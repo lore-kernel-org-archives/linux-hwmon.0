@@ -1,202 +1,111 @@
-Return-Path: <SRS0=Ro9r=3C=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=c1px=3D=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A5BAC33CA9
-	for <linux-hwmon@archiver.kernel.org>; Mon, 13 Jan 2020 20:56:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10D0CC33CA9
+	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Jan 2020 03:04:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 102A32187F
-	for <linux-hwmon@archiver.kernel.org>; Mon, 13 Jan 2020 20:56:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D71562084D
+	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Jan 2020 03:04:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H/HEujJ5"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="KKp4Lez6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726778AbgAMU4R (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 13 Jan 2020 15:56:17 -0500
-Received: from mail-pj1-f68.google.com ([209.85.216.68]:40468 "EHLO
-        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726086AbgAMU4R (ORCPT
+        id S1729585AbgANDEh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 13 Jan 2020 22:04:37 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:53130 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729224AbgANDEh (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 13 Jan 2020 15:56:17 -0500
-Received: by mail-pj1-f68.google.com with SMTP id bg7so4804836pjb.5;
-        Mon, 13 Jan 2020 12:56:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=qV5TDyFKNI2zN/NdXqAq0zZmtP9faiRwm9x6yaHxwlU=;
-        b=H/HEujJ5WtH2WWuNL2bJfQt9Pgh6rHxRE8EE5+qcTjy4CVwvSMmbIiAkQmILjMSN3S
-         yKnhe2RgDzJJWUycMBssCqyDIOMq615WRCvJsUzyL0xfGm+8acBmuVLoe9+0R0izChjk
-         Auc+4qf9vB0l3kgZpKOo5BI+88YLNu/yytUeWexkT8HY0qWe/BwnxKvUt0wEjtKBHKiT
-         gY+l+cYXxmplbLq5fhjg1nSbC7nDYnaQpsujd0+fUeLeLuvAiZvwymNZ8CF2ZbxE+2Zw
-         Sex7K1DjLe9Befzy7g+bzEUDfbXjGK1TygTXr2bbPkM3PwEkcQCECxq7twmCFR0xoGEP
-         pm3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=qV5TDyFKNI2zN/NdXqAq0zZmtP9faiRwm9x6yaHxwlU=;
-        b=jPI430ttKLYat2fFkaTUu0IO97Fnizg9ft8LoAYUdjApcsnRClvtq3dfubh3KbEfDb
-         NHeOipB89Jh3hqTuFy1mckmeAk7rXaQ0A7IXYLCGS3vqNOTzOBUvsq8XF7+Opcz9ljoj
-         t+/dHG8nqlRfU9Zx1kIivQrKNW/v68COEiKKqcgzpra0wH7ELcuf6pOBtOUM3YEMKWHG
-         orQ82Y4anBGSXDj7VXfr3chDpQD/wj4rUv5ZBHecL7LIAXbCughkeSKBdKShPSFljZ23
-         ia6XpXUf9jv6TU33uCeONvW3kWhTJCWa7+/yGs+LKsr7N9Q+Ku/2NhDlhqhru6P08leJ
-         PKbQ==
-X-Gm-Message-State: APjAAAXPn1dR3Fjdwei3Jm7JU3CI/BKWlGsEWFIVz0JQ7JQd+S3hG65h
-        aBzspeuWECGiCAFmg7GMXD8=
-X-Google-Smtp-Source: APXvYqx0DgEo55wguzYPd3WtYvB+kCzDmPzFefjGM54twdUm/jJnEbCu/SiahWY30jzN8SeUQFPi3A==
-X-Received: by 2002:a17:902:bb83:: with SMTP id m3mr16246851pls.258.1578948976472;
-        Mon, 13 Jan 2020 12:56:16 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j2sm15073585pfi.22.2020.01.13.12.56.14
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 13 Jan 2020 12:56:15 -0800 (PST)
-Date:   Mon, 13 Jan 2020 12:56:14 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Vadim Pasternak <vadimp@mellanox.com>
-Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "vijaykhemka@fb.com" <vijaykhemka@fb.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Michael Shych <michaelsh@mellanox.com>,
-        Ofer Levy <oferl@mellanox.com>
-Subject: Re: [RFC PATCH hwmon-next v1 5/5] hwmon: (pmbus/tps53679) Extend
- device list supported by driver
-Message-ID: <20200113205614.GA24228@roeck-us.net>
-References: <05925e70-0079-2467-b703-eba8d8667eaf@roeck-us.net>
- <AM6PR05MB52242EA6A029D4C5F011A21BA23C0@AM6PR05MB5224.eurprd05.prod.outlook.com>
- <20200106210104.GA9219@roeck-us.net>
- <AM6PR05MB52247DB7AB2677F5F36BAAE9A23C0@AM6PR05MB5224.eurprd05.prod.outlook.com>
- <a76015b5-74e3-5f84-dfce-f5cce34c302a@roeck-us.net>
- <AM6PR05MB5224ED5368BD037051F5BF92A23F0@AM6PR05MB5224.eurprd05.prod.outlook.com>
- <5be3c6c4-81e8-7731-2b6e-39b7ad6531d5@roeck-us.net>
- <AM6PR05MB5224C166E608C3BBD09E4606A23E0@AM6PR05MB5224.eurprd05.prod.outlook.com>
- <20200108164748.GD28993@roeck-us.net>
- <AM6PR05MB5224026B612B674681E81DF9A2350@AM6PR05MB5224.eurprd05.prod.outlook.com>
+        Mon, 13 Jan 2020 22:04:37 -0500
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00E33f0n181167;
+        Tue, 14 Jan 2020 03:04:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=corp-2019-08-05;
+ bh=keJibTsJRKKM7cxbY4WBKFccqeBdlACR5qxE4hPJX+4=;
+ b=KKp4Lez6+ddRjoyGpUtf4VWNMY+B3LVFG52sUGwtjh/9v2zq9CcRmH5IV/3gDWj5mZtz
+ vtHWtkVgOr9rmKfQxdB0jYdPL/to+TFrSl9ZTbeCy3U/1mpQr/MTZhX21WFF906elohQ
+ 3uYqtdf8jy0Gx3EJK12rwmZQWLhRY4muOJxdMLAGLUdWTQBVg1nRqLQF24zQmFZrfxb5
+ YsItUNOOvMmrWiiL8jxwVN/qEQ4u8NVwcagtESmfF0uwtd9oJSYxG3XSVn2wp8ouGWxW
+ foe1SEaAWDhbVfQwjVifj0LHDkRKXT0R9o23x5DRMluQRi4sOtEwsYa28K2897yOJBA5 rw== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2120.oracle.com with ESMTP id 2xf73tk4a4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Jan 2020 03:04:00 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00E33E1L194107;
+        Tue, 14 Jan 2020 03:04:00 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3020.oracle.com with ESMTP id 2xfrgjss6w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Jan 2020 03:03:59 +0000
+Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 00E33vjH010007;
+        Tue, 14 Jan 2020 03:03:57 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 13 Jan 2020 19:03:57 -0800
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-ide@vger.kernel.org,
+        Chris Healy <cphealy@gmail.com>
+Subject: Re: [PATCH v2] hwmon: Driver for temperature sensors on SATA drives
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+References: <20191215174509.1847-1-linux@roeck-us.net>
+        <20191215174509.1847-2-linux@roeck-us.net>
+        <yq1r211dvck.fsf@oracle.com>
+        <b22a519c-8f26-e731-345f-9deca1b2150e@roeck-us.net>
+        <yq1sgkq21ll.fsf@oracle.com> <20200108153341.GB28530@roeck-us.net>
+        <38af9fda-9edf-1b54-bd8d-92f712ae4cda@roeck-us.net>
+Date:   Mon, 13 Jan 2020 22:03:54 -0500
+In-Reply-To: <38af9fda-9edf-1b54-bd8d-92f712ae4cda@roeck-us.net> (Guenter
+        Roeck's message of "Sat, 11 Jan 2020 12:22:57 -0800")
+Message-ID: <yq1r202spr9.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <AM6PR05MB5224026B612B674681E81DF9A2350@AM6PR05MB5224.eurprd05.prod.outlook.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9499 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=643
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1911140001 definitions=main-2001140026
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9499 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=704 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
+ definitions=main-2001140026
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Vadim,
 
-On Mon, Jan 13, 2020 at 12:25:44PM +0000, Vadim Pasternak wrote:
-> 
-> 
-> > -----Original Message-----
-> > From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
-> > Sent: Wednesday, January 08, 2020 6:48 PM
-> > To: Vadim Pasternak <vadimp@mellanox.com>
-> > Cc: robh+dt@kernel.org; vijaykhemka@fb.com; linux-hwmon@vger.kernel.org;
-> > devicetree@vger.kernel.org; Michael Shych <michaelsh@mellanox.com>
-> > Subject: Re: [RFC PATCH hwmon-next v1 5/5] hwmon: (pmbus/tps53679) Extend
-> > device list supported by driver
-> > 
-> > On Wed, Jan 08, 2020 at 02:10:50PM +0000, Vadim Pasternak wrote:
-> > >
-> > > Hi Guenter,
-> > >
-> > > We are looking for possibility to provide some kind of flexible driver
-> > > to handle different devices from different vendors, but which have
-> > > common nature, like support of two pages for telemetry with same set
-> > > of functions and same formats. (Actually driver could be flexible regarding the
-> > number of pages).
-> > >
-> > > While the difference only in VID codes mapping.
-> > >
-> > > The motivation for that is to give free hand to HW design to choose
-> > > which particular device to use on the same system type.
-> > > There are two main reasons for such requirement:
-> > > - Quality of device (we already had a serios problems with ucd9224 and
-> > >   tps53679, caused system meltdown). In such case the intention is to move
-> > >   to fallback devices in the next batches.
-> > > - Device availability in stock. Sometimes vendors can't supply in time the
-> > >    necessary quantity.
-> > >
-> > > Currently there are the devices from three vendor: TI tps536xx,
-> > > Infineon
-> > > xdpe122 and MPS mp2975.
-> > > All have different mapping of VID codes.
-> > >
-> > > It could be also few additional devices, which are supposed to be used
-> > > as fallback devices.
-> > >
-> > > We have several very big customers ordering now huge quantity of our
-> > > systems, which are very conservative regarding image upgrade.
-> > > Means we can provide now support for tps536xx, xdpe122xx and mp2975
-> > > but in case new devices are coming soon, we will be able to support it
-> > > in kernel for their image after year or even more.
-> > >
-> > > We can provide ACPI pmbus driver, which will read VID mapping from
-> > > ACPI DSDT table. This mapping table will contain the names of
-> > > available modes and specific vendor code for this mode. Like:
-> > > PMBVR11=1
-> > > PMBVR12=2
-> > > PMBVR13=5
-> > > PMBIMVP9=10
-> > > And driver will set info->vrm_version[i] according to this mapping.
-> > >
-> > 
-> > The DSDT would have to provide all properties, not just the VID modes.
-> > At the very least that would have to be the number of pages, data formats, vrm
-> > version, and the supported attributes per page. It should be possible to also add
-> > m/b/R information for each of the sensor classes, but I guess the actual
-> > implementation could be postponed until it is needed.
-> > 
-> > This could all be done through the existing generic driver (pmbus.c); it would not
-> > really require a new driver. ACPI/DSDT could provide firmware properties, and
-> > pmbus.c could read those using device_property API functions (eg
-> > device_property_read_u32(dev, "vrm-mode")). Would that work for you ?
-> 
-> Hi Guenter,
-> 
-> We thought that it's possible to provide just modified DSDT with the specific
-> configuration as an external table, which is loaded during system boot.
-> 
-> It should not be integrated into BIOS image.
-> We want to avoid releasing of new BIOS or new each time system configuration
-> is changed.
-> New BIOS is released only when new CPU type should be supported.
-> Also BIOS overwriting is not an option, sine we have to support secured BIOS.
-> 
-> It should not be located in initrd.
-> The new system batch is released with BIOS, SMBIOS and with customer's OS or
-> with install environment like ONIE.
-> Means no kernel changes.
-> Also not all our customers use initrd.
->  
-> So, it seems there is no place, when we can locate modified DSDT and load
-> it dynamically.
-> But we should think more about possible methods for doing it.
-> 
-> Today all the static devices are instantiated  from the user space.
-> It's supposed to work for us while we have to support some pre-defined set of
-> devices, for which we can detect the specific configuration through DMI tables
-> (SKU in particular).
-> But it'll not work for some new coming devices.
-> 
-> We have a possibility to provide VID mapping info through CPLD device.
-> But in this case we'll have to implement Mellanox specific PMBus driver aware
-> of CPLD register map.
-> Not sure if such approach is accepted?
-> 
+Hi Guenter!
 
-How about a platform driver which loads the parameters into device
-properties from whatever location and instantiates the pmbus driver ?
-The PMBus driver would then read the device attributes and instantiate
-itself accordingly.
+> I tried again, this time with v5.5-rc5. Loading and unloading ahci and
+> drivetemp in any order does not cause any problems for me.
 
-If the other PMBus attributes can be auto-detected, it might actually be
-sufficient to have a per-page vrm-mode property and otherwise use the
-auto-detect mechanism of pmbus.c.
+I tried your hwmon-next branch and it still happens for me. Both in qemu
+and on real hw. I'm really low on bandwidth the next couple of days.
+Will try to look later this week unless you beat me to it. I get lots of
+these warnings after modprobe drivetemp; modprobe ahci:
 
-Thanks,
-Guenter
+[ 1055.611922] WARNING: CPU: 3 PID: 3233 at drivers/base/dd.c:519 really_probe+0x436/0x4f0
+
+A quick test forcing synchronous SCSI scanning made no difference.
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering
+
