@@ -7,78 +7,79 @@ X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 90A6AC33CB1
-	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Jan 2020 14:06:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DED18C33CB1
+	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Jan 2020 14:07:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6316224672
-	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Jan 2020 14:06:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AE0CB24672
+	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Jan 2020 14:07:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KKppaqZ0"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QyS1kaNy"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726453AbgANOG7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 14 Jan 2020 09:06:59 -0500
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:44798 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726115AbgANOG7 (ORCPT
+        id S1726453AbgANOHV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 14 Jan 2020 09:07:21 -0500
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:42492 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726115AbgANOHV (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 14 Jan 2020 09:06:59 -0500
-Received: by mail-pg1-f193.google.com with SMTP id x7so6430943pgl.11;
-        Tue, 14 Jan 2020 06:06:58 -0800 (PST)
+        Tue, 14 Jan 2020 09:07:21 -0500
+Received: by mail-pg1-f196.google.com with SMTP id s64so6436108pgb.9;
+        Tue, 14 Jan 2020 06:07:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=QldGiquG06Rzqj2V4tCuUeNohwUewSZS1Kvp5BIGaZ8=;
-        b=KKppaqZ0O7WLUqSU1NTXkIyo4qxpZN5XDIwzGK6RWHIFxwJUexYIUWy7QFk5F3e0Im
-         yVlRoYUy3AcyflbMx711yoCnhxmgI3T6JQFXU0wGcFGKD5eWkd4wRcSEiebCjojRNDMy
-         HR4RVLfn/DKdo1mhZbevgJJCjKHze4sU4OHt3KlfFi7wMm1MA/REgIF7AL94FdWzwxNN
-         1r43RQgErYOoLm+SEHcmb/gry0qiO7nWolhMuUkeXoEf8wPTFIIJIYCQWdNYheum1Jul
-         gBInbE08DdCCCgziXlPieNTts9/8Mw5FrKZjsdIlaCTqJQxaz9ppf2VK6XxPq9d/Iock
-         m+hQ==
+        bh=MXtqkO1dDJfeO67YPysiyS6dQCmc2YXDGOZ28v/f9bg=;
+        b=QyS1kaNyMl2x2crXNmIOY9pcUXkqIrHPgJ4JdVX4Lgf1hN1bbRZ/VRIYxyxCRqbgBp
+         QUxg9MeAus5EFcEJCfxiWij3XC/7YxPy8f3Doj0dqoqOGvFu2slEZ+EPmQfTJfHR2ZUe
+         1bLdMedOSn40YduvWDUcOT/8ycICb06sWKpPu6YMOrm3GRGR/W1CUj3JivRFLmMBc5ZM
+         yX9CzpZIVGHzmG4s5t8FdbwgjPTcfgcF/Dzy0H1kj18szNEiO0lkjwc5ewJTKOwy+LRo
+         V1Uf7Bn8nlQgg7Hh/jUkSA2dO7heu6Rx8FlXxeugiUc+ddLQ7J0yjutI0HGgqSv+Q80a
+         x4fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=QldGiquG06Rzqj2V4tCuUeNohwUewSZS1Kvp5BIGaZ8=;
-        b=sIBofl2/5b+J1I27i805C5658g2KnMuCy244yiahgXbQyMSpbFW5heJyB4zPwQ/cq2
-         bZWw3KKMihs0P1FgbiImMcMf7TsO5NxfUAKu0xbUQ0UpbBRp1iZprBJkcas7//KW/c21
-         4M5ou1qwXKscMgZiu9k/+uzGLJIZiR9N5lXKi+lEVnF3uchj9iyGD1KP5exeVkUEXr6R
-         4hkzlO7SyXA5WWC/i1Upe2I8HhSmKm6rVBsdDBTij7jDrPX42OX+on8CyrcnAwy47AgH
-         IpmGVLE3KON12UGmsaIT0uyetHLo05TfyF9R9eWDdreJQb3VM5X0OK5AlXEke6iAGXZf
-         U+1Q==
-X-Gm-Message-State: APjAAAUUuaM3SlHBmQOtP12aHPzIm/x2nnSS/Eh839c8PZAc6Z9D5ZV5
-        ybKMZmI59iv3OIytWbO188w=
-X-Google-Smtp-Source: APXvYqxGfghMJkrnT0qTERCtnzrvYrfkD0cT70PPt3i1BbLbPIjsdFiXhq2/0jOdEQGCCSwcaPeajA==
-X-Received: by 2002:a63:5c1c:: with SMTP id q28mr26289660pgb.245.1579010818196;
-        Tue, 14 Jan 2020 06:06:58 -0800 (PST)
+        bh=MXtqkO1dDJfeO67YPysiyS6dQCmc2YXDGOZ28v/f9bg=;
+        b=Pw0qBYljEzVMHN07bY3vPNgI+IQjCfaDp8ui3TzvQTICWx2Aea/BUPCZDZSF0qQyVS
+         SDAG/VngY3bOOCjDjtFqT/3jZLmCY4OZ4wPrqGRuzLM7l4GsRg6civ7XshH051tOCFZT
+         HdQ0/UsJr+eIom1Ao63bY2D7xETXWoa9EF7NXtjIp9og64Q5IrCPWw6EK93B8P/MUOW8
+         Ez/lwlFLGN/etMcG7awooAw11tgh8QCbLBklNK2P21BXswd8qOZ86q+2ymw8P+KVBufG
+         t78bHmVlLPIpkLxrYTH4R/u6dXdPm4y/FhrNJgOPniPXW27Ne8PhY2mKC0pZ6X22PMem
+         KMcQ==
+X-Gm-Message-State: APjAAAUrYD0Rn89G+frM3kLe9vm1zq+L93wIIAhoOhG8089KX31pgVcY
+        MtNFRdIMyKiyd0h13byYpuA=
+X-Google-Smtp-Source: APXvYqz/UEOKISZb7tAS02Y9AZ9F98yLLgjVfOAp2V1D0QaVpO6b07+LWJcILn2lRBxkxzu2+pTiXA==
+X-Received: by 2002:a63:eb02:: with SMTP id t2mr27124259pgh.289.1579010840252;
+        Tue, 14 Jan 2020 06:07:20 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k23sm16927172pgg.7.2020.01.14.06.06.57
+        by smtp.gmail.com with ESMTPSA id b65sm18292144pgc.18.2020.01.14.06.07.19
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 14 Jan 2020 06:06:57 -0800 (PST)
-Date:   Tue, 14 Jan 2020 06:06:56 -0800
+        Tue, 14 Jan 2020 06:07:19 -0800 (PST)
+Date:   Tue, 14 Jan 2020 06:07:18 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Vadim Pasternak <vadimp@mellanox.com>
 Cc:     robh+dt@kernel.org, vijaykhemka@fb.com,
         linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH hwmon-next v1 2/6] hwmon: (pmbus/core) Add support for
- Intel IMVP9 and AMD 6.25mV modes
-Message-ID: <20200114140656.GA22468@roeck-us.net>
+Subject: Re: [PATCH hwmon-next v1 3/6] hwmon: (pmbus/tps53679) Extend device
+ list supported by driver
+Message-ID: <20200114140718.GA16519@roeck-us.net>
 References: <20200113150841.17670-1-vadimp@mellanox.com>
- <20200113150841.17670-3-vadimp@mellanox.com>
+ <20200113150841.17670-4-vadimp@mellanox.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200113150841.17670-3-vadimp@mellanox.com>
+In-Reply-To: <20200113150841.17670-4-vadimp@mellanox.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Jan 13, 2020 at 03:08:37PM +0000, Vadim Pasternak wrote:
-> Extend "vrm_version" with the type for Intel IMVP9 and AMD 6.25mV VID
-> modes.
-> Add calculation for those types.
+On Mon, Jan 13, 2020 at 03:08:38PM +0000, Vadim Pasternak wrote:
+> Extends driver with support of the additional devices:
+> Texas Instruments Dual channel DCAP+ multiphase controllers: TPS53688.
+> 
+> Extend Kconfig with added device.
 > 
 > Signed-off-by: Vadim Pasternak <vadimp@mellanox.com>
 
@@ -88,39 +89,44 @@ Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/pmbus/pmbus.h      | 2 +-
->  drivers/hwmon/pmbus/pmbus_core.c | 8 ++++++++
->  2 files changed, 9 insertions(+), 1 deletion(-)
+>  drivers/hwmon/pmbus/Kconfig    | 4 ++--
+>  drivers/hwmon/pmbus/tps53679.c | 2 ++
+>  2 files changed, 4 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
-> index 2bdebd0ea9c1..a7f90e18119c 100644
-> --- a/drivers/hwmon/pmbus/pmbus.h
-> +++ b/drivers/hwmon/pmbus/pmbus.h
-> @@ -377,7 +377,7 @@ enum pmbus_sensor_classes {
->  #define PMBUS_PAGE_VIRTUAL	BIT(31)
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index 59859979571d..0dd30b07bf18 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -200,10 +200,10 @@ config SENSORS_TPS40422
+>  	  be called tps40422.
 >  
->  enum pmbus_data_format { linear = 0, direct, vid };
-> -enum vrm_version { vr11 = 0, vr12, vr13 };
-> +enum vrm_version { vr11 = 0, vr12, vr13, imvp9, amd625mv };
+>  config SENSORS_TPS53679
+> -	tristate "TI TPS53679"
+> +	tristate "TI TPS53679, TPS53688"
+>  	help
+>  	  If you say yes here you get hardware monitoring support for TI
+> -	  TPS53679.
+> +	  TPS53679, TPS53688
 >  
->  struct pmbus_driver_info {
->  	int pages;		/* Total number of pages */
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index 98226e84b351..811819e41a72 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -709,6 +709,14 @@ static long pmbus_reg2data_vid(struct pmbus_data *data,
->  		if (val >= 0x01)
->  			rv = 500 + (val - 1) * 10;
->  		break;
-> +	case imvp9:
-> +		if (val >= 0x01)
-> +			rv = 200 + (val - 1) * 10;
-> +		break;
-> +	case amd625mv:
-> +		if (val >= 0x0 && val <= 0xd8)
-> +			rv = DIV_ROUND_CLOSEST(155000 - val * 625, 100);
-> +		break;
->  	}
->  	return rv;
->  }
+>  	  This driver can also be built as a module. If so, the module will
+>  	  be called tps53679.
+> diff --git a/drivers/hwmon/pmbus/tps53679.c b/drivers/hwmon/pmbus/tps53679.c
+> index 163e8c6aaa8e..9c22e9013dd7 100644
+> --- a/drivers/hwmon/pmbus/tps53679.c
+> +++ b/drivers/hwmon/pmbus/tps53679.c
+> @@ -85,6 +85,7 @@ static int tps53679_probe(struct i2c_client *client,
+>  
+>  static const struct i2c_device_id tps53679_id[] = {
+>  	{"tps53679", 0},
+> +	{"tps53688", 0},
+>  	{}
+>  };
+>  
+> @@ -92,6 +93,7 @@ MODULE_DEVICE_TABLE(i2c, tps53679_id);
+>  
+>  static const struct of_device_id __maybe_unused tps53679_of_match[] = {
+>  	{.compatible = "ti,tps53679"},
+> +	{.compatible = "ti,tps53688"},
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(of, tps53679_of_match);
