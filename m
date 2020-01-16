@@ -7,48 +7,48 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 252B2C33CAF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jan 2020 19:06:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C473C47409
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jan 2020 19:24:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E7FE9206E6
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jan 2020 19:06:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 381632077C
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jan 2020 19:24:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1579201613;
-	bh=IVGWB140nrt+GHipb+qYIHmKcToavEP9uvo3bLo7vEs=;
+	s=default; t=1579202694;
+	bh=H6ajRm7v/INVO/OjCprFhS/ZmGye/MPtiF2yeOAxJRg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=PvVUdp7d4Y7M4a+FxtZt7nPQjqntvb2UOAFfJ3GkmiFp5DX+6heC6gLmI4aGhHkM1
-	 4lsFXI2txHXqu+4zR1GhIDsjcFFV7tLsJQPvWF4GX8Xzz9yKqPwE/S1qs6wXFMh6ru
-	 ya+qZcgaDuLQPeb4+mYK3LdSh3U1d3sd2Zidtb4A=
+	b=wqIKG708heTKSw5IFQWw+bKY6UtFlv62ANk1AGZ67KVAGiQz4i4gcltKWnorgdlfw
+	 TTdANAinqbfgUuZM/deJwsOy2c1OZ87DiadvJAomhKfngw9v/PdnfGeGz2meiGCuMa
+	 GQJI/sae2CumgyetsL95sG9gDl4CDUqw0pSAmnRM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387647AbgAPRB1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 16 Jan 2020 12:01:27 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52552 "EHLO mail.kernel.org"
+        id S1730244AbgAPQwm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 16 Jan 2020 11:52:42 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35894 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388094AbgAPRB1 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:01:27 -0500
+        id S1729351AbgAPQwm (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 16 Jan 2020 11:52:42 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 454C021D56;
-        Thu, 16 Jan 2020 17:01:25 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CD24E2192A;
+        Thu, 16 Jan 2020 16:52:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579194086;
-        bh=IVGWB140nrt+GHipb+qYIHmKcToavEP9uvo3bLo7vEs=;
+        s=default; t=1579193561;
+        bh=H6ajRm7v/INVO/OjCprFhS/ZmGye/MPtiF2yeOAxJRg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hr9M3MbiaK4mF2ZfL1i6Vhj9NbZcWtIZgsQ3UMcnHut1AwecU4Ob+XfjeoNTwe1y7
-         ZjW+3sJxcSbclQZ/4vDQG53PIXj646ae2jP1td4ixpM+OGGHcetPmRMHTf7IwJx1f7
-         2PYiRnzci3YTXwco36n/NOh0KUd7JaWGLc2NqIoc=
+        b=v0RzV1jfjt1dJa/5TLeU8romvhM+832WTI3MkLdbMGmYXVFR2OZhamG8dhxmPxmLE
+         4AuIiyhRKHFjgyH3cSXRfCw2sTaFR2OLsBDmcn81kyqLgU6drTmMHThHkZRPz10ETk
+         blXvtNQpF1iYs+PUFLChdVsDVcddhx2xq3oNJ2to=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Vadim Pasternak <vadimp@mellanox.com>,
+Cc:     Eddie James <eajames@linux.ibm.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 190/671] hwmon: (pmbus/tps53679) Fix driver info initialization in probe routine
-Date:   Thu, 16 Jan 2020 11:51:39 -0500
-Message-Id: <20200116165940.10720-73-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 106/205] hwmon: (pmbus/ibm-cffps) Fix LED blink behavior
+Date:   Thu, 16 Jan 2020 11:41:21 -0500
+Message-Id: <20200116164300.6705-106-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200116165940.10720-1-sashal@kernel.org>
-References: <20200116165940.10720-1-sashal@kernel.org>
+In-Reply-To: <20200116164300.6705-1-sashal@kernel.org>
+References: <20200116164300.6705-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -58,45 +58,100 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Vadim Pasternak <vadimp@mellanox.com>
+From: Eddie James <eajames@linux.ibm.com>
 
-[ Upstream commit ff066653aeed8ee2d4dadb1e35774dd91ecbb19f ]
+[ Upstream commit 92b39ad440968bab38eb6577d63c12994601ed94 ]
 
-Fix tps53679_probe() by using dynamically allocated "pmbus_driver_info"
-structure instead of static. Usage of static structures causes
-overwritten of the field "vrm_version", in case the system is equipped
-with several tps53679 devices with the different "vrm_version".
-In such case the last probed device overwrites this field for all
-others.
+The LED blink_set function incorrectly did not tell the PSU LED to blink
+if brightness was LED_OFF. Fix this, and also correct the LED_OFF
+command data, which should give control of the LED back to the PSU
+firmware. Also prevent I2C failures from getting the driver LED state
+out of sync and add some dev_dbg statements.
 
-Fixes: 610526527a13 ("hwmon: (pmbus) Add support for Texas Instruments tps53679 device")
-Signed-off-by: Vadim Pasternak <vadimp@mellanox.com>
+Signed-off-by: Eddie James <eajames@linux.ibm.com>
+Link: https://lore.kernel.org/r/20191106200106.29519-3-eajames@linux.ibm.com
+Fixes: ef9e1cdf419a3 ("hwmon: (pmbus/cffps) Add led class device for power supply fault led")
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/pmbus/tps53679.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ drivers/hwmon/pmbus/ibm-cffps.c | 27 +++++++++++++++++++--------
+ 1 file changed, 19 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/hwmon/pmbus/tps53679.c b/drivers/hwmon/pmbus/tps53679.c
-index 85b515cd9df0..2bc352c5357f 100644
---- a/drivers/hwmon/pmbus/tps53679.c
-+++ b/drivers/hwmon/pmbus/tps53679.c
-@@ -80,7 +80,14 @@ static struct pmbus_driver_info tps53679_info = {
- static int tps53679_probe(struct i2c_client *client,
- 			  const struct i2c_device_id *id)
- {
--	return pmbus_do_probe(client, id, &tps53679_info);
-+	struct pmbus_driver_info *info;
-+
-+	info = devm_kmemdup(&client->dev, &tps53679_info, sizeof(*info),
-+			    GFP_KERNEL);
-+	if (!info)
-+		return -ENOMEM;
-+
-+	return pmbus_do_probe(client, id, info);
- }
+diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
+index aa4cdbbb100a..929c909ac27a 100644
+--- a/drivers/hwmon/pmbus/ibm-cffps.c
++++ b/drivers/hwmon/pmbus/ibm-cffps.c
+@@ -39,9 +39,13 @@
+ #define CFFPS_MFR_VAUX_FAULT			BIT(6)
+ #define CFFPS_MFR_CURRENT_SHARE_WARNING		BIT(7)
  
- static const struct i2c_device_id tps53679_id[] = {
++/*
++ * LED off state actually relinquishes LED control to PSU firmware, so it can
++ * turn on the LED for faults.
++ */
++#define CFFPS_LED_OFF				0
+ #define CFFPS_LED_BLINK				BIT(0)
+ #define CFFPS_LED_ON				BIT(1)
+-#define CFFPS_LED_OFF				BIT(2)
+ #define CFFPS_BLINK_RATE_MS			250
+ 
+ enum {
+@@ -296,23 +300,31 @@ static int ibm_cffps_led_brightness_set(struct led_classdev *led_cdev,
+ 					enum led_brightness brightness)
+ {
+ 	int rc;
++	u8 next_led_state;
+ 	struct ibm_cffps *psu = container_of(led_cdev, struct ibm_cffps, led);
+ 
+ 	if (brightness == LED_OFF) {
+-		psu->led_state = CFFPS_LED_OFF;
++		next_led_state = CFFPS_LED_OFF;
+ 	} else {
+ 		brightness = LED_FULL;
++
+ 		if (psu->led_state != CFFPS_LED_BLINK)
+-			psu->led_state = CFFPS_LED_ON;
++			next_led_state = CFFPS_LED_ON;
++		else
++			next_led_state = CFFPS_LED_BLINK;
+ 	}
+ 
++	dev_dbg(&psu->client->dev, "LED brightness set: %d. Command: %d.\n",
++		brightness, next_led_state);
++
+ 	pmbus_set_page(psu->client, 0);
+ 
+ 	rc = i2c_smbus_write_byte_data(psu->client, CFFPS_SYS_CONFIG_CMD,
+-				       psu->led_state);
++				       next_led_state);
+ 	if (rc < 0)
+ 		return rc;
+ 
++	psu->led_state = next_led_state;
+ 	led_cdev->brightness = brightness;
+ 
+ 	return 0;
+@@ -325,10 +337,7 @@ static int ibm_cffps_led_blink_set(struct led_classdev *led_cdev,
+ 	int rc;
+ 	struct ibm_cffps *psu = container_of(led_cdev, struct ibm_cffps, led);
+ 
+-	psu->led_state = CFFPS_LED_BLINK;
+-
+-	if (led_cdev->brightness == LED_OFF)
+-		return 0;
++	dev_dbg(&psu->client->dev, "LED blink set.\n");
+ 
+ 	pmbus_set_page(psu->client, 0);
+ 
+@@ -337,6 +346,8 @@ static int ibm_cffps_led_blink_set(struct led_classdev *led_cdev,
+ 	if (rc < 0)
+ 		return rc;
+ 
++	psu->led_state = CFFPS_LED_BLINK;
++	led_cdev->brightness = LED_FULL;
+ 	*delay_on = CFFPS_BLINK_RATE_MS;
+ 	*delay_off = CFFPS_BLINK_RATE_MS;
+ 
 -- 
 2.20.1
 
