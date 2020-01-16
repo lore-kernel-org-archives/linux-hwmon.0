@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C78AC33CB7
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jan 2020 17:11:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB4C4C33CAF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jan 2020 17:17:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CC92524686
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jan 2020 17:11:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C15A620728
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jan 2020 17:17:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1579194666;
-	bh=T4VCaHC+ePrb6r+sRWQJAYXbx7hN/HtgqjgSgzkrnCc=;
+	s=default; t=1579195024;
+	bh=sjHvgJ//A5YxuNMWW1rGYSdxOcYiKmPBLe0uvbj0XZ8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=P79POYOvnatNt3e6GHKNlVS3Wpwm5g4gjzIvB5agXjtYC9/QgQVrromXgRa8H6WRd
-	 MmYrQelk5XpC8ZS/mc0r2PDn9dbMR4PIDs6Jt3uutmQljYTJfapzHkrPaun0hNjkq2
-	 XjfFBASqfb9PB5i/9BIZvxXybevXjxtVnDQbg5WQ=
+	b=D6RsIxgqrm9mdJoV6Cy4a3+5Mh78yLdU2KsVBVZLRgL7mToLn4S8QT9FFtoBfURvE
+	 DBkU8HKpHvsWd7PZ3mMPsYXU1Cw2BHCmHPoB+uvCXkHhZaCC9/kbJd9IbYQ0u4vshj
+	 ivzE8lVa4/3fIDo56/0LGccqVItjQN+chiphe6to=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389763AbgAPRLG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 16 Jan 2020 12:11:06 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50860 "EHLO mail.kernel.org"
+        id S2390872AbgAPRN5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 16 Jan 2020 12:13:57 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60194 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390150AbgAPRLF (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:11:05 -0500
+        id S2390483AbgAPRN5 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:13:57 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1151E24681;
-        Thu, 16 Jan 2020 17:11:03 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8E9EA2469E;
+        Thu, 16 Jan 2020 17:13:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579194664;
-        bh=T4VCaHC+ePrb6r+sRWQJAYXbx7hN/HtgqjgSgzkrnCc=;
+        s=default; t=1579194836;
+        bh=sjHvgJ//A5YxuNMWW1rGYSdxOcYiKmPBLe0uvbj0XZ8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cQq8lltYyrSwBwjQIku5b9fPUq8PnQ/Q+8GX7NEm+uVnKdiwkfr0kJxfaN89kpXuz
-         yGGryqaMo8PnIM3rA+4HJbgZIGbdHfAuFXJEyE01tZvG9y+G/kCnAWgnetXvjiFt0p
-         xxJfyXIz9hJGmMqOxrhRN62epEGDv+++dOYRA0bk=
+        b=2srN3Sd6NH2K8VBYJm1FJcxE4EkRtsRmFq3E9A5AMRsR+ujXaukEnqSCxnoTk9Cpj
+         gAYn8osmIckuYA1K01I6g3ktamfzYb/eFlPLQHVdJzPeUVkw++XuUqgjEqtwiVldJk
+         kAgFYqgCtI0bbQhrSxh5vhsztVCrA4YjPimCSjUc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Iker Perez del Palomar Sustatxa 
-        <iker.perez@codethink.co.uk>, Sasha Levin <sashal@kernel.org>,
-        linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 514/671] hwmon: (lm75) Fix write operations for negative temperatures
-Date:   Thu, 16 Jan 2020 12:02:32 -0500
-Message-Id: <20200116170509.12787-251-sashal@kernel.org>
+Cc:     Eddie James <eajames@linux.ibm.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 636/671] hwmon: (pmbus/ibm-cffps) Switch LEDs to blocking brightness call
+Date:   Thu, 16 Jan 2020 12:04:34 -0500
+Message-Id: <20200116170509.12787-373-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200116170509.12787-1-sashal@kernel.org>
 References: <20200116170509.12787-1-sashal@kernel.org>
@@ -59,38 +58,60 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Guenter Roeck <linux@roeck-us.net>
+From: Eddie James <eajames@linux.ibm.com>
 
-[ Upstream commit 7d82fcc9d9e81241778aaa22fda7be753e237d86 ]
+[ Upstream commit 9861ff954c7e83e2f738ce16fbe15f8a1e121771 ]
 
-Writes into limit registers fail if the temperature written is negative.
-The regmap write operation checks the value range, regmap_write accepts
-an unsigned int as parameter, and the temperature value passed to
-regmap_write is kept in a variable declared as long. Negative values
-are converted large unsigned integers, which fails the range check.
-Fix by type casting the temperature to u16 when calling regmap_write().
+Since i2c_smbus functions can sleep, the brightness setting function
+for this driver must be the blocking version to avoid scheduling while
+atomic.
 
-Cc: Iker Perez del Palomar Sustatxa <iker.perez@codethink.co.uk>
-Fixes: e65365fed87f ("hwmon: (lm75) Convert to use regmap")
+Signed-off-by: Eddie James <eajames@linux.ibm.com>
+Link: https://lore.kernel.org/r/20191106200106.29519-2-eajames@linux.ibm.com
+Fixes: ef9e1cdf419a3 ("hwmon: (pmbus/cffps) Add led class device for power supply fault led")
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/lm75.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/hwmon/pmbus/ibm-cffps.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
-index 49f4b33a5685..7f28912c9abc 100644
---- a/drivers/hwmon/lm75.c
-+++ b/drivers/hwmon/lm75.c
-@@ -165,7 +165,7 @@ static int lm75_write(struct device *dev, enum hwmon_sensor_types type,
- 	temp = DIV_ROUND_CLOSEST(temp  << (resolution - 8),
- 				 1000) << (16 - resolution);
- 
--	return regmap_write(data->regmap, reg, temp);
-+	return regmap_write(data->regmap, reg, (u16)temp);
+diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
+index 93d9a9ea112b..edc70ac7d2d0 100644
+--- a/drivers/hwmon/pmbus/ibm-cffps.c
++++ b/drivers/hwmon/pmbus/ibm-cffps.c
+@@ -269,8 +269,8 @@ static int ibm_cffps_read_word_data(struct i2c_client *client, int page,
+ 	return rc;
  }
  
- static umode_t lm75_is_visible(const void *data, enum hwmon_sensor_types type,
+-static void ibm_cffps_led_brightness_set(struct led_classdev *led_cdev,
+-					 enum led_brightness brightness)
++static int ibm_cffps_led_brightness_set(struct led_classdev *led_cdev,
++					enum led_brightness brightness)
+ {
+ 	int rc;
+ 	struct ibm_cffps *psu = container_of(led_cdev, struct ibm_cffps, led);
+@@ -286,9 +286,11 @@ static void ibm_cffps_led_brightness_set(struct led_classdev *led_cdev,
+ 	rc = i2c_smbus_write_byte_data(psu->client, CFFPS_SYS_CONFIG_CMD,
+ 				       psu->led_state);
+ 	if (rc < 0)
+-		return;
++		return rc;
+ 
+ 	led_cdev->brightness = brightness;
++
++	return 0;
+ }
+ 
+ static int ibm_cffps_led_blink_set(struct led_classdev *led_cdev,
+@@ -324,7 +326,7 @@ static void ibm_cffps_create_led_class(struct ibm_cffps *psu)
+ 		 client->addr);
+ 	psu->led.name = psu->led_name;
+ 	psu->led.max_brightness = LED_FULL;
+-	psu->led.brightness_set = ibm_cffps_led_brightness_set;
++	psu->led.brightness_set_blocking = ibm_cffps_led_brightness_set;
+ 	psu->led.blink_set = ibm_cffps_led_blink_set;
+ 
+ 	rc = devm_led_classdev_register(dev, &psu->led);
 -- 
 2.20.1
 
