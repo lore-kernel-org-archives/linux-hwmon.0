@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C731C33CB6
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jan 2020 18:32:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55B36C33CAF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jan 2020 18:41:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D4A1E2077B
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jan 2020 18:32:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 231B6207E0
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jan 2020 18:41:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1579199530;
-	bh=IVGWB140nrt+GHipb+qYIHmKcToavEP9uvo3bLo7vEs=;
+	s=default; t=1579200103;
+	bh=ChIPeAG1dGINkg+Fp76gMqPv0W47WaRVmtClRrlqMlk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=XhIVhpol6YtNlTKAbq4N5Xonvki6+GcsO6EilOKED+dWksbLFKJcY9ct3isOl/GXx
-	 JyH/kjcGm+V5dWQ5XlqrMxcq4hfA7NvgjZn3suHlVC8AK6xJGawnoTrmNBR0CBZGWh
-	 8kd/ajSix65J/gAQQ93wWIEqTgfKeY7uwneY41PU=
+	b=ru9ofNz6FcIs1kE4yR4nVvPSHSsk5ZBtKBOW573Ul7bLidiIxKBXd7dbF7fYixo2M
+	 IQK9Pe/yiatiljkTLtzeYGtjpkeuw09sbLyH2J5H778usxI/tCSULe2Q6ZZPAWYq85
+	 5mVCsEwNBLTHDW6DTzQVggYYi7ISzawgW4pFDfP0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391866AbgAPRZD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 16 Jan 2020 12:25:03 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60466 "EHLO mail.kernel.org"
+        id S2390823AbgAPSll (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 16 Jan 2020 13:41:41 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53086 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391855AbgAPRZC (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:25:02 -0500
+        id S2390000AbgAPRLp (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:11:45 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2CF1E2468C;
-        Thu, 16 Jan 2020 17:25:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C768324694;
+        Thu, 16 Jan 2020 17:11:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579195501;
-        bh=IVGWB140nrt+GHipb+qYIHmKcToavEP9uvo3bLo7vEs=;
+        s=default; t=1579194705;
+        bh=ChIPeAG1dGINkg+Fp76gMqPv0W47WaRVmtClRrlqMlk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Vst+L/ggAj8ZqtIDXs9l4Xo+pD+4hz7ZwH3JGVGaVBhsD8cmOcTbOF7Y919czT1Vn
-         SxhRzfA9Gi5jy5fe1AOfEdiB4o+7y5Z6e08gJ5Fi3BTzJ2oHsWZ3oBfn2f1zZPjhUL
-         uz+3MdLf15wHfW+baRgOlAg3xh6TgzymEfEWY/Xo=
+        b=NzHGfVqlS8AcooFVrCL9CW7ByURxciFWbjpWcfllD3ItFv3omI8fDq0m0voHuUIqq
+         LAoCNwK5abg1EE3OOb7wizZmccsCccWuYkk7PVNYQiM+B49qrkH9PM1vnG5YDS/FlK
+         qyNGilMq1mU3pjLpkGurJMvTMJagv6RwB2UiD8bk=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Vadim Pasternak <vadimp@mellanox.com>,
+Cc:     Dan Robertson <dan@dlrobertson.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 102/371] hwmon: (pmbus/tps53679) Fix driver info initialization in probe routine
-Date:   Thu, 16 Jan 2020 12:19:34 -0500
-Message-Id: <20200116172403.18149-45-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 544/671] hwmon: (shtc1) fix shtc1 and shtw1 id mask
+Date:   Thu, 16 Jan 2020 12:03:02 -0500
+Message-Id: <20200116170509.12787-281-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200116172403.18149-1-sashal@kernel.org>
-References: <20200116172403.18149-1-sashal@kernel.org>
+In-Reply-To: <20200116170509.12787-1-sashal@kernel.org>
+References: <20200116170509.12787-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -58,45 +58,37 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Vadim Pasternak <vadimp@mellanox.com>
+From: Dan Robertson <dan@dlrobertson.com>
 
-[ Upstream commit ff066653aeed8ee2d4dadb1e35774dd91ecbb19f ]
+[ Upstream commit fdc7d8e829ec755c5cfb2f5a8d8c0cdfb664f895 ]
 
-Fix tps53679_probe() by using dynamically allocated "pmbus_driver_info"
-structure instead of static. Usage of static structures causes
-overwritten of the field "vrm_version", in case the system is equipped
-with several tps53679 devices with the different "vrm_version".
-In such case the last probed device overwrites this field for all
-others.
+Fix an error in the bitmaskfor the shtc1 and shtw1 bitmask used to
+retrieve the chip ID from the ID register. See section 5.7 of the shtw1
+or shtc1 datasheet for details.
 
-Fixes: 610526527a13 ("hwmon: (pmbus) Add support for Texas Instruments tps53679 device")
-Signed-off-by: Vadim Pasternak <vadimp@mellanox.com>
+Fixes: 1a539d372edd9832444e7a3daa710c444c014dc9 ("hwmon: add support for Sensirion SHTC1 sensor")
+Signed-off-by: Dan Robertson <dan@dlrobertson.com>
+Link: https://lore.kernel.org/r/20190905014554.21658-3-dan@dlrobertson.com
+[groeck: Reordered to be first in series and adjusted accordingly]
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/pmbus/tps53679.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ drivers/hwmon/shtc1.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/pmbus/tps53679.c b/drivers/hwmon/pmbus/tps53679.c
-index 85b515cd9df0..2bc352c5357f 100644
---- a/drivers/hwmon/pmbus/tps53679.c
-+++ b/drivers/hwmon/pmbus/tps53679.c
-@@ -80,7 +80,14 @@ static struct pmbus_driver_info tps53679_info = {
- static int tps53679_probe(struct i2c_client *client,
- 			  const struct i2c_device_id *id)
- {
--	return pmbus_do_probe(client, id, &tps53679_info);
-+	struct pmbus_driver_info *info;
-+
-+	info = devm_kmemdup(&client->dev, &tps53679_info, sizeof(*info),
-+			    GFP_KERNEL);
-+	if (!info)
-+		return -ENOMEM;
-+
-+	return pmbus_do_probe(client, id, info);
- }
+diff --git a/drivers/hwmon/shtc1.c b/drivers/hwmon/shtc1.c
+index decd7df995ab..2a18539591ea 100644
+--- a/drivers/hwmon/shtc1.c
++++ b/drivers/hwmon/shtc1.c
+@@ -38,7 +38,7 @@ static const unsigned char shtc1_cmd_read_id_reg[]	       = { 0xef, 0xc8 };
  
- static const struct i2c_device_id tps53679_id[] = {
+ /* constants for reading the ID register */
+ #define SHTC1_ID	  0x07
+-#define SHTC1_ID_REG_MASK 0x1f
++#define SHTC1_ID_REG_MASK 0x3f
+ 
+ /* delays for non-blocking i2c commands, both in us */
+ #define SHTC1_NONBLOCKING_WAIT_TIME_HPM  14400
 -- 
 2.20.1
 
