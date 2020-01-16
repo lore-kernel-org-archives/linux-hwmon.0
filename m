@@ -2,82 +2,84 @@ Return-Path: <SRS0=BloK=3F=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0692EC33CB3
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jan 2020 21:22:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60F70C33CAF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jan 2020 22:47:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id ACC572087E
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jan 2020 21:22:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2988C20728
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jan 2020 22:47:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=moreofthesa.me.uk header.i=@moreofthesa.me.uk header.b="RRDWFtiv"
+	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="X275vukm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388782AbgAPVWJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 16 Jan 2020 16:22:09 -0500
-Received: from moreofthesa.me.uk ([178.238.159.109]:54642 "EHLO
-        spam.moreofthesa.me.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387674AbgAPVWJ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 16 Jan 2020 16:22:09 -0500
-X-Greylist: delayed 1087 seconds by postgrey-1.27 at vger.kernel.org; Thu, 16 Jan 2020 16:22:08 EST
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=moreofthesa.me.uk; s=201708; h=In-Reply-To:Message-ID:Subject:Cc:To:From:
-        Date:Sender:Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:References:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=0ordMptwqL+7MqYAIKv1O1Ieb3eNxf4cNX632cV3+dI=; b=RRDWFtivoFmKXXDB0m7aeAH97d
-        D5g/kj9Jnkk6taQz/jfaaxvQyIfIxxD6+/ycumnS2Ydc+8/enlTDDoaEWr6sn01LVdVvc2VVjU/B/
-        rZF6MNXbizAXZOmTdjNvtZ6xAo35wme4ZJYCgn7YaYzcpcPb3eqnNu6xvzDvLiet+n4Y8twAi3RSR
-        xiECOcwi0OdpTNY6r90HRj04PcZCHH86nRlxeH042Jiq6pYcUoJMBzi617tmybqpa72qxRS6ua6Ch
-        EXAUya72hS2nmyLQCjEUyzlg2WLaIM06dNYyILbzgxppyhFHVgtRvOwERvxvSruBfT0Qxee6C/9IX
-        ZlSZqsEw==;
-Received: from [2001:8b0:897:1650::2] (helo=moreofthesa.me.uk)
-        by spam.moreofthesa.me.uk with esmtp (Exim 4.92)
-        (envelope-from <devspam@moreofthesa.me.uk>)
-        id 1isCIx-0007Lo-QE; Thu, 16 Jan 2020 21:03:57 +0000
-Date:   Thu, 16 Jan 2020 20:55:16 +0000
-From:   Darren Salt <devspam@moreofthesa.me.uk>
+        id S2388680AbgAPWrV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 16 Jan 2020 17:47:21 -0500
+Received: from mout.gmx.net ([212.227.15.15]:39485 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729261AbgAPWrU (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 16 Jan 2020 17:47:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1579214811;
+        bh=Z/+ElE6JHsBoeTs82chNmoWyjkvc9HXsuRbXbwL5AIo=;
+        h=X-UI-Sender-Class:To:Cc:References:Subject:From:Date:In-Reply-To;
+        b=X275vukmnCfPJ5Gm9No3n/sKhFXnPp1VhCVejl/ZHISXeXdm7WfjUzSPKYHo5rC2x
+         ymQXPE+C2UPZShPUQcXq2svNTx4N7eBkt4S0o0LogYWLvbh/am6kOwWa8tA7ncwmmT
+         tEjmZxbR7DTGuErp3FR4lWqXhCnza5ZKGLRami34=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [10.0.0.132] ([194.96.152.49]) by mail.gmx.com (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M6Db0-1iyqg734PI-006eOl; Thu, 16
+ Jan 2020 23:46:51 +0100
 To:     linux@roeck-us.net
 Cc:     clemens@ladisch.de, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
+References: <20200116141800.9828-1-linux@roeck-us.net>
 Subject: Re: [RFT PATCH 0/4] hwmon: k10temp driver improvements
-Message-ID: <5838D7FEC0%devspam@moreofthesa.me.uk>
+From:   Bernhard Gebetsberger <bernhard.gebetsberger@gmx.at>
+Message-ID: <576b5576-3bd5-484b-ee3f-6198f9d87db3@gmx.at>
+Date:   Thu, 16 Jan 2020 23:46:47 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
 In-Reply-To: <20200116141800.9828-1-linux@roeck-us.net>
-Mail-Followup-To: linux@roeck-us.net, clemens@ladisch.de, jdelvare@suse.com, 
- linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org, Darren Salt 
- <devspam@moreofthesa.me.uk>
-User-Agent: Messenger-Pro/2.73.6.4250 (Qt/5.11.3) (Linux-x86_64)
-X-No-Archive: no
-X-Orwell-Date: Thu, 12830 Dec 1984 20:55:16 +0000
-X-SA-Exim-Connect-IP: 2001:8b0:897:1650::2
-X-SA-Exim-Mail-From: devspam@moreofthesa.me.uk
-X-SA-Exim-Scanned: No (on spam.moreofthesa.me.uk); SAEximRunCond expanded to false
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: base64
+Content-Language: en-US
+X-Provags-ID: V03:K1:ViLtBJpUk+jRp2qBd4XUwUKlJxfM02hLwjMicorhArbxI7NXI0E
+ Fym025Xo+YXV/QtkLnmnDajdIsUATHIn0b33esuq7F3iTGVoAKWYnNfIlU0kR6ApV3NKw8/
+ dDFS26mCJYQZwA5eRQDv0IJTOuzBx9bbRScU0Pqtga2idz9PkQczxp8WvCDa2aBr/dOCbUx
+ TBWMDr9MfBi9EgmG7OiXw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:mbx1B16A6HQ=:AZAVkGej55w2Ul46MqypZn
+ mfsVLPlaq2SU6bEbkCHYFS6YBqTdN+d1CzVWCPAOI2kCjPvKG1tYvtQqCe9rubTAhce95ZTAX
+ f3e1lvmJC4tJBT1PzXzbzoFuNioR8A4VxNEihVdV5n5Y55o8upOjUrO//tPbmXfm8w5XbeFiX
+ ee9z3xjTnrSrAcY5WaA1ohc9fHauC3FHvX2A7vWtuRjP5n6Iej0DyzwDWrm1ECb0Amn/WpE3L
+ U6m8ajlq4KVtKdbz/lC7ZoTU0Ak+B1kKRNiY6w9QxZJxltSyIbU/5uqZqeLeVCyGea/wgxbgP
+ ZohQUpIjo+fI0AuFH8rZLAIKUOS/HohzWK84+9ZQ6uX6EGuy1+Q0TMp3ghQCyM2E8145XC7J7
+ ycms2G0QPPZsTqJRK78bw+fHxFKxxXTHlJmUekg8soctkEy2YF8xS4U91C8dk/qiqhL9RX+DS
+ kfu0ZOz2mtPm0Y8NBpxjzV7N385YVeGb/NiUhutqVdVEZUva2ejjOxTclCw5R22MN3t+5xClE
+ nOU6VzEPoY24rA5TdeQOzjlNM3/hH9R/2yKkwaW97t1O57EpRkd6EcApoy4jW+MX1oL0SV5z/
+ CmOyCxy8xMJu50MrdFTW5ZjDXExjBC5DebmqxC3Ao2YEk8JA/tSdo+e/+VJG8b+jA5PQlU5nb
+ zcJOOa4ueNJXRxBVwffHzMJfklzZNFLPQEHTN1wINt0nmaZ1XNiJ0H9qRKEVkCVh0rQMRYfla
+ WsV94ZUUbMOrSotgvsL66t1ZM91GIMltV19lZ4Eezxn0wAtnZEEoIR37NLXM8v7WJV6oYAt7d
+ 3Bl9A4Rw2WE+HNdw4JFZU6jppp19VtAS+FBuMj0UpMO8MHynkKsf4q5YZaagm2AYxYhjt3aIN
+ VewJ2TiyiLru2Vy0agzB416fnxEj4NI867WSK1PJ5TSV3/vqiQ8amO32OlDDLRz76rDyjw24/
+ Ph6NNogqFcbeCbPliCfvsWkdA7Vnc06HEyYFrr0clik64Lsse3RC446vdkobeZ2XP7a43+xK7
+ cHtFo8E8Dqau1kHLXGgZy9bt/riTfyk1VdU5oySc0GiZkEfVQTXmkxB3IcEwT6KS/cLBb58AM
+ ciE5oa/3P/OLA6hZ3QRbs4zAhMmmymKbFi8iXs7WprTA4szMtJ2JT/ouloohWS8DHzOSsLRs8
+ 7hGFv/ohPsYeJ/QYTIwIkBIq3l4154bJhpQ0v92YFi5ZwnpNVwh9ytDm/AYaBQ6Q6dk6nFxo+
+ IfSyEd96eMeJOK3ZYkqvMyCvFdPgsXF+BiVIDWWBPT0zn8jQWCmFklK/fAH8=
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Tested-By: Darren Salt <devspam@moreofthesa.me.uk>
-
-Linux 5.4.12, Ryzen 5 1600. Patches were applied cleanly. No problems noticed in
-
-    $ sensors k10temp-pci-00c3
-    k10temp-pci-00c3
-    Adapter: PCI adapter
-    Vcore:	  +1.11 V
-    Vsoc:	  +0.94 V
-    Tdie:	  +42.8°C  (high = +70.0°C)
-    Tctl:         +42.8°C
-    Icore:       +15.59 A
-    Isoc:    	 +12.63 A
-    
-    $
-
--- 
-|  _  | Darren Salt, using Debian GNU/Linux (and Android)
-| ( ) |
-|  X  | ASCII Ribbon campaign against HTML e-mail
-| / \ |
+VGVzdGVkLWJ5OiBCZXJuaGFyZCBHZWJldHNiZXJnZXIgPGJlcm5oYXJkLmdlYmV0c2JlcmdlckBn
+bXguYXQ+DQoNClBhdGNoZXMgYXBwbGllZCBjbGVhbmx5IG9uIHRvcCBvZiA1LjUtcmM2LCBubyBp
+c3N1ZXMgdXNpbmcgYSBSeXplbiAzIDIyMDBHOg0KazEwdGVtcC1wY2ktMDBjMw0KQWRhcHRlcjog
+UENJIGFkYXB0ZXINClZjb3JlOsKgwqDCoMKgwqDCoMKgwqAgMS4yOSBWwqANClZzb2M6wqDCoMKg
+wqDCoMKgwqDCoMKgIDEuMTIgVsKgDQpUZGllOsKgwqDCoMKgwqDCoMKgwqAgKzI4LjLCsEPCoCAo
+aGlnaCA9ICs3MC4wwrBDKQ0KVGN0bDrCoMKgwqDCoMKgwqDCoMKgICsyOC4ywrBDwqANCkljb3Jl
+OsKgwqDCoMKgwqDCoMKgIDIzLjkwIEHCoA0KSXNvYzrCoMKgwqDCoMKgwqDCoMKgwqAgNi40OSBB
+DQoNCi0gQmVybmhhcmQNCg==
