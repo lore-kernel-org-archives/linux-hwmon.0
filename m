@@ -4,52 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43DD4C33CAF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jan 2020 18:04:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9DB1C33CB6
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jan 2020 18:16:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 111B7214AF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jan 2020 18:04:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AE5D92073A
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jan 2020 18:16:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1579197883;
-	bh=2cz7rdrQ0iVoEAqo7Qg7xczrfHpYE2OTUaaqrwLkRrI=;
+	s=default; t=1579198577;
+	bh=ChIPeAG1dGINkg+Fp76gMqPv0W47WaRVmtClRrlqMlk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=IFZFXo/QVRF+m6PBV4fW/ntQWn4KGY+u5tzlSlFZvpSnhj27dZtkLYJYfYkjj1aio
-	 0j5gzw/mepxBbKnqRY/LHtpBxNc0ZG4E3cLoPmPdkOQAmtKK2DazM+xbIIXgf4xx3/
-	 l4HuEAiVSCOea83HLGZjpry7v01TeR+8mtTV8spo=
+	b=m3YGltdZcitDzVwZGk/ZARdCiIumHL+jW7hJFYMolqAEpuCei2/RD1WLPAa9uF2sX
+	 GpbCA8pwcz5T9ZZlcmlMlxJ6fs5mzOU1Zw2htK5cBhHrbtbAJS4GYtBsDqzvbKgJyB
+	 lwg/RoTNo/HjGHBUKwFq2H/V4HDVs5Se77arFJ0E=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390946AbgAPSEm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 16 Jan 2020 13:04:42 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57446 "EHLO mail.kernel.org"
+        id S2392732AbgAPR3a (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 16 Jan 2020 12:29:30 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41368 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390445AbgAPRkV (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:40:21 -0500
+        id S2392728AbgAPR33 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:29:29 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A17AA2471C;
-        Thu, 16 Jan 2020 17:40:19 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 10FC22471A;
+        Thu, 16 Jan 2020 17:29:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579196420;
-        bh=2cz7rdrQ0iVoEAqo7Qg7xczrfHpYE2OTUaaqrwLkRrI=;
+        s=default; t=1579195768;
+        bh=ChIPeAG1dGINkg+Fp76gMqPv0W47WaRVmtClRrlqMlk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f2049zDoSrBIZrHGF3wDVVu52CMeXVp0d/GsY/fSUg/WRLgmDsMVExoG2DCL6HaEX
-         db7gAl1V959zPg7YOmDZVg4Uc8wyKuhAlNovmPGKheYlmgQGYYeP9Ag51Lho5AAmkH
-         fUXLNENg3B4lhxCi46MlSZA2VoCuqTMVZa9xH2ww=
+        b=ybUbDJTbjXiN04sga+Per/y61eXyeFUUbOQPvDFW3+e//2hBlqo35ddofWKYRAYoP
+         jqa0zq8m3Gzjme7LVc7YPtfwab5czlJ/F9chOXIr5gK4u2M3GjYWjVU9WYY9Zr1x66
+         TbV4G1ca5wePhzBTOg1GtEluDedOKIjI8i3/9K94=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Iker Perez del Palomar Sustatxa 
-        <iker.perez@codethink.co.uk>, Sasha Levin <sashal@kernel.org>,
-        linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 190/251] hwmon: (lm75) Fix write operations for negative temperatures
-Date:   Thu, 16 Jan 2020 12:35:39 -0500
-Message-Id: <20200116173641.22137-150-sashal@kernel.org>
+Cc:     Dan Robertson <dan@dlrobertson.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 296/371] hwmon: (shtc1) fix shtc1 and shtw1 id mask
+Date:   Thu, 16 Jan 2020 12:22:48 -0500
+Message-Id: <20200116172403.18149-239-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200116173641.22137-1-sashal@kernel.org>
-References: <20200116173641.22137-1-sashal@kernel.org>
+In-Reply-To: <20200116172403.18149-1-sashal@kernel.org>
+References: <20200116172403.18149-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -59,38 +58,37 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Guenter Roeck <linux@roeck-us.net>
+From: Dan Robertson <dan@dlrobertson.com>
 
-[ Upstream commit 7d82fcc9d9e81241778aaa22fda7be753e237d86 ]
+[ Upstream commit fdc7d8e829ec755c5cfb2f5a8d8c0cdfb664f895 ]
 
-Writes into limit registers fail if the temperature written is negative.
-The regmap write operation checks the value range, regmap_write accepts
-an unsigned int as parameter, and the temperature value passed to
-regmap_write is kept in a variable declared as long. Negative values
-are converted large unsigned integers, which fails the range check.
-Fix by type casting the temperature to u16 when calling regmap_write().
+Fix an error in the bitmaskfor the shtc1 and shtw1 bitmask used to
+retrieve the chip ID from the ID register. See section 5.7 of the shtw1
+or shtc1 datasheet for details.
 
-Cc: Iker Perez del Palomar Sustatxa <iker.perez@codethink.co.uk>
-Fixes: e65365fed87f ("hwmon: (lm75) Convert to use regmap")
+Fixes: 1a539d372edd9832444e7a3daa710c444c014dc9 ("hwmon: add support for Sensirion SHTC1 sensor")
+Signed-off-by: Dan Robertson <dan@dlrobertson.com>
+Link: https://lore.kernel.org/r/20190905014554.21658-3-dan@dlrobertson.com
+[groeck: Reordered to be first in series and adjusted accordingly]
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/lm75.c | 2 +-
+ drivers/hwmon/shtc1.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
-index eff3b24d8473..fc31669a86ba 100644
---- a/drivers/hwmon/lm75.c
-+++ b/drivers/hwmon/lm75.c
-@@ -164,7 +164,7 @@ static int lm75_write(struct device *dev, enum hwmon_sensor_types type,
- 	temp = DIV_ROUND_CLOSEST(temp  << (resolution - 8),
- 				 1000) << (16 - resolution);
+diff --git a/drivers/hwmon/shtc1.c b/drivers/hwmon/shtc1.c
+index decd7df995ab..2a18539591ea 100644
+--- a/drivers/hwmon/shtc1.c
++++ b/drivers/hwmon/shtc1.c
+@@ -38,7 +38,7 @@ static const unsigned char shtc1_cmd_read_id_reg[]	       = { 0xef, 0xc8 };
  
--	return regmap_write(data->regmap, reg, temp);
-+	return regmap_write(data->regmap, reg, (u16)temp);
- }
+ /* constants for reading the ID register */
+ #define SHTC1_ID	  0x07
+-#define SHTC1_ID_REG_MASK 0x1f
++#define SHTC1_ID_REG_MASK 0x3f
  
- static umode_t lm75_is_visible(const void *data, enum hwmon_sensor_types type,
+ /* delays for non-blocking i2c commands, both in us */
+ #define SHTC1_NONBLOCKING_WAIT_TIME_HPM  14400
 -- 
 2.20.1
 
