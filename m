@@ -4,50 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 552DBC33CB3
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jan 2020 17:54:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8CB0C33CAF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jan 2020 18:04:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3262B2077C
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jan 2020 17:54:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ABEC1214AF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jan 2020 18:04:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1579197283;
-	bh=IP02OrS0oqRKKzPOtb089VRTRAzmnUzERC6g3EaicoQ=;
+	s=default; t=1579197866;
+	bh=ChIPeAG1dGINkg+Fp76gMqPv0W47WaRVmtClRrlqMlk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=0fTSrMt7ZJossCvaooy/UTVLKEeSmVhRKZjBmVe2QByZ8takqx7uhb3MvIZZs4XSg
-	 lAmGgxq8RfSJykzYWDQVtIVILjv8GKR4DFxm/lNC6V3Rp6F7iuXtYBTP1HMZ6K5oN8
-	 uBpdug63JhFhT7jZDiak6En98ny70mBEUdcKG9WE=
+	b=u9ZShIN5C3Mfq8rnqVi41qNi518WgN6NRuaLqHiFPmx3BNFenlEfOccT+Gu9/YHkb
+	 kbjtXI975ocrqxB6qUwoBV4iTFAfQ+mDfTrt9uCWcp4HBBj4Xn5itGVVtO4A3DNxIJ
+	 eudczuvkCL6DxHm8p2w8caD9FnlbUC0tl2xmghjc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405911AbgAPRoi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 16 Jan 2020 12:44:38 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35656 "EHLO mail.kernel.org"
+        id S2390088AbgAPSE0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 16 Jan 2020 13:04:26 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57792 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405903AbgAPRog (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:44:36 -0500
+        id S2390981AbgAPRkd (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:40:33 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F41902474F;
-        Thu, 16 Jan 2020 17:44:34 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 61C9C2473A;
+        Thu, 16 Jan 2020 17:40:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579196676;
-        bh=IP02OrS0oqRKKzPOtb089VRTRAzmnUzERC6g3EaicoQ=;
+        s=default; t=1579196433;
+        bh=ChIPeAG1dGINkg+Fp76gMqPv0W47WaRVmtClRrlqMlk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Mym3iBnfdVlGcve6mp7jABqWkL/nvkJNH4eBOpAcfuT0eYiAGBOVtYIj/Si/EugS+
-         GLPuWsxPhaGQtb5agJ/2RPL+b3npn9tzkEQ77v0yh3AVOszLiOuF1s8YZAKBLKl2+V
-         m7OeLVwW4geBCNoJgZwAv73Yjd6+cS7M9LfxFpew=
+        b=vR6CWleK1tkElx82f7fCx+Kl5whRwyLSSgdVGr7Wo/O0VA3vTraIrcwHdfOpv65l2
+         L9sZfMEDihU52o1KSjNDWdkOLssY/lmZBvZaAN3LDkJpBUOjT7bQAjKi5mIzlTCiub
+         PQCzzL7eH0sWH/Q3+lX4pdYxaMDgiFQkKa5+szc8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Guenter Roeck <linux@roeck-us.net>,
+Cc:     Dan Robertson <dan@dlrobertson.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 075/174] hwmon: (w83627hf) Use request_muxed_region for Super-IO accesses
-Date:   Thu, 16 Jan 2020 12:41:12 -0500
-Message-Id: <20200116174251.24326-75-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 199/251] hwmon: (shtc1) fix shtc1 and shtw1 id mask
+Date:   Thu, 16 Jan 2020 12:35:48 -0500
+Message-Id: <20200116173641.22137-159-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200116174251.24326-1-sashal@kernel.org>
-References: <20200116174251.24326-1-sashal@kernel.org>
+In-Reply-To: <20200116173641.22137-1-sashal@kernel.org>
+References: <20200116173641.22137-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -57,119 +58,37 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Guenter Roeck <linux@roeck-us.net>
+From: Dan Robertson <dan@dlrobertson.com>
 
-[ Upstream commit e95fd518d05bfc087da6fcdea4900a57cfb083bd ]
+[ Upstream commit fdc7d8e829ec755c5cfb2f5a8d8c0cdfb664f895 ]
 
-Super-IO accesses may fail on a system with no or unmapped LPC bus.
+Fix an error in the bitmaskfor the shtc1 and shtw1 bitmask used to
+retrieve the chip ID from the ID register. See section 5.7 of the shtw1
+or shtc1 datasheet for details.
 
-Also, other drivers may attempt to access the LPC bus at the same time,
-resulting in undefined behavior.
-
-Use request_muxed_region() to ensure that IO access on the requested
-address space is supported, and to ensure that access by multiple drivers
-is synchronized.
-
-Fixes: b72656dbc491 ("hwmon: (w83627hf) Stop using globals for I/O port numbers")
+Fixes: 1a539d372edd9832444e7a3daa710c444c014dc9 ("hwmon: add support for Sensirion SHTC1 sensor")
+Signed-off-by: Dan Robertson <dan@dlrobertson.com>
+Link: https://lore.kernel.org/r/20190905014554.21658-3-dan@dlrobertson.com
+[groeck: Reordered to be first in series and adjusted accordingly]
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/w83627hf.c | 42 +++++++++++++++++++++++++++++++++++-----
- 1 file changed, 37 insertions(+), 5 deletions(-)
+ drivers/hwmon/shtc1.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/w83627hf.c b/drivers/hwmon/w83627hf.c
-index 721295b9a051..43c0f89cefdf 100644
---- a/drivers/hwmon/w83627hf.c
-+++ b/drivers/hwmon/w83627hf.c
-@@ -130,17 +130,23 @@ superio_select(struct w83627hf_sio_data *sio, int ld)
- 	outb(ld,  sio->sioaddr + 1);
- }
+diff --git a/drivers/hwmon/shtc1.c b/drivers/hwmon/shtc1.c
+index decd7df995ab..2a18539591ea 100644
+--- a/drivers/hwmon/shtc1.c
++++ b/drivers/hwmon/shtc1.c
+@@ -38,7 +38,7 @@ static const unsigned char shtc1_cmd_read_id_reg[]	       = { 0xef, 0xc8 };
  
--static inline void
-+static inline int
- superio_enter(struct w83627hf_sio_data *sio)
- {
-+	if (!request_muxed_region(sio->sioaddr, 2, DRVNAME))
-+		return -EBUSY;
-+
- 	outb(0x87, sio->sioaddr);
- 	outb(0x87, sio->sioaddr);
-+
-+	return 0;
- }
+ /* constants for reading the ID register */
+ #define SHTC1_ID	  0x07
+-#define SHTC1_ID_REG_MASK 0x1f
++#define SHTC1_ID_REG_MASK 0x3f
  
- static inline void
- superio_exit(struct w83627hf_sio_data *sio)
- {
- 	outb(0xAA, sio->sioaddr);
-+	release_region(sio->sioaddr, 2);
- }
- 
- #define W627_DEVID 0x52
-@@ -1275,7 +1281,7 @@ static DEVICE_ATTR(name, S_IRUGO, show_name, NULL);
- static int __init w83627hf_find(int sioaddr, unsigned short *addr,
- 				struct w83627hf_sio_data *sio_data)
- {
--	int err = -ENODEV;
-+	int err;
- 	u16 val;
- 
- 	static __initconst char *const names[] = {
-@@ -1287,7 +1293,11 @@ static int __init w83627hf_find(int sioaddr, unsigned short *addr,
- 	};
- 
- 	sio_data->sioaddr = sioaddr;
--	superio_enter(sio_data);
-+	err = superio_enter(sio_data);
-+	if (err)
-+		return err;
-+
-+	err = -ENODEV;
- 	val = force_id ? force_id : superio_inb(sio_data, DEVID);
- 	switch (val) {
- 	case W627_DEVID:
-@@ -1641,9 +1651,21 @@ static int w83627thf_read_gpio5(struct platform_device *pdev)
- 	struct w83627hf_sio_data *sio_data = dev_get_platdata(&pdev->dev);
- 	int res = 0xff, sel;
- 
--	superio_enter(sio_data);
-+	if (superio_enter(sio_data)) {
-+		/*
-+		 * Some other driver reserved the address space for itself.
-+		 * We don't want to fail driver instantiation because of that,
-+		 * so display a warning and keep going.
-+		 */
-+		dev_warn(&pdev->dev,
-+			 "Can not read VID data: Failed to enable SuperIO access\n");
-+		return res;
-+	}
-+
- 	superio_select(sio_data, W83627HF_LD_GPIO5);
- 
-+	res = 0xff;
-+
- 	/* Make sure these GPIO pins are enabled */
- 	if (!(superio_inb(sio_data, W83627THF_GPIO5_EN) & (1<<3))) {
- 		dev_dbg(&pdev->dev, "GPIO5 disabled, no VID function\n");
-@@ -1674,7 +1696,17 @@ static int w83687thf_read_vid(struct platform_device *pdev)
- 	struct w83627hf_sio_data *sio_data = dev_get_platdata(&pdev->dev);
- 	int res = 0xff;
- 
--	superio_enter(sio_data);
-+	if (superio_enter(sio_data)) {
-+		/*
-+		 * Some other driver reserved the address space for itself.
-+		 * We don't want to fail driver instantiation because of that,
-+		 * so display a warning and keep going.
-+		 */
-+		dev_warn(&pdev->dev,
-+			 "Can not read VID data: Failed to enable SuperIO access\n");
-+		return res;
-+	}
-+
- 	superio_select(sio_data, W83627HF_LD_HWM);
- 
- 	/* Make sure these GPIO pins are enabled */
+ /* delays for non-blocking i2c commands, both in us */
+ #define SHTC1_NONBLOCKING_WAIT_TIME_HPM  14400
 -- 
 2.20.1
 
