@@ -2,66 +2,66 @@ Return-Path: <SRS0=BloK=3F=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B889AC33CB1
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jan 2020 14:18:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15E12C33CB3
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jan 2020 14:18:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 80C5521582
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jan 2020 14:18:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DB976207E0
+	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jan 2020 14:18:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jz8cR9sB"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X8hO/Mgb"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726988AbgAPOSU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 16 Jan 2020 09:18:20 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:41155 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726933AbgAPOSP (ORCPT
+        id S1726876AbgAPOSN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 16 Jan 2020 09:18:13 -0500
+Received: from mail-pj1-f68.google.com ([209.85.216.68]:34877 "EHLO
+        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726084AbgAPOSM (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 16 Jan 2020 09:18:15 -0500
-Received: by mail-pf1-f193.google.com with SMTP id w62so10278002pfw.8;
-        Thu, 16 Jan 2020 06:18:15 -0800 (PST)
+        Thu, 16 Jan 2020 09:18:12 -0500
+Received: by mail-pj1-f68.google.com with SMTP id s7so1658662pjc.0;
+        Thu, 16 Jan 2020 06:18:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=seUK/JyxhRWMYA1ja0fRcFl7gNdd11FZuOX5tIhz6o4=;
-        b=jz8cR9sBbfsmWSgj6nQuh7q4/DORarQKf7m4rmnFRLbhDxisphLIrI8zkgCk/3U5+S
-         K37zkUeZ51c+k9AyhAsP0O9nvx7uzIGzLrCy8/C8GhflXsGlbWDJ/kb2X5GuCpnHJP3/
-         mDTwbJz78rq+owL2OReX86ZHk3QOURdLEy80bjCBNE+wFZ33kNk5vVwKPObdAOyjIlKK
-         fA7z86+jQS45RnK5aR5HEZuRawJW/buZE3dNLWQtT+E9aoR+UbxzgxSL8HQtHLcLx6Ws
-         tDookyPz/NS0YVztp1DnthfVlCGnnKtp4jZbVgbO61nTFEwQCLUludLYEJ8SW6vtHxe3
-         IW9g==
+        bh=SqNU8BEvRrh7CzCA9+xl9QuecJJq2yOX0LpeNCA/PXU=;
+        b=X8hO/Mgb+y4D9pAMDjiETjqRKyud+waS+FpHvHdSjok/cIJkRK6PQ6kD/in+MjIsjX
+         /9SWNF9oESyzACPDOPx4wNP9UiJFQ8VBQtzcIf0yjPV9/JN73utSZaKa4CPdDiXnILkn
+         K94ohtZZduWays/+X9nDp5X07lo2YbZ8HLnlJqaM2rJ2G7FLpyEg7o4fUSxlfr4t2IoR
+         fnxznViAfEG7O90bJJLyiyIcbxenFPOurx7baKLaSxIhbI/z5YHkw26x4fPld2hGYcu5
+         +4mXSlUUTNazjz6SahWeNuJn6c/BGRwJa0RNN4Kgvt7DUQXz6eeWF+ywP9Yt/PwxeMYs
+         Hjsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references;
-        bh=seUK/JyxhRWMYA1ja0fRcFl7gNdd11FZuOX5tIhz6o4=;
-        b=kIv5PfKJReMNtJP2w7hrCCZWgz682Dp9Dmzkypl3Q6wwYFGI2t/YLJ40FjiUgrlFoQ
-         ZSIY/e/BsDGoRtwrFbHOM2hydUAkESmn+2hy7HQie+7pmjVu6x+L3GuQZGfCUE2N/01j
-         zvJDXaTiBS8MtTY8iplaE+tZ/kYy2CCpT1a5CBlHVwg2lLLSNmdUAXc9PNO3C1gncVXs
-         xvqWeELFgBLrOysmp4FD1Q841Ff97LVO7YjE1d7p7UQod6jQZUFWA2k3pCtj4c16yrAK
-         sY6RST6CClXzkPCLshCeG5U0j8TuZtLqx76RnrCcnPKren6RP7jcFoH5w2WfdzJkb/cA
-         ytbw==
-X-Gm-Message-State: APjAAAUvuhi+ctW2YUbgxuehlg1D5PWCuStTC30xUQBO61YSSkUkAQtw
-        7kru679VCJQ3oBo2SV0GZLpcrik9
-X-Google-Smtp-Source: APXvYqzq0QxK2/ou/gLtw66gjnVeUzZb9qI4LUpHIeA/fI8Zq5pSY2SF9Euu+DmUse5dnhYPOeOHQw==
-X-Received: by 2002:a63:1119:: with SMTP id g25mr39349489pgl.359.1579184294488;
-        Thu, 16 Jan 2020 06:18:14 -0800 (PST)
+        bh=SqNU8BEvRrh7CzCA9+xl9QuecJJq2yOX0LpeNCA/PXU=;
+        b=j9yNiFVo2MyVCA1uwkjnNGapk74u/6s1AP0dgtSIVHEo2QPrZJ6QqmdNr7SoiCEHRL
+         aC2YiQilGIBP+P0W9E8cqdKkkuf7/DqJt5i/N46OtjeGb75EyE0MTboL60Sf0/JioCxO
+         D0G6fL0WyP3XPZs5ocvX1UXor8Ex/9k0rMzVZf58Dgze0U8+FwphoJ+131tLxKq5C2ED
+         NlgVt9y5JU+XOxKZcIXMIJDIuFDemmiPTwFL3BR4nhKyqLq1iraMB5060FVItF5X0Q/S
+         GXenUA/82Xj0ItNTRfG9+Ohkrtp2kQAjFF1XkHc/ESdMCQQfJB6V6G5pMe/zUj87JAiU
+         4Apw==
+X-Gm-Message-State: APjAAAWH4KSltyAkqIa6Pgf0SPUoCia6+ofpyAVr3ic+IFiGts1kPULq
+        jCIda6AnJkEw0YA5h+CXDXE10YJ/
+X-Google-Smtp-Source: APXvYqz4a+aYwqPdyN/YziCPmczd+nVvO2sv35M0TgKAX06/jm2IhIyBbqze+6JTW/R9hQWGPu1aeQ==
+X-Received: by 2002:a17:902:9a08:: with SMTP id v8mr32760182plp.134.1579184291553;
+        Thu, 16 Jan 2020 06:18:11 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i23sm25641983pfo.11.2020.01.16.06.18.13
+        by smtp.gmail.com with ESMTPSA id a10sm25244078pgm.81.2020.01.16.06.18.10
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 16 Jan 2020 06:18:14 -0800 (PST)
+        Thu, 16 Jan 2020 06:18:11 -0800 (PST)
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     linux-hwmon@vger.kernel.org
 Cc:     Clemens Ladisch <clemens@ladisch.de>,
         Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [RFT PATCH 3/4] hwmon: (k10temp) Report temperatures per CPU die
-Date:   Thu, 16 Jan 2020 06:17:59 -0800
-Message-Id: <20200116141800.9828-4-linux@roeck-us.net>
+Subject: [RFT PATCH 1/4] hwmon: (k10temp) Use bitops
+Date:   Thu, 16 Jan 2020 06:17:57 -0800
+Message-Id: <20200116141800.9828-2-linux@roeck-us.net>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200116141800.9828-1-linux@roeck-us.net>
 References: <20200116141800.9828-1-linux@roeck-us.net>
@@ -70,166 +70,80 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Zen2 reports reporting temperatures per CPU die (called Core Complex Dies,
-or CCD, by AMD). Add support for it to the k10temp driver.
+Using bitops makes bit masks and shifts easier to read.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/k10temp.c | 79 ++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 78 insertions(+), 1 deletion(-)
+ drivers/hwmon/k10temp.c | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-index c45f6498a59b..944ba8008bc4 100644
+index 5c1dddde193c..8807d7da68db 100644
 --- a/drivers/hwmon/k10temp.c
 +++ b/drivers/hwmon/k10temp.c
-@@ -5,6 +5,12 @@
-  *
+@@ -5,6 +5,7 @@
   * Copyright (c) 2009 Clemens Ladisch <clemens@ladisch.de>
-  * Copyright (c) 2020 Guenter Roeck <linux@roeck-us.net>
-+ *
-+ * Implementation notes:
-+ * - CCD1 and CCD2 register address information as well as the calculation to
-+ *   convert raw register values is from https://github.com/ocerman/zenpower.
-+ *   The information is not confirmed from chip datasheets, but experiments
-+ *   suggest that it provides reasonable temperature values.
   */
  
- #include <linux/bitops.h>
-@@ -61,6 +67,8 @@ static DEFINE_MUTEX(nb_smu_ind_mutex);
++#include <linux/bitops.h>
+ #include <linux/err.h>
+ #include <linux/hwmon.h>
+ #include <linux/hwmon-sysfs.h>
+@@ -31,22 +32,22 @@ static DEFINE_MUTEX(nb_smu_ind_mutex);
+ #endif
  
+ /* CPUID function 0x80000001, ebx */
+-#define CPUID_PKGTYPE_MASK	0xf0000000
++#define CPUID_PKGTYPE_MASK	GENMASK(31, 28)
+ #define CPUID_PKGTYPE_F		0x00000000
+ #define CPUID_PKGTYPE_AM2R2_AM3	0x10000000
+ 
+ /* DRAM controller (PCI function 2) */
+ #define REG_DCT0_CONFIG_HIGH		0x094
+-#define  DDR3_MODE			0x00000100
++#define  DDR3_MODE			BIT(8)
+ 
+ /* miscellaneous (PCI function 3) */
+ #define REG_HARDWARE_THERMAL_CONTROL	0x64
+-#define  HTC_ENABLE			0x00000001
++#define  HTC_ENABLE			BIT(0)
+ 
+ #define REG_REPORTED_TEMPERATURE	0xa4
+ 
+ #define REG_NORTHBRIDGE_CAPABILITIES	0xe8
+-#define  NB_CAP_HTC			0x00000400
++#define  NB_CAP_HTC			BIT(10)
+ 
+ /*
+  * For F15h M60h and M70h, REG_HARDWARE_THERMAL_CONTROL
+@@ -60,6 +61,9 @@ static DEFINE_MUTEX(nb_smu_ind_mutex);
  /* F17h M01h Access througn SMN */
  #define F17H_M01H_REPORTED_TEMP_CTRL_OFFSET	0x00059800
-+#define F17H_M70H_CCD1_TEMP			0x00059954
-+#define F17H_M70H_CCD2_TEMP			0x00059958
  
- #define CUR_TEMP_SHIFT				21
- #define CUR_TEMP_RANGE_SEL_MASK			BIT(19)
-@@ -72,6 +80,8 @@ struct k10temp_data {
- 	int temp_offset;
- 	u32 temp_adjust_mask;
- 	bool show_tdie;
-+	bool show_tccd1;
-+	bool show_tccd2;
- };
++#define CUR_TEMP_SHIFT				21
++#define CUR_TEMP_RANGE_SEL_MASK			BIT(19)
++
+ struct k10temp_data {
+ 	struct pci_dev *pdev;
+ 	void (*read_htcreg)(struct pci_dev *pdev, u32 *regval);
+@@ -129,7 +133,7 @@ static unsigned int get_raw_temp(struct k10temp_data *data)
+ 	u32 regval;
  
- struct tctl_offset {
-@@ -143,6 +153,8 @@ static long get_raw_temp(struct k10temp_data *data)
- const char *k10temp_temp_label[] = {
- 	"Tdie",
- 	"Tctl",
-+	"Tccd1",
-+	"Tccd2",
- };
- 
- static int k10temp_read_labels(struct device *dev,
-@@ -172,6 +184,16 @@ static int k10temp_read(struct device *dev, enum hwmon_sensor_types type,
- 			if (*val < 0)
- 				*val = 0;
- 			break;
-+		case 2:		/* Tccd1 */
-+			amd_smn_read(amd_pci_dev_to_node_id(data->pdev),
-+				     F17H_M70H_CCD1_TEMP, &regval);
-+			*val = (regval & 0xfff) * 125 - 305000;
-+			break;
-+		case 3:		/* Tccd2 */
-+			amd_smn_read(amd_pci_dev_to_node_id(data->pdev),
-+				     F17H_M70H_CCD2_TEMP, &regval);
-+			*val = (regval & 0xfff) * 125 - 305000;
-+			break;
- 		default:
- 			return -EOPNOTSUPP;
- 		}
-@@ -206,8 +228,24 @@ static umode_t k10temp_is_visible(const void *_data,
- 	case hwmon_temp:
- 		switch (attr) {
- 		case hwmon_temp_input:
--			if (channel && !data->show_tdie)
-+			switch (channel) {
-+			case 0:		/* Tdie, or Tctl if we don't show it */
-+				break;
-+			case 1:		/* Tctl */
-+				if (!data->show_tdie)
-+					return 0;
-+				break;
-+			case 2:		/* Tccd1 */
-+				if (!data->show_tccd1)
-+					return 0;
-+				break;
-+			case 3:		/* Tccd2 */
-+				if (!data->show_tccd2)
-+					return 0;
-+				break;
-+			default:
- 				return 0;
-+			}
- 			break;
- 		case hwmon_temp_max:
- 			if (channel)
-@@ -229,8 +267,24 @@ static umode_t k10temp_is_visible(const void *_data,
- 				return 0;
- 			break;
- 		case hwmon_temp_label:
-+			/* No labels if we don't show the die temperature */
- 			if (!data->show_tdie)
- 				return 0;
-+			switch (channel) {
-+			case 0:		/* Tdie */
-+			case 1:		/* Tctl */
-+				break;
-+			case 2:		/* Tccd1 */
-+				if (!data->show_tccd1)
-+					return 0;
-+				break;
-+			case 3:		/* Tccd2 */
-+				if (!data->show_tccd2)
-+					return 0;
-+				break;
-+			default:
-+				return 0;
-+			}
- 			break;
- 		default:
- 			return 0;
-@@ -281,6 +335,8 @@ static const struct hwmon_channel_info *k10temp_info[] = {
- 			   HWMON_T_INPUT | HWMON_T_MAX |
- 			   HWMON_T_CRIT | HWMON_T_CRIT_HYST |
- 			   HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
- 			   HWMON_T_INPUT | HWMON_T_LABEL),
- 	NULL
- };
-@@ -326,9 +382,30 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	data->read_tempreg(data->pdev, &regval);
+-	temp = (regval >> 21) * 125;
++	temp = (regval >> CUR_TEMP_SHIFT) * 125;
+ 	if (regval & data->temp_adjust_mask)
+ 		temp -= 49000;
+ 	return temp;
+@@ -312,7 +316,7 @@ static int k10temp_probe(struct pci_dev *pdev,
  		data->read_htcreg = read_htcreg_nb_f15;
  		data->read_tempreg = read_tempreg_nb_f15;
  	} else if (boot_cpu_data.x86 == 0x17 || boot_cpu_data.x86 == 0x18) {
-+		u32 regval;
-+
- 		data->temp_adjust_mask = CUR_TEMP_RANGE_SEL_MASK;
+-		data->temp_adjust_mask = 0x80000;
++		data->temp_adjust_mask = CUR_TEMP_RANGE_SEL_MASK;
  		data->read_tempreg = read_tempreg_nb_f17;
  		data->show_tdie = true;
-+
-+		switch (boot_cpu_data.x86_model) {
-+		case 0x1:	/* Zen */
-+		case 0x8:	/* Zen+ */
-+		case 0x11:	/* Zen APU */
-+		case 0x18:	/* Zen+ APU */
-+			break;
-+		case 0x71:	/* Zen2 */
-+			amd_smn_read(amd_pci_dev_to_node_id(pdev),
-+				     F17H_M70H_CCD1_TEMP, &regval);
-+			if (regval & 0xfff)
-+				data->show_tccd1 = true;
-+
-+			amd_smn_read(amd_pci_dev_to_node_id(pdev),
-+				     F17H_M70H_CCD2_TEMP, &regval);
-+			if (regval & 0xfff)
-+				data->show_tccd2 = true;
-+			break;
-+		}
  	} else {
- 		data->read_htcreg = read_htcreg_pci;
- 		data->read_tempreg = read_tempreg_pci;
 -- 
 2.17.1
 
