@@ -2,154 +2,106 @@ Return-Path: <SRS0=nEaE=3G=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 63341C33CAF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Jan 2020 01:46:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66413C33C9E
+	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Jan 2020 03:50:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 312A720748
-	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Jan 2020 01:46:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0773D2082F
+	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Jan 2020 03:50:52 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="C2siFIFM"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="rpQmXwiG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729031AbgAQBq0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 16 Jan 2020 20:46:26 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:42384 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726741AbgAQBq0 (ORCPT
+        id S1727030AbgAQDuv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 16 Jan 2020 22:50:51 -0500
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:56313 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726933AbgAQDuv (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 16 Jan 2020 20:46:26 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00H1i3rt009058;
-        Fri, 17 Jan 2020 01:44:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2019-08-05;
- bh=T4SKvmpTep1+qbnJtmrMWMHMbVyk5YW9j4BNwvKbNOs=;
- b=C2siFIFMrI5zM63utFvQrfdD8GXN7s3fcFugXBiK45D8U8IKFwSkNwWVjs9INyrlMrq8
- olhQ/S7e6yMLzO027ViPBfIGCcJnDYxUmb3xm4SmECRFkEGimz0XHcNqiWzyIbnFa5b+
- gJvpf6ORrF0uR8hjHH2lOocBdT7Rqk4z3Vj9TcRG/yDpqxKRx7LDwTfeQHpfd+x+LxZs
- qzvVQ9v+uTGt/YaSH3EfdhjmPsEjjAMZlt10UiILsmncEzlsEJ18BOaQ0oy/A03eE4WY
- ZiiapUXGACxfqJYBAMUzhgkqGYAyCInjZrWMNvB6qbqj0Pjs12ErW3YOw7HS0Yp+yWEp VQ== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2130.oracle.com with ESMTP id 2xf74sp0g1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Jan 2020 01:44:47 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00H1iYx4131526;
-        Fri, 17 Jan 2020 01:44:47 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 2xk22xy5b7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Jan 2020 01:44:46 +0000
-Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 00H1hI0f009269;
-        Fri, 17 Jan 2020 01:43:18 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 16 Jan 2020 17:43:17 -0800
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-ide@vger.kernel.org,
-        Chris Healy <cphealy@gmail.com>
-Subject: Re: [PATCH v2] hwmon: Driver for temperature sensors on SATA drives
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-References: <20191215174509.1847-1-linux@roeck-us.net>
-        <20191215174509.1847-2-linux@roeck-us.net>
-        <yq1r211dvck.fsf@oracle.com>
-        <b22a519c-8f26-e731-345f-9deca1b2150e@roeck-us.net>
-        <yq1sgkq21ll.fsf@oracle.com> <20200108153341.GB28530@roeck-us.net>
-        <38af9fda-9edf-1b54-bd8d-92f712ae4cda@roeck-us.net>
-        <yq1r202spr9.fsf@oracle.com>
-        <403cfbf8-79da-94f1-509f-e90d1a165722@roeck-us.net>
-        <yq14kwwnioo.fsf@oracle.com> <20200116174703.GA7850@roeck-us.net>
-Date:   Thu, 16 Jan 2020 20:43:14 -0500
-In-Reply-To: <20200116174703.GA7850@roeck-us.net> (Guenter Roeck's message of
-        "Thu, 16 Jan 2020 09:47:03 -0800")
-Message-ID: <yq18sm6n9hp.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+        Thu, 16 Jan 2020 22:50:51 -0500
+Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 3E687891AC;
+        Fri, 17 Jan 2020 16:50:49 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1579233049;
+        bh=1PlkYpAjDI6cRvnZgKg4jtVFtrJLjm20i+J1xIr/d1I=;
+        h=From:To:Cc:Subject:Date;
+        b=rpQmXwiG1QOq16IfyQ+zG53MiR0NmacX6+mJnkHi/YeXpQ3TtK4pd/x8HBOLDE/+w
+         kAXh/rl7f0HdE5h7YXXNV9g2/FyJBQxJhOO61hnuO3qD57ciKksi5tCraSzqqr3hxp
+         WdeLPdd7fWh0xmQ+eUSFQuPSBh+71L1p69VeIFW1kWxvaZu9xtvJEoeXN+QTfIw7JS
+         2H7QEiLifsX6TfXrLFtMMSgltR/b3+njRuZm/Ialyr4SAH7v8h/0WvEArOiredSyZx
+         /Ykr09TSZMJIOOEK2vNFo0uGosobBtzdCOKoXrj0c8qTxmwKoBCeawkaEcTyHX84cp
+         QOazhfjbImlmQ==
+Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
+        id <B5e212f190000>; Fri, 17 Jan 2020 16:50:49 +1300
+Received: from logans-dl.ws.atlnz.lc (logans-dl.ws.atlnz.lc [10.33.25.61])
+        by smtp (Postfix) with ESMTP id 8896913EEFE;
+        Fri, 17 Jan 2020 16:50:48 +1300 (NZDT)
+Received: by logans-dl.ws.atlnz.lc (Postfix, from userid 1820)
+        id 05CECC1A8B; Fri, 17 Jan 2020 16:50:49 +1300 (NZDT)
+From:   Logan Shaw <logan.shaw@alliedtelesis.co.nz>
+To:     linux@roeck-us.net, jdelvare@suse.com, robh+dt@kernel.org
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Joshua.Scott@alliedtelesis.co.nz,
+        Chris.Packham@alliedtelesis.co.nz, logan.shaw@alliedtelesis.co.nz
+Subject: [PATCH v3 0/2] hwmon: (adt7475) Added attenuator bypass support
+Date:   Fri, 17 Jan 2020 16:50:16 +1300
+Message-Id: <20200117035018.11985-1-logan.shaw@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9502 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-2001170009
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9502 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-2001170009
+Content-Transfer-Encoding: quoted-printable
+x-atlnz-ls: pat
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+The ADT7473 and ADT7475 support bypassing voltage input attenuators on
+voltage input 1 and the ADT7476 and ADT7490 additionally support
+bypassing voltage input attenuators on voltage inputs 0, 3, and 4. This
+can be useful to improve measurement resolution when measuring voltages
+0 V - 2.25 V.
 
-Guenter,
+This patch adds 4 optional devicetree properties to the adt7475
+driver, each setting the attenuator bypass (or clearing) on a
+specific voltage input.
 
-> Can you by any chance provide a full traceback ?
+* v3
+- removed the functionality to set the global attenuator bypass.
+- added functionality to allow bypassing voltage input 1 on the
+	ADT7473 and ADT7475.
+- added DTS definition file adt7475.yaml and 4 new properties.
+- added the previousely missing newline character to the end of
+  	file adt7475.c.=20
 
-My test machines are tied up with something else right now. This is from
-a few days ago (pristine hwmon-next, I believe):
+* v2
+- removed sysfs changes from patch
+- removed adt7475_write macro from patch and replaced it by using
+	the i2c_smbus_write_byte_data function directly in code.
+- removed config4_attenuate_index function from patch and replaced it
+	by modifying the function  load_individual_bypass_attenuators
+	to use hard coded bit values.
+- modified function load_individual_bypass_attenuators to use 4 if
+	statements, one for each voltage input, replacing the for loop.
+- modified function adt7475_probe to check the device is a ADT7476 or
+	ADT7490 (other devices do not support bypassing all or
+	individual attenuators), and only then set the relevant bits.
+- added new file adt7475.txt to document the new devicetree properties.
+- removed c++ style comments.=20
 
-[ 1055.611912] ------------[ cut here ]------------
-[ 1055.611922] WARNING: CPU: 3 PID: 3233 at drivers/base/dd.c:519 really_probe+0x436/0x4f0
-[ 1055.611925] Modules linked in: sd_mod sg ahci libahci libata drivetemp scsi_mod crc32c_intel igb i2c_algo_bit i2c_core dca hwmon ipv6 nf_defrag_ipv6 crc_ccitt
-[ 1055.611955] CPU: 3 PID: 3233 Comm: kworker/u17:1 Tainted: G        W         5.5.0-rc1+ #21
-[ 1055.611965] Workqueue: events_unbound async_run_entry_fn
-[ 1055.611973] RIP: 0010:really_probe+0x436/0x4f0
-[ 1055.611979] Code: c7 30 69 f8 82 e8 ba 94 e5 ff e9 60 ff ff ff 48 8d 7b 38 e8 cc d9 b4 ff 48 8b 43 38 48 85 c0 0f 85 41 fd ff ff e9 4f fd ff ff <0f> 0b e9 66 fc ff ff 48 8d 7d 50 e8 aa d9 b4 ff 4c 8b 6d 50 4d 85
-[ 1055.611983] RSP: 0018:ffff8881edb77c98 EFLAGS: 00010287
-[ 1055.611989] RAX: ffff8881e1f8fb80 RBX: ffffffffa033a000 RCX: ffffffff8182e583
-[ 1055.611993] RDX: dffffc0000000000 RSI: 0000000000000004 RDI: ffff8881dec506a8
-[ 1055.611997] RBP: ffff8881dec50238 R08: 0000000000000001 R09: fffffbfff09629ed
-[ 1055.612000] R10: fffffbfff09629ec R11: 0000000000000003 R12: 0000000000000000
-[ 1055.612004] R13: ffff8881dec506a8 R14: ffffffff8182eca0 R15: 000000000000000b
-[ 1055.612009] FS:  0000000000000000(0000) GS:ffff8881f8900000(0000) knlGS:0000000000000000
-[ 1055.612013] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ 1055.612017] CR2: 00007f957884a000 CR3: 00000001df5ec003 CR4: 00000000000606e0
-[ 1055.612020] Call Trace:
-[ 1055.612038]  ? driver_probe_device+0x170/0x170
-[ 1055.612045]  driver_probe_device+0x82/0x170
-[ 1055.612058]  ? driver_probe_device+0x170/0x170
-[ 1055.612064]  __driver_attach_async_helper+0xa3/0xe0
-[ 1055.612076]  async_run_entry_fn+0x68/0x2a0
-[ 1055.612094]  process_one_work+0x4df/0x990
-[ 1055.612121]  ? pwq_dec_nr_in_flight+0x110/0x110
-[ 1055.612127]  ? do_raw_spin_lock+0x113/0x1d0
-[ 1055.612161]  worker_thread+0x78/0x5c0
-[ 1055.612190]  ? process_one_work+0x990/0x990
-[ 1055.612195]  kthread+0x1be/0x1e0
-[ 1055.612202]  ? kthread_create_worker_on_cpu+0xd0/0xd0
-[ 1055.612215]  ret_from_fork+0x3a/0x50
-[ 1055.612251] irq event stamp: 3512
-[ 1055.612259] hardirqs last  enabled at (3511): [<ffffffff81d2b874>] _raw_spin_unlock_irq+0x24/0x30
-[ 1055.612265] hardirqs last disabled at (3512): [<ffffffff810029c9>] trace_hardirqs_off_thunk+0x1a/0x1c
-[ 1055.612272] softirqs last  enabled at (3500): [<ffffffff820003a5>] __do_softirq+0x3a5/0x5a8
-[ 1055.612281] softirqs last disabled at (3489): [<ffffffff810cec7b>] irq_exit+0xfb/0x100
-[ 1055.612284] ---[ end trace f0a8dd9a37bea031 ]---
+Logan Shaw (2):
+  hwmon: (adt7475) Added attenuator bypass support
+  hwmon: (adt7475) Added attenuator bypass support
 
-> Either case, I would like to track down how the warning happens, so any
-> information you can provide that lets me reproduce the problem would be
-> very helpful.
+ .../devicetree/bindings/hwmon/adt7475.yaml    | 90 +++++++++++++++++++
+ drivers/hwmon/adt7475.c                       | 76 ++++++++++++++++
+ 2 files changed, 166 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/adt7475.yaml
 
-The three systems that exhibit the problem are stock (2010/2012/2014
-vintage) x86_64 servers with onboard AHCI and a variety of 4-6 SATA
-drives each.
+--=20
+2.25.0
 
-For the qemu test I didn't have ahci configured but I had my SCSI temp
-patch on top of yours and ran modprobe drivetemp; modprobe scsi_debug to
-trigger the warnings.
-
--- 
-Martin K. Petersen	Oracle Linux Engineering
