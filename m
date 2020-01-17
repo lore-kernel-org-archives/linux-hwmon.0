@@ -1,95 +1,200 @@
-Return-Path: <SRS0=BloK=3F=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=nEaE=3G=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56DA4C33CAF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jan 2020 22:52:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 698C8C33CAF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Jan 2020 00:38:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 20C862073A
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Jan 2020 22:52:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 322092077C
+	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Jan 2020 00:38:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FjHfbveP"
+	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="bSqq+fKF"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387953AbgAPWw2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 16 Jan 2020 17:52:28 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:34798 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729261AbgAPWw2 (ORCPT
+        id S1729431AbgAQAif (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 16 Jan 2020 19:38:35 -0500
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:35026 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726925AbgAQAie (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 16 Jan 2020 17:52:28 -0500
-Received: by mail-pg1-f196.google.com with SMTP id r11so10675152pgf.1;
-        Thu, 16 Jan 2020 14:52:28 -0800 (PST)
+        Thu, 16 Jan 2020 19:38:34 -0500
+Received: by mail-lf1-f65.google.com with SMTP id 15so17022225lfr.2;
+        Thu, 16 Jan 2020 16:38:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=RN/ipqsW8ngLEOa2AfLfo6np6isK0Qy4a7Uo/MWPYEE=;
-        b=FjHfbvePrYUdqCds+yuzsoCVo1x8DAPJvd39MzZwN3sCHQHWbwvKxoRwv0535mp52f
-         wATGB9SALyJ4lqQ7Je33fM1SxDHKZ5H1D1EDHtSlf7GWtWF0NojyEp37Opv5LMZIyqn+
-         wmRzwa7jrQdUSP1ku69l1wgxDWqOX/EzCmhgaaXXGRy+0OiWPtYpPEqDiSiSrxipGzQW
-         Brmh56ElnzgcMYIVZliEbDos6nMVE3RnOC72w0UWFMV5e8gafIuxmF+mv6XmbLNdWpJH
-         FOoaD+JtyysCRId4CYAyPKM/H8ob6gQGtQPAzE4kqPFPLdRA54fqcvRlo9M2nhQipIFZ
-         LliA==
+        d=googlemail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=lFmi0DxXN3LQfVQ6vLdLOH7+FXKf60l5t8jOk9ir+hY=;
+        b=bSqq+fKFKHllfQv4OkGRC0YVtTDOsOdFgKOM0YLGOeTcrFeEYB/RRnlN8Fc20L42Yg
+         VR6USRmCFpha6wIc+VWy+Jol3GGR10EURTbYmZZnN0XriEeaHR4g/fmndB3eoEwsQdby
+         GsGvRyC+iF0u27znNKyS1zrm8A47+zk3SAh1PZ8tVvI9Bf+ogZe0lst6WWe0EKQ/SZnK
+         Ki0keDTBTvgV6/RycTaInDHmaz8gOYVTGEDEi4gQXdp5vJfOKJy3Un7+aFlzo/RTefc+
+         keH6eakh4NiLb6I0VR1k+OOr2BBCe7xcaJ4eddPWHY7gph8emqlAu5J/znx0x0jyQTz5
+         HKfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to:user-agent;
-        bh=RN/ipqsW8ngLEOa2AfLfo6np6isK0Qy4a7Uo/MWPYEE=;
-        b=ZkxONNG388Z9Bu7xMsuCWyiQZ7yVCk0FcZNYVJ8Xv7R1BkeINXbA6Knbwy9Zh05Nig
-         uxyc4QpeykuBY8QA0BeQ9a8FATSs4AsgkK8FQ8sfdAPQY3U6m8rTilkX3UPacn0buG45
-         x/PcMa/MlyIMV+ON5mD4y5nD2FWbXwpFIxwSzn5OtldsquS8PlNHQnAhy4IIDfFV4Kvf
-         y2Q80E0QiriyGrCrvIAPVQd0xDffBcOeovt9oTXkicSEN6y5b7POTbMk08Duafx/Kr5P
-         NYIKMkOTPNaE2SLV1ApMWgSRCmlJ+ltBo30e1VyiLPY5HmBfIbEj4K53LzrMYhFyARf/
-         RYAA==
-X-Gm-Message-State: APjAAAWXfSVxyIWd1vyvVXMAjKonPDRkwTkdrIhcUAdusxMC8RpXnVdm
-        5AQMd3rcd746GBstqAnUC5Hq7OxU
-X-Google-Smtp-Source: APXvYqzZM8E4S1IGKY2/NPb/C7G2BXIYHoYjQFEL8s7115ygbnLtKV1asqltwhHSqGsOw3K86lWq6Q==
-X-Received: by 2002:a62:e318:: with SMTP id g24mr39141152pfh.218.1579215148082;
-        Thu, 16 Jan 2020 14:52:28 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c15sm5232268pja.30.2020.01.16.14.52.26
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 16 Jan 2020 14:52:27 -0800 (PST)
-Date:   Thu, 16 Jan 2020 14:52:25 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Bernhard Gebetsberger <bernhard.gebetsberger@gmx.at>
-Cc:     clemens@ladisch.de, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFT PATCH 0/4] hwmon: k10temp driver improvements
-Message-ID: <20200116225225.GA12892@roeck-us.net>
-References: <20200116141800.9828-1-linux@roeck-us.net>
- <576b5576-3bd5-484b-ee3f-6198f9d87db3@gmx.at>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=lFmi0DxXN3LQfVQ6vLdLOH7+FXKf60l5t8jOk9ir+hY=;
+        b=d/hvUeGNFh5RSQR4/gD2NeVfzwNlq/b7k1S27d3+atcXWuF/z+FDdMr3HmuWW3mZcl
+         567AnwKldf31IeAk4UQ4Ntl1aO6CCFMMIIyuCJVWr+8HojmF+kH8XwnuNT7H3Z+ha+ww
+         L7XJ0ZIqsZdBF5oKZAv/EOUm7JhguLNZbt3xBEs1VTLHhyI1d8iHp8alL25vNSmJEdY0
+         1Hf7glyJpMz6825cBYys5gXvqWKoeOdVjEJ6EjRtVT7TgOMhFCFwbQ8yU5SbyD29/3PF
+         V9ydwQOT4AwRyD9SR+ILhUfst69wGCSSC11sfJ2/3/wuiGf9jeurOrs3GiPHXHuw192L
+         CGiw==
+X-Gm-Message-State: APjAAAUavESn6pRpwoFeEDsEJBhhgxn0Xf2mQeQRHkLvwV5LOiDLX+gi
+        zrZz/aeR62mrXFU2xcZvCdgYc54Q5PJSEMeKW7LBSFYRKuk=
+X-Google-Smtp-Source: APXvYqx1/X32n1YsVwgIiVtIlX04BK83qTRTYXpZGzO2c20mhtHCRHRe/aNxxnQBJBqsuvHgDmYDIxupajkUvoYw094=
+X-Received: by 2002:ac2:52a3:: with SMTP id r3mr3855156lfm.189.1579221512601;
+ Thu, 16 Jan 2020 16:38:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <576b5576-3bd5-484b-ee3f-6198f9d87db3@gmx.at>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20200116141800.9828-1-linux@roeck-us.net>
+In-Reply-To: <20200116141800.9828-1-linux@roeck-us.net>
+From:   Ken Moffat <zarniwhoop73@googlemail.com>
+Date:   Fri, 17 Jan 2020 00:38:20 +0000
+Message-ID: <CANVEwpZVZs5gnvQTgwZGcT6JG7WdGrOVpbHWGD08bjPascjL=g@mail.gmail.com>
+Subject: Re: [RFT PATCH 0/4] hwmon: k10temp driver improvements
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, Clemens Ladisch <clemens@ladisch.de>,
+        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Jan 16, 2020 at 11:46:47PM +0100, Bernhard Gebetsberger wrote:
-> Tested-by: Bernhard Gebetsberger <bernhard.gebetsberger@gmx.at>
-> 
-> Patches applied cleanly on top of 5.5-rc6, no issues using a Ryzen 3 2200G:
+On Thu, 16 Jan 2020 at 14:18, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> This patch series implements various improvements for the k10temp driver.
+>
+> Patch 1/4 introduces the use of bit operations.
+>
+> Patch 2/4 converts the driver to use the devm_hwmon_device_register_with_=
+info
+> API. This not only simplifies the code and reduces its size, it also
+> makes the code easier to maintain and enhance.
+>
+> Patch 3/4 adds support for reporting Core Complex Die (CCD) temperatures
+> on Ryzen 3 (Zen2) CPUs.
+>
+> Patch 4/4 adds support for reporting core and SoC current and voltage
+> information on Ryzen CPUs.
+>
+
 > k10temp-pci-00c3
 > Adapter: PCI adapter
-> Vcore:         1.29 V 
-> Vsoc:          1.12 V 
-> Tdie:         +28.2°C  (high = +70.0°C)
-> Tctl:         +28.2°C 
-> Icore:        23.90 A 
-> Isoc:          6.49 A
-> 
+> Vcore:        +1.36 V
+> Vsoc:         +1.18 V
+> Tdie:         +86.8=C2=B0C  (high =3D +70.0=C2=B0C)
+> Tctl:         +86.8=C2=B0C
+> Tccd1:        +80.0=C2=B0C
+> Tccd2:        +81.8=C2=B0C
+> Icore:       +44.14 A
+> Isoc:        +13.83 A
+>
+> The patch series has only been tested with Ryzen 3900 CPUs. Further test
+> coverage will be necessary before the changes can be applied to the Linux
+> kernel.
 
-Thanks!
+I have some Zen1 and Zen1+ here.
 
-Guenter
+My Ryzen 3 1300X, applied to 5.5.0-rc5
+
+machine idle, I thought at first the temperature may be a bit low, so
+I've added other reported temperatures.  I now think it is maybe ok.
+
+k10temp-pci-00c3
+Adapter: PCI adapter
+Vcore:        +1.41 V
+Vsoc:         +0.89 V
+Tdie:         +21.2=C2=B0C  (high =3D +70.0=C2=B0C)
+Tctl:         +21.2=C2=B0C
+Icore:       +30.14 A
+Isoc:         +8.66 A
+
+SYSTIN:                 +29.0=C2=B0C  (high =3D  +0.0=C2=B0C, hyst =3D  +0.=
+0=C2=B0C)
+ALARM  sensor =3D thermistor
+CPUTIN:                 +25.5=C2=B0C  (high =3D +80.0=C2=B0C, hyst =3D +75.=
+0=C2=B0C)
+sensor =3D thermistor
+AUXTIN0:                 -1.5=C2=B0C    sensor =3D thermistor
+AUXTIN1:                +87.0=C2=B0C    sensor =3D thermistor
+AUXTIN2:                +23.0=C2=B0C    sensor =3D thermistor
+AUXTIN3:                -27.0=C2=B0C    sensor =3D thermistor
+SMBUSMASTER 0:          +20.5=C2=B0C
+
+After about 2 minutes of make -j8 on kernel, to load it
+
+k10temp-pci-00c3
+Adapter: PCI adapter
+Vcore:        +1.26 V
+Vsoc:         +0.89 V
+Tdie:         +46.2=C2=B0C  (high =3D +70.0=C2=B0C)
+Tctl:         +46.2=C2=B0C
+Icore:       +45.73 A
+Isoc:        +11.18 A
+
+SYSTIN:                 +29.0=C2=B0C  (high =3D  +0.0=C2=B0C, hyst =3D  +0.=
+0=C2=B0C)
+ALARM  sensor =3D thermistor
+CPUTIN:                 +38.5=C2=B0C  (high =3D +80.0=C2=B0C, hyst =3D +75.=
+0=C2=B0C)
+sensor =3D thermistor
+AUXTIN0:                 -7.5=C2=B0C    sensor =3D thermistor
+AUXTIN1:                +85.0=C2=B0C    sensor =3D thermistor
+AUXTIN2:                +23.0=C2=B0C    sensor =3D thermistor
+AUXTIN3:                -27.0=C2=B0C    sensor =3D thermistor
+SMBUSMASTER 0:          +46.0=C2=B0C
+
+So I guess the temperatures *are* in the right area.
+Interestingly, the Vcore restores to above +1.4V when idle.
+
+And my Ryzen 5 3400G (Zen+), applied to 5.4.12, box is idle,
+also showing the gpu measurements of this APU to confirm the
+temperature:
+
+k10temp-pci-00c3
+Adapter: PCI adapter
+Vcore:        +0.94 V
+Vsoc:         +1.09 V
+Tdie:         +34.8=C2=B0C  (high =3D +70.0=C2=B0C)
+Tctl:         +34.8=C2=B0C
+Icore:        +6.24 A
+Isoc:         +8.30 A
+
+amdgpu-pci-0900
+Adapter: PCI adapter
+vddgfx:           N/A
+vddnb:            N/A
+edge:         +34.0=C2=B0C  (crit =3D +80.0=C2=B0C, hyst =3D  +0.0=C2=B0C)
+
+For my Ryzen 5 2500u laptop (Zen1), again showing the gpu:
+
+k10temp-pci-00c3
+Adapter: PCI adapter
+Vcore:        +0.97 V
+Vsoc:         +0.93 V
+Tdie:         +37.2=C2=B0C  (high =3D +70.0=C2=B0C)
+Tctl:         +37.2=C2=B0C
+Icore:       +19.75 A
+Isoc:         +8.66 A
+
+amdgpu-pci-0300
+Adapter: PCI adapter
+vddgfx:           N/A
+vddnb:            N/A
+edge:         +37.0=C2=B0C  (crit =3D +80.0=C2=B0C, hyst =3D  +0.0=C2=B0C)
+
+Thanks.
+=C4=B8en
+
+--=20
+We hope and trust that our values and loyal customers will bear with
+us in the coming months as we interact synergistically with change
+management in our striving for excellence.  That is our mission.
