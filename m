@@ -2,132 +2,297 @@ Return-Path: <SRS0=nEaE=3G=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BBD4C33CB1
-	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Jan 2020 14:14:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 330B3C33CB1
+	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Jan 2020 15:56:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id ED0232082F
-	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Jan 2020 14:14:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F3E6421582
+	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Jan 2020 15:56:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FPdj3+g1"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fI4qsdYV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727022AbgAQOOk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 17 Jan 2020 09:14:40 -0500
-Received: from mail-yw1-f65.google.com ([209.85.161.65]:41991 "EHLO
+        id S1729019AbgAQP4c (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 17 Jan 2020 10:56:32 -0500
+Received: from mail-yw1-f65.google.com ([209.85.161.65]:42947 "EHLO
         mail-yw1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726871AbgAQOOk (ORCPT
+        with ESMTP id S1728739AbgAQP4c (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 17 Jan 2020 09:14:40 -0500
-Received: by mail-yw1-f65.google.com with SMTP id l14so14395592ywj.9;
-        Fri, 17 Jan 2020 06:14:39 -0800 (PST)
+        Fri, 17 Jan 2020 10:56:32 -0500
+Received: by mail-yw1-f65.google.com with SMTP id l14so14541251ywj.9
+        for <linux-hwmon@vger.kernel.org>; Fri, 17 Jan 2020 07:56:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=VgRK7owqFXqx1Er/WrhHguchgkosTUUF7rP053YZqDk=;
-        b=FPdj3+g1oeemik7XvV+UzRawtP+NRK1UfI8QHBpyiFZufzctyk6ot82zs8sYKI3eSZ
-         /wlcnx5tAmi96GU42dBxLqVlQYd+gfe4ZzcOE/pgLShRG58LIYvZA8pjEMhEKEQGCZFl
-         jkTS6ERTyhOxrnvFbd/WQ4DXhWmFQMWxu4IRV2rAfjx5JfgisfzPxuxFDOHVcsfCQl7R
-         3Mrobd6hLcCapTi6YPW/cme8Yn1mdiHazSqwD4xb7ss8JuXpdNYj3Uoyh4V/INJZ7pM5
-         JQP0LRot1JZQhCzBkZyofDVwGwLHJI8RWP+FwlgtbNVZLhZdL7XYfSzZwfrWj9vTG1fj
-         bLHQ==
+        h=sender:from:to:cc:subject:date:message-id;
+        bh=OpWfR+kDUKQZu7yUwy5szmehKR2t6wKor0HzZ4WFqwc=;
+        b=fI4qsdYVmgsy5mZMT4F8xd4m62NTeDKL1JNkC2Yeh9ynQDETKU20CdXYSgg0hARVRk
+         6maKSKra2bF5ysfOCVxfNk3o2m42QumSyhtQZqysnYc7hpxQHw3Q20QDdgU0IcWcJcz2
+         Hhjvr3J7ki/FO7wKTv544NWaTBAuDa/1Al5dWPchxiDwl/t84VJMpOepVSpGA5H4j2LQ
+         WmHiebM/KN26YZe2hUFAQf4DJ2exbwa+R6SQbe1ho9GkODZDK7nly+D7ogzqCnbFAB5H
+         3jeJwhLKxrfhOdb4TTuwRlyeGeXU0yx5xazSmavdfDr4geCS0zB+qOgwRuz8AfHhOCW+
+         vEGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=VgRK7owqFXqx1Er/WrhHguchgkosTUUF7rP053YZqDk=;
-        b=MJfhNDlOiXRGI7CcF13Y1CbFrsECDPff5rjQt1VukDmNjWFdETk5WWN2ZMo8gnfyO8
-         zGOecm/B2/sDoXSW5vJM8Mrozg64WOeGLFOiowrVQrnW9ie+yTZNhvbcRAXyTdsosiOL
-         KzIi1bkV8tFNfxy7HJdAJuWi+bhkee1qBRjJoyDNb8kH7zWwH+GPU44m45idQotJakf2
-         LobvWvT4JDB1J6uDTo90y8v3AyZmtFSkto9WTKi52xs0n1prS78ewwKb3tkrnD7DLLmj
-         +b7WzAb6faLxzc84qjUDVinBEKJmMUnb/jQmp77mg9d5UDPc+3NFepCkuj6Drw7P/ZNJ
-         HprA==
-X-Gm-Message-State: APjAAAVeaEeR1yIkqUvcx2kxS5mA5ObZ3f187xMaYrlty+sC101C7UuH
-        iNChJUNGhFjoHCHqFZv/B+qdx0R8
-X-Google-Smtp-Source: APXvYqwanZ2evU3NjoOuixklvovr3pE8yxEkzSZ1P6n/7MXb1uUZoyyBCZywMBKKiXZ4AOfCZAZF1Q==
-X-Received: by 2002:a0d:e8ce:: with SMTP id r197mr26519344ywe.500.1579270479218;
-        Fri, 17 Jan 2020 06:14:39 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u185sm11477843ywf.89.2020.01.17.06.14.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jan 2020 06:14:37 -0800 (PST)
-Subject: Re: [RFT PATCH 0/4] hwmon: k10temp driver improvements
-To:     Ken Moffat <zarniwhoop73@googlemail.com>
-Cc:     linux-hwmon@vger.kernel.org, Clemens Ladisch <clemens@ladisch.de>,
-        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org
-References: <20200116141800.9828-1-linux@roeck-us.net>
- <CANVEwpZVZs5gnvQTgwZGcT6JG7WdGrOVpbHWGD08bjPascjL=g@mail.gmail.com>
- <964a5977-8d67-b0fd-4df4-c6bd41a8ad58@roeck-us.net>
- <CANVEwpZnaHBfF_NWp_3_wM4S3fhFrFuDXQWRMrp=-K4L0m1b6w@mail.gmail.com>
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
+        bh=OpWfR+kDUKQZu7yUwy5szmehKR2t6wKor0HzZ4WFqwc=;
+        b=U4kiBldj5DEIQ381IVHr9lWMSGo1cq1EMMaTU1saAKPvL376g4S7GAd7NMDZ+OWsDv
+         /4DilqDX/7zb9X1omb+dEQipfBOsmZH6fBXU4nTcl44siRPvAeBug83dqtrk/gc24wVG
+         xAZxheCKQYZ4SZYO7daXQJV90QIfNc44K6JlMwQn3atGVV5MrchFylcatx7sLNpS62XH
+         34gOvZV1jhUOVWTDF6VukLUJNkmGvbdNlBilnwVyoKhfzQgUxvKQAndMLBOzpMzK5bV1
+         Ls/L9c3SGrLq5afln8HghTvQHE7YGFA2ujIqyrHUGGpMC/sCAhTjwOS9x67VpPIOAxjh
+         gT/g==
+X-Gm-Message-State: APjAAAUjfqtFCWaZkaOTGsLfc/SYb+NkbUGXyhbQ74TW1iivsks656mk
+        C0jNk/tdUrRQ9blrIFme16l4+/sv
+X-Google-Smtp-Source: APXvYqyehE4lFb5tCZJdoCTRQw93dCDGnS9s/xxzdXVEcwTbFot717yvnm/tjAk6WK9cBqOfjT8Kzw==
+X-Received: by 2002:a81:b654:: with SMTP id h20mr29076766ywk.272.1579276591013;
+        Fri, 17 Jan 2020 07:56:31 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d143sm11905263ywb.51.2020.01.17.07.56.29
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 17 Jan 2020 07:56:29 -0800 (PST)
 From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <00c42e87-dd87-9116-607f-a0bdbf49d948@roeck-us.net>
-Date:   Fri, 17 Jan 2020 06:14:35 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
-MIME-Version: 1.0
-In-Reply-To: <CANVEwpZnaHBfF_NWp_3_wM4S3fhFrFuDXQWRMrp=-K4L0m1b6w@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH] hwmon: (core) Do not use device managed functions for memory allocations
+Date:   Fri, 17 Jan 2020 07:56:24 -0800
+Message-Id: <20200117155624.24490-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 1/16/20 8:47 PM, Ken Moffat wrote:
-> On Fri, 17 Jan 2020 at 03:58, Guenter Roeck <linux@roeck-us.net> wrote:
->>
->> Hi Ken,
->>
->> SMBUSMASTER 0 is the CPU, so we have a match with the temperatures.
->>
-> OK, thanks for that information.
-> 
->>
->> Both Vcore and Icore should be much less when idle, and higher under
->> load. The data from the Super-IO chip suggests that it is a Nuvoton
->> chip. Can you report its first voltage (in0) ? That should roughly
->> match Vcore.
->>
->> All other data looks ok.
->>
->> Thanks,
->> Guenter
-> 
-> Hi Guenter,
-> 
-> unfortunately I don't have any report of in0. I'm guessing I need some
-> module(s) which did not seem to do anything useful in the past.
-> 
-> All I have in the 'in' area is
-> nct6779-isa-0290
-> Adapter: ISA adapter
-> Vcore:                  +0.30 V  (min =  +0.00 V, max =  +1.74 V)
-> in1:                    +0.00 V  (min =  +0.00 V, max =  +0.00 V)
-> AVCC:                   +3.39 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-> +3.3V:                  +3.39 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-> in4:                    +1.90 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-> in5:                    +0.90 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-> in6:                    +1.50 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-> 3VSB:                   +3.47 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-> Vbat:                   +3.26 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-> in9:                    +0.00 V  (min =  +0.00 V, max =  +0.00 V)
-> in10:                   +0.32 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-> in11:                   +1.06 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-> in12:                   +1.70 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-> in13:                   +0.94 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-> in14:                   +1.84 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-> 
-> and at that point Vcore was reported as 1.41V (system idle)
-> 
+The hwmon core uses device managed functions, tied to the hwmon parent
+device, for various internal memory allocations. This is problematic
+since hwmon device lifetime does not necessarily match its parent's
+device lifetime. If there is a mismatch, memory leaks will accumulate
+until the parent device is released.
 
-Looks like someone configured /etc/sensors3.conf on that system which tells it
-to report in0 as Vcore. So there is a very clear mismatch. Can you report
-the values seen when the system is under load ?
+Fix the problem by managing all memory allocations internally. The only
+exception is memory allocation for thermal device registration, which
+can be tied to the hwmon device, along with thermal device registration
+itself.
 
-Thanks,
-Guenter
+Fixes: d560168b5d0f ("hwmon: (core) New hwmon registration API")
+Cc: stable@vger.kernel.org # v4.14.x: 47c332deb8e8: hwmon: Deal with errors from the thermal subsystem
+Cc: stable@vger.kernel.org # v4.14.x: 74e3512731bd: hwmon: (core) Fix double-free in __hwmon_device_register()
+Cc: stable@vger.kernel.org # v4.9.x: 3a412d5e4a1c: hwmon: (core) Simplify sysfs attribute name allocation
+Cc: stable@vger.kernel.org # v4.9.x: 47c332deb8e8: hwmon: Deal with errors from the thermal subsystem
+Cc: stable@vger.kernel.org # v4.9.x: 74e3512731bd: hwmon: (core) Fix double-free in __hwmon_device_register()
+Cc: stable@vger.kernel.org # v4.9+
+Cc: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/hwmon/hwmon.c | 68 ++++++++++++++++++++++++++-----------------
+ 1 file changed, 41 insertions(+), 27 deletions(-)
+
+diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+index 1f3b30b085b9..d018b20089ec 100644
+--- a/drivers/hwmon/hwmon.c
++++ b/drivers/hwmon/hwmon.c
+@@ -51,6 +51,7 @@ struct hwmon_device_attribute {
+ 
+ #define to_hwmon_attr(d) \
+ 	container_of(d, struct hwmon_device_attribute, dev_attr)
++#define to_dev_attr(a) container_of(a, struct device_attribute, attr)
+ 
+ /*
+  * Thermal zone information
+@@ -58,7 +59,7 @@ struct hwmon_device_attribute {
+  * also provides the sensor index.
+  */
+ struct hwmon_thermal_data {
+-	struct hwmon_device *hwdev;	/* Reference to hwmon device */
++	struct device *dev;		/* Reference to hwmon device */
+ 	int index;			/* sensor index */
+ };
+ 
+@@ -95,9 +96,27 @@ static const struct attribute_group *hwmon_dev_attr_groups[] = {
+ 	NULL
+ };
+ 
++static void hwmon_free_attrs(struct attribute **attrs)
++{
++	int i;
++
++	for (i = 0; attrs[i]; i++) {
++		struct device_attribute *dattr = to_dev_attr(attrs[i]);
++		struct hwmon_device_attribute *hattr = to_hwmon_attr(dattr);
++
++		kfree(hattr);
++	}
++	kfree(attrs);
++}
++
+ static void hwmon_dev_release(struct device *dev)
+ {
+-	kfree(to_hwmon_device(dev));
++	struct hwmon_device *hwdev = to_hwmon_device(dev);
++
++	if (hwdev->group.attrs)
++		hwmon_free_attrs(hwdev->group.attrs);
++	kfree(hwdev->groups);
++	kfree(hwdev);
+ }
+ 
+ static struct class hwmon_class = {
+@@ -119,11 +138,11 @@ static DEFINE_IDA(hwmon_ida);
+ static int hwmon_thermal_get_temp(void *data, int *temp)
+ {
+ 	struct hwmon_thermal_data *tdata = data;
+-	struct hwmon_device *hwdev = tdata->hwdev;
++	struct hwmon_device *hwdev = to_hwmon_device(tdata->dev);
+ 	int ret;
+ 	long t;
+ 
+-	ret = hwdev->chip->ops->read(&hwdev->dev, hwmon_temp, hwmon_temp_input,
++	ret = hwdev->chip->ops->read(tdata->dev, hwmon_temp, hwmon_temp_input,
+ 				     tdata->index, &t);
+ 	if (ret < 0)
+ 		return ret;
+@@ -137,8 +156,7 @@ static const struct thermal_zone_of_device_ops hwmon_thermal_ops = {
+ 	.get_temp = hwmon_thermal_get_temp,
+ };
+ 
+-static int hwmon_thermal_add_sensor(struct device *dev,
+-				    struct hwmon_device *hwdev, int index)
++static int hwmon_thermal_add_sensor(struct device *dev, int index)
+ {
+ 	struct hwmon_thermal_data *tdata;
+ 	struct thermal_zone_device *tzd;
+@@ -147,10 +165,10 @@ static int hwmon_thermal_add_sensor(struct device *dev,
+ 	if (!tdata)
+ 		return -ENOMEM;
+ 
+-	tdata->hwdev = hwdev;
++	tdata->dev = dev;
+ 	tdata->index = index;
+ 
+-	tzd = devm_thermal_zone_of_sensor_register(&hwdev->dev, index, tdata,
++	tzd = devm_thermal_zone_of_sensor_register(dev, index, tdata,
+ 						   &hwmon_thermal_ops);
+ 	/*
+ 	 * If CONFIG_THERMAL_OF is disabled, this returns -ENODEV,
+@@ -162,8 +180,7 @@ static int hwmon_thermal_add_sensor(struct device *dev,
+ 	return 0;
+ }
+ #else
+-static int hwmon_thermal_add_sensor(struct device *dev,
+-				    struct hwmon_device *hwdev, int index)
++static int hwmon_thermal_add_sensor(struct device *dev, int index)
+ {
+ 	return 0;
+ }
+@@ -250,8 +267,7 @@ static bool is_string_attr(enum hwmon_sensor_types type, u32 attr)
+ 	       (type == hwmon_fan && attr == hwmon_fan_label);
+ }
+ 
+-static struct attribute *hwmon_genattr(struct device *dev,
+-				       const void *drvdata,
++static struct attribute *hwmon_genattr(const void *drvdata,
+ 				       enum hwmon_sensor_types type,
+ 				       u32 attr,
+ 				       int index,
+@@ -279,7 +295,7 @@ static struct attribute *hwmon_genattr(struct device *dev,
+ 	if ((mode & 0222) && !ops->write)
+ 		return ERR_PTR(-EINVAL);
+ 
+-	hattr = devm_kzalloc(dev, sizeof(*hattr), GFP_KERNEL);
++	hattr = kzalloc(sizeof(*hattr), GFP_KERNEL);
+ 	if (!hattr)
+ 		return ERR_PTR(-ENOMEM);
+ 
+@@ -492,8 +508,7 @@ static int hwmon_num_channel_attrs(const struct hwmon_channel_info *info)
+ 	return n;
+ }
+ 
+-static int hwmon_genattrs(struct device *dev,
+-			  const void *drvdata,
++static int hwmon_genattrs(const void *drvdata,
+ 			  struct attribute **attrs,
+ 			  const struct hwmon_ops *ops,
+ 			  const struct hwmon_channel_info *info)
+@@ -519,7 +534,7 @@ static int hwmon_genattrs(struct device *dev,
+ 			attr_mask &= ~BIT(attr);
+ 			if (attr >= template_size)
+ 				return -EINVAL;
+-			a = hwmon_genattr(dev, drvdata, info->type, attr, i,
++			a = hwmon_genattr(drvdata, info->type, attr, i,
+ 					  templates[attr], ops);
+ 			if (IS_ERR(a)) {
+ 				if (PTR_ERR(a) != -ENOENT)
+@@ -533,8 +548,7 @@ static int hwmon_genattrs(struct device *dev,
+ }
+ 
+ static struct attribute **
+-__hwmon_create_attrs(struct device *dev, const void *drvdata,
+-		     const struct hwmon_chip_info *chip)
++__hwmon_create_attrs(const void *drvdata, const struct hwmon_chip_info *chip)
+ {
+ 	int ret, i, aindex = 0, nattrs = 0;
+ 	struct attribute **attrs;
+@@ -545,15 +559,17 @@ __hwmon_create_attrs(struct device *dev, const void *drvdata,
+ 	if (nattrs == 0)
+ 		return ERR_PTR(-EINVAL);
+ 
+-	attrs = devm_kcalloc(dev, nattrs + 1, sizeof(*attrs), GFP_KERNEL);
++	attrs = kcalloc(nattrs + 1, sizeof(*attrs), GFP_KERNEL);
+ 	if (!attrs)
+ 		return ERR_PTR(-ENOMEM);
+ 
+ 	for (i = 0; chip->info[i]; i++) {
+-		ret = hwmon_genattrs(dev, drvdata, &attrs[aindex], chip->ops,
++		ret = hwmon_genattrs(drvdata, &attrs[aindex], chip->ops,
+ 				     chip->info[i]);
+-		if (ret < 0)
++		if (ret < 0) {
++			hwmon_free_attrs(attrs);
+ 			return ERR_PTR(ret);
++		}
+ 		aindex += ret;
+ 	}
+ 
+@@ -595,14 +611,13 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
+ 			for (i = 0; groups[i]; i++)
+ 				ngroups++;
+ 
+-		hwdev->groups = devm_kcalloc(dev, ngroups, sizeof(*groups),
+-					     GFP_KERNEL);
++		hwdev->groups = kcalloc(ngroups, sizeof(*groups), GFP_KERNEL);
+ 		if (!hwdev->groups) {
+ 			err = -ENOMEM;
+ 			goto free_hwmon;
+ 		}
+ 
+-		attrs = __hwmon_create_attrs(dev, drvdata, chip);
++		attrs = __hwmon_create_attrs(drvdata, chip);
+ 		if (IS_ERR(attrs)) {
+ 			err = PTR_ERR(attrs);
+ 			goto free_hwmon;
+@@ -647,8 +662,7 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
+ 							   hwmon_temp_input, j))
+ 					continue;
+ 				if (info[i]->config[j] & HWMON_T_INPUT) {
+-					err = hwmon_thermal_add_sensor(dev,
+-								hwdev, j);
++					err = hwmon_thermal_add_sensor(hdev, j);
+ 					if (err) {
+ 						device_unregister(hdev);
+ 						/*
+@@ -667,7 +681,7 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
+ 	return hdev;
+ 
+ free_hwmon:
+-	kfree(hwdev);
++	hwmon_dev_release(hdev);
+ ida_remove:
+ 	ida_simple_remove(&hwmon_ida, id);
+ 	return ERR_PTR(err);
+-- 
+2.17.1
+
