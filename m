@@ -2,98 +2,134 @@ Return-Path: <SRS0=nEaE=3G=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49BDDC33CB1
-	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Jan 2020 16:32:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 014C4C33C9E
+	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Jan 2020 18:46:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1B9DA214AF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Jan 2020 16:32:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1579278775;
-	bh=FO48zQEQwocB6lV87keX2zJT4La31Mc5wcHkp/4iBLc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=gsfLXkHYAb9Cf7HtjBmJ111Ju6+SY0kBrfTExSonuU7IH6huSKaCbBXUaNprHyPF7
-	 npD7e53d8PUGDzLUSFpmcdm0G0cC1L0rke/iXuKupBcg4A4uWySEI2rT4EBaRBnrS0
-	 fYnKOSuFE6qNzlctK5EZsM3PQOMME1Egh7wy8imQ=
+	by mail.kernel.org (Postfix) with ESMTP id CBB9F20842
+	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Jan 2020 18:46:20 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KY4r6VIz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726566AbgAQQcy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 17 Jan 2020 11:32:54 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:37196 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726506AbgAQQcy (ORCPT
+        id S1729268AbgAQSqU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 17 Jan 2020 13:46:20 -0500
+Received: from mail-yb1-f194.google.com ([209.85.219.194]:40631 "EHLO
+        mail-yb1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727519AbgAQSqU (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 17 Jan 2020 11:32:54 -0500
-Received: by mail-ot1-f65.google.com with SMTP id k14so23059608otn.4;
-        Fri, 17 Jan 2020 08:32:54 -0800 (PST)
+        Fri, 17 Jan 2020 13:46:20 -0500
+Received: by mail-yb1-f194.google.com with SMTP id l197so4940956ybf.7;
+        Fri, 17 Jan 2020 10:46:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=upiGYbGt4/LTnrmjthjRUd/hQNqIVUczO1R2BQSLGfI=;
+        b=KY4r6VIzM+ASfF28p395PqWwDWo1qH3UJln63Un1GQdKyFyhWH8Yvs1nf52LBQUL4B
+         nya6HvXndacLywWJA4slAjzFivTcwN/ylU/gh3AAB4M8kQwh6bAwNsKB+4JtsYvtWEmu
+         RNcjbn0mJhaPN2dbgu3PkxGB+LyvC83Gb+7s8iFl2Iwr1PMRr3eGwXFZM/BeGuCc5yCU
+         tPbD040KWJF8qMy4pZbSJTMrPjvVnsPNP01XDzlHuWIWhSrGiMI20o4qx8E1Dha0AyzE
+         3rtGf3ftTCv/qi7jJnaZBy7IIsu572sj+VOZFzfLd6RjvpHf8YrDdJGFa+vuNNaC/qaL
+         jpsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=q77MY408jGCmYpI+zv//3ZdL+CvYzoBq5oPF0P9Vlwk=;
-        b=KMU2Wmv73EQhLnPelUTP+9Q3zTS3vvCwWJn0Y9kyftaa2441K8Kn9jHq5fbkcEG8GW
-         DvAikaTWMWahywX4sVO1w44JPq92GigsXfji1FWrxd4lsjyopJg7EzPKJJeZQe9bDxDB
-         gZzCA5Vep9Yke6Y7ynlO7arAAxiXJIrJC57kgl2uEQQiMBWceb9izMQHkXgzmQtCbUf/
-         zDyUErzrQtPCqV8sc864ZXtj+xkX2pBDtWlMGRurjk/9D1VmYUd4QKqq2++4uSAkeGMW
-         +zjA1DU7YBpUVW1EPF0ZzF37Ke9I9NNiYkiN4s/lkYQBWQ0QLT/y38Ygnx+5srA4mDHp
-         oM1w==
-X-Gm-Message-State: APjAAAV9CnpvyXHxtWOFD8zKYhEQj/TLXLLxJAbSUEPMdbl5r+t09g9j
-        zh1FF1ZiHmsycJqq7nt+eQ==
-X-Google-Smtp-Source: APXvYqxYC/6JwXiUv+1TD0mNMzTSSYbrWFU8g5c8PonVdmTsLzmIkAEwVjI/lxj7VYnLmqTCG1kosg==
-X-Received: by 2002:a9d:402:: with SMTP id 2mr6152888otc.357.1579278773544;
-        Fri, 17 Jan 2020 08:32:53 -0800 (PST)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id p65sm7957935oif.47.2020.01.17.08.32.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jan 2020 08:32:53 -0800 (PST)
-Received: (nullmailer pid 26849 invoked by uid 1000);
-        Fri, 17 Jan 2020 16:32:52 -0000
-Date:   Fri, 17 Jan 2020 10:32:52 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Logan Shaw <logan.shaw@alliedtelesis.co.nz>
-Cc:     linux@roeck-us.net, jdelvare@suse.com, robh+dt@kernel.org,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Joshua.Scott@alliedtelesis.co.nz,
-        Chris.Packham@alliedtelesis.co.nz, logan.shaw@alliedtelesis.co.nz
-Subject: Re: [PATCH v3 2/2] hwmon: (adt7475) Added attenuator bypass support
-Message-ID: <20200117163252.GA26187@bogus>
-References: <20200117035018.11985-1-logan.shaw@alliedtelesis.co.nz>
- <20200117035018.11985-3-logan.shaw@alliedtelesis.co.nz>
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to:user-agent;
+        bh=upiGYbGt4/LTnrmjthjRUd/hQNqIVUczO1R2BQSLGfI=;
+        b=KBn76O7WEJa0uu2D7sOxL7kkq9bg1SMae3IoQ62CzrK7hC8UxP0wGRBCdAKsebY97Q
+         jc2P1IGFcygSLzRU/T/GZipIuKS2QC7b19/JZhopVPfi549dX45FZAaQ4EgbVvgRMVg8
+         RhQIWkm4B+tHJlmv7HOTdjCMxrMEzCuuVGq47Yr7ZcqLg9ZdVygC3ISiOmW0rZa3HtvM
+         YF4d1dvfwbGLNWicb4wS1EQVEgHNG8vv54/G/6uva/eQ3HqdPWSrQl4TsxDD1OUXKLRa
+         LeQoJ5QYFlDgvFJV5v7uk8941ksmAKtxkN9q/ag1DLP2Go47icdZ9eHeX6gax730iqqQ
+         pUhg==
+X-Gm-Message-State: APjAAAWU3iiex96kxEMDTevIyuaUPPUSVa2M6owyvJHqrGxklV6EgaAL
+        gYwFf+XN65dL2aI58WSIgyk=
+X-Google-Smtp-Source: APXvYqy0w74WsHNKTpINtKaumk26VLINbUlvOmM74GHUgNWc16V11mp9TxxPQaMRVHX+cXOa3z69wQ==
+X-Received: by 2002:a25:5887:: with SMTP id m129mr32550513ybb.172.1579286779295;
+        Fri, 17 Jan 2020 10:46:19 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d186sm12100098ywe.0.2020.01.17.10.46.18
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 17 Jan 2020 10:46:18 -0800 (PST)
+Date:   Fri, 17 Jan 2020 10:46:17 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Ondrej =?utf-8?Q?=C4=8Cerman?= <ocerman@sda1.eu>
+Cc:     linux-hwmon@vger.kernel.org, Clemens Ladisch <clemens@ladisch.de>,
+        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org
+Subject: Re: [RFT PATCH 0/4] hwmon: k10temp driver improvements
+Message-ID: <20200117184617.GD13396@roeck-us.net>
+References: <20200116141800.9828-1-linux@roeck-us.net>
+ <e452614a-5425-e77c-4e2f-2a17ca733b7f@sda1.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200117035018.11985-3-logan.shaw@alliedtelesis.co.nz>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e452614a-5425-e77c-4e2f-2a17ca733b7f@sda1.eu>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, 17 Jan 2020 16:50:18 +1300, Logan Shaw wrote:
+On Fri, Jan 17, 2020 at 10:46:25AM +0100, Ondrej Čerman wrote:
+> Dňa 16. 1. 2020 o 15:17 Guenter Roeck napísal(a):
+> > This patch series implements various improvements for the k10temp driver.
+> > 
+> > Patch 1/4 introduces the use of bit operations.
+> > 
+> > Patch 2/4 converts the driver to use the devm_hwmon_device_register_with_info
+> > API. This not only simplifies the code and reduces its size, it also
+> > makes the code easier to maintain and enhance.
+> > 
+> > Patch 3/4 adds support for reporting Core Complex Die (CCD) temperatures
+> > on Ryzen 3 (Zen2) CPUs.
+> > 
+> > Patch 4/4 adds support for reporting core and SoC current and voltage
+> > information on Ryzen CPUs.
+> > 
+> > With all patches in place, output on Ryzen 3900 CPUs looks as follows
+> > (with the system under load).
+> > 
+> > k10temp-pci-00c3
+> > Adapter: PCI adapter
+> > Vcore:        +1.36 V
+> > Vsoc:         +1.18 V
+> > Tdie:         +86.8°C  (high = +70.0°C)
+> > Tctl:         +86.8°C
+> > Tccd1:        +80.0°C
+> > Tccd2:        +81.8°C
+> > Icore:       +44.14 A
+> > Isoc:        +13.83 A
+> > 
+> > The patch series has only been tested with Ryzen 3900 CPUs. Further test
+> > coverage will be necessary before the changes can be applied to the Linux
+> > kernel.
+> > 
+> Hello everyone, I am the author of https://github.com/ocerman/zenpower/ .
 > 
-> Added a new file documenting the adt7475 devicetree and added the four
-> new properties to it.
+> It is nice to see this merged.
 > 
-> Signed-off-by: Logan Shaw <logan.shaw@alliedtelesis.co.nz>
-> ---
-> ---
->  .../devicetree/bindings/hwmon/adt7475.yaml    | 90 +++++++++++++++++++
->  1 file changed, 90 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/adt7475.yaml
+> I just want to warn you that there have been reported issues with
+> Threadripper CPUs to zenpower issue tracker. Also I think that no-one tested
+> EPYC CPUs.
 > 
+> Most of the stuff I was able to figure out by trial-and-error approach and
+> unfortunately because I do not own any Threadripper CPU I was not able to
+> test and fix reported problems.
+> 
+Thanks a lot for the note. The key problem seems to be that Threadripper
+doesn't report SoC current and voltage. Is that correct ? If so, that
+should be easy to solve.
 
-My bot found errors running 'make dt_binding_check' on your patch:
+On a side note, drivers/gpu/drm/amd/include/asic_reg/thm/thm_10_0_offset.h
+suggests that two more temperature sensors might be available at 0x0005995C
+and 0x00059960 (DIE3_TEMP and SW_TEMP). Have you ever tried that ?
 
-Documentation/devicetree/bindings/display/simple-framebuffer.example.dts:21.16-37.11: Warning (chosen_node_is_root): /example-0/chosen: chosen node must be at root node
-Documentation/devicetree/bindings/hwmon/adt7475.example.dts:20.11-39: ERROR (duplicate_property_names): /example-0/hwmon@2e:bypass-attenuator-in1: Duplicate property name
-ERROR: Input tree has errors, aborting (use -f to force output)
-scripts/Makefile.lib:300: recipe for target 'Documentation/devicetree/bindings/hwmon/adt7475.example.dt.yaml' failed
-make[1]: *** [Documentation/devicetree/bindings/hwmon/adt7475.example.dt.yaml] Error 2
-Makefile:1263: recipe for target 'dt_binding_check' failed
-make: *** [dt_binding_check] Error 2
-
-See https://patchwork.ozlabs.org/patch/1224608
-Please check and re-submit.
+Thanks,
+Guenter
