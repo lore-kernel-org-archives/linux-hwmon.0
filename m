@@ -2,58 +2,58 @@ Return-Path: <SRS0=NPH/=3H=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-14.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0E06C33CB1
-	for <linux-hwmon@archiver.kernel.org>; Sat, 18 Jan 2020 17:26:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EC2CC33CB6
+	for <linux-hwmon@archiver.kernel.org>; Sat, 18 Jan 2020 17:26:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A2177246A8
-	for <linux-hwmon@archiver.kernel.org>; Sat, 18 Jan 2020 17:26:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3A7D7246A8
+	for <linux-hwmon@archiver.kernel.org>; Sat, 18 Jan 2020 17:26:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BaQJaMW1"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sDPSw6zU"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727028AbgARR0g (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 18 Jan 2020 12:26:36 -0500
-Received: from mail-yb1-f196.google.com ([209.85.219.196]:43341 "EHLO
-        mail-yb1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726460AbgARR0g (ORCPT
+        id S1727131AbgARR0l (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 18 Jan 2020 12:26:41 -0500
+Received: from mail-yw1-f65.google.com ([209.85.161.65]:43481 "EHLO
+        mail-yw1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727106AbgARR0k (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 18 Jan 2020 12:26:36 -0500
-Received: by mail-yb1-f196.google.com with SMTP id k15so7714403ybd.10;
-        Sat, 18 Jan 2020 09:26:35 -0800 (PST)
+        Sat, 18 Jan 2020 12:26:40 -0500
+Received: by mail-yw1-f65.google.com with SMTP id v126so15892770ywc.10;
+        Sat, 18 Jan 2020 09:26:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=OMTLrqbJGjpPtOvQXK7GqxkakiNc6MEfg8N93L8aG00=;
-        b=BaQJaMW1uBE4OAFtAAge2ZJ6uKhdkgYufRRHe7TGogjQh5XF8QXX6KuEPsP/VrBWKL
-         Ttgb5HRTlwydgzDvI8otTpUdH2GloIaD8QLVzteOz5M1oAHctQRHK1AQnmH5J+B8xC9c
-         kuRnM0wSJP+XpmGvD0x4Vo8HSmJ69+3q2X5IS1Mp7kE9wlDRJQ9563gbqTXy494AdFrP
-         eYSEECbhUSgB30F/YIGRLAwbqJfgcy80l2qKTdc6RCLgshW474P6g/Pg4hyDKTcD/IqR
-         9CVW9NF+2NA703CbHe7K+lNLboV9JBts/nLZ8WDkVxRH90mKvwkyZE7+hY7nNdRoKw2+
-         DRgg==
+        bh=oZkWvIdFpURTKA4ObtexHd8O3YPj8eeMou2Wwzsd5DQ=;
+        b=sDPSw6zU5v8afRvXuebS81HrxqmPo3Bhxw8gVRzHH7PtcCHJxLkfS3RvBWMW5jeH6V
+         49fQjLnEncgV9MyZkGa0801sH7IiEZlD/4rd2lFVLqMDJ2HTxhMQBqby17m6LwYTw3qQ
+         Zcc+zLL5l7gQCANAK3WRzE61ZbGIATc8i102JWbV3CFgcsjjE4SqQMI4Vy086giWyBqQ
+         rvU1hL1szQ0Zh+qZ2bwBEcIp3FIvGDodtCY9283ptvUrOGK4GpcBSxLxnP3IHz5EfXJ8
+         /yG8WLMEQLaf5hpXZv/8tOVhq86cQhtecmFbZT3gpmmKgruqIycHamdX5MG1wN+tris2
+         d0XQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references;
-        bh=OMTLrqbJGjpPtOvQXK7GqxkakiNc6MEfg8N93L8aG00=;
-        b=fC9HrpPUEKSFQiXfquXUVNUX70q3RkoTX9CCQPsdrCDmu0J1ugS02HK33htMGLEIln
-         uhypQoOQEpVE3FAT9t8LrWJ0YIoj7B9kS2BLxLKyXEvyebb64UwY7ko6XxK4OwrQXt3E
-         g6Ja7dXevuWnodqKEPQhz+AUVM9SZxJ3V47rwG52y2GKr53ne0B2VMO6jbs259PnjtT5
-         trXDV0W45B9jMz9u0mo59sink3ZDX5zl7wkHi2iVB5mfUGtBqSmFWzpY3JCPm8/Zr5ax
-         +xlnTzX7gEiI0h/BudH3j7z2NNl8C/56fq8wUcxIlZ156NSUib2wDeLv+hz4q+WPGb7Z
-         05Dw==
-X-Gm-Message-State: APjAAAUoTeWgFfqN557LYG26vYDXkUyjTLeFKnBjH4kI9Y90g7vzfXD1
-        sU1cmz3Kc/Be6lVbovaKwKn1T1fu
-X-Google-Smtp-Source: APXvYqzsFkk+AtDt6mI1KY2mtlSqn1V298XJ7m2FQSJiduH9Z1XsH93b6YYFhf2SsIHaWr/lmekkjw==
-X-Received: by 2002:a5b:cc1:: with SMTP id e1mr12165184ybr.153.1579368394657;
-        Sat, 18 Jan 2020 09:26:34 -0800 (PST)
+        bh=oZkWvIdFpURTKA4ObtexHd8O3YPj8eeMou2Wwzsd5DQ=;
+        b=FPNw61kz+YWJlMjR58R3IASqmvNs/czsNpaA2szi8fRPdVZGV8MojZPFb5gHYDbt4n
+         BWMJovzxq9y4lZ2dNSD7nnSayC9vIKzWKPQoDpQpGsSxo+eCfoe1PGtu8DUtQag2gFDD
+         uSMjPfNPpOsG7a54lgF8pNnsXg8Pu6pOm36rzWf56x60kI2eTMaRIyov7ymDB35Tujez
+         ogMFgAKnhBGGzNVw4giJuvCrKUdyid2Li8337Ep+5yxLKDBHmOk+Wjo8Ips2l/6a6gMU
+         n/pw0yiZi2X4HItkpmGfvBWtN/lGND5vG7baEh9fV1wJtC9Oyz/Mv32WuOmfu3p3Ef9R
+         piTg==
+X-Gm-Message-State: APjAAAUQS+jA/fTevBUoYtyz2ZG6ZFFnqIPiopQ3KHvZK+aDwGOFcU1S
+        FJkVPFZh+06Iz7DGwqn3iSvjYcBi
+X-Google-Smtp-Source: APXvYqwpiSwqWlnIlalgNSkUl+Ca6jhD9tqyq37+oS+TLdvoAKzWkd1L92TqxGeEbAfIE3W3vBOcEQ==
+X-Received: by 2002:a0d:cbd7:: with SMTP id n206mr7198949ywd.167.1579368398635;
+        Sat, 18 Jan 2020 09:26:38 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 71sm12857041ywd.59.2020.01.18.09.26.30
+        by smtp.gmail.com with ESMTPSA id d13sm13272444ywj.91.2020.01.18.09.26.38
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 18 Jan 2020 09:26:34 -0800 (PST)
+        Sat, 18 Jan 2020 09:26:38 -0800 (PST)
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     linux-hwmon@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, Clemens Ladisch <clemens@ladisch.de>,
@@ -66,9 +66,9 @@ Cc:     linux-kernel@vger.kernel.org, Clemens Ladisch <clemens@ladisch.de>,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
         Brad Campbell <lists2009@fnarfbargle.com>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH v2 2/5] hmon: (k10temp) Convert to use devm_hwmon_device_register_with_info
-Date:   Sat, 18 Jan 2020 09:26:12 -0800
-Message-Id: <20200118172615.26329-3-linux@roeck-us.net>
+Subject: [PATCH v2 4/5] hwmon: (k10temp) Show core and SoC current and voltages on Ryzen CPUs
+Date:   Sat, 18 Jan 2020 09:26:14 -0800
+Message-Id: <20200118172615.26329-5-linux@roeck-us.net>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200118172615.26329-1-linux@roeck-us.net>
 References: <20200118172615.26329-1-linux@roeck-us.net>
@@ -77,304 +77,225 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Convert driver to use devm_hwmon_device_register_with_info to simplify
-the code and to reduce its size.
+Ryzen CPUs report core and SoC voltages and currents. Add support
+for it to the k10temp driver.
 
-Old size (x86_64):
-   text	   data	    bss	    dec	    hex	filename
-   8247	   4488	     64	  12799	   31ff	drivers/hwmon/k10temp.o
-New size:
-   text	   data	    bss	    dec	    hex	filename
-   6778	   2792	     64	   9634	   25a2	drivers/hwmon/k10temp.o
+For the time being, only report voltages and currents for Ryzen
+CPUs. Threadripper and EPYC appear to use a different mechanism.
 
 Tested-by: Bernhard Gebetsberger <bernhard.gebetsberger@gmx.at>
 Tested-by: Darren Salt <devspam@moreofthesa.me.uk>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
-v2: Added Tested-by: tags
+v2: Added Tested-by: tags.
+    Don't try to report voltage and current information on Threadripper
+    and EPYC CPUs.
 
- drivers/hwmon/k10temp.c | 213 +++++++++++++++++++++-------------------
- 1 file changed, 112 insertions(+), 101 deletions(-)
+ drivers/hwmon/k10temp.c | 126 +++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 123 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-index 8807d7da68db..c45f6498a59b 100644
+index 944ba8008bc4..a4313b662a3a 100644
 --- a/drivers/hwmon/k10temp.c
 +++ b/drivers/hwmon/k10temp.c
-@@ -1,14 +1,15 @@
- // SPDX-License-Identifier: GPL-2.0-or-later
- /*
-- * k10temp.c - AMD Family 10h/11h/12h/14h/15h/16h processor hardware monitoring
-+ * k10temp.c - AMD Family 10h/11h/12h/14h/15h/16h/17h
-+ *		processor hardware monitoring
-  *
-  * Copyright (c) 2009 Clemens Ladisch <clemens@ladisch.de>
-+ * Copyright (c) 2020 Guenter Roeck <linux@roeck-us.net>
+@@ -11,6 +11,13 @@
+  *   convert raw register values is from https://github.com/ocerman/zenpower.
+  *   The information is not confirmed from chip datasheets, but experiments
+  *   suggest that it provides reasonable temperature values.
++ * - Register addresses to read chip voltage and current is also from
++ *   https://github.com/ocerman/zenpower, and not confirmed from chip
++ *   datasheets. Experiments suggest that reported current and voltage
++ *   information is reasonable.
++ * - It is unknown if the mechanism to read CCD1/CCD2 temperature as well as
++ *   current and voltage information works on higher-end Ryzen CPUs, or if
++ *   additional information is available on those CPUs.
   */
  
  #include <linux/bitops.h>
- #include <linux/err.h>
- #include <linux/hwmon.h>
--#include <linux/hwmon-sysfs.h>
- #include <linux/init.h>
- #include <linux/module.h>
- #include <linux/pci.h>
-@@ -127,10 +128,10 @@ static void read_tempreg_nb_f17(struct pci_dev *pdev, u32 *regval)
- 		     F17H_M01H_REPORTED_TEMP_CTRL_OFFSET, regval);
- }
+@@ -70,6 +77,10 @@ static DEFINE_MUTEX(nb_smu_ind_mutex);
+ #define F17H_M70H_CCD1_TEMP			0x00059954
+ #define F17H_M70H_CCD2_TEMP			0x00059958
  
--static unsigned int get_raw_temp(struct k10temp_data *data)
-+static long get_raw_temp(struct k10temp_data *data)
++#define F17H_M01H_SVI				0x0005A000
++#define F17H_M01H_SVI_TEL_PLANE0		(F17H_M01H_SVI + 0xc)
++#define F17H_M01H_SVI_TEL_PLANE1		(F17H_M01H_SVI + 0x10)
++
+ #define CUR_TEMP_SHIFT				21
+ #define CUR_TEMP_RANGE_SEL_MASK			BIT(19)
+ 
+@@ -82,6 +93,9 @@ struct k10temp_data {
+ 	bool show_tdie;
+ 	bool show_tccd1;
+ 	bool show_tccd2;
++	u32 svi_addr[2];
++	bool show_current;
++	int cfactor[2];
+ };
+ 
+ struct tctl_offset {
+@@ -99,6 +113,16 @@ static const struct tctl_offset tctl_offset_table[] = {
+ 	{ 0x17, "AMD Ryzen Threadripper 29", 27000 }, /* 29{20,50,70,90}[W]X */
+ };
+ 
++static bool is_threadripper(void)
++{
++	return strstr(boot_cpu_data.x86_model_id, "Threadripper");
++}
++
++static bool is_epyc(void)
++{
++	return strstr(boot_cpu_data.x86_model_id, "EPYC");
++}
++
+ static void read_htcreg_pci(struct pci_dev *pdev, u32 *regval)
  {
--	unsigned int temp;
- 	u32 regval;
-+	long temp;
+ 	pci_read_config_dword(pdev, REG_HARDWARE_THERMAL_CONTROL, regval);
+@@ -157,16 +181,76 @@ const char *k10temp_temp_label[] = {
+ 	"Tccd2",
+ };
  
- 	data->read_tempreg(data->pdev, &regval);
- 	temp = (regval >> CUR_TEMP_SHIFT) * 125;
-@@ -139,118 +140,108 @@ static unsigned int get_raw_temp(struct k10temp_data *data)
- 	return temp;
- }
- 
--static ssize_t temp1_input_show(struct device *dev,
--				struct device_attribute *attr, char *buf)
--{
--	struct k10temp_data *data = dev_get_drvdata(dev);
--	unsigned int temp = get_raw_temp(data);
--
--	if (temp > data->temp_offset)
--		temp -= data->temp_offset;
--	else
--		temp = 0;
--
--	return sprintf(buf, "%u\n", temp);
--}
--
--static ssize_t temp2_input_show(struct device *dev,
--				struct device_attribute *devattr, char *buf)
--{
--	struct k10temp_data *data = dev_get_drvdata(dev);
--	unsigned int temp = get_raw_temp(data);
--
--	return sprintf(buf, "%u\n", temp);
--}
--
--static ssize_t temp_label_show(struct device *dev,
--			       struct device_attribute *devattr, char *buf)
--{
--	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
--
--	return sprintf(buf, "%s\n", attr->index ? "Tctl" : "Tdie");
--}
-+const char *k10temp_temp_label[] = {
-+	"Tdie",
-+	"Tctl",
++const char *k10temp_in_label[] = {
++	"Vcore",
++	"Vsoc",
 +};
- 
--static ssize_t temp1_max_show(struct device *dev,
--			      struct device_attribute *attr, char *buf)
-+static int k10temp_read_labels(struct device *dev,
-+			       enum hwmon_sensor_types type,
-+			       u32 attr, int channel, const char **str)
++
++const char *k10temp_curr_label[] = {
++	"Icore",
++	"Isoc",
++};
++
+ static int k10temp_read_labels(struct device *dev,
+ 			       enum hwmon_sensor_types type,
+ 			       u32 attr, int channel, const char **str)
  {
--	return sprintf(buf, "%d\n", 70 * 1000);
-+	*str = k10temp_temp_label[channel];
-+	return 0;
+-	*str = k10temp_temp_label[channel];
++	switch (type) {
++	case hwmon_temp:
++		*str = k10temp_temp_label[channel];
++		break;
++	case hwmon_in:
++		*str = k10temp_in_label[channel];
++		break;
++	case hwmon_curr:
++		*str = k10temp_curr_label[channel];
++		break;
++	default:
++		return -EOPNOTSUPP;
++	}
+ 	return 0;
  }
  
--static ssize_t temp_crit_show(struct device *dev,
--			      struct device_attribute *devattr, char *buf)
-+static int k10temp_read(struct device *dev, enum hwmon_sensor_types type,
-+			u32 attr, int channel, long *val)
- {
--	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
- 	struct k10temp_data *data = dev_get_drvdata(dev);
--	int show_hyst = attr->index;
- 	u32 regval;
--	int value;
- 
--	data->read_htcreg(data->pdev, &regval);
--	value = ((regval >> 16) & 0x7f) * 500 + 52000;
--	if (show_hyst)
--		value -= ((regval >> 24) & 0xf) * 500;
--	return sprintf(buf, "%d\n", value);
+-static int k10temp_read(struct device *dev, enum hwmon_sensor_types type,
+-			u32 attr, int channel, long *val)
++static int k10temp_read_curr(struct device *dev, u32 attr, int channel,
++			     long *val)
++{
++	struct k10temp_data *data = dev_get_drvdata(dev);
++	u32 regval;
++
 +	switch (attr) {
-+	case hwmon_temp_input:
-+		switch (channel) {
-+		case 0:		/* Tdie */
-+			*val = get_raw_temp(data) - data->temp_offset;
-+			if (*val < 0)
-+				*val = 0;
-+			break;
-+		case 1:		/* Tctl */
-+			*val = get_raw_temp(data);
-+			if (*val < 0)
-+				*val = 0;
-+			break;
-+		default:
-+			return -EOPNOTSUPP;
-+		}
-+		break;
-+	case hwmon_temp_max:
-+		*val = 70 * 1000;
-+		break;
-+	case hwmon_temp_crit:
-+		data->read_htcreg(data->pdev, &regval);
-+		*val = ((regval >> 16) & 0x7f) * 500 + 52000;
-+		break;
-+	case hwmon_temp_crit_hyst:
-+		data->read_htcreg(data->pdev, &regval);
-+		*val = (((regval >> 16) & 0x7f)
-+			- ((regval >> 24) & 0xf)) * 500 + 52000;
++	case hwmon_curr_input:
++		amd_smn_read(amd_pci_dev_to_node_id(data->pdev),
++			     data->svi_addr[channel], &regval);
++		*val = DIV_ROUND_CLOSEST(data->cfactor[channel] *
++					 (regval & 0xff),
++					 1000);
 +		break;
 +	default:
 +		return -EOPNOTSUPP;
 +	}
 +	return 0;
++}
++
++static int k10temp_read_in(struct device *dev, u32 attr, int channel, long *val)
++{
++	struct k10temp_data *data = dev_get_drvdata(dev);
++	u32 regval;
++
++	switch (attr) {
++	case hwmon_in_input:
++		amd_smn_read(amd_pci_dev_to_node_id(data->pdev),
++			     data->svi_addr[channel], &regval);
++		regval = (regval >> 16) & 0xff;
++		*val = DIV_ROUND_CLOSEST(155000 - regval * 625, 100);
++		break;
++	default:
++		return -EOPNOTSUPP;
++	}
++	return 0;
++}
++
++static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
++			     long *val)
+ {
+ 	struct k10temp_data *data = dev_get_drvdata(dev);
+ 	u32 regval;
+@@ -216,6 +300,21 @@ static int k10temp_read(struct device *dev, enum hwmon_sensor_types type,
+ 	return 0;
  }
  
--static DEVICE_ATTR_RO(temp1_input);
--static DEVICE_ATTR_RO(temp1_max);
--static SENSOR_DEVICE_ATTR_RO(temp1_crit, temp_crit, 0);
--static SENSOR_DEVICE_ATTR_RO(temp1_crit_hyst, temp_crit, 1);
--
--static SENSOR_DEVICE_ATTR_RO(temp1_label, temp_label, 0);
--static DEVICE_ATTR_RO(temp2_input);
--static SENSOR_DEVICE_ATTR_RO(temp2_label, temp_label, 1);
--
--static umode_t k10temp_is_visible(struct kobject *kobj,
--				  struct attribute *attr, int index)
-+static umode_t k10temp_is_visible(const void *_data,
-+				  enum hwmon_sensor_types type,
-+				  u32 attr, int channel)
- {
--	struct device *dev = container_of(kobj, struct device, kobj);
--	struct k10temp_data *data = dev_get_drvdata(dev);
-+	const struct k10temp_data *data = _data;
- 	struct pci_dev *pdev = data->pdev;
- 	u32 reg;
- 
--	switch (index) {
--	case 0 ... 1:	/* temp1_input, temp1_max */
--	default:
--		break;
--	case 2 ... 3:	/* temp1_crit, temp1_crit_hyst */
--		if (!data->read_htcreg)
--			return 0;
--
--		pci_read_config_dword(pdev, REG_NORTHBRIDGE_CAPABILITIES,
--				      &reg);
--		if (!(reg & NB_CAP_HTC))
--			return 0;
--
--		data->read_htcreg(data->pdev, &reg);
--		if (!(reg & HTC_ENABLE))
--			return 0;
--		break;
--	case 4 ... 6:	/* temp1_label, temp2_input, temp2_label */
--		if (!data->show_tdie)
++static int k10temp_read(struct device *dev, enum hwmon_sensor_types type,
++			u32 attr, int channel, long *val)
++{
 +	switch (type) {
 +	case hwmon_temp:
-+		switch (attr) {
-+		case hwmon_temp_input:
-+			if (channel && !data->show_tdie)
-+				return 0;
-+			break;
-+		case hwmon_temp_max:
-+			if (channel)
-+				return 0;
-+			break;
-+		case hwmon_temp_crit:
-+		case hwmon_temp_crit_hyst:
-+			if (channel || !data->read_htcreg)
-+				return 0;
-+
-+			pci_read_config_dword(pdev,
-+					      REG_NORTHBRIDGE_CAPABILITIES,
-+					      &reg);
-+			if (!(reg & NB_CAP_HTC))
-+				return 0;
-+
-+			data->read_htcreg(data->pdev, &reg);
-+			if (!(reg & HTC_ENABLE))
-+				return 0;
-+			break;
-+		case hwmon_temp_label:
-+			if (!data->show_tdie)
-+				return 0;
-+			break;
-+		default:
- 			return 0;
-+		}
- 		break;
++		return k10temp_read_temp(dev, attr, channel, val);
++	case hwmon_in:
++		return k10temp_read_in(dev, attr, channel, val);
++	case hwmon_curr:
++		return k10temp_read_curr(dev, attr, channel, val);
 +	default:
-+		return 0;
- 	}
--	return attr->mode;
-+	return 0444;
- }
- 
--static struct attribute *k10temp_attrs[] = {
--	&dev_attr_temp1_input.attr,
--	&dev_attr_temp1_max.attr,
--	&sensor_dev_attr_temp1_crit.dev_attr.attr,
--	&sensor_dev_attr_temp1_crit_hyst.dev_attr.attr,
--	&sensor_dev_attr_temp1_label.dev_attr.attr,
--	&dev_attr_temp2_input.attr,
--	&sensor_dev_attr_temp2_label.dev_attr.attr,
--	NULL
--};
--
--static const struct attribute_group k10temp_group = {
--	.attrs = k10temp_attrs,
--	.is_visible = k10temp_is_visible,
--};
--__ATTRIBUTE_GROUPS(k10temp);
--
- static bool has_erratum_319(struct pci_dev *pdev)
- {
- 	u32 pkg_type, reg_dram_cfg;
-@@ -285,8 +276,27 @@ static bool has_erratum_319(struct pci_dev *pdev)
- 	       (boot_cpu_data.x86_model == 4 && boot_cpu_data.x86_stepping <= 2);
- }
- 
--static int k10temp_probe(struct pci_dev *pdev,
--				   const struct pci_device_id *id)
-+static const struct hwmon_channel_info *k10temp_info[] = {
-+	HWMON_CHANNEL_INFO(temp,
-+			   HWMON_T_INPUT | HWMON_T_MAX |
-+			   HWMON_T_CRIT | HWMON_T_CRIT_HYST |
-+			   HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL),
-+	NULL
-+};
++		return -EOPNOTSUPP;
++	}
++}
 +
-+static const struct hwmon_ops k10temp_hwmon_ops = {
-+	.is_visible = k10temp_is_visible,
-+	.read = k10temp_read,
-+	.read_string = k10temp_read_labels,
-+};
-+
-+static const struct hwmon_chip_info k10temp_chip_info = {
-+	.ops = &k10temp_hwmon_ops,
-+	.info = k10temp_info,
-+};
-+
-+static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- {
- 	int unreliable = has_erratum_319(pdev);
- 	struct device *dev = &pdev->dev;
-@@ -334,8 +344,9 @@ static int k10temp_probe(struct pci_dev *pdev,
+ static umode_t k10temp_is_visible(const void *_data,
+ 				  enum hwmon_sensor_types type,
+ 				  u32 attr, int channel)
+@@ -290,6 +389,11 @@ static umode_t k10temp_is_visible(const void *_data,
+ 			return 0;
  		}
+ 		break;
++	case hwmon_in:
++	case hwmon_curr:
++		if (!data->show_current)
++			return 0;
++		break;
+ 	default:
+ 		return 0;
  	}
+@@ -338,6 +442,12 @@ static const struct hwmon_channel_info *k10temp_info[] = {
+ 			   HWMON_T_INPUT | HWMON_T_LABEL,
+ 			   HWMON_T_INPUT | HWMON_T_LABEL,
+ 			   HWMON_T_INPUT | HWMON_T_LABEL),
++	HWMON_CHANNEL_INFO(in,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL),
++	HWMON_CHANNEL_INFO(curr,
++			   HWMON_C_INPUT | HWMON_C_LABEL,
++			   HWMON_C_INPUT | HWMON_C_LABEL),
+ 	NULL
+ };
  
--	hwmon_dev = devm_hwmon_device_register_with_groups(dev, "k10temp", data,
--							   k10temp_groups);
-+	hwmon_dev = devm_hwmon_device_register_with_info(dev, "k10temp", data,
-+							 &k10temp_chip_info,
-+							 NULL);
- 	return PTR_ERR_OR_ZERO(hwmon_dev);
- }
- 
+@@ -393,8 +503,18 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 		case 0x8:	/* Zen+ */
+ 		case 0x11:	/* Zen APU */
+ 		case 0x18:	/* Zen+ APU */
++			data->show_current = !is_threadripper() && !is_epyc();
++			data->svi_addr[0] = F17H_M01H_SVI_TEL_PLANE0;
++			data->svi_addr[1] = F17H_M01H_SVI_TEL_PLANE1;
++			data->cfactor[0] = 1039211;	/* core */
++			data->cfactor[1] = 360772;	/* SoC */
+ 			break;
+ 		case 0x71:	/* Zen2 */
++			data->show_current = !is_threadripper() && !is_epyc();
++			data->cfactor[0] = 658823;	/* core */
++			data->cfactor[1] = 294300;	/* SoC */
++			data->svi_addr[0] = F17H_M01H_SVI_TEL_PLANE1;
++			data->svi_addr[1] = F17H_M01H_SVI_TEL_PLANE0;
+ 			amd_smn_read(amd_pci_dev_to_node_id(pdev),
+ 				     F17H_M70H_CCD1_TEMP, &regval);
+ 			if (regval & 0xfff)
 -- 
 2.17.1
 
