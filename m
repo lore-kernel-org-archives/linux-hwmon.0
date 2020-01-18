@@ -2,226 +2,114 @@ Return-Path: <SRS0=NPH/=3H=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE1E6C33CB1
-	for <linux-hwmon@archiver.kernel.org>; Sat, 18 Jan 2020 06:47:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3BC0C33CB1
+	for <linux-hwmon@archiver.kernel.org>; Sat, 18 Jan 2020 09:16:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7E25B24683
-	for <linux-hwmon@archiver.kernel.org>; Sat, 18 Jan 2020 06:47:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 79E8F2468C
+	for <linux-hwmon@archiver.kernel.org>; Sat, 18 Jan 2020 09:16:38 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fnarfbargle.com header.i=@fnarfbargle.com header.b="nSA1ClJP"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725913AbgARGrT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 18 Jan 2020 01:47:19 -0500
-Received: from mga17.intel.com ([192.55.52.151]:34563 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725468AbgARGrT (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 18 Jan 2020 01:47:19 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Jan 2020 22:47:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,333,1574150400"; 
-   d="scan'208";a="306460926"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 17 Jan 2020 22:47:17 -0800
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1isht6-000Azx-HO; Sat, 18 Jan 2020 14:47:16 +0800
-Date:   Sat, 18 Jan 2020 14:46:32 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon] BUILD SUCCESS
- 3bf8bdcf3bada771eb12b57f2a30caee69e8ab8d
-Message-ID: <5e22a9c8.Rsb+WIvfjnwrQeXY%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1726673AbgARJQi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 18 Jan 2020 04:16:38 -0500
+Received: from ns3.fnarfbargle.com ([103.4.19.87]:41220 "EHLO
+        ns3.fnarfbargle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726602AbgARJQh (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 18 Jan 2020 04:16:37 -0500
+X-Greylist: delayed 1411 seconds by postgrey-1.27 at vger.kernel.org; Sat, 18 Jan 2020 04:16:36 EST
+Received: from [10.8.0.1] (helo=srv.home ident=heh3905)
+        by ns3.fnarfbargle.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.84_2)
+        (envelope-from <lists2009@fnarfbargle.com>)
+        id 1isjqY-00014F-U9; Sat, 18 Jan 2020 16:52:47 +0800
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fnarfbargle.com; s=mail;
+        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject; bh=9Zt73YMWrB9fRw/Y7euwqnit6NOkGlC6M3h5APuHqbI=;
+        b=nSA1ClJPIEdna7thwoj4c2T7DDvavIE62hsQzLiwRvUMX+kMO3t4IHudVvZpsKt996LIrB3OqqSruIN+iQ6fwh+8Ygfgp1JS/2durHvkFD0/S3vo+h1vo0Nhilbx46ocdoq+yMRBtHBg8BSr2RzubePvJlb30pJc9eoC+eziJTc=;
+Subject: Re: [RFT PATCH 0/4] hwmon: k10temp driver improvements
+To:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Cc:     Clemens Ladisch <clemens@ladisch.de>,
+        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org
+References: <20200116141800.9828-1-linux@roeck-us.net>
+From:   Brad Campbell <lists2009@fnarfbargle.com>
+Message-ID: <492345ed-f82e-e4d9-20ac-924b4a00df90@fnarfbargle.com>
+Date:   Sat, 18 Jan 2020 16:52:46 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20200116141800.9828-1-linux@roeck-us.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-AU
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon
-branch HEAD: 3bf8bdcf3bada771eb12b57f2a30caee69e8ab8d  hwmon: (core) Do not use device managed functions for memory allocations
+On 16/1/20 10:17 pm, Guenter Roeck wrote:
+> This patch series implements various improvements for the k10temp driver.
+> 
 
-elapsed time: 675m
+Looks good here. Identical motherboards (ASUS x370 Prime-Pro), different 
+CPUs.
 
-configs tested: 164
-configs skipped: 0
+3950x
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+k10temp-pci-00c3
+Adapter: PCI adapter
+Vcore:        +1.38 V
+Vsoc:         +1.08 V
+Tdie:         +69.1°C  (high = +70.0°C)
+Tctl:         +69.1°C
+Tccd1:        +54.2°C
+Tccd2:        +57.0°C
+Icore:       +27.67 A
+Isoc:        +14.13 A
 
-um                                  defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-csky                 randconfig-a001-20200118
-openrisc             randconfig-a001-20200118
-s390                 randconfig-a001-20200118
-sh                   randconfig-a001-20200118
-xtensa               randconfig-a001-20200118
-arm                              allmodconfig
-arm                               allnoconfig
-arm                              allyesconfig
-arm                         at91_dt_defconfig
-arm                           efm32_defconfig
-arm                          exynos_defconfig
-arm                        multi_v5_defconfig
-arm                        multi_v7_defconfig
-arm                        shmobile_defconfig
-arm                           sunxi_defconfig
-arm64                            allmodconfig
-arm64                             allnoconfig
-arm64                            allyesconfig
-arm64                               defconfig
-alpha                               defconfig
-csky                                defconfig
-nds32                             allnoconfig
-nds32                               defconfig
-sh                               allmodconfig
-sh                                allnoconfig
-sh                          rsk7269_defconfig
-sh                  sh7785lcr_32bit_defconfig
-sh                            titan_defconfig
-arc                              allyesconfig
-arc                                 defconfig
-microblaze                      mmu_defconfig
-microblaze                    nommu_defconfig
-powerpc                           allnoconfig
-powerpc                             defconfig
-powerpc                       ppc64_defconfig
-powerpc                          rhel-kconfig
-x86_64               randconfig-h001-20200118
-x86_64               randconfig-h002-20200118
-x86_64               randconfig-h003-20200118
-i386                 randconfig-h001-20200118
-i386                 randconfig-h002-20200118
-i386                 randconfig-h003-20200118
-arc                  randconfig-a001-20200118
-arm                  randconfig-a001-20200118
-arm64                randconfig-a001-20200118
-ia64                 randconfig-a001-20200118
-powerpc              randconfig-a001-20200118
-sparc                randconfig-a001-20200118
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-sparc64                          allmodconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-sparc64                             defconfig
-x86_64               randconfig-d001-20200118
-x86_64               randconfig-d002-20200118
-x86_64               randconfig-d003-20200118
-i386                 randconfig-d001-20200118
-i386                 randconfig-d002-20200118
-i386                 randconfig-d003-20200118
-x86_64               randconfig-g001-20200118
-x86_64               randconfig-g002-20200118
-x86_64               randconfig-g003-20200118
-i386                 randconfig-g001-20200118
-i386                 randconfig-g002-20200118
-i386                 randconfig-g003-20200118
-x86_64               randconfig-e001-20200118
-x86_64               randconfig-e002-20200118
-x86_64               randconfig-e003-20200118
-i386                 randconfig-e001-20200118
-i386                 randconfig-e002-20200118
-i386                 randconfig-e003-20200118
-c6x                              allyesconfig
-c6x                        evmc6678_defconfig
-nios2                         10m50_defconfig
-nios2                         3c120_defconfig
-openrisc                    or1ksim_defconfig
-openrisc                 simple_smp_defconfig
-xtensa                       common_defconfig
-xtensa                          iss_defconfig
-x86_64               randconfig-f001-20200118
-x86_64               randconfig-f002-20200118
-x86_64               randconfig-f003-20200118
-i386                 randconfig-f001-20200118
-i386                 randconfig-f002-20200118
-i386                 randconfig-f003-20200118
-c6x                  randconfig-a001-20200118
-h8300                randconfig-a001-20200118
-microblaze           randconfig-a001-20200118
-nios2                randconfig-a001-20200118
-sparc64              randconfig-a001-20200118
-h8300                     edosk2674_defconfig
-h8300                    h8300h-sim_defconfig
-h8300                       h8s-sim_defconfig
-m68k                             allmodconfig
-m68k                       m5475evb_defconfig
-m68k                          multi_defconfig
-m68k                           sun3_defconfig
-parisc                            allnoconfig
-parisc                            allyesonfig
-parisc                         b180_defconfig
-parisc                        c3000_defconfig
-parisc                              defconfig
-x86_64               randconfig-c001-20200118
-x86_64               randconfig-c002-20200118
-x86_64               randconfig-c003-20200118
-i386                 randconfig-c001-20200118
-i386                 randconfig-c002-20200118
-i386                 randconfig-c003-20200118
-alpha                randconfig-a001-20200118
-m68k                 randconfig-a001-20200118
-mips                 randconfig-a001-20200118
-nds32                randconfig-a001-20200118
-parisc               randconfig-a001-20200118
-riscv                randconfig-a001-20200118
-riscv                            allmodconfig
-riscv                             allnoconfig
-riscv                            allyesconfig
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-i386                             alldefconfig
-i386                              allnoconfig
-i386                                defconfig
-x86_64               randconfig-b001-20200118
-x86_64               randconfig-b002-20200118
-x86_64               randconfig-b003-20200118
-i386                 randconfig-b001-20200118
-i386                 randconfig-b002-20200118
-i386                 randconfig-b003-20200118
-s390                             alldefconfig
-s390                             allmodconfig
-s390                              allnoconfig
-s390                             allyesconfig
-s390                          debug_defconfig
-s390                                defconfig
-s390                       zfcpdump_defconfig
-x86_64                              fedora-25
-x86_64                                  kexec
-x86_64                                    lkp
-x86_64                                   rhel
-x86_64                               rhel-7.6
-ia64                             alldefconfig
-ia64                             allmodconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-ia64                                defconfig
-x86_64               randconfig-a001-20200118
-x86_64               randconfig-a002-20200118
-x86_64               randconfig-a003-20200118
-i386                 randconfig-a001-20200118
-i386                 randconfig-a002-20200118
-i386                 randconfig-a003-20200118
-mips                           32r2_defconfig
-mips                         64r6el_defconfig
-mips                             allmodconfig
-mips                              allnoconfig
-mips                             allyesconfig
-mips                      fuloong2e_defconfig
-mips                      malta_kvm_defconfig
+it8665-isa-0290
+Adapter: ISA adapter
+Vcore:        +1.41 V  (min =  +0.83 V, max =  +1.65 V)
+in1:          +2.51 V  (min =  +1.98 V, max =  +2.73 V)
++12V:        +11.98 V  (min = +11.20 V, max = +12.40 V)
++5V:          +5.01 V  (min =  +4.74 V, max =  +5.61 V)
+3VSB:         +6.67 V  (min =  +2.83 V, max =  +3.40 V)
+Vbat:         +6.58 V
++3.3V:        +3.33 V
+CPU Fan:     3409 RPM  (min = 1500 RPM)
+Back Fan:       0 RPM  (min =    0 RPM)
+MB CPU Temp:  +56.0°C  (low  = +13.0°C, high = +88.0°C)
+Ambient:      +35.0°C  (low  = +13.0°C, high = +43.0°C)  sensor = thermistor
+PCH:          +46.0°C  (low  = +18.0°C, high = +61.0°C)  sensor = thermistor
 
----
-0-DAY kernel test infrastructure                 Open Source Technology Center
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org Intel Corporation
+1800x
+
+k10temp-pci-00c3
+Adapter: PCI adapter
+Vcore:        +1.26 V
+Vsoc:         +0.91 V
+Tdie:         +36.0°C  (high = +70.0°C)
+Tctl:         +56.0°C
+Icore:       +15.59 A
+Isoc:         +7.94 A
+
+it8665-isa-0290
+Adapter: ISA adapter
+Vcore:        +1.25 V  (min =  +0.83 V, max =  +1.65 V)
+in1:          +2.48 V  (min =  +1.98 V, max =  +2.73 V)
++12V:        +11.98 V  (min = +11.20 V, max = +12.40 V)
++5V:          +4.96 V  (min =  +4.74 V, max =  +5.61 V)
+3VSB:         +6.54 V  (min =  +2.83 V, max =  +3.40 V)
+Vbat:         +6.37 V
++3.3V:        +3.31 V
+CPU Fan:     1171 RPM  (min = 1500 RPM)  ALARM
+Back Fan:       0 RPM  (min =    0 RPM)
+MB CPU Temp:  +36.0°C  (low  = +13.0°C, high = +88.0°C)
+Ambient:      +44.0°C  (low  = +13.0°C, high = +43.0°C)  sensor = thermistor
+PCH:          +38.0°C  (low  = +18.0°C, high = +61.0°C)  sensor = thermistor
+
+Regards,
+Brad
