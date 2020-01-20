@@ -2,182 +2,146 @@ Return-Path: <SRS0=PSO3=3J=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91A00C33CAF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Jan 2020 00:17:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2FEBC2D0DB
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Jan 2020 15:32:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5E591217F4
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Jan 2020 00:17:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 95E2022314
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Jan 2020 15:32:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="FBrh7Yq5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cYm/xAni"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728931AbgATAR0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 19 Jan 2020 19:17:26 -0500
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:58214 "EHLO
-        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729019AbgATAR0 (ORCPT
+        id S1726988AbgATPci (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 20 Jan 2020 10:32:38 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:39512 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726642AbgATPci (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 19 Jan 2020 19:17:26 -0500
-Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 9AC8C891A9;
-        Mon, 20 Jan 2020 13:17:24 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1579479444;
-        bh=Qrc/olz4vUb9+xNv/B2MGM5gonZe+CIlgglOYwHPYXE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=FBrh7Yq5ibUuJWa+ru1AezX+skION/6/GiyPhWpwdv6KM1m2gqJM9taf8IMcnB5ea
-         qOZ1iROpNIQPnZsHy4nUZzg7+K16iKNqbdSz2j1gBXyUZAX+LAj2sRVFptQPWRHDAu
-         IstYDPYirX4Ys0aJvT6N+6CZkPWlRdxJE/1Qd+VI9ZIpKe1VeMO+3KFRHD8BLN81XU
-         sBBsgsWfoxdp5uRFNm+j50vzq9/hN/7q69eN0wtP27ml2jhLuU0syBd4OxRYWdgb2j
-         CTpd24EIq39z0rig/oMKwNzStkB3os27nyB94nStIk4I1Na4mLoyFwY1poaZWG5Oa/
-         t7UMC3cCw4oBg==
-Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
-        id <B5e24f1940000>; Mon, 20 Jan 2020 13:17:24 +1300
-Received: from logans-dl.ws.atlnz.lc (logans-dl.ws.atlnz.lc [10.33.25.61])
-        by smtp (Postfix) with ESMTP id C539413EEFE;
-        Mon, 20 Jan 2020 13:17:23 +1300 (NZDT)
-Received: by logans-dl.ws.atlnz.lc (Postfix, from userid 1820)
-        id C7339C0448; Mon, 20 Jan 2020 13:17:23 +1300 (NZDT)
-From:   Logan Shaw <logan.shaw@alliedtelesis.co.nz>
-To:     linux@roeck-us.net, jdelvare@suse.com, robh+dt@kernel.org
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Joshua.Scott@alliedtelesis.co.nz,
-        Chris.Packham@alliedtelesis.co.nz, logan.shaw@alliedtelesis.co.nz
-Subject: [PATCH v4 2/2] hwmon: (adt7475) Added attenuator bypass support
-Date:   Mon, 20 Jan 2020 13:17:03 +1300
-Message-Id: <20200120001703.9927-3-logan.shaw@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200120001703.9927-1-logan.shaw@alliedtelesis.co.nz>
-References: <20200120001703.9927-1-logan.shaw@alliedtelesis.co.nz>
+        Mon, 20 Jan 2020 10:32:38 -0500
+Received: by mail-pf1-f195.google.com with SMTP id q10so16021433pfs.6;
+        Mon, 20 Jan 2020 07:32:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hMUb4UT/Nl0RzRD4JMm3uMZnqeQJo9tO8hkOnDtEC4E=;
+        b=cYm/xAnit5duDUrZSNf5yHb7/qxcY/IrwZeBIy3HMsoMwNutZ1Ymjyaen3DtT7upag
+         njR79D7Z9FSCPH4zqy/H5Fb4I/ALvyCHbyq2jzPOB/d29VlOmQtMTcCb6HBVB+OxEFf4
+         Gp3ZmeUpSr+An+Xb7npriQ4rs8Pl+yMpcFxuGAFcaZWEt6y2tDAj0syBEwskWcxVNlqw
+         2IDWGieJt6JFVOKvehbmZ/BypL0n1eSGyEjV6P82rqqAFkYETS+mDLYk9jOA3G6ku8o1
+         7upu/wkVirWlO1EaCx9puwyhpwHbFVccKLPnzzFKVQYLv8CXLiV2QSCYrMx0VqeOr0hl
+         eazA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hMUb4UT/Nl0RzRD4JMm3uMZnqeQJo9tO8hkOnDtEC4E=;
+        b=FJndGZoD0OZ0UAAEqBx4nN9+ivt7nBAJHm0Y9MJCA2VJHCqeq8qSmEGpJACmdl+1O/
+         0ukQlnR2wwpC+Ar4OkAokiZsbjo/SFve/9PnX1TQ756S3bOGB4jJTUqV3mr7DMMOoFPa
+         VFop62yGdjbjdy/JHg55Rz04j3RP5FfT1h3PomdaX+q3t2M/0X7Oy2S1lhqb5QsBxdas
+         ndUsPgET9ylIyzDfewwe2dUuANebMHNsd9QGv+2eawfnMio2oYDfOiKYI3RMsXcHnEna
+         oUw+aXwU4+2ya3B5qQHWvzjkxPzaPLDOTenQo8HWdm3i8n74lZ7GS+eMsuMo0HRIlh/F
+         KXRQ==
+X-Gm-Message-State: APjAAAVv+3ERdV+CtjzTiv5x7My5wDXH0qAqNmhrOlSF6k3YeyJ5x7mX
+        ZzcBLr5NvrGZlsIUeWkzsjA65ca8
+X-Google-Smtp-Source: APXvYqyRwVEaP9FNuLh2ezzOsX6H++Q0GymMPS7gp2wSbOwXC2/UDID7l0ZpJ+TUMM9K3qzsv7mTUA==
+X-Received: by 2002:a63:1b0a:: with SMTP id b10mr227445pgb.56.1579534357126;
+        Mon, 20 Jan 2020 07:32:37 -0800 (PST)
+Received: from localhost.localdomain ([240f:34:212d:1:25f1:5a01:f589:2cf2])
+        by smtp.gmail.com with ESMTPSA id q199sm41037797pfq.163.2020.01.20.07.32.32
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Mon, 20 Jan 2020 07:32:35 -0800 (PST)
+From:   Akinobu Mita <akinobu.mita@gmail.com>
+To:     linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org
+Cc:     Akinobu Mita <akinobu.mita@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Kamil Debski <kamil@wypas.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Subject: [PATCH v2] hwmon: (pwm-fan) stop fan on shutdown
+Date:   Tue, 21 Jan 2020 00:32:24 +0900
+Message-Id: <1579534344-11694-1-git-send-email-akinobu.mita@gmail.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-x-atlnz-ls: pat
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Added a new file documenting the adt7475 devicetree and added the four
-new properties to it.
+The pwm-fan driver stops the fan in suspend but leaves the fan on in
+shutdown.  It seems strange to leave the fan on in shutdown because there
+is no use case in my mind and the gpio-fan driver on the other hand stops
+in shutdown.
 
-Signed-off-by: Logan Shaw <logan.shaw@alliedtelesis.co.nz>
----
----
- .../devicetree/bindings/hwmon/adt7475.yaml    | 90 +++++++++++++++++++
- 1 file changed, 90 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/adt7475.yaml
+This change turns off the fan in shutdown.  If anyone complains then we'll
+add an optional property to switch the behavior.
 
-diff --git a/Documentation/devicetree/bindings/hwmon/adt7475.yaml b/Docum=
-entation/devicetree/bindings/hwmon/adt7475.yaml
-new file mode 100644
-index 000000000000..f2427de9991e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
-@@ -0,0 +1,90 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/adt7475.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Kamil Debski <kamil@wypas.org>
+Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Thierry Reding <thierry.reding@gmail.com>
+Cc: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
+---
+* v2
+- remove optional property and just turn off the fan in shutdown
+
+ drivers/hwmon/pwm-fan.c | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
+index 42ffd2e..30b7b3e 100644
+--- a/drivers/hwmon/pwm-fan.c
++++ b/drivers/hwmon/pwm-fan.c
+@@ -390,8 +390,7 @@ static int pwm_fan_probe(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
+-#ifdef CONFIG_PM_SLEEP
+-static int pwm_fan_suspend(struct device *dev)
++static int pwm_fan_disable(struct device *dev)
+ {
+ 	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
+ 	struct pwm_args args;
+@@ -418,6 +417,17 @@ static int pwm_fan_suspend(struct device *dev)
+ 	return 0;
+ }
+ 
++static void pwm_fan_shutdown(struct platform_device *pdev)
++{
++	pwm_fan_disable(&pdev->dev);
++}
 +
-+title: ADT7475 hwmon sensor
++#ifdef CONFIG_PM_SLEEP
++static int pwm_fan_suspend(struct device *dev)
++{
++	return pwm_fan_disable(dev);
++}
 +
-+maintainers:
-+  - Jean Delvare <jdelvare@suse.com>
-+
-+description: |
-+  The ADT7473, ADT7475, ADT7476, and ADT7490 are thermal monitors and mu=
-ltiple
-+  PWN fan controllers.
-+
-+  They support monitoring and controlling up to four fans (the ADT7490 c=
-an only
-+  control up to three). They support reading a single on chip temperatur=
-e
-+  sensor and two off chip temperature sensors (the ADT7490 additionally
-+  supports measuring up to three current external temperature sensors wi=
-th
-+  series resistance cancellation (SRC)).
-+
-+  Datasheets:
-+  https://www.onsemi.com/pub/Collateral/ADT7473-D.PDF
-+  https://www.onsemi.com/pub/Collateral/ADT7475-D.PDF
-+  https://www.onsemi.com/pub/Collateral/ADT7476-D.PDF
-+  https://www.onsemi.com/pub/Collateral/ADT7490-D.PDF
-+
-+  Description taken from omsemiconductors specification sheets, with min=
-or
-+  rephrasing.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - adi,adt7473
-+      - adi,adt7475
-+      - adi,adt7476
-+      - adi,adt7490
-+
-+  reg:
-+    maxItems: 1
-+
-+  bypass-attenuator-in0:
-+    description: |
-+      Configures bypassing the individual voltage input
-+      attenuator, on in0. This is supported on the ADT7476 and ADT7490.
-+      If set to a non-zero integer the attenuator is bypassed, if set to
-+      zero the attenuator is not bypassed. If the property is absent the=
-n
-+      the config register is not modified.
-+    maxItems: 1
-+
-+  bypass-attenuator-in1:
-+    description: |
-+      Configures bypassing the individual voltage input
-+      attenuator, on in1. This is supported on the ADT7473, ADT7475,
-+      ADT7476 and ADT7490. If set to a non-zero integer the attenuator
-+      is bypassed, if set to zero the attenuator is not bypassed. If the
-+      property is absent then the config register is not modified.
-+    maxItems: 1
-+
-+  bypass-attenuator-in3:
-+    description: |
-+      Configures bypassing the individual voltage input
-+      attenuator, on in3. This is supported on the ADT7476 and ADT7490.
-+      If set to a non-zero integer the attenuator is bypassed, if set to
-+      zero the attenuator is not bypassed. If the property is absent the=
-n
-+      the config register is not modified.
-+    maxItems: 1
-+
-+  bypass-attenuator-in4:
-+    description: |
-+      Configures bypassing the individual voltage input
-+      attenuator, on in4. This is supported on the ADT7476 and ADT7490.
-+      If set to a non-zero integer the attenuator is bypassed, if set to
-+      zero the attenuator is not bypassed. If the property is absent the=
-n
-+      the config register is not modified.
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+examples:
-+  - |
-+    hwmon@2e {
-+      compatible =3D "adi,adt7476";
-+      reg =3D <0x2e>;
-+      bypass-attenuator-in0 =3D <1>;
-+      bypass-attenuator-in1 =3D <0>;
-+    };
-+...
---=20
-2.25.0
+ static int pwm_fan_resume(struct device *dev)
+ {
+ 	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
+@@ -455,6 +465,7 @@ MODULE_DEVICE_TABLE(of, of_pwm_fan_match);
+ 
+ static struct platform_driver pwm_fan_driver = {
+ 	.probe		= pwm_fan_probe,
++	.shutdown	= pwm_fan_shutdown,
+ 	.driver	= {
+ 		.name		= "pwm-fan",
+ 		.pm		= &pwm_fan_pm,
+-- 
+2.7.4
 
