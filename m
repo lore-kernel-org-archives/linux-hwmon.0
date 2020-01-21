@@ -2,384 +2,226 @@ Return-Path: <SRS0=qhp6=3K=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.5 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 718F1C33CA1
-	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Jan 2020 02:30:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6DE7C33CAA
+	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Jan 2020 12:55:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 310B524656
-	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Jan 2020 02:30:55 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UWr6M2vv"
+	by mail.kernel.org (Postfix) with ESMTP id 8D9C821835
+	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Jan 2020 12:55:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729043AbgAUCak (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 20 Jan 2020 21:30:40 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:36737 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726890AbgAUCak (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 20 Jan 2020 21:30:40 -0500
-Received: by mail-pg1-f195.google.com with SMTP id k3so638922pgc.3;
-        Mon, 20 Jan 2020 18:30:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=2TWeVdE7IiqXKwtqthavTGOK3VlPsF519h/qxKiwBH8=;
-        b=UWr6M2vvnvogn67/lqEIk6nI3ETzsojv9QYOPYczZOB1zP322OYsEgG2SVrPYY5mej
-         ZrPcaQiK2BjC3YUrwkwOB5tgPeggZdKqFMDOX5SONBdAWtVHd27or73BCSw4pbnx6naJ
-         eux/dJ1gcl3dtOr1sMJfz1gCDWh+6oIqGcDyLr8JCH3Kipii8BmunWoLQMtRMqshey4q
-         OuYQc2TFrTFoStVWKlWWORNl4G0Axt9d2r4jNQA/zxe/qD0x/eT7SrG7SI4z81F/9yY6
-         fpYJUZnt9b6RfH47n1XggP0wFycqA9Apbix8AAPpfCI6Fw2U4OSP6G0FYuEjBZaHHauT
-         cEaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references;
-        bh=2TWeVdE7IiqXKwtqthavTGOK3VlPsF519h/qxKiwBH8=;
-        b=NasKvTUDiV6vTrIaeDCf/9KDmSeEGp5rXMHpu+mSI5qPVScZomYKaLUgJ69M7xPfvi
-         Kc/IwP9m8HWXVXIvj7X/Hymwax3gQN0EYgl/qE1ZH3tLVdI4lq+DXmjB+0lE/rbfpgpe
-         cKRSjhi9YGUbvf6nvSSooIq2+tbk4b6XNXB18IdibgL4d0uwKXnLptVVu8Dl2KXOQiCk
-         rdXD4YT7NjAwJDcwDfDlPjwsg0qQMGfTDrw6Ohbmgr6ReLw5r/IKxMBi7UNrpRJN1LHJ
-         mB4bxqyo+e0EL/WcnA344hW7WuAPcvN0IC62FgieeY+wrpuEEbenzIdiQYxqfIzapCqJ
-         dVww==
-X-Gm-Message-State: APjAAAXLcCoq65+cb+MuXyW5gaNBKsBXe8okNtMKrH9B2wLnay0VxXoC
-        +kgCifyKAfx6Qg0baH1irSQimdrD
-X-Google-Smtp-Source: APXvYqy2tO9VVNmNY4ECfNWMq/TIvWfh72QjB0FqxWDD+4MbXHGbqbeYPuhs4IGBsEZCZckN9WEXGA==
-X-Received: by 2002:aa7:8181:: with SMTP id g1mr2253068pfi.215.1579573839061;
-        Mon, 20 Jan 2020 18:30:39 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l2sm763160pjt.31.2020.01.20.18.30.38
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 20 Jan 2020 18:30:38 -0800 (PST)
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     linux-hwmon@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Clemens Ladisch <clemens@ladisch.de>,
-        Jean Delvare <jdelvare@suse.com>,
-        Brad Campbell <lists2009@fnarfbargle.com>,
-        =?UTF-8?q?Ondrej=20=C4=8Cerman?= <ocerman@sda1.eu>,
-        Bernhard Gebetsberger <bernhard.gebetsberger@gmx.at>,
-        Holger Kiehl <Holger.Kiehl@dwd.de>,
-        Michael Larabel <michael@phoronix.com>,
-        Jonathan McDowell <noodles@earth.li>,
-        Ken Moffat <zarniwhoop73@googlemail.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Darren Salt <devspam@moreofthesa.me.uk>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH v3 2/5] hmon: (k10temp) Convert to use devm_hwmon_device_register_with_info
-Date:   Mon, 20 Jan 2020 18:30:24 -0800
-Message-Id: <20200121023027.2081-3-linux@roeck-us.net>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200121023027.2081-1-linux@roeck-us.net>
-References: <20200121023027.2081-1-linux@roeck-us.net>
+        id S1728655AbgAUMz6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 21 Jan 2020 07:55:58 -0500
+Received: from mga18.intel.com ([134.134.136.126]:5245 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727817AbgAUMz5 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 21 Jan 2020 07:55:57 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 Jan 2020 04:55:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,346,1574150400"; 
+   d="scan'208";a="215528287"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 21 Jan 2020 04:55:56 -0800
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1itt4V-00072l-IG; Tue, 21 Jan 2020 20:55:55 +0800
+Date:   Tue, 21 Jan 2020 20:55:30 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:hwmon-next] BUILD SUCCESS
+ 96e5718a48b7086d85890aeebf091147f893c97c
+Message-ID: <5e26f4c2.FyC9tRix5yBqIenO%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Convert driver to use devm_hwmon_device_register_with_info to simplify
-the code and to reduce its size.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon-next
+branch HEAD: 96e5718a48b7086d85890aeebf091147f893c97c  hwmon: (k10temp) Don't show temperature limits on Ryzen (Zen) CPUs
 
-Old size (x86_64):
-   text	   data	    bss	    dec	    hex	filename
-   8247	   4488	     64	  12799	   31ff	drivers/hwmon/k10temp.o
-New size:
-   text	   data	    bss	    dec	    hex	filename
-   6778	   2792	     64	   9634	   25a2	drivers/hwmon/k10temp.o
+elapsed time: 520m
 
-Tested-by: Brad Campbell <lists2009@fnarfbargle.com>
-Tested-by: Bernhard Gebetsberger <bernhard.gebetsberger@gmx.at>
-Tested-by: Holger Kiehl <holger.kiehl@dwd.de>
-Tested-by: Michael Larabel <michael@phoronix.com>
-Tested-by: Jonathan McDowell <noodles@earth.li>
-Tested-by: Ken Moffat <zarniwhoop73@googlemail.com>
-Tested-by: Darren Salt <devspam@moreofthesa.me.uk>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+configs tested: 164
+configs skipped: 0
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+x86_64                              fedora-25
+x86_64                                  kexec
+x86_64                                    lkp
+x86_64                                   rhel
+x86_64                               rhel-7.6
+x86_64               randconfig-d001-20200121
+x86_64               randconfig-d002-20200121
+x86_64               randconfig-d003-20200121
+i386                 randconfig-d001-20200121
+i386                 randconfig-d002-20200121
+i386                 randconfig-d003-20200121
+ia64                             alldefconfig
+ia64                             allmodconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+ia64                                defconfig
+csky                 randconfig-a001-20200121
+openrisc             randconfig-a001-20200121
+s390                 randconfig-a001-20200121
+sh                   randconfig-a001-20200121
+xtensa               randconfig-a001-20200121
+x86_64               randconfig-b001-20200121
+x86_64               randconfig-b002-20200121
+x86_64               randconfig-b003-20200121
+i386                 randconfig-b001-20200121
+i386                 randconfig-b002-20200121
+i386                 randconfig-b003-20200121
+c6x                              allyesconfig
+c6x                        evmc6678_defconfig
+nios2                         10m50_defconfig
+nios2                         3c120_defconfig
+openrisc                    or1ksim_defconfig
+openrisc                 simple_smp_defconfig
+xtensa                       common_defconfig
+xtensa                          iss_defconfig
+m68k                           sun3_defconfig
+um                           x86_64_defconfig
+sh                               allmodconfig
+sh                                allnoconfig
+sh                          rsk7269_defconfig
+sh                  sh7785lcr_32bit_defconfig
+sh                            titan_defconfig
+alpha                randconfig-a001-20200121
+m68k                 randconfig-a001-20200121
+mips                 randconfig-a001-20200121
+nds32                randconfig-a001-20200121
+parisc               randconfig-a001-20200121
+riscv                randconfig-a001-20200121
+x86_64               randconfig-e001-20200121
+x86_64               randconfig-e002-20200121
+x86_64               randconfig-e003-20200121
+i386                 randconfig-e001-20200121
+i386                 randconfig-e002-20200121
+i386                 randconfig-e003-20200121
+h8300                     edosk2674_defconfig
+h8300                    h8300h-sim_defconfig
+h8300                       h8s-sim_defconfig
+m68k                             allmodconfig
+m68k                       m5475evb_defconfig
+m68k                          multi_defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+sparc64                          allmodconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                             defconfig
+riscv                            allmodconfig
+riscv                             allnoconfig
+riscv                            allyesconfig
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+um                                  defconfig
+um                             i386_defconfig
+arm                              allmodconfig
+arm64                            allmodconfig
+x86_64               randconfig-c001-20200121
+x86_64               randconfig-c002-20200121
+x86_64               randconfig-c003-20200121
+i386                 randconfig-c001-20200121
+i386                 randconfig-c002-20200121
+i386                 randconfig-c003-20200121
+mips                           32r2_defconfig
+mips                         64r6el_defconfig
+mips                             allmodconfig
+mips                              allnoconfig
+mips                             allyesconfig
+mips                      fuloong2e_defconfig
+mips                      malta_kvm_defconfig
+arc                              allyesconfig
+arc                                 defconfig
+microblaze                      mmu_defconfig
+microblaze                    nommu_defconfig
+powerpc                           allnoconfig
+powerpc                             defconfig
+powerpc                       ppc64_defconfig
+powerpc                          rhel-kconfig
+x86_64               randconfig-g001-20200121
+x86_64               randconfig-g002-20200121
+x86_64               randconfig-g003-20200121
+i386                 randconfig-g001-20200121
+i386                 randconfig-g002-20200121
+i386                 randconfig-g003-20200121
+x86_64               randconfig-a001-20200121
+x86_64               randconfig-a002-20200121
+x86_64               randconfig-a003-20200121
+i386                 randconfig-a001-20200121
+i386                 randconfig-a002-20200121
+i386                 randconfig-a003-20200121
+parisc                            allnoconfig
+parisc                            allyesonfig
+parisc                         b180_defconfig
+parisc                        c3000_defconfig
+parisc                              defconfig
+alpha                               defconfig
+csky                                defconfig
+nds32                             allnoconfig
+nds32                               defconfig
+arm                               allnoconfig
+arm                              allyesconfig
+arm                         at91_dt_defconfig
+arm                           efm32_defconfig
+arm                          exynos_defconfig
+arm                        multi_v5_defconfig
+arm                        multi_v7_defconfig
+arm                        shmobile_defconfig
+arm                           sunxi_defconfig
+arm64                             allnoconfig
+arm64                            allyesconfig
+arm64                               defconfig
+i386                             alldefconfig
+i386                              allnoconfig
+i386                             allyesconfig
+i386                                defconfig
+x86_64               randconfig-h001-20200121
+x86_64               randconfig-h002-20200121
+x86_64               randconfig-h003-20200121
+i386                 randconfig-h001-20200121
+i386                 randconfig-h002-20200121
+i386                 randconfig-h003-20200121
+s390                             alldefconfig
+s390                             allmodconfig
+s390                              allnoconfig
+s390                             allyesconfig
+s390                          debug_defconfig
+s390                                defconfig
+s390                       zfcpdump_defconfig
+arc                  randconfig-a001-20200121
+arm                  randconfig-a001-20200121
+arm64                randconfig-a001-20200121
+ia64                 randconfig-a001-20200121
+powerpc              randconfig-a001-20200121
+sparc                randconfig-a001-20200121
+c6x                  randconfig-a001-20200121
+h8300                randconfig-a001-20200121
+microblaze           randconfig-a001-20200121
+nios2                randconfig-a001-20200121
+sparc64              randconfig-a001-20200121
+x86_64               randconfig-f001-20200121
+x86_64               randconfig-f002-20200121
+x86_64               randconfig-f003-20200121
+i386                 randconfig-f001-20200121
+i386                 randconfig-f002-20200121
+i386                 randconfig-f003-20200121
+
 ---
- drivers/hwmon/k10temp.c | 213 +++++++++++++++++++++-------------------
- 1 file changed, 112 insertions(+), 101 deletions(-)
-
-diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-index 8807d7da68db..c45f6498a59b 100644
---- a/drivers/hwmon/k10temp.c
-+++ b/drivers/hwmon/k10temp.c
-@@ -1,14 +1,15 @@
- // SPDX-License-Identifier: GPL-2.0-or-later
- /*
-- * k10temp.c - AMD Family 10h/11h/12h/14h/15h/16h processor hardware monitoring
-+ * k10temp.c - AMD Family 10h/11h/12h/14h/15h/16h/17h
-+ *		processor hardware monitoring
-  *
-  * Copyright (c) 2009 Clemens Ladisch <clemens@ladisch.de>
-+ * Copyright (c) 2020 Guenter Roeck <linux@roeck-us.net>
-  */
- 
- #include <linux/bitops.h>
- #include <linux/err.h>
- #include <linux/hwmon.h>
--#include <linux/hwmon-sysfs.h>
- #include <linux/init.h>
- #include <linux/module.h>
- #include <linux/pci.h>
-@@ -127,10 +128,10 @@ static void read_tempreg_nb_f17(struct pci_dev *pdev, u32 *regval)
- 		     F17H_M01H_REPORTED_TEMP_CTRL_OFFSET, regval);
- }
- 
--static unsigned int get_raw_temp(struct k10temp_data *data)
-+static long get_raw_temp(struct k10temp_data *data)
- {
--	unsigned int temp;
- 	u32 regval;
-+	long temp;
- 
- 	data->read_tempreg(data->pdev, &regval);
- 	temp = (regval >> CUR_TEMP_SHIFT) * 125;
-@@ -139,118 +140,108 @@ static unsigned int get_raw_temp(struct k10temp_data *data)
- 	return temp;
- }
- 
--static ssize_t temp1_input_show(struct device *dev,
--				struct device_attribute *attr, char *buf)
--{
--	struct k10temp_data *data = dev_get_drvdata(dev);
--	unsigned int temp = get_raw_temp(data);
--
--	if (temp > data->temp_offset)
--		temp -= data->temp_offset;
--	else
--		temp = 0;
--
--	return sprintf(buf, "%u\n", temp);
--}
--
--static ssize_t temp2_input_show(struct device *dev,
--				struct device_attribute *devattr, char *buf)
--{
--	struct k10temp_data *data = dev_get_drvdata(dev);
--	unsigned int temp = get_raw_temp(data);
--
--	return sprintf(buf, "%u\n", temp);
--}
--
--static ssize_t temp_label_show(struct device *dev,
--			       struct device_attribute *devattr, char *buf)
--{
--	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
--
--	return sprintf(buf, "%s\n", attr->index ? "Tctl" : "Tdie");
--}
-+const char *k10temp_temp_label[] = {
-+	"Tdie",
-+	"Tctl",
-+};
- 
--static ssize_t temp1_max_show(struct device *dev,
--			      struct device_attribute *attr, char *buf)
-+static int k10temp_read_labels(struct device *dev,
-+			       enum hwmon_sensor_types type,
-+			       u32 attr, int channel, const char **str)
- {
--	return sprintf(buf, "%d\n", 70 * 1000);
-+	*str = k10temp_temp_label[channel];
-+	return 0;
- }
- 
--static ssize_t temp_crit_show(struct device *dev,
--			      struct device_attribute *devattr, char *buf)
-+static int k10temp_read(struct device *dev, enum hwmon_sensor_types type,
-+			u32 attr, int channel, long *val)
- {
--	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
- 	struct k10temp_data *data = dev_get_drvdata(dev);
--	int show_hyst = attr->index;
- 	u32 regval;
--	int value;
- 
--	data->read_htcreg(data->pdev, &regval);
--	value = ((regval >> 16) & 0x7f) * 500 + 52000;
--	if (show_hyst)
--		value -= ((regval >> 24) & 0xf) * 500;
--	return sprintf(buf, "%d\n", value);
-+	switch (attr) {
-+	case hwmon_temp_input:
-+		switch (channel) {
-+		case 0:		/* Tdie */
-+			*val = get_raw_temp(data) - data->temp_offset;
-+			if (*val < 0)
-+				*val = 0;
-+			break;
-+		case 1:		/* Tctl */
-+			*val = get_raw_temp(data);
-+			if (*val < 0)
-+				*val = 0;
-+			break;
-+		default:
-+			return -EOPNOTSUPP;
-+		}
-+		break;
-+	case hwmon_temp_max:
-+		*val = 70 * 1000;
-+		break;
-+	case hwmon_temp_crit:
-+		data->read_htcreg(data->pdev, &regval);
-+		*val = ((regval >> 16) & 0x7f) * 500 + 52000;
-+		break;
-+	case hwmon_temp_crit_hyst:
-+		data->read_htcreg(data->pdev, &regval);
-+		*val = (((regval >> 16) & 0x7f)
-+			- ((regval >> 24) & 0xf)) * 500 + 52000;
-+		break;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+	return 0;
- }
- 
--static DEVICE_ATTR_RO(temp1_input);
--static DEVICE_ATTR_RO(temp1_max);
--static SENSOR_DEVICE_ATTR_RO(temp1_crit, temp_crit, 0);
--static SENSOR_DEVICE_ATTR_RO(temp1_crit_hyst, temp_crit, 1);
--
--static SENSOR_DEVICE_ATTR_RO(temp1_label, temp_label, 0);
--static DEVICE_ATTR_RO(temp2_input);
--static SENSOR_DEVICE_ATTR_RO(temp2_label, temp_label, 1);
--
--static umode_t k10temp_is_visible(struct kobject *kobj,
--				  struct attribute *attr, int index)
-+static umode_t k10temp_is_visible(const void *_data,
-+				  enum hwmon_sensor_types type,
-+				  u32 attr, int channel)
- {
--	struct device *dev = container_of(kobj, struct device, kobj);
--	struct k10temp_data *data = dev_get_drvdata(dev);
-+	const struct k10temp_data *data = _data;
- 	struct pci_dev *pdev = data->pdev;
- 	u32 reg;
- 
--	switch (index) {
--	case 0 ... 1:	/* temp1_input, temp1_max */
--	default:
--		break;
--	case 2 ... 3:	/* temp1_crit, temp1_crit_hyst */
--		if (!data->read_htcreg)
--			return 0;
--
--		pci_read_config_dword(pdev, REG_NORTHBRIDGE_CAPABILITIES,
--				      &reg);
--		if (!(reg & NB_CAP_HTC))
--			return 0;
--
--		data->read_htcreg(data->pdev, &reg);
--		if (!(reg & HTC_ENABLE))
--			return 0;
--		break;
--	case 4 ... 6:	/* temp1_label, temp2_input, temp2_label */
--		if (!data->show_tdie)
-+	switch (type) {
-+	case hwmon_temp:
-+		switch (attr) {
-+		case hwmon_temp_input:
-+			if (channel && !data->show_tdie)
-+				return 0;
-+			break;
-+		case hwmon_temp_max:
-+			if (channel)
-+				return 0;
-+			break;
-+		case hwmon_temp_crit:
-+		case hwmon_temp_crit_hyst:
-+			if (channel || !data->read_htcreg)
-+				return 0;
-+
-+			pci_read_config_dword(pdev,
-+					      REG_NORTHBRIDGE_CAPABILITIES,
-+					      &reg);
-+			if (!(reg & NB_CAP_HTC))
-+				return 0;
-+
-+			data->read_htcreg(data->pdev, &reg);
-+			if (!(reg & HTC_ENABLE))
-+				return 0;
-+			break;
-+		case hwmon_temp_label:
-+			if (!data->show_tdie)
-+				return 0;
-+			break;
-+		default:
- 			return 0;
-+		}
- 		break;
-+	default:
-+		return 0;
- 	}
--	return attr->mode;
-+	return 0444;
- }
- 
--static struct attribute *k10temp_attrs[] = {
--	&dev_attr_temp1_input.attr,
--	&dev_attr_temp1_max.attr,
--	&sensor_dev_attr_temp1_crit.dev_attr.attr,
--	&sensor_dev_attr_temp1_crit_hyst.dev_attr.attr,
--	&sensor_dev_attr_temp1_label.dev_attr.attr,
--	&dev_attr_temp2_input.attr,
--	&sensor_dev_attr_temp2_label.dev_attr.attr,
--	NULL
--};
--
--static const struct attribute_group k10temp_group = {
--	.attrs = k10temp_attrs,
--	.is_visible = k10temp_is_visible,
--};
--__ATTRIBUTE_GROUPS(k10temp);
--
- static bool has_erratum_319(struct pci_dev *pdev)
- {
- 	u32 pkg_type, reg_dram_cfg;
-@@ -285,8 +276,27 @@ static bool has_erratum_319(struct pci_dev *pdev)
- 	       (boot_cpu_data.x86_model == 4 && boot_cpu_data.x86_stepping <= 2);
- }
- 
--static int k10temp_probe(struct pci_dev *pdev,
--				   const struct pci_device_id *id)
-+static const struct hwmon_channel_info *k10temp_info[] = {
-+	HWMON_CHANNEL_INFO(temp,
-+			   HWMON_T_INPUT | HWMON_T_MAX |
-+			   HWMON_T_CRIT | HWMON_T_CRIT_HYST |
-+			   HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL),
-+	NULL
-+};
-+
-+static const struct hwmon_ops k10temp_hwmon_ops = {
-+	.is_visible = k10temp_is_visible,
-+	.read = k10temp_read,
-+	.read_string = k10temp_read_labels,
-+};
-+
-+static const struct hwmon_chip_info k10temp_chip_info = {
-+	.ops = &k10temp_hwmon_ops,
-+	.info = k10temp_info,
-+};
-+
-+static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- {
- 	int unreliable = has_erratum_319(pdev);
- 	struct device *dev = &pdev->dev;
-@@ -334,8 +344,9 @@ static int k10temp_probe(struct pci_dev *pdev,
- 		}
- 	}
- 
--	hwmon_dev = devm_hwmon_device_register_with_groups(dev, "k10temp", data,
--							   k10temp_groups);
-+	hwmon_dev = devm_hwmon_device_register_with_info(dev, "k10temp", data,
-+							 &k10temp_chip_info,
-+							 NULL);
- 	return PTR_ERR_OR_ZERO(hwmon_dev);
- }
- 
--- 
-2.17.1
-
+0-DAY kernel test infrastructure                 Open Source Technology Center
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org Intel Corporation
