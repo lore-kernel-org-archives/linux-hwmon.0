@@ -2,153 +2,151 @@ Return-Path: <SRS0=qhp6=3K=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.5 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED320C32771
-	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Jan 2020 02:16:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D3FFC32771
+	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Jan 2020 02:30:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B871E24125
-	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Jan 2020 02:16:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D7BF524125
+	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Jan 2020 02:30:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WLYDRUzc"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bt0+NcVb"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726935AbgAUCQ0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 20 Jan 2020 21:16:26 -0500
-Received: from mail-pj1-f68.google.com ([209.85.216.68]:55856 "EHLO
-        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726890AbgAUCQ0 (ORCPT
+        id S1727144AbgAUCac (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 20 Jan 2020 21:30:32 -0500
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:39222 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726890AbgAUCac (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 20 Jan 2020 21:16:26 -0500
-Received: by mail-pj1-f68.google.com with SMTP id d5so590937pjz.5;
-        Mon, 20 Jan 2020 18:16:25 -0800 (PST)
+        Mon, 20 Jan 2020 21:30:32 -0500
+Received: by mail-pg1-f195.google.com with SMTP id 4so631892pgd.6;
+        Mon, 20 Jan 2020 18:30:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=gLXjP8X2Zeb/RU/7hx4cipQE1z/yzC2KfTwuzJ11qFQ=;
-        b=WLYDRUzcI9DVrnozRbXntvJrtd/agxRyE4YHBfk8k8QEWoxbNZe9WPYzSidngwUywf
-         n8DhLlNvJboZUbkaBb6ifiJ/N/+cahS/GjqCRTA1P4ENURzzN+v4dsSuv2nZFYl0HGYr
-         QSjWd90V9UNTIG8AspYWneg+wIRXR4KcgAcdEBjL1hFcwP7SNX7WLCFYjsJa5LOv/SFV
-         iHzyNzJowp4S0cXVQD3JF5iEhBIxhrBXWhpSLdv6QAtGqCRxMjJS5hgS1DZFiq5FuG94
-         0ReHgvA1ij8C6MhJq/fnGolVEIiRZZjuiss2uT1WSG5WLfo7amNbIOs/klz2e1AF+o6d
-         vMCA==
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UQyPAfqAyljHnvWhswSI0j0AaXOWbrBUiwjxd8hEWfs=;
+        b=Bt0+NcVbtyhKoPbU4w5EMFNOUoCclOtmzhRCrfG710xvJdFahXj+BqwWCMP/+lV/p6
+         0TaEc3sDfjQdNoO6/tedQTBn1Uj6EaA7podeyfC4qC1a8FWIMEalPpdrnjDWH4yy0fV2
+         EfnM1agj8iFckuwtSZu5jU/2/R2kklzvWNwO2vrw7BupLSYORiFi8Aatvmjlnr3aT3dz
+         zK43sFEqi90gQX49hYRG0FfWj8Tozkcl8H/XefzMQg+JVxyHsrOOGc4uIZUkRoPR8XB0
+         MixxWHbh1yvr+5sgn3eKONCeOTDYr2d6O8b5UmQuMTWn8Ua7ef3cd07oKfFWO0/yc/zh
+         W5cQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to:user-agent;
-        bh=gLXjP8X2Zeb/RU/7hx4cipQE1z/yzC2KfTwuzJ11qFQ=;
-        b=av+jkwYIalH9e++Rfavq6yV7ctQ+DOn3Txhh7dMZVOB8C/MpR+BO8y1aokut68TG4f
-         GLS70SuG05IXgi2Js9wqds7webQ8Ru0z6NiXBV+JtuzEtJqvj1r9LjTcsbuVHcsLjmuC
-         AcQpTgZdrw4uo33ocwHv+PZq+hq9OtED3vctzFhh9nk+LfBgbTAvbfepaKZgu/tq5Y8g
-         AUlU8zpYCUhGDBMk216MWTcu0onEWpaRGvKPJ+iJgJavNKOS48RD3Jrg/8ql2kNGxTgp
-         yRwUlW/4T/x8ZAPr/RFunFaVFtnQ5PNn60TkuUHH3CJobs2D3gs+/I4G5nNX5NNNDVbh
-         nldw==
-X-Gm-Message-State: APjAAAXbAKN6JtTxHblSShBNijx5k16FVtgh8f/zZhIduKZYxr0r0g/t
-        e60rziLasjNO4yUZjcsxj20=
-X-Google-Smtp-Source: APXvYqyOP5HMYNJRmYUdBWy8hYYcpqA69nsege8VW7ZF+vNPmQFhjtPBCy9XnIiT8aU3r+fx0+fxdw==
-X-Received: by 2002:a17:902:9a8e:: with SMTP id w14mr2879404plp.315.1579572985597;
-        Mon, 20 Jan 2020 18:16:25 -0800 (PST)
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=UQyPAfqAyljHnvWhswSI0j0AaXOWbrBUiwjxd8hEWfs=;
+        b=AFRQIpwZ7UcUKttFL5QfG541ovbNUt2Az9btdNC3KS5rzIxTMiKslt11blykdZMfcx
+         uG9dZdOkJg/K5umFwIsAZvP5ioOD4CWt+5aq+yeTnpgowjyKiuEdR2DbnicwczIeRdK0
+         KM8vVn5v8bM0YdCN3dmtAMJS5dYfUZ+jKjJG8Wv9FlxIikzpeMPio775torNPPWae0wO
+         Z3qbtg8geVOo3/TA9Fm1mBcJAzO1JEGencRh0JSA3exW8k/2wMeuM6jS4RI82M3gL0ir
+         nMO3o5+bEacdBfuhHnfGpcnUn8xcz4acABw3y17Li4ENkjS/pD3G5Yc3qspL/pOz1Chj
+         HnNA==
+X-Gm-Message-State: APjAAAUVwd3NrlUYC7eQwCXlxk1I0+ML/bKEW2tt67GzIUAnoZQvzbDS
+        F2WthzAe7Zlc8o7u9aImwhwuqM1t
+X-Google-Smtp-Source: APXvYqwIk9UQhVc9EWq9JS2v2Hzscp7+O/f9asgIn1QReUfPblnnZ9VX/CJrpK9D0nmctwWk5QO/pA==
+X-Received: by 2002:a63:5525:: with SMTP id j37mr2902151pgb.180.1579573831257;
+        Mon, 20 Jan 2020 18:30:31 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m71sm932106pje.0.2020.01.20.18.16.24
+        by smtp.gmail.com with ESMTPSA id p21sm40123272pfn.103.2020.01.20.18.30.30
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 20 Jan 2020 18:16:24 -0800 (PST)
-Date:   Mon, 20 Jan 2020 18:16:23 -0800
+        Mon, 20 Jan 2020 18:30:30 -0800 (PST)
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Akinobu Mita <akinobu.mita@gmail.com>
-Cc:     linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kamil Debski <kamil@wypas.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Subject: Re: [PATCH v2] hwmon: (pwm-fan) stop fan on shutdown
-Message-ID: <20200121021623.GA32430@roeck-us.net>
-References: <1579534344-11694-1-git-send-email-akinobu.mita@gmail.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Clemens Ladisch <clemens@ladisch.de>,
+        Jean Delvare <jdelvare@suse.com>,
+        Brad Campbell <lists2009@fnarfbargle.com>,
+        =?UTF-8?q?Ondrej=20=C4=8Cerman?= <ocerman@sda1.eu>,
+        Bernhard Gebetsberger <bernhard.gebetsberger@gmx.at>,
+        Holger Kiehl <Holger.Kiehl@dwd.de>,
+        Michael Larabel <michael@phoronix.com>,
+        Jonathan McDowell <noodles@earth.li>,
+        Ken Moffat <zarniwhoop73@googlemail.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Darren Salt <devspam@moreofthesa.me.uk>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v3 0/5] hwmon: k10temp driver improvements
+Date:   Mon, 20 Jan 2020 18:30:22 -0800
+Message-Id: <20200121023027.2081-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1579534344-11694-1-git-send-email-akinobu.mita@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jan 21, 2020 at 12:32:24AM +0900, Akinobu Mita wrote:
-> The pwm-fan driver stops the fan in suspend but leaves the fan on in
-> shutdown.  It seems strange to leave the fan on in shutdown because there
-> is no use case in my mind and the gpio-fan driver on the other hand stops
-> in shutdown.
-> 
-> This change turns off the fan in shutdown.  If anyone complains then we'll
-> add an optional property to switch the behavior.
-> 
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Kamil Debski <kamil@wypas.org>
-> Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Uwe Kleine-K�nig <u.kleine-koenig@pengutronix.de>
-> Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
+This patch series implements various improvements for the k10temp driver.
 
-Applied.
+Patch 1/5 introduces the use of bit operations.
 
-Thanks,
-Guenter
+Patch 2/5 converts the driver to use the devm_hwmon_device_register_with_info
+API. This not only simplifies the code and reduces its size, it also
+makes the code easier to maintain and enhance. 
 
-> ---
-> * v2
-> - remove optional property and just turn off the fan in shutdown
-> 
->  drivers/hwmon/pwm-fan.c | 15 +++++++++++++--
->  1 file changed, 13 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-> index 42ffd2e..30b7b3e 100644
-> --- a/drivers/hwmon/pwm-fan.c
-> +++ b/drivers/hwmon/pwm-fan.c
-> @@ -390,8 +390,7 @@ static int pwm_fan_probe(struct platform_device *pdev)
->  	return 0;
->  }
->  
-> -#ifdef CONFIG_PM_SLEEP
-> -static int pwm_fan_suspend(struct device *dev)
-> +static int pwm_fan_disable(struct device *dev)
->  {
->  	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
->  	struct pwm_args args;
-> @@ -418,6 +417,17 @@ static int pwm_fan_suspend(struct device *dev)
->  	return 0;
->  }
->  
-> +static void pwm_fan_shutdown(struct platform_device *pdev)
-> +{
-> +	pwm_fan_disable(&pdev->dev);
-> +}
-> +
-> +#ifdef CONFIG_PM_SLEEP
-> +static int pwm_fan_suspend(struct device *dev)
-> +{
-> +	return pwm_fan_disable(dev);
-> +}
-> +
->  static int pwm_fan_resume(struct device *dev)
->  {
->  	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
-> @@ -455,6 +465,7 @@ MODULE_DEVICE_TABLE(of, of_pwm_fan_match);
->  
->  static struct platform_driver pwm_fan_driver = {
->  	.probe		= pwm_fan_probe,
-> +	.shutdown	= pwm_fan_shutdown,
->  	.driver	= {
->  		.name		= "pwm-fan",
->  		.pm		= &pwm_fan_pm,
+Patch 3/5 adds support for reporting Core Complex Die (CCD) temperatures
+on Zen2 (Ryzen and Threadripper) CPUs (note that reporting is incomplete
+for Threadripper CPUs - it is known that additional temperature sensors
+exist, but the register locations are unknown).
+
+Patch 4/5 adds support for reporting core and SoC current and voltage
+information on Ryzen CPUs (note: voltage and current measurements for
+Threadripper and EPYC CPUs are known to exist, but register locations
+are unknown, and values are therefore not reported at this time).
+
+Patch 5/5 removes the maximum temperature from Tdie for Ryzen CPUs.
+It is inaccurate, misleading, and it just doesn't make sense to report
+wrong information.
+
+With all patches in place, output on Ryzen 3900X CPUs looks as follows
+(with the system under load).
+
+k10temp-pci-00c3
+Adapter: PCI adapter
+Vcore:        +1.36 V
+Vsoc:         +1.18 V
+Tdie:         +86.8°C
+Tctl:         +86.8°C
+Tccd1:        +80.0°C
+Tccd2:        +81.8°C
+Icore:       +44.14 A
+Isoc:        +13.83 A
+
+The voltage and current information is limited to Ryzen CPUs. Voltage
+and current reporting on Threadripper and EPYC CPUs is different, and the
+reported information is either incomplete or wrong. Exclude it for the time
+being; it can always be added if/when more information becomes available.
+
+Tested with the following Ryzen CPUs:
+    1300X A user with this CPU in the system reported somewhat unexpected
+          values for Vcore; it isn't entirely if at all clear why that is
+          the case. Overall this does not warrant holding up the series.
+    1600
+    1800X
+    2200G
+    2400G
+    2700
+    2700X
+    2950X
+    3600X
+    3800X
+    3900X
+    3950X
+    3970X
+    EPYC 7302
+    EPYC 7742
+
+Many thanks to everyone who helped to test this series.
+
+---
+v2: Added Tested-by: tags as received.
+    Don't display voltage and current information for Threadripper and EPYC.
+    Stop displaying the fixed (and wrong) maximum temperature of 70 degrees C
+    for Tdie on model 17h/18h CPUs.
+
+v3: Added more Tested-by: tags
+    Added detection for 3970X, and report Tccd1 for this CPU.
