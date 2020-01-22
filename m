@@ -4,73 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 840C0C2D0DB
-	for <linux-hwmon@archiver.kernel.org>; Wed, 22 Jan 2020 14:47:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CCAD8C2D0DB
+	for <linux-hwmon@archiver.kernel.org>; Wed, 22 Jan 2020 15:03:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5AFDF24684
-	for <linux-hwmon@archiver.kernel.org>; Wed, 22 Jan 2020 14:47:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9407C21734
+	for <linux-hwmon@archiver.kernel.org>; Wed, 22 Jan 2020 15:03:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gYR8w1cp"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ONmdKs9B"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725883AbgAVOrM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 22 Jan 2020 09:47:12 -0500
-Received: from mail-pj1-f67.google.com ([209.85.216.67]:34819 "EHLO
-        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725802AbgAVOrL (ORCPT
+        id S1725940AbgAVPD7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 22 Jan 2020 10:03:59 -0500
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:52627 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725911AbgAVPD7 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 22 Jan 2020 09:47:11 -0500
-Received: by mail-pj1-f67.google.com with SMTP id s7so3720960pjc.0;
-        Wed, 22 Jan 2020 06:47:11 -0800 (PST)
+        Wed, 22 Jan 2020 10:03:59 -0500
+Received: by mail-pj1-f66.google.com with SMTP id a6so1635pjh.2;
+        Wed, 22 Jan 2020 07:03:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ADCjuEPw44EETM4S2srrF1oIcsWNqgJFd7MKFaEnfRk=;
-        b=gYR8w1cpyQX/IIWcvWuIFRNpl7JWcIhtMDjoFDUaa4ALknxMr+KQ7DT89oArVh6c16
-         Fsb91OXQ+KCfkXYlZa5JaEYwR4QOJofxcK6Gy+6eFogGWy5svS0c5WA59xmNLeOeHe5f
-         5+KYxEuBPay5d/ZLaqnxyaqNNjOmwjjF+0cZNhJX8blAYXMcJR3COexd452nZETb1bEX
-         aYAYUTSqAQixgk2ZSdIqTDcNA0hhaLxOZebiT+rciVm31KqNWIZ0ZF8o6TgBcT+dsavK
-         fZ/nin+3VqRir198VSZCw/Ys9UZvMTP8z7TqQGezSqeoVmCtGZjcYs4DMBchvkduRFyd
-         3mbg==
+        bh=honzR1UFYcS5KDzHuxhgOGMS3nFjZMwaX7yvDQgux5I=;
+        b=ONmdKs9BqADGWbE9asU8kLdt+kDIKlUDgJzFNmct4VuHHY+Jmsi7/TyEbBM+f0YxAs
+         S1FV/tuRjZO0Kgf6mael0xqtN2n7b6xjuu/41D8RY3zB5Pr1WMsI5AjGeQDspr6FJPlE
+         XaiEFx7k7IEY4+xDe1SmwMdBCjMZMG7zf439qOTccPOOl4FTmATRggdX7mfrlEVU3tdd
+         E4n7saSRtjbo2xxG1UQqldK/MVfJMbjb6FbyGnVmVngMouO/fhe90TtlQPMntQeaPw2F
+         6wJ66n5f3hDsBFUitDytL1OatmkafyL+v5O3YPg02vfMlVY2agHfN40Q+jlynaGE6g9y
+         baug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=ADCjuEPw44EETM4S2srrF1oIcsWNqgJFd7MKFaEnfRk=;
-        b=nzmHdx2+Zu3BXAxUPmlp0p4+kIWCJg+35WJAwSlmuOHi3ZWJ2tzWk8HIw27PYLVZSd
-         NLI0enrfBrZdoxof7Wfjf/O9mdWMzzKxennw0rGc287RsmjMOCh2OAmtByq5NPG5kK7v
-         Vy8/3Uukz59u5o8lJd/E/MMPl5WqWhqYaf0D5uLUEWHHWnnnMoJO9DrFzjehNsETov4R
-         vPPlzE0gZG8dXo7bez3aKN2moaWkbBF62U8IRold3yLUMIXlE/ORpCVtq/rPHliwoOpf
-         BsLc4Qy4hptRePWQBqiqtqYHUPKl1AwtJMESTW+SJyrRSJWbZxa0X28tVJOuiYuC1fQd
-         eXVw==
-X-Gm-Message-State: APjAAAUSvTGEk2S1EgRjn9R17nBOGRiiD7x45LjGUaFyPE/5laJoKedU
-        nMDY0hniTPro/4OmrzXlaVU=
-X-Google-Smtp-Source: APXvYqxnhGFSwqsi3SgX4c9AnxtNRP2F88B4HNzAuqta4TdusNteHhtYs2grK58U/8NAVg+1EGE+2A==
-X-Received: by 2002:a17:90a:d783:: with SMTP id z3mr3349203pju.3.1579704430653;
-        Wed, 22 Jan 2020 06:47:10 -0800 (PST)
+        bh=honzR1UFYcS5KDzHuxhgOGMS3nFjZMwaX7yvDQgux5I=;
+        b=aUvz/HaiyzVkZPuGNOP5rh6kXKLFbRCoppEeiyN7vanv+smQ3vnNVjcOIJkBhbRn29
+         ymKcAjCToef9Hlg7Bamne6HjNuWCcr1oCBpjo0bf0NQqOv9Q2s6TPkLYJuR/yMB2gCQy
+         awGXoNAYG3i5NYDZ1SbWQBA2zHleDevpY0DinyRTQUhY12kvIyrv8B+5ndvLj4jmsRe/
+         BbHlaNV1QLFQqLQBxVMbnwBk903EqX0DqEFwSvUpJov127EYG+WybMOY1GhXNkZjvq1R
+         +V6wA0ND2bbyDqPnSjJNTMYvcgTXOUzuMTQlCkBIWIsOHajKLQDmw9zBI9mtAa9RiIC2
+         NOWw==
+X-Gm-Message-State: APjAAAUxEabtNPERHIRTy2Y/tfGpaBs1oiaewGk1/5xiTmbPzpKekeXS
+        pAhq+UUdLm3riGZdDeYZWc0Hkhlg
+X-Google-Smtp-Source: APXvYqxBdRKT3fansVhN9CRONYZuCImJK0uGVCTlqdj1qZmwZ5JVUdobcmoXlUDM0gWs7vAHeJ2pHQ==
+X-Received: by 2002:a17:90a:c708:: with SMTP id o8mr3636388pjt.104.1579705438079;
+        Wed, 22 Jan 2020 07:03:58 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l2sm3653107pjt.31.2020.01.22.06.47.08
+        by smtp.gmail.com with ESMTPSA id q64sm4171922pjb.1.2020.01.22.07.03.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jan 2020 06:47:09 -0800 (PST)
-Subject: Re: [PATCH v4 2/2] hwmon: (adt7475) Added attenuator bypass support
+        Wed, 22 Jan 2020 07:03:57 -0800 (PST)
+Subject: Re: [PATCH v4 1/2] hwmon: (adt7475) Added attenuator bypass support
 To:     Logan Shaw <logan.shaw@alliedtelesis.co.nz>, jdelvare@suse.com,
         robh+dt@kernel.org
 Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, Joshua.Scott@alliedtelesis.co.nz,
         Chris.Packham@alliedtelesis.co.nz
 References: <20200120001703.9927-1-logan.shaw@alliedtelesis.co.nz>
- <20200120001703.9927-3-logan.shaw@alliedtelesis.co.nz>
+ <20200120001703.9927-2-logan.shaw@alliedtelesis.co.nz>
 From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <f6d272b9-9099-8407-0dd3-ea6cbcb1a39b@roeck-us.net>
-Date:   Wed, 22 Jan 2020 06:47:07 -0800
+Message-ID: <09750637-1b1c-9bf0-2a52-5dfd77fb3450@roeck-us.net>
+Date:   Wed, 22 Jan 2020 07:03:55 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.2
 MIME-Version: 1.0
-In-Reply-To: <20200120001703.9927-3-logan.shaw@alliedtelesis.co.nz>
+In-Reply-To: <20200120001703.9927-2-logan.shaw@alliedtelesis.co.nz>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -80,116 +80,137 @@ List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 On 1/19/20 4:17 PM, Logan Shaw wrote:
-> Added a new file documenting the adt7475 devicetree and added the four
-> new properties to it.
+> Added support for reading DTS properties to set attenuators on
+> device probe for the ADT7473, ADT7475, ADT7476, and ADT7490.
 > 
 > Signed-off-by: Logan Shaw <logan.shaw@alliedtelesis.co.nz>
-
-Please fix the reported errors.
-
-Guenter
-
 > ---
 > ---
->   .../devicetree/bindings/hwmon/adt7475.yaml    | 90 +++++++++++++++++++
->   1 file changed, 90 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/hwmon/adt7475.yaml
+>   drivers/hwmon/adt7475.c | 76 +++++++++++++++++++++++++++++++++++++++++
+>   1 file changed, 76 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/adt7475.yaml b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
-> new file mode 100644
-> index 000000000000..f2427de9991e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
-> @@ -0,0 +1,90 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/adt7475.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
+> index 6c64d50c9aae..2bb787acb363 100644
+> --- a/drivers/hwmon/adt7475.c
+> +++ b/drivers/hwmon/adt7475.c
+> @@ -19,6 +19,7 @@
+>   #include <linux/hwmon-vid.h>
+>   #include <linux/err.h>
+>   #include <linux/jiffies.h>
+> +#include <linux/of.h>
+>   #include <linux/util_macros.h>
+>   
+>   /* Indexes for the sysfs hooks */
+> @@ -1457,6 +1458,76 @@ static int adt7475_update_limits(struct i2c_client *client)
+>   	return 0;
+>   }
+>   
+> +/**
+
+I don't see the point of adding this private comment into the documentation.
+
+> + * Attempts to read a u32 property from the DTS, if there is no error and
+> + * the properties value is zero then the bit given by parameter bit_index
+> + * is cleared in the parameter config. If the value is non-zero then the bit
+> + * is set.
+> + *
+> + * If reading the dts property returned an error code then it is returned and
+> + * the config parameter is not modified.
+> + */
+> +static int modify_config_from_dts_prop(const struct i2c_client *client,
+> +								char *dts_property, u8 *config, u8 bit_index) {
+
+Alignment is far off. Please run "checkpatch --strict" and fix all problems
+it reports.
+
+total: 6 errors, 12 warnings, 9 checks, 94 lines checked
+
+is a bit much.
+
+modify_config_from_dts_prop and dts_property are unnecessary long and result
+in multi-line code. Please use shorter function/parameter names.
+
+> +	u32 is_attenuator_bypassed = 0;
+> +	int ret = of_property_read_u32(client->dev.of_node, dts_property,
+> +									&is_attenuator_bypassed);
 > +
-> +title: ADT7475 hwmon sensor
+> +	if (! ret) {
+> +			if (is_attenuator_bypassed)
+> +		*config |= (1 << bit_index);
+> +	else
+> +		*config &= ~(1 << bit_index);
+> +	}
 > +
-> +maintainers:
-> +  - Jean Delvare <jdelvare@suse.com>
+> +	return ret;
+
+This return value is never used. Please drop it.
+
+> +}
 > +
-> +description: |
-> +  The ADT7473, ADT7475, ADT7476, and ADT7490 are thermal monitors and multiple
-> +  PWN fan controllers.
+> +/**
+> + * Reads all individual voltage input bypass attenuator properties from the
+> + * DTS, and if the property is present the corresponding bit is set in the
+> + * register.
 > +
-> +  They support monitoring and controlling up to four fans (the ADT7490 can only
-> +  control up to three). They support reading a single on chip temperature
-> +  sensor and two off chip temperature sensors (the ADT7490 additionally
-> +  supports measuring up to three current external temperature sensors with
-> +  series resistance cancellation (SRC)).
+> + * Properties are in the form of "bypass-attenuator-inx", where x is an
+> + * integer from the set {0, 1, 3, 4} (can not bypass in2 attenuator).
+> +.*
+> + * The adt7473 and adt7475 only support bypassing in1.
+> + *
+> + * Returns a negative error code if there was an error writing to the register.
+> + */
+> +static int load_all_bypass_attenuators(const struct i2c_client *client,
+> +					      int chip, u8 *config2, u8 *config4)
+> +{
+> +	u8 config2_copy = *config2;
+> +	u8 config4_copy = *config4;
 > +
-> +  Datasheets:
-> +  https://www.onsemi.com/pub/Collateral/ADT7473-D.PDF
-> +  https://www.onsemi.com/pub/Collateral/ADT7475-D.PDF
-> +  https://www.onsemi.com/pub/Collateral/ADT7476-D.PDF
-> +  https://www.onsemi.com/pub/Collateral/ADT7490-D.PDF
+Two "copy" variables are unnecessary, as only one is ever used.
+
+> +	if (chip == adt7476 || chip == adt7490) {
+> +		modify_config_from_dts_prop(client, "bypass-attenuator-in0",
+> +									&config4_copy, 4);
+> +		modify_config_from_dts_prop(client, "bypass-attenuator-in1",
+> +									&config4_copy, 5);
+> +		modify_config_from_dts_prop(client, "bypass-attenuator-in3",
+> +									&config4_copy, 6);
+> +		modify_config_from_dts_prop(client, "bypass-attenuator-in4",
+> +									&config4_copy, 7);
 > +
-> +  Description taken from omsemiconductors specification sheets, with minor
-> +  rephrasing.
+> +		if (i2c_smbus_write_byte_data(client, REG_CONFIG4, config4_copy) < 0)
+> +			return -EREMOTEIO;
 > +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - adi,adt7473
-> +      - adi,adt7475
-> +      - adi,adt7476
-> +      - adi,adt7490
+> +		*config4 = config4_copy;
+> +	} else if (chip == adt7473 || chip == adt7475) {
+> +		modify_config_from_dts_prop(client, "bypass-attenuator-in1",
+> +									&config2_copy, 5);
 > +
-> +  reg:
-> +    maxItems: 1
+> +		if (i2c_smbus_write_byte_data(client, REG_CONFIG2, config2_copy) < 0)
+> +			return -EREMOTEIO;
+
+Please do not override error codes.
+
 > +
-> +  bypass-attenuator-in0:
-> +    description: |
-> +      Configures bypassing the individual voltage input
-> +      attenuator, on in0. This is supported on the ADT7476 and ADT7490.
-> +      If set to a non-zero integer the attenuator is bypassed, if set to
-> +      zero the attenuator is not bypassed. If the property is absent then
-> +      the config register is not modified.
-> +    maxItems: 1
+> +		*config2 = config2_copy;
+> +	}
 > +
-> +  bypass-attenuator-in1:
-> +    description: |
-> +      Configures bypassing the individual voltage input
-> +      attenuator, on in1. This is supported on the ADT7473, ADT7475,
-> +      ADT7476 and ADT7490. If set to a non-zero integer the attenuator
-> +      is bypassed, if set to zero the attenuator is not bypassed. If the
-> +      property is absent then the config register is not modified.
-> +    maxItems: 1
+> +	return 0;
+> +}
 > +
-> +  bypass-attenuator-in3:
-> +    description: |
-> +      Configures bypassing the individual voltage input
-> +      attenuator, on in3. This is supported on the ADT7476 and ADT7490.
-> +      If set to a non-zero integer the attenuator is bypassed, if set to
-> +      zero the attenuator is not bypassed. If the property is absent then
-> +      the config register is not modified.
-> +    maxItems: 1
+>   static int adt7475_probe(struct i2c_client *client,
+>   			 const struct i2c_device_id *id)
+>   {
+> @@ -1546,6 +1617,11 @@ static int adt7475_probe(struct i2c_client *client,
+>   
+>   	/* Voltage attenuators can be bypassed, globally or individually */
+>   	config2 = adt7475_read(REG_CONFIG2);
+> +	if (load_all_bypass_attenuators(client, chip,
+> +						&config2, &(data->config4)) < 0)
+> +		dev_warn(&client->dev,
+> +			 "Error setting bypass attenuator bits\n");
 > +
-> +  bypass-attenuator-in4:
-> +    description: |
-> +      Configures bypassing the individual voltage input
-> +      attenuator, on in4. This is supported on the ADT7476 and ADT7490.
-> +      If set to a non-zero integer the attenuator is bypassed, if set to
-> +      zero the attenuator is not bypassed. If the property is absent then
-> +      the config register is not modified.
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +examples:
-> +  - |
-> +    hwmon@2e {
-> +      compatible = "adi,adt7476";
-> +      reg = <0x2e>;
-> +      bypass-attenuator-in0 = <1>;
-> +      bypass-attenuator-in1 = <0>;
-> +    };
-> +...
+>   	if (config2 & CONFIG2_ATTN) {
+>   		data->bypass_attn = (0x3 << 3) | 0x3;
+>   	} else {
 > 
 
