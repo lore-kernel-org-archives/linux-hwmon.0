@@ -1,311 +1,196 @@
-Return-Path: <SRS0=0qjx=3M=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=TLH2=3N=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19DC7C33CAA
-	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Jan 2020 22:34:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3165C35240
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Jan 2020 00:01:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C659621734
-	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Jan 2020 22:34:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B142F206D3
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Jan 2020 00:01:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="klgjN8IK"
+	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="SPMPAK0I"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728760AbgAWWeY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 23 Jan 2020 17:34:24 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:40365 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728057AbgAWWeY (ORCPT
+        id S1729238AbgAXABQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 23 Jan 2020 19:01:16 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:46886 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729149AbgAXABQ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 23 Jan 2020 17:34:24 -0500
-Received: by mail-pf1-f195.google.com with SMTP id q8so81508pfh.7;
-        Thu, 23 Jan 2020 14:34:24 -0800 (PST)
+        Thu, 23 Jan 2020 19:01:16 -0500
+Received: by mail-lj1-f196.google.com with SMTP id m26so330002ljc.13;
+        Thu, 23 Jan 2020 16:01:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NaIVSDWEYo+E32VlUawGD17fklUn3+VaHxnHIUgj7AQ=;
-        b=klgjN8IKGvy/qOdAO+OvZknZmwAvX9HtN5e7El2xf3qjNhz1VYJZxsUrYIBnH3WmGS
-         TSxPd0aSxThRxPeOILEvD2MvOjA5lE6Hh49Qg1c+7Iw9UMq6mKf/0QmFmERjj0PEB6OP
-         Qt9qPcKLBoTcu5l3rgvWkAcZe3QhzDpPKAXUYvrvynfxPPaG/gm26KlQREFFGPOG64FV
-         L2jA3L76zx3ZOnwdol8/9CU28yamGvhnZpcwgS2S/VPjxKu7kOlF4cmU6SFhE9U7RVVf
-         Wsa6UkXX6VfQ7MUkqDXs8cRewPvVNlAMeOHoEVJIbUKvURkT+FQrXvCQ2qQlgxSk3ZFB
-         rcng==
+        d=googlemail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=oAqx0oDShqyWqmyWl5SVU9PFNePPKKqDHWCDLQ6fp2A=;
+        b=SPMPAK0IfJobG635XYUTf+AMdgDP54jy1l3TM1JhI/p9vQalV6ibgIMPydP3nGH1P1
+         03eoAL/jLJ1+Tp3IezQSWMfOZ3Ka7aEwzid0ojfktCARIrfBui/rhFkCYflu49IPXWqx
+         A1XbcNCZdxmJ6sQFiJIE4za6aQy+a7GgSeWTbgJZHkJSxG/NyTP+SdZQYW3sB4JF64Pz
+         8d9skalo0skiTalCfOGAPHzesmH+THzQGi7V41tGd0kYKRKfi6i6BwK6cqNX6dva5e/q
+         pTkpri+ShlT1/fHeLnLfvV3OthnO5JafsgpzrdgpOGywh3khbH/v8Vh+LX94NXj3oa5z
+         yHpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=NaIVSDWEYo+E32VlUawGD17fklUn3+VaHxnHIUgj7AQ=;
-        b=ivKgApeY0A49LrJCy3wBOq/PZNHxBnEt11fTB+96XEbQat7qVMmaywzHbpJZ6iQBdM
-         5pOI8KMBC4LwT49Fo17lqOiTdUe7HXZMi02c0E1UzyD6dfocGg9pwy/yHnVMJlDuYiDc
-         omeaKHEhOHP4D88xyF1x0P6iJAoCF2PrauF83sc15n0ljIUzxPHQvakCLUhomncnZu2h
-         hMshCNMWA67FxP2fGQ4ZcOGGW2oMCVh1f4xB7mLx7aXPyCZ4WXcQECv0GmwDPtDo5wkF
-         DpemirSs7AJmEqbo0AbmcD7+50CPyV50AdoMktTD3UV0wGRHSYhNrIWvK5sAsxGtDIhE
-         Uz6A==
-X-Gm-Message-State: APjAAAXdynB/wxGUbBwK01xss5rMqwDyIEAy1ZmCCucfFny5t1fSytza
-        udgQm7lu6P9oFQSVspi3nj4ep+pc
-X-Google-Smtp-Source: APXvYqzs7gJQA3n3qHQWy1FgCLvacw3o/sd1RrKRcWy8mhIkVFQbxDll/PqUBnNFiYscJ8fstPY4Jw==
-X-Received: by 2002:a63:5818:: with SMTP id m24mr663330pgb.358.1579818863103;
-        Thu, 23 Jan 2020 14:34:23 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s15sm3991405pgq.4.2020.01.23.14.34.21
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 23 Jan 2020 14:34:22 -0800 (PST)
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     linux-hwmon@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Clemens Ladisch <clemens@ladisch.de>,
-        Jean Delvare <jdelvare@suse.com>,
-        =?UTF-8?q?Ondrej=20=C4=8Cerman?= <ocerman@sda1.eu>,
-        Michael Larabel <michael@phoronix.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH v4] hwmon: (k10temp) Display up to eight sets of CCD temperatures
-Date:   Thu, 23 Jan 2020 14:34:15 -0800
-Message-Id: <20200123223415.2691-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=oAqx0oDShqyWqmyWl5SVU9PFNePPKKqDHWCDLQ6fp2A=;
+        b=Db+rsT7wlH67efVy2nKtWXHBPAEoXq8J82Z63vQfApySnmrc72cvjP1pUFRjGkZJIn
+         oZuPw71ey691GO5zk23Z8fVLc6sBWSIL07ely7gV3LByfH9DuK7Ywad36jVDS4bDgVYc
+         T0JHHPpIVv1VKdQ0zoA2GLY/i0d6YtDpZeJnB2VNpyrpq0hABSYsF2fXr0s0QtoxINy9
+         iogolQEmtAyeAGsoFWNDGQ/WF4BgLKGeCTp5dCfB4EPlf1awKxg2c57OaCwvGCMYgML1
+         S5ApxjbML4Q7sk+ekFzC944NAyUDRXfKovS+T2MswH+jcj6X97u4txltAb4hxcgsZR7L
+         g60w==
+X-Gm-Message-State: APjAAAXcsm520mVGCpuT9V/36Zwcjbl2eNDa70UfU0pLHhfpjmt7BNx5
+        0GH/lhyuaeptcCvApuxCI8NAqx5vb6CTF2mC4DQ=
+X-Google-Smtp-Source: APXvYqy3vv9feEMZb4RFFhjzPb6p7tyvMoxr04+eMD6zaoJXve4Cw3+nL7kx6D1chit/X17URnrHhGE4UYMOBtG9cQc=
+X-Received: by 2002:a2e:b0e3:: with SMTP id h3mr531422ljl.56.1579824072889;
+ Thu, 23 Jan 2020 16:01:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20200122160800.12560-1-linux@roeck-us.net> <20200122160800.12560-7-linux@roeck-us.net>
+In-Reply-To: <20200122160800.12560-7-linux@roeck-us.net>
+From:   Ken Moffat <zarniwhoop73@googlemail.com>
+Date:   Fri, 24 Jan 2020 00:01:02 +0000
+Message-ID: <CANVEwpbeT_O=4TZu7RuRupwOGTNEVWSnHXvMsEqEmeKqmu92jw@mail.gmail.com>
+Subject: Re: [PATCH v4 6/6] hwmon: (k10temp) Add debugfs support
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Clemens Ladisch <clemens@ladisch.de>,
+        Jean Delvare <jdelvare@suse.com>,
+        Brad Campbell <lists2009@fnarfbargle.com>,
+        =?UTF-8?Q?Ondrej_=C4=8Cerman?= <ocerman@sda1.eu>,
+        Bernhard Gebetsberger <bernhard.gebetsberger@gmx.at>,
+        Holger Kiehl <Holger.Kiehl@dwd.de>,
+        Michael Larabel <michael@phoronix.com>,
+        Jonathan McDowell <noodles@earth.li>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Darren Salt <devspam@moreofthesa.me.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-In HWiNFO, we see support for Tccd1, Tccd3, Tccd5, and Tccd7 temperature
-sensors on Zen2 based Threadripper CPUs. Checking register maps on
-Threadripper 3970X confirms SMN register addresses and values for those
-sensors.
+Hi Guenter,
 
-Register values observed in an idle system:
+you asked else where for  debugfs files from machines with embedded
+graphics. I've pasted diffs below (idle,load) from my 3400G ('Picasso' APU)=
+.
 
-0x059950: 00000000 00000abc 00000000 00000ad8
-0x059960: 00000000 00000ade 00000000 00000ae4
+On Wed, 22 Jan 2020 at 16:08, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> Show thermal and SVI registers for Family 17h CPUs.
+>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+>  drivers/hwmon/k10temp.c | 78 ++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 77 insertions(+), 1 deletion(-)
+>
+[snipping here for brevity]
 
-Under load:
+--- svi-idle    2020-01-23 23:27:36.576177896 +0000
++++ svi-load    2020-01-23 23:33:05.342392957 +0000
+@@ -1,8 +1,8 @@
+-0x05a000: 0000000e 0000000e 00000002 01710000
+-0x05a010: 014a0010 00000000 0000000e 00000000
+-0x05a020: 00000000 00000000 00000080 005f0000
++0x05a000: 0000000e 0000000e 00000002 011f002e
++0x05a010: 014a0017 00000000 0000000e 00000000
++0x05a020: 00000000 00000000 00000080 001a0000
+ 0x05a030: 00000000 00000000 00000021 00000000
+-0x05a040: 00000000 00000000 00000000 5f000000
++0x05a040: 00000000 00000000 00000000 1a000000
+ 0x05a050: 68000000 48000000 00000000 0000030a
+ 0x05a060: 00000007 00000000 80000002 80000002
+ 0x05a070: 80000041 00000001 00000008 00000000
 
-0x059950: 00000000 00000c02 00000000 00000c14
-0x059960: 00000000 00000c30 00000000 00000c22
+--- thm-idle    2020-01-23 23:27:51.969229368 +0000
++++ thm-load    2020-01-23 23:33:19.779445923 +0000
+@@ -1,15 +1,15 @@
+-0x059800: 24200fef 00ff1001 00002921 000f4240
++0x059800: 3f800fef 00ff1001 00002921 000f4240
+ 0x059810: 800000f9 00000000 00000000 00000000
+ 0x059820: 00000000 00000000 00000000 0fff0078
+-0x059830: 00000000 0029ccdf 0029acde 002a2ce2
+-0x059840: 002a4ce3 002a0ce1 002a0ce1 002a6ce4
+-0x059850: 0029ece0 0029ece0 002a0ce1 002a0ce1
+-0x059860: 0029acde 002a8ce5 0029ece0 0029acde
+-0x059870: 00298cdd 0029ece0 002a8ce5 002a4ce3
+-0x059880: 0029ccdf 002a8ce5 0029acde 00296cdc
+-0x059890: 002a4ce3 00296cdc 0029ece0 0029acde
+-0x0598a0: 00294cdb 0029ece0 00294cdb 00298cdd
+-0x0598b0: 0029acde 00000000 00002100 ffffffff
++0x059830: 00000000 0030cd17 002e8d05 002f4d0b
++0x059840: 00338d2c 0032cd26 00314d1b 0034cd36
++0x059850: 002d8cfd 002e2d02 00300d11 002eed08
++0x059860: 002dccff 002fcd0f 002d4cfb 002e0d01
++0x059870: 002ded00 002f2d0a 00346d33 00344d32
++0x059880: 002f8d0d 00346d33 002f4d0b 0030cd17
++0x059890: 00344d32 00302d12 0031ed20 00386d53
++0x0598a0: 00392d59 0036ad45 0036ed47 0034ad35
++0x0598b0: 0034ad35 00000000 00002100 ffffffff
+ 0x0598c0: 00000000 00000000 00000000 00000000
+ 0x0598d0: 00000000 00000000 00000000 00000000
+ 0x0598e0: 00000000 00000000 00000000 00000000
+@@ -20,15 +20,15 @@
+ 0x059930: 00000000 00000000 00000000 00000000
+ 0x059940: 00000000 00000000 00000000 00000000
+ 0x059950: 00000000 00000000 00000000 00000000
+-0x059960: 00000000 08400001 00004623 00000039
++0x059960: 00000000 08400001 00008241 00000045
+ 0x059970: c0800005 30c8680e 00024068 00000000
+ 0x059980: 00000000 00000000 00000000 00000000
+ 0x059990: 00000000 00000000 00000000 00000000
+ 0x0599a0: 00000000 00000000 00000000 00000000
+ 0x0599b0: 00000000 00000000 00000000 00000000
+-0x0599c0: 00000060 000002a8 0000000c 00000294
+-0x0599d0: 0000001b 00000000 00000000 000002a8
+-0x0599e0: 0000000c 00000000 00000000 00000001
++0x0599c0: 00000060 00000392 0000001b 000002d4
++0x0599d0: 0000000d 00000000 00000000 00000392
++0x0599e0: 0000001b 00000000 00000000 00000001
+ 0x0599f0: 00000000 00010003 00000000 00000000
+ 0x059a00: 00000000 00000000 00000000 00000000
+ 0x059a10: 0000000e 00000000 00000003 00000000
 
-More analysis shows that EPYC CPUs support up to 8 CCD temperature
-sensors. EPYC 7601 supports three CCD temperature sensors. Unlike
-Zen2 CPUs, the register space in Zen1 CPUs supports a maximum of four
-sensors, so only search for a maximum of four sensors on Zen1 CPUs.
+and the accompanying human-readable sensor output
+(these were not all taken at hte exact same moment)
 
-On top of that, in thm_10_0_sh_mask.h in the Linux kernel, we find
-definitions for THM_DIE{1-3}_TEMP__VALID_MASK, set to 0x00000800, as well
-as matching SMN addresses. This lets us conclude that bit 11 of the
-respective registers is a valid bit. With this assumption, the temperature
-offset is now 49 degrees C. This conveniently matches the documented
-temperature offset for Tdie, again suggesting that above registers indeed
-report temperatures sensor values. Assume that bit 11 is indeed a valid
-bit, and add support for the additional sensors.
+--- k10-idle 2020-01-23 23:25:32.020740997 +0000
++++ k10-load 2020-01-23 23:33:01.305378146 +0000
+@@ -1,15 +1,15 @@
+ k10temp-pci-00c3
+ Adapter: PCI adapter
+-Vcore:        +0.96 V
+-Vsoc:         +1.09 V
+-Tdie:         +36.9=C2=B0C
+-Tctl:         +36.9=C2=B0C
+-Icore:        +2.00 A
+-Isoc:         +5.75 A
++Vcore:        +1.34 V
++Vsoc:         +1.08 V
++Tdie:         +62.5=C2=B0C
++Tctl:         +62.5=C2=B0C
++Icore:       +56.00 A
++Isoc:         +6.75 A
 
-With this patch applied, output from 3970X (idle) looks as follows:
+ amdgpu-pci-0900
+ Adapter: PCI adapter
+ vddgfx:           N/A
+ vddnb:            N/A
+-edge:         +36.0=C2=B0C  (crit =3D +80.0=C2=B0C, hyst =3D  +0.0=C2=B0C)
++edge:         +62.0=C2=B0C  (crit =3D +80.0=C2=B0C, hyst =3D  +0.0=C2=B0C)
 
-k10temp-pci-00c3
-Adapter: PCI adapter
-Tdie:         +55.9°C
-Tctl:         +55.9°C
-Tccd1:        +39.8°C
-Tccd3:        +43.8°C
-Tccd5:        +43.8°C
-Tccd7:        +44.8°C
+Hope this is not a waste of your time.
+Would you like similar for the 2500u ?
 
-Tested-by: Michael Larabel <michael@phoronix.com>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
-v4: Added support for CCD temperature sensors on Zen 1 based EPYC CPUs.
-
-v3: Increased number of supported CCD sensors to 8.
-    Dropped note that functionality on high-end CPUs is not known,
-    since that is no longer correct.
-
-v2: Added additional sensors to k10temp_info[].
-
- drivers/hwmon/k10temp.c | 82 ++++++++++++++++++++---------------------
- 1 file changed, 41 insertions(+), 41 deletions(-)
-
-diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-index 5e3f43594084..e39354ffe973 100644
---- a/drivers/hwmon/k10temp.c
-+++ b/drivers/hwmon/k10temp.c
-@@ -7,7 +7,7 @@
-  * Copyright (c) 2020 Guenter Roeck <linux@roeck-us.net>
-  *
-  * Implementation notes:
-- * - CCD1 and CCD2 register address information as well as the calculation to
-+ * - CCD register address information as well as the calculation to
-  *   convert raw register values is from https://github.com/ocerman/zenpower.
-  *   The information is not confirmed from chip datasheets, but experiments
-  *   suggest that it provides reasonable temperature values.
-@@ -18,11 +18,6 @@
-  *   normalized to report 1A/LSB for core current and and 0.25A/LSB for SoC
-  *   current. Reported values can be adjusted using the sensors configuration
-  *   file.
-- * - It is unknown if the mechanism to read CCD1/CCD2 temperature as well as
-- *   current and voltage information works on higher-end Ryzen CPUs.
-- *   Information reported by Windows tools suggests that additional sensors
-- *   (both temperature and voltage/current) are supported, but their register
-- *   location is currently unknown.
-  */
- 
- #include <linux/bitops.h>
-@@ -80,8 +75,10 @@ static DEFINE_MUTEX(nb_smu_ind_mutex);
- 
- /* F17h M01h Access througn SMN */
- #define F17H_M01H_REPORTED_TEMP_CTRL_OFFSET	0x00059800
--#define F17H_M70H_CCD1_TEMP			0x00059954
--#define F17H_M70H_CCD2_TEMP			0x00059958
-+
-+#define F17H_M70H_CCD_TEMP(x)			(0x00059954 + ((x) * 4))
-+#define F17H_M70H_CCD_TEMP_VALID		BIT(11)
-+#define F17H_M70H_CCD_TEMP_MASK			GENMASK(10, 0)
- 
- #define F17H_M01H_SVI				0x0005A000
- #define F17H_M01H_SVI_TEL_PLANE0		(F17H_M01H_SVI + 0xc)
-@@ -100,8 +97,7 @@ struct k10temp_data {
- 	int temp_offset;
- 	u32 temp_adjust_mask;
- 	bool show_tdie;
--	bool show_tccd1;
--	bool show_tccd2;
-+	u32 show_tccd;
- 	u32 svi_addr[2];
- 	bool show_current;
- 	int cfactor[2];
-@@ -188,6 +184,12 @@ const char *k10temp_temp_label[] = {
- 	"Tctl",
- 	"Tccd1",
- 	"Tccd2",
-+	"Tccd3",
-+	"Tccd4",
-+	"Tccd5",
-+	"Tccd6",
-+	"Tccd7",
-+	"Tccd8",
- };
- 
- const char *k10temp_in_label[] = {
-@@ -277,15 +279,10 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
- 			if (*val < 0)
- 				*val = 0;
- 			break;
--		case 2:		/* Tccd1 */
--			amd_smn_read(amd_pci_dev_to_node_id(data->pdev),
--				     F17H_M70H_CCD1_TEMP, &regval);
--			*val = (regval & 0xfff) * 125 - 305000;
--			break;
--		case 3:		/* Tccd2 */
-+		case 2 ... 9:		/* Tccd{1-8} */
- 			amd_smn_read(amd_pci_dev_to_node_id(data->pdev),
--				     F17H_M70H_CCD2_TEMP, &regval);
--			*val = (regval & 0xfff) * 125 - 305000;
-+				     F17H_M70H_CCD_TEMP(channel - 2), &regval);
-+			*val = (regval & F17H_M70H_CCD_TEMP_MASK) * 125 - 49000;
- 			break;
- 		default:
- 			return -EOPNOTSUPP;
-@@ -343,12 +340,8 @@ static umode_t k10temp_is_visible(const void *_data,
- 				if (!data->show_tdie)
- 					return 0;
- 				break;
--			case 2:		/* Tccd1 */
--				if (!data->show_tccd1)
--					return 0;
--				break;
--			case 3:		/* Tccd2 */
--				if (!data->show_tccd2)
-+			case 2 ... 9:		/* Tccd{1-8} */
-+				if (!(data->show_tccd & BIT(channel - 2)))
- 					return 0;
- 				break;
- 			default:
-@@ -382,12 +375,8 @@ static umode_t k10temp_is_visible(const void *_data,
- 			case 0:		/* Tdie */
- 			case 1:		/* Tctl */
- 				break;
--			case 2:		/* Tccd1 */
--				if (!data->show_tccd1)
--					return 0;
--				break;
--			case 3:		/* Tccd2 */
--				if (!data->show_tccd2)
-+			case 2 ... 9:		/* Tccd{1-8} */
-+				if (!(data->show_tccd & BIT(channel - 2)))
- 					return 0;
- 				break;
- 			default:
-@@ -520,6 +509,12 @@ static const struct hwmon_channel_info *k10temp_info[] = {
- 			   HWMON_T_LABEL,
- 			   HWMON_T_INPUT | HWMON_T_LABEL,
- 			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
- 			   HWMON_T_INPUT | HWMON_T_LABEL),
- 	HWMON_CHANNEL_INFO(in,
- 			   HWMON_I_INPUT | HWMON_I_LABEL,
-@@ -541,6 +536,20 @@ static const struct hwmon_chip_info k10temp_chip_info = {
- 	.info = k10temp_info,
- };
- 
-+static void k10temp_get_ccd_support(struct pci_dev *pdev,
-+				    struct k10temp_data *data, int limit)
-+{
-+	u32 regval;
-+	int i;
-+
-+	for (i = 0; i < limit; i++) {
-+		amd_smn_read(amd_pci_dev_to_node_id(pdev),
-+			     F17H_M70H_CCD_TEMP(i), &regval);
-+		if (regval & F17H_M70H_CCD_TEMP_VALID)
-+			data->show_tccd |= BIT(i);
-+	}
-+}
-+
- static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- {
- 	int unreliable = has_erratum_319(pdev);
-@@ -571,8 +580,6 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 		data->read_htcreg = read_htcreg_nb_f15;
- 		data->read_tempreg = read_tempreg_nb_f15;
- 	} else if (boot_cpu_data.x86 == 0x17 || boot_cpu_data.x86 == 0x18) {
--		u32 regval;
--
- 		data->temp_adjust_mask = CUR_TEMP_RANGE_SEL_MASK;
- 		data->read_tempreg = read_tempreg_nb_f17;
- 		data->show_tdie = true;
-@@ -587,6 +594,7 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 			data->svi_addr[1] = F17H_M01H_SVI_TEL_PLANE1;
- 			data->cfactor[0] = CFACTOR_ICORE;
- 			data->cfactor[1] = CFACTOR_ISOC;
-+			k10temp_get_ccd_support(pdev, data, 4);
- 			break;
- 		case 0x31:	/* Zen2 Threadripper */
- 		case 0x71:	/* Zen2 */
-@@ -595,15 +603,7 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 			data->cfactor[1] = CFACTOR_ISOC;
- 			data->svi_addr[0] = F17H_M01H_SVI_TEL_PLANE1;
- 			data->svi_addr[1] = F17H_M01H_SVI_TEL_PLANE0;
--			amd_smn_read(amd_pci_dev_to_node_id(pdev),
--				     F17H_M70H_CCD1_TEMP, &regval);
--			if (regval & 0xfff)
--				data->show_tccd1 = true;
--
--			amd_smn_read(amd_pci_dev_to_node_id(pdev),
--				     F17H_M70H_CCD2_TEMP, &regval);
--			if (regval & 0xfff)
--				data->show_tccd2 = true;
-+			k10temp_get_ccd_support(pdev, data, 8);
- 			break;
- 		}
- 	} else {
--- 
-2.17.1
-
+=C4=B8en
+--=20
+I live in a city. I know sparrows from starlings.  After that
+everything is a duck as far as I'm concerned.  -- Monstrous Regiment
