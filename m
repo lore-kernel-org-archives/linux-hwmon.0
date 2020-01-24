@@ -2,82 +2,75 @@ Return-Path: <SRS0=TLH2=3N=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D34ACC2D0CE
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Jan 2020 04:47:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D002C32771
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Jan 2020 04:56:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9E43620718
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Jan 2020 04:47:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 22C6C2070A
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Jan 2020 04:56:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UQCqQLsM"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G8IIZE34"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729545AbgAXErh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 23 Jan 2020 23:47:37 -0500
-Received: from mail-pj1-f67.google.com ([209.85.216.67]:36514 "EHLO
-        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729497AbgAXErh (ORCPT
+        id S1730055AbgAXE4C (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 23 Jan 2020 23:56:02 -0500
+Received: from mail-pj1-f68.google.com ([209.85.216.68]:52690 "EHLO
+        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729388AbgAXE4C (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 23 Jan 2020 23:47:37 -0500
-Received: by mail-pj1-f67.google.com with SMTP id gv17so255648pjb.1;
-        Thu, 23 Jan 2020 20:47:36 -0800 (PST)
+        Thu, 23 Jan 2020 23:56:02 -0500
+Received: by mail-pj1-f68.google.com with SMTP id a6so492379pjh.2;
+        Thu, 23 Jan 2020 20:56:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=+yNIg/fNH7fj0+LMHt+OynbzsULIsDrVWuMrkX06UAo=;
-        b=UQCqQLsM7YneywJvqhmHP90qigtji1VVlPwoTx47i4pqJwd16HQov9t/YhECEoe/Tn
-         1ST+36lATC5qNOen9gvU+swLSLTffbeCWhXoxmPJtXxyglHwX6E43nKESsuLrHod3ASD
-         mHxGQV0QFG9F5qa/CJiv4OXIe4I54Ow7YRurz1aJ6ePlLO37eM1D1oLRsV6zWTVD4xKj
-         ZH+rdgIPKsEJ5/0j0/Nu7NdXZ83Y1INVgPUyniSVICjkmxqFYIbkVw45k0Ov+9iprpXc
-         rR+Z99q89ES5GgFISVrhrZ4PxDijcJRvgFWtPBQacXUq+hgugA11CNNXl2MdYjzidZIq
-         rRag==
+        bh=HfqVz/MdooTXU0NNZcyHQMGb/c7xUmQ2Qp5V87UvDjs=;
+        b=G8IIZE34k3YFkJMiYrAJf0jZzmGvUuiDgm79WGoSHK98upyKy4VV5D9i/GoaCIFjp+
+         M4MKkgaFWIHO/Rg6wA+Ug2zkTrwHNGQ5FagS7GcOpKRhvIEt02HHeKZzBe99elgHc+Mb
+         8oPMT3Rr8DF7FOyHlgxNQw06+FCldQqJirttMo09lzKQF0GB9g0luCBiQ2DT2KYqOcj2
+         65oWiha41nXOxKvVBOMYNSy5IAXNYsvkXg+s1QPG8F16PmgKgcjHNl+wgQbyqI2zM8Bb
+         CGfxW/hJrqy5WL7hz8A1klPZmLwbxNI+88pAUsW6aV8rm0do28LjQKYQf+Y2X8nOhhlP
+         cfgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=+yNIg/fNH7fj0+LMHt+OynbzsULIsDrVWuMrkX06UAo=;
-        b=c1PHC/WOsaLtNaSDvaLou8F9VBoBlzTYIW7NFzX/jel8AKbha5Z+jUq8ZXdqN2W14s
-         Pd92sPDBwcxJ+GwxjZDVakwOpndQSSb/jLe2LQaCZJfjq+hPtaB2yFzkSbHCaF3FhRwW
-         eb45L+gDsiK2qUT3LAD/4GfCkKJZpLoKM70E8zjbfCfS0DXdHKTLQ3iCZ2nxo2LdL/3t
-         k56qmMjzfpMF+y1pZ7FbZIxgswC7FSLg2252I6Q8os38Ky41de2FN16RGoa8q/GaQlfv
-         TkPzqxjIzJPk87P+2GP91gbKDVUtQKqX+IQOxojtCcdHA3Jc+mIhFehIDhazdJdfarG7
-         wYzw==
-X-Gm-Message-State: APjAAAX7bG3lQGjTa4gEARK3dwrhYsfoYEyc1MtVGE0fLycx9i5NqRPo
-        FmU9sQKK2TziSwV2sMtE5Jlx4ow6
-X-Google-Smtp-Source: APXvYqxVvh2tPC5HthLG0EplcFYQJzl/hgL6WQ+DCgOrQvUI991oGq3iJnPaCV5KGZPDmokZ3b3MKw==
-X-Received: by 2002:a17:902:59cd:: with SMTP id d13mr1745420plj.146.1579841255481;
-        Thu, 23 Jan 2020 20:47:35 -0800 (PST)
+        bh=HfqVz/MdooTXU0NNZcyHQMGb/c7xUmQ2Qp5V87UvDjs=;
+        b=gzKWfs3Jp8z76dkk5SagT0tZCEUgGTvc+oxEwYhMJm2hOCMCDT6u4pNKVeDnjWDbxH
+         obIM7IfaufkKezYPaVXTONVWrn9EOXrEZE3milgYPkTCYoIYUTqTjw6m6H2MPjp1tQHm
+         Kq8DeJFJAbhEQlokisioPu2Wi+l0yiuQ1HSoZ+kZbq/2UQRE1SlRiK4RbtaB0GOYM7Wy
+         jqJlSyqp6Ph0YFDCg9Urz5rXOxiXvJmn1L2OPtMIMdKt1gEktZBU0Fxv7nB/J0KNLb0M
+         QT5SqxEb7UEt4k5YI6o/YMbR9SpNs7CIPvQxPOwm4YXF+JW7bFuJsz2VbuzxV9DpQ5Cw
+         8X2A==
+X-Gm-Message-State: APjAAAUzPA1+y1lTfvZ0DoMEFS7HJIZDmTmx8PrgJKImY3QW5yETn6bx
+        1b3TBMi7zCUSozcHXZpv3rQ=
+X-Google-Smtp-Source: APXvYqwWTQ80PO5xCV96BsrT7k5vaE0WQkxGov0WfkaTAi271H9ZeAKDX+NoLbYYDJ8I37rpcUcpXA==
+X-Received: by 2002:a17:902:fe0d:: with SMTP id g13mr1722494plj.124.1579841761640;
+        Thu, 23 Jan 2020 20:56:01 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z16sm4293566pff.125.2020.01.23.20.47.33
+        by smtp.gmail.com with ESMTPSA id e19sm2865155pgn.86.2020.01.23.20.56.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Jan 2020 20:47:34 -0800 (PST)
-Subject: Re: [PATCH v4 6/6] hwmon: (k10temp) Add debugfs support
-To:     Ken Moffat <zarniwhoop73@googlemail.com>
+        Thu, 23 Jan 2020 20:56:00 -0800 (PST)
+Subject: Re: [PATCH v5 1/2] hwmon: (adt7475) Added attenuator bypass support
+To:     Logan Shaw <logan.shaw@alliedtelesis.co.nz>, jdelvare@suse.com,
+        robh+dt@kernel.org
 Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Clemens Ladisch <clemens@ladisch.de>,
-        Jean Delvare <jdelvare@suse.com>,
-        Brad Campbell <lists2009@fnarfbargle.com>,
-        =?UTF-8?Q?Ondrej_=c4=8cerman?= <ocerman@sda1.eu>,
-        Bernhard Gebetsberger <bernhard.gebetsberger@gmx.at>,
-        Holger Kiehl <Holger.Kiehl@dwd.de>,
-        Michael Larabel <michael@phoronix.com>,
-        Jonathan McDowell <noodles@earth.li>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Darren Salt <devspam@moreofthesa.me.uk>
-References: <20200122160800.12560-1-linux@roeck-us.net>
- <20200122160800.12560-7-linux@roeck-us.net>
- <CANVEwpbeT_O=4TZu7RuRupwOGTNEVWSnHXvMsEqEmeKqmu92jw@mail.gmail.com>
+        devicetree@vger.kernel.org, Joshua.Scott@alliedtelesis.co.nz,
+        Chris.Packham@alliedtelesis.co.nz
+References: <20200123220533.2228-1-logan.shaw@alliedtelesis.co.nz>
+ <20200123220533.2228-2-logan.shaw@alliedtelesis.co.nz>
 From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <e1d351d3-ffc4-9241-c5fd-0703637d9eee@roeck-us.net>
-Date:   Thu, 23 Jan 2020 20:47:32 -0800
+Message-ID: <d8d1e0db-6e2d-8523-923a-df6c6dca0e89@roeck-us.net>
+Date:   Thu, 23 Jan 2020 20:55:59 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.2
 MIME-Version: 1.0
-In-Reply-To: <CANVEwpbeT_O=4TZu7RuRupwOGTNEVWSnHXvMsEqEmeKqmu92jw@mail.gmail.com>
+In-Reply-To: <20200123220533.2228-2-logan.shaw@alliedtelesis.co.nz>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -86,41 +79,143 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Ken,
-
-On 1/23/20 4:01 PM, Ken Moffat wrote:
-> Hi Guenter,
+On 1/23/20 2:05 PM, Logan Shaw wrote:
+> Added support for reading DTS properties to set attenuators on
+> device probe for the ADT7473, ADT7475, ADT7476, and ADT7490.
 > 
-
-Thanks a lot for the additional information. The following
-is interesting.
-
-> -0x059960: 00000000 08400001 00004623 00000039
-> +0x059960: 00000000 08400001 00008241 00000045
-
-The last two blocks also temperatures. In the AMD thermal code,
-we find definitions for CG_MULT_THERMAL_STATUS and
-CG_THERMAL_RANGE. The first consists of 2 x 9 bit (0x23
-and 0x43 above for idle and under load), the second is just
-a value. On Zen2, the address for those values is 20 higher
-(0x05997c instead of 0x059968), but the numbers are pretty
-much the same. The AMD thermal code reads those values for
-some graphics chips and displays it directly in degrees C.
-
-I am just not sure what exactly it represents. I see those
-temperatures on 3900X as well. Actually, it looks like all
-chips report them, including server chips, so it is not the
-graphics temperature. But it is definitely worth keeping an eye
-on it; maybe someone can figure out what it is.
-
-> Hope this is not a waste of your time.
-
-No, it is definitely worth it. It will give me data to work with
-in the future.
-
-> Would you like similar for the 2500u ?
+> Signed-off-by: Logan Shaw <logan.shaw@alliedtelesis.co.nz>
+> ---
+> ---
+>   drivers/hwmon/adt7475.c | 68 +++++++++++++++++++++++++++++++++++++++++
+>   1 file changed, 68 insertions(+)
 > 
-Yes, that would be great.
+> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
+> index 6c64d50c9aae..8afc5a89ec92 100644
+> --- a/drivers/hwmon/adt7475.c
+> +++ b/drivers/hwmon/adt7475.c
+> @@ -19,6 +19,7 @@
+>   #include <linux/hwmon-vid.h>
+>   #include <linux/err.h>
+>   #include <linux/jiffies.h>
+> +#include <linux/of.h>
+>   #include <linux/util_macros.h>
+>   
+>   /* Indexes for the sysfs hooks */
+> @@ -1457,6 +1458,70 @@ static int adt7475_update_limits(struct i2c_client *client)
+>   	return 0;
+>   }
+>   
+> +/**
+
+I am still at loss why you think it would make sense to mark those
+comments for the kernel documentation. This doesn't have value outside
+this driver.
+
+> + * Sets or clears the given bit in the config depending on the value of the
+> + * given dts property. Non-zero value sets, zero value clears. No change if
+> + * the property is absent.
+> + */
+> +static void modify_config(const struct i2c_client *client, char *property,
+> +				u8 *config, u8 bit_index)
+> +{
+> +	u32 prop_value = 0;
+> +	int ret = of_property_read_u32(client->dev.of_node, property,
+> +					&prop_value);
+> +
+> +	if (!ret) {
+> +		if (prop_value)
+> +			*config |= (1 << bit_index);
+> +		else
+> +			*config &= ~(1 << bit_index);
+> +	}
+> +}
+> +
+> +/**
+> + * Configures the attenuator bypasses for voltage inputs, depening on
+> + * properties in the dts.
+> +.*
+> + * The adt7473 and adt7475 only support bypassing in1.
+> + *
+> + * Returns a negative error code if there was an error writing to the register.
+> + */
+> +static int load_attenuators(const struct i2c_client *client, int chip,
+> +				u8 *config2, u8 *config4)
+> +{
+> +	u8 conf_copy;
+> +	int ret = 0;
+
+Unnecessary assignment.
+
+> +
+> +	if (chip == adt7476 || chip == adt7490) {
+> +		conf_copy = *config4;
+> +
+> +		modify_config(client, "bypass-attenuator-in0", &conf_copy, 4);
+> +		modify_config(client, "bypass-attenuator-in1", &conf_copy, 5);
+> +		modify_config(client, "bypass-attenuator-in3", &conf_copy, 6);
+> +		modify_config(client, "bypass-attenuator-in4", &conf_copy, 7);
+> +
+> +		ret = i2c_smbus_write_byte_data(client, REG_CONFIG4,
+> +			conf_copy);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		*config4 = conf_copy;
+> +	} else if (chip == adt7473 || chip == adt7475) {
+> +		conf_copy = *config2;
+> +
+> +		modify_config(client, "bypass-attenuator-in1", &conf_copy, 5);
+> +
+> +		ret = i2c_smbus_write_byte_data(client, REG_CONFIG2,
+> +			conf_copy);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		*config2 = conf_copy;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>   static int adt7475_probe(struct i2c_client *client,
+>   			 const struct i2c_device_id *id)
+>   {
+> @@ -1546,6 +1611,9 @@ static int adt7475_probe(struct i2c_client *client,
+>   
+>   	/* Voltage attenuators can be bypassed, globally or individually */
+>   	config2 = adt7475_read(REG_CONFIG2);
+> +	if (load_attenuators(client, chip, &config2, &(data->config4)) < 0)
+> +		dev_warn(&client->dev, "Error setting bypass attenuators\n");
+> +
+>   	if (config2 & CONFIG2_ATTN) {
+>   		data->bypass_attn = (0x3 << 3) | 0x3;
+>   	} else {
+> 
+CHECK: Alignment should match open parenthesis
+#45: FILE: drivers/hwmon/adt7475.c:1467:
++static void modify_config(const struct i2c_client *client, char *property,
++				u8 *config, u8 bit_index)
+
+CHECK: Alignment should match open parenthesis
+#68: FILE: drivers/hwmon/adt7475.c:1490:
++static int load_attenuators(const struct i2c_client *client, int chip,
++				u8 *config2, u8 *config4)
+
+CHECK: Alignment should match open parenthesis
+#82: FILE: drivers/hwmon/adt7475.c:1504:
++		ret = i2c_smbus_write_byte_data(client, REG_CONFIG4,
++			conf_copy);
+
+CHECK: Alignment should match open parenthesis
+#93: FILE: drivers/hwmon/adt7475.c:1515:
++		ret = i2c_smbus_write_byte_data(client, REG_CONFIG2,
++			conf_copy);
+
+CHECK: Unnecessary parentheses around data->config4
+#110: FILE: drivers/hwmon/adt7475.c:1614:
++	if (load_attenuators(client, chip, &config2, &(data->config4)) < 0)
+
+None of those is beneficial. Please fix.
 
 Thanks,
 Guenter
