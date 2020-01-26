@@ -6,40 +6,41 @@ X-Spam-Status: No, score=-7.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC43BC2D0DB
-	for <linux-hwmon@archiver.kernel.org>; Sun, 26 Jan 2020 17:11:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11F90C2D0DB
+	for <linux-hwmon@archiver.kernel.org>; Sun, 26 Jan 2020 18:18:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9FD21206F0
-	for <linux-hwmon@archiver.kernel.org>; Sun, 26 Jan 2020 17:11:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B7D6F20716
+	for <linux-hwmon@archiver.kernel.org>; Sun, 26 Jan 2020 18:18:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726670AbgAZRLi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 26 Jan 2020 12:11:38 -0500
-Received: from mga17.intel.com ([192.55.52.151]:33788 "EHLO mga17.intel.com"
+        id S1726155AbgAZSST (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 26 Jan 2020 13:18:19 -0500
+Received: from mga11.intel.com ([192.55.52.93]:24573 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726339AbgAZRLi (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 26 Jan 2020 12:11:38 -0500
-X-Amp-Result: UNSCANNABLE
+        id S1725838AbgAZSST (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 26 Jan 2020 13:18:19 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Jan 2020 09:11:35 -0800
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Jan 2020 10:18:16 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.70,366,1574150400"; 
-   d="gz'50?scan'50,208,50";a="223060331"
+   d="gz'50?scan'50,208,50";a="308585714"
 Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 26 Jan 2020 09:11:34 -0800
+  by orsmga001.jf.intel.com with ESMTP; 26 Jan 2020 10:18:14 -0800
 Received: from kbuild by lkp-server01 with local (Exim 4.89)
         (envelope-from <lkp@intel.com>)
-        id 1ivlRe-00012H-0c; Mon, 27 Jan 2020 01:11:34 +0800
-Date:   Mon, 27 Jan 2020 01:10:51 +0800
+        id 1ivmU9-0005nx-Ry; Mon, 27 Jan 2020 02:18:13 +0800
+Date:   Mon, 27 Jan 2020 02:17:44 +0800
 From:   kbuild test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     kbuild-all@lists.01.org, linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon-playground 37/44]
- drivers/hwmon/pmbus/ibm-cffps.c:250:3: error: too few arguments to function
- 'pmbus_set_page'
-Message-ID: <202001270137.QeDENbLB%lkp@intel.com>
+Subject: [hwmon:hwmon-playground 38/44]
+ drivers/hwmon/pmbus/pmbus_core.c:160:10: error: 'struct pmbus_data' has no
+ member named 'pages'
+Message-ID: <202001270240.QCi1uYpg%lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="flwdl2xntc6tuodc"
+Content-Type: multipart/mixed; boundary="p6k2bhkle4o4tawn"
 Content-Disposition: inline
 User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-hwmon-owner@vger.kernel.org
@@ -48,19 +49,19 @@ List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 
---flwdl2xntc6tuodc
+--p6k2bhkle4o4tawn
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-playground
 head:   e8dc30cf9ae936e93319687fa88ed45c55797807
-commit: 81a9e2ca8e40ffd25ae444bdd943dba8d3454ffe [37/44] hwmon: (pmbus) Add 'phase' parameter where needed for multi-phase support
+commit: e9036c751c0918fdac1a927e8b52d5fb4e4d926a [38/44] hwmon: (pmbus) Implement multi-phase support
 config: riscv-randconfig-a001-20200126 (attached as .config)
 compiler: riscv64-linux-gcc (GCC) 7.5.0
 reproduce:
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        git checkout 81a9e2ca8e40ffd25ae444bdd943dba8d3454ffe
+        git checkout e9036c751c0918fdac1a927e8b52d5fb4e4d926a
         # save the attached .config to linux build tree
         GCC_VERSION=7.5.0 make.cross ARCH=riscv 
 
@@ -69,180 +70,64 @@ Reported-by: kbuild test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   drivers/hwmon/pmbus/ibm-cffps.c: In function 'ibm_cffps_debugfs_write':
->> drivers/hwmon/pmbus/ibm-cffps.c:250:3: error: too few arguments to function 'pmbus_set_page'
-      pmbus_set_page(psu->client, 0);
-      ^~~~~~~~~~~~~~
-   In file included from drivers/hwmon/pmbus/ibm-cffps.c:19:0:
-   drivers/hwmon/pmbus/pmbus.h:461:5: note: declared here
-    int pmbus_set_page(struct i2c_client *client, int page, int phase);
-        ^~~~~~~~~~~~~~
-   drivers/hwmon/pmbus/ibm-cffps.c: In function 'ibm_cffps_read_word_data':
->> drivers/hwmon/pmbus/ibm-cffps.c:351:8: error: too few arguments to function 'pmbus_read_word_data'
-      rc = pmbus_read_word_data(client, page, CFFPS_12VCS_VOUT_CMD);
-           ^~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/hwmon/pmbus/ibm-cffps.c:19:0:
-   drivers/hwmon/pmbus/pmbus.h:462:5: note: declared here
-    int pmbus_read_word_data(struct i2c_client *client, int page, int phase,
-        ^~~~~~~~~~~~~~~~~~~~
---
->> drivers/hwmon/pmbus/max20730.c:168:21: error: initialization from incompatible pointer type [-Werror=incompatible-pointer-types]
-      .read_word_data = max20730_read_word_data,
-                        ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/hwmon/pmbus/max20730.c:168:21: note: (near initialization for 'max20730_info[0].read_word_data')
-   drivers/hwmon/pmbus/max20730.c:206:21: error: initialization from incompatible pointer type [-Werror=incompatible-pointer-types]
-      .read_word_data = max20730_read_word_data,
-                        ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/hwmon/pmbus/max20730.c:206:21: note: (near initialization for 'max20730_info[1].read_word_data')
-   drivers/hwmon/pmbus/max20730.c:234:21: error: initialization from incompatible pointer type [-Werror=incompatible-pointer-types]
-      .read_word_data = max20730_read_word_data,
-                        ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/hwmon/pmbus/max20730.c:234:21: note: (near initialization for 'max20730_info[2].read_word_data')
-   cc1: some warnings being treated as errors
+   drivers/hwmon/pmbus/pmbus_core.c: In function 'pmbus_set_page':
+>> drivers/hwmon/pmbus/pmbus_core.c:160:10: error: 'struct pmbus_data' has no member named 'pages'
+         data->pages > 1 & page != data->currpage) {
+             ^~
+>> drivers/hwmon/pmbus/pmbus_core.c:174:10: error: 'struct pmbus_data' has no member named 'phases'
+     if (data->phases && data->currphase != phase &&
+             ^~
 
-vim +/pmbus_set_page +250 drivers/hwmon/pmbus/ibm-cffps.c
+vim +160 drivers/hwmon/pmbus/pmbus_core.c
 
-d6bb645a1704cb Edward A. James 2017-12-11  237  
-abe508b66d23cf Eddie James     2019-12-19  238  static ssize_t ibm_cffps_debugfs_write(struct file *file,
-abe508b66d23cf Eddie James     2019-12-19  239  				       const char __user *buf, size_t count,
-abe508b66d23cf Eddie James     2019-12-19  240  				       loff_t *ppos)
-abe508b66d23cf Eddie James     2019-12-19  241  {
-abe508b66d23cf Eddie James     2019-12-19  242  	u8 data;
-abe508b66d23cf Eddie James     2019-12-19  243  	ssize_t rc;
-abe508b66d23cf Eddie James     2019-12-19  244  	int *idxp = file->private_data;
-abe508b66d23cf Eddie James     2019-12-19  245  	int idx = *idxp;
-abe508b66d23cf Eddie James     2019-12-19  246  	struct ibm_cffps *psu = to_psu(idxp, idx);
-abe508b66d23cf Eddie James     2019-12-19  247  
-abe508b66d23cf Eddie James     2019-12-19  248  	switch (idx) {
-abe508b66d23cf Eddie James     2019-12-19  249  	case CFFPS_DEBUGFS_ON_OFF_CONFIG:
-abe508b66d23cf Eddie James     2019-12-19 @250  		pmbus_set_page(psu->client, 0);
-abe508b66d23cf Eddie James     2019-12-19  251  
-abe508b66d23cf Eddie James     2019-12-19  252  		rc = simple_write_to_buffer(&data, 1, ppos, buf, count);
-d9c8ae69b99621 Eddie James     2020-01-07  253  		if (rc <= 0)
-abe508b66d23cf Eddie James     2019-12-19  254  			return rc;
-abe508b66d23cf Eddie James     2019-12-19  255  
-abe508b66d23cf Eddie James     2019-12-19  256  		rc = i2c_smbus_write_byte_data(psu->client,
-abe508b66d23cf Eddie James     2019-12-19  257  					       PMBUS_ON_OFF_CONFIG, data);
-abe508b66d23cf Eddie James     2019-12-19  258  		if (rc)
-abe508b66d23cf Eddie James     2019-12-19  259  			return rc;
-abe508b66d23cf Eddie James     2019-12-19  260  
-abe508b66d23cf Eddie James     2019-12-19  261  		rc = 1;
-abe508b66d23cf Eddie James     2019-12-19  262  		break;
-abe508b66d23cf Eddie James     2019-12-19  263  	default:
-abe508b66d23cf Eddie James     2019-12-19  264  		return -EINVAL;
-abe508b66d23cf Eddie James     2019-12-19  265  	}
-abe508b66d23cf Eddie James     2019-12-19  266  
-abe508b66d23cf Eddie James     2019-12-19  267  	return rc;
-abe508b66d23cf Eddie James     2019-12-19  268  }
-abe508b66d23cf Eddie James     2019-12-19  269  
-d6bb645a1704cb Edward A. James 2017-12-11  270  static const struct file_operations ibm_cffps_fops = {
-d6bb645a1704cb Edward A. James 2017-12-11  271  	.llseek = noop_llseek,
-abe508b66d23cf Eddie James     2019-12-19  272  	.read = ibm_cffps_debugfs_read,
-abe508b66d23cf Eddie James     2019-12-19  273  	.write = ibm_cffps_debugfs_write,
-d6bb645a1704cb Edward A. James 2017-12-11  274  	.open = simple_open,
-d6bb645a1704cb Edward A. James 2017-12-11  275  };
-d6bb645a1704cb Edward A. James 2017-12-11  276  
-f69316d62c7066 Edward A. James 2017-08-21  277  static int ibm_cffps_read_byte_data(struct i2c_client *client, int page,
-f69316d62c7066 Edward A. James 2017-08-21  278  				    int reg)
-f69316d62c7066 Edward A. James 2017-08-21  279  {
-f69316d62c7066 Edward A. James 2017-08-21  280  	int rc, mfr;
-f69316d62c7066 Edward A. James 2017-08-21  281  
-f69316d62c7066 Edward A. James 2017-08-21  282  	switch (reg) {
-f69316d62c7066 Edward A. James 2017-08-21  283  	case PMBUS_STATUS_VOUT:
-f69316d62c7066 Edward A. James 2017-08-21  284  	case PMBUS_STATUS_IOUT:
-f69316d62c7066 Edward A. James 2017-08-21  285  	case PMBUS_STATUS_TEMPERATURE:
-f69316d62c7066 Edward A. James 2017-08-21  286  	case PMBUS_STATUS_FAN_12:
-f69316d62c7066 Edward A. James 2017-08-21  287  		rc = pmbus_read_byte_data(client, page, reg);
-f69316d62c7066 Edward A. James 2017-08-21  288  		if (rc < 0)
-f69316d62c7066 Edward A. James 2017-08-21  289  			return rc;
-f69316d62c7066 Edward A. James 2017-08-21  290  
-f69316d62c7066 Edward A. James 2017-08-21  291  		mfr = pmbus_read_byte_data(client, page,
-f69316d62c7066 Edward A. James 2017-08-21  292  					   PMBUS_STATUS_MFR_SPECIFIC);
-f69316d62c7066 Edward A. James 2017-08-21  293  		if (mfr < 0)
-f69316d62c7066 Edward A. James 2017-08-21  294  			/*
-f69316d62c7066 Edward A. James 2017-08-21  295  			 * Return the status register instead of an error,
-f69316d62c7066 Edward A. James 2017-08-21  296  			 * since we successfully read status.
-f69316d62c7066 Edward A. James 2017-08-21  297  			 */
-f69316d62c7066 Edward A. James 2017-08-21  298  			return rc;
-f69316d62c7066 Edward A. James 2017-08-21  299  
-f69316d62c7066 Edward A. James 2017-08-21  300  		/* Add MFR_SPECIFIC bits to the standard pmbus status regs. */
-f69316d62c7066 Edward A. James 2017-08-21  301  		if (reg == PMBUS_STATUS_FAN_12) {
-f69316d62c7066 Edward A. James 2017-08-21  302  			if (mfr & CFFPS_MFR_FAN_FAULT)
-f69316d62c7066 Edward A. James 2017-08-21  303  				rc |= PB_FAN_FAN1_FAULT;
-f69316d62c7066 Edward A. James 2017-08-21  304  		} else if (reg == PMBUS_STATUS_TEMPERATURE) {
-f69316d62c7066 Edward A. James 2017-08-21  305  			if (mfr & CFFPS_MFR_THERMAL_FAULT)
-f69316d62c7066 Edward A. James 2017-08-21  306  				rc |= PB_TEMP_OT_FAULT;
-f69316d62c7066 Edward A. James 2017-08-21  307  		} else if (reg == PMBUS_STATUS_VOUT) {
-f69316d62c7066 Edward A. James 2017-08-21  308  			if (mfr & (CFFPS_MFR_OV_FAULT | CFFPS_MFR_VAUX_FAULT))
-f69316d62c7066 Edward A. James 2017-08-21  309  				rc |= PB_VOLTAGE_OV_FAULT;
-f69316d62c7066 Edward A. James 2017-08-21  310  			if (mfr & CFFPS_MFR_UV_FAULT)
-f69316d62c7066 Edward A. James 2017-08-21  311  				rc |= PB_VOLTAGE_UV_FAULT;
-f69316d62c7066 Edward A. James 2017-08-21  312  		} else if (reg == PMBUS_STATUS_IOUT) {
-f69316d62c7066 Edward A. James 2017-08-21  313  			if (mfr & CFFPS_MFR_OC_FAULT)
-f69316d62c7066 Edward A. James 2017-08-21  314  				rc |= PB_IOUT_OC_FAULT;
-f69316d62c7066 Edward A. James 2017-08-21  315  			if (mfr & CFFPS_MFR_CURRENT_SHARE_WARNING)
-f69316d62c7066 Edward A. James 2017-08-21  316  				rc |= PB_CURRENT_SHARE_FAULT;
-f69316d62c7066 Edward A. James 2017-08-21  317  		}
-f69316d62c7066 Edward A. James 2017-08-21  318  		break;
-f69316d62c7066 Edward A. James 2017-08-21  319  	default:
-f69316d62c7066 Edward A. James 2017-08-21  320  		rc = -ENODATA;
-f69316d62c7066 Edward A. James 2017-08-21  321  		break;
-f69316d62c7066 Edward A. James 2017-08-21  322  	}
-f69316d62c7066 Edward A. James 2017-08-21  323  
-f69316d62c7066 Edward A. James 2017-08-21  324  	return rc;
-f69316d62c7066 Edward A. James 2017-08-21  325  }
-f69316d62c7066 Edward A. James 2017-08-21  326  
-f69316d62c7066 Edward A. James 2017-08-21  327  static int ibm_cffps_read_word_data(struct i2c_client *client, int page,
-81a9e2ca8e40ff Guenter Roeck   2020-01-14  328  				    int phase, int reg)
-f69316d62c7066 Edward A. James 2017-08-21  329  {
-f69316d62c7066 Edward A. James 2017-08-21  330  	int rc, mfr;
-f69316d62c7066 Edward A. James 2017-08-21  331  
-f69316d62c7066 Edward A. James 2017-08-21  332  	switch (reg) {
-f69316d62c7066 Edward A. James 2017-08-21  333  	case PMBUS_STATUS_WORD:
-81a9e2ca8e40ff Guenter Roeck   2020-01-14  334  		rc = pmbus_read_word_data(client, page, phase, reg);
-f69316d62c7066 Edward A. James 2017-08-21  335  		if (rc < 0)
-f69316d62c7066 Edward A. James 2017-08-21  336  			return rc;
-f69316d62c7066 Edward A. James 2017-08-21  337  
-f69316d62c7066 Edward A. James 2017-08-21  338  		mfr = pmbus_read_byte_data(client, page,
-f69316d62c7066 Edward A. James 2017-08-21  339  					   PMBUS_STATUS_MFR_SPECIFIC);
-f69316d62c7066 Edward A. James 2017-08-21  340  		if (mfr < 0)
-f69316d62c7066 Edward A. James 2017-08-21  341  			/*
-f69316d62c7066 Edward A. James 2017-08-21  342  			 * Return the status register instead of an error,
-f69316d62c7066 Edward A. James 2017-08-21  343  			 * since we successfully read status.
-f69316d62c7066 Edward A. James 2017-08-21  344  			 */
-f69316d62c7066 Edward A. James 2017-08-21  345  			return rc;
-f69316d62c7066 Edward A. James 2017-08-21  346  
-f69316d62c7066 Edward A. James 2017-08-21  347  		if (mfr & CFFPS_MFR_PS_KILL)
-f69316d62c7066 Edward A. James 2017-08-21  348  			rc |= PB_STATUS_OFF;
-f69316d62c7066 Edward A. James 2017-08-21  349  		break;
-1952d79a0d2635 Eddie James     2019-12-19  350  	case PMBUS_VIRT_READ_VMON:
-1952d79a0d2635 Eddie James     2019-12-19 @351  		rc = pmbus_read_word_data(client, page, CFFPS_12VCS_VOUT_CMD);
-1952d79a0d2635 Eddie James     2019-12-19  352  		break;
-f69316d62c7066 Edward A. James 2017-08-21  353  	default:
-f69316d62c7066 Edward A. James 2017-08-21  354  		rc = -ENODATA;
-f69316d62c7066 Edward A. James 2017-08-21  355  		break;
-f69316d62c7066 Edward A. James 2017-08-21  356  	}
-f69316d62c7066 Edward A. James 2017-08-21  357  
-f69316d62c7066 Edward A. James 2017-08-21  358  	return rc;
-f69316d62c7066 Edward A. James 2017-08-21  359  }
-f69316d62c7066 Edward A. James 2017-08-21  360  
-
-:::::: The code at line 250 was first introduced by commit
-:::::: abe508b66d23cf2ed18c991c200b957e92f4bfbc hwmon: (pmbus/ibm-cffps) Add new manufacturer debugfs entries
-
-:::::: TO: Eddie James <eajames@linux.ibm.com>
-:::::: CC: Guenter Roeck <linux@roeck-us.net>
+   150	
+   151	int pmbus_set_page(struct i2c_client *client, int page, int phase)
+   152	{
+   153		struct pmbus_data *data = i2c_get_clientdata(client);
+   154		int rv;
+   155	
+   156		if (page < 0)
+   157			return 0;
+   158	
+   159		if (!(data->info->func[page] & PMBUS_PAGE_VIRTUAL) &&
+ > 160		    data->pages > 1 & page != data->currpage) {
+   161			rv = i2c_smbus_write_byte_data(client, PMBUS_PAGE, page);
+   162			if (rv < 0)
+   163				return rv;
+   164	
+   165			rv = i2c_smbus_read_byte_data(client, PMBUS_PAGE);
+   166			if (rv < 0)
+   167				return rv;
+   168	
+   169			if (rv != page)
+   170				return -EIO;
+   171		}
+   172		data->currpage = page;
+   173	
+ > 174		if (data->phases && data->currphase != phase &&
+   175		    !(data->info->pfunc[phase] & PMBUS_PHASE_VIRTUAL)) {
+   176			rv = i2c_smbus_write_byte_data(client, PMBUS_PHASE,
+   177						       phase);
+   178			if (rv)
+   179				return rv;
+   180		}
+   181		data->currphase = phase;
+   182	
+   183		return 0;
+   184	}
+   185	EXPORT_SYMBOL_GPL(pmbus_set_page);
+   186	
 
 ---
 0-DAY kernel test infrastructure                 Open Source Technology Center
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org Intel Corporation
 
---flwdl2xntc6tuodc
+--p6k2bhkle4o4tawn
 Content-Type: application/gzip
 Content-Disposition: attachment; filename=".config.gz"
 Content-Transfer-Encoding: base64
 
-H4sICDbALV4AAy5jb25maWcAlDxZc9w20u/5FVPOS1JbzuqwJ/Z+pQcQBElkeBkAR8cLS5Ym
+H4sICKbOLV4AAy5jb25maWcAlDxZc9w20u/5FVPOS1JbzuqwJ/Z+pQcQBElkeBkAR8cLS5Ym
 jmoljUsa5fj3Xzd4AWST0qYSx9PdaACNRl8A+OMPP67Yy2H/cH24u7m+v/9n9W33uHu6Puxu
 V7/f3e/+bxUWq7wwKxFK8wsQp3ePL3//++nu+ebP1cdfPv5y9P7p5tfVZvf0uLtf8f3j73ff
 XqD53f7xhx9/gH9/BODDd+D09J+VbbX+8P4eebz/dnOz+inm/OfVr8gHaHmRRzKuOa+lrgFz
@@ -725,4 +610,4 @@ IRp8SeuQd87g0zFUsWvzJAqholiVDh7IIoQ8Bxz81B7G8Ll4qYinP5iIy3K4ngLiZM5ldpHl
 TQkyY+r0rEN9uGvRe7pdmxjIK4He0t2WqICH02mW4OiVOaA9HTsJXImhZpLEbJN+mXt6dv+s
 jP8PacwgzUmiAQA=
 
---flwdl2xntc6tuodc--
+--p6k2bhkle4o4tawn--
