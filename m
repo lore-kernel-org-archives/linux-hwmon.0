@@ -2,210 +2,208 @@ Return-Path: <SRS0=C7fg=3Q=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 008B5C2D0DB
-	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Jan 2020 13:55:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E5EBC2D0DB
+	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Jan 2020 15:48:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BE620205F4
-	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Jan 2020 13:55:56 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DQHWSyB6"
+	by mail.kernel.org (Postfix) with ESMTP id 281A822527
+	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Jan 2020 15:48:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1580140084;
+	bh=yETsAyqvV6uSq9CHgjbudxsP1n7benId3zzzsdhb/Sk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=lFRUEdCNT6vRvGSprbXRZuBoZhbj+LuNLKJJwoe7G74Bi+2Njb4GpqKwY2edsIBz4
+	 zZ/jMeSforVYziub+WddiaFVR0GoMZjQcLs0KbxUMjdiaZmkq2Zj+YyeBZdawfqliQ
+	 bLNuf2mlNRfkHxvTIJY1JTq8tg0hgc5cU1lF/oVE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727586AbgA0Nz4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 27 Jan 2020 08:55:56 -0500
-Received: from mail-yb1-f196.google.com ([209.85.219.196]:37442 "EHLO
-        mail-yb1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726303AbgA0Nz4 (ORCPT
+        id S1729518AbgA0PsD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 27 Jan 2020 10:48:03 -0500
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:44008 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728783AbgA0PsD (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 27 Jan 2020 08:55:56 -0500
-Received: by mail-yb1-f196.google.com with SMTP id o199so4915184ybc.4;
-        Mon, 27 Jan 2020 05:55:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Sj5wqrITXv648oeDVHTzuVtybuGSot0BUrFpozXj91I=;
-        b=DQHWSyB62AUaTbbD2IbSJ7bM5FFoGOAf2Guu3doNjyh10jnsURvzmL/nvsWXIBzqNO
-         r0ss7auYa4iSX1KaGR6TMEUJZzBZEDcWCqkqexATJgkgRcVye5Vi38MlvouTtEjyfab6
-         0ZxeDb6dMYhqx2XISdEwIhIGpLzzkY94Tkmv/Nor20BS6uBR+/Kekb0JdFKxbUFG8A3W
-         AKwlVrdPaF+raotTav64q4dN9N1YNzxxaAOnhKMtYaolsJxSbmLB/tm4uPDJVFIZayfK
-         0gwmvk0eM68IwwUmhCb3oQY448tTcO83GJGPyinM92amONMReqR0qPY7zcDzWOLTBkkp
-         mVbA==
+        Mon, 27 Jan 2020 10:48:03 -0500
+Received: by mail-oi1-f194.google.com with SMTP id p125so7043168oif.10;
+        Mon, 27 Jan 2020 07:48:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Sj5wqrITXv648oeDVHTzuVtybuGSot0BUrFpozXj91I=;
-        b=mdIZXxATKa8g1Plo4KLKbasCYyWbNQyc5PNfQDzWBQh3o93H8u5HCp9P+qSe2X4zK8
-         CasiVYRdQb9NG/u3oo9w0K4W+n26JF12v6BtWSvOL7Qzwq43S5Es5HA+bMryzLx81dlg
-         TkYyKYndYN5nAoFzRDVGPE2AISPJX+7p79wPVBDsNKYsDKQfaqIT/8B5UxxTqnHEUrdd
-         T8VXglF+5AVMZg5LUtjPlDGDblJahCuSw0/7qnye5tAAZsb2AwFs+hZNxVS3tVVGeqRu
-         15Ug9rj6h7COOwJbKBr9MON29ALqt7V/jrCy5Px2Lio1Dvts8AxUm2jXYwxuKdsl1Axa
-         cLdg==
-X-Gm-Message-State: APjAAAXlMLrcORxbSoXXvlW73Pir/qUghf0m/GssQMlBrYan5Umz7nvn
-        E4oNMQ5duIqSQai38CWMLeYWEFGI
-X-Google-Smtp-Source: APXvYqxx/C9Ih7a3SKmxKUkzaJzJ1czbV1RYhgcuIjR5Yz3vglv7X/5/TVCgB59ehqUoec5BB/kqwA==
-X-Received: by 2002:a25:bc85:: with SMTP id e5mr12717277ybk.184.1580133354494;
-        Mon, 27 Jan 2020 05:55:54 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d199sm6565592ywh.83.2020.01.27.05.55.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jan 2020 05:55:53 -0800 (PST)
-Subject: Re: [PATCH V1 1/2] hwmon: (powr1220) Add support for Lattice's
- POWR1014 power manager IC
-To:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Jean Delvare <jdelvare@suse.com>,
-        Markus Pietrek <mpie@msc-ge.com>
-Cc:     kernel@pengutronix.de, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20200127102540.31742-1-o.rempel@pengutronix.de>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <7f613e41-26eb-e44b-f54a-47f972077bfa@roeck-us.net>
-Date:   Mon, 27 Jan 2020 05:55:52 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=UYR7sqxNx0kFfvk4lLW7ItpSc33p5wasYWW+LyIn5lM=;
+        b=Q+Um07aGAf06wo6Rg2/mjt35oFBwgfJ04V5/wVxqkAguH2r/R0Mk6y5FGfBesjBUys
+         FgL9OJqntBO9iFG/8J4y7afWeK5SllAvvICKEp9GeyqknmvPzldcFhfTWnKYt8K9M9pE
+         t3sTr8ZsejF4EfHCaSAsNWlzyGqlkbeYugSIcqO/TPIX9gpibXo8VoTnnumXVg0S7ZCg
+         ij8FUB8VT4BbhKc+R12iECoyDAmo4iDS/wyOgyhDQM8wS3N87cqiRmXPIXneuIRvNeH/
+         WmZTFmnlDIQZIj3qe1crIaIHOy75uA+dVREE9AxeZoKZdLkVlFZa7nCaURHYlRlWwZhn
+         ZHeA==
+X-Gm-Message-State: APjAAAWnKEmHbdvKuATizkMfMJEE4LwmRxeltPh1/lWf9EUcP8flpXSE
+        VSOn8nFri6NkEMiAVvIUJ6VYCa8=
+X-Google-Smtp-Source: APXvYqyAqfTjBhJSs8fb6ApXqnQsZdS4ObYsTxvZoMsNLCtJeCtCW0J0K1gBw3llFafOgZvIKKwDCA==
+X-Received: by 2002:aca:dc8b:: with SMTP id t133mr7969662oig.98.1580140082458;
+        Mon, 27 Jan 2020 07:48:02 -0800 (PST)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id c12sm4934322oic.27.2020.01.27.07.48.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jan 2020 07:48:01 -0800 (PST)
+Received: (nullmailer pid 16178 invoked by uid 1000);
+        Mon, 27 Jan 2020 15:48:00 -0000
+Date:   Mon, 27 Jan 2020 09:48:00 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Logan Shaw <logan.shaw@alliedtelesis.co.nz>
+Cc:     linux@roeck-us.net, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Joshua.Scott@alliedtelesis.co.nz, Chris.Packham@alliedtelesis.co.nz
+Subject: Re: [PATCH v6 2/2] dt-bindings: hwmon: (adt7475) Added missing
+ adt7475 documentation
+Message-ID: <20200127154800.GA7023@bogus>
+References: <20200126221014.2978-1-logan.shaw@alliedtelesis.co.nz>
+ <20200126221014.2978-3-logan.shaw@alliedtelesis.co.nz>
 MIME-Version: 1.0
-In-Reply-To: <20200127102540.31742-1-o.rempel@pengutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200126221014.2978-3-logan.shaw@alliedtelesis.co.nz>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 1/27/20 2:25 AM, Oleksij Rempel wrote:
-> From: Markus Pietrek <mpie@msc-ge.com>
+On Mon, Jan 27, 2020 at 11:10:14AM +1300, Logan Shaw wrote:
+> Added a new file documenting the adt7475 devicetree and added the four
+> new properties to it.
 > 
-> This patch adds support for Lattice's POWR1014 power manager IC. Read
-> access to all the ADCs on the chip are supported through the hwmon
-> sysfs files.
-> 
-> The main difference of POWR1014 compared to POWR1220 is amount of VMON
-> input lines: 10 on POWR1014 and 12 lines on POWR1220.
-> 
-
-Please use an is_visible function instead of duplicating the attribute
-pointer arrays.
-
-Thanks,
-Guenter
-
-> Signed-off-by: Markus Pietrek <mpie@msc-ge.com>
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> Signed-off-by: Logan Shaw <logan.shaw@alliedtelesis.co.nz>
 > ---
->   drivers/hwmon/powr1220.c | 65 ++++++++++++++++++++++++++++++++++++++--
->   1 file changed, 63 insertions(+), 2 deletions(-)
+> ---
+>  .../devicetree/bindings/hwmon/adt7475.yaml    | 95 +++++++++++++++++++
+>  1 file changed, 95 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/adt7475.yaml
 > 
-> diff --git a/drivers/hwmon/powr1220.c b/drivers/hwmon/powr1220.c
-> index 65997421ee3c..ad7a82f132e6 100644
-> --- a/drivers/hwmon/powr1220.c
-> +++ b/drivers/hwmon/powr1220.c
-> @@ -19,6 +19,9 @@
->   #include <linux/mutex.h>
->   #include <linux/delay.h>
->   
-> +#define I2C_CLIENT_DATA_1014 1014
-> +#define I2C_CLIENT_DATA_1220 1220
-> +
->   #define ADC_STEP_MV			2
->   #define ADC_MAX_LOW_MEASUREMENT_MV	2000
->   
-> @@ -246,6 +249,51 @@ static SENSOR_DEVICE_ATTR_RO(in11_label, powr1220_label, VMON12);
->   static SENSOR_DEVICE_ATTR_RO(in12_label, powr1220_label, VCCA);
->   static SENSOR_DEVICE_ATTR_RO(in13_label, powr1220_label, VCCINP);
->   
-> +static struct attribute *powr1014_attrs[] = {
-> +	&sensor_dev_attr_in0_input.dev_attr.attr,
-> +	&sensor_dev_attr_in1_input.dev_attr.attr,
-> +	&sensor_dev_attr_in2_input.dev_attr.attr,
-> +	&sensor_dev_attr_in3_input.dev_attr.attr,
-> +	&sensor_dev_attr_in4_input.dev_attr.attr,
-> +	&sensor_dev_attr_in5_input.dev_attr.attr,
-> +	&sensor_dev_attr_in6_input.dev_attr.attr,
-> +	&sensor_dev_attr_in7_input.dev_attr.attr,
-> +	&sensor_dev_attr_in8_input.dev_attr.attr,
-> +	&sensor_dev_attr_in9_input.dev_attr.attr,
-> +	&sensor_dev_attr_in12_input.dev_attr.attr,
-> +	&sensor_dev_attr_in13_input.dev_attr.attr,
-> +
-> +	&sensor_dev_attr_in0_highest.dev_attr.attr,
-> +	&sensor_dev_attr_in1_highest.dev_attr.attr,
-> +	&sensor_dev_attr_in2_highest.dev_attr.attr,
-> +	&sensor_dev_attr_in3_highest.dev_attr.attr,
-> +	&sensor_dev_attr_in4_highest.dev_attr.attr,
-> +	&sensor_dev_attr_in5_highest.dev_attr.attr,
-> +	&sensor_dev_attr_in6_highest.dev_attr.attr,
-> +	&sensor_dev_attr_in7_highest.dev_attr.attr,
-> +	&sensor_dev_attr_in8_highest.dev_attr.attr,
-> +	&sensor_dev_attr_in9_highest.dev_attr.attr,
-> +	&sensor_dev_attr_in12_highest.dev_attr.attr,
-> +	&sensor_dev_attr_in13_highest.dev_attr.attr,
-> +
-> +	&sensor_dev_attr_in0_label.dev_attr.attr,
-> +	&sensor_dev_attr_in1_label.dev_attr.attr,
-> +	&sensor_dev_attr_in2_label.dev_attr.attr,
-> +	&sensor_dev_attr_in3_label.dev_attr.attr,
-> +	&sensor_dev_attr_in4_label.dev_attr.attr,
-> +	&sensor_dev_attr_in5_label.dev_attr.attr,
-> +	&sensor_dev_attr_in6_label.dev_attr.attr,
-> +	&sensor_dev_attr_in7_label.dev_attr.attr,
-> +	&sensor_dev_attr_in8_label.dev_attr.attr,
-> +	&sensor_dev_attr_in9_label.dev_attr.attr,
-> +	&sensor_dev_attr_in12_label.dev_attr.attr,
-> +	&sensor_dev_attr_in13_label.dev_attr.attr,
-> +
-> +	NULL
-> +};
-> +
-> +ATTRIBUTE_GROUPS(powr1014);
-> +
->   static struct attribute *powr1220_attrs[] = {
->   	&sensor_dev_attr_in0_input.dev_attr.attr,
->   	&sensor_dev_attr_in1_input.dev_attr.attr,
-> @@ -300,9 +348,21 @@ ATTRIBUTE_GROUPS(powr1220);
->   static int powr1220_probe(struct i2c_client *client,
->   		const struct i2c_device_id *id)
->   {
-> +	const struct attribute_group **attr_groups = NULL;
->   	struct powr1220_data *data;
->   	struct device *hwmon_dev;
->   
-> +	switch (id->driver_data) {
-> +	case I2C_CLIENT_DATA_1014:
-> +		attr_groups = powr1014_groups;
-> +		break;
-> +	case I2C_CLIENT_DATA_1220:
-> +		attr_groups = powr1220_groups;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
->   	if (!i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_BYTE_DATA))
->   		return -ENODEV;
->   
-> @@ -314,13 +374,14 @@ static int powr1220_probe(struct i2c_client *client,
->   	data->client = client;
->   
->   	hwmon_dev = devm_hwmon_device_register_with_groups(&client->dev,
-> -			client->name, data, powr1220_groups);
-> +			client->name, data, attr_groups);
->   
->   	return PTR_ERR_OR_ZERO(hwmon_dev);
->   }
->   
->   static const struct i2c_device_id powr1220_ids[] = {
-> -	{ "powr1220", 0, },
-> +	{ "powr1014", I2C_CLIENT_DATA_1014, },
-> +	{ "powr1220", I2C_CLIENT_DATA_1220, },
->   	{ }
->   };
->   
-> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/adt7475.yaml b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
+> new file mode 100644
+> index 000000000000..450da5e66e07
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
+> @@ -0,0 +1,95 @@
+> +# SPDX-License-Identifier: GPL-2.0
 
+Dual license new bindings please:
+
+(GPL-2.0-only OR BSD-2-Clause)
+
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/adt7475.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: ADT7475 hwmon sensor
+> +
+> +maintainers:
+> +  - Jean Delvare <jdelvare@suse.com>
+> +
+> +description: |
+> +  The ADT7473, ADT7475, ADT7476, and ADT7490 are thermal monitors and multiple
+> +  PWN fan controllers.
+> +
+> +  They support monitoring and controlling up to four fans (the ADT7490 can only
+> +  control up to three). They support reading a single on chip temperature
+> +  sensor and two off chip temperature sensors (the ADT7490 additionally
+> +  supports measuring up to three current external temperature sensors with
+> +  series resistance cancellation (SRC)).
+> +
+> +  Datasheets:
+> +  https://www.onsemi.com/pub/Collateral/ADT7473-D.PDF
+> +  https://www.onsemi.com/pub/Collateral/ADT7475-D.PDF
+> +  https://www.onsemi.com/pub/Collateral/ADT7476-D.PDF
+> +  https://www.onsemi.com/pub/Collateral/ADT7490-D.PDF
+> +
+> +  Description taken from omsemiconductors specification sheets, with minor
+
+omsemi?
+ ^
+
+> +  rephrasing.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - adi,adt7473
+> +      - adi,adt7475
+> +      - adi,adt7476
+> +      - adi,adt7490
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  bypass-attenuator-in0:
+
+Needs a vendor prefix and a type ref. 
+
+> +    description: |
+> +      Configures bypassing the individual voltage input
+> +      attenuator, on in0. This is supported on the ADT7476 and ADT7490.
+> +      If set to a non-zero integer the attenuator is bypassed, if set to
+> +      zero the attenuator is not bypassed. If the property is absent then
+> +      the config register is not modified.
+
+Sounds like this could be boolean? If not, define a schema for what are 
+valid values.
+
+> +    maxItems: 1
+> +
+> +  bypass-attenuator-in1:
+> +    description: |
+> +      Configures bypassing the individual voltage input
+> +      attenuator, on in1. This is supported on the ADT7473, ADT7475,
+> +      ADT7476 and ADT7490. If set to a non-zero integer the attenuator
+> +      is bypassed, if set to zero the attenuator is not bypassed. If the
+> +      property is absent then the config register is not modified.
+> +    maxItems: 1
+> +
+> +  bypass-attenuator-in3:
+> +    description: |
+> +      Configures bypassing the individual voltage input
+> +      attenuator, on in3. This is supported on the ADT7476 and ADT7490.
+> +      If set to a non-zero integer the attenuator is bypassed, if set to
+> +      zero the attenuator is not bypassed. If the property is absent then
+> +      the config register is not modified.
+> +    maxItems: 1
+> +
+> +  bypass-attenuator-in4:
+
+These 4 could be a single entry under patternProperties.
+
+
+> +    description: |
+> +      Configures bypassing the individual voltage input
+> +      attenuator, on in4. This is supported on the ADT7476 and ADT7490.
+> +      If set to a non-zero integer the attenuator is bypassed, if set to
+> +      zero the attenuator is not bypassed. If the property is absent then
+> +      the config register is not modified.
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      hwmon@2e {
+> +        compatible = "adi,adt7476";
+> +        reg = <0x2e>;
+> +        bypass-attenuator-in0 = <1>;
+> +        bypass-attenuator-in1 = <0>;
+> +      };
+> +    };
+> +...
+> -- 
+> 2.25.0
+> 
