@@ -1,68 +1,100 @@
-Return-Path: <SRS0=C7fg=3Q=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=yzLH=3R=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58FD6C47409
-	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Jan 2020 17:35:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A46AC33C9E
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Jan 2020 11:31:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 334EE207FD
-	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Jan 2020 17:35:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1580146521;
-	bh=EqnsXRKDVhCWAJpS5T31IP1ElgX8132PdDGv7p6eCg4=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:List-ID:From;
-	b=mmBdpPmyzngfwe0gunz+x2/+/SE+jxFGx8UKiNZo+gTLa9wOLTzzXpUdt02quq0LJ
-	 ifboDx6QrxQFRWxBpVpH49FwhExoim39WH2E3CRIynUUZKzj9vPqwxK4nJqKPJlHGr
-	 Unx80FdF3yXK3u1bP8GaLj+f4b6oMEzmkUklCNgE=
+	by mail.kernel.org (Postfix) with ESMTP id DC6D024681
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Jan 2020 11:31:57 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=yadro.com header.i=@yadro.com header.b="GWW/ZSow"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728782AbgA0RfU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 27 Jan 2020 12:35:20 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36212 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727215AbgA0RfE (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 27 Jan 2020 12:35:04 -0500
-Subject: Re: [GIT PULL] hwmon updates for v5.6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1580146504;
-        bh=EqnsXRKDVhCWAJpS5T31IP1ElgX8132PdDGv7p6eCg4=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=axKDw0AJgR5EDRaS/5u41KkkjAp46Mt04CqIRzekNbg/L+PAA2v1kQiPiHnA0bYwT
-         zq7yo03lzQ6hb2z1ZSD/dpa6s1NQHfp47sKbX97//EFEEd+zxs/tmbx+/UDEyfhxJq
-         qnaGI5Kk5BtTmizTDpvJoLVYOcvExNpPc4RUmlKE=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20200127005032.25447-1-linux@roeck-us.net>
-References: <20200127005032.25447-1-linux@roeck-us.net>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20200127005032.25447-1-linux@roeck-us.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
- hwmon-for-v5.6
-X-PR-Tracked-Commit-Id: fd8bdb23b91876ac1e624337bb88dc1dcc21d67e
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 35417d57efaaf06894868a2e8dfcd7b9f31bd0bf
-Message-Id: <158014650424.9177.13754819467074734167.pr-tracker-bot@kernel.org>
-Date:   Mon, 27 Jan 2020 17:35:04 +0000
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+        id S1725977AbgA1Lb5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 28 Jan 2020 06:31:57 -0500
+Received: from mta-02.yadro.com ([89.207.88.252]:45780 "EHLO mta-01.yadro.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725903AbgA1Lb5 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 28 Jan 2020 06:31:57 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id 12EAA464EF;
+        Tue, 28 Jan 2020 11:31:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        content-transfer-encoding:mime-version:user-agent:content-type
+        :content-type:organization:date:date:from:from:subject:subject
+        :message-id:received:received:received; s=mta-01; t=1580211114;
+         x=1582025515; bh=kNtMjE3vC+0DYD+Pb2uxNur78VcVYMeHBP9LyJFGWtY=; b=
+        GWW/ZSowr85oRGGu5NAd5kJcBGlS7UCxS4qYcqHFenUEpq9vMpDzDbi4ijEwda8H
+        +sGUJRiFAy+5aOr8coAfr63B9Tha0kC21LsJmzJN6FBBWfHQZ7qXrjY5hrWNy6RF
+        586fnTDLZBoM0Tma8p83yojR3PFXUcxGfCbOfSEAX08=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id t4NL9A0vtwcY; Tue, 28 Jan 2020 14:31:54 +0300 (MSK)
+Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id C0B2F464E4;
+        Tue, 28 Jan 2020 14:31:53 +0300 (MSK)
+Received: from localhost.localdomain (172.17.15.69) by
+ T-EXCH-02.corp.yadro.com (172.17.10.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.1.669.32; Tue, 28 Jan 2020 14:31:53 +0300
+Message-ID: <cb21d1285e04a8a7a3817398629431f69aeebf2f.camel@yadro.com>
+Subject: vcnl3020 hwmon/proximity driver
+From:   Ivan Mikhaylov <i.mikhaylov@yadro.com>
+CC:     Jonathan Cameron <jic23@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        <linux-hwmon@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Ivan Mikhaylov <i.mikhaylov@yadro.com>
+Date:   Tue, 28 Jan 2020 14:31:49 +0300
+Organization: YADRO
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.17.15.69]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-02.corp.yadro.com (172.17.10.102)
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The pull request you sent on Sun, 26 Jan 2020 16:50:32 -0800:
+Hello, I want to make driver for vcnl3020 but not sure where should I put it.
+It's similar to vcnl40xx series which is already in iio/light/vcnl4000.c
+but it perfectly fits with hwmon intrusion detection concept
+(intrusion[0-*]_alarm), so I'm a little bit confused.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.6
+vcnl3020 - proximity sensor which mostly using for intrusion detection
+vcnl4020 - light and proximity sensor
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/35417d57efaaf06894868a2e8dfcd7b9f31bd0bf
+Doc's links:
+https://www.vishay.com/docs/84150/vcnl3020.pdf
+https://www.vishay.com/docs/83476/vcnl4020.pdf
 
-Thank you!
+That's what I think about possible ways:
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+1. just iio/proximity/vcnl3020.c
+2. extend functionality inside vcnl4000.c with ifdefs and dts stuff and maybe
+   rename it with generalization inside
+3. hwmon driver for intrusion detection inside drivers/hwmon
+4. both iio/proximity/vcnl3020.c and hwmon/vcnl3020.c
+   Example: hwmon/wm8350-hwmon.c + mfd/wm8350-core.c
+   So, just make proximity driver, do the depend in Kconfig for hwmon driver
+   on proximity driver and use proximity driver calls if would be needed.
+
+Maybe there any other good ways to deal with it? I'd be prefer 4.
+
+Thanks.
+
