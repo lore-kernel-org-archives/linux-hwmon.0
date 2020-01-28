@@ -2,99 +2,110 @@ Return-Path: <SRS0=yzLH=3R=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A46AC33C9E
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Jan 2020 11:31:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E21E8C2D0DB
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Jan 2020 13:23:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DC6D024681
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Jan 2020 11:31:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B0EF524688
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Jan 2020 13:23:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=yadro.com header.i=@yadro.com header.b="GWW/ZSow"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ewsejym0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725977AbgA1Lb5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 28 Jan 2020 06:31:57 -0500
-Received: from mta-02.yadro.com ([89.207.88.252]:45780 "EHLO mta-01.yadro.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725903AbgA1Lb5 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 28 Jan 2020 06:31:57 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 12EAA464EF;
-        Tue, 28 Jan 2020 11:31:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        content-transfer-encoding:mime-version:user-agent:content-type
-        :content-type:organization:date:date:from:from:subject:subject
-        :message-id:received:received:received; s=mta-01; t=1580211114;
-         x=1582025515; bh=kNtMjE3vC+0DYD+Pb2uxNur78VcVYMeHBP9LyJFGWtY=; b=
-        GWW/ZSowr85oRGGu5NAd5kJcBGlS7UCxS4qYcqHFenUEpq9vMpDzDbi4ijEwda8H
-        +sGUJRiFAy+5aOr8coAfr63B9Tha0kC21LsJmzJN6FBBWfHQZ7qXrjY5hrWNy6RF
-        586fnTDLZBoM0Tma8p83yojR3PFXUcxGfCbOfSEAX08=
-X-Virus-Scanned: amavisd-new at yadro.com
-Received: from mta-01.yadro.com ([127.0.0.1])
-        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id t4NL9A0vtwcY; Tue, 28 Jan 2020 14:31:54 +0300 (MSK)
-Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id C0B2F464E4;
-        Tue, 28 Jan 2020 14:31:53 +0300 (MSK)
-Received: from localhost.localdomain (172.17.15.69) by
- T-EXCH-02.corp.yadro.com (172.17.10.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.669.32; Tue, 28 Jan 2020 14:31:53 +0300
-Message-ID: <cb21d1285e04a8a7a3817398629431f69aeebf2f.camel@yadro.com>
-Subject: vcnl3020 hwmon/proximity driver
-From:   Ivan Mikhaylov <i.mikhaylov@yadro.com>
-CC:     Jonathan Cameron <jic23@kernel.org>,
+        id S1725959AbgA1NXA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 28 Jan 2020 08:23:00 -0500
+Received: from mail-yw1-f68.google.com ([209.85.161.68]:43543 "EHLO
+        mail-yw1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725852AbgA1NXA (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 28 Jan 2020 08:23:00 -0500
+Received: by mail-yw1-f68.google.com with SMTP id v126so6445129ywc.10;
+        Tue, 28 Jan 2020 05:22:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=XkZYELoimGvZaAW5RBxWL7cGk2TFSREoOSfJlXIP9Vg=;
+        b=ewsejym0mCr1Ke8POn4UD4mjF5wH29knENLueIwwvPdcbt+amzwmgCS3Zi0IDJaq0B
+         yZfZF1/mznPPZOAxeL5C3Uw3ifQwUQh/pthk52IqTIUBdsuAVceDf9qzgBhuL6S3jtFh
+         cT/FmyCtooXdfCOtYUxgjm5KapidE9WeFVxsuhu2VvnkFQXUChV3F1lRtAnscstgTXhS
+         6J502JETrdA7ub9FfFGunvuYx7rSAs9MP/g/G1X0ofFynmPEdLp1TbKP+R0fMxm0lgI2
+         kc/7g5KrbU3aT/6i1/5Po7a4Jl6rOEgnWaP85W4hbywy8YHT9tZPMBGS7dRvkk0x6Zlo
+         Rhcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=XkZYELoimGvZaAW5RBxWL7cGk2TFSREoOSfJlXIP9Vg=;
+        b=NxVH6rdW1gjVzYONtdJQB47mP+nJQKrgwfXVMjNkYUo3LAhI2LTGQL1l1WlLR3kCMq
+         Y0bJJNwkNzaZDpfNdHg8x3TgxVpwIjv1zZL1aRVJ//sOoi1zETUt/L3jNq0uvmObr0ay
+         wEmwv2AaCzuCp52+sFn6Ls5iW8wyqGvTy7hSSg7UCndkxuaLqEdr4t6nLXaUNKZEHRMM
+         fSOFdsRTTTsJDzgRjsLqAtm8rqCQUNozY31wRJBvyVSZxE7WEZViFHBKvWSifTUp8Zey
+         ggte5YbV5DNvPoP8UaOE8ZUvaL+lgIlX7rrb/S69LO3ikiNPsRX7GHtUhaVaAqLCPsgS
+         LRsg==
+X-Gm-Message-State: APjAAAVU6WAJ77N2EIVnrIQAyl4HIMkHsQuubi1QfpqtRRWgSRUPrpD5
+        UsbMUrQ4pd/2noPmc0Qr4oAhQKhr
+X-Google-Smtp-Source: APXvYqwUR5d09oL3MsIocx1dJ/ALYSnzLGEzt90SxTJDw3vrlpABD1JdKOJR+9gyt9+3SAPBZ4Kh4Q==
+X-Received: by 2002:a81:1889:: with SMTP id 131mr14998832ywy.277.1580217778469;
+        Tue, 28 Jan 2020 05:22:58 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9sm8364217ywh.55.2020.01.28.05.22.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Jan 2020 05:22:57 -0800 (PST)
+Subject: Re: vcnl3020 hwmon/proximity driver
+To:     Ivan Mikhaylov <i.mikhaylov@yadro.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
         Hartmut Knaack <knaack.h@gmx.de>,
         Lars-Peter Clausen <lars@metafoo.de>,
         Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        <linux-hwmon@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Ivan Mikhaylov <i.mikhaylov@yadro.com>
-Date:   Tue, 28 Jan 2020 14:31:49 +0300
-Organization: YADRO
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cb21d1285e04a8a7a3817398629431f69aeebf2f.camel@yadro.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <0e2f88e3-b7d3-9dd2-50ce-011be09d53c9@roeck-us.net>
+Date:   Tue, 28 Jan 2020 05:22:55 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
+In-Reply-To: <cb21d1285e04a8a7a3817398629431f69aeebf2f.camel@yadro.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.17.15.69]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-02.corp.yadro.com (172.17.10.102)
-To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hello, I want to make driver for vcnl3020 but not sure where should I put it.
-It's similar to vcnl40xx series which is already in iio/light/vcnl4000.c
-but it perfectly fits with hwmon intrusion detection concept
-(intrusion[0-*]_alarm), so I'm a little bit confused.
+On 1/28/20 3:31 AM, Ivan Mikhaylov wrote:
+> Hello, I want to make driver for vcnl3020 but not sure where should I put it.
+> It's similar to vcnl40xx series which is already in iio/light/vcnl4000.c
+> but it perfectly fits with hwmon intrusion detection concept
+> (intrusion[0-*]_alarm), so I'm a little bit confused.
+> 
+> vcnl3020 - proximity sensor which mostly using for intrusion detection
+> vcnl4020 - light and proximity sensor
+> 
+> Doc's links:
+> https://www.vishay.com/docs/84150/vcnl3020.pdf
+> https://www.vishay.com/docs/83476/vcnl4020.pdf
+> 
+> That's what I think about possible ways:
+> 
+> 1. just iio/proximity/vcnl3020.c
+> 2. extend functionality inside vcnl4000.c with ifdefs and dts stuff and maybe
+>     rename it with generalization inside
+> 3. hwmon driver for intrusion detection inside drivers/hwmon
+> 4. both iio/proximity/vcnl3020.c and hwmon/vcnl3020.c
+>     Example: hwmon/wm8350-hwmon.c + mfd/wm8350-core.c
+>     So, just make proximity driver, do the depend in Kconfig for hwmon driver
+>     on proximity driver and use proximity driver calls if would be needed.
+> 
 
-vcnl3020 - proximity sensor which mostly using for intrusion detection
-vcnl4020 - light and proximity sensor
+"intrusion" in the context of hardware monitoring is for chassis intrusion,
+not for intrusion into an area. This driver should reside in iio.
 
-Doc's links:
-https://www.vishay.com/docs/84150/vcnl3020.pdf
-https://www.vishay.com/docs/83476/vcnl4020.pdf
-
-That's what I think about possible ways:
-
-1. just iio/proximity/vcnl3020.c
-2. extend functionality inside vcnl4000.c with ifdefs and dts stuff and maybe
-   rename it with generalization inside
-3. hwmon driver for intrusion detection inside drivers/hwmon
-4. both iio/proximity/vcnl3020.c and hwmon/vcnl3020.c
-   Example: hwmon/wm8350-hwmon.c + mfd/wm8350-core.c
-   So, just make proximity driver, do the depend in Kconfig for hwmon driver
-   on proximity driver and use proximity driver calls if would be needed.
-
-Maybe there any other good ways to deal with it? I'd be prefer 4.
-
-Thanks.
-
+Thanks,
+Guenter
