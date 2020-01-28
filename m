@@ -2,137 +2,69 @@ Return-Path: <SRS0=yzLH=3R=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7656C2D0DB
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Jan 2020 16:28:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FD20C2D0DB
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Jan 2020 18:10:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B684120CC7
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Jan 2020 16:28:29 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rJxO2RNL"
+	by mail.kernel.org (Postfix) with ESMTP id DCA2B214AF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Jan 2020 18:10:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726107AbgA1Q23 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 28 Jan 2020 11:28:29 -0500
-Received: from mail-yb1-f193.google.com ([209.85.219.193]:35098 "EHLO
-        mail-yb1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726007AbgA1Q23 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 28 Jan 2020 11:28:29 -0500
-Received: by mail-yb1-f193.google.com with SMTP id q190so7015937ybq.2;
-        Tue, 28 Jan 2020 08:28:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=vWO3OeAiXfzyZ72erBieMqPl2Y7Lzm8L2Ifg8da5JF8=;
-        b=rJxO2RNLPTuUjUV6vNl6RrKOgkIULVcpTeDb5UXy1n8sg8ySQOc7Za1RqxjYEtOpy1
-         l+YKLwRyZRo1Kd7LIQ8FZMv93PL8prVs6LIDHAg1t61cwz2VS7EyOosBZV6B5eIW5cKq
-         xZRz8k11atcP+qHTnO3OvcRwvEh4TPOV1J8cyA1QJJvTeV5uhSM3uNZ87nKXZrFH8jOI
-         bI1mZ7X/4qahrKdpYcNVWVbZs+l7XApPPHhUvBsoTSdKD72z6j+uxRi6zgcYcv73lgGl
-         8I5oIF0yYsh7MdHdHvpykJhyPEaK6gY5ewYAZg+oqxfyUYXFIguooTwo/A4c731Lkpo2
-         3jBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=vWO3OeAiXfzyZ72erBieMqPl2Y7Lzm8L2Ifg8da5JF8=;
-        b=QcW9gXzKCpESzobklb/s4t/LV+2CGrxxR9eKVwOrNl2diaDxee70pp45hbstQd/mHR
-         TDBNBsZPHukxugYDz4W+JXaOqoetjoviWofuOsQlyDUOoCKMe990qJtW009oSkjT84p+
-         UomL0u2m2wvjicVsEBXAn7xWZfUEyitolHxbm7GaCXsXjUF7NVbcoFFaQ6u7yoLD/mty
-         qJcI1pgtpBuLi1/8qtJhM24uXB1hmyDFVkvoyCm4Hguj/UjqzlzX+YuQxxnuk+Fqfr1s
-         LPBXRXZBr4covhEv/s4LsatzIFfYT/V/Aj7hmx24ZTikl+Mc4mHgO0/R9WUAuG7XqUCY
-         fM0w==
-X-Gm-Message-State: APjAAAXKUIRGSlGD4VpbcOPRK+P0VXzTG36zmF9/TDe63EuDllCYiWFn
-        jKePbYinYsHWJ5x4bJKuXdI=
-X-Google-Smtp-Source: APXvYqzOLkzHKv5oWgTQCM3ZnUJPrHo2htc+ZoRkBhlHJpbO8trg30c+OjsJHmcvIDqswrYLDhvi5Q==
-X-Received: by 2002:a25:420c:: with SMTP id p12mr18270892yba.86.1580228907943;
-        Tue, 28 Jan 2020 08:28:27 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x131sm662380ywd.54.2020.01.28.08.28.26
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 28 Jan 2020 08:28:27 -0800 (PST)
-Date:   Tue, 28 Jan 2020 08:28:25 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Ivan Mikhaylov <i.mikhaylov@yadro.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: vcnl3020 hwmon/proximity driver
-Message-ID: <20200128162825.GA3322@roeck-us.net>
-References: <cb21d1285e04a8a7a3817398629431f69aeebf2f.camel@yadro.com>
- <0e2f88e3-b7d3-9dd2-50ce-011be09d53c9@roeck-us.net>
- <347fa610ef61d311486fa9eed66be3a4243a4459.camel@yadro.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <347fa610ef61d311486fa9eed66be3a4243a4459.camel@yadro.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        id S1726257AbgA1SKE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 28 Jan 2020 13:10:04 -0500
+Received: from [65.157.77.67] ([65.157.77.67]:62512 "HELO ubuntu.localdomain"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with SMTP
+        id S1726276AbgA1SKE (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 28 Jan 2020 13:10:04 -0500
+X-Greylist: delayed 567 seconds by postgrey-1.27 at vger.kernel.org; Tue, 28 Jan 2020 13:09:53 EST
+Received: by ubuntu.localdomain (Postfix, from userid 1000)
+        id 2FE37465314; Tue, 28 Jan 2020 11:00:36 -0700 (MST)
+From:   Mike Jones <michael-a1.jones@analog.com>
+To:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     linux@roeck-us.net, jdelvare@suse.com, robh+dt@kernel.org,
+        corbet@lwn.net, Mike Jones <michael-a1.jones@analog.com>
+Subject: [PATCH 2/3] hwmon: (pmbus/ltc2978): Fix PMBus polling of MFR_COMMON definitions.
+Date:   Tue, 28 Jan 2020 10:59:59 -0700
+Message-Id: <1580234400-2829-2-git-send-email-michael-a1.jones@analog.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1580234400-2829-1-git-send-email-michael-a1.jones@analog.com>
+References: <1580234400-2829-1-git-send-email-michael-a1.jones@analog.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jan 28, 2020 at 06:31:55PM +0300, Ivan Mikhaylov wrote:
-> On Tue, 2020-01-28 at 05:22 -0800, Guenter Roeck wrote:
-> > On 1/28/20 3:31 AM, Ivan Mikhaylov wrote:
-> > > Hello, I want to make driver for vcnl3020 but not sure where should I put
-> > > it.
-> > > It's similar to vcnl40xx series which is already in iio/light/vcnl4000.c
-> > > but it perfectly fits with hwmon intrusion detection concept
-> > > (intrusion[0-*]_alarm), so I'm a little bit confused.
-> > > 
-> > > vcnl3020 - proximity sensor which mostly using for intrusion detection
-> > > vcnl4020 - light and proximity sensor
-> > > 
-> > > Doc's links:
-> > > https://www.vishay.com/docs/84150/vcnl3020.pdf
-> > > https://www.vishay.com/docs/83476/vcnl4020.pdf
-> > > 
-> > > That's what I think about possible ways:
-> > > 
-> > > 1. just iio/proximity/vcnl3020.c
-> > > 2. extend functionality inside vcnl4000.c with ifdefs and dts stuff and
-> > > maybe
-> > >     rename it with generalization inside
-> > > 3. hwmon driver for intrusion detection inside drivers/hwmon
-> > > 4. both iio/proximity/vcnl3020.c and hwmon/vcnl3020.c
-> > >     Example: hwmon/wm8350-hwmon.c + mfd/wm8350-core.c
-> > >     So, just make proximity driver, do the depend in Kconfig for hwmon
-> > > driver
-> > >     on proximity driver and use proximity driver calls if would be needed.
-> > > 
-> > 
-> > "intrusion" in the context of hardware monitoring is for chassis intrusion,
-> > not for intrusion into an area. This driver should reside in iio.
-> > 
-> > Thanks,
-> > Guenter
-> 
-> Guenter,
-> that's what I meant about intrusion, sorry for being inaccurate. This proximity
-> sensor can be used as chassis intrusion detector, that's why I mentioned about
-> hwmon and possible interface for such thing.
-> 
+Change 21537dc driver PMBus polling of MFR_COMMON from bits 5/4 to
+bits 6/5. This fixs a LTC297X family bug where polling always returns
+not busy even when the part is busy. This fixes a LTC388X and
+LTM467X bug where polling used PEND and NOT_IN_TRANS, and BUSY was
+not polled, which can lead to NACKing of commands. LTC388X and
+LTM467X modules now poll BUSY and PEND, increasing reliability by
+eliminating NACKing of commands.
 
-This is most definitely not a common use case for such a chip. Similar,
-one might argue that a light sensor could be used for chassis intrusion
-detection, or a movement sensor (after all, moving a chassis could be
-considered "intrusion", especially if it is a server chassis). Sure,
-technically one can use pretty much anything for "intrusion detection",
-but it is hard to imagine this as actual use case. This is made worse by
-the need for calibration - one would need to be able to determine what
-exactly defines "intrusion", and that would have to be chassis or even
-board specific and can not be hardcoded. This is way out of scope for
-a hardware monitoring driver.
+Signed-off-by: Mike Jones <michael-a1.jones@analog.com>
+---
+ drivers/hwmon/pmbus/ltc2978.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-If you indeed choose such an approach in your company's systems, please
-use an iio driver.
+diff --git a/drivers/hwmon/pmbus/ltc2978.c b/drivers/hwmon/pmbus/ltc2978.c
+index f01f488..a91ed01 100644
+--- a/drivers/hwmon/pmbus/ltc2978.c
++++ b/drivers/hwmon/pmbus/ltc2978.c
+@@ -82,8 +82,8 @@ enum chips { ltc2974, ltc2975, ltc2977, ltc2978, ltc2980, ltc3880, ltc3882,
+ 
+ #define LTC_POLL_TIMEOUT		100	/* in milli-seconds */
+ 
+-#define LTC_NOT_BUSY			BIT(5)
+-#define LTC_NOT_PENDING			BIT(4)
++#define LTC_NOT_BUSY			BIT(6)
++#define LTC_NOT_PENDING			BIT(5)
+ 
+ /*
+  * LTC2978 clears peak data whenever the CLEAR_FAULTS command is executed, which
+-- 
+2.7.4
 
-Thanks,
-Guenter
