@@ -2,88 +2,104 @@ Return-Path: <SRS0=52eC=3S=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1481BC2D0DB
-	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Jan 2020 15:08:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB375C35240
+	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Jan 2020 17:27:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D9B7D20716
-	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Jan 2020 15:08:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8508A20720
+	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Jan 2020 17:27:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1580318867;
+	bh=8s9VvgE+3sDB2RdmAB7O5W3I5IDKHZgTxCsErqXZhSM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=s7ZOHSVSOJkPXkzgxpGF8Fk8RvldnamVMQ6sFKuZnFkyUWk8+frD1EYhLzjR5Vofu
+	 r9koLsSNcb7MCPVflrQ7yzdJBiuvVgu89MLuZnr6vrsrgUz5fRa4ntyH2GUp4/z01U
+	 UPXeafqvUpa21CMIy+wxYcLClE5CTSqIkByy61zk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726851AbgA2PIu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 29 Jan 2020 10:08:50 -0500
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:38901 "EHLO
-        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726840AbgA2PIu (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 29 Jan 2020 10:08:50 -0500
-Received: by mail-ed1-f68.google.com with SMTP id p23so79528edr.5
-        for <linux-hwmon@vger.kernel.org>; Wed, 29 Jan 2020 07:08:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=IBRHZCsjL/cdpH2kvC5t0YTEqXst7ZbeMIG5t22O534=;
-        b=sOSVId3n7bITr3tyBcQd9bMCm9LDmtqWXgXaqaFZK4eSgWht5AG5V8MXdy+QHzLaD/
-         wyertrOmPQSiJgIGrrTfd6VEHW+5UfdPxr/Z8S+ffDrmuSBy1aMbIAPRFc5ErocBtreO
-         4LiXdp0Siwb5z2AQaVgvq/WzVywOVmJIgyb44M4eACV5a0QYP+rCh4R1n1Nwgtkwv5dR
-         d1R0xv/R7VNQuHy+Pet6rIC1+A1IBo2z/aNbNBThLpGHIbPuxpeDPrKjv3bdJ6I6+XCW
-         b88ZXJthDegM31UPFKwJJgePBb2hSB9MNYhg0X3Ri4zsvWLAQiPUQEq88W0pQCLf4m7n
-         GO0A==
-X-Gm-Message-State: APjAAAUsNXqxB6c+FEBbmP5M7aQrzJymgzrSQ/R5wDOHqODQzbA20ORS
-        itwwsduFxoAqU73+/oB63f9+3VarnIVYzg==
-X-Google-Smtp-Source: APXvYqwJgKmuvGeTvZFI0aNfvSTjTnukYhU9CumE9q4Ae6AUOxAXuGfXLMcbvzAsUflGeFkydmB+ww==
-X-Received: by 2002:aa7:d1cf:: with SMTP id g15mr8348919edp.301.1580310528752;
-        Wed, 29 Jan 2020 07:08:48 -0800 (PST)
-Received: from localhost ([2001:470:1f15:8d0:a512:349:7724:8528])
-        by smtp.gmail.com with ESMTPSA id x10sm372934ejf.77.2020.01.29.07.08.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jan 2020 07:08:48 -0800 (PST)
-From:   Haochen Tong <i@hexchain.org>
-To:     pali.rohar@gmail.com, linux-hwmon@vger.kernel.org
-Cc:     jdelvare@suse.com, linux@roeck-us.net,
-        Haochen Tong <i@hexchain.org>
-Subject: [PATCH 2/2] dell-smm-hwmon: add XPS 13 9360 to fan control whitelist
-Date:   Wed, 29 Jan 2020 16:08:39 +0100
-Message-Id: <20200129150839.122689-3-i@hexchain.org>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200129150839.122689-1-i@hexchain.org>
-References: <20200129150839.122689-1-i@hexchain.org>
+        id S1726679AbgA2R1r (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 29 Jan 2020 12:27:47 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57464 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726851AbgA2R1r (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 29 Jan 2020 12:27:47 -0500
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 465ED20720;
+        Wed, 29 Jan 2020 17:27:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1580318866;
+        bh=8s9VvgE+3sDB2RdmAB7O5W3I5IDKHZgTxCsErqXZhSM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=10ezr15e4EFnIdqZW3oP3Fqkl8gaag+UDlzQcWWc9Je+DARdUBDAsXI4v2SXhoUp5
+         LrVg9YF/freePCz8tzsVEpWkernmrMuqyB5Yfxirq1OeT9lryAb0pxZR78BiJP279D
+         fhWJQ4Ltupl/CbKr3yoP0B8hmPlcf8xrxJz+CQqI=
+Received: by mail-qv1-f41.google.com with SMTP id dc14so38080qvb.9;
+        Wed, 29 Jan 2020 09:27:46 -0800 (PST)
+X-Gm-Message-State: APjAAAXIYkT6EiNBtpUiohBBhP9DW96aSjThq3sx2te54WnHYGux6J3F
+        qE54qpd4GGq0LrClBNtEXVBeoah+MiCS7Vk4ew==
+X-Google-Smtp-Source: APXvYqy7lz7tcOm3C7BBm+WdIc/S57kCUzAVoum0xd24HnI2yv7y4cWPvvqJoSeKtCptCj9v2G0XNP4qKg8IdftRxfU=
+X-Received: by 2002:a0c:f68f:: with SMTP id p15mr42024qvn.79.1580318865421;
+ Wed, 29 Jan 2020 09:27:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200126221014.2978-1-logan.shaw@alliedtelesis.co.nz>
+ <20200126221014.2978-3-logan.shaw@alliedtelesis.co.nz> <20200127154800.GA7023@bogus>
+ <b1d669567b5f9f00dfb5d6dab89262f68c5523f1.camel@alliedtelesis.co.nz>
+In-Reply-To: <b1d669567b5f9f00dfb5d6dab89262f68c5523f1.camel@alliedtelesis.co.nz>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 29 Jan 2020 11:27:33 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+UZvX-Avz7mA=RmhNU3hjKd2se1KODfGt9dfdbn_ACKQ@mail.gmail.com>
+Message-ID: <CAL_Jsq+UZvX-Avz7mA=RmhNU3hjKd2se1KODfGt9dfdbn_ACKQ@mail.gmail.com>
+Subject: Re: [PATCH v6 2/2] dt-bindings: hwmon: (adt7475) Added missing
+ adt7475 documentation
+To:     Logan Shaw <Logan.Shaw@alliedtelesis.co.nz>
+Cc:     "linux@roeck-us.net" <linux@roeck-us.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Joshua Scott <Joshua.Scott@alliedtelesis.co.nz>,
+        Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Tests have shown that fan control works fine on XPS 13 9360.
+On Tue, Jan 28, 2020 at 10:30 PM Logan Shaw
+<Logan.Shaw@alliedtelesis.co.nz> wrote:
+>
+> On Mon, 2020-01-27 at 09:48 -0600, Rob Herring wrote:
+> > On Mon, Jan 27, 2020 at 11:10:14AM +1300, Logan Shaw wrote:
+> > > Added a new file documenting the adt7475 devicetree and added the
+> > > four
+> > > new properties to it.
+> > >
+> > > Signed-off-by: Logan Shaw <logan.shaw@alliedtelesis.co.nz>
+> > > ---
 
-Signed-off-by: Haochen Tong <i@hexchain.org>
----
- drivers/hwmon/dell-smm-hwmon.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+> > > +  bypass-attenuator-in0:
+> >
+> > Needs a vendor prefix and a type ref.
+>
+> Adi (Analog Devices) sold the ADT product line (amongst other things)
+> to On Semiconductor. As changing the vendor of these chips (in code)
+> would break backwards compatibility should we keep the vendor as adi?
 
-diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-index d9f6394c08d6..f20a7ea050e1 100644
---- a/drivers/hwmon/dell-smm-hwmon.c
-+++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -1225,6 +1225,14 @@ static struct dmi_system_id i8k_whitelist_fan_control[] __initdata = {
- 		},
- 		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
- 	},
-+	{
-+		.ident = "Dell XPS 13 9360",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-+			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "XPS 13 9360"),
-+		},
-+		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
-+	},
- 	{ }
- };
- 
--- 
-2.25.0
+Yes. It should match what's used in the compatible string(s).
 
+> To confirm, would this make the property "adi,adt7476,bypass-
+> attenuator-in0"?
+>
+> So used in conjunction with patternProperties you would end up with
+> something like:
+>
+> "adi,(adt7473|adt7475|adt7476|adt7490),bypass-attenuator-in[0134]"
+
+No for the part #'s. Just add 'adi,'. Maybe you thought for type ref
+that's what I meant? A type ref is:
+
+$ref: /schemas/types.yaml#/definitions/uint32
