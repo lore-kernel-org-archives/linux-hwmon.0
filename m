@@ -6,37 +6,37 @@ X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39BA7C35247
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53E34C3524D
 	for <linux-hwmon@archiver.kernel.org>; Tue,  4 Feb 2020 19:40:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 057CD2087E
+	by mail.kernel.org (Postfix) with ESMTP id 2FF142166E
 	for <linux-hwmon@archiver.kernel.org>; Tue,  4 Feb 2020 19:40:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727423AbgBDTkf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S1727443AbgBDTkf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Tue, 4 Feb 2020 14:40:35 -0500
-Received: from mga06.intel.com ([134.134.136.31]:60214 "EHLO mga06.intel.com"
+Received: from mga01.intel.com ([192.55.52.88]:7966 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727382AbgBDTkf (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        id S1727385AbgBDTkf (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
         Tue, 4 Feb 2020 14:40:35 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Feb 2020 11:40:35 -0800
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Feb 2020 11:40:35 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.70,402,1574150400"; 
-   d="scan'208";a="311146077"
+   d="scan'208";a="342183841"
 Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 04 Feb 2020 11:40:34 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 04 Feb 2020 11:40:33 -0800
 Received: from kbuild by lkp-server01 with local (Exim 4.89)
         (envelope-from <lkp@intel.com>)
-        id 1iz43l-0002Bo-Fd; Wed, 05 Feb 2020 03:40:33 +0800
-Date:   Wed, 05 Feb 2020 03:40:01 +0800
+        id 1iz43l-0002Bc-EF; Wed, 05 Feb 2020 03:40:33 +0800
+Date:   Wed, 05 Feb 2020 03:39:39 +0800
 From:   kbuild test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:master] BUILD SUCCESS
- 54deefc4308592725b5b471f21254ff4ceca2479
-Message-ID: <5e39c891.xhNUBnyrDL1b7plR%lkp@intel.com>
+Subject: [hwmon:hwmon] BUILD SUCCESS
+ 7fee59f207819f1a57a66c176f81fc966d6e4f01
+Message-ID: <5e39c87b.vcUPKNxqYip2Cn5F%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -46,24 +46,24 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  master
-branch HEAD: 54deefc4308592725b5b471f21254ff4ceca2479  ARM: dts: aspeed: tacoma: Enable eMMC controller
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon
+branch HEAD: 7fee59f207819f1a57a66c176f81fc966d6e4f01  hwmon: (pmbus/ltc2978) Fix PMBus polling of MFR_COMMON definitions.
 
-elapsed time: 2884m
+elapsed time: 2883m
 
-configs tested: 186
-configs skipped: 142
+configs tested: 191
+configs skipped: 1
 
 The following configs have been built successfully.
 More configs may be tested in the coming days.
 
 arm                              allmodconfig
-arm                         at91_dt_defconfig
-arm                        multi_v5_defconfig
-arm                              allyesconfig
 arm                               allnoconfig
+arm                              allyesconfig
+arm                         at91_dt_defconfig
 arm                           efm32_defconfig
 arm                          exynos_defconfig
+arm                        multi_v5_defconfig
 arm                        multi_v7_defconfig
 arm                        shmobile_defconfig
 arm                           sunxi_defconfig
@@ -72,6 +72,7 @@ arm64                             allnoconfig
 arm64                            allyesconfig
 arm64                               defconfig
 sparc                            allyesconfig
+openrisc                    or1ksim_defconfig
 riscv                            allyesconfig
 riscv                          rv32_defconfig
 alpha                               defconfig
@@ -80,7 +81,6 @@ s390                          debug_defconfig
 xtensa                          iss_defconfig
 ia64                             alldefconfig
 microblaze                      mmu_defconfig
-openrisc                    or1ksim_defconfig
 i386                             alldefconfig
 i386                              allnoconfig
 i386                             allyesconfig
@@ -142,15 +142,20 @@ parisc               randconfig-a001-20200203
 riscv                randconfig-a001-20200203
 alpha                randconfig-a001-20200202
 m68k                 randconfig-a001-20200202
-mips                 randconfig-a001-20200202
 nds32                randconfig-a001-20200202
 parisc               randconfig-a001-20200202
 riscv                randconfig-a001-20200202
-csky                 randconfig-a001-20200202
-openrisc             randconfig-a001-20200202
-s390                 randconfig-a001-20200202
+mips                 randconfig-a001-20200202
+c6x                  randconfig-a001-20200203
+h8300                randconfig-a001-20200203
+microblaze           randconfig-a001-20200203
+nios2                randconfig-a001-20200203
+sparc64              randconfig-a001-20200203
 sh                   randconfig-a001-20200202
+s390                 randconfig-a001-20200202
+csky                 randconfig-a001-20200202
 xtensa               randconfig-a001-20200202
+openrisc             randconfig-a001-20200202
 csky                 randconfig-a001-20200203
 openrisc             randconfig-a001-20200203
 s390                 randconfig-a001-20200203
@@ -204,13 +209,13 @@ x86_64               randconfig-h003-20200202
 i386                 randconfig-h001-20200202
 i386                 randconfig-h002-20200202
 i386                 randconfig-h003-20200202
-arc                  randconfig-a001-20200203
-arm                  randconfig-a001-20200203
-arm64                randconfig-a001-20200203
 ia64                 randconfig-a001-20200203
+arm                  randconfig-a001-20200203
+arc                  randconfig-a001-20200203
+arm64                randconfig-a001-20200203
 powerpc              randconfig-a001-20200203
-arm                  randconfig-a001-20200202
 arc                  randconfig-a001-20200202
+arm                  randconfig-a001-20200202
 arm64                randconfig-a001-20200202
 ia64                 randconfig-a001-20200202
 powerpc              randconfig-a001-20200202
@@ -230,16 +235,16 @@ sh                          rsk7269_defconfig
 sh                  sh7785lcr_32bit_defconfig
 sh                            titan_defconfig
 sparc                               defconfig
-sparc64                          allmodconfig
 sparc64                           allnoconfig
-sparc64                          allyesconfig
 sparc64                             defconfig
+sparc64                          allmodconfig
+sparc64                          allyesconfig
 um                                  defconfig
 um                             i386_defconfig
 um                           x86_64_defconfig
+x86_64                              fedora-25
 x86_64                                  kexec
 x86_64                                    lkp
-x86_64                              fedora-25
 x86_64                                   rhel
 x86_64                         rhel-7.2-clear
 x86_64                               rhel-7.6
