@@ -1,139 +1,101 @@
-Return-Path: <SRS0=RmMb=3X=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=BD+L=3Y=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 089B8C3524D
-	for <linux-hwmon@archiver.kernel.org>; Mon,  3 Feb 2020 08:45:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D76C5C3524A
+	for <linux-hwmon@archiver.kernel.org>; Tue,  4 Feb 2020 08:06:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C55B720661
-	for <linux-hwmon@archiver.kernel.org>; Mon,  3 Feb 2020 08:45:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A4CD12087E
+	for <linux-hwmon@archiver.kernel.org>; Tue,  4 Feb 2020 08:06:57 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="ZvzboCB2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UaE+b8dV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727351AbgBCIpu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 3 Feb 2020 03:45:50 -0500
-Received: from userp2120.oracle.com ([156.151.31.85]:48960 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726410AbgBCIpu (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 3 Feb 2020 03:45:50 -0500
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 0138i4FR080648;
-        Mon, 3 Feb 2020 08:45:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2019-08-05;
- bh=fIhpZirZgu6aMl7Kj1J3qlPjpRzEKdEd+Vb72LMfALQ=;
- b=ZvzboCB2Q7087B/bzg+idr/unHVFtbVOjCUKsHPqxEj2DO+R6gVRlFfZAZyZaal/smbm
- K0Wa0E1pNQPVkWY4KtZdG99TRHfBxC4Xk29s0fQzfqSJb7TUBCAQsmZhee0Zr4KflFyr
- H2Ce60l2gj65tZrdMJgDRN1eb65hUsZEKeLse7jmcGGVhDygwdCN5CJkznsf6Glwqx6v
- /dU9ALw1BfNjbiX7mXpje9/+YYTcSKBhPuspPSe8hmOWzrm12hwrYAZYXePV+OF5ZJIS
- 547tGWH66TLzBi5z3MfX7AU8mQXnldPId9k2KU0FKAuo7eZM33Omwp3UP3ioRw002QNK WA== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2120.oracle.com with ESMTP id 2xwyg9ad8u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 03 Feb 2020 08:45:30 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 0138iE3k123754;
-        Mon, 3 Feb 2020 08:45:29 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3030.oracle.com with ESMTP id 2xwjt3c7hu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 03 Feb 2020 08:45:29 +0000
-Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0138jSr5006893;
-        Mon, 3 Feb 2020 08:45:28 GMT
-Received: from kadam (/41.210.143.134)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 03 Feb 2020 00:45:28 -0800
-Date:   Mon, 3 Feb 2020 11:45:22 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     kbuild@lists.01.org, Guenter Roeck <linux@roeck-us.net>
-Cc:     kbuild-all@lists.01.org, linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon-playground 6/16] drivers/hwmon/pmbus/pmbus_core.c:174
- pmbus_set_page() warn: this array is probably non-NULL. 'data->info->phases'
-Message-ID: <20200203084521.GI11068@kadam>
+        id S1727129AbgBDIG5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 4 Feb 2020 03:06:57 -0500
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:39506 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727127AbgBDIG5 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 4 Feb 2020 03:06:57 -0500
+Received: by mail-wm1-f67.google.com with SMTP id c84so2288450wme.4
+        for <linux-hwmon@vger.kernel.org>; Tue, 04 Feb 2020 00:06:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=RTEOWP+xe8TUPuYEAOrJ9gQCtbYNgXT2+1bMgsB1ISA=;
+        b=UaE+b8dV0NZYV994SfQTg2EGqtQACVtCB7OhWTVdbkgUjNwxy8lCsf8Tg1HUcJ1CVB
+         urkCm1xbbjndloHsuCegoR006jGZJp79K/PK6MNLT1b2+kxJ2jozX8W5KWY/GFlwUmH/
+         XntdXcK/lBI3MHVf0T3GRKMWzoaXMN4fOVXoOpck7cxxOkKCt/b3BPhsbVGgGG6B96dJ
+         oZu91igNIPkclOtTtib2m9WT30rNKR9JBb0xhdy/RyB9dz0EDvFCg2TXq4aVuj9vjLLi
+         uLgn4dLl89ktFFUpaJMp/N1cjLoSCBKCCDvFo0XkEvnglzbFDDQEDYtJhYHnwvFStw8r
+         rTvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=RTEOWP+xe8TUPuYEAOrJ9gQCtbYNgXT2+1bMgsB1ISA=;
+        b=laxseJBLgrIDIZcKmW4pg56/tPnnd6lPySHTSDKaqOTQ5JC4R0SkUWBBEb6m4WpPPB
+         1XXNRm52T6qNDNBaWbOQEUQ8ShpwPVTJyJL5Op7giCARU4tCer4WDaqePQSUtrHxolGI
+         1rdhfFeXOn5G+jmAdfnpWO6w5+ddbOl37V1ImjDRKfjC2bvq+7m5AlO88XxPKzVL+MdC
+         lbOGI/W78ILyH5mBY8Gvbx2mQ4vR4YZpTBTqu4GW1Jeu7Hjp9sJuYbEMJCwuShrO85nI
+         OB+mZz0pCpxCcXT/hVSF3tlde5pZqGc/SZeDDXI7NVQnKppBtj1s3I2VVao2iHk78l/i
+         AcYw==
+X-Gm-Message-State: APjAAAVTeb0v774pqkYsZmNQVc6JHkNBD8JmaKg+6NiQY/4JHid3o0A9
+        CQnwZURj2HC4VPS2nulTA6U=
+X-Google-Smtp-Source: APXvYqyxPrK5npeEOZYRRRW5pxGyqbIu5GZlOtz1sD6xVKL94KtgYClwytb/9srmmJfXWefkffz9mw==
+X-Received: by 2002:a05:600c:149:: with SMTP id w9mr3956690wmm.132.1580803613675;
+        Tue, 04 Feb 2020 00:06:53 -0800 (PST)
+Received: from pali ([2a02:2b88:2:1::5cc6:2f])
+        by smtp.gmail.com with ESMTPSA id v17sm28546566wrt.91.2020.02.04.00.06.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Feb 2020 00:06:53 -0800 (PST)
+Date:   Tue, 4 Feb 2020 09:06:52 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali.rohar@gmail.com>
+To:     Haochen Tong <i@hexchain.org>
+Cc:     linux-hwmon@vger.kernel.org, jdelvare@suse.com, linux@roeck-us.net
+Subject: Re: [PATCH v2 0/2] dell-smm-hwmon: Add XPS 13 9360 to supported
+ devices list
+Message-ID: <20200204080652.awdiu7qbkzu3kvpj@pali>
+References: <20200202233151.1840067-1-i@hexchain.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9519 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-2002030070
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9519 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-2002030070
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200202233151.1840067-1-i@hexchain.org>
+User-Agent: NeoMutt/20180716
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-playground
-head:   b6b911a2f7d675c768f19e75ba2e8ed216fce65a
-commit: 17e064db5aa2cfbfd254c0951544f88b2b1258ee [6/16] hwmon: (pmbus) Implement multi-phase support
+On Monday 03 February 2020 00:31:49 Haochen Tong wrote:
+> This patch adds Dell XPS 13 9360 to supported devices list in
+> dell-smm-hwmon.
+> 
+> I have tested this on one such device and verified that the fan speed is
+> correctly reported, and can be controlled through pwm1{,_enable}.
+> 
+> Haochen Tong (2):
+>   dell-smm-hwmon: add XPS 13 9360 to supported devices list
+>   dell-smm-hwmon: add XPS 13 9360 to fan control whitelist
+> 
+>  drivers/hwmon/dell-smm-hwmon.c | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+> 
+> 
+> base-commit: 46d6b7becb1d5a8e697db786590c19e4067a975a
 
-If you fix the issue, kindly add following tag
-Reported-by: kbuild test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Hello, both patches now look good, you can add my:
 
-smatch warnings:
-drivers/hwmon/pmbus/pmbus_core.c:174 pmbus_set_page() warn: this array is non-NULL. 'data->info->phases'
+Reviewed-by: Pali Rohár <pali.rohar@gmail.com>
 
-# https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/commit/?id=17e064db5aa2cfbfd254c0951544f88b2b1258ee
-git remote add hwmon https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
-git remote update hwmon
-git checkout 17e064db5aa2cfbfd254c0951544f88b2b1258ee
-vim +174 drivers/hwmon/pmbus/pmbus_core.c
-
-ce603b18f30aea drivers/hwmon/pmbus/pmbus_core.c Guenter Roeck  2013-01-26  150  
-6db8d5dba444f2 drivers/hwmon/pmbus/pmbus_core.c Guenter Roeck  2020-01-14  151  int pmbus_set_page(struct i2c_client *client, int page, int phase)
-442aba78728e77 drivers/hwmon/pmbus_core.c       Guenter Roeck  2011-01-26  152  {
-442aba78728e77 drivers/hwmon/pmbus_core.c       Guenter Roeck  2011-01-26  153  	struct pmbus_data *data = i2c_get_clientdata(client);
-464df6fa376678 drivers/hwmon/pmbus/pmbus_core.c Andrew Jeffery 2017-11-20  154  	int rv;
-464df6fa376678 drivers/hwmon/pmbus/pmbus_core.c Andrew Jeffery 2017-11-20  155  
-17e064db5aa2cf drivers/hwmon/pmbus/pmbus_core.c Guenter Roeck  2020-01-13  156  	if (page < 0)
-464df6fa376678 drivers/hwmon/pmbus/pmbus_core.c Andrew Jeffery 2017-11-20  157  		return 0;
-442aba78728e77 drivers/hwmon/pmbus_core.c       Guenter Roeck  2011-01-26  158  
-17e064db5aa2cf drivers/hwmon/pmbus/pmbus_core.c Guenter Roeck  2020-01-13  159  	if (!(data->info->func[page] & PMBUS_PAGE_VIRTUAL) &&
-17e064db5aa2cf drivers/hwmon/pmbus/pmbus_core.c Guenter Roeck  2020-01-13  160  	    data->info->pages > 1 && page != data->currpage) {
-442aba78728e77 drivers/hwmon/pmbus_core.c       Guenter Roeck  2011-01-26  161  		rv = i2c_smbus_write_byte_data(client, PMBUS_PAGE, page);
-464df6fa376678 drivers/hwmon/pmbus/pmbus_core.c Andrew Jeffery 2017-11-20  162  		if (rv < 0)
-442aba78728e77 drivers/hwmon/pmbus_core.c       Guenter Roeck  2011-01-26  163  			return rv;
-464df6fa376678 drivers/hwmon/pmbus/pmbus_core.c Andrew Jeffery 2017-11-20  164  
-464df6fa376678 drivers/hwmon/pmbus/pmbus_core.c Andrew Jeffery 2017-11-20  165  		rv = i2c_smbus_read_byte_data(client, PMBUS_PAGE);
-464df6fa376678 drivers/hwmon/pmbus/pmbus_core.c Andrew Jeffery 2017-11-20  166  		if (rv < 0)
-464df6fa376678 drivers/hwmon/pmbus/pmbus_core.c Andrew Jeffery 2017-11-20  167  			return rv;
-464df6fa376678 drivers/hwmon/pmbus/pmbus_core.c Andrew Jeffery 2017-11-20  168  
-464df6fa376678 drivers/hwmon/pmbus/pmbus_core.c Andrew Jeffery 2017-11-20  169  		if (rv != page)
-464df6fa376678 drivers/hwmon/pmbus/pmbus_core.c Andrew Jeffery 2017-11-20  170  			return -EIO;
-464df6fa376678 drivers/hwmon/pmbus/pmbus_core.c Andrew Jeffery 2017-11-20  171  	}
-464df6fa376678 drivers/hwmon/pmbus/pmbus_core.c Andrew Jeffery 2017-11-20  172  	data->currpage = page;
-464df6fa376678 drivers/hwmon/pmbus/pmbus_core.c Andrew Jeffery 2017-11-20  173  
-17e064db5aa2cf drivers/hwmon/pmbus/pmbus_core.c Guenter Roeck  2020-01-13 @174  	if (data->info->phases && data->currphase != phase &&
-                                                                                            ^^^^^^^^^^^^^^^^^^
-Delete this condition?
-
-17e064db5aa2cf drivers/hwmon/pmbus/pmbus_core.c Guenter Roeck  2020-01-13  175  	    !(data->info->func[page] & PMBUS_PHASE_VIRTUAL)) {
-17e064db5aa2cf drivers/hwmon/pmbus/pmbus_core.c Guenter Roeck  2020-01-13  176  		rv = i2c_smbus_write_byte_data(client, PMBUS_PHASE,
-17e064db5aa2cf drivers/hwmon/pmbus/pmbus_core.c Guenter Roeck  2020-01-13  177  					       phase);
-17e064db5aa2cf drivers/hwmon/pmbus/pmbus_core.c Guenter Roeck  2020-01-13  178  		if (rv)
-17e064db5aa2cf drivers/hwmon/pmbus/pmbus_core.c Guenter Roeck  2020-01-13  179  			return rv;
-17e064db5aa2cf drivers/hwmon/pmbus/pmbus_core.c Guenter Roeck  2020-01-13  180  	}
-17e064db5aa2cf drivers/hwmon/pmbus/pmbus_core.c Guenter Roeck  2020-01-13  181  	data->currphase = phase;
-17e064db5aa2cf drivers/hwmon/pmbus/pmbus_core.c Guenter Roeck  2020-01-13  182  
-464df6fa376678 drivers/hwmon/pmbus/pmbus_core.c Andrew Jeffery 2017-11-20  183  	return 0;
-442aba78728e77 drivers/hwmon/pmbus_core.c       Guenter Roeck  2011-01-26  184  }
-442aba78728e77 drivers/hwmon/pmbus_core.c       Guenter Roeck  2011-01-26  185  EXPORT_SYMBOL_GPL(pmbus_set_page);
-442aba78728e77 drivers/hwmon/pmbus_core.c       Guenter Roeck  2011-01-26  186  
-
----
-0-DAY kernel test infrastructure                 Open Source Technology Center
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org Intel Corporation
+-- 
+Pali Rohár
+pali.rohar@gmail.com
