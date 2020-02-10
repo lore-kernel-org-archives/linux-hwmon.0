@@ -2,150 +2,141 @@ Return-Path: <SRS0=RJFc=36=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 593CEC35254
-	for <linux-hwmon@archiver.kernel.org>; Mon, 10 Feb 2020 17:52:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D089EC35254
+	for <linux-hwmon@archiver.kernel.org>; Mon, 10 Feb 2020 17:53:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2ED3520715
-	for <linux-hwmon@archiver.kernel.org>; Mon, 10 Feb 2020 17:52:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A94D72080C
+	for <linux-hwmon@archiver.kernel.org>; Mon, 10 Feb 2020 17:53:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GabQrhEI"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jaRWKO3B"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726961AbgBJRwB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 10 Feb 2020 12:52:01 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:45481 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726563AbgBJRwA (ORCPT
+        id S1726896AbgBJRxT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 10 Feb 2020 12:53:19 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:43675 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726831AbgBJRxT (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 10 Feb 2020 12:52:00 -0500
-Received: by mail-pf1-f194.google.com with SMTP id 2so4041955pfg.12;
-        Mon, 10 Feb 2020 09:52:00 -0800 (PST)
+        Mon, 10 Feb 2020 12:53:19 -0500
+Received: by mail-pf1-f193.google.com with SMTP id s1so4046935pfh.10
+        for <linux-hwmon@vger.kernel.org>; Mon, 10 Feb 2020 09:53:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=MM7R9V7x4SfJxszh3dZy1asc+0YpWfKxq+33iCkgJuw=;
-        b=GabQrhEI7g1MP+cMV9bvR9dwQktgpfyeF8s92oPxorCxTF65Quy0utpXliSB6ZnQBQ
-         ga5RUyXfhYrcya0a4d2CpRKwdinAK2ZV38KFlbOeqYhaSOxm9DSQWJXNXzXpc4OBCx4O
-         wRnDOReq10omnEy4z76YRO4B/0kIjbanwVaJvE6TSL77zCMPEdgTRxxhPBSGbIs5hfNI
-         Rzz+9PHNUpiaSib5CXqyZMQ+qvEjl+JMwTkwhag4ObuukgdfwLlWNLJVzsFdq13f1dYD
-         wHjtE6RKHL4TxlfDLK2sZ9I4UaEA30lv9sMBMyVIhOMmuXjXUecgiYRm486xs52W0eSn
-         CjYA==
+        h=sender:from:to:cc:subject:date:message-id;
+        bh=VysTmKPrB0aqop6ZxUaGM1sAaj8tjmbLT3VN6PP9BSw=;
+        b=jaRWKO3Buodb6+fPH/4t49o2yNF6uaWuSh4ah5MQClx7pn6V+o1H9Uxp8SNEBqKhdr
+         fNdJ//1TK1ZsD9e3EMjuKAUVOdBijIfFw3Xh2Ts5JlU1vaTF+FBib8PnMQxCPp2JSFTn
+         OYsZN0cY270OYDRcSFM6NIRSdGHUoePsAEzmrsvJM7bVuOSQaRAquNy0jTvx2chzXt8X
+         JoOBHRrTmINUJXmtNZMR3XtWDGOcMTuFPToWk2xyg++dG7CA7/g47x8Qc3J/QhwEEwSf
+         EHISgdTxUcDqes1C9R59m7KMO+M0TbtMNkXdOeG5D/63F0S45Ql3SluPCnwdCLOYEb9y
+         YOjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=MM7R9V7x4SfJxszh3dZy1asc+0YpWfKxq+33iCkgJuw=;
-        b=W9nmWdKbEq7hRnV9BM9uNYsIN7vyLtictv+JtAOrBH3Vlph8aPfvyziJUpu6RAyqQk
-         OIhIvjTYlsI4nfGH8QaMyYsWmc/4ybT8UFwf4tHrpfFCpNm+qrPhtV+XTtDA22kRbInA
-         NR43fIMk2Iuybre8MUTkr4wV71XzMUY/mEUUM2FrfrihmFIBX1zyWgQBhaMm/GpyBF2t
-         sZukOTh615zaHPK+4t6b9ngGTX8Ims6Tis5gciQ9iw7Fs8UcyMd4vUMNEZDXpiFClGeg
-         n6E1NBXhs43JWfY0hizw/pYqc9tuujZUu0MbrOpi3ij1+LpuKUU37hrKNarQLFj5Ip9C
-         MIHQ==
-X-Gm-Message-State: APjAAAWtBAPWetwi6s11uvxrOYQekzUVLrSGepohyF3SxCvj5KhtfGPb
-        2ObHr3mxJVT4KA9dfwqE1b0=
-X-Google-Smtp-Source: APXvYqz8OGqGIw6Dj/1NWzwwvsY0TYQ/8+Hmsz8n9Ry0oUOLEEcDPAe0ccT7JEe+q4YdqNfl35R2Iw==
-X-Received: by 2002:a63:7457:: with SMTP id e23mr2869807pgn.386.1581357120158;
-        Mon, 10 Feb 2020 09:52:00 -0800 (PST)
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
+        bh=VysTmKPrB0aqop6ZxUaGM1sAaj8tjmbLT3VN6PP9BSw=;
+        b=gts2l2nEJiJvyAI8wuatkGbgPV5GV57791oYp7+VA1p1+8Gfc9Q87ovyMFdiLc1xyk
+         QYBA8NdwYKD/ZJuVxyhZUe4sWlp1ld/oJeOeFTnMszH56b6XAezNw/TT1FsXKh9XIgOb
+         lFxIEwbr2Sg8S9k7BQdd2t7XX1x09OTUTn+NBl3GpC/39Jx5EGFS55KjqxcItwEEd9KN
+         80tPxRFiW1aVGvjhzz0m88s0EDf8q8FOvxmLC2fOCPHN2n0L/wl5qPO6K7NrU5mjRVlD
+         m1yL/8hG7nNBiA8l0Qqh8dsWVJG7B2dRwtKu8VB6A96ymTJYtLhsSOIFYaNZc38Ww4Di
+         Rwhg==
+X-Gm-Message-State: APjAAAXU03nQwajdWynGlO6giGhAVvMmnIW1cN+KCQNph/W8xU8mMOmb
+        jWsIT+HozU8EXoBKEiXfyf28iXgG
+X-Google-Smtp-Source: APXvYqyhAVwyAgrTVmpWSCEKldgsAIicOEVEyrB9GHaHfMIIC2q27ROmp1g0YS/orq1ZlL7KVnG1gQ==
+X-Received: by 2002:a63:a1e:: with SMTP id 30mr2988607pgk.238.1581357198339;
+        Mon, 10 Feb 2020 09:53:18 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 70sm795638pgd.28.2020.02.10.09.51.59
+        by smtp.gmail.com with ESMTPSA id x197sm1079352pfc.1.2020.02.10.09.53.17
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 10 Feb 2020 09:51:59 -0800 (PST)
-Date:   Mon, 10 Feb 2020 09:51:58 -0800
+        Mon, 10 Feb 2020 09:53:17 -0800 (PST)
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Mike Jones <michael-a1.jones@analog.com>
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jdelvare@suse.com, robh+dt@kernel.org, corbet@lwn.net
-Subject: Re: [PATCH 2/2] bindings: (hwmon/ltc2978.txt): add support for more
- parts.
-Message-ID: <20200210175158.GA31186@roeck-us.net>
-References: <1581032654-4330-1-git-send-email-michael-a1.jones@analog.com>
- <1581032654-4330-2-git-send-email-michael-a1.jones@analog.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1581032654-4330-2-git-send-email-michael-a1.jones@analog.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 1/3] hwmon: (k10temp) Swap Tdie and Tctl on Family 17h CPUs
+Date:   Mon, 10 Feb 2020 09:53:12 -0800
+Message-Id: <20200210175314.32643-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Feb 06, 2020 at 04:44:14PM -0700, Mike Jones wrote:
-> LTC2972, LTC2979, LTC3884, LTC3889, LTC7880, LTM4664, LTM4677,
-> LTM4678, LTM4680, LTM4700.
-> 
-> Signed-off-by: Mike Jones <michael-a1.jones@analog.com>
+Traditionally, the temperature displayed by k10temp was Tctl.
+On Family 17h CPUs, Tdie was displayed instead. To reduce confusion,
+Tctl was added later as second temperature. This resulted in Tdie
+being reported as temp1_input, and Tctl as temp2_input. This is
+different to non-Ryzen CPUs, where Tctl is displayed as temp1_input.
+Swap temp1_input and temp2_input on Family 17h CPUs, such that Tctl
+is now reported as temp1_input and Tdie is reported as temp2_input,
+to align with other CPUs, streamline the code, and make it less
+confusing. Coincidentally, this also aligns the code with its
+documentation, which states that Tdie is reported as temp2_input.
 
-Conditionally applied to hwmon-next. We'll see if Rob would like to see
-any adjustments.
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/hwmon/k10temp.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-Thanks,
-Guenter
+diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+index e39354ffe973..b38547cd7ba3 100644
+--- a/drivers/hwmon/k10temp.c
++++ b/drivers/hwmon/k10temp.c
+@@ -180,8 +180,8 @@ static long get_raw_temp(struct k10temp_data *data)
+ }
+ 
+ const char *k10temp_temp_label[] = {
+-	"Tdie",
+ 	"Tctl",
++	"Tdie",
+ 	"Tccd1",
+ 	"Tccd2",
+ 	"Tccd3",
+@@ -269,13 +269,13 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
+ 	switch (attr) {
+ 	case hwmon_temp_input:
+ 		switch (channel) {
+-		case 0:		/* Tdie */
+-			*val = get_raw_temp(data) - data->temp_offset;
++		case 0:		/* Tctl */
++			*val = get_raw_temp(data);
+ 			if (*val < 0)
+ 				*val = 0;
+ 			break;
+-		case 1:		/* Tctl */
+-			*val = get_raw_temp(data);
++		case 1:		/* Tdie */
++			*val = get_raw_temp(data) - data->temp_offset;
+ 			if (*val < 0)
+ 				*val = 0;
+ 			break;
+@@ -334,9 +334,9 @@ static umode_t k10temp_is_visible(const void *_data,
+ 		switch (attr) {
+ 		case hwmon_temp_input:
+ 			switch (channel) {
+-			case 0:		/* Tdie, or Tctl if we don't show it */
++			case 0:		/* Tctl */
+ 				break;
+-			case 1:		/* Tctl */
++			case 1:		/* Tdie */
+ 				if (!data->show_tdie)
+ 					return 0;
+ 				break;
+@@ -372,8 +372,8 @@ static umode_t k10temp_is_visible(const void *_data,
+ 			if (!data->show_tdie)
+ 				return 0;
+ 			switch (channel) {
+-			case 0:		/* Tdie */
+-			case 1:		/* Tctl */
++			case 0:		/* Tctl */
++			case 1:		/* Tdie */
+ 				break;
+ 			case 2 ... 9:		/* Tccd{1-8} */
+ 				if (!(data->show_tccd & BIT(channel - 2)))
+-- 
+2.17.1
 
-> ---
->  .../devicetree/bindings/hwmon/ltc2978.txt          | 22 ++++++++++++++++++----
->  1 file changed, 18 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/ltc2978.txt b/Documentation/devicetree/bindings/hwmon/ltc2978.txt
-> index b428a70..4e7f621 100644
-> --- a/Documentation/devicetree/bindings/hwmon/ltc2978.txt
-> +++ b/Documentation/devicetree/bindings/hwmon/ltc2978.txt
-> @@ -2,20 +2,30 @@ ltc2978
->  
->  Required properties:
->  - compatible: should contain one of:
-> +  * "lltc,ltc2972"
->    * "lltc,ltc2974"
->    * "lltc,ltc2975"
->    * "lltc,ltc2977"
->    * "lltc,ltc2978"
-> +  * "lltc,ltc2979"
->    * "lltc,ltc2980"
->    * "lltc,ltc3880"
->    * "lltc,ltc3882"
->    * "lltc,ltc3883"
-> +  * "lltc,ltc3884"
->    * "lltc,ltc3886"
->    * "lltc,ltc3887"
-> +  * "lltc,ltc3889"
-> +  * "lltc,ltc7880"
->    * "lltc,ltm2987"
-> +  * "lltc,ltm4664"
->    * "lltc,ltm4675"
->    * "lltc,ltm4676"
-> +  * "lltc,ltm4677"
-> +  * "lltc,ltm4678"
-> +  * "lltc,ltm4680"
->    * "lltc,ltm4686"
-> +  * "lltc,ltm4700"
->  - reg: I2C slave address
->  
->  Optional properties:
-> @@ -25,13 +35,17 @@ Optional properties:
->    standard binding for regulators; see regulator.txt.
->  
->  Valid names of regulators depend on number of supplies supported per device:
-> +  * ltc2972 vout0 - vout1
->    * ltc2974, ltc2975 : vout0 - vout3
-> -  * ltc2977, ltc2980, ltm2987 : vout0 - vout7
-> +  * ltc2977, ltc2979, ltc2980, ltm2987 : vout0 - vout7
->    * ltc2978 : vout0 - vout7
-> -  * ltc3880, ltc3882, ltc3886 : vout0 - vout1
-> +  * ltc3880, ltc3882, ltc3884, ltc3886, ltc3887, ltc3889 : vout0 - vout1
-> +  * ltc7880 : vout0 - vout1
->    * ltc3883 : vout0
-> -  * ltm4676 : vout0 - vout1
-> -  * ltm4686 : vout0 - vout1
-> +  * ltm4664 : vout0 - vout1
-> +  * ltm4675, ltm4676, ltm4677, ltm4678 : vout0 - vout1
-> +  * ltm4680, ltm4686 : vout0 - vout1
-> +  * ltm4700 : vout0 - vout1
->  
->  Example:
->  ltc2978@5e {
