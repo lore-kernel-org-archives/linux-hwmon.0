@@ -7,60 +7,60 @@ X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2ADECC352A4
-	for <linux-hwmon@archiver.kernel.org>; Mon, 10 Feb 2020 17:53:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E66DC35254
+	for <linux-hwmon@archiver.kernel.org>; Mon, 10 Feb 2020 17:53:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0551420715
-	for <linux-hwmon@archiver.kernel.org>; Mon, 10 Feb 2020 17:53:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 38E3E20715
+	for <linux-hwmon@archiver.kernel.org>; Mon, 10 Feb 2020 17:53:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SkrNvI5F"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gnUpdt72"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726961AbgBJRxU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 10 Feb 2020 12:53:20 -0500
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:42782 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726831AbgBJRxU (ORCPT
+        id S1727056AbgBJRxW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 10 Feb 2020 12:53:22 -0500
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:53247 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726991AbgBJRxV (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 10 Feb 2020 12:53:20 -0500
-Received: by mail-pg1-f193.google.com with SMTP id w21so4275646pgl.9
-        for <linux-hwmon@vger.kernel.org>; Mon, 10 Feb 2020 09:53:20 -0800 (PST)
+        Mon, 10 Feb 2020 12:53:21 -0500
+Received: by mail-pj1-f65.google.com with SMTP id ep11so71382pjb.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 10 Feb 2020 09:53:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=qNep3xjIr/sVD7YYSCwzph0Jb0cUne8ku2hqEFamgrw=;
-        b=SkrNvI5FERELV8PZrNocJBZVLgkZNDfEvyBjctincw3HYJRKXUctvZdNn38QdK7AjB
-         gOlbGrGxhO3BuSt8J7dWEg8wv7b6b0tyIkx+8vYPFIp88By60xNkNbmdq03kCzfP4sZ3
-         FOzcmmYhY5sz3zEFERs55lDKTsIYPTF6vvhLXtTSFs7x8fsrWuYbQeILNwRwJJ13amHp
-         gKOdW8uNsHa+dki7zuRv4pgPpa3xP0IwMrRBouzMORvb/XSpdCFbioN2Bm25KAKaOppe
-         tEArcd7WPJ/9jqqoA6iiud2JbAvaFa8+aJ2nfiS1JBXJKYzV5cYI1DycJgsaWnvs/zaQ
-         WNnw==
+        bh=lf31ICTmd2LpndciqHkqNl0VJnwnAxJz9CPkLCZhl3k=;
+        b=gnUpdt72wBdsDAHp7ElrGxUsYtnPr95vfaWl1h+gZzzNMSZf4RZ4LC6xdwBKmmJMaQ
+         5UVovjb4cVemXiexkjmFcffMDJQcOH4Bv1WWfddJ82LBfej3Ea6NXMUc8QdGrsuXPO7X
+         I/fgyR8kkHJtSSsmv0YdvqMYrLA5FgFOuTYwf3wvky72tyPPG+RKP2ydwUML1JtPgavd
+         ry98qZNUZGUu9jF3hg9uzJDUZ6DA6l53FbL2nZrDpBOK1kcFbN1uYzbK16H+Qi/wsoIA
+         fvXKk9/T1JzK/vTENlabZ5pXORpYXYGxRUnG9Zaky92ZHZZ6sXequ1o8bBE3u+vXP/lX
+         cZWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references;
-        bh=qNep3xjIr/sVD7YYSCwzph0Jb0cUne8ku2hqEFamgrw=;
-        b=nsq8dwnUjsypxMIdWX+EuRziqJDBPo5pTe4TpcfghXpLVhT3L86GezF2vPuZvPC9fc
-         waV5hX6bg4fyPzXmTZtp/ZOlQsnYbf1ETlD0J/9HsPRRFUfm9H7OmW0pIuwbusNOPoC6
-         XX8NBEujx3TYeItX6RNe6gQBK/eRZ5rGn2I8Jb1ZocAgAEdLM9t8E59/znuqP76XWZsO
-         /xRHXZv9DAq37OuxyRxkbkWUe1ZmVt+/bYtWY98HlfWXvSg1PrHljEwiWNJwBvIOo26T
-         jw5ePwg5RJGLArg6dHP3JD7QdVGda5UwtMiiAz8bfc2yRuiWyJ+4MCSKQptk4sUx7wjk
-         JbhA==
-X-Gm-Message-State: APjAAAUsvFvohhmkJ55se0OH6evZHlJURAaRv6oDhEhIvW8yTk9UtBoo
-        PKlUd/kqxJY0MDQoy4IDTdtqa2EL
-X-Google-Smtp-Source: APXvYqzjgr86X+ydgquhg63wnBvvs4EQqHPdvaCtyfkN1A1vysOofshN/QiDySwB6VoIHF0LD24eMw==
-X-Received: by 2002:aa7:8ec1:: with SMTP id b1mr2184634pfr.95.1581357199719;
-        Mon, 10 Feb 2020 09:53:19 -0800 (PST)
+        bh=lf31ICTmd2LpndciqHkqNl0VJnwnAxJz9CPkLCZhl3k=;
+        b=jWUnEaX2zJyefC9CEWRKDR0pMwLzsiOnu5nqnicCZVTduZAF8VglsTK+BXFOcwULjY
+         AVd62kpU0geCLYUGjos/J69xF3H/NDdtEIFEh+TLJxUXHQomVn9KaiZdWYJQD1XHzA44
+         tD+j4JRgfPn1EXXY/UURJgBUAC5mz5sVOz6Ktt8FNtzIwegYDcWDGdbNRnyqFNNSZY6D
+         adoIvwqfK6w7Bas9mqPOuAynrYgcDtIVdmBoRSgxiGVSwWsRyypIz/0hOQldOER5OIja
+         m4DSPXVS3XGQyvaCOYrpOly568RMOtyUoeDoqQf4ZTLsbt+kNeYO7OG6KvtGv+f5A1qW
+         mOqA==
+X-Gm-Message-State: APjAAAVQ7GvyroQZCeQ6l2skH+csJ6bDY0F8NQwErbGrUD/sZJfS2gtp
+        bQWddKAEk3oe4uAvu+EnhX+Q3ufp
+X-Google-Smtp-Source: APXvYqyIjtsHGN/4tqPFVhDzW7KGBENFEjxOc0I7DOTDqFXaMrqwfhbNpen07q7+Mt3p7mBFZKLcuw==
+X-Received: by 2002:a17:902:8d8d:: with SMTP id v13mr14112623plo.260.1581357201061;
+        Mon, 10 Feb 2020 09:53:21 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 76sm1067461pfx.97.2020.02.10.09.53.19
+        by smtp.gmail.com with ESMTPSA id q25sm1111159pfg.41.2020.02.10.09.53.20
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 10 Feb 2020 09:53:19 -0800 (PST)
+        Mon, 10 Feb 2020 09:53:20 -0800 (PST)
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 2/3] hwmon: (k10temp) Reorganize and simplify temperature support detection
-Date:   Mon, 10 Feb 2020 09:53:13 -0800
-Message-Id: <20200210175314.32643-2-linux@roeck-us.net>
+Subject: [PATCH 3/3] hwmon: (k10temp) Update driver documentation
+Date:   Mon, 10 Feb 2020 09:53:14 -0800
+Message-Id: <20200210175314.32643-3-linux@roeck-us.net>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200210175314.32643-1-linux@roeck-us.net>
 References: <20200210175314.32643-1-linux@roeck-us.net>
@@ -69,128 +69,58 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Use a bit map to describe if temperature channels are supported,
-and use it for all temperature channels. Use a separate flag,
-independent of Tdie support, to indicate if the system is running
-on a Ryzen CPU.
+Document temperature, voltage, and current sensors available with
+Family 17h and later CPUs.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/k10temp.c | 50 +++++++++++++++--------------------------
- 1 file changed, 18 insertions(+), 32 deletions(-)
+ Documentation/hwmon/k10temp.rst | 29 ++++++++++++++++++++++++++---
+ 1 file changed, 26 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-index b38547cd7ba3..3f37d5d81fe4 100644
---- a/drivers/hwmon/k10temp.c
-+++ b/drivers/hwmon/k10temp.c
-@@ -96,13 +96,20 @@ struct k10temp_data {
- 	void (*read_tempreg)(struct pci_dev *pdev, u32 *regval);
- 	int temp_offset;
- 	u32 temp_adjust_mask;
--	bool show_tdie;
--	u32 show_tccd;
-+	u32 show_temp;
- 	u32 svi_addr[2];
-+	bool is_zen;
- 	bool show_current;
- 	int cfactor[2];
- };
+diff --git a/Documentation/hwmon/k10temp.rst b/Documentation/hwmon/k10temp.rst
+index 4451d59b9425..8557e26281c3 100644
+--- a/Documentation/hwmon/k10temp.rst
++++ b/Documentation/hwmon/k10temp.rst
+@@ -100,9 +100,10 @@ socket type, not the processor's actual capabilities.  Therefore, if you
+ are using an AM3 processor on an AM2+ mainboard, you can safely use the
+ "force=1" parameter.
  
-+#define TCTL_BIT	0
-+#define TDIE_BIT	1
-+#define TCCD_BIT(x)	((x) + 2)
+-There is one temperature measurement value, available as temp1_input in
+-sysfs. It is measured in degrees Celsius with a resolution of 1/8th degree.
+-Please note that it is defined as a relative value; to quote the AMD manual::
++For CPUs older than Family 17h, there is one temperature measurement value,
++available as temp1_input in sysfs. It is measured in degrees Celsius with a
++resolution of 1/8th degree.  Please note that it is defined as a relative
++value; to quote the AMD manual::
+ 
+   Tctl is the processor temperature control value, used by the platform to
+   control cooling systems. Tctl is a non-physical temperature on an
+@@ -126,3 +127,25 @@ it.
+ 
+ Models from 17h family report relative temperature, the driver aims to
+ compensate and report the real temperature.
 +
-+#define HAVE_TEMP(d, channel)	((d)->show_temp & BIT(channel))
-+#define HAVE_TDIE(d)		HAVE_TEMP(d, TDIE_BIT)
++On Family 17h and Family 18h CPUs, additional temperature sensors may report
++Core Complex Die (CCD) temperatures. Up to 8 such temperatures are reported
++as temp{3..10}_input, labeled Tccd{1..8}. Actual support depends on the CPU
++variant.
 +
- struct tctl_offset {
- 	u8 model;
- 	char const *id;
-@@ -333,23 +340,11 @@ static umode_t k10temp_is_visible(const void *_data,
- 	case hwmon_temp:
- 		switch (attr) {
- 		case hwmon_temp_input:
--			switch (channel) {
--			case 0:		/* Tctl */
--				break;
--			case 1:		/* Tdie */
--				if (!data->show_tdie)
--					return 0;
--				break;
--			case 2 ... 9:		/* Tccd{1-8} */
--				if (!(data->show_tccd & BIT(channel - 2)))
--					return 0;
--				break;
--			default:
-+			if (!HAVE_TEMP(data, channel))
- 				return 0;
--			}
- 			break;
- 		case hwmon_temp_max:
--			if (channel || data->show_tdie)
-+			if (channel || data->is_zen)
- 				return 0;
- 			break;
- 		case hwmon_temp_crit:
-@@ -368,20 +363,9 @@ static umode_t k10temp_is_visible(const void *_data,
- 				return 0;
- 			break;
- 		case hwmon_temp_label:
--			/* No labels if we don't show the die temperature */
--			if (!data->show_tdie)
--				return 0;
--			switch (channel) {
--			case 0:		/* Tctl */
--			case 1:		/* Tdie */
--				break;
--			case 2 ... 9:		/* Tccd{1-8} */
--				if (!(data->show_tccd & BIT(channel - 2)))
--					return 0;
--				break;
--			default:
-+			/* Show temperature labels only on Zen CPUs */
-+			if (!data->is_zen || !HAVE_TEMP(data, channel))
- 				return 0;
--			}
- 			break;
- 		default:
- 			return 0;
-@@ -480,7 +464,7 @@ static void k10temp_init_debugfs(struct k10temp_data *data)
- 	char name[32];
- 
- 	/* Only show debugfs data for Family 17h/18h CPUs */
--	if (!data->show_tdie)
-+	if (!data->is_zen)
- 		return;
- 
- 	scnprintf(name, sizeof(name), "k10temp-%s", pci_name(data->pdev));
-@@ -546,7 +530,7 @@ static void k10temp_get_ccd_support(struct pci_dev *pdev,
- 		amd_smn_read(amd_pci_dev_to_node_id(pdev),
- 			     F17H_M70H_CCD_TEMP(i), &regval);
- 		if (regval & F17H_M70H_CCD_TEMP_VALID)
--			data->show_tccd |= BIT(i);
-+			data->show_temp |= BIT(TCCD_BIT(i));
- 	}
- }
- 
-@@ -573,6 +557,7 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 		return -ENOMEM;
- 
- 	data->pdev = pdev;
-+	data->show_temp |= BIT(TCTL_BIT);	/* Always show Tctl */
- 
- 	if (boot_cpu_data.x86 == 0x15 &&
- 	    ((boot_cpu_data.x86_model & 0xf0) == 0x60 ||
-@@ -582,7 +567,8 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	} else if (boot_cpu_data.x86 == 0x17 || boot_cpu_data.x86 == 0x18) {
- 		data->temp_adjust_mask = CUR_TEMP_RANGE_SEL_MASK;
- 		data->read_tempreg = read_tempreg_nb_f17;
--		data->show_tdie = true;
-+		data->show_temp |= BIT(TDIE_BIT);	/* show Tdie */
-+		data->is_zen = true;
- 
- 		switch (boot_cpu_data.x86_model) {
- 		case 0x1:	/* Zen */
++Various Family 17h and 18h CPUs report voltage and current telemetry
++information. The following attributes may be reported.
++
++Attribute	Label	Description
++===============	=======	================
++in0_input	Vcore	Core voltage
++in1_input	Vsoc	SoC voltage
++curr1_input	Icore	Core current
++curr2_input	Isoc	SoC current
++===============	=======	================
++
++Current values are raw (unscaled) as reported by the CPU. Core current is
++reported as multiples of 1A / LSB. SoC is reported as multiples of 0.25A
++/ LSB. The real current is board specific. Reported currents should be seen
++as rough guidance, and should be scaled using sensors3.conf as appropriate
++for a given board.
 -- 
 2.17.1
 
