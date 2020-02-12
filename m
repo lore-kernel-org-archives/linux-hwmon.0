@@ -2,124 +2,78 @@ Return-Path: <SRS0=N1WN=4A=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5FE8C35242
-	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Feb 2020 00:03:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0131EC35242
+	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Feb 2020 03:06:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AA8012073C
-	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Feb 2020 00:03:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8968F2086A
+	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Feb 2020 03:06:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="J8DOEd5+"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="h7aDYiZA"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727979AbgBLADY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 11 Feb 2020 19:03:24 -0500
-Received: from gateway32.websitewelcome.com ([192.185.145.102]:24747 "EHLO
-        gateway32.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727956AbgBLADX (ORCPT
+        id S1727743AbgBLDG1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 11 Feb 2020 22:06:27 -0500
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:39375 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727671AbgBLDG1 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 11 Feb 2020 19:03:23 -0500
-X-Greylist: delayed 1397 seconds by postgrey-1.27 at vger.kernel.org; Tue, 11 Feb 2020 19:03:23 EST
-Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
-        by gateway32.websitewelcome.com (Postfix) with ESMTP id E5EBE645B9
-        for <linux-hwmon@vger.kernel.org>; Tue, 11 Feb 2020 17:40:05 -0600 (CST)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with SMTP
-        id 1f8PjKfx9vBMd1f8PjeGTV; Tue, 11 Feb 2020 17:40:05 -0600
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Type:MIME-Version:Message-ID:Subject:
-        Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=826huAG5ON0O/lfMhDpKUhNKj75IXOzCCcEnxbYam4I=; b=J8DOEd5+Zj56yKjv9GxEr/9liR
-        UxDb0yEozNCQtzTvTsjQ/6Nzv7jY4PMpcocRI1RLtNWUcZdEfadqZcNsYKNTtGPlWbh64mO46Z5fc
-        HSmPuT+YqB+oY4cyV7ADajR1EKG1xmts+TOzRBPHNuirE+T2pnefl+SZTFNOL+SpV38VFZwrD4Cq3
-        VjGWpDTya1CN0iqllnWMJvE5g8YzTR4zl27fE40CPAQkpP23qk7tJJeHxOyNnENQVBp9r55FJHO+v
-        xzmsjHdTZIcGqgGm7cCr6eCyBBuFzxLr5fYeImmEC0zCP1VQv4S/dLs/x56PEYF1/HqKLtx7U3A+3
-        4nZJpRdA==;
-Received: from [200.68.140.36] (port=31131 helo=embeddedor)
-        by gator4166.hostgator.com with esmtpa (Exim 4.92)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1j1f8O-003iJb-Fb; Tue, 11 Feb 2020 17:40:04 -0600
-Date:   Tue, 11 Feb 2020 17:42:37 -0600
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Subject: [PATCH] hwmon: (ibmaem) Replace zero-length array with
- flexible-array member
-Message-ID: <20200211234237.GA26971@embeddedor>
+        Tue, 11 Feb 2020 22:06:27 -0500
+Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 6C51D886BF;
+        Wed, 12 Feb 2020 16:06:23 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1581476783;
+        bh=5Zzd4p0YzB4rRdaFrzvricfO2C3A3m/IaL6u4DjRzpc=;
+        h=From:To:Cc:Subject:Date;
+        b=h7aDYiZAdE7XwdaiY96S+eNZrCHc+z135II3+n6IEBdPfoB9gENjPA/lxfydY4VWa
+         iJ8XY6vvrSft4mI4S9tzkWWs1HgHAyXCy5gQ/FOEe7tK3rABrH0SST7RzEhhZUEV8i
+         mHyoceaSfzL+dYJkjCoBKfXTb6bvCrFz+n/FsCKbb22nnN+tys88APHHi/BSR3MxbY
+         p7IhYjRDkkPHoMmC0yJ4ZOx/6om17WchS8d4UaFw45WTW82R+lCdm+Teg4fD+AfFx2
+         8kuLr1WcZQKT/0m9CL7UIpM91QW3iArqU8UbrombQKtYBIAYLStGMQHkijEco5DZk7
+         8s5hbHmgk8fCQ==
+Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
+        id <B5e436baf0000>; Wed, 12 Feb 2020 16:06:23 +1300
+Received: from henrys-dl.ws.atlnz.lc (henrys-dl.ws.atlnz.lc [10.33.23.26])
+        by smtp (Postfix) with ESMTP id 0E26213EED4;
+        Wed, 12 Feb 2020 16:06:23 +1300 (NZDT)
+Received: by henrys-dl.ws.atlnz.lc (Postfix, from userid 1052)
+        id 351754E1463; Wed, 12 Feb 2020 16:06:23 +1300 (NZDT)
+From:   Henry Shen <henry.shen@alliedtelesis.co.nz>
+To:     robh+dt@kernel.org, mark.rutland@arm.com,
+        guillaume.ligneul@gmail.com, jdelvare@suse.com, linux@roeck-us.net,
+        trivial@kernel.org, venture@google.com
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org,
+        Henry Shen <henry.shen@alliedtelesis.co.nz>
+Subject: [PATCH v2 0/2] (lm73) Add support for of_match_table
+Date:   Wed, 12 Feb 2020 16:06:13 +1300
+Message-Id: <20200212030615.28537-1-henry.shen@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 200.68.140.36
-X-Source-L: No
-X-Exim-ID: 1j1f8O-003iJb-Fb
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: (embeddedor) [200.68.140.36]:31131
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 51
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
+Content-Transfer-Encoding: quoted-printable
+x-atlnz-ls: pat
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The current codebase makes use of the zero-length array language
-extension to the C90 standard, but the preferred mechanism to declare
-variable-length types such as these ones is a flexible array member[1][2],
-introduced in C99:
+This series adds documentation and compatible info for the lm73 temperatu=
+re
+sensor.
 
-struct foo {
-        int stuff;
-        struct boo array[];
-};
+Henry Shen (2):
+  dt-bindings: Add TI LM73 as a trivial device
+  hwmon: (lm73) Add support for of_match_table
 
-By making use of the mechanism above, we will get a compiler warning
-in case the flexible array does not occur last in the structure, which
-will help us prevent some kind of undefined behavior bugs from being
-inadvertenly introduced[3] to the codebase from now on.
+ Documentation/devicetree/bindings/trivial-devices.yaml |  2 ++
+ drivers/hwmon/lm73.c                                   | 10 ++++++++++
+ 2 files changed, 12 insertions(+)
 
-This issue was found with the help of Coccinelle.
-
-[1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
-[2] https://github.com/KSPP/linux/issues/21
-[3] commit 76497732932f ("cxgb3/l2t: Fix undefined behaviour")
-
-Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
----
- drivers/hwmon/ibmaem.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/ibmaem.c b/drivers/hwmon/ibmaem.c
-index db63c1295cb2..fb052c2d9c34 100644
---- a/drivers/hwmon/ibmaem.c
-+++ b/drivers/hwmon/ibmaem.c
-@@ -232,7 +232,7 @@ struct aem_read_sensor_req {
- 
- struct aem_read_sensor_resp {
- 	struct aem_iana_id	id;
--	u8			bytes[0];
-+	u8			bytes[];
- } __packed;
- 
- /* Data structures to talk to the IPMI layer */
--- 
+--=20
 2.25.0
 
