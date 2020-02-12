@@ -2,107 +2,121 @@ Return-Path: <SRS0=N1WN=4A=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0EF93C352A4
-	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Feb 2020 20:43:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB81FC352A4
+	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Feb 2020 20:45:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DACE021734
-	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Feb 2020 20:43:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C3FAB2467D
+	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Feb 2020 20:45:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DytT3aj+"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OE9G1Ada"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727947AbgBLUn0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 12 Feb 2020 15:43:26 -0500
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:33204 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727548AbgBLUn0 (ORCPT
+        id S1727111AbgBLUpr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 12 Feb 2020 15:45:47 -0500
+Received: from mail-pj1-f68.google.com ([209.85.216.68]:40876 "EHLO
+        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728447AbgBLUpr (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 12 Feb 2020 15:43:26 -0500
-Received: by mail-pg1-f194.google.com with SMTP id 6so1836360pgk.0;
-        Wed, 12 Feb 2020 12:43:24 -0800 (PST)
+        Wed, 12 Feb 2020 15:45:47 -0500
+Received: by mail-pj1-f68.google.com with SMTP id 12so1383877pjb.5;
+        Wed, 12 Feb 2020 12:45:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=d8raYA2U8NHy+i0YP44rQhzEQ4l87sJ/u6a7isIV0dQ=;
-        b=DytT3aj+ejmTlv3SwFQTus74drk/f/yKVxfJ0H5BgH7J4jtkAJSyGWZRSiSICDXqZP
-         TVREodoR7KFwovelFeU+00kROq3sxO3r6cG2JeBSHyuIpCp21uXGCYUNq+kBOepP23KX
-         qus7Rmwxs8No6GpH8xgg4uQKX1uHitCqS1XR1ZWx9qZCVR8r0z6OilU/eppiTL1OE9S2
-         Dsf7lWOCpk4DMAPMciWOwmbS6WN080PQRW7F2FDSInpHBhJQY1ICtNZzxr6uYQmRbwn5
-         zmiKuMDj4Xzs3agog11qkmDUvbgNi4wP55gyzZ8vnlznhBNGxDfl3j3VMycdfuuVXIql
-         u5eg==
+        bh=ZPrKuRi6FOCenz8x5HDZUpKjL7/Vbor3/MAzvMLKF5E=;
+        b=OE9G1AdasJTFsKzJWS8850awYaQjFlzggWaPKTYdJhH+RGC10+WE4Oyg/tol+Y06BN
+         T+vNbnd1sRGxIOa43ic9tL98yjpP+w5izvAGPhAL6iapL73WaUwLIi5O/KDWY2UhX9Bj
+         4ivnKKvWWdLpLM/4spAH9rGtIwpl0zyhsNvafOjIjLZWEfNQZhZ/+eNIIWrXTc5cMWf4
+         xxEauh0uxljia3qMFyX1lmgC3buYcF+U22KGAj+/pB8FXK/vqRQ1J7n5u0UoL8CKLGdf
+         jaoMvScNI6iFvOmsFJ0MjE7j4zkAlY4/vRcT2B9FdgUeyq+/vmv3R8ex0bHoRNOwmGvk
+         ubuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=d8raYA2U8NHy+i0YP44rQhzEQ4l87sJ/u6a7isIV0dQ=;
-        b=mW7ti0VO1Jv2bZlntx+sGxjNfrjVT2c7JdfcsF7OgsEgBWJYFwBwWM31iIDEPohILx
-         lUKhziZTGqne7NNSa0R8NR9exUzZwONvHlkQiVg0xGAr/dJytwsoZ0ZWAowegiA9XqUO
-         U8C1Zr1vKnB2bngnxoN2l2DH0uzsDxlIAT6TPLN/LduNAjzn9iahUyF1AcL/drLD8Oiu
-         Sr2TtzzC44tjBGZhr1qIuwKXrRVNlnbneliUNLYlBZWu4LA8DVmoH0iHmc+GZhtkbURI
-         Qd7N9GyvXWFH57NVl3xYajFODOcizG5Ah56WgnTCLNbOuT47SLyZ4yjKjGXNXKwQD9Zu
-         bUzg==
-X-Gm-Message-State: APjAAAUcSz3hcAUbXOcvKRK618O7A9VO1aMPlBo6IS1JZhIJ3eoQOn1f
-        v0Kncw7OwEttkZ5v0R33HvjA4z7M
-X-Google-Smtp-Source: APXvYqyqQcjZj46BabcxFEe4W4htaAy+lMWGakEh1TAVciTCIg7ra3RT2/Qn3leqoLH8jXg7Te73Ig==
-X-Received: by 2002:a63:3c08:: with SMTP id j8mr14329831pga.223.1581540204184;
-        Wed, 12 Feb 2020 12:43:24 -0800 (PST)
+        bh=ZPrKuRi6FOCenz8x5HDZUpKjL7/Vbor3/MAzvMLKF5E=;
+        b=XBM0gvdXBZx6iTNPuXLK9ZtZkGsFlVXBowCUL7VXx1cPWgfWfjo3bu0Ob/ydZfF4Yx
+         UvmffpNdI53kvh0QkIqoh9FuD/C2t+71zAuz94+7Ya0K9mRmyCsDilGmkF3AptLQAs4P
+         YisHsomZNXrkZ1X+NBJXNhaq12lLat5nxmNgc5W05kV7fJv3+A4f7SJg+Cv46THDXLhB
+         NNwAuyJxqibgfC4xUwAwdnpnHNFZGiTx4WdVnaYTSILr0O6fSVySRcgOpthJxeFGKABo
+         ZSZbqUAEcok3P4/Awpw5bwTEOJA9DTxT5HhXFZVlg6S5u3EZBZdNSgguH4Zr2p4L1xFz
+         3KhQ==
+X-Gm-Message-State: APjAAAVhrcQEIvV6o//5yuN9rEH3F/HDIR76zVRJ1zDF9r+rj7X3j7H1
+        3+PA+P38RYOcUyrNpe4XAk0=
+X-Google-Smtp-Source: APXvYqxVHlUd3V0YAJLj7a1864k4eFqZ6YOFpcoO/yGan1cBrkCH/1mAgFrufk2ZuU/R+82aoLhEGw==
+X-Received: by 2002:a17:902:ac97:: with SMTP id h23mr10290430plr.237.1581540345301;
+        Wed, 12 Feb 2020 12:45:45 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 64sm127034pfd.48.2020.02.12.12.43.21
+        by smtp.gmail.com with ESMTPSA id 199sm128759pfu.71.2020.02.12.12.45.44
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 12 Feb 2020 12:43:22 -0800 (PST)
-Date:   Wed, 12 Feb 2020 12:43:20 -0800
+        Wed, 12 Feb 2020 12:45:44 -0800 (PST)
+Date:   Wed, 12 Feb 2020 12:45:43 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Johan Hovold <johan@kernel.org>
+To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
 Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Vadim Pasternak <vadimp@mellanox.com>
-Subject: Re: [PATCH] hwmon: (pmbus/xdpe12284): fix typo in compatible strings
-Message-ID: <20200212204320.GA7035@roeck-us.net>
-References: <20200212092426.24012-1-johan@kernel.org>
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (ibmaem) Replace zero-length array with
+ flexible-array member
+Message-ID: <20200212204543.GA7197@roeck-us.net>
+References: <20200211234237.GA26971@embeddedor>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200212092426.24012-1-johan@kernel.org>
+In-Reply-To: <20200211234237.GA26971@embeddedor>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Feb 12, 2020 at 10:24:26AM +0100, Johan Hovold wrote:
-> Make sure that the driver compatible strings matches the binding by
-> removing the space between the manufacturer and model.
+On Tue, Feb 11, 2020 at 05:42:37PM -0600, Gustavo A. R. Silva wrote:
+> The current codebase makes use of the zero-length array language
+> extension to the C90 standard, but the preferred mechanism to declare
+> variable-length types such as these ones is a flexible array member[1][2],
+> introduced in C99:
 > 
-> Fixes: aaafb7c8eb1c ("hwmon: (pmbus) Add support for Infineon Multi-phase xdpe122 family controllers")
-> Cc: Vadim Pasternak <vadimp@mellanox.com>
-> Signed-off-by: Johan Hovold <johan@kernel.org>
+> struct foo {
+>         int stuff;
+>         struct boo array[];
+> };
+> 
+> By making use of the mechanism above, we will get a compiler warning
+> in case the flexible array does not occur last in the structure, which
+> will help us prevent some kind of undefined behavior bugs from being
+> inadvertenly introduced[3] to the codebase from now on.
+> 
+> This issue was found with the help of Coccinelle.
+> 
+> [1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
+> [2] https://github.com/KSPP/linux/issues/21
+> [3] commit 76497732932f ("cxgb3/l2t: Fix undefined behaviour")
+> 
+> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
 
-Applied.
+Applied to hwmon-next.
 
 Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/pmbus/xdpe12284.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/hwmon/ibmaem.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/hwmon/pmbus/xdpe12284.c b/drivers/hwmon/pmbus/xdpe12284.c
-> index 3d47806ff4d3..ecd9b65627ec 100644
-> --- a/drivers/hwmon/pmbus/xdpe12284.c
-> +++ b/drivers/hwmon/pmbus/xdpe12284.c
-> @@ -94,8 +94,8 @@ static const struct i2c_device_id xdpe122_id[] = {
->  MODULE_DEVICE_TABLE(i2c, xdpe122_id);
+> diff --git a/drivers/hwmon/ibmaem.c b/drivers/hwmon/ibmaem.c
+> index db63c1295cb2..fb052c2d9c34 100644
+> --- a/drivers/hwmon/ibmaem.c
+> +++ b/drivers/hwmon/ibmaem.c
+> @@ -232,7 +232,7 @@ struct aem_read_sensor_req {
 >  
->  static const struct of_device_id __maybe_unused xdpe122_of_match[] = {
-> -	{.compatible = "infineon, xdpe12254"},
-> -	{.compatible = "infineon, xdpe12284"},
-> +	{.compatible = "infineon,xdpe12254"},
-> +	{.compatible = "infineon,xdpe12284"},
->  	{}
->  };
->  MODULE_DEVICE_TABLE(of, xdpe122_of_match);
+>  struct aem_read_sensor_resp {
+>  	struct aem_iana_id	id;
+> -	u8			bytes[0];
+> +	u8			bytes[];
+>  } __packed;
+>  
+>  /* Data structures to talk to the IPMI layer */
