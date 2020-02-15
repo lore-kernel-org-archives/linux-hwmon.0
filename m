@@ -7,61 +7,60 @@ X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5203AC2BA83
-	for <linux-hwmon@archiver.kernel.org>; Sat, 15 Feb 2020 12:26:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F255AC4741C
+	for <linux-hwmon@archiver.kernel.org>; Sat, 15 Feb 2020 12:26:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 297642082F
-	for <linux-hwmon@archiver.kernel.org>; Sat, 15 Feb 2020 12:26:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CB65B2073A
+	for <linux-hwmon@archiver.kernel.org>; Sat, 15 Feb 2020 12:26:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n3ot+X7q"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UcjXn5oN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726111AbgBOM0Q (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 15 Feb 2020 07:26:16 -0500
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:45434 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725937AbgBOM0P (ORCPT
+        id S1726129AbgBOM0R (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 15 Feb 2020 07:26:17 -0500
+Received: from mail-pf1-f175.google.com ([209.85.210.175]:42684 "EHLO
+        mail-pf1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725937AbgBOM0R (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 15 Feb 2020 07:26:15 -0500
-Received: by mail-pg1-f193.google.com with SMTP id b9so6426394pgk.12
-        for <linux-hwmon@vger.kernel.org>; Sat, 15 Feb 2020 04:26:15 -0800 (PST)
+        Sat, 15 Feb 2020 07:26:17 -0500
+Received: by mail-pf1-f175.google.com with SMTP id 4so6413474pfz.9
+        for <linux-hwmon@vger.kernel.org>; Sat, 15 Feb 2020 04:26:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=ksNM6jghe9F5KXhnDhz1gSh9uMRZEsmAFlnASz7qBgg=;
-        b=n3ot+X7qvlrIph/8O51/nRoRic5GozS1HSI0buE94OSL8cE529OOAYRt/W1RZ+oojI
-         3w8YjjqSJxToe0eDIBTeKua5tplmFOXd/byG4quFrfgSBl0V9wo1v5QICGBT0VruZ95+
-         sdtOZVvHpw+DYKsDI4BeHhvBXWj+i63lk17hsX+pN0sIlDiFpILpZbRVCZ7dluGXggxc
-         OMWH6EuR7vS7Cy1krN7DNtcwQPaa14VlUw6h//r2hH9dAsX4OWZLGch0YrfvqCAj4eqC
-         TRcTDTDmS9ZhI+lZs/ecaRxrQMQfmWNhfTncAD1WJmhdwUu7Cq4Fx8KR/4CsJ+s8PYnk
-         440w==
+        bh=UWjND2QgvvYLWyUrbBVs+iZBMdMm+VT6RUnJQxTl6g0=;
+        b=UcjXn5oNN5v2WN+X2Ira+dRqH/JsEibfcUyfgEJFI4rbucQ1iqHHLiVLXOFUno/Dua
+         ShnOQacNu5ONUj74388YQ971qUakT3LMuow4oCfXg/zbpD0JW+HtyxUvvlai2T7cadUq
+         dcpAiBTVUKoUO8tFou0rvh3zV5FpOzL7GkU+W7aM4VlrvisusOn6Mpg0U3zGc+16P6IU
+         j1PPUi1uEwRqlquTrfkLSfsosm6sptzANbioUndGdJt/Ldi27Q3973Eznt90dGPb6oMj
+         mm6tg/OAizm4Z+Pt/aazE/P/MCAZjGZTLWghui7MvGIeyUZnqsyyT0Jkm0yNOi1VQ0Rp
+         3sGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references;
-        bh=ksNM6jghe9F5KXhnDhz1gSh9uMRZEsmAFlnASz7qBgg=;
-        b=Vm0PN0w5u04OqlRGhRaXaWHA0BO4JX96Mko89q5dfS1uHruP6JqV9/NehM/SgfJuAJ
-         b62BjcK4R7YfwlxDP+U4HrA4WpcajherF+7Vhkgf+MjfUf1WpO0p57Rkxw9dpj+lv7y9
-         j1hbFu6FWWp9u8oo3MtjruHWN7LsXcAaM0Ct97uesV3DSfRuRgothjRTrRG2r1O3w7gT
-         Lya1vWvcwvqN53sXMzmJBDtkwUz2xEKnXt+Q1orwdVH/QHQmKcPL6DpROGUU1/YZuML1
-         yJmIPKA3ESK7yzUzHYHvKbfJrcPMTJ65TfLkAACGnBQXqJOIyVKhP7fedKfYOZCchtUR
-         St/Q==
-X-Gm-Message-State: APjAAAXXYceFbnnw1J8QMasqM6xNTCDApbUlQWbvihB5rGhExdjmGh/i
-        /SzGBe2sjfpnMkT42hNQxF99uW4a
-X-Google-Smtp-Source: APXvYqzH5RALg3NXX9W7AVykLd8/IuubdwV2uJDJOzSON/h6ch4ui/yBSCUllvb9IflEXoHxj/b8HQ==
-X-Received: by 2002:a62:2b8a:: with SMTP id r132mr7848652pfr.56.1581769574850;
-        Sat, 15 Feb 2020 04:26:14 -0800 (PST)
+        bh=UWjND2QgvvYLWyUrbBVs+iZBMdMm+VT6RUnJQxTl6g0=;
+        b=LWW3SW3oiPe2q4NgzjMLPKIT+vVPxYpy5t2D6+iEUNOYB7CpLKZ6+6iPh882jIpDQb
+         ALQn62pucKzcevNmfkLGiUUGM/02csDJGlmHjdlLs9tYgmJ+TlJVDhU1gP3L0djOwQ3y
+         szckl1Poh82Tbb90Tn0AMrVX7PhAryKETdl3J9ANZN8VhirSl5l+l7m+tP41clSSOSw3
+         GwFxUqs1SBh+JuEMS5cfqngpG0tdLn7ZCWiDsfN8Tc0lqWq8OZ/BbZNaDZ0GJToLakuQ
+         /4JhkHPCiX21DxN8tSz8J7D31VDbs7p6dkEI1/4W/l41Qz7Eo6gTX2rIRvk+2ET3lJpn
+         rNUQ==
+X-Gm-Message-State: APjAAAWpKhVPtwf99YF+JB0PoD+3ufzG4bqf886/f9o9nCjopRuTUQ0J
+        VDhmXfe0pVK6IYxyMV9yxSxoVx5K
+X-Google-Smtp-Source: APXvYqwn5ptx5yDXj21piGU6Zx4QA0ZIQBvp5+mToTyUvuzaIpyM4FwPItY4cZ4VFfzGUgprnLQ44A==
+X-Received: by 2002:a63:a541:: with SMTP id r1mr8417080pgu.118.1581769576210;
+        Sat, 15 Feb 2020 04:26:16 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z4sm10394001pfn.42.2020.02.15.04.26.14
+        by smtp.gmail.com with ESMTPSA id 13sm10225234pfj.68.2020.02.15.04.26.15
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 15 Feb 2020 04:26:14 -0800 (PST)
+        Sat, 15 Feb 2020 04:26:15 -0800 (PST)
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
 Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Vadim Pasternak <vadimp@mellanox.com>
-Subject: [PATCH 7/8] hwmon: (pmbus/tps53679) Add support for TPS53647 and TPS53667
-Date:   Sat, 15 Feb 2020 04:26:01 -0800
-Message-Id: <20200215122602.14245-7-linux@roeck-us.net>
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 8/8] hwmon: (pmbus/tps53679) Add documentation
+Date:   Sat, 15 Feb 2020 04:26:02 -0800
+Message-Id: <20200215122602.14245-8-linux@roeck-us.net>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200215122602.14245-1-linux@roeck-us.net>
 References: <20200215122602.14245-1-linux@roeck-us.net>
@@ -70,90 +69,211 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-TPS53647 and TPS53667 are single channel, Step-Down Buck Controllers.
-TPS53647 supports 4 phases, TPS53667 supports 6 phases.
-The chips do not support per-phase output telemetry.
+Document tps53679 driver with all chips supported by it.
 
-Cc: Vadim Pasternak <vadimp@mellanox.com>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/pmbus/Kconfig    |  4 ++--
- drivers/hwmon/pmbus/tps53679.c | 15 +++++++++++++--
- 2 files changed, 15 insertions(+), 4 deletions(-)
+ Documentation/hwmon/index.rst    |   1 +
+ Documentation/hwmon/tps53679.rst | 178 +++++++++++++++++++++++++++++++
+ 2 files changed, 179 insertions(+)
+ create mode 100644 Documentation/hwmon/tps53679.rst
 
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index 07bd5a4592bf..3b8ae69254e8 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -209,10 +209,10 @@ config SENSORS_TPS40422
- 	  be called tps40422.
- 
- config SENSORS_TPS53679
--	tristate "TI TPS53679, TPS53681, TPS53688"
-+	tristate "TI TPS53647, TPS53667, TPS53679, TPS53681, TPS53688"
- 	help
- 	  If you say yes here you get hardware monitoring support for TI
--	  TPS53679, TPS53681, and TPS53688.
-+	  TPS53647, TPS53667, TPS53679, TPS53681, and TPS53688.
- 
- 	  This driver can also be built as a module. If so, the module will
- 	  be called tps53679.
-diff --git a/drivers/hwmon/pmbus/tps53679.c b/drivers/hwmon/pmbus/tps53679.c
-index eb6e2ea0e66c..157c99ffb52b 100644
---- a/drivers/hwmon/pmbus/tps53679.c
-+++ b/drivers/hwmon/pmbus/tps53679.c
-@@ -16,9 +16,11 @@
- #include "pmbus.h"
- 
- enum chips {
--	tps53679, tps53681, tps53688
-+	tps53647, tps53667, tps53679, tps53681, tps53688
- };
- 
-+#define TPS53647_PAGE_NUM		1
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index b24adb67ddca..8ef62fd39787 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -162,6 +162,7 @@ Hardware Monitoring Kernel Drivers
+    tmp421
+    tmp513
+    tps40422
++   tps53679
+    twl4030-madc-hwmon
+    ucd9000
+    ucd9200
+diff --git a/Documentation/hwmon/tps53679.rst b/Documentation/hwmon/tps53679.rst
+new file mode 100644
+index 000000000000..be94cab78967
+--- /dev/null
++++ b/Documentation/hwmon/tps53679.rst
+@@ -0,0 +1,178 @@
++Kernel driver tps53679
++======================
 +
- #define TPS53679_PROT_VR12_5MV		0x01 /* VR12.0 mode, 5-mV DAC */
- #define TPS53679_PROT_VR12_5_10MV	0x02 /* VR12.5 mode, 10-mV DAC */
- #define TPS53679_PROT_VR13_10MV		0x04 /* VR13.0 mode, 10-mV DAC */
-@@ -38,7 +40,7 @@ static int tps53679_identify_mode(struct i2c_client *client,
- 	u8 vout_params;
- 	int i, ret;
- 
--	for (i = 0; i < TPS53679_PAGE_NUM; i++) {
-+	for (i = 0; i < info->pages; i++) {
- 		/* Read the register with VOUT scaling value.*/
- 		ret = pmbus_read_byte_data(client, i, PMBUS_VOUT_MODE);
- 		if (ret < 0)
-@@ -198,6 +200,11 @@ static int tps53679_probe(struct i2c_client *client,
- 		return -ENOMEM;
- 
- 	switch (chip_id) {
-+	case tps53647:
-+	case tps53667:
-+		info->pages = TPS53647_PAGE_NUM;
-+		info->identify = tps53679_identify;
-+		break;
- 	case tps53679:
- 	case tps53688:
- 		info->pages = TPS53679_PAGE_NUM;
-@@ -217,6 +224,8 @@ static int tps53679_probe(struct i2c_client *client,
- }
- 
- static const struct i2c_device_id tps53679_id[] = {
-+	{"tps53647", tps53647},
-+	{"tps53667", tps53667},
- 	{"tps53679", tps53679},
- 	{"tps53681", tps53681},
- 	{"tps53688", tps53688},
-@@ -226,6 +235,8 @@ static const struct i2c_device_id tps53679_id[] = {
- MODULE_DEVICE_TABLE(i2c, tps53679_id);
- 
- static const struct of_device_id __maybe_unused tps53679_of_match[] = {
-+	{.compatible = "ti,tps53647", .data = (void *)tps53647},
-+	{.compatible = "ti,tps53667", .data = (void *)tps53667},
- 	{.compatible = "ti,tps53679", .data = (void *)tps53679},
- 	{.compatible = "ti,tps53681", .data = (void *)tps53681},
- 	{.compatible = "ti,tps53688", .data = (void *)tps53688},
++Supported chips:
++
++  * Texas Instruments TPS53647
++
++    Prefix: 'tps53647'
++
++    Addresses scanned: -
++
++    Datasheet: http://www.ti.com/lit/gpn/tps53647
++
++  * Texas Instruments TPS53667
++
++    Prefix: 'tps53667'
++
++    Addresses scanned: -
++
++    Datasheet: http://www.ti.com/lit/gpn/TPS53667
++
++  * Texas Instruments TPS53679
++
++    Prefix: 'tps53679'
++
++    Addresses scanned: -
++
++    Datasheet: http://www.ti.com/lit/gpn/TPS53679 (short version)
++
++  * Texas Instruments TPS53681
++
++    Prefix: 'tps53681'
++
++    Addresses scanned: -
++
++    Datasheet: http://www.ti.com/lit/gpn/TPS53681
++
++  * Texas Instruments TPS53688
++
++    Prefix: 'tps53688'
++
++    Addresses scanned: -
++
++    Datasheet: Available under NDA
++
++
++Authors:
++	Vadim Pasternak <vadimp@mellanox.com>
++	Guenter Roeck <linux@roeck-us.net>
++
++
++Description
++-----------
++
++Chips in this series are multi-phase step-down converters with one or two
++output channels and up to 8 phases per channel.
++
++
++Usage Notes
++-----------
++
++This driver does not probe for PMBus devices. You will have to instantiate
++devices explicitly.
++
++Example: the following commands will load the driver for an TPS53681 at address
++0x60 on I2C bus #1::
++
++	# modprobe tps53679
++	# echo tps53681 0x60 > /sys/bus/i2c/devices/i2c-1/new_device
++
++
++Sysfs attributes
++----------------
++
++======================= ========================================================
++in1_label		"vin"
++
++in1_input		Measured input voltage.
++
++in1_lcrit		Critical minimum input voltage
++
++			TPS53679, TPS53681, TPS53688 only.
++
++in1_lcrit_alarm		Input voltage critical low alarm.
++
++			TPS53679, TPS53681, TPS53688 only.
++
++in1_crit		Critical maximum input voltage.
++
++in1_crit_alarm		Input voltage critical high alarm.
++
++in[N]_label		"vout[1-2]"
++
++			- TPS53647, TPS53667: N=2
++			- TPS53679, TPS53588: N=2,3
++
++in[N]_input		Measured output voltage.
++
++in[N]_lcrit		Critical minimum input voltage.
++
++			TPS53679, TPS53681, TPS53688 only.
++
++in[N]_lcrit_alarm	Critical minimum voltage alarm.
++
++			TPS53679, TPS53681, TPS53688 only.
++
++in[N]_alarm		Output voltage alarm.
++
++			TPS53647, TPS53667 only.
++
++in[N]_crit		Critical maximum output voltage.
++
++			TPS53679, TPS53681, TPS53688 only.
++
++in[N]_crit_alarm	Output voltage critical high alarm.
++
++			TPS53679, TPS53681, TPS53688 only.
++
++temp[N]_input		Measured temperature.
++
++			- TPS53647, TPS53667: N=1
++			- TPS53679, TPS53681, TPS53588: N=1,2
++
++temp[N]_max		Maximum temperature.
++
++temp[N]_crit		Critical high temperature.
++
++temp[N]_max_alarm	Temperature high alarm.
++
++temp[N]_crit_alarm	Temperature critical high alarm.
++
++power1_label		"pin".
++
++power1_input		Measured input power.
++
++power[N]_label		"pout[1-2]".
++
++			- TPS53647, TPS53667: N=2
++			- TPS53679, TPS53681, TPS53588: N=2,3
++
++power[N]_input		Measured output power.
++
++curr1_label		"iin".
++
++curr1_input		Measured input current.
++
++curr1_max		Maximum input current.
++
++curr1_max_alarm		Input current high alarm.
++
++curr1_crit		Critical input current.
++
++curr1_crit_alarm	Input current critical alarm.
++
++curr[N]_label		"iout[1-2]" or "iout1.[0-5]".
++
++			The first digit is the output channel, the second
++			digit is the phase within the channel. Per-phase
++			telemetry supported on TPS53681 only.
++
++			- TPS53647, TPS53667: N=2
++			- TPS53679, TPS53588: N=2,3
++			- TPS53681: N=2-9
++
++curr[N]_input		Measured output current.
++
++curr[N]_max		Maximum output current.
++
++curr[N]_crit		Critical high output current.
++
++curr[N]_max_alarm	Output current high alarm.
++
++curr[N]_crit_alarm	Output current critical high alarm.
++
++			Limit and alarm attributes are only available for
++			non-phase telemetry (iout1, iout2).
++
++======================= ========================================================
 -- 
 2.17.1
 
