@@ -1,68 +1,85 @@
-Return-Path: <SRS0=9cdn=4D=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=nx0j=4F=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9434C7114E
-	for <linux-hwmon@archiver.kernel.org>; Sat, 15 Feb 2020 21:25:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8644AC35242
+	for <linux-hwmon@archiver.kernel.org>; Mon, 17 Feb 2020 04:44:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7DEDC2187F
-	for <linux-hwmon@archiver.kernel.org>; Sat, 15 Feb 2020 21:25:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1581801938;
-	bh=E77Oal04jCQqH5ixAF7Ku9QKVf+7CEAujcJtJjmajI8=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:List-ID:From;
-	b=RM4ACQBPuEmYtJxyZZ8lXs3fuVnTxez2CVhsRUV5U3q+D2yDsWa+nZPKObJqBn7VD
-	 yTx+HryCDROW1id9Qq2MeFIQOP7zqHdkSKtjukPgCpqqBycBWqQ8mlFY8VomKy8G19
-	 XVFsEgjcX6pPaOTygAZfJLSdDOzpdjnA2fqsmoow=
+	by mail.kernel.org (Postfix) with ESMTP id 5A4A120718
+	for <linux-hwmon@archiver.kernel.org>; Mon, 17 Feb 2020 04:44:12 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="kTA/xvgx"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728008AbgBOVZe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 15 Feb 2020 16:25:34 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60698 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727896AbgBOVZW (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 15 Feb 2020 16:25:22 -0500
-Subject: Re: [GIT PULL] hwmon fixes for v5.6-rc2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581801921;
-        bh=E77Oal04jCQqH5ixAF7Ku9QKVf+7CEAujcJtJjmajI8=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=BKj5ISqwpqdzW8yYZbn3X3kPy1TVIKz4R2VnhzUgQvm6a5ENqQw6v6kBZLvZ63ElX
-         kJTtZ1ohkjBSl7nB1mv9zmqS0IjZRP9Eav6efTHzglzShNu/rLJoqRxrcb1sea309D
-         dZSeZM8a/8e9B4hGRnwNCggqJZKcjnHbMhKiasWE=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20200215174832.26950-1-linux@roeck-us.net>
-References: <20200215174832.26950-1-linux@roeck-us.net>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20200215174832.26950-1-linux@roeck-us.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
- hwmon-for-v5.6-rc2
-X-PR-Tracked-Commit-Id: 205447fa9e0a44cc42a74788eb2f6c96f91d5cd6
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: bd516133cc9067ef52518e1c9497c46cb8424ea9
-Message-Id: <158180192167.10388.11124359806666435874.pr-tracker-bot@kernel.org>
-Date:   Sat, 15 Feb 2020 21:25:21 +0000
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+        id S1727006AbgBQEoL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 16 Feb 2020 23:44:11 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:40338 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726656AbgBQEoL (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 16 Feb 2020 23:44:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:Date:Message-ID:Subject:From:Cc:To:Sender:Reply-To:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=1lvp+IDsJ8STAlLQx2axXCMnO3DgipEE+529qyr+2EY=; b=kTA/xvgxXJtM8EXzu1djvXwqZK
+        Sjy6Vhu0J0kWK4k7DbomEaDsdp40F+zHiH118i+E9WX+5WnhTU3KHRUcE41V2fuR6BVtZd8ihGJYk
+        htCDB42KbLgAmb1EmZU2sMTwhVIgrNtsuC7+HnKaxyE+ZGjCArCi+fKTQneMjgtlXP3aLIjMwpKVu
+        EpN2i/gsB0FgUHVFejmO63fv5qy2jEnGRDIz7cOGQRx8v7RUEQ5tEhaQzRx1SWGyJysUL6YNMI1By
+        X1NFiY8aTewZCc8NA2W61bv2Yu37tQCYKl2rnUqVLOiUW+l3m5BiXNfAD60IQN2RcElmNLd7Ay6wq
+        clVY8pLQ==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1j3YGQ-0001B0-Ey; Mon, 17 Feb 2020 04:44:10 +0000
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Vadim Pasternak <vadimp@mellanox.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH] Documentation/hwmon: fix xdpe12284 Sphinx warnings
+Message-ID: <0094c570-dd4c-dc0e-386d-ea1c39b6a582@infradead.org>
+Date:   Sun, 16 Feb 2020 20:44:09 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The pull request you sent on Sat, 15 Feb 2020 09:48:32 -0800:
+From: Randy Dunlap <rdunlap@infradead.org>
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.6-rc2
+Fix Sphinx format warnings by adding a blank line.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/bd516133cc9067ef52518e1c9497c46cb8424ea9
+Documentation/hwmon/xdpe12284.rst:28: WARNING: Unexpected indentation.
+Documentation/hwmon/xdpe12284.rst:29: WARNING: Block quote ends without a blank line; unexpected unindent.
 
-Thank you!
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Cc: Vadim Pasternak <vadimp@mellanox.com>
+---
+ Documentation/hwmon/xdpe12284.rst |    1 +
+ 1 file changed, 1 insertion(+)
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+--- lnx-56-rc2.orig/Documentation/hwmon/xdpe12284.rst
++++ lnx-56-rc2/Documentation/hwmon/xdpe12284.rst
+@@ -24,6 +24,7 @@ This driver implements support for Infin
+ dual loop voltage regulators.
+ The family includes XDPE12284 and XDPE12254 devices.
+ The devices from this family complaint with:
++
+ - Intel VR13 and VR13HC rev 1.3, IMVP8 rev 1.2 and IMPVP9 rev 1.3 DC-DC
+   converter specification.
+ - Intel SVID rev 1.9. protocol.
+
+
