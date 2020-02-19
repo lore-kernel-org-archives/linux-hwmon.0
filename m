@@ -2,224 +2,236 @@ Return-Path: <SRS0=CB9w=4H=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 819ABC3404D
-	for <linux-hwmon@archiver.kernel.org>; Wed, 19 Feb 2020 09:15:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71004C34047
+	for <linux-hwmon@archiver.kernel.org>; Wed, 19 Feb 2020 15:13:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5111824672
-	for <linux-hwmon@archiver.kernel.org>; Wed, 19 Feb 2020 09:15:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3A97824671
+	for <linux-hwmon@archiver.kernel.org>; Wed, 19 Feb 2020 15:13:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=wdc.com header.i=@wdc.com header.b="Y/wCzPW5";
-	dkim=pass (1024-bit key) header.d=sharedspace.onmicrosoft.com header.i=@sharedspace.onmicrosoft.com header.b="Bl9tm4RE"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X94vFv8u"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726202AbgBSJPc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 19 Feb 2020 04:15:32 -0500
-Received: from esa6.hgst.iphmx.com ([216.71.154.45]:28587 "EHLO
-        esa6.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726210AbgBSJPb (ORCPT
+        id S1727193AbgBSPNl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 19 Feb 2020 10:13:41 -0500
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:37453 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726634AbgBSPNk (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 19 Feb 2020 04:15:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1582103731; x=1613639731;
-  h=from:to:cc:subject:date:message-id:content-id:
-   content-transfer-encoding:mime-version;
-  bh=EPm0gtoAQUP6sdZ6Si4YpQUYfvZlDAxMAt5CMUpzfY4=;
-  b=Y/wCzPW5DRYDnSwe4JViM1jio3JOQ2pfCOODj5+tCFG1oZIwFKZ6FnWt
-   AKa/4I2AOqDjyFRTfQw1FuJlJ10b99t2F+uJccEfOTvKydTDonbdrcxPZ
-   GtJHQdO2VDZVsg5kvWqVyctEbx8dsLpMd1JFZkYXxF5yLowbzMw3mNvp0
-   vdPFOoxQRnl+eY+hKD0n8wyrj3dur2772biYTASzJo3wzMmAcuJf/VHLd
-   T37y+uN/YtD7TWev0VAds1bAwna826wmO9T+11T/OkzRY80lb7azcX2Yd
-   Xb/8x3a1Ox2hg0cWAtfjioIqFZ9FL5OptFokypLZNIy1AypDRKM8x7hNF
-   A==;
-IronPort-SDR: YHVSwD/KnupzBEJzhDae9ZOZQXgMD0+CMOj5TBf/cux5pS1Asbm+YPA7Cam/PvYMbw2qbTqfbJ
- X0DYvM3INSuQTszDPTlhGTOQ5JPx20W8MYoQM0I4AX4lLuVlrKPXw/REH0V+Nga8xcfE6IDu6E
- H3Y77uAJPi4r5L+bZpY/UdSwD0Z0U85sIBBXMv7Jhr/J3aj8onX7P/kLXW8pyzOqM/UVk8M+9b
- QpMpgRZUaOwv5YEoy2XmQ4meelY+mM2uP6L/vNDo91W0DWkj1Csk7Vq0CxZfy/pW/myz8HsP7h
- ZYI=
-X-IronPort-AV: E=Sophos;i="5.70,459,1574092800"; 
-   d="scan'208";a="131614919"
-Received: from mail-mw2nam12lp2043.outbound.protection.outlook.com (HELO NAM12-MW2-obe.outbound.protection.outlook.com) ([104.47.66.43])
-  by ob1.hgst.iphmx.com with ESMTP; 19 Feb 2020 17:15:31 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YsKx/gjNlzJ5d6SnB3qC/wlANWbXT8UGfgyuQEZQpPiwekZDwF1e6my8WSeP4WqhDr6RPquNefHKfPAPBvhYadnFmpd8KTrW/QQvaRyjJCbq/71h5XZhokmRi/VJTyKh/3zSsHCfYCEDmkqTGH3sUaGdbkp9EXfuXwiTdprhjDYG9lhjE/4EflG47sjVC1Lp3PsVzqkps6lqn2z5LuNMd5g5dswY3f9HBHD5ANEfEYuHa2Q61AWUrDBW8hJT5Tl87b0XuX+H02eNt5ZOY+/4beQ0wgSIr3l7rncw0mt2tFRYaJcMZPQM7v7caLqFa7bEvlYjcAeBC3NuVHY3h8yUQQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EPm0gtoAQUP6sdZ6Si4YpQUYfvZlDAxMAt5CMUpzfY4=;
- b=LIsaYRbAEye8yC34JFEijObYduqIJYwfKAPSDo1jzpAPl3Vjv+5FY7sqtlQpR4/xsL2NxAYxXB7rlsb7LqwTFxQvlkbWx65qDmpAWgQtYV6sMLB5hkDHhUpEIPoA5Y7AbycUiGatFQ6/K4vkDonItKHgZEqKym0fMN13y7AJn0C6vDnEQTJgduZQapk6JGBblgPLhD1sPAYesroIXXcSNMFycUjMneiDcjMjdVRLjyb8K45FZRam7oeSwI0c9uSs1cdQaVCxNrg7yRt27lKO6AxsVbHYIM22uRbNOqeXNWVW41PzyYIZkvlLioUOkfVdnDRALK+9PMPzkcOSHyD0Ig==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
+        Wed, 19 Feb 2020 10:13:40 -0500
+Received: by mail-pl1-f194.google.com with SMTP id c23so196762plz.4;
+        Wed, 19 Feb 2020 07:13:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EPm0gtoAQUP6sdZ6Si4YpQUYfvZlDAxMAt5CMUpzfY4=;
- b=Bl9tm4REWDyV6OyeW1Ui4r4NtJfMAond+sqvCi7AAuyQOdkVoVn9D6sCizkaJcZgF4DDlqltcENTSTdwj/JfIE9CvioTb2v/JGZP7irrepAf4UUIkdKFK7iosEEjXa+6HVBsD7RNyuN8zhKBf6iQg7Am91cpFgJ+dYpItYsjlHg=
-Received: from BYAPR04MB5816.namprd04.prod.outlook.com (20.179.59.16) by
- BYAPR04MB4567.namprd04.prod.outlook.com (52.135.237.21) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2729.31; Wed, 19 Feb 2020 09:15:28 +0000
-Received: from BYAPR04MB5816.namprd04.prod.outlook.com
- ([fe80::6daf:1b7c:1a61:8cb2]) by BYAPR04MB5816.namprd04.prod.outlook.com
- ([fe80::6daf:1b7c:1a61:8cb2%6]) with mapi id 15.20.2729.032; Wed, 19 Feb 2020
- 09:15:28 +0000
-From:   Damien Le Moal <Damien.LeMoal@wdc.com>
-To:     "linux@roeck-us.net" <linux@roeck-us.net>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "jdelvare@suse.com" <jdelvare@suse.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: lockdep splat for acpi power meter
-Thread-Topic: lockdep splat for acpi power meter
-Thread-Index: AQHV5wUgdnmwASqAOESniBmEpzdWjQ==
-Date:   Wed, 19 Feb 2020 09:15:28 +0000
-Message-ID: <8561ff118638c9ed077573c1099adea3521c9734.camel@wdc.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.34.3 (3.34.3-1.fc31) 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Damien.LeMoal@wdc.com; 
-x-originating-ip: [199.255.47.11]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: da16fd2b-5e30-45d7-113f-08d7b51c430c
-x-ms-traffictypediagnostic: BYAPR04MB4567:
-x-microsoft-antispam-prvs: <BYAPR04MB45676F2BCBB4C741819CF0DCE7100@BYAPR04MB4567.namprd04.prod.outlook.com>
-wdcipoutbound: EOP-TRUE
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 0318501FAE
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(346002)(136003)(376002)(366004)(39860400002)(396003)(189003)(199004)(26005)(186003)(110136005)(316002)(478600001)(6512007)(6486002)(71200400001)(4326008)(36756003)(5660300002)(6506007)(66446008)(66556008)(64756008)(8676002)(66946007)(66476007)(86362001)(91956017)(76116006)(2906002)(81156014)(2616005)(81166006)(8936002);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR04MB4567;H:BYAPR04MB5816.namprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: NWzqfmOLoK8XoTzSlqhHjK53pZ5fK+QO/KBFENhnfVNEVjhMoHbLf35oe538Dm7EPdhDsPvruf4+A2lglN5Fn2HLKbNaBftV+r4LQP0/RR/fN8UEA4bwwOtEFVkChqWIw2zG5N1puUlUHotGlJRKyKMaAg92FCxXraosdFDsKZ2cBJXtwqWJf/cS5vmw1+seM5OzVSuL5hSvEteCUsyTSIR8oK5aurbjpCrEChgYn7rBd1KButFN7eN28RI+5AOCBI+90vUl0MRlXDkV/Wchqu9uRCIWn1ZG7HCghuG8Z9rNgPO0QW/sMr7OM4lhIVzT3dI60emx9kEuJeL756qrqRz+63rvuiY3YnEj8VD5E3bLvYnwtQ8glwMZemqqWD0oGQNUBp/1OavhnK2uLVgbb0AsmAM4c7p1oxMR36+LB2qbypRmIa38D22g0TeLkSWs
-x-ms-exchange-antispam-messagedata: +x0VKkYtvwJQlrTjscnpUujC6roGaV7YKO9jQTedb4xSy7nzj3Hk3chDiW37mrN00M6AI0TIJC2jM5mLQR4GsM795dDydKQhbZ0mxV+IQsod3OosE5lUpLr42/8+gwrkwUVxiDvuFXlHgklXFE7w/A==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <A9B96939BDE02B4287DD855FC9EE26C1@namprd04.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=A/WCgzKsAGcAiBdB1Q4Nk8rPvu+Sieh53r5g+a2fQlI=;
+        b=X94vFv8umiSsRLPKefpXwFeBxqVoTskjis3OGYeRoB3yH7CJqpyGv79+y/Mo0meKis
+         SXfe5YE+Pt4D6baIy25Ui6fT9zixwLVzn0XijkFwJDvAbkG7jPJ6yR/H3ZSZue1UubF1
+         gvIp0IeTuwZyKEycDb+MZiUiG3DvBIl4A6GlendnbVWBQyTJhYCPYQJBjBdcoM27SF6v
+         h1i0gMOYyu0UhgIbEN3nhd1Q9SAILIU/n862AujprgAyNt5a5xMP6qpLNXdKq6qALt4V
+         aXRH1IKbnGSJ2hdtOLRXLT4CpMmQ/b6GLWNfMSEbSjE5oFsHfb6SndxWkRYk915nsCVr
+         ILqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=A/WCgzKsAGcAiBdB1Q4Nk8rPvu+Sieh53r5g+a2fQlI=;
+        b=CO45BVsumcfKGvzegI+KiiRlhTVkKedBmydpMUAtI+OD6bnaPFd1S5in5r8sVewX9G
+         rn0JjQoKjoBTwA5NaFU8PB3dau1GGPdZ9krEmLruKw7R7/MK4P95N36d8aSKByOOweC5
+         Z0M5cfGgxWED0MyCwWEg19btQvCJrRnUTrshzwPHPQPL19g6w5TCK1y3/6+mZaxyL9en
+         Ys/hDULsXRNtDMJzrQRkhJ425MaJ/HlfFeg7Rs5r3gUNio2URhj/d316UiBjpp88Cb2Z
+         hI4Jn1lCv9Q1f2cJvFNtl/4iN+O9XU2dRhgIsFfaC05rejny1YE8N/W+jpQje4zupJ5S
+         ySQQ==
+X-Gm-Message-State: APjAAAX33BQ9pqUHeYTh31uP72u4cThP4qtvhFl64mAUNhNtxCkCLBKX
+        WATpBnHbMiqkuiSOd+dkBVA=
+X-Google-Smtp-Source: APXvYqwLqLNlOBaRUkfoOdjsQ527g670hCXQCrGsOhAqD8Aitha1iqFp11ieH3OcuiENx7gNU/jPmQ==
+X-Received: by 2002:a17:90a:f0d1:: with SMTP id fa17mr9329610pjb.90.1582125219764;
+        Wed, 19 Feb 2020 07:13:39 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x26sm3633825pfq.55.2020.02.19.07.13.38
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 19 Feb 2020 07:13:38 -0800 (PST)
+Date:   Wed, 19 Feb 2020 07:13:36 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Damien Le Moal <Damien.LeMoal@wdc.com>
+Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: lockdep splat for acpi power meter
+Message-ID: <20200219151336.GA17501@roeck-us.net>
+References: <8561ff118638c9ed077573c1099adea3521c9734.camel@wdc.com>
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: da16fd2b-5e30-45d7-113f-08d7b51c430c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Feb 2020 09:15:28.3491
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: JAsHnwT0+lDQjgnBj1dZc53IRhneYZsgfIfFQWr20XeuElGvu1/HUsc9vNo72X49gwKdJc62ggl7W/x4T4gk1g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR04MB4567
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8561ff118638c9ed077573c1099adea3521c9734.camel@wdc.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-SmVhbiwgR3VlbnRlciwNCg0KSSBhbSBnZXR0aW5nIHRoZSBmb2xsb3dpbmcgbG9ja2RlcCBzcGxh
-dCBvbiBib290IHNpbmNlIDUuNS1yYzEgKG15DQphcG9sb2dpZXMgZm9yIG5vdCBzaWduYWxpbmcg
-dGhpcyBlYXJsaWVyKS4gSSBkbyBub3Qgc2VlIHRoaXMgd2l0aCA1LjQNCmFuZCBhcyBvZiA1LjYt
-cmMyLCBpdCBzdGlsbCBzaG93cyB1cCAxMDAlIG9mIHRoZSB0aW1lIG9uIGJvb3QuDQoNCklmIHlv
-dSBhcmUgbm90IHRoZSByaWdodCBwZXJzb25zIHRvIGxvb2sgaW50byB0aGlzLCBwbGVhc2UgbGV0
-IG1lIGtub3cuDQpUaGFua3MgIQ0KDQpbICAgNjQuMTQ1NzYxXSA9PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NClsgICA2NC4xNTIyOTVdIFdBUk5J
-Tkc6IHBvc3NpYmxlIGNpcmN1bGFyIGxvY2tpbmcgZGVwZW5kZW5jeSBkZXRlY3RlZA0KWyAgIDY0
-LjE1ODg1MF0gNS42LjAtcmMyKyAjNjI5IE5vdCB0YWludGVkDQpbICAgNjQuMTU4ODUxXSAtLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NClsgICA2
-NC4xNTg4NTRdIHB5dGhvbi8xMzk3IGlzIHRyeWluZyB0byBhY3F1aXJlIGxvY2s6DQpbICAgNjQu
-MTc3MDM5XSBmZmZmODg4NjE5MDgwMDcwICgmcmVzb3VyY2UtPmxvY2speysuKy59LCBhdDoNCnNo
-b3dfcG93ZXIrMHgzYy8weGEwIFthY3BpX3Bvd2VyX21ldGVyXQ0KWyAgIDY0LjE3NzA1MF0gDQog
-ICAgICAgICAgICAgICBidXQgdGFzayBpcyBhbHJlYWR5IGhvbGRpbmcgbG9jazoNClsgICA2NC4x
-NzcwNTBdIGZmZmY4ODg4MTY0M2YxODggKGtuLT5jb3VudCMxMTkpeysrKyt9LCBhdDoNCmtlcm5m
-c19zZXFfc3RhcnQrMHg2YS8weDE2MA0KWyAgIDY0LjE3NzA1OF0gDQogICAgICAgICAgICAgICB3
-aGljaCBsb2NrIGFscmVhZHkgZGVwZW5kcyBvbiB0aGUgbmV3IGxvY2suDQoNClsgICA2NC4xNzcw
-NThdIA0KICAgICAgICAgICAgICAgdGhlIGV4aXN0aW5nIGRlcGVuZGVuY3kgY2hhaW4gKGluIHJl
-dmVyc2Ugb3JkZXIpIGlzOg0KWyAgIDY0LjE3NzA1OV0gDQogICAgICAgICAgICAgICAtPiAjMSAo
-a24tPmNvdW50IzExOSl7KysrK306DQpbICAgNjQuMTc3MDY2XSAgICAgICAgX19rZXJuZnNfcmVt
-b3ZlKzB4NjI2LzB4N2UwDQpbICAgNjQuMTc3MDY4XSAgICAgICAga2VybmZzX3JlbW92ZV9ieV9u
-YW1lX25zKzB4NDEvMHg4MA0KWyAgIDY0LjE3NzA3MF0gICAgICAgIHJlbW92ZV9hdHRycysweGNi
-LzB4M2MwIFthY3BpX3Bvd2VyX21ldGVyXQ0KWyAgIDY0LjE3NzA3M10gICAgICAgIGFjcGlfcG93
-ZXJfbWV0ZXJfbm90aWZ5KzB4MWY3LzB4MzEwDQpbYWNwaV9wb3dlcl9tZXRlcl0NClsgICA2NC4x
-NzcwNzhdICAgICAgICBhY3BpX2V2X25vdGlmeV9kaXNwYXRjaCsweDE5OC8weDFmMw0KWyAgIDY0
-LjE3NzA4MV0gICAgICAgIGFjcGlfb3NfZXhlY3V0ZV9kZWZlcnJlZCsweDRkLzB4NzANClsgICA2
-NC4xNzcwODVdICAgICAgICBwcm9jZXNzX29uZV93b3JrKzB4N2M4LzB4MTM0MA0KWyAgIDY0LjE3
-NzA4N10gICAgICAgIHdvcmtlcl90aHJlYWQrMHg5NC8weGM3MA0KWyAgIDY0LjE3NzA4OV0gICAg
-ICAgIGt0aHJlYWQrMHgyZWQvMHgzZjANClsgICA2NC4xNzcwOTRdICAgICAgICByZXRfZnJvbV9m
-b3JrKzB4MjQvMHgzMA0KWyAgIDY0LjE3NzA5NF0gDQogICAgICAgICAgICAgICAtPiAjMCAoJnJl
-c291cmNlLT5sb2NrKXsrLisufToNClsgICA2NC4xNzcxMDBdICAgICAgICBfX2xvY2tfYWNxdWly
-ZSsweDIwYmUvMHg0OWIwDQpbICAgNjQuMTc3MTAxXSAgICAgICAgbG9ja19hY3F1aXJlKzB4MTI3
-LzB4MzQwDQpbICAgNjQuMTc3MTA0XSAgICAgICAgX19tdXRleF9sb2NrKzB4MTViLzB4MTM1MA0K
-WyAgIDY0LjE3NzEwNl0gICAgICAgIHNob3dfcG93ZXIrMHgzYy8weGEwIFthY3BpX3Bvd2VyX21l
-dGVyXQ0KWyAgIDY0LjE3NzExMF0gICAgICAgIGRldl9hdHRyX3Nob3crMHgzZi8weDgwDQpbICAg
-NjQuMTc3MTEyXSAgICAgICAgc3lzZnNfa2Zfc2VxX3Nob3crMHgyMTYvMHg0MTANClsgICA2NC4x
-NzcxMTRdICAgICAgICBzZXFfcmVhZCsweDQwNy8weGY5MA0KWyAgIDY0LjE3NzExOV0gICAgICAg
-IHZmc19yZWFkKzB4MTUyLzB4MmMwDQpbICAgNjQuMTc3MTIxXSAgICAgICAga3N5c19yZWFkKzB4
-ZjMvMHgxZDANClsgICA2NC4xNzcxMjVdICAgICAgICBkb19zeXNjYWxsXzY0KzB4OTUvMHgxMDEw
-DQpbICAgNjQuMTc3MTI3XSAgICAgICAgZW50cnlfU1lTQ0FMTF82NF9hZnRlcl9od2ZyYW1lKzB4
-NDkvMHhiZQ0KWyAgIDY0LjE3NzEyOF0gDQogICAgICAgICAgICAgICBvdGhlciBpbmZvIHRoYXQg
-bWlnaHQgaGVscCB1cyBkZWJ1ZyB0aGlzOg0KDQpbICAgNjQuMTc3MTI5XSAgUG9zc2libGUgdW5z
-YWZlIGxvY2tpbmcgc2NlbmFyaW86DQoNClsgICA2NC4xNzcxMzBdICAgICAgICBDUFUwICAgICAg
-ICAgICAgICAgICAgICBDUFUxDQpbICAgNjQuMTc3MTMwXSAgICAgICAgLS0tLSAgICAgICAgICAg
-ICAgICAgICAgLS0tLQ0KWyAgIDY0LjE3NzEzMV0gICBsb2NrKGtuLT5jb3VudCMxMTkpOw0KWyAg
-IDY0LjE3NzEzMl0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGxvY2soJnJlc291cmNl
-LT5sb2NrKTsNClsgICA2NC4xNzcxMzRdICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBs
-b2NrKGtuLT5jb3VudCMxMTkpOw0KWyAgIDY0LjE3NzEzNV0gICBsb2NrKCZyZXNvdXJjZS0+bG9j
-ayk7DQpbICAgNjQuMTc3MTM3XSANCiAgICAgICAgICAgICAgICAqKiogREVBRExPQ0sgKioqDQpb
-ICAgNjQuMTc3MTM4XSA0IGxvY2tzIGhlbGQgYnkgcHl0aG9uLzEzOTc6DQpbICAgNjQuMTc3MTM5
-XSAgIzA6IGZmZmY4ODkwMjQyZDY0ZTAgKCZmLT5mX3Bvc19sb2NrKXsrLisufSwgYXQ6DQpfX2Zk
-Z2V0X3BvcysweDliLzB4YjANClsgICA2NC4xNzcxNDVdICAjMTogZmZmZjg4OTA0MGJlNzRlMCAo
-JnAtPmxvY2speysuKy59LCBhdDoNCnNlcV9yZWFkKzB4NmIvMHhmOTANClsgICA2NC4xNzcxNDhd
-ICAjMjogZmZmZjg4OTA0NDhlYjg4MCAoJm9mLT5tdXRleCl7Ky4rLn0sIGF0Og0Ka2VybmZzX3Nl
-cV9zdGFydCsweDQ3LzB4MTYwDQpbICAgNjQuMTc3MTUxXSAgIzM6IGZmZmY4ODg4MTY0M2YxODgg
-KGtuLT5jb3VudCMxMTkpeysrKyt9LCBhdDoNCmtlcm5mc19zZXFfc3RhcnQrMHg2YS8weDE2MA0K
-WyAgIDY0LjE3NzE1NV0gDQogICAgICAgICAgICAgICBzdGFjayBiYWNrdHJhY2U6DQpbICAgNjQu
-MTc3MTU4XSBDUFU6IDEwIFBJRDogMTM5NyBDb21tOiBweXRob24gTm90IHRhaW50ZWQgNS42LjAt
-cmMyKw0KIzYyOQ0KWyAgIDY0LjE3NzE1OV0gSGFyZHdhcmUgbmFtZTogU3VwZXJtaWNybyBTdXBl
-ciBTZXJ2ZXIvWDExRFBMLWksIEJJT1MNCjMuMSAwNS8yMS8yMDE5DQpbICAgNjQuMTc3MTYwXSBD
-YWxsIFRyYWNlOg0KWyAgIDY0LjE3NzE2N10gIGR1bXBfc3RhY2srMHg5Ny8weGUwDQpbICAgNjQu
-MTc3MTcwXSAgY2hlY2tfbm9uY2lyY3VsYXIrMHgzMmUvMHgzZTANClsgICA2NC4xNzcxNzJdICA/
-IHByaW50X2NpcmN1bGFyX2J1Zy5pc3JhLjArMHgxZTAvMHgxZTANClsgICA2NC4xNzcxNzddICA/
-IHVud2luZF9uZXh0X2ZyYW1lKzB4YjlhLzB4MTg5MA0KWyAgIDY0LjE3NzE4MF0gID8gZW50cnlf
-U1lTQ0FMTF82NF9hZnRlcl9od2ZyYW1lKzB4NDkvMHhiZQ0KWyAgIDY0LjE3NzE4Ml0gID8gZ3Jh
-cGhfbG9jaysweDc5LzB4MTcwDQpbICAgNjQuMTc3MTgzXSAgPyBfX2xvY2tkZXBfcmVzZXRfbG9j
-aysweDNjMC8weDNjMA0KWyAgIDY0LjE3NzE4NV0gID8gbWFya19sb2NrKzB4YmMvMHgxMTUwDQpb
-ICAgNjQuMTc3MTg3XSAgX19sb2NrX2FjcXVpcmUrMHgyMGJlLzB4NDliMA0KWyAgIDY0LjE3NzE5
-MF0gID8gbWFya19oZWxkX2xvY2tzKzB4ZTAvMHhlMA0KWyAgIDY0LjE3NzE5NF0gID8gc3RhY2tf
-dHJhY2Vfc2F2ZSsweDkxLzB4YzANClsgICA2NC4xNzcxOTZdICBsb2NrX2FjcXVpcmUrMHgxMjcv
-MHgzNDANClsgICA2NC4xNzcxOTldICA/IHNob3dfcG93ZXIrMHgzYy8weGEwIFthY3BpX3Bvd2Vy
-X21ldGVyXQ0KWyAgIDY0LjE3NzIwMV0gID8gZGV2aWNlX3JlbW92ZV9iaW5fZmlsZSsweDEwLzB4
-MTANClsgICA2NC4xNzcyMDNdICA/IGRldmljZV9yZW1vdmVfYmluX2ZpbGUrMHgxMC8weDEwDQpb
-ICAgNjQuMTc3MjA1XSAgX19tdXRleF9sb2NrKzB4MTViLzB4MTM1MA0KWyAgIDY0LjE3NzIwOF0g
-ID8gc2hvd19wb3dlcisweDNjLzB4YTAgW2FjcGlfcG93ZXJfbWV0ZXJdDQpbICAgNjQuMTc3MjEw
-XSAgPyBzaG93X3Bvd2VyKzB4M2MvMHhhMCBbYWNwaV9wb3dlcl9tZXRlcl0NClsgICA2NC4xNzcy
-MTJdICA/IG11dGV4X2xvY2tfaW9fbmVzdGVkKzB4MTFmMC8weDExZjANClsgICA2NC4xNzcyMTRd
-ICA/IGxvY2tfZG93bmdyYWRlKzB4NmEwLzB4NmEwDQpbICAgNjQuMTc3MjE2XSAgPyBrZXJuZnNf
-c2VxX3N0YXJ0KzB4NDcvMHgxNjANClsgICA2NC4xNzcyMThdICA/IGxvY2tfYWNxdWlyZSsweDEy
-Ny8weDM0MA0KWyAgIDY0LjE3NzIxOV0gID8ga2VybmZzX3NlcV9zdGFydCsweDZhLzB4MTYwDQpb
-ICAgNjQuMTc3MjIyXSAgPyBkZXZpY2VfcmVtb3ZlX2Jpbl9maWxlKzB4MTAvMHgxMA0KWyAgIDY0
-LjE3NzIyNl0gID8gc2hvd19wb3dlcisweDNjLzB4YTAgW2FjcGlfcG93ZXJfbWV0ZXJdDQpbICAg
-NjQuNTcyNjc2XSAgc2hvd19wb3dlcisweDNjLzB4YTAgW2FjcGlfcG93ZXJfbWV0ZXJdDQpbICAg
-NjQuNTcyNjgxXSAgZGV2X2F0dHJfc2hvdysweDNmLzB4ODANClsgICA2NC41ODE5MzFdICA/IG1l
-bXNldCsweDIwLzB4NDANClsgICA2NC41ODE5MzVdICBzeXNmc19rZl9zZXFfc2hvdysweDIxNi8w
-eDQxMA0KWyAgIDY0LjU4MTkzOF0gIHNlcV9yZWFkKzB4NDA3LzB4ZjkwDQpbICAgNjQuNTgxOTQz
-XSAgPyBzZWN1cml0eV9maWxlX3Blcm1pc3Npb24rMHgxNmYvMHgyYzANClsgICA2NC41ODE5NDhd
-ICB2ZnNfcmVhZCsweDE1Mi8weDJjMA0KWyAgIDY0LjU4MTk1MV0gIGtzeXNfcmVhZCsweGYzLzB4
-MWQwDQpbICAgNjQuNTgxOTU0XSAgPyBrZXJuZWxfd3JpdGUrMHgxMjAvMHgxMjANClsgICA2NC41
-ODE5NTddICA/IGZpbHBfb3BlbisweDUwLzB4NTANClsgICA2NC41ODE5NjJdICBkb19zeXNjYWxs
-XzY0KzB4OTUvMHgxMDEwDQpbICAgNjQuNTgxOTY3XSAgZW50cnlfU1lTQ0FMTF82NF9hZnRlcl9o
-d2ZyYW1lKzB4NDkvMHhiZQ0KWyAgIDY0LjU4MTk3MV0gUklQOiAwMDMzOjB4N2ZiYjRlMmM2NDRj
-DQpbICAgNjQuNTgxOTc0XSBDb2RlOiBlYyAyOCA0OCA4OSA1NCAyNCAxOCA0OCA4OSA3NCAyNCAx
-MCA4OSA3YyAyNCAwOCBlOA0KZDkgNDkgZjkgZmYgNDggOGIgNTQgMjQgMTggNDggOGIgNzQgMjQg
-MTAgNDEgODkgYzAgOGIgN2MgMjQgMDggMzEgYzAgMGYNCjA1IDw0OD4gM2QgMDAgZjAgZmYgZmYg
-NzcgMzAgNDQgODkgYzcgNDggODkgNDQgMjQgMDggZTggMGYgNGEgZjkgZmYgNDgNClsgICA2NC41
-ODE5NzZdIFJTUDogMDAyYjowMDAwN2ZmZTMwZDMzNDAwIEVGTEFHUzogMDAwMDAyNDYgT1JJR19S
-QVg6DQowMDAwMDAwMDAwMDAwMDAwDQpbICAgNjQuNTgxOTc5XSBSQVg6IGZmZmZmZmZmZmZmZmZm
-ZGEgUkJYOiAwMDAwNTU2OWQwMTZlMWUwIFJDWDoNCjAwMDA3ZmJiNGUyYzY0NGMNClsgICA2NC41
-ODE5ODBdIFJEWDogMDAwMDAwMDAwMDAwMTAwMCBSU0k6IDAwMDA1NTY5ZDAyMjI5NzAgUkRJOg0K
-MDAwMDAwMDAwMDAwMDAwMw0KWyAgIDY0LjU4MTk4Ml0gUkJQOiAwMDAwN2ZiYjRlMzk4MzAwIFIw
-ODogMDAwMDAwMDAwMDAwMDAwMCBSMDk6DQowMDAwN2ZiYjRlMzk3MTkwDQpbICAgNjQuNTgxOTg0
-XSBSMTA6IDAwMDAwMDAwMDAwMDAwMDAgUjExOiAwMDAwMDAwMDAwMDAwMjQ2IFIxMjoNCjAwMDA1
-NTY5ZDAxNmUxZTANClsgICA2NC41ODE5ODVdIFIxMzogMDAwMDdmYmI0ZTM5NzcwMCBSMTQ6IDAw
-MDAwMDAwMDAwMDBkNjggUjE1Og0KMDAwMDAwMDAwMDAwMGQ2OA0KDQoNCi0tIA0KRGFtaWVuIExl
-IE1vYWwNCldlc3Rlcm4gRGlnaXRhbCBSZXNlYXJjaA0K
+On Wed, Feb 19, 2020 at 09:15:28AM +0000, Damien Le Moal wrote:
+> Jean, Guenter,
+> 
+> I am getting the following lockdep splat on boot since 5.5-rc1 (my
+> apologies for not signaling this earlier). I do not see this with 5.4
+> and as of 5.6-rc2, it still shows up 100% of the time on boot.
+> 
+I think this is a real problem. I am not sure though what makes it
+appear now; there have been no interesting changes in the acpi
+code or in the hwmon driver. There _have_ been some locking related
+changes in kernfs, though. I don't know if those changes cause the
+problem, or if they expose it.
+
+Either case, the acpi_power_meter driver locks its resources, then
+removes and re-creates all its attributes (which requires a kernfs
+lock). At the same time, if an attribute is read, the same lock
+is acquired by kernfs, then the driver locks its resources. Perfect
+deadlock.
+
+I may be missing something, but I think this entire code is broken.
+Not only deletes and re-creates it all attributes while the hwmon
+driver is active, it also releases and re-creates various strings
+while potentially accessing those very same strings ... without
+any locking. This is just asking for trouble.
+
+We can (try to) work around the lockdep splat, but I don't think
+that will solve all the problems. Jean, any thoughts ?
+
+Guenter
+
+> If you are not the right persons to look into this, please let me know.
+> Thanks !
+> 
+> [   64.145761] ======================================================
+> [   64.152295] WARNING: possible circular locking dependency detected
+> [   64.158850] 5.6.0-rc2+ #629 Not tainted
+> [   64.158851] ------------------------------------------------------
+> [   64.158854] python/1397 is trying to acquire lock:
+> [   64.177039] ffff888619080070 (&resource->lock){+.+.}, at:
+> show_power+0x3c/0xa0 [acpi_power_meter]
+> [   64.177050] 
+>                but task is already holding lock:
+> [   64.177050] ffff88881643f188 (kn->count#119){++++}, at:
+> kernfs_seq_start+0x6a/0x160
+> [   64.177058] 
+>                which lock already depends on the new lock.
+> 
+> [   64.177058] 
+>                the existing dependency chain (in reverse order) is:
+> [   64.177059] 
+>                -> #1 (kn->count#119){++++}:
+> [   64.177066]        __kernfs_remove+0x626/0x7e0
+> [   64.177068]        kernfs_remove_by_name_ns+0x41/0x80
+> [   64.177070]        remove_attrs+0xcb/0x3c0 [acpi_power_meter]
+> [   64.177073]        acpi_power_meter_notify+0x1f7/0x310
+> [acpi_power_meter]
+> [   64.177078]        acpi_ev_notify_dispatch+0x198/0x1f3
+> [   64.177081]        acpi_os_execute_deferred+0x4d/0x70
+> [   64.177085]        process_one_work+0x7c8/0x1340
+> [   64.177087]        worker_thread+0x94/0xc70
+> [   64.177089]        kthread+0x2ed/0x3f0
+> [   64.177094]        ret_from_fork+0x24/0x30
+> [   64.177094] 
+>                -> #0 (&resource->lock){+.+.}:
+> [   64.177100]        __lock_acquire+0x20be/0x49b0
+> [   64.177101]        lock_acquire+0x127/0x340
+> [   64.177104]        __mutex_lock+0x15b/0x1350
+> [   64.177106]        show_power+0x3c/0xa0 [acpi_power_meter]
+> [   64.177110]        dev_attr_show+0x3f/0x80
+> [   64.177112]        sysfs_kf_seq_show+0x216/0x410
+> [   64.177114]        seq_read+0x407/0xf90
+> [   64.177119]        vfs_read+0x152/0x2c0
+> [   64.177121]        ksys_read+0xf3/0x1d0
+> [   64.177125]        do_syscall_64+0x95/0x1010
+> [   64.177127]        entry_SYSCALL_64_after_hwframe+0x49/0xbe
+> [   64.177128] 
+>                other info that might help us debug this:
+> 
+> [   64.177129]  Possible unsafe locking scenario:
+> 
+> [   64.177130]        CPU0                    CPU1
+> [   64.177130]        ----                    ----
+> [   64.177131]   lock(kn->count#119);
+> [   64.177132]                                lock(&resource->lock);
+> [   64.177134]                                lock(kn->count#119);
+> [   64.177135]   lock(&resource->lock);
+> [   64.177137] 
+>                 *** DEADLOCK ***
+> [   64.177138] 4 locks held by python/1397:
+> [   64.177139]  #0: ffff8890242d64e0 (&f->f_pos_lock){+.+.}, at:
+> __fdget_pos+0x9b/0xb0
+> [   64.177145]  #1: ffff889040be74e0 (&p->lock){+.+.}, at:
+> seq_read+0x6b/0xf90
+> [   64.177148]  #2: ffff8890448eb880 (&of->mutex){+.+.}, at:
+> kernfs_seq_start+0x47/0x160
+> [   64.177151]  #3: ffff88881643f188 (kn->count#119){++++}, at:
+> kernfs_seq_start+0x6a/0x160
+> [   64.177155] 
+>                stack backtrace:
+> [   64.177158] CPU: 10 PID: 1397 Comm: python Not tainted 5.6.0-rc2+
+> #629
+> [   64.177159] Hardware name: Supermicro Super Server/X11DPL-i, BIOS
+> 3.1 05/21/2019
+> [   64.177160] Call Trace:
+> [   64.177167]  dump_stack+0x97/0xe0
+> [   64.177170]  check_noncircular+0x32e/0x3e0
+> [   64.177172]  ? print_circular_bug.isra.0+0x1e0/0x1e0
+> [   64.177177]  ? unwind_next_frame+0xb9a/0x1890
+> [   64.177180]  ? entry_SYSCALL_64_after_hwframe+0x49/0xbe
+> [   64.177182]  ? graph_lock+0x79/0x170
+> [   64.177183]  ? __lockdep_reset_lock+0x3c0/0x3c0
+> [   64.177185]  ? mark_lock+0xbc/0x1150
+> [   64.177187]  __lock_acquire+0x20be/0x49b0
+> [   64.177190]  ? mark_held_locks+0xe0/0xe0
+> [   64.177194]  ? stack_trace_save+0x91/0xc0
+> [   64.177196]  lock_acquire+0x127/0x340
+> [   64.177199]  ? show_power+0x3c/0xa0 [acpi_power_meter]
+> [   64.177201]  ? device_remove_bin_file+0x10/0x10
+> [   64.177203]  ? device_remove_bin_file+0x10/0x10
+> [   64.177205]  __mutex_lock+0x15b/0x1350
+> [   64.177208]  ? show_power+0x3c/0xa0 [acpi_power_meter]
+> [   64.177210]  ? show_power+0x3c/0xa0 [acpi_power_meter]
+> [   64.177212]  ? mutex_lock_io_nested+0x11f0/0x11f0
+> [   64.177214]  ? lock_downgrade+0x6a0/0x6a0
+> [   64.177216]  ? kernfs_seq_start+0x47/0x160
+> [   64.177218]  ? lock_acquire+0x127/0x340
+> [   64.177219]  ? kernfs_seq_start+0x6a/0x160
+> [   64.177222]  ? device_remove_bin_file+0x10/0x10
+> [   64.177226]  ? show_power+0x3c/0xa0 [acpi_power_meter]
+> [   64.572676]  show_power+0x3c/0xa0 [acpi_power_meter]
+> [   64.572681]  dev_attr_show+0x3f/0x80
+> [   64.581931]  ? memset+0x20/0x40
+> [   64.581935]  sysfs_kf_seq_show+0x216/0x410
+> [   64.581938]  seq_read+0x407/0xf90
+> [   64.581943]  ? security_file_permission+0x16f/0x2c0
+> [   64.581948]  vfs_read+0x152/0x2c0
+> [   64.581951]  ksys_read+0xf3/0x1d0
+> [   64.581954]  ? kernel_write+0x120/0x120
+> [   64.581957]  ? filp_open+0x50/0x50
+> [   64.581962]  do_syscall_64+0x95/0x1010
+> [   64.581967]  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+> [   64.581971] RIP: 0033:0x7fbb4e2c644c
+> [   64.581974] Code: ec 28 48 89 54 24 18 48 89 74 24 10 89 7c 24 08 e8
+> d9 49 f9 ff 48 8b 54 24 18 48 8b 74 24 10 41 89 c0 8b 7c 24 08 31 c0 0f
+> 05 <48> 3d 00 f0 ff ff 77 30 44 89 c7 48 89 44 24 08 e8 0f 4a f9 ff 48
+> [   64.581976] RSP: 002b:00007ffe30d33400 EFLAGS: 00000246 ORIG_RAX:
+> 0000000000000000
+> [   64.581979] RAX: ffffffffffffffda RBX: 00005569d016e1e0 RCX:
+> 00007fbb4e2c644c
+> [   64.581980] RDX: 0000000000001000 RSI: 00005569d0222970 RDI:
+> 0000000000000003
+> [   64.581982] RBP: 00007fbb4e398300 R08: 0000000000000000 R09:
+> 00007fbb4e397190
+> [   64.581984] R10: 0000000000000000 R11: 0000000000000246 R12:
+> 00005569d016e1e0
+> [   64.581985] R13: 00007fbb4e397700 R14: 0000000000000d68 R15:
+> 0000000000000d68
+> 
+> 
+> -- 
+> Damien Le Moal
+> Western Digital Research
