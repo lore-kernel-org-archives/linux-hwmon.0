@@ -2,109 +2,120 @@ Return-Path: <SRS0=oaIe=4I=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A968C11D05
-	for <linux-hwmon@archiver.kernel.org>; Thu, 20 Feb 2020 15:52:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56795C11D0C
+	for <linux-hwmon@archiver.kernel.org>; Thu, 20 Feb 2020 20:01:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D299F20659
-	for <linux-hwmon@archiver.kernel.org>; Thu, 20 Feb 2020 15:52:09 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="rOdYYUhY"
+	by mail.kernel.org (Postfix) with ESMTP id 24F9624650
+	for <linux-hwmon@archiver.kernel.org>; Thu, 20 Feb 2020 20:01:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1582228906;
+	bh=E3wtXDlHqe9uG1b3FccAdsybeJfQVvMHZ1RK3GWM/sg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=yFVGC9bjjqA2N/zBMSp2Zm/NbIAMUI/OpxfziuMdx7KDiPeRdOtcjc+WhpX4yhdJ3
+	 leOXtTz9YsaouRhF1/AK6s7elJ5THnH2Yk8SMpHV/PMLQ98vp3QeZB1tZZlNdbP4Nt
+	 NparL9KvFcdd0crRdoEfpD/5xPAyxwlTLAUhT8tk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728484AbgBTPwJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 20 Feb 2020 10:52:09 -0500
-Received: from mx.treblig.org ([46.43.15.161]:58668 "EHLO mx.treblig.org"
+        id S1728770AbgBTUBp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 20 Feb 2020 15:01:45 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47184 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728289AbgBTPwJ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 20 Feb 2020 10:52:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
-        ; s=bytemarkmx; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID
-        :Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID
-        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
-        Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
-        :List-Post:List-Owner:List-Archive;
-        bh=+C8IabH42Dpc9RVl6yu13ukx4iHkXHb1tLJu1omzXNc=; b=rOdYYUhY05kGc0rziD4apvUsNC
-        Mbz0U4MZ7Q9g0cuiRPegO7kcbp/luzXuaXKlWqnZNNs2bEXaJFpRR8BMnr8zitgrV5rE7lBtSNy4O
-        PNWLzXiaUUhy7TJaxI5lHv7qo9gcDXoNAJtVJGu/8owAsMzXjE4yPn34wNwFiIkeTALD6X+jTNbVs
-        F8dUVK8nJ6XH2CyasQH9wORrPwdqQEBxfc4NXSF18gObA7OJwdp+AHwBMGxVHgDsR7FUCb+Lbe/6x
-        z4wZ1Xjhfeb0WBgszkkV6bA4/eU1BydPPuehFga44C7mrfi1L3dpdQAHY+9uHgp+xHFeCpdXj8Zim
-        4h8033TA==;
-Received: from dg by mx.treblig.org with local (Exim 4.92)
-        (envelope-from <dg@treblig.org>)
-        id 1j4o7Q-0007el-Ow; Thu, 20 Feb 2020 15:52:04 +0000
-Date:   Thu, 20 Feb 2020 15:52:04 +0000
-From:   "Dr. David Alan Gilbert" <linux@treblig.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Meelis Roos <mroos@linux.ee>, linux-hwmon@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Chen Zhou <chenzhou10@huawei.com>
-Subject: Re: w83627ehf crash in 5.6.0-rc2-00055-gca7e1fd1026c
-Message-ID: <20200220155204.GC18071@gallifrey>
-References: <434212bb-4eb9-7366-3255-79826d0e65bc@linux.ee>
- <20200220121451.GA18071@gallifrey>
- <6050ed14-f7a6-cb99-7268-072129226d48@linux.ee>
- <20200220135709.GB18071@gallifrey>
- <ad023dc1-1878-dcd9-a183-06003ed698af@roeck-us.net>
+        id S1728556AbgBTUBp (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 20 Feb 2020 15:01:45 -0500
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B9D9124650;
+        Thu, 20 Feb 2020 20:01:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1582228904;
+        bh=E3wtXDlHqe9uG1b3FccAdsybeJfQVvMHZ1RK3GWM/sg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=u9GdaiH1AxhdmxCLobZH59ld4VoU8bKkNCMkr+kUaThLTzlb7w+ao+wURI3rU/lek
+         kkrMmCnfUd1uAHE0IXSzPpNjvapSXrhlWTqfH6XQ6LC86ycV0l4A54mw0s2vnKLNgv
+         Q2N7uUTFijrtv0F9zAGaPeLCtnkS9xrY/PtegQSM=
+Received: by mail-qt1-f171.google.com with SMTP id n17so3819030qtv.2;
+        Thu, 20 Feb 2020 12:01:44 -0800 (PST)
+X-Gm-Message-State: APjAAAVVsDDV1JloJ0p6wNPt5d2gjjBteVInGArU5TqOjMJeAkhffqfZ
+        4eoOiqNEkY5sgy015gNQSwk8OLWIOGNc0PXzKA==
+X-Google-Smtp-Source: APXvYqzjdY4RP8PXrUjP9DhJJfjP2nOH9wKbVDesN+YnyeYa7DustfCuvJPmOYppH7ViKAhlXHaPkzzxn/PcXp6k6M8=
+X-Received: by 2002:ac8:6747:: with SMTP id n7mr28217961qtp.224.1582228903752;
+ Thu, 20 Feb 2020 12:01:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ad023dc1-1878-dcd9-a183-06003ed698af@roeck-us.net>
-X-Chocolate: 70 percent or better cocoa solids preferably
-X-Operating-System: Linux/4.19.0-5-amd64 (x86_64)
-X-Uptime: 15:51:37 up 172 days, 16:12,  1 user,  load average: 0.00, 0.00,
- 0.00
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20200217234657.9413-1-chris.packham@alliedtelesis.co.nz> <20200217234657.9413-3-chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <20200217234657.9413-3-chris.packham@alliedtelesis.co.nz>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 20 Feb 2020 14:01:32 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqK-zD+_gBw-HqzSfz8_r8wY041DcewKJYm7BZj4ToHeZw@mail.gmail.com>
+Message-ID: <CAL_JsqK-zD+_gBw-HqzSfz8_r8wY041DcewKJYm7BZj4ToHeZw@mail.gmail.com>
+Subject: Re: [PATCH 2/5] dt-bindings: hwmon: Document adt7475
+ bypass-attenuator property
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Logan Shaw <logan.shaw@alliedtelesis.co.nz>,
+        Linux HWMON List <linux-hwmon@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-* Guenter Roeck (linux@roeck-us.net) wrote:
-> On 2/20/20 5:57 AM, Dr. David Alan Gilbert wrote:
-> > * Meelis Roos (mroos@linux.ee) wrote:
-> > > > It looks like not all chips have temp_label, so I think we need to change w83627ehf_is_visible
-> > > > which has:
-> > > > 
-> > > >                   if (attr == hwmon_temp_input || attr == hwmon_temp_label)
-> > > >                           return 0444;
-> > > > 
-> > > > to
-> > > >                   if (attr == hwmon_temp_input)
-> > > >                           return 0444;
-> > > >                   if (attr == hwmon_temp_label) {
-> > > >                           if (data->temp_label)
-> > > > 				return 0444;
-> > > > 			else
-> > > > 				return 0;
-> 
-> Nitpick: else after return isn't necessary. Too bad I didn't notice that before;
-> static analyzers will have a field day :-)
-> 
-> > > >                   }
-> > > > 
-> > > > Does that work for you?
-> > > Yes, it works - sensors are displayed as they should be, with nothing in dmesg.
-> > > 
-> > > Thank you for so quick response!
-> > 
-> > Great, I need to turn that into a proper patch; (I might need to wait till
-> > Saturday for that, although if someone needs it before then please shout).
-> > 
-> 
-> We'll want this fixed in the next stable release candidate, so I wrote one up
-> and submitted it.
+On Mon, Feb 17, 2020 at 5:47 PM Chris Packham
+<chris.packham@alliedtelesis.co.nz> wrote:
+>
+> From: Logan Shaw <logan.shaw@alliedtelesis.co.nz>
+>
+> Add documentation for the bypass-attenuator-in[0-4] property.
+>
+> Signed-off-by: Logan Shaw <logan.shaw@alliedtelesis.co.nz>
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> ---
+>  .../devicetree/bindings/hwmon/adt7475.yaml          | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/hwmon/adt7475.yaml b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
+> index 2252499ea201..61da90c82649 100644
+> --- a/Documentation/devicetree/bindings/hwmon/adt7475.yaml
+> +++ b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
+> @@ -39,6 +39,17 @@ properties:
+>    reg:
+>      maxItems: 1
+>
+> +patternProperties:
+> +  "^bypass-attenuator-in[0-4]$":
+> +    maxItems: 1
+> +    minimum: 0
+> +    maximum: 1
 
-Thanks!
+The errors here are because you are mixing array and scalar constraints.
 
-Dave
+You also need a vendor prefix and a type $ref.
 
-> Thanks,
-> Guenter
--- 
- -----Open up your eyes, open up your mind, open up your code -------   
-/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
-\        dave @ treblig.org |                               | In Hex /
- \ _________________________|_____ http://www.treblig.org   |_______/
+> +    description: |
+> +      Configures bypassing the individual voltage input attenuator. If
+> +      set to 1 the attenuator is bypassed if set to 0 the attenuator is
+> +      not bypassed. If the property is absent then the attenuator
+> +      retains it's configuration from the bios/bootloader.
+> +
+>  required:
+>    - compatible
+>    - reg
+> @@ -52,6 +63,8 @@ examples:
+>        hwmon@2e {
+>          compatible = "adi,adt7476";
+>          reg = <0x2e>;
+> +        bypass-attenuator-in0 = <1>;
+> +        bypass-attenuator-in1 = <0>;
+>        };
+>      };
+>
+> --
+> 2.25.0
+>
