@@ -2,130 +2,237 @@ Return-Path: <SRS0=IX/m=4J=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5238CC35656
-	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Feb 2020 15:53:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21F9BC35669
+	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Feb 2020 21:48:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2519424656
-	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Feb 2020 15:53:03 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cAgWsNHl"
+	by mail.kernel.org (Postfix) with ESMTP id F10E5206D7
+	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Feb 2020 21:48:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728441AbgBUPxC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 21 Feb 2020 10:53:02 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:43022 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728177AbgBUPxC (ORCPT
+        id S1728135AbgBUVsU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 21 Feb 2020 16:48:20 -0500
+Received: from lists.gateworks.com ([108.161.130.12]:52807 "EHLO
+        lists.gateworks.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727635AbgBUVsU (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 21 Feb 2020 10:53:02 -0500
-Received: by mail-pf1-f195.google.com with SMTP id s1so1408115pfh.10;
-        Fri, 21 Feb 2020 07:53:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=zyHw2W64cvX+gZNU0JO3HXnkgRvbxlvM1SKeLni6cTs=;
-        b=cAgWsNHlhVZ52YNV+lMk+yxfR687FANqWvqcxuH/LRjVmW9r1Sy0COlP6gGenMgDmi
-         oEv7UuSD0ed9WS2Cn7TU08wDNXqCcLPIxiEMwxt6jEMAFbgG2Az2QkNdU1aXk6wK9kJz
-         VdsSwQnhy/y1CW1XBiKHApv4elCuLhr/za0lVjfKKfPG0VYOLX0oc8zK8pD30rZd4s2v
-         BZ7P2iSOdXlXkqQP/0BY6kiPtQ7og2KpyJI/1eZUe6rz3aNK9MUlvogfa8+Fla1xR/KJ
-         zlUqM8QMnUdkWXZnBMiQDFba8aKyeQSgpVVSZFGzzgFAFBUkx2EIjyelKPThkWk64TlH
-         TsoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=zyHw2W64cvX+gZNU0JO3HXnkgRvbxlvM1SKeLni6cTs=;
-        b=dpAK5aL7/t74ABtpRXan1Fgj4oSm7gVHI0239ajSgkncNjJh5xtT/KmE+d/wRLgHsA
-         SV/GXxNuAfvf5elZzFA0th1TuRimEOQYtFYX+s0Nw3Gypm4FfatcKrv23hYsfG5XrHCJ
-         1v98fIEujBGC8aW3L5bN3ubs2+6yOukRNVxVNWotduEup7aLdijUk2wFVVcQFBFhhpvi
-         STUiEhGmWxL2fJYedRbltRJV8EmAq4XUqL2B7C8Mer8+Qq2o1IHyCpQHifeL3TVPHfXO
-         7mMhKDZzTajEOm0MtK/5C8c7+o6uYkoKnpnahs8x3PejLvqabBAIr0pISoEshTYheIeF
-         vqVw==
-X-Gm-Message-State: APjAAAVciOyH2s2FGf2NqEJhmmDJvfEk9IIR7pBqDb24JBZXjzeLhJCZ
-        RA4SsrZ9SL650Y/flEOiSDY=
-X-Google-Smtp-Source: APXvYqw9chVujo9ni4QiEPGQ/fIVhBDYRty7frDynHbyaIrLdduSbIykbWqS0B3D4FnvEwa0WILBCQ==
-X-Received: by 2002:a63:1a50:: with SMTP id a16mr38186561pgm.389.1582300382031;
-        Fri, 21 Feb 2020 07:53:02 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 3sm3034130pjg.27.2020.02.21.07.53.00
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 21 Feb 2020 07:53:01 -0800 (PST)
-Date:   Fri, 21 Feb 2020 07:52:59 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Jean Delvare <jdelvare@suse.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Linux HWMON List <linux-hwmon@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Logan Shaw <logan.shaw@alliedtelesis.co.nz>
-Subject: Re: [PATCH v4 3/5] dt-bindings: hwmon: Document adt7475 invert-pwm
- property
-Message-ID: <20200221155259.GA11868@roeck-us.net>
-References: <20200221041631.10960-1-chris.packham@alliedtelesis.co.nz>
- <20200221041631.10960-4-chris.packham@alliedtelesis.co.nz>
- <CAL_JsqK+jKyRr98_YX1GGwk-rHrLMOq_v7Z_57dQWYYQPuLS7A@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL_JsqK+jKyRr98_YX1GGwk-rHrLMOq_v7Z_57dQWYYQPuLS7A@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        Fri, 21 Feb 2020 16:48:20 -0500
+X-Greylist: delayed 1215 seconds by postgrey-1.27 at vger.kernel.org; Fri, 21 Feb 2020 16:48:19 EST
+Received: from 68-189-91-139.static.snlo.ca.charter.com ([68.189.91.139] helo=tharvey.pdc.gateworks.com)
+        by lists.gateworks.com with esmtp (Exim 4.82)
+        (envelope-from <tharvey@gateworks.com>)
+        id 1j5Fr4-00018b-QR; Fri, 21 Feb 2020 21:29:02 +0000
+From:   Tim Harvey <tharvey@gateworks.com>
+To:     Lee Jones <lee.jones@linaro.org>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Robert Jones <rjones@gateworks.com>
+Cc:     Tim Harvey <tharvey@gateworks.com>
+Subject: [PATCH v4 1/3] dt-bindings: mfd: Add Gateworks System Controller bindings
+Date:   Fri, 21 Feb 2020 13:27:54 -0800
+Message-Id: <1582320476-1098-2-git-send-email-tharvey@gateworks.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1582320476-1098-1-git-send-email-tharvey@gateworks.com>
+References: <1582320476-1098-1-git-send-email-tharvey@gateworks.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Feb 21, 2020 at 09:40:00AM -0600, Rob Herring wrote:
-> On Thu, Feb 20, 2020 at 10:16 PM Chris Packham
-> <chris.packham@alliedtelesis.co.nz> wrote:
-> >
-> > Add binding information for the invert-pwm property.
-> >
-> > Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> > ---
-> >
-> > Notes:
-> >     Changes in v4:
-> >     - use $ref uint32 and enum
-> >     - add adi vendor prefix
-> >
-> >     Cahnges in v3:
-> >     - new
-> >
-> >  Documentation/devicetree/bindings/hwmon/adt7475.yaml | 12 ++++++++++++
-> >  1 file changed, 12 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/hwmon/adt7475.yaml b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
-> > index e40612ee075f..6a358b30586c 100644
-> > --- a/Documentation/devicetree/bindings/hwmon/adt7475.yaml
-> > +++ b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
-> > @@ -50,6 +50,17 @@ patternProperties:
-> >       - $ref: /schemas/types.yaml#/definitions/uint32
-> >       - enum: [0, 1]
-> >
-> > +  "^adi,invert-pwm[1-3]$":
-> > +    description: |
-> > +      Configures the pwm output to use inverted logic. If set to 1
-> > +      the pwm uses a logic low output for 100% duty cycle. If set
-> > +      to 0 the pwm uses a logic high output for 100% duty cycle.
-> > +      If the property is absent the pwm retains it's configuration
-> > +      from the bios/bootloader.
-> 
-> I believe we already have an inverted flag for consumers. That doesn't
-> work if you don't have a consumer described in DT, but then the
-> question is should you? Or is this something the user will want to
-> configure from userspace.
-> 
+This patch adds documentation of device-tree bindings for the
+Gateworks System Controller (GSC).
 
-Normally that is a system property. It is difficult to imagine
-that it would ever have to be configured from userspace at runtime.
-Most of the time users won't have any idea, and the board datasheet
-(if avaible) won't list such information.
+Signed-off-by: Tim Harvey <tharvey@gateworks.com>
 
-Guenter
+v4:
+ - move to using pwm<n>_auto_point<m>_{pwm,temp} for FAN PWM
+ - remove unncessary resolution/scaling properties for ADCs
+ - update to yaml
+ - remove watchdog
+
+v3:
+ - replaced _ with -
+ - remove input bindings
+ - added full description of hwmon
+ - fix unit address of hwmon child nodes
+
+update dts
+
+Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+
+merge with binding doc
+---
+ .../devicetree/bindings/mfd/gateworks-gsc.yaml     | 156 +++++++++++++++++++++
+ 1 file changed, 156 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
+
+diff --git a/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml b/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
+new file mode 100644
+index 00000000..314dc7d
+--- /dev/null
++++ b/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
+@@ -0,0 +1,156 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/mfd/gateworks-gsc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Gateworks System Controller multi-function device
++
++description: |
++  The GSC is a Multifunction I2C slave device with the following submodules:
++   - Watchdog Timer
++   - GPIO
++   - Pushbutton controller
++   - Hardware Monitore with ADC's for temperature and voltage rails and
++     fan controller
++
++maintainers:
++  - Tim Harvey <tharvey@gateworks.com>
++  - Robert Jones <rjones@gateworks.com>
++
++properties:
++  $nodename:
++    pattern: "gsc@[0-9a-f]{1,2}"
++  compatible:
++    const: gw,gsc
++
++  reg:
++    description:
++      I2C device address.
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  interrupt-controller: true
++
++  "#interrupt-cells":
++    const: 1
++    description:
++      The IRQ number.
++
++  hwmon:
++    description:
++      Optional Hardware Monitoring module.
++
++    properties:
++      compatible:
++        const: "gw,gsc-hwmon"
++
++      "#address-cells":
++        const: 1
++
++      "#size-cells":
++        const: 0
++
++      gw,fan-base:
++        description:
++          The fan controller base address
++
++      patternProperties:
++        "^adc@[0-2]$":
++          type: object
++          description: |
++            Properties for a single ADC which can report cooked values
++            (ie temperature sensor based on thermister), raw values
++            (ie voltage rail with a pre-scaling resistor divider).
++
++          properties:
++            reg:
++              description:
++                Register of the ADC.
++              minimum: 0
++              maximum: 255
++
++           label: true
++             description:
++               Name of the ADC input.
++
++           type:
++             description: |
++               temperature in C*10 (temperature),
++               pre-scaled voltage value (voltage),
++               or scaled based on an optional resistor divider and optional
++               offset (voltage-raw)
++             enum:
++               - temperature
++               - voltage
++               - voltage-raw
++
++           gw,voltage-divider:
++             description: |
++               An array of two integers containing the resistor
++               values R1 and R2 of the optinal resistor divider on a raw ADC.
++
++           gw,voltage-offset:
++             description: |
++               A positive uV voltage offset to apply to a raw ADC
++               (ie to compensate for a diode drop).
++
++           required:
++             - compatible
++             - reg
++             - label
++             - type
++
++    required:
++      - compatible
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - interrupt-parent
++  - #interrupt-cells
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        gsc@20 {
++            compatible = "gw,gsc";
++            reg = <0x20>;
++            interrupt-parent = <&gpio1>;
++            interrupts = <4 GPIO_ACTIVE_LOW>;
++            interrupt-controller;
++            #interrupt-cells = <1>;
++
++            hwmon {
++                compatible = "gw,gsc-hwmon";
++                #address-cells = <1>;
++                #size-cells = <0>;
++                gw,fan-base = <0x2c>;
++
++                adc@0 { /* A0: Board Temperature */
++                    type = "temperature";
++                    reg = <0x00>;
++                    label = "temp";
++                };
++
++                adc@2 { /* A1: Input Voltage (raw ADC) */
++                    type = "voltage-raw";
++                    reg = <0x02>;
++                    label = "vdd_vin";
++                    gw,voltage-divider = <22100 1000>;
++                    gw,voltage-offset = <800000>;
++                };
++
++                adc@b { /* A2: Battery voltage */
++                    type = "voltage";
++                    reg = <0x0b>;
++                    label = "vdd_bat";
++                };
++            };
++        };
+-- 
+2.7.4
+
