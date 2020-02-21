@@ -2,116 +2,130 @@ Return-Path: <SRS0=IX/m=4J=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28F8DC35657
-	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Feb 2020 15:40:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5238CC35656
+	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Feb 2020 15:53:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F0315208E4
-	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Feb 2020 15:40:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1582299617;
-	bh=+DoRoBMJXa06a9s5rF/Tg0R2Bb7OUU1w4NYR6LGt5us=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=cFwxyWvdzVpUk8yHlNFEX+mbpcO5gK9mxlJz7tpg7dfl1ZvjjsI2Lu9Q9uRdfnVoi
-	 BEMljV55TFc8dhfIjZijaF14spLSl4kSmTx6vkxTdwYBeY4GAI51hmGjAUk0texqZs
-	 jgb18PETe2vejTOwZQzKcPHdL2fiqy0+hl3yxloY=
+	by mail.kernel.org (Postfix) with ESMTP id 2519424656
+	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Feb 2020 15:53:03 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cAgWsNHl"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728901AbgBUPkN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 21 Feb 2020 10:40:13 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33888 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728815AbgBUPkM (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 21 Feb 2020 10:40:12 -0500
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3325F208E4;
-        Fri, 21 Feb 2020 15:40:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582299612;
-        bh=+DoRoBMJXa06a9s5rF/Tg0R2Bb7OUU1w4NYR6LGt5us=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=C50UxxIIkUBAA2owQJBxXLzj5mfErfF8Pc2OBetl4t/cV2KyEMFMjn8eC4BwC7mmB
-         kCwDosbSs53gE4Sdr5Fg43Ax+XA9Ho+WY/6Ra20KzNoV0s1vrbxL2eSWxW29kf/Mqk
-         pkg+U+QsIhllO3E7zJbObensr46EDR31k4fiVQ/w=
-Received: by mail-qk1-f176.google.com with SMTP id u124so2142822qkh.13;
-        Fri, 21 Feb 2020 07:40:12 -0800 (PST)
-X-Gm-Message-State: APjAAAVWTnkvg0TT+tYQ0dwv4VG90sEhb2AlHYq/UYKheOekFsdrUtva
-        UyaKIOjoiDlVrAqb3AWsHyj9DjU4LPJxqKXl/g==
-X-Google-Smtp-Source: APXvYqy0D6b0D+YPb02EPEVdZaz7+H9RHdQphCR7I5xx5+N9sBx4J8AdIN+Hdpb187sXHw7HfZ4TtvWRgV6uosWTKgo=
-X-Received: by 2002:a05:620a:1237:: with SMTP id v23mr17847336qkj.223.1582299611320;
- Fri, 21 Feb 2020 07:40:11 -0800 (PST)
-MIME-Version: 1.0
-References: <20200221041631.10960-1-chris.packham@alliedtelesis.co.nz> <20200221041631.10960-4-chris.packham@alliedtelesis.co.nz>
-In-Reply-To: <20200221041631.10960-4-chris.packham@alliedtelesis.co.nz>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Fri, 21 Feb 2020 09:40:00 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqK+jKyRr98_YX1GGwk-rHrLMOq_v7Z_57dQWYYQPuLS7A@mail.gmail.com>
-Message-ID: <CAL_JsqK+jKyRr98_YX1GGwk-rHrLMOq_v7Z_57dQWYYQPuLS7A@mail.gmail.com>
-Subject: Re: [PATCH v4 3/5] dt-bindings: hwmon: Document adt7475 invert-pwm property
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        id S1728441AbgBUPxC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 21 Feb 2020 10:53:02 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:43022 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728177AbgBUPxC (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 21 Feb 2020 10:53:02 -0500
+Received: by mail-pf1-f195.google.com with SMTP id s1so1408115pfh.10;
+        Fri, 21 Feb 2020 07:53:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=zyHw2W64cvX+gZNU0JO3HXnkgRvbxlvM1SKeLni6cTs=;
+        b=cAgWsNHlhVZ52YNV+lMk+yxfR687FANqWvqcxuH/LRjVmW9r1Sy0COlP6gGenMgDmi
+         oEv7UuSD0ed9WS2Cn7TU08wDNXqCcLPIxiEMwxt6jEMAFbgG2Az2QkNdU1aXk6wK9kJz
+         VdsSwQnhy/y1CW1XBiKHApv4elCuLhr/za0lVjfKKfPG0VYOLX0oc8zK8pD30rZd4s2v
+         BZ7P2iSOdXlXkqQP/0BY6kiPtQ7og2KpyJI/1eZUe6rz3aNK9MUlvogfa8+Fla1xR/KJ
+         zlUqM8QMnUdkWXZnBMiQDFba8aKyeQSgpVVSZFGzzgFAFBUkx2EIjyelKPThkWk64TlH
+         TsoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=zyHw2W64cvX+gZNU0JO3HXnkgRvbxlvM1SKeLni6cTs=;
+        b=dpAK5aL7/t74ABtpRXan1Fgj4oSm7gVHI0239ajSgkncNjJh5xtT/KmE+d/wRLgHsA
+         SV/GXxNuAfvf5elZzFA0th1TuRimEOQYtFYX+s0Nw3Gypm4FfatcKrv23hYsfG5XrHCJ
+         1v98fIEujBGC8aW3L5bN3ubs2+6yOukRNVxVNWotduEup7aLdijUk2wFVVcQFBFhhpvi
+         STUiEhGmWxL2fJYedRbltRJV8EmAq4XUqL2B7C8Mer8+Qq2o1IHyCpQHifeL3TVPHfXO
+         7mMhKDZzTajEOm0MtK/5C8c7+o6uYkoKnpnahs8x3PejLvqabBAIr0pISoEshTYheIeF
+         vqVw==
+X-Gm-Message-State: APjAAAVciOyH2s2FGf2NqEJhmmDJvfEk9IIR7pBqDb24JBZXjzeLhJCZ
+        RA4SsrZ9SL650Y/flEOiSDY=
+X-Google-Smtp-Source: APXvYqw9chVujo9ni4QiEPGQ/fIVhBDYRty7frDynHbyaIrLdduSbIykbWqS0B3D4FnvEwa0WILBCQ==
+X-Received: by 2002:a63:1a50:: with SMTP id a16mr38186561pgm.389.1582300382031;
+        Fri, 21 Feb 2020 07:53:02 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 3sm3034130pjg.27.2020.02.21.07.53.00
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 21 Feb 2020 07:53:01 -0800 (PST)
+Date:   Fri, 21 Feb 2020 07:52:59 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Jean Delvare <jdelvare@suse.com>,
         Mark Rutland <mark.rutland@arm.com>,
         Linux HWMON List <linux-hwmon@vger.kernel.org>,
         devicetree@vger.kernel.org,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Logan Shaw <logan.shaw@alliedtelesis.co.nz>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v4 3/5] dt-bindings: hwmon: Document adt7475 invert-pwm
+ property
+Message-ID: <20200221155259.GA11868@roeck-us.net>
+References: <20200221041631.10960-1-chris.packham@alliedtelesis.co.nz>
+ <20200221041631.10960-4-chris.packham@alliedtelesis.co.nz>
+ <CAL_JsqK+jKyRr98_YX1GGwk-rHrLMOq_v7Z_57dQWYYQPuLS7A@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAL_JsqK+jKyRr98_YX1GGwk-rHrLMOq_v7Z_57dQWYYQPuLS7A@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Feb 20, 2020 at 10:16 PM Chris Packham
-<chris.packham@alliedtelesis.co.nz> wrote:
->
-> Add binding information for the invert-pwm property.
->
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
->
-> Notes:
->     Changes in v4:
->     - use $ref uint32 and enum
->     - add adi vendor prefix
->
->     Cahnges in v3:
->     - new
->
->  Documentation/devicetree/bindings/hwmon/adt7475.yaml | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/hwmon/adt7475.yaml b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
-> index e40612ee075f..6a358b30586c 100644
-> --- a/Documentation/devicetree/bindings/hwmon/adt7475.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
-> @@ -50,6 +50,17 @@ patternProperties:
->       - $ref: /schemas/types.yaml#/definitions/uint32
->       - enum: [0, 1]
->
-> +  "^adi,invert-pwm[1-3]$":
-> +    description: |
-> +      Configures the pwm output to use inverted logic. If set to 1
-> +      the pwm uses a logic low output for 100% duty cycle. If set
-> +      to 0 the pwm uses a logic high output for 100% duty cycle.
-> +      If the property is absent the pwm retains it's configuration
-> +      from the bios/bootloader.
+On Fri, Feb 21, 2020 at 09:40:00AM -0600, Rob Herring wrote:
+> On Thu, Feb 20, 2020 at 10:16 PM Chris Packham
+> <chris.packham@alliedtelesis.co.nz> wrote:
+> >
+> > Add binding information for the invert-pwm property.
+> >
+> > Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> > ---
+> >
+> > Notes:
+> >     Changes in v4:
+> >     - use $ref uint32 and enum
+> >     - add adi vendor prefix
+> >
+> >     Cahnges in v3:
+> >     - new
+> >
+> >  Documentation/devicetree/bindings/hwmon/adt7475.yaml | 12 ++++++++++++
+> >  1 file changed, 12 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/hwmon/adt7475.yaml b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
+> > index e40612ee075f..6a358b30586c 100644
+> > --- a/Documentation/devicetree/bindings/hwmon/adt7475.yaml
+> > +++ b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
+> > @@ -50,6 +50,17 @@ patternProperties:
+> >       - $ref: /schemas/types.yaml#/definitions/uint32
+> >       - enum: [0, 1]
+> >
+> > +  "^adi,invert-pwm[1-3]$":
+> > +    description: |
+> > +      Configures the pwm output to use inverted logic. If set to 1
+> > +      the pwm uses a logic low output for 100% duty cycle. If set
+> > +      to 0 the pwm uses a logic high output for 100% duty cycle.
+> > +      If the property is absent the pwm retains it's configuration
+> > +      from the bios/bootloader.
+> 
+> I believe we already have an inverted flag for consumers. That doesn't
+> work if you don't have a consumer described in DT, but then the
+> question is should you? Or is this something the user will want to
+> configure from userspace.
+> 
 
-I believe we already have an inverted flag for consumers. That doesn't
-work if you don't have a consumer described in DT, but then the
-question is should you? Or is this something the user will want to
-configure from userspace.
+Normally that is a system property. It is difficult to imagine
+that it would ever have to be configured from userspace at runtime.
+Most of the time users won't have any idea, and the board datasheet
+(if avaible) won't list such information.
 
-The problem with 'invert' properties is they assume you know what the
-not inverted state is. I would also make this an array:
-
-adi,pwm-active-state = <1 0 0 1>; // PWM1 and PWM2 active low
-
-And not present means <1 1 1 1>.
-
-Rob
+Guenter
