@@ -2,742 +2,237 @@ Return-Path: <SRS0=0nUB=4K=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F965C35673
-	for <linux-hwmon@archiver.kernel.org>; Sat, 22 Feb 2020 17:37:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63C05C35666
+	for <linux-hwmon@archiver.kernel.org>; Sat, 22 Feb 2020 17:56:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 097E3206E2
-	for <linux-hwmon@archiver.kernel.org>; Sat, 22 Feb 2020 17:37:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2B26E206ED
+	for <linux-hwmon@archiver.kernel.org>; Sat, 22 Feb 2020 17:56:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZttC/YHg"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TA/E0+br"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726713AbgBVRht (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 22 Feb 2020 12:37:49 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:34031 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726198AbgBVRhs (ORCPT
+        id S1726707AbgBVR4F (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 22 Feb 2020 12:56:05 -0500
+Received: from mail-io1-f68.google.com ([209.85.166.68]:34181 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726310AbgBVR4F (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 22 Feb 2020 12:37:48 -0500
-Received: by mail-pl1-f194.google.com with SMTP id j7so2231660plt.1;
-        Sat, 22 Feb 2020 09:37:48 -0800 (PST)
+        Sat, 22 Feb 2020 12:56:05 -0500
+Received: by mail-io1-f68.google.com with SMTP id 13so5420474iou.1;
+        Sat, 22 Feb 2020 09:56:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=sz7sj6V1PmEm3o9Y27hmfr/XcYI4l+PDMWF+h4x/dWo=;
-        b=ZttC/YHgnn5nRSNqQWFEZPz0S9+I1hGiSEd+3Ihi3vsY3emqCcbPAC7Fz34x+SI9Yi
-         h+zraDW2non19b6RP6P2ijfdIHw5PyZpQUEhVqYY/lDjH/TOg4cS9EnEku2FEhotmgru
-         OUy8cFODmIytLMQV1TDQgFqUuGtqvdOhG2Ky0+PWl5d53lKkpadpHFNIbX8nRZcOTt3P
-         ab+ITw4HPAGrBvB5dMLfxgKPmNJrpBeZ6r9nED4jV3zeSvOVJUs2AnRm1sQ3R4dArRqQ
-         wRjZQpntPNtM/qc9GUivT8YYr1Q0leDlZ2PhbnTKXrw1sIyhqspKqAxOjvrprGJPx7ek
-         1GJA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Xymqa3kDE8gsaAhoOOgg+/Rq6GUtmyGf3OS1Gk1puFM=;
+        b=TA/E0+brZKY8GIL4XfyNmXkGX+sVKWKhBFZ5kfx7Jjin9KONKQcwt0S6LNE20Mo4+V
+         fKuAnbY844dDzct+NO/c+3R+RydMxmtZtTpneVKt2O7QSMNopiNsJyKwnUeOJG6oXkxR
+         t3jYMT3xi9yO9Ubinp/3UvLyHUKkbvMO7WBmlCd/n20OIAvWS6+JDybmPd5qIvGP9RpA
+         AzgZwxZcW8jqywzZV7Immrzvui8R9t1Re0TnmKRByM/FHHKZOGKFV8NquT5vMuViZQwC
+         gL2o/49NTgQZHUQml11shU5Zbh/jIF7hZ3c53C2vQdheyQav9vSjFEpzMQw4TE2IQO+u
+         WZuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=sz7sj6V1PmEm3o9Y27hmfr/XcYI4l+PDMWF+h4x/dWo=;
-        b=U+QK/kpmLDApTBM8AY1hsdOajrDhnht4HWhYF3+9yPwa5F2Nhv519N/XmDSRub7MEz
-         SR8KPT1SN3BaYehfYUkSSj/Ywgt/ol2xOQIt0T0t2vsS2ILo9i76TTkV3CnxYhGdocTK
-         IG++/NjT9sWpKKJEIS19LX70yACnMLoyNpUXgGJNlqw/qsaYwPTsEfmtVPRhSHsHh0Dz
-         KjvXlfMQA7D+lGn2MUMzvtAIHyZbbAXZ9fG2zcZ2IASpvH8+ok7cEPPbZSEsgv4dy9WK
-         5GC5tROUxK8igAAFUxMJlxNVRhdAU4OVX/2TRWdKseqyJumU+dSmuZdXlodvDHCNt0IU
-         6HqA==
-X-Gm-Message-State: APjAAAXriA4dcbL+TsKJo5tAvy0G7zAdsBV85NNmvLW6r3ptvykqDL+w
-        kb9h5i1iDSXTZMRgJZ8XOLc=
-X-Google-Smtp-Source: APXvYqwmY74LVwjv4gt44bv+BvqA/+uIGx0p2BPHjacRGqbaBoMUlLrVIPg2otp7FLyOx6SouBlksA==
-X-Received: by 2002:a17:902:7406:: with SMTP id g6mr42802399pll.103.1582393067532;
-        Sat, 22 Feb 2020 09:37:47 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z127sm6472913pgb.64.2020.02.22.09.37.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 Feb 2020 09:37:46 -0800 (PST)
-Subject: Re: [PATCH v4 3/3] hwmon: add Gateworks System Controller support
-To:     Tim Harvey <tharvey@gateworks.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Robert Jones <rjones@gateworks.com>
-References: <1582320476-1098-1-git-send-email-tharvey@gateworks.com>
- <1582320476-1098-4-git-send-email-tharvey@gateworks.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <794c1b1b-8d24-2789-42f1-0aaa6ac59c11@roeck-us.net>
-Date:   Sat, 22 Feb 2020 09:37:45 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Xymqa3kDE8gsaAhoOOgg+/Rq6GUtmyGf3OS1Gk1puFM=;
+        b=gzgo90WjEW+33zJzsQ+UwW+/FDAO50VW1BFqrItMz+cCP+Na3G0dl4th8S6gXjFRpT
+         Pv7A9FXj6LjHp18yJJQ8LiIxyNHZCpAkht281GgaoEAxsfOV/ziX8UOb2ikk8JDwfq/7
+         U3hlzxe+RB37JAEOr7Z4GK9jsWGqNPbbF2U/qOEuoACoFMadExqktnSss+SQOkLykstF
+         PWy6UeCnqmRtXztx79k8qNZg6cikr6WiArY984kFbIFRNxohPM96RhtoZO7wX8e+vm7J
+         GdiYL9gGEmW31egNKOldXTifwIQ1jB/HSgBP5LezEW9+cg64B8A1f62PBh0BHdYfhQIM
+         V7/Q==
+X-Gm-Message-State: APjAAAU8tM4uTGKzz7PrQSUaTCM9/kiwi9BXeqsjuoZNNCYTiA0P9Xqv
+        GTiZKzHrKEPyoDOZf6Sp0auobNS6KjTqNFTh4rE=
+X-Google-Smtp-Source: APXvYqxP8SJjkdO5uQ+lfPYwWS8j0dNtJ89xe1yYIwsTYsnwmryLmwlLhtjzdEEfvStYfb0Zlsxrhbk9BKd4UE5ex8c=
+X-Received: by 2002:a6b:5902:: with SMTP id n2mr38049416iob.298.1582394164673;
+ Sat, 22 Feb 2020 09:56:04 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <1582320476-1098-4-git-send-email-tharvey@gateworks.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <CAM1AHpQ4196tyD=HhBu-2donSsuogabkfP03v1YF26Q7_BgvgA@mail.gmail.com>
+ <1bdbac08-86f8-2a57-2b0d-8cd2beb2a1c0@roeck-us.net>
+In-Reply-To: <1bdbac08-86f8-2a57-2b0d-8cd2beb2a1c0@roeck-us.net>
+From:   Martin Volf <martin.volf.42@gmail.com>
+Date:   Sat, 22 Feb 2020 18:55:53 +0100
+Message-ID: <CAM1AHpSKFk9ZosQf=k-Rm2=EFqco7y4Lpfb7m07r=j_uJd4T0A@mail.gmail.com>
+Subject: Re: [regression] nct6775 does not load in 5.4 and 5.5, bisected to b84398d6d7f90080
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
+        linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2/21/20 1:27 PM, Tim Harvey wrote:
-> The Gateworks System Controller has a hwmon sub-component that exposes
-> up to 16 ADC's, some of which are temperature sensors, others which are
-> voltage inputs. The ADC configuration (register mapping and name) is
-> configured via device-tree and varies board to board.
-> 
-> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
-> 
+Hello,
 
-This patch generates lots of checkpatch warnings. Please run "checkpatch
---strict" on the patch and fix what it reports. Additional comments inline.
+On Sat, Feb 22, 2020 at 4:41 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> On 2/22/20 3:13 AM, Martin Volf wrote:
+> > hardware monitoring sensors NCT6796D on my Asus PRIME Z390M-PLUS
+> > motherboard with Intel i7-9700 CPU don't work with 5.4 and newer linux
+> > kernels, the driver nct6775 does not load.
+> >
+> > It is working OK in version 5.3. I have used almost all released stable
+> > versions from 5.3.8 to 5.3.16; I didn't try older kernels.
+...
+> My wild guess would be that the i801 driver is a bit aggressive with
+> reserving memory spaces, but I don't immediately see what it does
+> differently in that regard after the offending patch. Does it work
+> if you unload the i2c_i801 driver first ?
 
-> v4:
-> - adjust for uV offset from device-tree
-> - remove unnecessary optional write function
-> - remove register range check
-> - change dev_err prints to use gsc dev
-> - hard-code resolution/scaling for raw adcs
-> - describe units of ADC resolution
-> - move to using pwm<n>_auto_point<m>_{pwm,temp} for FAN PWM
-> - ensure space before/after operators
-> - remove unnecessary parens
-> - remove more debugging
-> - add default case and comment for type_voltage
-> - remove unnecessary index bounds checks for channel
-> - remove unnecessary clearing of struct fields
-> - added Documentation/hwmon/gsc-hwmon.rst
-> 
-> v3:
-> - add voltage_raw input type and supporting fields
-> - add channel validation to is_visible function
-> - remove unnecessary channel validation from read/write functions
-> 
-> v2:
-> - change license comment style
-> - remove DEBUG
-> - simplify regmap_bulk_read err check
-> - remove break after returns in switch statement
-> - fix fan setpoint buffer address
-> - remove unnecessary parens
-> - consistently use struct device *dev pointer
-> - change license/comment block
-> - add validation for hwmon child node props
-> - move parsing of of to own function
-> - use strlcpy to ensure null termination
-> - fix static array sizes and removed unnecessary initializers
-> - dynamically allocate channels
-> - fix fan input label
-> - support platform data
-> - fixed whitespace issues
-> 
-> merge with hwmon
-> 
-> merge with hwmon
-> 
-> scale by uV offset
-> ---
->   Documentation/hwmon/gsc-hwmon.rst       |  51 +++++
->   Documentation/hwmon/index.rst           |   1 +
->   MAINTAINERS                             |   3 +
->   drivers/hwmon/Kconfig                   |   9 +
->   drivers/hwmon/Makefile                  |   1 +
->   drivers/hwmon/gsc-hwmon.c               | 387 ++++++++++++++++++++++++++++++++
->   include/linux/platform_data/gsc_hwmon.h |  45 ++++
->   7 files changed, 497 insertions(+)
->   create mode 100644 Documentation/hwmon/gsc-hwmon.rst
->   create mode 100644 drivers/hwmon/gsc-hwmon.c
->   create mode 100644 include/linux/platform_data/gsc_hwmon.h
-> 
-> diff --git a/Documentation/hwmon/gsc-hwmon.rst b/Documentation/hwmon/gsc-hwmon.rst
-> new file mode 100644
-> index 00000000..194a8e6
-> --- /dev/null
-> +++ b/Documentation/hwmon/gsc-hwmon.rst
-> @@ -0,0 +1,51 @@
-> +Kernel driver gsc-hwmon
-> +=======================
-> +
-> +Supported chips: Gateworks GSC
-> +Datasheet: http://trac.gateworks.com/wiki/gsc
-> +Author: Tim Harvey <tharvey@gateworks.com>
-> +
-> +Description:
-> +------------
-> +
-> +This driver supports hardware monitoring for the temperature sensor,
-> +various ADC's connected to the GSC, and optional FAN controller available
-> +on some boards.
-> +
-> +
-> +Voltage Monitoring
-> +------------------
-> +
-> +The voltage inputs are scaled either internally or by the driver depending
-> +on the GSC version and firmware. The values returned by the driver do not need
-> +further scaling. The voltage input labels provide the voltage rail name:
-> +
-> +inX_input                  Measured voltage (mV).
-> +inX_label                  Name of voltage rail.
-> +
-> +
-> +Temperature Monitoring
-> +----------------------
-> +
-> +Temperatures are measured with 12-bit or 10-bit resolution and are scaled
-> +either internally or by the driver depending on the GSC version and firmware.
-> +The values returned by the driver reflect millidegree Celcius:
-> +
-> +tempX_input                Measured temperature.
-> +tempX_label                Name of temperature input.
-> +
-> +
-> +PWM Output Control
-> +------------------
-> +
-> +The GSC features 1 PWM output that operates in automatic mode where the
-> +PWM value will be scalled depending on 6 temperature boundaries.
-> +The tempeature boundaries are read-write and in millidegree Celcius and the
-> +read-only PWM values range from 0 (off) to 255 (full speed).
-> +Fan speed will be set to minimum (off) when the temperature sensor reads
-> +less than pwm1_auto_point1_temp and maximum when the temperature sensor
-> +equals or exceeds pwm1_auto_point6_temp.
-> +
-> +pwm1_auto_point1_pwm       PWM value.
-> +pwm1_auto_point1_temp      Temperature boundary.
-> +
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index 43cc605..a4fab69 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -58,6 +58,7 @@ Hardware Monitoring Kernel Drivers
->      ftsteutates
->      g760a
->      g762
-> +   gsc-hwmon
->      gl518sm
->      hih6130
->      ibmaem
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index bb79b60..19c0add 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -6846,6 +6846,9 @@ S:	Maintained
->   F:	Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
->   F:	drivers/mfd/gateworks-gsc.c
->   F:	include/linux/mfd/gsc.h
-> +F:	Documentation/hwmon/gsc-hwmon
+Yes, after unloading i2c_i801, the nct6775 works. There is definitely
+some sort of race between these two drivers. Mostly i2c_i801 wins, but it
+happened twice that nct6775 got automatically loaded just before i2c_i801
+and the sensors worked.
 
-Documentation/hwmon/gsc-hwmon.rst
+> You could also try to compare the output of /proc/ioports with
+> the old and the new kernel, and see if the IO address space used
+> by nct6775 in v5.3 is assigned to the i801 driver (or some other
+> driver, such as the watchdog driver) in v5.4.
 
-> +F:	drivers/hwmon/gsc-hwmon.c
-> +F:	include/linux/platform_data/gsc_hwmon.h
->   
->   GCC PLUGINS
->   M:	Kees Cook <keescook@chromium.org>
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 23dfe84..99dae13 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -494,6 +494,15 @@ config SENSORS_F75375S
->   	  This driver can also be built as a module. If so, the module
->   	  will be called f75375s.
->   
-> +config SENSORS_GSC
-> +        tristate "Gateworks System Controller ADC"
-> +        depends on MFD_GATEWORKS_GSC
-> +        help
-> +          Support for the Gateworks System Controller A/D converters.
-> +
-> +	  To compile this driver as a module, choose M here:
-> +	  the module will be called gsc-hwmon.
-> +
->   config SENSORS_MC13783_ADC
->           tristate "Freescale MC13783/MC13892 ADC"
->           depends on MFD_MC13XXX
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index 6db5db9..259cba7 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -71,6 +71,7 @@ obj-$(CONFIG_SENSORS_G760A)	+= g760a.o
->   obj-$(CONFIG_SENSORS_G762)	+= g762.o
->   obj-$(CONFIG_SENSORS_GL518SM)	+= gl518sm.o
->   obj-$(CONFIG_SENSORS_GL520SM)	+= gl520sm.o
-> +obj-$(CONFIG_SENSORS_GSC)	+= gsc-hwmon.o
->   obj-$(CONFIG_SENSORS_GPIO_FAN)	+= gpio-fan.o
->   obj-$(CONFIG_SENSORS_HIH6130)	+= hih6130.o
->   obj-$(CONFIG_SENSORS_ULTRA45)	+= ultra45_env.o
-> diff --git a/drivers/hwmon/gsc-hwmon.c b/drivers/hwmon/gsc-hwmon.c
-> new file mode 100644
-> index 00000000..e38fcc8
-> --- /dev/null
-> +++ b/drivers/hwmon/gsc-hwmon.c
-> @@ -0,0 +1,387 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Driver for Gateworks System Controller Hardware Monitor module
-> + *
-> + * Copyright (C) 2020 Gateworks Corporation
-> + */
-> +#include <linux/hwmon.h>
-> +#include <linux/hwmon-sysfs.h>
-> +#include <linux/mfd/gsc.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/slab.h>
-> +
-> +#include <linux/platform_data/gsc_hwmon.h>
-> +
-> +#define GSC_HWMON_MAX_TEMP_CH	16
-> +#define GSC_HWMON_MAX_IN_CH	16
-> +
-> +#define GSC_HWMON_RESOLUTION	12
-> +#define GSC_HWMON_VREF		2500
-> +
-> +struct gsc_hwmon_data {
-> +	struct gsc_dev *gsc;
-> +	struct device *dev;
-> +	struct gsc_hwmon_platform_data *pdata;
-> +	const struct gsc_hwmon_channel *temp_ch[GSC_HWMON_MAX_TEMP_CH];
-> +	const struct gsc_hwmon_channel *in_ch[GSC_HWMON_MAX_IN_CH];
-> +	u32 temp_config[GSC_HWMON_MAX_TEMP_CH + 1];
-> +	u32 in_config[GSC_HWMON_MAX_IN_CH + 1];
-> +	struct hwmon_channel_info temp_info;
-> +	struct hwmon_channel_info in_info;
-> +	const struct hwmon_channel_info *info[4];
-> +	struct hwmon_chip_info chip;
-> +};
-> +
-> +static ssize_t show_pwm_auto_point_temp(struct device *dev,
-> +					struct device_attribute *devattr,
-> +					char *buf)
-> +{
-> +	struct gsc_hwmon_data *hwmon = dev_get_drvdata(dev);
-> +	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
-> +	u8 reg = hwmon->pdata->fan_base + (2 * attr->index);
-> +	u8 regs[2];
-> +	int ret;
-> +
-> +	ret = regmap_bulk_read(hwmon->gsc->regmap_hwmon, reg, regs, 2);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = regs[0] | regs[1] << 8;
-> +	return sprintf(buf, "%d\n", ret * 10);
-> +}
-> +
-> +static ssize_t set_pwm_auto_point_temp(struct device *dev,
-> +				       struct device_attribute *devattr,
-> +				       const char *buf, size_t count)
-> +{
-> +	struct gsc_hwmon_data *hwmon = dev_get_drvdata(dev);
-> +	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
-> +	u8 reg = hwmon->pdata->fan_base + (2 * attr->index);
-> +	u8 regs[2];
-> +	long temp;
-> +	int err;
-> +
-> +	if (kstrtol(buf, 10, &temp))
-> +		return -EINVAL;
-> +
-> +	temp = clamp_val(temp, 0, 10000);
-> +	temp = DIV_ROUND_CLOSEST(temp, 10);
-> +
-> +	regs[0] = temp & 0xff;
-> +	regs[1] = (temp >> 8) & 0xff;
-> +	err = regmap_bulk_write(hwmon->gsc->regmap_hwmon, reg, regs, 2);
-> +	if (err)
-> +		return err;
-> +
-> +	return count;
-> +}
-> +
-> +static ssize_t show_pwm_auto_point_pwm(struct device *dev,
-> +				       struct device_attribute *devattr,
-> +				       char *buf)
-> +{
-> +	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
-> +
-> +	return sprintf(buf, "%d\n", 255 * (50 + (attr->index * 10)) / 100);
-> +}
-> +
-> +static SENSOR_DEVICE_ATTR(pwm1_auto_point1_pwm, S_IRUGO,
-> +			  show_pwm_auto_point_pwm, NULL, 0);
-> +static SENSOR_DEVICE_ATTR(pwm1_auto_point1_temp, S_IRUGO | S_IWUSR,
-> +			  show_pwm_auto_point_temp, set_pwm_auto_point_temp, 0);
-> +
-> +static SENSOR_DEVICE_ATTR(pwm1_auto_point2_pwm, S_IRUGO,
-> +			  show_pwm_auto_point_pwm, NULL, 1);
-> +static SENSOR_DEVICE_ATTR(pwm1_auto_point2_temp, S_IRUGO | S_IWUSR,
-> +			  show_pwm_auto_point_temp, set_pwm_auto_point_temp, 1);
-> +
-> +static SENSOR_DEVICE_ATTR(pwm1_auto_point3_pwm, S_IRUGO,
-> +			  show_pwm_auto_point_pwm, NULL, 2);
-> +static SENSOR_DEVICE_ATTR(pwm1_auto_point3_temp, S_IRUGO | S_IWUSR,
-> +			  show_pwm_auto_point_temp, set_pwm_auto_point_temp, 2);
-> +
-> +static SENSOR_DEVICE_ATTR(pwm1_auto_point4_pwm, S_IRUGO,
-> +			  show_pwm_auto_point_pwm, NULL, 3);
-> +static SENSOR_DEVICE_ATTR(pwm1_auto_point4_temp, S_IRUGO | S_IWUSR,
-> +			  show_pwm_auto_point_temp, set_pwm_auto_point_temp, 3);
-> +
-> +static SENSOR_DEVICE_ATTR(pwm1_auto_point5_pwm, S_IRUGO,
-> +			  show_pwm_auto_point_pwm, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(pwm1_auto_point5_temp, S_IRUGO | S_IWUSR,
-> +			  show_pwm_auto_point_temp, set_pwm_auto_point_temp, 4);
-> +
-> +static SENSOR_DEVICE_ATTR(pwm1_auto_point6_pwm, S_IRUGO,
-> +			  show_pwm_auto_point_pwm, NULL, 5);
-> +static SENSOR_DEVICE_ATTR(pwm1_auto_point6_temp, S_IRUGO | S_IWUSR,
-> +			  show_pwm_auto_point_temp, set_pwm_auto_point_temp, 5);
-> +
+This is diff of /proc/ioports in 5.3.18 with loaded nct6775 and in
+5.4.21 without:
 
-Also please use SENSOR_DEVICE_ATTR_{RW,RO}.
+--- ioports-5.3.18
++++ ioports-5.4.21
+@@ -2,6 +2,7 @@
+   0000-001f : dma1
+   0020-0021 : pic1
+   002e-0031 : iTCO_wdt
++    002e-0031 : iTCO_wdt
+   0040-0043 : timer0
+   0050-0053 : timer1
+   0060-0060 : keyboard
+@@ -14,11 +15,10 @@
+   00f0-00ff : fpu
+     00f0-00f0 : PNP0C04:00
+   0290-029f : pnp 00:01
+-    0295-0296 : nct6775
+-      0295-0296 : nct6775
+   03c0-03df : vga+
+   03f8-03ff : serial
+   0400-041f : iTCO_wdt
++    0400-041f : iTCO_wdt
+   0680-069f : pnp 00:03
+ 0cf8-0cff : PCI conf1
+ 0d00-ffff : PCI Bus 0000:00
 
-> +static struct attribute *gsc_hwmon_attributes[] = {
-> +	&sensor_dev_attr_pwm1_auto_point1_pwm.dev_attr.attr,
-> +	&sensor_dev_attr_pwm1_auto_point1_temp.dev_attr.attr,
-> +	&sensor_dev_attr_pwm1_auto_point2_pwm.dev_attr.attr,
-> +	&sensor_dev_attr_pwm1_auto_point2_temp.dev_attr.attr,
-> +	&sensor_dev_attr_pwm1_auto_point3_pwm.dev_attr.attr,
-> +	&sensor_dev_attr_pwm1_auto_point3_temp.dev_attr.attr,
-> +	&sensor_dev_attr_pwm1_auto_point4_pwm.dev_attr.attr,
-> +	&sensor_dev_attr_pwm1_auto_point4_temp.dev_attr.attr,
-> +	&sensor_dev_attr_pwm1_auto_point5_pwm.dev_attr.attr,
-> +	&sensor_dev_attr_pwm1_auto_point5_temp.dev_attr.attr,
-> +	&sensor_dev_attr_pwm1_auto_point6_pwm.dev_attr.attr,
-> +	&sensor_dev_attr_pwm1_auto_point6_temp.dev_attr.attr,
-> +	NULL
-> +};
-> +
-> +static const struct attribute_group gsc_hwmon_group = {
-> +	.attrs = gsc_hwmon_attributes,
-> +};
-> +__ATTRIBUTE_GROUPS(gsc_hwmon);
-> +
-> +static int
-> +gsc_hwmon_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
-> +	       int channel, long *val)
-> +{
-> +	struct gsc_hwmon_data *hwmon = dev_get_drvdata(dev);
-> +	const struct gsc_hwmon_channel *ch;
-> +	int sz, ret;
-> +	u8 buf[3];
-> +
-> +	switch (type) {
-> +	case hwmon_in:
-> +		ch = hwmon->in_ch[channel];
-> +		break;
-> +	case hwmon_temp:
-> +		ch = hwmon->temp_ch[channel];
-> +		break;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	sz = (ch->type == type_voltage) ? 3 : 2;
-> +	ret = regmap_bulk_read(hwmon->gsc->regmap_hwmon, ch->reg, buf, sz);
-> +	if (ret)
-> +		return ret;
-> +
-> +	*val = 0;
-> +	while (sz-- > 0)
-> +		*val |= (buf[sz] << (8 * sz));
-> +
-FWIW, accessing "*val" repeatedly to compute the return value isn't
-exactly efficient. A local variable might be more appropriate here.
+> If you are into hacking the kernel, you could also add some
+> debug messages into the nct6775 driver to find out where exactly
+> it fails. If that helps, maybe we can then add those messages into
+> into the driver source to help others if this is observed again.
 
-> +	switch (ch->type) {
-> +	case type_temperature:
-> +		if (*val > 0x8000)
-> +			*val -= 0xffff;
-> +		break;
-> +	case type_voltage_raw:
-> +		*val = clamp_val(*val, 0, BIT(GSC_HWMON_RESOLUTION));
-> +		/* scale based on ref voltage and ADC resolution */
-> +		*val *= GSC_HWMON_VREF;
-> +		*val /= BIT(GSC_HWMON_RESOLUTION);
+I have added some pr_info calls, the diff is at the and of this massage.
 
-This translates to
-		*val /= (1 << 12)
-which is identical to
-		*val >>= 12
+"bad" dmesg (i.e. i2c_i801 loaded before modprobe nct6775)
 
-Kind of complicated way to express a shift operation.
+[ 1631.975392] nct6775: ### sensors_nct6775_init:
+platform_driver_register() -> 0x0
+[ 1631.975396] nct6775: ### nct6775_find: superio_enter(0x2e) -> 0xfffffff0
+[ 1631.975417] nct6775: ### nct6775_find: superio_enter(0x4e) -> 0x0
+[ 1631.975455] nct6775: ### nct6775_find: (val & SIO_ID_MASK) == 0xffff
 
-> +		/* scale based on optional voltage divider */
-> +		if (ch->vdiv[0] && ch->vdiv[1]) {
-> +			*val *= (ch->vdiv[0] + ch->vdiv[1]);
-> +			*val /= ch->vdiv[1];
-> +		}
-> +		/* adjust by uV offset */
-> +		*val += (ch->voffset / 1000);
+"good" dmesg (rmmod i2c_i801; modprobe nct6775)
 
-voffset is never used differently. Might as well divide once and store
-the result in voffset instead of repeating the divide operation each time
-an attribute is read.
+[ 1730.751188] nct6775: ### sensors_nct6775_init:
+platform_driver_register() -> 0x0
+[ 1730.751213] nct6775: ### nct6775_find: superio_enter(0x2e) -> 0x0
+[ 1730.751251] nct6775: ### nct6775_find: (val & SIO_ID_MASK) == 0xd42b
+[ 1730.751359] nct6775: Found NCT6798D or compatible chip at 0x2e:0x290
+[ 1730.751367] ACPI Warning: SystemIO range
+0x0000000000000295-0x0000000000000296 conflicts with OpRegion
+0x0000000000000290-0x0000000000000299 (\AMW0.SHWM)
+(20190816/utaddress-204)
+[ 1730.751379] ACPI: This conflict may cause random problems and
+system instability
+[ 1730.751381] ACPI: If an ACPI driver is available for this device,
+you should use it instead of the native driver
+[ 1730.751431] nct6775: ### nct6775_probe: platform_get_resource() -> 0xfdac7b00
+[ 1730.751434] nct6775: ### nct6775_probe: devm_request_region() -> 0
+[ 1730.751554] nct6775 nct6775.656: Invalid temperature source 28 at
+index 0, source register 0x100, temp register 0x73
+[ 1730.751588] nct6775 nct6775.656: Invalid temperature source 28 at
+index 1, source register 0x200, temp register 0x75
+[ 1730.751686] nct6775 nct6775.656: Invalid temperature source 28 at
+index 4, source register 0x900, temp register 0x7b
+[ 1730.751865] nct6775: ### nct6775_probe: superio_enter(0x2e) -> 0x0
+[ 1730.753685] nct6775: ### nct6775_find: superio_enter(0x4e) -> 0x0
+[ 1730.753722] nct6775: ### nct6775_find: (val & SIO_ID_MASK) == 0xffff
 
-> +		break;
-> +	case type_voltage:
-> +		/* no adjustment needed */
-> +		break;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int
-> +gsc_hwmon_read_string(struct device *dev, enum hwmon_sensor_types type,
-> +		      u32 attr, int channel, const char **buf)
-> +{
-> +	struct gsc_hwmon_data *hwmon = dev_get_drvdata(dev);
-> +
-> +	switch (type) {
-> +	case hwmon_in:
-> +		*buf = hwmon->in_ch[channel]->name;
-> +		break;
-> +	case hwmon_temp:
-> +		*buf = hwmon->temp_ch[channel]->name;
-> +		break;
-> +	default:
-> +		return -ENOTSUPP;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static umode_t
-> +gsc_hwmon_is_visible(const void *_data, enum hwmon_sensor_types type, u32 attr,
-> +		     int ch)
-> +{
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		return S_IRUGO;
-> +	case hwmon_in:
-> +		return S_IRUGO;
-> +		break;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
+So 0x2e is the resource the two drivers are fighting for.
 
-This is identical to always returning S_IRUGO, or 0444. A simple
+I have created /etc/modprobe.d/nct6775-before-i2c_i801.conf with
+install i2c_i801 /sbin/modprobe nct6775; /sbin/modprobe
+--ignore-install i2c_i801
 
-	return 0444;
+and it is working. I'm OK with this workaround, but I can do more
+experiments if you instruct me what to try.
 
-would serve the same purpose.
+Thanks,
 
-> +}
-> +
-> +static const struct hwmon_ops gsc_hwmon_ops = {
-> +	.is_visible = gsc_hwmon_is_visible,
-> +	.read = gsc_hwmon_read,
-> +	.read_string = gsc_hwmon_read_string,
-> +};
-> +
-> +static struct gsc_hwmon_platform_data *
-> +gsc_hwmon_get_devtree_pdata(struct device *dev)
-> +{
-> +	struct gsc_hwmon_platform_data *pdata;
-> +	struct gsc_hwmon_channel *ch;
-> +	struct fwnode_handle *child;
-> +	const char *type;
-> +	int nchannels;
-> +
-> +	nchannels = device_get_child_node_count(dev);
-> +	if (nchannels == 0)
-> +		return ERR_PTR(-ENODEV);
-> +
-> +	pdata = devm_kzalloc(dev,
-> +			     sizeof(*pdata) + nchannels * sizeof(*ch),
-> +			     GFP_KERNEL);
-> +	if (!pdata)
-> +		return ERR_PTR(-ENOMEM);
-> +	ch = (struct gsc_hwmon_channel *)(pdata + 1);
-> +	pdata->channels = ch;
-> +	pdata->nchannels = nchannels;
-> +
-> +	device_property_read_u32(dev, "gw,fan-base", &pdata->fan_base);
-> +
-> +	/* allocate structures for channels and count instances of each type */
-> +	device_for_each_child_node(dev, child) {
-> +		if (fwnode_property_read_string(child, "label", &ch->name)) {
-> +			dev_err(dev, "channel without label\n");
-> +			fwnode_handle_put(child);
-> +			return ERR_PTR(-EINVAL);
-> +		}
-> +		if (fwnode_property_read_u32(child, "reg", &ch->reg)) {
-> +			dev_err(dev, "channel without reg\n");
-> +			fwnode_handle_put(child);
-> +			return ERR_PTR(-EINVAL);
-> +		}
-> +		if (fwnode_property_read_string(child, "type", &type)) {
-> +			dev_err(dev, "channel without type\n");
-> +			fwnode_handle_put(child);
-> +			return ERR_PTR(-EINVAL);
-> +		}
-> +		if (!strcasecmp(type, "temperature"))
-> +			ch->type = type_temperature;
-> +		else if (!strcasecmp(type, "voltage"))
-> +			ch->type = type_voltage;
-> +		else if (!strcasecmp(type, "voltage-raw"))
-> +			ch->type = type_voltage_raw;
-> +		else {
-> +			dev_err(dev, "channel without type\n");
-> +			fwnode_handle_put(child);
-> +			return ERR_PTR(-EINVAL);
-> +		}
-> +
-> +		fwnode_property_read_u32(child, "gw,voltage-offset",
-> +			&ch->voffset);
-> +		fwnode_property_read_u32_array(child, "gw,voltage-divider",
-> +			ch->vdiv, ARRAY_SIZE(ch->vdiv));
-> +		ch++;
-> +	}
-> +
-> +	return pdata;
-> +}
-> +
-> +static int gsc_hwmon_probe(struct platform_device *pdev)
-> +{
-> +	struct gsc_dev *gsc = dev_get_drvdata(pdev->dev.parent);
-> +	struct device *dev = &pdev->dev;
-> +	struct gsc_hwmon_platform_data *pdata = dev_get_platdata(dev);
-> +	struct gsc_hwmon_data *hwmon;
-> +	const struct attribute_group **groups;
-> +	int i, i_in, i_temp;
-> +
-> +	if (!pdata) {
-> +		pdata = gsc_hwmon_get_devtree_pdata(dev);
-> +		if (IS_ERR(pdata))
-> +			return PTR_ERR(pdata);
-> +	}
-> +
-> +	hwmon = devm_kzalloc(dev, sizeof(*hwmon), GFP_KERNEL);
-> +	if (!hwmon)
-> +		return -ENOMEM;
-> +	hwmon->gsc = gsc;
-> +	hwmon->pdata = pdata;
-> +
-> +	for (i = 0, i_in = 0, i_temp = 0; i < hwmon->pdata->nchannels; i++) {
-> +		const struct gsc_hwmon_channel *ch = &pdata->channels[i];
-> +
-> +		switch (ch->type) {
-> +		case type_temperature:
-> +			if (i_temp == GSC_HWMON_MAX_TEMP_CH) {
-> +				dev_err(gsc->dev, "too many temp channels\n");
-> +				return -EINVAL;
-> +			}
-> +			hwmon->temp_ch[i_temp] = ch;
-> +			hwmon->temp_config[i_temp] = HWMON_T_INPUT |
-> +						     HWMON_T_LABEL;
-> +			i_temp++;
-> +			break;
-> +		case type_voltage:
-> +		case type_voltage_raw:
-> +			if (i_in == GSC_HWMON_MAX_IN_CH) {
-> +				dev_err(gsc->dev, "too many input channels\n");
-> +				return -EINVAL;
-> +			}
-> +			hwmon->in_ch[i_in] = ch;
-> +			hwmon->in_config[i_in] =
-> +				HWMON_I_INPUT | HWMON_I_LABEL;
-> +			i_in++;
-> +			break;
-> +		default:
-> +			dev_err(gsc->dev, "invalid type: %d\n", ch->type);
-> +			return -EINVAL;
-> +		}
-> +	}
-> +
-> +	/* setup config structures */
-> +	hwmon->chip.ops = &gsc_hwmon_ops;
-> +	hwmon->chip.info = hwmon->info;
-> +	hwmon->info[0] = &hwmon->temp_info;
-> +	hwmon->info[1] = &hwmon->in_info;
-> +	hwmon->temp_info.type = hwmon_temp;
-> +	hwmon->temp_info.config = hwmon->temp_config;
-> +	hwmon->in_info.type = hwmon_in;
-> +	hwmon->in_info.config = hwmon->in_config;
-> +
-> +	groups = pdata->fan_base ? gsc_hwmon_groups : NULL;
-> +	hwmon->dev = devm_hwmon_device_register_with_info(dev,
-> +							  KBUILD_MODNAME, hwmon,
-> +							  &hwmon->chip, groups);
-> +	return PTR_ERR_OR_ZERO(hwmon->dev);
-> +}
-> +
-> +static const struct of_device_id gsc_hwmon_of_match[] = {
-> +	{ .compatible = "gw,gsc-hwmon", },
-> +	{}
-> +};
-> +
-> +static struct platform_driver gsc_hwmon_driver = {
-> +	.driver = {
-> +		.name = "gsc-hwmon",
-> +		.of_match_table = gsc_hwmon_of_match,
-> +	},
-> +	.probe = gsc_hwmon_probe,
-> +};
-> +
-> +module_platform_driver(gsc_hwmon_driver);
-> +
-> +MODULE_AUTHOR("Tim Harvey <tharvey@gateworks.com>");
-> +MODULE_DESCRIPTION("GSC hardware monitor driver");
-> +MODULE_LICENSE("GPL v2");
-> diff --git a/include/linux/platform_data/gsc_hwmon.h b/include/linux/platform_data/gsc_hwmon.h
-> new file mode 100644
-> index 00000000..fab1ec9
-> --- /dev/null
-> +++ b/include/linux/platform_data/gsc_hwmon.h
-> @@ -0,0 +1,45 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _GSC_HWMON_H
-> +#define _GSC_HWMON_H
-> +
-> +enum gsc_hwmon_type {
-> +	type_temperature,
-> +	type_voltage,
-> +	type_voltage_raw,
-> +	type_fan,
-> +};
-> +
-> +/**
-> + * struct gsc_hwmon_channel - configuration parameters
-> + * @reg:  I2C register offset
-> + * @type: channel type
-> + * @name: channel name
-> + * @voffset: voltage offset (mV)
-> + * @vdiv: voltage divider array (2 resistor values in ohms)
-> + */
-> +struct gsc_hwmon_channel {
-> +	unsigned int reg;
-> +	unsigned int type;
-> +	const char *name;
-> +	unsigned int voffset;
-> +	unsigned int vdiv[2];
-> +};
-> +
-> +/**
-> + * struct gsc_hwmon_platform_data - platform data for gsc_hwmon driver
-> + * @channels:	pointer to array of gsc_hwmon_channel structures
-> + *		describing channels
-> + * @nchannels:	number of elements in @channels array
-> + * @vreference: voltage reference (mV)
-> + * @resolution: ADC bit resolution
-> + * @fan_base: register base for FAN controller
-> + */
-> +struct gsc_hwmon_platform_data {
-> +	const struct gsc_hwmon_channel *channels;
-> +	int nchannels;
-> +	unsigned int resolution;
-> +	unsigned int vreference;
-> +	unsigned int fan_base;
-> +};
-> +
-> +#endif
-> 
-No empty lines at end of file, please.
+Martin
 
+--8<--
+--- nct6775.c.orig
++++ nct6775.c
+@@ -3806,10 +3806,13 @@ static int nct6775_probe(struct platform
+        int num_attr_groups = 0;
+
+        res = platform_get_resource(pdev, IORESOURCE_IO, 0);
++pr_info("### nct6775_probe: platform_get_resource() -> 0x%x\n", res);
+        if (!devm_request_region(&pdev->dev, res->start, IOREGION_LENGTH,
+                                 DRVNAME))
+                return -EBUSY;
+
++pr_info("### nct6775_probe: devm_request_region() -> 0");
++
+        data = devm_kzalloc(&pdev->dev, sizeof(struct nct6775_data),
+                            GFP_KERNEL);
+        if (!data)
+@@ -4318,6 +4321,7 @@ static int nct6775_probe(struct platform
+
+                break;
+        default:
++pr_info("### nct6775_probe: data->kind == 0x%x\n", data->kind);
+                return -ENODEV;
+        }
+        data->have_in = BIT(data->in_num) - 1;
+@@ -4503,6 +4507,7 @@ static int nct6775_probe(struct platform
+        nct6775_init_device(data);
+
+        err = superio_enter(sio_data->sioreg);
++pr_info("### nct6775_probe: superio_enter(0x%x) -> 0x%x\n",
+sio_data->sioreg, err);
+        if (err)
+                return err;
+
+@@ -4729,6 +4734,7 @@ static int __init nct6775_find(int sioad
+        int addr;
+
+        err = superio_enter(sioaddr);
++pr_info("### nct6775_find: superio_enter(0x%x) -> 0x%x\n", sioaddr, err);
+        if (err)
+                return err;
+
+@@ -4737,6 +4743,7 @@ static int __init nct6775_find(int sioad
+        if (force_id && val != 0xffff)
+                val = force_id;
+
++pr_info("### nct6775_find: (val & SIO_ID_MASK) == 0x%04x\n", val);
+        switch (val & SIO_ID_MASK) {
+        case SIO_NCT6106_ID:
+                sio_data->kind = nct6106;
+@@ -4831,6 +4838,7 @@ static int __init sensors_nct6775_init(v
+        int sioaddr[2] = { 0x2e, 0x4e };
+
+        err = platform_driver_register(&nct6775_driver);
++pr_info("### sensors_nct6775_init: platform_driver_register() -> 0x%x\n", err);
+        if (err)
+                return err;
