@@ -2,146 +2,121 @@ Return-Path: <SRS0=0nUB=4K=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.4 required=3.0 tests=FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81099C35671
-	for <linux-hwmon@archiver.kernel.org>; Sat, 22 Feb 2020 11:51:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F06B9C35672
+	for <linux-hwmon@archiver.kernel.org>; Sat, 22 Feb 2020 15:08:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 629AD21741
-	for <linux-hwmon@archiver.kernel.org>; Sat, 22 Feb 2020 11:51:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D12F8206EF
+	for <linux-hwmon@archiver.kernel.org>; Sat, 22 Feb 2020 15:08:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727253AbgBVLvN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 22 Feb 2020 06:51:13 -0500
-Received: from sauhun.de ([88.99.104.3]:53212 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727186AbgBVLvN (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 22 Feb 2020 06:51:13 -0500
-Received: from localhost (p5486C6B7.dip0.t-ipconnect.de [84.134.198.183])
-        by pokefinder.org (Postfix) with ESMTPSA id 7187A2C07F9;
-        Sat, 22 Feb 2020 12:51:11 +0100 (CET)
-Date:   Sat, 22 Feb 2020 12:51:11 +0100
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Martin Volf <martin.volf.42@gmail.com>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-i2c@vger.kernel.org,
-        linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [regression] nct6775 does not load in 5.4 and 5.5, bisected to
- b84398d6d7f90080
-Message-ID: <20200222115111.GD1716@kunai>
-References: <CAM1AHpQ4196tyD=HhBu-2donSsuogabkfP03v1YF26Q7_BgvgA@mail.gmail.com>
+        id S1727445AbgBVPIM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 22 Feb 2020 10:08:12 -0500
+Received: from mail-il1-f199.google.com ([209.85.166.199]:38656 "EHLO
+        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727552AbgBVPIM (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 22 Feb 2020 10:08:12 -0500
+Received: by mail-il1-f199.google.com with SMTP id i67so6007230ilf.5
+        for <linux-hwmon@vger.kernel.org>; Sat, 22 Feb 2020 07:08:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=mgUjHs4g9bSaFC5XPvo9JG4ciHdYePxlQqjSBI/frtc=;
+        b=m+TF8jHboBrcGikNg9Lfc7qHjoySNmCG5unkP5QUtm8oNaq75n14NQv1Cl+6zEmINn
+         5OGDZ5yPhi7uO/gbKv+pcFGXA+tMEJDEKdfvq/MJIjxq/vONYR6Vnhmzf0lOyFFFu5u2
+         hOAaXG9ZJQET+/wavcOx3qu+uLeCGYMVHKM9fYf9WXdOTdtzjbIsgVSazg/2Hpn/Nmk9
+         vVytodQyIB4hyzh1nTGlFqAbQu3jrH6iKCABgaf+PfeZtnjire5kLpVBZz3he/ZKY4lV
+         NvkHvdtWRpAbjzS9F+noLip2yONHHmJZhZgI6uASWmsHY/T03FiDib49kFXxu9fGULz/
+         zETA==
+X-Gm-Message-State: APjAAAVRGZt8tmOE8YqIouvq1FH/IpaEm3Dm8QBOdvvbh/OGRvEhkyHV
+        xLrsLlfSEggw7EYAkdp4tIuhWkpDwYR/leZvuL4Ej6MzowzG
+X-Google-Smtp-Source: APXvYqzQ9v3Jv/j+mdzsfcplavver9uu7MnultdBhWVRk1X95/5PxqZRz8vbVu8k7B0bZB7tDzEqLuXzaQLP6vbQFAXORhVQIVhm
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="WChQLJJJfbwij+9x"
-Content-Disposition: inline
-In-Reply-To: <CAM1AHpQ4196tyD=HhBu-2donSsuogabkfP03v1YF26Q7_BgvgA@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Received: by 2002:a92:af4b:: with SMTP id n72mr45268383ili.288.1582384091534;
+ Sat, 22 Feb 2020 07:08:11 -0800 (PST)
+Date:   Sat, 22 Feb 2020 07:08:11 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000acd115059f2b8188@google.com>
+Subject: BUG: sleeping function called from invalid context in
+ lock_sock_nested (2)
+From:   syzbot <syzbot+a5df189917e79d5e59c9@syzkaller.appspotmail.com>
+To:     andriin@fb.com, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, daniel@zonque.org, davem@davemloft.net,
+        devicetree@vger.kernel.org, jdelvare@suse.com,
+        john.fastabend@gmail.com, kafai@fb.com, kuba@kernel.org,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux@roeck-us.net, mark.rutland@arm.com, netdev@vger.kernel.org,
+        robh+dt@kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+Hello,
 
---WChQLJJJfbwij+9x
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+syzbot found the following crash on:
 
-Hi Martin,
+HEAD commit:    0a44cac8 Merge tag 'dma-mapping-5.6' of git://git.infradea..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=152eba29e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a61f2164c515c07f
+dashboard link: https://syzkaller.appspot.com/bug?extid=a5df189917e79d5e59c9
+compiler:       clang version 10.0.0 (https://github.com/llvm/llvm-project/ c2443155a0fb245c8f17f2c1c72b6ea391e86e81)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=117a0931e00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17d8c109e00000
 
-On Sat, Feb 22, 2020 at 12:13:07PM +0100, Martin Volf wrote:
-> Hello,
->=20
-> hardware monitoring sensors NCT6796D on my Asus PRIME Z390M-PLUS
-> motherboard with Intel i7-9700 CPU don't work with 5.4 and newer linux
-> kernels, the driver nct6775 does not load.
->=20
-> It is working OK in version 5.3. I have used almost all released stable
-> versions from 5.3.8 to 5.3.16; I didn't try older kernels.
->=20
-> Even on new kernels the sensors-detect finds the sensors:
->         Found `Nuvoton NCT6796D Super IO Sensors' Success!
->             (address 0x290, driver `nct6775')
-> but "modprobe nct6775" says:
->         ERROR: could not insert 'nct6775': No such device
-> There is nothing interesting in dmesg.
->=20
-> git bisect found out the first bad commit is
-> b84398d6d7f900805662b1619223fd644d862d7c,
-> i2c: i801: Use iTCO version 6 in Cannon Lake PCH and beyond
->=20
-> Unfortunately I am not able to revert it in v5.4 to confirm it is really
-> the culprit.
->=20
-> Is there a way to have working hwmon sensors on my system in newer linux
-> kernels?
+The bug was bisected to:
 
-Well, it worked before, so I am quite sure it can be fixed. Thank you
-very much for your detailed regression report! Sadly, I am not familiar
-enough with those drivers, but you put the right people on CC, so I
-think you will get more feedback within the next days. I'll keep an eye
-on this, too.
+commit 5ac6badc5aa057ceb1d50c93326a81db6e89ad2f
+Author: Daniel Mack <daniel@zonque.org>
+Date:   Thu Jul 11 12:45:03 2019 +0000
 
-Happy hacking,
+    device-tree: bindinds: add NXP PCT2075 as compatible device to LM75
 
-   Wolfram
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=15924629e00000
+final crash:    https://syzkaller.appspot.com/x/report.txt?x=17924629e00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=13924629e00000
 
->=20
-> Thanks,
->=20
-> Martin
->=20
-> --8<--
-> lspci
-> 00:00.0 Host bridge: Intel Corporation 8th Gen Core 8-core Desktop
-> Processor Host Bridge/DRAM Registers [Coffee Lake S] (rev 0d)
-> 00:02.0 VGA compatible controller: Intel Corporation UHD Graphics 630
-> (Desktop 9 Series) (rev 02)
-> 00:14.0 USB controller: Intel Corporation Cannon Lake PCH USB 3.1 xHCI
-> Host Controller (rev 10)
-> 00:14.2 RAM memory: Intel Corporation Cannon Lake PCH Shared SRAM (rev 10)
-> 00:16.0 Communication controller: Intel Corporation Cannon Lake PCH
-> HECI Controller (rev 10)
-> 00:17.0 SATA controller: Intel Corporation Cannon Lake PCH SATA AHCI
-> Controller (rev 10)
-> 00:1b.0 PCI bridge: Intel Corporation Cannon Lake PCH PCI Express Root
-> Port #17 (rev f0)
-> 00:1c.0 PCI bridge: Intel Corporation Cannon Lake PCH PCI Express Root
-> Port #1 (rev f0)
-> 00:1c.6 PCI bridge: Intel Corporation Cannon Lake PCH PCI Express Root
-> Port #7 (rev f0)
-> 00:1d.0 PCI bridge: Intel Corporation Cannon Lake PCH PCI Express Root
-> Port #9 (rev f0)
-> 00:1f.0 ISA bridge: Intel Corporation Z390 Chipset LPC/eSPI Controller (r=
-ev 10)
-> 00:1f.3 Audio device: Intel Corporation Cannon Lake PCH cAVS (rev 10)
-> 00:1f.4 SMBus: Intel Corporation Cannon Lake PCH SMBus Controller (rev 10)
-> 00:1f.5 Serial bus controller [0c80]: Intel Corporation Cannon Lake
-> PCH SPI Controller (rev 10)
-> 00:1f.6 Ethernet controller: Intel Corporation Ethernet Connection (7)
-> I219-V (rev 10)
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+a5df189917e79d5e59c9@syzkaller.appspotmail.com
+Fixes: 5ac6badc5aa0 ("device-tree: bindinds: add NXP PCT2075 as compatible device to LM75")
 
---WChQLJJJfbwij+9x
-Content-Type: application/pgp-signature; name="signature.asc"
+BUG: sleeping function called from invalid context at net/core/sock.c:2935
+in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 2687, name: kworker/1:3
+INFO: lockdep is turned off.
+Preemption disabled at:
+[<ffffffff867b39c7>] sock_hash_free+0xd7/0x460 net/core/sock_map.c:869
+CPU: 1 PID: 2687 Comm: kworker/1:3 Not tainted 5.6.0-rc2-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events bpf_map_free_deferred
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x1fb/0x318 lib/dump_stack.c:118
+ ___might_sleep+0x449/0x5e0 kernel/sched/core.c:6798
+ __might_sleep+0x8f/0x100 kernel/sched/core.c:6751
+ lock_sock_nested+0x36/0x120 net/core/sock.c:2935
+ lock_sock include/net/sock.h:1516 [inline]
+ sock_hash_free+0x200/0x460 net/core/sock_map.c:872
+ bpf_map_free_deferred+0xb2/0x110 kernel/bpf/syscall.c:474
+ process_one_work+0x7f5/0x10f0 kernel/workqueue.c:2264
+ worker_thread+0xbbc/0x1630 kernel/workqueue.c:2410
+ kthread+0x332/0x350 kernel/kthread.c:255
+ ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
 
------BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5RFa8ACgkQFA3kzBSg
-KbbkDw/8D/PpB5Muukf4L8rPt0Q0BAL/ZO7cmlwGKXUxZgm2f3KaqDqSYqrHFQs1
-ACTDyyyg6q1RMNiHZQ6LMCBLvWHfgjtBeJcDhTgzFcA7CV+xDrpOan8+8mBHnd8X
-q/vGIGXoBUREZqiGDkCkWu1Pty3nmbsdNgKXy0fc0Ej8q5Apr8dUJ+VU4r7ZzOt4
-naHsYdb3oxyYIu7pNYIM1j64wfivCP6T5pnlfP3JdQkOZfL0dQuW0g3NTcr5n3Gg
-aEdazPNQuN9HB4KH+wqaztxC9LqlCd++gVFx43rakydhVjVnh6BrYIGKkZoAhr4f
-OyvPvyF2QWit0tr2UA5u4OIQUS3kzjW8FzvezozsVRjW/5qmDj2xZ/hesvK5oG+S
-K6uMhABJd8bbBH6Z4/0v/kVgpe0WzMb7qrW125SygYqqckm4WvQ7CprgBIEMXUSg
-7wzYbTU+f8bdT0XD/neK0YueQmutM+smcStwCAGtRPtDgfeCS6OBlfyoJTt22pYT
-Wmaat8iCnX0T2nGXbevLgAI9IE7cbQdvRWCowpBTmQ9So7d9FtI2xhrGbn8xevhs
-tycC0knPDkLmpM6NTibte5PkfIhJLcSEWp3NLzXoqCrFJMV2UoN4eQ2fvnFlvM2E
-Q07PfpWT2mnpl7SGY7EItIIXdeJ/4aDfqr2GemEqnSJao27gUvs=
-=lEKr
------END PGP SIGNATURE-----
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
---WChQLJJJfbwij+9x--
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
