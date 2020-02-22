@@ -2,75 +2,74 @@ Return-Path: <SRS0=0nUB=4K=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F51EC35672
-	for <linux-hwmon@archiver.kernel.org>; Sat, 22 Feb 2020 15:41:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4D43C35666
+	for <linux-hwmon@archiver.kernel.org>; Sat, 22 Feb 2020 15:48:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 15EC5206ED
-	for <linux-hwmon@archiver.kernel.org>; Sat, 22 Feb 2020 15:41:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9B55F208C3
+	for <linux-hwmon@archiver.kernel.org>; Sat, 22 Feb 2020 15:48:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pgu+gYaD"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M4Em60uB"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727681AbgBVPlW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 22 Feb 2020 10:41:22 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:33382 "EHLO
+        id S1727445AbgBVPsc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 22 Feb 2020 10:48:32 -0500
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:34236 "EHLO
         mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727230AbgBVPlV (ORCPT
+        with ESMTP id S1727230AbgBVPsc (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 22 Feb 2020 10:41:21 -0500
-Received: by mail-pl1-f194.google.com with SMTP id ay11so2168986plb.0;
-        Sat, 22 Feb 2020 07:41:21 -0800 (PST)
+        Sat, 22 Feb 2020 10:48:32 -0500
+Received: by mail-pl1-f194.google.com with SMTP id j7so2170725plt.1;
+        Sat, 22 Feb 2020 07:48:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ZKqnhKtnjlrm/NrpyM5QaS9UL8/A0/pvxGGFI8Wsv3o=;
-        b=Pgu+gYaDPETaF85sNjWfDPiAD6EkDxAO6E9xek1rU5M6uwrNQN13L3OMjjvwiPxDoe
-         gp49QnHzOchd1YoaxN/JosfktWZFqyf/pV5JScPo+95BIbujN1wTPRaAsX2HGOHpASmG
-         UzrvvEAy2gZ9ddMNJfWXCse+uP9NdXWuN2uqQ4B7RFbnVMdfeFQyFx6UHwi6xBTO6vqP
-         TUWuBZ4qN5wJAo0WeeVPDrlHANL/sbbVl1wut/om3pYofISgu2DFAqWO2dDXENljZckj
-         1ugcPNB6OUHLG23KAG2eHjzujmB4nPLqGnfPe8YLLPAZEjJTUkpK9foURb2yHjwdm7ue
-         XMKg==
+        bh=SWUUWT4ZB0TcXYYHFJ6Ou9hJ8yBoPD/x5MgrkUc6YHo=;
+        b=M4Em60uBlU0Kn1ASOLYVagcX/WbF9WpkMQc8Y+3WYxAxKzRRi19YVfcYjt4yx7cGh5
+         vc0PH3unxuBx1+RB1n09rLHzNHvicsdvgcXJ+lPjXM74RFxomdnrsz4Ska0Fyl3OH6DI
+         Fswl3FBUCT+p/AgMlshwTj+K4jwap6FQkCKXUlZrnv7/vsDsCZziCit+k2zrwKIIbNHo
+         K6VCDlxDG0i5g/OA/lkCZpxiHo1lr1jsZhUEMe8KKkmrXvKw/gWpBslceC75EBY1/SMl
+         wuB7yYGW1Wo35Z8SDkpEGwFJ12uKjogy6QC+i+kCdgesAncLybGFGdN93j7WgdegFFir
+         uwvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=ZKqnhKtnjlrm/NrpyM5QaS9UL8/A0/pvxGGFI8Wsv3o=;
-        b=c6xdj2CfQENiUAe74mRONG/chuTE7G3pbJCKfzCKurPwFEAeNx+zlW+Q44QlxrBPCE
-         wBUNoDhoVJw276QnFhAthPvpF3z1kANkH0N4RRanpxntjY7K0iAdR50yO9n0b9GG8/p5
-         8M4DFBuGsjElLpZevfWSoQUXHqqsznLNscO3ImqmBDC+KXKe2Giv8qOL5vY0Den4Lr4w
-         rnFDwvjxq2GIPbw4TEUSWgq1NIjSR1wHYuwfLXEFWZM8b6MeLXNvnegw71BrV+5V0Bgh
-         Y5TLY5msyUBAqtckbgNhUCAG+KoBlYgxsjU+XP7aU8Nh53rsvIMkpAQ++2qY0pyeiapu
-         rSLg==
-X-Gm-Message-State: APjAAAVpjkWL+TnNNKt3FaJ6bP1Tjtz4eAS6KKHb9afeKfaSiTX6rdIe
-        2yTl6RuqpBSh+T/Tm+d5tS2+r2ay
-X-Google-Smtp-Source: APXvYqxQm22B+SJe7ymcheyrXUZZA2F9Z0qnG9iBS9cXm58rL50yqAHe+Sb+plQX+1/lnt4E7jPOEg==
-X-Received: by 2002:a17:90a:17e5:: with SMTP id q92mr10137107pja.28.1582386080725;
-        Sat, 22 Feb 2020 07:41:20 -0800 (PST)
+        bh=SWUUWT4ZB0TcXYYHFJ6Ou9hJ8yBoPD/x5MgrkUc6YHo=;
+        b=SI1eVd8YuNy8kr7MPyMzpupQ7eWC1eAW1DjIh9KZJXZ8fX3sfHeVz5gC8oo7l1+pMo
+         HFQHwLkX61SPxiNwQY1cEw6cLByOJWESN+AFeeMYlnrmrb937xf6YALM3ziW7WuNxp4C
+         SlS8NPL2+aryM5Mg28+Msj/kkCCeVAQhjknJPiB9Mh3E42BQkpl8juBN7/i8bynKaY3j
+         SxGvidEehv8Vi48D71xzb741ZCj7vkdqhL9Gsrn69fxHiPPMMQ1SXQ5IoBk5suMxHFYA
+         uVE98eQ5WDgiREzSxxaHCiA88JXg16rZFvEGMm+XtOwoAaWKid5Usi/MJ36D/mM6C4I2
+         aCHg==
+X-Gm-Message-State: APjAAAXn4D46Sccy4u/htLYAagc93xH7hzT54FIu/aQ5rIa+Xv9cx3bi
+        QYh7Ngyoqk/fUADHcRU/GxBl9499
+X-Google-Smtp-Source: APXvYqxU4oL1zrqJFA7RYhmlpHImtB+PRJ6fby0XYlNwyDTXJLipc6p6cDELDHFnTReX8BkMsuItbg==
+X-Received: by 2002:a17:902:bd43:: with SMTP id b3mr39373443plx.230.1582386511081;
+        Sat, 22 Feb 2020 07:48:31 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r8sm6230930pjo.22.2020.02.22.07.41.19
+        by smtp.gmail.com with ESMTPSA id x190sm6793019pfb.96.2020.02.22.07.48.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 Feb 2020 07:41:19 -0800 (PST)
-Subject: Re: [regression] nct6775 does not load in 5.4 and 5.5, bisected to
- b84398d6d7f90080
-To:     Martin Volf <martin.volf.42@gmail.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Wolfram Sang <wsa@the-dreams.de>
-Cc:     linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <CAM1AHpQ4196tyD=HhBu-2donSsuogabkfP03v1YF26Q7_BgvgA@mail.gmail.com>
+        Sat, 22 Feb 2020 07:48:30 -0800 (PST)
+Subject: Re: [PATCH 4/7] docs: adm1177: fix a broken reference
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org
+References: <cover.1582361737.git.mchehab+huawei@kernel.org>
+ <8d37f465888656224855a21f5bb01edb1ca66cf3.1582361738.git.mchehab+huawei@kernel.org>
 From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <1bdbac08-86f8-2a57-2b0d-8cd2beb2a1c0@roeck-us.net>
-Date:   Sat, 22 Feb 2020 07:41:18 -0800
+Message-ID: <b7f05f9f-a3d4-2b8d-f917-e430ffe453aa@roeck-us.net>
+Date:   Sat, 22 Feb 2020 07:48:29 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <CAM1AHpQ4196tyD=HhBu-2donSsuogabkfP03v1YF26Q7_BgvgA@mail.gmail.com>
+In-Reply-To: <8d37f465888656224855a21f5bb01edb1ca66cf3.1582361738.git.mchehab+huawei@kernel.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -79,38 +78,37 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2/22/20 3:13 AM, Martin Volf wrote:
-> Hello,
+On 2/22/20 1:00 AM, Mauro Carvalho Chehab wrote:
+> This reference was missing the .rst extension. This would be OK
+> if it were using the :doc: directive. So, switch to it.
 > 
-> hardware monitoring sensors NCT6796D on my Asus PRIME Z390M-PLUS
-> motherboard with Intel i7-9700 CPU don't work with 5.4 and newer linux
-> kernels, the driver nct6775 does not load.
+> As a side effect, this will create cross-reference links at
+> html output.
 > 
-> It is working OK in version 5.3. I have used almost all released stable
-> versions from 5.3.8 to 5.3.16; I didn't try older kernels.
-> 
-> Even on new kernels the sensors-detect finds the sensors:
->          Found `Nuvoton NCT6796D Super IO Sensors' Success!
->              (address 0x290, driver `nct6775')
-> but "modprobe nct6775" says:
->          ERROR: could not insert 'nct6775': No such device
-> There is nothing interesting in dmesg.
-> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-My wild guess would be that the i801 driver is a bit aggressive with
-reserving memory spaces, but I don't immediately see what it does
-differently in that regard after the offending patch. Does it work
-if you unload the i2c_i801 driver first ?
-
-You could also try to compare the output of /proc/ioports with
-the old and the new kernel, and see if the IO address space used
-by nct6775 in v5.3 is assigned to the i801 driver (or some other
-driver, such as the watchdog driver) in v5.4.
-
-If you are into hacking the kernel, you could also add some
-debug messages into the nct6775 driver to find out where exactly
-it fails. If that helps, maybe we can then add those messages into
-into the driver source to help others if this is observed again.
+Applied.
 
 Thanks,
 Guenter
+
+> ---
+>   Documentation/hwmon/adm1177.rst | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/hwmon/adm1177.rst b/Documentation/hwmon/adm1177.rst
+> index c81e0b4abd28..471be1e98d6f 100644
+> --- a/Documentation/hwmon/adm1177.rst
+> +++ b/Documentation/hwmon/adm1177.rst
+> @@ -20,8 +20,7 @@ Usage Notes
+>   -----------
+>   
+>   This driver does not auto-detect devices. You will have to instantiate the
+> -devices explicitly. Please see Documentation/i2c/instantiating-devices for
+> -details.
+> +devices explicitly. Please see :doc:`/i2c/instantiating-devices` for details.
+>   
+>   
+>   Sysfs entries
+> 
+
