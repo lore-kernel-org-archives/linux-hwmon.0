@@ -1,129 +1,108 @@
-Return-Path: <SRS0=IX/m=4J=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=0nUB=4K=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA26FC35669
-	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Feb 2020 22:04:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A53EC35669
+	for <linux-hwmon@archiver.kernel.org>; Sat, 22 Feb 2020 01:59:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B071E2072C
-	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Feb 2020 22:04:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1582322699;
-	bh=ixkaQsOyXc65L7U5cAzBy/t7QDxhcFt3SZW7c7F25dw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=PMXdG8wexEAjJ0JWBexne/MhkDQ9PS+plL78pEz1g2rXtq5jMQoOc+SkIBBgzpxba
-	 k6rU7DFK18FTnEEjWq3fCMwB+a/9AN14KkN1gDdvORCX/QOzCNhIWhA00vHjEvSPSN
-	 S8ToY569QWHIfllnqdDVZOZyvuFyLSmkIqb4y+h0=
+	by mail.kernel.org (Postfix) with ESMTP id 19423206D7
+	for <linux-hwmon@archiver.kernel.org>; Sat, 22 Feb 2020 01:59:41 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RUgUbMPx"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726787AbgBUWE7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 21 Feb 2020 17:04:59 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49572 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726725AbgBUWE7 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 21 Feb 2020 17:04:59 -0500
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 58CD72072C;
-        Fri, 21 Feb 2020 22:04:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582322698;
-        bh=ixkaQsOyXc65L7U5cAzBy/t7QDxhcFt3SZW7c7F25dw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hE+MPvG/9HlApVb7a1C28KlYECMfNuRDiN5O/RjQeGCMCTPwZif/S/YvJ3If4HBTr
-         Zcf5e4RSkOSoTbbHRzOeqS1MPWOHar1v8y4TTptGKAnNkZlw4pcEM412p0OvN5oN2S
-         N6+5cm3k6Gaukxa1iLXjUVY1CJuM9VvipF3t7LrA=
-Received: by mail-qt1-f181.google.com with SMTP id n17so2428773qtv.2;
-        Fri, 21 Feb 2020 14:04:58 -0800 (PST)
-X-Gm-Message-State: APjAAAX5ccd/wo+Yi5RqNKmlZzcMfwAwJfJdzxQBsrVW/Yt432JeySLU
-        q5OnmIU6fMdpNPPyoR4nERzfkFpV0GbVVluKLA==
-X-Google-Smtp-Source: APXvYqzIdyYmWrgE2znfgfwuWRqr27wwCfU9j74qwfxNfJB8wFPqCO8UUY9xs6KKGgpRQQM31GBK5HGN7l7/vsKP0xo=
-X-Received: by 2002:aed:2344:: with SMTP id i4mr34521971qtc.136.1582322697489;
- Fri, 21 Feb 2020 14:04:57 -0800 (PST)
-MIME-Version: 1.0
-References: <20200221041631.10960-1-chris.packham@alliedtelesis.co.nz>
- <20200221041631.10960-4-chris.packham@alliedtelesis.co.nz>
- <CAL_JsqK+jKyRr98_YX1GGwk-rHrLMOq_v7Z_57dQWYYQPuLS7A@mail.gmail.com> <20200221155259.GA11868@roeck-us.net>
-In-Reply-To: <20200221155259.GA11868@roeck-us.net>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Fri, 21 Feb 2020 16:04:45 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqK5MqD9vqS0A1oTDkMvVkBFM83_fLAp7M7zR5uEv+NEJw@mail.gmail.com>
-Message-ID: <CAL_JsqK5MqD9vqS0A1oTDkMvVkBFM83_fLAp7M7zR5uEv+NEJw@mail.gmail.com>
-Subject: Re: [PATCH v4 3/5] dt-bindings: hwmon: Document adt7475 invert-pwm property
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Jean Delvare <jdelvare@suse.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Linux HWMON List <linux-hwmon@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Logan Shaw <logan.shaw@alliedtelesis.co.nz>
-Content-Type: text/plain; charset="UTF-8"
+        id S1727864AbgBVB7k (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 21 Feb 2020 20:59:40 -0500
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:44422 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727640AbgBVB7k (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 21 Feb 2020 20:59:40 -0500
+Received: by mail-pl1-f194.google.com with SMTP id d9so1625515plo.11;
+        Fri, 21 Feb 2020 17:59:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id;
+        bh=bPiehA+LSYVdtpwKmbPxHRPfkAKoqTNmaKfdGrk5b7U=;
+        b=RUgUbMPx76nesOwYwg8U95GvdQVUMZDaF8Ri6hpN2pj0eQwLDgNpZoXGtia3sNmc05
+         s6IkPpSkkjnmPiCSRu2TDiOmY6Sj1rvHxo5IMpqFVTFATHUozTVemYshjKmW6txne039
+         qKzORtRkUFyFBsXMV3IJSN28Ox6Jbm6+aKI2IgF3hWEiymJzdSX1W9vRrIGxGVGC+RyK
+         HvKUe+W3MsC2XGNQP6UYgqpR4dqDig25+9kToGdxgOIT8aci24dAhUCivo4WsO+SKV+w
+         EGlStSVzy0cBlqgFUFnxZRNqKkhe0gpjMWj5LOZ5g72ercxvQifdCPQStTt9mXP+lxRE
+         LEIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
+        bh=bPiehA+LSYVdtpwKmbPxHRPfkAKoqTNmaKfdGrk5b7U=;
+        b=trlL0E9ffR+T5DNls0O1FEdTqmZeQ1Pb4EU6PMsztfI/ih1D/v1AM9ux4EcNRy6AN9
+         gOZ69a69+UBAh+6CZLdgR4DuDoD0yrM1conu3kzHxjFTspErGtA6EXxp/G6qZClNKGBg
+         g1RMq3UpSCYQQPr/oTaJn+trbKfoiT4P7D5VSgSiASFFRYR/ra2MSBc95RSqz5+wrxLx
+         wS99bbEHHloTIE8gr8geuZUK3XlDxFvKFLLYSXqKEHXLMKRJjbb0MV87/1qx22fNiSGy
+         GwiqjpQeEQd0HKMT3l7s9jPviYGu2XbV1kFx3F38bZFCMPM1uoDHyST+LOIR6jUJtIJY
+         Pqcg==
+X-Gm-Message-State: APjAAAW4RWLnXajBCJzxyDLNybbA2LPUvx/k9Xg0SYiNKk4vkenocd0G
+        j+ZeVkSYQoWbrhTZjXA49h2bebiR
+X-Google-Smtp-Source: APXvYqzHqlPWFKL2Gx43Aewag9UkaxrEpwfprte15UMgFsWUB/gITeDIsLd5nKb9uK1W+86RhxcrVA==
+X-Received: by 2002:a17:902:a715:: with SMTP id w21mr31810562plq.244.1582336779978;
+        Fri, 21 Feb 2020 17:59:39 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g72sm4263183pfb.11.2020.02.21.17.59.38
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 21 Feb 2020 17:59:39 -0800 (PST)
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v5.6-rc3
+Date:   Fri, 21 Feb 2020 17:59:37 -0800
+Message-Id: <20200222015937.3949-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Feb 21, 2020 at 9:53 AM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Fri, Feb 21, 2020 at 09:40:00AM -0600, Rob Herring wrote:
-> > On Thu, Feb 20, 2020 at 10:16 PM Chris Packham
-> > <chris.packham@alliedtelesis.co.nz> wrote:
-> > >
-> > > Add binding information for the invert-pwm property.
-> > >
-> > > Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> > > ---
-> > >
-> > > Notes:
-> > >     Changes in v4:
-> > >     - use $ref uint32 and enum
-> > >     - add adi vendor prefix
-> > >
-> > >     Cahnges in v3:
-> > >     - new
-> > >
-> > >  Documentation/devicetree/bindings/hwmon/adt7475.yaml | 12 ++++++++++++
-> > >  1 file changed, 12 insertions(+)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/hwmon/adt7475.yaml b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
-> > > index e40612ee075f..6a358b30586c 100644
-> > > --- a/Documentation/devicetree/bindings/hwmon/adt7475.yaml
-> > > +++ b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
-> > > @@ -50,6 +50,17 @@ patternProperties:
-> > >       - $ref: /schemas/types.yaml#/definitions/uint32
-> > >       - enum: [0, 1]
-> > >
-> > > +  "^adi,invert-pwm[1-3]$":
-> > > +    description: |
-> > > +      Configures the pwm output to use inverted logic. If set to 1
-> > > +      the pwm uses a logic low output for 100% duty cycle. If set
-> > > +      to 0 the pwm uses a logic high output for 100% duty cycle.
-> > > +      If the property is absent the pwm retains it's configuration
-> > > +      from the bios/bootloader.
-> >
-> > I believe we already have an inverted flag for consumers. That doesn't
-> > work if you don't have a consumer described in DT, but then the
-> > question is should you? Or is this something the user will want to
-> > configure from userspace.
-> >
->
-> Normally that is a system property. It is difficult to imagine
-> that it would ever have to be configured from userspace at runtime.
-> Most of the time users won't have any idea, and the board datasheet
-> (if avaible) won't list such information.
+Hi Linus,
 
-Yes, I agree and for those cases I'd expect the consumer is described
-in DT too. I read and refreshed my memory on this binding after
-sending this. I believe this is for a fan which I'd expect to be in DT
-as fans need power and there's different types.
+Please pull hwmon fixes for Linux v5.6-rc3 from signed tag:
 
-The userspace case I was thinking of was more the hobbyist boards with
-PWM to a connector.
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.6-rc3
 
-Rob
+Thanks,
+Guenter
+------
+
+The following changes since commit 11a48a5a18c63fd7621bb050228cebf13566e4d8:
+
+  Linux 5.6-rc2 (2020-02-16 13:16:59 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v5.6-rc3
+
+for you to fetch changes up to e61d2392253220477813b43412090dccdcac601f:
+
+  hwmon: (w83627ehf) Fix crash seen with W83627DHG-P (2020-02-21 09:16:24 -0800)
+
+----------------------------------------------------------------
+hwmon fixes for v5.6-rc3
+
+- Fix crash in w83627ehf driver seen with W83627DHG-P
+- Fix lockdep splat in acpi_power_meter driver
+- Fix xdpe12284 documentation Sphinx warnings
+
+----------------------------------------------------------------
+Guenter Roeck (2):
+      hwmon: (acpi_power_meter) Fix lockdep splat
+      hwmon: (w83627ehf) Fix crash seen with W83627DHG-P
+
+Randy Dunlap (1):
+      Documentation/hwmon: fix xdpe12284 Sphinx warnings
+
+ Documentation/hwmon/xdpe12284.rst |  1 +
+ drivers/hwmon/acpi_power_meter.c  | 16 ++++++++--------
+ drivers/hwmon/w83627ehf.c         |  7 ++++++-
+ 3 files changed, 15 insertions(+), 9 deletions(-)
