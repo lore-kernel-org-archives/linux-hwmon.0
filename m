@@ -1,163 +1,227 @@
-Return-Path: <SRS0=0nUB=4K=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=8gzA=4L=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 442D8C35671
-	for <linux-hwmon@archiver.kernel.org>; Sat, 22 Feb 2020 21:26:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC644C35675
+	for <linux-hwmon@archiver.kernel.org>; Sun, 23 Feb 2020 03:45:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 071FE20675
-	for <linux-hwmon@archiver.kernel.org>; Sat, 22 Feb 2020 21:26:52 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aTvdhtDL"
+	by mail.kernel.org (Postfix) with ESMTP id BE661208C3
+	for <linux-hwmon@archiver.kernel.org>; Sun, 23 Feb 2020 03:45:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726845AbgBVV0w (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 22 Feb 2020 16:26:52 -0500
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:37352 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726828AbgBVV0w (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 22 Feb 2020 16:26:52 -0500
-Received: by mail-pl1-f193.google.com with SMTP id c23so2372088plz.4;
-        Sat, 22 Feb 2020 13:26:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=YIYXGSS8fcmSn+/UDOu18mOj75c8PxzQTNkib8e4EmA=;
-        b=aTvdhtDL2+Mbhb5VETddMZfDxbWJ6EZbCYCSx9D6sUrCe7Uenur7XB6+LX454vOb89
-         Md/Ww1N8czpeKjPMs2tk1lpbniKQA1BMw66AVtPvna49MpPRFZdOhiMevSUjYSfs37fP
-         FJq/iGw5MR+c1ba3+LwSvlxtKSZNyspFmCNzTwGe/i1vjUQB+wVI1co0OEn2di8G6wEZ
-         loPSUWHD+Dp+rq6j0b+oJE3zN5lGzoPRMQGA7KBocF/77+4Bomtm+z3ejC+u5MAeBvBE
-         XH4ixL8ZAkSCwxnJFu0Dy/57u04y3hcatyLH7Pid11LpQrwmtZ8ddGTVk4n6TT+fdUHc
-         hqeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=YIYXGSS8fcmSn+/UDOu18mOj75c8PxzQTNkib8e4EmA=;
-        b=el+DJBaOzT9Bz2yVA+m2shV1t+SA1ysTin2libLjNayD9v2XNoyrUgtWCRNSu5JGB+
-         Q36YTEkL3HruqnJJBoLocQUjEMldIITARhNY0Kx+cSvOab7f2kc1nUYSSrKOHCkKGSLz
-         5kPrKdN8V55T3s9CJ9Ea0LLQBU9TI24XVaEVwww0Dpr+Ch0Luwk15my/pBgB+crGBGYR
-         /IZmbWxJHaxvRWc9qu0wHcHyec4bYRimvTBjRY0OqvQTFBWk5wf0eH2JIRP6B8dzf25l
-         UNx8hA8w53zaI4G/XAgRrCVjBLmaLzLVtIfaWtJ3M6q+HsX+e0Nfnwy49BaVDbLZkD7Y
-         W02Q==
-X-Gm-Message-State: APjAAAWcmvrGKnjU1tBk6r95caQ30e/rG4+nB0gZR9MspTOMsfvMjTfr
-        /RWY9WogyTX9hR0tgj7TDFWwhrrn
-X-Google-Smtp-Source: APXvYqxGHhG+YoimZM6KOAYrgFZeqwXLYxLIW+5+yyIxTusu61LzJRVvDSMP/nnIjlm0W5kplxOhJg==
-X-Received: by 2002:a17:902:343:: with SMTP id 61mr43399823pld.332.1582406811177;
-        Sat, 22 Feb 2020 13:26:51 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r7sm7570933pfg.34.2020.02.22.13.26.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 Feb 2020 13:26:50 -0800 (PST)
-Subject: Re: [regression] nct6775 does not load in 5.4 and 5.5, bisected to
- b84398d6d7f90080
-To:     Martin Volf <martin.volf.42@gmail.com>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
-        linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <CAM1AHpQ4196tyD=HhBu-2donSsuogabkfP03v1YF26Q7_BgvgA@mail.gmail.com>
- <1bdbac08-86f8-2a57-2b0d-8cd2beb2a1c0@roeck-us.net>
- <CAM1AHpSKFk9ZosQf=k-Rm2=EFqco7y4Lpfb7m07r=j_uJd4T0A@mail.gmail.com>
- <85356d1a-f90d-e94d-16eb-1071d4e94753@roeck-us.net>
- <CAM1AHpSpEFshpUGxKdhLV3XuThQg_XVaPgOWzvrTv6YtzHyO+A@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <bec1f81c-09a8-ba48-c6c4-5d9b340f7c0b@roeck-us.net>
-Date:   Sat, 22 Feb 2020 13:26:48 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1727286AbgBWDpl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 22 Feb 2020 22:45:41 -0500
+Received: from mga17.intel.com ([192.55.52.151]:27065 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726983AbgBWDpl (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 22 Feb 2020 22:45:41 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 22 Feb 2020 19:45:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,474,1574150400"; 
+   d="scan'208";a="236969725"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 22 Feb 2020 19:45:39 -0800
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1j5iD4-000G1u-NA; Sun, 23 Feb 2020 11:45:38 +0800
+Date:   Sun, 23 Feb 2020 11:45:16 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:hwmon] BUILD SUCCESS
+ 675c7c3258d6dac6a44f90620f208c04f9a80f17
+Message-ID: <5e51f54c.HzJhot6s0sD4oki0%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <CAM1AHpSpEFshpUGxKdhLV3XuThQg_XVaPgOWzvrTv6YtzHyO+A@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2/22/20 12:49 PM, Martin Volf wrote:
-> Hello,
-> 
-> On Sat, Feb 22, 2020 at 8:05 PM Guenter Roeck <linux@roeck-us.net> wrote:
->> On 2/22/20 9:55 AM, Martin Volf wrote:
->>> On Sat, Feb 22, 2020 at 4:41 PM Guenter Roeck <linux@roeck-us.net> wrote:
->>>> On 2/22/20 3:13 AM, Martin Volf wrote:
->>>>> hardware monitoring sensors NCT6796D on my Asus PRIME Z390M-PLUS
->>>>> motherboard with Intel i7-9700 CPU don't work with 5.4 and newer linux
->>>>> kernels, the driver nct6775 does not load.
->>>>>
->>>>> It is working OK in version 5.3. I have used almost all released stable
->>>>> versions from 5.3.8 to 5.3.16; I didn't try older kernels.
->>> ...
->>>> My wild guess would be that the i801 driver is a bit aggressive with
->>>> reserving memory spaces, but I don't immediately see what it does
->>>> differently in that regard after the offending patch. Does it work
->>>> if you unload the i2c_i801 driver first ?
->>>
->>> Yes, after unloading i2c_i801, the nct6775 works.
-> ...
->>> This is diff of /proc/ioports in 5.3.18 with loaded nct6775 and in
->>> 5.4.21 without:
->>>
->>> --- ioports-5.3.18
->>> +++ ioports-5.4.21
->>> @@ -2,6 +2,7 @@
->>>      0000-001f : dma1
->>>      0020-0021 : pic1
->>>      002e-0031 : iTCO_wdt
->>> +    002e-0031 : iTCO_wdt
->>>      0040-0043 : timer0
->>>      0050-0053 : timer1
-> ...
->>> So 0x2e is the resource the two drivers are fighting for.
-> ...
->> Yes, and it should not do that, since the range can be used to access
->> different segments of the same chip from multiple drivers. This region
->> should only be reserved temporarily, using request_muxed_region() when
->> needed and release_region() after the access is complete. Either case,
->> I don't immediately see why that region would be interesting for the
->> iTCO watchdog driver.
->>
->> Can you add some debugging into the i801 driver to see what memory regions
->> it reserves, and how it gets to reserve 0x2e..0x31 ? That range really
->> doesn't make any sense to me.
-> 
-> in the function i801_add_tco() in drivers/i2c/busses/i2c-i801.c
-> (line 1601 in 5.4.21), there is this code:
-> 
->          /*
->           * Power Management registers.
->           */
->          devfn = PCI_DEVFN(PCI_SLOT(pci_dev->devfn), 2);
->          pci_bus_read_config_dword(pci_dev->bus, devfn, ACPIBASE, &base_addr);
-> 
->          res = &tco_res[ICH_RES_IO_SMI];
->          res->start = (base_addr & ~1) + ACPIBASE_SMI_OFF;
->          res->end = res->start + 3;
->          res->flags = IORESOURCE_IO;
-> 
-> base_addr is 0xffffffff after pci_bus_read_config_dword() call.
-> ACPIBASE_SMI_OFF is 0x030, therefore res->start is 0x2e.
-> Not that I understand even a bit of this...
-> 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon
+branch HEAD: 675c7c3258d6dac6a44f90620f208c04f9a80f17  docs: adm1177: fix a broken reference
 
-Outch. This means that the code is broken. ACPIBASE is not configured,
-or disabled, or the code reads from the wrong PCI configuration register.
-What I don't understand is why this works with v5.3 kernels; the code
-looks just as bad there for me. I must be missing something. Either case,
-the only thing you can really do at this point is to blacklist the
-iTCO_wdt driver.
+elapsed time: 480m
 
-Other than that, we can only hope that someone who understands above
-code can provide a fix. Maybe Wolfram has an idea.
+configs tested: 164
+configs skipped: 0
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Guenter
+arm                              allmodconfig
+arm                               allnoconfig
+arm                              allyesconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+arm64                            allyesconfig
+arm                           efm32_defconfig
+arm                         at91_dt_defconfig
+arm                        shmobile_defconfig
+arm64                               defconfig
+arm                          exynos_defconfig
+arm                        multi_v5_defconfig
+arm                           sunxi_defconfig
+arm                        multi_v7_defconfig
+sparc                            allyesconfig
+riscv                               defconfig
+s390                             allyesconfig
+h8300                     edosk2674_defconfig
+nios2                         10m50_defconfig
+riscv                             allnoconfig
+nds32                               defconfig
+ia64                                defconfig
+riscv                            allyesconfig
+powerpc                             defconfig
+sparc                               defconfig
+sparc64                             defconfig
+i386                              allnoconfig
+i386                             allyesconfig
+i386                             alldefconfig
+i386                                defconfig
+ia64                             alldefconfig
+ia64                             allmodconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+c6x                              allyesconfig
+c6x                        evmc6678_defconfig
+nios2                         3c120_defconfig
+openrisc                    or1ksim_defconfig
+openrisc                 simple_smp_defconfig
+xtensa                       common_defconfig
+xtensa                          iss_defconfig
+nds32                             allnoconfig
+csky                                defconfig
+alpha                               defconfig
+h8300                    h8300h-sim_defconfig
+h8300                       h8s-sim_defconfig
+m68k                             allmodconfig
+m68k                       m5475evb_defconfig
+m68k                          multi_defconfig
+m68k                           sun3_defconfig
+arc                                 defconfig
+arc                              allyesconfig
+powerpc                       ppc64_defconfig
+powerpc                          rhel-kconfig
+microblaze                      mmu_defconfig
+microblaze                    nommu_defconfig
+powerpc                           allnoconfig
+mips                           32r2_defconfig
+mips                         64r6el_defconfig
+mips                             allmodconfig
+mips                              allnoconfig
+mips                             allyesconfig
+mips                      fuloong2e_defconfig
+mips                      malta_kvm_defconfig
+parisc                            allnoconfig
+parisc                           allyesconfig
+parisc                generic-32bit_defconfig
+parisc                generic-64bit_defconfig
+x86_64               randconfig-a001-20200223
+x86_64               randconfig-a002-20200223
+x86_64               randconfig-a003-20200223
+i386                 randconfig-a001-20200223
+i386                 randconfig-a002-20200223
+i386                 randconfig-a003-20200223
+alpha                randconfig-a001-20200223
+m68k                 randconfig-a001-20200223
+mips                 randconfig-a001-20200223
+nds32                randconfig-a001-20200223
+parisc               randconfig-a001-20200223
+riscv                randconfig-a001-20200223
+c6x                  randconfig-a001-20200223
+h8300                randconfig-a001-20200223
+microblaze           randconfig-a001-20200223
+nios2                randconfig-a001-20200223
+sparc64              randconfig-a001-20200223
+csky                 randconfig-a001-20200223
+openrisc             randconfig-a001-20200223
+s390                 randconfig-a001-20200223
+sh                   randconfig-a001-20200223
+xtensa               randconfig-a001-20200223
+x86_64               randconfig-b001-20200223
+x86_64               randconfig-b002-20200223
+x86_64               randconfig-b003-20200223
+i386                 randconfig-b001-20200223
+i386                 randconfig-b002-20200223
+i386                 randconfig-b003-20200223
+x86_64               randconfig-c001-20200223
+x86_64               randconfig-c002-20200223
+x86_64               randconfig-c003-20200223
+i386                 randconfig-c001-20200223
+i386                 randconfig-c002-20200223
+i386                 randconfig-c003-20200223
+x86_64               randconfig-d001-20200223
+x86_64               randconfig-d002-20200223
+x86_64               randconfig-d003-20200223
+i386                 randconfig-d001-20200223
+i386                 randconfig-d002-20200223
+i386                 randconfig-d003-20200223
+x86_64               randconfig-e001-20200223
+x86_64               randconfig-e002-20200223
+x86_64               randconfig-e003-20200223
+i386                 randconfig-e001-20200223
+i386                 randconfig-e002-20200223
+i386                 randconfig-e003-20200223
+x86_64               randconfig-f001-20200223
+x86_64               randconfig-f002-20200223
+x86_64               randconfig-f003-20200223
+i386                 randconfig-f001-20200223
+i386                 randconfig-f002-20200223
+i386                 randconfig-f003-20200223
+x86_64               randconfig-g001-20200223
+x86_64               randconfig-g002-20200223
+x86_64               randconfig-g003-20200223
+i386                 randconfig-g001-20200223
+i386                 randconfig-g002-20200223
+i386                 randconfig-g003-20200223
+x86_64               randconfig-h001-20200223
+x86_64               randconfig-h002-20200223
+x86_64               randconfig-h003-20200223
+i386                 randconfig-h001-20200223
+i386                 randconfig-h002-20200223
+i386                 randconfig-h003-20200223
+arc                  randconfig-a001-20200223
+arm                  randconfig-a001-20200223
+arm64                randconfig-a001-20200223
+ia64                 randconfig-a001-20200223
+powerpc              randconfig-a001-20200223
+sparc                randconfig-a001-20200223
+riscv                            allmodconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+s390                             alldefconfig
+s390                             allmodconfig
+s390                              allnoconfig
+s390                          debug_defconfig
+s390                                defconfig
+s390                       zfcpdump_defconfig
+sh                               allmodconfig
+sh                                allnoconfig
+sh                          rsk7269_defconfig
+sh                  sh7785lcr_32bit_defconfig
+sh                            titan_defconfig
+sparc64                          allmodconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+um                                  defconfig
+x86_64                              fedora-25
+x86_64                                  kexec
+x86_64                                    lkp
+x86_64                                   rhel
+x86_64                         rhel-7.2-clear
+x86_64                               rhel-7.6
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
