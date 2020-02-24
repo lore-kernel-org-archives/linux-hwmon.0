@@ -2,223 +2,259 @@ Return-Path: <SRS0=BLaD=4M=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D6AF1C38BFA
-	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Feb 2020 22:23:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB309C38BFA
+	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Feb 2020 22:24:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A304321744
-	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Feb 2020 22:23:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 71B9021744
+	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Feb 2020 22:24:18 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=Mellanox.com header.i=@Mellanox.com header.b="jGilHytA"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UL8h8lJm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726687AbgBXWXv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 24 Feb 2020 17:23:51 -0500
-Received: from mail-eopbgr140049.outbound.protection.outlook.com ([40.107.14.49]:6981
-        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727520AbgBXWXv (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 24 Feb 2020 17:23:51 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TxytLYHeDaLiLumGp+nyVP3DJ5A48qHCVKYGOrZCMiXKsfW7JghiR9R6WME2nansGAXcXBSG5wCEpsyLz1QjvhnR3dZrayP2xdWvMzTbN6ZfnaedrJQkEY2Jig9Qrvluiu7M6PfQ/FLLY/+GUXL1FF+n9iFq63Xj/336CFGoAbBRI6xeudMvWuzHHXtG5laHUimCzTcKmXvvPhd/Hnu7Qmli0K/B+KqTx5benZKoEN2jWpInQPzU+DjnntNwrniW9O9eMChRKSZ3a6GXmYBk9LczzCV4DZ9/rlpvm2HywjgYBwQKNuQMD8ROAwTr+Ysmad+vfDE9ANnqAga2Gj80+w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XUhswU12fIUxG2IQlDfHEtIbom+XdPKgzk3V4uHkq5c=;
- b=BbYdbAzMowJ4cZ46D5V4uwTOaDnvWeQFWEQ1mSA0IUKvXr8+j/TlHOK8PllP1SwT50ZENstQWUH8ySUVZg+KDBJGvOh31SIH/ccQKMXmlq+QHoxUzDZonnXtIJvub6Cs4zA8spqeFDaXo0nx0cVpkxmI0Ykp6Oe6qr8I+Lplv+uWujVoxYXg8zfIWphjl8VOyKbf7w/zMnHB71zu/oAdKYKRenHh6xxPF5y06etcWOzXM5eTkT9PzWtkDbwM2786dwprn8+ZPISytumla+lS03MGNazfjMb2mD2CDmpn3H3A11ZdI2XubRQwlWY7htTtWnbFO8vMBQXP21/IotCrrg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mellanox.com; dmarc=pass action=none header.from=mellanox.com;
- dkim=pass header.d=mellanox.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Mellanox.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XUhswU12fIUxG2IQlDfHEtIbom+XdPKgzk3V4uHkq5c=;
- b=jGilHytAr3S52qb1AzOpl5E76tWUENQ+AD1VhCk4Ct+hBO8Hdp7sdSmK96uz2q75mHq2XuDbIYORy9jEV/dgO+7YqcoOORey5/wwmreyiKxnuQER3NhMu6iIjfD3j9rt3G8xVxRpmJnimsYv1R/7ZdrUYWvDfWF9NsYBcQrfL68=
-Received: from DB6PR0501MB2358.eurprd05.prod.outlook.com (10.168.57.146) by
- DB6PR0501MB2823.eurprd05.prod.outlook.com (10.172.226.15) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2750.17; Mon, 24 Feb 2020 22:23:12 +0000
-Received: from DB6PR0501MB2358.eurprd05.prod.outlook.com
- ([fe80::5108:a8d6:5b9:45f4]) by DB6PR0501MB2358.eurprd05.prod.outlook.com
- ([fe80::5108:a8d6:5b9:45f4%10]) with mapi id 15.20.2750.021; Mon, 24 Feb 2020
- 22:23:12 +0000
-From:   Vadim Pasternak <vadimp@mellanox.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Subject: RE: [hwmon-next v2] hwmon: (pmbus/xdpe12284) Add callback for vout
- limits conversion
-Thread-Topic: [hwmon-next v2] hwmon: (pmbus/xdpe12284) Add callback for vout
- limits conversion
-Thread-Index: AQHV61x4ofvnP3YiXEinyPFn1ybmlagq6IUAgAACUoA=
-Date:   Mon, 24 Feb 2020 22:23:12 +0000
-Message-ID: <DB6PR0501MB2358416FEF06AA8797C0F096A2EC0@DB6PR0501MB2358.eurprd05.prod.outlook.com>
-References: <20200224215031.24729-1-vadimp@mellanox.com>
- <20200224221320.GA6917@roeck-us.net>
-In-Reply-To: <20200224221320.GA6917@roeck-us.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=vadimp@mellanox.com; 
-x-originating-ip: [46.116.34.10]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 88011e73-3e95-4e69-0be1-08d7b978226c
-x-ms-traffictypediagnostic: DB6PR0501MB2823:
-x-microsoft-antispam-prvs: <DB6PR0501MB2823EDD1C4536D9300C0EBF2A2EC0@DB6PR0501MB2823.eurprd05.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4714;
-x-forefront-prvs: 032334F434
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(136003)(39860400002)(366004)(376002)(396003)(346002)(199004)(189003)(186003)(6916009)(55016002)(26005)(76116006)(52536014)(6506007)(86362001)(9686003)(53546011)(66476007)(66446008)(7696005)(64756008)(66556008)(66946007)(478600001)(5660300002)(316002)(33656002)(4326008)(2906002)(8936002)(81166006)(8676002)(71200400001)(81156014);DIR:OUT;SFP:1101;SCL:1;SRVR:DB6PR0501MB2823;H:DB6PR0501MB2358.eurprd05.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: mellanox.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: +CX4hL+tuTAv0R1rwbhJfaneR5CLaM9wL4tyeGXviRgjENBQHjQRlFVfjDYfMHn+ZmIh+8dZ/9Wvut95svj7AB76rtOvV9EFiNPkDBhAmgRSGZaTl7YTchCGTJsxVTvBHR/HHGC4oUE+bbNyGQXN95RxLGz3rwbe/FMInCeylN9b4eVmDsg99GY1iKM/0LHJ5lcKGfsyC16VWqVH031A63woe/SGA0OlViM09nCvCJ5LApfs8Ou+tdxDrcO5VYrdQOO5MW189B8WAzZXRA9DZDaUD04fLv2SQf2KKbpZWbGZEbpF4Khj8ozPDmPno7HsY5WnbY8sJGfvRp9xF0zukMR1vxCzQG7i35fIv1eC37GwxXUxKsy8S8GVD4oGiSxvMp4iMVDROqqsXswJgGsoiceQT3+J5Vk25KY2bRtrFCJw3ML4GAyP4ZxEVxahbLaX
-x-ms-exchange-antispam-messagedata: Go0/5L1k2xOtvdrKnkr6zCQebl6aaOhWwIFW2s0SOldYghQlhWHZXTLJAR9v75jwORTuYlo3BQ9hyNWVsRDYT4cmJTtiBHRGgw8+5nQvBTBZ83JZGBP0f+lhnBUcGBsDQ10sRngNYC0BMnFAMZm41A==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1727520AbgBXWYS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 24 Feb 2020 17:24:18 -0500
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:38537 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726687AbgBXWYS (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 24 Feb 2020 17:24:18 -0500
+Received: by mail-pg1-f193.google.com with SMTP id d6so5853256pgn.5
+        for <linux-hwmon@vger.kernel.org>; Mon, 24 Feb 2020 14:24:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=pKSMFoRviSnVhGcVQ44LjrSBK1sLK4s39hZORu1KrHQ=;
+        b=UL8h8lJm2EkevBDmKCe/+6bGbdG1y74ZEsnCMgeFOtVNB2yyqFLJX95pP27YyWvwed
+         ecPoYigwhxIhsgT3bORZ8hn3LyacQugyyWy4LI8cXz+HXRjkO0va9P4swq+rnscjtVmq
+         9KlmRczO7uer5tUs1zt5YngxPzg0GEm366j8OzPJT2nASLp9pnu8uOPz6Ef2DKdPoPAy
+         +gd2F/guuBXaqkmhn+kPEqXuj5hPaoqbMTZzigB4k1/p2dl76jtVQYp2DIkQvtVILMhx
+         DmHUOKcrug9gyWYiAe5m85KUXC1JFtZF3WiPG/Eu1WWPD5y2qhtJ0KiDgwuEL/gNy+QD
+         WWgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=pKSMFoRviSnVhGcVQ44LjrSBK1sLK4s39hZORu1KrHQ=;
+        b=Ab4rR65hxqPld+AiR89l3UgKmGxSze+RX5yV8n8G6psO5OohpvKxjPl4EMIxGHX77D
+         3aRjgCOmSzf/xKway/WZlgk71R/KfEzmXILst2RG8EhdByOaqX97vjy3Nn8JTlTECsk1
+         UOVaGOk5I2plfRrLmdh2L8PguLSHejXeO0WF4cY/w7qBl1Ia6GN1km052ed4qEq38XOI
+         nzWWSSXDHAsPsf3rctd7ZZvuBah5+4J1xoI3//b4D29Cr56ed4xWWXYB09I7WfxUSSLR
+         606QuYxoivTZvUMlu3POOdxOD4cdksF7SBh7vDhmng5ddJFu663ZsB31Ur3qWp3qh5B4
+         9gzg==
+X-Gm-Message-State: APjAAAWHSdHzv2bLmLHiv+15cdS/s7Apx8vvd4egJXdhSf2MFG6MBbvY
+        /v/NecwJeaxPOeUg2nwRLPr1l1FJ
+X-Google-Smtp-Source: APXvYqxpCS6ofjmLR7M1NybwJ1acS5XAXJDa+DQx28kSGtvwhZtgVGkWcpfuqin1QDuExyUSeB2Mig==
+X-Received: by 2002:a62:1a09:: with SMTP id a9mr53738105pfa.64.1582583056889;
+        Mon, 24 Feb 2020 14:24:16 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u13sm460019pjn.29.2020.02.24.14.24.15
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 24 Feb 2020 14:24:16 -0800 (PST)
+Date:   Mon, 24 Feb 2020 14:24:15 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Vadim Pasternak <vadimp@mellanox.com>
+Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Subject: Re: [hwmon-next v1] hwmon: (pmbus/tps53679) Add support for
+ historical registers for TPS53688
+Message-ID: <20200224222415.GA7282@roeck-us.net>
+References: <20200224131316.28238-1-vadimp@mellanox.com>
+ <b9b2d96b-1b1d-7445-18a7-21e3d28e6819@roeck-us.net>
+ <DB6PR0501MB23584EB4453A14BC1EE29C13A2EC0@DB6PR0501MB2358.eurprd05.prod.outlook.com>
 MIME-Version: 1.0
-X-OriginatorOrg: Mellanox.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 88011e73-3e95-4e69-0be1-08d7b978226c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Feb 2020 22:23:12.0325
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a652971c-7d2e-4d9b-a6a4-d149256f461b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: aQv4C8v3d/4VrRhZ52mP0Xed60zj+qNJTW2xN1Ac4jnHpIOtv3JSNVRj9b443JTLGnhdoxDNZxjr3wYe9Vi6Rg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR0501MB2823
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DB6PR0501MB23584EB4453A14BC1EE29C13A2EC0@DB6PR0501MB2358.eurprd05.prod.outlook.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+On Mon, Feb 24, 2020 at 10:13:18PM +0000, Vadim Pasternak wrote:
+> 
+> 
+> > -----Original Message-----
+> > From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
+> > Sent: Monday, February 24, 2020 4:51 PM
+> > To: Vadim Pasternak <vadimp@mellanox.com>
+> > Cc: linux-hwmon@vger.kernel.org
+> > Subject: Re: [hwmon-next v1] hwmon: (pmbus/tps53679) Add support for
+> > historical registers for TPS53688
+> > 
+> > On 2/24/20 5:13 AM, Vadim Pasternak wrote:
+> > > TPS53688 supports historical registers. Patch allows exposing the next
+> > > attributes for the historical registers in 'sysfs':
+> > > - curr{x}_reset_history;
+> > > - in{x}_reset_history;
+> > > - power{x}_reset_history;
+> > > - temp{x}_reset_history;
+> > > - curr{x}_highest;
+> > > - in{x}_highest;
+> > > - power{x}_input_highest;
+> > > - temp{x}_highest;
+> > > - curr{x}_lowest;
+> > > - in{x}_lowest;
+> > > - power{x}_input_lowest;
+> > > - temp{x}_lowest.
+> > >
+> > > This patch is required patch:
+> > > "hwmon: (pmbus/core) Add callback for register to data conversion".
+> > >
+> > > Signed-off-by: Vadim Pasternak <vadimp@mellanox.com>
+> > > ---
+> > >   drivers/hwmon/pmbus/tps53679.c | 244
+> > ++++++++++++++++++++++++++++++++++++++++-
+> > >   1 file changed, 243 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/hwmon/pmbus/tps53679.c
+> > > b/drivers/hwmon/pmbus/tps53679.c index 157c99ffb52b..ae5ce144e5fe
+> > > 100644
+> > > --- a/drivers/hwmon/pmbus/tps53679.c
+> > > +++ b/drivers/hwmon/pmbus/tps53679.c
+> > > @@ -34,6 +34,227 @@ enum chips {
+> > >
+> > >   #define TPS53681_MFR_SPECIFIC_20	0xe4	/* Number of phases, per page
+> > */
+> > >
+> > > +/* Registers for highest and lowest historical values records */
+> > > +#define TPS53688_VOUT_PEAK		0xd1
+> > > +#define TPS53688_IOUT_PEAK		0xd2
+> > > +#define TPS53688_TEMP_PEAK		0xd3
+> > > +#define TPS53688_VIN_PEAK		0xd5
+> > > +#define TPS53688_IIN_PEAK		0xd6
+> > > +#define TPS53688_PIN_PEAK		0xd7
+> > > +#define TPS53688_POUT_PEAK		0xd8
+> > > +#define TPS53688_HISTORY_REG_BUF_LEN	5
+> > > +#define TPS53688_HISTORY_REG_MIN_OFFSET	3
+> > > +#define TPS53688_HISTORY_REG_MAX_OFFSET	1
+> > > +
+> > > +const static u8 tps53688_reset_logging[] = { 0x04, 0x00, 0x01, 0x00,
+> > > +0x00 }; const static u8 tps53688_resume_logging[] = { 0x04, 0x20,
+> > > +0x00, 0x00, 0x00 };
+> > > +
+> > Passing the length as 1st field seems wrong.
+> > 
+> > > +static int tps53688_reg2data(u16 reg, int data, long *val) {
+> > > +	s16 exponent;
+> > > +	s32 mantissa;
+> > > +
+> > > +	if (data == 0)
+> > > +		return data;
+> > > +
+> > > +	switch (reg) {
+> > > +	case PMBUS_VIRT_READ_VOUT_MIN:
+> > > +	case PMBUS_VIRT_READ_VOUT_MAX:
+> > > +		/* Convert to LINEAR11. */
+> > > +		exponent = ((s16)data) >> 11;
+> > > +		mantissa = ((s16)((data & GENMASK(10, 0)) << 5)) >> 5;
+> > > +		*val = mantissa * 1000L;
+> > > +		if (exponent >= 0)
+> > > +			*val <<= exponent;
+> > > +		else
+> > > +			*val >>= -exponent;
+> > > +		return 0;
+> > > +	default:
+> > > +		return -ENODATA;
+> > > +	}
+> > > +}
+> > > +
+> > As with the xpde driver, I would suggest to implement the conversion in the
+> > read_word_data function.
+> > 
+> > > +static int
+> > > +tps53688_get_history(struct i2c_client *client, int reg, int page, int unused,
+> > > +		     int offset)
+> > 
+> > What is the point of passing "unused" to this function ?
+> > 
+> > > +{
+> > > +	u8 buf[TPS53688_HISTORY_REG_BUF_LEN];
+> > > +	int ret;
+> > > +
+> > > +	ret = pmbus_set_page(client, page, 0);
+> > > +	if (ret < 0)
+> > > +		return ret;
+> > > +
+> > > +	ret = i2c_smbus_read_i2c_block_data(client, reg,
+> > > +					    TPS53688_HISTORY_REG_BUF_LEN,
+> > > +					    buf);
+> > > +	if (ret < 0)
+> > > +		return ret;
+> > > +	else if (ret != TPS53688_HISTORY_REG_BUF_LEN)
+> > > +		return -EIO;
+> > 
+> > I am a bit confused here. Are you sure this returns (and is supposed to return)
+> > 5 bytes of data, not 4, and that the data offsets are 1 and 3, not 0 and 2 ?
+> > i2c_smbus_read_i2c_block_data() returns the length, and only copies the data
+> > into the buffer, not the length field.
+> > 
+> > > +
+> > > +	return *(u16 *)(buf + offset);
+> > 
+> > This implies host byte order. I don't think it will work on big endian systems.
+> > Besides, it won't work on systems which can not directly read from odd
+> > addresses (if the odd offsets are indeed correct).
+> > 
+> > > +}
+> > > +
+> > > +static int
+> > > +tps53688_reset_history(struct i2c_client *client, int reg) {
+> > > +	int ret;
+> > > +
+> > > +	ret = i2c_smbus_write_i2c_block_data(client, reg,
+> > > +					     TPS53688_HISTORY_REG_BUF_LEN,
+> > > +					     tps53688_reset_logging);
+> > > +	if (ret < 0)
+> > > +		return ret;
+> > > +
+> > > +	ret = i2c_smbus_write_i2c_block_data(client, reg,
+> > > +					     TPS53688_HISTORY_REG_BUF_LEN,
+> > > +					     tps53688_resume_logging);
+> > > +	if (ret < 0)
+> > > +		return ret;
+> > > +
+> > Are you sure that a single write of 00 00 01 00 wouldn't do it ?
+> > Is it indeed necessary to resume logging after resetting it ?
+> > 
+> 
+> Yes.
+> I used initially '0x00, 0x01, 0x00' and it didn't work for me.
+> Then I managed to have a call with TI and after some debug they said
+> I should resume after reset, so I added '0x02 0x00, 0x00, 0x00'.
+> 
+> Datasheet says:
+> Issue a write transaction with the following values to control peak logging functions.
+> Logging is not automatically started or stopped by TPS536xx.
+> 0000 0001h Pause minimum value logging
+> 0000 0002h Pause maximum value logging
+> 0000 0004h Pause minimum and maximum value logging
+> 0000 0008h Resume minimum value logging (if paused)
+> 0000 0010h Resume maximum value logging (if paused)
+> 0000 0020h Resume minimum and maximum value logging (if paused)
+> 0000 0040h Reset the minimum value logging
+> 0000 0080h Reset the maximum value logging
+> 0000 0100h Reset both minimum and maximum value logging
+> Other Invalid/Unsupported data.
+> 
+> So it's not active by default and should be resumed for starting logging.
+> 
+> Because of that I also added tps53688_reset_history_all() in probe, because
+> otherwise after boot these registers have some abnormal values.
+> But anyway I'll drop this routine following your comment below.
+> Also considering that driver can be re-probed and in this case history after
+> the first reset/resume could be important.
+> 
+Thanks for the explanation.
 
+That means though that you'll need to call something like
+tps53688_start_logging_all() in the probe function, or am I missing
+something ? Otherwise the user would have to explicitly reset the
+history to start logging it, which would not be desirable either.
 
-> -----Original Message-----
-> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
-> Sent: Tuesday, February 25, 2020 12:13 AM
-> To: Vadim Pasternak <vadimp@mellanox.com>
-> Cc: linux-hwmon@vger.kernel.org
-> Subject: Re: [hwmon-next v2] hwmon: (pmbus/xdpe12284) Add callback for vo=
-ut
-> limits conversion
->=20
-> On Mon, Feb 24, 2020 at 11:50:31PM +0200, Vadim Pasternak wrote:
-> > Provide read_word_data() callback for overvoltage and undervoltage
-> > output readouts conversion. These registers are presented in
-> > 'slinear11' format, while default conversion for 'vout' class for the
-> > devices is 'vid'. It is resulted in wrong conversion in
-> > pmbus_reg2data() for in{3-4}_lcrit and in{3-4}_crit attributes.
-> > )
-> > Fixes: aaafb7c8eb1c ("hwmon: (pmbus) Add support for Infineon
-> > Multi-phase xdpe122 family controllers")
-> > Signed-off-by: Vadim Pasternak <vadimp@mellanox.com>
-> > ---
-> > v1->v2:
-> >  Comments pointed out by Guenter:
-> >  - Drop reg2data() callback, provide conversion through
-> >    read_word_data() callback instead.
-> > ---
-> >  drivers/hwmon/pmbus/xdpe12284.c | 51
-> > +++++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 51 insertions(+)
-> >
-> > diff --git a/drivers/hwmon/pmbus/xdpe12284.c
-> > b/drivers/hwmon/pmbus/xdpe12284.c index ecd9b65627ec..44b737d0bc24
-> > 100644
-> > --- a/drivers/hwmon/pmbus/xdpe12284.c
-> > +++ b/drivers/hwmon/pmbus/xdpe12284.c
-> > @@ -18,6 +18,56 @@
-> >  #define XDPE122_AMD_625MV		0x10 /* AMD mode 6.25mV */
-> >  #define XDPE122_PAGE_NUM		2
-> >
-> > +static int xdpe122_read_word_data(struct i2c_client *client, int page,
-> > +				  int phase, int reg)
-> > +{
-> > +	const struct pmbus_driver_info *info =3D pmbus_get_driver_info(client=
-);
-> > +	long val;
-> > +	s16 exponent;
-> > +	s32 mantissa;
-> > +	int ret;
-> > +
-> > +	switch (reg) {
-> > +	case PMBUS_VOUT_OV_FAULT_LIMIT:
-> > +	case PMBUS_VOUT_UV_FAULT_LIMIT:
-> > +		ret =3D pmbus_read_word_data(client, page, phase, reg);
-> > +		if (ret < 0)
-> > +			return ret;
-> > +
-> > +		/* Convert register value to LINEAR11 data. */
-> > +		exponent =3D ((s16)ret) >> 11;
-> > +		mantissa =3D ((s16)((ret & GENMASK(10, 0)) << 5)) >> 5;
-> > +		val =3D mantissa * 1000L;
-> > +		if (exponent >=3D 0)
-> > +			val <<=3D exponent;
-> > +		else
-> > +			val >>=3D -exponent;
-> > +
-> > +		/* Convert data to VID register. */
-> > +		switch (info->vrm_version[page]) {
-> > +		case vr13:
-> > +			if (val >=3D 500)
-> > +				return 1 + DIV_ROUND_CLOSEST(val - 500, 10);
->=20
-> 			return 0; ?
->=20
-> > +		case vr12:
-> > +			if (val >=3D 250)
-> > +				return 1 + DIV_ROUND_CLOSEST(val - 250, 5);
->=20
-> 			return 0; ?
->=20
-> > +		case imvp9:
-> > +			if (val >=3D 200)
-> > +				return 1 + DIV_ROUND_CLOSEST(val - 200, 10);
->=20
-> 			return 0; ?
-> > +		case amd625mv:
-> > +			if (val >=3D 200 && val <=3D 968750)
-> > +				return DIV_ROUND_CLOSEST((1550 - val) *
-> 100,
-> > +							 625);
-
-Oh, it should be 1550.
-(155000 - 0 * 625) / 100 =3D 1550.
-Sorry.
-
-> 			return 0; ?
->=20
-> Also, are you sure that this calculation is correct ?
-> 1550 - val is almost always negative.
->=20
-> > +		default:
-> > +			return -EINVAL;
-> > +		}
-> > +	default:
-> > +		return -ENODATA;
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >  static int xdpe122_identify(struct i2c_client *client,
-> >  			    struct pmbus_driver_info *info)  { @@ -70,6 +120,7
-> @@ static
-> > struct pmbus_driver_info xdpe122_info =3D {
-> >  		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP |
-> >  		PMBUS_HAVE_POUT | PMBUS_HAVE_PIN |
-> PMBUS_HAVE_STATUS_INPUT,
-> >  	.identify =3D xdpe122_identify,
-> > +	.read_word_data =3D xdpe122_read_word_data,
-> >  };
-> >
-> >  static int xdpe122_probe(struct i2c_client *client,
-> > --
-> > 2.11.0
-> >
+Thanks,
+Guenter
