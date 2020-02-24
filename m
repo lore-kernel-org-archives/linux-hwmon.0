@@ -6,37 +6,37 @@ X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A5CFC11D30
-	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Feb 2020 18:11:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B283C11D32
+	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Feb 2020 18:11:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 45DE62084E
-	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Feb 2020 18:11:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7626920732
+	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Feb 2020 18:11:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727483AbgBXSLc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 24 Feb 2020 13:11:32 -0500
-Received: from mga18.intel.com ([134.134.136.126]:64986 "EHLO mga18.intel.com"
+        id S1727489AbgBXSLd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 24 Feb 2020 13:11:33 -0500
+Received: from mga05.intel.com ([192.55.52.43]:6530 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726208AbgBXSLc (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 24 Feb 2020 13:11:32 -0500
+        id S1726208AbgBXSLd (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 24 Feb 2020 13:11:33 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Feb 2020 10:11:31 -0800
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Feb 2020 10:11:32 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.70,480,1574150400"; 
-   d="scan'208";a="409956034"
+   d="scan'208";a="316822824"
 Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 24 Feb 2020 10:11:29 -0800
+  by orsmga001.jf.intel.com with ESMTP; 24 Feb 2020 10:11:28 -0800
 Received: from kbuild by lkp-server01 with local (Exim 4.89)
         (envelope-from <lkp@intel.com>)
-        id 1j6ICW-0009Sw-0y; Tue, 25 Feb 2020 02:11:28 +0800
-Date:   Tue, 25 Feb 2020 02:10:59 +0800
+        id 1j6ICV-0009Ro-Qc; Tue, 25 Feb 2020 02:11:27 +0800
+Date:   Tue, 25 Feb 2020 02:10:48 +0800
 From:   kbuild test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:watchdog-next] BUILD SUCCESS
- 2fcc126a0b3ce9d2aa42e8ead0f42b842df084d0
-Message-ID: <5e5411b3.5EEARlihswotX55d%lkp@intel.com>
+Subject: [hwmon:hwmon-next] BUILD SUCCESS
+ b85e1cd57c2ce62a11a77b47d44c8193cb8d4dbc
+Message-ID: <5e5411a8.3+oyUtEAZx8qyGbp%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -46,8 +46,8 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  watchdog-next
-branch HEAD: 2fcc126a0b3ce9d2aa42e8ead0f42b842df084d0  watchdog: imx7ulp: Remove unused include of init.h
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon-next
+branch HEAD: b85e1cd57c2ce62a11a77b47d44c8193cb8d4dbc  hwmon: (lm73) Add support for of_match_table
 
 elapsed time: 484m
 
@@ -85,10 +85,10 @@ i386                              allnoconfig
 i386                             alldefconfig
 i386                             allyesconfig
 i386                                defconfig
-ia64                             alldefconfig
 ia64                             allmodconfig
 ia64                              allnoconfig
 ia64                             allyesconfig
+ia64                             alldefconfig
 c6x                              allyesconfig
 c6x                        evmc6678_defconfig
 nios2                         10m50_defconfig
@@ -97,10 +97,10 @@ openrisc                    or1ksim_defconfig
 openrisc                 simple_smp_defconfig
 xtensa                       common_defconfig
 xtensa                          iss_defconfig
-alpha                               defconfig
-csky                                defconfig
-nds32                             allnoconfig
 nds32                               defconfig
+nds32                             allnoconfig
+csky                                defconfig
+alpha                               defconfig
 h8300                     edosk2674_defconfig
 h8300                       h8s-sim_defconfig
 m68k                             allmodconfig
@@ -108,11 +108,11 @@ m68k                       m5475evb_defconfig
 m68k                          multi_defconfig
 m68k                           sun3_defconfig
 arc                              allyesconfig
+microblaze                      mmu_defconfig
+microblaze                    nommu_defconfig
 powerpc                             defconfig
 powerpc                       ppc64_defconfig
 powerpc                          rhel-kconfig
-microblaze                      mmu_defconfig
-microblaze                    nommu_defconfig
 mips                           32r2_defconfig
 mips                         64r6el_defconfig
 mips                             allmodconfig
@@ -134,11 +134,11 @@ riscv                randconfig-a001-20200224
 parisc               randconfig-a001-20200224
 alpha                randconfig-a001-20200224
 m68k                 randconfig-a001-20200224
-c6x                  randconfig-a001-20200224
-h8300                randconfig-a001-20200224
-microblaze           randconfig-a001-20200224
 nios2                randconfig-a001-20200224
+c6x                  randconfig-a001-20200224
 sparc64              randconfig-a001-20200224
+microblaze           randconfig-a001-20200224
+h8300                randconfig-a001-20200224
 openrisc             randconfig-a001-20200224
 sh                   randconfig-a001-20200224
 s390                 randconfig-a001-20200224
@@ -174,18 +174,18 @@ x86_64               randconfig-f003-20200224
 i386                 randconfig-f001-20200224
 i386                 randconfig-f002-20200224
 i386                 randconfig-f003-20200224
-x86_64               randconfig-g001-20200223
-x86_64               randconfig-g002-20200223
-x86_64               randconfig-g003-20200223
-i386                 randconfig-g001-20200223
-i386                 randconfig-g002-20200223
-i386                 randconfig-g003-20200223
 x86_64               randconfig-g001-20200224
 x86_64               randconfig-g002-20200224
 x86_64               randconfig-g003-20200224
 i386                 randconfig-g001-20200224
 i386                 randconfig-g002-20200224
 i386                 randconfig-g003-20200224
+x86_64               randconfig-g001-20200223
+x86_64               randconfig-g002-20200223
+x86_64               randconfig-g003-20200223
+i386                 randconfig-g001-20200223
+i386                 randconfig-g002-20200223
+i386                 randconfig-g003-20200223
 x86_64               randconfig-h001-20200224
 x86_64               randconfig-h002-20200224
 x86_64               randconfig-h003-20200224
@@ -218,9 +218,9 @@ sparc64                          allmodconfig
 sparc64                           allnoconfig
 sparc64                          allyesconfig
 sparc64                             defconfig
-um                                  defconfig
-um                             i386_defconfig
 um                           x86_64_defconfig
+um                             i386_defconfig
+um                                  defconfig
 x86_64                              fedora-25
 x86_64                                  kexec
 x86_64                                    lkp
