@@ -2,170 +2,232 @@ Return-Path: <SRS0=BLaD=4M=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CAA8C11D2F
-	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Feb 2020 17:30:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1038DC11D2F
+	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Feb 2020 18:11:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D6F9C20732
-	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Feb 2020 17:30:33 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M4ZViU/9"
+	by mail.kernel.org (Postfix) with ESMTP id DAF0A20732
+	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Feb 2020 18:11:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727673AbgBXRad (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 24 Feb 2020 12:30:33 -0500
-Received: from mail-il1-f193.google.com ([209.85.166.193]:38564 "EHLO
-        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727440AbgBXRad (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 24 Feb 2020 12:30:33 -0500
-Received: by mail-il1-f193.google.com with SMTP id f5so8413928ilq.5;
-        Mon, 24 Feb 2020 09:30:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SKj57E8UaKSzcr5YZePGtfiP1UB+Fu3gym2CoICZfHk=;
-        b=M4ZViU/9h3Z6JjGtIU3UxjU+RHzCZ9+DjaoBCgJTI1glOFKFQ+LDnU8i4iyTFkdcjP
-         EAOkuBDaaTKfppOeOqKrBblOA6SgnQI64RFELJ+Rc06MX6K2K778F1zk+EedbH1dV7+W
-         fcn0iJxHQVaHyC2p2xTYBcgDbrfWErrBPmVRoeftMPQkwD126cNlwBMdQ3UXdgo+mehf
-         KXK9xV4Q4yRREwGDZvYvZcrMGo+p4kW74LPJKW1bImxR0DAV5UM5FIj3I1TKhxmjlOu7
-         irpMjCg/R5qTrP9AYzSlaLUzwzgrPkCWGkpdhxd+/seohPk0yKaWVopaJtg0g1krFDxK
-         0zjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SKj57E8UaKSzcr5YZePGtfiP1UB+Fu3gym2CoICZfHk=;
-        b=ht5Bz+/MykOjK6jimFauaiG9ELOfhdG10H00bTAnYiQNSxKYxUUv/6Xzs20Emk+ea0
-         sTpR0L5pxzAkE6MKE6v6ptPr7SkjBQI9e/JbxxffUQvvdsUnwEq1RoXSRJaldhbDWu7L
-         eutoM25tSVI+wsF6XhUvOCpFyCX59XZOV8xVXImgJFOvmK3JRdC+Lk8aG1CKyXTD6OjO
-         tGIINa5zOdOC25SeEiLH0ZZO7mC40twVh0Fv0JykVAKPW4V2YLBkhGNjYC+vSq2XuSXq
-         iNyFF6qOqOQMDB5Zl1bqc2CvJ5lt15bvtFR2WpgyXjg9cXewehVMmiNAWP/Izdw+gblf
-         m5Jg==
-X-Gm-Message-State: APjAAAW4B7jQvpPyq0skzyDrpbkTu0NoO5ahDlQcajPoeAkRXGzm/oVk
-        93y/LOHT2QA5qJN7ZQ9Rxe6P0LkSHKqBgi35FGA=
-X-Google-Smtp-Source: APXvYqxd9lL1OgyFEkdy2Qzj4Dk2yTwPFtckG9T0XASSlIkyyGL7t5TDIFJhsrj9l/n/RJCex6W2aSpuDJ1r9ndHDyc=
-X-Received: by 2002:a05:6e02:f0f:: with SMTP id x15mr59682046ilj.298.1582565432229;
- Mon, 24 Feb 2020 09:30:32 -0800 (PST)
+        id S1727438AbgBXSLa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 24 Feb 2020 13:11:30 -0500
+Received: from mga14.intel.com ([192.55.52.115]:32668 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726208AbgBXSLa (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 24 Feb 2020 13:11:30 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Feb 2020 10:11:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,480,1574150400"; 
+   d="scan'208";a="270986733"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 24 Feb 2020 10:11:28 -0800
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1j6ICV-0009Sg-VS; Tue, 25 Feb 2020 02:11:27 +0800
+Date:   Tue, 25 Feb 2020 02:10:46 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:hwmon] BUILD SUCCESS
+ c77ec025346f122bb74719725331c6386bbb86b7
+Message-ID: <5e5411a6.1fnKwqvkYWfCFhFe%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <CAM1AHpQ4196tyD=HhBu-2donSsuogabkfP03v1YF26Q7_BgvgA@mail.gmail.com>
- <1bdbac08-86f8-2a57-2b0d-8cd2beb2a1c0@roeck-us.net> <CAM1AHpSKFk9ZosQf=k-Rm2=EFqco7y4Lpfb7m07r=j_uJd4T0A@mail.gmail.com>
- <85356d1a-f90d-e94d-16eb-1071d4e94753@roeck-us.net> <CAM1AHpSpEFshpUGxKdhLV3XuThQg_XVaPgOWzvrTv6YtzHyO+A@mail.gmail.com>
- <bec1f81c-09a8-ba48-c6c4-5d9b340f7c0b@roeck-us.net> <20200224101800.GJ2667@lahna.fi.intel.com>
- <20200224103731.GA10400@smile.fi.intel.com> <20200224105121.GK2667@lahna.fi.intel.com>
- <20200224112740.GL2667@lahna.fi.intel.com>
-In-Reply-To: <20200224112740.GL2667@lahna.fi.intel.com>
-From:   Martin Volf <martin.volf.42@gmail.com>
-Date:   Mon, 24 Feb 2020 18:30:21 +0100
-Message-ID: <CAM1AHpQW_=vvcjXHa8UOrdOohABm0sE2UPr4sfK2AtfWHsm4Ag@mail.gmail.com>
-Subject: Re: [regression] nct6775 does not load in 5.4 and 5.5, bisected to b84398d6d7f90080
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
-        linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Feb 24, 2020 at 12:27 PM Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
->
-> On Mon, Feb 24, 2020 at 12:51:25PM +0200, Mika Westerberg wrote:
-> > > I'm wondering if
-> > >
-> > >             pci_dev_is_present(...);
-> > >
-> > > returns false here.
-> >
-> > Well that might also be the case since lspci shows this:
-> >
-> > 00:1f.0 ISA bridge: Intel Corporation Z390 Chipset LPC/eSPI Controller (rev 10)
-> > 00:1f.3 Audio device: Intel Corporation Cannon Lake PCH cAVS (rev 10)
-> > 00:1f.4 SMBus: Intel Corporation Cannon Lake PCH SMBus Controller (rev 10)
-> >
-> > PMC is 1f.2 and not present here. However, it may be that the PMC is
-> > still there it just does not "enumerate" because its devid/vendorid are
-> > set to 0xffff. Similar hiding was done for the P2SB bridge.
->
-> Actually I think this is the case here.
->
-> I don't know the iTCO_wdt well enough to say if it could live without
-> the ICH_RES_IO_SMI. It looks like this register is used to disable SMI
-> generation but not sure how well it works if it is left to BIOS to
-> configure. I suppose these systems should use WDAT instead.
->
-> Martin, can you try the below patch?
->
-> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-> index ba87305f4332..c16e5ad08641 100644
-> --- a/drivers/i2c/busses/i2c-i801.c
-> +++ b/drivers/i2c/busses/i2c-i801.c
-> @@ -1593,7 +1593,7 @@ i801_add_tco_cnl(struct i801_priv *priv, struct pci_dev *pci_dev,
->  static void i801_add_tco(struct i801_priv *priv)
->  {
->         u32 base_addr, tco_base, tco_ctl, ctrl_val;
-> -       struct pci_dev *pci_dev = priv->pci_dev;
-> +       struct pci_dev *pmc_dev, *pci_dev = priv->pci_dev;
->         struct resource tco_res[3], *res;
->         unsigned int devfn;
->
-> @@ -1620,7 +1620,12 @@ static void i801_add_tco(struct i801_priv *priv)
->          * Power Management registers.
->          */
->         devfn = PCI_DEVFN(PCI_SLOT(pci_dev->devfn), 2);
-> -       pci_bus_read_config_dword(pci_dev->bus, devfn, ACPIBASE, &base_addr);
-> +       pmc_dev = pci_get_slot(pci_dev->bus, devfn);
-> +       if (!pmc_dev) {
-> +               dev_info(&pci_dev->dev, "PMC device disabled, not enabling iTCO\n");
-> +               return;
-> +       }
-> +       pci_read_config_dword(pmc_dev, ACPIBASE, &base_addr);
->
->         res = &tco_res[ICH_RES_IO_SMI];
->         res->start = (base_addr & ~1) + ACPIBASE_SMI_OFF;
-> @@ -1630,15 +1635,17 @@ static void i801_add_tco(struct i801_priv *priv)
->         /*
->          * Enable the ACPI I/O space.
->          */
-> -       pci_bus_read_config_dword(pci_dev->bus, devfn, ACPICTRL, &ctrl_val);
-> +       pci_read_config_dword(pmc_dev, ACPICTRL, &ctrl_val);
->         ctrl_val |= ACPICTRL_EN;
-> -       pci_bus_write_config_dword(pci_dev->bus, devfn, ACPICTRL, ctrl_val);
-> +       pci_write_config_dword(pmc_dev, ACPICTRL, ctrl_val);
->
->         if (priv->features & FEATURE_TCO_CNL)
->                 priv->tco_pdev = i801_add_tco_cnl(priv, pci_dev, tco_res);
->         else
->                 priv->tco_pdev = i801_add_tco_spt(priv, pci_dev, tco_res);
->
-> +       pci_dev_put(pmc_dev);
-> +
->         if (IS_ERR(priv->tco_pdev))
->                 dev_warn(&pci_dev->dev, "failed to create iTCO device\n");
->  }
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon
+branch HEAD: c77ec025346f122bb74719725331c6386bbb86b7  docs: adm1177: fix a broken reference
 
-Hello,
+elapsed time: 484m
 
-with the patch applied, the sensors are working, dmesg says:
-...
-[    2.804423] i801_smbus 0000:00:1f.4: SPD Write Disable is set
-[    2.804478] i801_smbus 0000:00:1f.4: SMBus using PCI interrupt
-[    2.804491] i801_smbus 0000:00:1f.4: PMC device disabled, not enabling iTCO
-...
-[    2.826373] nct6775: Enabling hardware monitor logical device mappings.
-[    2.826447] nct6775: Found NCT6798D or compatible chip at 0x2e:0x290
-...
+configs tested: 170
+configs skipped: 14
 
-and there is no "002e-0031" line in /proc/ioports.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Martin
+arm                              allmodconfig
+arm                               allnoconfig
+arm                              allyesconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+arm64                            allyesconfig
+arm                         at91_dt_defconfig
+arm                           efm32_defconfig
+arm                          exynos_defconfig
+arm                        multi_v5_defconfig
+arm                        multi_v7_defconfig
+arm                        shmobile_defconfig
+arm                           sunxi_defconfig
+arm64                               defconfig
+sparc                            allyesconfig
+ia64                                defconfig
+parisc                generic-32bit_defconfig
+mips                      fuloong2e_defconfig
+riscv                    nommu_virt_defconfig
+powerpc                           allnoconfig
+s390                              allnoconfig
+arc                                 defconfig
+s390                          debug_defconfig
+h8300                    h8300h-sim_defconfig
+parisc                generic-64bit_defconfig
+s390                             allmodconfig
+i386                              allnoconfig
+i386                             alldefconfig
+i386                             allyesconfig
+i386                                defconfig
+ia64                             alldefconfig
+ia64                             allmodconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+c6x                              allyesconfig
+c6x                        evmc6678_defconfig
+nios2                         10m50_defconfig
+nios2                         3c120_defconfig
+openrisc                    or1ksim_defconfig
+openrisc                 simple_smp_defconfig
+xtensa                       common_defconfig
+xtensa                          iss_defconfig
+alpha                               defconfig
+csky                                defconfig
+nds32                             allnoconfig
+nds32                               defconfig
+h8300                     edosk2674_defconfig
+h8300                       h8s-sim_defconfig
+m68k                             allmodconfig
+m68k                       m5475evb_defconfig
+m68k                          multi_defconfig
+m68k                           sun3_defconfig
+arc                              allyesconfig
+powerpc                             defconfig
+powerpc                       ppc64_defconfig
+powerpc                          rhel-kconfig
+microblaze                      mmu_defconfig
+microblaze                    nommu_defconfig
+mips                           32r2_defconfig
+mips                         64r6el_defconfig
+mips                             allmodconfig
+mips                              allnoconfig
+mips                             allyesconfig
+mips                      malta_kvm_defconfig
+parisc                            allnoconfig
+parisc                           allyesconfig
+x86_64               randconfig-a001-20200224
+x86_64               randconfig-a002-20200224
+x86_64               randconfig-a003-20200224
+i386                 randconfig-a001-20200224
+i386                 randconfig-a002-20200224
+i386                 randconfig-a003-20200224
+alpha                randconfig-a001-20200224
+m68k                 randconfig-a001-20200224
+mips                 randconfig-a001-20200224
+nds32                randconfig-a001-20200224
+parisc               randconfig-a001-20200224
+riscv                randconfig-a001-20200224
+c6x                  randconfig-a001-20200224
+h8300                randconfig-a001-20200224
+microblaze           randconfig-a001-20200224
+nios2                randconfig-a001-20200224
+sparc64              randconfig-a001-20200224
+csky                 randconfig-a001-20200224
+openrisc             randconfig-a001-20200224
+s390                 randconfig-a001-20200224
+sh                   randconfig-a001-20200224
+xtensa               randconfig-a001-20200224
+x86_64               randconfig-b001-20200224
+x86_64               randconfig-b002-20200224
+x86_64               randconfig-b003-20200224
+i386                 randconfig-b001-20200224
+i386                 randconfig-b002-20200224
+i386                 randconfig-b003-20200224
+x86_64               randconfig-c001-20200224
+x86_64               randconfig-c002-20200224
+x86_64               randconfig-c003-20200224
+i386                 randconfig-c001-20200224
+i386                 randconfig-c002-20200224
+i386                 randconfig-c003-20200224
+x86_64               randconfig-d001-20200224
+x86_64               randconfig-d002-20200224
+x86_64               randconfig-d003-20200224
+i386                 randconfig-d001-20200224
+i386                 randconfig-d002-20200224
+i386                 randconfig-d003-20200224
+x86_64               randconfig-e001-20200224
+x86_64               randconfig-e002-20200224
+x86_64               randconfig-e003-20200224
+i386                 randconfig-e001-20200224
+i386                 randconfig-e002-20200224
+i386                 randconfig-e003-20200224
+x86_64               randconfig-f001-20200224
+x86_64               randconfig-f002-20200224
+x86_64               randconfig-f003-20200224
+i386                 randconfig-f001-20200224
+i386                 randconfig-f002-20200224
+i386                 randconfig-f003-20200224
+x86_64               randconfig-g001-20200224
+x86_64               randconfig-g002-20200224
+x86_64               randconfig-g003-20200224
+i386                 randconfig-g001-20200224
+i386                 randconfig-g002-20200224
+i386                 randconfig-g003-20200224
+x86_64               randconfig-g001-20200223
+x86_64               randconfig-g002-20200223
+x86_64               randconfig-g003-20200223
+i386                 randconfig-g001-20200223
+i386                 randconfig-g002-20200223
+i386                 randconfig-g003-20200223
+x86_64               randconfig-h001-20200224
+x86_64               randconfig-h002-20200224
+x86_64               randconfig-h003-20200224
+i386                 randconfig-h001-20200224
+i386                 randconfig-h002-20200224
+i386                 randconfig-h003-20200224
+arc                  randconfig-a001-20200224
+arm                  randconfig-a001-20200224
+arm64                randconfig-a001-20200224
+ia64                 randconfig-a001-20200224
+powerpc              randconfig-a001-20200224
+sparc                randconfig-a001-20200224
+riscv                            allmodconfig
+riscv                             allnoconfig
+riscv                            allyesconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+s390                             alldefconfig
+s390                             allyesconfig
+s390                                defconfig
+s390                       zfcpdump_defconfig
+sh                               allmodconfig
+sh                                allnoconfig
+sh                          rsk7269_defconfig
+sh                  sh7785lcr_32bit_defconfig
+sh                            titan_defconfig
+sparc                               defconfig
+sparc64                          allmodconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                             defconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+um                                  defconfig
+x86_64                              fedora-25
+x86_64                                  kexec
+x86_64                                    lkp
+x86_64                                   rhel
+x86_64                         rhel-7.2-clear
+x86_64                               rhel-7.6
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
