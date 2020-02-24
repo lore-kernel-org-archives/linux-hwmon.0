@@ -2,190 +2,192 @@ Return-Path: <SRS0=BLaD=4M=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB841C11D2F
-	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Feb 2020 15:10:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D5D6C11D2F
+	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Feb 2020 15:44:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8AEDA20828
-	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Feb 2020 15:10:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BFE8E2084E
+	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Feb 2020 15:44:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pizg+mkt"
+	dkim=pass (1024-bit key) header.d=Mellanox.com header.i=@Mellanox.com header.b="nfRf49ID"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727359AbgBXPKv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 24 Feb 2020 10:10:51 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:35223 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727299AbgBXPKv (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 24 Feb 2020 10:10:51 -0500
-Received: by mail-pf1-f194.google.com with SMTP id i19so5517472pfa.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 24 Feb 2020 07:10:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=gkLJUqy2bU1nQGA9FqQEJWEilctTbZiQoc7uYwjAgD0=;
-        b=Pizg+mkt+XVZ73xee988ARHxYlZk9RzzuPZ/gX3hQj9HTHIvXg4tnU9TdM9g19f8PY
-         DtxjG/4zdC7n6/pxUMDzUmNkMVSNjsRL8YL6hnjWofky84xFk77VuJUaRxCmGXKe5dKC
-         wRdw58fibFa5IEcsj9INT8C0+i1vjVtmtFuZBgoXSecEyxi4yuO01VayPfebZDYaV1PR
-         wsUSH2V7Tr12+XO9/EIlX3S6L34DSegRZrDocv70UqM0iRaK8/fd7rl6bEO0pdIyInJU
-         3CGM8U6eZ/jO+bSbOwwpVWTxE+JVFJs63g+1sKVIQgc7vtt57UxtIH5Gy6R4NA4uk9jq
-         Rvuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:from:to:cc:references:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=gkLJUqy2bU1nQGA9FqQEJWEilctTbZiQoc7uYwjAgD0=;
-        b=GSdhTMwqb75KSCVk0nxCICERA+H/d8qntkSyo0rqzr6ioJxrFZIwfkG/1bjd8HFJkx
-         h7OeruaupzM36Uah0IoGsAsWl84lP1QlrIi27pVizfhFUZ/kARLhIjtjkQ1gyBWtcPES
-         QoD2X4S56w68tRnTtKDpMmJDMzC71JnwbR9uEENc5r5rQ11udkFDpfecUCNmih9EHRQP
-         hDgJR0UWjZN5+9hJSdYnSxnHk2T53WohNmO7NWl7FpbuzmNqll7YTglmxzj8zAuKPlXv
-         vagredpP3G3ASul4SZ8ashw4oR2Z1IjU36a1obhawSJYnoBfNtSYcKQYGW3fA+Pi4yLb
-         o16w==
-X-Gm-Message-State: APjAAAWDz2cpGOxNgBWAK203/yOKtV3jNZ2v9boiGhHT7hMOddqi+4Qs
-        ZLnZuERfH/qoPumI9MsXDYDUtTZ6
-X-Google-Smtp-Source: APXvYqxr9RMIyxlDhvqrWjJrQ492moysnKknTFN7pkb7A8/p6vHS0YhbbSSjfW+k2RQf7BOJr5HTEQ==
-X-Received: by 2002:a63:ba05:: with SMTP id k5mr8876896pgf.174.1582557049926;
-        Mon, 24 Feb 2020 07:10:49 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c19sm13249980pgh.8.2020.02.24.07.10.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Feb 2020 07:10:49 -0800 (PST)
-Subject: Re: [hwmon-next v1] hwmon: (pmbus/tps53679) Add support for
+        id S1727734AbgBXPoM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 24 Feb 2020 10:44:12 -0500
+Received: from mail-eopbgr150054.outbound.protection.outlook.com ([40.107.15.54]:57494
+        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727730AbgBXPoM (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 24 Feb 2020 10:44:12 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=W5TMZNgaJlq57D/RdTyPHh4RYuWCwicMr6U5pplgDarHGV+fxnhsJoTTb4L8D4ZYOLzUBdLIQLiKIfaxRumulItV3mQsXNzEWjai+SwVhpTIUO8n/f1OBt5RLi/l9UOmpsOWYvRTQmj2cjdO+5ijk62xQbzFkUbbXdTQ1coW5OssoVJKrB74C0+3hs86e9MV+qO3wxupgJv0QEhxcHxVMG+QRmSrHfA5NisBzHxBou3fL8IONNIDYSikjXjo9rujK8LgB+uLUxdXhcjMej4tGIVK9aIbF3rrg9V8SszvutzRH3J4EtA1k8Q7uVRX6NPjomuNHlMfv+JBgBzyGLoojA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RSfx0LBfrazXABIqQnBWNJ1E8IptyDGyRn2VuBIdgyY=;
+ b=MRdSVbvHsteWblOCPbIT61vetau9J6hiwRIwEKAx+1q6+qEmr1iQuFnKgRz1NoP5Zx3MP+9+PYH8p4dTOykhlRjdJ1Bw95jpuTHWELNGjFBiCS52qw6Ss/DZ4v3gRQWFblKhyNObLpiUjO98eS/IAIF0K+noGOn3mPEggzIQk4up0HTwJtzNPdE7E6zX2NGgjDlmgEbiD13PfhRM0U2zzKbi9Lpnb/9EMmHRmyCXbCYjaZLt1bASqt6QxCYEMUs1O/BWkrlEumZa86gJLa5WX1l1dDUDaWXB/WmGOsVjEZMWXmTyGcbGtzutp/F8RPvN3yPf5BytiM289nlGY7b4Eg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=mellanox.com; dmarc=pass action=none header.from=mellanox.com;
+ dkim=pass header.d=mellanox.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Mellanox.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RSfx0LBfrazXABIqQnBWNJ1E8IptyDGyRn2VuBIdgyY=;
+ b=nfRf49IDOp+AVjr+suh/w1zGfMeHO5MYw2vZsjHf1ixkvnI75jbZNEItOCgms42alnsKIWLu4I8RlAAYtaXkb6SJWSlhdJ+DnoFBBusvMoitOFuF3QCFFwgOaCOMTy1A0Z9PJjmNVnYtNaSdFBE7eYc5J2U4oWdZ6XqZYJLVqFg=
+Received: from DB6PR0501MB2358.eurprd05.prod.outlook.com (10.168.57.146) by
+ DB6PR0501MB2823.eurprd05.prod.outlook.com (10.172.226.15) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2750.17; Mon, 24 Feb 2020 15:44:04 +0000
+Received: from DB6PR0501MB2358.eurprd05.prod.outlook.com
+ ([fe80::5108:a8d6:5b9:45f4]) by DB6PR0501MB2358.eurprd05.prod.outlook.com
+ ([fe80::5108:a8d6:5b9:45f4%10]) with mapi id 15.20.2750.021; Mon, 24 Feb 2020
+ 15:44:04 +0000
+From:   Vadim Pasternak <vadimp@mellanox.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Subject: RE: [hwmon-next v1] hwmon: (pmbus/tps53679) Add support for
  historical registers for TPS53688
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Vadim Pasternak <vadimp@mellanox.com>
-Cc:     linux-hwmon@vger.kernel.org
+Thread-Topic: [hwmon-next v1] hwmon: (pmbus/tps53679) Add support for
+ historical registers for TPS53688
+Thread-Index: AQHV6xRZB08WINjb/UWHvGecIbZtXagqbWaAgAAFoQCAAAPFAA==
+Date:   Mon, 24 Feb 2020 15:44:04 +0000
+Message-ID: <DB6PR0501MB235847DEC43DED481A0553EDA2EC0@DB6PR0501MB2358.eurprd05.prod.outlook.com>
 References: <20200224131316.28238-1-vadimp@mellanox.com>
  <b9b2d96b-1b1d-7445-18a7-21e3d28e6819@roeck-us.net>
-Message-ID: <d38525ac-e7f2-970b-5c7c-e0a84d492492@roeck-us.net>
-Date:   Mon, 24 Feb 2020 07:10:48 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
-MIME-Version: 1.0
-In-Reply-To: <b9b2d96b-1b1d-7445-18a7-21e3d28e6819@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
+ <d38525ac-e7f2-970b-5c7c-e0a84d492492@roeck-us.net>
+In-Reply-To: <d38525ac-e7f2-970b-5c7c-e0a84d492492@roeck-us.net>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=vadimp@mellanox.com; 
+x-originating-ip: [193.47.165.251]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 786b3c51-4da7-40fb-ae98-08d7b9406062
+x-ms-traffictypediagnostic: DB6PR0501MB2823:
+x-microsoft-antispam-prvs: <DB6PR0501MB2823814B1DD0A38010BE73B6A2EC0@DB6PR0501MB2823.eurprd05.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6790;
+x-forefront-prvs: 032334F434
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(396003)(376002)(366004)(136003)(39860400002)(189003)(199004)(316002)(33656002)(478600001)(5660300002)(8936002)(81166006)(71200400001)(8676002)(81156014)(2906002)(4326008)(86362001)(52536014)(76116006)(6506007)(186003)(55016002)(26005)(6916009)(64756008)(66556008)(66476007)(66446008)(66946007)(7696005)(9686003)(53546011);DIR:OUT;SFP:1101;SCL:1;SRVR:DB6PR0501MB2823;H:DB6PR0501MB2358.eurprd05.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: mellanox.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: M1gRpTOA6whwHnUdw/6n3MmiFXJSlD6S2W4/oaINEhXC5GE8JgO7ScXiEYfEdfIyyeOaHUW4W6Vk6crLMc3cOBDZ/8cHZK512SzNCMiP0rbg9Vt0RqZOuyLJ3uYQYYBMds675SkktLJCjkaOM6Ujxd9MS4h072BaC5GOzru03i4Dqis/skjz2Par1syu0lUbbom/9UC+RREmg/5GUT7Bd9RA9zsnkynIHex7TjOM5/l3R5C/hXBblywEd7M7lPNtO1zHa2WqR6fymtqdgkvbfyK/MdWORnN3kHWmtT+JqOjXjOQDoQS98i7WBrsknvmGmxt1xUS0BalKHX0htUwpBqJ23U64VZx6KgZujdOS2PNPLoc9fuFd2yi9xXcYlnoctRPuXOQlAkUOFgq6fcKh+RR1mERmkE9RSjgNklah36VVdO+9XMEUt1E5P7UakbZN
+x-ms-exchange-antispam-messagedata: bdmK0uThby6a80tf9mBId/4SzzmY+da3Q3y7SKGhE8jdDLuL3jT+6dbd0dd2hD16JeTq4G4C63hKvKWOiDa3w/AFs/KVD3yVcsnb44xCL4/kCOhweU1K+xSQUJlPY4FSFATz3NSpKnleE6aMNuoTJw==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: Mellanox.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 786b3c51-4da7-40fb-ae98-08d7b9406062
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Feb 2020 15:44:04.1860
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a652971c-7d2e-4d9b-a6a4-d149256f461b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 9HiuK5L4KcAEihiRICOnUPBrPa9nIQipY5NwGCj4X95+WibpAy/Zft7uHvCuMo/Ge3MwMmCOYW+iz3VJf20lfw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR0501MB2823
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2/24/20 6:50 AM, Guenter Roeck wrote:
-> On 2/24/20 5:13 AM, Vadim Pasternak wrote:
->> TPS53688 supports historical registers. Patch allows exposing the next
->> attributes for the historical registers in 'sysfs':
->> - curr{x}_reset_history;
->> - in{x}_reset_history;
->> - power{x}_reset_history;
->> - temp{x}_reset_history;
->> - curr{x}_highest;
->> - in{x}_highest;
->> - power{x}_input_highest;
->> - temp{x}_highest;
->> - curr{x}_lowest;
->> - in{x}_lowest;
->> - power{x}_input_lowest;
->> - temp{x}_lowest.
->>
->> This patch is required patch:
->> "hwmon: (pmbus/core) Add callback for register to data conversion".
->>
->> Signed-off-by: Vadim Pasternak <vadimp@mellanox.com>
->> ---
->>   drivers/hwmon/pmbus/tps53679.c | 244 ++++++++++++++++++++++++++++++++++++++++-
->>   1 file changed, 243 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/hwmon/pmbus/tps53679.c b/drivers/hwmon/pmbus/tps53679.c
->> index 157c99ffb52b..ae5ce144e5fe 100644
->> --- a/drivers/hwmon/pmbus/tps53679.c
->> +++ b/drivers/hwmon/pmbus/tps53679.c
->> @@ -34,6 +34,227 @@ enum chips {
->>   #define TPS53681_MFR_SPECIFIC_20    0xe4    /* Number of phases, per page */
->> +/* Registers for highest and lowest historical values records */
->> +#define TPS53688_VOUT_PEAK        0xd1
->> +#define TPS53688_IOUT_PEAK        0xd2
->> +#define TPS53688_TEMP_PEAK        0xd3
->> +#define TPS53688_VIN_PEAK        0xd5
->> +#define TPS53688_IIN_PEAK        0xd6
->> +#define TPS53688_PIN_PEAK        0xd7
->> +#define TPS53688_POUT_PEAK        0xd8
->> +#define TPS53688_HISTORY_REG_BUF_LEN    5
->> +#define TPS53688_HISTORY_REG_MIN_OFFSET    3
->> +#define TPS53688_HISTORY_REG_MAX_OFFSET    1
->> +
->> +const static u8 tps53688_reset_logging[] = { 0x04, 0x00, 0x01, 0x00, 0x00 };
->> +const static u8 tps53688_resume_logging[] = { 0x04, 0x20, 0x00, 0x00, 0x00 };
->> +
-> Passing the length as 1st field seems wrong.
-> 
->> +static int tps53688_reg2data(u16 reg, int data, long *val)
->> +{
->> +    s16 exponent;
->> +    s32 mantissa;
->> +
->> +    if (data == 0)
->> +        return data;
->> +
->> +    switch (reg) {
->> +    case PMBUS_VIRT_READ_VOUT_MIN:
->> +    case PMBUS_VIRT_READ_VOUT_MAX:
->> +        /* Convert to LINEAR11. */
->> +        exponent = ((s16)data) >> 11;
->> +        mantissa = ((s16)((data & GENMASK(10, 0)) << 5)) >> 5;
->> +        *val = mantissa * 1000L;
->> +        if (exponent >= 0)
->> +            *val <<= exponent;
->> +        else
->> +            *val >>= -exponent;
->> +        return 0;
->> +    default:
->> +        return -ENODATA;
->> +    }
->> +}
->> +
-> As with the xpde driver, I would suggest to implement the conversion in the
-> read_word_data function.
-> 
->> +static int
->> +tps53688_get_history(struct i2c_client *client, int reg, int page, int unused,
->> +             int offset)
-> 
-> What is the point of passing "unused" to this function ?
-> 
->> +{
->> +    u8 buf[TPS53688_HISTORY_REG_BUF_LEN];
->> +    int ret;
->> +
->> +    ret = pmbus_set_page(client, page, 0);
->> +    if (ret < 0)
->> +        return ret;
->> +
->> +    ret = i2c_smbus_read_i2c_block_data(client, reg,
->> +                        TPS53688_HISTORY_REG_BUF_LEN,
->> +                        buf);
->> +    if (ret < 0)
->> +        return ret;
->> +    else if (ret != TPS53688_HISTORY_REG_BUF_LEN)
->> +        return -EIO;
-> 
-> I am a bit confused here. Are you sure this returns (and is supposed to return)
-> 5 bytes of data, not 4, and that the data offsets are 1 and 3, not 0 and 2 ?
-> i2c_smbus_read_i2c_block_data() returns the length, and only copies the data
-> into the buffer, not the length field.
-> 
-Wait, you care calling i2c_smbus_read_i2c_block_data() instead of
-i2c_smbus_read_block_data(). Maybe that explains why you need to specify
-the length twice. This should really be i2c_smbus_read_block_data()
-(and, yes, the buffer needs to fit the maximum smbus block length).
-
-Same for write.
-
-Thanks,
-Guenter
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogR3VlbnRlciBSb2VjayA8
+Z3JvZWNrN0BnbWFpbC5jb20+IE9uIEJlaGFsZiBPZiBHdWVudGVyIFJvZWNrDQo+IFNlbnQ6IE1v
+bmRheSwgRmVicnVhcnkgMjQsIDIwMjAgNToxMSBQTQ0KPiBUbzogVmFkaW0gUGFzdGVybmFrIDx2
+YWRpbXBAbWVsbGFub3guY29tPg0KPiBDYzogbGludXgtaHdtb25Admdlci5rZXJuZWwub3JnDQo+
+IFN1YmplY3Q6IFJlOiBbaHdtb24tbmV4dCB2MV0gaHdtb246IChwbWJ1cy90cHM1MzY3OSkgQWRk
+IHN1cHBvcnQgZm9yDQo+IGhpc3RvcmljYWwgcmVnaXN0ZXJzIGZvciBUUFM1MzY4OA0KPiANCj4g
+T24gMi8yNC8yMCA2OjUwIEFNLCBHdWVudGVyIFJvZWNrIHdyb3RlOg0KPiA+IE9uIDIvMjQvMjAg
+NToxMyBBTSwgVmFkaW0gUGFzdGVybmFrIHdyb3RlOg0KPiA+PiBUUFM1MzY4OCBzdXBwb3J0cyBo
+aXN0b3JpY2FsIHJlZ2lzdGVycy4gUGF0Y2ggYWxsb3dzIGV4cG9zaW5nIHRoZQ0KPiA+PiBuZXh0
+IGF0dHJpYnV0ZXMgZm9yIHRoZSBoaXN0b3JpY2FsIHJlZ2lzdGVycyBpbiAnc3lzZnMnOg0KPiA+
+PiAtIGN1cnJ7eH1fcmVzZXRfaGlzdG9yeTsNCj4gPj4gLSBpbnt4fV9yZXNldF9oaXN0b3J5Ow0K
+PiA+PiAtIHBvd2Vye3h9X3Jlc2V0X2hpc3Rvcnk7DQo+ID4+IC0gdGVtcHt4fV9yZXNldF9oaXN0
+b3J5Ow0KPiA+PiAtIGN1cnJ7eH1faGlnaGVzdDsNCj4gPj4gLSBpbnt4fV9oaWdoZXN0Ow0KPiA+
+PiAtIHBvd2Vye3h9X2lucHV0X2hpZ2hlc3Q7DQo+ID4+IC0gdGVtcHt4fV9oaWdoZXN0Ow0KPiA+
+PiAtIGN1cnJ7eH1fbG93ZXN0Ow0KPiA+PiAtIGlue3h9X2xvd2VzdDsNCj4gPj4gLSBwb3dlcnt4
+fV9pbnB1dF9sb3dlc3Q7DQo+ID4+IC0gdGVtcHt4fV9sb3dlc3QuDQo+ID4+DQo+ID4+IFRoaXMg
+cGF0Y2ggaXMgcmVxdWlyZWQgcGF0Y2g6DQo+ID4+ICJod21vbjogKHBtYnVzL2NvcmUpIEFkZCBj
+YWxsYmFjayBmb3IgcmVnaXN0ZXIgdG8gZGF0YSBjb252ZXJzaW9uIi4NCj4gPj4NCj4gPj4gU2ln
+bmVkLW9mZi1ieTogVmFkaW0gUGFzdGVybmFrIDx2YWRpbXBAbWVsbGFub3guY29tPg0KPiA+PiAt
+LS0NCj4gPj4gwqAgZHJpdmVycy9od21vbi9wbWJ1cy90cHM1MzY3OS5jIHwgMjQ0DQo+ID4+ICsr
+KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKystDQo+ID4+IMKgIDEgZmlsZSBj
+aGFuZ2VkLCAyNDMgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPiA+Pg0KPiA+PiBkaWZm
+IC0tZ2l0IGEvZHJpdmVycy9od21vbi9wbWJ1cy90cHM1MzY3OS5jDQo+ID4+IGIvZHJpdmVycy9o
+d21vbi9wbWJ1cy90cHM1MzY3OS5jIGluZGV4IDE1N2M5OWZmYjUyYi4uYWU1Y2UxNDRlNWZlDQo+
+ID4+IDEwMDY0NA0KPiA+PiAtLS0gYS9kcml2ZXJzL2h3bW9uL3BtYnVzL3RwczUzNjc5LmMNCj4g
+Pj4gKysrIGIvZHJpdmVycy9od21vbi9wbWJ1cy90cHM1MzY3OS5jDQo+ID4+IEBAIC0zNCw2ICsz
+NCwyMjcgQEAgZW51bSBjaGlwcyB7DQo+ID4+IMKgICNkZWZpbmUgVFBTNTM2ODFfTUZSX1NQRUNJ
+RklDXzIwwqDCoMKgIDB4ZTTCoMKgwqAgLyogTnVtYmVyIG9mIHBoYXNlcywNCj4gPj4gcGVyIHBh
+Z2UgKi8NCj4gPj4gKy8qIFJlZ2lzdGVycyBmb3IgaGlnaGVzdCBhbmQgbG93ZXN0IGhpc3Rvcmlj
+YWwgdmFsdWVzIHJlY29yZHMgKi8NCj4gPj4gKyNkZWZpbmUgVFBTNTM2ODhfVk9VVF9QRUFLwqDC
+oMKgwqDCoMKgwqAgMHhkMSAjZGVmaW5lIFRQUzUzNjg4X0lPVVRfUEVBSw0KPiA+PiArMHhkMiAj
+ZGVmaW5lIFRQUzUzNjg4X1RFTVBfUEVBS8KgwqDCoMKgwqDCoMKgIDB4ZDMgI2RlZmluZQ0KPiA+
+PiArVFBTNTM2ODhfVklOX1BFQUvCoMKgwqDCoMKgwqDCoCAweGQ1ICNkZWZpbmUgVFBTNTM2ODhf
+SUlOX1BFQUvCoMKgwqDCoMKgwqDCoCAweGQ2DQo+ID4+ICsjZGVmaW5lIFRQUzUzNjg4X1BJTl9Q
+RUFLwqDCoMKgwqDCoMKgwqAgMHhkNyAjZGVmaW5lIFRQUzUzNjg4X1BPVVRfUEVBSw0KPiA+PiAr
+MHhkOCAjZGVmaW5lIFRQUzUzNjg4X0hJU1RPUllfUkVHX0JVRl9MRU7CoMKgwqAgNSAjZGVmaW5l
+DQo+ID4+ICtUUFM1MzY4OF9ISVNUT1JZX1JFR19NSU5fT0ZGU0VUwqDCoMKgIDMgI2RlZmluZQ0K
+PiA+PiArVFBTNTM2ODhfSElTVE9SWV9SRUdfTUFYX09GRlNFVMKgwqDCoCAxDQo+ID4+ICsNCj4g
+Pj4gK2NvbnN0IHN0YXRpYyB1OCB0cHM1MzY4OF9yZXNldF9sb2dnaW5nW10gPSB7IDB4MDQsIDB4
+MDAsIDB4MDEsIDB4MDAsDQo+ID4+ICsweDAwIH07IGNvbnN0IHN0YXRpYyB1OCB0cHM1MzY4OF9y
+ZXN1bWVfbG9nZ2luZ1tdID0geyAweDA0LCAweDIwLA0KPiA+PiArMHgwMCwgMHgwMCwgMHgwMCB9
+Ow0KPiA+PiArDQo+ID4gUGFzc2luZyB0aGUgbGVuZ3RoIGFzIDFzdCBmaWVsZCBzZWVtcyB3cm9u
+Zy4NCj4gPg0KPiA+PiArc3RhdGljIGludCB0cHM1MzY4OF9yZWcyZGF0YSh1MTYgcmVnLCBpbnQg
+ZGF0YSwgbG9uZyAqdmFsKSB7DQo+ID4+ICvCoMKgwqAgczE2IGV4cG9uZW50Ow0KPiA+PiArwqDC
+oMKgIHMzMiBtYW50aXNzYTsNCj4gPj4gKw0KPiA+PiArwqDCoMKgIGlmIChkYXRhID09IDApDQo+
+ID4+ICvCoMKgwqDCoMKgwqDCoCByZXR1cm4gZGF0YTsNCj4gPj4gKw0KPiA+PiArwqDCoMKgIHN3
+aXRjaCAocmVnKSB7DQo+ID4+ICvCoMKgwqAgY2FzZSBQTUJVU19WSVJUX1JFQURfVk9VVF9NSU46
+DQo+ID4+ICvCoMKgwqAgY2FzZSBQTUJVU19WSVJUX1JFQURfVk9VVF9NQVg6DQo+ID4+ICvCoMKg
+wqDCoMKgwqDCoCAvKiBDb252ZXJ0IHRvIExJTkVBUjExLiAqLw0KPiA+PiArwqDCoMKgwqDCoMKg
+wqAgZXhwb25lbnQgPSAoKHMxNilkYXRhKSA+PiAxMTsNCj4gPj4gK8KgwqDCoMKgwqDCoMKgIG1h
+bnRpc3NhID0gKChzMTYpKChkYXRhICYgR0VOTUFTSygxMCwgMCkpIDw8IDUpKSA+PiA1Ow0KPiA+
+PiArwqDCoMKgwqDCoMKgwqAgKnZhbCA9IG1hbnRpc3NhICogMTAwMEw7DQo+ID4+ICvCoMKgwqDC
+oMKgwqDCoCBpZiAoZXhwb25lbnQgPj0gMCkNCj4gPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
+KnZhbCA8PD0gZXhwb25lbnQ7DQo+ID4+ICvCoMKgwqDCoMKgwqDCoCBlbHNlDQo+ID4+ICvCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgICp2YWwgPj49IC1leHBvbmVudDsNCj4gPj4gK8KgwqDCoMKgwqDC
+oMKgIHJldHVybiAwOw0KPiA+PiArwqDCoMKgIGRlZmF1bHQ6DQo+ID4+ICvCoMKgwqDCoMKgwqDC
+oCByZXR1cm4gLUVOT0RBVEE7DQo+ID4+ICvCoMKgwqAgfQ0KPiA+PiArfQ0KPiA+PiArDQo+ID4g
+QXMgd2l0aCB0aGUgeHBkZSBkcml2ZXIsIEkgd291bGQgc3VnZ2VzdCB0byBpbXBsZW1lbnQgdGhl
+IGNvbnZlcnNpb24NCj4gPiBpbiB0aGUgcmVhZF93b3JkX2RhdGEgZnVuY3Rpb24uDQo+ID4NCj4g
+Pj4gK3N0YXRpYyBpbnQNCj4gPj4gK3RwczUzNjg4X2dldF9oaXN0b3J5KHN0cnVjdCBpMmNfY2xp
+ZW50ICpjbGllbnQsIGludCByZWcsIGludCBwYWdlLA0KPiA+PiAraW50IHVudXNlZCwNCj4gPj4g
+K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBpbnQgb2Zmc2V0KQ0KPiA+DQo+ID4gV2hhdCBpcyB0
+aGUgcG9pbnQgb2YgcGFzc2luZyAidW51c2VkIiB0byB0aGlzIGZ1bmN0aW9uID8NCj4gPg0KPiA+
+PiArew0KPiA+PiArwqDCoMKgIHU4IGJ1ZltUUFM1MzY4OF9ISVNUT1JZX1JFR19CVUZfTEVOXTsN
+Cj4gPj4gK8KgwqDCoCBpbnQgcmV0Ow0KPiA+PiArDQo+ID4+ICvCoMKgwqAgcmV0ID0gcG1idXNf
+c2V0X3BhZ2UoY2xpZW50LCBwYWdlLCAwKTsNCj4gPj4gK8KgwqDCoCBpZiAocmV0IDwgMCkNCj4g
+Pj4gK8KgwqDCoMKgwqDCoMKgIHJldHVybiByZXQ7DQo+ID4+ICsNCj4gPj4gK8KgwqDCoCByZXQg
+PSBpMmNfc21idXNfcmVhZF9pMmNfYmxvY2tfZGF0YShjbGllbnQsIHJlZywNCj4gPj4gK8KgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgVFBTNTM2ODhfSElTVE9S
+WV9SRUdfQlVGX0xFTiwNCj4gPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqAgYnVmKTsNCj4gPj4gK8KgwqDCoCBpZiAocmV0IDwgMCkNCj4gPj4gK8KgwqDC
+oMKgwqDCoMKgIHJldHVybiByZXQ7DQo+ID4+ICvCoMKgwqAgZWxzZSBpZiAocmV0ICE9IFRQUzUz
+Njg4X0hJU1RPUllfUkVHX0JVRl9MRU4pDQo+ID4+ICvCoMKgwqDCoMKgwqDCoCByZXR1cm4gLUVJ
+TzsNCj4gPg0KPiA+IEkgYW0gYSBiaXQgY29uZnVzZWQgaGVyZS4gQXJlIHlvdSBzdXJlIHRoaXMg
+cmV0dXJucyAoYW5kIGlzIHN1cHBvc2VkDQo+ID4gdG8gcmV0dXJuKQ0KPiA+IDUgYnl0ZXMgb2Yg
+ZGF0YSwgbm90IDQsIGFuZCB0aGF0IHRoZSBkYXRhIG9mZnNldHMgYXJlIDEgYW5kIDMsIG5vdCAw
+IGFuZCAyID8NCj4gPiBpMmNfc21idXNfcmVhZF9pMmNfYmxvY2tfZGF0YSgpIHJldHVybnMgdGhl
+IGxlbmd0aCwgYW5kIG9ubHkgY29waWVzDQo+ID4gdGhlIGRhdGEgaW50byB0aGUgYnVmZmVyLCBu
+b3QgdGhlIGxlbmd0aCBmaWVsZC4NCj4gPg0KPiBXYWl0LCB5b3UgY2FyZSBjYWxsaW5nIGkyY19z
+bWJ1c19yZWFkX2kyY19ibG9ja19kYXRhKCkgaW5zdGVhZCBvZg0KPiBpMmNfc21idXNfcmVhZF9i
+bG9ja19kYXRhKCkuIE1heWJlIHRoYXQgZXhwbGFpbnMgd2h5IHlvdSBuZWVkIHRvIHNwZWNpZnkg
+dGhlDQo+IGxlbmd0aCB0d2ljZS4gVGhpcyBzaG91bGQgcmVhbGx5IGJlIGkyY19zbWJ1c19yZWFk
+X2Jsb2NrX2RhdGEoKSAoYW5kLCB5ZXMsIHRoZQ0KPiBidWZmZXIgbmVlZHMgdG8gZml0IHRoZSBt
+YXhpbXVtIHNtYnVzIGJsb2NrIGxlbmd0aCkuDQo+IA0KPiBTYW1lIGZvciB3cml0ZS4NCg0KSGkg
+R3VudGVyLA0KDQpJdCBzZWVtcyAgaXQgd2FzIHNvbWUgbWlzdW5kZXJzdGFuZGluZy4NCg0KV2hl
+biB3ZSBkaXNjdXNzZWQgdGhpcyBmZWF0dXJlIEkgYXNrZWQ6DQoNCj4+IENhbiBJIGFzc3VtZSB0
+aGF0IG1vc3QgaTJjIGNvbnRyb2xsZXJzIHN1cHBvcnQgInNtYnVzX3JlYWRfYmxvY2siLCAgb3Ig
+DQo+PiBpdCdzIGJldHRlciB0byByZWFkIHdpdGgNCj4+IGkyY19zbWJ1c19yZWFkX2kyY19ibG9j
+a19kYXRhKCkgd2l0aCBzaXplIDU/DQo+PiANCkFuZCB5b3UgcmVwbGllZDoNCj4gSSB1c2UgaTJj
+X3NtYnVzX3JlYWRfaTJjX2Jsb2NrX2RhdGEoKTsgdGhhdCBpcyB3aGF0IGl0IGlzIGZvci4NCg0K
+U28sIEkgdGhvdWdodCB0aGF0IGkyY19zbWJ1c19yZWFkX2kyY19ibG9ja19kYXRhIHdpbGwgYmUg
+bW9yZSBjb21tb24NCmNhc2UuDQpJJ2xsIGNoYW5nZSBpdC4NCg0KPiANCj4gVGhhbmtzLA0KPiBH
+dWVudGVyDQo=
