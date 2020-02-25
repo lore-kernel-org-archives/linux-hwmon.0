@@ -2,137 +2,122 @@ Return-Path: <SRS0=jMON=4N=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D0F0C35E0E
-	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Feb 2020 21:34:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 241CCC35E0E
+	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Feb 2020 21:36:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E2B8521D7E
-	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Feb 2020 21:34:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F405420838
+	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Feb 2020 21:36:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728946AbgBYVeB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 25 Feb 2020 16:34:01 -0500
-Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:59023 "EHLO
-        mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726130AbgBYVeB (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 25 Feb 2020 16:34:01 -0500
-Received: from Internal Mail-Server by MTLPINE2 (envelope-from vadimp@mellanox.com)
-        with ESMTPS (AES256-SHA encrypted); 25 Feb 2020 23:33:59 +0200
-Received: from r-build-lowlevel.mtr.labs.mlnx. (r-build-lowlevel.mtr.labs.mlnx [10.209.0.190])
-        by labmailer.mlnx (8.13.8/8.13.8) with ESMTP id 01PLXx2q024119;
-        Tue, 25 Feb 2020 23:33:59 +0200
-From:   Vadim Pasternak <vadimp@mellanox.com>
-To:     linux@roeck-us.net
-Cc:     linux-hwmon@vger.kernel.org, Vadim Pasternak <vadimp@mellanox.com>
-Subject: [next v4] hwmon: (pmbus/xdpe12284) Add callback for vout limits conversion
-Date:   Tue, 25 Feb 2020 23:33:36 +0200
-Message-Id: <20200225213336.26527-1-vadimp@mellanox.com>
-X-Mailer: git-send-email 2.11.0
+        id S1728162AbgBYVgF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 25 Feb 2020 16:36:05 -0500
+Received: from mga12.intel.com ([192.55.52.136]:8416 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726130AbgBYVgF (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 25 Feb 2020 16:36:05 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Feb 2020 13:36:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,485,1574150400"; 
+   d="scan'208";a="410377650"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 25 Feb 2020 13:36:03 -0800
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1j6hs3-0009Wf-3g; Wed, 26 Feb 2020 05:36:03 +0800
+Date:   Wed, 26 Feb 2020 05:35:52 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:hwmon-next] BUILD SUCCESS
+ 7e331bfd1172b8ed13199b056f336c408394c0ce
+Message-ID: <5e559338.Dsc2eNJmm9jan26R%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Provide read_word_data() callback for overvoltage and undervoltage
-output readouts conversion. These registers are presented in
-'slinear11' format, while default conversion for 'vout' class for the
-devices is 'vid'. It is resulted in wrong conversion in pmbus_reg2data()
-for in{3-4}_lcrit and in{3-4}_crit attributes.
-)
-Fixes: aaafb7c8eb1c ("hwmon: (pmbus) Add support for Infineon Multi-phase xdpe122 family controllers")
-Signed-off-by: Vadim Pasternak <vadimp@mellanox.com>
----
-v1->v2:
- Comments pointed out by Guenter:
- - Drop reg2data() callback, provide conversion through
-   read_word_data() callback instead.
-v2->v3:
- Comments pointed out by Guenter:
- - Fix wrong conversion.
- - Add missed returns.
-v3->v4
- Fixed by Vadim:
- - Rebase patch for 'hwmon' branch.
----
- drivers/hwmon/pmbus/xdpe12284.c | 54 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon-next
+branch HEAD: 7e331bfd1172b8ed13199b056f336c408394c0ce  hwmon: (lm73) Add support for of_match_table
 
-diff --git a/drivers/hwmon/pmbus/xdpe12284.c b/drivers/hwmon/pmbus/xdpe12284.c
-index ecd9b65627ec..660556b89e9f 100644
---- a/drivers/hwmon/pmbus/xdpe12284.c
-+++ b/drivers/hwmon/pmbus/xdpe12284.c
-@@ -18,6 +18,59 @@
- #define XDPE122_AMD_625MV		0x10 /* AMD mode 6.25mV */
- #define XDPE122_PAGE_NUM		2
- 
-+static int xdpe122_read_word_data(struct i2c_client *client, int page, int reg)
-+{
-+	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-+	long val;
-+	s16 exponent;
-+	s32 mantissa;
-+	int ret;
-+
-+	switch (reg) {
-+	case PMBUS_VOUT_OV_FAULT_LIMIT:
-+	case PMBUS_VOUT_UV_FAULT_LIMIT:
-+		ret = pmbus_read_word_data(client, page, reg);
-+		if (ret < 0)
-+			return ret;
-+
-+		/* Convert register value to LINEAR11 data. */
-+		exponent = ((s16)ret) >> 11;
-+		mantissa = ((s16)((ret & GENMASK(10, 0)) << 5)) >> 5;
-+		val = mantissa * 1000L;
-+		if (exponent >= 0)
-+			val <<= exponent;
-+		else
-+			val >>= -exponent;
-+
-+		/* Convert data to VID register. */
-+		switch (info->vrm_version[page]) {
-+		case vr13:
-+			if (val >= 500)
-+				return 1 + DIV_ROUND_CLOSEST(val - 500, 10);
-+			return 0;
-+		case vr12:
-+			if (val >= 250)
-+				return 1 + DIV_ROUND_CLOSEST(val - 250, 5);
-+			return 0;
-+		case imvp9:
-+			if (val >= 200)
-+				return 1 + DIV_ROUND_CLOSEST(val - 200, 10);
-+			return 0;
-+		case amd625mv:
-+			if (val >= 200 && val <= 1550)
-+				return DIV_ROUND_CLOSEST((1550 - val) * 100,
-+							 625);
-+			return 0;
-+		default:
-+			return -EINVAL;
-+		}
-+	default:
-+		return -ENODATA;
-+	}
-+
-+	return 0;
-+}
-+
- static int xdpe122_identify(struct i2c_client *client,
- 			    struct pmbus_driver_info *info)
- {
-@@ -70,6 +123,7 @@ static struct pmbus_driver_info xdpe122_info = {
- 		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP |
- 		PMBUS_HAVE_POUT | PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT,
- 	.identify = xdpe122_identify,
-+	.read_word_data = xdpe122_read_word_data,
- };
- 
- static int xdpe122_probe(struct i2c_client *client,
--- 
-2.11.0
+elapsed time: 136m
 
+configs tested: 60
+configs skipped: 0
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+i386                              allnoconfig
+i386                             alldefconfig
+i386                             allyesconfig
+i386                                defconfig
+c6x                              allyesconfig
+c6x                        evmc6678_defconfig
+nios2                         10m50_defconfig
+nios2                         3c120_defconfig
+openrisc                    or1ksim_defconfig
+openrisc                 simple_smp_defconfig
+xtensa                       common_defconfig
+xtensa                          iss_defconfig
+alpha                               defconfig
+csky                                defconfig
+nds32                             allnoconfig
+nds32                               defconfig
+h8300                     edosk2674_defconfig
+h8300                    h8300h-sim_defconfig
+h8300                       h8s-sim_defconfig
+m68k                             allmodconfig
+m68k                       m5475evb_defconfig
+m68k                          multi_defconfig
+m68k                           sun3_defconfig
+arc                                 defconfig
+arc                              allyesconfig
+powerpc                             defconfig
+powerpc                       ppc64_defconfig
+powerpc                          rhel-kconfig
+microblaze                      mmu_defconfig
+microblaze                    nommu_defconfig
+powerpc                           allnoconfig
+parisc                            allnoconfig
+parisc                generic-64bit_defconfig
+parisc                generic-32bit_defconfig
+parisc                           allyesconfig
+nds32                randconfig-a001-20200225
+mips                 randconfig-a001-20200225
+parisc               randconfig-a001-20200225
+riscv                randconfig-a001-20200225
+alpha                randconfig-a001-20200225
+m68k                 randconfig-a001-20200225
+openrisc             randconfig-a001-20200226
+sh                   randconfig-a001-20200226
+s390                 randconfig-a001-20200226
+xtensa               randconfig-a001-20200226
+csky                 randconfig-a001-20200226
+x86_64               randconfig-e001-20200226
+x86_64               randconfig-e002-20200226
+x86_64               randconfig-e003-20200226
+i386                 randconfig-e001-20200226
+i386                 randconfig-e002-20200226
+i386                 randconfig-e003-20200226
+sh                               allmodconfig
+sh                                allnoconfig
+sh                          rsk7269_defconfig
+sh                  sh7785lcr_32bit_defconfig
+sh                            titan_defconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+um                                  defconfig
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
