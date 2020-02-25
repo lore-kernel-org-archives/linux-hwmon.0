@@ -1,129 +1,158 @@
-Return-Path: <SRS0=BLaD=4M=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=jMON=4N=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98D66C34050
-	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Feb 2020 23:27:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78BC4C35DF5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Feb 2020 12:13:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6D7F62176D
-	for <linux-hwmon@archiver.kernel.org>; Mon, 24 Feb 2020 23:27:21 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LFWvr7kz"
+	by mail.kernel.org (Postfix) with ESMTP id 562142176D
+	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Feb 2020 12:13:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728512AbgBXX1F (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 24 Feb 2020 18:27:05 -0500
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:38875 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727843AbgBXX1E (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 24 Feb 2020 18:27:04 -0500
-Received: by mail-wm1-f68.google.com with SMTP id a9so1184883wmj.3;
-        Mon, 24 Feb 2020 15:27:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=23TD4aokwkLA4YFL/RMSToVR/ZyFznaziCp8vM8V51U=;
-        b=LFWvr7kzjAVeBtnezK13os3rubmVM//bzWCe/YZhk/nB1g+w3D3bnzUzu45G3UeqTZ
-         65/jXVXYXxYaSlVVlZsWvgkdvzTQj51rUXSBJdzX4YHea4jZ5k9I9YSPG45yvpK7Orug
-         6pUsDAolp43uT07L9SjIpflDX6SG9HkVRxCl+aWTS3ExQ2X1J+raRPiyyGO5RDIv4oxR
-         xwW/673j3cXzLku45QdQXWMLf0dPBKJNviKrqkYGHqDKvf9eOemvuM4+m45Drsu1CDUt
-         7EYfIt6u1+PR/mnY+iXYFVrfjYeLYnM95crd0TxrOzRi1zTvMecwIPiqjtth2eo3sj5Z
-         bwIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=23TD4aokwkLA4YFL/RMSToVR/ZyFznaziCp8vM8V51U=;
-        b=VdqpDUzfL3VjADeJ9LZwRn+HhLqnvplLPkcGAKgaMS3g1JraEQfWRj+ntiTrjTgv+2
-         o49bEFraN7VG/e2a5RtCTh1ZjWqrnZlgJRdhIubjBhY6ZBoAzo5kT43iibvW5n5QHgDw
-         OApLrPN8u8WAKy/ii3Wc+o4FfZgtFruIMxpH2pTnJnQPTX5MFVRO/LjasLfC0WRb8QQh
-         GmXedtNvWgGytHEa/7zbk6iVpBlLUz/gWXdcHEmTrHATECam8XpzqrB3EmkqMT5s6CZ7
-         dMfAW5xlkr/3fKIMJFVelVF7zWCRA9PNlVc5NHblgGNfRsK8t5ie3Wuxl/SZ8cOIEWsA
-         GYaw==
-X-Gm-Message-State: APjAAAXHAJhWZk4KjSafMxI4qKmxAcFu8A9g7J1/VOMpmAZmAJbKbYHC
-        bA372jSNo0YNkB6YfGzFD2s=
-X-Google-Smtp-Source: APXvYqz39UvdMoJ4Twe4n+7DfqpGUdBg03hSNF+vDC/9/q8YLSO8JHEWd3T0uUjWaPGilVQyh+evog==
-X-Received: by 2002:a1c:7205:: with SMTP id n5mr1390088wmc.9.1582586822341;
-        Mon, 24 Feb 2020 15:27:02 -0800 (PST)
-Received: from buildbot.home (217-149-167-12.nat.highway.telekom.at. [217.149.167.12])
-        by smtp.googlemail.com with ESMTPSA id g25sm1971099wmh.3.2020.02.24.15.27.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Feb 2020 15:27:01 -0800 (PST)
-From:   Franz Forstmayr <forstmayr.franz@gmail.com>
-To:     forstmayr.franz@gmail.com
-Cc:     Guenter Roeck <linux@roeck-us.net>,
+        id S1729590AbgBYMNb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 25 Feb 2020 07:13:31 -0500
+Received: from mga18.intel.com ([134.134.136.126]:4824 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725788AbgBYMNa (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 25 Feb 2020 07:13:30 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Feb 2020 04:13:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,484,1574150400"; 
+   d="scan'208";a="350138517"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by fmsmga001.fm.intel.com with SMTP; 25 Feb 2020 04:13:25 -0800
+Received: by lahna (sSMTP sendmail emulation); Tue, 25 Feb 2020 14:13:25 +0200
+Date:   Tue, 25 Feb 2020 14:13:25 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Martin Volf <martin.volf.42@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: [PATCH 2/3] docs: hwmon: Add support for ina2xx
-Date:   Tue, 25 Feb 2020 00:26:46 +0100
-Message-Id: <20200224232647.29213-2-forstmayr.franz@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200224232647.29213-1-forstmayr.franz@gmail.com>
-References: <20200224232647.29213-1-forstmayr.franz@gmail.com>
+        Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
+        linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Subject: Re: [regression] nct6775 does not load in 5.4 and 5.5, bisected to
+ b84398d6d7f90080
+Message-ID: <20200225121325.GX2667@lahna.fi.intel.com>
+References: <1bdbac08-86f8-2a57-2b0d-8cd2beb2a1c0@roeck-us.net>
+ <CAM1AHpSKFk9ZosQf=k-Rm2=EFqco7y4Lpfb7m07r=j_uJd4T0A@mail.gmail.com>
+ <85356d1a-f90d-e94d-16eb-1071d4e94753@roeck-us.net>
+ <CAM1AHpSpEFshpUGxKdhLV3XuThQg_XVaPgOWzvrTv6YtzHyO+A@mail.gmail.com>
+ <bec1f81c-09a8-ba48-c6c4-5d9b340f7c0b@roeck-us.net>
+ <20200224101800.GJ2667@lahna.fi.intel.com>
+ <20200224103731.GA10400@smile.fi.intel.com>
+ <20200224105121.GK2667@lahna.fi.intel.com>
+ <20200224112740.GL2667@lahna.fi.intel.com>
+ <CAM1AHpQW_=vvcjXHa8UOrdOohABm0sE2UPr4sfK2AtfWHsm4Ag@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAM1AHpQW_=vvcjXHa8UOrdOohABm0sE2UPr4sfK2AtfWHsm4Ag@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add documentation for INA260, power/current monitor with I2C interface.
+On Mon, Feb 24, 2020 at 06:30:21PM +0100, Martin Volf wrote:
+> On Mon, Feb 24, 2020 at 12:27 PM Mika Westerberg
+> <mika.westerberg@linux.intel.com> wrote:
+> >
+> > On Mon, Feb 24, 2020 at 12:51:25PM +0200, Mika Westerberg wrote:
+> > > > I'm wondering if
+> > > >
+> > > >             pci_dev_is_present(...);
+> > > >
+> > > > returns false here.
+> > >
+> > > Well that might also be the case since lspci shows this:
+> > >
+> > > 00:1f.0 ISA bridge: Intel Corporation Z390 Chipset LPC/eSPI Controller (rev 10)
+> > > 00:1f.3 Audio device: Intel Corporation Cannon Lake PCH cAVS (rev 10)
+> > > 00:1f.4 SMBus: Intel Corporation Cannon Lake PCH SMBus Controller (rev 10)
+> > >
+> > > PMC is 1f.2 and not present here. However, it may be that the PMC is
+> > > still there it just does not "enumerate" because its devid/vendorid are
+> > > set to 0xffff. Similar hiding was done for the P2SB bridge.
+> >
+> > Actually I think this is the case here.
+> >
+> > I don't know the iTCO_wdt well enough to say if it could live without
+> > the ICH_RES_IO_SMI. It looks like this register is used to disable SMI
+> > generation but not sure how well it works if it is left to BIOS to
+> > configure. I suppose these systems should use WDAT instead.
+> >
+> > Martin, can you try the below patch?
+> >
+> > diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+> > index ba87305f4332..c16e5ad08641 100644
+> > --- a/drivers/i2c/busses/i2c-i801.c
+> > +++ b/drivers/i2c/busses/i2c-i801.c
+> > @@ -1593,7 +1593,7 @@ i801_add_tco_cnl(struct i801_priv *priv, struct pci_dev *pci_dev,
+> >  static void i801_add_tco(struct i801_priv *priv)
+> >  {
+> >         u32 base_addr, tco_base, tco_ctl, ctrl_val;
+> > -       struct pci_dev *pci_dev = priv->pci_dev;
+> > +       struct pci_dev *pmc_dev, *pci_dev = priv->pci_dev;
+> >         struct resource tco_res[3], *res;
+> >         unsigned int devfn;
+> >
+> > @@ -1620,7 +1620,12 @@ static void i801_add_tco(struct i801_priv *priv)
+> >          * Power Management registers.
+> >          */
+> >         devfn = PCI_DEVFN(PCI_SLOT(pci_dev->devfn), 2);
+> > -       pci_bus_read_config_dword(pci_dev->bus, devfn, ACPIBASE, &base_addr);
+> > +       pmc_dev = pci_get_slot(pci_dev->bus, devfn);
+> > +       if (!pmc_dev) {
+> > +               dev_info(&pci_dev->dev, "PMC device disabled, not enabling iTCO\n");
+> > +               return;
+> > +       }
+> > +       pci_read_config_dword(pmc_dev, ACPIBASE, &base_addr);
+> >
+> >         res = &tco_res[ICH_RES_IO_SMI];
+> >         res->start = (base_addr & ~1) + ACPIBASE_SMI_OFF;
+> > @@ -1630,15 +1635,17 @@ static void i801_add_tco(struct i801_priv *priv)
+> >         /*
+> >          * Enable the ACPI I/O space.
+> >          */
+> > -       pci_bus_read_config_dword(pci_dev->bus, devfn, ACPICTRL, &ctrl_val);
+> > +       pci_read_config_dword(pmc_dev, ACPICTRL, &ctrl_val);
+> >         ctrl_val |= ACPICTRL_EN;
+> > -       pci_bus_write_config_dword(pci_dev->bus, devfn, ACPICTRL, ctrl_val);
+> > +       pci_write_config_dword(pmc_dev, ACPICTRL, ctrl_val);
+> >
+> >         if (priv->features & FEATURE_TCO_CNL)
+> >                 priv->tco_pdev = i801_add_tco_cnl(priv, pci_dev, tco_res);
+> >         else
+> >                 priv->tco_pdev = i801_add_tco_spt(priv, pci_dev, tco_res);
+> >
+> > +       pci_dev_put(pmc_dev);
+> > +
+> >         if (IS_ERR(priv->tco_pdev))
+> >                 dev_warn(&pci_dev->dev, "failed to create iTCO device\n");
+> >  }
+> 
+> Hello,
+> 
+> with the patch applied, the sensors are working, dmesg says:
+> ...
+> [    2.804423] i801_smbus 0000:00:1f.4: SPD Write Disable is set
+> [    2.804478] i801_smbus 0000:00:1f.4: SMBus using PCI interrupt
+> [    2.804491] i801_smbus 0000:00:1f.4: PMC device disabled, not enabling iTCO
+> ...
+> [    2.826373] nct6775: Enabling hardware monitor logical device mappings.
+> [    2.826447] nct6775: Found NCT6798D or compatible chip at 0x2e:0x290
+> ...
+> 
+> and there is no "002e-0031" line in /proc/ioports.
 
-Signed-off-by: Franz Forstmayr <forstmayr.franz@gmail.com>
----
- Documentation/hwmon/ina2xx.rst | 19 ++++++++++++++++---
- 1 file changed, 16 insertions(+), 3 deletions(-)
-
-diff --git a/Documentation/hwmon/ina2xx.rst b/Documentation/hwmon/ina2xx.rst
-index 94b9a260c518..74267dd433dd 100644
---- a/Documentation/hwmon/ina2xx.rst
-+++ b/Documentation/hwmon/ina2xx.rst
-@@ -53,6 +53,16 @@ Supported chips:
- 
- 	       http://www.ti.com/
- 
-+  * Texas Instruments INA260
-+
-+    Prefix: 'ina260'
-+
-+    Addresses: I2C 0x40 - 0x4f
-+
-+    Datasheet: Publicly available at the Texas Instruments website
-+
-+         http://www.ti.com/
-+
- Author: Lothar Felten <lothar.felten@gmail.com>
- 
- Description
-@@ -72,14 +82,17 @@ INA230 and INA231 are high or low side current shunt and power monitors
- with an I2C interface. The chips monitor both a shunt voltage drop and
- bus supply voltage.
- 
-+INA260 is a high or low side current and power monitor with an integrated
-+shunt and I2C interface.
-+
- The shunt value in micro-ohms can be set via platform data or device tree at
- compile-time or via the shunt_resistor attribute in sysfs at run-time. Please
- refer to the Documentation/devicetree/bindings/hwmon/ina2xx.txt for bindings
- if the device tree is used.
- 
--Additionally ina226 supports update_interval attribute as described in
--Documentation/hwmon/sysfs-interface.rst. Internally the interval is the sum of
--bus and shunt voltage conversion times multiplied by the averaging rate. We
-+Additionally ina226 and ina260 supports update_interval attribute as described
-+in Documentation/hwmon/sysfs-interface.rst. Internally the interval is the sum
-+of bus and shunt voltage conversion times multiplied by the averaging rate. We
- don't touch the conversion times and only modify the number of averages. The
- lower limit of the update_interval is 2 ms, the upper limit is 2253 ms.
- The actual programmed interval may vary from the desired value.
--- 
-2.17.1
-
+Great, thanks for testing. I'll make an updated patch as suggested by
+Guenter that makes the SMI resource optional and send it to you guys.
