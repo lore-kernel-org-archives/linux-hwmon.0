@@ -2,101 +2,108 @@ Return-Path: <SRS0=jMON=4N=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C7DFC35E01
-	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Feb 2020 12:14:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C12EEC35DF5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Feb 2020 12:38:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EF7E42176D
-	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Feb 2020 12:14:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9BE0221556
+	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Feb 2020 12:38:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729301AbgBYMOt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 25 Feb 2020 07:14:49 -0500
-Received: from mga14.intel.com ([192.55.52.115]:38160 "EHLO mga14.intel.com"
+        id S1729800AbgBYMiG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 25 Feb 2020 07:38:06 -0500
+Received: from mga05.intel.com ([192.55.52.43]:14005 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725788AbgBYMOt (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 25 Feb 2020 07:14:49 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
+        id S1729238AbgBYMiG (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 25 Feb 2020 07:38:06 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Feb 2020 04:14:48 -0800
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Feb 2020 04:38:05 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.70,484,1574150400"; 
-   d="scan'208";a="350138610"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga001.fm.intel.com with SMTP; 25 Feb 2020 04:14:45 -0800
-Received: by lahna (sSMTP sendmail emulation); Tue, 25 Feb 2020 14:14:45 +0200
-Date:   Tue, 25 Feb 2020 14:14:45 +0200
+   d="scan'208";a="436248367"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 25 Feb 2020 04:38:03 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 49CB1482; Tue, 25 Feb 2020 14:38:02 +0200 (EET)
 From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Martin Volf <martin.volf.42@gmail.com>,
+To:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>,
-        Wolfram Sang <wsa@the-dreams.de>, linux-i2c@vger.kernel.org,
-        linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Subject: Re: [regression] nct6775 does not load in 5.4 and 5.5, bisected to
- b84398d6d7f90080
-Message-ID: <20200225121445.GY2667@lahna.fi.intel.com>
-References: <1bdbac08-86f8-2a57-2b0d-8cd2beb2a1c0@roeck-us.net>
- <CAM1AHpSKFk9ZosQf=k-Rm2=EFqco7y4Lpfb7m07r=j_uJd4T0A@mail.gmail.com>
- <85356d1a-f90d-e94d-16eb-1071d4e94753@roeck-us.net>
- <CAM1AHpSpEFshpUGxKdhLV3XuThQg_XVaPgOWzvrTv6YtzHyO+A@mail.gmail.com>
- <bec1f81c-09a8-ba48-c6c4-5d9b340f7c0b@roeck-us.net>
- <20200224101800.GJ2667@lahna.fi.intel.com>
- <20200224103731.GA10400@smile.fi.intel.com>
- <20200224105121.GK2667@lahna.fi.intel.com>
- <20200224112740.GL2667@lahna.fi.intel.com>
- <20200224182730.GA29799@roeck-us.net>
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Wolfram Sang <wsa@the-dreams.de>
+Cc:     Martin Volf <martin.volf.42@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 2/3] watchdog: iTCO_wdt: Make ICH_RES_IO_SMI optional
+Date:   Tue, 25 Feb 2020 15:38:01 +0300
+Message-Id: <20200225123802.88984-3-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.25.0
+In-Reply-To: <20200225123802.88984-1-mika.westerberg@linux.intel.com>
+References: <20200225123802.88984-1-mika.westerberg@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200224182730.GA29799@roeck-us.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Feb 24, 2020 at 10:27:30AM -0800, Guenter Roeck wrote:
-> On Mon, Feb 24, 2020 at 01:27:40PM +0200, Mika Westerberg wrote:
-> > On Mon, Feb 24, 2020 at 12:51:25PM +0200, Mika Westerberg wrote:
-> > > > I'm wondering if
-> > > > 
-> > > > 		pci_dev_is_present(...);
-> > > > 
-> > > > returns false here.
-> > > 
-> > > Well that might also be the case since lspci shows this:
-> > > 
-> > > 00:1f.0 ISA bridge: Intel Corporation Z390 Chipset LPC/eSPI Controller (rev 10)
-> > > 00:1f.3 Audio device: Intel Corporation Cannon Lake PCH cAVS (rev 10)
-> > > 00:1f.4 SMBus: Intel Corporation Cannon Lake PCH SMBus Controller (rev 10)
-> > > 
-> > > PMC is 1f.2 and not present here. However, it may be that the PMC is
-> > > still there it just does not "enumerate" because its devid/vendorid are
-> > > set to 0xffff. Similar hiding was done for the P2SB bridge.
-> > 
-> > Actually I think this is the case here.
-> > 
-> > I don't know the iTCO_wdt well enough to say if it could live without
-> > the ICH_RES_IO_SMI. It looks like this register is used to disable SMI
-> > generation but not sure how well it works if it is left to BIOS to
-> > configure. I suppose these systems should use WDAT instead.
-> > 
-> 
-> In practice the region is only used if
-> 	if (turn_SMI_watchdog_clear_off >= p->iTCO_version) {
-> where turn_SMI_watchdog_clear_off is 1 by default. It is also
-> passed to vendor specific code, but that is only relevant for
-> really old systems. In short, it isn't really needed for any
-> recent-generation systems, and could be made optional with
-> a few lines of code in iTCO_wdt.c.
+The iTCO_wdt driver only needs ICH_RES_IO_SMI I/O resource when either
+turn_SMI_watchdog_clear_off module parameter is set to match ->iTCO_version
+(or higher), and when legacy iTCO_vendorsupport is set. Modify the driver
+so that ICH_RES_IO_SMI is optional if the two conditions are not met.
 
-Indeed that seems to be the case. Let me come up with a series that
-makes the SMI optional and fixes the problematic code in the i801 driver
-by not passing the SMI resource if the PMC device is not present.
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+---
+ drivers/watchdog/iTCO_wdt.c | 22 +++++++++++++---------
+ 1 file changed, 13 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/watchdog/iTCO_wdt.c b/drivers/watchdog/iTCO_wdt.c
+index 156360e37714..f1692452bc25 100644
+--- a/drivers/watchdog/iTCO_wdt.c
++++ b/drivers/watchdog/iTCO_wdt.c
+@@ -460,7 +460,7 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
+ 		return -ENODEV;
+ 
+ 	p->smi_res = platform_get_resource(pdev, IORESOURCE_IO, ICH_RES_IO_SMI);
+-	if (!p->smi_res)
++	if (!p->smi_res && iTCO_vendorsupport)
+ 		return -ENODEV;
+ 
+ 	p->iTCO_version = pdata->version;
+@@ -492,15 +492,19 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
+ 	/* Set the NO_REBOOT bit to prevent later reboots, just for sure */
+ 	p->update_no_reboot_bit(p->no_reboot_priv, true);
+ 
+-	/* The TCO logic uses the TCO_EN bit in the SMI_EN register */
+-	if (!devm_request_region(dev, p->smi_res->start,
+-				 resource_size(p->smi_res),
+-				 pdev->name)) {
+-		pr_err("I/O address 0x%04llx already in use, device disabled\n",
+-		       (u64)SMI_EN(p));
+-		return -EBUSY;
+-	}
+ 	if (turn_SMI_watchdog_clear_off >= p->iTCO_version) {
++		if (!p->smi_res) {
++			pr_err("SMI I/O resource is missing\n");
++			return -EINVAL;
++		}
++		/* The TCO logic uses the TCO_EN bit in the SMI_EN register */
++		if (!devm_request_region(dev, p->smi_res->start,
++					 resource_size(p->smi_res),
++					 pdev->name)) {
++			pr_err("I/O address 0x%04llx already in use, device disabled\n",
++			       (u64)SMI_EN(p));
++			return -EBUSY;
++		}
+ 		/*
+ 		 * Bit 13: TCO_EN -> 0
+ 		 * Disables TCO logic generating an SMI#
+-- 
+2.25.0
+
