@@ -2,72 +2,95 @@ Return-Path: <SRS0=L2ja=4O=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FD7FC4BA12
-	for <linux-hwmon@archiver.kernel.org>; Wed, 26 Feb 2020 13:39:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56F26C4BA13
+	for <linux-hwmon@archiver.kernel.org>; Wed, 26 Feb 2020 16:48:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 785B824685
-	for <linux-hwmon@archiver.kernel.org>; Wed, 26 Feb 2020 13:39:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1C13024670
+	for <linux-hwmon@archiver.kernel.org>; Wed, 26 Feb 2020 16:48:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1582735708;
+	bh=AyV+rEVApn0d86MUGYS3G+Ev4cJkOIvxqRx9o7bXNf4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=hTK2N+VDVWOQC2Lz9kr/7daFVmcHggNcBVYWoHHHP4VUEDcntYyneEAJLul36luDs
+	 kMTjxSzhRhHMOeS2elMpD3PsgRxofDMWbO4Xjq0P9kqEnwwLxd4NB27P3hhm7nvxCB
+	 5uPUc6tENf7XRiFMfygBiJ2Ohe2tFTTMOfgLQWig=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726700AbgBZNj0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 26 Feb 2020 08:39:26 -0500
-Received: from mga04.intel.com ([192.55.52.120]:24376 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726673AbgBZNjZ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 26 Feb 2020 08:39:25 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Feb 2020 05:39:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,488,1574150400"; 
-   d="scan'208";a="350390585"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga001.fm.intel.com with SMTP; 26 Feb 2020 05:39:21 -0800
-Received: by lahna (sSMTP sendmail emulation); Wed, 26 Feb 2020 15:39:21 +0200
-Date:   Wed, 26 Feb 2020 15:39:21 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Martin Volf <martin.volf.42@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] watchdog: iTCO_wdt: Export vendorsupport
-Message-ID: <20200226133921.GS2667@lahna.fi.intel.com>
-References: <20200226132122.62805-1-mika.westerberg@linux.intel.com>
- <20200226132122.62805-2-mika.westerberg@linux.intel.com>
- <5e56f8b1-c411-69bd-6e02-c0dde3db69dd@roeck-us.net>
+        id S1726400AbgBZQs1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 26 Feb 2020 11:48:27 -0500
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:41036 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726151AbgBZQs1 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 26 Feb 2020 11:48:27 -0500
+Received: by mail-oi1-f194.google.com with SMTP id i1so135559oie.8;
+        Wed, 26 Feb 2020 08:48:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=wYb2SPyfU9sT5dHwc2B+qBWDt2ccSquWhAdxVh14F+o=;
+        b=SXMlzPt4EBNdDzcLdHsSxdjqBlopqdyt42xwiO410qYBE+cAhq9LMmb3RC2vXB/QO5
+         i/mrj5dPD7DzymKLElX5r4PqDE9wf4iWBWOnT3AbOoTbkV3trxdSGChzAbwI8gkZFBHg
+         YwNLi1LzvcGVDYsw1956S49Os3V7ICIpARWFgOzhRoMMEhArKe0PawF8b+FC5x6q329O
+         meg7vXWrYgRZkuEVQPuXLLuGbUhUDc3XCG6jDBye1ViaA/iOkl/L1jTwpCNa/p+7ZWcK
+         FE1IYleCDMIArJ38mShEmbBjHjA3au4E4WwCkBj6xqzqUdJGg1GJ0utxro/CtNmqVAnM
+         IIrg==
+X-Gm-Message-State: APjAAAXVP8awnQRlec7K9kRkbHMfFNTkB/dQwgzjviFurOrAXPHK+ilG
+        XNRdLRdwaZPjJot116bfzQ==
+X-Google-Smtp-Source: APXvYqzqWkKvdNyvC73lIfPwrzjTstV2xUgnU7vLxawHZqyFVI4GcqFEaXpJ+Hms53LlnWG+uylBPA==
+X-Received: by 2002:a54:4f14:: with SMTP id e20mr3776108oiy.84.1582735706721;
+        Wed, 26 Feb 2020 08:48:26 -0800 (PST)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id k201sm978469oih.43.2020.02.26.08.48.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Feb 2020 08:48:26 -0800 (PST)
+Received: (nullmailer pid 20055 invoked by uid 1000);
+        Wed, 26 Feb 2020 16:48:25 -0000
+Date:   Wed, 26 Feb 2020 10:48:25 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
+        mark.rutland@arm.com, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        logan.shaw@alliedtelesis.co.nz,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: Re: [PATCH v4 1/5] dt-bindings: hwmon: Document adt7475 binding
+Message-ID: <20200226164825.GA19992@bogus>
+References: <20200221041631.10960-1-chris.packham@alliedtelesis.co.nz>
+ <20200221041631.10960-2-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5e56f8b1-c411-69bd-6e02-c0dde3db69dd@roeck-us.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20200221041631.10960-2-chris.packham@alliedtelesis.co.nz>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Feb 26, 2020 at 05:32:40AM -0800, Guenter Roeck wrote:
-> On 2/26/20 5:21 AM, Mika Westerberg wrote:
-> > In preparation for making ->smi_res optional the iTCO_wdt driver needs
-> > to know whether vendorsupport is being set to non-zero. For this reason
-> > export the variable.
-> > 
-> > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+On Fri, 21 Feb 2020 17:16:27 +1300, Chris Packham wrote:
 > 
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> From: Logan Shaw <logan.shaw@alliedtelesis.co.nz>
+> 
+> Add binding for adi,adt7475 and variants.
+> Remove from trivial-devices.
+> 
+> Signed-off-by: Logan Shaw <logan.shaw@alliedtelesis.co.nz>
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> ---
+> 
+> Notes:
+>     Changes in v3:
+>     - split conversion to yaml from addition of new properties
+> 
+>  .../devicetree/bindings/hwmon/adt7475.yaml    | 57 +++++++++++++++++++
+>  .../devicetree/bindings/trivial-devices.yaml  |  8 ---
+>  2 files changed, 57 insertions(+), 8 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/adt7475.yaml
+> 
 
-Thanks!
-
-> I assume you'll send the series upstream in one go (through i2c ?).
-> If not, please let me and Wim know.
-
-Yes, I was hoping that Wolfram could take these through his I2C tree.
+Reviewed-by: Rob Herring <robh@kernel.org>
