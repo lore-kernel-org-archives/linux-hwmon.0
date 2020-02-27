@@ -1,99 +1,143 @@
-Return-Path: <SRS0=L2ja=4O=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=N4Op=4P=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDD78C4BA13
-	for <linux-hwmon@archiver.kernel.org>; Wed, 26 Feb 2020 16:48:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02659C4BA3C
+	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Feb 2020 08:46:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A5CCB2467B
-	for <linux-hwmon@archiver.kernel.org>; Wed, 26 Feb 2020 16:48:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1582735726;
-	bh=7JYktPIyWf6YONapWD3xlC/B2o1cUD1UNvbX1uLibio=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=NQOxeYXuEqEQd6M/4/edG45xkLopiY02K7DVvYeD/2w9a2B2Yx42OrOpa+ubJqmNy
-	 stDOYUrZ5BIcseBfBMz519ViI7Np4ewCFd/FZVbdPvHOUU4aVeGESJPrTXXznanAx+
-	 f7wrGbLp3QAi6sgeIsgx7KxM7jNqUWIxGihUxmEM=
+	by mail.kernel.org (Postfix) with ESMTP id CDEF82467B
+	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Feb 2020 08:46:57 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="UYQM+Vkg"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727311AbgBZQsn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 26 Feb 2020 11:48:43 -0500
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:37700 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726151AbgBZQsn (ORCPT
+        id S1728738AbgB0Iqz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 27 Feb 2020 03:46:55 -0500
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:40292 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728720AbgB0Iqz (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 26 Feb 2020 11:48:43 -0500
-Received: by mail-oi1-f194.google.com with SMTP id q84so165779oic.4;
-        Wed, 26 Feb 2020 08:48:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=jHw4ngjVXB8T2PU45eGKR13llpnjZ9TB1h6gXwWneRQ=;
-        b=jhNLElVZc699qbYoDEW6WoRA9wVUpDndXwlG6JeOUp3zTvv0Z8iIdKwXskBhI+Yq24
-         dueZYAQeHg39YkGBgf0yWwdtoX0VWO+HVsll28BWZ9agU1strllnJ9W5ub3QW6Y24vNM
-         qK9uUUqECY2ZYV06/DHnxYNzZylb3ms22sAkKfeDwWSIVyaw9FRXD0O6aO36pADXQYqW
-         9KHtHC6sMSGBDAsvl/t9JIQ6Bw+62N0x5bBphoYSU9aasQIOYXl7B8H0QKJ+gQaiHOXo
-         gsfcTav7/UjcMVMblQpTu6Oot7UM56g5aOswm7UEO7t6m3k3rmdOcKG5q2KnmJ+d0J1S
-         NnJg==
-X-Gm-Message-State: APjAAAXk++NltWLUEq7rxaHIzuT9bXLptgPdxMOfByB5+TKMmIpJS9h+
-        rvkirAszrGfv2aTrz3E7JQ==
-X-Google-Smtp-Source: APXvYqx18Z/v/4iN8R6CZrp92Er0P2zNbyeqssC0LiTbHDTS1rfusrMZHEu4FappFe1fTYPGsU/aeg==
-X-Received: by 2002:aca:fc0c:: with SMTP id a12mr3791106oii.118.1582735722218;
-        Wed, 26 Feb 2020 08:48:42 -0800 (PST)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id 15sm968900ois.20.2020.02.26.08.48.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Feb 2020 08:48:41 -0800 (PST)
-Received: (nullmailer pid 20572 invoked by uid 1000);
-        Wed, 26 Feb 2020 16:48:41 -0000
-Date:   Wed, 26 Feb 2020 10:48:41 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
-        mark.rutland@arm.com, linux-hwmon@vger.kernel.org,
+        Thu, 27 Feb 2020 03:46:55 -0500
+Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 793B6891AE;
+        Thu, 27 Feb 2020 21:46:52 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1582793212;
+        bh=7ES6tEyEz8XnCzXTzvkZrM7yYWWqjmJ6wjX0UjtGUNo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=UYQM+VkgT40nWUTOK56c3OPmdy3/3eNIkjCExJgaJJAg1Y8xboPo5QXITBC4whZdx
+         ZkvJcMuRonwPWu4l5dNkvf+zOIq6IR5dl8cfI1GAsTzKsADT8ewSYguM3zUsTsOtQw
+         UVbXC9v1JJOdhjFL6GdeudfQ3u3yKw8UY4UtQOafVfjz1aTEYj6cTa+WlG723FlYO1
+         stK/R0GBvixN6w4ipNWwzSCM28e+BZcNAcsqBEVZOhMTZI1hOjmlhpqtebCa8EvidO
+         uNbvo5N8x+aZGncym8w8VLn+/7ED5vUMeHOoD6pki/WO3Nog6NdEGOaSpszkjmzhV5
+         XV21vfKa8+UkQ==
+Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
+        id <B5e5781fb0005>; Thu, 27 Feb 2020 21:46:51 +1300
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.20])
+        by smtp (Postfix) with ESMTP id 810C913EECD;
+        Thu, 27 Feb 2020 21:46:51 +1300 (NZDT)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+        id 4713C280072; Thu, 27 Feb 2020 21:46:52 +1300 (NZDT)
+From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
+To:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
+        mark.rutland@arm.com
+Cc:     logan.shaw@alliedtelesis.co.nz, linux-hwmon@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        logan.shaw@alliedtelesis.co.nz,
         Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: Re: [PATCH v4 2/5] dt-bindings: hwmon: Document adt7475
- bypass-attenuator property
-Message-ID: <20200226164841.GA20519@bogus>
-References: <20200221041631.10960-1-chris.packham@alliedtelesis.co.nz>
- <20200221041631.10960-3-chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH v5 5/5] hwmon: (adt7475) Add support for inverting pwm output
+Date:   Thu, 27 Feb 2020 21:46:42 +1300
+Message-Id: <20200227084642.7057-6-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200227084642.7057-1-chris.packham@alliedtelesis.co.nz>
+References: <20200227084642.7057-1-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200221041631.10960-3-chris.packham@alliedtelesis.co.nz>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: quoted-printable
+x-atlnz-ls: pat
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, 21 Feb 2020 17:16:28 +1300, Chris Packham wrote:
-> 
-> From: Logan Shaw <logan.shaw@alliedtelesis.co.nz>
-> 
-> Add documentation for the bypass-attenuator-in[0-4] property.
-> 
-> Signed-off-by: Logan Shaw <logan.shaw@alliedtelesis.co.nz>
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
-> 
-> Notes:
->     Changes in v4:
->     - use $ref uint32 and enum
->     - add 'adi' vendor prefix
->     
->     Changes in v3:
->     - separated addition of new properties from conversion to yaml
-> 
->  .../devicetree/bindings/hwmon/adt7475.yaml          | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
+Add a "adi,pwm-active-state" device-tree property to allow hardware
+designs to use inverted logic on the PWM output.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+---
+
+Notes:
+    Changes in v5:
+    - change to adi,pwm-active-state
+    - uint32 array
+   =20
+    Changes in v4:
+    - use vendor prefix for new property
+   =20
+    Changes in v3:
+    - New
+
+ drivers/hwmon/adt7475.c | 34 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+
+diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
+index 3649b18359dc..142a4fec688b 100644
+--- a/drivers/hwmon/adt7475.c
++++ b/drivers/hwmon/adt7475.c
+@@ -1509,6 +1509,36 @@ static int load_attenuators(const struct i2c_clien=
+t *client, int chip,
+ 	return 0;
+ }
+=20
++static int adt7475_set_pwm_polarity(struct i2c_client *client)
++{
++	u32 states[ADT7475_PWM_COUNT];
++	int ret, i;
++	u8 val;
++
++	ret =3D of_property_read_u32_array(client->dev.of_node,
++					 "adi,pwm-active-state", states,
++					 ARRAY_SIZE(states));
++	if (ret)
++		return ret;
++
++	for (i =3D 0; i < ADT7475_PWM_COUNT; i++) {
++		ret =3D adt7475_read(PWM_CONFIG_REG(i));
++		if (ret < 0)
++			return ret;
++		val =3D ret;
++		if (states[i])
++			val &=3D ~BIT(4);
++		else
++			val |=3D BIT(4);
++
++		ret =3D i2c_smbus_write_byte_data(client, PWM_CONFIG_REG(i), val);
++		if (ret)
++			return ret;
++	}
++
++	return 0;
++}
++
+ static int adt7475_probe(struct i2c_client *client,
+ 			 const struct i2c_device_id *id)
+ {
+@@ -1617,6 +1647,10 @@ static int adt7475_probe(struct i2c_client *client=
+,
+ 	for (i =3D 0; i < ADT7475_PWM_COUNT; i++)
+ 		adt7475_read_pwm(client, i);
+=20
++	ret =3D adt7475_set_pwm_polarity(client);
++	if (ret && ret !=3D -EINVAL)
++		dev_err(&client->dev, "Error configuring pwm polarity\n");
++
+ 	/* Start monitoring */
+ 	switch (chip) {
+ 	case adt7475:
+--=20
+2.25.1
+
