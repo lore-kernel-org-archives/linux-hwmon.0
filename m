@@ -4,55 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EAE8C4BA24
-	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Feb 2020 08:47:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD351C4BA24
+	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Feb 2020 08:47:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2B525246A3
-	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Feb 2020 08:47:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 83FAA2467B
+	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Feb 2020 08:47:07 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="CjbJo2R2"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="ZX0+bbtZ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728729AbgB0Iqz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 27 Feb 2020 03:46:55 -0500
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:40272 "EHLO
+        id S1728511AbgB0IrG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 27 Feb 2020 03:47:06 -0500
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:40277 "EHLO
         gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728646AbgB0Iqy (ORCPT
+        with ESMTP id S1728619AbgB0Iqy (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
         Thu, 27 Feb 2020 03:46:54 -0500
 Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 2D16A891AD;
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 7966B891AF;
         Thu, 27 Feb 2020 21:46:52 +1300 (NZDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
         s=mail181024; t=1582793212;
-        bh=EVlEwiS/TFFN1q66aMSFRrpHv5REOLeczvMuwQi/uGU=;
+        bh=gAeymK9rchxCX6TVwrgC2CafflPqeAExrMOJHuXCK3g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=CjbJo2R2MQonW8SHlpPrWcGrqNEX21yj5DWeIK1/xIJPI4Ya6juJoMDc+VzGgj4fn
-         8H/pN32ifgz69atfxNnkxKcu3NkikGMsEV6aEf7wkaYdLUdQPkPLYIPYod6iLYfVJF
-         50ElomjbzXUYZpOQ2b3l82yrSTwOxKwUu5R9Qb5F8OSIa0FjTtXPpB8+SKymPSdv8d
-         TVEOzUdmemh9pEfU42HsUJDqZdcAChfNgQw1lIIKDIHGFN4ZCupwFIJsaZtGCB1ypz
-         m9NXc34Wj+dLi0wouBZaRppFTNOPh9pHnj5LdiGr0qkmLyie5JACws8L1+DPS62OVk
-         Xw6Vduc+4v8lQ==
+        b=ZX0+bbtZF+xBIecdwhvbZoOoUqR1MMKjLocPEyOIS2NE9mrhAyakEZa4/vQUOxY1r
+         jNKSzYhTibAUlxpqn7yLukVLzhfFrbA/ljjj83vegT7iLRWRIPKGX070Zft9XzJ22d
+         R2r7N9iAaay6YmO9CExvrKkf1fsqYnCumBiO+mzTM3V81dbRXJGl7jqCnpMbIhSfLw
+         bfKx52Fkfv5LboALwXJKIOZfEOYoeCpmxAg4CejdH5aB4vmy8xPv2i1FKwc1ISPJWf
+         8Yd6ndxOOx03j0AAlID4+wtpdLXLFSSWavIR5uaKT1kk4BFKm6XnLPZWf486yN5kFE
+         Wrdb8+uRDATVw==
 Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
-        id <B5e5781fb0003>; Thu, 27 Feb 2020 21:46:51 +1300
+        id <B5e5781fb0004>; Thu, 27 Feb 2020 21:46:51 +1300
 Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.20])
-        by smtp (Postfix) with ESMTP id 3F63313EECD;
+        by smtp (Postfix) with ESMTP id 60EF413EECD;
         Thu, 27 Feb 2020 21:46:51 +1300 (NZDT)
 Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-        id 0581F280072; Thu, 27 Feb 2020 21:46:52 +1300 (NZDT)
+        id 2708C280072; Thu, 27 Feb 2020 21:46:52 +1300 (NZDT)
 From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
 To:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
         mark.rutland@arm.com
 Cc:     logan.shaw@alliedtelesis.co.nz, linux-hwmon@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH v5 3/5] dt-bindings: hwmon: Document adt7475 pwm-active-state property
-Date:   Thu, 27 Feb 2020 21:46:40 +1300
-Message-Id: <20200227084642.7057-4-chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH v5 4/5] hwmon: (adt7475) Add attenuator bypass support
+Date:   Thu, 27 Feb 2020 21:46:41 +1300
+Message-Id: <20200227084642.7057-5-chris.packham@alliedtelesis.co.nz>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200227084642.7057-1-chris.packham@alliedtelesis.co.nz>
 References: <20200227084642.7057-1-chris.packham@alliedtelesis.co.nz>
@@ -64,61 +64,134 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add binding information for the adi,pwm-active-state property.
+From: Logan Shaw <logan.shaw@alliedtelesis.co.nz>
 
+Added support for reading DTS properties to set attenuators on
+device probe for the ADT7473, ADT7475, ADT7476, and ADT7490.
+
+Signed-off-by: Logan Shaw <logan.shaw@alliedtelesis.co.nz>
 Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 ---
 
 Notes:
     Changes in v5:
-    - change to adi,pwm-active-state
-    - uint32 array
+    - None
    =20
     Changes in v4:
-    - use $ref uint32 and enum
-    - add adi vendor prefix
+    - use vendor prefix for new property
    =20
-    Cahnges in v3:
-    - new
+    Changes in v3:
+    - move config2 to struct adt7475_data
+    - set_property_bit() new helper function to set/clear bit based on dt
+      property value.
+    - rename to use load_attenuators()
 
- .../devicetree/bindings/hwmon/adt7475.yaml         | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ drivers/hwmon/adt7475.c | 61 +++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 58 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/adt7475.yaml b/Docum=
-entation/devicetree/bindings/hwmon/adt7475.yaml
-index e40612ee075f..76985034ea73 100644
---- a/Documentation/devicetree/bindings/hwmon/adt7475.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
-@@ -50,6 +50,19 @@ patternProperties:
-      - $ref: /schemas/types.yaml#/definitions/uint32
-      - enum: [0, 1]
+diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
+index 01c2eeb02aa9..3649b18359dc 100644
+--- a/drivers/hwmon/adt7475.c
++++ b/drivers/hwmon/adt7475.c
+@@ -19,6 +19,7 @@
+ #include <linux/hwmon-vid.h>
+ #include <linux/err.h>
+ #include <linux/jiffies.h>
++#include <linux/of.h>
+ #include <linux/util_macros.h>
 =20
-+  "^adi,pwm-active-state$":
-+    description: |
-+      Integer array, represents the active state of the pwm outputs If s=
-et to 0
-+      the pwm uses a logic low output for 100% duty cycle. If set to 1 t=
-he pwm
-+      uses a logic high output for 100% duty cycle.
-+    allOf:
-+      - $ref: /schemas/types.yaml#/definitions/uint32-array
-+      - minItems: 3
-+        maxItems: 3
-+        items:
-+          enum: [0, 1]
-+          default: 1
+ /* Indexes for the sysfs hooks */
+@@ -193,6 +194,7 @@ struct adt7475_data {
+ 	unsigned long measure_updated;
+ 	bool valid;
+=20
++	u8 config2;
+ 	u8 config4;
+ 	u8 config5;
+ 	u8 has_voltage;
+@@ -1458,6 +1460,55 @@ static int adt7475_update_limits(struct i2c_client=
+ *client)
+ 	return 0;
+ }
+=20
++static int set_property_bit(const struct i2c_client *client, char *prope=
+rty,
++			  u8 *config, u8 bit_index)
++{
++	u32 prop_value =3D 0;
++	int ret =3D of_property_read_u32(client->dev.of_node, property,
++					&prop_value);
 +
- required:
-   - compatible
-   - reg
-@@ -65,6 +78,7 @@ examples:
-         reg =3D <0x2e>;
-         adi,bypass-attenuator-in0 =3D <1>;
-         adi,bypass-attenuator-in1 =3D <0>;
-+        adi,pwm-active-state =3D <1 0 1>;
-       };
-     };
++	if (!ret) {
++		if (prop_value)
++			*config |=3D (1 << bit_index);
++		else
++			*config &=3D ~(1 << bit_index);
++	}
++
++	return ret;
++}
++
++static int load_attenuators(const struct i2c_client *client, int chip,
++			    struct adt7475_data *data)
++{
++	int ret;
++
++	if (chip =3D=3D adt7476 || chip =3D=3D adt7490) {
++		set_property_bit(client, "adi,bypass-attenuator-in0",
++				 &data->config4, 4);
++		set_property_bit(client, "adi,bypass-attenuator-in1",
++				 &data->config4, 5);
++		set_property_bit(client, "adi,bypass-attenuator-in3",
++				 &data->config4, 6);
++		set_property_bit(client, "adi,bypass-attenuator-in4",
++				 &data->config4, 7);
++
++		ret =3D i2c_smbus_write_byte_data(client, REG_CONFIG4,
++						data->config4);
++		if (ret < 0)
++			return ret;
++	} else if (chip =3D=3D adt7473 || chip =3D=3D adt7475) {
++		set_property_bit(client, "adi,bypass-attenuator-in1",
++				 &data->config2, 5);
++
++		ret =3D i2c_smbus_write_byte_data(client, REG_CONFIG2,
++						data->config2);
++		if (ret < 0)
++			return ret;
++	}
++
++	return 0;
++}
++
+ static int adt7475_probe(struct i2c_client *client,
+ 			 const struct i2c_device_id *id)
+ {
+@@ -1472,7 +1523,7 @@ static int adt7475_probe(struct i2c_client *client,
+ 	struct adt7475_data *data;
+ 	struct device *hwmon_dev;
+ 	int i, ret =3D 0, revision, group_num =3D 0;
+-	u8 config2, config3;
++	u8 config3;
 =20
+ 	data =3D devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
+ 	if (data =3D=3D NULL)
+@@ -1546,8 +1597,12 @@ static int adt7475_probe(struct i2c_client *client=
+,
+ 	}
+=20
+ 	/* Voltage attenuators can be bypassed, globally or individually */
+-	config2 =3D adt7475_read(REG_CONFIG2);
+-	if (config2 & CONFIG2_ATTN) {
++	data->config2 =3D adt7475_read(REG_CONFIG2);
++	ret =3D load_attenuators(client, chip, data);
++	if (ret)
++		dev_err(&client->dev, "Error configuring attenuator bypass\n");
++
++	if (data->config2 & CONFIG2_ATTN) {
+ 		data->bypass_attn =3D (0x3 << 3) | 0x3;
+ 	} else {
+ 		data->bypass_attn =3D ((data->config4 & CONFIG4_ATTN_IN10) >> 4) |
 --=20
 2.25.1
 
