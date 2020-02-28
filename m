@@ -1,90 +1,115 @@
-Return-Path: <SRS0=N4Op=4P=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=1jLB=4Q=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 862BCC4BA24
-	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Feb 2020 08:47:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10284C3F2D2
+	for <linux-hwmon@archiver.kernel.org>; Fri, 28 Feb 2020 17:03:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5216524688
-	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Feb 2020 08:47:09 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="FXhxleGj"
+	by mail.kernel.org (Postfix) with ESMTP id E278124690
+	for <linux-hwmon@archiver.kernel.org>; Fri, 28 Feb 2020 17:03:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728480AbgB0IrJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 27 Feb 2020 03:47:09 -0500
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:40252 "EHLO
-        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728688AbgB0Iqy (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 27 Feb 2020 03:46:54 -0500
-Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id E32BC891AA;
-        Thu, 27 Feb 2020 21:46:51 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1582793211;
-        bh=5ZvCK32jhVQkZ7Gq7Zp6sPOjMydghcdRlycwIcqf2vE=;
-        h=From:To:Cc:Subject:Date;
-        b=FXhxleGj98+teUVM0Rjd7VSVSZOxwFawHAQ0eKuaW1/QdsJlZ/FMSotg7/0CFlQAA
-         b5ldf3Chd8AbtM3BM0dpPsB+bZHT6WdWFUEpPEQlxf3RvTPkoXApEmblymA6iWJPUL
-         v8qsLRBbyUfBm5BMIdntlCmqYt1gwnlo1H2vN04PUw4QVkMKo6lOMLXOIafYB1qeBh
-         0hkZi7djR+bev9z0HIj9sDVcb8pSp9BunP13E5nrV7lkXl3ORgnsYH/yvYQi/tgkad
-         t7VW7/pDsOJ9PB2eYnDEKOg8VkaEtY1i30OsSS9xPcX1AOFyEsDCEHFVGofhS+LjKx
-         e/Y7r8aoVSiDw==
-Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
-        id <B5e5781fb0000>; Thu, 27 Feb 2020 21:46:51 +1300
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.20])
-        by smtp (Postfix) with ESMTP id C170013EECD;
-        Thu, 27 Feb 2020 21:46:50 +1300 (NZDT)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-        id 83E0D280072; Thu, 27 Feb 2020 21:46:51 +1300 (NZDT)
-From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
-To:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
-        mark.rutland@arm.com
-Cc:     logan.shaw@alliedtelesis.co.nz, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH v5 0/5] hwmon: (adt7475) attenuator bypass and pwm invert
-Date:   Thu, 27 Feb 2020 21:46:37 +1300
-Message-Id: <20200227084642.7057-1-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.25.1
+        id S1726277AbgB1RDp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 28 Feb 2020 12:03:45 -0500
+Received: from sauhun.de ([88.99.104.3]:59882 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725876AbgB1RDp (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 28 Feb 2020 12:03:45 -0500
+Received: from localhost (p54B3301B.dip0.t-ipconnect.de [84.179.48.27])
+        by pokefinder.org (Postfix) with ESMTPSA id D2A142C1E8B;
+        Fri, 28 Feb 2020 18:03:42 +0100 (CET)
+Date:   Fri, 28 Feb 2020 18:03:42 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Martin Volf <martin.volf.42@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] i2c: i801: Fix iTCO_wdt resource creation if PMC
+ is not present
+Message-ID: <20200228170342.GC1130@ninjato>
+References: <20200226132122.62805-1-mika.westerberg@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-x-atlnz-ls: pat
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="da4uJneut+ArUgXk"
+Content-Disposition: inline
+In-Reply-To: <20200226132122.62805-1-mika.westerberg@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-I've picked up Logan's changes[1] and am combining them with an old serie=
-s of
-mine[2] to hopefully get them both over the line.
 
-[1] - https://lore.kernel.org/linux-hwmon/20191219033213.30364-1-logan.sh=
-aw@alliedtelesis.co.nz/
-[2] - https://lore.kernel.org/linux-hwmon/20181107040010.27436-1-chris.pa=
-ckham@alliedtelesis.co.nz/
+--da4uJneut+ArUgXk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Chris Packham (2):
-  dt-bindings: hwmon: Document adt7475 pwm-active-state property
-  hwmon: (adt7475) Add support for inverting pwm output
+On Wed, Feb 26, 2020 at 04:21:19PM +0300, Mika Westerberg wrote:
+> Hi all,
+>=20
+> This series aims to fix the issue reported by Martin Volf [1] that preven=
+ts
+> the nct6775 driver from loading.
+>=20
+> I added Fixes tag to the last patch but not stable tag because the other
+> two patches it depends are not really stable material IMO. Please let me
+> know if there is a better way to organize these :)
+>=20
+> I tested this on Intel Whiskey Lake based system (CNL derived) and on Com=
+et
+> Lake-V based system (SPT derived and the iTCO_wdt still works and I can s=
+ee
+> the expected resources in /proc/ioports and /proc/iomem.
+>=20
+> The previous version of the patch series can be found here:
+>=20
+>   https://lore.kernel.org/linux-hwmon/20200225123802.88984-1-mika.westerb=
+erg@linux.intel.com/
+>=20
+> Changes from the previous version:
+>=20
+>   * Call request_region() also for iTCO_vendorsupport
+>   * Drop the core populating ICH_RES_IO_SMI completely from i2c-i801.c
+>=20
+> [1] https://lore.kernel.org/linux-hwmon/CAM1AHpQ4196tyD=3DHhBu-2donSsuoga=
+bkfP03v1YF26Q7_BgvgA@mail.gmail.com/
 
-Logan Shaw (3):
-  dt-bindings: hwmon: Document adt7475 binding
-  dt-bindings: hwmon: Document adt7475 bypass-attenuator property
-  hwmon: (adt7475) Add attenuator bypass support
+I can take this series via I2C. Just wanted to let you know that I am
+aiming for rc5, because I'd like to have this in linux-next for a week
+to make sure we don't regress again (despite all precautions) somewhere
+else.
 
- .../devicetree/bindings/hwmon/adt7475.yaml    | 84 ++++++++++++++++
- .../devicetree/bindings/trivial-devices.yaml  |  8 --
- drivers/hwmon/adt7475.c                       | 95 ++++++++++++++++++-
- 3 files changed, 176 insertions(+), 11 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/hwmon/adt7475.yaml
+Thanks to everyone to get this regression handled in such a concentrated
+manner!
 
---=20
-2.25.1
 
+--da4uJneut+ArUgXk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5ZR+4ACgkQFA3kzBSg
+Kbb29A//YUY3JKyYa6plCWxNQj6H12cc6EdXrS4lOnESwx89pq9ITm98Juu/VPqe
+41Y0idzm2RNeq9ez7J6lxzGfYul5TkAxex+FGirUlp5GwrtrpRq2WFptcCR66Vx3
+Tx4hw4bnValX5pWvQegGpvCX0kvFvMu4/Lv47C8nCWEljm0L0j144MTgXfgzCRKb
+1iElopnX9Y7c0p5SaJUmM13WjHi9Y4TloOjmeIcGjOpEcQ0YzdsPeFfuGpn17FhX
+Ninbdux+DM94gWEuK6e3Xc3HAyz3zQDN9b1MR0A/0UqjoeEUspa2yvSOEOcNcDDH
+KyD7No8DbVNc6n8dLmncQqf+jZ4yN2hPMy/6YaJGhjk40hJI8M1cYC3jVqj8bnYA
+ItjrjV7QANSUwP+Kne2qCf5rQ10P18SJXaDd8s8cWXBmOh1Y6U9XsaDRrbfuXBO1
+t0Lr6ssJZ3/RCu+X8wVMAIqgBQkhV57T0HItN8xeNhS8HpSopXank5tKVhQaUx7N
+vy4E8AoTO/T/mkNdjiUFfhDCxRqUElM5V5gtYJEl+B5Bx//2f1doGMBa0A+UIOk4
+oMsevqtEXyPacx7U7gaXbverDoLwppf2zNclJ9aSopCDoyHUBTjbvIw2aHQA3oyz
+uvhVF1Re0owL3aqfAuXbPQtUdLMdJRELXEIa0dcwOi89leiCdmc=
+=71Zy
+-----END PGP SIGNATURE-----
+
+--da4uJneut+ArUgXk--
