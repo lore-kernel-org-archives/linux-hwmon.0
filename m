@@ -1,160 +1,261 @@
-Return-Path: <SRS0=zXU2=4U=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=ilVt=4W=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6ED1FC3F2D1
-	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Mar 2020 21:08:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BFDAC3F2CD
+	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Mar 2020 05:49:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4058320870
-	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Mar 2020 21:08:29 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lBTb4pfw"
+	by mail.kernel.org (Postfix) with ESMTP id 3AE5721556
+	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Mar 2020 05:49:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732388AbgCCVI3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 3 Mar 2020 16:08:29 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:43438 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732305AbgCCVI2 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 3 Mar 2020 16:08:28 -0500
-Received: by mail-pf1-f195.google.com with SMTP id s1so2097991pfh.10;
-        Tue, 03 Mar 2020 13:08:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=tRnA9gsq61Jh7dxXvs0qNF+P6/PxC+dpo1WJdbrhTdo=;
-        b=lBTb4pfwS6M6tvdUtTKWO0pk/OE9IsCfEZSx9aXlLwD8oKDjxnafFMfCRwyJrBPuzc
-         YAAqsmERKuiJixQKCBp4pxpkHympc07N3kGP+MgW0BQ/ghX/7Svq9ZutY/IwoYZa3e4e
-         L3g5o5oLmpZqmCBRLkSyp+GFGtTIO2kKyMTZA+sfONya0SjPQENUh9f2XvyDkLbpeAMV
-         kW0k6SYgwMMv4hhXKNlj1SHB9jXalx2NsO1xl2wzHcIckPKwaMIVVOUpvAL8Jd6hmStN
-         zr71JcqYl/P4M7vikVzQ5mbHFhxnX6IXrv1nIkK3EKc6KSHfb2S2Ln91D4sJtIf1POkn
-         fTUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=tRnA9gsq61Jh7dxXvs0qNF+P6/PxC+dpo1WJdbrhTdo=;
-        b=JJt7hH551PMjryxAgPe0UVCBvp2p05UfMi6ChrkpJSiz7XdIANNiFKJ4TdgpPMbkGJ
-         gTD0zLD45t7ykcUtk1pL9yAFut1WH0Aw+TQiRjKKkMYLX/LC0p8U9Lo6yJq75w31qBvx
-         jPTFlC9ou6JOK/4Il8RyL0CTkkltvqDf7BgckSnsqncqBHt7wgdpvrJn59o9MacLtC0Q
-         UtwbNH2MGp6Rr2vhuXYZJbJbGNBR59jKJQtrFeSe8XknrWJomQjLYlBL6XaljMxT59vs
-         0VqolOEi293Jp91zRyeZeAVpwkkmbi7hrl8naPwnjiBebU6enFKPbO3up2jpILmdnJlA
-         m5fQ==
-X-Gm-Message-State: ANhLgQ19k/0/8anqwBIyQvFn6rXO8SEEIWcv3d+UACAZ/OAZHUPiu4Ks
-        iwULtPFR1oLcRNjdHaXcjUI=
-X-Google-Smtp-Source: ADFU+vs9qw5IJKjsfY9djOC7mpzpIVMRZ3OFGciTJwpjdbqAQKIxUT5j4Tu6zOrWOAI47BsnxM5YXg==
-X-Received: by 2002:a62:e111:: with SMTP id q17mr5873943pfh.242.1583269705838;
-        Tue, 03 Mar 2020 13:08:25 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id jx10sm122931pjb.33.2020.03.03.13.08.25
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 03 Mar 2020 13:08:25 -0800 (PST)
-Date:   Tue, 3 Mar 2020 13:08:24 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
-        logan.shaw@alliedtelesis.co.nz, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 5/5] hwmon: (adt7475) Add support for inverting pwm
- output
-Message-ID: <20200303210824.GE14692@roeck-us.net>
-References: <20200227084642.7057-1-chris.packham@alliedtelesis.co.nz>
- <20200227084642.7057-6-chris.packham@alliedtelesis.co.nz>
+        id S1725948AbgCEFtL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 5 Mar 2020 00:49:11 -0500
+Received: from mga12.intel.com ([192.55.52.136]:52550 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725900AbgCEFtL (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 5 Mar 2020 00:49:11 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Mar 2020 21:49:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,516,1574150400"; 
+   d="scan'208";a="320061774"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 04 Mar 2020 21:49:09 -0800
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1j9jNc-000IvN-Lm; Thu, 05 Mar 2020 13:49:08 +0800
+Date:   Thu, 05 Mar 2020 13:48:43 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:watchdog-next] BUILD SUCCESS
+ 230bc81b9bc26713d3d61cfc094c0fb72b3caaf4
+Message-ID: <5e6092bb.+jf7jABwmK/n3JMH%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200227084642.7057-6-chris.packham@alliedtelesis.co.nz>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Feb 27, 2020 at 09:46:42PM +1300, Chris Packham wrote:
-> Add a "adi,pwm-active-state" device-tree property to allow hardware
-> designs to use inverted logic on the PWM output.
-> 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  watchdog-next
+branch HEAD: 230bc81b9bc26713d3d61cfc094c0fb72b3caaf4  watchdog: npcm: remove whitespaces
 
-Applied, with change described below. Please let me know if ignoring
-the error is not what you wanted.
+elapsed time: 757m
 
-Thanks,
-Guenter
+configs tested: 198
+configs skipped: 0
 
-> ---
-> 
-> Notes:
->     Changes in v5:
->     - change to adi,pwm-active-state
->     - uint32 array
->     
->     Changes in v4:
->     - use vendor prefix for new property
->     
->     Changes in v3:
->     - New
-> 
->  drivers/hwmon/adt7475.c | 34 ++++++++++++++++++++++++++++++++++
->  1 file changed, 34 insertions(+)
-> 
-> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
-> index 3649b18359dc..142a4fec688b 100644
-> --- a/drivers/hwmon/adt7475.c
-> +++ b/drivers/hwmon/adt7475.c
-> @@ -1509,6 +1509,36 @@ static int load_attenuators(const struct i2c_client *client, int chip,
->  	return 0;
->  }
->  
-> +static int adt7475_set_pwm_polarity(struct i2c_client *client)
-> +{
-> +	u32 states[ADT7475_PWM_COUNT];
-> +	int ret, i;
-> +	u8 val;
-> +
-> +	ret = of_property_read_u32_array(client->dev.of_node,
-> +					 "adi,pwm-active-state", states,
-> +					 ARRAY_SIZE(states));
-> +	if (ret)
-> +		return ret;
-> +
-> +	for (i = 0; i < ADT7475_PWM_COUNT; i++) {
-> +		ret = adt7475_read(PWM_CONFIG_REG(i));
-> +		if (ret < 0)
-> +			return ret;
-> +		val = ret;
-> +		if (states[i])
-> +			val &= ~BIT(4);
-> +		else
-> +			val |= BIT(4);
-> +
-> +		ret = i2c_smbus_write_byte_data(client, PWM_CONFIG_REG(i), val);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static int adt7475_probe(struct i2c_client *client,
->  			 const struct i2c_device_id *id)
->  {
-> @@ -1617,6 +1647,10 @@ static int adt7475_probe(struct i2c_client *client,
->  	for (i = 0; i < ADT7475_PWM_COUNT; i++)
->  		adt7475_read_pwm(client, i);
->  
-> +	ret = adt7475_set_pwm_polarity(client);
-> +	if (ret && ret != -EINVAL)
-> +		dev_err(&client->dev, "Error configuring pwm polarity\n");
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-		dev_err -> dev_warn
+arm                              allmodconfig
+arm                               allnoconfig
+arm                              allyesconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+arm64                            allyesconfig
+arm                         at91_dt_defconfig
+arm                           efm32_defconfig
+arm                          exynos_defconfig
+arm                        multi_v5_defconfig
+arm                        multi_v7_defconfig
+arm                        shmobile_defconfig
+arm                           sunxi_defconfig
+arm64                               defconfig
+sparc                            allyesconfig
+riscv                            allmodconfig
+c6x                        evmc6678_defconfig
+ia64                                defconfig
+powerpc                             defconfig
+parisc                generic-64bit_defconfig
+i386                              allnoconfig
+i386                             alldefconfig
+i386                             allyesconfig
+i386                                defconfig
+ia64                             alldefconfig
+ia64                             allmodconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+c6x                              allyesconfig
+nios2                         10m50_defconfig
+nios2                         3c120_defconfig
+openrisc                    or1ksim_defconfig
+openrisc                 simple_smp_defconfig
+xtensa                       common_defconfig
+xtensa                          iss_defconfig
+alpha                               defconfig
+csky                                defconfig
+nds32                             allnoconfig
+nds32                               defconfig
+h8300                     edosk2674_defconfig
+h8300                    h8300h-sim_defconfig
+h8300                       h8s-sim_defconfig
+m68k                             allmodconfig
+m68k                       m5475evb_defconfig
+m68k                          multi_defconfig
+m68k                           sun3_defconfig
+arc                              allyesconfig
+arc                                 defconfig
+microblaze                      mmu_defconfig
+microblaze                    nommu_defconfig
+powerpc                           allnoconfig
+powerpc                       ppc64_defconfig
+powerpc                          rhel-kconfig
+mips                             allyesconfig
+mips                              allnoconfig
+mips                           32r2_defconfig
+mips                             allmodconfig
+mips                         64r6el_defconfig
+mips                      fuloong2e_defconfig
+mips                      malta_kvm_defconfig
+parisc                            allnoconfig
+parisc                           allyesconfig
+parisc                generic-32bit_defconfig
+x86_64               randconfig-a001-20200305
+x86_64               randconfig-a002-20200305
+x86_64               randconfig-a003-20200305
+i386                 randconfig-a001-20200305
+i386                 randconfig-a002-20200305
+i386                 randconfig-a003-20200305
+x86_64               randconfig-a001-20200304
+x86_64               randconfig-a002-20200304
+x86_64               randconfig-a003-20200304
+i386                 randconfig-a001-20200304
+i386                 randconfig-a002-20200304
+i386                 randconfig-a003-20200304
+riscv                randconfig-a001-20200304
+alpha                randconfig-a001-20200304
+m68k                 randconfig-a001-20200304
+nds32                randconfig-a001-20200304
+mips                 randconfig-a001-20200304
+parisc               randconfig-a001-20200304
+c6x                  randconfig-a001-20200304
+h8300                randconfig-a001-20200304
+microblaze           randconfig-a001-20200304
+nios2                randconfig-a001-20200304
+sparc64              randconfig-a001-20200304
+sparc64              randconfig-a001-20200305
+c6x                  randconfig-a001-20200305
+nios2                randconfig-a001-20200305
+h8300                randconfig-a001-20200305
+microblaze           randconfig-a001-20200305
+csky                 randconfig-a001-20200304
+openrisc             randconfig-a001-20200304
+s390                 randconfig-a001-20200304
+sh                   randconfig-a001-20200304
+xtensa               randconfig-a001-20200304
+sh                   randconfig-a001-20200305
+openrisc             randconfig-a001-20200305
+csky                 randconfig-a001-20200305
+s390                 randconfig-a001-20200305
+xtensa               randconfig-a001-20200305
+x86_64               randconfig-b001-20200304
+x86_64               randconfig-b002-20200304
+x86_64               randconfig-b003-20200304
+i386                 randconfig-b001-20200304
+i386                 randconfig-b002-20200304
+i386                 randconfig-b003-20200304
+x86_64               randconfig-b001-20200305
+x86_64               randconfig-b002-20200305
+x86_64               randconfig-b003-20200305
+i386                 randconfig-b001-20200305
+i386                 randconfig-b002-20200305
+i386                 randconfig-b003-20200305
+x86_64               randconfig-c001-20200304
+x86_64               randconfig-c002-20200304
+x86_64               randconfig-c003-20200304
+i386                 randconfig-c001-20200304
+i386                 randconfig-c002-20200304
+i386                 randconfig-c003-20200304
+x86_64               randconfig-d001-20200304
+x86_64               randconfig-d002-20200304
+x86_64               randconfig-d003-20200304
+i386                 randconfig-d001-20200304
+i386                 randconfig-d002-20200304
+i386                 randconfig-d003-20200304
+x86_64               randconfig-e001-20200304
+x86_64               randconfig-e002-20200304
+x86_64               randconfig-e003-20200304
+i386                 randconfig-e001-20200304
+i386                 randconfig-e002-20200304
+i386                 randconfig-e003-20200304
+x86_64               randconfig-e001-20200305
+x86_64               randconfig-e002-20200305
+x86_64               randconfig-e003-20200305
+i386                 randconfig-e001-20200305
+i386                 randconfig-e002-20200305
+i386                 randconfig-e003-20200305
+x86_64               randconfig-f001-20200304
+x86_64               randconfig-f002-20200304
+x86_64               randconfig-f003-20200304
+i386                 randconfig-f001-20200304
+i386                 randconfig-f002-20200304
+i386                 randconfig-f003-20200304
+x86_64               randconfig-g001-20200304
+x86_64               randconfig-g002-20200304
+x86_64               randconfig-g003-20200304
+i386                 randconfig-g001-20200304
+i386                 randconfig-g002-20200304
+i386                 randconfig-g003-20200304
+i386                 randconfig-g003-20200305
+x86_64               randconfig-g003-20200305
+i386                 randconfig-g001-20200305
+x86_64               randconfig-g001-20200305
+x86_64               randconfig-g002-20200305
+i386                 randconfig-g002-20200305
+x86_64               randconfig-h001-20200305
+x86_64               randconfig-h002-20200305
+x86_64               randconfig-h003-20200305
+i386                 randconfig-h001-20200305
+i386                 randconfig-h002-20200305
+i386                 randconfig-h003-20200305
+arc                  randconfig-a001-20200304
+ia64                 randconfig-a001-20200304
+sparc                randconfig-a001-20200304
+arm                  randconfig-a001-20200304
+arm64                randconfig-a001-20200304
+powerpc              randconfig-a001-20200304
+riscv                             allnoconfig
+riscv                            allyesconfig
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+s390                             alldefconfig
+s390                             allmodconfig
+s390                              allnoconfig
+s390                             allyesconfig
+s390                          debug_defconfig
+s390                                defconfig
+s390                       zfcpdump_defconfig
+sh                               allmodconfig
+sh                                allnoconfig
+sh                          rsk7269_defconfig
+sh                  sh7785lcr_32bit_defconfig
+sh                            titan_defconfig
+sparc                               defconfig
+sparc64                          allmodconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                             defconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+um                                  defconfig
+x86_64                              fedora-25
+x86_64                                  kexec
+x86_64                                    lkp
+x86_64                                   rhel
+x86_64                         rhel-7.2-clear
+x86_64                               rhel-7.6
 
-> +
->  	/* Start monitoring */
->  	switch (chip) {
->  	case adt7475:
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
