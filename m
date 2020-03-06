@@ -2,59 +2,63 @@ Return-Path: <SRS0=43Pj=4X=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34BD6C10DCE
-	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Mar 2020 17:50:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E45AC10F25
+	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Mar 2020 20:02:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 07F8120848
-	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Mar 2020 17:50:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1583517051;
-	bh=5rMJ7WU8kihvc/95pzuL9wp/s1bKJesptPNnSjIQkb0=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=xNdXnLZbubLEbut6xtFkd4TjNWdnhnxB5/eE/82JKAbw9RDmipV8HtjBkH0XDNOIA
-	 Aut+ZTDhyBBXQ2h36WtyTbyGDKi8ji1fdf4U36pQHGI00AfNJZikoUh1GKMf++0QcY
-	 +Tu5MTuFeHmlauRTHi7U2/vm74mNAnNXDPIHnJ9c=
+	by mail.kernel.org (Postfix) with ESMTP id 56CAD2070E
+	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Mar 2020 20:02:44 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gateworks-com.20150623.gappssmtp.com header.i=@gateworks-com.20150623.gappssmtp.com header.b="Z844DkNt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726382AbgCFRur (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 6 Mar 2020 12:50:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44218 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725835AbgCFRur (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 6 Mar 2020 12:50:47 -0500
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BFE5D2084E;
-        Fri,  6 Mar 2020 17:50:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583517046;
-        bh=5rMJ7WU8kihvc/95pzuL9wp/s1bKJesptPNnSjIQkb0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=w6XMGxCBVlC8t1Olh/w9bzeElFbljQ+vK4RO7Dto6taAy9J1BWhwg6PP+iBSM8qCf
-         1VCFzMwEA+0PCHnYjQMAJXwYG42lfPokdP7a/ziNkBH1/43gbXp38ColDCmyyvnksk
-         r+zwHAoCU+FBK8jpGGoFrWcYI1mmZojdoVPzK6zw=
-Received: by mail-qv1-f54.google.com with SMTP id e7so1318531qvy.9;
-        Fri, 06 Mar 2020 09:50:46 -0800 (PST)
-X-Gm-Message-State: ANhLgQ1Aq5kEo3R20pxydo2XphsTYhfSOL34vXDzpXE1QFi6ltUmmalT
-        wiwYCG3xKTHFWNOAKJ+YZ9pqN5nSloh5PCW5qA==
-X-Google-Smtp-Source: ADFU+vucNe1zZESDTtcVCMKR7bBRtaitwdEGUyeLjzoaSMBOobGgODVX6O6CnXWWyY/pTxIHItb3uF3mqKbfXoGYAeU=
-X-Received: by 2002:ad4:45e3:: with SMTP id q3mr3794285qvu.135.1583517045699;
- Fri, 06 Mar 2020 09:50:45 -0800 (PST)
+        id S1726083AbgCFUCn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 6 Mar 2020 15:02:43 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:41883 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725922AbgCFUCn (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 6 Mar 2020 15:02:43 -0500
+Received: by mail-ot1-f65.google.com with SMTP id v19so3646208ote.8
+        for <linux-hwmon@vger.kernel.org>; Fri, 06 Mar 2020 12:02:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gateworks-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SMzXlI4eXcBBSJs7KiKlj7d7z04WUy2SFwDFYe8Tcig=;
+        b=Z844DkNt5lzVBUHwoyeaTPtXkCuayuNUT3Pk2kBNVVEUPQmdeLx2yvB8JgjGZrxh7V
+         eoRSWTRqWCE+ILI9gcyqM6wLF4CfIrcOLygTxwvf9EsZ5+6y/u/AIjNuWIuP1ArgWyyw
+         S3Fch8kxDK2me49l+VEILLCOejxa0+BxxKx4ssyZx7pLm1KDqynmaVnw6fGCizpQ0Zs4
+         Ji7WQSXwehpzC77QcNSDpkQx986fP2+JBVfDgK3/BF7kUyG0Lt3I2jhHI1YFMM+CUYlB
+         c4F26ezTytt/t0c34XLt1rP3pL7l9hPCLWeW9CtyN5XdYwwUBl9kz9IMIb2m5ish3noy
+         fY4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SMzXlI4eXcBBSJs7KiKlj7d7z04WUy2SFwDFYe8Tcig=;
+        b=aKlxQHS8LbX1fzAiMWAxn7pJt0HNNlBidTxqoUlYOZI7h0n6hSTaA+CPgas4DgihxT
+         kqMvKmKwNCm59IDrFBTlgEEwWBtcUSm4Arf9F9yzewEP+D08IPqjzHs1AVcIDxicW3Or
+         iqwBj3tE8fOKqABllP4xHBtZLz0qRb154womtTOtwkX6yOW8KuRInQR7Ag4p/mTjtBgN
+         35Xjm1B0+XUw/7sWEeKmFk9dc9pUVMLgw1fk9p/cM8cpChH3e4P2oZRQK4TMPUcKGRZ/
+         qWdgApJNmZVzxuLJkENWkZAGHxgVbfRIWO9dhQJ7ZtQFHz62yp/g+q92WnXHdOdgeUTJ
+         I/9w==
+X-Gm-Message-State: ANhLgQ0L4OUM1++giS80zHp7ATEvt1dy9KEs+ZD2ZPPL802Ei8ZBoErQ
+        JsbjIiFb3eF6loMobkmSldQpyePtgjKfnfeJ7OOesg==
+X-Google-Smtp-Source: ADFU+vu1RS3nf8reu36DceipCuq5IpQtNWeNqmqkurUGaX9j2e/3u6+1GePdgIdM1aGini5f8bUiLhK8TFCe3F569T4=
+X-Received: by 2002:a05:6830:1503:: with SMTP id k3mr4088931otp.28.1583524962480;
+ Fri, 06 Mar 2020 12:02:42 -0800 (PST)
 MIME-Version: 1.0
 References: <1582577665-13554-1-git-send-email-tharvey@gateworks.com>
  <1582577665-13554-2-git-send-email-tharvey@gateworks.com> <20200302204949.GA6649@bogus>
- <CAJ+vNU2ySjAP3q-4rgGy1U=iJeswv1kx6bKCy+Zw7V7oArkumw@mail.gmail.com>
-In-Reply-To: <CAJ+vNU2ySjAP3q-4rgGy1U=iJeswv1kx6bKCy+Zw7V7oArkumw@mail.gmail.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 6 Mar 2020 11:50:33 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJnvW=pRt6M6sivxP62-qDg37czAZBKFV61CXO7Uazjsw@mail.gmail.com>
-Message-ID: <CAL_JsqJnvW=pRt6M6sivxP62-qDg37czAZBKFV61CXO7Uazjsw@mail.gmail.com>
+ <CAJ+vNU2ySjAP3q-4rgGy1U=iJeswv1kx6bKCy+Zw7V7oArkumw@mail.gmail.com> <CAL_JsqJnvW=pRt6M6sivxP62-qDg37czAZBKFV61CXO7Uazjsw@mail.gmail.com>
+In-Reply-To: <CAL_JsqJnvW=pRt6M6sivxP62-qDg37czAZBKFV61CXO7Uazjsw@mail.gmail.com>
+From:   Tim Harvey <tharvey@gateworks.com>
+Date:   Fri, 6 Mar 2020 12:02:31 -0800
+Message-ID: <CAJ+vNU2c-Qr_rdWdFC77K8dcX-wgfVN5pXhtYG1nd4iniVT+fg@mail.gmail.com>
 Subject: Re: [PATCH v5 1/3] dt-bindings: mfd: Add Gateworks System Controller bindings
-To:     Tim Harvey <tharvey@gateworks.com>
+To:     Rob Herring <robh@kernel.org>
 Cc:     Lee Jones <lee.jones@linaro.org>, Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Linux HWMON List <linux-hwmon@vger.kernel.org>,
@@ -68,252 +72,225 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Mar 6, 2020 at 9:58 AM Tim Harvey <tharvey@gateworks.com> wrote:
+On Fri, Mar 6, 2020 at 9:50 AM Rob Herring <robh@kernel.org> wrote:
 >
-> On Mon, Mar 2, 2020 at 12:49 PM Rob Herring <robh@kernel.org> wrote:
-> >
->
-> Rob,
->
-> Thanks for the review! Some questions below:
->
-> > On Mon, Feb 24, 2020 at 12:54:23PM -0800, Tim Harvey wrote:
-> > > This patch adds documentation of device-tree bindings for the
-> > > Gateworks System Controller (GSC).
+<snip>
+> > > > +properties:
+> > > > +  $nodename:
+> > > > +    pattern: "gsc@[0-9a-f]{1,2}"
+> > > > +  compatible:
+> > > > +    const: gw,gsc
 > > >
-> > > Signed-off-by: Tim Harvey <tharvey@gateworks.com>
-> > > ---
-> > > v5:
-> > >  - resolve dt_binding_check issues
+> > > That's not very specific.
 > > >
-> > > v4:
-> > >  - move to using pwm<n>_auto_point<m>_{pwm,temp} for FAN PWM
-> > >  - remove unncessary resolution/scaling properties for ADCs
-> > >  - update to yaml
-> > >  - remove watchdog
+> >
+> > Do you mean something like 'gw,system-controller' would be better
+> > instead of the gsc abbreviation for 'Gateworks System Controller'?
+>
+> No, I mean is there or will there be only one version of this?
+>
+
+currently just 1 version is enough
+
+> >
+<snip>
+> >
+> > > > +
+> > > > +  hwmon:
 > > >
-> > > v3:
-> > >  - replaced _ with -
-> > >  - remove input bindings
-> > >  - added full description of hwmon
-> > >  - fix unit address of hwmon child nodes
-> > > ---
-> > >  .../devicetree/bindings/mfd/gateworks-gsc.yaml     | 158 +++++++++++++++++++++
-> > >  1 file changed, 158 insertions(+)
-> > >  create mode 100644 Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
+> > > 'hwmon' is a Linux thing. I'm suspicious...
 > > >
-> > > diff --git a/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml b/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
-> > > new file mode 100644
-> > > index 00000000..f7c1a05
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
-> > > @@ -0,0 +1,158 @@
-> > > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/mfd/gateworks-gsc.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: Gateworks System Controller multi-function device
-> > > +
-> > > +description: |
-> > > +  The GSC is a Multifunction I2C slave device with the following submodules:
-> > > +   - Watchdog Timer
-> > > +   - GPIO
-> > > +   - Pushbutton controller
-> > > +   - Hardware Monitore with ADC's for temperature and voltage rails and
 > >
-> > typo
+> > Yes, we've discussed this before and I understand that DT shouldn't
+> > use terminology that is Linux specific (which is why I replaced
+> > 'hwmon' with 'adc' in the ADC nodes below) but I still see a long of
+> > dt bindings in Documentation/devicetree/bindings with the word 'hwmon'
+> > in them.
+> >
+> > Perhaps this makes more sense?
 >
-> will fix
+> Yes, that's more aligned with IIO ADC bindings. Yes, IIO is again a
+> Linuxism, but I think the ADC bindings are fairly independent other
+> than the directory name.
 >
 > >
-> > > +     fan controller
-> > > +
-> > > +maintainers:
-> > > +  - Tim Harvey <tharvey@gateworks.com>
-> > > +  - Robert Jones <rjones@gateworks.com>
-> > > +
-> > > +properties:
-> > > +  $nodename:
-> > > +    pattern: "gsc@[0-9a-f]{1,2}"
-> > > +  compatible:
-> > > +    const: gw,gsc
+> > adc {
+> >   compatible = "gw,gsc-adc";
+> >   #address-cells = <1>;
+> >   #size-cells = <0>;
 > >
-> > That's not very specific.
+> >   channel@6 {
+> >     type = "gw,hwmon-temperature";
+> >     reg = <0x06>;
+> >     label = "temp";
+> >   };
+> >   ...
+> > };
 > >
->
-> Do you mean something like 'gw,system-controller' would be better
-> instead of the gsc abbreviation for 'Gateworks System Controller'?
 
-No, I mean is there or will there be only one version of this?
+ok, will use adc/channel instead of hwmon/adc and change compatible to
+'gw,gsc-adc'
 
->
-> > +
-> > > +  reg:
-> > > +    description: I2C device address
-> > > +    maxItems: 1
-> > > +
-> > > +  interrupts:
-> > > +    maxItems: 1
-> > > +
-> > > +  interrupt-controller: true
-> > > +
-> > > +  "#interrupt-cells":
-> > > +    const: 1
-> > > +    description: The IRQ number
 > >
-> > description is wrong. You can just drop it.
+> > > > +    type: object
+> > > > +    description: Optional Hardware Monitoring module
+> > > > +
+> > > > +    properties:
+> > > > +      compatible:
+> > > > +        const: gw,gsc-hwmon
+> > > > +
+> > > > +      "#address-cells":
+> > > > +        const: 1
+> > > > +
+> > > > +      "#size-cells":
+> > > > +        const: 0
+> > > > +
+> > > > +      gw,fan-base:
+> > > > +        $ref: /schemas/types.yaml#/definitions/uint32
+> > > > +        description: The fan controller base address
+> > >
+> > > Shouldn't this be described as a node in the DT or be implied by the
+> > > compatible?
 > >
->
-> ok
->
-> > > +
-> > > +  hwmon:
+> > It does look out of place there. Would adding another subnode outside
+> > of the (perhaps misnamed) 'hwmon' node make more sense?:
 > >
-> > 'hwmon' is a Linux thing. I'm suspicious...
+> > fan:
+> >  properties:
+> >    compatible: gw,gsc-fancontroller
+> >    reg:
+> >      description: address of the fan controller base register
+> >      maxItems: 1
+>
+> Seems somewhat better location in that the first level is
+> sub-functions of this chip.
+>
+> But now you have 'adc' with no address and 'fan' (w/ reg should be
+> fan@...) with an address, so that's not consistent.
+>
+> Also, I think fan controllers and fans need to have separate nodes as
+> there are different types of fans such as with and without tach
+> signals. I've tried to steer other fan bindings that way. Depends how
+> complex the fan controller is whether that's necessary.
+>
+
+The fan controller does now support a tach signal reported via one of
+the ADC channels (which I've neglected to cover) so I can represent
+that as well in a new first level node such as:
+
+  fan:
+    type: object
+    description: Optional FAN controller
+
+    properties:
+      compatible:
+        const: gw,gsc-fan
+
+      reg:
+        description: The fan controller base address
+        maxItems: 1
+
+      gw,fan-tach-ch:
+        description: The fan tach ADC channel
+        maxItems: 1
+
+    required:
+      - compatible
+      - reg
+
+fan {
+  compatible = "gw,gsc-pwm-fan";
+  reg = <0x2c>;
+  gw,fan-tach-ch = <0x16>;
+};
+
+<snip>
 > >
->
-> Yes, we've discussed this before and I understand that DT shouldn't
-> use terminology that is Linux specific (which is why I replaced
-> 'hwmon' with 'adc' in the ADC nodes below) but I still see a long of
-> dt bindings in Documentation/devicetree/bindings with the word 'hwmon'
-> in them.
->
-> Perhaps this makes more sense?
-
-Yes, that's more aligned with IIO ADC bindings. Yes, IIO is again a
-Linuxism, but I think the ADC bindings are fairly independent other
-than the directory name.
-
->
-> adc {
->   compatible = "gw,gsc-adc";
->   #address-cells = <1>;
->   #size-cells = <0>;
->
->   channel@6 {
->     type = "gw,hwmon-temperature";
->     reg = <0x06>;
->     label = "temp";
->   };
->   ...
-> };
->
->
-> > > +    type: object
-> > > +    description: Optional Hardware Monitoring module
-> > > +
-> > > +    properties:
-> > > +      compatible:
-> > > +        const: gw,gsc-hwmon
-> > > +
-> > > +      "#address-cells":
-> > > +        const: 1
-> > > +
-> > > +      "#size-cells":
-> > > +        const: 0
-> > > +
-> > > +      gw,fan-base:
-> > > +        $ref: /schemas/types.yaml#/definitions/uint32
-> > > +        description: The fan controller base address
+> > > > +        type: object
+> > > > +        description: |
+> > > > +          Properties for a single ADC which can report cooked values
+> > > > +          (ie temperature sensor based on thermister), raw values
+> > > > +          (ie voltage rail with a pre-scaling resistor divider).
+> > > > +
+> > > > +        properties:
+> > > > +          reg:
+> > > > +            description: Register of the ADC
+> > > > +            maxItems: 1
+> > > > +
+> > > > +          label:
+> > > > +            description: Name of the ADC input
+> > > > +
+> > > > +          type:
+> > >
+> > > Very generic property name, but it's not generic. Needs a vendor prefix
+> > > at least.
 > >
-> > Shouldn't this be described as a node in the DT or be implied by the
-> > compatible?
+> > You mean the property name of 'type' is fine, but the values will need
+> > to be vendor specific like 'gw,temperature', 'gw,voltage',
+> > 'gw,voltage-raw' or is it inappropriate to use 'type'?
 >
-> It does look out of place there. Would adding another subnode outside
-> of the (perhaps misnamed) 'hwmon' node make more sense?:
+> Don't use 'type'.
 >
-> fan:
->  properties:
->    compatible: gw,gsc-fancontroller
->    reg:
->      description: address of the fan controller base register
->      maxItems: 1
+> Is this for 'how to setup/program the adc' or 'what am I measuring'?
+> For example, configure the adc for temperature readings vs. measure
+> CPU temperature. Seems like a common thing needed for ADC. 'label'
+> already covers the latter case.
 
-Seems somewhat better location in that the first level is
-sub-functions of this chip.
+This is for translation of the raw ADC to a cooked value. An earlier
+version of the GSC reported cooked values (doing the scaling in the
+GSC firmware) and later versions report raw values which need to be
+scaled depending on optional voltage divider so you can consider that
+'setup'. Instead of handling this via a 'version' of the GSC I elected
+to describe the difference in ADC channel type as I already had on
+that reported millidegree celcius vs millivolts. I could just move
+them to properties such as:
 
-But now you have 'adc' with no address and 'fan' (w/ reg should be
-fan@...) with an address, so that's not consistent.
+gw,temperature
+gw,voltage
+gw,voltage-raw
 
-Also, I think fan controllers and fans need to have separate nodes as
-there are different types of fans such as with and without tach
-signals. I've tried to steer other fan bindings that way. Depends how
-complex the fan controller is whether that's necessary.
+Only one of the above is allowed and am not sure how to represent that
+in the yaml.
 
-> > > +    patternProperties:
-> > > +      "^adc@[0-2]$":
+Alternatively I could call this property name 'gw,conversion' and
+leave the three type enum?
+
+>
+> > > > +            description: |
+> > > > +              temperature in C*10 (temperature),
+> > > > +              pre-scaled voltage value (voltage),
+> > > > +              or scaled based on an optional resistor divider and optional
+> > > > +              offset (voltage-raw)
+> > > > +            enum:
+> > > > +              - temperature
+> > > > +              - voltage
+> > > > +              - voltage-raw
+> > > > +
+> > > > +          gw,voltage-divider:
+> > > > +            allOf:
+> > > > +              - $ref: /schemas/types.yaml#/definitions/uint32-array
+> > > > +            description: values of resistors for divider on raw ADC input
+> > > > +            items:
+> > > > +              - description: R1
+> > > > +              - description: R2
+> > >
+> > > Needs a standard unit suffix. With that, you can drop the type
+> > > reference.
 > >
-> > There's only one number space at any level. So if you ever need anything
-> > else at this level, it can't have an address. Just something to
-> > consider.
+> > I understand the unit suffix but not sure what you mean by type
+> > reference. Do you mean:
 > >
+> > gw,voltage-divider-milli-ohms:
+> >   description: values of resistors for divider on raw ADC input
+> >     items:
+> >       - description: R1
+> >       - description: R2
 >
-> yes, one number space is ok if I understand what you mean but I meant
-> this to be "^adc@[0-9]+$" to support the number of ADC pins the part
-> supports.
+> Yes, drop the '$ref'.
 >
-> > > +        type: object
-> > > +        description: |
-> > > +          Properties for a single ADC which can report cooked values
-> > > +          (ie temperature sensor based on thermister), raw values
-> > > +          (ie voltage rail with a pre-scaling resistor divider).
-> > > +
-> > > +        properties:
-> > > +          reg:
-> > > +            description: Register of the ADC
-> > > +            maxItems: 1
-> > > +
-> > > +          label:
-> > > +            description: Name of the ADC input
-> > > +
-> > > +          type:
-> >
-> > Very generic property name, but it's not generic. Needs a vendor prefix
-> > at least.
->
-> You mean the property name of 'type' is fine, but the values will need
-> to be vendor specific like 'gw,temperature', 'gw,voltage',
-> 'gw,voltage-raw' or is it inappropriate to use 'type'?
 
-Don't use 'type'.
+ok,
 
-Is this for 'how to setup/program the adc' or 'what am I measuring'?
-For example, configure the adc for temperature readings vs. measure
-CPU temperature. Seems like a common thing needed for ADC. 'label'
-already covers the latter case.
+Thanks,
 
-> > > +            description: |
-> > > +              temperature in C*10 (temperature),
-> > > +              pre-scaled voltage value (voltage),
-> > > +              or scaled based on an optional resistor divider and optional
-> > > +              offset (voltage-raw)
-> > > +            enum:
-> > > +              - temperature
-> > > +              - voltage
-> > > +              - voltage-raw
-> > > +
-> > > +          gw,voltage-divider:
-> > > +            allOf:
-> > > +              - $ref: /schemas/types.yaml#/definitions/uint32-array
-> > > +            description: values of resistors for divider on raw ADC input
-> > > +            items:
-> > > +              - description: R1
-> > > +              - description: R2
-> >
-> > Needs a standard unit suffix. With that, you can drop the type
-> > reference.
->
-> I understand the unit suffix but not sure what you mean by type
-> reference. Do you mean:
->
-> gw,voltage-divider-milli-ohms:
->   description: values of resistors for divider on raw ADC input
->     items:
->       - description: R1
->       - description: R2
-
-Yes, drop the '$ref'.
-
-Rob
+Tim
