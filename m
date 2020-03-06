@@ -2,108 +2,318 @@ Return-Path: <SRS0=43Pj=4X=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61759C10DCE
-	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Mar 2020 16:20:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34BD6C10DCE
+	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Mar 2020 17:50:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 34C1421741
-	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Mar 2020 16:20:02 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U0SCpXGz"
+	by mail.kernel.org (Postfix) with ESMTP id 07F8120848
+	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Mar 2020 17:50:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1583517051;
+	bh=5rMJ7WU8kihvc/95pzuL9wp/s1bKJesptPNnSjIQkb0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=xNdXnLZbubLEbut6xtFkd4TjNWdnhnxB5/eE/82JKAbw9RDmipV8HtjBkH0XDNOIA
+	 Aut+ZTDhyBBXQ2h36WtyTbyGDKi8ji1fdf4U36pQHGI00AfNJZikoUh1GKMf++0QcY
+	 +Tu5MTuFeHmlauRTHi7U2/vm74mNAnNXDPIHnJ9c=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726811AbgCFQUC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 6 Mar 2020 11:20:02 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:37375 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726738AbgCFQUB (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 6 Mar 2020 11:20:01 -0500
-Received: by mail-pf1-f193.google.com with SMTP id p14so1342146pfn.4;
-        Fri, 06 Mar 2020 08:20:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id;
-        bh=HT85QxwdFTCLPqBgxQh69fgGjpwmL/OKcBc+DMSRtbY=;
-        b=U0SCpXGzRVAUN/CEpW1P2vaOBisrt31nPw63g11ueKaCltoVoyX5Wr7SuUysDk7M7R
-         pBjGeqAQSdG35me8VFTutvq/n4HG9wXCpjEoB8YnBTmHO5bbgnF13WhemvM1q2982NS9
-         /dkSjQecKSQdimDWgO9V6x6zg/ueJvzJ1veDWZonPveO3KjkwCVjm2S5b7jVooAkVosa
-         V+m5PsLLH/IuC1UJnM995wVZ7D47chcGqT4X08QYt4N2HzrGz8N19zyGqVTnungYB4yQ
-         ZdtF8HoY6vOEupmbSBi6NMD27J6AAjeWpKiwswq+83OmiSFDrax/wlQaE2489y+hqPKy
-         vb4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
-        bh=HT85QxwdFTCLPqBgxQh69fgGjpwmL/OKcBc+DMSRtbY=;
-        b=eGJLZPXLXJZ41mBjffcrOq6SMaKRsfRNj8XeKFAv7ToYVDy3jwec1YxNlv7TYBFHu2
-         j8/pst8uAxkLsR3hwujxJO3UPnAhtzoIdVBZiL43vPvmzNB8dYabSIT1Zn0bL0Fqlss1
-         gWfNxeMaN3I+KjaUn0e1rUMVVwXnehCbbgsUQL2hzpTTzGnBa4mc59GMO4EMxXAri/GX
-         eRGakwtkOpotKyjw9ssWDjC7vNTaTZQSbBFlx+j95uD8XrcfBCfx8EZ0z0Z9nkjknR0d
-         jlXKK+9Y8K1rtXdIWXqCRcMjW8Q5vIyMhRZeoOKfmuUz34UvPfq7oX5tKCeBqC8By0Ut
-         CrBQ==
-X-Gm-Message-State: ANhLgQ1h9+fT7XcFCwxaJOesA8GLBqeOxg1B7sgthBc3wRFjldpQNON6
-        qIpstSbkEJcHjyYqbPjc7ypa4zMz
-X-Google-Smtp-Source: ADFU+vt/x/gDdrv8nW5YW6NkMcQXxfUC6YKNJVxfnaZBTijdPleSG0DWGOoyEKmWOZaaV6eb0f99xA==
-X-Received: by 2002:a63:9d04:: with SMTP id i4mr4055404pgd.294.1583511600857;
-        Fri, 06 Mar 2020 08:20:00 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r3sm30036021pfq.126.2020.03.06.08.19.59
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 06 Mar 2020 08:20:00 -0800 (PST)
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v5.6-rc5
-Date:   Fri,  6 Mar 2020 08:19:58 -0800
-Message-Id: <20200306161958.31030-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.17.1
+        id S1726382AbgCFRur (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 6 Mar 2020 12:50:47 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44218 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725835AbgCFRur (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 6 Mar 2020 12:50:47 -0500
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BFE5D2084E;
+        Fri,  6 Mar 2020 17:50:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1583517046;
+        bh=5rMJ7WU8kihvc/95pzuL9wp/s1bKJesptPNnSjIQkb0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=w6XMGxCBVlC8t1Olh/w9bzeElFbljQ+vK4RO7Dto6taAy9J1BWhwg6PP+iBSM8qCf
+         1VCFzMwEA+0PCHnYjQMAJXwYG42lfPokdP7a/ziNkBH1/43gbXp38ColDCmyyvnksk
+         r+zwHAoCU+FBK8jpGGoFrWcYI1mmZojdoVPzK6zw=
+Received: by mail-qv1-f54.google.com with SMTP id e7so1318531qvy.9;
+        Fri, 06 Mar 2020 09:50:46 -0800 (PST)
+X-Gm-Message-State: ANhLgQ1Aq5kEo3R20pxydo2XphsTYhfSOL34vXDzpXE1QFi6ltUmmalT
+        wiwYCG3xKTHFWNOAKJ+YZ9pqN5nSloh5PCW5qA==
+X-Google-Smtp-Source: ADFU+vucNe1zZESDTtcVCMKR7bBRtaitwdEGUyeLjzoaSMBOobGgODVX6O6CnXWWyY/pTxIHItb3uF3mqKbfXoGYAeU=
+X-Received: by 2002:ad4:45e3:: with SMTP id q3mr3794285qvu.135.1583517045699;
+ Fri, 06 Mar 2020 09:50:45 -0800 (PST)
+MIME-Version: 1.0
+References: <1582577665-13554-1-git-send-email-tharvey@gateworks.com>
+ <1582577665-13554-2-git-send-email-tharvey@gateworks.com> <20200302204949.GA6649@bogus>
+ <CAJ+vNU2ySjAP3q-4rgGy1U=iJeswv1kx6bKCy+Zw7V7oArkumw@mail.gmail.com>
+In-Reply-To: <CAJ+vNU2ySjAP3q-4rgGy1U=iJeswv1kx6bKCy+Zw7V7oArkumw@mail.gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Fri, 6 Mar 2020 11:50:33 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJnvW=pRt6M6sivxP62-qDg37czAZBKFV61CXO7Uazjsw@mail.gmail.com>
+Message-ID: <CAL_JsqJnvW=pRt6M6sivxP62-qDg37czAZBKFV61CXO7Uazjsw@mail.gmail.com>
+Subject: Re: [PATCH v5 1/3] dt-bindings: mfd: Add Gateworks System Controller bindings
+To:     Tim Harvey <tharvey@gateworks.com>
+Cc:     Lee Jones <lee.jones@linaro.org>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Linux HWMON List <linux-hwmon@vger.kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Robert Jones <rjones@gateworks.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Linus,
+On Fri, Mar 6, 2020 at 9:58 AM Tim Harvey <tharvey@gateworks.com> wrote:
+>
+> On Mon, Mar 2, 2020 at 12:49 PM Rob Herring <robh@kernel.org> wrote:
+> >
+>
+> Rob,
+>
+> Thanks for the review! Some questions below:
+>
+> > On Mon, Feb 24, 2020 at 12:54:23PM -0800, Tim Harvey wrote:
+> > > This patch adds documentation of device-tree bindings for the
+> > > Gateworks System Controller (GSC).
+> > >
+> > > Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+> > > ---
+> > > v5:
+> > >  - resolve dt_binding_check issues
+> > >
+> > > v4:
+> > >  - move to using pwm<n>_auto_point<m>_{pwm,temp} for FAN PWM
+> > >  - remove unncessary resolution/scaling properties for ADCs
+> > >  - update to yaml
+> > >  - remove watchdog
+> > >
+> > > v3:
+> > >  - replaced _ with -
+> > >  - remove input bindings
+> > >  - added full description of hwmon
+> > >  - fix unit address of hwmon child nodes
+> > > ---
+> > >  .../devicetree/bindings/mfd/gateworks-gsc.yaml     | 158 +++++++++++++++++++++
+> > >  1 file changed, 158 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml b/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
+> > > new file mode 100644
+> > > index 00000000..f7c1a05
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
+> > > @@ -0,0 +1,158 @@
+> > > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/mfd/gateworks-gsc.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Gateworks System Controller multi-function device
+> > > +
+> > > +description: |
+> > > +  The GSC is a Multifunction I2C slave device with the following submodules:
+> > > +   - Watchdog Timer
+> > > +   - GPIO
+> > > +   - Pushbutton controller
+> > > +   - Hardware Monitore with ADC's for temperature and voltage rails and
+> >
+> > typo
+>
+> will fix
+>
+> >
+> > > +     fan controller
+> > > +
+> > > +maintainers:
+> > > +  - Tim Harvey <tharvey@gateworks.com>
+> > > +  - Robert Jones <rjones@gateworks.com>
+> > > +
+> > > +properties:
+> > > +  $nodename:
+> > > +    pattern: "gsc@[0-9a-f]{1,2}"
+> > > +  compatible:
+> > > +    const: gw,gsc
+> >
+> > That's not very specific.
+> >
+>
+> Do you mean something like 'gw,system-controller' would be better
+> instead of the gsc abbreviation for 'Gateworks System Controller'?
 
-Please pull hwmon fixes for Linux v5.6-rc5 from signed tag:
+No, I mean is there or will there be only one version of this?
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.6-rc5
+>
+> > +
+> > > +  reg:
+> > > +    description: I2C device address
+> > > +    maxItems: 1
+> > > +
+> > > +  interrupts:
+> > > +    maxItems: 1
+> > > +
+> > > +  interrupt-controller: true
+> > > +
+> > > +  "#interrupt-cells":
+> > > +    const: 1
+> > > +    description: The IRQ number
+> >
+> > description is wrong. You can just drop it.
+> >
+>
+> ok
+>
+> > > +
+> > > +  hwmon:
+> >
+> > 'hwmon' is a Linux thing. I'm suspicious...
+> >
+>
+> Yes, we've discussed this before and I understand that DT shouldn't
+> use terminology that is Linux specific (which is why I replaced
+> 'hwmon' with 'adc' in the ADC nodes below) but I still see a long of
+> dt bindings in Documentation/devicetree/bindings with the word 'hwmon'
+> in them.
+>
+> Perhaps this makes more sense?
 
-Thanks,
-Guenter
-------
+Yes, that's more aligned with IIO ADC bindings. Yes, IIO is again a
+Linuxism, but I think the ADC bindings are fairly independent other
+than the directory name.
 
-The following changes since commit f8788d86ab28f61f7b46eb6be375f8a726783636:
+>
+> adc {
+>   compatible = "gw,gsc-adc";
+>   #address-cells = <1>;
+>   #size-cells = <0>;
+>
+>   channel@6 {
+>     type = "gw,hwmon-temperature";
+>     reg = <0x06>;
+>     label = "temp";
+>   };
+>   ...
+> };
+>
+>
+> > > +    type: object
+> > > +    description: Optional Hardware Monitoring module
+> > > +
+> > > +    properties:
+> > > +      compatible:
+> > > +        const: gw,gsc-hwmon
+> > > +
+> > > +      "#address-cells":
+> > > +        const: 1
+> > > +
+> > > +      "#size-cells":
+> > > +        const: 0
+> > > +
+> > > +      gw,fan-base:
+> > > +        $ref: /schemas/types.yaml#/definitions/uint32
+> > > +        description: The fan controller base address
+> >
+> > Shouldn't this be described as a node in the DT or be implied by the
+> > compatible?
+>
+> It does look out of place there. Would adding another subnode outside
+> of the (perhaps misnamed) 'hwmon' node make more sense?:
+>
+> fan:
+>  properties:
+>    compatible: gw,gsc-fancontroller
+>    reg:
+>      description: address of the fan controller base register
+>      maxItems: 1
 
-  Linux 5.6-rc3 (2020-02-23 16:17:42 -0800)
+Seems somewhat better location in that the first level is
+sub-functions of this chip.
 
-are available in the Git repository at:
+But now you have 'adc' with no address and 'fan' (w/ reg should be
+fan@...) with an address, so that's not consistent.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v5.6-rc5
+Also, I think fan controllers and fans need to have separate nodes as
+there are different types of fans such as with and without tach
+signals. I've tried to steer other fan bindings that way. Depends how
+complex the fan controller is whether that's necessary.
 
-for you to fetch changes up to 44f2f882909fedfc3a56e4b90026910456019743:
+> > > +    patternProperties:
+> > > +      "^adc@[0-2]$":
+> >
+> > There's only one number space at any level. So if you ever need anything
+> > else at this level, it can't have an address. Just something to
+> > consider.
+> >
+>
+> yes, one number space is ok if I understand what you mean but I meant
+> this to be "^adc@[0-9]+$" to support the number of ADC pins the part
+> supports.
+>
+> > > +        type: object
+> > > +        description: |
+> > > +          Properties for a single ADC which can report cooked values
+> > > +          (ie temperature sensor based on thermister), raw values
+> > > +          (ie voltage rail with a pre-scaling resistor divider).
+> > > +
+> > > +        properties:
+> > > +          reg:
+> > > +            description: Register of the ADC
+> > > +            maxItems: 1
+> > > +
+> > > +          label:
+> > > +            description: Name of the ADC input
+> > > +
+> > > +          type:
+> >
+> > Very generic property name, but it's not generic. Needs a vendor prefix
+> > at least.
+>
+> You mean the property name of 'type' is fine, but the values will need
+> to be vendor specific like 'gw,temperature', 'gw,voltage',
+> 'gw,voltage-raw' or is it inappropriate to use 'type'?
 
-  hwmon: (adt7462) Fix an error return in ADT7462_REG_VOLT() (2020-03-03 12:42:55 -0800)
+Don't use 'type'.
 
-----------------------------------------------------------------
-hwmon fixes for v5.6-rc5
+Is this for 'how to setup/program the adc' or 'what am I measuring'?
+For example, configure the adc for temperature readings vs. measure
+CPU temperature. Seems like a common thing needed for ADC. 'label'
+already covers the latter case.
 
-Fix an error return in the adt7462 driver, bad voltage limits
-reported by the xdpe12284 driver, and a broken documentation
-reference in the adm1177 driver documentation.
+> > > +            description: |
+> > > +              temperature in C*10 (temperature),
+> > > +              pre-scaled voltage value (voltage),
+> > > +              or scaled based on an optional resistor divider and optional
+> > > +              offset (voltage-raw)
+> > > +            enum:
+> > > +              - temperature
+> > > +              - voltage
+> > > +              - voltage-raw
+> > > +
+> > > +          gw,voltage-divider:
+> > > +            allOf:
+> > > +              - $ref: /schemas/types.yaml#/definitions/uint32-array
+> > > +            description: values of resistors for divider on raw ADC input
+> > > +            items:
+> > > +              - description: R1
+> > > +              - description: R2
+> >
+> > Needs a standard unit suffix. With that, you can drop the type
+> > reference.
+>
+> I understand the unit suffix but not sure what you mean by type
+> reference. Do you mean:
+>
+> gw,voltage-divider-milli-ohms:
+>   description: values of resistors for divider on raw ADC input
+>     items:
+>       - description: R1
+>       - description: R2
 
-----------------------------------------------------------------
-Dan Carpenter (1):
-      hwmon: (adt7462) Fix an error return in ADT7462_REG_VOLT()
+Yes, drop the '$ref'.
 
-Mauro Carvalho Chehab (1):
-      docs: adm1177: fix a broken reference
-
-Vadim Pasternak (1):
-      hwmon: (pmbus/xdpe12284) Add callback for vout limits conversion
-
- Documentation/hwmon/adm1177.rst |  3 +--
- drivers/hwmon/adt7462.c         |  2 +-
- drivers/hwmon/pmbus/xdpe12284.c | 54 +++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 56 insertions(+), 3 deletions(-)
+Rob
