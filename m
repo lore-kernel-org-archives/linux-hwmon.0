@@ -2,91 +2,108 @@ Return-Path: <SRS0=43Pj=4X=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C7EAC10DCE
-	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Mar 2020 16:08:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61759C10DCE
+	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Mar 2020 16:20:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D6FC82073B
-	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Mar 2020 16:08:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 34C1421741
+	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Mar 2020 16:20:02 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gateworks-com.20150623.gappssmtp.com header.i=@gateworks-com.20150623.gappssmtp.com header.b="Em4FnE3P"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U0SCpXGz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726299AbgCFQIG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 6 Mar 2020 11:08:06 -0500
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:39589 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726240AbgCFQIG (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 6 Mar 2020 11:08:06 -0500
-Received: by mail-ot1-f66.google.com with SMTP id x97so2901164ota.6
-        for <linux-hwmon@vger.kernel.org>; Fri, 06 Mar 2020 08:08:05 -0800 (PST)
+        id S1726811AbgCFQUC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 6 Mar 2020 11:20:02 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:37375 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726738AbgCFQUB (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 6 Mar 2020 11:20:01 -0500
+Received: by mail-pf1-f193.google.com with SMTP id p14so1342146pfn.4;
+        Fri, 06 Mar 2020 08:20:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gateworks-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LC6fYzrXvQrjxYDrnEIkTo21CADYi8sV2Co7PyB612o=;
-        b=Em4FnE3PMcg/WJr4+ZZxzWpxxSoKfbxuzSM5MUfpkLsbTVlEXeYbbYwoUnxXmVz69j
-         Iqb7SraT2u9Q6F8bMg2vRFiX/HmlLM5dgTUpWL5od1AFfc2p9mnuscx1OFecr72ABli/
-         0hpiyenMdchTPAxl5tdGTjAKLT82q1DvF2Z4n92MPD6OKEUlCIAowJxgyot3mwEO3Ale
-         9zIoRQiRzK4TID3SuMIB/U3VyxPvgP6ovn23L/Y291FSZGvM0lDYFN/zBLVMH5iTq4Vp
-         KChUM1kPuRflNvko9QQg7hFH0gnXCoRVOUAXu5Ww215JsyK/05x5wSaTmFPiac0a80/K
-         tCUA==
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id;
+        bh=HT85QxwdFTCLPqBgxQh69fgGjpwmL/OKcBc+DMSRtbY=;
+        b=U0SCpXGzRVAUN/CEpW1P2vaOBisrt31nPw63g11ueKaCltoVoyX5Wr7SuUysDk7M7R
+         pBjGeqAQSdG35me8VFTutvq/n4HG9wXCpjEoB8YnBTmHO5bbgnF13WhemvM1q2982NS9
+         /dkSjQecKSQdimDWgO9V6x6zg/ueJvzJ1veDWZonPveO3KjkwCVjm2S5b7jVooAkVosa
+         V+m5PsLLH/IuC1UJnM995wVZ7D47chcGqT4X08QYt4N2HzrGz8N19zyGqVTnungYB4yQ
+         ZdtF8HoY6vOEupmbSBi6NMD27J6AAjeWpKiwswq+83OmiSFDrax/wlQaE2489y+hqPKy
+         vb4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LC6fYzrXvQrjxYDrnEIkTo21CADYi8sV2Co7PyB612o=;
-        b=ma7WSzPeTn7t7ATgYa3JeoAd6QMZhx3ctREaCxITfEjwzvaFd2myCjvYtLYEJMck0q
-         EIjTmSlVSibqlhQQVoTf3+lnhHFYyCVCLLF3MAvM/zzlfY99ur7o6FfyH4vjhoZwMTE1
-         VD5QlsAN4vLRtID0HkyYa88VqkuM7SGzhTUdl018/aT1gD1BDrIBOM8sa0ci4QVtF1b+
-         fJMs+oG3gC5kYJl5y6RQfTgMACtQrfLrOioRiJq+MUEcK1QMFOxODsFfEE+Ld9VrH3ba
-         3O+IurS+8S+Y8z/rLMRRbitwBeSWlzT1AEoHi4hbEyxv7TbbU6Q4C6oqzy6ouwbqBrzQ
-         OU1g==
-X-Gm-Message-State: ANhLgQ3OhZvWof3d7hTUmYfOTYHTxPlmMChyAhu6kMifTkWRvDQeje/y
-        P+6+08LeGpgjWOVWntToYr5aJFbhbYMEphP4Msrcpw==
-X-Google-Smtp-Source: ADFU+vsNOqF1Gnn9gVAlK3MDDr9UJefA8cNJowONg8rgYvH5SxZps7BFriCK6uP0ehSTEA8IezBvGKF2Ku8ePhgAtxw=
-X-Received: by 2002:a9d:5cc4:: with SMTP id r4mr3190223oti.33.1583510885541;
- Fri, 06 Mar 2020 08:08:05 -0800 (PST)
-MIME-Version: 1.0
-References: <1582577665-13554-1-git-send-email-tharvey@gateworks.com>
- <1582577665-13554-4-git-send-email-tharvey@gateworks.com> <20200303205408.GA19757@roeck-us.net>
-In-Reply-To: <20200303205408.GA19757@roeck-us.net>
-From:   Tim Harvey <tharvey@gateworks.com>
-Date:   Fri, 6 Mar 2020 08:07:54 -0800
-Message-ID: <CAJ+vNU359PicGLtFr-s+arf210LtBH5OpBsbnbDd7otC1WBkhw@mail.gmail.com>
-Subject: Re: [PATCH v5 3/3] hwmon: add Gateworks System Controller support
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Lee Jones <lee.jones@linaro.org>, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Robert Jones <rjones@gateworks.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
+        bh=HT85QxwdFTCLPqBgxQh69fgGjpwmL/OKcBc+DMSRtbY=;
+        b=eGJLZPXLXJZ41mBjffcrOq6SMaKRsfRNj8XeKFAv7ToYVDy3jwec1YxNlv7TYBFHu2
+         j8/pst8uAxkLsR3hwujxJO3UPnAhtzoIdVBZiL43vPvmzNB8dYabSIT1Zn0bL0Fqlss1
+         gWfNxeMaN3I+KjaUn0e1rUMVVwXnehCbbgsUQL2hzpTTzGnBa4mc59GMO4EMxXAri/GX
+         eRGakwtkOpotKyjw9ssWDjC7vNTaTZQSbBFlx+j95uD8XrcfBCfx8EZ0z0Z9nkjknR0d
+         jlXKK+9Y8K1rtXdIWXqCRcMjW8Q5vIyMhRZeoOKfmuUz34UvPfq7oX5tKCeBqC8By0Ut
+         CrBQ==
+X-Gm-Message-State: ANhLgQ1h9+fT7XcFCwxaJOesA8GLBqeOxg1B7sgthBc3wRFjldpQNON6
+        qIpstSbkEJcHjyYqbPjc7ypa4zMz
+X-Google-Smtp-Source: ADFU+vt/x/gDdrv8nW5YW6NkMcQXxfUC6YKNJVxfnaZBTijdPleSG0DWGOoyEKmWOZaaV6eb0f99xA==
+X-Received: by 2002:a63:9d04:: with SMTP id i4mr4055404pgd.294.1583511600857;
+        Fri, 06 Mar 2020 08:20:00 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id r3sm30036021pfq.126.2020.03.06.08.19.59
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 06 Mar 2020 08:20:00 -0800 (PST)
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v5.6-rc5
+Date:   Fri,  6 Mar 2020 08:19:58 -0800
+Message-Id: <20200306161958.31030-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Mar 3, 2020 at 12:54 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Mon, Feb 24, 2020 at 12:54:25PM -0800, Tim Harvey wrote:
-> > The Gateworks System Controller has a hwmon sub-component that exposes
-> > up to 16 ADC's, some of which are temperature sensors, others which are
-> > voltage inputs. The ADC configuration (register mapping and name) is
-> > configured via device-tree and varies board to board.
-> >
-> > Cc: Guenter Roeck <linux@roeck-us.net>
-> > Signed-off-by: Tim Harvey <tharvey@gateworks.com>
->
-> Couple of minor comments, otherwise looks good from my perspective.
->
+Hi Linus,
 
-Guenter,
+Please pull hwmon fixes for Linux v5.6-rc5 from signed tag:
 
-Thank you for the review! I will post a v6 as soon as I get the dt
-bindings worked through.
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.6-rc5
 
-Tim
+Thanks,
+Guenter
+------
+
+The following changes since commit f8788d86ab28f61f7b46eb6be375f8a726783636:
+
+  Linux 5.6-rc3 (2020-02-23 16:17:42 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v5.6-rc5
+
+for you to fetch changes up to 44f2f882909fedfc3a56e4b90026910456019743:
+
+  hwmon: (adt7462) Fix an error return in ADT7462_REG_VOLT() (2020-03-03 12:42:55 -0800)
+
+----------------------------------------------------------------
+hwmon fixes for v5.6-rc5
+
+Fix an error return in the adt7462 driver, bad voltage limits
+reported by the xdpe12284 driver, and a broken documentation
+reference in the adm1177 driver documentation.
+
+----------------------------------------------------------------
+Dan Carpenter (1):
+      hwmon: (adt7462) Fix an error return in ADT7462_REG_VOLT()
+
+Mauro Carvalho Chehab (1):
+      docs: adm1177: fix a broken reference
+
+Vadim Pasternak (1):
+      hwmon: (pmbus/xdpe12284) Add callback for vout limits conversion
+
+ Documentation/hwmon/adm1177.rst |  3 +--
+ drivers/hwmon/adt7462.c         |  2 +-
+ drivers/hwmon/pmbus/xdpe12284.c | 54 +++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 56 insertions(+), 3 deletions(-)
