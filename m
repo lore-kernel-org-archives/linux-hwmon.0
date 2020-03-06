@@ -2,65 +2,65 @@ Return-Path: <SRS0=43Pj=4X=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CEA1C10DCE
-	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Mar 2020 15:58:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C7EAC10DCE
+	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Mar 2020 16:08:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EC4E02072A
-	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Mar 2020 15:58:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D6FC82073B
+	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Mar 2020 16:08:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gateworks-com.20150623.gappssmtp.com header.i=@gateworks-com.20150623.gappssmtp.com header.b="T13lPKXq"
+	dkim=pass (2048-bit key) header.d=gateworks-com.20150623.gappssmtp.com header.i=@gateworks-com.20150623.gappssmtp.com header.b="Em4FnE3P"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726485AbgCFP6T (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 6 Mar 2020 10:58:19 -0500
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:43529 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726231AbgCFP6T (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 6 Mar 2020 10:58:19 -0500
-Received: by mail-oi1-f194.google.com with SMTP id p125so2969043oif.10
-        for <linux-hwmon@vger.kernel.org>; Fri, 06 Mar 2020 07:58:17 -0800 (PST)
+        id S1726299AbgCFQIG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 6 Mar 2020 11:08:06 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:39589 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726240AbgCFQIG (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 6 Mar 2020 11:08:06 -0500
+Received: by mail-ot1-f66.google.com with SMTP id x97so2901164ota.6
+        for <linux-hwmon@vger.kernel.org>; Fri, 06 Mar 2020 08:08:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gateworks-com.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=V1+6fz7momKdjDKRLqw8BplaQOzNVOpCnEBk52cR68k=;
-        b=T13lPKXqnNZA59yIPmcWAvKkYxPbFJQE//C8CuWxSSA8Eryr9CjcGHr59f+vzEsplC
-         rRw87sCAHXLcwHm4zXgKv2p66+F36erpOXSanqygBXQXMjnpKQRzWAT/+sxCFGJfFo2N
-         uOHIBEON7sHSiK1F5ZoB9htmkQ/j5Am4ReDlUxOcwG0M+xSxXwFGKDBVXRhaukVUodEC
-         udVuRgtU58l7Z5L2JTSmxKsHDyaLWNg1vRlLjywcVWWROoquqxIkIzPlXB3XQKCMXIyO
-         8bycVdDw24Tu4/bZpYnLfxDP1wnCFYMJryKl1M53ad78js6TpLseSmUMdPTOf/pWzSpC
-         NFZQ==
+        bh=LC6fYzrXvQrjxYDrnEIkTo21CADYi8sV2Co7PyB612o=;
+        b=Em4FnE3PMcg/WJr4+ZZxzWpxxSoKfbxuzSM5MUfpkLsbTVlEXeYbbYwoUnxXmVz69j
+         Iqb7SraT2u9Q6F8bMg2vRFiX/HmlLM5dgTUpWL5od1AFfc2p9mnuscx1OFecr72ABli/
+         0hpiyenMdchTPAxl5tdGTjAKLT82q1DvF2Z4n92MPD6OKEUlCIAowJxgyot3mwEO3Ale
+         9zIoRQiRzK4TID3SuMIB/U3VyxPvgP6ovn23L/Y291FSZGvM0lDYFN/zBLVMH5iTq4Vp
+         KChUM1kPuRflNvko9QQg7hFH0gnXCoRVOUAXu5Ww215JsyK/05x5wSaTmFPiac0a80/K
+         tCUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=V1+6fz7momKdjDKRLqw8BplaQOzNVOpCnEBk52cR68k=;
-        b=kHm6r2pFjwrHNoM8z04cHs8WZjLgZWefm0zHZp0hUZeZ1QxoKpFbEo4LlGVkrynzOd
-         /jynqfKAnf604lOzwMPUZi1zM87Z1lYhskD6Q1l+B7A7F/2HNOwfW9VoYHWrCPmZegsc
-         mMYW9cKGGHZt+ZWNdJ+52HCpS0hsdidGVRiw2TMjgWpOMYeRaQprhGBrBJlwwpxDcjNx
-         gLMyyP3J1WHQEnP0h762Tvgb+Djl8PQtmM0A9neOrHz13GI9ZrnCZ9/rmIhO4SwZVZyl
-         m6LieLgG0kcrKBQqydQcG7Tz+UU1jgTooCOSLPRVOFu2wLp24VZ7LoSc7AoC1XoL8zun
-         dzyg==
-X-Gm-Message-State: ANhLgQ0VKJBAb2SbKLu4ZJisgQufoePn7LAjQDf/IunaIKtEslc/7HmE
-        FxDXC1OXuUsxryAsz0qij3HfWLns91OpOYdgKtfIAQ==
-X-Google-Smtp-Source: ADFU+vuurdK1tLYKRHZySVDtkBsBts5O21phnWVSyzdskxYRWATOvZ9qJ0gvvcLFvlEeFknTq1uWLIeBBdhGqgGFm9c=
-X-Received: by 2002:aca:fc44:: with SMTP id a65mr2929862oii.119.1583510297120;
- Fri, 06 Mar 2020 07:58:17 -0800 (PST)
+        bh=LC6fYzrXvQrjxYDrnEIkTo21CADYi8sV2Co7PyB612o=;
+        b=ma7WSzPeTn7t7ATgYa3JeoAd6QMZhx3ctREaCxITfEjwzvaFd2myCjvYtLYEJMck0q
+         EIjTmSlVSibqlhQQVoTf3+lnhHFYyCVCLLF3MAvM/zzlfY99ur7o6FfyH4vjhoZwMTE1
+         VD5QlsAN4vLRtID0HkyYa88VqkuM7SGzhTUdl018/aT1gD1BDrIBOM8sa0ci4QVtF1b+
+         fJMs+oG3gC5kYJl5y6RQfTgMACtQrfLrOioRiJq+MUEcK1QMFOxODsFfEE+Ld9VrH3ba
+         3O+IurS+8S+Y8z/rLMRRbitwBeSWlzT1AEoHi4hbEyxv7TbbU6Q4C6oqzy6ouwbqBrzQ
+         OU1g==
+X-Gm-Message-State: ANhLgQ3OhZvWof3d7hTUmYfOTYHTxPlmMChyAhu6kMifTkWRvDQeje/y
+        P+6+08LeGpgjWOVWntToYr5aJFbhbYMEphP4Msrcpw==
+X-Google-Smtp-Source: ADFU+vsNOqF1Gnn9gVAlK3MDDr9UJefA8cNJowONg8rgYvH5SxZps7BFriCK6uP0ehSTEA8IezBvGKF2Ku8ePhgAtxw=
+X-Received: by 2002:a9d:5cc4:: with SMTP id r4mr3190223oti.33.1583510885541;
+ Fri, 06 Mar 2020 08:08:05 -0800 (PST)
 MIME-Version: 1.0
 References: <1582577665-13554-1-git-send-email-tharvey@gateworks.com>
- <1582577665-13554-2-git-send-email-tharvey@gateworks.com> <20200302204949.GA6649@bogus>
-In-Reply-To: <20200302204949.GA6649@bogus>
+ <1582577665-13554-4-git-send-email-tharvey@gateworks.com> <20200303205408.GA19757@roeck-us.net>
+In-Reply-To: <20200303205408.GA19757@roeck-us.net>
 From:   Tim Harvey <tharvey@gateworks.com>
-Date:   Fri, 6 Mar 2020 07:58:06 -0800
-Message-ID: <CAJ+vNU2ySjAP3q-4rgGy1U=iJeswv1kx6bKCy+Zw7V7oArkumw@mail.gmail.com>
-Subject: Re: [PATCH v5 1/3] dt-bindings: mfd: Add Gateworks System Controller bindings
-To:     Rob Herring <robh@kernel.org>
+Date:   Fri, 6 Mar 2020 08:07:54 -0800
+Message-ID: <CAJ+vNU359PicGLtFr-s+arf210LtBH5OpBsbnbDd7otC1WBkhw@mail.gmail.com>
+Subject: Re: [PATCH v5 3/3] hwmon: add Gateworks System Controller support
+To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     Lee Jones <lee.jones@linaro.org>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, Frank Rowand <frowand.list@gmail.com>,
+        linux-hwmon@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
         devicetree@vger.kernel.org,
         open list <linux-kernel@vger.kernel.org>,
         Robert Jones <rjones@gateworks.com>
@@ -70,239 +70,23 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Mar 2, 2020 at 12:49 PM Rob Herring <robh@kernel.org> wrote:
+On Tue, Mar 3, 2020 at 12:54 PM Guenter Roeck <linux@roeck-us.net> wrote:
 >
-
-Rob,
-
-Thanks for the review! Some questions below:
-
-> On Mon, Feb 24, 2020 at 12:54:23PM -0800, Tim Harvey wrote:
-> > This patch adds documentation of device-tree bindings for the
-> > Gateworks System Controller (GSC).
+> On Mon, Feb 24, 2020 at 12:54:25PM -0800, Tim Harvey wrote:
+> > The Gateworks System Controller has a hwmon sub-component that exposes
+> > up to 16 ADC's, some of which are temperature sensors, others which are
+> > voltage inputs. The ADC configuration (register mapping and name) is
+> > configured via device-tree and varies board to board.
 > >
+> > Cc: Guenter Roeck <linux@roeck-us.net>
 > > Signed-off-by: Tim Harvey <tharvey@gateworks.com>
-> > ---
-> > v5:
-> >  - resolve dt_binding_check issues
-> >
-> > v4:
-> >  - move to using pwm<n>_auto_point<m>_{pwm,temp} for FAN PWM
-> >  - remove unncessary resolution/scaling properties for ADCs
-> >  - update to yaml
-> >  - remove watchdog
-> >
-> > v3:
-> >  - replaced _ with -
-> >  - remove input bindings
-> >  - added full description of hwmon
-> >  - fix unit address of hwmon child nodes
-> > ---
-> >  .../devicetree/bindings/mfd/gateworks-gsc.yaml     | 158 +++++++++++++++++++++
-> >  1 file changed, 158 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml b/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
-> > new file mode 100644
-> > index 00000000..f7c1a05
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
-> > @@ -0,0 +1,158 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/mfd/gateworks-gsc.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Gateworks System Controller multi-function device
-> > +
-> > +description: |
-> > +  The GSC is a Multifunction I2C slave device with the following submodules:
-> > +   - Watchdog Timer
-> > +   - GPIO
-> > +   - Pushbutton controller
-> > +   - Hardware Monitore with ADC's for temperature and voltage rails and
 >
-> typo
-
-will fix
-
->
-> > +     fan controller
-> > +
-> > +maintainers:
-> > +  - Tim Harvey <tharvey@gateworks.com>
-> > +  - Robert Jones <rjones@gateworks.com>
-> > +
-> > +properties:
-> > +  $nodename:
-> > +    pattern: "gsc@[0-9a-f]{1,2}"
-> > +  compatible:
-> > +    const: gw,gsc
->
-> That's not very specific.
+> Couple of minor comments, otherwise looks good from my perspective.
 >
 
-Do you mean something like 'gw,system-controller' would be better
-instead of the gsc abbreviation for 'Gateworks System Controller'?
+Guenter,
 
-> +
-> > +  reg:
-> > +    description: I2C device address
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  interrupt-controller: true
-> > +
-> > +  "#interrupt-cells":
-> > +    const: 1
-> > +    description: The IRQ number
->
-> description is wrong. You can just drop it.
->
-
-ok
-
-> > +
-> > +  hwmon:
->
-> 'hwmon' is a Linux thing. I'm suspicious...
->
-
-Yes, we've discussed this before and I understand that DT shouldn't
-use terminology that is Linux specific (which is why I replaced
-'hwmon' with 'adc' in the ADC nodes below) but I still see a long of
-dt bindings in Documentation/devicetree/bindings with the word 'hwmon'
-in them.
-
-Perhaps this makes more sense?
-
-adc {
-  compatible = "gw,gsc-adc";
-  #address-cells = <1>;
-  #size-cells = <0>;
-
-  channel@6 {
-    type = "gw,hwmon-temperature";
-    reg = <0x06>;
-    label = "temp";
-  };
-  ...
-};
-
-
-> > +    type: object
-> > +    description: Optional Hardware Monitoring module
-> > +
-> > +    properties:
-> > +      compatible:
-> > +        const: gw,gsc-hwmon
-> > +
-> > +      "#address-cells":
-> > +        const: 1
-> > +
-> > +      "#size-cells":
-> > +        const: 0
-> > +
-> > +      gw,fan-base:
-> > +        $ref: /schemas/types.yaml#/definitions/uint32
-> > +        description: The fan controller base address
->
-> Shouldn't this be described as a node in the DT or be implied by the
-> compatible?
-
-It does look out of place there. Would adding another subnode outside
-of the (perhaps misnamed) 'hwmon' node make more sense?:
-
-fan:
- properties:
-   compatible: gw,gsc-fancontroller
-   reg:
-     description: address of the fan controller base register
-     maxItems: 1
-
->
-> > +
-> > +    patternProperties:
-> > +      "^adc@[0-2]$":
->
-> There's only one number space at any level. So if you ever need anything
-> else at this level, it can't have an address. Just something to
-> consider.
->
-
-yes, one number space is ok if I understand what you mean but I meant
-this to be "^adc@[0-9]+$" to support the number of ADC pins the part
-supports.
-
-> > +        type: object
-> > +        description: |
-> > +          Properties for a single ADC which can report cooked values
-> > +          (ie temperature sensor based on thermister), raw values
-> > +          (ie voltage rail with a pre-scaling resistor divider).
-> > +
-> > +        properties:
-> > +          reg:
-> > +            description: Register of the ADC
-> > +            maxItems: 1
-> > +
-> > +          label:
-> > +            description: Name of the ADC input
-> > +
-> > +          type:
->
-> Very generic property name, but it's not generic. Needs a vendor prefix
-> at least.
-
-You mean the property name of 'type' is fine, but the values will need
-to be vendor specific like 'gw,temperature', 'gw,voltage',
-'gw,voltage-raw' or is it inappropriate to use 'type'?
-
->
-> > +            description: |
-> > +              temperature in C*10 (temperature),
-> > +              pre-scaled voltage value (voltage),
-> > +              or scaled based on an optional resistor divider and optional
-> > +              offset (voltage-raw)
-> > +            enum:
-> > +              - temperature
-> > +              - voltage
-> > +              - voltage-raw
-> > +
-> > +          gw,voltage-divider:
-> > +            allOf:
-> > +              - $ref: /schemas/types.yaml#/definitions/uint32-array
-> > +            description: values of resistors for divider on raw ADC input
-> > +            items:
-> > +              - description: R1
-> > +              - description: R2
->
-> Needs a standard unit suffix. With that, you can drop the type
-> reference.
-
-I understand the unit suffix but not sure what you mean by type
-reference. Do you mean:
-
-gw,voltage-divider-milli-ohms:
-  description: values of resistors for divider on raw ADC input
-    items:
-      - description: R1
-      - description: R2
-
->
-> > +
-> > +          gw,voltage-offset:
-> > +            $ref: /schemas/types.yaml#/definitions/uint32
-> > +            description: |
-> > +              A positive uV voltage offset to apply to a raw ADC
-> > +              (ie to compensate for a diode drop).
->
-> Needs a unit suffix.
-
-ok
-
-Thanks!
+Thank you for the review! I will post a v6 as soon as I get the dt
+bindings worked through.
 
 Tim
