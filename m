@@ -2,112 +2,101 @@ Return-Path: <SRS0=8g6a=43=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B32AC10F27
-	for <linux-hwmon@archiver.kernel.org>; Tue, 10 Mar 2020 09:31:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B46CC10F27
+	for <linux-hwmon@archiver.kernel.org>; Tue, 10 Mar 2020 12:08:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2A31A222D9
-	for <linux-hwmon@archiver.kernel.org>; Tue, 10 Mar 2020 09:31:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CEA312468F
+	for <linux-hwmon@archiver.kernel.org>; Tue, 10 Mar 2020 12:08:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726461AbgCJJbk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 10 Mar 2020 05:31:40 -0400
-Received: from sauhun.de ([88.99.104.3]:46550 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726446AbgCJJbk (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 10 Mar 2020 05:31:40 -0400
-Received: from localhost (p54B33196.dip0.t-ipconnect.de [84.179.49.150])
-        by pokefinder.org (Postfix) with ESMTPSA id 4D28D2C1EB6;
-        Tue, 10 Mar 2020 10:31:37 +0100 (CET)
-Date:   Tue, 10 Mar 2020 10:31:36 +0100
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
+        id S1726514AbgCJMIi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 10 Mar 2020 08:08:38 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:56861 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726475AbgCJMIh (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 10 Mar 2020 08:08:37 -0400
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1jBdgG-0008Dd-VG; Tue, 10 Mar 2020 13:08:16 +0100
+Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1jBdgE-00032B-AO; Tue, 10 Mar 2020 13:08:14 +0100
+Date:   Tue, 10 Mar 2020 13:08:14 +0100
+From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Guru Das Srinagesh <gurus@codeaurora.org>,
+        linux-pwm@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Subbaraman Narayanamurthy <subbaram@codeaurora.org>,
+        linux-kernel@vger.kernel.org, Kamil Debski <kamil@wypas.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Martin Volf <martin.volf.42@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] i2c: i801: Do not add ICH_RES_IO_SMI for the
- iTCO_wdt device
-Message-ID: <20200310093136.GE1987@ninjato>
-References: <20200226132122.62805-1-mika.westerberg@linux.intel.com>
- <20200226132122.62805-4-mika.westerberg@linux.intel.com>
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v7 03/13] hwmon: pwm-fan: Use 64-bit division macros for
+ period and duty cycle
+Message-ID: <20200310120814.4kjxmii3c7zxw55y@pengutronix.de>
+References: <cover.1583782035.git.gurus@codeaurora.org>
+ <b503833e0f58bd6dd9fe84d866124e7c457e099e.1583782035.git.gurus@codeaurora.org>
+ <20200309214822.GA19773@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="G6nVm6DDWH/FONJq"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20200226132122.62805-4-mika.westerberg@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200309214822.GA19773@roeck-us.net>
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+Hello Guenter,
 
---G6nVm6DDWH/FONJq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon, Mar 09, 2020 at 02:48:22PM -0700, Guenter Roeck wrote:
+> On Mon, Mar 09, 2020 at 12:35:06PM -0700, Guru Das Srinagesh wrote:
+> > Because period and duty cycle are defined in the PWM framework structs
+> > as ints with units of nanoseconds, the maximum time duration that can be
+> > set is limited to ~2.147 seconds. Redefining them as u64 values will
+> > enable larger time durations to be set.
+> > 
+> > As a first step, prepare drivers to handle the switch to u64 period and
+> > duty_cycle by replacing division operations involving pwm period and duty cycle
+> > with their 64-bit equivalents as appropriate. The actual switch to u64 period
+> > and duty_cycle follows as a separate patch.
+> > 
+> > Where the dividend is 64-bit but the divisor is 32-bit, use *_ULL
+> > macros:
+> > - DIV_ROUND_UP_ULL
+> > - DIV_ROUND_CLOSEST_ULL
+> > - div_u64
+> > 
+> > Where the divisor is 64-bit (dividend may be 32-bit or 64-bit), use
+> > DIV64_* macros:
+> > - DIV64_U64_ROUND_CLOSEST
+> > - div64_u64
+>
+> There is no explanation why this is necessary. What is the use case ?
+> It is hard to imagine a real-world use case with a duty cycle of more
+> than 2 seconds.
 
-On Wed, Feb 26, 2020 at 04:21:22PM +0300, Mika Westerberg wrote:
-> Martin noticed that nct6775 driver does not load properly on his system
-> in v5.4+ kernels. The issue was bisected to commit b84398d6d7f9 ("i2c:
-> i801: Use iTCO version 6 in Cannon Lake PCH and beyond") but it is
-> likely not the culprit because the faulty code has been in the driver
-> already since commit 9424693035a5 ("i2c: i801: Create iTCO device on
-> newer Intel PCHs"). So more likely some commit that added PCI IDs of
-> recent chipsets made the driver to create the iTCO_wdt device on Martins
-> system.
->=20
-> The issue was debugged to be PCI configuration access to the PMC device
-> that is not present. This returns all 1's when read and this caused the
-> iTCO_wdt driver to accidentally request resourses used by nct6775.
->=20
-> It turns out that the SMI resource is only required for some ancient
-> systems, not the ones supported by this driver. For this reason do not
-> populate the SMI resource at all and drop all the related code. The
-> driver now always populates the main I/O resource and only in case of SPT
-> (Intel Sunrisepoint) compatible devices it adds another resource for the
-> NO_REBOOT bit. These two resources are of different types so
-> platform_get_resource() used by the iTCO_wdt driver continues to find
-> the both resources at index 0.
->=20
-> Link: https://lore.kernel.org/linux-hwmon/CAM1AHpQ4196tyD=3DHhBu-2donSsuo=
-gabkfP03v1YF26Q7_BgvgA@mail.gmail.com/
-> Fixes: 9424693035a5 ("i2c: i801: Create iTCO device on newer Intel PCHs")
-> Reported-by: Martin Volf <martin.volf.42@gmail.com>
-> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+When my Laptop is in suspend there is an LED that blinks with a period
+of approximately 5 seconds. (To be fair, the brightness is more a sinus
+than a rectangle, but still.)
 
-I added a comment saying that the whole series is needed for a complete
-fix. Dunno if there is a better way to express such dependencies for
-stable.
+Best regards
+Uwe
 
-Applied to for-current, thanks!
-
-
---G6nVm6DDWH/FONJq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5nXngACgkQFA3kzBSg
-KbZU4w/8DWEsX3sB25IkWCiHMd+k6Xdt9pibradFLjnIPS2iR7fCa2RdyBkB3pQj
-Woql9oxCJX7yrncKky7XaFYalUhAcSiFg/Li8gDQ+p+ilszMrU4bS+9nYCl+MAel
-RXxSmIv7gbdiTewYewssmh8ttNeDkbx96EoIxcyIKMPMNHOITfkcsDihwWTI+grg
-00GwjQafODS2Iyuoy9vZW0dgbBWMXfeZWG2Yk7nQS5QI5Mb4N4s6KwN7aVS6EJCz
-VsHrvzmyyRLd8//LhOGbV2JGsHIwkrp9j5snGRWumXYqWZKpaboXMf1G0xx1ZbU4
-M8qn1R/LaiJa6Lmk+J8Xv/eVEeBBNY4C3ljGw0n8Yut2dmGWUxLZ7Bu5QXM1wUeg
-etlA+NmfABg83PhtLQyImtrmvBuQ/SQGHoA7MZB9wDqBdg3E+mK9fjAGFKXmfED0
-Hjhh+xZrg61RS3oP68SPqcWJVXi2S5BYNzL3132ub5iYuhmdeu9ZXhI34ImwCob9
-ZKxG14azyq/LIPf5IV3aZ3hu+B2kmb9EbL8FWMP5sjk+gI72WdF+Ff84h5OOPyi7
-nyzBUTJDJtacPraxurwQ9elA9cNVjo0iawcTUM/bhD2S/ucfDezKtKEOD0WO/5rQ
-tx7qPcWlol8eGOaFT3SbuJtW2gbNoeHrI3UkpSxHqxg/II5FWJQ=
-=0FFd
------END PGP SIGNATURE-----
-
---G6nVm6DDWH/FONJq--
+-- 
+Pengutronix e.K.                           | Uwe Kleine-König            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
