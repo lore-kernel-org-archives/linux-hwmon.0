@@ -1,109 +1,124 @@
-Return-Path: <SRS0=mCPh=42=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=8g6a=43=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60161C10F25
-	for <linux-hwmon@archiver.kernel.org>; Mon,  9 Mar 2020 21:48:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E925AC10F25
+	for <linux-hwmon@archiver.kernel.org>; Tue, 10 Mar 2020 00:26:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 38FD124649
-	for <linux-hwmon@archiver.kernel.org>; Mon,  9 Mar 2020 21:48:27 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EnAOLY3l"
+	by mail.kernel.org (Postfix) with ESMTP id C725524654
+	for <linux-hwmon@archiver.kernel.org>; Tue, 10 Mar 2020 00:26:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726838AbgCIVs1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 9 Mar 2020 17:48:27 -0400
-Received: from mail-pj1-f67.google.com ([209.85.216.67]:36819 "EHLO
-        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726118AbgCIVs0 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 9 Mar 2020 17:48:26 -0400
-Received: by mail-pj1-f67.google.com with SMTP id l41so503224pjb.1;
-        Mon, 09 Mar 2020 14:48:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=M+Yc5KaBBvqlUu6IX9+jhdSvvYBrtTQ1N/+uZrTujAY=;
-        b=EnAOLY3lknQn3MrFOnTG47rE/msuLtkHcwI9CiqqLxAphICFFDtZpSmVBdHY1gjaT1
-         nF3ZgHtiuEflpauwpjHLTa11NmOBCgIGoRnB/lC61GeUFJGTQUhR7M5jhLKEkVom/atE
-         rGNK46z/+EJGKYmexGaRptMczx6WalQZ7vm1+hnINGCorC4R+/lDj28HCN2YFObBXibf
-         TbBc8ktb/3tvgKvbKZYVuXQFQ1jCh7q5i2kNRpO8mDbWAxKJ4bf2OPG8x6COaosxKY5L
-         JbUlwomEzIjo5YEQYdlVnYLt8bnVg32QPMRPbi/wBzdkVbfsh8Q61ZV2waG0vTF+9vHY
-         Rdwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=M+Yc5KaBBvqlUu6IX9+jhdSvvYBrtTQ1N/+uZrTujAY=;
-        b=mm7w3L8jqlQIB8Lu2kEgJxyj37wTFyz2EXsB840lnf6J2Wfio0xEfHjW201sfChTZr
-         bjFAuPv5mC1gn1ux0eEJKc0qQimcpXBxZZ5ivDC7wgnc6sVqBYGIuduMOeqhG8qlErOy
-         RjP926mWRMhXUVFWVOOOJdGskqAVJ8PTOYrDmeKZWjCNEKkrdPHQ0KFZi27D7l2XyA3K
-         os0kSgnol6L/ha9RlAtqDD6+rcQlfjiOhZ42NVMvx19h+vXdU+MAPE3YOeNlOyvWwRop
-         ntPccf2Q92sAXrCFu0XijIeg/64JgHKrB+k0pXPAwfy3q5WGocl8lKxZ8Q3fi1tSCFcr
-         h6fA==
-X-Gm-Message-State: ANhLgQ0bbrk3KOLcIuUyShwCSv7CT+iQh+iyEZ/GhN8VctyhYwSkfVDH
-        3V9O0t6TCjsx6N/jj/XCZOo=
-X-Google-Smtp-Source: ADFU+vspwoKFKjFMDUf9nlAvLvUHioLAIIAwk15+/ODm/1HJWpwGZy4//EuoLeQ1SRiulbB+FAF01Q==
-X-Received: by 2002:a17:90a:ba89:: with SMTP id t9mr1352540pjr.93.1583790503831;
-        Mon, 09 Mar 2020 14:48:23 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q15sm9321748pgn.68.2020.03.09.14.48.22
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 09 Mar 2020 14:48:23 -0700 (PDT)
-Date:   Mon, 9 Mar 2020 14:48:22 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Guru Das Srinagesh <gurus@codeaurora.org>
-Cc:     linux-pwm@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>,
-        Subbaraman Narayanamurthy <subbaram@codeaurora.org>,
-        linux-kernel@vger.kernel.org, Kamil Debski <kamil@wypas.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        id S1727487AbgCJA0X (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 9 Mar 2020 20:26:23 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:44426 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727322AbgCJA0X (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 9 Mar 2020 20:26:23 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 68D30803087C;
+        Tue, 10 Mar 2020 00:26:21 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 5-s31Ti5uv7A; Tue, 10 Mar 2020 03:26:19 +0300 (MSK)
+Date:   Tue, 10 Mar 2020 03:25:29 +0300
+From:   Sergey Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
+        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
         Jean Delvare <jdelvare@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v7 03/13] hwmon: pwm-fan: Use 64-bit division macros for
- period and duty cycle
-Message-ID: <20200309214822.GA19773@roeck-us.net>
-References: <cover.1583782035.git.gurus@codeaurora.org>
- <b503833e0f58bd6dd9fe84d866124e7c457e099e.1583782035.git.gurus@codeaurora.org>
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 0/2] hwmon: Add Baikal-T1 SoC Process, Voltage and Temp
+ sensor support
+References: <20200306132604.14312-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <b503833e0f58bd6dd9fe84d866124e7c457e099e.1583782035.git.gurus@codeaurora.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200306132604.14312-1-Sergey.Semin@baikalelectronics.ru>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+Message-Id: <20200310002621.68D30803087C@mail.baikalelectronics.ru>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Mar 09, 2020 at 12:35:06PM -0700, Guru Das Srinagesh wrote:
-> Because period and duty cycle are defined in the PWM framework structs
-> as ints with units of nanoseconds, the maximum time duration that can be
-> set is limited to ~2.147 seconds. Redefining them as u64 values will
-> enable larger time durations to be set.
+On Fri, Mar 06, 2020 at 04:26:02PM +0300, Sergey.Semin@baikalelectronics.ru wrote:
+> From: Serge Semin <fancer.lancer@gmail.com>
 > 
-> As a first step, prepare drivers to handle the switch to u64 period and
-> duty_cycle by replacing division operations involving pwm period and duty cycle
-> with their 64-bit equivalents as appropriate. The actual switch to u64 period
-> and duty_cycle follows as a separate patch.
+> In order to keep track of Baikal-T1 SoC power consumption and make sure
+> the chip heating is within the normal temperature limits, there is
+> a dedicated hardware monitor sensor embedded into the SoC. It is based
+> on the Analog Bits PVT sensor but equipped with a vendor-specific control
+> wrapper, which ease an access to the sensors functionality. Fist of all it
+> provides an accessed to the sampled Temperature, Voltage and
+> Low/Standard/High Voltage thresholds. In addition the wrapper generates
+> an interrupt in case if one enabled for alarm thresholds or data ready
+> event. All of these functionality is implemented in the Baikal-T1 PVT
+> driver submitted within this patchset. Naturally there is also a patch,
+> which creates a corresponding yaml-based dt-binding file for the sensor.
 > 
-> Where the dividend is 64-bit but the divisor is 32-bit, use *_ULL
-> macros:
-> - DIV_ROUND_UP_ULL
-> - DIV_ROUND_CLOSEST_ULL
-> - div_u64
+> This patchset is rebased and tested on the mainline Linux kernel 5.6-rc4:
+> commit 98d54f81e36b ("Linux 5.6-rc4").
 > 
-> Where the divisor is 64-bit (dividend may be 32-bit or 64-bit), use
-> DIV64_* macros:
-> - DIV64_U64_ROUND_CLOSEST
-> - div64_u64
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Signed-off-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Signed-off-by: Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>
+> Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+> Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+> Cc: Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>
+> Cc: Vadim Vlasov <V.Vlasov@baikalelectronics.ru>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Paul Burton <paulburton@kernel.org>
+> Cc: Ralf Baechle <ralf@linux-mips.org>
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: linux-hwmon@vger.kernel.org
+> Cc: devicetree@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
 > 
-There is no explanation why this is necessary. What is the use case ?
-It is hard to imagine a real-world use case with a duty cycle of more
-than 2 seconds.
+> Serge Semin (2):
+>   dt-bindings: hwmon: Add Baikal-T1 PVT sensor bindings
+>   hwmon: Add Baikal-T1 PVT sensor driver
+> 
+>  .../devicetree/bindings/hwmon/be,bt1-pvt.yaml |  100 ++
+>  Documentation/hwmon/bt1-pvt.rst               |  113 ++
+>  drivers/hwmon/Kconfig                         |   29 +
+>  drivers/hwmon/Makefile                        |    1 +
+>  drivers/hwmon/bt1-pvt.c                       | 1147 +++++++++++++++++
+>  drivers/hwmon/bt1-pvt.h                       |  266 ++++
+>  6 files changed, 1656 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/be,bt1-pvt.yaml
+>  create mode 100644 Documentation/hwmon/bt1-pvt.rst
+>  create mode 100644 drivers/hwmon/bt1-pvt.c
+>  create mode 100644 drivers/hwmon/bt1-pvt.h
+> 
+> -- 
+> 2.25.1
+> 
 
-Guenter
+Folks,
+
+It appears our corporate email server changes the Message-Id field of 
+messages passing through it. Due to that the emails threading gets to be
+broken. I'll resubmit the properly structured v2 patchset as soon as our
+system administrator fixes the problem. Sorry for the inconvenience caused
+by it.
+
+Regards,
+-Sergey
