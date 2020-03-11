@@ -6,82 +6,80 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28FEAC10DCE
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Mar 2020 01:41:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BF96DC10F25
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Mar 2020 07:39:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F059721D56
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Mar 2020 01:41:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9E7EC20873
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Mar 2020 07:39:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728033AbgCKBlp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 10 Mar 2020 21:41:45 -0400
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:26789 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727950AbgCKBl0 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 10 Mar 2020 21:41:26 -0400
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 10 Mar 2020 18:41:24 -0700
-Received: from gurus-linux.qualcomm.com ([10.46.162.81])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP; 10 Mar 2020 18:41:24 -0700
-Received: by gurus-linux.qualcomm.com (Postfix, from userid 383780)
-        id 03880107B; Tue, 10 Mar 2020 18:41:23 -0700 (PDT)
-From:   Guru Das Srinagesh <gurus@codeaurora.org>
-To:     linux-pwm@vger.kernel.org
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
-        Subbaraman Narayanamurthy <subbaram@codeaurora.org>,
-        linux-kernel@vger.kernel.org,
-        Guru Das Srinagesh <gurus@codeaurora.org>,
-        Kamil Debski <kamil@wypas.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Jean Delvare <jdelvare@suse.com>,
+        id S1726310AbgCKHjr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 11 Mar 2020 03:39:47 -0400
+Received: from mx2.suse.de ([195.135.220.15]:46324 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726160AbgCKHjr (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 11 Mar 2020 03:39:47 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 87D21AD72;
+        Wed, 11 Mar 2020 07:39:45 +0000 (UTC)
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-hwmon@vger.kernel.org
-Subject: [PATCH v8 03/12] hwmon: pwm-fan: Use 64-bit division macro
-Date:   Tue, 10 Mar 2020 18:41:12 -0700
-Message-Id: <237b1b5ae59d072b576d300cdc0c2a1242b18516.1583889178.git.gurus@codeaurora.org>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <cover.1583889178.git.gurus@codeaurora.org>
-References: <cover.1583889178.git.gurus@codeaurora.org>
-In-Reply-To: <cover.1583889178.git.gurus@codeaurora.org>
-References: <cover.1583889178.git.gurus@codeaurora.org>
+        linux-hwmon@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH] hwmon: (ibmpowernv) Use scnprintf() for avoiding potential buffer overflow
+Date:   Wed, 11 Mar 2020 08:39:44 +0100
+Message-Id: <20200311073944.7487-1-tiwai@suse.de>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Since the PWM framework is switching struct pwm_args.period's datatype
-to u64, prepare for this transition by using DIV_ROUND_UP_ULL to handle
-a 64-bit dividend.
+Since snprintf() returns the would-be-output size instead of the
+actual output size, the succeeding calls may go beyond the given
+buffer limit.  Fix it by replacing with scnprintf().
 
-Cc: Kamil Debski <kamil@wypas.org>
-Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Cc: Jean Delvare <jdelvare@suse.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Liam Girdwood <lgirdwood@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: linux-hwmon@vger.kernel.org
-
-Signed-off-by: Guru Das Srinagesh <gurus@codeaurora.org>
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 ---
- drivers/hwmon/pwm-fan.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/hwmon/ibmpowernv.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-index 42ffd2e..283423a 100644
---- a/drivers/hwmon/pwm-fan.c
-+++ b/drivers/hwmon/pwm-fan.c
-@@ -437,7 +437,7 @@ static int pwm_fan_resume(struct device *dev)
- 		return 0;
+diff --git a/drivers/hwmon/ibmpowernv.c b/drivers/hwmon/ibmpowernv.c
+index 0e525cfbdfc5..a750647e66a4 100644
+--- a/drivers/hwmon/ibmpowernv.c
++++ b/drivers/hwmon/ibmpowernv.c
+@@ -186,7 +186,7 @@ static void make_sensor_label(struct device_node *np,
+ 	u32 id;
+ 	size_t n;
  
- 	pwm_get_args(ctx->pwm, &pargs);
--	duty = DIV_ROUND_UP(ctx->pwm_value * (pargs.period - 1), MAX_PWM);
-+	duty = DIV_ROUND_UP_ULL(ctx->pwm_value * (pargs.period - 1), MAX_PWM);
- 	ret = pwm_config(ctx->pwm, duty, pargs.period);
- 	if (ret)
- 		return ret;
+-	n = snprintf(sdata->label, sizeof(sdata->label), "%s", label);
++	n = scnprintf(sdata->label, sizeof(sdata->label), "%s", label);
+ 
+ 	/*
+ 	 * Core temp pretty print
+@@ -199,11 +199,11 @@ static void make_sensor_label(struct device_node *np,
+ 			 * The digital thermal sensors are associated
+ 			 * with a core.
+ 			 */
+-			n += snprintf(sdata->label + n,
++			n += scnprintf(sdata->label + n,
+ 				      sizeof(sdata->label) - n, " %d",
+ 				      cpuid);
+ 		else
+-			n += snprintf(sdata->label + n,
++			n += scnprintf(sdata->label + n,
+ 				      sizeof(sdata->label) - n, " phy%d", id);
+ 	}
+ 
+@@ -211,7 +211,7 @@ static void make_sensor_label(struct device_node *np,
+ 	 * Membuffer pretty print
+ 	 */
+ 	if (!of_property_read_u32(np, "ibm,chip-id", &id))
+-		n += snprintf(sdata->label + n, sizeof(sdata->label) - n,
++		n += scnprintf(sdata->label + n, sizeof(sdata->label) - n,
+ 			      " %d", id & 0xffff);
+ }
+ 
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.16.4
 
