@@ -2,134 +2,221 @@ Return-Path: <SRS0=GxSE=44=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C03BC0044D
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Mar 2020 17:43:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A4E6C0044D
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Mar 2020 23:15:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0603C2073E
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Mar 2020 17:43:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0CD292074E
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Mar 2020 23:15:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730615AbgCKRno (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 11 Mar 2020 13:43:44 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:43882 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730389AbgCKRnn (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 11 Mar 2020 13:43:43 -0400
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02BHeX9H068783;
-        Wed, 11 Mar 2020 13:43:22 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2ypxbkbwgw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 Mar 2020 13:43:21 -0400
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 02BHetiC069720;
-        Wed, 11 Mar 2020 13:43:19 -0400
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2ypxbkbwgb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 Mar 2020 13:43:19 -0400
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 02BHfPuL003571;
-        Wed, 11 Mar 2020 17:43:17 GMT
-Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma01wdc.us.ibm.com with ESMTP id 2ypjxqxkus-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 Mar 2020 17:43:17 +0000
-Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 02BHhHLk15532886
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 11 Mar 2020 17:43:17 GMT
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 28AD9112061;
-        Wed, 11 Mar 2020 17:43:17 +0000 (GMT)
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ACC23112062;
-        Wed, 11 Mar 2020 17:43:16 +0000 (GMT)
-Received: from talon7.ibm.com (unknown [9.41.103.158])
-        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
-        Wed, 11 Mar 2020 17:43:16 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, jdelvare@suse.com,
-        linux@roeck-us.net, bjwyman@gmail.com,
-        Eddie James <eajames@linux.ibm.com>
-Subject: [PATCH] hwmon: (pmbus/ibm-cffps) Add another PSU CCIN to version detection
-Date:   Wed, 11 Mar 2020 12:43:10 -0500
-Message-Id: <1583948590-17220-1-git-send-email-eajames@linux.ibm.com>
-X-Mailer: git-send-email 1.8.3.1
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-03-11_08:2020-03-11,2020-03-11 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- mlxlogscore=999 adultscore=0 clxscore=1011 mlxscore=0 malwarescore=0
- spamscore=0 priorityscore=1501 lowpriorityscore=0 bulkscore=0
- suspectscore=1 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2001150001 definitions=main-2003110102
+        id S1731383AbgCKXP1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 11 Mar 2020 19:15:27 -0400
+Received: from mga02.intel.com ([134.134.136.20]:5097 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731369AbgCKXP1 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 11 Mar 2020 19:15:27 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Mar 2020 16:15:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,542,1574150400"; 
+   d="scan'208";a="389417943"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 11 Mar 2020 16:15:25 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1jCAZQ-0000dc-AA; Thu, 12 Mar 2020 07:15:24 +0800
+Date:   Thu, 12 Mar 2020 07:15:16 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:hwmon-next] BUILD SUCCESS
+ 6a096871b2bedd524ce706aa687de4f7145f535c
+Message-ID: <5e697104.mh1M9xvTU52W5s6e%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-There is an additional CCIN for the IBM CFFPS that may be classifed as
-either version one or version two, based upon the rest of the bits of
-the CCIN. Add support for it in the version detection.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon-next
+branch HEAD: 6a096871b2bedd524ce706aa687de4f7145f535c  hwmon: (ibmpowernv) Use scnprintf() for avoiding potential buffer overflow
 
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
+elapsed time: 482m
+
+configs tested: 159
+configs skipped: 0
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+arm                              allmodconfig
+arm                               allnoconfig
+arm                              allyesconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+arm64                            allyesconfig
+arm                         at91_dt_defconfig
+arm                           efm32_defconfig
+arm                          exynos_defconfig
+arm                        multi_v5_defconfig
+arm                        multi_v7_defconfig
+arm                        shmobile_defconfig
+arm                           sunxi_defconfig
+arm64                               defconfig
+sparc                            allyesconfig
+ia64                              allnoconfig
+powerpc                             defconfig
+riscv                             allnoconfig
+ia64                                defconfig
+sparc                               defconfig
+m68k                          multi_defconfig
+parisc                generic-32bit_defconfig
+m68k                             allmodconfig
+s390                             alldefconfig
+s390                          debug_defconfig
+sparc64                           allnoconfig
+i386                              allnoconfig
+i386                             allyesconfig
+i386                             alldefconfig
+i386                                defconfig
+ia64                             alldefconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+c6x                              allyesconfig
+c6x                        evmc6678_defconfig
+nios2                         10m50_defconfig
+nios2                         3c120_defconfig
+openrisc                    or1ksim_defconfig
+openrisc                 simple_smp_defconfig
+xtensa                       common_defconfig
+xtensa                          iss_defconfig
+alpha                               defconfig
+csky                                defconfig
+nds32                             allnoconfig
+nds32                               defconfig
+h8300                     edosk2674_defconfig
+h8300                    h8300h-sim_defconfig
+h8300                       h8s-sim_defconfig
+m68k                       m5475evb_defconfig
+m68k                           sun3_defconfig
+arc                              allyesconfig
+arc                                 defconfig
+microblaze                      mmu_defconfig
+microblaze                    nommu_defconfig
+powerpc                           allnoconfig
+powerpc                       ppc64_defconfig
+powerpc                          rhel-kconfig
+mips                           32r2_defconfig
+mips                         64r6el_defconfig
+mips                             allmodconfig
+mips                              allnoconfig
+mips                             allyesconfig
+mips                      fuloong2e_defconfig
+mips                      malta_kvm_defconfig
+parisc                            allnoconfig
+parisc                           allyesconfig
+parisc                generic-64bit_defconfig
+x86_64               randconfig-a001-20200311
+x86_64               randconfig-a002-20200311
+x86_64               randconfig-a003-20200311
+i386                 randconfig-a001-20200311
+i386                 randconfig-a002-20200311
+i386                 randconfig-a003-20200311
+alpha                randconfig-a001-20200311
+m68k                 randconfig-a001-20200311
+mips                 randconfig-a001-20200311
+nds32                randconfig-a001-20200311
+parisc               randconfig-a001-20200311
+riscv                randconfig-a001-20200311
+csky                 randconfig-a001-20200311
+openrisc             randconfig-a001-20200311
+s390                 randconfig-a001-20200311
+sh                   randconfig-a001-20200311
+xtensa               randconfig-a001-20200311
+x86_64               randconfig-b001-20200311
+x86_64               randconfig-b002-20200311
+x86_64               randconfig-b003-20200311
+i386                 randconfig-b001-20200311
+i386                 randconfig-b002-20200311
+i386                 randconfig-b003-20200311
+x86_64               randconfig-c001-20200311
+x86_64               randconfig-c002-20200311
+x86_64               randconfig-c003-20200311
+i386                 randconfig-c001-20200311
+i386                 randconfig-c002-20200311
+i386                 randconfig-c003-20200311
+x86_64               randconfig-d001-20200311
+i386                 randconfig-d001-20200311
+i386                 randconfig-d003-20200311
+i386                 randconfig-d002-20200311
+x86_64               randconfig-d002-20200311
+x86_64               randconfig-d003-20200311
+x86_64               randconfig-e003-20200312
+i386                 randconfig-e003-20200312
+i386                 randconfig-e002-20200312
+x86_64               randconfig-e002-20200312
+x86_64               randconfig-e001-20200312
+i386                 randconfig-e001-20200312
+i386                 randconfig-f002-20200311
+x86_64               randconfig-f001-20200311
+i386                 randconfig-f003-20200311
+i386                 randconfig-f001-20200311
+x86_64               randconfig-f002-20200311
+x86_64               randconfig-f003-20200311
+x86_64               randconfig-g001-20200311
+x86_64               randconfig-g002-20200311
+x86_64               randconfig-g003-20200311
+i386                 randconfig-g001-20200311
+i386                 randconfig-g002-20200311
+i386                 randconfig-g003-20200311
+x86_64               randconfig-h001-20200311
+x86_64               randconfig-h002-20200311
+x86_64               randconfig-h003-20200311
+i386                 randconfig-h001-20200311
+i386                 randconfig-h002-20200311
+i386                 randconfig-h003-20200311
+arc                  randconfig-a001-20200311
+arm                  randconfig-a001-20200311
+arm64                randconfig-a001-20200311
+ia64                 randconfig-a001-20200311
+powerpc              randconfig-a001-20200311
+sparc                randconfig-a001-20200311
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+s390                             allmodconfig
+s390                              allnoconfig
+s390                             allyesconfig
+s390                                defconfig
+s390                       zfcpdump_defconfig
+sh                          rsk7269_defconfig
+sh                               allmodconfig
+sh                            titan_defconfig
+sh                  sh7785lcr_32bit_defconfig
+sh                                allnoconfig
+sparc64                          allmodconfig
+sparc64                          allyesconfig
+sparc64                             defconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+um                                  defconfig
+x86_64                                   rhel
+x86_64                               rhel-7.6
+x86_64                         rhel-7.2-clear
+x86_64                                    lkp
+x86_64                              fedora-25
+x86_64                                  kexec
+
 ---
- drivers/hwmon/pmbus/ibm-cffps.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
-index b9bfa43..7d300f2 100644
---- a/drivers/hwmon/pmbus/ibm-cffps.c
-+++ b/drivers/hwmon/pmbus/ibm-cffps.c
-@@ -33,9 +33,12 @@
- #define CFFPS_INPUT_HISTORY_CMD			0xD6
- #define CFFPS_INPUT_HISTORY_SIZE		100
- 
-+#define CFFPS_CCIN_REVISION			GENMASK(7, 0)
-+#define  CFFPS_CCIN_REVISION_LEGACY		 0xde
- #define CFFPS_CCIN_VERSION			GENMASK(15, 8)
- #define CFFPS_CCIN_VERSION_1			 0x2b
- #define CFFPS_CCIN_VERSION_2			 0x2e
-+#define CFFPS_CCIN_VERSION_3			 0x51
- 
- /* STATUS_MFR_SPECIFIC bits */
- #define CFFPS_MFR_FAN_FAULT			BIT(0)
-@@ -486,11 +489,14 @@ static int ibm_cffps_probe(struct i2c_client *client,
- 		vs = (enum versions)id->driver_data;
- 
- 	if (vs == cffps_unknown) {
-+		u16 ccin_revision = 0;
- 		u16 ccin_version = CFFPS_CCIN_VERSION_1;
- 		int ccin = i2c_smbus_read_word_swapped(client, CFFPS_CCIN_CMD);
- 
--		if (ccin > 0)
-+		if (ccin > 0) {
-+			ccin_revision = FIELD_GET(CFFPS_CCIN_REVISION, ccin);
- 			ccin_version = FIELD_GET(CFFPS_CCIN_VERSION, ccin);
-+		}
- 
- 		switch (ccin_version) {
- 		default:
-@@ -500,6 +506,12 @@ static int ibm_cffps_probe(struct i2c_client *client,
- 		case CFFPS_CCIN_VERSION_2:
- 			vs = cffps2;
- 			break;
-+		case CFFPS_CCIN_VERSION_3:
-+			if (ccin_revision == CFFPS_CCIN_REVISION_LEGACY)
-+				vs = cffps1;
-+			else
-+				vs = cffps2;
-+			break;
- 		}
- 
- 		/* Set the client name to include the version number. */
--- 
-1.8.3.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
