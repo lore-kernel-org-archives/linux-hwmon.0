@@ -1,222 +1,110 @@
-Return-Path: <SRS0=GxSE=44=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=7vWV=45=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UPPERCASE_50_75,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A4E6C0044D
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Mar 2020 23:15:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73C01C0044D
+	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Mar 2020 03:00:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0CD292074E
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Mar 2020 23:15:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8FE5C20735
+	for <linux-hwmon@archiver.kernel.org>; Thu, 12 Mar 2020 03:00:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731383AbgCKXP1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 11 Mar 2020 19:15:27 -0400
-Received: from mga02.intel.com ([134.134.136.20]:5097 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731369AbgCKXP1 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 11 Mar 2020 19:15:27 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Mar 2020 16:15:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,542,1574150400"; 
-   d="scan'208";a="389417943"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 11 Mar 2020 16:15:25 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1jCAZQ-0000dc-AA; Thu, 12 Mar 2020 07:15:24 +0800
-Date:   Thu, 12 Mar 2020 07:15:16 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon-next] BUILD SUCCESS
- 6a096871b2bedd524ce706aa687de4f7145f535c
-Message-ID: <5e697104.mh1M9xvTU52W5s6e%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S2387629AbgCLDAA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 11 Mar 2020 23:00:00 -0400
+Received: from aclms1.advantech.com.tw ([61.58.41.199]:53506 "EHLO
+        ACLMS1.advantech.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387609AbgCLDAA (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 11 Mar 2020 23:00:00 -0400
+X-Greylist: delayed 602 seconds by postgrey-1.27 at vger.kernel.org; Wed, 11 Mar 2020 22:59:59 EDT
+Received: from taipei08.ADVANTECH.CORP (unverified [172.20.0.235]) by ACLMS1.advantech.com.tw
+ (Clearswift SMTPRS 5.6.0) with ESMTP id <Tdddac63711ac14014bd38@ACLMS1.advantech.com.tw>;
+ Thu, 12 Mar 2020 10:49:55 +0800
+Received: from ADVANTECH.CORP (172.17.10.74) by taipei08.ADVANTECH.CORP
+ (172.20.0.235) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Thu, 12 Mar
+ 2020 10:49:54 +0800
+From:   <Amy.Shih@advantech.com.tw>
+To:     <she90122@gmail.com>
+CC:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <amy.shih@advantech.com.tw>, <oakley.ding@advantech.com.tw>,
+        <jia.sui@advantech.com.cn>, <yuechao.zhao@advantech.com.cn>
+Subject: [v1,1/1] Fix the incorrect quantity for fan & temp attributes.
+Date:   Thu, 12 Mar 2020 02:49:34 +0000
+Message-ID: <20200312024934.3533-1-Amy.Shih@advantech.com.tw>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [172.17.10.74]
+X-ClientProxiedBy: ACLDAG.ADVANTECH.CORP (172.20.2.88) To
+ taipei08.ADVANTECH.CORP (172.20.0.235)
+X-StopIT: No
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon-next
-branch HEAD: 6a096871b2bedd524ce706aa687de4f7145f535c  hwmon: (ibmpowernv) Use scnprintf() for avoiding potential buffer overflow
+From: Amy Shih <amy.shih@advantech.com.tw>
 
-elapsed time: 482m
+nct7904d supports 12 fan tachometers input and 13 temperatures
+(TEMP_CH1~4 and LTD + DTS TCPU1~8), fix the quantity for fan & temp
+attributes.
 
-configs tested: 159
-configs skipped: 0
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-arm                              allmodconfig
-arm                               allnoconfig
-arm                              allyesconfig
-arm64                            allmodconfig
-arm64                             allnoconfig
-arm64                            allyesconfig
-arm                         at91_dt_defconfig
-arm                           efm32_defconfig
-arm                          exynos_defconfig
-arm                        multi_v5_defconfig
-arm                        multi_v7_defconfig
-arm                        shmobile_defconfig
-arm                           sunxi_defconfig
-arm64                               defconfig
-sparc                            allyesconfig
-ia64                              allnoconfig
-powerpc                             defconfig
-riscv                             allnoconfig
-ia64                                defconfig
-sparc                               defconfig
-m68k                          multi_defconfig
-parisc                generic-32bit_defconfig
-m68k                             allmodconfig
-s390                             alldefconfig
-s390                          debug_defconfig
-sparc64                           allnoconfig
-i386                              allnoconfig
-i386                             allyesconfig
-i386                             alldefconfig
-i386                                defconfig
-ia64                             alldefconfig
-ia64                             allmodconfig
-ia64                             allyesconfig
-c6x                              allyesconfig
-c6x                        evmc6678_defconfig
-nios2                         10m50_defconfig
-nios2                         3c120_defconfig
-openrisc                    or1ksim_defconfig
-openrisc                 simple_smp_defconfig
-xtensa                       common_defconfig
-xtensa                          iss_defconfig
-alpha                               defconfig
-csky                                defconfig
-nds32                             allnoconfig
-nds32                               defconfig
-h8300                     edosk2674_defconfig
-h8300                    h8300h-sim_defconfig
-h8300                       h8s-sim_defconfig
-m68k                       m5475evb_defconfig
-m68k                           sun3_defconfig
-arc                              allyesconfig
-arc                                 defconfig
-microblaze                      mmu_defconfig
-microblaze                    nommu_defconfig
-powerpc                           allnoconfig
-powerpc                       ppc64_defconfig
-powerpc                          rhel-kconfig
-mips                           32r2_defconfig
-mips                         64r6el_defconfig
-mips                             allmodconfig
-mips                              allnoconfig
-mips                             allyesconfig
-mips                      fuloong2e_defconfig
-mips                      malta_kvm_defconfig
-parisc                            allnoconfig
-parisc                           allyesconfig
-parisc                generic-64bit_defconfig
-x86_64               randconfig-a001-20200311
-x86_64               randconfig-a002-20200311
-x86_64               randconfig-a003-20200311
-i386                 randconfig-a001-20200311
-i386                 randconfig-a002-20200311
-i386                 randconfig-a003-20200311
-alpha                randconfig-a001-20200311
-m68k                 randconfig-a001-20200311
-mips                 randconfig-a001-20200311
-nds32                randconfig-a001-20200311
-parisc               randconfig-a001-20200311
-riscv                randconfig-a001-20200311
-csky                 randconfig-a001-20200311
-openrisc             randconfig-a001-20200311
-s390                 randconfig-a001-20200311
-sh                   randconfig-a001-20200311
-xtensa               randconfig-a001-20200311
-x86_64               randconfig-b001-20200311
-x86_64               randconfig-b002-20200311
-x86_64               randconfig-b003-20200311
-i386                 randconfig-b001-20200311
-i386                 randconfig-b002-20200311
-i386                 randconfig-b003-20200311
-x86_64               randconfig-c001-20200311
-x86_64               randconfig-c002-20200311
-x86_64               randconfig-c003-20200311
-i386                 randconfig-c001-20200311
-i386                 randconfig-c002-20200311
-i386                 randconfig-c003-20200311
-x86_64               randconfig-d001-20200311
-i386                 randconfig-d001-20200311
-i386                 randconfig-d003-20200311
-i386                 randconfig-d002-20200311
-x86_64               randconfig-d002-20200311
-x86_64               randconfig-d003-20200311
-x86_64               randconfig-e003-20200312
-i386                 randconfig-e003-20200312
-i386                 randconfig-e002-20200312
-x86_64               randconfig-e002-20200312
-x86_64               randconfig-e001-20200312
-i386                 randconfig-e001-20200312
-i386                 randconfig-f002-20200311
-x86_64               randconfig-f001-20200311
-i386                 randconfig-f003-20200311
-i386                 randconfig-f001-20200311
-x86_64               randconfig-f002-20200311
-x86_64               randconfig-f003-20200311
-x86_64               randconfig-g001-20200311
-x86_64               randconfig-g002-20200311
-x86_64               randconfig-g003-20200311
-i386                 randconfig-g001-20200311
-i386                 randconfig-g002-20200311
-i386                 randconfig-g003-20200311
-x86_64               randconfig-h001-20200311
-x86_64               randconfig-h002-20200311
-x86_64               randconfig-h003-20200311
-i386                 randconfig-h001-20200311
-i386                 randconfig-h002-20200311
-i386                 randconfig-h003-20200311
-arc                  randconfig-a001-20200311
-arm                  randconfig-a001-20200311
-arm64                randconfig-a001-20200311
-ia64                 randconfig-a001-20200311
-powerpc              randconfig-a001-20200311
-sparc                randconfig-a001-20200311
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-s390                             allmodconfig
-s390                              allnoconfig
-s390                             allyesconfig
-s390                                defconfig
-s390                       zfcpdump_defconfig
-sh                          rsk7269_defconfig
-sh                               allmodconfig
-sh                            titan_defconfig
-sh                  sh7785lcr_32bit_defconfig
-sh                                allnoconfig
-sparc64                          allmodconfig
-sparc64                          allyesconfig
-sparc64                             defconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-um                                  defconfig
-x86_64                                   rhel
-x86_64                               rhel-7.6
-x86_64                         rhel-7.2-clear
-x86_64                                    lkp
-x86_64                              fedora-25
-x86_64                                  kexec
-
+Signed-off-by: Amy Shih <amy.shih@advantech.com.tw>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/hwmon/nct7904.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+
+diff --git a/drivers/hwmon/nct7904.c b/drivers/hwmon/nct7904.c
+index 281c81e..1f5743d 100644
+--- a/drivers/hwmon/nct7904.c
++++ b/drivers/hwmon/nct7904.c
+@@ -7,6 +7,11 @@
+  *
+  * Copyright (c) 2019 Advantech
+  * Author: Amy.Shih <amy.shih@advantech.com.tw>
++ *
++ * Supports the following chips:
++ *
++ * Chip        #vin  #fan  #pwm  #temp  #dts  chip ID
++ * nct7904d     20    12    4     5      8    0xc5
+  */
+ 
+ #include <linux/module.h>
+@@ -820,6 +825,10 @@ static int nct7904_detect(struct i2c_client *client,
+ 			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_ALARM,
+ 			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_ALARM,
+ 			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_ALARM,
++			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_ALARM,
++			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_ALARM,
++			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_ALARM,
++			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_ALARM,
+ 			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_ALARM),
+ 	HWMON_CHANNEL_INFO(pwm,
+ 			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+@@ -853,6 +862,18 @@ static int nct7904_detect(struct i2c_client *client,
+ 			   HWMON_T_CRIT_HYST,
+ 			   HWMON_T_INPUT | HWMON_T_ALARM | HWMON_T_MAX |
+ 			   HWMON_T_MAX_HYST | HWMON_T_TYPE | HWMON_T_CRIT |
++			   HWMON_T_CRIT_HYST,
++			   HWMON_T_INPUT | HWMON_T_ALARM | HWMON_T_MAX |
++			   HWMON_T_MAX_HYST | HWMON_T_TYPE | HWMON_T_CRIT |
++			   HWMON_T_CRIT_HYST,
++			   HWMON_T_INPUT | HWMON_T_ALARM | HWMON_T_MAX |
++			   HWMON_T_MAX_HYST | HWMON_T_TYPE | HWMON_T_CRIT |
++			   HWMON_T_CRIT_HYST,
++			   HWMON_T_INPUT | HWMON_T_ALARM | HWMON_T_MAX |
++			   HWMON_T_MAX_HYST | HWMON_T_TYPE | HWMON_T_CRIT |
++			   HWMON_T_CRIT_HYST,
++			   HWMON_T_INPUT | HWMON_T_ALARM | HWMON_T_MAX |
++			   HWMON_T_MAX_HYST | HWMON_T_TYPE | HWMON_T_CRIT |
+ 			   HWMON_T_CRIT_HYST),
+ 	NULL
+ };
+-- 
+1.8.3.1
+
