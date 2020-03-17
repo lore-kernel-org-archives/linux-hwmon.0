@@ -2,92 +2,103 @@ Return-Path: <SRS0=oqPP=5C=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E09F5C10F29
-	for <linux-hwmon@archiver.kernel.org>; Tue, 17 Mar 2020 17:03:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7782AC5ACD6
+	for <linux-hwmon@archiver.kernel.org>; Tue, 17 Mar 2020 17:07:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B32B620735
-	for <linux-hwmon@archiver.kernel.org>; Tue, 17 Mar 2020 17:03:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4D3C42073E
+	for <linux-hwmon@archiver.kernel.org>; Tue, 17 Mar 2020 17:07:18 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="jOeS0u82"
+	dkim=pass (2048-bit key) header.d=gateworks-com.20150623.gappssmtp.com header.i=@gateworks-com.20150623.gappssmtp.com header.b="sIqg0Vzx"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726222AbgCQRD4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 17 Mar 2020 13:03:56 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:42214 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726082AbgCQRD4 (ORCPT
+        id S1726838AbgCQRHR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 17 Mar 2020 13:07:17 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:44135 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726735AbgCQRHQ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 17 Mar 2020 13:03:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:
-        Subject:Sender:Reply-To:Cc:Content-ID:Content-Description;
-        bh=JrfbfStkuLthDJce1M1JugDTO24hOoZE58L7iN+zG2U=; b=jOeS0u829MtADQiUjmIqAmuJKK
-        etUNM1qkA+POedoDZdTcxDQbKGA5Ltl+G3zo4zyk9vZF9F2epczpebM4r+qpE4cCDXtTbXsEqsRdC
-        vwNMTgdrUxksdy3oy99KgYgsqiZaRhcsOrVfOjATxum+k7gbgA0tJIopajlTDy02l8YxkBiQ1Oqsp
-        WZvYKipXpfKvXKt/4eEl73Rqf0Te0oYUmBL1iVqhpx1sjqeu4xwtJlkjmqD1lVEyMOCXQFsABTnbR
-        HDsNTn55SBEezIAwjDefrCoetIBT6CbDNMVV31xTZvsIqj4wOzCxWEanwQpjL1gxU+eP8GLC/1SgA
-        nJFHVyqQ==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jEFdC-0007p4-Kj; Tue, 17 Mar 2020 17:03:55 +0000
-Subject: Re: [PATCH v6 3/3] hwmon: add Gateworks System Controller support
-To:     Tim Harvey <tharvey@gateworks.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Robert Jones <rjones@gateworks.com>
-References: <1584464453-28200-1-git-send-email-tharvey@gateworks.com>
- <1584464453-28200-4-git-send-email-tharvey@gateworks.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <f7ccbdb4-917a-2dd7-bf6b-8c82b87bc167@infradead.org>
-Date:   Tue, 17 Mar 2020 10:03:53 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        Tue, 17 Mar 2020 13:07:16 -0400
+Received: by mail-ot1-f68.google.com with SMTP id a49so19654911otc.11
+        for <linux-hwmon@vger.kernel.org>; Tue, 17 Mar 2020 10:07:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gateworks-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VudPPbgid+IOVvMAP116P9IN7W1PK4r6e92xmQ1xmVM=;
+        b=sIqg0VzxFQwfl+NWdXDi591J6crh9n/XZpMU6biUNq1ohIi87AXY3udpx2XqMHkG9G
+         AmFbSuaTV0n71kWgl2dwunxBA3bdTceAz5Tv6B7qbX+ChY+tJ8rO4aySoZwGR8ugZwWe
+         JletsY23VuybykQ/pY2k6o4WLc9+SMC9quU/Z035kTOMLlD3FORwXXL7orXMI9gJ6bpO
+         13TIqF+0JAf8hKTlpUgovjbiqHvCPNDR5K49lKbQ3IXF6Pr8vp0reLw6qA3Wz6J39zec
+         we0h7fcwjRIXljWqhkCLie48zTmUzg17Vg16TPXJmn75bDntjrDD60Ilz7aU34a84sKu
+         cUog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VudPPbgid+IOVvMAP116P9IN7W1PK4r6e92xmQ1xmVM=;
+        b=S71++t19Mz1i6xZqGvW1hdyknYtB6BgUQwM17v9qacqODs+YasTjfHoK5PXs2ZRkzp
+         G7A8Mah48UBqcL3pu40VX6Souglb5Fxm/HQwJkkflqqY6S3sDYK2sBSB5ZuwbIuXFzI1
+         xYqHnSMieEAZaAj50cuv+OR53MnV+KwZMoyQ65P1bfon7kLKZ8XdPpK9tCybWCTGX8Iz
+         /hjb2kuTF8OssgWaVTOwl9ibBibQlB+LQ3NNdi8UjGKDrmbzr4ssUsHJxBkZXeE7toeE
+         tf7N6OpDho2jSw934txyI/VxxI9Fnfb1tP7T4uMcitXMWyt6+MfN9J9DDKujFRroGb7D
+         GTwQ==
+X-Gm-Message-State: ANhLgQ2AXfFIemWoK4V5xwo+Ntw2T7DiG2pdQgsiW2QhQ4fyTCwYnX9q
+        Fzzgk6EHKVBoabH3QrEgWl0Uqdvzt/MDCVRQ6OJNSA==
+X-Google-Smtp-Source: ADFU+vu5W+BZZpY/VMpqNkUZ9RU5okoO9lMPTYpCARTmV5yjADrHMwmK0PiXPRTBtmoi8/X9ZZHucwoULMi4fh6GVLk=
+X-Received: by 2002:a9d:63d2:: with SMTP id e18mr158576otl.277.1584464835611;
+ Tue, 17 Mar 2020 10:07:15 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1584464453-28200-4-git-send-email-tharvey@gateworks.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <1584464453-28200-1-git-send-email-tharvey@gateworks.com>
+ <1584464453-28200-4-git-send-email-tharvey@gateworks.com> <f7ccbdb4-917a-2dd7-bf6b-8c82b87bc167@infradead.org>
+In-Reply-To: <f7ccbdb4-917a-2dd7-bf6b-8c82b87bc167@infradead.org>
+From:   Tim Harvey <tharvey@gateworks.com>
+Date:   Tue, 17 Mar 2020 10:07:04 -0700
+Message-ID: <CAJ+vNU3Bgn5W7E6RQbfygz=pGsDLLZ9tkQ0J4EPGn1COk9XLSw@mail.gmail.com>
+Subject: Re: [PATCH v6 3/3] hwmon: add Gateworks System Controller support
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Lee Jones <lee.jones@linaro.org>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Linux HWMON List <linux-hwmon@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Device Tree Mailing List <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Robert Jones <rjones@gateworks.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 3/17/20 10:00 AM, Tim Harvey wrote:
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 23dfe84..99dae13 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -494,6 +494,15 @@ config SENSORS_F75375S
->  	  This driver can also be built as a module. If so, the module
->  	  will be called f75375s.
->  
-> +config SENSORS_GSC
-> +        tristate "Gateworks System Controller ADC"
-> +        depends on MFD_GATEWORKS_GSC
-> +        help
-> +          Support for the Gateworks System Controller A/D converters.
+On Tue, Mar 17, 2020 at 10:03 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> On 3/17/20 10:00 AM, Tim Harvey wrote:
+> > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> > index 23dfe84..99dae13 100644
+> > --- a/drivers/hwmon/Kconfig
+> > +++ b/drivers/hwmon/Kconfig
+> > @@ -494,6 +494,15 @@ config SENSORS_F75375S
+> >         This driver can also be built as a module. If so, the module
+> >         will be called f75375s.
+> >
+> > +config SENSORS_GSC
+> > +        tristate "Gateworks System Controller ADC"
+> > +        depends on MFD_GATEWORKS_GSC
+> > +        help
+> > +          Support for the Gateworks System Controller A/D converters.
+>
+> Hi Tim,
+> Those 4 lines above should be using tabs for indentation.
+> + 2 spaces on the final "Support" line.
 
-Hi Tim,
-Those 4 lines above should be using tabs for indentation.
-+ 2 spaces on the final "Support" line.
+Randy,
 
-> +
-> +	  To compile this driver as a module, choose M here:
-> +	  the module will be called gsc-hwmon.
-> +
->  config SENSORS_MC13783_ADC
->          tristate "Freescale MC13783/MC13892 ADC"
->          depends on MFD_MC13XXX
+Thanks - can't believe I didn't see that. Checkpatch didn't catch it either.
+
+I'll fix for v7.
 
 
--- 
-~Randy
-
+Tim
