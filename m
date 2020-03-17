@@ -2,87 +2,121 @@ Return-Path: <SRS0=oqPP=5C=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1284C2BB1D
-	for <linux-hwmon@archiver.kernel.org>; Tue, 17 Mar 2020 20:06:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 249C4C1975A
+	for <linux-hwmon@archiver.kernel.org>; Tue, 17 Mar 2020 20:50:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D5F7E20768
-	for <linux-hwmon@archiver.kernel.org>; Tue, 17 Mar 2020 20:06:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E290C2075E
+	for <linux-hwmon@archiver.kernel.org>; Tue, 17 Mar 2020 20:50:50 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="cSJm4OCH"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727015AbgCQUGF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 17 Mar 2020 16:06:05 -0400
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:40974 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726756AbgCQUFg (ORCPT
+        id S1726776AbgCQUuu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 17 Mar 2020 16:50:50 -0400
+Received: from ssl.serverraum.org ([176.9.125.105]:43577 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726680AbgCQUuu (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 17 Mar 2020 16:05:36 -0400
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 17 Mar 2020 13:05:35 -0700
-Received: from gurus-linux.qualcomm.com ([10.46.162.81])
-  by ironmsg05-sd.qualcomm.com with ESMTP; 17 Mar 2020 13:05:34 -0700
-Received: by gurus-linux.qualcomm.com (Postfix, from userid 383780)
-        id 9DE022164; Tue, 17 Mar 2020 13:05:34 -0700 (PDT)
-From:   Guru Das Srinagesh <gurus@codeaurora.org>
-To:     linux-pwm@vger.kernel.org
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
-        Subbaraman Narayanamurthy <subbaram@codeaurora.org>,
-        linux-kernel@vger.kernel.org,
-        Guru Das Srinagesh <gurus@codeaurora.org>,
-        Kamil Debski <kamil@wypas.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Tue, 17 Mar 2020 16:50:50 -0400
+Received: from apollo.fritz.box (unknown [IPv6:2a02:810c:c200:2e91:6257:18ff:fec4:ca34])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 621F223E3D;
+        Tue, 17 Mar 2020 21:50:47 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1584478247;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yHhnQloQUToDXGnXijKLNbDzOyKNXrK7+WubSxFsj34=;
+        b=cSJm4OCHxSQfB3YX/PxFPSyx/Uz0UYF9kZtTPAU8l0ttDyB7LGY1VhFNo6DXRmKBOy34AQ
+        h/PyXwOebr6/w8MwLxZzAiMLO881AAjr6KPE6IBw5tEEOBfYmPwuqC4cv8NE8GNbbFXUDo
+        /+OZlquotM0LFYlAd31RL3wXpw2MXLM=
+From:   Michael Walle <michael@walle.cc>
+To:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-hwmon@vger.kernel.org
-Subject: [PATCH v9 02/11] hwmon: pwm-fan: Use 64-bit division macro
-Date:   Tue, 17 Mar 2020 13:05:17 -0700
-Message-Id: <9b0166fa9b86c01001291cdb1eb5c33609589965.1584473399.git.gurus@codeaurora.org>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <cover.1584473399.git.gurus@codeaurora.org>
-References: <cover.1584473399.git.gurus@codeaurora.org>
-In-Reply-To: <cover.1584473399.git.gurus@codeaurora.org>
-References: <cover.1584473399.git.gurus@codeaurora.org>
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Michael Walle <michael@walle.cc>
+Subject: [PATCH 01/18] include/linux/ioport.h: add helper to define REG resource constructs
+Date:   Tue, 17 Mar 2020 21:50:00 +0100
+Message-Id: <20200317205017.28280-2-michael@walle.cc>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200317205017.28280-1-michael@walle.cc>
+References: <20200317205017.28280-1-michael@walle.cc>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spamd-Bar: ++++++
+X-Rspamd-Server: web
+X-Rspamd-Queue-Id: 621F223E3D
+X-Spamd-Result: default: False [6.40 / 15.00];
+         FROM_HAS_DN(0.00)[];
+         TO_DN_SOME(0.00)[];
+         R_MISSING_CHARSET(2.50)[];
+         FREEMAIL_ENVRCPT(0.00)[gmail.com];
+         TAGGED_RCPT(0.00)[dt];
+         MIME_GOOD(-0.10)[text/plain];
+         BROKEN_CONTENT_TYPE(1.50)[];
+         TO_MATCH_ENVRCPT_ALL(0.00)[];
+         NEURAL_SPAM(0.00)[0.496];
+         DKIM_SIGNED(0.00)[];
+         RCPT_COUNT_TWELVE(0.00)[22];
+         MID_CONTAINS_FROM(1.00)[];
+         RCVD_COUNT_ZERO(0.00)[0];
+         FROM_EQ_ENVFROM(0.00)[];
+         MIME_TRACE(0.00)[0:+];
+         ASN(0.00)[asn:31334, ipnet:2a02:810c:8000::/33, country:DE];
+         FREEMAIL_CC(0.00)[linaro.org,baylibre.com,kernel.org,suse.com,roeck-us.net,gmail.com,pengutronix.de,linux-watchdog.org,nxp.com,linutronix.de,lakedaemon.net,walle.cc];
+         SUSPICIOUS_RECIPS(1.50)[]
+X-Spam: Yes
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Since the PWM framework is switching struct pwm_args.period's datatype
-to u64, prepare for this transition by using DIV_ROUND_UP_ULL to handle
-a 64-bit dividend.
+Similar to the existing helpers, add one for IORESOURCE_REG which comes
+in handy for most common resource declarations.
 
-Cc: Kamil Debski <kamil@wypas.org>
-Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Cc: Jean Delvare <jdelvare@suse.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Liam Girdwood <lgirdwood@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: linux-hwmon@vger.kernel.org
-
-Signed-off-by: Guru Das Srinagesh <gurus@codeaurora.org>
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Michael Walle <michael@walle.cc>
 ---
- drivers/hwmon/pwm-fan.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/ioport.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-index 42ffd2e..283423a 100644
---- a/drivers/hwmon/pwm-fan.c
-+++ b/drivers/hwmon/pwm-fan.c
-@@ -437,7 +437,7 @@ static int pwm_fan_resume(struct device *dev)
- 		return 0;
+diff --git a/include/linux/ioport.h b/include/linux/ioport.h
+index a9b9170b5dd2..cdcceeec0f86 100644
+--- a/include/linux/ioport.h
++++ b/include/linux/ioport.h
+@@ -165,6 +165,11 @@ enum {
+ #define DEFINE_RES_MEM(_start, _size)					\
+ 	DEFINE_RES_MEM_NAMED((_start), (_size), NULL)
  
- 	pwm_get_args(ctx->pwm, &pargs);
--	duty = DIV_ROUND_UP(ctx->pwm_value * (pargs.period - 1), MAX_PWM);
-+	duty = DIV_ROUND_UP_ULL(ctx->pwm_value * (pargs.period - 1), MAX_PWM);
- 	ret = pwm_config(ctx->pwm, duty, pargs.period);
- 	if (ret)
- 		return ret;
++#define DEFINE_RES_REG_NAMED(_start, _size, _name)			\
++	DEFINE_RES_NAMED((_start), (_size), (_name), IORESOURCE_REG)
++#define DEFINE_RES_REG(_start, _size)					\
++	DEFINE_RES_REG_NAMED((_start), (_size), NULL)
++
+ #define DEFINE_RES_IRQ_NAMED(_irq, _name)				\
+ 	DEFINE_RES_NAMED((_irq), 1, (_name), IORESOURCE_IRQ)
+ #define DEFINE_RES_IRQ(_irq)						\
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.20.1
 
