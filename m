@@ -2,40 +2,42 @@ Return-Path: <SRS0=oqPP=5C=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB585C5ACD8
-	for <linux-hwmon@archiver.kernel.org>; Tue, 17 Mar 2020 20:50:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE9B0C2BB1D
+	for <linux-hwmon@archiver.kernel.org>; Tue, 17 Mar 2020 20:51:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B6DAE20752
-	for <linux-hwmon@archiver.kernel.org>; Tue, 17 Mar 2020 20:50:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AD76C20738
+	for <linux-hwmon@archiver.kernel.org>; Tue, 17 Mar 2020 20:51:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="qce08iWX"
+	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="GoSAhAhK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726680AbgCQUuv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 17 Mar 2020 16:50:51 -0400
-Received: from ssl.serverraum.org ([176.9.125.105]:57217 "EHLO
+        id S1727128AbgCQUvF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 17 Mar 2020 16:51:05 -0400
+Received: from ssl.serverraum.org ([176.9.125.105]:37775 "EHLO
         ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726388AbgCQUuv (ORCPT
+        with ESMTP id S1727065AbgCQUvD (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 17 Mar 2020 16:50:51 -0400
+        Tue, 17 Mar 2020 16:51:03 -0400
 Received: from apollo.fritz.box (unknown [IPv6:2a02:810c:c200:2e91:6257:18ff:fec4:ca34])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 0D1DA23E3C;
-        Tue, 17 Mar 2020 21:50:44 +0100 (CET)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 2025123EC4;
+        Tue, 17 Mar 2020 21:51:00 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1584478246;
+        t=1584478260;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=9s1oQ4jq4pc56CEahZRpEbRnFk8T32v+b2fT2eRreEE=;
-        b=qce08iWXtRajtnoSLXDjM1QKGpUAFHSDUgGSEcHGW3Cj/PC34Uaf4/Vo5xxlHtQ8P6BNYg
-        lEHg2dwzb2isgJtP0nuBHmcX3ASQiJeZI0CBXD8U3ZTPh7fb/MXg0ksEIlJD3bFFu3dKEM
-        DpgRvvwPFbSDcOfN9eADOSPG9Xbhg6U=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=W2NICvToJ5VxP77+c9lfy+Eo5/BPC2qjYzOe6PwS1TY=;
+        b=GoSAhAhKPygog86zCvdX/KIK15Bpoy1qgBcBDCsnwFSc7ORr1Qn7y51e3qM1MuUEA4A1Yz
+        ow/+sDOVf5eZWxHpwLhcV/yApcTgnKAUeaiwF8YsW5Hw5tSiw6AuTVBbbYfE2mz5tw1FGW
+        FVz/hz9mwVYd+m3lrRPAK59AYAojuwc=
 From:   Michael Walle <michael@walle.cc>
 To:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
@@ -55,15 +57,17 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Jason Cooper <jason@lakedaemon.net>,
         Marc Zyngier <maz@kernel.org>, Michael Walle <michael@walle.cc>
-Subject: [PATCH 00/18] Add support for Kontron sl28cpld
-Date:   Tue, 17 Mar 2020 21:49:59 +0100
-Message-Id: <20200317205017.28280-1-michael@walle.cc>
+Subject: [PATCH 18/18] arm64: dts: freescale: sl28: enable fan support
+Date:   Tue, 17 Mar 2020 21:50:17 +0100
+Message-Id: <20200317205017.28280-19-michael@walle.cc>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200317205017.28280-1-michael@walle.cc>
+References: <20200317205017.28280-1-michael@walle.cc>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spamd-Bar: ++++++
 X-Rspamd-Server: web
-X-Rspamd-Queue-Id: 0D1DA23E3C
+X-Rspamd-Queue-Id: 2025123EC4
 X-Spamd-Result: default: False [6.40 / 15.00];
          FROM_HAS_DN(0.00)[];
          TO_DN_SOME(0.00)[];
@@ -73,9 +77,8 @@ X-Spamd-Result: default: False [6.40 / 15.00];
          MIME_GOOD(-0.10)[text/plain];
          BROKEN_CONTENT_TYPE(1.50)[];
          TO_MATCH_ENVRCPT_ALL(0.00)[];
-         NEURAL_SPAM(0.00)[0.662];
+         NEURAL_SPAM(0.00)[0.572];
          DKIM_SIGNED(0.00)[];
-         DBL_PROHIBIT(0.00)[0.0.0.1:email,0.0.0.0:email];
          RCPT_COUNT_TWELVE(0.00)[22];
          MID_CONTAINS_FROM(1.00)[];
          RCVD_COUNT_ZERO(0.00)[0];
@@ -90,96 +93,34 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The Kontron sl28cpld is a board management chip providing gpio, pwm, fan
-monitoring and an interrupt controller. For now this controller is used on
-the Kontron SMARC-sAL28 board. But because of its flexible nature, it
-might also be used on other boards in the future. The individual blocks
-(like gpio, pwm, etc) are kept intentionally small. The MFD core driver
-then instantiates different (or multiple of the same) blocks. It also
-provides the register layout so it might be updated in the future without a
-device tree change; and support other boards with a different layout or
-functionalities.
+Add a pwm-fan mapped to the PWM channel 0 which is connected to the
+fan connector of the carrier.
 
-See also [1] for more information.
+Signed-off-by: Michael Walle <michael@walle.cc>
+---
+ .../dts/freescale/fsl-ls1028a-kontron-sl28-var3-ads2.dts | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-There is one problem though:
-
-Documentation/devicetree/bindings/mfd/kontron,sl28cpld.example.dts:32.24-41.19: Warning (unique_unit_address): /example-0/i2c/sl28cpld@4a/gpio@0: duplicate unit-address (also used in node /example-0/i2c/sl28cpld@4a/pwm@0)
-Documentation/devicetree/bindings/mfd/kontron,sl28cpld.example.dts:43.24-52.19: Warning (unique_unit_address): /example-0/i2c/sl28cpld@4a/gpio@1: duplicate unit-address (also used in node /example-0/i2c/sl28cpld@4a/pwm@1)
-
-This is because the reg property is used to match multiple MFD cells which
-has the same devicetree compatible string. See patch 3. So only the (reg,
-compatible string) is unique. Maybe I should use a different property but
-reg?
-
-This is my first take of a MFD driver. I don't know wether the subsystem
-maintainers should only be CCed on the patches which affect the subsystem
-or on all patches for this series. I've chosen the latter so you can get a
-more complete picture.
-
-[1] https://lore.kernel.org/linux-devicetree/0e3e8204ab992d75aa07fc36af7e4ab2@walle.cc/
-
-Michael Walle (18):
-  include/linux/ioport.h: add helper to define REG resource constructs
-  mfd: mfd-core: Don't overwrite the dma_mask of the child device
-  mfd: mfd-core: match device tree node against reg property
-  dt-bindings: mfd: Add bindings for sl28cpld
-  mfd: Add support for Kontron sl28cpld management controller
-  irqchip: add sl28cpld interrupt controller support
-  dt-bindings: watchdog: Add bindings for sl28cpld watchdog
-  watchdog: add support for sl28cpld watchdog
-  dt-bindings: pwm: Add bindings for sl28cpld PWM controller
-  pwm: add support for sl28cpld PWM controller
-  dt-bindings: gpio: Add bindings for sl28cpld GPIO controller
-  gpio: add support for the sl28cpld GPIO controller
-  dt-bindings: hwmon: Add bindings for sl28cpld hardware monitoring
-  hwmon: add support for the sl28cpld hardware monitoring controller
-  arm64: dts: freescale: sl28: enable sl28cpld
-  arm64: dts: freescale: sl28: map GPIOs to input events
-  arm64: dts: freescale: sl28: enable LED support
-  arm64: dts: freescale: sl28: enable fan support
-
- .../bindings/gpio/kontron,sl28cpld-gpio.yaml  |  52 +++
- .../hwmon/kontron,sl28cpld-hwmon.yaml         |  28 ++
- .../bindings/mfd/kontron,sl28cpld.yaml        | 146 ++++++++
- .../bindings/pwm/kontron,sl28cpld-pwm.yaml    |  33 ++
- .../watchdog/kontron,sl28cpld-wdt.yaml        |  30 ++
- .../fsl-ls1028a-kontron-kbox-a-230-ls.dts     |  14 +
- .../fsl-ls1028a-kontron-sl28-var3-ads2.dts    |   9 +
- .../freescale/fsl-ls1028a-kontron-sl28.dts    | 119 +++++++
- drivers/gpio/Kconfig                          |  11 +
- drivers/gpio/Makefile                         |   1 +
- drivers/gpio/gpio-sl28cpld.c                  | 332 ++++++++++++++++++
- drivers/hwmon/Kconfig                         |  10 +
- drivers/hwmon/Makefile                        |   1 +
- drivers/hwmon/sl28cpld-hwmon.c                | 146 ++++++++
- drivers/irqchip/Kconfig                       |   3 +
- drivers/irqchip/Makefile                      |   1 +
- drivers/irqchip/irq-sl28cpld.c                |  92 +++++
- drivers/mfd/Kconfig                           |  21 ++
- drivers/mfd/Makefile                          |   2 +
- drivers/mfd/mfd-core.c                        |  28 +-
- drivers/mfd/sl28cpld.c                        | 155 ++++++++
- drivers/pwm/Kconfig                           |  10 +
- drivers/pwm/Makefile                          |   1 +
- drivers/pwm/pwm-sl28cpld.c                    | 192 ++++++++++
- drivers/watchdog/Kconfig                      |  11 +
- drivers/watchdog/Makefile                     |   1 +
- drivers/watchdog/sl28cpld_wdt.c               | 238 +++++++++++++
- include/linux/ioport.h                        |   5 +
- 28 files changed, 1682 insertions(+), 10 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/gpio/kontron,sl28cpld-gpio.yaml
- create mode 100644 Documentation/devicetree/bindings/hwmon/kontron,sl28cpld-hwmon.yaml
- create mode 100644 Documentation/devicetree/bindings/mfd/kontron,sl28cpld.yaml
- create mode 100644 Documentation/devicetree/bindings/pwm/kontron,sl28cpld-pwm.yaml
- create mode 100644 Documentation/devicetree/bindings/watchdog/kontron,sl28cpld-wdt.yaml
- create mode 100644 drivers/gpio/gpio-sl28cpld.c
- create mode 100644 drivers/hwmon/sl28cpld-hwmon.c
- create mode 100644 drivers/irqchip/irq-sl28cpld.c
- create mode 100644 drivers/mfd/sl28cpld.c
- create mode 100644 drivers/pwm/pwm-sl28cpld.c
- create mode 100644 drivers/watchdog/sl28cpld_wdt.c
-
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var3-ads2.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var3-ads2.dts
+index 0973a6a45217..016b6ae5826b 100644
+--- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var3-ads2.dts
++++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var3-ads2.dts
+@@ -15,6 +15,15 @@
+ 	compatible = "kontron,sl28-var3-ads2", "kontron,sl28-var3",
+ 		     "kontron,sl28", "fsl,ls1028a";
+ 
++	pwm-fan {
++		compatible = "pwm-fan";
++		cooling-min-state = <0>;
++		cooling-max-state = <3>;
++		#cooling-cells = <2>;
++		pwms = <&pwm0 0 4000000>;
++		cooling-levels = <1 128 192 255>;
++	};
++
+ 	sound {
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
 -- 
 2.20.1
 
