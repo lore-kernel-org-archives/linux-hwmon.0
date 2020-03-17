@@ -1,4 +1,4 @@
-Return-Path: <SRS0=VC+S=5B=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=oqPP=5C=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
@@ -6,41 +6,41 @@ X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4ECCC0044D
-	for <linux-hwmon@archiver.kernel.org>; Mon, 16 Mar 2020 18:24:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB3BBC10F29
+	for <linux-hwmon@archiver.kernel.org>; Tue, 17 Mar 2020 06:18:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7BC2320409
-	for <linux-hwmon@archiver.kernel.org>; Mon, 16 Mar 2020 18:24:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 84130206EC
+	for <linux-hwmon@archiver.kernel.org>; Tue, 17 Mar 2020 06:18:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732236AbgCPSYv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 16 Mar 2020 14:24:51 -0400
-Received: from mga17.intel.com ([192.55.52.151]:25126 "EHLO mga17.intel.com"
+        id S1725785AbgCQGSj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 17 Mar 2020 02:18:39 -0400
+Received: from mga17.intel.com ([192.55.52.151]:12504 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731967AbgCPSYv (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 16 Mar 2020 14:24:51 -0400
-IronPort-SDR: Gv3jXCGYV1KtGN7n+/xfJhSxxJM5u5utJHA48j//+I8Y+dI+rACt8UL7bm8xS+rnrpeBkTBcjq
- nzjuivJdtVUQ==
+        id S1725536AbgCQGSi (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 17 Mar 2020 02:18:38 -0400
+IronPort-SDR: lDIM15/YDsC1OMxgrMfKniY9ecJude2ETKFgs5oPkIjKj+qSsVSFCjH5Z0D5kLPBG8THmNaZ2Z
+ 6SqfebburCyA==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2020 11:24:50 -0700
-IronPort-SDR: pxY6UFCvX3ScYq+PEiy6URaBsk9Zdj9exFi3eVPg2PfB9QhlKW5Od48c5cAtJYWkzgp/QiyTUk
- XcwL2IQOQJew==
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2020 23:18:38 -0700
+IronPort-SDR: 5ADYPYhCJ+kKXTw3pWXQIUVY3KnKmtUiU8xvToO7O2VBthdZhtiR5is0u2TKDyVuL+l9/ovrac
+ STtMt7nCijLA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,561,1574150400"; 
-   d="scan'208";a="355118220"
+X-IronPort-AV: E=Sophos;i="5.70,563,1574150400"; 
+   d="scan'208";a="279293302"
 Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 16 Mar 2020 11:24:49 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 16 Mar 2020 23:18:37 -0700
 Received: from kbuild by lkp-server01 with local (Exim 4.89)
         (envelope-from <lkp@intel.com>)
-        id 1jDuPw-0006EZ-OM; Tue, 17 Mar 2020 02:24:48 +0800
-Date:   Tue, 17 Mar 2020 02:24:41 +0800
+        id 1jE5Yi-000Fnu-Ht; Tue, 17 Mar 2020 14:18:36 +0800
+Date:   Tue, 17 Mar 2020 14:18:19 +0800
 From:   kbuild test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:watchdog-next] BUILD SUCCESS
- 7f1d51f5a9eff8e57b047fa6927d3f6905f2b32b
-Message-ID: <5e6fc469.iPe2EVRkJwY2GjWl%lkp@intel.com>
+Subject: [hwmon:hwmon-next] BUILD SUCCESS
+ b1fbe673b89e88adae0800ab8bef69854be58720
+Message-ID: <5e706bab.omC0USPuOIC7ArR1%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -50,12 +50,12 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  watchdog-next
-branch HEAD: 7f1d51f5a9eff8e57b047fa6927d3f6905f2b32b  watchdog: ziirave_wdt: change name to be more specific
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon-next
+branch HEAD: b1fbe673b89e88adae0800ab8bef69854be58720  hwmon: (pmbus/ibm-cffps) Add another PSU CCIN to version detection
 
-elapsed time: 694m
+elapsed time: 1408m
 
-configs tested: 157
+configs tested: 145
 configs skipped: 0
 
 The following configs have been built successfully.
@@ -80,10 +80,8 @@ mips                             allyesconfig
 riscv                    nommu_virt_defconfig
 sh                                allnoconfig
 um                                  defconfig
-um                             i386_defconfig
 microblaze                      mmu_defconfig
 parisc                            allnoconfig
-h8300                     edosk2674_defconfig
 i386                              allnoconfig
 i386                             alldefconfig
 i386                             allyesconfig
@@ -105,6 +103,7 @@ alpha                               defconfig
 csky                                defconfig
 nds32                             allnoconfig
 nds32                               defconfig
+h8300                     edosk2674_defconfig
 h8300                    h8300h-sim_defconfig
 h8300                       h8s-sim_defconfig
 m68k                             allmodconfig
@@ -120,12 +119,6 @@ mips                      malta_kvm_defconfig
 parisc                           allyesconfig
 parisc                generic-32bit_defconfig
 parisc                generic-64bit_defconfig
-x86_64               randconfig-a001-20200316
-x86_64               randconfig-a002-20200316
-x86_64               randconfig-a003-20200316
-i386                 randconfig-a001-20200316
-i386                 randconfig-a002-20200316
-i386                 randconfig-a003-20200316
 alpha                randconfig-a001-20200316
 m68k                 randconfig-a001-20200316
 mips                 randconfig-a001-20200316
@@ -148,12 +141,12 @@ x86_64               randconfig-b003-20200316
 i386                 randconfig-b001-20200316
 i386                 randconfig-b002-20200316
 i386                 randconfig-b003-20200316
-x86_64               randconfig-c001-20200316
-x86_64               randconfig-c002-20200316
-x86_64               randconfig-c003-20200316
-i386                 randconfig-c001-20200316
-i386                 randconfig-c002-20200316
-i386                 randconfig-c003-20200316
+x86_64               randconfig-c001-20200317
+x86_64               randconfig-c002-20200317
+x86_64               randconfig-c003-20200317
+i386                 randconfig-c001-20200317
+i386                 randconfig-c002-20200317
+i386                 randconfig-c003-20200317
 x86_64               randconfig-d001-20200316
 x86_64               randconfig-d002-20200316
 x86_64               randconfig-d003-20200316
@@ -166,12 +159,6 @@ x86_64               randconfig-e003-20200316
 i386                 randconfig-e001-20200316
 i386                 randconfig-e002-20200316
 i386                 randconfig-e003-20200316
-x86_64               randconfig-f001-20200316
-x86_64               randconfig-f002-20200316
-x86_64               randconfig-f003-20200316
-i386                 randconfig-f001-20200316
-i386                 randconfig-f002-20200316
-i386                 randconfig-f003-20200316
 x86_64               randconfig-g001-20200316
 x86_64               randconfig-g002-20200316
 x86_64               randconfig-g003-20200316
@@ -207,10 +194,11 @@ sh                          rsk7269_defconfig
 sh                  sh7785lcr_32bit_defconfig
 sh                            titan_defconfig
 sparc                               defconfig
-sparc64                          allmodconfig
+sparc64                             defconfig
 sparc64                           allnoconfig
 sparc64                          allyesconfig
-sparc64                             defconfig
+sparc64                          allmodconfig
+um                             i386_defconfig
 um                           x86_64_defconfig
 x86_64                              fedora-25
 x86_64                                  kexec
