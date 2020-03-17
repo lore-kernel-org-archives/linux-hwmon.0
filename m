@@ -2,211 +2,139 @@ Return-Path: <SRS0=oqPP=5C=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB3BBC10F29
-	for <linux-hwmon@archiver.kernel.org>; Tue, 17 Mar 2020 06:18:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63976C18E5B
+	for <linux-hwmon@archiver.kernel.org>; Tue, 17 Mar 2020 17:01:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 84130206EC
-	for <linux-hwmon@archiver.kernel.org>; Tue, 17 Mar 2020 06:18:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3F93020714
+	for <linux-hwmon@archiver.kernel.org>; Tue, 17 Mar 2020 17:01:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725785AbgCQGSj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 17 Mar 2020 02:18:39 -0400
-Received: from mga17.intel.com ([192.55.52.151]:12504 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725536AbgCQGSi (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 17 Mar 2020 02:18:38 -0400
-IronPort-SDR: lDIM15/YDsC1OMxgrMfKniY9ecJude2ETKFgs5oPkIjKj+qSsVSFCjH5Z0D5kLPBG8THmNaZ2Z
- 6SqfebburCyA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2020 23:18:38 -0700
-IronPort-SDR: 5ADYPYhCJ+kKXTw3pWXQIUVY3KnKmtUiU8xvToO7O2VBthdZhtiR5is0u2TKDyVuL+l9/ovrac
- STtMt7nCijLA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,563,1574150400"; 
-   d="scan'208";a="279293302"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 16 Mar 2020 23:18:37 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1jE5Yi-000Fnu-Ht; Tue, 17 Mar 2020 14:18:36 +0800
-Date:   Tue, 17 Mar 2020 14:18:19 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon-next] BUILD SUCCESS
- b1fbe673b89e88adae0800ab8bef69854be58720
-Message-ID: <5e706bab.omC0USPuOIC7ArR1%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+        id S1726066AbgCQRBC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 17 Mar 2020 13:01:02 -0400
+Received: from lists.gateworks.com ([108.161.130.12]:51761 "EHLO
+        lists.gateworks.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726016AbgCQRBB (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 17 Mar 2020 13:01:01 -0400
+Received: from 68-189-91-139.static.snlo.ca.charter.com ([68.189.91.139] helo=tharvey.pdc.gateworks.com)
+        by lists.gateworks.com with esmtp (Exim 4.82)
+        (envelope-from <tharvey@gateworks.com>)
+        id 1jEFbj-00005R-CC; Tue, 17 Mar 2020 17:02:23 +0000
+From:   Tim Harvey <tharvey@gateworks.com>
+To:     Lee Jones <lee.jones@linaro.org>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Robert Jones <rjones@gateworks.com>
+Cc:     Tim Harvey <tharvey@gateworks.com>
+Subject: [PATCH v6 0/3] Add support for the Gateworks System Controller
+Date:   Tue, 17 Mar 2020 10:00:50 -0700
+Message-Id: <1584464453-28200-1-git-send-email-tharvey@gateworks.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon-next
-branch HEAD: b1fbe673b89e88adae0800ab8bef69854be58720  hwmon: (pmbus/ibm-cffps) Add another PSU CCIN to version detection
+This series adds support for the Gateworks System Controller used on Gateworks
+Laguna, Ventana, and Newport product families.
 
-elapsed time: 1408m
+The GSC is an MSP430 I2C slave controller whose firmware embeds the following
+features:
+ - I/O expander (16 GPIO's emulating a PCA955x)
+ - EEPROM (enumating AT24)
+ - RTC (enumating DS1672)
+ - HWMON
+ - Interrupt controller with tamper detect, user pushbotton
+ - Watchdog controller capable of full board power-cycle
+ - Power Control capable of full board power-cycle
 
-configs tested: 145
-configs skipped: 0
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-arm                              allmodconfig
-arm                               allnoconfig
-arm                              allyesconfig
-arm64                            allmodconfig
-arm64                             allnoconfig
-arm64                            allyesconfig
-arm                         at91_dt_defconfig
-arm                           efm32_defconfig
-arm                          exynos_defconfig
-arm                        multi_v5_defconfig
-arm                        multi_v7_defconfig
-arm                        shmobile_defconfig
-arm                           sunxi_defconfig
-arm64                               defconfig
-sparc                            allyesconfig
-mips                             allyesconfig
-riscv                    nommu_virt_defconfig
-sh                                allnoconfig
-um                                  defconfig
-microblaze                      mmu_defconfig
-parisc                            allnoconfig
-i386                              allnoconfig
-i386                             alldefconfig
-i386                             allyesconfig
-i386                                defconfig
-ia64                             alldefconfig
-ia64                             allmodconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-ia64                                defconfig
-c6x                              allyesconfig
-c6x                        evmc6678_defconfig
-nios2                         10m50_defconfig
-nios2                         3c120_defconfig
-openrisc                    or1ksim_defconfig
-openrisc                 simple_smp_defconfig
-xtensa                       common_defconfig
-xtensa                          iss_defconfig
-alpha                               defconfig
-csky                                defconfig
-nds32                             allnoconfig
-nds32                               defconfig
-h8300                     edosk2674_defconfig
-h8300                    h8300h-sim_defconfig
-h8300                       h8s-sim_defconfig
-m68k                             allmodconfig
-m68k                       m5475evb_defconfig
-m68k                          multi_defconfig
-m68k                           sun3_defconfig
-mips                           32r2_defconfig
-mips                         64r6el_defconfig
-mips                             allmodconfig
-mips                              allnoconfig
-mips                      fuloong2e_defconfig
-mips                      malta_kvm_defconfig
-parisc                           allyesconfig
-parisc                generic-32bit_defconfig
-parisc                generic-64bit_defconfig
-alpha                randconfig-a001-20200316
-m68k                 randconfig-a001-20200316
-mips                 randconfig-a001-20200316
-nds32                randconfig-a001-20200316
-parisc               randconfig-a001-20200316
-riscv                randconfig-a001-20200316
-c6x                  randconfig-a001-20200316
-h8300                randconfig-a001-20200316
-microblaze           randconfig-a001-20200316
-nios2                randconfig-a001-20200316
-sparc64              randconfig-a001-20200316
-csky                 randconfig-a001-20200316
-openrisc             randconfig-a001-20200316
-s390                 randconfig-a001-20200316
-sh                   randconfig-a001-20200316
-xtensa               randconfig-a001-20200316
-x86_64               randconfig-b001-20200316
-x86_64               randconfig-b002-20200316
-x86_64               randconfig-b003-20200316
-i386                 randconfig-b001-20200316
-i386                 randconfig-b002-20200316
-i386                 randconfig-b003-20200316
-x86_64               randconfig-c001-20200317
-x86_64               randconfig-c002-20200317
-x86_64               randconfig-c003-20200317
-i386                 randconfig-c001-20200317
-i386                 randconfig-c002-20200317
-i386                 randconfig-c003-20200317
-x86_64               randconfig-d001-20200316
-x86_64               randconfig-d002-20200316
-x86_64               randconfig-d003-20200316
-i386                 randconfig-d001-20200316
-i386                 randconfig-d002-20200316
-i386                 randconfig-d003-20200316
-x86_64               randconfig-e001-20200316
-x86_64               randconfig-e002-20200316
-x86_64               randconfig-e003-20200316
-i386                 randconfig-e001-20200316
-i386                 randconfig-e002-20200316
-i386                 randconfig-e003-20200316
-x86_64               randconfig-g001-20200316
-x86_64               randconfig-g002-20200316
-x86_64               randconfig-g003-20200316
-i386                 randconfig-g001-20200316
-i386                 randconfig-g002-20200316
-i386                 randconfig-g003-20200316
-x86_64               randconfig-h001-20200316
-x86_64               randconfig-h002-20200316
-x86_64               randconfig-h003-20200316
-i386                 randconfig-h001-20200316
-i386                 randconfig-h002-20200316
-i386                 randconfig-h003-20200316
-arc                  randconfig-a001-20200316
-arm                  randconfig-a001-20200316
-arm64                randconfig-a001-20200316
-ia64                 randconfig-a001-20200316
-powerpc              randconfig-a001-20200316
-sparc                randconfig-a001-20200316
-riscv                            allmodconfig
-riscv                             allnoconfig
-riscv                            allyesconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-s390                             alldefconfig
-s390                             allmodconfig
-s390                              allnoconfig
-s390                             allyesconfig
-s390                          debug_defconfig
-s390                                defconfig
-s390                       zfcpdump_defconfig
-sh                               allmodconfig
-sh                          rsk7269_defconfig
-sh                  sh7785lcr_32bit_defconfig
-sh                            titan_defconfig
-sparc                               defconfig
-sparc64                             defconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-sparc64                          allmodconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              fedora-25
-x86_64                                  kexec
-x86_64                                    lkp
-x86_64                                   rhel
-x86_64                         rhel-7.2-clear
-x86_64                               rhel-7.6
-
+see http://trac.gateworks.com/wiki/gsc for more details
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+v6:
+ - hwmon: fix size of info field
+ - hwmon: improve pwm output control documentation 
+ - hwmon: include unit suffix in divider and offset
+ - hwmon: change subnode name to gsc-adc
+ - hwmon: change to fan subnode
+ - hwmon: fix voltage offset
+ - dt-bindings: fix commit message typo
+ - dt-bindings: drop invalid description from #interrupt-cells property
+ - dt-bindings: fix adc pattern property
+ - dt-bindings: add unit suffix
+ - dt-bindings: replace hwmon/adc with adc/channel
+ - dt-bindings: changed adc type to gw,mode 
+ - dt-bindings: add unit suffix and drop ref for voltage-divider
+ - dt-bindings: add unit suffix for voltage-offset
+ - dt-bindings: moved fan to its own subnode with base register
+
+v5:
+ - fix checkpatch issues
+ - fix dt_binding_check issues
+ - address feedback from v4
+
+v4:
+ - hwmon: move to using pwm<n>_auto_point<m>_{pwm,temp} for FAN PWM
+ - hwmon: remove unncessary resolution/scaling properties for ADCs
+ - bindings: update to yaml Documentation
+ - removed watchdog driver
+
+v3:
+ - removed unnecessary input driver
+ - added wdt driver
+ - bindings: encorporated feedback from mailng list
+ - hwmon:
+ - encoroprated feedback from mailng list
+ - added support for raw ADC voltage input used in newer GSC firmware
+
+v2:
+ - change license comment block style
+ - remove COMPILE_TEST
+ - fixed whitespace issues
+ - replaced a printk with dev_err
+ - remove DEBUG
+ - simplify regmap_bulk_read err check
+ - remove break after returns in switch statement
+ - fix fan setpoint buffer address
+ - remove unnecessary parens
+ - consistently use struct device *dev pointer
+ - add validation for hwmon child node props
+ - move parsing of of to own function
+ - use strlcpy to ensure null termination
+ - fix static array sizes and removed unnecessary initializers
+ - dynamically allocate channels
+ - fix fan input label
+ - support platform data
+
+Tim Harvey (3):
+  dt-bindings: mfd: Add Gateworks System Controller bindings
+  mfd: add Gateworks System Controller core driver
+  hwmon: add Gateworks System Controller support
+
+ .../devicetree/bindings/mfd/gateworks-gsc.yaml     | 172 ++++++++++
+ Documentation/hwmon/gsc-hwmon.rst                  |  53 +++
+ Documentation/hwmon/index.rst                      |   1 +
+ MAINTAINERS                                        |  11 +
+ drivers/hwmon/Kconfig                              |   9 +
+ drivers/hwmon/Makefile                             |   1 +
+ drivers/hwmon/gsc-hwmon.c                          | 372 +++++++++++++++++++++
+ drivers/mfd/Kconfig                                |  10 +
+ drivers/mfd/Makefile                               |   1 +
+ drivers/mfd/gateworks-gsc.c                        | 292 ++++++++++++++++
+ include/linux/mfd/gsc.h                            |  72 ++++
+ include/linux/platform_data/gsc_hwmon.h            |  44 +++
+ 12 files changed, 1038 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
+ create mode 100644 Documentation/hwmon/gsc-hwmon.rst
+ create mode 100644 drivers/hwmon/gsc-hwmon.c
+ create mode 100644 drivers/mfd/gateworks-gsc.c
+ create mode 100644 include/linux/mfd/gsc.h
+ create mode 100644 include/linux/platform_data/gsc_hwmon.h
+
+-- 
+2.7.4
+
