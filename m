@@ -7,57 +7,58 @@ X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
 	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91CE7C4332B
-	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Mar 2020 22:48:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B4BFC4332E
+	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Mar 2020 22:48:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5D1842076C
-	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Mar 2020 22:48:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4EAD42076C
+	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Mar 2020 22:48:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MhM+didP"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="a3I+KiTG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727647AbgCSWsc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 19 Mar 2020 18:48:32 -0400
-Received: from mail-pj1-f73.google.com ([209.85.216.73]:44945 "EHLO
-        mail-pj1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727620AbgCSWsa (ORCPT
+        id S1727650AbgCSWse (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 19 Mar 2020 18:48:34 -0400
+Received: from mail-pl1-f201.google.com ([209.85.214.201]:53790 "EHLO
+        mail-pl1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727641AbgCSWsc (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 19 Mar 2020 18:48:30 -0400
-Received: by mail-pj1-f73.google.com with SMTP id t7so2593878pjb.9
-        for <linux-hwmon@vger.kernel.org>; Thu, 19 Mar 2020 15:48:28 -0700 (PDT)
+        Thu, 19 Mar 2020 18:48:32 -0400
+Received: by mail-pl1-f201.google.com with SMTP id 2so2585920plb.20
+        for <linux-hwmon@vger.kernel.org>; Thu, 19 Mar 2020 15:48:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=LhMQ+INauU/9KsdnAD4j2Pb0cvx1ECfEdZDOsAn7Tjs=;
-        b=MhM+didPcgg860ORFtZLYW+f0Yigz9R3V9Dt9sQFenpw5C8t+d3zAp4iZdnHS20qBj
-         rluUdvf3Tk5HZ+fhAi+3AhaWvz6M+8nPWu3gEjKl+mlO13h6gzwlEWXL/mUVBeRs2Q1Z
-         BXnLAIZ4oYQYPE6viTR1RxUYphilXx+en4IHpEXGMygvfUa40O3kVU0Oxj2sc6V1ACiT
-         3eQOHS+rfuemcp3ctkZ5yzASfOo/QIp4jzErU+6nwvqG/FjdsT3YbnG4foi4eG0755xh
-         aBIwiN7e8pqaY440bLfaY470kt6vhy+0vhGsbDWheRHYTqa9t2oI6lP7JabCSxg+rBng
-         2tLA==
+        bh=p2FECenFo/SV+lvmBUFJN/N3tCfRxwr2b4eodVl25VI=;
+        b=a3I+KiTG8nWWCWq5o/hbNf7tgyx9XDAThb0tz5gwUfh0lfIOPV14Y+uE5vbEhILmxN
+         xkAUviA4XsZ6iaKNhkGwT+Asbp+hEu/fyIVBR8Zroy967ppdGOV9aVyvD8HVoKpZRXkI
+         b7/axSYnJ87E4WNgdOeBRJS7oeBQbPBXSAijU+4JTuPtzhaKm6TifdtGeHdBKV+6nA5x
+         /kfXfwsPxHTPKl28em94wM71Ug+hSPn26/Fh163ZsHYgliNWvAxA7ZIBhtp9zwBKnSuK
+         k9x6fHhO8VJ7k9i159tiGWe/STUBqXq7Blv3A7H+ZZYf877JDX228pSNax2iTD2avlAW
+         m57A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=LhMQ+INauU/9KsdnAD4j2Pb0cvx1ECfEdZDOsAn7Tjs=;
-        b=KW0pSooNrlokCVmPrKFg77nG9NNdGPCYvkfG9k2jJLxTAZJIxqyUyRvLaGqMnJqUIp
-         BjpuDAZNF1pOXjSI5uTaQiUmNaRuKZMMsW7IeVZLrrqJbukwgXUFLHd6j/K3B2+5fiJr
-         C6yuzB4IOwNeHveaqcTIv71KYAHn38yI82KOXaqxncb0vd043J7RWCCmKmhr03yY7WJ6
-         pEZ2FpzSCPhS6MIvCiVLo2O/gMkaFmScPDNhb7AGJpCcBvhHOExaeoOrxT2/wj+n+NnE
-         TnkVW2hm/d9Er5MoYGXaRFhzhgqvaf5zrWbjbfgGut/B+2zQ7Td3hCU/gX5EzCt+q+bn
-         MWqw==
-X-Gm-Message-State: ANhLgQ1jS90/SzgtsPRjOpGLCkxmuNN4oKP/IE1+x+n6OdYxHXXftW7U
-        cK2h5KUp8DkvU0N7eB9iaySkyROAbQ==
-X-Google-Smtp-Source: ADFU+vsLgunwRk9yZ3AUlPSafEADszzRYkrqieYJNQ1jOtHdB0maXLeE+UQJmDtZWigVEJCVaugEtLcuxQ==
-X-Received: by 2002:a17:90a:25c8:: with SMTP id k66mr6241638pje.90.1584658108071;
- Thu, 19 Mar 2020 15:48:28 -0700 (PDT)
-Date:   Thu, 19 Mar 2020 15:48:11 -0700
+        bh=p2FECenFo/SV+lvmBUFJN/N3tCfRxwr2b4eodVl25VI=;
+        b=W+Kvq3BM904Z0zmVL8KGNeRJlsTK9suXtLpYNcsXaLL6lcwRv2jzFiVqCvXr30vMgG
+         H6Xrxg3dQHbU7m/07illryHGo6GzkveqGpaRMy5gtM/xirs0c+vYKrDQ3DpO5ASXR/Pu
+         bDW4CGASkRRI0MohHByiXlsWSnnFw2Ec+Kiz4vp8oI3oSvMP0OTiVTxhK1VCwBCfgNzU
+         zZtZW4AHQiH0lCY3UggvW3fEMJIonfXSb/aVNvGocnsK1PhwkBVd7Ls0nWnt5tjBy4m0
+         jddez3G+3aXhPDmCP+E2fbbEPxHeHbrzANpmWc+0VZ72aIRjFV3v7Qbf9FMdqL0NRouA
+         eveA==
+X-Gm-Message-State: ANhLgQ2jJFyYrWa5uH+7b3v2JPpiFuawGKpFfH43rZOZHnagZvz1Is+N
+        x5E0B9mirn/t16983t5Ur092BJzI5A==
+X-Google-Smtp-Source: ADFU+vsiwSXNqmafTIi8B+BiMHfBtFjBqB+UtENXanP1PQfB14qdA7ZVWXrhzSCXbwWiNFPLFow4n0qFDA==
+X-Received: by 2002:a63:c54b:: with SMTP id g11mr5703406pgd.164.1584658111321;
+ Thu, 19 Mar 2020 15:48:31 -0700 (PDT)
+Date:   Thu, 19 Mar 2020 15:48:12 -0700
 In-Reply-To: <20200319224812.202013-1-kunyi@google.com>
-Message-Id: <20200319224812.202013-3-kunyi@google.com>
+Message-Id: <20200319224812.202013-4-kunyi@google.com>
 Mime-Version: 1.0
 References: <20200319224812.202013-1-kunyi@google.com>
 X-Mailer: git-send-email 2.25.1.696.g5e7596f4ac-goog
-Subject: [PATCH linux hwmon-next v1 2/3] hwmon: (sbtsi) Add documentation
+Subject: [PATCH linux hwmon-next v1 3/3] dt-bindings: (hwmon/sbtsi_tmep) Add
+ SB-TSI hwmon driver bindings
 From:   Kun Yi <kunyi@google.com>
 To:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
         mark.rutland@arm.com
@@ -70,53 +71,35 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Document the SB-TSI sensor interface driver.
+Document device tree bindings for AMD SB-TSI emulated temperature
+sensor.
 
 Signed-off-by: Kun Yi <kunyi@google.com>
 ---
- Documentation/hwmon/sbtsi_temp.rst | 33 ++++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 Documentation/hwmon/sbtsi_temp.rst
+ .../devicetree/bindings/hwmon/sbtsi_temp.txt       | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/sbtsi_temp.txt
 
-diff --git a/Documentation/hwmon/sbtsi_temp.rst b/Documentation/hwmon/sbtsi_temp.rst
+diff --git a/Documentation/devicetree/bindings/hwmon/sbtsi_temp.txt b/Documentation/devicetree/bindings/hwmon/sbtsi_temp.txt
 new file mode 100644
-index 000000000000..f5addb72d13f
+index 000000000000..4020f075699e
 --- /dev/null
-+++ b/Documentation/hwmon/sbtsi_temp.rst
-@@ -0,0 +1,33 @@
-+Kernel driver sbtsi_temp
-+==================
++++ b/Documentation/devicetree/bindings/hwmon/sbtsi_temp.txt
+@@ -0,0 +1,14 @@
++*AMD SoC SB-TSI hwmon driver.
 +
-+Supported hardware:
++Required properties:
++- compatible: manufacturer and chip name, should be
++	"amd,sbtsi",
 +
-+  * Sideband interface (SBI) Temperature Sensor Interface (SB-TSI)
-+    compliant AMD SoC temperature device.
++- reg: I2C bus address of the device
 +
-+    Prefix: 'sbtsi_temp'
++Example:
 +
-+    Addresses scanned: This driver doesn't support address scanning.
-+
-+    Datasheet: The SB-TSI interface and protocol is available as part of
-+               the open source SoC register reference at:
-+
-+	       https://www.amd.com/system/files/TechDocs/56255_OSRR.pdf
-+
-+               The Advanced Platform Management Link (APML) Specification is
-+               available at:
-+
-+	       http://developer.amd.com/wordpress/media/2012/10/41918.pdf
-+
-+Author: Kun Yi <kunyi@google.com>
-+
-+Description
-+-----------
-+
-+The SBI temperature sensor interface (SB-TSI) is an emulation of the software
-+and physical interface of a typical 8-pin remote temperature sensor (RTS) on
-+AMD SoCs. It implements one temperature sensor with readings and limit
-+registers encode the temperature in increments of 0.125 from 0 to 255.875.
-+Limits can be set through the writable thresholds, and if reached will trigger
-+corresponding alert signals.
++sbtsi@4c {
++	compatible = "amd,sbtsi";
++	reg = <0x4c>;
++};
 -- 
 2.25.1.696.g5e7596f4ac-goog
 
