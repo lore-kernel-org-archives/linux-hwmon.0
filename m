@@ -2,91 +2,313 @@ Return-Path: <SRS0=kej4=5F=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59C8CC4332D
-	for <linux-hwmon@archiver.kernel.org>; Fri, 20 Mar 2020 03:05:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D086C4332D
+	for <linux-hwmon@archiver.kernel.org>; Fri, 20 Mar 2020 03:15:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E679220754
-	for <linux-hwmon@archiver.kernel.org>; Fri, 20 Mar 2020 03:05:49 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X3qa7GWP"
+	by mail.kernel.org (Postfix) with ESMTP id BD99920724
+	for <linux-hwmon@archiver.kernel.org>; Fri, 20 Mar 2020 03:15:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1584674118;
+	bh=Qy4Drd2ux8KYY4KgJCZdJOObAhqMSo77y6zNWn+q4MM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=rSQiCihCYurn8wuOzNF3FyVCk+DXdp0Hsh3sYkGzK8vWQ3xqwolH+NdyIU/0s02TL
+	 QStXDFXJdsDi8nkYgvO8Fc62LLLAQ6GL0q4D/L+Nz3eOFwz04VgybfwA0oFD5QTg6w
+	 u/ovsxjeG5AGkhwKQLv6mOlbFSrmi9HeG/YRBv8k=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726603AbgCTDFs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 19 Mar 2020 23:05:48 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:45199 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726596AbgCTDFs (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 19 Mar 2020 23:05:48 -0400
-Received: by mail-pg1-f194.google.com with SMTP id m15so2331403pgv.12;
-        Thu, 19 Mar 2020 20:05:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=AetbBZq6fH3L1TSV0zp8Vgu0DgkKl6UrkrvBBlKDDog=;
-        b=X3qa7GWP7/MLQDcD0kMqRXOybiYDYjsblYHrK1ylLZByadrIGnRFFSW/ZaGPPWrPp4
-         5XelvX8qMVz6c8zezkaMmhsaM/boJmXDTrTsXDGBcycGq68qoCgC2G1qgyyho3xGNkGp
-         +kULm9o47KLudBUhr/7jRf95RCBgWGrgMA9xqDtw6OhNYRpdqiGoODTVHCPlMRwHhRTG
-         X1GQJVnxnIUEt92OwumZojxSKLwFyfssFUbqXLJEjY5ulweas8l8cEwH2IQT8IBHjH41
-         pVMtkz/5DRiSuwFqc8G8CnHkU7fh/eT4gmco3WKFONZUwmvWFeVAhA3xY+zfHKO0zqnt
-         8TCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=AetbBZq6fH3L1TSV0zp8Vgu0DgkKl6UrkrvBBlKDDog=;
-        b=q8tShp05SjoeGpWUzPozVZ2aOFCCEAV+A59gBhqrd2uYJdbZfOur5VJwB3VOmuxBpB
-         5voiWv6cm+NrEIMBn8o/efKIbRQPtZEYrtelVSb9rlGIpHY0hPOCTNfC3SG3qGiZg5+3
-         d7w/6hCY3Ao8OFbc2m04u11zYlx5V/uv2YfUbRMVfVUfPDV20ufG+tSD3tXeEXKqErca
-         GStPieEFc9h7c9/qmkFJ9GfI67t+xLN9QxRsB8+MpmUdHNBOCm+Y69d38igqm7jkBilE
-         0MY1GNGFwDy6vqO2gPlV8okJT6r7JvSoH7edvEhH7uuT+pDoNXUYJ31YtDgd4okW5l2C
-         bsCQ==
-X-Gm-Message-State: ANhLgQ2dVwPrD8cADtDA8Hbbhs7U0cYQRRGNuee8rShhOh8vsLAJ14hp
-        MhF5De3tYnsliCdG6qXT8XU=
-X-Google-Smtp-Source: ADFU+vtx5K5X6TOjjrU/pgCvP2+Rz06GRkgR3bOHnCWbJjIq77NHdpFMDTQzO7GETDz0S9Xj1qxKKw==
-X-Received: by 2002:aa7:8f03:: with SMTP id x3mr7538783pfr.40.1584673547029;
-        Thu, 19 Mar 2020 20:05:47 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d23sm3726170pfq.210.2020.03.19.20.05.46
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 19 Mar 2020 20:05:46 -0700 (PDT)
-Date:   Thu, 19 Mar 2020 20:05:45 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Grant Peltier <grantpeltier93@gmail.com>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        adam.vaughn.xh@renesas.com
-Subject: Re: [PATCH v2 2/2] docs: hwmon: Update documentation for isl68137
- pmbus driver
-Message-ID: <20200320030545.GA3260@roeck-us.net>
-References: <cover.1584568073.git.grantpeltier93@gmail.com>
- <619d5d430b80fbf33a7e19e9910a0cf049203f59.1584568073.git.grantpeltier93@gmail.com>
+        id S1726596AbgCTDPS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 19 Mar 2020 23:15:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37532 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726103AbgCTDPS (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 19 Mar 2020 23:15:18 -0400
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E68AD20732;
+        Fri, 20 Mar 2020 03:15:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1584674117;
+        bh=Qy4Drd2ux8KYY4KgJCZdJOObAhqMSo77y6zNWn+q4MM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=w3GKc92cnRRSzt66icI55KS0YEpfwJqCiylsk1UA/e0G2dtEuTFM3ktG48tXpJvQH
+         RUqJDJyM6DfJjtqBLJ5d/7Iv/23jWn4gz1/qanH0EYx3PWYHQZ5NnQOzLXVoT7V7yP
+         pa/AWhK78n39Pbt4bzMzZAspmVtoVHhhot1C7FLo=
+Received: by mail-qt1-f180.google.com with SMTP id d22so3881277qtn.0;
+        Thu, 19 Mar 2020 20:15:16 -0700 (PDT)
+X-Gm-Message-State: ANhLgQ2RuSClpIGjk4Ol/gbJ7iJHsGYum2kCfd2o9VuF3OvTt+9X2Zws
+        x+3Vhu6Q89az0ImCEVdkqVNYO7MufTDXJVc4GA==
+X-Google-Smtp-Source: ADFU+vvbZ0m/eqkTFt+PYD8TMf6wIaTyZ1u2Jmh0zj6G5M05l2SrNwBvEVQ1sjhQ0kcRpDTwXiW7ElZTToN7kZFliKg=
+X-Received: by 2002:ac8:1b33:: with SMTP id y48mr6410475qtj.136.1584674115935;
+ Thu, 19 Mar 2020 20:15:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <619d5d430b80fbf33a7e19e9910a0cf049203f59.1584568073.git.grantpeltier93@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <1584464453-28200-1-git-send-email-tharvey@gateworks.com> <1584464453-28200-2-git-send-email-tharvey@gateworks.com>
+In-Reply-To: <1584464453-28200-2-git-send-email-tharvey@gateworks.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 19 Mar 2020 21:15:04 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqK8isY1ymi6Kk=uDC-uLR5QZUYUUQJ3z=SJ6ToC5aTbjg@mail.gmail.com>
+Message-ID: <CAL_JsqK8isY1ymi6Kk=uDC-uLR5QZUYUUQJ3z=SJ6ToC5aTbjg@mail.gmail.com>
+Subject: Re: [PATCH v6 1/3] dt-bindings: mfd: Add Gateworks System Controller bindings
+To:     Tim Harvey <tharvey@gateworks.com>
+Cc:     Lee Jones <lee.jones@linaro.org>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Linux HWMON List <linux-hwmon@vger.kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Robert Jones <rjones@gateworks.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Mar 19, 2020 at 10:50:18AM -0500, Grant Peltier wrote:
-> Update documentation to include reference information for newly
-> supported 2nd generation Renesas digital multiphase voltage regulators.
-> Also update branding from Intersil to Renesas.
-> 
-> Signed-off-by: Grant Peltier <grantpeltier93@gmail.com>
+On Tue, Mar 17, 2020 at 11:01 AM Tim Harvey <tharvey@gateworks.com> wrote:
+>
+> This patch adds documentation of device-tree bindings for the
+> Gateworks System Controller (GSC).
+>
+> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+> ---
+> v6:
+>  - fix commit message typo
+>  - drop invalid description from #interrupt-cells property
+>  - fix adc pattern property
+>  - add unit suffix
+>  - replace hwmon/adc with adc/channel
+>  - changed adc type to gw,mode
+>  - add unit suffix and drop ref for voltage-divider
+>  - add unit suffix for voltage-offset
+>  - moved fan to its own subnode with base register
+>
+> v5:
+>  - resolve dt_binding_check issues
+>
+> v4:
+>  - move to using pwm<n>_auto_point<m>_{pwm,temp} for FAN PWM
+>  - remove unncessary resolution/scaling properties for ADCs
+>  - update to yaml
+>  - remove watchdog
+>
+> v3:
+>  - replaced _ with -
+>  - remove input bindings
+>  - added full description of hwmon
+>  - fix unit address of hwmon child nodes
+> ---
+>  .../devicetree/bindings/mfd/gateworks-gsc.yaml     | 172 +++++++++++++++++++++
+>  1 file changed, 172 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml b/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
+> new file mode 100644
+> index 00000000..e921e67
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
+> @@ -0,0 +1,172 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/gateworks-gsc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Gateworks System Controller multi-function device
+> +
+> +description: |
+> +  The GSC is a Multifunction I2C slave device with the following submodules:
+> +   - Watchdog Timer
+> +   - GPIO
+> +   - Pushbutton controller
+> +   - Hardware Monitor with ADC's for temperature and voltage rails and
+> +     fan controller
+> +
+> +maintainers:
+> +  - Tim Harvey <tharvey@gateworks.com>
+> +  - Robert Jones <rjones@gateworks.com>
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: "gsc@[0-9a-f]{1,2}"
+> +  compatible:
+> +    const: gw,gsc
+> +
+> +  reg:
+> +    description: I2C device address
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  interrupt-controller: true
+> +
+> +  "#interrupt-cells":
+> +    const: 1
+> +
+> +  adc:
+> +    type: object
+> +    description: Optional Hardware Monitoring module
+> +
+> +    properties:
+> +      compatible:
+> +        const: gw,gsc-adc
+> +
+> +      "#address-cells":
+> +        const: 1
+> +
+> +      "#size-cells":
+> +        const: 0
+> +
+> +    patternProperties:
+> +      "^channel@[0-9]+$":
+> +        type: object
+> +        description: |
+> +          Properties for a single ADC which can report cooked values
+> +          (ie temperature sensor based on thermister), raw values
+> +          (ie voltage rail with a pre-scaling resistor divider).
+> +
+> +        properties:
+> +          reg:
+> +            description: Register of the ADC
+> +            maxItems: 1
+> +
+> +          label:
+> +            description: Name of the ADC input
+> +
+> +          gw,mode:
+> +            description: |
+> +              conversion mode:
+> +                0 - temperature, in C*10
+> +                1 - pre-scaled voltage value
+> +                2 - scaled voltage based on an optional resistor divider
+> +                    and optional offset
+> +            allOf:
+> +              - $ref: /schemas/types.yaml#/definitions/uint32
+> +            enum: [0, 1, 2]
+> +
+> +          gw,voltage-divider-milli-ohms:
+> +            description: values of resistors for divider on raw ADC input
+> +            items:
+> +              - description: R1
+> +              - description: R2
 
-Generating htmldocs results in:
+Aren't there some constraints on the values? You could do something like this:
 
-/home/groeck/src/linux-staging/Documentation/hwmon/isl68137.rst:499: WARNING: Malformed table.
-Text in column margin in table line 25.
+            maxItems: 2
+            items:
+              minimum: 1
+              maximum: 2000
 
-Please fix and resubmit.
+I know I said the way you have it is fine, but the example fails with
+it like this. It's related to how we encode the DT data for validation
+and some schema fixups we do to cut down on some boilerplate. We could
+just fix the example (with <> around each value), but having
+constraints is better.
 
-Thanks,
-Guenter
+> +
+> +          gw,voltage-offset-microvolt:
+> +            $ref: /schemas/types.yaml#/definitions/uint32
+
+Can drop this as .*-microvolt has a defined type.
+
+Are there some constraints?
+
+> +            description: |
+> +              A positive voltage offset to apply to a raw ADC
+> +              (ie to compensate for a diode drop).
+> +
+> +        required:
+> +          - gw,mode
+> +          - reg
+> +          - label
+> +
+> +    required:
+> +      - compatible
+> +      - "#address-cells"
+> +      - "#size-cells"
+> +
+> +  fan:
+
+fan-controller
+
+Save 'fan' for if/when we have a node representing the fan itself.
+
+> +    type: object
+> +    description: Optional FAN controller
+> +
+> +    properties:
+> +      compatible:
+> +        const: gw,gsc-fan
+> +
+> +      base:
+
+What happened to 'reg'? While inconsistent that adc doesn't have an
+address, better that than inventing your own address property.
+
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        description: The fan controller base address
+> +        maxItems: 1
+> +
+> +    required:
+> +      - compatible
+> +      - base
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - interrupt-controller
+> +  - "#interrupt-cells"
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        gsc@20 {
+> +            compatible = "gw,gsc";
+> +            reg = <0x20>;
+> +            interrupt-parent = <&gpio1>;
+> +            interrupts = <4 GPIO_ACTIVE_LOW>;
+> +            interrupt-controller;
+> +            #interrupt-cells = <1>;
+> +
+> +            adc {
+> +                compatible = "gw,gsc-adc";
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +
+> +                channel@0 { /* A0: Board Temperature */
+> +                    gw,mode = <0>;
+> +                    reg = <0x00>;
+> +                    label = "temp";
+> +                };
+> +
+> +                channel@2 { /* A1: Input Voltage (raw ADC) */
+> +                    gw,mode = <1>;
+> +                    reg = <0x02>;
+> +                    label = "vdd_vin";
+> +                    gw,voltage-divider-milli-ohms = <22100 1000>;
+> +                    gw,voltage-offset-microvolt = <800000>;
+> +                };
+> +
+> +                channel@b { /* A2: Battery voltage */
+> +                    gw,mode = <1>;
+> +                    reg = <0x0b>;
+> +                    label = "vdd_bat";
+> +                };
+> +            };
+> +
+> +            fan {
+> +                compatible = "gw,gsc-fan";
+> +                base = <0x2c>;
+> +            };
+> +        };
+> +    };
+> --
+> 2.7.4
+>
