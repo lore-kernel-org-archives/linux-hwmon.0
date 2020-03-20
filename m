@@ -2,132 +2,93 @@ Return-Path: <SRS0=kej4=5F=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 437B9C4332E
-	for <linux-hwmon@archiver.kernel.org>; Fri, 20 Mar 2020 14:59:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7104DC4332B
+	for <linux-hwmon@archiver.kernel.org>; Fri, 20 Mar 2020 16:16:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1400C20777
-	for <linux-hwmon@archiver.kernel.org>; Fri, 20 Mar 2020 14:59:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1584716356;
-	bh=Hd3zAvAezuFSVlozOz44ullhVT1eSajSxemMLbZxlBE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=obuUakSJswXCsZ6S/NIbMum8vgMzNZiExatmohj16KS/Z8zZhTgl8fAsrzqdpCVe3
-	 o8PSfc8or7r/dBSrxkXaiZAxEYuKCS8J+x26NHzoFqEfmgZ97/kulHSMlGTQMK+L8g
-	 usJsdQShCSHrZMcO6fTwQm6QouUKUR2CXcEafXDM=
+	by mail.kernel.org (Postfix) with ESMTP id 36B3120724
+	for <linux-hwmon@archiver.kernel.org>; Fri, 20 Mar 2020 16:16:02 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IOaKuUHU"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726783AbgCTO7P (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 20 Mar 2020 10:59:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49012 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725446AbgCTO7P (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 20 Mar 2020 10:59:15 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 99F7A2072D;
-        Fri, 20 Mar 2020 14:59:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584716354;
-        bh=Hd3zAvAezuFSVlozOz44ullhVT1eSajSxemMLbZxlBE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ff33wKiw1HbXy93zCGoh1lWvVOk00lgxJdeoknvNzKnVdJSPvefa0ML3LysbJ4nTO
-         6rAp6ASm4qt4uUIq2mtTpgvdRMDHrrSeBb59UaWhHjcJKEKHYeRpe3xmrMj7LtAtPD
-         nmjVJ+xUohzhMq/MhLV3uoj+bRi4FVjkP6UigI8o=
-Date:   Fri, 20 Mar 2020 15:59:06 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Mark Gross <mgross@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        linux-edac@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-mmc@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        linux-pci@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-crypto@vger.kernel.org
-Subject: Re: [patch 00/22] x86/treewide: Consolidate CPU match macro maze and
- get rid of C89 (sic!) initializers
-Message-ID: <20200320145906.GA762057@kroah.com>
-References: <20200320131345.635023594@linutronix.de>
+        id S1727456AbgCTQQC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 20 Mar 2020 12:16:02 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:39605 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727221AbgCTQQB (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 20 Mar 2020 12:16:01 -0400
+Received: by mail-ot1-f67.google.com with SMTP id r2so6502638otn.6;
+        Fri, 20 Mar 2020 09:16:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=4siL/QnB5rK41jF0b+PMW35lQYv+liwGyNv1LaXLkvA=;
+        b=IOaKuUHUyAWoXIvTFm9CTyUOg3PspNJqP3yD219ml731mn2FZeRJlsS45MHwfwcb2O
+         +5htgSBHVHLl0SH87HXi++5ruLquaxguCRFD1YDx8keO95ZhvkzqiPuuOKEuTjI5dYjG
+         +tW+wQ8xwffz28DN/dALiYDOzPdu2E2nXroj2RQemnJK5ep/LNRSd6tVJQ5O4QlSlk2o
+         7DCoBJloHGLtQFArBXxcxn6nHVkiHBCsKOOCacbQIPn3C5YT1WpOpRNKtvAyZjVNjYX1
+         /qoKWFVb8xG+Q3e9aGvTiiarvYrKhrFMcmYLpSFPOcDuPe+hMKRNmAu66DspBxrlS5Mo
+         SanA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=4siL/QnB5rK41jF0b+PMW35lQYv+liwGyNv1LaXLkvA=;
+        b=MSo9aD4Gnl3+zJ9xr6J6EnsHEdDhefWKGToKUntxjVXv8TJUN0QJ+gtcav3vBd3bUX
+         YwMzdoxTq5jm8dB5cbWfsdzfMFNH4SwotjBSTp74Z2Yi+vzp9gvSXQV//mXid4OZW2tp
+         viOETBLMv/1dL22BQtXsdgHRG1m9R1XR2gt44ShglnLMGbNZzXDoKqHinwebgLonOOxT
+         TZbvU69JQbAqOHcobKleUX3Z1HUDH+YBDMS+ANI8OWQ67wywJL2qJoWkQig0c3x0m1Lt
+         tfcssIVUsxmP8jBB9CQRL1qv+1Nxl1H2u4jCJYnhi5YFc89/gQcQbGAD6ASFVFcCozzx
+         QyAg==
+X-Gm-Message-State: ANhLgQ1qHlYJDM/kZcfosrpDL1bWT+xm5jwC9evpqsQAvZxcZ1Y/9koH
+        O4Ojl8mg0lCYjTULDWr6A01GOoh9
+X-Google-Smtp-Source: ADFU+vu7m4s6HC3CFPvhv8PHdn4skuu+PhssReolQPybf+07PloWOvFqJPVtHrmf8vQ9Idy+Ok9evQ==
+X-Received: by 2002:a05:6830:1051:: with SMTP id b17mr7607762otp.157.1584720960728;
+        Fri, 20 Mar 2020 09:16:00 -0700 (PDT)
+Received: from raspberrypi (99-189-78-97.lightspeed.austtx.sbcglobal.net. [99.189.78.97])
+        by smtp.gmail.com with ESMTPSA id 60sm2024521ott.17.2020.03.20.09.15.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Mar 2020 09:16:00 -0700 (PDT)
+Date:   Fri, 20 Mar 2020 11:15:55 -0500
+From:   Grant Peltier <grantpeltier93@gmail.com>
+To:     linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     adam.vaughn.xh@renesas.com
+Subject: [PATCH v3 0/2] hwmon: (pmbus) add support for Gen 2 Renesas digital
+ multiphase
+Message-ID: <cover.1584720563.git.grantpeltier93@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200320131345.635023594@linutronix.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Mar 20, 2020 at 02:13:45PM +0100, Thomas Gleixner wrote:
-> The x86 CPU matching based on struct x86_cpu_id:
-> 
->   - is using an inconsistent macro mess with pointlessly duplicated and
->     slightly different local macros. Finding the places is an art as there
->     is no consistent name space at all.
-> 
->   - is still mostly based on C89 struct initializers which rely on the
->     ordering of the struct members. That's proliferated forever as every
->     new driver just copies the mess from some exising one.
-> 
-> A recent offlist conversation about adding more match criteria to the CPU
-> matching logic instead of creating yet another set of horrors, reminded me
-> of a pile of scripts and patches which I hacked on a few years ago when I
-> tried to add something to struct x86_cpu_id.
-> 
-> That stuff was finally not needed and ended up in my ever growing todo list
-> and collected dust and cobwebs, but (un)surprisingly enough most of it
-> still worked out of the box. The copy & paste machinery still works as it
-> did years ago.
-> 
-> There are a few places which needed extra care due to new creative macros,
-> new check combinations etc. and surprisingly ONE open coded proper C99
-> initializer.
-> 
-> It was reasonably simple to make it at least compile and pass a quick
-> binary equivalence check.
-> 
-> The result is a X86_MATCH prefix based set of macros which are reflecting
-> the needs of the usage sites and shorten the base macro which takes all
-> possible parameters (vendor, family, model, feature, data) and uses proper
-> C99 initializers.
-> 
-> So extensions of the match logic are trivial after that.
-> 
-> The patch set is against Linus tree and has trivial conflicts against
-> linux-next.
-> 
-> The diffstat is:
->  71 files changed, 525 insertions(+), 472 deletions(-)
-> 
-> but the extra lines are pretty much kernel-doc documentation which I added
-> to each of the new macros. The usage sites diffstat is:
-> 
->  70 files changed, 393 insertions(+), 471 deletions(-)
-> 
-> Thoughts?
+The patch series adds support for 2nd generation Renesas digitial multiphase
+voltage regulators. This functionality extends the existing ISL68137 PMBus
+driver.
 
-Much nicer looking, thanks for cleaning up this mess:
+The series contains 2 patches:
+  - patch #1 adds extends the ISL68137 driver to support Gen 2 devices
+  - patch #2 adds documentation for the newly supported devices
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Grant Peltier (2):
+  hwmon: (pmbus) add support for 2nd Gen Renesas digital multiphase
+  docs: hwmon: Update documentation for isl68137 pmbus driver
+
+ Documentation/hwmon/isl68137.rst | 541 ++++++++++++++++++++++++++++++-
+ drivers/hwmon/pmbus/Kconfig      |   6 +-
+ drivers/hwmon/pmbus/isl68137.c   | 110 ++++++-
+ 3 files changed, 631 insertions(+), 26 deletions(-)
+
+-- 
+2.20.1
+
