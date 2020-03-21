@@ -1,106 +1,288 @@
-Return-Path: <SRS0=kej4=5F=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=g6XL=5G=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E8E5C4332D
-	for <linux-hwmon@archiver.kernel.org>; Fri, 20 Mar 2020 22:19:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52D4BC4332B
+	for <linux-hwmon@archiver.kernel.org>; Sat, 21 Mar 2020 22:09:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1E1782072D
-	for <linux-hwmon@archiver.kernel.org>; Fri, 20 Mar 2020 22:19:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 18E8A20739
+	for <linux-hwmon@archiver.kernel.org>; Sat, 21 Mar 2020 22:09:47 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="atBoSCjd"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726980AbgCTWTP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 20 Mar 2020 18:19:15 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:37559 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726666AbgCTWTO (ORCPT
+        id S1728056AbgCUWJq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 21 Mar 2020 18:09:46 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:41029 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728044AbgCUWJq (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 20 Mar 2020 18:19:14 -0400
-Received: from p5de0bf0b.dip0.t-ipconnect.de ([93.224.191.11] helo=nanos.tec.linutronix.de)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1jFPyQ-00050m-N3; Fri, 20 Mar 2020 23:18:38 +0100
-Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
-        id 3A4771039FC; Fri, 20 Mar 2020 23:18:38 +0100 (CET)
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "maintainer\:X86 ARCHITECTURE \(32-BIT AND 64-BIT\)" <x86@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Gross <mgross@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-edac@vger.kernel.org,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        Takashi Iwai <tiwai@suse.com>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-crypto <linux-crypto@vger.kernel.org>
-Subject: Re: [patch 09/22] cpufreq: Convert to new X86 CPU match macros
-In-Reply-To: <CAHp75VfuU98gEriS+GDJqZX4BV-cZT9hPbrDX-roeo63O8UvYQ@mail.gmail.com>
-References: <20200320131345.635023594@linutronix.de> <20200320131509.564059710@linutronix.de> <CAHp75VdkvyqOaAsLmz8K2j4bdd0sboPoUpRr6U-zvtkSaQfPRQ@mail.gmail.com> <87eetmpy56.fsf@nanos.tec.linutronix.de> <CAHp75VfuU98gEriS+GDJqZX4BV-cZT9hPbrDX-roeo63O8UvYQ@mail.gmail.com>
-Date:   Fri, 20 Mar 2020 23:18:38 +0100
-Message-ID: <877dzept4x.fsf@nanos.tec.linutronix.de>
+        Sat, 21 Mar 2020 18:09:46 -0400
+Received: by mail-pf1-f193.google.com with SMTP id z65so5348238pfz.8;
+        Sat, 21 Mar 2020 15:09:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=IdqBWeqHBM2VQM72lf3mMQkySbvn1pz4kfLceH613LQ=;
+        b=atBoSCjdwsyBtICaMtOyo3vvMc4lWzmKQggLXhOUC9+jkqhcro/mNjiH+ZLwEyHU2t
+         f8oz2ir1JpmkgvyqIQHicKDvTcN/8SVxg4FszL+woYHq/DbGFavjLQFQKzhkqwLs5MJL
+         nFETrufVqYlK+Xkzn1AKryz0A/YV8NiWd+ZDAhLihD9XiLGk9g6vK0EtPJXLvT9B4/WI
+         Oz9vAFWWIIvSoGsI2ehG4R7yhqEGLPPwWv36CIwVn+kS0IReVwqJGD1nfA2XqPSiF240
+         sp5r3NiI+psSSarZvbYxwtjGot15IwkJwtpqcnYBAiF6dttrj2AeHuClMWCSx4pRoY+4
+         UQ9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=IdqBWeqHBM2VQM72lf3mMQkySbvn1pz4kfLceH613LQ=;
+        b=oKeMM5JnzDbLcnmA0mh62aqBsAPrkB2o9p4RZs38FHJ3V+h/wzZ6l+DtgoDbnE6tMz
+         Ue+s9aRWfFahJQD0Ob8zKYVzD5WRS3qPzauAuaEvIXBEyH+anMQSZNI4/amxq4LbChyS
+         j2LEKua1QwcnpkscR5jVNoz/T2W+ofU8tpWnaxzGFkkN43zogGZCpy0TDzXe046MZ//N
+         r8P7Q0H/yko5U2JwJJkzAU4vr/tbjII8/6RodZJfNrTWwinKoXCJKfigCiw0tOdpNulz
+         1TCvLV7Y1z3ClowS70FNtRCKJiX7fhHu6sa+1J0t1jaeCQlNAx8Y+kgJgYeYRQMCYC3r
+         KSlg==
+X-Gm-Message-State: ANhLgQ1cyiCAVYL9h31cKeylz8oMTGRBC7SV5b2uD6d/bTxu61Ot4qE0
+        UdmXuhizGi4VvhEe6gkbCLK39lbZ
+X-Google-Smtp-Source: ADFU+vskwW1mk/P5nLozrqpgjggfa/69haqZYHIPH+FYRReyIfqaR7sQo4kTb6sb3r+RzyLscr+Icw==
+X-Received: by 2002:a62:a515:: with SMTP id v21mr16594280pfm.128.1584828585601;
+        Sat, 21 Mar 2020 15:09:45 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u14sm8383748pgg.67.2020.03.21.15.09.44
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 21 Mar 2020 15:09:44 -0700 (PDT)
+Date:   Sat, 21 Mar 2020 15:09:43 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Grant Peltier <grantpeltier93@gmail.com>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        adam.vaughn.xh@renesas.com
+Subject: Re: [PATCH v3 1/2] hwmon: (pmbus) add support for 2nd Gen Renesas
+ digital multiphase
+Message-ID: <20200321220943.GA22233@roeck-us.net>
+References: <cover.1584720563.git.grantpeltier93@gmail.com>
+ <62c000adf0108aeb65d3f275f28eb26b690384aa.1584720563.git.grantpeltier93@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <62c000adf0108aeb65d3f275f28eb26b690384aa.1584720563.git.grantpeltier93@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Andy Shevchenko <andy.shevchenko@gmail.com> writes:
+On Fri, Mar 20, 2020 at 11:16:21AM -0500, Grant Peltier wrote:
+> Extend the isl68137 driver to provide support for 2nd generation Renesas
+> digital multiphase voltage regulators.
+> 
+> Signed-off-by: Grant Peltier <grantpeltier93@gmail.com>
 
-> On Fri, Mar 20, 2020 at 10:30 PM Thomas Gleixner <tglx@linutronix.de> wrote:
->>
->> Andy Shevchenko <andy.shevchenko@gmail.com> writes:
->> > On Fri, Mar 20, 2020 at 3:18 PM Thomas Gleixner <tglx@linutronix.de> wrote:
->> >
->> >> +       X86_MATCH_VENDOR_FAM_MODEL_FEATURE(INTEL,  6,  9, X86_FEATURE_EST, NULL),
->> >> +       X86_MATCH_VENDOR_FAM_MODEL_FEATURE(INTEL,  6, 13, X86_FEATURE_EST, NULL),
->> >> +       X86_MATCH_VENDOR_FAM_MODEL_FEATURE(INTEL, 15,  3, X86_FEATURE_EST, NULL),
->> >> +       X86_MATCH_VENDOR_FAM_MODEL_FEATURE(INTEL, 15,  4, X86_FEATURE_EST, NULL),
->> >
->> >> +       X86_MATCH_VENDOR_FAM_MODEL(INTEL,  6, 0x8, 0),
->> >> +       X86_MATCH_VENDOR_FAM_MODEL(INTEL,  6, 0xb, 0),
->> >> +       X86_MATCH_VENDOR_FAM_MODEL(INTEL, 15, 0x2, 0),
->> >
->> >> +       X86_MATCH_VENDOR_FAM_MODEL(INTEL,  6, 0x8, 0),
->> >> +       X86_MATCH_VENDOR_FAM_MODEL(INTEL,  6, 0xb, 0),
->> >> +       X86_MATCH_VENDOR_FAM_MODEL(INTEL, 15, 0x2, 0),
->> >
->> > Perhaps use names instead of 6 and 15?
->>
->> Thought about that and did not come up with anyting useful. FAM6 vs. 6
->> is not really any better
->
-> Hmm... Do we have family 15 for Intel? Perhaps I missed something...
-> Or is it for any family?
+Applied.
 
-Pentium 4
+Thanks,
+Guenter
+
+> ---
+>  drivers/hwmon/pmbus/Kconfig    |   6 +-
+>  drivers/hwmon/pmbus/isl68137.c | 110 ++++++++++++++++++++++++++++-----
+>  2 files changed, 98 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index a9ea06204767..1e3e5a61ed9c 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -92,10 +92,10 @@ config SENSORS_IRPS5401
+>  	  be called irps5401.
+>  
+>  config SENSORS_ISL68137
+> -	tristate "Intersil ISL68137"
+> +	tristate "Renesas Digital Multiphase Voltage Regulators"
+>  	help
+> -	  If you say yes here you get hardware monitoring support for Intersil
+> -	  ISL68137.
+> +	  If you say yes here you get hardware monitoring support for Renesas
+> +	  digital multiphase voltage regulators.
+>  
+>  	  This driver can also be built as a module. If so, the module will
+>  	  be called isl68137.
+> diff --git a/drivers/hwmon/pmbus/isl68137.c b/drivers/hwmon/pmbus/isl68137.c
+> index 515596c92fe1..47f6cce1da58 100644
+> --- a/drivers/hwmon/pmbus/isl68137.c
+> +++ b/drivers/hwmon/pmbus/isl68137.c
+> @@ -1,8 +1,9 @@
+>  // SPDX-License-Identifier: GPL-2.0+
+>  /*
+> - * Hardware monitoring driver for Intersil ISL68137
+> + * Hardware monitoring driver for Renesas Digital Multiphase Voltage Regulators
+>   *
+>   * Copyright (c) 2017 Google Inc
+> + * Copyright (c) 2020 Renesas Electronics America
+>   *
+>   */
+>  
+> @@ -14,9 +15,19 @@
+>  #include <linux/module.h>
+>  #include <linux/string.h>
+>  #include <linux/sysfs.h>
+> +
+>  #include "pmbus.h"
+>  
+>  #define ISL68137_VOUT_AVS	0x30
+> +#define RAA_DMPVR2_READ_VMON	0xc8
+> +
+> +enum versions {
+> +	isl68137,
+> +	raa_dmpvr2_1rail,
+> +	raa_dmpvr2_2rail,
+> +	raa_dmpvr2_3rail,
+> +	raa_dmpvr2_hv,
+> +};
+>  
+>  static ssize_t isl68137_avs_enable_show_page(struct i2c_client *client,
+>  					     int page,
+> @@ -98,13 +109,30 @@ static const struct attribute_group enable_group = {
+>  	.attrs = enable_attrs,
+>  };
+>  
+> -static const struct attribute_group *attribute_groups[] = {
+> +static const struct attribute_group *isl68137_attribute_groups[] = {
+>  	&enable_group,
+>  	NULL,
+>  };
+>  
+> -static struct pmbus_driver_info isl68137_info = {
+> -	.pages = 2,
+> +static int raa_dmpvr2_read_word_data(struct i2c_client *client, int page,
+> +				     int reg)
+> +{
+> +	int ret;
+> +
+> +	switch (reg) {
+> +	case PMBUS_VIRT_READ_VMON:
+> +		ret = pmbus_read_word_data(client, page, RAA_DMPVR2_READ_VMON);
+> +		break;
+> +	default:
+> +		ret = -ENODATA;
+> +		break;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static struct pmbus_driver_info raa_dmpvr_info = {
+> +	.pages = 3,
+>  	.format[PSC_VOLTAGE_IN] = direct,
+>  	.format[PSC_VOLTAGE_OUT] = direct,
+>  	.format[PSC_CURRENT_IN] = direct,
+> @@ -113,7 +141,7 @@ static struct pmbus_driver_info isl68137_info = {
+>  	.format[PSC_TEMPERATURE] = direct,
+>  	.m[PSC_VOLTAGE_IN] = 1,
+>  	.b[PSC_VOLTAGE_IN] = 0,
+> -	.R[PSC_VOLTAGE_IN] = 3,
+> +	.R[PSC_VOLTAGE_IN] = 2,
+>  	.m[PSC_VOLTAGE_OUT] = 1,
+>  	.b[PSC_VOLTAGE_OUT] = 0,
+>  	.R[PSC_VOLTAGE_OUT] = 3,
+> @@ -133,24 +161,76 @@ static struct pmbus_driver_info isl68137_info = {
+>  	    | PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2
+>  	    | PMBUS_HAVE_TEMP3 | PMBUS_HAVE_STATUS_TEMP
+>  	    | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+> -	    | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_POUT,
+> -	.func[1] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+> -	    | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_POUT,
+> -	.groups = attribute_groups,
+> +	    | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_POUT
+> +		| PMBUS_HAVE_VMON,
+> +	.func[1] = PMBUS_HAVE_IIN | PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT
+> +	    | PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP3 | PMBUS_HAVE_STATUS_TEMP
+> +	    | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT | PMBUS_HAVE_IOUT
+> +	    | PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_POUT,
+> +	.func[2] = PMBUS_HAVE_IIN | PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT
+> +	    | PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP3 | PMBUS_HAVE_STATUS_TEMP
+> +	    | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT | PMBUS_HAVE_IOUT
+> +	    | PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_POUT,
+>  };
+>  
+>  static int isl68137_probe(struct i2c_client *client,
+>  			  const struct i2c_device_id *id)
+>  {
+> -	return pmbus_do_probe(client, id, &isl68137_info);
+> +	struct pmbus_driver_info *info;
+> +
+> +	info = devm_kzalloc(&client->dev, sizeof(*info), GFP_KERNEL);
+> +	if (!info)
+> +		return -ENOMEM;
+> +	memcpy(info, &raa_dmpvr_info, sizeof(*info));
+> +
+> +	switch (id->driver_data) {
+> +	case isl68137:
+> +		info->pages = 2;
+> +		info->R[PSC_VOLTAGE_IN] = 3;
+> +		info->func[0] &= ~PMBUS_HAVE_VMON;
+> +		info->func[1] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+> +		    | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT
+> +		    | PMBUS_HAVE_POUT;
+> +		info->groups = isl68137_attribute_groups;
+> +		break;
+> +	case raa_dmpvr2_1rail:
+> +		info->pages = 1;
+> +		info->read_word_data = raa_dmpvr2_read_word_data;
+> +		break;
+> +	case raa_dmpvr2_2rail:
+> +		info->pages = 2;
+> +		info->read_word_data = raa_dmpvr2_read_word_data;
+> +		break;
+> +	case raa_dmpvr2_3rail:
+> +		info->read_word_data = raa_dmpvr2_read_word_data;
+> +		break;
+> +	case raa_dmpvr2_hv:
+> +		info->pages = 1;
+> +		info->R[PSC_VOLTAGE_IN] = 1;
+> +		info->m[PSC_VOLTAGE_OUT] = 2;
+> +		info->R[PSC_VOLTAGE_OUT] = 2;
+> +		info->m[PSC_CURRENT_IN] = 2;
+> +		info->m[PSC_POWER] = 2;
+> +		info->R[PSC_POWER] = -1;
+> +		info->read_word_data = raa_dmpvr2_read_word_data;
+> +		break;
+> +	default:
+> +		return -ENODEV;
+> +	}
+> +
+> +	return pmbus_do_probe(client, id, info);
+>  }
+>  
+> -static const struct i2c_device_id isl68137_id[] = {
+> -	{"isl68137", 0},
+> +static const struct i2c_device_id raa_dmpvr_id[] = {
+> +	{"isl68137", isl68137},
+> +	{"raa_dmpvr2_1rail", raa_dmpvr2_1rail},
+> +	{"raa_dmpvr2_2rail", raa_dmpvr2_2rail},
+> +	{"raa_dmpvr2_3rail", raa_dmpvr2_3rail},
+> +	{"raa_dmpvr2_hv", raa_dmpvr2_hv},
+>  	{}
+>  };
+>  
+> -MODULE_DEVICE_TABLE(i2c, isl68137_id);
+> +MODULE_DEVICE_TABLE(i2c, raa_dmpvr_id);
+>  
+>  /* This is the driver that will be inserted */
+>  static struct i2c_driver isl68137_driver = {
+> @@ -159,11 +239,11 @@ static struct i2c_driver isl68137_driver = {
+>  		   },
+>  	.probe = isl68137_probe,
+>  	.remove = pmbus_do_remove,
+> -	.id_table = isl68137_id,
+> +	.id_table = raa_dmpvr_id,
+>  };
+>  
+>  module_i2c_driver(isl68137_driver);
+>  
+>  MODULE_AUTHOR("Maxim Sloyko <maxims@google.com>");
+> -MODULE_DESCRIPTION("PMBus driver for Intersil ISL68137");
+> +MODULE_DESCRIPTION("PMBus driver for Renesas digital multiphase voltage regulators");
+>  MODULE_LICENSE("GPL");
