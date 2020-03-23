@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FB65C4332B
-	for <linux-hwmon@archiver.kernel.org>; Mon, 23 Mar 2020 23:34:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB4C6C43331
+	for <linux-hwmon@archiver.kernel.org>; Mon, 23 Mar 2020 23:34:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E983B2078B
-	for <linux-hwmon@archiver.kernel.org>; Mon, 23 Mar 2020 23:34:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B25BB206C3
+	for <linux-hwmon@archiver.kernel.org>; Mon, 23 Mar 2020 23:34:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IHAJPl2o"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QbtMCVGG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727129AbgCWXeS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 23 Mar 2020 19:34:18 -0400
-Received: from mail-pj1-f73.google.com ([209.85.216.73]:40630 "EHLO
-        mail-pj1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727120AbgCWXeR (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
+        id S1727122AbgCWXeR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Mon, 23 Mar 2020 19:34:17 -0400
-Received: by mail-pj1-f73.google.com with SMTP id d10so1004466pjz.5
-        for <linux-hwmon@vger.kernel.org>; Mon, 23 Mar 2020 16:34:17 -0700 (PDT)
+Received: from mail-ua1-f74.google.com ([209.85.222.74]:38526 "EHLO
+        mail-ua1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727117AbgCWXeQ (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 23 Mar 2020 19:34:16 -0400
+Received: by mail-ua1-f74.google.com with SMTP id t10so5636690uaj.5
+        for <linux-hwmon@vger.kernel.org>; Mon, 23 Mar 2020 16:34:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=g1IXTxNeLuaEoIeAZquMIN8o8RyeqEvLaY82fpBZWjc=;
-        b=IHAJPl2oTxONyfNceKZR24ED2EcxarW3ZSAI9FkMqFE0ID+RRsYVYXi/fqi8YylKMo
-         xZC9QD9AIn59b5g/bRMjVT4gSbndx3PplMKjOoHeqCMVeb07iDVn3kco3S0VNdhmg0pY
-         rZAEkQXs/YaXzYjK4qx1UpuatgbmdmooExWI5KIZ4t/aZ9oaIBIEymCkr9WPFdlxs8Xr
-         biYrXf/F84ARMgUzOsMmb9Xbpo8PItkZbMK/Up5Uv3q0W/dHd2VDhVqyNzBJnlSKEfrI
-         G373NRUxDdgwxiKbtjsuFhX/4Q9Uv5meYi6iK8UDoWK7rFRjTpGOWB3UJoFEHcwDdFn4
-         LEcA==
+        bh=tXPEW76sKJjaPQGOZOimHJEP26LY2RMe5WtADrdJadU=;
+        b=QbtMCVGGHfrzaPRSTOG6hYYZxOLOAJUOS7nSkIWYeuCBEGvFanrgs59bjGOXXPxZBJ
+         bHAuvMI19M1Cl8fmZDd1Zl5BJSmfSmgYX7voMEM64BkT+OmECDkwOmb5kGuBbx326ZYV
+         5Xad/Ole1WKEk3xofvjvHLRACG9gqI51bzRUCvXrL+4s3WuorbsJSEoncubX7m7qi6zJ
+         oqDheiFmlN5YvzOMowlMkH99wT6l4OvlG+o9VPjh/glIu+slaTwYugVRK6WT45ZghgJX
+         ePNxq4qTsD8RWuWw1KNJBVFK+USe9+6bexHrzChg7Mr2MCoGBx4kmV4Mg8whJaBF6qkZ
+         YQRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=g1IXTxNeLuaEoIeAZquMIN8o8RyeqEvLaY82fpBZWjc=;
-        b=n+gtCyT3P+w4Vn23TAH0v8VDFv+mP2+1Ycf/T0VABTqg98VMjSTHAGluEvcSb2aEdA
-         1TvG0Jdo7ZwC5QZ7aV+glUQg96S6rpjBJBb58ie5bIq/qgMcSM6/4+TDU2l7f+PIqGiB
-         5OHEhWr8Ieos5lRCtICvtTG7Emxe9CZW0V6qwsdZqH+GCjZ2hsq/IsdTYnzboTOshxp7
-         7s0/trh4J6lHROdAmCuzPkWCAs+h8Ot3lG6H2G1+xeMt3A2u5NzmG2OxGcBhlVv7sYy6
-         O70MNTfFx6G05wVuj3qWj0ON+e+fDS3gpuraN/9hjENJi35zCIuNPg1hsyv9Wx9nSC7n
-         BbAA==
-X-Gm-Message-State: ANhLgQ1DcpunKkTxMc3aHMMg45Gs7+MOh+PJpkw5HNWaQcrDeDmirjKs
-        YHteKdAzvu+1a59vJRKRuyHx1pfSDA==
-X-Google-Smtp-Source: ADFU+vtuicKd9xEczdBa/a3me7A5WmLybcBMMiKtFPfL2j6mf5FWfWwsC5ap0rDRstz05QphVWxOQwQh5A==
-X-Received: by 2002:a17:90a:e7c8:: with SMTP id kb8mr1901152pjb.79.1585006456742;
- Mon, 23 Mar 2020 16:34:16 -0700 (PDT)
-Date:   Mon, 23 Mar 2020 16:33:54 -0700
+        bh=tXPEW76sKJjaPQGOZOimHJEP26LY2RMe5WtADrdJadU=;
+        b=ObWQOR+wvgUYbFLfd8T5QMcNRb53qxJcHZ1qJKXuDoA/RdTv/0VSBoI2a2gqV1ucSx
+         R8WTW5quo10CMGksd3uz4EWgZ8e5nWzGgciUB1QZ8XKXkpG8XzuUHwdLXHyT2/FoFZCQ
+         nk+eSZTgIBAyIm6BaFLyqkOSv2VllIovp1rVmkVZn10xFIoxa0azsNhiD7ST7EUBK23y
+         z1DTl5BMIybon9fNCeSPe9L2zwMo0RHG7uRrtGhgbdnlqVvq2GcedIZZfOx4DeU76+Cg
+         VyNc71iObPoEnSOH6XxuIJmPmHIOh6VqYySMJfXaQAbybjBIbT7Tyh+2XwoBWEw95Fee
+         WyCw==
+X-Gm-Message-State: ANhLgQ3/auikJwva7hANxnU7tmKLh3GwWsODL7gXbn9ZSWIKmXiV+4QV
+        EMT0EbADuUJiOMT55ug2+VzTrL9pTg==
+X-Google-Smtp-Source: ADFU+vuLxlD+2uO92bRrRaRHd0gjs4zp+jDXUXilAFiN/Eux1EFzVf5TdgZWCwGXv1Yhg1tiwl6PAvstYA==
+X-Received: by 2002:ab0:698e:: with SMTP id t14mr16110287uaq.53.1585006453359;
+ Mon, 23 Mar 2020 16:34:13 -0700 (PDT)
+Date:   Mon, 23 Mar 2020 16:33:53 -0700
 In-Reply-To: <20200323233354.239365-1-kunyi@google.com>
-Message-Id: <20200323233354.239365-4-kunyi@google.com>
+Message-Id: <20200323233354.239365-3-kunyi@google.com>
 Mime-Version: 1.0
 References: <20200323233354.239365-1-kunyi@google.com>
 X-Mailer: git-send-email 2.25.1.696.g5e7596f4ac-goog
-Subject: [PATCH linux hwmon-next v2 3/3] dt-bindings: (hwmon/sbtsi_tmep) Add
- SB-TSI hwmon driver bindings
+Subject: [PATCH linux hwmon-next v2 2/3] hwmon: (sbtsi) Add documentation
 From:   Kun Yi <kunyi@google.com>
 To:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
         mark.rutland@arm.com
@@ -71,36 +71,61 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Document device tree bindings for AMD SB-TSI emulated temperature
-sensor.
+Document the SB-TSI sensor interface driver.
 
 Signed-off-by: Kun Yi <kunyi@google.com>
-Change-Id: Ife3285afa4cf8d410cb7bee1eb930dc0717084f9
+Change-Id: I4b086a124d1d94a516386b0d2ff1cd7180b1dac1
 ---
- .../devicetree/bindings/hwmon/sbtsi_temp.txt       | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/sbtsi_temp.txt
+ Documentation/hwmon/sbtsi_temp.rst | 40 ++++++++++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+ create mode 100644 Documentation/hwmon/sbtsi_temp.rst
 
-diff --git a/Documentation/devicetree/bindings/hwmon/sbtsi_temp.txt b/Documentation/devicetree/bindings/hwmon/sbtsi_temp.txt
+diff --git a/Documentation/hwmon/sbtsi_temp.rst b/Documentation/hwmon/sbtsi_temp.rst
 new file mode 100644
-index 000000000000..4020f075699e
+index 000000000000..9f0f197c8aa2
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/sbtsi_temp.txt
-@@ -0,0 +1,14 @@
-+*AMD SoC SB-TSI hwmon driver.
++++ b/Documentation/hwmon/sbtsi_temp.rst
+@@ -0,0 +1,40 @@
++Kernel driver sbtsi_temp
++==================
 +
-+Required properties:
-+- compatible: manufacturer and chip name, should be
-+	"amd,sbtsi",
++Supported hardware:
 +
-+- reg: I2C bus address of the device
++  * Sideband interface (SBI) Temperature Sensor Interface (SB-TSI)
++    compliant AMD SoC temperature device.
 +
-+Example:
++    Prefix: 'sbtsi_temp'
 +
-+sbtsi@4c {
-+	compatible = "amd,sbtsi";
-+	reg = <0x4c>;
-+};
++    Addresses scanned: This driver doesn't support address scanning.
++
++    To instantiate this driver on an AMD CPU with SB-TSI
++    support, the i2c bus number would be the bus connected from the board
++    management controller (BMC) to the CPU. The i2c address is specified in
++    Section 6.3.1 of the SoC register reference: The SB-TSI address is normally
++    98h for socket 0 and 90h for socket 1, but it could vary based on hardware
++    address select pins.
++
++    Datasheet: The SB-TSI interface and protocol is available as part of
++               the open source SoC register reference at:
++
++	       https://www.amd.com/system/files/TechDocs/56255_OSRR.pdf
++
++               The Advanced Platform Management Link (APML) Specification is
++               available at:
++
++	       http://developer.amd.com/wordpress/media/2012/10/41918.pdf
++
++Author: Kun Yi <kunyi@google.com>
++
++Description
++-----------
++
++The SBI temperature sensor interface (SB-TSI) is an emulation of the software
++and physical interface of a typical 8-pin remote temperature sensor (RTS) on
++AMD SoCs. It implements one temperature sensor with readings and limit
++registers encode the temperature in increments of 0.125 from 0 to 255.875.
++Limits can be set through the writable thresholds, and if reached will trigger
++corresponding alert signals.
 -- 
 2.25.1.696.g5e7596f4ac-goog
 
