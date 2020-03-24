@@ -2,276 +2,122 @@ Return-Path: <SRS0=mVYL=5J=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3370C43331
-	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Mar 2020 01:56:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1B67C41621
+	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Mar 2020 10:25:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 72CA320714
-	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Mar 2020 01:56:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CB4C2208DB
+	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Mar 2020 10:25:07 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WL57huwo"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727102AbgCXB4q (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 23 Mar 2020 21:56:46 -0400
-Received: from [58.211.163.100] ([58.211.163.100]:49791 "EHLO
-        mail.advantech.com.cn" rhost-flags-FAIL-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727050AbgCXB4q (ORCPT
+        id S1727150AbgCXKZE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 24 Mar 2020 06:25:04 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:36962 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726524AbgCXKZD (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 23 Mar 2020 21:56:46 -0400
-X-Greylist: delayed 605 seconds by postgrey-1.27 at vger.kernel.org; Mon, 23 Mar 2020 21:56:44 EDT
-Received: from ACNMB2.ACN.ADVANTECH.CORP (unverified [172.21.128.148]) by ACN-SWEEPER01.ACN.ADVANTECH.CORP
- (Clearswift SMTPRS 5.6.0) with ESMTP id <Tde185875d0ac1580301704@ACN-SWEEPER01.ACN.ADVANTECH.CORP>;
- Tue, 24 Mar 2020 09:46:30 +0800
-Received: from ADVANTECH.CORP (172.17.10.74) by ACNMB2.ACN.ADVANTECH.CORP
- (172.21.128.148) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Tue, 24 Mar
- 2020 09:46:30 +0800
-From:   <yuechao.zhao@advantech.com.cn>
-To:     <345351830@qq.com>
-CC:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <amy.shih@advantech.com.tw>, <oakley.ding@advantech.com.tw>,
-        <jia.sui@advantech.com.cn>, <shengkui.leng@advantech.com.cn>,
-        Yuechao Zhao <yuechao.zhao@advantech.com.cn>
-Subject: [v1,1/1] hwmon: (nct7904) Add watchdog function
-Date:   Tue, 24 Mar 2020 01:46:19 +0000
-Message-ID: <20200324014619.14276-1-yuechao.zhao@advantech.com.cn>
-X-Mailer: git-send-email 2.17.1
+        Tue, 24 Mar 2020 06:25:03 -0400
+Received: by mail-pg1-f194.google.com with SMTP id a32so8810157pga.4;
+        Tue, 24 Mar 2020 03:25:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=niMBZQskqIvvbvSQd3Vs9C4OFVhjiYiDfUEWD3hhgQU=;
+        b=WL57huwoohYOXgJDpFwNTccWhDvbdVj53HP9RTAYqeUArAowfq+8wm7C8xnQS+d7Xg
+         T6ZEXRd83CkutsSV26moPh6SFShAu8y5bgcdaa94+vyt5gv9L7FHOWY/xTwiS3ZXTJoo
+         mYyatVs+4JSkglhV/DZno5DkKWgsDuV6Nq3GIgrszTouv3+HdzH3Ue4zNWg9IJabYRM5
+         Yc/KKpuGqrb71fAUqQdj6kfvkI7Fc5ogXvzI4kRXgF1utZe1N1Trsq00q5ItgQsyJMa1
+         K51p515UguhiI4YjD4zkfxOZoju5Vs4RIc7CzfPQSFesYRhhKwf5f8kTncK3eqxsX1rE
+         yirA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=niMBZQskqIvvbvSQd3Vs9C4OFVhjiYiDfUEWD3hhgQU=;
+        b=MzFd2Jhj6NnyoTXDhkIDFXZaVVEeeRk7Ymt0c9yhAa02N+aUf3a2bgMGpJVsI0eyeb
+         dOiCM7PPIjQ7Vy9vzvWavWC/dB5HRgGAX84io8H7x8yQwYGe45tzV8kg3FmX5+KuoT5t
+         4deALsSaFDZjh44GUqT0q4JNNoF+98YMHrDsQhiKmkzRmTvZDXMjkjFRs22HbctASBKf
+         fsytqVC2ZwiG3APXDtOU2kuJmfobubjcFW+5LF70sJzJrqTcnH9PkrIyHA/F0/SmkjI4
+         u3ABbxCxzs7gfxoQZu9QRHtG5xcWiv9ikSPZ1eKCmWL/z1c0mU8DJnGlrg+/XBlexkNE
+         vtBQ==
+X-Gm-Message-State: ANhLgQ1JOAWWi5gPBJvE5LVcy14E2W0ND1MVLJbZRfqVsZSxIOEgewVQ
+        l7nJZI/CkU4AdsGKMvy4n0CbhmtUPRNG4ZxZcbc=
+X-Google-Smtp-Source: ADFU+vtRP5kcse4VydJXhIWcSQg5qG4qh1fLLlH+sYOY0YXmbvxSTKNtq7OW900chK9pK0hyoRdDWpT1dROadSow+qU=
+X-Received: by 2002:a05:6a00:2b4:: with SMTP id q20mr17417161pfs.36.1585045502171;
+ Tue, 24 Mar 2020 03:25:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.17.10.74]
-X-ClientProxiedBy: ACLDAG.ADVANTECH.CORP (172.20.2.88) To
- ACNMB2.ACN.ADVANTECH.CORP (172.21.128.148)
+References: <20200320131509.564059710@linutronix.de> <20200324060124.GC11705@shao2-debian>
+In-Reply-To: <20200324060124.GC11705@shao2-debian>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 24 Mar 2020 12:24:54 +0200
+Message-ID: <CAHp75VeeKZLeZ8E3Py7LECN54SPFHaRgkxrMzBYQWXM8x+4JhA@mail.gmail.com>
+Subject: Re: [cpufreq] 06c4d00466: will-it-scale.per_process_ops -53.4% regression
+To:     kernel test robot <rong.a.chen@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Gross <mgross@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        linux-edac@vger.kernel.org,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        Takashi Iwai <tiwai@suse.com>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-crypto <linux-crypto@vger.kernel.org>, lkp@lists.01.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Yuechao Zhao <yuechao.zhao@advantech.com.cn>
+On Tue, Mar 24, 2020 at 8:02 AM kernel test robot <rong.a.chen@intel.com> wrote:
+>
+> Greeting,
+>
+> FYI, we noticed a -53.4% regression of will-it-scale.per_process_ops due to commit:
 
-implement watchdong functionality into the "hwmon/nct7904.c"
+> commit: 06c4d00466eb374841bc84c39af19b3161ff6917 ("[patch 09/22] cpufreq: Convert to new X86 CPU match macros")
+> url: https://github.com/0day-ci/linux/commits/Thomas-Gleixner/x86-devicetable-Move-x86-specific-macro-out-of-generic-code/20200321-031729
+> base: https://git.kernel.org/cgit/linux/kernel/git/rafael/linux-pm.git linux-next
+>
+> in testcase: will-it-scale
+> on test machine: 4 threads Intel(R) Core(TM) i3-3220 CPU @ 3.30GHz with 8G memory
+> with following parameters:
 
-Signed-off-by: Yuechao Zhao <yuechao.zhao@advantech.com.cn>
----
- drivers/hwmon/nct7904.c | 157 +++++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 156 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/nct7904.c b/drivers/hwmon/nct7904.c
-index 1f5743d..137199c 100644
---- a/drivers/hwmon/nct7904.c
-+++ b/drivers/hwmon/nct7904.c
-@@ -8,6 +8,9 @@
-  * Copyright (c) 2019 Advantech
-  * Author: Amy.Shih <amy.shih@advantech.com.tw>
-  *
-+ * Copyright (c) 2020 Advantech
-+ * Author: Yuechao Zhao <yuechao.zhao@advantech.com.cn>
-+ *
-  * Supports the following chips:
-  *
-  * Chip        #vin  #fan  #pwm  #temp  #dts  chip ID
-@@ -20,6 +23,7 @@
- #include <linux/i2c.h>
- #include <linux/mutex.h>
- #include <linux/hwmon.h>
-+#include <linux/watchdog.h>
- 
- #define VENDOR_ID_REG		0x7A	/* Any bank */
- #define NUVOTON_ID		0x50
-@@ -87,18 +91,39 @@
- #define FANCTL1_FMR_REG		0x00	/* Bank 3; 1 reg per channel */
- #define FANCTL1_OUT_REG		0x10	/* Bank 3; 1 reg per channel */
- 
-+#define WDT_LOCK_REG		0xE0	/* W/O Lock Watchdog Register */
-+#define WDT_EN_REG		0xE1	/* R/O Watchdog Enable Register */
-+#define WDT_STS_REG		0xE2	/* R/O Watchdog Status Register */
-+#define WDT_TIMER_REG		0xE3	/* R/W Watchdog Timer Register */
-+#define WDT_SOFT_EN		0x55	/* Enable soft watchdog timer */
-+#define WDT_SOFT_DIS		0xAA	/* Disable soft watchdog timer */
-+
- #define VOLT_MONITOR_MODE	0x0
- #define THERMAL_DIODE_MODE	0x1
- #define THERMISTOR_MODE		0x3
- 
- #define ENABLE_TSI	BIT(1)
- 
-+#define WATCHDOG_TIMEOUT	1	/* 1 minute default timeout */
-+static int ping_timeout = WATCHDOG_TIMEOUT; /* default feeding timeout */
-+
-+static int timeout = WATCHDOG_TIMEOUT;
-+module_param(timeout, int, 0);
-+MODULE_PARM_DESC(timeout, "Watchdog timeout in minutes. 1 <= timeout <= 255, default="
-+			__MODULE_STRING(WATCHODOG_TIMEOUT) ".");
-+
-+static bool nowayout = WATCHDOG_NOWAYOUT;
-+module_param(nowayout, bool, 0);
-+MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started once started (default="
-+			__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-+
- static const unsigned short normal_i2c[] = {
- 	0x2d, 0x2e, I2C_CLIENT_END
- };
- 
- struct nct7904_data {
- 	struct i2c_client *client;
-+	struct watchdog_device wdt;
- 	struct mutex bank_lock;
- 	int bank_sel;
- 	u32 fanin_mask;
-@@ -889,6 +914,91 @@ static int nct7904_detect(struct i2c_client *client,
- 	.info = nct7904_info,
- };
- 
-+/*
-+ * Wathcdog Function
-+ */
-+static int nct7904_wdt_start(struct watchdog_device *wdt)
-+{
-+	int ret;
-+	struct nct7904_data *data = watchdog_get_drvdata(wdt);
-+
-+	/* Disable soft watchdog timer first */
-+	ret = nct7904_write_reg(data, BANK_0, WDT_LOCK_REG, WDT_SOFT_DIS);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* Enable soft watchdog timer */
-+	ret = nct7904_write_reg(data, BANK_0, WDT_LOCK_REG, WDT_SOFT_EN);
-+	return ret;
-+}
-+
-+static int nct7904_wdt_stop(struct watchdog_device *wdt)
-+{
-+	struct nct7904_data *data = watchdog_get_drvdata(wdt);
-+	int ret;
-+
-+	ret = nct7904_write_reg(data, BANK_0, WDT_LOCK_REG, WDT_SOFT_DIS);
-+
-+	return ret;
-+}
-+
-+static int nct7904_wdt_set_timeout(struct watchdog_device *wdt,
-+				   unsigned int timeout)
-+{
-+	struct nct7904_data *data = watchdog_get_drvdata(wdt);
-+
-+	ping_timeout = timeout / 60;
-+
-+	return nct7904_write_reg(data, BANK_0, WDT_TIMER_REG, ping_timeout);
-+}
-+
-+static int nct7904_wdt_ping(struct watchdog_device *wdt)
-+{
-+	/*
-+	 * Note:
-+	 * NCT7904 is not supported refresh WDT_TIMER_REG register when the
-+	 * watchdog is actiove. Please disable watchdog before fedding the
-+	 * watchdog and enable it again.
-+	 */
-+	struct nct7904_data *data = watchdog_get_drvdata(wdt);
-+	int ret;
-+
-+	/* Disable soft watchdog timer */
-+	ret = nct7904_write_reg(data, BANK_0, WDT_LOCK_REG, WDT_SOFT_DIS);
-+	if (ret < 0)
-+		goto ping_err;
-+
-+	/* feed watchdog */
-+	ret = nct7904_write_reg(data, BANK_0, WDT_TIMER_REG, ping_timeout);
-+	if (ret < 0)
-+		goto ping_err;
-+
-+	/* Enable soft watchdog timer */
-+	ret = nct7904_write_reg(data, BANK_0, WDT_TIMER_REG, WDT_SOFT_EN);
-+	if (ret < 0)
-+		goto ping_err;
-+
-+	return 0;
-+
-+ping_err:
-+	pr_err("nct7904 ping error\n");
-+	return ret;
-+}
-+
-+static const struct watchdog_info nct7904_wdt_info = {
-+	.options	= WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING |
-+				WDIOF_MAGICCLOSE,
-+	.identity	= "nct7904 watchdog",
-+};
-+
-+static const struct watchdog_ops nct7904_wdt_ops = {
-+	.owner		= THIS_MODULE,
-+	.start		= nct7904_wdt_start,
-+	.stop		= nct7904_wdt_stop,
-+	.ping		= nct7904_wdt_ping,
-+	.set_timeout	= nct7904_wdt_set_timeout,
-+};
-+
- static int nct7904_probe(struct i2c_client *client,
- 			 const struct i2c_device_id *id)
- {
-@@ -1012,7 +1122,51 @@ static int nct7904_probe(struct i2c_client *client,
- 	hwmon_dev =
- 		devm_hwmon_device_register_with_info(dev, client->name, data,
- 						     &nct7904_chip_info, NULL);
--	return PTR_ERR_OR_ZERO(hwmon_dev);
-+	ret = PTR_ERR_OR_ZERO(hwmon_dev);
-+	if (ret)
-+		return ret;
-+
-+	/* Watchdog initialization */
-+	data->wdt.ops = &nct7904_wdt_ops;
-+	data->wdt.info = &nct7904_wdt_info;
-+
-+	data->wdt.timeout = timeout * 60; /* in seconds */
-+	data->wdt.min_timeout = 1;
-+	data->wdt.max_timeout = 15300;
-+	data->wdt.parent = &client->dev;
-+
-+	watchdog_init_timeout(&data->wdt, timeout, &client->dev);
-+	watchdog_set_nowayout(&data->wdt, nowayout);
-+	watchdog_set_drvdata(&data->wdt, data);
-+
-+	i2c_set_clientdata(client, data);
-+
-+	ret = watchdog_register_device(&data->wdt);
-+	if (ret)
-+		return ret;
-+
-+	dev_info(&client->dev, "NCT7904 HWMON and Watchdog device probed\n");
-+
-+	return ret;
-+}
-+
-+static int nct7904_remove(struct i2c_client *client)
-+{
-+	/*
-+	 * HWMON use devm_hwmon_device_register_with_info() register. So, do
-+	 * not need unregister it manually.
-+	 */
-+	struct nct7904_data *data = i2c_get_clientdata(client);
-+
-+	/* disable watchdog */
-+	if (!nowayout)
-+		nct7904_write_reg(data, BANK_0, WDT_LOCK_REG, WDT_SOFT_DIS);
-+
-+	watchdog_unregister_device(&data->wdt);
-+
-+	dev_info(&client->dev, "NCT7904 driver removed\n");
-+
-+	return 0;
- }
- 
- static const struct i2c_device_id nct7904_id[] = {
-@@ -1030,6 +1184,7 @@ static int nct7904_probe(struct i2c_client *client,
- 	.id_table = nct7904_id,
- 	.detect = nct7904_detect,
- 	.address_list = normal_i2c,
-+	.remove = nct7904_remove,
- };
- 
- module_i2c_driver(nct7904_driver);
+drivers/cpufreq/speedstep-centrino.c change missed the terminator,
+perhaps it's a culprit, because I don't believe removing dups and
+reordering lines may affect this.
+Can you restore terminator there and re-test?
+
 -- 
-1.8.3.1
-
+With Best Regards,
+Andy Shevchenko
