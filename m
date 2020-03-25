@@ -7,294 +7,167 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7344C18E5B
-	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Mar 2020 08:23:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48F0FC54FD4
+	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Mar 2020 10:17:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8D7A12070A
-	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Mar 2020 08:23:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2B04620775
+	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Mar 2020 10:17:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726073AbgCYIXJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 25 Mar 2020 04:23:09 -0400
-Received: from [58.211.163.100] ([58.211.163.100]:49995 "EHLO
-        mail.advantech.com.cn" rhost-flags-FAIL-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725903AbgCYIXI (ORCPT
+        id S1726109AbgCYKRs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 25 Mar 2020 06:17:48 -0400
+Received: from mail-out.m-online.net ([212.18.0.10]:33983 "EHLO
+        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726154AbgCYKRs (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 25 Mar 2020 04:23:08 -0400
-Received: from ACNMB2.ACN.ADVANTECH.CORP (unverified [172.21.128.148]) by ACN-SWEEPER01.ACN.ADVANTECH.CORP
- (Clearswift SMTPRS 5.6.0) with ESMTP id <Tde1ee9bab1ac1580301704@ACN-SWEEPER01.ACN.ADVANTECH.CORP>;
- Wed, 25 Mar 2020 16:22:53 +0800
-Received: from ADVANTECH.CORP (172.17.10.69) by ACNMB2.ACN.ADVANTECH.CORP
- (172.21.128.148) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Wed, 25 Mar
- 2020 16:22:53 +0800
-From:   <yuechao.zhao@advantech.com.cn>
-To:     <345351830@qq.com>
-CC:     Jean Delvare <jdelvare@suse.com>,
+        Wed, 25 Mar 2020 06:17:48 -0400
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 48nPFP3VPpz1rt4C;
+        Wed, 25 Mar 2020 11:17:45 +0100 (CET)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+        by mail.m-online.net (Postfix) with ESMTP id 48nPFP2dbCz1r0cT;
+        Wed, 25 Mar 2020 11:17:45 +0100 (CET)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+        with ESMTP id EVWG01mQ1PSP; Wed, 25 Mar 2020 11:17:43 +0100 (CET)
+X-Auth-Info: mEW+8yWUKx3wQVMIV02stZex5Cvuc/wh4CTSer8hAPM=
+Received: from desktop.lan (ip-86-49-35-8.net.upcbroadband.cz [86.49.35.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Wed, 25 Mar 2020 11:17:43 +0100 (CET)
+From:   Marek Vasut <marex@denx.de>
+To:     netdev@vger.kernel.org
+Cc:     o.rempel@pengutronix.de, Marek Vasut <marex@denx.de>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <amy.shih@advantech.com.tw>, <oakley.ding@advantech.com.tw>,
-        <jia.sui@advantech.com.cn>, <shengkui.leng@advantech.com.cn>,
-        Yuechao Zhao <yuechao.zhao@advantech.com.cn>
-Subject: [v2,1/1] hwmon: (nct7904) Add watchdog function
-Date:   Wed, 25 Mar 2020 08:22:37 +0000
-Message-ID: <20200325082237.7002-1-yuechao.zhao@advantech.com.cn>
-X-Mailer: git-send-email 2.17.1
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Subject: [RFC][PATCH 2/2] net: phy: tja11xx: Add BroadRReach Master/Slave support into TJA11xx PHY driver
+Date:   Wed, 25 Mar 2020 11:17:36 +0100
+Message-Id: <20200325101736.2100-2-marex@denx.de>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200325101736.2100-1-marex@denx.de>
+References: <20200325101736.2100-1-marex@denx.de>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.17.10.69]
-X-ClientProxiedBy: ACLDAG.ADVANTECH.CORP (172.20.2.88) To
- ACNMB2.ACN.ADVANTECH.CORP (172.21.128.148)
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Yuechao Zhao <yuechao.zhao@advantech.com.cn>
+Add PHY tunable callbacks to allow configuring BroadRReach
+Master/Slave mode.
 
-implement watchdong functionality into the "hwmon/nct7904.c"
-
-Signed-off-by: Yuechao Zhao <yuechao.zhao@advantech.com.cn>
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Andrew Lunn <andrew@lunn.ch>
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Heiner Kallweit <hkallweit1@gmail.com>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: linux-hwmon@vger.kernel.org
 ---
-v2:
-- Modify dependency of NC7904 into "drivers/hwmon/Kconfig".
----
- drivers/hwmon/Kconfig   |   6 +-
- drivers/hwmon/nct7904.c | 157 +++++++++++++++++++++++++++++++++++++++++++++++-
- 2 files changed, 160 insertions(+), 3 deletions(-)
+ drivers/net/phy/nxp-tja11xx.c | 58 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 58 insertions(+)
 
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 05a3083..cd0ae82 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -1340,10 +1340,12 @@ config SENSORS_NCT7802
+diff --git a/drivers/net/phy/nxp-tja11xx.c b/drivers/net/phy/nxp-tja11xx.c
+index f1aeef449c33..78f6594a6acc 100644
+--- a/drivers/net/phy/nxp-tja11xx.c
++++ b/drivers/net/phy/nxp-tja11xx.c
+@@ -26,6 +26,7 @@
+ #define MII_ECTRL_WAKE_REQUEST		BIT(0)
  
- config SENSORS_NCT7904
- 	tristate "Nuvoton NCT7904"
--	depends on I2C
-+	depends on I2C && WATCHDOG
-+	select WATCHDOG_CORE
- 	help
- 	  If you say yes here you get support for the Nuvoton NCT7904
--	  hardware monitoring chip, including manual fan speed control.
-+	  hardware monitoring chip, including manual fan speed control
-+	  and support for the integrated watchdog.
- 
- 	  This driver can also be built as a module. If so, the module
- 	  will be called nct7904.
-diff --git a/drivers/hwmon/nct7904.c b/drivers/hwmon/nct7904.c
-index 1f5743d..137199c 100644
---- a/drivers/hwmon/nct7904.c
-+++ b/drivers/hwmon/nct7904.c
-@@ -8,6 +8,9 @@
-  * Copyright (c) 2019 Advantech
-  * Author: Amy.Shih <amy.shih@advantech.com.tw>
-  *
-+ * Copyright (c) 2020 Advantech
-+ * Author: Yuechao Zhao <yuechao.zhao@advantech.com.cn>
-+ *
-  * Supports the following chips:
-  *
-  * Chip        #vin  #fan  #pwm  #temp  #dts  chip ID
-@@ -20,6 +23,7 @@
- #include <linux/i2c.h>
- #include <linux/mutex.h>
- #include <linux/hwmon.h>
-+#include <linux/watchdog.h>
- 
- #define VENDOR_ID_REG		0x7A	/* Any bank */
- #define NUVOTON_ID		0x50
-@@ -87,18 +91,39 @@
- #define FANCTL1_FMR_REG		0x00	/* Bank 3; 1 reg per channel */
- #define FANCTL1_OUT_REG		0x10	/* Bank 3; 1 reg per channel */
- 
-+#define WDT_LOCK_REG		0xE0	/* W/O Lock Watchdog Register */
-+#define WDT_EN_REG		0xE1	/* R/O Watchdog Enable Register */
-+#define WDT_STS_REG		0xE2	/* R/O Watchdog Status Register */
-+#define WDT_TIMER_REG		0xE3	/* R/W Watchdog Timer Register */
-+#define WDT_SOFT_EN		0x55	/* Enable soft watchdog timer */
-+#define WDT_SOFT_DIS		0xAA	/* Disable soft watchdog timer */
-+
- #define VOLT_MONITOR_MODE	0x0
- #define THERMAL_DIODE_MODE	0x1
- #define THERMISTOR_MODE		0x3
- 
- #define ENABLE_TSI	BIT(1)
- 
-+#define WATCHDOG_TIMEOUT	1	/* 1 minute default timeout */
-+static int ping_timeout = WATCHDOG_TIMEOUT; /* default feeding timeout */
-+
-+static int timeout = WATCHDOG_TIMEOUT;
-+module_param(timeout, int, 0);
-+MODULE_PARM_DESC(timeout, "Watchdog timeout in minutes. 1 <= timeout <= 255, default="
-+			__MODULE_STRING(WATCHODOG_TIMEOUT) ".");
-+
-+static bool nowayout = WATCHDOG_NOWAYOUT;
-+module_param(nowayout, bool, 0);
-+MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started once started (default="
-+			__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-+
- static const unsigned short normal_i2c[] = {
- 	0x2d, 0x2e, I2C_CLIENT_END
- };
- 
- struct nct7904_data {
- 	struct i2c_client *client;
-+	struct watchdog_device wdt;
- 	struct mutex bank_lock;
- 	int bank_sel;
- 	u32 fanin_mask;
-@@ -889,6 +914,91 @@ static int nct7904_detect(struct i2c_client *client,
- 	.info = nct7904_info,
- };
- 
-+/*
-+ * Wathcdog Function
-+ */
-+static int nct7904_wdt_start(struct watchdog_device *wdt)
-+{
-+	int ret;
-+	struct nct7904_data *data = watchdog_get_drvdata(wdt);
-+
-+	/* Disable soft watchdog timer first */
-+	ret = nct7904_write_reg(data, BANK_0, WDT_LOCK_REG, WDT_SOFT_DIS);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* Enable soft watchdog timer */
-+	ret = nct7904_write_reg(data, BANK_0, WDT_LOCK_REG, WDT_SOFT_EN);
-+	return ret;
-+}
-+
-+static int nct7904_wdt_stop(struct watchdog_device *wdt)
-+{
-+	struct nct7904_data *data = watchdog_get_drvdata(wdt);
-+	int ret;
-+
-+	ret = nct7904_write_reg(data, BANK_0, WDT_LOCK_REG, WDT_SOFT_DIS);
-+
-+	return ret;
-+}
-+
-+static int nct7904_wdt_set_timeout(struct watchdog_device *wdt,
-+				   unsigned int timeout)
-+{
-+	struct nct7904_data *data = watchdog_get_drvdata(wdt);
-+
-+	ping_timeout = timeout / 60;
-+
-+	return nct7904_write_reg(data, BANK_0, WDT_TIMER_REG, ping_timeout);
-+}
-+
-+static int nct7904_wdt_ping(struct watchdog_device *wdt)
-+{
-+	/*
-+	 * Note:
-+	 * NCT7904 is not supported refresh WDT_TIMER_REG register when the
-+	 * watchdog is actiove. Please disable watchdog before fedding the
-+	 * watchdog and enable it again.
-+	 */
-+	struct nct7904_data *data = watchdog_get_drvdata(wdt);
-+	int ret;
-+
-+	/* Disable soft watchdog timer */
-+	ret = nct7904_write_reg(data, BANK_0, WDT_LOCK_REG, WDT_SOFT_DIS);
-+	if (ret < 0)
-+		goto ping_err;
-+
-+	/* feed watchdog */
-+	ret = nct7904_write_reg(data, BANK_0, WDT_TIMER_REG, ping_timeout);
-+	if (ret < 0)
-+		goto ping_err;
-+
-+	/* Enable soft watchdog timer */
-+	ret = nct7904_write_reg(data, BANK_0, WDT_TIMER_REG, WDT_SOFT_EN);
-+	if (ret < 0)
-+		goto ping_err;
-+
-+	return 0;
-+
-+ping_err:
-+	pr_err("nct7904 ping error\n");
-+	return ret;
-+}
-+
-+static const struct watchdog_info nct7904_wdt_info = {
-+	.options	= WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING |
-+				WDIOF_MAGICCLOSE,
-+	.identity	= "nct7904 watchdog",
-+};
-+
-+static const struct watchdog_ops nct7904_wdt_ops = {
-+	.owner		= THIS_MODULE,
-+	.start		= nct7904_wdt_start,
-+	.stop		= nct7904_wdt_stop,
-+	.ping		= nct7904_wdt_ping,
-+	.set_timeout	= nct7904_wdt_set_timeout,
-+};
-+
- static int nct7904_probe(struct i2c_client *client,
- 			 const struct i2c_device_id *id)
- {
-@@ -1012,7 +1122,51 @@ static int nct7904_probe(struct i2c_client *client,
- 	hwmon_dev =
- 		devm_hwmon_device_register_with_info(dev, client->name, data,
- 						     &nct7904_chip_info, NULL);
--	return PTR_ERR_OR_ZERO(hwmon_dev);
-+	ret = PTR_ERR_OR_ZERO(hwmon_dev);
-+	if (ret)
-+		return ret;
-+
-+	/* Watchdog initialization */
-+	data->wdt.ops = &nct7904_wdt_ops;
-+	data->wdt.info = &nct7904_wdt_info;
-+
-+	data->wdt.timeout = timeout * 60; /* in seconds */
-+	data->wdt.min_timeout = 1;
-+	data->wdt.max_timeout = 15300;
-+	data->wdt.parent = &client->dev;
-+
-+	watchdog_init_timeout(&data->wdt, timeout, &client->dev);
-+	watchdog_set_nowayout(&data->wdt, nowayout);
-+	watchdog_set_drvdata(&data->wdt, data);
-+
-+	i2c_set_clientdata(client, data);
-+
-+	ret = watchdog_register_device(&data->wdt);
-+	if (ret)
-+		return ret;
-+
-+	dev_info(&client->dev, "NCT7904 HWMON and Watchdog device probed\n");
-+
-+	return ret;
-+}
-+
-+static int nct7904_remove(struct i2c_client *client)
-+{
-+	/*
-+	 * HWMON use devm_hwmon_device_register_with_info() register. So, do
-+	 * not need unregister it manually.
-+	 */
-+	struct nct7904_data *data = i2c_get_clientdata(client);
-+
-+	/* disable watchdog */
-+	if (!nowayout)
-+		nct7904_write_reg(data, BANK_0, WDT_LOCK_REG, WDT_SOFT_DIS);
-+
-+	watchdog_unregister_device(&data->wdt);
-+
-+	dev_info(&client->dev, "NCT7904 driver removed\n");
-+
-+	return 0;
+ #define MII_CFG1			18
++#define MII_CFG1_MASTER_SLAVE		BIT(15)
+ #define MII_CFG1_AUTO_OP		BIT(14)
+ #define MII_CFG1_SLEEP_CONFIRM		BIT(6)
+ #define MII_CFG1_LED_MODE_MASK		GENMASK(5, 4)
+@@ -115,6 +116,11 @@ static int tja11xx_enable_link_control(struct phy_device *phydev)
+ 	return phy_set_bits(phydev, MII_ECTRL, MII_ECTRL_LINK_CONTROL);
  }
  
- static const struct i2c_device_id nct7904_id[] = {
-@@ -1030,6 +1184,7 @@ static int nct7904_probe(struct i2c_client *client,
- 	.id_table = nct7904_id,
- 	.detect = nct7904_detect,
- 	.address_list = normal_i2c,
-+	.remove = nct7904_remove,
++static int tja11xx_disable_link_control(struct phy_device *phydev)
++{
++	return phy_clear_bits(phydev, MII_ECTRL, MII_ECTRL_LINK_CONTROL);
++}
++
+ static int tja11xx_wakeup(struct phy_device *phydev)
+ {
+ 	int ret;
+@@ -299,6 +305,52 @@ static void tja11xx_get_stats(struct phy_device *phydev,
+ 	}
+ }
+ 
++static int tja11xx_get_tunable(struct phy_device *phydev,
++			       struct ethtool_tunable *tuna, void *data)
++{
++	u8 *mode = (u8 *)data;
++	int ret;
++
++	switch (tuna->id) {
++	case ETHTOOL_PHY_BRR_MODE:
++		ret = phy_read(phydev, MII_CFG1);
++		if (ret < 0)
++			return ret;
++		*mode = !!(ret & MII_CFG1_MASTER_SLAVE);
++		return 0;
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static int tja11xx_set_tunable(struct phy_device *phydev,
++			       struct ethtool_tunable *tuna, const void *data)
++{
++	u8 mode = *(u8 *)data;
++	int ret;
++
++	switch (tuna->id) {
++	case ETHTOOL_PHY_BRR_MODE:
++		ret = tja11xx_disable_link_control(phydev);
++		if (ret)
++			return ret;
++
++		ret = phy_modify(phydev, MII_CFG1, MII_CFG1_MASTER_SLAVE,
++				 mode ? MII_CFG1_MASTER_SLAVE : 0);
++		if (ret)
++			return ret;
++
++		ret = tja11xx_enable_link_control(phydev);
++		if (ret)
++			return ret;
++
++		/* TJA1100 needs this to bring the link back up. */
++		return genphy_soft_reset(phydev);
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
+ static int tja11xx_hwmon_read(struct device *dev,
+ 			      enum hwmon_sensor_types type,
+ 			      u32 attr, int channel, long *value)
+@@ -425,6 +477,9 @@ static struct phy_driver tja11xx_driver[] = {
+ 		.get_sset_count = tja11xx_get_sset_count,
+ 		.get_strings	= tja11xx_get_strings,
+ 		.get_stats	= tja11xx_get_stats,
++		/* Tunables */
++		.get_tunable	= tja11xx_get_tunable,
++		.set_tunable	= tja11xx_set_tunable,
+ 	}, {
+ 		PHY_ID_MATCH_MODEL(PHY_ID_TJA1101),
+ 		.name		= "NXP TJA1101",
+@@ -444,6 +499,9 @@ static struct phy_driver tja11xx_driver[] = {
+ 		.get_sset_count = tja11xx_get_sset_count,
+ 		.get_strings	= tja11xx_get_strings,
+ 		.get_stats	= tja11xx_get_stats,
++		/* Tunables */
++		.get_tunable	= tja11xx_get_tunable,
++		.set_tunable	= tja11xx_set_tunable,
+ 	}
  };
  
- module_i2c_driver(nct7904_driver);
 -- 
-1.8.3.1
+2.25.1
 
