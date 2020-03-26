@@ -2,671 +2,243 @@ Return-Path: <SRS0=BwOg=5L=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0740C2D0F0
-	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Mar 2020 20:06:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 749DAC43331
+	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Mar 2020 21:56:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 89C7320857
-	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Mar 2020 20:06:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 394022073E
+	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Mar 2020 21:56:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="mytuH9Rs"
+	dkim=pass (2048-bit key) header.d=gateworks-com.20150623.gappssmtp.com header.i=@gateworks-com.20150623.gappssmtp.com header.b="oUaa4kKp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728692AbgCZUGG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 26 Mar 2020 16:06:06 -0400
-Received: from ssl.serverraum.org ([176.9.125.105]:45133 "EHLO
-        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727770AbgCZUGF (ORCPT
+        id S1726296AbgCZV4H (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 26 Mar 2020 17:56:07 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:40982 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726260AbgCZV4H (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 26 Mar 2020 16:06:05 -0400
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id DA8F82222E;
-        Thu, 26 Mar 2020 21:05:51 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1585253161;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6Su5YbX7HX5TxViPoYjV7m52PeSCqZzDYRmf1SJwLiQ=;
-        b=mytuH9Rsozp23uOCtqTLsuIxKzxIv3pikEjfuolYqQAWHnTTK4Q3bH4DgbOFT3BB8K2zRm
-        1leCC+kAJw9QIwlV3IG4F1Ntn/0PuVoTapAptLv8ArOB6AfQV9IRTGmi8WRch0GZaa071m
-        51MNI7pIr714EcxPTxuv7pOqYrdddGw=
+        Thu, 26 Mar 2020 17:56:07 -0400
+Received: by mail-ot1-f65.google.com with SMTP id f52so7645671otf.8
+        for <linux-hwmon@vger.kernel.org>; Thu, 26 Mar 2020 14:56:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gateworks-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fVDzJ6BDEWFzO6Zb5IeGhEXG4L3sc+hrhgcx0i0PDMc=;
+        b=oUaa4kKpgOh9V1+IpaniVvK9yJzz4NLG4abJw0B5W05RL5HKAw+RPj9HZSG1LDDo7o
+         xNSfpAIETfqMHJZJ2kZ/CmDopIiWyBUGKtHgBR63U8l1FoAD3J+z3ai7krCy1xFwnqZF
+         CLk6cnqkm4ZR9MJyLruD+dTTeGerXRh1epfU1aiZfPAKyrb8jv3L+db6Amf+rr5PN0vO
+         KSkimNNpjs/31eJL7+EnW1Si+tG3DjjkCWr5pJz19L2h5DjrQPVdLqeoYNE4ZI4pYkwe
+         g04owtoGOG/7cEjU64xMJgZ0jh9+MNk5YnHf30L3vzEZ0zedjjMiIGHAY+bubla2n5sU
+         5zvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fVDzJ6BDEWFzO6Zb5IeGhEXG4L3sc+hrhgcx0i0PDMc=;
+        b=f090hwuXNcJXLd3WIl+9AD+qKJR1ybQ+kMMZ29zqD6Y2BOQQJ4uto0kRio98TxGLba
+         DCmNZ3lLidUdaYSpiutsy9jyAEvZjuie2fLQQ0ONyhVKje0FO6vL9B9O/CUXZ2O4KoRw
+         xY9PXz4pIMYXDim6TRbk9+EMICqa0t9rzjONDJHTxIU/+ZBR08AmYXoQ71uqjrk1qzt+
+         0xeGUJ4zKJKrwcWkmEcF2sw3E75WY1wn98Y3XtJyteJMYmTJRzUUKbtYMtvyLmE94GMy
+         XO4clk9HfC+gvnxdAqWVlGDpKeJa6hYu0GZjc2qj0Yx9wjt5cSOuHx4iKido9oN2LMEn
+         DfoQ==
+X-Gm-Message-State: ANhLgQ10JUlLtV9tZ1nTFPEbcYLg5YGi8gZqF6VkVBz0wikqcs1P0jSZ
+        OG+JLWDkesZsHI3gMkXqKXEpIjS1aazLk+ddWwU44g==
+X-Google-Smtp-Source: ADFU+vsWTvLX1x18YifbVlDZbfMowYVSThseSulGrqAUkQatpGn5d7UzcL2X3gq8FAmUJ8EfBv414sF7tqsi/FUvBUc=
+X-Received: by 2002:a4a:c184:: with SMTP id w4mr6815873oop.39.1585259766176;
+ Thu, 26 Mar 2020 14:56:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Thu, 26 Mar 2020 21:05:51 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Cc:     linux-gpio <linux-gpio@vger.kernel.org>,
-        linux-devicetree <devicetree@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-hwmon@vger.kernel.org,
-        linux-pwm@vger.kernel.org,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
+References: <1584736550-7520-1-git-send-email-tharvey@gateworks.com>
+ <1584736550-7520-3-git-send-email-tharvey@gateworks.com> <20200326101702.GD603801@dell>
+In-Reply-To: <20200326101702.GD603801@dell>
+From:   Tim Harvey <tharvey@gateworks.com>
+Date:   Thu, 26 Mar 2020 14:55:54 -0700
+Message-ID: <CAJ+vNU0pPW3n6dnUH4n_3ZtmwGYdtc6gwUkg+aWJYPF7bFUXzQ@mail.gmail.com>
+Subject: Re: [PATCH v7 2/3] mfd: add Gateworks System Controller core driver
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>
-Subject: Re: [PATCH 12/18] gpio: add support for the sl28cpld GPIO controller
-In-Reply-To: <CAMpxmJXmD-M+Wbj6=wgFgP2aDxbqDN=ceHi1XDun4iwdLm55Zg@mail.gmail.com>
-References: <20200317205017.28280-1-michael@walle.cc>
- <20200317205017.28280-13-michael@walle.cc>
- <CAMpxmJW770v6JLdveEe1hkgNEJByVyArhorSyUZBYOyFiVyOeg@mail.gmail.com>
- <9c310f2a11913d4d089ef1b07671be00@walle.cc>
- <CAMpxmJXmD-M+Wbj6=wgFgP2aDxbqDN=ceHi1XDun4iwdLm55Zg@mail.gmail.com>
-Message-ID: <22944c9b62aa69da418de7766b7741bd@walle.cc>
-X-Sender: michael@walle.cc
-User-Agent: Roundcube Webmail/1.3.10
-X-Spamd-Bar: +
-X-Rspamd-Server: web
-X-Rspamd-Queue-Id: DA8F82222E
-X-Spamd-Result: default: False [1.40 / 15.00];
-         FROM_HAS_DN(0.00)[];
-         TO_DN_SOME(0.00)[];
-         FREEMAIL_ENVRCPT(0.00)[gmail.com];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         TAGGED_RCPT(0.00)[dt];
-         MIME_GOOD(-0.10)[text/plain];
-         DKIM_SIGNED(0.00)[];
-         RCPT_COUNT_TWELVE(0.00)[21];
-         NEURAL_HAM(-0.00)[-0.467];
-         RCVD_COUNT_ZERO(0.00)[0];
-         FROM_EQ_ENVFROM(0.00)[];
-         MIME_TRACE(0.00)[0:+];
-         FREEMAIL_CC(0.00)[vger.kernel.org,lists.infradead.org,linaro.org,kernel.org,suse.com,roeck-us.net,gmail.com,pengutronix.de,linux-watchdog.org,nxp.com,linutronix.de,lakedaemon.net];
-         MID_RHS_MATCH_FROM(0.00)[];
-         SUSPICIOUS_RECIPS(1.50)[]
+        Linux HWMON List <linux-hwmon@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Device Tree Mailing List <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Robert Jones <rjones@gateworks.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Bartosz,
+On Thu, Mar 26, 2020 at 3:16 AM Lee Jones <lee.jones@linaro.org> wrote:
+>
+> On Fri, 20 Mar 2020, Tim Harvey wrote:
+>
+> > The Gateworks System Controller (GSC) is an I2C slave controller
+> > implemented with an MSP430 micro-controller whose firmware embeds the
+> > following features:
+> >  - I/O expander (16 GPIO's) using PCA955x protocol
+> >  - Real Time Clock using DS1672 protocol
+> >  - User EEPROM using AT24 protocol
+> >  - HWMON using custom protocol
+> >  - Interrupt controller with tamper detect, user pushbotton
+> >  - Watchdog controller capable of full board power-cycle
+> >  - Power Control capable of full board power-cycle
+> >
+<snip>
+> > diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> > index 4209008..d84725a 100644
+> > --- a/drivers/mfd/Kconfig
+> > +++ b/drivers/mfd/Kconfig
+> > @@ -407,6 +407,16 @@ config MFD_EXYNOS_LPASS
+> >         Select this option to enable support for Samsung Exynos Low Power
+> >         Audio Subsystem.
+> >
+> > +config MFD_GATEWORKS_GSC
+> > +     tristate "Gateworks System Controller"
+> > +     depends on (I2C && OF)
+> > +     select MFD_CORE
+> > +     select REGMAP_I2C
+> > +     select REGMAP_IRQ
+> > +     help
+> > +       Enable support for the Gateworks System Controller found
+> > +       on Gateworks Single Board Computers.
+>
+> Please describe which sub-devices are attached.
 
-Am 2020-03-25 12:50, schrieb Bartosz Golaszewski:
-> śr., 18 mar 2020 o 13:45 Michael Walle <michael@walle.cc> napisał(a):
->> 
->> Hi Bartosz,
->> 
->> Am 2020-03-18 10:14, schrieb Bartosz Golaszewski:
->> > wt., 17 mar 2020 o 21:50 Michael Walle <michael@walle.cc> napisał(a):
->> >>
->> >> This adds support for the GPIO controller of the sl28 board management
->> >> controller. This driver is part of a multi-function device.
->> >>
->> >> Signed-off-by: Michael Walle <michael@walle.cc>
->> >
->> > Hi Michael,
->> >
->> > thanks for the driver. Please take a look at some comments below.
->> 
->> well, thank you for the very fast review!
->> 
->> >> ---
->> >>  drivers/gpio/Kconfig         |  11 ++
->> >>  drivers/gpio/Makefile        |   1 +
->> >>  drivers/gpio/gpio-sl28cpld.c | 332
->> >> +++++++++++++++++++++++++++++++++++
->> >>  3 files changed, 344 insertions(+)
->> >>  create mode 100644 drivers/gpio/gpio-sl28cpld.c
->> >>
->> >> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
->> >> index 3cbf8882a0dd..516e47017ef5 100644
->> >> --- a/drivers/gpio/Kconfig
->> >> +++ b/drivers/gpio/Kconfig
->> >> @@ -1211,6 +1211,17 @@ config GPIO_RC5T583
->> >>           This driver provides the support for driving/reading the
->> >> gpio pins
->> >>           of RC5T583 device through standard gpio library.
->> >>
->> >> +config GPIO_SL28CPLD
->> >> +       tristate "Kontron sl28 GPIO"
->> >> +       depends on MFD_SL28CPLD
->> >> +       depends on OF_GPIO
->> >> +       select GPIOLIB_IRQCHIP
->> >
->> > Please see below - I think both are not needed.
->> >
->> >> +       help
->> >> +         This enables support for the GPIOs found on the Kontron sl28
->> >> CPLD.
->> >> +
->> >> +         This driver can also be built as a module. If so, the module
->> >> will be
->> >> +         called gpio-sl28cpld.
->> >> +
->> >>  config GPIO_STMPE
->> >>         bool "STMPE GPIOs"
->> >>         depends on MFD_STMPE
->> >> diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
->> >> index 0b571264ddbc..0ca2d52c78e8 100644
->> >> --- a/drivers/gpio/Makefile
->> >> +++ b/drivers/gpio/Makefile
->> >> @@ -127,6 +127,7 @@ obj-$(CONFIG_GPIO_SCH311X)          +=
->> >> gpio-sch311x.o
->> >>  obj-$(CONFIG_GPIO_SCH)                 += gpio-sch.o
->> >>  obj-$(CONFIG_GPIO_SIFIVE)              += gpio-sifive.o
->> >>  obj-$(CONFIG_GPIO_SIOX)                        += gpio-siox.o
->> >> +obj-$(CONFIG_GPIO_SL28CPLD)            += gpio-sl28cpld.o
->> >>  obj-$(CONFIG_GPIO_SODAVILLE)           += gpio-sodaville.o
->> >>  obj-$(CONFIG_GPIO_SPEAR_SPICS)         += gpio-spear-spics.o
->> >>  obj-$(CONFIG_GPIO_SPRD)                        += gpio-sprd.o
->> >> diff --git a/drivers/gpio/gpio-sl28cpld.c
->> >> b/drivers/gpio/gpio-sl28cpld.c
->> >> new file mode 100644
->> >> index 000000000000..94f82013882f
->> >> --- /dev/null
->> >> +++ b/drivers/gpio/gpio-sl28cpld.c
->> >> @@ -0,0 +1,332 @@
->> >> +// SPDX-License-Identifier: GPL-2.0-only
->> >> +/*
->> >> + * SMARC-sAL28 GPIO driver.
->> >> + *
->> >> + * Copyright 2019 Kontron Europe GmbH
->> >> + */
->> >> +
->> >> +#include <linux/kernel.h>
->> >> +#include <linux/module.h>
->> >> +#include <linux/of.h>
->> >> +#include <linux/of_device.h>
->> >> +#include <linux/of_address.h>
->> >> +#include <linux/interrupt.h>
->> >> +#include <linux/regmap.h>
->> >> +#include <linux/platform_device.h>
->> >> +#include <linux/gpio/driver.h>
->> >> +
->> >> +#define GPIO_REG_DIR   0
->> >> +#define GPIO_REG_OUT   1
->> >> +#define GPIO_REG_IN    2
->> >> +#define GPIO_REG_IE    3
->> >> +#define GPIO_REG_IP    4
->> >
->> > These values would be more clear if they were defined as hex.
->> >
->> >> +
->> >> +#define GPI_REG_IN     0
->> >> +
->> >> +#define GPO_REG_OUT    0
->> >
->> > Please also use a common prefix even for defines.
->> 
->> ok
->> 
->> >
->> >> +
->> >> +enum sl28cpld_gpio_type {
->> >> +       sl28cpld_gpio,
->> >> +       sl28cpld_gpi,
->> >> +       sl28cpld_gpo,
->> >> +};
->> >
->> > Enum values should be all upper-case.
->> 
->> ok
->> 
->> >> +
->> >> +struct sl28cpld_gpio {
->> >> +       struct gpio_chip gpio_chip;
->> >> +       struct irq_chip irq_chip;
->> >> +       struct regmap *regmap;
->> >> +       u32 offset;
->> >> +       struct mutex lock;
->> >> +       u8 ie;
->> >> +};
->> >> +
->> >> +static void sl28cpld_gpio_set_reg(struct gpio_chip *chip, unsigned
->> >> int reg,
->> >> +                                 unsigned int offset, int value)
->> >> +{
->> >> +       struct sl28cpld_gpio *gpio = gpiochip_get_data(chip);
->> >> +       unsigned int mask = 1 << offset;
->> >> +       unsigned int val = value << offset;
->> >> +
->> >> +       regmap_update_bits(gpio->regmap, gpio->offset + reg, mask,
->> >> val);
->> >> +}
->> >> +
->> >> +static void sl28cpld_gpio_set(struct gpio_chip *chip, unsigned int
->> >> offset,
->> >> +                             int value)
->> >> +{
->> >> +       sl28cpld_gpio_set_reg(chip, GPIO_REG_OUT, offset, value);
->> >> +}
->> >> +
->> >> +static void sl28cpld_gpo_set(struct gpio_chip *chip, unsigned int
->> >> offset,
->> >> +                            int value)
->> >> +{
->> >> +       sl28cpld_gpio_set_reg(chip, GPO_REG_OUT, offset, value);
->> >> +}
->> >> +
->> >> +static int sl28cpld_gpio_get_reg(struct gpio_chip *chip, unsigned int
->> >> reg,
->> >> +                                unsigned int offset)
->> >> +{
->> >> +       struct sl28cpld_gpio *gpio = gpiochip_get_data(chip);
->> >> +       unsigned int mask = 1 << offset;
->> >> +       unsigned int val;
->> >> +       int ret;
->> >> +
->> >> +       ret = regmap_read(gpio->regmap, gpio->offset + reg, &val);
->> >> +       if (ret)
->> >> +               return ret;
->> >> +
->> >> +       return (val & mask) ? 1 : 0;
->> >> +}
->> >> +
->> >> +static int sl28cpld_gpio_get(struct gpio_chip *chip, unsigned int
->> >> offset)
->> >> +{
->> >> +       return sl28cpld_gpio_get_reg(chip, GPIO_REG_IN, offset);
->> >> +}
->> >> +
->> >> +static int sl28cpld_gpi_get(struct gpio_chip *chip, unsigned int
->> >> offset)
->> >> +{
->> >> +       return sl28cpld_gpio_get_reg(chip, GPI_REG_IN, offset);
->> >> +}
->> >> +
->> >> +static int sl28cpld_gpio_get_direction(struct gpio_chip *chip,
->> >> +                                      unsigned int offset)
->> >> +{
->> >> +       struct sl28cpld_gpio *gpio = gpiochip_get_data(chip);
->> >> +       unsigned int reg;
->> >> +       int ret;
->> >> +
->> >> +       ret = regmap_read(gpio->regmap, gpio->offset + GPIO_REG_DIR,
->> >> &reg);
->> >> +       if (ret)
->> >> +               return ret;
->> >> +
->> >> +       if (reg & (1 << offset))
->> >> +               return GPIO_LINE_DIRECTION_OUT;
->> >> +       else
->> >> +               return GPIO_LINE_DIRECTION_IN;
->> >> +}
->> >> +
->> >> +static int sl28cpld_gpio_set_direction(struct gpio_chip *chip,
->> >> +                                      unsigned int offset,
->> >> +                                      bool output)
->> >> +{
->> >> +       struct sl28cpld_gpio *gpio = gpiochip_get_data(chip);
->> >> +       unsigned int mask = 1 << offset;
->> >> +       unsigned int val = (output) ? mask : 0;
->> >> +
->> >> +       return regmap_update_bits(gpio->regmap, gpio->offset +
->> >> GPIO_REG_DIR,
->> >> +                                 mask, val);
->> >> +
->> >
->> > Stray newline.
->> ok
->> 
->> >
->> >> +}
->> >> +
->> >> +static int sl28cpld_gpio_direction_input(struct gpio_chip *chip,
->> >> +                                        unsigned int offset)
->> >> +{
->> >> +       return sl28cpld_gpio_set_direction(chip, offset, false);
->> >> +}
->> >> +
->> >> +static int sl28cpld_gpio_direction_output(struct gpio_chip *chip,
->> >> +                                         unsigned int offset, int
->> >> value)
->> >> +{
->> >> +       sl28cpld_gpio_set_reg(chip, GPIO_REG_OUT, offset, value);
->> >> +       return sl28cpld_gpio_set_direction(chip, offset, true);
->> >> +}
->> >> +
->> >> +static void sl28cpld_gpio_irq_lock(struct irq_data *data)
->> >> +{
->> >> +       struct sl28cpld_gpio *gpio =
->> >> +               gpiochip_get_data(irq_data_get_irq_chip_data(data));
->> >> +
->> >> +       mutex_lock(&gpio->lock);
->> >
->> > How does that actually lock anything?
->> 
->> TBH, I took that from gpio-pcf857x.c. But that
->>   (1) don't uses regmap
->>   (2) also uses that lock on other places.
->> 
->> I'll dig deeper into that and try to understand why there is a lock at
->> all and why this callback is actually called _irq_lock() because that
->> made me wonder.
->> 
->> > Regmap uses a different lock and
->> > if you want to make sure nobody modifies the GPIO registers than you'd
->> > need to use the same lock. Also: this looks a lot like a task for
->> > regmap_irqchip - maybe you could use it here or in the core mfd
->> > module?
->> 
->> regmap_irqchip will register the interrupt controller on the device
->> which owns the regmap, ie. the parent. So (1) the phandle would need 
->> to
->> point to the parent device instead of the GPIO subnode and (2) I'm
->> already using the regmap_irqchip for the interrupt controller. I don't
->> know if you can actually have that multiple times.
->> 
->> there was a discussion which might apply partly to (1):
->>   https://lore.kernel.org/patchwork/patch/802608/
->> 
-> 
-> In that case maybe you should use the disable_locking option in
-> regmap_config and provide your own callbacks that you can use in the
-> irqchip code too?
+Hi Lee, thanks for the review!
 
-But how would that solve problem (1). And keep in mind, that the
-reqmap_irqchip is actually used for the interrupt controller, which
-is not this gpio controller.
+I will add more description for v8:
 
-Ie. the interrupt controller of the sl28cpld uses the regmap_irqchip
-and all interrupt phandles pointing to the interrupt controller will
-reference the toplevel node. Any phandles pointing to the gpio
-controller will reference the GPIO subnode.
+Enable common support for the Gateworks System Controller
+found on Gateworks Single Board Computers. This device supports
+an interrupt controller providing interrupts for pushbutton
+events and a sub-device for HWMON and FAN controller via the
+gsc-hwmon driver.
 
-> 
->> >
->> >> +}
->> >> +
->> >> +static void sl28cpld_gpio_irq_sync_unlock(struct irq_data *data)
->> >> +{
->> >> +       struct sl28cpld_gpio *gpio =
->> >> +               gpiochip_get_data(irq_data_get_irq_chip_data(data));
->> >> +
->> >> +       regmap_write(gpio->regmap, gpio->offset + GPIO_REG_IE,
->> >> gpio->ie);
->> >> +       mutex_unlock(&gpio->lock);
->> >> +}
->> >> +
->> >> +static void sl28cpld_gpio_irq_disable(struct irq_data *data)
->> >> +{
->> >> +       struct sl28cpld_gpio *gpio =
->> >> +               gpiochip_get_data(irq_data_get_irq_chip_data(data));
->> >> +
->> >> +       if (data->hwirq >= 8)
->> >> +               return;
->> >> +
->> >> +       gpio->ie &= ~(1 << data->hwirq);
->> >> +}
->> >> +
->> >> +static void sl28cpld_gpio_irq_enable(struct irq_data *data)
->> >> +{
->> >> +       struct sl28cpld_gpio *gpio =
->> >> +               gpiochip_get_data(irq_data_get_irq_chip_data(data));
->> >> +
->> >> +       if (data->hwirq >= 8)
->> >> +               return;
->> >> +
->> >> +       gpio->ie |= (1 << data->hwirq);
->> >> +}
->> >> +
->> >> +static int sl28cpld_gpio_irq_set_type(struct irq_data *data, unsigned
->> >> int type)
->> >> +{
->> >> +       /* only edge triggered interrupts on both edges are supported
->> >> */
->> >> +       return (type == IRQ_TYPE_EDGE_BOTH) ? 0 : -EINVAL;
->> >> +}
->> >> +
->> >> +static irqreturn_t sl28cpld_gpio_irq_thread(int irq, void *data)
->> >> +{
->> >> +       struct sl28cpld_gpio *gpio = data;
->> >> +       unsigned int ip;
->> >> +       unsigned int virq;
->> >> +       int pin;
->> >> +       int ret;
->> >> +
->> >> +       ret = regmap_read(gpio->regmap, gpio->offset + GPIO_REG_IP,
->> >> &ip);
->> >> +       if (ret)
->> >> +               return IRQ_NONE;
->> >> +
->> >> +       /* mask other pending interrupts which are not enabled */
->> >> +       ip &= gpio->ie;
->> >> +
->> >> +       /* ack the interrupts */
->> >> +       regmap_write(gpio->regmap, gpio->offset + GPIO_REG_IP, ip);
->> >> +
->> >> +       /* and handle them */
->> >> +       while (ip) {
->> >> +               pin = __ffs(ip);
->> >> +               ip &= ~BIT(pin);
->> >> +
->> >> +               virq = irq_find_mapping(gpio->gpio_chip.irq.domain,
->> >> pin);
->> >> +               if (virq)
->> >> +                       handle_nested_irq(virq);
->> >> +       }
->> >> +
->> >> +       return IRQ_HANDLED;
->> >> +}
->> >
->> > This definitely looks like parts of regmap_irqchip reimplemented.
->> > Please check if you could reuse it - it would save a lot of code.
->> 
->> See above. I'd be happy to reuse the code though.
->> 
->> >
->> >> +
->> >> +static int sl28_cpld_gpio_irq_init(struct platform_device *pdev, int
->> >> irq)
->> >> +{
->> >> +       struct sl28cpld_gpio *gpio = platform_get_drvdata(pdev);
->> >> +       struct irq_chip *irq_chip = &gpio->irq_chip;
->> >> +       int ret;
->> >> +
->> >> +       irq_chip->name = "sl28cpld-gpio-irq",
->> >> +       irq_chip->irq_bus_lock = sl28cpld_gpio_irq_lock,
->> >> +       irq_chip->irq_bus_sync_unlock = sl28cpld_gpio_irq_sync_unlock,
->> >> +       irq_chip->irq_disable = sl28cpld_gpio_irq_disable,
->> >> +       irq_chip->irq_enable = sl28cpld_gpio_irq_enable,
->> >> +       irq_chip->irq_set_type = sl28cpld_gpio_irq_set_type,
->> >> +       irq_chip->flags = IRQCHIP_SKIP_SET_WAKE,
->> >> +
->> >> +       ret = gpiochip_irqchip_add_nested(&gpio->gpio_chip, irq_chip,
->> >> 0,
->> >> +                                         handle_simple_irq,
->> >> IRQ_TYPE_NONE);
->> >> +       if (ret)
->> >> +               return ret;
->> >> +
->> >> +       ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
->> >> +                                       sl28cpld_gpio_irq_thread,
->> >> +                                       IRQF_SHARED | IRQF_ONESHOT,
->> >> +                                       pdev->name, gpio);
->> >> +       if (ret)
->> >> +               return ret;
->> >> +
->> >> +       gpiochip_set_nested_irqchip(&gpio->gpio_chip, irq_chip, irq);
->> >> +
->> >> +       return 0;
->> >> +}
->> >> +
->> >> +static int sl28cpld_gpio_probe(struct platform_device *pdev)
->> >> +{
->> >> +       enum sl28cpld_gpio_type type =
->> >> +               platform_get_device_id(pdev)->driver_data;
->> >> +       struct device_node *np = pdev->dev.of_node;
->> >> +       struct sl28cpld_gpio *gpio;
->> >> +       struct gpio_chip *chip;
->> >> +       struct resource *res;
->> >> +       bool irq_support = false;
->> >> +       int ret;
->> >> +       int irq;
->> >> +
->> >> +       gpio = devm_kzalloc(&pdev->dev, sizeof(*gpio), GFP_KERNEL);
->> >> +       if (!gpio)
->> >> +               return -ENOMEM;
->> >> +
->> >> +       if (!pdev->dev.parent)
->> >> +               return -ENODEV;
->> >
->> > Why not check this before allocating any memory?
->> 
->> I'll change that, you're not the first one which notices that. My 
->> reason
->> was to have the check together with the dev_get_regmap() which uses 
->> the
->> parent, expecting that the error case only happen exceptionally.
->> 
->> >
->> >> +
->> >> +       gpio->regmap = dev_get_regmap(pdev->dev.parent, NULL);
->> >> +       if (!gpio->regmap)
->> >> +               return -ENODEV;
->> >> +
->> >> +       res = platform_get_resource(pdev, IORESOURCE_REG, 0);
->> >> +       if (!res)
->> >> +               return -EINVAL;
->> >> +       gpio->offset = res->start;
->> >> +
->> >
->> > This isn't how IO resources are used. What are you trying to achieve
->> > here?
->> 
->> Mh are you sure? The blueprint for this were the regulators in
->> drivers/regulators/, eg the wm831x-ldo.c. IORESOURCE_REG isn't used
->> that often. But here is what I want to achieve (for which I haven't
->> found any existing drivers for now):
->>   (1) the individual blocks of the overall sl28cpld may be used
->>       multiple times, eg. this driver only has the offset to a
->>       base address. So if there are two blocks, this mfd core
->>       driver will register two devices for this driver with
->>       different base offsets, which are passed by IORESOURCE_REG
->>   (2) I wanted to avoid having a private mfd include with some
->>       kind of "proprietary" method how to get that offset
->>   (3) the mfd core driver is the one knowing the offset, thus it
->>       is possible to have different flavours of the sl28cpld
->> 
-> 
-> Ok, now I see it's documented in the bindings. Thanks for the 
-> explanation.
-> 
->> 
->> >
->> >> +       /* initialize struct gpio_chip */
->> >> +       mutex_init(&gpio->lock);
->> >> +       chip = &gpio->gpio_chip;
->> >> +       chip->parent = &pdev->dev;
->> >> +       chip->label = dev_name(&pdev->dev);
->> >> +       chip->owner = THIS_MODULE;
->> >> +       chip->can_sleep = true;
->> >> +       chip->base = -1;
->> >> +       chip->ngpio = 8;
->> >> +
->> >> +       switch (type) {
->> >> +       case sl28cpld_gpio:
->> >> +               chip->get_direction = sl28cpld_gpio_get_direction;
->> >> +               chip->direction_input = sl28cpld_gpio_direction_input;
->> >> +               chip->direction_output =
->> >> sl28cpld_gpio_direction_output;
->> >> +               chip->get = sl28cpld_gpio_get;
->> >> +               chip->set = sl28cpld_gpio_set;
->> >> +               irq_support = true;
->> >> +               break;
->> >> +       case sl28cpld_gpo:
->> >> +               chip->set = sl28cpld_gpo_set;
->> >> +               chip->get = sl28cpld_gpi_get;
->> >> +               break;
->> >> +       case sl28cpld_gpi:
->> >> +               chip->get = sl28cpld_gpi_get;
->> >> +               break;
->> >> +       }
->> >> +
->> >> +       ret = devm_gpiochip_add_data(&pdev->dev, chip, gpio);
->> >> +       if (ret < 0)
->> >> +               return ret;
->> >> +
->> >> +       platform_set_drvdata(pdev, gpio);
->> >> +
->> >> +       if (irq_support && of_property_read_bool(np,
->> >> "interrupt-controller")) {
->> >
->> > You're depending on OF_GPIO for this one function. Please switch to
->> > device_property_read_bool() instead.
->> 
->> ok
->> 
->> 
->> >
->> >> +               irq = platform_get_irq(pdev, 0);
->> >> +               if (irq < 0)
->> >> +                       return ret;
->> >> +
->> >> +               ret = sl28_cpld_gpio_irq_init(pdev, irq);
->> >> +               if (ret)
->> >> +                       return ret;
->> >> +       }
->> >> +
->> >> +       return 0;
->> >> +}
->> >> +
->> >> +static const struct platform_device_id sl28cpld_gpio_id_table[] = {
->> >> +       {"sl28cpld-gpio", sl28cpld_gpio},
->> >> +       {"sl28cpld-gpi", sl28cpld_gpi},
->> >> +       {"sl28cpld-gpo", sl28cpld_gpo},
->> >
->> > Could you explain this a bit more? Is this the same component with
->> > input/output-only lines or three different components?
->> 
->> These are actually three different components. Ie. you could have a
->> flavour where you have one GPIO (sl28cpld-gpio) and two output-only
->> ones (sl28cpld-gpo). Is that what you wanted to know?
->> 
-> 
-> Yes, thanks. This could use some documentation in the bindings though.
+>
+> >  config MFD_MC13XXX
+> >       tristate
+> >       depends on (SPI_MASTER || I2C)
+> > diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> > index aed99f0..c82b442 100644
+> > --- a/drivers/mfd/Makefile
+> > +++ b/drivers/mfd/Makefile
+> > @@ -15,6 +15,7 @@ obj-$(CONFIG_MFD_BCM590XX)  += bcm590xx.o
+> >  obj-$(CONFIG_MFD_BD9571MWV)  += bd9571mwv.o
+> >  obj-$(CONFIG_MFD_CROS_EC_DEV)        += cros_ec_dev.o
+> >  obj-$(CONFIG_MFD_EXYNOS_LPASS)       += exynos-lpass.o
+> > +obj-$(CONFIG_MFD_GATEWORKS_GSC)      += gateworks-gsc.o
+> >
+> >  obj-$(CONFIG_HTC_PASIC3)     += htc-pasic3.o
+> >  obj-$(CONFIG_HTC_I2CPLD)     += htc-i2cpld.o
+> > diff --git a/drivers/mfd/gateworks-gsc.c b/drivers/mfd/gateworks-gsc.c
+> > new file mode 100644
+> > index 00000000..8566123
+> > --- /dev/null
+> > +++ b/drivers/mfd/gateworks-gsc.c
+> > @@ -0,0 +1,291 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * The Gateworks System Controller (GSC) is a multi-function
+> > + * device designed for use in Gateworks Single Board Computers.
+> > + * The control interface is I2C, with an interrupt. The device supports
+> > + * system functions such as pushbutton monitoring, multiple ADC's for
+> > + * voltage and temperature, fan controller, and watchdog monitor.
+>
+> When are you planning on adding support for the other devices?
 
-ok. thats easy ;)
+The pushbutton monitoring is supported via interrupts and the ADC's
+and fan controller are supported via the gsc-hwmon driver in this
+series. The watchdog is not yet supported via a driver and I'm not
+sure if/when I will submit one as the API is rather strange.
 
--michael
+>
+<snip>
+> > +/*
+> > + * gsc_powerdown - API to use GSC to power down board for a specific time
+> > + *
+> > + * secs - number of seconds to remain powered off
+> > + */
+> > +static int gsc_powerdown(struct gsc_dev *gsc, unsigned long secs)
+> > +{
+> > +     int ret;
+> > +     unsigned char regs[4];
+>
+> No error checking?  Could be down for a very long time.
 
-> Bartosz
-> 
->> >
->> >> +};
->> >> +MODULE_DEVICE_TABLE(platform, sl28cpld_gpio_id_table);
->> >> +
->> >> +static struct platform_driver sl28cpld_gpio_driver = {
->> >> +       .probe = sl28cpld_gpio_probe,
->> >> +       .id_table = sl28cpld_gpio_id_table,
->> >> +       .driver = {
->> >> +               .name = "sl28cpld-gpio",
->> >> +       },
->> >> +};
->> >> +module_platform_driver(sl28cpld_gpio_driver);
->> >> +
->> >> +MODULE_DESCRIPTION("sl28cpld GPIO Driver");
->> >> +MODULE_LICENSE("GPL");
->> >
->> > I think you could use a MODULE_ALIAS() here if you want this module to
->> > be loaded automatically by udev.
->> 
->> ok, I'll look into that.
->> 
->> thanks,
->> -michael
->> 
->> >
->> >> --
->> >> 2.20.1
->> >>
->> >
->> > Best regards,
->> > Bartosz Golaszewski
+understood, but I'm not sure I want to dictate what the max amount of
+time to power-down should be. Some remote-sensing use cases may want
+to power-down for days, or weeks. I agree powering down for years
+seems strange but again, I don't want to dictate usage. If they
+accidently power down for a length of time they did not mean to they
+still have to remove power, battery, or press a button to power back
+on.
+
+>
+<snip>
+>
+> > +gsc_probe(struct i2c_client *client, const struct i2c_device_id *id)
+> > +{
+> > +     struct device *dev = &client->dev;
+> > +     struct gsc_dev *gsc;
+> > +     int ret;
+> > +     unsigned int reg;
+> > +
+> > +     gsc = devm_kzalloc(dev, sizeof(*gsc), GFP_KERNEL);
+> > +     if (!gsc)
+> > +             return -ENOMEM;
+> > +
+> > +     gsc->dev = &client->dev;
+> > +     gsc->i2c = client;
+> > +     i2c_set_clientdata(client, gsc);
+> > +
+> > +     gsc->regmap = devm_regmap_init(dev, &regmap_gsc, client,
+> > +                                    &gsc_regmap_config);
+> > +     if (IS_ERR(gsc->regmap))
+> > +             return PTR_ERR(gsc->regmap);
+> > +
+> > +     if (regmap_read(gsc->regmap, GSC_FW_VER, &reg))
+> > +             return -EIO;
+> > +     gsc->fwver = reg;
+>
+> You not checking this for a valid value?
+
+it's a single byte unsigned char, there really isn't an invalid value.
+
+>
+> > +     regmap_read(gsc->regmap, GSC_FW_CRC, &reg);
+> > +     gsc->fwcrc = reg;
+> > +     regmap_read(gsc->regmap, GSC_FW_CRC + 1, &reg);
+> > +     gsc->fwcrc |= reg << 8;
+> > +
+> > +     gsc->i2c_hwmon = i2c_new_dummy_device(client->adapter, GSC_HWMON);
+> > +     if (!gsc->i2c_hwmon) {
+> > +             dev_err(dev, "Failed to allocate I2C device for HWMON\n");
+> > +             return -ENODEV;
+> > +     }
+> > +     i2c_set_clientdata(gsc->i2c_hwmon, gsc);
+> > +
+> > +     gsc->regmap_hwmon = devm_regmap_init(dev, &regmap_gsc, gsc->i2c_hwmon,
+> > +                                          &gsc_regmap_hwmon_config);
+> > +     if (IS_ERR(gsc->regmap_hwmon)) {
+> > +             ret = PTR_ERR(gsc->regmap_hwmon);
+> > +             dev_err(dev, "failed to allocate register map: %d\n", ret);
+> > +             goto err_regmap;
+> > +     }
+>
+> Why can't the HWMON driver fetch its own Regmap?
+
+I can move this to hwmon. It means I have to share the regmap_bus in
+struct gsc_dev instead of sharing the regmap but I suppose it makes
+more sense to have hwmon register it's own.
+
+Everything else you suggest makes complete sense and I will put into v8.
+
+Best Regards,
+
+Tim
