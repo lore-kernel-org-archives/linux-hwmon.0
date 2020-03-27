@@ -2,97 +2,161 @@ Return-Path: <SRS0=0/BK=5M=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DAB01C2D0F0
-	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Mar 2020 19:02:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04269C43331
+	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Mar 2020 20:33:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B6AD92072F
-	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Mar 2020 19:02:01 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XzwTwOQ2"
+	by mail.kernel.org (Postfix) with ESMTP id D5019206F1
+	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Mar 2020 20:33:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727125AbgC0TCA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 27 Mar 2020 15:02:00 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:39897 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727393AbgC0TCA (ORCPT
+        id S1727423AbgC0Udm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 27 Mar 2020 16:33:42 -0400
+Received: from lists.gateworks.com ([108.161.130.12]:43551 "EHLO
+        lists.gateworks.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727349AbgC0Udm (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 27 Mar 2020 15:02:00 -0400
-Received: by mail-lf1-f66.google.com with SMTP id h6so2999773lfp.6
-        for <linux-hwmon@vger.kernel.org>; Fri, 27 Mar 2020 12:01:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CooN/lA7d5yACqkmjNxbvElnXH9xWYc5D690cPagV5A=;
-        b=XzwTwOQ2tZqjO9DLphNswRW0Faz+tkI3lW4QKn8PnDodceq0s69XJc+EX+CaxLUZAc
-         DsmeaJdkg7faxGR2WlOr2Q2xOqCK3LhvO83UpvhTPjbrrDITVXe01nU0HW2zIBGLSdNK
-         x+SI4S2qeU3EY5SopL7X1UD90wHcT3WjJvLfVVsAO2U5Em5d1XWCXX0PRhRjUwlFbFjC
-         /RhNOl/qPgtup89fKy/XuqC10uHh8xb2p99SAbLCDPTbSVvO8tHFnVGOGXPs57VzLKHy
-         z3pNrxrHAv/ZVQFSEpVOjEocb4Os2eKubiclJ5LN8KBbJgdGF3NkBVCWlJGOm0DbvFTa
-         Y1mA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CooN/lA7d5yACqkmjNxbvElnXH9xWYc5D690cPagV5A=;
-        b=ObUOC3SlhDhsMd46NQZ6drAxgn8e1nxNeFgFsqoTFsOp5ny3C9MDy4BcLTihnspvYX
-         TzPJqStONg8fUO6ubd73n2tHxctejkGrNnXW6459Kmp8wnv9NvRd/CVAzesyxxWp8ACX
-         1Gzv5wbssr3VzAtP2NX+fCgjYYoOWoI7P4lWwDkRxl6RnOGDjskJfDBuuIgKUyURU5Gq
-         ONGDfXdWRQWC22uSDb8S0V9VnEZSdZimBd4T64V7NfAKlKmz7jW4xMleGtqgmwCryIjP
-         V5WZYzFVSakmh2+vOgDxrginqkJZT4x+iVLh1D9qiR5IdKFZZwTA8y8Xd/rI2fCpjPMS
-         scjA==
-X-Gm-Message-State: AGi0PubumhMJV2S+4QqLkV8+B1mugF37VfA/XquI7Sb9PPns6/g4DhXn
-        THhN6LpPg0d/Hv1gMQtZeAg70dkK46k3qdgBhQgcwQ==
-X-Google-Smtp-Source: APiQypLD/fNDqtD4u7+uuQ8ZqMmHjJHk9/rbkJ2Ows6MzWRJlKEVAAUCTvzeqzTfoWN78XIJxBngK/onAWpgkIOJt00=
-X-Received: by 2002:ac2:5f7c:: with SMTP id c28mr457241lfc.4.1585335716191;
- Fri, 27 Mar 2020 12:01:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200317205017.28280-1-michael@walle.cc> <20200317205017.28280-13-michael@walle.cc>
- <CAMpxmJW770v6JLdveEe1hkgNEJByVyArhorSyUZBYOyFiVyOeg@mail.gmail.com>
- <9c310f2a11913d4d089ef1b07671be00@walle.cc> <CAMpxmJXmD-M+Wbj6=wgFgP2aDxbqDN=ceHi1XDun4iwdLm55Zg@mail.gmail.com>
- <22944c9b62aa69da418de7766b7741bd@walle.cc> <CACRpkdbJ3DBO+W4P0n-CfZ1T3L8d_L0Nizra8frkv92XPXR4WA@mail.gmail.com>
- <4d8d3bc26bdf73eb5c0e5851589fe085@walle.cc>
-In-Reply-To: <4d8d3bc26bdf73eb5c0e5851589fe085@walle.cc>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 27 Mar 2020 20:01:44 +0100
-Message-ID: <CACRpkdYwqReW+UcY=4S3ZnC+jFeVr=e+Ns12A_CK6o7VBUXHbA@mail.gmail.com>
-Subject: Re: [PATCH 12/18] gpio: add support for the sl28cpld GPIO controller
-To:     Michael Walle <michael@walle.cc>
-Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        linux-gpio <linux-gpio@vger.kernel.org>,
-        linux-devicetree <devicetree@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-hwmon@vger.kernel.org,
-        linux-pwm@vger.kernel.org,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
+        Fri, 27 Mar 2020 16:33:42 -0400
+Received: from 68-189-91-139.static.snlo.ca.charter.com ([68.189.91.139] helo=tharvey.pdc.gateworks.com)
+        by lists.gateworks.com with esmtp (Exim 4.82)
+        (envelope-from <tharvey@gateworks.com>)
+        id 1jHvhE-0006P8-Cf; Fri, 27 Mar 2020 20:35:16 +0000
+From:   Tim Harvey <tharvey@gateworks.com>
+To:     Lee Jones <lee.jones@linaro.org>, Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-hwmon@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Robert Jones <rjones@gateworks.com>
+Cc:     Tim Harvey <tharvey@gateworks.com>
+Subject: [PATCH v8 0/3] Add support for the Gateworks System Controller
+Date:   Fri, 27 Mar 2020 13:33:31 -0700
+Message-Id: <1585341214-25285-1-git-send-email-tharvey@gateworks.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Mar 27, 2020 at 4:28 PM Michael Walle <michael@walle.cc> wrote:
+This series adds support for the Gateworks System Controller used on Gateworks
+Laguna, Ventana, and Newport product families.
 
-> For starters, would that be a drivers/gpio/gpio-regmap.c or a
-> drivers/base/regmap/regmap-gpio.c? I would assume the first,
+The GSC is an MSP430 I2C slave controller whose firmware embeds the following
+features:
+ - I/O expander (16 GPIO's emulating a PCA955x)
+ - EEPROM (enumating AT24)
+ - RTC (enumating DS1672)
+ - HWMON
+ - Interrupt controller with tamper detect, user pushbotton
+ - Watchdog controller capable of full board power-cycle
+ - Power Control capable of full board power-cycle
 
-Yeah I would name it like that. gpio-regmap.c.
+see http://trac.gateworks.com/wiki/gsc for more details
+---
+v8:
+ - mfd: whitespace fixes
+ - mfd: describe sub-devices in Kconfig
+ - mfd: add error print for invalid command
+ - mfd: update copyright
+ - mfd: use devm_of_platform_populate
+ - mfd: use probe_new
+ - mfd: move hwmon's regmap init to hwmon
+ - hwmon: move hwmon's regmap init to hwmon
+ - dt-bindings: add register to fan-controller node name
 
-Yours,
-Linus Walleij
+v7:
+ - dt-bindings: change divider from mili-ohms to ohms
+ - dt-bindings: add constraints for voltage divider and offset
+ - dt-bindings: remove unnecessary ref for offset
+ - dt-bindings: renamed fan to fan-controller and changed base prop to reg
+ - mfd:  remove irq from private data struct
+ - hwmon: fix whitespace in Kconfig
+ - hwmon: remove unnecessary device pointer in private data
+ - hwmon: change divider from mili-ohms to ohms
+ - hwmon: move fan base property to reg
+
+v6:
+ - hwmon: fix size of info field
+ - hwmon: improve pwm output control documentation
+ - hwmon: include unit suffix in divider and offset
+ - hwmon: change subnode name to gsc-adc
+ - hwmon: change to fan subnode
+ - hwmon: fix voltage offset
+ - dt-bindings: fix commit message typo
+ - dt-bindings: drop invalid description from #interrupt-cells property
+ - dt-bindings: fix adc pattern property
+ - dt-bindings: add unit suffix
+ - dt-bindings: replace hwmon/adc with adc/channel
+ - dt-bindings: changed adc type to gw,mode
+ - dt-bindings: add unit suffix and drop ref for voltage-divider
+ - dt-bindings: add unit suffix for voltage-offset
+ - dt-bindings: moved fan to its own subnode with base register
+
+v5:
+ - fix checkpatch issues
+ - fix dt_binding_check issues
+ - address feedback from v4
+
+v4:
+ - hwmon: move to using pwm<n>_auto_point<m>_{pwm,temp} for FAN PWM
+ - hwmon: remove unncessary resolution/scaling properties for ADCs
+ - bindings: update to yaml Documentation
+ - removed watchdog driver
+
+v3:
+ - removed unnecessary input driver
+ - added wdt driver
+ - bindings: encorporated feedback from mailng list
+ - hwmon:
+ - encoroprated feedback from mailng list
+ - added support for raw ADC voltage input used in newer GSC firmware
+
+v2:
+ - change license comment block style
+ - remove COMPILE_TEST
+ - fixed whitespace issues
+ - replaced a printk with dev_err
+ - remove DEBUG
+ - simplify regmap_bulk_read err check
+ - remove break after returns in switch statement
+ - fix fan setpoint buffer address
+ - remove unnecessary parens
+ - consistently use struct device *dev pointer
+ - add validation for hwmon child node props
+ - move parsing of of to own function
+ - use strlcpy to ensure null termination
+ - fix static array sizes and removed unnecessary initializers
+ - dynamically allocate channels
+ - fix fan input label
+ - support platform data
+
+Tim Harvey (3):
+  dt-bindings: mfd: Add Gateworks System Controller bindings
+  mfd: add Gateworks System Controller core driver
+  hwmon: add Gateworks System Controller support
+
+ .../devicetree/bindings/mfd/gateworks-gsc.yaml     | 194 +++++++++++
+ Documentation/hwmon/gsc-hwmon.rst                  |  53 +++
+ Documentation/hwmon/index.rst                      |   1 +
+ MAINTAINERS                                        |  11 +
+ drivers/hwmon/Kconfig                              |   9 +
+ drivers/hwmon/Makefile                             |   1 +
+ drivers/hwmon/gsc-hwmon.c                          | 385 +++++++++++++++++++++
+ drivers/mfd/Kconfig                                |  10 +
+ drivers/mfd/Makefile                               |   1 +
+ drivers/mfd/gateworks-gsc.c                        | 288 +++++++++++++++
+ include/linux/mfd/gsc.h                            |  73 ++++
+ include/linux/platform_data/gsc_hwmon.h            |  44 +++
+ 12 files changed, 1070 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
+ create mode 100644 Documentation/hwmon/gsc-hwmon.rst
+ create mode 100644 drivers/hwmon/gsc-hwmon.c
+ create mode 100644 drivers/mfd/gateworks-gsc.c
+ create mode 100644 include/linux/mfd/gsc.h
+ create mode 100644 include/linux/platform_data/gsc_hwmon.h
+
+-- 
+2.7.4
+
