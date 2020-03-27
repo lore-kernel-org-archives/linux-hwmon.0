@@ -1,244 +1,115 @@
-Return-Path: <SRS0=BwOg=5L=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=0/BK=5M=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 749DAC43331
-	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Mar 2020 21:56:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D02A8C2D0E8
+	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Mar 2020 10:21:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 394022073E
-	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Mar 2020 21:56:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A4EAE20705
+	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Mar 2020 10:21:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gateworks-com.20150623.gappssmtp.com header.i=@gateworks-com.20150623.gappssmtp.com header.b="oUaa4kKp"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BWdcmcSO"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726296AbgCZV4H (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 26 Mar 2020 17:56:07 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:40982 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726260AbgCZV4H (ORCPT
+        id S1726165AbgC0KVK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 27 Mar 2020 06:21:10 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:42966 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726149AbgC0KVK (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 26 Mar 2020 17:56:07 -0400
-Received: by mail-ot1-f65.google.com with SMTP id f52so7645671otf.8
-        for <linux-hwmon@vger.kernel.org>; Thu, 26 Mar 2020 14:56:06 -0700 (PDT)
+        Fri, 27 Mar 2020 06:21:10 -0400
+Received: by mail-lf1-f65.google.com with SMTP id t21so7374229lfe.9
+        for <linux-hwmon@vger.kernel.org>; Fri, 27 Mar 2020 03:21:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gateworks-com.20150623.gappssmtp.com; s=20150623;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=fVDzJ6BDEWFzO6Zb5IeGhEXG4L3sc+hrhgcx0i0PDMc=;
-        b=oUaa4kKpgOh9V1+IpaniVvK9yJzz4NLG4abJw0B5W05RL5HKAw+RPj9HZSG1LDDo7o
-         xNSfpAIETfqMHJZJ2kZ/CmDopIiWyBUGKtHgBR63U8l1FoAD3J+z3ai7krCy1xFwnqZF
-         CLk6cnqkm4ZR9MJyLruD+dTTeGerXRh1epfU1aiZfPAKyrb8jv3L+db6Amf+rr5PN0vO
-         KSkimNNpjs/31eJL7+EnW1Si+tG3DjjkCWr5pJz19L2h5DjrQPVdLqeoYNE4ZI4pYkwe
-         g04owtoGOG/7cEjU64xMJgZ0jh9+MNk5YnHf30L3vzEZ0zedjjMiIGHAY+bubla2n5sU
-         5zvw==
+        bh=TuB8BNTEMS6Xu4xWKK0GTpM0KTFJDSPd7CoTH260LEY=;
+        b=BWdcmcSOZAia9WokqOKv83FwargH+rfDXr2Mp0QwyZsT/mABCSd3y3ZMISvNsbmXhU
+         gQMIR1duY1UxdvKr1tbHQzNudMLJvKqINJWtOlrbk9+kwOmXToR95IOMrI3yVrYmqYw4
+         ERIXKr3kSqBiWHHSNhbcDl9Iko5A1Q0USZ7lVRGh7i4ZWuu8E4UBLvEJ0Rb7XNIkfIsy
+         aw8uoNh4prsuenO/RPpdtz/llUkVRpSahQ6WFiqcc4YqGBOhRx5YxeATNzXZkpF5gRXs
+         u9qzGndEeTvD5XvNeditQ2MMZ58/zYFaGXYoaCpP0AzoqV0GaxsvyztxFYEj52lAcoCH
+         pBJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=fVDzJ6BDEWFzO6Zb5IeGhEXG4L3sc+hrhgcx0i0PDMc=;
-        b=f090hwuXNcJXLd3WIl+9AD+qKJR1ybQ+kMMZ29zqD6Y2BOQQJ4uto0kRio98TxGLba
-         DCmNZ3lLidUdaYSpiutsy9jyAEvZjuie2fLQQ0ONyhVKje0FO6vL9B9O/CUXZ2O4KoRw
-         xY9PXz4pIMYXDim6TRbk9+EMICqa0t9rzjONDJHTxIU/+ZBR08AmYXoQ71uqjrk1qzt+
-         0xeGUJ4zKJKrwcWkmEcF2sw3E75WY1wn98Y3XtJyteJMYmTJRzUUKbtYMtvyLmE94GMy
-         XO4clk9HfC+gvnxdAqWVlGDpKeJa6hYu0GZjc2qj0Yx9wjt5cSOuHx4iKido9oN2LMEn
-         DfoQ==
-X-Gm-Message-State: ANhLgQ10JUlLtV9tZ1nTFPEbcYLg5YGi8gZqF6VkVBz0wikqcs1P0jSZ
-        OG+JLWDkesZsHI3gMkXqKXEpIjS1aazLk+ddWwU44g==
-X-Google-Smtp-Source: ADFU+vsWTvLX1x18YifbVlDZbfMowYVSThseSulGrqAUkQatpGn5d7UzcL2X3gq8FAmUJ8EfBv414sF7tqsi/FUvBUc=
-X-Received: by 2002:a4a:c184:: with SMTP id w4mr6815873oop.39.1585259766176;
- Thu, 26 Mar 2020 14:56:06 -0700 (PDT)
+        bh=TuB8BNTEMS6Xu4xWKK0GTpM0KTFJDSPd7CoTH260LEY=;
+        b=YJ1Rxv4w5DIF31fl7UDIMXLNQ4QXi0VdOh+Kjk8OBmNQEVmoESUMwLvvpmt9zeGZGu
+         XndlXlbizznKUMizcWHSjhP0m1xT3aI13yhiTCO0+VNqU2oFJaCWuqZ4WQ6linHof6DU
+         KtXi0iPToCbHf2QcoOwvNt5mPFEW0u87wQsYs3W+tJOk7gdiQJYNy6PCFSSLSgTPlNpY
+         nd2Bbpope/iTqVopPODQ3JLM1I+mtW+jFfi8rGgLLMLhSgW8DzHlFFWIbv1U7V+a/tDs
+         YegkBYn8BsaIVTsgzPI2/s0jk7XxMu0Eejk0l51unbCf+gH0KZocHm2MKgETRkGI8GE/
+         Ei8Q==
+X-Gm-Message-State: ANhLgQ3Uho5uOf1hOI04qXNcbv0BRv6oTYLn8e4GUG/auZYY65oWg7QK
+        qAEUA5d+AiJed9g0ZWzG5ZmWMRTo27xVG4gGrJTdcA==
+X-Google-Smtp-Source: ADFU+vtsIgqK8FyZODtKNKWKI1HxhtKduwTybRXQvKGmxQLsPLeMOqx9p3y4gdOqstKYu6oc3bIWeFZeiamysR3lBHg=
+X-Received: by 2002:a19:ac8:: with SMTP id 191mr8675462lfk.77.1585304468041;
+ Fri, 27 Mar 2020 03:21:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <1584736550-7520-1-git-send-email-tharvey@gateworks.com>
- <1584736550-7520-3-git-send-email-tharvey@gateworks.com> <20200326101702.GD603801@dell>
-In-Reply-To: <20200326101702.GD603801@dell>
-From:   Tim Harvey <tharvey@gateworks.com>
-Date:   Thu, 26 Mar 2020 14:55:54 -0700
-Message-ID: <CAJ+vNU0pPW3n6dnUH4n_3ZtmwGYdtc6gwUkg+aWJYPF7bFUXzQ@mail.gmail.com>
-Subject: Re: [PATCH v7 2/3] mfd: add Gateworks System Controller core driver
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Linux HWMON List <linux-hwmon@vger.kernel.org>,
+References: <20200317205017.28280-1-michael@walle.cc> <20200317205017.28280-13-michael@walle.cc>
+ <CAMpxmJW770v6JLdveEe1hkgNEJByVyArhorSyUZBYOyFiVyOeg@mail.gmail.com>
+ <9c310f2a11913d4d089ef1b07671be00@walle.cc> <CAMpxmJXmD-M+Wbj6=wgFgP2aDxbqDN=ceHi1XDun4iwdLm55Zg@mail.gmail.com>
+ <22944c9b62aa69da418de7766b7741bd@walle.cc>
+In-Reply-To: <22944c9b62aa69da418de7766b7741bd@walle.cc>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 27 Mar 2020 11:20:56 +0100
+Message-ID: <CACRpkdbJ3DBO+W4P0n-CfZ1T3L8d_L0Nizra8frkv92XPXR4WA@mail.gmail.com>
+Subject: Re: [PATCH 12/18] gpio: add support for the sl28cpld GPIO controller
+To:     Michael Walle <michael@walle.cc>
+Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        linux-gpio <linux-gpio@vger.kernel.org>,
+        linux-devicetree <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Device Tree Mailing List <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Robert Jones <rjones@gateworks.com>,
-        Randy Dunlap <rdunlap@infradead.org>
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Mar 26, 2020 at 3:16 AM Lee Jones <lee.jones@linaro.org> wrote:
+On Thu, Mar 26, 2020 at 9:06 PM Michael Walle <michael@walle.cc> wrote:
+> Am 2020-03-25 12:50, schrieb Bartosz Golaszewski:
+
+> > In that case maybe you should use the disable_locking option in
+> > regmap_config and provide your own callbacks that you can use in the
+> > irqchip code too?
 >
-> On Fri, 20 Mar 2020, Tim Harvey wrote:
+> But how would that solve problem (1). And keep in mind, that the
+> reqmap_irqchip is actually used for the interrupt controller, which
+> is not this gpio controller.
 >
-> > The Gateworks System Controller (GSC) is an I2C slave controller
-> > implemented with an MSP430 micro-controller whose firmware embeds the
-> > following features:
-> >  - I/O expander (16 GPIO's) using PCA955x protocol
-> >  - Real Time Clock using DS1672 protocol
-> >  - User EEPROM using AT24 protocol
-> >  - HWMON using custom protocol
-> >  - Interrupt controller with tamper detect, user pushbotton
-> >  - Watchdog controller capable of full board power-cycle
-> >  - Power Control capable of full board power-cycle
-> >
-<snip>
-> > diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> > index 4209008..d84725a 100644
-> > --- a/drivers/mfd/Kconfig
-> > +++ b/drivers/mfd/Kconfig
-> > @@ -407,6 +407,16 @@ config MFD_EXYNOS_LPASS
-> >         Select this option to enable support for Samsung Exynos Low Power
-> >         Audio Subsystem.
-> >
-> > +config MFD_GATEWORKS_GSC
-> > +     tristate "Gateworks System Controller"
-> > +     depends on (I2C && OF)
-> > +     select MFD_CORE
-> > +     select REGMAP_I2C
-> > +     select REGMAP_IRQ
-> > +     help
-> > +       Enable support for the Gateworks System Controller found
-> > +       on Gateworks Single Board Computers.
->
-> Please describe which sub-devices are attached.
+> Ie. the interrupt controller of the sl28cpld uses the regmap_irqchip
+> and all interrupt phandles pointing to the interrupt controller will
+> reference the toplevel node. Any phandles pointing to the gpio
+> controller will reference the GPIO subnode.
 
-Hi Lee, thanks for the review!
+Ideally we would create something generic that has been on my
+mind for some time, like a generic GPIO regmap irqchip now that
+there are a few controllers like that.
 
-I will add more description for v8:
+I don't know how feasible it is or how much work it would be. But
+as with GPIO_GENERIC (for MMIO) it would be helpful since we
+can then implement things like .set_multiple() and .get_multiple()
+for everyone.
 
-Enable common support for the Gateworks System Controller
-found on Gateworks Single Board Computers. This device supports
-an interrupt controller providing interrupts for pushbutton
-events and a sub-device for HWMON and FAN controller via the
-gsc-hwmon driver.
-
->
-> >  config MFD_MC13XXX
-> >       tristate
-> >       depends on (SPI_MASTER || I2C)
-> > diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> > index aed99f0..c82b442 100644
-> > --- a/drivers/mfd/Makefile
-> > +++ b/drivers/mfd/Makefile
-> > @@ -15,6 +15,7 @@ obj-$(CONFIG_MFD_BCM590XX)  += bcm590xx.o
-> >  obj-$(CONFIG_MFD_BD9571MWV)  += bd9571mwv.o
-> >  obj-$(CONFIG_MFD_CROS_EC_DEV)        += cros_ec_dev.o
-> >  obj-$(CONFIG_MFD_EXYNOS_LPASS)       += exynos-lpass.o
-> > +obj-$(CONFIG_MFD_GATEWORKS_GSC)      += gateworks-gsc.o
-> >
-> >  obj-$(CONFIG_HTC_PASIC3)     += htc-pasic3.o
-> >  obj-$(CONFIG_HTC_I2CPLD)     += htc-i2cpld.o
-> > diff --git a/drivers/mfd/gateworks-gsc.c b/drivers/mfd/gateworks-gsc.c
-> > new file mode 100644
-> > index 00000000..8566123
-> > --- /dev/null
-> > +++ b/drivers/mfd/gateworks-gsc.c
-> > @@ -0,0 +1,291 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * The Gateworks System Controller (GSC) is a multi-function
-> > + * device designed for use in Gateworks Single Board Computers.
-> > + * The control interface is I2C, with an interrupt. The device supports
-> > + * system functions such as pushbutton monitoring, multiple ADC's for
-> > + * voltage and temperature, fan controller, and watchdog monitor.
->
-> When are you planning on adding support for the other devices?
-
-The pushbutton monitoring is supported via interrupts and the ADC's
-and fan controller are supported via the gsc-hwmon driver in this
-series. The watchdog is not yet supported via a driver and I'm not
-sure if/when I will submit one as the API is rather strange.
-
->
-<snip>
-> > +/*
-> > + * gsc_powerdown - API to use GSC to power down board for a specific time
-> > + *
-> > + * secs - number of seconds to remain powered off
-> > + */
-> > +static int gsc_powerdown(struct gsc_dev *gsc, unsigned long secs)
-> > +{
-> > +     int ret;
-> > +     unsigned char regs[4];
->
-> No error checking?  Could be down for a very long time.
-
-understood, but I'm not sure I want to dictate what the max amount of
-time to power-down should be. Some remote-sensing use cases may want
-to power-down for days, or weeks. I agree powering down for years
-seems strange but again, I don't want to dictate usage. If they
-accidently power down for a length of time they did not mean to they
-still have to remove power, battery, or press a button to power back
-on.
-
->
-<snip>
->
-> > +gsc_probe(struct i2c_client *client, const struct i2c_device_id *id)
-> > +{
-> > +     struct device *dev = &client->dev;
-> > +     struct gsc_dev *gsc;
-> > +     int ret;
-> > +     unsigned int reg;
-> > +
-> > +     gsc = devm_kzalloc(dev, sizeof(*gsc), GFP_KERNEL);
-> > +     if (!gsc)
-> > +             return -ENOMEM;
-> > +
-> > +     gsc->dev = &client->dev;
-> > +     gsc->i2c = client;
-> > +     i2c_set_clientdata(client, gsc);
-> > +
-> > +     gsc->regmap = devm_regmap_init(dev, &regmap_gsc, client,
-> > +                                    &gsc_regmap_config);
-> > +     if (IS_ERR(gsc->regmap))
-> > +             return PTR_ERR(gsc->regmap);
-> > +
-> > +     if (regmap_read(gsc->regmap, GSC_FW_VER, &reg))
-> > +             return -EIO;
-> > +     gsc->fwver = reg;
->
-> You not checking this for a valid value?
-
-it's a single byte unsigned char, there really isn't an invalid value.
-
->
-> > +     regmap_read(gsc->regmap, GSC_FW_CRC, &reg);
-> > +     gsc->fwcrc = reg;
-> > +     regmap_read(gsc->regmap, GSC_FW_CRC + 1, &reg);
-> > +     gsc->fwcrc |= reg << 8;
-> > +
-> > +     gsc->i2c_hwmon = i2c_new_dummy_device(client->adapter, GSC_HWMON);
-> > +     if (!gsc->i2c_hwmon) {
-> > +             dev_err(dev, "Failed to allocate I2C device for HWMON\n");
-> > +             return -ENODEV;
-> > +     }
-> > +     i2c_set_clientdata(gsc->i2c_hwmon, gsc);
-> > +
-> > +     gsc->regmap_hwmon = devm_regmap_init(dev, &regmap_gsc, gsc->i2c_hwmon,
-> > +                                          &gsc_regmap_hwmon_config);
-> > +     if (IS_ERR(gsc->regmap_hwmon)) {
-> > +             ret = PTR_ERR(gsc->regmap_hwmon);
-> > +             dev_err(dev, "failed to allocate register map: %d\n", ret);
-> > +             goto err_regmap;
-> > +     }
->
-> Why can't the HWMON driver fetch its own Regmap?
-
-I can move this to hwmon. It means I have to share the regmap_bus in
-struct gsc_dev instead of sharing the regmap but I suppose it makes
-more sense to have hwmon register it's own.
-
-Everything else you suggest makes complete sense and I will put into v8.
-
-Best Regards,
-
-Tim
+Yours,
+Linus Walleij
