@@ -2,67 +2,251 @@ Return-Path: <SRS0=Jj3a=5P=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82EB1C2D0F2
-	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Mar 2020 20:40:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25153C43331
+	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Mar 2020 22:35:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5D87020A8B
-	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Mar 2020 20:40:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E205F20771
+	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Mar 2020 22:35:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1585600812;
-	bh=BnapL7PNjuiGUk5ThjG3kkJukHnsfgG0HrcNQzz9ynU=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:List-ID:From;
-	b=vmnAKWv8JuR+HYuo3em+wy6o/ovWuJOPajDLr1fazIbwHCRfI9pIQGLWrZ4/Y94JJ
-	 fEfUfmXD5+GLrCpm1cHxkLEQuzuh7SRfzymOd5m5k6OOwWaSdl+TIfjKYdQ0k/lGWJ
-	 cwNw4/ewY+9lCM02sYwyI/VJRulIAfbRiBQYUg08=
+	s=default; t=1585607740;
+	bh=PEdMdgM5NyNsov7qHA19DK0RlueRdGYngB2ksynv00E=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=nI3gin7+NfPygS20OpPFdQTWVqQ4sR6paOcWCec0R6s6FB5t0em/5xKk+xdiSmKAh
+	 0BBKyCM59WWc75O9K2cMhuxnW1wRt7oVyfuK0IfAtmZJvGyHAgY22GnsB2MjfDRjeR
+	 mJ9Q5n49tU0gKoAYUMmmcs1AA0eWysBST/EIz6qc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728795AbgC3UkK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 30 Mar 2020 16:40:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35074 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728880AbgC3UkK (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 30 Mar 2020 16:40:10 -0400
-Subject: Re: [GIT PULL] hwmon updates for v5.7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1585600810;
-        bh=BnapL7PNjuiGUk5ThjG3kkJukHnsfgG0HrcNQzz9ynU=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=1wuswTZvlU5af8TaPO2wYpzYNzEIxCyX2kra6vC6I+AjYl6giHMG+2e4PlFxPL7kE
-         VKb5KEMTS4QxtP4FW2o1aXWhWuvGl5C/SXhCYKyVMRITGouRR+uBVuWx4fgBTr8s58
-         gpllzP6BgoPW3r7AO9gtCg+OWbJLBtaQI4biKSCo=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20200330155124.243034-1-linux@roeck-us.net>
-References: <20200330155124.243034-1-linux@roeck-us.net>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20200330155124.243034-1-linux@roeck-us.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
- hwmon-for-v5.7
-X-PR-Tracked-Commit-Id: 5b10a8194664a0d3b025f9b53de4476754ce8e41
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 47acac8cae28b36668bf89400c56b7fdebca3e75
-Message-Id: <158560081009.3259.4182950844172818914.pr-tracker-bot@kernel.org>
-Date:   Mon, 30 Mar 2020 20:40:10 +0000
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+        id S1729918AbgC3Wfj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 30 Mar 2020 18:35:39 -0400
+Received: from mail-il1-f196.google.com ([209.85.166.196]:44289 "EHLO
+        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728876AbgC3Wfj (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 30 Mar 2020 18:35:39 -0400
+Received: by mail-il1-f196.google.com with SMTP id j69so17508805ila.11;
+        Mon, 30 Mar 2020 15:35:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=I5WWfs5YS24hDXKa/XtUGtXEdA3TZ6qAt3nvgnrU3Mg=;
+        b=S42bGyddtT81fV3FRyMo2TSfC5Y78Ypj604lGERU61HstFdouh0f5/buY2E59GD6DY
+         e48XK2+8t1Be/m3rwdt6vF1OajIYRSMH3NOYib/MXOJVc1JS4NzwyIYANbNmt9K/Mx7G
+         dZRHCPLJzZw+uL6R5/FhIjofze+JlN9ebDgdzNXEfKQVTHkK8WmAzg9iSI/o8cQRcko3
+         wwbL2/FttfTl0Dj+G3wCj9i6W7NsCdOdl2PfTrLfLtBO/NXo7oUoIBTrX5kePWoDf1cR
+         9rhX/nFMmSoBya3YuZ86HDCrJY1FCgd2Vr1lT8GlyoOvPUCxK7irPHtdjB4O2/AoqlN/
+         jUrw==
+X-Gm-Message-State: ANhLgQ2k0sN1IrrwpSMwOBgTxTDRLS0qYjAKjZ6jQMY2dxIy0m6duuAS
+        4z7iBxJyiDuxX6ek2jdsLA==
+X-Google-Smtp-Source: ADFU+vssbUqtDjk9LmSKnh6QyMy6yhoEjw71OJha0yhLNQZ1KYIfV2iGgJtR8LtRx2C40kLrzGDj9w==
+X-Received: by 2002:a92:5e55:: with SMTP id s82mr12453797ilb.62.1585607737767;
+        Mon, 30 Mar 2020 15:35:37 -0700 (PDT)
+Received: from rob-hp-laptop ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id x15sm5321840ilg.29.2020.03.30.15.35.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Mar 2020 15:35:37 -0700 (PDT)
+Received: (nullmailer pid 18867 invoked by uid 1000);
+        Mon, 30 Mar 2020 22:35:35 -0000
+Date:   Mon, 30 Mar 2020 16:35:35 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Michael Walle <michael@walle.cc>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>
+Subject: Re: [PATCH 04/18] dt-bindings: mfd: Add bindings for sl28cpld
+Message-ID: <20200330223535.GA31402@bogus>
+References: <20200317205017.28280-1-michael@walle.cc>
+ <20200317205017.28280-5-michael@walle.cc>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200317205017.28280-5-michael@walle.cc>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The pull request you sent on Mon, 30 Mar 2020 08:51:24 -0700:
+On Tue, Mar 17, 2020 at 09:50:03PM +0100, Michael Walle wrote:
+> This adds device tree bindings for the board management controller found
+> on the Kontron SMARC-sAL28 board.
+> 
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+>  .../bindings/mfd/kontron,sl28cpld.yaml        | 143 ++++++++++++++++++
+>  1 file changed, 143 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/kontron,sl28cpld.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/kontron,sl28cpld.yaml b/Documentation/devicetree/bindings/mfd/kontron,sl28cpld.yaml
+> new file mode 100644
+> index 000000000000..3b9cca49d2d6
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/kontron,sl28cpld.yaml
+> @@ -0,0 +1,143 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/kontron,sl28cpld.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Kontron's sl28cpld board management controller
+> +
+> +maintainers:
+> +  - Michael Walle <michael@walle.cc>
+> +
+> +description: |
+> +  The board management controller may contain different IP blocks like
+> +  watchdog, fan monitoring, PWM controller, interrupt controller and a
+> +  GPIO controller.
+> +
+> +properties:
+> +  compatible:
+> +    const: kontron,sl28cpld
+> +
+> +  reg:
+> +    description:
+> +      I2C device address.
+> +    maxItems: 1
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 0
+> +
+> +  "#interrupt-cells":
+> +    const: 2
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  interrupt-controller: true
+> +
+> +patternProperties:
+> +  "^gp(io|i|o)(@[0-9]+)?$":
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.7
+Just 'gpio'. We don't need that level of distinguishing in node names.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/47acac8cae28b36668bf89400c56b7fdebca3e75
+> +    $ref: ../gpio/kontron,sl28cpld-gpio.yaml
+> +
+> +  "^hwmon(@[0-9]+)?$":
+> +    $ref: ../hwmon/kontron,sl28cpld-hwmon.yaml
+> +
+> +  "^pwm(@[0-9]+)?$":
+> +    $ref: ../pwm/kontron,sl28cpld-pwm.yaml
+> +
+> +  "^watchdog(@[0-9]+)?$":
+> +    $ref: ../watchdog/kontron,sl28cpld-wdt.yaml
 
-Thank you!
+The patches for these files need to come first or validating this file 
+fails. Really, you can just make all five files 1 patch.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+> +
+> +required:
+> +  - "#address-cells"
+> +  - "#size-cells"
+> +  - compatible
+> +  - reg
+> +  - "#interrupt-cells"
+> +  - interrupt-controller
+> +
+> +oneOf:
+> +  - required:
+> +    - interrupts
+> +  - required:
+> +    - interrupts-extended
+
+Don't need to do this. Just make 'interrupts' required and you'll get 
+interrupts-extended for free.
+
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        sl28cpld@4a {
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +            compatible = "kontron,sl28cpld";
+> +            reg = <0x4a>;
+> +            interrupts-extended = <&gpio2 6 IRQ_TYPE_EDGE_FALLING>;
+> +
+> +            #interrupt-cells = <2>;
+> +            interrupt-controller;
+> +
+> +            gpio@0 {
+> +                compatible = "kontron,sl28cpld-gpio";
+> +                reg = <0>;
+> +
+> +                gpio-controller;
+> +                #gpio-cells = <2>;
+> +
+> +                interrupt-controller;
+> +                #interrupt-cells = <2>;
+> +            };
+> +
+> +            gpio@1 {
+> +                compatible = "kontron,sl28cpld-gpio";
+> +                reg = <1>;
+> +
+> +                gpio-controller;
+> +                #gpio-cells = <2>;
+> +
+> +                interrupt-controller;
+> +                #interrupt-cells = <2>;
+> +            };
+> +
+> +            gpo {
+> +                compatible = "kontron,sl28cpld-gpo";
+> +
+> +                gpio-controller;
+> +                #gpio-cells = <2>;
+> +                gpio-line-names = "a", "b", "c";
+> +            };
+> +
+> +            gpi {
+> +                compatible = "kontron,sl28cpld-gpi";
+> +
+> +                gpio-controller;
+> +                #gpio-cells = <2>;
+> +            };
+> +
+> +            hwmon {
+> +                compatible = "kontron,sl28cpld-fan";
+> +            };
+> +
+> +            pwm@0 {
+
+You already used the '0' address. You can't have 2 things at the 
+same address. There's only one number space at a given level. 
+
+All these child devices don't have any DT resources, so you don't really 
+need them. The parent node could be a gpio and pwm provider and that's 
+all you need in DT. Aside from DT resources, the only other reason 
+to have all these child nodes are if the child blocks are going to get 
+assembled in different combinations across a variety of h/w.
+
+Rob
