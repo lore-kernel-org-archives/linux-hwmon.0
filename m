@@ -1,564 +1,201 @@
-Return-Path: <SRS0=RnqA=5N=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=Jj3a=5P=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C53EFC43331
-	for <linux-hwmon@archiver.kernel.org>; Sat, 28 Mar 2020 17:20:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BC36C43331
+	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Mar 2020 06:19:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7583E206F6
-	for <linux-hwmon@archiver.kernel.org>; Sat, 28 Mar 2020 17:20:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D942820732
+	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Mar 2020 06:19:46 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="YkxH5C3l"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tdAiEuI+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726389AbgC1RUY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 28 Mar 2020 13:20:24 -0400
-Received: from ssl.serverraum.org ([176.9.125.105]:51369 "EHLO
-        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725807AbgC1RUX (ORCPT
+        id S1728492AbgC3GTq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 30 Mar 2020 02:19:46 -0400
+Received: from mail-pl1-f176.google.com ([209.85.214.176]:36800 "EHLO
+        mail-pl1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728065AbgC3GTq (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 28 Mar 2020 13:20:23 -0400
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 3828623058;
-        Sat, 28 Mar 2020 18:20:18 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1585416019;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=v0cezBNVL/WJ3daZ5cBul1gFbKy30uqvfk30zxNUGng=;
-        b=YkxH5C3lzwqFCH74ys2ZZSfPnnfK3Wem8tDcwhGWojcMnVNK4L0RiYJ+PI6A+e4LasGlHh
-        k0W4aFiANK04a4fESOj+62ztvwrYJnSEhIJ5KADQljf24VQH0298PEEylDgOCUs55Kzk3R
-        6iWGuLBbEryzz36o7M8f3tMNCjQoKFQ=
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Sat, 28 Mar 2020 18:20:17 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Cc:     linux-gpio <linux-gpio@vger.kernel.org>,
-        linux-devicetree <devicetree@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-hwmon@vger.kernel.org,
-        linux-pwm@vger.kernel.org,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Mon, 30 Mar 2020 02:19:46 -0400
+Received: by mail-pl1-f176.google.com with SMTP id g2so6332011plo.3;
+        Sun, 29 Mar 2020 23:19:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=fjRqXXkCjy3Sn+NxAY1O/fq6KYCmQZP/2AMVqQxR1AA=;
+        b=tdAiEuI+wHfqWGmBDNwDjpN05bqeintYxxmYsQA9SEx3AmIWHpyky4qKbCkHMLbrNe
+         hvNrbHJA0NcyF9prbZ5Sk+ZKaEoKGbwOS59m7QpMaRGqzx0A9sThPwBOjJ2ZG6viK09y
+         9hGfKCoIXSj3Lvy+pMnZ88DCLu9FrHJRgto+2pcfSmXVj6odhd9CmzK+6dn702dVu+CY
+         RsO1kNYayzweRN/7yd4Kspo4cquI8FOdUNG17kHyHPToJ+sqfWVGEOB+OrTgdbVTBBXp
+         zMpCw8+ei0FqDxjb3Y7ja7VuhnxVFYbJdU1XktShfcZul9NFeukIF2sjSE4jTfwPfE5q
+         OPgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=fjRqXXkCjy3Sn+NxAY1O/fq6KYCmQZP/2AMVqQxR1AA=;
+        b=JWxVDVSxoJSDRC9GSmmj0xHVSRLrUuIp612zStU7JZ+EorDubeefuK8Isdc2c1uoS4
+         yLj7ap5iFpCB3yiMR31OJGHZ9X7ZuG4j75/QHAoFgDI6QYhzTvuVwt14Ix/dCmO/BiQ5
+         OscweltEMXd6fq8OKC7DFWMjJR+RSMEftnRvn+BVULJgPXTgfz9j5fEVSg4fkpUio94K
+         CPIaMpKMBY9kSTOSnOxgyRsC/yBRXsccN/RU+VCJl4NTK6I1VUfbgGCyzMqLbDJPF6DY
+         UsKahvbAcG7X7tlTaSirfM35XAuXBDPSoM47ZnMubtAiIdF+oOUH88bnjlAp0VfLk6Sp
+         w2qQ==
+X-Gm-Message-State: ANhLgQ3h19/H3J0k575LoRr85EwqPdRWz6bFQxSlOO2pihQ4V8ZrWyhh
+        Ri/838ppN6mjd4LIk9qG5ho=
+X-Google-Smtp-Source: ADFU+vvcYd3ByIwzHX77XdBk0vWIf5xDPe0TToK0WRh7npJw3i8DIDjotO8SANROjlArwSgP3sjKLA==
+X-Received: by 2002:a17:902:d712:: with SMTP id w18mr11576534ply.238.1585549184131;
+        Sun, 29 Mar 2020 23:19:44 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s9sm353489pjr.5.2020.03.29.23.19.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 29 Mar 2020 23:19:43 -0700 (PDT)
+Subject: =?UTF-8?B?UmU6IOetlOWkjTog562U5aSNOiBbdjIsMS8xXSBod21vbjogKG5jdDc5?=
+ =?UTF-8?Q?04=29_Add_watchdog_function?=
+To:     =?UTF-8?B?eXVlY2hhby56aGFvKOi1tei2iui2hSk=?= 
+        <yuechao.zhao@advantech.com.cn>
+Cc:     "345351830@qq.com" <345351830@qq.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>
-Subject: Re: [PATCH 12/18] gpio: add support for the sl28cpld GPIO controller
-In-Reply-To: <CAMpxmJW770v6JLdveEe1hkgNEJByVyArhorSyUZBYOyFiVyOeg@mail.gmail.com>
-References: <20200317205017.28280-1-michael@walle.cc>
- <20200317205017.28280-13-michael@walle.cc>
- <CAMpxmJW770v6JLdveEe1hkgNEJByVyArhorSyUZBYOyFiVyOeg@mail.gmail.com>
-Message-ID: <ffd7a0863a6667b85d024f82904f853e@walle.cc>
-X-Sender: michael@walle.cc
-User-Agent: Roundcube Webmail/1.3.10
-X-Spamd-Bar: +
-X-Rspamd-Server: web
-X-Rspamd-Queue-Id: 3828623058
-X-Spamd-Result: default: False [1.40 / 15.00];
-         FROM_HAS_DN(0.00)[];
-         TO_DN_SOME(0.00)[];
-         FREEMAIL_ENVRCPT(0.00)[gmail.com];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         TAGGED_RCPT(0.00)[dt];
-         MIME_GOOD(-0.10)[text/plain];
-         DKIM_SIGNED(0.00)[];
-         RCPT_COUNT_TWELVE(0.00)[21];
-         NEURAL_HAM(-0.00)[-0.581];
-         RCVD_COUNT_ZERO(0.00)[0];
-         FROM_EQ_ENVFROM(0.00)[];
-         MIME_TRACE(0.00)[0:+];
-         FREEMAIL_CC(0.00)[vger.kernel.org,lists.infradead.org,linaro.org,kernel.org,suse.com,roeck-us.net,gmail.com,pengutronix.de,linux-watchdog.org,nxp.com,linutronix.de,lakedaemon.net];
-         MID_RHS_MATCH_FROM(0.00)[];
-         SUSPICIOUS_RECIPS(1.50)[]
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Amy.Shih" <Amy.Shih@advantech.com.tw>,
+        "Oakley.Ding" <Oakley.Ding@advantech.com.tw>,
+        =?UTF-8?B?SmlhLlN1aSjotL7nnaIp?= <Jia.Sui@advantech.com.cn>,
+        =?UTF-8?B?c2hlbmdrdWkubGVuZyjlhrfog5zprYEp?= 
+        <shengkui.leng@advantech.com.cn>,
+        =?UTF-8?B?UmFpbmJvdy5aaGFuZyjlvLXnjokp?= 
+        <Rainbow.Zhang@advantech.com.cn>
+References: <20200325082237.7002-1-yuechao.zhao@advantech.com.cn>
+ <20200325224733.GA27706@roeck-us.net>
+ <37833c60d7df45109897dcf35fb1b102@ACNMB2.ACN.ADVANTECH.CORP>
+ <c8dd611e-3ff4-a041-6800-8396dd517e7b@roeck-us.net>
+ <ded25cd289e24701a3f9008ee4a78158@ACNMB2.ACN.ADVANTECH.CORP>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <a26f1fbb-a730-e31b-acdc-4975c2053bd7@roeck-us.net>
+Date:   Sun, 29 Mar 2020 23:19:41 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+In-Reply-To: <ded25cd289e24701a3f9008ee4a78158@ACNMB2.ACN.ADVANTECH.CORP>
+Content-Type: text/plain; charset=gbk
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Am 2020-03-18 10:14, schrieb Bartosz Golaszewski:
-> wt., 17 mar 2020 o 21:50 Michael Walle <michael@walle.cc> napisa艂(a):
->> 
->> This adds support for the GPIO controller of the sl28 board management
->> controller. This driver is part of a multi-function device.
->> 
->> Signed-off-by: Michael Walle <michael@walle.cc>
+On 3/29/20 10:42 PM, yuechao.zhao(赵越超) wrote:
+> Hi Guenter
 > 
-> Hi Michael,
+> Thank you very much.
+> I misunderstood your suggestion. (Please make it 60 * 255 (or use a respective define) to clarify where the number comes from)
+> So, I will modify it.
+> Also, I will define a module parameter which specifies the timeout in minutes instead of seconds.
 > 
-> thanks for the driver. Please take a look at some comments below.
-> 
->> ---
->>  drivers/gpio/Kconfig         |  11 ++
->>  drivers/gpio/Makefile        |   1 +
->>  drivers/gpio/gpio-sl28cpld.c | 332 
->> +++++++++++++++++++++++++++++++++++
->>  3 files changed, 344 insertions(+)
->>  create mode 100644 drivers/gpio/gpio-sl28cpld.c
->> 
->> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
->> index 3cbf8882a0dd..516e47017ef5 100644
->> --- a/drivers/gpio/Kconfig
->> +++ b/drivers/gpio/Kconfig
->> @@ -1211,6 +1211,17 @@ config GPIO_RC5T583
->>           This driver provides the support for driving/reading the 
->> gpio pins
->>           of RC5T583 device through standard gpio library.
->> 
->> +config GPIO_SL28CPLD
->> +       tristate "Kontron sl28 GPIO"
->> +       depends on MFD_SL28CPLD
->> +       depends on OF_GPIO
->> +       select GPIOLIB_IRQCHIP
-> 
-> Please see below - I think both are not needed.
-> 
->> +       help
->> +         This enables support for the GPIOs found on the Kontron sl28 
->> CPLD.
->> +
->> +         This driver can also be built as a module. If so, the module 
->> will be
->> +         called gpio-sl28cpld.
->> +
->>  config GPIO_STMPE
->>         bool "STMPE GPIOs"
->>         depends on MFD_STMPE
->> diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
->> index 0b571264ddbc..0ca2d52c78e8 100644
->> --- a/drivers/gpio/Makefile
->> +++ b/drivers/gpio/Makefile
->> @@ -127,6 +127,7 @@ obj-$(CONFIG_GPIO_SCH311X)          += 
->> gpio-sch311x.o
->>  obj-$(CONFIG_GPIO_SCH)                 += gpio-sch.o
->>  obj-$(CONFIG_GPIO_SIFIVE)              += gpio-sifive.o
->>  obj-$(CONFIG_GPIO_SIOX)                        += gpio-siox.o
->> +obj-$(CONFIG_GPIO_SL28CPLD)            += gpio-sl28cpld.o
->>  obj-$(CONFIG_GPIO_SODAVILLE)           += gpio-sodaville.o
->>  obj-$(CONFIG_GPIO_SPEAR_SPICS)         += gpio-spear-spics.o
->>  obj-$(CONFIG_GPIO_SPRD)                        += gpio-sprd.o
->> diff --git a/drivers/gpio/gpio-sl28cpld.c 
->> b/drivers/gpio/gpio-sl28cpld.c
->> new file mode 100644
->> index 000000000000..94f82013882f
->> --- /dev/null
->> +++ b/drivers/gpio/gpio-sl28cpld.c
->> @@ -0,0 +1,332 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * SMARC-sAL28 GPIO driver.
->> + *
->> + * Copyright 2019 Kontron Europe GmbH
->> + */
->> +
->> +#include <linux/kernel.h>
->> +#include <linux/module.h>
->> +#include <linux/of.h>
->> +#include <linux/of_device.h>
->> +#include <linux/of_address.h>
->> +#include <linux/interrupt.h>
->> +#include <linux/regmap.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/gpio/driver.h>
->> +
->> +#define GPIO_REG_DIR   0
->> +#define GPIO_REG_OUT   1
->> +#define GPIO_REG_IN    2
->> +#define GPIO_REG_IE    3
->> +#define GPIO_REG_IP    4
-> 
-> These values would be more clear if they were defined as hex.
-> 
->> +
->> +#define GPI_REG_IN     0
->> +
->> +#define GPO_REG_OUT    0
-> 
-> Please also use a common prefix even for defines.
-> 
->> +
->> +enum sl28cpld_gpio_type {
->> +       sl28cpld_gpio,
->> +       sl28cpld_gpi,
->> +       sl28cpld_gpo,
->> +};
-> 
-> Enum values should be all upper-case.
-> 
->> +
->> +struct sl28cpld_gpio {
->> +       struct gpio_chip gpio_chip;
->> +       struct irq_chip irq_chip;
->> +       struct regmap *regmap;
->> +       u32 offset;
->> +       struct mutex lock;
->> +       u8 ie;
->> +};
->> +
->> +static void sl28cpld_gpio_set_reg(struct gpio_chip *chip, unsigned 
->> int reg,
->> +                                 unsigned int offset, int value)
->> +{
->> +       struct sl28cpld_gpio *gpio = gpiochip_get_data(chip);
->> +       unsigned int mask = 1 << offset;
->> +       unsigned int val = value << offset;
->> +
->> +       regmap_update_bits(gpio->regmap, gpio->offset + reg, mask, 
->> val);
->> +}
->> +
->> +static void sl28cpld_gpio_set(struct gpio_chip *chip, unsigned int 
->> offset,
->> +                             int value)
->> +{
->> +       sl28cpld_gpio_set_reg(chip, GPIO_REG_OUT, offset, value);
->> +}
->> +
->> +static void sl28cpld_gpo_set(struct gpio_chip *chip, unsigned int 
->> offset,
->> +                            int value)
->> +{
->> +       sl28cpld_gpio_set_reg(chip, GPO_REG_OUT, offset, value);
->> +}
->> +
->> +static int sl28cpld_gpio_get_reg(struct gpio_chip *chip, unsigned int 
->> reg,
->> +                                unsigned int offset)
->> +{
->> +       struct sl28cpld_gpio *gpio = gpiochip_get_data(chip);
->> +       unsigned int mask = 1 << offset;
->> +       unsigned int val;
->> +       int ret;
->> +
->> +       ret = regmap_read(gpio->regmap, gpio->offset + reg, &val);
->> +       if (ret)
->> +               return ret;
->> +
->> +       return (val & mask) ? 1 : 0;
->> +}
->> +
->> +static int sl28cpld_gpio_get(struct gpio_chip *chip, unsigned int 
->> offset)
->> +{
->> +       return sl28cpld_gpio_get_reg(chip, GPIO_REG_IN, offset);
->> +}
->> +
->> +static int sl28cpld_gpi_get(struct gpio_chip *chip, unsigned int 
->> offset)
->> +{
->> +       return sl28cpld_gpio_get_reg(chip, GPI_REG_IN, offset);
->> +}
->> +
->> +static int sl28cpld_gpio_get_direction(struct gpio_chip *chip,
->> +                                      unsigned int offset)
->> +{
->> +       struct sl28cpld_gpio *gpio = gpiochip_get_data(chip);
->> +       unsigned int reg;
->> +       int ret;
->> +
->> +       ret = regmap_read(gpio->regmap, gpio->offset + GPIO_REG_DIR, 
->> &reg);
->> +       if (ret)
->> +               return ret;
->> +
->> +       if (reg & (1 << offset))
->> +               return GPIO_LINE_DIRECTION_OUT;
->> +       else
->> +               return GPIO_LINE_DIRECTION_IN;
->> +}
->> +
->> +static int sl28cpld_gpio_set_direction(struct gpio_chip *chip,
->> +                                      unsigned int offset,
->> +                                      bool output)
->> +{
->> +       struct sl28cpld_gpio *gpio = gpiochip_get_data(chip);
->> +       unsigned int mask = 1 << offset;
->> +       unsigned int val = (output) ? mask : 0;
->> +
->> +       return regmap_update_bits(gpio->regmap, gpio->offset + 
->> GPIO_REG_DIR,
->> +                                 mask, val);
->> +
-> 
-> Stray newline.
-> 
->> +}
->> +
->> +static int sl28cpld_gpio_direction_input(struct gpio_chip *chip,
->> +                                        unsigned int offset)
->> +{
->> +       return sl28cpld_gpio_set_direction(chip, offset, false);
->> +}
->> +
->> +static int sl28cpld_gpio_direction_output(struct gpio_chip *chip,
->> +                                         unsigned int offset, int 
->> value)
->> +{
->> +       sl28cpld_gpio_set_reg(chip, GPIO_REG_OUT, offset, value);
->> +       return sl28cpld_gpio_set_direction(chip, offset, true);
->> +}
->> +
->> +static void sl28cpld_gpio_irq_lock(struct irq_data *data)
->> +{
->> +       struct sl28cpld_gpio *gpio =
->> +               gpiochip_get_data(irq_data_get_irq_chip_data(data));
->> +
->> +       mutex_lock(&gpio->lock);
-> 
-> How does that actually lock anything? Regmap uses a different lock and
-> if you want to make sure nobody modifies the GPIO registers than you'd
-> need to use the same lock. Also: this looks a lot like a task for
-> regmap_irqchip - maybe you could use it here or in the core mfd
-> module?
-> 
->> +}
->> +
->> +static void sl28cpld_gpio_irq_sync_unlock(struct irq_data *data)
->> +{
->> +       struct sl28cpld_gpio *gpio =
->> +               gpiochip_get_data(irq_data_get_irq_chip_data(data));
->> +
->> +       regmap_write(gpio->regmap, gpio->offset + GPIO_REG_IE, 
->> gpio->ie);
->> +       mutex_unlock(&gpio->lock);
->> +}
->> +
->> +static void sl28cpld_gpio_irq_disable(struct irq_data *data)
->> +{
->> +       struct sl28cpld_gpio *gpio =
->> +               gpiochip_get_data(irq_data_get_irq_chip_data(data));
->> +
->> +       if (data->hwirq >= 8)
->> +               return;
->> +
->> +       gpio->ie &= ~(1 << data->hwirq);
->> +}
->> +
->> +static void sl28cpld_gpio_irq_enable(struct irq_data *data)
->> +{
->> +       struct sl28cpld_gpio *gpio =
->> +               gpiochip_get_data(irq_data_get_irq_chip_data(data));
->> +
->> +       if (data->hwirq >= 8)
->> +               return;
->> +
->> +       gpio->ie |= (1 << data->hwirq);
->> +}
->> +
->> +static int sl28cpld_gpio_irq_set_type(struct irq_data *data, unsigned 
->> int type)
->> +{
->> +       /* only edge triggered interrupts on both edges are supported 
->> */
->> +       return (type == IRQ_TYPE_EDGE_BOTH) ? 0 : -EINVAL;
->> +}
->> +
->> +static irqreturn_t sl28cpld_gpio_irq_thread(int irq, void *data)
->> +{
->> +       struct sl28cpld_gpio *gpio = data;
->> +       unsigned int ip;
->> +       unsigned int virq;
->> +       int pin;
->> +       int ret;
->> +
->> +       ret = regmap_read(gpio->regmap, gpio->offset + GPIO_REG_IP, 
->> &ip);
->> +       if (ret)
->> +               return IRQ_NONE;
->> +
->> +       /* mask other pending interrupts which are not enabled */
->> +       ip &= gpio->ie;
->> +
->> +       /* ack the interrupts */
->> +       regmap_write(gpio->regmap, gpio->offset + GPIO_REG_IP, ip);
->> +
->> +       /* and handle them */
->> +       while (ip) {
->> +               pin = __ffs(ip);
->> +               ip &= ~BIT(pin);
->> +
->> +               virq = irq_find_mapping(gpio->gpio_chip.irq.domain, 
->> pin);
->> +               if (virq)
->> +                       handle_nested_irq(virq);
->> +       }
->> +
->> +       return IRQ_HANDLED;
->> +}
-> 
-> This definitely looks like parts of regmap_irqchip reimplemented.
-> Please check if you could reuse it - it would save a lot of code.
-> 
->> +
->> +static int sl28_cpld_gpio_irq_init(struct platform_device *pdev, int 
->> irq)
->> +{
->> +       struct sl28cpld_gpio *gpio = platform_get_drvdata(pdev);
->> +       struct irq_chip *irq_chip = &gpio->irq_chip;
->> +       int ret;
->> +
->> +       irq_chip->name = "sl28cpld-gpio-irq",
->> +       irq_chip->irq_bus_lock = sl28cpld_gpio_irq_lock,
->> +       irq_chip->irq_bus_sync_unlock = sl28cpld_gpio_irq_sync_unlock,
->> +       irq_chip->irq_disable = sl28cpld_gpio_irq_disable,
->> +       irq_chip->irq_enable = sl28cpld_gpio_irq_enable,
->> +       irq_chip->irq_set_type = sl28cpld_gpio_irq_set_type,
->> +       irq_chip->flags = IRQCHIP_SKIP_SET_WAKE,
->> +
->> +       ret = gpiochip_irqchip_add_nested(&gpio->gpio_chip, irq_chip, 
->> 0,
->> +                                         handle_simple_irq, 
->> IRQ_TYPE_NONE);
->> +       if (ret)
->> +               return ret;
->> +
->> +       ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
->> +                                       sl28cpld_gpio_irq_thread,
->> +                                       IRQF_SHARED | IRQF_ONESHOT,
->> +                                       pdev->name, gpio);
->> +       if (ret)
->> +               return ret;
->> +
->> +       gpiochip_set_nested_irqchip(&gpio->gpio_chip, irq_chip, irq);
->> +
->> +       return 0;
->> +}
->> +
->> +static int sl28cpld_gpio_probe(struct platform_device *pdev)
->> +{
->> +       enum sl28cpld_gpio_type type =
->> +               platform_get_device_id(pdev)->driver_data;
->> +       struct device_node *np = pdev->dev.of_node;
->> +       struct sl28cpld_gpio *gpio;
->> +       struct gpio_chip *chip;
->> +       struct resource *res;
->> +       bool irq_support = false;
->> +       int ret;
->> +       int irq;
->> +
->> +       gpio = devm_kzalloc(&pdev->dev, sizeof(*gpio), GFP_KERNEL);
->> +       if (!gpio)
->> +               return -ENOMEM;
->> +
->> +       if (!pdev->dev.parent)
->> +               return -ENODEV;
-> 
-> Why not check this before allocating any memory?
-> 
->> +
->> +       gpio->regmap = dev_get_regmap(pdev->dev.parent, NULL);
->> +       if (!gpio->regmap)
->> +               return -ENODEV;
->> +
->> +       res = platform_get_resource(pdev, IORESOURCE_REG, 0);
->> +       if (!res)
->> +               return -EINVAL;
->> +       gpio->offset = res->start;
->> +
-> 
-> This isn't how IO resources are used. What are you trying to achieve 
-> here?
-> 
->> +       /* initialize struct gpio_chip */
->> +       mutex_init(&gpio->lock);
->> +       chip = &gpio->gpio_chip;
->> +       chip->parent = &pdev->dev;
->> +       chip->label = dev_name(&pdev->dev);
->> +       chip->owner = THIS_MODULE;
->> +       chip->can_sleep = true;
->> +       chip->base = -1;
->> +       chip->ngpio = 8;
->> +
->> +       switch (type) {
->> +       case sl28cpld_gpio:
->> +               chip->get_direction = sl28cpld_gpio_get_direction;
->> +               chip->direction_input = sl28cpld_gpio_direction_input;
->> +               chip->direction_output = 
->> sl28cpld_gpio_direction_output;
->> +               chip->get = sl28cpld_gpio_get;
->> +               chip->set = sl28cpld_gpio_set;
->> +               irq_support = true;
->> +               break;
->> +       case sl28cpld_gpo:
->> +               chip->set = sl28cpld_gpo_set;
->> +               chip->get = sl28cpld_gpi_get;
->> +               break;
->> +       case sl28cpld_gpi:
->> +               chip->get = sl28cpld_gpi_get;
->> +               break;
->> +       }
->> +
->> +       ret = devm_gpiochip_add_data(&pdev->dev, chip, gpio);
->> +       if (ret < 0)
->> +               return ret;
->> +
->> +       platform_set_drvdata(pdev, gpio);
->> +
->> +       if (irq_support && of_property_read_bool(np, 
->> "interrupt-controller")) {
-> 
-> You're depending on OF_GPIO for this one function. Please switch to
-> device_property_read_bool() instead.
-> 
->> +               irq = platform_get_irq(pdev, 0);
->> +               if (irq < 0)
->> +                       return ret;
->> +
->> +               ret = sl28_cpld_gpio_irq_init(pdev, irq);
->> +               if (ret)
->> +                       return ret;
->> +       }
->> +
->> +       return 0;
->> +}
->> +
->> +static const struct platform_device_id sl28cpld_gpio_id_table[] = {
->> +       {"sl28cpld-gpio", sl28cpld_gpio},
->> +       {"sl28cpld-gpi", sl28cpld_gpi},
->> +       {"sl28cpld-gpo", sl28cpld_gpo},
-> 
-> Could you explain this a bit more? Is this the same component with
-> input/output-only lines or three different components?
-> 
->> +};
->> +MODULE_DEVICE_TABLE(platform, sl28cpld_gpio_id_table);
->> +
->> +static struct platform_driver sl28cpld_gpio_driver = {
->> +       .probe = sl28cpld_gpio_probe,
->> +       .id_table = sl28cpld_gpio_id_table,
->> +       .driver = {
->> +               .name = "sl28cpld-gpio",
->> +       },
->> +};
->> +module_platform_driver(sl28cpld_gpio_driver);
->> +
->> +MODULE_DESCRIPTION("sl28cpld GPIO Driver");
->> +MODULE_LICENSE("GPL");
-> 
-> I think you could use a MODULE_ALIAS() here if you want this module to
-> be loaded automatically by udev.
+The module parameter already specifies the timeout in minutes.
 
-Turns out MODULE_ALIAS("platform:..") isn't working with mfd and
-OF_MFD_CELL(), because the match is done on "of:.." module aliases.
-So I guess I'll need a of_device_id array after all, although the
-matching for the mfd is via the platform driver name.
+Guenter
 
--michael
+> Thanks
+> Yuechao
+> 
+> -----邮件原件-----
+> 发件人: Guenter Roeck [mailto:groeck7@gmail.com] 代表 Guenter Roeck
+> 发送时间: 2020年3月28日 4:54
+> 收件人: yuechao.zhao(赵越超)
+> 抄送: 345351830@qq.com; Jean Delvare; linux-hwmon@vger.kernel.org; linux-kernel@vger.kernel.org; Amy.Shih; Oakley.Ding; Jia.Sui(贾睢); shengkui.leng(冷胜魁); Rainbow.Zhang(張玉)
+> 主题: Re: 答复: [v2,1/1] hwmon: (nct7904) Add watchdog function
+> 
+> On 3/26/20 7:39 PM, yuechao.zhao(赵越超) wrote:
+>> Hi Guenter
+>> Thank you very much for the suggestion
+>>
+>> But, I wish to consult you on a few questions.
+>> The NCT7904 is very special in watchdog function. Its minimum unit is minutes.
+>> So, what unit do we use for setting the timeout in user space. Minutes or seconds?
+>> Does the kernel document specify it?
+>>
+> Documentation/watchdog/watchdog-api.rst very clearly specifies that the timeout is set in seconds.
+> 
+>> Also, about this suggestion:
+>> 	> +	data->wdt.timeout = timeout * 60; /* in seconds */
+>> 	> +	data->wdt.min_timeout = 1;
+>> 	> +	data->wdt.max_timeout = 15300;
+>> 	Please make it 60 * 255 (or use a respective define) to clarify where the number comes from.
+>>
+>> The reason for not use 60 * 255(or use a respective define ) is that 
+>> we will set the default timeout with "timeout" parameter when "insmod nct7904.ko".
+> 
+> This is not an argument for
+> 	data->wdt.max_timeout = 15300;
+> instead of
+> 	data->wdt.max_timeout = 60 * 255;
+> or
+> 
+> #define MAX_TIMEOUT	(60 * 255)
+> ...
+> 	data->wdt.max_timeout = MAX_TIMEOUT;
+> 
+>> The relevant code as follows:
+>> 	> +static int timeout = WATCHDOG_TIMEOUT; module_param(timeout, int, 0); 
+>> 	> +MODULE_PARM_DESC(timeout, "Watchdog timeout in minutes. 1 <= timeout <= 255, default="
+>> 	> +			__MODULE_STRING(WATCHODOG_TIMEOUT) ".");
+>>
+> 
+> I accepted that you want to have a module parameter which specifies the timeout in minutes instead of seconds (as would be customary).
+> However, I completely fail to understand what that has to do with using an unexplained constant of "15300" when setting the maximum timeout variable instead of "60 * 255" or, as I had suggested, a define.
+> 
+> Thanks,
+> Guenter
+> 
+
