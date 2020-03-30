@@ -2,65 +2,68 @@ Return-Path: <SRS0=Jj3a=5P=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65E33C43331
-	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Mar 2020 15:24:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC390C43331
+	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Mar 2020 15:32:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2D523206F6
-	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Mar 2020 15:24:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9C1212073B
+	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Mar 2020 15:32:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pIV4oKAC"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M2y8NTr9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728955AbgC3PYe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 30 Mar 2020 11:24:34 -0400
-Received: from mail-pf1-f178.google.com ([209.85.210.178]:42316 "EHLO
-        mail-pf1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728666AbgC3PYe (ORCPT
+        id S1729150AbgC3PcV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 30 Mar 2020 11:32:21 -0400
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:36982 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726497AbgC3PcV (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 30 Mar 2020 11:24:34 -0400
-Received: by mail-pf1-f178.google.com with SMTP id 22so8732303pfa.9
-        for <linux-hwmon@vger.kernel.org>; Mon, 30 Mar 2020 08:24:33 -0700 (PDT)
+        Mon, 30 Mar 2020 11:32:21 -0400
+Received: by mail-pj1-f67.google.com with SMTP id o12so7492701pjs.2;
+        Mon, 30 Mar 2020 08:32:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=RZtKFPbubKCAdsl1k9SGX1EFDs8J0MVqeY8+F5r/UNA=;
-        b=pIV4oKAClcB75vjSWUlqLqbKMCp2wejcQuGDqNLzO45Owzr0pF4Yoj1L6zV5kP8FpQ
-         rZ9J3el1kRBR80KI9ThjLKMquwa+7Hi7A31Sce0nv5xujq/tUB4T/tk7CHF86bY6prnJ
-         5GSM37zqwNnz7HSyDfN6NX87LQ852vI5Bg3M9S2l8vu8GPkU0q5lM2kdlfY9ziDkktC+
-         RO0YBT6Vw/fcy+WjmDXxxiCLoAsIufIaSc8atM4q8iq/+VKacR+kWrjun2gmQA1DK/gE
-         BqcFGxuVLnJ5iSNIMw06iLW/CpjKDuBjLIofAofpgSdncPReYZn2FVi4FChYI/50pDkR
-         K8QA==
+        bh=s90eZg+WweKgB83wmVOKof9bzIaX2B9IyDZDTed6HWA=;
+        b=M2y8NTr9cgdR8AQoZ6z2xP9A9WinnnZbPHyA6GHqOr14e4L1+qa1wCKa08vVCuipk8
+         LwL3I7vmvP6vPTQpd308AyvB0MWd2EJlu235+tpTBhHXLPCVYBTxlHSIKZQNeX+4til9
+         +1sKCwHXvY+YWqeSGyVs+X7BvW0kcI12f12ZKkjoY36b6H6g9hOVGOkRMxE11gwsg8Si
+         Z/bX+lkJWZd6mvjmaaF7N3FhpNTQQKdvz0QgXZhyCQ5Sw1MUx7LcOowF5qCvtouIIAmB
+         Mzdp/k62+uWzAPUxOhX5wrvPZWIRwmgl9gfR0uUTfUZ0nOalwr15LQriZWBMoluIm/RF
+         UKTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=RZtKFPbubKCAdsl1k9SGX1EFDs8J0MVqeY8+F5r/UNA=;
-        b=os3sDVjHnx497ZT5T/QafP+OmeT8MV82AxKxJPp/I/monLKx4Z3N5HsYqFr3H9kkO2
-         loKlM/vesXz2ygbnMau6saGyr73jpVq0eqPloEdy+wO3x1JHh3ufKuu9vDAlxatkzafN
-         IZ0zwHCEZnwjPQVCcOx9m6Rkzl69ZnZrQd1WNpKcJbtkh9ioxIAw+dlRh05D9H1ozU6y
-         t+K2UqFmS6H/YXZ2f22cEal5hOixT1Ri+4fyWRv+9MAihtl0WbO3hTIoJO2fcL9TaEwI
-         bFTJCyfK/kj50v13tNZwTIRAYPU/2+utUuQ1+29MBREWSUhfkGeRMjFtkKoWWtgugyyc
-         XU9Q==
-X-Gm-Message-State: ANhLgQ1aTctZixLyCLTHqAy8mLxmdX4HGnsQ7ydvWMJht3qdxP/qKhGW
-        QvwGh2Ermgx5ZRGtNExKRO3nrevN
-X-Google-Smtp-Source: ADFU+vsCDsJsST7QyvHkA3rMUPJNRBOqrAB6tgjCMKui1QmM2rxQnWrlNE9Y+yCRwS9E8bTo/3n9zw==
-X-Received: by 2002:a63:8048:: with SMTP id j69mr13447293pgd.410.1585581872735;
-        Mon, 30 Mar 2020 08:24:32 -0700 (PDT)
+        bh=s90eZg+WweKgB83wmVOKof9bzIaX2B9IyDZDTed6HWA=;
+        b=VUIcUn8ge8dYkfhZCNRsVDVzKV+1wHsloT6vNTVRb8VCAcNz+C3votH6mIKZQCn3GD
+         OX4lSCqmM1wTMk2001qso2JuUHoYbJcj2Xp8dMAVqEdLr0Zf0l3noL4sBF9MCp9p63G3
+         ApfIQ7r0E0X4EV35E8iD8FOIPQ8R5+obPkUOfyzZiZAd06FeMRRKZX7iABXBqGq2L6ag
+         Cv/3UA3jb3lAoLEl5AajAjDUBgga0hAWx5LXd/i1mLmURIpTBPjg70S9Tgj570h8Koe9
+         dm2ja+d/eJxc2URMVZkQ8XGm71NjjpNBw5CIeaoC2mj7efayjWB2fpoZI8UwwipiaGuM
+         GH1w==
+X-Gm-Message-State: ANhLgQ36g2VZtWvsJvbJARuqsQmWfYrGIvkE8CE/7uO9X80v/SQb47pg
+        G4N88g1q+wEifORSj94xOxY=
+X-Google-Smtp-Source: ADFU+vuWNUNlYfJ1ZdZdtelzDfevKIwgkpDdtCAmGl1gGL6BhiYj99Cu3MshkRlMR93NIgu8tSDwxQ==
+X-Received: by 2002:a17:90a:1503:: with SMTP id l3mr16050741pja.87.1585582339196;
+        Mon, 30 Mar 2020 08:32:19 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r59sm10732585pjb.45.2020.03.30.08.24.30
+        by smtp.gmail.com with ESMTPSA id q19sm7027163pgh.11.2020.03.30.08.32.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Mar 2020 08:24:31 -0700 (PDT)
-Subject: Re: Linux driver for IRPS5401 - status reg not found
-To:     Michal Simek <michal.simek@xilinx.com>,
-        Robert Hancock <hancock@sedsystems.ca>
-Cc:     linux-hwmon@vger.kernel.org
-References: <e303166b-4d7a-d2b9-a5c0-fd4de8d22a49@xilinx.com>
+        Mon, 30 Mar 2020 08:32:18 -0700 (PDT)
+Subject: Re: [v3,1/1] hwmon: (nct7904) Add watchdog function
+To:     yuechao.zhao@advantech.com.cn, 345351830@qq.com
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, amy.shih@advantech.com.tw,
+        oakley.ding@advantech.com.tw, jia.sui@advantech.com.cn,
+        shengkui.leng@advantech.com.cn
+References: <20200330095912.10827-1-yuechao.zhao@advantech.com.cn>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -105,12 +108,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <44d8631a-618c-a061-d9ca-d8030dd8a420@roeck-us.net>
-Date:   Mon, 30 Mar 2020 08:24:30 -0700
+Message-ID: <1cd1e048-71b2-b3e9-e22a-d0aae7129072@roeck-us.net>
+Date:   Mon, 30 Mar 2020 08:32:17 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <e303166b-4d7a-d2b9-a5c0-fd4de8d22a49@xilinx.com>
+In-Reply-To: <20200330095912.10827-1-yuechao.zhao@advantech.com.cn>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -119,78 +122,248 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 3/30/20 4:33 AM, Michal Simek wrote:
-> Hi Robert and Guenter,
+On 3/30/20 2:59 AM, yuechao.zhao@advantech.com.cn wrote:
+> From: Yuechao Zhao <yuechao.zhao@advantech.com.cn>
 > 
-> Xilinx boards are using IRPS5401 chips and I have tried to use your driver.
-> I have checked that u-boot can detect that devices and read it.
+> implement watchdong functionality into the "hwmon/nct7904.c"
 > 
-> ZynqMP> i2c probe
-> Valid chip addresses: 0C 13 14 20 43 44 74
-> ZynqMP> i2c md 13 0 10
-> 0000: 00 08 00 08 00 08 00 08 00 08 00 08 00 08 00 08    ................
-> ZynqMP> i2c md 14 0 10
-> 0000: 00 08 00 08 00 08 00 08 00 08 00 08 00 08 00 08    ................
-> ZynqMP> i2c md 43 0 10
-> 0000: 00 98 ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-> ZynqMP> i2c md 44 0 10
-> 0000: 00 8a ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-> ZynqMP>
+> Signed-off-by: Yuechao Zhao <yuechao.zhao@advantech.com.cn>
+> ---
+> v2:
+> - Modify dependency of NC7904 into "drivers/hwmon/Kconfig".
 > 
-> Here is DT fragment which I use (it is under i2c mux)
+> v3:
+> - Delete useless message(noise).
+> - Delete useless variable 'ret'.
+> - Delete 'ping_timeout'.
+> - Use 'wdt->timeout' as basis for setting the chip timeout
+> - Implement a get_timeout function
+> - Use devm_watchdog_register_device() instead of watchdog_register_device().
+> - Use watchdog_stop_on_unregister() when driver remove.
+> - Delete nct7904_remove() function.
+> - Fix typos. 
+> ---
+>  drivers/hwmon/Kconfig   |   6 ++-
+>  drivers/hwmon/nct7904.c | 132 +++++++++++++++++++++++++++++++++++++++++++++++-
+>  2 files changed, 135 insertions(+), 3 deletions(-)
 > 
-> 185                         irps5401_43: irps5401@43 {
-> 186                                 compatible = "infineon,irps5401";
-> 187                                 reg = <0x43>; /* pmbus / i2c 0x13 */
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 05a3083..cd0ae82 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -1340,10 +1340,12 @@ config SENSORS_NCT7802
+>  
+>  config SENSORS_NCT7904
+>  	tristate "Nuvoton NCT7904"
+> -	depends on I2C
+> +	depends on I2C && WATCHDOG
+> +	select WATCHDOG_CORE
+>  	help
+>  	  If you say yes here you get support for the Nuvoton NCT7904
+> -	  hardware monitoring chip, including manual fan speed control.
+> +	  hardware monitoring chip, including manual fan speed control
+> +	  and support for the integrated watchdog.
+>  
+>  	  This driver can also be built as a module. If so, the module
+>  	  will be called nct7904.
+> diff --git a/drivers/hwmon/nct7904.c b/drivers/hwmon/nct7904.c
+> index 1f5743d..13ac880 100644
+> --- a/drivers/hwmon/nct7904.c
+> +++ b/drivers/hwmon/nct7904.c
+> @@ -8,6 +8,9 @@
+>   * Copyright (c) 2019 Advantech
+>   * Author: Amy.Shih <amy.shih@advantech.com.tw>
+>   *
+> + * Copyright (c) 2020 Advantech
+> + * Author: Yuechao Zhao <yuechao.zhao@advantech.com.cn>
+> + *
+>   * Supports the following chips:
+>   *
+>   * Chip        #vin  #fan  #pwm  #temp  #dts  chip ID
+> @@ -20,6 +23,7 @@
+>  #include <linux/i2c.h>
+>  #include <linux/mutex.h>
+>  #include <linux/hwmon.h>
+> +#include <linux/watchdog.h>
+>  
+>  #define VENDOR_ID_REG		0x7A	/* Any bank */
+>  #define NUVOTON_ID		0x50
+> @@ -87,18 +91,42 @@
+>  #define FANCTL1_FMR_REG		0x00	/* Bank 3; 1 reg per channel */
+>  #define FANCTL1_OUT_REG		0x10	/* Bank 3; 1 reg per channel */
+>  
+> +#define WDT_LOCK_REG		0xE0	/* W/O Lock Watchdog Register */
+> +#define WDT_EN_REG		0xE1	/* R/O Watchdog Enable Register */
+> +#define WDT_STS_REG		0xE2	/* R/O Watchdog Status Register */
+> +#define WDT_TIMER_REG		0xE3	/* R/W Watchdog Timer Register */
+> +#define WDT_SOFT_EN		0x55	/* Enable soft watchdog timer */
+> +#define WDT_SOFT_DIS		0xAA	/* Disable soft watchdog timer */
+> +
+>  #define VOLT_MONITOR_MODE	0x0
+>  #define THERMAL_DIODE_MODE	0x1
+>  #define THERMISTOR_MODE		0x3
+>  
+>  #define ENABLE_TSI	BIT(1)
+>  
+> +#define WATCHDOG_TIMEOUT	1	/* 1 minute default timeout */
+> +
+> +/*The timeout range is 1-255 minutes*/
+> +#define MIN_TIMEOUT		(1 * 60)
+> +#define MAX_TIMEOUT		(255 * 60)
+> +
+> +static int timeout = WATCHDOG_TIMEOUT;
+> +module_param(timeout, int, 0);
+> +MODULE_PARM_DESC(timeout, "Watchdog timeout in minutes. 1 <= timeout <= 255, default="
+> +			__MODULE_STRING(WATCHODOG_TIMEOUT) ".");
+> +
+> +static bool nowayout = WATCHDOG_NOWAYOUT;
+> +module_param(nowayout, bool, 0);
+> +MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started once started (default="
+> +			__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+> +
+>  static const unsigned short normal_i2c[] = {
+>  	0x2d, 0x2e, I2C_CLIENT_END
+>  };
+>  
+>  struct nct7904_data {
+>  	struct i2c_client *client;
+> +	struct watchdog_device wdt;
+>  	struct mutex bank_lock;
+>  	int bank_sel;
+>  	u32 fanin_mask;
+> @@ -889,6 +917,87 @@ static int nct7904_detect(struct i2c_client *client,
+>  	.info = nct7904_info,
+>  };
+>  
+> +/*
+> + * Watchdog Function
+> + */
+> +static int nct7904_wdt_start(struct watchdog_device *wdt)
+> +{
+> +	struct nct7904_data *data = watchdog_get_drvdata(wdt);
+> +
+> +	/* Enable soft watchdog timer */
+> +	return nct7904_write_reg(data, BANK_0, WDT_LOCK_REG, WDT_SOFT_EN);
+> +}
+> +
+> +static int nct7904_wdt_stop(struct watchdog_device *wdt)
+> +{
+> +	struct nct7904_data *data = watchdog_get_drvdata(wdt);
+> +
+> +	return nct7904_write_reg(data, BANK_0, WDT_LOCK_REG, WDT_SOFT_DIS);
+> +}
+> +
+> +static int nct7904_wdt_set_timeout(struct watchdog_device *wdt,
+> +				   unsigned int timeout)
+> +{
+> +	struct nct7904_data *data = watchdog_get_drvdata(wdt);
+> +
+> +	wdt->timeout = timeout;
 
-Does that mean the mux is at 0x13 ?
+wdt->timeout needs to match the actual timeout selected.
+For example, if the user configures a timeout of 119 seconds,
+the actual timeout will be 60 seconds. wdt->timeout must then
+be set to 60 seconds. So this needs to be
+	wdt->timeout = timeout / 60 * 60;
 
-> 188                         };
-> 189                         irps5401_4d: irps5401@44 {
-> 190                                 compatible = "infineon,irps5401";
-> 191                                 reg = <0x44>; /* pmbus / i2c 0x14 */
+> +
+> +	return nct7904_write_reg(data, BANK_0, WDT_TIMER_REG,
+> +				 wdt->timeout / 60);
+> +}
+> +
+> +static int nct7904_wdt_ping(struct watchdog_device *wdt)
+> +{
+> +	/*
+> +	 * Note:
+> +	 * NCT7904 does not support refreshing WDT_TIMER_REG register when
+> +	 * the watchdog is active. Please disable watchdog before feeding
+> +	 * the watchdog and enable it again.
+> +	 */
+> +	struct nct7904_data *data = watchdog_get_drvdata(wdt);
+> +	int ret;
+> +
+> +	/* Disable soft watchdog timer */
+> +	ret = nct7904_write_reg(data, BANK_0, WDT_LOCK_REG, WDT_SOFT_DIS);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* feed watchdog */
+> +	ret = nct7904_write_reg(data, BANK_0, WDT_TIMER_REG, wdt->timeout / 60);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* Enable soft watchdog timer */
+> +	return nct7904_write_reg(data, BANK_0, WDT_TIMER_REG, WDT_SOFT_EN);
+> +}
+> +
+> +static unsigned int nct7904_wdt_get_timeleft(struct watchdog_device *wdt)
+> +{
+> +	struct nct7904_data *data = watchdog_get_drvdata(wdt);
+> +	int ret;
+> +
+> +	ret = nct7904_read_reg(data, BANK_0, WDT_TIMER_REG);
+> +	if (ret < 0)
+> +		return 0;
+> +
+> +	return (unsigned int)ret;
 
-Why _4d ?
+The returned value is the time left in minutes, thus
+	return ret * 60;
 
-> 192                         };
+The typecast is unnecessary.
+
+> +}
+> +
+> +static const struct watchdog_info nct7904_wdt_info = {
+> +	.options	= WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING |
+> +				WDIOF_MAGICCLOSE,
+> +	.identity	= "nct7904 watchdog",
+> +};
+> +
+> +static const struct watchdog_ops nct7904_wdt_ops = {
+> +	.owner		= THIS_MODULE,
+> +	.start		= nct7904_wdt_start,
+> +	.stop		= nct7904_wdt_stop,
+> +	.ping		= nct7904_wdt_ping,
+> +	.set_timeout	= nct7904_wdt_set_timeout,
+> +	.get_timeleft	= nct7904_wdt_get_timeleft,
+> +};
+> +
+>  static int nct7904_probe(struct i2c_client *client,
+>  			 const struct i2c_device_id *id)
+>  {
+> @@ -1012,7 +1121,28 @@ static int nct7904_probe(struct i2c_client *client,
+>  	hwmon_dev =
+>  		devm_hwmon_device_register_with_info(dev, client->name, data,
+>  						     &nct7904_chip_info, NULL);
+> -	return PTR_ERR_OR_ZERO(hwmon_dev);
+> +	ret = PTR_ERR_OR_ZERO(hwmon_dev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Watchdog initialization */
+> +	data->wdt.ops = &nct7904_wdt_ops;
+> +	data->wdt.info = &nct7904_wdt_info;
+> +
+> +	data->wdt.timeout = timeout * 60; /* in seconds */
+> +	data->wdt.min_timeout = MIN_TIMEOUT;
+> +	data->wdt.max_timeout = MAX_TIMEOUT;
+> +	data->wdt.parent = &client->dev;
+> +
+> +	watchdog_init_timeout(&data->wdt, timeout * 60, &client->dev);
+> +	watchdog_set_nowayout(&data->wdt, nowayout);
+> +	watchdog_set_drvdata(&data->wdt, data);
+> +
+> +	watchdog_stop_on_unregister(&data->wdt);
+> +
+> +	i2c_set_clientdata(client, data);
+
+Unless I am missing something, this is not needed.
+
+> +
+> +	return devm_watchdog_register_device(dev, &data->wdt);
+>  }
+>  
+>  static const struct i2c_device_id nct7904_id[] = {
 > 
-> I see that driver is used but with error.
-> 
-> [   37.553740] irps5401 3-0043: PMBus status register not found
-> [   37.559815] irps5401 3-0044: PMBus status register not found
-> 
-> 
-> That's why I want to check with you what could be the problem.
-> 
 
-PMBus status registers are at 0x78 (byte) and 0x79 (word). The above
-error is reported if reading both returns an error or 0xff / 0xffff,
-which indicates that the chip is not accessible.
-
-I can say for sure that whatever is at 0x43/0x44, it is very likely
-not an irps5401. If it was, at least registers 0x2 and 0x6 should report
-different values, and 0x01 doesn't look much better (the lower 2 bits
-should never be set).
-
-> Also I would like to know if there is a way to disable it via any API.
-
-Not sure what you want to disable. The message ? The PMBus core needs
-to have access to the chip to initialize. If there is no status register,
-there is nothing it can do but to refuse to instantiate.
-
-It might make sense to use i2cdetect / i2cget in Linux to determine
-if the chips are accessible. I'd try reading the status registers (0x78
-to 0x7e), value registers (0x88 to 0x8d, 0x96, 0x97), manufacturer
-id (0x99) and model (0x9a), and i2c device ID (0xad) and revision (0xae).
-
-> One of this regulator is connected to another device which doesn't have
-> access to it. It means before powering up this device there is a need to
-> enable this power regulator. The best via any dedicated API.
-> 
-
-We can add regulator support to the PMBus core or to the irps5401 driver
-if necessary (patches welcome), assuming the regulator in question is
-handled by Linux.
-
-Hope this helps,
-Guenter
