@@ -2,213 +2,151 @@ Return-Path: <SRS0=Jj3a=5P=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3531C43331
-	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Mar 2020 15:51:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 420E6C43331
+	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Mar 2020 16:02:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id ADC0D206CC
-	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Mar 2020 15:51:27 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dpI1okSX"
+	by mail.kernel.org (Postfix) with ESMTP id 1A0A22072E
+	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Mar 2020 16:02:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729319AbgC3Pv1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 30 Mar 2020 11:51:27 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:42268 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727952AbgC3Pv1 (ORCPT
+        id S1729573AbgC3QCA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 30 Mar 2020 12:02:00 -0400
+Received: from sed198n136.SEDSystems.ca ([198.169.180.136]:35348 "EHLO
+        sed198n136.sedsystems.ca" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729319AbgC3QCA (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 30 Mar 2020 11:51:27 -0400
-Received: by mail-pl1-f196.google.com with SMTP id e1so6877028plt.9;
-        Mon, 30 Mar 2020 08:51:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=L9o4KRn00mDjtqt+akJWlI8f2RLZQl/VvTUHSutIqZc=;
-        b=dpI1okSXow4OOYbunaZ8VE/spoxDkrFnRnKrS/Q3aMCM4/g1GiuVrKnwrYY0r+C2iw
-         7YmAGvblhoiq0Cfm+10H2kSVAhrbudXQlQAMO/ciRQysZlfsgYM86/T1X8F9MSqMExa6
-         n/46GkZKJPLHBgs7A3TkBM3HOrCzWLiQg0ymqnUzj25rc6HEJM4HdfFATBSDlZQ3tfh2
-         Y9AA2pvVIS2dxxuevFGQktuU9UK+JdvWs/2gS6CZB/jYO5sYTdXXWjgscV5382HiLOvA
-         CZwrIwTY78IET02aKVRqznPkzQv7nTZ3x4xOSu6ac55CNrgNYVvgCqM1I3bha8knJ8Et
-         7Etg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=L9o4KRn00mDjtqt+akJWlI8f2RLZQl/VvTUHSutIqZc=;
-        b=aao03QFcHlztH3f0jmYHaNDmvxFIS7G8xpd3MTREUyU7vugT44wvlqM1C93LWgRv47
-         zDVLQw4vv6uSMH9BShY1+OybP59LBJBeP/MhQ/LGcsdFMIyBp2jkapM26C4sBssvenUS
-         +h0iD+q/0/AuPWQNAXqb5eBDb2h3oxiP2shrdglQYkAtyxY2PZKdj0D4yvQW2R3xyGxh
-         nMG/Veky6z5hGuD8c13mdBocy8VGXUuSTAqSVGA2HgCFHVsiW9VGcZoaFLciRZTWFC3W
-         3SJ/BP5Wu3xxt5ifxmLCA3BWf6yOZ9TGzY4+fV+iWYJ1vc3WxRNxZZrYjBhNlx2AoKcT
-         35IA==
-X-Gm-Message-State: ANhLgQ1XC+UPCT/7kNoAQQEl/gkskkqn2lQQQScYBIPnTo4I17aloFJW
-        cawIwob4Z/kKU06jhS2VeBxyWBMI
-X-Google-Smtp-Source: ADFU+vv9C+B1Xv0VipPjnnA/WMWiN43YowIhNsDS4hWW6fmhwtfmcDA2QmTJbFMvWFsC0gf5esa79w==
-X-Received: by 2002:a17:90a:1784:: with SMTP id q4mr16358734pja.111.1585583485967;
-        Mon, 30 Mar 2020 08:51:25 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 21sm9963781pgf.41.2020.03.30.08.51.25
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 30 Mar 2020 08:51:25 -0700 (PDT)
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon updates for v5.7
-Date:   Mon, 30 Mar 2020 08:51:24 -0700
-Message-Id: <20200330155124.243034-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.17.1
+        Mon, 30 Mar 2020 12:02:00 -0400
+X-Greylist: delayed 1122 seconds by postgrey-1.27 at vger.kernel.org; Mon, 30 Mar 2020 12:02:00 EDT
+Received: from barney.sedsystems.ca (barney [198.169.180.121])
+        by sed198n136.sedsystems.ca  with ESMTP id 02UFgx0b008192
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Mar 2020 09:42:59 -0600 (CST)
+Received: from [192.168.233.77] (ovpn77.sedsystems.ca [192.168.233.77])
+        by barney.sedsystems.ca (8.14.7/8.14.4) with ESMTP id 02UFgwQT041410
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
+        Mon, 30 Mar 2020 09:42:58 -0600
+Subject: Re: Linux driver for IRPS5401 - status reg not found
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Michal Simek <michal.simek@xilinx.com>
+Cc:     linux-hwmon@vger.kernel.org
+References: <e303166b-4d7a-d2b9-a5c0-fd4de8d22a49@xilinx.com>
+ <44d8631a-618c-a061-d9ca-d8030dd8a420@roeck-us.net>
+From:   Robert Hancock <hancock@sedsystems.ca>
+Message-ID: <52d41b38-8af9-1496-65dc-c36179a9d286@sedsystems.ca>
+Date:   Mon, 30 Mar 2020 09:42:58 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Firefox/68.0 Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <44d8631a-618c-a061-d9ca-d8030dd8a420@roeck-us.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.64 on 198.169.180.136
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Linus,
+On 2020-03-30 9:24 a.m., Guenter Roeck wrote:
+> On 3/30/20 4:33 AM, Michal Simek wrote:
+>> Hi Robert and Guenter,
+>>
+>> Xilinx boards are using IRPS5401 chips and I have tried to use your driver.
+>> I have checked that u-boot can detect that devices and read it.
+>>
+>> ZynqMP> i2c probe
+>> Valid chip addresses: 0C 13 14 20 43 44 74
+>> ZynqMP> i2c md 13 0 10
+>> 0000: 00 08 00 08 00 08 00 08 00 08 00 08 00 08 00 08    ................
+>> ZynqMP> i2c md 14 0 10
+>> 0000: 00 08 00 08 00 08 00 08 00 08 00 08 00 08 00 08    ................
+>> ZynqMP> i2c md 43 0 10
+>> 0000: 00 98 ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
+>> ZynqMP> i2c md 44 0 10
+>> 0000: 00 8a ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
+>> ZynqMP>
+>>
+>> Here is DT fragment which I use (it is under i2c mux)
+>>
+>> 185                         irps5401_43: irps5401@43 {
+>> 186                                 compatible = "infineon,irps5401";
+>> 187                                 reg = <0x43>; /* pmbus / i2c 0x13 */
+> 
+> Does that mean the mux is at 0x13 ?
 
-Please pull hwmon updates for Linux v5.7 from signed tag:
+These chips have two I2C addresses with two separate interfaces: the 
+standard PMBus-compatible interface at an address between 0x40-0x4f, 
+which the irps5401 driver supports, and another proprietary interface at 
+an address between 0x10-0x1f. The specific addresses in those ranges is 
+configured by the value of a resistor on one of the pins.
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.7
+> 
+>> 188                         };
+>> 189                         irps5401_4d: irps5401@44 {
+>> 190                                 compatible = "infineon,irps5401";
+>> 191                                 reg = <0x44>; /* pmbus / i2c 0x14 */
+> 
+> Why _4d ?
+> 
+>> 192                         };
+>>
+>> I see that driver is used but with error.
+>>
+>> [   37.553740] irps5401 3-0043: PMBus status register not found
+>> [   37.559815] irps5401 3-0044: PMBus status register not found
+>>
+>>
+>> That's why I want to check with you what could be the problem.
+>>
+> 
+> PMBus status registers are at 0x78 (byte) and 0x79 (word). The above
+> error is reported if reading both returns an error or 0xff / 0xffff,
+> which indicates that the chip is not accessible.
+> 
+> I can say for sure that whatever is at 0x43/0x44, it is very likely
+> not an irps5401. If it was, at least registers 0x2 and 0x6 should report
+> different values, and 0x01 doesn't look much better (the lower 2 bits
+> should never be set).
+> 
+>> Also I would like to know if there is a way to disable it via any API.
+> 
+> Not sure what you want to disable. The message ? The PMBus core needs
+> to have access to the chip to initialize. If there is no status register,
+> there is nothing it can do but to refuse to instantiate.
+> 
+> It might make sense to use i2cdetect / i2cget in Linux to determine
+> if the chips are accessible. I'd try reading the status registers (0x78
+> to 0x7e), value registers (0x88 to 0x8d, 0x96, 0x97), manufacturer
+> id (0x99) and model (0x9a), and i2c device ID (0xad) and revision (0xae).
 
-Depending on merge order, there may be a context conflict against devicetree
-in Documentation/devicetree/bindings/trivial-devices.yaml.
+This would be my first suggestion as well.
 
-Thanks,
-Guenter
-------
+> 
+>> One of this regulator is connected to another device which doesn't have
+>> access to it. It means before powering up this device there is a need to
+>> enable this power regulator. The best via any dedicated API.
 
-The following changes since commit 2c523b344dfa65a3738e7039832044aa133c75fb:
+I don't think the PMBus interface on these chips exposes any interface 
+to command the regulator. However, one could do this over the Infineon 
+programming/control interface on the 0x10-0x1f addresses. This protocol 
+is documented publicly now (see the programming guide and register map 
+document on the Infineon web site).
 
-  Linux 5.6-rc5 (2020-03-08 17:44:44 -0700)
+>>
+> 
+> We can add regulator support to the PMBus core or to the irps5401 driver
+> if necessary (patches welcome), assuming the regulator in question is
+> handled by Linux.
+> 
+> Hope this helps,
+> Guenter
+> 
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v5.7
-
-for you to fetch changes up to 5b10a8194664a0d3b025f9b53de4476754ce8e41:
-
-  docs: hwmon: Update documentation for isl68137 pmbus driver (2020-03-22 16:42:54 -0700)
-
-----------------------------------------------------------------
-hwmon patches for v5.7
-
-New driver for AXI fan control.
-Attenuator bypass support and support for inverting pwm output
-in adt7475 driver.
-Support for new power supply version in ibm-cffps driver.
-PMBus drivers:
-  Support for multi-phase chips.
-  Support for LTC2972, LTC2979, LTC3884, LTC3889, LTC7880, LTM4664,
-  LTM4677, LTM4678, LTM4680, and LTM4700 added to ltc2978 driver.
-  Support for TPS53681, TPS53647, and TPS53667 added to tps53679
-  driver.
-  Support for various 2nd Gen Renesas digital multiphase chips
-  added to isl68137 driver.
-
-Minor improvements and fixes in nct7904, ibmpowernv, lm73, ibmaem,
-and k10temp drivers.
-
-----------------------------------------------------------------
-Amy Shih (1):
-      hwmon: (nct7904) Fix the incorrect quantity for fan & temp attributes
-
-Chris Packham (2):
-      dt-bindings: hwmon: Document adt7475 pwm-active-state property
-      hwmon: (adt7475) Add support for inverting pwm output
-
-Eddie James (1):
-      hwmon: (pmbus/ibm-cffps) Add another PSU CCIN to version detection
-
-Grant Peltier (2):
-      hwmon: (pmbus) add support for 2nd Gen Renesas digital multiphase
-      docs: hwmon: Update documentation for isl68137 pmbus driver
-
-Guenter Roeck (11):
-      hwmon: (k10temp) Swap Tdie and Tctl on Family 17h CPUs
-      hwmon: (k10temp) Reorganize and simplify temperature support detection
-      hwmon: (k10temp) Update driver documentation
-      hwmon: (pmbus) Add IC_DEVICE_ID and IC_DEVICE_REV command definitions
-      hwmon: (pmbus) Add 'phase' parameter where needed for multi-phase support
-      hwmon: (pmbus) Implement multi-phase support
-      hwmon: (pmbus/tps53679) Add support for multiple chips IDs
-      hwmon: (pmbus/tps53679) Add support for IIN and PIN to TPS53679 and TPS53688
-      hwmon: (pmbus/tps53679) Add support for TPS53681
-      hwmon: (pmbus/tps53679) Add support for TPS53647 and TPS53667
-      hwmon: (pmbus/tps53679) Add documentation
-
-Gustavo A. R. Silva (1):
-      hwmon: (ibmaem) Replace zero-length array with flexible-array member
-
-Henry Shen (2):
-      dt-bindings: Add TI LM73 as a trivial device
-      hwmon: (lm73) Add support for of_match_table
-
-Logan Shaw (3):
-      dt-bindings: hwmon: Document adt7475 binding
-      dt-bindings: hwmon: Document adt7475 bypass-attenuator property
-      hwmon: (adt7475) Add attenuator bypass support
-
-Mike Jones (3):
-      docs: hwmon: (pmbus/ltc2978) Update datasheet URLs to analog.com.
-      hwmon: (pmbus/ltc2978) add support for more parts.
-      bindings: (hwmon/ltc2978.txt) add support for more parts (bindings)
-
-Nuno Sá (2):
-      hwmon: Support ADI Fan Control IP
-      dt-bindings: hwmon: Add AXI FAN Control documentation
-
-Takashi Iwai (1):
-      hwmon: (ibmpowernv) Use scnprintf() for avoiding potential buffer overflow
-
- .../bindings/hwmon/adi,axi-fan-control.yaml        |  62 +++
- .../devicetree/bindings/hwmon/adt7475.yaml         |  84 ++++
- .../devicetree/bindings/hwmon/ltc2978.txt          |  22 +-
- .../devicetree/bindings/trivial-devices.yaml       |  10 +-
- Documentation/hwmon/index.rst                      |   1 +
- Documentation/hwmon/isl68137.rst                   | 541 ++++++++++++++++++++-
- Documentation/hwmon/k10temp.rst                    |  29 +-
- Documentation/hwmon/ltc2978.rst                    | 198 ++++++--
- Documentation/hwmon/pmbus-core.rst                 |  22 +-
- Documentation/hwmon/pmbus.rst                      |   8 +-
- Documentation/hwmon/tps53679.rst                   | 178 +++++++
- MAINTAINERS                                        |   8 +
- drivers/hwmon/Kconfig                              |   9 +
- drivers/hwmon/Makefile                             |   1 +
- drivers/hwmon/adt7475.c                            |  95 +++-
- drivers/hwmon/axi-fan-control.c                    | 469 ++++++++++++++++++
- drivers/hwmon/ibmaem.c                             |   2 +-
- drivers/hwmon/ibmpowernv.c                         |   8 +-
- drivers/hwmon/k10temp.c                            |  60 +--
- drivers/hwmon/lm73.c                               |  10 +
- drivers/hwmon/nct7904.c                            |  21 +
- drivers/hwmon/pmbus/Kconfig                        |  21 +-
- drivers/hwmon/pmbus/adm1275.c                      |  37 +-
- drivers/hwmon/pmbus/ibm-cffps.c                    |  29 +-
- drivers/hwmon/pmbus/ir35221.c                      |  23 +-
- drivers/hwmon/pmbus/isl68137.c                     | 114 ++++-
- drivers/hwmon/pmbus/lm25066.c                      |  39 +-
- drivers/hwmon/pmbus/ltc2978.c                      | 130 ++++-
- drivers/hwmon/pmbus/ltc3815.c                      |  20 +-
- drivers/hwmon/pmbus/max16064.c                     |   7 +-
- drivers/hwmon/pmbus/max20730.c                     |   3 +-
- drivers/hwmon/pmbus/max31785.c                     |   6 +-
- drivers/hwmon/pmbus/max34440.c                     |  25 +-
- drivers/hwmon/pmbus/max8688.c                      |  17 +-
- drivers/hwmon/pmbus/pmbus.c                        |   4 +-
- drivers/hwmon/pmbus/pmbus.h                        |  20 +-
- drivers/hwmon/pmbus/pmbus_core.c                   | 119 +++--
- drivers/hwmon/pmbus/tps53679.c                     | 172 ++++++-
- drivers/hwmon/pmbus/ucd9000.c                      |   2 +-
- drivers/hwmon/pmbus/xdpe12284.c                    |   5 +-
- drivers/hwmon/pmbus/zl6100.c                       |   5 +-
- 41 files changed, 2325 insertions(+), 311 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/hwmon/adi,axi-fan-control.yaml
- create mode 100644 Documentation/devicetree/bindings/hwmon/adt7475.yaml
- create mode 100644 Documentation/hwmon/tps53679.rst
- create mode 100644 drivers/hwmon/axi-fan-control.c
+-- 
+Robert Hancock
+Senior Hardware Designer
+SED Systems, a division of Calian Ltd.
+Email: hancock@sedsystems.ca
