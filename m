@@ -2,277 +2,135 @@ Return-Path: <SRS0=Jj3a=5P=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A79FC2D0EE
-	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Mar 2020 10:06:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7144C2D0EF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Mar 2020 11:22:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 01F0B206E6
-	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Mar 2020 10:06:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8454020784
+	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Mar 2020 11:22:10 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="Lo81bSLQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728640AbgC3KG6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 30 Mar 2020 06:06:58 -0400
-Received: from [58.211.163.100] ([58.211.163.100]:64725 "EHLO
-        mail.advantech.com.cn" rhost-flags-FAIL-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729181AbgC3KG6 (ORCPT
+        id S1729770AbgC3LWD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 30 Mar 2020 07:22:03 -0400
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:36096 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729750AbgC3LWD (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 30 Mar 2020 06:06:58 -0400
-Received: from ACNMB2.ACN.ADVANTECH.CORP (unverified [172.21.128.148]) by ACN-SWEEPER01.ACN.ADVANTECH.CORP
- (Clearswift SMTPRS 5.6.0) with ESMTP id <Tde39040d7fac1580301704@ACN-SWEEPER01.ACN.ADVANTECH.CORP>;
- Mon, 30 Mar 2020 18:01:46 +0800
-Received: from ADVANTECH.CORP (172.17.10.69) by ACNMB2.ACN.ADVANTECH.CORP
- (172.21.128.148) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Mon, 30 Mar
- 2020 18:01:45 +0800
-From:   <yuechao.zhao@advantech.com.cn>
-To:     <345351830@qq.com>
-CC:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <amy.shih@advantech.com.tw>, <oakley.ding@advantech.com.tw>,
-        <jia.sui@advantech.com.cn>, <shengkui.leng@advantech.com.cn>,
-        Yuechao Zhao <yuechao.zhao@advantech.com.cn>
-Subject: [v3,1/1] hwmon: (nct7904) Add watchdog function
-Date:   Mon, 30 Mar 2020 09:59:12 +0000
-Message-ID: <20200330095912.10827-1-yuechao.zhao@advantech.com.cn>
-X-Mailer: git-send-email 2.17.1
+        Mon, 30 Mar 2020 07:22:03 -0400
+Received: by mail-qk1-f195.google.com with SMTP id d11so18439037qko.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 30 Mar 2020 04:22:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=CzM9Ul/dphXe/6k6V017VGqcrogFXRUNidC2oEsJyA4=;
+        b=Lo81bSLQWPVgU/i6sxlrCIBODUnjRkBTUhlltdOET1Dmks4BFPSVpOUpndvcX76UyB
+         hkWTYKD7omKCo2QzXiH1W+Q/eSWGYesRpzjunThYHGs7hjuSdF+XD+aVckt8qcSQLHLf
+         2dGg3fYi4+AUTb5J78URConeOPfe4tGuRHbb2F1LS3sMbaCujqQsCxjWXbGbH5HyzGhD
+         p/Ux96ci6T31CRwG9rUx5pXRxGzCZ84npmpm7CJGxisaBEPrDQEfeik1T+tSs3DS8SSR
+         xRT/u5P760PPOifEwBJ2NscES25L2rM7gIEkuzVGazBBxQdHCpd66DpKgluiH+hEAOZj
+         1OzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=CzM9Ul/dphXe/6k6V017VGqcrogFXRUNidC2oEsJyA4=;
+        b=kIdkj+Ubf+WCpxNkCG33fF3SyA//xGzUBjdG8nZSab3o49JUCbm2fTMtFaSmTzT/L9
+         f2Me8SoGJg4ujhbDZkY0cVkgS3EdZoey+r7URbGoZFWXe5t6YJGJNuEr2ZF0xUf3pDwj
+         j8uqkXnFldULSHNLqANvrD1gVIpcASfgzbY6Qn7/jtDVGjcwWBQ80f+vnyKo41c7t6a8
+         wAtIaSgYH8Xy/6gdWC5UPkXNJwKTegVsuoleHs7kOLWuwDqnRR6TMgJHO5iRKN2BdDmK
+         elbw8kZGqL+MvI2mYVwYJ/FzXvnvDkHlvwTA37oGVHOCOc2MwnE6d7ppvu+4/djAe2TW
+         Qg/Q==
+X-Gm-Message-State: ANhLgQ3Lei21eFleG0LXPQcji5O77K184uQH6lw134SqRLPlfzr2FxFI
+        2SOCrCTL4ddhx09HqzAPfqudOiHSYhUGIs8WTZQMLQ==
+X-Google-Smtp-Source: ADFU+vstVtsw7JWrmBNop5+zhRNU4WPamx9SIUzCEtNOrBy3Hzu3AZDNweBkY+DVn4Q0wOYnEWX26BByXVYtpX6VxmE=
+X-Received: by 2002:a37:a2c8:: with SMTP id l191mr11373979qke.120.1585567321647;
+ Mon, 30 Mar 2020 04:22:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.17.10.69]
-X-ClientProxiedBy: ACLDAG.ADVANTECH.CORP (172.20.2.88) To
- ACNMB2.ACN.ADVANTECH.CORP (172.21.128.148)
+References: <20200317205017.28280-1-michael@walle.cc> <20200317205017.28280-13-michael@walle.cc>
+ <CAMpxmJW770v6JLdveEe1hkgNEJByVyArhorSyUZBYOyFiVyOeg@mail.gmail.com>
+ <9c310f2a11913d4d089ef1b07671be00@walle.cc> <CAMpxmJXmD-M+Wbj6=wgFgP2aDxbqDN=ceHi1XDun4iwdLm55Zg@mail.gmail.com>
+ <22944c9b62aa69da418de7766b7741bd@walle.cc> <CACRpkdbJ3DBO+W4P0n-CfZ1T3L8d_L0Nizra8frkv92XPXR4WA@mail.gmail.com>
+ <4d8d3bc26bdf73eb5c0e5851589fe085@walle.cc>
+In-Reply-To: <4d8d3bc26bdf73eb5c0e5851589fe085@walle.cc>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Mon, 30 Mar 2020 13:21:50 +0200
+Message-ID: <CAMpxmJUj7wBvO=Y-u5CXazHhjsPHXcq=5iST4KuLrfakW_a9Mg@mail.gmail.com>
+Subject: Re: [PATCH 12/18] gpio: add support for the sl28cpld GPIO controller
+To:     Michael Walle <michael@walle.cc>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio <linux-gpio@vger.kernel.org>,
+        linux-devicetree <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Yuechao Zhao <yuechao.zhao@advantech.com.cn>
+pt., 27 mar 2020 o 16:28 Michael Walle <michael@walle.cc> napisa=C5=82(a):
+>
+> Am 2020-03-27 11:20, schrieb Linus Walleij:
+> > On Thu, Mar 26, 2020 at 9:06 PM Michael Walle <michael@walle.cc> wrote:
+> >> Am 2020-03-25 12:50, schrieb Bartosz Golaszewski:
+> >
+> >> > In that case maybe you should use the disable_locking option in
+> >> > regmap_config and provide your own callbacks that you can use in the
+> >> > irqchip code too?
+> >>
+> >> But how would that solve problem (1). And keep in mind, that the
+> >> reqmap_irqchip is actually used for the interrupt controller, which
+> >> is not this gpio controller.
+> >>
+> >> Ie. the interrupt controller of the sl28cpld uses the regmap_irqchip
+> >> and all interrupt phandles pointing to the interrupt controller will
+> >> reference the toplevel node. Any phandles pointing to the gpio
+> >> controller will reference the GPIO subnode.
+> >
+> > Ideally we would create something generic that has been on my
+> > mind for some time, like a generic GPIO regmap irqchip now that
+> > there are a few controllers like that.
+> >
+> > I don't know how feasible it is or how much work it would be. But
+> > as with GPIO_GENERIC (for MMIO) it would be helpful since we
+> > can then implement things like .set_multiple() and .get_multiple()
+> > for everyone.
+>
+> For starters, would that be a drivers/gpio/gpio-regmap.c or a
+> drivers/base/regmap/regmap-gpio.c? I would assume the first,
+> because the stuff in drivers/base/regmap operates on a given
+> regmap and we'd just be using one, correct? On the other hand
+> there is also the reqmap-irq.c. But as pointed out before, it
+> will add an interrupt controller to the regmap, not a device
+> so to speak.
+>
+> -michael
 
-implement watchdong functionality into the "hwmon/nct7904.c"
+This has been on my TODO list for so long, but I've never been able to
+find the time... I'd really appreciate any effort in that direction as
+I believe it would allow us to slowly port a big part of the GPIO
+expander drivers over to it and make large portions of our codebase
+generic.
 
-Signed-off-by: Yuechao Zhao <yuechao.zhao@advantech.com.cn>
----
-v2:
-- Modify dependency of NC7904 into "drivers/hwmon/Kconfig".
-
-v3:
-- Delete useless message(noise).
-- Delete useless variable 'ret'.
-- Delete 'ping_timeout'.
-- Use 'wdt->timeout' as basis for setting the chip timeout
-- Implement a get_timeout function
-- Use devm_watchdog_register_device() instead of watchdog_register_device().
-- Use watchdog_stop_on_unregister() when driver remove.
-- Delete nct7904_remove() function.
-- Fix typos. 
----
- drivers/hwmon/Kconfig   |   6 ++-
- drivers/hwmon/nct7904.c | 132 +++++++++++++++++++++++++++++++++++++++++++++++-
- 2 files changed, 135 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 05a3083..cd0ae82 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -1340,10 +1340,12 @@ config SENSORS_NCT7802
- 
- config SENSORS_NCT7904
- 	tristate "Nuvoton NCT7904"
--	depends on I2C
-+	depends on I2C && WATCHDOG
-+	select WATCHDOG_CORE
- 	help
- 	  If you say yes here you get support for the Nuvoton NCT7904
--	  hardware monitoring chip, including manual fan speed control.
-+	  hardware monitoring chip, including manual fan speed control
-+	  and support for the integrated watchdog.
- 
- 	  This driver can also be built as a module. If so, the module
- 	  will be called nct7904.
-diff --git a/drivers/hwmon/nct7904.c b/drivers/hwmon/nct7904.c
-index 1f5743d..13ac880 100644
---- a/drivers/hwmon/nct7904.c
-+++ b/drivers/hwmon/nct7904.c
-@@ -8,6 +8,9 @@
-  * Copyright (c) 2019 Advantech
-  * Author: Amy.Shih <amy.shih@advantech.com.tw>
-  *
-+ * Copyright (c) 2020 Advantech
-+ * Author: Yuechao Zhao <yuechao.zhao@advantech.com.cn>
-+ *
-  * Supports the following chips:
-  *
-  * Chip        #vin  #fan  #pwm  #temp  #dts  chip ID
-@@ -20,6 +23,7 @@
- #include <linux/i2c.h>
- #include <linux/mutex.h>
- #include <linux/hwmon.h>
-+#include <linux/watchdog.h>
- 
- #define VENDOR_ID_REG		0x7A	/* Any bank */
- #define NUVOTON_ID		0x50
-@@ -87,18 +91,42 @@
- #define FANCTL1_FMR_REG		0x00	/* Bank 3; 1 reg per channel */
- #define FANCTL1_OUT_REG		0x10	/* Bank 3; 1 reg per channel */
- 
-+#define WDT_LOCK_REG		0xE0	/* W/O Lock Watchdog Register */
-+#define WDT_EN_REG		0xE1	/* R/O Watchdog Enable Register */
-+#define WDT_STS_REG		0xE2	/* R/O Watchdog Status Register */
-+#define WDT_TIMER_REG		0xE3	/* R/W Watchdog Timer Register */
-+#define WDT_SOFT_EN		0x55	/* Enable soft watchdog timer */
-+#define WDT_SOFT_DIS		0xAA	/* Disable soft watchdog timer */
-+
- #define VOLT_MONITOR_MODE	0x0
- #define THERMAL_DIODE_MODE	0x1
- #define THERMISTOR_MODE		0x3
- 
- #define ENABLE_TSI	BIT(1)
- 
-+#define WATCHDOG_TIMEOUT	1	/* 1 minute default timeout */
-+
-+/*The timeout range is 1-255 minutes*/
-+#define MIN_TIMEOUT		(1 * 60)
-+#define MAX_TIMEOUT		(255 * 60)
-+
-+static int timeout = WATCHDOG_TIMEOUT;
-+module_param(timeout, int, 0);
-+MODULE_PARM_DESC(timeout, "Watchdog timeout in minutes. 1 <= timeout <= 255, default="
-+			__MODULE_STRING(WATCHODOG_TIMEOUT) ".");
-+
-+static bool nowayout = WATCHDOG_NOWAYOUT;
-+module_param(nowayout, bool, 0);
-+MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started once started (default="
-+			__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-+
- static const unsigned short normal_i2c[] = {
- 	0x2d, 0x2e, I2C_CLIENT_END
- };
- 
- struct nct7904_data {
- 	struct i2c_client *client;
-+	struct watchdog_device wdt;
- 	struct mutex bank_lock;
- 	int bank_sel;
- 	u32 fanin_mask;
-@@ -889,6 +917,87 @@ static int nct7904_detect(struct i2c_client *client,
- 	.info = nct7904_info,
- };
- 
-+/*
-+ * Watchdog Function
-+ */
-+static int nct7904_wdt_start(struct watchdog_device *wdt)
-+{
-+	struct nct7904_data *data = watchdog_get_drvdata(wdt);
-+
-+	/* Enable soft watchdog timer */
-+	return nct7904_write_reg(data, BANK_0, WDT_LOCK_REG, WDT_SOFT_EN);
-+}
-+
-+static int nct7904_wdt_stop(struct watchdog_device *wdt)
-+{
-+	struct nct7904_data *data = watchdog_get_drvdata(wdt);
-+
-+	return nct7904_write_reg(data, BANK_0, WDT_LOCK_REG, WDT_SOFT_DIS);
-+}
-+
-+static int nct7904_wdt_set_timeout(struct watchdog_device *wdt,
-+				   unsigned int timeout)
-+{
-+	struct nct7904_data *data = watchdog_get_drvdata(wdt);
-+
-+	wdt->timeout = timeout;
-+
-+	return nct7904_write_reg(data, BANK_0, WDT_TIMER_REG,
-+				 wdt->timeout / 60);
-+}
-+
-+static int nct7904_wdt_ping(struct watchdog_device *wdt)
-+{
-+	/*
-+	 * Note:
-+	 * NCT7904 does not support refreshing WDT_TIMER_REG register when
-+	 * the watchdog is active. Please disable watchdog before feeding
-+	 * the watchdog and enable it again.
-+	 */
-+	struct nct7904_data *data = watchdog_get_drvdata(wdt);
-+	int ret;
-+
-+	/* Disable soft watchdog timer */
-+	ret = nct7904_write_reg(data, BANK_0, WDT_LOCK_REG, WDT_SOFT_DIS);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* feed watchdog */
-+	ret = nct7904_write_reg(data, BANK_0, WDT_TIMER_REG, wdt->timeout / 60);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* Enable soft watchdog timer */
-+	return nct7904_write_reg(data, BANK_0, WDT_TIMER_REG, WDT_SOFT_EN);
-+}
-+
-+static unsigned int nct7904_wdt_get_timeleft(struct watchdog_device *wdt)
-+{
-+	struct nct7904_data *data = watchdog_get_drvdata(wdt);
-+	int ret;
-+
-+	ret = nct7904_read_reg(data, BANK_0, WDT_TIMER_REG);
-+	if (ret < 0)
-+		return 0;
-+
-+	return (unsigned int)ret;
-+}
-+
-+static const struct watchdog_info nct7904_wdt_info = {
-+	.options	= WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING |
-+				WDIOF_MAGICCLOSE,
-+	.identity	= "nct7904 watchdog",
-+};
-+
-+static const struct watchdog_ops nct7904_wdt_ops = {
-+	.owner		= THIS_MODULE,
-+	.start		= nct7904_wdt_start,
-+	.stop		= nct7904_wdt_stop,
-+	.ping		= nct7904_wdt_ping,
-+	.set_timeout	= nct7904_wdt_set_timeout,
-+	.get_timeleft	= nct7904_wdt_get_timeleft,
-+};
-+
- static int nct7904_probe(struct i2c_client *client,
- 			 const struct i2c_device_id *id)
- {
-@@ -1012,7 +1121,28 @@ static int nct7904_probe(struct i2c_client *client,
- 	hwmon_dev =
- 		devm_hwmon_device_register_with_info(dev, client->name, data,
- 						     &nct7904_chip_info, NULL);
--	return PTR_ERR_OR_ZERO(hwmon_dev);
-+	ret = PTR_ERR_OR_ZERO(hwmon_dev);
-+	if (ret)
-+		return ret;
-+
-+	/* Watchdog initialization */
-+	data->wdt.ops = &nct7904_wdt_ops;
-+	data->wdt.info = &nct7904_wdt_info;
-+
-+	data->wdt.timeout = timeout * 60; /* in seconds */
-+	data->wdt.min_timeout = MIN_TIMEOUT;
-+	data->wdt.max_timeout = MAX_TIMEOUT;
-+	data->wdt.parent = &client->dev;
-+
-+	watchdog_init_timeout(&data->wdt, timeout * 60, &client->dev);
-+	watchdog_set_nowayout(&data->wdt, nowayout);
-+	watchdog_set_drvdata(&data->wdt, data);
-+
-+	watchdog_stop_on_unregister(&data->wdt);
-+
-+	i2c_set_clientdata(client, data);
-+
-+	return devm_watchdog_register_device(dev, &data->wdt);
- }
- 
- static const struct i2c_device_id nct7904_id[] = {
--- 
-1.8.3.1
-
+Best regards,
+Bartosz Golaszewski
