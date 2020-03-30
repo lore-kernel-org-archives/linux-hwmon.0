@@ -6,63 +6,63 @@ X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A71DC43331
-	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Mar 2020 16:52:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DDD7CC2D0F1
+	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Mar 2020 18:48:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E39742072E
-	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Mar 2020 16:52:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AF5DB2082F
+	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Mar 2020 18:48:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KaSZmrNO"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IelanpLu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726023AbgC3Qwu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 30 Mar 2020 12:52:50 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:44077 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726000AbgC3Qwu (ORCPT
+        id S1727905AbgC3SsU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 30 Mar 2020 14:48:20 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:44000 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726518AbgC3SsS (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 30 Mar 2020 12:52:50 -0400
-Received: by mail-pf1-f196.google.com with SMTP id b72so8854837pfb.11
-        for <linux-hwmon@vger.kernel.org>; Mon, 30 Mar 2020 09:52:48 -0700 (PDT)
+        Mon, 30 Mar 2020 14:48:18 -0400
+Received: by mail-pf1-f195.google.com with SMTP id f206so9017463pfa.10
+        for <linux-hwmon@vger.kernel.org>; Mon, 30 Mar 2020 11:48:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=PEKmnyPB1jRhUo+KfQsEAq+T3KuIhpuTzr5Net99xj0=;
-        b=KaSZmrNOTk1r76MXw+qsp8cNQiKRltogjOvAiT8fVX/+gYcF+UBOrg9GDh/XGAMmQj
-         WZotI2JfTe+oqCthvymnoIuvpDmX7u29yQF9T8WIftzfJLOSk7xpn21Yjin5tbb6nsNS
-         8e67YaXhx1j84yJFBMaGr1EwXAZXjPAE7ZnIOhP/j3nmYSZu68Ihukvl6/uE1Tv50ene
-         TcDVhqssWYPVfMorPikp28rNihE4beap5mQZOnGAnHr6EBOMJvrI3bl5NUtFd7T78cYd
-         Flg5JnL6hzUGtwRfoJfsv6QWPQ0LBBSTwOdmpvbRihXM6K0JZwwTfWSeE+L7O6Zu4R+z
-         PL8w==
+        bh=A/5cntKj1Rboep0ErkxJsbgUnugu9yuS7FLop8xwtCk=;
+        b=IelanpLuCnZmnRe4IM3SN00rqXJcLN3mB/J4FHrHy/TZ7SKBM7vBOaYHrKit7WEpjw
+         Eki+wb+zC5QMCebrghTZEEmxtI34pKZdIqBy9D7LbIR8K7+dg6IMZeb6F1rBPymE3zmN
+         CvYqFtzki4SnFWcOc2SGE+ul8pA4tweVrO160354CBTc5SnKFCtvNQIJyM94iDemDicX
+         kAFR2ETi2FCImESrDT53hM2BlkWky15Z8LKvBlRO/YsVrtL26lurj8CkHqE1AdptqB+a
+         R7XxAe0zqSWFdvGKvJ0J0LRHra+TH6XLzD/DzS234CPGCEwKf7SDTZR8CBiICRhAVUau
+         VNCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=PEKmnyPB1jRhUo+KfQsEAq+T3KuIhpuTzr5Net99xj0=;
-        b=Ycu9QHoF/Q8O7jOkSS1BM8b8kAD40aFGpmMn5gLvtB6yqMHL3Lu6bVj2PCbJWA3hob
-         RkSodoaKoD58g+BN2LOxhO446qDYJ+bTPzqxtLhNl7NLR7omTt4Mv5rGhF+ypeO6V++1
-         7U71tLNrxd4h6FAs7YqlUTIm3snWaT5SFNxN2NQAjhSdb6BMRRRGUni54PdSpJlyJOsC
-         cRxgAHWzjYP46qbQLaRp3ne7hx+56QIGZSYntcl9Mc58MgIAhPEuxpzFYyT1EZSF6aZs
-         8RmT89VGMeFLmv+xuWIdP/MxXvgKk1+s/ijorz38kTtdcyDvPjEZv0b4NHa4AuPa8FGK
-         8J4g==
-X-Gm-Message-State: ANhLgQ157oM9JWZwIT93nFsnF1wCYl/jix3q9/8tW1ElFnJkMgMKOt19
-        Tcu3asOu8L9XWTgRibXzO+wnq3Ab
-X-Google-Smtp-Source: ADFU+vtsbHsdWZxm+ChzwuGk1A4DaNWSHx7KBFdIh/Wdx7FfJormrahPUWIovIrKHG2Q6R4u9FYVsw==
-X-Received: by 2002:aa7:969b:: with SMTP id f27mr13296187pfk.116.1585587167958;
-        Mon, 30 Mar 2020 09:52:47 -0700 (PDT)
+        bh=A/5cntKj1Rboep0ErkxJsbgUnugu9yuS7FLop8xwtCk=;
+        b=ohYTosu2Jvm00G1zb7DlGLC62fQ8URytK8tOsbzjIEdg0da25B6FSbOFHzG1bDWN6O
+         TqqZV0Z6nnl0xq14rG6cgSY8TfAbixj0anut09vzD8L1k/q6s0dQ3bIWEWb4cqu+bVNg
+         KlGd4TxxRYtcXGhS8O/EQfF+ZYqbL3qGDjhae5Z+Wh6v3i5tGNhT3azR/kyfHEDj3zhh
+         MOcfp+GQyPWH5u+Nnz2fnY8BnQf3efYP7Qf/sHz9Ixi8oh9oD2PcmVvyiMs5apnGIsNf
+         dK0q1/efuC4fhn2ez0Xf+5A7vqunMXhM+Fj6ucwCjjJPbWJOaOZMvQ8ECbBslBjexFTm
+         nOqg==
+X-Gm-Message-State: ANhLgQ1z8X6RW9aUr39VGEjGDC+k83MWrPm5Y6UZ4U3IWQ8bQFfgy7SA
+        H1VDdJKYkT7wl2/2VzNf00BOsr9N
+X-Google-Smtp-Source: ADFU+vszedluTj80RaKNLI5miVmMBmoXsYGao5SAoFEOHYhMM/xJQ5/V63A9rJE5zg/IahCQoV7QJw==
+X-Received: by 2002:a63:ff4e:: with SMTP id s14mr14214611pgk.269.1585594096792;
+        Mon, 30 Mar 2020 11:48:16 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u21sm63223pjy.8.2020.03.30.09.52.45
+        by smtp.gmail.com with ESMTPSA id r70sm10787393pfr.116.2020.03.30.11.48.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Mar 2020 09:52:46 -0700 (PDT)
+        Mon, 30 Mar 2020 11:48:15 -0700 (PDT)
 Subject: Re: Linux driver for IRPS5401 - status reg not found
-To:     Michal Simek <michal.simek@xilinx.com>,
-        Robert Hancock <hancock@sedsystems.ca>
+To:     Robert Hancock <hancock@sedsystems.ca>,
+        Michal Simek <michal.simek@xilinx.com>
 Cc:     linux-hwmon@vger.kernel.org
 References: <e303166b-4d7a-d2b9-a5c0-fd4de8d22a49@xilinx.com>
  <44d8631a-618c-a061-d9ca-d8030dd8a420@roeck-us.net>
- <f6f3735d-1af2-4d57-d8d5-3b87e9be8b32@xilinx.com>
+ <52d41b38-8af9-1496-65dc-c36179a9d286@sedsystems.ca>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -107,12 +107,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <8cf85df7-6c7d-7352-9a19-f6c0cf838e39@roeck-us.net>
-Date:   Mon, 30 Mar 2020 09:52:45 -0700
+Message-ID: <299872b6-0fcf-3ef1-5b52-41fceb2dcdc0@roeck-us.net>
+Date:   Mon, 30 Mar 2020 11:48:14 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <f6f3735d-1af2-4d57-d8d5-3b87e9be8b32@xilinx.com>
+In-Reply-To: <52d41b38-8af9-1496-65dc-c36179a9d286@sedsystems.ca>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -121,8 +121,8 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 3/30/20 8:46 AM, Michal Simek wrote:
-> On 30. 03. 20 17:24, Guenter Roeck wrote:
+On 3/30/20 8:42 AM, Robert Hancock wrote:
+> On 2020-03-30 9:24 a.m., Guenter Roeck wrote:
 >> On 3/30/20 4:33 AM, Michal Simek wrote:
 >>> Hi Robert and Guenter,
 >>>
@@ -132,54 +132,33 @@ On 3/30/20 8:46 AM, Michal Simek wrote:
 >>> ZynqMP> i2c probe
 >>> Valid chip addresses: 0C 13 14 20 43 44 74
 >>> ZynqMP> i2c md 13 0 10
->>> 0000: 00 08 00 08 00 08 00 08 00 08 00 08 00 08 00 08    ................
+>>> 0000: 00 08 00 08 00 08 00 08 00 08 00 08 00 08 00 08    ................
 >>> ZynqMP> i2c md 14 0 10
->>> 0000: 00 08 00 08 00 08 00 08 00 08 00 08 00 08 00 08    ................
+>>> 0000: 00 08 00 08 00 08 00 08 00 08 00 08 00 08 00 08    ................
 >>> ZynqMP> i2c md 43 0 10
->>> 0000: 00 98 ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
+>>> 0000: 00 98 ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
 >>> ZynqMP> i2c md 44 0 10
->>> 0000: 00 8a ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
+>>> 0000: 00 8a ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
 >>> ZynqMP>
 >>>
 >>> Here is DT fragment which I use (it is under i2c mux)
 >>>
->>> 185                         irps5401_43: irps5401@43 {
->>> 186                                 compatible = "infineon,irps5401";
->>> 187                                 reg = <0x43>; /* pmbus / i2c 0x13 */
+>>> 185                         irps5401_43: irps5401@43 {
+>>> 186                                 compatible = "infineon,irps5401";
+>>> 187                                 reg = <0x43>; /* pmbus / i2c 0x13 */
 >>
 >> Does that mean the mux is at 0x13 ?
 > 
-> HW guys wrote that 0x13 is i2c address and 0x43 is pmbus address.
+> These chips have two I2C addresses with two separate interfaces: the standard PMBus-compatible interface at an address between 0x40-0x4f, which the irps5401 driver supports, and another proprietary interface at an address between 0x10-0x1f. The specific addresses in those ranges is configured by the value of a resistor on one of the pins.
 > 
 
-Sorry, I have no idea what that is supposed to mean. PMBus is SMBus
-which, for all practical purpose, is i2c. There is no difference between
-PMBus and I2C addresses.
+Ah, sorry, I didn't get that part earlier. Unfortunately, the datasheet
+doesn't seem to include a description of the proprietary interface
+registers/commands, or maybe I am missing it.
 
-
-[ ... ]
-
-> 
-> There is nothing else on schematics. When I try 0x13/0x14 I am getting.
-> irps5401 3-0013: Failed to identify chip capabilities
-> irps5401 3-0014: Failed to identify chip capabilities
-> 
-Yes, the chips at those addresses don't look like PMBus chips.
-
-Maybe the chips are on other i2c busses. There must be at least four
-of them in the system.
-
->>> Also I would like to know if there is a way to disable it via any API.
->>
->> Not sure what you want to disable. The message ? The PMBus core needs
->> to have access to the chip to initialize. If there is no status register,
->> there is nothing it can do but to refuse to instantiate.
-> 
-> When driver is probed I would like to be able from user space
-> enable/disable the specific output from PMIC. This one has 4 VOUTs.
-> 
-You mean to instantiate a regulator ? That is possible; see
-drivers/hwmon/pmbus/ltc2978.c for an example. I don't know if one
-can enable/disable regulators from userspace, though.
+The chip datasheet does talk a lot about various MTP registers.
+Part of that register set is Write_protect_section and
+Read_protect_section. Maybe the PMBus registers are all read
+protected ?
 
 Guenter
