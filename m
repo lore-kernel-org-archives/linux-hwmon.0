@@ -2,84 +2,93 @@ Return-Path: <SRS0=Wymy=5Q=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D218C43331
-	for <linux-hwmon@archiver.kernel.org>; Tue, 31 Mar 2020 21:49:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB135C43331
+	for <linux-hwmon@archiver.kernel.org>; Tue, 31 Mar 2020 23:02:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E693A20842
-	for <linux-hwmon@archiver.kernel.org>; Tue, 31 Mar 2020 21:49:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ADA3D208E0
+	for <linux-hwmon@archiver.kernel.org>; Tue, 31 Mar 2020 23:02:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1585691392;
-	bh=8n+Kh8XT0EZrnbYjJxYejv0op0bqH3mHIBCHS4nu/c0=;
+	s=default; t=1585695777;
+	bh=RDr5TB2wv3VlgO3MORuYf5f3VFVISMMWhvEYqR+u2n0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=eP7J+VBPbceJLZDGcWh7oH9dzlS2is/YL4uZp7AKPMrdcEVVRF0WnwiZXX+zDg4tm
-	 uC52Z6gkA3R9hMFrVo8UzVJbwWMLOrl4nAGYmF1cil4bbI8f4myaXc6GASylOJrJAB
-	 j/VDUcdXVuvJNcXIPPT1jPoVuAy0OdDJ45qyqg+g=
+	b=q3Ab/e5AsmSM6DeI1YSwIG86mTX6wPYYPq8Dtenbt4E5Nzu40TrrgJ40tyRiiZvdk
+	 3FbS6+Z6fBnOnEopRfbKm25RxbSsHMR6zvTnqFuAn7rVkUq2pj7UIMluCUTghtq6cp
+	 Xbhqrc+M/ms5TOS3kg4bMu25eXSLFzuiKJrEo/8U=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731570AbgCaVtv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 31 Mar 2020 17:49:51 -0400
-Received: from mail-il1-f193.google.com ([209.85.166.193]:36634 "EHLO
-        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731565AbgCaVtv (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 31 Mar 2020 17:49:51 -0400
-Received: by mail-il1-f193.google.com with SMTP id p13so20986757ilp.3;
-        Tue, 31 Mar 2020 14:49:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=XGaSzuYBrzwb5Afzco535xjNeNm7VCR01D0e+KSHlBU=;
-        b=gTneFJeCBSFloAJlZJlDtxRj3bW2AXRuMrV3hivTuEN9jFL7o6GuUnif9YkRGLcnCr
-         MFg8p3WXk4SPgjTDrjS0fbF75kqSieyGZxiydG+qbAJjqrvCFdQXMSI/f5URBcin3WZh
-         EzewSDfAU9ucpnjdvdELKuRocahNElwIFzWJSNSmrSQzXDwnWAjqySx29PSRk/rERJiD
-         Wti2YWUpbZwma02otcv2FI1GeB4Ryll0zJNs6vDyirwfe4XVj/RQRi5ezxg+wCvCXdQl
-         LsZAiLFvocwd8bsf86/icukiromC00VI6UKUNOH7qKstS0bfcs7J6M0P2agxgPCjeWEs
-         5HSg==
-X-Gm-Message-State: ANhLgQ0jmoIIjVVI/FZvGrELP4/31RZsP70ltRzXW+0XjB4lZrZ6w4ag
-        Zm0GTpUg5w3wUnZp7eEhVMTNZoarkw==
-X-Google-Smtp-Source: ADFU+vtLiLqlrFPVsFsHqZpYWIdxcsfYWlyNB3SkdVLs9VJv60/GvpmZRG/1ep91VBksmL/cQASE2g==
-X-Received: by 2002:a92:d582:: with SMTP id a2mr16558293iln.37.1585691389269;
-        Tue, 31 Mar 2020 14:49:49 -0700 (PDT)
-Received: from rob-hp-laptop ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id l25sm34133ild.61.2020.03.31.14.49.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Mar 2020 14:49:48 -0700 (PDT)
-Received: (nullmailer pid 486 invoked by uid 1000);
-        Tue, 31 Mar 2020 21:49:47 -0000
-Date:   Tue, 31 Mar 2020 15:49:47 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     alexandru.tachici@analog.com
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org, linux@roeck-us.net,
-        Alexandru Tachici <alexandru.tachici@analog.com>
-Subject: Re: [PATCH v2 2/2] dt-bindings: hwmon: Add bindings for ADM1266
-Message-ID: <20200331214947.GA446@bogus>
-References: <20200325130605.2420-1-alexandru.tachici@analog.com>
- <20200325130605.2420-3-alexandru.tachici@analog.com>
+        id S1731498AbgCaXC5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 31 Mar 2020 19:02:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39438 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730589AbgCaXC5 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 31 Mar 2020 19:02:57 -0400
+Received: from pali.im (pali.im [31.31.79.79])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8C58920787;
+        Tue, 31 Mar 2020 23:02:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1585695776;
+        bh=RDr5TB2wv3VlgO3MORuYf5f3VFVISMMWhvEYqR+u2n0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=naLp6hgsZrmQ5EVpGKNR8qCmsxuQw22SFQ7f6AStKryG6QbiKnAZSkGsN+gcMnnHH
+         uI0jKyLIRednUBhP2lALGV7qva9WhsMCnX1EjULO7e9jgJ1GBmvqgU8CzvaYmOFG0P
+         D3eD3JjfoXrDxn4auqTwGkKVXuXxomESl/cYkiF8=
+Received: by pali.im (Postfix)
+        id 9D2C7888; Wed,  1 Apr 2020 01:02:54 +0200 (CEST)
+Date:   Wed, 1 Apr 2020 01:02:54 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Michele Sorcinelli <michelesr@autistici.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] drivers/hwmon/dell-smm-hwmon.c: fix blank line
+Message-ID: <20200331230254.hxntiaq2s3ynk7pi@pali>
+References: <20200331225708.52822-1-michelesr@autistici.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200325130605.2420-3-alexandru.tachici@analog.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200331225708.52822-1-michelesr@autistici.org>
+User-Agent: NeoMutt/20180716
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, 25 Mar 2020 15:06:05 +0200, <alexandru.tachici@analog.com> wrote:
-> From: Alexandru Tachici <alexandru.tachici@analog.com>
+On Tuesday 31 March 2020 23:57:08 Michele Sorcinelli wrote:
+> Fix missing blank line after declaration: reported by checkpatch.pl
 > 
-> Add bindings for the Analog Devices ADM1266 sequencer.
+> There are other missing blank lines reported in the declaration of
+> struct smm_regs fields (line 120) but they are probably false positives
+> so I don't think they need to be changed.
 > 
-> Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
-> ---
->  .../bindings/hwmon/adi,adm1266.yaml           | 57 +++++++++++++++++++
->  1 file changed, 57 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/adi,adm1266.yaml
-> 
+> Signed-off-by: Michele Sorcinelli <michelesr@autistici.org>
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Hello! I'm fine with any coding style which is consistent. With or also
+without this blank line. So if Jean and Guenter as subsystem maintainers
+want this change I'm fine with it too and in this case you can add my
+Acked-by: Pali Rohár <pali@kernel.org>
+
+> ---
+>  drivers/hwmon/dell-smm-hwmon.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+> index ab719d372b0d..7b61b613aff6 100644
+> --- a/drivers/hwmon/dell-smm-hwmon.c
+> +++ b/drivers/hwmon/dell-smm-hwmon.c
+> @@ -1276,6 +1276,7 @@ static int __init i8k_probe(void)
+>  	id = dmi_first_match(i8k_dmi_table);
+>  	if (id && id->driver_data) {
+>  		const struct i8k_config_data *conf = id->driver_data;
+> +
+>  		if (!fan_mult && conf->fan_mult)
+>  			fan_mult = conf->fan_mult;
+>  		if (!fan_max && conf->fan_max)
+> -- 
+> 2.26.0
+> 
