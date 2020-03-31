@@ -1,252 +1,289 @@
-Return-Path: <SRS0=Jj3a=5P=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=Wymy=5Q=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25153C43331
-	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Mar 2020 22:35:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B023C43331
+	for <linux-hwmon@archiver.kernel.org>; Tue, 31 Mar 2020 05:29:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E205F20771
-	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Mar 2020 22:35:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1585607740;
-	bh=PEdMdgM5NyNsov7qHA19DK0RlueRdGYngB2ksynv00E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=nI3gin7+NfPygS20OpPFdQTWVqQ4sR6paOcWCec0R6s6FB5t0em/5xKk+xdiSmKAh
-	 0BBKyCM59WWc75O9K2cMhuxnW1wRt7oVyfuK0IfAtmZJvGyHAgY22GnsB2MjfDRjeR
-	 mJ9Q5n49tU0gKoAYUMmmcs1AA0eWysBST/EIz6qc=
+	by mail.kernel.org (Postfix) with ESMTP id 2DF7120757
+	for <linux-hwmon@archiver.kernel.org>; Tue, 31 Mar 2020 05:29:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729918AbgC3Wfj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 30 Mar 2020 18:35:39 -0400
-Received: from mail-il1-f196.google.com ([209.85.166.196]:44289 "EHLO
-        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728876AbgC3Wfj (ORCPT
+        id S1726299AbgCaF3P (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 31 Mar 2020 01:29:15 -0400
+Received: from [58.211.163.100] ([58.211.163.100]:62245 "EHLO
+        mail.advantech.com.cn" rhost-flags-FAIL-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726236AbgCaF3P (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 30 Mar 2020 18:35:39 -0400
-Received: by mail-il1-f196.google.com with SMTP id j69so17508805ila.11;
-        Mon, 30 Mar 2020 15:35:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=I5WWfs5YS24hDXKa/XtUGtXEdA3TZ6qAt3nvgnrU3Mg=;
-        b=S42bGyddtT81fV3FRyMo2TSfC5Y78Ypj604lGERU61HstFdouh0f5/buY2E59GD6DY
-         e48XK2+8t1Be/m3rwdt6vF1OajIYRSMH3NOYib/MXOJVc1JS4NzwyIYANbNmt9K/Mx7G
-         dZRHCPLJzZw+uL6R5/FhIjofze+JlN9ebDgdzNXEfKQVTHkK8WmAzg9iSI/o8cQRcko3
-         wwbL2/FttfTl0Dj+G3wCj9i6W7NsCdOdl2PfTrLfLtBO/NXo7oUoIBTrX5kePWoDf1cR
-         9rhX/nFMmSoBya3YuZ86HDCrJY1FCgd2Vr1lT8GlyoOvPUCxK7irPHtdjB4O2/AoqlN/
-         jUrw==
-X-Gm-Message-State: ANhLgQ2k0sN1IrrwpSMwOBgTxTDRLS0qYjAKjZ6jQMY2dxIy0m6duuAS
-        4z7iBxJyiDuxX6ek2jdsLA==
-X-Google-Smtp-Source: ADFU+vssbUqtDjk9LmSKnh6QyMy6yhoEjw71OJha0yhLNQZ1KYIfV2iGgJtR8LtRx2C40kLrzGDj9w==
-X-Received: by 2002:a92:5e55:: with SMTP id s82mr12453797ilb.62.1585607737767;
-        Mon, 30 Mar 2020 15:35:37 -0700 (PDT)
-Received: from rob-hp-laptop ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id x15sm5321840ilg.29.2020.03.30.15.35.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Mar 2020 15:35:37 -0700 (PDT)
-Received: (nullmailer pid 18867 invoked by uid 1000);
-        Mon, 30 Mar 2020 22:35:35 -0000
-Date:   Mon, 30 Mar 2020 16:35:35 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Jean Delvare <jdelvare@suse.com>,
+        Tue, 31 Mar 2020 01:29:15 -0400
+Received: from ACNMB2.ACN.ADVANTECH.CORP (unverified [172.21.128.148]) by ACN-SWEEPER01.ACN.ADVANTECH.CORP
+ (Clearswift SMTPRS 5.6.0) with ESMTP id <Tde3d30b370ac1580301704@ACN-SWEEPER01.ACN.ADVANTECH.CORP>;
+ Tue, 31 Mar 2020 13:29:01 +0800
+Received: from ADVANTECH.CORP (172.17.10.69) by ACNMB2.ACN.ADVANTECH.CORP
+ (172.21.128.148) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Tue, 31 Mar
+ 2020 13:29:00 +0800
+From:   <yuechao.zhao@advantech.com.cn>
+To:     <345351830@qq.com>
+CC:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>
-Subject: Re: [PATCH 04/18] dt-bindings: mfd: Add bindings for sl28cpld
-Message-ID: <20200330223535.GA31402@bogus>
-References: <20200317205017.28280-1-michael@walle.cc>
- <20200317205017.28280-5-michael@walle.cc>
+        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <amy.shih@advantech.com.tw>, <oakley.ding@advantech.com.tw>,
+        <jia.sui@advantech.com.cn>, <shengkui.leng@advantech.com.cn>,
+        Yuechao Zhao <yuechao.zhao@advantech.com.cn>
+Subject: [v4,1/1] hwmon: (nct7904) Add watchdog function
+Date:   Tue, 31 Mar 2020 05:28:50 +0000
+Message-ID: <20200331052850.5419-1-yuechao.zhao@advantech.com.cn>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200317205017.28280-5-michael@walle.cc>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-Originating-IP: [172.17.10.69]
+X-ClientProxiedBy: ACLDAG.ADVANTECH.CORP (172.20.2.88) To
+ ACNMB2.ACN.ADVANTECH.CORP (172.21.128.148)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Mar 17, 2020 at 09:50:03PM +0100, Michael Walle wrote:
-> This adds device tree bindings for the board management controller found
-> on the Kontron SMARC-sAL28 board.
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
->  .../bindings/mfd/kontron,sl28cpld.yaml        | 143 ++++++++++++++++++
->  1 file changed, 143 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/kontron,sl28cpld.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/kontron,sl28cpld.yaml b/Documentation/devicetree/bindings/mfd/kontron,sl28cpld.yaml
-> new file mode 100644
-> index 000000000000..3b9cca49d2d6
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/kontron,sl28cpld.yaml
-> @@ -0,0 +1,143 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/kontron,sl28cpld.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Kontron's sl28cpld board management controller
-> +
-> +maintainers:
-> +  - Michael Walle <michael@walle.cc>
-> +
-> +description: |
-> +  The board management controller may contain different IP blocks like
-> +  watchdog, fan monitoring, PWM controller, interrupt controller and a
-> +  GPIO controller.
-> +
-> +properties:
-> +  compatible:
-> +    const: kontron,sl28cpld
-> +
-> +  reg:
-> +    description:
-> +      I2C device address.
-> +    maxItems: 1
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 0
-> +
-> +  "#interrupt-cells":
-> +    const: 2
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  interrupt-controller: true
-> +
-> +patternProperties:
-> +  "^gp(io|i|o)(@[0-9]+)?$":
+From: Yuechao Zhao <yuechao.zhao@advantech.com.cn>
 
-Just 'gpio'. We don't need that level of distinguishing in node names.
+implement watchdong functionality into the "hwmon/nct7904.c"
 
-> +    $ref: ../gpio/kontron,sl28cpld-gpio.yaml
-> +
-> +  "^hwmon(@[0-9]+)?$":
-> +    $ref: ../hwmon/kontron,sl28cpld-hwmon.yaml
-> +
-> +  "^pwm(@[0-9]+)?$":
-> +    $ref: ../pwm/kontron,sl28cpld-pwm.yaml
-> +
-> +  "^watchdog(@[0-9]+)?$":
-> +    $ref: ../watchdog/kontron,sl28cpld-wdt.yaml
+Signed-off-by: Yuechao Zhao <yuechao.zhao@advantech.com.cn>
+---
+v4:
+- Set "wdt->timeout" to actual timeout
+- Modify nct7904_wdt_get_timeleft return value
+- Remove code 'i2c_set_clientdata(client, data)'
 
-The patches for these files need to come first or validating this file 
-fails. Really, you can just make all five files 1 patch.
+v3:
+- Delete useless message(noise).
+- Delete useless variable 'ret'.
+- Delete 'ping_timeout'.
+- Use 'wdt->timeout' as basis for setting the chip timeout
+- Implement a get_timeout function
+- Use devm_watchdog_register_device() instead of watchdog_register_device().
+- Use watchdog_stop_on_unregister() when driver remove.
+- Delete nct7904_remove() function.
+- Fix typos.
 
-> +
-> +required:
-> +  - "#address-cells"
-> +  - "#size-cells"
-> +  - compatible
-> +  - reg
-> +  - "#interrupt-cells"
-> +  - interrupt-controller
-> +
-> +oneOf:
-> +  - required:
-> +    - interrupts
-> +  - required:
-> +    - interrupts-extended
+v2:
+- Modify dependency of NC7904 into "drivers/hwmon/Kconfig".
+---
+ drivers/hwmon/Kconfig   |   6 ++-
+ drivers/hwmon/nct7904.c | 138 +++++++++++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 141 insertions(+), 3 deletions(-)
 
-Don't need to do this. Just make 'interrupts' required and you'll get 
-interrupts-extended for free.
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 05a3083..cd0ae82 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -1340,10 +1340,12 @@ config SENSORS_NCT7802
+ 
+ config SENSORS_NCT7904
+ 	tristate "Nuvoton NCT7904"
+-	depends on I2C
++	depends on I2C && WATCHDOG
++	select WATCHDOG_CORE
+ 	help
+ 	  If you say yes here you get support for the Nuvoton NCT7904
+-	  hardware monitoring chip, including manual fan speed control.
++	  hardware monitoring chip, including manual fan speed control
++	  and support for the integrated watchdog.
+ 
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called nct7904.
+diff --git a/drivers/hwmon/nct7904.c b/drivers/hwmon/nct7904.c
+index 1f5743d..571a649 100644
+--- a/drivers/hwmon/nct7904.c
++++ b/drivers/hwmon/nct7904.c
+@@ -8,6 +8,9 @@
+  * Copyright (c) 2019 Advantech
+  * Author: Amy.Shih <amy.shih@advantech.com.tw>
+  *
++ * Copyright (c) 2020 Advantech
++ * Author: Yuechao Zhao <yuechao.zhao@advantech.com.cn>
++ *
+  * Supports the following chips:
+  *
+  * Chip        #vin  #fan  #pwm  #temp  #dts  chip ID
+@@ -20,6 +23,7 @@
+ #include <linux/i2c.h>
+ #include <linux/mutex.h>
+ #include <linux/hwmon.h>
++#include <linux/watchdog.h>
+ 
+ #define VENDOR_ID_REG		0x7A	/* Any bank */
+ #define NUVOTON_ID		0x50
+@@ -87,18 +91,42 @@
+ #define FANCTL1_FMR_REG		0x00	/* Bank 3; 1 reg per channel */
+ #define FANCTL1_OUT_REG		0x10	/* Bank 3; 1 reg per channel */
+ 
++#define WDT_LOCK_REG		0xE0	/* W/O Lock Watchdog Register */
++#define WDT_EN_REG		0xE1	/* R/O Watchdog Enable Register */
++#define WDT_STS_REG		0xE2	/* R/O Watchdog Status Register */
++#define WDT_TIMER_REG		0xE3	/* R/W Watchdog Timer Register */
++#define WDT_SOFT_EN		0x55	/* Enable soft watchdog timer */
++#define WDT_SOFT_DIS		0xAA	/* Disable soft watchdog timer */
++
+ #define VOLT_MONITOR_MODE	0x0
+ #define THERMAL_DIODE_MODE	0x1
+ #define THERMISTOR_MODE		0x3
+ 
+ #define ENABLE_TSI	BIT(1)
+ 
++#define WATCHDOG_TIMEOUT	1	/* 1 minute default timeout */
++
++/*The timeout range is 1-255 minutes*/
++#define MIN_TIMEOUT		(1 * 60)
++#define MAX_TIMEOUT		(255 * 60)
++
++static int timeout = WATCHDOG_TIMEOUT;
++module_param(timeout, int, 0);
++MODULE_PARM_DESC(timeout, "Watchdog timeout in minutes. 1 <= timeout <= 255, default="
++			__MODULE_STRING(WATCHODOG_TIMEOUT) ".");
++
++static bool nowayout = WATCHDOG_NOWAYOUT;
++module_param(nowayout, bool, 0);
++MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started once started (default="
++			__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
++
+ static const unsigned short normal_i2c[] = {
+ 	0x2d, 0x2e, I2C_CLIENT_END
+ };
+ 
+ struct nct7904_data {
+ 	struct i2c_client *client;
++	struct watchdog_device wdt;
+ 	struct mutex bank_lock;
+ 	int bank_sel;
+ 	u32 fanin_mask;
+@@ -889,6 +917,95 @@ static int nct7904_detect(struct i2c_client *client,
+ 	.info = nct7904_info,
+ };
+ 
++/*
++ * Watchdog Function
++ */
++static int nct7904_wdt_start(struct watchdog_device *wdt)
++{
++	struct nct7904_data *data = watchdog_get_drvdata(wdt);
++
++	/* Enable soft watchdog timer */
++	return nct7904_write_reg(data, BANK_0, WDT_LOCK_REG, WDT_SOFT_EN);
++}
++
++static int nct7904_wdt_stop(struct watchdog_device *wdt)
++{
++	struct nct7904_data *data = watchdog_get_drvdata(wdt);
++
++	return nct7904_write_reg(data, BANK_0, WDT_LOCK_REG, WDT_SOFT_DIS);
++}
++
++static int nct7904_wdt_set_timeout(struct watchdog_device *wdt,
++				   unsigned int timeout)
++{
++	struct nct7904_data *data = watchdog_get_drvdata(wdt);
++	/*
++	 * The NCT7904 is very special in watchdog function.
++	 * Its minimum unit is minutes. And wdt->timeout needs
++	 * to match the actual timeout selected. So, this needs
++	 * to be: wdt->timeout = timeout / 60 * 60.
++	 * For example, if the user configures a timeout of
++	 * 119 seconds, the actual timeout will be 60 seconds.
++	 * So, wdt->timeout must then be set to 60 seconds.
++	 */
++	wdt->timeout = timeout / 60 * 60;
++
++	return nct7904_write_reg(data, BANK_0, WDT_TIMER_REG,
++				 wdt->timeout / 60);
++}
++
++static int nct7904_wdt_ping(struct watchdog_device *wdt)
++{
++	/*
++	 * Note:
++	 * NCT7904 does not support refreshing WDT_TIMER_REG register when
++	 * the watchdog is active. Please disable watchdog before feeding
++	 * the watchdog and enable it again.
++	 */
++	struct nct7904_data *data = watchdog_get_drvdata(wdt);
++	int ret;
++
++	/* Disable soft watchdog timer */
++	ret = nct7904_write_reg(data, BANK_0, WDT_LOCK_REG, WDT_SOFT_DIS);
++	if (ret < 0)
++		return ret;
++
++	/* feed watchdog */
++	ret = nct7904_write_reg(data, BANK_0, WDT_TIMER_REG, wdt->timeout / 60);
++	if (ret < 0)
++		return ret;
++
++	/* Enable soft watchdog timer */
++	return nct7904_write_reg(data, BANK_0, WDT_TIMER_REG, WDT_SOFT_EN);
++}
++
++static unsigned int nct7904_wdt_get_timeleft(struct watchdog_device *wdt)
++{
++	struct nct7904_data *data = watchdog_get_drvdata(wdt);
++	int ret;
++
++	ret = nct7904_read_reg(data, BANK_0, WDT_TIMER_REG);
++	if (ret < 0)
++		return 0;
++
++	return ret * 60;
++}
++
++static const struct watchdog_info nct7904_wdt_info = {
++	.options	= WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING |
++				WDIOF_MAGICCLOSE,
++	.identity	= "nct7904 watchdog",
++};
++
++static const struct watchdog_ops nct7904_wdt_ops = {
++	.owner		= THIS_MODULE,
++	.start		= nct7904_wdt_start,
++	.stop		= nct7904_wdt_stop,
++	.ping		= nct7904_wdt_ping,
++	.set_timeout	= nct7904_wdt_set_timeout,
++	.get_timeleft	= nct7904_wdt_get_timeleft,
++};
++
+ static int nct7904_probe(struct i2c_client *client,
+ 			 const struct i2c_device_id *id)
+ {
+@@ -1012,7 +1129,26 @@ static int nct7904_probe(struct i2c_client *client,
+ 	hwmon_dev =
+ 		devm_hwmon_device_register_with_info(dev, client->name, data,
+ 						     &nct7904_chip_info, NULL);
+-	return PTR_ERR_OR_ZERO(hwmon_dev);
++	ret = PTR_ERR_OR_ZERO(hwmon_dev);
++	if (ret)
++		return ret;
++
++	/* Watchdog initialization */
++	data->wdt.ops = &nct7904_wdt_ops;
++	data->wdt.info = &nct7904_wdt_info;
++
++	data->wdt.timeout = timeout * 60; /* in seconds */
++	data->wdt.min_timeout = MIN_TIMEOUT;
++	data->wdt.max_timeout = MAX_TIMEOUT;
++	data->wdt.parent = &client->dev;
++
++	watchdog_init_timeout(&data->wdt, timeout * 60, &client->dev);
++	watchdog_set_nowayout(&data->wdt, nowayout);
++	watchdog_set_drvdata(&data->wdt, data);
++
++	watchdog_stop_on_unregister(&data->wdt);
++
++	return devm_watchdog_register_device(dev, &data->wdt);
+ }
+ 
+ static const struct i2c_device_id nct7904_id[] = {
+-- 
+1.8.3.1
 
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        sl28cpld@4a {
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +            compatible = "kontron,sl28cpld";
-> +            reg = <0x4a>;
-> +            interrupts-extended = <&gpio2 6 IRQ_TYPE_EDGE_FALLING>;
-> +
-> +            #interrupt-cells = <2>;
-> +            interrupt-controller;
-> +
-> +            gpio@0 {
-> +                compatible = "kontron,sl28cpld-gpio";
-> +                reg = <0>;
-> +
-> +                gpio-controller;
-> +                #gpio-cells = <2>;
-> +
-> +                interrupt-controller;
-> +                #interrupt-cells = <2>;
-> +            };
-> +
-> +            gpio@1 {
-> +                compatible = "kontron,sl28cpld-gpio";
-> +                reg = <1>;
-> +
-> +                gpio-controller;
-> +                #gpio-cells = <2>;
-> +
-> +                interrupt-controller;
-> +                #interrupt-cells = <2>;
-> +            };
-> +
-> +            gpo {
-> +                compatible = "kontron,sl28cpld-gpo";
-> +
-> +                gpio-controller;
-> +                #gpio-cells = <2>;
-> +                gpio-line-names = "a", "b", "c";
-> +            };
-> +
-> +            gpi {
-> +                compatible = "kontron,sl28cpld-gpi";
-> +
-> +                gpio-controller;
-> +                #gpio-cells = <2>;
-> +            };
-> +
-> +            hwmon {
-> +                compatible = "kontron,sl28cpld-fan";
-> +            };
-> +
-> +            pwm@0 {
-
-You already used the '0' address. You can't have 2 things at the 
-same address. There's only one number space at a given level. 
-
-All these child devices don't have any DT resources, so you don't really 
-need them. The parent node could be a gpio and pwm provider and that's 
-all you need in DT. Aside from DT resources, the only other reason 
-to have all these child nodes are if the child blocks are going to get 
-assembled in different combinations across a variety of h/w.
-
-Rob
