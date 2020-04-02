@@ -1,545 +1,242 @@
-Return-Path: <SRS0=B4Vt=5R=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=8m/r=5S=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84153C43331
-	for <linux-hwmon@archiver.kernel.org>; Wed,  1 Apr 2020 16:54:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 453ACC43331
+	for <linux-hwmon@archiver.kernel.org>; Thu,  2 Apr 2020 01:11:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0F1A7206E9
-	for <linux-hwmon@archiver.kernel.org>; Wed,  1 Apr 2020 16:54:26 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rrJPEl/P"
+	by mail.kernel.org (Postfix) with ESMTP id 1617020721
+	for <linux-hwmon@archiver.kernel.org>; Thu,  2 Apr 2020 01:11:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732974AbgDAQyZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 1 Apr 2020 12:54:25 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:35158 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387987AbgDAQyY (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 1 Apr 2020 12:54:24 -0400
-Received: by mail-pf1-f196.google.com with SMTP id a13so228866pfa.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 01 Apr 2020 09:54:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id;
-        bh=ZWA9XtWy72yOStFxF6i3KloqxD24/9884mUEPI5vYTk=;
-        b=rrJPEl/Po71XSMvloSXR7THlFeXJ2Qcc2kohXz8hCqsGp5yyojNLgfxGqs0GguZ/Yj
-         4cphWVvADDjBsmnLqUemT6opRdReMpJSxd/hJ2sKNpCFFZRM/KfdvFgsM0J+d+XDoTRb
-         E632kH4WH7+BB7Y6EIyvZjU8exOYRr4uon1Ac/JF0762Q0/oXYaGarsMFEgp5aiYflcg
-         syFoyu6EyhZLsfwCp0QO6VntIfQTUOzTQHoZK5YYz0syjc55nCeL/Tn5ge3z73VQrXJa
-         DCJagQRdt2BGb1vNRX8FH+b4rLfor0uq2Q+N6Msg03+oSaJQ5D4JVTmeDq+ibHR1jlK5
-         zgXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
-        bh=ZWA9XtWy72yOStFxF6i3KloqxD24/9884mUEPI5vYTk=;
-        b=I5zMpEhLZfqKN0NZHXpWBB0ybtMQrsFYXgV5+Haq5aP5lVmkqB1F4VTZypo504H1VI
-         TyGzOGpc7TqCQJ5WBOcgeAojaLFIQ0OHQ8+DD7C+CNUbNtJtDStk3cUHi9ibnz64PcPo
-         0eq9olT3P85zFyyTQcJKH6PdlzCTMiIe8KkyeJW3JsHJBmURujbTzTD45+qu1l1qn7Uj
-         01t5GCxQFPnUVnxu5j5w7ZNrujuoRcg/M1cUstJZVEUCzrZSEmIuV6lyN7tU0IXq6+Wa
-         rvM8U5USIK3HPCWFlN46J8RfIpNnddPEuGIbTct+gEtk8Soof5+oHF1h4D66I3BAtoHi
-         TgAQ==
-X-Gm-Message-State: ANhLgQ2ISYJ6APOT/HJz3lzf9IZgFiy0o3TuWeD88uVGDtw9SJPu1cdC
-        ld+lrV9TAENAnt8iNc+ucqzEX28S
-X-Google-Smtp-Source: ADFU+vsg1eEHf+3VrJphbaRUQqWK/IOFO9OrhmfyhxZGNjv9ftRk1scpHgAMPehp8M+l+mKj1QtmiA==
-X-Received: by 2002:aa7:9af7:: with SMTP id y23mr25509240pfp.1.1585760062615;
-        Wed, 01 Apr 2020 09:54:22 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h71sm1739903pge.32.2020.04.01.09.54.21
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 01 Apr 2020 09:54:22 -0700 (PDT)
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Grant Peltier <grantpeltier93@gmail.com>
-Subject: [PATCH] hwmon: (pmbus/isl68137) Fix up chip IDs
-Date:   Wed,  1 Apr 2020 09:54:20 -0700
-Message-Id: <20200401165420.4603-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.17.1
+        id S1732498AbgDBBL0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 1 Apr 2020 21:11:26 -0400
+Received: from mga07.intel.com ([134.134.136.100]:49080 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732435AbgDBBL0 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 1 Apr 2020 21:11:26 -0400
+IronPort-SDR: q4tFnAMM+/wlF0aquk03OWH/i+aEF19OzamVuEvIpfI9rUQYQwxgAD1DwkZ24RWCvLE2MMNZi9
+ uu66/EHWLl5Q==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2020 18:11:25 -0700
+IronPort-SDR: b1WwQDelQA1x+1ddjbo2UoHGJWg7Oz9u8gYjEpktZdDzTnm+BYRtOW7ffC43KI31qmB+XPLDo4
+ 8L5+l+TuS6Zw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,333,1580803200"; 
+   d="scan'208";a="284603692"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 01 Apr 2020 18:11:23 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1jJoOB-000IAP-4G; Thu, 02 Apr 2020 09:11:23 +0800
+Date:   Thu, 02 Apr 2020 09:10:57 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:watchdog-next] BUILD SUCCESS
+ 70dab33a3abe8e132c53f9c4f8f596aa3956bbea
+Message-ID: <5e853ba1.UklXR/mz0cPMuXZa%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-I2C chip IDs need to reflect chip names, not chip functionality.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  watchdog-next
+branch HEAD: 70dab33a3abe8e132c53f9c4f8f596aa3956bbea  watchdog: sp805: fix restart handler
 
-Fixes: f621d61fd59f ("hwmon: (pmbus) add support for 2nd Gen Renesas digital multiphase")
-Cc: Grant Peltier <grantpeltier93@gmail.com>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+elapsed time: 483m
+
+configs tested: 175
+configs skipped: 0
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+arm                              allmodconfig
+arm                               allnoconfig
+arm                              allyesconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+arm64                            allyesconfig
+arm                         at91_dt_defconfig
+arm                           efm32_defconfig
+arm                          exynos_defconfig
+arm                        multi_v5_defconfig
+arm                        multi_v7_defconfig
+arm                        shmobile_defconfig
+arm                           sunxi_defconfig
+arm64                               defconfig
+sparc                            allyesconfig
+m68k                       m5475evb_defconfig
+c6x                              allyesconfig
+powerpc                       ppc64_defconfig
+ia64                                defconfig
+powerpc                             defconfig
+i386                              allnoconfig
+i386                             alldefconfig
+i386                             allyesconfig
+i386                                defconfig
+ia64                             alldefconfig
+ia64                             allmodconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+c6x                        evmc6678_defconfig
+nios2                         10m50_defconfig
+nios2                         3c120_defconfig
+openrisc                    or1ksim_defconfig
+openrisc                 simple_smp_defconfig
+xtensa                       common_defconfig
+xtensa                          iss_defconfig
+alpha                               defconfig
+csky                                defconfig
+nds32                             allnoconfig
+nds32                               defconfig
+h8300                     edosk2674_defconfig
+h8300                    h8300h-sim_defconfig
+h8300                       h8s-sim_defconfig
+m68k                             allmodconfig
+m68k                          multi_defconfig
+m68k                           sun3_defconfig
+arc                              allyesconfig
+arc                                 defconfig
+microblaze                      mmu_defconfig
+microblaze                    nommu_defconfig
+powerpc                           allnoconfig
+powerpc                          rhel-kconfig
+mips                      fuloong2e_defconfig
+mips                      malta_kvm_defconfig
+mips                             allyesconfig
+mips                         64r6el_defconfig
+mips                              allnoconfig
+mips                           32r2_defconfig
+mips                             allmodconfig
+parisc                            allnoconfig
+parisc                generic-64bit_defconfig
+parisc                generic-32bit_defconfig
+parisc                           allyesconfig
+x86_64               randconfig-a003-20200401
+i386                 randconfig-a002-20200401
+x86_64               randconfig-a002-20200401
+x86_64               randconfig-a001-20200401
+i386                 randconfig-a003-20200401
+i386                 randconfig-a001-20200401
+alpha                randconfig-a001-20200401
+m68k                 randconfig-a001-20200401
+mips                 randconfig-a001-20200401
+nds32                randconfig-a001-20200401
+parisc               randconfig-a001-20200401
+riscv                randconfig-a001-20200401
+c6x                  randconfig-a001-20200401
+h8300                randconfig-a001-20200401
+microblaze           randconfig-a001-20200401
+nios2                randconfig-a001-20200401
+sparc64              randconfig-a001-20200401
+c6x                  randconfig-a001-20200402
+h8300                randconfig-a001-20200402
+microblaze           randconfig-a001-20200402
+nios2                randconfig-a001-20200402
+sparc64              randconfig-a001-20200402
+s390                 randconfig-a001-20200401
+xtensa               randconfig-a001-20200401
+csky                 randconfig-a001-20200401
+openrisc             randconfig-a001-20200401
+sh                   randconfig-a001-20200401
+x86_64               randconfig-b001-20200401
+x86_64               randconfig-b002-20200401
+x86_64               randconfig-b003-20200401
+i386                 randconfig-b001-20200401
+i386                 randconfig-b002-20200401
+i386                 randconfig-b003-20200401
+x86_64               randconfig-c001-20200401
+x86_64               randconfig-c002-20200401
+x86_64               randconfig-c003-20200401
+i386                 randconfig-c001-20200401
+i386                 randconfig-c002-20200401
+i386                 randconfig-c003-20200401
+x86_64               randconfig-d001-20200401
+i386                 randconfig-d003-20200401
+i386                 randconfig-d001-20200401
+x86_64               randconfig-d002-20200401
+i386                 randconfig-d002-20200401
+x86_64               randconfig-d003-20200401
+i386                 randconfig-e001-20200401
+x86_64               randconfig-e002-20200401
+i386                 randconfig-e003-20200401
+x86_64               randconfig-e001-20200401
+i386                 randconfig-e002-20200401
+x86_64               randconfig-e003-20200401
+i386                 randconfig-f001-20200401
+i386                 randconfig-f003-20200401
+x86_64               randconfig-f003-20200401
+x86_64               randconfig-f001-20200401
+i386                 randconfig-f002-20200401
+x86_64               randconfig-f002-20200401
+x86_64               randconfig-f001-20200402
+x86_64               randconfig-f002-20200402
+x86_64               randconfig-f003-20200402
+i386                 randconfig-f001-20200402
+i386                 randconfig-f002-20200402
+i386                 randconfig-f003-20200402
+x86_64               randconfig-g001-20200401
+x86_64               randconfig-g002-20200401
+x86_64               randconfig-g003-20200401
+i386                 randconfig-g001-20200401
+i386                 randconfig-g002-20200401
+i386                 randconfig-g003-20200401
+x86_64               randconfig-h001-20200401
+x86_64               randconfig-h002-20200401
+x86_64               randconfig-h003-20200401
+i386                 randconfig-h001-20200401
+i386                 randconfig-h002-20200401
+i386                 randconfig-h003-20200401
+arc                  randconfig-a001-20200401
+arm                  randconfig-a001-20200401
+arm64                randconfig-a001-20200401
+ia64                 randconfig-a001-20200401
+powerpc              randconfig-a001-20200401
+sparc                randconfig-a001-20200401
+riscv                            allmodconfig
+riscv                             allnoconfig
+riscv                            allyesconfig
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+s390                             alldefconfig
+s390                             allmodconfig
+s390                              allnoconfig
+s390                             allyesconfig
+s390                          debug_defconfig
+s390                                defconfig
+s390                       zfcpdump_defconfig
+sh                               allmodconfig
+sh                                allnoconfig
+sh                          rsk7269_defconfig
+sh                  sh7785lcr_32bit_defconfig
+sh                            titan_defconfig
+sparc                               defconfig
+sparc64                          allmodconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                             defconfig
+um                                  defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                                   rhel
+x86_64                               rhel-7.6
+x86_64                         rhel-7.2-clear
+x86_64                                    lkp
+x86_64                              fedora-25
+x86_64                                  kexec
+
 ---
- Documentation/hwmon/isl68137.rst | 76 +++++++++++++-------------
- drivers/hwmon/pmbus/isl68137.c   | 92 +++++++++++++++++++++++++++++---
- 2 files changed, 123 insertions(+), 45 deletions(-)
-
-diff --git a/Documentation/hwmon/isl68137.rst b/Documentation/hwmon/isl68137.rst
-index cc4b61447b63..0e71b22047f8 100644
---- a/Documentation/hwmon/isl68137.rst
-+++ b/Documentation/hwmon/isl68137.rst
-@@ -16,7 +16,7 @@ Supported chips:
- 
-   * Renesas ISL68220
- 
--    Prefix: 'raa_dmpvr2_2rail'
-+    Prefix: 'isl68220'
- 
-     Addresses scanned: -
- 
-@@ -26,7 +26,7 @@ Supported chips:
- 
-   * Renesas ISL68221
- 
--    Prefix: 'raa_dmpvr2_3rail'
-+    Prefix: 'isl68221'
- 
-     Addresses scanned: -
- 
-@@ -36,7 +36,7 @@ Supported chips:
- 
-   * Renesas ISL68222
- 
--    Prefix: 'raa_dmpvr2_2rail'
-+    Prefix: 'isl68222'
- 
-     Addresses scanned: -
- 
-@@ -46,7 +46,7 @@ Supported chips:
- 
-   * Renesas ISL68223
- 
--    Prefix: 'raa_dmpvr2_2rail'
-+    Prefix: 'isl68223'
- 
-     Addresses scanned: -
- 
-@@ -56,7 +56,7 @@ Supported chips:
- 
-   * Renesas ISL68224
- 
--    Prefix: 'raa_dmpvr2_3rail'
-+    Prefix: 'isl68224'
- 
-     Addresses scanned: -
- 
-@@ -66,7 +66,7 @@ Supported chips:
- 
-   * Renesas ISL68225
- 
--    Prefix: 'raa_dmpvr2_2rail'
-+    Prefix: 'isl68225'
- 
-     Addresses scanned: -
- 
-@@ -76,7 +76,7 @@ Supported chips:
- 
-   * Renesas ISL68226
- 
--    Prefix: 'raa_dmpvr2_3rail'
-+    Prefix: 'isl68226'
- 
-     Addresses scanned: -
- 
-@@ -86,7 +86,7 @@ Supported chips:
- 
-   * Renesas ISL68227
- 
--    Prefix: 'raa_dmpvr2_1rail'
-+    Prefix: 'isl68227'
- 
-     Addresses scanned: -
- 
-@@ -96,7 +96,7 @@ Supported chips:
- 
-   * Renesas ISL68229
- 
--    Prefix: 'raa_dmpvr2_3rail'
-+    Prefix: 'isl68229'
- 
-     Addresses scanned: -
- 
-@@ -106,7 +106,7 @@ Supported chips:
- 
-   * Renesas ISL68233
- 
--    Prefix: 'raa_dmpvr2_2rail'
-+    Prefix: 'isl68233'
- 
-     Addresses scanned: -
- 
-@@ -116,7 +116,7 @@ Supported chips:
- 
-   * Renesas ISL68239
- 
--    Prefix: 'raa_dmpvr2_3rail'
-+    Prefix: 'isl68239'
- 
-     Addresses scanned: -
- 
-@@ -126,7 +126,7 @@ Supported chips:
- 
-   * Renesas ISL69222
- 
--    Prefix: 'raa_dmpvr2_2rail'
-+    Prefix: 'isl69222'
- 
-     Addresses scanned: -
- 
-@@ -136,7 +136,7 @@ Supported chips:
- 
-   * Renesas ISL69223
- 
--    Prefix: 'raa_dmpvr2_3rail'
-+    Prefix: 'isl69223'
- 
-     Addresses scanned: -
- 
-@@ -146,7 +146,7 @@ Supported chips:
- 
-   * Renesas ISL69224
- 
--    Prefix: 'raa_dmpvr2_2rail'
-+    Prefix: 'isl69224'
- 
-     Addresses scanned: -
- 
-@@ -156,7 +156,7 @@ Supported chips:
- 
-   * Renesas ISL69225
- 
--    Prefix: 'raa_dmpvr2_2rail'
-+    Prefix: 'isl69225'
- 
-     Addresses scanned: -
- 
-@@ -166,7 +166,7 @@ Supported chips:
- 
-   * Renesas ISL69227
- 
--    Prefix: 'raa_dmpvr2_3rail'
-+    Prefix: 'isl69227'
- 
-     Addresses scanned: -
- 
-@@ -176,7 +176,7 @@ Supported chips:
- 
-   * Renesas ISL69228
- 
--    Prefix: 'raa_dmpvr2_3rail'
-+    Prefix: 'isl69228'
- 
-     Addresses scanned: -
- 
-@@ -186,7 +186,7 @@ Supported chips:
- 
-   * Renesas ISL69234
- 
--    Prefix: 'raa_dmpvr2_2rail'
-+    Prefix: 'isl69234'
- 
-     Addresses scanned: -
- 
-@@ -196,7 +196,7 @@ Supported chips:
- 
-   * Renesas ISL69236
- 
--    Prefix: 'raa_dmpvr2_2rail'
-+    Prefix: 'isl69236'
- 
-     Addresses scanned: -
- 
-@@ -206,7 +206,7 @@ Supported chips:
- 
-   * Renesas ISL69239
- 
--    Prefix: 'raa_dmpvr2_3rail'
-+    Prefix: 'isl69239'
- 
-     Addresses scanned: -
- 
-@@ -216,7 +216,7 @@ Supported chips:
- 
-   * Renesas ISL69242
- 
--    Prefix: 'raa_dmpvr2_2rail'
-+    Prefix: 'isl69242'
- 
-     Addresses scanned: -
- 
-@@ -226,7 +226,7 @@ Supported chips:
- 
-   * Renesas ISL69243
- 
--    Prefix: 'raa_dmpvr2_1rail'
-+    Prefix: 'isl69243'
- 
-     Addresses scanned: -
- 
-@@ -236,7 +236,7 @@ Supported chips:
- 
-   * Renesas ISL69247
- 
--    Prefix: 'raa_dmpvr2_2rail'
-+    Prefix: 'isl69247'
- 
-     Addresses scanned: -
- 
-@@ -246,7 +246,7 @@ Supported chips:
- 
-   * Renesas ISL69248
- 
--    Prefix: 'raa_dmpvr2_2rail'
-+    Prefix: 'isl69248'
- 
-     Addresses scanned: -
- 
-@@ -256,7 +256,7 @@ Supported chips:
- 
-   * Renesas ISL69254
- 
--    Prefix: 'raa_dmpvr2_2rail'
-+    Prefix: 'isl69254'
- 
-     Addresses scanned: -
- 
-@@ -266,7 +266,7 @@ Supported chips:
- 
-   * Renesas ISL69255
- 
--    Prefix: 'raa_dmpvr2_2rail'
-+    Prefix: 'isl69255'
- 
-     Addresses scanned: -
- 
-@@ -276,7 +276,7 @@ Supported chips:
- 
-   * Renesas ISL69256
- 
--    Prefix: 'raa_dmpvr2_2rail'
-+    Prefix: 'isl69256'
- 
-     Addresses scanned: -
- 
-@@ -286,7 +286,7 @@ Supported chips:
- 
-   * Renesas ISL69259
- 
--    Prefix: 'raa_dmpvr2_2rail'
-+    Prefix: 'isl69259'
- 
-     Addresses scanned: -
- 
-@@ -296,7 +296,7 @@ Supported chips:
- 
-   * Renesas ISL69260
- 
--    Prefix: 'raa_dmpvr2_2rail'
-+    Prefix: 'isl69260'
- 
-     Addresses scanned: -
- 
-@@ -306,7 +306,7 @@ Supported chips:
- 
-   * Renesas ISL69268
- 
--    Prefix: 'raa_dmpvr2_2rail'
-+    Prefix: 'isl69268'
- 
-     Addresses scanned: -
- 
-@@ -316,7 +316,7 @@ Supported chips:
- 
-   * Renesas ISL69269
- 
--    Prefix: 'raa_dmpvr2_3rail'
-+    Prefix: 'isl69269'
- 
-     Addresses scanned: -
- 
-@@ -326,7 +326,7 @@ Supported chips:
- 
-   * Renesas ISL69298
- 
--    Prefix: 'raa_dmpvr2_2rail'
-+    Prefix: 'isl69298'
- 
-     Addresses scanned: -
- 
-@@ -336,7 +336,7 @@ Supported chips:
- 
-   * Renesas RAA228000
- 
--    Prefix: 'raa_dmpvr2_hv'
-+    Prefix: 'raa228000'
- 
-     Addresses scanned: -
- 
-@@ -346,7 +346,7 @@ Supported chips:
- 
-   * Renesas RAA228004
- 
--    Prefix: 'raa_dmpvr2_hv'
-+    Prefix: 'raa228004'
- 
-     Addresses scanned: -
- 
-@@ -356,7 +356,7 @@ Supported chips:
- 
-   * Renesas RAA228006
- 
--    Prefix: 'raa_dmpvr2_hv'
-+    Prefix: 'raa228006'
- 
-     Addresses scanned: -
- 
-@@ -366,7 +366,7 @@ Supported chips:
- 
-   * Renesas RAA228228
- 
--    Prefix: 'raa_dmpvr2_2rail'
-+    Prefix: 'raa228228'
- 
-     Addresses scanned: -
- 
-@@ -376,7 +376,7 @@ Supported chips:
- 
-   * Renesas RAA229001
- 
--    Prefix: 'raa_dmpvr2_2rail'
-+    Prefix: 'raa229001'
- 
-     Addresses scanned: -
- 
-@@ -386,7 +386,7 @@ Supported chips:
- 
-   * Renesas RAA229004
- 
--    Prefix: 'raa_dmpvr2_2rail'
-+    Prefix: 'raa229004'
- 
-     Addresses scanned: -
- 
-diff --git a/drivers/hwmon/pmbus/isl68137.c b/drivers/hwmon/pmbus/isl68137.c
-index 4d2315208bb5..0c622711ef7e 100644
---- a/drivers/hwmon/pmbus/isl68137.c
-+++ b/drivers/hwmon/pmbus/isl68137.c
-@@ -21,8 +21,50 @@
- #define ISL68137_VOUT_AVS	0x30
- #define RAA_DMPVR2_READ_VMON	0xc8
- 
--enum versions {
-+enum chips {
- 	isl68137,
-+	isl68220,
-+	isl68221,
-+	isl68222,
-+	isl68223,
-+	isl68224,
-+	isl68225,
-+	isl68226,
-+	isl68227,
-+	isl68229,
-+	isl68233,
-+	isl68239,
-+	isl69222,
-+	isl69223,
-+	isl69224,
-+	isl69225,
-+	isl69227,
-+	isl69228,
-+	isl69234,
-+	isl69236,
-+	isl69239,
-+	isl69242,
-+	isl69243,
-+	isl69247,
-+	isl69248,
-+	isl69254,
-+	isl69255,
-+	isl69256,
-+	isl69259,
-+	isl69260,
-+	isl69268,
-+	isl69269,
-+	isl69298,
-+	raa228000,
-+	raa228004,
-+	raa228006,
-+	raa228228,
-+	raa229001,
-+	raa229004,
-+};
-+
-+enum variants {
-+	raa_dmpvr1_2rail,
- 	raa_dmpvr2_1rail,
- 	raa_dmpvr2_2rail,
- 	raa_dmpvr2_3rail,
-@@ -186,7 +228,7 @@ static int isl68137_probe(struct i2c_client *client,
- 	memcpy(info, &raa_dmpvr_info, sizeof(*info));
- 
- 	switch (id->driver_data) {
--	case isl68137:
-+	case raa_dmpvr1_2rail:
- 		info->pages = 2;
- 		info->R[PSC_VOLTAGE_IN] = 3;
- 		info->func[0] &= ~PMBUS_HAVE_VMON;
-@@ -224,11 +266,47 @@ static int isl68137_probe(struct i2c_client *client,
- }
- 
- static const struct i2c_device_id raa_dmpvr_id[] = {
--	{"isl68137", isl68137},
--	{"raa_dmpvr2_1rail", raa_dmpvr2_1rail},
--	{"raa_dmpvr2_2rail", raa_dmpvr2_2rail},
--	{"raa_dmpvr2_3rail", raa_dmpvr2_3rail},
--	{"raa_dmpvr2_hv", raa_dmpvr2_hv},
-+	{"isl68137", raa_dmpvr1_2rail},
-+	{"isl68220", raa_dmpvr2_2rail},
-+	{"isl68221", raa_dmpvr2_3rail},
-+	{"isl68222", raa_dmpvr2_2rail},
-+	{"isl68223", raa_dmpvr2_2rail},
-+	{"isl68224", raa_dmpvr2_3rail},
-+	{"isl68225", raa_dmpvr2_2rail},
-+	{"isl68226", raa_dmpvr2_3rail},
-+	{"isl68227", raa_dmpvr2_1rail},
-+	{"isl68229", raa_dmpvr2_3rail},
-+	{"isl68233", raa_dmpvr2_2rail},
-+	{"isl68239", raa_dmpvr2_3rail},
-+
-+	{"isl69222", raa_dmpvr2_2rail},
-+	{"isl69223", raa_dmpvr2_3rail},
-+	{"isl69224", raa_dmpvr2_2rail},
-+	{"isl69225", raa_dmpvr2_2rail},
-+	{"isl69227", raa_dmpvr2_3rail},
-+	{"isl69228", raa_dmpvr2_3rail},
-+	{"isl69234", raa_dmpvr2_2rail},
-+	{"isl69236", raa_dmpvr2_2rail},
-+	{"isl69239", raa_dmpvr2_3rail},
-+	{"isl69242", raa_dmpvr2_2rail},
-+	{"isl69243", raa_dmpvr2_1rail},
-+	{"isl69247", raa_dmpvr2_2rail},
-+	{"isl69248", raa_dmpvr2_2rail},
-+	{"isl69254", raa_dmpvr2_2rail},
-+	{"isl69255", raa_dmpvr2_2rail},
-+	{"isl69256", raa_dmpvr2_2rail},
-+	{"isl69259", raa_dmpvr2_2rail},
-+	{"isl69260", raa_dmpvr2_2rail},
-+	{"isl69268", raa_dmpvr2_2rail},
-+	{"isl69269", raa_dmpvr2_3rail},
-+	{"isl69298", raa_dmpvr2_2rail},
-+
-+	{"raa228000", raa_dmpvr2_hv},
-+	{"raa228004", raa_dmpvr2_hv},
-+	{"raa228006", raa_dmpvr2_hv},
-+	{"raa228228", raa_dmpvr2_2rail},
-+	{"raa229001", raa_dmpvr2_2rail},
-+	{"raa229004", raa_dmpvr2_2rail},
- 	{}
- };
- 
--- 
-2.17.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
