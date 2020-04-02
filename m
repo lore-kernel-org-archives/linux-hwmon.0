@@ -2,241 +2,140 @@ Return-Path: <SRS0=8m/r=5S=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 453ACC43331
-	for <linux-hwmon@archiver.kernel.org>; Thu,  2 Apr 2020 01:11:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A8C5C2D0F4
+	for <linux-hwmon@archiver.kernel.org>; Thu,  2 Apr 2020 04:02:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1617020721
-	for <linux-hwmon@archiver.kernel.org>; Thu,  2 Apr 2020 01:11:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 327DE20757
+	for <linux-hwmon@archiver.kernel.org>; Thu,  2 Apr 2020 04:02:32 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RgO2uaxF"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732498AbgDBBL0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 1 Apr 2020 21:11:26 -0400
-Received: from mga07.intel.com ([134.134.136.100]:49080 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732435AbgDBBL0 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 1 Apr 2020 21:11:26 -0400
-IronPort-SDR: q4tFnAMM+/wlF0aquk03OWH/i+aEF19OzamVuEvIpfI9rUQYQwxgAD1DwkZ24RWCvLE2MMNZi9
- uu66/EHWLl5Q==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2020 18:11:25 -0700
-IronPort-SDR: b1WwQDelQA1x+1ddjbo2UoHGJWg7Oz9u8gYjEpktZdDzTnm+BYRtOW7ffC43KI31qmB+XPLDo4
- 8L5+l+TuS6Zw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,333,1580803200"; 
-   d="scan'208";a="284603692"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 01 Apr 2020 18:11:23 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1jJoOB-000IAP-4G; Thu, 02 Apr 2020 09:11:23 +0800
-Date:   Thu, 02 Apr 2020 09:10:57 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:watchdog-next] BUILD SUCCESS
- 70dab33a3abe8e132c53f9c4f8f596aa3956bbea
-Message-ID: <5e853ba1.UklXR/mz0cPMuXZa%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1728053AbgDBECc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 2 Apr 2020 00:02:32 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:39313 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727109AbgDBECb (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 2 Apr 2020 00:02:31 -0400
+Received: by mail-qt1-f196.google.com with SMTP id f20so2225472qtq.6;
+        Wed, 01 Apr 2020 21:02:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/jw2WZ6aHnORJ8qH5PbT0GtwmWt6wJffdnj2epPitNs=;
+        b=RgO2uaxFVrmvxGIheHJFmd2euaYJzPmwzonN/sulS7pSoSDC32XNN4/VzwiXOPczrg
+         N4DBS4HIMwKOHo/iwfYgdScX7uy+2fhomXdO4l30X/PsztnSa6JxV21zWMZuQ0e+Sl9N
+         o8LjJYYb5Zu79X+0e35dqfIX0mFFZFY6rlkQ4yqbISrpXN+4z39PyJCQXPiePV8ZjJXS
+         fYfP1daGeG1hYtA6RSetq3ud5i4FYK5evGbY3VNU+Crfi/c4nbiiDCjqLA9lnvv59d5k
+         6saQEsT9ChKQZVs6RzDu7lAgSBQSH22bdWP3Yp46jQ9Pyui9u10+sX5fAFaz0a6S8D3e
+         uBEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/jw2WZ6aHnORJ8qH5PbT0GtwmWt6wJffdnj2epPitNs=;
+        b=PwUYZtartRNbSwa0unlWa6NCYhlj1jGUr2DzIM5laVknInqvYAHzpqMttMs7PfAYr5
+         Eqt+La1iE7NPSPjkhba9Uy4UasOMIJkg1BJdCDiVyTK1GwNibyzS7jFbHZLCvyMjeQZy
+         d2GHfXt7TU+dRaMoSqz4VGtjWCVk/L4M1BguNZSKyPbOAEgXHYeOtVTmCa/aMccGqcME
+         tNvi78cMJsA1PPwYvld3ATCweHnJ9GQD35WKVTCB5dU8p4sPCfXzQZv00S74iEFvdPp7
+         hOyb2n5jZ/4wg09vpdqkoHMsgwMsiAmMmKUS20hjyAz5K/bm5Iua6aOMN8Jp8TID2EST
+         DxuA==
+X-Gm-Message-State: AGi0PuatVxtp+LGZy2LXpas+3nfve2zp8zzBI4KjoZTvxk3D0BWsRJw+
+        QYNnPK4iR4UfO6KOtmKkXx3fiP6B5JabVA==
+X-Google-Smtp-Source: APiQypLHBdJLcacAP39uZyzAC5X3t9Jb0FA3mUxgEx6ZlY/YRiBYA3sNmCO3+ecWdvQsu0NGw7gpTw==
+X-Received: by 2002:ac8:358f:: with SMTP id k15mr1019998qtb.113.1585800148357;
+        Wed, 01 Apr 2020 21:02:28 -0700 (PDT)
+Received: from stingray.lan (pool-173-76-255-234.bstnma.fios.verizon.net. [173.76.255.234])
+        by smtp.gmail.com with ESMTPSA id c6sm627749qkg.88.2020.04.01.21.02.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Apr 2020 21:02:27 -0700 (PDT)
+From:   Thomas Hebb <tommyhebb@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Thomas Hebb <tommyhebb@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali.rohar@gmail.com>,
+        linux-hwmon@vger.kernel.org
+Subject: [PATCH] hwmon: (dell-smm) Use one DMI match for all XPS models
+Date:   Thu,  2 Apr 2020 00:02:21 -0400
+Message-Id: <be17c0a111983e886d871db8dc2fc8fbfe8e2da0.1585800134.git.tommyhebb@gmail.com>
+X-Mailer: git-send-email 2.25.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  watchdog-next
-branch HEAD: 70dab33a3abe8e132c53f9c4f8f596aa3956bbea  watchdog: sp805: fix restart handler
+Currently, each new XPS has to be added manually for module autoloading
+to work. Since fan multiplier autodetection should work fine on all XPS
+models, just match them all with one block like is done for Precision
+and Studio.
 
-elapsed time: 483m
+The only match we replace that doesn't already use autodetection is
+"XPS13" which, according to Google, only matches the XPS 13 9333. (All
+other XPS 13 models have "XPS" as its own word, surrounded by spaces.)
+According to the thread at [1], autodetection works for the XPS 13 9333,
+meaning this shouldn't regress it. I do not own one to confirm with,
+though.
 
-configs tested: 175
-configs skipped: 0
+Tested on an XPS 13 9350 and confirmed the module now autoloads and
+reports reasonable-looking data. I am using BIOS 1.12.2 and do not see
+any freezes when querying fan speed.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+[1] https://lore.kernel.org/patchwork/patch/525367/
 
-arm                              allmodconfig
-arm                               allnoconfig
-arm                              allyesconfig
-arm64                            allmodconfig
-arm64                             allnoconfig
-arm64                            allyesconfig
-arm                         at91_dt_defconfig
-arm                           efm32_defconfig
-arm                          exynos_defconfig
-arm                        multi_v5_defconfig
-arm                        multi_v7_defconfig
-arm                        shmobile_defconfig
-arm                           sunxi_defconfig
-arm64                               defconfig
-sparc                            allyesconfig
-m68k                       m5475evb_defconfig
-c6x                              allyesconfig
-powerpc                       ppc64_defconfig
-ia64                                defconfig
-powerpc                             defconfig
-i386                              allnoconfig
-i386                             alldefconfig
-i386                             allyesconfig
-i386                                defconfig
-ia64                             alldefconfig
-ia64                             allmodconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-c6x                        evmc6678_defconfig
-nios2                         10m50_defconfig
-nios2                         3c120_defconfig
-openrisc                    or1ksim_defconfig
-openrisc                 simple_smp_defconfig
-xtensa                       common_defconfig
-xtensa                          iss_defconfig
-alpha                               defconfig
-csky                                defconfig
-nds32                             allnoconfig
-nds32                               defconfig
-h8300                     edosk2674_defconfig
-h8300                    h8300h-sim_defconfig
-h8300                       h8s-sim_defconfig
-m68k                             allmodconfig
-m68k                          multi_defconfig
-m68k                           sun3_defconfig
-arc                              allyesconfig
-arc                                 defconfig
-microblaze                      mmu_defconfig
-microblaze                    nommu_defconfig
-powerpc                           allnoconfig
-powerpc                          rhel-kconfig
-mips                      fuloong2e_defconfig
-mips                      malta_kvm_defconfig
-mips                             allyesconfig
-mips                         64r6el_defconfig
-mips                              allnoconfig
-mips                           32r2_defconfig
-mips                             allmodconfig
-parisc                            allnoconfig
-parisc                generic-64bit_defconfig
-parisc                generic-32bit_defconfig
-parisc                           allyesconfig
-x86_64               randconfig-a003-20200401
-i386                 randconfig-a002-20200401
-x86_64               randconfig-a002-20200401
-x86_64               randconfig-a001-20200401
-i386                 randconfig-a003-20200401
-i386                 randconfig-a001-20200401
-alpha                randconfig-a001-20200401
-m68k                 randconfig-a001-20200401
-mips                 randconfig-a001-20200401
-nds32                randconfig-a001-20200401
-parisc               randconfig-a001-20200401
-riscv                randconfig-a001-20200401
-c6x                  randconfig-a001-20200401
-h8300                randconfig-a001-20200401
-microblaze           randconfig-a001-20200401
-nios2                randconfig-a001-20200401
-sparc64              randconfig-a001-20200401
-c6x                  randconfig-a001-20200402
-h8300                randconfig-a001-20200402
-microblaze           randconfig-a001-20200402
-nios2                randconfig-a001-20200402
-sparc64              randconfig-a001-20200402
-s390                 randconfig-a001-20200401
-xtensa               randconfig-a001-20200401
-csky                 randconfig-a001-20200401
-openrisc             randconfig-a001-20200401
-sh                   randconfig-a001-20200401
-x86_64               randconfig-b001-20200401
-x86_64               randconfig-b002-20200401
-x86_64               randconfig-b003-20200401
-i386                 randconfig-b001-20200401
-i386                 randconfig-b002-20200401
-i386                 randconfig-b003-20200401
-x86_64               randconfig-c001-20200401
-x86_64               randconfig-c002-20200401
-x86_64               randconfig-c003-20200401
-i386                 randconfig-c001-20200401
-i386                 randconfig-c002-20200401
-i386                 randconfig-c003-20200401
-x86_64               randconfig-d001-20200401
-i386                 randconfig-d003-20200401
-i386                 randconfig-d001-20200401
-x86_64               randconfig-d002-20200401
-i386                 randconfig-d002-20200401
-x86_64               randconfig-d003-20200401
-i386                 randconfig-e001-20200401
-x86_64               randconfig-e002-20200401
-i386                 randconfig-e003-20200401
-x86_64               randconfig-e001-20200401
-i386                 randconfig-e002-20200401
-x86_64               randconfig-e003-20200401
-i386                 randconfig-f001-20200401
-i386                 randconfig-f003-20200401
-x86_64               randconfig-f003-20200401
-x86_64               randconfig-f001-20200401
-i386                 randconfig-f002-20200401
-x86_64               randconfig-f002-20200401
-x86_64               randconfig-f001-20200402
-x86_64               randconfig-f002-20200402
-x86_64               randconfig-f003-20200402
-i386                 randconfig-f001-20200402
-i386                 randconfig-f002-20200402
-i386                 randconfig-f003-20200402
-x86_64               randconfig-g001-20200401
-x86_64               randconfig-g002-20200401
-x86_64               randconfig-g003-20200401
-i386                 randconfig-g001-20200401
-i386                 randconfig-g002-20200401
-i386                 randconfig-g003-20200401
-x86_64               randconfig-h001-20200401
-x86_64               randconfig-h002-20200401
-x86_64               randconfig-h003-20200401
-i386                 randconfig-h001-20200401
-i386                 randconfig-h002-20200401
-i386                 randconfig-h003-20200401
-arc                  randconfig-a001-20200401
-arm                  randconfig-a001-20200401
-arm64                randconfig-a001-20200401
-ia64                 randconfig-a001-20200401
-powerpc              randconfig-a001-20200401
-sparc                randconfig-a001-20200401
-riscv                            allmodconfig
-riscv                             allnoconfig
-riscv                            allyesconfig
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-s390                             alldefconfig
-s390                             allmodconfig
-s390                              allnoconfig
-s390                             allyesconfig
-s390                          debug_defconfig
-s390                                defconfig
-s390                       zfcpdump_defconfig
-sh                               allmodconfig
-sh                                allnoconfig
-sh                          rsk7269_defconfig
-sh                  sh7785lcr_32bit_defconfig
-sh                            titan_defconfig
-sparc                               defconfig
-sparc64                          allmodconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-sparc64                             defconfig
-um                                  defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                                   rhel
-x86_64                               rhel-7.6
-x86_64                         rhel-7.2-clear
-x86_64                                    lkp
-x86_64                              fedora-25
-x86_64                                  kexec
-
+Signed-off-by: Thomas Hebb <tommyhebb@gmail.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+ drivers/hwmon/dell-smm-hwmon.c | 19 ++-----------------
+ 1 file changed, 2 insertions(+), 17 deletions(-)
+
+diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+index d4c83009d625..c1af4c801dd8 100644
+--- a/drivers/hwmon/dell-smm-hwmon.c
++++ b/drivers/hwmon/dell-smm-hwmon.c
+@@ -1087,14 +1087,6 @@ static const struct dmi_system_id i8k_dmi_table[] __initconst = {
+ 		},
+ 		.driver_data = (void *)&i8k_config_data[DELL_STUDIO],
+ 	},
+-	{
+-		.ident = "Dell XPS 13",
+-		.matches = {
+-			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
+-			DMI_MATCH(DMI_PRODUCT_NAME, "XPS13"),
+-		},
+-		.driver_data = (void *)&i8k_config_data[DELL_XPS],
+-	},
+ 	{
+ 		.ident = "Dell XPS M140",
+ 		.matches = {
+@@ -1104,17 +1096,10 @@ static const struct dmi_system_id i8k_dmi_table[] __initconst = {
+ 		.driver_data = (void *)&i8k_config_data[DELL_XPS],
+ 	},
+ 	{
+-		.ident = "Dell XPS 15 9560",
+-		.matches = {
+-			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
+-			DMI_MATCH(DMI_PRODUCT_NAME, "XPS 15 9560"),
+-		},
+-	},
+-	{
+-		.ident = "Dell XPS 15 9570",
++		.ident = "Dell XPS",
+ 		.matches = {
+ 			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
+-			DMI_MATCH(DMI_PRODUCT_NAME, "XPS 15 9570"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "XPS"),
+ 		},
+ 	},
+ 	{ }
+-- 
+2.25.2
+
