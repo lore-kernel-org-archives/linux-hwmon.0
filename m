@@ -1,443 +1,614 @@
-Return-Path: <SRS0=cvjA=5V=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=rtMO=5W=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B6DDC2BA15
-	for <linux-hwmon@archiver.kernel.org>; Sun,  5 Apr 2020 16:27:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1EF8C2BA18
+	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Apr 2020 07:48:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 16543206B8
-	for <linux-hwmon@archiver.kernel.org>; Sun,  5 Apr 2020 16:27:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6F714206F5
+	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Apr 2020 07:48:07 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AH0fj9TS"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="TGEztmhV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727441AbgDEQ1m (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 5 Apr 2020 12:27:42 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:37747 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727018AbgDEQ1m (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 5 Apr 2020 12:27:42 -0400
-Received: by mail-pl1-f195.google.com with SMTP id x1so4925483plm.4;
-        Sun, 05 Apr 2020 09:27:41 -0700 (PDT)
+        id S1726475AbgDFHsH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 6 Apr 2020 03:48:07 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:41969 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726536AbgDFHsH (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 6 Apr 2020 03:48:07 -0400
+Received: by mail-qt1-f193.google.com with SMTP id i3so12083018qtv.8
+        for <linux-hwmon@vger.kernel.org>; Mon, 06 Apr 2020 00:48:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=bJ/LcOSIlYiaLe2lBWuO3tI66lhILiB6h5yZlYKXPHI=;
-        b=AH0fj9TSSbTaMy2uQaKS113BKu2jo+djlzk8QUJ8GIQzO7A6eAbFE7mfgPqc0Ii1sj
-         wTeIzsCEMFETu2MkHeOwJIKIS2StfUvrxoR4OZaE8DHKIprKblDseq/vbdEzsPIdMh+G
-         KtstcxmhyOEWu/Badqwu2ek+kv/ALHsY4drtpCFw0X0JAF10+Yx6Jyccziv5MSVASETy
-         aBuiExokVTycIW+PkI3R+oLYFOqKef47/OLXnYjzug4R12rE1PeuGA20QyuJ2YN/z/Jf
-         iWU8z/QurfW3uo+vlg+g2JaHXw2p+5W3TzYs+l/tolNpTddQe8Ej9wAEjIjwnGPIMUsJ
-         IBLQ==
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=amAF0/6ZAlncZUHeVlhe3w2Ki3z4fhffTcU8qEplQgI=;
+        b=TGEztmhV4iB7KyI5BPf8WoTfqW3RCZUlDikAjrf1SR+nN1ZsXwXw2LRG86FQfm7Vmk
+         yf7DjN8owLtSCpXTYmdNKugl6ddHr5UviVK0DWckTC+8BSgi4oKm2WkuR1cOfxw1ejTk
+         b0sfFieGzMsxgNCHBn7I9YXMZL/47t1Rr/Wh6WRw/08nhG+/naUtTien/aMtfPkJvEp2
+         +JSy8a8tR3cOr7obFkgvuGtURmTRVYq++sadK9pcZtZVhgd3ah+/FCTiT6bOhVdZ9R7T
+         sJOW+IFFQBDi9XJCU/Wf11AQfeluJniuWM0IZhDfPafDVPHlY5jdVrW1kFw060cL6RgB
+         EjRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=bJ/LcOSIlYiaLe2lBWuO3tI66lhILiB6h5yZlYKXPHI=;
-        b=dfWbh/HoP7VYcR3olELO5ueYd9iIwwOww+ESvOicFDZ/RPXaT9iFYh6V/OWyoArxai
-         1L3XlNyIz4PBIdPfXpR1mzVboDxwP88i2hMKNttq22QGu+Xu8GP1ClLlB2V3fiH/MtDd
-         ATjDYZ5Igh7pHuo633VwFn6N/gMIwEvlJAjkwSHzQy387VHNPj4rtsiLI4ZEEl6CkjhL
-         aF3dfnt+eYQ304ootfdvcxHhhTGz7fg+U2lDeNW83JBc73hPBhw3qhHFLpReEeIt+9bl
-         hoFUz0NXWj5i7QSgOJtjrWwXHitb7mNjTBu/ShEjT7QS00yUDPouj4JiTZPUvZ0e+XYw
-         R+ZA==
-X-Gm-Message-State: AGi0PuZWstYX7zEk3Hefa8c8DpjZ0UJ+r7QJIkWpObd4aesWvuR5K8U9
-        F66iTpxcMNmtNjIlLbED/uE=
-X-Google-Smtp-Source: APiQypJYKKjonvi129GAuEokj1MBJcWucjt1DpxCmGL97+oXqjf4mlzEFgdTfgrMXHiwofkzx3I9rg==
-X-Received: by 2002:a17:90a:a00c:: with SMTP id q12mr21198502pjp.7.1586104060576;
-        Sun, 05 Apr 2020 09:27:40 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u13sm9005251pgp.49.2020.04.05.09.27.39
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 05 Apr 2020 09:27:39 -0700 (PDT)
-Date:   Sun, 5 Apr 2020 09:27:38 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Kun Yi <kunyi@google.com>
-Cc:     jdelvare@suse.com, robh+dt@kernel.org, mark.rutland@arm.com,
-        openbmc@lists.ozlabs.org, joel@jms.id.au,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH linux hwmon-next v3 1/3] hwmon: (sbtsi) Add basic support
- for SB-TSI sensors
-Message-ID: <20200405162738.GA161211@roeck-us.net>
-References: <20200405030118.191950-1-kunyi@google.com>
- <20200405030118.191950-2-kunyi@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=amAF0/6ZAlncZUHeVlhe3w2Ki3z4fhffTcU8qEplQgI=;
+        b=G2qFKcAPpmUhMWAAXcNV/vDhHRenxcEknjf+6VtbUw9g2B++LUbDzvbizp9C0MhAQN
+         AFw+7TC4S87fgtiEJJ1gBl5D7j/M5bWibFvfeS7tPDAgbdxvDxFz1Vq1U1gyn2NhuSVb
+         1u7tcuvujuT/Ksn/FAgd3w9wtyOO7vZDxJy+7HajdmUbFRW9hhB37Vp+ya+gzsphM3/6
+         VNVWxv2faT6n0X+o68bHrq0UDUZhGZZPYf3qC/LrBlN2lOcBqZkt9LNZ8I3VA5Sqeg4U
+         d+VvSv4nPFacJ/sLtXJfJ2UVI4Sxc+l3P3EZa++BloqWC+L6gjZiGYj1Xv6SjdW4qiQP
+         PUrg==
+X-Gm-Message-State: AGi0PubybW0Ui2HJ6+sRW4Xv98uPhTGGxalluZkllTTfLvQ2csfaM+t+
+        JphxwXQH3FHDGt3ZzuIVAifuyYIA3g9A2hAATGmatg==
+X-Google-Smtp-Source: APiQypIZh9O39IoVlyPxAsvhWgOsBERW3TzNwd/djolltb8HgtlAHalS0On8dowlQ6zkrSLVBqEdY6ashXn19IuDVN0=
+X-Received: by 2002:ac8:5318:: with SMTP id t24mr3914516qtn.208.1586159284935;
+ Mon, 06 Apr 2020 00:48:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200405030118.191950-2-kunyi@google.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20200402203656.27047-1-michael@walle.cc> <20200402203656.27047-11-michael@walle.cc>
+In-Reply-To: <20200402203656.27047-11-michael@walle.cc>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Mon, 6 Apr 2020 09:47:54 +0200
+Message-ID: <CAMpxmJVE3PgVCxkQ-ryc5=KSrKcpdmk1cnJUxJBz9QFCx-e_+A@mail.gmail.com>
+Subject: Re: [PATCH v2 10/16] gpio: add a reusable generic gpio_chip using regmap
+To:     Michael Walle <michael@walle.cc>
+Cc:     linux-gpio <linux-gpio@vger.kernel.org>,
+        linux-devicetree <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Apr 04, 2020 at 08:01:16PM -0700, Kun Yi wrote:
-> SB Temperature Sensor Interface (SB-TSI) is an SMBus compatible
-> interface that reports AMD SoC's Ttcl (normalized temperature),
-> and resembles a typical 8-pin remote temperature sensor's I2C interface
-> to BMC.
-> 
-> This commit adds basic support using this interface to read CPU
-> temperature, and read/write high/low CPU temp thresholds.
-> 
-> To instantiate this driver on an AMD CPU with SB-TSI
-> support, the i2c bus number would be the bus connected from the board
-> management controller (BMC) to the CPU. The i2c address is specified in
-> Section 6.3.1 of the spec [1]: The SB-TSI address is normally 98h for socket 0
-> and 90h for socket 1, but it could vary based on hardware address select pins.
-> 
-> [1]: https://www.amd.com/system/files/TechDocs/56255_OSRR.pdf
-> 
-> Test status: tested reading temp1_input, and reading/writing
-> temp1_max/min.
-> 
-> Signed-off-by: Kun Yi <kunyi@google.com>
+czw., 2 kwi 2020 o 22:37 Michael Walle <michael@walle.cc> napisa=C5=82(a):
+>
+> There are quite a lot simple GPIO controller which are using regmap to
+> access the hardware. This driver tries to be a base to unify existing
+> code into one place. This won't cover everything but it should be a good
+> starting point.
+>
+> It does not implement its own irq_chip because there is already a
+> generic one for regmap based devices. Instead, the irq_chip will be
+> instanciated in the parent driver and its irq domain will be associate
+> to this driver.
+>
+> For now it consists of the usual registers, like set (and an optional
+> clear) data register, an input register and direction registers.
+> Out-of-the-box, it supports consecutive register mappings and mappings
+> where the registers have gaps between them with a linear mapping between
+> GPIO offset and bit position. For weirder mappings the user can register
+> its own .xlate().
+>
+> Signed-off-by: Michael Walle <michael@walle.cc>
+
+Hi Michael,
+
+Thanks for doing this! When looking at other generic drivers:
+gpio-mmio and gpio-reg I can see there are some corner-cases and more
+specific configuration options we could add but it's not a blocker,
+we'll probably be extending this one as we convert more drivers to
+using it. Personally I'd love to see gpio-mmio and gpio-reg removed
+and replaced by a single, generic regmap interface eventually.
+
 > ---
->  drivers/hwmon/Kconfig      |  10 ++
->  drivers/hwmon/Makefile     |   1 +
->  drivers/hwmon/sbtsi_temp.c | 259 +++++++++++++++++++++++++++++++++++++
->  3 files changed, 270 insertions(+)
->  create mode 100644 drivers/hwmon/sbtsi_temp.c
-> 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 05a30832c6ba..9585dcd01d1b 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1412,6 +1412,16 @@ config SENSORS_RASPBERRYPI_HWMON
->  	  This driver can also be built as a module. If so, the module
->  	  will be called raspberrypi-hwmon.
->  
-> +config SENSORS_SBTSI
-> +	tristate "Emulated SB-TSI temperature sensor"
-> +	depends on I2C
-> +	help
-> +	  If you say yes here you get support for emulated temperature
-> +	  sensors on AMD SoCs with SB-TSI interface connected to a BMC device.
+>  drivers/gpio/Kconfig        |   4 +
+>  drivers/gpio/Makefile       |   1 +
+>  drivers/gpio/gpio-regmap.c  | 320 ++++++++++++++++++++++++++++++++++++
+>  include/linux/gpio-regmap.h |  88 ++++++++++
+>  4 files changed, 413 insertions(+)
+>  create mode 100644 drivers/gpio/gpio-regmap.c
+>  create mode 100644 include/linux/gpio-regmap.h
+>
+> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+> index 1b96169d84f7..a8e148f4b2e0 100644
+> --- a/drivers/gpio/Kconfig
+> +++ b/drivers/gpio/Kconfig
+> @@ -73,6 +73,10 @@ config GPIO_GENERIC
+>         depends on HAS_IOMEM # Only for IOMEM drivers
+>         tristate
+>
+> +config GPIO_REGMAP
+> +       depends on REGMAP
+> +       tristate
 > +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called sbtsi_temp.
-> +
->  config SENSORS_SHT15
->  	tristate "Sensiron humidity and temperature sensors. SHT15 and compat."
->  	depends on GPIOLIB || COMPILE_TEST
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index b0b9c8e57176..cd109f003ce4 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -152,6 +152,7 @@ obj-$(CONFIG_SENSORS_POWR1220)  += powr1220.o
->  obj-$(CONFIG_SENSORS_PWM_FAN)	+= pwm-fan.o
->  obj-$(CONFIG_SENSORS_RASPBERRYPI_HWMON)	+= raspberrypi-hwmon.o
->  obj-$(CONFIG_SENSORS_S3C)	+= s3c-hwmon.o
-> +obj-$(CONFIG_SENSORS_SBTSI)	+= sbtsi_temp.o
->  obj-$(CONFIG_SENSORS_SCH56XX_COMMON)+= sch56xx-common.o
->  obj-$(CONFIG_SENSORS_SCH5627)	+= sch5627.o
->  obj-$(CONFIG_SENSORS_SCH5636)	+= sch5636.o
-> diff --git a/drivers/hwmon/sbtsi_temp.c b/drivers/hwmon/sbtsi_temp.c
+>  # put drivers in the right section, in alphabetical order
+>
+>  # This symbol is selected by both I2C and SPI expanders
+> diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
+> index b2cfc21a97f3..93e139fdfa57 100644
+> --- a/drivers/gpio/Makefile
+> +++ b/drivers/gpio/Makefile
+> @@ -12,6 +12,7 @@ obj-$(CONFIG_GPIO_SYSFS)      +=3D gpiolib-sysfs.o
+>  obj-$(CONFIG_GPIO_ACPI)                +=3D gpiolib-acpi.o
+>
+>  # Device drivers. Generally keep list sorted alphabetically
+> +obj-$(CONFIG_GPIO_REGMAP)      +=3D gpio-regmap.o
+>  obj-$(CONFIG_GPIO_GENERIC)     +=3D gpio-generic.o
+>
+>  # directly supported by gpio-generic
+> diff --git a/drivers/gpio/gpio-regmap.c b/drivers/gpio/gpio-regmap.c
 > new file mode 100644
-> index 000000000000..e3ad6a9f7ec1
+> index 000000000000..cc4437dc0521
 > --- /dev/null
-> +++ b/drivers/hwmon/sbtsi_temp.c
-> @@ -0,0 +1,259 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +++ b/drivers/gpio/gpio-regmap.c
+> @@ -0,0 +1,320 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
 > +/*
-> + * sbtsi_temp.c - hwmon driver for a SBI Temperature Sensor Interface (SB-TSI)
-> + *                compliant AMD SoC temperature device.
+> + * regmap based generic GPIO driver
 > + *
-> + * Copyright (c) 2020, Google Inc.
-> + * Copyright (c) 2020, Kun Yi <kunyi@google.com>
+> + * Copyright 2019 Michael Walle <michael@walle.cc>
 > + */
 > +
-> +#include <linux/err.h>
-> +#include <linux/i2c.h>
-> +#include <linux/init.h>
-> +#include <linux/hwmon.h>
+> +#include <linux/gpio/driver.h>
+> +#include <linux/gpio-regmap.h>
+> +#include <linux/kernel.h>
 > +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/of_device.h>
-> +#include <linux/of.h>
+> +#include <linux/regmap.h>
 > +
-> +/*
-> + * SB-TSI registers only support SMBus byte data access. "_INT" registers are
-> + * the integer part of a temperature value or limit, and "_DEC" registers are
-> + * corresponding decimal parts.
-> + */
-> +#define SBTSI_REG_TEMP_INT		0x01 /* RO */
-> +#define SBTSI_REG_STATUS		0x02 /* RO */
-> +#define SBTSI_REG_CONFIG		0x03 /* RO */
-> +#define SBTSI_REG_TEMP_HIGH_INT		0x07 /* RW */
-> +#define SBTSI_REG_TEMP_LOW_INT		0x08 /* RW */
-> +#define SBTSI_REG_TEMP_DEC		0x10 /* RW */
-> +#define SBTSI_REG_TEMP_HIGH_DEC		0x13 /* RW */
-> +#define SBTSI_REG_TEMP_LOW_DEC		0x14 /* RW */
-> +#define SBTSI_REG_REV			0xFF /* RO */
-
-The revision register is not actually used. 
-
-> +
-> +#define SBTSI_CONFIG_READ_ORDER_SHIFT	5
-> +
-> +#define SBTSI_TEMP_MIN	0
-> +#define SBTSI_TEMP_MAX	255875
-> +#define SBTSI_REV_MAX_VALID_ID	4
-
-Not actually used, and I am not sure if it would make sense to check it.
-If at all, it would only make sense if you also check SBTSIxFE (Manufacture
-ID). Unfortunately, the actual SB-TSI specification seems to be non-public,
-so I can't check if the driver as-is supports versions 0..3 (assuming those
-exist).
-
-> +
-> +/* Each client has this additional data */
-> +struct sbtsi_data {
-> +	struct i2c_client *client;
-> +	struct mutex lock;
+> +struct gpio_regmap_data {
+> +       struct gpio_chip gpio_chip;
+> +       struct gpio_regmap *gpio;
 > +};
 > +
-> +/*
-> + * From SB-TSI spec: CPU temperature readings and limit registers encode the
-> + * temperature in increments of 0.125 from 0 to 255.875. The "high byte"
-> + * register encodes the base-2 of the integer portion, and the upper 3 bits of
-> + * the "low byte" encode in base-2 the decimal portion.
+> +/**
+> + * gpio_regmap_simple_xlate() - translate base/offset to reg/mask
 > + *
-> + * e.g. INT=0x19, DEC=0x20 represents 25.125 degrees Celsius
+> + * Use a simple linear mapping to translate the offset to the bitmask.
+> + */
+> +int gpio_regmap_simple_xlate(struct gpio_regmap *gpio, unsigned int base=
+,
+> +                            unsigned int offset,
+> +                            unsigned int *reg, unsigned int *mask)
+> +{
+> +       unsigned int line =3D offset % gpio->ngpio_per_reg;
+> +       unsigned int stride =3D offset / gpio->ngpio_per_reg;
+> +
+> +       *reg =3D base + stride * gpio->reg_stride;
+> +       *mask =3D BIT(line);
+> +
+> +       return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(gpio_regmap_simple_xlate);
+
+Why does this need to be exported?
+
+> +
+> +static int gpio_regmap_get(struct gpio_chip *chip, unsigned int offset)
+> +{
+> +       struct gpio_regmap_data *data =3D gpiochip_get_data(chip);
+> +       struct gpio_regmap *gpio =3D data->gpio;
+> +       unsigned int base;
+> +       unsigned int val, reg, mask;
+
+This can fit on a single line with base. Same elsewhere.
+
+> +       int ret;
+> +
+> +       /* we might not have an output register if we are input only */
+> +       if (gpio->reg_dat_base.valid)
+> +               base =3D gpio->reg_dat_base.addr;
+> +       else
+> +               base =3D gpio->reg_set_base.addr;
+> +
+> +       ret =3D gpio->reg_mask_xlate(gpio, base, offset, &reg, &mask);
+> +       if (ret)
+> +               return ret;
+> +
+> +       ret =3D regmap_read(gpio->regmap, reg, &val);
+> +       if (ret)
+> +               return ret;
+> +
+> +       return (val & mask) ? 1 : 0;
+> +}
+> +
+> +static void gpio_regmap_set(struct gpio_chip *chip, unsigned int offset,
+> +                           int val)
+> +{
+> +       struct gpio_regmap_data *data =3D gpiochip_get_data(chip);
+> +       struct gpio_regmap *gpio =3D data->gpio;
+> +       unsigned int base =3D gpio->reg_set_base.addr;
+> +       unsigned int reg, mask;
+> +
+> +       gpio->reg_mask_xlate(gpio, base, offset, &reg, &mask);
+> +       if (val)
+> +               regmap_update_bits(gpio->regmap, reg, mask, mask);
+> +       else
+> +               regmap_update_bits(gpio->regmap, reg, mask, 0);
+> +}
+> +
+> +static void gpio_regmap_set_with_clear(struct gpio_chip *chip,
+> +                                      unsigned int offset, int val)
+> +{
+> +       struct gpio_regmap_data *data =3D gpiochip_get_data(chip);
+> +       struct gpio_regmap *gpio =3D data->gpio;
+> +       unsigned int base;
+> +       unsigned int reg, mask;
+> +
+> +       if (val)
+> +               base =3D gpio->reg_set_base.addr;
+> +       else
+> +               base =3D gpio->reg_clr_base.addr;
+> +
+> +       gpio->reg_mask_xlate(gpio, base, offset, &reg, &mask);
+> +       regmap_write(gpio->regmap, reg, mask);
+> +}
+> +
+> +static int gpio_regmap_get_direction(struct gpio_chip *chip,
+> +                                    unsigned int offset)
+> +{
+> +       struct gpio_regmap_data *data =3D gpiochip_get_data(chip);
+> +       struct gpio_regmap *gpio =3D data->gpio;
+> +       unsigned int val, reg, mask;
+> +       unsigned int base;
+> +       int invert;
+> +       int ret;
+> +
+> +       if (gpio->reg_dir_out_base.valid) {
+> +               base =3D gpio->reg_dir_out_base.addr;
+> +               invert =3D 0;
+> +       } else if (gpio->reg_dir_in_base.valid) {
+> +               base =3D gpio->reg_dir_in_base.addr;
+> +               invert =3D 1;
+> +       } else {
+> +               return GPIO_LINE_DIRECTION_IN;
+> +       }
+> +
+> +       ret =3D gpio->reg_mask_xlate(gpio, base, offset, &reg, &mask);
+> +       if (ret)
+> +               return ret;
+> +
+> +       ret =3D regmap_read(gpio->regmap, reg, &val);
+> +       if (ret)
+> +               return ret;
+> +
+> +       if (!!(val & mask) ^ invert)
+> +               return GPIO_LINE_DIRECTION_OUT;
+> +       else
+> +               return GPIO_LINE_DIRECTION_IN;
+> +}
+> +
+> +static int gpio_regmap_set_direction(struct gpio_chip *chip,
+> +                                    unsigned int offset, bool output)
+> +{
+> +       struct gpio_regmap_data *data =3D gpiochip_get_data(chip);
+> +       struct gpio_regmap *gpio =3D data->gpio;
+> +       unsigned int val, reg, mask;
+> +       unsigned int base;
+> +       int invert;
+> +       int ret;
+> +
+> +       if (gpio->reg_dir_out_base.valid) {
+> +               base =3D gpio->reg_dir_out_base.addr;
+> +               invert =3D 0;
+> +       } else if (gpio->reg_dir_in_base.valid) {
+> +               base =3D gpio->reg_dir_in_base.addr;
+> +               invert =3D 1;
+> +       } else {
+> +               return 0;
+> +       }
+> +
+> +       ret =3D gpio->reg_mask_xlate(gpio, base, offset, &reg, &mask);
+> +       if (ret)
+> +               return ret;
+> +
+> +       if (!invert)
+> +               val =3D (output) ? mask : 0;
+> +       else
+> +               val =3D (output) ? 0 : mask;
+> +
+> +       return regmap_update_bits(gpio->regmap, reg, mask, val);
+> +}
+> +
+> +static int gpio_regmap_direction_input(struct gpio_chip *chip,
+> +                                      unsigned int offset)
+> +{
+> +       return gpio_regmap_set_direction(chip, offset, false);
+> +}
+> +
+> +static int gpio_regmap_direction_output(struct gpio_chip *chip,
+> +                                       unsigned int offset, int value)
+> +{
+> +       gpio_regmap_set(chip, offset, value);
+> +       return gpio_regmap_set_direction(chip, offset, true);
+> +}
+> +
+> +static int gpio_regmap_to_irq(struct gpio_chip *chip, unsigned int offse=
+t)
+> +{
+> +       struct gpio_regmap_data *data =3D gpiochip_get_data(chip);
+> +       struct gpio_regmap *gpio =3D data->gpio;
+> +
+> +       /* the user might have its own .to_irq callback */
+> +       if (gpio->to_irq)
+> +               return gpio->to_irq(gpio, offset);
+> +
+> +       return irq_create_mapping(gpio->irq_domain, offset);
+> +}
+> +
+> +/**
+> + * gpio_regmap_register() - Register a generic regmap GPIO controller
 > + *
-> + * Therefore temperature in millidegree Celsius =
-> + *   (INT + DEC / 256) * 1000 = (INT * 8 + DEC / 32) * 125
+> + * @gpio: gpio_regmap device to register
+> + *
+> + * Returns 0 on success or an errno on failure.
 > + */
-> +static inline int sbtsi_reg_to_mc(s32 integer, s32 decimal)
+> +int gpio_regmap_register(struct gpio_regmap *gpio)
 > +{
-> +	return ((integer << 3) + (decimal >> 5)) * 125;
-> +}
+> +       struct gpio_regmap_data *d;
+> +       struct gpio_chip *chip;
+> +       int ret;
 > +
-> +/*
-> + * Inversely, given temperature in millidegree Celsius
-> + *   INT = (TEMP / 125) / 8
-> + *   DEC = ((TEMP / 125) % 8) * 32
-> + * Caller have to make sure temp doesn't exceed 255875, the max valid value.
+> +       if (!gpio->parent)
+> +               return -EINVAL;
+> +
+> +       if (!gpio->ngpio)
+> +               return -EINVAL;
+> +
+> +       /* we need at least one */
+> +       if (!gpio->reg_dat_base.valid && !gpio->reg_set_base.valid)
+> +               return -EINVAL;
+> +
+> +       /* we don't support having both registers simulaniously for now *=
+/
+> +       if (gpio->reg_dir_out_base.valid && gpio->reg_dir_in_base.valid)
+> +               return -EINVAL;
+> +
+> +       /* if not set, assume they are consecutive */
+> +       if (!gpio->reg_stride)
+> +               gpio->reg_stride =3D 1;
+> +
+> +       /* if not set, assume there is only one register */
+> +       if (!gpio->ngpio_per_reg)
+> +               gpio->ngpio_per_reg =3D gpio->ngpio;
+> +
+> +       if (!gpio->reg_mask_xlate)
+> +               gpio->reg_mask_xlate =3D gpio_regmap_simple_xlate;
+> +
+> +       d =3D kzalloc(sizeof(*d), GFP_KERNEL);
+> +       if (!d)
+> +               return -ENOMEM;
+> +
+> +       gpio->data =3D d;
+> +       d->gpio =3D gpio;
+> +
+> +       chip =3D &d->gpio_chip;
+> +       chip->parent =3D gpio->parent;
+> +       chip->label =3D gpio->label;
+> +       chip->base =3D -1;
+> +       chip->ngpio =3D gpio->ngpio;
+> +       chip->can_sleep =3D true;
+> +       chip->get =3D gpio_regmap_get;
+> +
+> +       if (!chip->label)
+> +               chip->label =3D dev_name(gpio->parent);
+> +
+> +       if (gpio->reg_set_base.valid && gpio->reg_clr_base.valid)
+> +               chip->set =3D gpio_regmap_set_with_clear;
+> +       else if (gpio->reg_set_base.valid)
+> +               chip->set =3D gpio_regmap_set;
+> +
+> +       if (gpio->reg_dir_in_base.valid || gpio->reg_dir_out_base.valid) =
+{
+> +               chip->get_direction =3D gpio_regmap_get_direction;
+> +               chip->direction_input =3D gpio_regmap_direction_input;
+> +               chip->direction_output =3D gpio_regmap_direction_output;
+> +       }
+> +
+> +       if (gpio->irq_domain)
+> +               chip->to_irq =3D gpio_regmap_to_irq;
+> +
+> +       ret =3D gpiochip_add_data(chip, d);
+> +       if (ret < 0)
+> +               goto err_alloc;
+> +
+> +       return 0;
+> +
+> +err_alloc:
+> +       kfree(d);
+> +       return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(gpio_regmap_register);
+> +
+> +/**
+> + * gpio_regmap_unregister() - Unregister a generic regmap GPIO controlle=
+r
+> + *
+> + * @gpio: gpio_regmap device to unregister
 > + */
-> +static inline void sbtsi_mc_to_reg(s32 temp, u8 *integer, u8 *decimal)
+> +void gpio_regmap_unregister(struct gpio_regmap *gpio)
 > +{
-> +	temp /= 125;
-> +	*integer = temp >> 3;
-> +	*decimal = (temp & 0x7) << 5;
+> +       gpiochip_remove(&gpio->data->gpio_chip);
+> +       kfree(gpio->data);
+> +}
+> +EXPORT_SYMBOL_GPL(gpio_regmap_unregister);
+> +
+> +static void devm_gpio_regmap_unregister(struct device *dev, void *res)
+> +{
+> +       gpio_regmap_unregister(*(struct gpio_regmap **)res);
 > +}
 > +
-> +static int sbtsi_read(struct device *dev, enum hwmon_sensor_types type,
-> +		      u32 attr, int channel, long *val)
+> +/**
+> + * devm_gpio_regmap_register() - resource managed gpio_regmap_register()
+> + *
+> + * @dev: device that is registering this GPIO device
+> + * @gpio: gpio_regmap device to register
+> + *
+> + * Managed gpio_regmap_register(). For generic regmap GPIO device regist=
+ered by
+> + * this function, gpio_regmap_unregister() is automatically called on dr=
+iver
+> + * detach. See gpio_regmap_register() for more information.
+> + */
+> +int devm_gpio_regmap_register(struct device *dev, struct gpio_regmap *gp=
+io)
 > +{
-> +	struct sbtsi_data *data = dev_get_drvdata(dev);
-> +	s32 temp_int, temp_dec;
-> +	int err, reg_int, reg_dec;
-> +	u8 read_order;
+> +       struct gpio_regmap **ptr;
+> +       int ret;
 > +
-> +	if (type != hwmon_temp)
-> +		return -EINVAL;
+> +       ptr =3D devres_alloc(devm_gpio_regmap_unregister, sizeof(*ptr),
+> +                          GFP_KERNEL);
+> +       if (!ptr)
+> +               return -ENOMEM;
 > +
-> +	read_order = 0;
-> +	switch (attr) {
-> +	case hwmon_temp_input:
-> +		/*
-> +		 * ReadOrder bit specifies the reading order of integer and
-> +		 * decimal part of CPU temp for atomic reads. If bit == 0,
-> +		 * reading integer part triggers latching of the decimal part,
-> +		 * so integer part should be read first. If bit == 1, read
-> +		 * order should be reversed.
-> +		 */
-> +		err = i2c_smbus_read_byte_data(data->client, SBTSI_REG_CONFIG);
-> +		if (err < 0)
-> +			return err;
+> +       ret =3D gpio_regmap_register(gpio);
+> +       if (ret) {
+> +               devres_free(ptr);
+> +               return ret;
+> +       }
 > +
-As I understand it, the idea is to set this configuration bit once and then
-just use it. Any chance to do that ? This would save an i2c read operation
-each time the temperature is read, and the if/else complexity below.
-
-> +		read_order = (u8)err & BIT(SBTSI_CONFIG_READ_ORDER_SHIFT);
-
-Nit: typecast is unnecessary.
-
-> +		reg_int = SBTSI_REG_TEMP_INT;
-> +		reg_dec = SBTSI_REG_TEMP_DEC;
-> +		break;
-> +	case hwmon_temp_max:
-> +		reg_int = SBTSI_REG_TEMP_HIGH_INT;
-> +		reg_dec = SBTSI_REG_TEMP_HIGH_DEC;
-> +		break;
-> +	case hwmon_temp_min:
-> +		reg_int = SBTSI_REG_TEMP_LOW_INT;
-> +		reg_dec = SBTSI_REG_TEMP_LOW_DEC;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
+> +       *ptr =3D gpio;
+> +       devres_add(dev, ptr);
 > +
-> +	if (read_order == 0) {
-> +		temp_int = i2c_smbus_read_byte_data(data->client, reg_int);
-> +		temp_dec = i2c_smbus_read_byte_data(data->client, reg_dec);
-> +	} else {
-> +		temp_dec = i2c_smbus_read_byte_data(data->client, reg_dec);
-> +		temp_int = i2c_smbus_read_byte_data(data->client, reg_int);
-> +	}
-
-Just a thought: if you use regmap and tell it that the limit registers
-are non-volatile, this wouldn't actually read from the chip more than once.
-
-Also, since the read involves reading two registers, and the first read
-locks the value for the second, you'll need mutex protection when reading
-the current temperature (not for limits, though).
-
-> +
-> +	if (temp_int < 0)
-> +		return temp_int;
-> +	if (temp_dec < 0)
-> +		return temp_dec;
-> +
-> +	*val = sbtsi_reg_to_mc(temp_int, temp_dec);
-> +
-> +	return 0;
+> +       return 0;
 > +}
+> +EXPORT_SYMBOL_GPL(devm_gpio_regmap_register);
 > +
-> +static int sbtsi_write(struct device *dev, enum hwmon_sensor_types type,
-> +		       u32 attr, int channel, long val)
-> +{
-> +	struct sbtsi_data *data = dev_get_drvdata(dev);
-> +	int reg_int, reg_dec, err;
-> +	u8 temp_int, temp_dec;
-> +
-> +	if (type != hwmon_temp)
-> +		return -EINVAL;
-> +
-> +	switch (attr) {
-> +	case hwmon_temp_max:
-> +		reg_int = SBTSI_REG_TEMP_HIGH_INT;
-> +		reg_dec = SBTSI_REG_TEMP_HIGH_DEC;
-> +		break;
-> +	case hwmon_temp_min:
-> +		reg_int = SBTSI_REG_TEMP_LOW_INT;
-> +		reg_dec = SBTSI_REG_TEMP_LOW_DEC;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	val = clamp_val(val, SBTSI_TEMP_MIN, SBTSI_TEMP_MAX);
-> +	mutex_lock(&data->lock);
-> +	sbtsi_mc_to_reg(val, &temp_int, &temp_dec);
-> +	err = i2c_smbus_write_byte_data(data->client, reg_int, temp_int);
-> +	if (err)
-> +		goto exit;
-> +
-> +	err = i2c_smbus_write_byte_data(data->client, reg_dec, temp_dec);
-> +exit:
-> +	mutex_unlock(&data->lock);
-> +	return err;
-> +}
-> +
-> +static umode_t sbtsi_is_visible(const void *data,
-> +				enum hwmon_sensor_types type,
-> +				u32 attr, int channel)
-> +{
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		switch (attr) {
-> +		case hwmon_temp_input:
-> +			return 0444;
-> +		case hwmon_temp_min:
-> +			return 0644;
-> +		case hwmon_temp_max:
-> +			return 0644;
-> +		}
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static const struct hwmon_channel_info *sbtsi_info[] = {
-> +	HWMON_CHANNEL_INFO(chip,
-> +			   HWMON_C_REGISTER_TZ),
-> +	HWMON_CHANNEL_INFO(temp,
-> +			   HWMON_T_INPUT | HWMON_T_MIN | HWMON_T_MAX),
-
-For your consideration: SB-TSI supports reporting high/low alerts.
-With this, it would be possible to implement respective alarm attributes.
-In conjunction with https://patchwork.kernel.org/patch/11277347/mbox/,
-it should also be possible to add interrupt and thus userspace notification
-for those attributes.
-
-SBTSI also supports setting the update rate (SBTSIx04) and setting
-the temperature offset (SBTSIx11, SBTSIx12), which could also be
-implemented as standard attributes.
-
-I won't require that for the initial version, just something to keep
-in mind.
-
-> +	NULL
-> +};
-> +
-> +static const struct hwmon_ops sbtsi_hwmon_ops = {
-> +	.is_visible = sbtsi_is_visible,
-> +	.read = sbtsi_read,
-> +	.write = sbtsi_write,
-> +};
-> +
-> +static const struct hwmon_chip_info sbtsi_chip_info = {
-> +	.ops = &sbtsi_hwmon_ops,
-> +	.info = sbtsi_info,
-> +};
-> +
-> +static int sbtsi_probe(struct i2c_client *client,
-> +		       const struct i2c_device_id *id)
-> +{
-> +	struct device *dev = &client->dev;
-> +	struct device *hwmon_dev;
-> +	struct sbtsi_data *data;
-> +
-> +	data = devm_kzalloc(dev, sizeof(struct sbtsi_data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	data->client = client;
-> +	mutex_init(&data->lock);
-> +
-> +	hwmon_dev =
-> +		devm_hwmon_device_register_with_info(dev, client->name, data,
-> +						     &sbtsi_chip_info, NULL);
-> +
-> +	return PTR_ERR_OR_ZERO(hwmon_dev);
-> +}
-> +
-> +static const struct i2c_device_id sbtsi_id[] = {
-> +	{"sbtsi", 0},
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(i2c, sbtsi_id);
-> +
-> +static const struct of_device_id __maybe_unused sbtsi_of_match[] = {
-> +	{
-> +		.compatible = "amd,sbtsi",
-> +	},
-> +	{ },
-> +};
-> +MODULE_DEVICE_TABLE(of, sbtsi_of_match);
-> +
-> +static struct i2c_driver sbtsi_driver = {
-> +	.class = I2C_CLASS_HWMON,
-> +	.driver = {
-> +		.name = "sbtsi",
-> +		.of_match_table = of_match_ptr(sbtsi_of_match),
-> +	},
-> +	.probe = sbtsi_probe,
-> +	.id_table = sbtsi_id,
-> +};
-> +
-> +module_i2c_driver(sbtsi_driver);
-> +
-> +MODULE_AUTHOR("Kun Yi <kunyi@google.com>");
-> +MODULE_DESCRIPTION("Hwmon driver for AMD SB-TSI emulated sensor");
+> +MODULE_AUTHOR("Michael Walle <michael@walle.cc>");
+> +MODULE_DESCRIPTION("GPIO generic regmap driver core");
 > +MODULE_LICENSE("GPL");
+> diff --git a/include/linux/gpio-regmap.h b/include/linux/gpio-regmap.h
+> new file mode 100644
+> index 000000000000..ad63955e0e43
+> --- /dev/null
+> +++ b/include/linux/gpio-regmap.h
+> @@ -0,0 +1,88 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +
+> +#ifndef _LINUX_GPIO_REGMAP_H
+> +#define _LINUX_GPIO_REGMAP_H
+> +
+> +struct gpio_regmap_addr {
+> +       unsigned int addr;
+> +       bool valid;
+> +};
+
+I'm not quite sure what the meaning behind the valid field here is.
+When would we potentially set it to false?
+
+> +#define GPIO_REGMAP_ADDR(_addr) \
+> +       ((struct gpio_regmap_addr) { .addr =3D _addr, .valid =3D true })
+> +
+> +/**
+> + * struct gpio_regmap - Description of a generic regmap gpio_chip.
+> + *
+> + * @parent:            The parent device
+> + * @regmap:            The regmap use to access the registers
+
+s/use/used/
+
+> + *                     given, the name of the device is used
+> + * @label:             (Optional) Descriptive name for GPIO controller.
+> + *                     If not given, the name of the device is used.
+> + * @ngpio:             Number of GPIOs
+> + * @reg_dat_base:      (Optional) (in) register base address
+> + * @reg_set_base:      (Optional) set register base address
+> + * @reg_clr_base:      (Optional) clear register base address
+> + * @reg_dir_in_base:   (Optional) out setting register base address
+> + * @reg_dir_out_base:  (Optional) in setting register base address
+> + * @reg_stride:                (Optional) May be set if the registers (o=
+f the
+> + *                     same type, dat, set, etc) are not consecutive.
+> + * @ngpio_per_reg:     Number of GPIOs per register
+> + * @irq_domain:                (Optional) IRQ domain if the controller i=
+s
+> + *                     interrupt-capable
+> + * @reg_mask_xlate:     (Optional) Translates base address and GPIO
+> + *                     offset to a register/bitmask pair. If not
+> + *                     given the default gpio_regmap_simple_xlate()
+> + *                     is used.
+> + * @to_irq:            (Optional) Maps GPIO offset to a irq number.
+> + *                     By default assumes a linear mapping of the
+> + *                     given irq_domain.
+> + * @driver_data:       Pointer to the drivers private data. Not used by
+> + *                     gpio-regmap.
+> + *
+> + * The reg_mask_xlate translates a given base address and GPIO offset to
+> + * register and mask pair. The base address is one of the given reg_*_ba=
+se.
+> + */
+> +struct gpio_regmap {
+
+I'd prefer to follow a pattern seen in other such APIs of calling this
+structure gpio_regmap_config and creating another private structure
+called gpio_regmap used in callbacks that would only contain necessary
+fields.
+
+> +       struct device *parent;
+> +       struct regmap *regmap;
+> +       struct gpio_regmap_data *data;
+> +
+> +       const char *label;
+> +       int ngpio;
+> +
+> +       struct gpio_regmap_addr reg_dat_base;
+> +       struct gpio_regmap_addr reg_set_base;
+> +       struct gpio_regmap_addr reg_clr_base;
+> +       struct gpio_regmap_addr reg_dir_in_base;
+> +       struct gpio_regmap_addr reg_dir_out_base;
+> +       int reg_stride;
+> +       int ngpio_per_reg;
+> +       struct irq_domain *irq_domain;
+> +
+> +       int (*reg_mask_xlate)(struct gpio_regmap *gpio, unsigned int base=
+,
+> +                             unsigned int offset, unsigned int *reg,
+> +                             unsigned int *mask);
+> +       int (*to_irq)(struct gpio_regmap *gpio, unsigned int offset);
+> +
+> +       void *driver_data;
+> +};
+> +
+> +static inline void gpio_regmap_set_drvdata(struct gpio_regmap *gpio,
+> +                                          void *data)
+> +{
+> +       gpio->driver_data =3D data;
+> +}
+> +
+> +static inline void *gpio_regmap_get_drvdata(struct gpio_regmap *gpio)
+> +{
+> +       return gpio->driver_data;
+> +}
+> +
+> +int gpio_regmap_register(struct gpio_regmap *gpio);
+> +void gpio_regmap_unregister(struct gpio_regmap *gpio);
+> +int devm_gpio_regmap_register(struct device *dev, struct gpio_regmap *gp=
+io);
+> +int gpio_regmap_simple_xlate(struct gpio_regmap *gpio, unsigned int base=
+,
+> +                            unsigned int offset,
+> +                            unsigned int *reg, unsigned int *mask);
+> +
+> +#endif /* _LINUX_GPIO_REGMAP_H */
+> --
+> 2.20.1
+>
+
+Overall looks really nice. I'm happy we'll have it in v5.8.
+
+Best regards,
+Bartosz Golaszewski
