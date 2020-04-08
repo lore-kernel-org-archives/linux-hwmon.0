@@ -2,231 +2,575 @@ Return-Path: <SRS0=yf6F=5Y=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71DDBC2BA80
-	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Apr 2020 02:49:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DD5BC2BA16
+	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Apr 2020 15:36:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3A46120748
-	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Apr 2020 02:49:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0BCD5206F7
+	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Apr 2020 15:36:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hOXqIwIQ"
+	dkim=pass (2048-bit key) header.d=gateworks-com.20150623.gappssmtp.com header.i=@gateworks-com.20150623.gappssmtp.com header.b="NMGowdQZ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726510AbgDHCs5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 7 Apr 2020 22:48:57 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:34961 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726420AbgDHCs4 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 7 Apr 2020 22:48:56 -0400
-Received: by mail-pl1-f194.google.com with SMTP id c12so1999045plz.2;
-        Tue, 07 Apr 2020 19:48:52 -0700 (PDT)
+        id S1728157AbgDHPgl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 8 Apr 2020 11:36:41 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:39250 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726709AbgDHPgl (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 Apr 2020 11:36:41 -0400
+Received: by mail-oi1-f193.google.com with SMTP id d63so329690oig.6
+        for <linux-hwmon@vger.kernel.org>; Wed, 08 Apr 2020 08:36:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=CVVMrOtOUJzsx2drtrkCJ83PaKET950PyeDv0OYif3g=;
-        b=hOXqIwIQhYTtaaEp+LQxtLdaCOEXCEFW+poIvX+trNXLgmcNTSyQ1LJ7U1f1dRjx6f
-         /K5R4Xoezt00KERaTWliqNNLUifeL5m7SqGhAYxnfJPSzUkRd9y/BBESfCKzJVr3NpS/
-         6SGUH5nRWexoSnLLRcRekn21tgc59KA0b6ZWZdBmMlYkd8DcTXsEmlwaCd5+4y7QSRpR
-         jWh7BsDqm7QJQV1a6u9fiUV2DhX4AHaju6wf7Xxro53iMJqmOByxuliIj8JsNwdvhXP9
-         GuoMVigDXEH8Wfo+eV9CXLjN59vdlhy6K05snCv1UGsiaI8urRkxzQCWORf5D2kOTvuj
-         bNqw==
+        d=gateworks-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=P5ndFmZYHSdeCxEE/d3Pz+BDHK76c9gli7aTHHz3Gpo=;
+        b=NMGowdQZ2RMwb3jNOXw4cb9ZuAwpa2CNYkQPHA5xCzW/C5Wb73t0vw7T59cq3izVWj
+         oF7Z5Scfo4KBPe2eddmDuU7KP8YdzBlV4WYNoRuHBZuDrtZXEe81GJO44SSEOMZM0U0f
+         Mah57EPQ4SL9St56Lw3y0p3LzuuVT6sgZgXFan8AhLzfm4TC7RqimAaiJWFYqBrfmJy/
+         cwbCzkS2mSJ+T1mACQ/uK/u2MEPZQQ801k/Dsc4r4BlDo6E13mWHQdDtQJw1jSBdT1Bd
+         PQMPQyb3u4on5cgI4ITn6doS/DzmLnnBGR/8nP7xEf9K/Orr1LpEClqJUkI7RCj0i5uO
+         2kKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=CVVMrOtOUJzsx2drtrkCJ83PaKET950PyeDv0OYif3g=;
-        b=YDWgf8DqoY4A/MWRySNgD3dQColpbzenZScA4+urCXIMzXOZpqKLPTL3tnTPXINrdO
-         0GLYO/Sn70aAYg/m9H5jpop4o+HSPf765OoeG9dlK73EPLAsJtKEeIpJJ4aakV/28l4a
-         Gz4cXgJLbkJbbEAMAxcCzA28E3vGEPgh44f5G/V3sMc5+qYZ3y8eATL3Z6SKejasIGuj
-         SJYF7pItgkwDGdDYDNccC9X1nirN/X2zV9ddxi/k7w9Dj0VTVxK4AeyirmEqytr8dXG9
-         ZvQi20cN18+0z0Tp4AjPEGm7NRBpxBxay06NxSj0sYU04qNYq5i1UI53LFaUlpZJDMdb
-         qGlA==
-X-Gm-Message-State: AGi0PuZc8+4ilVXcOGVEJ2prcVr6wDmjOjRBRNPiUK2stWEe835Dkjsk
-        RzqpI0CaImT0pY/oXIZIhGyiRAOK
-X-Google-Smtp-Source: APiQypKFyc+NJo8J3P/PfJkYIV6n5m7g1IFua5B90buSjDMH2Mc2FdehFgKhpCr9AO03R5R6kPxzXQ==
-X-Received: by 2002:a17:902:107:: with SMTP id 7mr5043824plb.302.1586314132072;
-        Tue, 07 Apr 2020 19:48:52 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f64sm15972916pfb.72.2020.04.07.19.48.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Apr 2020 19:48:51 -0700 (PDT)
-Subject: Re: [PATCH v2] hwmon: (dell-smm) Use one DMI match for all XPS models
-To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
-        Thomas Hebb <tommyhebb@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org
-References: <5d7e498b83e89ce7c41a449b61919c65d0770b73.1586033337.git.tommyhebb@gmail.com>
- <20200407102238.zweh7s7t6rn5cwhf@pali>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <c830927d-3365-4b58-9bea-6c99ca2d9edb@roeck-us.net>
-Date:   Tue, 7 Apr 2020 19:48:50 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=P5ndFmZYHSdeCxEE/d3Pz+BDHK76c9gli7aTHHz3Gpo=;
+        b=lpOhZWGqH4eNHVHGfFayeqQJ9xvtkkmuu7AwmfNeTWyJdNy9P5UULjLgr6Dn/xluiJ
+         mxkTd9UKIur+YNwtuUQeKuDL2TBAo1bCc7QFO8iTZTiwRb2MoW8N0ycUR1fRMfq6etwI
+         O5MHnNZPfIclj1JTPlrCsZ1i6nxK1Sz/89otGfznUukkiQIKutO8A9GN8yQabsQqrfQ9
+         lOLxsBUZ19mpaXCVfMsG/QZ03PAj8DwVKTKItxjRNlKCdARXTYUQupkrunSJB9BlbaX8
+         jZZRMGcuaeOXhK2cKzIVadjcLEw3TxBqFcyfn1+Z2y1vuXbWkJlrSMpvdTKrG24jT4+M
+         FkUQ==
+X-Gm-Message-State: AGi0Pub4V9vkZvhpVmYTZyn1S37xoBWJ/AaQxaTGrOaVmZODOl+S19hh
+        giN26dzl+BTsG7hrtCaicQZXn8jvTyzoJz0pU9rYvw==
+X-Google-Smtp-Source: APiQypJrGThI7hwe2WLPDwM2jL0L7bLNmPfTNouFaEovrcPk423AWXGyzVCvSbDVKklKKDrTaFQ3c8MtvQTXilVYFAY=
+X-Received: by 2002:aca:4b56:: with SMTP id y83mr251743oia.142.1586360199725;
+ Wed, 08 Apr 2020 08:36:39 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200407102238.zweh7s7t6rn5cwhf@pali>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <1585341214-25285-1-git-send-email-tharvey@gateworks.com> <1585341214-25285-3-git-send-email-tharvey@gateworks.com>
+In-Reply-To: <1585341214-25285-3-git-send-email-tharvey@gateworks.com>
+From:   Tim Harvey <tharvey@gateworks.com>
+Date:   Wed, 8 Apr 2020 08:36:26 -0700
+Message-ID: <CAJ+vNU1GWFKv8f-ihhoVTWgD8G5UyupOek1fmBPaU0QXKC1qHw@mail.gmail.com>
+Subject: Re: [PATCH v8 2/3] mfd: add Gateworks System Controller core driver
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Linux HWMON List <linux-hwmon@vger.kernel.org>,
+        Robert Jones <rjones@gateworks.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Device Tree Mailing List <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/7/20 3:22 AM, Pali Rohár wrote:
-> Hi!
-> 
-> On Saturday 04 April 2020 16:49:00 Thomas Hebb wrote:
->> Currently, each new XPS has to be added manually for module autoloading
->> to work. Since fan multiplier autodetection should work fine on all XPS
->> models, just match them all with one block like is done for Precision
->> and Studio.
-> 
-> It makes sense. We already load driver for all Inspirion, Latitude,
-> Precision, Vostro and Studio models so I do not see reason why not to
-> load it also for all XPS models. I doubt that Dell uses one base
-> firmware for all mentioned models and second one specially for XPS.
-> 
->> The only match we replace that doesn't already use autodetection is
->> "XPS13" which, according to Google, only matches the XPS 13 9333. (All
->> other XPS 13 models have "XPS" as its own word, surrounded by spaces.)
->> According to the thread at [1], autodetection works for the XPS 13 9333,
->> meaning this shouldn't regress it. I do not own one to confirm with,
->> though.
->>
->> Tested on an XPS 13 9350 and confirmed the module now autoloads and
->> reports reasonable-looking data. I am using BIOS 1.12.2 and do not see
->> any freezes when querying fan speed.
->>
->> [1] https://lore.kernel.org/patchwork/patch/525367/
-> 
-> I guess that these two tests are enough based on the fact that lot of
-> XPS models are already whitelisted.
-> 
-> Guenter, it is fine for you now? Or is something else needed?
-> 
+On Fri, Mar 27, 2020 at 1:33 PM Tim Harvey <tharvey@gateworks.com> wrote:
+>
+> The Gateworks System Controller (GSC) is an I2C slave controller
+> implemented with an MSP430 micro-controller whose firmware embeds the
+> following features:
+>  - I/O expander (16 GPIO's) using PCA955x protocol
+>  - Real Time Clock using DS1672 protocol
+>  - User EEPROM using AT24 protocol
+>  - HWMON using custom protocol
+>  - Interrupt controller with tamper detect, user pushbotton
+>  - Watchdog controller capable of full board power-cycle
+>  - Power Control capable of full board power-cycle
+>
+> see http://trac.gateworks.com/wiki/gsc for more details
+>
+> Cc: Randy Dunlap <rdunlap@infradead.org>
+> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+> ---
+> v8:
+> - whitespace fixes
+> - describe sub-devices in Kconfig
+> - add error print for invalid command
+> - update copyright
+> - use devm_of_platform_populate
+> - use probe_new
+> - move hwmon's regmap init to hwmon
+>
+> v7:
+> - remove irq from private data struct
+>
+> v6:
+> - remove duplicate signature and fix commit log
+>
+> v5:
+> - simplify powerdown function
+>
+> v4:
+> - remove hwmon max reg check/define
+> - fix powerdown function
+>
+> v3:
+> - rename gsc->gateworks-gsc
+> - remove uncecessary include for linux/mfd/core.h
+> - upercase I2C in comments
+> - remove i2c debug
+> - remove uncecessary comments
+> - don't use KBUILD_MODNAME for name
+> - remove unnecessary v1/v2/v3 tracking
+> - unregister hwmon i2c adapter on remove
+>
+> v2:
+> - change license comment block style
+> - remove COMPILE_TEST (Randy)
+> - fixed whitespace issues
+> - replaced a printk with dev_err
+> ---
+>  MAINTAINERS                 |   8 ++
+>  drivers/mfd/Kconfig         |  10 ++
+>  drivers/mfd/Makefile        |   1 +
+>  drivers/mfd/gateworks-gsc.c | 288 ++++++++++++++++++++++++++++++++++++++++++++
+>  include/linux/mfd/gsc.h     |  73 +++++++++++
+>  5 files changed, 380 insertions(+)
+>  create mode 100644 drivers/mfd/gateworks-gsc.c
+>  create mode 100644 include/linux/mfd/gsc.h
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 56765f5..bb79b60 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -6839,6 +6839,14 @@ F:       tools/testing/selftests/futex/
+>  F:     tools/perf/bench/futex*
+>  F:     Documentation/*futex*
+>
+> +GATEWORKS SYSTEM CONTROLLER (GSC) DRIVER
+> +M:     Tim Harvey <tharvey@gateworks.com>
+> +M:     Robert Jones <rjones@gateworks.com>
+> +S:     Maintained
+> +F:     Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
+> +F:     drivers/mfd/gateworks-gsc.c
+> +F:     include/linux/mfd/gsc.h
+> +
+>  GCC PLUGINS
+>  M:     Kees Cook <keescook@chromium.org>
+>  R:     Emese Revfy <re.emese@gmail.com>
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index 4209008..d84725a 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -407,6 +407,16 @@ config MFD_EXYNOS_LPASS
+>           Select this option to enable support for Samsung Exynos Low Power
+>           Audio Subsystem.
+>
+> +config MFD_GATEWORKS_GSC
+> +       tristate "Gateworks System Controller"
+> +       depends on (I2C && OF)
+> +       select MFD_CORE
+> +       select REGMAP_I2C
+> +       select REGMAP_IRQ
+> +       help
+> +         Enable support for the Gateworks System Controller found
+> +         on Gateworks Single Board Computers.
+> +
+>  config MFD_MC13XXX
+>         tristate
+>         depends on (SPI_MASTER || I2C)
+> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> index aed99f0..c82b442 100644
+> --- a/drivers/mfd/Makefile
+> +++ b/drivers/mfd/Makefile
+> @@ -15,6 +15,7 @@ obj-$(CONFIG_MFD_BCM590XX)    += bcm590xx.o
+>  obj-$(CONFIG_MFD_BD9571MWV)    += bd9571mwv.o
+>  obj-$(CONFIG_MFD_CROS_EC_DEV)  += cros_ec_dev.o
+>  obj-$(CONFIG_MFD_EXYNOS_LPASS) += exynos-lpass.o
+> +obj-$(CONFIG_MFD_GATEWORKS_GSC)        += gateworks-gsc.o
+>
+>  obj-$(CONFIG_HTC_PASIC3)       += htc-pasic3.o
+>  obj-$(CONFIG_HTC_I2CPLD)       += htc-i2cpld.o
+> diff --git a/drivers/mfd/gateworks-gsc.c b/drivers/mfd/gateworks-gsc.c
+> new file mode 100644
+> index 00000000..020e1e1
+> --- /dev/null
+> +++ b/drivers/mfd/gateworks-gsc.c
+> @@ -0,0 +1,288 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * The Gateworks System Controller (GSC) is a multi-function
+> + * device designed for use in Gateworks Single Board Computers.
+> + * The control interface is I2C, with an interrupt. The device supports
+> + * system functions such as pushbutton monitoring, multiple ADC's for
+> + * voltage and temperature, fan controller, and watchdog monitor.
+> + *
+> + * Copyright (C) 2020 Gateworks Corporation
+> + */
+> +#include <linux/device.h>
+> +#include <linux/i2c.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/mfd/gsc.h>
+> +#include <linux/module.h>
+> +#include <linux/mutex.h>
+> +#include <linux/of.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +
+> +/*
+> + * The GSC suffers from an errata where occasionally during
+> + * ADC cycles the chip can NAK I2C transactions. To ensure we have reliable
+> + * register access we place retries around register access.
+> + */
+> +#define I2C_RETRIES    3
+> +
+> +static int gsc_regmap_regwrite(void *context, unsigned int reg,
+> +                              unsigned int val)
+> +{
+> +       struct i2c_client *client = context;
+> +       int retry, ret;
+> +
+> +       for (retry = 0; retry < I2C_RETRIES; retry++) {
+> +               ret = i2c_smbus_write_byte_data(client, reg, val);
+> +               /*
+> +                * -EAGAIN returned when the i2c host controller is busy
+> +                * -EIO returned when i2c device is busy
+> +                */
+> +               if (ret != -EAGAIN && ret != -EIO)
+> +                       break;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static int gsc_regmap_regread(void *context, unsigned int reg,
+> +                             unsigned int *val)
+> +{
+> +       struct i2c_client *client = context;
+> +       int retry, ret;
+> +
+> +       for (retry = 0; retry < I2C_RETRIES; retry++) {
+> +               ret = i2c_smbus_read_byte_data(client, reg);
+> +               /*
+> +                * -EAGAIN returned when the i2c host controller is busy
+> +                * -EIO returned when i2c device is busy
+> +                */
+> +               if (ret != -EAGAIN && ret != -EIO)
+> +                       break;
+> +       }
+> +       *val = ret & 0xff;
+> +
+> +       return 0;
+> +}
+> +
+> +/*
+> + * gsc_powerdown - API to use GSC to power down board for a specific time
+> + *
+> + * secs - number of seconds to remain powered off
+> + */
+> +static int gsc_powerdown(struct gsc_dev *gsc, unsigned long secs)
+> +{
+> +       int ret;
+> +       unsigned char regs[4];
+> +
+> +       dev_info(&gsc->i2c->dev, "GSC powerdown for %ld seconds\n",
+> +                secs);
+> +
+> +       regs[0] = secs & 0xff;
+> +       regs[1] = (secs >> 8) & 0xff;
+> +       regs[2] = (secs >> 16) & 0xff;
+> +       regs[3] = (secs >> 24) & 0xff;
+> +
+> +       ret = regmap_bulk_write(gsc->regmap, GSC_TIME_ADD, regs, 4);
+> +       if (ret)
+> +               return ret;
+> +
+> +       regs[0] = 1 << GSC_CTRL_1_LATCH_SLEEP_ADD;
+> +
+> +       ret = regmap_update_bits(gsc->regmap, GSC_CTRL_1, regs[0], regs[0]);
+> +       if (ret)
+> +               return ret;
+> +
+> +       regs[0] = (1 << GSC_CTRL_1_ACTIVATE_SLEEP) |
+> +               (1 << GSC_CTRL_1_SLEEP_ENABLE);
+> +
+> +       ret = regmap_update_bits(gsc->regmap, GSC_CTRL_1, regs[0], regs[0]);
+> +
+> +       return ret;
+> +}
+> +
+> +static ssize_t gsc_show(struct device *dev, struct device_attribute *attr,
+> +                       char *buf)
+> +{
+> +       struct gsc_dev *gsc = dev_get_drvdata(dev);
+> +       const char *name = attr->attr.name;
+> +       int rz = 0;
+> +
+> +       if (strcasecmp(name, "fw_version") == 0)
+> +               rz = sprintf(buf, "%d\n", gsc->fwver);
+> +       else if (strcasecmp(name, "fw_crc") == 0)
+> +               rz = sprintf(buf, "0x%04x\n", gsc->fwcrc);
+> +       else
+> +               dev_err(dev, "invalid command: '%s'\n", name);
+> +
+> +       return rz;
+> +}
+> +
+> +static ssize_t gsc_store(struct device *dev, struct device_attribute *attr,
+> +                        const char *buf, size_t count)
+> +{
+> +       struct gsc_dev *gsc = dev_get_drvdata(dev);
+> +       const char *name = attr->attr.name;
+> +       long value;
+> +
+> +       if (strcasecmp(name, "powerdown") == 0) {
+> +               if (kstrtol(buf, 0, &value) == 0)
+> +                       gsc_powerdown(gsc, value);
+> +       } else {
+> +               dev_err(dev, "invalid command: '%s\n", name);
+> +       }
+> +
+> +       return count;
+> +}
+> +
+> +static struct device_attribute attr_fwver =
+> +       __ATTR(fw_version, 0440, gsc_show, NULL);
+> +static struct device_attribute attr_fwcrc =
+> +       __ATTR(fw_crc, 0440, gsc_show, NULL);
+> +static struct device_attribute attr_pwrdown =
+> +       __ATTR(powerdown, 0220, NULL, gsc_store);
+> +
+> +static struct attribute *gsc_attrs[] = {
+> +       &attr_fwver.attr,
+> +       &attr_fwcrc.attr,
+> +       &attr_pwrdown.attr,
+> +       NULL,
+> +};
+> +
+> +static struct attribute_group attr_group = {
+> +       .attrs = gsc_attrs,
+> +};
+> +
+> +static const struct of_device_id gsc_of_match[] = {
+> +       { .compatible = "gw,gsc", },
+> +       { }
+> +};
+> +MODULE_DEVICE_TABLE(of, gsc_of_match);
+> +
+> +static const struct regmap_config gsc_regmap_config = {
+> +       .reg_bits = 8,
+> +       .val_bits = 8,
+> +       .cache_type = REGCACHE_NONE,
+> +       .max_register = 0xf,
+> +};
+> +
+> +static const struct regmap_irq gsc_irqs[] = {
+> +       REGMAP_IRQ_REG(GSC_IRQ_PB, 0, BIT(GSC_IRQ_PB)),
+> +       REGMAP_IRQ_REG(GSC_IRQ_KEY_ERASED, 0, BIT(GSC_IRQ_KEY_ERASED)),
+> +       REGMAP_IRQ_REG(GSC_IRQ_EEPROM_WP, 0, BIT(GSC_IRQ_EEPROM_WP)),
+> +       REGMAP_IRQ_REG(GSC_IRQ_RESV, 0, BIT(GSC_IRQ_RESV)),
+> +       REGMAP_IRQ_REG(GSC_IRQ_GPIO, 0, BIT(GSC_IRQ_GPIO)),
+> +       REGMAP_IRQ_REG(GSC_IRQ_TAMPER, 0, BIT(GSC_IRQ_TAMPER)),
+> +       REGMAP_IRQ_REG(GSC_IRQ_WDT_TIMEOUT, 0, BIT(GSC_IRQ_WDT_TIMEOUT)),
+> +       REGMAP_IRQ_REG(GSC_IRQ_SWITCH_HOLD, 0, BIT(GSC_IRQ_SWITCH_HOLD)),
+> +};
+> +
+> +static const struct regmap_irq_chip gsc_irq_chip = {
+> +       .name = "gateworks-gsc",
+> +       .irqs = gsc_irqs,
+> +       .num_irqs = ARRAY_SIZE(gsc_irqs),
+> +       .num_regs = 1,
+> +       .status_base = GSC_IRQ_STATUS,
+> +       .mask_base = GSC_IRQ_ENABLE,
+> +       .mask_invert = true,
+> +       .ack_base = GSC_IRQ_STATUS,
+> +       .ack_invert = true,
+> +};
+> +
+> +static int gsc_probe(struct i2c_client *client)
+> +{
+> +       struct device *dev = &client->dev;
+> +       struct gsc_dev *gsc;
+> +       int ret;
+> +       unsigned int reg;
+> +
+> +       gsc = devm_kzalloc(dev, sizeof(*gsc), GFP_KERNEL);
+> +       if (!gsc)
+> +               return -ENOMEM;
+> +
+> +       gsc->dev = &client->dev;
+> +       gsc->i2c = client;
+> +       i2c_set_clientdata(client, gsc);
+> +
+> +       gsc->bus.reg_write = gsc_regmap_regwrite;
+> +       gsc->bus.reg_read = gsc_regmap_regread;
+> +       gsc->regmap = devm_regmap_init(dev, &gsc->bus, client,
+> +                                      &gsc_regmap_config);
+> +       if (IS_ERR(gsc->regmap))
+> +               return PTR_ERR(gsc->regmap);
+> +
+> +       if (regmap_read(gsc->regmap, GSC_FW_VER, &reg))
+> +               return -EIO;
+> +       gsc->fwver = reg;
+> +
+> +       regmap_read(gsc->regmap, GSC_FW_CRC, &reg);
+> +       gsc->fwcrc = reg;
+> +       regmap_read(gsc->regmap, GSC_FW_CRC + 1, &reg);
+> +       gsc->fwcrc |= reg << 8;
+> +
+> +       gsc->i2c_hwmon = i2c_new_dummy_device(client->adapter, GSC_HWMON);
+> +       if (!gsc->i2c_hwmon) {
+> +               dev_err(dev, "Failed to allocate I2C device for HWMON\n");
+> +               return -ENODEV;
+> +       }
+> +       i2c_set_clientdata(gsc->i2c_hwmon, gsc);
+> +
+> +       ret = devm_regmap_add_irq_chip(dev, gsc->regmap, client->irq,
+> +                                      IRQF_ONESHOT | IRQF_SHARED |
+> +                                      IRQF_TRIGGER_FALLING, 0,
+> +                                      &gsc_irq_chip, &gsc->irq_chip_data);
+> +       if (ret)
+> +               goto err_regmap;
+> +
+> +       dev_info(dev, "Gateworks System Controller v%d: fw 0x%04x\n",
+> +                gsc->fwver, gsc->fwcrc);
+> +
+> +       ret = sysfs_create_group(&dev->kobj, &attr_group);
+> +       if (ret)
+> +               dev_err(dev, "failed to create sysfs attrs\n");
+> +
+> +       ret = devm_of_platform_populate(dev);
+> +       if (ret)
+> +               goto err_sysfs;
+> +
+> +       return 0;
+> +
+> +err_sysfs:
+> +       sysfs_remove_group(&dev->kobj, &attr_group);
+> +err_regmap:
+> +       i2c_unregister_device(gsc->i2c_hwmon);
+> +
+> +       return ret;
+> +}
+> +
+> +static int gsc_remove(struct i2c_client *client)
+> +{
+> +       struct gsc_dev *gsc = i2c_get_clientdata(client);
+> +
+> +       sysfs_remove_group(&client->dev.kobj, &attr_group);
+> +       i2c_unregister_device(gsc->i2c_hwmon);
+> +
+> +       return 0;
+> +}
+> +
+> +static const struct i2c_device_id gsc_id_table[] = {
+> +       {"gsc", GSC_MISC },
+> +       { /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(i2c, gsc_id_table);
+> +
+> +static struct i2c_driver gsc_driver = {
+> +       .driver = {
+> +               .name   = "gateworks-gsc",
+> +               .of_match_table = gsc_of_match,
+> +       },
+> +       .id_table       = gsc_id_table,
+> +       .probe_new      = gsc_probe,
+> +       .remove         = gsc_remove,
+> +};
+> +
+> +module_i2c_driver(gsc_driver);
+> +
+> +MODULE_AUTHOR("Tim Harvey <tharvey@gateworks.com>");
+> +MODULE_DESCRIPTION("I2C Core interface for GSC");
+> +MODULE_LICENSE("GPL v2");
+> diff --git a/include/linux/mfd/gsc.h b/include/linux/mfd/gsc.h
+> new file mode 100644
+> index 00000000..fc33647
+> --- /dev/null
+> +++ b/include/linux/mfd/gsc.h
+> @@ -0,0 +1,73 @@
+> +/* SPDX-License-Identifier: GPL-2.0
+> + *
+> + * Copyright (C) 2020 Gateworks Corporation
+> + */
+> +#ifndef __LINUX_MFD_GSC_H_
+> +#define __LINUX_MFD_GSC_H_
+> +
+> +#include <linux/regmap.h>
+> +
+> +/* Device Addresses */
+> +#define GSC_MISC       0x20
+> +#define GSC_UPDATE     0x21
+> +#define GSC_GPIO       0x23
+> +#define GSC_HWMON      0x29
+> +#define GSC_EEPROM0    0x50
+> +#define GSC_EEPROM1    0x51
+> +#define GSC_EEPROM2    0x52
+> +#define GSC_EEPROM3    0x53
+> +#define GSC_RTC                0x68
+> +
+> +/* Register offsets */
+> +#define GSC_CTRL_0     0x00
+> +#define GSC_CTRL_1     0x01
+> +#define GSC_TIME       0x02
+> +#define GSC_TIME_ADD   0x06
+> +#define GSC_IRQ_STATUS 0x0A
+> +#define GSC_IRQ_ENABLE 0x0B
+> +#define GSC_FW_CRC     0x0C
+> +#define GSC_FW_VER     0x0E
+> +#define GSC_WP         0x0F
+> +
+> +/* Bit definitions */
+> +#define GSC_CTRL_0_PB_HARD_RESET       0
+> +#define GSC_CTRL_0_PB_CLEAR_SECURE_KEY 1
+> +#define GSC_CTRL_0_PB_SOFT_POWER_DOWN  2
+> +#define GSC_CTRL_0_PB_BOOT_ALTERNATE   3
+> +#define GSC_CTRL_0_PERFORM_CRC         4
+> +#define GSC_CTRL_0_TAMPER_DETECT       5
+> +#define GSC_CTRL_0_SWITCH_HOLD         6
+> +
+> +#define GSC_CTRL_1_SLEEP_ENABLE                0
+> +#define GSC_CTRL_1_ACTIVATE_SLEEP      1
+> +#define GSC_CTRL_1_LATCH_SLEEP_ADD     2
+> +#define GSC_CTRL_1_SLEEP_NOWAKEPB      3
+> +#define GSC_CTRL_1_WDT_TIME            4
+> +#define GSC_CTRL_1_WDT_ENABLE          5
+> +#define GSC_CTRL_1_SWITCH_BOOT_ENABLE  6
+> +#define GSC_CTRL_1_SWITCH_BOOT_CLEAR   7
+> +
+> +#define GSC_IRQ_PB                     0
+> +#define GSC_IRQ_KEY_ERASED             1
+> +#define GSC_IRQ_EEPROM_WP              2
+> +#define GSC_IRQ_RESV                   3
+> +#define GSC_IRQ_GPIO                   4
+> +#define GSC_IRQ_TAMPER                 5
+> +#define GSC_IRQ_WDT_TIMEOUT            6
+> +#define GSC_IRQ_SWITCH_HOLD            7
+> +
+> +struct gsc_dev {
+> +       struct device *dev;
+> +
+> +       struct i2c_client *i2c;         /* 0x20: interrupt controller, WDT */
+> +       struct i2c_client *i2c_hwmon;   /* 0x29: hwmon, fan controller */
+> +
+> +       struct regmap *regmap;
+> +       struct regmap_bus bus;
+> +       struct regmap_irq_chip_data *irq_chip_data;
+> +
+> +       unsigned int fwver;
+> +       unsigned short fwcrc;
+> +};
+> +
+> +#endif /* __LINUX_MFD_GSC_H_ */
+> --
+> 2.7.4
+>
 
-I still have my reservations, but ...
+Lee,
 
->> Signed-off-by: Thomas Hebb <tommyhebb@gmail.com>
-> 
-> Acked-by: Pali Rohár <pali@kernel.org>
-> 
-I'll apply it to linux-next with your approval. After all, the entire driver
-is a mess to start with. We'll see if it blows up in our face.
+Do you have time to look at this? Rob has reviewed the dt-bindings and
+Guenter has reviewed the hwmon driver so this is the only patch
+remaining in the series that needs review/sign-off.
 
-Guenter
+Best Regards,
 
->> ---
->>
->> Changes in v2:
->> - Remove another now-redundant XPS entry that I'd missed.
->>
->>  drivers/hwmon/dell-smm-hwmon.c | 26 ++------------------------
->>  1 file changed, 2 insertions(+), 24 deletions(-)
->>
->> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
->> index d4c83009d625..ca30bf903ec7 100644
->> --- a/drivers/hwmon/dell-smm-hwmon.c
->> +++ b/drivers/hwmon/dell-smm-hwmon.c
->> @@ -1072,13 +1072,6 @@ static const struct dmi_system_id i8k_dmi_table[] __initconst = {
->>  			DMI_MATCH(DMI_PRODUCT_NAME, "Vostro"),
->>  		},
->>  	},
->> -	{
->> -		.ident = "Dell XPS421",
->> -		.matches = {
->> -			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
->> -			DMI_MATCH(DMI_PRODUCT_NAME, "XPS L421X"),
->> -		},
->> -	},
->>  	{
->>  		.ident = "Dell Studio",
->>  		.matches = {
->> @@ -1087,14 +1080,6 @@ static const struct dmi_system_id i8k_dmi_table[] __initconst = {
->>  		},
->>  		.driver_data = (void *)&i8k_config_data[DELL_STUDIO],
->>  	},
->> -	{
->> -		.ident = "Dell XPS 13",
->> -		.matches = {
->> -			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
->> -			DMI_MATCH(DMI_PRODUCT_NAME, "XPS13"),
->> -		},
->> -		.driver_data = (void *)&i8k_config_data[DELL_XPS],
->> -	},
->>  	{
->>  		.ident = "Dell XPS M140",
->>  		.matches = {
->> @@ -1104,17 +1089,10 @@ static const struct dmi_system_id i8k_dmi_table[] __initconst = {
->>  		.driver_data = (void *)&i8k_config_data[DELL_XPS],
->>  	},
->>  	{
->> -		.ident = "Dell XPS 15 9560",
->> -		.matches = {
->> -			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
->> -			DMI_MATCH(DMI_PRODUCT_NAME, "XPS 15 9560"),
->> -		},
->> -	},
->> -	{
->> -		.ident = "Dell XPS 15 9570",
->> +		.ident = "Dell XPS",
->>  		.matches = {
->>  			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
->> -			DMI_MATCH(DMI_PRODUCT_NAME, "XPS 15 9570"),
->> +			DMI_MATCH(DMI_PRODUCT_NAME, "XPS"),
->>  		},
->>  	},
->>  	{ }
->> -- 
->> 2.25.2
->>
-
+Tim
