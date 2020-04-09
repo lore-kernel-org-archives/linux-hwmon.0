@@ -2,133 +2,163 @@ Return-Path: <SRS0=sjJb=5Z=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C25AC2BA19
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Apr 2020 20:33:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EC21C2BA19
+	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Apr 2020 21:23:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0BFEB20753
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Apr 2020 20:33:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 460432074F
+	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Apr 2020 21:23:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VR1P9Yaj"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OIdeT5Pa"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726690AbgDIUdS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 9 Apr 2020 16:33:18 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:44061 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726291AbgDIUdR (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Apr 2020 16:33:17 -0400
-Received: by mail-pl1-f194.google.com with SMTP id h11so4239181plr.11;
-        Thu, 09 Apr 2020 13:33:16 -0700 (PDT)
+        id S1727473AbgDIVXt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 9 Apr 2020 17:23:49 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:37064 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726964AbgDIVXt (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Apr 2020 17:23:49 -0400
+Received: by mail-pf1-f194.google.com with SMTP id u65so114265pfb.4
+        for <linux-hwmon@vger.kernel.org>; Thu, 09 Apr 2020 14:23:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=4SVDgN+C0tk45KKPvKPH2audguqznA2eb50JRgni7xU=;
-        b=VR1P9YajX8xf0bhzUGipEzuU0IJbACEc1yGsZgSRtRhXW01lSu+eHhCDA8hhBzMMEA
-         Z9NafHl1FNHgSfPq1gL2x86TmxMdX/olc5Q1+X0mexxz8Q36F+FPyfPlqXa2B0/QLela
-         1bCGKT1EK9eTFAhn8+X9E549oT4QAqffFgwMJqRXWuBCxSO1mSU8faWwmiCty6pDktp8
-         7ygCZeZvjSDoWNnioBu8KaCV1AigVMwL1d57JuQEzRNIAFcpl62savNaLVRKOt47/G4S
-         U5b6NietzpVGnIH1NlzmiOXV2ZA0X4kPadz5P7l9xEUfhs6/sXZCWZ2jkFM++FYuyX0A
-         eGig==
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=yL0OhmUu6d0arJqT+Bp+sovcnmZw2sYB3OolA8stCrc=;
+        b=OIdeT5PaB0TJwD9WYhy8NNJ3hNNKrcGaHTzLKJi8lEpEqRkzL1fj/AIYepfn4eCgoj
+         YejDUW+hV7SzOZo6lAIcgzP/I5dVzLT2Wfh/Rj1w+HkuqaLy696T7Tm4DJmW+YSsQET/
+         THAWHuV6QRa8NfikhJ/Is78PSGXLdvcxNE6MioHzQ88iZbUrcYM8aGspKMr5Tao2+JgG
+         477bIqig+75tqia6thsJsYCLoqlG8nVdPRCCdFixFnc/OiRAuR2jDZToy+UdSUQJ8gFS
+         3B7c8F5AveQ+0WBM9w4kFnXKYIPV/ptT3zddxm/R7dI8/h9ui4MhE1GnX6wuVKKE7TsY
+         6XLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to:user-agent;
-        bh=4SVDgN+C0tk45KKPvKPH2audguqznA2eb50JRgni7xU=;
-        b=D3jeCVUXIQk1c3mY6q1cQycChEIzo00AsyMxkqe3Cegonw8+Z9EInGiGo6wE3yvwPv
-         l4u0HlX2hqJe2Z6/J3U+aawz0ibvzVv2dYiRi31UMo/g7XiHpMSM7ahj0/1twY/+bWJV
-         9tFxzH5blNqXgdONGXfU+yzG4XI+CKaQ0r9vlNAcp/2/cPQVQfIAcTmn3XdvdZDZfUk1
-         PWEcMRIYCwI6jio23PDcZJ8q3702okXuZBd9sQ1LhJHsEqOal2k7g58jozl+gLbqaZfi
-         65wP/5BntHkkvXrACb/ndYvZK0bY0/MpgBj71UpKQe44paxoPp75o7K2jDx/dM6zuxWE
-         PSYA==
-X-Gm-Message-State: AGi0PuZWKtQZY08zH/h41uszD5SElC4NxmW8ay1/s5LlpeZy7yShz1nE
-        NgQx0zqM5HS1f7OGJuy4xhY=
-X-Google-Smtp-Source: APiQypJYO/LqKd+ZR+Upyyv6N8ejP4NQFYcNUfx8WDETT5uQGgeME1tRvPM1titORrQcYNY+YCkRUg==
-X-Received: by 2002:a17:90b:3615:: with SMTP id ml21mr1422940pjb.145.1586464395801;
-        Thu, 09 Apr 2020 13:33:15 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 3sm16040880pfd.140.2020.04.09.13.33.15
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 09 Apr 2020 13:33:15 -0700 (PDT)
-Date:   Thu, 9 Apr 2020 13:33:14 -0700
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=yL0OhmUu6d0arJqT+Bp+sovcnmZw2sYB3OolA8stCrc=;
+        b=XsN17Dd0h60/LibzUI0cyB4A9S2fx02iBSRqNFRtnpKRM6ucX3i3zUyM+xUfxP1ewe
+         XtretsqSMXyIcLFHY00HDU27hz9Mnv0ijDIdOFOYC9/EtytkCzx/ERURaO5aG6ZxEb1f
+         YwPY3hssH9ZRDv9qjIkGeFMTpDrWucwo4Qo21FxkdnRKnA28k+UdI2sex0sbO7ipBmHP
+         Qtm9uU/JcvtqM10zQyRARNlGXbCfh2E+GlZHWUTEyApmpUMnAjc/TQUt6+1JUMd2mEr6
+         MYYFJNPBrk7sIFiMouQuarm07JBstBWyLDG/1dSpKITXkMoNGG/kHLdZGQX2kAEVHLWU
+         PkXg==
+X-Gm-Message-State: AGi0PuYQECWPLL+a4TwX5GhCb25uz2V5pq1YEZJdqNaOu5f2jFqZlvWG
+        ZV0ZT5AIjzKgbMI4swKyHVH/1sV4
+X-Google-Smtp-Source: APiQypKO3OgizsKJt5KnSTWSIhs5YVSW54xg8bmrswuEfspJFcIZv2CBAPrxFBNuNyWSr537L2t94A==
+X-Received: by 2002:aa7:9698:: with SMTP id f24mr1686174pfk.94.1586467427795;
+        Thu, 09 Apr 2020 14:23:47 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id h24sm17334pfo.190.2020.04.09.14.23.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Apr 2020 14:23:47 -0700 (PDT)
+Subject: Re: Linux driver for IRPS5401 - status reg not found
+To:     Robert Hancock <hancock@sedsystems.ca>, monstr@monstr.eu,
+        Michal Simek <michal.simek@xilinx.com>
+Cc:     linux-hwmon@vger.kernel.org
+References: <e303166b-4d7a-d2b9-a5c0-fd4de8d22a49@xilinx.com>
+ <44d8631a-618c-a061-d9ca-d8030dd8a420@roeck-us.net>
+ <52d41b38-8af9-1496-65dc-c36179a9d286@sedsystems.ca>
+ <299872b6-0fcf-3ef1-5b52-41fceb2dcdc0@roeck-us.net>
+ <3b1750d0-bb1c-0a37-e1a0-d7c25b4bc525@sedsystems.ca>
+ <20200330194859.GA12459@roeck-us.net>
+ <b4322641-5918-40c4-a887-dcfa20db1733@xilinx.com>
+ <7a10a855-53a2-0743-be7d-86f6030626ca@seznam.cz>
+ <087f0821-bcd5-0f85-3e02-2b95721d1c2d@roeck-us.net>
+ <8afd61bc-9a67-0f22-2931-5ac9d084ee3f@sedsystems.ca>
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: hwmon: Fix incorrect $id paths
-Message-ID: <20200409203314.GB143353@roeck-us.net>
-References: <20200409202516.25282-1-robh@kernel.org>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <ff6483cf-7513-8a2c-f686-5c6782fa50cc@roeck-us.net>
+Date:   Thu, 9 Apr 2020 14:23:44 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+In-Reply-To: <8afd61bc-9a67-0f22-2931-5ac9d084ee3f@sedsystems.ca>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200409202516.25282-1-robh@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Apr 09, 2020 at 02:25:15PM -0600, Rob Herring wrote:
-> Fix the path warnings in the adi,axi-fan-control and adt7475 bindings:
+On 4/9/20 8:30 AM, Robert Hancock wrote:
+> On 2020-04-09 9:16 a.m., Guenter Roeck wrote:
+>> Hi Michal,
+>>
+>> On 4/9/20 7:29 AM, Michal Simek wrote:
+>> [ ... ]
+>>>
+>>> Just to let you know issue is with i2c driver. Here is my output for the
+>>> record.
+>>>
+>> Thanks a lot for the update.
+>>
+>>> irps5401-i2c-3-43
+>>> Adapter: i2c-0-mux (chan_id 2)
+>>> vin1:         11.56 V  (min =  +9.00 V, crit max = +14.00 V)
+>>> vin2:         11.56 V  (min =  +9.00 V, crit max = +14.00 V)
+>>> vin3:         11.56 V  (min =  +9.00 V, crit max = +14.00 V)
+>>> vin4:             N/A
+>>
+>> This is interesting; it means that the rail is not active (?) or
+>> not supported, or maybe even that the driver has a bug. The second
+>> chip reports a value here, so I guess the rail is inactive.
+>> If possible, it would be desirable to detect this during probe
+>> and not try to report values for this rail. It would be great if
+>> you can find the time to figure out what is going on.
 > 
-> Documentation/devicetree/bindings/hwmon/adt7475.yaml: $id:
->   relative path/filename doesn't match actual path or filename
->   expected: http://devicetree.org/schemas/hwmon/adt7475.yaml#
-> Documentation/devicetree/bindings/hwmon/adi,axi-fan-control.yaml: $id:
->   relative path/filename doesn't match actual path or filename
->   expected: http://devicetree.org/schemas/hwmon/adi,axi-fan-control.yaml#
+> I would assume that either that rail is not used in that board design and was disabled in the non-volatile config on the chip, or alternately the chip allows combining outputs C and D (i.e. 3 and 4) into a single output in which case only one will report valid data. Not sure offhand if there is a way to detect those cases from the PMBus interface at probe time.
 > 
-> Cc: "Nuno S�" <nuno.sa@analog.com>
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: linux-hwmon@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
+I think it may be the output disable register (0x38). One would have
+to know the i2c address, read the register, and set page bits
+accordingly. Overall, I am not sure if it is worth the trouble.
+Maybe we should just just add a note to the driver documentation.
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
-> Will take this via the DT tree.
-> 
-> Rob
-> 
->  .../devicetree/bindings/hwmon/adi,axi-fan-control.yaml          | 2 +-
->  Documentation/devicetree/bindings/hwmon/adt7475.yaml            | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/adi,axi-fan-control.yaml b/Documentation/devicetree/bindings/hwmon/adi,axi-fan-control.yaml
-> index 29bb2c778c59..7db78767c02d 100644
-> --- a/Documentation/devicetree/bindings/hwmon/adi,axi-fan-control.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/adi,axi-fan-control.yaml
-> @@ -2,7 +2,7 @@
->  # Copyright 2019 Analog Devices Inc.
->  %YAML 1.2
->  ---
-> -$id: http://devicetree.org/schemas/bindings/hwmon/adi,axi-fan-control.yaml#
-> +$id: http://devicetree.org/schemas/hwmon/adi,axi-fan-control.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->  
->  title: Analog Devices AXI FAN Control Device Tree Bindings
-> diff --git a/Documentation/devicetree/bindings/hwmon/adt7475.yaml b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
-> index 76985034ea73..46c441574f98 100644
-> --- a/Documentation/devicetree/bindings/hwmon/adt7475.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/adt7475.yaml
-> @@ -1,7 +1,7 @@
->  # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->  %YAML 1.2
->  ---
-> -$id: http://devicetree.org/schemas/adt7475.yaml#
-> +$id: http://devicetree.org/schemas/hwmon/adt7475.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->  
->  title: ADT7475 hwmon sensor
-> -- 
-> 2.20.1
-> 
+Thanks,
+Guenter
