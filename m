@@ -2,45 +2,61 @@ Return-Path: <SRS0=sjJb=5Z=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03526C2BB55
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Apr 2020 14:42:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A271DC2BA2B
+	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Apr 2020 15:16:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8E65220A8B
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Apr 2020 14:42:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6C98B2082D
+	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Apr 2020 15:16:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=seznam.cz header.i=@seznam.cz header.b="F5YLkeY1"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JLmA8hz2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727611AbgDIOmK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 9 Apr 2020 10:42:10 -0400
-Received: from mxs1.seznam.cz ([77.75.78.125]:10724 "EHLO mxs1.seznam.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726977AbgDIOmK (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 9 Apr 2020 10:42:10 -0400
-X-Greylist: delayed 671 seconds by postgrey-1.27 at vger.kernel.org; Thu, 09 Apr 2020 10:42:08 EDT
-Received: from email.seznam.cz
-        by email-smtpc14a.ko.seznam.cz (email-smtpc14a.ko.seznam.cz [10.53.11.165])
-        id 5652f474e3099566565b11a7;
-        Thu, 09 Apr 2020 16:41:43 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seznam.cz; s=beta;
-        t=1586443303; bh=7nHRr7R6btvLfqvv5uDKSITEp8q7v/u5E5Qgr7uOKTk=;
-        h=Received:Reply-To:Subject:To:Cc:References:From:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=F5YLkeY1aNUu34NoI1nhssLvCjkgnyy13+g9tF2dzzhp9QjJ0z24xTfszPRbjAM1b
-         3Utfcd9zza1bk19jzhO8RSY8nZVx5NMKeeaRxckPhTFcbR8sdNtng+LoQdw1sXEimd
-         xXPUDDc03f3yeYIaipjxEVjT5CNE7vk8HaHBPc4U=
-Received: from [77.75.78.48] (unknown-62-131.xilinx.com [149.199.62.131])
-        by email-relay11.ko.seznam.cz (Seznam SMTPD 1.3.108) with ESMTP;
-        Thu, 09 Apr 2020 16:30:03 +0200 (CEST)  
-Reply-To: monstr@monstr.eu
+        id S1728080AbgDIPQt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 9 Apr 2020 11:16:49 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:36798 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727855AbgDIPQt (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Apr 2020 11:16:49 -0400
+Received: by mail-pl1-f196.google.com with SMTP id g2so3940642plo.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 09 Apr 2020 08:16:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=b5ZrxjMQSSf8XlZ5BhjfNHRnLTCuQwT/HeimnJaOkpw=;
+        b=JLmA8hz2GzH9QTCtG2pKhM5xzoE/DAYbxSevnSh4CoOffs2IsgY1ELch3gbo/YKRcn
+         MTi5hQln3zDiuXqpvobUCAAT2mkrUU5hUdWMVEhpNSg1A8dPoCmwWydfncUOYZD4GprP
+         SsydJfXfOZDXDF39KuL4bG2ppM4T3wogpeDXU4u54Qs3Ag7f6wbKqeYC1ZA6uQ3ve9jf
+         rpmQHizDxQb5cDe+Ddi0UWFjoeqW5fSFoonQ2YLgcpL4jC5pvPwONEAVbipuiA2OE3XO
+         W8CxzE9LCq9Xn7BR2QSYnIPLlsIAixfneu9Hs/D5fgGv2jKQzIFkSRy1nGOnMb4Q5aH/
+         +USA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=b5ZrxjMQSSf8XlZ5BhjfNHRnLTCuQwT/HeimnJaOkpw=;
+        b=sZBquAiaGzXpqmwnxSGPkupe5K0EcA0Kn2rxJM5c0ZgYCW/zeX0yFBFMGhvPWLAvaq
+         e514LSZ7DzUHRLykL52/UUXDuB3CMdB66mKImJLXALjNmRll4JT+4RkCvedxv0Fwm7Tn
+         QZ8qBsWQkp2/Pro0VUMu4yMIqp8G8Bj+Bxx3QivB6JCelB0T/uqqacJd0GZySwFBXg5w
+         3qkwBw+n5p20OYGS22cso2qtlbrWiKqQplggMwiIU4G6Z327eN/6aJzPbK69ovgNZEU5
+         CPLNgMsrYS/K8MWZTmW7HMoZz9UNn+TnSWOlnXsKesqsXu1Hr5MtBtMODI1OeJfjJrMj
+         TH4w==
+X-Gm-Message-State: AGi0PuaqbDQQutCU0xtkAiPnXF7ACOlafutps3XYU8xMu5WVpmSpHs4V
+        sfyplgO/imYEsmq7rBDWjqgtrskK
+X-Google-Smtp-Source: APiQypIEoYUzly6zzOMbDa8anxSjWkDWnSE6oyRY5c29id1wbGRssiFXc7TQapeWpas34jF43NiH9Q==
+X-Received: by 2002:a17:90a:f0c6:: with SMTP id fa6mr12161694pjb.5.1586445407923;
+        Thu, 09 Apr 2020 08:16:47 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t123sm2116193pfd.48.2020.04.09.08.16.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Apr 2020 08:16:47 -0700 (PDT)
 Subject: Re: Linux driver for IRPS5401 - status reg not found
-To:     Michal Simek <michal.simek@xilinx.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+To:     monstr@monstr.eu, Michal Simek <michal.simek@xilinx.com>,
         Robert Hancock <hancock@sedsystems.ca>
 Cc:     linux-hwmon@vger.kernel.org
 References: <e303166b-4d7a-d2b9-a5c0-fd4de8d22a49@xilinx.com>
@@ -50,13 +66,57 @@ References: <e303166b-4d7a-d2b9-a5c0-fd4de8d22a49@xilinx.com>
  <3b1750d0-bb1c-0a37-e1a0-d7c25b4bc525@sedsystems.ca>
  <20200330194859.GA12459@roeck-us.net>
  <b4322641-5918-40c4-a887-dcfa20db1733@xilinx.com>
-From:   Michal Simek <monstr@seznam.cz>
-Message-ID: <7a10a855-53a2-0743-be7d-86f6030626ca@seznam.cz>
-Date:   Thu, 9 Apr 2020 16:29:55 +0200
+ <7a10a855-53a2-0743-be7d-86f6030626ca@seznam.cz>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <087f0821-bcd5-0f85-3e02-2b95721d1c2d@roeck-us.net>
+Date:   Thu, 9 Apr 2020 08:16:45 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <b4322641-5918-40c4-a887-dcfa20db1733@xilinx.com>
+In-Reply-To: <7a10a855-53a2-0743-be7d-86f6030626ca@seznam.cz>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -65,168 +125,29 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 31. 03. 20 14:38, Michal Simek wrote:
-> On 30. 03. 20 21:48, Guenter Roeck wrote:
->> On Mon, Mar 30, 2020 at 01:09:56PM -0600, Robert Hancock wrote:
->>> On 2020-03-30 12:48 p.m., Guenter Roeck wrote:
->>>> On 3/30/20 8:42 AM, Robert Hancock wrote:
->>>>> On 2020-03-30 9:24 a.m., Guenter Roeck wrote:
->>>>>> On 3/30/20 4:33 AM, Michal Simek wrote:
->>>>>>> Hi Robert and Guenter,
->>>>>>>
->>>>>>> Xilinx boards are using IRPS5401 chips and I have tried to use your driver.
->>>>>>> I have checked that u-boot can detect that devices and read it.
->>>>>>>
->>>>>>> ZynqMP> i2c probe
->>>>>>> Valid chip addresses: 0C 13 14 20 43 44 74
->>>>>>> ZynqMP> i2c md 13 0 10
->>>>>>> 0000: 00 08 00 08 00 08 00 08 00 08 00 08 00 08 00 08    ................
->>>>>>> ZynqMP> i2c md 14 0 10
->>>>>>> 0000: 00 08 00 08 00 08 00 08 00 08 00 08 00 08 00 08    ................
->>>>>>> ZynqMP> i2c md 43 0 10
->>>>>>> 0000: 00 98 ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
->>>>>>> ZynqMP> i2c md 44 0 10
->>>>>>> 0000: 00 8a ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
->>>>>>> ZynqMP>
->>>>>>>
->>>>>>> Here is DT fragment which I use (it is under i2c mux)
->>>>>>>
->>>>>>> 185                         irps5401_43: irps5401@43 {
->>>>>>> 186                                 compatible = "infineon,irps5401";
->>>>>>> 187                                 reg = <0x43>; /* pmbus / i2c 0x13 */
->>>>>>
->>>>>> Does that mean the mux is at 0x13 ?
->>>>>
->>>>> These chips have two I2C addresses with two separate interfaces: the standard PMBus-compatible interface at an address between 0x40-0x4f, which the irps5401 driver supports, and another proprietary interface at an address between 0x10-0x1f. The specific addresses in those ranges is configured by the value of a resistor on one of the pins.
->>>>>
->>>>
->>>> Ah, sorry, I didn't get that part earlier. Unfortunately, the datasheet
->>>> doesn't seem to include a description of the proprietary interface
->>>> registers/commands, or maybe I am missing it.
->>>>
->>>> The chip datasheet does talk a lot about various MTP registers.
->>>> Part of that register set is Write_protect_section and
->>>> Read_protect_section. Maybe the PMBus registers are all read
->>>> protected ?
->>>
->>> There is a programming guide and register map on the Infineon site under
->>> "Additional Technical Information" here:
->>>
->>> https://www.infineon.com/cms/en/product/power/dc-dc-converters/integrated-pol-voltage-regulators/irps5401m/
->>>
->> Based on that my best guess would be that either the chips are not at the
->> expected addresses, or that the registers are indeed read protected.
+Hi Michal,
+
+On 4/9/20 7:29 AM, Michal Simek wrote:
+[ ... ]
 > 
-> I am able to detect that devices.
+> Just to let you know issue is with i2c driver. Here is my output for the
+> record.
 > 
-> root@zcu104-debian:/etc/apt# i2cdetect -y -r 3
->      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
-> 00:          -- -- -- -- -- -- -- -- -- -- -- -- --
-> 10: -- -- -- 13 14 -- -- -- -- -- -- -- -- -- -- --
-> 20: UU -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-> 30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-> 40: -- -- -- 43 44 -- -- -- -- -- -- -- -- -- -- --
-> 50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-> 60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-> 70: -- -- -- -- UU -- -- --
-> 
-> Also disable/enable rail on 0x44 and see power good led on/off
-> 
-> root@zcu104-debian:~# i2cset -y 3 0x44 0 3
-> root@zcu104-debian:~# i2cset -y 3 0x44 1 0x80 b
-> root@zcu104-debian:~# i2cget -y 3 0x44 0x78 b
-> 
-> I can't read the rest of regs but checking with hw guys what they have
-> done with these devices.
+Thanks a lot for the update.
 
+> irps5401-i2c-3-43
+> Adapter: i2c-0-mux (chan_id 2)
+> vin1:         11.56 V  (min =  +9.00 V, crit max = +14.00 V)
+> vin2:         11.56 V  (min =  +9.00 V, crit max = +14.00 V)
+> vin3:         11.56 V  (min =  +9.00 V, crit max = +14.00 V)
+> vin4:             N/A
 
-Just to let you know issue is with i2c driver. Here is my output for the
-record.
-
-irps5401-i2c-3-43
-Adapter: i2c-0-mux (chan_id 2)
-vin1:         11.56 V  (min =  +9.00 V, crit max = +14.00 V)
-vin2:         11.56 V  (min =  +9.00 V, crit max = +14.00 V)
-vin3:         11.56 V  (min =  +9.00 V, crit max = +14.00 V)
-vin4:             N/A
-vin5:          2.52 V  (min =  +0.40 V, crit max =  +4.00 V)  ALARM (CRIT)
-vout1:       851.00 mV (crit min =  +0.65 V, min =  +0.68 V)
-                       (max =  +1.02 V, crit max =  +1.25 V)
-vout2:         1.80 V  (crit min =  +1.55 V, min =  +1.56 V)
-                       (max =  +2.16 V, crit max =  +2.20 V)
-vout3:         1.20 V  (crit min =  +0.90 V, min =  +0.96 V)
-                       (max =  +1.43 V, crit max =  +1.59 V)
-vout4:            N/A
-vout5:       906.00 mV (crit min =  +0.68 V, min =  +0.79 V)
-                       (max =  +1.02 V, crit max =  +1.13 V)
-temp1:        +43.0°C  (high = +100.0°C, crit = +120.0°C)
-temp2:        +43.0°C  (high = +100.0°C, crit = +120.0°C)
-temp3:        +43.0°C  (high = +100.0°C, crit = +120.0°C)
-temp4:            N/A
-temp5:        +44.0°C  (high = +100.0°C, crit = +120.0°C)
-pin1:          1.75 W
-pin2:        406.25 mW
-pin3:        468.75 mW
-pin4:             N/A
-pin5:         15.62 mW
-pout1:         1.50 W
-pout2:       406.25 mW
-pout3:       468.75 mW
-pout4:            N/A
-pout5:        15.62 mW
-iin1:        125.00 mA
-iin2:         31.00 mA
-iin3:         39.00 mA
-iin4:             N/A
-iout1:         2.00 A  (max = +21.00 A, crit max = +25.00 A)
-iout2:       234.00 mA (max =  +2.50 A, crit max =  +3.12 A)
-iout3:       390.00 mA (max =  +8.50 A, crit max = +10.25 A)
-iout4:            N/A
-iout5:         8.00 mA (max =  +0.65 A, crit max =  +0.72 A)
-
-irps5401-i2c-3-44
-Adapter: i2c-0-mux (chan_id 2)
-vin1:         11.53 V  (min =  +9.00 V, crit max = +14.00 V)
-vin2:         11.56 V  (min =  +9.00 V, crit max = +14.00 V)
-vin3:         11.41 V  (min =  +9.00 V, crit max = +14.00 V)
-vin4:         11.56 V  (min =  +9.00 V, crit max = +14.00 V)
-vin5:          2.51 V  (min =  +0.40 V, crit max =  +4.00 V)  ALARM (CRIT)
-vout1:         3.30 V  (crit min =  +2.90 V, min =  +2.91 V)
-                       (max =  +3.69 V, crit max =  +3.70 V)
-vout2:         1.13 V  (crit min =  +0.73 V, min =  +0.90 V)
-                       (max =  +1.35 V, crit max =  +1.52 V)
-vout3:         5.00 V  (crit min =  +4.60 V, min =  +4.70 V)
-                       (max =  +5.20 V, crit max =  +5.40 V)
-vout4:       152.00 mV (crit min =  +1.40 V, min =  +1.44 V)
-                       (max =  +2.16 V, crit max =  +2.20 V)
-vout5:       851.00 mV (crit min =  +0.64 V, min =  +0.75 V)
-                       (max =  +0.97 V, crit max =  +1.07 V)
-temp1:        +40.0°C  (high = +100.0°C, crit = +120.0°C)
-temp2:        +40.0°C  (high = +100.0°C, crit = +120.0°C)
-temp3:        +40.0°C  (high = +100.0°C, crit = +120.0°C)
-temp4:        +40.0°C  (high = +100.0°C, crit = +120.0°C)
-temp5:        +40.0°C  (high = +100.0°C, crit = +120.0°C)
-pin1:          2.50 W
-pin2:         31.25 mW
-pin3:          0.00 W
-pin4:          0.00 W
-pin5:        187.50 mW
-pout1:         2.25 W
-pout2:        31.25 mW
-pout3:         0.00 W
-pout4:        31.25 mW
-pout5:        62.50 mW
-iin1:        187.00 mA
-iin2:          0.00 A
-iin3:          0.00 A
-iin4:          0.00 A
-iout1:       750.00 mA (max = +12.00 A, crit max = +14.00 A)
-iout2:        46.00 mA (max =  +1.81 A, crit max =  +2.19 A)
-iout3:         0.00 A  (max =  +3.50 A, crit max =  +4.00 A)
-iout4:         9.28 A  (max =  +3.81 A, crit max =  +4.81 A)
-iout5:        73.00 mA (max =  +0.65 A, crit max =  +0.72 A)
-
-
+This is interesting; it means that the rail is not active (?) or
+not supported, or maybe even that the driver has a bug. The second
+chip reports a value here, so I guess the rail is inactive.
+If possible, it would be desirable to detect this during probe
+and not try to report values for this rail. It would be great if
+you can find the time to figure out what is going on.
 
 Thanks,
-Michal
+Guenter
