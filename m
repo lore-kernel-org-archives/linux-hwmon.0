@@ -2,172 +2,489 @@ Return-Path: <SRS0=joRm=52=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65C12C2BA2B
-	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Apr 2020 07:19:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1789C2BA2B
+	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Apr 2020 15:57:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 30BB920692
-	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Apr 2020 07:19:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5D7D320769
+	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Apr 2020 15:57:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=xilinx.onmicrosoft.com header.i=@xilinx.onmicrosoft.com header.b="I0dSM0SJ"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d0rZkBOT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725897AbgDJHTg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 10 Apr 2020 03:19:36 -0400
-Received: from mail-co1nam11on2044.outbound.protection.outlook.com ([40.107.220.44]:6045
-        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725858AbgDJHTf (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 10 Apr 2020 03:19:35 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SbrUodeX0h2fs70O8+xU0rrr/AX2iAd7rZ/rD3e3soC/qXM4VYgwiCuV3uixilOGJQR2yZC8QfM+goVAsjdXjTG3kBhvp4KzYO53R6yVF2rYBgk4ElGFJp8NMGsJW0IEElDHMp3foT69ih2UXQb9tYvZN51gaNnfm/TYNtHZJmnl2YqoCv8IdulQQBnsG81QIBSGxgkQRgMuYT7mfSMipAWu13aRed1CI+Sum/DLpqX8rVXOalHGq3ZFrJFg4U/Tz5LyBdOHeclvut+wyDyyQyXKmfAHFLBMzraVWV92ChfvHjtZkBjsCzUiTSXspaWfiIVNsKOD1RSc3bkcvJbzKg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FKGlSqE1jYCOfD2LiiBwGfH4L3DNjBQm66kK3Dg6/TI=;
- b=dbogqCj8NFBSmCpuHOpcG0sfa7kmivB9+R8UFrvdo/LDp5cwFpwUJ9hNPgrmdD71NFTAegrooIXnlbNTs/CTs4mNehAjog8QCqePAqJcHSuIjSrZbaf4DZbBOXlBlFDrywaRTSbq7lt8GchJpkiPVbKfZqoLlTkmCZ3mu8Ak6gXYZpqp47zBNsSTxeR1CHCoRsTSNTqNLMxlJWSFw38NOSSq4q7SnOt7HptEM5mZg95Tyu4a/etAO/PDxZjBGHGVZDVRhXIkXzz22DM8IwRjvfPsAdARXHnLEcQ0eMLIsM3O5t/xVABk74I9/dgdRS/dYBQUdJGnVQdFghZ9OWFdtw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.60.83) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=xilinx.com;
- dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
- not signed); arc=none
+        id S1726181AbgDJP5r (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 10 Apr 2020 11:57:47 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:34290 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726049AbgDJP5r (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 10 Apr 2020 11:57:47 -0400
+Received: by mail-pg1-f195.google.com with SMTP id l14so1157452pgb.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 10 Apr 2020 08:57:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FKGlSqE1jYCOfD2LiiBwGfH4L3DNjBQm66kK3Dg6/TI=;
- b=I0dSM0SJG+K6SvHV+nTbtBhxNHolXbz+1SjGPWMx5+zIX6nOMxCnHvPUYnDh9dzrAy38yMz7OlEvc+NRpQuXbygqFIII5tz9Ryd0xttn7Lvm8SJ/p7tjxhKPmOhSUHUGzBtEUTZxo87qRlcF9kDWRxNZ9aDDzum0Ev0gFPOVS9Q=
-Received: from CY4PR18CA0065.namprd18.prod.outlook.com (2603:10b6:903:13f::27)
- by DM6PR02MB3993.namprd02.prod.outlook.com (2603:10b6:5:9f::30) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2900.15; Fri, 10 Apr
- 2020 07:19:33 +0000
-Received: from CY1NAM02FT008.eop-nam02.prod.protection.outlook.com
- (2603:10b6:903:13f:cafe::9a) by CY4PR18CA0065.outlook.office365.com
- (2603:10b6:903:13f::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2900.15 via Frontend
- Transport; Fri, 10 Apr 2020 07:19:33 +0000
-Authentication-Results: spf=pass (sender IP is 149.199.60.83)
- smtp.mailfrom=xilinx.com; roeck-us.net; dkim=none (message not signed)
- header.d=none;roeck-us.net; dmarc=bestguesspass action=none
- header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.60.83 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
-Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
- CY1NAM02FT008.mail.protection.outlook.com (10.152.75.59) with Microsoft SMTP
- Server id 15.20.2900.15 via Frontend Transport; Fri, 10 Apr 2020 07:19:32
- +0000
-Received: from [149.199.38.66] (port=39528 helo=xsj-pvapsmtp01)
-        by xsj-pvapsmtpgw01 with esmtp (Exim 4.90)
-        (envelope-from <michal.simek@xilinx.com>)
-        id 1jMnwO-0003Wm-It; Fri, 10 Apr 2020 00:19:04 -0700
-Received: from [127.0.0.1] (helo=localhost)
-        by xsj-pvapsmtp01 with smtp (Exim 4.63)
-        (envelope-from <michal.simek@xilinx.com>)
-        id 1jMnwq-0002Vw-Gr; Fri, 10 Apr 2020 00:19:32 -0700
-Received: from xsj-pvapsmtp01 (smtp3.xilinx.com [149.199.38.66])
-        by xsj-smtp-dlp2.xlnx.xilinx.com (8.13.8/8.13.1) with ESMTP id 03A7JVRO024206;
-        Fri, 10 Apr 2020 00:19:31 -0700
-Received: from [172.30.17.109]
-        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
-        (envelope-from <michals@xilinx.com>)
-        id 1jMnwo-0002Vh-ST; Fri, 10 Apr 2020 00:19:31 -0700
-Subject: Re: Linux driver for IRPS5401 - status reg not found
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Robert Hancock <hancock@sedsystems.ca>, monstr@monstr.eu,
-        Michal Simek <michal.simek@xilinx.com>
-Cc:     linux-hwmon@vger.kernel.org
-References: <e303166b-4d7a-d2b9-a5c0-fd4de8d22a49@xilinx.com>
- <44d8631a-618c-a061-d9ca-d8030dd8a420@roeck-us.net>
- <52d41b38-8af9-1496-65dc-c36179a9d286@sedsystems.ca>
- <299872b6-0fcf-3ef1-5b52-41fceb2dcdc0@roeck-us.net>
- <3b1750d0-bb1c-0a37-e1a0-d7c25b4bc525@sedsystems.ca>
- <20200330194859.GA12459@roeck-us.net>
- <b4322641-5918-40c4-a887-dcfa20db1733@xilinx.com>
- <7a10a855-53a2-0743-be7d-86f6030626ca@seznam.cz>
- <087f0821-bcd5-0f85-3e02-2b95721d1c2d@roeck-us.net>
- <8afd61bc-9a67-0f22-2931-5ac9d084ee3f@sedsystems.ca>
- <ff6483cf-7513-8a2c-f686-5c6782fa50cc@roeck-us.net>
-From:   Michal Simek <michal.simek@xilinx.com>
-Message-ID: <3d9be1ab-febc-c195-4aca-653cdb87225e@xilinx.com>
-Date:   Fri, 10 Apr 2020 09:19:28 +0200
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=mw5iRhcRTm4w6zDEklf+mqWxFAC/CxTIHdIJdE/3RCA=;
+        b=d0rZkBOTWb5jBfVrKkEhCGLSgFaH8xzo3b5YUP82LsSBcQOgZnve/o1s9EKsWv7q6+
+         59G6aXgIOuc+L4Kya7kJjczdHmWkTGmdGOO3g7AJrYaCvIy9p6d2hmvEiTzpDvsPlJI5
+         UdYqZ6Mzo1eJUG2QZe5NW9UZl96IxtvW76U1EyBXPzvwKgVsb2XxZSFo1vyiu1nihx/P
+         JCTI6EANI0dNd1hDZ5AWhDwqA22PnJCmu9+sR4SiX3TSO/jY7OM0KiqrZHRnlmaO3bOx
+         5zRivqF9TVgGxV99+zuUsIVJjOF5Lg/WnQbrQsSOtp//CYGgm/Rop0Qmf2uQLeR2QPZA
+         E8Og==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=mw5iRhcRTm4w6zDEklf+mqWxFAC/CxTIHdIJdE/3RCA=;
+        b=JVxazuB8b/H19o36ItAukLjsKhbKLhOjqOnBET2+A+ImB3icUt+zMm7Wi0U9/qdYjK
+         pl7bWh4ZnuTgKkMnAE7KhGZKxac0ieioAwD07lTTiVlyInm0KHfGAFcoaDAqmWwrv0Yw
+         aINDvvD6ZuMnCZOMzOCsNEaC7sp/c27KtmIIgNNaar4INysiQi+IniWwPnjGyaeNfmzW
+         CTUuPwWjSmAnRLhhl29xAFTihtfFvHUklOTesQurW1nSvf/WQVyF92KEff23XxPkTMh3
+         ZuVOoyDjAGshehqjC8zbBogP3PCBFFpgjsUYx86bjAPiu5DqJu4f2zEqtmUlC0iDVAj2
+         1zIw==
+X-Gm-Message-State: AGi0PuayASqGzDPObm0VzXhUol/VAtx3SHu5Req9fwAsLOFSvWUUV5k7
+        ldClaSuMF3bNzOaFHVc16jg=
+X-Google-Smtp-Source: APiQypIrJNxXbow4TTckVeSTEhityVX9LdXNtXfXnDV4SyM8fGUvyHYaQApfcmeS+uyjuD1Ryl/41g==
+X-Received: by 2002:a62:d10b:: with SMTP id z11mr5483389pfg.205.1586534265923;
+        Fri, 10 Apr 2020 08:57:45 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o128sm2035080pfb.58.2020.04.10.08.57.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Apr 2020 08:57:45 -0700 (PDT)
+Subject: Re: [PATCH 1/2] hwmon: Add amd_energy driver to report energy
+ counters
+To:     Naveen Krishna Chatradhi <nchatrad@amd.com>,
+        linux-hwmon@vger.kernel.org
+Cc:     naveenkrishna.ch@gmail.com
+References: <20200409153939.38730-1-nchatrad@amd.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <e0d1a13c-e475-2b9f-c951-92aeb1dce9c0@roeck-us.net>
+Date:   Fri, 10 Apr 2020 08:57:44 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <ff6483cf-7513-8a2c-f686-5c6782fa50cc@roeck-us.net>
+In-Reply-To: <20200409153939.38730-1-nchatrad@amd.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-RCIS-Action: ALLOW
-X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
-X-TM-AS-User-Approved-Sender: Yes;Yes
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-Forefront-Antispam-Report: CIP:149.199.60.83;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapsmtpgw01;PTR:unknown-60-83.xilinx.com;CAT:NONE;SFTY:;SFS:(10009020)(4636009)(39860400002)(136003)(376002)(346002)(396003)(46966005)(5660300002)(356005)(31696002)(47076004)(110136005)(82740400003)(53546011)(70206006)(8936002)(6666004)(70586007)(336012)(36756003)(2906002)(81156014)(316002)(26005)(2616005)(44832011)(186003)(4326008)(81166007)(478600001)(966005)(8676002)(426003)(9786002)(31686004);DIR:OUT;SFP:1101;
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f851b281-5a21-4af1-78d5-08d7dd1f8436
-X-MS-TrafficTypeDiagnostic: DM6PR02MB3993:
-X-LD-Processed: 657af505-d5df-48d0-8300-c31994686c5c,ExtAddr
-X-Microsoft-Antispam-PRVS: <DM6PR02MB3993735661CA4BEE3DA96D80C6DE0@DM6PR02MB3993.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-Forefront-PRVS: 0369E8196C
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 02ruE5oNMFRFuekGOxma9+ovjXP1FvPeGk2nU+U4/zQKXJEqXF0SkwIZCL1K5jcL7JshyuQCJN0ZAp6VT03E9dBjCynua9GUJ5JfBvd3O4O+L7OXylJyadVt9GdLVCEckFbtCyQkHugWiJAAEYAqgCgFbAwgUEwqWBzNXt2spv2AWvN2ZHNKqa0qLhUqOYzqm4s3QSzmQMfWhmP9KDuOyIM5QxaL0OZ8xursJXk4bo8D5Kl8SUdWxBdKiiVvi0cOKeWdrdpcnX1za1KOoMOQW4zoFOFKhvX979DGqaNsGnA/4XKXWbayrHI96XS0wlJOE8c4igBIcvTdJ0q2Pd00mIe7XL9kTY4zDjxsMIL6aQr7K+Y26NUTVmNW6HBGkak5YISBBn4alqT7ZcrsKj+L7tvnkSi7m/9pMb23weydZFextZ0AzVlKeU0dscU+x5rcmJubtoNZqH2DU1v5PV1lN3qXZ7kUFcfd4Xv3/Yq8Wo7fyaXvrBzEklk0zMvkaF9aVMmkZbOCmSNMF51SAy4zEQDmRMbXVATJ8S4oVobqXZVLbdPW09aL9xZfWsh/mTmetHD9SLgB2fs+ZwU6FtAfvw==
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Apr 2020 07:19:32.8041
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f851b281-5a21-4af1-78d5-08d7dd1f8436
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB3993
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 09. 04. 20 23:23, Guenter Roeck wrote:
-> On 4/9/20 8:30 AM, Robert Hancock wrote:
->> On 2020-04-09 9:16 a.m., Guenter Roeck wrote:
->>> Hi Michal,
->>>
->>> On 4/9/20 7:29 AM, Michal Simek wrote:
->>> [ ... ]
->>>>
->>>> Just to let you know issue is with i2c driver. Here is my output for the
->>>> record.
->>>>
->>> Thanks a lot for the update.
->>>
->>>> irps5401-i2c-3-43
->>>> Adapter: i2c-0-mux (chan_id 2)
->>>> vin1:         11.56 V  (min =  +9.00 V, crit max = +14.00 V)
->>>> vin2:         11.56 V  (min =  +9.00 V, crit max = +14.00 V)
->>>> vin3:         11.56 V  (min =  +9.00 V, crit max = +14.00 V)
->>>> vin4:             N/A
->>>
->>> This is interesting; it means that the rail is not active (?) or
->>> not supported, or maybe even that the driver has a bug. The second
->>> chip reports a value here, so I guess the rail is inactive.
->>> If possible, it would be desirable to detect this during probe
->>> and not try to report values for this rail. It would be great if
->>> you can find the time to figure out what is going on.
->>
->> I would assume that either that rail is not used in that board design and was disabled in the non-volatile config on the chip, or alternately the chip allows combining outputs C and D (i.e. 3 and 4) into a single output in which case only one will report valid data. Not sure offhand if there is a way to detect those cases from the PMBus interface at probe time.
->>
-> I think it may be the output disable register (0x38). One would have
-> to know the i2c address, read the register, and set page bits
-> accordingly. Overall, I am not sure if it is worth the trouble.
-> Maybe we should just just add a note to the driver documentation.
+On 4/9/20 8:39 AM, Naveen Krishna Chatradhi wrote:
+> This patch adds hwmon based amd_energy driver support for
+> family 17h processors from AMD.
+> 
+> The driver provides following interface to the userspace
+> 1. Reports the per core and per socket energy consumption
+>    via sysfs entries created per core and per socket respectively.
+>     * per core energy consumed via "core_energy%d_input"
+>     * package/socket energy consumed via "sock_energy%d_input".
+> 2. Uses topology_max_packages() to get number of sockets.
+> 3. Uses num_present_cpus() to get the number of CPUs.
+> 4. Reports the energy units via energy_unit sysfs entry
+> 
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
+> ---
+>  drivers/hwmon/Kconfig      |  10 ++
+>  drivers/hwmon/Makefile     |   1 +
+>  drivers/hwmon/amd_energy.c | 273 +++++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 284 insertions(+)
+>  create mode 100644 drivers/hwmon/amd_energy.c
+> 
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 05a30832c6ba..d83f1403b429 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -324,6 +324,16 @@ config SENSORS_FAM15H_POWER
+>  	  This driver can also be built as a module. If so, the module
+>  	  will be called fam15h_power.
+>  
+> +config SENSORS_AMD_ENERGY
+> +	tristate "AMD RAPL MSR based Energy driver"
+> +	depends on X86
+> +	help
+> +	  If you say yes here you get support for core and package energy
+> +	  sensors, based on RAPL MSR for AMD family 17h and above CPUs.
+> +
+> +	  This driver can also be built as a module. If so, the module
+> +	  will be called as amd_energy.
+> +
+>  config SENSORS_APPLESMC
+>  	tristate "Apple SMC (Motion sensor, light sensor, keyboard backlight)"
+>  	depends on INPUT && X86
+> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> index b0b9c8e57176..318f89dc7133 100644
+> --- a/drivers/hwmon/Makefile
+> +++ b/drivers/hwmon/Makefile
+> @@ -45,6 +45,7 @@ obj-$(CONFIG_SENSORS_ADT7411)	+= adt7411.o
+>  obj-$(CONFIG_SENSORS_ADT7462)	+= adt7462.o
+>  obj-$(CONFIG_SENSORS_ADT7470)	+= adt7470.o
+>  obj-$(CONFIG_SENSORS_ADT7475)	+= adt7475.o
+> +obj-$(CONFIG_SENSORS_AMD_ENERGY) += amd_energy.o
+>  obj-$(CONFIG_SENSORS_APPLESMC)	+= applesmc.o
+>  obj-$(CONFIG_SENSORS_ARM_SCMI)	+= scmi-hwmon.o
+>  obj-$(CONFIG_SENSORS_ARM_SCPI)	+= scpi-hwmon.o
+> diff --git a/drivers/hwmon/amd_energy.c b/drivers/hwmon/amd_energy.c
+> new file mode 100644
+> index 000000000000..ddb7073ae39b
+> --- /dev/null
+> +++ b/drivers/hwmon/amd_energy.c
+> @@ -0,0 +1,273 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +
+> +/*
+> + * Copyright (C) 2019 Advanced Micro Devices, Inc.
+> + */
+> +
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/slab.h>
+> +#include <linux/types.h>
+> +#include <linux/device.h>
+> +#include <linux/sysfs.h>
+> +#include <linux/cpu.h>
+> +#include <linux/list.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/hwmon-sysfs.h>
+> +#include <linux/processor.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/cpumask.h>
 
-https://www.xilinx.com/support/documentation/boards_and_kits/zcu104/ug1267-zcu104-eval-bd.pdf
+Alphabetic include file order, please.
 
-page 83
+> +
+> +#include <asm/cpu_device_id.h>
+> +
+> +#define DRVNAME	"amd_energy"
+> +
+> +#define ENERGY_PWR_UNIT_MSR	0xC0010299
+> +#define ENERGY_CORE_MSR	0xC001029A
+> +#define ENERGY_PCK_MSR		0xC001029B
+> +
+> +#define AMD_TIME_UNIT_MASK	0xF0000
+> +#define AMD_ENERGY_UNIT_MASK	0x01F00
+> +#define AMD_POWER_UNIT_MASK	0x0000F
+> +
+> +#define ENERGY_STATUS_MASK	0xffffffff
+> +
+> +#define AMD_FAM_17		0x17 /* ZP, SSP */
+> +
+> +/* Useful macros */
+> +#define AMD_CPU_FAM_ANY(_family, _model)	\
+> +{						\
+> +	.vendor		= X86_VENDOR_AMD,	\
+> +	.family		= _family,		\
+> +	.model		= _model,		\
+> +	.feature	= X86_FEATURE_ANY,	\
+> +}
+> +
+> +#define AMD_CPU_FAM(_model)			\
+> +	AMD_CPU_FAM_ANY(AMD_FAM_##_model, X86_MODEL_ANY)
+> +
+> +static struct device_attribute units_attr;
+> +
+> +struct sensor_data {
+> +	unsigned int scale;
+> +	union {
+> +		unsigned int cpu_nr;
+> +		unsigned int sock_nr;
+> +	};
+> +	struct device_attribute dev_attr_input;
+> +	char input[32];
+> +};
+> +
+> +struct amd_energy_sensors {
+> +	struct sensor_data *data;
+> +	struct attribute **attrs;
+> +	struct attribute_group group;
+> +	const struct attribute_group *groups[1];
 
-0x43 is PHASE_C/D combined together a provide 1.2v.
+Even if acceptable, this would be wrong. The list of groups
+ends with an empty entry, meaning this array would have to have
+at least two entries (one for the terminator).
 
-Thanks,
-Michal
+> +};
+> +
+> +static ssize_t amd_units_u64_show(struct device *dev,
+> +	struct device_attribute *dev_attr, char *buffer)
+> +{
+> +	uint64_t rapl_units;
+> +	uint64_t energy_unit;
+> +	int ret = 0;
+> +
+> +	ret = rdmsrl_safe(ENERGY_PWR_UNIT_MSR, &rapl_units);
+> +	if (ret)
+> +		return -EAGAIN;
+> +
+> +	energy_unit = (rapl_units & AMD_ENERGY_UNIT_MASK) >> 8;
+> +
+> +	return snprintf(buffer, 24, "%llu\n", energy_unit);
+> +}
+> +
+> +static ssize_t amd_core_u64_show(struct device *dev,
+> +		struct device_attribute *dev_attr, char *buffer)
+> +{
+> +	unsigned long long value;
+> +	struct sensor_data *sensor;
+> +	int ret = 0;
+> +
+> +	sensor = container_of(dev_attr, struct sensor_data, dev_attr_input);
+> +	ret = rdmsrl_safe_on_cpu(sensor->cpu_nr, ENERGY_CORE_MSR, &value);
+> +	if (ret)
+> +		return -EAGAIN;
+> +
+> +	return snprintf(buffer, 24, "%llu\n", value);
+
+It seems to me this reports raw values. This is unacceptable. Values need
+to be scaled to match the ABI. Energy is reported in microJoule.
+
+> +}
+> +
+> +static ssize_t amd_sock_u64_show(struct device *dev,
+> +		struct device_attribute *dev_attr, char *buffer)
+> +{
+> +	unsigned long long value;
+> +	struct sensor_data *sensor;
+> +	int ret = 0;
+> +	int cpu, cpu_nr;
+> +
+> +	sensor = container_of(dev_attr, struct sensor_data, dev_attr_input);
+> +
+> +	for_each_possible_cpu(cpu) {
+> +		struct cpuinfo_x86 *c = &cpu_data(cpu);
+> +
+> +		if (c->initialized && c->logical_die_id == sensor->sock_nr) {
+> +			cpu_nr = cpu;
+> +			break;
+> +		}
+> +		cpu_nr = 0;
+> +	}
+> +
+> +	ret = rdmsrl_safe_on_cpu(cpu_nr, ENERGY_PCK_MSR, &value);
+> +	if (ret)
+> +		return -EAGAIN;
+> +
+> +	return snprintf(buffer, 24, "%llu\n", value);
+> +}
+> +
+> +static int amd_energy_probe(struct platform_device *pdev)
+> +{
+> +	struct amd_energy_sensors *amd_sensors;
+> +	struct device *hwdev, *dev = &pdev->dev;
+> +	int nr_cpus, nr_socks, idx = 0;
+> +
+> +	nr_cpus = num_present_cpus();
+> +	nr_socks = topology_max_packages();
+> +
+> +	amd_sensors = devm_kzalloc(dev, sizeof(*amd_sensors), GFP_KERNEL);
+> +	if (!amd_sensors)
+> +		return -ENOMEM;
+> +
+> +	amd_sensors->data = devm_kcalloc(dev, nr_cpus + nr_socks,
+> +				sizeof(*amd_sensors->data), GFP_KERNEL);
+> +	if (!amd_sensors->data)
+> +		return -ENOMEM;
+> +
+> +	amd_sensors->attrs = devm_kcalloc(dev, nr_cpus + nr_socks,
+> +				sizeof(*amd_sensors->attrs), GFP_KERNEL);
+> +	if (!amd_sensors->attrs)
+> +		return -ENOMEM;
+> +
+> +	/* populate attributes for number of cpus. */
+> +	for (idx = 0; idx < ; idx++) {
+> +		struct sensor_data *sensor = &amd_sensors->data[idx];
+> +
+> +		snprintf(sensor->input, sizeof(sensor->input),
+> +				"core_energy%d_input", idx);
+> +
+
+This is unacceptable. Please use standard attributes (energyX_input).
+If you want to report what the sensor is for, use labels.
+
+> +		sensor->dev_attr_input.attr.mode = 0444;
+> +		sensor->dev_attr_input.attr.name = sensor->input;
+> +		sensor->dev_attr_input.show = amd_core_u64_show;
+> +
+> +		sensor->cpu_nr = idx;
+> +		amd_sensors->attrs[idx] = &sensor->dev_attr_input.attr;
+> +
+> +		sysfs_attr_init(amd_sensors->attrs[idx]);
+> +	}
+> +
+> +	/* populate attributes for number of sockets. */
+> +	for (idx = 0; idx < nr_socks; idx++) {
+> +		struct sensor_data *sensor =
+> +			&amd_sensors->data[nr_cpus + idx];
+> +
+> +		snprintf(sensor->input,
+> +			sizeof(sensor->input), "sock_energy%d_input", idx);
+> +
+> +		sensor->dev_attr_input.attr.mode = 0444;
+> +		sensor->dev_attr_input.attr.name = sensor->input;
+> +		sensor->dev_attr_input.show = amd_sock_u64_show;
+> +
+> +		sensor->sock_nr = idx;
+> +		amd_sensors->attrs[nr_cpus + idx] =
+> +			&sensor->dev_attr_input.attr;
+> +
+> +		sysfs_attr_init(amd_sensors->attrs[nr_cpus + idx]);
+> +	}
+
+This all makes me wonder what is reported for inactive/disabled CPUs.
+
+> +
+> +	amd_sensors->group.attrs = amd_sensors->attrs;
+> +	amd_sensors->groups[0] = &amd_sensors->group;
+> +
+> +	platform_set_drvdata(pdev, amd_sensors);
+> +
+> +	hwdev = devm_hwmon_device_register_with_groups(dev,
+> +			"amd_energy", amd_sensors, amd_sensors->groups);
+
+Please rework the driver to use the devm_hwmon_device_register_with_info() API.
+
+> +	if (!hwdev)
+> +		return PTR_ERR_OR_ZERO(hwdev);
+> +
+> +	/* populate attributes for energy units */
+> +	units_attr.attr.name = "energy_units";
+> +	units_attr.attr.mode = 0444;
+> +	units_attr.show = amd_units_u64_show;
+> +
+> +	return sysfs_create_file(&hwdev->kobj, &units_attr.attr);
+
+This is irrelevant for this driver. Units are fixed. Besides, registering
+sysfs attributes after driver registration is racy and won't be accepted.
+Non-standard attributes can be added with the groups argument of
+devm_hwmon_device_register_with_info() (not that I see any here).
+
+> +}
+> +
+> +static int amd_energy_remove(struct platform_device *pdev)
+> +{
+> +	sysfs_remove_file(&pdev->dev.kobj, &units_attr.attr);
+> +	return 0;
+> +}
+> +
+> +static const struct platform_device_id amd_energy_ids[] = {
+> +	{ .name = DRVNAME, },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(platform, amd_energy_ids);
+> +
+> +static struct platform_driver amd_energy_driver = {
+> +	.probe = amd_energy_probe,
+> +	.remove	= amd_energy_remove,
+> +	.id_table = amd_energy_ids,
+> +	.driver = {
+> +		.name = DRVNAME,
+> +	},
+> +};
+> +
+> +static struct platform_device *amd_energy_platdev;
+> +
+> +static const struct x86_cpu_id cpu_ids[] __initconst = {
+> +	AMD_CPU_FAM(17),
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(x86cpu, cpu_ids);
+> +
+> +static int __init amd_energy_init(void)
+> +{
+> +	const struct x86_cpu_id *id;
+> +	int ret;
+> +
+> +	id = x86_match_cpu(cpu_ids);
+> +	if (!id) {
+> +		pr_err("driver does not support CPU family %d model %d\n",
+> +			boot_cpu_data.x86, boot_cpu_data.x86_model);
+> +
+
+This is not an error and thus does not warrant an error message.
+
+> +		return -ENODEV;
+> +	}
+> +
+> +	ret = platform_driver_register(&amd_energy_driver);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	amd_energy_platdev = platform_device_alloc(DRVNAME, 0);
+> +	if (!amd_energy_platdev)
+> +		return -ENOMEM;
+> +
+> +	ret = platform_device_add(amd_energy_platdev);
+> +	if (ret) {
+> +		platform_device_unregister(amd_energy_platdev);
+> +		return ret;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static void __exit amd_energy_exit(void)
+> +{
+> +	platform_device_unregister(amd_energy_platdev);
+> +	platform_driver_unregister(&amd_energy_driver);
+> +}
+> +
+> +module_init(amd_energy_init);
+> +module_exit(amd_energy_exit);
+> +
+> +MODULE_DESCRIPTION("Driver for AMD Energy reporting from RAPL MSR via HWMON interface");
+> +MODULE_AUTHOR("Naveen Krishna Chatradhi <nchatrad@amd.com>");
+> +MODULE_LICENSE("GPL");
+> 
+
