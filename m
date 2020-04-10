@@ -2,326 +2,172 @@ Return-Path: <SRS0=joRm=52=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 426F5C2BB85
-	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Apr 2020 02:15:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65C12C2BA2B
+	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Apr 2020 07:19:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1A7BC20936
-	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Apr 2020 02:15:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 30BB920692
+	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Apr 2020 07:19:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IAv54bR4"
+	dkim=pass (1024-bit key) header.d=xilinx.onmicrosoft.com header.i=@xilinx.onmicrosoft.com header.b="I0dSM0SJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726598AbgDJCPW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 9 Apr 2020 22:15:22 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:41513 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726521AbgDJCPW (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Apr 2020 22:15:22 -0400
-Received: by mail-pg1-f194.google.com with SMTP id m13so379977pgd.8
-        for <linux-hwmon@vger.kernel.org>; Thu, 09 Apr 2020 19:15:21 -0700 (PDT)
+        id S1725897AbgDJHTg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 10 Apr 2020 03:19:36 -0400
+Received: from mail-co1nam11on2044.outbound.protection.outlook.com ([40.107.220.44]:6045
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725858AbgDJHTf (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 10 Apr 2020 03:19:35 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SbrUodeX0h2fs70O8+xU0rrr/AX2iAd7rZ/rD3e3soC/qXM4VYgwiCuV3uixilOGJQR2yZC8QfM+goVAsjdXjTG3kBhvp4KzYO53R6yVF2rYBgk4ElGFJp8NMGsJW0IEElDHMp3foT69ih2UXQb9tYvZN51gaNnfm/TYNtHZJmnl2YqoCv8IdulQQBnsG81QIBSGxgkQRgMuYT7mfSMipAWu13aRed1CI+Sum/DLpqX8rVXOalHGq3ZFrJFg4U/Tz5LyBdOHeclvut+wyDyyQyXKmfAHFLBMzraVWV92ChfvHjtZkBjsCzUiTSXspaWfiIVNsKOD1RSc3bkcvJbzKg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FKGlSqE1jYCOfD2LiiBwGfH4L3DNjBQm66kK3Dg6/TI=;
+ b=dbogqCj8NFBSmCpuHOpcG0sfa7kmivB9+R8UFrvdo/LDp5cwFpwUJ9hNPgrmdD71NFTAegrooIXnlbNTs/CTs4mNehAjog8QCqePAqJcHSuIjSrZbaf4DZbBOXlBlFDrywaRTSbq7lt8GchJpkiPVbKfZqoLlTkmCZ3mu8Ak6gXYZpqp47zBNsSTxeR1CHCoRsTSNTqNLMxlJWSFw38NOSSq4q7SnOt7HptEM5mZg95Tyu4a/etAO/PDxZjBGHGVZDVRhXIkXzz22DM8IwRjvfPsAdARXHnLEcQ0eMLIsM3O5t/xVABk74I9/dgdRS/dYBQUdJGnVQdFghZ9OWFdtw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.60.83) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=xilinx.com;
+ dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
+ not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=d7TfN17oK8F2t6OALSAXlrRz8ePlocQcOt3Tf7Trm+w=;
-        b=IAv54bR49HatWrnIw+HDgyEN9L0d+xo2Xv+gqO9biP9UAG4TQxLCmG7iTpbSCq+NuC
-         0eAR4r4KUVa6eR6XU7d3tZ5fOUaNT6Wg4F97lpYfpU8MSjA8SlYyhx+b4yh9uNhsbG4n
-         oNawBTi8CBRoYEvBS4wq84IRWkzfMxdsNljhCX1BARiGTmfgxw2N4TkfQs4duPM6QRsC
-         +daKrgaq3RS/hpXvWAQJFLUKT7QBBqjbgFTKz8Z3KRYGMMv2EvUymel++H5RKt+zsyd6
-         f8RHaCLC6Lghb4Nbso62VAu3g8UE9aQ8Yv6ZVW9+JjeIw9YffkFE9T6mZb2/j2IDS2WA
-         XF9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=d7TfN17oK8F2t6OALSAXlrRz8ePlocQcOt3Tf7Trm+w=;
-        b=R22yX0cCyoiBoAtYMTTf8i/eTofSArI3KiJt8fHv/qCN0hHm0ncUeC/59VZ5dPUmCq
-         OUTANlbR1SfQPkYyN9c0/MnoF3BuL+i07YCfFVFjFVu+L+eIPvZRfR7NGx0rjKOIC5Zb
-         WJh7Vt63Urx8jkeXmYjMmYdS8dDZwC9shtLBhqTifHXbfmvZiF8i20A+qIGzsQzIJ4Tc
-         8rXIztrVGC6Uw3qa/kQX4K+W0ASMIGB3Bh5NCK4aPtNFlCd/Dg03+TQPk0E/RMZlauun
-         M0muDi8YuC/TFhTaBraPf1hFyQ5FOxro+Tm1P/C/Z2ff6if+nC5XQCaJHGPX0DADcLYS
-         LCKw==
-X-Gm-Message-State: AGi0PuYlLqu4KGCuYyY/ODt6Rdz5Jh1HKTiIhk2Pv5PXqB62nhTaZ1t5
-        r7mRXz1h4jc6VlstAgNqz5pVfg==
-X-Google-Smtp-Source: APiQypJ9lhmlgi5PbLI3Ia4+q4YouJOhuN2AbjSX8A9OMK0E/D5AZg24FRtaKX79pzagH8HcG/UleQ==
-X-Received: by 2002:a65:424b:: with SMTP id d11mr2245592pgq.17.1586484921064;
-        Thu, 09 Apr 2020 19:15:21 -0700 (PDT)
-Received: from builder.lan (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id e26sm388588pff.167.2020.04.09.19.15.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Apr 2020 19:15:20 -0700 (PDT)
-Date:   Thu, 9 Apr 2020 19:15:28 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>, Nuno S? <nuno.sa@analog.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Mark Brown <broonie@kernel.org>, linux-hwmon@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        netdev@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Fix dtc warnings on reg and ranges in
- examples
-Message-ID: <20200410021528.GY20625@builder.lan>
-References: <20200409202458.24509-1-robh@kernel.org>
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FKGlSqE1jYCOfD2LiiBwGfH4L3DNjBQm66kK3Dg6/TI=;
+ b=I0dSM0SJG+K6SvHV+nTbtBhxNHolXbz+1SjGPWMx5+zIX6nOMxCnHvPUYnDh9dzrAy38yMz7OlEvc+NRpQuXbygqFIII5tz9Ryd0xttn7Lvm8SJ/p7tjxhKPmOhSUHUGzBtEUTZxo87qRlcF9kDWRxNZ9aDDzum0Ev0gFPOVS9Q=
+Received: from CY4PR18CA0065.namprd18.prod.outlook.com (2603:10b6:903:13f::27)
+ by DM6PR02MB3993.namprd02.prod.outlook.com (2603:10b6:5:9f::30) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2900.15; Fri, 10 Apr
+ 2020 07:19:33 +0000
+Received: from CY1NAM02FT008.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:903:13f:cafe::9a) by CY4PR18CA0065.outlook.office365.com
+ (2603:10b6:903:13f::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2900.15 via Frontend
+ Transport; Fri, 10 Apr 2020 07:19:33 +0000
+Authentication-Results: spf=pass (sender IP is 149.199.60.83)
+ smtp.mailfrom=xilinx.com; roeck-us.net; dkim=none (message not signed)
+ header.d=none;roeck-us.net; dmarc=bestguesspass action=none
+ header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.60.83 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
+Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
+ CY1NAM02FT008.mail.protection.outlook.com (10.152.75.59) with Microsoft SMTP
+ Server id 15.20.2900.15 via Frontend Transport; Fri, 10 Apr 2020 07:19:32
+ +0000
+Received: from [149.199.38.66] (port=39528 helo=xsj-pvapsmtp01)
+        by xsj-pvapsmtpgw01 with esmtp (Exim 4.90)
+        (envelope-from <michal.simek@xilinx.com>)
+        id 1jMnwO-0003Wm-It; Fri, 10 Apr 2020 00:19:04 -0700
+Received: from [127.0.0.1] (helo=localhost)
+        by xsj-pvapsmtp01 with smtp (Exim 4.63)
+        (envelope-from <michal.simek@xilinx.com>)
+        id 1jMnwq-0002Vw-Gr; Fri, 10 Apr 2020 00:19:32 -0700
+Received: from xsj-pvapsmtp01 (smtp3.xilinx.com [149.199.38.66])
+        by xsj-smtp-dlp2.xlnx.xilinx.com (8.13.8/8.13.1) with ESMTP id 03A7JVRO024206;
+        Fri, 10 Apr 2020 00:19:31 -0700
+Received: from [172.30.17.109]
+        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
+        (envelope-from <michals@xilinx.com>)
+        id 1jMnwo-0002Vh-ST; Fri, 10 Apr 2020 00:19:31 -0700
+Subject: Re: Linux driver for IRPS5401 - status reg not found
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Robert Hancock <hancock@sedsystems.ca>, monstr@monstr.eu,
+        Michal Simek <michal.simek@xilinx.com>
+Cc:     linux-hwmon@vger.kernel.org
+References: <e303166b-4d7a-d2b9-a5c0-fd4de8d22a49@xilinx.com>
+ <44d8631a-618c-a061-d9ca-d8030dd8a420@roeck-us.net>
+ <52d41b38-8af9-1496-65dc-c36179a9d286@sedsystems.ca>
+ <299872b6-0fcf-3ef1-5b52-41fceb2dcdc0@roeck-us.net>
+ <3b1750d0-bb1c-0a37-e1a0-d7c25b4bc525@sedsystems.ca>
+ <20200330194859.GA12459@roeck-us.net>
+ <b4322641-5918-40c4-a887-dcfa20db1733@xilinx.com>
+ <7a10a855-53a2-0743-be7d-86f6030626ca@seznam.cz>
+ <087f0821-bcd5-0f85-3e02-2b95721d1c2d@roeck-us.net>
+ <8afd61bc-9a67-0f22-2931-5ac9d084ee3f@sedsystems.ca>
+ <ff6483cf-7513-8a2c-f686-5c6782fa50cc@roeck-us.net>
+From:   Michal Simek <michal.simek@xilinx.com>
+Message-ID: <3d9be1ab-febc-c195-4aca-653cdb87225e@xilinx.com>
+Date:   Fri, 10 Apr 2020 09:19:28 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+In-Reply-To: <ff6483cf-7513-8a2c-f686-5c6782fa50cc@roeck-us.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200409202458.24509-1-robh@kernel.org>
+X-RCIS-Action: ALLOW
+X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
+X-TM-AS-User-Approved-Sender: Yes;Yes
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-Forefront-Antispam-Report: CIP:149.199.60.83;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapsmtpgw01;PTR:unknown-60-83.xilinx.com;CAT:NONE;SFTY:;SFS:(10009020)(4636009)(39860400002)(136003)(376002)(346002)(396003)(46966005)(5660300002)(356005)(31696002)(47076004)(110136005)(82740400003)(53546011)(70206006)(8936002)(6666004)(70586007)(336012)(36756003)(2906002)(81156014)(316002)(26005)(2616005)(44832011)(186003)(4326008)(81166007)(478600001)(966005)(8676002)(426003)(9786002)(31686004);DIR:OUT;SFP:1101;
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f851b281-5a21-4af1-78d5-08d7dd1f8436
+X-MS-TrafficTypeDiagnostic: DM6PR02MB3993:
+X-LD-Processed: 657af505-d5df-48d0-8300-c31994686c5c,ExtAddr
+X-Microsoft-Antispam-PRVS: <DM6PR02MB3993735661CA4BEE3DA96D80C6DE0@DM6PR02MB3993.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-Forefront-PRVS: 0369E8196C
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 02ruE5oNMFRFuekGOxma9+ovjXP1FvPeGk2nU+U4/zQKXJEqXF0SkwIZCL1K5jcL7JshyuQCJN0ZAp6VT03E9dBjCynua9GUJ5JfBvd3O4O+L7OXylJyadVt9GdLVCEckFbtCyQkHugWiJAAEYAqgCgFbAwgUEwqWBzNXt2spv2AWvN2ZHNKqa0qLhUqOYzqm4s3QSzmQMfWhmP9KDuOyIM5QxaL0OZ8xursJXk4bo8D5Kl8SUdWxBdKiiVvi0cOKeWdrdpcnX1za1KOoMOQW4zoFOFKhvX979DGqaNsGnA/4XKXWbayrHI96XS0wlJOE8c4igBIcvTdJ0q2Pd00mIe7XL9kTY4zDjxsMIL6aQr7K+Y26NUTVmNW6HBGkak5YISBBn4alqT7ZcrsKj+L7tvnkSi7m/9pMb23weydZFextZ0AzVlKeU0dscU+x5rcmJubtoNZqH2DU1v5PV1lN3qXZ7kUFcfd4Xv3/Yq8Wo7fyaXvrBzEklk0zMvkaF9aVMmkZbOCmSNMF51SAy4zEQDmRMbXVATJ8S4oVobqXZVLbdPW09aL9xZfWsh/mTmetHD9SLgB2fs+ZwU6FtAfvw==
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Apr 2020 07:19:32.8041
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f851b281-5a21-4af1-78d5-08d7dd1f8436
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB3993
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu 09 Apr 13:24 PDT 2020, Rob Herring wrote:
+On 09. 04. 20 23:23, Guenter Roeck wrote:
+> On 4/9/20 8:30 AM, Robert Hancock wrote:
+>> On 2020-04-09 9:16 a.m., Guenter Roeck wrote:
+>>> Hi Michal,
+>>>
+>>> On 4/9/20 7:29 AM, Michal Simek wrote:
+>>> [ ... ]
+>>>>
+>>>> Just to let you know issue is with i2c driver. Here is my output for the
+>>>> record.
+>>>>
+>>> Thanks a lot for the update.
+>>>
+>>>> irps5401-i2c-3-43
+>>>> Adapter: i2c-0-mux (chan_id 2)
+>>>> vin1:         11.56 V  (min =  +9.00 V, crit max = +14.00 V)
+>>>> vin2:         11.56 V  (min =  +9.00 V, crit max = +14.00 V)
+>>>> vin3:         11.56 V  (min =  +9.00 V, crit max = +14.00 V)
+>>>> vin4:             N/A
+>>>
+>>> This is interesting; it means that the rail is not active (?) or
+>>> not supported, or maybe even that the driver has a bug. The second
+>>> chip reports a value here, so I guess the rail is inactive.
+>>> If possible, it would be desirable to detect this during probe
+>>> and not try to report values for this rail. It would be great if
+>>> you can find the time to figure out what is going on.
+>>
+>> I would assume that either that rail is not used in that board design and was disabled in the non-volatile config on the chip, or alternately the chip allows combining outputs C and D (i.e. 3 and 4) into a single output in which case only one will report valid data. Not sure offhand if there is a way to detect those cases from the PMBus interface at probe time.
+>>
+> I think it may be the output disable register (0x38). One would have
+> to know the i2c address, read the register, and set page bits
+> accordingly. Overall, I am not sure if it is worth the trouble.
+> Maybe we should just just add a note to the driver documentation.
 
-> A recent update to dtc and changes to the default warnings introduced
-> some new warnings in the DT binding examples:
-> 
-> Documentation/devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-mbus.example.dts:23.13-61:
->  Warning (dma_ranges_format): /example-0/dram-controller@1c01000:dma-ranges: "dma-ranges" property has invalid length (12 bytes) (parent #address-cells == 1, child #address-cells == 2, #size-cells == 1)
-> Documentation/devicetree/bindings/hwmon/adi,axi-fan-control.example.dts:17.22-28.11:
->  Warning (unit_address_vs_reg): /example-0/fpga-axi@0: node has a unit name, but no reg or ranges property
-> Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.example.dts:34.13-54:
->  Warning (dma_ranges_format): /example-0/memory-controller@2c00000:dma-ranges: "dma-ranges" property has invalid length (24 bytes) (parent #address-cells == 1, child #address-cells == 2, #size-cells == 2)
-> Documentation/devicetree/bindings/mfd/st,stpmic1.example.dts:19.15-79.11:
->  Warning (unit_address_vs_reg): /example-0/i2c@0: node has a unit name, but no reg or ranges property
-> Documentation/devicetree/bindings/net/qcom,ipq8064-mdio.example.dts:28.23-31.15:
->  Warning (unit_address_vs_reg): /example-0/mdio@37000000/switch@10: node has a unit name, but no reg or ranges property
-> Documentation/devicetree/bindings/rng/brcm,bcm2835.example.dts:17.5-21.11:
->  Warning (unit_address_vs_reg): /example-0/rng: node has a reg or ranges property, but no unit name
-> Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.example.dts:20.20-43.11:
->  Warning (unit_address_vs_reg): /example-0/soc@0: node has a unit name, but no reg or ranges property
-> Documentation/devicetree/bindings/usb/ingenic,musb.example.dts:18.28-21.11:
->  Warning (unit_address_vs_reg): /example-0/usb-phy@0: node has a unit name, but no reg or ranges property
-> 
-> Cc: Maxime Ripard <mripard@kernel.org>
-> Cc: Chen-Yu Tsai <wens@csie.org>
-> Cc: "Nuno S�" <nuno.sa@analog.com>
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Jonathan Hunter <jonathanh@nvidia.com>
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Matt Mackall <mpm@selenic.com>
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> Cc: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-> Cc: Florian Fainelli <f.fainelli@gmail.com>
-> Cc: Ray Jui <rjui@broadcom.com>
-> Cc: Scott Branden <sbranden@broadcom.com>
-> Cc: bcm-kernel-feedback-list@broadcom.com
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: linux-hwmon@vger.kernel.org
-> Cc: linux-tegra@vger.kernel.org
-> Cc: linux-arm-msm@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-crypto@vger.kernel.org
-> Cc: linux-rpi-kernel@lists.infradead.org
-> Cc: linux-spi@vger.kernel.org
-> Cc: linux-usb@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
+https://www.xilinx.com/support/documentation/boards_and_kits/zcu104/ug1267-zcu104-eval-bd.pdf
 
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+page 83
 
-Regards,
-Bjorn
+0x43 is PHASE_C/D combined together a provide 1.2v.
 
-> ---
-> Will take this via the DT tree.
-> 
-> Rob
-> 
->  .../arm/sunxi/allwinner,sun4i-a10-mbus.yaml   |  6 +++
->  .../bindings/hwmon/adi,axi-fan-control.yaml   |  2 +-
->  .../nvidia,tegra186-mc.yaml                   | 41 +++++++++++--------
->  .../devicetree/bindings/mfd/st,stpmic1.yaml   |  2 +-
->  .../bindings/net/qcom,ipq8064-mdio.yaml       |  1 +
->  .../devicetree/bindings/rng/brcm,bcm2835.yaml |  2 +-
->  .../bindings/spi/qcom,spi-qcom-qspi.yaml      |  2 +-
->  .../devicetree/bindings/usb/ingenic,musb.yaml |  2 +-
->  8 files changed, 35 insertions(+), 23 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-mbus.yaml b/Documentation/devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-mbus.yaml
-> index aa0738b4d534..e713a6fe4cf7 100644
-> --- a/Documentation/devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-mbus.yaml
-> +++ b/Documentation/devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-mbus.yaml
-> @@ -42,6 +42,10 @@ properties:
->      description:
->        See section 2.3.9 of the DeviceTree Specification.
->  
-> +  '#address-cells': true
-> +
-> +  '#size-cells': true
-> +
->  required:
->    - "#interconnect-cells"
->    - compatible
-> @@ -59,6 +63,8 @@ examples:
->          compatible = "allwinner,sun5i-a13-mbus";
->          reg = <0x01c01000 0x1000>;
->          clocks = <&ccu CLK_MBUS>;
-> +        #address-cells = <1>;
-> +        #size-cells = <1>;
->          dma-ranges = <0x00000000 0x40000000 0x20000000>;
->          #interconnect-cells = <1>;
->      };
-> diff --git a/Documentation/devicetree/bindings/hwmon/adi,axi-fan-control.yaml b/Documentation/devicetree/bindings/hwmon/adi,axi-fan-control.yaml
-> index 57a240d2d026..29bb2c778c59 100644
-> --- a/Documentation/devicetree/bindings/hwmon/adi,axi-fan-control.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/adi,axi-fan-control.yaml
-> @@ -47,7 +47,7 @@ required:
->  
->  examples:
->    - |
-> -    fpga_axi: fpga-axi@0 {
-> +    fpga_axi: fpga-axi {
->              #address-cells = <0x2>;
->              #size-cells = <0x1>;
->  
-> diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
-> index 12516bd89cf9..611bda38d187 100644
-> --- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
-> +++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.yaml
-> @@ -97,30 +97,35 @@ examples:
->      #include <dt-bindings/clock/tegra186-clock.h>
->      #include <dt-bindings/interrupt-controller/arm-gic.h>
->  
-> -    memory-controller@2c00000 {
-> -        compatible = "nvidia,tegra186-mc";
-> -        reg = <0x0 0x02c00000 0x0 0xb0000>;
-> -        interrupts = <GIC_SPI 223 IRQ_TYPE_LEVEL_HIGH>;
-> -
-> +    bus {
->          #address-cells = <2>;
->          #size-cells = <2>;
->  
-> -        ranges = <0x0 0x02c00000 0x02c00000 0x0 0xb0000>;
-> +        memory-controller@2c00000 {
-> +            compatible = "nvidia,tegra186-mc";
-> +            reg = <0x0 0x02c00000 0x0 0xb0000>;
-> +            interrupts = <GIC_SPI 223 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +            #address-cells = <2>;
-> +            #size-cells = <2>;
-> +
-> +            ranges = <0x0 0x02c00000 0x0 0x02c00000 0x0 0xb0000>;
->  
-> -        /*
-> -         * Memory clients have access to all 40 bits that the memory
-> -         * controller can address.
-> -         */
-> -        dma-ranges = <0x0 0x0 0x0 0x0 0x100 0x0>;
-> +            /*
-> +             * Memory clients have access to all 40 bits that the memory
-> +             * controller can address.
-> +             */
-> +            dma-ranges = <0x0 0x0 0x0 0x0 0x100 0x0>;
->  
-> -        external-memory-controller@2c60000 {
-> -            compatible = "nvidia,tegra186-emc";
-> -            reg = <0x0 0x02c60000 0x0 0x50000>;
-> -            interrupts = <GIC_SPI 224 IRQ_TYPE_LEVEL_HIGH>;
-> -            clocks = <&bpmp TEGRA186_CLK_EMC>;
-> -            clock-names = "emc";
-> +            external-memory-controller@2c60000 {
-> +                compatible = "nvidia,tegra186-emc";
-> +                reg = <0x0 0x02c60000 0x0 0x50000>;
-> +                interrupts = <GIC_SPI 224 IRQ_TYPE_LEVEL_HIGH>;
-> +                clocks = <&bpmp TEGRA186_CLK_EMC>;
-> +                clock-names = "emc";
->  
-> -            nvidia,bpmp = <&bpmp>;
-> +                nvidia,bpmp = <&bpmp>;
-> +            };
->          };
->      };
->  
-> diff --git a/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml b/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml
-> index d9ad9260e348..f88d13d70441 100644
-> --- a/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml
-> @@ -274,7 +274,7 @@ examples:
->    - |
->      #include <dt-bindings/mfd/st,stpmic1.h>
->      #include <dt-bindings/interrupt-controller/arm-gic.h>
-> -    i2c@0 {
-> +    i2c {
->        #address-cells = <1>;
->        #size-cells = <0>;
->        pmic@33 {
-> diff --git a/Documentation/devicetree/bindings/net/qcom,ipq8064-mdio.yaml b/Documentation/devicetree/bindings/net/qcom,ipq8064-mdio.yaml
-> index b9f90081046f..67df3fe861ee 100644
-> --- a/Documentation/devicetree/bindings/net/qcom,ipq8064-mdio.yaml
-> +++ b/Documentation/devicetree/bindings/net/qcom,ipq8064-mdio.yaml
-> @@ -48,6 +48,7 @@ examples:
->  
->          switch@10 {
->              compatible = "qca,qca8337";
-> +            reg = <0x10>;
->              /* ... */
->          };
->      };
-> diff --git a/Documentation/devicetree/bindings/rng/brcm,bcm2835.yaml b/Documentation/devicetree/bindings/rng/brcm,bcm2835.yaml
-> index 89ab67f20a7f..c147900f9041 100644
-> --- a/Documentation/devicetree/bindings/rng/brcm,bcm2835.yaml
-> +++ b/Documentation/devicetree/bindings/rng/brcm,bcm2835.yaml
-> @@ -39,7 +39,7 @@ additionalProperties: false
->  
->  examples:
->    - |
-> -    rng {
-> +    rng@7e104000 {
->          compatible = "brcm,bcm2835-rng";
->          reg = <0x7e104000 0x10>;
->          interrupts = <2 29>;
-> diff --git a/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml b/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
-> index 0cf470eaf2a0..5c16cf59ca00 100644
-> --- a/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.yaml
-> @@ -61,7 +61,7 @@ examples:
->      #include <dt-bindings/clock/qcom,gcc-sdm845.h>
->      #include <dt-bindings/interrupt-controller/arm-gic.h>
->  
-> -    soc: soc@0 {
-> +    soc: soc {
->          #address-cells = <2>;
->          #size-cells = <2>;
->  
-> diff --git a/Documentation/devicetree/bindings/usb/ingenic,musb.yaml b/Documentation/devicetree/bindings/usb/ingenic,musb.yaml
-> index 1d6877875077..c2d2ee43ba67 100644
-> --- a/Documentation/devicetree/bindings/usb/ingenic,musb.yaml
-> +++ b/Documentation/devicetree/bindings/usb/ingenic,musb.yaml
-> @@ -56,7 +56,7 @@ additionalProperties: false
->  examples:
->    - |
->      #include <dt-bindings/clock/jz4740-cgu.h>
-> -    usb_phy: usb-phy@0 {
-> +    usb_phy: usb-phy {
->        compatible = "usb-nop-xceiv";
->        #phy-cells = <0>;
->      };
-> -- 
-> 2.20.1
-> 
+Thanks,
+Michal
