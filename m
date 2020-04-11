@@ -2,384 +2,198 @@ Return-Path: <SRS0=9wTL=53=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A32AC2BA2B
-	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Apr 2020 17:07:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64787C2BA2B
+	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Apr 2020 17:27:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0CBEF20757
-	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Apr 2020 17:07:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3233D2084D
+	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Apr 2020 17:27:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GiBWJvFO"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Iga7JCYS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726107AbgDKRHi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 11 Apr 2020 13:07:38 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:33201 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726070AbgDKRHh (ORCPT
+        id S1726182AbgDKR1D (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 11 Apr 2020 13:27:03 -0400
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:38339 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726167AbgDKR1C (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 11 Apr 2020 13:07:37 -0400
-Received: by mail-lj1-f194.google.com with SMTP id q22so4873271ljg.0
-        for <linux-hwmon@vger.kernel.org>; Sat, 11 Apr 2020 10:07:32 -0700 (PDT)
+        Sat, 11 Apr 2020 13:27:02 -0400
+Received: by mail-pj1-f66.google.com with SMTP id t40so1993636pjb.3;
+        Sat, 11 Apr 2020 10:27:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fwf8KArGumSTOqMp4+M8xuLRLaiR9uNWE7GXqk1HG5A=;
-        b=GiBWJvFOx0Rju8bh+8K4CZYJ+2EA83iDRueRX7zYaqxKEzas3Q92kg9dOoi70Zwgap
-         +VdkrEioJKiSH7OgUzdVsZ2LGvGBkucmcVL15E36c/os1iAMUbm42fwehlYVp0/n3Gws
-         qKY1+xWpbNOf7+E24q45jvKSsl6wNSbS3UEasaram06pRRqdJvpiRT5Ke+Hpua/Dxjci
-         MZSWq7lUbYWWGUB2AFjRGUsAbc6KwtYqD1dNmFD1UY+R0tJVts5X9McV5LAEGyqWe8F6
-         ILwVFdwFkpSVZrfz6AzN/x7H8CT38LZyhHbuAwtlRiRvXYZV02Pw8JtpyqMh8r7EI/Zy
-         RGig==
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ptfnM7VsMaSg4mcGQBGZ7WYsGaiNghpUl6FSxVTH1CU=;
+        b=Iga7JCYSM0y9Vh9eZSj1dJUKrbo9F0j2D3B7OvDt3D4fuGxf4ujJOM1mIu4E6SVSuq
+         YQRmCRiNBDwD9BXpfm70aTv8kBp5y6PcMNvUqL/9u9DURrI4F8KWjAh2ZFXMoG9NpK7E
+         908bDlFnDV8WIAgq7D8k3EP617b4e/O7KezJfsihQ9eNUCekg6cQN3EwbIUst6B8cf8c
+         GwcL1qouz3TpAGgBOvft5iemxZCmgnHSSZwjO8LWlwXhE9Kyy8IdpWttX5llCS85yK6p
+         Mf0m3JF0SlHwldv3b9peYcy6j/wsPjF8vLaCRoMIVLjrsRoB2YncXDIWqOyMTOX3AKAC
+         8pyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fwf8KArGumSTOqMp4+M8xuLRLaiR9uNWE7GXqk1HG5A=;
-        b=SLeaPpwONlVnj4amKhT3z7lYrDL9xUfYWsZohLDkS0UE3GsICnAkRtBHD7gyfY1GMt
-         Qj3z6aE4A95BMM1yWFvDbakpqEiahGL9/V2CS/yx94xi4FWbDuHg1gSAiLwswcznjTxh
-         cwi/7KqVpVMb/YXiTzFbH/qtXAByvXJVuFxZlh14B6IZQuK8aS33rbxv495zbBujqzyN
-         DLlwYIL2pwB0tQTAqchFTsc8p7OFtplxfPxlrRxx8ZJIpKlJqCdh88BBQxh3Bcjgzl17
-         3QCsT86dCk9sOBtV3XDS9erHOamCeN/pEc5cQM1Fe2qa52MOPuCVpPPnqyHhBkE9FHe+
-         0ggQ==
-X-Gm-Message-State: AGi0Puas3/7uXdMqs/+L/dQRvvazArJCP0U4c96pFjKSz1saICYRCqS7
-        S+Gs343P/wD1v3WcEKXIYCTf2/rNmo4R56AUTlhdUg==
-X-Google-Smtp-Source: APiQypI76Pyw+By+DZu4LkKLa/jXVR1b5EDLbeknSnro2954ueQ1OwOAXfhtdmiB1Mg5dvCygIQATPvKdf8SOhEHpWk=
-X-Received: by 2002:a05:651c:20d:: with SMTP id y13mr6341734ljn.112.1586624851922;
- Sat, 11 Apr 2020 10:07:31 -0700 (PDT)
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=ptfnM7VsMaSg4mcGQBGZ7WYsGaiNghpUl6FSxVTH1CU=;
+        b=B84AwkOo+bd54DfuLBSFXBthSu5IzHkTok4FXdEdnXUK094DWMr1E1UcF5+QqvO//t
+         av2Yc+vHx0CPajzPN8Gkxb3dIsh6dG4EK5F5/OfRoYr+DiKYkUpCMxkIYs5n9BIO2/ck
+         MHLQW22xj2EYGc6vV13XlCFzxuP5XWrg4ZD5Ej+kQ0HnHCW8iLFOCb0PgQJyk76+xSzi
+         xM4NXPmz1uYXuNzGff4RK6CGwl9o/XIYFG9Erszou1YJvSbhLyi/qKLMpbBU7RdFy8Ug
+         MJ/Npq1voiWkB5nYM+qSWWrl/HJOwEXiLmh/kP/8LSKNCYyiV7VUojwALjzuXVqWaf57
+         cVlA==
+X-Gm-Message-State: AGi0PuZ/OTFBdOlh5BUputTA/AgcYRi7wQZsg6E3dp+RR8XcbyXF+fc3
+        qPyI8sLsrh6FBtNNRz8whPv2tMac
+X-Google-Smtp-Source: APiQypKkQ5NjsU6GAzjlSDYKMu29r2B7oURjFUQjV+DLvDhnyaVHbziRtlkSiV+6bWxn+e9vdDDOlA==
+X-Received: by 2002:a17:902:8b8a:: with SMTP id ay10mr9825947plb.172.1586626021889;
+        Sat, 11 Apr 2020 10:27:01 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id b75sm4915140pjc.23.2020.04.11.10.27.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Apr 2020 10:27:01 -0700 (PDT)
+Subject: Re: [PATCH 1/6] thermal: hwmon: Replace the call the
+ thermal_cdev_update()
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rui.zhang@intel.com
+Cc:     amit.kucheria@verdurent.com, linux-kernel@vger.kernel.org,
+        Kamil Debski <kamil@wypas.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        "open list:PWM FAN DRIVER" <linux-hwmon@vger.kernel.org>
+References: <20200410221236.6484-1-daniel.lezcano@linaro.org>
+ <20200410221236.6484-2-daniel.lezcano@linaro.org>
+ <4ded7975-499d-024a-283f-de4f82d295f3@roeck-us.net>
+ <907914e7-7f5a-e66d-bf38-be110aa1f6f0@linaro.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <bf81a4db-9687-b9b2-4976-64bdd364b101@roeck-us.net>
+Date:   Sat, 11 Apr 2020 10:26:59 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-References: <20200409153939.38730-1-nchatrad@amd.com> <e0d1a13c-e475-2b9f-c951-92aeb1dce9c0@roeck-us.net>
- <CAHfPSqAsuo+ac49L=f0Bg-iPj5gVQp3MRE9kfjSFysUx7WMHpg@mail.gmail.com> <75bc1938-104d-4d53-f46a-247e5ce2d2d2@roeck-us.net>
-In-Reply-To: <75bc1938-104d-4d53-f46a-247e5ce2d2d2@roeck-us.net>
-From:   Naveen Krishna Ch <naveenkrishna.ch@gmail.com>
-Date:   Sat, 11 Apr 2020 22:37:20 +0530
-Message-ID: <CAHfPSqDQmQFaN-VqrPLPz8GOGh_4VHq6=4moJQB3eEGPdRfMiA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] hwmon: Add amd_energy driver to report energy counters
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Naveen Krishna Chatradhi <nchatrad@amd.com>,
-        linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <907914e7-7f5a-e66d-bf38-be110aa1f6f0@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Guenter
+On 4/11/20 9:45 AM, Daniel Lezcano wrote:
+> On 11/04/2020 03:32, Guenter Roeck wrote:
+>> On 4/10/20 3:12 PM, Daniel Lezcano wrote:
+>>> The function thermal_cdev_upadte is called from the throttling
+>>
+>> misspelled
+>>
+>>> functions in the governors not from the cooling device itself.
+>>>
+>>> The cooling device is set to its maximum state and then updated. Even
+>>> if I don't get the purpose of probing the pwm-fan to its maximum
+>>> cooling state, we can replace the thermal_cdev_update() call to the
+>>> internal set_cur_state() function directly.
+>>>
+>>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>>> ---
+>>>  drivers/hwmon/pwm-fan.c | 3 +--
+>>>  1 file changed, 1 insertion(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
+>>> index 30b7b3ea8836..a654ecdf21ab 100644
+>>> --- a/drivers/hwmon/pwm-fan.c
+>>> +++ b/drivers/hwmon/pwm-fan.c
+>>> @@ -372,7 +372,6 @@ static int pwm_fan_probe(struct platform_device *pdev)
+>>>  	if (ret)
+>>>  		return ret;
+>>>  
+>>> -	ctx->pwm_fan_state = ctx->pwm_fan_max_state;
+>>>  	if (IS_ENABLED(CONFIG_THERMAL)) {
+>>>  		cdev = devm_thermal_of_cooling_device_register(dev,
+>>>  			dev->of_node, "pwm-fan", ctx, &pwm_fan_cooling_ops);
+>>> @@ -384,7 +383,7 @@ static int pwm_fan_probe(struct platform_device *pdev)
+>>>  			return ret;
+>>>  		}
+>>>  		ctx->cdev = cdev;
+>>> -		thermal_cdev_update(cdev);
+>>> +		pwm_fan_set_cur_state(cdev, ctx->pwm_fan_max_state);
+>>
+>> So far the function would only change the state if the new
+>> state is not equal to the old state. This was the case because
+>> pwm_fan_state was set to pwm_fan_max_state, and the call to
+>> thermal_cdev_update() and thus pwm_fan_set_cur_state() would
+>> do nothing except update statistics. The old code _assumed_
+>> that the current state is pwm_fan_max_state. The new code
+>> enforces it. That is a substantial semantic change, and it
+>> is not really reflected in the commit message. Is that really
+>> what you want ? If so, the commit message needs to state that
+>> and explain the rationale.
+> 
+> Well, to be honest I'm not getting the rational of calling
+> thermal_cdev_update(cdev) right after
+> devm_thermal_of_cooling_device_register() neither setting pwm_fan_state
+> to pwm_fan_max_state.
+> 
+Good question. The author might know/recall. Maybe the idea was that
+thermal would update the state to a lower state shortly thereafter.
 
-On Sat, 11 Apr 2020 at 21:18, Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 4/11/20 5:26 AM, Naveen Krishna Ch wrote:
-> > Hi Guenter
-> >
-> > I would be glad, If you could help me with the following query.
-> > On Fri, 10 Apr 2020 at 21:27, Guenter Roeck <linux@roeck-us.net> wrote:
-> >>
-> >> On 4/9/20 8:39 AM, Naveen Krishna Chatradhi wrote:
-> >>> This patch adds hwmon based amd_energy driver support for
-> >>> family 17h processors from AMD.
-> >>>
-> >>> The driver provides following interface to the userspace
-> >>> 1. Reports the per core and per socket energy consumption
-> >>>    via sysfs entries created per core and per socket respectively.
-> >>>     * per core energy consumed via "core_energy%d_input"
-> >>>     * package/socket energy consumed via "sock_energy%d_input".
-> >>> 2. Uses topology_max_packages() to get number of sockets.
-> >>> 3. Uses num_present_cpus() to get the number of CPUs.
-> >>> 4. Reports the energy units via energy_unit sysfs entry
-> >>>
-> >>> Cc: Guenter Roeck <linux@roeck-us.net>
-> >>> Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
-> >>> ---
-> >>>  drivers/hwmon/Kconfig      |  10 ++
-> >>>  drivers/hwmon/Makefile     |   1 +
-> >>>  drivers/hwmon/amd_energy.c | 273 +++++++++++++++++++++++++++++++++++++++++++++
-> >>>  3 files changed, 284 insertions(+)
-> >>>  create mode 100644 drivers/hwmon/amd_energy.c
-> >>>
-> >>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> >>> index 05a30832c6ba..d83f1403b429 100644
-> >>> --- a/drivers/hwmon/Kconfig
-> >>> +++ b/drivers/hwmon/Kconfig
-> >>> @@ -324,6 +324,16 @@ config SENSORS_FAM15H_POWER
-> >>>         This driver can also be built as a module. If so, the module
-> >>>         will be called fam15h_power.
-> >>>
-> >>> +config SENSORS_AMD_ENERGY
-> >>> +     tristate "AMD RAPL MSR based Energy driver"
-> >>> +     depends on X86
-> >>> +     help
-> >>> +       If you say yes here you get support for core and package energy
-> >>> +       sensors, based on RAPL MSR for AMD family 17h and above CPUs.
-> >>> +
-> >>> +       This driver can also be built as a module. If so, the module
-> >>> +       will be called as amd_energy.
-> >>> +
-> >>>  config SENSORS_APPLESMC
-> >>>       tristate "Apple SMC (Motion sensor, light sensor, keyboard backlight)"
-> >>>       depends on INPUT && X86
-> >>> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> >>> index b0b9c8e57176..318f89dc7133 100644
-> >>> --- a/drivers/hwmon/Makefile
-> >>> +++ b/drivers/hwmon/Makefile
-> >>> @@ -45,6 +45,7 @@ obj-$(CONFIG_SENSORS_ADT7411)       += adt7411.o
-> >>>  obj-$(CONFIG_SENSORS_ADT7462)        += adt7462.o
-> >>>  obj-$(CONFIG_SENSORS_ADT7470)        += adt7470.o
-> >>>  obj-$(CONFIG_SENSORS_ADT7475)        += adt7475.o
-> >>> +obj-$(CONFIG_SENSORS_AMD_ENERGY) += amd_energy.o
-> >>>  obj-$(CONFIG_SENSORS_APPLESMC)       += applesmc.o
-> >>>  obj-$(CONFIG_SENSORS_ARM_SCMI)       += scmi-hwmon.o
-> >>>  obj-$(CONFIG_SENSORS_ARM_SCPI)       += scpi-hwmon.o
-> >>> diff --git a/drivers/hwmon/amd_energy.c b/drivers/hwmon/amd_energy.c
-> >>> new file mode 100644
-> >>> index 000000000000..ddb7073ae39b
-> >>> --- /dev/null
-> >>> +++ b/drivers/hwmon/amd_energy.c
-> >>> @@ -0,0 +1,273 @@
-> >>> +// SPDX-License-Identifier: GPL-2.0-only
-> >>> +
-> >>> +/*
-> >>> + * Copyright (C) 2019 Advanced Micro Devices, Inc.
-> >>> + */
-> >>> +
-> >>> +#include <linux/kernel.h>
-> >>> +#include <linux/module.h>
-> >>> +#include <linux/slab.h>
-> >>> +#include <linux/types.h>
-> >>> +#include <linux/device.h>
-> >>> +#include <linux/sysfs.h>
-> >>> +#include <linux/cpu.h>
-> >>> +#include <linux/list.h>
-> >>> +#include <linux/hwmon.h>
-> >>> +#include <linux/hwmon-sysfs.h>
-> >>> +#include <linux/processor.h>
-> >>> +#include <linux/platform_device.h>
-> >>> +#include <linux/cpumask.h>
-> >>
-> >> Alphabetic include file order, please.
-> >>
-> >>> +
-> >>> +#include <asm/cpu_device_id.h>
-> >>> +
-> >>> +#define DRVNAME      "amd_energy"
-> >>> +
-> >>> +#define ENERGY_PWR_UNIT_MSR  0xC0010299
-> >>> +#define ENERGY_CORE_MSR      0xC001029A
-> >>> +#define ENERGY_PCK_MSR               0xC001029B
-> >>> +
-> >>> +#define AMD_TIME_UNIT_MASK   0xF0000
-> >>> +#define AMD_ENERGY_UNIT_MASK 0x01F00
-> >>> +#define AMD_POWER_UNIT_MASK  0x0000F
-> >>> +
-> >>> +#define ENERGY_STATUS_MASK   0xffffffff
-> >>> +
-> >>> +#define AMD_FAM_17           0x17 /* ZP, SSP */
-> >>> +
-> >>> +/* Useful macros */
-> >>> +#define AMD_CPU_FAM_ANY(_family, _model)     \
-> >>> +{                                            \
-> >>> +     .vendor         = X86_VENDOR_AMD,       \
-> >>> +     .family         = _family,              \
-> >>> +     .model          = _model,               \
-> >>> +     .feature        = X86_FEATURE_ANY,      \
-> >>> +}
-> >>> +
-> >>> +#define AMD_CPU_FAM(_model)                  \
-> >>> +     AMD_CPU_FAM_ANY(AMD_FAM_##_model, X86_MODEL_ANY)
-> >>> +
-> >>> +static struct device_attribute units_attr;
-> >>> +
-> >>> +struct sensor_data {
-> >>> +     unsigned int scale;
-> >>> +     union {
-> >>> +             unsigned int cpu_nr;
-> >>> +             unsigned int sock_nr;
-> >>> +     };
-> >>> +     struct device_attribute dev_attr_input;
-> >>> +     char input[32];
-> >>> +};
-> >>> +
-> >>> +struct amd_energy_sensors {
-> >>> +     struct sensor_data *data;
-> >>> +     struct attribute **attrs;
-> >>> +     struct attribute_group group;
-> >>> +     const struct attribute_group *groups[1];
-> >>
-> >> Even if acceptable, this would be wrong. The list of groups
-> >> ends with an empty entry, meaning this array would have to have
-> >> at least two entries (one for the terminator).
-> >>
-> >>> +};
-> >>> +
-> >>> +static ssize_t amd_units_u64_show(struct device *dev,
-> >>> +     struct device_attribute *dev_attr, char *buffer)
-> >>> +{
-> >>> +     uint64_t rapl_units;
-> >>> +     uint64_t energy_unit;
-> >>> +     int ret = 0;
-> >>> +
-> >>> +     ret = rdmsrl_safe(ENERGY_PWR_UNIT_MSR, &rapl_units);
-> >>> +     if (ret)
-> >>> +             return -EAGAIN;
-> >>> +
-> >>> +     energy_unit = (rapl_units & AMD_ENERGY_UNIT_MASK) >> 8;
-> >>> +
-> >>> +     return snprintf(buffer, 24, "%llu\n", energy_unit);
-> >>> +}
-> >>> +
-> >>> +static ssize_t amd_core_u64_show(struct device *dev,
-> >>> +             struct device_attribute *dev_attr, char *buffer)
-> >>> +{
-> >>> +     unsigned long long value;
-> >>> +     struct sensor_data *sensor;
-> >>> +     int ret = 0;
-> >>> +
-> >>> +     sensor = container_of(dev_attr, struct sensor_data, dev_attr_input);
-> >>> +     ret = rdmsrl_safe_on_cpu(sensor->cpu_nr, ENERGY_CORE_MSR, &value);
-> >>> +     if (ret)
-> >>> +             return -EAGAIN;
-> >>> +
-> >>> +     return snprintf(buffer, 24, "%llu\n", value);
-> >>
-> >> It seems to me this reports raw values. This is unacceptable. Values need
-> >> to be scaled to match the ABI. Energy is reported in microJoule.
-> >>
-> >>> +}
-> >>> +
-> >>> +static ssize_t amd_sock_u64_show(struct device *dev,
-> >>> +             struct device_attribute *dev_attr, char *buffer)
-> >>> +{
-> >>> +     unsigned long long value;
-> >>> +     struct sensor_data *sensor;
-> >>> +     int ret = 0;
-> >>> +     int cpu, cpu_nr;
-> >>> +
-> >>> +     sensor = container_of(dev_attr, struct sensor_data, dev_attr_input);
-> >>> +
-> >>> +     for_each_possible_cpu(cpu) {
-> >>> +             struct cpuinfo_x86 *c = &cpu_data(cpu);
-> >>> +
-> >>> +             if (c->initialized && c->logical_die_id == sensor->sock_nr) {
-> >>> +                     cpu_nr = cpu;
-> >>> +                     break;
-> >>> +             }
-> >>> +             cpu_nr = 0;
-> >>> +     }
-> >>> +
-> >>> +     ret = rdmsrl_safe_on_cpu(cpu_nr, ENERGY_PCK_MSR, &value);
-> >>> +     if (ret)
-> >>> +             return -EAGAIN;
-> >>> +
-> >>> +     return snprintf(buffer, 24, "%llu\n", value);
-> >>> +}
-> >>> +
-> >>> +static int amd_energy_probe(struct platform_device *pdev)
-> >>> +{
-> >>> +     struct amd_energy_sensors *amd_sensors;
-> >>> +     struct device *hwdev, *dev = &pdev->dev;
-> >>> +     int nr_cpus, nr_socks, idx = 0;
-> >>> +
-> >>> +     nr_cpus = num_present_cpus();
-> >>> +     nr_socks = topology_max_packages();
-> >>> +
-> >>> +     amd_sensors = devm_kzalloc(dev, sizeof(*amd_sensors), GFP_KERNEL);
-> >>> +     if (!amd_sensors)
-> >>> +             return -ENOMEM;
-> >>> +
-> >>> +     amd_sensors->data = devm_kcalloc(dev, nr_cpus + nr_socks,
-> >>> +                             sizeof(*amd_sensors->data), GFP_KERNEL);
-> >>> +     if (!amd_sensors->data)
-> >>> +             return -ENOMEM;
-> >>> +
-> >>> +     amd_sensors->attrs = devm_kcalloc(dev, nr_cpus + nr_socks,
-> >>> +                             sizeof(*amd_sensors->attrs), GFP_KERNEL);
-> >>> +     if (!amd_sensors->attrs)
-> >>> +             return -ENOMEM;
-> >>> +
-> >>> +     /* populate attributes for number of cpus. */
-> >>> +     for (idx = 0; idx < ; idx++) {
-> >>> +             struct sensor_data *sensor = &amd_sensors->data[idx];
-> >>> +
-> >>> +             snprintf(sensor->input, sizeof(sensor->input),
-> >>> +                             "core_energy%d_input", idx);
-> >>> +
-> >>
-> >> This is unacceptable. Please use standard attributes (energyX_input).
-> >> If you want to report what the sensor is for, use labels.
-> >>
-> >>> +             sensor->dev_attr_input.attr.mode = 0444;
-> >>> +             sensor->dev_attr_input.attr.name = sensor->input;
-> >>> +             sensor->dev_attr_input.show = amd_core_u64_show;
-> >>> +
-> >>> +             sensor->cpu_nr = idx;
-> >>> +             amd_sensors->attrs[idx] = &sensor->dev_attr_input.attr;
-> >>> +
-> >>> +             sysfs_attr_init(amd_sensors->attrs[idx]);
-> >>> +     }
-> >>> +
-> >>> +     /* populate attributes for number of sockets. */
-> >>> +     for (idx = 0; idx < nr_socks; idx++) {
-> >>> +             struct sensor_data *sensor =
-> >>> +                     &amd_sensors->data[nr_cpus + idx];
-> >>> +
-> >>> +             snprintf(sensor->input,
-> >>> +                     sizeof(sensor->input), "sock_energy%d_input", idx);
-> >>> +
-> >>> +             sensor->dev_attr_input.attr.mode = 0444;
-> >>> +             sensor->dev_attr_input.attr.name = sensor->input;
-> >>> +             sensor->dev_attr_input.show = amd_sock_u64_show;
-> >>> +
-> >>> +             sensor->sock_nr = idx;
-> >>> +             amd_sensors->attrs[nr_cpus + idx] =
-> >>> +                     &sensor->dev_attr_input.attr;
-> >>> +
-> >>> +             sysfs_attr_init(amd_sensors->attrs[nr_cpus + idx]);
-> >>> +     }
-> >>
-> >> This all makes me wonder what is reported for inactive/disabled CPUs.
-> >>
-> >>> +
-> >>> +     amd_sensors->group.attrs = amd_sensors->attrs;
-> >>> +     amd_sensors->groups[0] = &amd_sensors->group;
-> >>> +
-> >>> +     platform_set_drvdata(pdev, amd_sensors);
-> >>> +
-> >>> +     hwdev = devm_hwmon_device_register_with_groups(dev,
-> >>> +                     "amd_energy", amd_sensors, amd_sensors->groups);
-> >>
-> >> Please rework the driver to use the devm_hwmon_device_register_with_info() API.
-> > Our current, platform has 64 cores per socket and 2 such sockets on a
-> > board. There is a core energy counter register for each core and
-> > Package counter for each socket.  The topology varies from platform to
-> > platform.
-> >
-> >
-> > To keep this driver reusable for all platforms. I think, we need to
-> > define the hwmon_chip_info and channel_info structures dynamically
-> > (hwmon_chip_info has const variables). Is there a way to define a
-> > pre-processor statement which can create an array for a given
-> > platform.
-> >
-> > Could you suggest me a way to defining these hwmon_chip_info and
-> > channel array dynamically ?  This reason a reason for me to use groups
-> > instead of the chip_info.
->
-> The approach used by the tmp421 driver should work. 'const'
-> doesn't apply to the pointers, but to the data they contain.
-> But that doesn't mean the data itself has to be const. You
-> can still assign the pointers dynamically. The  habanalabs
-> driver does it fully dynamically (I did not review that code,
-> so it may be a bit messy).
-Thank you very much for the pointer. I will go through the code.
->
-> Guenter
+> Do we have the guarantee there is at this point a thermal instance
+> making the target state working when thermal_cdev_update is called?
+> 
+> Are we sure a thermal_cdev_update(cdev) is actually right here?
+> 
+I don't know. I am not exactly familiar with thermal subsystem
+particulars. I do recall seeing similar code in other drivers, though.
 
+Either case, your patch does change functionality, and we should not
+do that without understanding its impact.
 
-
--- 
-Shine bright,
-(: Nav :)
+Thanks
+Guenter
