@@ -2,75 +2,74 @@ Return-Path: <SRS0=wRoL=56=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55529C3815B
-	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Apr 2020 17:06:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D2E8C3815B
+	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Apr 2020 17:12:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2AE882076A
-	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Apr 2020 17:06:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DFEAF2076C
+	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Apr 2020 17:12:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1586883996;
-	bh=N+wDVFj4k9qNnM4H4JBhjazm1jiklG8jskgZRqJY8vE=;
+	s=default; t=1586884372;
+	bh=+qcyIZF6Y3PyicvWS4ejyY0zwsK0szUsXLI7l22j8W0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=X7UtX7X3pWy6xZnvVgA4xiLYajb/sKOwYkkpfjo61JmXlJhrIB0iVRbLtu954i5XU
-	 aIaVXejA6rugiMK8+3iXZOG4YPN4/euTRoDrS+R90/k75O+snJ7K6MhIBkVEnThpR8
-	 kW0ZOxZrecE7XuLQNgnHkMjyybnG0sh+tK0wuT2M=
+	b=YSu7Uw+qQOEcf/j5TFwpPjv+L+m6fvaldB3GPkmhGFhukBCKaLhVzjOh3du2/0Pis
+	 NQzm23H8wr6lRSPi6UxDMNDpUJ4w/oGOSSdWwUCBeC9/4PAP3j4iuVkLcHjixB8f3b
+	 IKb4p3jpCSQrw8osjfnmNtfVRaGZVO07E0ThEWN8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732803AbgDNRGX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 14 Apr 2020 13:06:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59172 "EHLO mail.kernel.org"
+        id S2407568AbgDNRMr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 14 Apr 2020 13:12:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41624 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729042AbgDNRGV (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 14 Apr 2020 13:06:21 -0400
+        id S2407517AbgDNRMq (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 14 Apr 2020 13:12:46 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2B5D820678;
-        Tue, 14 Apr 2020 17:06:20 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6937C20767;
+        Tue, 14 Apr 2020 17:12:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586883980;
-        bh=N+wDVFj4k9qNnM4H4JBhjazm1jiklG8jskgZRqJY8vE=;
+        s=default; t=1586884366;
+        bh=+qcyIZF6Y3PyicvWS4ejyY0zwsK0szUsXLI7l22j8W0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GLTIl/JCaTkOhZA5OQwDfanxfbTEyIdCvGi1wIKXRvXuh3XsA+ROea7ZdVEIEMoUp
-         rkUKYqb5ScEV9JzmaLWwUPEzla8bLzvty9CCTcNG/rMrOF/dgEbtEBXh5A5+9KH9XJ
-         dgb4ux3lsK5o5RvJGS7cBTojbNGLUizRObK2g7/U=
-Date:   Tue, 14 Apr 2020 18:06:18 +0100
+        b=PbluDEd8klbe4xkNX9xFsE670ESHTTOhjhaQFVoprnCTaU4ZEjH5UTUWLd+mTSI+6
+         DSQqhWkIQPD3yBIeAJU1asNH6AEgt5USvO7Kqa+X6ECZCi+OKRLsnOvTCTR+BmFAPw
+         EQDmo85zc+VWDvUZDPnadGVNgStkGN6AM/MaH5iQ=
+Date:   Tue, 14 Apr 2020 18:12:43 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+To:     Michael Walle <michael@walle.cc>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
         Lee Jones <lee.jones@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-hwmon@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        netdev@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Fix dtc warnings on reg and ranges in
- examples
-Message-ID: <20200414170618.GG5412@sirena.org.uk>
-References: <20200409202458.24509-1-robh@kernel.org>
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v2 04/16] regmap-irq: make it possible to add irq_chip do
+ a specific device node
+Message-ID: <20200414171243.GI5412@sirena.org.uk>
+References: <20200402203656.27047-1-michael@walle.cc>
+ <20200402203656.27047-5-michael@walle.cc>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kjpMrWxdCilgNbo1"
+        protocol="application/pgp-signature"; boundary="Q59ABw34pTSIagmi"
 Content-Disposition: inline
-In-Reply-To: <20200409202458.24509-1-robh@kernel.org>
+In-Reply-To: <20200402203656.27047-5-michael@walle.cc>
 X-Cookie: I've only got 12 cards.
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-hwmon-owner@vger.kernel.org
@@ -79,29 +78,51 @@ List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 
---kjpMrWxdCilgNbo1
+--Q59ABw34pTSIagmi
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Thu, Apr 09, 2020 at 02:24:58PM -0600, Rob Herring wrote:
-> A recent update to dtc and changes to the default warnings introduced
-> some new warnings in the DT binding examples:
+On Thu, Apr 02, 2020 at 10:36:44PM +0200, Michael Walle wrote:
+> Add a new function regmap_add_irq_chip_np() with its corresponding
+> devm_regmap_add_irq_chip_np() variant. Sometimes one want to register
+> the IRQ domain on a different device node that the one of the regmap
 
-Acked-by: Mark Brown <broonie@kernel.org>
+The following changes since commit 8f3d9f354286745c751374f5f1fcafee6b3f3136:
 
---kjpMrWxdCilgNbo1
+  Linux 5.7-rc1 (2020-04-12 12:35:55 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git tags/regmap-irq-np
+
+for you to fetch changes up to 12479382877dcf6623af4676caa8d3c647469a1b:
+
+  regmap-irq: make it possible to add irq_chip do a specific device node (2020-04-14 16:21:37 +0100)
+
+----------------------------------------------------------------
+regmap: Allow an irqchip to be created for a specific DT node
+
+----------------------------------------------------------------
+Michael Walle (1):
+      regmap-irq: make it possible to add irq_chip do a specific device node
+
+ drivers/base/regmap/regmap-irq.c | 84 ++++++++++++++++++++++++++++++++--------
+ include/linux/regmap.h           | 10 +++++
+ 2 files changed, 78 insertions(+), 16 deletions(-)
+
+--Q59ABw34pTSIagmi
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl6V7YkACgkQJNaLcl1U
-h9C0nggAgbznZBSepYyVohp/1H4rCte0Z/wk6K7EfPvfDL1M/M+F5oW6AU4YZ7Kq
-lnSn9hweJBFpxBwrrAv0lHakge/LpEQZ1Aqig/t9jd9NgwKqJWJ8Y2aKPx+Oli9k
-mdb6G44fbxVgVruXHd1n2XzJwpISNXksvKBTYWY63Gb7DRAfzSqlexWfysRbtI/O
-NgdIihQ9ti6mjE0Nxso/6KeZbooinBxVRntCOiinYSHraOWbfTn24MQXa70JtuVC
-m7cod5i1+C4PiKb+3m5aYIEQxvzN08qRxnnZFrnknqj+N0GcA1N9wVkJ06JhXrzn
-a84u535dpkRwCg+2Nf9leoevVqXUqw==
-=wm8m
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl6V7woACgkQJNaLcl1U
+h9BuQQf/an0mQWAm5vrM5ORmT03qy9aVeFZm3VBOD6lyBwl1SqzPsYPgdbPBk75U
+DQv+FyWG5Qq1BmPfR4oE8pimSb+pt0UE1LO6zLTHt8WvYmRh+xj6UwLfO0WVEJ06
++xdRzkrGLVScCsrlYGfx1RtjmpgvwRCKZVw39nPYTr57mRndNqlTCAtVtYoL8bX0
+I1ryrYEBvOcjJKTpWRKkm5LzVB67bpyYHEdmA5X6Xn1EwxcNrsfbJ5Eou9rlYmPI
+c1ehw1CrspXGb28+phVkDRaTYRzv4QhOZ/m7Rj1nTMemSL5++ew7GBtMQYqyh+T4
+x9u6Aa5UCcrOyLUoWRLaA3drz6EgbA==
+=lV/N
 -----END PGP SIGNATURE-----
 
---kjpMrWxdCilgNbo1--
+--Q59ABw34pTSIagmi--
