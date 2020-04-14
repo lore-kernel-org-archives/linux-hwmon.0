@@ -2,119 +2,106 @@ Return-Path: <SRS0=wRoL=56=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5F63C2BB85
-	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Apr 2020 17:00:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55529C3815B
+	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Apr 2020 17:06:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C578620678
-	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Apr 2020 17:00:59 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="WJK29o3K"
+	by mail.kernel.org (Postfix) with ESMTP id 2AE882076A
+	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Apr 2020 17:06:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1586883996;
+	bh=N+wDVFj4k9qNnM4H4JBhjazm1jiklG8jskgZRqJY8vE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=X7UtX7X3pWy6xZnvVgA4xiLYajb/sKOwYkkpfjo61JmXlJhrIB0iVRbLtu954i5XU
+	 aIaVXejA6rugiMK8+3iXZOG4YPN4/euTRoDrS+R90/k75O+snJ7K6MhIBkVEnThpR8
+	 kW0ZOxZrecE7XuLQNgnHkMjyybnG0sh+tK0wuT2M=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387524AbgDNRAt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 14 Apr 2020 13:00:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33976 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1732562AbgDNRAo (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 14 Apr 2020 13:00:44 -0400
-Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055CFC061A41
-        for <linux-hwmon@vger.kernel.org>; Tue, 14 Apr 2020 10:00:43 -0700 (PDT)
-Received: by mail-qk1-x742.google.com with SMTP id 20so5966316qkl.10
-        for <linux-hwmon@vger.kernel.org>; Tue, 14 Apr 2020 10:00:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=GIN7IF6qYtKF4gSfr/AeRIvPX7/eCFsh4TApVUETWoE=;
-        b=WJK29o3K5MXm6p3VWzbGrHsk0KBRUyWWpDHcGXG/HUX36uIXx5JyvHKhiu1s3JtLtU
-         V7gkFI/q1KmdLMhMMUxBqFlgpBaa0ZkNYnWmTKON4gWBw5jxIE0XBUAq91eeIGYap3zZ
-         OYhvWUkFkEL5+ErE8/pYC7Unq7WRkY9b6ox3OTtr13DORJy7fe4UWueM3dLYCpcH+haM
-         7s83titQwzbdrha9nbAnzXASShQuNXplRRlunOROJBdfg3Qf8CHG61pH9bI8Yw4wFfA2
-         c4dSOcHuk/T/b5dEH1oSwrARzE52d5vcmU9CxIdgyuhRNmOaqHvCyIjmpsCkx6zA/Qs+
-         xdOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=GIN7IF6qYtKF4gSfr/AeRIvPX7/eCFsh4TApVUETWoE=;
-        b=fnZucS8cgqelkGi7zQFGKXBUWiLYGSStE5OByJefuBOtTo4iQJmQOEtZQEl8OvHhXa
-         bBQlk9cq6OLUy1yZrpn0OdA49I+tpm6ZBF1gddmcs9zn+lx3PBb2axSG/tmr6qudDW3D
-         zdV5kmGBYNmZjyu9uD908rWqNSGFukCnO/tFiX9WWsd44hHrA1lmLSETWA2rIb6ithqH
-         HcUyzmxJefGDTgAkA+QNUJ7RYXZ3DCUhOWb8y8ISkhqhx3BMUcBCvEUuDhe/D/i3uFuf
-         pK1qYk4nFjLOKAY7HHw/kWRkfZVDnW9DDLGQ5mvu6ZBahhH17mw0HFUGHsBHc4UiZS2E
-         6HhA==
-X-Gm-Message-State: AGi0Pua6bX0oql9hnDva1u9XTcJj9jEfv7+erjg295UgynlA1zwPMKQP
-        eHTyLnOj8rLzdUCl38nUwv1cw5ly3NvGBbssJ7yFqA==
-X-Google-Smtp-Source: APiQypJAVUbx87PMTgMxPYPAUoh9xIaPNebw3vKNOCwEq+Xku6Borru68lB1wY/XGBsCVLhWsPFHE8/a8s5sITgt6DA=
-X-Received: by 2002:a05:620a:5f1:: with SMTP id z17mr18160792qkg.21.1586883642039;
- Tue, 14 Apr 2020 10:00:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200402203656.27047-1-michael@walle.cc> <20200402203656.27047-11-michael@walle.cc>
- <CAMpxmJVE3PgVCxkQ-ryc5=KSrKcpdmk1cnJUxJBz9QFCx-e_+A@mail.gmail.com>
- <80bd8661ec8a1f5eda3f09a267846eaa@walle.cc> <CAMpxmJVC7e9JnHzBo-h8M1+KmcA32=Rvxo7+znH=-kAbcCr_LQ@mail.gmail.com>
- <e0388a2137e23d76b2415a7549c01dd1@walle.cc>
-In-Reply-To: <e0388a2137e23d76b2415a7549c01dd1@walle.cc>
-From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date:   Tue, 14 Apr 2020 19:00:30 +0200
-Message-ID: <CAMpxmJW1x4Orh1BZ4TUoCsYeaAAZ4NBUNvoMG9JgP0iLvXTOtg@mail.gmail.com>
-Subject: Re: [PATCH v2 10/16] gpio: add a reusable generic gpio_chip using regmap
-To:     Michael Walle <michael@walle.cc>
-Cc:     linux-gpio <linux-gpio@vger.kernel.org>,
-        linux-devicetree <devicetree@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-hwmon@vger.kernel.org,
-        linux-pwm@vger.kernel.org,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        id S1732803AbgDNRGX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 14 Apr 2020 13:06:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59172 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729042AbgDNRGV (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 14 Apr 2020 13:06:21 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2B5D820678;
+        Tue, 14 Apr 2020 17:06:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1586883980;
+        bh=N+wDVFj4k9qNnM4H4JBhjazm1jiklG8jskgZRqJY8vE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GLTIl/JCaTkOhZA5OQwDfanxfbTEyIdCvGi1wIKXRvXuh3XsA+ROea7ZdVEIEMoUp
+         rkUKYqb5ScEV9JzmaLWwUPEzla8bLzvty9CCTcNG/rMrOF/dgEbtEBXh5A5+9KH9XJ
+         dgb4ux3lsK5o5RvJGS7cBTojbNGLUizRObK2g7/U=
+Date:   Tue, 14 Apr 2020 18:06:18 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
         Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Matt Mackall <mpm@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com, linux-hwmon@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        netdev@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Fix dtc warnings on reg and ranges in
+ examples
+Message-ID: <20200414170618.GG5412@sirena.org.uk>
+References: <20200409202458.24509-1-robh@kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="kjpMrWxdCilgNbo1"
+Content-Disposition: inline
+In-Reply-To: <20200409202458.24509-1-robh@kernel.org>
+X-Cookie: I've only got 12 cards.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-wt., 14 kwi 2020 o 12:07 Michael Walle <michael@walle.cc> napisa=C5=82(a):
-> >>
-> >> So the best from a user perspective I've could come up with was:
-> >>
-> >>    ->base_reg =3D GPIO_REGMAP_ADDR(addr);
-> >>
-> >> I'm open for suggestions.
-> >>
-> >
-> > Maybe setting the pointer to ERR_PTR(-ENOENT) which will result in
-> > IS_ERR() returning true?
->
-> Unfortunatly, its not a pointer, but only a regular unsigned int (ie
-> the type the regmap API has for its "reg" property). It could be a
-> pointer of course but then the user would have to allocate additional
-> memory.
->
-> -michael
->
 
-Eek, of course it's not a pointer. If possible I'd like to avoid this
-GPIO_REGMAP_ADDR() macro, so how about having some separate field for
-invalid offsets making every offset 'valid' by default?
+--kjpMrWxdCilgNbo1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Linus: do you have a better idea?
+On Thu, Apr 09, 2020 at 02:24:58PM -0600, Rob Herring wrote:
+> A recent update to dtc and changes to the default warnings introduced
+> some new warnings in the DT binding examples:
 
-Bart
+Acked-by: Mark Brown <broonie@kernel.org>
+
+--kjpMrWxdCilgNbo1
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl6V7YkACgkQJNaLcl1U
+h9C0nggAgbznZBSepYyVohp/1H4rCte0Z/wk6K7EfPvfDL1M/M+F5oW6AU4YZ7Kq
+lnSn9hweJBFpxBwrrAv0lHakge/LpEQZ1Aqig/t9jd9NgwKqJWJ8Y2aKPx+Oli9k
+mdb6G44fbxVgVruXHd1n2XzJwpISNXksvKBTYWY63Gb7DRAfzSqlexWfysRbtI/O
+NgdIihQ9ti6mjE0Nxso/6KeZbooinBxVRntCOiinYSHraOWbfTn24MQXa70JtuVC
+m7cod5i1+C4PiKb+3m5aYIEQxvzN08qRxnnZFrnknqj+N0GcA1N9wVkJ06JhXrzn
+a84u535dpkRwCg+2Nf9leoevVqXUqw==
+=wm8m
+-----END PGP SIGNATURE-----
+
+--kjpMrWxdCilgNbo1--
