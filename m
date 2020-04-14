@@ -1,253 +1,137 @@
-Return-Path: <SRS0=kKRA=55=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=wRoL=56=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60495C2BA19
-	for <linux-hwmon@archiver.kernel.org>; Mon, 13 Apr 2020 08:28:11 +0000 (UTC)
-X-Greylist: delayed 193 seconds by postgrey-1.34 at mail.kernel.org; Mon, 13 Apr 2020 08:28:11 UTC
-DMARC-Filter: OpenDMARC Filter v1.3.2 mail.kernel.org 28B9520678
-Authentication-Results: mail.kernel.org; dmarc=fail (p=none dis=none) header.from=intel.com
-Authentication-Results: mail.kernel.org; spf=none smtp.mailfrom=linux-hwmon-owner@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 28B9520678
-	for <linux-hwmon@archiver.kernel.org>; Mon, 13 Apr 2020 08:28:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3356CC2BA19
+	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Apr 2020 08:08:18 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id DF84E2072D
+	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Apr 2020 08:08:17 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Qi+aAYqV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728166AbgDMIY5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 13 Apr 2020 04:24:57 -0400
-Received: from mga06.intel.com ([134.134.136.31]:39888 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727971AbgDMIY4 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 13 Apr 2020 04:24:56 -0400
-IronPort-SDR: tQ+ErCLh9dGsFNODh5IEsZZrEGeiTcRVInxDnk9/qcvYD8fQMWDL/xVIiilNHU9YxK4A7Au0rz
- 2GirG7qB4hrg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2020 01:24:55 -0700
-IronPort-SDR: dfhqYwusCHccRouM8fWQKhoDZNSY/8Y9b0CDFs33VwZNSXb87Wg+1Zr373CsdUc/cRRq6K3nZa
- Z0hsHoPUajKw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,378,1580803200"; 
-   d="scan'208";a="243481811"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 13 Apr 2020 01:24:52 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1jNuOh-0001GH-Sh; Mon, 13 Apr 2020 16:24:51 +0800
-Date:   Mon, 13 Apr 2020 16:24:33 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:watchdog-next] BUILD SUCCESS
- 4b86b0f144be5939a981f1d27f806c8a46b5182e
-Message-ID: <5e9421c1.4irejuMiOObUXqLB%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S2406970AbgDNIIQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 14 Apr 2020 04:08:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35692 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2406955AbgDNIIH (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 14 Apr 2020 04:08:07 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601A0C0A3BE2
+        for <linux-hwmon@vger.kernel.org>; Tue, 14 Apr 2020 01:08:07 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id h9so13208783wrc.8
+        for <linux-hwmon@vger.kernel.org>; Tue, 14 Apr 2020 01:08:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Of87X/gGHd7WK7J8InDBiy0jDOtLSnaghXrcb3fjgfk=;
+        b=Qi+aAYqVu1eN15qmGiNzA8fNa4lIaXjb7w8Ocp8Gc0hvk+JIaKlkVXzyxUG8n0kj+r
+         UO5wQRuYWMusYRen73PY8mnpxj7c2gEagVixnKH7uYpOo25BzIAhsiy4AwByxwVKgDTX
+         3usXFCaxp+gOky+4ixr3sYj7SJeR2HTcyBG8WdE5NSYpwB+WADiE6Jvju2AScK2TrryU
+         m0Nbcv9ajXflZubAOOw8jM1w57tWTxiDu8rNj7uzuriDtcDYZAa3eT9hU0TcjfE4Hm8v
+         K5mfMgvUSBew+h/w06khwgn9kCDZAA34fzfhg7vHcnzLGX4BOXe2yx/so+jE4QPF1o8e
+         YT5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Of87X/gGHd7WK7J8InDBiy0jDOtLSnaghXrcb3fjgfk=;
+        b=eO6LNcOMlwR5LJuIYADsibwEQh1KC1MgmEKAp6Xf5fYyCML+APagI2YPgWbHVSsTaK
+         685obyJ6ibm68MclhyQaBI3Y9rwsU8xizTX0QNNy8k9dzFGXgL9/7XPrqRJ0BzGqXwnF
+         BXipcicn7BZf5YRxl0U7CjXish8kozoyqOIVz9eE9qf2nzqltITnJeoqC1ppr9G6suNR
+         NBfUHC7grD2ulZG4sdlW64Z4crA2grCbuZuQ8snYIxlrV9mB45koDSq4RMkuLzR+wqjW
+         3YjRH7IKX0iqvxLGmGQrnzQkXQbirDgyYeQ+1NZiUB+h9plbHpK4Au2x/x2vWkqNCGjQ
+         9oCw==
+X-Gm-Message-State: AGi0PuYVyYCVhYAHW5TTEmVdj6tddmOKbMAcchGaGPhQXMt6OeVUOhjW
+        82RWvZUL/NIG2P9Nnx1963DQvQ==
+X-Google-Smtp-Source: APiQypLIN3SbXV7PM0uFFyvMDh857863ygqy9yht/XtufvHAtOL8FPNIeAgdp7UPDBUQOVQgcQy0GQ==
+X-Received: by 2002:a5d:4286:: with SMTP id k6mr10371255wrq.222.1586851685895;
+        Tue, 14 Apr 2020 01:08:05 -0700 (PDT)
+Received: from dell ([95.149.164.124])
+        by smtp.gmail.com with ESMTPSA id f63sm17383374wma.47.2020.04.14.01.08.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Apr 2020 01:08:05 -0700 (PDT)
+Date:   Tue, 14 Apr 2020 09:09:05 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Tim Harvey <tharvey@gateworks.com>
+Cc:     Linux HWMON List <linux-hwmon@vger.kernel.org>,
+        Robert Jones <rjones@gateworks.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Device Tree Mailing List <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v8 2/3] mfd: add Gateworks System Controller core driver
+Message-ID: <20200414080905.GC2167633@dell>
+References: <1585341214-25285-1-git-send-email-tharvey@gateworks.com>
+ <1585341214-25285-3-git-send-email-tharvey@gateworks.com>
+ <CAJ+vNU1GWFKv8f-ihhoVTWgD8G5UyupOek1fmBPaU0QXKC1qHw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJ+vNU1GWFKv8f-ihhoVTWgD8G5UyupOek1fmBPaU0QXKC1qHw@mail.gmail.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  watchdog-next
-branch HEAD: 4b86b0f144be5939a981f1d27f806c8a46b5182e  watchdog: sp805: fix restart handler
+On Wed, 08 Apr 2020, Tim Harvey wrote:
 
-elapsed time: 484m
+> On Fri, Mar 27, 2020 at 1:33 PM Tim Harvey <tharvey@gateworks.com> wrote:
+> >
+> > The Gateworks System Controller (GSC) is an I2C slave controller
+> > implemented with an MSP430 micro-controller whose firmware embeds the
+> > following features:
+> >  - I/O expander (16 GPIO's) using PCA955x protocol
+> >  - Real Time Clock using DS1672 protocol
+> >  - User EEPROM using AT24 protocol
+> >  - HWMON using custom protocol
+> >  - Interrupt controller with tamper detect, user pushbotton
+> >  - Watchdog controller capable of full board power-cycle
+> >  - Power Control capable of full board power-cycle
+> >
+> > see http://trac.gateworks.com/wiki/gsc for more details
+> >
+> > Cc: Randy Dunlap <rdunlap@infradead.org>
+> > Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+> > ---
+> >  MAINTAINERS                 |   8 ++
+> >  drivers/mfd/Kconfig         |  10 ++
+> >  drivers/mfd/Makefile        |   1 +
+> >  drivers/mfd/gateworks-gsc.c | 288 ++++++++++++++++++++++++++++++++++++++++++++
+> >  include/linux/mfd/gsc.h     |  73 +++++++++++
+> >  5 files changed, 380 insertions(+)
+> >  create mode 100644 drivers/mfd/gateworks-gsc.c
+> >  create mode 100644 include/linux/mfd/gsc.h
 
-configs tested: 182
-configs skipped: 0
+[...]
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Please clip your responses.
 
-arm                              allmodconfig
-arm                               allnoconfig
-arm                              allyesconfig
-arm64                            allmodconfig
-arm64                             allnoconfig
-arm64                            allyesconfig
-arm                           efm32_defconfig
-arm                         at91_dt_defconfig
-arm                        shmobile_defconfig
-arm64                               defconfig
-arm                          exynos_defconfig
-arm                        multi_v5_defconfig
-arm                           sunxi_defconfig
-arm                        multi_v7_defconfig
-openrisc                    or1ksim_defconfig
-powerpc                       ppc64_defconfig
-m68k                       m5475evb_defconfig
-ia64                                defconfig
-powerpc                             defconfig
-sh                            titan_defconfig
-mips                      malta_kvm_defconfig
-i386                              allnoconfig
-i386                             alldefconfig
-i386                             allyesconfig
-i386                              debian-10.3
-i386                                defconfig
-ia64                             allmodconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-ia64                             alldefconfig
-c6x                              allyesconfig
-c6x                        evmc6678_defconfig
-nios2                         10m50_defconfig
-nios2                         3c120_defconfig
-openrisc                 simple_smp_defconfig
-xtensa                       common_defconfig
-xtensa                          iss_defconfig
-nds32                               defconfig
-nds32                             allnoconfig
-csky                                defconfig
-alpha                               defconfig
-h8300                       h8s-sim_defconfig
-h8300                     edosk2674_defconfig
-m68k                             allmodconfig
-h8300                    h8300h-sim_defconfig
-m68k                           sun3_defconfig
-m68k                          multi_defconfig
-arc                                 defconfig
-arc                              allyesconfig
-powerpc                          rhel-kconfig
-microblaze                      mmu_defconfig
-microblaze                    nommu_defconfig
-powerpc                           allnoconfig
-mips                           32r2_defconfig
-mips                         64r6el_defconfig
-mips                             allmodconfig
-mips                              allnoconfig
-mips                             allyesconfig
-mips                      fuloong2e_defconfig
-parisc                            allnoconfig
-parisc                generic-64bit_defconfig
-parisc                generic-32bit_defconfig
-parisc                           allyesconfig
-x86_64               randconfig-a001-20200413
-x86_64               randconfig-a002-20200413
-x86_64               randconfig-a003-20200413
-i386                 randconfig-a001-20200413
-i386                 randconfig-a002-20200413
-i386                 randconfig-a003-20200413
-mips                 randconfig-a001-20200412
-nds32                randconfig-a001-20200412
-riscv                randconfig-a001-20200412
-m68k                 randconfig-a001-20200412
-parisc               randconfig-a001-20200412
-alpha                randconfig-a001-20200412
-c6x                  randconfig-a001-20200412
-h8300                randconfig-a001-20200412
-microblaze           randconfig-a001-20200412
-nios2                randconfig-a001-20200412
-sparc64              randconfig-a001-20200412
-csky                 randconfig-a001-20200413
-openrisc             randconfig-a001-20200413
-s390                 randconfig-a001-20200413
-sh                   randconfig-a001-20200413
-xtensa               randconfig-a001-20200413
-x86_64               randconfig-b001-20200412
-x86_64               randconfig-b002-20200412
-x86_64               randconfig-b003-20200412
-i386                 randconfig-b001-20200412
-i386                 randconfig-b002-20200412
-i386                 randconfig-b003-20200412
-x86_64               randconfig-b001-20200413
-x86_64               randconfig-b002-20200413
-x86_64               randconfig-b003-20200413
-i386                 randconfig-b001-20200413
-i386                 randconfig-b002-20200413
-i386                 randconfig-b003-20200413
-x86_64               randconfig-c001-20200413
-x86_64               randconfig-c002-20200413
-x86_64               randconfig-c003-20200413
-i386                 randconfig-c001-20200413
-i386                 randconfig-c002-20200413
-i386                 randconfig-c003-20200413
-i386                 randconfig-d002-20200412
-x86_64               randconfig-d003-20200412
-i386                 randconfig-d003-20200412
-i386                 randconfig-d001-20200412
-x86_64               randconfig-d002-20200412
-x86_64               randconfig-e001-20200412
-x86_64               randconfig-e002-20200412
-x86_64               randconfig-e003-20200412
-i386                 randconfig-e001-20200412
-i386                 randconfig-e002-20200412
-i386                 randconfig-e003-20200412
-x86_64               randconfig-f001-20200413
-x86_64               randconfig-f002-20200413
-x86_64               randconfig-f003-20200413
-i386                 randconfig-f001-20200413
-i386                 randconfig-f002-20200413
-i386                 randconfig-f003-20200413
-x86_64               randconfig-f001-20200412
-x86_64               randconfig-f002-20200412
-x86_64               randconfig-f003-20200412
-i386                 randconfig-f001-20200412
-i386                 randconfig-f002-20200412
-i386                 randconfig-f003-20200412
-x86_64               randconfig-g003-20200413
-i386                 randconfig-g003-20200413
-x86_64               randconfig-g001-20200413
-x86_64               randconfig-g002-20200413
-i386                 randconfig-g002-20200413
-i386                 randconfig-g001-20200413
-x86_64               randconfig-h001-20200413
-i386                 randconfig-h003-20200413
-i386                 randconfig-h002-20200413
-i386                 randconfig-h001-20200413
-x86_64               randconfig-h002-20200413
-x86_64               randconfig-h001-20200412
-x86_64               randconfig-h002-20200412
-x86_64               randconfig-h003-20200412
-i386                 randconfig-h001-20200412
-i386                 randconfig-h002-20200412
-i386                 randconfig-h003-20200412
-arm64                randconfig-a001-20200412
-ia64                 randconfig-a001-20200412
-arc                  randconfig-a001-20200412
-arm                  randconfig-a001-20200412
-sparc                randconfig-a001-20200412
-powerpc              randconfig-a001-20200412
-riscv                            allmodconfig
-riscv                             allnoconfig
-riscv                            allyesconfig
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-s390                             alldefconfig
-s390                             allmodconfig
-s390                              allnoconfig
-s390                             allyesconfig
-s390                          debug_defconfig
-s390                                defconfig
-s390                       zfcpdump_defconfig
-sh                               allmodconfig
-sh                                allnoconfig
-sh                          rsk7269_defconfig
-sh                  sh7785lcr_32bit_defconfig
-sparc                            allyesconfig
-sparc                               defconfig
-sparc64                             defconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-sparc64                          allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-um                                  defconfig
-x86_64                              fedora-25
-x86_64                                  kexec
-x86_64                                    lkp
-x86_64                                   rhel
-x86_64                         rhel-7.2-clear
-x86_64                               rhel-7.6
-x86_64                    rhel-7.6-kselftests
+> Lee,
+> 
+> Do you have time to look at this? Rob has reviewed the dt-bindings and
+> Guenter has reviewed the hwmon driver so this is the only patch
+> remaining in the series that needs review/sign-off.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+It's on the list.
+
+Please bear in mind that the merge-window has been open for the past 2
+weeks.  Usually reviewing cadence slows down during this period.  It
+should be ramping up again this week.
+
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
