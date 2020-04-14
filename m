@@ -2,314 +2,202 @@ Return-Path: <SRS0=wRoL=56=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B69E4C2BA19
-	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Apr 2020 10:07:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 465AEC2BA19
+	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Apr 2020 14:13:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 829D220732
-	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Apr 2020 10:07:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1D6F7206D5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Apr 2020 14:13:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="uLyAAYMI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DSOdZtsa"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438132AbgDNKH3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 14 Apr 2020 06:07:29 -0400
-Received: from ssl.serverraum.org ([176.9.125.105]:39923 "EHLO
-        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2438129AbgDNKHW (ORCPT
+        id S1733116AbgDNONL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 14 Apr 2020 10:13:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35782 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728815AbgDNONJ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 14 Apr 2020 06:07:22 -0400
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 3CF8C22EEB;
-        Tue, 14 Apr 2020 12:07:01 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1586858831;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=APa0klHYbq0nRnZCFsgw5rX3mQ0o6Wd2E6ZRzR/tOMM=;
-        b=uLyAAYMIctXbXn9cwOwmR55h8ibp43+Djfg86KlNcR7vgHgZZwlDgYiRikLd5qtnEMmsMc
-        PzDJsZxopbkE54MxXLnOoNx1pAf8tR0ohLsnwK7dyAuGExIalFgJsLgv7Fxr4qrCcCMQhy
-        F83tczkLaB8z8xbA7ARkBZ9/CpoYSSU=
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Tue, 14 Apr 2020 12:07:01 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Cc:     linux-gpio <linux-gpio@vger.kernel.org>,
-        linux-devicetree <devicetree@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-hwmon@vger.kernel.org,
-        linux-pwm@vger.kernel.org,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Tue, 14 Apr 2020 10:13:09 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA7FC061A0C;
+        Tue, 14 Apr 2020 07:13:08 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id y24so14106538wma.4;
+        Tue, 14 Apr 2020 07:13:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=38hjaeVMfDTrLM9trY9+hmFb8NgODs18v+51yVEdqf0=;
+        b=DSOdZtsa0Q1U6edIFjWXGJDMPISyKtsSC5A0iaqXILkG9C+5opPctCLicrqeH3dADp
+         8mLhFGG9kRKS8laq8fDaq5Pc78+zhsulnUlK42rd6MqzkG1HqdwbRXTljSnupe8HmS3i
+         ggbpiGTNYmpBDNynlOBzm+4eGFYG9rU3VgL33u3u+EnLd6noTV5+13JgycdGv0Iru7ml
+         vrhZKnhdOxkpK1V0nVKKCByXdAJ08riGNGNBfSzzp+HqTGOXrIvA8Nj2Cxa0Oh2Yklxa
+         FzVkCaFWXXN8AD5/uvr5zTO4JySX5587zNqXGrU/v+x5HRK4pcD688YaqiSMZLwBymp6
+         pWkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=38hjaeVMfDTrLM9trY9+hmFb8NgODs18v+51yVEdqf0=;
+        b=Njbt0NeOFrcql744QDhTTnZfIE+g/XPZOPlz8fGGBY2VCFSvqnDqQPzi0YOCcio9ov
+         NqdF2zQ21QBbT7nopoEmb6mkA1rOeUuVQWRNlZCqt3J64iNHIiEVeVtoFPs1waYD18xI
+         jcIZvPjm4GIZGK0nKJfLydykttg+jB0ocNtC4ZjKn/vVPtB6MjyPvAOL6s9hJn1G6Gs1
+         mzZIJP+nILqSWCBwbSqIHsPGW+rHeI/s7T2rbyN7BFIflEEDWs2iNdOQrXtyGPJhBsB8
+         /r+VyyITWpZFtSCR47Qp1cp2YVDDLtCrm7R4N9rji0GPgRZFBRfZODS7zy3EgRTjBnJz
+         SaEQ==
+X-Gm-Message-State: AGi0PuYN+TsWH3gXn+MWURprPUEj8BB4dkcgigS/AvE6525mAZwvCk4Y
+        6W6cpJUO6VnBWKTAvfgt/30=
+X-Google-Smtp-Source: APiQypIu61i+U+FJ5yfBav6rYHOOq99NNUTrjzV/j4yL55pxZFlT4zBF2ErILE/hDllT4OpS6fwZHw==
+X-Received: by 2002:a1c:1d84:: with SMTP id d126mr59139wmd.119.1586873585881;
+        Tue, 14 Apr 2020 07:13:05 -0700 (PDT)
+Received: from localhost (pD9E51D62.dip0.t-ipconnect.de. [217.229.29.98])
+        by smtp.gmail.com with ESMTPSA id a80sm18937856wme.37.2020.04.14.07.13.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Apr 2020 07:13:04 -0700 (PDT)
+Date:   Tue, 14 Apr 2020 16:13:03 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
         Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v2 10/16] gpio: add a reusable generic gpio_chip using
- regmap
-In-Reply-To: <CAMpxmJVC7e9JnHzBo-h8M1+KmcA32=Rvxo7+znH=-kAbcCr_LQ@mail.gmail.com>
-References: <20200402203656.27047-1-michael@walle.cc>
- <20200402203656.27047-11-michael@walle.cc>
- <CAMpxmJVE3PgVCxkQ-ryc5=KSrKcpdmk1cnJUxJBz9QFCx-e_+A@mail.gmail.com>
- <80bd8661ec8a1f5eda3f09a267846eaa@walle.cc>
- <CAMpxmJVC7e9JnHzBo-h8M1+KmcA32=Rvxo7+znH=-kAbcCr_LQ@mail.gmail.com>
-Message-ID: <e0388a2137e23d76b2415a7549c01dd1@walle.cc>
-X-Sender: michael@walle.cc
-User-Agent: Roundcube Webmail/1.3.10
-X-Spamd-Bar: +
-X-Rspamd-Server: web
-X-Rspamd-Queue-Id: 3CF8C22EEB
-X-Spamd-Result: default: False [1.40 / 15.00];
-         FROM_HAS_DN(0.00)[];
-         TO_DN_SOME(0.00)[];
-         FREEMAIL_ENVRCPT(0.00)[gmail.com];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         TAGGED_RCPT(0.00)[dt];
-         MIME_GOOD(-0.10)[text/plain];
-         DKIM_SIGNED(0.00)[];
-         RCPT_COUNT_TWELVE(0.00)[23];
-         NEURAL_HAM(-0.00)[-1.081];
-         RCVD_COUNT_ZERO(0.00)[0];
-         FROM_EQ_ENVFROM(0.00)[];
-         MIME_TRACE(0.00)[0:+];
-         FREEMAIL_CC(0.00)[vger.kernel.org,lists.infradead.org,linaro.org,kernel.org,suse.com,roeck-us.net,gmail.com,pengutronix.de,linux-watchdog.org,nxp.com,linutronix.de,lakedaemon.net,linuxfoundation.org];
-         MID_RHS_MATCH_FROM(0.00)[];
-         SUSPICIOUS_RECIPS(1.50)[]
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Matt Mackall <mpm@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Mark Brown <broonie@kernel.org>, linux-hwmon@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        netdev@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Fix dtc warnings on reg and ranges in
+ examples
+Message-ID: <20200414141303.GE3593749@ulmo>
+References: <20200409202458.24509-1-robh@kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="lkTb+7nhmha7W+c3"
+Content-Disposition: inline
+In-Reply-To: <20200409202458.24509-1-robh@kernel.org>
+User-Agent: Mutt/1.13.1 (2019-12-14)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Am 2020-04-14 11:50, schrieb Bartosz Golaszewski:
-> pon., 6 kwi 2020 o 12:10 Michael Walle <michael@walle.cc> napisał(a):
->> 
->> 
->> Hi Bartosz, Hi Mark Brown,
->> 
->> Am 2020-04-06 09:47, schrieb Bartosz Golaszewski:
->> > czw., 2 kwi 2020 o 22:37 Michael Walle <michael@walle.cc> napisał(a):
->> >>
->> >> There are quite a lot simple GPIO controller which are using regmap to
->> >> access the hardware. This driver tries to be a base to unify existing
->> >> code into one place. This won't cover everything but it should be a
->> >> good
->> >> starting point.
->> >>
->> >> It does not implement its own irq_chip because there is already a
->> >> generic one for regmap based devices. Instead, the irq_chip will be
->> >> instanciated in the parent driver and its irq domain will be associate
->> >> to this driver.
->> >>
->> >> For now it consists of the usual registers, like set (and an optional
->> >> clear) data register, an input register and direction registers.
->> >> Out-of-the-box, it supports consecutive register mappings and mappings
->> >> where the registers have gaps between them with a linear mapping
->> >> between
->> >> GPIO offset and bit position. For weirder mappings the user can
->> >> register
->> >> its own .xlate().
->> >>
->> >> Signed-off-by: Michael Walle <michael@walle.cc>
->> >
->> > Hi Michael,
->> >
->> > Thanks for doing this! When looking at other generic drivers:
->> > gpio-mmio and gpio-reg I can see there are some corner-cases and more
->> > specific configuration options we could add
->> 
->> I didn't want to copy every bit without being able to test it.
->> 
-> 
-> Sure, I didn't mean we need to do it now - just set it as the future 
-> goal.
-> 
->> > but it's not a blocker,
->> > we'll probably be extending this one as we convert more drivers to
->> > using it.
->> 
->> correct, that was also my plan.
->> 
->> > Personally I'd love to see gpio-mmio and gpio-reg removed
->> > and replaced by a single, generic regmap interface eventually.
->> 
->> agreed.
->> 
->> 
-> 
-> [snip!]
-> 
->> >> +
->> >> +/**
->> >> + * gpio_regmap_simple_xlate() - translate base/offset to reg/mask
->> >> + *
->> >> + * Use a simple linear mapping to translate the offset to the
->> >> bitmask.
->> >> + */
->> >> +int gpio_regmap_simple_xlate(struct gpio_regmap *gpio, unsigned int
->> >> base,
->> >> +                            unsigned int offset,
->> >> +                            unsigned int *reg, unsigned int *mask)
->> >> +{
->> >> +       unsigned int line = offset % gpio->ngpio_per_reg;
->> >> +       unsigned int stride = offset / gpio->ngpio_per_reg;
->> >> +
->> >> +       *reg = base + stride * gpio->reg_stride;
->> >> +       *mask = BIT(line);
->> >> +
->> >> +       return 0;
->> >> +}
->> >> +EXPORT_SYMBOL_GPL(gpio_regmap_simple_xlate);
->> >
->> > Why does this need to be exported?
->> 
->> Mh, the idea was that a user could also set this xlate() by himself 
->> (for
->> whatever reason). But since it is the default, it is not really
->> necessary.
->> That being said, I don't care if its only local to this module.
->> 
-> 
-> Let's only export symbols that have external users then.
-> 
-> [snip!]
-> 
->> >> +
->> >> +MODULE_AUTHOR("Michael Walle <michael@walle.cc>");
->> >> +MODULE_DESCRIPTION("GPIO generic regmap driver core");
->> >> +MODULE_LICENSE("GPL");
->> >> diff --git a/include/linux/gpio-regmap.h b/include/linux/gpio-regmap.h
->> >> new file mode 100644
->> >> index 000000000000..ad63955e0e43
->> >> --- /dev/null
->> >> +++ b/include/linux/gpio-regmap.h
->> >> @@ -0,0 +1,88 @@
->> >> +/* SPDX-License-Identifier: GPL-2.0-only */
->> >> +
->> >> +#ifndef _LINUX_GPIO_REGMAP_H
->> >> +#define _LINUX_GPIO_REGMAP_H
->> >> +
->> >> +struct gpio_regmap_addr {
->> >> +       unsigned int addr;
->> >> +       bool valid;
->> >> +};
->> >
->> > I'm not quite sure what the meaning behind the valid field here is.
->> > When would we potentially set it to false?
->> 
->> Some base addresses are optional, but on the other hand, a base 
->> address
->> of 0 could also be valid. So I cannot use 0 as an indicator whether a
->> base address is set or not. The generic mmio driver has some special
->> case for the ack base, where there is a use_ack flag which forces to
->> use the ack register even if its zero. So I've had a look at the 
->> kernel
->> if there is a better idiom for that, but I haven't found anything.
->> 
->> So the best from a user perspective I've could come up with was:
->> 
->>    ->base_reg = GPIO_REGMAP_ADDR(addr);
->> 
->> I'm open for suggestions.
->> 
-> 
-> Maybe setting the pointer to ERR_PTR(-ENOENT) which will result in
-> IS_ERR() returning true?
 
-Unfortunatly, its not a pointer, but only a regular unsigned int (ie
-the type the regmap API has for its "reg" property). It could be a
-pointer of course but then the user would have to allocate additional
-memory.
+--lkTb+7nhmha7W+c3
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--michael
+On Thu, Apr 09, 2020 at 02:24:58PM -0600, Rob Herring wrote:
+> A recent update to dtc and changes to the default warnings introduced
+> some new warnings in the DT binding examples:
+>=20
+> Documentation/devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-mbus.exam=
+ple.dts:23.13-61:
+>  Warning (dma_ranges_format): /example-0/dram-controller@1c01000:dma-rang=
+es: "dma-ranges" property has invalid length (12 bytes) (parent #address-ce=
+lls =3D=3D 1, child #address-cells =3D=3D 2, #size-cells =3D=3D 1)
+> Documentation/devicetree/bindings/hwmon/adi,axi-fan-control.example.dts:1=
+7.22-28.11:
+>  Warning (unit_address_vs_reg): /example-0/fpga-axi@0: node has a unit na=
+me, but no reg or ranges property
+> Documentation/devicetree/bindings/memory-controllers/nvidia,tegra186-mc.e=
+xample.dts:34.13-54:
+>  Warning (dma_ranges_format): /example-0/memory-controller@2c00000:dma-ra=
+nges: "dma-ranges" property has invalid length (24 bytes) (parent #address-=
+cells =3D=3D 1, child #address-cells =3D=3D 2, #size-cells =3D=3D 2)
+> Documentation/devicetree/bindings/mfd/st,stpmic1.example.dts:19.15-79.11:
+>  Warning (unit_address_vs_reg): /example-0/i2c@0: node has a unit name, b=
+ut no reg or ranges property
+> Documentation/devicetree/bindings/net/qcom,ipq8064-mdio.example.dts:28.23=
+-31.15:
+>  Warning (unit_address_vs_reg): /example-0/mdio@37000000/switch@10: node =
+has a unit name, but no reg or ranges property
+> Documentation/devicetree/bindings/rng/brcm,bcm2835.example.dts:17.5-21.11:
+>  Warning (unit_address_vs_reg): /example-0/rng: node has a reg or ranges =
+property, but no unit name
+> Documentation/devicetree/bindings/spi/qcom,spi-qcom-qspi.example.dts:20.2=
+0-43.11:
+>  Warning (unit_address_vs_reg): /example-0/soc@0: node has a unit name, b=
+ut no reg or ranges property
+> Documentation/devicetree/bindings/usb/ingenic,musb.example.dts:18.28-21.1=
+1:
+>  Warning (unit_address_vs_reg): /example-0/usb-phy@0: node has a unit nam=
+e, but no reg or ranges property
+>=20
+> Cc: Maxime Ripard <mripard@kernel.org>
+> Cc: Chen-Yu Tsai <wens@csie.org>
+> Cc: "Nuno S=C3=A1" <nuno.sa@analog.com>
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Jonathan Hunter <jonathanh@nvidia.com>
+> Cc: Lee Jones <lee.jones@linaro.org>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Matt Mackall <mpm@selenic.com>
+> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> Cc: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+> Cc: Florian Fainelli <f.fainelli@gmail.com>
+> Cc: Ray Jui <rjui@broadcom.com>
+> Cc: Scott Branden <sbranden@broadcom.com>
+> Cc: bcm-kernel-feedback-list@broadcom.com
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: linux-hwmon@vger.kernel.org
+> Cc: linux-tegra@vger.kernel.org
+> Cc: linux-arm-msm@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-crypto@vger.kernel.org
+> Cc: linux-rpi-kernel@lists.infradead.org
+> Cc: linux-spi@vger.kernel.org
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> Will take this via the DT tree.
+>=20
+> Rob
+>=20
+>  .../arm/sunxi/allwinner,sun4i-a10-mbus.yaml   |  6 +++
+>  .../bindings/hwmon/adi,axi-fan-control.yaml   |  2 +-
+>  .../nvidia,tegra186-mc.yaml                   | 41 +++++++++++--------
 
-> 
->> >
->> >> +#define GPIO_REGMAP_ADDR(_addr) \
->> >> +       ((struct gpio_regmap_addr) { .addr = _addr, .valid = true })
->> >> +
->> >> +/**
->> >> + * struct gpio_regmap - Description of a generic regmap gpio_chip.
->> >> + *
->> >> + * @parent:            The parent device
->> >> + * @regmap:            The regmap use to access the registers
->> >
->> > s/use/used/
->> >
->> >> + *                     given, the name of the device is used
->> >> + * @label:             (Optional) Descriptive name for GPIO
->> >> controller.
->> >> + *                     If not given, the name of the device is used.
->> >> + * @ngpio:             Number of GPIOs
->> >> + * @reg_dat_base:      (Optional) (in) register base address
->> >> + * @reg_set_base:      (Optional) set register base address
->> >> + * @reg_clr_base:      (Optional) clear register base address
->> >> + * @reg_dir_in_base:   (Optional) out setting register base address
->> >> + * @reg_dir_out_base:  (Optional) in setting register base address
->> >> + * @reg_stride:                (Optional) May be set if the registers
->> >> (of the
->> >> + *                     same type, dat, set, etc) are not consecutive.
->> >> + * @ngpio_per_reg:     Number of GPIOs per register
->> >> + * @irq_domain:                (Optional) IRQ domain if the
->> >> controller is
->> >> + *                     interrupt-capable
->> >> + * @reg_mask_xlate:     (Optional) Translates base address and GPIO
->> >> + *                     offset to a register/bitmask pair. If not
->> >> + *                     given the default gpio_regmap_simple_xlate()
->> >> + *                     is used.
->> >> + * @to_irq:            (Optional) Maps GPIO offset to a irq number.
->> >> + *                     By default assumes a linear mapping of the
->> >> + *                     given irq_domain.
->> >> + * @driver_data:       Pointer to the drivers private data. Not used
->> >> by
->> >> + *                     gpio-regmap.
->> >> + *
->> >> + * The reg_mask_xlate translates a given base address and GPIO offset
->> >> to
->> >> + * register and mask pair. The base address is one of the given
->> >> reg_*_base.
->> >> + */
->> >> +struct gpio_regmap {
->> >
->> > I'd prefer to follow a pattern seen in other such APIs of calling this
->> > structure gpio_regmap_config and creating another private structure
->> > called gpio_regmap used in callbacks that would only contain necessary
->> > fields.
->> 
->> something like the following?
->> 
->> struct gpio_regmap *gpio_regmap_register(struct gpio_regmap_config *)
->> 
->> but if that structure is private, how can a callback access individual
->> elements? Or do you mean private in "local to the gpio drivers"?
->> 
-> 
-> Either making the structure local to drivers/gpio or making it
-> entirely opaque and providing accessor functions. Depending on how
-> much of the structure one may want to access.
-> 
->> Also I was unsure about the naming, eg. some use
->> stuff_register()/stuff_unregister() and some 
->> stuff_add()/stuff_remove().
->> 
-> 
-> register/unregister is fine with me.
-> 
-> Bart
+Acked-by: Thierry Reding <treding@nvidia.com>
+
+--lkTb+7nhmha7W+c3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl6VxO4ACgkQ3SOs138+
+s6HPeQ//QZ7J+cY1tUFdjRIyipxkFqqYiAQRkhxlIDOkSlrucVwZtqSD1oa2Cc0z
+jSJ7ZBYVJyufJRVY6QTSB+X7cG20IBxXYsuWvdTO3exZ4XfgqhwAib7bnhtXa9Pv
+dIDYIL7H+CjxH+tSixKhgCtZEid0tBR1FDkZ0AcMym178Ug1dLSF021pbGME6N8r
+bQZfaFDX3j8SBbc+7LpeVUxry/PHbzEVtjIZpmuVUOBrJp0NXH089H61k8CanWoF
+DeiY3UFjJQYeX1SQAL02T2Ee6CPwqjb6m1VXXiross/z2IpVasAm7Pz0JkudRGur
+wNSWF0+y9QdpOvW3SFmd1nwccfbC52I5M4PtselQOsREZkE6fzfgkeGoLcrLBYWT
+LKrOGqqgVdgSJqvW2TEzVPrK0l3X24wONzY7wLLwXClOVNKD+/O/oP7zQ3Yrwua3
+BipXTmhEW1sj5bHFeyQaAemZjPybszASHDJi28wWkdLiWhundMfrpfjcpFV3KnBv
+iTWwMYYxFxrlOK75l6BNERbASd3xF87PTRoT2U+8QfIuS+PbBxsJ6MTHK7sHBcUJ
+fDm0z/KoKtN6ngRbkh8aogrJEj94Bw1jqO/YqwVHR5f+9iZPYMe+2rjRFf7MxLOc
+q3WO/SrJwT21tD7WeVHBGzvWneMgkqL0ikFjtlTLMAOZMfu5Lpw=
+=8xXE
+-----END PGP SIGNATURE-----
+
+--lkTb+7nhmha7W+c3--
