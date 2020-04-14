@@ -2,145 +2,119 @@ Return-Path: <SRS0=wRoL=56=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56526C2BB85
-	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Apr 2020 16:44:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5F63C2BB85
+	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Apr 2020 17:00:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 348532074D
-	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Apr 2020 16:44:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1586882650;
-	bh=ebMzOpuIt9dXZbE+2Z/ikNbXxDt+34cNjVaGtOHoy0o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=Of+tAOSL9B/obJ9BJYdkJkeqfYu+f26XFGeCftz5Xb9xpUr1hKoti4wIAo2GfRLlZ
-	 t6/oexRfUuL5211xx2q2tOXNE5QSX/kGSMgxFLiZYaz0+JFiX7zsleDjxujPecHMAI
-	 owR4EE8JZur8LNkovRPtYUqBzvuSAYrBF3Idr1tw=
+	by mail.kernel.org (Postfix) with ESMTP id C578620678
+	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Apr 2020 17:00:59 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="WJK29o3K"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437272AbgDNQoD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 14 Apr 2020 12:44:03 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:38898 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2437160AbgDNQoB (ORCPT
+        id S2387524AbgDNRAt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 14 Apr 2020 13:00:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33976 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1732562AbgDNRAo (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 14 Apr 2020 12:44:01 -0400
-Received: by mail-ot1-f68.google.com with SMTP id k21so278401otl.5;
-        Tue, 14 Apr 2020 09:44:00 -0700 (PDT)
+        Tue, 14 Apr 2020 13:00:44 -0400
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055CFC061A41
+        for <linux-hwmon@vger.kernel.org>; Tue, 14 Apr 2020 10:00:43 -0700 (PDT)
+Received: by mail-qk1-x742.google.com with SMTP id 20so5966316qkl.10
+        for <linux-hwmon@vger.kernel.org>; Tue, 14 Apr 2020 10:00:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=GIN7IF6qYtKF4gSfr/AeRIvPX7/eCFsh4TApVUETWoE=;
+        b=WJK29o3K5MXm6p3VWzbGrHsk0KBRUyWWpDHcGXG/HUX36uIXx5JyvHKhiu1s3JtLtU
+         V7gkFI/q1KmdLMhMMUxBqFlgpBaa0ZkNYnWmTKON4gWBw5jxIE0XBUAq91eeIGYap3zZ
+         OYhvWUkFkEL5+ErE8/pYC7Unq7WRkY9b6ox3OTtr13DORJy7fe4UWueM3dLYCpcH+haM
+         7s83titQwzbdrha9nbAnzXASShQuNXplRRlunOROJBdfg3Qf8CHG61pH9bI8Yw4wFfA2
+         c4dSOcHuk/T/b5dEH1oSwrARzE52d5vcmU9CxIdgyuhRNmOaqHvCyIjmpsCkx6zA/Qs+
+         xdOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=mdJGN+n2VYiCEYSu8u8xlSZpkqPfV2n6FeIMEPtdiVw=;
-        b=jRawnFkhpMXRAk9E226hLegLZOwJm+sg5V2l2IliKC7kTYlv3AjUbLNF2Q/3Db2pG8
-         /kBLzUav3peM7gUMIYvigwE7gudFjwgnz5cgfkvZaBIEmTKPPMwy21G9B/mNL19P0q+u
-         RnRmLqPM6octnPqaWHTIeyAzVkUP1eqT5CxQ+EQLFFSo5E3Mut6TtUNXCoiT+xikwlw8
-         o4EOKK1f3egKel9MXtX8QR4O0SnZQ7KJJxhMuX5CycDZ1j950fQCO+wXDhRdANxD+A/N
-         sCw5YYCzQa4ob6TORHTfkpqBzF6UeZV4grvYJZmGRw3Ll8N3V0Kt80ikIwcC8Gae8mtE
-         LH9w==
-X-Gm-Message-State: AGi0PuYsill/UOYWVcuAPTo1VL4eUTb985sb7O5B8uo3WEl08upTdoj1
-        qt2ARle7JPS4CPTrL/Hnyw==
-X-Google-Smtp-Source: APiQypINczSaAx3RvBdTvMgP/hZFPK9N4KYJKAMcgw+8KVN2riIwZXpaqEpmPb+hOROqaiW2MJnmaw==
-X-Received: by 2002:a4a:a98b:: with SMTP id w11mr19105677oom.80.1586882640106;
-        Tue, 14 Apr 2020 09:44:00 -0700 (PDT)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id w15sm6274633ooq.24.2020.04.14.09.43.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Apr 2020 09:43:59 -0700 (PDT)
-Received: (nullmailer pid 11212 invoked by uid 1000);
-        Tue, 14 Apr 2020 16:43:57 -0000
-Date:   Tue, 14 Apr 2020 11:43:57 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Amit Kucheria <amit.kucheria@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        lukasz.luba@arm.com, daniel.lezcano@linaro.org,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=GIN7IF6qYtKF4gSfr/AeRIvPX7/eCFsh4TApVUETWoE=;
+        b=fnZucS8cgqelkGi7zQFGKXBUWiLYGSStE5OByJefuBOtTo4iQJmQOEtZQEl8OvHhXa
+         bBQlk9cq6OLUy1yZrpn0OdA49I+tpm6ZBF1gddmcs9zn+lx3PBb2axSG/tmr6qudDW3D
+         zdV5kmGBYNmZjyu9uD908rWqNSGFukCnO/tFiX9WWsd44hHrA1lmLSETWA2rIb6ithqH
+         HcUyzmxJefGDTgAkA+QNUJ7RYXZ3DCUhOWb8y8ISkhqhx3BMUcBCvEUuDhe/D/i3uFuf
+         pK1qYk4nFjLOKAY7HHw/kWRkfZVDnW9DDLGQ5mvu6ZBahhH17mw0HFUGHsBHc4UiZS2E
+         6HhA==
+X-Gm-Message-State: AGi0Pua6bX0oql9hnDva1u9XTcJj9jEfv7+erjg295UgynlA1zwPMKQP
+        eHTyLnOj8rLzdUCl38nUwv1cw5ly3NvGBbssJ7yFqA==
+X-Google-Smtp-Source: APiQypJAVUbx87PMTgMxPYPAUoh9xIaPNebw3vKNOCwEq+Xku6Borru68lB1wY/XGBsCVLhWsPFHE8/a8s5sITgt6DA=
+X-Received: by 2002:a05:620a:5f1:: with SMTP id z17mr18160792qkg.21.1586883642039;
+ Tue, 14 Apr 2020 10:00:42 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200402203656.27047-1-michael@walle.cc> <20200402203656.27047-11-michael@walle.cc>
+ <CAMpxmJVE3PgVCxkQ-ryc5=KSrKcpdmk1cnJUxJBz9QFCx-e_+A@mail.gmail.com>
+ <80bd8661ec8a1f5eda3f09a267846eaa@walle.cc> <CAMpxmJVC7e9JnHzBo-h8M1+KmcA32=Rvxo7+znH=-kAbcCr_LQ@mail.gmail.com>
+ <e0388a2137e23d76b2415a7549c01dd1@walle.cc>
+In-Reply-To: <e0388a2137e23d76b2415a7549c01dd1@walle.cc>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Tue, 14 Apr 2020 19:00:30 +0200
+Message-ID: <CAMpxmJW1x4Orh1BZ4TUoCsYeaAAZ4NBUNvoMG9JgP0iLvXTOtg@mail.gmail.com>
+Subject: Re: [PATCH v2 10/16] gpio: add a reusable generic gpio_chip using regmap
+To:     Michael Walle <michael@walle.cc>
+Cc:     linux-gpio <linux-gpio@vger.kernel.org>,
+        linux-devicetree <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>, Talel Shenhar <talel@amazon.com>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
+        Lee Jones <lee.jones@linaro.org>,
         Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Marc Gonzalez <marc.w.gonzalez@free.fr>,
-        Mans Rullgard <mans@mansr.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] dt-bindings: thermal: Get rid of thermal.txt and replace
- references
-Message-ID: <20200414164357.GA11178@bogus>
-References: <cbd70c2f0f5ddae0d8e418fcb1e03101e408f6c2.1585753313.git.amit.kucheria@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cbd70c2f0f5ddae0d8e418fcb1e03101e408f6c2.1585753313.git.amit.kucheria@linaro.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed,  1 Apr 2020 20:35:50 +0530, Amit Kucheria wrote:
-> Now that we have yaml bindings for the thermal subsystem, get rid of the
-> old bindings (thermal.txt).
-> 
-> Replace all references to thermal.txt in the Documentation with a link
-> to the appropriate YAML bindings using the following search and replace
-> pattern:
->  - If the reference is specific to the thermal-sensor-cells property,
->  replace with a pointer to thermal-sensor.yaml
->  - If the reference is to the cooling-cells property, replace with a
->  pointer to thermal-cooling-devices.yaml
->  - If the reference is generic thermal bindings, replace with a
->  reference to thermal*.yaml.
-> 
-> Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
-> ---
->  .../devicetree/bindings/arm/arm,scmi.txt      |   2 +-
->  .../devicetree/bindings/arm/arm,scpi.txt      |   2 +-
->  .../arm/marvell/ap80x-system-controller.txt   |   2 +-
->  .../arm/marvell/cp110-system-controller.txt   |   2 +-
->  .../bindings/cpufreq/cpufreq-dt.txt           |   3 +-
->  .../bindings/cpufreq/cpufreq-mediatek.txt     |   4 +-
->  .../devicetree/bindings/hwmon/gpio-fan.txt    |   3 +-
->  .../devicetree/bindings/hwmon/lm90.txt        |   4 +-
->  .../thermal/allwinner,sun8i-a83t-ths.yaml     |   2 +-
->  .../bindings/thermal/amazon,al-thermal.txt    |   2 +-
->  .../bindings/thermal/brcm,avs-ro-thermal.yaml |   2 +-
->  .../bindings/thermal/brcm,bcm2835-thermal.txt |   2 +-
->  .../bindings/thermal/hisilicon-thermal.txt    |   2 +-
->  .../bindings/thermal/max77620_thermal.txt     |   6 +-
->  .../bindings/thermal/mediatek-thermal.txt     |   2 +-
->  .../thermal/nvidia,tegra124-soctherm.txt      |  10 +-
->  .../thermal/nvidia,tegra186-bpmp-thermal.txt  |   2 +-
->  .../bindings/thermal/qcom-spmi-temp-alarm.txt |   2 +-
->  .../bindings/thermal/rockchip-thermal.txt     |   2 +-
->  .../bindings/thermal/tango-thermal.txt        |   2 +-
->  .../bindings/thermal/thermal-generic-adc.txt  |   2 +-
->  .../devicetree/bindings/thermal/thermal.txt   | 586 ------------------
->  .../bindings/thermal/uniphier-thermal.txt     |   2 +-
->  23 files changed, 33 insertions(+), 615 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/thermal/thermal.txt
-> 
+wt., 14 kwi 2020 o 12:07 Michael Walle <michael@walle.cc> napisa=C5=82(a):
+> >>
+> >> So the best from a user perspective I've could come up with was:
+> >>
+> >>    ->base_reg =3D GPIO_REGMAP_ADDR(addr);
+> >>
+> >> I'm open for suggestions.
+> >>
+> >
+> > Maybe setting the pointer to ERR_PTR(-ENOENT) which will result in
+> > IS_ERR() returning true?
+>
+> Unfortunatly, its not a pointer, but only a regular unsigned int (ie
+> the type the regmap API has for its "reg" property). It could be a
+> pointer of course but then the user would have to allocate additional
+> memory.
+>
+> -michael
+>
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Eek, of course it's not a pointer. If possible I'd like to avoid this
+GPIO_REGMAP_ADDR() macro, so how about having some separate field for
+invalid offsets making every offset 'valid' by default?
+
+Linus: do you have a better idea?
+
+Bart
