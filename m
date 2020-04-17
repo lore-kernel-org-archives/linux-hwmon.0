@@ -2,372 +2,101 @@ Return-Path: <SRS0=fRLa=6B=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02D7AC38A2C
-	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Apr 2020 09:57:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C3C7C352BE
+	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Apr 2020 10:32:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C5E40221EA
-	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Apr 2020 09:57:38 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="r1OM7MYy"
+	by mail.kernel.org (Postfix) with ESMTP id 503FD221EB
+	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Apr 2020 10:32:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728674AbgDQJ5f (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 17 Apr 2020 05:57:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49446 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726366AbgDQJ5d (ORCPT
+        id S1727907AbgDQKc6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 17 Apr 2020 06:32:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54998 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727828AbgDQKc5 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 17 Apr 2020 05:57:33 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D520C061A0C
-        for <linux-hwmon@vger.kernel.org>; Fri, 17 Apr 2020 02:57:33 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id a25so2389331wrd.0
-        for <linux-hwmon@vger.kernel.org>; Fri, 17 Apr 2020 02:57:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=BxdOY3z0xM0CI52w6qoCNlpFo6ByBsjg8n/akR2lelc=;
-        b=r1OM7MYyPLUl1o1MFezOlO7AvDxrNPs6Xz4NAaLKl1TeAvn0VSfVhxoS0vfa7/Whv7
-         THcyu2XioGBgIj5oDSF+9361zmgyquIbS6my6peNI0bAJtf04uWiutCiT4VdZSUcguLn
-         /6zCSWZVeKEHxaSRyu6OI1F5yMOym//DYJYCLlB2PwcKGxDvuI9fczsQyuGHOTTUKATk
-         UyU9NBUqVdnPgXC7eWYrSlZ3X+QDCmPPMoREUkj+At+d6rc1t+LXvEME7+Qhg8L+xmJX
-         zktoqKg+G5CMds+vod2roisaCDjzmK8OdJn3j2tpAzF6ZPwYrfe6fMWje3JXw45cYzb7
-         k/Zg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=BxdOY3z0xM0CI52w6qoCNlpFo6ByBsjg8n/akR2lelc=;
-        b=bO2Vw+n0kKIJEm0JB/iG8LfI8EvTYSshwZ8Zt37xCfgWoImsmCD8wil/jWuuayD+BT
-         0H5a+CK0a9xnfQM8BCQwplCPTCDSthYU/JRvB72w7dG143Xj4Oadh15tLKj0K9hrLFGu
-         gMLTTvWqVvXdYO3+9vawsHUs1bsxK6UDXHJeGWKHuk2Zr7lfOdzilSGIs8ycdcJR7+H2
-         zZDFKsXvppHO/uP3DLiLxkrZTCijvdH7td4Nnl54MnetfDUZjXzAT6wcPeGfjrgcZByW
-         kE0zgC5CDIK36CBm38iRaW/JR95s7OsF5HA7XkJidfYnwaZiXkoL697PTRfFgE9uEuIq
-         gMSw==
-X-Gm-Message-State: AGi0PuZR+GEAf1dZNfF25tT0PCTHX7SWBouQmEOYHZfITPohQFcOls/P
-        27kWTOb+YZfWX3fAPZp4cqyomw==
-X-Google-Smtp-Source: APiQypIue/Km0CGvOVXLRMs3dRNzNn2b+oQJbWUSRC7S+I6HZthWyFZ45PSiWlv1OzGFmHnp1EEYHg==
-X-Received: by 2002:adf:b1c8:: with SMTP id r8mr2997631wra.218.1587117452173;
-        Fri, 17 Apr 2020 02:57:32 -0700 (PDT)
-Received: from dell ([95.149.164.124])
-        by smtp.gmail.com with ESMTPSA id h188sm7601572wme.8.2020.04.17.02.57.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Apr 2020 02:57:31 -0700 (PDT)
-Date:   Fri, 17 Apr 2020 10:58:31 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Tim Harvey <tharvey@gateworks.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Robert Jones <rjones@gateworks.com>
-Subject: Re: [PATCH v8 1/3] dt-bindings: mfd: Add Gateworks System Controller
- bindings
-Message-ID: <20200417095831.GI2167633@dell>
-References: <1585341214-25285-1-git-send-email-tharvey@gateworks.com>
- <1585341214-25285-2-git-send-email-tharvey@gateworks.com>
+        Fri, 17 Apr 2020 06:32:57 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E41C061A0C
+        for <linux-hwmon@vger.kernel.org>; Fri, 17 Apr 2020 03:32:57 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1jPOIq-0006Dq-4X; Fri, 17 Apr 2020 12:32:56 +0200
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1jPOIp-0008EY-Od; Fri, 17 Apr 2020 12:32:55 +0200
+Date:   Fri, 17 Apr 2020 12:32:55 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] hwmon: (jc42) Fix name to have no illegal characters
+Message-ID: <20200417103255.GZ1694@pengutronix.de>
+References: <20200417092853.31206-1-s.hauer@pengutronix.de>
+ <20200417115503.249d4d48@endymion>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1585341214-25285-2-git-send-email-tharvey@gateworks.com>
+In-Reply-To: <20200417115503.249d4d48@endymion>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 12:25:55 up 57 days, 17:56, 99 users,  load average: 0.20, 0.14,
+ 0.16
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, 27 Mar 2020, Tim Harvey wrote:
+Hi Jean,
 
-> This patch adds documentation of device-tree bindings for the
-> Gateworks System Controller (GSC).
+On Fri, Apr 17, 2020 at 11:55:03AM +0200, Jean Delvare wrote:
+> Hi Sascha,
 > 
-> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
-> ---
-> v8:
->  - add register to fan-controller node name
+> On Fri, 17 Apr 2020 11:28:53 +0200, Sascha Hauer wrote:
+> > The jc42 driver passes I2C client's name as hwmon device name. In case
+> > of device tree probed devices this ends up being part of the compatible
+> > string, "jc-42.4-temp". This name contains hyphens and the hwmon core
+> > doesn't like this:
+> > 
+> > jc42 2-0018: hwmon: 'jc-42.4-temp' is not a valid name attribute, please fix
+> > 
+> > This changes the name to "jc42" which doesn't have any illegal
+> > characters.
 > 
-> v7:
->  - change divider from mili-ohms to ohms
->  - add constraints for voltage divider and offset
->  - remove unnecessary ref for offset
->  - renamed fan to fan-controller and changed base prop to reg
-> 
-> v6:
->  - fix typo
->  - drop invalid description from #interrupt-cells property
->  - fix adc pattern property
->  - add unit suffix
->  - replace hwmon/adc with adc/channel
->  - changed adc type to mode and enum int
->  - add unit suffix and drop ref for voltage-divider
->  - moved fan to its own subnode with base register
-> 
-> v5:
->  - resolve dt_binding_check issues
-> 
-> v4:
->  - move to using pwm<n>_auto_point<m>_{pwm,temp} for FAN PWM
->  - remove unncessary resolution/scaling properties for ADCs
->  - update to yaml
->  - remove watchdog
-> 
-> v3:
->  - replaced _ with -
->  - remove input bindings
->  - added full description of hwmon
->  - fix unit address of hwmon child nodes
-> ---
->  .../devicetree/bindings/mfd/gateworks-gsc.yaml     | 194 +++++++++++++++++++++
->  1 file changed, 194 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml b/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
-> new file mode 100644
-> index 00000000..a96751c9
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
-> @@ -0,0 +1,194 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/gateworks-gsc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Gateworks System Controller multi-function device
+> I don't think "jc-42.4-temp" is a valid i2c client name either.
 
-I'd prefer if you didn't use Linuxisums in DT docs.
+What makes the name invalid then? I am not aware of any constraints of
+i2c client names.
 
-A 'multi-function device' isn't a thing - we made it up.
+> I believe this should be fixed at the of->i2c level, rather than the
+> i2c->hwmon level.
 
-Nowhere in the documentation [0] is the Gateworks System Controller
-described as a multi-function device.
+Are you suggesting a character conversion from hyphens to underscores or
+similar in the i2c core?
 
-[0] http://trac.gateworks.com/wiki/gsc
+> Not sure how other drivers are dealing with that, it
+> seems that in most cases the name part of the compatible string matches
+> exactly the expected client name so no conversion is needed.
 
-> +description: |
-> +  The GSC is a Multifunction I2C slave device with the following submodules:
+Other i2c hwmon drivers I found do not have any hyphens in their
+compatible string, so they are at least not hit by this message.
 
-No it isn't.  It's a:
-
-  "The Gateworks System Controller (GSC) is a device present across
-   various Gateworks product families that provides a set of system
-   related feature such as the following (refer to the board hardware
-   user manuals to see what features are present)"
-
-> +   - Watchdog Timer
-> +   - GPIO
-> +   - Pushbutton controller
-> +   - Hardware Monitor with ADC's for temperature and voltage rails and
-> +     fan controller
-
-Why is "Monitor" capitalised, but "controller" is not?
-
-I would s/Monitor/monitor/ here.
-
-> +maintainers:
-> +  - Tim Harvey <tharvey@gateworks.com>
-> +  - Robert Jones <rjones@gateworks.com>
-> +
-> +properties:
-> +  $nodename:
-> +    pattern: "gsc@[0-9a-f]{1,2}"
-> +  compatible:
-> +    const: gw,gsc
-> +
-> +  reg:
-> +    description: I2C device address
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  interrupt-controller: true
-> +
-> +  "#interrupt-cells":
-> +    const: 1
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 0
-> +
-> +  adc:
-> +    type: object
-> +    description: Optional Hardware Monitoring module
-
-Again, an odd thing to capitalise.
-
-> +    properties:
-> +      compatible:
-> +        const: gw,gsc-adc
-> +
-> +      "#address-cells":
-> +        const: 1
-> +
-> +      "#size-cells":
-> +        const: 0
-> +
-> +    patternProperties:
-> +      "^channel@[0-9]+$":
-> +        type: object
-> +        description: |
-> +          Properties for a single ADC which can report cooked values
-> +          (ie temperature sensor based on thermister), raw values
-> +          (ie voltage rail with a pre-scaling resistor divider).
-
-/ie/i.e./
-
-> +        properties:
-> +          reg:
-> +            description: Register of the ADC
-> +            maxItems: 1
-> +
-> +          label:
-> +            description: Name of the ADC input
-> +
-> +          gw,mode:
-> +            description: |
-> +              conversion mode:
-> +                0 - temperature, in C*10
-> +                1 - pre-scaled voltage value
-> +                2 - scaled voltage based on an optional resistor divider
-> +                    and optional offset
-> +            allOf:
-> +              - $ref: /schemas/types.yaml#/definitions/uint32
-
-Rob just submitted a patch-set to remove 'allOf's from '$ref'
-properties.
-
-> +            enum: [0, 1, 2]
-> +
-> +          gw,voltage-divider-ohms:
-> +            description: values of resistors for divider on raw ADC input
-
-s/values/Values/
-
-> +            maxItems: 2
-> +            items:
-> +             minimum: 1000
-> +             maximum: 1000000
-> +
-> +          gw,voltage-offset-microvolt:
-> +            description: |
-> +              A positive voltage offset to apply to a raw ADC
-> +              (ie to compensate for a diode drop).
-
-s/ie/i.e/
-
-> +            minimum: 0
-> +            maximum: 1000000
-> +
-> +        required:
-> +          - gw,mode
-> +          - reg
-> +          - label
-> +
-> +    required:
-> +      - compatible
-> +      - "#address-cells"
-> +      - "#size-cells"
-> +
-> +patternProperties:
-> +  "^fan-controller@[0-9a-f]+$":
-> +    type: object
-> +    description: Optional FAN controller
-
-"Fan"
-
-> +    properties:
-> +      compatible:
-> +        const: gw,gsc-fan
-> +
-> +      "#address-cells":
-> +        const: 1
-> +
-> +      "#size-cells":
-> +        const: 0
-> +
-> +      reg:
-> +        description: The fan controller base address
-> +        maxItems: 1
-> +
-> +    required:
-> +      - compatible
-> +      - reg
-> +      - "#address-cells"
-> +      - "#size-cells"
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - interrupt-controller
-> +  - "#interrupt-cells"
-> +  - "#address-cells"
-> +  - "#size-cells"
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        gsc@20 {
-> +            compatible = "gw,gsc";
-> +            reg = <0x20>;
-> +            interrupt-parent = <&gpio1>;
-> +            interrupts = <4 GPIO_ACTIVE_LOW>;
-> +            interrupt-controller;
-> +            #interrupt-cells = <1>;
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +
-> +            adc {
-> +                compatible = "gw,gsc-adc";
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +
-> +                channel@0 { /* A0: Board Temperature */
-> +                    reg = <0x00>;
-> +                    label = "temp";
-> +                    gw,mode = <0>;
-> +                };
-> +
-> +                channel@2 { /* A1: Input Voltage (raw ADC) */
-> +                    reg = <0x02>;
-> +                    label = "vdd_vin";
-> +                    gw,mode = <1>;
-> +                    gw,voltage-divider-ohms = <22100 1000>;
-> +                    gw,voltage-offset-microvolt = <800000>;
-> +                };
-> +
-> +                channel@b { /* A2: Battery voltage */
-> +                    reg = <0x0b>;
-> +                    label = "vdd_bat";
-> +                    gw,mode = <1>;
-> +                };
-> +            };
-> +
-> +            fan-controller@2c {
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +                compatible = "gw,gsc-fan";
-> +                reg = <0x2c>;
-> +            };
-> +        };
-> +    };
+Sascha
 
 -- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
