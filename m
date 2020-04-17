@@ -2,101 +2,86 @@ Return-Path: <SRS0=fRLa=6B=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F51DC2D0EF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Apr 2020 19:34:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3922FC38A29
+	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Apr 2020 19:39:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3FF09206D9
-	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Apr 2020 19:34:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0E779206D9
+	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Apr 2020 19:39:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IMMzb43R"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="MysNWm+Y"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730413AbgDQTei (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 17 Apr 2020 15:34:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54476 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728826AbgDQTei (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 17 Apr 2020 15:34:38 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C404C061A0C;
-        Fri, 17 Apr 2020 12:34:38 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id ms17so1493965pjb.0;
-        Fri, 17 Apr 2020 12:34:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=tQnh9bMknhmK0SLjhY8GYeOkFSZfOfpp0SuxWOSDDX0=;
-        b=IMMzb43Rae3Ny+NkzukzwSVkTodIPkm8EK9cG6V+/8cgcsYlezidqynTgJB7haepXz
-         NNx7KxIuli5YAMPp1VzJVr37tuXzI7G3C9T53REH+Qyp4UJ6z2DzXKGu/HZSSqKlJhpC
-         XpR2Z0CweEAMPGJeivq90NuYlb33XbXjbrWG6tyTQYSvWH07N8sxr4gh+zoOMIecba3Y
-         5M+cKgkVYpyO3gT3TE3Bh602GSfWtRG14NDrsDp2AGkg5OwzZ4Mt7Xg+WVkjkiATfVi8
-         5SVfpbUOPFE/NNEzDYeCj2DGcG8DoDFRoHH7taWk4CKhBfpp9JCuXdkINa5yJYTxeBPB
-         5sHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=tQnh9bMknhmK0SLjhY8GYeOkFSZfOfpp0SuxWOSDDX0=;
-        b=MXJ7oKaX0zzs7f6VlraEHhgNIHqSm+vWRDIjZnS4Sglcd+zE9F2B+D7ekjV7EiFBrZ
-         O+AWTZZVyTlLeWqKAXSvTZaBP11vsAmUTRKQgKxbzSeu2AhYrzrPqK3Kef+Ew+xn7kIa
-         178U6VW9Roa2za3g4vhhDQsx+Jo2LD1Kvw9ZGqsFHI2wILZupW37Mwz2m3/2V8nSRXq1
-         PP8CF7hvn9xgLjmIrMdvIpagKttr+TEZ7R09m8wbKl9SMu9DN0beXFlxFrwSqNJBGjYm
-         I39n34pDkYeBVSqdrq26dNsqqPgnc6Rb9nq/HPKmUaK3W/OCVh525ntVJShNw23bw0S7
-         HTaA==
-X-Gm-Message-State: AGi0Pua8KoojXhY97l+RdEuW1MKHXE16a5TkKXdAc7zRWuDDkwrMbbI0
-        wv9KDdbQN2YAP0YdjHCwDvY=
-X-Google-Smtp-Source: APiQypIL6KyowX9unVOk4wA2Mdi6nQNAg2BioJEZe34qxKKWZRXAypJ+sBFiBKMg3329barooUFNBA==
-X-Received: by 2002:a17:902:d70f:: with SMTP id w15mr5027642ply.138.1587152077669;
-        Fri, 17 Apr 2020 12:34:37 -0700 (PDT)
-Received: from [10.230.188.26] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id g22sm6299187pju.21.2020.04.17.12.34.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Apr 2020 12:34:36 -0700 (PDT)
-Subject: Re: [PATCH net-next 1/3] net: phy: broadcom: add helper to write/read
- RDB registers
-To:     Michael Walle <michael@walle.cc>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>,
+        id S1730586AbgDQTjJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 17 Apr 2020 15:39:09 -0400
+Received: from vps0.lunn.ch ([185.16.172.187]:45034 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730336AbgDQTjJ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 17 Apr 2020 15:39:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=5wbOmjfBKlirMRvp5xkC4Vfb3UzqF4kW6GaX+rtLC0w=; b=MysNWm+Y2KusXIbmHXxDn1//Qv
+        lmbrRrLEkeVCG+iEB0C0OrfMinRn1UVeI6mD+HHpRourTk3OftiF7Lz3FKcGF89362FLHYkjt1Nxz
+        DIuA5NLySaGnnqp7dNYaGovpinRPtaPD2Qb9+KeQUBxfC4d6VEvx+/2ETsh4TwlDY808=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.93)
+        (envelope-from <andrew@lunn.ch>)
+        id 1jPWpN-003LEM-6k; Fri, 17 Apr 2020 21:39:05 +0200
+Date:   Fri, 17 Apr 2020 21:39:05 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Michael Walle <michael@walle.cc>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
         Heiner Kallweit <hkallweit1@gmail.com>,
         Russell King <linux@armlinux.org.uk>,
         "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH net-next 2/3] net: phy: add Broadcom BCM54140 support
+Message-ID: <20200417193905.GF785713@lunn.ch>
 References: <20200417192858.6997-1-michael@walle.cc>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <ddc9c4e1-0bbb-a058-be70-e6cb772271da@gmail.com>
-Date:   Fri, 17 Apr 2020 12:34:34 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Firefox/68.0 Thunderbird/68.7.0
+ <20200417192858.6997-2-michael@walle.cc>
 MIME-Version: 1.0
-In-Reply-To: <20200417192858.6997-1-michael@walle.cc>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200417192858.6997-2-michael@walle.cc>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+On Fri, Apr 17, 2020 at 09:28:57PM +0200, Michael Walle wrote:
 
+> +static int bcm54140_get_base_addr_and_port(struct phy_device *phydev)
+> +{
+> +	struct bcm54140_phy_priv *priv = phydev->priv;
+> +	struct mii_bus *bus = phydev->mdio.bus;
+> +	int addr, min_addr, max_addr;
+> +	int step = 1;
+> +	u32 phy_id;
+> +	int tmp;
+> +
+> +	min_addr = phydev->mdio.addr;
+> +	max_addr = phydev->mdio.addr;
+> +	addr = phydev->mdio.addr;
+> +
+> +	/* We scan forward and backwards and look for PHYs which have the
+> +	 * same phy_id like we do. Step 1 will scan forward, step 2
+> +	 * backwards. Once we are finished, we have a min_addr and
+> +	 * max_addr which resembles the range of PHY addresses of the same
+> +	 * type of PHY. There is one caveat; there may be many PHYs of
+> +	 * the same type, but we know that each PHY takes exactly 4
+> +	 * consecutive addresses. Therefore we can deduce our offset
+> +	 * to the base address of this quad PHY.
+> +	 */
 
-On 4/17/2020 12:28 PM, Michael Walle wrote:
-> RDB regsiters are used on newer Broadcom PHYs. Add helper to read, write
-> and modify these registers.
+Hi Michael
 
-Only if you have to respin: please correct the typo above: regsiters vs. 
-registers.
+How much flexibility is there in setting the base address using
+strapping etc? Is it limited to a multiple of 4?
 
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
-
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
