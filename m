@@ -1,170 +1,178 @@
-Return-Path: <SRS0=jk2+=6A=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=fRLa=6B=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5D39C2BB85
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Apr 2020 12:44:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7420CC2BB1D
+	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Apr 2020 06:34:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A7559208E4
-	for <linux-hwmon@archiver.kernel.org>; Thu, 16 Apr 2020 12:44:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 47F2522201
+	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Apr 2020 06:34:19 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="QJWl4WcT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2636091AbgDPMoV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 16 Apr 2020 08:44:21 -0400
-Received: from asavdk4.altibox.net ([109.247.116.15]:33886 "EHLO
-        asavdk4.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2636077AbgDPMoR (ORCPT
+        id S1727935AbgDQGeS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 17 Apr 2020 02:34:18 -0400
+Received: from ssl.serverraum.org ([176.9.125.105]:42453 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727912AbgDQGeS (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 16 Apr 2020 08:44:17 -0400
-Received: from ravnborg.org (unknown [158.248.194.18])
+        Fri, 17 Apr 2020 02:34:18 -0400
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by asavdk4.altibox.net (Postfix) with ESMTPS id 924AA80487;
-        Thu, 16 Apr 2020 14:44:00 +0200 (CEST)
-Date:   Thu, 16 Apr 2020 14:43:59 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-i2c@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: Clean-up schema indentation formatting
-Message-ID: <20200416124359.GB5785@ravnborg.org>
-References: <20200416005549.9683-1-robh@kernel.org>
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 062C222EEB;
+        Fri, 17 Apr 2020 08:34:09 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1587105252;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yRofvrT7uJxuqc53iK0glkaODL7zqW5wwpHXjFjKcgw=;
+        b=QJWl4WcToI73JqjXrubzRp0qLIcPIjk2ilLyWMLcnLKpiGqrfWON6uL1z8JhJq7r5UUkyF
+        TKqmBRGjCEejYmQaC3M7NJhp8Ji3md43YmGOp9YWBADR/RoIApO6RHynSWNUvMQUz3QA90
+        FlDbwzSR3GqZVaXjssTh33Iz8CDafW4=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200416005549.9683-1-robh@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-CMAE-Score: 0
-X-CMAE-Analysis: v=2.3 cv=XpTUx2N9 c=1 sm=1 tr=0
-        a=UWs3HLbX/2nnQ3s7vZ42gw==:117 a=UWs3HLbX/2nnQ3s7vZ42gw==:17
-        a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19 a=kj9zAlcOel0A:10
-        a=xJWM5Xtqm7-vkBAKM1YA:9 a=bxeknKLoBf6BnO7k:21 a=StjP_oZuoJ7ca4eH:21
-        a=CjuIK1q_8ugA:10
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Fri, 17 Apr 2020 08:34:09 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v2 10/16] gpio: add a reusable generic gpio_chip using
+ regmap
+In-Reply-To: <CACRpkdaqgHhPwdKdUai4zvi21qR-cSQUKyzZ3SyfWBLPN9us3w@mail.gmail.com>
+References: <20200402203656.27047-1-michael@walle.cc>
+ <20200402203656.27047-11-michael@walle.cc>
+ <CACRpkdaqgHhPwdKdUai4zvi21qR-cSQUKyzZ3SyfWBLPN9us3w@mail.gmail.com>
+Message-ID: <f82706a8596436d13642c49e26233133@walle.cc>
+X-Sender: michael@walle.cc
+User-Agent: Roundcube Webmail/1.3.10
+X-Spamd-Bar: +
+X-Rspamd-Server: web
+X-Rspamd-Queue-Id: 062C222EEB
+X-Spamd-Result: default: False [1.40 / 15.00];
+         FROM_HAS_DN(0.00)[];
+         TO_DN_SOME(0.00)[];
+         FREEMAIL_ENVRCPT(0.00)[gmail.com];
+         TO_MATCH_ENVRCPT_ALL(0.00)[];
+         TAGGED_RCPT(0.00)[dt];
+         MIME_GOOD(-0.10)[text/plain];
+         DKIM_SIGNED(0.00)[];
+         RCPT_COUNT_TWELVE(0.00)[23];
+         NEURAL_HAM(-0.00)[-0.393];
+         RCVD_COUNT_ZERO(0.00)[0];
+         FROM_EQ_ENVFROM(0.00)[];
+         MIME_TRACE(0.00)[0:+];
+         FREEMAIL_CC(0.00)[vger.kernel.org,lists.infradead.org,baylibre.com,kernel.org,suse.com,roeck-us.net,linaro.org,gmail.com,pengutronix.de,linux-watchdog.org,nxp.com,linutronix.de,lakedaemon.net,linuxfoundation.org];
+         MID_RHS_MATCH_FROM(0.00)[];
+         SUSPICIOUS_RECIPS(1.50)[]
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Rob.
+Hi Linus,
 
-On Wed, Apr 15, 2020 at 07:55:48PM -0500, Rob Herring wrote:
-> Fix various inconsistencies in schema indentation. Most of these are
-> list indentation which should be 2 spaces more than the start of the
-> enclosing keyword. This doesn't matter functionally, but affects running
-> scripts which do transforms on the schema files.
-
-Are there any plans to improve the tooling so we get warnigns for this?
-Otherwise I am afraid we will see a lot of patches that gets this wrong.
-
-As a follow-up patch it would be good if example-schema.yaml
-could gain some comments about the correct indentions.
-
-Some comments in the following.
-
-> diff --git a/Documentation/devicetree/bindings/arm/altera.yaml b/Documentation/devicetree/bindings/arm/altera.yaml
-> index 49e0362ddc11..b388c5aa7984 100644
-> --- a/Documentation/devicetree/bindings/arm/altera.yaml
-> +++ b/Documentation/devicetree/bindings/arm/altera.yaml
-> @@ -13,8 +13,8 @@ properties:
->    compatible:
->      items:
->        - enum:
-> -        - altr,socfpga-cyclone5
-> -        - altr,socfpga-arria5
-> -        - altr,socfpga-arria10
-> +          - altr,socfpga-cyclone5
-> +          - altr,socfpga-arria5
-> +          - altr,socfpga-arria10
->        - const: altr,socfpga
-
-So here "- enum" do not need the extra indent.
-Is it because this is not a list?
-
->  ...
-> diff --git a/Documentation/devicetree/bindings/arm/amlogic/amlogic,meson-gx-ao-secure.yaml b/Documentation/devicetree/bindings/arm/amlogic/amlogic,meson-gx-ao-secure.yaml
-> index 66213bd95e6e..6cc74523ebfd 100644
-> --- a/Documentation/devicetree/bindings/arm/amlogic/amlogic,meson-gx-ao-secure.yaml
-> +++ b/Documentation/devicetree/bindings/arm/amlogic/amlogic,meson-gx-ao-secure.yaml
-> @@ -25,7 +25,7 @@ select:
+Am 2020-04-16 11:27, schrieb Linus Walleij:
+> On Thu, Apr 2, 2020 at 10:37 PM Michael Walle <michael@walle.cc> wrote:
 > 
->  properties:
->    compatible:
-> -   items:
-> +    items:
->        - const: amlogic,meson-gx-ao-secure
->        - const: syscon
+>> There are quite a lot simple GPIO controller which are using regmap to
+>> access the hardware. This driver tries to be a base to unify existing
+>> code into one place. This won't cover everything but it should be a 
+>> good
+>> starting point.
+>> 
+>> It does not implement its own irq_chip because there is already a
+>> generic one for regmap based devices. Instead, the irq_chip will be
+>> instanciated in the parent driver and its irq domain will be associate
+>> to this driver.
+>> 
+>> For now it consists of the usual registers, like set (and an optional
+>> clear) data register, an input register and direction registers.
+>> Out-of-the-box, it supports consecutive register mappings and mappings
+>> where the registers have gaps between them with a linear mapping 
+>> between
+>> GPIO offset and bit position. For weirder mappings the user can 
+>> register
+>> its own .xlate().
+>> 
+>> Signed-off-by: Michael Walle <michael@walle.cc>
+> 
+> Overall I really like this driver and I think we should merge is as 
+> soon
+> as it is in reasonable shape and then improve on top so we can start
+> migrating drivers to it.
+> 
+>> +static int gpio_regmap_to_irq(struct gpio_chip *chip, unsigned int 
+>> offset)
+>> +{
+>> +       struct gpio_regmap_data *data = gpiochip_get_data(chip);
+>> +       struct gpio_regmap *gpio = data->gpio;
+>> +
+>> +       /* the user might have its own .to_irq callback */
+>> +       if (gpio->to_irq)
+>> +               return gpio->to_irq(gpio, offset);
+>> +
+>> +       return irq_create_mapping(gpio->irq_domain, offset);
+> 
+> I think that should at least be irq_find_mapping(), the mapping should
+> definately not be created by the .to_irq() callback since that is just
+> a convenience function.
 
-This is something I had expected the tooling to notice.
-I had expected the two "- const" to be indented with 4 spaces, not two.
-So there is something I do not understand.
+what do you mean by conenience function? are there other ways? if you 
+use
+irq_find_mapping() who will create the mappings? most gpio drivers use a
+similar function like gpio_regmap_to_irq().
 
+> 
+>> +       if (gpio->irq_domain)
+>> +               chip->to_irq = gpio_regmap_to_irq;
+> 
+> I don't know about this.
+> (...)
+>> + * @irq_domain:                (Optional) IRQ domain if the 
+>> controller is
+>> + *                     interrupt-capable
+> (...)
+>> +       struct irq_domain *irq_domain;
+> 
+> I don't think this is a good storage place for the irqdomain, we 
+> already have
+> gpio_irq_chip inside gpio_chip and that has an irqdomain, we should
+> strive to reuse that infrastructure also for regmap GPIO I think, for 
+> now
+> I would just leave .to_irq() out of this and let the driver deal with 
+> any
+> irqs.
 
-> diff --git a/Documentation/devicetree/bindings/arm/nxp/lpc32xx.yaml b/Documentation/devicetree/bindings/arm/nxp/lpc32xx.yaml
-> index 07f39d3eee7e..f7f024910e71 100644
-> --- a/Documentation/devicetree/bindings/arm/nxp/lpc32xx.yaml
-> +++ b/Documentation/devicetree/bindings/arm/nxp/lpc32xx.yaml
-> @@ -17,9 +17,8 @@ properties:
->            - nxp,lpc3230
->            - nxp,lpc3240
->        - items:
-> -        - enum:
-> -            - ea,ea3250
-> -            - phytec,phy3250
-> -        - const: nxp,lpc3250
-> -
-> +          - enum:
-> +              - ea,ea3250
-> +              - phytec,phy3250
-> +          - const: nxp,lpc3250
->  ...
+How would a driver attach the to_irq callback then? At the moment, the
+gpio_regmap doesn't expose the gpio_chip. So either we have to do that 
+or
+the config still have to have a .to_irq property.
 
-And here "- enum" receive extra indent.
-
-I trust you know what you are doing - but I do not get it.
-
-Some pointers or examples for the correct indention would be great.
-I cannot review this patch as long as I do not know the rules.
-
-My request to update example-schema.yaml was one way to teach me.
-(Some people will say that is difficult/impossible to teach me,
-but thats another story:-) ).
-
-	Sam
+-michael
