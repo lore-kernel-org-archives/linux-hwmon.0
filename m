@@ -2,177 +2,82 @@ Return-Path: <SRS0=fRLa=6B=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7420CC2BB1D
-	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Apr 2020 06:34:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49609C352BE
+	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Apr 2020 09:29:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 47F2522201
-	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Apr 2020 06:34:19 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="QJWl4WcT"
+	by mail.kernel.org (Postfix) with ESMTP id 2757B21D91
+	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Apr 2020 09:29:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727935AbgDQGeS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 17 Apr 2020 02:34:18 -0400
-Received: from ssl.serverraum.org ([176.9.125.105]:42453 "EHLO
-        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727912AbgDQGeS (ORCPT
+        id S1730226AbgDQJ3C (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 17 Apr 2020 05:29:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45002 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729987AbgDQJ3B (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 17 Apr 2020 02:34:18 -0400
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 062C222EEB;
-        Fri, 17 Apr 2020 08:34:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1587105252;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yRofvrT7uJxuqc53iK0glkaODL7zqW5wwpHXjFjKcgw=;
-        b=QJWl4WcToI73JqjXrubzRp0qLIcPIjk2ilLyWMLcnLKpiGqrfWON6uL1z8JhJq7r5UUkyF
-        TKqmBRGjCEejYmQaC3M7NJhp8Ji3md43YmGOp9YWBADR/RoIApO6RHynSWNUvMQUz3QA90
-        FlDbwzSR3GqZVaXjssTh33Iz8CDafW4=
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Fri, 17 Apr 2020 08:34:09 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
+        Fri, 17 Apr 2020 05:29:01 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6B7BC061A0C
+        for <linux-hwmon@vger.kernel.org>; Fri, 17 Apr 2020 02:29:01 -0700 (PDT)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1jPNIy-0007b9-AW; Fri, 17 Apr 2020 11:29:00 +0200
+Received: from sha by dude.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1jPNIw-0000sh-Lu; Fri, 17 Apr 2020 11:28:58 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     linux-hwmon@vger.kernel.org
+Cc:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v2 10/16] gpio: add a reusable generic gpio_chip using
- regmap
-In-Reply-To: <CACRpkdaqgHhPwdKdUai4zvi21qR-cSQUKyzZ3SyfWBLPN9us3w@mail.gmail.com>
-References: <20200402203656.27047-1-michael@walle.cc>
- <20200402203656.27047-11-michael@walle.cc>
- <CACRpkdaqgHhPwdKdUai4zvi21qR-cSQUKyzZ3SyfWBLPN9us3w@mail.gmail.com>
-Message-ID: <f82706a8596436d13642c49e26233133@walle.cc>
-X-Sender: michael@walle.cc
-User-Agent: Roundcube Webmail/1.3.10
-X-Spamd-Bar: +
-X-Rspamd-Server: web
-X-Rspamd-Queue-Id: 062C222EEB
-X-Spamd-Result: default: False [1.40 / 15.00];
-         FROM_HAS_DN(0.00)[];
-         TO_DN_SOME(0.00)[];
-         FREEMAIL_ENVRCPT(0.00)[gmail.com];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         TAGGED_RCPT(0.00)[dt];
-         MIME_GOOD(-0.10)[text/plain];
-         DKIM_SIGNED(0.00)[];
-         RCPT_COUNT_TWELVE(0.00)[23];
-         NEURAL_HAM(-0.00)[-0.393];
-         RCVD_COUNT_ZERO(0.00)[0];
-         FROM_EQ_ENVFROM(0.00)[];
-         MIME_TRACE(0.00)[0:+];
-         FREEMAIL_CC(0.00)[vger.kernel.org,lists.infradead.org,baylibre.com,kernel.org,suse.com,roeck-us.net,linaro.org,gmail.com,pengutronix.de,linux-watchdog.org,nxp.com,linutronix.de,lakedaemon.net,linuxfoundation.org];
-         MID_RHS_MATCH_FROM(0.00)[];
-         SUSPICIOUS_RECIPS(1.50)[]
+        Sascha Hauer <s.hauer@pengutronix.de>
+Subject: [PATCH] hwmon: (jc42) Fix name to have no illegal characters
+Date:   Fri, 17 Apr 2020 11:28:53 +0200
+Message-Id: <20200417092853.31206-1-s.hauer@pengutronix.de>
+X-Mailer: git-send-email 2.26.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Linus,
+The jc42 driver passes I2C client's name as hwmon device name. In case
+of device tree probed devices this ends up being part of the compatible
+string, "jc-42.4-temp". This name contains hyphens and the hwmon core
+doesn't like this:
 
-Am 2020-04-16 11:27, schrieb Linus Walleij:
-> On Thu, Apr 2, 2020 at 10:37 PM Michael Walle <michael@walle.cc> wrote:
-> 
->> There are quite a lot simple GPIO controller which are using regmap to
->> access the hardware. This driver tries to be a base to unify existing
->> code into one place. This won't cover everything but it should be a 
->> good
->> starting point.
->> 
->> It does not implement its own irq_chip because there is already a
->> generic one for regmap based devices. Instead, the irq_chip will be
->> instanciated in the parent driver and its irq domain will be associate
->> to this driver.
->> 
->> For now it consists of the usual registers, like set (and an optional
->> clear) data register, an input register and direction registers.
->> Out-of-the-box, it supports consecutive register mappings and mappings
->> where the registers have gaps between them with a linear mapping 
->> between
->> GPIO offset and bit position. For weirder mappings the user can 
->> register
->> its own .xlate().
->> 
->> Signed-off-by: Michael Walle <michael@walle.cc>
-> 
-> Overall I really like this driver and I think we should merge is as 
-> soon
-> as it is in reasonable shape and then improve on top so we can start
-> migrating drivers to it.
-> 
->> +static int gpio_regmap_to_irq(struct gpio_chip *chip, unsigned int 
->> offset)
->> +{
->> +       struct gpio_regmap_data *data = gpiochip_get_data(chip);
->> +       struct gpio_regmap *gpio = data->gpio;
->> +
->> +       /* the user might have its own .to_irq callback */
->> +       if (gpio->to_irq)
->> +               return gpio->to_irq(gpio, offset);
->> +
->> +       return irq_create_mapping(gpio->irq_domain, offset);
-> 
-> I think that should at least be irq_find_mapping(), the mapping should
-> definately not be created by the .to_irq() callback since that is just
-> a convenience function.
+jc42 2-0018: hwmon: 'jc-42.4-temp' is not a valid name attribute, please fix
 
-what do you mean by conenience function? are there other ways? if you 
-use
-irq_find_mapping() who will create the mappings? most gpio drivers use a
-similar function like gpio_regmap_to_irq().
+This changes the name to "jc42" which doesn't have any illegal
+characters.
 
-> 
->> +       if (gpio->irq_domain)
->> +               chip->to_irq = gpio_regmap_to_irq;
-> 
-> I don't know about this.
-> (...)
->> + * @irq_domain:                (Optional) IRQ domain if the 
->> controller is
->> + *                     interrupt-capable
-> (...)
->> +       struct irq_domain *irq_domain;
-> 
-> I don't think this is a good storage place for the irqdomain, we 
-> already have
-> gpio_irq_chip inside gpio_chip and that has an irqdomain, we should
-> strive to reuse that infrastructure also for regmap GPIO I think, for 
-> now
-> I would just leave .to_irq() out of this and let the driver deal with 
-> any
-> irqs.
+Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+---
+ drivers/hwmon/jc42.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-How would a driver attach the to_irq callback then? At the moment, the
-gpio_regmap doesn't expose the gpio_chip. So either we have to do that 
-or
-the config still have to have a .to_irq property.
+diff --git a/drivers/hwmon/jc42.c b/drivers/hwmon/jc42.c
+index f2d81b0558e5..e3f1ebee7130 100644
+--- a/drivers/hwmon/jc42.c
++++ b/drivers/hwmon/jc42.c
+@@ -506,7 +506,7 @@ static int jc42_probe(struct i2c_client *client, const struct i2c_device_id *id)
+ 	}
+ 	data->config = config;
+ 
+-	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name,
++	hwmon_dev = devm_hwmon_device_register_with_info(dev, "jc42",
+ 							 data, &jc42_chip_info,
+ 							 NULL);
+ 	return PTR_ERR_OR_ZERO(hwmon_dev);
+-- 
+2.26.1
 
--michael
