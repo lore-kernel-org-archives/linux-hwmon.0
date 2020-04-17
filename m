@@ -7,28 +7,28 @@ X-Spam-Status: No, score=-9.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	MSGID_FROM_MTA_HEADER,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85DE4C2D0EF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Apr 2020 19:02:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A65DDC2D0EF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Apr 2020 19:05:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4BA8C20780
-	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Apr 2020 19:02:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7CCCA20780
+	for <linux-hwmon@archiver.kernel.org>; Fri, 17 Apr 2020 19:05:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=amdcloud.onmicrosoft.com header.i=@amdcloud.onmicrosoft.com header.b="2Amy3TBz"
+	dkim=pass (1024-bit key) header.d=amdcloud.onmicrosoft.com header.i=@amdcloud.onmicrosoft.com header.b="W5I/QsQL"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726498AbgDQTCl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 17 Apr 2020 15:02:41 -0400
-Received: from mail-dm6nam12on2045.outbound.protection.outlook.com ([40.107.243.45]:64832
-        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
+        id S1728096AbgDQTFV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 17 Apr 2020 15:05:21 -0400
+Received: from mail-bn7nam10on2082.outbound.protection.outlook.com ([40.107.92.82]:40225
+        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725960AbgDQTCk (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 17 Apr 2020 15:02:40 -0400
+        id S1727775AbgDQTFT (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 17 Apr 2020 15:05:19 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fYpjWbZ7uY1p52EftTL7xGvYYDzVqw1AlaFsHGmjk2fC3V2cPZZrNh12/z1w5DiB2/8uxbyp0acKvRkDB+NKJBhVLwMl+ZrjpCaXSne55GnOvH45quI3vrWJg5JTDVuAwdFWy2CD06y3Txn35o4pox4x9TGY+HCMglldOLxu6EakWfHMR/jZDBKPeOq0syB6CeGXzHtk5bP/ikn9GBv33XxdRJnDEHsc0yeRE09C3f4/bWHCA5Ae4D1fVJiRxkoBGpry1RD2Ykt7ANQ0kCJe10QZx/UQLjIujob470oGOQ3/PPU4sonbzxuK9yvvA4B8kq8J4OWjNFSnxhzbgQvdHg==
+ b=Cz7AtlJOzsmTY8HaQniGTYNFInyBe+/suRzxHqrmWmqw37Go5mkJ7q3Gj3QczU+/WtDN+aHpJ8K8QB6Z3uDc729v9f6E3Sn41OyjiMpRQe3WqjZ0iDkYNX93i0tEQ1VkEWKp7kQGptEb+Fzjzk1Nhu7wHPiDWFI83yhprTW/d2VIBzjXY5WH7JL0x3xi5gQQajsqaPEsNxw/Ekb5V5jC/n7BN+CT+zTaif2+E/LtbFM0A9MIcyv01yNtBHL4ek9CEl4cJ/F4/MLDcE9a8y5Aue50fWiUQ4va+3VUNKcg7Fd57vunbH4Vbl91zfySehrp90ZhfJgKTL65YPzromAgXA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
  bh=OcOdHA998wo7TenUUi7b08qNb6RkJMEce/hIVNf/WuA=;
- b=IU9kR81RwwKRXl3k1qNmEbN1qLNRij3TcG6jxO2jg8LhiTOrSYpOnFyHO55JL0FfDfhkjwUg8/O3A+QcPmgPjAO2sSq+fiwdtFj1OkThwKXgiDJFU1/lPAo9dorG853dbhAEP8+3WIf19pg02VKLhGKsBPlDZUFh3qxi5gP4SPOw33Tu2hM8maF3ue1y6vZgr9VFW6OhOYBr2T4ixMESSel8tbYwtGGc0tTGoYgOWgl3/kplmRH7+QmIw8lSTlDO59GSW1kiYujLo4ns5rl1CwUob/a8oI9vvEQ9HBRu8FJUFqXfTzfBp7Upr43N9BYpEIhl7gdxkPD2mECGDS/Tuw==
+ b=MG10V+TIJy71kN+cwZFMm87sHnXUu9XzNbchmGhPaTxMCIiBftsEhqjoOQmliIA2JagGOdwqOrtiJbAQMn6NfjZIJfx1mrhWP9GKELm0BfF24LoGz34s3UJnD5LP3sUySAQaEjCYDuspcLFXtji5nvoWjRKCC3ssTk4UGUQgwDDy3qd00Hjiklr1VWQ0+RfuYsO1s+wrFqdZ9ljWK/uCEQzXXt2GdspNGotOpDwYnoWMCYp6e/Y3frwbH7zyD252tOubTbo+gJnubrT+firqtGm9xN9OjMO079rSb05Pp9BmCBenVZjQz/z/NgQmczTbVY8NgVxDopsXRGe9kBFFSw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
@@ -36,59 +36,59 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
  bh=OcOdHA998wo7TenUUi7b08qNb6RkJMEce/hIVNf/WuA=;
- b=2Amy3TBzC2Wf8kPJKgV6NX3Mv8lJOKbFqvpjnXt5c8NvgZFtlGVDXZ/oP2nRIndcXNr9Ay5ONNQb1JA0RUDdISpXdY3Yy+1ufDXUv4D4Z365r2qiBoQq35GNdGh94aPJkrgi+o1z+Ga/va93WmfSUxz2fIQxcc5PEaxPCT2IHg4=
+ b=W5I/QsQLP1XC4kXvpXuEVd//l6xRx0lBRlRY7ER5cNgzrnydKX7JgJ2J/ZKd3jV8An9d4443H7JvXGTGbBXTKsSM89eHAJkIYOoXflYZCtD+vg6r7WQYwsbqIrM3eKb+uzvL23XhyhgPZK48IdHBgk2yXvszoaIyUd7HY1/asPo=
 Authentication-Results: spf=none (sender IP is )
  smtp.mailfrom=NaveenKrishna.Chatradhi@amd.com; 
 Received: from DM6PR12MB4219.namprd12.prod.outlook.com (2603:10b6:5:217::14)
- by DM6PR12MB2842.namprd12.prod.outlook.com (2603:10b6:5:4c::20) with
+ by DM6PR12MB2939.namprd12.prod.outlook.com (2603:10b6:5:18b::24) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2900.28; Fri, 17 Apr
- 2020 19:02:35 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2921.29; Fri, 17 Apr
+ 2020 19:05:16 +0000
 Received: from DM6PR12MB4219.namprd12.prod.outlook.com
  ([fe80::58f0:5661:ff16:c269]) by DM6PR12MB4219.namprd12.prod.outlook.com
  ([fe80::58f0:5661:ff16:c269%3]) with mapi id 15.20.2921.027; Fri, 17 Apr 2020
- 19:02:35 +0000
+ 19:05:16 +0000
 From:   Naveen Krishna Chatradhi <nchatrad@amd.com>
 To:     linux-hwmon@vger.kernel.org
 Cc:     Naveen Krishna Chatradhi <nchatrad@amd.com>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 1/2] hwmon: Add amd_energy driver to report energy counters
-Date:   Sat, 18 Apr 2020 00:32:06 +0530
-Message-Id: <20200417190207.233062-1-nchatrad@amd.com>
+Subject: [PATCH v2 1/2] hwmon: Add amd_energy driver to report energy counters
+Date:   Sat, 18 Apr 2020 00:34:58 +0530
+Message-Id: <20200417190459.233179-1-nchatrad@amd.com>
 X-Mailer: git-send-email 2.17.1
 Content-Type: text/plain
-X-ClientProxiedBy: MA1PR01CA0147.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a00:71::17) To DM6PR12MB4219.namprd12.prod.outlook.com
+X-ClientProxiedBy: MA1PR01CA0099.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a00:1::15) To DM6PR12MB4219.namprd12.prod.outlook.com
  (2603:10b6:5:217::14)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from milan-ETHANOL-X.amd.com (165.204.156.251) by MA1PR01CA0147.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:71::17) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2921.25 via Frontend Transport; Fri, 17 Apr 2020 19:02:34 +0000
+Received: from milan-ETHANOL-X.amd.com (165.204.156.251) by MA1PR01CA0099.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:1::15) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2921.25 via Frontend Transport; Fri, 17 Apr 2020 19:05:14 +0000
 X-Mailer: git-send-email 2.17.1
 X-Originating-IP: [165.204.156.251]
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: d5660592-c9f7-412c-334b-08d7e301e3ff
-X-MS-TrafficTypeDiagnostic: DM6PR12MB2842:|DM6PR12MB2842:
+X-MS-Office365-Filtering-Correlation-Id: 7953b193-c665-44b5-3d20-08d7e302438c
+X-MS-TrafficTypeDiagnostic: DM6PR12MB2939:|DM6PR12MB2939:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <DM6PR12MB28429C0A187C7B4B21E16552E8D90@DM6PR12MB2842.namprd12.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <DM6PR12MB29390534B97B617E0A3EA6B3E8D90@DM6PR12MB2939.namprd12.prod.outlook.com>
 X-MS-Oob-TLC-OOBClassifiers: OLM:316;
 X-Forefront-PRVS: 0376ECF4DD
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4219.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10009020)(4636009)(396003)(136003)(376002)(39860400002)(366004)(346002)(66556008)(54906003)(6486002)(186003)(52116002)(26005)(4326008)(36756003)(2906002)(316002)(16526019)(6916009)(1076003)(8936002)(956004)(8676002)(66476007)(7696005)(6666004)(66946007)(2616005)(5660300002)(81156014)(478600001)(6606295002);DIR:OUT;SFP:1101;
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4219.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10009020)(4636009)(376002)(396003)(136003)(39860400002)(366004)(346002)(5660300002)(2906002)(6916009)(1076003)(6666004)(36756003)(6486002)(8936002)(54906003)(316002)(8676002)(4326008)(478600001)(81156014)(16526019)(7696005)(52116002)(26005)(66476007)(956004)(2616005)(66556008)(66946007)(186003)(6606295002);DIR:OUT;SFP:1101;
 Received-SPF: None (protection.outlook.com: amd.com does not designate
  permitted sender hosts)
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8rjp2QaF+ojOdDbYCMs/wFRaIlCAy7plQ2TTbB5EzDr//YD0DLPcMeadmhX1LKMpghekLWOXuGE9PefOBJw9RsqqQv+uJa/q0YmEN7pRWcgiJ3GzmVgSyAeqdNuwoTUVe1Far3YcvPZamY/hi0EBg56ckfxdjoEtzUmGq1N6P0IqRD8X7TrlWi8gqNhEUwozfLpOZJZIH6InOEmWecZgdAS3w1Sf62LiOh0pBQ49o3my2MVhHpT8iqzPuUYieZR4gDue3FzO9vk8k/Fg6lepAMxYwer0PXb0+0bMLBWg4/Z95xD5K7XLc/yOl6FLddDDmPL3k52S/z34ez5AZY9tqhxPneH+3giYis1jlljyJHW40UCubL9lNn+e0syyhoyu9/gFxF7FErhVtFD0uFVTKlcM9pyv4TOatz5HL3TOsCf+jOBnr3IjG9SQKJ5tOsjDWsw2I+elt/DYiu3BMHS4JVZW7SLDnYcAy4MHs9n2BY6qD2VfOa3ogdLqJhBlcqf1
-X-MS-Exchange-AntiSpam-MessageData: zSL669NPjB3M8x501Pwao+OKTN/BcZJ9ZkyGei4iD16Jp6zoMiR95LLfYvtidqNMw/IJOlWNbdkk37pKb6U3KrVJnMthwTymP2v2d9vkoIJjleoUcxEy88zS3ZWC4fq11mrHokOw+RTYf9/SrQ99Mg==
+X-Microsoft-Antispam-Message-Info: 5ovAxW84CFPB0m3u0rMvMsoFxG4iwnJmAJ69mJeXhSqwl26Tz5I4OP38RANKLNcHFXIoZeuG/W4JogbrWIxkLB0c5xUn/oiDUcIk5sO2AEwRJnWkytgJ8b/uiV4nXUs0KzueB1ZriQVHbQ6bChhTnabePWU60XFFMGCUMKw0ttfqSr7PCqulDu82nOXnF0NFZelM6jibqeEiRYNzgFO1i+Q4MdpjU6RJTpskjzlr0nUwwLLiFhuS/6HYG0iKV0vEIWAaR38j1NDK0RMKG5gQBDvDtEHYUslnHX55fG+QxOKwQfFqfTUeMKusXgSD0AzKHJgVREDroWgDgj0ksebz34H2wUI32jC36Kj8mGFmj6GKn+HMhJkhJQ+oHP1QIS44Z9PWQxEvINbZ477PENMGUcx/pmzurXcPmBwdD+43LsGrpFpTgS/iKWJLdoCwwG7gZOb+d5MjBaVe6GjtMPmrr76GHX00DfeIrJ2UhbBY2Yx/IDoL9mEB5EqjDEKOHgOU
+X-MS-Exchange-AntiSpam-MessageData: gRtHPfxbwQkvZI0H8WU8+XVZumYQplLAK3GOpsf5/j5RgFTSIzJFOSls8atCol0zKIjn6F0bMqXoC2e49CnvAMgDCbVF1lh6TOVxhG6vmvoJeTmZirsSuArrjqTitpDs18rzQv4K/7YnSgGuq51hkg==
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d5660592-c9f7-412c-334b-08d7e301e3ff
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2020 19:02:35.7243
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7953b193-c665-44b5-3d20-08d7e302438c
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2020 19:05:15.9714
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mpE0X7QP2eVIaed/sCyFMUPnOxh0/yTEsAB/rjQGH6wP5yoacSm2UlmZGOq7Z0Mi3PJRVrBaL+jIDV9VrYaD1w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2842
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3WqWNSSu5qB2qxK9ocX+ymk9iJdRuPZebhVvRKJzlYB3lXHEEd2PpxnHTpuz1CfkSZ8gQMwSijINPThktyI/uA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2939
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
