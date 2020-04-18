@@ -2,74 +2,69 @@ Return-Path: <SRS0=3EK7=6C=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3FBBC2BA19
-	for <linux-hwmon@archiver.kernel.org>; Sat, 18 Apr 2020 03:09:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6671BC2BA19
+	for <linux-hwmon@archiver.kernel.org>; Sat, 18 Apr 2020 03:14:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6817E221F7
-	for <linux-hwmon@archiver.kernel.org>; Sat, 18 Apr 2020 03:09:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 32AFE21D94
+	for <linux-hwmon@archiver.kernel.org>; Sat, 18 Apr 2020 03:14:57 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fMYnar6z"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b5gnCaWm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725784AbgDRDJT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 17 Apr 2020 23:09:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40058 "EHLO
+        id S1725796AbgDRDO5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 17 Apr 2020 23:14:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725320AbgDRDJS (ORCPT
+        by vger.kernel.org with ESMTP id S1725782AbgDRDO4 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 17 Apr 2020 23:09:18 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60391C061A0C;
-        Fri, 17 Apr 2020 20:09:18 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id x26so2043093pgc.10;
-        Fri, 17 Apr 2020 20:09:18 -0700 (PDT)
+        Fri, 17 Apr 2020 23:14:56 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5636EC061A0C
+        for <linux-hwmon@vger.kernel.org>; Fri, 17 Apr 2020 20:14:56 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id w65so1986633pfc.12
+        for <linux-hwmon@vger.kernel.org>; Fri, 17 Apr 2020 20:14:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=xUBf/PGWzTKQsCEO+nlF6TylRkukCQPUTSjokALqJCg=;
-        b=fMYnar6z1x87ve2AVXXLaZP/u7IPgl+9OLTN0xLSJ8IT2hZfa/kt08n/GRXWz0sW2y
-         vI2GDneODE4w8uzfglUrpV7s18yPGRKuTorWWuTVdPMJhNNPQus4O1X0hpeTheXnoPm4
-         sI2CAV04f21AsobDGx1IJ0fY85BvOkWTq/xURJ6FgIcc5tkZ/MBrZzmkb/S1yh8AO40y
-         jDW58dmYchS+gUcU7zlcxHzhGzeWnw6ArZ5MuchYCFW0poVFpdzuLOiVxFC02xyUpPO1
-         gQ2yN58f0tHmrQcPfyHrPdaLbC9pH67SthrLEFe5wPsb8iDLD/AqGvv5yaazTIffct+i
-         K/jg==
+        bh=Ur48VXUaFdnC01C4bcoPeLM1EgvU3txjNONbqUhnnrE=;
+        b=b5gnCaWmxXu4zXd53OSULMOlXBYOalprRjamjZGN033JUvgHzYQSZn8T5rEwy9zjaS
+         cDHcU0ERcd2vul1GR0xvABzoUl+vdh9pbi18ijTqIyBLaqidNx1//y81FqQCLSM0K1bm
+         0D1chiJ/85ZfEZrA2e2mKAcnokQlGwiTzC4QIcMvmvlSsaDhDkr98KIGX6oJerBENsV0
+         nyPL6jHQXK13UrnfAe6mpgTqIkKWiWmBupOrOBEq+PgCbnjaMafwVGzBBwA2lfwtXF12
+         eCuPdzMajZhIQGPBtjfnDeEZc3teBpOV09SyeMZ7FjamkUWsLJk/kS0DwAW6/19C8DKo
+         FDnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=xUBf/PGWzTKQsCEO+nlF6TylRkukCQPUTSjokALqJCg=;
-        b=UEV9n3fpQiiGRJju83QHXiPt/qIuvFNBrfb0N0ctN/wNH+nTqbi02dPdCUqYINdwQU
-         y5LDxKNTgmvYNR4K6pG22gkz4OkjpeXHAHAOTdI1i9sMbdaptI6MO6DhyyLy9xLSoaMW
-         bFZ2mT0EjxCsW/Yf6V0evNQlnjH8e0xjg/zXgJVf5Pr6uCrc2wJ6XbteMhqkejQz+hcC
-         zRed5ku2mgAD4XfnpijOaM3oT8x9LOImeRbz+aJzVsOnjvyVXnDoy7vZ4UOohYbeOYvH
-         BUZdwS2Ru/mNHpjAl7daVjSSb0CAZEtkE3irSOKX2hCKRR/gAOLIIHoEnYIZvHeQ5bzj
-         FfDQ==
-X-Gm-Message-State: AGi0Puaf+HqQ43PhE2Vu8PpIbzAqt8rY5KCJqzN1rsasekvnQvhQw75r
-        K8zBihrfFOf0zdekXBIy93s=
-X-Google-Smtp-Source: APiQypLBHktItTeXICX5oDYP1McLtu1qvoO/slVhcXPfAelSYMWY1InkMoIq07qUTtlziOWXZImv3Q==
-X-Received: by 2002:a62:3812:: with SMTP id f18mr4503007pfa.173.1587179357625;
-        Fri, 17 Apr 2020 20:09:17 -0700 (PDT)
+        bh=Ur48VXUaFdnC01C4bcoPeLM1EgvU3txjNONbqUhnnrE=;
+        b=q5ukJkAeGAOaL587tcS6uFgnze6Ps6syWTSg8HM7qEvJgGp7IwG1DFFyC8LltuPGIk
+         5tIRE8CNqOaHqPcw1r32sEcjOTwbKAQufIhOf/cPBAE50bvVc92avA+Bq0orcTQWTld9
+         BeXZ09/GRdB73d0p5vCvqDgR0MhfXCeJLbswa0m95aa6WpljgAUEodbFKsFJqxKXlo+7
+         yrdSnJyCRu6mmlaWUCEYc/7zd08Ap4T0/lsQpMesCXSmd5lvFxgBKWzEkh8FIFIoZthu
+         ZcWydGvND0yC+ejqSKahFM9G6s4BWTqDJemjzNu4Cf+V7ChMBnon7I0l/MEhhjy9YhTn
+         jAZQ==
+X-Gm-Message-State: AGi0PuaiDzRNO8Y6VLpVPIOJCLpek/uPLx/TsCBzCn6TuO01hjXl8xyX
+        ydkkyGDL/BfSkAxY6zRCAUE3Xl3+
+X-Google-Smtp-Source: APiQypKI+NV75+qLMaSq9qQIMYWuvitNZfdfCtVYo30hddfHw9YiwtdqIsN2091Hu+mJ76MBK7y2uw==
+X-Received: by 2002:a63:5d5c:: with SMTP id o28mr6347209pgm.322.1587179695415;
+        Fri, 17 Apr 2020 20:14:55 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l30sm6934082pje.34.2020.04.17.20.09.16
+        by smtp.gmail.com with ESMTPSA id e11sm21149577pfl.65.2020.04.17.20.14.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Apr 2020 20:09:16 -0700 (PDT)
-Subject: Re: [PATCH net-next 3/3] net: phy: bcm54140: add hwmon support
-To:     Michael Walle <michael@walle.cc>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>
-References: <20200417192858.6997-1-michael@walle.cc>
- <20200417192858.6997-3-michael@walle.cc>
+        Fri, 17 Apr 2020 20:14:55 -0700 (PDT)
+Subject: Re: [PATCH] hwmon: (jc42) Fix name to have no illegal characters
+To:     Jean Delvare <jdelvare@suse.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     linux-hwmon@vger.kernel.org
+References: <20200417092853.31206-1-s.hauer@pengutronix.de>
+ <20200417115503.249d4d48@endymion>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -114,523 +109,45 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <74a19e1a-35cd-708c-2972-8782d21c8e7d@roeck-us.net>
-Date:   Fri, 17 Apr 2020 20:09:15 -0700
+Message-ID: <9ddf4f81-ac0d-8b76-134b-b5074b17ddfb@roeck-us.net>
+Date:   Fri, 17 Apr 2020 20:14:54 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <20200417192858.6997-3-michael@walle.cc>
+In-Reply-To: <20200417115503.249d4d48@endymion>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/17/20 12:28 PM, Michael Walle wrote:
-> The PHY supports monitoring its die temperature as well as two analog
-> voltages. Add support for it.
+On 4/17/20 2:55 AM, Jean Delvare wrote:
+> Hi Sascha,
 > 
-> Signed-off-by: Michael Walle <michael@walle.cc>
-
-This will probably fail to compile if HWMON is not enabled or if it is built
-as module and this driver is built into the kernel.
-
-> ---
->  Documentation/hwmon/bcm54140.rst |  45 ++++
->  Documentation/hwmon/index.rst    |   1 +
->  drivers/net/phy/bcm54140.c       | 377 +++++++++++++++++++++++++++++++
->  3 files changed, 423 insertions(+)
->  create mode 100644 Documentation/hwmon/bcm54140.rst
+> On Fri, 17 Apr 2020 11:28:53 +0200, Sascha Hauer wrote:
+>> The jc42 driver passes I2C client's name as hwmon device name. In case
+>> of device tree probed devices this ends up being part of the compatible
+>> string, "jc-42.4-temp". This name contains hyphens and the hwmon core
+>> doesn't like this:
+>>
+>> jc42 2-0018: hwmon: 'jc-42.4-temp' is not a valid name attribute, please fix
+>>
+>> This changes the name to "jc42" which doesn't have any illegal
+>> characters.
 > 
-> diff --git a/Documentation/hwmon/bcm54140.rst b/Documentation/hwmon/bcm54140.rst
-> new file mode 100644
-> index 000000000000..bc6ea4b45966
-> --- /dev/null
-> +++ b/Documentation/hwmon/bcm54140.rst
-> @@ -0,0 +1,45 @@
-> +.. SPDX-License-Identifier: GPL-2.0-only
-> +
-> +Broadcom BCM54140 Quad SGMII/QSGMII PHY
-> +=======================================
-> +
-> +Supported chips:
-> +
-> +   * Broadcom BCM54140
-> +
-> +     Datasheet: not public
-> +
-> +Author: Michael Walle <michael@walle.cc>
-> +
-> +Description
-> +-----------
-> +
-> +The Broadcom BCM54140 is a Quad SGMII/QSGMII PHY which supports monitoring
-> +its die temperature as well as two analog voltages.
-> +
-> +The AVDDL is a 1.0V analogue voltage, the AVDDH is a 3.3V analogue voltage.
-> +Both voltages and the temperature are measured in a round-robin fashion.
-> +
-> +Sysfs entries
-> +-------------
-> +
-> +The following attributes are supported.
-> +
-> +======================= ========================================================
-> +in0_label		"AVDDL"
-> +in0_input		Measured AVDDL voltage.
-> +in0_min			Minimum AVDDL voltage.
-> +in0_max			Maximum AVDDL voltage.
-> +in0_alarm		AVDDL voltage alarm.
-> +
-> +in1_label		"AVDDH"
-> +in1_input		Measured AVDDH voltage.
-> +in1_min			Minimum AVDDH voltage.
-> +in1_max			Maximum AVDDH voltage.
-> +in1_alarm		AVDDH voltage alarm.
-> +
-> +temp1_input		Die temperature.
-> +temp1_min		Minimum die temperature.
-> +temp1_max		Maximum die temperature.
-> +temp1_alarm		Die temperature alarm.
-> +======================= ========================================================
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index f022583f96f6..19ad0846736d 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -42,6 +42,7 @@ Hardware Monitoring Kernel Drivers
->     asb100
->     asc7621
->     aspeed-pwm-tacho
-> +   bcm54140
->     bel-pfe
->     coretemp
->     da9052
-> diff --git a/drivers/net/phy/bcm54140.c b/drivers/net/phy/bcm54140.c
-> index 97465491b41b..97c364ce05e3 100644
-> --- a/drivers/net/phy/bcm54140.c
-> +++ b/drivers/net/phy/bcm54140.c
-> @@ -6,6 +6,7 @@
->  
->  #include <linux/bitfield.h>
->  #include <linux/brcmphy.h>
-> +#include <linux/hwmon.h>
->  #include <linux/module.h>
->  #include <linux/phy.h>
->  
-> @@ -50,6 +51,54 @@
->  #define  BCM54140_RDB_TOP_IMR_PORT1	BIT(5)
->  #define  BCM54140_RDB_TOP_IMR_PORT2	BIT(6)
->  #define  BCM54140_RDB_TOP_IMR_PORT3	BIT(7)
-> +#define BCM54140_RDB_MON_CTRL		0x831	/* monitor control */
-> +#define  BCM54140_RDB_MON_CTRL_V_MODE	BIT(3)	/* voltage mode */
-> +#define  BCM54140_RDB_MON_CTRL_SEL_MASK	GENMASK(2, 1)
-> +#define  BCM54140_RDB_MON_CTRL_SEL_TEMP	0	/* meassure temperature */
-> +#define  BCM54140_RDB_MON_CTRL_SEL_1V0	1	/* meassure AVDDL 1.0V */
-> +#define  BCM54140_RDB_MON_CTRL_SEL_3V3	2	/* meassure AVDDH 3.3V */
-> +#define  BCM54140_RDB_MON_CTRL_SEL_RR	3	/* meassure all round-robin */
-> +#define  BCM54140_RDB_MON_CTRL_PWR_DOWN	BIT(0)	/* power-down monitor */
-> +#define BCM54140_RDB_MON_TEMP_VAL	0x832	/* temperature value */
-> +#define BCM54140_RDB_MON_TEMP_MAX	0x833	/* temperature high thresh */
-> +#define BCM54140_RDB_MON_TEMP_MIN	0x834	/* temperature low thresh */
-> +#define  BCM54140_RDB_MON_TEMP_DATA_MASK GENMASK(9, 0)
-> +#define BCM54140_RDB_MON_1V0_VAL	0x835	/* AVDDL 1.0V value */
-> +#define BCM54140_RDB_MON_1V0_MAX	0x836	/* AVDDL 1.0V high thresh */
-> +#define BCM54140_RDB_MON_1V0_MIN	0x837	/* AVDDL 1.0V low thresh */
-> +#define  BCM54140_RDB_MON_1V0_DATA_MASK	GENMASK(10, 0)
-> +#define BCM54140_RDB_MON_3V3_VAL	0x838	/* AVDDH 3.3V value */
-> +#define BCM54140_RDB_MON_3V3_MAX	0x839	/* AVDDH 3.3V high thresh */
-> +#define BCM54140_RDB_MON_3V3_MIN	0x83a	/* AVDDH 3.3V low thresh */
-> +#define  BCM54140_RDB_MON_3V3_DATA_MASK	GENMASK(11, 0)
-> +#define BCM54140_RDB_MON_ISR		0x83b	/* interrupt status */
-> +#define  BCM54140_RDB_MON_ISR_3V3	BIT(2)	/* AVDDH 3.3V alarm */
-> +#define  BCM54140_RDB_MON_ISR_1V0	BIT(1)	/* AVDDL 1.0V alarm */
-> +#define  BCM54140_RDB_MON_ISR_TEMP	BIT(0)	/* temperature alarm */
-> +
-> +/* According to the datasheet the formula is:
-> + *   T = 413.35 - (0.49055 * bits[9:0])
-> + */
-> +#define BCM54140_HWMON_TO_TEMP(v) (413350L - (v) * 491)
-> +#define BCM54140_HWMON_FROM_TEMP(v) DIV_ROUND_CLOSEST_ULL(413350L - (v), 491)
-> +
-> +/* According to the datasheet the formula is:
-> + *   U = bits[11:0] / 1024 * 220 / 0.2
-> + *
-> + * Normalized:
-> + *   U = bits[11:0] / 4096 * 2514
-> + */
-> +#define BCM54140_HWMON_TO_IN_1V0(v) ((v) * 2514 >> 11)
-> +#define BCM54140_HWMON_FROM_IN_1V0(v) DIV_ROUND_CLOSEST_ULL(((v) << 11), 2514)
-> +
-> +/* According to the datasheet the formula is:
-> + *   U = bits[10:0] / 1024 * 880 / 0.7
-> + *
-> + * Normalized:
-> + *   U = bits[10:0] / 2048 * 4400
-> + */
-> +#define BCM54140_HWMON_TO_IN_3V3(v) ((v) * 4400 >> 12)
-> +#define BCM54140_HWMON_FROM_IN_3V3(v) DIV_ROUND_CLOSEST_ULL(((v) << 12), 4400)
->  
->  #define BCM54140_DEFAULT_DOWNSHIFT 5
->  #define BCM54140_MAX_DOWNSHIFT 9
-> @@ -57,6 +106,258 @@
->  struct bcm54140_phy_priv {
->  	int port;
->  	int base_addr;
-> +	bool pkg_init;
-> +	u16 alarm;
-> +};
-> +
-> +static umode_t bcm54140_hwmon_is_visible(const void *data,
-> +					 enum hwmon_sensor_types type,
-> +					 u32 attr, int channel)
-> +{
-> +	switch (type) {
-> +	case hwmon_in:
-> +		switch (attr) {
-> +		case hwmon_in_min:
-> +		case hwmon_in_max:
-> +			return 0644;
-> +		case hwmon_in_label:
-> +		case hwmon_in_input:
-> +		case hwmon_in_alarm:
-> +			return 0444;
-> +		default:
-> +			return 0;
-> +		}
-> +	case hwmon_temp:
-> +		switch (attr) {
-> +		case hwmon_temp_min:
-> +		case hwmon_temp_max:
-> +			return 0644;
-> +		case hwmon_temp_input:
-> +		case hwmon_temp_alarm:
-> +			return 0444;
-> +		default:
-> +			return 0;
-> +		}
-> +	default:
-> +		return 0;
-> +	}
-> +}
-> +
-> +static int bcm54140_hwmon_read_alarm(struct device *dev, unsigned int bit,
-> +				     long *val)
-> +{
-> +	struct phy_device *phydev = dev_get_drvdata(dev);
-> +	struct bcm54140_phy_priv *priv = phydev->priv;
-> +	u16 tmp;
-> +
-> +	/* latch any alarm bits */
-> +	tmp = bcm_phy_read_rdb(phydev, BCM54140_RDB_MON_ISR);
-> +	if (tmp < 0)
-> +		return tmp;
-> +	priv->alarm |= tmp;
-> +
-> +	*val = !!(priv->alarm & bit);
-> +	priv->alarm &= ~bit;> +
-> +	return 0;
-> +}
-> +
-> +static int bcm54140_hwmon_read_temp(struct device *dev, u32 attr,
-> +				    int channel, long *val)
-> +{
-> +	struct phy_device *phydev = dev_get_drvdata(dev);
-> +	u16 reg, tmp;
-> +
-> +	switch (attr) {
-> +	case hwmon_temp_input:
-> +		reg = BCM54140_RDB_MON_TEMP_VAL;
-> +		break;
-> +	case hwmon_temp_min:
-> +		reg = BCM54140_RDB_MON_TEMP_MIN;
-> +		break;
-> +	case hwmon_temp_max:
-> +		reg = BCM54140_RDB_MON_TEMP_MAX;
-> +		break;
-> +	case hwmon_temp_alarm:
-> +		return bcm54140_hwmon_read_alarm(dev,
-> +						 BCM54140_RDB_MON_ISR_TEMP,
-> +						 val);
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	tmp = bcm_phy_read_rdb(phydev, reg);
-> +	if (tmp < 0)
-> +		return tmp;
-> +
-> +	*val = BCM54140_HWMON_TO_TEMP(tmp & BCM54140_RDB_MON_TEMP_DATA_MASK);
-> +
-> +	return 0;
-> +}
-> +
-> +static int bcm54140_hwmon_read_in(struct device *dev, u32 attr,
-> +				  int channel, long *val)
-> +{
-> +	struct phy_device *phydev = dev_get_drvdata(dev);
-> +	u16 mask = (!channel) ? BCM54140_RDB_MON_1V0_DATA_MASK
-> +			      : BCM54140_RDB_MON_3V3_DATA_MASK;
-> +	u16 bit, reg, tmp;
-> +
-> +	switch (attr) {
-> +	case hwmon_in_input:
-> +		reg = (!channel) ? BCM54140_RDB_MON_1V0_VAL
-> +				 : BCM54140_RDB_MON_3V3_VAL;
-
-I am personally neither a friend of unnecessary () nor of
-unnecessary negations. Why not the following ?
-
-		reg = channel ? BCM54140_RDB_MON_3V3_VAL :
-				BCM54140_RDB_MON_1V0_VAL;
-
-Another option would be to read all those values from a set of
-defines, given the expressions are repeated several times.
-
-> +		break;
-> +	case hwmon_in_min:
-> +		reg = (!channel) ? BCM54140_RDB_MON_1V0_MIN
-> +				 : BCM54140_RDB_MON_3V3_MIN;
-> +		break;
-> +	case hwmon_in_max:
-> +		reg = (!channel) ? BCM54140_RDB_MON_1V0_MAX
-> +				 : BCM54140_RDB_MON_3V3_MAX;
-> +		break;
-> +	case hwmon_in_alarm:
-> +		bit = (!channel) ? BCM54140_RDB_MON_ISR_1V0
-> +				 : BCM54140_RDB_MON_ISR_3V3;
-> +		return bcm54140_hwmon_read_alarm(dev, bit, val);
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	tmp = bcm_phy_read_rdb(phydev, reg);
-> +	if (tmp < 0)
-> +		return tmp;
-> +
-> +	if (!channel)
-> +		*val = BCM54140_HWMON_TO_IN_1V0(tmp & mask);
-> +	else
-> +		*val = BCM54140_HWMON_TO_IN_3V3(tmp & mask);
-> +
-> +	return 0;
-> +}
-> +
-> +static int bcm54140_hwmon_read(struct device *dev,
-> +			       enum hwmon_sensor_types type, u32 attr,
-> +			       int channel, long *val)
-> +{
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		return bcm54140_hwmon_read_temp(dev, attr, channel, val);
-> +	case hwmon_in:
-> +		return bcm54140_hwmon_read_in(dev, attr, channel, val);
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
-> +static const char *const bcm54140_hwmon_in_labels[] = {
-> +	"AVDDL",
-> +	"AVDDH",
-> +};
-> +
-> +static int bcm54140_hwmon_read_string(struct device *dev,
-> +				      enum hwmon_sensor_types type, u32 attr,
-> +				      int channel, const char **str)
-> +{
-> +	switch (type) {
-> +	case hwmon_in:
-> +		switch (attr) {
-> +		case hwmon_in_label:
-> +			*str = bcm54140_hwmon_in_labels[channel];
-> +			return 0;
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
-> +static int bcm54140_hwmon_write_temp(struct device *dev, u32 attr,
-> +				     int channel, long val)
-> +{
-> +	struct phy_device *phydev = dev_get_drvdata(dev);
-> +	u16 reg;
-> +
-> +	switch (attr) {
-> +	case hwmon_temp_min:
-> +		reg = BCM54140_RDB_MON_TEMP_MIN;
-> +		break;
-> +	case hwmon_temp_max:
-> +		reg = BCM54140_RDB_MON_TEMP_MAX;
-> +		break;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	return bcm_phy_modify_rdb(phydev, reg, BCM54140_RDB_MON_TEMP_DATA_MASK,
-> +				  BCM54140_HWMON_FROM_TEMP(val));
-> +}
-> +
-> +static int bcm54140_hwmon_write_in(struct device *dev, u32 attr,
-> +				   int channel, long val)
-> +{
-> +	struct phy_device *phydev = dev_get_drvdata(dev);
-> +	u16 mask = (!channel) ? BCM54140_RDB_MON_1V0_DATA_MASK
-> +			      : BCM54140_RDB_MON_3V3_DATA_MASK;
-> +	unsigned long raw = (!channel) ?  BCM54140_HWMON_FROM_IN_1V0(val)
-> +				       :  BCM54140_HWMON_FROM_IN_3V3(val);
-> +	u16 reg;
-> +
-> +	raw = clamp_val(raw, 0, mask);
-> +
-> +	switch (attr) {
-> +	case hwmon_in_min:
-> +		reg = (!channel) ? BCM54140_RDB_MON_1V0_MIN
-> +				 : BCM54140_RDB_MON_3V3_MIN;
-> +		break;
-> +	case hwmon_in_max:
-> +		reg = (!channel) ? BCM54140_RDB_MON_1V0_MAX
-> +				 : BCM54140_RDB_MON_3V3_MAX;
-> +		break;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	return bcm_phy_modify_rdb(phydev, reg, mask, raw);
-> +}
-> +
-> +static int bcm54140_hwmon_write(struct device *dev,
-> +				enum hwmon_sensor_types type, u32 attr,
-> +				int channel, long val)
-> +{
-> +	switch (type) {
-> +	case hwmon_temp:
-> +		return bcm54140_hwmon_write_temp(dev, attr, channel, val);
-> +	case hwmon_in:
-> +		return bcm54140_hwmon_write_in(dev, attr, channel, val);
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-> +
-> +static const struct hwmon_channel_info *bcm54140_hwmon_info[] = {
-> +	HWMON_CHANNEL_INFO(temp,
-> +			   HWMON_T_INPUT | HWMON_T_MIN | HWMON_T_MAX |
-> +			   HWMON_T_ALARM),
-> +	HWMON_CHANNEL_INFO(in,
-> +			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
-> +			   HWMON_I_ALARM | HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
-> +			   HWMON_I_ALARM | HWMON_I_LABEL),
-> +	NULL
-> +};
-> +
-> +static const struct hwmon_ops bcm54140_hwmon_ops = {
-> +	.is_visible = bcm54140_hwmon_is_visible,
-> +	.read = bcm54140_hwmon_read,
-> +	.read_string = bcm54140_hwmon_read_string,
-> +	.write = bcm54140_hwmon_write,
-> +};
-> +
-> +static const struct hwmon_chip_info bcm54140_chip_info = {
-> +	.ops = &bcm54140_hwmon_ops,
-> +	.info = bcm54140_hwmon_info,
->  };
->  
->  static int bcm54140_phy_base_read_rdb(struct phy_device *phydev, u16 rdb)
-> @@ -203,6 +504,74 @@ static int bcm54140_get_base_addr_and_port(struct phy_device *phydev)
->  	return 0;
->  }
->  
-> +/* Check if one PHY has already done the init of the parts common to all PHYs
-> + * in the Quad PHY package.
-> + */
-> +static bool bcm54140_is_pkg_init(struct phy_device *phydev)
-> +{
-> +	struct mdio_device **map = phydev->mdio.bus->mdio_map;
-> +	struct bcm54140_phy_priv *priv;
-> +	struct phy_device *phy;
-> +	int i, addr;
-> +
-> +	/* Quad PHY */
-> +	for (i = 0; i < 4; i++) {
-> +		priv = phydev->priv;
-> +		addr = priv->base_addr + i;
-> +
-> +		if (!map[addr])
-> +			continue;
-> +
-> +		phy = container_of(map[addr], struct phy_device, mdio);
-> +
-> +		if ((phy->phy_id & phydev->drv->phy_id_mask) !=
-> +		    (phydev->drv->phy_id & phydev->drv->phy_id_mask))
-> +			continue;
-> +
-> +		priv = phy->priv;
-> +
-> +		if (priv && priv->pkg_init)
-> +			return true;
-> +	}
-> +
-> +	return false;
-> +}
-> +
-> +static int bcm54140_enable_monitoring(struct phy_device *phydev)
-> +{
-> +	u16 mask, set;
-> +
-> +	/* 3.3V voltage mode */
-> +	set = BCM54140_RDB_MON_CTRL_V_MODE;
-> +
-> +	/* select round-robin */
-> +	mask = BCM54140_RDB_MON_CTRL_SEL_MASK;
-> +	set |= FIELD_PREP(BCM54140_RDB_MON_CTRL_SEL_MASK,
-> +			  BCM54140_RDB_MON_CTRL_SEL_RR);
-> +
-> +	/* remove power-down bit */
-> +	mask |= BCM54140_RDB_MON_CTRL_PWR_DOWN;
-> +
-> +	return bcm_phy_modify_rdb(phydev, BCM54140_RDB_MON_CTRL, mask, set);
-> +}
-> +
-> +static int bcm54140_phy_probe_once(struct phy_device *phydev)
-> +{
-> +	struct device *hwmon;
-> +	int ret;
-> +
-> +	/* enable hardware monitoring */
-> +	ret = bcm54140_enable_monitoring(phydev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	hwmon = devm_hwmon_device_register_with_info(&phydev->mdio.dev,
-> +						     "BCM54140", phydev,
-> +						     &bcm54140_chip_info,
-> +						     NULL);
-> +	return PTR_ERR_OR_ZERO(hwmon);
-> +}
-> +
->  static int bcm54140_phy_probe(struct phy_device *phydev)
->  {
->  	struct bcm54140_phy_priv *priv;
-> @@ -218,6 +587,14 @@ static int bcm54140_phy_probe(struct phy_device *phydev)
->  	if (ret)
->  		return ret;
->  
-> +	if (!bcm54140_is_pkg_init(phydev)) {
-> +		ret = bcm54140_phy_probe_once(phydev);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	priv->pkg_init = true;
-> +
->  	dev_info(&phydev->mdio.dev,
->  		 "probed (port %d, base PHY address %d)\n",
->  		 priv->port, priv->base_addr);
+> I don't think "jc-42.4-temp" is a valid i2c client name either. I
+> believe this should be fixed at the of->i2c level, rather than the
+> i2c->hwmon level. Not sure how other drivers are dealing with that, it
+> seems that in most cases the name part of the compatible string matches
+> exactly the expected client name so no conversion is needed.
 > 
 
+The problem here is that the compatible string is simply wrong. It
+precedes the time when I understood devicetree properties well enough
+to understand what I was doing. Oh well.
+
+No idea what to do at this point other than accepting this patch.
+
+Guenter
