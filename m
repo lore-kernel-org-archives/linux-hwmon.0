@@ -2,125 +2,106 @@ Return-Path: <SRS0=3EK7=6C=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EE01C352BE
-	for <linux-hwmon@archiver.kernel.org>; Sat, 18 Apr 2020 19:49:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E0AEC38A29
+	for <linux-hwmon@archiver.kernel.org>; Sat, 18 Apr 2020 20:09:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EF3D121BE5
-	for <linux-hwmon@archiver.kernel.org>; Sat, 18 Apr 2020 19:49:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5FACD2051A
+	for <linux-hwmon@archiver.kernel.org>; Sat, 18 Apr 2020 20:09:57 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="naDBULIb"
+	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="D10MxJEU"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727951AbgDRTtk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 18 Apr 2020 15:49:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51662 "EHLO
+        id S1728259AbgDRUJw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 18 Apr 2020 16:09:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727927AbgDRTtk (ORCPT
+        by vger.kernel.org with ESMTP id S1727927AbgDRUJw (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 18 Apr 2020 15:49:40 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6274AC061A0C;
-        Sat, 18 Apr 2020 12:49:40 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id x3so2881405pfp.7;
-        Sat, 18 Apr 2020 12:49:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id;
-        bh=Y/SzlNPnbUm7h0G2Yfc4g6XizOL6O0F1JAvmhHKZVeM=;
-        b=naDBULIbe3M5HUGt3xmozZ71nP1DE0go78SIXXjh0Vgli8hsNBtuLvKCTMJzDBC1PU
-         5VseFyLEzap45gv9EjhrZsDZIprgs7CylPVus1KQuXdRufjAFdOBiE9WXbr0eTwEOtfM
-         DNRhBMKgvURiv1xQPq4WxIrgenU+CExLbmGHgl7hmtoGhZ5IghnDHBTCIeuBp26MIqYK
-         LdZ9AfFOVpEg0VEKqONCpnUuB55Xzp5qdnqkukAyr56gPj9oNHgUopIRVbHpHu2iAq0d
-         gVUs7z1M2pInHcLNm44u8+4vL2kkxxtrlxvk9PAsYU2JiKN3qq+aStC0FOihV0WNcFjW
-         Gn5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
-        bh=Y/SzlNPnbUm7h0G2Yfc4g6XizOL6O0F1JAvmhHKZVeM=;
-        b=r3gmMfalrY8/tpLIXtAIOpGZn1d+w8s8qczJKzgA75pjDmU5NL/GsehemLsZEa+NpK
-         T42+HghcHi6wriUku6P546K1FP1FR4VOWw0PPRgzz7M8EAjfCSJVDTgM5fas7MbUav9p
-         T2OXVfxQlAQ1VzkRnHRxyDn/Z5XCb2T+6j7vius+hM2YfYV/VVVAsnsX2kSorRj47sSr
-         yrrp0tIQYcGHmEmlUAZJu/fK+eYjHF80ztWCPXH4opGIhUps5BmalsdqlDNwmNrx1COv
-         pq52I7gjIUcQgdwfNMczkxJlbTG5ztkHMCHEIId+f//IzTemVy1o7Y8dIsn24T4CJ1m5
-         WjNw==
-X-Gm-Message-State: AGi0Pub+IF46r/NnUc185iH7biNLT0h+HV/c3S4ouYFsW9mgkCg6Ed6c
-        Eum7aD5GYabWTIqLe4H6iKvgAnSY
-X-Google-Smtp-Source: APiQypJcUt0Zv6YK1+BJROfQVMlRousdmqPvjcMziFa4YR5PMHcqEyEW6FLfdhjorsj2wH9Cam3D9A==
-X-Received: by 2002:aa7:864e:: with SMTP id a14mr9593864pfo.67.1587239379708;
-        Sat, 18 Apr 2020 12:49:39 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y8sm9210745pja.26.2020.04.18.12.49.38
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 18 Apr 2020 12:49:38 -0700 (PDT)
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v5.7-rc2
-Date:   Sat, 18 Apr 2020 12:49:37 -0700
-Message-Id: <20200418194937.5589-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.17.1
+        Sat, 18 Apr 2020 16:09:52 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7EFC061A0C;
+        Sat, 18 Apr 2020 13:09:52 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 5469423061;
+        Sat, 18 Apr 2020 22:09:48 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1587240589;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lwbpohXkgA8LBRIp0lZ4q/XzjtDAPv3LIIeZKlx0qvo=;
+        b=D10MxJEUiC26rbD4lax+8UpzBji3cbsEhy6svKSmVTYs/aTYhWTaMNM79dEclTETomSKbS
+        4+Aa6fjWCkGhSbX24oo7qi9QGEyH3qgS+j1X9uOO6V4z/havW82dBC9vCFm8qniqhdyltm
+        vQHjJZkaRmNlylWtjnzbpTGTZLs7UbU=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Sat, 18 Apr 2020 22:09:48 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH net-next 1/3] net: phy: broadcom: add helper to write/read
+ RDB registers
+In-Reply-To: <aa126ad1-ae29-3da6-bd50-2c0444cfd691@gmail.com>
+References: <20200417192858.6997-1-michael@walle.cc>
+ <20200418141348.GA804711@lunn.ch>
+ <aa126ad1-ae29-3da6-bd50-2c0444cfd691@gmail.com>
+Message-ID: <f264bcad85571a44fabf33fe7e13664e@walle.cc>
+X-Sender: michael@walle.cc
+User-Agent: Roundcube Webmail/1.3.10
+X-Spamd-Bar: +
+X-Rspamd-Server: web
+X-Rspamd-Queue-Id: 5469423061
+X-Spamd-Result: default: False [1.40 / 15.00];
+         FROM_HAS_DN(0.00)[];
+         TO_DN_SOME(0.00)[];
+         FREEMAIL_ENVRCPT(0.00)[gmail.com];
+         TO_MATCH_ENVRCPT_ALL(0.00)[];
+         TAGGED_RCPT(0.00)[];
+         MIME_GOOD(-0.10)[text/plain];
+         DKIM_SIGNED(0.00)[];
+         RCPT_COUNT_SEVEN(0.00)[10];
+         NEURAL_HAM(-0.00)[-0.968];
+         FREEMAIL_TO(0.00)[gmail.com];
+         RCVD_COUNT_ZERO(0.00)[0];
+         FROM_EQ_ENVFROM(0.00)[];
+         MIME_TRACE(0.00)[0:+];
+         FREEMAIL_CC(0.00)[lunn.ch,vger.kernel.org,suse.com,roeck-us.net,gmail.com,armlinux.org.uk,davemloft.net];
+         MID_RHS_MATCH_FROM(0.00)[];
+         SUSPICIOUS_RECIPS(1.50)[]
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Linus,
+Am 2020-04-18 17:55, schrieb Florian Fainelli:
+> On 4/18/2020 7:13 AM, Andrew Lunn wrote:
+>> On Fri, Apr 17, 2020 at 09:28:56PM +0200, Michael Walle wrote:
+>>> RDB regsiters are used on newer Broadcom PHYs. Add helper to read, 
+>>> write
+>>> and modify these registers.
+>> 
+>> It would be nice to give a hint what RDB means?
+> 
+> It means Register Data Base, it is meant to be a linear register
+> offset as opposed to the more convulated shadow 18, 1c or other
+> expansion registers.
 
-Please pull hwmon fixes for Linux v5.7-rc2 from signed tag:
+Oh I just found some comment to another linux patch explaining this.
+Because there is no trace what RDB actually means in the datasheets
+from Broadcom I've seen so far.
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.7-rc2
-
-Thanks,
-Guenter
-------
-
-The following changes since commit 8f3d9f354286745c751374f5f1fcafee6b3f3136:
-
-  Linux 5.7-rc1 (2020-04-12 12:35:55 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v5.7-rc2
-
-for you to fetch changes up to c843b382e61b5f28a3d917712c69a344f632387c:
-
-  hwmon: (jc42) Fix name to have no illegal characters (2020-04-18 10:13:07 -0700)
-
-----------------------------------------------------------------
-hwmon fixes for v5.7-rc2
-
-pmbus/isl68137:
-    Fix up chip IDs
-drivetemp:
-    Return -ENODATA for invalid temperatures
-    Use true module name
-k10temp:
-    Fix static symbol warnings
-jc42:
-    Use valid hwmon device name
-
-----------------------------------------------------------------
-Ann T Ropea (1):
-      hwmon: (drivetemp) Use drivetemp's true module name in Kconfig section
-
-Guenter Roeck (2):
-      hwmon: (pmbus/isl68137) Fix up chip IDs
-      hwmon: (drivetemp) Return -ENODATA for invalid temperatures
-
-Jason Yan (1):
-      hwmon: (k10temp) make some symbols static
-
-Sascha Hauer (1):
-      hwmon: (jc42) Fix name to have no illegal characters
-
- Documentation/hwmon/isl68137.rst | 76 ++++++++++++++++-----------------
- drivers/hwmon/Kconfig            |  2 +-
- drivers/hwmon/drivetemp.c        |  6 +++
- drivers/hwmon/jc42.c             |  2 +-
- drivers/hwmon/k10temp.c          |  6 +--
- drivers/hwmon/pmbus/isl68137.c   | 92 +++++++++++++++++++++++++++++++++++++---
- 6 files changed, 134 insertions(+), 50 deletions(-)
+-michael
