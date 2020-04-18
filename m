@@ -6,65 +6,66 @@ X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6671BC2BA19
-	for <linux-hwmon@archiver.kernel.org>; Sat, 18 Apr 2020 03:14:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E2FCC2BB1D
+	for <linux-hwmon@archiver.kernel.org>; Sat, 18 Apr 2020 03:19:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 32AFE21D94
-	for <linux-hwmon@archiver.kernel.org>; Sat, 18 Apr 2020 03:14:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 48C9122201
+	for <linux-hwmon@archiver.kernel.org>; Sat, 18 Apr 2020 03:19:07 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b5gnCaWm"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KJ5SWHL7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725796AbgDRDO5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 17 Apr 2020 23:14:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40920 "EHLO
+        id S1725991AbgDRDTG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 17 Apr 2020 23:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725782AbgDRDO4 (ORCPT
+        by vger.kernel.org with ESMTP id S1726164AbgDRDTF (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 17 Apr 2020 23:14:56 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5636EC061A0C
-        for <linux-hwmon@vger.kernel.org>; Fri, 17 Apr 2020 20:14:56 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id w65so1986633pfc.12
-        for <linux-hwmon@vger.kernel.org>; Fri, 17 Apr 2020 20:14:56 -0700 (PDT)
+        Fri, 17 Apr 2020 23:19:05 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25675C061A0C
+        for <linux-hwmon@vger.kernel.org>; Fri, 17 Apr 2020 20:19:05 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id 2so2047567pgp.11
+        for <linux-hwmon@vger.kernel.org>; Fri, 17 Apr 2020 20:19:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=Ur48VXUaFdnC01C4bcoPeLM1EgvU3txjNONbqUhnnrE=;
-        b=b5gnCaWmxXu4zXd53OSULMOlXBYOalprRjamjZGN033JUvgHzYQSZn8T5rEwy9zjaS
-         cDHcU0ERcd2vul1GR0xvABzoUl+vdh9pbi18ijTqIyBLaqidNx1//y81FqQCLSM0K1bm
-         0D1chiJ/85ZfEZrA2e2mKAcnokQlGwiTzC4QIcMvmvlSsaDhDkr98KIGX6oJerBENsV0
-         nyPL6jHQXK13UrnfAe6mpgTqIkKWiWmBupOrOBEq+PgCbnjaMafwVGzBBwA2lfwtXF12
-         eCuPdzMajZhIQGPBtjfnDeEZc3teBpOV09SyeMZ7FjamkUWsLJk/kS0DwAW6/19C8DKo
-         FDnQ==
+        bh=48satfkhKE7PS5N7uTwkrx0HdlssIYrnkbdyBp70N58=;
+        b=KJ5SWHL7m2+UW6TmljmMtmw1R8ic5zA5HH5s4GkpDtWEgFoeYSbzwcLa2spZWK8j0G
+         NHSn6rndL7fwXHJFEvR+owb41k9lQG3Ekf+ggc33yykOmDG6lymokSvetpUNDXhPAz/S
+         dY9sU6Y+j2yd4qIsrWHknjwP5wCMFu/hQX4Is1ijdHnGrHtFda9iqj2zEzMFNaRIDEqs
+         bPf710IyNEnsN2ECO7GKOfpDv+LPn8HrejlV/t0xwfcBspVIWGJFuv6QG7sZYqvSQgX6
+         +WsuKHrf3XfbUNXe8ftObu9T7nbGnvsMi/KySifCWClV/jsAQ0bAFmVSm+bTAc1XCgr/
+         L1pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=Ur48VXUaFdnC01C4bcoPeLM1EgvU3txjNONbqUhnnrE=;
-        b=q5ukJkAeGAOaL587tcS6uFgnze6Ps6syWTSg8HM7qEvJgGp7IwG1DFFyC8LltuPGIk
-         5tIRE8CNqOaHqPcw1r32sEcjOTwbKAQufIhOf/cPBAE50bvVc92avA+Bq0orcTQWTld9
-         BeXZ09/GRdB73d0p5vCvqDgR0MhfXCeJLbswa0m95aa6WpljgAUEodbFKsFJqxKXlo+7
-         yrdSnJyCRu6mmlaWUCEYc/7zd08Ap4T0/lsQpMesCXSmd5lvFxgBKWzEkh8FIFIoZthu
-         ZcWydGvND0yC+ejqSKahFM9G6s4BWTqDJemjzNu4Cf+V7ChMBnon7I0l/MEhhjy9YhTn
-         jAZQ==
-X-Gm-Message-State: AGi0PuaiDzRNO8Y6VLpVPIOJCLpek/uPLx/TsCBzCn6TuO01hjXl8xyX
-        ydkkyGDL/BfSkAxY6zRCAUE3Xl3+
-X-Google-Smtp-Source: APiQypKI+NV75+qLMaSq9qQIMYWuvitNZfdfCtVYo30hddfHw9YiwtdqIsN2091Hu+mJ76MBK7y2uw==
-X-Received: by 2002:a63:5d5c:: with SMTP id o28mr6347209pgm.322.1587179695415;
-        Fri, 17 Apr 2020 20:14:55 -0700 (PDT)
+        bh=48satfkhKE7PS5N7uTwkrx0HdlssIYrnkbdyBp70N58=;
+        b=O4+mOcfjx2Y6Zg5Ab/mbsUf56WZOSWIJbIiMt6sQJchJbAj6OZx3xW0SfiTsCHaz6M
+         7LLnuhdCTmy7micocnUg4hNTDbOsWGyfUSOSOBNbyY4auobSs3lpHcNH/If19xidfn7x
+         l1+vVkDPnCW8TyqsHcDYaAa6htp/q+oy6oNwuWxc98FboOLH8R17WCrv47jYQLT3mxro
+         VlumyxGOYmF9q6LAsOCgjciOHCpW6SwFxNl4cX5YPJf2z/Y3JX/IpOWen/eYulf6w72R
+         p7LXM3rmn/koNQ6koL/YV7RBo7HdtGw7l/yjiOVfzWThLFNO/jTkrRNlcAnf9MXRlIqP
+         VcXw==
+X-Gm-Message-State: AGi0PuZkliiqEY1RA5q3MmA7XAaczOGMbwgtUKjM3ogXDp3HqXEHvrsV
+        s5RqSBRQgibj39JTlrXO5htW9zgF
+X-Google-Smtp-Source: APiQypLGy0wiG+DGoSOTkgwgulI1bR+FrIGsRMjFg3VtfX0u3gneW/u/1TvO39I77jAw1aXnj9CRYg==
+X-Received: by 2002:a62:cdcc:: with SMTP id o195mr6476497pfg.323.1587179944441;
+        Fri, 17 Apr 2020 20:19:04 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e11sm21149577pfl.65.2020.04.17.20.14.54
+        by smtp.gmail.com with ESMTPSA id na18sm7100744pjb.31.2020.04.17.20.19.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Apr 2020 20:14:55 -0700 (PDT)
+        Fri, 17 Apr 2020 20:19:03 -0700 (PDT)
 Subject: Re: [PATCH] hwmon: (jc42) Fix name to have no illegal characters
 To:     Jean Delvare <jdelvare@suse.de>,
         Sascha Hauer <s.hauer@pengutronix.de>
 Cc:     linux-hwmon@vger.kernel.org
 References: <20200417092853.31206-1-s.hauer@pengutronix.de>
- <20200417115503.249d4d48@endymion>
+ <20200417115503.249d4d48@endymion> <20200417103255.GZ1694@pengutronix.de>
+ <20200417154723.09bad8d9@endymion>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -109,12 +110,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <9ddf4f81-ac0d-8b76-134b-b5074b17ddfb@roeck-us.net>
-Date:   Fri, 17 Apr 2020 20:14:54 -0700
+Message-ID: <1d53da6e-13c9-63c3-0950-89f2a82ffc79@roeck-us.net>
+Date:   Fri, 17 Apr 2020 20:19:02 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <20200417115503.249d4d48@endymion>
+In-Reply-To: <20200417154723.09bad8d9@endymion>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -123,31 +124,73 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/17/20 2:55 AM, Jean Delvare wrote:
-> Hi Sascha,
-> 
-> On Fri, 17 Apr 2020 11:28:53 +0200, Sascha Hauer wrote:
->> The jc42 driver passes I2C client's name as hwmon device name. In case
->> of device tree probed devices this ends up being part of the compatible
->> string, "jc-42.4-temp". This name contains hyphens and the hwmon core
->> doesn't like this:
+On 4/17/20 6:47 AM, Jean Delvare wrote:
+> On Fri, 17 Apr 2020 12:32:55 +0200, Sascha Hauer wrote:
+>> On Fri, Apr 17, 2020 at 11:55:03AM +0200, Jean Delvare wrote:
+>>> On Fri, 17 Apr 2020 11:28:53 +0200, Sascha Hauer wrote:  
+>>>> The jc42 driver passes I2C client's name as hwmon device name. In case
+>>>> of device tree probed devices this ends up being part of the compatible
+>>>> string, "jc-42.4-temp". This name contains hyphens and the hwmon core
+>>>> doesn't like this:
+>>>>
+>>>> jc42 2-0018: hwmon: 'jc-42.4-temp' is not a valid name attribute, please fix
+>>>>
+>>>> This changes the name to "jc42" which doesn't have any illegal
+>>>> characters.  
+>>>
+>>> I don't think "jc-42.4-temp" is a valid i2c client name either.  
 >>
->> jc42 2-0018: hwmon: 'jc-42.4-temp' is not a valid name attribute, please fix
->>
->> This changes the name to "jc42" which doesn't have any illegal
->> characters.
+>> What makes the name invalid then? I am not aware of any constraints of
+>> i2c client names.
 > 
-> I don't think "jc-42.4-temp" is a valid i2c client name either. I
-> believe this should be fixed at the of->i2c level, rather than the
-> i2c->hwmon level. Not sure how other drivers are dealing with that, it
-> seems that in most cases the name part of the compatible string matches
-> exactly the expected client name so no conversion is needed.
+> Historically hwmon devices were i2c devices so libsensors would use
+> the i2c client name as the device name, and still does as a fallback if
+> memory serves. Therefore whatever rule applies to hwmon names would
+> also apply to i2c names (in the context of hwmon devices) even though
+> this is not enforced.
+> 
+>>> I believe this should be fixed at the of->i2c level, rather than the
+>>> i2c->hwmon level.  
+>>
+>> Are you suggesting a character conversion from hyphens to underscores or
+>> similar in the i2c core?
+> 
+> No, my point is that from a userspace perspective it shouldn't matter
+> if the device comes from the OF tree or not. So the device name should
+> be the same, i.e. the i2c client should be named "jc42" always. That's
+> what happens for all other devices I checked, simply because it turns
+> out that their OF compatible string is in the form
+> <vendor_name>,<linux_i2c_client_name>, so when you strip the vendor
+> name you get the right name directly.
+> 
+> My knowledge of the OF subsystem is fairly limited though, so I have no
+> idea if it is possible to enforce a specific name like that at an early
+> stage. The proper name can't be guessed by i2c-core, so ideally the
+> conversion should be provided by the driver itself. I see that struct
+> of_device_id has a "name" field, can it be used for that purpose? If
+> not, I suppose the "data" field could be used for that.
+> 
+>>> Not sure how other drivers are dealing with that, it
+>>> seems that in most cases the name part of the compatible string matches
+>>> exactly the expected client name so no conversion is needed.  
+>>
+>> Other i2c hwmon drivers I found do not have any hyphens in their
+>> compatible string, so they are at least not hit by this message.
+> 
+> I drew the same conclusion here, and your patch is definitely better
+> than nothing as it fixes a real problem, however it is not prefect due
+> to the reason explained above, plus the fact that it would break if the
+> driver ever supports more than one device type (say JEDEC releases JC43
+> tomorrow and we add support... you code forces the name to "jc42" even
+> if the OF name was something other than "jc-42.4-temp").
 > 
 
-The problem here is that the compatible string is simply wrong. It
-precedes the time when I understood devicetree properties well enough
-to understand what I was doing. Oh well.
+The driver should really list all supported devices (not the standard).
+It could/should have a generic property name to match, but I have no idea
+what that should be. There are existing compatible properties named
+"jedec,ufs-1.1" and similar, so maybe the current compatible string
+isn't as bad as I thought.
 
-No idea what to do at this point other than accepting this patch.
+Still, we need to do something. I am open to suggestions.
 
 Guenter
