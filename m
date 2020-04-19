@@ -6,33 +6,33 @@ X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 713ADC38A30
-	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Apr 2020 15:49:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96D44C38A30
+	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Apr 2020 15:56:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4251121744
-	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Apr 2020 15:49:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 71AB121744
+	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Apr 2020 15:56:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="oOU/p5eB"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="tnMBKHko"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726100AbgDSPtr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 19 Apr 2020 11:49:47 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:48432 "EHLO vps0.lunn.ch"
+        id S1726160AbgDSP46 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 19 Apr 2020 11:56:58 -0400
+Received: from vps0.lunn.ch ([185.16.172.187]:48460 "EHLO vps0.lunn.ch"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725939AbgDSPtq (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 19 Apr 2020 11:49:46 -0400
+        id S1725939AbgDSP46 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 19 Apr 2020 11:56:58 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
         s=20171124; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
         Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
         Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
         :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
         List-Post:List-Owner:List-Archive;
-        bh=9MvkBXmiEdANg+HoZVypf5aaCZQcXxBtGb3cmIo49e4=; b=oOU/p5eBY6McgT+ZdYrf2lGtEp
-        8xEBF8J9m8asiWfs8rSVsrIX3a97REZg/9Oa4w0hk4fT8jI/O4BtNjN8PhVIAHSfGp87zgx4ZbOQC
-        +wKpRD8ugKNiZ+Xq2WVMXxvtr+C/MSPbLeWEUIH9NK+Va9/Q6+/c8e5BqPg5WcmpYeXM=;
+        bh=nBLU5uDhRJ126WPInMV2v3q9bGLsLlC7SxGeR9SC2II=; b=tnMBKHkoMrDGfz+eZIH3S58UrQ
+        dopyoEc6LvRi9XhD0qRI+cGkWhnkjapJJghMy+4p9U9/DmwBn183jtv507+flScAoknItQ1B9j0io
+        ImC/OxKOxkonbSPCBiLYPcKGJ6xHxAw4HAuO279sci/IaDHNVneuRWRsjVdsEVuf+CWs=;
 Received: from andrew by vps0.lunn.ch with local (Exim 4.93)
         (envelope-from <andrew@lunn.ch>)
-        id 1jQCCV-003eaj-5k; Sun, 19 Apr 2020 17:49:43 +0200
-Date:   Sun, 19 Apr 2020 17:49:43 +0200
+        id 1jQCJT-003eeE-1M; Sun, 19 Apr 2020 17:56:55 +0200
+Date:   Sun, 19 Apr 2020 17:56:55 +0200
 From:   Andrew Lunn <andrew@lunn.ch>
 To:     Michael Walle <michael@walle.cc>
 Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -42,81 +42,109 @@ Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
         Heiner Kallweit <hkallweit1@gmail.com>,
         Russell King <linux@armlinux.org.uk>,
         "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH net-next v2 2/3] net: phy: add Broadcom BCM54140 support
-Message-ID: <20200419154943.GJ836632@lunn.ch>
+Subject: Re: [PATCH net-next v2 3/3] net: phy: bcm54140: add hwmon support
+Message-ID: <20200419155655.GK836632@lunn.ch>
 References: <20200419101249.28991-1-michael@walle.cc>
- <20200419101249.28991-2-michael@walle.cc>
+ <20200419101249.28991-3-michael@walle.cc>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200419101249.28991-2-michael@walle.cc>
+In-Reply-To: <20200419101249.28991-3-michael@walle.cc>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Apr 19, 2020 at 12:12:48PM +0200, Michael Walle wrote:
+On Sun, Apr 19, 2020 at 12:12:49PM +0200, Michael Walle wrote:
 
 Hi Michael
 
-> +static int bcm54140_b0_workaround(struct phy_device *phydev)
+You have an #if here...
+
+> +#if IS_ENABLED(CONFIG_HWMON)
+> +static umode_t bcm54140_hwmon_is_visible(const void *data,
+> +					 enum hwmon_sensor_types type,
+> +					 u32 attr, int channel)
 > +{
-> +	int spare3;
-> +	int ret;
-
-Could you add a comment about what this is working around?
-
-> +static int bcm54140_phy_probe(struct phy_device *phydev)
-> +{
-> +	struct bcm54140_phy_priv *priv;
-> +	int ret;
-> +
-> +	priv = devm_kzalloc(&phydev->mdio.dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	phydev->priv = priv;
-> +
-> +	ret = bcm54140_get_base_addr_and_port(phydev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	dev_info(&phydev->mdio.dev,
-> +		 "probed (port %d, base PHY address %d)\n",
-> +		 priv->port, priv->base_addr);
-
-phydev_dbg() ? Do we need to see this message four times?
-
-> +
-> +	return 0;
+> +	switch (type) {
+> +	case hwmon_in:
+> +		switch (attr) {
+> +		case hwmon_in_min:
+> +		case hwmon_in_max:
+> +			return 0644;
+> +		case hwmon_in_label:
+> +		case hwmon_in_input:
+> +		case hwmon_in_alarm:
+> +			return 0444;
+> +		default:
+> +			return 0;
+> +		}
+> +	case hwmon_temp:
+> +		switch (attr) {
+> +		case hwmon_temp_min:
+> +		case hwmon_temp_max:
+> +			return 0644;
+> +		case hwmon_temp_input:
+> +		case hwmon_temp_alarm:
+> +			return 0444;
+> +		default:
+> +			return 0;
+> +		}
+> +	default:
+> +		return 0;
+> +	}
 > +}
-> +
-> +static int bcm54140_config_init(struct phy_device *phydev)
+
+...
+
+
+> +static const struct hwmon_chip_info bcm54140_chip_info = {
+> +	.ops = &bcm54140_hwmon_ops,
+> +	.info = bcm54140_hwmon_info,
+>  };
+>  
+>  static int bcm54140_phy_base_read_rdb(struct phy_device *phydev, u16 rdb)
+> @@ -203,6 +522,72 @@ static int bcm54140_get_base_addr_and_port(struct phy_device *phydev)
+>  	return 0;
+>  }
+
+
+Still inside the #if. Some original code is now inside the #if/#endif.
+Is this correct? Hard to see from just the patch.
+
+>  
+> +/* Check if one PHY has already done the init of the parts common to all PHYs
+> + * in the Quad PHY package.
+> + */
+> +static bool bcm54140_is_pkg_init(struct phy_device *phydev)
 > +{
-> +	u16 reg = 0xffff;
+> +	struct bcm54140_phy_priv *priv = phydev->priv;
+> +	struct mii_bus *bus = phydev->mdio.bus;
+> +	int base_addr = priv->base_addr;
+> +	struct phy_device *phy;
+> +	int i;
+> +
+
+...
+
+> +static int bcm54140_phy_probe_once(struct phy_device *phydev)
+> +{
+> +	struct device *hwmon;
 > +	int ret;
 > +
-> +	/* Apply hardware errata */
-> +	ret = bcm54140_b0_workaround(phydev);
+> +	/* enable hardware monitoring */
+> +	ret = bcm54140_enable_monitoring(phydev);
 > +	if (ret)
 > +		return ret;
 > +
-> +	/* Unmask events we are interested in. */
-> +	reg &= ~(BCM54140_RDB_INT_DUPLEX |
-> +		 BCM54140_RDB_INT_SPEED |
-> +		 BCM54140_RDB_INT_LINK);
-> +	ret = bcm_phy_write_rdb(phydev, BCM54140_RDB_IMR, reg);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* LED1=LINKSPD[1], LED2=LINKSPD[2], LED3=ACTIVITY */
-> +	ret = bcm_phy_modify_rdb(phydev, BCM54140_RDB_SPARE1,
-> +				 0, BCM54140_RDB_SPARE1_LSLM);
-> +	if (ret)
-> +		return ret;
+> +	hwmon = devm_hwmon_device_register_with_info(&phydev->mdio.dev,
+> +						     "BCM54140", phydev,
+> +						     &bcm54140_chip_info,
+> +						     NULL);
+> +	return PTR_ERR_OR_ZERO(hwmon);
+> +}
+> +#endif
 
-What are the reset default for LEDs? Can the LEDs be configured via
-strapping pins? There is currently no good solution for this. Whatever
-you pick will be wrong for somebody else. At minimum, strapping pins,
-if they exist, should not be overridden.
 
+Thanks
+  Andrew
