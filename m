@@ -6,33 +6,33 @@ X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96D44C38A30
-	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Apr 2020 15:56:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B59A1C5321D
+	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Apr 2020 16:29:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 71AB121744
-	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Apr 2020 15:56:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 92B5D21744
+	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Apr 2020 16:29:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="tnMBKHko"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="uoTly+RP"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726160AbgDSP46 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 19 Apr 2020 11:56:58 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:48460 "EHLO vps0.lunn.ch"
+        id S1726474AbgDSQ3e (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 19 Apr 2020 12:29:34 -0400
+Received: from vps0.lunn.ch ([185.16.172.187]:48516 "EHLO vps0.lunn.ch"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725939AbgDSP46 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 19 Apr 2020 11:56:58 -0400
+        id S1726181AbgDSQ3d (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 19 Apr 2020 12:29:33 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
         s=20171124; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
         Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
         Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
         :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
         List-Post:List-Owner:List-Archive;
-        bh=nBLU5uDhRJ126WPInMV2v3q9bGLsLlC7SxGeR9SC2II=; b=tnMBKHkoMrDGfz+eZIH3S58UrQ
-        dopyoEc6LvRi9XhD0qRI+cGkWhnkjapJJghMy+4p9U9/DmwBn183jtv507+flScAoknItQ1B9j0io
-        ImC/OxKOxkonbSPCBiLYPcKGJ6xHxAw4HAuO279sci/IaDHNVneuRWRsjVdsEVuf+CWs=;
+        bh=X0MRD5CzLwX8JPnqO6SANjVQWQPEK4R3ADbwkBqXpro=; b=uoTly+RPsTeTrEWTyInn0FHblW
+        Pd+P28zEjuOBg91hX+E/7at6FIQ/FfPJVneAProYw1zzA07P68s06MGArA1wPfUJ5sCGkJDOJjELL
+        oVKGZ3VkE1xCiBiALJc1ZMGsN/me6dld/GFOQN0dGr/8mr2gJexn/gr4m0XbzrZk9yKE=;
 Received: from andrew by vps0.lunn.ch with local (Exim 4.93)
         (envelope-from <andrew@lunn.ch>)
-        id 1jQCJT-003eeE-1M; Sun, 19 Apr 2020 17:56:55 +0200
-Date:   Sun, 19 Apr 2020 17:56:55 +0200
+        id 1jQCoy-003epS-Mq; Sun, 19 Apr 2020 18:29:28 +0200
+Date:   Sun, 19 Apr 2020 18:29:28 +0200
 From:   Andrew Lunn <andrew@lunn.ch>
 To:     Michael Walle <michael@walle.cc>
 Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -42,109 +42,89 @@ Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
         Heiner Kallweit <hkallweit1@gmail.com>,
         Russell King <linux@armlinux.org.uk>,
         "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH net-next v2 3/3] net: phy: bcm54140: add hwmon support
-Message-ID: <20200419155655.GK836632@lunn.ch>
-References: <20200419101249.28991-1-michael@walle.cc>
- <20200419101249.28991-3-michael@walle.cc>
+Subject: Re: [PATCH net-next 3/3] net: phy: bcm54140: add hwmon support
+Message-ID: <20200419162928.GL836632@lunn.ch>
+References: <20200417192858.6997-1-michael@walle.cc>
+ <20200417192858.6997-3-michael@walle.cc>
+ <20200417195003.GG785713@lunn.ch>
+ <35d00dfe1ad24b580dc247d882aa2e39@walle.cc>
+ <20200417201338.GI785713@lunn.ch>
+ <84679226df03bdd8060cb95761724d3a@walle.cc>
+ <20200417212829.GJ785713@lunn.ch>
+ <4f3ff33f78472f547212f87f75a37b66@walle.cc>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200419101249.28991-3-michael@walle.cc>
+In-Reply-To: <4f3ff33f78472f547212f87f75a37b66@walle.cc>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Apr 19, 2020 at 12:12:49PM +0200, Michael Walle wrote:
+On Sun, Apr 19, 2020 at 12:29:23PM +0200, Michael Walle wrote:
+> Am 2020-04-17 23:28, schrieb Andrew Lunn:
+> > On Fri, Apr 17, 2020 at 11:08:56PM +0200, Michael Walle wrote:
+> > > Am 2020-04-17 22:13, schrieb Andrew Lunn:
+> > > > > Correct, and this function was actually stolen from there ;) This was
+> > > > > actually stolen from the mscc PHY ;)
+> > > >
+> > > > Which in itself indicates it is time to make it a helper :-)
+> > > 
+> > > Sure, do you have any suggestions?
+> > 
+> > mdiobus_get_phy() does the bit i was complaining about, the mdiobus
+> > internal knowledge.
+> 
+> But that doesn't address your other comment.
 
-Hi Michael
+Yes, you are right. But i don't think you can easily generalize the
+rest. It needs knowledge of the driver private structure to reference
+pkg_init. You would have to move that into phy_device.
 
-You have an #if here...
+> 
+> > There is also the question of locking. What happens if the PHY devices
+> > is unbound while you have an instance of its phydev?
+> 
+> Is there any lock one could take to avoid that?
 
-> +#if IS_ENABLED(CONFIG_HWMON)
-> +static umode_t bcm54140_hwmon_is_visible(const void *data,
-> +					 enum hwmon_sensor_types type,
-> +					 u32 attr, int channel)
-> +{
-> +	switch (type) {
-> +	case hwmon_in:
-> +		switch (attr) {
-> +		case hwmon_in_min:
-> +		case hwmon_in_max:
-> +			return 0644;
-> +		case hwmon_in_label:
-> +		case hwmon_in_input:
-> +		case hwmon_in_alarm:
-> +			return 0444;
-> +		default:
-> +			return 0;
-> +		}
-> +	case hwmon_temp:
-> +		switch (attr) {
-> +		case hwmon_temp_min:
-> +		case hwmon_temp_max:
-> +			return 0644;
-> +		case hwmon_temp_input:
-> +		case hwmon_temp_alarm:
-> +			return 0444;
-> +		default:
-> +			return 0;
-> +		}
-> +	default:
-> +		return 0;
-> +	}
-> +}
+phy_attach_direct() does a get_device(). That at least means the
+struct device will not go away. I don't know the code well enough to
+know if that will also stop the phy_device structure from being freed.
+We might need mdiobus_get_phy() to also do a get_device(), and add a
+mdiobus_put_phy() which does a put_device().
 
-...
+> > What happens if the base PHY is unbound? Are the three others then
+> > unusable?
+> 
+> In my case, this would mean the hwmon device is also removed. I don't
+> see any other way to do it right now. I guess it would be better to
+> have the hwmon device registered to some kind of parent device.
 
+The phydev structure might go away. But the hardware is still
+there. You can access it via address on the bus. What you have to be
+careful of is using the phydev for a different phy.
 
-> +static const struct hwmon_chip_info bcm54140_chip_info = {
-> +	.ops = &bcm54140_hwmon_ops,
-> +	.info = bcm54140_hwmon_info,
->  };
->  
->  static int bcm54140_phy_base_read_rdb(struct phy_device *phydev, u16 rdb)
-> @@ -203,6 +522,72 @@ static int bcm54140_get_base_addr_and_port(struct phy_device *phydev)
->  	return 0;
->  }
+> For the BCM54140 there are three different functions:
+>  (1) PHY functions accessible by the PHYs own address (ie PHY
+>      status/control)
+>  (2) PHY functions but only accessible by the global registers (ie
+>      interrupt enables per PHY of the shared interrupt pin)
+>  (3) global functions (like sensors, global configuration)
+> 
+> (1) is already supported in the current PHY framework. (2) and (3)
+> need the "hack" which uses mdiobus_read/write() with the base
+> address.
 
+Is the _is_pkg_init() function the only place you need to access some
+other phy_device structure.
 
-Still inside the #if. Some original code is now inside the #if/#endif.
-Is this correct? Hard to see from just the patch.
+Maybe we need a phydev->shared structure, which all PHYs in one
+package share? Get the core to do reference counting on the structure?
+Add helpers phy_read_shared(), phy_write_shared(), etc, which does
+MDIO accesses on the base device, taking care of the locking. pkg_init
+is a member of this shared structure. And have a void * priv in shared
+for shared driver private data?
 
->  
-> +/* Check if one PHY has already done the init of the parts common to all PHYs
-> + * in the Quad PHY package.
-> + */
-> +static bool bcm54140_is_pkg_init(struct phy_device *phydev)
-> +{
-> +	struct bcm54140_phy_priv *priv = phydev->priv;
-> +	struct mii_bus *bus = phydev->mdio.bus;
-> +	int base_addr = priv->base_addr;
-> +	struct phy_device *phy;
-> +	int i;
-> +
+Just "thinking out loud"
 
-...
-
-> +static int bcm54140_phy_probe_once(struct phy_device *phydev)
-> +{
-> +	struct device *hwmon;
-> +	int ret;
-> +
-> +	/* enable hardware monitoring */
-> +	ret = bcm54140_enable_monitoring(phydev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	hwmon = devm_hwmon_device_register_with_info(&phydev->mdio.dev,
-> +						     "BCM54140", phydev,
-> +						     &bcm54140_chip_info,
-> +						     NULL);
-> +	return PTR_ERR_OR_ZERO(hwmon);
-> +}
-> +#endif
-
-
-Thanks
-  Andrew
+    Andrew
