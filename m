@@ -2,115 +2,106 @@ Return-Path: <SRS0=a0nG=6D=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C356C38A30
-	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Apr 2020 17:13:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE7E8C54FCB
+	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Apr 2020 18:14:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E9B4321927
-	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Apr 2020 17:13:13 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="TTrTHJ5R"
+	by mail.kernel.org (Postfix) with ESMTP id D165721744
+	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Apr 2020 18:14:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1587320091;
+	bh=bOt9BTn/I9BtpLW6MYPux7kH7zXf1KQ4OwttSbOUgxw=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:List-ID:From;
+	b=012NNHTrtnIcYFPbGL0VwHfdbtXJHgCfRkl8hcZ6cMBslIsqgqOGIqz7mTq94uiUe
+	 6MjJRWDbA9op7UBKtHc3nE7qT02Ol4fhXccqsJOo+aFXbjQ1l11M7ZALvBTk8ibD1n
+	 e9OsGrA2xx/B/h2N9ySB0HxtsWOHo220gdPFUaBE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726693AbgDSRNN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 19 Apr 2020 13:13:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50642 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726668AbgDSRNN (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 19 Apr 2020 13:13:13 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:3201:214:fdff:fe10:1be6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC5BC061A0C;
-        Sun, 19 Apr 2020 10:13:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=zLl/O8f9jYA4cx5fo7LmDJmUNDdHX/VFattYUnbZWo8=; b=TTrTHJ5Rl6+8WqZ4OVlavXUHL
-        b/MV6/U2DqN0ZXFUb2Yoi2cyAb5MSV26h765gK+qxknuS9jU3aB7/puQhHat0yjv+wISB27caT4Za
-        uw0Lnm/WxRbGq3brZJb56U5bAQYtc5kYIXp2uhoyn99VfG6iP7DdPKBs6B2r9gyHqs18vlL3wXqN9
-        NxGHEHHpE9mvWtMGrKQEI2QdpQpS5Oty6IQ7+gZol1OElt//d4GhtdmGPYoGTPTLwmql+YZVlJpsj
-        j6ucxTdswTesUGNYNY395InePIr+nJScTsEhezWYe8XSlEgxQCeqlCdNWXPVsZsywAndOB9BPEtNk
-        niXy2U1Ag==;
-Received: from shell.armlinux.org.uk ([2002:4e20:1eda:1:5054:ff:fe00:4ec]:48106)
-        by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.90_1)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1jQDUo-0006lc-67; Sun, 19 Apr 2020 18:12:43 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1jQDUd-000515-O4; Sun, 19 Apr 2020 18:12:31 +0100
-Date:   Sun, 19 Apr 2020 18:12:31 +0100
-From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Michael Walle <michael@walle.cc>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH net-next 3/3] net: phy: bcm54140: add hwmon support
-Message-ID: <20200419171231.GY25745@shell.armlinux.org.uk>
-References: <20200417192858.6997-1-michael@walle.cc>
- <20200417192858.6997-3-michael@walle.cc>
- <20200417195003.GG785713@lunn.ch>
- <35d00dfe1ad24b580dc247d882aa2e39@walle.cc>
- <20200417201338.GI785713@lunn.ch>
- <84679226df03bdd8060cb95761724d3a@walle.cc>
- <20200417212829.GJ785713@lunn.ch>
- <4f3ff33f78472f547212f87f75a37b66@walle.cc>
- <20200419162928.GL836632@lunn.ch>
+        id S1726686AbgDSSOk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 19 Apr 2020 14:14:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37082 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726440AbgDSSOk (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 19 Apr 2020 14:14:40 -0400
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3440920771;
+        Sun, 19 Apr 2020 18:14:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1587320079;
+        bh=bOt9BTn/I9BtpLW6MYPux7kH7zXf1KQ4OwttSbOUgxw=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=F96kxGnwb5hbRo2uaveExMkh4pG5tmsfXC/X4f7LcIR9NVVk3+CXqwPimCRGIZsLq
+         200DZ+NlYkyxPrNFkbuYootDCzDqqWFu0hJkAVPZpKUAgkDDPBPfI6mIZvHi8k+VtM
+         aJNXnDOzYimf/GSU7Z8wIQIZEF7kJxvbDOxdjZqA=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200419162928.GL836632@lunn.ch>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200416005549.9683-2-robh@kernel.org>
+References: <20200416005549.9683-1-robh@kernel.org> <20200416005549.9683-2-robh@kernel.org>
+Subject: Re: [PATCH 2/2] dt-bindings: Remove cases of 'allOf' containing a '$ref'
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>, Vinod Koul <vkoul@kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        Danie l Lezcano <daniel.lezcano@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-i2c@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org
+To:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Sun, 19 Apr 2020 11:14:38 -0700
+Message-ID: <158732007844.132238.3936257450130949073@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Apr 19, 2020 at 06:29:28PM +0200, Andrew Lunn wrote:
-> On Sun, Apr 19, 2020 at 12:29:23PM +0200, Michael Walle wrote:
-> > Am 2020-04-17 23:28, schrieb Andrew Lunn:
-> > > On Fri, Apr 17, 2020 at 11:08:56PM +0200, Michael Walle wrote:
-> > > > Am 2020-04-17 22:13, schrieb Andrew Lunn:
-> > > > > > Correct, and this function was actually stolen from there ;) This was
-> > > > > > actually stolen from the mscc PHY ;)
-> > > > >
-> > > > > Which in itself indicates it is time to make it a helper :-)
-> > > > 
-> > > > Sure, do you have any suggestions?
-> > > 
-> > > mdiobus_get_phy() does the bit i was complaining about, the mdiobus
-> > > internal knowledge.
-> > 
-> > But that doesn't address your other comment.
-> 
-> Yes, you are right. But i don't think you can easily generalize the
-> rest. It needs knowledge of the driver private structure to reference
-> pkg_init. You would have to move that into phy_device.
-> 
-> > 
-> > > There is also the question of locking. What happens if the PHY devices
-> > > is unbound while you have an instance of its phydev?
-> > 
-> > Is there any lock one could take to avoid that?
-> 
-> phy_attach_direct() does a get_device(). That at least means the
-> struct device will not go away. I don't know the code well enough to
-> know if that will also stop the phy_device structure from being freed.
+Quoting Rob Herring (2020-04-15 17:55:49)
+> json-schema versions draft7 and earlier have a weird behavior in that
+> any keywords combined with a '$ref' are ignored (silently). The correct
+> form was to put a '$ref' under an 'allOf'. This behavior is now changed
+> in the 2019-09 json-schema spec and '$ref' can be mixed with other
+> keywords. The json-schema library doesn't yet support this, but the
+> tooling now does a fixup for this and either way works.
+>=20
+> This has been a constant source of review comments, so let's change this
+> treewide so everyone copies the simpler syntax.
+>=20
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../bindings/clock/fixed-factor-clock.yaml    |   5 +-
 
-Well, struct device is embedded in struct mdio_device, which in turn
-is embedded in struct phy_device. So, if struct device can't go away
-because its refcount is held, the same is true of the structs
-embedding it.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTC broadband for 0.8mile line in suburbia: sync at 10.2Mbps down 587kbps up
+Reviewed-by: Stephen Boyd <sboyd@kernel.org> # clock
