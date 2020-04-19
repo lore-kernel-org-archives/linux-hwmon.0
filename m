@@ -2,226 +2,131 @@ Return-Path: <SRS0=a0nG=6D=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A7A9C54F70
-	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Apr 2020 10:13:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44023C54F70
+	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Apr 2020 10:29:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4A79E21927
-	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Apr 2020 10:13:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2407E21473
+	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Apr 2020 10:29:30 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="MnVlAW5E"
+	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="Z8ON4iq3"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726055AbgDSKNJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 19 Apr 2020 06:13:09 -0400
-Received: from ssl.serverraum.org ([176.9.125.105]:41177 "EHLO
-        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725914AbgDSKNI (ORCPT
+        id S1725939AbgDSK30 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 19 Apr 2020 06:29:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45240 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725783AbgDSK3Z (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 19 Apr 2020 06:13:08 -0400
-Received: from apollo.fritz.box (unknown [IPv6:2a02:810c:c200:2e91:6257:18ff:fec4:ca34])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Sun, 19 Apr 2020 06:29:25 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 606DEC061A0C;
+        Sun, 19 Apr 2020 03:29:25 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 9149F23059;
-        Sun, 19 Apr 2020 12:13:02 +0200 (CEST)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 752A223059;
+        Sun, 19 Apr 2020 12:29:23 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1587291183;
+        t=1587292163;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=dVOR36wUUAgqWiE9r1z9/+kv5+zWMoO7OVGdx+qKcxA=;
-        b=MnVlAW5EXw7D8hOBgut2fyiAwuqud16UBWMahqzEuX1n3kC2PILTE1CLxN4eq3FBiPiBOn
-        qfWwdN6Kq17uURzIdgyvgX2yKwsKR8xQzfnVm/8tEt5cXSB59sFTgkkDe6wJRReSDkz5Ai
-        5ZBthmQ3PR2qnE9SEWIR8AB+YUoZwKg=
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TbYFlrjpu4ST5SWEqVqD8WF0zCnnnfS7jHo+g2Rkr/U=;
+        b=Z8ON4iq3dQ8V1H+OpfOlW447vjWjj8F3TPtlN3Yz8zYTA5BSaOY0XWx/Y9HSJyhzYadX24
+        TDCYo5t+cSmelPa2fUKTBOwZZ5PUSNgpYB+uwiR9HGApIfC55MzEFsUVMc+wISMl66rj7N
+        QOsnkY44q06h15OD5gnGpAiFKfOiNjA=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Sun, 19 Apr 2020 12:29:23 +0200
 From:   Michael Walle <michael@walle.cc>
-To:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>,
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Andrew Lunn <andrew@lunn.ch>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Heiner Kallweit <hkallweit1@gmail.com>,
         Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Michael Walle <michael@walle.cc>
-Subject: [PATCH net-next v2 1/3] net: phy: broadcom: add helper to write/read RDB registers
-Date:   Sun, 19 Apr 2020 12:12:47 +0200
-Message-Id: <20200419101249.28991-1-michael@walle.cc>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Bar: ++++++
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH net-next 3/3] net: phy: bcm54140: add hwmon support
+In-Reply-To: <20200417212829.GJ785713@lunn.ch>
+References: <20200417192858.6997-1-michael@walle.cc>
+ <20200417192858.6997-3-michael@walle.cc> <20200417195003.GG785713@lunn.ch>
+ <35d00dfe1ad24b580dc247d882aa2e39@walle.cc>
+ <20200417201338.GI785713@lunn.ch>
+ <84679226df03bdd8060cb95761724d3a@walle.cc>
+ <20200417212829.GJ785713@lunn.ch>
+Message-ID: <4f3ff33f78472f547212f87f75a37b66@walle.cc>
+X-Sender: michael@walle.cc
+User-Agent: Roundcube Webmail/1.3.10
+X-Spamd-Bar: +
 X-Rspamd-Server: web
-X-Rspamd-Queue-Id: 9149F23059
-X-Spamd-Result: default: False [6.40 / 15.00];
+X-Rspamd-Queue-Id: 752A223059
+X-Spamd-Result: default: False [1.40 / 15.00];
          FROM_HAS_DN(0.00)[];
          TO_DN_SOME(0.00)[];
-         R_MISSING_CHARSET(2.50)[];
          FREEMAIL_ENVRCPT(0.00)[gmail.com];
+         TO_MATCH_ENVRCPT_ALL(0.00)[];
          TAGGED_RCPT(0.00)[];
          MIME_GOOD(-0.10)[text/plain];
-         BROKEN_CONTENT_TYPE(1.50)[];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         NEURAL_SPAM(0.00)[0.841];
          DKIM_SIGNED(0.00)[];
-         RCPT_COUNT_SEVEN(0.00)[11];
-         MID_CONTAINS_FROM(1.00)[];
+         RCPT_COUNT_SEVEN(0.00)[10];
+         NEURAL_HAM(-0.00)[-0.974];
          RCVD_COUNT_ZERO(0.00)[0];
          FROM_EQ_ENVFROM(0.00)[];
          MIME_TRACE(0.00)[0:+];
-         ASN(0.00)[asn:31334, ipnet:2a02:810c:8000::/33, country:DE];
-         FREEMAIL_CC(0.00)[suse.com,roeck-us.net,lunn.ch,gmail.com,armlinux.org.uk,davemloft.net,walle.cc];
+         FREEMAIL_CC(0.00)[vger.kernel.org,suse.com,roeck-us.net,gmail.com,armlinux.org.uk,davemloft.net];
+         MID_RHS_MATCH_FROM(0.00)[];
          SUSPICIOUS_RECIPS(1.50)[]
-X-Spam: Yes
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-RDB (Register Data Base) registers are used on newer Broadcom PHYs. Add
-helper to read, write and modify these registers.
+Am 2020-04-17 23:28, schrieb Andrew Lunn:
+> On Fri, Apr 17, 2020 at 11:08:56PM +0200, Michael Walle wrote:
+>> Am 2020-04-17 22:13, schrieb Andrew Lunn:
+>> > > Correct, and this function was actually stolen from there ;) This was
+>> > > actually stolen from the mscc PHY ;)
+>> >
+>> > Which in itself indicates it is time to make it a helper :-)
+>> 
+>> Sure, do you have any suggestions?
+> 
+> mdiobus_get_phy() does the bit i was complaining about, the mdiobus
+> internal knowledge.
 
-Signed-off-by: Michael Walle <michael@walle.cc>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
----
-changes since v1:
- - corrected typo
- - added Reviewed-by
+But that doesn't address your other comment.
 
- drivers/net/phy/bcm-phy-lib.c | 80 +++++++++++++++++++++++++++++++++++
- drivers/net/phy/bcm-phy-lib.h |  9 ++++
- include/linux/brcmphy.h       |  3 ++
- 3 files changed, 92 insertions(+)
+> There is also the question of locking. What happens if the PHY devices
+> is unbound while you have an instance of its phydev?
 
-diff --git a/drivers/net/phy/bcm-phy-lib.c b/drivers/net/phy/bcm-phy-lib.c
-index e77b274a09fd..d5f9a2701989 100644
---- a/drivers/net/phy/bcm-phy-lib.c
-+++ b/drivers/net/phy/bcm-phy-lib.c
-@@ -155,6 +155,86 @@ int bcm_phy_write_shadow(struct phy_device *phydev, u16 shadow,
- }
- EXPORT_SYMBOL_GPL(bcm_phy_write_shadow);
- 
-+int __bcm_phy_read_rdb(struct phy_device *phydev, u16 rdb)
-+{
-+	int val;
-+
-+	val = __phy_write(phydev, MII_BCM54XX_RDB_ADDR, rdb);
-+	if (val < 0)
-+		return val;
-+
-+	return __phy_read(phydev, MII_BCM54XX_RDB_DATA);
-+}
-+EXPORT_SYMBOL_GPL(__bcm_phy_read_rdb);
-+
-+int bcm_phy_read_rdb(struct phy_device *phydev, u16 rdb)
-+{
-+	int ret;
-+
-+	phy_lock_mdio_bus(phydev);
-+	ret = __bcm_phy_read_rdb(phydev, rdb);
-+	phy_unlock_mdio_bus(phydev);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(bcm_phy_read_rdb);
-+
-+int __bcm_phy_write_rdb(struct phy_device *phydev, u16 rdb, u16 val)
-+{
-+	int ret;
-+
-+	ret = __phy_write(phydev, MII_BCM54XX_RDB_ADDR, rdb);
-+	if (ret < 0)
-+		return ret;
-+
-+	return __phy_write(phydev, MII_BCM54XX_RDB_DATA, val);
-+}
-+EXPORT_SYMBOL_GPL(__bcm_phy_write_rdb);
-+
-+int bcm_phy_write_rdb(struct phy_device *phydev, u16 rdb, u16 val)
-+{
-+	int ret;
-+
-+	phy_lock_mdio_bus(phydev);
-+	ret = __bcm_phy_write_rdb(phydev, rdb, val);
-+	phy_unlock_mdio_bus(phydev);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(bcm_phy_write_rdb);
-+
-+int __bcm_phy_modify_rdb(struct phy_device *phydev, u16 rdb, u16 mask, u16 set)
-+{
-+	int new, ret;
-+
-+	ret = __phy_write(phydev, MII_BCM54XX_RDB_ADDR, rdb);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = __phy_read(phydev, MII_BCM54XX_RDB_DATA);
-+	if (ret < 0)
-+		return ret;
-+
-+	new = (ret & ~mask) | set;
-+	if (new == ret)
-+		return 0;
-+
-+	return __phy_write(phydev, MII_BCM54XX_RDB_DATA, new);
-+}
-+EXPORT_SYMBOL_GPL(__bcm_phy_modify_rdb);
-+
-+int bcm_phy_modify_rdb(struct phy_device *phydev, u16 rdb, u16 mask, u16 set)
-+{
-+	int ret;
-+
-+	phy_lock_mdio_bus(phydev);
-+	ret = __bcm_phy_modify_rdb(phydev, rdb, mask, set);
-+	phy_unlock_mdio_bus(phydev);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(bcm_phy_modify_rdb);
-+
- int bcm_phy_enable_apd(struct phy_device *phydev, bool dll_pwr_down)
- {
- 	int val;
-diff --git a/drivers/net/phy/bcm-phy-lib.h b/drivers/net/phy/bcm-phy-lib.h
-index 129df819be8c..4d3de91cda6c 100644
---- a/drivers/net/phy/bcm-phy-lib.h
-+++ b/drivers/net/phy/bcm-phy-lib.h
-@@ -48,6 +48,15 @@ int bcm_phy_write_shadow(struct phy_device *phydev, u16 shadow,
- 			 u16 val);
- int bcm_phy_read_shadow(struct phy_device *phydev, u16 shadow);
- 
-+int __bcm_phy_write_rdb(struct phy_device *phydev, u16 rdb, u16 val);
-+int bcm_phy_write_rdb(struct phy_device *phydev, u16 rdb, u16 val);
-+int __bcm_phy_read_rdb(struct phy_device *phydev, u16 rdb);
-+int bcm_phy_read_rdb(struct phy_device *phydev, u16 rdb);
-+int __bcm_phy_modify_rdb(struct phy_device *phydev, u16 rdb, u16 mask,
-+			 u16 set);
-+int bcm_phy_modify_rdb(struct phy_device *phydev, u16 rdb, u16 mask,
-+		       u16 set);
-+
- int bcm_phy_ack_intr(struct phy_device *phydev);
- int bcm_phy_config_intr(struct phy_device *phydev);
- 
-diff --git a/include/linux/brcmphy.h b/include/linux/brcmphy.h
-index 6462c5447872..e14f78b3c8a4 100644
---- a/include/linux/brcmphy.h
-+++ b/include/linux/brcmphy.h
-@@ -114,6 +114,9 @@
- #define MII_BCM54XX_SHD_VAL(x)	((x & 0x1f) << 10)
- #define MII_BCM54XX_SHD_DATA(x)	((x & 0x3ff) << 0)
- 
-+#define MII_BCM54XX_RDB_ADDR	0x1e
-+#define MII_BCM54XX_RDB_DATA	0x1f
-+
- /*
-  * AUXILIARY CONTROL SHADOW ACCESS REGISTERS.  (PHY REG 0x18)
-  */
--- 
-2.20.1
+Is there any lock one could take to avoid that?
 
+> What happens if the base PHY is unbound? Are the three others then
+> unusable?
+
+In my case, this would mean the hwmon device is also removed. I don't
+see any other way to do it right now. I guess it would be better to
+have the hwmon device registered to some kind of parent device.
+
+> I think we need to take a step back and look at how we handle quad
+> PHYs in general. The VSC8584 has many of the same issues.
+
+For the BCM54140 there are three different functions:
+  (1) PHY functions accessible by the PHYs own address (ie PHY
+      status/control)
+  (2) PHY functions but only accessible by the global registers (ie
+      interrupt enables per PHY of the shared interrupt pin)
+  (3) global functions (like sensors, global configuration)
+
+(1) is already supported in the current PHY framework. (2) and (3)
+need the "hack" which uses mdiobus_read/write() with the base
+address.
+
+-michael
