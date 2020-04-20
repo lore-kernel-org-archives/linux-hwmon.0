@@ -2,138 +2,77 @@ Return-Path: <SRS0=7kdz=6E=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.5 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0835BC3815B
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Apr 2020 19:04:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96A35C3A5A0
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Apr 2020 19:57:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D884B20672
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Apr 2020 19:04:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 74D1A2074F
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Apr 2020 19:57:49 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dZ0kP2h5"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="PefrVbjh"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726061AbgDTTES (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 20 Apr 2020 15:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36502 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725896AbgDTTES (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 20 Apr 2020 15:04:18 -0400
-Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332D4C061A0C;
-        Mon, 20 Apr 2020 12:04:18 -0700 (PDT)
-Received: by mail-oi1-x244.google.com with SMTP id k9so9794588oia.8;
-        Mon, 20 Apr 2020 12:04:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=p7Df55Nm93D6znad/ezCzItS2C5Wj62A07HIVImwYiw=;
-        b=dZ0kP2h5rvu6VkHf6jQdeqlecfClWNhanlZhMmHQ8J4giOrNGCwyjyknuQIrOOFi5Z
-         D4C4kwla6NIOEAmFn5E+ePE3JgLhpLk51IDcxx2VkAP3uQi5XKbJuA+C4/BEm8WiKjyr
-         8klVyfuqJOSeO4W51nVsco8Q+jTttHk0g56KKA0dwf+hhoXFpcnG+tiO84nT205SUnBi
-         42e+kmfPUBvCiYCBFbZ5LHZojnHjXSnGJGeFoW0uVGVEbb542FdqzlktKzIG2EelnuOW
-         4L5VACp2VIkJtpDpn1LDEv8qRC1BEKpJXGLNVBqhb+sUxkxDtqmdZOjwG/0Kcd+Btp0Y
-         hv8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=p7Df55Nm93D6znad/ezCzItS2C5Wj62A07HIVImwYiw=;
-        b=mE9AnsQOk9EJZBSJN1PTJ6kbhsxXDeJ2KiOJB21bzR2vGU2Mif52i/9lLOVWEjlzmU
-         dAG5RYKwPO3InV6bpbA4oVhhq1YZvTNYLqbBbcnFLY60CjERYN3YFqHXAbLyOtlMWDQ/
-         XGFhK8AxhPAwUB+zfRpnBD4pn9x1vPe9ha5WD6XKA2OnXnvE65tGFgxBRQbVipbwD8wR
-         l+yMPNlVExtk2tgzjykQuIwcmkG9bOetwfmDxiRxWB2qnH3jAVg0D6ifaakl7vGnWto8
-         ZDqKVV7KNze+K19O54NRIjlefNGutKvwJZTC7VyFOG7mfcts90p3sB52XXuSdtJok3IC
-         +kcw==
-X-Gm-Message-State: AGi0PuZ3Ee63homxE1pw5Iir0+n4GK+VbGGdxdorBT7WFCGyeshOX0Ew
-        OyzMokNylGrJV4NsV5+eARDfUWZPKvbQ4g==
-X-Google-Smtp-Source: APiQypJx9Iv6LcOVa/nQidWSmEECnNjxBW9OpcCfvyjJPibOPCgsxOKe/T32OXebghVyWc9p98y0jg==
-X-Received: by 2002:aca:7286:: with SMTP id p128mr671468oic.158.1587409457328;
-        Mon, 20 Apr 2020 12:04:17 -0700 (PDT)
-Received: from raspberrypi (99-189-78-97.lightspeed.austtx.sbcglobal.net. [99.189.78.97])
-        by smtp.gmail.com with ESMTPSA id t9sm64739oie.24.2020.04.20.12.04.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Apr 2020 12:04:16 -0700 (PDT)
-Date:   Mon, 20 Apr 2020 14:04:15 -0500
-From:   Grant Peltier <grantpeltier93@gmail.com>
-To:     linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     adam.vaughn.xh@renesas.com, grant.peltier.jg@renesas.com
-Subject: [PATCH 2/2] docs: hwmon: Update driver documentation for debugfs
-Message-ID: <e3c47c1877d2f94351b020a4ce1309390075e88f.1587408025.git.grantpeltier93@gmail.com>
-References: <cover.1587408025.git.grantpeltier93@gmail.com>
+        id S1726141AbgDTT5o (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 20 Apr 2020 15:57:44 -0400
+Received: from vps0.lunn.ch ([185.16.172.187]:51858 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725897AbgDTT5o (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 20 Apr 2020 15:57:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=IqE7/k/wP7v8PNyQusFkoxnSxLx5Dg8o8W6frjL5sIg=; b=PefrVbjhr8EMpaAV29ne7JrSyE
+        3u8hMm61U8WuBm3Zf987w3XpNz/2KKuWNdPDYpjXScRipB7xmyVd3IW34wcwbN2za0j4ozhyP1oEE
+        NqQc06L6KPfTqHkNQQo961vRYNWEJ5/hdNgsiuP+rW3WG16JBdGXtcOGz3WR9TFi1uJM=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.93)
+        (envelope-from <andrew@lunn.ch>)
+        id 1jQcY1-003tPh-K7; Mon, 20 Apr 2020 21:57:41 +0200
+Date:   Mon, 20 Apr 2020 21:57:41 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Michael Walle <michael@walle.cc>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH net-next v3 2/3] net: phy: add Broadcom BCM54140 support
+Message-ID: <20200420195741.GG917792@lunn.ch>
+References: <20200420182113.22577-1-michael@walle.cc>
+ <20200420182113.22577-2-michael@walle.cc>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1587408025.git.grantpeltier93@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200420182113.22577-2-michael@walle.cc>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add usage details for the two new debugfs endpoints for 2nd Gen devices:
-read_black_box and write_config
+On Mon, Apr 20, 2020 at 08:21:12PM +0200, Michael Walle wrote:
+> The Broadcom BCM54140 is a Quad SGMII/QSGMII Copper/Fiber Gigabit
+> Ethernet transceiver.
+> 
+> This also adds support for tunables to set and get downshift and
+> energy detect auto power-down.
+> 
+> The PHY has four ports and each port has its own PHY address.
+> There are per-port registers as well as global registers.
+> Unfortunately, the global registers can only be accessed by reading
+> and writing from/to the PHY address of the first port. Further,
+> there is no way to find out what port you actually are by just
+> reading the per-port registers. We therefore, have to scan the
+> bus on the PHY probe to determine the port and thus what address
+> we need to access the global registers.
+> 
+> Signed-off-by: Michael Walle <michael@walle.cc>
 
-Signed-off-by: Grant Peltier <grantpeltier93@gmail.com>
----
- Documentation/hwmon/isl68137.rst | 34 +++++++++++++++++++++++++++++++-
- 1 file changed, 33 insertions(+), 1 deletion(-)
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-diff --git a/Documentation/hwmon/isl68137.rst b/Documentation/hwmon/isl68137.rst
-index 0e71b22047f8..c5f7b2981db6 100644
---- a/Documentation/hwmon/isl68137.rst
-+++ b/Documentation/hwmon/isl68137.rst
-@@ -423,7 +423,8 @@ Beyond the normal sysfs pmbus attributes, the driver exposes a control attribute
- for the ISL68137.
- 
- For 2nd generation Renesas digital multiphase voltage regulators, only the
--normal sysfs pmbus attributes are supported.
-+normal sysfs pmbus attributes are supported. However, 2nd generation devices do
-+have additional debugfs features which are detailed below.
- 
- ISL68137 sysfs attributes
- -------------------------
-@@ -603,3 +604,34 @@ temp[1-7]_crit_alarm	Chip temperature critical high alarm
- temp[1-7]_max		Maximum temperature
- temp[1-7]_max_alarm	Chip temperature high alarm
- ======================= ==========================================
-+
-+debugfs features (Gen 2 ONLY)
-+-----------------------------
-+
-+If you have debugfs enabled, two file endpoints will be created under
-+`/sys/kernel/debug/pmbus/<device-id>` when you instantiate a 2nd generation
-+device: `read_black_box` and `write_config`.
-+
-+`read_black_box` is a read-only file. When read, the driver will attempt to read
-+the contents of the device's fault recording RAM segment called "Black Box". The
-+RAM segment is then printed to the file as hex formatted strings. For easier
-+consumption, the 128-byte segment is broken up into 32 4-byte little-endian
-+lines (i.e. each line starts with the least significant byte). See your device's
-+datasheet for information regarding how to parse the data.
-+
-+.. warning::
-+    When using `write_config`, only use hex files as they are exported from the
-+    Renesas Power Navigator application:
-+    https://www.renesas.com/us/en/products/power-management/digital-power/powernavigator.html
-+
-+`write_config` is a write-only file. This endpoint expects the contents of a
-+configuration hex file specific to your device exactly as it is exported from
-+the Renesas Power Navigator application. When this endpoint is written to, the
-+driver will attempt to write the contents of the file down to one or more of the
-+device's NVM slots and will return a standard error code if any part of the
-+process fails. Be careful when using this feature as writing an unstable
-+configuration to your device may may cause it to misbehave. Each device also has
-+a fixed number of NVM writes allowed. Consult the datasheet for your device for
-+more information about NVM configuration options. Finally, note that you will
-+have to power cycle your device in order for NVM configuration changes to take
-+effect.
--- 
-2.20.1
-
+    Andrew
