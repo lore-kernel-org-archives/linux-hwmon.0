@@ -2,150 +2,340 @@ Return-Path: <SRS0=7kdz=6E=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A11FCC3A5A0
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Apr 2020 15:10:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95680C54FCB
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Apr 2020 15:28:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 578412074F
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Apr 2020 15:10:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 67A6220B1F
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Apr 2020 15:28:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="GXh55I+p"
+	dkim=pass (2048-bit key) header.d=gateworks-com.20150623.gappssmtp.com header.i=@gateworks-com.20150623.gappssmtp.com header.b="E/d4gQIi"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729391AbgDTPKX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 20 Apr 2020 11:10:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55758 "EHLO
+        id S1726806AbgDTP2d (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 20 Apr 2020 11:28:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726905AbgDTPKW (ORCPT
+        with ESMTP id S1726756AbgDTP2c (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 20 Apr 2020 11:10:22 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9BE0C061A0C;
-        Mon, 20 Apr 2020 08:10:22 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 5491423058;
-        Mon, 20 Apr 2020 17:10:20 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1587395421;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0ltuHb7l1+7HEhaCHMWAHJsVLlBWvFM9cUwwU6Q/+H8=;
-        b=GXh55I+p1XeHFEEJ6lgxqTmXqMK/e3uuEU+gkGUFZobafGr56JCOwSt3Ejd2lU/MFAVeNe
-        zF9AjRTaLC3ZhH6pvE07AhQcKnziOrFttyI5FSynVv5TDOORoeDisFYhDCf/1KAvvcTqnp
-        hiS2S5vSYapB9uU8mmb0/8a4s2CVQg4=
+        Mon, 20 Apr 2020 11:28:32 -0400
+Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C022C061A10
+        for <linux-hwmon@vger.kernel.org>; Mon, 20 Apr 2020 08:28:31 -0700 (PDT)
+Received: by mail-ot1-x341.google.com with SMTP id m18so8428594otq.9
+        for <linux-hwmon@vger.kernel.org>; Mon, 20 Apr 2020 08:28:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gateworks-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Pdhitu/GA13B0b+pKwpEIsLq4K1KtaHyPOEGx43ocN4=;
+        b=E/d4gQIiqdJcRaikcAjbAfHFdIwMplawIg6BdNW/RmRpg0TeBBclMy/2L8Pikcyp3h
+         5txC5GRIKZparX3RXZHhl24WjcltJuF7gvhG/VFg27b7mQCZnJBvtJXckl/9gEBCuLXd
+         mLh4fO6XRc7B5tLtTDooYRSikQNMwnraigxd65oHtBcKCWBRLy5t5hweFvRNOQ4OF8Uu
+         hMrJW14RkCGMO0t7KVf5Fox3yDL/8TwxXUXGwUYn6yiRNqNxYiROBW7iGszagGDajSXB
+         TTJE9lOcGrwjHw5EwYG1E3QjzqCwyCAjwwSHxemIrP+wDMHlXaxua/np7rMuaE/Wnir3
+         BVPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Pdhitu/GA13B0b+pKwpEIsLq4K1KtaHyPOEGx43ocN4=;
+        b=SRJBhQ4RYmCHUeGczCWeTORl65rRxGAW1N0mdYVdYxP1PWojfcXfbHWzIZhYJAGTeG
+         +aXQPDg5FIpIlIkBGPmCjjzDYH5KWg6cFZlLjrEoHqcoV4H0avTCVulcH7xCP+pS39i7
+         uVktigMGeduLfq2b27Y3vHbg8LZcRsPTPi0pQq9P6N87gwvmHSX6H2mwVAXze3KwYy37
+         w4JShXtvZ4A9O6tP6P8MsuUGqOOkaqoTdaKsSsfwBkQTHjDSX+q7OvPvpa3HI3lO+dtR
+         L7fOeQf2WUBpKzwD+a6dpr7Jd+/OdCPsSYVrIRGsAr5q9L2n/6OYUaYa3oWPwVMvM8dw
+         8LEw==
+X-Gm-Message-State: AGi0Pubs+a48NVH5PY651YxemstRZh4gfl/YRPn4PxI9qAUWQmb8fcQp
+        TbKBrcdnEhQJK/Wr8DRI2+qKHCGRPvJrwBzdLusong==
+X-Google-Smtp-Source: APiQypKljkdmPJSFbCodFsRJPlON7rGbbY1ej40phxYNyRoBtjH9cv47s6AEwc6+8FPADLordGEzaxl4nbbBuoFonCI=
+X-Received: by 2002:a9d:7dd8:: with SMTP id k24mr4846402otn.33.1587396510050;
+ Mon, 20 Apr 2020 08:28:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Mon, 20 Apr 2020 17:10:19 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+References: <1585341214-25285-1-git-send-email-tharvey@gateworks.com>
+ <1585341214-25285-2-git-send-email-tharvey@gateworks.com> <20200417095831.GI2167633@dell>
+In-Reply-To: <20200417095831.GI2167633@dell>
+From:   Tim Harvey <tharvey@gateworks.com>
+Date:   Mon, 20 Apr 2020 08:28:17 -0700
+Message-ID: <CAJ+vNU32JcADb-p4+rpX5fzA8PkfknMr0Qd-UCMs-6AxLRGc5w@mail.gmail.com>
+Subject: Re: [PATCH v8 1/3] dt-bindings: mfd: Add Gateworks System Controller bindings
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH net-next 3/3] net: phy: bcm54140: add hwmon support
-In-Reply-To: <20200419215549.GR836632@lunn.ch>
-References: <20200417195003.GG785713@lunn.ch>
- <35d00dfe1ad24b580dc247d882aa2e39@walle.cc>
- <20200417201338.GI785713@lunn.ch>
- <84679226df03bdd8060cb95761724d3a@walle.cc>
- <20200417212829.GJ785713@lunn.ch>
- <4f3ff33f78472f547212f87f75a37b66@walle.cc>
- <20200419162928.GL836632@lunn.ch>
- <ebc026792e09d5702d031398e96d34f2@walle.cc>
- <20200419170547.GO836632@lunn.ch>
- <0f7ea4522a76f977f3aa3a80dd62201d@walle.cc>
- <20200419215549.GR836632@lunn.ch>
-Message-ID: <75428c5faab7fc656051ab227663e6e6@walle.cc>
-X-Sender: michael@walle.cc
-User-Agent: Roundcube Webmail/1.3.10
-X-Spamd-Bar: +
-X-Rspamd-Server: web
-X-Rspamd-Queue-Id: 5491423058
-X-Spamd-Result: default: False [1.40 / 15.00];
-         FROM_HAS_DN(0.00)[];
-         TO_DN_SOME(0.00)[];
-         FREEMAIL_ENVRCPT(0.00)[gmail.com];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         TAGGED_RCPT(0.00)[];
-         MIME_GOOD(-0.10)[text/plain];
-         DKIM_SIGNED(0.00)[];
-         RCPT_COUNT_SEVEN(0.00)[10];
-         NEURAL_HAM(-0.00)[-0.969];
-         RCVD_COUNT_ZERO(0.00)[0];
-         FROM_EQ_ENVFROM(0.00)[];
-         MIME_TRACE(0.00)[0:+];
-         FREEMAIL_CC(0.00)[vger.kernel.org,suse.com,roeck-us.net,gmail.com,armlinux.org.uk,davemloft.net];
-         MID_RHS_MATCH_FROM(0.00)[];
-         SUSPICIOUS_RECIPS(1.50)[]
+        Linux HWMON List <linux-hwmon@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Device Tree Mailing List <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Robert Jones <rjones@gateworks.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Andrew,
+On Fri, Apr 17, 2020 at 2:57 AM Lee Jones <lee.jones@linaro.org> wrote:
+>
+> On Fri, 27 Mar 2020, Tim Harvey wrote:
+>
+> > This patch adds documentation of device-tree bindings for the
+> > Gateworks System Controller (GSC).
+> >
+> > Signed-off-by: Tim Harvey <tharvey@gateworks.com>
 
-Am 2020-04-19 23:55, schrieb Andrew Lunn:
->> But what does that have to do with the shared structure? I don't think
->> you have to "bundle" the shared structure with the "access the global
->> registers" method.
-> 
-> We don't need to. But it would be a good way to clean up code which
-> locks the mdio bus, does a register access on some other device, and
-> then unlocks the bus.
+<snip>
 
-I'd like do an RFC for that. But how should I proceed with the original
-patch series? Should I send an updated version; you didn't reply to the
-LED stuff. That is the last remark for now.
+> > ---
+> >  .../devicetree/bindings/mfd/gateworks-gsc.yaml     | 194 +++++++++++++++++++++
+> >  1 file changed, 194 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml b/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
+> > new file mode 100644
+> > index 00000000..a96751c9
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
+> > @@ -0,0 +1,194 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/mfd/gateworks-gsc.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Gateworks System Controller multi-function device
+>
+> I'd prefer if you didn't use Linuxisums in DT docs.
+>
+> A 'multi-function device' isn't a thing - we made it up.
+>
+> Nowhere in the documentation [0] is the Gateworks System Controller
+> described as a multi-function device.
+>
+> [0] http://trac.gateworks.com/wiki/gsc
+>
+> > +description: |
+> > +  The GSC is a Multifunction I2C slave device with the following submodules:
+>
+> No it isn't.  It's a:
+>
+>   "The Gateworks System Controller (GSC) is a device present across
+>    various Gateworks product families that provides a set of system
+>    related feature such as the following (refer to the board hardware
+>    user manuals to see what features are present)"
+>
+> > +   - Watchdog Timer
+> > +   - GPIO
+> > +   - Pushbutton controller
+> > +   - Hardware Monitor with ADC's for temperature and voltage rails and
+> > +     fan controller
+>
+> Why is "Monitor" capitalised, but "controller" is not?
+>
+> I would s/Monitor/monitor/ here.
+>
+> > +maintainers:
+> > +  - Tim Harvey <tharvey@gateworks.com>
+> > +  - Robert Jones <rjones@gateworks.com>
+> > +
+> > +properties:
+> > +  $nodename:
+> > +    pattern: "gsc@[0-9a-f]{1,2}"
+> > +  compatible:
+> > +    const: gw,gsc
+> > +
+> > +  reg:
+> > +    description: I2C device address
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  interrupt-controller: true
+> > +
+> > +  "#interrupt-cells":
+> > +    const: 1
+> > +
+> > +  "#address-cells":
+> > +    const: 1
+> > +
+> > +  "#size-cells":
+> > +    const: 0
+> > +
+> > +  adc:
+> > +    type: object
+> > +    description: Optional Hardware Monitoring module
+>
+> Again, an odd thing to capitalise.
+>
+> > +    properties:
+> > +      compatible:
+> > +        const: gw,gsc-adc
+> > +
+> > +      "#address-cells":
+> > +        const: 1
+> > +
+> > +      "#size-cells":
+> > +        const: 0
+> > +
+> > +    patternProperties:
+> > +      "^channel@[0-9]+$":
+> > +        type: object
+> > +        description: |
+> > +          Properties for a single ADC which can report cooked values
+> > +          (ie temperature sensor based on thermister), raw values
+> > +          (ie voltage rail with a pre-scaling resistor divider).
+>
+> /ie/i.e./
+>
+> > +        properties:
+> > +          reg:
+> > +            description: Register of the ADC
+> > +            maxItems: 1
+> > +
+> > +          label:
+> > +            description: Name of the ADC input
+> > +
+> > +          gw,mode:
+> > +            description: |
+> > +              conversion mode:
+> > +                0 - temperature, in C*10
+> > +                1 - pre-scaled voltage value
+> > +                2 - scaled voltage based on an optional resistor divider
+> > +                    and optional offset
+> > +            allOf:
+> > +              - $ref: /schemas/types.yaml#/definitions/uint32
+>
+> Rob just submitted a patch-set to remove 'allOf's from '$ref'
+> properties.
+>
+> > +            enum: [0, 1, 2]
+> > +
+> > +          gw,voltage-divider-ohms:
+> > +            description: values of resistors for divider on raw ADC input
+>
+> s/values/Values/
+>
+> > +            maxItems: 2
+> > +            items:
+> > +             minimum: 1000
+> > +             maximum: 1000000
+> > +
+> > +          gw,voltage-offset-microvolt:
+> > +            description: |
+> > +              A positive voltage offset to apply to a raw ADC
+> > +              (ie to compensate for a diode drop).
+>
+> s/ie/i.e/
+>
+> > +            minimum: 0
+> > +            maximum: 1000000
+> > +
+> > +        required:
+> > +          - gw,mode
+> > +          - reg
+> > +          - label
+> > +
+> > +    required:
+> > +      - compatible
+> > +      - "#address-cells"
+> > +      - "#size-cells"
+> > +
+> > +patternProperties:
+> > +  "^fan-controller@[0-9a-f]+$":
+> > +    type: object
+> > +    description: Optional FAN controller
+>
+> "Fan"
+>
+> > +    properties:
+> > +      compatible:
+> > +        const: gw,gsc-fan
+> > +
+> > +      "#address-cells":
+> > +        const: 1
+> > +
+> > +      "#size-cells":
+> > +        const: 0
+> > +
+> > +      reg:
+> > +        description: The fan controller base address
+> > +        maxItems: 1
+> > +
+> > +    required:
+> > +      - compatible
+> > +      - reg
+> > +      - "#address-cells"
+> > +      - "#size-cells"
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - interrupts
+> > +  - interrupt-controller
+> > +  - "#interrupt-cells"
+> > +  - "#address-cells"
+> > +  - "#size-cells"
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/gpio/gpio.h>
+> > +    i2c {
+> > +        #address-cells = <1>;
+> > +        #size-cells = <0>;
+> > +
+> > +        gsc@20 {
+> > +            compatible = "gw,gsc";
+> > +            reg = <0x20>;
+> > +            interrupt-parent = <&gpio1>;
+> > +            interrupts = <4 GPIO_ACTIVE_LOW>;
+> > +            interrupt-controller;
+> > +            #interrupt-cells = <1>;
+> > +            #address-cells = <1>;
+> > +            #size-cells = <0>;
+> > +
+> > +            adc {
+> > +                compatible = "gw,gsc-adc";
+> > +                #address-cells = <1>;
+> > +                #size-cells = <0>;
+> > +
+> > +                channel@0 { /* A0: Board Temperature */
+> > +                    reg = <0x00>;
+> > +                    label = "temp";
+> > +                    gw,mode = <0>;
+> > +                };
+> > +
+> > +                channel@2 { /* A1: Input Voltage (raw ADC) */
+> > +                    reg = <0x02>;
+> > +                    label = "vdd_vin";
+> > +                    gw,mode = <1>;
+> > +                    gw,voltage-divider-ohms = <22100 1000>;
+> > +                    gw,voltage-offset-microvolt = <800000>;
+> > +                };
+> > +
+> > +                channel@b { /* A2: Battery voltage */
+> > +                    reg = <0x0b>;
+> > +                    label = "vdd_bat";
+> > +                    gw,mode = <1>;
+> > +                };
+> > +            };
+> > +
+> > +            fan-controller@2c {
+> > +                #address-cells = <1>;
+> > +                #size-cells = <0>;
+> > +                compatible = "gw,gsc-fan";
+> > +                reg = <0x2c>;
+> > +            };
+> > +        };
+> > +    };
+>
 
-> As a general rule of thumb, it is better to have the core do the
-> locking, rather than the driver. Driver writers don't always think
-> about locking, so it is better to give driver writers safe APIs to
-> use.
+Lee,
 
-Ok I see, but what locking do you have in mind? We could have something
-like
+Thanks for the review. I will send a v9 once you have had time to
+review the mfd driver patch in this series.
 
-__phy_package_write(struct phy_device *dev, u32 regnum, u16 val)
-{
-   return __mdiobus_write(phydev->mdio.bus, phydev->shared->addr,
-                          regnum, val);
-}
+Best Regards,
 
-and its phy_package_write() equivalent. But that would just be
-convenience functions, nothing where you actually help the user with
-locking. Am I missing something?
-
->>> Get the core to do reference counting on the structure?
->>> Add helpers phy_read_shared(), phy_write_shared(), etc, which does
->>> MDIO accesses on the base device, taking care of the locking.
->>> 
->> The "base" access is another thing, I guess, which has nothing to do
->> with the shared structure.
->> 
-> I'm making the assumption that all global addresses are at the base
-> address. If we don't want to make that assumption, we need the change
-> the API above so you pass a cookie, and all PHYs need to use the same
-> cookie to identify the package.
-
-how would a phy driver deduce a common cookie? And how would that be a
-difference to using a PHY address.
-
-> Maybe base is the wrong name, since MSCC can have the base as the high
-> address of the four, not the low?
-
-I'd say it might be any of the four addresses as long as it is the same
-across the PHYs in the same package. And in that case you can also have
-the phy_package_read/write() functions.
-
--michael
+Tim
