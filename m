@@ -2,59 +2,60 @@ Return-Path: <SRS0=7kdz=6E=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D054AC3815B
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Apr 2020 16:11:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0904C3815B
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Apr 2020 17:20:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A88802074F
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Apr 2020 16:11:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 943DA20B1F
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Apr 2020 17:20:30 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="Gft4E8gY"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="Ie5TFC4x"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726036AbgDTQLZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 20 Apr 2020 12:11:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37222 "EHLO
+        id S1726296AbgDTRUa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 20 Apr 2020 13:20:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725958AbgDTQLZ (ORCPT
+        by vger.kernel.org with ESMTP id S1726013AbgDTRUa (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 20 Apr 2020 12:11:25 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E72ADC061A0C;
-        Mon, 20 Apr 2020 09:11:24 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 24DB823058;
-        Mon, 20 Apr 2020 18:11:23 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1587399083;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JV6/yxI0hnc0gvSbIatDYRHmoDSkrGEsV3XUSagw0bk=;
-        b=Gft4E8gYE1Lgsbzo3T45DiSRrqtW8EXgO1MzjtcCpkpzeNmTcz9ooabT2uU5w+5DEq1jiB
-        Fm2CW2M+hAkXy/yB6/MppZvOKIVGP+qyL8twG3E2QEaWi6pe5VB8nmJZ+has2k0UFwuWs5
-        zegzfvshTGmk6r02tUYBRwmwFvYHTbU=
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Mon, 20 Apr 2020 18:11:22 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Mon, 20 Apr 2020 13:20:30 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:3201:214:fdff:fe10:1be6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC37C061A0C;
+        Mon, 20 Apr 2020 10:20:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=d8hn8TYhXkanozCI896xHfztLh3G1m8lpd0qQJenmuE=; b=Ie5TFC4xXLvpH8VIdZhJgD/vQ
+        U0UnL3buhmistVbJaceQe2O08t0R8ajzlMqcANzrvhpG7EVkigE99IQIPz3V21WX7wXNlCAWbbMg+
+        KacUXQy44xapf7PVhh6B1RCbSqXheTXfugi9pzz/TTW33QFoxAqUov3nKP1dUV9CRISq5YoV5ghrx
+        rD2eDKRilSdZiaks8OJHTv47vE1YMWE2b7KqwcsRi15gvUfmm6bWCBvE1GZ7xEdsB4M8v+TpHf9wc
+        k6fPgbq22LikuV14yTqjXD1DOX/TvSXJkhxDqsC3tN5kXgezZ2+SzwXbtb13DjMhMBjzZwDiPn8xT
+        Dle/kOZKA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:52812)
+        by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.90_1)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1jQa5i-0004i2-Nw; Mon, 20 Apr 2020 18:20:18 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1jQa5d-00060E-8D; Mon, 20 Apr 2020 18:20:13 +0100
+Date:   Mon, 20 Apr 2020 18:20:13 +0100
+From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Andrew Lunn <andrew@lunn.ch>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
         "David S . Miller" <davem@davemloft.net>
 Subject: Re: [PATCH net-next 3/3] net: phy: bcm54140: add hwmon support
-In-Reply-To: <20200420153625.GA917792@lunn.ch>
+Message-ID: <20200420172013.GZ25745@shell.armlinux.org.uk>
 References: <20200417201338.GI785713@lunn.ch>
  <84679226df03bdd8060cb95761724d3a@walle.cc>
  <20200417212829.GJ785713@lunn.ch>
@@ -65,93 +66,42 @@ References: <20200417201338.GI785713@lunn.ch>
  <0f7ea4522a76f977f3aa3a80dd62201d@walle.cc>
  <20200419215549.GR836632@lunn.ch>
  <75428c5faab7fc656051ab227663e6e6@walle.cc>
- <20200420153625.GA917792@lunn.ch>
-Message-ID: <00e8c608daac498623643e8f769f80a6@walle.cc>
-X-Sender: michael@walle.cc
-User-Agent: Roundcube Webmail/1.3.10
-X-Spamd-Bar: +
-X-Rspamd-Server: web
-X-Rspamd-Queue-Id: 24DB823058
-X-Spamd-Result: default: False [1.40 / 15.00];
-         FROM_HAS_DN(0.00)[];
-         TO_DN_SOME(0.00)[];
-         FREEMAIL_ENVRCPT(0.00)[gmail.com];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         TAGGED_RCPT(0.00)[];
-         MIME_GOOD(-0.10)[text/plain];
-         DKIM_SIGNED(0.00)[];
-         RCPT_COUNT_SEVEN(0.00)[10];
-         NEURAL_HAM(-0.00)[-0.970];
-         RCVD_COUNT_ZERO(0.00)[0];
-         FROM_EQ_ENVFROM(0.00)[];
-         MIME_TRACE(0.00)[0:+];
-         FREEMAIL_CC(0.00)[vger.kernel.org,suse.com,roeck-us.net,gmail.com,armlinux.org.uk,davemloft.net];
-         MID_RHS_MATCH_FROM(0.00)[];
-         SUSPICIOUS_RECIPS(1.50)[]
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <75428c5faab7fc656051ab227663e6e6@walle.cc>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Am 2020-04-20 17:36, schrieb Andrew Lunn:
->> Ok I see, but what locking do you have in mind? We could have 
->> something
->> like
->> 
->> __phy_package_write(struct phy_device *dev, u32 regnum, u16 val)
->> {
->>   return __mdiobus_write(phydev->mdio.bus, phydev->shared->addr,
->>                          regnum, val);
->> }
->> 
->> and its phy_package_write() equivalent. But that would just be
->> convenience functions, nothing where you actually help the user with
->> locking. Am I missing something?
+On Mon, Apr 20, 2020 at 05:10:19PM +0200, Michael Walle wrote:
+> Hi Andrew,
 > 
-> In general, drivers should not be using __foo functions. We want
-> drivers to make use of phy_package_write() which would do the bus
-> locking. Look at a typical PHY driver. There is no locking what so
-> ever. Just lots of phy_read() and phy write(). The locking is done by
-> the core and so should be correct.
-
-Ok, but for example the BCM54140 uses indirect register access and thus
-need to lock the mdio bus itself in which case I need the __funcs.
-
->> > > > Get the core to do reference counting on the structure?
->> > > > Add helpers phy_read_shared(), phy_write_shared(), etc, which does
->> > > > MDIO accesses on the base device, taking care of the locking.
->> > > >
->> > > The "base" access is another thing, I guess, which has nothing to do
->> > > with the shared structure.
->> > >
->> > I'm making the assumption that all global addresses are at the base
->> > address. If we don't want to make that assumption, we need the change
->> > the API above so you pass a cookie, and all PHYs need to use the same
->> > cookie to identify the package.
->> 
->> how would a phy driver deduce a common cookie? And how would that be a
->> difference to using a PHY address.
+> Am 2020-04-19 23:55, schrieb Andrew Lunn:
+> > > But what does that have to do with the shared structure? I don't think
+> > > you have to "bundle" the shared structure with the "access the global
+> > > registers" method.
+> > 
+> > We don't need to. But it would be a good way to clean up code which
+> > locks the mdio bus, does a register access on some other device, and
+> > then unlocks the bus.
 > 
-> For a cookie, i don't care how the driver decides on the cookie. The
-> core never uses it, other than comparing cookies to combine individual
-> PHYs into a package. It could be a PHY address. It could be the PHY
-> address where the global registers are. Or it could be anything else.
-> 
->> > Maybe base is the wrong name, since MSCC can have the base as the high
->> > address of the four, not the low?
->> 
->> I'd say it might be any of the four addresses as long as it is the 
->> same
->> across the PHYs in the same package. And in that case you can also 
->> have
->> the phy_package_read/write() functions.
-> 
-> Yes. That is the semantics which is think is most useful. But then we
-> don't have a cookie, the value has real significance, and we need to
-> document what is should mean.
+> I'd like do an RFC for that. But how should I proceed with the original
+> patch series? Should I send an updated version; you didn't reply to the
+> LED stuff. That is the last remark for now.
 
-Agreed.
+The LED stuff is something that there isn't a solution for at the
+moment.  There's been talk about coming up with some generic way
+to describe the PHY LED configuration in DT, but given that almost
+every PHY has quite different ways to configure LEDs, I fear such
+a task is virtually impossible.
 
-I will post a RFC shortly.
+Very few PHYs under Linux have their LEDs operating "correctly" or
+in a meaningful or sensible way because of this, and it's been this
+way for years.
 
--michael
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTC broadband for 0.8mile line in suburbia: sync at 10.2Mbps down 587kbps up
