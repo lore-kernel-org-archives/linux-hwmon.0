@@ -2,137 +2,150 @@ Return-Path: <SRS0=7kdz=6E=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7428CC3815B
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Apr 2020 10:51:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A11FCC3A5A0
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Apr 2020 15:10:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4FD23206B9
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Apr 2020 10:51:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 578412074F
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Apr 2020 15:10:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gR89r3Wf"
+	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="GXh55I+p"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725775AbgDTKvq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 20 Apr 2020 06:51:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43918 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725773AbgDTKvp (ORCPT
+        id S1729391AbgDTPKX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 20 Apr 2020 11:10:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55758 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726905AbgDTPKW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 20 Apr 2020 06:51:45 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3888FC061A0C
-        for <linux-hwmon@vger.kernel.org>; Mon, 20 Apr 2020 03:51:45 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id r17so7518026lff.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 20 Apr 2020 03:51:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6SI13zg+Kyh1UMc/wEsTaUBCcl0+HbmmuPm7W1E/Vqc=;
-        b=gR89r3Wfz0vs+jrEyeMMs8dyc0hw57yS2vSSNgjZDkVC6pomMquXcy3jr6mC7C7PZa
-         I/YEAbRyj2dcy+B/YKzFLoHBYuUNXiyG98xaY2qFn0DsUAOacI68MWAlC/pPU5zq2nEm
-         +L33Ij3jiKVQguymdAhSzFSzdWgXMDWzViHR4dpb+HZadVcHRzLFF8wUWuBTLkDN7brh
-         8UNUQbq3knRfFRHZvNgUEAuJJZO5Oe0zQn+vnldO3Qffivae/ap2TYrfVVgBomTKA8Mw
-         utuxOhjwVoziXHPq40E+8zAOcnmXqkvoxDOGkgoWPq/NWZUrLqRCdN29bvb8GSAivktW
-         Sj7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6SI13zg+Kyh1UMc/wEsTaUBCcl0+HbmmuPm7W1E/Vqc=;
-        b=OxY/TQmcuOYFKJ2vd17JP3NE9MT45P3goAYRre7GDkuvOsen05MMHM5ATpYMOiQPMr
-         Hk34ssuy63XGrZ3EpekjjcSYry57DtlIE5W393gN05KkIhH+TGnXXnV0dCuB6V0z7PQu
-         AHMcrsQPF4w7pvaclcKH1Bc/8G0YZXw5RVId6QTOX0LWzb+aX/fSWPs+mXFx/beWm0qK
-         ufbI+c6BWTUDM+GHIAivwrrcVwtiHv2iR3+RPSLGxxBKnvQk4bpcUZY3CcFm17pZaDmA
-         fLWhhJwNBdklNOT8djn/0elR/LYpu56VIYm1rUgO1do73IekiX76QK+ZTf0Lp4H/0rrS
-         m1kw==
-X-Gm-Message-State: AGi0PuYMuIibUwWw48RFDy1b7eDsnyiUvyhpZTvby3Nf4UlJJCpnMyds
-        Itc4+Czz5bqIQ20TLNWfx65LX7bbjsQHkWx92FU=
-X-Google-Smtp-Source: APiQypKngqYQY1W92/I7C010k4ulnfxNqerTmI0Il7KG3zNEKtcSbSibQt91d1airpvkAU4F4hVOFAs18V3PCOxkSa4=
-X-Received: by 2002:ac2:47f0:: with SMTP id b16mr10355765lfp.81.1587379903665;
- Mon, 20 Apr 2020 03:51:43 -0700 (PDT)
+        Mon, 20 Apr 2020 11:10:22 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9BE0C061A0C;
+        Mon, 20 Apr 2020 08:10:22 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 5491423058;
+        Mon, 20 Apr 2020 17:10:20 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1587395421;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0ltuHb7l1+7HEhaCHMWAHJsVLlBWvFM9cUwwU6Q/+H8=;
+        b=GXh55I+p1XeHFEEJ6lgxqTmXqMK/e3uuEU+gkGUFZobafGr56JCOwSt3Ejd2lU/MFAVeNe
+        zF9AjRTaLC3ZhH6pvE07AhQcKnziOrFttyI5FSynVv5TDOORoeDisFYhDCf/1KAvvcTqnp
+        hiS2S5vSYapB9uU8mmb0/8a4s2CVQg4=
 MIME-Version: 1.0
-References: <20200409153939.38730-1-nchatrad@amd.com> <e0d1a13c-e475-2b9f-c951-92aeb1dce9c0@roeck-us.net>
- <CAHfPSqAsuo+ac49L=f0Bg-iPj5gVQp3MRE9kfjSFysUx7WMHpg@mail.gmail.com>
- <75bc1938-104d-4d53-f46a-247e5ce2d2d2@roeck-us.net> <CAHfPSqDQmQFaN-VqrPLPz8GOGh_4VHq6=4moJQB3eEGPdRfMiA@mail.gmail.com>
- <CAHfPSqD6b-=KPVzHr0TOjrNQd5Sub1JnChGhD_aaR6b5+HO6BQ@mail.gmail.com> <20200412222735.GA232180@roeck-us.net>
-In-Reply-To: <20200412222735.GA232180@roeck-us.net>
-From:   Naveen Krishna Ch <naveenkrishna.ch@gmail.com>
-Date:   Mon, 20 Apr 2020 16:21:32 +0530
-Message-ID: <CAHfPSqBu7rv3UTuwgEXbbwWMv46UMYZAMAcy9FvPwGeEOOWh4A@mail.gmail.com>
-Subject: Re: [PATCH 1/2] hwmon: Add amd_energy driver to report energy counters
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Naveen Krishna Chatradhi <nchatrad@amd.com>,
-        linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Mon, 20 Apr 2020 17:10:19 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH net-next 3/3] net: phy: bcm54140: add hwmon support
+In-Reply-To: <20200419215549.GR836632@lunn.ch>
+References: <20200417195003.GG785713@lunn.ch>
+ <35d00dfe1ad24b580dc247d882aa2e39@walle.cc>
+ <20200417201338.GI785713@lunn.ch>
+ <84679226df03bdd8060cb95761724d3a@walle.cc>
+ <20200417212829.GJ785713@lunn.ch>
+ <4f3ff33f78472f547212f87f75a37b66@walle.cc>
+ <20200419162928.GL836632@lunn.ch>
+ <ebc026792e09d5702d031398e96d34f2@walle.cc>
+ <20200419170547.GO836632@lunn.ch>
+ <0f7ea4522a76f977f3aa3a80dd62201d@walle.cc>
+ <20200419215549.GR836632@lunn.ch>
+Message-ID: <75428c5faab7fc656051ab227663e6e6@walle.cc>
+X-Sender: michael@walle.cc
+User-Agent: Roundcube Webmail/1.3.10
+X-Spamd-Bar: +
+X-Rspamd-Server: web
+X-Rspamd-Queue-Id: 5491423058
+X-Spamd-Result: default: False [1.40 / 15.00];
+         FROM_HAS_DN(0.00)[];
+         TO_DN_SOME(0.00)[];
+         FREEMAIL_ENVRCPT(0.00)[gmail.com];
+         TO_MATCH_ENVRCPT_ALL(0.00)[];
+         TAGGED_RCPT(0.00)[];
+         MIME_GOOD(-0.10)[text/plain];
+         DKIM_SIGNED(0.00)[];
+         RCPT_COUNT_SEVEN(0.00)[10];
+         NEURAL_HAM(-0.00)[-0.969];
+         RCVD_COUNT_ZERO(0.00)[0];
+         FROM_EQ_ENVFROM(0.00)[];
+         MIME_TRACE(0.00)[0:+];
+         FREEMAIL_CC(0.00)[vger.kernel.org,suse.com,roeck-us.net,gmail.com,armlinux.org.uk,davemloft.net];
+         MID_RHS_MATCH_FROM(0.00)[];
+         SUSPICIOUS_RECIPS(1.50)[]
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Guenter,
+Hi Andrew,
 
-On Mon, 13 Apr 2020 at 03:57, Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Mon, Apr 13, 2020 at 01:34:19AM +0530, Naveen Krishna Ch wrote:
-> > Hi Guenter
-> >
-> [ ... ]
-> >
-> > Constraint:
-> > The platform has 2 sets of energy sensors, one at core level, one at
-> > socket level.
-> > If i populate the chip_info type as "hwmon_energy" for both sensors.
-> > The naming of the sysfs entries are going to be continuous and the
-> > user application
-> > should read the label to identify which entry belongs to which sensor set.
-> >
->
-> I am a bit at loss. what is the problem with having multiple _energy attributes
-> (energy1_input, energy2_input, ..., energy100_input) ?
->
-> > Possible solutions :
-> > I could think of following ways to avoid this
-> > 1. Create 2 different hwmon devices
->
-> You could do that, following the approach used by the k10temp driver. This is
-> really your call. The question in that case, though, would be why you would want
-> have a separate driver to start with and not just enhance the k10temp driver to
-> also report energy (and power consumption, though I understand that the registers
-> reporting it are not published).
->
-> > 2. Use "hwmon_in" as type for one of the sensor sets and
-> > "hwmon_energy" for other.
->
-> _in is for voltages. Please don't tell me you plan to report voltages with this
-> driver. If so, please extend the k10temp driver instead.
->
-> > 3. Use "groups" for one of the sensor sets and populate the other via chip.
->
-> This is a no-go.
->
-> > What do you suggest ?
-> >
-> > Also, I noticed that the sysfs filename index for the hwmon_energy
-> > type is starting with 1,
-> > while hwmon_in starts with 0. Was this a design choice ?
->
-> I think this was mostly historic, but it preceeds my involvement with the
-> hwmon subsystem, so I don't really know.
+Am 2020-04-19 23:55, schrieb Andrew Lunn:
+>> But what does that have to do with the shared structure? I don't think
+>> you have to "bundle" the shared structure with the "access the global
+>> registers" method.
+> 
+> We don't need to. But it would be a good way to clean up code which
+> locks the mdio bus, does a register access on some other device, and
+> then unlocks the bus.
 
-Thanks for your inputs, i've submitted V2 version of the patch with your
-comments addressed. Could you please review them and let us know your opinion.
+I'd like do an RFC for that. But how should I proceed with the original
+patch series? Should I send an updated version; you didn't reply to the
+LED stuff. That is the last remark for now.
 
-https://lore.kernel.org/linux-hwmon/20200417190459.233179-1-nchatrad@amd.com/T/#t
+> As a general rule of thumb, it is better to have the core do the
+> locking, rather than the driver. Driver writers don't always think
+> about locking, so it is better to give driver writers safe APIs to
+> use.
 
->
-> Guenter
+Ok I see, but what locking do you have in mind? We could have something
+like
 
+__phy_package_write(struct phy_device *dev, u32 regnum, u16 val)
+{
+   return __mdiobus_write(phydev->mdio.bus, phydev->shared->addr,
+                          regnum, val);
+}
 
+and its phy_package_write() equivalent. But that would just be
+convenience functions, nothing where you actually help the user with
+locking. Am I missing something?
 
--- 
-Shine bright,
-(: Nav :)
+>>> Get the core to do reference counting on the structure?
+>>> Add helpers phy_read_shared(), phy_write_shared(), etc, which does
+>>> MDIO accesses on the base device, taking care of the locking.
+>>> 
+>> The "base" access is another thing, I guess, which has nothing to do
+>> with the shared structure.
+>> 
+> I'm making the assumption that all global addresses are at the base
+> address. If we don't want to make that assumption, we need the change
+> the API above so you pass a cookie, and all PHYs need to use the same
+> cookie to identify the package.
+
+how would a phy driver deduce a common cookie? And how would that be a
+difference to using a PHY address.
+
+> Maybe base is the wrong name, since MSCC can have the base as the high
+> address of the four, not the low?
+
+I'd say it might be any of the four addresses as long as it is the same
+across the PHYs in the same package. And in that case you can also have
+the phy_package_read/write() functions.
+
+-michael
