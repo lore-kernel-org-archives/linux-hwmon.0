@@ -7,66 +7,67 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDCE6C2BA19
-	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Apr 2020 08:01:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AB63C55181
+	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Apr 2020 08:01:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AECB420B1F
-	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Apr 2020 08:01:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 393DA21D79
+	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Apr 2020 08:01:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="masfNwGS"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="dGTNCcnG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726691AbgDUIB2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 21 Apr 2020 04:01:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45056 "EHLO
+        id S1728315AbgDUIB3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 21 Apr 2020 04:01:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728315AbgDUIBT (ORCPT
+        with ESMTP id S1728276AbgDUIBQ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 21 Apr 2020 04:01:19 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4CBEC061A41
-        for <linux-hwmon@vger.kernel.org>; Tue, 21 Apr 2020 01:01:18 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id x4so2482411wmj.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 21 Apr 2020 01:01:18 -0700 (PDT)
+        Tue, 21 Apr 2020 04:01:16 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B6FC0610D5
+        for <linux-hwmon@vger.kernel.org>; Tue, 21 Apr 2020 01:01:15 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id t14so15288103wrw.12
+        for <linux-hwmon@vger.kernel.org>; Tue, 21 Apr 2020 01:01:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=exntrZVDrpNC4LfoF62zE8ED3Dungiic5pvW3+dqcrE=;
-        b=masfNwGS8IZQ2541J1dwhk8GqCR2J55vlrTQssHEbTO9xZSvKw4jZzjNLJV4v1DYeg
-         ubBwEzmaUyKD/nAjdgA2nIZ319L0eXWUFqw/8EGufNzLxABbA23/YIVLCBbCfBHqn1h1
-         I8SnrdHtfrIDDG340w1zg/i66dRkz3EJ3pQzdTFMN65wwpFiUkRb6Mpfim9Dcx+6InWS
-         hT8QIS2zrVKTrr9+5cLP7YFB2d0W2BN9mko24jNiwAw1B7b9/521qmpA/S+8J7fcAhDK
-         SNd1tyts0TZBlubdtb8U1OEkIt8DMPHul1Lmd+0eiBGcfKaIooeFH0AiLWhFp+u2O3U6
-         Yw4g==
+        bh=8x2qbrmvJrvzLhSdZyiezkJo4hKvmqVH04B778IZt90=;
+        b=dGTNCcnGr7YtPFf7J6XDaRYOU2CiBaCJhYNx09RmlAPeojd7c14ojBOwblaGyqje5J
+         WlHC8CdEZ5ZGd2aGNslxywnwSLnzXx66X945Y1gGFesYLDy7pTBXaZVH2xHQ2llnHRJE
+         vDYT9lWrKI+Xl6GV5za29OV/+p9Lnm7qhD7moZpHDPwhUYzF301asuOKHkFSC0FrJ5eb
+         8Coh7+dbLi4ywxt7d0Wxl/e2rvqbPOGO+/6LRv7cJrOZkSqXFinuBl0ytSHkNtPqWvOM
+         sTPL5jKQ/j4QtCgLNgZYIl92+Xf5k0fU8Bdgrv98mdvjRzX4hbDwRD5PWihG8IOAlhAA
+         UdBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=exntrZVDrpNC4LfoF62zE8ED3Dungiic5pvW3+dqcrE=;
-        b=R8cPou3fpPcryxdoAfIdINszUJpk68kH7vLKiVwst8Fz+DFVNvEorRIlKekUdjsQ/i
-         t7bSrlm7Gr+4OekY2nX4n5+XkalG5A5ZUoy8ukPK1wtBOKMTjP7Ny2WOei279Ij/tq3O
-         Tl1Zfc089Oj/jEcNBBnhx8voEdPP2hrEx2Jn/slrwJlfn1zd0wfNbguRdEicDVDH48Gc
-         7pHDQ3VmoNg5s1zsMYNX+RhUFSqmHabSs85ZJPmRKXJYbzR9/reYTq1SiZIHsA4qSRbd
-         aXpA4i84LCtJe7XKpGA+uaLUL0uVtYZRtsk0ZpV0hLOwLy7CdTHDRjF60fs2QQbMssoJ
-         Gr6Q==
-X-Gm-Message-State: AGi0PuaJDiet/W2XcEyVPP+CeuPVm4hyFkDD9WXXEYIR+NpUjDA4M0ua
-        aItV2qgBNIDV5ecnqy1GIcEacQ==
-X-Google-Smtp-Source: APiQypI9h94l+CZXcEb1aZ/OgizCqV8es3Sa3eybeGWtzOeDjtlLjSkfJia1v7tSyR5sX8sej1M55w==
-X-Received: by 2002:a1c:96c6:: with SMTP id y189mr3785930wmd.106.1587456077312;
-        Tue, 21 Apr 2020 01:01:17 -0700 (PDT)
+        bh=8x2qbrmvJrvzLhSdZyiezkJo4hKvmqVH04B778IZt90=;
+        b=HMJj8gxEpWBIuiZK4TJTVBLrrHKq7tZXZ9CkoPq4EX1g/w87yFg++SrDNApXwZMSAP
+         Viz/rkAKqEBVFBatV1ZeGfFnrMafxeZJQEcLc1loEfYkk9PpZyEndWcukomrSW5kpH6r
+         VwVh9OhK/YOEBPZAgBE9F8qjiENPpyTww5wBDmoX/LE1c1LmiYCJ+aT4TA5xayCqKZKo
+         vmv2+OtjGCi0kHKKLfEc/lka8R1SopeURegbikw9u0VGwrbXjqGv/lUfqg5FB4ypLr9E
+         xEF2V+Wj2LKfUuUi3lHuhIQb6jY08sUC3YFKJb6jNHa9yqzao4eXx8h1m4TOWAle6jss
+         l05g==
+X-Gm-Message-State: AGi0PuYyNfzjdVdTBI5J3+YrFN8maRqSF92VfKXJ+1+XEPsXYn+JMFkX
+        OZ1TgEkkgNB2Vz3oNRqH3G6sb594FWk=
+X-Google-Smtp-Source: APiQypIiWqXPmC/5mQtYcIdPcfFDsrYy87KwONuuyBh3FM0Eo21Qb7uC8L4gifzvCSJ9ml9PyD7LFQ==
+X-Received: by 2002:a5d:4381:: with SMTP id i1mr22202504wrq.194.1587456074451;
+        Tue, 21 Apr 2020 01:01:14 -0700 (PDT)
 Received: from localhost.localdomain ([2a01:e35:2ec0:82b0:39cc:a07:8b48:cc56])
-        by smtp.gmail.com with ESMTPSA id x132sm2561552wmg.33.2020.04.21.01.01.16
+        by smtp.gmail.com with ESMTPSA id x132sm2561552wmg.33.2020.04.21.01.01.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Apr 2020 01:01:16 -0700 (PDT)
+        Tue, 21 Apr 2020 01:01:13 -0700 (PDT)
 From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     khilman@baylibre.com
+To:     lee.jones@linaro.org, jdelvare@suse.com, linux@roeck-us.net,
+        srinivas.kandagatla@linaro.org
 Cc:     nick@khadas.com, art@khadas.com,
         Neil Armstrong <narmstrong@baylibre.com>,
         linux-amlogic@lists.infradead.org, linux-hwmon@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [RFC 7/8] arm64: dts: meson-sm1: add cpu thermal nodes
-Date:   Tue, 21 Apr 2020 10:01:01 +0200
-Message-Id: <20200421080102.22796-8-narmstrong@baylibre.com>
+Subject: [RFC 5/8] MAINTAINERS: add myself as maintainer for Khadas MCU drivers
+Date:   Tue, 21 Apr 2020 10:00:59 +0200
+Message-Id: <20200421080102.22796-6-narmstrong@baylibre.com>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20200421080102.22796-1-narmstrong@baylibre.com>
 References: <20200421080102.22796-1-narmstrong@baylibre.com>
@@ -77,77 +78,35 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add thermal nodes for the Amlogic SM1 SoCs based on the G12A and G12B
-thermal nodes.
+Add the HWMON and NVMEM drivers along the MFD drivers and header
+as Maintained by myself.
 
 Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
 ---
- arch/arm64/boot/dts/amlogic/meson-sm1.dtsi | 24 ++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ MAINTAINERS | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi b/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi
-index d4ec735fb1a5..71317f5aada1 100644
---- a/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi
-@@ -56,6 +56,7 @@
- 			reg = <0x0 0x0>;
- 			enable-method = "psci";
- 			next-level-cache = <&l2>;
-+			#cooling-cells = <2>;
- 		};
+diff --git a/MAINTAINERS b/MAINTAINERS
+index b816a453b10e..4484fa568d42 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -9431,6 +9431,17 @@ F:	include/linux/kdb.h
+ F:	include/linux/kgdb.h
+ F:	kernel/debug/
  
- 		cpu1: cpu@1 {
-@@ -64,6 +65,7 @@
- 			reg = <0x0 0x1>;
- 			enable-method = "psci";
- 			next-level-cache = <&l2>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		cpu2: cpu@2 {
-@@ -72,6 +74,7 @@
- 			reg = <0x0 0x2>;
- 			enable-method = "psci";
- 			next-level-cache = <&l2>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		cpu3: cpu@3 {
-@@ -80,6 +83,7 @@
- 			reg = <0x0 0x3>;
- 			enable-method = "psci";
- 			next-level-cache = <&l2>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		l2: l2-cache0 {
-@@ -466,6 +470,26 @@
- 	compatible = "amlogic,sm1-clkc";
- };
- 
-+&cpu_thermal {
-+	cooling-maps {
-+		map0 {
-+			trip = <&cpu_passive>;
-+			cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+					<&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+					<&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+					<&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+		};
++KHADAS MCU MFD DRIVER
++M:	Neil Armstrong <narmstrong@baylibre.com>
++L:	linux-amlogic@lists.infradead.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/mfd/khadas,mcu.yaml
++F:	drivers/mfd/khadas-mcu.c
++F:	include/linux/mfd/khadas-mcu.h
++F:	drivers/hwmon/khadas-mcu-fan.c
++F:	drivers/nvmem/khadas-mcu-user-mem.c
 +
-+		map1 {
-+			trip = <&cpu_hot>;
-+			cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+					<&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+					<&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+					<&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+		};
-+	};
-+};
-+
- &ethmac {
- 	power-domains = <&pwrc PWRC_SM1_ETH_ID>;
- };
+ KMEMLEAK
+ M:	Catalin Marinas <catalin.marinas@arm.com>
+ S:	Maintained
 -- 
 2.22.0
 
