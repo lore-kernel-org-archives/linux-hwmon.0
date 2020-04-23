@@ -7,59 +7,59 @@ X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2216BC54FCB
-	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Apr 2020 16:21:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC6D4C54FD0
+	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Apr 2020 16:22:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EDCEC20CC7
-	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Apr 2020 16:21:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 85A5C20776
+	for <linux-hwmon@archiver.kernel.org>; Thu, 23 Apr 2020 16:22:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cG3EV/89"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eyD+S79M"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729573AbgDWQVt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 23 Apr 2020 12:21:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33180 "EHLO
+        id S1729490AbgDWQWu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 23 Apr 2020 12:22:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729462AbgDWQVt (ORCPT
+        by vger.kernel.org with ESMTP id S1729407AbgDWQWt (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 23 Apr 2020 12:21:49 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC4DFC09B041
-        for <linux-hwmon@vger.kernel.org>; Thu, 23 Apr 2020 09:21:47 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id o15so3142565pgi.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 23 Apr 2020 09:21:47 -0700 (PDT)
+        Thu, 23 Apr 2020 12:22:49 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E956C09B041
+        for <linux-hwmon@vger.kernel.org>; Thu, 23 Apr 2020 09:22:49 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id d184so3198021pfd.4
+        for <linux-hwmon@vger.kernel.org>; Thu, 23 Apr 2020 09:22:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=6nuxxt8mJJrAMERWBW3+C1jtsyWDgs/mExhvp9JeeGw=;
-        b=cG3EV/89937Vb8fZ7rjwtnpovXShdHjoWOHUElZCmxP2KouZB9AUa8ZaW5dHem+Nlz
-         7altIOpIwiSPU/VpLuiDwMkHxNgYBo2h0V5YAE0nz8Ho95Rr3UOrH9zUVQFTaD+Btqm8
-         z7KETLE9p+rt9TcSfnDZpwdAe7xjxLYuwXiSkWZ0KzmtZdBFV0LmkHZlqnKXAsE2TRfE
-         FnM88FjxEJvFZaEYyHRsPgG/szAJxvQpb5g6s9fQxOsufuViRxQxwJUb3uoE0tHkenwi
-         JTuABamLPoMh+6rDzqWrPo0NKa7cGZ18UGE/ef6CzWxu0k9kMsikBlZzsMcN4JMJjDkY
-         YL3g==
+        bh=oOJG1PZUI8PVy+YkI6Vv53ngz7mQvYCpqbc1AH2637w=;
+        b=eyD+S79MdZKlqNjC3rxMXFO8hC3fptW3qdb/eYcVCB9lipgSw5wMZmbOVzmAKT82N3
+         3hR1Cfnv0SaxUp54AMPwG4Ru6gCElr4nqoQUz+vbqPq47KfXAKF0ISQlZsRHsYLwM6pH
+         HonpG/kLBOYuBcZ3YBNkW3QWknD50zXT+r/eCUsH8D9f2imzLPjpYBgYUPs0OqvglLTK
+         PbgEULdAs2wGMy2b9wC7RH9qblSo9Vg1BS4QbAE3PAoEdi4rZ2wrkT1Efy2IJKDiBYs6
+         BVacudQ7JTZWleQ6A62D7hX37Vrz0DqDs59/M9jC1rUaGMGRqGwe7VrRk6ZuagSgt7eU
+         L+VA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=6nuxxt8mJJrAMERWBW3+C1jtsyWDgs/mExhvp9JeeGw=;
-        b=iry6VJIr26p6tGTvRDn+ABKOtnXW7wta4WVELxsAhif0dH55h9AwMc3bCzd9OJJIil
-         qYZGo3UmmdEr/znc3qZrjMdPG6Mq0IUOFiJGjDsr/NWiaunnV9dtCcCcdWIr2YpD4czC
-         n0S1DutpGqjWSsUz3PC51Pj+1RIjeeqoEqtaTrYDPqcD19wnhzpfvVy3RMoc2HePjl2h
-         EYIcP/9MTU8JmwIoJPZY9KBT7cmSq/cLfWA51A3VFmXOFG4ZVL+UwkPspfE5Tg043XlV
-         tMH0Ss68geDijL7aLW1r0ZKMQ7gYHFyXavu6Ld5Us2KPOHfWUW05Iz0iy/5WmOLZWUqy
-         aGYA==
-X-Gm-Message-State: AGi0Pua/uohsQuMQfVKA+qegIp6BcyS1SXOqG/jy5qOFUNQCuN0wbAWH
-        StDoiYjw1ZigMaPlaOcZlH8zDHnq
-X-Google-Smtp-Source: APiQypIDFq9vN+6d9iCC1ainWD+UxNwbbQQdMWEJtzeycTfhwUP7cxyeH9TJMSdnMsbk/y0bqmyk+g==
-X-Received: by 2002:aa7:93c2:: with SMTP id y2mr4413523pff.50.1587658907184;
-        Thu, 23 Apr 2020 09:21:47 -0700 (PDT)
+        bh=oOJG1PZUI8PVy+YkI6Vv53ngz7mQvYCpqbc1AH2637w=;
+        b=V8L1SFaqpXzL4aZczwStIbezeXGWa3nLn6LpIkIoXFlYtb5OYnqGOgroTDhJyBhdiz
+         MLJfdaz5qDnBVJAlQprMd5IxdHSqJ0nUq8hcV2rnnauC++eCLSFVZsbXIkeLruOdrZde
+         AglFW2VuiubSJ77fSJ7IEaScwv/4dLDW2fxEyxJqbpxsuee14FbPpmi1CTxKv/yCq29M
+         UEC1RimwAWLZjgj7qUClsE9/pZ+KHBt/aivTh15tPLQzOTiIWOIp6a/a5CMdx00d6tw4
+         0DYfZI2BmmO5yjLzemOEuvcIxh/g75V1KV9LOodyLdtxgdwNKGEmmZnZOFgeVsf6Tgw9
+         YAEQ==
+X-Gm-Message-State: AGi0PubCYFLmI8dQJ0HXH8vbQm4eJ6Zju9QFEJADS06wen5wEDOto7nN
+        vxD+tzXZYeeGAEGBQXP5Ry+eZUic
+X-Google-Smtp-Source: APiQypIwQ1i1mVSPXs77MqNYawJvLQttAXfigKhAv9dTTqlB9/dHk7rvXlxRhr2h/8aKui6IP20nVg==
+X-Received: by 2002:a63:564e:: with SMTP id g14mr4792581pgm.63.1587658968997;
+        Thu, 23 Apr 2020 09:22:48 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c1sm2997255pfc.94.2020.04.23.09.21.46
+        by smtp.gmail.com with ESMTPSA id v1sm2930488pfn.212.2020.04.23.09.22.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Apr 2020 09:21:46 -0700 (PDT)
+        Thu, 23 Apr 2020 09:22:48 -0700 (PDT)
 Subject: Re: [PATCH v2 2/2] hwmon: (amd_energy) Add documentation
 To:     Naveen Krishna Chatradhi <nchatrad@amd.com>,
         linux-hwmon@vger.kernel.org
@@ -109,8 +109,8 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <7982269f-b758-9cec-ab2f-305b91e4fe75@roeck-us.net>
-Date:   Thu, 23 Apr 2020 09:21:45 -0700
+Message-ID: <40fb6413-2b10-667b-1a1c-41158d6474c4@roeck-us.net>
+Date:   Thu, 23 Apr 2020 09:22:47 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
@@ -141,111 +141,7 @@ On 4/17/20 12:04 PM, Naveen Krishna Chatradhi wrote:
 > +++ b/Documentation/hwmon/amd_energy.rst
 > @@ -0,0 +1,83 @@
 > +Kernel driver amd_energy
-> +==========================
-> +
-> +Supported chips:
-> +
-> +* AMD Family 17h Processors
-> +
-> +  Prefix: 'amd_energy'
-> +
-> +  Addresses used:  RAPL MSRs
-> +
-> +  Datasheets:
-> +
-> +  - Processor Programming Reference (PPR) for AMD Family 17h Model 01h, Revision B1 Processors
-> +
-> +	https://developer.amd.com/wp-content/resources/55570-B1_PUB.zip
-> +
-> +  - Preliminary Processor Programming Reference (PPR) for AMD Family 17h Model 31h, Revision B0 Processors
-> +
-> +	https://developer.amd.com/wp-content/resources/56176_ppr_Family_17h_Model_71h_B0_pub_Rev_3.06.zip
-> +
-> +Author: Naveen Krishna Chatradhi <nchatrad@amd.com>
-> +
-> +Description
-> +-----------
-> +
-> +The Energy driver exposes the energy counters that are
-> +reported via the Running Average Power Limit (RAPL)
-> +Model-specific Registers (MSRs) via the hardware monitor
-> +(HWMON) sysfs interface.
-> +
-> +1. Power, Energy and Time Units
-> +  * MSR_RAPL_POWER_UNIT/ C001_0299:
-> +    -> shared with all cores in the socket
-> +
-> +2. Energy consumed by each Core
-> +  * MSR_CORE_ENERGY_STATUS/ C001_029A:
-> +    -> 32-bitRO, Accumulator, core-level power reporting
-> +
-> +3. Energy consumed by Socket
-> +  * MSR_PACKAGE_ENERGY_STATUS/ C001_029B:
-> +    -> 32-bitRO, Accumulator, socket-level power reporting,
-> +    -> shared with all cores in socket
-> +
-> +These registers are updated every 1ms and cleared on
-> +reset of the system.
-> +
-> +Energy Caluclation
-> +------------------
-> +
-> +Energy information (in Joules) is based on the multiplier,
-> +1/2^ESU; where ESU is an unsigned integer read from
-> +MSR_RAPL_POWER_UNIT register. Default value is 10000b,
-> +indicating energy status unit is 15.3 micro-Joules increment.
-> +
-> +Reported values are scaled as per the formula
-> +
-> +scaled value = ((1/2^ESU) * (Raw value) * 1000000UL) in Joules
-> +
-> +Users calculate power for a given domain by calculating
-> +	dEnergy/dTime for that domain.
-> +
-> +Sysfs attributes
-> +----------------
-> +
-> +=============== ========  =====================================
-> +Attribute	Label	  Description
-> +===============	========  =====================================
-> +
-> +* For index N between [1] and [nr_cpus]
-> +
-> +===============	========  ======================================
-> +energy[N]_input EcoreX	  Core Energy   X = [0] to [nr_cpus - 1]
-> +			  Measured input core energy
-> +===============	========  ======================================
-> +
-> +* For N between [nr_cpus] and [nr_cpus + nr_socks]
-> +
-> +===============	========  ======================================
-> +energy[N]_input EsocketX  Socket Energy X = [0] to [nr_socks -1]
-> +			  Measured input socket energy
-> +=============== ========  ======================================
-> +
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index 8ef62fd39787..fc4b89810e67 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -39,6 +39,7 @@ Hardware Monitoring Kernel Drivers
->     adt7470
->     adt7475
->     amc6821
-> +   amd_energy
->     asb100
->     asc7621
->     aspeed-pwm-tacho
-> 
-groeck@server:~/src/linux-stable$ git am -s amd2
-Applying: hwmon: (amd_energy) Add documentation
-.git/rebase-apply/patch:95: new blank line at EOF.
-+
-warning: 1 line adds whitespace errors.
 
-and:
-
-/home/groeck/src/linux-stable/Documentation/hwmon/amd_energy.rst:33: WARNING: Enumerated list ends without a blank line; unexpected unindent.
-/home/groeck/src/linux-stable/Documentation/hwmon/amd_energy.rst:37: WARNING: Enumerated list ends without a blank line; unexpected unindent.
-/home/groeck/src/linux-stable/Documentation/hwmon/amd_energy.rst:41: WARNING: Enumerated list ends without a blank line; unexpected unindent.
-
-Guenter
+WARNING: Missing or malformed SPDX-License-Identifier tag in line 1
+#30: FILE: Documentation/hwmon/amd_energy.rst:1:
++Kernel driver amd_energy
