@@ -7,48 +7,48 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20325C54FD0
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Apr 2020 12:28:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C47BCC54FD0
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Apr 2020 12:29:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EB0252087E
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Apr 2020 12:28:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A6A9220736
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Apr 2020 12:29:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1587731303;
-	bh=q71kAljo8EsKoOPHLSzW1gYD6pwZKfe8hSDVn1gDtrA=;
+	s=default; t=1587731381;
+	bh=PtDDryNXCt/9ihdYD2ZXT+uVLrhInNakO1Houm02HMs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=jFLhG7z3rAz3QMcRfswWP3lDGjfKgJM+QagkB5wT22EE5POH/E4xpuCSc2ySRxuXv
-	 Qo7NPZ7deXuamaVp14FPAmoa7GvfgtWXugsTIkXvtrJlMMNMCfFItccS/G7Iu/S5A9
-	 bjo8zyKtDvJ+10c/gOtefeP1Nc4lQGmWmO4MYNx8=
+	b=hPlNXz0nZtCgz8MkbeNUz5WO8+KP/kArsjzNfPYzwNhG++M2ydTnmz0Juv8HPCQfN
+	 8WsEZXV3y2+I0QTcHEbDMPniwfxobVHUFNVF1Bs/mbHxQQ1xqaORDILA9gzUK6SVTn
+	 IVI8QcZTAw69t0UB9bBOiqSk8uZb0wquhMJ5h90w=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727112AbgDXM2S (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 24 Apr 2020 08:28:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54752 "EHLO mail.kernel.org"
+        id S1728193AbgDXMXz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 24 Apr 2020 08:23:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54106 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728348AbgDXMYR (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 24 Apr 2020 08:24:17 -0400
+        id S1728190AbgDXMXy (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 24 Apr 2020 08:23:54 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AF35220700;
-        Fri, 24 Apr 2020 12:24:16 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E760820706;
+        Fri, 24 Apr 2020 12:23:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587731057;
-        bh=q71kAljo8EsKoOPHLSzW1gYD6pwZKfe8hSDVn1gDtrA=;
+        s=default; t=1587731033;
+        bh=PtDDryNXCt/9ihdYD2ZXT+uVLrhInNakO1Houm02HMs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dpKtEKJIwuv6G+ZaE3edkn9eEdD74nh5XN6j8PJy2FbKesnZoYUdbtNGrbxvO8wOm
-         R8umRxiHrM4mU9Cj+a1x1F1cMuYj4rgBhPQO74UXa/MXmvgASFeMuR+KYPuIX230n1
-         oOXcaWp533M2/xUuwXLL8czNaQ75QPFq0QYHhp0M=
+        b=ze+jnc3sIU0XgPHPoBdXPizwyYz67A1Fz1jz/d5DGaGqVXD6ZYlytEicbuH93Dvl2
+         w8+w5/XgW9ZDVJtBSX3NhJ4qs/+l7HHrqvKD5FBbAIhNhEaMfCVV+P/og2VMGMVjfl
+         MPZ4blyeQuy9VA3J2znI9IM9F+nSmV4ALomlb74E=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
         Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 18/18] hwmon: (jc42) Fix name to have no illegal characters
-Date:   Fri, 24 Apr 2020 08:23:55 -0400
-Message-Id: <20200424122355.10453-18-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 26/26] hwmon: (jc42) Fix name to have no illegal characters
+Date:   Fri, 24 Apr 2020 08:23:23 -0400
+Message-Id: <20200424122323.10194-26-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200424122355.10453-1-sashal@kernel.org>
-References: <20200424122355.10453-1-sashal@kernel.org>
+In-Reply-To: <20200424122323.10194-1-sashal@kernel.org>
+References: <20200424122323.10194-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -81,10 +81,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/hwmon/jc42.c b/drivers/hwmon/jc42.c
-index e5234f953a6d1..b6e5aaa54963d 100644
+index f2d81b0558e56..e3f1ebee71306 100644
 --- a/drivers/hwmon/jc42.c
 +++ b/drivers/hwmon/jc42.c
-@@ -527,7 +527,7 @@ static int jc42_probe(struct i2c_client *client, const struct i2c_device_id *id)
+@@ -506,7 +506,7 @@ static int jc42_probe(struct i2c_client *client, const struct i2c_device_id *id)
  	}
  	data->config = config;
  
