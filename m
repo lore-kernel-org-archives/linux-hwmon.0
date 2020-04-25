@@ -4,426 +4,669 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66227C55197
-	for <linux-hwmon@archiver.kernel.org>; Sat, 25 Apr 2020 17:02:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33385C54FCB
+	for <linux-hwmon@archiver.kernel.org>; Sat, 25 Apr 2020 17:43:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 40325206B6
-	for <linux-hwmon@archiver.kernel.org>; Sat, 25 Apr 2020 17:02:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F04C220728
+	for <linux-hwmon@archiver.kernel.org>; Sat, 25 Apr 2020 17:43:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F1xHEvaM"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tce4E8Hp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726400AbgDYRCz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 25 Apr 2020 13:02:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36298 "EHLO
+        id S1726190AbgDYRnU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 25 Apr 2020 13:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726156AbgDYRCy (ORCPT
+        by vger.kernel.org with ESMTP id S1726145AbgDYRnU (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 25 Apr 2020 13:02:54 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 165C2C09B04D;
-        Sat, 25 Apr 2020 10:02:54 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id k18so4983893pll.6;
-        Sat, 25 Apr 2020 10:02:54 -0700 (PDT)
+        Sat, 25 Apr 2020 13:43:20 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41005C09B04D;
+        Sat, 25 Apr 2020 10:43:20 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id t40so5257687pjb.3;
+        Sat, 25 Apr 2020 10:43:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=VBIKmrJmiLWT4Ougw5jkUobA+4SdhZWTwHOXjczvwT8=;
-        b=F1xHEvaM/b0ETQppnfeYOtPh30ENq2JghHVih6jnKJLKWHYcJGY+xrsuK3WO83ZqJx
-         z0pucKqy8sY00PZVachPpDczSX62gIOpqRdgHD7OuRop8AWrYpQGvcokOJluORRgY7wb
-         n5dmX1cCrT9fnHHz843nHVYboBmN/LopNAySkSD0CFmWcx7CxIf8zfM/aTqOf3Yxwg1A
-         JX5k+O0rLeXxIRNbnNoUDiwcgPwWpEkCR9Y/nRXtrg7iN13m/LgfT2yZ0KyUSgwTVbKA
-         8Lh6z2F/xT69/sqzw5bwuxS0R4qk9Y5ClcO2c7kBJCKOKCvG7RczXvIjsAGkaBZ1eoH4
-         5HZw==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=bLqcX5Fj4pW2thvwUP8PivGetMN8e8e3pxGwORfwkh4=;
+        b=tce4E8HpMgZSsJN7XvOy50RbSVkBWESC0MTvnIuoWaE94Ngxe/AStRO95YJ9AAp8RY
+         E+UvthngfX4Ncnnhmv9k1/Ol2686SNihZ00Yc3hjxKr2Tfwn6J1T1b80MOBFJxgh7w1N
+         U5YPVJrNQsI1NB6MKN7FPkyPlX65Z61oKDNQi7vNiYRvBEuGWtfDXuS/PKpQorXPZc1F
+         wzwnfmETlfx1kM9kGfQ1OEHNhc84y6jG1DYlZv+dBzw8FeI7mYXbfm3cd3gFQ2yP7Twv
+         +OkJy1aCtknQPrX8n803xuXC/eJCQyt2SnH+J9o7yBoi6825AZpn0bbnlFPkm8NCl2md
+         b03A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=VBIKmrJmiLWT4Ougw5jkUobA+4SdhZWTwHOXjczvwT8=;
-        b=V0s9UTkJPyfDr+1+6YGN35vqOUS6c2YAoYcqldqFNeIy/qsUEdO0fHBA2RPnND6+s2
-         szmgIQTIJ7HJcW61KOo/2GoFeDo8xl2CNike95F55wi1Maos8vGsSJtkSWmsBQqcPGUG
-         oRvoe0JUzYYj49CU7H0yMb6Pd9aOJ/gJop/mc1r2odK/s10tDdAcQX4hjDPFqGbP0MPV
-         NurTmCYck/nUCahlMFqIiiK7C5urLMy/XQgSKQv/REjvoyXeAsTY079vsRhowXcnJpQU
-         EMLjWJFvpTrF0K+AbjuqZt3FviS6SPnyPJ3sgwo4Nb7n25xaI+cxSO8QC03GjSjnfviV
-         quJg==
-X-Gm-Message-State: AGi0PuaaK1Q2lm/XPru7PaDMddRTzU5tG5ZdEv4LUJm+yHLrz6/vC24m
-        Fzw3wviJD41Q+v3IETTMBiI=
-X-Google-Smtp-Source: APiQypLt+dLMSaesv3UmaS6qMNSUbYz8bicIkLNwhtfCAYBPi7k45+K175L6T0qLP+x69lMz7tEucw==
-X-Received: by 2002:a17:90a:a893:: with SMTP id h19mr13405208pjq.138.1587834173439;
-        Sat, 25 Apr 2020 10:02:53 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z5sm8397473pfn.142.2020.04.25.10.02.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 25 Apr 2020 10:02:52 -0700 (PDT)
-Subject: Re: [PATCH v3 07/16] watchdog: add support for sl28cpld watchdog
-To:     Michael Walle <michael@walle.cc>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20200423174543.17161-1-michael@walle.cc>
- <20200423174543.17161-8-michael@walle.cc>
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=bLqcX5Fj4pW2thvwUP8PivGetMN8e8e3pxGwORfwkh4=;
+        b=H6YQhq/f2h77++2i+dz40lI/0OweNgtcD5Cu/xPDARFSOhBfGFOszWLPPMGdWo4sxL
+         ay5gvPDVrrRJjZV6smg0VluVfhKp0I2duJ0axDuQNdqvLn/MsNc5ODEaB5iTd80+gWnB
+         2A/+BqxF05iS5GTDnhTjY7/JlAiUZ2GImzVAO+ZbSCuA0WcwlCXGSXNkMBgXcx2775/P
+         mlx8wJ7TSz09+FgbxaFXUGmp9OKt7wRqdgRM4EAeS0UI0yY9nqz77+fLtBvkzTm0CKSf
+         dBnKSeeUgD6uFPcMKQrts4hBwuaUlAWVU8y0TfnN0MwTdZokifOATD4wH+zrdtbAuDln
+         Wujw==
+X-Gm-Message-State: AGi0Pua9Kecw05u2DcVOisvKYddagrj60JUMtGVtbtQvTur++H/nDst2
+        hFN8p1uX9uEcv2pzt7t8G2o=
+X-Google-Smtp-Source: APiQypKd71HLJXPWdwWo9tHWLE36CIWnshm64ymcpGe4p4v4DNqlP90JI8y1vI+/t4yiTzKY63ZZpA==
+X-Received: by 2002:a17:902:6bc1:: with SMTP id m1mr15029471plt.90.1587836599646;
+        Sat, 25 Apr 2020 10:43:19 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f3sm7458610pjo.24.2020.04.25.10.43.18
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 25 Apr 2020 10:43:19 -0700 (PDT)
+Date:   Sat, 25 Apr 2020 10:43:18 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
- RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
- nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
- 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
- gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
- IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
- kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
- VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
- jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
- BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
- ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
- CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
- nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
- hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
- c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
- 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
- GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
- sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
- Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
- HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
- BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
- l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
- 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
- pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
- J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
- pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
- 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
- ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
- I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
- nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
- HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
- JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
- J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
- cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
- wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
- hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
- nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
- QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
- trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
- WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
- HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <eaa00592-8b9b-458e-f445-c7f7b5bcd007@roeck-us.net>
-Date:   Sat, 25 Apr 2020 10:02:50 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+To:     Grant Peltier <grantpeltier93@gmail.com>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        adam.vaughn.xh@renesas.com, grant.peltier.jg@renesas.com
+Subject: Re: [PATCH v2 1/2] hwmon: (pmbus/isl68137) add debugfs config and
+ black box endpoints
+Message-ID: <20200425174318.GA40266@roeck-us.net>
+References: <cover.1587572415.git.grantpeltier93@gmail.com>
+ <acbdc26389b6ab5f5f4536de7332b03c45a95f00.1587572415.git.grantpeltier93@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200423174543.17161-8-michael@walle.cc>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <acbdc26389b6ab5f5f4536de7332b03c45a95f00.1587572415.git.grantpeltier93@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/23/20 10:45 AM, Michael Walle wrote:
-> This adds support for the watchdog of the sl28cpld board management
-> controller. This is part of a multi-function device driver.
+On Wed, Apr 22, 2020 at 12:27:14PM -0500, Grant Peltier wrote:
+> Add debugfs endpoints to support features of 2nd generation Renesas
+> digital multiphase voltage regulators that are not compatible with
+> sysfs.
 > 
-> Signed-off-by: Michael Walle <michael@walle.cc>
+> The read_black_box endpoint allows users to read the contents of a
+> RAM segment used to record fault conditions within Gen 2 devices.
+> 
+> The write_config endpoint allows users to write configuration hex
+> files to Gen 2 devices which modify how they operate.
+> 
+> Signed-off-by: Grant Peltier <grantpeltier93@gmail.com>
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Comments inline.
+
+However, the more I look into this, the more concerns I have.
+I think we should limit debugfs functions, if they are needed,
+to reporting detailed device status. Can you consider handling
+configuration from userspace using i2cget / i2cset commands ?
+
+Thanks,
+Guenter
 
 > ---
->  drivers/watchdog/Kconfig        |  11 ++
->  drivers/watchdog/Makefile       |   1 +
->  drivers/watchdog/sl28cpld_wdt.c | 233 ++++++++++++++++++++++++++++++++
->  3 files changed, 245 insertions(+)
->  create mode 100644 drivers/watchdog/sl28cpld_wdt.c
+>  drivers/hwmon/pmbus/isl68137.c | 460 ++++++++++++++++++++++++++++++++-
+>  1 file changed, 457 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index 0663c604bd64..6c53c1d0f348 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -340,6 +340,17 @@ config MLX_WDT
->  	  To compile this driver as a module, choose M here: the
->  	  module will be called mlx-wdt.
+> diff --git a/drivers/hwmon/pmbus/isl68137.c b/drivers/hwmon/pmbus/isl68137.c
+> index 0c622711ef7e..455235a7a56b 100644
+> --- a/drivers/hwmon/pmbus/isl68137.c
+> +++ b/drivers/hwmon/pmbus/isl68137.c
+> @@ -7,10 +7,12 @@
+>   *
+>   */
 >  
-> +config SL28CPLD_WATCHDOG
-> +	tristate "Kontron sl28 watchdog"
-> +	depends on MFD_SL28CPLD
-> +	select WATCHDOG_CORE
-> +	help
-> +	  Say Y here to include support for the watchdog timer
-> +	  on the Kontron sl28 CPLD.
-> +
-> +	  To compile this driver as a module, choose M here: the
-> +	  module will be called sl28cpld_wdt.
-> +
->  # ALPHA Architecture
+> +#include <linux/debugfs.h>
+>  #include <linux/err.h>
+>  #include <linux/hwmon-sysfs.h>
+>  #include <linux/i2c.h>
+>  #include <linux/init.h>
+> +#include <linux/jiffies.h>
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/string.h>
+> @@ -18,8 +20,22 @@
 >  
->  # ARM Architecture
-> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-> index 6de2e4ceef19..b9ecdf2d7347 100644
-> --- a/drivers/watchdog/Makefile
-> +++ b/drivers/watchdog/Makefile
-> @@ -224,3 +224,4 @@ obj-$(CONFIG_MENF21BMC_WATCHDOG) += menf21bmc_wdt.o
->  obj-$(CONFIG_MENZ069_WATCHDOG) += menz69_wdt.o
->  obj-$(CONFIG_RAVE_SP_WATCHDOG) += rave-sp-wdt.o
->  obj-$(CONFIG_STPMIC1_WATCHDOG) += stpmic1_wdt.o
-> +obj-$(CONFIG_SL28CPLD_WATCHDOG) += sl28cpld_wdt.o
-> diff --git a/drivers/watchdog/sl28cpld_wdt.c b/drivers/watchdog/sl28cpld_wdt.c
-> new file mode 100644
-> index 000000000000..2640084ace5c
-> --- /dev/null
-> +++ b/drivers/watchdog/sl28cpld_wdt.c
-> @@ -0,0 +1,233 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * sl28cpld watchdog driver.
-> + *
-> + * Copyright 2019 Kontron Europe GmbH
-> + */
-> +
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/watchdog.h>
-> +
-> +/*
-> + * Watchdog timer block registers.
-> + */
-> +#define WDT_CTRL			0x00
-> +#define  WDT_CTRL_EN			BIT(0)
-> +#define  WDT_CTRL_LOCK			BIT(2)
-> +#define  WDT_CTRL_ASSERT_SYS_RESET	BIT(6)
-> +#define  WDT_CTRL_ASSERT_WDT_TIMEOUT	BIT(7)
-> +#define WDT_TIMEOUT			0x01
-> +#define WDT_KICK			0x02
-> +#define  WDT_KICK_VALUE			0x6b
-> +#define WDT_COUNT			0x03
-> +
-> +#define WDT_DEFAULT_TIMEOUT		10
-> +
-> +static bool nowayout = WATCHDOG_NOWAYOUT;
-> +module_param(nowayout, bool, 0);
-> +MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
-> +				__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-> +
-> +static int timeout;
-> +module_param(timeout, int, 0);
-> +MODULE_PARM_DESC(timeout, "Initial watchdog timeout in seconds");
-> +
-> +struct sl28cpld_wdt {
-> +	struct watchdog_device wdd;
-> +	struct regmap *regmap;
-> +	u32 offset;
-> +	bool assert_wdt_timeout;
+>  #include "pmbus.h"
+>  
+> -#define ISL68137_VOUT_AVS	0x30
+> -#define RAA_DMPVR2_READ_VMON	0xc8
+> +#define ISL68137_VOUT_AVS		0x30
+> +#define RAA_DMPVR2_DMA_FIX		0xc5
+> +#define RAA_DMPVR2_DMA_SEQ		0xc6
+> +#define RAA_DMPVR2_DMA_ADDR		0xc7
+> +#define RAA_DMPVR2_READ_VMON		0xc8
+> +#define RAA_DMPVR2_BB_BASE_ADDR		0xef80
+> +#define RAA_DMPVR2_BB_WSIZE		4
+> +#define RAA_DMPVR2_BB_WCNT		32
+> +#define RAA_DMPVR2_BB_BUF_SIZE		288
+> +#define RAA_DMPVR2_NVM_CNT_ADDR		0x00c2
+> +#define RAA_DMPVR2_PRGM_STATUS_ADDR	0x0707
+> +#define RAA_DMPVR2_BANK0_STATUS_ADDR	0x0709
+> +#define RAA_DMPVR2_BANK1_STATUS_ADDR	0x070a
+> +#define RAA_DMPVR2_CFG_MAX_SLOT		16
+> +#define RAA_DMPVR2_CFG_HEAD_LEN		290
+> +#define RAA_DMPVR2_CFG_SLOT_LEN		358
+>  
+>  enum chips {
+>  	isl68137,
+> @@ -71,6 +87,21 @@ enum variants {
+>  	raa_dmpvr2_hv,
+>  };
+>  
+> +enum {
+> +	RAA_DMPVR2_DEBUGFS_CFG_W = 0,
+> +	RAA_DMPVR2_DEBUGFS_BB_R,
+> +	RAA_DMPVR2_DEBUGFS_NUM_ENTRIES,
 > +};
 > +
-> +static int sl28cpld_wdt_ping(struct watchdog_device *wdd)
-> +{
-> +	struct sl28cpld_wdt *wdt = watchdog_get_drvdata(wdd);
+> +struct raa_dmpvr2_ctrl {
+> +	enum chips part;
+> +	struct i2c_client *client;
+> +	int debugfs_entries[RAA_DMPVR2_DEBUGFS_NUM_ENTRIES];
+> +};
 > +
-> +	return regmap_write(wdt->regmap, wdt->offset + WDT_KICK,
-> +			    WDT_KICK_VALUE);
+> +#define to_ctrl(x, y) container_of((x), struct raa_dmpvr2_ctrl, \
+> +				   debugfs_entries[(y)])
+> +
+>  static ssize_t isl68137_avs_enable_show_page(struct i2c_client *client,
+>  					     int page,
+>  					     char *buf)
+> @@ -157,6 +188,395 @@ static const struct attribute_group *isl68137_attribute_groups[] = {
+>  	NULL,
+>  };
+>  
+> +/**
+> + * Helper function required since linux SMBus implementation does not currently
+> + * (v5.6) support the SMBus 3.0 "Read 32" protocol
+> + */
+> +static s32 raa_dmpvr2_smbus_read32(const struct i2c_client *client, u8 command,
+> +				   unsigned char *data)
+> +{
+> +	int status;
+> +	unsigned char msgbuf[1];
+> +	struct i2c_msg msg[2] = {
+> +		{
+> +			.addr = client->addr,
+> +			.flags = client->flags,
+> +			.len = 1,
+> +			.buf = msgbuf,
+> +		},
+> +		{
+> +			.addr = client->addr,
+> +			.flags = client->flags | I2C_M_RD,
+> +			.len = 4,
+> +			.buf = data,
+> +		},
+> +	};
+> +
+> +	msgbuf[0] = command;
+> +	status = i2c_transfer(client->adapter, msg, 2);
+> +	if (status != 2)
+> +		return status;
+> +	return 0;
+
+The return value from this function is not checked. Either check it,
+or don't return a value.
+
 > +}
 > +
-> +static int sl28cpld_wdt_start(struct watchdog_device *wdd)
+> +/**
+> + * Helper function required since linux SMBus implementation does not currently
+> + * (v5.6) support the SMBus 3.0 "Write 32" protocol
+> + */
+> +static s32 raa_dmpvr2_smbus_write32(const struct i2c_client *client,
+> +				    u8 command, u32 value)
 > +{
-> +	struct sl28cpld_wdt *wdt = watchdog_get_drvdata(wdd);
-> +	unsigned int val;
-> +
-> +	val = WDT_CTRL_EN | WDT_CTRL_ASSERT_SYS_RESET;
-> +	if (wdt->assert_wdt_timeout)
-> +		val |= WDT_CTRL_ASSERT_WDT_TIMEOUT;
-> +	if (nowayout)
-> +		val |= WDT_CTRL_LOCK;
-> +
-> +	return regmap_update_bits(wdt->regmap, wdt->offset + WDT_CTRL,
-> +				  val, val);
+> +	int status;
+> +	unsigned char msgbuf[5];
+> +	struct i2c_msg msg[1] = {
+> +		{
+> +			.addr = client->addr,
+> +			.flags = client->flags,
+> +			.len = 5,
+> +			.buf = msgbuf,
+> +		},
+> +	};
+> +	msgbuf[0] = command;
+> +	msgbuf[1] = value & 0x0FF;
+> +	msgbuf[2] = (value >> 8) & 0x0FF;
+> +	msgbuf[3] = (value >> 16) & 0x0FF;
+> +	msgbuf[4] = (value >> 24) &  0x0FF;
+> +	status = i2c_transfer(client->adapter, msg, 1);
+> +	if (status != 1)
+> +		return status;
+> +	return 0;
 > +}
 > +
-> +static int sl28cpld_wdt_stop(struct watchdog_device *wdd)
+> +static ssize_t raa_dmpvr2_read_black_box(struct raa_dmpvr2_ctrl *ctrl,
+> +					 char __user *buf, size_t len,
+> +					 loff_t *ppos)
 > +{
-> +	struct sl28cpld_wdt *wdt = watchdog_get_drvdata(wdd);
+> +	int i, j;
+> +	u16 addr = RAA_DMPVR2_BB_BASE_ADDR;
+> +	unsigned char data[RAA_DMPVR2_BB_WSIZE] = { 0 };
+> +	char out[RAA_DMPVR2_BB_BUF_SIZE] = { 0 };
+> +	char *optr = out;
 > +
-> +	return regmap_update_bits(wdt->regmap, wdt->offset + WDT_CTRL,
-> +				  WDT_CTRL_EN, 0);
+> +	i2c_smbus_write_word_data(ctrl->client, RAA_DMPVR2_DMA_ADDR, addr);
+> +	for (i = 0; i < RAA_DMPVR2_BB_WCNT; i++) {
+> +		raa_dmpvr2_smbus_read32(ctrl->client, RAA_DMPVR2_DMA_SEQ,
+> +					data);
+> +		for (j = 0; j < RAA_DMPVR2_BB_WSIZE; j++)
+> +			optr += snprintf(optr, sizeof(out), "%02X", data[j]);
+
+The length check here only ensures that a single call to snprintf() doesn't add
+more data to the buffer than available. However, since optr is advanced, there
+is no practical limit on the total data written.
+
+I understand that the maximum amount of data written in practice
+is RAA_DMPVR2_BB_WCNT * ((RAA_DMPVR2_BB_WSIZE * 2) + 1), or 
+32 * ((4 * 2) + 1) = 288, meaning the buffer is large enough, but
+using snprintf() with sizeof(out) to limit the length of data written
+is pretty pointless. Somewhat cleaner code might keep track of the length
+written, write to out + length, and pass sizeof(out) - length as parameter.
+
+> +		*optr = '\n';
+> +		optr++;
+> +	}
+> +
+> +	return simple_read_from_buffer(buf, len, ppos, &out, sizeof(out));
 > +}
 > +
-> +static unsigned int sl28cpld_wdt_get_timeleft(struct watchdog_device *wdd)
+> +struct raa_dmpvr_cfg_cmd {
+> +	u8 cmd;
+> +	u8 len;
+> +	u8 data[4];
+> +};
+> +
+> +struct raa_dmpvr2_cfg {
+> +	u8 dev_id[4];
+> +	u8 dev_rev[4];
+> +	int slot_cnt;
+> +	int cmd_cnt;
+> +	struct raa_dmpvr_cfg_cmd *cmds;
+> +	u8 crc[4];
+> +};
+> +
+> +/**
+> + * Helper function to handle hex string to byte conversions
+> + */
+> +static int raa_dmpvr2_hextou8(char *buf, u8 *res)
 > +{
-> +	struct sl28cpld_wdt *wdt = watchdog_get_drvdata(wdd);
-> +	unsigned int val;
-> +	int ret;
+> +	char s[3];
 > +
-> +	ret = regmap_read(wdt->regmap, wdt->offset + WDT_COUNT, &val);
-> +
-> +	return (ret < 0) ? 0 : val;
+> +	s[0] = buf[0];
+> +	s[1] = buf[1];
+> +	s[2] = '\0';
+> +	return kstrtou8(s, 16, res);
 > +}
 > +
-> +static int sl28cpld_wdt_set_timeout(struct watchdog_device *wdd,
-> +				    unsigned int timeout)
+> +static int raa_dmpvr2_parse_cfg(char *buf, struct raa_dmpvr2_cfg *cfg)
 > +{
-> +	struct sl28cpld_wdt *wdt = watchdog_get_drvdata(wdd);
-> +	int ret;
+> +	const int lsta = 2;
+> +	const int csta = 6;
+> +	const int dsta = 8;
+> +	char *cptr, *line;
+> +	int lcnt = 1;
+> +	int ccnt = 0;
+> +	int i, j, ret;
+> +	u8 b;
 > +
-> +	ret = regmap_write(wdt->regmap, wdt->offset + WDT_TIMEOUT, timeout);
-> +	if (!ret)
-> +		wdd->timeout = timeout;
+> +	// Ensure there is enough memory for the file
+
+Please don't mix c++ comments into a driver using c style comments.
+
+> +	for (i = 0; i < strlen(buf); i++) {
+> +		if (buf[i] == '\n' && i < strlen(buf)-2) {
+> +			lcnt++;
+> +			if (buf[i+1] != '4' || buf[i+2] != '9')
+
+Space around operators, please.
+
+> +				ccnt++;
+> +		}
+> +	}
+> +	cfg->slot_cnt = (lcnt-RAA_DMPVR2_CFG_HEAD_LEN)/RAA_DMPVR2_CFG_SLOT_LEN;
+> +	if (cfg->slot_cnt < 1 || cfg->slot_cnt > RAA_DMPVR2_CFG_MAX_SLOT)
+> +		return -EINVAL;
+> +	cfg->cmd_cnt = ccnt;
+> +	cfg->cmds = kmalloc_array(ccnt, sizeof(struct raa_dmpvr_cfg_cmd),
+> +				  GFP_KERNEL);
+> +	if (!cfg->cmds)
+> +		return -ENOMEM;
 > +
+> +	// Parse header
+> +	for (i = 0; i < 2; i++) {
+> +		line = strsep(&buf, "\n");
+> +		cptr = line + dsta;
+> +		for (j = 3; j >= 0; j--) {
+> +			ret = raa_dmpvr2_hextou8(cptr, &b);
+> +			if (ret)
+> +				goto parse_err;
+> +			if (i == 0)
+> +				cfg->dev_id[j] = b;
+> +			else
+> +				cfg->dev_rev[j] = b;
+> +			cptr += 2;
+> +		}
+> +	}
+> +
+> +	// Parse cmds
+> +	i = 0;
+> +	while (line != NULL && strlen(line) > (dsta + 2)) {
+> +		if (strncmp(line, "49", 2) != 0) {
+> +			ret = raa_dmpvr2_hextou8(line+lsta, &b);
+> +			if (ret)
+> +				goto parse_err;
+> +			cfg->cmds[i].len = b - 3;
+> +			ret = raa_dmpvr2_hextou8(line+csta, &b);
+> +			if (ret)
+> +				goto parse_err;
+> +			cfg->cmds[i].cmd = b;
+> +			for (j = 0; j < cfg->cmds[i].len; j++) {
+> +				cptr = line + dsta + (2 * j);
+> +				ret = raa_dmpvr2_hextou8(cptr, &b);
+> +				if (ret)
+> +					goto parse_err;
+> +				cfg->cmds[i].data[j] = b;
+> +			}
+> +			i++;
+> +		}
+> +		line = strsep(&buf, "\n");
+> +	}
+> +	return 0;
+> +
+> +parse_err:
+> +	kfree(cfg->cmds);
 > +	return ret;
 > +}
 > +
-> +static const struct watchdog_info sl28cpld_wdt_info = {
-> +	.options = WDIOF_MAGICCLOSE | WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING,
-> +	.identity = "sl28cpld watchdog",
-> +};
-> +
-> +static struct watchdog_ops sl28cpld_wdt_ops = {
-> +	.owner = THIS_MODULE,
-> +	.start = sl28cpld_wdt_start,
-> +	.stop = sl28cpld_wdt_stop,
-> +	.ping = sl28cpld_wdt_ping,
-> +	.set_timeout = sl28cpld_wdt_set_timeout,
-> +	.get_timeleft = sl28cpld_wdt_get_timeleft,
-> +};
-> +
-> +static int sl28cpld_wdt_probe(struct platform_device *pdev)
+> +static int raa_dmpvr2_verify_device(struct raa_dmpvr2_ctrl *ctrl,
+> +				    struct raa_dmpvr2_cfg *cfg)
 > +{
-> +	struct watchdog_device *wdd;
-> +	struct sl28cpld_wdt *wdt;
-> +	struct resource *res;
-> +	unsigned int status;
-> +	unsigned int val;
-> +	int ret;
+> +	u8 dev_id[5];
+> +	u8 dev_rev[5];
+> +	int res;
 > +
-> +	if (!pdev->dev.parent)
-> +		return -ENODEV;
+> +	res = i2c_smbus_read_i2c_block_data(ctrl->client, PMBUS_IC_DEVICE_ID,
+> +					    5, dev_id);
+> +	if (res != 5)
+> +		return -EIO;
+
+The calling code returns this as error code.
+
 > +
-> +	wdt = devm_kzalloc(&pdev->dev, sizeof(*wdt), GFP_KERNEL);
-> +	if (!wdt)
-> +		return -ENOMEM;
+> +	res = i2c_smbus_read_i2c_block_data(ctrl->client, PMBUS_IC_DEVICE_REV,
+> +					    5, dev_rev);
+
+It still puzzles me, quite frankly, why i2c_smbus_read_block_data()
+would not work here.
+
+> +	if (res != 5)
+> +		return -EIO;
 > +
-> +	wdt->regmap = dev_get_regmap(pdev->dev.parent, NULL);
-> +	if (!wdt->regmap)
-> +		return -ENODEV;
+> +	return memcmp(cfg->dev_id, dev_id+1, 4)
+> +		| memcmp(cfg->dev_rev+3, dev_rev+4, 1);
+
+Please no arithmetic or of return codes. Besides, this is dangerous:
+A mismatch returns a value <0 or >0 depending on the match, and this
+is then returned as valid (and pretty much random) error code.
+This function should return -ENODEV on error.
+
+> +}
 > +
-> +	res = platform_get_resource(pdev, IORESOURCE_REG, 0);
-> +	if (!res)
+> +static int raa_dmpvr2_check_cfg(struct raa_dmpvr2_ctrl *ctrl,
+> +				struct raa_dmpvr2_cfg *cfg)
+> +{
+> +	u8 data[4];
+> +
+> +	i2c_smbus_write_word_data(ctrl->client, RAA_DMPVR2_DMA_ADDR,
+> +				  RAA_DMPVR2_NVM_CNT_ADDR);
+> +	raa_dmpvr2_smbus_read32(ctrl->client, RAA_DMPVR2_DMA_SEQ, data);
+> +	if (cfg->slot_cnt > data[0])
+
+If raa_dmpvr2_smbus_read32 returns an error, the content of data[] is
+random. In that case, this code is checking a random value.
+
 > +		return -EINVAL;
-> +	wdt->offset = res->start;
+> +	return 0;
+> +}
 > +
-> +	wdt->assert_wdt_timeout = device_property_read_bool(&pdev->dev,
-> +							    "kontron,assert-wdt-timeout-pin");
+> +static int raa_dmpvr2_send_cfg(struct raa_dmpvr2_ctrl *ctrl,
+> +			       struct raa_dmpvr2_cfg *cfg)
+> +{
+> +	int i, status;
+> +	u16 word;
+> +	u32 dbl_word;
 > +
-> +	/* initialize struct watchdog_device */
-> +	wdd = &wdt->wdd;
-> +	wdd->parent = &pdev->dev;
-> +	wdd->info = &sl28cpld_wdt_info;
-> +	wdd->ops = &sl28cpld_wdt_ops;
-> +	wdd->min_timeout = 1;
-> +	wdd->max_timeout = 255;
-> +
-> +	watchdog_set_drvdata(wdd, wdt);
-> +	watchdog_stop_on_reboot(wdd);
-> +
-> +	/*
-> +	 * Read the status early, in case of an error, we haven't modified the
-> +	 * hardware.
-> +	 */
-> +	ret = regmap_read(wdt->regmap, wdt->offset + WDT_CTRL, &status);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/*
-> +	 * Initial timeout value, may be overwritten by device tree or module
-> +	 * parmeter in watchdog_init_timeout().
-> +	 *
-> +	 * Reading a zero here means that either the hardware has a default
-> +	 * value of zero (which is very unlikely and definitely a hardware
-> +	 * bug) or the bootloader set it to zero. In any case, we handle
-> +	 * this case gracefully and set out own timeout.
-> +	 */
-> +	ret = regmap_read(wdt->regmap, wdt->offset + WDT_TIMEOUT, &val);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	if (val)
-> +		wdd->timeout = val;
-> +	else
-> +		wdd->timeout = WDT_DEFAULT_TIMEOUT;
-> +
-> +	watchdog_init_timeout(wdd, timeout, &pdev->dev);
-> +	sl28cpld_wdt_set_timeout(wdd, wdd->timeout);
-> +
-> +	/* if the watchdog is locked, we set nowayout */
-> +	if (status & WDT_CTRL_LOCK)
-> +		nowayout = true;
-> +	watchdog_set_nowayout(wdd, nowayout);
-> +
-> +	/*
-> +	 * If watchdog is already running, keep it enabled, but make
-> +	 * sure its mode is set correctly.
-> +	 */
-> +	if (status & WDT_CTRL_EN) {
-> +		sl28cpld_wdt_start(wdd);
-> +		set_bit(WDOG_HW_RUNNING, &wdd->status);
+> +	for (i = 0; i < cfg->cmd_cnt; i++) {
+> +		if (cfg->cmds[i].len == 2) {
+> +			word = cfg->cmds[i].data[0]
+> +				| (cfg->cmds[i].data[1] << 8);
+> +			status = i2c_smbus_write_word_data(ctrl->client,
+> +							   cfg->cmds[i].cmd,
+> +							   word);
+> +			if (status < 0)
+> +				return status;
+> +		} else if (cfg->cmds[i].len == 4) {
+> +			dbl_word = cfg->cmds[i].data[0]
+> +				| (cfg->cmds[i].data[1] << 8)
+> +				| (cfg->cmds[i].data[2] << 16)
+> +				| (cfg->cmds[i].data[3] << 24);
+> +			status = raa_dmpvr2_smbus_write32(ctrl->client,
+> +							  cfg->cmds[i].cmd,
+> +							  dbl_word);
+> +			if (status < 0)
+> +				return status;
+> +		} else {
+> +			return -EINVAL;
+> +		}
 > +	}
-> +
-> +	ret = devm_watchdog_register_device(&pdev->dev, wdd);
-> +	if (ret < 0) {
-> +		dev_err(&pdev->dev, "failed to register watchdog device\n");
-> +		return ret;
-> +	}
-> +
-> +	dev_info(&pdev->dev, "initial timeout %d sec%s\n",
-> +		 wdd->timeout, nowayout ? ", nowayout" : "");
 > +
 > +	return 0;
 > +}
 > +
-> +static const struct of_device_id sl28cpld_wdt_of_match[] = {
-> +	{ .compatible = "kontron,sl28cpld-wdt" },
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(of, sl28cpld_wdt_of_match);
+> +static int raa_dmpvr2_cfg_write_result(struct raa_dmpvr2_ctrl *ctrl,
+> +				       struct raa_dmpvr2_cfg *cfg)
+> +{
+> +	u8 data[4] = {0};
+> +	u8 data1[4];
+> +	u8 *dptr;
+> +	unsigned long start;
+> +	int i, j, status;
 > +
-> +static const struct platform_device_id sl28cpld_wdt_id_table[] = {
-> +	{ "sl28cpld-wdt" },
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(platform, sl28cpld_wdt_id_table);
-> +
-> +static struct platform_driver sl28cpld_wdt_driver = {
-> +	.probe = sl28cpld_wdt_probe,
-> +	.id_table = sl28cpld_wdt_id_table,
-> +	.driver = {
-> +		.name = KBUILD_MODNAME,
-> +		.of_match_table = sl28cpld_wdt_of_match,
-> +	},
-> +};
-> +module_platform_driver(sl28cpld_wdt_driver);
-> +
-> +MODULE_DESCRIPTION("sl28cpld Watchdog Driver");
-> +MODULE_AUTHOR("Michael Walle <michael@walle.cc>");
-> +MODULE_LICENSE("GPL");
-> 
+> +	// Check programmer status
+> +	start = jiffies;
+> +	i2c_smbus_write_word_data(ctrl->client, RAA_DMPVR2_DMA_ADDR,
+> +				  RAA_DMPVR2_PRGM_STATUS_ADDR);
+> +	while (data[0] == 0 && !time_after(jiffies, start + HZ + HZ)) {
+> +		raa_dmpvr2_smbus_read32(ctrl->client, RAA_DMPVR2_DMA_FIX,
+> +					data);
+> +	}
+> +	if (data[0] != 1)
+> +		return -ETIME;
 
+Are you sure ? Normally I would expect ETIMEDOUT.
+
+> +
+> +	// Check bank statuses
+> +	i2c_smbus_write_word_data(ctrl->client, RAA_DMPVR2_DMA_ADDR,
+> +				  RAA_DMPVR2_BANK0_STATUS_ADDR);
+> +	raa_dmpvr2_smbus_read32(ctrl->client, RAA_DMPVR2_DMA_FIX, data);
+> +	i2c_smbus_write_word_data(ctrl->client, RAA_DMPVR2_DMA_ADDR,
+> +				  RAA_DMPVR2_BANK1_STATUS_ADDR);
+> +	raa_dmpvr2_smbus_read32(ctrl->client, RAA_DMPVR2_DMA_FIX, data1);
+> +
+> +	for (i = 0; i < cfg->slot_cnt; i++) {
+> +		if (i < 8) {
+> +			j = i;
+> +			dptr = data;
+> +		} else {
+> +			j = i - 8;
+> +			dptr = data1;
+> +		}
+> +		status = (dptr[j/2] >> (4 * (j % 2))) & 0x0F;
+> +		if (status != 1)
+> +			return -EIO;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static ssize_t raa_dmpvr2_write_cfg(struct raa_dmpvr2_ctrl *ctrl,
+> +				    const char __user *buf, size_t len,
+> +				    loff_t *ppos)
+> +{
+> +	char *cbuf;
+> +	int ret, status;
+> +	struct raa_dmpvr2_cfg *cfg;
+> +
+> +	cfg = kmalloc(sizeof(*cfg), GFP_KERNEL);
+> +	if (!cfg)
+> +		return -ENOMEM;
+> +
+> +	cbuf = kmalloc(len, GFP_KERNEL);
+> +	if (!cbuf) {
+> +		status = -ENOMEM;
+> +		goto buf_err;
+> +	}
+> +	ret = simple_write_to_buffer(cbuf, len, ppos, buf, len);
+> +
+> +	// Parse file
+> +	status = raa_dmpvr2_parse_cfg(cbuf, cfg);
+> +	if (status)
+> +		goto parse_err;
+> +	// Verify device and file IDs/revs match
+> +	status = raa_dmpvr2_verify_device(ctrl, cfg);
+> +	if (status)
+> +		goto dev_err;
+> +	// Verify enough NVM slots available
+> +	status = raa_dmpvr2_check_cfg(ctrl, cfg);
+> +	if (status)
+> +		goto dev_err;
+> +	// Write CFG to device
+> +	status = raa_dmpvr2_send_cfg(ctrl, cfg);
+> +	if (status)
+> +		goto dev_err;
+> +	// Verify programming success
+> +	status = raa_dmpvr2_cfg_write_result(ctrl, cfg);
+> +	if (status)
+> +		goto dev_err;
+> +	// Free memory
+
+That comment is a bit useless.
+
+> +	kfree(cbuf);
+> +	kfree(cfg->cmds);
+> +	kfree(cfg);
+> +	return ret;
+> +
+> +	// Handle Errors
+
+Another useless comment.
+
+> +dev_err:
+> +	kfree(cfg->cmds);
+> +parse_err:
+> +	kfree(cbuf);
+> +buf_err:
+> +	kfree(cfg);
+> +	return status;
+> +}
+> +
+> +static ssize_t raa_dmpvr2_debugfs_read(struct file *file, char __user *buf,
+> +				       size_t len, loff_t *ppos)
+> +{
+> +	int *idxp = file->private_data;
+> +	int idx = *idxp;
+> +	struct raa_dmpvr2_ctrl *ctrl = to_ctrl(idxp, idx);
+> +
+> +	switch (idx) {
+> +	case RAA_DMPVR2_DEBUGFS_BB_R:
+> +		return raa_dmpvr2_read_black_box(ctrl, buf, len, ppos);
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+> +
+> +static ssize_t raa_dmpvr2_debugfs_write(struct file *file,
+> +					const char __user *buf, size_t len,
+> +					loff_t *ppos)
+> +{
+> +	int *idxp = file->private_data;
+> +	int idx = *idxp;
+> +	struct raa_dmpvr2_ctrl *ctrl = to_ctrl(idxp, idx);
+> +
+> +	switch (idx) {
+> +	case RAA_DMPVR2_DEBUGFS_CFG_W:
+> +		return raa_dmpvr2_write_cfg(ctrl, buf, len, ppos);
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+> +
+> +static const struct file_operations raa_dmpvr2_debugfs_fops = {
+> +	.llseek = noop_llseek,
+> +	.read = raa_dmpvr2_debugfs_read,
+> +	.write = raa_dmpvr2_debugfs_write,
+> +	.open = simple_open,
+> +};
+> +
+>  static int raa_dmpvr2_read_word_data(struct i2c_client *client, int page,
+>  				     int phase, int reg)
+>  {
+> @@ -220,7 +640,11 @@ static struct pmbus_driver_info raa_dmpvr_info = {
+>  static int isl68137_probe(struct i2c_client *client,
+>  			  const struct i2c_device_id *id)
+>  {
+> +	int i, ret;
+>  	struct pmbus_driver_info *info;
+> +	struct dentry *debugfs;
+> +	struct dentry *debug_dir;
+> +	struct raa_dmpvr2_ctrl *ctrl;
+>  
+>  	info = devm_kzalloc(&client->dev, sizeof(*info), GFP_KERNEL);
+>  	if (!info)
+> @@ -262,7 +686,37 @@ static int isl68137_probe(struct i2c_client *client,
+>  		return -ENODEV;
+>  	}
+>  
+> -	return pmbus_do_probe(client, id, info);
+> +	// No debugfs features for Gen 1
+> +	if (id->driver_data == raa_dmpvr1_2rail)
+> +		return pmbus_do_probe(client, id, info);
+> +
+> +	ret = pmbus_do_probe(client, id, info);
+> +	if (ret != 0)
+> +		return ret;
+
+Why not do the version check and return here ?
+
+	if (ret || id->driver_data == raa_dmpvr1_2rail)
+		return ret;
+
+> +
+> +	ctrl = devm_kzalloc(&client->dev, sizeof(*ctrl), GFP_KERNEL);
+> +	if (!ctrl)
+> +		return 0;
+> +
+> +	ctrl->client = client;
+> +	debugfs = pmbus_get_debugfs_dir(client);
+> +	if (!debugfs)
+> +		return 0;
+> +
+> +	debug_dir = debugfs_create_dir(client->name, debugfs);
+> +	if (!debug_dir)
+> +		return 0;
+> +
+> +	for (i = 0; i < RAA_DMPVR2_DEBUGFS_NUM_ENTRIES; i++)
+> +		ctrl->debugfs_entries[i] = i;
+> +
+> +	debugfs_create_file("write_config", 0220, debug_dir,
+> +			    &ctrl->debugfs_entries[RAA_DMPVR2_DEBUGFS_CFG_W],
+> +			    &raa_dmpvr2_debugfs_fops);
+> +	debugfs_create_file("read_black_box", 0440, debug_dir,
+> +			    &ctrl->debugfs_entries[RAA_DMPVR2_DEBUGFS_BB_R],
+> +			    &raa_dmpvr2_debugfs_fops);
+> +	return 0;
+>  }
+>  
+>  static const struct i2c_device_id raa_dmpvr_id[] = {
