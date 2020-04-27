@@ -2,483 +2,203 @@ Return-Path: <SRS0=1vPy=6L=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60728C54FD0
-	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Apr 2020 12:40:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2DCEC54FD0
+	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Apr 2020 13:34:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 348E1206BF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Apr 2020 12:40:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B4D0020663
+	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Apr 2020 13:34:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fZ8FAsfS"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gi/XmspG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726504AbgD0MkG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 27 Apr 2020 08:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45294 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726390AbgD0MkG (ORCPT
+        id S1726769AbgD0NeU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 27 Apr 2020 09:34:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53726 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726721AbgD0NeU (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 27 Apr 2020 08:40:06 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C826EC0610D5
-        for <linux-hwmon@vger.kernel.org>; Mon, 27 Apr 2020 05:40:05 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id t11so13646593lfe.4
-        for <linux-hwmon@vger.kernel.org>; Mon, 27 Apr 2020 05:40:05 -0700 (PDT)
+        Mon, 27 Apr 2020 09:34:20 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01816C0610D5
+        for <linux-hwmon@vger.kernel.org>; Mon, 27 Apr 2020 06:34:20 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id t11so8703577pgg.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 27 Apr 2020 06:34:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=DWsMOIOw6HlCLC84vlK77/IZK4iuZNkCnTbk0aX5v3M=;
-        b=fZ8FAsfSxhKe5tcUKz5ZwDLdBbK8TIBK1U4TaJfe8iVplZIYKsf/4gCB4s5hbQxdrX
-         Ly8TP/D+h/x8KZAkPAiXTasLSoTehTrgIU4+p0iea0BMQFjA+HMz4pTAZzwqiWSGoOrS
-         05FPxu0vYZ7PJ/VHoa9K2AtsMWFeIcIH2f3M2bqRHjWVpHekOwfh9c7TTaBOZTLibjie
-         CoWqmJEfchHivvC0SemGusVcw6DcFzx3BJM+xLjU1J45rXPLyXG4J0GBx4Yf+1Vqhelu
-         diMrQT6HFy0okl5tuj9uCR8k9JrFXAJdFf4zq7g4XBCMvandwout+ZSqiZPzo+3ZUKzI
-         wDew==
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=jpyqeoUYiJHMwlhQOh1Jzu/4bIAdQJb6XGtHqWlyLms=;
+        b=Gi/XmspGrfW5gszB7YEkToK5qoQGOl1z9S/oVNLABFqj7YmKHs1FxUAup0OhB9OMnv
+         yluK873NpuRQ24CqrYN54SfFD8JIJ1nxUYlx12Pindl9KxXyBr70crmWElD7eYXpASu7
+         WfpBIdIizLuPfA2YZvqcwWQGSipbbmlXnBow6rXfGXyqmfZ3HW39LTzH2uPtz2ei0J4Z
+         NGXlYbET43WXQrYOotaEh0o6fsbFm0J3XKintO6i1mKRDLwxKSz0MYquqMwphJCp+c+C
+         ROzUaMZZZmDCJuS7JvNHev8d7EQHJDmlqbo88E9qrNjpPsUra0wJpLnU6VGHiq7H//uf
+         G9Pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=DWsMOIOw6HlCLC84vlK77/IZK4iuZNkCnTbk0aX5v3M=;
-        b=DexJZwDzl6HT7TMR0h5dlEampiUuTlykxF6eGwWcDVtVQ1lL5xtdWArSTJeCJhy5k3
-         Ttq5Dc2r1nZfKisgcCeqh8QQlDZEt6Nccto1aPbJpveyKqa0U9dEpzrSL1jOn32KtDa1
-         TTYrAFsREqzxGJOf6e5MbLewOyWPPY6orMT3NbP44nFM7ckqom/5gkU2ll0LyNbvLMx0
-         9uvRULYHjIKguxmapGMlozG9Awt+pySxUF35jrQxFrJmbdB0xbrN72Y2/lGiMYAmwLKc
-         3sABAtGIq+wrnSxlUzeugo6VHJf+LvsUMAunpkn1oQvtUz8WgBBdkJXZTQFh+zVe3axS
-         VRIA==
-X-Gm-Message-State: AGi0PubZIt+VAd90ywNcCCE9JMyXL0VHmTfPafTtfH3pbGiEHNVn59N7
-        em3tRH1dMkEJ+BEboxLDM3yxTiMaPPQLbnixtTbis9Rx
-X-Google-Smtp-Source: APiQypJs0K2dyLrfKNUfwc/9NwBGRWi5szH9r5bkTb08ur6q9TMeQjB9nPkdYiMbnN0VMzH5rh3VcUu6wibJkTJygBo=
-X-Received: by 2002:a05:6512:308c:: with SMTP id z12mr15240587lfd.195.1587991203945;
- Mon, 27 Apr 2020 05:40:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200425161750.GA67085@roeck-us.net>
-In-Reply-To: <20200425161750.GA67085@roeck-us.net>
-From:   Naveen Krishna Ch <naveenkrishna.ch@gmail.com>
-Date:   Mon, 27 Apr 2020 18:09:51 +0530
-Message-ID: <CAHfPSqAj+Ga8u-bL3TrhWJAmMpJ4y4C9t627j3er=UoV9LfGHQ@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] hwmon: Add amd_energy driver to report energy counters
-To:     Guenter Roeck <linux@roeck-us.net>
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=jpyqeoUYiJHMwlhQOh1Jzu/4bIAdQJb6XGtHqWlyLms=;
+        b=Nv1H5noI0/Bw5fRJnH8AhwQyPhqU/s5Akq2dovQdNTxB4QStvSvZj2YuUb9vyW607D
+         mX9/t378iGiQc06PqhRPM61sxkkchaxvr3gRum7jGgJa1jqDVfQY0zkcgIjmY9MTvvsJ
+         ky8NSifdqnWcznGSEnymi8hFSyP6lTRIlAL8hgtjKsJj5vi/X+fL5vjaWGv9BNtJ8718
+         CSzEbk02Dmlkbhdnpd6lLGMDBvlgp7quF1MKs4trJw/qs9EGUZ8JpXpXjF0KgS0q6jx/
+         3wwLIYHcR/e7YYxMPGKyZ3HXQaUhCYHmGBypYI45BJnKqJ7odu545Woo/I7om245sHCs
+         P8bg==
+X-Gm-Message-State: AGi0PubGQSSm2VxzL+K/O/sjyS0Rgt+qZ33XN0Ja53ggGHQf+JR6SY80
+        LNRyqI20mpwOyF7zoJR9Dn0uT53U
+X-Google-Smtp-Source: APiQypKajlUoJdx57FWNtIVKk72cbbkU5fp3keH33Ns8TSvL44qx1AEAQy0N713oWS3Bx0vtUYgEBg==
+X-Received: by 2002:a62:864c:: with SMTP id x73mr23865018pfd.235.1587994459269;
+        Mon, 27 Apr 2020 06:34:19 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t7sm12543977pfh.143.2020.04.27.06.34.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Apr 2020 06:34:18 -0700 (PDT)
+Subject: Re: [PATCH v4 1/3] hwmon: Add amd_energy driver to report energy
+ counters
+To:     Naveen Krishna Ch <naveenkrishna.ch@gmail.com>
 Cc:     Naveen Krishna Chatradhi <nchatrad@amd.com>,
         linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+References: <20200425161750.GA67085@roeck-us.net>
+ <CAHfPSqAj+Ga8u-bL3TrhWJAmMpJ4y4C9t627j3er=UoV9LfGHQ@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <23f57a70-9c1e-2b1d-eaa4-80b093db8146@roeck-us.net>
+Date:   Mon, 27 Apr 2020 06:34:16 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+MIME-Version: 1.0
+In-Reply-To: <CAHfPSqAj+Ga8u-bL3TrhWJAmMpJ4y4C9t627j3er=UoV9LfGHQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Guenter,
+On 4/27/20 5:39 AM, Naveen Krishna Ch wrote:
+> Hi Guenter,
+> 
+> On Sat, 25 Apr 2020 at 21:47, Guenter Roeck <linux@roeck-us.net> wrote:
+>>
+>> On Fri, Apr 24, 2020 at 08:50:54AM +0530, Naveen Krishna Chatradhi wrote:
+>>> This patch adds hwmon based amd_energy driver support for
+>>> family 17h processors from AMD.
+>>>
+>>> The driver provides following interface to the userspace
+>>> 1. Reports the per core consumption
+>>>       * file: "energy%d_input", label: "Ecore%03d"
+>>> 2. Reports per socket energy consumption
+>>>       * file: "energy%d_input", label: "Esocket%d"
+>>> 2. Reports scaled energy value in Joules.
+>>>
+>>> Cc: Guenter Roeck <linux@roeck-us.net>
+>>> Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
+>>
+>> Couple of additional comments below.
+>>
+>> On a higher level, I noticed that the data overflows quickly
+>> (ie within a day or so), which is the reason why the matching
+>> code for Intel CPUs never made it into the kernel. With that
+>> in mind, I do wonder if this is really valuable. I am quite
+>> concerned about people complaining that the data is useless,
+>> and I have to say that I find it quite useless myself. Any
+>> system running for more than a few hours will report more or
+>> less random data. Any thoughts on that ?
+> This driver will also address the future platforms with
+> support for 64-bit counters.
+> 
+> We do have platforms that will come out very shortly, which will
+> support a different energy resolution to increase the wraparound
+> time with 32bit counters,
+> 
+> On a platform with 2 sockets each with 64 cores,
+> Assuming 240W, new resolution of 15.6 milli Joules
+> 
+> -  Wrap around time for socket energy counter will be
+> (up to ~3 to 4 days with maximum load).
+> 
+> 2^32*15.625e-3/240 = 279620.2667 secs to wrap (i.e 3.2 days)
+> 
+> - Wrap around time for the per-core energy counters with the
+> new resolution will be
+> 
+> 2^32*15.6e-3/ (240 * 128) = 2184533.33 secs to wrap (i.e 25 days)
+> 
+> When a work load is to be run on certain predefined cores.
+> The Work load managers can gather the energy status before starting
+> and after completion of the job and measure power consumed by the
+> work load.
+> 
+All that doesn't help much for existing platforms, nor for users who
+expect that counters don't wrap around at all (at least not until they
+reach the 64-bit limit).
 
-On Sat, 25 Apr 2020 at 21:47, Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Fri, Apr 24, 2020 at 08:50:54AM +0530, Naveen Krishna Chatradhi wrote:
-> > This patch adds hwmon based amd_energy driver support for
-> > family 17h processors from AMD.
-> >
-> > The driver provides following interface to the userspace
-> > 1. Reports the per core consumption
-> >       * file: "energy%d_input", label: "Ecore%03d"
-> > 2. Reports per socket energy consumption
-> >       * file: "energy%d_input", label: "Esocket%d"
-> > 2. Reports scaled energy value in Joules.
-> >
-> > Cc: Guenter Roeck <linux@roeck-us.net>
-> > Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
->
-> Couple of additional comments below.
->
-> On a higher level, I noticed that the data overflows quickly
-> (ie within a day or so), which is the reason why the matching
-> code for Intel CPUs never made it into the kernel. With that
-> in mind, I do wonder if this is really valuable. I am quite
-> concerned about people complaining that the data is useless,
-> and I have to say that I find it quite useless myself. Any
-> system running for more than a few hours will report more or
-> less random data. Any thoughts on that ?
-This driver will also address the future platforms with
-support for 64-bit counters.
+I see two options. Either provide power reporting instead (which should
+be done in the k10temp driver), or implement a kernel thread which runs
+often enough to catch wraparounds. While not perfect (it will only report
+the energy since the driver was loaded), it will at least avoid the
+frequent wraparounds seen today, and that caveat can be documented.
 
-We do have platforms that will come out very shortly, which will
-support a different energy resolution to increase the wraparound
-time with 32bit counters,
+>>
+>> How about making the power reporting registers available and
+>> reporting per-CPU power consumption instead ? I think that would
+>> add much more value.
+> We will expose power reporting when platform exposes that information.
+> Until then, energy reporting becomes further critical.
+> 
 
-On a platform with 2 sockets each with 64 cores,
-Assuming 240W, new resolution of 15.6 milli Joules
+Some Windows tools such as HwInfo report power readings today,
+on existing CPUs, so I don't really buy the claim that existing
+chips don't report it.
 
--  Wrap around time for socket energy counter will be
-(up to ~3 to 4 days with maximum load).
-
-2^32*15.625e-3/240 =3D 279620.2667 secs to wrap (i.e 3.2 days)
-
-- Wrap around time for the per-core energy counters with the
-new resolution will be
-
-2^32*15.6e-3/ (240 * 128) =3D 2184533.33 secs to wrap (i.e 25 days)
-
-When a work load is to be run on certain predefined cores.
-The Work load managers can gather the energy status before starting
-and after completion of the job and measure power consumed by the
-work load.
-
->
-> How about making the power reporting registers available and
-> reporting per-CPU power consumption instead ? I think that would
-> add much more value.
-We will expose power reporting when platform exposes that information.
-Until then, energy reporting becomes further critical.
-
->
-> Thanks,
-> Guenter
->
-> > ---
-> > Changes in v4:
-> > 1. Use num_present_cpus() instead num_online_cpu(), as the latter does
-> >    not take offline cpus into account.
-> > 2. run checkpatch.pl --strict and fix alignment issues
-> > 3. Fixed other comments from Guenter Roeck
-> >
-> >  drivers/hwmon/Kconfig      |  10 ++
-> >  drivers/hwmon/Makefile     |   1 +
-> >  drivers/hwmon/amd_energy.c | 250 +++++++++++++++++++++++++++++++++++++
-> >  3 files changed, 261 insertions(+)
-> >  create mode 100644 drivers/hwmon/amd_energy.c
-> >
-> > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> > index 4c62f900bf7e..e165e10c49ef 100644
-> > --- a/drivers/hwmon/Kconfig
-> > +++ b/drivers/hwmon/Kconfig
-> > @@ -324,6 +324,16 @@ config SENSORS_FAM15H_POWER
-> >         This driver can also be built as a module. If so, the module
-> >         will be called fam15h_power.
-> >
-> > +config SENSORS_AMD_ENERGY
-> > +     tristate "AMD RAPL MSR based Energy driver"
-> > +     depends on X86
-> > +     help
-> > +       If you say yes here you get support for core and package energy
-> > +       sensors, based on RAPL MSR for AMD family 17h and above CPUs.
-> > +
-> > +       This driver can also be built as a module. If so, the module
-> > +       will be called as amd_energy.
-> > +
-> >  config SENSORS_APPLESMC
-> >       tristate "Apple SMC (Motion sensor, light sensor, keyboard backli=
-ght)"
-> >       depends on INPUT && X86
-> > diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> > index b0b9c8e57176..318f89dc7133 100644
-> > --- a/drivers/hwmon/Makefile
-> > +++ b/drivers/hwmon/Makefile
-> > @@ -45,6 +45,7 @@ obj-$(CONFIG_SENSORS_ADT7411)       +=3D adt7411.o
-> >  obj-$(CONFIG_SENSORS_ADT7462)        +=3D adt7462.o
-> >  obj-$(CONFIG_SENSORS_ADT7470)        +=3D adt7470.o
-> >  obj-$(CONFIG_SENSORS_ADT7475)        +=3D adt7475.o
-> > +obj-$(CONFIG_SENSORS_AMD_ENERGY) +=3D amd_energy.o
-> >  obj-$(CONFIG_SENSORS_APPLESMC)       +=3D applesmc.o
-> >  obj-$(CONFIG_SENSORS_ARM_SCMI)       +=3D scmi-hwmon.o
-> >  obj-$(CONFIG_SENSORS_ARM_SCPI)       +=3D scpi-hwmon.o
-> > diff --git a/drivers/hwmon/amd_energy.c b/drivers/hwmon/amd_energy.c
-> > new file mode 100644
-> > index 000000000000..7162c80edd10
-> > --- /dev/null
-> > +++ b/drivers/hwmon/amd_energy.c
-> > @@ -0,0 +1,250 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +
-> > +/*
-> > + * Copyright (C) 2020 Advanced Micro Devices, Inc.
-> > + */
-> > +
-> > +#include <asm/cpu_device_id.h>
-> > +
-> I don't think this is currently used. More on that below, though.
-will remove
->
-> > +#include <linux/cpu.h>
-> > +#include <linux/cpumask.h>
-> > +#include <linux/device.h>
-> > +#include <linux/hwmon.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/list.h>
-> > +#include <linux/module.h>
-> > +#include <linux/processor.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/slab.h>
-> > +#include <linux/sysfs.h>
->
-> I don't think this include is needed.
-yes
-
->
-> On the other side, using BIT() means that linux/bits.h should be included=
-.
-sure
-
->
-> > +#include <linux/types.h>
-> > +
-> > +#define DRVNAME                      "amd_energy"
-> > +
-> > +#define ENERGY_PWR_UNIT_MSR  0xC0010299
-> > +#define ENERGY_CORE_MSR              0xC001029A
-> > +#define ENERGY_PKG_MSR               0xC001029B
-> > +
-> > +#define AMD_TIME_UNIT_MASK   0xF0000
-> > +#define AMD_ENERGY_UNIT_MASK 0x01F00
-> > +#define AMD_POWER_UNIT_MASK  0x0000F
-> > +
-> > +#define ENERGY_STATUS_MASK   0xffffffff
-> > +
-> > +#define AMD_FAM_17           0x17 /* ZP, SSP */
-> > +
-> > +/* Useful macros */
-> > +#define AMD_CPU_FAM_ANY(_family, _model)     \
-> > +{                                            \
-> > +     .vendor         =3D X86_VENDOR_AMD,       \
-> > +     .family         =3D _family,              \
-> > +     .model          =3D _model,               \
-> > +     .feature        =3D X86_FEATURE_ANY,      \
-> > +}
-> > +
-> > +#define AMD_CPU_FAM(_model)                  \
-> > +     AMD_CPU_FAM_ANY(AMD_FAM_##_model, X86_MODEL_ANY)
-> > +
->
-> Any special reason for not just using the following in cpu_ids[] ?
->         X86_MATCH_VENDOR_FAM(AMD, 0x17, NULL)
-no specific reason, will use this.
-
->
-> > +struct amd_energy_data {
-> > +     struct hwmon_channel_info energy_info;
-> > +     const struct hwmon_channel_info *info[2];
-> > +     struct hwmon_chip_info chip;
-> > +};
-> > +
-> > +static int nr_cpus, nr_socks;
-> > +static u64 energy_units;
-> > +
-> > +static int amd_energy_read_labels(struct device *dev,
-> > +                               enum hwmon_sensor_types type,
-> > +                              u32 attr, int channel,
-> > +                              const char **str)
-> > +{
-> > +     char *buf =3D devm_kcalloc(dev, 10, sizeof(char), GFP_KERNEL);
-> > +
-> > +     if (channel >=3D nr_cpus)
-> > +             scnprintf(buf, 9, "Esocket%u", channel - nr_cpus);
-> > +     else
-> > +             scnprintf(buf, 9, "Ecore%03u", channel);
-> > +
-> > +     *str =3D buf;
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int get_energy_units(void)
-> > +{
-> > +     u64 rapl_units;
-> > +     int ret;
-> > +
-> > +     ret =3D rdmsrl_safe(ENERGY_PWR_UNIT_MSR, &rapl_units);
-> > +     if (ret)
-> > +             return -EAGAIN;
-> > +
-> > +     energy_units =3D (rapl_units & AMD_ENERGY_UNIT_MASK) >> 8;
-> > +     return 0;
-> > +}
-> > +
-> > +static int amd_energy_read(struct device *dev,
-> > +                        enum hwmon_sensor_types type,
-> > +                        u32 attr, int channel, long *val)
-> > +{
-> > +     u64 value;
-> > +     int cpu, ret;
-> > +     u32 reg;
-> > +
-> > +     if (channel >=3D nr_cpus) {
-> > +             reg =3D ENERGY_PKG_MSR;
-> > +             cpu =3D cpumask_first_and(cpu_online_mask,
-> > +                                     cpumask_of_node
-> > +                                     (channel - nr_cpus));
-> > +     } else {
-> > +             reg =3D ENERGY_CORE_MSR;
-> > +             cpu =3D channel;
-> > +     }
-> > +
-> > +     if (!cpu_online(cpu))
-> > +             return -ENODEV;
-> > +
-> > +     ret =3D rdmsrl_safe_on_cpu(cpu, reg, &value);
-> > +     if (ret)
-> > +             return -EAGAIN;
-> > +
-> > +     if (energy_units =3D=3D 0 && get_energy_units())
-> > +             return -EAGAIN;
-> > +
-> > +     /* Energy consumed =3D (1/(2^ESU) * RAW * 1000000UL) Joules */
-> > +     *val =3D (long)value * div64_ul(1000000UL, BIT(energy_units));
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static umode_t amd_energy_is_visible(const void *_data,
-> > +                                  enum hwmon_sensor_types type,
-> > +                                  u32 attr, int channel)
-> > +{
-> > +     return 0444;
-> > +}
-> > +
-> > +static const struct hwmon_ops amd_energy_ops =3D {
-> > +     .is_visible =3D amd_energy_is_visible,
-> > +     .read =3D amd_energy_read,
-> > +     .read_string =3D amd_energy_read_labels,
-> > +};
-> > +
-> > +static int amd_create_sensor(struct device *dev,
-> > +                          struct amd_energy_data *data,
-> > +                          u8 type, u32 config)
-> > +{
-> > +     int i;
-> > +     u32 *s_config;
-> > +     struct hwmon_channel_info *info =3D &data->energy_info;
-> > +
-> > +     nr_socks =3D num_possible_nodes();
-> > +     nr_cpus =3D num_present_cpus();
-> > +
->
-> On Ryzen 3900X, this generates data for 24 CPUs. Are you sure
-> that this is correct, ie that the data is available per
-> hyperthreading sibling ?
-These energy counters are updated per core level, not at thread level.
-Correct me if I=E2=80=99m wrong. My understanding is linux enumerates
-all thread as a cpus and the internals of rd/wrmsr_on_cpu() functions
-would handle the cpu/sibling thread in the x86_64 specific way.
-
-If this understanding is wrong, I will try to use
-topology_sibling_cpumask() or similar.
-
-
->
-> > +     s_config =3D devm_kcalloc(dev, nr_cpus + nr_socks,
-> > +                             sizeof(u32), GFP_KERNEL);
-> > +     if (!s_config)
-> > +             return -ENOMEM;
-> > +
-> > +     info->type =3D type;
-> > +     info->config =3D s_config;
-> > +
-> > +     for (i =3D 0; i < nr_cpus + nr_socks; i++)
-> > +             s_config[i] =3D config;
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int amd_energy_probe(struct platform_device *pdev)
-> > +{
-> > +     struct device *hwmon_dev;
-> > +     struct amd_energy_data *data;
-> > +     struct device *dev =3D &pdev->dev;
-> > +     int ret;
-> > +
-> > +     ret =3D get_energy_units();
-> > +
-> > +     data =3D devm_kzalloc(dev, sizeof(struct amd_energy_data), GFP_KE=
-RNEL);
-> > +     if (!data)
-> > +             return -ENOMEM;
-> > +
-> > +     data->chip.ops =3D &amd_energy_ops;
-> > +     data->chip.info =3D data->info;
-> > +
-> > +     /* Populate per-core energy reporting */
-> > +     data->info[0] =3D &data->energy_info;
-> > +     amd_create_sensor(dev, data,  hwmon_energy,
-> > +                       HWMON_E_INPUT | HWMON_E_LABEL);
-> > +
-> > +     hwmon_dev =3D devm_hwmon_device_register_with_info(dev, DRVNAME,
-> > +                                                      data,
-> > +                                                      &data->chip,
-> > +                                                      NULL);
-> > +     return PTR_ERR_OR_ZERO(hwmon_dev);
-> > +}
-> > +
-> > +static int amd_energy_remove(struct platform_device *pdev)
-> > +{
-> > +     return 0;
-> > +}
-> > +
-> > +static const struct platform_device_id amd_energy_ids[] =3D {
-> > +     { .name =3D DRVNAME, },
-> > +     {}
-> > +};
-> > +MODULE_DEVICE_TABLE(platform, amd_energy_ids);
-> > +
-> > +static struct platform_driver amd_energy_driver =3D {
-> > +     .probe =3D amd_energy_probe,
-> > +     .remove =3D amd_energy_remove,
-> > +     .id_table =3D amd_energy_ids,
-> > +     .driver =3D {
-> > +             .name =3D DRVNAME,
-> > +     },
-> > +};
-> > +
-> > +static struct platform_device *amd_energy_platdev;
-> > +
-> > +static const struct x86_cpu_id cpu_ids[] __initconst =3D {
-> > +     AMD_CPU_FAM(17),
-> > +     {}
-> > +};
-> > +MODULE_DEVICE_TABLE(x86cpu, cpu_ids);
-> > +
-> > +static int __init amd_energy_init(void)
-> > +{
-> > +     int ret;
-> > +
-> > +     if (!x86_match_cpu(cpu_ids))
-> > +             return -ENODEV;
-> > +
-> > +     ret =3D platform_driver_register(&amd_energy_driver);
-> > +     if (ret < 0)
-> > +             return ret;
-> > +
-> > +     amd_energy_platdev =3D platform_device_alloc(DRVNAME, 0);
-> > +     if (!amd_energy_platdev)
-> > +             return -ENOMEM;
-> > +
-> > +     ret =3D platform_device_add(amd_energy_platdev);
-> > +     if (ret) {
-> > +             platform_device_unregister(amd_energy_platdev);
-> > +             return ret;
-> > +     }
-> > +
-> > +     return ret;
-> > +}
-> > +
-> > +static void __exit amd_energy_exit(void)
-> > +{
-> > +     platform_device_unregister(amd_energy_platdev);
-> > +     platform_driver_unregister(&amd_energy_driver);
-> > +}
-> > +
-> > +module_init(amd_energy_init);
-> > +module_exit(amd_energy_exit);
-> > +
-> > +MODULE_DESCRIPTION("Driver for AMD Energy reporting from RAPL MSR via =
-HWMON interface");
-> > +MODULE_AUTHOR("Naveen Krishna Chatradhi <nchatrad@amd.com>");
-> > +MODULE_LICENSE("GPL");
-> > --
-> > 2.17.1
-> >
-
-
-
---
-Shine bright,
-(: Nav :)
+Thanks,
+Guenter
