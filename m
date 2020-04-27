@@ -2,156 +2,172 @@ Return-Path: <SRS0=1vPy=6L=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69332C54FD0
-	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Apr 2020 17:07:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF366C4CECD
+	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Apr 2020 17:40:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3D3FD20738
-	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Apr 2020 17:07:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 99CAF2078C
+	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Apr 2020 17:40:18 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R5ajrQCB"
+	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="jZOn6q/j"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726248AbgD0RHd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 27 Apr 2020 13:07:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58990 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726204AbgD0RHc (ORCPT
+        id S1726217AbgD0RkS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 27 Apr 2020 13:40:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35924 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726189AbgD0RkS (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 27 Apr 2020 13:07:32 -0400
-Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD0EC0610D5;
-        Mon, 27 Apr 2020 10:07:32 -0700 (PDT)
-Received: by mail-ot1-x344.google.com with SMTP id z25so27413042otq.13;
-        Mon, 27 Apr 2020 10:07:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=B3eBYK/kzeNRP96M+6ouxtzsIv+mQZ4EB6uahgWm770=;
-        b=R5ajrQCBims2YTx0ZNjnD+FPfVFx8QMDUmxWy6zKaMJHum+eljaVeHP6D+Mn/4UYh5
-         vqTn+RHIi1fzXw4NtFNyvgMyEMLN5XkgfMucjBldIRRFTZ+xCXdPzVtdItfcC1kOnZHG
-         UHI5+IU9JVPdUgmjnUk//hGM0MMhJvYvDCd7GxjoFvpIaPgMUKqYKTkZqQr/XvqxtM4T
-         Jmhd/y5/ugi2vLRQPxSMJyKnYd+Buy5ZW9/jPvs3bH6hBFz6onCC5aZW4JCQnOAsdQFj
-         Bbe4moN9SSkCC/bIC6DaJTl/bgW1v7JHD8EpJYCQGjBharoTc4a/6V4XaPBc+TZ8mwfR
-         gE5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=B3eBYK/kzeNRP96M+6ouxtzsIv+mQZ4EB6uahgWm770=;
-        b=KGm93Ko7EsIgezfXFFb5yktfUiZzP2PSL0W40JtH+0Aa430YFJS0hnOIJtaiVIh3U2
-         3o5j+BD/C9/lYQHTQyybEa17JF/FG3USj47VBrc9LXYBHhHSU5PGOPVdx8qVZnm9y3Q8
-         50+ica32dqbGEfrxPdsLVAg7QetoHdR9T3D2ic//HSASOhLnyoLMXW01tZdLjbxUiVv0
-         9kMHK87IkXssF2dd3GK3hdATS29ZNYlIEi0FLE61zNuutbJZjscgrZ29IOggmIoMMvrO
-         XWGSlWfb90lWYKHrjPY+LW1T6xDhHUzp2PINAUGk1J6x6jwA23ZADTcKMBJLCjNzbCtA
-         9EOA==
-X-Gm-Message-State: AGi0PuZWZc76NMLlA3MFjyHQi3caj30qiuaMgmjpWuMKayblpq/AVPz9
-        6wXaOAS1Bjyv8r4ABiftkF2oNxFzXdo=
-X-Google-Smtp-Source: APiQypKaD/gFAbQnvyaxAd4tr9bbcy4MhmIJk4wgWUAgWIXQzn6pmr4F8lxTGEGBgopidNcmBQp68w==
-X-Received: by 2002:a54:4483:: with SMTP id v3mr17114731oiv.0.1588007251883;
-        Mon, 27 Apr 2020 10:07:31 -0700 (PDT)
-Received: from raspberrypi (99-189-78-97.lightspeed.austtx.sbcglobal.net. [99.189.78.97])
-        by smtp.gmail.com with ESMTPSA id q142sm4177867oic.44.2020.04.27.10.07.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Apr 2020 10:07:31 -0700 (PDT)
-Date:   Mon, 27 Apr 2020 12:07:29 -0500
-From:   Grant Peltier <grantpeltier93@gmail.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        adam.vaughn.xh@renesas.com, grant.peltier.jg@renesas.com
-Subject: Re: [PATCH v2 1/2] hwmon: (pmbus/isl68137) add debugfs config and
- black box endpoints
-Message-ID: <20200427170729.GA13285@raspberrypi>
-References: <cover.1587572415.git.grantpeltier93@gmail.com>
- <acbdc26389b6ab5f5f4536de7332b03c45a95f00.1587572415.git.grantpeltier93@gmail.com>
- <20200425174318.GA40266@roeck-us.net>
+        Mon, 27 Apr 2020 13:40:18 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56D2C0610D5;
+        Mon, 27 Apr 2020 10:40:17 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id A316B2305C;
+        Mon, 27 Apr 2020 19:40:12 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1588009213;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Mb7wOIhi91zTa7OdCwnok2RD4/Y3FAeCxF/iMp7nN6o=;
+        b=jZOn6q/jxrjwYNn4nj3d83zoUJgdzvpe11GNFG7mRNPqsDk605zmppuXrjG6DwI9lToeYu
+        hv+XTWKczoGnq1p/Vnvk/7ctIF/9ikivCHAneUAnz7kw7CjEkx+6UB5FgdL5xAtJTg6voE
+        R4T413P+f5UjxDP86b2VwSVDn779YB4=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200425174318.GA40266@roeck-us.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Mon, 27 Apr 2020 19:40:11 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v3 06/16] irqchip: add sl28cpld interrupt controller
+ support
+In-Reply-To: <87pnbtqhr1.fsf@nanos.tec.linutronix.de>
+References: <20200423174543.17161-1-michael@walle.cc>
+ <20200423174543.17161-7-michael@walle.cc>
+ <87pnbtqhr1.fsf@nanos.tec.linutronix.de>
+Message-ID: <87f141bce0a4fda04b550647306be296@walle.cc>
+X-Sender: michael@walle.cc
+User-Agent: Roundcube Webmail/1.3.10
+X-Spamd-Bar: +
+X-Rspamd-Server: web
+X-Rspamd-Queue-Id: A316B2305C
+X-Spamd-Result: default: False [1.40 / 15.00];
+         FROM_HAS_DN(0.00)[];
+         TO_DN_SOME(0.00)[];
+         FREEMAIL_ENVRCPT(0.00)[gmail.com];
+         TO_MATCH_ENVRCPT_ALL(0.00)[];
+         TAGGED_RCPT(0.00)[dt];
+         MIME_GOOD(-0.10)[text/plain];
+         DKIM_SIGNED(0.00)[];
+         RCPT_COUNT_TWELVE(0.00)[24];
+         NEURAL_HAM(-0.00)[-0.766];
+         RCVD_COUNT_ZERO(0.00)[0];
+         FROM_EQ_ENVFROM(0.00)[];
+         MIME_TRACE(0.00)[0:+];
+         FREEMAIL_CC(0.00)[linux.intel.com,vger.kernel.org,lists.infradead.org,linaro.org,baylibre.com,kernel.org,suse.com,roeck-us.net,gmail.com,pengutronix.de,linux-watchdog.org,nxp.com,lakedaemon.net,linuxfoundation.org];
+         MID_RHS_MATCH_FROM(0.00)[];
+         SUSPICIOUS_RECIPS(1.50)[]
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Apr 25, 2020 at 10:43:18AM -0700, Guenter Roeck wrote:
-> On Wed, Apr 22, 2020 at 12:27:14PM -0500, Grant Peltier wrote:
-> > Add debugfs endpoints to support features of 2nd generation Renesas
-> > digital multiphase voltage regulators that are not compatible with
-> > sysfs.
-> > 
-> > The read_black_box endpoint allows users to read the contents of a
-> > RAM segment used to record fault conditions within Gen 2 devices.
-> > 
-> > The write_config endpoint allows users to write configuration hex
-> > files to Gen 2 devices which modify how they operate.
-> > 
-> > Signed-off-by: Grant Peltier <grantpeltier93@gmail.com>
+Hi Thomas,
+
+thanks for the review.
+
+Am 2020-04-27 13:40, schrieb Thomas Gleixner:
+> Michael Walle <michael@walle.cc> writes:
 > 
-> Comments inline.
+>> This patch adds support for the interrupt controller inside the sl28
 > 
-> However, the more I look into this, the more concerns I have.
-> I think we should limit debugfs functions, if they are needed,
-> to reporting detailed device status. Can you consider handling
-> configuration from userspace using i2cget / i2cset commands ?
+> git grep 'This patch' Documentation/process/
 
-The reason we decided to try to implement configuration writes within the
-driver is that we found a userspace implementation to be unstable. The
-process requires anywhere from approximately 650 to a few thousand 32-bit
-writes (dependent on number of NVM slots contained in the file). The entire
-write process therefore takes a non-trivial amount of CPU time to complete
-and the userspace process was often interrupted which would cause for it
-to fail. Writing the configuration directly from the driver has been less
-error prone.
+ok.
 
-> > +	res = i2c_smbus_read_i2c_block_data(ctrl->client, PMBUS_IC_DEVICE_REV,
-> > +					    5, dev_rev);
 > 
-> It still puzzles me, quite frankly, why i2c_smbus_read_block_data()
-> would not work here.
->
-
-i2c_smbus_read_block_data() requires the underlying driver/controller to handle
-interpretting the initial length byte read from the client device and then
-continuing to read that number of bytes. Not all controllers (e.g. BCM2835)
-support this. On the other hand, i2c_smbus_read_i2c_block_data() just does a
-fixed-length read based on the given length parameter.
-
-> > +static int raa_dmpvr2_cfg_write_result(struct raa_dmpvr2_ctrl *ctrl,
-> > +				       struct raa_dmpvr2_cfg *cfg)
-> > +{
-> > +	u8 data[4] = {0};
-> > +	u8 data1[4];
-> > +	u8 *dptr;
-> > +	unsigned long start;
-> > +	int i, j, status;
-> > +
-> > +	// Check programmer status
-> > +	start = jiffies;
-> > +	i2c_smbus_write_word_data(ctrl->client, RAA_DMPVR2_DMA_ADDR,
-> > +				  RAA_DMPVR2_PRGM_STATUS_ADDR);
-> > +	while (data[0] == 0 && !time_after(jiffies, start + HZ + HZ)) {
-> > +		raa_dmpvr2_smbus_read32(ctrl->client, RAA_DMPVR2_DMA_FIX,
-> > +					data);
-> > +	}
-> > +	if (data[0] != 1)
-> > +		return -ETIME;
+>> CPLD management controller.
+>> 
+>> +static int sl28cpld_intc_probe(struct platform_device *pdev)
+>> +{
+>> +	struct sl28cpld_intc *irqchip;
+>> +	struct resource *res;
+>> +	unsigned int irq;
+>> +	int ret;
+>> +
+>> +	if (!pdev->dev.parent)
+>> +		return -ENODEV;
+>> +
+>> +	irqchip = devm_kzalloc(&pdev->dev, sizeof(*irqchip), GFP_KERNEL);
+>> +	if (!irqchip)
+>> +		return -ENOMEM;
+>> +
+>> +	irqchip->regmap = dev_get_regmap(pdev->dev.parent, NULL);
+>> +	if (!irqchip->regmap)
+>> +		return -ENODEV;
+>> +
+>> +	irq = platform_get_irq(pdev, 0);
+>> +	if (irq < 0)
+>> +		return irq;
+>> +
+>> +	res = platform_get_resource(pdev, IORESOURCE_REG, 0);
+>> +	if (!res)
+>> +		return -EINVAL;
+>> +
+>> +	irqchip->chip.name = "sl28cpld-intc";
+>> +	irqchip->chip.irqs = sl28cpld_irqs;
+>> +	irqchip->chip.num_irqs = ARRAY_SIZE(sl28cpld_irqs);
+>> +	irqchip->chip.num_regs = 1;
+>> +	irqchip->chip.status_base = res->start + INTC_IP;
+>> +	irqchip->chip.mask_base = res->start + INTC_IE;
+>> +	irqchip->chip.mask_invert = true,
+>> +	irqchip->chip.ack_base = res->start + INTC_IP;
+>> +
+>> +	ret = devm_regmap_add_irq_chip(&pdev->dev, irqchip->regmap, irq,
+>> +				       IRQF_SHARED | IRQF_ONESHOT, 0,
 > 
-> Are you sure ? Normally I would expect ETIMEDOUT.
- 
-My understanding is that ETIME is meant for timer expiration whereas ETIMEDOUT
-is meant for connection timeout errors. Is that correct? In this case, we are
-not really waiting on the device to respond but instead are constantly polling
-until the device responds with the desired value. However, I can understand an
-argument for ETIMEDOUT here and can swtich to that if you think it is more
-appropriate.
+> What's the point of IRQF_SHARED | IRQF_ONESHOT here?
 
+IRQF_SHARED because this interrupt is shared with all the blocks
+which can generate interrupts, i.e. the GPIO contollers.
 
-Thank you for your other notes. I will refactor as requested.
+IRQF_ONESHOT, because its is a threaded interrupt with no primary
+handler. But I just noticed, that regmap-irq will also set the
+IRQF_ONESHOT. But that the commit 09cadf6e088b ("regmap-irq:
+set IRQF_ONESHOT flag to ensure IRQ request") reads like it is
+just there to be sure. So I don't know if it should also be set
+here.
 
-Grant
+-michael
+
+> 
+>> +				       &irqchip->chip, &irqchip->irq_data);
+> 
+> Thanks,
+> 
+>         tglx
