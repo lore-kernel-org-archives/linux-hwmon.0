@@ -1,240 +1,121 @@
-Return-Path: <SRS0=k0rg=6K=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=1vPy=6L=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A821C55191
-	for <linux-hwmon@archiver.kernel.org>; Sun, 26 Apr 2020 10:10:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EA1AC5519C
+	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Apr 2020 11:40:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D3F2A2075B
-	for <linux-hwmon@archiver.kernel.org>; Sun, 26 Apr 2020 10:10:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 801EF206BF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Apr 2020 11:40:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726125AbgDZKKK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 26 Apr 2020 06:10:10 -0400
-Received: from mga01.intel.com ([192.55.52.88]:1826 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726119AbgDZKKK (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 26 Apr 2020 06:10:10 -0400
-IronPort-SDR: dEHRNrJrMLDvdc3H1o6Jnk24gs4IxBH4DtqsR7mPww4AyrRy89Qu5vVZp+5fRbgu0d4FextPXf
- ByUyCT2uxRpA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2020 03:10:09 -0700
-IronPort-SDR: B5q1ksYpNxE2A9TeSAuzv7IN0kTPGUA1FrVaRGyfNRXCEDFrHLvFV+Ox1xRCHa6fktzN9vRnoZ
- +Q2bnUuSGd8w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,319,1583222400"; 
-   d="scan'208";a="275142385"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 26 Apr 2020 03:10:08 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1jSeEh-000H8v-O8; Sun, 26 Apr 2020 18:10:07 +0800
-Date:   Sun, 26 Apr 2020 18:09:58 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon-next] BUILD SUCCESS
- 02b925a9104d994191cdc7210a5ef07f0f3e7a4e
-Message-ID: <5ea55df6.9fA7s+7RyVUmkJXM%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1726931AbgD0Lkj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 27 Apr 2020 07:40:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35912 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726504AbgD0Lkj (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 27 Apr 2020 07:40:39 -0400
+Received: from Galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A343C0610D5;
+        Mon, 27 Apr 2020 04:40:39 -0700 (PDT)
+Received: from p5de0bf0b.dip0.t-ipconnect.de ([93.224.191.11] helo=nanos.tec.linutronix.de)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1jT27W-0001FM-LG; Mon, 27 Apr 2020 13:40:18 +0200
+Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
+        id 118A3100606; Mon, 27 Apr 2020 13:40:18 +0200 (CEST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     Michael Walle <michael@walle.cc>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Walle <michael@walle.cc>
+Subject: Re: [PATCH v3 06/16] irqchip: add sl28cpld interrupt controller support
+In-Reply-To: <20200423174543.17161-7-michael@walle.cc>
+References: <20200423174543.17161-1-michael@walle.cc> <20200423174543.17161-7-michael@walle.cc>
+Date:   Mon, 27 Apr 2020 13:40:18 +0200
+Message-ID: <87pnbtqhr1.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon-next
-branch HEAD: 02b925a9104d994191cdc7210a5ef07f0f3e7a4e  hwmon: (lm70) Add support for ACPI
+Michael Walle <michael@walle.cc> writes:
 
-elapsed time: 488m
+> This patch adds support for the interrupt controller inside the sl28
 
-configs tested: 173
-configs skipped: 0
+git grep 'This patch' Documentation/process/
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> CPLD management controller.
+>
+> +static int sl28cpld_intc_probe(struct platform_device *pdev)
+> +{
+> +	struct sl28cpld_intc *irqchip;
+> +	struct resource *res;
+> +	unsigned int irq;
+> +	int ret;
+> +
+> +	if (!pdev->dev.parent)
+> +		return -ENODEV;
+> +
+> +	irqchip = devm_kzalloc(&pdev->dev, sizeof(*irqchip), GFP_KERNEL);
+> +	if (!irqchip)
+> +		return -ENOMEM;
+> +
+> +	irqchip->regmap = dev_get_regmap(pdev->dev.parent, NULL);
+> +	if (!irqchip->regmap)
+> +		return -ENODEV;
+> +
+> +	irq = platform_get_irq(pdev, 0);
+> +	if (irq < 0)
+> +		return irq;
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_REG, 0);
+> +	if (!res)
+> +		return -EINVAL;
+> +
+> +	irqchip->chip.name = "sl28cpld-intc";
+> +	irqchip->chip.irqs = sl28cpld_irqs;
+> +	irqchip->chip.num_irqs = ARRAY_SIZE(sl28cpld_irqs);
+> +	irqchip->chip.num_regs = 1;
+> +	irqchip->chip.status_base = res->start + INTC_IP;
+> +	irqchip->chip.mask_base = res->start + INTC_IE;
+> +	irqchip->chip.mask_invert = true,
+> +	irqchip->chip.ack_base = res->start + INTC_IP;
+> +
+> +	ret = devm_regmap_add_irq_chip(&pdev->dev, irqchip->regmap, irq,
+> +				       IRQF_SHARED | IRQF_ONESHOT, 0,
 
-arm                           efm32_defconfig
-arm                         at91_dt_defconfig
-arm                        shmobile_defconfig
-arm64                               defconfig
-arm                          exynos_defconfig
-arm                        multi_v5_defconfig
-arm                           sunxi_defconfig
-arm                        multi_v7_defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-arm64                            allmodconfig
-arm                              allmodconfig
-arm64                             allnoconfig
-arm                               allnoconfig
-sparc                            allyesconfig
-parisc                generic-64bit_defconfig
-i386                              allnoconfig
-i386                             allyesconfig
-i386                             alldefconfig
-i386                                defconfig
-i386                              debian-10.3
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                              allnoconfig
-ia64                        generic_defconfig
-ia64                          tiger_defconfig
-ia64                         bigsur_defconfig
-ia64                             allyesconfig
-ia64                             alldefconfig
-nds32                               defconfig
-nds32                             allnoconfig
-csky                                defconfig
-alpha                               defconfig
-nios2                         3c120_defconfig
-nios2                         10m50_defconfig
-c6x                        evmc6678_defconfig
-xtensa                          iss_defconfig
-c6x                              allyesconfig
-xtensa                       common_defconfig
-openrisc                 simple_smp_defconfig
-openrisc                    or1ksim_defconfig
-h8300                       h8s-sim_defconfig
-h8300                     edosk2674_defconfig
-m68k                       m5475evb_defconfig
-m68k                             allmodconfig
-h8300                    h8300h-sim_defconfig
-m68k                           sun3_defconfig
-m68k                          multi_defconfig
-arc                                 defconfig
-arc                              allyesconfig
-powerpc                             defconfig
-powerpc                       ppc64_defconfig
-powerpc                          rhel-kconfig
-microblaze                      mmu_defconfig
-microblaze                    nommu_defconfig
-powerpc                           allnoconfig
-mips                      fuloong2e_defconfig
-mips                      malta_kvm_defconfig
-mips                            ar7_defconfig
-mips                             allyesconfig
-mips                         64r6el_defconfig
-mips                              allnoconfig
-mips                           32r2_defconfig
-mips                             allmodconfig
-mips                malta_kvm_guest_defconfig
-mips                         tb0287_defconfig
-mips                       capcella_defconfig
-mips                           ip32_defconfig
-mips                  decstation_64_defconfig
-mips                      loongson3_defconfig
-mips                          ath79_defconfig
-mips                        bcm63xx_defconfig
-parisc                            allnoconfig
-parisc                generic-32bit_defconfig
-parisc                           allyesconfig
-parisc                           allmodconfig
-parisc               randconfig-a001-20200426
-mips                 randconfig-a001-20200426
-alpha                randconfig-a001-20200426
-m68k                 randconfig-a001-20200426
-riscv                randconfig-a001-20200426
-nds32                randconfig-a001-20200426
-nios2                randconfig-a001-20200426
-c6x                  randconfig-a001-20200426
-h8300                randconfig-a001-20200426
-sparc64              randconfig-a001-20200426
-microblaze           randconfig-a001-20200426
-sh                   randconfig-a001-20200426
-csky                 randconfig-a001-20200426
-s390                 randconfig-a001-20200426
-xtensa               randconfig-a001-20200426
-openrisc             randconfig-a001-20200426
-i386                 randconfig-b002-20200426
-x86_64               randconfig-b001-20200426
-i386                 randconfig-b001-20200426
-i386                 randconfig-b003-20200426
-x86_64               randconfig-b003-20200426
-i386                 randconfig-c002-20200426
-i386                 randconfig-c001-20200426
-x86_64               randconfig-c002-20200426
-i386                 randconfig-c003-20200426
-x86_64               randconfig-a001-20200426
-i386                 randconfig-a003-20200426
-x86_64               randconfig-a003-20200426
-i386                 randconfig-a002-20200426
-i386                 randconfig-a001-20200426
-x86_64               randconfig-a002-20200426
-x86_64               randconfig-d002-20200426
-i386                 randconfig-d002-20200426
-i386                 randconfig-d001-20200426
-i386                 randconfig-d003-20200426
-i386                 randconfig-e003-20200426
-x86_64               randconfig-e003-20200426
-i386                 randconfig-e002-20200426
-i386                 randconfig-e001-20200426
-x86_64               randconfig-e001-20200426
-x86_64               randconfig-f002-20200426
-i386                 randconfig-f002-20200426
-x86_64               randconfig-f003-20200426
-i386                 randconfig-f003-20200426
-i386                 randconfig-f001-20200426
-x86_64               randconfig-f001-20200426
-i386                 randconfig-g003-20200426
-i386                 randconfig-g001-20200426
-x86_64               randconfig-g001-20200426
-x86_64               randconfig-g002-20200426
-i386                 randconfig-g002-20200426
-x86_64               randconfig-g003-20200426
-i386                 randconfig-h003-20200426
-x86_64               randconfig-h001-20200426
-x86_64               randconfig-h003-20200426
-x86_64               randconfig-h002-20200426
-i386                 randconfig-h001-20200426
-i386                 randconfig-h002-20200426
-sparc                randconfig-a001-20200426
-ia64                 randconfig-a001-20200426
-powerpc              randconfig-a001-20200426
-arm                  randconfig-a001-20200426
-arm64                randconfig-a001-20200426
-arc                  randconfig-a001-20200426
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-s390                       zfcpdump_defconfig
-s390                          debug_defconfig
-s390                             allyesconfig
-s390                              allnoconfig
-s390                             allmodconfig
-s390                             alldefconfig
-s390                                defconfig
-sh                          rsk7269_defconfig
-sh                               allmodconfig
-sh                            titan_defconfig
-sh                  sh7785lcr_32bit_defconfig
-sh                                allnoconfig
-sparc                               defconfig
-sparc64                             defconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-sparc64                          allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-um                                  defconfig
-x86_64                                   rhel
-x86_64                               rhel-7.6
-x86_64                    rhel-7.6-kselftests
-x86_64                         rhel-7.2-clear
-x86_64                                    lkp
-x86_64                              fedora-25
-x86_64                                  kexec
+What's the point of IRQF_SHARED | IRQF_ONESHOT here?
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> +				       &irqchip->chip, &irqchip->irq_data);
+
+Thanks,
+
+        tglx
