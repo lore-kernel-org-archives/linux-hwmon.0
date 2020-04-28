@@ -2,35 +2,45 @@ Return-Path: <SRS0=A6DV=6M=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D426BC83000
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Apr 2020 13:06:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BA13BC83000
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Apr 2020 14:29:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ABB6C206D6
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Apr 2020 13:06:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9ACA2206C0
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Apr 2020 14:29:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726870AbgD1NG0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 28 Apr 2020 09:06:26 -0400
-Received: from foss.arm.com ([217.140.110.172]:51134 "EHLO foss.arm.com"
+        id S1727124AbgD1O3n (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 28 Apr 2020 10:29:43 -0400
+Received: from mga06.intel.com ([134.134.136.31]:4285 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726746AbgD1NG0 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 28 Apr 2020 09:06:26 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 145BA31B;
-        Tue, 28 Apr 2020 06:06:25 -0700 (PDT)
-Received: from [10.57.33.170] (unknown [10.57.33.170])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 710363F68F;
-        Tue, 28 Apr 2020 06:06:21 -0700 (PDT)
-Subject: Re: [PATCH v3 02/16] mfd: mfd-core: Don't overwrite the dma_mask of
- the child device
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Michael Walle <michael@walle.cc>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        id S1727108AbgD1O3n (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 28 Apr 2020 10:29:43 -0400
+IronPort-SDR: kOZrIelPDgOUC3aJDJW9H80ah7VC/S2GDIWbHQz354UeEUlk3/wUSs6TRvijBEJrgEMrqAkN+V
+ kbTVQZESG98A==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2020 07:29:42 -0700
+IronPort-SDR: vGnHmY/BqlTIl3FGa5R64rDdkwKbnMHUnpT0wYGLkHb05hlF7l+pQ52NbGLIPzbFCXoyvBDAUH
+ qkiQUfkvunvw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,328,1583222400"; 
+   d="scan'208";a="432201423"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga005.jf.intel.com with ESMTP; 28 Apr 2020 07:29:36 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jTREw-003ZVU-6Y; Tue, 28 Apr 2020 17:29:38 +0300
+Date:   Tue, 28 Apr 2020 17:29:38 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Michael Walle <michael@walle.cc>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>,
@@ -39,62 +49,77 @@ Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
         Guenter Roeck <linux@roeck-us.net>,
         Lee Jones <lee.jones@linaro.org>,
         Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Jason Cooper <jason@lakedaemon.net>,
         Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v3 02/16] mfd: mfd-core: Don't overwrite the dma_mask of
+ the child device
+Message-ID: <20200428142938.GX185537@smile.fi.intel.com>
 References: <20200423174543.17161-1-michael@walle.cc>
  <20200423174543.17161-3-michael@walle.cc>
  <20200428124548.GS185537@smile.fi.intel.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-Message-ID: <3cd3705a-4f48-6a46-e869-3ee11dc17323@arm.com>
-Date:   Tue, 28 Apr 2020 14:06:20 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+ <3cd3705a-4f48-6a46-e869-3ee11dc17323@arm.com>
 MIME-Version: 1.0
-In-Reply-To: <20200428124548.GS185537@smile.fi.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3cd3705a-4f48-6a46-e869-3ee11dc17323@arm.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2020-04-28 1:45 pm, Andy Shevchenko wrote:
-> On Thu, Apr 23, 2020 at 07:45:29PM +0200, Michael Walle wrote:
->> Commit cdfee5623290 ("driver core: initialize a default DMA mask for
->> platform device") initialize the DMA of a platform device. But if the
->> parent doesn't have a dma_mask set, for example if it's an I2C device,
->> the dma_mask of the child platform device will be set to zero again.
->> Which leads to many "DMA mask not set" warnings, if the MFD cell has the
->> of_compatible property set.
+On Tue, Apr 28, 2020 at 02:06:20PM +0100, Robin Murphy wrote:
+> On 2020-04-28 1:45 pm, Andy Shevchenko wrote:
+> > On Thu, Apr 23, 2020 at 07:45:29PM +0200, Michael Walle wrote:
+> > > Commit cdfee5623290 ("driver core: initialize a default DMA mask for
+> > > platform device") initialize the DMA of a platform device. But if the
+> > > parent doesn't have a dma_mask set, for example if it's an I2C device,
+> > > the dma_mask of the child platform device will be set to zero again.
+> > > Which leads to many "DMA mask not set" warnings, if the MFD cell has the
+> > > of_compatible property set.
+> > 
+> > I'm wondering why parent doesn't have it.
 > 
-> I'm wondering why parent doesn't have it.
+> Because the parent isn't on a DMA-capable bus, and thus really shouldn't
+> have a valid DMA configuration ever.
 
-Because the parent isn't on a DMA-capable bus, and thus really shouldn't 
-have a valid DMA configuration ever.
+Then how come a child is DMA capable? MFD takes a physical device node as a
+parent and creates one of several children with that device as a parent. DMA
+mask is a property of the device which *does DMA*. Obviously a child is not
+correct device for that.
 
-> I remember we have explicit patches in the past for buses such as PCI and AMBA
-> to set default DMA mask for all physical devices on the respective bus, of
-> course they can individually override it later.
+Where am I mistaken?
+
+> > I remember we have explicit patches in the past for buses such as PCI and AMBA
+> > to set default DMA mask for all physical devices on the respective bus, of
+> > course they can individually override it later.
+> > 
+> > So, this seems to me a paper over the real issue (absence of default DMA mask
+> > where it's needed) and devices should explicitly define it if they disagree
+> > with default.
+> > 
+> > If I'm wrong, you really need elaborate commit message much better.
 > 
-> So, this seems to me a paper over the real issue (absence of default DMA mask
-> where it's needed) and devices should explicitly define it if they disagree
-> with default.
+> The problem here is that MFD children are created as platform devices
+> (regardless of what their parent is) and assigned an of_node, at which point
+> they look pretty much indistinguishable from SoC devices created by the
+> of_platform code, that *do* have to be assumed to be DMA-capable to prevent
+> ~90% of existing devicetrees from breaking.
 > 
-> If I'm wrong, you really need elaborate commit message much better.
+> Of course the real fundamental issue is the platform bus itself, but it's
+> way too late to fix that :(
 
-The problem here is that MFD children are created as platform devices 
-(regardless of what their parent is) and assigned an of_node, at which 
-point they look pretty much indistinguishable from SoC devices created 
-by the of_platform code, that *do* have to be assumed to be DMA-capable 
-to prevent ~90% of existing devicetrees from breaking.
+I don't think it's an issue, rather in model you are describing. Or I miss
+something not so obvious.
 
-Of course the real fundamental issue is the platform bus itself, but 
-it's way too late to fix that :(
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Robin.
+
