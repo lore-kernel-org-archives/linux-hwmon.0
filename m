@@ -6,130 +6,106 @@ X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B13FC83006
-	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Apr 2020 14:50:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 440E3C83000
+	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Apr 2020 19:16:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 75F7D2083B
-	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Apr 2020 14:50:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 01350206F0
+	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Apr 2020 19:16:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gateworks-com.20150623.gappssmtp.com header.i=@gateworks-com.20150623.gappssmtp.com header.b="OTk4BhDe"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="fvrS0VEE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727073AbgD2OuX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 29 Apr 2020 10:50:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36456 "EHLO
+        id S1726921AbgD2TQe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 29 Apr 2020 15:16:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727069AbgD2OuX (ORCPT
+        by vger.kernel.org with ESMTP id S1726423AbgD2TQe (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 29 Apr 2020 10:50:23 -0400
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E70C035493
-        for <linux-hwmon@vger.kernel.org>; Wed, 29 Apr 2020 07:50:21 -0700 (PDT)
-Received: by mail-ot1-x343.google.com with SMTP id 72so1911643otu.1
-        for <linux-hwmon@vger.kernel.org>; Wed, 29 Apr 2020 07:50:21 -0700 (PDT)
+        Wed, 29 Apr 2020 15:16:34 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2222C035493
+        for <linux-hwmon@vger.kernel.org>; Wed, 29 Apr 2020 12:16:33 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id x25so3307662wmc.0
+        for <linux-hwmon@vger.kernel.org>; Wed, 29 Apr 2020 12:16:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gateworks-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qyI0SNEnQtXEbJwY1Ck/cg35XSFvpALxjDJPBXBhrnQ=;
-        b=OTk4BhDexgtYj45AbedwxqiaNtEWMz5vICEz3FjS2ASgEs8RDykY5nycZKJdyYbvnn
-         xdYRSxrMo55Daa/iS9BaQRTfDRlJL96e4tSX6UHp/duPNiog6mElo/qalSUKyuNe2+2N
-         FywOGF2rs+Lg/lbWRbixNls/EZK2awg/bnYNn07l121KiDC7cS3+PpjNLSCT4vphjz9Q
-         8+Qvo/Jpc4uxv0X7IfL1rgTr7vmGDeAVK+o2Evv+5128QbHUGYjhzwz3j8odYXtGvUjn
-         MHsz/jK4o0FM3/8LMB8RHP46ODdQNZsg6uZaFmQaGKJ55XRjyCSufzRH3kpLiEfiZ5zN
-         8GxQ==
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=uTaxYC0jwA+3Mf6QeyL0kxKKg+CdYcd/49GGY7p9esY=;
+        b=fvrS0VEE66iO7kf6DfmoKB0rXIEmgiuWit2Fu+SmZkTgV6Cz07n/xX2l0Biwa1hAvY
+         1rEHDzYF+Wb6TaiiZhFSD0G25jsO/9oCpN6WJ4Ofic0d8qZck24SS0b83d80Q2n9lC+3
+         vjSpHa8acnnKltv95KH9GXphftHAkW4OfVrBeuHMhJsh5bL/o9sEXRrcQ4PmoeoTOuxh
+         oaZK3GiZEZ4cHhxuzNnpKkAiHeBNLqjCNqWK4u0sg/S2vdTywv30jYvWIP2vHJQZCUTv
+         NXkpzzCTNxpxeraY4yOZeKvak+SgmC9CpSWq/NTkuLEhMo09VG1wovwqUeGDWA+/+8Nj
+         MxPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qyI0SNEnQtXEbJwY1Ck/cg35XSFvpALxjDJPBXBhrnQ=;
-        b=D6khUBa1Zu+VnjTMa/ItNBDKSX18L+nQFiyeY76Xbc5d5QDfoJzz49Nu9Mdo9a6lUr
-         sTnScuWIVvP6Q6aExBNWfnhv33t8/UOvjfGnHIetzLrbTcmy38F0TeDvQj8E6QgL9TQ/
-         pBgBJKdfqotQR1ml28tosd/TxgSuAXt4ZH5UR8Lwk556Hd+eOuzl+Mpkaa6njKxweoej
-         tlckhdF4VGJv3JE6Nf4VBVmjRXFCEqZbhNJ9+rOdIvmNYonyQoT4Mu+qEcSwkL7q410x
-         KaU+u3U7W/n2DgF47F+fFIVTUjl2cgxwUj8HX4PNj5VUC7AiV6yUGYRuMtQ5x82ZSVwY
-         CmRA==
-X-Gm-Message-State: AGi0PubTkx9jZYMaqWWDmkqPtghU4RUXIgLqFpEUSECIljojkFIkfBGm
-        kfyCOSYAErXyEF2ETk4M/rQ4xuaLhj1yRv4yCgl19Q==
-X-Google-Smtp-Source: APiQypIXL8I2wEME01DT2EGMJ0/M/DnYHbWLA+pVPwZCB7X9EbvdQ5yUHo7uSB8IJZb4WwLhqG0FGhPpcw/e0s52+Ik=
-X-Received: by 2002:a9d:2f48:: with SMTP id h66mr24840284otb.252.1588171820828;
- Wed, 29 Apr 2020 07:50:20 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=uTaxYC0jwA+3Mf6QeyL0kxKKg+CdYcd/49GGY7p9esY=;
+        b=qjvfy8L+1KbGb8ArIFXZbsclCzd53lr9fUmEfvFNZm0rXlt7wHgfpDC6TxG+HzzTjh
+         LhbDpHN/rc5f+EA7H3W++oe87DPD1LqakB/1hdwfYGZd61vH/W3yhEcyeYZo0McbsFyd
+         BTINen+qGPHR7fDUQAaB8yoOncbfE8EC5rj3BlSy4H7ZlrYH7MV2RWyZ7kD6CFCQfkPg
+         kcqKqbEGY8CJTE71IYGeeyQe2qnDJx+rR7EKRdxrNweRyFgJNj06i4VTP84lCxdYz8ns
+         DXBulcwtuoDUkwxvWNI5tthRc+fE2kTNOA1CivUuJXpBD4yZrzMIbs/toFycepgkovXw
+         /1lg==
+X-Gm-Message-State: AGi0PuYK2jCjU+YFk7LVLjcAaQxVSPUaq5erdYKAL3mfYUK3J01i+0O/
+        MblbtBhKDlaWi6kqHG14fnD51RxTU7jlXg==
+X-Google-Smtp-Source: APiQypLJ0zeDoIhCzi097XAozrXJsq0a0rW6Z3NDWwTzdI9ZLjqD2jG0z5naNye1gwdLaN6JoAuAiA==
+X-Received: by 2002:a1c:2e07:: with SMTP id u7mr4865638wmu.74.1588187792498;
+        Wed, 29 Apr 2020 12:16:32 -0700 (PDT)
+Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
+        by smtp.gmail.com with ESMTPSA id e5sm235982wru.92.2020.04.29.12.16.30
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 29 Apr 2020 12:16:31 -0700 (PDT)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Neil Armstrong <narmstrong@baylibre.com>, lee.jones@linaro.org,
+        jdelvare@suse.com, linux@roeck-us.net,
+        srinivas.kandagatla@linaro.org
+Cc:     nick@khadas.com, art@khadas.com,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-amlogic@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC 0/8] mfd: Add support for Khadas Microcontroller
+In-Reply-To: <20200421080102.22796-1-narmstrong@baylibre.com>
+References: <20200421080102.22796-1-narmstrong@baylibre.com>
+Date:   Wed, 29 Apr 2020 12:16:28 -0700
+Message-ID: <7h4kt2ksqb.fsf@baylibre.com>
 MIME-Version: 1.0
-References: <1585341214-25285-1-git-send-email-tharvey@gateworks.com>
- <1585341214-25285-3-git-send-email-tharvey@gateworks.com> <20200428094426.GL3559@dell>
- <CAJ+vNU0UCugbM7Q7WZ1Hw-U=Je483jYGdrvS0Vq6idxtuUmz2Q@mail.gmail.com> <20200429063319.GV3559@dell>
-In-Reply-To: <20200429063319.GV3559@dell>
-From:   Tim Harvey <tharvey@gateworks.com>
-Date:   Wed, 29 Apr 2020 07:50:09 -0700
-Message-ID: <CAJ+vNU1e10F_g51UXgJ+o1R9zhf_1J9xHJ6SYEuZC4615QfG1w@mail.gmail.com>
-Subject: Re: [PATCH v8 2/3] mfd: add Gateworks System Controller core driver
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Linux HWMON List <linux-hwmon@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Device Tree Mailing List <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Robert Jones <rjones@gateworks.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Apr 28, 2020 at 11:33 PM Lee Jones <lee.jones@linaro.org> wrote:
->
-> On Tue, 28 Apr 2020, Tim Harvey wrote:
->
-> > On Tue, Apr 28, 2020 at 2:44 AM Lee Jones <lee.jones@linaro.org> wrote:
-> > >
-> > <snip>
-> > > > +
-> > > > +static int gsc_probe(struct i2c_client *client)
-> > > > +{
-> > > > +     struct device *dev = &client->dev;
-> > > > +     struct gsc_dev *gsc;
-> > > > +     int ret;
-> > > > +     unsigned int reg;
-> > > > +
-> > > > +     gsc = devm_kzalloc(dev, sizeof(*gsc), GFP_KERNEL);
-> > > > +     if (!gsc)
-> > > > +             return -ENOMEM;
-> > > > +
-> > > > +     gsc->dev = &client->dev;
-> > > > +     gsc->i2c = client;
-> > > > +     i2c_set_clientdata(client, gsc);
-> > > > +
-> > > > +     gsc->bus.reg_write = gsc_regmap_regwrite;
-> > > > +     gsc->bus.reg_read = gsc_regmap_regread;
-> > >
-> > > Why do you need to store these in ddata?
-> >
-> > Lee,
-> >
-> > Thanks for the review!
-> >
-> > I need the remap_bus* for devm_regmap_init() in the hwmon sub-module driver:
-> >
-> > hwmon->regmap = devm_regmap_init(dev, &gsc->bus, gsc->i2c_hwmon,
-> > &gsc_hwmon_regmap_config);
-> >
-> > Is there something easier I'm missing?
->
-> This is an odd setup.  I haven't seen one driver registering another
-> driver's Regmap call-backs before, related or otherwise.  Normally the
-> Regmap is setup (initialised) in the parent driver and child drivers
-> just make use of it.  Here it looks like you are registering 2
-> separate Regmaps, but using the same call-backs for both, which seems
-> wrong to me.
->
+Neil Armstrong <narmstrong@baylibre.com> writes:
 
-Lee,
+> The new Khadas VIM2, VIM3 and Edge boards embeds an on-board microcontroller
+> connected via I2C.
+>
+> This Microcontroller is present on the Khadas VIM1, VIM2, VIM3 and Edge
+> boards.
+>
+> It has multiple boot control features like password check, power-on
+> options, power-off control and system FAN control on recent boards.
+>
+> Thie serie adds :
+> - the bindings
+> - the MFD driver
+> - the HWMON cell driver
+> - the NVMEM cell driver
+> - updates MAINTAINERS
+> - add support into the Khadas VIM3/VIM3L DT
+>
+> Neil Armstrong (8):
+>   dt-bindings: mfd: add Khadas Microcontroller bindings
+>   mfd: add support for the Khadas System control Microcontroller
+>   hwmon: add support for the MCU controlled FAN on Khadas boards
+>   nvmem: add support for the Khadas MCU Programmable User Memory
+>   MAINTAINERS: add myself as maintainer for Khadas MCU drivers
+>   arm64: dts: meson-g12b: move G12B thermal nodes to meson-g12b.dtsi
+>   arm64: dts: meson-sm1: add cpu thermal nodes
 
-It is perhaps an odd setup. The hwmon sub-device is at a different i2c
-slave address than the other sub-devices. The same callbacks are used
-for reg read/write to take advantage of the retries due to the errata
-resulting in occasional NAK'd register reads.
+These two could/should be sent separately from this RFC series and
+queued for v5.8.
 
-Tim
+Kevin
