@@ -2,136 +2,171 @@ Return-Path: <SRS0=bhe0=6N=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DAE4BC83006
-	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Apr 2020 06:33:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B61A5C83004
+	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Apr 2020 14:11:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BB6F5206F0
-	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Apr 2020 06:33:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8DF772083B
+	for <linux-hwmon@archiver.kernel.org>; Wed, 29 Apr 2020 14:11:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jcnk+SmN"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jbDsAEhG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726158AbgD2GdZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 29 Apr 2020 02:33:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43328 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726617AbgD2GdY (ORCPT
+        id S1726923AbgD2OLu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 29 Apr 2020 10:11:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58546 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726861AbgD2OLt (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 29 Apr 2020 02:33:24 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A12AC03C1AD
-        for <linux-hwmon@vger.kernel.org>; Tue, 28 Apr 2020 23:33:23 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id d17so1011223wrg.11
-        for <linux-hwmon@vger.kernel.org>; Tue, 28 Apr 2020 23:33:23 -0700 (PDT)
+        Wed, 29 Apr 2020 10:11:49 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B16C03C1AD;
+        Wed, 29 Apr 2020 07:11:49 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id ms17so804429pjb.0;
+        Wed, 29 Apr 2020 07:11:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=FalhFLP6E8s3NKoZ3mocGoumscHehcVbJvsfHxyqr68=;
-        b=jcnk+SmN7gJoXA+rIYyNYv+mdewstAhguOXgIdfAfe2l50i2EinJIhjLCL15A/RN9u
-         No4J0Js2Ychj7f9w/5cum7T4uLtrgTmGd2MNWr8rCMNUA0gA5zOmA86WdT28zIV73TS8
-         g/0CwMME2kbePSa/mi0q0UGiHtOUSkLLz79lr8sPJjK5MQNH2yH7dafzXwTM7cuANhgi
-         jan5DFEZ5VtOzRh01Jm+8LoX8Jy1xzq3dTZGekqdygLWaKqu5rVpsoullD2LtdcurIZY
-         aeA/zF5pI7UmHP/OYShsRPXDldLiyBRspOBzo99bh4Z5dPuzXfI4INmCR3UPpp05DH7R
-         ls7g==
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=fi8nr3NsAL0lJQ0AmANnBpm6h197A9dlmy0t2HE2WsU=;
+        b=jbDsAEhGDmRRTvAkM4OiGbWTUBTaq6MhMBpfmQBwLLOep2qxJCDWLMZ670C22pxKhV
+         63NeNutFiDK8iaRbUJtaR6k9J7jD1jmwus0unWDFVhrkx9XUeEy+rCrh2sAYjDudpegq
+         nIwgAoMevcJPyjpvPsL/2X4jNeWN2KwbMAGiWx80tFnGWAPFl1nMA7gm5wh8LEUoDMhJ
+         NTd5vXfd/O2zuDf1MQBb+uyGrPLoYsHtInTN9FkcEDocIIxQNUqFfJZmldu4uZcDPJIj
+         qLxAsWH0KjheXqQXyCH2PssGea6FVb8jOJAAjPSyNZFfxlilv9zTx6Y4dTzfZN2rr/71
+         DcXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=FalhFLP6E8s3NKoZ3mocGoumscHehcVbJvsfHxyqr68=;
-        b=uMLJwLOmqnCG1V7uV5EBUePunK4GMi+ZzLLM6EyC4lRlpuXexTEFHq30coh8XX+78T
-         00bnqjvS6DCU79JJn6qe/CeMxQmBBt8yIvnHjX8pk8Cda9S1xwMkVupPcupBGf9efXl/
-         f72vgCc3oLEth6EhRZPOJJ8CR4hgAnBJ0C5z7A0IOgAz3qJPukqDdGAaG7CTTgaSQWhX
-         PGtezSt2qa8zddsfj4LG/G/QY7iIKE9JxP6iIiCmLqTQeV7Hli+GhC4ZSMg+ub/rLy1I
-         a8j3dpn8x3CRSTRnM5j0QOLFmxRoy/ga3ZCDuR8HTwgjqzcUjrj8qbAIjAjBFdyDTdxR
-         MpJQ==
-X-Gm-Message-State: AGi0Puag1mbVat0Ip+8dcZD3BYqRlaGkz1ESADwhOFLh6IDlRg/O9MUP
-        KY70FBwTeTtgheknVZqbHEzPYA==
-X-Google-Smtp-Source: APiQypJCmA2kezBe5CdrbA/94VscVCu2n5N0CMovezJRRNOvUbUsbGv7XxjfwQeHhPFqWFZRZr/poA==
-X-Received: by 2002:adf:e541:: with SMTP id z1mr36924430wrm.218.1588142001918;
-        Tue, 28 Apr 2020 23:33:21 -0700 (PDT)
-Received: from dell ([2.31.163.63])
-        by smtp.gmail.com with ESMTPSA id h188sm6815465wme.8.2020.04.28.23.33.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2020 23:33:21 -0700 (PDT)
-Date:   Wed, 29 Apr 2020 07:33:19 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Tim Harvey <tharvey@gateworks.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Linux HWMON List <linux-hwmon@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Device Tree Mailing List <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Robert Jones <rjones@gateworks.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH v8 2/3] mfd: add Gateworks System Controller core driver
-Message-ID: <20200429063319.GV3559@dell>
-References: <1585341214-25285-1-git-send-email-tharvey@gateworks.com>
- <1585341214-25285-3-git-send-email-tharvey@gateworks.com>
- <20200428094426.GL3559@dell>
- <CAJ+vNU0UCugbM7Q7WZ1Hw-U=Je483jYGdrvS0Vq6idxtuUmz2Q@mail.gmail.com>
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=fi8nr3NsAL0lJQ0AmANnBpm6h197A9dlmy0t2HE2WsU=;
+        b=d8KlqWAnD2/HluecXiTwwDsec9xX501NkyQmQczjIWhy8Us3bXNPz4rZzMXSj2pwP2
+         H25cEzgNkEEuuk5nAjiTugfYpUkodkoRaN5MCoBD0IZFrbkSaQvSbaFnuTs0lCWAVIIt
+         daNAXlqOd+uGVWqljVFOf1KREBk+SqIS5ZhBhlxk0diNBbrncTTYnR7aPHwJzfN4GoxG
+         scmk9eodxXmpEkWt9xo0BuDImmITQRgW/QvBrEdRJJZwRml5UNVpoz7W6oj3dCK1gkbU
+         9V/g5WBuZjUYM61wQ/glkqUc5rkxIM9y2uDlSJ3c3VeqeemZ9sH//oqF8RW4V8Va2f2F
+         DlaA==
+X-Gm-Message-State: AGi0PuY4Am5+J+4F6xo/0xyJHMPjueKHCDHTm9ouBN9qdTAN1ZZKFD9M
+        RarnFdS+yURUWjg19OS2HXA=
+X-Google-Smtp-Source: APiQypKjfaDfu68AEIKmhlf9dOmJLBj2BgOzoMAHZ9nGIcvHTwFFTDm9wqrGZ2ULJAmN6c1QeLmWhg==
+X-Received: by 2002:a17:90b:14c1:: with SMTP id jz1mr3647909pjb.112.1588169509354;
+        Wed, 29 Apr 2020 07:11:49 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id p66sm1225332pfb.65.2020.04.29.07.11.48
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 29 Apr 2020 07:11:48 -0700 (PDT)
+Date:   Wed, 29 Apr 2020 07:11:47 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Grant Peltier <grantpeltier93@gmail.com>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        adam.vaughn.xh@renesas.com, grant.peltier.jg@renesas.com
+Subject: Re: [PATCH v2 1/2] hwmon: (pmbus/isl68137) add debugfs config and
+ black box endpoints
+Message-ID: <20200429141147.GD8469@roeck-us.net>
+References: <cover.1587572415.git.grantpeltier93@gmail.com>
+ <acbdc26389b6ab5f5f4536de7332b03c45a95f00.1587572415.git.grantpeltier93@gmail.com>
+ <20200425174318.GA40266@roeck-us.net>
+ <20200427170729.GA13285@raspberrypi>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJ+vNU0UCugbM7Q7WZ1Hw-U=Je483jYGdrvS0Vq6idxtuUmz2Q@mail.gmail.com>
+In-Reply-To: <20200427170729.GA13285@raspberrypi>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, 28 Apr 2020, Tim Harvey wrote:
+On Mon, Apr 27, 2020 at 12:07:29PM -0500, Grant Peltier wrote:
+> On Sat, Apr 25, 2020 at 10:43:18AM -0700, Guenter Roeck wrote:
+> > On Wed, Apr 22, 2020 at 12:27:14PM -0500, Grant Peltier wrote:
+> > > Add debugfs endpoints to support features of 2nd generation Renesas
+> > > digital multiphase voltage regulators that are not compatible with
+> > > sysfs.
+> > > 
+> > > The read_black_box endpoint allows users to read the contents of a
+> > > RAM segment used to record fault conditions within Gen 2 devices.
+> > > 
+> > > The write_config endpoint allows users to write configuration hex
+> > > files to Gen 2 devices which modify how they operate.
+> > > 
+> > > Signed-off-by: Grant Peltier <grantpeltier93@gmail.com>
+> > 
+> > Comments inline.
+> > 
+> > However, the more I look into this, the more concerns I have.
+> > I think we should limit debugfs functions, if they are needed,
+> > to reporting detailed device status. Can you consider handling
+> > configuration from userspace using i2cget / i2cset commands ?
+> 
+> The reason we decided to try to implement configuration writes within the
+> driver is that we found a userspace implementation to be unstable. The
+> process requires anywhere from approximately 650 to a few thousand 32-bit
+> writes (dependent on number of NVM slots contained in the file). The entire
+> write process therefore takes a non-trivial amount of CPU time to complete
+> and the userspace process was often interrupted which would cause for it
+> to fail. Writing the configuration directly from the driver has been less
+> error prone.
+> 
+The downside is that anyone can easily mess with the chip. That does make
+me quite concerned - I have seen many PMBus chips and even boards blown up
+if misconfigured. It is bad enough that this can be done in the first place,
+but I don't want to make it even easier by providing the means to do so via
+debugfs files.
 
-> On Tue, Apr 28, 2020 at 2:44 AM Lee Jones <lee.jones@linaro.org> wrote:
+Did you try with an application sending ioctls directly ? That should
+be much less error prone than i2cset/i2cget. Also, a userspace process
+like this should have appropriate priorities (ie run as realtime process)
+to avoid being preempted.
+
+Thanks,
+Guenter
+
+> > > +	res = i2c_smbus_read_i2c_block_data(ctrl->client, PMBUS_IC_DEVICE_REV,
+> > > +					    5, dev_rev);
+> > 
+> > It still puzzles me, quite frankly, why i2c_smbus_read_block_data()
+> > would not work here.
 > >
-> <snip>
-> > > +
-> > > +static int gsc_probe(struct i2c_client *client)
+> 
+> i2c_smbus_read_block_data() requires the underlying driver/controller to handle
+> interpretting the initial length byte read from the client device and then
+> continuing to read that number of bytes. Not all controllers (e.g. BCM2835)
+> support this. On the other hand, i2c_smbus_read_i2c_block_data() just does a
+> fixed-length read based on the given length parameter.
+> 
+> > > +static int raa_dmpvr2_cfg_write_result(struct raa_dmpvr2_ctrl *ctrl,
+> > > +				       struct raa_dmpvr2_cfg *cfg)
 > > > +{
-> > > +     struct device *dev = &client->dev;
-> > > +     struct gsc_dev *gsc;
-> > > +     int ret;
-> > > +     unsigned int reg;
+> > > +	u8 data[4] = {0};
+> > > +	u8 data1[4];
+> > > +	u8 *dptr;
+> > > +	unsigned long start;
+> > > +	int i, j, status;
 > > > +
-> > > +     gsc = devm_kzalloc(dev, sizeof(*gsc), GFP_KERNEL);
-> > > +     if (!gsc)
-> > > +             return -ENOMEM;
-> > > +
-> > > +     gsc->dev = &client->dev;
-> > > +     gsc->i2c = client;
-> > > +     i2c_set_clientdata(client, gsc);
-> > > +
-> > > +     gsc->bus.reg_write = gsc_regmap_regwrite;
-> > > +     gsc->bus.reg_read = gsc_regmap_regread;
-> >
-> > Why do you need to store these in ddata?
+> > > +	// Check programmer status
+> > > +	start = jiffies;
+> > > +	i2c_smbus_write_word_data(ctrl->client, RAA_DMPVR2_DMA_ADDR,
+> > > +				  RAA_DMPVR2_PRGM_STATUS_ADDR);
+> > > +	while (data[0] == 0 && !time_after(jiffies, start + HZ + HZ)) {
+> > > +		raa_dmpvr2_smbus_read32(ctrl->client, RAA_DMPVR2_DMA_FIX,
+> > > +					data);
+> > > +	}
+> > > +	if (data[0] != 1)
+> > > +		return -ETIME;
+> > 
+> > Are you sure ? Normally I would expect ETIMEDOUT.
+>  
+> My understanding is that ETIME is meant for timer expiration whereas ETIMEDOUT
+> is meant for connection timeout errors. Is that correct? In this case, we are
+> not really waiting on the device to respond but instead are constantly polling
+> until the device responds with the desired value. However, I can understand an
+> argument for ETIMEDOUT here and can swtich to that if you think it is more
+> appropriate.
 > 
-> Lee,
 > 
-> Thanks for the review!
+> Thank you for your other notes. I will refactor as requested.
 > 
-> I need the remap_bus* for devm_regmap_init() in the hwmon sub-module driver:
-> 
-> hwmon->regmap = devm_regmap_init(dev, &gsc->bus, gsc->i2c_hwmon,
-> &gsc_hwmon_regmap_config);
-> 
-> Is there something easier I'm missing?
-
-This is an odd setup.  I haven't seen one driver registering another
-driver's Regmap call-backs before, related or otherwise.  Normally the
-Regmap is setup (initialised) in the parent driver and child drivers
-just make use of it.  Here it looks like you are registering 2
-separate Regmaps, but using the same call-backs for both, which seems
-wrong to me.
-
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+> Grant
