@@ -2,201 +2,228 @@ Return-Path: <SRS0=lHFq=6T=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27A37C47256
-	for <linux-hwmon@archiver.kernel.org>; Tue,  5 May 2020 05:48:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EBCDC47247
+	for <linux-hwmon@archiver.kernel.org>; Tue,  5 May 2020 11:25:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F154720663
-	for <linux-hwmon@archiver.kernel.org>; Tue,  5 May 2020 05:48:50 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tUQk5WHT"
+	by mail.kernel.org (Postfix) with ESMTP id 4AD6A20735
+	for <linux-hwmon@archiver.kernel.org>; Tue,  5 May 2020 11:25:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725768AbgEEFsu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 5 May 2020 01:48:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54422 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725535AbgEEFsu (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 5 May 2020 01:48:50 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0253AC061A0F;
-        Mon,  4 May 2020 22:48:49 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id w20so328229ljj.0;
-        Mon, 04 May 2020 22:48:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=jB37zzTgwI47TMOI0FYcGt2ovqz6plx1N4prNTTSWkc=;
-        b=tUQk5WHT0xp0po7KBS7AbhpZnUyQxyDSSfskMBn6KRcygua9OIkn4IroRx61Q3/Rlk
-         1eWEwZHNwHmBS++DlWBPt8gcw6r0pW/fpGA1dI6Tggq4QzB/hHePWECvJ5SljCrj9Zhl
-         EiiG1Ks2T4XlFm0Je8+uXS0CbXvJ4W1kRXjHA6iS3r/4/4ipT1LDZUIpRDqCRURl3wBB
-         SxLPNxU634eB8ZzfllUVka8M84djKF3EiH/88ulyTe9WcdA8ADA7v83cQVMNf7vbONO9
-         maw7GfsYfrFAJMHySRylr4Xq5LjukUXmZcD9FFNurXMmXGbrtQiBOslXahF96f645+fp
-         KbrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=jB37zzTgwI47TMOI0FYcGt2ovqz6plx1N4prNTTSWkc=;
-        b=k5xamMYhGhV1hOyvypyvoUCesXTfrCuRzrhgLRvw7VRKhpelRFk4JZgVT/c+Ayecaw
-         ejaXa/cXgd4COEneYntw/FjR7TIaoVJXc2sclktwoIJ3GNzXipxks6Mehc0RyhhoE3dr
-         gKqWXCeIJ6AS61gNXkPzAGF5jJ7MfueEV7+rup9nTepWtoZN582Z/BeZLWPFMT1EfQtS
-         sAz7u9E3uAs6EYrJMCdTa+C04Q5KAoWKJAa6ZfJ6mZVXKs7EXsajFtKZAA9ah5xQDk6L
-         mm9MQXDPO9iqeOdPdHg1nnQiKEjng6XsEjiOP5TWb9s6fmGJYoETl/s8U6+kTNBkqT98
-         sh+w==
-X-Gm-Message-State: AGi0PuZNXOdd8GCDhS9PiiI4o81jLVoILvv7mjgfxeT3uxE0V6RsBdV+
-        5RWbrKPyEgj+fFnBHQIFc4K68edKBa27PQ==
-X-Google-Smtp-Source: APiQypLrS97ESMZ1bmwkR1k5TAF+7cc8KaEokiEguxHbpPIWE6LxWEmXImDJ2ul57nuERrvl+BkZzA==
-X-Received: by 2002:a2e:864f:: with SMTP id i15mr750080ljj.179.1588657727848;
-        Mon, 04 May 2020 22:48:47 -0700 (PDT)
-Received: from [192.168.0.103] (static-91-225-135-18.devs.futuro.pl. [91.225.135.18])
-        by smtp.gmail.com with ESMTPSA id g20sm989642lfj.1.2020.05.04.22.48.46
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 04 May 2020 22:48:47 -0700 (PDT)
-Subject: Re: [PATCH] Fix all coding-style warnings on lm75 driver
+        id S1728736AbgEELZa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 5 May 2020 07:25:30 -0400
+Received: from mga17.intel.com ([192.55.52.151]:58966 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728422AbgEELZ3 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 5 May 2020 07:25:29 -0400
+IronPort-SDR: zIADWp612lu3JDXE6RyLVujbhiI0fajp/TLh6rq+Wiro7Z17JiKJPtKiMnIFRMwJBTZbPMH31S
+ fGf/z8n5wLOg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2020 04:25:28 -0700
+IronPort-SDR: h3GUbhMetO9osvm4MxKiXygrTq+qlE11MMb172ETLHEa4ASVDMOFTqeOAuuDHBfsIwFVBXRT/w
+ /5IvtGB0KCGA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,354,1583222400"; 
+   d="scan'208";a="434447540"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 05 May 2020 04:25:27 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1jVvhW-0002as-MV; Tue, 05 May 2020 19:25:26 +0800
+Date:   Tue, 05 May 2020 19:24:40 +0800
+From:   kbuild test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1588255534-28073-1-git-send-email-michalorzel.eng@gmail.com>
- <20200505015808.GA139531@roeck-us.net>
-From:   =?UTF-8?B?TWljaGHFgiBPcnplxYI=?= <michalorzel.eng@gmail.com>
-Message-ID: <cc5e0f61-a7f7-c7b7-2e90-8e7817329d1e@gmail.com>
-Date:   Tue, 5 May 2020 07:48:46 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.1
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:hwmon-next] BUILD SUCCESS
+ 40b62a1c4c33b77953ace2e20d3b3069fce7ef98
+Message-ID: <5eb14cf8.vthRe0TWMX+XPb56%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <20200505015808.GA139531@roeck-us.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon-next
+branch HEAD: 40b62a1c4c33b77953ace2e20d3b3069fce7ef98  hwmon: (lm75) Fix all coding-style warnings on lm75 driver
 
+elapsed time: 540m
 
-On 05.05.2020 03:58, Guenter Roeck wrote:
-> On Thu, Apr 30, 2020 at 04:05:34PM +0200, Michal Orzel wrote:
->> Check/fix all warnings generated by checkpatch.pl script on LM75 driver.
->>
->> Signed-off-by: Michal Orzel <michalorzel.eng@gmail.com>
-> 
-> Applied, but for the future please prepend your patches with something like
-> "subsystem: driver:", or for hwmon "hwmon: (driver)".
-> 
-> Also, please keep in mind that such cleanups are not encouraged unless you
-> also provide functional changes.
-> 
-> Thanks,
-> Guenter
-> 
-I will keep it in mind.
+configs tested: 162
+configs skipped: 0
 
-Thanks,
-Michal
->> ---
->>  drivers/hwmon/lm75.c |  8 ++++++--
->>  drivers/hwmon/lm75.h | 31 +++++++++++++++++--------------
->>  2 files changed, 23 insertions(+), 16 deletions(-)
->>
->> diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
->> index 5e63922..ba0be48 100644
->> --- a/drivers/hwmon/lm75.c
->> +++ b/drivers/hwmon/lm75.c
->> @@ -797,8 +797,10 @@ static int lm75_detect(struct i2c_client *new_client,
->>  
->>  	/* First check for LM75A */
->>  	if (i2c_smbus_read_byte_data(new_client, 7) == LM75A_ID) {
->> -		/* LM75A returns 0xff on unused registers so
->> -		   just to be sure we check for that too. */
->> +		/*
->> +		 * LM75A returns 0xff on unused registers so
->> +		 * just to be sure we check for that too.
->> +		 */
->>  		if (i2c_smbus_read_byte_data(new_client, 4) != 0xff
->>  		 || i2c_smbus_read_byte_data(new_client, 5) != 0xff
->>  		 || i2c_smbus_read_byte_data(new_client, 6) != 0xff)
->> @@ -849,6 +851,7 @@ static int lm75_suspend(struct device *dev)
->>  {
->>  	int status;
->>  	struct i2c_client *client = to_i2c_client(dev);
->> +
->>  	status = i2c_smbus_read_byte_data(client, LM75_REG_CONF);
->>  	if (status < 0) {
->>  		dev_dbg(&client->dev, "Can't read config? %d\n", status);
->> @@ -863,6 +866,7 @@ static int lm75_resume(struct device *dev)
->>  {
->>  	int status;
->>  	struct i2c_client *client = to_i2c_client(dev);
->> +
->>  	status = i2c_smbus_read_byte_data(client, LM75_REG_CONF);
->>  	if (status < 0) {
->>  		dev_dbg(&client->dev, "Can't read config? %d\n", status);
->> diff --git a/drivers/hwmon/lm75.h b/drivers/hwmon/lm75.h
->> index b614e63..a398171 100644
->> --- a/drivers/hwmon/lm75.h
->> +++ b/drivers/hwmon/lm75.h
->> @@ -1,17 +1,15 @@
->>  /* SPDX-License-Identifier: GPL-2.0-or-later */
->>  /*
->> -    lm75.h - Part of lm_sensors, Linux kernel modules for hardware
->> -	      monitoring
->> -    Copyright (c) 2003 Mark M. Hoffman <mhoffman@lightlink.com>
->> -
->> -*/
->> + * lm75.h - Part of lm_sensors, Linux kernel modules for hardware monitoring
->> + * Copyright (c) 2003 Mark M. Hoffman <mhoffman@lightlink.com>
->> + */
->>  
->>  /*
->> -    This file contains common code for encoding/decoding LM75 type
->> -    temperature readings, which are emulated by many of the chips
->> -    we support.  As the user is unlikely to load more than one driver
->> -    which contains this code, we don't worry about the wasted space.
->> -*/
->> + * This file contains common code for encoding/decoding LM75 type
->> + * temperature readings, which are emulated by many of the chips
->> + * we support.  As the user is unlikely to load more than one driver
->> + * which contains this code, we don't worry about the wasted space.
->> + */
->>  
->>  #include <linux/kernel.h>
->>  
->> @@ -20,18 +18,23 @@
->>  #define LM75_TEMP_MAX 125000
->>  #define LM75_SHUTDOWN 0x01
->>  
->> -/* TEMP: 0.001C/bit (-55C to +125C)
->> -   REG: (0.5C/bit, two's complement) << 7 */
->> +/*
->> + * TEMP: 0.001C/bit (-55C to +125C)
->> + * REG: (0.5C/bit, two's complement) << 7
->> + */
->>  static inline u16 LM75_TEMP_TO_REG(long temp)
->>  {
->>  	int ntemp = clamp_val(temp, LM75_TEMP_MIN, LM75_TEMP_MAX);
->> +
->>  	ntemp += (ntemp < 0 ? -250 : 250);
->>  	return (u16)((ntemp / 500) << 7);
->>  }
->>  
->>  static inline int LM75_TEMP_FROM_REG(u16 reg)
->>  {
->> -	/* use integer division instead of equivalent right shift to
->> -	   guarantee arithmetic shift and preserve the sign */
->> +	/*
->> +	 * use integer division instead of equivalent right shift to
->> +	 * guarantee arithmetic shift and preserve the sign
->> +	 */
->>  	return ((s16)reg / 128) * 500;
->>  }
->> -- 
->> 2.7.4
->>
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+arm                           efm32_defconfig
+arm                         at91_dt_defconfig
+arm                        shmobile_defconfig
+arm64                               defconfig
+arm                          exynos_defconfig
+arm                        multi_v5_defconfig
+arm                           sunxi_defconfig
+arm                        multi_v7_defconfig
+arm64                            allyesconfig
+arm                              allyesconfig
+arm64                            allmodconfig
+arm                              allmodconfig
+arm64                             allnoconfig
+arm                               allnoconfig
+sparc                            allyesconfig
+parisc                generic-32bit_defconfig
+mips                             allmodconfig
+xtensa                       common_defconfig
+m68k                           sun3_defconfig
+h8300                    h8300h-sim_defconfig
+powerpc                     ep8248e_defconfig
+mips                malta_kvm_guest_defconfig
+ia64                                defconfig
+riscv                          rv32_defconfig
+powerpc                          g5_defconfig
+mips                          ath79_defconfig
+nds32                             allnoconfig
+mips                           ip32_defconfig
+mips                       capcella_defconfig
+i386                              allnoconfig
+i386                             allyesconfig
+i386                             alldefconfig
+i386                                defconfig
+i386                              debian-10.3
+ia64                             allmodconfig
+ia64                              allnoconfig
+ia64                        generic_defconfig
+ia64                          tiger_defconfig
+ia64                         bigsur_defconfig
+ia64                             allyesconfig
+ia64                             alldefconfig
+m68k                       m5475evb_defconfig
+m68k                             allmodconfig
+m68k                       bvme6000_defconfig
+m68k                          multi_defconfig
+nios2                         3c120_defconfig
+nios2                         10m50_defconfig
+c6x                        evmc6678_defconfig
+c6x                              allyesconfig
+openrisc                 simple_smp_defconfig
+openrisc                    or1ksim_defconfig
+nds32                               defconfig
+csky                                defconfig
+alpha                               defconfig
+h8300                       h8s-sim_defconfig
+h8300                     edosk2674_defconfig
+xtensa                          iss_defconfig
+arc                                 defconfig
+arc                              allyesconfig
+microblaze                      mmu_defconfig
+microblaze                    nommu_defconfig
+mips                      fuloong2e_defconfig
+mips                      malta_kvm_defconfig
+mips                            ar7_defconfig
+mips                             allyesconfig
+mips                         64r6el_defconfig
+mips                              allnoconfig
+mips                           32r2_defconfig
+mips                         tb0287_defconfig
+mips                  decstation_64_defconfig
+mips                      loongson3_defconfig
+mips                        bcm63xx_defconfig
+parisc                            allnoconfig
+parisc                generic-64bit_defconfig
+parisc                           allyesconfig
+parisc                           allmodconfig
+powerpc                  mpc866_ads_defconfig
+powerpc                    amigaone_defconfig
+powerpc                    adder875_defconfig
+powerpc                     mpc512x_defconfig
+powerpc                      chrp32_defconfig
+powerpc                             defconfig
+powerpc                       holly_defconfig
+powerpc                       ppc64_defconfig
+powerpc                          rhel-kconfig
+powerpc                           allnoconfig
+m68k                 randconfig-a001-20200505
+mips                 randconfig-a001-20200505
+nds32                randconfig-a001-20200505
+parisc               randconfig-a001-20200505
+alpha                randconfig-a001-20200505
+riscv                randconfig-a001-20200505
+h8300                randconfig-a001-20200503
+nios2                randconfig-a001-20200503
+microblaze           randconfig-a001-20200503
+c6x                  randconfig-a001-20200503
+sparc64              randconfig-a001-20200503
+s390                 randconfig-a001-20200505
+xtensa               randconfig-a001-20200505
+sh                   randconfig-a001-20200505
+openrisc             randconfig-a001-20200505
+csky                 randconfig-a001-20200505
+xtensa               randconfig-a001-20200503
+openrisc             randconfig-a001-20200503
+csky                 randconfig-a001-20200503
+s390                 randconfig-a001-20200430
+xtensa               randconfig-a001-20200430
+csky                 randconfig-a001-20200430
+openrisc             randconfig-a001-20200430
+sh                   randconfig-a001-20200430
+x86_64               randconfig-e003-20200503
+x86_64               randconfig-e002-20200503
+i386                 randconfig-e003-20200503
+x86_64               randconfig-e001-20200503
+i386                 randconfig-e002-20200503
+i386                 randconfig-e001-20200503
+i386                 randconfig-f003-20200505
+x86_64               randconfig-f001-20200505
+x86_64               randconfig-f003-20200505
+i386                 randconfig-f001-20200505
+i386                 randconfig-f002-20200505
+i386                 randconfig-f003-20200503
+x86_64               randconfig-f002-20200503
+i386                 randconfig-f001-20200503
+i386                 randconfig-f002-20200503
+ia64                 randconfig-a001-20200505
+arc                  randconfig-a001-20200505
+powerpc              randconfig-a001-20200505
+arm                  randconfig-a001-20200505
+sparc                randconfig-a001-20200505
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+s390                       zfcpdump_defconfig
+s390                          debug_defconfig
+s390                             allyesconfig
+s390                              allnoconfig
+s390                             allmodconfig
+s390                             alldefconfig
+s390                                defconfig
+sh                          rsk7269_defconfig
+sh                               allmodconfig
+sh                            titan_defconfig
+sh                  sh7785lcr_32bit_defconfig
+sh                                allnoconfig
+sparc                               defconfig
+sparc64                             defconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                          allmodconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+um                                  defconfig
+x86_64                                   rhel
+x86_64                               rhel-7.6
+x86_64                    rhel-7.6-kselftests
+x86_64                         rhel-7.2-clear
+x86_64                                    lkp
+x86_64                              fedora-25
+x86_64                                  kexec
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
