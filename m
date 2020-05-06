@@ -4,102 +4,204 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B285DC28CBC
-	for <linux-hwmon@archiver.kernel.org>; Wed,  6 May 2020 15:54:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38208C28CBC
+	for <linux-hwmon@archiver.kernel.org>; Wed,  6 May 2020 15:57:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8800420708
-	for <linux-hwmon@archiver.kernel.org>; Wed,  6 May 2020 15:54:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0B59A20708
+	for <linux-hwmon@archiver.kernel.org>; Wed,  6 May 2020 15:57:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kI1OL9TG"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ar4xFgar"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729799AbgEFPyz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 6 May 2020 11:54:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35252 "EHLO
+        id S1729668AbgEFP5H (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 6 May 2020 11:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728991AbgEFPyy (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 6 May 2020 11:54:54 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C169CC061A0F;
-        Wed,  6 May 2020 08:54:54 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id a32so1094333pje.5;
-        Wed, 06 May 2020 08:54:54 -0700 (PDT)
+        with ESMTP id S1728991AbgEFP5H (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 6 May 2020 11:57:07 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E592C061A0F;
+        Wed,  6 May 2020 08:57:07 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id t11so1286871pgg.2;
+        Wed, 06 May 2020 08:57:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=oj5IPbhmqssdAfqNx5StxpYP2G7pyEkKBU7FcMWIgfM=;
-        b=kI1OL9TG/f/VjVz1rY/Omul7eFLv44yR2GlyC+qH8ZJEfvnoVW4l+5cCrIwUi0eC3E
-         tm5fLsqOWeOxCT9BTLgjfd+vwV5juYEG6ep1lmQRJLSLBtIHvakLQnWUCDdQzj+aOcJy
-         zadM5jF/N9AYw2YczAu773y1vJnwadukYOd5t51CydJ4p3/C45X8TFdUJhGWHlFFUsbX
-         I0VdRgyk82TJOLMbHe/2LlCX9Lfv68KoYr8Wra7fx+DQzzbAivDT1vmm3oBjvVS+nchs
-         xcsWP7jFs2BWLb+P5PxgwblYt/UU71hWo6A59dKYkrHbwI0wPqh5vhWNLyVV7lsZgxbm
-         uwNg==
+        bh=mKpCjuzdZCHjolVpdDfscU7qJJTtSQZ+t9VhNB43JSw=;
+        b=ar4xFgarysgBLcmwqP6yPq87M4Mk0brn0FOWV1bGn5/a7Ohmi2D4WL7MSiwJLQ99wh
+         7aD+BsOqsENG1cjrXegl6Ig/SvWxVL+mNBQ1Uj+OoCKN5GbXBDaSC2H83Osrb2KLmXCa
+         kZ0N7rQiAFuFIMPrPuS1C3riz9BalKRJ4B/UPUoT9v0CzX1wT2cSGSV9gtH83AXauEX6
+         bJkuvrAxsnZVxv/G++H99E3hLQdohyPHuNEn/9UgshIM2kx+PXnUchpAXrd7oIAW8gkH
+         cU8rz2/F9wNTD7m+f6W8lWEAOavifuXnJRf6bBq4W+kXBeEQptxW+8WnEA9/l2/F8fj4
+         NYfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=oj5IPbhmqssdAfqNx5StxpYP2G7pyEkKBU7FcMWIgfM=;
-        b=mnGILTIgeJu2HwQkuEeTb7HCtZ2PLbVmcihJAKZD3TEWmA7xVCwCr81AAHAiCXFoKx
-         QwaQue1TxMJPVo+MVqHUR39yIj11U4V+MgXSULV/2dfCfh2sVemt/0SElf2CJUj2kyam
-         sqiuouqJ0Qp6VRnY5CNDFjVA62kQGlbZ/CBM6T7d4hvpV71+Q4C99G7lamTYcq4sD/5M
-         DAujE4rIuQR+jY9ldjdVOIzCObAH3cYSXZnKj2+3vFXDLE92VuJgMG1RrzURWq9zY9yg
-         uqMVbFhaPfkR7SXIG3ywTmrdLcpeaYd+GGW5UAj/HggyJQaOAN6/9aXMdLLbIzwdt8Gd
-         jwgA==
-X-Gm-Message-State: AGi0PuZjKGFWy/kxH18YS1O0EjleDnDxTQDfNoAjGSHV9WsVSufV45Ro
-        Hj2Uov5fPSbrYxfNRaBIO6c=
-X-Google-Smtp-Source: APiQypIsJ165wI8qSWOP7w9JHOxs1R4H0GK0DDlrPg/3yM2r+hY5wFT6D2pp1pZUIuiV2g2TVs707w==
-X-Received: by 2002:a17:90a:35f0:: with SMTP id r103mr10529961pjb.167.1588780494358;
-        Wed, 06 May 2020 08:54:54 -0700 (PDT)
+        bh=mKpCjuzdZCHjolVpdDfscU7qJJTtSQZ+t9VhNB43JSw=;
+        b=bdndrDOAOPXCI+N51AQEt7bjGG+aWTCgf41HRQyr+oP0xC69Dsn3AqHRnwJF6wj7Kt
+         sp/ZFysCuwwVaM7UjWN97BbGwi0R/33zLDUCney1/l6X8eIxC9z0RzyB3wVo+tPGZIlg
+         o5g3Ct99cWbC7xGbqF9MMxp+CGPXg9TjEGeh1b6kb+cumLCVOP8RJHhRMnfbxtG7yZIJ
+         EiJpfFrki033pfYg7sXHVYrQ8WRldH2LDjX6sxIo/XVZwhNa2oSroM1v6UqLlMznTh89
+         ue0PhNEODGSC22DexocCw+z43SExY+V13cAShJITWZa5fftjt5n0gZ30agBosTEYVUmf
+         uZGg==
+X-Gm-Message-State: AGi0PuY0kiSYxGuXvOyegoqZ3fC24NQW7nLglsbroW+XFHlNseFi0Qvb
+        B1xhFVcO0kk7ubdlia3+BxY=
+X-Google-Smtp-Source: APiQypLHWEH0TX+GBg4gqAGKHl+cYN4HAp8NxlHV/fTPVtwLI8bM2al958mRCqE+bbvl+uPLsoSycA==
+X-Received: by 2002:a63:150:: with SMTP id 77mr7231734pgb.136.1588780626809;
+        Wed, 06 May 2020 08:57:06 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g14sm2199196pfh.49.2020.05.06.08.54.52
+        by smtp.gmail.com with ESMTPSA id r31sm1912232pgl.86.2020.05.06.08.57.05
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 06 May 2020 08:54:53 -0700 (PDT)
-Date:   Wed, 6 May 2020 08:54:52 -0700
+        Wed, 06 May 2020 08:57:06 -0700 (PDT)
+Date:   Wed, 6 May 2020 08:57:04 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: adt7411: update contact email
-Message-ID: <20200506155452.GA30343@roeck-us.net>
-References: <20200502142700.19254-1-wsa@kernel.org>
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-fsi@lists.ozlabs.org, devicetree@vger.kernel.org,
+        jdelvare@suse.com, alistair@popple.id.au, joel@jms.id.au,
+        jk@ozlabs.org, robh+dt@kernel.org
+Subject: Re: [PATCH 3/3] hwmon: (occ) Add new temperature sensor type
+Message-ID: <20200506155704.GA30543@roeck-us.net>
+References: <20200501150833.5251-1-eajames@linux.ibm.com>
+ <20200501150833.5251-4-eajames@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200502142700.19254-1-wsa@kernel.org>
+In-Reply-To: <20200501150833.5251-4-eajames@linux.ibm.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, May 02, 2020 at 04:27:00PM +0200, Wolfram Sang wrote:
-> My 'pengutronix' address is defunct for years. Merge the entries and use
-> the proper contact address.
+On Fri, May 01, 2020 at 10:08:33AM -0500, Eddie James wrote:
+> The latest version of the On-Chip Controller (OCC) has a different
+> format for the temperature sensor data. Add a new temperature sensor
+> version to handle this data.
 > 
-> Signed-off-by: Wolfram Sang <wsa@kernel.org>
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
 
-Applied.
+For my reference:
 
-Thanks,
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+
+I assume this depends on at least patch 2 of the series, so we'll have
+to wait for that to be accepted.
+
 Guenter
 
 > ---
->  drivers/hwmon/adt7411.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+>  drivers/hwmon/occ/common.c | 75 ++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 75 insertions(+)
 > 
-> diff --git a/drivers/hwmon/adt7411.c b/drivers/hwmon/adt7411.c
-> index c7010b91bc13..5a839cc2ed1c 100644
-> --- a/drivers/hwmon/adt7411.c
-> +++ b/drivers/hwmon/adt7411.c
-> @@ -716,7 +716,6 @@ static struct i2c_driver adt7411_driver = {
+> diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
+> index 30e18eb60da7..52af0e728232 100644
+> --- a/drivers/hwmon/occ/common.c
+> +++ b/drivers/hwmon/occ/common.c
+> @@ -41,6 +41,14 @@ struct temp_sensor_2 {
+>  	u8 value;
+>  } __packed;
 >  
->  module_i2c_driver(adt7411_driver);
+> +struct temp_sensor_10 {
+> +	u32 sensor_id;
+> +	u8 fru_type;
+> +	u8 value;
+> +	u8 throttle;
+> +	u8 reserved;
+> +} __packed;
+> +
+>  struct freq_sensor_1 {
+>  	u16 sensor_id;
+>  	u16 value;
+> @@ -307,6 +315,60 @@ static ssize_t occ_show_temp_2(struct device *dev,
+>  	return snprintf(buf, PAGE_SIZE - 1, "%u\n", val);
+>  }
 >  
-> -MODULE_AUTHOR("Sascha Hauer <s.hauer@pengutronix.de> and "
-> -	"Wolfram Sang <w.sang@pengutronix.de>");
-> +MODULE_AUTHOR("Sascha Hauer, Wolfram Sang <kernel@pengutronix.de>");
->  MODULE_DESCRIPTION("ADT7411 driver");
->  MODULE_LICENSE("GPL v2");
+> +static ssize_t occ_show_temp_10(struct device *dev,
+> +				struct device_attribute *attr, char *buf)
+> +{
+> +	int rc;
+> +	u32 val = 0;
+> +	struct temp_sensor_10 *temp;
+> +	struct occ *occ = dev_get_drvdata(dev);
+> +	struct occ_sensors *sensors = &occ->sensors;
+> +	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
+> +
+> +	rc = occ_update_response(occ);
+> +	if (rc)
+> +		return rc;
+> +
+> +	temp = ((struct temp_sensor_10 *)sensors->temp.data) + sattr->index;
+> +
+> +	switch (sattr->nr) {
+> +	case 0:
+> +		val = get_unaligned_be32(&temp->sensor_id);
+> +		break;
+> +	case 1:
+> +		val = temp->value;
+> +		if (val == OCC_TEMP_SENSOR_FAULT)
+> +			return -EREMOTEIO;
+> +
+> +		/*
+> +		 * VRM doesn't return temperature, only alarm bit. This
+> +		 * attribute maps to tempX_alarm instead of tempX_input for
+> +		 * VRM
+> +		 */
+> +		if (temp->fru_type != OCC_FRU_TYPE_VRM) {
+> +			/* sensor not ready */
+> +			if (val == 0)
+> +				return -EAGAIN;
+> +
+> +			val *= 1000;
+> +		}
+> +		break;
+> +	case 2:
+> +		val = temp->fru_type;
+> +		break;
+> +	case 3:
+> +		val = temp->value == OCC_TEMP_SENSOR_FAULT;
+> +		break;
+> +	case 4:
+> +		val = temp->throttle * 1000;
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	return snprintf(buf, PAGE_SIZE - 1, "%u\n", val);
+> +}
+> +
+>  static ssize_t occ_show_freq_1(struct device *dev,
+>  			       struct device_attribute *attr, char *buf)
+>  {
+> @@ -745,6 +807,10 @@ static int occ_setup_sensor_attrs(struct occ *occ)
+>  		num_attrs += (sensors->temp.num_sensors * 4);
+>  		show_temp = occ_show_temp_2;
+>  		break;
+> +	case 0x10:
+> +		num_attrs += (sensors->temp.num_sensors * 5);
+> +		show_temp = occ_show_temp_10;
+> +		break;
+>  	default:
+>  		sensors->temp.num_sensors = 0;
+>  	}
+> @@ -844,6 +910,15 @@ static int occ_setup_sensor_attrs(struct occ *occ)
+>  			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
+>  						     show_temp, NULL, 3, i);
+>  			attr++;
+> +
+> +			if (sensors->temp.version == 0x10) {
+> +				snprintf(attr->name, sizeof(attr->name),
+> +					 "temp%d_max", s);
+> +				attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
+> +							     show_temp, NULL,
+> +							     4, i);
+> +				attr++;
+> +			}
+>  		}
+>  	}
+>  
