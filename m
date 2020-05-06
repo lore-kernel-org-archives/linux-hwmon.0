@@ -7,525 +7,302 @@ X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C7D1C28CBC
-	for <linux-hwmon@archiver.kernel.org>; Wed,  6 May 2020 18:32:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4787FC28CBC
+	for <linux-hwmon@archiver.kernel.org>; Wed,  6 May 2020 19:27:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 33738206D5
-	for <linux-hwmon@archiver.kernel.org>; Wed,  6 May 2020 18:32:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1434420CC7
+	for <linux-hwmon@archiver.kernel.org>; Wed,  6 May 2020 19:27:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U6dwBxPL"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NL6BJtMp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730283AbgEFSco (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 6 May 2020 14:32:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60170 "EHLO
+        id S1728738AbgEFT1Q (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 6 May 2020 15:27:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729313AbgEFScn (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 6 May 2020 14:32:43 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E68C061A0F
-        for <linux-hwmon@vger.kernel.org>; Wed,  6 May 2020 11:32:42 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id a4so1505980pgc.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 06 May 2020 11:32:42 -0700 (PDT)
+        with ESMTP id S1729114AbgEFT1Q (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 6 May 2020 15:27:16 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33DA2C061A0F
+        for <linux-hwmon@vger.kernel.org>; Wed,  6 May 2020 12:27:16 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id x15so1541915pfa.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 06 May 2020 12:27:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=2sDqeZqC7ld2T14enYaGBZfz0cMHxgReQvtQdj+GE5A=;
-        b=U6dwBxPLJZFNvq1MKSRKpp4FYIsKqMblcAv6h3TmVC8Tm3HEb16EVu2YEsSyYiTBzI
-         O5LT7yaRLDUGeZBxeNxpYbek0aA4RWkMaPq0ZgnLJiDsHJHKHkV2NuELRZJsNDLHavBa
-         exflkl/ki8WXjgMzx/UhXt8tU5H0AVyWSHIJdYSYUkmWKH0WjcGy3cio1IseDt7ETdt1
-         p7f/zfCEZkekWA8/32cGs3ubV1wqd4fcEZ9iJOPW05UtcbFUcZF4ugYUnc9hGATUej57
-         LmMYdcy0ozyErl7jF3QVcYWh9kRL4ipp7RzxMT1sa0ft0oAJ6U+hEEG/S24Dnw36abzB
-         /GEA==
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=oyh2ivZYxh3iBBOEYorJcVLNULttrWaS+tzJWGoE9JA=;
+        b=NL6BJtMp9ATv58IpsehSlXa2GvvDEsYjG6IeK5g2HhnTtDYFYjTgNbWsLzNvr6wHwG
+         GYfNP1PfUOXxFPkzTemw9N71RWpr38ddJYMp9qrxGei3l10lrQ63pLiGRvX5sCWEN7wt
+         CL986UT/58Ud3EPytRQybkN8Vawb2dHlAPreaERyUr8AQZJtD2No8XIk6lqhvLqBtN0K
+         WwNAp6Kh7ozX5EBIcOfNnsjzAcmblaxw7rlCdll6SHYYGmzNQrbmmZ7I7FaZYeaoDLEa
+         BNaoZHpcem65NmIvXChsuDIoTiL0ppRjIytcWcDkm9+h4jkQ4sSu6BnIuxyYQvVtXzOp
+         OkBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=2sDqeZqC7ld2T14enYaGBZfz0cMHxgReQvtQdj+GE5A=;
-        b=HmwfKs39/bIvLzbbKjqO87CvOD97cgUZY+ioM0Jzq95pfNx99gkYWoIsB8lcOr98dC
-         YCxvvvye+zkyapAwNq8NiaG7r+VaZcBit5YRk07C/qEflm+76sxj+oySuBtndSh2Ha+P
-         W9645TwMPkecAW5mxB35S73WN30Mj87Da0snNCeZNEfEAcwrjP7qVBYjU/mfPKs98v8y
-         s7N/MRCAPxA70oS0IILwol82ZOFxu93m0SeYPodppz2TQe+wTCa0NdAFkTCXrlE57FzK
-         Gdi3QdDxEYL/NAr0rkmp9q6dgKPBIyMKGfmIWS6dnmFCuHnohe7YfnjiMGP/utWvPRce
-         HAuA==
-X-Gm-Message-State: AGi0PubC1GcUgaFGzmVrMMa39Gx1kRoKeaInXvbmcC/0FtH/3Ee50Pu6
-        ngCvnyqnp8X8WmejzM9ZY9Q=
-X-Google-Smtp-Source: APiQypLUEDHJW1h4ljnj7dbR5RlwaHpz67wJ96eHaKxIBJcddbkeO7GnUcNLAVeKCzI/0oCgSDiEMA==
-X-Received: by 2002:a65:4c45:: with SMTP id l5mr7231082pgr.405.1588789961691;
-        Wed, 06 May 2020 11:32:41 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y21sm2407340pfm.219.2020.05.06.11.32.40
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 06 May 2020 11:32:40 -0700 (PDT)
-Date:   Wed, 6 May 2020 11:32:39 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Naveen Krishna Chatradhi <nchatrad@amd.com>
-Cc:     linux-hwmon@vger.kernel.org, naveenkrishna.ch@gmail.com
-Subject: Re: [PATCH 1/3] hwmon: Add amd_energy driver to report energy
- counters
-Message-ID: <20200506183239.GA246606@roeck-us.net>
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=oyh2ivZYxh3iBBOEYorJcVLNULttrWaS+tzJWGoE9JA=;
+        b=P16GR2yvSkWyuq8GHYnMoW52MedleDTEXT+GCciGkgTrBwCNAe/mSwAZf3H3eTcMmv
+         QeTE4aSf5B6/D3EnSR0hvXhKKmEyTTkX1fXVOF2hV2ub84CRRT5mEsy9GtE/fsRVAoDU
+         TTMMoM/Nz1A2ddj0jygaTFrPpuFabcmet+/M4T9QMPDiu0dHKAzvKTNpUjBhpXMvXr67
+         KpK7/oUjLRyJXlHhwIlrndikiSuVrYQhH71EaA+ieSlgyijuGOBTY1UM8tQC3+foAUb5
+         W/FPnBYf3E9eyKh/aE4R3Qw0veCB4GY8AtZTeuRsy24x4r7j5RJK+W/L18rhDvXoZEHg
+         Q8Fw==
+X-Gm-Message-State: AGi0PuZktD7pQKidjQdQJ0pZgHyjzRV0Xc61D00Pkv6GTbee1dhLGhhQ
+        3x6aRjtCHvQuNkcb9qnNkAcnJyIp
+X-Google-Smtp-Source: APiQypKksyp1lBupaZaZxfbWYaqNxQSyJ00A68SSrTjN47hbOPg1gPLGM4ViftjZ5x/savmhKjh5uA==
+X-Received: by 2002:a62:1c97:: with SMTP id c145mr10414271pfc.68.1588793235402;
+        Wed, 06 May 2020 12:27:15 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a12sm2497811pfr.28.2020.05.06.12.27.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 May 2020 12:27:14 -0700 (PDT)
+Subject: Re: [PATCH 2/3] hwmon: (amd_energy) Add documentation
+To:     Naveen Krishna Ch <naveenkrishna.ch@gmail.com>
+Cc:     Naveen Krishna Chatradhi <nchatrad@amd.com>,
+        linux-hwmon@vger.kernel.org
 References: <20200501175003.28613-1-nchatrad@amd.com>
+ <20200501175003.28613-2-nchatrad@amd.com>
+ <20200506163324.GA89932@roeck-us.net>
+ <CAHfPSqBJT1FYMxLMsF0GKFnQZfaKBKS6tydVX6tA5_eJutTd7w@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <498b7568-3b59-35f7-79d4-a6e4a972aec0@roeck-us.net>
+Date:   Wed, 6 May 2020 12:27:13 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200501175003.28613-1-nchatrad@amd.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <CAHfPSqBJT1FYMxLMsF0GKFnQZfaKBKS6tydVX6tA5_eJutTd7w@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, May 01, 2020 at 11:20:01PM +0530, Naveen Krishna Chatradhi wrote:
-> This patch adds hwmon based amd_energy driver support for
-> family 17h processors from AMD.
+Hi,
+
+On 5/6/20 10:11 AM, Naveen Krishna Ch wrote:
+> Hi Guenter
 > 
-> The driver provides following interface to the userspace
-> 1. Reports the per core consumption
-> 	* file: "energy%d_input", label: "Ecore%03d"
-> 2. Reports per socket energy consumption
-> 	* file: "energy%d_input", label: "Esocket%d"
-> 3. To, increase the wrap around time of the socket energy
->    counters, a 64bit accumultor is implemented.
-> 4. Reports scaled energy value in Joules.
+> On Wed, 6 May 2020 at 22:03, Guenter Roeck <linux@roeck-us.net> wrote:
+>>
+>> On Fri, May 01, 2020 at 11:20:02PM +0530, Naveen Krishna Chatradhi wrote:
+>>> Document amd_energy driver with all chips supported by it.
+>>>
+>>> Cc: Guenter Roeck <linux@roeck-us.net>
+>>> Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
+>>> ---
+>>> Changes in v5: None
+>>>
+>>>  Documentation/hwmon/amd_energy.rst | 100 +++++++++++++++++++++++++++++
+>>>  Documentation/hwmon/index.rst      |   1 +
+>>>  2 files changed, 101 insertions(+)
+>>>  create mode 100644 Documentation/hwmon/amd_energy.rst
+>>>
+>>> diff --git a/Documentation/hwmon/amd_energy.rst b/Documentation/hwmon/amd_energy.rst
+>>> new file mode 100644
+>>> index 000000000000..2216c8b13e58
+>>> --- /dev/null
+>>> +++ b/Documentation/hwmon/amd_energy.rst
+>>> @@ -0,0 +1,100 @@
+>>> +.. SPDX-License-Identifier: GPL-2.0
+>>> +
+>>> +Kernel driver amd_energy
+>>> +==========================
+>>> +
+>>> +Supported chips:
+>>> +
+>>> +* AMD Family 17h Processors
+>>> +
+>>> +  Prefix: 'amd_energy'
+>>> +
+>>> +  Addresses used:  RAPL MSRs
+>>> +
+>>> +  Datasheets:
+>>> +
+>>> +  - Processor Programming Reference (PPR) for AMD Family 17h Model 01h, Revision B1 Processors
+>>> +
+>>> +     https://developer.amd.com/wp-content/resources/55570-B1_PUB.zip
+>>> +
+>>> +  - Preliminary Processor Programming Reference (PPR) for AMD Family 17h Model 31h, Revision B0 Processors
+>>> +
+>>> +     https://developer.amd.com/wp-content/resources/56176_ppr_Family_17h_Model_71h_B0_pub_Rev_3.06.zip
+>>> +
+>>> +Author: Naveen Krishna Chatradhi <nchatrad@amd.com>
+>>> +
+>>> +Description
+>>> +-----------
+>>> +
+>>> +The Energy driver exposes the energy counters that are
+>>> +reported via the Running Average Power Limit (RAPL)
+>>> +Model-specific Registers (MSRs) via the hardware monitor
+>>> +(HWMON) sysfs interface.
+>>> +
+>>> +1. Power, Energy and Time Units
+>>> +   MSR_RAPL_POWER_UNIT/ C001_0299:
+>>> +   shared with all cores in the socket
+>>> +
+>>> +2. Energy consumed by each Core
+>>> +   MSR_CORE_ENERGY_STATUS/ C001_029A:
+>>> +   32-bitRO, Accumulator, core-level power reporting
+>>> +
+>>> +3. Energy consumed by Socket
+>>> +   MSR_PACKAGE_ENERGY_STATUS/ C001_029B:
+>>> +   32-bitRO, Accumulator, socket-level power reporting,
+>>> +   shared with all cores in socket
+>>> +
+>>> +These registers are updated every 1ms and cleared on
+>>> +reset of the system.
+>>> +
+>>> +Energy Caluclation
+>>> +------------------
+>>> +
+>>> +Energy information (in Joules) is based on the multiplier,
+>>> +1/2^ESU; where ESU is an unsigned integer read from
+>>> +MSR_RAPL_POWER_UNIT register. Default value is 10000b,
+>>> +indicating energy status unit is 15.3 micro-Joules increment.
+>>> +
+>>> +Reported values are scaled as per the formula
+>>> +
+>>> +scaled value = ((1/2^ESU) * (Raw value) * 1000000UL) in Joules
+>>> +
+>>> +Users calculate power for a given domain by calculating
+>>> +     dEnergy/dTime for that domain.
+>>> +
+>>> +Socket energy accumulation
+>>> +--------------------------
+>>> +
+>>> +Current Socket energy status register is 32bit, assuming a 240W
+>>> +system, the register would wrap around in
+>>> +
+>>> +     2^32*15.3 e-6/240 = 273.80416512 secs to wrap(~4.5 mins)
+>>> +
+>>> +To improve the wrap around time, a kernel thread is implemented
+>>> +to accumulate the socket energy counter to a 64-bit counter. The
+>>> +kernel thread starts running during probe, wakes up at 100secs
+>>
+>> wakes up every 100 seconds
+>>
+>>> +and stops running in remove.
+>>
+>> stops running when the driver is removed.
+> Will correct them
+>>
+>> All counters need to be be updated by the kernel thread, not just the socket
+>> counter. If the socket counter can wrap in 4.5 minutes, the matching per-core
+>> counters on a 64-core system can wrap every 4.5 * 64 = 288 minutes, which
+>> isn't much better. This might be even worse on a system with fewer cores and
+>> higher per-core power.
 > 
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
+> Agreed, just need few clarifications though
+> 1. Is it OK to implement another thread for cores alone, as it need not run as
+> frequently as the socket thread.
 
-When running the code, I still see that both hyperthreading siblings are
-reported. On Ryzen 3900X:
+Your call, but personally I think it is not worth the overhead; see below.
 
-amd_energy-isa-0000
-Adapter: ISA adapter
-Ecore000:    740.54 J
-Ecore001:    618.91 J
-Ecore002:    565.79 J
-Ecore003:    629.43 J
-Ecore004:    602.00 J
-Ecore005:    610.42 J
-Ecore006:    447.83 J
-Ecore007:    443.74 J
-Ecore008:    436.55 J
-Ecore009:    445.41 J
-Ecore010:    442.97 J
-Ecore011:    445.35 J
-Ecore012:    740.54 J	<--- everything from here is duplicates
-Ecore013:    618.91 J
-Ecore014:    565.79 J
-Ecore015:    629.43 J
-Ecore016:    602.00 J
-Ecore017:    610.42 J
-Ecore018:    447.83 J
-Ecore019:    443.74 J
-Ecore020:    436.55 J
-Ecore021:    445.41 J
-Ecore022:    442.97 J
-Ecore023:    445.35 J
-Esocket0:     74.62 kJ
+> 2. We have a scenario on servers, a thread accumulating energy for all 128 cores
+> might compromise the compute. So, i would like to provide a configuration
+> symbol or sysfs mechanism to enable/disable the core accumulation.
+> 
 
-That does not make sense. Please filter out hyperthreading siblings.
+Another option would be to use a single thread but only update a single core
+per socket at a time. If the socket thread needs to run every N seconds,
+one would assume that the core thread only needs to run every N * (number
+of cores) seconds (assuming that it uses the same scale). If so, reading
+the data for one core (or maybe a couple of cores if the scale is different)
+plus the data for the socket should not be that expensive.
 
-Also, adding up the individual cores from the output above results
-in 6.428 kJ, which is far off the 74.62 kJ reported for the socket.
-The driver was instantiated during boot, so I'd expect no overflow.
-Also, a couple of minutes later I see 6.497 kJ vs. 87.73 kJ.
-So the socket accumuulated some 13 kJ while the individual cores
-only accumulated a miniscule .069 kJ.
-
-Looking at my 3900X system with an uptime of 30 minutes, I see ~107 kJ
-energy for the socket. That translates to an average power consumption
-of ~60W, which seems high for an idle system. On the other side,
-individual cores show 450 - 750 Joule, which translates to an average
-power consumption between ~0.25W and ~0.41W per core.
-
-Letting the system run for a minute under load, I noticed two things:
-- The socket counter wrapped, even though the kernel thread is running
-  (it reported 122.33 kJ initially and 77.85 kJ after one minute).
-- Per-core energy consumption for one minute under load is ~500 Joule,
-  which translates to ~8W, or ~96W total with 12 cores. That makes
-  sense, but it suggests that the socket energy counter is way off.
-
-Do you have an explanation for the difference and the numbers ?
+If that is not acceptable, it might make more sense to blacklist the driver
+entirely in such situations; without accumulation the reported values are
+pretty much worthless.
 
 Thanks,
 Guenter
 
-> ---
-> Changes in v5:
-> 1. To improve wrap around time. A kernel thread is implemented
->    to accumulate the socket energy counters into a 64bit.
-> 2. Address other comments from Guenter.
+>>
+>>> +
+>>> +A socket energy read would return the current register value
+>>> +added to the respective energy accumulator.
+>>> +
+>>> +Sysfs attributes
+>>> +----------------
+>>> +
+>>> +=============== ========  =====================================
+>>> +Attribute    Label     Description
+>>> +===============      ========  =====================================
+>>> +
+>>> +* For index N between [1] and [nr_cpus]
+>>> +
+>>> +===============      ========  ======================================
+>>> +energy[N]_input EcoreX         Core Energy   X = [0] to [nr_cpus - 1]
+>>> +                       Measured input core energy
+>>> +===============      ========  ======================================
+>>> +
+>>> +* For N between [nr_cpus] and [nr_cpus + nr_socks]
+>>> +
+>>> +===============      ========  ======================================
+>>> +energy[N]_input EsocketX  Socket Energy X = [0] to [nr_socks -1]
+>>> +                       Measured input socket energy
+>>> +=============== ========  ======================================
+>>> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+>>> index 8ef62fd39787..fc4b89810e67 100644
+>>> --- a/Documentation/hwmon/index.rst
+>>> +++ b/Documentation/hwmon/index.rst
+>>> @@ -39,6 +39,7 @@ Hardware Monitoring Kernel Drivers
+>>>     adt7470
+>>>     adt7475
+>>>     amc6821
+>>> +   amd_energy
+>>>     asb100
+>>>     asc7621
+>>>     aspeed-pwm-tacho
 > 
->  drivers/hwmon/Kconfig      |  10 ++
->  drivers/hwmon/Makefile     |   1 +
->  drivers/hwmon/amd_energy.c | 329 +++++++++++++++++++++++++++++++++++++
->  3 files changed, 340 insertions(+)
->  create mode 100644 drivers/hwmon/amd_energy.c
 > 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 4c62f900bf7e..e165e10c49ef 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -324,6 +324,16 @@ config SENSORS_FAM15H_POWER
->  	  This driver can also be built as a module. If so, the module
->  	  will be called fam15h_power.
->  
-> +config SENSORS_AMD_ENERGY
-> +	tristate "AMD RAPL MSR based Energy driver"
-> +	depends on X86
-> +	help
-> +	  If you say yes here you get support for core and package energy
-> +	  sensors, based on RAPL MSR for AMD family 17h and above CPUs.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called as amd_energy.
-> +
->  config SENSORS_APPLESMC
->  	tristate "Apple SMC (Motion sensor, light sensor, keyboard backlight)"
->  	depends on INPUT && X86
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index b0b9c8e57176..318f89dc7133 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -45,6 +45,7 @@ obj-$(CONFIG_SENSORS_ADT7411)	+= adt7411.o
->  obj-$(CONFIG_SENSORS_ADT7462)	+= adt7462.o
->  obj-$(CONFIG_SENSORS_ADT7470)	+= adt7470.o
->  obj-$(CONFIG_SENSORS_ADT7475)	+= adt7475.o
-> +obj-$(CONFIG_SENSORS_AMD_ENERGY) += amd_energy.o
->  obj-$(CONFIG_SENSORS_APPLESMC)	+= applesmc.o
->  obj-$(CONFIG_SENSORS_ARM_SCMI)	+= scmi-hwmon.o
->  obj-$(CONFIG_SENSORS_ARM_SCPI)	+= scpi-hwmon.o
-> diff --git a/drivers/hwmon/amd_energy.c b/drivers/hwmon/amd_energy.c
-> new file mode 100644
-> index 000000000000..16364576f067
-> --- /dev/null
-> +++ b/drivers/hwmon/amd_energy.c
-> @@ -0,0 +1,329 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +
-> +/*
-> + * Copyright (C) 2020 Advanced Micro Devices, Inc.
-> + */
-> +#include <asm/cpu_device_id.h>
-> +
-> +#include <linux/bits.h>
-> +#include <linux/cpu.h>
-> +#include <linux/cpumask.h>
-> +#include <linux/device.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/kernel.h>
-> +#include <linux/kthread.h>
-> +#include <linux/list.h>
-> +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/processor.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/slab.h>
-> +#include <linux/types.h>
-> +
-> +#define DRVNAME			"amd_energy"
-> +
-> +#define ENERGY_PWR_UNIT_MSR	0xC0010299
-> +#define ENERGY_CORE_MSR		0xC001029A
-> +#define ENERGY_PKG_MSR		0xC001029B
-> +
-> +#define AMD_ENERGY_UNIT_MASK	0x01F00
-> +
-> +struct amd_energy_data {
-> +	struct hwmon_channel_info energy_info;
-> +	const struct hwmon_channel_info *info[2];
-> +	struct hwmon_chip_info chip;
-> +	/* Lock around the accumulator */
-> +	struct mutex lock;
-> +	/* Energy Status Units */
-> +	u64 energy_units;
-> +	/* An accumulator for each socket */
-> +	u64 *energy_ctrs;
-> +	u64 *prev_value;
-> +};
-> +
-> +/* */
-> +struct task_struct *wrap_accumulate;
-> +static int nr_cpus, nr_socks;
-> +
-> +static int amd_energy_read_labels(struct device *dev,
-> +				  enum hwmon_sensor_types type,
-> +				 u32 attr, int channel,
-> +				 const char **str)
-> +{
-> +	char *buf = devm_kcalloc(dev, 10, sizeof(char), GFP_KERNEL);
-> +
-> +	if (channel >= nr_cpus)
-> +		scnprintf(buf, 9, "Esocket%u", channel - nr_cpus);
-> +	else
-> +		scnprintf(buf, 9, "Ecore%03u", channel);
-> +
-> +	*str = buf;
-> +
-> +	return 0;
-> +}
-> +
-> +static int get_energy_units(struct amd_energy_data *data)
-> +{
-> +	u64 rapl_units;
-> +	int ret;
-> +
-> +	ret = rdmsrl_safe(ENERGY_PWR_UNIT_MSR, &rapl_units);
-> +	if (ret)
-> +		return ret;
-> +
-> +	data->energy_units = (rapl_units & AMD_ENERGY_UNIT_MASK) >> 8;
-> +	return 0;
-> +}
-> +
-> +static int read_accumulate(struct amd_energy_data *data)
-> +{
-> +	int ret, cu;
-> +	u64 input = 0;
-> +
-> +	for (cu = 0; cu < nr_socks; cu++) {
-> +		int cpu;
-> +
-> +		cpu = cpumask_first_and(cpu_online_mask,
-> +					cpumask_of_node(cu));
-> +
-> +		ret = rdmsrl_safe_on_cpu(cpu, ENERGY_PKG_MSR, &input);
-> +		if (ret)
-> +			return ret;
-> +
-> +		if (input > data->prev_value[cu])
-> +			data->energy_ctrs[cu] +=
-> +				input - data->prev_value[cu];
-> +		else
-> +			data->energy_ctrs[cu] +=
-> +				UINT_MAX - data->prev_value[cu] + input;
-> +
-> +		data->prev_value[cu] = input;
-> +	}
-> +		return 0;
-> +}
-> +
-> +static int amd_energy_read(struct device *dev,
-> +			   enum hwmon_sensor_types type,
-> +			   u32 attr, int channel, long *val)
-> +{
-> +	struct amd_energy_data *data = dev_get_drvdata(dev);
-> +	int ret, cpu;
-> +	u32 reg;
-> +	u64 input;
-> +
-> +	if (channel >= nr_cpus) {
-> +		reg = ENERGY_PKG_MSR;
-> +		cpu = cpumask_first_and(cpu_online_mask,
-> +					cpumask_of_node
-> +					(channel - nr_cpus));
-> +	} else {
-> +		reg = ENERGY_CORE_MSR;
-> +		cpu = channel;
-> +	}
-> +
-> +	if (!cpu_online(cpu))
-> +		return -ENODEV;
-> +
-> +	if (data->energy_units == 0 && get_energy_units(data))
-> +		return -EAGAIN;
-> +
-> +	mutex_lock(&data->lock);
-> +	ret = rdmsrl_safe_on_cpu(cpu, reg, &input);
-> +	if (ret)
-> +		return -EAGAIN;
-> +
-> +	/* Accumulation is for sockets only */
-> +	if (channel >= nr_cpus)
-> +		input += data->energy_ctrs[channel - nr_cpus];
-> +
-> +	/* Energy consumed = (1/(2^ESU) * RAW * 1000000UL) Joules */
-> +	*val = (long)input * div64_ul(1000000UL,
-> +				      BIT(data->energy_units));
-> +	mutex_unlock(&data->lock);
-> +
-> +	return 0;
-> +}
-> +
-> +static umode_t amd_energy_is_visible(const void *_data,
-> +				     enum hwmon_sensor_types type,
-> +				     u32 attr, int channel)
-> +{
-> +	return 0444;
-> +}
-> +
-> +static int socket_accumulator(void *p)
-> +{
-> +	struct amd_energy_data *data = (struct amd_energy_data *)p;
-> +
-> +	while (!kthread_should_stop()) {
-> +		mutex_lock(&data->lock);
-> +		read_accumulate(data);
-> +		mutex_unlock(&data->lock);
-> +
-> +		set_current_state(TASK_INTERRUPTIBLE);
-> +		if (kthread_should_stop())
-> +			break;
-> +
-> +		/*
-> +		 * On a 240W system, the Socket Energy status
-> +		 * register may wrap around in
-> +		 * 2^32*15.3 e-6/240 = 273.8041 secs (~4.5 mins)
-> +		 *
-> +		 * let us accumulate for every 100secs
-> +		 */
-> +		schedule_timeout(msecs_to_jiffies(100000));
-> +	}
-> +	return 0;
-> +}
-> +
-> +static const struct hwmon_ops amd_energy_ops = {
-> +	.is_visible = amd_energy_is_visible,
-> +	.read = amd_energy_read,
-> +	.read_string = amd_energy_read_labels,
-> +};
-> +
-> +static int amd_create_sensor(struct device *dev,
-> +			     struct amd_energy_data *data,
-> +			     u8 type, u32 config)
-> +{
-> +	int i;
-> +	u32 *s_config;
-> +
-> +	struct hwmon_channel_info *info = &data->energy_info;
-> +
-> +	nr_socks = num_possible_nodes();
-> +	nr_cpus = num_present_cpus();
-> +
-> +	s_config = devm_kcalloc(dev, nr_cpus + nr_socks,
-> +				sizeof(u32), GFP_KERNEL);
-> +	if (!s_config)
-> +		return -ENOMEM;
-> +
-> +	data->energy_ctrs = devm_kcalloc(dev, nr_socks,
-> +					 sizeof(u64), GFP_KERNEL);
-> +	if (!data->energy_ctrs)
-> +		return -ENOMEM;
-> +
-> +	data->prev_value = devm_kcalloc(dev, nr_socks,
-> +					sizeof(u64), GFP_KERNEL);
-> +	if (!data->prev_value)
-> +		return -ENOMEM;
-> +
-> +	info->type = type;
-> +	info->config = s_config;
-> +
-> +	for (i = 0; i < nr_cpus + nr_socks; i++)
-> +		s_config[i] = config;
-> +
-> +	return 0;
-> +}
-> +
-> +static int amd_energy_probe(struct platform_device *pdev)
-> +{
-> +	struct device *hwmon_dev;
-> +	struct amd_energy_data *data;
-> +	struct device *dev = &pdev->dev;
-> +	int ret;
-> +
-> +	data = devm_kzalloc(dev,
-> +			    sizeof(struct amd_energy_data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	data->chip.ops = &amd_energy_ops;
-> +	data->chip.info = data->info;
-> +
-> +	/* Populate per-core energy reporting */
-> +	data->info[0] = &data->energy_info;
-> +	amd_create_sensor(dev, data,  hwmon_energy,
-> +			  HWMON_E_INPUT | HWMON_E_LABEL);
-> +
-> +	mutex_init(&data->lock);
-> +
-> +	ret = get_energy_units(data);
-> +	if (ret)
-> +		return ret;
-> +
-> +	hwmon_dev = devm_hwmon_device_register_with_info(dev, DRVNAME,
-> +							 data,
-> +							 &data->chip,
-> +							 NULL);
-> +	if (IS_ERR(hwmon_dev))
-> +		return PTR_ERR(hwmon_dev);
-> +
-> +	wrap_accumulate = kthread_run(socket_accumulator, data,
-> +				      "%s", dev_name(hwmon_dev));
-> +	if (IS_ERR(wrap_accumulate))
-> +		return PTR_ERR(wrap_accumulate);
-> +
-> +	return 0;
-> +}
-> +
-> +static int amd_energy_remove(struct platform_device *pdev)
-> +{
-> +	if (wrap_accumulate)
-> +		kthread_stop(wrap_accumulate);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct platform_device_id amd_energy_ids[] = {
-> +	{ .name = DRVNAME, },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(platform, amd_energy_ids);
-> +
-> +static struct platform_driver amd_energy_driver = {
-> +	.probe = amd_energy_probe,
-> +	.remove	= amd_energy_remove,
-> +	.id_table = amd_energy_ids,
-> +	.driver = {
-> +		.name = DRVNAME,
-> +	},
-> +};
-> +
-> +static struct platform_device *amd_energy_platdev;
-> +
-> +static const struct x86_cpu_id cpu_ids[] __initconst = {
-> +	X86_MATCH_VENDOR_FAM(AMD, 0x17, NULL),
-> +	X86_MATCH_VENDOR_FAM(AMD, 0x19, NULL),
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(x86cpu, cpu_ids);
-> +
-> +static int __init amd_energy_init(void)
-> +{
-> +	int ret;
-> +
-> +	if (!x86_match_cpu(cpu_ids))
-> +		return -ENODEV;
-> +
-> +	ret = platform_driver_register(&amd_energy_driver);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	amd_energy_platdev = platform_device_alloc(DRVNAME, 0);
-> +	if (!amd_energy_platdev)
-> +		return -ENOMEM;
-> +
-> +	ret = platform_device_add(amd_energy_platdev);
-> +	if (ret) {
-> +		platform_device_unregister(amd_energy_platdev);
-> +		return ret;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static void __exit amd_energy_exit(void)
-> +{
-> +	platform_device_unregister(amd_energy_platdev);
-> +	platform_driver_unregister(&amd_energy_driver);
-> +}
-> +
-> +module_init(amd_energy_init);
-> +module_exit(amd_energy_exit);
-> +
-> +MODULE_DESCRIPTION("Driver for AMD Energy reporting from RAPL MSR via HWMON interface");
-> +MODULE_AUTHOR("Naveen Krishna Chatradhi <nchatrad@amd.com>");
-> +MODULE_LICENSE("GPL");
+> 
+
