@@ -1,618 +1,173 @@
-Return-Path: <SRS0=PMJT=6U=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=IuZw=6V=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62032C28CBC
-	for <linux-hwmon@archiver.kernel.org>; Wed,  6 May 2020 21:49:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0FC0C38A24
+	for <linux-hwmon@archiver.kernel.org>; Thu,  7 May 2020 07:44:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 30FD02075E
-	for <linux-hwmon@archiver.kernel.org>; Wed,  6 May 2020 21:49:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7B2ED207DD
+	for <linux-hwmon@archiver.kernel.org>; Thu,  7 May 2020 07:44:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b7yzDyxr"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="CrkVX65s"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729162AbgEFVt5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 6 May 2020 17:49:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34544 "EHLO
+        id S1725841AbgEGHoM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 7 May 2020 03:44:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728888AbgEFVt4 (ORCPT
+        by vger.kernel.org with ESMTP id S1725802AbgEGHoL (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 6 May 2020 17:49:56 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76FCAC061A0F
-        for <linux-hwmon@vger.kernel.org>; Wed,  6 May 2020 14:49:56 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id j21so1786070pgb.7
-        for <linux-hwmon@vger.kernel.org>; Wed, 06 May 2020 14:49:56 -0700 (PDT)
+        Thu, 7 May 2020 03:44:11 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17777C061A10
+        for <linux-hwmon@vger.kernel.org>; Thu,  7 May 2020 00:44:11 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id s8so5097257wrt.9
+        for <linux-hwmon@vger.kernel.org>; Thu, 07 May 2020 00:44:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id;
-        bh=r4201qfSpwHSaZSRVo1ZQM9pAAKVoHc9GNflHN3IZLw=;
-        b=b7yzDyxrsxM+vqgXKQmZYTIAtXfmMPuLIafdD0uugRvZSCWZgD/Ymoy/9NP8CVOIBJ
-         mO7kctG4W/DCWTeeBpO7aCt0PK98D6lSygETc/LGHmo3Vl8bCH5rp+uy3p7RA7gDO4nN
-         D0YWVpnuev8OmzvkxtiLwWJGmNUQLTrYyfGZ9oCH2zhu46ySG90lUhJNwcFJ176qS2ie
-         ZNFuCA72Jb3kFwxiVfT0VQ8RzzUn3o0CoaUR8n1acbYtTBJ71MWy7anrp7+9WfD96sf/
-         spoGWtEzaM9Lcr9jZC25mojAV05/N9i61BbIWyF5CIwrj7ZKSXhZKAgi7rwcvQRsDxZq
-         o6bQ==
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:autocrypt:organization:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=uUBf9MfWNdQa1baFay3uOB30PnoCuD4Q9VGGkHO8szo=;
+        b=CrkVX65sHKx9G0UXdHi7qaJz1EZN4oFmhJT5zUwZA2E/KPV1olSaKU96MTtc3FNYaw
+         OqJ5OkQj33bgFbcRzwmRoArye1tIPWrhlIRLr0qjmreQPGWrNqjl752OqaCzFfYyEAbq
+         mTrJ0p+UxBTFeDujaEjA2Gc0O+oMli1W84YzeCVvG86RllyK9LmHgjccZm/MDAiXKe6g
+         RuMoaCBda78kryLSX8omGCTVlJYGGYdTlZwnvgzOARhjYUWoThgEJIzUQo+GoHiUxAbN
+         zNNUo6TH7l7Jtdj9L6rGU9SFWa6B/Dzeo1CBZRE8vSOYNr4QmBzCdCZjOfVyGDAAnfxE
+         q8Yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
-        bh=r4201qfSpwHSaZSRVo1ZQM9pAAKVoHc9GNflHN3IZLw=;
-        b=bsax+PGr5z85vsu6FVUoxSrowP3q8DyOjDxhliEe7RmB5sS5c95zKCzRa7gjTeKOaT
-         VKT+/TYnSnNHmTPOcx91oKr52Nrom11rTY2pEw4NN+yS+4taHkGaa3TfIUbt3vG2cJo8
-         OzuzeHqETFmKDY73UrLeGUpVqNRVseJWA2gBhi2nyYoDGYbRRKl9j0VUktjOU80VgHq7
-         JkHSoQa/YinZmn6hDpqPqD9w+uaMcissPgIlsINDlieyFJXnUapth+8uVM67zRCg2Bwr
-         JcQPLKwD1khtf4r4ptIQNs0qQ5w4htwuhnUnfgLHp9KFjIe5p9Cml8XTKi3nhMXiiWSM
-         Tkig==
-X-Gm-Message-State: AGi0PubNLIApNdLitUajj7SEfyIspBw7KrDkpBYFszkZOxdnkEw4ndXe
-        LlKs0gChuZrBviMV0bkCZKU1PkV4
-X-Google-Smtp-Source: APiQypJVLtT2eEpc8bYkO7vqIDrax+oDx2gxyImc6b1joRzneDjMIIO6Vx9Evx/uO/Z1FII4gtfcoA==
-X-Received: by 2002:a63:1d4:: with SMTP id 203mr8455762pgb.74.1588801795325;
-        Wed, 06 May 2020 14:49:55 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o1sm5727277pjs.39.2020.05.06.14.49.53
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 06 May 2020 14:49:54 -0700 (PDT)
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, Alex Qiu <xqiu@google.com>
-Subject: [PATCH] hwmon: (pmbus) Driver for Maxim MAX16601
-Date:   Wed,  6 May 2020 14:49:49 -0700
-Message-Id: <20200506214949.175744-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :organization:message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=uUBf9MfWNdQa1baFay3uOB30PnoCuD4Q9VGGkHO8szo=;
+        b=qEUkS9TPFQK8dULJKHcx7yzq1elIC8JJNhcUdlOnngkCjA+2LkflA1eSd7oyClbjCq
+         hk8ofGD9U679FAWgOqPgJHbOBV303R9x38f2nOfvp2s8IjRGY7ikr+4vPrEMdiUkVJFt
+         0r0WU6QBNPBsOWTG9H78yDLLfht02Uy42wuc6bbriY8eNlNB2dhvdKXHz2UyXRX8ztzB
+         tdW5trckevlGutTnqFB2Gbt0hpK7975nxBFRQj0oPgD9VmNW2+65jKIxFlMfopOQO7Vm
+         5enCpeN1Q6KwKIyylZi4UQCGFGy85A4NfezEhADYR9NvtSJxpleoEnYbO8vrf6Z/91+O
+         2mXA==
+X-Gm-Message-State: AGi0PuYecAypFiqhfQBK+gM+S/fTla70eUwjJYlMkvyABzeKVNxBufLA
+        IUH64KKxBhunWoxLChZ31gJ3Aw==
+X-Google-Smtp-Source: APiQypLzuXRyxxCUpOTaVywUtUvYjKZQknhge2JrssH5jZATODOz2orqaMmw/te0EdXI9uKkj3Ls+Q==
+X-Received: by 2002:adf:80ee:: with SMTP id 101mr14267190wrl.156.1588837449147;
+        Thu, 07 May 2020 00:44:09 -0700 (PDT)
+Received: from ?IPv6:2a01:e35:2ec0:82b0:4460:3fd3:382:4a71? ([2a01:e35:2ec0:82b0:4460:3fd3:382:4a71])
+        by smtp.gmail.com with ESMTPSA id s11sm6785519wms.5.2020.05.07.00.44.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 May 2020 00:44:08 -0700 (PDT)
+Subject: Re: [RFC 0/8] mfd: Add support for Khadas Microcontroller
+To:     Kevin Hilman <khilman@baylibre.com>, lee.jones@linaro.org,
+        jdelvare@suse.com, linux@roeck-us.net,
+        srinivas.kandagatla@linaro.org
+Cc:     nick@khadas.com, art@khadas.com, linux-amlogic@lists.infradead.org,
+        linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20200421080102.22796-1-narmstrong@baylibre.com>
+ <7h4kt2ksqb.fsf@baylibre.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
+ 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
+ BSwxi7g3Mu7u5kUByanqHyA=
+Organization: Baylibre
+Message-ID: <29ef9a37-fc6f-4cbe-4b4c-7248866adaca@baylibre.com>
+Date:   Thu, 7 May 2020 09:44:07 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+In-Reply-To: <7h4kt2ksqb.fsf@baylibre.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-MAX16601 is a VR13.HC Dual-Output Voltage Regulator Chipset,
-implementing a (8+1) multiphase synchronous buck converter.
+On 29/04/2020 21:16, Kevin Hilman wrote:
+> Neil Armstrong <narmstrong@baylibre.com> writes:
+> 
+>> The new Khadas VIM2, VIM3 and Edge boards embeds an on-board microcontroller
+>> connected via I2C.
+>>
+>> This Microcontroller is present on the Khadas VIM1, VIM2, VIM3 and Edge
+>> boards.
+>>
+>> It has multiple boot control features like password check, power-on
+>> options, power-off control and system FAN control on recent boards.
+>>
+>> Thie serie adds :
+>> - the bindings
+>> - the MFD driver
+>> - the HWMON cell driver
+>> - the NVMEM cell driver
+>> - updates MAINTAINERS
+>> - add support into the Khadas VIM3/VIM3L DT
+>>
+>> Neil Armstrong (8):
+>>   dt-bindings: mfd: add Khadas Microcontroller bindings
+>>   mfd: add support for the Khadas System control Microcontroller
+>>   hwmon: add support for the MCU controlled FAN on Khadas boards
+>>   nvmem: add support for the Khadas MCU Programmable User Memory
+>>   MAINTAINERS: add myself as maintainer for Khadas MCU drivers
+>>   arm64: dts: meson-g12b: move G12B thermal nodes to meson-g12b.dtsi
+>>   arm64: dts: meson-sm1: add cpu thermal nodes
+> 
+> These two could/should be sent separately from this RFC series and
+> queued for v5.8.
+> 
+> Kevin
+> 
 
-Cc: Alex Qiu <xqiu@google.com>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- Documentation/hwmon/index.rst    |   1 +
- Documentation/hwmon/max16601.rst | 159 ++++++++++++++++
- drivers/hwmon/pmbus/Kconfig      |   9 +
- drivers/hwmon/pmbus/Makefile     |   1 +
- drivers/hwmon/pmbus/max16601.c   | 314 +++++++++++++++++++++++++++++++
- 5 files changed, 484 insertions(+)
- create mode 100644 Documentation/hwmon/max16601.rst
- create mode 100644 drivers/hwmon/pmbus/max16601.c
+Ok
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index 8ef62fd39787..df87ae15a1d4 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -106,6 +106,7 @@ Hardware Monitoring Kernel Drivers
-    max16064
-    max16065
-    max1619
-+   max16601
-    max1668
-    max197
-    max20730
-diff --git a/Documentation/hwmon/max16601.rst b/Documentation/hwmon/max16601.rst
-new file mode 100644
-index 000000000000..346e74674c51
---- /dev/null
-+++ b/Documentation/hwmon/max16601.rst
-@@ -0,0 +1,159 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Kernel driver max16601
-+======================
-+
-+Supported chips:
-+
-+  * Maxim MAX16601
-+
-+    Prefix: 'max16601'
-+
-+    Addresses scanned: -
-+
-+    Datasheet: Not published
-+
-+Author: Guenter Roeck <linux@roeck-us.net>
-+
-+
-+Description
-+-----------
-+
-+This driver supports the MAX16601 VR13.HC Dual-Output Voltage Regulator
-+Chipset.
-+
-+The driver is a client driver to the core PMBus driver.
-+Please see Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
-+
-+
-+Usage Notes
-+-----------
-+
-+This driver does not auto-detect devices. You will have to instantiate the
-+devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
-+details.
-+
-+
-+Platform data support
-+---------------------
-+
-+The driver supports standard PMBus driver platform data.
-+
-+
-+Sysfs entries
-+-------------
-+
-+The following attributes are supported.
-+
-+======================= =======================================================
-+in1_label		"vin1"
-+in1_input		VCORE input voltage.
-+in1_alarm		Input voltage alarm.
-+
-+in2_label		"vout1"
-+in2_input		VCORE output voltage.
-+in2_alarm		Output voltage alarm.
-+
-+curr1_label		"iin1"
-+curr1_input		VCORE input current, derived from duty cycle and output
-+			current.
-+curr1_max		Maximum input current.
-+curr1_max_alarm		Current high alarm.
-+
-+curr2_label		"iin1.0"
-+curr2_input		VCORE phase 0 input current.
-+
-+curr3_label		"iin1.1"
-+curr3_input		VCORE phase 1 input current.
-+
-+curr4_label		"iin1.2"
-+curr4_input		VCORE phase 2 input current.
-+
-+curr5_label		"iin1.3"
-+curr5_input		VCORE phase 3 input current.
-+
-+curr6_label		"iin1.4"
-+curr6_input		VCORE phase 4 input current.
-+
-+curr7_label		"iin1.5"
-+curr7_input		VCORE phase 5 input current.
-+
-+curr8_label		"iin1.6"
-+curr8_input		VCORE phase 6 input current.
-+
-+curr9_label		"iin1.7"
-+curr9_input		VCORE phase 7 input current.
-+
-+curr10_label		"iin2"
-+curr10_input		VCORE input current, derived from sensor element.
-+
-+curr11_label		"iin3"
-+curr11_input		VSA input current.
-+
-+curr12_label		"iout1"
-+curr12_input		VCORE output current.
-+curr12_crit		Critical output current.
-+curr12_crit_alarm	Output current critical alarm.
-+curr12_max		Maximum output current.
-+curr12_max_alarm	Output current high alarm.
-+
-+curr13_label		"iout1.0"
-+curr13_input		VCORE phase 0 output current.
-+
-+curr14_label		"iout1.1"
-+curr14_input		VCORE phase 1 output current.
-+
-+curr15_label		"iout1.2"
-+curr15_input		VCORE phase 2 output current.
-+
-+curr16_label		"iout1.3"
-+curr16_input		VCORE phase 3 output current.
-+
-+curr17_label		"iout1.4"
-+curr17_input		VCORE phase 4 output current.
-+
-+curr18_label		"iout1.5"
-+curr18_input		VCORE phase 5 output current.
-+
-+curr19_label		"iout1.6"
-+curr19_input		VCORE phase 6 output current.
-+
-+curr20_label		"iout1.7"
-+curr20_input		VCORE phase 7 output current.
-+
-+curr21_label		"iout3"
-+curr21_input		VSA output current.
-+curr21_highest		Historical maximum VSA output current.
-+curr21_reset_history	Write any value to reset curr21_highest.
-+curr21_crit		Critical output current.
-+curr21_crit_alarm	Output current critical alarm.
-+curr21_max		Maximum output current.
-+curr21_max_alarm	Output current high alarm.
-+
-+power1_label		"pin1"
-+power1_input		Input power, derived from duty cycle and output current.
-+power1_alarm		Input power alarm.
-+
-+power2_label		"pin2"
-+power2_input		Input power, derived from input current sensor.
-+
-+power3_label		"pout"
-+power3_input		Output power.
-+
-+temp1_input		VCORE temperature.
-+temp1_crit		Critical high temperature.
-+temp1_crit_alarm	Chip temperature critical high alarm.
-+temp1_max		Maximum temperature.
-+temp1_max_alarm		Chip temperature high alarm.
-+
-+temp2_input		TSENSE_0 temperature
-+temp3_input		TSENSE_1 temperature
-+temp4_input		TSENSE_2 temperature
-+temp5_input		TSENSE_3 temperature
-+
-+temp6_input		VSA temperature.
-+temp6_crit		Critical high temperature.
-+temp6_crit_alarm	Chip temperature critical high alarm.
-+temp6_max		Maximum temperature.
-+temp6_max_alarm		Chip temperature high alarm.
-+======================= =======================================================
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index de12a565006d..a337195b1c39 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -146,6 +146,15 @@ config SENSORS_MAX16064
- 	  This driver can also be built as a module. If so, the module will
- 	  be called max16064.
- 
-+config SENSORS_MAX16601
-+	tristate "Maxim MAX16601"
-+	help
-+	  If you say yes here you get hardware monitoring support for Maxim
-+	  MAX16601.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called max16601.
-+
- config SENSORS_MAX20730
- 	tristate "Maxim MAX20730, MAX20734, MAX20743"
- 	help
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index 5feb45806123..c4b15db996ad 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -17,6 +17,7 @@ obj-$(CONFIG_SENSORS_LM25066)	+= lm25066.o
- obj-$(CONFIG_SENSORS_LTC2978)	+= ltc2978.o
- obj-$(CONFIG_SENSORS_LTC3815)	+= ltc3815.o
- obj-$(CONFIG_SENSORS_MAX16064)	+= max16064.o
-+obj-$(CONFIG_SENSORS_MAX16601)	+= max16601.o
- obj-$(CONFIG_SENSORS_MAX20730)	+= max20730.o
- obj-$(CONFIG_SENSORS_MAX20751)	+= max20751.o
- obj-$(CONFIG_SENSORS_MAX31785)	+= max31785.o
-diff --git a/drivers/hwmon/pmbus/max16601.c b/drivers/hwmon/pmbus/max16601.c
-new file mode 100644
-index 000000000000..e10ab394b8de
---- /dev/null
-+++ b/drivers/hwmon/pmbus/max16601.c
-@@ -0,0 +1,314 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Hardware monitoring driver for Maxim MAX16601
-+ *
-+ * Implementation notes:
-+ *
-+ * Ths chip supports two rails, VCORE and VSA. Telemetry information for the
-+ * two rails is reported in two subsequent I2C addresses. The driver
-+ * instantiates a dummy I2C client at the second I2C address to report
-+ * information for the VSA rail in a single instance of the driver.
-+ * Telemetry for the VSA rail is reported to the PMBus core in PMBus page 2.
-+ *
-+ * The chip reports input current using two separate methods. The input current
-+ * reported with the standard READ_IIN command is derived from the output
-+ * current. The first method is reported to the PMBus core with PMBus page 0,
-+ * the second method is reported with PMBus page 1.
-+ *
-+ * The chip supports reading per-phase temperatures and per-phase input/output
-+ * currents for VCORE. Telemetry is reported in vendor specific registers.
-+ * The driver translates the vendor specific register values to PMBus standard
-+ * register values and reports per-phase information in PMBus page 0.
-+ *
-+ * Copyright 2019, 2020 Google LLC.
-+ */
-+
-+#include <linux/bits.h>
-+#include <linux/i2c.h>
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+
-+#include "pmbus.h"
-+
-+#define REG_SETPT_DVID		0xd1
-+#define  DAC_10MV_MODE		BIT(4)
-+#define REG_PHASE_ID		0xf3
-+#define  CORE_RAIL_INDICATOR	BIT(7)
-+#define REG_IOUT_AVG_PK		0xee
-+#define REG_IIN_SENSOR		0xf1
-+#define REG_TOTAL_INPUT_POWER	0xf2
-+#define REG_PHASE_REPORTING	0xf4
-+
-+struct max16601_data {
-+	struct pmbus_driver_info info;
-+	struct i2c_client *vsa;
-+	int iout_avg_pkg;
-+};
-+
-+#define to_max16601_data(x) container_of(x, struct max16601_data, info)
-+
-+static int max16601_read_byte(struct i2c_client *client, int page, int reg)
-+{
-+	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-+	struct max16601_data *data = to_max16601_data(info);
-+
-+	if (page > 0) {
-+		if (page == 2)	/* VSA */
-+			return i2c_smbus_read_byte_data(data->vsa, reg);
-+		return -EOPNOTSUPP;
-+	}
-+	return -ENODATA;
-+}
-+
-+static int max16601_read_word(struct i2c_client *client, int page, int phase,
-+			      int reg)
-+{
-+	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-+	struct max16601_data *data = to_max16601_data(info);
-+	u8 buf[I2C_SMBUS_BLOCK_MAX + 1];
-+	int ret;
-+
-+	switch (page) {
-+	case 0:		/* VCORE */
-+		if (phase == 0xff)
-+			return -ENODATA;
-+		switch (reg) {
-+		case PMBUS_READ_IIN:
-+		case PMBUS_READ_IOUT:
-+		case PMBUS_READ_TEMPERATURE_1:
-+			ret = i2c_smbus_write_byte_data(client, REG_PHASE_ID,
-+							phase);
-+			if (ret)
-+				return ret;
-+			ret = i2c_smbus_read_block_data(client,
-+							REG_PHASE_REPORTING,
-+							buf);
-+			if (ret < 0)
-+				return ret;
-+			if (ret < 6)
-+				return -EIO;
-+			switch (reg) {
-+			case PMBUS_READ_TEMPERATURE_1:
-+				return buf[1] << 8 | buf[0];
-+			case PMBUS_READ_IOUT:
-+				return buf[3] << 8 | buf[2];
-+			case PMBUS_READ_IIN:
-+				return buf[5] << 8 | buf[4];
-+			default:
-+				break;
-+			}
-+		}
-+		return -EOPNOTSUPP;
-+	case 1:		/* VCORE, read IIN/PIN from sensor element */
-+		switch (reg) {
-+		case PMBUS_READ_IIN:
-+			return i2c_smbus_read_word_data(client, REG_IIN_SENSOR);
-+		case PMBUS_READ_PIN:
-+			return i2c_smbus_read_word_data(client,
-+							REG_TOTAL_INPUT_POWER);
-+		default:
-+			break;
-+		}
-+		return -EOPNOTSUPP;
-+	case 2:		/* VSA */
-+		switch (reg) {
-+		case PMBUS_VIRT_READ_IOUT_MAX:
-+			ret = i2c_smbus_read_word_data(data->vsa,
-+						       REG_IOUT_AVG_PK);
-+			if (ret < 0)
-+				return ret;
-+			if (sign_extend32(ret, 10) >
-+			    sign_extend32(data->iout_avg_pkg, 10))
-+				data->iout_avg_pkg = ret;
-+			return data->iout_avg_pkg;
-+		case PMBUS_VIRT_RESET_IOUT_HISTORY:
-+			return 0;
-+		case PMBUS_IOUT_OC_FAULT_LIMIT:
-+		case PMBUS_IOUT_OC_WARN_LIMIT:
-+		case PMBUS_OT_FAULT_LIMIT:
-+		case PMBUS_OT_WARN_LIMIT:
-+		case PMBUS_READ_IIN:
-+		case PMBUS_READ_IOUT:
-+		case PMBUS_READ_TEMPERATURE_1:
-+		case PMBUS_STATUS_WORD:
-+			return i2c_smbus_read_word_data(data->vsa, reg);
-+		default:
-+			return -EOPNOTSUPP;
-+		}
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static int max16601_write_byte(struct i2c_client *client, int page, u8 reg)
-+{
-+	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-+	struct max16601_data *data = to_max16601_data(info);
-+
-+	if (page == 2) {
-+		if (reg == PMBUS_CLEAR_FAULTS)
-+			return i2c_smbus_write_byte(data->vsa, reg);
-+		return -EOPNOTSUPP;
-+	}
-+	return -ENODATA;
-+}
-+
-+static int max16601_write_word(struct i2c_client *client, int page, int reg,
-+			       u16 value)
-+{
-+	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-+	struct max16601_data *data = to_max16601_data(info);
-+
-+	switch (page) {
-+	case 0:		/* VCORE */
-+		return -ENODATA;
-+	case 1:		/* VCORE IIN/PIN from sensor element */
-+	default:
-+		return -EOPNOTSUPP;
-+	case 2:		/* VSA */
-+		switch (reg) {
-+		case PMBUS_VIRT_RESET_IOUT_HISTORY:
-+			data->iout_avg_pkg = 0xfc00;
-+			return 0;
-+		case PMBUS_IOUT_OC_FAULT_LIMIT:
-+		case PMBUS_IOUT_OC_WARN_LIMIT:
-+		case PMBUS_OT_FAULT_LIMIT:
-+		case PMBUS_OT_WARN_LIMIT:
-+			return i2c_smbus_write_word_data(data->vsa, reg, value);
-+		default:
-+			return -EOPNOTSUPP;
-+		}
-+	}
-+}
-+
-+static int max16601_identify(struct i2c_client *client,
-+			     struct pmbus_driver_info *info)
-+{
-+	int reg;
-+
-+	reg = i2c_smbus_read_byte_data(client, REG_SETPT_DVID);
-+	if (reg < 0)
-+		return reg;
-+	if (reg & DAC_10MV_MODE)
-+		info->vrm_version[0] = vr13;
-+	else
-+		info->vrm_version[0] = vr12;
-+
-+	return 0;
-+}
-+
-+static struct pmbus_driver_info max16601_info = {
-+	.pages = 3,
-+	.format[PSC_VOLTAGE_IN] = linear,
-+	.format[PSC_VOLTAGE_OUT] = vid,
-+	.format[PSC_CURRENT_IN] = linear,
-+	.format[PSC_CURRENT_OUT] = linear,
-+	.format[PSC_TEMPERATURE] = linear,
-+	.format[PSC_POWER] = linear,
-+	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN | PMBUS_HAVE_PIN |
-+		PMBUS_HAVE_STATUS_INPUT |
-+		PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
-+		PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
-+		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP |
-+		PMBUS_HAVE_POUT | PMBUS_PAGE_VIRTUAL | PMBUS_PHASE_VIRTUAL,
-+	.func[1] = PMBUS_HAVE_IIN | PMBUS_HAVE_PIN | PMBUS_PAGE_VIRTUAL,
-+	.func[2] = PMBUS_HAVE_IIN | PMBUS_HAVE_STATUS_INPUT |
-+		PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
-+		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP | PMBUS_PAGE_VIRTUAL,
-+	.phases[0] = 8,
-+	.pfunc[0] = PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT | PMBUS_HAVE_TEMP,
-+	.pfunc[1] = PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT,
-+	.pfunc[2] = PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT | PMBUS_HAVE_TEMP,
-+	.pfunc[3] = PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT,
-+	.pfunc[4] = PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT | PMBUS_HAVE_TEMP,
-+	.pfunc[5] = PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT,
-+	.pfunc[6] = PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT | PMBUS_HAVE_TEMP,
-+	.pfunc[7] = PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT,
-+	.identify = max16601_identify,
-+	.read_byte_data = max16601_read_byte,
-+	.read_word_data = max16601_read_word,
-+	.write_byte = max16601_write_byte,
-+	.write_word_data = max16601_write_word,
-+};
-+
-+static void max16601_remove(void *_data)
-+{
-+	struct max16601_data *data = _data;
-+
-+	i2c_unregister_device(data->vsa);
-+}
-+
-+static int max16601_probe(struct i2c_client *client,
-+			  const struct i2c_device_id *id)
-+{
-+	struct device *dev = &client->dev;
-+	u8 buf[I2C_SMBUS_BLOCK_MAX + 1];
-+	struct max16601_data *data;
-+	int ret;
-+
-+	if (!i2c_check_functionality(client->adapter,
-+				     I2C_FUNC_SMBUS_READ_BYTE_DATA |
-+				     I2C_FUNC_SMBUS_READ_BLOCK_DATA))
-+		return -ENODEV;
-+
-+	ret = i2c_smbus_read_block_data(client, PMBUS_IC_DEVICE_ID, buf);
-+	if (ret < 0)
-+		return -ENODEV;
-+
-+	/* PMBUS_IC_DEVICE_ID is expected to return "MAX16601y.xx" */
-+	if (ret < 11 || strncmp(buf, "MAX16601", 8)) {
-+		buf[ret] = '\0';
-+		dev_err(dev, "Unsupported chip '%s'\n", buf);
-+		return -ENODEV;
-+	}
-+
-+	ret = i2c_smbus_read_byte_data(client, REG_PHASE_ID);
-+	if (ret < 0)
-+		return ret;
-+	if (!(ret & CORE_RAIL_INDICATOR)) {
-+		dev_err(dev,
-+			"Driver must be instantiated on CORE rail I2C address\n");
-+		return -ENODEV;
-+	}
-+
-+	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	data->iout_avg_pkg = 0xfc00;
-+	data->vsa = i2c_new_dummy_device(client->adapter, client->addr + 1);
-+	if (IS_ERR(data->vsa)) {
-+		dev_err(dev, "Failed to register VSA client\n");
-+		return PTR_ERR(data->vsa);
-+	}
-+	ret = devm_add_action_or_reset(dev, max16601_remove, data);
-+	if (ret)
-+		return ret;
-+
-+	data->info = max16601_info;
-+
-+	return pmbus_do_probe(client, id, &data->info);
-+}
-+
-+static const struct i2c_device_id max16601_id[] = {
-+	{"max16601", 0},
-+	{}
-+};
-+
-+MODULE_DEVICE_TABLE(i2c, max16601_id);
-+
-+static struct i2c_driver max16601_driver = {
-+	.driver = {
-+		   .name = "max16601",
-+		   },
-+	.probe = max16601_probe,
-+	.remove = pmbus_do_remove,
-+	.id_table = max16601_id,
-+};
-+
-+module_i2c_driver(max16601_driver);
-+
-+MODULE_AUTHOR("Guenter Roeck <linux@roeck-us.net>");
-+MODULE_DESCRIPTION("PMBus driver for Maxim MAX16601");
-+MODULE_LICENSE("GPL v2");
--- 
-2.17.1
-
+Neil
