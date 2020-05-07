@@ -2,172 +2,115 @@ Return-Path: <SRS0=IuZw=6V=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.5 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0FC0C38A24
-	for <linux-hwmon@archiver.kernel.org>; Thu,  7 May 2020 07:44:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A804C38A24
+	for <linux-hwmon@archiver.kernel.org>; Thu,  7 May 2020 17:44:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7B2ED207DD
-	for <linux-hwmon@archiver.kernel.org>; Thu,  7 May 2020 07:44:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 46095215A4
+	for <linux-hwmon@archiver.kernel.org>; Thu,  7 May 2020 17:44:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="CrkVX65s"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XFwcqLro"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725841AbgEGHoM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 7 May 2020 03:44:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42092 "EHLO
+        id S1726467AbgEGRoM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 7 May 2020 13:44:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725802AbgEGHoL (ORCPT
+        by vger.kernel.org with ESMTP id S1726393AbgEGRoL (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 7 May 2020 03:44:11 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17777C061A10
-        for <linux-hwmon@vger.kernel.org>; Thu,  7 May 2020 00:44:11 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id s8so5097257wrt.9
-        for <linux-hwmon@vger.kernel.org>; Thu, 07 May 2020 00:44:10 -0700 (PDT)
+        Thu, 7 May 2020 13:44:11 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD00FC05BD43
+        for <linux-hwmon@vger.kernel.org>; Thu,  7 May 2020 10:44:11 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id t11so3137617pgg.2
+        for <linux-hwmon@vger.kernel.org>; Thu, 07 May 2020 10:44:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:autocrypt:organization:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=uUBf9MfWNdQa1baFay3uOB30PnoCuD4Q9VGGkHO8szo=;
-        b=CrkVX65sHKx9G0UXdHi7qaJz1EZN4oFmhJT5zUwZA2E/KPV1olSaKU96MTtc3FNYaw
-         OqJ5OkQj33bgFbcRzwmRoArye1tIPWrhlIRLr0qjmreQPGWrNqjl752OqaCzFfYyEAbq
-         mTrJ0p+UxBTFeDujaEjA2Gc0O+oMli1W84YzeCVvG86RllyK9LmHgjccZm/MDAiXKe6g
-         RuMoaCBda78kryLSX8omGCTVlJYGGYdTlZwnvgzOARhjYUWoThgEJIzUQo+GoHiUxAbN
-         zNNUo6TH7l7Jtdj9L6rGU9SFWa6B/Dzeo1CBZRE8vSOYNr4QmBzCdCZjOfVyGDAAnfxE
-         q8Yg==
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id;
+        bh=6+lthxw1RcC6O9714Ly8gtNuZI1rivcqg7mcqA94vPM=;
+        b=XFwcqLroivgc4Bter9SF1NkmmDAfxV1CxqFlun5dlcAFS/DULGCQ2vKX9oAlXsxXfW
+         QIrIXa63lmGCbaGJfaG4rT0VbMSLStLB9hA8XOj5LFUqKS6R0642xAJpnCodIJ87wBu/
+         3ng/v+0KXuFsk2nR2GeIwgH1pDCFwDkhpD3XXE30+9Z3o4icaIc/MZEkyj1qbNm4GBbO
+         dVPAwFMLBC5ktkfx4IxgF6lJ/7aRmQbDC8Swj8Fdzy5G/xB0kIqNEgzZHP1PKp59C6lo
+         aDoTqdFDYihjNPoMWVLcH/jFJ3FZoH+fiAOAckGFCHRwwfFfdodRWeF5l+1Q/dcOY97/
+         tcmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
-         :organization:message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=uUBf9MfWNdQa1baFay3uOB30PnoCuD4Q9VGGkHO8szo=;
-        b=qEUkS9TPFQK8dULJKHcx7yzq1elIC8JJNhcUdlOnngkCjA+2LkflA1eSd7oyClbjCq
-         hk8ofGD9U679FAWgOqPgJHbOBV303R9x38f2nOfvp2s8IjRGY7ikr+4vPrEMdiUkVJFt
-         0r0WU6QBNPBsOWTG9H78yDLLfht02Uy42wuc6bbriY8eNlNB2dhvdKXHz2UyXRX8ztzB
-         tdW5trckevlGutTnqFB2Gbt0hpK7975nxBFRQj0oPgD9VmNW2+65jKIxFlMfopOQO7Vm
-         5enCpeN1Q6KwKIyylZi4UQCGFGy85A4NfezEhADYR9NvtSJxpleoEnYbO8vrf6Z/91+O
-         2mXA==
-X-Gm-Message-State: AGi0PuYecAypFiqhfQBK+gM+S/fTla70eUwjJYlMkvyABzeKVNxBufLA
-        IUH64KKxBhunWoxLChZ31gJ3Aw==
-X-Google-Smtp-Source: APiQypLzuXRyxxCUpOTaVywUtUvYjKZQknhge2JrssH5jZATODOz2orqaMmw/te0EdXI9uKkj3Ls+Q==
-X-Received: by 2002:adf:80ee:: with SMTP id 101mr14267190wrl.156.1588837449147;
-        Thu, 07 May 2020 00:44:09 -0700 (PDT)
-Received: from ?IPv6:2a01:e35:2ec0:82b0:4460:3fd3:382:4a71? ([2a01:e35:2ec0:82b0:4460:3fd3:382:4a71])
-        by smtp.gmail.com with ESMTPSA id s11sm6785519wms.5.2020.05.07.00.44.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 May 2020 00:44:08 -0700 (PDT)
-Subject: Re: [RFC 0/8] mfd: Add support for Khadas Microcontroller
-To:     Kevin Hilman <khilman@baylibre.com>, lee.jones@linaro.org,
-        jdelvare@suse.com, linux@roeck-us.net,
-        srinivas.kandagatla@linaro.org
-Cc:     nick@khadas.com, art@khadas.com, linux-amlogic@lists.infradead.org,
-        linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20200421080102.22796-1-narmstrong@baylibre.com>
- <7h4kt2ksqb.fsf@baylibre.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
- 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
- BSwxi7g3Mu7u5kUByanqHyA=
-Organization: Baylibre
-Message-ID: <29ef9a37-fc6f-4cbe-4b4c-7248866adaca@baylibre.com>
-Date:   Thu, 7 May 2020 09:44:07 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
-MIME-Version: 1.0
-In-Reply-To: <7h4kt2ksqb.fsf@baylibre.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
+        bh=6+lthxw1RcC6O9714Ly8gtNuZI1rivcqg7mcqA94vPM=;
+        b=aDySMbNiNouVK7RvArO7JrhiqA7Ek+ZiLSDsxY/znEfES+t9XjV/CEY2k+5Xewkjlk
+         445Wcnxqw1pJz6YieKh1ppQ7PB9mHjygjxsE26jsGo8PZzC8Oy1X9gjecdsekCg59WtD
+         ZlzcGTnI8KJ+Qj+DmqD2I6stLjfeo3An45eTwNbDJ4zKxD7u5L1kl5XfoUxFFmB44/Wv
+         SxadYCKUWbPfDRr7zUoF8zuL55m0pp3W1WAe9H2AZbP0DAQU3sL25IF6T+sfIyrfhoAy
+         pyZ3ioztuUV9KOIvmnnsunOpUWBg+BsH5/s/tbg2rskwRNKycRb/i5zVXtRyT9Y60SXm
+         JQug==
+X-Gm-Message-State: AGi0PuZCgEATKaUcyrefnku4wlCbxK/8bU7GD3BnSOe2IqVZHcmPy3xb
+        va8mcgYY5V6ijZSWbC49BoZmiCSn
+X-Google-Smtp-Source: APiQypKveulk8Wi3napClfHoR6KRkwl5dj9nrvrvWfC9tiDSCzV6bxFG7j7QMBkyfJw31DN4lI94zg==
+X-Received: by 2002:a62:1a0d:: with SMTP id a13mr14554261pfa.229.1588873450929;
+        Thu, 07 May 2020 10:44:10 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 10sm5430631pfn.204.2020.05.07.10.44.09
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 07 May 2020 10:44:10 -0700 (PDT)
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, Alex Qiu <xqiu@google.com>
+Subject: [PATCH] hwmon: (pmbus) Improve initialization of 'currpage' and 'currphase'
+Date:   Thu,  7 May 2020 10:44:07 -0700
+Message-Id: <20200507174407.36576-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 29/04/2020 21:16, Kevin Hilman wrote:
-> Neil Armstrong <narmstrong@baylibre.com> writes:
-> 
->> The new Khadas VIM2, VIM3 and Edge boards embeds an on-board microcontroller
->> connected via I2C.
->>
->> This Microcontroller is present on the Khadas VIM1, VIM2, VIM3 and Edge
->> boards.
->>
->> It has multiple boot control features like password check, power-on
->> options, power-off control and system FAN control on recent boards.
->>
->> Thie serie adds :
->> - the bindings
->> - the MFD driver
->> - the HWMON cell driver
->> - the NVMEM cell driver
->> - updates MAINTAINERS
->> - add support into the Khadas VIM3/VIM3L DT
->>
->> Neil Armstrong (8):
->>   dt-bindings: mfd: add Khadas Microcontroller bindings
->>   mfd: add support for the Khadas System control Microcontroller
->>   hwmon: add support for the MCU controlled FAN on Khadas boards
->>   nvmem: add support for the Khadas MCU Programmable User Memory
->>   MAINTAINERS: add myself as maintainer for Khadas MCU drivers
->>   arm64: dts: meson-g12b: move G12B thermal nodes to meson-g12b.dtsi
->>   arm64: dts: meson-sm1: add cpu thermal nodes
-> 
-> These two could/should be sent separately from this RFC series and
-> queued for v5.8.
-> 
-> Kevin
-> 
+The 'currpage' and 'currphase' variables in struct pmbus_data are used by
+the PMBus core to determine if the phase or page value has changed. Both
+are initialized with values which are never expected to be set in the code
+to ensure that the first page/phase write operation is actually performed.
 
-Ok
+This is not well explained and occasionally causes confusion. Change the
+type of both variables to s16 and initialize with -1 to ensure that the
+initial value never matches a requested value, and clarify that this
+value means "unknown/unset".
 
-Neil
+Cc: Alex Qiu <xqiu@google.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/hwmon/pmbus/pmbus_core.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index 8d321bf7d15b..a420877ba533 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -109,8 +109,8 @@ struct pmbus_data {
+ 	bool has_status_word;		/* device uses STATUS_WORD register */
+ 	int (*read_status)(struct i2c_client *client, int page);
+ 
+-	u8 currpage;
+-	u8 currphase;	/* current phase, 0xff for all */
++	s16 currpage;	/* current page, -1 for unknown/unset */
++	s16 currphase;	/* current phase, 0xff for all, -1 for unknown/unset */
+ };
+ 
+ struct pmbus_debugfs_entry {
+@@ -2529,8 +2529,8 @@ int pmbus_do_probe(struct i2c_client *client, const struct i2c_device_id *id,
+ 	if (pdata)
+ 		data->flags = pdata->flags;
+ 	data->info = info;
+-	data->currpage = 0xff;
+-	data->currphase = 0xfe;
++	data->currpage = -1;
++	data->currphase = -1;
+ 
+ 	ret = pmbus_init_common(client, data, info);
+ 	if (ret < 0)
+-- 
+2.17.1
+
