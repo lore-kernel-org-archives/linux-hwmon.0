@@ -6,20 +6,21 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 21F40C54E8F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05FC3C54E8E
 	for <linux-hwmon@archiver.kernel.org>; Sun, 10 May 2020 20:58:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 07028206B9
-	for <linux-hwmon@archiver.kernel.org>; Sun, 10 May 2020 20:58:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E978B2080C
+	for <linux-hwmon@archiver.kernel.org>; Sun, 10 May 2020 20:58:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729372AbgEJU6W (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S1729162AbgEJU6W (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Sun, 10 May 2020 16:58:22 -0400
-Received: from mail.ispras.ru ([83.149.199.45]:53660 "EHLO mail.ispras.ru"
+Received: from mail.ispras.ru ([83.149.199.45]:53654 "EHLO mail.ispras.ru"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729028AbgEJU6W (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        id S1728468AbgEJU6W (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
         Sun, 10 May 2020 16:58:22 -0400
+X-Greylist: delayed 349 seconds by postgrey-1.27 at vger.kernel.org; Sun, 10 May 2020 16:58:21 EDT
 Received: from localhost.localdomain (unknown [46.188.10.168])
-        by mail.ispras.ru (Postfix) with ESMTPSA id E0888CD46B;
+        by mail.ispras.ru (Postfix) with ESMTPSA id A099BCD468;
         Sun, 10 May 2020 23:52:29 +0300 (MSK)
 From:   Alexander Monakov <amonakov@ispras.ru>
 To:     linux-kernel@vger.kernel.org
@@ -32,9 +33,9 @@ Cc:     Alexander Monakov <amonakov@ispras.ru>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         linux-hwmon@vger.kernel.org, linux-edac@vger.kernel.org
-Subject: [PATCH 3/3] EDAC/amd64: Add AMD family 17h model 60h PCI IDs
-Date:   Sun, 10 May 2020 20:48:42 +0000
-Message-Id: <20200510204842.2603-4-amonakov@ispras.ru>
+Subject: [PATCH 1/3] x86/amd_nb: add AMD family 17h model 60h PCI IDs
+Date:   Sun, 10 May 2020 20:48:40 +0000
+Message-Id: <20200510204842.2603-2-amonakov@ispras.ru>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200510204842.2603-1-amonakov@ispras.ru>
 References: <20200510204842.2603-1-amonakov@ispras.ru>
@@ -45,7 +46,8 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add support for AMD Renoir (4000-series Ryzen CPUs).
+Add PCI IDs for AMD Renoir (4000-series Ryzen CPUs). This is necessary
+to enable support for temperature sensors via the k10temp module.
 
 Signed-off-by: Alexander Monakov <amonakov@ispras.ru>
 Cc: Thomas Gleixner <tglx@linutronix.de>
@@ -59,63 +61,62 @@ Cc: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org
 Cc: linux-edac@vger.kernel.org
 ---
- drivers/edac/amd64_edac.c | 14 ++++++++++++++
- drivers/edac/amd64_edac.h |  3 +++
- 2 files changed, 17 insertions(+)
+ arch/x86/kernel/amd_nb.c | 5 +++++
+ include/linux/pci_ids.h  | 1 +
+ 2 files changed, 6 insertions(+)
 
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 1136500c5f53..d50365e9217a 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -2319,6 +2319,16 @@ static struct amd64_family_type family_types[] = {
- 			.dbam_to_cs		= f17_addr_mask_to_cs_size,
- 		}
- 	},
-+	[F17_M60H_CPUS] = {
-+		.ctl_name = "F17h_M60h",
-+		.f0_id = PCI_DEVICE_ID_AMD_17H_M60H_DF_F0,
-+		.f6_id = PCI_DEVICE_ID_AMD_17H_M60H_DF_F6,
-+		.max_mcs = 2,
-+		.ops = {
-+			.early_channel_count	= f17_early_channel_count,
-+			.dbam_to_cs		= f17_addr_mask_to_cs_size,
-+		}
-+	},
- 	[F17_M70H_CPUS] = {
- 		.ctl_name = "F17h_M70h",
- 		.f0_id = PCI_DEVICE_ID_AMD_17H_M70H_DF_F0,
-@@ -3357,6 +3367,10 @@ static struct amd64_family_type *per_family_init(struct amd64_pvt *pvt)
- 			fam_type = &family_types[F17_M30H_CPUS];
- 			pvt->ops = &family_types[F17_M30H_CPUS].ops;
- 			break;
-+		} else if (pvt->model >= 0x60 && pvt->model <= 0x6f) {
-+			fam_type = &family_types[F17_M60H_CPUS];
-+			pvt->ops = &family_types[F17_M60H_CPUS].ops;
-+			break;
- 		} else if (pvt->model >= 0x70 && pvt->model <= 0x7f) {
- 			fam_type = &family_types[F17_M70H_CPUS];
- 			pvt->ops = &family_types[F17_M70H_CPUS].ops;
-diff --git a/drivers/edac/amd64_edac.h b/drivers/edac/amd64_edac.h
-index abbf3c274d74..52b5d03eeba0 100644
---- a/drivers/edac/amd64_edac.h
-+++ b/drivers/edac/amd64_edac.h
-@@ -120,6 +120,8 @@
- #define PCI_DEVICE_ID_AMD_17H_M10H_DF_F6 0x15ee
- #define PCI_DEVICE_ID_AMD_17H_M30H_DF_F0 0x1490
- #define PCI_DEVICE_ID_AMD_17H_M30H_DF_F6 0x1496
-+#define PCI_DEVICE_ID_AMD_17H_M60H_DF_F0 0x1448
-+#define PCI_DEVICE_ID_AMD_17H_M60H_DF_F6 0x144e
- #define PCI_DEVICE_ID_AMD_17H_M70H_DF_F0 0x1440
- #define PCI_DEVICE_ID_AMD_17H_M70H_DF_F6 0x1446
- #define PCI_DEVICE_ID_AMD_19H_DF_F0	0x1650
-@@ -293,6 +295,7 @@ enum amd_families {
- 	F17_CPUS,
- 	F17_M10H_CPUS,
- 	F17_M30H_CPUS,
-+	F17_M60H_CPUS,
- 	F17_M70H_CPUS,
- 	F19_CPUS,
- 	NUM_FAMILIES,
+diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
+index b6b3297851f3..18f6b7c4bd79 100644
+--- a/arch/x86/kernel/amd_nb.c
++++ b/arch/x86/kernel/amd_nb.c
+@@ -18,9 +18,11 @@
+ #define PCI_DEVICE_ID_AMD_17H_ROOT	0x1450
+ #define PCI_DEVICE_ID_AMD_17H_M10H_ROOT	0x15d0
+ #define PCI_DEVICE_ID_AMD_17H_M30H_ROOT	0x1480
++#define PCI_DEVICE_ID_AMD_17H_M60H_ROOT	0x1630
+ #define PCI_DEVICE_ID_AMD_17H_DF_F4	0x1464
+ #define PCI_DEVICE_ID_AMD_17H_M10H_DF_F4 0x15ec
+ #define PCI_DEVICE_ID_AMD_17H_M30H_DF_F4 0x1494
++#define PCI_DEVICE_ID_AMD_17H_M60H_DF_F4 0x144c
+ #define PCI_DEVICE_ID_AMD_17H_M70H_DF_F4 0x1444
+ #define PCI_DEVICE_ID_AMD_19H_DF_F4	0x1654
+ 
+@@ -33,6 +35,7 @@ static const struct pci_device_id amd_root_ids[] = {
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_ROOT) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M10H_ROOT) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M30H_ROOT) },
++	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M60H_ROOT) },
+ 	{}
+ };
+ 
+@@ -50,6 +53,7 @@ static const struct pci_device_id amd_nb_misc_ids[] = {
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_DF_F3) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M10H_DF_F3) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M30H_DF_F3) },
++	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M60H_DF_F3) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_CNB17H_F3) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M70H_DF_F3) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_DF_F3) },
+@@ -65,6 +69,7 @@ static const struct pci_device_id amd_nb_link_ids[] = {
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_DF_F4) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M10H_DF_F4) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M30H_DF_F4) },
++	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M60H_DF_F4) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M70H_DF_F4) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_DF_F4) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_CNB17H_F4) },
+diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+index 1dfc4e1dcb94..3155f5ada02e 100644
+--- a/include/linux/pci_ids.h
++++ b/include/linux/pci_ids.h
+@@ -550,6 +550,7 @@
+ #define PCI_DEVICE_ID_AMD_17H_DF_F3	0x1463
+ #define PCI_DEVICE_ID_AMD_17H_M10H_DF_F3 0x15eb
+ #define PCI_DEVICE_ID_AMD_17H_M30H_DF_F3 0x1493
++#define PCI_DEVICE_ID_AMD_17H_M60H_DF_F3 0x144b
+ #define PCI_DEVICE_ID_AMD_17H_M70H_DF_F3 0x1443
+ #define PCI_DEVICE_ID_AMD_19H_DF_F3	0x1653
+ #define PCI_DEVICE_ID_AMD_CNB17H_F3	0x1703
 -- 
 2.26.2
 
