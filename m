@@ -2,84 +2,82 @@ Return-Path: <SRS0=Zk20=6Y=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=no
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CAE5C38A2A
-	for <linux-hwmon@archiver.kernel.org>; Sun, 10 May 2020 19:58:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD992C38A2A
+	for <linux-hwmon@archiver.kernel.org>; Sun, 10 May 2020 20:58:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EDD4C206B8
-	for <linux-hwmon@archiver.kernel.org>; Sun, 10 May 2020 19:58:45 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="k2+XDM6/"
+	by mail.kernel.org (Postfix) with ESMTP id BC1272080C
+	for <linux-hwmon@archiver.kernel.org>; Sun, 10 May 2020 20:58:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729138AbgEJT6p (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 10 May 2020 15:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36780 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728071AbgEJT6p (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 10 May 2020 15:58:45 -0400
-Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C48BC061A0C
-        for <linux-hwmon@vger.kernel.org>; Sun, 10 May 2020 12:58:45 -0700 (PDT)
-Received: by mail-oi1-x241.google.com with SMTP id a2so13156674oia.11
-        for <linux-hwmon@vger.kernel.org>; Sun, 10 May 2020 12:58:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BGcmJTr+I4xJ4ohXD7CGetFglEF96ROWbRIzv4TBhDk=;
-        b=k2+XDM6//VFeafzOzGUjhwVXZ9KPy8IS9QP5BM14yYzrxvXEK1FWQ24fTCkQiu84/h
-         Xod9JkfCP3cKaLMu4CmKgeHedBXmFTTdzfXX3EUe3QrPVwLD4xwgxCo1dlMf4FTHVN/p
-         rKzwGVCamMGLMqMR371ovoP5674CDbDEIfe+ACS2lPfVugRn6WTQgNrtLGQNr2j7/0H2
-         Nz60rG5OyPKJ7Vu9lIiGenli5tXyqxEqkNTJ6NKXz7iPUBrIV3UPyuTv0y/+Xp2SM2PF
-         aNoZtY7bYsGhFmCJjbCZY3M2m+PQukjubgbAxFuyhgrM3T5a+SivQaarF8XipzRksjOK
-         LvMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BGcmJTr+I4xJ4ohXD7CGetFglEF96ROWbRIzv4TBhDk=;
-        b=spfXfXuGaDxboIgCf9JLLz71i5vuNwfF0VPMELB4n+uPkJ3iPOvg8wDBQ7UWiMa11x
-         PllX/Au41bsdX4uWrGgbX9Ly6UjP2nJIZQW5rPrlLLZQjDzLnPRjmujMfP0Fy3vSd2LI
-         n84wyKy90lLqlMEiWOmTCdbG1ZmvqMXr2UWDN7QWNHjVY+nf3C4Lvw90+1xGZQxdMZO/
-         zfhjHAqJNg1deLpQGxp4NHXRN4gyUXq15cr0CzkdqmIfHFCDCCrxI5uZbOLu95daGz4G
-         glPSLPFbt6RhwrgHkVwopbEGYF14TIeJwSAHgsgYkyqQiF6DdF2OgalAHYREaBeQvSpy
-         Cgiw==
-X-Gm-Message-State: AGi0PubZJvQMAfY9s8NDqU2lLJhiVqBLzew1RJGWaLNkzxNMv81hPfQr
-        MvKx4BWYLhIm3N//fNBL8i7TArP04WdK/zLj7Vs+FwPz
-X-Google-Smtp-Source: APiQypK1dE6XeEBR0V1rirsIjOsnSOYGrrfwu5xV/dlL2eZJUNELuLt6tuiEnSjZBs+Es9D8RBJaHGGAlZ4DAYqHy0U=
-X-Received: by 2002:aca:5943:: with SMTP id n64mr9781613oib.62.1589140724383;
- Sun, 10 May 2020 12:58:44 -0700 (PDT)
+        id S1729286AbgEJU6W (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 10 May 2020 16:58:22 -0400
+Received: from mail.ispras.ru ([83.149.199.45]:53672 "EHLO mail.ispras.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729276AbgEJU6W (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 10 May 2020 16:58:22 -0400
+Received: from localhost.localdomain (unknown [46.188.10.168])
+        by mail.ispras.ru (Postfix) with ESMTPSA id C7DFECD464;
+        Sun, 10 May 2020 23:52:28 +0300 (MSK)
+From:   Alexander Monakov <amonakov@ispras.ru>
+To:     linux-kernel@vger.kernel.org
+Cc:     Alexander Monakov <amonakov@ispras.ru>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Brian Woods <brian.woods@amd.com>,
+        Clemens Ladisch <clemens@ladisch.de>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-edac@vger.kernel.org
+Subject: [PATCH 0/3] k10temp and EDAC support for AMD Renoir
+Date:   Sun, 10 May 2020 20:48:39 +0000
+Message-Id: <20200510204842.2603-1-amonakov@ispras.ru>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-References: <20200509213734.206409-1-linux@roeck-us.net>
-In-Reply-To: <20200509213734.206409-1-linux@roeck-us.net>
-From:   Alex Qiu <xqiu@google.com>
-Date:   Sun, 10 May 2020 12:58:34 -0700
-Message-ID: <CAA_a9xJ95h3LudbcoCLJ_EfT=kgvnBzTyFF5DwQF11M65rHL1w@mail.gmail.com>
-Subject: Re: [PATCH v2] hwmon: (pmbus) Driver for Maxim MAX16601
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Hardware Monitoring <linux-hwmon@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Guenter,
+Hello!
 
-On Sat, May 9, 2020 at 2:37 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> +#define REG_SETPT_DVID         0xd1
-> +#define  DAC_10MV_MODE         BIT(4)
-> +#define REG_IOUT_AVG_PK                0xee
-> +#define REG_IIN_SENSOR         0xf1
-> +#define REG_TOTAL_INPUT_POWER  0xf2
-> +#define REG_PHASE_ID           0xf3
-> +#define  CORE_RAIL_INDICATOR   BIT(7)
-> +#define REG_PHASE_REPORTING    0xf4
+This simple patch series adds support for new AMD Ryzen CPU generation
+(model 17h family 60h) by adding the new PCI IDs as appropriate in the
+amd_nb, k10temp and amd64_edac drivers.
 
-LGTM. Thank you very much!
+The change in k10temp is the one most important for users (temperature
+sensors of the new CPUs), the amd_nb patch is a prerequisite for that,
+and finally edac_amd64 patch is necessary, because otherwise loading
+that module produces a warning due to incomplete support.
+
+Thank you.
+
+Alexander Monakov (3):
+  x86/amd_nb: add AMD family 17h model 60h PCI IDs
+  hwmon: (k10temp) Add AMD family 17h model 60h PCI match
+  EDAC/amd64: Add AMD family 17h model 60h PCI IDs
+
+ arch/x86/kernel/amd_nb.c  |  5 +++++
+ drivers/edac/amd64_edac.c | 14 ++++++++++++++
+ drivers/edac/amd64_edac.h |  3 +++
+ drivers/hwmon/k10temp.c   |  1 +
+ include/linux/pci_ids.h   |  1 +
+ 5 files changed, 24 insertions(+)
+
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: x86@kernel.org
+Cc: Yazen Ghannam <yazen.ghannam@amd.com>
+Cc: Brian Woods <brian.woods@amd.com>
+Cc: Clemens Ladisch <clemens@ladisch.de>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Cc: linux-edac@vger.kernel.org
+-- 
+2.26.2
+
