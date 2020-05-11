@@ -2,265 +2,172 @@ Return-Path: <SRS0=93eZ=6Z=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 900AFC47255
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 May 2020 16:49:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FDB5C47255
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 May 2020 16:51:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 672EF20708
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 May 2020 16:49:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3175A20708
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 May 2020 16:51:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="r+mBBREn"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fua0UGkm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729619AbgEKQtc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 11 May 2020 12:49:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33156 "EHLO
+        id S1729120AbgEKQv2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 11 May 2020 12:51:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729120AbgEKQtb (ORCPT
+        with ESMTP id S1728556AbgEKQv1 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 11 May 2020 12:49:31 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F75FC061A0C
-        for <linux-hwmon@vger.kernel.org>; Mon, 11 May 2020 09:49:31 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id r17so5045733lff.9
-        for <linux-hwmon@vger.kernel.org>; Mon, 11 May 2020 09:49:31 -0700 (PDT)
+        Mon, 11 May 2020 12:51:27 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F3FEC061A0C;
+        Mon, 11 May 2020 09:51:27 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id m7so4173071plt.5;
+        Mon, 11 May 2020 09:51:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tSpl8iCFD4uJBVMGnLc2MyCViCkhZNwlhhWOZMzpFHQ=;
-        b=r+mBBREn1nE+aPQK2FY383XFpETllu44FaVrmv7odOcYW2ZNHMhGcnnSONgm5/myqs
-         tPDaKgqs9Vyw9w0LnKaJ86MBhEWM8gD0UrJz67SRr8kmU4bLswln8F4d5SSdEdKTfDSJ
-         RiMEaKnR1TfLulFLjC30IDstlQ3vXUxn4TIgckgrGKkgVwF987GXeIl3U2VFw46rdKkZ
-         6JmMj3tcLoymKXL9KWxlkRbprt6jqNjMhlCbCEP4hdhsAaIFzsc2ITODccyThkgcEoKv
-         rOuVed+6qtX8EXDCCxhPfwEIpH3Btu/b8tcUsGmmcCoztHkEMiEGx1jH+EtdJAe5aNu2
-         tHQQ==
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=a45zQ4dwEmlbf8HYJN+kcAE96lnl2unThzvDupXevx4=;
+        b=Fua0UGkmeWejN8Fn12t8uUSafJlCMNTP1nHqmy7/90MdxBhm1w9QFKKSV038yuD2xN
+         Zz6UO1CA7RwcothBymZil/Bn874WFyOHMw+gP2Iyr/NoDfJwtxx9cYzGaui9y6V3LKlc
+         rW+7BB0Tmu5LzHw9micpHmnFwXjzaI5OP6LYKtzmefR9OoezXkrIou+CTLoQzH3xxW3V
+         4OzP5NUOg2UJRXenOau8E10zrixIvq1G0tZgLGurR7F9lFETS/CGfJsnb8yx1odekPgt
+         VAB9qBW7iuSkUrolosEPOPN5Uw7RjMcS3oUo7LrGq8trz/4lf8faY41b9TK5P486tbSl
+         1kEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tSpl8iCFD4uJBVMGnLc2MyCViCkhZNwlhhWOZMzpFHQ=;
-        b=Ugj7HoDNqvl7R7+L9U+90xSyqgNK8LA5mLfeNbE4q3i06bBvLmKQF4ZpC2XDDsMDCu
-         MN2OH5COpjZDqmUQmYEQhVjWlu2L7r8f1wSF+NTxskdKN7eCFCGh/Ulzn8DrHvYUtNHp
-         U7eNnrH28h8ZOzK7I8EBnSTEUfBrZkt8UpQmrd18EK2sE2BmzmtyCT3DAaPpMElv4n9E
-         Hz7AfLNga2vjIANqwexuuv95lFxE4xmFdyrGkn7waWaVbNbywZ4xoPhfLoy0357GYDol
-         N3n2ksxc+KYEAX04BCfglphDZppKgyldjJUHB/eZRfHylblokfOlER2R9aWSJnRlTv9C
-         7KxQ==
-X-Gm-Message-State: AOAM531CaP9HNLZCnM/Bl/La4Gxz1d0reRMC1E/zu8t0LcZzQ2XLaF2k
-        me7i3qGfaFeCniKTLIp726Cpjt+TYNY/CVUJaE0=
-X-Google-Smtp-Source: ABdhPJwFOMkFQFRjxT9zDIojoRRLF5NLjq9RYvddLN8YCwRZlLEenP5GQUJOOP6d/58N6+4cQ/SdvIldT2O6C83/ZuE=
-X-Received: by 2002:ac2:5607:: with SMTP id v7mr11760302lfd.134.1589215769648;
- Mon, 11 May 2020 09:49:29 -0700 (PDT)
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=a45zQ4dwEmlbf8HYJN+kcAE96lnl2unThzvDupXevx4=;
+        b=KcNznYpaDIHdbUj2aC6nhJK9uWvcEPzNSLrg2H2ftVXGxct8AOtG2XRynVqTzBmKf7
+         ghVsIJUMsOcg8uu8myjVUw85sXNYYQuWM8RAQRSZQ/Stljmdq0A0tGlSbSaVnS4gfhn8
+         Ox84R+YMF3dR/9ZpAalbA29V5frfQnyuqisHilrOxvejiZEByDu9c/ptXEnGGU5WVeHB
+         mzpGfxTYCUn06iF9U/1kOkvH7sTz+9J0Bi0Fmy2+txRVX/6iAdoQRyGkJklS3xmybPt9
+         qyYhUGmBrMe5obzxD9TeAywA4hS1izAQi8a+qbZPqoQWhEO6gN81GZ6W7a5tNI/dIK9K
+         KJzQ==
+X-Gm-Message-State: AGi0PubTewBZtcJspCFvzcLiSI7EfIzcj01Xf3LxHoUfFmuU9i9XOjCz
+        fcSeOJOPayHrRrbyJJE3oKA=
+X-Google-Smtp-Source: APiQypJFL7fF1uxQO/7n7Anfp+584Tz9laM7UvXyaNNNdRz43eN/pHnVtE2LaDEOJM4a+fUEEWCBmg==
+X-Received: by 2002:a17:90a:290f:: with SMTP id g15mr23149328pjd.93.1589215886795;
+        Mon, 11 May 2020 09:51:26 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d2sm9878709pfc.7.2020.05.11.09.51.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 May 2020 09:51:26 -0700 (PDT)
+Subject: Re: [PATCH] hwmon: da9052: Synchronize access with mfd
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     Lee Jones <lee.jones@linaro.org>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        Samu Nuutamo <samu.nuutamo@vincit.fi>
+References: <20200511110219.68188-1-sebastian.reichel@collabora.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <930d27f3-46f8-2e7a-5028-b593f4fe84a3@roeck-us.net>
+Date:   Mon, 11 May 2020 09:51:25 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-References: <20200501175003.28613-1-nchatrad@amd.com> <20200501175003.28613-2-nchatrad@amd.com>
- <20200506163324.GA89932@roeck-us.net> <CAHfPSqBJT1FYMxLMsF0GKFnQZfaKBKS6tydVX6tA5_eJutTd7w@mail.gmail.com>
- <498b7568-3b59-35f7-79d4-a6e4a972aec0@roeck-us.net>
-In-Reply-To: <498b7568-3b59-35f7-79d4-a6e4a972aec0@roeck-us.net>
-From:   Naveen Krishna Ch <naveenkrishna.ch@gmail.com>
-Date:   Mon, 11 May 2020 22:19:18 +0530
-Message-ID: <CAHfPSqDkuUuejO-b2wJnMzr1TNRzhNogiF4_ov3TKytrwS+JtA@mail.gmail.com>
-Subject: Re: [PATCH 2/3] hwmon: (amd_energy) Add documentation
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Naveen Krishna Chatradhi <nchatrad@amd.com>,
-        linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200511110219.68188-1-sebastian.reichel@collabora.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Guenter
+On 5/11/20 4:02 AM, Sebastian Reichel wrote:
+> From: Samu Nuutamo <samu.nuutamo@vincit.fi>
+> 
+> When tsi-as-adc is configured it is possible for in7[0123]_input read to
+> return an incorrect value if a concurrent read to in[456]_input is
+> performed. This is caused by a concurrent manipulation of the mux
+> channel without proper locking as hwmon and mfd use different locks for
+> synchronization.
+> 
+> Switch hwmon to use the same lock as mfd when accessing the TSI channel.
+> 
+> Fixes: 4f16cab19a3d5 ("hwmon: da9052: Add support for TSI channel")
+> Signed-off-by: Samu Nuutamo <samu.nuutamo@vincit.fi>
+> [rebase to current master, reword commit message slightly]
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-On Thu, 7 May 2020 at 00:57, Guenter Roeck <linux@roeck-us.net> wrote:
->
-> Hi,
->
-> On 5/6/20 10:11 AM, Naveen Krishna Ch wrote:
-> > Hi Guenter
-> >
-> > On Wed, 6 May 2020 at 22:03, Guenter Roeck <linux@roeck-us.net> wrote:
-> >>
-> >> On Fri, May 01, 2020 at 11:20:02PM +0530, Naveen Krishna Chatradhi wrote:
-> >>> Document amd_energy driver with all chips supported by it.
-> >>>
-> >>> Cc: Guenter Roeck <linux@roeck-us.net>
-> >>> Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
-> >>> ---
-> >>> Changes in v5: None
-> >>>
-> >>>  Documentation/hwmon/amd_energy.rst | 100 +++++++++++++++++++++++++++++
-> >>>  Documentation/hwmon/index.rst      |   1 +
-> >>>  2 files changed, 101 insertions(+)
-> >>>  create mode 100644 Documentation/hwmon/amd_energy.rst
-> >>>
-> >>> diff --git a/Documentation/hwmon/amd_energy.rst b/Documentation/hwmon/amd_energy.rst
-> >>> new file mode 100644
-> >>> index 000000000000..2216c8b13e58
-> >>> --- /dev/null
-> >>> +++ b/Documentation/hwmon/amd_energy.rst
-> >>> @@ -0,0 +1,100 @@
-> >>> +.. SPDX-License-Identifier: GPL-2.0
-> >>> +
-> >>> +Kernel driver amd_energy
-> >>> +==========================
-> >>> +
-> >>> +Supported chips:
-> >>> +
-> >>> +* AMD Family 17h Processors
-> >>> +
-> >>> +  Prefix: 'amd_energy'
-> >>> +
-> >>> +  Addresses used:  RAPL MSRs
-> >>> +
-> >>> +  Datasheets:
-> >>> +
-> >>> +  - Processor Programming Reference (PPR) for AMD Family 17h Model 01h, Revision B1 Processors
-> >>> +
-> >>> +     https://developer.amd.com/wp-content/resources/55570-B1_PUB.zip
-> >>> +
-> >>> +  - Preliminary Processor Programming Reference (PPR) for AMD Family 17h Model 31h, Revision B0 Processors
-> >>> +
-> >>> +     https://developer.amd.com/wp-content/resources/56176_ppr_Family_17h_Model_71h_B0_pub_Rev_3.06.zip
-> >>> +
-> >>> +Author: Naveen Krishna Chatradhi <nchatrad@amd.com>
-> >>> +
-> >>> +Description
-> >>> +-----------
-> >>> +
-> >>> +The Energy driver exposes the energy counters that are
-> >>> +reported via the Running Average Power Limit (RAPL)
-> >>> +Model-specific Registers (MSRs) via the hardware monitor
-> >>> +(HWMON) sysfs interface.
-> >>> +
-> >>> +1. Power, Energy and Time Units
-> >>> +   MSR_RAPL_POWER_UNIT/ C001_0299:
-> >>> +   shared with all cores in the socket
-> >>> +
-> >>> +2. Energy consumed by each Core
-> >>> +   MSR_CORE_ENERGY_STATUS/ C001_029A:
-> >>> +   32-bitRO, Accumulator, core-level power reporting
-> >>> +
-> >>> +3. Energy consumed by Socket
-> >>> +   MSR_PACKAGE_ENERGY_STATUS/ C001_029B:
-> >>> +   32-bitRO, Accumulator, socket-level power reporting,
-> >>> +   shared with all cores in socket
-> >>> +
-> >>> +These registers are updated every 1ms and cleared on
-> >>> +reset of the system.
-> >>> +
-> >>> +Energy Caluclation
-> >>> +------------------
-> >>> +
-> >>> +Energy information (in Joules) is based on the multiplier,
-> >>> +1/2^ESU; where ESU is an unsigned integer read from
-> >>> +MSR_RAPL_POWER_UNIT register. Default value is 10000b,
-> >>> +indicating energy status unit is 15.3 micro-Joules increment.
-> >>> +
-> >>> +Reported values are scaled as per the formula
-> >>> +
-> >>> +scaled value = ((1/2^ESU) * (Raw value) * 1000000UL) in Joules
-> >>> +
-> >>> +Users calculate power for a given domain by calculating
-> >>> +     dEnergy/dTime for that domain.
-> >>> +
-> >>> +Socket energy accumulation
-> >>> +--------------------------
-> >>> +
-> >>> +Current Socket energy status register is 32bit, assuming a 240W
-> >>> +system, the register would wrap around in
-> >>> +
-> >>> +     2^32*15.3 e-6/240 = 273.80416512 secs to wrap(~4.5 mins)
-> >>> +
-> >>> +To improve the wrap around time, a kernel thread is implemented
-> >>> +to accumulate the socket energy counter to a 64-bit counter. The
-> >>> +kernel thread starts running during probe, wakes up at 100secs
-> >>
-> >> wakes up every 100 seconds
-> >>
-> >>> +and stops running in remove.
-> >>
-> >> stops running when the driver is removed.
-> > Will correct them
-> >>
-> >> All counters need to be be updated by the kernel thread, not just the socket
-> >> counter. If the socket counter can wrap in 4.5 minutes, the matching per-core
-> >> counters on a 64-core system can wrap every 4.5 * 64 = 288 minutes, which
-> >> isn't much better. This might be even worse on a system with fewer cores and
-> >> higher per-core power.
-> >
-> > Agreed, just need few clarifications though
-> > 1. Is it OK to implement another thread for cores alone, as it need not run as
-> > frequently as the socket thread.
->
-> Your call, but personally I think it is not worth the overhead; see below.
->
-> > 2. We have a scenario on servers, a thread accumulating energy for all 128 cores
-> > might compromise the compute. So, i would like to provide a configuration
-> > symbol or sysfs mechanism to enable/disable the core accumulation.
-> >
->
-> Another option would be to use a single thread but only update a single core
-> per socket at a time. If the socket thread needs to run every N seconds,
-> one would assume that the core thread only needs to run every N * (number
-> of cores) seconds (assuming that it uses the same scale). If so, reading
-> the data for one core (or maybe a couple of cores if the scale is different)
-> plus the data for the socket should not be that expensive.
-This is good and possible. Thanks
->
-> If that is not acceptable, it might make more sense to blacklist the driver
-> entirely in such situations; without accumulation the reported values are
-> pretty much worthless.
-Sure, will implement core accumulation as well.
->
-> Thanks,
-> Guenter
->
-> >>
-> >>> +
-> >>> +A socket energy read would return the current register value
-> >>> +added to the respective energy accumulator.
-> >>> +
-> >>> +Sysfs attributes
-> >>> +----------------
-> >>> +
-> >>> +=============== ========  =====================================
-> >>> +Attribute    Label     Description
-> >>> +===============      ========  =====================================
-> >>> +
-> >>> +* For index N between [1] and [nr_cpus]
-> >>> +
-> >>> +===============      ========  ======================================
-> >>> +energy[N]_input EcoreX         Core Energy   X = [0] to [nr_cpus - 1]
-> >>> +                       Measured input core energy
-> >>> +===============      ========  ======================================
-> >>> +
-> >>> +* For N between [nr_cpus] and [nr_cpus + nr_socks]
-> >>> +
-> >>> +===============      ========  ======================================
-> >>> +energy[N]_input EsocketX  Socket Energy X = [0] to [nr_socks -1]
-> >>> +                       Measured input socket energy
-> >>> +=============== ========  ======================================
-> >>> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> >>> index 8ef62fd39787..fc4b89810e67 100644
-> >>> --- a/Documentation/hwmon/index.rst
-> >>> +++ b/Documentation/hwmon/index.rst
-> >>> @@ -39,6 +39,7 @@ Hardware Monitoring Kernel Drivers
-> >>>     adt7470
-> >>>     adt7475
-> >>>     amc6821
-> >>> +   amd_energy
-> >>>     asb100
-> >>>     asc7621
-> >>>     aspeed-pwm-tacho
-> >
-> >
-> >
->
+Have you explored calling da9052_adc_manual_read() instead ?
+At the very least we should have a comment explaining why that
+isn't feasible.
 
+Thanks,
+Guenter
 
--- 
-Shine bright,
-(: Nav :)
+> ---
+>  drivers/hwmon/da9052-hwmon.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/hwmon/da9052-hwmon.c b/drivers/hwmon/da9052-hwmon.c
+> index 53b517dbe7e6..4af2fc309c28 100644
+> --- a/drivers/hwmon/da9052-hwmon.c
+> +++ b/drivers/hwmon/da9052-hwmon.c
+> @@ -244,9 +244,9 @@ static ssize_t da9052_tsi_show(struct device *dev,
+>  	int channel = to_sensor_dev_attr(devattr)->index;
+>  	int ret;
+>  
+> -	mutex_lock(&hwmon->hwmon_lock);
+> +	mutex_lock(&hwmon->da9052->auxadc_lock);
+>  	ret = __da9052_read_tsi(dev, channel);
+> -	mutex_unlock(&hwmon->hwmon_lock);
+> +	mutex_unlock(&hwmon->da9052->auxadc_lock);
+>  
+>  	if (ret < 0)
+>  		return ret;
+> 
+
