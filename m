@@ -2,125 +2,142 @@ Return-Path: <SRS0=93eZ=6Z=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	FAKE_REPLY_C,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22ACEC54E8F
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 May 2020 16:42:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 892B2C47255
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 May 2020 16:47:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 02B3120720
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 May 2020 16:42:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6421320708
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 May 2020 16:47:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="or8Ih0uO"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B3mf3ZJX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729469AbgEKQmS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 11 May 2020 12:42:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60242 "EHLO
+        id S1729971AbgEKQrg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 11 May 2020 12:47:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728556AbgEKQmS (ORCPT
+        with ESMTP id S1728711AbgEKQrg (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 11 May 2020 12:42:18 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5970FC061A0C;
-        Mon, 11 May 2020 09:42:17 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id d22so4810481pgk.3;
-        Mon, 11 May 2020 09:42:17 -0700 (PDT)
+        Mon, 11 May 2020 12:47:36 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B98EC061A0C;
+        Mon, 11 May 2020 09:47:36 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id 18so4990949pfx.6;
+        Mon, 11 May 2020 09:47:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=wjcVkM0iIPHDmnA1v2m/HCs7tHhpwlpy7N3vN8jxvGA=;
-        b=or8Ih0uOAb5nfLO9YVIifoJs8Y11ITKyZHsLxs+Tt5+8jb/Hwgk190tJ94+uFXVVaA
-         P+Bih9aM1e7kiJUm8Yfsy1oB6w+viVr81EHw0nzAyipb/KNYnYTIYmm5GQyqSuIQDZ/g
-         DhAD4QzusQq9yXq/clJjP3odeF0FcjwE8gW/My3WlhuL4e6ekPhdlwoz88CY9VJ3M+1g
-         C7/2o1x0u4Fx1ut4cw17VCsN2xH7uFbYw80roIQVAceC4QdjcKZEOshZdIbPz9OWKvXX
-         +edrhABujWLGECFOmwQ6tipvOpNEwHecuALrI1ij777In5jmnYplNOOizUt042apdYCC
-         eR2w==
+        h=sender:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=ZxZ+LNXooelMFfSlZpAdADZ0tj2CGMfXwem7tyyyZjI=;
+        b=B3mf3ZJX5nxwKQ2JbRXP4UhMcFX9MMg5WxhA4VsAKC716/NMaJlz3yhHmf8UXF3y5G
+         bedq/2c6b6izlX2O+6bi1cI6UY5PNDBZCahFmlxHt/3ni+7re4QJUdL5Nh6w5bnbmhq2
+         EEnPbKQ5rdlDTXs6ikWRuODeKQAZKuQYq41SYPF5tYjE8Uw4PnnDSWy03HYdpD72b+bC
+         r58Er9/0sH/bkSzgMO2fbv8EmgjWhe5/7b45xdjZqPQv5lYgcGKibmZkPDD5fMukkbA+
+         MQIBmEF4NdanPLXZYyHqzKHV2ynKy16F+yAjcb5S9+E43aYFintrYSMHNK43B3e1S2Vi
+         8OcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=wjcVkM0iIPHDmnA1v2m/HCs7tHhpwlpy7N3vN8jxvGA=;
-        b=IcfLiKIYkTbK9KDhJG9C6R3AcyrCdDFESf3LmsDyxkXOwhzKfmb7xzU8H7oaPKrRbU
-         MTswvJxMYapVUMSzmIeot3fOcUS7G+Txhajl0xfBBaOfItihSE4y4ikY8zb7VbIl5s6z
-         k6geLas+wnMyqax4hVQC2AENX1vpLp3BhKiwmKjrpDHK79TCddGjUCW6EX4SuSNTdiHW
-         bCLBNZw2cLBTry1sItlRJW5HctNYFKqXbItJ5ynbKj9LNC/f56r9JvvKzFG3bfm2E7+N
-         Uxv7bPrDps1xDK8TPIv+Nr5Mf4IYWQdLm9Qwz9QAi9Uu0mlIMrRfGF70HP54tDxQWLRO
-         PjAQ==
-X-Gm-Message-State: AGi0PuYE9EWFhXxf4HewBVTs6yoYRO1vte4LsguzjmYVDzZVN/PaGEVH
-        ghTqQxO/1rQNmI4Wn8dbw3g=
-X-Google-Smtp-Source: APiQypKAjJK0uNGblLw3mQPEnYObTagGL96ucTXOo0nd0rScmYisG5kfy5slZQu1hsOEy3vHgN26Vg==
-X-Received: by 2002:aa7:9a4c:: with SMTP id x12mr17113131pfj.263.1589215335809;
-        Mon, 11 May 2020 09:42:15 -0700 (PDT)
+         :mime-version:content-disposition:user-agent;
+        bh=ZxZ+LNXooelMFfSlZpAdADZ0tj2CGMfXwem7tyyyZjI=;
+        b=cMk9w5aYR0sjSWyGMw0Qh6iCOvUEdZUporOatxat1w1uJg+XKrdqWP03QGHaj0QhbZ
+         idBZrptf7sLv7FbiEkBZXXjQqRRnrGnQntef+enJoJgii01vV5unVekLJo6Qj3z8F4az
+         HarD6/1DIkG0eOlW/M1jSpUY7AvrdwiPVQU+G8Y4iAmIrYmwIH+dJQiUKBcH6UjMzblc
+         P8RSxhj/z89TLJyARn5sm8D4pOCz1EC1Njwz3mVi49GYE7jv0y7VkvZoqcvVCTknzAQq
+         oWTjOmmNI6fqUG28D30I+f59Xi3ZEuA/KjQqsHk54EPgxtxQSZvSy7ObQS1uUDip9/43
+         bQYA==
+X-Gm-Message-State: AGi0PuZe+CRtFbFlGi++DK72LWpdZuLIjwpZrLPggVHcloQSxP3TLX0l
+        1VCC7c2t1ltIzO6ITMibdO41H7PB
+X-Google-Smtp-Source: APiQypK7eD9kXLOTKh+SfZrSfG2VJdbSxL4HhJuz4L/E1u/xFnHuKDTd78vaQ5iy2sTAb+0F+SCnJA==
+X-Received: by 2002:a65:6709:: with SMTP id u9mr15969426pgf.386.1589215655967;
+        Mon, 11 May 2020 09:47:35 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z7sm9536200pff.47.2020.05.11.09.42.13
+        by smtp.gmail.com with ESMTPSA id cp22sm10612435pjb.28.2020.05.11.09.47.35
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 11 May 2020 09:42:14 -0700 (PDT)
-Date:   Mon, 11 May 2020 09:42:13 -0700
+        Mon, 11 May 2020 09:47:35 -0700 (PDT)
+Date:   Mon, 11 May 2020 09:47:34 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Alexander Monakov <amonakov@ispras.ru>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Brian Woods <brian.woods@amd.com>,
-        Clemens Ladisch <clemens@ladisch.de>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-edac@vger.kernel.org
-Subject: Re: [PATCH 2/3] hwmon: (k10temp) Add AMD family 17h model 60h PCI
- match
-Message-ID: <20200511164213.GA188488@roeck-us.net>
-References: <20200510204842.2603-1-amonakov@ispras.ru>
- <20200510204842.2603-3-amonakov@ispras.ru>
+To:     zhouchuangao <chuangaozhou@gmail.com>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        zhouchuangao <zhouchuangao@xiaomi.com>
+Subject: Re: [PATCH] driver/hwmon/nct6775: Use kobj_to_dev() API
+Message-ID: <20200511164734.GA23709@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200510204842.2603-3-amonakov@ispras.ru>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, May 10, 2020 at 08:48:41PM +0000, Alexander Monakov wrote:
-> Add support for retrieving Tdie and Tctl on AMD Renoir (4000-series
-> Ryzen CPUs).
+On Mon, May 11, 2020 at 11:43:06AM +0800, zhouchuangao wrote:
+> Use kobj_to_dev() API instead of container_of().
 > 
-> It appears SMU offsets for reading current/voltage and CCD temperature
-> have changed for this generation (reads from currently used offsets
-> yield zeros), so those features cannot be enabled so trivially.
-> 
-> Signed-off-by: Alexander Monakov <amonakov@ispras.ru>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: x86@kernel.org
-> Cc: Yazen Ghannam <yazen.ghannam@amd.com>
-> Cc: Brian Woods <brian.woods@amd.com>
-> Cc: Clemens Ladisch <clemens@ladisch.de>
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: linux-hwmon@vger.kernel.org
-> Cc: linux-edac@vger.kernel.org
+> Signed-off-by: zhouchuangao <zhouchuangao@xiaomi.com>
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Applied.
+
+Thanks,
+Guenter
 
 > ---
->  drivers/hwmon/k10temp.c | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/hwmon/nct6775.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
 > 
-> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-> index 9915578533bb..8f12995ec133 100644
-> --- a/drivers/hwmon/k10temp.c
-> +++ b/drivers/hwmon/k10temp.c
-> @@ -632,6 +632,7 @@ static const struct pci_device_id k10temp_id_table[] = {
->  	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_DF_F3) },
->  	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M10H_DF_F3) },
->  	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M30H_DF_F3) },
-> +	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M60H_DF_F3) },
->  	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M70H_DF_F3) },
->  	{ PCI_VDEVICE(HYGON, PCI_DEVICE_ID_AMD_17H_DF_F3) },
->  	{}
+> diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
+> index 7efa6bf..e7e1ddc 100644
+> --- a/drivers/hwmon/nct6775.c
+> +++ b/drivers/hwmon/nct6775.c
+> @@ -2047,7 +2047,7 @@ store_temp_beep(struct device *dev, struct device_attribute *attr,
+>  static umode_t nct6775_in_is_visible(struct kobject *kobj,
+>  				     struct attribute *attr, int index)
+>  {
+> -	struct device *dev = container_of(kobj, struct device, kobj);
+> +	struct device *dev = kobj_to_dev(kobj);
+>  	struct nct6775_data *data = dev_get_drvdata(dev);
+>  	int in = index / 5;	/* voltage index */
+>  
+> @@ -2253,7 +2253,7 @@ store_fan_pulses(struct device *dev, struct device_attribute *attr,
+>  static umode_t nct6775_fan_is_visible(struct kobject *kobj,
+>  				      struct attribute *attr, int index)
+>  {
+> -	struct device *dev = container_of(kobj, struct device, kobj);
+> +	struct device *dev = kobj_to_dev(kobj);
+>  	struct nct6775_data *data = dev_get_drvdata(dev);
+>  	int fan = index / 6;	/* fan index */
+>  	int nr = index % 6;	/* attribute index */
+> @@ -2440,7 +2440,7 @@ store_temp_type(struct device *dev, struct device_attribute *attr,
+>  static umode_t nct6775_temp_is_visible(struct kobject *kobj,
+>  				       struct attribute *attr, int index)
+>  {
+> -	struct device *dev = container_of(kobj, struct device, kobj);
+> +	struct device *dev = kobj_to_dev(kobj);
+>  	struct nct6775_data *data = dev_get_drvdata(dev);
+>  	int temp = index / 10;	/* temp index */
+>  	int nr = index % 10;	/* attribute index */
+> @@ -3257,7 +3257,7 @@ store_auto_temp(struct device *dev, struct device_attribute *attr,
+>  static umode_t nct6775_pwm_is_visible(struct kobject *kobj,
+>  				      struct attribute *attr, int index)
+>  {
+> -	struct device *dev = container_of(kobj, struct device, kobj);
+> +	struct device *dev = kobj_to_dev(kobj);
+>  	struct nct6775_data *data = dev_get_drvdata(dev);
+>  	int pwm = index / 36;	/* pwm index */
+>  	int nr = index % 36;	/* attribute index */
+> @@ -3459,7 +3459,7 @@ static SENSOR_DEVICE_ATTR(beep_enable, S_IWUSR | S_IRUGO, show_beep,
+>  static umode_t nct6775_other_is_visible(struct kobject *kobj,
+>  					struct attribute *attr, int index)
+>  {
+> -	struct device *dev = container_of(kobj, struct device, kobj);
+> +	struct device *dev = kobj_to_dev(kobj);
+>  	struct nct6775_data *data = dev_get_drvdata(dev);
+>  
+>  	if (index == 0 && !data->have_vid)
 > -- 
-> 2.26.2
+> 2.7.4
 > 
