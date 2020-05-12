@@ -1,240 +1,164 @@
-Return-Path: <SRS0=93eZ=6Z=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=llHb=62=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	LONGWORDS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0B80C47255
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 May 2020 22:29:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35AA3C47255
+	for <linux-hwmon@archiver.kernel.org>; Tue, 12 May 2020 00:53:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AFB7A2070B
-	for <linux-hwmon@archiver.kernel.org>; Mon, 11 May 2020 22:29:53 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="YdDVOLeZ"
+	by mail.kernel.org (Postfix) with ESMTP id 18980206D3
+	for <linux-hwmon@archiver.kernel.org>; Tue, 12 May 2020 00:53:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726173AbgEKW3x (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 11 May 2020 18:29:53 -0400
-Received: from ssl.serverraum.org ([176.9.125.105]:38177 "EHLO
-        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725828AbgEKW3x (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 11 May 2020 18:29:53 -0400
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id E950223E4D;
-        Tue, 12 May 2020 00:29:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1589236187;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZWtR9bzSYXnNm25amIJ9C/96FTsepP7H5IrzZ9zpG/A=;
-        b=YdDVOLeZBQ34l+NCgbOJbibwaRMlbhkryBPCyVboFq3OoIIcwGhTb4bpx1oqBWsLm0T3Ny
-        CZp5yyu0djrMsi4kOWfKCfNplFlS7gp1ntDK+bdoeton2uRftwbJISw7i+6IVo7b7aosbu
-        kNxvxZ/YLMcP4rurnW92mHmhw4rdMek=
+        id S1728105AbgELAxz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 11 May 2020 20:53:55 -0400
+Received: from mga11.intel.com ([192.55.52.93]:59918 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726874AbgELAxz (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 11 May 2020 20:53:55 -0400
+IronPort-SDR: OzjjhsrNtfEccw4RJSj4cNobcDhMDmb7nJE73DB3U64cnDiXOMSgauOxFnVEyFIJpE65r8384w
+ Uw0k6Bv2qTvQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2020 17:53:54 -0700
+IronPort-SDR: bjfvG+9d/U0YuDYDMu6HEbj7nz0ZpvZKkrxZsT3Lj600XW+rOZhDfzrl11JpQRWYjXiuP9VMsA
+ eRfpn6hnJKHQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,381,1583222400"; 
+   d="scan'208";a="261947272"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 11 May 2020 17:53:53 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1jYJBA-0003Ao-KG; Tue, 12 May 2020 08:53:52 +0800
+Date:   Tue, 12 May 2020 08:52:58 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:hwmon-next] BUILD SUCCESS
+ 9e2b8f667a0423b2ba152fcf2474428fda5e8ec9
+Message-ID: <5eb9f36a.33Fwpy43eUQlFJ7V%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-Date:   Tue, 12 May 2020 00:29:46 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v3 05/16] mfd: Add support for Kontron sl28cpld management
- controller
-In-Reply-To: <f0fafa63047f00e912013b137e4db15c@walle.cc>
-References: <20200423174543.17161-1-michael@walle.cc>
- <20200423174543.17161-6-michael@walle.cc> <20200511211359.GB3518@bogus>
- <f0fafa63047f00e912013b137e4db15c@walle.cc>
-User-Agent: Roundcube Webmail/1.4.4
-Message-ID: <7acbb6d9b2240b1856136fa35c1318bf@walle.cc>
-X-Sender: michael@walle.cc
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Am 2020-05-11 23:44, schrieb Michael Walle:
-> Am 2020-05-11 23:13, schrieb Rob Herring:
->> On Thu, Apr 23, 2020 at 07:45:32PM +0200, Michael Walle wrote:
->>> This patch adds core support for the board management controller 
->>> found
->>> on the SMARC-sAL28 board. It consists of the following functions:
->>>  - watchdog
->>>  - GPIO controller
->>>  - PWM controller
->>>  - fan sensor
->>>  - interrupt controller
->>> 
->>> At the moment, this controller is used on the Kontron SMARC-sAL28 
->>> board.
->>> 
->>> Please note that the MFD driver is defined as bool in the Kconfig
->>> because the next patch will add interrupt support.
->>> 
->>> Signed-off-by: Michael Walle <michael@walle.cc>
->>> ---
->>>  drivers/mfd/Kconfig    |  19 +++++
->>>  drivers/mfd/Makefile   |   2 +
->>>  drivers/mfd/sl28cpld.c | 153 
->>> +++++++++++++++++++++++++++++++++++++++++
->>>  3 files changed, 174 insertions(+)
->>>  create mode 100644 drivers/mfd/sl28cpld.c
->>> 
->>> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
->>> index 0a59249198d3..be0c8d93c526 100644
->>> --- a/drivers/mfd/Kconfig
->>> +++ b/drivers/mfd/Kconfig
->>> @@ -2060,5 +2060,24 @@ config SGI_MFD_IOC3
->>>  	  If you have an SGI Origin, Octane, or a PCI IOC3 card,
->>>  	  then say Y. Otherwise say N.
->>> 
->>> +config MFD_SL28CPLD
->>> +	bool "Kontron sl28 core driver"
->>> +	depends on I2C=y
->>> +	depends on OF
->>> +	select REGMAP_I2C
->>> +	select MFD_CORE
->>> +	help
->>> +	  This option enables support for the board management controller
->>> +	  found on the Kontron sl28 CPLD. You have to select individual
->>> +	  functions, such as watchdog, GPIO, etc, under the corresponding 
->>> menus
->>> +	  in order to enable them.
->>> +
->>> +	  Currently supported boards are:
->>> +
->>> +		Kontron SMARC-sAL28
->>> +
->>> +	  To compile this driver as a module, choose M here: the module 
->>> will be
->>> +	  called sl28cpld.
->>> +
->>>  endmenu
->>>  endif
->>> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
->>> index f935d10cbf0f..9bc38863b9c7 100644
->>> --- a/drivers/mfd/Makefile
->>> +++ b/drivers/mfd/Makefile
->>> @@ -259,3 +259,5 @@ obj-$(CONFIG_MFD_ROHM_BD718XX)	+= rohm-bd718x7.o
->>>  obj-$(CONFIG_MFD_STMFX) 	+= stmfx.o
->>> 
->>>  obj-$(CONFIG_SGI_MFD_IOC3)	+= ioc3.o
->>> +
->>> +obj-$(CONFIG_MFD_SL28CPLD)	+= sl28cpld.o
->>> diff --git a/drivers/mfd/sl28cpld.c b/drivers/mfd/sl28cpld.c
->>> new file mode 100644
->>> index 000000000000..1e5860cc7ffc
->>> --- /dev/null
->>> +++ b/drivers/mfd/sl28cpld.c
->>> @@ -0,0 +1,153 @@
->>> +// SPDX-License-Identifier: GPL-2.0-only
->>> +/*
->>> + * MFD core for the sl28cpld.
->>> + *
->>> + * Copyright 2019 Kontron Europe GmbH
->>> + */
->>> +
->>> +#include <linux/i2c.h>
->>> +#include <linux/interrupt.h>
->>> +#include <linux/kernel.h>
->>> +#include <linux/mfd/core.h>
->>> +#include <linux/module.h>
->>> +#include <linux/of_platform.h>
->>> +#include <linux/regmap.h>
->>> +
->>> +#define SL28CPLD_VERSION	0x03
->>> +#define SL28CPLD_WATCHDOG_BASE	0x04
->>> +#define SL28CPLD_HWMON_FAN_BASE	0x0b
->>> +#define SL28CPLD_PWM0_BASE	0x0c
->>> +#define SL28CPLD_PWM1_BASE	0x0e
->>> +#define SL28CPLD_GPIO0_BASE	0x10
->>> +#define SL28CPLD_GPIO1_BASE	0x15
->>> +#define SL28CPLD_GPO_BASE	0x1a
->>> +#define SL28CPLD_GPI_BASE	0x1b
->>> +#define SL28CPLD_INTC_BASE	0x1c
->> 
->> If you want to use 'reg' in the binding, these are the numbers you
->> should be using rather than making up numbering!
-> 
-> My motivation is that I don't want to hardcode the internal addresses
-> of the management controller in the device tree. For example if they
-> will move around with a later update of the controller, so a driver can
-> be compatible with both the old and the new version. If they are in the
-> device tree, only one register layout is possible.
-> 
->> However, I still don't think you need any child nodes. All the data in
->> the DT binding is right here in the driver already. There's no 
->> advantage
->> to putting child nodes in DT, because this driver still has to be
->> updated if you add more nodes.
-> 
-> But then any phandle will reference the mfd device. And for example 
-> there
-> are two different interrupt controllers, that is the INTC and the 
-> GPIO[01],
-> which will then be combined into one device tree node, right?
-> 
-> So the mfd node would be
-> 
-> cpld: sl28cpld@4a {
->   interrupt-controller;
->   #interrupt-cells = <2>;
->   gpio-controller;
->   #gpio-cells = <2>;
->   [..]
-> };
-> 
-> and then depending on the mapping one could use:
-> 
-> interrupts-extended = <&cpld 0 FLAGS>; /* gpio0 line 0 */
-> interrupts-extended = <&cpld 8 FLAGS>; /* gpio1 line 0 */
-> interrupts-extended = <&cpld 12 FLAGS>; /* irq0 */
-> 
-> gpios = <&cpld 0> /* gpio0 line 0 */
-> 
-> But there is also offset 12, but then it is the GPI controller:
-> 
-> gpios = <&cpld 12> /* gpi line 0, nothing to do with irq0 */
-> 
-> I don't know if this is good practice, I guess you have to tell me. And
-> is it possible to combine any sub device into the mfd node in that way?
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon-next
+branch HEAD: 9e2b8f667a0423b2ba152fcf2474428fda5e8ec9  hwmon : (nct6775) Use kobj_to_dev() API
 
-Oh I don't think that will work for the watchdog. If you just have one
-watchdog it just looks odd.
+elapsed time: 480m
 
-cpld: sl28cpld@4a {
-    interrupt-controller;
-    #interrupt-cells = <2>;
-    gpio-controller;
-    #gpio-cells = <2>;
-    timeout-sec = <10>; /* watchdog property */
-};
+configs tested: 97
+configs skipped: 1
 
-And won't pass the dtbindings check because the nodename is not
-"watchdog(@[0-9]+)?". But it really falls short if you want to have
-two watchdogs with different properties.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
--michael
+arm                                 defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                               allnoconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+sparc                            allyesconfig
+m68k                             allyesconfig
+i386                              allnoconfig
+i386                             allyesconfig
+i386                                defconfig
+i386                              debian-10.3
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                              allnoconfig
+m68k                           sun3_defconfig
+m68k                                defconfig
+nios2                               defconfig
+nios2                            allyesconfig
+openrisc                            defconfig
+c6x                              allyesconfig
+c6x                               allnoconfig
+openrisc                         allyesconfig
+nds32                               defconfig
+nds32                             allnoconfig
+csky                             allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+h8300                            allmodconfig
+xtensa                              defconfig
+arc                                 defconfig
+arc                              allyesconfig
+sh                               allmodconfig
+sh                                allnoconfig
+microblaze                        allnoconfig
+mips                             allyesconfig
+mips                              allnoconfig
+mips                             allmodconfig
+parisc                            allnoconfig
+parisc                              defconfig
+parisc                           allyesconfig
+parisc                           allmodconfig
+powerpc                             defconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+powerpc                          rhel-kconfig
+i386                 randconfig-a006-20200511
+i386                 randconfig-a005-20200511
+i386                 randconfig-a003-20200511
+i386                 randconfig-a001-20200511
+i386                 randconfig-a004-20200511
+i386                 randconfig-a002-20200511
+i386                 randconfig-a012-20200511
+i386                 randconfig-a016-20200511
+i386                 randconfig-a014-20200511
+i386                 randconfig-a011-20200511
+i386                 randconfig-a013-20200511
+i386                 randconfig-a015-20200511
+x86_64               randconfig-a005-20200511
+x86_64               randconfig-a003-20200511
+x86_64               randconfig-a006-20200511
+x86_64               randconfig-a004-20200511
+x86_64               randconfig-a001-20200511
+x86_64               randconfig-a002-20200511
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+s390                             allyesconfig
+s390                              allnoconfig
+s390                             allmodconfig
+s390                                defconfig
+sparc                               defconfig
+sparc64                             defconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                          allmodconfig
+um                               allmodconfig
+um                                allnoconfig
+um                               allyesconfig
+um                                  defconfig
+x86_64                                   rhel
+x86_64                               rhel-7.6
+x86_64                    rhel-7.6-kselftests
+x86_64                         rhel-7.2-clear
+x86_64                                    lkp
+x86_64                              fedora-25
+x86_64                                  kexec
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
