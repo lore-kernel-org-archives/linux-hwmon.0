@@ -2,141 +2,604 @@ Return-Path: <SRS0=llHb=62=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A74BAC54E4A
-	for <linux-hwmon@archiver.kernel.org>; Tue, 12 May 2020 11:31:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7857C54E91
+	for <linux-hwmon@archiver.kernel.org>; Tue, 12 May 2020 12:48:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8700220731
-	for <linux-hwmon@archiver.kernel.org>; Tue, 12 May 2020 11:31:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AC74F20674
+	for <linux-hwmon@archiver.kernel.org>; Tue, 12 May 2020 12:48:44 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="VDjCkcy7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726891AbgELLbc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 12 May 2020 07:31:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38582 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726187AbgELLbc (ORCPT
+        id S1729461AbgELMsl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 12 May 2020 08:48:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50672 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729980AbgELMsk (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 12 May 2020 07:31:32 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A800C061A0C;
-        Tue, 12 May 2020 04:31:32 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id B27BB2A208B
-Received: by earth.universe (Postfix, from userid 1000)
-        id 18C513C08C6; Tue, 12 May 2020 13:31:28 +0200 (CEST)
-Date:   Tue, 12 May 2020 13:31:28 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Support Opensource <support.opensource@diasemi.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Lee Jones <lee.jones@linaro.org>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        Samu Nuutamo <samu.nuutamo@vincit.fi>
-Subject: Re: [PATCH] hwmon: da9052: Synchronize access with mfd
-Message-ID: <20200512113128.yfg2vihkbbg3f762@earth.universe>
-References: <20200511110219.68188-1-sebastian.reichel@collabora.com>
- <930d27f3-46f8-2e7a-5028-b593f4fe84a3@roeck-us.net>
+        Tue, 12 May 2020 08:48:40 -0400
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44BD4C061A0E
+        for <linux-hwmon@vger.kernel.org>; Tue, 12 May 2020 05:48:39 -0700 (PDT)
+Received: by mail-qk1-x742.google.com with SMTP id f189so7670674qkd.5
+        for <linux-hwmon@vger.kernel.org>; Tue, 12 May 2020 05:48:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=VjtW18trSHOOQ++iWlwEWrR0XUPVdV8/Se9flzmcddU=;
+        b=VDjCkcy744H4FUDc+3CK+CCNWBxtS8oooYdO73NxXTzs0vH05D1k+ZyGgm5P37+ei0
+         /WDDcrP5sdHuopYQ0wGI4lH+cvg9XvEqhYDbygWeM9T3izl8OFPytZL1hRfydIlW5EWW
+         6ZXw42jBkkm9xEeUB3DrPHQoQPYEmdFaGyYmEGC/Ogrd14GwV9V2eWwI6r5G1YL0M3Bl
+         VisJEDF+mD7RcV9UIqo5RR6GBraQdarrW2U6KHdpyRG1ffiDID089zYWWUZKWjj+opzp
+         dNRE9ELS9n3/WzDDI/xuoFhDRXiVCWmbaQ53O7G+kn8MtxcfgeC42A2r+PEQCZEdJN45
+         xpxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=VjtW18trSHOOQ++iWlwEWrR0XUPVdV8/Se9flzmcddU=;
+        b=FBhRe2ieLl4Y+KotFOXk115eWo3kczhEmdFhBC3YhmOYXcrEgL+jd7L5bz/psgH7PR
+         5ott8tPYf7IYKxOF8CyfCNRyn6A57d57rYoVRGMsYWGXQP47s3hms3kk+t9QEFrmbrGD
+         V6leimIMtmPtdWBsLUBFFnv1DmdRLwoiHvwrMf+P7aL2yfRt+UxfdHw6hfk7vhx6oacS
+         5uPDgZuBZELPW20TuHk8z5w+eYEkDMJniNqZruqtC93TjdQlo/65CjRH9N5jhJ574xKO
+         OtSM7Pt7M7tiYlL8OgW606GIwJsfboDZvXcJs+10KV7f2kxRChxdXfl5bXCQRVR9xkAf
+         GEdA==
+X-Gm-Message-State: AOAM533M6J+JtKs6bmwU/sZJqeaB9WTH4jTeAxlBBOdI7Lq/8uHReuE2
+        wId2UXkivMqEmOVwiQlyx56lC2g2cOqkx5ZsgGlWOA==
+X-Google-Smtp-Source: ABdhPJypfSLdSXb97/x4iYLpOr03nuCvuTkApoi503zg7GYi87aDkvdl/FNkhSV0p2F06CJhcuItiCx/mthD9grVnJg=
+X-Received: by 2002:a05:620a:6bc:: with SMTP id i28mr4012799qkh.330.1589287718069;
+ Tue, 12 May 2020 05:48:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dtasy64h7n6tklmq"
-Content-Disposition: inline
-In-Reply-To: <930d27f3-46f8-2e7a-5028-b593f4fe84a3@roeck-us.net>
+References: <20200423174543.17161-1-michael@walle.cc> <20200423174543.17161-11-michael@walle.cc>
+In-Reply-To: <20200423174543.17161-11-michael@walle.cc>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Tue, 12 May 2020 14:48:27 +0200
+Message-ID: <CAMpxmJV3XTOxuoKeV-z2d75qWqHkgvV9419tfe3idDeKwoeoLA@mail.gmail.com>
+Subject: Re: [PATCH v3 10/16] gpio: add a reusable generic gpio_chip using regmap
+To:     Michael Walle <michael@walle.cc>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-gpio <linux-gpio@vger.kernel.org>,
+        linux-devicetree <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+czw., 23 kwi 2020 o 19:46 Michael Walle <michael@walle.cc> napisa=C5=82(a):
+>
+> There are quite a lot simple GPIO controller which are using regmap to
+> access the hardware. This driver tries to be a base to unify existing
+> code into one place. This won't cover everything but it should be a good
+> starting point.
+>
+> It does not implement its own irq_chip because there is already a
+> generic one for regmap based devices. Instead, the irq_chip will be
+> instantiated in the parent driver and its irq domain will be associate
+> to this driver.
+>
+> For now it consists of the usual registers, like set (and an optional
+> clear) data register, an input register and direction registers.
+> Out-of-the-box, it supports consecutive register mappings and mappings
+> where the registers have gaps between them with a linear mapping between
+> GPIO offset and bit position. For weirder mappings the user can register
+> its own .xlate().
+>
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
 
---dtasy64h7n6tklmq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This looks good to me. Please see some nits below.
 
-Hi Guenter,
+>  drivers/gpio/Kconfig        |   4 +
+>  drivers/gpio/Makefile       |   1 +
+>  drivers/gpio/gpio-regmap.c  | 343 ++++++++++++++++++++++++++++++++++++
+>  include/linux/gpio-regmap.h |  69 ++++++++
+>  4 files changed, 417 insertions(+)
+>  create mode 100644 drivers/gpio/gpio-regmap.c
+>  create mode 100644 include/linux/gpio-regmap.h
+>
+> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+> index 8ef2179fb999..ae3a49a2e970 100644
+> --- a/drivers/gpio/Kconfig
+> +++ b/drivers/gpio/Kconfig
+> @@ -73,6 +73,10 @@ config GPIO_GENERIC
+>         depends on HAS_IOMEM # Only for IOMEM drivers
+>         tristate
+>
+> +config GPIO_REGMAP
+> +       depends on REGMAP
+> +       tristate
+> +
+>  # put drivers in the right section, in alphabetical order
+>
+>  # This symbol is selected by both I2C and SPI expanders
+> diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
+> index b2cfc21a97f3..93e139fdfa57 100644
+> --- a/drivers/gpio/Makefile
+> +++ b/drivers/gpio/Makefile
+> @@ -12,6 +12,7 @@ obj-$(CONFIG_GPIO_SYSFS)      +=3D gpiolib-sysfs.o
+>  obj-$(CONFIG_GPIO_ACPI)                +=3D gpiolib-acpi.o
+>
+>  # Device drivers. Generally keep list sorted alphabetically
+> +obj-$(CONFIG_GPIO_REGMAP)      +=3D gpio-regmap.o
+>  obj-$(CONFIG_GPIO_GENERIC)     +=3D gpio-generic.o
+>
+>  # directly supported by gpio-generic
+> diff --git a/drivers/gpio/gpio-regmap.c b/drivers/gpio/gpio-regmap.c
+> new file mode 100644
+> index 000000000000..04939c0a22f9
+> --- /dev/null
+> +++ b/drivers/gpio/gpio-regmap.c
+> @@ -0,0 +1,343 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * regmap based generic GPIO driver
+> + *
+> + * Copyright 2019 Michael Walle <michael@walle.cc>
+> + */
+> +
+> +#include <linux/gpio/driver.h>
+> +#include <linux/gpio-regmap.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/regmap.h>
+> +
+> +struct gpio_regmap {
+> +       struct device *parent;
+> +       struct regmap *regmap;
+> +       struct gpio_chip gpio_chip;
+> +
+> +       int reg_stride;
+> +       int ngpio_per_reg;
+> +       unsigned int reg_dat_base;
+> +       unsigned int reg_set_base;
+> +       unsigned int reg_clr_base;
+> +       unsigned int reg_dir_in_base;
+> +       unsigned int reg_dir_out_base;
+> +
+> +       int (*reg_mask_xlate)(struct gpio_regmap *gpio, unsigned int base=
+,
+> +                             unsigned int offset, unsigned int *reg,
+> +                             unsigned int *mask);
+> +
+> +       void *driver_data;
+> +};
+> +
+> +static unsigned int gpio_regmap_addr(unsigned int addr)
+> +{
+> +       return (addr =3D=3D GPIO_REGMAP_ADDR_ZERO) ? 0 : addr;
+> +}
+> +
+> +/**
+> + * gpio_regmap_simple_xlate() - translate base/offset to reg/mask
+> + *
+> + * Use a simple linear mapping to translate the offset to the bitmask.
+> + */
+> +static int gpio_regmap_simple_xlate(struct gpio_regmap *gpio,
+> +                                   unsigned int base, unsigned int offse=
+t,
+> +                                   unsigned int *reg, unsigned int *mask=
+)
+> +{
+> +       unsigned int line =3D offset % gpio->ngpio_per_reg;
+> +       unsigned int stride =3D offset / gpio->ngpio_per_reg;
+> +
+> +       *reg =3D base + stride * gpio->reg_stride;
+> +       *mask =3D BIT(line);
+> +
+> +       return 0;
+> +}
+> +
+> +static int gpio_regmap_get(struct gpio_chip *chip, unsigned int offset)
+> +{
+> +       struct gpio_regmap *gpio =3D gpiochip_get_data(chip);
+> +       unsigned int base, val, reg, mask;
+> +       int ret;
+> +
+> +       /* we might not have an output register if we are input only */
+> +       if (gpio->reg_dat_base)
+> +               base =3D gpio_regmap_addr(gpio->reg_dat_base);
+> +       else
+> +               base =3D gpio_regmap_addr(gpio->reg_set_base);
+> +
+> +       ret =3D gpio->reg_mask_xlate(gpio, base, offset, &reg, &mask);
+> +       if (ret)
+> +               return ret;
+> +
+> +       ret =3D regmap_read(gpio->regmap, reg, &val);
+> +       if (ret)
+> +               return ret;
+> +
+> +       return (val & mask) ? 1 : 0;
+> +}
+> +
+> +static void gpio_regmap_set(struct gpio_chip *chip, unsigned int offset,
+> +                           int val)
+> +{
+> +       struct gpio_regmap *gpio =3D gpiochip_get_data(chip);
+> +       unsigned int base =3D gpio_regmap_addr(gpio->reg_set_base);
+> +       unsigned int reg, mask;
+> +
+> +       gpio->reg_mask_xlate(gpio, base, offset, &reg, &mask);
+> +       if (val)
+> +               regmap_update_bits(gpio->regmap, reg, mask, mask);
+> +       else
+> +               regmap_update_bits(gpio->regmap, reg, mask, 0);
+> +}
+> +
+> +static void gpio_regmap_set_with_clear(struct gpio_chip *chip,
+> +                                      unsigned int offset, int val)
+> +{
+> +       struct gpio_regmap *gpio =3D gpiochip_get_data(chip);
+> +       unsigned int base, reg, mask;
+> +
+> +       if (val)
+> +               base =3D gpio_regmap_addr(gpio->reg_set_base);
+> +       else
+> +               base =3D gpio_regmap_addr(gpio->reg_clr_base);
+> +
+> +       gpio->reg_mask_xlate(gpio, base, offset, &reg, &mask);
+> +       regmap_write(gpio->regmap, reg, mask);
+> +}
+> +
+> +static int gpio_regmap_get_direction(struct gpio_chip *chip,
+> +                                    unsigned int offset)
+> +{
+> +       struct gpio_regmap *gpio =3D gpiochip_get_data(chip);
+> +       unsigned int base, val, reg, mask;
+> +       int invert, ret;
+> +
+> +       if (gpio->reg_dir_out_base) {
+> +               base =3D gpio_regmap_addr(gpio->reg_dir_out_base);
+> +               invert =3D 0;
+> +       } else if (gpio->reg_dir_in_base) {
+> +               base =3D gpio_regmap_addr(gpio->reg_dir_in_base);
+> +               invert =3D 1;
+> +       } else {
+> +               return GPIO_LINE_DIRECTION_IN;
+> +       }
+> +
+> +       ret =3D gpio->reg_mask_xlate(gpio, base, offset, &reg, &mask);
+> +       if (ret)
+> +               return ret;
+> +
+> +       ret =3D regmap_read(gpio->regmap, reg, &val);
+> +       if (ret)
+> +               return ret;
+> +
+> +       if (!!(val & mask) ^ invert)
+> +               return GPIO_LINE_DIRECTION_OUT;
+> +       else
+> +               return GPIO_LINE_DIRECTION_IN;
+> +}
+> +
+> +static int gpio_regmap_set_direction(struct gpio_chip *chip,
+> +                                    unsigned int offset, bool output)
+> +{
+> +       struct gpio_regmap *gpio =3D gpiochip_get_data(chip);
+> +       unsigned int base, val, reg, mask;
+> +       int invert, ret;
+> +
+> +       if (gpio->reg_dir_out_base) {
+> +               base =3D gpio_regmap_addr(gpio->reg_dir_out_base);
+> +               invert =3D 0;
+> +       } else if (gpio->reg_dir_in_base) {
+> +               base =3D gpio_regmap_addr(gpio->reg_dir_in_base);
+> +               invert =3D 1;
+> +       } else {
+> +               return 0;
+> +       }
+> +
+> +       ret =3D gpio->reg_mask_xlate(gpio, base, offset, &reg, &mask);
+> +       if (ret)
+> +               return ret;
+> +
+> +       if (!invert)
+> +               val =3D (output) ? mask : 0;
+> +       else
+> +               val =3D (output) ? 0 : mask;
+> +
+> +       return regmap_update_bits(gpio->regmap, reg, mask, val);
+> +}
+> +
+> +static int gpio_regmap_direction_input(struct gpio_chip *chip,
+> +                                      unsigned int offset)
+> +{
+> +       return gpio_regmap_set_direction(chip, offset, false);
+> +}
+> +
+> +static int gpio_regmap_direction_output(struct gpio_chip *chip,
+> +                                       unsigned int offset, int value)
+> +{
+> +       gpio_regmap_set(chip, offset, value);
+> +
+> +       return gpio_regmap_set_direction(chip, offset, true);
+> +}
+> +
+> +void gpio_regmap_set_drvdata(struct gpio_regmap *gpio, void *data)
+> +{
+> +       gpio->driver_data =3D data;
+> +}
+> +EXPORT_SYMBOL_GPL(gpio_regmap_set_drvdata);
+> +
+> +void *gpio_regmap_get_drvdata(struct gpio_regmap *gpio)
+> +{
+> +       return gpio->driver_data;
+> +}
+> +EXPORT_SYMBOL_GPL(gpio_regmap_get_drvdata);
+> +
+> +/**
+> + * gpio_regmap_register() - Register a generic regmap GPIO controller
+> + *
+> + * @gpio: gpio_regmap device to register
+> + *
+> + * Returns 0 on success or an errno on failure.
+> + */
+> +struct gpio_regmap *gpio_regmap_register(const struct gpio_regmap_config=
+ *config)
+> +{
+> +       struct gpio_regmap *gpio;
+> +       struct gpio_chip *chip;
+> +       int ret;
+> +
+> +       if (!config->parent)
+> +               return ERR_PTR(-EINVAL);
+> +
+> +       if (!config->ngpio)
+> +               return ERR_PTR(-EINVAL);
+> +
+> +       /* we need at least one */
+> +       if (!config->reg_dat_base && !config->reg_set_base)
+> +               return ERR_PTR(-EINVAL);
+> +
+> +       /* we don't support having both registers simulaniously for now *=
+/
+> +       if (config->reg_dir_out_base && config->reg_dir_in_base)
+> +               return ERR_PTR(-EINVAL);
+> +
+> +       gpio =3D kzalloc(sizeof(*gpio), GFP_KERNEL);
+> +       if (!gpio)
+> +               return ERR_PTR(-ENOMEM);
+> +
+> +       gpio->parent =3D config->parent;
+> +       gpio->regmap =3D config->regmap;
+> +       gpio->ngpio_per_reg =3D config->ngpio_per_reg;
+> +       gpio->reg_stride =3D config->reg_stride;
+> +       gpio->reg_mask_xlate =3D config->reg_mask_xlate;
+> +       gpio->reg_set_base =3D config->reg_set_base;
+> +       gpio->reg_clr_base =3D config->reg_clr_base;
+> +       gpio->reg_dir_in_base =3D config->reg_dir_in_base;
+> +       gpio->reg_dir_out_base =3D config->reg_dir_out_base;
+> +
+> +       /* if not set, assume there is only one register */
+> +       if (!gpio->ngpio_per_reg)
+> +               gpio->ngpio_per_reg =3D config->ngpio;
+> +
+> +       /* if not set, assume they are consecutive */
+> +       if (!gpio->reg_stride)
+> +               gpio->reg_stride =3D 1;
+> +
+> +       if (!gpio->reg_mask_xlate)
+> +               gpio->reg_mask_xlate =3D gpio_regmap_simple_xlate;
+> +
+> +       chip =3D &gpio->gpio_chip;
+> +       chip->parent =3D config->parent;
+> +       chip->base =3D -1;
+> +       chip->ngpio =3D config->ngpio;
+> +       chip->can_sleep =3D true;
+> +
+> +       if (!chip->label)
+> +               chip->label =3D dev_name(config->parent);
+> +       else
+> +               chip->label =3D config->label;
+> +
+> +       chip->get =3D gpio_regmap_get;
+> +       if (gpio->reg_set_base && gpio->reg_clr_base)
+> +               chip->set =3D gpio_regmap_set_with_clear;
+> +       else if (gpio->reg_set_base)
+> +               chip->set =3D gpio_regmap_set;
+> +
+> +       if (gpio->reg_dir_in_base || gpio->reg_dir_out_base) {
+> +               chip->get_direction =3D gpio_regmap_get_direction;
+> +               chip->direction_input =3D gpio_regmap_direction_input;
+> +               chip->direction_output =3D gpio_regmap_direction_output;
+> +       }
+> +
+> +       ret =3D gpiochip_add_data(chip, gpio);
+> +       if (ret < 0) {
+> +               kfree(gpio);
 
-On Mon, May 11, 2020 at 09:51:25AM -0700, Guenter Roeck wrote:
-> On 5/11/20 4:02 AM, Sebastian Reichel wrote:
-> > From: Samu Nuutamo <samu.nuutamo@vincit.fi>
-> >=20
-> > When tsi-as-adc is configured it is possible for in7[0123]_input read to
-> > return an incorrect value if a concurrent read to in[456]_input is
-> > performed. This is caused by a concurrent manipulation of the mux
-> > channel without proper locking as hwmon and mfd use different locks for
-> > synchronization.
-> >=20
-> > Switch hwmon to use the same lock as mfd when accessing the TSI channel.
-> >=20
-> > Fixes: 4f16cab19a3d5 ("hwmon: da9052: Add support for TSI channel")
-> > Signed-off-by: Samu Nuutamo <samu.nuutamo@vincit.fi>
-> > [rebase to current master, reword commit message slightly]
-> > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
->=20
-> Have you explored calling da9052_adc_manual_read() instead ?
-> At the very least we should have a comment explaining why that
-> isn't feasible.
+Maybe add a second label at the end of the function?
 
-da9052_adc_manual_read() writes to DA9052_ADC_MAN_REG, waits for an
-IRQ and then reads DA9052_ADC_RES_H_REG/DA9052_ADC_RES_L_REG. The
-function called here works with the TSI registers instead. So
-calling da9052_adc_manual_read() is not an option.
+> +               return ERR_PTR(ret);
+> +       }
+> +
+> +       if (config->irq_domain) {
+> +               ret =3D gpiochip_irqchip_add_domain(chip, config->irq_dom=
+ain);
+> +               if (ret < 0)
+> +                       goto err;
+> +       }
+> +
+> +       return gpio;
+> +
+> +err:
+> +       gpiochip_remove(chip);
+> +       kfree(gpio);
+> +       return ERR_PTR(ret);
+> +}
+> +EXPORT_SYMBOL_GPL(gpio_regmap_register);
+> +
+> +/**
+> + * gpio_regmap_unregister() - Unregister a generic regmap GPIO controlle=
+r
+> + *
+> + * @gpio: gpio_regmap device to unregister
+> + */
+> +void gpio_regmap_unregister(struct gpio_regmap *gpio)
+> +{
+> +       gpiochip_remove(&gpio->gpio_chip);
+> +       kfree(gpio);
+> +}
+> +EXPORT_SYMBOL_GPL(gpio_regmap_unregister);
+> +
+> +static void devm_gpio_regmap_unregister(struct device *dev, void *res)
+> +{
+> +       gpio_regmap_unregister(*(struct gpio_regmap **)res);
+> +}
+> +
+> +/**
+> + * devm_gpio_regmap_register() - resource managed gpio_regmap_register()
+> + *
+> + * @dev: device that is registering this GPIO device
+> + * @gpio: gpio_regmap device to register
+> + *
+> + * Managed gpio_regmap_register(). For generic regmap GPIO device regist=
+ered by
+> + * this function, gpio_regmap_unregister() is automatically called on dr=
+iver
+> + * detach. See gpio_regmap_register() for more information.
+> + */
+> +struct gpio_regmap *devm_gpio_regmap_register(struct device *dev,
+> +                                             const struct gpio_regmap_co=
+nfig *config)
+> +{
+> +       struct gpio_regmap **ptr, *gpio;
+> +
+> +       ptr =3D devres_alloc(devm_gpio_regmap_unregister, sizeof(*ptr),
+> +                          GFP_KERNEL);
+> +       if (!ptr)
+> +               return ERR_PTR(-ENOMEM);
+> +
+> +       gpio =3D gpio_regmap_register(config);
+> +
+> +       if (!IS_ERR(gpio)) {
+> +               *ptr =3D gpio;
+> +               devres_add(dev, ptr);
+> +       } else {
+> +               devres_free(ptr);
+> +       }
+> +
+> +       return gpio;
+> +}
+> +EXPORT_SYMBOL_GPL(devm_gpio_regmap_register);
+> +
+> +MODULE_AUTHOR("Michael Walle <michael@walle.cc>");
+> +MODULE_DESCRIPTION("GPIO generic regmap driver core");
+> +MODULE_LICENSE("GPL");
+> diff --git a/include/linux/gpio-regmap.h b/include/linux/gpio-regmap.h
+> new file mode 100644
+> index 000000000000..a868cbcde6e9
+> --- /dev/null
+> +++ b/include/linux/gpio-regmap.h
+> @@ -0,0 +1,69 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +
+> +#ifndef _LINUX_GPIO_REGMAP_H
+> +#define _LINUX_GPIO_REGMAP_H
+> +
+> +struct gpio_regmap;
+> +
+> +#define GPIO_REGMAP_ADDR_ZERO ((unsigned long)(-1))
+> +#define GPIO_REGMAP_ADDR(addr) ((addr) ? : GPIO_REGMAP_ADDR_ZERO)
+> +
 
-The reason for the locking problem is, that the same ADC is used
-internally by the devices and muxed to different pins in the
-background. In continuous touchscreen mode, the device is supposed
-to schedule the ADC slots automatically and I assumed this would
-also work here when I wrote the original support. Turns out the
-device is not smart enough for that :(
+What if the addr is actually 0? Maybe drop GPIO_REGMAP_ADDR and
+require users to set unused registers to GPIO_REGMAP_ADDR_ZERO?
 
--- Sebastian
+> +/**
+> + * struct gpio_regmap_config - Description of a generic regmap gpio_chip=
+.
+> + *
+> + * @parent:            The parent device
+> + * @regmap:            The regmap used to access the registers
+> + *                     given, the name of the device is used
+> + * @label:             (Optional) Descriptive name for GPIO controller.
+> + *                     If not given, the name of the device is used.
+> + * @ngpio:             Number of GPIOs
+> + * @reg_dat_base:      (Optional) (in) register base address
+> + * @reg_set_base:      (Optional) set register base address
+> + * @reg_clr_base:      (Optional) clear register base address
+> + * @reg_dir_in_base:   (Optional) out setting register base address
+> + * @reg_dir_out_base:  (Optional) in setting register base address
 
-> Thanks,
-> Guenter
->=20
-> > ---
-> >  drivers/hwmon/da9052-hwmon.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >=20
-> > diff --git a/drivers/hwmon/da9052-hwmon.c b/drivers/hwmon/da9052-hwmon.c
-> > index 53b517dbe7e6..4af2fc309c28 100644
-> > --- a/drivers/hwmon/da9052-hwmon.c
-> > +++ b/drivers/hwmon/da9052-hwmon.c
-> > @@ -244,9 +244,9 @@ static ssize_t da9052_tsi_show(struct device *dev,
-> >  	int channel =3D to_sensor_dev_attr(devattr)->index;
-> >  	int ret;
-> > =20
-> > -	mutex_lock(&hwmon->hwmon_lock);
-> > +	mutex_lock(&hwmon->da9052->auxadc_lock);
-> >  	ret =3D __da9052_read_tsi(dev, channel);
-> > -	mutex_unlock(&hwmon->hwmon_lock);
-> > +	mutex_unlock(&hwmon->da9052->auxadc_lock);
-> > =20
-> >  	if (ret < 0)
-> >  		return ret;
-> >=20
->=20
+The two above are inverted I think? Also: why the limitation of only
+supporting one at a time?
 
---dtasy64h7n6tklmq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl66iQIACgkQ2O7X88g7
-+poUkA//ZgeIB40UjFCzLiTemGNhHPVyrtf8oWt8lbrYknJ4dR1sYcJv5po+wA0b
-hEniRGKcaqKlUdRRN9YTIdjjYimp//z61eUoqG3emWuL0GW25uISxrqtTwRsh6PL
-+C1WjME1D8DANK7pzLA7vnUoUc7q12sKIWacMi7r/rTrSjALA+YGTrru+BmO13Af
-BZEljnxZ40B236svT+e9mzVMRdoHaxb+CKPQVtzh9v5uhhx1OjYEkeKNe9D5zv3M
-GQAEMw8YWB/lEoXu8rWHYqghku5iESUEMdTid7+cwRSo33M3Uf4u/ZtxGwGYnYkq
-Xa2v9OfR9btNH4pbWcEO54UE4hW5BTFALiXmC+w4MVqacWKs2OszrS4VuAaMmrRc
-Cn1QCIsrGPYPtn5kwDs1qDqd0xlk+NuEoufvp7ywNTxtrsRbsDk4gsSf+g2nEpeC
-qR3MuikW/eewUl3E5LoLRH/11oA09oWvZQfgF8T2c1IGq7uf+cU9r+g94L2DiXWb
-wzu4aBH3udoNmQZn1G42VADgPoHahl1tr/FwypxOg0bQe6FfqfWAwdM3wHHy7E2h
-mBLWSC0oZSXB3JESsI/2SvnqL2/IWiuORrDHRlwY3gG+9hfUCTScNHmeEUd24VtZ
-poGaUJvKqhQqh3DQaV/CZDBgILa8YDxDSer5Elpb6mB8syQEhs4=
-=Vq5Y
------END PGP SIGNATURE-----
-
---dtasy64h7n6tklmq--
+> + * @reg_stride:                (Optional) May be set if the registers (o=
+f the
+> + *                     same type, dat, set, etc) are not consecutive.
+> + * @ngpio_per_reg:     Number of GPIOs per register
+> + * @irq_domain:                (Optional) IRQ domain if the controller i=
+s
+> + *                     interrupt-capable
+> + * @reg_mask_xlate:     (Optional) Translates base address and GPIO
+> + *                     offset to a register/bitmask pair. If not
+> + *                     given the default gpio_regmap_simple_xlate()
+> + *                     is used.
+> + *
+> + * The reg_mask_xlate translates a given base address and GPIO offset to
+> + * register and mask pair. The base address is one of the given reg_*_ba=
+se.
+> + *
+> + * All base addresses may have the special value GPIO_REGMAP_ADDR_ZERO
+> + * which forces the address to the value 0.
+> + */
+> +struct gpio_regmap_config {
+> +       struct device *parent;
+> +       struct regmap *regmap;
+> +
+> +       const char *label;
+> +       int ngpio;
+> +
+> +       unsigned int reg_dat_base;
+> +       unsigned int reg_set_base;
+> +       unsigned int reg_clr_base;
+> +       unsigned int reg_dir_in_base;
+> +       unsigned int reg_dir_out_base;
+> +       int reg_stride;
+> +       int ngpio_per_reg;
+> +       struct irq_domain *irq_domain;
+> +
+> +       int (*reg_mask_xlate)(struct gpio_regmap *gpio, unsigned int base=
+,
+> +                             unsigned int offset, unsigned int *reg,
+> +                             unsigned int *mask);
+> +};
+> +
+> +struct gpio_regmap *gpio_regmap_register(const struct gpio_regmap_config=
+ *config);
+> +void gpio_regmap_unregister(struct gpio_regmap *gpio);
+> +struct gpio_regmap *devm_gpio_regmap_register(struct device *dev,
+> +                                             const struct gpio_regmap_co=
+nfig *config);
+> +void gpio_regmap_set_drvdata(struct gpio_regmap *gpio, void *data);
+> +void *gpio_regmap_get_drvdata(struct gpio_regmap *gpio);
+> +
+> +#endif /* _LINUX_GPIO_REGMAP_H */
+> --
+> 2.20.1
+>
