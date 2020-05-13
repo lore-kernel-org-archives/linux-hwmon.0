@@ -5,69 +5,69 @@ X-Spam-Level:
 X-Spam-Status: No, score=-8.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	FAKE_REPLY_C,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0F47C433DF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 13 May 2020 15:21:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 761F6C433DF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 13 May 2020 15:21:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B29062065C
-	for <linux-hwmon@archiver.kernel.org>; Wed, 13 May 2020 15:21:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8C8F32065D
+	for <linux-hwmon@archiver.kernel.org>; Wed, 13 May 2020 15:21:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UcXf/LwO"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GSuHkBHq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729219AbgEMPVI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 13 May 2020 11:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44562 "EHLO
+        id S2389239AbgEMPVW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 13 May 2020 11:21:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729153AbgEMPVI (ORCPT
+        with ESMTP id S2389208AbgEMPVW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 13 May 2020 11:21:08 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8CFEC061A0C;
-        Wed, 13 May 2020 08:21:06 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id k19so6942739pll.9;
-        Wed, 13 May 2020 08:21:06 -0700 (PDT)
+        Wed, 13 May 2020 11:21:22 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F22E3C061A0C;
+        Wed, 13 May 2020 08:21:21 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id u5so5313991pgn.5;
+        Wed, 13 May 2020 08:21:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:mime-version
          :content-disposition:user-agent;
-        bh=cWFKfC62+6x0cIYD7JbR18PKDXXbx8nGB7XYfgqUvF4=;
-        b=UcXf/LwO0ebFP2l74juHCGTii8BlrEnCisLBwXU9iBrGdE0F4Dh7tM35PLhI1CelSf
-         D90sKcDWwfUNJetU6bOWntnUxER3HDl68AuV/oGIyRrWbs/2NbS3MSX///qA7+VarM+k
-         PcS1MvIzZSP9pZSmEj0R6HkNph8/wo0Wf8VPT7UkhrgyTTT6IFLdg+XCGklDhTCvZVOR
-         ZVVA/oU6jvXNcFb7sLyG5JVaaJ9gQAnmld2vsUzrCEEPAP8FQE+aYvi5wjMQjKvJvaum
-         AUDZuh3gI5JiRriLLUkDc6ZUl6z4MQW7kMwiDI9RaSErrKDVCIS3S5PggLrat3ZdetqO
-         UWNw==
+        bh=3yRyofDBUmX/6AiJcNBUrwOztf43oL+1vzquNOT5/mo=;
+        b=GSuHkBHq8QgfFxtm2FP3EqTycxL336tHfmghS0MWuRb/rZPxShnQNx9Oee5rFOVyg0
+         l/ptw/VloyZIy9MuyPiCRnZnw1HYrJbiRV+1lCEvK8qa6/CdoQif+hOiv2RJY1gxa6Hr
+         bw5XWNivpCWVwAihiUpFMmqS0hMvl0cunD/O3OrhNu+5u7XUaY0wv//2cl3LHI8Mw/Cw
+         tucG5Ob2OZE5ochimEJwebGMfaUMc4jniQliCKYtomCi+cdQdbXVrTgqvilkhCAWPVUC
+         3ZinFt7WcjDy1uT68siR3VE84bwM2c8qlXx12DK0RIkBO/oPY2IHgNvhk9p5UelMWfHM
+         en4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :mime-version:content-disposition:user-agent;
-        bh=cWFKfC62+6x0cIYD7JbR18PKDXXbx8nGB7XYfgqUvF4=;
-        b=heaqZvKfa0qJZVl3zb7kPVZO70Al7OuWGRYn6l8xObvRaowh64m2alsS2GOuL1kDEb
-         6GwyzD66kaw5dHXgKOknsOlCFpLNlTfhVIyKFGDVuIlHOX+gDYfkLrPu8Dvj0uJEFXyu
-         WOJGH2bAgxo+4Rls0Yonci/hvWS6aOoXfqX3hQKHd5vRai6Ub2OQdDPYWlk2idutmJ3D
-         ApCTpY84aRr6zg1t0AO5DKvKn0fR4B5YZJE2kYvFLzA1V4ehSmC/xB3Qbr7WSs+EL/z3
-         58s9tBoPaCP1RQX+MoBVJ8krIh3kaBjuj3PLNLZStjjgC61N2pRzo4cNONU8CkeDYqP2
-         3ldQ==
-X-Gm-Message-State: AGi0PuY3+tTdSnm4WGaKt1deIo9Tu4qDPxRj3kWiL/W1Og9rHWut3O1A
-        azxksq/rqv49y2wgnOwZSyU=
-X-Google-Smtp-Source: APiQypIG3VnLUc5o3LGxO1a1f/FF6vP3C9zhpMSozv2JhiVOu26f8gI33aGjcezrncxrxG7y6GoXDQ==
-X-Received: by 2002:a17:90a:ba84:: with SMTP id t4mr32154756pjr.81.1589383266524;
-        Wed, 13 May 2020 08:21:06 -0700 (PDT)
+        bh=3yRyofDBUmX/6AiJcNBUrwOztf43oL+1vzquNOT5/mo=;
+        b=GQW/8/U7NxSempPNmSgMKWiI+iXCL2TPwLRk6ErPGskj4pAAdND2otdD1PZCinCZyI
+         +OLYgxextDwwTNoE/5cLHznILQPZrL2jp4GtRyAnlaGm02BsqgtCk+2+fSBjJlkFRl4I
+         mWhxkhUgaAMrY2L2nXIQnihEh2LWAq0ldGWAU5myR1JPI8kqkJSHvwkImDXEmqMikffc
+         Ui0poGWA3gy00CY9CxKSePTFA3+jCVhQy0uDFGmBshH+jNB1MiCBYOAy9dFZDJuQhgkJ
+         oREy43pA6jddxRmwwvsZGsV88aIr1r8Fs8U4ZidG0GCEFFG3pld/FkxSC86OATG0iBDv
+         S4pA==
+X-Gm-Message-State: AGi0PuYfMd0iax/GOsfVOsd+jabjsG3mKM7TVXq51z+pyT12dGmOFTC1
+        cGWqfKWUlXwKPXXGsOlc4eA=
+X-Google-Smtp-Source: APiQypLCGbbc3jPoqU2PX5STXtYWYF43p0LqJ06UayKzWFa+d92ts/mOM23v1/nJALaPOTFIbYxNZw==
+X-Received: by 2002:aa7:8042:: with SMTP id y2mr26714744pfm.94.1589383281502;
+        Wed, 13 May 2020 08:21:21 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 82sm14944156pfv.214.2020.05.13.08.21.05
+        by smtp.gmail.com with ESMTPSA id l137sm15425893pfd.107.2020.05.13.08.21.20
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 13 May 2020 08:21:05 -0700 (PDT)
-Date:   Wed, 13 May 2020 08:21:05 -0700
+        Wed, 13 May 2020 08:21:21 -0700 (PDT)
+Date:   Wed, 13 May 2020 08:21:20 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Amy.Shih@advantech.com.tw
 Cc:     she90122@gmail.com, Jean Delvare <jdelvare@suse.com>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
         oakley.ding@advantech.com.tw, jia.sui@advantech.com.cn,
         yuechao.zhao@advantech.com.cn, Hy.Lee@advantech.com.tw
-Subject: Re: [v1,1/1] hwmon: (nct7904) Add to read all of the SMI status
- registers in probe function.
-Message-ID: <20200513152104.GA125097@roeck-us.net>
+Subject: Re: [v1,1/1] hwmon: (nct7904) Fix the incorrect rang of temperature
+ limitation registers.
+Message-ID: <20200513152120.GA125233@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -77,14 +77,13 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, May 12, 2020 at 02:25:23AM +0000, Amy.Shih@advantech.com.tw wrote:
+On Tue, May 12, 2020 at 09:38:06AM +0000, Amy.Shih@advantech.com.tw wrote:
 > From: Amy Shih <amy.shih@advantech.com.tw>
 > 
-> When nct7904 power up, it compares current sensor readings within the
-> default threshold immediately, thus some of SMI status registers would
-> get non zero values cause the false alarms on first reading. Add to
-> read all of the SMI status registers in probe function to clear the
-> alarms.
+> The format of temperature limitation registers are 8-bit 2's complement
+> and the range is -128~127.
+> Converts the reading value to signed char to fix the incorrect range
+> of temperature limitation registers.
 > 
 > Signed-off-by: Amy Shih <amy.shih@advantech.com.tw>
 
@@ -94,35 +93,31 @@ Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/nct7904.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
+>  drivers/hwmon/nct7904.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
 > diff --git a/drivers/hwmon/nct7904.c b/drivers/hwmon/nct7904.c
-> index 571a649..6fb06f7 100644
+> index 6fb06f7..04f2a8e 100644
 > --- a/drivers/hwmon/nct7904.c
 > +++ b/drivers/hwmon/nct7904.c
-> @@ -45,6 +45,7 @@
->  #define FANCTL_MAX		4	/* Counted from 1 */
->  #define TCPU_MAX		8	/* Counted from 1 */
->  #define TEMP_MAX		4	/* Counted from 1 */
-> +#define SMI_STS_MAX		10	/* Counted from 1 */
+> @@ -390,6 +390,7 @@ static int nct7904_read_temp(struct device *dev, u32 attr, int channel,
+>  	struct nct7904_data *data = dev_get_drvdata(dev);
+>  	int ret, temp;
+>  	unsigned int reg1, reg2, reg3;
+> +	s8 temps;
 >  
->  #define VT_ADC_CTRL0_REG	0x20	/* Bank 0 */
->  #define VT_ADC_CTRL1_REG	0x21	/* Bank 0 */
-> @@ -1126,6 +1127,13 @@ static int nct7904_probe(struct i2c_client *client,
->  		data->fan_mode[i] = ret;
->  	}
+>  	switch (attr) {
+>  	case hwmon_temp_input:
+> @@ -495,7 +496,8 @@ static int nct7904_read_temp(struct device *dev, u32 attr, int channel,
 >  
-> +	/* Read all of SMI status register to clear alarms */
-> +	for (i = 0; i < SMI_STS_MAX; i++) {
-> +		ret = nct7904_read_reg(data, BANK_0, SMI_STS1_REG + i);
-> +		if (ret < 0)
-> +			return ret;
-> +	}
-> +
->  	hwmon_dev =
->  		devm_hwmon_device_register_with_info(dev, client->name, data,
->  						     &nct7904_chip_info, NULL);
+>  	if (ret < 0)
+>  		return ret;
+> -	*val = ret * 1000;
+> +	temps = ret;
+> +	*val = temps * 1000;
+>  	return 0;
+>  }
+>  
 > -- 
 > 1.8.3.1
 > 
