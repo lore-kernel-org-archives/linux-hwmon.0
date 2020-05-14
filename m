@@ -1,164 +1,225 @@
-Return-Path: <SRS0=2Ivk=63=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=CEvc=64=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	LONGWORDS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81061C433DF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 13 May 2020 22:15:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BEAEC433E0
+	for <linux-hwmon@archiver.kernel.org>; Thu, 14 May 2020 01:13:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7D379205ED
-	for <linux-hwmon@archiver.kernel.org>; Wed, 13 May 2020 22:15:33 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="eKf0mnWx"
+	by mail.kernel.org (Postfix) with ESMTP id A8237205ED
+	for <linux-hwmon@archiver.kernel.org>; Thu, 14 May 2020 01:13:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730881AbgEMWPa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 13 May 2020 18:15:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53086 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730532AbgEMWP3 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 13 May 2020 18:15:29 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A1EC061A0C;
-        Wed, 13 May 2020 15:15:29 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 5752922FEC;
-        Thu, 14 May 2020 00:15:22 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1589408125;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IjMyCHfdnLjEuVo++xDGBWjambq+Fde/qc+KEJNfdSc=;
-        b=eKf0mnWxRhNAeHVKoNWCeiV9u0yLpbJAusnkLK3vNXKHhQeGeNYWKXQ++zSpwJbX38tbdU
-        2EJap+54vaZnLGcacA4UH6AZs5fGtsgB2NmyXR2hFOrHme+LDvtC1sdogLUw19sHNQKzAs
-        BwssZiT/tIG61qYJfOLJ1Eowufi8hK0=
+        id S1725967AbgENBNT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 13 May 2020 21:13:19 -0400
+Received: from mga01.intel.com ([192.55.52.88]:56500 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725943AbgENBNS (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 13 May 2020 21:13:18 -0400
+IronPort-SDR: IeupuTbP/J42hw5EpnsNYnYmcePruLHYZ82kx6gK+WUKm1fGsk4l78AwBaR/FrGoxTt0M8eTaW
+ g8Nmspy6ZDXQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2020 18:13:18 -0700
+IronPort-SDR: jrt0dLmErjo3sveL8M7fjz56wDdJlHGgaZEU6EWd1YQiSoa0unDQbraa3R8pbSXiBzJmUaVUDi
+ hqV+WmVJ5+iQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,389,1583222400"; 
+   d="scan'208";a="464143969"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 13 May 2020 18:13:17 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1jZ2R2-000EBv-NU; Thu, 14 May 2020 09:13:16 +0800
+Date:   Thu, 14 May 2020 09:13:13 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:hwmon] BUILD SUCCESS
+ 333e22db228f0bd0c839553015a6a8d3db4ba569
+Message-ID: <5ebc9b29.CKNl88QyTGDYfjm0%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-Date:   Thu, 14 May 2020 00:15:22 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linux HWMON List <linux-hwmon@vger.kernel.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v3 05/16] mfd: Add support for Kontron sl28cpld management
- controller
-In-Reply-To: <CAL_JsqJBAghgdKmH1OfpH0B508st7Gx3GMtjufjZvBWM_c6GAQ@mail.gmail.com>
-References: <20200423174543.17161-1-michael@walle.cc>
- <20200423174543.17161-6-michael@walle.cc> <20200511211359.GB3518@bogus>
- <f0fafa63047f00e912013b137e4db15c@walle.cc>
- <CAL_JsqJBAghgdKmH1OfpH0B508st7Gx3GMtjufjZvBWM_c6GAQ@mail.gmail.com>
-User-Agent: Roundcube Webmail/1.4.4
-Message-ID: <c170d7ad3874567e624bb827c1eac661@walle.cc>
-X-Sender: michael@walle.cc
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Am 2020-05-12 23:59, schrieb Rob Herring:
-> On Mon, May 11, 2020 at 4:45 PM Michael Walle <michael@walle.cc> wrote:
->> 
->> Am 2020-05-11 23:13, schrieb Rob Herring:
->> > On Thu, Apr 23, 2020 at 07:45:32PM +0200, Michael Walle wrote:
->> >> +#define SL28CPLD_VERSION    0x03
->> >> +#define SL28CPLD_WATCHDOG_BASE      0x04
->> >> +#define SL28CPLD_HWMON_FAN_BASE     0x0b
->> >> +#define SL28CPLD_PWM0_BASE  0x0c
->> >> +#define SL28CPLD_PWM1_BASE  0x0e
->> >> +#define SL28CPLD_GPIO0_BASE 0x10
->> >> +#define SL28CPLD_GPIO1_BASE 0x15
->> >> +#define SL28CPLD_GPO_BASE   0x1a
->> >> +#define SL28CPLD_GPI_BASE   0x1b
->> >> +#define SL28CPLD_INTC_BASE  0x1c
->> >
->> > If you want to use 'reg' in the binding, these are the numbers you
->> > should be using rather than making up numbering!
->> 
->> My motivation is that I don't want to hardcode the internal addresses
->> of the management controller in the device tree. For example if they
->> will move around with a later update of the controller, so a driver 
->> can
->> be compatible with both the old and the new version. If they are in 
->> the
->> device tree, only one register layout is possible.
-> 
-> I don't understand, if the addresses change, then the above defines
-> have to change. So your driver is only compatible with 1 version. If
-> you change the CPLD, then that's a h/w change and your h/w description
-> (DT) should change. That can either be the compatible string changing
-> and updating the driver with new match data such as register offsets
-> or all the differences are in DT and there's no kernel change.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon
+branch HEAD: 333e22db228f0bd0c839553015a6a8d3db4ba569  hwmon: (da9052) Synchronize access with mfd
 
-The CPLD and the board is designed in a way that it is possible to
-update and/or change its function (or parts of it). It must not be
-a hardware change, although I admit thats a bit of a grey area wether
-you treat it as hardware or "firmware". Anyway, yes you'd have to
-change the register offsets, but as this is code it might support
-different register offsets. For example you could dynamically add
-functionality, if there is a newer controller version while still
-being compatible with older versions.
+elapsed time: 482m
 
->> > However, I still don't think you need any child nodes. All the data in
->> > the DT binding is right here in the driver already. There's no
->> > advantage
->> > to putting child nodes in DT, because this driver still has to be
->> > updated if you add more nodes.
->> 
->> But then any phandle will reference the mfd device. And for example
->> there
->> are two different interrupt controllers, that is the INTC and the
->> GPIO[01],
->> which will then be combined into one device tree node, right?
-> 
-> You either have to add a cell for 'bank' or divide the 1st cell into a
-> bank and index. Both have been done before.
+configs tested: 158
+configs skipped: 13
 
-But this won't work with watchdogs, correct? See
-https://lore.kernel.org/linux-devicetree/7acbb6d9b2240b1856136fa35c1318bf@walle.cc/
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> To go the other direction, AIUI you shouldn't need OF_MFD_CELL_REG
-> entries if you have the child devices in DT.
+arm                                 defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                               allnoconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+sparc                            allyesconfig
+m68k                             allyesconfig
+h8300                     edosk2674_defconfig
+mips                     decstation_defconfig
+sh                          rsk7201_defconfig
+parisc                              defconfig
+m68k                          amiga_defconfig
+mips                malta_qemu_32r6_defconfig
+i386                              allnoconfig
+arm                     davinci_all_defconfig
+arc                          axs101_defconfig
+m68k                        mvme16x_defconfig
+arc                              alldefconfig
+sh                          sdk7786_defconfig
+arm                            hisi_defconfig
+arm                          exynos_defconfig
+arm                            mps2_defconfig
+s390                       zfcpdump_defconfig
+m68k                       m5249evb_defconfig
+m68k                          sun3x_defconfig
+sh                           se7619_defconfig
+mips                        qi_lb60_defconfig
+arc                        nsim_700_defconfig
+arm                         lubbock_defconfig
+arm                          tango4_defconfig
+sh                            shmin_defconfig
+mips                           mtx1_defconfig
+riscv                    nommu_virt_defconfig
+mips                        nlm_xlr_defconfig
+arm                         s3c2410_defconfig
+xtensa                           allyesconfig
+powerpc                      chrp32_defconfig
+arm                     eseries_pxa_defconfig
+xtensa                    xip_kc705_defconfig
+arm                           h3600_defconfig
+arm                         nhk8815_defconfig
+powerpc                    adder875_defconfig
+mips                 pnx8335_stb225_defconfig
+sh                   sh7770_generic_defconfig
+arm                            dove_defconfig
+mips                 decstation_r4k_defconfig
+arm                          moxart_defconfig
+sh                               allmodconfig
+sh                             espt_defconfig
+arm                            xcep_defconfig
+microblaze                          defconfig
+arm                         orion5x_defconfig
+mips                      pic32mzda_defconfig
+mips                  mips_paravirt_defconfig
+riscv                          rv32_defconfig
+powerpc                      ppc44x_defconfig
+arm                         at91_dt_defconfig
+sh                           se7724_defconfig
+arc                             nps_defconfig
+arm                             rpc_defconfig
+powerpc                       holly_defconfig
+arm                           h5000_defconfig
+arm                          pxa910_defconfig
+sh                          rsk7203_defconfig
+arm                         assabet_defconfig
+m68k                                defconfig
+arm                           sama5_defconfig
+sh                        sh7785lcr_defconfig
+arm                         shannon_defconfig
+nios2                            alldefconfig
+sh                   secureedge5410_defconfig
+arm                      footbridge_defconfig
+i386                             allyesconfig
+i386                                defconfig
+i386                              debian-10.3
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                              allnoconfig
+m68k                           sun3_defconfig
+nios2                               defconfig
+nios2                            allyesconfig
+openrisc                            defconfig
+c6x                              allyesconfig
+c6x                               allnoconfig
+openrisc                         allyesconfig
+nds32                               defconfig
+nds32                             allnoconfig
+csky                             allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+h8300                            allmodconfig
+xtensa                              defconfig
+arc                                 defconfig
+arc                              allyesconfig
+sh                                allnoconfig
+microblaze                        allnoconfig
+mips                             allyesconfig
+mips                              allnoconfig
+mips                             allmodconfig
+parisc                            allnoconfig
+parisc                           allyesconfig
+parisc                           allmodconfig
+powerpc                             defconfig
+powerpc                          allyesconfig
+powerpc                          rhel-kconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a006-20200513
+i386                 randconfig-a005-20200513
+i386                 randconfig-a003-20200513
+i386                 randconfig-a001-20200513
+i386                 randconfig-a004-20200513
+i386                 randconfig-a002-20200513
+x86_64               randconfig-a005-20200513
+x86_64               randconfig-a003-20200513
+x86_64               randconfig-a006-20200513
+x86_64               randconfig-a004-20200513
+x86_64               randconfig-a001-20200513
+x86_64               randconfig-a002-20200513
+i386                 randconfig-a012-20200513
+i386                 randconfig-a016-20200513
+i386                 randconfig-a014-20200513
+i386                 randconfig-a011-20200513
+i386                 randconfig-a013-20200513
+i386                 randconfig-a015-20200513
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+s390                             allyesconfig
+s390                              allnoconfig
+s390                             allmodconfig
+s390                                defconfig
+x86_64                              defconfig
+sparc                               defconfig
+sparc64                             defconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                          allmodconfig
+um                               allmodconfig
+um                                allnoconfig
+um                               allyesconfig
+um                                  defconfig
+x86_64                                   rhel
+x86_64                               rhel-7.6
+x86_64                    rhel-7.6-kselftests
+x86_64                         rhel-7.2-clear
+x86_64                                    lkp
+x86_64                              fedora-25
+x86_64                                  kexec
 
-This is a general problem IMHO. There are mfd drivers which have mfd
-cells and a device tree node associated with each cell. But it just
-works as long as there is only one sub device per unique compatible
-string. So you cannot have multiple mfd cells with the same
-compatible string.
-
-That being said, I can try to reimplement it using
-of_platform_populate() and its internal offset as its unit address.
-
-> Pick one way or the
-> other. It's ultimately a judgement call. For a one-off device, sub
-> devices in DT doesn't really buy you anything. If you have sub-blocks
-> showing up multiple devices, then sub devices makes sense. If there's
-> only 2-3 combinations, then it's a toss up.
-
--michael
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
