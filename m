@@ -2,60 +2,61 @@ Return-Path: <SRS0=MVeP=65=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-14.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MSGID_FROM_MTA_HEADER,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MENTIONS_GIT_HOSTING,MSGID_FROM_MTA_HEADER,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46146C433E0
-	for <linux-hwmon@archiver.kernel.org>; Fri, 15 May 2020 18:53:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB673C433E1
+	for <linux-hwmon@archiver.kernel.org>; Fri, 15 May 2020 18:53:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 154BC206D8
-	for <linux-hwmon@archiver.kernel.org>; Fri, 15 May 2020 18:53:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A405520728
+	for <linux-hwmon@archiver.kernel.org>; Fri, 15 May 2020 18:53:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=amdcloud.onmicrosoft.com header.i=@amdcloud.onmicrosoft.com header.b="UFnYWvNY"
+	dkim=pass (1024-bit key) header.d=amdcloud.onmicrosoft.com header.i=@amdcloud.onmicrosoft.com header.b="n8D/TSVH"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726221AbgEOSxB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 15 May 2020 14:53:01 -0400
-Received: from mail-eopbgr700061.outbound.protection.outlook.com ([40.107.70.61]:23904
+        id S1726223AbgEOSxD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 15 May 2020 14:53:03 -0400
+Received: from mail-eopbgr700077.outbound.protection.outlook.com ([40.107.70.77]:45217
         "EHLO NAM04-SN1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726144AbgEOSxB (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 15 May 2020 14:53:01 -0400
+        id S1726144AbgEOSxD (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 15 May 2020 14:53:03 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZjnTFaehwPo/12rGEFp39pDUH8FUOv4DZVXZ9Y3uuYB8QcIfmO2Kg2/Zir14ZdOq5nBtvAPrSnWyqpU/J48jTmXxKALFbr8u9oJFPptr1jWHa2qoHU5JkErPriZ1lfGFZXKzKtQ1HXGSaFvbAJpucw7HWk/eUXdCnFCAJX/deBDtGBYf6+KOTugW2Q6YxnlLvVnQhDRWbk7/BieOEacHYZUay2qCXXwsdWuQV8TAuK0uusQ/sFLeX+5f/YiWwwH1THKhWy5Rtf7jD8Z5jWAX8g9hJ/A+uxa/p+BMjRaIXcFht4Cn6JP9OJsZGPNIGLAes0xatV4KQPQmk6jTSyufSw==
+ b=D4mhE9wJnOUMKEvgP4/NSHeyxZMpchVz6wloZRP4qPs9t2aE5GSVN+6AI0tmP1OfUPMXcmD8ThRzI2G00tIV7ughYroW/hFV+3V4XY56RZkP6lc98eogr9GavN0op0rTPEnHhgEYbftsfvRR/WDA4rV0gc6zy8r6N7+0HC+NWvXW/U3walwI+9QSkSZHJjUPU5SWKVDGlZXka5eWsu8swD8lbOEJG9UBMe7bx6fFprN11Oi6BFUoHHncmZNp2NKuft90MgFXayZ+uHqTFED1vstPxeL9GF6E86T/ifn4HFFPrtzNcZqx+z2GMX8o0f7Ydxr7b9OzVdFNiOv5GeEhMQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Hb8cIk+3E8YbhwNG2ftK6AU63vjk07+cDbSEsuJ4mfg=;
- b=BNJKsBdMpoigwWtWHnjGBgp0ZBFZt1LLV2jWFZd8bF2Xm4cU/dv6nfBllnU7QtqS2BCSlJTRFThH0SA/DwYY9H9qDJp4fGxYvco+dJQOlOz8n8Zg76oly7zjNfysAeK7rYTRADNRT3N66SrRRHUKtQo48piI+EC4zfQ3Is4ZHWnnAGMXbdtsokQ5bH45S89VukEktKThIFUlCG07ulN1uL7TEETwxhIw9aYueHEnYe3o1pSH4tOWEQOFx0MbDohdrqLUTtu9vzVR9HCQM0R9tre2PaUDkMT2TqidpiE8JfIdpdRImwlh/scK0sFZ6r3gkxBqOSBJEhx8yML5867VHA==
+ bh=OOinFidRBjYbV5iC5lH6fB1KecSfu632JbR9h4uoYmg=;
+ b=LbXL3DJeyIs6Ih3nra+WhkNeWvew9mduHfM52Oo8XqyODm0Bl8x/LQxWdrrBiywr3SuE+qD8pNZ+fwrBvsTSIZrvMPMyosbjDDB94G8sF9yLOKxiWWHCGuJLYMiV+OXdzlVjqveXIgRAYYESpzE/ouFPUs+ATJAyrbzT1IRRGJH9DEbGkgfANEdXwv6MbNhPTronw1DVN9t4M8WVLHAzosjWC3vyVFAfiHgz4qIWJP9BIfAimjCcYkAsXC1rVbfRFeTpD8yhvQCFjKPkTEWj626badkM6i8DDIflfTlXXMwKYPKTQHJMIdXacTt3PqmNcICsDMbAARMYMceli5xvnA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Hb8cIk+3E8YbhwNG2ftK6AU63vjk07+cDbSEsuJ4mfg=;
- b=UFnYWvNYCtUnJI2Qtp4l/nres2XspKz+U5MrHFzbfCrMJ+1Evr7wkeS4tsouY7620qsVQxLYWDIRV2zZJtC0VqhOXEDajp80O+TipkT7OJHSFJmpI+Bn44NUYHNf79XsY7XocKsSr/pNs4IoBmGVG5ES6KU43mI2tVERrHiMaAg=
+ bh=OOinFidRBjYbV5iC5lH6fB1KecSfu632JbR9h4uoYmg=;
+ b=n8D/TSVHY3kMVlNwFRzTiUpFW1lzonGeD/+HRCZ9IkCceVG3Vz2CVMAOt4Bm/xr9A5gWw+GwbTjk3GXoQlegTWWvj+i0J3LfzPoQ3+JyOvoxOT4FPPoEUa7Zq44d4yByqEME1uHil+6Tv2VZwjizU/l3RID8mXb6C5KGTnuX/tI=
 Authentication-Results: vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=none action=none header.from=amd.com;
 Received: from BY5PR12MB4212.namprd12.prod.outlook.com (2603:10b6:a03:202::8)
  by BY5PR12MB3860.namprd12.prod.outlook.com (2603:10b6:a03:1ac::25) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3000.26; Fri, 15 May
- 2020 18:52:58 +0000
+ 2020 18:53:01 +0000
 Received: from BY5PR12MB4212.namprd12.prod.outlook.com
  ([fe80::9ce:3ab2:f0ee:47b2]) by BY5PR12MB4212.namprd12.prod.outlook.com
  ([fe80::9ce:3ab2:f0ee:47b2%5]) with mapi id 15.20.3000.016; Fri, 15 May 2020
- 18:52:58 +0000
+ 18:53:01 +0000
 From:   Naveen Krishna Chatradhi <nchatrad@amd.com>
 To:     linux-hwmon@vger.kernel.org
 Cc:     naveenkrishna.ch@gmail.com,
         Naveen Krishna Chatradhi <nchatrad@amd.com>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 2/3 v6] hwmon: (amd_energy) Add documentation
-Date:   Sat, 16 May 2020 00:22:33 +0530
-Message-Id: <20200515185234.30687-2-nchatrad@amd.com>
+Subject: [PATCH 3/3 v6] MAINTAINERS: add entry for AMD energy driver
+Date:   Sat, 16 May 2020 00:22:34 +0530
+Message-Id: <20200515185234.30687-3-nchatrad@amd.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200515185234.30687-1-nchatrad@amd.com>
 References: <20200515185234.30687-1-nchatrad@amd.com>
@@ -65,170 +66,65 @@ X-ClientProxiedBy: MA1PR0101CA0034.INDPRD01.PROD.OUTLOOK.COM
  (2603:10b6:a03:202::8)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from milan-ETHANOL-X.amd.com (165.204.156.251) by MA1PR0101CA0034.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:22::20) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3000.20 via Frontend Transport; Fri, 15 May 2020 18:52:56 +0000
+Received: from milan-ETHANOL-X.amd.com (165.204.156.251) by MA1PR0101CA0034.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:22::20) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3000.20 via Frontend Transport; Fri, 15 May 2020 18:52:59 +0000
 X-Mailer: git-send-email 2.17.1
 X-Originating-IP: [165.204.156.251]
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 4d6c3325-3a71-4445-3e7b-08d7f9012f5c
+X-MS-Office365-Filtering-Correlation-Id: 4f552f04-3660-46a7-8d6e-08d7f9013123
 X-MS-TrafficTypeDiagnostic: BY5PR12MB3860:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BY5PR12MB3860DA00D584ACDBD06E5C0CE8BD0@BY5PR12MB3860.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-Microsoft-Antispam-PRVS: <BY5PR12MB3860C59F357825A0223252A1E8BD0@BY5PR12MB3860.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1227;
 X-Forefront-PRVS: 04041A2886
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mr9CyKQj73VNog7OjV5NBa81OcqOgZ6LuRh519D5iUTx5v4FbnDJFX8hSlFzPLZH8lAocvclQkdqNVUUx2VKLyeMS8416IRdimqFlWmdlM5r8T4Vz3OhvN6IHCO0UfKh1u9UbzQ1JALLEEpRqt1ajAcOaTRFbiZyvkPNVHEQ8P/lJAm+cFl9c1Uc3C7H9gUaQdfMwMTwdA60DyKYpIwcMLdzbJgAvgkl6R1j4nAAvgyFLV3ZPKhzC6HcaD2ayubZddkUczRmnUw8f8/qMOzZR5W6GDbFkokHdNWOSvvJu9koVjHVpPe2L7Zne5/3brhO+/k99SEaAy2G/eps5Gm/1BeuZxljrFhGWSBp/bOPtYcYWng8xGHmD+Y+vRnMNMCjqKYSiK5XMjY+khHmI2thNb14kMJT8CZaDSezi/LSCQXW3XhrEo6QKrpxs7JjEpfUAAc4Oq4JQevxx873Gqwda8xdZ6XMJJdn3Nm+N4Oo7fCbBWiSUH1NaZE7QFz6L/gu4Awy/Qrkiue7DQjESX8rOwHlPme3mONS3PTrXKQmrSgHWbdyYmMWXsbL4AMORCQJnfVxqQuKe5xCmAX8ujQhV9PbEE9ELOR5SuTvQgU8iUo0xgJKuge0Lr+YX/C1PpJa
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4212.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(39860400002)(376002)(136003)(346002)(396003)(366004)(2906002)(36756003)(7696005)(6916009)(478600001)(66946007)(956004)(5660300002)(66556008)(186003)(4326008)(52116002)(1076003)(66476007)(16526019)(2616005)(6486002)(8676002)(8936002)(6666004)(54906003)(26005)(966005)(316002)(24770200002)(43620500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: 0Z7AScBfq9IhV3Epy6wy8huA6fU2q1/ZCbZfVvLG2qHEhliESbTA8CHcXdwxdT/djiAnjiXdGHXwxqAX73VONsV6jcgbIVt4GhXyNYMuPxLAsrByQZJlkM91ncoPgeatuHMwCar8tQCXNH8aHPllLTJQ7cmvOAp3AqNkLJa8qpZYu3n7evYr7UoZmLTYDWyBjX2x1vxs+MzD2+hk8Sbo3M5firjabSlrDR/m3PiIvax6YxcZ1yVyldhj2VfkxgY2QAwPS26YY+xT0876gGUcGT9oM5Tzs/mdr2QDbDFEP95fKXY+hZ+kOTTm2sFK+Ad49/nDUgDG03fV3LXPEt3wi65FIBgPYhL8MegDEuLlJRnttWZ4SmDuSJNl6loCbhB2h/QafkYJsoeBV9cknjHO7GPH3qpLr7VES1xYVGfWyYJ8AlNCKWSr0aiIG7r7/XHYcWBL/M9pZ1hvveD6rz7mh5rgpwoSkoC7RsE1DbTdaL98q1ovzv0cBwxaidGiXDoO
+X-Microsoft-Antispam-Message-Info: Qf67kYDSz85BpMzRvtgINGSD6DcVLNfr5+cBIy+MXhQC/epdQe7qBkk1MKqzGiZG76GcFhnohyBq7h5s0PXc99CC781XXfu6iVBxtGiEtGveLfx+eHc0NPYNCLXSj5YXRchf+zJwGhwTmu8Jlg6VCGgPq9XZulSlmD6fBD8tLjejeeVKS4dtXIimwAoohPqGQDV4Trtotjis78pR8qbjjtN7jCzo50J337tUIixl3ZkU3+yFTkcln79Kd2LG9EvW56ofN6zgI8oILDhYdnTskEG/Zb+J3WB5+LdowR6ysYvwcpeOixilIXawzZykENgU+STxVTJiDlIUinb8PDOhIk+orLWegF0Yjw7FHj3z37XZrn4Lx2Z7kuLA1X+nfFAiJ3bpxtGoxmLaYC9Zo4yPEhvGoFHIx4PPYx7WWm4BB9V7TBHcHgDFizfIVgfihcnI
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4212.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(39860400002)(376002)(136003)(346002)(396003)(366004)(2906002)(36756003)(7696005)(6916009)(478600001)(66946007)(956004)(5660300002)(4744005)(66556008)(186003)(4326008)(52116002)(1076003)(66476007)(16526019)(2616005)(6486002)(8676002)(8936002)(6666004)(54906003)(26005)(316002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: QAn+w/KuHhLPQLrcm2KcLFaAHnlTzTeVHYqSS1/UqcObRxp2+wdkX8HQE5lOOpELQkHlTpshvX7PV1kA49EWWNaPq/luE5bvFV4UrjN9R7HyGIHNwOO0pjnGrOCanaXtYEG+cY053NguEdpCmbnlqgFX2K1tKIroa8mObobqBKoyIH4OMhag+FFOwpbirI3yOIYTA11cfWUspykdLzV+tY9+grZCFC0zn6mXSOHzV7bfTxghOSKyFazUuEi/ukTInk+TUYv139K5ufZRwFVVM08qLwhsEBO8P34C1t9pqk5xJvQaSovRFMobeiprSZmIYM7NK0BOxfQP9HqYFZaT2THKHN4gVbc1H8aPn8MHHNwZzFYUw40cZ/2KHxvlKE49FlAIHZ1SjKH8TAvM9N0vFnExWJD5whfZOS62dcf2jgj6mfZom2by2LbG/EasDErNJb2LClc1GmFr/ZoGEOUwgCqJG1EI2gaYWQOLc1wWEAqUew9eIeErNjc5DB8ooeOZ
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4d6c3325-3a71-4445-3e7b-08d7f9012f5c
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2020 18:52:58.3053
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4f552f04-3660-46a7-8d6e-08d7f9013123
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2020 18:53:01.5690
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: w/zjvrYJjfkOl4SHfaUcXnPknrZnsTaPpCFv2tMFbcSi565FB4jU2wcLoASh72OMY+eSadxhjOO3onHGUwWJmA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: CiEe0EoPyrewl3w3Hy7J7sO6JJjOENqtNSc+7+8eI7bcCe8MMgPrBUOwENv/e15hESQze4LIzb0/9l5sTk0njg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB3860
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Document amd_energy driver with all chips supported by it.
+The kernel driver is part of HWMON subsystem.
 
 Cc: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
 ---
-Changes in v6:
-1. Update energy accumulation section
+Change in v6:
+None
 
- Documentation/hwmon/amd_energy.rst | 103 +++++++++++++++++++++++++++++
- Documentation/hwmon/index.rst      |   1 +
- 2 files changed, 104 insertions(+)
- create mode 100644 Documentation/hwmon/amd_energy.rst
+ MAINTAINERS | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/Documentation/hwmon/amd_energy.rst b/Documentation/hwmon/amd_energy.rst
-new file mode 100644
-index 000000000000..4bf5997db22b
---- /dev/null
-+++ b/Documentation/hwmon/amd_energy.rst
-@@ -0,0 +1,103 @@
-+.. SPDX-License-Identifier: GPL-2.0
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 091ec22c1a23..7e7393f9a0e5 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -842,6 +842,13 @@ S:	Supported
+ T:	git git://people.freedesktop.org/~agd5f/linux
+ F:	drivers/gpu/drm/amd/display/
+ 
++AMD ENERGY DRIVER
++M:	Naveen Krishna Chatradhi <nchatrad@amd.com>
++L:	linux-hwmon@vger.kernel.org
++S:	Maintained
++F:	Documentation/hwmon/amd_energy.rst
++F:	drivers/hwmon/amd_energy.c
 +
-+Kernel driver amd_energy
-+==========================
-+
-+Supported chips:
-+
-+* AMD Family 17h Processors
-+
-+  Prefix: 'amd_energy'
-+
-+  Addresses used:  RAPL MSRs
-+
-+  Datasheets:
-+
-+  - Processor Programming Reference (PPR) for AMD Family 17h Model 01h, Revision B1 Processors
-+
-+	https://developer.amd.com/wp-content/resources/55570-B1_PUB.zip
-+
-+  - Preliminary Processor Programming Reference (PPR) for AMD Family 17h Model 31h, Revision B0 Processors
-+
-+	https://developer.amd.com/wp-content/resources/56176_ppr_Family_17h_Model_71h_B0_pub_Rev_3.06.zip
-+
-+Author: Naveen Krishna Chatradhi <nchatrad@amd.com>
-+
-+Description
-+-----------
-+
-+The Energy driver exposes the energy counters that are
-+reported via the Running Average Power Limit (RAPL)
-+Model-specific Registers (MSRs) via the hardware monitor
-+(HWMON) sysfs interface.
-+
-+1. Power, Energy and Time Units
-+   MSR_RAPL_POWER_UNIT/ C001_0299:
-+   shared with all cores in the socket
-+
-+2. Energy consumed by each Core
-+   MSR_CORE_ENERGY_STATUS/ C001_029A:
-+   32-bitRO, Accumulator, core-level power reporting
-+
-+3. Energy consumed by Socket
-+   MSR_PACKAGE_ENERGY_STATUS/ C001_029B:
-+   32-bitRO, Accumulator, socket-level power reporting,
-+   shared with all cores in socket
-+
-+These registers are updated every 1ms and cleared on
-+reset of the system.
-+
-+Energy Caluclation
-+------------------
-+
-+Energy information (in Joules) is based on the multiplier,
-+1/2^ESU; where ESU is an unsigned integer read from
-+MSR_RAPL_POWER_UNIT register. Default value is 10000b,
-+indicating energy status unit is 15.3 micro-Joules increment.
-+
-+Reported values are scaled as per the formula
-+
-+scaled value = ((1/2^ESU) * (Raw value) * 1000000UL) in uJoules
-+
-+Users calculate power for a given domain by calculating
-+	dEnergy/dTime for that domain.
-+
-+Energy accumulation
-+--------------------------
-+
-+Current, Socket energy status register is 32bit, assuming a 240W
-+2P system, the register would wrap around in
-+
-+	2^32*15.3 e-6/240 * 2 = 547.60833024 secs to wrap(~9 mins)
-+
-+The Core energy register may wrap around after several days.
-+
-+To improve the wrap around time, a kernel thread is implemented
-+to accumulate the socket energy counters and one core energy counter
-+per run to a respective 64-bit counter. The kernel thread starts
-+running during probe, wakes up every 100secs and stops running
-+when driver is removed.
-+
-+A socket and core energy read would return the current register
-+value added to the respective energy accumulator.
-+
-+Sysfs attributes
-+----------------
-+
-+=============== ========  =====================================
-+Attribute	Label	  Description
-+===============	========  =====================================
-+
-+* For index N between [1] and [nr_cpus]
-+
-+===============	========  ======================================
-+energy[N]_input EcoreX	  Core Energy   X = [0] to [nr_cpus - 1]
-+			  Measured input core energy
-+===============	========  ======================================
-+
-+* For N between [nr_cpus] and [nr_cpus + nr_socks]
-+
-+===============	========  ======================================
-+energy[N]_input EsocketX  Socket Energy X = [0] to [nr_socks -1]
-+			  Measured input socket energy
-+=============== ========  ======================================
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index 8ef62fd39787..fc4b89810e67 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -39,6 +39,7 @@ Hardware Monitoring Kernel Drivers
-    adt7470
-    adt7475
-    amc6821
-+   amd_energy
-    asb100
-    asc7621
-    aspeed-pwm-tacho
+ AMD FAM15H PROCESSOR POWER MONITORING DRIVER
+ M:	Huang Rui <ray.huang@amd.com>
+ L:	linux-hwmon@vger.kernel.org
 -- 
 2.17.1
 
