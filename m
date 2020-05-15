@@ -2,114 +2,67 @@ Return-Path: <SRS0=MVeP=65=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47C6AC433E1
-	for <linux-hwmon@archiver.kernel.org>; Fri, 15 May 2020 15:23:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 517B4C433E0
+	for <linux-hwmon@archiver.kernel.org>; Fri, 15 May 2020 17:30:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2AD1D20709
-	for <linux-hwmon@archiver.kernel.org>; Fri, 15 May 2020 15:23:02 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="alW5P+uE"
+	by mail.kernel.org (Postfix) with ESMTP id 310EE2073E
+	for <linux-hwmon@archiver.kernel.org>; Fri, 15 May 2020 17:30:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1589563813;
+	bh=H7r8JOVXcXDVJJi5IhEOv9pbTm0V+PoBDVDqWSDZuM0=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:List-ID:From;
+	b=eWed7N79rNB5MUdKkwPGXZ8P9yNRjlvZ7Ytre6Sjh7mj1voL/lNSsfN8b7FfpsO3J
+	 qfWj/D+fdcNlcXWYnabSmQ6NrnMZRKmo33tDq2EgY5VnQuLL9i53YV2V8oU8kKw9KO
+	 cYV/4ZyWShtYpTSq8S1mDNKfVXOINJUGrja+aSW4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726589AbgEOPXB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 15 May 2020 11:23:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42824 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726228AbgEOPXA (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 15 May 2020 11:23:00 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A67CC061A0C;
-        Fri, 15 May 2020 08:22:59 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id y18so1080045pfl.9;
-        Fri, 15 May 2020 08:22:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id;
-        bh=JXjW8Fwqqx8e6N0SOGdmxsBYaPVx0pjA+VT2dzb7g4k=;
-        b=alW5P+uETtrTiaACW/tUwzhy3RCwja3lJqg1Lbd4iEe4TEO5mTDUK0tloWjLUiHl8x
-         EuKfWC5TaQbe4P6uqsCBiLuQ1Z6lgBPzIv+aBIDGn6yAo554QIpCo/zRfn7Bvb4jHj/S
-         pNnDpJC4JBuklJK49L4ydNuy0fEFWW7KI3LtobUmnNOqvT5f8qAW8OkTkgv49KOpnloD
-         RTVAsgrcFT3KF8Z0oN5RDmSDriAogUs/k+gAdSwUe1nd8dheJDfMou2ygm8WkHitqXY9
-         Oy2a2k4RCo0ruaH/FkbeKHGtDwpGDtIHOkSxK8kp8Qz8B5NJFf7+bP4dEU7Sji6H+Po9
-         xdXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
-        bh=JXjW8Fwqqx8e6N0SOGdmxsBYaPVx0pjA+VT2dzb7g4k=;
-        b=lCI1PNi4t7/8D9ayLuHmt3pd1u4cEA7nOPGi3xNqGWFRyk5LDKGPEkpRVokdteWnVU
-         4/mI4JTJmFqeXqPdbpNFUnmtMNZshYnNOXhne4HuRbfxTTAqDDfhgy/RG9HsGmiUeeOc
-         gJWuI4vBKK+2Cm5doP2qsa4NV7FeyxoLheVXQs789yuQExXt8gGuAx33sd0wSLXEyx6E
-         dsPm2RCy5jEiyB2PCWvBncgzO+0tqnaq6+xkapO7CPCQwPbRMVYu5h19q8Ag23huIupW
-         IXw9NDVsW9W/OvtrSSGB5jTrJI06rWmQRUEDdwhwxIa2otoQP1dHI0mBz3oOTrBkfYlV
-         M+Ow==
-X-Gm-Message-State: AOAM531CP91Oqk0h5B4ywI6BzSVyfTs0Dpn8Ro0C0sdxVNY1vuRNL6yX
-        xljE7N0RJkftqj57B3x39I4XUAc+
-X-Google-Smtp-Source: ABdhPJy9aGh/4wMhQRWaxXuCWxaoEDf873E7pBLKiaUv4NwXPA1PMgY9TlorzZfhHvs0ynr32C4DSQ==
-X-Received: by 2002:a62:6341:: with SMTP id x62mr4494195pfb.289.1589556179070;
-        Fri, 15 May 2020 08:22:59 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t7sm1848406pjf.30.2020.05.15.08.22.57
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 15 May 2020 08:22:58 -0700 (PDT)
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v5.7-rc6
-Date:   Fri, 15 May 2020 08:22:56 -0700
-Message-Id: <20200515152256.175107-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.17.1
+        id S1726266AbgEORaF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 15 May 2020 13:30:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54974 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726233AbgEORaF (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 15 May 2020 13:30:05 -0400
+Subject: Re: [GIT PULL] hwmon fixes for v5.7-rc6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589563804;
+        bh=H7r8JOVXcXDVJJi5IhEOv9pbTm0V+PoBDVDqWSDZuM0=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=nJzA09EYFjF/awprp+XUyOQb/YzSGkOcyfH9fyYf70Hcjs/Xq5bkq696I8iAupOoD
+         wGzzwk/94bsGS38+BNargOEyE3HmzjE9YS36HDjGM47tEehjOM+er3n7UwqFLLaa0T
+         7/BO808LAZf6qwGGQGNiaOzBZZ9agh3HnukFB09o=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20200515152256.175107-1-linux@roeck-us.net>
+References: <20200515152256.175107-1-linux@roeck-us.net>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20200515152256.175107-1-linux@roeck-us.net>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
+ hwmon-for-v5.7-rc6
+X-PR-Tracked-Commit-Id: 333e22db228f0bd0c839553015a6a8d3db4ba569
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 051e6b7e34b9bd24f46725f74994a4d3a653966e
+Message-Id: <158956380473.31776.13184431620388889550.pr-tracker-bot@kernel.org>
+Date:   Fri, 15 May 2020 17:30:04 +0000
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Linus,
+The pull request you sent on Fri, 15 May 2020 08:22:56 -0700:
 
-Please pull hwmon fixes for Linux v5.7-rc6 from signed tag:
+> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.7-rc6
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.7-rc6
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/051e6b7e34b9bd24f46725f74994a4d3a653966e
 
-Thanks,
-Guenter
-------
+Thank you!
 
-The following changes since commit ae83d0b416db002fe95601e7f97f64b59514d936:
-
-  Linux 5.7-rc2 (2020-04-19 14:35:30 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v5.7-rc6
-
-for you to fetch changes up to 333e22db228f0bd0c839553015a6a8d3db4ba569:
-
-  hwmon: (da9052) Synchronize access with mfd (2020-05-13 10:06:09 -0700)
-
-----------------------------------------------------------------
-hwmon fixes for v5.7-rc6
-
-Fix ADC access synchronization problem with da9052 driver
-Fix temperature limit and status reporting in nct7904 driver
-Fix drivetemp temperature reporting if SCT is supported
-but SCT data tables are not.
-
-----------------------------------------------------------------
-Amy Shih (2):
-      hwmon: (nct7904) Read all SMI status registers in probe function
-      hwmon: (nct7904) Fix incorrect range of temperature limit registers
-
-Guenter Roeck (1):
-      hwmon: (drivetemp) Fix SCT support if SCT data tables are not supported
-
-Samu Nuutamo (1):
-      hwmon: (da9052) Synchronize access with mfd
-
- drivers/hwmon/da9052-hwmon.c |  4 ++--
- drivers/hwmon/drivetemp.c    |  2 +-
- drivers/hwmon/nct7904.c      | 12 +++++++++++-
- 3 files changed, 14 insertions(+), 4 deletions(-)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
