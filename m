@@ -2,191 +2,255 @@ Return-Path: <SRS0=MVeP=65=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	LONGWORDS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 792E0C433E1
-	for <linux-hwmon@archiver.kernel.org>; Fri, 15 May 2020 06:58:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5A42C433E2
+	for <linux-hwmon@archiver.kernel.org>; Fri, 15 May 2020 10:28:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5C593206F1
-	for <linux-hwmon@archiver.kernel.org>; Fri, 15 May 2020 06:58:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9C25B20759
+	for <linux-hwmon@archiver.kernel.org>; Fri, 15 May 2020 10:28:56 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CXEYEEqc"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726821AbgEOG6E (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 15 May 2020 02:58:04 -0400
-Received: from mga07.intel.com ([134.134.136.100]:45729 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727910AbgEOG6E (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 15 May 2020 02:58:04 -0400
-IronPort-SDR: X1NwVPlOkRMrvesgQ6oQi4JXjv8u5opnTLiBrwftJo2dAB26Wwcl75lyZ96dbE1shvD1rw27tr
- gmQxF+/TlR9A==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2020 23:58:03 -0700
-IronPort-SDR: PRlLhEfoHYAbsSAiN/UuGnnx2SzxXbbAEbZpZI8HbB2mgzNrRc0cU5WST/pCTIdZYHmADGGmsp
- zRyzqU6adF3w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,394,1583222400"; 
-   d="scan'208";a="298959680"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 14 May 2020 23:58:02 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1jZUID-0005Lo-Ou; Fri, 15 May 2020 14:58:01 +0800
-Date:   Fri, 15 May 2020 14:57:56 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon-next] BUILD SUCCESS
- 9b7f228e84edae4b962df35ac7d0fecaabfe1e19
-Message-ID: <5ebe3d74.9YHSnIfddz33mXNy%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1728079AbgEOK24 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 15 May 2020 06:28:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53234 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728213AbgEOK2y (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 15 May 2020 06:28:54 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00899C061A0C
+        for <linux-hwmon@vger.kernel.org>; Fri, 15 May 2020 03:28:52 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id h17so2898021wrc.8
+        for <linux-hwmon@vger.kernel.org>; Fri, 15 May 2020 03:28:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=xpA4uoROidais1iNpnkNzF9vq5C6X235V0wZ35uHdEI=;
+        b=CXEYEEqcvkty6QbjHU8IC9+4m00nYkEX+SNv9RcxVR5/SFF+YXke+BvJ6oVoOabQdZ
+         zNfD971SDDWzHM8i6tMy7Ide1qyTwoimukooCDQG010KoMF5GvG2qiwCDrJzTOJ/ST1J
+         prbm8Ynnzt8vqseddRKMMZbinTDqtdohbq4rUwGgpc6TUwZFSsD+mzok7VbjTnaA+NPE
+         7SxmiCj38OP6B2dbzDqJc0ZqywE58/rTxvAnd+HOSQ/e7PuK5vIet7N3V1P5fBuJTFqx
+         810hQ3AwpINxJ1EOF2q5K54I50ZckVeqd/fsfxWyzTJVbsxau3rGuKWQxQF/tGuS+Hp3
+         egGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=xpA4uoROidais1iNpnkNzF9vq5C6X235V0wZ35uHdEI=;
+        b=chWtRQ4e0Znm2/56vMojefgMHM9vgf/c1hJd9xhRT4DfM/lKsHd4fE7AGDu/liWLuH
+         1NpT6Q+Z/TYOLq9nXa6+7V6h+wByCo/QReb4qsbKrR5d2ERaKFlwKsU5wSdJCobxbxru
+         IYWeldqOrDb4Rgr7Ots+4aQHbFxjYSL0sGUMA8e0b/57VPE5bYshY6NlSREajn7nufm8
+         m+qMcMw9nBtyjKYgnk6FJ0GmadwcWSLFsv82GLbDzfjqOGZhz7h6IMGf5sk5/sCXAT8b
+         rDfsvjx4++BGTvJf2Wvgjb5XyFFU2RZbWaULuk9cRcfmqJ06UFUEKhtr6i73wctsz+Jx
+         BWSw==
+X-Gm-Message-State: AOAM530QfwifuwuKWinyf2Bn5UDRv9R1U1/p5fiuYV5JWe8AnwGf9wNx
+        ULl8+/o8fN4Lu8di1w+b6fkbbA==
+X-Google-Smtp-Source: ABdhPJxTv+9YnkgoMuYBGuW3wQDNEiVk0bNzw09WJsjwgIV7JP0J+YUnU47dJL1yqsEb92xCMVOBXw==
+X-Received: by 2002:adf:a1d7:: with SMTP id v23mr3514719wrv.155.1589538531500;
+        Fri, 15 May 2020 03:28:51 -0700 (PDT)
+Received: from dell ([2.31.163.63])
+        by smtp.gmail.com with ESMTPSA id j16sm2878629wru.13.2020.05.15.03.28.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 May 2020 03:28:50 -0700 (PDT)
+Date:   Fri, 15 May 2020 11:28:48 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3 03/16] mfd: mfd-core: match device tree node against
+ reg property
+Message-ID: <20200515102848.GH271301@dell>
+References: <20200423174543.17161-1-michael@walle.cc>
+ <20200423174543.17161-4-michael@walle.cc>
+ <67e90dafd67c285158c2c6f67f92edb7@walle.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <67e90dafd67c285158c2c6f67f92edb7@walle.cc>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon-next
-branch HEAD: 9b7f228e84edae4b962df35ac7d0fecaabfe1e19  hwmon: (lm90) Add max6654 support to lm90 driver
+On Thu, 30 Apr 2020, Michael Walle wrote:
 
-elapsed time: 484m
+> Hi Lee,
+> 
+> Am 2020-04-23 19:45, schrieb Michael Walle:
+> > There might be multiple children with the device tree compatible, for
+> > example if a MFD has multiple instances of the same function. In this
+> > case only the first is matched and the other children get a wrong
+> > of_node reference.
+> > Add a new option to match also against the unit address of the child
+> > node. Additonally, a new helper OF_MFD_CELL_REG is added.
+> 
+> 
+> Do you think this is feasible? I guess this is the biggest uncertainty
+> for me at the moment in this patch series.
 
-configs tested: 125
-configs skipped: 5
+I think it sounds fine in principle.  So long as it doesn't change the
+existing behaviour when of_reg isn't set.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> > Signed-off-by: Michael Walle <michael@walle.cc>
+> > ---
+> >  drivers/mfd/mfd-core.c   | 29 ++++++++++++++++++++---------
+> >  include/linux/mfd/core.h | 26 ++++++++++++++++++++------
+> >  2 files changed, 40 insertions(+), 15 deletions(-)
+> > 
+> > diff --git a/drivers/mfd/mfd-core.c b/drivers/mfd/mfd-core.c
+> > index e735565969b3..4ecb376338f7 100644
+> > --- a/drivers/mfd/mfd-core.c
+> > +++ b/drivers/mfd/mfd-core.c
+> > @@ -117,6 +117,7 @@ static int mfd_add_device(struct device *parent, int
+> > id,
+> >  	struct device_node *np = NULL;
+> >  	int ret = -ENOMEM;
+> >  	int platform_id;
+> > +	u32 of_reg;
+> >  	int r;
+> > 
+> >  	if (id == PLATFORM_DEVID_AUTO)
+> > @@ -151,16 +152,26 @@ static int mfd_add_device(struct device *parent,
+> > int id,
+> > 
+> >  	if (parent->of_node && cell->of_compatible) {
+> >  		for_each_child_of_node(parent->of_node, np) {
+> > -			if (of_device_is_compatible(np, cell->of_compatible)) {
+> > -				if (!of_device_is_available(np)) {
+> > -					/* Ignore disabled devices error free */
+> > -					ret = 0;
+> > -					goto fail_alias;
+> > -				}
+> > -				pdev->dev.of_node = np;
+> > -				pdev->dev.fwnode = &np->fwnode;
+> > -				break;
+> > +			if (!of_device_is_compatible(np, cell->of_compatible))
+> > +				continue;
+> > +
+> > +			/* also match the unit address if set */
 
-arm                                 defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                               allnoconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm64                            allmodconfig
-arm64                             allnoconfig
-sparc                            allyesconfig
-mips                             allyesconfig
-m68k                             allyesconfig
-mips                         rt305x_defconfig
-arm                           corgi_defconfig
-m68k                       m5208evb_defconfig
-powerpc                       holly_defconfig
-arm                        oxnas_v6_defconfig
-mips                           ip27_defconfig
-sparc                            alldefconfig
-mips                  decstation_64_defconfig
-mips                            e55_defconfig
-m68k                          multi_defconfig
-powerpc                     mpc5200_defconfig
-arc                        nsim_700_defconfig
-riscv                    nommu_virt_defconfig
-arm                  colibri_pxa270_defconfig
-arc                          axs103_defconfig
-s390                       zfcpdump_defconfig
-powerpc                       maple_defconfig
-sh                           se7722_defconfig
-sh                          r7785rp_defconfig
-h8300                            alldefconfig
-ia64                             allmodconfig
-sh                 kfr2r09-romimage_defconfig
-c6x                        evmc6678_defconfig
-sh                            shmin_defconfig
-arm                        neponset_defconfig
-arm                         socfpga_defconfig
-m68k                        m5407c3_defconfig
-arm                        multi_v7_defconfig
-i386                              allnoconfig
-i386                             allyesconfig
-i386                                defconfig
-i386                              debian-10.3
-ia64                                defconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                              allnoconfig
-m68k                           sun3_defconfig
-m68k                                defconfig
-nios2                               defconfig
-nios2                            allyesconfig
-openrisc                            defconfig
-c6x                              allyesconfig
-c6x                               allnoconfig
-openrisc                         allyesconfig
-nds32                               defconfig
-nds32                             allnoconfig
-csky                             allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-h8300                            allmodconfig
-xtensa                              defconfig
-arc                                 defconfig
-arc                              allyesconfig
-sh                               allmodconfig
-sh                                allnoconfig
-microblaze                        allnoconfig
-mips                              allnoconfig
-mips                             allmodconfig
-parisc                            allnoconfig
-parisc                              defconfig
-parisc                           allyesconfig
-parisc                           allmodconfig
-powerpc                             defconfig
-powerpc                          allyesconfig
-powerpc                          rhel-kconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a006-20200515
-i386                 randconfig-a005-20200515
-i386                 randconfig-a003-20200515
-i386                 randconfig-a001-20200515
-i386                 randconfig-a004-20200515
-i386                 randconfig-a002-20200515
-x86_64               randconfig-a005-20200515
-x86_64               randconfig-a003-20200515
-x86_64               randconfig-a006-20200515
-x86_64               randconfig-a004-20200515
-x86_64               randconfig-a001-20200515
-x86_64               randconfig-a002-20200515
-i386                 randconfig-a012-20200515
-i386                 randconfig-a016-20200515
-i386                 randconfig-a014-20200515
-i386                 randconfig-a011-20200515
-i386                 randconfig-a013-20200515
-i386                 randconfig-a015-20200515
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-s390                             allyesconfig
-s390                              allnoconfig
-s390                             allmodconfig
-s390                                defconfig
-x86_64                              defconfig
-sparc                               defconfig
-sparc64                             defconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-sparc64                          allmodconfig
-um                               allmodconfig
-um                                allnoconfig
-um                               allyesconfig
-um                                  defconfig
-x86_64                                   rhel
-x86_64                               rhel-7.6
-x86_64                    rhel-7.6-kselftests
-x86_64                         rhel-7.2-clear
-x86_64                                    lkp
-x86_64                              fedora-25
-x86_64                                  kexec
+Please use correct grammar in comments (leaving off the full-stop).
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> > +			if (cell->of_reg & MFD_OF_REG_VALID) {
+> > +				if (of_property_read_u32(np, "reg", &of_reg))
+> > +					continue;
+> > +				if ((cell->of_reg & MFD_OF_REG_MASK) != of_reg)
+> > +					continue;
+> >  			}
+> > +
+> > +			if (!of_device_is_available(np)) {
+> > +				/* Ignore disabled devices error free */
+> > +				ret = 0;
+> > +				goto fail_alias;
+> > +			}
+> > +
+> > +			pdev->dev.of_node = np;
+> > +			pdev->dev.fwnode = &np->fwnode;
+> > +			break;
+> >  		}
+> >  	}
+> > 
+> > diff --git a/include/linux/mfd/core.h b/include/linux/mfd/core.h
+> > index d01d1299e49d..c2c0ad6b14f3 100644
+> > --- a/include/linux/mfd/core.h
+> > +++ b/include/linux/mfd/core.h
+> > @@ -13,8 +13,11 @@
+> >  #include <linux/platform_device.h>
+> > 
+> >  #define MFD_RES_SIZE(arr) (sizeof(arr) / sizeof(struct resource))
+> > +#define MFD_OF_REG_VALID	BIT(31)
+
+What about 64bit platforms?
+
+> > +#define MFD_OF_REG_MASK		GENMASK(30, 0)
+> > 
+> > -#define MFD_CELL_ALL(_name, _res, _pdata, _pdsize, _id, _compat,
+> > _match)\
+> > +#define MFD_CELL_ALL(_name, _res, _pdata, _pdsize, _id, _compat,	\
+> > +		     _of_reg, _match)					\
+> >  	{								\
+> >  		.name = (_name),					\
+> >  		.resources = (_res),					\
+> > @@ -22,24 +25,32 @@
+> >  		.platform_data = (_pdata),				\
+> >  		.pdata_size = (_pdsize),				\
+> >  		.of_compatible = (_compat),				\
+> > +		.of_reg = (_of_reg),					\
+> >  		.acpi_match = (_match),					\
+> >  		.id = (_id),						\
+> >  	}
+> > 
+> > +#define OF_MFD_CELL_REG(_name, _res, _pdata, _pdsize, _id, _compat,	\
+> > +			_of_reg)					\
+> > +	MFD_CELL_ALL(_name, _res, _pdata, _pdsize, _id, _compat,	\
+> > +		     ((_of_reg) | MFD_OF_REG_VALID), NULL)		\
+> > +
+> >  #define OF_MFD_CELL(_name, _res, _pdata, _pdsize,_id, _compat)		\
+> > -	MFD_CELL_ALL(_name, _res, _pdata, _pdsize, _id, _compat, NULL)	\
+> > +	MFD_CELL_ALL(_name, _res, _pdata, _pdsize, _id, _compat,	\
+> > +		     0, NULL)						\
+> > 
+> >  #define ACPI_MFD_CELL(_name, _res, _pdata, _pdsize, _id, _match)	\
+> > -	MFD_CELL_ALL(_name, _res, _pdata, _pdsize, _id, NULL, _match)	\
+> > +	MFD_CELL_ALL(_name, _res, _pdata, _pdsize, _id, NULL, 0,	\
+> > +		     _match)						\
+> > 
+> >  #define MFD_CELL_BASIC(_name, _res, _pdata, _pdsize, _id)		\
+> > -	MFD_CELL_ALL(_name, _res, _pdata, _pdsize, _id, NULL, NULL)	\
+> > +	MFD_CELL_ALL(_name, _res, _pdata, _pdsize, _id, NULL, 0, NULL) \
+> > 
+> >  #define MFD_CELL_RES(_name, _res)					\
+> > -	MFD_CELL_ALL(_name, _res, NULL, 0, 0, NULL, NULL)		\
+> > +	MFD_CELL_ALL(_name, _res, NULL, 0, 0, NULL, 0, NULL)		\
+> > 
+> >  #define MFD_CELL_NAME(_name)						\
+> > -	MFD_CELL_ALL(_name, NULL, NULL, 0, 0, NULL, NULL)		\
+> > +	MFD_CELL_ALL(_name, NULL, NULL, 0, 0, NULL, 0, NULL)		\
+> > 
+> >  struct irq_domain;
+> >  struct property_entry;
+> > @@ -78,6 +89,9 @@ struct mfd_cell {
+> >  	 */
+> >  	const char		*of_compatible;
+> > 
+> > +	/* matching the reg property if set */
+
+Proper grammar please.
+
+"OF unit address for device matching"
+
+> > +	unsigned int		of_reg;
+> > +
+> >  	/* Matches ACPI */
+> >  	const struct mfd_cell_acpi_match	*acpi_match;
+
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
