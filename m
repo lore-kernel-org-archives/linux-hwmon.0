@@ -2,66 +2,80 @@ Return-Path: <SRS0=LqIa=7B=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+X-Spam-Status: No, score=-5.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D2E0C433E0
-	for <linux-hwmon@archiver.kernel.org>; Tue, 19 May 2020 14:14:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8773FC433DF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 19 May 2020 15:28:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1978A207D8
-	for <linux-hwmon@archiver.kernel.org>; Tue, 19 May 2020 14:14:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5CFB0207FB
+	for <linux-hwmon@archiver.kernel.org>; Tue, 19 May 2020 15:28:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RWtb4SEG"
+	dkim=pass (1024-bit key) header.d=xilinx.onmicrosoft.com header.i=@xilinx.onmicrosoft.com header.b="X4vAVDCz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728737AbgESOOZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 19 May 2020 10:14:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54342 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728633AbgESOOY (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 19 May 2020 10:14:24 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC5B1C08C5C0;
-        Tue, 19 May 2020 07:14:24 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id y18so6587184pfl.9;
-        Tue, 19 May 2020 07:14:24 -0700 (PDT)
+        id S1729233AbgESP2i (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 19 May 2020 11:28:38 -0400
+Received: from mail-dm6nam10on2080.outbound.protection.outlook.com ([40.107.93.80]:12736
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726203AbgESP2h (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 19 May 2020 11:28:37 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Xm8Lpad4+2F9Ehxn0LeaaP9APl20jE0S1Jr1nDyNNkH+isVkjj2iGoBs3/8A3XlPdIMrVadj5TJHGFm/Ep1P9MyECFuc/jd2lWEIs12uETWNUHfNC6mkr4taOVTAZDeCDNFgu6xIaUut9vjPqFeIm1Jp8638poL43L/vj5l84rZCpBLFWBGIdfdroKa6JmOkEYrE8dn5gj/G0QUtbBHMCUc2iFy5rUFzP/W78sQan1A8Ed5KUsiBHoXXygNurfgLllTgFg3wesjh7rXyzwhhcqRUvCMSzgqyVP5x4W8qsx/ifVdxLa/lKGjQfuOYwr1OKSJLZFTK7lycExbdL2vXgA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JCkr78K4elGImNK2RCaTA/K0p1ePT4REONIl3tSsaOo=;
+ b=oE4V6wxPyZy2XHWl68cC5yZFt5G1FHonghKfouB1zEBiCVRvyodGKJVS4OVxfP9rMLl1TwTCAKh6PoEwwqYMWoe3zQiaEjL/8mPE8Ts5FZDzWJWBUM7ZCI3AnEZmxJH8Q5afaywkv+QZ03dPFz82S42A955bMHk1Uh3nEdLQ/qq4sFPJ/v8hrnsWu1g+MCsauwrFOx6uREBi/ErGgxuEIFuP2df9JAt1eRdpBA6a+GS5O7Uwo4oaKXXSvP5YZBsqAs2cx2sgU8y6ET928YnIx7MVx0T5/4CjRdoMAxAVaGvfICwU0PZzawFqtxRT6IOpu7IR3gNqLGUHhULCC6YgQA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.60.83) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=xilinx.com;
+ dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
+ not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=n6nj99MT5VnMbYi4sa2axsK+PhJ/0czyZ6v4F5+mrN4=;
-        b=RWtb4SEG8i0H0GB5ehrZhaZFULdBlGuy/FVGgAsK0UypYLvGekDBIPPnHiRlwdcy/o
-         brYsQzMk7bk589ceCKORt3RjKKqkmUnia9bXTEGpJL8SQ78MnztdT2Hq8P2prxuZwYLY
-         IyGUZNSliSPfNbB6HauCRIYXhx+/t3xzuEiBqi8hHBi8W3REm7UkcDY+A1LMEC4nPAgv
-         2ikySlzx9+cMcbJIXt5bdzYXo1ogYprq/5kYzbd0sP6cBkwhH/xnOvNf6vDVKylM4k0I
-         5ouLqGsCp1dawhG2jyoKQSsZurmvcvuIQBW+xgpRaLvIfUG2YdZ7vU1QoaDkNUFBGA6t
-         BvEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=n6nj99MT5VnMbYi4sa2axsK+PhJ/0czyZ6v4F5+mrN4=;
-        b=kL/coXYVahBqs1QjGGbmGIyFrYJzWo77T93EiA5sWLw1B7bhXDMTE+546Lup6Xng0j
-         IBqR+nFh47AyKmax2nJKnTYMKRp06e+qqwDUNa+P8kZgrDeZZuFBUnkHSyqmVH1Yf5H5
-         dxJd7QPeUnBVpjBwA33u7nYgWYABTlWdGjHlAmOEvI7SSS2CAlPoZNkScPvvaT+WPzwr
-         Tur26OFmkpo9RJfSj9NumB3ZKvre4W+pVrNqtadJJCVDd5FXiB54PYggzJbWSZ5m2TZS
-         MMwqaD43yaYXx3hNlRkbGCgx4cEjP4rFebtYQO0WCJDP5ux07pAhHbQ1JZP/7hbzDpVU
-         4P4w==
-X-Gm-Message-State: AOAM533iTfVDoE7o9lFWgYhm36z9pWz75fsu313gutzGFs6qi0tMqUNG
-        m+yoObDoyyXREvkAzMGyI3OCIFX9
-X-Google-Smtp-Source: ABdhPJw+/1fyKAecOwG0xlf74llbkA5RFHYrrZTT7Yh3CkRkUjWTQKL3et5fc/ZDAyV51S+581CK+A==
-X-Received: by 2002:a05:6a00:d2:: with SMTP id e18mr12656822pfj.252.1589897664103;
-        Tue, 19 May 2020 07:14:24 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t64sm10598398pgd.24.2020.05.19.07.14.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 May 2020 07:14:22 -0700 (PDT)
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JCkr78K4elGImNK2RCaTA/K0p1ePT4REONIl3tSsaOo=;
+ b=X4vAVDCzSfBH7oe1fC5EFPYvl0lxBphB21PUx1eD85I3RMNbZ5kfC9W6FRQXF0/Z7u2pPOMdSex1wnmECbSYRdGPDfx2TRMWoE14Gh+PRoKYaJIrzKEVxME9pQENzHyCKMkBBwViQJb07OZ2rO28AyHMuYLDtv5kBLhJztIWQuI=
+Received: from CY4PR1701CA0005.namprd17.prod.outlook.com
+ (2603:10b6:910:5e::15) by MWHPR02MB2848.namprd02.prod.outlook.com
+ (2603:10b6:300:109::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3000.26; Tue, 19 May
+ 2020 15:28:34 +0000
+Received: from CY1NAM02FT009.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:910:5e:cafe::3f) by CY4PR1701CA0005.outlook.office365.com
+ (2603:10b6:910:5e::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3021.23 via Frontend
+ Transport; Tue, 19 May 2020 15:28:34 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.60.83)
+ smtp.mailfrom=xilinx.com; roeck-us.net; dkim=none (message not signed)
+ header.d=none;roeck-us.net; dmarc=bestguesspass action=none
+ header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.60.83 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
+Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
+ CY1NAM02FT009.mail.protection.outlook.com (10.152.75.12) with Microsoft SMTP
+ Server id 15.20.3000.19 via Frontend Transport; Tue, 19 May 2020 15:28:33
+ +0000
+Received: from [149.199.38.66] (port=48033 helo=xsj-pvapsmtp01)
+        by xsj-pvapsmtpgw01 with esmtp (Exim 4.90)
+        (envelope-from <michal.simek@xilinx.com>)
+        id 1jb4A2-0007Qc-QV; Tue, 19 May 2020 08:28:06 -0700
+Received: from [127.0.0.1] (helo=localhost)
+        by xsj-pvapsmtp01 with smtp (Exim 4.63)
+        (envelope-from <michal.simek@xilinx.com>)
+        id 1jb4AS-0005bg-IT; Tue, 19 May 2020 08:28:32 -0700
+Received: from xsj-pvapsmtp01 (smtp3.xilinx.com [149.199.38.66])
+        by xsj-smtp-dlp1.xlnx.xilinx.com (8.13.8/8.13.1) with ESMTP id 04JFSS75021237;
+        Tue, 19 May 2020 08:28:29 -0700
+Received: from [172.30.17.109]
+        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
+        (envelope-from <michals@xilinx.com>)
+        id 1jb4AO-0005b9-Jp; Tue, 19 May 2020 08:28:28 -0700
 Subject: Re: [PATCH 3/3] hwmon: (ina2xx) Add support for ina260
-To:     Michal Simek <michal.simek@xilinx.com>,
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Michal Simek <michal.simek@xilinx.com>,
         Franz Forstmayr <forstmayr.franz@gmail.com>
 Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -72,91 +86,78 @@ References: <20200224232647.29213-1-forstmayr.franz@gmail.com>
  <20200224232647.29213-3-forstmayr.franz@gmail.com>
  <a78bbb40-9a0c-8acc-841e-7a51447d4dbc@roeck-us.net>
  <bfa786b6-fe62-a5fb-718f-bb9e95b1f051@xilinx.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <616f7b6e-0e11-7c76-3baa-5b90a0967a91@roeck-us.net>
-Date:   Tue, 19 May 2020 07:14:21 -0700
+ <616f7b6e-0e11-7c76-3baa-5b90a0967a91@roeck-us.net>
+From:   Michal Simek <michal.simek@xilinx.com>
+Message-ID: <7e904ebe-6a59-19d8-79a6-875893aa037c@xilinx.com>
+Date:   Tue, 19 May 2020 17:28:25 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <bfa786b6-fe62-a5fb-718f-bb9e95b1f051@xilinx.com>
+In-Reply-To: <616f7b6e-0e11-7c76-3baa-5b90a0967a91@roeck-us.net>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-RCIS-Action: ALLOW
+X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
+X-TM-AS-User-Approved-Sender: Yes;Yes
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-Forefront-Antispam-Report: CIP:149.199.60.83;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapsmtpgw01;PTR:unknown-60-83.xilinx.com;CAT:NONE;SFTY:;SFS:(346002)(396003)(376002)(39860400002)(136003)(46966005)(54906003)(70206006)(110136005)(70586007)(31696002)(478600001)(7416002)(31686004)(82310400002)(8676002)(2616005)(356005)(36756003)(81166007)(8936002)(4326008)(5660300002)(53546011)(9786002)(316002)(26005)(336012)(2906002)(44832011)(426003)(82740400003)(47076004)(6666004)(186003)(43740500002);DIR:OUT;SFP:1101;
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c3a965fb-d212-4e99-7077-08d7fc094ae7
+X-MS-TrafficTypeDiagnostic: MWHPR02MB2848:
+X-Microsoft-Antispam-PRVS: <MWHPR02MB284865A14BBE61485A541F06C6B90@MWHPR02MB2848.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-Forefront-PRVS: 040866B734
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: DLy8q+sNtwlLw/CNQacJ4qbWagLTsCrY4ysduTdXt+nWQz1GRDYz3NUx5/XMzZ9Us6uWJHEnDSpz16HvfPBtY3QGiQkfUAyXRlBWSIInUp/CfjgrJ+aJ6k2mWobIvvRAmdq2fSJz/X2beQWMIwXWpVApFDM9Fhb/nOmeKBNHONpFZeJDA8BpKoHWyAXBq69GTtPpGklH3yHrqbMNuUNEeuIXyi978ZcLsBeAdDmX7joFwXaDWPe79q+BJI3eF67tr3mv68qjUfXLgbaAxjboc0oN1cm+BhoONhRrGKexOmZXzelpSvs4ddWYHK6QX8G5JGOx0u2Xke2sUuE/pMPGlkKtQ/JNEIU6MHiZ5F6lQjETlEmdoH9m9aRSR4i+mwNjZ6tK73MSHCPCZ/yMgTyIKw+zgzYCkAU4PLPMgjzdVmUDLE8zRFT9JD2FuOB/DMCoOQq5dffEuO5KfBB0DUfZpV7LcnvWvsEsc71R8dXC9NP4P0Km1RSwNPvWiIs1x8mw6B6O1oP7UzD1b9BnDNrROP8/oEzDiBQrvvTIXA36fvQ=
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2020 15:28:33.7601
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c3a965fb-d212-4e99-7077-08d7fc094ae7
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR02MB2848
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/18/20 10:21 PM, Michal Simek wrote:
-> On 26. 02. 20 3:16, Guenter Roeck wrote:
->> On 2/24/20 3:26 PM, Franz Forstmayr wrote:
->>> Add initial support for INA260 power monitor with integrated shunt.
->>> Registers are different from other INA2xx devices, that's why a small
->>> translation table is used.
+On 19. 05. 20 16:14, Guenter Roeck wrote:
+> On 5/18/20 10:21 PM, Michal Simek wrote:
+>> On 26. 02. 20 3:16, Guenter Roeck wrote:
+>>> On 2/24/20 3:26 PM, Franz Forstmayr wrote:
+>>>> Add initial support for INA260 power monitor with integrated shunt.
+>>>> Registers are different from other INA2xx devices, that's why a small
+>>>> translation table is used.
+>>>>
+>>>> Signed-off-by: Franz Forstmayr <forstmayr.franz@gmail.com>
 >>>
->>> Signed-off-by: Franz Forstmayr <forstmayr.franz@gmail.com>
+>>> I think the chip is sufficiently different to other chips that a separate
+>>> driver would make much more sense than adding support to the existing
+>>> driver.
+>>> There is no calibration, registers are different, the retry logic is
+>>> not needed. A new driver could use the with_info API and would be much
+>>> simpler while at the same time not messing up the existing driver.
 >>
->> I think the chip is sufficiently different to other chips that a separate
->> driver would make much more sense than adding support to the existing
->> driver.
->> There is no calibration, registers are different, the retry logic is
->> not needed. A new driver could use the with_info API and would be much
->> simpler while at the same time not messing up the existing driver.
+>> Isn't it also better to switch to IIO framework?
+>> As we discussed in past there are two ina226 drivers. One in hwmon and
+>> second based on IIO framework (more advance one?) and would be good to
+>> deprecate hwmon one.
 > 
-> Isn't it also better to switch to IIO framework?
-> As we discussed in past there are two ina226 drivers. One in hwmon and
-> second based on IIO framework (more advance one?) and would be good to
-> deprecate hwmon one.
+> "More advanced" is relative. The ina2xx driver in iio doesn't support
+> alert limits (which is queued in the hwmon driver for 5.8), and the
+> iio->hwmon bridge doesn't support it either. On top of that, there are
+> existing users of the hwmon driver, which would have to be converted
+> first. As for ina260, it would be up to the implementer to determine
+> if alert limit support is needed or not, and which API would be
+> appropriate for the intended use case.
 
-"More advanced" is relative. The ina2xx driver in iio doesn't support
-alert limits (which is queued in the hwmon driver for 5.8), and the
-iio->hwmon bridge doesn't support it either. On top of that, there are
-existing users of the hwmon driver, which would have to be converted
-first. As for ina260, it would be up to the implementer to determine
-if alert limit support is needed or not, and which API would be
-appropriate for the intended use case.
+Good to know. If ina260 is done as separate driver I am fine with it.
 
-Guenter
+Thanks,
+Michal
+
