@@ -2,115 +2,161 @@ Return-Path: <SRS0=LqIa=7B=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9BF8C433DF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 19 May 2020 12:25:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D2E0C433E0
+	for <linux-hwmon@archiver.kernel.org>; Tue, 19 May 2020 14:14:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B387D20825
-	for <linux-hwmon@archiver.kernel.org>; Tue, 19 May 2020 12:25:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1978A207D8
+	for <linux-hwmon@archiver.kernel.org>; Tue, 19 May 2020 14:14:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Tp77Wdhy"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RWtb4SEG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728626AbgESMZ7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 19 May 2020 08:25:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37306 "EHLO
+        id S1728737AbgESOOZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 19 May 2020 10:14:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727057AbgESMZ7 (ORCPT
+        with ESMTP id S1728633AbgESOOY (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 19 May 2020 08:25:59 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33179C08C5C0;
-        Tue, 19 May 2020 05:25:59 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id z26so6344043pfk.12;
-        Tue, 19 May 2020 05:25:59 -0700 (PDT)
+        Tue, 19 May 2020 10:14:24 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC5B1C08C5C0;
+        Tue, 19 May 2020 07:14:24 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id y18so6587184pfl.9;
+        Tue, 19 May 2020 07:14:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=UAG0nDWN7NxcHbETHSWkVEUyOCr5c/khtV94afHrVSs=;
-        b=Tp77WdhypJcf6CsxDz9e7xxrl7jdJunhvj1kCjoCFOXWfu/JkVJDLLBMpK57/gxbPX
-         9o8EEqgX+AXU6lg/bu4BxEEiWuhDRZnrPbPFAIzTbsDn9Z7ZaUkUMiKKle/jVlGWt64R
-         rTjew3blOiNp/po15iZOdIlDaGSfzvel053fdJFSrMVG9IxK8FdD2nBQr5rhk/sQHmhS
-         dUKvb+OOKce4HoAOW6tXOeSuqoHsTGWOLBTrmH6uP9Gu1IjI9VrLJeHG4KDway/3o8zQ
-         p1/9V0k8IxzjxYUGsjjWaxSyGomRYYj7o3k5RvS+sPvR7jlFRJEFFwXWlAL2y9Xo6l3O
-         lo+Q==
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=n6nj99MT5VnMbYi4sa2axsK+PhJ/0czyZ6v4F5+mrN4=;
+        b=RWtb4SEG8i0H0GB5ehrZhaZFULdBlGuy/FVGgAsK0UypYLvGekDBIPPnHiRlwdcy/o
+         brYsQzMk7bk589ceCKORt3RjKKqkmUnia9bXTEGpJL8SQ78MnztdT2Hq8P2prxuZwYLY
+         IyGUZNSliSPfNbB6HauCRIYXhx+/t3xzuEiBqi8hHBi8W3REm7UkcDY+A1LMEC4nPAgv
+         2ikySlzx9+cMcbJIXt5bdzYXo1ogYprq/5kYzbd0sP6cBkwhH/xnOvNf6vDVKylM4k0I
+         5ouLqGsCp1dawhG2jyoKQSsZurmvcvuIQBW+xgpRaLvIfUG2YdZ7vU1QoaDkNUFBGA6t
+         BvEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=UAG0nDWN7NxcHbETHSWkVEUyOCr5c/khtV94afHrVSs=;
-        b=lGrktynBcuB7DzYNiguC7LK+7CAyRT8p2yjSP2r+qpDS4kVpwiE1Zux0XfxFya0Ij4
-         LksfNXdDsz/ZrAeInkrfDIfGnO4JLsdel+kmjPJ5l3n9Fu8y0jEnGKf6s0NLYIEygwxp
-         E95maRSHtCaPZSMzjgUTdpU6rxBfZLcjHI59qUH0rZ1mthY4iKdPDOpBn5IN893yn02K
-         W0+0KIJJrPG8k35ajM+r3I9VEl1/TOA2NwqQKHri5UWTYsS9q8/Brbbz0WLLtkr+I2k0
-         L0bq+O7lBPhzbfO8fPnzX9u97XgtLpNr0xvS0P4cpStUiEFLQil9jdkLTUDGSzeMd0aK
-         bqjg==
-X-Gm-Message-State: AOAM531JNpVLAOkMABRhs4Wv8Kv83l61Hw1C+/We81O45LQazoFIaeph
-        gDwL44TGXG5xeAU37krRT/s=
-X-Google-Smtp-Source: ABdhPJxVWwg9jKyNLg50QRNytCyx/osQtadPxufs91KgthICPMtzvQimZ6Umr6/TxdZmkkW7p6scHA==
-X-Received: by 2002:a63:7d4e:: with SMTP id m14mr8993828pgn.391.1589891158758;
-        Tue, 19 May 2020 05:25:58 -0700 (PDT)
-Received: from localhost ([221.224.30.42])
-        by smtp.gmail.com with ESMTPSA id d15sm3000809pjc.0.2020.05.19.05.25.57
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 19 May 2020 05:25:58 -0700 (PDT)
-From:   zhenghaili <hailizheng1993@gmail.com>
-X-Google-Original-From: zhenghaili <haili.zheng@powercore.com.cn>
-To:     jdelvare@suse.com, linux@roeck-us.net
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hailizheng <haili.zheng@powercore.com.cn>
-Subject: [PATCH] drivers/hwmon/nct7802: Replace container_of() API
-Date:   Tue, 19 May 2020 08:25:19 -0400
-Message-Id: <1589891119-16508-1-git-send-email-haili.zheng@powercore.com.cn>
-X-Mailer: git-send-email 2.7.4
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=n6nj99MT5VnMbYi4sa2axsK+PhJ/0czyZ6v4F5+mrN4=;
+        b=kL/coXYVahBqs1QjGGbmGIyFrYJzWo77T93EiA5sWLw1B7bhXDMTE+546Lup6Xng0j
+         IBqR+nFh47AyKmax2nJKnTYMKRp06e+qqwDUNa+P8kZgrDeZZuFBUnkHSyqmVH1Yf5H5
+         dxJd7QPeUnBVpjBwA33u7nYgWYABTlWdGjHlAmOEvI7SSS2CAlPoZNkScPvvaT+WPzwr
+         Tur26OFmkpo9RJfSj9NumB3ZKvre4W+pVrNqtadJJCVDd5FXiB54PYggzJbWSZ5m2TZS
+         MMwqaD43yaYXx3hNlRkbGCgx4cEjP4rFebtYQO0WCJDP5ux07pAhHbQ1JZP/7hbzDpVU
+         4P4w==
+X-Gm-Message-State: AOAM533iTfVDoE7o9lFWgYhm36z9pWz75fsu313gutzGFs6qi0tMqUNG
+        m+yoObDoyyXREvkAzMGyI3OCIFX9
+X-Google-Smtp-Source: ABdhPJw+/1fyKAecOwG0xlf74llbkA5RFHYrrZTT7Yh3CkRkUjWTQKL3et5fc/ZDAyV51S+581CK+A==
+X-Received: by 2002:a05:6a00:d2:: with SMTP id e18mr12656822pfj.252.1589897664103;
+        Tue, 19 May 2020 07:14:24 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t64sm10598398pgd.24.2020.05.19.07.14.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 May 2020 07:14:22 -0700 (PDT)
+Subject: Re: [PATCH 3/3] hwmon: (ina2xx) Add support for ina260
+To:     Michal Simek <michal.simek@xilinx.com>,
+        Franz Forstmayr <forstmayr.franz@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20200224232647.29213-1-forstmayr.franz@gmail.com>
+ <20200224232647.29213-3-forstmayr.franz@gmail.com>
+ <a78bbb40-9a0c-8acc-841e-7a51447d4dbc@roeck-us.net>
+ <bfa786b6-fe62-a5fb-718f-bb9e95b1f051@xilinx.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <616f7b6e-0e11-7c76-3baa-5b90a0967a91@roeck-us.net>
+Date:   Tue, 19 May 2020 07:14:21 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+MIME-Version: 1.0
+In-Reply-To: <bfa786b6-fe62-a5fb-718f-bb9e95b1f051@xilinx.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: hailizheng <haili.zheng@powercore.com.cn>
+On 5/18/20 10:21 PM, Michal Simek wrote:
+> On 26. 02. 20 3:16, Guenter Roeck wrote:
+>> On 2/24/20 3:26 PM, Franz Forstmayr wrote:
+>>> Add initial support for INA260 power monitor with integrated shunt.
+>>> Registers are different from other INA2xx devices, that's why a small
+>>> translation table is used.
+>>>
+>>> Signed-off-by: Franz Forstmayr <forstmayr.franz@gmail.com>
+>>
+>> I think the chip is sufficiently different to other chips that a separate
+>> driver would make much more sense than adding support to the existing
+>> driver.
+>> There is no calibration, registers are different, the retry logic is
+>> not needed. A new driver could use the with_info API and would be much
+>> simpler while at the same time not messing up the existing driver.
+> 
+> Isn't it also better to switch to IIO framework?
+> As we discussed in past there are two ina226 drivers. One in hwmon and
+> second based on IIO framework (more advance one?) and would be good to
+> deprecate hwmon one.
 
-Replace container_of() API with kobj_to_dev().
+"More advanced" is relative. The ina2xx driver in iio doesn't support
+alert limits (which is queued in the hwmon driver for 5.8), and the
+iio->hwmon bridge doesn't support it either. On top of that, there are
+existing users of the hwmon driver, which would have to be converted
+first. As for ina260, it would be up to the implementer to determine
+if alert limit support is needed or not, and which API would be
+appropriate for the intended use case.
 
-Signed-off-by: hailizheng <haili.zheng@powercore.com.cn>
----
- drivers/hwmon/nct7802.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/hwmon/nct7802.c b/drivers/hwmon/nct7802.c
-index 2e97e56..570df8e 100644
---- a/drivers/hwmon/nct7802.c
-+++ b/drivers/hwmon/nct7802.c
-@@ -679,7 +679,7 @@ static struct attribute *nct7802_temp_attrs[] = {
- static umode_t nct7802_temp_is_visible(struct kobject *kobj,
- 				       struct attribute *attr, int index)
- {
--	struct device *dev = container_of(kobj, struct device, kobj);
-+	struct device *dev = kobj_to_dev(kobj);
- 	struct nct7802_data *data = dev_get_drvdata(dev);
- 	unsigned int reg;
- 	int err;
-@@ -778,7 +778,7 @@ static struct attribute *nct7802_in_attrs[] = {
- static umode_t nct7802_in_is_visible(struct kobject *kobj,
- 				     struct attribute *attr, int index)
- {
--	struct device *dev = container_of(kobj, struct device, kobj);
-+	struct device *dev = kobj_to_dev(kobj);
- 	struct nct7802_data *data = dev_get_drvdata(dev);
- 	unsigned int reg;
- 	int err;
-@@ -853,7 +853,7 @@ static struct attribute *nct7802_fan_attrs[] = {
- static umode_t nct7802_fan_is_visible(struct kobject *kobj,
- 				      struct attribute *attr, int index)
- {
--	struct device *dev = container_of(kobj, struct device, kobj);
-+	struct device *dev = kobj_to_dev(kobj);
- 	struct nct7802_data *data = dev_get_drvdata(dev);
- 	int fan = index / 4;	/* 4 attributes per fan */
- 	unsigned int reg;
--- 
-2.7.4
-
+Guenter
