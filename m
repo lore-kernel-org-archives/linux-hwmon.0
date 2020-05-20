@@ -1,129 +1,149 @@
-Return-Path: <SRS0=LqIa=7B=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=CmOj=7C=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,MSGID_FROM_MTA_HEADER,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86677C433DF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 19 May 2020 15:51:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 784EAC433DF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 20 May 2020 09:30:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5D908207D8
-	for <linux-hwmon@archiver.kernel.org>; Tue, 19 May 2020 15:51:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 554FF207D3
+	for <linux-hwmon@archiver.kernel.org>; Wed, 20 May 2020 09:30:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=amdcloud.onmicrosoft.com header.i=@amdcloud.onmicrosoft.com header.b="g/mHUQbh"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vjazAm37"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729160AbgESPvA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 19 May 2020 11:51:00 -0400
-Received: from mail-mw2nam12on2050.outbound.protection.outlook.com ([40.107.244.50]:39680
-        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728534AbgESPu7 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 19 May 2020 11:50:59 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IdkTK++ClntNEv/hf2Iyg7oJ1Nk6cyyxnHTOi5wEN+/M+LRBQLjEAwKhstA5QPpdXkJoSu7yDTcdcQOp4WFVI0xuzbYX69C6KDt/fb07NPU1/RARoBlGjuN9GClSpt9CNq7ju/WFTKAsJ5N21MN5dlFC+CJNEN7AX0lpwIhHk6Gu3vb4H7wsBt5HqFNi/a9uPaeNyoWIsbluQxd+cOiAtGiCxEE9svylpdhhT7X3SHFp05fvQ9Z20Zx0H0Lu0dZUqtESqb8xQ+rafeIORZGuC/n9nzCcGZosCacWPRUhmNSe9tHhmNa13YkTSQ/G8V3d0WQIN9POmF6KZIgFAbmWQw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7XmiJdFVZjIdUVeYHoSzaUVLmGesmjp5n1oFXXp8W3M=;
- b=RZKZ+oD60/eHxzR4ms5qWD8vie6ooiM3Vf7EOaval/vRryvAs+Jt4pf1muTGga9M/DNV/b/Twl/En5ClP4zAtzgITuBbnl6ORXGkfHS4UUkWvino+bZobIgLvuCZVv6GkyMeAQXxc9VEeOfOFWHOH3tGkAShyOuvIfcFxBPCeSu0SINDF79SZwVR+iOOIImZBi2U3nwyESRz2t3VcAyJYf4osk5qWPTdPdVFZK1gYZaNvkGDTm1oMXWIC0cYhcmjyeaoorV9saCTfxWFUidC9+s+PHN0CyvBDDpcb3JQfd/+f9XCXEJOgOA5HScPX7NUNzFeaIYlTIWBJmqRBAPtgw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
+        id S1726905AbgETJag (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 20 May 2020 05:30:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37634 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726898AbgETJag (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 20 May 2020 05:30:36 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A61BC05BD43
+        for <linux-hwmon@vger.kernel.org>; Wed, 20 May 2020 02:30:35 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id u188so2139438wmu.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 20 May 2020 02:30:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7XmiJdFVZjIdUVeYHoSzaUVLmGesmjp5n1oFXXp8W3M=;
- b=g/mHUQbhukP02LgTHsP+NB0xUYryTWymLyoirPEgEtX5jue7uC65c5cNlGEOmtY0rXK1XzKsEpmdUYb+XAccFv2aSREuiheuVRjPP93BiVMIw1rEP1si2FwDpm6WOzfpU3TGy8CCV9eQG/VOie1OZSPKArcukoWMWjptQPuWgQE=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=amd.com;
-Received: from BY5PR12MB4212.namprd12.prod.outlook.com (2603:10b6:a03:202::8)
- by BY5SPR01MB0022.namprd12.prod.outlook.com (2603:10b6:a03:1a3::33) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3000.20; Tue, 19 May
- 2020 15:50:57 +0000
-Received: from BY5PR12MB4212.namprd12.prod.outlook.com
- ([fe80::9ce:3ab2:f0ee:47b2]) by BY5PR12MB4212.namprd12.prod.outlook.com
- ([fe80::9ce:3ab2:f0ee:47b2%5]) with mapi id 15.20.3000.034; Tue, 19 May 2020
- 15:50:57 +0000
-From:   Naveen Krishna Chatradhi <nchatrad@amd.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     naveenkrishna.ch@gmail.com,
-        Naveen Krishna Chatradhi <nchatrad@amd.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 3/3 v7] MAINTAINERS: add entry for AMD energy driver
-Date:   Tue, 19 May 2020 21:20:11 +0530
-Message-Id: <20200519155011.56184-3-nchatrad@amd.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200519155011.56184-1-nchatrad@amd.com>
-References: <20200519155011.56184-1-nchatrad@amd.com>
-Content-Type: text/plain
-X-ClientProxiedBy: MAXPR0101CA0050.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a00:e::12) To BY5PR12MB4212.namprd12.prod.outlook.com
- (2603:10b6:a03:202::8)
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=wc6stLd7fv3SlBSmBsX1XmQPwtI3AmwZLYlnJzwyzvw=;
+        b=vjazAm37j6JS0ESDLULP7usxUJmcyJXpI1rYanJaiBMEXC47/00EoRJqXccf2I/aHF
+         52deqipmXhdXb5EVkrQLE6gsz2A75scUhggoIq6VvVuYAA7SeSN8FKnu783vCaJD+lGl
+         oJbe9GifOa2TT59QiErtSRIQDSyNwLbHL8NjtYgFCMfCdYZ2BbiXPnihGjZel5DGTJ/M
+         DZSn/NAOoba12f60Dh40Ra2FYgfuafQB0ij5r+w2xW+9dGHHUENhQYIPsJOjfGgi5rzR
+         QcJ5mOS1YHLQIjdCS8QMEujcXfs863rcj24FHVj+SWqcI54f2AWW3KDQDQCkFFqDj1gC
+         ewqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=wc6stLd7fv3SlBSmBsX1XmQPwtI3AmwZLYlnJzwyzvw=;
+        b=KkGkB2o2llgQLBnhgGJ4AwDJ2IH2qMCnQGsyB5sXOW0E9Cn2fowqeR5DRZuBpgMSBM
+         b2V2RkErelS90zuOJiyKk/bBLfthfzY9H6/wnJVZNJrFd/9kxE7qj7yfFtYr4lEhox3n
+         xI0acCq1fHLmJO08TaPEd8yd+MO7xvYlSsFcnYe+q53/tT7pRXRTT2f+lkVD/89uy5sy
+         jO01LR3MkcWodWkludpRjL9OG7wlyv78MaxQ6dHC0T+hHyqwhwUtptiioFU6ylyMZjxS
+         xzxhjNFcUHEosa+yQSIV8eIn9hmoi1j8AoiwBivdbepuI/AqnLLVJvO6za8XOMEoNQXd
+         Dqiw==
+X-Gm-Message-State: AOAM531oR3EPuHRTAv5Km7NOLn+9/t6c0IuLKd7MPWnpX2VYVqGMhQvM
+        OtZRjjkjmy+5NFIqndcAab0uVw==
+X-Google-Smtp-Source: ABdhPJymBBbiK71tQTEAqr5QIR08/MCj+YzDXrNmdjU7RtZMKMWFmlQRCDMRfe/P26o83I25huuHag==
+X-Received: by 2002:a1c:305:: with SMTP id 5mr3772868wmd.60.1589967034154;
+        Wed, 20 May 2020 02:30:34 -0700 (PDT)
+Received: from dell ([95.149.164.102])
+        by smtp.gmail.com with ESMTPSA id x5sm2370385wro.12.2020.05.20.02.30.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 May 2020 02:30:33 -0700 (PDT)
+Date:   Wed, 20 May 2020 10:30:31 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Tim Harvey <tharvey@gateworks.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Robert Jones <rjones@gateworks.com>
+Subject: Re: [PATCH v11 1/3] dt-bindings: mfd: Add Gateworks System
+ Controller bindings
+Message-ID: <20200520093031.GF271301@dell>
+References: <1589565428-28886-1-git-send-email-tharvey@gateworks.com>
+ <1589565428-28886-2-git-send-email-tharvey@gateworks.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from milan-ETHANOL-X.amd.com (165.204.156.251) by MAXPR0101CA0050.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:e::12) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3021.23 via Frontend Transport; Tue, 19 May 2020 15:50:55 +0000
-X-Mailer: git-send-email 2.17.1
-X-Originating-IP: [165.204.156.251]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 3893d29a-59fa-45e4-b689-08d7fc0c6ba5
-X-MS-TrafficTypeDiagnostic: BY5SPR01MB0022:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BY5SPR01MB002245CF01AE58FC207FBB1AE8B90@BY5SPR01MB0022.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1227;
-X-Forefront-PRVS: 040866B734
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: d3dao1+ClqdObJagq9dsnZgcO8fkMThoEfi1FuFF1Yyyk4LhU48yi5brq+6zAbPnmKitfhPe3JkeP4/euJpbIa3D/N6ASDhZiJVqa52XpEzoCOppHEKcxS+bWVt6sBDBoDj4PriJj3ambCUgl/soN9+xSvIhwoD39QQu6MThYfcYlfJD58gGgbc4cX4xiSk+R/Nxt7uh5xnURZyPEbWvMgBSASiXrt3YQRqzTtbKE0+dpSKCg577f23d+w6qO1x1X2jtC+uDdcm+tg6vL5j0Mm3fHWREMTqR0lEzDspWaGdGgXPIJ0nolAFxaLhhXGdXuLxBBbiyuv9Dx+ApMhkFW2zGGxmlr9WVVIp7JdO6Jj2kV3jIwzI4LTsQSou2BMhkk+6/h+aZ+GP6rMW2GzFL3OjScGrQTBvCJgQm1A3KVbM967PtIBU3tXWQgfhwhUtP
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4212.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(39860400002)(136003)(396003)(346002)(376002)(366004)(8676002)(2906002)(956004)(16526019)(2616005)(6486002)(66556008)(66946007)(66476007)(4326008)(36756003)(4744005)(54906003)(7696005)(478600001)(6666004)(316002)(26005)(6916009)(8936002)(5660300002)(186003)(1076003)(52116002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: 7sH42NnDQNNkop9roOrGF0Ccjo8D4lmD4PRAXzESf65RFyqQt73uLb+saDYVBSKGo0LYaFsFt0kcifzVxii2g8Mly7p8MxUOIZzl6qdGVGEB21s48RW2zz2/v6tybR9pBYc7yEfQxnlGwV/RloT6r1j4uaIOIIrudpzSrCcxdiwl+9qlSwi+WAvuPxJ0/SIFu8NnvIdVMezXgF9ODf0nM1eYGCpc2Ez/eNh4fKzultwh3kPHH/H9jFNAOUq/4+fA7iuuekVfKftKK4Qg6aoHGkn/SyAWtpUOA+faKTS00H+wAYh8jgacdKdE44lqtQBWqkgNVJhe+j4Ilp9UC97MC1vN/I8K0xp+XUtPWYRtUsObRXT02KdICqNa98MFkBG4kqgP439nhBfUC2YewOx6V8yrFdym77QyVUhygHDVvjOLaqb0TBAd0YMV9sXSK4jxB2agE/RwauLEEurB80HTaKJ5DQ2wCUse8fdgOwmq4yLWT5j/gfzVz2bYoBzRDABt
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3893d29a-59fa-45e4-b689-08d7fc0c6ba5
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2020 15:50:57.6066
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: sPifPkdMdkWtZiKffKAz46lxTkY1CIIM/g7H/XF3dMcSv8I6aGwAPB2SPNyQsIh0dBP6GDmozS7DpF/GrrMctg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5SPR01MB0022
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1589565428-28886-2-git-send-email-tharvey@gateworks.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The kernel driver is part of HWMON subsystem.
+On Fri, 15 May 2020, Tim Harvey wrote:
 
-Cc: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
----
-Changes in v7:
-None
+> This patch adds documentation of device-tree bindings for the
+> Gateworks System Controller (GSC).
+> 
+> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> ---
+> v11:
+>  - no change
+> 
+> v10:
+>  - no change
+> 
+> v9:
+>  - added Reviewed-by: Rob Herring <robh@kernel.org>
+>  - remove allOf: see https://lkml.org/lkml/2020/4/15/1930
+>  - encorporate Lee's review comments for item descriptions
+> 
+> v8:
+>  - add register to fan-controller node name
+> 
+> v7:
+>  - change divider from mili-ohms to ohms
+>  - add constraints for voltage divider and offset
+>  - remove unnecessary ref for offset
+>  - renamed fan to fan-controller and changed base prop to reg
+> 
+> v6:
+>  - fix typo
+>  - drop invalid description from #interrupt-cells property
+>  - fix adc pattern property
+>  - add unit suffix
+>  - replace hwmon/adc with adc/channel
+>  - changed adc type to mode and enum int
+>  - add unit suffix and drop ref for voltage-divider
+>  - moved fan to its own subnode with base register
+> 
+> v5:
+>  - resolve dt_binding_check issues
+> 
+> v4:
+>  - move to using pwm<n>_auto_point<m>_{pwm,temp} for FAN PWM
+>  - remove unncessary resolution/scaling properties for ADCs
+>  - update to yaml
+>  - remove watchdog
+> 
+> v3:
+>  - replaced _ with -
+>  - remove input bindings
+>  - added full description of hwmon
+>  - fix unit address of hwmon child nodes
+> ---
+>  .../devicetree/bindings/mfd/gateworks-gsc.yaml     | 196 +++++++++++++++++++++
+>  1 file changed, 196 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
 
- MAINTAINERS | 7 +++++++
- 1 file changed, 7 insertions(+)
+Applied, thanks.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 091ec22c1a23..7e7393f9a0e5 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -842,6 +842,13 @@ S:	Supported
- T:	git git://people.freedesktop.org/~agd5f/linux
- F:	drivers/gpu/drm/amd/display/
- 
-+AMD ENERGY DRIVER
-+M:	Naveen Krishna Chatradhi <nchatrad@amd.com>
-+L:	linux-hwmon@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/hwmon/amd_energy.rst
-+F:	drivers/hwmon/amd_energy.c
-+
- AMD FAM15H PROCESSOR POWER MONITORING DRIVER
- M:	Huang Rui <ray.huang@amd.com>
- L:	linux-hwmon@vger.kernel.org
 -- 
-2.17.1
-
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
