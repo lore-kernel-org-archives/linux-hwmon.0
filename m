@@ -2,64 +2,64 @@ Return-Path: <SRS0=CmOj=7C=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD731C433DF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 20 May 2020 09:31:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BA10C433DF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 20 May 2020 09:31:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8BF64207D3
-	for <linux-hwmon@archiver.kernel.org>; Wed, 20 May 2020 09:31:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 15D8A207F9
+	for <linux-hwmon@archiver.kernel.org>; Wed, 20 May 2020 09:31:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nVWCPKGt"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KkUdP2Ig"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726729AbgETJbF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 20 May 2020 05:31:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37716 "EHLO
+        id S1726688AbgETJbz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 20 May 2020 05:31:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726486AbgETJbE (ORCPT
+        with ESMTP id S1726545AbgETJbz (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 20 May 2020 05:31:04 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B43EC061A0F
-        for <linux-hwmon@vger.kernel.org>; Wed, 20 May 2020 02:31:04 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id n5so2150422wmd.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 20 May 2020 02:31:04 -0700 (PDT)
+        Wed, 20 May 2020 05:31:55 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A28C061A0E
+        for <linux-hwmon@vger.kernel.org>; Wed, 20 May 2020 02:31:54 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id l18so2413785wrn.6
+        for <linux-hwmon@vger.kernel.org>; Wed, 20 May 2020 02:31:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=vnMYNrD5xFrqPZ12P+CUYTuQR/zTD6kL3bib8/4eAFA=;
-        b=nVWCPKGtDsfqcZpiCWP93jC50VzOjkoDTLJHO/l0sfwdq/yYogmFoEhraSXDbBFYE3
-         wKcBgirsp4/ZxSPX/9x9Qd3uP5i2daOEkdGL5tQoOINJACVZ+LWnepPZT+gWoTBxtraa
-         dk2Pn6LRlufZs48w15o9mk3oLI/Q0HsZokX9jpG5fZPxATB8VX7bii5QUssKwrjdfPl4
-         pi1qdiuAJ+9h/Xg0xLnsHEL14wJDeoeECXTSj3vhyWBcHTGO1SBqRJguYnyvVSlsKjLK
-         /UHL/ViMeC5qdHjmGJ9rAv7gHkiQIiL+KUkWEE6fwnqyQsF8bHpiW7qV+K+PJ7mDQIYk
-         wf9g==
+        bh=2tHuCvrzX51mj1uQ+UwpdZjDnMBFbfdASVT6bpLiK94=;
+        b=KkUdP2Igd2sVLWD2v/jgj8mU8xfvivFCa0hoQGP/ioGQcz7TFCUZozc4aO9Vsk3brC
+         OnkctpfmWwV58oJY46zf8qKaqeSIW/TTp8/jz6DXzGWMPq7Ar/WdhwbHMmlZtcKMJGY2
+         NAf0wEf0Sb0z0s8GQ5F0Wufb2xu96Ut4er+05P9dbMItqbTge830tSsH28XFUBxgfHWm
+         eVzQkvCIqi5P9EHxDBFPdnvIU2yIoqMyvFYXIWW0sOO5op5SCgt0PptetU7TMDGfUG2X
+         yLHQ3JXhhLNjE7hDoNMVPTmVTOIh/jeNYey33l5PZc4GJORVu9Sg9rTSnJI+uqlvR8In
+         bDWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=vnMYNrD5xFrqPZ12P+CUYTuQR/zTD6kL3bib8/4eAFA=;
-        b=QMv7Bow3PKmfz32dzPoQSHlzGrgoGkBBXmnj51toO3nNfuM1F8YUrcMh1TC61D+oiD
-         vyAMKiD9ZSUnbbTX5sT6JyG+OpBlPBiboGaSfGolg7OZm7osikaWi2LvsrAiLYwQCrIF
-         O2CBT1QLadOqyaK9S+NpaqtDxL7/QrZNwZJ9fS1EKT98gFUN1i8Wgwmhc8HN9rCvmboz
-         xA+qTW3HTJ6pA+/0A54UUcBPXd/Wcm0V0grc/TKywl451PxgQfPXDpt6Mr8jOOsN5kgl
-         imOyB2PSiEeYL+sPrxeZASm3IUgyjm16UW7JY+RPLZ/hMv1fCEWWll2g2DG/0b1QeTTd
-         O6Dw==
-X-Gm-Message-State: AOAM531ysLVJJ7sgUXxKwQSVVHHJyJQB6DPs0sIRpNBPfVXjOPkKBJdY
-        iMlWyf5DDUbAxdhjVIQYZVy57A==
-X-Google-Smtp-Source: ABdhPJxndAFdMDpnRlOmd3ffH7tvbO+BIRPhKt4GQ3SNY1ddPhzylWyt34uhdI0/+WwoQFCJ//eB8A==
-X-Received: by 2002:a1c:bd56:: with SMTP id n83mr1935210wmf.139.1589967063211;
-        Wed, 20 May 2020 02:31:03 -0700 (PDT)
+        bh=2tHuCvrzX51mj1uQ+UwpdZjDnMBFbfdASVT6bpLiK94=;
+        b=TnX/5tnQvSGcmcfTrvgtJgjoOJF8hrRoIX/qYCj7YlWj27c/3MmWeM6xV/tl6tsJxF
+         fF9uB/nx80TAju9Dm+uvzyQ8NyLnX8/08PIMp0bvMW1GjWxgWt8hQVpgj42QZvPJC/Zp
+         8Pq8fXy9l6/Bb0B3CFAv9QOq5/5Y02G/XwjpGvBSi3EJKctxy3yyUVNBKs8mhkFCV1JR
+         I/1ztisExtuBwMlJ1RCTj0l7Hat+Pf8OShMlR1Lwo8QrgckLny4tMVFe+IohuHSlHVrc
+         rr56KhmA6Au1i/0UAEv66nfK2WzuEiu4OjTQtE2cq3cpj9q7w1BYKKAMcvodhZVZ0GGT
+         hk4Q==
+X-Gm-Message-State: AOAM531iA5AJ3Vb3OYETq8XH9b0CZnvCEhFH4Rw6LDlkaqt1TyFjsifH
+        FIGyD8j/Os3aMGbTKVnpzlUTVg==
+X-Google-Smtp-Source: ABdhPJx5k+oUlvwC1JXFJu394O0FcThxr/ncbDj/sSxUGANin8w+P0XmNFDbzi0lv8vNtBzcnA33nA==
+X-Received: by 2002:a05:6000:81:: with SMTP id m1mr3364804wrx.59.1589967113591;
+        Wed, 20 May 2020 02:31:53 -0700 (PDT)
 Received: from dell ([95.149.164.102])
-        by smtp.gmail.com with ESMTPSA id n7sm2184521wro.94.2020.05.20.02.31.02
+        by smtp.gmail.com with ESMTPSA id l11sm2568308wmf.28.2020.05.20.02.31.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 May 2020 02:31:02 -0700 (PDT)
-Date:   Wed, 20 May 2020 10:31:00 +0100
+        Wed, 20 May 2020 02:31:53 -0700 (PDT)
+Date:   Wed, 20 May 2020 10:31:51 +0100
 From:   Lee Jones <lee.jones@linaro.org>
 To:     Tim Harvey <tharvey@gateworks.com>
 Cc:     Jean Delvare <jdelvare@suse.com>,
@@ -68,120 +68,62 @@ Cc:     Jean Delvare <jdelvare@suse.com>,
         Frank Rowand <frowand.list@gmail.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Robert Jones <rjones@gateworks.com>
-Subject: Re: [PATCH 3/3] hwmon: add Gateworks System Controller support
-Message-ID: <20200520093100.GH271301@dell>
+Subject: [GIT PULL] Immutable branch between MFD and HWMON due for the v5.8
+ merge window
+Message-ID: <20200520093151.GI271301@dell>
 References: <1589565428-28886-1-git-send-email-tharvey@gateworks.com>
- <1589565428-28886-4-git-send-email-tharvey@gateworks.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1589565428-28886-4-git-send-email-tharvey@gateworks.com>
+In-Reply-To: <1589565428-28886-1-git-send-email-tharvey@gateworks.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, 15 May 2020, Tim Harvey wrote:
+Enjoy!
 
-> The Gateworks System Controller has a hwmon sub-component that exposes
-> up to 16 ADC's, some of which are temperature sensors, others which are
-> voltage inputs. The ADC configuration (register mapping and name) is
-> configured via device-tree and varies board to board.
-> 
-> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> ---
-> v11:
-> - no change
-> 
-> v10:
-> - no change
-> 
-> v9:
-> - use exported gsc_{read,write}
-> - added Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> 
-> v8:
-> - move regmap init to hwmon
-> 
-> v7:
-> - fix whitespace in Kconfig
-> - remove unnecessary device pointer in private data
-> - change divider from mili-ohms to ohms
-> - move fan base property to reg
-> 
-> v6:
-> - fix size of info field
-> - improve pwm output control documentation
-> - include unit suffix in divider and offset
-> - change subnode name to gsc-adc
-> - change to fan subnode
-> - fix voltage offset
-> 
-> v5:
-> - fix various checkpatch issues
-> - correct gsc-hwmon.rst in MAINTAINERS
-> - encorporate Gunter's feedback:
->  - switch to SENSOR_DEVICE_ATTR_{RW,RO}
->  - use tmp value to avoid excessive pointer deference
->  - simplify shift operation
->  - scale voffset once
->  - simplify is_visible function
->  - remove empty line at end of file
-> 
-> v4:
-> - adjust for uV offset from device-tree
-> - remove unnecessary optional write function
-> - remove register range check
-> - change dev_err prints to use gsc dev
-> - hard-code resolution/scaling for raw adcs
-> - describe units of ADC resolution
-> - move to using pwm<n>_auto_point<m>_{pwm,temp} for FAN PWM
-> - ensure space before/after operators
-> - remove unnecessary parens
-> - remove more debugging
-> - add default case and comment for type_voltage
-> - remove unnecessary index bounds checks for channel
-> - remove unnecessary clearing of struct fields
-> - added Documentation/hwmon/gsc-hwmon.rst
-> 
-> v3:
-> - add voltage_raw input type and supporting fields
-> - add channel validation to is_visible function
-> - remove unnecessary channel validation from read/write functions
-> 
-> v2:
-> - change license comment style
-> - remove DEBUG
-> - simplify regmap_bulk_read err check
-> - remove break after returns in switch statement
-> - fix fan setpoint buffer address
-> - remove unnecessary parens
-> - consistently use struct device *dev pointer
-> - change license/comment block
-> - add validation for hwmon child node props
-> - move parsing of of to own function
-> - use strlcpy to ensure null termination
-> - fix static array sizes and removed unnecessary initializers
-> - dynamically allocate channels
-> - fix fan input label
-> - support platform data
-> - fixed whitespace issues
-> ---
->  Documentation/hwmon/gsc-hwmon.rst       |  53 +++++
->  Documentation/hwmon/index.rst           |   1 +
->  MAINTAINERS                             |   3 +
->  drivers/hwmon/Kconfig                   |   9 +
->  drivers/hwmon/Makefile                  |   1 +
->  drivers/hwmon/gsc-hwmon.c               | 390 ++++++++++++++++++++++++++++++++
->  include/linux/platform_data/gsc_hwmon.h |  44 ++++
->  7 files changed, 501 insertions(+)
->  create mode 100644 Documentation/hwmon/gsc-hwmon.rst
->  create mode 100644 drivers/hwmon/gsc-hwmon.c
->  create mode 100644 include/linux/platform_data/gsc_hwmon.h
+The following changes since commit 8f3d9f354286745c751374f5f1fcafee6b3f3136:
 
-Applied, thanks.
+  Linux 5.7-rc1 (2020-04-12 12:35:55 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-hwmon-v5.8
+
+for you to fetch changes up to 3bce5377ef66a8700dcf7a9cb89b7aeb99326cb7:
+
+  hwmon: Add Gateworks System Controller support (2020-05-20 10:29:17 +0100)
+
+----------------------------------------------------------------
+Immutable branch between MFD and HWMON due for the v5.8 merge window
+
+----------------------------------------------------------------
+Tim Harvey (3):
+      dt-bindings: mfd: Add Gateworks System Controller bindings
+      mfd: Add Gateworks System Controller core driver
+      hwmon: Add Gateworks System Controller support
+
+ .../devicetree/bindings/mfd/gateworks-gsc.yaml     | 196 +++++++++++
+ Documentation/hwmon/gsc-hwmon.rst                  |  53 +++
+ Documentation/hwmon/index.rst                      |   1 +
+ MAINTAINERS                                        |  11 +
+ drivers/hwmon/Kconfig                              |   9 +
+ drivers/hwmon/Makefile                             |   1 +
+ drivers/hwmon/gsc-hwmon.c                          | 390 +++++++++++++++++++++
+ drivers/mfd/Kconfig                                |  15 +
+ drivers/mfd/Makefile                               |   1 +
+ drivers/mfd/gateworks-gsc.c                        | 277 +++++++++++++++
+ include/linux/mfd/gsc.h                            |  76 ++++
+ include/linux/platform_data/gsc_hwmon.h            |  44 +++
+ 12 files changed, 1074 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
+ create mode 100644 Documentation/hwmon/gsc-hwmon.rst
+ create mode 100644 drivers/hwmon/gsc-hwmon.c
+ create mode 100644 drivers/mfd/gateworks-gsc.c
+ create mode 100644 include/linux/mfd/gsc.h
+ create mode 100644 include/linux/platform_data/gsc_hwmon.h
 
 -- 
 Lee Jones [李琼斯]
