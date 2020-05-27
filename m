@@ -6,59 +6,59 @@ X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9710C433E0
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 May 2020 15:34:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C988C433E0
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 May 2020 15:35:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B5CF7208DB
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 May 2020 15:34:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D78E5207D3
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 May 2020 15:35:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nVVF756v"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eAVo//Hp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728142AbgE0PeC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 27 May 2020 11:34:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54514 "EHLO
+        id S1725848AbgE0Pf1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 27 May 2020 11:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725848AbgE0PeB (ORCPT
+        with ESMTP id S1729127AbgE0Pf1 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 27 May 2020 11:34:01 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1A5EC05BD1E
-        for <linux-hwmon@vger.kernel.org>; Wed, 27 May 2020 08:34:01 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id 23so11957724pfy.8
-        for <linux-hwmon@vger.kernel.org>; Wed, 27 May 2020 08:34:01 -0700 (PDT)
+        Wed, 27 May 2020 11:35:27 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB12C05BD1E
+        for <linux-hwmon@vger.kernel.org>; Wed, 27 May 2020 08:35:26 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id s69so1674390pjb.4
+        for <linux-hwmon@vger.kernel.org>; Wed, 27 May 2020 08:35:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=Ck/Ogqteywlz/IXzYraYFMsrnKFZKMcwRJ6vMoCFUgA=;
-        b=nVVF756vd/5WfI92ZJBIqJ2FUn4q+GCXG8rJ0Yb8lpZyJV4c6AoehT2GolmTQT6VyY
-         p3g2lWhP+vapN5oPQ+Cd18hTBSExaCTcHf48JenCgR3LHgHgjJjyj/Ms8YNkcoNaUxKL
-         nLKKmASHZ7Bj4A7iBkousmI2aEmtkErCvMTcSx3xD3S2ca9MUbgvRP6OifEx8VrogHVP
-         9b6lXpf3+zqHEWwvh+O180f4hpdaKx2rUBvOMD8a4IYUiXDK3d/wZ6yTjP3NLjQ+SLf7
-         TZlK5mOzHWhoMLMVvV0N1iKQNz3uldrtb9Gz4AivHBkvJuybqUBT6KykMo/5Zry58Q40
-         qV0A==
+        bh=M5GB0AMS9WRErDc3nMkJiXBeHkIhYgLYLLC8h00713k=;
+        b=eAVo//HplQB0DOu4zBXbYz+EKRw/LCbGuaP+ztwqUyiZa72mAIvOtMtK8syM/AGvcF
+         sW6kT5Enshjc1omP0q2Cb0XiFSEETbRAckAPqEDhmBx3VBD89Ljs51bC13+PJAN1jtKB
+         KtTI8ExDU2fkA4i2MPg5b20grxEZlj8KlRWWEzD/fm3JAs6jGZ9yvx10BDJtufaYNJq0
+         bTK+BkiIicXIdk444G6IdYDRYFU8cwlxmB5W0G8esP7oKko0+zgpMWj1mqJ3wY9/fPDI
+         UIFqztUzJjAfTfifcblOOnjGWaBziL4C7mazJjyqUC9qlD0arna+wF9Yfyar+t0j3ZhH
+         Lm6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=Ck/Ogqteywlz/IXzYraYFMsrnKFZKMcwRJ6vMoCFUgA=;
-        b=rlhSFEKvRY7+zF2+18SFtV3von/iCq1ABxQMtFd37K6mO6frqAU/w9sjSliEPUlZtp
-         BL2flaRoXWSBuoWVouMOmAQAm9ehTGByn8Q5IyDF73ZpA2RXeqS9fQzfo/aWpgPvY0iU
-         TcjJm5LJUaVkBakB/6ogcT8IInIJmQVAIoezwrbmr2KV7oJ0PAOukK2eGuWs90uQ8BZG
-         5N60UVL5jU9JxMfJgqc8Oe1ymD0fEbeUxKQYWy+cPfXs2+V+Bu1GmUfZug1mj/OnFoid
-         rthmn1Qlk8/LMxoHPtSStlUTapks5DbNc89jx6HHHydTWI19tFWsiPr7KGq+hvyjNyAC
-         xkWA==
-X-Gm-Message-State: AOAM530vl4Df8NSwTSGcKZCbX05QLnRQFpt9y991LNhFlZsgMhCThyEX
-        KzQjkMuxm2LjGR8y1MGEP9heeUm2
-X-Google-Smtp-Source: ABdhPJwzNJXBeK8CPT3vGWlMZ7sighvaOy2pKQLNkN5IxZ+LEBPco6dSJXXp5Ck39W8h/Dp0xFBV4Q==
-X-Received: by 2002:a63:541c:: with SMTP id i28mr4733787pgb.344.1590593640879;
-        Wed, 27 May 2020 08:34:00 -0700 (PDT)
+        bh=M5GB0AMS9WRErDc3nMkJiXBeHkIhYgLYLLC8h00713k=;
+        b=E/OpGGdPZDySh33Jtz37hIaLy5/36CWETGQm6wnysbQ1PpnWJ+rdkc696xaHTcOGJ5
+         gUr+pILfHoHJWr8SCe3XTaPBe+8Loec3SGV20SDi/49e/xC9ycvZXeuM53g8uvGrMVsI
+         03qDUvrb6Bh1Wh3pq9IF1Sk0Jz3Kc7P85Y4h0BKLkerPtxvB7/CaGZCK+TmRKKUiEM7V
+         vqtC1+SX3xYGnSdNzvLpFTPf3+RQqP7pX5Ys/1R/0F13XYRAvUfwjgRsFtVA7cvBGNKu
+         LngZuYmPfEnkTbUC+IUWNd3F7oXSPhU/fzXWw5h+m8ZTzxT+VquL6sgUk8JRiKMyMoO3
+         0dpw==
+X-Gm-Message-State: AOAM531M09jHJAJWNW6hbNX22g3fS1iJpmfpUOJlFOntVbqlxLGuA66j
+        Dc1pT3AANNbTqE6A+0eNdKvYyrmG
+X-Google-Smtp-Source: ABdhPJwXTRV4Z5rLAP+PwsRVUMBa5AakD7dmXOvoI+OZyx7XOCAVUPCzQYXq9g51GXz3Uk31FbUnGQ==
+X-Received: by 2002:a17:90a:26a7:: with SMTP id m36mr5652170pje.28.1590593726225;
+        Wed, 27 May 2020 08:35:26 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id cx11sm2984899pjb.36.2020.05.27.08.33.59
+        by smtp.gmail.com with ESMTPSA id s94sm3225668pjb.20.2020.05.27.08.35.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 May 2020 08:34:00 -0700 (PDT)
+        Wed, 27 May 2020 08:35:25 -0700 (PDT)
 Subject: Re: [PATCH 1/3 v7] hwmon: Add amd_energy driver to report energy
  counters
 To:     Alexander Monakov <amonakov@ispras.ru>
@@ -74,8 +74,9 @@ References: <20200519155011.56184-1-nchatrad@amd.com>
  <CAHfPSqC6gQzRt-_O-zHTHoSa=vOO064+dfoGrV2abQr=rMvfgA@mail.gmail.com>
  <9a4bbf2f-114a-4c69-b03e-0d9326816d44@roeck-us.net>
  <alpine.LNX.2.20.13.2005271703220.18802@monopod.intra.ispras.ru>
- <20200527144838.GA209591@roeck-us.net>
- <alpine.LNX.2.20.13.2005271755070.18802@monopod.intra.ispras.ru>
+ <CAHfPSqA_0NhpEvn+jAGb3O7uc+EbZDKWajdR_A=RK9Y_-QgKnQ@mail.gmail.com>
+ <10e43329-7822-83fb-ab58-c82c4a28373a@roeck-us.net>
+ <alpine.LNX.2.20.13.2005271823000.18802@monopod.intra.ispras.ru>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -120,71 +121,44 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <01990ace-a66a-2ada-5c97-a47a57bc90de@roeck-us.net>
-Date:   Wed, 27 May 2020 08:33:58 -0700
+Message-ID: <3a7b3724-86e8-d503-ff4b-43d2bb5074ae@roeck-us.net>
+Date:   Wed, 27 May 2020 08:35:24 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <alpine.LNX.2.20.13.2005271755070.18802@monopod.intra.ispras.ru>
+In-Reply-To: <alpine.LNX.2.20.13.2005271823000.18802@monopod.intra.ispras.ru>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/27/20 8:12 AM, Alexander Monakov wrote:
+On 5/27/20 8:25 AM, Alexander Monakov wrote:
 > On Wed, 27 May 2020, Guenter Roeck wrote:
 > 
->>> I'm not exactly complaining, I'm proposing a solution: at probe time, populate
->>> prev_value members with MSR values instead of zeros. That way, the module will
->>> correctly count energy over the time it's been loaded. It can be unloaded and
->>> reloaded freely, and doing so would allow to easily measure energy across large
->>> spans of time, which sounds like an improvement.
+>>> In the current driver, the accumulation thread starts during the probe and the
+>>> prev_value of sockets and the core0 is updated with the current MSR value.
+>>> It takes (nr_cpus - 1) iterations of the thread to populate the prev_value for
+>>> the other cores.
 >>>
->> That would ignore energy accumulated from before the driver was loaded, and
->> would thus trigger another set of complaints.
+>>> By populating prev_value of all the cores during probe, we can
+>>> certainly save some
+>>> information (values with in one wrap-around at the best). If this
+>>> information is
+>>> useful, i can submit a patch to do so. Guenter, could you suggest us on this.
+>>>
+>>
+>> As long as you don't ignore counter values from before loading the driver,
+>> sure, go ahead.
 > 
-> That doesn't sound right. There's no way for the driver to be sure that the
-> counters did not wrap around before it was loaded. Here's a few scenarios
-> how such wraparound is possible:
-> 
-> - while the user was messing in the bootloader for a few minutes
-> - if the user kexec'd a new kernel
-> - if the counters were not reset during a warm reboot
-> 
-> Ignoring initial values of the counters is generally the right thing to do.
-> In the specific circumstances when the user wants to measure energy used
-> since machine power-up, and they know the boot happened so quick the counters
-> did not wrap around, they can easily script that with e.g. the rdmsr tool.
-> Or perhaps the driver could pr_info the initial values at probe time.
-> 
-> Have such complaints already appeared in practice?
->
-The main argument in the coretemp case, if I recall correctly, was that
-the driver _doesn't_ provide valid data from the beginning of time, and
-would thus be worthless. So, yes, such complaints have already appeared
-in practice.
-
-> Also note that documentation doesn't promise that counters start from zero
-> at power-up time, although that's of course a natural assumption.
-> 
-> 
->> A slight improvement might be to add up core energy counters when loading
->> the driver, compare it against the package counter, and pick the larger
->> value for the initial package counter(s). This would at least ensure that
->> the package counter is never less than the sum of the core counters.
-> 
-> No, fudging the initial reading like this wouldn't help, because I was
-> pointing out how core counters increment quicker than the package counter;
-> i.e. even if the kernel fudged the initial values, they would still grow
-> contradictory quick enough (on some workloads).
+> Hm? If I'm understanding correctly what Naveen is proposing, that would simply
+> move reading the initial values ahead by a few hundred cycles (the latency to
+> start the thread). It wouldn't change anything about the issue, and make the 
+> code more complicated :(
 > 
 
-This exchange is exactly what I was concerned about when this driver
-was first submitted. I should have known better, and I should not
-have accepted it. Right now I seriously wonder if I should revert/drop
-it. Any arguments/thoughts why I _shouldn't_ do that ?
+At this point the question is if I should drop this driver entirely.
 
 Guenter
