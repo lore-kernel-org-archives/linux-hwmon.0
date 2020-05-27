@@ -7,194 +7,110 @@ X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89DBDC433E0
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 May 2020 03:23:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88D59C433DF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 May 2020 03:25:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5CC49207D8
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 May 2020 03:23:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 644B12084C
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 May 2020 03:25:49 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="si5tT+13"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SG8o27GO"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728395AbgE0DXc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 26 May 2020 23:23:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54296 "EHLO
+        id S1728472AbgE0DZt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 26 May 2020 23:25:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725893AbgE0DXb (ORCPT
+        with ESMTP id S1725893AbgE0DZs (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 26 May 2020 23:23:31 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7AE1C061A0F;
-        Tue, 26 May 2020 20:23:30 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id x18so8456352pll.6;
-        Tue, 26 May 2020 20:23:30 -0700 (PDT)
+        Tue, 26 May 2020 23:25:48 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9979EC061A0F;
+        Tue, 26 May 2020 20:25:47 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id v63so11151785pfb.10;
+        Tue, 26 May 2020 20:25:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=jpdwppDGX8MstjnP8VRZqQebs6Vku8HVmzBOYvGhB+c=;
-        b=si5tT+13sqgQs3mkFdK85QyElcFv/vijbjgCpiCHEl8BHHhqfXl5e+aLEuOBL0Tgk1
-         Ojq3VM9mNj0oy8m72fE363OWNxjntuhV3hPF55rbDnDzCLaX54cgia0Y3Nzfq+uJozwJ
-         KPje2+//1yByfam3kQUVt8AKzWO2nyvO0e3utKDL7qoSjHl3VVnR7bTcYdW0MYIbtqPt
-         pi4FJjIWvcZW9lW18OGrWp+eqoCkS53v9gx9IgbOVTOpO11+7VgKvB/aJgwVTe0FEu+9
-         Vh7AmfvbxuMALjN4yFBtER+KQKT9fLai96maEGsoukuZ5QahvHcl/uvdyQPGPCvhwFWb
-         +T8g==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=+LoutGusB/DPRmQJ774sLiZdDOwxl2Urz+NIX0qJuGk=;
+        b=SG8o27GOj8uGlIOjHmSbmkDbPXp9q2jD5zg+tjj9kWkRV66mAhxC/sO5mgNM7fdmUH
+         0CMJa5/KJnAgjzog3jsp9eSoWKbDtsqss4qdtnkzLvVh+Zzw4jAKSXaFpjzUofqUi0dY
+         I8xCNqO6gRs3sLPhy7KwgTD0oy2SdNWkYLahQja8HdvTkVYDXMOhxEzFm5EVwNlgpiMU
+         mc+V7lcWPGuVjvdQlArigQLoSBZ2nvHYVlbkX+B6dQ5CYm0iyvXbgE9M/W4zO2Py/MFQ
+         inE5iW6zJe5CcuZhsWUvm9lq7NjDvb+6QAMsdsLfbq1S5Tw0Ll3LXyXICRU8+mIGg6+E
+         YXzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=jpdwppDGX8MstjnP8VRZqQebs6Vku8HVmzBOYvGhB+c=;
-        b=mND8Ap2ai0TfcXFjvVzcu+3xyIVdalVro4EF9XHMBql5Vp7swwCYCDVx0dTyaCPnsP
-         /6NqHGST5yUfgPhtLOCpdfBuGUubEYnEjTzFTwh/cmYA68EbGAu/CrJ56lKtFGLlIjmQ
-         d8AgSHz2a6PpkOg2BKBxyyKYYBEab0NtXtnkIJoFo1/aGltXAZcheNNu9rajvc2KjDb8
-         KtKaQxx17oWr7XHgsXsazP/bmhZppPhriUbDknNb46fySEZw/DyCSLbsJWQqMoB9Gy9l
-         +TbGx5v7hjGv2eLrS0571oWv1kDuq1AzJfqp2EV3j4r0C8eGT0KfhZcDkS7EBV+iqeoL
-         o9kw==
-X-Gm-Message-State: AOAM533QXME+Qa9334pCvXF8lDol/x769DnlqDzGRkBstAo4qpwGD+/M
-        YJNDmZHmHpNe6NW13RUKMg4=
-X-Google-Smtp-Source: ABdhPJylRQt/CPga0uPaST3n+k7RJRf7QMAm01HSTidDdckxjhG/HiJF2vcIufGefGvsp8nv55nW0A==
-X-Received: by 2002:a17:90a:26a7:: with SMTP id m36mr2552425pje.28.1590549810383;
-        Tue, 26 May 2020 20:23:30 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v9sm819179pgj.54.2020.05.26.20.23.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 May 2020 20:23:29 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=+LoutGusB/DPRmQJ774sLiZdDOwxl2Urz+NIX0qJuGk=;
+        b=J28NkEhKtM9O1c55Vwki05txAm2hmwlOkYPN6CVSYYkpgYCzDQMh/orw3iTGeVvD1c
+         VGwD2wkynBfVN93BHvimxLMxbFT/S0sLX+BWMH4hCcebHubQGYu5p1vPQ6QKc/2pYoXF
+         fesYqpXQrtLez5XZZWazleACSSZSTwrX1UmHe2JRlDX5LpdU3nn71Pf77POSJWTLD/kB
+         2UZjhU4wA25OSy3niTR1wO1haPHBX+Q86eAuO/75lUBZCNfHHGmxYEVnnTBj+JWsW9FH
+         R3i8e1DCZDXMOuGiVZuofI2Di5QaKKjiHgOfwEJ1jE56+uuY2SfLXYEey2mxlFYuIOki
+         SjmQ==
+X-Gm-Message-State: AOAM533k95YLgG5uCRyZaoSVr5qQtGJ+VLOp1ZWwSl/lV6D2cBKcjAIQ
+        OfGB/LGxGeuY9AN1LcgicjY=
+X-Google-Smtp-Source: ABdhPJyL7/Ee2xG8f4YZQOo5SM6fDnvglKdX92dvDKXoNDVPGc1PO3DAs8c4RmF5mmJZsmNSaJAnMQ==
+X-Received: by 2002:a63:c311:: with SMTP id c17mr1965284pgd.103.1590549947242;
+        Tue, 26 May 2020 20:25:47 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u5sm750419pjv.54.2020.05.26.20.25.46
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 26 May 2020 20:25:46 -0700 (PDT)
+Date:   Tue, 26 May 2020 20:25:45 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Wei Yongjun <weiyongjun1@huawei.com>
+Cc:     Naveen Krishna Chatradhi <nchatrad@amd.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, Hulk Robot <hulkci@huawei.com>
 Subject: Re: [PATCH -next] hwmon: amd_energy: Missing
  platform_driver_unregister() on error in amd_energy_init()
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        "Chatradhi, Naveen Krishna" <NaveenKrishna.Chatradhi@amd.com>,
-        Wei Yongjun <weiyongjun1@huawei.com>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
-        Hulk Robot <hulkci@huawei.com>
+Message-ID: <20200527032545.GA259122@roeck-us.net>
 References: <20200527022417.105620-1-weiyongjun1@huawei.com>
- <BY5PR12MB42125FF6FEE5F146C428E295E8B10@BY5PR12MB4212.namprd12.prod.outlook.com>
- <5b96a406-3aea-fa63-03fb-580011728629@infradead.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <8b55407a-f4e6-5333-efcb-c8ea453cb3b5@roeck-us.net>
-Date:   Tue, 26 May 2020 20:23:28 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <5b96a406-3aea-fa63-03fb-580011728629@infradead.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200527022417.105620-1-weiyongjun1@huawei.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/26/20 7:32 PM, Randy Dunlap wrote:
-> On 5/26/20 7:28 PM, Chatradhi, Naveen Krishna wrote:
->> [AMD Official Use Only - Internal Distribution Only]
->>
->> Hi Yongjun,
->>
->> Thanks,
->> Acked-by: Naveen krishna Chatradhi <nchatrad@amd.com>
->>
->> -----Original Message-----
->> From: linux-hwmon-owner@vger.kernel.org <linux-hwmon-owner@vger.kernel.org> On Behalf Of Wei Yongjun
->> Sent: Wednesday, May 27, 2020 7:54 AM
->> To: Chatradhi, Naveen Krishna <NaveenKrishna.Chatradhi@amd.com>; Jean Delvare <jdelvare@suse.com>; Guenter Roeck <linux@roeck-us.net>
->> Cc: Wei Yongjun <weiyongjun1@huawei.com>; linux-hwmon@vger.kernel.org; kernel-janitors@vger.kernel.org; Hulk Robot <hulkci@huawei.com>
->> Subject: [PATCH -next] hwmon: amd_energy: Missing platform_driver_unregister() on error in amd_energy_init()
->>
->> [CAUTION: External Email]
->>
->> Add the missing platform_driver_unregister() before return from amd_energy_init() in the error handling case.
->>
->> Fixes: 8abee9566b7e ("hwmon: Add amd_energy driver to report energy counters")
->> Reported-by: Hulk Robot <hulkci@huawei.com>
+On Wed, May 27, 2020 at 02:24:17AM +0000, Wei Yongjun wrote:
+> Add the missing platform_driver_unregister() before return
+> from amd_energy_init() in the error handling case.
 > 
-> Hi Yongjun,
-> 
-> Does this Reported-by: say (imply) that hulkci is doing semantic analysis?
-> 
-> Is there any writeup or summary of what hulkci does?
-> 
-The tag is quite common nowadays.
+> Fixes: 8abee9566b7e ("hwmon: Add amd_energy driver to report energy counters")
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+> Acked-by: Naveen krishna Chatradhi <nchatrad@amd.com>
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
 
-$ git log | grep "Hulk Robot" | wc
-    869    3476   41712
+Applied.
 
-https://lwn.net/Articles/804119/:
-
-"At the top of the "by changesets" column is Yue Haibing, who fixed a large number of small problems
- all over the kernel. The bulk of these problems, it seems, have been found using a system at Huawei
- called Hulk Robot, which uses various Coccinelle scripts and reports the results."
-
+Thanks,
 Guenter
 
->> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
->> ---
->>  drivers/hwmon/amd_energy.c | 4 +++-
->>  1 file changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/hwmon/amd_energy.c b/drivers/hwmon/amd_energy.c index bc8b643a37d5..e95b7426106e 100644
->> --- a/drivers/hwmon/amd_energy.c
->> +++ b/drivers/hwmon/amd_energy.c
->> @@ -379,8 +379,10 @@ static int __init amd_energy_init(void)
->>                 return ret;
->>
->>         amd_energy_platdev = platform_device_alloc(DRVNAME, 0);
->> -       if (!amd_energy_platdev)
->> +       if (!amd_energy_platdev) {
->> +               platform_driver_unregister(&amd_energy_driver);
->>                 return -ENOMEM;
->> +       }
->>
->>         ret = platform_device_add(amd_energy_platdev);
->>         if (ret) {
->>
+> ---
+>  drivers/hwmon/amd_energy.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> 
-> thanks.
-> 
-
+> diff --git a/drivers/hwmon/amd_energy.c b/drivers/hwmon/amd_energy.c
+> index bc8b643a37d5..e95b7426106e 100644
+> --- a/drivers/hwmon/amd_energy.c
+> +++ b/drivers/hwmon/amd_energy.c
+> @@ -379,8 +379,10 @@ static int __init amd_energy_init(void)
+>  		return ret;
+>  
+>  	amd_energy_platdev = platform_device_alloc(DRVNAME, 0);
+> -	if (!amd_energy_platdev)
+> +	if (!amd_energy_platdev) {
+> +		platform_driver_unregister(&amd_energy_driver);
+>  		return -ENOMEM;
+> +	}
+>  
+>  	ret = platform_device_add(amd_energy_platdev);
+>  	if (ret) {
