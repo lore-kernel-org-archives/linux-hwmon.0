@@ -7,66 +7,66 @@ X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66486C433DF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 May 2020 01:43:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FEF8C433DF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 May 2020 01:46:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3E5CE207CB
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 May 2020 01:43:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EEB9A207CB
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 May 2020 01:46:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aDhAuU75"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gi8OFKEz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726776AbgE0BnA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 26 May 2020 21:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38898 "EHLO
+        id S1726759AbgE0BqG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 26 May 2020 21:46:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725801AbgE0BnA (ORCPT
+        with ESMTP id S1725287AbgE0BqG (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 26 May 2020 21:43:00 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09670C061A0F;
-        Tue, 26 May 2020 18:43:00 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id 131so2648271pfv.13;
-        Tue, 26 May 2020 18:42:59 -0700 (PDT)
+        Tue, 26 May 2020 21:46:06 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6108C061A0F;
+        Tue, 26 May 2020 18:46:05 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id j21so10951263pgb.7;
+        Tue, 26 May 2020 18:46:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=TMYPzf1zyGGWbUzm30NY2XXvAZv7yIeZIH3rUZQbHZ0=;
-        b=aDhAuU759PeqA8cjkqHn8adpDLvzToq0LVho3g0nQGloHty1hnnswAJKFZJ4VDJEYm
-         I/NgUF6P23Emcgg9NkiXw6EyxQvVirYZRc9hzYzu0b+nldYFiQUvTlk1SRL5x68mORv9
-         IJk5wLdgxfD48NAvBxIDibign9kv0e5c/w61ygUcEDzgf9TC9/HAf2xwg/Q2FGZvIqLG
-         aKruAu7zdsgF6bPufeSPTDO2UQ4BViFGfGH1hDZ2KtiY8ZJHWyF0iC5IbdP8/ztZ944e
-         NrI3rT4/OeHL7QLQwJPnlDnXFw1ZTFSb+0dOqLsL8FtAOl+Pd0bJmgXuRCn01YmbJM7Y
-         lq1g==
+        bh=MZLcc6FvvOdkLrr65+pE0QxY7X3K3DlXgtasljPdFOE=;
+        b=gi8OFKEzmSJgoc4o6BpqkFTS/o613tcMjZEAEXaPfsJkFpBgLiOmr0VLpKr0QQwZOT
+         IqRtDOJVwuJxMs19qf/cnyVDk8q1UM3QeCsWS/sJ9E4dP4kPRuAvlwjO8qMA9RFdqOC4
+         f+VAiyf6l66e2+jlVzziC52F4Bc/wVHYgt/CRiysTHp7DzZPI9xnr5zspTXQ6UVxv7oc
+         JOxkvW3MOicGqomUH3NMGNwq1vXYhsQneEwZ+rV1MegHR+do8vS68zad+8h6V02/v5Qz
+         SZuBrYldQ/1S8FvbeCbp3deGsuuKYGvW1eDXmZZj2R8Pr5eXnkMI5dka1eFG2l2inGbm
+         rJ0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=TMYPzf1zyGGWbUzm30NY2XXvAZv7yIeZIH3rUZQbHZ0=;
-        b=lOW+QcBuXb2foPHXh4g8OHya+GNMpPCn6udymgryA3loLK/wqYniU7G7KWwzMywCJB
-         fNVTUOU53MVOw2GmBXhrrwzsl8+qRLgaQIJrffmhiC+mNHL5m0Qd0vL7UBvbwLMKNpAp
-         7duH7raPhMzAMBIwq3joQQzntwMQoJD7PaBBEI3hnE47oC6zEOONpSmKsaZW/FlSNxMt
-         ROaokfbAKvTikX3OUYLAEF71Mz6UIDh5dr4R7Yky3Bb20j8AX4+PaplyWwS083k+HeVV
-         xaep4yH9azxG6nvnMEnSyYMKcHeNd81Mkm9+uoSKCvLMPU09LcvFKSBbPZbG0x4+b/hU
-         o7fA==
-X-Gm-Message-State: AOAM532xq2i4XTWRccF8ZhlDTNRbz7JXlmbgoy09krT/EegN2CborMCD
-        ahiyzXY/p4A3r7+XS5HmBSqvQjRB
-X-Google-Smtp-Source: ABdhPJypNKnsEraByPoOKKR2nH5/93q/md72DNbuMFLZxLPjVlTARJ8Qr8pYRvCyJAUtiW5Ce1mvHg==
-X-Received: by 2002:aa7:9ad9:: with SMTP id x25mr1595779pfp.179.1590543779087;
-        Tue, 26 May 2020 18:42:59 -0700 (PDT)
+        bh=MZLcc6FvvOdkLrr65+pE0QxY7X3K3DlXgtasljPdFOE=;
+        b=dOLBd4PFxvVuGQ5S9UXfMfQz9/CTynZjVhdXH7JeTUcUCj4ufNewJ2ZfQzEODfeVid
+         hkGq4enCZ+a+jpMUz8Yjmw6XPmaqELqaTdRTjwgMI4t01tPDez6Yj/LCEhxkAT6fb19j
+         FS5Bu9TRU5D7WAAy2AsNAS0VIt6k7j5l3fXL3fHpbnaOkZ4vv0ihOA8g0SboWW6hSC0Z
+         4Adv03/G1RnjBC+fRvp6qthuyR7cZB726LelaGiLgYkdAV9aL5Yw3pfhPifdznUoo2UH
+         ODyYpRFTLmlt8E2BPfZ0pjEGUUmD6dWxfk5A+AJp9r7EAvovE5RnziMyVk7MXwinxfBK
+         GKqw==
+X-Gm-Message-State: AOAM533EaR44O2T/m0NvV/C40XE0rDCfaY0Zgyi2q94zjC8MTo2K4D+4
+        S2FNoEyuFRpLsoU1atDqmrrVT9YX
+X-Google-Smtp-Source: ABdhPJxDxYp82tCTqbaj9xZV2lik9aWSCUbDGxUgn3OaYoxe5lPASUOvo32ty/T86ev5s2Kt8CzvHg==
+X-Received: by 2002:a63:9304:: with SMTP id b4mr1585553pge.229.1590543965219;
+        Tue, 26 May 2020 18:46:05 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k65sm623030pfd.156.2020.05.26.18.42.57
+        by smtp.gmail.com with ESMTPSA id k4sm689386pgg.88.2020.05.26.18.46.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 May 2020 18:42:58 -0700 (PDT)
-Subject: Re: [v1,1/1 1/2] Check the timeout module parameter is in the min-max
- range
+        Tue, 26 May 2020 18:46:04 -0700 (PDT)
+Subject: Re: [v1,1/1 2/2] Set the default timeout
 To:     yuechao.zhao@advantech.com.cn, 345351830@qq.com
 Cc:     amy.shih@advantech.com.tw, oakley.ding@advantech.com.tw,
         jia.sui@advantech.com.cn, Jean Delvare <jdelvare@suse.com>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <1590542319-35736-1-git-send-email-yuechao.zhao@advantech.com.cn>
+ <1590542319-35736-2-git-send-email-yuechao.zhao@advantech.com.cn>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -111,12 +111,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <2f482f42-0977-db1d-704a-b6f83ad715ef@roeck-us.net>
-Date:   Tue, 26 May 2020 18:42:56 -0700
+Message-ID: <80af4393-f7d9-6815-f156-44b0ba2c4c27@roeck-us.net>
+Date:   Tue, 26 May 2020 18:46:03 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <1590542319-35736-1-git-send-email-yuechao.zhao@advantech.com.cn>
+In-Reply-To: <1590542319-35736-2-git-send-email-yuechao.zhao@advantech.com.cn>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -128,37 +128,37 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 On 5/26/20 6:18 PM, yuechao.zhao@advantech.com.cn wrote:
 > From: Yuechao Zhao <yuechao.zhao@advantech.com.cn>
 > 
-> Check the return value of 'watchdog_init_timeout()' for checking the
-> timeout module parameter is in the min-max range.
+> The timeout module parameter should not be used for setting the default
+> timeout. Because, if you set the timeout = 0, the default timeout will
+> be meaningless. And the wahtchdog_init_timeout() can not detect this
+> error because the timeout module parameter of 0 means "no timeout
+> module paraameter specified".
 > 
 > Signed-off-by: Yuechao Zhao <yuechao.zhao@advantech.com.cn>
 
-Please fix the subject. It should start with "hwmon: (nct7904)"
+Please fix the subject to something like "hmwmon: (nct7904) Set default timeout".
+
+Also, the change only makes sense if you also change "static int timeout"
+to default to 0. Then you can just drop patch 1/2.
+
+Guenter
 
 > ---
->  drivers/hwmon/nct7904.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+>  drivers/hwmon/nct7904.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 > diff --git a/drivers/hwmon/nct7904.c b/drivers/hwmon/nct7904.c
-> index 18c95be..d069d59 100644
+> index d069d59..ddbe47e 100644
 > --- a/drivers/hwmon/nct7904.c
 > +++ b/drivers/hwmon/nct7904.c
-> @@ -1152,7 +1152,10 @@ static int nct7904_probe(struct i2c_client *client,
+> @@ -1147,7 +1147,7 @@ static int nct7904_probe(struct i2c_client *client,
+>  	data->wdt.ops = &nct7904_wdt_ops;
+>  	data->wdt.info = &nct7904_wdt_info;
+>  
+> -	data->wdt.timeout = timeout * 60; /* in seconds */
+> +	data->wdt.timeout = WATCHDOG_TIMEOUT * 60; /* Set default timeout */
+>  	data->wdt.min_timeout = MIN_TIMEOUT;
 >  	data->wdt.max_timeout = MAX_TIMEOUT;
 >  	data->wdt.parent = &client->dev;
->  
-> -	watchdog_init_timeout(&data->wdt, timeout * 60, &client->dev);
-> +	ret = watchdog_init_timeout(&data->wdt, timeout * 60, &client->dev);
-> +	if (ret < 0)
-> +		return ret;
-> +
-
-Why ? The idea of returning an error from watchdog_init_timeout
-is to give the driver a chance to select a default, not to refuse
-loading the driver.
-
->  	watchdog_set_nowayout(&data->wdt, nowayout);
->  	watchdog_set_drvdata(&data->wdt, data);
->  
 > 
 
