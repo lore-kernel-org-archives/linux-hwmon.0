@@ -2,149 +2,115 @@ Return-Path: <SRS0=qJgv=7K=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C70FC433DF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 28 May 2020 04:12:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7581DC433DF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 28 May 2020 10:03:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 056B42078B
-	for <linux-hwmon@archiver.kernel.org>; Thu, 28 May 2020 04:12:03 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KbT/dpfC"
+	by mail.kernel.org (Postfix) with ESMTP id 62044208B8
+	for <linux-hwmon@archiver.kernel.org>; Thu, 28 May 2020 10:03:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725839AbgE1EMC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 28 May 2020 00:12:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59192 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725833AbgE1EMC (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 28 May 2020 00:12:02 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291F3C05BD1E
-        for <linux-hwmon@vger.kernel.org>; Wed, 27 May 2020 21:12:02 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id 202so15755782lfe.5
-        for <linux-hwmon@vger.kernel.org>; Wed, 27 May 2020 21:12:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5CAlTgwBVvI1wBI5cKEmYCi0twI2vkrHSRXRgSY2ang=;
-        b=KbT/dpfCDFX77P2CKJ0MlBUPPVk1GsVobHSn0pncSTQ/VC46krxggmolpfGzIPqfK0
-         FXi7lc5t3s7RWVloomrlmG4PryEoQHsl9uLYfJPVaUh48fx5y6LmgpMR2ESfyl8NrRSM
-         dQXV9xQlJBBVcl+L7rgkOBAAtqpCWDDBE7Vn0jAIQcm6u/ncUso5zTGCKGgixHMGlNRK
-         iTFIj7dzxNIwe84X1iXZC41BfQYLxVPn9dhE20G122C58RGuZyjJS5C4eh+2afHU4dtG
-         l4aMd9rMmNFrWTiQH1FxFrCFejf0E60Bk8mrVJasp6GjVwSyroel0BBnLaAEdp2pcDYc
-         MeWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5CAlTgwBVvI1wBI5cKEmYCi0twI2vkrHSRXRgSY2ang=;
-        b=had5+6YHPG55eTyxOnvSM3Xm4vjgsZqS+EI3xZFj8QBFJDmzkgeyVP9UwCz0HxWBWw
-         0RGuVBzIKxqIAuh9o3VkkSO4kA8M+TN0iC0Ct3lNcMpH2yTjrhafB0auh/V1NMYqBu+N
-         L7FS2ZrkW2lfsmUH/iTUkAOvQO29a7OccQyieAOum4XJbvEqGKOVQmdTo+nQolqe6CXw
-         AsZlm4o6+K55/cqAlZIgVt4k4QvbXv9z7YUHIETA4RTtscar9BwsDvpbbgoggMq5vbWx
-         jqaJRsZIaMigkxCJO/dgNcH/VU0h4HyxhV6wASlhNONZgQIRbj+noPgWMtnrrZUlLUYO
-         /69g==
-X-Gm-Message-State: AOAM531hnGcx59mZfLKOoiYfK385bVpK43aGAMxE9w5EGkoLuxQdB/Ft
-        YVNKqFOvoxs481HS90mf8cm1rGH0ZgmaLihnTO+fqQ==
-X-Google-Smtp-Source: ABdhPJxPCVuAFQfZn1jTTI97GwXRcIEtoXLOMYJ2NswE6VoKKMH3bz102TiIn+2ml3VoExp62d7RSeSQjAcKs6Cner0=
-X-Received: by 2002:ac2:53a2:: with SMTP id j2mr575176lfh.139.1590639120527;
- Wed, 27 May 2020 21:12:00 -0700 (PDT)
+        id S2387643AbgE1KDD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 28 May 2020 06:03:03 -0400
+Received: from mx2.suse.de ([195.135.220.15]:38038 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387518AbgE1KDC (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 28 May 2020 06:03:02 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 31780AF4F;
+        Thu, 28 May 2020 10:02:59 +0000 (UTC)
+Date:   Thu, 28 May 2020 12:02:56 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     "Darrick J. Wong" <darrick.wong@oracle.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+        Joshua Scott <joshua.scott@alliedtelesis.co.nz>,
+        Axel Lin <axel.lin@ingics.com>
+Subject: Re: Questions about adt7470 driver
+Message-ID: <20200528120256.63023d63@endymion>
+In-Reply-To: <20200527233334.GL252930@magnolia>
+References: <20200526112259.4356fb2f@endymion>
+        <20200527224252.GB89212@roeck-us.net>
+        <20200527233334.GL252930@magnolia>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-References: <20200519155011.56184-1-nchatrad@amd.com> <d3cf6e06-8cda-a3d6-b528-fd2b5360585a@roeck-us.net>
- <CAHfPSqAUYjT_QDmLoQBSQwtjfzyTeNqGqxtBpfGUGc+uO8j+KA@mail.gmail.com>
- <alpine.LNX.2.20.13.2005270120271.8241@monopod.intra.ispras.ru>
- <CAHfPSqCDSQkR03B_g+OAWvja9-+Zwo4Pbx0jLpsHUu_sn9K77Q@mail.gmail.com>
- <alpine.LNX.2.20.13.2005270940400.18802@monopod.intra.ispras.ru>
- <CAHfPSqC6gQzRt-_O-zHTHoSa=vOO064+dfoGrV2abQr=rMvfgA@mail.gmail.com> <alpine.LNX.2.20.13.2005271944560.18802@monopod.intra.ispras.ru>
-In-Reply-To: <alpine.LNX.2.20.13.2005271944560.18802@monopod.intra.ispras.ru>
-From:   Naveen Krishna Ch <naveenkrishna.ch@gmail.com>
-Date:   Thu, 28 May 2020 09:41:49 +0530
-Message-ID: <CAHfPSqAYBKXJkG21hqjyuRN8X+HqaX5df6ByeSRoMycBeVU48A@mail.gmail.com>
-Subject: Re: [PATCH 1/3 v7] hwmon: Add amd_energy driver to report energy counters
-To:     Alexander Monakov <amonakov@ispras.ru>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Naveen Krishna Chatradhi <nchatrad@amd.com>,
-        linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Alexander
-
-On Wed, 27 May 2020 at 22:29, Alexander Monakov <amonakov@ispras.ru> wrote:
->
-> On Wed, 27 May 2020, Naveen Krishna Ch wrote:
->
-> > I tried on an octa core machine, must be Renoir
-> > vendor_id       : AuthenticAMD
-> > cpu family      : 23
-> > model           : 96
->
-> Yes, same here. The only difference I'm on a 6-core 4500U.
->
-> > On an idle system over a period of 500secs:
-> [snip]
-> > Power consumed by socket: 4.53539685 W
-> > Sum of power consumed by cores: 0.010953W
->
-> Yes, no problem for idle readings. I'm getting 2W/package on AC and
-> close to 0W on battery.
->
->
-> > On an system with AVX test running over a period of 500 secs:
+On Wed, 27 May 2020 16:33:34 -0700, Darrick J. Wong wrote:
+> On Wed, May 27, 2020 at 03:42:52PM -0700, Guenter Roeck wrote:
+> > On Tue, May 26, 2020 at 11:22:59AM +0200, Jean Delvare wrote:  
+> > > Hi all,
+> > > 
+> > > In the context of bug #207771, I got to look into the adt7470 driver.
+> > > I'm slowing understanding the logic of the background temperature
+> > > registers update thread, still there are 2 things I do not understand:
+> > > 
+> > > 1* Function adt7470_read_temperatures() sets data->num_temp_sensors,
+> > > however this value seems to be only used to limit the wait time of
+> > > future calls to the same function. In the general update function we
+> > > still read ALL temperature sensors regardless of its value:
+> > > 
+> > > 		for (i = 0; i < ADT7470_TEMP_COUNT; i++)
+> > > 			data->temp[i] = i2c_smbus_read_byte_data(client,
+> > > 						ADT7470_TEMP_REG(i));
+> > > 
+> > > Shouldn't this loop be bounded with data->num_temp_sensors instead of
+> > > ADT7470_TEMP_COUNT?
+> > >   
+> > Guess so.
+> >   
+> > > 2* Function adt7470_read_temperatures() also sets
+> > > data->temperatures_probed to 1, and this boolean is then used to skip
+> > > further calls to that function. But do we really need a separate
+> > > variable for this, given that num_temp_sensors >= 0 matches the same
+> > > condition as far as I can see?
 > >
-> >                  At t=500sec    | At t= 0           | Diff of energy
-> >  | in Joules        | Power in Watts
-> > core 0     | 649348495     | 413687530    | 235660965       |
-> > 235.660965   | 0.47132193
-> > core 1     | 506880081     | 294882827    | 211997254       |
-> > 211.997254    | 0.423994508
-> > core 2     | 454804046     | 271046127    | 183757919       |
-> > 183.757919    | 0.367515838
-> > core 3     | 391508712     | 237531021    | 153977691       |
-> > 153.977691    | 0.307955382
-> > core 4     | 410336868     | 284410079    | 125926789       |
-> > 125.926789    | 0.251853578
-> > core 5     | 287569732     | 192306015    | 95263717         |
-> > 95.263717      | 0.190527434
-> > core 6     | 185909622     | 120556152    | 65353470         |
-> > 65.35347        | 0.13070694
-> > core 7     | 129932006     | 95385940      | 34546066         |
-> > 34.546066      | 0.069092132
-> > Socket 0 | 28399099655 |  24799819931 3599279724     | 3599.27972    |
-> > 7.198559448
-> > Power consumed by socket: 7.198559448 W
-> > Sum of power consumed by cores:  2.212968 W
-> >
-> > Can you confirm this.
->
-> No, this isn't right. The workload is not stressing all cores, you're
-> reporting 235 J for core 0 and only 35 J for core 7.
->
-> If you are running the avx-turbo test, please run it like this:
->
->   ./avx-turbo --iters 10000000 --spec avx256_fma_t/8
->
-> This will run AVX code on all 8 cores for about 1 second. To run it for longer,
-> increase the --iters argument.
-I ran with all cores loaded now and i see that
-sum of diff of energy consumed by all cores is greater than the diff of
-socket energy consumed in 100secs.
+> > Agreed. On the other side, those are optimizations. I am not really sure
+> > if that driver is worth spending time on, given the age of the chip.
 
-Kindly, give me time. I will come back with some explanation or solution.
->
-> Thanks.
-> Alexander
+Well it's still in use and apparently at least one user cares enough to
+report a bug and propose a candidate fix.
 
+> I /think/ the answer to both questions is yes, but I don't have the
+> hardware anymore so I have no way to QA that... :/
 
+Thanks for both of you for your answers.
 
+Darrick, I have 3 more questions for you if you remember...
+
+3* I understand that the temperatures need to be read periodically in
+order for automatic fan speed control to work. What I do not understand
+is why you bother switching PWM outputs to manual mode each time? What
+bad would happen if we did not do that? I see nothing in the datasheet
+justifying it.
+
+4* Why are you calling msleep_interruptible() in
+adt7470_read_temperatures() to wait for the temperature conversions? We
+return -EAGAIN if that happens, but then ignore that error code, and we
+log a cryptic error message. Do I understand correctly that the only
+case where this should happen is when the user unloads the kernel
+driver, in which case we do not care about having been interrupted? I
+can't actually get the error message to be logged when rmmod'ing the
+module so I don't know what it would take to trigger it.
+
+5* Is there any reason why the update thread is being started
+unconditionally? As I understand it, it is only needed if at least one
+PWM output is configured in automatic mode, which (I think) is not the
+default. It is odd that the bug reporter hits a problem with the
+polling thread when they are not using automatic fan speed control in
+the first place so they do not need the polling thread to run. I was
+wondering if it would be possible to start and stop the polling thread
+depending on whether automatic PWM is enabled or not.
+
+Thanks again,
 -- 
-Shine bright,
-(: Nav :)
+Jean Delvare
+SUSE L3 Support
