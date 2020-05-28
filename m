@@ -2,151 +2,103 @@ Return-Path: <SRS0=qJgv=7K=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	LONGWORDS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA40AC433E1
-	for <linux-hwmon@archiver.kernel.org>; Thu, 28 May 2020 00:28:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37061C433E0
+	for <linux-hwmon@archiver.kernel.org>; Thu, 28 May 2020 01:10:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8632D207CB
-	for <linux-hwmon@archiver.kernel.org>; Thu, 28 May 2020 00:28:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0FDCC2078C
+	for <linux-hwmon@archiver.kernel.org>; Thu, 28 May 2020 01:10:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725795AbgE1A2V (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 27 May 2020 20:28:21 -0400
-Received: from mga18.intel.com ([134.134.136.126]:57165 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725267AbgE1A2V (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 27 May 2020 20:28:21 -0400
-IronPort-SDR: c8yuVqbSLL/IdG6uqrYv+TncwJRFHwAw4YwMO/+llkwenW2jyzp60AtH7WotVsfEQqzsdfIVgs
- Q2cVhMtPT2IQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2020 17:28:20 -0700
-IronPort-SDR: IVAbdojn3MGIwnf91QBmOqCfG8JiaJYtCk1shwfgXKPhFEF9xjXlNhkhk/izGPssuldnZjcYuQ
- Yo99rW3+fStw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,443,1583222400"; 
-   d="scan'208";a="291801827"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 27 May 2020 17:28:19 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1je6PC-000HPt-E8; Thu, 28 May 2020 08:28:18 +0800
-Date:   Thu, 28 May 2020 08:27:57 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon-next] BUILD SUCCESS
- fff2d0f701e6753591609739f8ab9be1c8e80ebb
-Message-ID: <5ecf058d.uoUqFcpk9xEvvT+f%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1725922AbgE1BKR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 27 May 2020 21:10:17 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:37124 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725747AbgE1BKR (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 27 May 2020 21:10:17 -0400
+Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id E2ED01509E92DF93ECA2;
+        Thu, 28 May 2020 09:10:13 +0800 (CST)
+Received: from [127.0.0.1] (10.166.215.154) by DGGEMS407-HUB.china.huawei.com
+ (10.3.19.207) with Microsoft SMTP Server id 14.3.487.0; Thu, 28 May 2020
+ 09:10:10 +0800
+Subject: Re: [PATCH -next] hwmon: (amd_energy) Fix build error
+To:     Guenter Roeck <linux@roeck-us.net>, <nchatrad@amd.com>,
+        <jdelvare@suse.com>
+References: <20200527130241.58468-1-yuehaibing@huawei.com>
+ <bfcd6504-c717-8e60-a1ad-d173f3bea02f@roeck-us.net>
+CC:     <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+From:   Yuehaibing <yuehaibing@huawei.com>
+Message-ID: <a0d97556-feb2-ee02-2554-678c4cac2801@huawei.com>
+Date:   Thu, 28 May 2020 09:10:09 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <bfcd6504-c717-8e60-a1ad-d173f3bea02f@roeck-us.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.166.215.154]
+X-CFilter-Loop: Reflected
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon-next
-branch HEAD: fff2d0f701e6753591609739f8ab9be1c8e80ebb  hwmon: (applesmc) avoid overlong udelay()
+On 2020/5/27 21:22, Guenter Roeck wrote:
+> On 5/27/20 6:02 AM, YueHaibing wrote:
+>> If CONFIG_NEED_MULTIPLE_NODES is n, building fails:
+>>
+>> drivers/hwmon/amd_energy.c: In function ‘amd_energy_read’:
+>> ./include/asm-generic/topology.h:51:36: error: void value not ignored as it ought to be
+>>      #define cpumask_of_node(node) ((void)node, cpu_online_mask)
+>> ./include/linux/cpumask.h:618:72: note: in definition of macro ‘cpumask_first_and’
+>>  #define cpumask_first_and(src1p, src2p) cpumask_next_and(-1, (src1p), (src2p))
+>>                                                                         ^~~~~
+>> drivers/hwmon/amd_energy.c:194:6: note: in expansion of macro ‘cpumask_of_node’
+>>       cpumask_of_node
+>>       ^~~~~~~~~~~~~~~
+>> ./include/asm-generic/topology.h:51:46: warning: left-hand operand of comma expression has no effect [-Wunused-value]
+>>      #define cpumask_of_node(node) ((void)node, cpu_online_mask)
+>>                                               ^
+>> ./include/linux/cpumask.h:618:72: note: in definition of macro ‘cpumask_first_and’
+>>  #define cpumask_first_and(src1p, src2p) cpumask_next_and(-1, (src1p), (src2p))
+>>                                                                         ^~~~~
+>> drivers/hwmon/amd_energy.c:194:6: note: in expansion of macro ‘cpumask_of_node’
+>>       cpumask_of_node
+>>       ^~~~~~~~~~~~~~~
+>>
+>> Fixes: 8abee9566b7e ("hwmon: Add amd_energy driver to report energy counters")
+>> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+>> ---
+>>  drivers/hwmon/amd_energy.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/hwmon/amd_energy.c b/drivers/hwmon/amd_energy.c
+>> index bc8b643a37d5..9d5cd3057866 100644
+>> --- a/drivers/hwmon/amd_energy.c
+>> +++ b/drivers/hwmon/amd_energy.c
+>> @@ -192,7 +192,7 @@ static int amd_energy_read(struct device *dev,
+>>  	if (channel >= data->nr_cpus) {
+>>  		cpu = cpumask_first_and(cpu_online_mask,
+>>  					cpumask_of_node
+>> -					(channel - data->nr_cpus));
+>> +					((channel - data->nr_cpus)));
+> 
+> Wrong fix. The correct fix is to fix the macro, not its caller.
+> A patch to fix the macro has been submitted.
+> 
+Thanks, missing that.
 
-elapsed time: 484m
+> Guenter
+> 
+> 
+>>  		amd_add_delta(data, channel, cpu, val, false);
+>>  	} else {
+>>  		cpu = channel;
+>>
+> 
+> 
+> 
 
-configs tested: 85
-configs skipped: 4
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-arm64                            allyesconfig
-arm64                               defconfig
-arm64                            allmodconfig
-arm64                             allnoconfig
-arm                                 defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                               allnoconfig
-mips                     loongson1c_defconfig
-mips                    maltaup_xpa_defconfig
-arm                           tegra_defconfig
-mips                            e55_defconfig
-arc                     nsimosci_hs_defconfig
-m68k                            mac_defconfig
-i386                              allnoconfig
-i386                             allyesconfig
-i386                                defconfig
-i386                              debian-10.3
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                              allnoconfig
-m68k                           sun3_defconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                               defconfig
-nds32                             allnoconfig
-csky                             allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-h8300                            allmodconfig
-xtensa                              defconfig
-arc                                 defconfig
-arc                              allyesconfig
-sh                               allmodconfig
-sh                                allnoconfig
-microblaze                        allnoconfig
-nios2                               defconfig
-nios2                            allyesconfig
-openrisc                            defconfig
-c6x                              allyesconfig
-c6x                               allnoconfig
-openrisc                         allyesconfig
-mips                             allyesconfig
-mips                              allnoconfig
-mips                             allmodconfig
-parisc                            allnoconfig
-parisc                              defconfig
-parisc                           allyesconfig
-parisc                           allmodconfig
-powerpc                             defconfig
-powerpc                          allyesconfig
-powerpc                          rhel-kconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-s390                             allyesconfig
-s390                              allnoconfig
-s390                             allmodconfig
-s390                                defconfig
-sparc                            allyesconfig
-sparc                               defconfig
-sparc64                             defconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-sparc64                          allmodconfig
-um                               allmodconfig
-um                                allnoconfig
-um                               allyesconfig
-um                                  defconfig
-x86_64                                   rhel
-x86_64                               rhel-7.6
-x86_64                    rhel-7.6-kselftests
-x86_64                         rhel-7.2-clear
-x86_64                                    lkp
-x86_64                              fedora-25
-x86_64                                  kexec
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
