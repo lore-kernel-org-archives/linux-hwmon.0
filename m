@@ -2,103 +2,106 @@ Return-Path: <SRS0=qJgv=7K=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37061C433E0
-	for <linux-hwmon@archiver.kernel.org>; Thu, 28 May 2020 01:10:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2430C433DF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 28 May 2020 02:29:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0FDCC2078C
-	for <linux-hwmon@archiver.kernel.org>; Thu, 28 May 2020 01:10:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A8E9E2084C
+	for <linux-hwmon@archiver.kernel.org>; Thu, 28 May 2020 02:29:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1590632978;
+	bh=I7d2ARYFNaoUS4y6HBudICV1DoitdBXWssMAGuzWnHE=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:List-ID:
+	 From;
+	b=GNRUjBl9uRalDX2EbKtwXsYiCU5PuZieRqiACBuEBk6Mk09V0pMULmKZa/VnFR8jT
+	 0+jE45MDxHvxzmAkHH15I/xoEgkQKzXW7eZz3Acmg5b9Smyn0Tim4JILE08SgGndwh
+	 fUbs2W8lbJ5rhQ45JbYUw/tM7DEYXJPCX3/SX9r0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725922AbgE1BKR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 27 May 2020 21:10:17 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:37124 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725747AbgE1BKR (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 27 May 2020 21:10:17 -0400
-Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id E2ED01509E92DF93ECA2;
-        Thu, 28 May 2020 09:10:13 +0800 (CST)
-Received: from [127.0.0.1] (10.166.215.154) by DGGEMS407-HUB.china.huawei.com
- (10.3.19.207) with Microsoft SMTP Server id 14.3.487.0; Thu, 28 May 2020
- 09:10:10 +0800
-Subject: Re: [PATCH -next] hwmon: (amd_energy) Fix build error
-To:     Guenter Roeck <linux@roeck-us.net>, <nchatrad@amd.com>,
-        <jdelvare@suse.com>
-References: <20200527130241.58468-1-yuehaibing@huawei.com>
- <bfcd6504-c717-8e60-a1ad-d173f3bea02f@roeck-us.net>
-CC:     <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-From:   Yuehaibing <yuehaibing@huawei.com>
-Message-ID: <a0d97556-feb2-ee02-2554-678c4cac2801@huawei.com>
-Date:   Thu, 28 May 2020 09:10:09 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.8.0
+        id S1726579AbgE1C3f (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 27 May 2020 22:29:35 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:40640 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725849AbgE1C3f (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 27 May 2020 22:29:35 -0400
+Received: by mail-io1-f65.google.com with SMTP id q8so26961079iow.7;
+        Wed, 27 May 2020 19:29:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=uKUnnOxF9cpoRDQnA++h7CPfUqtyF29gVMBaKZyv/Y0=;
+        b=kg1LTEZhQxb7HJVJ1IQog3JuWZ7xWR6fI5tmoDcEpTLC+8uxKKOPI1Pa6bdKXI+adX
+         fWAha59YG9+r8Oxtu1l/VdwHbm1YrSOxYn/Vwl/N9LhwR5prt7bx5mUt4mnjm/aXkYEU
+         5/XOr5Rm0gB2P3WF5Mg3n5r/8hiMJbwwK7ai59cyeXMWyc0+c31hp/vvuilDGDczDFsy
+         2ekWgRwUphJ/wZdjqr82jXb+QA4xcpwK0x3CRKgVLwlM2eeQZdPIwlGf8qOCc1gUQDZY
+         ReDxEmHM28aHnnmCBE2NkaCwdte8ybeAutJFJsALwojh9xMgQxLgktpDRSeIe73G1vj4
+         owfA==
+X-Gm-Message-State: AOAM5333u5ngyp7sm4VfOWFNqrI8abOEh1qPw3t8o0yiPDT/cbjXQ1bU
+        aHVLJxgBSyOfabzv/iBOhg==
+X-Google-Smtp-Source: ABdhPJwYED2xCAsIzgBVyE9vczourY10RCn6ClYw2lvBmJb5XU3kxN6F+mP9W19n8mYNqGq07R2dMg==
+X-Received: by 2002:a05:6638:101c:: with SMTP id r28mr815783jab.84.1590632973069;
+        Wed, 27 May 2020 19:29:33 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id z75sm2638939ilc.50.2020.05.27.19.29.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 May 2020 19:29:32 -0700 (PDT)
+Received: (nullmailer pid 3243939 invoked by uid 1000);
+        Thu, 28 May 2020 02:29:31 -0000
+Date:   Wed, 27 May 2020 20:29:31 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Lars Povlsen <lars.povlsen@microchip.com>
+List-Id: <soc.lore.kernel.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>, SoC Team <soc@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: Re: [PATCH 2/3] arm64: dts: sparx5: Add hwmon temperature sensor
+Message-ID: <20200528022931.GA3238321@bogus>
+References: <20200513134140.25357-1-lars.povlsen@microchip.com>
+ <20200513134140.25357-3-lars.povlsen@microchip.com>
 MIME-Version: 1.0
-In-Reply-To: <bfcd6504-c717-8e60-a1ad-d173f3bea02f@roeck-us.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.166.215.154]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200513134140.25357-3-lars.povlsen@microchip.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2020/5/27 21:22, Guenter Roeck wrote:
-> On 5/27/20 6:02 AM, YueHaibing wrote:
->> If CONFIG_NEED_MULTIPLE_NODES is n, building fails:
->>
->> drivers/hwmon/amd_energy.c: In function ‘amd_energy_read’:
->> ./include/asm-generic/topology.h:51:36: error: void value not ignored as it ought to be
->>      #define cpumask_of_node(node) ((void)node, cpu_online_mask)
->> ./include/linux/cpumask.h:618:72: note: in definition of macro ‘cpumask_first_and’
->>  #define cpumask_first_and(src1p, src2p) cpumask_next_and(-1, (src1p), (src2p))
->>                                                                         ^~~~~
->> drivers/hwmon/amd_energy.c:194:6: note: in expansion of macro ‘cpumask_of_node’
->>       cpumask_of_node
->>       ^~~~~~~~~~~~~~~
->> ./include/asm-generic/topology.h:51:46: warning: left-hand operand of comma expression has no effect [-Wunused-value]
->>      #define cpumask_of_node(node) ((void)node, cpu_online_mask)
->>                                               ^
->> ./include/linux/cpumask.h:618:72: note: in definition of macro ‘cpumask_first_and’
->>  #define cpumask_first_and(src1p, src2p) cpumask_next_and(-1, (src1p), (src2p))
->>                                                                         ^~~~~
->> drivers/hwmon/amd_energy.c:194:6: note: in expansion of macro ‘cpumask_of_node’
->>       cpumask_of_node
->>       ^~~~~~~~~~~~~~~
->>
->> Fixes: 8abee9566b7e ("hwmon: Add amd_energy driver to report energy counters")
->> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
->> ---
->>  drivers/hwmon/amd_energy.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/hwmon/amd_energy.c b/drivers/hwmon/amd_energy.c
->> index bc8b643a37d5..9d5cd3057866 100644
->> --- a/drivers/hwmon/amd_energy.c
->> +++ b/drivers/hwmon/amd_energy.c
->> @@ -192,7 +192,7 @@ static int amd_energy_read(struct device *dev,
->>  	if (channel >= data->nr_cpus) {
->>  		cpu = cpumask_first_and(cpu_online_mask,
->>  					cpumask_of_node
->> -					(channel - data->nr_cpus));
->> +					((channel - data->nr_cpus)));
+On Wed, May 13, 2020 at 03:41:39PM +0200, Lars Povlsen wrote:
+> This adds a hwmon temperature node sensor to the Sparx5 SoC.
 > 
-> Wrong fix. The correct fix is to fix the macro, not its caller.
-> A patch to fix the macro has been submitted.
+> Reviewed-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Signed-off-by: Lars Povlsen <lars.povlsen@microchip.com>
+> ---
+>  arch/arm64/boot/dts/microchip/sparx5.dtsi | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-Thanks, missing that.
+> diff --git a/arch/arm64/boot/dts/microchip/sparx5.dtsi b/arch/arm64/boot/dts/microchip/sparx5.dtsi
+> index f09a49c41ce19..b5f2d088af30e 100644
+> --- a/arch/arm64/boot/dts/microchip/sparx5.dtsi
+> +++ b/arch/arm64/boot/dts/microchip/sparx5.dtsi
+> @@ -233,5 +233,11 @@ i2c1: i2c@600103000 {
+>  			clock-frequency = <100000>;
+>  			clocks = <&ahb_clk>;
+>  		};
+> +
+> +		tmon0: tmon@610508110 {
+> +			compatible = "microchip,sparx5-temp";
+> +			reg = <0x6 0x10508110 0xc>;
 
-> Guenter
-> 
-> 
->>  		amd_add_delta(data, channel, cpu, val, false);
->>  	} else {
->>  		cpu = channel;
->>
-> 
-> 
-> 
+These nodes are all very odd with a couple of registers spread out at 
+randomish addresses. DT nodes should roughly correlate to h/w blocks, 
+not sets of registers for a driver like this seems to be.
 
+Please make the dts files one patch. Reviewing a node at a time is not 
+all that effective.
+
+Rob
