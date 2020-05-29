@@ -2,151 +2,183 @@ Return-Path: <SRS0=nzsd=7L=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6EE0C433DF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 29 May 2020 21:17:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CB81C433DF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 29 May 2020 23:47:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A138B2071A
-	for <linux-hwmon@archiver.kernel.org>; Fri, 29 May 2020 21:17:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1590787076;
-	bh=vpKoyoWN5r6O3rlLTDJNlJPVdlLTIMxaOA92uuObPJs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=lSeQELv0XzjBHH5d4R4yUBnGADHJr5LqaPkkrCWErBg5l175nFC95ckfMjQC5HLgC
-	 2+SOVCZriP5T5UpzVow7Zsk4kZWs7lHgkKNriJeT3o9k9fEoqEsR4m7D9HJONLvI59
-	 AWyYmhhJ6GIfKOGMuHK9JjXTVsQm1SGXKkNEbIdg=
+	by mail.kernel.org (Postfix) with ESMTP id 24B7B20810
+	for <linux-hwmon@archiver.kernel.org>; Fri, 29 May 2020 23:47:59 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="jQR9T6j2";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="I9+sJU1z"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728265AbgE2VR4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 29 May 2020 17:17:56 -0400
-Received: from mail-il1-f194.google.com ([209.85.166.194]:39940 "EHLO
-        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727851AbgE2VRz (ORCPT
+        id S1728425AbgE2Xr6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 29 May 2020 19:47:58 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:11940 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727876AbgE2Xr6 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 29 May 2020 17:17:55 -0400
-Received: by mail-il1-f194.google.com with SMTP id t8so3362045ilm.7;
-        Fri, 29 May 2020 14:17:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vUXcWEVyGeAOrT4sCouBuRywKuKYWtHu45lPmV+EjrM=;
-        b=nO/VaQfVLUdP+MS002zaTmo62t4ug3fpAAZ0LSjsfV++CwAfYYECsveush6QrupusU
-         uG3KkB5qfaHqlRMRrtF9ctG1IjqNo2zgeqgj22TFnKIouV/ZatSdpC22KKRjVFMropb4
-         pl9xnGu6LvysL6hW/hHLewnRCrCKMaZVWpWb4AcoaYh+VYgHKXTXd0jup36FMc6ekg7K
-         F5xV6/s6BQ8edtgFL0A1aG8nrwGtluS25hzt8j/jnvu9RrZkbPTLiuIpg9rMzClJRRlQ
-         m4h0YHMd/Y2f+FNVA6Pttj8kGxDsHVVtyPH0S1VJHoQtlYHSDR7cOo2DYy2+GFhNvo1l
-         IKgQ==
-X-Gm-Message-State: AOAM533bciewWWeIEK4Y+EaU/3wF5+2rdq8FNkoSd4g4mXhmH0D8LMcY
-        9J7OAuj3yhyStAeyNTXpw7C8HD8MOg==
-X-Google-Smtp-Source: ABdhPJyVQopdodmrG1J/7Gqr/xZs0tHWJIN9wz1LuRxvYuIRTOK2a60ioznc8C+lv3tHwhikdv876w==
-X-Received: by 2002:a05:6e02:8ee:: with SMTP id n14mr8971926ilt.189.1590787074907;
-        Fri, 29 May 2020 14:17:54 -0700 (PDT)
-Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id a17sm5194699ilr.68.2020.05.29.14.17.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 May 2020 14:17:54 -0700 (PDT)
-Received: (nullmailer pid 2984285 invoked by uid 1000);
-        Fri, 29 May 2020 21:17:53 -0000
-Date:   Fri, 29 May 2020 15:17:53 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     alexandru.tachici@analog.com
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux@roeck-us.net
-Subject: Re: [PATCH v3 6/6] dt-bindings: hwmon: Add bindings for ADM1266
-Message-ID: <20200529211753.GA2981084@bogus>
-References: <20200529130506.73511-1-alexandru.tachici@analog.com>
- <20200529130506.73511-7-alexandru.tachici@analog.com>
+        Fri, 29 May 2020 19:47:58 -0400
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04TNd2lF024963;
+        Fri, 29 May 2020 16:47:18 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=/RYMGJ2Okat5dDtOGmDpmxH6n4WAqD0HlqiSukw323E=;
+ b=jQR9T6j2UlpwKW+wjihWwN6AZre19Wfwklg29azRfGG1jkyAM3OjBH0JwHksXrSP6dKK
+ v9rRFx6n0UkdPbPMdxAzrFdL6cghpwp3/Se9lhyXLkXiTvpV2RtWTbX648ocwq5KnuAY
+ 36Iv7Tgqfb9uV64nzRk9YZ/UDG57MBVkFz4= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 31b3yrcyag-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 29 May 2020 16:47:18 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.36.101) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Fri, 29 May 2020 16:47:17 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CcQ/fO9ws1xymHIgvraPd82/SgyYG6rS9e6Mg/MsC4szfZwwrIb0WTgGWqPgp5bVOybsm1zsrsZTTqlVr7zc0R5CCEoQO+rdOGSn+J8Aoi6vkAHz0wHJJa1E4hOW6fSRhVjNwdWOIutThPPqowUVn3FxqN9pOpwJasVOm7Os3u9xxJk4QnoNNgO/2KqrZGojj439WhWcehBqBhqoNTMnA37IeW/kCUMroYyPHzE94A6MxHAURx1q4wpFLedCu92VPHdZyidL6/KJ/IAJTKDKR2noucn19VfobpnAWEPXzX9UqdmPnysuha5H+715aLUh5IEl1kLkbq7hqJdBCnuf0A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/RYMGJ2Okat5dDtOGmDpmxH6n4WAqD0HlqiSukw323E=;
+ b=dZhs7xKed6JiLRPcB8zA9q1sXUUW2JusPA7GRsUgqd/WLuP+VpiGvH5J7g97VrvBZQd/be/jpt0reXurz6O2V1ZFFOIHyX/gCJFwdPqx3u4i7xVtPB1wW/SJL0fkpbwIh9iyGu4OulF1y6a8FTgt04A69ve/uUW9aqKz4EFhDEIgmY1uCcOg8KLma0QQgZMf9u1sfjH0o3XBjmyg0kALfLE2KNN14e+S42R2fKbieqBDDWNIEcNhaWKXNwS5SrKYW7cyiLNfAmB2T8pTrgal8OYOqkllrfA4EFOIwM9BYnebew5UMBUz71nYW/g6KtDv5PRM50yKKi1j7+J91LbUZg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/RYMGJ2Okat5dDtOGmDpmxH6n4WAqD0HlqiSukw323E=;
+ b=I9+sJU1zLJLY+zyrlDhWpbUiYnnlKoaTCzGqfP08ZuZDjPC31uTlSD2KXKj2OWz8+nN6suX7FnXZNuvC5M9BSCgXUV6L0mszvLXyRk792OqtEovaf24kOG9NT+y1taE5pl2WXoSsFTE3kxH3r4xC0v/+Vqc2uenVfaCn86euEBs=
+Received: from BYAPR15MB2374.namprd15.prod.outlook.com (2603:10b6:a02:8b::16)
+ by BYAPR15MB2918.namprd15.prod.outlook.com (2603:10b6:a03:fe::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3045.17; Fri, 29 May
+ 2020 23:47:13 +0000
+Received: from BYAPR15MB2374.namprd15.prod.outlook.com
+ ([fe80::34b8:e690:6dfc:8faf]) by BYAPR15MB2374.namprd15.prod.outlook.com
+ ([fe80::34b8:e690:6dfc:8faf%4]) with mapi id 15.20.3045.018; Fri, 29 May 2020
+ 23:47:13 +0000
+From:   Vijay Khemka <vijaykhemka@fb.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Manikandan Elumalai <manikandan.hcl.ers.epl@gmail.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>
+CC:     "saipsdasari@fb.com" <saipsdasari@fb.com>,
+        Patrick Williams <patrickw3@fb.com>,
+        "manikandan.e@hcl.com" <manikandan.e@hcl.com>
+Subject: Re: [PATCH v2] hwmon:(adm1275) Enable adm1278 ADM1278_TEMP1_EN
+Thread-Topic: [PATCH v2] hwmon:(adm1275) Enable adm1278 ADM1278_TEMP1_EN
+Thread-Index: AQHWNbdFvmcC7XgBI0iZGne+tKUE7Ki+5FUAgACFwID//9wAAA==
+Date:   Fri, 29 May 2020 23:47:13 +0000
+Message-ID: <86D10289-7406-4114-B058-1B2693E3C4E1@fb.com>
+References: <20200529124607.GA3469@cnn>
+ <6F5BD2D3-997D-4607-BC0C-B36497B51D13@fb.com>
+ <41b169b7-83cb-c814-179e-9e62f17f27d8@roeck-us.net>
+In-Reply-To: <41b169b7-83cb-c814-179e-9e62f17f27d8@roeck-us.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: roeck-us.net; dkim=none (message not signed)
+ header.d=none;roeck-us.net; dmarc=none action=none header.from=fb.com;
+x-originating-ip: [2620:10d:c090:400::5:9985]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e60a29b1-49a5-4039-ca66-08d8042a9cb7
+x-ms-traffictypediagnostic: BYAPR15MB2918:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <BYAPR15MB2918475FF1CAC8F826B5054ADD8F0@BYAPR15MB2918.namprd15.prod.outlook.com>
+x-fb-source: Internal
+x-ms-oob-tlc-oobclassifiers: OLM:4714;
+x-forefront-prvs: 04180B6720
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 6MtBi8VV7hCtvfhkhHnUY1mtb2ng+EeTLlUnfO2/NdP43hd6Z2MeVAExQ2H2aggEOHZ6pE6pGKFxvpvtvun8xzpiF54JaXvnjxcOg4qIGP/CjcoatITK8qadOi+xYcVMc3cChEUiRm/bp5AZiL8xAeRWUavn72MB4g9fsKd8sOQSdQnpGmkDoclpW17T4IFB7o9VJayOfNSFeGgNADHD/c+36QK3KdW5BFKhM7cWEH/uAqmeQvoNZhXqqPP/sLyYVYvJl1x09Rq7hHeKrC+hw7uYk8YZbYmJTDoolucG/H5gvJ4lHdCZ17q34zHuOL0R8sbAv6/DJw2PWaTOw+N9Pw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB2374.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(376002)(346002)(136003)(39860400002)(366004)(396003)(110136005)(4326008)(8676002)(6506007)(2616005)(64756008)(86362001)(66476007)(33656002)(66556008)(53546011)(6486002)(66446008)(66946007)(5660300002)(54906003)(8936002)(186003)(83380400001)(71200400001)(6512007)(478600001)(316002)(36756003)(76116006)(2906002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: jZF+xShicQJML+CPRfn5UGzhoxYAhqZe0elOv2jMn6TCLSFk3luXzoUth5ZGaMa2F+L0iSSoqEKQnsnk4SuF8pLZe0Q4LARIqeMbo68CDsrjgWEvkopOEIRy4aJuMrK52Ydv4tozNYlMq5Z16YIlRzeNPV8SdI8O5qKi0sQ7QCJb6WRa+LoiD8Fj9XUPEhQ+Qq07K5mqNchmIwG26eK0O6j23NWjHIiQqH5EbZPkMYA0pjdI0fssioqUr9v5YlRu1m95Yui872khzSyBwFuzuuArrWUjpCoArkfeWD5Ck0EarOMTjuQewz3QKHicFai+c2GOSHu76tbaiX3RWKb4F8KZQ0Iv8cLbI22E5t+J2WablkwufaUnY/npypOICoBL50vOl7mOu8pTX95FfQ3ujUH5jw/FjeNW+CQKqXOIfik9iGGgd2OD2//gALjP6jW3WEbVlz1GOjwtLFH5nIbTs+Fh/nFqYRlr8/64+2zTlj732VaUbBUjZr8Fd7swOFCoc5P6XLDVH4w4a4LiDktVWw==
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <6F691F52033581428C9C670C5BA0DC04@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200529130506.73511-7-alexandru.tachici@analog.com>
+X-MS-Exchange-CrossTenant-Network-Message-Id: e60a29b1-49a5-4039-ca66-08d8042a9cb7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 May 2020 23:47:13.5584
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: gntFRY+cHDJXU7irl4Wxc8hADb4SbazYlrW+fC5p+nRvutdbHO4ILRHrQaeuGOhTzgYutIo5LIuFWjorxoP9RA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2918
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-05-29_13:2020-05-28,2020-05-29 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 phishscore=0
+ mlxlogscore=999 malwarescore=0 priorityscore=1501 clxscore=1015
+ lowpriorityscore=0 suspectscore=0 spamscore=0 bulkscore=0 impostorscore=0
+ adultscore=0 cotscore=-2147483648 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2005290172
+X-FB-Internal: deliver
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, May 29, 2020 at 04:05:06PM +0300, alexandru.tachici@analog.com wrote:
-> From: Alexandru Tachici <alexandru.tachici@analog.com>
-> 
-> Add bindings for the Analog Devices ADM1266 sequencer.
-> 
-> Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
-> ---
->  .../bindings/hwmon/adi,adm1266.yaml           | 56 +++++++++++++++++++
->  1 file changed, 56 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/adi,adm1266.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/adi,adm1266.yaml b/Documentation/devicetree/bindings/hwmon/adi,adm1266.yaml
-> new file mode 100644
-> index 000000000000..76b62be48d56
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/adi,adm1266.yaml
-> @@ -0,0 +1,56 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/adi,adm1266.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Analog Devices ADM1266 Cascadable Super Sequencer with Margin
-> +  Control and Fault Recording
-> +
-> +maintainers:
-> +  - Alexandru Tachici <alexandru.tachici@analog.com>
-> +
-> +description: |
-> +  Analog Devices ADM1266 Cascadable Super Sequencer with Margin
-> +  Control and Fault Recording.
-> +  https://www.analog.com/media/en/technical-documentation/data-sheets/ADM1266.pdf
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - adi,adm1266
-> +
-> +  reg:
-> +    description: |
-> +      I2C address of slave device.
-> +    items:
-> +      minimum: 0x40
-> +      maximum: 0x4F
-> +
-> +  avcc-supply:
-> +    description: |
-> +      Phandle to the Avcc power supply.
-> +
-> +  adi,master-adm1266:
-> +    description: |
-> +      Represents phandle of a master ADM1266 device cascaded through the IDB.
-> +    $ref: "/schemas/types.yaml#/definitions/phandle"
-> +
-> +required:
-> +  - compatible
-> +  - reg
-
-Add:
-
-additionalProperties: false
-
-> +
-> +examples:
-> +  - |
-> +    i2c0 {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        adm1266@40 {
-> +                compatible = "adi,adm1266";
-> +                reg = <0x40>;
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +        };
-> +    };
-> +...
-> -- 
-> 2.20.1
-> 
+DQoNCu+7v09uIDUvMjkvMjAsIDExOjU2IEFNLCAiR3VlbnRlciBSb2VjayIgPGdyb2VjazdAZ21h
+aWwuY29tIG9uIGJlaGFsZiBvZiBsaW51eEByb2Vjay11cy5uZXQ+IHdyb3RlOg0KDQogICAgT24g
+NS8yOS8yMCAxMDo1NyBBTSwgVmlqYXkgS2hlbWthIHdyb3RlOg0KICAgID4gDQogICAgPiANCiAg
+ICA+IE9uIDUvMjkvMjAsIDU6NDcgQU0sICJNYW5pa2FuZGFuIEVsdW1hbGFpIiA8bWFuaWthbmRh
+bi5oY2wuZXJzLmVwbEBnbWFpbC5jb20+IHdyb3RlOg0KICAgID4gDQogICAgPiAgICAgVGhlIGFk
+bTEyNzggdGVtcGVyYXR1cmUgc3lzZnMgYXR0cmlidXRlIG5lZWQgaXQgZm9yIG9uZSBvZiB0aGUg
+b3BlbmJtYyBwbGF0Zm9ybSAuIA0KICAgID4gICAgIFRoaXMgZnVuY3Rpb25hbGl0eSBpcyBub3Qg
+ZW5hYmxlZCBieSBkZWZhdWx0LCBzbyBQTU9OX0NPTkZJRyBuZWVkcyB0byBiZSBtb2RpZmllZCBp
+biBvcmRlciB0byBlbmFibGUgaXQuDQogICAgPiAgICAgDQogICAgPiAgICAgU2lnbmVkLW9mZi1i
+eSAgIDogTWFuaWthbmRhbiBFbHVtYWxhaSA8bWFuaWthbmRhbi5oY2wuZXJzLmVwbEBnbWFpbC5j
+b20+DQogICAgPiAgICAgDQogICAgPiAgICAgdjI6DQogICAgPiAgICAgICAgLSBBZGQgU2lnbmVk
+LW9mZi1ieS4NCiAgICA+ICAgICAgICAtIFJlbW92ZWQgQURNMTI3OF9URU1QMV9FTiBjaGVjay4N
+CiAgICA+ICAgICAtLS0NCiAgICA+ICAgICAgZHJpdmVycy9od21vbi9wbWJ1cy9hZG0xMjc1LmMg
+fCAyMSArKysrKysrKysrKysrKysrKy0tLS0NCiAgICA+ICAgICAgMSBmaWxlIGNoYW5nZWQsIDE3
+IGluc2VydGlvbnMoKyksIDQgZGVsZXRpb25zKC0pDQogICAgPiAgICAgDQogICAgPiAgICAgZGlm
+ZiAtLWdpdCBhL2RyaXZlcnMvaHdtb24vcG1idXMvYWRtMTI3NS5jIGIvZHJpdmVycy9od21vbi9w
+bWJ1cy9hZG0xMjc1LmMNCiAgICA+ICAgICBpbmRleCA1Y2FhMzdmYi4uYWI1ZmNlYiAxMDA2NDQN
+CiAgICA+ICAgICAtLS0gYS9kcml2ZXJzL2h3bW9uL3BtYnVzL2FkbTEyNzUuYw0KICAgID4gICAg
+ICsrKyBiL2RyaXZlcnMvaHdtb24vcG1idXMvYWRtMTI3NS5jDQogICAgPiAgICAgQEAgLTY2Niw3
+ICs2NjYsMjMgQEAgc3RhdGljIGludCBhZG0xMjc1X3Byb2JlKHN0cnVjdCBpMmNfY2xpZW50ICpj
+bGllbnQsDQogICAgPiAgICAgIAkJdGluZGV4ID0gMzsNCiAgICA+ICAgICAgDQogICAgPiAgICAg
+IAkJaW5mby0+ZnVuY1swXSB8PSBQTUJVU19IQVZFX1BJTiB8IFBNQlVTX0hBVkVfU1RBVFVTX0lO
+UFVUIHwNCiAgICA+ICAgICAtCQkJUE1CVVNfSEFWRV9WT1VUIHwgUE1CVVNfSEFWRV9TVEFUVVNf
+Vk9VVDsNCiAgICA+ICAgICArCQkJUE1CVVNfSEFWRV9WT1VUIHwgUE1CVVNfSEFWRV9TVEFUVVNf
+Vk9VVCB8DQogICAgPiAgICAgKwkJCVBNQlVTX0hBVkVfVEVNUCB8IFBNQlVTX0hBVkVfU1RBVFVT
+X1RFTVA7DQogICAgPiAgICAgKw0KICAgID4gICAgICsJCWNvbmZpZyA9IGkyY19zbWJ1c19yZWFk
+X2J5dGVfZGF0YShjbGllbnQsIEFETTEyNzVfUE1PTl9DT05GSUcpOw0KICAgID4gICAgICsJCWlm
+IChjb25maWcgPCAwKQ0KICAgID4gICAgICsJCQlyZXR1cm4gY29uZmlnOw0KICAgID4gICAgICsN
+CiAgICA+ICAgICArCQkvKiBFbmFibGUgVEVNUDEgYnkgZGVmYXVsdCAqLw0KICAgID4gICAgICsJ
+CWNvbmZpZyB8PSBBRE0xMjc4X1RFTVAxX0VOOw0KICAgID4gICAgICsJCXJldCA9IGkyY19zbWJ1
+c193cml0ZV9ieXRlX2RhdGEoY2xpZW50LA0KICAgID4gICAgICsJCQkJCUFETTEyNzVfUE1PTl9D
+T05GSUcsDQogICAgPiAgICAgKwkJCQkJY29uZmlnKTsNCiAgICA+ICAgICArCQlpZiAocmV0IDwg
+MCkgew0KICAgID4gICAgICsJCWRldl9lcnIoJmNsaWVudC0+ZGV2LA0KICAgID4gICAgICsJCQki
+RmFpbGVkIHRvIGVuYWJsZSB0ZW1wZXJhdHVyZSBjb25maWdcbiIpOw0KICAgID4gICAgICsJCXJl
+dHVybiAtRU5PREVWOw0KICAgID4gICAgICsJCX0NCiAgICA+IFlvdSBkb24ndCBuZWVkIHRoaXMg
+YWJvdmUgY29kZSByZW1vdmluZyBjaGVjayBhcyBiZWxvdyBzaG91bGQgYmUgZW5vdWdoICB0bw0K
+ICAgID4gcG9wdWxhdGUgc3lzZnMgZW50cnkgeW91IG5lZWQuDQogICAgPiANCg0KICAgIFlvdSBt
+ZWFuIHlvdSBhcmUgb25seSBpbnRlcmVzdGVkIGluIGhhdmluZyB0aGUgYXR0cmlidXRlLCBldmVu
+IGlmIGl0IGRvZXNuJ3QNCiAgICByZXBvcnQgYW55dGhpbmcgdXNlZnVsIGJlY2F1c2UgbW9uaXRv
+cmluZyBpcyBkaXNhYmxlZCBpbiB0aGUgY2hpcCA/DQogICAgU29ycnksIEkgZG9uJ3QgdW5kZXJz
+dGFuZC4gQ2FuIHlvdSBlbGFib3JhdGUgPw0KU29ycnkgZm9yIG1pc2ludGVycHJldGF0aW9uLCBO
+byBJIGRvbid0IG1lYW4gdGhhdC4gVGhpcyBzaG91bGQgYmUgZmluZS4NCg0KICAgIFRoYW5rcywN
+CiAgICBHdWVudGVyDQoNCiAgICA+ICAgICAgCQkvKiBFbmFibGUgVk9VVCBpZiBub3QgZW5hYmxl
+ZCAoaXQgaXMgZGlzYWJsZWQgYnkgZGVmYXVsdCkgKi8NCiAgICA+ICAgICAgCQlpZiAoIShjb25m
+aWcgJiBBRE0xMjc4X1ZPVVRfRU4pKSB7DQogICAgPiAgICAgQEAgLTY4MSw5ICs2OTcsNiBAQCBz
+dGF0aWMgaW50IGFkbTEyNzVfcHJvYmUoc3RydWN0IGkyY19jbGllbnQgKmNsaWVudCwNCiAgICA+
+ICAgICAgCQkJfQ0KICAgID4gICAgICAJCX0NCiAgICA+ICAgICAgDQogICAgPiAgICAgLQkJaWYg
+KGNvbmZpZyAmIEFETTEyNzhfVEVNUDFfRU4pDQogICAgPiAgICAgLQkJCWluZm8tPmZ1bmNbMF0g
+fD0NCiAgICA+ICAgICAtCQkJCVBNQlVTX0hBVkVfVEVNUCB8IFBNQlVTX0hBVkVfU1RBVFVTX1RF
+TVA7DQogICAgPiAgICAgIAkJaWYgKGNvbmZpZyAmIEFETTEyNzhfVklOX0VOKQ0KICAgID4gICAg
+ICAJCQlpbmZvLT5mdW5jWzBdIHw9IFBNQlVTX0hBVkVfVklOOw0KICAgID4gICAgICAJCWJyZWFr
+Ow0KICAgID4gICAgIC0tIA0KICAgID4gICAgIDIuNy40DQogICAgPiAgICAgDQogICAgPiAgICAg
+DQogICAgPiANCg0KDQo=
