@@ -2,166 +2,437 @@ Return-Path: <SRS0=nzsd=7L=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13BD6C433E0
-	for <linux-hwmon@archiver.kernel.org>; Fri, 29 May 2020 17:57:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66DB7C433E0
+	for <linux-hwmon@archiver.kernel.org>; Fri, 29 May 2020 18:36:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DC8982074D
-	for <linux-hwmon@archiver.kernel.org>; Fri, 29 May 2020 17:57:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 39392206A1
+	for <linux-hwmon@archiver.kernel.org>; Fri, 29 May 2020 18:36:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="be6x0OPE";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="h5cZWd92"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RxOi735f"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728039AbgE2R5o (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 29 May 2020 13:57:44 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:45986 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728051AbgE2R5j (ORCPT
+        id S1726487AbgE2Sgb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 29 May 2020 14:36:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50952 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725901AbgE2Sg3 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 29 May 2020 13:57:39 -0400
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04THmsZO023589;
-        Fri, 29 May 2020 10:57:05 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=facebook;
- bh=nDGFZqrsMLB3ESjeIC+dQ8ZZtGkF5tmKL2DpAJiSzsY=;
- b=be6x0OPEiFjBh7oiMbxuehgrs1x6k+6EbJEJ5Xvr55HCvTSPmjnvEPNPcVK7s/BG9CTg
- 7Ff6mmekNI0pAMkjWNf5LwJtENGw2OLm+x18ewqUbpFapaUjC1A0bHPMpsRhbFR0bE39
- sQuVUKxXLHKjLRiGswEKKMpB60SLhJWq6Vw= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 31b3yra173-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 29 May 2020 10:57:05 -0700
-Received: from NAM04-BN3-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.36.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Fri, 29 May 2020 10:57:04 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X0m6Qj1b8CkZ9RA24+YNpEqFhTJkgsQvja8JU/r3o86Hpi0pWQYwT1dEkls3Wjp02SWY/B9WfxnvLdG36HNAjo6OkXDvJSH/jLCC9sCFNOIpzfZco736+T07LrZIjKw3Rce+sOnFyiQraDfXlh7u+VjkcXpL+KsHn54sJO15gH7bW24fnRbIXyZTQfHs5VGXviVtiKHWL4CapqMsFEU0e7BVr442KEvbIXObiDfy27BhCdMjjT8XTAl/J2fpSh0ACTHwoUYG5uD98zzZiot6MoqK0fcOEMdqoGlRuCnhS7OtJVVLFZ7I9cBaTRtzEG44LpDI4R5C03fe0xd0Aehl1w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nDGFZqrsMLB3ESjeIC+dQ8ZZtGkF5tmKL2DpAJiSzsY=;
- b=Zxo6ZhkZ3N0m3lftztCCfWqQUzT9sz5bRnRVR1dWoDzUMkQ2ZOscW9N+PAxprdQwcGdPJH8PHiRUzRtwvaezJyIOrI6KUYsSUpON9fDGrtKBl8+sLHyGMw6hcAHhMOjL4NwcMihxKawqwJJZ9cIgWZxfk/w5UZiyuZy7DI5z0bQruIH5dDGlvhe1lg9T7nBSI3vQsFJkxCyUZEz4IwIFm05Ux0c3i/mcuAgwEz7NvFtawUAHcHZCvl87sK/8tZ9sujsCrabaSLEa1hJywX9djJntRDvexWfo346QWXhGBM3aqYt3scNNI4Np2/nD3viUnyEV7M4Qy39Gwpx4SKUBBg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector2-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nDGFZqrsMLB3ESjeIC+dQ8ZZtGkF5tmKL2DpAJiSzsY=;
- b=h5cZWd92mDZSMrSZ7jtoAuNDkej1+zbQWv8/G3hiAONOtoysHqdMI6rjYJOFzYb0xMcIDIp8nxAe6dJBE4a26KHMrIoJL7KEdUrv7pXK49mqoj1Qs7ohYAA+s+8YOlyDEwciFzcXtXCZaVNWR8on7A8aUNVKNpqGwinYTt5ZAKA=
-Received: from BYAPR15MB2374.namprd15.prod.outlook.com (2603:10b6:a02:8b::16)
- by BYAPR15MB3048.namprd15.prod.outlook.com (2603:10b6:a03:fc::25) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3045.17; Fri, 29 May
- 2020 17:57:03 +0000
-Received: from BYAPR15MB2374.namprd15.prod.outlook.com
- ([fe80::34b8:e690:6dfc:8faf]) by BYAPR15MB2374.namprd15.prod.outlook.com
- ([fe80::34b8:e690:6dfc:8faf%4]) with mapi id 15.20.3045.018; Fri, 29 May 2020
- 17:57:03 +0000
-From:   Vijay Khemka <vijaykhemka@fb.com>
-To:     Manikandan Elumalai <manikandan.hcl.ers.epl@gmail.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>
-CC:     "linux@roeck-us.net" <linux@roeck-us.net>,
-        "saipsdasari@fb.com" <saipsdasari@fb.com>,
-        Patrick Williams <patrickw3@fb.com>,
-        "manikandan.e@hcl.com" <manikandan.e@hcl.com>
-Subject: Re: [PATCH v2] hwmon:(adm1275) Enable adm1278 ADM1278_TEMP1_EN 
-Thread-Topic: [PATCH v2] hwmon:(adm1275) Enable adm1278 ADM1278_TEMP1_EN 
-Thread-Index: AQHWNbdFvmcC7XgBI0iZGne+tKUE7Ki+5FUA
-Date:   Fri, 29 May 2020 17:57:03 +0000
-Message-ID: <6F5BD2D3-997D-4607-BC0C-B36497B51D13@fb.com>
-References: <20200529124607.GA3469@cnn>
-In-Reply-To: <20200529124607.GA3469@cnn>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=fb.com;
-x-originating-ip: [2601:647:4b00:fd70:18e2:66b5:5e3d:3d1a]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 75e3de07-774a-4d31-4235-08d803f9b1aa
-x-ms-traffictypediagnostic: BYAPR15MB3048:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BYAPR15MB3048CD9B53BAB351207FF14DDD8F0@BYAPR15MB3048.namprd15.prod.outlook.com>
-x-fb-source: Internal
-x-ms-oob-tlc-oobclassifiers: OLM:2733;
-x-forefront-prvs: 04180B6720
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Yw+b1MTh6cUGJDQWn7vi2FYsdYtVX+xMJm+Ndwnl0VJw5aPzU1W/klUaqWeF1mrSkTEH8s/XCbXSczncwYBiP0zhmwrbxzd0x6eDbX4CDf6UkePaG77qIGrG5ft7kWPxBTbQKBCeysVr5hBOn2KLKDIC5XwUIBH4hMN4QhLJuoxYmHgtVdt/4eBOm4Hz+3wtapn9grBRNEnx7mZOdkyN6pYrlH/GBAq19e4AUlUhnXZGIw3/z4JLlvvxbbycbWzXkMUoaUOlhVsqeI5QbJD/Ib6z9nAkPuFC2ddar17fs4s0SzK2i3+3pwbBOmoSSqKQQJnI3rg00Tvj76h1Wdr4LA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB2374.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(396003)(39860400002)(136003)(376002)(346002)(366004)(478600001)(36756003)(71200400001)(2616005)(8936002)(4326008)(6506007)(6512007)(5660300002)(186003)(8676002)(83380400001)(6486002)(2906002)(54906003)(33656002)(316002)(86362001)(66476007)(66556008)(66446008)(4743002)(76116006)(66946007)(110136005)(64756008);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: xrSAlQnxZZDRAdvrAX5F+ksy1VQk4xI94G7NaCaI+9Pg+BCcX3sqek+pgPcBR0v4lXkAza/XesuXMtyo8Hc51qhbuoc9rxO6RjlWNJS4ObFOX5imS87fYFj6nKmFTCkr5IiQVDP/K4Mvkhu7DEPfkf9QvpCI39a+P45rzZJf0ZwdzFL/Y0fUxwdbCeqzADlc8o1BgMl737wzI5MIyPcf2W28+IINj0kpvBs5mSMn7fjiuWCUoEwmm18IFbxDOxYEHFGglsIv5rvn3C4OIJJ26rL9H5mumLm2b0xkq2W9vY0c2y1cNflMuAiDJ4NaMpWSgF1KzPcOEOWebwjKH99+UzGA56tUB6uF5lHSERzHruOnWqQjl4197QLywYYxKJdh08gM9xX7xq+DyF9dZc1a2lx9W3U09i0/8/gQ4vuFtdrFcmia1EpDorJ6rRq49Nf4AJknWsy3Z5ePS+kVqTAE8fB1ezM1gIy7/VpdxLcysfmT4zirZS2kg4g9EupXjl2cwaMn5CI5iwIYrnDJnl125WfrZCIouIIEI1404KGXrsuhNiOtwdqiwTIYFvGMijHz
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <A5BAD156FDBD5043A9D1F66D19E5892E@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Fri, 29 May 2020 14:36:29 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF3F2C03E969;
+        Fri, 29 May 2020 11:36:28 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id y11so1550663plt.12;
+        Fri, 29 May 2020 11:36:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=TBUJzwvxLKIj+N5jawvSsHj59zY5+19woKtlGEvpPC8=;
+        b=RxOi735fuE7QuIST48ojRzMwMnLDIJZlVAbJpp5RNYeItQV7IsjO1RlRhBCBKLAFdQ
+         PkfXbQgyqfH6mFEhFqHbdleqZCxbfyKMZH58j1K7kCn5DttzfHR0yAKJpkrNTAyqXkkm
+         QqlWFDcSEzret+1pw/0N7sQ58aX9RDcWM2IA8ffqAzIJDReBZKH7EROoN8TJ+7GQZ1WX
+         OjTHDxewqfU73LogLpBb3/GIyxSk2fk2zWKKRsXhKjglR1LUFJFPQj77qZznub1cjtX+
+         mobqXpv0kGEW2L/0Df9GmGXUdaCDCQfZwbXin1hD5C7gZXcG/Z8x0/lF0YT7vMmN7s6T
+         maFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=TBUJzwvxLKIj+N5jawvSsHj59zY5+19woKtlGEvpPC8=;
+        b=hsQO/8NCaNGpSpD6acDZ92Bp7LUajjmb9OyuzGPLxbVqKgaDkyAE8uUYrmoBVxTCoc
+         cndtRKO1RhSyF4QXOIXC6ofHPyh/zA3FtyornRMgQAPh0rq68zLHODziFfWZlXZm0HiI
+         WtkKOtgZIXAHMhcKtz/XQKU08IX1fubXfDGEDBJNsv60fRD32N6v4XgEqHm3JHcgH4d5
+         XyKG72W+gRb0CtwO7dCcJTqXSEFUD9F7peNBo5suRcsECBBeckR9MG6Hbl+OPD9g3wb8
+         g77WZv/K2HT5w1AaDI61XyUKa14TgRP1IMPXBxiPutRkiS5ageCbS2XFTgLE9AlNVLVv
+         3RCA==
+X-Gm-Message-State: AOAM5306Fx0xW5sKB4BCzD/kI9vNd6upzHLLslmsRHXU+zE8bG2Bp3Cc
+        yYEjvtCc1X2nmXXuUkAhhMQ=
+X-Google-Smtp-Source: ABdhPJweD5gWJvHRFhmr92UwFXq4KxFDnMAHyng4jV1Ksi+EA/E1XNPMlE71OlQEyV2b4z1kMaJmfw==
+X-Received: by 2002:a17:902:6906:: with SMTP id j6mr10336825plk.261.1590777388234;
+        Fri, 29 May 2020 11:36:28 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m2sm145483pjl.45.2020.05.29.11.36.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 May 2020 11:36:27 -0700 (PDT)
+Subject: Re: [PATCH v3 3/6] hwmon: pmbus: adm1266: Add support for GPIOs
+To:     alexandru.tachici@analog.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     robh+dt@kernel.org
+References: <20200529130506.73511-1-alexandru.tachici@analog.com>
+ <20200529130506.73511-4-alexandru.tachici@analog.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <711bf4ff-f907-6727-c4ad-c8c2270b3bc4@roeck-us.net>
+Date:   Fri, 29 May 2020 11:36:26 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 75e3de07-774a-4d31-4235-08d803f9b1aa
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 May 2020 17:57:03.4381
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: OAZU2RiGLZrgj7UUmwkcxfa4ZGzfKYCqMjsu4+4kB22CaadtZq9xYHm2fuiHSDzRjb/AZAMWj9ZnhTUi4+0G0A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB3048
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-05-29_09:2020-05-28,2020-05-29 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 phishscore=0
- mlxlogscore=999 malwarescore=0 priorityscore=1501 clxscore=1011
- lowpriorityscore=0 suspectscore=0 spamscore=0 bulkscore=0 impostorscore=0
- adultscore=0 cotscore=-2147483648 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2005290135
-X-FB-Internal: deliver
+In-Reply-To: <20200529130506.73511-4-alexandru.tachici@analog.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-DQoNCu+7v09uIDUvMjkvMjAsIDU6NDcgQU0sICJNYW5pa2FuZGFuIEVsdW1hbGFpIiA8bWFuaWth
-bmRhbi5oY2wuZXJzLmVwbEBnbWFpbC5jb20+IHdyb3RlOg0KDQogICAgVGhlIGFkbTEyNzggdGVt
-cGVyYXR1cmUgc3lzZnMgYXR0cmlidXRlIG5lZWQgaXQgZm9yIG9uZSBvZiB0aGUgb3BlbmJtYyBw
-bGF0Zm9ybSAuIA0KICAgIFRoaXMgZnVuY3Rpb25hbGl0eSBpcyBub3QgZW5hYmxlZCBieSBkZWZh
-dWx0LCBzbyBQTU9OX0NPTkZJRyBuZWVkcyB0byBiZSBtb2RpZmllZCBpbiBvcmRlciB0byBlbmFi
-bGUgaXQuDQogICAgDQogICAgU2lnbmVkLW9mZi1ieSAgIDogTWFuaWthbmRhbiBFbHVtYWxhaSA8
-bWFuaWthbmRhbi5oY2wuZXJzLmVwbEBnbWFpbC5jb20+DQogICAgDQogICAgdjI6DQogICAgICAg
-LSBBZGQgU2lnbmVkLW9mZi1ieS4NCiAgICAgICAtIFJlbW92ZWQgQURNMTI3OF9URU1QMV9FTiBj
-aGVjay4NCiAgICAtLS0NCiAgICAgZHJpdmVycy9od21vbi9wbWJ1cy9hZG0xMjc1LmMgfCAyMSAr
-KysrKysrKysrKysrKysrKy0tLS0NCiAgICAgMSBmaWxlIGNoYW5nZWQsIDE3IGluc2VydGlvbnMo
-KyksIDQgZGVsZXRpb25zKC0pDQogICAgDQogICAgZGlmZiAtLWdpdCBhL2RyaXZlcnMvaHdtb24v
-cG1idXMvYWRtMTI3NS5jIGIvZHJpdmVycy9od21vbi9wbWJ1cy9hZG0xMjc1LmMNCiAgICBpbmRl
-eCA1Y2FhMzdmYi4uYWI1ZmNlYiAxMDA2NDQNCiAgICAtLS0gYS9kcml2ZXJzL2h3bW9uL3BtYnVz
-L2FkbTEyNzUuYw0KICAgICsrKyBiL2RyaXZlcnMvaHdtb24vcG1idXMvYWRtMTI3NS5jDQogICAg
-QEAgLTY2Niw3ICs2NjYsMjMgQEAgc3RhdGljIGludCBhZG0xMjc1X3Byb2JlKHN0cnVjdCBpMmNf
-Y2xpZW50ICpjbGllbnQsDQogICAgIAkJdGluZGV4ID0gMzsNCiAgICAgDQogICAgIAkJaW5mby0+
-ZnVuY1swXSB8PSBQTUJVU19IQVZFX1BJTiB8IFBNQlVTX0hBVkVfU1RBVFVTX0lOUFVUIHwNCiAg
-ICAtCQkJUE1CVVNfSEFWRV9WT1VUIHwgUE1CVVNfSEFWRV9TVEFUVVNfVk9VVDsNCiAgICArCQkJ
-UE1CVVNfSEFWRV9WT1VUIHwgUE1CVVNfSEFWRV9TVEFUVVNfVk9VVCB8DQogICAgKwkJCVBNQlVT
-X0hBVkVfVEVNUCB8IFBNQlVTX0hBVkVfU1RBVFVTX1RFTVA7DQogICAgKw0KICAgICsJCWNvbmZp
-ZyA9IGkyY19zbWJ1c19yZWFkX2J5dGVfZGF0YShjbGllbnQsIEFETTEyNzVfUE1PTl9DT05GSUcp
-Ow0KICAgICsJCWlmIChjb25maWcgPCAwKQ0KICAgICsJCQlyZXR1cm4gY29uZmlnOw0KICAgICsN
-CiAgICArCQkvKiBFbmFibGUgVEVNUDEgYnkgZGVmYXVsdCAqLw0KICAgICsJCWNvbmZpZyB8PSBB
-RE0xMjc4X1RFTVAxX0VOOw0KICAgICsJCXJldCA9IGkyY19zbWJ1c193cml0ZV9ieXRlX2RhdGEo
-Y2xpZW50LA0KICAgICsJCQkJCUFETTEyNzVfUE1PTl9DT05GSUcsDQogICAgKwkJCQkJY29uZmln
-KTsNCiAgICArCQlpZiAocmV0IDwgMCkgew0KICAgICsJCWRldl9lcnIoJmNsaWVudC0+ZGV2LA0K
-ICAgICsJCQkiRmFpbGVkIHRvIGVuYWJsZSB0ZW1wZXJhdHVyZSBjb25maWdcbiIpOw0KICAgICsJ
-CXJldHVybiAtRU5PREVWOw0KICAgICsJCX0NCllvdSBkb24ndCBuZWVkIHRoaXMgYWJvdmUgY29k
-ZSByZW1vdmluZyBjaGVjayBhcyBiZWxvdyBzaG91bGQgYmUgZW5vdWdoICB0bw0KcG9wdWxhdGUg
-c3lzZnMgZW50cnkgeW91IG5lZWQuDQoNCiAgICAgCQkvKiBFbmFibGUgVk9VVCBpZiBub3QgZW5h
-YmxlZCAoaXQgaXMgZGlzYWJsZWQgYnkgZGVmYXVsdCkgKi8NCiAgICAgCQlpZiAoIShjb25maWcg
-JiBBRE0xMjc4X1ZPVVRfRU4pKSB7DQogICAgQEAgLTY4MSw5ICs2OTcsNiBAQCBzdGF0aWMgaW50
-IGFkbTEyNzVfcHJvYmUoc3RydWN0IGkyY19jbGllbnQgKmNsaWVudCwNCiAgICAgCQkJfQ0KICAg
-ICAJCX0NCiAgICAgDQogICAgLQkJaWYgKGNvbmZpZyAmIEFETTEyNzhfVEVNUDFfRU4pDQogICAg
-LQkJCWluZm8tPmZ1bmNbMF0gfD0NCiAgICAtCQkJCVBNQlVTX0hBVkVfVEVNUCB8IFBNQlVTX0hB
-VkVfU1RBVFVTX1RFTVA7DQogICAgIAkJaWYgKGNvbmZpZyAmIEFETTEyNzhfVklOX0VOKQ0KICAg
-ICAJCQlpbmZvLT5mdW5jWzBdIHw9IFBNQlVTX0hBVkVfVklOOw0KICAgICAJCWJyZWFrOw0KICAg
-IC0tIA0KICAgIDIuNy40DQogICAgDQogICAgDQoNCg==
+On 5/29/20 6:05 AM, alexandru.tachici@analog.com wrote:
+> From: Alexandru Tachici <alexandru.tachici@analog.com>
+> 
+> Adm1266 exposes 9 GPIOs and 16 PDIOs which are currently read-only. They
+> are controlled by the internal sequencing engine.
+> 
+> This patch makes adm1266 driver expose GPIOs and PDIOs to user-space
+> using GPIO provider kernel api.
+> 
+> Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
+> ---
+>  drivers/hwmon/pmbus/adm1266.c | 233 +++++++++++++++++++++++++++++++++-
+>  1 file changed, 232 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
+> index a7ef048a9a5c..190170300ef1 100644
+> --- a/drivers/hwmon/pmbus/adm1266.c
+> +++ b/drivers/hwmon/pmbus/adm1266.c
+> @@ -6,7 +6,11 @@
+>   * Copyright 2020 Analog Devices Inc.
+>   */
+>  
+> +#include <linux/bitfield.h>
+> +#include <linux/debugfs.h>
+> +#include <linux/gpio/driver.h>
+>  #include <linux/i2c.h>
+> +#include <linux/i2c-smbus.h>
+>  #include <linux/init.h>
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+> @@ -14,16 +18,243 @@
+>  
+>  #include "pmbus.h"
+>  
+> +#define ADM1266_PDIO_CONFIG	0xD4
+> +#define ADM1266_GPIO_CONFIG	0xE1
+> +#define ADM1266_PDIO_STATUS	0xE9
+> +#define ADM1266_GPIO_STATUS	0xEA
+> +
+> +/* ADM1266 GPIO defines */
+> +#define ADM1266_GPIO_NR			9
+> +#define ADM1266_GPIO_FUNCTIONS(x)	FIELD_GET(BIT(0), x)
+> +#define ADM1266_GPIO_INPUT_EN(x)	FIELD_GET(BIT(2), x)
+> +#define ADM1266_GPIO_OUTPUT_EN(x)	FIELD_GET(BIT(3), x)
+> +#define ADM1266_GPIO_OPEN_DRAIN(x)	FIELD_GET(BIT(4), x)
+> +
+> +/* ADM1266 PDIO defines */
+> +#define ADM1266_PDIO_NR			16
+> +#define ADM1266_PDIO_PIN_CFG(x)		FIELD_GET(GENMASK(15, 13), x)
+> +#define ADM1266_PDIO_GLITCH_FILT(x)	FIELD_GET(GENMASK(12, 9), x)
+> +#define ADM1266_PDIO_OUT_CFG(x)		FIELD_GET(GENMASK(2, 0), x)
+> +
+> +struct adm1266_data {
+> +	struct pmbus_driver_info info;
+> +	struct gpio_chip gc;
+> +	const char *gpio_names[ADM1266_GPIO_NR + ADM1266_PDIO_NR];
+> +	struct i2c_client *client;
+> +};
+> +
+> +#if IS_ENABLED(CONFIG_GPIOLIB)
+
+GPIOLIB is bool. IS_ENABLED suggests tristate, which won't happen. Just use #ifdef.
+
+> +static const unsigned int adm1266_gpio_mapping[ADM1266_GPIO_NR][2] = {
+> +	{1, 0},
+> +	{2, 1},
+> +	{3, 2},
+> +	{4, 8},
+> +	{5, 9},
+> +	{6, 10},
+> +	{7, 11},
+> +	{8, 6},
+> +	{9, 7},
+> +};
+> +
+> +static const char *adm1266_names[ADM1266_GPIO_NR + ADM1266_PDIO_NR] = {
+> +	"GPIO1", "GPIO2", "GPIO3", "GPIO4", "GPIO5", "GPIO6", "GPIO7", "GPIO8",
+> +	"GPIO9", "PDIO1", "PDIO2", "PDIO3", "PDIO4", "PDIO5", "PDIO6",
+> +	"PDIO7", "PDIO8", "PDIO9", "PDIO10", "PDIO11", "PDIO12", "PDIO13",
+> +	"PDIO14", "PDIO15", "PDIO16",
+> +};
+> +
+> +static int adm1266_gpio_get(struct gpio_chip *chip, unsigned int offset)
+> +{
+> +	struct adm1266_data *data = gpiochip_get_data(chip);
+> +	u8 read_buf[PMBUS_BLOCK_MAX + 1];
+
+Unnecessarily large. SMBUS_BLOCK_MAX is sufficient here.
+
+> +	unsigned long pins_status;
+> +	unsigned int pmbus_cmd;
+> +	int ret;
+> +
+> +	if (offset < ADM1266_GPIO_NR)
+> +		pmbus_cmd = ADM1266_GPIO_STATUS;
+> +	else
+> +		pmbus_cmd = ADM1266_PDIO_STATUS;
+> +
+> +	ret = i2c_smbus_read_block_data(data->client, pmbus_cmd,
+> +					read_buf);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	pins_status = read_buf[0] + (read_buf[1] << 8);
+> +	if (offset < ADM1266_GPIO_NR)
+> +		return test_bit(adm1266_gpio_mapping[offset][1], &pins_status);
+> +	else
+
+else after return is unnecessary.
+
+> +		return test_bit(offset - ADM1266_GPIO_NR, &pins_status);
+> +}
+> +
+> +static int adm1266_gpio_get_multiple(struct gpio_chip *chip,
+> +				     unsigned long *mask,
+> +				     unsigned long *bits)
+> +{
+> +	struct adm1266_data *data = gpiochip_get_data(chip);
+> +	u8 gpio_data[PMBUS_BLOCK_MAX + 1];
+> +	u8 pdio_data[PMBUS_BLOCK_MAX + 1];
+
+This is quite some strain on the stack. I would suggest to use only
+one buffer and handle gpio completely first, then pdio.
+
+> +	unsigned long gpio_status;
+> +	unsigned long pdio_status;
+> +	unsigned int gpio_nr;
+> +	int ret;
+> +
+> +	ret = i2c_smbus_read_block_data(data->client, ADM1266_GPIO_STATUS,
+> +					gpio_data);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = i2c_smbus_read_block_data(data->client, ADM1266_PDIO_STATUS,
+> +					pdio_data);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	gpio_status = gpio_data[0] + (gpio_data[1] << 8);
+> +	pdio_status = pdio_data[0] + (pdio_data[1] << 8);
+> +	*bits = 0;
+> +	for_each_set_bit(gpio_nr, mask, ADM1266_GPIO_NR) {
+> +		if (test_bit(adm1266_gpio_mapping[gpio_nr][1], &gpio_status))
+> +			set_bit(gpio_nr, bits);
+> +	}
+> +
+> +	for_each_set_bit_from(gpio_nr, mask,
+> +			      ADM1266_GPIO_NR + ADM1266_PDIO_STATUS) {
+> +		if (test_bit(gpio_nr - ADM1266_GPIO_NR, &pdio_status))
+> +			set_bit(gpio_nr, bits);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static void adm1266_gpio_dbg_show(struct seq_file *s, struct gpio_chip *chip)
+> +{
+> +	struct adm1266_data *data = gpiochip_get_data(chip);
+> +	u8 write_buf[PMBUS_BLOCK_MAX + 1];
+
+We know how much data we are going to write. Allocating more is a waste.
+Given that it is only going to be one byte, you might as well just point
+to it directly or use an u8 variable and point to that.
+
+> +	u8 read_buf[PMBUS_BLOCK_MAX + 1];
+> +	unsigned long gpio_config;
+> +	unsigned long pdio_config;
+> +	unsigned long pin_cfg;
+> +	int ret;
+> +	int i;
+> +
+> +	for (i = 0; i < ADM1266_GPIO_NR; i++) {
+> +		write_buf[0] = adm1266_gpio_mapping[i][1];
+> +		ret = pmbus_block_wr(data->client, ADM1266_GPIO_CONFIG, 1,
+> +				     write_buf, read_buf);
+> +		if (ret < 0)
+> +			dev_err(&data->client->dev, "GPIOs scan failed(%d).\n",
+> +				ret);
+> +
+So there was an error ...
+
+> +		gpio_config = read_buf[0];
+
+... and then happily report (random) data anyway ?
+
+Besides, we are having logging noise again, this time on top of
+the logging noise in pmbus_block_wr().
+
+> +		seq_puts(s, adm1266_names[i]);
+> +
+> +		seq_puts(s, " ( ");
+> +		if (!ADM1266_GPIO_FUNCTIONS(gpio_config)) {
+> +			seq_puts(s, "high-Z )\n");
+> +			continue;
+> +		}
+> +		if (ADM1266_GPIO_INPUT_EN(gpio_config))
+> +			seq_puts(s, "input ");
+> +		if (ADM1266_GPIO_OUTPUT_EN(gpio_config))
+> +			seq_puts(s, "output ");
+> +		if (ADM1266_GPIO_OPEN_DRAIN(gpio_config))
+> +			seq_puts(s, "open-drain )\n");
+> +		else
+> +			seq_puts(s, "push-pull )\n");
+> +	}
+> +
+> +	write_buf[0] = 0xFF;
+> +	ret = pmbus_block_wr(data->client, ADM1266_PDIO_CONFIG, 1, write_buf,
+> +			     read_buf);
+> +	if (ret < 0)
+> +		dev_err(&data->client->dev, "PDIOs scan failed(%d).\n", ret);
+> +
+
+Again: error followed by reporting (non-received) data anyway.
+On top of that, 'ret' is not compared against ADM1266_PDIO_NR.
+If less data is received than expected, the resulting output
+will be random.
+
+> +	for (i = 0; i < ADM1266_PDIO_NR; i++) {
+> +		seq_puts(s, adm1266_names[ADM1266_GPIO_NR + i]);
+> +
+> +		pdio_config = read_buf[2 * i];
+> +		pdio_config += (read_buf[2 * i + 1] << 8);
+> +		pin_cfg = ADM1266_PDIO_PIN_CFG(pdio_config);
+> +
+> +		seq_puts(s, " ( ");
+> +		if (!pin_cfg || pin_cfg > 5) {
+> +			seq_puts(s, "high-Z )\n");
+> +			continue;
+> +		}
+> +
+> +		if (pin_cfg & BIT(0))
+> +			seq_puts(s, "output ");
+> +
+> +		if (pin_cfg & BIT(1))
+> +			seq_puts(s, "input ");
+> +
+> +		seq_puts(s, ")\n");
+> +	}
+> +}
+> +
+> +static int adm1266_config_gpio(struct adm1266_data *data)
+> +{
+> +	const char *name = dev_name(&data->client->dev);
+> +	char *gpio_name;
+> +	int ret;
+> +	int i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(data->gpio_names); i++) {
+> +		gpio_name = devm_kasprintf(&data->client->dev, GFP_KERNEL,
+> +					   "adm1266-%x-%s", data->client->addr,
+> +					   adm1266_names[i]);
+> +		if (!gpio_name)
+> +			return -ENOMEM;
+> +
+> +		data->gpio_names[i] = gpio_name;
+> +	}
+> +
+> +	data->gc.label = name;
+> +	data->gc.parent = &data->client->dev;
+> +	data->gc.owner = THIS_MODULE;
+> +	data->gc.base = -1;
+> +	data->gc.names = data->gpio_names;
+> +	data->gc.ngpio = ARRAY_SIZE(data->gpio_names);
+> +	data->gc.get = adm1266_gpio_get;
+> +	data->gc.get_multiple = adm1266_gpio_get_multiple;
+> +	data->gc.dbg_show = adm1266_gpio_dbg_show;
+> +
+> +	ret = devm_gpiochip_add_data(&data->client->dev, &data->gc, data);
+> +	if (ret)
+> +		dev_err(&data->client->dev, "GPIO registering failed (%d)\n",
+> +			ret);
+> +
+> +	return ret;
+> +}
+> +#else
+> +static inline int adm1266_config_gpio(struct adm1266_data *data)
+
+inline is unnecessary. Let the compiler do its job.
+
+> +{
+> +	return 0;
+> +}
+> +#endif
+> +
+>  static int adm1266_probe(struct i2c_client *client,
+>  			 const struct i2c_device_id *id)
+>  {
+>  	struct pmbus_driver_info *info;
+> +	struct adm1266_data *data;
+>  	u32 funcs;
+> +	int ret;
+>  	int i;
+>  
+> -	info = devm_kzalloc(&client->dev, sizeof(struct pmbus_driver_info),
+> +	data = devm_kzalloc(&client->dev, sizeof(struct adm1266_data),
+>  			    GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+> +	data->client = client;
+> +
+> +	ret = adm1266_config_gpio(data);
+> +	if (ret < 0)
+> +		return ret;
+>  
+> +	info = &data->info;
+>  	info->pages = 17;
+>  	info->format[PSC_VOLTAGE_OUT] = linear;
+>  	funcs = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT;
+> 
+
