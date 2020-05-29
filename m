@@ -2,71 +2,75 @@ Return-Path: <SRS0=nzsd=7L=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C164DC433E0
-	for <linux-hwmon@archiver.kernel.org>; Fri, 29 May 2020 18:52:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB7F9C433E0
+	for <linux-hwmon@archiver.kernel.org>; Fri, 29 May 2020 18:55:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9E7432077D
-	for <linux-hwmon@archiver.kernel.org>; Fri, 29 May 2020 18:52:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B6FA82074B
+	for <linux-hwmon@archiver.kernel.org>; Fri, 29 May 2020 18:55:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gycs5Jdk"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oCQL90tR"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726751AbgE2Swh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 29 May 2020 14:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53456 "EHLO
+        id S1726849AbgE2Szs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 29 May 2020 14:55:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725795AbgE2Swg (ORCPT
+        with ESMTP id S1725865AbgE2Szr (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 29 May 2020 14:52:36 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FF80C03E969;
-        Fri, 29 May 2020 11:52:36 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id h95so934636pje.4;
-        Fri, 29 May 2020 11:52:36 -0700 (PDT)
+        Fri, 29 May 2020 14:55:47 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1C7BC03E969;
+        Fri, 29 May 2020 11:55:47 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id f3so256041pfd.11;
+        Fri, 29 May 2020 11:55:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to;
-        bh=hzq5CP06WE+rDQgMLM3t1qmEAoMARZTAExLtoppQY3s=;
-        b=Gycs5Jdkqw5y4aA6YTe0aznWpCkMlZyRDPypCEmvOBdwBFX6i3XcJWwe7lm/WO/GBO
-         1AvSgQxNCngwWH+VR5TUxuAW5T6jgrD5tWbA/ciT2KjuPVFqMubuc/byw95UNRKdipEx
-         8eu3GoyM9a4BTQd4Tw3TCZkBHPDnwOJRRifO8jmduL8V5J7loVskh+NeU1/5BAaL6IM5
-         dGNq6xfDuPsttWgJ+3LEJ0OV/kXyMl0XNn66uES9P+VqTuAOd/6oUMr8Rwl+imlkXv/T
-         3pMu/AYkxboWp5pyvRMtXTi5EEzq6lT0SV3bnnOq7fZcTWwhTceupsPxShexmp7hPyhs
-         Yvkg==
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=fYjKDDeICBXrGG11GY9j9/rZl2s6XWCbpUSZjG1wuSk=;
+        b=oCQL90tRRA1d4mnvC9q35QF1rd6ofQhsrUylrXvdCbLKMu/iHwMQ9j78uz+T81b9pM
+         T/eGzZaUgKspgSJZ9+3B4wZqBXofXvZ+36TJ+eu9mwiD+LgAOk4tE26o+G2zEfZWqmnQ
+         GEFNbey+bS8pJcBdUcWxxdHiI8psbES3DKkKp8OcFIkvkWfq4CoJkQYtXdMIa2y9eIqt
+         HYaVbrsiEYwg6zA+OEU64Kq9mEpjkGym921/FtRD6UOZPVmKKaxyf/rVQS3gf7fDTFFd
+         WV2efgInTGoTSN1R69WHq/pqyeHFuPSnAkia5OBbfoTXdM6MAI1ELCbJHSKQY3EeI2ub
+         h6BA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to;
-        bh=hzq5CP06WE+rDQgMLM3t1qmEAoMARZTAExLtoppQY3s=;
-        b=ED4wLR0g0WKFC8nJgHqf6ztG/QPcjHZRpRQnis8QMIQVHe+Lzvm8J6EJn+RjhvTE9S
-         9itz6+WUvK7g7PL5qrzYRU2ORH3RGchxilRwAGxunnOH7xgLk2pq6kxGUhAstFhTpPT+
-         f5CebiZt+5L5GjoJCU+PrAoqrlZ5FcxhaFzHOmlRmgLMh9t0cpndRKylpCNyQT7fBOTH
-         EvGaJLvtutGHXr9wvUeRmcNj8QuPUSiFKDh06l4tX3BRcIhQMfVHoAcP04ZaR0YDyH4x
-         5E2lnAd49u6jCRnaAoMnNQTEytepSfrrAvXa2msh9FRwpe/ODXD3ACAxmuD9kS1oVpx5
-         bQag==
-X-Gm-Message-State: AOAM533T7Hy4kgOK6+ZEYlOO6+YLg6nQjGvo8zfIayys4GmlDN33cMgN
-        rxjo6jcNGAQBqSg+RA33NqM=
-X-Google-Smtp-Source: ABdhPJySY1MJ/4FGL1qpg5ojXX5NRDuqHrhGcK+iN4Uvb1UvVjRA8TVDXXm3AHDVaMF2yV13gndnCQ==
-X-Received: by 2002:a17:90a:3ad1:: with SMTP id b75mr11081675pjc.216.1590778355795;
-        Fri, 29 May 2020 11:52:35 -0700 (PDT)
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=fYjKDDeICBXrGG11GY9j9/rZl2s6XWCbpUSZjG1wuSk=;
+        b=fNO+laiIvKSZtcB3D0ZAKbdy1uNQC8sGtpMalPVXEb66cTDhKYFUlE+jLU5NZKODpZ
+         velL7Hjjk5IAkSVSe9MNeGDI9zX3PztdVRDvSGf0XGEUXlOmaTvNwy9YapAXOdZG2kJe
+         tN5GUbldUEZAEZXHJ5y47d3HL4lGSZvtRQrG4KOVZDUz1Wn9zZRdApLe5cD0sqQOOVBD
+         +ctu8SEvMfl8Vd+GCB6ZaU6dBLIgp8/Zp1au5M1/mEtSusrb5EN0IwyR54qG77oOEPKY
+         M5QaefgatCsbQdOp1zbdBzfz4LRfZ2NYg4Kpg/wO3QJv2QS7z1lfbijuGJrVfObasCOl
+         tzig==
+X-Gm-Message-State: AOAM530g3n3T1ZrDbH+lpjielLk8Jm7l83hw/ysf0ZlCy1LbfbDsr75A
+        FLAHD8xrOJ8SyOT4w429xD8=
+X-Google-Smtp-Source: ABdhPJwl7NePayUo4Bh0gkEE8JWwruDQ3zKRedRBd19GFObsXvihjoEyvAlF24fxdfwcWHkEb1sAzw==
+X-Received: by 2002:a63:5054:: with SMTP id q20mr9571150pgl.117.1590778547250;
+        Fri, 29 May 2020 11:55:47 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g18sm7401759pgn.47.2020.05.29.11.52.34
+        by smtp.gmail.com with ESMTPSA id z29sm8150504pff.120.2020.05.29.11.55.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 May 2020 11:52:35 -0700 (PDT)
+        Fri, 29 May 2020 11:55:46 -0700 (PDT)
 Subject: Re: [PATCH v2] hwmon:(adm1275) Enable adm1278 ADM1278_TEMP1_EN
-To:     Patrick Williams <patrick@stwcx.xyz>
-Cc:     Manikandan Elumalai <manikandan.hcl.ers.epl@gmail.com>,
-        linux-hwmon@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
-        manikandan.e@hcl.com, saipsdasari@fb.com, patrickw3@fb.com,
-        vijaykhemka@fb.com
+To:     Vijay Khemka <vijaykhemka@fb.com>,
+        Manikandan Elumalai <manikandan.hcl.ers.epl@gmail.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>
+Cc:     "saipsdasari@fb.com" <saipsdasari@fb.com>,
+        Patrick Williams <patrickw3@fb.com>,
+        "manikandan.e@hcl.com" <manikandan.e@hcl.com>
 References: <20200529124607.GA3469@cnn>
- <49485085-7cc7-9e29-a719-98d1e184378b@roeck-us.net>
- <20200529174210.GF17541@heinlein>
+ <6F5BD2D3-997D-4607-BC0C-B36497B51D13@fb.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -111,111 +115,89 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <356db3d6-bc56-bd58-428f-d8e94311abee@roeck-us.net>
-Date:   Fri, 29 May 2020 11:52:33 -0700
+Message-ID: <41b169b7-83cb-c814-179e-9e62f17f27d8@roeck-us.net>
+Date:   Fri, 29 May 2020 11:55:45 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <20200529174210.GF17541@heinlein>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="3DlYDZqgzYYzdUTaYkmBSX1UFcTispULy"
+In-Reply-To: <6F5BD2D3-997D-4607-BC0C-B36497B51D13@fb.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---3DlYDZqgzYYzdUTaYkmBSX1UFcTispULy
-Content-Type: multipart/mixed; boundary="PzSnpketLU5sr73i8NHQan8wbmrYTvdCO"
+On 5/29/20 10:57 AM, Vijay Khemka wrote:
+> 
+> 
+> ﻿On 5/29/20, 5:47 AM, "Manikandan Elumalai" <manikandan.hcl.ers.epl@gmail.com> wrote:
+> 
+>     The adm1278 temperature sysfs attribute need it for one of the openbmc platform . 
+>     This functionality is not enabled by default, so PMON_CONFIG needs to be modified in order to enable it.
+>     
+>     Signed-off-by   : Manikandan Elumalai <manikandan.hcl.ers.epl@gmail.com>
+>     
+>     v2:
+>        - Add Signed-off-by.
+>        - Removed ADM1278_TEMP1_EN check.
+>     ---
+>      drivers/hwmon/pmbus/adm1275.c | 21 +++++++++++++++++----
+>      1 file changed, 17 insertions(+), 4 deletions(-)
+>     
+>     diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275.c
+>     index 5caa37fb..ab5fceb 100644
+>     --- a/drivers/hwmon/pmbus/adm1275.c
+>     +++ b/drivers/hwmon/pmbus/adm1275.c
+>     @@ -666,7 +666,23 @@ static int adm1275_probe(struct i2c_client *client,
+>      		tindex = 3;
+>      
+>      		info->func[0] |= PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT |
+>     -			PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT;
+>     +			PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
+>     +			PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP;
+>     +
+>     +		config = i2c_smbus_read_byte_data(client, ADM1275_PMON_CONFIG);
+>     +		if (config < 0)
+>     +			return config;
+>     +
+>     +		/* Enable TEMP1 by default */
+>     +		config |= ADM1278_TEMP1_EN;
+>     +		ret = i2c_smbus_write_byte_data(client,
+>     +					ADM1275_PMON_CONFIG,
+>     +					config);
+>     +		if (ret < 0) {
+>     +		dev_err(&client->dev,
+>     +			"Failed to enable temperature config\n");
+>     +		return -ENODEV;
+>     +		}
+> You don't need this above code removing check as below should be enough  to
+> populate sysfs entry you need.
+> 
 
---PzSnpketLU5sr73i8NHQan8wbmrYTvdCO
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
+You mean you are only interested in having the attribute, even if it doesn't
+report anything useful because monitoring is disabled in the chip ?
+Sorry, I don't understand. Can you elaborate ?
 
-On 5/29/20 10:42 AM, Patrick Williams wrote:
-> Hi Guenter,
->=20
-> Thanks for the initial look at this.
->=20
-> One question for you below...
->=20
-> On Fri, May 29, 2020 at 10:30:16AM -0700, Guenter Roeck wrote:
->> On 5/29/20 5:46 AM, Manikandan Elumalai wrote:
->>> +		/* Enable TEMP1 by default */
->>> +		config |=3D ADM1278_TEMP1_EN;
->>> +		ret =3D i2c_smbus_write_byte_data(client,
->>> +					ADM1275_PMON_CONFIG,
->>> +					config);
->>> +		if (ret < 0) {
->>> +		dev_err(&client->dev,
->>> +			"Failed to enable temperature config\n");
->>> +		return -ENODEV;
->>> +		}
->>
->> This can be handled in a single operation, together with ADM1278_VOUT_=
-EN
->> below. There is no need for two separate write operations.
->=20
-> I don't know if you noticed here but the change ends up enabling
-> TEMP1_EN in all cases.  Is this acceptable?  If not, do you have any
-> preference on how it is selected for enablement?
->=20
-
-I did. We are doing the same for output voltage already, so I am not that=
-
-much concerned about it. If it is, we might consider adding _enable
-attribute support (see Documentation/hwmon/sysfs-interface.rst) to the
-PMBus core (presumably as virtual PMBus commands) and let the user
-enable/disable individual attributes as needed.
-
-What _should_ really be done, of course, is that the BIOS/ROMMON
-configures the chip as desired. Obviously that is not happening here.
-
+Thanks,
 Guenter
 
->>>  		/* Enable VOUT if not enabled (it is disabled by default) */
->>>  		if (!(config & ADM1278_VOUT_EN)) {
->>> @@ -681,9 +697,6 @@ static int adm1275_probe(struct i2c_client *clien=
-t,
->>>  			}
->>>  		}
->>> =20
->>> -		if (config & ADM1278_TEMP1_EN)
->>> -			info->func[0] |=3D
->>> -				PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP;
->>>  		if (config & ADM1278_VIN_EN)
->>>  			info->func[0] |=3D PMBUS_HAVE_VIN;
->>>  		break;
->>>
->>
->=20
+>      		/* Enable VOUT if not enabled (it is disabled by default) */
+>      		if (!(config & ADM1278_VOUT_EN)) {
+>     @@ -681,9 +697,6 @@ static int adm1275_probe(struct i2c_client *client,
+>      			}
+>      		}
+>      
+>     -		if (config & ADM1278_TEMP1_EN)
+>     -			info->func[0] |=
+>     -				PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP;
+>      		if (config & ADM1278_VIN_EN)
+>      			info->func[0] |= PMBUS_HAVE_VIN;
+>      		break;
+>     -- 
+>     2.7.4
+>     
+>     
+> 
 
-
-
---PzSnpketLU5sr73i8NHQan8wbmrYTvdCO--
-
---3DlYDZqgzYYzdUTaYkmBSX1UFcTispULy
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEiHPvMQj9QTOCiqgVyx8mb86fmYEFAl7RWfEACgkQyx8mb86f
-mYFj8Q/9FXJVYh+JNzgnGbNsTDqIEFGwqd0O5cn8rIPErMDkibL45IqGfyrgLX/K
-im/Uwe0c/S6wij2YpP1MHxpLYcQJWUR+pv2WxOf9jzVXRBpXDB+nBtxSE1DWlIvJ
-aEPO9TSSEp8Qmy2CQ9QIFKnxiQQ2n1hxrFmEQH0pkulAwL5rx6ZzfWC/laZsu/j4
-6ZKTtfqc36MscC6KwxcWtSjY8shHAAQof2XILFXC95lYUCO6fHwcAuHvWaXbeyoh
-3rrIHu75NTlYzT8fZtgAzHJ7AlSvSTTy98aYETxFNgLqoZq0i8SIpwYci6JrPraz
-JXtegLXtISvse145ayXshtBJ3tr3+lW4S7fpU0JY3jXcECIgdi+tZ2dNQT+7Tqt+
-BH9Me/wt67PMk+baSeQH48NYrSIjNitnxH5b35xjGqcPvNbTTKY0MzWjn0a6BvwE
-pDaDUQXlNrmDXKu+ot47dNpXdGtR3fOxh6VAiFPIfePXyKB7hVBUesDH1+/iEc8/
-QZYOUL/OVHxIIKcxGXtDta8Zoz7TwdKplfkmIdLHovHrAtU0EtGV+BeOD6budsTl
-DaL2J2jJ1UvPJbjmGWI423QMtyljV+8lvYgEdEB3ytNqfuQaCHhKZsKBIrgwul9f
-bXOLZKHFgcaZKEtGqGRyvnbSKONebZHDdwQXV51utOhnT0eN900=
-=rTYV
------END PGP SIGNATURE-----
-
---3DlYDZqgzYYzdUTaYkmBSX1UFcTispULy--
