@@ -2,70 +2,71 @@ Return-Path: <SRS0=nzsd=7L=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89CE7C433DF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 29 May 2020 18:45:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C164DC433E0
+	for <linux-hwmon@archiver.kernel.org>; Fri, 29 May 2020 18:52:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 62A82207D4
-	for <linux-hwmon@archiver.kernel.org>; Fri, 29 May 2020 18:45:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9E7432077D
+	for <linux-hwmon@archiver.kernel.org>; Fri, 29 May 2020 18:52:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U0fGZRDq"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gycs5Jdk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726829AbgE2SpM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 29 May 2020 14:45:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52304 "EHLO
+        id S1726751AbgE2Swh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 29 May 2020 14:52:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726487AbgE2SpL (ORCPT
+        with ESMTP id S1725795AbgE2Swg (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 29 May 2020 14:45:11 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E37CC03E969;
-        Fri, 29 May 2020 11:45:10 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id r10so315799pgv.8;
-        Fri, 29 May 2020 11:45:10 -0700 (PDT)
+        Fri, 29 May 2020 14:52:36 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FF80C03E969;
+        Fri, 29 May 2020 11:52:36 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id h95so934636pje.4;
+        Fri, 29 May 2020 11:52:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=GxvhoaJ6/3DBa0iXuuNwBlmKU+YBFnrhHrRCI50bhKI=;
-        b=U0fGZRDqhIxpb6n6bF3wCBPHwCI2RFKBy7m1bu7Vpw6C43I9vkbG9Pvwj/8YKWg0Qh
-         tYemPGrBH506Haim9HDL95m2Wec/yWO3ufJj/C7pJn7+jrxI2/dc0dxbkJ9UditP6pk0
-         VkHK0S7rM6MdCXvuAtvT2gqjC4RArW4p5S2cfY1QRE+JL9fp8rwBBDwSuuhtMR4Cvkr8
-         iCVZxWYWfK4+vRbqtexsWq8cmIzcc5ifuihs00/HEAbGoBh8J7kuIG8EpqqPATlLLg7I
-         r8Tufd7XY2HrOpMCKXTQTUxHN1x5QQ5JU4Myp0s/34uFC5FC0zupIIE77W9y0bdyfeLs
-         jp8g==
+         :user-agent:mime-version:in-reply-to;
+        bh=hzq5CP06WE+rDQgMLM3t1qmEAoMARZTAExLtoppQY3s=;
+        b=Gycs5Jdkqw5y4aA6YTe0aznWpCkMlZyRDPypCEmvOBdwBFX6i3XcJWwe7lm/WO/GBO
+         1AvSgQxNCngwWH+VR5TUxuAW5T6jgrD5tWbA/ciT2KjuPVFqMubuc/byw95UNRKdipEx
+         8eu3GoyM9a4BTQd4Tw3TCZkBHPDnwOJRRifO8jmduL8V5J7loVskh+NeU1/5BAaL6IM5
+         dGNq6xfDuPsttWgJ+3LEJ0OV/kXyMl0XNn66uES9P+VqTuAOd/6oUMr8Rwl+imlkXv/T
+         3pMu/AYkxboWp5pyvRMtXTi5EEzq6lT0SV3bnnOq7fZcTWwhTceupsPxShexmp7hPyhs
+         Yvkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=GxvhoaJ6/3DBa0iXuuNwBlmKU+YBFnrhHrRCI50bhKI=;
-        b=HsOhzfZimgXDkEDpzgmZzoao7gRN41bwaMFEzUm4syTmVd/vHYgAaYOkgr2991+Gin
-         YVI3zl3ug5VsVvnjelURupS2tsVfa4QjJjWm1BSi8X8cGmbcVgNkIxQFC0VhhF1kDodh
-         j1YD9r4vtwBIem84pB4imHE8H6gaYsObFqj3CvMOcVHWketXfnpI6mLGMk+Wguesc76V
-         Z9vx64F1uzU9TwdndBljHAUu8hFT181nkqbp1bZcHsMfzIZvyOl8SL96oBalJHeis0VK
-         8ifDLgwcsKZdZkjebLbi7LcZR+GRcab1P+uIWjBMZCmfFYdkrp1iDkafXpbpxJDtmlSl
-         j3Jw==
-X-Gm-Message-State: AOAM532Z7d6IwbarasbfvFOUVikqUNm7NjloJCWdSSJvrX98/HSN2jIF
-        I5jK9EH35s8/5w4bTt7/lLkO4LTZ
-X-Google-Smtp-Source: ABdhPJyhnxd0muKu4wgiNp1MSmgOmKkGQ8z7O7hyTYFtM19FiI9B/WNi67AefVkUClaqdll5lnV+ig==
-X-Received: by 2002:a63:da0e:: with SMTP id c14mr9365088pgh.377.1590777909749;
-        Fri, 29 May 2020 11:45:09 -0700 (PDT)
+         :message-id:date:user-agent:mime-version:in-reply-to;
+        bh=hzq5CP06WE+rDQgMLM3t1qmEAoMARZTAExLtoppQY3s=;
+        b=ED4wLR0g0WKFC8nJgHqf6ztG/QPcjHZRpRQnis8QMIQVHe+Lzvm8J6EJn+RjhvTE9S
+         9itz6+WUvK7g7PL5qrzYRU2ORH3RGchxilRwAGxunnOH7xgLk2pq6kxGUhAstFhTpPT+
+         f5CebiZt+5L5GjoJCU+PrAoqrlZ5FcxhaFzHOmlRmgLMh9t0cpndRKylpCNyQT7fBOTH
+         EvGaJLvtutGHXr9wvUeRmcNj8QuPUSiFKDh06l4tX3BRcIhQMfVHoAcP04ZaR0YDyH4x
+         5E2lnAd49u6jCRnaAoMnNQTEytepSfrrAvXa2msh9FRwpe/ODXD3ACAxmuD9kS1oVpx5
+         bQag==
+X-Gm-Message-State: AOAM533T7Hy4kgOK6+ZEYlOO6+YLg6nQjGvo8zfIayys4GmlDN33cMgN
+        rxjo6jcNGAQBqSg+RA33NqM=
+X-Google-Smtp-Source: ABdhPJySY1MJ/4FGL1qpg5ojXX5NRDuqHrhGcK+iN4Uvb1UvVjRA8TVDXXm3AHDVaMF2yV13gndnCQ==
+X-Received: by 2002:a17:90a:3ad1:: with SMTP id b75mr11081675pjc.216.1590778355795;
+        Fri, 29 May 2020 11:52:35 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i22sm4946686pfo.92.2020.05.29.11.45.08
+        by smtp.gmail.com with ESMTPSA id g18sm7401759pgn.47.2020.05.29.11.52.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 May 2020 11:45:09 -0700 (PDT)
-Subject: Re: [PATCH v3 5/6] hwmon: pmbus: adm1266: read blackbox
-To:     alexandru.tachici@analog.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     robh+dt@kernel.org
-References: <20200529130506.73511-1-alexandru.tachici@analog.com>
- <20200529130506.73511-6-alexandru.tachici@analog.com>
+        Fri, 29 May 2020 11:52:35 -0700 (PDT)
+Subject: Re: [PATCH v2] hwmon:(adm1275) Enable adm1278 ADM1278_TEMP1_EN
+To:     Patrick Williams <patrick@stwcx.xyz>
+Cc:     Manikandan Elumalai <manikandan.hcl.ers.epl@gmail.com>,
+        linux-hwmon@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        manikandan.e@hcl.com, saipsdasari@fb.com, patrickw3@fb.com,
+        vijaykhemka@fb.com
+References: <20200529124607.GA3469@cnn>
+ <49485085-7cc7-9e29-a719-98d1e184378b@roeck-us.net>
+ <20200529174210.GF17541@heinlein>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -110,249 +111,111 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <80800d67-85ae-d6f1-b400-c230296e1eaf@roeck-us.net>
-Date:   Fri, 29 May 2020 11:45:08 -0700
+Message-ID: <356db3d6-bc56-bd58-428f-d8e94311abee@roeck-us.net>
+Date:   Fri, 29 May 2020 11:52:33 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <20200529130506.73511-6-alexandru.tachici@analog.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20200529174210.GF17541@heinlein>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="3DlYDZqgzYYzdUTaYkmBSX1UFcTispULy"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/29/20 6:05 AM, alexandru.tachici@analog.com wrote:
-> From: Alexandru Tachici <alexandru.tachici@analog.com>
-> 
-> Use the nvmem kernel api to expose the black box
-> chip functionality to userspace.
-> 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--3DlYDZqgzYYzdUTaYkmBSX1UFcTispULy
+Content-Type: multipart/mixed; boundary="PzSnpketLU5sr73i8NHQan8wbmrYTvdCO"
 
-This needs to be split into two functions: Add nvmem support, add
-debugfs file.
+--PzSnpketLU5sr73i8NHQan8wbmrYTvdCO
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+
+On 5/29/20 10:42 AM, Patrick Williams wrote:
+> Hi Guenter,
+>=20
+> Thanks for the initial look at this.
+>=20
+> One question for you below...
+>=20
+> On Fri, May 29, 2020 at 10:30:16AM -0700, Guenter Roeck wrote:
+>> On 5/29/20 5:46 AM, Manikandan Elumalai wrote:
+>>> +		/* Enable TEMP1 by default */
+>>> +		config |=3D ADM1278_TEMP1_EN;
+>>> +		ret =3D i2c_smbus_write_byte_data(client,
+>>> +					ADM1275_PMON_CONFIG,
+>>> +					config);
+>>> +		if (ret < 0) {
+>>> +		dev_err(&client->dev,
+>>> +			"Failed to enable temperature config\n");
+>>> +		return -ENODEV;
+>>> +		}
+>>
+>> This can be handled in a single operation, together with ADM1278_VOUT_=
+EN
+>> below. There is no need for two separate write operations.
+>=20
+> I don't know if you noticed here but the change ends up enabling
+> TEMP1_EN in all cases.  Is this acceptable?  If not, do you have any
+> preference on how it is selected for enablement?
+>=20
+
+I did. We are doing the same for output voltage already, so I am not that=
+
+much concerned about it. If it is, we might consider adding _enable
+attribute support (see Documentation/hwmon/sysfs-interface.rst) to the
+PMBus core (presumably as virtual PMBus commands) and let the user
+enable/disable individual attributes as needed.
+
+What _should_ really be done, of course, is that the BIOS/ROMMON
+configures the chip as desired. Obviously that is not happening here.
 
 Guenter
 
-> Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
-> ---
->  drivers/hwmon/pmbus/adm1266.c | 160 ++++++++++++++++++++++++++++++++++
->  1 file changed, 160 insertions(+)
-> 
-> diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
-> index 85d6795b79d3..831156004087 100644
-> --- a/drivers/hwmon/pmbus/adm1266.c
-> +++ b/drivers/hwmon/pmbus/adm1266.c
-> @@ -14,14 +14,19 @@
->  #include <linux/init.h>
->  #include <linux/kernel.h>
->  #include <linux/module.h>
-> +#include <linux/nvmem-consumer.h>
-> +#include <linux/nvmem-provider.h>
->  #include <linux/slab.h>
->  
->  #include "pmbus.h"
->  
-> +#define ADM1266_BLACKBOX_CONFIG	0xD3
->  #define ADM1266_PDIO_CONFIG	0xD4
->  #define ADM1266_GO_COMMAND	0xD8
->  #define ADM1266_READ_STATE	0xD9
-> +#define ADM1266_READ_BLACKBOX	0xDE
->  #define ADM1266_GPIO_CONFIG	0xE1
-> +#define ADM1266_BLACKBOX_INFO	0xE6
->  #define ADM1266_PDIO_STATUS	0xE9
->  #define ADM1266_GPIO_STATUS	0xEA
->  
-> @@ -38,12 +43,26 @@
->  #define ADM1266_PDIO_GLITCH_FILT(x)	FIELD_GET(GENMASK(12, 9), x)
->  #define ADM1266_PDIO_OUT_CFG(x)		FIELD_GET(GENMASK(2, 0), x)
->  
-> +#define ADM1266_BLACKBOX_OFFSET		0x7F700
-> +#define ADM1266_BLACKBOX_SIZE		64
-> +
->  struct adm1266_data {
->  	struct pmbus_driver_info info;
->  	struct gpio_chip gc;
->  	const char *gpio_names[ADM1266_GPIO_NR + ADM1266_PDIO_NR];
->  	struct i2c_client *client;
->  	struct dentry *debugfs_dir;
-> +	struct nvmem_config nvmem_config;
-> +	struct nvmem_device *nvmem;
-> +	u8 *dev_mem;
-> +};
-> +
-> +static const struct nvmem_cell_info adm1266_nvmem_cells[] = {
-> +	{
-> +		.name           = "blackbox",
-> +		.offset         = ADM1266_BLACKBOX_OFFSET,
-> +		.bytes          = 2048,
-> +	},
->  };
->  
->  #if IS_ENABLED(CONFIG_GPIOLIB)
-> @@ -261,6 +280,28 @@ static int adm1266_set_go_command_op(void *pdata, u64 val)
->  	return i2c_smbus_write_word_data(data->client, ADM1266_GO_COMMAND, reg);
->  }
->  
-> +static int adm1266_blackbox_information_read(struct seq_file *s, void *pdata)
-> +{
-> +	struct device *dev = s->private;
-> +	struct i2c_client *client = to_i2c_client(dev);
-> +	u8 read_buf[PMBUS_BLOCK_MAX + 1];
-> +	unsigned int latest_id;
-> +	int ret;
-> +
-> +	ret = i2c_smbus_read_block_data(client, ADM1266_BLACKBOX_INFO,
-> +					read_buf);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	seq_puts(s, "BLACKBOX_INFORMATION:\n");
-> +	latest_id = read_buf[0] + (read_buf[1] << 8);
-> +	seq_printf(s, "Black box ID: %x\n", latest_id);
-> +	seq_printf(s, "Logic index: %x\n", read_buf[2]);
-> +	seq_printf(s, "Record count: %x\n", read_buf[3]);
-> +
-> +	return 0;
-> +}
-> +
->  DEFINE_DEBUGFS_ATTRIBUTE(go_command_fops, NULL, adm1266_set_go_command_op,
->  			 "%llu\n");
->  DEFINE_DEBUGFS_ATTRIBUTE(read_state_fops, adm1266_get_state_op, NULL, "%llu\n");
-> @@ -277,6 +318,121 @@ static void adm1266_debug_init(struct adm1266_data *data)
->  				   &go_command_fops);
->  	debugfs_create_file_unsafe("read_state", 0400, root, data,
->  				   &read_state_fops);
-> +	debugfs_create_devm_seqfile(&data->client->dev, "blackbox_information",
-> +				    root, adm1266_blackbox_information_read);
-> +}
-> +
-> +static int adm1266_nvmem_read_blackbox(struct adm1266_data *data, u8 *buf)
-> +{
-> +	u8 write_buf[PMBUS_BLOCK_MAX + 1];
-> +	u8 read_buf[PMBUS_BLOCK_MAX + 1];
-> +	int record_count;
-> +	int ret;
-> +	int i;
-> +
-> +	ret = i2c_smbus_read_block_data(data->client, ADM1266_BLACKBOX_INFO,
-> +					read_buf);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	record_count = read_buf[3];
-> +
-> +	for (i = 0; i < record_count; i++) {
-> +		write_buf[0] = i;
-> +		ret = pmbus_block_wr(data->client, ADM1266_READ_BLACKBOX, 1,
-> +				     write_buf, buf);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		buf += ADM1266_BLACKBOX_SIZE;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static bool adm1266_cell_is_accessed(const struct nvmem_cell_info *mem_cell,
-> +				     unsigned int offset, size_t bytes)
-> +{
-> +	unsigned int start_addr = offset;
-> +	unsigned int end_addr = offset + bytes;
-> +	unsigned int cell_start = mem_cell->offset;
-> +	unsigned int cell_end = mem_cell->offset + mem_cell->bytes;
-> +
-> +	if (start_addr <= cell_end && cell_start <= end_addr)
-> +		return true;
-> +
-> +	return false;
-> +}
-> +
-> +static int adm1266_read_mem_cell(struct adm1266_data *data,
-> +				 const struct nvmem_cell_info *mem_cell)
-> +{
-> +	u8 *mem_offset;
-> +	int ret;
-> +
-> +	switch (mem_cell->offset) {
-> +	case ADM1266_BLACKBOX_OFFSET:
-> +		mem_offset = data->dev_mem + mem_cell->offset;
-> +		ret = adm1266_nvmem_read_blackbox(data, mem_offset);
-> +		if (ret)
-> +			dev_err(&data->client->dev, "Could not read blackbox!");
-> +		return ret;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +}
-> +
-> +static int adm1266_nvmem_read(void *priv, unsigned int offset, void *val,
-> +			      size_t bytes)
-> +{
-> +	const struct nvmem_cell_info *mem_cell;
-> +	struct adm1266_data *data = priv;
-> +	int ret;
-> +	int i;
-> +
-> +	for (i = 0; i < data->nvmem_config.ncells; i++) {
-> +		mem_cell = &adm1266_nvmem_cells[i];
-> +		if (!adm1266_cell_is_accessed(mem_cell, offset, bytes))
-> +			continue;
-> +
-> +		ret = adm1266_read_mem_cell(data, mem_cell);
-> +		if (ret < 0)
-> +			return ret;
-> +	}
-> +
-> +	memcpy(val, data->dev_mem + offset, bytes);
-> +
-> +	return 0;
-> +}
-> +
-> +static int adm1266_config_nvmem(struct adm1266_data *data)
-> +{
-> +	data->nvmem_config.name = dev_name(&data->client->dev);
-> +	data->nvmem_config.dev = &data->client->dev;
-> +	data->nvmem_config.root_only = true;
-> +	data->nvmem_config.read_only = true;
-> +	data->nvmem_config.owner = THIS_MODULE;
-> +	data->nvmem_config.reg_read = adm1266_nvmem_read;
-> +	data->nvmem_config.cells = adm1266_nvmem_cells;
-> +	data->nvmem_config.ncells = ARRAY_SIZE(adm1266_nvmem_cells);
-> +	data->nvmem_config.priv = data;
-> +	data->nvmem_config.stride = 1;
-> +	data->nvmem_config.word_size = 1;
-> +	data->nvmem_config.size = 0x80000;
-> +
-> +	data->nvmem = nvmem_register(&data->nvmem_config);
-> +	if (IS_ERR(data->nvmem)) {
-> +		dev_err(&data->client->dev, "Could not register nvmem!");
-> +		return PTR_ERR(data->nvmem);
-> +	}
-> +
-> +	data->dev_mem = devm_kzalloc(&data->client->dev,
-> +				     data->nvmem_config.size,
-> +				     GFP_KERNEL);
-> +	if (!data->dev_mem)
-> +		return -ENOMEM;
-> +
-> +	return 0;
->  }
->  
->  static int adm1266_probe(struct i2c_client *client,
-> @@ -299,6 +455,10 @@ static int adm1266_probe(struct i2c_client *client,
->  	if (ret < 0)
->  		return ret;
->  
-> +	ret = adm1266_config_nvmem(data);
-> +	if (ret < 0)
-> +		return ret;
-> +
->  	adm1266_debug_init(data);
->  
->  	info = &data->info;
-> 
+>>>  		/* Enable VOUT if not enabled (it is disabled by default) */
+>>>  		if (!(config & ADM1278_VOUT_EN)) {
+>>> @@ -681,9 +697,6 @@ static int adm1275_probe(struct i2c_client *clien=
+t,
+>>>  			}
+>>>  		}
+>>> =20
+>>> -		if (config & ADM1278_TEMP1_EN)
+>>> -			info->func[0] |=3D
+>>> -				PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP;
+>>>  		if (config & ADM1278_VIN_EN)
+>>>  			info->func[0] |=3D PMBUS_HAVE_VIN;
+>>>  		break;
+>>>
+>>
+>=20
 
+
+
+--PzSnpketLU5sr73i8NHQan8wbmrYTvdCO--
+
+--3DlYDZqgzYYzdUTaYkmBSX1UFcTispULy
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEiHPvMQj9QTOCiqgVyx8mb86fmYEFAl7RWfEACgkQyx8mb86f
+mYFj8Q/9FXJVYh+JNzgnGbNsTDqIEFGwqd0O5cn8rIPErMDkibL45IqGfyrgLX/K
+im/Uwe0c/S6wij2YpP1MHxpLYcQJWUR+pv2WxOf9jzVXRBpXDB+nBtxSE1DWlIvJ
+aEPO9TSSEp8Qmy2CQ9QIFKnxiQQ2n1hxrFmEQH0pkulAwL5rx6ZzfWC/laZsu/j4
+6ZKTtfqc36MscC6KwxcWtSjY8shHAAQof2XILFXC95lYUCO6fHwcAuHvWaXbeyoh
+3rrIHu75NTlYzT8fZtgAzHJ7AlSvSTTy98aYETxFNgLqoZq0i8SIpwYci6JrPraz
+JXtegLXtISvse145ayXshtBJ3tr3+lW4S7fpU0JY3jXcECIgdi+tZ2dNQT+7Tqt+
+BH9Me/wt67PMk+baSeQH48NYrSIjNitnxH5b35xjGqcPvNbTTKY0MzWjn0a6BvwE
+pDaDUQXlNrmDXKu+ot47dNpXdGtR3fOxh6VAiFPIfePXyKB7hVBUesDH1+/iEc8/
+QZYOUL/OVHxIIKcxGXtDta8Zoz7TwdKplfkmIdLHovHrAtU0EtGV+BeOD6budsTl
+DaL2J2jJ1UvPJbjmGWI423QMtyljV+8lvYgEdEB3ytNqfuQaCHhKZsKBIrgwul9f
+bXOLZKHFgcaZKEtGqGRyvnbSKONebZHDdwQXV51utOhnT0eN900=
+=rTYV
+-----END PGP SIGNATURE-----
+
+--3DlYDZqgzYYzdUTaYkmBSX1UFcTispULy--
