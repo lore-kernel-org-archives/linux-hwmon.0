@@ -2,134 +2,211 @@ Return-Path: <SRS0=nzsd=7L=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=no
+X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C046AC433E0
-	for <linux-hwmon@archiver.kernel.org>; Fri, 29 May 2020 13:42:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91EE4C433DF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 29 May 2020 17:37:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 99BD5207BC
-	for <linux-hwmon@archiver.kernel.org>; Fri, 29 May 2020 13:42:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 721B1208B8
+	for <linux-hwmon@archiver.kernel.org>; Fri, 29 May 2020 17:37:44 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L6RagwOn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726827AbgE2NmB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 29 May 2020 09:42:01 -0400
-Received: from mx2.suse.de ([195.135.220.15]:32824 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725901AbgE2NmA (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 29 May 2020 09:42:00 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 5EBE9AF4F;
-        Fri, 29 May 2020 13:41:58 +0000 (UTC)
-Date:   Fri, 29 May 2020 15:41:57 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     "Darrick J. Wong" <darrick.wong@oracle.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
-        Joshua Scott <joshua.scott@alliedtelesis.co.nz>,
-        Axel Lin <axel.lin@ingics.com>
-Subject: Re: Questions about adt7470 driver
-Message-ID: <20200529154157.18a5e4b5@endymion>
-In-Reply-To: <20200529001858.GP252930@magnolia>
-References: <20200526112259.4356fb2f@endymion>
-        <20200527224252.GB89212@roeck-us.net>
-        <20200527233334.GL252930@magnolia>
-        <20200528120256.63023d63@endymion>
-        <4ddb3fb5-8461-8269-5fa1-ca8421342903@roeck-us.net>
-        <20200529001858.GP252930@magnolia>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        id S1727056AbgE2Rho (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 29 May 2020 13:37:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41714 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726936AbgE2Rhk (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 29 May 2020 13:37:40 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF1FC008633;
+        Fri, 29 May 2020 10:30:19 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id bh7so1417385plb.11;
+        Fri, 29 May 2020 10:30:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=dNC62Fp+vHRzfZ9HpoFGuvs+TLS5VQcLR5KjG2JpKpI=;
+        b=L6RagwOn8yu9YUv3jRZKUekT2X3fEvfu+9HneUl/nZSDzuj8HZBD0FAAHFRoS+Og8p
+         jDyx75IZQvBB2ReH8wWSgWO10Y0B5hwaqJDtH5UZ7n+hk8Hm9HwlZxy8993tOMzn5s3Z
+         3plQcIJ1MeD/cdh16KPmCVi4qrnfuTF3lPlqp/4j38WC/xWZRq95Z2kaA1moNYb4rhVm
+         dU7GQwHYIXnBTLkH4s/7jyjjC2TF0VBTUDg0ElJgQhStkIap1wLUQLS8vFp7W3x5Ags6
+         QEedu6f9Zz8mSBQ/RpHJaUv/RTFa0oCPIZ1Nb935+KVjDrex0DwJ2AcrPNTbb23XwHmZ
+         I2kA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=dNC62Fp+vHRzfZ9HpoFGuvs+TLS5VQcLR5KjG2JpKpI=;
+        b=AJmiwMDP4mYc761uCR6V954Ku9qOGTkOFgRyAy1eZECfNd9CQj2hewVI4URuBPZH4A
+         /zZdxx6pB9hcH7Vy/1vqaSn9lWhkD/BWbL9OAuYrU+yI2DxWKa4NzfWv/mZr/xEOK7qs
+         rRV229Muu0bRXLYdCFoym2K+r7uZ+H113189AcFtlrdM6Lzby7Y6zQ9tPCt6GfEMRcZC
+         lfYolFkTax5bIQW0OBCxSDfQJiqV/v2dMWQIbp8/GMf5P5uGj1ac/pbJAWdeqgbA2bUp
+         0ghs8ENXzCReZ+9Y9sBU4epH9pG2AQFW71iZ4xWjfH92cXGkBMUVneZsfnuA0+omCtUj
+         8w5w==
+X-Gm-Message-State: AOAM530GZXJJaTkVK+SP+8U9//OT7nctqMekKOG5vAPooQ89FJNKNoIw
+        VPnijxvCC+zRKp5l/O/B5tI=
+X-Google-Smtp-Source: ABdhPJwvEPiMCyec0sDJOdvdJCD5v0MpfKaQ4COVZxEyWPbyhVUyhd6wN1pAtQZob6dNvAuDE25vqA==
+X-Received: by 2002:a17:90a:de97:: with SMTP id n23mr10245546pjv.164.1590773419440;
+        Fri, 29 May 2020 10:30:19 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e5sm7561217pfe.121.2020.05.29.10.30.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 May 2020 10:30:18 -0700 (PDT)
+Subject: Re: [PATCH v2] hwmon:(adm1275) Enable adm1278 ADM1278_TEMP1_EN
+To:     Manikandan Elumalai <manikandan.hcl.ers.epl@gmail.com>,
+        linux-hwmon@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
+Cc:     saipsdasari@fb.com, patrickw3@fb.com, vijaykhemka@fb.com,
+        manikandan.e@hcl.com
+References: <20200529124607.GA3469@cnn>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <49485085-7cc7-9e29-a719-98d1e184378b@roeck-us.net>
+Date:   Fri, 29 May 2020 10:30:16 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20200529124607.GA3469@cnn>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, 28 May 2020 17:18:58 -0700, Darrick J. Wong wrote:
-> I vaguely remember that the adt7470 temperature inputs were connected to
-> the CPU, and the PWM outputs were connected to the CPU heatsink fans.
-> The BIOS appeared to set up the adt7470 for automatic thermal management
-> (i.e. when you cranked all four cores of the machine to maximum) it
-> would gradually raise the CPU fan speed, like you'd expect.
+On 5/29/20 5:46 AM, Manikandan Elumalai wrote:
+> The adm1278 temperature sysfs attribute need it for one of the openbmc platform . 
+> This functionality is not enabled by default, so PMON_CONFIG needs to be modified in order to enable it.
 > 
-> The reality (again, vaguely remembered) was that the chip wouldn't run
-> its pwm control loop unless *something* poked it to reread the
-> temperature sensors.  A different model of the same machine had a BMC
-> which would talk to the adt7470 over i2c and take care of that.
+> Signed-off-by   : Manikandan Elumalai <manikandan.hcl.ers.epl@gmail.com>
 
-That I understand, and while it is poor design in my opinion, it makes
-sense to some degree.
+This is not valid.
 
-> The other problem was that /some/ of the machines for whatever reason
-> would adjust the pwm value that you could read out over i2c, but
-> wouldn't actually change the fan speed unless you whacked the adt into
-> manual modem.
-
-Ah. That would be the reason for the extra code. Automatic fan speed
-control that needs to be refreshed manually. Oh my.
-
-> Neither of those two behaviors were listed in the datasheet, and we
-> (IBM) could never get an answer out of either Analog or our own hardware
-> group about whether or not this was the expected behavior.  I
-> disassembled the BMC code to figure out what the other model computer
-> was doing, and (clumsily) wrote that into the driver.  For all I know we
-> got a bad batch of adt7470s and all these weird gymnastics aren't
-> supposed to be necessary.
 > 
-> The next generation switched to a totally different chip and supplier,
-> so I surmise they weren't happy with the results either.  Those machines
-> tended to overheat if you were in Windows.
+> v2:
+>    - Add Signed-off-by.
+>    - Removed ADM1278_TEMP1_EN check.
+
+checkpatch reports:
+
+> ---WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+#14:
+The adm1278 temperature sysfs attribute need it for one of the openbmc platform .
+
+CHECK: Alignment should match open parenthesis
+#45: FILE: drivers/hwmon/pmbus/adm1275.c:679:
++		ret = i2c_smbus_write_byte_data(client,
++					ADM1275_PMON_CONFIG,
+
+WARNING: suspect code indent for conditional statements (16, 16)
+#47: FILE: drivers/hwmon/pmbus/adm1275.c:681:
++		if (ret < 0) {
++		dev_err(&client->dev,
+
+ERROR: Missing Signed-off-by: line(s)
+
+total: 1 errors, 2 warnings, 1 checks, 33 lines checked
+
+Please follow published guidelines when submitting patches.
+
+>  drivers/hwmon/pmbus/adm1275.c | 21 +++++++++++++++++----
+>  1 file changed, 17 insertions(+), 4 deletions(-)
 > 
-> > > 4* Why are you calling msleep_interruptible() in
-> > > adt7470_read_temperatures() to wait for the temperature conversions? We
-> > > return -EAGAIN if that happens, but then ignore that error code, and we
-> > > log a cryptic error message. Do I understand correctly that the only
-> > > case where this should happen is when the user unloads the kernel
-> > > driver, in which case we do not care about having been interrupted? I
-> > > can't actually get the error message to be logged when rmmod'ing the
-> > > module so I don't know what it would take to trigger it.  
+> diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275.c
+> index 5caa37fb..ab5fceb 100644
+> --- a/drivers/hwmon/pmbus/adm1275.c
+> +++ b/drivers/hwmon/pmbus/adm1275.c
+> @@ -666,7 +666,23 @@ static int adm1275_probe(struct i2c_client *client,
+>  		tindex = 3;
+>  
+>  		info->func[0] |= PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT |
+> -			PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT;
+> +			PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
+> +			PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP;
+> +
+> +		config = i2c_smbus_read_byte_data(client, ADM1275_PMON_CONFIG);
+> +		if (config < 0)
+> +			return config;
+> +
+> +		/* Enable TEMP1 by default */
+> +		config |= ADM1278_TEMP1_EN;
+> +		ret = i2c_smbus_write_byte_data(client,
+> +					ADM1275_PMON_CONFIG,
+> +					config);
+> +		if (ret < 0) {
+> +		dev_err(&client->dev,
+> +			"Failed to enable temperature config\n");
+> +		return -ENODEV;
+> +		}
+
+This can be handled in a single operation, together with ADM1278_VOUT_EN
+below. There is no need for two separate write operations.
+
+Guenter
+
 > 
-> Urrk, what a doof who wrote that.  /me smacks 2009-era djwong. :P
+>  		/* Enable VOUT if not enabled (it is disabled by default) */
+>  		if (!(config & ADM1278_VOUT_EN)) {
+> @@ -681,9 +697,6 @@ static int adm1275_probe(struct i2c_client *client,
+>  			}
+>  		}
+>  
+> -		if (config & ADM1278_TEMP1_EN)
+> -			info->func[0] |=
+> -				PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP;
+>  		if (config & ADM1278_VIN_EN)
+>  			info->func[0] |= PMBUS_HAVE_VIN;
+>  		break;
 > 
-> kthread_stop blocks until the thread exits...
 
-My experiments seem to confirm this.
-
-> but strangely we don't
-> even try to interrupt the msleep_interruptible call.
-
-How would we do that if we wanted to? Later you say this is not
-possible?
-
-> That's fine,
-> though device removal will take longer than it needs to.
-
-Yes, up to 2 seconds in my tests. Not pleasant, but also not
-necessarily something to worry about, as rmmod is usually not needed.
-
-> We also don't
-> care about the return value of msleep_interruptible at all since one
-> cannot interrupt the kthread.
-> 
-> I probably picked interruptible sleep to avoid triggering the hangcheck
-> timer.
-
-I don't understand that part. Is a 2 second uninteruptible sleep in a
-kthread considered bad somehow?
-
-> > > 5* Is there any reason why the update thread is being started
-> > > unconditionally? As I understand it, it is only needed if at least one
-> > > PWM output is configured in automatic mode, which (I think) is not the
-> > > default. It is odd that the bug reporter hits a problem with the  
-> 
-> Yes, the driver should only start the kthread loop if someone wants
-> automatic temp control.
-
-OK, I'll give it a try. I don't want to add too much complexity though.
-
-Thanks,
--- 
-Jean Delvare
-SUSE L3 Support
