@@ -2,78 +2,124 @@ Return-Path: <SRS0=V20P=7P=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-5.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 376B6C433DF
-	for <linux-hwmon@archiver.kernel.org>; Tue,  2 Jun 2020 11:13:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DFF89C433E0
+	for <linux-hwmon@archiver.kernel.org>; Tue,  2 Jun 2020 13:28:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 15260206E2
-	for <linux-hwmon@archiver.kernel.org>; Tue,  2 Jun 2020 11:13:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ADB19206E2
+	for <linux-hwmon@archiver.kernel.org>; Tue,  2 Jun 2020 13:28:58 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FAeuagD/"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X6QbDLkQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725900AbgFBLNd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 2 Jun 2020 07:13:33 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:23547 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725919AbgFBLNd (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 2 Jun 2020 07:13:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1591096412;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=mcGdkq8ccdORDcTXBpKNpsu+Jhtx9060LrIuVw/kpqE=;
-        b=FAeuagD/SoYtyolaoZnVBeJFV9FMuiad1vHlWVSxbHf24vP899c2TXvT/EuYH/2FWtDafY
-        yqogjrh2Qqgb4E8+f2pVUmRnrCKP8+4PINVANaZnLl/CE3AT2SAvDIYAwrpxW+GsGNnzBa
-        iRLKO6Swm7gBBkVxJbPFFQgVhr1Rrgs=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-299-RHRLySLzMNqVwLeoxSOJMw-1; Tue, 02 Jun 2020 07:13:30 -0400
-X-MC-Unique: RHRLySLzMNqVwLeoxSOJMw-1
-Received: by mail-ed1-f71.google.com with SMTP id i93so6468632edi.4
-        for <linux-hwmon@vger.kernel.org>; Tue, 02 Jun 2020 04:13:30 -0700 (PDT)
+        id S1725958AbgFBN26 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 2 Jun 2020 09:28:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49776 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725919AbgFBN26 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 2 Jun 2020 09:28:58 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F048BC061A0E;
+        Tue,  2 Jun 2020 06:28:57 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id d6so1444838pjs.3;
+        Tue, 02 Jun 2020 06:28:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=fP8bDVMSOhUWMBpileSgO8TPsqk2gHN6BkWpLwOq3I0=;
+        b=X6QbDLkQFzzfgBl8Z+cYFVwUfWYoeWpLs+gdCIrW8IjydOBV75ORrI6HMHjj2Mpt5m
+         fZHDTBggkpC7nWAe90KGiXhkxT3cPp9fMNupiR5vyqU6zBHzJG+7ILq+eJrK+/Mpwjjx
+         RnX5qALh+mD/jmK6RApH9SI6vjaUjxfPMNlvWoTPytWbFfjzjxeHZo7fV8CfxBcDd+tM
+         3spaLlpFOuJlmmCltL5+rFRTdQAIUwheahxGC/drCs3tzUjq18Y7CSUOAWbFyYcvP/az
+         PeXdRA2GMvR8y/3pcij8iBMPq+a2a4QHo0/W1xahEm2LeWvja9BHT/0exmQX7gDVwkiA
+         Zicw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=mcGdkq8ccdORDcTXBpKNpsu+Jhtx9060LrIuVw/kpqE=;
-        b=nAb9YzxIOXEbXo6T4ykB75maZ3N8NvWJOvrtw7bklT4wVVQls03HTxeafvj9WctmOS
-         PCc00k3fa3hLVZGfT/60CuSWsMg6viuNW2RCUTqae2a3pUjxFNBdKXCga+ZGL2OTwQae
-         yQbd/RNP+P7SjE8zo9otGpb6hEab4wqO9JcOJ2mRsosXHFk3nxX25XIG02Ix1EFUJzk3
-         dPJeVU+2QfOvcEYsSEt0x606Qpoo0vSUbX2hdPwUYEStV2jU7WZKc/9AYBbvS+i6cvez
-         H1m4IJgu9GqcTJQQGdsgX7gzQT+SQ4XyzEjcnWw3pCR8wcR0SQFxJuSzkcMTegrdC9ZD
-         +kLw==
-X-Gm-Message-State: AOAM530yu4X5lZofj7RIdQD26Hr2L7/XkxQFT43lB+WMOhVNlw65qT1O
-        mVa0F9JKgq5MwHk2ELqtOOWxzIYpIHJZYAyagkT+II6YkKbpXmSvhHLkKTI68g+sQdDnwJWIMew
-        MuRZZ1Gb1Fn6KLxO79/Mu5RE=
-X-Received: by 2002:a17:906:2e55:: with SMTP id r21mr22505491eji.338.1591096408977;
-        Tue, 02 Jun 2020 04:13:28 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz9aUdItLHvjAGqk/HKw4j0VB0tvMsfY3zMxv2DWihZe5mGBiU9xAECc1qiW7tSoxMN0whHxA==
-X-Received: by 2002:a17:906:2e55:: with SMTP id r21mr22505473eji.338.1591096408665;
-        Tue, 02 Jun 2020 04:13:28 -0700 (PDT)
-Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
-        by smtp.gmail.com with ESMTPSA id w28sm1487875ejk.75.2020.06.02.04.13.27
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=fP8bDVMSOhUWMBpileSgO8TPsqk2gHN6BkWpLwOq3I0=;
+        b=Uf3luvA79vGMpIZgKQqNVbdb+j4yzNRQS7OtFj37O938w8Rhyfbk3qF+5GiRRvcMjo
+         GOG5eBxDSbdbYtHjfp/b4S2i7arXVM3cKNh03Ok6Gb4hEIMKvqeJJnTh0HwGvOTY3NoI
+         cauK6INHU/EA1pgsQzm7uPtSosTzrj8WipuqAPA8gKNIhjUP283VrFp8TV9PuaBeYguf
+         1Ps2EjtqNGLjJu+6Z1H9NGHk0CyCr8bYO4aKjJe6mCl1fBx0e3S2x28BmTI8/7xKpOY6
+         fL22c7fxW7MQdtN8RaH+PvU8w6XKiFn79op7z6zrXYKkA+37CMROBJ0Xa6jpJm/w/B5I
+         OCZg==
+X-Gm-Message-State: AOAM5305IZAMOBZ/Oeh8x7qM1W5uq9MHZZMlGrxnBTea0y8SovJhpV53
+        yFGKaiLpj3lpZ/3OO1RQaTo=
+X-Google-Smtp-Source: ABdhPJz6b8mrr9XDbRkVoSaeyZm1ughGVCKjctF9bY+4py+mzxGmlbPG3zRJUsuvL8egDFRBUvOGjg==
+X-Received: by 2002:a17:90b:1101:: with SMTP id gi1mr5872830pjb.117.1591104537361;
+        Tue, 02 Jun 2020 06:28:57 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n24sm2482118pjt.47.2020.06.02.06.28.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Jun 2020 04:13:28 -0700 (PDT)
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>
-Cc:     linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org
-From:   Hans de Goede <hdegoede@redhat.com>
-Subject: RFC: Writing a small superio kernel driver to allow superio probing
- on locked down systems?
-Message-ID: <0d7e97e0-fe78-163a-cdaf-825b9d0b50ee@redhat.com>
-Date:   Tue, 2 Jun 2020 13:13:27 +0200
+        Tue, 02 Jun 2020 06:28:56 -0700 (PDT)
+Subject: Re: [v4,1/1] hwmon: (nct7904) Add watchdog function
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        yuechao.zhao@advantech.com.cn
+Cc:     345351830@qq.com, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        amy.shih@advantech.com.tw, oakley.ding@advantech.com.tw,
+        jia.sui@advantech.com.cn, shengkui.leng@advantech.com.cn
+References: <20200331052850.5419-1-yuechao.zhao@advantech.com.cn>
+ <CAMuHMdUesEMsWH55Tfe+eru8iVpgWbKPnL-wgRakG9BEpP4Y1g@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <c94d4263-1644-7059-f26d-e81c30a1c766@roeck-us.net>
+Date:   Tue, 2 Jun 2020 06:28:54 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <CAMuHMdUesEMsWH55Tfe+eru8iVpgWbKPnL-wgRakG9BEpP4Y1g@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
@@ -81,59 +127,64 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi All,
+On 6/2/20 1:01 AM, Geert Uytterhoeven wrote:
+> Hi Yuechao,
+> 
+> On Tue, Mar 31, 2020 at 7:30 AM <yuechao.zhao@advantech.com.cn> wrote:
+>> From: Yuechao Zhao <yuechao.zhao@advantech.com.cn>
+>>
+>> implement watchdong functionality into the "hwmon/nct7904.c"
+>>
+>> Signed-off-by: Yuechao Zhao <yuechao.zhao@advantech.com.cn>
+> 
+> Thanks for your patch, which is now commit 77849a552d142ef5 ("hwmon:
+> (nct7904) Add watchdog function").
+> 
+>> --- a/drivers/hwmon/Kconfig
+>> +++ b/drivers/hwmon/Kconfig
+>> @@ -1340,10 +1340,12 @@ config SENSORS_NCT7802
+>>
+>>  config SENSORS_NCT7904
+>>         tristate "Nuvoton NCT7904"
+>> -       depends on I2C
+>> +       depends on I2C && WATCHDOG
+>> +       select WATCHDOG_CORE
+> 
+> This makes the driver unselectable if WATCHDOG is not set.
+> 
+> Is there a use case for using this driver without watchdog functionality?
+> If yes, it might make sense to make the watchdog support optional,
+> protected by #ifdef CONFIG_WATCHDOG, and change the above to
+> 
 
-Yesterday Fedora received this bug report:
+We use the same pattern in other hwmon drivers which also implement
+watchdog functionality, so I am not particularly concerned about it.
 
-https://bugzilla.redhat.com/show_bug.cgi?id=1842611
+Guenter
 
-The problem reported here is that sensors-detect is denied
-/dev/ports access when run on systems booted with secure-boot
-enabled (and thus kernel-lockdown mode activated).
-
-I've been thinking a bit about this issue and I was thinking
-that maybe we could do a very small kernel driver to help
-sensors-detect here (and which might also be useful for
-other diagnostic purposes) ?
-
-The idea would be to take the superio probe code from
-sensors-detect and put it in a kernel module under
-drivers/platform/x86.
-
-This module will never autoload (sensors-detect will
-need to modprobe it); and this module will offer a couple
-of sysfs attributes, all of which will only be readable
-by root (to avoid a regular user being able to trigger
-the probe if the module does somehow end up being loaded
-through some other mechanism).
-
-When the first sysfs attr is read then the module will
-do the probe and export the results through sysfs
-attr. With the results being the super-io base address
-(0x2e or 0x4e IIRC) and the device-id of the super-io
-chip; and maybe some other info.
-
-The above proposal is a bit fuzy wrt what info will be
-exported through sysfs attributes because I've not looked
-at super-io probing for ages, details to be filled in later.
-
-The main purpose of this email is to test the waters
-for the concept of such a module, so some questions:
-
-1. Do you (hwmon and platform/x86 maintainers) think
-that the proposed security comprise is ok?
-
-IOW is it ok to allow root to trigger a super-io probe,
-which involves poking some io-ports. Note this will
-only allow root to cause the kernel to do the probe,
-the probe itself and thus the exact io-port reads / writes
-are fully under the kernel's control.
-
-2. Do you think that the concept of having a little
-helper module for this, with a simple sysfs interface
-is ok?
-
-Regards,
-
-Hans
+>     depends on I2C
+>     select WATCHDOG_CORE if WATCHDOG
+> 
+> If no, please ignore my email.
+> 
+>>         help
+>>           If you say yes here you get support for the Nuvoton NCT7904
+>> -         hardware monitoring chip, including manual fan speed control.
+>> +         hardware monitoring chip, including manual fan speed control
+>> +         and support for the integrated watchdog.
+>>
+>>           This driver can also be built as a module. If so, the module
+>>           will be called nct7904.
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
+> 
 
