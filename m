@@ -2,145 +2,230 @@ Return-Path: <SRS0=Agb6=7R=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50354C433E0
-	for <linux-hwmon@archiver.kernel.org>; Thu,  4 Jun 2020 15:30:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7907AC433E0
+	for <linux-hwmon@archiver.kernel.org>; Thu,  4 Jun 2020 21:11:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 24B9A207F5
-	for <linux-hwmon@archiver.kernel.org>; Thu,  4 Jun 2020 15:30:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 42BF42067B
+	for <linux-hwmon@archiver.kernel.org>; Thu,  4 Jun 2020 21:11:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qqW79A56"
+	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="BUavk4KO"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729522AbgFDPas (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 4 Jun 2020 11:30:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34762 "EHLO
+        id S1726326AbgFDVLT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 4 Jun 2020 17:11:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729153AbgFDPas (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 4 Jun 2020 11:30:48 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37BA1C08C5C0;
-        Thu,  4 Jun 2020 08:30:48 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id ga6so1267751pjb.1;
-        Thu, 04 Jun 2020 08:30:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=05vmOo/sEpxMWFEEii+qy1RpdqnFhqBY0D+z2U4qyKA=;
-        b=qqW79A56q2GGzmKpYXMGrh7FM7BaCoPv2cQIRcxRZX35FWfWV6KoJIUGSIQ9SvrlvX
-         S8qeA58q0vvqPLTHEbc6dH9dA9c7pydCJ9S2QTSRcX2NYFLyPDvzOtOpuuIwESrTj4uI
-         lr3+12ok85R2j4ryJKPQQK2OFJcjlmNGdItyDDgonJU9qz+VrP2myXB9aAdaZBEpnbme
-         77TYnFC8+j1rm83692wBWYTeBo6NpALTwv9TWVqQyciCyrQnFX7/8XS56CB1n55av4xo
-         fxAgJPLFdKFE7TdOjBpOa0L3iROOVBeADtDrDKq0mJZiiwlQwVuaD9dxhtXUm87wsxny
-         acmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=05vmOo/sEpxMWFEEii+qy1RpdqnFhqBY0D+z2U4qyKA=;
-        b=saYk5jf87HZE+hQQ6x/SAFGchCjUkwwZE5GUa40a25A+QwKiNxSr6x5xL3pQGRzLOy
-         HhILebcmupWoRUHbY9oa5PTC5GF8zFiaF6zeJGckJsK1+16ZnqPgwGmXARKZv25rutlo
-         QRupQV6bvrlW076y2gY2z14Vd4flauI5QFWujVNrBGt/e/0LYwanNKvnoz3v8oVLjVDQ
-         mJbJtFzXGaNY0skLqr+W3pLuUL/By0WvwqkE/+10x2jy0KF2gFI9xiY6DOuICc3BPNS9
-         E2r20REEMr2TKhpF2UiYACauBQ0qyLwkEU1SFs/kiPFX5iI58jg4FZa8igWuGzu2+wRR
-         cybQ==
-X-Gm-Message-State: AOAM530gCNyYvZnNvfGPUq+F3G1yk94QfBwVP7t4FwVQtEWklNvI573Q
-        tH8/00ehyckBUEs0jJACPkc=
-X-Google-Smtp-Source: ABdhPJzawl5RAjmhHCgxaSs9Q6RhpN+ZaoU9HI1IIe3V4VgaXcf4xOjfx+bIOMRaqk47vfDMR63eHA==
-X-Received: by 2002:a17:90a:e98e:: with SMTP id v14mr7055585pjy.70.1591284646395;
-        Thu, 04 Jun 2020 08:30:46 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 5sm4230538pgl.4.2020.06.04.08.30.44
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 04 Jun 2020 08:30:45 -0700 (PDT)
-Date:   Thu, 4 Jun 2020 08:30:44 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        kbuild test robot <lkp@intel.com>,
-        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: bt1-pvt: Define Temp- and Volt-to-N poly as
- maybe-unused
-Message-ID: <20200604153043.GA185160@roeck-us.net>
-References: <20200602091219.24404-1-Sergey.Semin@baikalelectronics.ru>
- <20200603000753.391-1-Sergey.Semin@baikalelectronics.ru>
+        with ESMTP id S1726062AbgFDVLT (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 4 Jun 2020 17:11:19 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38EEC08C5C0;
+        Thu,  4 Jun 2020 14:11:18 -0700 (PDT)
+Received: from apollo.fritz.box (unknown [IPv6:2a02:810c:c200:2e91:6257:18ff:fec4:ca34])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 67D4B22708;
+        Thu,  4 Jun 2020 23:11:09 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1591305074;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=dfBAK5buwUbNri4/Cpv7vZflGHwzc1zt++Q49F+L4Sk=;
+        b=BUavk4KOaVLu6b0yy/JrUOH+f8S+yP9N7RFB9x4HPaKKkwYPMRq5Y97HAwXJJefjWsMP3X
+        5p+UlwqvcBs9fQgN7yUcJoDV/Icy5/wizYDb/IjWVGCYHiKXMXfgOw1iMf0zqL/NJKcI9p
+        Nq2WSUQO2QN/YvnQSINASUnsosNCt/0=
+From:   Michael Walle <michael@walle.cc>
+To:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH v4 00/11] Add support for Kontron sl28cpld
+Date:   Thu,  4 Jun 2020 23:10:28 +0200
+Message-Id: <20200604211039.12689-1-michael@walle.cc>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200603000753.391-1-Sergey.Semin@baikalelectronics.ru>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
+X-Spam: Yes
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Jun 03, 2020 at 03:07:53AM +0300, Serge Semin wrote:
-> Clang-based kernel building with W=1 warns that some static const
-> variables are unused:
-> 
-> drivers/hwmon/bt1-pvt.c:67:30: warning: unused variable 'poly_temp_to_N' [-Wunused-const-variable]
-> static const struct pvt_poly poly_temp_to_N = {
->                              ^
-> drivers/hwmon/bt1-pvt.c:99:30: warning: unused variable 'poly_volt_to_N' [-Wunused-const-variable]
-> static const struct pvt_poly poly_volt_to_N = {
->                              ^
-> 
-> Indeed these polynomials are utilized only when the PVT sensor alarms are
-> enabled. In that case they are used to convert the temperature and
-> voltage alarm limits from normal quantities (Volts and degree Celsius) to
-> the sensor data representation N = [0, 1023]. Otherwise when alarms are
-> disabled the driver only does the detected data conversion to the human
-> readable form and doesn't need that polynomials defined. So let's mark the
-> Temp-to-N and Volt-to-N polynomials with __maybe_unused attribute.
-> 
-> Note gcc with W=1 doesn't notice the problem.
-> 
-> Fixes: 87976ce2825d ("hwmon: Add Baikal-T1 PVT sensor driver")
-> Reported-by: kbuild test robot <lkp@intel.com>
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Cc: Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>
-> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+The Kontron sl28cpld is a board management chip providing gpio, pwm, fan
+monitoring and an interrupt controller. For now this controller is used on
+the Kontron SMARC-sAL28 board. But because of its flexible nature, it
+might also be used on other boards in the future. The individual blocks
+(like gpio, pwm, etc) are kept intentionally small. The MFD core driver
+then instantiates different (or multiple of the same) blocks. It also
+provides the register layout so it might be updated in the future without a
+device tree change; and support other boards with a different layout or
+functionalities.
 
-Applied.
+See also [1] for more information.
 
-Thanks,
-Guenter
+This is my first take of a MFD driver. I don't know whether the subsystem
+maintainers should only be CCed on the patches which affect the subsystem
+or on all patches for this series. I've chosen the latter so you can get a
+more complete picture.
 
-> ---
-> 
-> Link: https://lore.kernel.org/linux-hwmon/20200602091219.24404-1-Sergey.Semin@baikalelectronics.ru
-> Changelog v2:
-> - Repalce if-defs with __maybe_unused attribute.
-> ---
->  drivers/hwmon/bt1-pvt.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/bt1-pvt.c b/drivers/hwmon/bt1-pvt.c
-> index 1a9772fb1f73..8709b3f54086 100644
-> --- a/drivers/hwmon/bt1-pvt.c
-> +++ b/drivers/hwmon/bt1-pvt.c
-> @@ -64,7 +64,7 @@ static const struct pvt_sensor_info pvt_info[] = {
->   *     48380,
->   * where T = [-48380, 147438] mC and N = [0, 1023].
->   */
-> -static const struct pvt_poly poly_temp_to_N = {
-> +static const struct pvt_poly __maybe_unused poly_temp_to_N = {
->  	.total_divider = 10000,
->  	.terms = {
->  		{4, 18322, 10000, 10000},
-> @@ -96,7 +96,7 @@ static const struct pvt_poly poly_N_to_temp = {
->   * N = (18658e-3*V - 11572) / 10,
->   * V = N * 10^5 / 18658 + 11572 * 10^4 / 18658.
->   */
-> -static const struct pvt_poly poly_volt_to_N = {
-> +static const struct pvt_poly __maybe_unused poly_volt_to_N = {
->  	.total_divider = 10,
->  	.terms = {
->  		{1, 18658, 1000, 1},
+[1] https://lore.kernel.org/linux-devicetree/0e3e8204ab992d75aa07fc36af7e4ab2@walle.cc/
+
+Changes since v3:
+ - use of_platform_populate() to populate internal devices using the
+   internal register offsets as unit-addresses
+ - because we don't use mfd_cells anymore, we cannot use IORESOURCE_REG,
+   but instead parse the reg property in each individual driver
+ - dropped the following patches because they were already merged:
+     gpiolib: Introduce gpiochip_irqchip_add_domain()
+     gpio: add a reusable generic gpio_chip using regmap
+ - dropped the following patches because they are no longer needed:
+     include/linux/ioport.h: add helper to define REG resource constructs
+     mfd: mfd-core: Don't overwrite the dma_mask of the child device
+     mfd: mfd-core: match device tree node against reg property
+ - rephrase commit messages, as suggested by Thomas Gleixner
+
+Changes since v2:
+As suggested by Guenter Roeck:
+ - added sl28cpld.rst to index.rst
+ - removed sl28cpld_wdt_status()
+ - reverse christmas tree local variable ordering
+ - assign device_property_read_bool() retval directly
+ - introduce WDT_DEFAULT_TIMEOUT and use it if the hardware reports
+   0 as timeout.
+ - set WDOG_HW_RUNNING if applicable
+ - remove platform_set_drvdata() leftover
+
+As suggested by Bartosz Golaszewski:
+ - don't export gpio_regmap_simple_xlate()
+ - combine local variable declaration of the same type
+ - drop the "struct gpio_regmap_addr", instead use -1 to force an address
+   offset of zero
+ - fix typo
+ - use "struct gpio_regmap_config" pattern, keep "struct gpio_regmap"
+   private. this also means we need a getter/setter for the driver_data
+   element.
+
+As suggested by Linus Walleij:
+ - don't store irq_domain in gpio-regmap. drop to_irq() altogether for now.
+   Instead there is now a new patch which lets us set the irqdomain of the
+   gpiochip_irqchip and use its .to_irq() function. This way we don't have
+   to expose the gpio_chip inside the gpio-regmap to the user.
+
+Changes since v1:
+ - use of_match_table in all drivers, needed for automatic module loading,
+   when using OF_MFD_CELL()
+ - add new gpio-regmap.c which adds a generic regmap gpio_chip
+   implementation
+ - new patch for reqmap_irq, so we can reuse its implementation
+ - remove almost any code from gpio-sl28cpld.c, instead use gpio-regmap and
+   regmap-irq
+ - change the handling of the mfd core vs device tree nodes; add a new
+   property "of_reg" to the mfd_cell struct which, when set, is matched to
+   the unit-address of the device tree nodes.
+ - fix sl28cpld watchdog when it is not initialized by the bootloader.
+   Explicitly set the operation mode.
+ - also add support for kontron,assert-wdt-timeout-pin in sl28cpld-wdt.
+
+As suggested by Bartosz Golaszewski:
+ - define registers as hex
+ - make gpio enum uppercase
+ - move parent regmap check before memory allocation
+ - use device_property_read_bool() instead of the of_ version
+ - mention the gpio flavors in the bindings documentation
+
+As suggested by Guenter Roeck:
+ - cleanup #includes and sort them
+ - use devm_watchdog_register_device()
+ - use watchdog_stop_on_reboot()
+ - provide a Documentation/hwmon/sl28cpld.rst
+ - cleaned up the weird tristate->bool and I2C=y issue. Instead mention
+   that the MFD driver is bool because of the following intc patch
+ - removed the SL28CPLD_IRQ typo
+
+As suggested by Rob Herring:
+ - combine all dt bindings docs into one patch
+ - change the node name for all gpio flavors to "gpio"
+ - removed the interrupts-extended rule
+ - cleaned up the unit-address space, see above
+
+Michael Walle (11):
+  dt-bindings: mfd: Add bindings for sl28cpld
+  mfd: Add support for Kontron sl28cpld management controller
+  irqchip: add sl28cpld interrupt controller support
+  watchdog: add support for sl28cpld watchdog
+  pwm: add support for sl28cpld PWM controller
+  gpio: add support for the sl28cpld GPIO controller
+  hwmon: add support for the sl28cpld hardware monitoring controller
+  arm64: dts: freescale: sl28: enable sl28cpld
+  arm64: dts: freescale: sl28: map GPIOs to input events
+  arm64: dts: freescale: sl28: enable LED support
+  arm64: dts: freescale: sl28: enable fan support
+
+ .../bindings/gpio/kontron,sl28cpld-gpio.yaml  |  54 ++++
+ .../hwmon/kontron,sl28cpld-hwmon.yaml         |  27 ++
+ .../kontron,sl28cpld-intc.yaml                |  54 ++++
+ .../bindings/mfd/kontron,sl28cpld.yaml        | 153 ++++++++++++
+ .../bindings/pwm/kontron,sl28cpld-pwm.yaml    |  35 +++
+ .../watchdog/kontron,sl28cpld-wdt.yaml        |  35 +++
+ Documentation/hwmon/index.rst                 |   1 +
+ Documentation/hwmon/sl28cpld.rst              |  36 +++
+ .../fsl-ls1028a-kontron-kbox-a-230-ls.dts     |  14 ++
+ .../fsl-ls1028a-kontron-sl28-var3-ads2.dts    |   9 +
+ .../freescale/fsl-ls1028a-kontron-sl28.dts    | 134 ++++++++++
+ drivers/gpio/Kconfig                          |  11 +
+ drivers/gpio/Makefile                         |   1 +
+ drivers/gpio/gpio-sl28cpld.c                  | 180 ++++++++++++++
+ drivers/hwmon/Kconfig                         |  10 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/sl28cpld-hwmon.c                | 150 ++++++++++++
+ drivers/irqchip/Kconfig                       |   3 +
+ drivers/irqchip/Makefile                      |   1 +
+ drivers/irqchip/irq-sl28cpld.c                | 102 ++++++++
+ drivers/mfd/Kconfig                           |  21 ++
+ drivers/mfd/Makefile                          |   2 +
+ drivers/mfd/sl28cpld.c                        |  79 ++++++
+ drivers/pwm/Kconfig                           |  10 +
+ drivers/pwm/Makefile                          |   1 +
+ drivers/pwm/pwm-sl28cpld.c                    | 201 +++++++++++++++
+ drivers/watchdog/Kconfig                      |  11 +
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/sl28cpld_wdt.c               | 231 ++++++++++++++++++
+ 29 files changed, 1568 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/gpio/kontron,sl28cpld-gpio.yaml
+ create mode 100644 Documentation/devicetree/bindings/hwmon/kontron,sl28cpld-hwmon.yaml
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/kontron,sl28cpld-intc.yaml
+ create mode 100644 Documentation/devicetree/bindings/mfd/kontron,sl28cpld.yaml
+ create mode 100644 Documentation/devicetree/bindings/pwm/kontron,sl28cpld-pwm.yaml
+ create mode 100644 Documentation/devicetree/bindings/watchdog/kontron,sl28cpld-wdt.yaml
+ create mode 100644 Documentation/hwmon/sl28cpld.rst
+ create mode 100644 drivers/gpio/gpio-sl28cpld.c
+ create mode 100644 drivers/hwmon/sl28cpld-hwmon.c
+ create mode 100644 drivers/irqchip/irq-sl28cpld.c
+ create mode 100644 drivers/mfd/sl28cpld.c
+ create mode 100644 drivers/pwm/pwm-sl28cpld.c
+ create mode 100644 drivers/watchdog/sl28cpld_wdt.c
+
+-- 
+2.20.1
+
