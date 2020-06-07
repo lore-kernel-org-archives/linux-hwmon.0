@@ -1,132 +1,196 @@
-Return-Path: <SRS0=Pe92=7T=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=RDSF=7U=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1473FC433E0
-	for <linux-hwmon@archiver.kernel.org>; Sat,  6 Jun 2020 12:45:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF856C433DF
+	for <linux-hwmon@archiver.kernel.org>; Sun,  7 Jun 2020 18:25:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E79F5207D0
-	for <linux-hwmon@archiver.kernel.org>; Sat,  6 Jun 2020 12:45:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A5D99206D5
+	for <linux-hwmon@archiver.kernel.org>; Sun,  7 Jun 2020 18:25:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="KuYGZZ03"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CnAiG0SB"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728751AbgFFMpu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 6 Jun 2020 08:45:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60762 "EHLO
+        id S1727966AbgFGSZc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 7 Jun 2020 14:25:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728102AbgFFMpt (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 6 Jun 2020 08:45:49 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF62C03E96A;
-        Sat,  6 Jun 2020 05:45:49 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 999A322EE3;
-        Sat,  6 Jun 2020 14:45:38 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1591447546;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gM7IewjQCAkSDvRzyGMjXyQ6q6nkyRovpb2OhFZgErU=;
-        b=KuYGZZ03XJdDL/35fA1elmt+MIj+rU+0eKSys+0i1Gm2egVv5RXaD3aFB3MbhRgnovcamY
-        4aT7AEghDPLkUWLir3HVwjqlo7DG4MYmumZOnXR3FIRnd/DzSgbqimwkYeeY+6keWPjTC2
-        uwzuGiRic8TGrOkkEq19V8gU90hnB3Y=
+        with ESMTP id S1726841AbgFGSZa (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 7 Jun 2020 14:25:30 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8639BC08C5C3;
+        Sun,  7 Jun 2020 11:25:29 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id l10so14987592wrr.10;
+        Sun, 07 Jun 2020 11:25:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=R+cLX/NnGzJYg90E/xhKujobggud5wPVVPibcJ6xCyk=;
+        b=CnAiG0SB6E0/ZROKSViLS2a1XaqiyVVah6t9iYnSiDlAzWtvygSOwHJ8hjdsj2IKoj
+         fJtJ2+70Nn+sddHhrQyi3UuFeUq1Ed3nsNw+vsCFMI6zdJr0QqN50f1Ui3nSeWi5CohZ
+         upCXEuXvcUVXXURw9x5t0VeSvqm1FstSrgCPV8jJ0m6Z2oNaq9Iv/3GjkiyJJUz4m30O
+         XaBEpON81I+sv9CFmv+DlwDcX9M3nCS1/4P2S6ettsAf2RpaTMv/X7iII/ESG+iixxfU
+         9V+TbFRQE4NCcpwvhN/ASEdnXzFInd3pk7kYzJ+6VnZsIn0PBGLlxaMgcvf9lgi3CIPK
+         Gblw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=R+cLX/NnGzJYg90E/xhKujobggud5wPVVPibcJ6xCyk=;
+        b=CAAPXlrb745ZGHkOzWxfQ1KIeWCFve9VxYE9NgyZA0ufK22+EUGv/cw/TfKL2hAfbe
+         FLjJtXx0pChYHkbEQUSzz5/U1iBdhS/6NqkEg297+/hzKBRIrAbdV1X57dIXWQK3ncdK
+         Iwldngg5DV4GhdVRanaDnZvKhpH27n3e1hebiJc8dMeerxc64WdjkNdM6eiGmk0r3xMk
+         ADqT0l8XE0vc6bRR01jnkj6C9JIlL+K4QvmEqH3S1tSDH4Kv5F4ui/+WSEDZBCFL3jIV
+         QoWQ18Xd1iiVo9mVbQebBRxpKo/+8T8kdHylB52788fm9nZhz0UVsGniHIkQcp2GQhy0
+         tPhQ==
+X-Gm-Message-State: AOAM533+wnI/OD1rrWPk0MzOVuhEW/Ot9AreBf76Qc+rSAqp0rrloahf
+        WGUXZTAZbW/iwHPmTjmAsgA=
+X-Google-Smtp-Source: ABdhPJxuG1xVrWalOyExAuJvVq0meSH+XP8QM+JM2FHl/hEkH5Me8/1+7EL9Jn1r762JzXdGKeqeDQ==
+X-Received: by 2002:a5d:4286:: with SMTP id k6mr19108400wrq.140.1591554328104;
+        Sun, 07 Jun 2020 11:25:28 -0700 (PDT)
+Received: from skynet.lan (28.red-83-49-61.dynamicip.rima-tde.net. [83.49.61.28])
+        by smtp.gmail.com with ESMTPSA id h18sm20434981wru.7.2020.06.07.11.25.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Jun 2020 11:25:27 -0700 (PDT)
+From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+To:     jdelvare@suse.com, linux@roeck-us.net, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org
+Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+Subject: [PATCH 1/2] dt-bindings: hwmon: Add SFR NB6 sensor binding
+Date:   Sun,  7 Jun 2020 20:25:23 +0200
+Message-Id: <20200607182524.3221837-2-noltari@gmail.com>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200607182524.3221837-1-noltari@gmail.com>
+References: <20200607182524.3221837-1-noltari@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Sat, 06 Jun 2020 14:45:38 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Lee Jones <lee.jones@linaro.org>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v4 02/11] mfd: Add support for Kontron sl28cpld management
- controller
-In-Reply-To: <20200606114645.GB2055@sirena.org.uk>
-References: <20200604211039.12689-1-michael@walle.cc>
- <20200604211039.12689-3-michael@walle.cc> <20200605065709.GD3714@dell>
- <20200605105026.GC5413@sirena.org.uk>
- <c5632bfab3956265e90fc2fb6c0b3cae@walle.cc>
- <20200606114645.GB2055@sirena.org.uk>
-User-Agent: Roundcube Webmail/1.4.4
-Message-ID: <dc052a5c77171014ecc465b1da8b7ef8@walle.cc>
-X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Am 2020-06-06 13:46, schrieb Mark Brown:
-> On Fri, Jun 05, 2020 at 10:07:36PM +0200, Michael Walle wrote:
->> Am 2020-06-05 12:50, schrieb Mark Brown:
-> 
->> > I have no idea what you are thinking of when you say "simple-regmap" so
->> > it is difficult to comment.
-> 
->> I guess, Lee is suggesting to be able to create a regmap instance via
->> device tree (and populate its child nodes?). Like
->>   compatible = "syscon", "simple-mfd";
->> but for any regmap, not just MMIO.
-> 
-> I don't understand why this would be anything separate to
-> simple-mfd.
+SFR NeufBox 6 is equipped with an I2C connected chip to monitor voltage,
+temperature and other stats. It also has PWM LEDs that can be manually
+controlled or set to specific hardware monitoring modes.
 
-Don't just simple-mfd tells the of core, to probe the children this
-node? Where does the regmap then come from?
+Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+---
+ .../bindings/hwmon/sfr,neufbox6.yaml          | 96 +++++++++++++++++++
+ 1 file changed, 96 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/sfr,neufbox6.yaml
 
-> 
->> But, there is more in my driver:
->>  (1) there is a version check
->>  (2) there is another function for which there is no suitable linux
->>      subsystem I'm aware of and thus which I'd like to us sysfs
->>      attributes for: This controller supports 16 non-volatile
->>      configuration bits. (this is still TBD)
-> 
-> TBH I'd also say that the enumeration of the subdevices for this
-> device should be in the device rather than the DT, they don't
-> seem to be things that exist outside of this one device.
+diff --git a/Documentation/devicetree/bindings/hwmon/sfr,neufbox6.yaml b/Documentation/devicetree/bindings/hwmon/sfr,neufbox6.yaml
+new file mode 100644
+index 000000000000..418180e30a66
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/sfr,neufbox6.yaml
+@@ -0,0 +1,96 @@
++# SPDX-License-Identifier: GPL-2.0-or-later
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwmon/sfr,neufbox6.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: SFR NeufBox 6 Sensor
++
++maintainers:
++  - Álvaro Fernández Rojas <noltari@gmail.com>
++
++description: |
++  SFR NeufBox 6 is equipped with an I2C connected chip to monitor voltage,
++  temperature and other stats. It also has PWM LEDs that can be manually
++  controlled or set to specific hardware monitoring modes.
++
++properties:
++  compatible:
++    const: sfr,nb6_hwmon
++
++  reg:
++    description: I2C address
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    pwm: hwmon@60 {
++      compatible = "sfr,nb6_hwmon";
++      reg = <0x60>;
++    };
++
++    pwm-leds {
++      compatible = "pwm-leds";
++
++      service1_red {
++        label = "neufbox-6-foxconn-r0:red:service1";
++        pwms = <&pwm 0 31>;
++        max-brightness = <31>;
++      };
++
++      service2_red {
++        label = "neufbox-6-foxconn-r0:red:service2";
++        pwms = <&pwm 1 31>;
++        max-brightness = <31>;
++      };
++
++      service3_red {
++        label = "neufbox-6-foxconn-r0:red:service3";
++        pwms = <&pwm 2 31>;
++        max-brightness = <31>;
++      };
++
++      service1_green {
++        label = "neufbox-6-foxconn-r0:green:service1";
++        pwms = <&pwm 3 31>;
++        max-brightness = <31>;
++        default-state = "on";
++      };
++
++      service2_green {
++        label = "neufbox-6-foxconn-r0:green:service2";
++        pwms = <&pwm 4 31>;
++        max-brightness = <31>;
++      };
++
++      service3_green {
++        label = "neufbox-6-foxconn-r0:green:service3";
++        pwms = <&pwm 5 31>;
++        max-brightness = <31>;
++      };
++
++      wan_white {
++        label = "neufbox-6-foxconn-r0:white:wan";
++        pwms = <&pwm 6 31>;
++        max-brightness = <31>;
++      };
++
++      voip_white {
++        label = "neufbox-6-foxconn-r0:white:voip";
++        pwms = <&pwm 7 31>;
++        max-brightness = <31>;
++      };
++
++      wlan_white {
++        label = "neufbox-6-foxconn-r0:white:wlan";
++        pwms = <&pwm 8 31>;
++        max-brightness = <31>;
++      };
++    };
++...
+-- 
+2.26.2
 
-We're going circles here, formerly they were enumerated in the MFD.
-Yes, they are devices which aren't likely be used outside a
-"sl28cpld", but there might there might be other versions of the
-sl28cpld with other components on different base addresses. I
-don't care if they are enumerated in DT or MFD, actually, I'd
-prefer the latter. _But_ I would like to have the device tree
-properties for its subdevices, e.g. the ones for the watchdog or
-whatever components there might be in the future. MFD core can
-match a device tree node today; but only one per unique compatible
-string. So what should I use to differentiate the different
-subdevices? Rob suggested the internal offset, which I did here.
-But then, there is less use in duplicating the offsets in the MFD
-just to have the MFD enumerate the subdevices and then match
-the device tree nodes against it. I can just use
-of_platform_populate() to enumerate the children and I won't
-have to duplicate the base addresses.
-
-So here we are, any ideas appreciated.
-
--michael
