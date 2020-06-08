@@ -2,175 +2,218 @@ Return-Path: <SRS0=E0ck=7V=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	FAKE_REPLY_C,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB0B2C433DF
-	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Jun 2020 18:04:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3ED31C433E1
+	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Jun 2020 18:20:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B6350208B8
-	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Jun 2020 18:04:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1583C2076A
+	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Jun 2020 18:20:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tU9QNdGO"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FvaaSm5t"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730178AbgFHSEY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 8 Jun 2020 14:04:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47284 "EHLO
+        id S1726035AbgFHSU0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 8 Jun 2020 14:20:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729979AbgFHSEY (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 8 Jun 2020 14:04:24 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A09D1C08C5C2;
-        Mon,  8 Jun 2020 11:04:23 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id a127so8857720pfa.12;
-        Mon, 08 Jun 2020 11:04:23 -0700 (PDT)
+        with ESMTP id S1725926AbgFHSUX (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 8 Jun 2020 14:20:23 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 643DDC08C5C4
+        for <linux-hwmon@vger.kernel.org>; Mon,  8 Jun 2020 11:20:22 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id j10so18471240wrw.8
+        for <linux-hwmon@vger.kernel.org>; Mon, 08 Jun 2020 11:20:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=vy3WmLcTN1C9TwpCZlVK/k2jmSpqqmElcRpgtxdIswQ=;
-        b=tU9QNdGOX7EhRI4izEZnPMk+dIet667Sn1H49wXjBsahqedcLrR2Ed9Was0NtItz+Q
-         OhHZ1HOon0qszB+DS3pVonGWlCDyobR3+iECtEpUJk5ZatPVX3iGI8Mki8CjkwmfHODf
-         xYqDGnmJrEAqKjbOY/ADn1YcTT5qZAwrm/JBiY8Z8jZ0MTBM6FaCvdfh/vdoZwAUDLjY
-         aBN46WtCVW27QpkV0HgeQThk37WSKoWsxNBKUdWj2kSt4rVH12iVTChoCpoUDLuKAnix
-         m+yUngrG8K4fHjLs+MPCa+EbDd/tvEwMHpFCAVHAtQ6mCMDVD5V5KCmkE7Es4E/tk2Tc
-         353Q==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=2CJM5g0VuqYFNIM+dUzodFUTj18WAdux3/u8z24zvRA=;
+        b=FvaaSm5tyr6RBgjbPNfvrJLlZcAn3DmzQGeyoQrQ5NJotNGMRI+S/WTL4cZGcvbeKQ
+         OeiYno6xBUEcQi5WgLfPg1nv7oOkxmoaBpZ6QtIPDVlQPQdk8Xg1KETQTvd/QbsmmRZg
+         rKCAizdiGMf2yjrMRJkrYUJTQ8RhPDKv4CF4YBH4XvdeaNYdcf0hTu/38GolQI/FykDN
+         4Wtn17IHKjfImnRlO7XuYIJCSylUrNpYSAcVJ0FF2ljUmpkm69oK59PmBzzl1uzp468r
+         sdFV0WqzFhOkNZXY3HflI0dAEsSOqMmu2UtExqdHiQfNrXygDGlFgbgtHXGR4oIhwsQF
+         uzWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mime-version:content-disposition:user-agent;
-        bh=vy3WmLcTN1C9TwpCZlVK/k2jmSpqqmElcRpgtxdIswQ=;
-        b=ZTPHlXiY7bnWin53cH+PyIFi9O5P+jzyLnW0o4m/08BS/F/4CKeNIveyuFl5UQK26y
-         32QDqCss6nHiyAkSmC5eZP4stagLhmW/cNrfQdQJyKDe4D3FnUMm+2JL97wEslEZiQXU
-         D7+UBe+7hXwL+AowPRAWuEENKFsNP6YntYLIQ0dJV0cXGuKSR7kQRQZ9ZaZN6MZQACFj
-         0W89Aipf0N9yz9ywiSrmMCDTTofUPrEzMGIDgn3rW5lMQ5bn17Mp/hjteq76DA+xEZxE
-         Yd4gJmaNmbGw4v7Vo9YDjuIcUzB+O6MZLE/5k4IptniAe1A/wB9cu3z5SxPHYNz/7Ibb
-         HiZw==
-X-Gm-Message-State: AOAM531YyRSNTv+seNb7p5DKs94d2jrurBxxZmgSUUUBNFkGVu+jh0LO
-        OnkHrfHyIIhDigAf8cnIFb0=
-X-Google-Smtp-Source: ABdhPJwSZFtCX0X/ChGUh2y2uaj7qYI5ZishucIyaSmU2a8St4wozy1oqywQxQ/Wmi+91DEp4j/RsA==
-X-Received: by 2002:a62:a510:: with SMTP id v16mr4640795pfm.154.1591639463137;
-        Mon, 08 Jun 2020 11:04:23 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a27sm6615481pgn.62.2020.06.08.11.04.22
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 08 Jun 2020 11:04:22 -0700 (PDT)
-Date:   Mon, 8 Jun 2020 11:04:21 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     X86 ML <x86@kernel.org>, Huang Rui <ray.huang@amd.com>,
-        linux-hwmon@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] x86/msr: Lift AMD family 0x15 power-specific MSRs
-Message-ID: <20200608180421.GA32167@roeck-us.net>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=2CJM5g0VuqYFNIM+dUzodFUTj18WAdux3/u8z24zvRA=;
+        b=P8uYEy5mBTVOx0tnInqtEY3+gN4JrgFtCgp/aJmMB9TuTkst++ZVPxqQU5E9f1cD4L
+         bKng5wm11gmiHG9Vq44ulqNNsmzLG1IEwubt5RCZZvS4b57225Lab0yGXwqWQ6MZ9mwh
+         LyqeO2eo/6GvAaV6G0ZJFtHxU/J6yI2NzUqD8x6H2/4DoQ2REvdtBQIvCd++dqhXaw0k
+         thf/lh6Z5qgq+vXC064kLdZDUmbcTdKtDxYaaIav2A7eIrw8Bax4IK19LQVAJTVPPxEj
+         +S9OpvXX6m7eqC/Hd9OesdCpgg1aJw52vLBKK5QD9yg3uyKAN0Ck04PPLvwEhc9LH0OB
+         SSeA==
+X-Gm-Message-State: AOAM532drTHNsFMiVQugsI4STrwaC/eOliQ03PtBhbz7r6FG0uDNJPcz
+        kO7lXFjtepCzUc7C72lHPvV9tw==
+X-Google-Smtp-Source: ABdhPJxumzJA4nkmctYgB3lMSJVUnSMTyEhafMZJYxSm51uV/tmOYuDxGF7eIqOVSIVmr0U8Lef0xg==
+X-Received: by 2002:a05:6000:11cd:: with SMTP id i13mr86707wrx.141.1591640420821;
+        Mon, 08 Jun 2020 11:20:20 -0700 (PDT)
+Received: from dell ([95.147.198.92])
+        by smtp.gmail.com with ESMTPSA id a7sm358274wmh.14.2020.06.08.11.20.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Jun 2020 11:20:20 -0700 (PDT)
+Date:   Mon, 8 Jun 2020 19:20:18 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        david.m.ertman@intel.com, shiraz.saleem@intel.com,
+        Michael Walle <michael@walle.cc>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v4 02/11] mfd: Add support for Kontron sl28cpld
+ management controller
+Message-ID: <20200608182018.GB4106@dell>
+References: <20200604211039.12689-1-michael@walle.cc>
+ <20200604211039.12689-3-michael@walle.cc>
+ <20200605065709.GD3714@dell>
+ <20200605105026.GC5413@sirena.org.uk>
+ <c5632bfab3956265e90fc2fb6c0b3cae@walle.cc>
+ <20200606114645.GB2055@sirena.org.uk>
+ <dc052a5c77171014ecc465b1da8b7ef8@walle.cc>
+ <20200608082827.GB3567@dell>
+ <CAHp75VdiH=J-ovCdh1RFJDW_bJM8=pbXRaHmB691GLb-5oBmYQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHp75VdiH=J-ovCdh1RFJDW_bJM8=pbXRaHmB691GLb-5oBmYQ@mail.gmail.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Jun 08, 2020 at 06:48:47PM +0200, Borislav Petkov wrote:
-> From: Borislav Petkov <bp@suse.de>
-> 
-> ... into the global msr-index.h header because they're used in multiple
-> compilation units. Sort the MSR list a bit. Update the msr-index.h copy
-> in tools.
-> 
-> No functional changes.
-> 
-> Signed-off-by: Borislav Petkov <bp@suse.de>
+On Mon, 08 Jun 2020, Andy Shevchenko wrote:
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+> +Cc: some Intel people WRT our internal discussion about similar
+> problem and solutions.
+> 
+> On Mon, Jun 8, 2020 at 11:30 AM Lee Jones <lee.jones@linaro.org> wrote:
+> > On Sat, 06 Jun 2020, Michael Walle wrote:
+> > > Am 2020-06-06 13:46, schrieb Mark Brown:
+> > > > On Fri, Jun 05, 2020 at 10:07:36PM +0200, Michael Walle wrote:
+> > > > > Am 2020-06-05 12:50, schrieb Mark Brown:
+> 
+> ...
+> 
+> > Right.  I'm suggesting a means to extrapolate complex shared and
+> > sometimes intertwined batches of register sets to be consumed by
+> > multiple (sub-)devices spanning different subsystems.
+> >
+> > Actually scrap that.  The most common case I see is a single Regmap
+> > covering all child-devices.
+> 
+> Yes, because often we need a synchronization across the entire address
+> space of the (parent) device in question.
 
-> ---
->  arch/x86/events/amd/power.c            | 4 ----
->  arch/x86/include/asm/msr-index.h       | 5 ++++-
->  drivers/hwmon/fam15h_power.c           | 4 ----
->  tools/arch/x86/include/asm/msr-index.h | 5 ++++-
->  4 files changed, 8 insertions(+), 10 deletions(-)
+Exactly.
+
+Because of the reasons in the paragraph above:
+
+ "complex shared and sometimes intertwined batches of register sets to
+  be consumed by multiple (sub-)devices spanning different subsystems"
+
+> >  It would be great if there was a way in
+> > which we could make an assumption that the entire register address
+> > space for a 'tagged' (MFD) device is to be shared (via Regmap) between
+> > each of the devices described by its child-nodes.  Probably by picking
+> > up on the 'simple-mfd' compatible string in the first instance.
+> >
+> > Rob, is the above something you would contemplate?
+> >
+> > Michael, do your register addresses overlap i.e. are they intermingled
+> > with one another?  Do multiple child devices need access to the same
+> > registers i.e. are they shared?
+> >
+> > > > > But, there is more in my driver:
+> > > > >  (1) there is a version check
+> >
+> > If we can rid the Regmap dependency, then creating an entire driver to
+> > conduct a version check is unjustifiable.  This could become an inline
+> > function which is called by each of the sub-devices instead, for
+> > example.
+> >
+> > > > >  (2) there is another function for which there is no suitable linux
+> > > > >      subsystem I'm aware of and thus which I'd like to us sysfs
+> > > > >      attributes for: This controller supports 16 non-volatile
+> > > > >      configuration bits. (this is still TBD)
+> >
+> > There is a place for everything in Linux.
+> >
+> > What do these bits configure?
+> >
+> > > > TBH I'd also say that the enumeration of the subdevices for this
+> > > > device should be in the device rather than the DT, they don't
+> > > > seem to be things that exist outside of this one device.
+> > >
+> > > We're going circles here, formerly they were enumerated in the MFD.
+> > > Yes, they are devices which aren't likely be used outside a
+> > > "sl28cpld", but there might there might be other versions of the
+> > > sl28cpld with other components on different base addresses. I
+> > > don't care if they are enumerated in DT or MFD, actually, I'd
+> > > prefer the latter. _But_ I would like to have the device tree
+> > > properties for its subdevices, e.g. the ones for the watchdog or
+> > > whatever components there might be in the future.
+> >
+> > [...]
+> >
+> > > MFD core can
+> > > match a device tree node today; but only one per unique compatible
+> > > string. So what should I use to differentiate the different
+> > > subdevices?
+> >
+> > Right.  I have been aware of this issue.  The only suitable solution
+> > to this would be to match on 'reg'.
+> >
+> > FYI: I plan to fix this.
+> >
+> > If your register map needs to change, then I suggest that this is
+> > either a new device or at least a different version of the device and
+> > would also have to be represented as different (sub-)mfd_cell.
+> >
+> > > Rob suggested the internal offset, which I did here.
+> >
+> > FWIW, I don't like this idea.  DTs should not have to be modified
+> > (either in the first instance or subsequently) or specifically
+> > designed to patch inadequacies in any given OS.
+> >
+> > > But then, there is less use in duplicating the offsets in the MFD
+> > > just to have the MFD enumerate the subdevices and then match
+> > > the device tree nodes against it. I can just use
+> > > of_platform_populate() to enumerate the children and I won't
+> > > have to duplicate the base addresses.
+> >
+> > Which is fine.  However this causes a different issue for you.  By
+> > stripping out the MFD code you render the MFD portion seemingly
+> > superfluous.  Another issue driver authors commonly contend with.
 > 
-> diff --git a/arch/x86/events/amd/power.c b/arch/x86/events/amd/power.c
-> index 43b09e9c93a2..16a2369c586e 100644
-> --- a/arch/x86/events/amd/power.c
-> +++ b/arch/x86/events/amd/power.c
-> @@ -13,10 +13,6 @@
->  #include <asm/cpu_device_id.h>
->  #include "../perf_event.h"
->  
-> -#define MSR_F15H_CU_PWR_ACCUMULATOR     0xc001007a
-> -#define MSR_F15H_CU_MAX_PWR_ACCUMULATOR 0xc001007b
-> -#define MSR_F15H_PTSC			0xc0010280
-> -
->  /* Event code: LSB 8 bits, passed in attr->config any other bit is reserved. */
->  #define AMD_POWER_EVENT_MASK		0xFFULL
->  
-> diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-> index ef452b817f44..7dfd45bb6cdb 100644
-> --- a/arch/x86/include/asm/msr-index.h
-> +++ b/arch/x86/include/asm/msr-index.h
-> @@ -414,15 +414,18 @@
->  #define MSR_AMD64_PATCH_LEVEL		0x0000008b
->  #define MSR_AMD64_TSC_RATIO		0xc0000104
->  #define MSR_AMD64_NB_CFG		0xc001001f
-> -#define MSR_AMD64_CPUID_FN_1		0xc0011004
->  #define MSR_AMD64_PATCH_LOADER		0xc0010020
->  #define MSR_AMD_PERF_CTL		0xc0010062
->  #define MSR_AMD_PERF_STATUS		0xc0010063
->  #define MSR_AMD_PSTATE_DEF_BASE		0xc0010064
-> +#define MSR_F15H_CU_PWR_ACCUMULATOR     0xc001007a
-> +#define MSR_F15H_CU_MAX_PWR_ACCUMULATOR 0xc001007b
->  #define MSR_AMD64_OSVW_ID_LENGTH	0xc0010140
->  #define MSR_AMD64_OSVW_STATUS		0xc0010141
-> +#define MSR_F15H_PTSC			0xc0010280
->  #define MSR_AMD_PPIN_CTL		0xc00102f0
->  #define MSR_AMD_PPIN			0xc00102f1
-> +#define MSR_AMD64_CPUID_FN_1		0xc0011004
->  #define MSR_AMD64_LS_CFG		0xc0011020
->  #define MSR_AMD64_DC_CFG		0xc0011022
->  #define MSR_AMD64_BU_CFG2		0xc001102a
-> diff --git a/drivers/hwmon/fam15h_power.c b/drivers/hwmon/fam15h_power.c
-> index 267eac00a3fb..29f5fed28c2a 100644
-> --- a/drivers/hwmon/fam15h_power.c
-> +++ b/drivers/hwmon/fam15h_power.c
-> @@ -41,10 +41,6 @@ MODULE_LICENSE("GPL");
->  /* set maximum interval as 1 second */
->  #define MAX_INTERVAL			1000
->  
-> -#define MSR_F15H_CU_PWR_ACCUMULATOR	0xc001007a
-> -#define MSR_F15H_CU_MAX_PWR_ACCUMULATOR	0xc001007b
-> -#define MSR_F15H_PTSC			0xc0010280
-> -
->  #define PCI_DEVICE_ID_AMD_15H_M70H_NB_F4 0x15b4
->  
->  struct fam15h_power_data {
-> diff --git a/tools/arch/x86/include/asm/msr-index.h b/tools/arch/x86/include/asm/msr-index.h
-> index ef452b817f44..7dfd45bb6cdb 100644
-> --- a/tools/arch/x86/include/asm/msr-index.h
-> +++ b/tools/arch/x86/include/asm/msr-index.h
-> @@ -414,15 +414,18 @@
->  #define MSR_AMD64_PATCH_LEVEL		0x0000008b
->  #define MSR_AMD64_TSC_RATIO		0xc0000104
->  #define MSR_AMD64_NB_CFG		0xc001001f
-> -#define MSR_AMD64_CPUID_FN_1		0xc0011004
->  #define MSR_AMD64_PATCH_LOADER		0xc0010020
->  #define MSR_AMD_PERF_CTL		0xc0010062
->  #define MSR_AMD_PERF_STATUS		0xc0010063
->  #define MSR_AMD_PSTATE_DEF_BASE		0xc0010064
-> +#define MSR_F15H_CU_PWR_ACCUMULATOR     0xc001007a
-> +#define MSR_F15H_CU_MAX_PWR_ACCUMULATOR 0xc001007b
->  #define MSR_AMD64_OSVW_ID_LENGTH	0xc0010140
->  #define MSR_AMD64_OSVW_STATUS		0xc0010141
-> +#define MSR_F15H_PTSC			0xc0010280
->  #define MSR_AMD_PPIN_CTL		0xc00102f0
->  #define MSR_AMD_PPIN			0xc00102f1
-> +#define MSR_AMD64_CPUID_FN_1		0xc0011004
->  #define MSR_AMD64_LS_CFG		0xc0011020
->  #define MSR_AMD64_DC_CFG		0xc0011022
->  #define MSR_AMD64_BU_CFG2		0xc001102a
-> -- 
-> 2.21.0
-> 
+
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
