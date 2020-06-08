@@ -2,193 +2,129 @@ Return-Path: <SRS0=E0ck=7V=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F09B0C433E2
-	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Jun 2020 10:02:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4325C433E0
+	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Jun 2020 10:44:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C792B206C3
-	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Jun 2020 10:02:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A52722076C
+	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Jun 2020 10:44:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="up0PRyxO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nx4Nav7d"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729335AbgFHKCf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 8 Jun 2020 06:02:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57560 "EHLO
+        id S1729342AbgFHKoF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 8 Jun 2020 06:44:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729240AbgFHKCe (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 8 Jun 2020 06:02:34 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF17DC08C5C3;
-        Mon,  8 Jun 2020 03:02:33 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id s10so8571438pgm.0;
-        Mon, 08 Jun 2020 03:02:33 -0700 (PDT)
+        with ESMTP id S1729337AbgFHKoF (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 8 Jun 2020 06:44:05 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC045C08C5C3;
+        Mon,  8 Jun 2020 03:44:04 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id b201so8386096pfb.0;
+        Mon, 08 Jun 2020 03:44:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2zoo0ERaliX/JjKEGnYqTQZHfKutQDjXGBUR6MxE50E=;
-        b=up0PRyxOK9NsFIv2bsBl0byvSjs9TKlq7122/ilkRkEttg+3QL6Te0gWz3TYNBv0vi
-         IE21MrMkSmBoOM0mY4Ym6dD4h0fHd8PJqbmjpqRLAoD8EgiLZJlztmdayzlMxvl64uad
-         DTmDDiOoifJ+qZNcLaLd2QSV/HmYZnGjko8DYlFAtHLeNrU6eLEN23fhJDEXcZO9k6su
-         5btG1FU90NfVPGLZPU9H4xy++nNO22Mb48r9L7eryuGK6DS+fMUjxg5jPDGiU2+oNHCp
-         xKXJVPkjQbjd51oijoYnbZKVI1lUIdfoc2nsSSfQ/4wyGgwYugHqOswiCBWgOn9shtpA
-         CEbg==
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=qPnSozpEwUzkMm6eKHETr428FnuusYj7UAKssD/B8Gw=;
+        b=Nx4Nav7dq7hqOTiO9EpgScp0uHZaMAEuO5ijNJXIiflFvXwujN6NzjfkgdrdObQXw7
+         gtsUpoeP9gygnvCak/QpaFDOhAGY+6NMgrD2kko61NQGB+qM++yaROkDh316gvX5WJdD
+         kVRcMIFl/HKLLX6DoSoFm3Obxjms1l649M3TvgERYYWDMSfhmM2lKBUX445KYxvraXay
+         7/PcCFNkkUbHu37dfYBJcHam4Rh94zVC6XaDru1QTU+0+BKwmIv/KWK80cUDW8LZqAxx
+         nk9gHUWLlS8tT+YCPxW4lCvbiX/SOYfP2F4rEG9L6hwwJGrJU0PmeqUHz3tLpV5CCA8q
+         Gc5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2zoo0ERaliX/JjKEGnYqTQZHfKutQDjXGBUR6MxE50E=;
-        b=g+UrNPb+COB2G9HXzGNpVv8bK2+XNK7NVTe7ZrgsXB0MpkLh5baLopiGaSe05kLUc5
-         2oImWxAnKyh6dMEHOELibjZk6aDSEiBXCnN0ldjjmcZYoBnERto5hInNOpH24o0rwiX7
-         IdjzgubCAKzsLFb5JP4eTMpwAs+iNdVOZAixwelfZmbWXBzBJn0YlN/aPvbQCv0tXYLT
-         1zS2tEqhDOl4BgniqlnEbxDY13piiSSf8QO2jWWDdEYmuQBHv3Czyhw16QHGV06i5UOg
-         es1YTLlthzxaR2yJj3B3LiiUzbKmxUeSpWHk5Z83c6B2yY7urQj1y+vwZfApL+su+F4U
-         ez8g==
-X-Gm-Message-State: AOAM530UZqQ/k2LOEI+e4z8ksSnyG7jN5oQUlqwM2BxhETuCr4ymCLnY
-        HAOIxbzfL7A+fyLCchobg5qZgG7oeQrj9RbKgVI=
-X-Google-Smtp-Source: ABdhPJx86tPKDhVhcYy12URCDzcRNhNuX2MCH50rKMBNeLvTYoOCyhjdRnZsCXkMUtFO7r9gOz6BiOXhGjPZOdlfhLw=
-X-Received: by 2002:a63:ff52:: with SMTP id s18mr20149238pgk.203.1591610553061;
- Mon, 08 Jun 2020 03:02:33 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=qPnSozpEwUzkMm6eKHETr428FnuusYj7UAKssD/B8Gw=;
+        b=tYrNTti5ZN1phKcAJRzM4JoBpqF6Ov1C/aBMZfhFIGD8U9iiodz3qh2xFEDHO43Ewr
+         uYVTpDjG4qzwLnVuSFKUVrWJOi/+5aYKfnxojDAvUt7udZZvTUKnybcble7304Q49cSF
+         hZCRRIG6oUIvrXinPL0dhJ31QZZoHGgjVxi9o7cXs0E7WyzkGc2NGlGTSIXAELs6oFDc
+         sNsnfujtkRD4jsM4I3ClSAspLYENuiazCJ0xjxJcZGuO32jjsAXeM2thyIsbFPCDnafj
+         dLmr5qRhxMkDXIOXnKs6zmug8T0cqO6+njSthz3q+0Zncct5H4kOc8NqAUyKpFltJtUh
+         ibMw==
+X-Gm-Message-State: AOAM5316Am8fdVnkZtQDbppvL8yXZkmgWHO5C8Z8Ah+i16hG9vhy3Vgg
+        3y8u+7Vo3SN3ABtUy2CdVDk=
+X-Google-Smtp-Source: ABdhPJxgls+P5umjn5ZAfKcl9HEToSKCZ+YAzvgO/qv6hSZewDYAKVnQCujNvqqB9DaDgbuDvUQ/+g==
+X-Received: by 2002:a63:63c4:: with SMTP id x187mr20800156pgb.112.1591613044363;
+        Mon, 08 Jun 2020 03:44:04 -0700 (PDT)
+Received: from cnn ([2401:4900:2349:e80d:cd72:839f:5826:c552])
+        by smtp.gmail.com with ESMTPSA id dw17sm14808774pjb.40.2020.06.08.03.44.00
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 08 Jun 2020 03:44:03 -0700 (PDT)
+Date:   Mon, 8 Jun 2020 16:13:49 +0530
+From:   Manikandan Elumalai <manikandan.hcl.ers.epl@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     saipsdasari@fb.com, patrickw3@fb.com, vijaykhemka@fb.com,
+        linux-aspeed@lists.ozlabs.org, manikandan.e@hcl.com
+Subject: [PATCH v3] hwmon:(adm1275) Enable adm1278 ADM1278_TEMP1_EN
+Message-ID: <20200608104349.GA10918@cnn>
 MIME-Version: 1.0
-References: <20200604211039.12689-1-michael@walle.cc> <20200604211039.12689-3-michael@walle.cc>
- <20200605065709.GD3714@dell> <20200605105026.GC5413@sirena.org.uk>
- <c5632bfab3956265e90fc2fb6c0b3cae@walle.cc> <20200606114645.GB2055@sirena.org.uk>
- <dc052a5c77171014ecc465b1da8b7ef8@walle.cc> <20200608082827.GB3567@dell>
-In-Reply-To: <20200608082827.GB3567@dell>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 8 Jun 2020 13:02:21 +0300
-Message-ID: <CAHp75VdiH=J-ovCdh1RFJDW_bJM8=pbXRaHmB691GLb-5oBmYQ@mail.gmail.com>
-Subject: Re: [PATCH v4 02/11] mfd: Add support for Kontron sl28cpld management controller
-To:     Lee Jones <lee.jones@linaro.org>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        david.m.ertman@intel.com, shiraz.saleem@intel.com
-Cc:     Michael Walle <michael@walle.cc>, Rob Herring <robh+dt@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-+Cc: some Intel people WRT our internal discussion about similar
-problem and solutions.
+The adm1278 temp attribute need it for openbmc platform .
+This feature not enabled by default, so PMON_CONFIG needs to enable it.
 
-On Mon, Jun 8, 2020 at 11:30 AM Lee Jones <lee.jones@linaro.org> wrote:
-> On Sat, 06 Jun 2020, Michael Walle wrote:
-> > Am 2020-06-06 13:46, schrieb Mark Brown:
-> > > On Fri, Jun 05, 2020 at 10:07:36PM +0200, Michael Walle wrote:
-> > > > Am 2020-06-05 12:50, schrieb Mark Brown:
+v3:
+----
+fix invalid signed-off.
+removed checkpath warnings.
+write ADM1278_TEMP1_EN and ADM1278_VOUT_EN conf in single line operation.
 
-...
+v2:
+----
+add Signed-off-by.
+removed ADM1278_TEMP1_EN check.
 
-> Right.  I'm suggesting a means to extrapolate complex shared and
-> sometimes intertwined batches of register sets to be consumed by
-> multiple (sub-)devices spanning different subsystems.
->
-> Actually scrap that.  The most common case I see is a single Regmap
-> covering all child-devices.
+Signed-off-by: Manikandan Elumalai <manikandan.hcl.ers.epl@gmail.com>
+---
+ drivers/hwmon/pmbus/adm1275.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-Yes, because often we need a synchronization across the entire address
-space of the (parent) device in question.
-
->  It would be great if there was a way in
-> which we could make an assumption that the entire register address
-> space for a 'tagged' (MFD) device is to be shared (via Regmap) between
-> each of the devices described by its child-nodes.  Probably by picking
-> up on the 'simple-mfd' compatible string in the first instance.
->
-> Rob, is the above something you would contemplate?
->
-> Michael, do your register addresses overlap i.e. are they intermingled
-> with one another?  Do multiple child devices need access to the same
-> registers i.e. are they shared?
->
-> > > > But, there is more in my driver:
-> > > >  (1) there is a version check
->
-> If we can rid the Regmap dependency, then creating an entire driver to
-> conduct a version check is unjustifiable.  This could become an inline
-> function which is called by each of the sub-devices instead, for
-> example.
->
-> > > >  (2) there is another function for which there is no suitable linux
-> > > >      subsystem I'm aware of and thus which I'd like to us sysfs
-> > > >      attributes for: This controller supports 16 non-volatile
-> > > >      configuration bits. (this is still TBD)
->
-> There is a place for everything in Linux.
->
-> What do these bits configure?
->
-> > > TBH I'd also say that the enumeration of the subdevices for this
-> > > device should be in the device rather than the DT, they don't
-> > > seem to be things that exist outside of this one device.
-> >
-> > We're going circles here, formerly they were enumerated in the MFD.
-> > Yes, they are devices which aren't likely be used outside a
-> > "sl28cpld", but there might there might be other versions of the
-> > sl28cpld with other components on different base addresses. I
-> > don't care if they are enumerated in DT or MFD, actually, I'd
-> > prefer the latter. _But_ I would like to have the device tree
-> > properties for its subdevices, e.g. the ones for the watchdog or
-> > whatever components there might be in the future.
->
-> [...]
->
-> > MFD core can
-> > match a device tree node today; but only one per unique compatible
-> > string. So what should I use to differentiate the different
-> > subdevices?
->
-> Right.  I have been aware of this issue.  The only suitable solution
-> to this would be to match on 'reg'.
->
-> FYI: I plan to fix this.
->
-> If your register map needs to change, then I suggest that this is
-> either a new device or at least a different version of the device and
-> would also have to be represented as different (sub-)mfd_cell.
->
-> > Rob suggested the internal offset, which I did here.
->
-> FWIW, I don't like this idea.  DTs should not have to be modified
-> (either in the first instance or subsequently) or specifically
-> designed to patch inadequacies in any given OS.
->
-> > But then, there is less use in duplicating the offsets in the MFD
-> > just to have the MFD enumerate the subdevices and then match
-> > the device tree nodes against it. I can just use
-> > of_platform_populate() to enumerate the children and I won't
-> > have to duplicate the base addresses.
->
-> Which is fine.  However this causes a different issue for you.  By
-> stripping out the MFD code you render the MFD portion seemingly
-> superfluous.  Another issue driver authors commonly contend with.
-
+diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275.c
+index 5caa37fb..4782e31 100644
+--- a/drivers/hwmon/pmbus/adm1275.c
++++ b/drivers/hwmon/pmbus/adm1275.c
+@@ -666,11 +666,12 @@ static int adm1275_probe(struct i2c_client *client,
+ 		tindex = 3;
+ 
+ 		info->func[0] |= PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT |
+-			PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT;
++			PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
++			PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP;
+ 
+-		/* Enable VOUT if not enabled (it is disabled by default) */
++		/* Enable VOUT & TEMP1 if not enabled (disabled by default) */
+ 		if (!(config & ADM1278_VOUT_EN)) {
+-			config |= ADM1278_VOUT_EN;
++			config |= ADM1278_VOUT_EN | ADM1278_TEMP1_EN;
+ 			ret = i2c_smbus_write_byte_data(client,
+ 							ADM1275_PMON_CONFIG,
+ 							config);
+@@ -681,9 +682,6 @@ static int adm1275_probe(struct i2c_client *client,
+ 			}
+ 		}
+ 
+-		if (config & ADM1278_TEMP1_EN)
+-			info->func[0] |=
+-				PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP;
+ 		if (config & ADM1278_VIN_EN)
+ 			info->func[0] |= PMBUS_HAVE_VIN;
+ 		break;
 -- 
-With Best Regards,
-Andy Shevchenko
+2.7.4
+
