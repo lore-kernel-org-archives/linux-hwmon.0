@@ -7,48 +7,47 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9E99C433E1
-	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jun 2020 00:20:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF89DC433E0
+	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jun 2020 00:44:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AD782206C3
-	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jun 2020 00:20:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C4DA020737
+	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jun 2020 00:44:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591662059;
-	bh=hu3+Cu1mobOMU0osGTqGMIyMafxT7FTy0kESiJ1M/lw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=jXXdjMuQLjJ93PNZJvlqDGenM0HfhtdNCZel5AZRt+RPSN/k00i6qmGDEil+uwwcp
-	 iic53oBgYFzGIDyjuBJhqT4isx70JBikEESbSoiy/01+yJdEztORFmZpJppj6u8Bsc
-	 UiM8oxXTkHtlfzA3lxf/vj/dDr5fyW4QqHOPNzIo=
+	s=default; t=1591663469;
+	bh=s/0fHWJWsk3CSOvkSF0fCcWuzyXf2QbMKemiARoezHU=;
+	h=From:To:Cc:Subject:Date:List-ID:From;
+	b=EcjSfrJkNRE2OFhV09SgSStyTgAH99GHtgir46arsP/EF3EQkBeng9NpoBCRpCgkq
+	 4++/WfK6A7fcwgGieBeFj3lRqrHoZXuMroTaBmX5D1xg/LOYBmJ51Li0O1Mu0M31JX
+	 P5F9YU6SjVCdQzzh13MPiFzRwTDJzWxcvTmjg6z4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730564AbgFHXR6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 8 Jun 2020 19:17:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39990 "EHLO mail.kernel.org"
+        id S1731092AbgFIAnp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 8 Jun 2020 20:43:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59544 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730558AbgFHXR5 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:17:57 -0400
+        id S1729061AbgFHXMN (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:12:13 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0F2BE20814;
-        Mon,  8 Jun 2020 23:17:56 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4EF57208C3;
+        Mon,  8 Jun 2020 23:12:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658277;
-        bh=hu3+Cu1mobOMU0osGTqGMIyMafxT7FTy0kESiJ1M/lw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VuabL1NWuEBlL7Zr75lqzMXqbohEBlj7mKna/ytld7u8fYAtPmHHRQTK1one0+LZW
-         UxTOYfbDj+aHdTHNDuSpCp+8MgrwpxIJ+Ax+rnGevpuVHgByVs8Z29metOiwFXSKyC
-         EenPSGgaV3WvXowGa0q3UKoNcYzV4eSwvf3tgqr4=
+        s=default; t=1591657933;
+        bh=s/0fHWJWsk3CSOvkSF0fCcWuzyXf2QbMKemiARoezHU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RG5LeXWbK0ZO8i+dpF7A7R+y/hq7YNvsfh9KJ37QQXHY3MKpIxMCrKVgN/DadnBAB
+         NkgjHC5ObsQvn+HtcpkbH6EwH0e1huKXE3x/3pHOCxIYKMYU42g4E8EaPhzAqOMObA
+         sgKi3fPMRQgS4xcUUA18tIftm1MV8azzkIJH601g=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Amy Shih <amy.shih@advantech.com.tw>,
+Cc:     Samu Nuutamo <samu.nuutamo@vincit.fi>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 283/606] hwmon: (nct7904) Fix incorrect range of temperature limit registers
-Date:   Mon,  8 Jun 2020 19:06:48 -0400
-Message-Id: <20200608231211.3363633-283-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.6 001/606] hwmon: (da9052) Synchronize access with mfd
+Date:   Mon,  8 Jun 2020 19:02:06 -0400
+Message-Id: <20200608231211.3363633-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200608231211.3363633-1-sashal@kernel.org>
-References: <20200608231211.3363633-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -58,44 +57,44 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Amy Shih <amy.shih@advantech.com.tw>
+From: Samu Nuutamo <samu.nuutamo@vincit.fi>
 
-[ Upstream commit 7b2fd270af27edaf02acb41a7babe805a9441914 ]
+[ Upstream commit 333e22db228f0bd0c839553015a6a8d3db4ba569 ]
 
-The format of temperature limitation registers are 8-bit 2's complement
-and the range is -128~127.
-Converts the reading value to signed char to fix the incorrect range
-of temperature limitation registers.
+When tsi-as-adc is configured it is possible for in7[0123]_input read to
+return an incorrect value if a concurrent read to in[456]_input is
+performed. This is caused by a concurrent manipulation of the mux
+channel without proper locking as hwmon and mfd use different locks for
+synchronization.
 
-Signed-off-by: Amy Shih <amy.shih@advantech.com.tw>
+Switch hwmon to use the same lock as mfd when accessing the TSI channel.
+
+Fixes: 4f16cab19a3d5 ("hwmon: da9052: Add support for TSI channel")
+Signed-off-by: Samu Nuutamo <samu.nuutamo@vincit.fi>
+[rebase to current master, reword commit message slightly]
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/nct7904.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/hwmon/da9052-hwmon.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hwmon/nct7904.c b/drivers/hwmon/nct7904.c
-index 281c81edabc6..dfb122b5e1b7 100644
---- a/drivers/hwmon/nct7904.c
-+++ b/drivers/hwmon/nct7904.c
-@@ -356,6 +356,7 @@ static int nct7904_read_temp(struct device *dev, u32 attr, int channel,
- 	struct nct7904_data *data = dev_get_drvdata(dev);
- 	int ret, temp;
- 	unsigned int reg1, reg2, reg3;
-+	s8 temps;
+diff --git a/drivers/hwmon/da9052-hwmon.c b/drivers/hwmon/da9052-hwmon.c
+index 53b517dbe7e6..4af2fc309c28 100644
+--- a/drivers/hwmon/da9052-hwmon.c
++++ b/drivers/hwmon/da9052-hwmon.c
+@@ -244,9 +244,9 @@ static ssize_t da9052_tsi_show(struct device *dev,
+ 	int channel = to_sensor_dev_attr(devattr)->index;
+ 	int ret;
  
- 	switch (attr) {
- 	case hwmon_temp_input:
-@@ -461,7 +462,8 @@ static int nct7904_read_temp(struct device *dev, u32 attr, int channel,
+-	mutex_lock(&hwmon->hwmon_lock);
++	mutex_lock(&hwmon->da9052->auxadc_lock);
+ 	ret = __da9052_read_tsi(dev, channel);
+-	mutex_unlock(&hwmon->hwmon_lock);
++	mutex_unlock(&hwmon->da9052->auxadc_lock);
  
  	if (ret < 0)
  		return ret;
--	*val = ret * 1000;
-+	temps = ret;
-+	*val = temps * 1000;
- 	return 0;
- }
- 
 -- 
 2.25.1
 
