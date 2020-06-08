@@ -2,124 +2,136 @@ Return-Path: <SRS0=E0ck=7V=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.2 required=3.0 tests=FAKE_REPLY_C,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A443DC433DF
-	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Jun 2020 14:24:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42496C433E1
+	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Jun 2020 15:01:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7E7882074B
-	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Jun 2020 14:24:37 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NwGUG7M3"
+	by mail.kernel.org (Postfix) with ESMTP id 2D3802076C
+	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Jun 2020 15:01:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729989AbgFHOYf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 8 Jun 2020 10:24:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41560 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729975AbgFHOYc (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 8 Jun 2020 10:24:32 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D317C08C5C3
-        for <linux-hwmon@vger.kernel.org>; Mon,  8 Jun 2020 07:24:31 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id x207so8619305pfc.5
-        for <linux-hwmon@vger.kernel.org>; Mon, 08 Jun 2020 07:24:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id;
-        bh=q85AsuKrmY4IgPtm0mYuch5lt547T48wysZIba/Zk60=;
-        b=NwGUG7M3RstcTShP/AE52ZtX7jNXwqlzxgS+8r0eebqIsWka5aBKloejGdX7NbrinQ
-         OWurFVkCS62Cu4u1QY8AdBbNlovjeq56SaGHmROCc+VcgbjB+qLBXYq/AM3oC0XYgvgQ
-         De6CbkCnme2wxHMqjfa0sxLGWe50VyWClxCO764/zy4OOMrwQBK+ssiXSFY1EAv5/+f4
-         k7cwf5hwq9Em9gGxJ7fCdXRrKNEsxB4YjiZ6iOwuvDs8ru84MTuuW5MIpVi7hJzBW29t
-         jnJDH+bwT2sYw2Z/ZOz/vZ+/nme5iz+NP4Ql1Myp619nwjUAntFrv6CgFLiZ5Ui1mJhx
-         bQyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
-        bh=q85AsuKrmY4IgPtm0mYuch5lt547T48wysZIba/Zk60=;
-        b=i5jtpZ9WowapiVUyjO8L3vFx/9zEKA1aYXThxj+YYEyFJ9dmRlpWe0wrHxZ8OVoCB7
-         bLrDzWKeJcLTzr9i0ovWB3m+2kyvBsaccas7F0G9L12OAfXQ2IC5aCf39dBOaUaB5zQv
-         LMaPy+R6TIO7Jlj1hJsh9JHOX4CZQ0GTVXT5XG9fGWgVQ34W0UqlJD1upgriug7Kmbgi
-         dbS5j6irv5/Licmfk1k/KIDvyKcs4y6qJ5WFTkopgyxfDfzkQeHaPS5ue2LmfeuMVXi/
-         OaCHKuOywRjC/Mnvfb4M7EFrbqNCGdOcn+iGQHiQPr1QO70XzySEZEGeBAq+kSqRJIjp
-         Fneg==
-X-Gm-Message-State: AOAM531tS09crHMVoFZndelVRIxzRWXtX90+kLxuxCCY4o0QGmES4TmN
-        RhWJuoCgDFt/Z6Aio+1Yzzyy3oV7
-X-Google-Smtp-Source: ABdhPJxbtBc1/9L1itl0MKKXkwWZRCKZEklNHGWWBoS0ZfAk2tPhh49YBZkIM8ohdCl1Xc18PPpfQg==
-X-Received: by 2002:a63:2806:: with SMTP id o6mr20070506pgo.328.1591626270711;
-        Mon, 08 Jun 2020 07:24:30 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y23sm6174354pgc.78.2020.06.08.07.24.28
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 08 Jun 2020 07:24:29 -0700 (PDT)
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Subject: [PATCH] hwmon: (bt1-pvt) Mark is_visible functions static
-Date:   Mon,  8 Jun 2020 07:24:26 -0700
-Message-Id: <20200608142426.46955-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.17.1
+        id S1730186AbgFHPBX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 8 Jun 2020 11:01:23 -0400
+Received: from mga14.intel.com ([192.55.52.115]:19233 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730113AbgFHPBU (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 8 Jun 2020 11:01:20 -0400
+IronPort-SDR: QEWYMjpttx1VENSjcq+DFJEfd4pFq2g6cuv9uO3Akuzp///EGgWAL8dLJ8EjP+E8VJfzCRmLrm
+ p2ZllQ/o4xbA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2020 08:01:17 -0700
+IronPort-SDR: qk19wMuB5NTP1uhyGuehwhAT0ySMHmi+z3MF99ChcbZ2MX6hiD8ivvEKHQyNffbsw5Uvs3gXmx
+ MmWyMS0KOLAQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,487,1583222400"; 
+   d="scan'208";a="472714449"
+Received: from xsang-optiplex-9020.sh.intel.com (HELO xsang-OptiPlex-9020) ([10.239.159.140])
+  by fmsmga005.fm.intel.com with ESMTP; 08 Jun 2020 08:01:14 -0700
+Date:   Mon, 8 Jun 2020 23:12:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Michael Walle <michael@walle.cc>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     kbuild-all@lists.01.org, Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v4 03/11] irqchip: add sl28cpld interrupt controller
+ support
+Message-ID: <20200608151247.GC31689@xsang-OptiPlex-9020>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200604211039.12689-4-michael@walle.cc>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-0-day reports:
+Hi Michael,
 
-drivers/hwmon/bt1-pvt.c:303:16: warning:
-	no previous declaration for 'pvt_limit_is_visible'
-drivers/hwmon/bt1-pvt.c:308:16: warning:
-	no previous declaration for 'pvt_alarm_is_visible'
+I love your patch! Perhaps something to improve:
 
-Declare both functions static.
+[auto build test WARNING on next-20200604]
+[cannot apply to gpio/for-next hwmon/hwmon-next ljones-mfd/for-mfd-next shawnguo/for-next v5.7 v5.7-rc7 v5.7-rc6 v5.7]
+[if your patch is applied to the wrong git tree, please drop us a note to help
+improve the system. BTW, we also suggest to use '--base' option to specify the
+base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
 
+url:    https://github.com/0day-ci/linux/commits/Michael-Walle/Add-support-for-Kontron-sl28cpld/20200605-051333
+base:    d4899e5542c15062cc55cac0ca99025bb64edc61
+:::::: branch date: 26 hours ago
+:::::: commit date: 26 hours ago
+compiler: gcc-9 (Debian 9.3.0-13) 9.3.0
+
+If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
-Fixes: 87976ce2825d("hwmon: Add Baikal-T1 PVT sensor driver")
-Cc: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/bt1-pvt.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/hwmon/bt1-pvt.c b/drivers/hwmon/bt1-pvt.c
-index 8709b3f54086..94698cae0497 100644
---- a/drivers/hwmon/bt1-pvt.c
-+++ b/drivers/hwmon/bt1-pvt.c
-@@ -300,12 +300,12 @@ static irqreturn_t pvt_soft_isr(int irq, void *data)
- 	return IRQ_HANDLED;
- }
- 
--inline umode_t pvt_limit_is_visible(enum pvt_sensor_type type)
-+static inline umode_t pvt_limit_is_visible(enum pvt_sensor_type type)
- {
- 	return 0644;
- }
- 
--inline umode_t pvt_alarm_is_visible(enum pvt_sensor_type type)
-+static inline umode_t pvt_alarm_is_visible(enum pvt_sensor_type type)
- {
- 	return 0444;
- }
-@@ -462,12 +462,12 @@ static irqreturn_t pvt_hard_isr(int irq, void *data)
- 
- #define pvt_soft_isr NULL
- 
--inline umode_t pvt_limit_is_visible(enum pvt_sensor_type type)
-+static inline umode_t pvt_limit_is_visible(enum pvt_sensor_type type)
- {
- 	return 0;
- }
- 
--inline umode_t pvt_alarm_is_visible(enum pvt_sensor_type type)
-+static inline umode_t pvt_alarm_is_visible(enum pvt_sensor_type type)
- {
- 	return 0;
- }
--- 
-2.17.1
+
+cppcheck warnings: (new ones prefixed by >>)
+
+>> drivers/irqchip/irq-sl28cpld.c:56:10: warning: Checking if unsigned variable 'irq' is less than zero. [unsignedLessThanZero]
+    if (irq < 0)
+            ^
+
+# https://github.com/0day-ci/linux/commit/b13743c1f1a52746beaa071e5d008c84d59fbd7f
+git remote add linux-review https://github.com/0day-ci/linux
+git remote update linux-review
+git checkout b13743c1f1a52746beaa071e5d008c84d59fbd7f
+vim +/irq +56 drivers/irqchip/irq-sl28cpld.c
+
+b13743c1f1a527 Michael Walle 2020-06-04  35  
+b13743c1f1a527 Michael Walle 2020-06-04  36  static int sl28cpld_intc_probe(struct platform_device *pdev)
+b13743c1f1a527 Michael Walle 2020-06-04  37  {
+b13743c1f1a527 Michael Walle 2020-06-04  38  	struct device *dev = &pdev->dev;
+b13743c1f1a527 Michael Walle 2020-06-04  39  	struct sl28cpld_intc *irqchip;
+b13743c1f1a527 Michael Walle 2020-06-04  40  	unsigned int irq;
+b13743c1f1a527 Michael Walle 2020-06-04  41  	u32 base;
+b13743c1f1a527 Michael Walle 2020-06-04  42  	int ret;
+b13743c1f1a527 Michael Walle 2020-06-04  43  
+b13743c1f1a527 Michael Walle 2020-06-04  44  	if (!dev->parent)
+b13743c1f1a527 Michael Walle 2020-06-04  45  		return -ENODEV;
+b13743c1f1a527 Michael Walle 2020-06-04  46  
+b13743c1f1a527 Michael Walle 2020-06-04  47  	irqchip = devm_kzalloc(dev, sizeof(*irqchip), GFP_KERNEL);
+b13743c1f1a527 Michael Walle 2020-06-04  48  	if (!irqchip)
+b13743c1f1a527 Michael Walle 2020-06-04  49  		return -ENOMEM;
+b13743c1f1a527 Michael Walle 2020-06-04  50  
+b13743c1f1a527 Michael Walle 2020-06-04  51  	irqchip->regmap = dev_get_regmap(dev->parent, NULL);
+b13743c1f1a527 Michael Walle 2020-06-04  52  	if (!irqchip->regmap)
+b13743c1f1a527 Michael Walle 2020-06-04  53  		return -ENODEV;
+b13743c1f1a527 Michael Walle 2020-06-04  54  
+b13743c1f1a527 Michael Walle 2020-06-04  55  	irq = platform_get_irq(pdev, 0);
+b13743c1f1a527 Michael Walle 2020-06-04 @56  	if (irq < 0)
+b13743c1f1a527 Michael Walle 2020-06-04  57  		return irq;
+b13743c1f1a527 Michael Walle 2020-06-04  58  
+b13743c1f1a527 Michael Walle 2020-06-04  59  	ret = device_property_read_u32(&pdev->dev, "reg", &base);
+b13743c1f1a527 Michael Walle 2020-06-04  60  	if (ret)
+b13743c1f1a527 Michael Walle 2020-06-04  61  		return -EINVAL;
+b13743c1f1a527 Michael Walle 2020-06-04  62  
+b13743c1f1a527 Michael Walle 2020-06-04  63  	irqchip->chip.name = "sl28cpld-intc";
+b13743c1f1a527 Michael Walle 2020-06-04  64  	irqchip->chip.irqs = sl28cpld_irqs;
+b13743c1f1a527 Michael Walle 2020-06-04  65  	irqchip->chip.num_irqs = ARRAY_SIZE(sl28cpld_irqs);
+b13743c1f1a527 Michael Walle 2020-06-04  66  	irqchip->chip.num_regs = 1;
+b13743c1f1a527 Michael Walle 2020-06-04  67  	irqchip->chip.status_base = base + INTC_IP;
+b13743c1f1a527 Michael Walle 2020-06-04  68  	irqchip->chip.mask_base = base + INTC_IE;
+b13743c1f1a527 Michael Walle 2020-06-04  69  	irqchip->chip.mask_invert = true,
+b13743c1f1a527 Michael Walle 2020-06-04  70  	irqchip->chip.ack_base = base + INTC_IP;
+b13743c1f1a527 Michael Walle 2020-06-04  71  
+b13743c1f1a527 Michael Walle 2020-06-04  72  	return devm_regmap_add_irq_chip_np(&pdev->dev, dev->of_node,
+b13743c1f1a527 Michael Walle 2020-06-04  73  					   irqchip->regmap, irq,
+b13743c1f1a527 Michael Walle 2020-06-04  74  					   IRQF_SHARED | IRQF_ONESHOT, 0,
+b13743c1f1a527 Michael Walle 2020-06-04  75  					   &irqchip->chip, &irqchip->irq_data);
+b13743c1f1a527 Michael Walle 2020-06-04  76  }
+b13743c1f1a527 Michael Walle 2020-06-04  77  
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
