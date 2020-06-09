@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F857C433E0
-	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jun 2020 14:57:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5739C433DF
+	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jun 2020 14:57:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 779B52078C
-	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jun 2020 14:57:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 902382078C
+	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jun 2020 14:57:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730677AbgFIO5c (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S1730667AbgFIO5c (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Tue, 9 Jun 2020 10:57:32 -0400
-Received: from lists.gateworks.com ([108.161.130.12]:54523 "EHLO
+Received: from lists.gateworks.com ([108.161.130.12]:54519 "EHLO
         lists.gateworks.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730110AbgFIO53 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 9 Jun 2020 10:57:29 -0400
+        with ESMTP id S1730436AbgFIO52 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 9 Jun 2020 10:57:28 -0400
 Received: from 068-189-091-139.biz.spectrum.com ([68.189.91.139] helo=tharvey.pdc.gateworks.com)
         by lists.gateworks.com with esmtp (Exim 4.82)
         (envelope-from <tharvey@gateworks.com>)
-        id 1jifjx-0002Dv-Ge; Tue, 09 Jun 2020 15:00:37 +0000
+        id 1jifjw-0002Dv-5T; Tue, 09 Jun 2020 15:00:36 +0000
 From:   Tim Harvey <tharvey@gateworks.com>
 To:     Rob Herring <robh+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
@@ -30,9 +30,9 @@ Cc:     Lee Jones <lee.jones@linaro.org>,
         Robert Jones <rjones@gateworks.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-hwmon@vger.kernel.org, Tim Harvey <tharvey@gateworks.com>
-Subject: [PATCH 2/2] hwmon: (gsc): add 16bit pre-scaled voltage mode
-Date:   Tue,  9 Jun 2020 07:57:20 -0700
-Message-Id: <1591714640-10332-3-git-send-email-tharvey@gateworks.com>
+Subject: [PATCH 1/2] dt-bindings: mfd: gateworks-gsc: add 16bit pre-scaled voltage mode
+Date:   Tue,  9 Jun 2020 07:57:19 -0700
+Message-Id: <1591714640-10332-2-git-send-email-tharvey@gateworks.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1591714640-10332-1-git-send-email-tharvey@gateworks.com>
 References: <1591714640-10332-1-git-send-email-tharvey@gateworks.com>
@@ -46,58 +46,28 @@ pre-scaled mode is 24bit.
 
 Signed-off-by: Tim Harvey <tharvey@gateworks.com>
 ---
- drivers/hwmon/gsc-hwmon.c               | 8 +++++---
- include/linux/platform_data/gsc_hwmon.h | 3 ++-
- 2 files changed, 7 insertions(+), 4 deletions(-)
+ Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hwmon/gsc-hwmon.c b/drivers/hwmon/gsc-hwmon.c
-index 2137bc6..3dfe2ca 100644
---- a/drivers/hwmon/gsc-hwmon.c
-+++ b/drivers/hwmon/gsc-hwmon.c
-@@ -159,7 +159,7 @@ gsc_hwmon_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
- 		return -EOPNOTSUPP;
- 	}
+diff --git a/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml b/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
+index 487a844..ceec33f 100644
+--- a/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
++++ b/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
+@@ -79,11 +79,12 @@ properties:
+             description: |
+               conversion mode:
+                 0 - temperature, in C*10
+-                1 - pre-scaled voltage value
++                1 - pre-scaled 24-bit voltage value
+                 2 - scaled voltage based on an optional resistor divider
+                     and optional offset
++                3 - pre-scaled 16-bit voltage value
+             $ref: /schemas/types.yaml#/definitions/uint32
+-            enum: [0, 1, 2]
++            enum: [0, 1, 2, 3]
  
--	sz = (ch->mode == mode_voltage) ? 3 : 2;
-+	sz = (ch->mode == mode_voltage_24bit) ? 3 : 2;
- 	ret = regmap_bulk_read(hwmon->regmap, ch->reg, buf, sz);
- 	if (ret)
- 		return ret;
-@@ -186,7 +186,8 @@ gsc_hwmon_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
- 		/* adjust by uV offset */
- 		tmp += ch->mvoffset;
- 		break;
--	case mode_voltage:
-+	case mode_voltage_24bit:
-+	case mode_voltage_16bit:
- 		/* no adjustment needed */
- 		break;
- 	}
-@@ -336,7 +337,8 @@ static int gsc_hwmon_probe(struct platform_device *pdev)
- 						     HWMON_T_LABEL;
- 			i_temp++;
- 			break;
--		case mode_voltage:
-+		case mode_voltage_24bit:
-+		case mode_voltage_16bit:
- 		case mode_voltage_raw:
- 			if (i_in == GSC_HWMON_MAX_IN_CH) {
- 				dev_err(gsc->dev, "too many input channels\n");
-diff --git a/include/linux/platform_data/gsc_hwmon.h b/include/linux/platform_data/gsc_hwmon.h
-index ec1611a..37a8f554d 100644
---- a/include/linux/platform_data/gsc_hwmon.h
-+++ b/include/linux/platform_data/gsc_hwmon.h
-@@ -4,8 +4,9 @@
- 
- enum gsc_hwmon_mode {
- 	mode_temperature,
--	mode_voltage,
-+	mode_voltage_24bit,
- 	mode_voltage_raw,
-+	mode_voltage_16bit,
- 	mode_max,
- };
- 
+           gw,voltage-divider-ohms:
+             description: Values of resistors for divider on raw ADC input
 -- 
 2.7.4
 
