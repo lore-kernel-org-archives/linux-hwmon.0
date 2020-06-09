@@ -2,45 +2,65 @@ Return-Path: <SRS0=B/FW=7W=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DE6DC433E1
-	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jun 2020 17:30:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1015C433E3
+	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jun 2020 18:41:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4E7B9207C3
-	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jun 2020 17:30:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591723805;
-	bh=Qmr3xU4Wr498BcrukotcukidPlKEgC2wLsO/I0prusU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=dcUe92d/JjTfvHR2rvcllepVdDFj+lDoZAXCwCmhRARPghu3hJWBM4t9U1GQODvw3
-	 Vnia/2FWi8Rpen9+izB4mfq8YbXNA2tdfpVXTLPLm18hzUaZDHAalwasIj2jWrXmq5
-	 vfHVsJeJp/CPGy9Xf/7l1abLd52xUIcUJoeNQ0oM=
+	by mail.kernel.org (Postfix) with ESMTP id D542F2074B
+	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jun 2020 18:41:50 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="bT+muX/Z"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728249AbgFIR37 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 9 Jun 2020 13:29:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43610 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727837AbgFIR35 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 9 Jun 2020 13:29:57 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5C97A20774;
-        Tue,  9 Jun 2020 17:29:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591723796;
-        bh=Qmr3xU4Wr498BcrukotcukidPlKEgC2wLsO/I0prusU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=19nG0JhFpICXKRdbQSqtV0xLlrZOSFIZdBzGSyuzFEyQ2dbY5bUXfPdrnZ6jcWHUo
-         5oFSLLb0j1GAaGWDSmFkt13oJIr1GWQVeODfQGNwbTo6AcQi4rffXKZCSqX3WSqM3s
-         CO4pnstLd/HBdIWUPNfNZy1qr8OFn5U3V2Azny5c=
-Date:   Tue, 9 Jun 2020 18:29:54 +0100
-From:   Mark Brown <broonie@kernel.org>
+        id S1729938AbgFISlt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 9 Jun 2020 14:41:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49386 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728404AbgFISls (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 9 Jun 2020 14:41:48 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C260C08C5C2
+        for <linux-hwmon@vger.kernel.org>; Tue,  9 Jun 2020 11:41:47 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id p5so22453265wrw.9
+        for <linux-hwmon@vger.kernel.org>; Tue, 09 Jun 2020 11:41:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=nmaejAPqL7w5RZ3rYBTgKoizKjTpzF9/rXO7+RKEnFs=;
+        b=bT+muX/ZHRyFVoKnvmGjZYEBoJBSQhFE7M258fsMuSAMDYowHgy3BXIG/jHiBLN3Eu
+         j44yKp2S1Qr5XCQKMWibyk0jNOe5ZUqG43z0mTcQgB8TqqYUAilZ/+TflAKsIoD+DYg1
+         GiUnrBLUYvuXERBXq188+PcxnG+tGm3IfxkW3Wq0xTDoNESuL/TXFOE+ZgasGd5La3cx
+         0RN999iXgJC2v/eadBv1wABQnyJuHz70FaHCXXpaWaEftcJLu5dCN01Qk2HOHHG4dywz
+         Noa2fAHca/bEcEoRRIgF3kdGyr3gXsT44NPGuPONy9VKwePCyay2oPzNkfZ81KyeTGx+
+         F5zQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=nmaejAPqL7w5RZ3rYBTgKoizKjTpzF9/rXO7+RKEnFs=;
+        b=TpJdT6IAr6vwCrmPK4W1UaX0I5WAS31GrId5z0jWUz/gXuknUfd1Spedgzx6ClwW6K
+         TbtYiCym6Y3R417auiNwRMAI8Ys10/lHWgE6GijktqBGojLk0egDuFfUNck0ZA1A87a/
+         Pg8lCvd2iddq9U+UhMNLmGVcZLhMLxmRN1i0Xw3kph8bLtzIibTy4ZsKUxAVVGKnUMXM
+         U4V61beEH8z4vKkGGrv6oJVldjpXoYur9AoTuHswBih15sZUU68C0db5/ta6PohsLpSn
+         AQwiSz+c/8y4AZoMqVJkYqV3fNfG/Rvgg2tfWuGDl01FGElryMyGfMdUs2ZeysU70wd2
+         y+1Q==
+X-Gm-Message-State: AOAM532mGb/7VSCokuJRaCFQEllKTQcUSCRVvWYOi3kPmubvwjnpuJx7
+        N2Gu4oqP7fqMPYYloTck9AUuyg==
+X-Google-Smtp-Source: ABdhPJx5FO/vEubUSX2PK6P+KpZvhjPdNngyh29RNODEGr7a4h7Gn46X2+6wYsXyxNUmt6ZTCXwdvQ==
+X-Received: by 2002:adf:f44b:: with SMTP id f11mr5884154wrp.165.1591728105471;
+        Tue, 09 Jun 2020 11:41:45 -0700 (PDT)
+Received: from dell ([2.27.167.101])
+        by smtp.gmail.com with ESMTPSA id 40sm4694407wrc.15.2020.06.09.11.41.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Jun 2020 11:41:44 -0700 (PDT)
+Date:   Tue, 9 Jun 2020 19:41:42 +0100
+From:   Lee Jones <lee.jones@linaro.org>
 To:     Rob Herring <robh@kernel.org>
-Cc:     Michael Walle <michael@walle.cc>, Lee Jones <lee.jones@linaro.org>,
+Cc:     Michael Walle <michael@walle.cc>, Mark Brown <broonie@kernel.org>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
         Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
         david.m.ertman@intel.com, shiraz.saleem@intel.com,
@@ -66,7 +86,7 @@ Cc:     Michael Walle <michael@walle.cc>, Lee Jones <lee.jones@linaro.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Subject: Re: [PATCH v4 02/11] mfd: Add support for Kontron sl28cpld
  management controller
-Message-ID: <20200609172954.GM4583@sirena.org.uk>
+Message-ID: <20200609184142.GN4106@dell>
 References: <20200608082827.GB3567@dell>
  <CAHp75VdiH=J-ovCdh1RFJDW_bJM8=pbXRaHmB691GLb-5oBmYQ@mail.gmail.com>
  <7d7feb374cbf5a587dc1ce65fc3ad672@walle.cc>
@@ -78,51 +98,57 @@ References: <20200608082827.GB3567@dell>
  <a2bae71634fe288f067d5e92090b7561@walle.cc>
  <20200609171520.GC1019634@bogus>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Pz/qqzCPDfGwIFOg"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 In-Reply-To: <20200609171520.GC1019634@bogus>
-X-Cookie: Be careful!  Is it classified?
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+On Tue, 09 Jun 2020, Rob Herring wrote:
 
---Pz/qqzCPDfGwIFOg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Jun 09, 2020 at 11:15:20AM -0600, Rob Herring wrote:
-
-> Find another driver doing this already and rename it 'simple-mfd' (no=20
-> relation to the DT binding) and add your compatible string to it.=20
+> On Tue, Jun 09, 2020 at 05:01:17PM +0200, Michael Walle wrote:
+> > Am 2020-06-09 16:42, schrieb Mark Brown:
+> > > On Tue, Jun 09, 2020 at 04:38:31PM +0200, Michael Walle wrote:
+> > > 
+> > > >   mfd-device@10 {
+> > > >     compatible = "simple-regmap", "simple-mfd";
+> > > >     reg = <10>;
+> > > >     regmap,reg-bits = <8>;
+> > > >     regmap,val-bits = <8>;
+> > > >     sub-device@0 {
+> > > >       compatible = "vendor,sub-device0";
+> > > >       reg = <0>;
+> > > >     };
+> > > 
+> > > A DT binding like this is not a good idea, encoding the details of the
+> > > register map into the DT binding makes it an ABI which is begging for
+> > > trouble.  I'd also suggest that any device using a generic driver like
+> > > this should have a specific compatible string for the device so we can
+> > > go back and add quirks later if we need them.
+> > 
+> > Like in the spidev case, yes. But OTOH if I _just_ encode the parameters
+> > for the regmap a MFD, Lee don't agree because its just a shim. So either
+> > way I seem to be stuck here.
+> > 
+> > Where should I put the code to create an i2c driver, init a regmap and
+> > populate its childen?
+> 
+> Find another driver doing this already and rename it 'simple-mfd' (no 
+> relation to the DT binding) and add your compatible string to it. 
 > 'Generic' or 'simple' drivers don't require generic/simple DT bindings.
 
-> Or extend the existing syscon driver to look up the bus_type and create=
-=20
+Creating a generic driver is one of the options spinning around in my
+head.  If nothing better comes of these discussions, I'll turn my hand
+to it soon.
+
+> Or extend the existing syscon driver to look up the bus_type and create 
 > the regmap based on the bus type?
 
-You'd need a particular bus driver to instantiate for a given bus (or
-I'm misunderstanding your proposal) so it wouldn't even need a lookup,
-just per-bus ID tables (and ideally also data tables with the regmap
-and child descriptions).
-
---Pz/qqzCPDfGwIFOg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7fxxEACgkQJNaLcl1U
-h9DCLQf/bdNDdxW0Qpw6CjYiwGbdGhDPz2buR07hZ0HFwlLW/CCeJCk0naiEaRo1
-P3qH84YQ2ka1vdYpGLWX6+vvXjU2ejaSPz9GmDxoUVkrxB8SjwVYWehydJkgE8Bs
-/f9vdLsoac0TjNNro7gumcUGE6bIGFDUvuOJkjn+O4dOBz3cTqhYsY4Sz14cyTxW
-maZmtiiVvFyP5Jrf0LTE2oQzqnTEKgoBY8Ku6f34K7EiNmIK/bgppdXsJvNGqZp9
-tPbeGiW01Rg8XVNPYnjJf6TipJRvHLJh8hma6sFq5dqH0ZNDpFFW35xqWLPWL5Af
-2Plbt+f89ibSJGeBNXMaaEPkfzTv7A==
-=lKAA
------END PGP SIGNATURE-----
-
---Pz/qqzCPDfGwIFOg--
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
