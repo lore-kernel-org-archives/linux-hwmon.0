@@ -2,353 +2,153 @@ Return-Path: <SRS0=B/FW=7W=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 534DAC433DF
-	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jun 2020 13:03:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E8DDC433E0
+	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jun 2020 13:50:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 32391206A4
-	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jun 2020 13:03:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 54F3C20737
+	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jun 2020 13:50:18 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jPUt0nwI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728410AbgFINDZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 9 Jun 2020 09:03:25 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2295 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727910AbgFINDT (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 9 Jun 2020 09:03:19 -0400
-Received: from lhreml710-chm.china.huawei.com (unknown [172.18.7.108])
-        by Forcepoint Email with ESMTP id BE4E3B52E37FC3B0FF53;
-        Tue,  9 Jun 2020 14:03:14 +0100 (IST)
-Received: from localhost (10.227.96.57) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.1913.5; Tue, 9 Jun 2020
- 14:03:14 +0100
-Date:   Tue, 9 Jun 2020 14:03:13 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+        id S1730367AbgFINuS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 9 Jun 2020 09:50:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60744 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730311AbgFINuR (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 9 Jun 2020 09:50:17 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC613C05BD1E;
+        Tue,  9 Jun 2020 06:50:16 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id y17so8058943plb.8;
+        Tue, 09 Jun 2020 06:50:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=T+YJKeaOVYUazWEiD+FC8ATuHe96dWcYavuW/yCbOJ8=;
+        b=jPUt0nwIlm22VZ9NM8bA8jJUH3/vojexLi25P2CSJEQLLyMcgS8L/O4tdrqBie5DG4
+         lpCQ83zaNoNLyRbtv9PXZCVijMfIgwToB80TVKfygem0BD5GN3TnPDkl51B0erQQEcRS
+         pMj8dmvRdp9ouEyAd7C9OqJrcaimaa1bFk3SsTLknJtj7oY5n1oF/oD+DrLSdyBeNmGK
+         5xX5S7MH7aWAkbXmi5KB4cvcbCiIrDwj6Nw1dPTdUAmH1816/77epygsbbWsxIk33Xse
+         9pGKdpJ3QG5CdWJgCtKD1wWBA/dEIG5uwm9zvFXlpqmZ7oeFxg4JKuNkAPbt9424wrZ0
+         oFbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=T+YJKeaOVYUazWEiD+FC8ATuHe96dWcYavuW/yCbOJ8=;
+        b=FzOgqGoJ2QH9UGgla4PiiCIrbtbGA7e726Lqo7mJ4BnMoFy/XCiHyHVmaonPzRKdOM
+         r22rh2f/UoyRk/HUB9yj1OX7PiUPlem0lNPdUr6Juv1bdJ3T7HCHAnp2pB4ZeQIRrZ3x
+         VHiQtZhWyLlUN+S4RKFC0NzpmZUQhkeDKKxSW+M8UKOAAWvYsVtlQCCgZKKhaUoNBSTg
+         mC0RUoCbpl4b3YrBlrqcRAUHjbmpyf3iFmROzeyC+AsrAC9vAEnx5QK/h1npk2l7DXy/
+         mK9KIjCuhHn1yi4o/DeuqECmqcO46yzpEom6ZsnCpA3aRMKXzjzS/jURwNwWF/nb1lR+
+         qC8Q==
+X-Gm-Message-State: AOAM533gqgHnhXwD4jP2OpV0Bp1JvCUs4qpzySEsL4/Hi0PX3A/WoXFz
+        wqjw3DiIjEaRlAbEgsVX5qc=
+X-Google-Smtp-Source: ABdhPJyUnUWzeW0xWjPqzYyPmmCu9YaKhZU6LXzT6RNu0dBqMFw/Le2X2mLtUg75RNwhOibnjx6iRA==
+X-Received: by 2002:a17:90a:9484:: with SMTP id s4mr5008356pjo.30.1591710616351;
+        Tue, 09 Jun 2020 06:50:16 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id gq8sm2668734pjb.14.2020.06.09.06.50.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Jun 2020 06:50:15 -0700 (PDT)
+Subject: Re: [PATCH v2 0/3] hwmon: Adding support for Microchip Sparx5 SoC
 To:     Lars Povlsen <lars.povlsen@microchip.com>
-CC:     Guenter Roeck <linux@roeck-us.net>, <linux-hwmon@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        <linux-kernel@vger.kernel.org>,
+Cc:     Jean Delvare <jdelvare@suse.com>,
         Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v2 3/3] hwmon: sparx5: Add Sparx5 SoC temperature driver
-Message-ID: <20200609140313.00007187@huawei.com>
-In-Reply-To: <87h7vkig6i.fsf@soft-dev15.microsemi.net>
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
 References: <20200609072828.9088-1-lars.povlsen@microchip.com>
-        <20200609074940.9529-1-lars.povlsen@microchip.com>
-        <20200609093808.00003aad@Huawei.com>
-        <87h7vkig6i.fsf@soft-dev15.microsemi.net>
-Organization: Huawei tech. R&D (UK)  Ltd.
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; i686-w64-mingw32)
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <5f006733-52b6-e003-5db3-2ff16596918c@roeck-us.net>
+Date:   Tue, 9 Jun 2020 06:50:14 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+In-Reply-To: <20200609072828.9088-1-lars.povlsen@microchip.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.227.96.57]
-X-ClientProxiedBy: lhreml707-chm.china.huawei.com (10.201.108.56) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, 9 Jun 2020 14:20:37 +0200
-Lars Povlsen <lars.povlsen@microchip.com> wrote:
+On 6/9/20 12:28 AM, Lars Povlsen wrote:
+> This is an add-on series to the main SoC Sparx5 series
+> (Message-ID: <20200608123024.5330-1-lars.povlsen@microchip.com>)
+> 
+> Changes in v2:
+> - Changes in driver as per review comments
+> 
 
-> Jonathan Cameron writes:
-> 
-> > On Tue, 9 Jun 2020 09:49:40 +0200
-> > Lars Povlsen <lars.povlsen@microchip.com> wrote:
-> >  
-> >> This patch adds a temperature sensor driver to the Sparx5 SoC.
-> >>
-> >> Reviewed-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> >> Signed-off-by: Lars Povlsen <lars.povlsen@microchip.com>  
-> >
-> > Hi.  Quick drive by review whilst waiting for coffee time...
-> >
-> > A few minor suggestions inline.
-> >  
-> 
-> Much appreciated!
-> 
-> > Thanks,
-> >
-> > Jonathan
-> >  
-> >> ---
-> >>  drivers/hwmon/Kconfig       |  10 +++
-> >>  drivers/hwmon/Makefile      |   2 +-
-> >>  drivers/hwmon/sparx5-temp.c | 152
-> >> ++++++++++++++++++++++++++++++++++++ 3 files changed, 163
-> >> insertions(+), 1 deletion(-) create mode 100644
-> >> drivers/hwmon/sparx5-temp.c
-> >>
-> >> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> >> index 288ae9f63588c..ec6bb8b8b12df 100644
-> >> --- a/drivers/hwmon/Kconfig
-> >> +++ b/drivers/hwmon/Kconfig
-> >> @@ -515,6 +515,16 @@ config SENSORS_I5K_AMB
-> >>         This driver can also be built as a module. If so, the
-> >> module will be called i5k_amb.
-> >>
-> >> +config SENSORS_SPARX5
-> >> +     tristate "Sparx5 SoC temperature sensor"
-> >> +     depends on ARCH_SPARX5  
-> > Anything stop this building with COMPILE_TEST?
-> >
-> > That will great increase automated build coverage.
-> >  
-> >> +     help
-> >> +       If you say yes here you get support for temperature
-> >> monitoring
-> >> +       with the Microchip Sparx5 SoC.
-> >> +
-> >> +       This driver can also be built as a module. If so, the
-> >> module
-> >> +       will be called sparx5-temp.
-> >> +
-> >>  config SENSORS_F71805F
-> >>       tristate "Fintek F71805F/FG, F71806F/FG and F71872F/FG"
-> >>       depends on !PPC
-> >> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> >> index 3e32c21f5efe3..144f09993a3f4 100644
-> >> --- a/drivers/hwmon/Makefile
-> >> +++ b/drivers/hwmon/Makefile
-> >> @@ -66,6 +66,7 @@ obj-$(CONFIG_SENSORS_DS1621)        += ds1621.o
-> >>  obj-$(CONFIG_SENSORS_EMC1403)        += emc1403.o
-> >>  obj-$(CONFIG_SENSORS_EMC2103)        += emc2103.o
-> >>  obj-$(CONFIG_SENSORS_EMC6W201)       += emc6w201.o
-> >> +obj-$(CONFIG_SENSORS_SPARX5) += sparx5-temp.o
-> >>  obj-$(CONFIG_SENSORS_F71805F)        += f71805f.o
-> >>  obj-$(CONFIG_SENSORS_F71882FG)       += f71882fg.o
-> >>  obj-$(CONFIG_SENSORS_F75375S)        += f75375s.o
-> >> @@ -193,4 +194,3 @@ obj-$(CONFIG_SENSORS_OCC) += occ/
-> >>  obj-$(CONFIG_PMBUS)          += pmbus/
-> >>
-> >>  ccflags-$(CONFIG_HWMON_DEBUG_CHIP) := -DDEBUG
-> >> -
-> >> diff --git a/drivers/hwmon/sparx5-temp.c
-> >> b/drivers/hwmon/sparx5-temp.c new file mode 100644
-> >> index 0000000000000..2e754462b6010
-> >> --- /dev/null
-> >> +++ b/drivers/hwmon/sparx5-temp.c
-> >> @@ -0,0 +1,152 @@
-> >> +// SPDX-License-Identifier: GPL-2.0-or-later
-> >> +/* Sparx5 SoC temperature sensor driver
-> >> + *
-> >> + * Copyright (C) 2020 Lars Povlsen <lars.povlsen@microchip.com>
-> >> + */
-> >> +
-> >> +#include <linux/module.h>
-> >> +#include <linux/init.h>
-> >> +#include <linux/hwmon.h>
-> >> +#include <linux/io.h>
-> >> +#include <linux/of_device.h>  
-> > I think you only have this to define the id table?
-> >
-> > If so, perhaps better to include mod_devicetable.h and not include
-> > the of header.  
-> 
-> Well, I ended up needed other, so it became:
-> 
-> -#include <linux/of_device.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/mod_devicetable.h>
-> 
-> Other of these drivers seem to use "linux/of_device.h" as well?
+And you expect the reviewers/maintainers to remember what those were ?
 
-Yeah. Lots of drivers take the lazy approach of including of_device.h
-but doesn't mean we can't do better.
-
-:)
-
-Preference is always to include a little as possible (in terms of the
-tree of headers rather than include lines in a file)
-
-J
-
+> Lars Povlsen (3):
+>   dt-bindings: hwmon: Add Sparx5 temperature sensor
+>   arm64: dts: sparx5: Add hwmon temperature sensor
+>   hwmon: sparx5: Add Sparx5 SoC temperature driver
 > 
-> >  
-> >> +
-> >> +#define TEMP_CTRL            0
-> >> +#define TEMP_CFG             4
-> >> +#define  TEMP_CFG_CYCLES     GENMASK(24, 15)
-> >> +#define  TEMP_CFG_CYCLES_OFF 15  
-> >
-> > Could you used FIELD_PREP etc to avoid having to have both
-> > the mask and offset defined here?
-> >  
-> >> +#define  TEMP_CFG_ENA                BIT(0)
-> >> +#define TEMP_STAT            8
-> >> +#define  TEMP_STAT_VALID     BIT(12)
-> >> +#define  TEMP_STAT_TEMP              GENMASK(11, 0)
-> >> +
-> >> +struct s5_hwmon {
-> >> +     void __iomem *base;
-> >> +};
-> >> +
-> >> +static void s5_temp_enable(struct s5_hwmon *hwmon)
-> >> +{
-> >> +     u32 val = readl(hwmon->base + TEMP_CFG);
-> >> +     u32 clk = 250;
-> >> +
-> >> +     val &= ~TEMP_CFG_CYCLES;
-> >> +     val |= (clk << TEMP_CFG_CYCLES_OFF);
-> >> +     val |= TEMP_CFG_ENA;
-> >> +
-> >> +     writel(val, hwmon->base + TEMP_CFG);
-> >> +}
-> >> +
-> >> +static void s5_temp_disable(void *data)
-> >> +{
-> >> +     struct s5_hwmon *hwmon = data;
-> >> +     u32 val = readl(hwmon->base + TEMP_CFG);
-> >> +
-> >> +     val &= ~TEMP_CFG_ENA;
-> >> +
-> >> +     writel(val, hwmon->base + TEMP_CFG);
-> >> +}
-> >> +
-> >> +static int s5_read(struct device *dev, enum hwmon_sensor_types
-> >> type,
-> >> +                u32 attr, int channel, long *temp)
-> >> +{
-> >> +     struct s5_hwmon *hwmon = dev_get_drvdata(dev);
-> >> +     int rc = 0, value;
-> >> +     u32 stat;
-> >> +
-> >> +     switch (attr) {
-> >> +     case hwmon_temp_input:
-> >> +             stat = readl_relaxed(hwmon->base + TEMP_STAT);
-> >> +             if (!(stat & TEMP_STAT_VALID))
-> >> +                     return -EIO;
-> >> +             value = stat & TEMP_STAT_TEMP;
-> >> +             value = DIV_ROUND_CLOSEST(value * 3522, 4096) - 1094;
-> >> +             value *= 100;
-> >> +             *temp = value;
-> >> +             break;
-> >> +     default:
-> >> +             rc = -EOPNOTSUPP;
-> >> +             break;
-> >> +     }
-> >> +
-> >> +     return rc;
-> >> +}
-> >> +
-> >> +static umode_t s5_is_visible(const void *_data, enum
-> >> hwmon_sensor_types type,
-> >> +                          u32 attr, int channel)
-> >> +{
-> >> +     if (type != hwmon_temp)
-> >> +             return 0;
-> >> +
-> >> +     switch (attr) {
-> >> +     case hwmon_temp_input:
-> >> +             return 0444;
-> >> +     default:
-> >> +             return 0;
-> >> +     }
-> >> +}
-> >> +
-> >> +static const struct hwmon_channel_info *s5_info[] = {
-> >> +     HWMON_CHANNEL_INFO(chip,
-> >> +                        HWMON_C_REGISTER_TZ),
-> >> +     HWMON_CHANNEL_INFO(temp,
-> >> +                        HWMON_T_INPUT),  
-> >
-> > Excess line breaks.  The above 2 would be more readable on one line
-> > each. 
+>  .../bindings/hwmon/microchip,sparx5-temp.yaml |  39 +++++
+>  arch/arm64/boot/dts/microchip/sparx5.dtsi     |   6 +
+>  drivers/hwmon/Kconfig                         |  10 ++
+>  drivers/hwmon/Makefile                        |   2 +-
+>  drivers/hwmon/sparx5-temp.c                   | 152 ++++++++++++++++++
+>  5 files changed, 208 insertions(+), 1 deletion(-)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,sparx5-temp.yaml
+>  create mode 100644 drivers/hwmon/sparx5-temp.c
 > 
-> Right.
-> 
-> >> +     NULL
-> >> +};
-> >> +
-> >> +static const struct hwmon_ops s5_hwmon_ops = {
-> >> +     .is_visible = s5_is_visible,
-> >> +     .read = s5_read,
-> >> +};
-> >> +
-> >> +static const struct hwmon_chip_info s5_chip_info = {
-> >> +     .ops = &s5_hwmon_ops,
-> >> +     .info = s5_info,
-> >> +};
-> >> +
-> >> +static int s5_temp_probe(struct platform_device *pdev)
-> >> +{
-> >> +     struct device *hwmon_dev;
-> >> +     struct s5_hwmon *hwmon;
-> >> +     int err;
-> >> +
-> >> +     hwmon = devm_kzalloc(&pdev->dev, sizeof(*hwmon), GFP_KERNEL);
-> >> +     if (!hwmon)
-> >> +             return -ENOMEM;
-> >> +
-> >> +     hwmon->base = devm_platform_ioremap_resource(pdev, 0);
-> >> +     if (IS_ERR(hwmon->base))
-> >> +             return PTR_ERR(hwmon->base);
-> >> +
-> >> +     err = devm_add_action(&pdev->dev, s5_temp_disable, hwmon);
-> >> +     if (err)
-> >> +             return err;  
-> >
-> > Probably just my linear way of thinking, but unusual to put error
-> > handling / remove stuff in place _before_ the thing it's unwinding.
-> >
-> > We have devm_add_action_or_reset to make it safe to call this after
-> > the thing it unwinds.
-> >  
-> 
-> Seems I got this "backwardness" from ltq-cputemp.c. However, its
-> totally unneeded here, so I'll just remove it.
-> 
-> Thanks!
-> 
-> ---Lars
-> 
-> >> +
-> >> +     s5_temp_enable(hwmon);
-> >> +
-> >> +     hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev,
-> >> +                                                      "s5_temp",
-> >> +                                                      hwmon,
-> >> +
-> >> &s5_chip_info,
-> >> +                                                      NULL);
-> >> +
-> >> +     return PTR_ERR_OR_ZERO(hwmon_dev);
-> >> +}
-> >> +
-> >> +const struct of_device_id s5_temp_match[] = {
-> >> +     { .compatible = "microchip,sparx5-temp" },
-> >> +     {},
-> >> +};
-> >> +MODULE_DEVICE_TABLE(of, s5_temp_match);
-> >> +
-> >> +static struct platform_driver s5_temp_driver = {
-> >> +     .probe = s5_temp_probe,
-> >> +     .driver = {
-> >> +             .name = "sparx5-temp",
-> >> +             .of_match_table = s5_temp_match,
-> >> +     },
-> >> +};
-> >> +
-> >> +module_platform_driver(s5_temp_driver);
-> >> +
-> >> +MODULE_AUTHOR("Lars Povlsen <lars.povlsen@microchip.com>");
-> >> +MODULE_DESCRIPTION("Sparx5 SoC temperature sensor driver");
-> >> +MODULE_LICENSE("GPL");
-> >> --
-> >> 2.27.0
-> >>
-> >> _______________________________________________
-> >> linux-arm-kernel mailing list
-> >> linux-arm-kernel@lists.infradead.org
-> >> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel  
+> --
+> 2.27.0
 > 
 
