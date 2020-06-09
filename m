@@ -2,57 +2,45 @@ Return-Path: <SRS0=B/FW=7W=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70AFBC433E3
-	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jun 2020 17:15:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DE6DC433E1
+	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jun 2020 17:30:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4F73920734
-	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jun 2020 17:15:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4E7B9207C3
+	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jun 2020 17:30:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1591722932;
-	bh=1hv8Ta3NPq+cCRtS8AxD8w9rYZ/vbqZGGrF/WP8nXsM=;
+	s=default; t=1591723805;
+	bh=Qmr3xU4Wr498BcrukotcukidPlKEgC2wLsO/I0prusU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=gbuXLzFCfbNgwo5cs2jvaXSvsYNNqAOzGRLaGfoBwRnwzMEYWdx6Eih4mTdrZev51
-	 JDm+3561LQIxRSVYakuZ16/PCpaD3QYZX4NM5NLy3qiM6qyf3V6z4/jvWy/UZXmTGm
-	 67WAgdaHDuaTUK8ACfB9LaoPDpqg/kx4X7KJAN1o=
+	b=dcUe92d/JjTfvHR2rvcllepVdDFj+lDoZAXCwCmhRARPghu3hJWBM4t9U1GQODvw3
+	 Vnia/2FWi8Rpen9+izB4mfq8YbXNA2tdfpVXTLPLm18hzUaZDHAalwasIj2jWrXmq5
+	 vfHVsJeJp/CPGy9Xf/7l1abLd52xUIcUJoeNQ0oM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731560AbgFIRP1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 9 Jun 2020 13:15:27 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:35545 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728556AbgFIRPY (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 9 Jun 2020 13:15:24 -0400
-Received: by mail-io1-f68.google.com with SMTP id s18so23677110ioe.2;
-        Tue, 09 Jun 2020 10:15:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=JGLI/jshAv4UOtJl5rWJiq7REK+PfEQZi+2RrLn3IFA=;
-        b=FJ2BXV8fElHPvhxX1kqSat7dr5hUgWprvrK07L0mkCWxEbdS1F1gDpdk6HJ1l4jpqw
-         abSkXzUmBlH+3DWJI0POhl2FaWihi6dHbGf/evOvRazwzUU9M0cDL8k8hjwYKG0qUXjc
-         4Se9i2lNnOPKMpTGuNCKcEUadEleAcAMdGc5pdf908mFt+qZsBGYLwEvytAbTCRM/J6w
-         wTYSpIEh7onBnmiK5q0Z80B2U4jl4cjh3S4d1rpguF/vRvwBYE600PoE3h4h/4lnnIQ3
-         YNHEm9WCMOGEUjVQo2eu2WfyYCbOuE+QQHXhozpcYrHH68953yQ0SUka9vDSD+efImfx
-         kihA==
-X-Gm-Message-State: AOAM531N4hhgDIsMVjjiFbhxdcU7tRPzNDBUqUsX88+6lT6kwLc8wQEP
-        fq6T02nb/8kKTwbCyKEjyA==
-X-Google-Smtp-Source: ABdhPJyom2HW81zaEPBo0bO0otJQ7le36pAHDKSbZIdASMosYcxXzc1o/KabAiMefhklBHue5cmzqQ==
-X-Received: by 2002:a5d:8e14:: with SMTP id e20mr28764204iod.156.1591722922294;
-        Tue, 09 Jun 2020 10:15:22 -0700 (PDT)
-Received: from xps15 ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id k5sm9534836ili.80.2020.06.09.10.15.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jun 2020 10:15:21 -0700 (PDT)
-Received: (nullmailer pid 1093153 invoked by uid 1000);
-        Tue, 09 Jun 2020 17:15:20 -0000
-Date:   Tue, 9 Jun 2020 11:15:20 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Mark Brown <broonie@kernel.org>, Lee Jones <lee.jones@linaro.org>,
+        id S1728249AbgFIR37 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 9 Jun 2020 13:29:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43610 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727837AbgFIR35 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 9 Jun 2020 13:29:57 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5C97A20774;
+        Tue,  9 Jun 2020 17:29:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1591723796;
+        bh=Qmr3xU4Wr498BcrukotcukidPlKEgC2wLsO/I0prusU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=19nG0JhFpICXKRdbQSqtV0xLlrZOSFIZdBzGSyuzFEyQ2dbY5bUXfPdrnZ6jcWHUo
+         5oFSLLb0j1GAaGWDSmFkt13oJIr1GWQVeODfQGNwbTo6AcQi4rffXKZCSqX3WSqM3s
+         CO4pnstLd/HBdIWUPNfNZy1qr8OFn5U3V2Azny5c=
+Date:   Tue, 9 Jun 2020 18:29:54 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Michael Walle <michael@walle.cc>, Lee Jones <lee.jones@linaro.org>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
         Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
         david.m.ertman@intel.com, shiraz.saleem@intel.com,
@@ -67,7 +55,7 @@ Cc:     Mark Brown <broonie@kernel.org>, Lee Jones <lee.jones@linaro.org>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
         <u.kleine-koenig@pengutronix.de>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
@@ -78,9 +66,8 @@ Cc:     Mark Brown <broonie@kernel.org>, Lee Jones <lee.jones@linaro.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Subject: Re: [PATCH v4 02/11] mfd: Add support for Kontron sl28cpld
  management controller
-Message-ID: <20200609171520.GC1019634@bogus>
-References: <dc052a5c77171014ecc465b1da8b7ef8@walle.cc>
- <20200608082827.GB3567@dell>
+Message-ID: <20200609172954.GM4583@sirena.org.uk>
+References: <20200608082827.GB3567@dell>
  <CAHp75VdiH=J-ovCdh1RFJDW_bJM8=pbXRaHmB691GLb-5oBmYQ@mail.gmail.com>
  <7d7feb374cbf5a587dc1ce65fc3ad672@walle.cc>
  <20200608185651.GD4106@dell>
@@ -89,47 +76,53 @@ References: <dc052a5c77171014ecc465b1da8b7ef8@walle.cc>
  <32287ac0488f7cbd5a7d1259c284e554@walle.cc>
  <20200609144201.GK4583@sirena.org.uk>
  <a2bae71634fe288f067d5e92090b7561@walle.cc>
+ <20200609171520.GC1019634@bogus>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Pz/qqzCPDfGwIFOg"
 Content-Disposition: inline
-In-Reply-To: <a2bae71634fe288f067d5e92090b7561@walle.cc>
+In-Reply-To: <20200609171520.GC1019634@bogus>
+X-Cookie: Be careful!  Is it classified?
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jun 09, 2020 at 05:01:17PM +0200, Michael Walle wrote:
-> Am 2020-06-09 16:42, schrieb Mark Brown:
-> > On Tue, Jun 09, 2020 at 04:38:31PM +0200, Michael Walle wrote:
-> > 
-> > >   mfd-device@10 {
-> > >     compatible = "simple-regmap", "simple-mfd";
-> > >     reg = <10>;
-> > >     regmap,reg-bits = <8>;
-> > >     regmap,val-bits = <8>;
-> > >     sub-device@0 {
-> > >       compatible = "vendor,sub-device0";
-> > >       reg = <0>;
-> > >     };
-> > 
-> > A DT binding like this is not a good idea, encoding the details of the
-> > register map into the DT binding makes it an ABI which is begging for
-> > trouble.  I'd also suggest that any device using a generic driver like
-> > this should have a specific compatible string for the device so we can
-> > go back and add quirks later if we need them.
-> 
-> Like in the spidev case, yes. But OTOH if I _just_ encode the parameters
-> for the regmap a MFD, Lee don't agree because its just a shim. So either
-> way I seem to be stuck here.
-> 
-> Where should I put the code to create an i2c driver, init a regmap and
-> populate its childen?
 
-Find another driver doing this already and rename it 'simple-mfd' (no 
-relation to the DT binding) and add your compatible string to it. 
-'Generic' or 'simple' drivers don't require generic/simple DT bindings.
+--Pz/qqzCPDfGwIFOg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Or extend the existing syscon driver to look up the bus_type and create 
-the regmap based on the bus type?
+On Tue, Jun 09, 2020 at 11:15:20AM -0600, Rob Herring wrote:
 
-Rob
+> Find another driver doing this already and rename it 'simple-mfd' (no=20
+> relation to the DT binding) and add your compatible string to it.=20
+> 'Generic' or 'simple' drivers don't require generic/simple DT bindings.
+
+> Or extend the existing syscon driver to look up the bus_type and create=
+=20
+> the regmap based on the bus type?
+
+You'd need a particular bus driver to instantiate for a given bus (or
+I'm misunderstanding your proposal) so it wouldn't even need a lookup,
+just per-bus ID tables (and ideally also data tables with the regmap
+and child descriptions).
+
+--Pz/qqzCPDfGwIFOg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7fxxEACgkQJNaLcl1U
+h9DCLQf/bdNDdxW0Qpw6CjYiwGbdGhDPz2buR07hZ0HFwlLW/CCeJCk0naiEaRo1
+P3qH84YQ2ka1vdYpGLWX6+vvXjU2ejaSPz9GmDxoUVkrxB8SjwVYWehydJkgE8Bs
+/f9vdLsoac0TjNNro7gumcUGE6bIGFDUvuOJkjn+O4dOBz3cTqhYsY4Sz14cyTxW
+maZmtiiVvFyP5Jrf0LTE2oQzqnTEKgoBY8Ku6f34K7EiNmIK/bgppdXsJvNGqZp9
+tPbeGiW01Rg8XVNPYnjJf6TipJRvHLJh8hma6sFq5dqH0ZNDpFFW35xqWLPWL5Af
+2Plbt+f89ibSJGeBNXMaaEPkfzTv7A==
+=lKAA
+-----END PGP SIGNATURE-----
+
+--Pz/qqzCPDfGwIFOg--
