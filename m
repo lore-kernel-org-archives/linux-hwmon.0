@@ -2,151 +2,203 @@ Return-Path: <SRS0=B/FW=7W=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A943C433E0
-	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jun 2020 15:26:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA6F8C433E1
+	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jun 2020 15:30:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 061512072F
-	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jun 2020 15:26:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B80452072F
+	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jun 2020 15:30:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P/TEF7aN"
+	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="Jsr8QG9b"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726395AbgFIP0r (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 9 Jun 2020 11:26:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47452 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728609AbgFIP0l (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 9 Jun 2020 11:26:41 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122DBC05BD1E;
-        Tue,  9 Jun 2020 08:26:41 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id e9so10434168pgo.9;
-        Tue, 09 Jun 2020 08:26:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=1K8sHcdXpjGKgr+77VdsdCZesRB4PdV8M1C3oEj3EnQ=;
-        b=P/TEF7aNarddaQFetGCGJZLD2+MyTqV4fT79+cJ8t0B3IEVLhh7nKcDtCsrUfeX8Db
-         zJiY5zKKgTUYl0y5bOBw8b+uXC5Zh+IfgsZD6BN7lpUX7Zi8tOxT7R50u/0tKNu+9zCw
-         a9udRVnJhGw2dQ/RJnmjuM/kQp23E6JsTT7zdSpXZ69nZbfd95IllHtpd+zEKHIWlJR8
-         hrjKCn8ekVNsUzebAxVGh4mA0d86bjhY6puqwMJDqTxj9BQvhPLZdfekNUtScUrIetCo
-         DJKdoXH2vuWFrp/wsx31FmalCiVIjq3MjqHdMa+TCosyXXD3aWNbdAxK76sL4yRCVIOF
-         1Q9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=1K8sHcdXpjGKgr+77VdsdCZesRB4PdV8M1C3oEj3EnQ=;
-        b=KPlE3bkB9Hvb8O3O0oK/Zs5tqC9Xbw3qznWH7Xm12BBjWF57RN1LEe5np6+vsLLFM3
-         C1vt1ehhVCN49QXvA4nrlZ5+k7HDgXZMhIvqs0yKBpyEFnfXHvNIYOJraOTzw1PSy5Ge
-         4LqAlTTHnIFm6dW8i0/+wx+BXo7sbhtX1LLKOJi8bwb2629fkOb0/bjRMtD8BGJ4XUbg
-         G3a8/fP8nNWweCUR6H99x41UVp5H1Q2mAJzXVSA9Xch408oF+ue+c+Y7DvG2PSy/ob+L
-         B0YVpqX7to7k9GgMMZZz3OiXozUlnkhlIWRaGne3245aRgbk2YojLVrJEM4MLJGdWRsN
-         /GZw==
-X-Gm-Message-State: AOAM532j4luEgYS6QSjsRnjzJZwqVlRiqO5byeAK2mI5nb8ITyF6mli9
-        NGNVtJWh76CyGKhc9D3nJ9o=
-X-Google-Smtp-Source: ABdhPJwBOJKozhohl5aBI+nYCONer+CHeapbzC/Y9xaA7btNB5oPiCLPbKzm0Q50DpdY6Ml9tBw0nw==
-X-Received: by 2002:a62:fc92:: with SMTP id e140mr13037081pfh.33.1591716400545;
-        Tue, 09 Jun 2020 08:26:40 -0700 (PDT)
-Received: from cnn ([2409:4072:6412:6b70:cd72:839f:5826:c552])
-        by smtp.gmail.com with ESMTPSA id y9sm3116403pjy.56.2020.06.09.08.26.34
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 09 Jun 2020 08:26:39 -0700 (PDT)
-Date:   Tue, 9 Jun 2020 20:56:28 +0530
-From:   Manikandan <manikandan.hcl.ers.epl@gmail.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, saipsdasari@fb.com, patrickw3@fb.com,
-        vijaykhemka@fb.com, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org, manikandan.e@hcl.com
-Subject: Re: [PATCH v3] hwmon:(adm1275) Enable adm1278 ADM1278_TEMP1_EN
-Message-ID: <20200609152628.GB8833@cnn>
-References: <20200608104349.GA10918@cnn>
- <23597b7b-de89-2911-092e-f3e1ad4884f5@roeck-us.net>
+        id S1730736AbgFIPaT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 9 Jun 2020 11:30:19 -0400
+Received: from ssl.serverraum.org ([176.9.125.105]:54073 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729027AbgFIPaS (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 9 Jun 2020 11:30:18 -0400
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id C2CE522F54;
+        Tue,  9 Jun 2020 17:30:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1591716613;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5fW2eer9+yY8UigSBRZj7sU8vGtoK3CaYKgnjiJ9Ftc=;
+        b=Jsr8QG9bQvMRxi+JC3zJF6oiNPIPFthDgRXmHE3KezcDNOYyGUNV5OAImGBlHMGL5NTMyg
+        H61bpzBx9wXe1ekcEpZqZYGS5xGzM6j4pfJFpVrh2WZlKjhi6EkYz4iooa0zHfzpMmPgpi
+        Bv61N/8jh4hOE6c5nIppCvTW9O67BKs=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <23597b7b-de89-2911-092e-f3e1ad4884f5@roeck-us.net>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 09 Jun 2020 17:30:06 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        david.m.ertman@intel.com, shiraz.saleem@intel.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K?= =?UTF-8?Q?=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v4 02/11] mfd: Add support for Kontron sl28cpld management
+ controller
+In-Reply-To: <20200609151941.GM4106@dell>
+References: <c5632bfab3956265e90fc2fb6c0b3cae@walle.cc>
+ <20200606114645.GB2055@sirena.org.uk>
+ <dc052a5c77171014ecc465b1da8b7ef8@walle.cc> <20200608082827.GB3567@dell>
+ <CAHp75VdiH=J-ovCdh1RFJDW_bJM8=pbXRaHmB691GLb-5oBmYQ@mail.gmail.com>
+ <7d7feb374cbf5a587dc1ce65fc3ad672@walle.cc> <20200608185651.GD4106@dell>
+ <32231f26f7028d62aeda8fdb3364faf1@walle.cc> <20200609064735.GH4106@dell>
+ <32287ac0488f7cbd5a7d1259c284e554@walle.cc> <20200609151941.GM4106@dell>
+User-Agent: Roundcube Webmail/1.4.4
+Message-ID: <95e6ec9bbdf6af7a9ff9c31786f743f2@walle.cc>
+X-Sender: michael@walle.cc
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Jun 08, 2020 at 06:49:45AM -0700, Guenter Roeck wrote:
-> On 6/8/20 3:43 AM, Manikandan Elumalai wrote:
-> > The adm1278 temp attribute need it for openbmc platform .
-> > This feature not enabled by default, so PMON_CONFIG needs to enable it.
-> > 
-> > v3:
-> > ----
-> > fix invalid signed-off.
-> > removed checkpath warnings.
-> > write ADM1278_TEMP1_EN and ADM1278_VOUT_EN conf in single line operation.
-> > 
-> > v2:
-> > ----
-> > add Signed-off-by.
-> > removed ADM1278_TEMP1_EN check.
-> > 
-> > Signed-off-by: Manikandan Elumalai <manikandan.hcl.ers.epl@gmail.com>
-> > ---
-> >  drivers/hwmon/pmbus/adm1275.c | 10 ++++------
-> >  1 file changed, 4 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275.c
-> > index 5caa37fb..4782e31 100644
-> > --- a/drivers/hwmon/pmbus/adm1275.c
-> > +++ b/drivers/hwmon/pmbus/adm1275.c
-> > @@ -666,11 +666,12 @@ static int adm1275_probe(struct i2c_client *client,
-> >  		tindex = 3;
-> >  
-> >  		info->func[0] |= PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT |
-> > -			PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT;
-> > +			PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
-> > +			PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP;
-> >  
-> > -		/* Enable VOUT if not enabled (it is disabled by default) */
-> > +		/* Enable VOUT & TEMP1 if not enabled (disabled by default) */
-> >  		if (!(config & ADM1278_VOUT_EN)) {
+Am 2020-06-09 17:19, schrieb Lee Jones:
+> On Tue, 09 Jun 2020, Michael Walle wrote:
 > 
-> This if statement needs to be
-> 		if (config & (ADM1278_VOUT_EN | ADM1278_TEMP1_EN) != ADM1278_VOUT_EN | ADM1278_TEMP1_EN)
->
-          Hi Guenter,
+>> Am 2020-06-09 08:47, schrieb Lee Jones:
+>> > On Mon, 08 Jun 2020, Michael Walle wrote:
+>> >
+>> > > Am 2020-06-08 20:56, schrieb Lee Jones:
+>> > > > On Mon, 08 Jun 2020, Michael Walle wrote:
+>> > > >
+>> > > > > Am 2020-06-08 12:02, schrieb Andy Shevchenko:
+>> > > > > > +Cc: some Intel people WRT our internal discussion about similar
+>> > > > > > problem and solutions.
+>> > > > > >
+>> > > > > > On Mon, Jun 8, 2020 at 11:30 AM Lee Jones <lee.jones@linaro.org> wrote:
+>> > > > > > > On Sat, 06 Jun 2020, Michael Walle wrote:
+>> > > > > > > > Am 2020-06-06 13:46, schrieb Mark Brown:
+>> > > > > > > > > On Fri, Jun 05, 2020 at 10:07:36PM +0200, Michael Walle wrote:
+>> > > > > > > > > > Am 2020-06-05 12:50, schrieb Mark Brown:
+>> > > > > >
+>> > > > > > ...
+>> > > > > >
+>> > > > > > > Right.  I'm suggesting a means to extrapolate complex shared and
+>> > > > > > > sometimes intertwined batches of register sets to be consumed by
+>> > > > > > > multiple (sub-)devices spanning different subsystems.
+>> > > > > > >
+>> > > > > > > Actually scrap that.  The most common case I see is a single Regmap
+>> > > > > > > covering all child-devices.
+>> > > > > >
+>> > > > > > Yes, because often we need a synchronization across the entire address
+>> > > > > > space of the (parent) device in question.
+>> > > > > >
+>> > > > > > >  It would be great if there was a way in
+>> > > > > > > which we could make an assumption that the entire register address
+>> > > > > > > space for a 'tagged' (MFD) device is to be shared (via Regmap) between
+>> > > > > > > each of the devices described by its child-nodes.  Probably by picking
+>> > > > > > > up on the 'simple-mfd' compatible string in the first instance.
+>> > > > > > >
+>> > > > > > > Rob, is the above something you would contemplate?
+>> > > > > > >
+>> > > > > > > Michael, do your register addresses overlap i.e. are they intermingled
+>> > > > > > > with one another?  Do multiple child devices need access to the same
+>> > > > > > > registers i.e. are they shared?
+>> > > > >
+>> > > > > No they don't overlap, expect for maybe the version register, which is
+>> > > > > just there once and not per function block.
+>> > > >
+>> > > > Then what's stopping you having each device Regmap their own space?
+>> > >
+>> > > Because its just one I2C device, AFAIK thats not possible, right?
+>> >
+>> > Not sure what (if any) the restrictions are.
+>> 
+>> You can only have one device per I2C address. Therefore, I need one 
+>> device
+>> which is enumerated by the I2C bus, which then enumerates its 
+>> sub-devices.
+>> I thought this was one of the use cases for MFD. (Regardless of how a
+>> sub-device access its registers). So even in the "simple-regmap" case 
+>> this
+>> would need to be an i2c device.
 
-             The below warning shown by checkpatch after changes,
+Here (see below)
 
-                  WARNING: line over 80 characters
-                   #38: FILE: drivers/hwmon/pmbus/adm1275.c:672:
-                   + if (config & (ADM1278_VOUT_EN | ADM1278_TEMP1_EN) != ADM1278_VOUT_EN | ADM1278_TEMP1_EN) {
- 
-                   total: 0 errors, 1 warnings, 24 lines checked
-
-              I didn't see any if() condition made as two line in the driver . Is this acceptable warning ?
-
-         Thanks
-         Mani.E
-> > -			config |= ADM1278_VOUT_EN;
-> > +			config |= ADM1278_VOUT_EN | ADM1278_TEMP1_EN;
-> >  			ret = i2c_smbus_write_byte_data(client,
-> >  							ADM1275_PMON_CONFIG,
-> >  							config);
-> > @@ -681,9 +682,6 @@ static int adm1275_probe(struct i2c_client *client,
-> >  			}
-> >  		}
-> >  
-> > -		if (config & ADM1278_TEMP1_EN)
-> > -			info->func[0] |=
-> > -				PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP;
-> >  		if (config & ADM1278_VIN_EN)
-> >  			info->func[0] |= PMBUS_HAVE_VIN;
-> >  		break;
-> > 
+>> 
+>> E.g.
+>> 
+>> &i2cbus {
+>>   mfd-device@10 {
+>>     compatible = "simple-regmap", "simple-mfd";
+>>     reg = <10>;
+>>     regmap,reg-bits = <8>;
+>>     regmap,val-bits = <8>;
+>>     sub-device@0 {
+>>       compatible = "vendor,sub-device0";
+>>       reg = <0>;
+>>     };
+>>     ...
+>> };
+>> 
+>> Or if you just want the regmap:
+>> 
+>> &soc {
+>>   regmap: regmap@fff0000 {
+>>     compatible = "simple-regmap";
+>>     reg = <0xfff0000>;
+>>     regmap,reg-bits = <16>;
+>>     regmap,val-bits = <32>;
+>>   };
+>> 
+>>   enet-which-needs-syscon-too@1000000 {
+>>     vendor,ctrl-regmap = <&regmap>;
+>>   };
+>> };
+>> 
+>> Similar to the current syscon (which is MMIO only..).
 > 
+> We do not need a 'simple-regmap' solution for your use-case.
+> 
+> Since your device's registers are segregated, just split up the
+> register map and allocate each sub-device with it's own slice.
+
+I don't get it, could you make a device tree example for my
+use-case? (see also above)
+
+-michael
+
+> 
+>> > I can't think of any reasons why not, off the top of my head.
+>> >
+>> > Does Regmap only deal with shared accesses from multiple devices
+>> > accessing a single register map, or can it also handle multiple
+>> > devices communicating over a single I2C channel?
+>> >
+>> > One for Mark perhaps.
+
+-- 
+-michael
