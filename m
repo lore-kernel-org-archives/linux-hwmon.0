@@ -2,54 +2,54 @@ Return-Path: <SRS0=B/FW=7W=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.5 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.5 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F51CC433E1
-	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jun 2020 12:20:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AAD57C433E0
+	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jun 2020 12:55:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1586F2074B
-	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jun 2020 12:20:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7783420801
+	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Jun 2020 12:55:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="nKUcgDGq"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="liv9i5S2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729225AbgFIMUn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 9 Jun 2020 08:20:43 -0400
-Received: from esa5.microchip.iphmx.com ([216.71.150.166]:45463 "EHLO
-        esa5.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727113AbgFIMUm (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 9 Jun 2020 08:20:42 -0400
+        id S1728217AbgFIMzC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 9 Jun 2020 08:55:02 -0400
+Received: from esa3.microchip.iphmx.com ([68.232.153.233]:57913 "EHLO
+        esa3.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726903AbgFIMzB (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 9 Jun 2020 08:55:01 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1591705242; x=1623241242;
+  t=1591707301; x=1623243301;
   h=references:from:to:cc:subject:in-reply-to:date:
    message-id:mime-version;
-  bh=/ARMfJTWTJUqONEm3m+NvlVGabaqqM3z40RZZEwlMpo=;
-  b=nKUcgDGqQjwA15aFOkqpp9uf7UZVnA4eGvz1uW39vR1DbqBrO94Sycaq
-   fOlyU0RUZyXwuGXjdfoQAKaH48DS8xMyxsX0HdT+6zqHSrancwbwvil6W
-   RiTu3gKRcDKEP3kcKwI1oaStqfTVDKK/1EfVGEXTQJnttVFWQ/Exex+10
-   HRzu207xM54EMnZ3OY75415N8L6ALhAJHKMXoeeLvkwAzZ7eEP8x5ZCS/
-   4J7oDz1bel6PztaWyqMXo+LP/n+IWeSX1tksv4KMFpKh9aXENSn4e/3T7
-   DvQ6dQ8WROJURnC1m/urZgKEOmhn9ZypDhpcOiObsv//SgvjB/iIPbE6i
-   g==;
-IronPort-SDR: jMSRtlxIhw1KB3hsptje3YuoNtLg7hGMSiF68EEdeeTFqzEzPEXSAnsxs8fW/TYAMbZIBvsV6C
- JnLWPuQ41nD7YyMuqOYXFFGhTcXQPW8hHn+qv6C6KP0PnraA6VDsjpLNfc31EZO0cLeboaixXa
- OjQ5+naA6n8RzwLlsBdJfnRUjOaI3rhv1Yam3Yx8+KydO6usPbP56QeuA7KgqWk1kHbx/I/W9K
- FUC4gHHZ7XJ4m4RNaEsswSKvYg2cnU0rpAPZh6AIt1+Llx1IfeSgChoOs+GdjLDF2vktTDzOp0
- yeM=
+  bh=R4d1xFOQANOtBvYugE4Y6z/1+LM4tG8caBxOeDEyPCg=;
+  b=liv9i5S21PCOej3E82Sz/28uPN/9ah9nZQivmnSduccmsFjY5M5kNyTr
+   4ytXdZ7vbejVr7rVi4nnU/l3wGAld79jiqmvesgXFW5ZoO18euoSoElT8
+   Y0HWp1EtxQ8of/sX8sO7l25fB8u7eam/hNrB6QIJzBVk6jm+DuztciVQ/
+   jvShsyYeGqgHCS/nQ4PqZs1XAW55PkFYBY8UxUcnsRIwKJR4/7TjIhh3n
+   g7Aqxp0Iod9z2GlpQdS1U7Ke8+cWq4k/OOYgShW+1R2gj+Ea4KSKBFz1S
+   ysnP+xyEJ9YwYyZkyZcjfdkt5qX61JQVt37cXDNHHHmAf8888iXZ/LtJ+
+   A==;
+IronPort-SDR: WAUKnIXpcUbDouBuOz024F5bSzIZ7+iHnxZeWI8QHby6MNWMIDw5pmk2jj7PVMdBKyPVy4b81W
+ G2ktMI+O5H2bocpkSKi/DiHgvq2xQNE3wrNGF44mZhvL8AwD6GXlSJTS31FRmgqh1h6oKU5l6q
+ cBV3erkFaKmMlCnUKLxsDHoePKE46e4UA3nTOGz/4hlr+BYDH8+TJKsR31BRclTeuc3OjHcRVk
+ SL0aiMMVWITHhn41N73LPpgA8f6MFnevuSJ/xkG4MG0YZIamcdGmV8Gnwk4D0lyhE29g6mFHpO
+ /ak=
 X-IronPort-AV: E=Sophos;i="5.73,492,1583218800"; 
-   d="scan'208";a="78736295"
+   d="scan'208";a="79427220"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Jun 2020 05:20:42 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Jun 2020 05:55:00 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
  chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1847.3; Tue, 9 Jun 2020 05:20:40 -0700
+ 15.1.1847.3; Tue, 9 Jun 2020 05:54:59 -0700
 Received: from soft-dev15.microsemi.net.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1847.3
- via Frontend Transport; Tue, 9 Jun 2020 05:20:38 -0700
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5
+ via Frontend Transport; Tue, 9 Jun 2020 05:54:57 -0700
 References: <20200609072828.9088-1-lars.povlsen@microchip.com> <20200609074940.9529-1-lars.povlsen@microchip.com> <20200609093808.00003aad@Huawei.com>
 From:   Lars Povlsen <lars.povlsen@microchip.com>
 To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
@@ -63,8 +63,8 @@ CC:     Lars Povlsen <lars.povlsen@microchip.com>,
         <linux-arm-kernel@lists.infradead.org>
 Subject: Re: [PATCH v2 3/3] hwmon: sparx5: Add Sparx5 SoC temperature driver
 In-Reply-To: <20200609093808.00003aad@Huawei.com>
-Date:   Tue, 9 Jun 2020 14:20:37 +0200
-Message-ID: <87h7vkig6i.fsf@soft-dev15.microsemi.net>
+Date:   Tue, 9 Jun 2020 14:54:56 +0200
+Message-ID: <87ftb4ielb.fsf@soft-dev15.microsemi.net>
 MIME-Version: 1.0
 Content-Type: text/plain
 Sender: linux-hwmon-owner@vger.kernel.org
@@ -88,265 +88,13 @@ Jonathan Cameron writes:
 > A few minor suggestions inline.
 >
 
-Much appreciated!
+Ooops, forgot to ack the COMPILE_TEST and bitfield.h suggestions.
 
-> Thanks,
->
-> Jonathan
->
->> ---
->>  drivers/hwmon/Kconfig       |  10 +++
->>  drivers/hwmon/Makefile      |   2 +-
->>  drivers/hwmon/sparx5-temp.c | 152 ++++++++++++++++++++++++++++++++++++
->>  3 files changed, 163 insertions(+), 1 deletion(-)
->>  create mode 100644 drivers/hwmon/sparx5-temp.c
->>
->> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
->> index 288ae9f63588c..ec6bb8b8b12df 100644
->> --- a/drivers/hwmon/Kconfig
->> +++ b/drivers/hwmon/Kconfig
->> @@ -515,6 +515,16 @@ config SENSORS_I5K_AMB
->>         This driver can also be built as a module. If so, the module
->>         will be called i5k_amb.
->>
->> +config SENSORS_SPARX5
->> +     tristate "Sparx5 SoC temperature sensor"
->> +     depends on ARCH_SPARX5
-> Anything stop this building with COMPILE_TEST?
->
-> That will great increase automated build coverage.
->
->> +     help
->> +       If you say yes here you get support for temperature monitoring
->> +       with the Microchip Sparx5 SoC.
->> +
->> +       This driver can also be built as a module. If so, the module
->> +       will be called sparx5-temp.
->> +
->>  config SENSORS_F71805F
->>       tristate "Fintek F71805F/FG, F71806F/FG and F71872F/FG"
->>       depends on !PPC
->> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
->> index 3e32c21f5efe3..144f09993a3f4 100644
->> --- a/drivers/hwmon/Makefile
->> +++ b/drivers/hwmon/Makefile
->> @@ -66,6 +66,7 @@ obj-$(CONFIG_SENSORS_DS1621)        += ds1621.o
->>  obj-$(CONFIG_SENSORS_EMC1403)        += emc1403.o
->>  obj-$(CONFIG_SENSORS_EMC2103)        += emc2103.o
->>  obj-$(CONFIG_SENSORS_EMC6W201)       += emc6w201.o
->> +obj-$(CONFIG_SENSORS_SPARX5) += sparx5-temp.o
->>  obj-$(CONFIG_SENSORS_F71805F)        += f71805f.o
->>  obj-$(CONFIG_SENSORS_F71882FG)       += f71882fg.o
->>  obj-$(CONFIG_SENSORS_F75375S)        += f75375s.o
->> @@ -193,4 +194,3 @@ obj-$(CONFIG_SENSORS_OCC) += occ/
->>  obj-$(CONFIG_PMBUS)          += pmbus/
->>
->>  ccflags-$(CONFIG_HWMON_DEBUG_CHIP) := -DDEBUG
->> -
->> diff --git a/drivers/hwmon/sparx5-temp.c b/drivers/hwmon/sparx5-temp.c
->> new file mode 100644
->> index 0000000000000..2e754462b6010
->> --- /dev/null
->> +++ b/drivers/hwmon/sparx5-temp.c
->> @@ -0,0 +1,152 @@
->> +// SPDX-License-Identifier: GPL-2.0-or-later
->> +/* Sparx5 SoC temperature sensor driver
->> + *
->> + * Copyright (C) 2020 Lars Povlsen <lars.povlsen@microchip.com>
->> + */
->> +
->> +#include <linux/module.h>
->> +#include <linux/init.h>
->> +#include <linux/hwmon.h>
->> +#include <linux/io.h>
->> +#include <linux/of_device.h>
-> I think you only have this to define the id table?
->
-> If so, perhaps better to include mod_devicetable.h and not include
-> the of header.
+Both adopted.
 
-Well, I ended up needed other, so it became:
-
--#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+#include <linux/mod_devicetable.h>
-
-Other of these drivers seem to use "linux/of_device.h" as well?
-
->
->> +
->> +#define TEMP_CTRL            0
->> +#define TEMP_CFG             4
->> +#define  TEMP_CFG_CYCLES     GENMASK(24, 15)
->> +#define  TEMP_CFG_CYCLES_OFF 15
->
-> Could you used FIELD_PREP etc to avoid having to have both
-> the mask and offset defined here?
->
->> +#define  TEMP_CFG_ENA                BIT(0)
->> +#define TEMP_STAT            8
->> +#define  TEMP_STAT_VALID     BIT(12)
->> +#define  TEMP_STAT_TEMP              GENMASK(11, 0)
->> +
->> +struct s5_hwmon {
->> +     void __iomem *base;
->> +};
->> +
->> +static void s5_temp_enable(struct s5_hwmon *hwmon)
->> +{
->> +     u32 val = readl(hwmon->base + TEMP_CFG);
->> +     u32 clk = 250;
->> +
->> +     val &= ~TEMP_CFG_CYCLES;
->> +     val |= (clk << TEMP_CFG_CYCLES_OFF);
->> +     val |= TEMP_CFG_ENA;
->> +
->> +     writel(val, hwmon->base + TEMP_CFG);
->> +}
->> +
->> +static void s5_temp_disable(void *data)
->> +{
->> +     struct s5_hwmon *hwmon = data;
->> +     u32 val = readl(hwmon->base + TEMP_CFG);
->> +
->> +     val &= ~TEMP_CFG_ENA;
->> +
->> +     writel(val, hwmon->base + TEMP_CFG);
->> +}
->> +
->> +static int s5_read(struct device *dev, enum hwmon_sensor_types type,
->> +                u32 attr, int channel, long *temp)
->> +{
->> +     struct s5_hwmon *hwmon = dev_get_drvdata(dev);
->> +     int rc = 0, value;
->> +     u32 stat;
->> +
->> +     switch (attr) {
->> +     case hwmon_temp_input:
->> +             stat = readl_relaxed(hwmon->base + TEMP_STAT);
->> +             if (!(stat & TEMP_STAT_VALID))
->> +                     return -EIO;
->> +             value = stat & TEMP_STAT_TEMP;
->> +             value = DIV_ROUND_CLOSEST(value * 3522, 4096) - 1094;
->> +             value *= 100;
->> +             *temp = value;
->> +             break;
->> +     default:
->> +             rc = -EOPNOTSUPP;
->> +             break;
->> +     }
->> +
->> +     return rc;
->> +}
->> +
->> +static umode_t s5_is_visible(const void *_data, enum hwmon_sensor_types type,
->> +                          u32 attr, int channel)
->> +{
->> +     if (type != hwmon_temp)
->> +             return 0;
->> +
->> +     switch (attr) {
->> +     case hwmon_temp_input:
->> +             return 0444;
->> +     default:
->> +             return 0;
->> +     }
->> +}
->> +
->> +static const struct hwmon_channel_info *s5_info[] = {
->> +     HWMON_CHANNEL_INFO(chip,
->> +                        HWMON_C_REGISTER_TZ),
->> +     HWMON_CHANNEL_INFO(temp,
->> +                        HWMON_T_INPUT),
->
-> Excess line breaks.  The above 2 would be more readable on one line each.
->
-
-Right.
-
->> +     NULL
->> +};
->> +
->> +static const struct hwmon_ops s5_hwmon_ops = {
->> +     .is_visible = s5_is_visible,
->> +     .read = s5_read,
->> +};
->> +
->> +static const struct hwmon_chip_info s5_chip_info = {
->> +     .ops = &s5_hwmon_ops,
->> +     .info = s5_info,
->> +};
->> +
->> +static int s5_temp_probe(struct platform_device *pdev)
->> +{
->> +     struct device *hwmon_dev;
->> +     struct s5_hwmon *hwmon;
->> +     int err;
->> +
->> +     hwmon = devm_kzalloc(&pdev->dev, sizeof(*hwmon), GFP_KERNEL);
->> +     if (!hwmon)
->> +             return -ENOMEM;
->> +
->> +     hwmon->base = devm_platform_ioremap_resource(pdev, 0);
->> +     if (IS_ERR(hwmon->base))
->> +             return PTR_ERR(hwmon->base);
->> +
->> +     err = devm_add_action(&pdev->dev, s5_temp_disable, hwmon);
->> +     if (err)
->> +             return err;
->
-> Probably just my linear way of thinking, but unusual to put error
-> handling / remove stuff in place _before_ the thing it's unwinding.
->
-> We have devm_add_action_or_reset to make it safe to call this after
-> the thing it unwinds.
->
-
-Seems I got this "backwardness" from ltq-cputemp.c. However, its totally
-unneeded here, so I'll just remove it.
-
-Thanks!
+Thanks,
 
 ---Lars
-
->> +
->> +     s5_temp_enable(hwmon);
->> +
->> +     hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev,
->> +                                                      "s5_temp",
->> +                                                      hwmon,
->> +                                                      &s5_chip_info,
->> +                                                      NULL);
->> +
->> +     return PTR_ERR_OR_ZERO(hwmon_dev);
->> +}
->> +
->> +const struct of_device_id s5_temp_match[] = {
->> +     { .compatible = "microchip,sparx5-temp" },
->> +     {},
->> +};
->> +MODULE_DEVICE_TABLE(of, s5_temp_match);
->> +
->> +static struct platform_driver s5_temp_driver = {
->> +     .probe = s5_temp_probe,
->> +     .driver = {
->> +             .name = "sparx5-temp",
->> +             .of_match_table = s5_temp_match,
->> +     },
->> +};
->> +
->> +module_platform_driver(s5_temp_driver);
->> +
->> +MODULE_AUTHOR("Lars Povlsen <lars.povlsen@microchip.com>");
->> +MODULE_DESCRIPTION("Sparx5 SoC temperature sensor driver");
->> +MODULE_LICENSE("GPL");
->> --
->> 2.27.0
->>
->> _______________________________________________
->> linux-arm-kernel mailing list
->> linux-arm-kernel@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
 
 -- 
 Lars Povlsen,
