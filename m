@@ -2,204 +2,64 @@ Return-Path: <SRS0=CRfx=7X=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 994D2C433E0
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Jun 2020 18:31:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 632A8C433E0
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Jun 2020 20:21:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6E3B92072F
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Jun 2020 18:31:00 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DV34bec3"
+	by mail.kernel.org (Postfix) with ESMTP id 44EE02078D
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Jun 2020 20:21:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728952AbgFJSbA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 10 Jun 2020 14:31:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44598 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726186AbgFJSa6 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 10 Jun 2020 14:30:58 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63CBAC03E96B
-        for <linux-hwmon@vger.kernel.org>; Wed, 10 Jun 2020 11:30:58 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id y17so3406424wrn.11
-        for <linux-hwmon@vger.kernel.org>; Wed, 10 Jun 2020 11:30:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=/+J5oO5OnfDiIOVOhIHmtbQvypR4NOyguvZ+vS+VBRA=;
-        b=DV34bec3kn8ups3mo1KcqY/YeluhEBHJfMnEoE9K8u+na1nJ1DGGsyc4jU+glucolT
-         TUviM5dxviwZLPuM0g8+vQXe6cH2pxFxUWwU93dsLznmfLILTgw0LIRBUGyUiEr5eR3C
-         YVHYT4otqvUKNG5g6IBlf3xE5gnzBzFj8GQusuekh3De1azhWfnqZ9zrNkArwxjoeSDN
-         OrOIMECTmg9RCEjAQB7ALp90Ij1RGNwkk5LC/8K25KqHj43cQrS4VRgqmzzK2AP4yrmE
-         cR6KgKL7WPcVlg8QndhCyIa1+G17DLQVODULBk72RsyfmyYYRSqETFm9e19h9C2G/EmO
-         VhdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=/+J5oO5OnfDiIOVOhIHmtbQvypR4NOyguvZ+vS+VBRA=;
-        b=s3k+wqQS7j5iUA9qkBoaYArqAx+GofInC31V4b/VC74/DHYmZlUQYWjSY8UMkHb19B
-         MeZi+5Ap7hSdprciOBGbInPuol2JzhvQaYKdYBnv4GNTYbB0KYfINV925ZGn/F1qFckG
-         m3YCtGYI6jitFChTkZdLFAQPgVRxVZS7ty+cV1fQb6MYB8lRix4wtw9xym0rBFjABRVM
-         W2UMMkpW1eLqjWSFyY9y3zi9aN+gLWPXGET/TKYJiHU5lS9bJXjwYvsLznVrncJWEnhv
-         Hf4ffSumcGybEtoVjCZOUdZQewktGnUGS/+j3v8lBRkmj2+H9bZ+B4qAhCzkHORcXhY1
-         wv3g==
-X-Gm-Message-State: AOAM531l4RMxJFrlBMVsOvTerBqXsvi9sIRN8uxxzynbIGKn2dNcYEHn
-        cMic3FvpdgkmF5WNV+TNViOvaQ==
-X-Google-Smtp-Source: ABdhPJz6Ni2JYhcqjCdFdfUuYTBOEDs7I3nA8SyUMwPOtX+kOnBTbqU0Si/knyTH6nG0/LiIF9R1rQ==
-X-Received: by 2002:adf:c98a:: with SMTP id f10mr5095428wrh.329.1591813856649;
-        Wed, 10 Jun 2020 11:30:56 -0700 (PDT)
-Received: from dell ([2.27.167.101])
-        by smtp.gmail.com with ESMTPSA id a15sm878966wra.86.2020.06.10.11.30.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Jun 2020 11:30:55 -0700 (PDT)
-Date:   Wed, 10 Jun 2020 19:30:53 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        david.m.ertman@intel.com, shiraz.saleem@intel.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v4 02/11] mfd: Add support for Kontron sl28cpld
- management controller
-Message-ID: <20200610183053.GV4106@dell>
-References: <20200609064735.GH4106@dell>
- <32287ac0488f7cbd5a7d1259c284e554@walle.cc>
- <20200609151941.GM4106@dell>
- <95e6ec9bbdf6af7a9ff9c31786f743f2@walle.cc>
- <20200609194505.GQ4106@dell>
- <3a6931248f0efcaf8efbb5425a9bd833@walle.cc>
- <20200610071940.GS4106@dell>
- <f7b2b690750edd022000ab56d2f58154@walle.cc>
- <20200610075615.GT4106@dell>
- <b06a79c845e0ab251235d30f7dc94dd5@walle.cc>
+        id S1726828AbgFJUVo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 10 Jun 2020 16:21:44 -0400
+Received: from winnie.ispras.ru ([83.149.199.91]:18733 "EHLO smtp.ispras.ru"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726219AbgFJUVn (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 10 Jun 2020 16:21:43 -0400
+Received: from monopod.intra.ispras.ru (monopod.intra.ispras.ru [10.10.3.121])
+        by smtp.ispras.ru (Postfix) with ESMTP id DBC09203C1;
+        Wed, 10 Jun 2020 23:21:40 +0300 (MSK)
+Date:   Wed, 10 Jun 2020 23:21:40 +0300 (MSK)
+From:   Alexander Monakov <amonakov@ispras.ru>
+To:     Naveen Krishna Ch <naveenkrishna.ch@gmail.com>
+cc:     Guenter Roeck <linux@roeck-us.net>,
+        Naveen Krishna Chatradhi <nchatrad@amd.com>,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 1/3 v7] hwmon: Add amd_energy driver to report energy
+ counters
+In-Reply-To: <CAHfPSqAYBKXJkG21hqjyuRN8X+HqaX5df6ByeSRoMycBeVU48A@mail.gmail.com>
+Message-ID: <alpine.LNX.2.20.13.2006102320180.15859@monopod.intra.ispras.ru>
+References: <20200519155011.56184-1-nchatrad@amd.com> <d3cf6e06-8cda-a3d6-b528-fd2b5360585a@roeck-us.net> <CAHfPSqAUYjT_QDmLoQBSQwtjfzyTeNqGqxtBpfGUGc+uO8j+KA@mail.gmail.com> <alpine.LNX.2.20.13.2005270120271.8241@monopod.intra.ispras.ru>
+ <CAHfPSqCDSQkR03B_g+OAWvja9-+Zwo4Pbx0jLpsHUu_sn9K77Q@mail.gmail.com> <alpine.LNX.2.20.13.2005270940400.18802@monopod.intra.ispras.ru> <CAHfPSqC6gQzRt-_O-zHTHoSa=vOO064+dfoGrV2abQr=rMvfgA@mail.gmail.com> <alpine.LNX.2.20.13.2005271944560.18802@monopod.intra.ispras.ru>
+ <CAHfPSqAYBKXJkG21hqjyuRN8X+HqaX5df6ByeSRoMycBeVU48A@mail.gmail.com>
+User-Agent: Alpine 2.20.13 (LNX 116 2015-12-14)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b06a79c845e0ab251235d30f7dc94dd5@walle.cc>
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, 10 Jun 2020, Michael Walle wrote:
+On Thu, 28 May 2020, Naveen Krishna Ch wrote:
 
-> Am 2020-06-10 09:56, schrieb Lee Jones:
-> > On Wed, 10 Jun 2020, Michael Walle wrote:
-> > 
-> > > Am 2020-06-10 09:19, schrieb Lee Jones:
-> > > > On Wed, 10 Jun 2020, Michael Walle wrote:
-> > > > > Am 2020-06-09 21:45, schrieb Lee Jones:
-> > > > > > On Tue, 09 Jun 2020, Michael Walle wrote:
-> > > > > > > > We do not need a 'simple-regmap' solution for your use-case.
-> > > > > > > >
-> > > > > > > > Since your device's registers are segregated, just split up the
-> > > > > > > > register map and allocate each sub-device with it's own slice.
-> > > > > > >
-> > > > > > > I don't get it, could you make a device tree example for my
-> > > > > > > use-case? (see also above)
-> > > > > >
-> > > > > >     &i2cbus {
-> > > > > >         mfd-device@10 {
-> > > > > >             compatible = "simple-mfd";
-> > > > > >             reg = <10>;
-> > > > > >
-> > > > > >             sub-device@10 {
-> > > > > >                 compatible = "vendor,sub-device";
-> > > > > >                 reg = <10>;
-> > > > > >             };
-> > > > > >    };
-> > > > > >
-> > > > > > The Regmap config would be present in each of the child devices.
-> > > > > >
-> > > > > > Each child device would call devm_regmap_init_i2c() in .probe().
-> > > > >
-> > > > > Ah, I see. If I'm not wrong, this still means to create an i2c
-> > > > > device driver with the name "simple-mfd".
-> > > >
-> > > > Yes, it does.
-> > > >
-> > > > > Besides that, I don't like this, because:
-> > > > >  - Rob already expressed its concerns with "simple-mfd" and so on.
-> > > >
-> > > > Where did this take place?  I'd like to read up on this.
-> > > 
-> > > In this thread:
-> > > https://lore.kernel.org/linux-devicetree/20200604211039.12689-1-michael@walle.cc/T/#m16fdba5962069e7cd4aa817582ee358c9fe2ecbf
-> > > 
-> > > >
-> > > > >  - you need to duplicate the config in each sub device
-> > > >
-> > > > You can have a share a single config.
-> > > >
-> > > > >  - which also means you are restricting the sub devices to be
-> > > > >    i2c only (unless you implement and duplicate other regmap configs,
-> > > > >    too). For this driver, SPI and MMIO may be viable options.
-> > > >
-> > > > You could also have a shared implementation to choose between different
-> > > > busses.
-> > > 
-> > > Then what is the difference between to have this shared config in the
-> > > parent driver only and use the functions which are already there, i.e.
-> > > dev_get_regmap(parent). But see, below, I'll wait with what you're
-> > > coming up.
-> > 
-> > The difference is the omission of an otherwise pointless/superfluous
-> > driver.  Actually, it's the difference between the omission of 10
-> > pointless drivers!
+> > No, this isn't right. The workload is not stressing all cores, you're
+> > reporting 235 J for core 0 and only 35 J for core 7.
+> >
+> > If you are running the avx-turbo test, please run it like this:
+> >
+> >   ./avx-turbo --iters 10000000 --spec avx256_fma_t/8
+> >
+> > This will run AVX code on all 8 cores for about 1 second. To run it for longer,
+> > increase the --iters argument.
+> I ran with all cores loaded now and i see that
+> sum of diff of energy consumed by all cores is greater than the diff of
+> socket energy consumed in 100secs.
 > 
-> If you want to omit anything generic in the device tree - and as far as
-> I understand it - that should be the way to go, the specific compatible
-> string of the parent device has to go somewhere. Thus I'd appreciate
-> a consolidated (MFD) driver which holds all these, as you say it
-> pointless drivers.
-> Because IMHO they are not pointless, rather they are
-> the actual drivers for the MFD. Its sub nodes are just an implementation
-> detail to be able to use the OF bindings
-> (like your clock example or
-> a phandle to a PWM controller). Just because it is almost nothing there
-> except the regmap instantiation doesn't mean it is not a valid MFD driver.
+> Kindly, give me time. I will come back with some explanation or solution.
 
-A valid MFD driver is whatever we (the Linux community at large)
-define it to be.  An MFD is not a real thing.  We made it up.  It's
-MFD which is the implementation detail, not the child devices.  If a
-driver a) does very little, and b) the very little it does do can be
-resolved in a different way, is not a valid driver.  It's a waste of
-disk space.
+Hello. Is there any update on this issue?
 
-> And there is also additional stuff, like clock enable, version checks, etc.
-
-As more functionality is added *then* we can justify a driver.
-
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Thanks.
+Alexander
