@@ -2,139 +2,142 @@ Return-Path: <SRS0=CRfx=7X=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B03A9C433E0
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Jun 2020 13:28:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C7BDC433E0
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Jun 2020 14:53:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7E29A2072E
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Jun 2020 13:28:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E44392078C
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Jun 2020 14:52:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fEclRi9m"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sPb6shlw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726259AbgFJN2g (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 10 Jun 2020 09:28:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54190 "EHLO
+        id S1729922AbgFJOw7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 10 Jun 2020 10:52:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726121AbgFJN2f (ORCPT
+        with ESMTP id S1726992AbgFJOw6 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 10 Jun 2020 09:28:35 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB122C03E96B;
-        Wed, 10 Jun 2020 06:28:35 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id a127so1095732pfa.12;
-        Wed, 10 Jun 2020 06:28:35 -0700 (PDT)
+        Wed, 10 Jun 2020 10:52:58 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723E7C03E96B;
+        Wed, 10 Jun 2020 07:52:57 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id jz3so939043pjb.0;
+        Wed, 10 Jun 2020 07:52:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+        h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=5nPSs393bGASphPtnT357hjeVtfaWOHC4CaGSirIQ0k=;
-        b=fEclRi9mXpZuNWCDGq3LGoLC69Zoh084aXEwqnhiUGzCy4Lveyjg5c3uHKbynX46QB
-         /gPuG7HGhPtt3mFPHVuDj3DA005B7sHn0a+P2bygYpxaTgovINLQirbxyA7KMk+kmtEx
-         0283ouBpmFZceDWliw8qkg/SQu7I91p+NVGbjK/l8fc2KG681YRY58RySnhFxPWqUvht
-         6HfBwK0em+Guf8WDnxSsCEBXCIUigPxa8gKJuN/LeGC3h31Wr9/loSkugEo4w50eQe97
-         6GpxoFjooLBWhdFIFHRRZid79h+TcbC2bOU8cpYtG2ctGb9ufBPZiVBhYvX09F2LFK7U
-         qI0w==
+        bh=W5XkcC7KeYS10PiOng4uQLLTra/keU9RDeMCG9b6HTE=;
+        b=sPb6shlw/GMM34jCjyI+1IyQl4hjR/gFWJT6F1W1mWxRRFErqnyy4lHrqQqDvzki4D
+         HWjwpt79BKVEZlT/4vlA7Ly8ojfKRPU6RcNA7BxoWt2xC7fX+vMKkINKQDJNT8iOzA8a
+         /acoLzDyGF/oRQShetdsDD2X7jOGGZ+SD68udu7rqFtnh6G4NrKf/fgQM26zjjpykRxt
+         7n/nBGjtNaBwkIu+I1M4EutJwtWZ/Tah9TQybU2I1181c3LgNk/ctC1FggbDvtMeDGcG
+         lptWQfeoGMvUS6Czd/p2Dn/C3dtUjqPuy7TUtwUZoiwlkJ3+XivdFUxQjNa9sOEE/fvE
+         Fo9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=5nPSs393bGASphPtnT357hjeVtfaWOHC4CaGSirIQ0k=;
-        b=I3cmnYN6CMJJNK60t9S6p6zL2EZxEjDvDBX892Y1bDJ/vX/fhASQS/1Z0rPLzQ3Dcy
-         az8EjwnuYL0/OOfV9jjo0dusZR1L4CM+cpF9CdeN0TogmwxNZIAYkQWBBtclbs2fn85W
-         96QyJs6FdW8skeN7WJ4O0d5lGl925iQr1dXLniEZrpMUNb0Sk67n7wvz07dok4Dt4n95
-         X54kQt1mPnGJxRWF0q8Vuyi7pgAgP4vXj3D6fckqet8zX4qOCbwEI/wW2Kw8aEjQ0JHm
-         AsuI7kPGJxzpxigW1UBqiOSQ8VVSPSBxVG0WJWNYAUpqCgntFdRNnUoHuvQwUiHyucke
-         AHDA==
-X-Gm-Message-State: AOAM5314RIXJmuENIbx5MP7ggF4/s+wyfdWa+t5Rk0Ms+AIOAOhmsV0e
-        Vpwg3IIDQrLSXBahSGI4eD8=
-X-Google-Smtp-Source: ABdhPJzZ/n/c5toEAWjdwCntIeRgVObVWoTwUoxNq25z0L3JlP1IwlRK5hoW1zpdPOdgFcDzIos5rA==
-X-Received: by 2002:aa7:8387:: with SMTP id u7mr2816888pfm.90.1591795715320;
-        Wed, 10 Jun 2020 06:28:35 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c12sm1505576pgm.73.2020.06.10.06.28.34
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 10 Jun 2020 06:28:34 -0700 (PDT)
-Date:   Wed, 10 Jun 2020 06:28:33 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Manikandan Elumalai <manikandan.hcl.ers.epl@gmail.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=W5XkcC7KeYS10PiOng4uQLLTra/keU9RDeMCG9b6HTE=;
+        b=lH7wYDq3E3LonMKXUXzXnWXT8OPbZQf+QMkpdX50jFZN9CtFILJYeX0KIf72uwRd4N
+         KI+78GrCB6c2S3O4fjmi0bd+N20HTDL2Z2hQHBVv0Ol1D5XhtYHJfjz7TirOPCuyqsBp
+         jZrnm92yDsomIuDayj6MRP5NGqXvasK+QIJot+pqB+7mhO8E2nDWyurESV5d1V/Sc2vR
+         pmc7Mng1T1rWUQnwVieg6XxUBcBXMjGmO3lFcCSyjSMBDt7iPy9LfSxEwxLBgBXJwqrA
+         kkDBqrh0q5u72Ou/ifbnTHhfffshNlMCqvzhmV8hGDgH3wVDQHkTBc/JlBcP5lYFiqqa
+         lpig==
+X-Gm-Message-State: AOAM532PVIRhoe8RebOv1u2Z4SCevD2jthHRhjQKlh5nCH9vIuU+y8RR
+        QgOyfKLRqNdFL8kUNdJVn8o=
+X-Google-Smtp-Source: ABdhPJyKgwdIOuUz7O0lHPIz41Jqpk6jni0GZnkqI+vYAHow4N0nEvag/EnBCXAmZff942QnsJ46Vg==
+X-Received: by 2002:a17:90b:1087:: with SMTP id gj7mr3513264pjb.124.1591800777042;
+        Wed, 10 Jun 2020 07:52:57 -0700 (PDT)
+Received: from cnn ([2402:3a80:464:d8d9:cd72:839f:5826:c552])
+        by smtp.gmail.com with ESMTPSA id a5sm203465pfi.41.2020.06.10.07.52.53
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 10 Jun 2020 07:52:56 -0700 (PDT)
+Date:   Wed, 10 Jun 2020 20:22:50 +0530
+From:   Manikandan <manikandan.hcl.ers.epl@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org, saipsdasari@fb.com, patrickw3@fb.com,
         vijaykhemka@fb.com, linux-aspeed@lists.ozlabs.org,
         openbmc@lists.ozlabs.org, manikandan.e@hcl.com
 Subject: Re: [PATCH v4] hwmon:(adm1275) Enable adm1278 ADM1278_TEMP1_EN
-Message-ID: <20200610132833.GA237017@roeck-us.net>
+Message-ID: <20200610145250.GA25183@cnn>
 References: <20200610082611.GA14266@cnn>
+ <20200610132833.GA237017@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200610082611.GA14266@cnn>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200610132833.GA237017@roeck-us.net>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Jun 10, 2020 at 01:56:11PM +0530, Manikandan Elumalai wrote:
-> The adm1278 temp attribute need it for openbmc platform .
-> This feature not enabled by default, so PMON_CONFIG needs to enable it.
+On Wed, Jun 10, 2020 at 06:28:33AM -0700, Guenter Roeck wrote:
+> On Wed, Jun 10, 2020 at 01:56:11PM +0530, Manikandan Elumalai wrote:
+> > The adm1278 temp attribute need it for openbmc platform .
+> > This feature not enabled by default, so PMON_CONFIG needs to enable it.
+> > 
+> > v4:
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > ---
+> > changes in conditional check to enable vout & temp1 by default.
+> > v3:
+> > ----
+> > fix invalid signed-off.
+> > removed checkpath warnings.
+> > write ADM1278_TEMP1_EN and ADM1278_VOUT_EN conf in single line operation.
+> > v2:
+> > ----
+> > add Signed-off-by.
+> > removed ADM1278_TEMP1_EN check.
+> > 
+> > Signed-off-by: Manikandan Elumalai <manikandan.hcl.ers.epl@gmail.com>
 > 
-> v4:
-> Reported-by: kernel test robot <lkp@intel.com>
-> ---
-> changes in conditional check to enable vout & temp1 by default.
-> v3:
-> ----
-> fix invalid signed-off.
-> removed checkpath warnings.
-> write ADM1278_TEMP1_EN and ADM1278_VOUT_EN conf in single line operation.
-> v2:
-> ----
-> add Signed-off-by.
-> removed ADM1278_TEMP1_EN check.
+> Applied (and I fixed the problem reported by 0-day, so no need to resend).
+>                  Thank you  Guenter. 
+> Thanks,
+> Guenter
 > 
-> Signed-off-by: Manikandan Elumalai <manikandan.hcl.ers.epl@gmail.com>
-
-Applied (and I fixed the problem reported by 0-day, so no need to resend).
-
-Thanks,
-Guenter
-
-> ---
->  drivers/hwmon/pmbus/adm1275.c | 12 +++++-------
->  1 file changed, 5 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275.c
-> index 5caa37fb..d4e1925 100644
-> --- a/drivers/hwmon/pmbus/adm1275.c
-> +++ b/drivers/hwmon/pmbus/adm1275.c
-> @@ -666,11 +666,12 @@ static int adm1275_probe(struct i2c_client *client,
->  		tindex = 3;
->  
->  		info->func[0] |= PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT |
-> -			PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT;
-> +			PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
-> +			PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP;
->  
-> -		/* Enable VOUT if not enabled (it is disabled by default) */
-> -		if (!(config & ADM1278_VOUT_EN)) {
-> -			config |= ADM1278_VOUT_EN;
-> +		/* Enable VOUT & TEMP1 if not enabled (disabled by default) */
-> +		if (config & (ADM1278_VOUT_EN | ADM1278_TEMP1_EN) != ADM1278_VOUT_EN | ADM1278_TEMP1_EN) {
-> +			config |= ADM1278_VOUT_EN | ADM1278_TEMP1_EN;
->  			ret = i2c_smbus_write_byte_data(client,
->  							ADM1275_PMON_CONFIG,
->  							config);
-> @@ -681,9 +682,6 @@ static int adm1275_probe(struct i2c_client *client,
->  			}
->  		}
->  
-> -		if (config & ADM1278_TEMP1_EN)
-> -			info->func[0] |=
-> -				PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP;
->  		if (config & ADM1278_VIN_EN)
->  			info->func[0] |= PMBUS_HAVE_VIN;
->  		break;
+> > ---
+> >  drivers/hwmon/pmbus/adm1275.c | 12 +++++-------
+> >  1 file changed, 5 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275.c
+> > index 5caa37fb..d4e1925 100644
+> > --- a/drivers/hwmon/pmbus/adm1275.c
+> > +++ b/drivers/hwmon/pmbus/adm1275.c
+> > @@ -666,11 +666,12 @@ static int adm1275_probe(struct i2c_client *client,
+> >  		tindex = 3;
+> >  
+> >  		info->func[0] |= PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT |
+> > -			PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT;
+> > +			PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
+> > +			PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP;
+> >  
+> > -		/* Enable VOUT if not enabled (it is disabled by default) */
+> > -		if (!(config & ADM1278_VOUT_EN)) {
+> > -			config |= ADM1278_VOUT_EN;
+> > +		/* Enable VOUT & TEMP1 if not enabled (disabled by default) */
+> > +		if (config & (ADM1278_VOUT_EN | ADM1278_TEMP1_EN) != ADM1278_VOUT_EN | ADM1278_TEMP1_EN) {
+> > +			config |= ADM1278_VOUT_EN | ADM1278_TEMP1_EN;
+> >  			ret = i2c_smbus_write_byte_data(client,
+> >  							ADM1275_PMON_CONFIG,
+> >  							config);
+> > @@ -681,9 +682,6 @@ static int adm1275_probe(struct i2c_client *client,
+> >  			}
+> >  		}
+> >  
+> > -		if (config & ADM1278_TEMP1_EN)
+> > -			info->func[0] |=
+> > -				PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP;
+> >  		if (config & ADM1278_VIN_EN)
+> >  			info->func[0] |= PMBUS_HAVE_VIN;
+> >  		break;
