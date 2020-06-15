@@ -6,67 +6,66 @@ X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19688C433E0
-	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Jun 2020 15:01:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D094C433E0
+	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Jun 2020 18:05:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E05F12071A
-	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Jun 2020 15:01:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 31804207DA
+	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Jun 2020 18:05:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OKZC52Ui"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HP7HtQBg"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730837AbgFOPB0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 15 Jun 2020 11:01:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42950 "EHLO
+        id S1730976AbgFOSFP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 15 Jun 2020 14:05:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730711AbgFOPBY (ORCPT
+        with ESMTP id S1728585AbgFOSFP (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 15 Jun 2020 11:01:24 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB153C061A0E;
-        Mon, 15 Jun 2020 08:01:24 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id jz3so6958836pjb.0;
-        Mon, 15 Jun 2020 08:01:24 -0700 (PDT)
+        Mon, 15 Jun 2020 14:05:15 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF9D6C061A0E;
+        Mon, 15 Jun 2020 11:05:14 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id h22so188732pjf.1;
+        Mon, 15 Jun 2020 11:05:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=PIF5e8K3q0e7NGWwSzCLOMuB5EYjzZTGf/QhEJ+wTt0=;
-        b=OKZC52Ui/7+4r4w4WhEFNgl/jQeuvFXAADk0vtf9J7DJIKVztfzZGbG0wALTt4RQhA
-         gK44MhcxZqZb0/R0Syeq0y5EZQVfGzJ0dR6/VMo5pqY7wEPe+SDP+Uk4IKhAmEjgMs6F
-         K6eCTGvbM3YJYU314mCmC/Q/8CfSqbqmUaGBSQSN2WPSRSoOsZoi5gMYRp3mJXFXFVB1
-         H6KCRE/2kPUVdGOHjzjivDBVnN1IuWO/53v41IVkyQS6v899JV4sSK/02iwqF6XwTzmP
-         jeJS/bNlWyLIoEtFaYLgOwbundxZpGjefaKtoMmzKHwtglzYbpres+i9NLV9+dQrMaPU
-         324w==
+        bh=Jhsd8aTl+CMui37A0Yluu4YuHY/r0BYk4cBD83Toifg=;
+        b=HP7HtQBgtpCTVUxRrPKP9+cQFpP1w8c5GIfmD22gJAwYZtuu/s8lJpymZEhRpEcjMi
+         MxnkoWKZoU46N4yQjdekxWTHxuzsy+95wo18CAa6A0d8yE6pA1yRkagm2p3KQNl8KMjl
+         J93aSOUjmvNS9htvOBr8iuI72aAGjqSz97fOZtL1N1NqjL5iZoLmjf9bG8+9bZx3pz6o
+         6sTYebPcqVrIobZMlJ7pyY7pCd93n1WoBPv7HUjpAVJ0VEKZBFjf3rIn1OoqunNnJYeA
+         TKds5NDzYBYNQLzsnlZCLUNinADLQzCLKNeodnkvxJtNhy63V+l4GpZsI2r3/5xFbUCn
+         na4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=PIF5e8K3q0e7NGWwSzCLOMuB5EYjzZTGf/QhEJ+wTt0=;
-        b=l1HgJ3ENNksh3nxXTw0WxHC43Ys3a85FUk+w2Hxx0/ezU2M9YwtNnsTEVtnxwfAXtF
-         V4sqpt0q60dUYENgkDZ0U7V1y1iKtWuts9t4zdbIINAGrnt9LahyaSb2NyNt1ol4YHYV
-         fI02myAn83fRDzP3RVw7CnT4GUmzFFKSiJ601Nfq08UxwcypT+oGSSHAMO7vRojCcNDR
-         XQaXzODhBSvGHj6Fbl/+FAIYbLUyDrx/ti8Psfhovd38Y5fanrpMdDAOG9FCoL7UkKKT
-         d+vTO2NO3ooeinWlJBrncNOwLyxHk2wMvo7zPfevTOQPMoxzaWKXVKWptKfCiVVySAAc
-         ydow==
-X-Gm-Message-State: AOAM533be/BmbjPEnfOb2mceEncT1qBMkEbGecn3xuwNqsYC17gRV6go
-        O/HJLRrXrQJ2OtFQ0FKS3ZniQnaA
-X-Google-Smtp-Source: ABdhPJwuAoJMmw1d1eAx382Qgrf0SyTxlzhfUhGXYj6pc4gbpdsUacnnSgQowdOaG1diyOGfe7UUhg==
-X-Received: by 2002:a17:90b:190e:: with SMTP id mp14mr12363004pjb.198.1592233283856;
-        Mon, 15 Jun 2020 08:01:23 -0700 (PDT)
+        bh=Jhsd8aTl+CMui37A0Yluu4YuHY/r0BYk4cBD83Toifg=;
+        b=AYHN+bNCAirFFaLxC11uVYd7CDjuutISjR7R2J6GRkoLjVmH1wA1cAyOL/esFp3GID
+         4gg9f59DqwfTVeZWc59YUMnBrtQwhKzewMNzOlxT8tKTtLJXwA9OaPwr+D8pgE1TFHEi
+         np1BFECXvQfKMg2pJENgMZHR06Xx6KEBnw8xTFiTmnd8UOqenLG1hBfTjDV2Uxp6haPF
+         19fFcLRWlfDWA8MxFyhnzi3kwsqwWI6ncPDa/qHcsjwQJI3hH53aXhtJCcr4vWpFm1pQ
+         Ml1IdhCNzNxo6KsCJroGocaHAcsQVOTnPKmm9R42f/jhzgA0rE6jFz1OBAiRm1N2EgBU
+         FBiA==
+X-Gm-Message-State: AOAM532aawUOCo8eV1DWhhina77XSp0zsldQcIqMe/KQOLdN+xOltvzQ
+        DCir4Qu+9hk7P7sgqAaWQlvokFj0
+X-Google-Smtp-Source: ABdhPJwawRl8MamUhH+oKsenRXYuR4LdoD3dAQhMnHayPTZrpgrJnkGjikp1luyyr0S35HTcZuhxSw==
+X-Received: by 2002:a17:90b:234c:: with SMTP id ms12mr542035pjb.164.1592244314047;
+        Mon, 15 Jun 2020 11:05:14 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b5sm14346660pfg.191.2020.06.15.08.01.22
+        by smtp.gmail.com with ESMTPSA id b5sm14659240pfg.191.2020.06.15.11.05.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Jun 2020 08:01:23 -0700 (PDT)
-Subject: Re: [PATCH 0/2] MCA and EDAC updates for AMD Family 17h, Model 60h
-To:     Borislav Petkov <bp@alien8.de>, Jacky Hu <hengqing.hu@gmail.com>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tony.luck@intel.com, x86@kernel.org,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        linux-hwmon@vger.kernel.org
-References: <20200607043709.48178-1-hengqing.hu@gmail.com>
- <20200615115950.GG14668@zn.tnic>
+        Mon, 15 Jun 2020 11:05:13 -0700 (PDT)
+Subject: Re: [RFC v2] hwmon: add Corsair Commander Pro driver
+To:     Marius Zachmann <mail@mariuszachmann.de>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+References: <4064217.uIqdvtiHzK@marius>
+ <1bdfa5cb-ad9c-ab4c-351f-5b86d38c3eb8@roeck-us.net>
+ <2951227.8AuJ4AEgc1@marius>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -111,56 +110,62 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <a9d0cfc4-1aed-d6ed-c6f2-336b56d91f20@roeck-us.net>
-Date:   Mon, 15 Jun 2020 08:01:22 -0700
+Message-ID: <f078c0de-f66a-235a-b575-414a6b756786@roeck-us.net>
+Date:   Mon, 15 Jun 2020 11:05:12 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <20200615115950.GG14668@zn.tnic>
+In-Reply-To: <2951227.8AuJ4AEgc1@marius>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 6/15/20 4:59 AM, Borislav Petkov wrote:
-> + Yazen and linux-hwmon.
+On 6/15/20 7:54 AM, Marius Zachmann wrote:
+[ ... ]
+>>> +	memset(ccp->buffer, 0x00, OUT_BUFFER_SIZE);
+>>> +	ccp->buffer[0] = CTL_SET_FAN_FPWM;
+>>> +	ccp->buffer[1] = channel;
+>>> +	ccp->buffer[2] = val;
+>>
+>> As it turns out (unless I am missing something), all commands have
+>> one, two, or three parameters. Also, the full buffer is always
+>> written. With that, it would be easier to add command, channel,
+>> and value as parameters to send_usb_cmd() and handle both
+>> memset() and assignments there.
+>>
 > 
-> On Sun, Jun 07, 2020 at 12:37:07PM +0800, Jacky Hu wrote:
->> This patchset adds MCA and EDAC support for AMD Family 17h, Model 60h.
->>
->> Also k10temp works with 4800h
->>
->> k10temp-pci-00c3
->> Adapter: PCI adapter
->> Vcore:         1.55 V
->> Vsoc:          1.55 V
->> Tctl:         +49.6°C
->> Tdie:         +49.6°C
->> Icore:         0.00 A
->> Isoc:          0.00 A
->>
+> There is at least one command for setting a fan curve (0x25),
+> which I intend to implement at a later point. It needs 27 bytes.
+> There seem to be more long commands related to the RGB output.
+> Also there is CTL_GET_FAN_CNCT which needs read 6 bytes of the
+> response.
+> 
+In that case it might make sense to add a helper function to handle
+_most_ of the commands. CTL_GET_FAN_CNCT can still be handled
+with that helper function since the response is 6 bytes, not the
+command itself.
 
-Looks like we may have to black-list current measurements
-for that chip, though.
+>>> +	ret = send_usb_cmd(ccp);
+>>> +
+>>
+>> This makes me wonder if reading a response is always necessary.
+>> If not, it might make sense to add a flag to the function indicating
+>> that no response is needed, and skip the read part there. If it is
+>> needed, it might make sense to add a comment into the send function,
+>> explaining that a read command must be executed even if no data is
+>> returned.
+>>
+> 
+> Actually yes. After a bit of further testing it seems, there is an
+> error code in the first byte of the response, when sending invalid
+> commands. I will check for it, return -EIO and log it, since I
+> do not know, what all the error codes are.
 
+Makes sense.
+
+Thanks,
 Guenter
-
->> Jacky Hu (2):
->>   x86/amd_nb: Add Family 17h, Model 60h PCI IDs
->>   EDAC/amd64: Add family ops for Family 17h Models 60h-6Fh
->>
->>  arch/x86/kernel/amd_nb.c  |  5 +++++
->>  drivers/edac/amd64_edac.c | 14 ++++++++++++++
->>  drivers/edac/amd64_edac.h |  3 +++
->>  drivers/hwmon/k10temp.c   |  2 ++
->>  include/linux/pci_ids.h   |  1 +
->>  5 files changed, 25 insertions(+)
->>
->> -- 
->> 2.27.0
->>
-> 
-
