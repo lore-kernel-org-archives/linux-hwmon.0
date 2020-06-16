@@ -2,179 +2,154 @@ Return-Path: <SRS0=PqkE=75=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED01AC433DF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Jun 2020 14:46:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42679C433E1
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Jun 2020 14:46:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C8778208B8
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Jun 2020 14:46:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 25D3320C09
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Jun 2020 14:46:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=amdcloud.onmicrosoft.com header.i=@amdcloud.onmicrosoft.com header.b="fvY9HV+z"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m3FpMn0H"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728553AbgFPOqk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S1729113AbgFPOqk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Tue, 16 Jun 2020 10:46:40 -0400
-Received: from mail-bn8nam12on2077.outbound.protection.outlook.com ([40.107.237.77]:59041
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726341AbgFPOqh (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 16 Jun 2020 10:46:37 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MjjkJysAnNl6CHeKidsaXDPMojTkBKBW41td54LvHFjp+mxZhaHOMpfbDWvfDGL4bCTp0Zyq+UKZ7GQL2JOSyXxnrGiPUECh00HHkvNUEnp7biArx0BxIzpptcdnrYOh7scZSONaJ7chVcDaFbRRkJnCY2VOzFJF5IXLLecbEHkZBdBye3ktFgFWifdri+b7T0bKwLnSVHocSzY00wUJcD1NPAs7bNnT3HOGrOkqkciOOfVsR5ylN05IJcN8plAMoZp0KyupgwsItCOYIwb4oB60mK/V/OtRZLyJz9wYdyvovKHoqtl91cx+mtGV+Zo4kAx5f/l3P8Bdn/Io6cA6eQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zzhu8arb24PuyX1ODD1B/geXdOkMfbA7lVgplG3Gx/w=;
- b=QhIQe+Ki+TO9Zr1iM2+5FeNkCRKEBtEYaelHek99lF5B6cDzggpEdnX5Us38IgFRp9c/6oY5YeQTXNXEKMnB5L4z+WXGX3cFf7pUcWJGReJpbiMS63xCwKlFD8vnzJo5BCrb5SWmM2v03oiF84xu6PcNPLwB3nw0GdcDM/UQ3OB/M3ubjJiUz6DSb1S7l2hVdvOH2aAdKNxA9eTVoN0CFMzpyQ8atgFq5KBxIWoN2cB5fAwXecTB0sfuqaX8TAZ7hu7DxfUn7h6ixAm+klqRtKPoxZt174y1Qb73FRicUFEgZWb7CVY6F3pzUSiztOQHfgrwtMjTAY1KyDbd+YBqhA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37048 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726526AbgFPOqj (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 16 Jun 2020 10:46:39 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 206DEC061573;
+        Tue, 16 Jun 2020 07:46:39 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id j4so5240544plk.3;
+        Tue, 16 Jun 2020 07:46:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zzhu8arb24PuyX1ODD1B/geXdOkMfbA7lVgplG3Gx/w=;
- b=fvY9HV+zsW1fWsTHLmWz7QFhZ8fQbtFQBAIjcy/TnjtYb+0V5bY17aVnfTXy8O7dJ4lWcnyxrMivJRvoR6ia3KjkJ/v4VoJiUrWPo0/L5Bg4zTnT8PzVNiguZbt8h1+xIC3NvEUo71x3bQQWW7DptsmDoz9rGeVGKxdts5YPwtM=
-Received: from MW2PR12MB2569.namprd12.prod.outlook.com (2603:10b6:907:11::16)
- by MW3PR12MB4363.namprd12.prod.outlook.com (2603:10b6:303:56::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3088.23; Tue, 16 Jun
- 2020 14:46:35 +0000
-Received: from MW2PR12MB2569.namprd12.prod.outlook.com
- ([fe80::584c:e49:1331:4d44]) by MW2PR12MB2569.namprd12.prod.outlook.com
- ([fe80::584c:e49:1331:4d44%7]) with mapi id 15.20.3088.028; Tue, 16 Jun 2020
- 14:46:35 +0000
-From:   "Chatradhi, Naveen Krishna" <NaveenKrishna.Chatradhi@amd.com>
-To:     Alexander Monakov <amonakov@ispras.ru>,
-        Naveen Krishna Ch <naveenkrishna.ch@gmail.com>
-CC:     Guenter Roeck <linux@roeck-us.net>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Subject: RE: [PATCH 1/3 v7] hwmon: Add amd_energy driver to report energy
- counters
-Thread-Topic: [PATCH 1/3 v7] hwmon: Add amd_energy driver to report energy
- counters
-Thread-Index: AQHWLfU4bXfRfy3r7UC27klZb4uGxqi0HWWAgAAOp4CABtSEAIAASkyAgABB/oCAADw3AIAAa2CAgAC73ICAFX1IAIAJD3MA
-Date:   Tue, 16 Jun 2020 14:46:35 +0000
-Message-ID: <MW2PR12MB2569591CBFFB613E88EAD9F1E89D0@MW2PR12MB2569.namprd12.prod.outlook.com>
-References: <20200519155011.56184-1-nchatrad@amd.com>
- <d3cf6e06-8cda-a3d6-b528-fd2b5360585a@roeck-us.net>
- <CAHfPSqAUYjT_QDmLoQBSQwtjfzyTeNqGqxtBpfGUGc+uO8j+KA@mail.gmail.com>
- <alpine.LNX.2.20.13.2005270120271.8241@monopod.intra.ispras.ru>
- <CAHfPSqCDSQkR03B_g+OAWvja9-+Zwo4Pbx0jLpsHUu_sn9K77Q@mail.gmail.com>
- <alpine.LNX.2.20.13.2005270940400.18802@monopod.intra.ispras.ru>
- <CAHfPSqC6gQzRt-_O-zHTHoSa=vOO064+dfoGrV2abQr=rMvfgA@mail.gmail.com>
- <alpine.LNX.2.20.13.2005271944560.18802@monopod.intra.ispras.ru>
- <CAHfPSqAYBKXJkG21hqjyuRN8X+HqaX5df6ByeSRoMycBeVU48A@mail.gmail.com>
- <alpine.LNX.2.20.13.2006102320180.15859@monopod.intra.ispras.ru>
-In-Reply-To: <alpine.LNX.2.20.13.2006102320180.15859@monopod.intra.ispras.ru>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_0d814d60-469d-470c-8cb0-58434e2bf457_Enabled=true;
- MSIP_Label_0d814d60-469d-470c-8cb0-58434e2bf457_SetDate=2020-06-16T14:46:22Z;
- MSIP_Label_0d814d60-469d-470c-8cb0-58434e2bf457_Method=Privileged;
- MSIP_Label_0d814d60-469d-470c-8cb0-58434e2bf457_Name=Public_0;
- MSIP_Label_0d814d60-469d-470c-8cb0-58434e2bf457_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_0d814d60-469d-470c-8cb0-58434e2bf457_ActionId=bed5bb7f-840f-4b08-ad92-0000420e4ea5;
- MSIP_Label_0d814d60-469d-470c-8cb0-58434e2bf457_ContentBits=1
-msip_label_76546daa-41b6-470c-bb85-f6f40f044d7f_enabled: true
-msip_label_76546daa-41b6-470c-bb85-f6f40f044d7f_setdate: 2020-06-16T14:45:37Z
-msip_label_76546daa-41b6-470c-bb85-f6f40f044d7f_method: Standard
-msip_label_76546daa-41b6-470c-bb85-f6f40f044d7f_name: Internal Use Only -
- Unrestricted
-msip_label_76546daa-41b6-470c-bb85-f6f40f044d7f_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_76546daa-41b6-470c-bb85-f6f40f044d7f_actionid: 8cdcafe4-2e74-48d1-906b-0000847281fa
-msip_label_76546daa-41b6-470c-bb85-f6f40f044d7f_contentbits: 0
-msip_label_0d814d60-469d-470c-8cb0-58434e2bf457_enabled: true
-msip_label_0d814d60-469d-470c-8cb0-58434e2bf457_setdate: 2020-06-16T14:46:31Z
-msip_label_0d814d60-469d-470c-8cb0-58434e2bf457_method: Privileged
-msip_label_0d814d60-469d-470c-8cb0-58434e2bf457_name: Public_0
-msip_label_0d814d60-469d-470c-8cb0-58434e2bf457_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_0d814d60-469d-470c-8cb0-58434e2bf457_actionid: 27f77cd4-6fff-4f74-94e2-00000b6587cb
-msip_label_0d814d60-469d-470c-8cb0-58434e2bf457_contentbits: 0
-authentication-results: ispras.ru; dkim=none (message not signed)
- header.d=none;ispras.ru; dmarc=none action=none header.from=amd.com;
-x-originating-ip: [122.172.141.219]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 4b3e043d-decb-4ebf-14ee-08d81204115f
-x-ms-traffictypediagnostic: MW3PR12MB4363:
-x-microsoft-antispam-prvs: <MW3PR12MB4363F52A14568F8FB3A29327E89D0@MW3PR12MB4363.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
-x-forefront-prvs: 04362AC73B
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 9BXwk9P1QK5kG/hUhMY4kxN13uIdQ5Xsw+h3d0PcL4a6Pjwxg9oA4qkUOR1swa80E53A7rASuYiHN+FApcup3TBAa2IYusv/bpDleppiC7ibwEcjTKJyHwcLl2oGH5cHUnnfP+zJ5MPFkgv6MTmukyysJSwbv+uhCnEtHk7I57k2PwKcG+HSYy4EefRWiMYfPu07sF8JgxxCADpPXQsfxs2ufZJ+fG9mf7uGpVtlL000Me3aL9grD+Lnn64/VzLEwR6XqD1KjyAGJAuV/HCEfGetK+9oZnI1cUCkguePVEBBzsg+7zfzr91qt71UtEmc
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB2569.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(396003)(346002)(39860400002)(366004)(376002)(136003)(186003)(71200400001)(54906003)(478600001)(83380400001)(7696005)(110136005)(52536014)(26005)(5660300002)(316002)(6506007)(53546011)(55236004)(64756008)(55016002)(8676002)(8936002)(33656002)(76116006)(9686003)(86362001)(66556008)(66946007)(4326008)(2906002)(66446008)(66476007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: EV87WgHbNTZJs8/5LlNct41Y9pQywkF06Sjl45f2d/753kepQxkEgqo54xTQdqm52/0P9pLnN2ndu8+zVXjtjNQnB4RnAQKCNSYWlgACjhF8w0+6BtrMV1s3TeUmkseq1b+5U3nYGJWwVnNkcPzjbsV86EBf/Y8qGBMMl1iw/HuC6tE0xwlXR0SkJ/FzcL3oKbITWfhlmUu6uYz1HkRAayGCQydotxTY0dCj9n5qMXL0DydAyF3ZJGMp/zLpvKMYZsLZpfxejp7+FP/qy3FULSubT/U946s7Lt/FVWwzIOwRbjsQOsW4j4BkAMLHFWtq2+5wwxldtkM6rqxMvD8PaIE294huy9JQPqqdeIiOz8w9p4QgDHlM1hEFKhRMDCo5fhh3bOIOVMbJuy/Sh51zY40+oD/714hZa2tw3NPuTrmwVPXQtLBwBsV+Vzc2IEWh6LpyhoZcC+ylrBBv1vU2NRlUxOOuDTb+iuL1gaZrBQ7li+qaQHPqAWx5fBFjJlMs
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Wp5M8tnQYT7iRVKebggcqWX6gRGut1Hkoi6yXdAIq0c=;
+        b=m3FpMn0Hb64pQCP149bbxyapIdSQgqxjgxZBGjIZI21tRCZztfhMD6aamjeW8CmXPM
+         U7nO4wiV/bV6y3Pt4nXyZLe/TUNy1rzlelPCtTIcWhdx61iyb7shjYcP678TXY6attG8
+         XHjbngBn5N59Bds/xdZ23GUn2vEH9lxALTvDPNiukNl1PXh7LJrkfl9HqcQ+bF6CiO+U
+         rZWHWEhUf6dcBwf/RobVhZ13mf/aHJhOf/fj1dF26SLV88EdYY8PdMIJjBoZjs3qZe7i
+         vt/Yg4ea3f5tUk2r01mjY9mGN2njC+oXhh1OkunngcG60Iz/C5XHhtBFS4sZxThkjOPU
+         qmBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=Wp5M8tnQYT7iRVKebggcqWX6gRGut1Hkoi6yXdAIq0c=;
+        b=to/zHPqmZ7FngSGCX13QPvISR45yzRAzUr1e9J8fUm9J13XwCdUHyNFGbtZ0lOm4Ch
+         bvGQt78dSHz7sXZJxeHJiGY7RLf+igOvcF/Je+D0vJ8Zk83oWrO+nYzEGKyiakeLC+I1
+         RH5ENfau/hwLifo/JV+lwwUDvjPtgCdvCnk7KdopkbS2rYmhayR0CRIHOMeIfrWGLyv5
+         ija43yKFxf3zV1qA28ALDFUPxYZDfzk+PD0taINkKu9RoQlve2YZN3EW+2caH5gzXM0H
+         i48TlZx8IM7ELI4cSx+83wRJZkSjolvEi2hRBr+X8wr763eEP5qdwmvs4kPs9z6PrQ7D
+         8Vhg==
+X-Gm-Message-State: AOAM532TBBJzDbAVNV2urii2gA5QgGUJMXG8THRUN9Itn7yH4ruxGoOA
+        F/Xdf4+A4ARn244cHmt4ofabTZGD
+X-Google-Smtp-Source: ABdhPJxFjTLMU5EPu/DBjvRqE91x26mensCA5LghCmxC15P+zKUeH+HwWjuCA+92AdJF1oU8S7jKtA==
+X-Received: by 2002:a17:90b:188d:: with SMTP id mn13mr3186865pjb.84.1592318798345;
+        Tue, 16 Jun 2020 07:46:38 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id k18sm17495730pfp.208.2020.06.16.07.46.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Jun 2020 07:46:37 -0700 (PDT)
+Subject: Re: [PATCH 0/2] MCA and EDAC updates for AMD Family 17h, Model 60h
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Jacky Hu <hengqing.hu@gmail.com>, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tony.luck@intel.com, x86@kernel.org,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        linux-hwmon@vger.kernel.org
+References: <20200607043709.48178-1-hengqing.hu@gmail.com>
+ <20200615115950.GG14668@zn.tnic>
+ <a9d0cfc4-1aed-d6ed-c6f2-336b56d91f20@roeck-us.net>
+ <20200616143517.GH13515@zn.tnic>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
+ RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
+ nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
+ 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
+ gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
+ IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
+ kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
+ VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
+ jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
+ BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
+ ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
+ CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
+ nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
+ hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
+ c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
+ 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
+ GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
+ sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
+ Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
+ HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
+ BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
+ l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
+ 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
+ pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
+ J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
+ pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
+ 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
+ ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
+ I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
+ nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
+ HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
+ JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
+ J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
+ cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
+ wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
+ hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
+ nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
+ QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
+ trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
+ WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
+ HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <a2f55a9c-25fd-d79d-5f20-8144694f394d@roeck-us.net>
+Date:   Tue, 16 Jun 2020 07:46:36 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4b3e043d-decb-4ebf-14ee-08d81204115f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jun 2020 14:46:35.2159
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: zi59e6XakPfYzw002wJ/SIKjrjxZ/ETo7p0vd8T5da9pOTFpLscGv6Wlpsa+u0TRtUcLz8JnckUcqW5eF780vw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4363
+In-Reply-To: <20200616143517.GH13515@zn.tnic>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-[AMD Public Use]
+On 6/16/20 7:35 AM, Borislav Petkov wrote:
+> On Mon, Jun 15, 2020 at 08:01:22AM -0700, Guenter Roeck wrote:
+>> Looks like we may have to black-list current measurements
+>> for that chip, though.
+>>
+>> Guenter
+>>
+>>>> Jacky Hu (2):
+>>>>   x86/amd_nb: Add Family 17h, Model 60h PCI IDs
+>>>>   EDAC/amd64: Add family ops for Family 17h Models 60h-6Fh
+>>>>
+>>>>  arch/x86/kernel/amd_nb.c  |  5 +++++
+>>>>  drivers/edac/amd64_edac.c | 14 ++++++++++++++
+>>>>  drivers/edac/amd64_edac.h |  3 +++
+>>>>  drivers/hwmon/k10temp.c   |  2 ++
+> 
+> ... meaning I should not take the k10temp changes yet? I can drop them
+> and take the rest...
+> 
 
-Hi Alexander,
+No, that is independent. It is more like a note to myself. I'll have to get
+debug dumps from someone with affected chip(s), and for that to work
+support for those chips has to be enabled in k10temp.
 
-The issue does not seem to be in the driver, it is in the register values p=
-opulated by the firmware.
-We have tested this in the server platforms and it works fine.
-I've raised an issue internally to analyze and provide a solution for clien=
-t systems.
-I'm still waiting for their update.=20
-
-Guenter,
-This issue is seen on client machines model ranging from 0x40 and above. Sh=
-ould I submit a patch
-to support only server specific models 0x0 to 0x3f until we triage the issu=
-e for client systems.
-
-Regards,
-Naveen
------Original Message-----
-From: Alexander Monakov <amonakov@ispras.ru>=20
-Sent: Thursday, June 11, 2020 1:52 AM
-To: Naveen Krishna Ch <naveenkrishna.ch@gmail.com>
-Cc: Guenter Roeck <linux@roeck-us.net>; Chatradhi, Naveen Krishna <NaveenKr=
-ishna.Chatradhi@amd.com>; linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 1/3 v7] hwmon: Add amd_energy driver to report energy c=
-ounters
-
-[CAUTION: External Email]
-
-On Thu, 28 May 2020, Naveen Krishna Ch wrote:
-
-> > No, this isn't right. The workload is not stressing all cores,=20
-> > you're reporting 235 J for core 0 and only 35 J for core 7.
-> >
-> > If you are running the avx-turbo test, please run it like this:
-> >
-> >   ./avx-turbo --iters 10000000 --spec avx256_fma_t/8
-> >
-> > This will run AVX code on all 8 cores for about 1 second. To run it=20
-> > for longer, increase the --iters argument.
-> I ran with all cores loaded now and i see that sum of diff of energy=20
-> consumed by all cores is greater than the diff of socket energy=20
-> consumed in 100secs.
->
-> Kindly, give me time. I will come back with some explanation or solution.
-
-Hello. Is there any update on this issue?
-
-Thanks.
-Alexander
+Thanks,
+Guenter
