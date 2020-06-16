@@ -6,69 +6,76 @@ X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42679C433E1
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Jun 2020 14:46:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F273C433E0
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Jun 2020 14:53:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 25D3320C09
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Jun 2020 14:46:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5A23D20679
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Jun 2020 14:53:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m3FpMn0H"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tQ6j6EcK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729113AbgFPOqk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 16 Jun 2020 10:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37048 "EHLO
+        id S1729380AbgFPOx0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 16 Jun 2020 10:53:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726526AbgFPOqj (ORCPT
+        with ESMTP id S1729005AbgFPOxZ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 16 Jun 2020 10:46:39 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 206DEC061573;
-        Tue, 16 Jun 2020 07:46:39 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id j4so5240544plk.3;
-        Tue, 16 Jun 2020 07:46:39 -0700 (PDT)
+        Tue, 16 Jun 2020 10:53:25 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7CC3C061573
+        for <linux-hwmon@vger.kernel.org>; Tue, 16 Jun 2020 07:53:25 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id x207so9617146pfc.5
+        for <linux-hwmon@vger.kernel.org>; Tue, 16 Jun 2020 07:53:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=Wp5M8tnQYT7iRVKebggcqWX6gRGut1Hkoi6yXdAIq0c=;
-        b=m3FpMn0Hb64pQCP149bbxyapIdSQgqxjgxZBGjIZI21tRCZztfhMD6aamjeW8CmXPM
-         U7nO4wiV/bV6y3Pt4nXyZLe/TUNy1rzlelPCtTIcWhdx61iyb7shjYcP678TXY6attG8
-         XHjbngBn5N59Bds/xdZ23GUn2vEH9lxALTvDPNiukNl1PXh7LJrkfl9HqcQ+bF6CiO+U
-         rZWHWEhUf6dcBwf/RobVhZ13mf/aHJhOf/fj1dF26SLV88EdYY8PdMIJjBoZjs3qZe7i
-         vt/Yg4ea3f5tUk2r01mjY9mGN2njC+oXhh1OkunngcG60Iz/C5XHhtBFS4sZxThkjOPU
-         qmBA==
+        bh=AtGEVcVYwzLMn+NJ6fr14Iakl+QIl0A5dvhhK8Fenqc=;
+        b=tQ6j6EcKyzVtjW85Xu1hJydGFiOls9r0lyKE1Sj2a6UZZwYzoCeU+i00UPXLI43qvw
+         dd0Qo3xDGU+/0+bm4AFD26QvoAjdUoC/kmoGBuGQSBwD7GhgdimzF9NJcsaVz+3Xj6VR
+         S6+KnwBjKDgfO7y5uU2H+LmJenp4UAzm8i6QJ2xL/Ro3DHhFrCDln2AKR6/YGdD01eqI
+         FdJmVRf9HUl18GGbhXDEh40QzXuzSpQ8RiPlhAmJFthpHV+d+zz+9znylvYVk3IA8cXV
+         ibTR0mDqeQjtz2UQIpvShIxzF68hOYqHpBVRE+/rEWZYRfYWPEVZgYd91WumsN2h02Mp
+         BzFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=Wp5M8tnQYT7iRVKebggcqWX6gRGut1Hkoi6yXdAIq0c=;
-        b=to/zHPqmZ7FngSGCX13QPvISR45yzRAzUr1e9J8fUm9J13XwCdUHyNFGbtZ0lOm4Ch
-         bvGQt78dSHz7sXZJxeHJiGY7RLf+igOvcF/Je+D0vJ8Zk83oWrO+nYzEGKyiakeLC+I1
-         RH5ENfau/hwLifo/JV+lwwUDvjPtgCdvCnk7KdopkbS2rYmhayR0CRIHOMeIfrWGLyv5
-         ija43yKFxf3zV1qA28ALDFUPxYZDfzk+PD0taINkKu9RoQlve2YZN3EW+2caH5gzXM0H
-         i48TlZx8IM7ELI4cSx+83wRJZkSjolvEi2hRBr+X8wr763eEP5qdwmvs4kPs9z6PrQ7D
-         8Vhg==
-X-Gm-Message-State: AOAM532TBBJzDbAVNV2urii2gA5QgGUJMXG8THRUN9Itn7yH4ruxGoOA
-        F/Xdf4+A4ARn244cHmt4ofabTZGD
-X-Google-Smtp-Source: ABdhPJxFjTLMU5EPu/DBjvRqE91x26mensCA5LghCmxC15P+zKUeH+HwWjuCA+92AdJF1oU8S7jKtA==
-X-Received: by 2002:a17:90b:188d:: with SMTP id mn13mr3186865pjb.84.1592318798345;
-        Tue, 16 Jun 2020 07:46:38 -0700 (PDT)
+        bh=AtGEVcVYwzLMn+NJ6fr14Iakl+QIl0A5dvhhK8Fenqc=;
+        b=XhqjzhD42H0IaEEEQukYd8kQQmScCpAkRZRPI8RxNsuXVv9GO5H41lPxvxQg1kbr+h
+         1skJC+Y1JvEJMCxEHZH+pNCOxeyXYw/UJJMl+ydwaMO/iBvKJbjRrTEkZlfLrk0emgj+
+         Z8GiYNv2/VetgGEhMQRyUNPRXmt79XG5eTNNSCbDThh0MQgTAb8FlU3RPG0txwFNjpmT
+         eXMNRWhRQChfkLzrSCXbIwXPNzMYWx0Bl79EJWqCTEAejVV4iPhG+M774frXULu3YxPm
+         +3hr9jBwyvo/IDqSCKAAPhblPuLy04KVDeZwFGvM/XzuH7uXzWa95/CP2K2c0eduwXp5
+         cgYw==
+X-Gm-Message-State: AOAM5323M04syD9qemyEtLtbYKZKJSZNncSU9MT5jld0sJSPS9kBhk8v
+        uhXiPtmx8vgQx8V1sd/Kx5uiRBTf
+X-Google-Smtp-Source: ABdhPJx/Y0ABPZqfJO2JVsXW4nUWVukU70zIlY92KY73D+smz1VLaFod3ZxL2xkxwDiyZRpSZ3Ek2w==
+X-Received: by 2002:a62:75c1:: with SMTP id q184mr2480371pfc.210.1592319204826;
+        Tue, 16 Jun 2020 07:53:24 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k18sm17495730pfp.208.2020.06.16.07.46.37
+        by smtp.gmail.com with ESMTPSA id r24sm14805058pgm.25.2020.06.16.07.53.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Jun 2020 07:46:37 -0700 (PDT)
-Subject: Re: [PATCH 0/2] MCA and EDAC updates for AMD Family 17h, Model 60h
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Jacky Hu <hengqing.hu@gmail.com>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tony.luck@intel.com, x86@kernel.org,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        linux-hwmon@vger.kernel.org
-References: <20200607043709.48178-1-hengqing.hu@gmail.com>
- <20200615115950.GG14668@zn.tnic>
- <a9d0cfc4-1aed-d6ed-c6f2-336b56d91f20@roeck-us.net>
- <20200616143517.GH13515@zn.tnic>
+        Tue, 16 Jun 2020 07:53:24 -0700 (PDT)
+Subject: Re: [PATCH 1/3 v7] hwmon: Add amd_energy driver to report energy
+ counters
+To:     "Chatradhi, Naveen Krishna" <NaveenKrishna.Chatradhi@amd.com>,
+        Alexander Monakov <amonakov@ispras.ru>,
+        Naveen Krishna Ch <naveenkrishna.ch@gmail.com>
+Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+References: <20200519155011.56184-1-nchatrad@amd.com>
+ <d3cf6e06-8cda-a3d6-b528-fd2b5360585a@roeck-us.net>
+ <CAHfPSqAUYjT_QDmLoQBSQwtjfzyTeNqGqxtBpfGUGc+uO8j+KA@mail.gmail.com>
+ <alpine.LNX.2.20.13.2005270120271.8241@monopod.intra.ispras.ru>
+ <CAHfPSqCDSQkR03B_g+OAWvja9-+Zwo4Pbx0jLpsHUu_sn9K77Q@mail.gmail.com>
+ <alpine.LNX.2.20.13.2005270940400.18802@monopod.intra.ispras.ru>
+ <CAHfPSqC6gQzRt-_O-zHTHoSa=vOO064+dfoGrV2abQr=rMvfgA@mail.gmail.com>
+ <alpine.LNX.2.20.13.2005271944560.18802@monopod.intra.ispras.ru>
+ <CAHfPSqAYBKXJkG21hqjyuRN8X+HqaX5df6ByeSRoMycBeVU48A@mail.gmail.com>
+ <alpine.LNX.2.20.13.2006102320180.15859@monopod.intra.ispras.ru>
+ <MW2PR12MB2569591CBFFB613E88EAD9F1E89D0@MW2PR12MB2569.namprd12.prod.outlook.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -113,12 +120,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <a2f55a9c-25fd-d79d-5f20-8144694f394d@roeck-us.net>
-Date:   Tue, 16 Jun 2020 07:46:36 -0700
+Message-ID: <40def50d-8642-c850-5b23-b0ad4110becb@roeck-us.net>
+Date:   Tue, 16 Jun 2020 07:53:23 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <20200616143517.GH13515@zn.tnic>
+In-Reply-To: <MW2PR12MB2569591CBFFB613E88EAD9F1E89D0@MW2PR12MB2569.namprd12.prod.outlook.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -127,29 +134,22 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 6/16/20 7:35 AM, Borislav Petkov wrote:
-> On Mon, Jun 15, 2020 at 08:01:22AM -0700, Guenter Roeck wrote:
->> Looks like we may have to black-list current measurements
->> for that chip, though.
->>
->> Guenter
->>
->>>> Jacky Hu (2):
->>>>   x86/amd_nb: Add Family 17h, Model 60h PCI IDs
->>>>   EDAC/amd64: Add family ops for Family 17h Models 60h-6Fh
->>>>
->>>>  arch/x86/kernel/amd_nb.c  |  5 +++++
->>>>  drivers/edac/amd64_edac.c | 14 ++++++++++++++
->>>>  drivers/edac/amd64_edac.h |  3 +++
->>>>  drivers/hwmon/k10temp.c   |  2 ++
+On 6/16/20 7:46 AM, Chatradhi, Naveen Krishna wrote:
+> [AMD Public Use]
 > 
-> ... meaning I should not take the k10temp changes yet? I can drop them
-> and take the rest...
+> Hi Alexander,
+> 
+> The issue does not seem to be in the driver, it is in the register values populated by the firmware.
+> We have tested this in the server platforms and it works fine.
+> I've raised an issue internally to analyze and provide a solution for client systems.
+> I'm still waiting for their update. 
+> 
+> Guenter,
+> This issue is seen on client machines model ranging from 0x40 and above. Should I submit a patch
+> to support only server specific models 0x0 to 0x3f until we triage the issue for client systems.
 > 
 
-No, that is independent. It is more like a note to myself. I'll have to get
-debug dumps from someone with affected chip(s), and for that to work
-support for those chips has to be enabled in k10temp.
+Yes, I think that would make sense.
 
 Thanks,
 Guenter
