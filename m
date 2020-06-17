@@ -2,94 +2,85 @@ Return-Path: <SRS0=unJW=76=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88B41C433DF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Jun 2020 15:22:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4192EC433DF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Jun 2020 21:47:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5EC402089D
-	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Jun 2020 15:22:29 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=alien8.de header.i=@alien8.de header.b="FlJ8BA/r"
+	by mail.kernel.org (Postfix) with ESMTP id 11E5B2070A
+	for <linux-hwmon@archiver.kernel.org>; Wed, 17 Jun 2020 21:47:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1592430428;
+	bh=CNjWjSwj/oRHWDdfsfECWAfole8MdNdrGLveVtbPY70=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=Cxf2HanCk9UdAtnvjXPt5VHNSMR2WZBTK1sZhvbFjhLcypGeZn7ai7kpk4SZcH8/4
+	 3z5r+kS8oPMqimj2CwC2CWO7BlsVXgfaE2ueJVdQjAFzRpQEnTdL4s3WY+YAowq0oa
+	 kGkWxpdRBg4nNa0N0gDsQ0wIiQl0xeNApjvJ+o6A=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726913AbgFQPW3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 17 Jun 2020 11:22:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39182 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726815AbgFQPW2 (ORCPT
+        id S1726906AbgFQVrH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 17 Jun 2020 17:47:07 -0400
+Received: from mail-il1-f196.google.com ([209.85.166.196]:46722 "EHLO
+        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726763AbgFQVrH (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 17 Jun 2020 11:22:28 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C38C06174E;
-        Wed, 17 Jun 2020 08:22:28 -0700 (PDT)
-Received: from zn.tnic (p200300ec2f0bb000a115b7d9110c62d9.dip0.t-ipconnect.de [IPv6:2003:ec:2f0b:b000:a115:b7d9:110c:62d9])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0C32B1EC03C5;
-        Wed, 17 Jun 2020 17:22:27 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1592407347;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=jYDxX+7IAxeetjgcjqHuc8C8ajEs1SremN84jrW7G34=;
-        b=FlJ8BA/rFfbHhRscG8JZf3811K+pYpyfbdCPV0v6xnQK4W6lGL1HZV6CKX8ywK1TcNpTwX
-        FQbG4lKH89OkaajVBInGO2SrOZ4JfhlNjEV1J4gDy9EqrxpN0pO7m3XTFyVH8g6p5m7cJQ
-        1qI06z91kpXtHxoEQ6OfLSKHyeP0YPw=
-Date:   Wed, 17 Jun 2020 17:22:19 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Jacky Hu <hengqing.hu@gmail.com>,
-        Alexander Monakov <amonakov@ispras.ru>
-Cc:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tony.luck@intel.com, x86@kernel.org, yazen.ghannam@amd.com,
-        clemens@ladisch.de
-Subject: Re: [PATCH] hwmon: (k10temp) Add AMD family 17h model 60h probe
-Message-ID: <20200617152219.GG10118@zn.tnic>
-References: <20200616180940.GN13515@zn.tnic>
- <20200617013255.391975-1-hengqing.hu@gmail.com>
- <20200617034028.GA1614@roeck-us.net>
- <20200617071927.GA398128@i716>
- <alpine.LNX.2.20.13.2006171739010.31660@monopod.intra.ispras.ru>
- <20200617150735.GA405893@i716>
+        Wed, 17 Jun 2020 17:47:07 -0400
+Received: by mail-il1-f196.google.com with SMTP id h3so3789095ilh.13;
+        Wed, 17 Jun 2020 14:47:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QOtalIRl7dJtF8bawMxSj4onvGztmuE6KHSorPmNNiQ=;
+        b=V148A2qW713f52gffD0TFLqQYonwvq7M6y00yZ5tS2MSy1wpkoFE4Rpu0PMhAFJfJ3
+         0t0X1kEtwn04RXn254y01KmWWizOh4ZuQANggRBqq1upBHFeaf3x031fLLWm3suv7aQo
+         9+YfnihUUPMwsd0+U2y8jzjKLWDGtDPpFQ6JFasz1ZcWvYXXajgjyRWIVcIL8I+s6JYv
+         q2giZS7+DVveD81xdVCx9tmg+4gK0tNXoxUu3uw2I9QcHXdrxMfyuJAxphTQlBc2PL8Q
+         pyHkrbH4ZaWRwl3rBrgQ7F3XkDvQkDltKG3EWI1A8xgGP1QE3rHEMFwPhNYQ/os263/8
+         m4HA==
+X-Gm-Message-State: AOAM5331VadJxlE6EUnfZWo6GuV/BI7mWTjjcPgapnAVcvI/0i5gM1Vw
+        oMl2fSMRqWRTDgHuGRvNsw==
+X-Google-Smtp-Source: ABdhPJyBDSEi43mBE+erhCt9ul6yKVvlnJFELUx209pjl/BDlB/3MXyAjCZJbUAeEV6872L5HmPo+Q==
+X-Received: by 2002:a05:6e02:1203:: with SMTP id a3mr1011013ilq.30.1592430426606;
+        Wed, 17 Jun 2020 14:47:06 -0700 (PDT)
+Received: from xps15 ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id c62sm484926ill.62.2020.06.17.14.47.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Jun 2020 14:47:06 -0700 (PDT)
+Received: (nullmailer pid 2884760 invoked by uid 1000);
+        Wed, 17 Jun 2020 21:47:05 -0000
+Date:   Wed, 17 Jun 2020 15:47:05 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Tim Harvey <tharvey@gateworks.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Robert Jones <rjones@gateworks.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>, linux-hwmon@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 1/2] dt-bindings: mfd: gateworks-gsc: add 16bit
+ pre-scaled voltage mode
+Message-ID: <20200617214705.GA2884703@bogus>
+References: <1591714640-10332-1-git-send-email-tharvey@gateworks.com>
+ <1591714640-10332-2-git-send-email-tharvey@gateworks.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200617150735.GA405893@i716>
+In-Reply-To: <1591714640-10332-2-git-send-email-tharvey@gateworks.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Ok, both of you:
-
-On Wed, Jun 17, 2020 at 11:07:35PM +0800, Jacky Hu wrote:
-> Hi,
+On Tue, 09 Jun 2020 07:57:19 -0700, Tim Harvey wrote:
+> add a 16-bit pre-scaled voltage mode to adc and clarify that existing
+> pre-scaled mode is 24bit.
 > 
-> Sorry, I apologize for didn't do much lookup that you already did the patch
-> submission before I submitted the patch.
-> I have to say we are all programmed by the programs.
-> Also I didn't submit to either of the lists.
-> A few places I did looked at are below before I did the submission.
-> https://pci-ids.ucw.cz/v2.2/pci.ids
-> https://lore.kernel.org/patchwork/project/lkml/list/
+> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+> ---
+>  Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
 
-Jacky, please do not top-post. Please adhere to the etiquette on public
-mailing lists.
-
-Alexander, things like that can happen and they pretty much do happen
-everytime new hw comes out. Kernel development has exploded so much in
-recent years so that it is absolutely normal to miss stuff. Hell, *we*
-miss stuff too, from time to time.
-
-So let's concentrate on the work pls.
-
-Thank you both!
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Acked-by: Rob Herring <robh@kernel.org>
