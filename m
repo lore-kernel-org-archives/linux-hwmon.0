@@ -2,122 +2,303 @@ Return-Path: <SRS0=2i4F=77=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.5 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 21045C433E1
-	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Jun 2020 07:40:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF491C433DF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Jun 2020 11:31:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ED622206D7
-	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Jun 2020 07:40:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A6288206C3
+	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Jun 2020 11:31:30 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wHpyRT6g"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="nN8dMAPm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726945AbgFRHkE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 18 Jun 2020 03:40:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48384 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728072AbgFRHkC (ORCPT
+        id S1726919AbgFRLba (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 18 Jun 2020 07:31:30 -0400
+Received: from esa5.microchip.iphmx.com ([216.71.150.166]:30401 "EHLO
+        esa5.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729428AbgFRLb3 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 18 Jun 2020 03:40:02 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2EDC061755
-        for <linux-hwmon@vger.kernel.org>; Thu, 18 Jun 2020 00:40:02 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id p5so4902704wrw.9
-        for <linux-hwmon@vger.kernel.org>; Thu, 18 Jun 2020 00:40:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=s/8DkSI65X40wSJ2wJgW7rhkfE2WrLXMAQ1mczpC6zc=;
-        b=wHpyRT6g48UW/2VXK4Vlqpp8IdBVoxvfm7hbnHoGqXqCjcWMt6OjnjC0rOX3gwVWts
-         CLtUGBGE6vad+ibfxaicPD/sIMOJD68RzNyGnf+1r0JdWkXwXI9ont46uDWDYJAwEceO
-         wlqNwz4FlUo1BipYuyqxlumxcHgPp/x2UVL9Rei+ttRe410xPlxd42rDurT/o7l/PtWi
-         78hcrsBrTwGr8bON5Uu9RG8gAJXxac8Nasy8ACpAXSOobGFMWW+EqW42O3T0ctfYgGuK
-         bOsPXyue9KhNA9HLKghAG1/VXSbLRz0MOxZPd0AllO8Veeup7EVzoYbJ9pJAC4q+mbN5
-         ubaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=s/8DkSI65X40wSJ2wJgW7rhkfE2WrLXMAQ1mczpC6zc=;
-        b=KHKZdbgk20DoctJiol8Jx2tLp+CwK8V1HQfsslt8tzuYbi4HL1t3EbCRyZGz7QcD8D
-         ynrilWxQzF7jDkjRtlc3YLGlyHoaxIjOAyX0CyealPUthpcRDpmlcR/PYnR7+qCJvgT0
-         kSb4fgdasASsQ/I0gQutUquH/U6tijbjPqGvluK0wssclIHIqo5O/ubvI7sbTxdDqsyA
-         8ECKD98ZFCpaYF3uN3GqLSVrfBCafkLnttkCsNGiT9HcMs0wsPYz3Nj+h5wd1tUIZD2u
-         HhJGNMHrD/s+q3Z0aqUTTLRhavfvooMILentYVbzk5DzTv43CzrVxog3YoIJ/faHJH+7
-         qGAQ==
-X-Gm-Message-State: AOAM531XUW2pndn9lMDyEDFnRhRoMJuuV0QIq0NqrDbo69MzEHAl8RYm
-        2hhOpLgnpbPuuGsU03ckSX2pLA==
-X-Google-Smtp-Source: ABdhPJxwjDquDAcT4g/jpcs1pS9o3jDdghMMVIQd0ngpDgfkG3HO7xafJGF9xrjnE6lQmQDojILE2g==
-X-Received: by 2002:adf:f083:: with SMTP id n3mr446448wro.297.1592466001358;
-        Thu, 18 Jun 2020 00:40:01 -0700 (PDT)
-Received: from dell ([95.149.164.118])
-        by smtp.gmail.com with ESMTPSA id w13sm2368365wrr.67.2020.06.18.00.40.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Jun 2020 00:40:00 -0700 (PDT)
-Date:   Thu, 18 Jun 2020 08:39:59 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Tim Harvey <tharvey@gateworks.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Robert Jones <rjones@gateworks.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: mfd: gateworks-gsc: add 16bit
- pre-scaled voltage mode
-Message-ID: <20200618073959.GX2608702@dell>
-References: <1591714640-10332-1-git-send-email-tharvey@gateworks.com>
- <1591714640-10332-2-git-send-email-tharvey@gateworks.com>
+        Thu, 18 Jun 2020 07:31:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1592479889; x=1624015889;
+  h=references:from:to:cc:subject:in-reply-to:date:
+   message-id:mime-version;
+  bh=fDjMVXtMTZ2HWY9E00w48WZpz44oyO+oc1cgMEc4zbo=;
+  b=nN8dMAPmPrrCsB6ymB945ORnBGmi5VHuHshOwudgIqegy+EBhNcTUzKW
+   QZKJdQRqJmFaPzUAHoDWPd5+8oSP0jygfwwO5roArAIXMcDvRRwkz+XnH
+   Ac27yJR3+wmTRo1leBrRTpHgYSpXvne0//TNLuIRhUV+MjAmTFQlpveir
+   95hL05MFy79ZqgNCKS11z3VraP0NAijHZQjxkZRcp6hdPYHgCCrcE0lMX
+   U4LZjCy7PsYcXVV5ppfzQuiLYMBJZWUgDxda01j0ahidItwL1BnmPN+wS
+   KsP11/FDCE9x93kNIR5Ip4LttkuaA871ub0kXRTC3/zjWNO0ZidVbCkjc
+   A==;
+IronPort-SDR: gvlMpEiR3kTqMCQ+dV6NdL/esUxVuocXP1AeqEbyxu1npCzRzbdK8z2zOG+e/SYFQLGd2uunbH
+ p00mHThX6/jwwxLe4xvLBq1NjxIuFa5BAlwgSjowFWCJyjJyebF1fmjiTJ71QPHR5dVSwneZ8l
+ O5CDBeA8wpD+cet1lIu/FZHlRzf38ZbR8yhAyzy0xY+v+ZFV1HXxmw+yLouAzs8fu40Kjfri1+
+ 7Aqag/bVSuIyQRwQhibQWrJFGjIGBzN6wrH0aB7rhgkTLfquguXu8a0ete6xKM7ekvSBQiPOF6
+ fns=
+X-IronPort-AV: E=Sophos;i="5.73,526,1583218800"; 
+   d="scan'208";a="79965936"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Jun 2020 04:31:29 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Thu, 18 Jun 2020 04:31:21 -0700
+Received: from soft-dev15.microsemi.net.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3
+ via Frontend Transport; Thu, 18 Jun 2020 04:31:19 -0700
+References: <20200616082556.27877-1-lars.povlsen@microchip.com> <20200616082556.27877-4-lars.povlsen@microchip.com> <b44120d8-67fe-4ba3-bc76-80a5a0970dad@roeck-us.net>
+From:   Lars Povlsen <lars.povlsen@microchip.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     Lars Povlsen <lars.povlsen@microchip.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: Re: [PATCH v3 3/3] hwmon: sparx5: Add Sparx5 SoC temperature driver
+In-Reply-To: <b44120d8-67fe-4ba3-bc76-80a5a0970dad@roeck-us.net>
+Date:   Thu, 18 Jun 2020 13:31:24 +0200
+Message-ID: <87ftaswqyb.fsf@soft-dev15.microsemi.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1591714640-10332-2-git-send-email-tharvey@gateworks.com>
+Content-Type: text/plain
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, 09 Jun 2020, Tim Harvey wrote:
 
-> add a 16-bit pre-scaled voltage mode to adc and clarify that existing
-> pre-scaled mode is 24bit.
-> 
-> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
-> ---
->  Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+Guenter Roeck writes:
 
-Fixed the grammar in the subject and commit message.
+> On 6/16/20 1:25 AM, Lars Povlsen wrote:
+>> This patch adds a temperature sensor driver to the Sparx5 SoC.
+>>
+>> Signed-off-by: Lars Povlsen <lars.povlsen@microchip.com>
+>> ---
+>>  drivers/hwmon/Kconfig       |  10 +++
+>>  drivers/hwmon/Makefile      |   1 +
+>>  drivers/hwmon/sparx5-temp.c | 136 ++++++++++++++++++++++++++++++++++++
+>
+> This will also require documentation in
+>         Documentation/hwmon/sparx5-temp.rst
+>
+>>  3 files changed, 147 insertions(+)
+>>  create mode 100644 drivers/hwmon/sparx5-temp.c
+>>
+>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+>> index 288ae9f63588c..7fb5e0c6c6306 100644
+>> --- a/drivers/hwmon/Kconfig
+>> +++ b/drivers/hwmon/Kconfig
+>> @@ -515,6 +515,16 @@ config SENSORS_I5K_AMB
+>>         This driver can also be built as a module. If so, the module
+>>         will be called i5k_amb.
+>>
+>> +config SENSORS_SPARX5
+>> +     tristate "Sparx5 SoC temperature sensor"
+>> +     depends on ARCH_SPARX5 || COMPILE_TEST
+>> +     help
+>> +       If you say yes here you get support for temperature monitoring
+>> +       with the Microchip Sparx5 SoC.
+>> +
+>> +       This driver can also be built as a module. If so, the module
+>> +       will be called sparx5-temp.
+>> +
+>>  config SENSORS_F71805F
+>>       tristate "Fintek F71805F/FG, F71806F/FG and F71872F/FG"
+>>       depends on !PPC
+>> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+>> index 3e32c21f5efe3..857293f650412 100644
+>> --- a/drivers/hwmon/Makefile
+>> +++ b/drivers/hwmon/Makefile
+>> @@ -167,6 +167,7 @@ obj-$(CONFIG_SENSORS_SMM665)      += smm665.o
+>>  obj-$(CONFIG_SENSORS_SMSC47B397)+= smsc47b397.o
+>>  obj-$(CONFIG_SENSORS_SMSC47M1)       += smsc47m1.o
+>>  obj-$(CONFIG_SENSORS_SMSC47M192)+= smsc47m192.o
+>> +obj-$(CONFIG_SENSORS_SPARX5) += sparx5-temp.o
+>>  obj-$(CONFIG_SENSORS_STTS751)        += stts751.o
+>>  obj-$(CONFIG_SENSORS_AMC6821)        += amc6821.o
+>>  obj-$(CONFIG_SENSORS_TC74)   += tc74.o
+>> diff --git a/drivers/hwmon/sparx5-temp.c b/drivers/hwmon/sparx5-temp.c
+>> new file mode 100644
+>> index 0000000000000..4ed8a2aec3ae9
+>> --- /dev/null
+>> +++ b/drivers/hwmon/sparx5-temp.c
+>> @@ -0,0 +1,136 @@
+>> +// SPDX-License-Identifier: GPL-2.0-or-later
+>> +/* Sparx5 SoC temperature sensor driver
+>> + *
+>> + * Copyright (C) 2020 Lars Povlsen <lars.povlsen@microchip.com>
+>> + */
+>> +
+>> +#include <linux/module.h>
+>> +#include <linux/init.h>
+>> +#include <linux/hwmon.h>
+>> +#include <linux/io.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/mod_devicetable.h>
+>> +#include <linux/bitfield.h>
+>
+> Alphabetic order, please.
 
-Patch applied, thanks.
+Ack.
 
-> diff --git a/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml b/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
-> index 487a844..ceec33f 100644
-> --- a/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
-> @@ -79,11 +79,12 @@ properties:
->              description: |
->                conversion mode:
->                  0 - temperature, in C*10
-> -                1 - pre-scaled voltage value
-> +                1 - pre-scaled 24-bit voltage value
->                  2 - scaled voltage based on an optional resistor divider
->                      and optional offset
-> +                3 - pre-scaled 16-bit voltage value
->              $ref: /schemas/types.yaml#/definitions/uint32
-> -            enum: [0, 1, 2]
-> +            enum: [0, 1, 2, 3]
->  
->            gw,voltage-divider-ohms:
->              description: Values of resistors for divider on raw ADC input
+>
+>> +
+>> +#define TEMP_CTRL            0
+>> +#define TEMP_CFG             4
+>> +#define  TEMP_CFG_CYCLES     GENMASK(24, 15)
+>> +#define  TEMP_CFG_ENA                BIT(0)
+>> +#define TEMP_STAT            8
+>> +#define  TEMP_STAT_VALID     BIT(12)
+>> +#define  TEMP_STAT_TEMP              GENMASK(11, 0)
+>> +
+>> +struct s5_hwmon {
+>> +     void __iomem *base;
+>> +};
+>> +
+>> +static void s5_temp_enable(struct s5_hwmon *hwmon)
+>> +{
+>> +     u32 val = readl(hwmon->base + TEMP_CFG);
+>> +     u32 clk = 250;
+>> +
+>
+> Unnecessary variable, and magic number. It would be better to use a define
+> or at least explain what the number is for. Also, if this is associated with
+> a system clock, would it make sense to use the clock subsystem API to get
+> the rate ?
+>
+
+Yes, valid point. Changed to reference the system AHB clock, so DT and
+bindings updated as well. (The magic number is clock ticks per 1us).
+
+I am sending an update asap.
+
+Thank you for your comments, they are highly appreciated!
+
+Cheers,
+
+---Lars
+
+>> +     val &= ~TEMP_CFG_CYCLES;
+>> +     val |= FIELD_PREP(TEMP_CFG_CYCLES, clk);
+>> +     val |= TEMP_CFG_ENA;
+>> +
+>> +     writel(val, hwmon->base + TEMP_CFG);
+>> +}
+>> +
+>> +static int s5_read(struct device *dev, enum hwmon_sensor_types type,
+>> +                u32 attr, int channel, long *temp)
+>> +{
+>> +     struct s5_hwmon *hwmon = dev_get_drvdata(dev);
+>> +     int rc = 0, value;
+>> +     u32 stat;
+>> +
+>> +     switch (attr) {
+>> +     case hwmon_temp_input:
+>> +             stat = readl_relaxed(hwmon->base + TEMP_STAT);
+>> +             if (!(stat & TEMP_STAT_VALID))
+>> +                     return -EIO;
+>> +             value = stat & TEMP_STAT_TEMP;
+>> +             value = DIV_ROUND_CLOSEST(value * 3522, 4096) - 1094;
+>
+> A comment describing the calculation would be useful, not only to help
+> the reader but also to help me verify if the calculation is correct
+> (especially since datasheets don't seem to be public).
+>
+
+I have added the register docs and commented the calculations.
+
+>> +             value *= 100;
+>> +             *temp = value;
+>> +             break;
+>> +     default:
+>> +             rc = -EOPNOTSUPP;
+>> +             break;
+>> +     }
+>> +
+>> +     return rc;
+>> +}
+>> +
+>> +static umode_t s5_is_visible(const void *_data, enum hwmon_sensor_types type,
+>> +                          u32 attr, int channel)
+>> +{
+>> +     if (type != hwmon_temp)
+>> +             return 0;
+>> +
+>> +     switch (attr) {
+>> +     case hwmon_temp_input:
+>> +             return 0444;
+>> +     default:
+>> +             return 0;
+>> +     }
+>> +}
+>> +
+>> +static const struct hwmon_channel_info *s5_info[] = {
+>> +     HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
+>> +     HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
+>> +     NULL
+>> +};
+>> +
+>> +static const struct hwmon_ops s5_hwmon_ops = {
+>> +     .is_visible = s5_is_visible,
+>> +     .read = s5_read,
+>> +};
+>> +
+>> +static const struct hwmon_chip_info s5_chip_info = {
+>> +     .ops = &s5_hwmon_ops,
+>> +     .info = s5_info,
+>> +};
+>> +
+>> +static int s5_temp_probe(struct platform_device *pdev)
+>> +{
+>> +     struct device *hwmon_dev;
+>> +     struct s5_hwmon *hwmon;
+>> +
+>> +     hwmon = devm_kzalloc(&pdev->dev, sizeof(*hwmon), GFP_KERNEL);
+>> +     if (!hwmon)
+>> +             return -ENOMEM;
+>> +
+>> +     hwmon->base = devm_platform_ioremap_resource(pdev, 0);
+>> +     if (IS_ERR(hwmon->base))
+>> +             return PTR_ERR(hwmon->base);
+>> +
+>> +     s5_temp_enable(hwmon);
+>> +
+>> +     hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev,
+>> +                                                      "s5_temp",
+>> +                                                      hwmon,
+>> +                                                      &s5_chip_info,
+>> +                                                      NULL);
+>> +
+>> +     return PTR_ERR_OR_ZERO(hwmon_dev);
+>> +}
+>> +
+>> +const struct of_device_id s5_temp_match[] = {
+>> +     { .compatible = "microchip,sparx5-temp" },
+>> +     {},
+>> +};
+>> +MODULE_DEVICE_TABLE(of, s5_temp_match);
+>> +
+>> +static struct platform_driver s5_temp_driver = {
+>> +     .probe = s5_temp_probe,
+>> +     .driver = {
+>> +             .name = "sparx5-temp",
+>> +             .of_match_table = s5_temp_match,
+>> +     },
+>> +};
+>> +
+>> +module_platform_driver(s5_temp_driver);
+>> +
+>> +MODULE_AUTHOR("Lars Povlsen <lars.povlsen@microchip.com>");
+>> +MODULE_DESCRIPTION("Sparx5 SoC temperature sensor driver");
+>> +MODULE_LICENSE("GPL");
+>>
 
 -- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Lars Povlsen,
+Microchip
