@@ -8,58 +8,58 @@ X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 345B2C433E1
-	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Jun 2020 16:36:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CEDCEC433E1
+	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Jun 2020 16:52:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 132FA21973
-	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Jun 2020 16:36:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AB2CF2078D
+	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Jun 2020 16:52:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZHBdCnX7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lOWhq/zJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389588AbgFSQgj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 19 Jun 2020 12:36:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53882 "EHLO
+        id S2393389AbgFSQwF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 19 Jun 2020 12:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389163AbgFSOtD (ORCPT
+        with ESMTP id S2393343AbgFSQwD (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 19 Jun 2020 10:49:03 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 117D4C06174E;
-        Fri, 19 Jun 2020 07:49:04 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id b5so4577665pgm.8;
-        Fri, 19 Jun 2020 07:49:04 -0700 (PDT)
+        Fri, 19 Jun 2020 12:52:03 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D7CC06174E;
+        Fri, 19 Jun 2020 09:52:03 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id d66so4664905pfd.6;
+        Fri, 19 Jun 2020 09:52:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:mime-version:content-disposition
          :user-agent;
-        bh=ctscLOlaKZHuHAvTFyT78hwNlRcZSz4aJaHfOiGs+e0=;
-        b=ZHBdCnX7+qH7Kxr7PP2Ge6MSsRgRj0s/ihGp4bPB13nAk+lg2mZ9GPpFQHv5SE351v
-         bM5jgHNdHfrUEaaLrMrXiCuqIYiwQEqSrs829H2hVv+qrNrXPAIra7ygBRVJb1mhIt/N
-         1uXJzpSK2VT48LrvhU5HdW+QJTwStqm3A26IHPJ9X0mwkp68M1TF85ET6Ul4g606Lnjh
-         mTZ9oGfAXFD5HTO+GmCIIMB4dHVTl8BFajZxa2Kk9QbceYPQuGQq5O3WZkk06dO0oIwq
-         XOemreiCAGbB5Yr07/Q0AtBCWzBJoqZExVDVf0M3Htqv+XndSHiJh7ib/ft/GHuKHdPn
-         WQIw==
+        bh=MojqGVMm/N36ukD1qQOzNiKEH9Yim97rUfkXtpM0HIo=;
+        b=lOWhq/zJNBjesFgxGkSn+BtJRwxdpQomhyNHZjlONsvkEN01tr66aBIeORJjSlwrzc
+         FU5LcMVd9PShZF8KF7qWB2r9nJTDNzbUQFTIbtZEygCCvfx2SoWdYi3G4ThYpquzn7du
+         VjTaDYtDXrCRuMgvTdYBl0LSsSxePM1iVhw0O+4kHjzM9oruFsWA+9t6pDoSSEeytMUq
+         ztebVmkrP6goQODaIFcGYuFPm9xXGNRapQ4dceWSPlj7VfBr3vZitoPI5lAVO03aVVvO
+         7w9bYuIMXzVmT0/+BmyJmMycx1Ctm9cPdZiWG8cDdpIyaj+6wWD9lfbEGHobj4s5ya5g
+         pTkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
          :content-disposition:user-agent;
-        bh=ctscLOlaKZHuHAvTFyT78hwNlRcZSz4aJaHfOiGs+e0=;
-        b=a5kV3SF6z/NLZ/yFn9rR7ZWCQ+oVnslzXVFzuUbOVd+hbF13JCMRp635+bc9563NXe
-         Q6Ke8ehFu1h6E6YujUIyBPrQbU7F291cKey79rRcHQ7iywhqgZkIKY/dprGrYYCWAcrZ
-         A2Zd5QKtZkqSIJQBvYjuCT5xJaK2e33EoI8sQscJkhhbdBldY9PtFOm/D2/vChHV52G2
-         y5Dv7z+G1ppaPgVbWCw2cfb/dCYr7HFJAHCy6PB8emDekkMLBwTTmqXv9leK9Ng1HKyH
-         xVxWUYwzGBIIqG2EteLAfMSbccpUrW/GPOBOZOMTlc7FR8r6/Rcf+8lsIgBAgjp8DijZ
-         XggQ==
-X-Gm-Message-State: AOAM533L7IjnIaUFsnhEKMOzla6tWRZT0cVUjmwcSud0bt7kXo4qcAj1
-        hURz/kdc7yXhojE60H20/fY=
-X-Google-Smtp-Source: ABdhPJxerp4UqGlBqo7ylxGcCO9oCGFDfiOp3F5MBCTgeGs6IAVexj7p0hvG8EQQNbo8S8SNGMozPQ==
-X-Received: by 2002:a63:1406:: with SMTP id u6mr3318908pgl.108.1592578142495;
-        Fri, 19 Jun 2020 07:49:02 -0700 (PDT)
-Received: from cnn ([2402:3a80:455:d3c:b10e:bd87:9e7c:d04])
-        by smtp.gmail.com with ESMTPSA id n19sm5975012pfu.194.2020.06.19.07.48.57
+        bh=MojqGVMm/N36ukD1qQOzNiKEH9Yim97rUfkXtpM0HIo=;
+        b=I5y4PQgEslVtNK+tqqx6lsmdWsJBAfI7qA0B/xyekGA25h54hWNTBYr0za34Z83UVB
+         uHTQ9Lvdc6Q60pP1byG7WcoJ7R9PR4ogPGlkD+Xrf79yJIXDdbG7AglejkGJIH7+Kh1V
+         oio2GCkhxx+vcCMy+CWSisYjkVPATt3CTRmIgU/cBIhm+4MsMWLks0hZiN6FrvlyYP6s
+         KpNVsqWGKAl0Bph3V8KpSUkfeW6JG4zQst6cC5Swkpb3R/7wBU57XoC8fN6ug4xJdhP/
+         +pEJUNoATrX8+q+dDJ8J7XXGFWf8V1q+QFP9+3j39wis+ZbugW5Pq8cE7VQThRaa3pY3
+         vnVA==
+X-Gm-Message-State: AOAM530mZG5qYzzDwTouwFF1zvtIawDutB8ZV3zTOlScdZA/xSltP67m
+        i0WQ5UI46tlEM6R5iDrMTJnwKV2/psc=
+X-Google-Smtp-Source: ABdhPJxQLpIde5crNDljO1wbiI8PDd931pTpWT7w4Fpd3YuE5eJBQnt/XfFKVMlmlaSaxcOe7PD3Rg==
+X-Received: by 2002:a62:8095:: with SMTP id j143mr8678422pfd.62.1592585522685;
+        Fri, 19 Jun 2020 09:52:02 -0700 (PDT)
+Received: from cnn ([112.133.236.100])
+        by smtp.gmail.com with ESMTPSA id w18sm5580656pgj.31.2020.06.19.09.51.58
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 19 Jun 2020 07:49:01 -0700 (PDT)
-Date:   Fri, 19 Jun 2020 20:18:53 +0530
+        Fri, 19 Jun 2020 09:52:02 -0700 (PDT)
+Date:   Fri, 19 Jun 2020 22:21:54 +0530
 From:   Manikandan Elumalai <manikandan.hcl.ers.epl@gmail.com>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
@@ -68,7 +68,7 @@ Cc:     saipsdasari@fb.com, patrickw3@fb.com, vijaykhemka@fb.com,
         linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
         manikandan.e@hcl.com
 Subject: [PATCH v4] hwmon:(adm1275) Enable adm1278 ADM1278_TEMP1_EN
-Message-ID: <20200619144853.GA18271@cnn>
+Message-ID: <20200619165154.GA20461@cnn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -81,20 +81,15 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 The adm1278 temp attribute need it for openbmc platform .
 This feature not enabled by default, so PMON_CONFIG needs to enable it.
 
-v4:
----
-Reported-by: kernel test robot <lkp@intel.com>
-v3:
-----
-fix invalid signed-off.
-removed checkpath warnings.
-write ADM1278_TEMP1_EN and ADM1278_VOUT_EN conf in single line operation.
-v2:
-----
-add Signed-off-by.
-removed ADM1278_TEMP1_EN check.
-
 Signed-off-by: Manikandan Elumalai <manikandan.hcl.ers.epl@gmail.com>
+---
+---    v4 -Reported-by: kernel test robot <lkp@intel.com>
+---    v3 -fix invalid signed-off.
+---       -removed checkpath warnings.
+---       -write ADM1278_TEMP1_EN and ADM1278_VOUT_EN conf in single line operation.
+---    v2 -add Signed-off-by.
+---       -removed ADM1278_TEMP1_EN check.
+---
 ---
  drivers/hwmon/pmbus/adm1275.c | 12 +++++-------
  1 file changed, 5 insertions(+), 7 deletions(-)
