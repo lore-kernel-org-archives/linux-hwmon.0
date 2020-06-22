@@ -1,94 +1,138 @@
-Return-Path: <SRS0=4pW0=AC=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=CoIK=AD=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B904C433DF
-	for <linux-hwmon@archiver.kernel.org>; Sun, 21 Jun 2020 04:55:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3AA16C433E1
+	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Jun 2020 15:37:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4DE392076A
-	for <linux-hwmon@archiver.kernel.org>; Sun, 21 Jun 2020 04:55:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 124CB2071A
+	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Jun 2020 15:37:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=icurse.nl header.i=@icurse.nl header.b="GVvAhg9P"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VJEN13ez"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725951AbgFUEzd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 21 Jun 2020 00:55:33 -0400
-Received: from mail.ruun.network ([176.9.184.6]:33241 "EHLO mail.ruun.network"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725807AbgFUEzc (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 21 Jun 2020 00:55:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=icurse.nl;
-         s=x; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-Id:Date:
-        Subject:Cc:To:From:Sender:Reply-To:Content-ID:Content-Description:Resent-Date
-        :Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
-        References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
-        List-Owner:List-Archive; bh=pzICcxAhbjceCAGYyGxyUjDndEifum3vNyJxaV2tvZ8=; b=G
-        VvAhg9PE6jLJRnKlAUSzjspsg97m/ubY7jZDpqjJKIi3N/YRFPYepNlJ6ihanw6AJdMkQ4BAOg/7o
-        twpRfZJTPg0SC8QxVBfxJk2Y3o4nzil8mR3j4R/pzDTvL8uWRhonX5Okql68uFSY0if7t7rauNK99
-        l5gwORxGQ8gQTMN/3USEw+17/6m3/+CKbtCple7xAdR6jinBvH1fCFS3AcLGYTePSqoPEH1G2OToy
-        BIrSH/gjqdKLI6Z2uqZgI1ObeqReZZPf7rTKBEAzGxuS50kjQFTKToGxspudyZ5QjmmMN2QPyFX7h
-        1f/mn0W+ts9DPbFzWSa4akXAYByHK3F1A==;
-Received: from cpe-98-14-166-248.nyc.res.rr.com ([98.14.166.248] helo=localhost.localdomain)
-        by birchibald.ruun.network with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93.0.4)
-        (envelope-from <jeffrey@icurse.nl>)
-        id 1jms0r-0002ng-Pa; Sun, 21 Jun 2020 06:55:26 +0200
-From:   Jeffrey Lin <jeffrey@icurse.nl>
-To:     Jean Delvare <jdelvare@suse.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jeffrey Lin <jeffrey@icurse.nl>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
-Subject: [PATCH v2] hwmon: (dell-smm) Add Latitude 5480 to fan control whitelist
-Date:   Sun, 21 Jun 2020 00:52:48 -0400
-Message-Id: <20200621045246.929649-1-jeffrey@icurse.nl>
-X-Mailer: git-send-email 2.27.0
+        id S1729566AbgFVPhh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 22 Jun 2020 11:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39322 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729494AbgFVPhh (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 22 Jun 2020 11:37:37 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C87C061795;
+        Mon, 22 Jun 2020 08:37:36 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id q22so5451182pgk.2;
+        Mon, 22 Jun 2020 08:37:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=Es07PooiZSXxjxOYZMyYhw0eShmysXjcokuuPID8SBQ=;
+        b=VJEN13ezcBfitU/knBaJoVjUSPO7tRSy83x0iwvXUroVjfpM1abAak06Wby0HSJhjW
+         3TAfZpgTv5+0lDjXEjJJlg4Ai0WaUmrBG8tLcFguItP0s4OInG1dE5CppJ4yEPr6CFvu
+         Le+uPayyeugMSGDo7/YB+3yVZh7NPR07n2yylWV2gnwIR5e77Mk/7B64mp/FAWkbSdI1
+         b5g0nUUh1on9k6+eN7HTXF48a/YBefUH8//I9p7iq0oK2Q1njJgntodYvewj7VCSpsT8
+         r6UfaGjUzB2Z496qnfeHts1VvCxbPOuCD3RSdxHoMHxZw430Oo/i4if0cUpTTuAqpQon
+         LoOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=Es07PooiZSXxjxOYZMyYhw0eShmysXjcokuuPID8SBQ=;
+        b=lnkvdayAj2lo7IR/q5iW0Ci+5keU1XI/ho0qJ36xLVEUJaG3WYmzw3rcEGfYclxCSa
+         Wgnwm4n2py/vPTztQyuSI0QWj6MLM7kSkdPHB6wTf/hhlFQzA15FhaqtLr9RoNUEHIG0
+         ZPdgFs5DZDIYqVnkAWf8tPEkMtGePGJAjGrNUColIQfZSSHZcGYRFqxBXLnU/H4zP2Ww
+         wE9Kp6w636gA6azyxHc1H2D/SzqFwaCwKwRaxk1jmqOIkL8xFRkboI5cOElCP4befHW5
+         ey+yz6a0KEjfOAZeVGRfXeAOZuxlNGtzQIQHfy4IoUO4hErWtWmRI5aahB/N23/gqc9S
+         B7Zg==
+X-Gm-Message-State: AOAM531ueIoO9IDZgKzCtSujNu4GC3HrXeI6Sxz7fy/+T1LiW0ghcXpU
+        RKEFKGwYBdB3aUrYm/MxO+4=
+X-Google-Smtp-Source: ABdhPJyrpuylIa7V3BVep59iIW7Hr5hWwlEONFn+NSvjqQKwf6Zd3Di3SEEpmzlZnQBAKhFy8LxKJw==
+X-Received: by 2002:a62:7841:: with SMTP id t62mr19835568pfc.273.1592840256516;
+        Mon, 22 Jun 2020 08:37:36 -0700 (PDT)
+Received: from cnn ([2402:3a80:462:12d4:244f:2b0c:295:2c0b])
+        by smtp.gmail.com with ESMTPSA id i12sm14333391pfk.180.2020.06.22.08.37.31
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 22 Jun 2020 08:37:36 -0700 (PDT)
+Date:   Mon, 22 Jun 2020 21:07:27 +0530
+From:   Manikandan Elumalai <manikandan.hcl.ers.epl@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>, miltonm@us.ibm.com,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     saipsdasari@fb.com, patrickw3@fb.com, vijaykhemka@fb.com,
+        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+        manikandan.e@hcl.com
+Subject: [PATCH v6] hwmon:(adm1275) Enable adm1278 ADM1278_TEMP1_EN
+Message-ID: <20200622153727.GA9347@cnn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Id: jeffrey@icurse.nl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This allows manual PWM control without the BIOS fighting back on Dell
-Latitude 5480.
+The adm1278 temp attribute need it for openbmc platform .
+This feature not enabled by default, so PMON_CONFIG needs to enable it.
 
-Signed-off-by: Jeffrey Lin <jeffrey@icurse.nl>
-Acked-by: Pali Rohár <pali@kernel.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Manikandan Elumalai <manikandan.hcl.ers.epl@gmail.com>
 ---
+v5 -> v6: 
+add Reported-by in commit log
+align commit and change log as per guidelines.
+v4 -> v5: 
+align commit and change log. 
+v3 -> v4: 
+kernel test robot CI warning
+v2 -> v3: 
+fix invalid signed-off.
+removed checkpath warnings.
+write ADM1278_TEMP1_EN and ADM1278_VOUT_EN conf in single line operation.
+v1 -> v2: 
+add Signed-off-by.
+removed ADM1278_TEMP1_EN check.
 
-The last email should have been labeled v2, apologies for the noise.
+ drivers/hwmon/pmbus/adm1275.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
-Changes in v2:
-- Added Pali's Acked-by
-
- drivers/hwmon/dell-smm-hwmon.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-index 16be012a95ed..ec448f5f2dc3 100644
---- a/drivers/hwmon/dell-smm-hwmon.c
-+++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -1187,6 +1187,14 @@ static struct dmi_system_id i8k_whitelist_fan_control[] __initdata = {
- 		},
- 		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
- 	},
-+	{
-+		.ident = "Dell Latitude 5480",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-+			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Latitude 5480"),
-+		},
-+		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
-+	},
- 	{
- 		.ident = "Dell Latitude E6440",
- 		.matches = {
+diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275.c
+index 5caa37fb..d4e1925 100644
+--- a/drivers/hwmon/pmbus/adm1275.c
++++ b/drivers/hwmon/pmbus/adm1275.c
+@@ -666,11 +666,12 @@ static int adm1275_probe(struct i2c_client *client,
+ 		tindex = 3;
+ 
+ 		info->func[0] |= PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT |
+-			PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT;
++			PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
++			PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP;
+ 
+-		/* Enable VOUT if not enabled (it is disabled by default) */
+-		if (!(config & ADM1278_VOUT_EN)) {
+-			config |= ADM1278_VOUT_EN;
++		/* Enable VOUT & TEMP1 if not enabled (disabled by default) */
++		if ((config & (ADM1278_VOUT_EN | ADM1278_TEMP1_EN)) != (ADM1278_VOUT_EN | ADM1278_TEMP1_EN)) {
++			config |= ADM1278_VOUT_EN | ADM1278_TEMP1_EN;
+ 			ret = i2c_smbus_write_byte_data(client,
+ 							ADM1275_PMON_CONFIG,
+ 							config);
+@@ -681,9 +682,6 @@ static int adm1275_probe(struct i2c_client *client,
+ 			}
+ 		}
+ 
+-		if (config & ADM1278_TEMP1_EN)
+-			info->func[0] |=
+-				PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP;
+ 		if (config & ADM1278_VIN_EN)
+ 			info->func[0] |= PMBUS_HAVE_VIN;
+ 		break;
 -- 
-2.27.0
+2.7.4
 
