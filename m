@@ -2,147 +2,171 @@ Return-Path: <SRS0=cB4w=AE=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+X-Spam-Status: No, score=-10.0 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EBEEFC433DF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Jun 2020 16:04:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0961C433E0
+	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Jun 2020 17:35:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C71892073E
-	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Jun 2020 16:04:59 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Djp5eFF2"
+	by mail.kernel.org (Postfix) with ESMTP id 87DDC20706
+	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Jun 2020 17:35:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732224AbgFWQE7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 23 Jun 2020 12:04:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41132 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728472AbgFWQE7 (ORCPT
+        id S1733058AbgFWRfO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 23 Jun 2020 13:35:14 -0400
+Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:11850 "EHLO
+        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1732408AbgFWRfO (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 23 Jun 2020 12:04:59 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 130C2C061573;
-        Tue, 23 Jun 2020 09:04:59 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id u8so1651847pje.4;
-        Tue, 23 Jun 2020 09:04:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=do86B9M5tGDDUUM7bCWck23OCEcGEf6z7sPQe5ReWXM=;
-        b=Djp5eFF2KkXJL5N4FbrLUF77gAhDcV09R7NzL5ZiUZr7l493GiFUA9Jc9AJumWB0JL
-         ob3ddMttwYvBHNdejMqGHn4zkWNutODfSMB1EYsuy7gK0ctmTFc2MucxUSEHeAx0FXRo
-         Kc1JsWyaBntbk3noEF/ZwfLnuWgOuxuAjUAJ3u2kdl9BDCczgLdYM1cAMaf1mGZVTDJR
-         1AZ/IpnFSy2MIaiM9hm44WqPnMmLUBPcaxrGp/M09wKoBVJ70nzZx3c9GzJPM6aiFMBt
-         2uKdTE+BtxVANIedKeQAVxL8ZgHHg5iw/HM72G98bbBmF0Oas6EoWDZUEfPaByY66sGa
-         waeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=do86B9M5tGDDUUM7bCWck23OCEcGEf6z7sPQe5ReWXM=;
-        b=SmGsIAvL9puj6f0otNmKbCB5YVO2b0VJBt4BJ+uN0iq1uJOPvvo4hb3cSmlHYv8N/C
-         jwyOdMs7ufcqVId7AimAedh6AZBzoU8gx0EbdQ34r3e/3YfjWRUHpeXpxK1OHO5svlkc
-         a5uM3uxvA+E6ao+6LAzek5Bp+eZb9oBvnx2cUpX63vLPzkrtmzf1x9uX3wxjZLugbyGw
-         gtFGwtDQBbDLJAs147qRsbhP+nVVriTFekC6Qg9Q77+Apd24G9uw0AJW4lMzht9o9JFY
-         cC4syvrG/pCK3CS41Hn20Te5bpHQnNmF9KrJbyM73Xok4KeaeB1duXPU/ImHiOr2PyF4
-         8PLg==
-X-Gm-Message-State: AOAM530byh2ur0PbYXaT5lsoAHcbLApePQTxWQ2SO5nra2o/ygcFQC7/
-        oGvOjYbgLyDokNzgytjZ2ZU=
-X-Google-Smtp-Source: ABdhPJyYsFWWdMFAKz+pYWcsYlvkUt6KuY+lCjjy9egaWFdNP/Yb85qwbsEGoOOjI/3ToguBhuO5zQ==
-X-Received: by 2002:a17:902:326:: with SMTP id 35mr24612675pld.301.1592928297950;
-        Tue, 23 Jun 2020 09:04:57 -0700 (PDT)
-Received: from cnn ([112.133.236.83])
-        by smtp.gmail.com with ESMTPSA id 25sm17287060pfi.7.2020.06.23.09.04.49
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 23 Jun 2020 09:04:54 -0700 (PDT)
-Date:   Tue, 23 Jun 2020 21:34:44 +0530
-From:   Manikandan <manikandan.hcl.ers.epl@gmail.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     miltonm@us.ibm.com, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        saipsdasari@fb.com, patrickw3@fb.com, vijaykhemka@fb.com,
-        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-        manikandan.e@hcl.com
-Subject: Re: [PATCH v6] hwmon:(adm1275) Enable adm1278 ADM1278_TEMP1_EN
-Message-ID: <20200623160444.GA8945@cnn>
-References: <20200622153727.GA9347@cnn>
- <20200623140711.GA208792@roeck-us.net>
+        Tue, 23 Jun 2020 13:35:14 -0400
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05NHOqaD009632;
+        Tue, 23 Jun 2020 13:35:12 -0400
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com with ESMTP id 31uk23gr7q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 Jun 2020 13:35:12 -0400
+Received: from SCSQMBX10.ad.analog.com (scsqmbx10.ad.analog.com [10.77.17.5])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 05NHZABW002025
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Tue, 23 Jun 2020 13:35:11 -0400
+Received: from SCSQMBX10.ad.analog.com (10.77.17.5) by SCSQMBX10.ad.analog.com
+ (10.77.17.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1779.2; Tue, 23 Jun
+ 2020 10:35:09 -0700
+Received: from zeus.spd.analog.com (10.64.82.11) by SCSQMBX10.ad.analog.com
+ (10.77.17.5) with Microsoft SMTP Server id 15.1.1779.2 via Frontend
+ Transport; Tue, 23 Jun 2020 10:35:09 -0700
+Received: from localhost.localdomain ([10.48.65.12])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 05NHYxMV017521;
+        Tue, 23 Jun 2020 13:35:07 -0400
+From:   <alexandru.tachici@analog.com>
+To:     <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+CC:     <robh+dt@kernel.org>, <linux@roeck-us.net>,
+        Alexandru Tachici <alexandru.tachici@analog.com>
+Subject: [PATCH v4 6/7] hwmon: pmbus: adm1266: debugfs for blackbox info
+Date:   Tue, 23 Jun 2020 20:36:58 +0300
+Message-ID: <20200623173659.41358-7-alexandru.tachici@analog.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200623173659.41358-1-alexandru.tachici@analog.com>
+References: <20200623173659.41358-1-alexandru.tachici@analog.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200623140711.GA208792@roeck-us.net>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Type: text/plain
+X-ADIRoutedOnPrem: True
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-23_11:2020-06-23,2020-06-23 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ impostorscore=0 adultscore=0 mlxlogscore=999 phishscore=0 clxscore=1015
+ priorityscore=1501 suspectscore=0 bulkscore=0 mlxscore=0
+ lowpriorityscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2006120000 definitions=main-2006230123
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jun 23, 2020 at 07:07:11AM -0700, Guenter Roeck wrote:
-> On Mon, Jun 22, 2020 at 09:07:27PM +0530, Manikandan Elumalai wrote:
-> > The adm1278 temp attribute need it for openbmc platform .
-> > This feature not enabled by default, so PMON_CONFIG needs to enable it.
-> > 
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Signed-off-by: Manikandan Elumalai <manikandan.hcl.ers.epl@gmail.com>
-> 
-> Applied.
+From: Alexandru Tachici <alexandru.tachici@analog.com>
 
-    Thanks Guenter.
-> 
-> Thanks,
-> Guenter
-> 
-> > ---
-> > v5 -> v6: 
-> > add Reported-by in commit log
-> > align commit and change log as per guidelines.
-> > v4 -> v5: 
-> > align commit and change log. 
-> > v3 -> v4: 
-> > kernel test robot CI warning
-> > v2 -> v3: 
-> > fix invalid signed-off.
-> > removed checkpath warnings.
-> > write ADM1278_TEMP1_EN and ADM1278_VOUT_EN conf in single line operation.
-> > v1 -> v2: 
-> > add Signed-off-by.
-> > removed ADM1278_TEMP1_EN check.
-> > 
-> >  drivers/hwmon/pmbus/adm1275.c | 12 +++++-------
-> >  1 file changed, 5 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275.c
-> > index 5caa37fb..d4e1925 100644
-> > --- a/drivers/hwmon/pmbus/adm1275.c
-> > +++ b/drivers/hwmon/pmbus/adm1275.c
-> > @@ -666,11 +666,12 @@ static int adm1275_probe(struct i2c_client *client,
-> >  		tindex = 3;
-> >  
-> >  		info->func[0] |= PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT |
-> > -			PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT;
-> > +			PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
-> > +			PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP;
-> >  
-> > -		/* Enable VOUT if not enabled (it is disabled by default) */
-> > -		if (!(config & ADM1278_VOUT_EN)) {
-> > -			config |= ADM1278_VOUT_EN;
-> > +		/* Enable VOUT & TEMP1 if not enabled (disabled by default) */
-> > +		if ((config & (ADM1278_VOUT_EN | ADM1278_TEMP1_EN)) != (ADM1278_VOUT_EN | ADM1278_TEMP1_EN)) {
-> > +			config |= ADM1278_VOUT_EN | ADM1278_TEMP1_EN;
-> >  			ret = i2c_smbus_write_byte_data(client,
-> >  							ADM1275_PMON_CONFIG,
-> >  							config);
-> > @@ -681,9 +682,6 @@ static int adm1275_probe(struct i2c_client *client,
-> >  			}
-> >  		}
-> >  
-> > -		if (config & ADM1278_TEMP1_EN)
-> > -			info->func[0] |=
-> > -				PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP;
-> >  		if (config & ADM1278_VIN_EN)
-> >  			info->func[0] |= PMBUS_HAVE_VIN;
-> >  		break;
+Add a debugfs file to print information in the
+BLACKBOX_INFORMATION register. Contains information
+about the number of stored records, logic index and id
+of the latest record.
+
+Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
+---
+ drivers/hwmon/pmbus/adm1266.c | 56 ++++++++++++++++++++++++++++++++++-
+ 1 file changed, 55 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
+index b9e92ab1e39a..ea2dc481094b 100644
+--- a/drivers/hwmon/pmbus/adm1266.c
++++ b/drivers/hwmon/pmbus/adm1266.c
+@@ -60,6 +60,7 @@ struct adm1266_data {
+ 	const char *gpio_names[ADM1266_GPIO_NR + ADM1266_PDIO_NR];
+ 	struct i2c_client *client;
+ 	struct mutex ioctl_mutex; /* lock ioctl access */
++	struct dentry *debugfs_dir;
+ 	struct nvmem_config nvmem_config;
+ 	struct nvmem_device *nvmem;
+ 	u8 *dev_mem;
+@@ -406,6 +407,28 @@ static const struct proc_ops adm1266_proc_ops = {
+ 	.proc_ioctl	= adm1266_ioctl,
+ };
+ 
++static int adm1266_blackbox_information_read(struct seq_file *s, void *pdata)
++{
++	struct device *dev = s->private;
++	struct i2c_client *client = to_i2c_client(dev);
++	u8 read_buf[5];
++	unsigned int latest_id;
++	int ret;
++
++	ret = i2c_smbus_read_block_data(client, ADM1266_BLACKBOX_INFO,
++					read_buf);
++	if (ret < 0)
++		return ret;
++
++	seq_puts(s, "BLACKBOX_INFORMATION:\n");
++	latest_id = read_buf[0] + (read_buf[1] << 8);
++	seq_printf(s, "Black box ID: %u\n", latest_id);
++	seq_printf(s, "Logic index: %u\n", read_buf[2]);
++	seq_printf(s, "Record count: %u\n", read_buf[3]);
++
++	return 0;
++}
++
+ static int adm1266_init_procfs(struct adm1266_data *data)
+ {
+ 	struct proc_dir_entry *proc_dir;
+@@ -423,6 +446,29 @@ static int adm1266_init_procfs(struct adm1266_data *data)
+ 	return 0;
+ }
+ 
++static int adm1266_init_debugfs(struct adm1266_data *data)
++{
++	struct dentry *entry;
++	struct dentry *root;
++
++	root = pmbus_get_debugfs_dir(data->client);
++	if (!root)
++		return -ENOENT;
++
++	data->debugfs_dir = debugfs_create_dir(data->client->name, root);
++	if (!data->debugfs_dir)
++		return -ENOENT;
++
++	entry = debugfs_create_devm_seqfile(&data->client->dev,
++					    "blackbox_information",
++					    data->debugfs_dir,
++					    adm1266_blackbox_information_read);
++	if (!entry)
++		return -ENOENT;
++
++	return 0;
++}
++
+ static int adm1266_nvmem_read_blackbox(struct adm1266_data *data, u8 *buf)
+ {
+ 	u8 read_buf[5];
+@@ -571,7 +617,15 @@ static int adm1266_probe(struct i2c_client *client,
+ 	for (i = 0; i < info->pages; i++)
+ 		info->func[i] = funcs;
+ 
+-	return pmbus_do_probe(client, id, info);
++	ret = pmbus_do_probe(client, id, info);
++	if (ret)
++		return ret;
++
++	ret = adm1266_init_debugfs(data);
++	if (ret)
++		dev_warn(&client->dev, "Failed to register debugfs: %d\n", ret);
++
++	return 0;
+ }
+ 
+ static const struct of_device_id adm1266_of_match[] = {
+-- 
+2.20.1
+
