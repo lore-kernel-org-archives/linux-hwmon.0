@@ -7,225 +7,381 @@ X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0DC6C433E0
-	for <linux-hwmon@archiver.kernel.org>; Wed, 24 Jun 2020 21:28:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2FF0C433E0
+	for <linux-hwmon@archiver.kernel.org>; Wed, 24 Jun 2020 21:36:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8A767207FC
-	for <linux-hwmon@archiver.kernel.org>; Wed, 24 Jun 2020 21:28:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 84827207E8
+	for <linux-hwmon@archiver.kernel.org>; Wed, 24 Jun 2020 21:36:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eeh0OUFG"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rNP05xCh"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403840AbgFXV2V (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 24 Jun 2020 17:28:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59174 "EHLO
+        id S2404318AbgFXVgB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 24 Jun 2020 17:36:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2403837AbgFXV2V (ORCPT
+        with ESMTP id S2403996AbgFXVgB (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 24 Jun 2020 17:28:21 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C981CC061573;
-        Wed, 24 Jun 2020 14:28:20 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id u5so1825868pfn.7;
-        Wed, 24 Jun 2020 14:28:20 -0700 (PDT)
+        Wed, 24 Jun 2020 17:36:01 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD30C061573;
+        Wed, 24 Jun 2020 14:35:59 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id b5so1831484pfp.9;
+        Wed, 24 Jun 2020 14:35:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=ZQxYRtrdi9vMsm5/HU8dIzNpM/BIdYP813BZZqvCjg0=;
-        b=eeh0OUFGL1szB4i5Su7T59EnhhWG8V4dnvFfAmXwesd39jBEk1e5aJgu6jLpCvibqR
-         lrDvI83l3+BoneNtxiWzBbWW/w7nIJfZ91hBWtMKoVGK2SIMc7vzfDKERDp1O72Zqpb1
-         SAznuYITDSjcYHM9yVCk7+6GU+dqic8dbw/5h2/aSIPpN/yPyMuw3jlQHAURBHi9pe0U
-         A9blCDohZsgC95jEKcdmPGBn7Y+R7qN8cQts/CyrgGNWTTMLftGZhJywH9r5+md6xEk4
-         qLW5bsR1zhwq04slrMF72XhuDYcVUDd7ldUAUX7bdbO/hJZLe16c4tli0YrDTxxWAG68
-         xUXA==
+        bh=/S7z+VHkpiSU9UTj23FPiFf5ijzh85CT4lj/9PJvsG8=;
+        b=rNP05xChMMIpyiWLadavSpeUvyQpfINtuO1FDvAr1B7xVAtFD5CTillGO6E0umKl9/
+         sdJoFgSURmecmLcRhPrDmYBcvJiLBSKgxgtGjA9XJBMsQFEOaWqek+VnTPwbHT+WcgjF
+         AgX7HRaTL0D6B8RP0H/4relb4IYoQOpO3Lz+vYlf98AZ0/pztk5vL6jcgtQ+xsoLD2ul
+         +/owAn3EbJfFLemk6np0YglNuHyQKsJhlaWzSyUyQTnTBw/4FTODBKNlJIO1eTwHXHt6
+         oxv++BmAUD6WapldYond0ZVjMbG9c236wvG5A5umPB0sSFOqMqdAJT5uUwNcXyH5KaiL
+         uexw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ZQxYRtrdi9vMsm5/HU8dIzNpM/BIdYP813BZZqvCjg0=;
-        b=Ws+Y+Ov+vaZuduSd6F8X9NM4DBat4rMcedp1/SU2UqPZ1ZxTtMBExHaNpEJuLLER9v
-         RDtVkdNDpakdJTMwoAstA7BSTeTC0JWbvahQCs7JqB7gr6974oPZCj9ivGEqq6tgDMuq
-         5RGU9cxD/NdvGd5eXqWK1q8FbTAfXVFqfXpa9Gnd2HQB4mE9BFcux5sKSihc2dMRgKQf
-         QVGJgONbYEqFhOYl4Ceacnuq1hsQXhmLy6pnEuxGMLSIb1cDEthlFOoOmnxQl0vWZ9oy
-         CseIiB5TnbZbHkFo4FRk95UAErw87wnUirMftaRpNcUUcdrTyoCI3CZkiqGue/miFdwZ
-         CdSg==
-X-Gm-Message-State: AOAM532xch8Mp++ES4nlmgMfSjSG+qvk2PsJb5SOl6Fq41/PFKlqayJZ
-        l4XaCpfbD1XrnskdbZsK7kA=
-X-Google-Smtp-Source: ABdhPJwOtNYzpuiQLvOOi783XQ5IsW5kFW5cCx0iaESxphTAfmmd9rqiD8gUnZXdENB+Ac1a24XG9Q==
-X-Received: by 2002:aa7:8d07:: with SMTP id j7mr978970pfe.125.1593034100358;
-        Wed, 24 Jun 2020 14:28:20 -0700 (PDT)
+        bh=/S7z+VHkpiSU9UTj23FPiFf5ijzh85CT4lj/9PJvsG8=;
+        b=syv3L6kkAXrvBpRH/vvFd5nYkYdXilW74kg4ObI89yDcF00guOPhbuSFF2X+aWm3fw
+         qGXnTasHuUYMEgVOB9EAAsRR/JJbhhNleIf0hNudI1v+BmdUUJBxFhikE8KH23tzWeOw
+         JGKdxIusW3uVjC1bAAlkTGzlbwbb08s+vT9+8gYb1aeup42Jp2rTDLjYVGletOf/Sbm4
+         0Xcs2LF/j0L/K4ZPdul5ARP+VOyZbgdDHmbXXydv8pzjPKwXA+IS8/vJzWBRQ5dxQPju
+         kRMdjqWzVu5V/IGSljDv1ymcxSNXx9ARk/o7548iiEepaiuT3j4PHtfE1LMEVKHNLxai
+         fS+A==
+X-Gm-Message-State: AOAM533lNrbu5xcm8Xne5AvTdtnCaP/gSirNMBDHDnBoI7d4n8JwLHos
+        dFwtO8kTpjq7N+kRHuJrvnr8zlFL
+X-Google-Smtp-Source: ABdhPJya9bEtxAeLDIM7u3nt1FfvxTkshkwGeNY8Vhgo0puwi/ifu6A+sdAsGHL5EAHE5ufVEaoM4g==
+X-Received: by 2002:a63:4c48:: with SMTP id m8mr23994264pgl.290.1593034559205;
+        Wed, 24 Jun 2020 14:35:59 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j16sm217410pfr.100.2020.06.24.14.28.19
+        by smtp.gmail.com with ESMTPSA id y187sm21274402pfb.46.2020.06.24.14.35.58
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 24 Jun 2020 14:28:19 -0700 (PDT)
-Date:   Wed, 24 Jun 2020 14:28:18 -0700
+        Wed, 24 Jun 2020 14:35:58 -0700 (PDT)
+Date:   Wed, 24 Jun 2020 14:35:57 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     alexandru.tachici@analog.com
 Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, robh+dt@kernel.org
-Subject: Re: [PATCH v4 2/7] hwmon: pmbus: adm1266: Add Block process call
-Message-ID: <20200624212818.GA74031@roeck-us.net>
+Subject: Re: [PATCH v4 3/7] hwmon: pmbus: adm1266: Add support for GPIOs
+Message-ID: <20200624213557.GA74535@roeck-us.net>
 References: <20200623173659.41358-1-alexandru.tachici@analog.com>
- <20200623173659.41358-3-alexandru.tachici@analog.com>
+ <20200623173659.41358-4-alexandru.tachici@analog.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200623173659.41358-3-alexandru.tachici@analog.com>
+In-Reply-To: <20200623173659.41358-4-alexandru.tachici@analog.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jun 23, 2020 at 08:36:54PM +0300, alexandru.tachici@analog.com wrote:
+On Tue, Jun 23, 2020 at 08:36:55PM +0300, alexandru.tachici@analog.com wrote:
 > From: Alexandru Tachici <alexandru.tachici@analog.com>
 > 
-> PmBus devices support Block Write-Block Read Process
-> Call described in SMBus specification v 2.0 with the
-> exception that Block writes and reads are permitted to
-> have up 255 data bytes instead of max 32 bytes (SMBus).
+> Adm1266 exposes 9 GPIOs and 16 PDIOs which are currently read-only. They
+> are controlled by the internal sequencing engine.
 > 
-> This patch adds Block WR process call support for ADM1266.
+> This patch makes adm1266 driver expose GPIOs and PDIOs to user-space
+> using GPIO provider kernel api.
 > 
 > Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
 > ---
->  drivers/hwmon/pmbus/Kconfig   |  1 +
->  drivers/hwmon/pmbus/adm1266.c | 79 +++++++++++++++++++++++++++++++++++
->  2 files changed, 80 insertions(+)
+>  drivers/hwmon/pmbus/adm1266.c | 233 +++++++++++++++++++++++++++++++++-
+>  1 file changed, 232 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index 6949483aa732..dc6971a7c49e 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -28,6 +28,7 @@ config SENSORS_PMBUS
->  
->  config SENSORS_ADM1266
->  	tristate "Analog Devices ADM1266 Sequencer"
-> +	select CRC8
->  	help
->  	  If you say yes here you get hardware monitoring support for Analog
->  	  Devices ADM1266 Cascadable Super Sequencer.
 > diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
-> index a7ef048a9a5c..381d89a8569f 100644
+> index 381d89a8569f..76bf2c78e737 100644
 > --- a/drivers/hwmon/pmbus/adm1266.c
 > +++ b/drivers/hwmon/pmbus/adm1266.c
-> @@ -6,6 +6,7 @@
+> @@ -6,8 +6,12 @@
 >   * Copyright 2020 Analog Devices Inc.
 >   */
 >  
-> +#include <linux/crc8.h>
+> +#include <linux/bitfield.h>
+>  #include <linux/crc8.h>
+> +#include <linux/debugfs.h>
+> +#include <linux/gpio/driver.h>
 >  #include <linux/i2c.h>
+> +#include <linux/i2c-smbus.h>
 >  #include <linux/init.h>
 >  #include <linux/kernel.h>
-> @@ -14,6 +15,82 @@
+>  #include <linux/module.h>
+> @@ -15,10 +19,35 @@
 >  
 >  #include "pmbus.h"
 >  
-> +#define ADM1266_PMBUS_BLOCK_MAX		255
+> +#define ADM1266_PDIO_CONFIG	0xD4
+> +#define ADM1266_GPIO_CONFIG	0xE1
+> +#define ADM1266_PDIO_STATUS	0xE9
+> +#define ADM1266_GPIO_STATUS	0xEA
 > +
-> +DECLARE_CRC8_TABLE(pmbus_crc_table);
+> +/* ADM1266 GPIO defines */
+> +#define ADM1266_GPIO_NR			9
+> +#define ADM1266_GPIO_FUNCTIONS(x)	FIELD_GET(BIT(0), x)
+> +#define ADM1266_GPIO_INPUT_EN(x)	FIELD_GET(BIT(2), x)
+> +#define ADM1266_GPIO_OUTPUT_EN(x)	FIELD_GET(BIT(3), x)
+> +#define ADM1266_GPIO_OPEN_DRAIN(x)	FIELD_GET(BIT(4), x)
 > +
-> +/* Different from Block Read as it sends data and waits for the slave to
+> +/* ADM1266 PDIO defines */
+> +#define ADM1266_PDIO_NR			16
+> +#define ADM1266_PDIO_PIN_CFG(x)		FIELD_GET(GENMASK(15, 13), x)
+> +#define ADM1266_PDIO_GLITCH_FILT(x)	FIELD_GET(GENMASK(12, 9), x)
+> +#define ADM1266_PDIO_OUT_CFG(x)		FIELD_GET(GENMASK(2, 0), x)
+> +
+>  #define ADM1266_PMBUS_BLOCK_MAX		255
+>  
+>  DECLARE_CRC8_TABLE(pmbus_crc_table);
+>  
+> +struct adm1266_data {
+> +	struct pmbus_driver_info info;
+> +	struct gpio_chip gc;
+> +	const char *gpio_names[ADM1266_GPIO_NR + ADM1266_PDIO_NR];
+> +	struct i2c_client *client;
+> +};
+> +
+>  /* Different from Block Read as it sends data and waits for the slave to
 
-   /*
-    * Proper multi-line comment
-    */
+Please use standard multi-line comment (yes, I know, part of previous patch).
 
-> + * return a value dependent on that data. The protocol is simply a Write Block
-> + * followed by a Read Block without the Read-Block command field and the
-> + * Write-Block STOP bit.
-> + */
+>   * return a value dependent on that data. The protocol is simply a Write Block
+>   * followed by a Read Block without the Read-Block command field and the
+> @@ -91,18 +120,220 @@ int pmbus_block_xfer(struct i2c_client *client, u8 cmd, u8 w_len,
+>  	return ret;
+>  }
+>  
+> +#ifdef CONFIG_GPIOLIB
 
-static
+It is customary to use "select GPIOLIB" in Kconfig. I would suggest to do
+that here as well.
 
-> +int pmbus_block_xfer(struct i2c_client *client, u8 cmd, u8 w_len,
-> +		     u8 *data_w, u8 *data_r)
+> +static const unsigned int adm1266_gpio_mapping[ADM1266_GPIO_NR][2] = {
+> +	{1, 0},
+> +	{2, 1},
+> +	{3, 2},
+> +	{4, 8},
+> +	{5, 9},
+> +	{6, 10},
+> +	{7, 11},
+> +	{8, 6},
+> +	{9, 7},
+> +};
+> +
+> +static const char *adm1266_names[ADM1266_GPIO_NR + ADM1266_PDIO_NR] = {
+> +	"GPIO1", "GPIO2", "GPIO3", "GPIO4", "GPIO5", "GPIO6", "GPIO7", "GPIO8",
+> +	"GPIO9", "PDIO1", "PDIO2", "PDIO3", "PDIO4", "PDIO5", "PDIO6",
+> +	"PDIO7", "PDIO8", "PDIO9", "PDIO10", "PDIO11", "PDIO12", "PDIO13",
+> +	"PDIO14", "PDIO15", "PDIO16",
+> +};
+> +
+> +static int adm1266_gpio_get(struct gpio_chip *chip, unsigned int offset)
 > +{
-> +	u8 write_buf[ADM1266_PMBUS_BLOCK_MAX + 2];
-> +	struct i2c_msg msgs[2] = {
-> +		{
-> +			.addr = client->addr,
-> +			.flags = 0,
-> +			.buf = write_buf,
-> +			.len = w_len + 2,
-> +		},
-> +		{
-> +			.addr = client->addr,
-> +			.flags = I2C_M_RD,
-> +			.len = ADM1266_PMBUS_BLOCK_MAX + 2,
-> +		}
-> +	};
-> +	u8 addr = 0;
-> +	u8 crc = 0;
-
-Unnecessary initialization for both variables
-
+> +	struct adm1266_data *data = gpiochip_get_data(chip);
+> +	u8 read_buf[I2C_SMBUS_BLOCK_MAX + 1];
+> +	unsigned long pins_status;
+> +	unsigned int pmbus_cmd;
 > +	int ret;
 > +
-> +	msgs[0].buf[0] = cmd;
-> +	msgs[0].buf[1] = w_len;
-> +	memcpy(&msgs[0].buf[2], data_w, w_len);
+> +	if (offset < ADM1266_GPIO_NR)
+> +		pmbus_cmd = ADM1266_GPIO_STATUS;
+> +	else
+> +		pmbus_cmd = ADM1266_PDIO_STATUS;
 > +
-> +	msgs[0].buf = i2c_get_dma_safe_msg_buf(&msgs[0], 1);
-> +	if (!msgs[0].buf)
-> +		return -ENOMEM;
+> +	ret = i2c_smbus_read_block_data(data->client, pmbus_cmd,
+> +					read_buf);
+
+Maximum line length is now 100 columns.
+
+> +	if (ret < 0)
+> +		return ret;
 > +
-> +	msgs[1].buf = i2c_get_dma_safe_msg_buf(&msgs[1], 1);
-> +	if (!msgs[1].buf) {
-> +		i2c_put_dma_safe_msg_buf(msgs[0].buf, &msgs[0], false);
-> +		return -ENOMEM;
+> +	pins_status = read_buf[0] + (read_buf[1] << 8);
+> +	if (offset < ADM1266_GPIO_NR)
+> +		return test_bit(adm1266_gpio_mapping[offset][1], &pins_status);
+> +
+> +	return test_bit(offset - ADM1266_GPIO_NR, &pins_status);
+> +}
+> +
+> +static int adm1266_gpio_get_multiple(struct gpio_chip *chip,
+> +				     unsigned long *mask,
+> +				     unsigned long *bits)
+> +{
+> +	struct adm1266_data *data = gpiochip_get_data(chip);
+> +	u8 read_buf[ADM1266_PMBUS_BLOCK_MAX + 1];
+> +	unsigned long status;
+> +	unsigned int gpio_nr;
+> +	int ret;
+> +
+> +	ret = i2c_smbus_read_block_data(data->client, ADM1266_GPIO_STATUS,
+> +					read_buf);
+
+Line length again. Applies everywhere.
+
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	status = read_buf[0] + (read_buf[1] << 8);
+> +
+> +	*bits = 0;
+> +	for_each_set_bit(gpio_nr, mask, ADM1266_GPIO_NR) {
+> +		if (test_bit(adm1266_gpio_mapping[gpio_nr][1], &status))
+> +			set_bit(gpio_nr, bits);
 > +	}
-
-AFAICS i2c_get_dma_safe_msg_buf() is supposed to be used by i2c bus drivers,
-not by device drivers. If this is needed for the target architecture,
-it should be implemented in the bus driver, not here.
-
 > +
-> +	ret = i2c_transfer(client->adapter, msgs, 2);
-> +	if (ret != 2) {
-> +		ret = -EPROTO;
-
-Should retain error if ret < 0, and only return EPROTO if the return value
-is 0 or 1.
-
-> +		goto cleanup;
+> +	ret = i2c_smbus_read_block_data(data->client, ADM1266_PDIO_STATUS,
+> +					read_buf);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	status = read_buf[0] + (read_buf[1] << 8);
+> +
+> +	*bits = 0;
+> +	for_each_set_bit_from(gpio_nr, mask,
+> +			      ADM1266_GPIO_NR + ADM1266_PDIO_STATUS) {
+> +		if (test_bit(gpio_nr - ADM1266_GPIO_NR, &status))
+> +			set_bit(gpio_nr, bits);
 > +	}
 > +
-> +	if (client->flags & I2C_CLIENT_PEC) {
-> +		addr = i2c_8bit_addr_from_msg(&msgs[0]);
-> +		crc = crc8(pmbus_crc_table, &addr, 1, crc);
-> +		crc = crc8(pmbus_crc_table, msgs[0].buf,  msgs[0].len, crc);
+> +	return 0;
+> +}
 > +
-> +		addr = i2c_8bit_addr_from_msg(&msgs[1]);
-> +		crc = crc8(pmbus_crc_table, &addr, 1, crc);
-> +		crc = crc8(pmbus_crc_table, msgs[1].buf,  msgs[1].buf[0] + 1,
-> +			   crc);
+> +static void adm1266_gpio_dbg_show(struct seq_file *s, struct gpio_chip *chip)
+> +{
+> +	struct adm1266_data *data = gpiochip_get_data(chip);
+> +	u8 read_buf[ADM1266_PMBUS_BLOCK_MAX + 1];
+> +	unsigned long gpio_config;
+> +	unsigned long pdio_config;
+> +	unsigned long pin_cfg;
+> +	u8 write_cmd;
+> +	int ret;
+> +	int i;
 > +
-> +		if (crc != msgs[1].buf[msgs[1].buf[0] + 1]) {
-> +			ret = -EBADMSG;
-> +			goto cleanup;
+> +	for (i = 0; i < ADM1266_GPIO_NR; i++) {
+> +		write_cmd = adm1266_gpio_mapping[i][1];
+> +		ret = pmbus_block_xfer(data->client, ADM1266_GPIO_CONFIG, 1,
+> +				       &write_cmd, read_buf);
+> +		if (ret != 2)
+> +			return;
+> +
+> +		gpio_config = read_buf[0];
+> +		seq_puts(s, adm1266_names[i]);
+> +
+> +		seq_puts(s, " ( ");
+> +		if (!ADM1266_GPIO_FUNCTIONS(gpio_config)) {
+> +			seq_puts(s, "high-Z )\n");
+> +			continue;
 > +		}
+> +		if (ADM1266_GPIO_INPUT_EN(gpio_config))
+> +			seq_puts(s, "input ");
+> +		if (ADM1266_GPIO_OUTPUT_EN(gpio_config))
+> +			seq_puts(s, "output ");
+> +		if (ADM1266_GPIO_OPEN_DRAIN(gpio_config))
+> +			seq_puts(s, "open-drain )\n");
+> +		else
+> +			seq_puts(s, "push-pull )\n");
 > +	}
 > +
-> +	memcpy(data_r, &msgs[1].buf[1], msgs[1].buf[0]);
-> +	ret = msgs[1].buf[0];
+> +	write_cmd = 0xFF;
+> +	ret = pmbus_block_xfer(data->client, ADM1266_PDIO_CONFIG, 1, &write_cmd,
+> +			       read_buf);
+> +	if (ret != 32)
+> +		return;
 > +
-> +cleanup:
-> +	i2c_put_dma_safe_msg_buf(msgs[0].buf, &msgs[0], true);
-> +	i2c_put_dma_safe_msg_buf(msgs[1].buf, &msgs[1], true);
+> +	for (i = 0; i < ADM1266_PDIO_NR; i++) {
+> +		seq_puts(s, adm1266_names[ADM1266_GPIO_NR + i]);
+> +
+> +		pdio_config = read_buf[2 * i];
+> +		pdio_config += (read_buf[2 * i + 1] << 8);
+> +		pin_cfg = ADM1266_PDIO_PIN_CFG(pdio_config);
+> +
+> +		seq_puts(s, " ( ");
+> +		if (!pin_cfg || pin_cfg > 5) {
+> +			seq_puts(s, "high-Z )\n");
+> +			continue;
+> +		}
+> +
+> +		if (pin_cfg & BIT(0))
+> +			seq_puts(s, "output ");
+> +
+> +		if (pin_cfg & BIT(1))
+> +			seq_puts(s, "input ");
+> +
+> +		seq_puts(s, ")\n");
+> +	}
+> +}
+> +
+> +static int adm1266_config_gpio(struct adm1266_data *data)
+> +{
+> +	const char *name = dev_name(&data->client->dev);
+> +	char *gpio_name;
+> +	int ret;
+> +	int i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(data->gpio_names); i++) {
+> +		gpio_name = devm_kasprintf(&data->client->dev, GFP_KERNEL,
+> +					   "adm1266-%x-%s", data->client->addr,
+> +					   adm1266_names[i]);
+> +		if (!gpio_name)
+> +			return -ENOMEM;
+> +
+> +		data->gpio_names[i] = gpio_name;
+> +	}
+> +
+> +	data->gc.label = name;
+> +	data->gc.parent = &data->client->dev;
+> +	data->gc.owner = THIS_MODULE;
+> +	data->gc.base = -1;
+> +	data->gc.names = data->gpio_names;
+> +	data->gc.ngpio = ARRAY_SIZE(data->gpio_names);
+> +	data->gc.get = adm1266_gpio_get;
+> +	data->gc.get_multiple = adm1266_gpio_get_multiple;
+> +	data->gc.dbg_show = adm1266_gpio_dbg_show;
+> +
+> +	ret = devm_gpiochip_add_data(&data->client->dev, &data->gc, data);
+> +	if (ret)
+> +		dev_err(&data->client->dev, "GPIO registering failed (%d)\n",
+> +			ret);
 > +
 > +	return ret;
 > +}
-    > +
+> +#else
+> +static int adm1266_config_gpio(struct adm1266_data *data)
+> +{
+> +	return 0;
+> +}
+> +#endif
+> +
 >  static int adm1266_probe(struct i2c_client *client,
 >  			 const struct i2c_device_id *id)
 >  {
-> @@ -24,6 +101,8 @@ static int adm1266_probe(struct i2c_client *client,
->  	info = devm_kzalloc(&client->dev, sizeof(struct pmbus_driver_info),
->  			    GFP_KERNEL);
+>  	struct pmbus_driver_info *info;
+> +	struct adm1266_data *data;
+>  	u32 funcs;
+> +	int ret;
+>  	int i;
 >  
-> +	crc8_populate_msb(pmbus_crc_table, 0x7);
+> -	info = devm_kzalloc(&client->dev, sizeof(struct pmbus_driver_info),
+> +	data = devm_kzalloc(&client->dev, sizeof(struct adm1266_data),
+>  			    GFP_KERNEL);
+
+It might be a bit cleaner to create struct adm1266_data in the first patch
+of the series, even if it only includes the "info" field. This would reduce
+the size of the diffs here, as it would not be necessary to change this
+code.
+
+> +	if (!data)
+> +		return -ENOMEM;
 > +
+> +	data->client = client;
+> +
+> +	ret = adm1266_config_gpio(data);
+> +	if (ret < 0)
+> +		return ret;
+>  
+>  	crc8_populate_msb(pmbus_crc_table, 0x7);
+>  
+> +	info = &data->info;
 >  	info->pages = 17;
 >  	info->format[PSC_VOLTAGE_OUT] = linear;
 >  	funcs = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT;
