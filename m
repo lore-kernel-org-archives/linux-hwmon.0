@@ -6,44 +6,44 @@ X-Spam-Status: No, score=-4.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	LONGWORDS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1879C433DF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 24 Jun 2020 02:41:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29174C433E0
+	for <linux-hwmon@archiver.kernel.org>; Wed, 24 Jun 2020 02:41:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 90816206E2
-	for <linux-hwmon@archiver.kernel.org>; Wed, 24 Jun 2020 02:41:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0CA77206E2
+	for <linux-hwmon@archiver.kernel.org>; Wed, 24 Jun 2020 02:41:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387985AbgFXClG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S2388278AbgFXClG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Tue, 23 Jun 2020 22:41:06 -0400
-Received: from mga04.intel.com ([192.55.52.120]:18819 "EHLO mga04.intel.com"
+Received: from mga06.intel.com ([134.134.136.31]:34056 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387719AbgFXClG (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        id S2387974AbgFXClG (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
         Tue, 23 Jun 2020 22:41:06 -0400
-IronPort-SDR: rVa6SgtPZadSQFWEJSvKOXnmEiQF0Jn4ySWzBQ68muycYF9aou5+QGMODRdm2C6xZM0bwRTeDB
- wO/wpge7Abww==
-X-IronPort-AV: E=McAfee;i="6000,8403,9661"; a="141793688"
+IronPort-SDR: RHV/rY9SW+CNV7FGislhz8uWorZcepWPjGkz9PRBISeLVUa/dZ1sBishlrKJPjasl56iyctguV
+ LIizVEwA4YkA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9661"; a="205810450"
 X-IronPort-AV: E=Sophos;i="5.75,273,1589266800"; 
-   d="scan'208";a="141793688"
+   d="scan'208";a="205810450"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2020 19:41:05 -0700
-IronPort-SDR: a9pi9Ou6AhSIUnjYYBi2n9cW0vjTuYcG4Y4rGuWL4PFsUMVkSQD7gZLS53qV2Wm0Z6s6w5SVWq
- bsc63lRWNOBg==
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2020 19:41:05 -0700
+IronPort-SDR: 3jXjAMnkcGz8sZ3lFZ+UZzNhCGOE1fEdHrGoCLc5vtc8pkkr1AQyf+Dlnip2wITjZvWQZrLOE4
+ P9n6Tr35y/NA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.75,273,1589266800"; 
-   d="scan'208";a="311503561"
+   d="scan'208";a="478964253"
 Received: from lkp-server01.sh.intel.com (HELO 538b5e3c8319) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 23 Jun 2020 19:41:04 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 23 Jun 2020 19:41:04 -0700
 Received: from kbuild by 538b5e3c8319 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1jnvLT-0000e4-SQ; Wed, 24 Jun 2020 02:41:03 +0000
-Date:   Wed, 24 Jun 2020 10:40:41 +0800
+        id 1jnvLT-0000e2-Oh; Wed, 24 Jun 2020 02:41:03 +0000
+Date:   Wed, 24 Jun 2020 10:40:46 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon] BUILD SUCCESS
- b4c8af4c2a226fc9c25e1decbd26fdab1b0993ee
-Message-ID: <5ef2bd29.QEM/00tWu2rzCAsg%lkp@intel.com>
+Subject: [hwmon:hwmon-next] BUILD SUCCESS
+ b5f8c9e5ccb7ab48298025298638e290aef818be
+Message-ID: <5ef2bd2e.5YfKPvlGVzwQC2Kw%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -53,8 +53,8 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon
-branch HEAD: b4c8af4c2a226fc9c25e1decbd26fdab1b0993ee  hwmon: (pmbus) Fix page vs. register when accessing fans
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon-next
+branch HEAD: b5f8c9e5ccb7ab48298025298638e290aef818be  hwmon: (nct6683) Replace container_of() with  kobj_to_dev()
 
 elapsed time: 725m
 
