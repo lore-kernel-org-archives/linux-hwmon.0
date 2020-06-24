@@ -2,117 +2,130 @@ Return-Path: <SRS0=gPXQ=AF=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E913EC433E1
-	for <linux-hwmon@archiver.kernel.org>; Wed, 24 Jun 2020 07:23:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F4CAC433E1
+	for <linux-hwmon@archiver.kernel.org>; Wed, 24 Jun 2020 08:45:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C40DE2073E
-	for <linux-hwmon@archiver.kernel.org>; Wed, 24 Jun 2020 07:23:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3DA2720836
+	for <linux-hwmon@archiver.kernel.org>; Wed, 24 Jun 2020 08:45:38 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NDsFpPQm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389724AbgFXHXC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 24 Jun 2020 03:23:02 -0400
-Received: from ms-10.1blu.de ([178.254.4.101]:60700 "EHLO ms-10.1blu.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389684AbgFXHWr (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 24 Jun 2020 03:22:47 -0400
-Received: from [78.43.71.214] (helo=marius.fritz.box)
-        by ms-10.1blu.de with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <mail@mariuszachmann.de>)
-        id 1jnzjy-0000VK-4y; Wed, 24 Jun 2020 09:22:38 +0200
-From:   Marius Zachmann <mail@mariuszachmann.de>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Marius Zachmann <mail@mariuszachmann.de>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
-Subject: [PATCH v4 2/3] hwmon: add Documentation
-Date:   Wed, 24 Jun 2020 09:21:53 +0200
-Message-Id: <20200624072154.22486-3-mail@mariuszachmann.de>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200624072154.22486-1-mail@mariuszachmann.de>
-References: <20200624072154.22486-1-mail@mariuszachmann.de>
+        id S2388671AbgFXIph (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 24 Jun 2020 04:45:37 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:43968 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2388638AbgFXIpg (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 24 Jun 2020 04:45:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1592988335;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=S2b8jLigyZb+R3i3+e/XAVkUga1RYeny5NHhX1UTOHk=;
+        b=NDsFpPQmqP926OgaJGRqsawR73LhV3HTo/zx4s2ikUwF60rN8F6cijRig7pS/DtQsGx4jb
+        2rS1vRTsMgwDFPlOXxkznSoYH9y7qAeQnnFXlwiN3kBMUo6qWtEghZ2eIOaTpkKLnxNAoa
+        WKKOArHTdEdGcNTdapC2+6NSgpBSbxQ=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-350-1FzK3LHXPi6LtyKjuKsLMQ-1; Wed, 24 Jun 2020 04:45:31 -0400
+X-MC-Unique: 1FzK3LHXPi6LtyKjuKsLMQ-1
+Received: by mail-qk1-f200.google.com with SMTP id o63so1118001qkc.8
+        for <linux-hwmon@vger.kernel.org>; Wed, 24 Jun 2020 01:45:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=S2b8jLigyZb+R3i3+e/XAVkUga1RYeny5NHhX1UTOHk=;
+        b=XNqnbA8OjnjvW+zaGST9So1P+2oGBbsKA3oqxl/W1WebOx9+Er7tW8cGggk9Uea1xx
+         DI8zr7/D/wEd3l+QoxpvqGFNZRVqZbcVM8OqHGS+d9GqShB6vUtThlI9zAEdU056S2wY
+         kVzyj9rwoIIuTZmV1VwW8pT2/vma8bZvJF5FY3WWoou3eXugJpvqeHTaGa2nR6GZdMmH
+         LnGMiLvQO8wC8BKR3iR9htMkbDjrWYnOMg8hxSSU6qpFezUXEpC22VEDi1RHHvhUgOEi
+         Qe2jAkaq4RRb8wxWJt8Paet6Qdg8QMxeozde2ckKS3WM3/V5Nm6r67BUVQ6s7cn7fOcw
+         GBTg==
+X-Gm-Message-State: AOAM530zfscZ7ZAYQy6H8pLPEv71T15aUEmxGZXPljZ13gvAY7YqOurX
+        goS1XmufZPoVype9Jbe3872TXHWfyoPocjw4o4wiBY2m0A2zXmIZW28Flh7fBYMFU/SrbVxAYR+
+        KiTcqXe+Z46SmWY4oHVaUi+kJVN7KwCRh5STQDoI=
+X-Received: by 2002:ad4:598f:: with SMTP id ek15mr30211367qvb.196.1592988330634;
+        Wed, 24 Jun 2020 01:45:30 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzAHk0i+wHdD9G0k78iapc862XPazRlaJgWStCZlsc5eOWTiAArDIkkFFTWqAuPKUUS2wS+4zC0nEtxoN1lNz8=
+X-Received: by 2002:ad4:598f:: with SMTP id ek15mr30211352qvb.196.1592988330427;
+ Wed, 24 Jun 2020 01:45:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Con-Id: 241080
-X-Con-U: 0-mail
-X-Originating-IP: 78.43.71.214
+References: <20200624072154.22486-1-mail@mariuszachmann.de> <20200624072154.22486-2-mail@mariuszachmann.de>
+In-Reply-To: <20200624072154.22486-2-mail@mariuszachmann.de>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Wed, 24 Jun 2020 10:45:19 +0200
+Message-ID: <CAO-hwJLo_v5mWaVJHcdf2aaK4yQHfKd8Xk2XTpUa61q_NsTb4g@mail.gmail.com>
+Subject: Re: [PATCH v4 1/3] input: add to hid_ignore_list
+To:     Marius Zachmann <mail@mariuszachmann.de>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jiri Kosina <jikos@kernel.org>, linux-hwmon@vger.kernel.org,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Signed-off-by: Marius Zachmann <mail@mariuszachmann.de>
----
- Documentation/hwmon/corsair-cpro.rst | 40 ++++++++++++++++++++++++++++
- Documentation/hwmon/index.rst        |  1 +
- 2 files changed, 41 insertions(+)
- create mode 100644 Documentation/hwmon/corsair-cpro.rst
+Hi Marius,
 
-diff --git a/Documentation/hwmon/corsair-cpro.rst b/Documentation/hwmon/corsair-cpro.rst
-new file mode 100644
-index 000000000000..2383c6f72115
---- /dev/null
-+++ b/Documentation/hwmon/corsair-cpro.rst
-@@ -0,0 +1,40 @@
-+.. SPDX-License-Identifier: GPL-2.0-or-later
-+
-+Kernel driver corsair-cpro
-+==========================
-+
-+Supported devices:
-+
-+  * Corsair Commander Pro
-+  * Corsair Commander Pro (1000D)
-+
-+Author: Marius Zachmann
-+
-+Description
-+-----------
-+
-+This driver implements the sysfs interface for the Corsair Commander Pro.
-+The Corsair Commander Pro is a USB device with 6 fan connectors,
-+4 temperature sensor connectors and 2 Corsair LED connectors.
-+It can read the voltage levels on the SATA power connector.
-+
-+Usage Notes
-+-----------
-+
-+Since it is a USB device, hotswapping is possible. The device is autodetected.
-+
-+Sysfs entries
-+-------------
-+
-+======================= =====================================================================
-+in0_input		Voltage on SATA 12v
-+in1_input		Voltage on SATA 5v
-+in2_input		Voltage on SATA 3.3v
-+temp[1-4]_input		Temperature on connected temperature sensors
-+temp[1-4] label		Shows "nc" after name, when not connected
-+fan[1-6]_input		Connected fan rpm.
-+fan[1-6]_label		Shows connection status of the fan as detected by the device.
-+pwm[1-6]		Sets the fan speed. Values from 0-255.
-+			When reading, it reports the last value if it was set by the driver.
-+			Otherwise returns 0.
-+======================= =====================================================================
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index 55ff4b7c5349..750d3a975d82 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -47,6 +47,7 @@ Hardware Monitoring Kernel Drivers
-    bel-pfe
-    bt1-pvt
-    coretemp
-+   corsair-cpro
-    da9052
-    da9055
-    dell-smm-hwmon
--- 
-2.27.0
+On Wed, Jun 24, 2020 at 10:16 AM Marius Zachmann <mail@mariuszachmann.de> wrote:
+>
+> Signed-off-by: Marius Zachmann <mail@mariuszachmann.de>
+
+I wasn't Cc-ed on the cover letter (0/3) if any, but there are a few
+things to improve here (not code wise, I haven't reviewed the series,
+but on the form).
+
+Every commit needs a commit message. And here, this particular commit
+just disables 2 device IDs from HID, which, without explanation seems
+like you decided to remove support for 2 keyboards from the kernel. So
+please add commit messages explaining *why* you are introducing a new
+driver/change in the code.
+
+Then, it would be much better to have a single commit that disables
+the HID support and add the hwmon driver in one go. Leave the
+synchronisation between the trees to the maintainers, and keep it
+simple: you can squash your 3 commits together, so it's one semantic
+action. This way, if there is a need to bisect or revert this patch,
+we won't have side effects and can revert just one patch. Think also
+that if someone needs that to be backported in a stable or a
+distribution kernel, it would make everyone's life simpler.
+
+That being said, if you squash the 3 patches and provide a good enough
+explanation on the series, from a HID point of view, there should not
+be any reasons for us to not give an Ack.
+
+Cheers,
+Benjamin
+
+> ---
+>  drivers/hid/hid-quirks.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/hid/hid-quirks.c b/drivers/hid/hid-quirks.c
+> index ca8b5c261c7c..7b7bc7737c53 100644
+> --- a/drivers/hid/hid-quirks.c
+> +++ b/drivers/hid/hid-quirks.c
+> @@ -699,6 +699,8 @@ static const struct hid_device_id hid_ignore_list[] = {
+>         { HID_USB_DEVICE(USB_VENDOR_ID_AXENTIA, USB_DEVICE_ID_AXENTIA_FM_RADIO) },
+>         { HID_USB_DEVICE(USB_VENDOR_ID_BERKSHIRE, USB_DEVICE_ID_BERKSHIRE_PCWD) },
+>         { HID_USB_DEVICE(USB_VENDOR_ID_CIDC, 0x0103) },
+> +       { HID_USB_DEVICE(USB_VENDOR_ID_CORSAIR, 0x0c10) },
+> +       { HID_USB_DEVICE(USB_VENDOR_ID_CORSAIR, 0x1d00) },
+>         { HID_USB_DEVICE(USB_VENDOR_ID_CYGNAL, USB_DEVICE_ID_CYGNAL_RADIO_SI470X) },
+>         { HID_USB_DEVICE(USB_VENDOR_ID_CYGNAL, USB_DEVICE_ID_CYGNAL_RADIO_SI4713) },
+>         { HID_USB_DEVICE(USB_VENDOR_ID_CMEDIA, USB_DEVICE_ID_CM109) },
+> --
+> 2.27.0
+>
 
