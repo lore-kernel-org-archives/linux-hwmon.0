@@ -7,248 +7,225 @@ X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7E2AC433DF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 24 Jun 2020 21:18:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0DC6C433E0
+	for <linux-hwmon@archiver.kernel.org>; Wed, 24 Jun 2020 21:28:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9F5FF20768
-	for <linux-hwmon@archiver.kernel.org>; Wed, 24 Jun 2020 21:18:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8A767207FC
+	for <linux-hwmon@archiver.kernel.org>; Wed, 24 Jun 2020 21:28:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H7/JdmWV"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eeh0OUFG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390238AbgFXVSK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 24 Jun 2020 17:18:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57588 "EHLO
+        id S2403840AbgFXV2V (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 24 Jun 2020 17:28:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389773AbgFXVSJ (ORCPT
+        with ESMTP id S2403837AbgFXV2V (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 24 Jun 2020 17:18:09 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9919FC061573;
-        Wed, 24 Jun 2020 14:18:09 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id t6so2079136pgq.1;
-        Wed, 24 Jun 2020 14:18:09 -0700 (PDT)
+        Wed, 24 Jun 2020 17:28:21 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C981CC061573;
+        Wed, 24 Jun 2020 14:28:20 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id u5so1825868pfn.7;
+        Wed, 24 Jun 2020 14:28:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=NRzCLA7O4yoo4CK0D6JzW9iY/LolqowIQ1VcLyZX85w=;
-        b=H7/JdmWVIO5T5GxbQ2aid1gD1aMhLZBIoNy0Ck5MkDloSN6GJa9Cjk8j8oYXhanuV5
-         3qQQe8IRz+XyZ9XxwDeeGTtTMLEpVN2CluHCF5NsD/T2YWI4LrAebdB7bBwv/KQw0bus
-         ey5HxlGfor8aZp/F1uPq1ppb/Tsw84hvEiZvVKzybRrhjMKEy/SNzuvpn74Co5FwvIOW
-         GzM0byLxEusjhUayBfdSzoDEKxifof52BoCPXeun62SoXXvUbMpQt/iSsVJtw8ULoT8m
-         MxI3Ne3Xb0pVsVKlnvnAyVJ6D9QVJFZJ4DKt/x571T8s+k60cQdvVF3hCFXKvcY5pQ8K
-         ob+A==
+        bh=ZQxYRtrdi9vMsm5/HU8dIzNpM/BIdYP813BZZqvCjg0=;
+        b=eeh0OUFGL1szB4i5Su7T59EnhhWG8V4dnvFfAmXwesd39jBEk1e5aJgu6jLpCvibqR
+         lrDvI83l3+BoneNtxiWzBbWW/w7nIJfZ91hBWtMKoVGK2SIMc7vzfDKERDp1O72Zqpb1
+         SAznuYITDSjcYHM9yVCk7+6GU+dqic8dbw/5h2/aSIPpN/yPyMuw3jlQHAURBHi9pe0U
+         A9blCDohZsgC95jEKcdmPGBn7Y+R7qN8cQts/CyrgGNWTTMLftGZhJywH9r5+md6xEk4
+         qLW5bsR1zhwq04slrMF72XhuDYcVUDd7ldUAUX7bdbO/hJZLe16c4tli0YrDTxxWAG68
+         xUXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=NRzCLA7O4yoo4CK0D6JzW9iY/LolqowIQ1VcLyZX85w=;
-        b=d2sYmKE7EvITS/fDiTkgcmm2m0y3YkIcX/oDohlt9K0NIE5bJP5G1hyNPXnyGOIy0k
-         wC2Y2AkOhUoB+qsP/d82hjRoMXsVd5x25MHfAxNbJEM0FYrdcnMDPU2SzJCfHgIDtA7Q
-         SdO6dpOnm7unqA/FP8jak11rLljGH1fjioXFwK5A720uFIxS3IahCp7FWuTQeYlajZGe
-         q1+xTQaC649+Plcpde1o+p1OxRS7IJpejhO37aZErNRYJMQI8LfnoZ9TxeucUdt/4GC0
-         WVXezA9P2mBXUE4b/wmFAuWQqNFCZW4wpjeZ0oUu93yaqHBq93EGfccbED8yGgUCTmA6
-         qDag==
-X-Gm-Message-State: AOAM533TK6GwRA3HFMAON/vetPxWgfH44o0QJ8vjxxohewgytVO22JDp
-        nLm8QwthYD2yt7dSyU2A+eI=
-X-Google-Smtp-Source: ABdhPJwA/MRTNNMwZys901eyc1IpyqubmLQ3cTtXEX8Lkv0SCtEDweT8ZT23q233+ptPVmsACNkdgQ==
-X-Received: by 2002:a63:e23:: with SMTP id d35mr16527434pgl.435.1593033488974;
-        Wed, 24 Jun 2020 14:18:08 -0700 (PDT)
+        bh=ZQxYRtrdi9vMsm5/HU8dIzNpM/BIdYP813BZZqvCjg0=;
+        b=Ws+Y+Ov+vaZuduSd6F8X9NM4DBat4rMcedp1/SU2UqPZ1ZxTtMBExHaNpEJuLLER9v
+         RDtVkdNDpakdJTMwoAstA7BSTeTC0JWbvahQCs7JqB7gr6974oPZCj9ivGEqq6tgDMuq
+         5RGU9cxD/NdvGd5eXqWK1q8FbTAfXVFqfXpa9Gnd2HQB4mE9BFcux5sKSihc2dMRgKQf
+         QVGJgONbYEqFhOYl4Ceacnuq1hsQXhmLy6pnEuxGMLSIb1cDEthlFOoOmnxQl0vWZ9oy
+         CseIiB5TnbZbHkFo4FRk95UAErw87wnUirMftaRpNcUUcdrTyoCI3CZkiqGue/miFdwZ
+         CdSg==
+X-Gm-Message-State: AOAM532xch8Mp++ES4nlmgMfSjSG+qvk2PsJb5SOl6Fq41/PFKlqayJZ
+        l4XaCpfbD1XrnskdbZsK7kA=
+X-Google-Smtp-Source: ABdhPJwOtNYzpuiQLvOOi783XQ5IsW5kFW5cCx0iaESxphTAfmmd9rqiD8gUnZXdENB+Ac1a24XG9Q==
+X-Received: by 2002:aa7:8d07:: with SMTP id j7mr978970pfe.125.1593034100358;
+        Wed, 24 Jun 2020 14:28:20 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u74sm17246504pgc.58.2020.06.24.14.18.08
+        by smtp.gmail.com with ESMTPSA id j16sm217410pfr.100.2020.06.24.14.28.19
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 24 Jun 2020 14:18:08 -0700 (PDT)
-Date:   Wed, 24 Jun 2020 14:18:07 -0700
+        Wed, 24 Jun 2020 14:28:19 -0700 (PDT)
+Date:   Wed, 24 Jun 2020 14:28:18 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     alexandru.tachici@analog.com
 Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, robh+dt@kernel.org
-Subject: Re: [PATCH v4 1/7] hwmon: pmbus: adm1266: add support
-Message-ID: <20200624211807.GA73801@roeck-us.net>
+Subject: Re: [PATCH v4 2/7] hwmon: pmbus: adm1266: Add Block process call
+Message-ID: <20200624212818.GA74031@roeck-us.net>
 References: <20200623173659.41358-1-alexandru.tachici@analog.com>
- <20200623173659.41358-2-alexandru.tachici@analog.com>
+ <20200623173659.41358-3-alexandru.tachici@analog.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200623173659.41358-2-alexandru.tachici@analog.com>
+In-Reply-To: <20200623173659.41358-3-alexandru.tachici@analog.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jun 23, 2020 at 08:36:53PM +0300, alexandru.tachici@analog.com wrote:
+On Tue, Jun 23, 2020 at 08:36:54PM +0300, alexandru.tachici@analog.com wrote:
 > From: Alexandru Tachici <alexandru.tachici@analog.com>
 > 
-> Add pmbus probing driver for the adm1266 Cascadable
-> Super Sequencer with Margin Control and Fault Recording.
-> Driver is using the pmbus_core, creating sysfs files
-> under hwmon for inputs: vh1->vh4 and vp1->vp13.
+> PmBus devices support Block Write-Block Read Process
+> Call described in SMBus specification v 2.0 with the
+> exception that Block writes and reads are permitted to
+> have up 255 data bytes instead of max 32 bytes (SMBus).
+> 
+> This patch adds Block WR process call support for ADM1266.
 > 
 > Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
 > ---
->  Documentation/hwmon/adm1266.rst | 35 +++++++++++++++++++
-
-Needs to be added to index.rst.
-
->  drivers/hwmon/pmbus/Kconfig     |  9 +++++
->  drivers/hwmon/pmbus/Makefile    |  1 +
->  drivers/hwmon/pmbus/adm1266.c   | 62 +++++++++++++++++++++++++++++++++
->  4 files changed, 107 insertions(+)
->  create mode 100644 Documentation/hwmon/adm1266.rst
->  create mode 100644 drivers/hwmon/pmbus/adm1266.c
+>  drivers/hwmon/pmbus/Kconfig   |  1 +
+>  drivers/hwmon/pmbus/adm1266.c | 79 +++++++++++++++++++++++++++++++++++
+>  2 files changed, 80 insertions(+)
 > 
-> diff --git a/Documentation/hwmon/adm1266.rst b/Documentation/hwmon/adm1266.rst
-> new file mode 100644
-> index 000000000000..65662115750c
-> --- /dev/null
-> +++ b/Documentation/hwmon/adm1266.rst
-> @@ -0,0 +1,35 @@
-
-WARNING: Missing or malformed SPDX-License-Identifier tag in line 1
-#99: FILE: Documentation/hwmon/adm1266.rst:1:
-+Kernel driver adm1266
-
-> +Kernel driver adm1266
-> +=====================
-> +
-> +Supported chips:
-> +  * Analog Devices ADM1266
-> +    Prefix: 'adm1266'
-> +    Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/ADM1266.pdf
-> +
-> +Author: Alexandru Tachici <alexandru.tachici@analog.com>
-> +
-> +
-> +Description
-> +-----------
-> +
-> +This driver supports hardware monitoring for Analog Devices ADM1266 sequencer.
-> +
-> +ADM1266 is a sequencer that features voltage readback from 17 channels via an
-> +integrated 12 bit SAR ADC, accessed using a PMBus interface.
-> +
-> +The driver is a client driver to the core PMBus driver. Please see
-> +Documentation/hwmon/pmbus for details on PMBus client drivers.
-> +
-> +
-> +Sysfs entries
-> +-------------
-> +
-> +The following attributes are supported. Limits are read-write, history reset
-> +attributes are write-only, all other attributes are read-only.
-> +
-> +inX_label		"voutx"
-> +inX_input		Measured voltage.
-> +inX_min			Minimum Voltage.
-> +inX_max			Maximum voltage.
-> +inX_min_alarm		Voltage low alarm.
-> +inX_max_alarm		Voltage high alarm.
 > diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index de12a565006d..6949483aa732 100644
+> index 6949483aa732..dc6971a7c49e 100644
 > --- a/drivers/hwmon/pmbus/Kconfig
 > +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -26,6 +26,15 @@ config SENSORS_PMBUS
->  	  This driver can also be built as a module. If so, the module will
->  	  be called pmbus.
+> @@ -28,6 +28,7 @@ config SENSORS_PMBUS
 >  
-> +config SENSORS_ADM1266
-> +	tristate "Analog Devices ADM1266 Sequencer"
-> +	help
-> +	  If you say yes here you get hardware monitoring support for Analog
-> +	  Devices ADM1266 Cascadable Super Sequencer.
-> +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called adm1266.
-> +
->  config SENSORS_ADM1275
->  	tristate "Analog Devices ADM1275 and compatibles"
+>  config SENSORS_ADM1266
+>  	tristate "Analog Devices ADM1266 Sequencer"
+> +	select CRC8
 >  	help
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index 5feb45806123..ed38f6d6f845 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -5,6 +5,7 @@
->  
->  obj-$(CONFIG_PMBUS)		+= pmbus_core.o
->  obj-$(CONFIG_SENSORS_PMBUS)	+= pmbus.o
-> +obj-$(CONFIG_SENSORS_ADM1266)	+= adm1266.o
->  obj-$(CONFIG_SENSORS_ADM1275)	+= adm1275.o
->  obj-$(CONFIG_SENSORS_BEL_PFE)	+= bel-pfe.o
->  obj-$(CONFIG_SENSORS_IBM_CFFPS)	+= ibm-cffps.o
+>  	  If you say yes here you get hardware monitoring support for Analog
+>  	  Devices ADM1266 Cascadable Super Sequencer.
 > diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
-> new file mode 100644
-> index 000000000000..a7ef048a9a5c
-> --- /dev/null
+> index a7ef048a9a5c..381d89a8569f 100644
+> --- a/drivers/hwmon/pmbus/adm1266.c
 > +++ b/drivers/hwmon/pmbus/adm1266.c
-> @@ -0,0 +1,62 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * ADM1266 - Cascadable Super Sequencer with Margin
-> + * Control and Fault Recording
-> + *
-> + * Copyright 2020 Analog Devices Inc.
+> @@ -6,6 +6,7 @@
+>   * Copyright 2020 Analog Devices Inc.
+>   */
+>  
+> +#include <linux/crc8.h>
+>  #include <linux/i2c.h>
+>  #include <linux/init.h>
+>  #include <linux/kernel.h>
+> @@ -14,6 +15,82 @@
+>  
+>  #include "pmbus.h"
+>  
+> +#define ADM1266_PMBUS_BLOCK_MAX		255
+> +
+> +DECLARE_CRC8_TABLE(pmbus_crc_table);
+> +
+> +/* Different from Block Read as it sends data and waits for the slave to
+
+   /*
+    * Proper multi-line comment
+    */
+
+> + * return a value dependent on that data. The protocol is simply a Write Block
+> + * followed by a Read Block without the Read-Block command field and the
+> + * Write-Block STOP bit.
 > + */
-> +
-> +#include <linux/i2c.h>
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/slab.h>
 
-Alphabetic include file order, please.
+static
 
-> +
-> +#include "pmbus.h"
-> +
-> +static int adm1266_probe(struct i2c_client *client,
-> +			 const struct i2c_device_id *id)
+> +int pmbus_block_xfer(struct i2c_client *client, u8 cmd, u8 w_len,
+> +		     u8 *data_w, u8 *data_r)
 > +{
-> +	struct pmbus_driver_info *info;
-> +	u32 funcs;
-> +	int i;
-> +
-> +	info = devm_kzalloc(&client->dev, sizeof(struct pmbus_driver_info),
-> +			    GFP_KERNEL);
-> +
-> +	info->pages = 17;
-> +	info->format[PSC_VOLTAGE_OUT] = linear;
-> +	funcs = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT;
-> +	for (i = 0; i < info->pages; i++)
-> +		info->func[i] = funcs;
+> +	u8 write_buf[ADM1266_PMBUS_BLOCK_MAX + 2];
+> +	struct i2c_msg msgs[2] = {
+> +		{
+> +			.addr = client->addr,
+> +			.flags = 0,
+> +			.buf = write_buf,
+> +			.len = w_len + 2,
+> +		},
+> +		{
+> +			.addr = client->addr,
+> +			.flags = I2C_M_RD,
+> +			.len = ADM1266_PMBUS_BLOCK_MAX + 2,
+> +		}
+> +	};
+> +	u8 addr = 0;
+> +	u8 crc = 0;
 
-		info->func[i] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT;
+Unnecessary initialization for both variables
 
-and drop the variable.
+> +	int ret;
+> +
+> +	msgs[0].buf[0] = cmd;
+> +	msgs[0].buf[1] = w_len;
+> +	memcpy(&msgs[0].buf[2], data_w, w_len);
+> +
+> +	msgs[0].buf = i2c_get_dma_safe_msg_buf(&msgs[0], 1);
+> +	if (!msgs[0].buf)
+> +		return -ENOMEM;
+> +
+> +	msgs[1].buf = i2c_get_dma_safe_msg_buf(&msgs[1], 1);
+> +	if (!msgs[1].buf) {
+> +		i2c_put_dma_safe_msg_buf(msgs[0].buf, &msgs[0], false);
+> +		return -ENOMEM;
+> +	}
+
+AFAICS i2c_get_dma_safe_msg_buf() is supposed to be used by i2c bus drivers,
+not by device drivers. If this is needed for the target architecture,
+it should be implemented in the bus driver, not here.
 
 > +
-> +	return pmbus_do_probe(client, id, info);
+> +	ret = i2c_transfer(client->adapter, msgs, 2);
+> +	if (ret != 2) {
+> +		ret = -EPROTO;
+
+Should retain error if ret < 0, and only return EPROTO if the return value
+is 0 or 1.
+
+> +		goto cleanup;
+> +	}
+> +
+> +	if (client->flags & I2C_CLIENT_PEC) {
+> +		addr = i2c_8bit_addr_from_msg(&msgs[0]);
+> +		crc = crc8(pmbus_crc_table, &addr, 1, crc);
+> +		crc = crc8(pmbus_crc_table, msgs[0].buf,  msgs[0].len, crc);
+> +
+> +		addr = i2c_8bit_addr_from_msg(&msgs[1]);
+> +		crc = crc8(pmbus_crc_table, &addr, 1, crc);
+> +		crc = crc8(pmbus_crc_table, msgs[1].buf,  msgs[1].buf[0] + 1,
+> +			   crc);
+> +
+> +		if (crc != msgs[1].buf[msgs[1].buf[0] + 1]) {
+> +			ret = -EBADMSG;
+> +			goto cleanup;
+> +		}
+> +	}
+> +
+> +	memcpy(data_r, &msgs[1].buf[1], msgs[1].buf[0]);
+> +	ret = msgs[1].buf[0];
+> +
+> +cleanup:
+> +	i2c_put_dma_safe_msg_buf(msgs[0].buf, &msgs[0], true);
+> +	i2c_put_dma_safe_msg_buf(msgs[1].buf, &msgs[1], true);
+> +
+> +	return ret;
 > +}
+    > +
+>  static int adm1266_probe(struct i2c_client *client,
+>  			 const struct i2c_device_id *id)
+>  {
+> @@ -24,6 +101,8 @@ static int adm1266_probe(struct i2c_client *client,
+>  	info = devm_kzalloc(&client->dev, sizeof(struct pmbus_driver_info),
+>  			    GFP_KERNEL);
+>  
+> +	crc8_populate_msb(pmbus_crc_table, 0x7);
 > +
-> +static const struct of_device_id adm1266_of_match[] = {
-> +	{ .compatible = "adi,adm1266" },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, adm1266_of_match);
-> +
-> +static const struct i2c_device_id adm1266_id[] = {
-> +	{ "adm1266", 0 },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(i2c, adm1266_id);
-> +
-> +static struct i2c_driver adm1266_driver = {
-> +	.driver = {
-> +		   .name = "adm1266",
-> +		   .of_match_table = adm1266_of_match,
-> +		  },
-> +	.probe = adm1266_probe,
-> +	.remove = pmbus_do_remove,
-> +	.id_table = adm1266_id,
-> +};
-> +
-> +module_i2c_driver(adm1266_driver);
-> +
-> +MODULE_AUTHOR("Alexandru Tachici <alexandru.tachici@analog.com>");
-> +MODULE_DESCRIPTION("PMBus driver for Analog Devices ADM1266");
-> +MODULE_LICENSE("GPL v2");
+>  	info->pages = 17;
+>  	info->format[PSC_VOLTAGE_OUT] = linear;
+>  	funcs = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT;
