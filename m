@@ -6,44 +6,44 @@ X-Spam-Status: No, score=-4.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	LONGWORDS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DBFE5C433E1
-	for <linux-hwmon@archiver.kernel.org>; Thu, 25 Jun 2020 10:00:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D05B2C433E0
+	for <linux-hwmon@archiver.kernel.org>; Thu, 25 Jun 2020 10:00:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C101320702
-	for <linux-hwmon@archiver.kernel.org>; Thu, 25 Jun 2020 10:00:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B8A6C20702
+	for <linux-hwmon@archiver.kernel.org>; Thu, 25 Jun 2020 10:00:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390451AbgFYKAp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 25 Jun 2020 06:00:45 -0400
-Received: from mga09.intel.com ([134.134.136.24]:55077 "EHLO mga09.intel.com"
+        id S2390150AbgFYKAu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 25 Jun 2020 06:00:50 -0400
+Received: from mga06.intel.com ([134.134.136.31]:60113 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390476AbgFYKAn (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 25 Jun 2020 06:00:43 -0400
-IronPort-SDR: zcIsIG67EjSclbV/hD75X74pF9pei7vquW/9ZKYCh5SAWEle/0pUBc4LTELXR/xuI7qoO0LqMg
- 9r6fkUiMMyfg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9662"; a="146323839"
+        id S2390074AbgFYKAu (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 25 Jun 2020 06:00:50 -0400
+IronPort-SDR: Or7H4jLO6oycByduf1FaEB/c2EYtLUepRYprW6X19GqiliGEe9w6pLzXcWy6FiEgjp4kpa6JP8
+ HbLrkM9J+zdQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9662"; a="206358643"
 X-IronPort-AV: E=Sophos;i="5.75,278,1589266800"; 
-   d="scan'208";a="146323839"
+   d="scan'208";a="206358643"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2020 03:00:42 -0700
-IronPort-SDR: yQobybY0/Tw0n4nw4DWUilKGsrpEuw/a6eNFRHO/3BDK2cDjGcFetMDFK7+IXKD7uc68WdIT7c
- gCHJfGsFQibA==
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2020 03:00:48 -0700
+IronPort-SDR: q4lmhAxst6B/5QcPkSqPRr3zuxH8noou2H/m6bwLWPdqqVtOeikyUPtQzJ337Tiu+q5KeR6lDW
+ 6/K9kJsLgcvA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.75,278,1589266800"; 
-   d="scan'208";a="296318301"
+   d="scan'208";a="479588658"
 Received: from lkp-server01.sh.intel.com (HELO 538b5e3c8319) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 25 Jun 2020 03:00:41 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 25 Jun 2020 03:00:46 -0700
 Received: from kbuild by 538b5e3c8319 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1joOgS-0001XO-R8; Thu, 25 Jun 2020 10:00:40 +0000
-Date:   Thu, 25 Jun 2020 18:00:20 +0800
+        id 1joOgX-0001Xa-Uq; Thu, 25 Jun 2020 10:00:45 +0000
+Date:   Thu, 25 Jun 2020 18:00:18 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon-next] BUILD SUCCESS
- 54d491abaf40b346334b136f2057ccbe5311654a
-Message-ID: <5ef475b4.TKrrwH8JcMhpQBGE%lkp@intel.com>
+Subject: [hwmon:hwmon] BUILD SUCCESS
+ 016983d138cbe99a5c0aaae0103ee88f5300beb3
+Message-ID: <5ef475b2.tfplpnvSUeqdew3L%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -53,8 +53,8 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon-next
-branch HEAD: 54d491abaf40b346334b136f2057ccbe5311654a  hwmon: (gsc) add 16bit pre-scaled voltage mode
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon
+branch HEAD: 016983d138cbe99a5c0aaae0103ee88f5300beb3  hwmon: (max6697) Make sure the OVERT mask is set correctly
 
 elapsed time: 723m
 
@@ -155,10 +155,10 @@ sparc64                             defconfig
 sparc64                           allnoconfig
 sparc64                          allyesconfig
 sparc64                          allmodconfig
-um                                allnoconfig
-um                                  defconfig
 um                               allmodconfig
+um                                allnoconfig
 um                               allyesconfig
+um                                  defconfig
 x86_64                               rhel-7.6
 x86_64                    rhel-7.6-kselftests
 x86_64                               rhel-8.3
