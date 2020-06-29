@@ -2,62 +2,61 @@ Return-Path: <SRS0=iNK7=AK=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06749C433E0
-	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Jun 2020 20:49:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5593C433E1
+	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Jun 2020 20:50:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D5D5B20663
-	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Jun 2020 20:49:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 88316206C0
+	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Jun 2020 20:50:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20150623.gappssmtp.com header.i=@bgdev-pl.20150623.gappssmtp.com header.b="FYmhjDIX"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20150623.gappssmtp.com header.i=@bgdev-pl.20150623.gappssmtp.com header.b="MFHsR5ID"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731050AbgF2Usy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 29 Jun 2020 16:48:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43354 "EHLO
+        id S1728444AbgF2UuA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 29 Jun 2020 16:50:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731515AbgF2TNs (ORCPT
+        with ESMTP id S1731480AbgF2TNj (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 29 Jun 2020 15:13:48 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A3CC08ECAF
-        for <linux-hwmon@vger.kernel.org>; Sun, 28 Jun 2020 23:50:21 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id z15so4063485wrl.8
-        for <linux-hwmon@vger.kernel.org>; Sun, 28 Jun 2020 23:50:21 -0700 (PDT)
+        Mon, 29 Jun 2020 15:13:39 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31021C08EC11
+        for <linux-hwmon@vger.kernel.org>; Sun, 28 Jun 2020 23:50:15 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id s10so15292390wrw.12
+        for <linux-hwmon@vger.kernel.org>; Sun, 28 Jun 2020 23:50:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=HQLZ+jko03ajYiEU9tKzGTq9iSv1zZX+07bBcjYcbLA=;
-        b=FYmhjDIXqE+19n161Ij01cT38yTbnnKTVcBm5nfxvt0mQoxdX8jT5GCNuSmoKGQ2il
-         zlOMuHkFhRAhof+11xURpM5Ke9pgsEcriQuwBOd7e7VKbccssUwJ9KxNsQDeqO4m5yuT
-         CgkHnWe1BxhBEASU/SLGzD8cRrDNVjdIEF+BGPRnD7hDJ2xzsV1jeWo7vkuqUQmaNAZ6
-         Gm84ZPAyV54o4Y60vwDt0COyyKKs3duQp77LiMGGjUsxBO+z7tCOdsozVT9eEkf+ahFl
-         Idog53/4Cl4F2ELArDr6T+/8gsp/dA2WV2zXGEzT00o2WxhlEeOg4DIy1JjL+7hu6hvP
-         BimA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0FbmkW7UOcYY7LkyFQeYD+n43SXMQXYjstj7AfGPBFY=;
+        b=MFHsR5IDjPY0E1cBnmOdDmaaexsDnuGaeCom8ugM6D2bx/csHHWIKc48ZfoIzQ1WnQ
+         wH2T1DsKev7yAD8X37BfHZeGwcp165BuatzBqWpk9PKAHPFguntRaNcNM+9ylDmq1Njl
+         NVuN0ckQWhi9I84VLdztbSBWb2IQ1+HBDHXb622lxqQpwfrwmNWd9Mkyxhm4TdXQF1a6
+         Qu7nv7GnKuaQtAdamC+YNXe2VGuqkZAdM7PXqkyxRPuNL0QCsk4OeEyOd44jJct2xsgz
+         /DRypuk9B9Sua+ocxb2STpKn4HHeSpfcsjEMcVSUlGI2ghJFdvn2DzB6bgnCgXysJtma
+         CCag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=HQLZ+jko03ajYiEU9tKzGTq9iSv1zZX+07bBcjYcbLA=;
-        b=RAIge4/LGof4XCqgkUtkVQYLLaisSRVTFJYC2bem/Zx+cHiO05wIt8IDKmYS42Qkis
-         Ix8/3dUfbrAL796jN/aHO/1XUtvW95M4Ukpc2bkhSDr1yBD27MkMemYtkl8MXdUxfViy
-         eovmo9rM9M3L07HvNJJUogSNst+SYbUkgAQjYKL6ie0KsFiEEgJ80duUAs+pC5op7MA6
-         oFWYZ6GvyteR2y9bRd0lsprNE0HxAmw8kYGPZk+f5o85+4/ONNHV+ENUbaNdlkIGTwC3
-         BdAZB4O4Nd4t3jeNOMdxSbVF8OCwS9SwogulG8DoljqcZ/yXsn/p1UQZMqt6Vih3N77Z
-         Qo4w==
-X-Gm-Message-State: AOAM532H7MY03KfU9yoWxwSDVpIgktn18B1FTBExxst85YIyD4IbfEao
-        o2CLYnGjQJB7e/H+NAoiHhd9tA==
-X-Google-Smtp-Source: ABdhPJx4pF05M7pSnBLMBSCCL5/gux2FQqGxkWxH+G1Fjsdujj7JidMEWyZnEHhaT+WmVt1X6gqXvg==
-X-Received: by 2002:adf:f8d1:: with SMTP id f17mr15609276wrq.59.1593413420219;
-        Sun, 28 Jun 2020 23:50:20 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0FbmkW7UOcYY7LkyFQeYD+n43SXMQXYjstj7AfGPBFY=;
+        b=eSmQiqTha09wa9SXwtsot/uPh+aXQ0lnIM3cfZxRqMAkXmvTPJW+NiszIRrIx8y94z
+         clc7/MnOMYoxB1mjVxnPsM78Fc1UT6IBlbMXBgNGF9aJ7APHYhYVj/7XJb3z2JnoRos2
+         OeATFSXvGibXBF6Q+gV1cmGf23BpHet6KPnuoEIqcgh4kVxg0PjGYBzE5pjHAOi0I/qN
+         qPRPNIj+UVuHZzeoXjc/hSnPCmki96v2IZepB4Uo8KQmfe+qmDF3yVbp19ylLxFY439z
+         8FY6ik80LIfHg0F9XP7KVxZwnK4fYVqWfTxbQi8SLXUUhxhiL3tK/6WdpH7lbXHlfxLz
+         Mh7g==
+X-Gm-Message-State: AOAM532FSA+sCItP0A8gf2IqPtvETBOXEYVYyw8p1AT7TV32veM+mNf8
+        SZ6OpLHqIYcnNaw49MCipuKbUw==
+X-Google-Smtp-Source: ABdhPJxSUzNN1zV4gXxXOT8r64Q07nF/D8nrR8lGdd7yU4bCgcU0Q04rNUK9eOM5Le0U05BUn4D0PA==
+X-Received: by 2002:a5d:4ec7:: with SMTP id s7mr15362311wrv.400.1593413413900;
+        Sun, 28 Jun 2020 23:50:13 -0700 (PDT)
 Received: from localhost.localdomain (lfbn-nic-1-65-232.w2-15.abo.wanadoo.fr. [2.15.156.232])
-        by smtp.gmail.com with ESMTPSA id z25sm26400850wmk.28.2020.06.28.23.50.19
+        by smtp.gmail.com with ESMTPSA id z25sm26400850wmk.28.2020.06.28.23.50.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Jun 2020 23:50:19 -0700 (PDT)
+        Sun, 28 Jun 2020 23:50:13 -0700 (PDT)
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     Jonathan Corbet <corbet@lwn.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -67,12 +66,10 @@ To:     Jonathan Corbet <corbet@lwn.net>,
 Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-hwmon@vger.kernel.org,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: [PATCH v2 5/6] devres: provide devm_krealloc()
-Date:   Mon, 29 Jun 2020 08:50:07 +0200
-Message-Id: <20200629065008.27620-6-brgl@bgdev.pl>
+Subject: [PATCH v2 0/6] devres: provide and use devm_krealloc()
+Date:   Mon, 29 Jun 2020 08:50:02 +0200
+Message-Id: <20200629065008.27620-1-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.26.1
-In-Reply-To: <20200629065008.27620-1-brgl@bgdev.pl>
-References: <20200629065008.27620-1-brgl@bgdev.pl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
@@ -82,105 +79,36 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 
 From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 
-Implement the managed variant of krealloc(). This function works with
-all memory allocated by devm_kmalloc() (or devres functions using it
-implicitly like devm_kmemdup(), devm_kstrdup() etc.).
+Regular krealloc() obviously can't work with managed memory. This series
+implements devm_krealloc() and adds the first user with hope that this
+helper will be adopted by other drivers currently using non-managed
+krealloc().
 
-Managed realloc'ed chunks can be manually released with devm_kfree().
+Some additional changes to the code modified by main patches are included.
 
-Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
----
- .../driver-api/driver-model/devres.rst        |  1 +
- drivers/base/devres.c                         | 50 +++++++++++++++++++
- include/linux/device.h                        |  2 +
- 3 files changed, 53 insertions(+)
+v1 -> v2:
+- remove leftover call to hwmon_device_unregister() from pmbus_core.c
+- add a patch extending devm_kmalloc() to handle zero size case
+- use WARN_ON() instead of WARN_ONCE() in devm_krealloc() when passed
+  a pointer to non-managed memory
+- correctly handle the case when devm_krealloc() is passed a pointer to
+  memory in .rodata (potentially returned by devm_kstrdup_const())
+- correctly handle ZERO_SIZE_PTR passed as the ptr argument in devm_krealloc()
 
-diff --git a/Documentation/driver-api/driver-model/devres.rst b/Documentation/driver-api/driver-model/devres.rst
-index e0b58c392e4f..0a2572c3813c 100644
---- a/Documentation/driver-api/driver-model/devres.rst
-+++ b/Documentation/driver-api/driver-model/devres.rst
-@@ -352,6 +352,7 @@ MEM
-   devm_kfree()
-   devm_kmalloc()
-   devm_kmalloc_array()
-+  devm_krealloc()
-   devm_kmemdup()
-   devm_kstrdup()
-   devm_kvasprintf()
-diff --git a/drivers/base/devres.c b/drivers/base/devres.c
-index ed615d3b9cf1..4b8870ef6a3f 100644
---- a/drivers/base/devres.c
-+++ b/drivers/base/devres.c
-@@ -837,6 +837,56 @@ void *devm_kmalloc(struct device *dev, size_t size, gfp_t gfp)
- }
- EXPORT_SYMBOL_GPL(devm_kmalloc);
- 
-+void *devm_krealloc(struct device *dev, void *ptr, size_t new_size, gfp_t gfp)
-+{
-+	struct devres *old_dr, *new_dr;
-+	struct list_head old_head;
-+	unsigned long flags;
-+	void *ret = NULL;
-+	size_t tot_size;
-+
-+	if (unlikely(!new_size)) {
-+		devm_kfree(dev, ptr);
-+		return ZERO_SIZE_PTR;
-+	}
-+
-+	if (unlikely(ZERO_OR_NULL_PTR(ptr)))
-+		return devm_kmalloc(dev, new_size, gfp);
-+
-+	if (WARN_ON(is_kernel_rodata((unsigned long)ptr)))
-+		/*
-+		 * We cannot reliably realloc a const string returned by
-+		 * devm_kstrdup_const().
-+		 */
-+		return NULL;
-+
-+	if (!check_dr_size(new_size, &tot_size))
-+		return NULL;
-+
-+	spin_lock_irqsave(&dev->devres_lock, flags);
-+
-+	old_dr = find_dr(dev, devm_kmalloc_release, devm_kmalloc_match, ptr);
-+	if (WARN_ON(!old_dr))
-+		/* Memory chunk not managed or managed by a different device. */
-+		goto out;
-+
-+	old_head = old_dr->node.entry;
-+
-+	new_dr = krealloc(old_dr, tot_size, gfp);
-+	if (!new_dr)
-+		goto out;
-+
-+	if (new_dr != old_dr)
-+		list_replace(&old_head, &new_dr->node.entry);
-+
-+	ret = new_dr->data;
-+
-+out:
-+	spin_unlock_irqrestore(&dev->devres_lock, flags);
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(devm_krealloc);
-+
- /**
-  * devm_kstrdup - Allocate resource managed space and
-  *                copy an existing string into that.
-diff --git a/include/linux/device.h b/include/linux/device.h
-index 9cadb647cacc..228063c6392c 100644
---- a/include/linux/device.h
-+++ b/include/linux/device.h
-@@ -201,6 +201,8 @@ int devres_release_group(struct device *dev, void *id);
- 
- /* managed devm_k.alloc/kfree for device drivers */
- void *devm_kmalloc(struct device *dev, size_t size, gfp_t gfp) __malloc;
-+void *devm_krealloc(struct device *dev, void *ptr, size_t size,
-+		    gfp_t gfp) __must_check;
- __printf(3, 0) char *devm_kvasprintf(struct device *dev, gfp_t gfp,
- 				     const char *fmt, va_list ap) __malloc;
- __printf(3, 4) char *devm_kasprintf(struct device *dev, gfp_t gfp,
+Bartosz Golaszewski (6):
+  devres: remove stray space from devm_kmalloc() definition
+  devres: move the size check from alloc_dr() into a separate function
+  device: remove 'extern' attribute from function prototypes in device.h
+  devres: handle zero size in devm_kmalloc()
+  devres: provide devm_krealloc()
+  hwmon: pmbus: use more devres helpers
+
+ .../driver-api/driver-model/devres.rst        |   1 +
+ drivers/base/devres.c                         |  75 +++++-
+ drivers/hwmon/pmbus/pmbus_core.c              |  28 +--
+ include/linux/device.h                        | 225 +++++++++---------
+ 4 files changed, 187 insertions(+), 142 deletions(-)
+
 -- 
 2.26.1
 
