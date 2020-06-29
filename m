@@ -2,152 +2,185 @@ Return-Path: <SRS0=iNK7=AK=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6C17C433DF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Jun 2020 19:27:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06749C433E0
+	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Jun 2020 20:49:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A91232065F
-	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Jun 2020 19:27:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D5D5B20663
+	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Jun 2020 20:49:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eupqY2KT"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20150623.gappssmtp.com header.i=@bgdev-pl.20150623.gappssmtp.com header.b="FYmhjDIX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732317AbgF2T1u (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 29 Jun 2020 15:27:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
+        id S1731050AbgF2Usy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 29 Jun 2020 16:48:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732754AbgF2T1t (ORCPT
+        with ESMTP id S1731515AbgF2TNs (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 29 Jun 2020 15:27:49 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34999C031400
-        for <linux-hwmon@vger.kernel.org>; Mon, 29 Jun 2020 09:59:54 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id o22so3223118pjw.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 29 Jun 2020 09:59:54 -0700 (PDT)
+        Mon, 29 Jun 2020 15:13:48 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A3CC08ECAF
+        for <linux-hwmon@vger.kernel.org>; Sun, 28 Jun 2020 23:50:21 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id z15so4063485wrl.8
+        for <linux-hwmon@vger.kernel.org>; Sun, 28 Jun 2020 23:50:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=9ipBm7l0xCbDF5JmnRDA2GTE5VaA4tfJ0uNXAyKG1p0=;
-        b=eupqY2KToj+52e4xOEpy2/OjhFxemonGdyxvP/iXLGcaguOqjgfmj/m+w5DeiV6uoq
-         r6tbJ+gbaP0+3uyFxbO699ihdsXnDMbF8/d91ie1ZN1reMKJxWlbgKHuC5F6CR5RDGT6
-         3i2fi6J4FOyNTZe0JT9OYNGRisQF68FcQ+W9d9+vpnqscmmIsu6uQ0V6e6ON+aDAJJ1X
-         ZlHVem7OpgVdNiyf3lcekomsUyWDQtaJoqZwyMZjPpgvMeAvAo8m/64Z0P0eBYbGtPxq
-         YaXvVMLZv8uYEO+AetnHKR/5rh5pX4TCvzURWD4R46or3tkGT8P1V1OyWR12V8ImmsIY
-         u/hA==
+        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=HQLZ+jko03ajYiEU9tKzGTq9iSv1zZX+07bBcjYcbLA=;
+        b=FYmhjDIXqE+19n161Ij01cT38yTbnnKTVcBm5nfxvt0mQoxdX8jT5GCNuSmoKGQ2il
+         zlOMuHkFhRAhof+11xURpM5Ke9pgsEcriQuwBOd7e7VKbccssUwJ9KxNsQDeqO4m5yuT
+         CgkHnWe1BxhBEASU/SLGzD8cRrDNVjdIEF+BGPRnD7hDJ2xzsV1jeWo7vkuqUQmaNAZ6
+         Gm84ZPAyV54o4Y60vwDt0COyyKKs3duQp77LiMGGjUsxBO+z7tCOdsozVT9eEkf+ahFl
+         Idog53/4Cl4F2ELArDr6T+/8gsp/dA2WV2zXGEzT00o2WxhlEeOg4DIy1JjL+7hu6hvP
+         BimA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=9ipBm7l0xCbDF5JmnRDA2GTE5VaA4tfJ0uNXAyKG1p0=;
-        b=Jg8H7rXpHdXbXaDJ6lvP/uMhG5P/RcsUlgByLsQu7DBN1tJhAvxlqP08UO17fgZRlk
-         ZBjxEViI0fT5+NtsmKaENXJz6HhR73NL1DSL7LH7pvATiEfqF3SfiZodDPBNruIiQ4HQ
-         8flb1Yqg0U6zJv4BmG1lF1i5FS3qAzkB8b+flzvUtLDoQs9kFDH1wMQfURA7/zcxNJRa
-         l261SKs5nKWSDkNqe7JiAekzAyd8UV7IjzNOo96zM7h+4Vy1rOMyciBS+qsp6K5vMIyH
-         zznJb55Uq5Mk1w4tdyfOUDyThGS4juQvMnjjxkPlqzB1a1V6fL2ikdOqGeQVBD73/xZ+
-         f+bw==
-X-Gm-Message-State: AOAM530t9OJLVJmNVLs9ua1rjyxLToUPp41+Fjgjs6wXB80dysB4GpXP
-        uSBwtyE/USA4bxMv2p1cPNMMUgFW
-X-Google-Smtp-Source: ABdhPJzfTl3WkyUZXrj23Ar+Nc47uqStlzYySnhgn01oV/VXUZh5XONKBEMRHXL13RROwV+OsXaGUw==
-X-Received: by 2002:a17:90b:705:: with SMTP id s5mr11698438pjz.11.1593449992472;
-        Mon, 29 Jun 2020 09:59:52 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c27sm232096pfj.163.2020.06.29.09.59.51
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 29 Jun 2020 09:59:51 -0700 (PDT)
-Date:   Mon, 29 Jun 2020 09:59:50 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     zlukwins <zbigniew.lukwinski@linux.intel.com>
-Cc:     jae.hyun.yoo@linux.intel.com, lukasz.tuz@intel.com,
-        linux-hwmon@vger.kernel.org
-Subject: Re: Maximum rate value of input power for pmbus device
-Message-ID: <20200629165950.GB113813@roeck-us.net>
-References: <ddcb240a-5444-ba46-ecdf-70350d27125f@linux.intel.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=HQLZ+jko03ajYiEU9tKzGTq9iSv1zZX+07bBcjYcbLA=;
+        b=RAIge4/LGof4XCqgkUtkVQYLLaisSRVTFJYC2bem/Zx+cHiO05wIt8IDKmYS42Qkis
+         Ix8/3dUfbrAL796jN/aHO/1XUtvW95M4Ukpc2bkhSDr1yBD27MkMemYtkl8MXdUxfViy
+         eovmo9rM9M3L07HvNJJUogSNst+SYbUkgAQjYKL6ie0KsFiEEgJ80duUAs+pC5op7MA6
+         oFWYZ6GvyteR2y9bRd0lsprNE0HxAmw8kYGPZk+f5o85+4/ONNHV+ENUbaNdlkIGTwC3
+         BdAZB4O4Nd4t3jeNOMdxSbVF8OCwS9SwogulG8DoljqcZ/yXsn/p1UQZMqt6Vih3N77Z
+         Qo4w==
+X-Gm-Message-State: AOAM532H7MY03KfU9yoWxwSDVpIgktn18B1FTBExxst85YIyD4IbfEao
+        o2CLYnGjQJB7e/H+NAoiHhd9tA==
+X-Google-Smtp-Source: ABdhPJx4pF05M7pSnBLMBSCCL5/gux2FQqGxkWxH+G1Fjsdujj7JidMEWyZnEHhaT+WmVt1X6gqXvg==
+X-Received: by 2002:adf:f8d1:: with SMTP id f17mr15609276wrq.59.1593413420219;
+        Sun, 28 Jun 2020 23:50:20 -0700 (PDT)
+Received: from localhost.localdomain (lfbn-nic-1-65-232.w2-15.abo.wanadoo.fr. [2.15.156.232])
+        by smtp.gmail.com with ESMTPSA id z25sm26400850wmk.28.2020.06.28.23.50.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 Jun 2020 23:50:19 -0700 (PDT)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Subject: [PATCH v2 5/6] devres: provide devm_krealloc()
+Date:   Mon, 29 Jun 2020 08:50:07 +0200
+Message-Id: <20200629065008.27620-6-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.26.1
+In-Reply-To: <20200629065008.27620-1-brgl@bgdev.pl>
+References: <20200629065008.27620-1-brgl@bgdev.pl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ddcb240a-5444-ba46-ecdf-70350d27125f@linux.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-+ linux-hwmon@vger.kernel.org
+From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 
-On Mon, Jun 29, 2020 at 08:31:11AM +0200, zlukwins wrote:
-> Hi,
-> 
-> 
-> I am OpenBMC FW developer working currently on some power measurement stuff.
-> 
-> I would like to have maximum rated input power for pmubus device available
-> in hwmon sysfs. This value is read by MFR_PIN_MAX command:
-> 
-> /MFR_PIN_MAX//
-> //The MFR_PIN_MIN command sets or retrieves the maximum rated value, in
-> watts, of//
-> //the input power./
+Implement the managed variant of krealloc(). This function works with
+all memory allocated by devm_kmalloc() (or devres functions using it
+implicitly like devm_kmemdup(), devm_kstrdup() etc.).
 
-Interesting typo in the PMBus specification. Yes, it really does associate
-MFR_PIN_MIN - which doesn't seem to exist - with the maximum rated output
-power.
+Managed realloc'ed chunks can be manually released with devm_kfree().
 
-> 
-> And I wondering which attribute shell be used to expose that value in sysfs.
-> I went through documentation
-> (https://www.kernel.org/doc/Documentation/hwmon/sysfs-interface) and found
-> the following:
-> 
-> power[1-*]_max			Maximum power.
-> 				Unit: microWatt
-> 				RW
-> 
-> But it looks like it is already occupied by PIN_OP_WARN_LIMIT.
-> 
-> Maybe new attribute shall be used? If so how to call that?
-> 
+Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+---
+ .../driver-api/driver-model/devres.rst        |  1 +
+ drivers/base/devres.c                         | 50 +++++++++++++++++++
+ include/linux/device.h                        |  2 +
+ 3 files changed, 53 insertions(+)
 
-None of the standard attributes reports (or is supposed to report) rated
-values, so we can not just use any of those.
+diff --git a/Documentation/driver-api/driver-model/devres.rst b/Documentation/driver-api/driver-model/devres.rst
+index e0b58c392e4f..0a2572c3813c 100644
+--- a/Documentation/driver-api/driver-model/devres.rst
++++ b/Documentation/driver-api/driver-model/devres.rst
+@@ -352,6 +352,7 @@ MEM
+   devm_kfree()
+   devm_kmalloc()
+   devm_kmalloc_array()
++  devm_krealloc()
+   devm_kmemdup()
+   devm_kstrdup()
+   devm_kvasprintf()
+diff --git a/drivers/base/devres.c b/drivers/base/devres.c
+index ed615d3b9cf1..4b8870ef6a3f 100644
+--- a/drivers/base/devres.c
++++ b/drivers/base/devres.c
+@@ -837,6 +837,56 @@ void *devm_kmalloc(struct device *dev, size_t size, gfp_t gfp)
+ }
+ EXPORT_SYMBOL_GPL(devm_kmalloc);
+ 
++void *devm_krealloc(struct device *dev, void *ptr, size_t new_size, gfp_t gfp)
++{
++	struct devres *old_dr, *new_dr;
++	struct list_head old_head;
++	unsigned long flags;
++	void *ret = NULL;
++	size_t tot_size;
++
++	if (unlikely(!new_size)) {
++		devm_kfree(dev, ptr);
++		return ZERO_SIZE_PTR;
++	}
++
++	if (unlikely(ZERO_OR_NULL_PTR(ptr)))
++		return devm_kmalloc(dev, new_size, gfp);
++
++	if (WARN_ON(is_kernel_rodata((unsigned long)ptr)))
++		/*
++		 * We cannot reliably realloc a const string returned by
++		 * devm_kstrdup_const().
++		 */
++		return NULL;
++
++	if (!check_dr_size(new_size, &tot_size))
++		return NULL;
++
++	spin_lock_irqsave(&dev->devres_lock, flags);
++
++	old_dr = find_dr(dev, devm_kmalloc_release, devm_kmalloc_match, ptr);
++	if (WARN_ON(!old_dr))
++		/* Memory chunk not managed or managed by a different device. */
++		goto out;
++
++	old_head = old_dr->node.entry;
++
++	new_dr = krealloc(old_dr, tot_size, gfp);
++	if (!new_dr)
++		goto out;
++
++	if (new_dr != old_dr)
++		list_replace(&old_head, &new_dr->node.entry);
++
++	ret = new_dr->data;
++
++out:
++	spin_unlock_irqrestore(&dev->devres_lock, flags);
++	return ret;
++}
++EXPORT_SYMBOL_GPL(devm_krealloc);
++
+ /**
+  * devm_kstrdup - Allocate resource managed space and
+  *                copy an existing string into that.
+diff --git a/include/linux/device.h b/include/linux/device.h
+index 9cadb647cacc..228063c6392c 100644
+--- a/include/linux/device.h
++++ b/include/linux/device.h
+@@ -201,6 +201,8 @@ int devres_release_group(struct device *dev, void *id);
+ 
+ /* managed devm_k.alloc/kfree for device drivers */
+ void *devm_kmalloc(struct device *dev, size_t size, gfp_t gfp) __malloc;
++void *devm_krealloc(struct device *dev, void *ptr, size_t size,
++		    gfp_t gfp) __must_check;
+ __printf(3, 0) char *devm_kvasprintf(struct device *dev, gfp_t gfp,
+ 				     const char *fmt, va_list ap) __malloc;
+ __printf(3, 4) char *devm_kasprintf(struct device *dev, gfp_t gfp,
+-- 
+2.26.1
 
-Also, we can not just add a single attribute to handle this situation,
-for the simple reason that there are many more similar attributes.
-PMBus specifies (this is from version 1.3.1):
-
-MFR_VIN_MIN
-MFR_VIN_MAX
-MFR_IIN_MAX
-MFR_PIN_MAX
-MFR_VOUT_MIN
-MFR_VOUT_MAX
-MFR_IOUT_MAX
-MFR_POUT_MAX
-MFR_TAMBIENT_MAX
-MFR_TAMBIENT_MIN
-MFR_MAX_TEMP_{1,2.3}
-
-All those report rated values. I do see the need/desire for reporting such
-information. The only real solution I can see is to add a new set of
-attributes to the hwmon ABI. Something like:
-
-	currentX_rated_min	# for consistency
-	currentX_rated_max
-	inX_rated_min
-	inX_rated_max
-	powerX_rated_min	# for consistency
-	powerX_rated_max
-	tempX_rated_min
-	tempX_rated_max
-plus maybe, for consistency:
-	humidityX_rated_min
-	humidityX_rated_max
-
-Those would be read-only attributes.
-
-Thoughts, comments, feedback anyone ?
-
-Thanks,
-Guenter
