@@ -2,89 +2,155 @@ Return-Path: <SRS0=y3Lu=AN=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66B4CC433DF
-	for <linux-hwmon@archiver.kernel.org>; Thu,  2 Jul 2020 05:14:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18614C433E0
+	for <linux-hwmon@archiver.kernel.org>; Thu,  2 Jul 2020 12:42:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3B6272070C
-	for <linux-hwmon@archiver.kernel.org>; Thu,  2 Jul 2020 05:14:56 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mhi3Y848"
+	by mail.kernel.org (Postfix) with ESMTP id E07BC2088E
+	for <linux-hwmon@archiver.kernel.org>; Thu,  2 Jul 2020 12:42:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1593693775;
+	bh=5Id979Qu+TbMvFs3bdzAkBCYv828DS3FPkCk09ao5tA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=mib1AkxPc6UVeR8MlJfX8fucj/of7ckc8mHqjqkmawCWtntrhadPc8th01oOIxKUX
+	 DW9QzPZMOP5W48Iudt3GfHQwpb6wTZfeF87suDK7vJnaG9Rl8hXsuceybnf8X0b7RR
+	 Fmu0kXbdV41i6Di2uKQiT1zBOmrUmcyaArUKUDbM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725994AbgGBFO4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 2 Jul 2020 01:14:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46362 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725872AbgGBFOz (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 2 Jul 2020 01:14:55 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 799AEC08C5C1;
-        Wed,  1 Jul 2020 22:14:55 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id o1so4254148plk.1;
-        Wed, 01 Jul 2020 22:14:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=q2AmPf54k6V+7YFyiJal5EYJsUdyj94UY6PchwcvXgE=;
-        b=Mhi3Y8486oj84DtikJxaCfYVKOB48AuEVcdz9zXATCez1PDm9uGjq9ljKqSTe/Rg7Y
-         48g5DsXTSLkStEwAGOxLh+C4TO24duoO0Fd7faKjR9vhDPOaANKNV3F2V15zE/T/VP3A
-         G/RLqHivbxcamVKMSk+QknhcL1esCCcvGxlkLjuRkXJxLqw8sa0jXsHu4BhqIAHLlJ6K
-         adH8ppBdN//81dxXBrQP18WIeG8k4JWlXHaX74R1duzy8i7qVHRA2DbHzNp9/ow6Pt7K
-         oxeN44983tGOXJHsKU2HzMc7WZnnAASgmEl8JCL7esWL199UFDpa22Sb34h2vExIsMvM
-         Mn7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=q2AmPf54k6V+7YFyiJal5EYJsUdyj94UY6PchwcvXgE=;
-        b=gm70aJfv+DsJQjWCxRWc5SKqfFj3/frzrN0webXcslBix5DQhgwcYLkTm14mFLSzK0
-         rDW/0JZdPd4KPYcH2IkDNpkv75Q6ajw+LXfCMxCIBmSCrZSxC6bjAtsmK68MlMF2abK3
-         aebr1bqjj6ge6+kaS+Qy1yKGaKq3iUEZcteusjqDFaXLFzS8pskFhmcUHArOX70JykT4
-         4UeVaMWm7dVC/MxZvJhOmlhyIVmgf9d2HVQBT0AbfMk//OBHtN4JNJS5Kvr4uRezKAY7
-         NMZwFLRCRVKawxzQpUyY6VPMeWpxRcspRuhIA1BTsMmpbujdp+ceREJcS5OZ0jIqyH1f
-         qnPA==
-X-Gm-Message-State: AOAM533q6V95j9/BExqNaPIIJRHSbKji+iZCQJgdQB1MvrNO3AEnjdF9
-        IBMytr5J3VlH0+RIhRCZtYI=
-X-Google-Smtp-Source: ABdhPJxUSRo5a108Q/nySxmd/hO3m1jwUtrDffjQ3A8Afm6suRTmK1b5bXou9m4MLz/f/KB67nbIDw==
-X-Received: by 2002:a17:902:d68d:: with SMTP id v13mr25904277ply.10.1593666894865;
-        Wed, 01 Jul 2020 22:14:54 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n188sm7505225pfn.104.2020.07.01.22.14.53
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 01 Jul 2020 22:14:54 -0700 (PDT)
-Date:   Wed, 1 Jul 2020 22:14:53 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Chu Lin <linchuyuan@google.com>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jasonling@google.com,
-        belgaied@google.com, zhongqil@google.com
-Subject: Re: [PATCH] hwmon:max6697: Allow max6581 to create tempX_offset
- attributes
-Message-ID: <20200702051453.GA235128@roeck-us.net>
-References: <20200630174350.2842555-1-linchuyuan@google.com>
- <20200702014223.4096977-1-linchuyuan@google.com>
+        id S1728966AbgGBMmz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 2 Jul 2020 08:42:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48304 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728808AbgGBMmz (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 2 Jul 2020 08:42:55 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 08AA820885;
+        Thu,  2 Jul 2020 12:42:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1593693774;
+        bh=5Id979Qu+TbMvFs3bdzAkBCYv828DS3FPkCk09ao5tA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NnEiOIpme/oFl0LG5LH6yJgz74OeVj3OGC7bfMvt0oxzcNXw+2nUkp3q2zvGrrPGq
+         UsSwLsIAvHHV+/6JJLtgHnigNwQNASJFS46tZVN8u14zfgkXkyxA9J5vACUSl8en8a
+         NkSQAtlPXwcKyiBMDvyEfJKL+vgGQz13nystJm24=
+Date:   Thu, 2 Jul 2020 14:42:58 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Subject: Re: [PATCH v2 5/6] devres: provide devm_krealloc()
+Message-ID: <20200702124258.GA1882489@kroah.com>
+References: <20200629065008.27620-1-brgl@bgdev.pl>
+ <20200629065008.27620-6-brgl@bgdev.pl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200702014223.4096977-1-linchuyuan@google.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200629065008.27620-6-brgl@bgdev.pl>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Jul 02, 2020 at 01:42:23AM +0000, Chu Lin wrote:
-> Per max6581, reg 4d and reg 4e is used for temperature read offset.
-> This patch will let the user specify the temperature read offset for
-> max6581. This patch is tested on max6581 and only applies to max6581.
+On Mon, Jun 29, 2020 at 08:50:07AM +0200, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 > 
-Patchwork received four versions of this patch, with two different
-subject lines.
+> Implement the managed variant of krealloc(). This function works with
+> all memory allocated by devm_kmalloc() (or devres functions using it
+> implicitly like devm_kmemdup(), devm_kstrdup() etc.).
+> 
+> Managed realloc'ed chunks can be manually released with devm_kfree().
+> 
+> Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> ---
+>  .../driver-api/driver-model/devres.rst        |  1 +
+>  drivers/base/devres.c                         | 50 +++++++++++++++++++
+>  include/linux/device.h                        |  2 +
+>  3 files changed, 53 insertions(+)
+> 
+> diff --git a/Documentation/driver-api/driver-model/devres.rst b/Documentation/driver-api/driver-model/devres.rst
+> index e0b58c392e4f..0a2572c3813c 100644
+> --- a/Documentation/driver-api/driver-model/devres.rst
+> +++ b/Documentation/driver-api/driver-model/devres.rst
+> @@ -352,6 +352,7 @@ MEM
+>    devm_kfree()
+>    devm_kmalloc()
+>    devm_kmalloc_array()
+> +  devm_krealloc()
+>    devm_kmemdup()
+>    devm_kstrdup()
+>    devm_kvasprintf()
+> diff --git a/drivers/base/devres.c b/drivers/base/devres.c
+> index ed615d3b9cf1..4b8870ef6a3f 100644
+> --- a/drivers/base/devres.c
+> +++ b/drivers/base/devres.c
+> @@ -837,6 +837,56 @@ void *devm_kmalloc(struct device *dev, size_t size, gfp_t gfp)
+>  }
+>  EXPORT_SYMBOL_GPL(devm_kmalloc);
+>  
+> +void *devm_krealloc(struct device *dev, void *ptr, size_t new_size, gfp_t gfp)
+> +{
+> +	struct devres *old_dr, *new_dr;
+> +	struct list_head old_head;
+> +	unsigned long flags;
+> +	void *ret = NULL;
+> +	size_t tot_size;
+> +
+> +	if (unlikely(!new_size)) {
+> +		devm_kfree(dev, ptr);
+> +		return ZERO_SIZE_PTR;
+> +	}
+> +
+> +	if (unlikely(ZERO_OR_NULL_PTR(ptr)))
+> +		return devm_kmalloc(dev, new_size, gfp);
+> +
+> +	if (WARN_ON(is_kernel_rodata((unsigned long)ptr)))
+> +		/*
+> +		 * We cannot reliably realloc a const string returned by
+> +		 * devm_kstrdup_const().
+> +		 */
+> +		return NULL;
+> +
+> +	if (!check_dr_size(new_size, &tot_size))
+> +		return NULL;
+> +
+> +	spin_lock_irqsave(&dev->devres_lock, flags);
+> +
+> +	old_dr = find_dr(dev, devm_kmalloc_release, devm_kmalloc_match, ptr);
+> +	if (WARN_ON(!old_dr))
+> +		/* Memory chunk not managed or managed by a different device. */
+> +		goto out;
+> +
+> +	old_head = old_dr->node.entry;
+> +
+> +	new_dr = krealloc(old_dr, tot_size, gfp);
+> +	if (!new_dr)
+> +		goto out;
+> +
+> +	if (new_dr != old_dr)
+> +		list_replace(&old_head, &new_dr->node.entry);
+> +
+> +	ret = new_dr->data;
+> +
+> +out:
+> +	spin_unlock_irqrestore(&dev->devres_lock, flags);
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(devm_krealloc);
 
-How am I supposed to know which one to look at ?
+That's a lot of logic that does not seem to match up with the krealloc()
+logic in mm/slab_common.c, are you sure we need to do all of that?
 
-Guenter
+Who wants this?
+
+thanks,
+
+greg k-h
