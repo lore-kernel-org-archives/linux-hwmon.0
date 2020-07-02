@@ -1,4 +1,4 @@
-Return-Path: <SRS0=4jzs=AM=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=y3Lu=AN=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
@@ -7,59 +7,59 @@ X-Spam-Status: No, score=-17.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
 	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62CDCC433E0
-	for <linux-hwmon@archiver.kernel.org>; Wed,  1 Jul 2020 18:46:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18F94C433E0
+	for <linux-hwmon@archiver.kernel.org>; Thu,  2 Jul 2020 01:43:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 388D220760
-	for <linux-hwmon@archiver.kernel.org>; Wed,  1 Jul 2020 18:46:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D9109207D4
+	for <linux-hwmon@archiver.kernel.org>; Thu,  2 Jul 2020 01:43:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oz3kxVUu"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hzP/52G8"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726021AbgGASqA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 1 Jul 2020 14:46:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34292 "EHLO
+        id S1728193AbgGBBnc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 1 Jul 2020 21:43:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725535AbgGASp7 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 1 Jul 2020 14:45:59 -0400
-Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD71AC08C5C1
-        for <linux-hwmon@vger.kernel.org>; Wed,  1 Jul 2020 11:45:58 -0700 (PDT)
-Received: by mail-qv1-xf49.google.com with SMTP id u1so3201680qvu.18
-        for <linux-hwmon@vger.kernel.org>; Wed, 01 Jul 2020 11:45:58 -0700 (PDT)
+        with ESMTP id S1728029AbgGBBn3 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 1 Jul 2020 21:43:29 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECA4C08C5DB
+        for <linux-hwmon@vger.kernel.org>; Wed,  1 Jul 2020 18:43:29 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id fr7so13796753pjb.4
+        for <linux-hwmon@vger.kernel.org>; Wed, 01 Jul 2020 18:43:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
         bh=SCqQGailrCYA7+IFNQkGdPcyTCT2gfWNKAHkDA9B1GY=;
-        b=oz3kxVUuxNzsVbNxWVzZN6iHCbfgJe5blYfxTfSMVhNXNJUwWLWPAwrGt2Bz/FmQPp
-         7DThxAtBDdaAyMzQV/EkeFZ3aR1a5gDUwH/BGSZUl+cEdUn3dagOWMGopZZA2s6tf+J3
-         5e5e81iH/SEawiyIsPS+g/iPCvFVT1mstt3C6HN/rwhmUmElsXRT1Abyg/C+oGhRMgFq
-         3YdnsulnJhyyWLyvojIUTQW5iqr7SQwUDCA1OLJ0UUq2DAbU3bn/hY9rRbjUJeTgkLkn
-         gDG3jya6lL8T6VmxBOMJjFWS3RkTXld0mwmwZHCuzZhGYWe1z3QvtEV65MrHdALSYcIx
-         L8bg==
+        b=hzP/52G8y/U5SEdRnajEwhCVo+IzJNdL7M7B8RPX28Uyin02LnNTbtuD+Aw5XtyzWK
+         5nEIfIhJg6HNRCXZ/FADkRrgwvLGm2lOt1R3L0K9zcedZbffA2Bysl88uHclF3WX3OeG
+         4pNIg5xNSkEuX9ro8KTQxHgkqxheICXdsu32ePHrOIrg+Yfec7Phjqx+AvQBd/vng6Vf
+         JZGtPihMHYfu4tGn3wXHzCElVxB8w0lJ7R1j75uAQJ/Yp5GrYWipGVxLiixYBhxoS31O
+         nAS75psD+5EvYbsVZ8m3ewcerRGRv0dVMPe7oYalc85C85uPPJOHFsCo5/39toqXFhtX
+         d9yQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
         bh=SCqQGailrCYA7+IFNQkGdPcyTCT2gfWNKAHkDA9B1GY=;
-        b=C30xdMXkX/j1kQmaJy2ie8CmbduUJiOGsmCFohtr3JfH6oP9UERW4swynGunlxY+zR
-         5k7dGeqWjvnb6WMZxw4Zs/V1JbBVbzFjH1kD/bgGndievbNaqZThvP6mGgvzz7CEpYcu
-         RxXPE2AH0lUHqR7p+nl7iEmh/D7reRBUR8vqpXONYVYR7AQSHnuciHkVSMz+WY6WxEmn
-         7QTzhdkdjwXNCl3tFIWUiCKmgeCOqOe2ux1tBSUTgjc6tSXRSH1NjUgfX+Jaj55QeZMw
-         nDqlIluKSsRWRfN+Z139piA0Sl2pW6EH4my8YUGQAfRWqUY1v711TQ5qhxS4rVhui3eN
-         wbFw==
-X-Gm-Message-State: AOAM530owY4zvyfFKf4V6SPXyKQ1WTa/a4OFqSi7n/JOtknlKmjMauhF
-        InmgIe+QZlFPWMFpjrq108QKZvJZarSpe44h
-X-Google-Smtp-Source: ABdhPJxsLC0Gq/HZr8PagYYpXpPDcXCIdLsyuzQzztBuA27UXGWFvgFqyTsiYincpNRX4UNQGrvEWIsj2Odq6Oen
-X-Received: by 2002:ad4:5511:: with SMTP id az17mr26712656qvb.159.1593629158006;
- Wed, 01 Jul 2020 11:45:58 -0700 (PDT)
-Date:   Wed,  1 Jul 2020 18:45:54 +0000
+        b=qH3TawlX/aztiqgzImtuky/6XZx7vuHNCD59OpNzp6wUGA+mCtddBpteVTF1aY4Nap
+         0/FLJxpPD8HaNt0M8AxBgBpKDRvbEWPmjcuaR/ExMwt22VTleVYL5GVuBLkuX+laDjxV
+         6zG/KHK5XZUZ4IYqZ0NBCJ4fCIhY65reERe0JGslzNlpJtzm3g637mTPfA3SMi60AgyA
+         6ZEtZjAujnelR2WdSWXv7M9bTyN9Kk4HZT1ie4Bg/DkV37op3QkM/eNcCm6A/MvltyQ7
+         bXW5z2Vi+VQAcCQ/MhWYMAosam7myaRrhzDxnnRDDwtJxhEgHivPce03sctsjJKUOu1Z
+         F+UQ==
+X-Gm-Message-State: AOAM5335RqvDTw+z7OcH2HQRSVlVPSHfhnpcL2+uE6j73gCOyxSJBMbM
+        gWKkrFFNrVhykKPT9pm5B0XHHgZhE22JY8K3
+X-Google-Smtp-Source: ABdhPJzhZwG94LQ7S2+ClOsEqlp0XJknP6+1ih2Pa0MuDmV7aHu0txehv0/LSu/sHmSlQJDwz/N8dgohlStubMLF
+X-Received: by 2002:a17:902:8681:: with SMTP id g1mr24117264plo.161.1593654209035;
+ Wed, 01 Jul 2020 18:43:29 -0700 (PDT)
+Date:   Thu,  2 Jul 2020 01:42:23 +0000
 In-Reply-To: <20200630174350.2842555-1-linchuyuan@google.com>
-Message-Id: <20200701184554.4037658-1-linchuyuan@google.com>
+Message-Id: <20200702014223.4096977-1-linchuyuan@google.com>
 Mime-Version: 1.0
 References: <20200630174350.2842555-1-linchuyuan@google.com>
 X-Mailer: git-send-email 2.27.0.212.ge8ba1cc988-goog
-Subject: [PATCH] hwmon:max6697: Allow max6581 to set temperature read offset
+Subject: [PATCH] hwmon:max6697: Allow max6581 to create tempX_offset attributes
 From:   Chu Lin <linchuyuan@google.com>
 To:     linux@roeck-us.net, jdelvare@suse.com, linchuyuan@google.com,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
