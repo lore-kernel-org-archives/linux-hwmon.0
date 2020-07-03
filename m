@@ -2,50 +2,53 @@ Return-Path: <SRS0=10GT=AO=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EDCB1C433DF
-	for <linux-hwmon@archiver.kernel.org>; Fri,  3 Jul 2020 20:56:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EAC8C433E3
+	for <linux-hwmon@archiver.kernel.org>; Fri,  3 Jul 2020 20:57:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BD37B20884
-	for <linux-hwmon@archiver.kernel.org>; Fri,  3 Jul 2020 20:56:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5595A21531
+	for <linux-hwmon@archiver.kernel.org>; Fri,  3 Jul 2020 20:57:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="AWw1aPsk"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="U3U0QbtP"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726474AbgGCU46 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 3 Jul 2020 16:56:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46148 "EHLO
+        id S1726928AbgGCU5J (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 3 Jul 2020 16:57:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726379AbgGCU46 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 3 Jul 2020 16:56:58 -0400
+        with ESMTP id S1726923AbgGCU5I (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 3 Jul 2020 16:57:08 -0400
 Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFFBDC061794;
-        Fri,  3 Jul 2020 13:56:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1DCDC061794;
+        Fri,  3 Jul 2020 13:57:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=OklJTjIK2GvSZajjtMqE8AHOQY76ZYipLpdReMlAK+s=; b=AWw1aPskRb8DXHdZK4K3t1F3pQ
-        UJgW9wcmJ7LW5WlOSpwuvvtqApeyheurie1tx8ahNpmDlM8CsaLA9+anWBupNvWFrWkhvR37mmQez
-        Yv/fVz1HVQqX2gWvkXzyCZ5qNWqkDU3zfx4K7usSjijca2xBagML3lI+MG8M+UYBOhp8UaOUdy71o
-        /ztsTPa1cfJ2jDctB1eZj4o7BqaCNyMSXufUjRLduPC93HJFB1w/LDTIkZ2Mdtro6bt7/uv6PFWaA
-        6pY/bHWjHp/QotfI5ozbdv1/BqInsQd1gAEu7VJOyDK+ioIkT781Onvgef/ULJePUS6I0UpVpCirx
-        5Ro8Mb3w==;
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description;
+        bh=ER9INp1xkSyqdiyLU3ujpdio8GueQUvIZBaizd2Mgo4=; b=U3U0QbtPmGoxRFNfTjHazOebZX
+        nZsMOdt7Xl3NLG0vKOpUxKfNz5JjHau2Urq3mbuxRHu48HTRk7AzH98aY3uNSBUrejTyS3Q6eLVrk
+        tC+c93kdUqMfXEQMmyMddnV8bcik+uy88QH+XHe+5RucwApBPIID2y0KvN/pOxLw0hv3QyuLBrAlY
+        B2hED+14k8jtQWzmhwfZtfQ0aHCQRoMc7/fTLTf0vA79XvmBKCWfoKMMCdCkOcOeQnFFw9YyIzz4K
+        i+fhK75nWcpB2CP34OFvFqATaURVizH0rm1LP3NIjEahFdqA4psFC7ezN7d3Pm07HBe/rc9pxLZRK
+        SmDjcVBQ==;
 Received: from [2601:1c0:6280:3f0::19c2] (helo=smtpauth.infradead.org)
         by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jrSju-0003a5-Pc; Fri, 03 Jul 2020 20:56:55 +0000
+        id 1jrSk6-0003a5-Bw; Fri, 03 Jul 2020 20:57:06 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Randy Dunlap <rdunlap@infradead.org>,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: [PATCH 0/5] Documenation: hwmon: eliminate doubled words
-Date:   Fri,  3 Jul 2020 13:56:44 -0700
-Message-Id: <20200703205649.30125-1-rdunlap@infradead.org>
+Subject: [PATCH 4/5] Documenation: hwmon/w83627ehf: drop duplicate words
+Date:   Fri,  3 Jul 2020 13:56:48 -0700
+Message-Id: <20200703205649.30125-5-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200703205649.30125-1-rdunlap@infradead.org>
+References: <20200703205649.30125-1-rdunlap@infradead.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
@@ -53,18 +56,26 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Eliminate duplicated words in Documentation/hwmon/ files.
+Drop the doubled word "and".
 
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
 Cc: Jonathan Corbet <corbet@lwn.net>
 Cc: linux-doc@vger.kernel.org
 Cc: Jean Delvare <jdelvare@suse.com>
 Cc: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org
-
-
- Documentation/hwmon/f71882fg.rst  |    2 +-
- Documentation/hwmon/lm93.rst      |    2 +-
- Documentation/hwmon/nct6775.rst   |    2 +-
+---
  Documentation/hwmon/w83627ehf.rst |    2 +-
- Documentation/hwmon/w83l786ng.rst |    2 +-
- 5 files changed, 5 insertions(+), 5 deletions(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- linux-next-20200701.orig/Documentation/hwmon/w83627ehf.rst
++++ linux-next-20200701/Documentation/hwmon/w83627ehf.rst
+@@ -96,7 +96,7 @@ sensors. The configured source for each
+ in tempX_label.
+ 
+ Temperatures are measured in degrees Celsius and measurement resolution is 1
+-degC for temp1 and and 0.5 degC for temp2 and temp3. For temp4 and higher,
++degC for temp1 and 0.5 degC for temp2 and temp3. For temp4 and higher,
+ resolution is 1 degC for W83667HG-B and 0.0 degC for NCT6775F and NCT6776F.
+ An alarm is triggered when the temperature gets higher than high limit;
+ it stays on until the temperature falls below the hysteresis value.
