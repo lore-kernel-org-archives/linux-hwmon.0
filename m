@@ -2,112 +2,106 @@ Return-Path: <SRS0=10GT=AO=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A962BC433E0
-	for <linux-hwmon@archiver.kernel.org>; Fri,  3 Jul 2020 15:45:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83C8EC433E0
+	for <linux-hwmon@archiver.kernel.org>; Fri,  3 Jul 2020 16:03:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7F6AF20737
-	for <linux-hwmon@archiver.kernel.org>; Fri,  3 Jul 2020 15:45:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 566622070B
+	for <linux-hwmon@archiver.kernel.org>; Fri,  3 Jul 2020 16:03:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=danweeks.net header.i=@danweeks.net header.b="FMXGToUT"
+	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="HdrJD0Wo"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726317AbgGCPpX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 3 Jul 2020 11:45:23 -0400
-Received: from p-impout008aa.msg.pkvw.co.charter.net ([47.43.26.139]:49659
-        "EHLO p-impout001.msg.pkvw.co.charter.net" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726035AbgGCPpW (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 3 Jul 2020 11:45:22 -0400
-X-Greylist: delayed 427 seconds by postgrey-1.27 at vger.kernel.org; Fri, 03 Jul 2020 11:45:22 EDT
-Received: from opius.danweeks.net ([74.70.107.6])
-        by cmsmtp with ESMTP
-        id rNlVjtwY2rzR3rNlWj41C8; Fri, 03 Jul 2020 15:38:14 +0000
-X-Authority-Analysis: v=2.3 cv=Ne6YKFL4 c=1 sm=1 tr=0
- a=h7kw2a+/6g3zdzmQNwjrbw==:117 a=h7kw2a+/6g3zdzmQNwjrbw==:17
- a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10 a=_RQrkK6FrEwA:10 a=7kYe3NcsAAAA:8
- a=noYv9r6eKZTnZH2xmfQA:9 a=CjuIK1q_8ugA:10 a=4VldaCG94jXMVy0yUZtu:22
-Received: from dev.danweeks.net (dev.danweeks.net [IPv6:2001:470:1f07:699::91])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by opius.danweeks.net (Postfix) with ESMTPSA id 083624410F;
-        Fri,  3 Jul 2020 11:37:54 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=danweeks.net;
-        s=opius.danweeks.net; t=1593790693;
-        bh=V2T+2N4lCCiebjUmaYDIhM8VGLdRvfUsoZG/BWe/uvY=;
-        h=Date:From:To:Cc:Subject;
-        b=FMXGToUTze8pdU99NXtup5gP8ln27pg5Sze2mTtacMLbZ18QtO0Phj15tOpE4y3oq
-         xD8YuO7vdX8OnBr+a9WJ144W146v83avFJ4MPqlGdy1GFVP7D4F+/dBP5vhjK0JOiA
-         4IChXZNY90RU7oZCCbzOXBBOE2Xg0ysNk4T1tgGQ=
-Date:   Fri, 3 Jul 2020 11:37:48 -0400
-From:   "Daniel M. Weeks" <dan@danweeks.net>
-To:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: hwmon: Correct vendor for mcp980x
-Message-ID: <20200703153748.GA16156@dev.danweeks.net>
+        id S1726147AbgGCQD2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 3 Jul 2020 12:03:28 -0400
+Received: from mout.gmx.net ([212.227.15.15]:47137 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726035AbgGCQD1 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 3 Jul 2020 12:03:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1593792206;
+        bh=NEG0WksfHj7Vv+zOdRUdELdOi70nhjOXQtEb7jBh2L0=;
+        h=X-UI-Sender-Class:Subject:From:To:Date;
+        b=HdrJD0Wom3r57A3VdVx1l3rIM9p9ZgryohEjzf2cATisk+bHlCti7EJiMiGd69Jnx
+         tDMBOeQ5SYZ2xjZU1Bjp9p10cX8QpeckrGZ8E8dM/h1e5p4u0xPvmxGrrOnratZwBA
+         3xA5BH6VTUQPFcgz+p+Zt4FA8QD1T+/aLxyUd9iM=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.0.2] ([84.190.128.236]) by mail.gmx.com (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M8QS2-1jmyJa1sLg-004QiK for
+ <linux-hwmon@vger.kernel.org>; Fri, 03 Jul 2020 18:03:26 +0200
+Message-ID: <66053ce744dafbad6925df53b6ef2db1e2859740.camel@gmx.de>
+Subject: hwmon (nct6775): Please fix Invalid temperature source error for
+ NCT6798D
+From:   Stefan Dietrich <roots@gmx.de>
+To:     linux-hwmon@vger.kernel.org
+Date:   Fri, 03 Jul 2020 18:03:26 +0200
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.3-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-CMAE-Envelope: MS4wfD9asncUoSFNcBiXAB2gHJXmvbabag/zMKGlIzoo9k3WTWdB0wpT8dB8m7/cIaBridhqyOJZ4vaRLy/C4qfX3QFpRPGowuxWj5I1BcAQO4kRZLaju3oZ
- s2pEKcPfIGD+DzLSSI+y950AXz+OfXrXYbnwlAepaXRcFrIriGTLcsmF+C7kq9xHiY0UG5MNDHDmrLCVMHj3rdw8CJ81b7fRbOsKdrOaiG94JUBwzdgVOB5V
- 8bzhWh4CvZFMAPuU880e1DCBS0UlARlw9Elg6bDN5k5cBD1pn5l397hKb2F5Bfj/7czbFi+xHejDqdDJEVVtSR+sU7dQDguMDwb0rqhXB/IJ9CydMic1jcYJ
- dPJrwtux
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:u1HAZi9KHM7/+tghgdomnXIdOl/lQPnRyuIdJvCmA97aYytRLI+
+ yy+H95X+LMMF8Kg63esXTKkk5SCx+LhctZkxOogjiUYWtvQpxRl5HxWkC3zbHu/dg5hMGIh
+ /UNDlFYJXhoYxYIsGToIOb8i238/qs4V7of2QnW7H2cgaYCPyxZZrja9GsjWLkf7QltGe5i
+ uu8OajLqOMxxhnic22KMg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:fQcKSYmBjeg=:VXJoFPIhY/1I61C1/pwZDd
+ ZXCihPuFogIooBTqdQRENhD24Mv6aEjJ6wK1tPsn/GUQ1QYjDSY/KNb2t5811Q8SQ6fOUvqlR
+ sRGIbnzhFhPOHhM2y8HSh68nqzSchGE7fmJe++Fo6BvVRUCBcBb6PgB/+pUtXIhOIniiCOldh
+ l3K8eS5Xjm1zZUYkHIAWzP25AOiXCOOleG9SnqfMo1K3gnObC9eLRyEkqcgJpNF3nD+33dRem
+ nrouezy+b/u/+iMjyIGrcqpSVz8pCiVEjcNC4+zs5rn9OqhUNEQ1hClxfL4IOB/O5eb3mZ6mZ
+ cuxwNSshmfAKjl4r7J2vFRxyhdDLU2hmOYlacOBam6LtDzo7XApN/44UxrxSfabgX8AVJSz4e
+ HK/OrIchFXueJFid9VEyrEIysYC2Txnh8rj2VaBFUbXanB/9tRKyCRkShfEvOzHVn3lbuDSUc
+ 7MZAWNN8D0k/U6JlDO7N8zWHMJmm8n0KjQSHj8mwn7y8GNXTDnbB89JdJZv8FL0vMZ6F+FaU7
+ I3ioY/G4yDA4iflm9vmmOWjFmE6JDi6lGkAmviaYMIOM2+p+FMWjrCcvWYXxFQS5Y/U4CP3ar
+ 6/JqatU85F6gVelpGFMLyywqqxkBTHvdTokddmfNTEBFIN3oCCEd/56j6ia+dG6odMzRgJWIz
+ 6gTiBJZSnC3CnbmmD1RbUWOT/y5ck7pGw2a+vf66Zem6vrhgctfrARy2WT6IqQFRoKuCoGqt1
+ EV0NhcF5RJuYsJZyva0cuT6FPykLRxCzNT2Ll5aNz/0qCxmPW8N3VZkvlFLXup/yPfNemAsoU
+ oGsVV7OaMq21YCtF81EMb1NBqfYW7pprl4rs0wIcY257gP6d7ConmsbyD3gU9njTmMKr3lo8N
+ iIrvGTlL/0Nk44YvCgsbQ8NkK6ayKTnOkYvmLqQV18sL0JN7zw5+SdEm60IU2Ea+sGfUxhIxJ
+ UoSuKIG4gcQy3cgPk5XJiW5pphNBC+tNGYuEyKwA7TzZ4QfqtJQwJjDVJX4qokvNhZB5rP5z3
+ DkYqNsqUwfHThiOvENh/wz/TnU/nLdT8NFCn7hU08UJYxGZQWP5zUIHOmFkH6ElVx5YyBPfAE
+ DtuVfBUVTegHtxbXcH1/N4z7zzy5kOHgxWMSdv3sxQmWMmWbHd/LHjiPsM/EKggXE2BJ37TmM
+ MncKcoFkUJbsRKpjafCF7/ueGGyHJHNW9kDptJYibedAarvZnieEC/3GIY7dfXw2Vrdl+7rhz
+ Y2kp2zMqUAoY+SzxZ
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Signed-off-by: Daniel M. Weeks <dan@danweeks.net>
----
- Documentation/devicetree/bindings/hwmon/lm75.txt | 2 +-
- drivers/hwmon/lm75.c                             | 8 ++++----
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Hi all,
 
-diff --git a/Documentation/devicetree/bindings/hwmon/lm75.txt b/Documentation/devicetree/bindings/hwmon/lm75.txt
-index 273616702c51..e5bb554cd2c3 100644
---- a/Documentation/devicetree/bindings/hwmon/lm75.txt
-+++ b/Documentation/devicetree/bindings/hwmon/lm75.txt
-@@ -14,10 +14,10 @@ Required properties:
- 		"maxim,max6626",
- 		"maxim,max31725",
- 		"maxim,max31726",
--		"maxim,mcp980x",
- 		"nxp,pct2075",
- 		"st,stds75",
- 		"st,stlm75",
-+		"microchip,mcp980x",
- 		"microchip,tcn75",
- 		"ti,tmp100",
- 		"ti,tmp101",
-diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
-index ba0be48aeadd..a8cfc7e4a685 100644
---- a/drivers/hwmon/lm75.c
-+++ b/drivers/hwmon/lm75.c
-@@ -690,10 +690,6 @@ static const struct of_device_id __maybe_unused lm75_of_match[] = {
- 		.compatible = "maxim,max31726",
- 		.data = (void *)max31725
- 	},
--	{
--		.compatible = "maxim,mcp980x",
--		.data = (void *)mcp980x
--	},
- 	{
- 		.compatible = "nxp,pct2075",
- 		.data = (void *)pct2075
-@@ -706,6 +702,10 @@ static const struct of_device_id __maybe_unused lm75_of_match[] = {
- 		.compatible = "st,stlm75",
- 		.data = (void *)stlm75
- 	},
-+	{
-+		.compatible = "microchip,mcp980x",
-+		.data = (void *)mcp980x
-+	},
- 	{
- 		.compatible = "microchip,tcn75",
- 		.data = (void *)tcn75
--- 
-Daniel M. Weeks
+with my Asus Formula XII Z490 and 5.7.0-7.1-liquorix-amd64 I'm getting
+the following error messages during boot:
+
+nct6775: Found NCT6798D or compatible chip at 0x2e:0x290
+nct6775 nct6775.656: Invalid temperature source 28 at index 0, source
+register 0x100, temp register 0x73
+nct6775 nct6775.656: Invalid temperature source 28 at index 1, source
+register 0x200, temp register 0x75
+nct6775 nct6775.656: Invalid temperature source 28 at index 2, source
+register 0x300, temp register 0x77
+nct6775 nct6775.656: Invalid temperature source 28 at index 3, source
+register 0x800, temp register 0x79
+nct6775 nct6775.656: Invalid temperature source 28 at index 4, source
+register 0x900, temp register 0x7b
+nct6775 nct6775.656: Invalid temperature source 28 at index 5, source
+register 0xa00, temp register 0x7d
+
+During sensors-detect, most of the standard temperature, voltage and
+rpm sources are recognized, however, some of the values, particularly
+voltages, are off quite a bit. In addition, output of additional
+temperature sensors (via headers on the mainboard) which are reported
+fine in BIOS, are missing.
+
+Booting with acpi_enforce_resources=lax doesn't solve this issue.
+
+I'd be happy if anyone would be able to fix this issue or give any
+pointers on how to do so. Unfortunately I only have very basic coding
+skills, but I'll be happy to assist in debugging.
+
+
+Cheers,
+Stefan
+
