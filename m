@@ -2,68 +2,70 @@ Return-Path: <SRS0=10GT=AO=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 637B9C433DF
-	for <linux-hwmon@archiver.kernel.org>; Fri,  3 Jul 2020 05:35:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15005C433E0
+	for <linux-hwmon@archiver.kernel.org>; Fri,  3 Jul 2020 05:48:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 39B7920771
-	for <linux-hwmon@archiver.kernel.org>; Fri,  3 Jul 2020 05:35:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D02AD20771
+	for <linux-hwmon@archiver.kernel.org>; Fri,  3 Jul 2020 05:48:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TCZNWgrs"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iAQ3NNZt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725779AbgGCFfM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 3 Jul 2020 01:35:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45824 "EHLO
+        id S1725786AbgGCFsx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 3 Jul 2020 01:48:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725764AbgGCFfL (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 3 Jul 2020 01:35:11 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C104C08C5C1;
-        Thu,  2 Jul 2020 22:35:11 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id f16so3119502pjt.0;
-        Thu, 02 Jul 2020 22:35:11 -0700 (PDT)
+        with ESMTP id S1725779AbgGCFsx (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 3 Jul 2020 01:48:53 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03690C08C5C1;
+        Thu,  2 Jul 2020 22:48:53 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id x3so7997095pfo.9;
+        Thu, 02 Jul 2020 22:48:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=aqAeYmPjwjkxEQnStyzuXlmnxfbziE2aI+3//FBIGzA=;
-        b=TCZNWgrsuMjtHigk19Fl8rAGjIGOmSkW2ZD0R6i4m/axLjDeaiAz/s6oVTswujVggE
-         ZdwDtG86rRUHW+7aiuNWI35ynFRQhQzCRpNaZf7ScVxyTRatBFX2hYruUikxcbFWQzBq
-         1aZgWwHfE2+D0rfozh/pyedpU9HlOpbYjSmtZlGOiHsX2USNfjUV/o7Far5kKpmzv+Rg
-         Hr4c4gRAGlYO0nEwngOMi/+xyqKPFNmJ2BNQZe7VZENFdbG9NMwRSxCu+LUnyfheVvTy
-         IDKXOQDjRc5yY3aA1uaXV9/nlwgGX2BD5zMualO7KPtFLuATCBW4FjfHaZvaRWae0du3
-         PqxQ==
+        bh=xggNeQQkKQTMcykW7pls8KqjnSbZo3eU0HBpywIP0Oo=;
+        b=iAQ3NNZtzHZJsUVnV6xvw5rLLHcrLPrpLBNSnPFDcHccUhrpy+2bn/nL/1C99XUGBw
+         g/Xvrp5XV20/VkAQqpTRZ1rDvJIu/F37GSBn2iAcrrOPjoo2a2Xhz2RInBOXPqwdgP51
+         JgCuvqvFzaTwR8JUN/erwRBYJlTIPehQFPBc8unMMtB+iBEZfvrxnQmbw18EJ7PhNeFc
+         eA+FDyG2d6+HNFg9YVksLXC2tsqe36/1ykDGqLvGl+2ldmeiDGCsoD1hGvOWVJnQUXcG
+         s80uM7X9CJL/lj8sHL4COK3YT0EmYelEsIsjSWch2vTvfM4xoMzZKd1yOG49biZNxk96
+         /UXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=aqAeYmPjwjkxEQnStyzuXlmnxfbziE2aI+3//FBIGzA=;
-        b=f1ElWVQkNxCC6p0eUEapFGaXVvact7BGzdtQvcFozvsqtQwNW4EXfuZ3W0aD/33hWT
-         fk9sH7TCNwFGLyDai9Y+2DtAWFhyoU6BA/gyscbV1ges1isPQcyJuRZApNJUsDNkDvA+
-         OvDk+q5MjtALlDPxHYSRcdLcyBq0I61/fOORwVl1epoGvfG4HL6tA6IZjgr/cR4PLurp
-         LHyXaRUcj0L/z26nsGngXpIIRmvFn7x5rIrQmatddCysf/y/7dlgILjWMmu8VWIKfr1P
-         oIJ2dUrkvX7Y+PJnD/1S7svcOY5G18IB8aUTbxp10zN+dsKvTuFqb3MyyuvyFLecB7m/
-         r4Lw==
-X-Gm-Message-State: AOAM531ymAWrXY4PkP8uyQvNgHr38hsTTKW2xugTtTWBPQN0JBnBB1kc
-        ZXauekfcgTmaSxYRFevSSqCPD3PmoGQ=
-X-Google-Smtp-Source: ABdhPJzmI1Mq3lGuSgoeed9o449j3QwcAJuzlV9nKjpgybfJLEvrnCyhsT96zyvlO283baywrwg+wA==
-X-Received: by 2002:a17:90a:2a09:: with SMTP id i9mr21527709pjd.50.1593754510970;
-        Thu, 02 Jul 2020 22:35:10 -0700 (PDT)
+        bh=xggNeQQkKQTMcykW7pls8KqjnSbZo3eU0HBpywIP0Oo=;
+        b=Fzw880kZfQH3bWMSrX9aRM1ictbHPEk54+YtRAv6zzubB4N1V1zrfXzzaamXbN5gx4
+         ZZJrRRz+ojOdjh+o8vwBfKBkzg6AGQljCfsiAd1p6AD4ay0I1lhPDDsHPM0FIeW/NeT6
+         seI4BfautgrX7cfepR9YTE1YxV0OlEWbvgF0nOp02R2n96Iu+6Otgtc2N+Prya3BXDv5
+         L6RuS4zubV8ucI//kaBQ38NwScKaZggUf+CKEwI+VMYu0ZgGUlFriBeTlwWc+Xx8inQ6
+         jb2H9HSPP9ylYIo76MqKXdvZ4Ngt5gNvpUIryw1Ls8DGAZcX8gq4b/UbZwCgtqQ4inPg
+         Px3g==
+X-Gm-Message-State: AOAM533okHX4JFM4+nVZuLb37Ni3Webcpc/YMtsZ2BaGrIrcY3O5nDRj
+        AthUghkwO3dmSjt0PuUMghKgnL/iLdo=
+X-Google-Smtp-Source: ABdhPJxandp0SqaiKJ6v16u8uYdHi68WYcJyPtjvXPax47gf97Oxdgr7/9JgzXuNTBFd3HF4/BMwog==
+X-Received: by 2002:a63:fc59:: with SMTP id r25mr4650294pgk.336.1593755332242;
+        Thu, 02 Jul 2020 22:48:52 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r4sm9880409pgp.60.2020.07.02.22.35.09
+        by smtp.gmail.com with ESMTPSA id q14sm10197381pgk.86.2020.07.02.22.48.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jul 2020 22:35:10 -0700 (PDT)
-Subject: Re: [PATCH] shtc1: add support for device tree bindings
+        Thu, 02 Jul 2020 22:48:51 -0700 (PDT)
+Subject: Re: [PATCH 1/2] hwmon: shtc1: add support for device tree bindings
 To:     Chris Ruehl <chris.ruehl@gtsys.com.hk>
 Cc:     Jack Lo <jack.lo@gtsys.com.hk>, devicetree@vger.kernel.org,
         Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20200703034856.12846-1-chris.ruehl@gtsys.com.hk>
+ <20200703034856.12846-2-chris.ruehl@gtsys.com.hk>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -108,31 +110,111 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <41f5ea63-5b04-977a-3f19-760338b8956c@roeck-us.net>
-Date:   Thu, 2 Jul 2020 22:35:08 -0700
+Message-ID: <94043e67-1899-8e80-064c-50489cf7e4b2@roeck-us.net>
+Date:   Thu, 2 Jul 2020 22:48:50 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <20200703034856.12846-1-chris.ruehl@gtsys.com.hk>
+In-Reply-To: <20200703034856.12846-2-chris.ruehl@gtsys.com.hk>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 On 7/2/20 8:48 PM, Chris Ruehl wrote:
-> Add support for DTS bindings to the shtc driver
-> The patches add the compatible table and of_property_read* to the
-> shtc1.c. Newly created Yaml document has been released to the
-> Documentation/devicetree/hwmon/sensirion,shtc1.yaml
+> Add support for DTS bindings to the shtc driver, use CONFIG_OF
+> to compile in the code if needed.
 > 
+
+Ah, here it is. The introducing patch should say something like "[PATCH 0/2]".
+
 > Signed-off-by: Chris Ruehl <chris.ruehl@gtsys.com.hk>
 > ---
->  Version 1
+>  drivers/hwmon/shtc1.c | 30 ++++++++++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
 > 
+> diff --git a/drivers/hwmon/shtc1.c b/drivers/hwmon/shtc1.c
+> index a0078ccede03..3bcabc1cbce8 100644
+> --- a/drivers/hwmon/shtc1.c
+> +++ b/drivers/hwmon/shtc1.c
+> @@ -14,6 +14,9 @@
+>  #include <linux/err.h>
+>  #include <linux/delay.h>
+>  #include <linux/platform_data/shtc1.h>
+> +#ifdef CONFIG_OF
 
-There is no patch.
+No. Please no conditional includes.
+
+> +#include <linux/of.h>
+> +#endif
+>  
+>  /* commands (high precision mode) */
+>  static const unsigned char shtc1_cmd_measure_blocking_hpm[]    = { 0x7C, 0xA2 };
+> @@ -196,6 +199,10 @@ static int shtc1_probe(struct i2c_client *client,
+>  	enum shtcx_chips chip = id->driver_data;
+>  	struct i2c_adapter *adap = client->adapter;
+>  	struct device *dev = &client->dev;
+> +#ifdef CONFIG_OF
+> +	struct device_node *np = dev->of_node;
+> +	u8 value;
+> +#endif
+>  
+>  	if (!i2c_check_functionality(adap, I2C_FUNC_I2C)) {
+>  		dev_err(dev, "plain i2c transactions not supported\n");
+> @@ -235,6 +242,20 @@ static int shtc1_probe(struct i2c_client *client,
+>  
+>  	if (client->dev.platform_data)
+>  		data->setup = *(struct shtc1_platform_data *)dev->platform_data;
+> +
+> +#ifdef CONFIG_OF
+
+Unnecessary ifdef. Selection of devicetree data or not can be made
+based on np != NULL. Also, if devictree data is available, platform
+data should be ignored to avoid confusion.
+
+> +	if (np) {
+> +		if (of_property_read_bool(np, "sensirion,blocking_io")) {
+> +			of_property_read_u8(np, "sensirion,blocking_io", &value);
+> +			data->setup.blocking_io = (value > 0) ? true : false;
+> +		}
+Why this complexity, and why not just make the property a boolean ?
+
+> +		if (of_property_read_bool(np, "sensicon,high_precision")) {
+> +			of_property_read_u8(np, "sensirion,high_precision", &value);
+> +			data->setup.high_precision = (value > 0) ? true : false;
+
+"sensicon,high_precision" should also be a boolean.
+
+> +		}
+> +	}
+> +#endif
+> +
+>  	shtc1_select_command(data);
+>  	mutex_init(&data->update_lock);
+>  
+> @@ -257,6 +278,15 @@ static const struct i2c_device_id shtc1_id[] = {
+>  };
+>  MODULE_DEVICE_TABLE(i2c, shtc1_id);
+>  
+> +#ifdef CONFIG_OF
+> +static const struct of_device_id shtc1_of_match[] = {
+> +	{ .compatible = "sensirion,shtc1" },
+> +	{ .compatible = "sensirion,shtw1" },
+> +	{ .compatible = "sensirion,shtc3" },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, shtc1_of_match);
+> +#endif
+>  static struct i2c_driver shtc1_i2c_driver = {
+>  	.driver.name  = "shtc1",
+>  	.probe        = shtc1_probe,
+> 
+Not sure how this works without setting of_match_table. I guess it just works
+accidentally because .id_table also provides a devicetree match. Still,
+of_match_table should be set.
 
 Guenter
+
