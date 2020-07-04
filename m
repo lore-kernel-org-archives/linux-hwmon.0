@@ -2,144 +2,242 @@ Return-Path: <SRS0=THek=AP=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	LONGWORDS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F20B6C433DF
-	for <linux-hwmon@archiver.kernel.org>; Sat,  4 Jul 2020 20:54:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC969C433E0
+	for <linux-hwmon@archiver.kernel.org>; Sat,  4 Jul 2020 20:55:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BB90820885
-	for <linux-hwmon@archiver.kernel.org>; Sat,  4 Jul 2020 20:54:28 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iUzt7CXk"
+	by mail.kernel.org (Postfix) with ESMTP id A57C72100A
+	for <linux-hwmon@archiver.kernel.org>; Sat,  4 Jul 2020 20:55:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727084AbgGDUy2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 4 Jul 2020 16:54:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40952 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726922AbgGDUy2 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 4 Jul 2020 16:54:28 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBCE0C061794
-        for <linux-hwmon@vger.kernel.org>; Sat,  4 Jul 2020 13:54:27 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id g67so15705748pgc.8
-        for <linux-hwmon@vger.kernel.org>; Sat, 04 Jul 2020 13:54:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=P8laneVGqsHWYUcEs15/qCTd57IMkJMaVxhZqaLR5mY=;
-        b=iUzt7CXk0kymZck97Htv2SNwXi6EEGFh7LMn74r8ZDMiUk5Lk2PnQbVh+bITyO44We
-         85BXfONkarnRamKaXxBM39cX0as6kxHR3V7LfveBIM64HnYSuqJ/qDNtIqt0AlIxJSSP
-         qnNCngMRaOJbGJKsXKjF5YZnMbIA6wJvf/AtR2FfoML58pLtbyQicfVnB8aRGglo5RAK
-         weCxGzij6yVaDmQGgS+uBM37Boh5YL0SkDFhYsJ4QoxQCSSYQm6Pb8xp+/VL//y10jic
-         CYoGZkvtWMvfP/22KK9wZ4wdbcKoOlaQKvDmBfxbw4wcNufLs85hertX+TccYKEcMoHC
-         ASLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=P8laneVGqsHWYUcEs15/qCTd57IMkJMaVxhZqaLR5mY=;
-        b=pocb8m8nMSwWC9+P7cuv7x6+sOc3oU+3kXRvEPK3XMmA9Gg7H3tFeZ3svAI1VeKnXI
-         bvycQDLRVqTPFdyEg6eTpKlz84JxvGiuNy7jIdv0FhUjDjIX8YgmzG7HQe/8AINJiY7c
-         495RkH7gER+eEbGWjuczLsqPiIeekGIX3eD1amaqbCQtJQsEnhIgLBsNOt4inPVbj4yi
-         ObTj3+9gdka79l/Ivow/dc7RCa+mOrPp195ogQOlr3poIz6c5S2i0v0ormuCVrP7N2pu
-         jNo9VNyyIUrXxYnm+J7yJlucEN1o3RJjByOI+//XezjGV86gDSaY6BbdhP0G215esl1U
-         Klrg==
-X-Gm-Message-State: AOAM532v87vuK/b7rD3jzjYBDkqzACJEh1amPHQUQMk+ytdgHgm4Xn/i
-        uJcw9sZVw9avjbrnjttsZrrkLR1euZk=
-X-Google-Smtp-Source: ABdhPJxtPgTK8X3Vrl6+TSq5DWMZLy989gLiwDCBfZw8neLPIGCHaK+oQhM+5GPfFWPh3bDImmhSzg==
-X-Received: by 2002:a63:fd03:: with SMTP id d3mr34251562pgh.76.1593896067243;
-        Sat, 04 Jul 2020 13:54:27 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v3sm3429122pfb.207.2020.07.04.13.54.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 04 Jul 2020 13:54:26 -0700 (PDT)
-Subject: Re: [QUESTION] fan rpm hwmon driver
-To:     =?UTF-8?Q?Barnab=c3=a1s_P=c5=91cze?= <pobrn@protonmail.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-References: <xU_nzuNaKzomGSEsIdtEGvDVgR0MuUoti45TC5WzkVu0FscRsOEp7dzY4tGOoUkvrG9QPJethyosMSnxcXFuE-xcpqJ6DQwfnPkPlFiEcbY=@protonmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
- RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
- nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
- 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
- gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
- IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
- kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
- VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
- jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
- BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
- ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
- CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
- nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
- hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
- c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
- 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
- GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
- sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
- Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
- HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
- BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
- l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
- 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
- pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
- J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
- pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
- 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
- ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
- I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
- nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
- HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
- JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
- J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
- cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
- wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
- hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
- nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
- QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
- trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
- WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
- HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <3b92f53f-fd3f-a432-aae1-620582701286@roeck-us.net>
-Date:   Sat, 4 Jul 2020 13:54:25 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1726953AbgGDUz2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 4 Jul 2020 16:55:28 -0400
+Received: from mga14.intel.com ([192.55.52.115]:16197 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726922AbgGDUz2 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 4 Jul 2020 16:55:28 -0400
+IronPort-SDR: 5+X/bVBy7Z82tWT9MJTta1LXK9wwtS5W+/245BdG5kmBjTzZCFOzqRnhS8PAL7bSMU6q56HMqk
+ BJahiFb6A9qg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9672"; a="146361895"
+X-IronPort-AV: E=Sophos;i="5.75,313,1589266800"; 
+   d="scan'208";a="146361895"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2020 13:55:27 -0700
+IronPort-SDR: fBGwDwW4yv6j4lBM+0U8kWFfWCEW19IlqTBDPTrVQ/jau9n7iCsgVFO+Hj7jVFQs4mFCbPij0N
+ cmREmhCgRZfw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,313,1589266800"; 
+   d="scan'208";a="278890233"
+Received: from lkp-server01.sh.intel.com (HELO 6dc8ab148a5d) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 04 Jul 2020 13:55:26 -0700
+Received: from kbuild by 6dc8ab148a5d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1jrpC1-0000mU-GF; Sat, 04 Jul 2020 20:55:25 +0000
+Date:   Sun, 05 Jul 2020 04:54:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:hwmon] BUILD SUCCESS
+ 835a6470db5a96980ec3d4b09ea1a4683e76c2c2
+Message-ID: <5f00ec90.ppvxZ5hcTyU5HOQf%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <xU_nzuNaKzomGSEsIdtEGvDVgR0MuUoti45TC5WzkVu0FscRsOEp7dzY4tGOoUkvrG9QPJethyosMSnxcXFuE-xcpqJ6DQwfnPkPlFiEcbY=@protonmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 7/4/20 12:50 PM, Barnabás Pőcze wrote:
-> Hello all,
-> 
-> I am completely new to Linux kernel development. I have written a kernel module for my laptop that integrates the fan speeds available in the embedded controller memory into the hwmon subsystem.
-> 
-> My first question would be: can such a driver be merged into the mainline? I ask this because it is a device specific driver, and I am not sure if such drivers are wanted in the mainline.
-> 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon
+branch HEAD: 835a6470db5a96980ec3d4b09ea1a4683e76c2c2  hwmon: (aspeed-pwm-tacho) Avoid possible buffer overflow
 
-There are several device/platform specific drivers in drivers/hwmon;
-that is not a problem. Question is more how the EC is accessed, and
-who is going to maintain the driver after the initial submission.
-This might be easier to evaluate if we had a patch or a pointer to,
-for example, an out-of-tree driver at a public repository site such
-as github.
+elapsed time: 1354m
 
-> Depending on the answer to my first question, my second question is: where should such a driver reside in the source tree? Initially, I thought of drivers/hwmon, but that seems to be occupied by drivers for external(?) devices (I am not sure, but that is the idea I get). So I am now thinking of drivers/platform/x86. However, I have failed to find any fan hwmon drivers there, so I am not sure about that one, either.
+configs tested: 173
+configs skipped: 21
 
-hwmon drivers should in general reside in drivers/hwmon, unless hardware
-monitoring functionality is part of other functionality and would be
-difficult to extract from the main driver (example: various Ethernet
-or graphics controllers).
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Guenter
+arm                                 defconfig
+arm                               allnoconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+arm                       aspeed_g4_defconfig
+m68k                       m5249evb_defconfig
+arm                            mmp2_defconfig
+sh                            shmin_defconfig
+powerpc                      pmac32_defconfig
+sh                                  defconfig
+arm                          moxart_defconfig
+arm                            qcom_defconfig
+arm                          iop32x_defconfig
+mips                           ip28_defconfig
+powerpc                     pq2fads_defconfig
+arm                         at91_dt_defconfig
+sh                           cayman_defconfig
+m68k                         amcore_defconfig
+arc                             nps_defconfig
+arm                        trizeps4_defconfig
+microblaze                    nommu_defconfig
+mips                           ip27_defconfig
+sh                         apsh4a3a_defconfig
+arc                 nsimosci_hs_smp_defconfig
+sh                            titan_defconfig
+powerpc                     skiroot_defconfig
+sh                               allmodconfig
+arm                         assabet_defconfig
+powerpc                      ppc40x_defconfig
+arm                          pxa3xx_defconfig
+arm                       imx_v6_v7_defconfig
+powerpc                      ppc6xx_defconfig
+mips                          ath25_defconfig
+ia64                             allyesconfig
+powerpc                       maple_defconfig
+mips                      pistachio_defconfig
+h8300                               defconfig
+arm                          simpad_defconfig
+arm                           efm32_defconfig
+sh                               alldefconfig
+powerpc                    mvme5100_defconfig
+mips                          rb532_defconfig
+xtensa                          iss_defconfig
+m68k                       m5475evb_defconfig
+arm                         s5pv210_defconfig
+arm                        vexpress_defconfig
+arm                         lpc32xx_defconfig
+mips                   sb1250_swarm_defconfig
+powerpc                  mpc885_ads_defconfig
+arm                   milbeaut_m10v_defconfig
+sh                        dreamcast_defconfig
+openrisc                    or1ksim_defconfig
+m68k                             alldefconfig
+arc                      axs103_smp_defconfig
+ia64                          tiger_defconfig
+arm                         vf610m4_defconfig
+h8300                     edosk2674_defconfig
+mips                        jmr3927_defconfig
+arm                         nhk8815_defconfig
+powerpc                     mpc5200_defconfig
+s390                          debug_defconfig
+ia64                                defconfig
+s390                             alldefconfig
+arm                         bcm2835_defconfig
+sparc                            alldefconfig
+arm                           viper_defconfig
+arm                         orion5x_defconfig
+m68k                          multi_defconfig
+arm                       imx_v4_v5_defconfig
+arm                             rpc_defconfig
+arm                         mv78xx0_defconfig
+s390                                defconfig
+powerpc                      tqm8xx_defconfig
+mips                     loongson1b_defconfig
+powerpc                    gamecube_defconfig
+arm                         ebsa110_defconfig
+powerpc                       ppc64_defconfig
+m68k                       bvme6000_defconfig
+sh                     sh7710voipgw_defconfig
+nios2                         10m50_defconfig
+powerpc                          alldefconfig
+arm                           stm32_defconfig
+arc                            hsdk_defconfig
+mips                        vocore2_defconfig
+mips                      pic32mzda_defconfig
+arm                              zx_defconfig
+sh                           se7619_defconfig
+mips                        nlm_xlp_defconfig
+arm                      jornada720_defconfig
+mips                         tb0219_defconfig
+powerpc                  storcenter_defconfig
+arm                          tango4_defconfig
+sh                          r7785rp_defconfig
+arm                      footbridge_defconfig
+arm                          badge4_defconfig
+mips                           gcw0_defconfig
+nios2                         3c120_defconfig
+c6x                        evmc6678_defconfig
+sh                   sh7770_generic_defconfig
+sparc64                          allmodconfig
+microblaze                        allnoconfig
+parisc                generic-64bit_defconfig
+mips                 decstation_r4k_defconfig
+i386                             allyesconfig
+i386                                defconfig
+i386                              debian-10.3
+i386                              allnoconfig
+ia64                             allmodconfig
+ia64                              allnoconfig
+m68k                              allnoconfig
+m68k                           sun3_defconfig
+m68k                                defconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+nios2                               defconfig
+nios2                            allyesconfig
+openrisc                            defconfig
+c6x                              allyesconfig
+c6x                               allnoconfig
+openrisc                         allyesconfig
+nds32                               defconfig
+nds32                             allnoconfig
+csky                             allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                              defconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+h8300                            allmodconfig
+arc                                 defconfig
+arc                              allyesconfig
+sh                                allnoconfig
+mips                              allnoconfig
+mips                             allyesconfig
+mips                             allmodconfig
+parisc                            allnoconfig
+parisc                              defconfig
+parisc                           allyesconfig
+parisc                           allmodconfig
+powerpc                             defconfig
+powerpc                          allyesconfig
+powerpc                          rhel-kconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allyesconfig
+riscv                            allmodconfig
+s390                              allnoconfig
+s390                             allmodconfig
+s390                             allyesconfig
+sparc                               defconfig
+sparc64                             defconfig
+sparc64                           allnoconfig
+sparc                            allyesconfig
+sparc64                          allyesconfig
+um                               allmodconfig
+um                                allnoconfig
+um                               allyesconfig
+um                                  defconfig
+x86_64                               rhel-7.6
+x86_64                    rhel-7.6-kselftests
+x86_64                               rhel-8.3
+x86_64                                  kexec
+x86_64                                   rhel
+x86_64                         rhel-7.2-clear
+x86_64                                    lkp
+x86_64                              fedora-25
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
