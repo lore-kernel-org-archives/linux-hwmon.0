@@ -2,126 +2,99 @@ Return-Path: <SRS0=nCRF=AQ=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	FAKE_REPLY_C,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CF41C433DF
-	for <linux-hwmon@archiver.kernel.org>; Sun,  5 Jul 2020 14:25:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 094DDC433DF
+	for <linux-hwmon@archiver.kernel.org>; Sun,  5 Jul 2020 14:43:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 31A3420723
-	for <linux-hwmon@archiver.kernel.org>; Sun,  5 Jul 2020 14:25:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8C15F2073E
+	for <linux-hwmon@archiver.kernel.org>; Sun,  5 Jul 2020 14:43:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ohEGptPd"
+	dkim=pass (1024-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="SVFJ2t3C"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726826AbgGEOZR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 5 Jul 2020 10:25:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60358 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726781AbgGEOZR (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 5 Jul 2020 10:25:17 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 823C6C061794;
-        Sun,  5 Jul 2020 07:25:17 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id t15so1498962pjq.5;
-        Sun, 05 Jul 2020 07:25:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=JR7kwKiFMyvd55rimdXeKVadd9DIbk1gr0VeN52B5gw=;
-        b=ohEGptPdtz/dMRDpu6mfz4PUpjxyKl/UyLwOarCQGBS2We2st84rSN5jix4C8FiqNb
-         DbUQfd7IIlMUqjCBBRTBcNGWI2fKpo6SJ/hHCg9PVFjk+ssrvBroFm/o5ez4f/TqT9+5
-         Yr1cbS3zPq9K4lZSECQj0yGv0QKpYDCXunVW5acQW9f45Z+lxEbLvIUgByvUOopDjhM2
-         g5mWHLxGZiwkkwqaP0COYohoO84gE/qaPUm6hAz3r45dhfrOrPLtNvGM8G+ANOlGAyxG
-         PtNz+1xYQ3mgoS/0AmnBfA9mlUm+Jx5gMKy6Iz94dbeStfexLIQEZqKSd+ORQDJvbfv3
-         bwdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mime-version:content-disposition:user-agent;
-        bh=JR7kwKiFMyvd55rimdXeKVadd9DIbk1gr0VeN52B5gw=;
-        b=pso7gj91+2vnf9jgSAh9Z1Tf9ubqSUNnMDwArwFSuUyS6aKQ98iu/J+E/ANSRWJiWr
-         iRmzGrrNMvOTBN34qY8C3EHN/V3pFbJh4mRCMliHRA+mLXOWZGgsODOA+8aCy1dCDE5j
-         mNUhABMtqLG/wgAvyU0tZbLxXICrSqlxqvGQaOScKe9nabdWhBRREATbzAGusNlb/J8z
-         yO9jzcoTYRpGykmgDwLvCOabd/st7fbfpoyzJejEigqctZucHxW4o8Pb80gEOqSFbpoS
-         vpQIZiDh8+yZZtMR/QKm0xVqb7lswcDlJM3FZ9kQf55OqI4jk2bO8dqhNXTTsnsd3VEj
-         L54g==
-X-Gm-Message-State: AOAM530mxl7GcIbDOgJ5nITTVPus+Lm3PT6qX22F4Cth3Xqvlti364CB
-        kXuydx6wE9VXb1y3FwcwnvElDfc4M30=
-X-Google-Smtp-Source: ABdhPJxL3mA3++jITE0N7Bpxwb9SJfrFkV4GdFSJeF0HqaQp3Hwnh+bEJOSPJkmt3OyxcgZQ57RXNQ==
-X-Received: by 2002:a17:90a:f2c3:: with SMTP id gt3mr31168368pjb.92.1593959116964;
-        Sun, 05 Jul 2020 07:25:16 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c188sm16712159pfc.143.2020.07.05.07.25.16
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 05 Jul 2020 07:25:16 -0700 (PDT)
-Date:   Sun, 5 Jul 2020 07:25:15 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Chris Ruehl <chris.ruehl@gtsys.com.hk>
-Cc:     Jack Lo <jack.lo@gtsys.com.hk>, devicetree@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] hwmon: shtc1: add support for device tree bindings
-Message-ID: <20200705142515.GA1975@roeck-us.net>
+        id S1726939AbgGEOnz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 5 Jul 2020 10:43:55 -0400
+Received: from mail-40135.protonmail.ch ([185.70.40.135]:43818 "EHLO
+        mail-40135.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726826AbgGEOnz (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 5 Jul 2020 10:43:55 -0400
+Date:   Sun, 05 Jul 2020 14:43:46 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail; t=1593960232;
+        bh=hkiuszVQyyYsmkKGPQZAtyDgftT14KhrpkWy1AJcbaA=;
+        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
+        b=SVFJ2t3CXWQVmZmIb/w1kx3gnzW6CxIfWP7m9O+oIZ4Jech0VjMAd3Y8gjuTrGXcA
+         B7ZvwBNuT/dLEh87d/6lWOiNp93HIeXf0EtHpDcp8EllAf3XrQOkerIoIU+QLMj1r0
+         TjDpBplrM3xiw3HOWhtuYL8ure2h6ar6fcd+nVzg=
+To:     Guenter Roeck <linux@roeck-us.net>
+From:   =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>
+Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Reply-To: =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>
+Subject: Re: [QUESTION] fan rpm hwmon driver
+Message-ID: <DHROZx6CXFIpnoRAMmpc1kubP3PaZnOhmjA3lnNsC651w4Zk-bIxrYhAdrVPofTDFj3ODQDmHfIKDDTRmok1FpYJAXF77qAYb9wmP2R9b14=@protonmail.com>
+In-Reply-To: <1507eedb-c78c-7333-84ec-880e1ea1b1c8@roeck-us.net>
+References: <xU_nzuNaKzomGSEsIdtEGvDVgR0MuUoti45TC5WzkVu0FscRsOEp7dzY4tGOoUkvrG9QPJethyosMSnxcXFuE-xcpqJ6DQwfnPkPlFiEcbY=@protonmail.com> <3b92f53f-fd3f-a432-aae1-620582701286@roeck-us.net> <vCYQSnYIKROnbBCa77NtCP1VqtQUNl8cItazgNFjTJfmzRogHKpxkUThwzQnv-HXuISOOhhZ_J_gM2Pm-Y8dwfp2c6IxY2LYirIgdbriYwQ=@protonmail.com> <3259b471-c3b6-ef22-e5c6-813313395cef@roeck-us.net> <gPUUkJgSquQcl0TQu3m4-RdGPCj7xKAyRqgZlbIcu0FoA3egKZHq6VUMpNDMLJSp5Vs9GTRV7QWOfKJR3Mv4zgKof9JtJn_bAjAZu6Rykkk=@protonmail.com> <097a08db-2afb-f220-75d3-caa9d37fd1f9@roeck-us.net> <OiRhgUQ7biZw0KwFjt27l2MOveHFmJ5I2LevL0Uh84m1lPTioycSKybzJlMzjkGpcQkVnOOI4kiY7vKQ2Yzw7-uHub8OsCUir6RsmFIE9go=@protonmail.com> <1507eedb-c78c-7333-84ec-880e1ea1b1c8@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Jul 05, 2020 at 11:47:25AM +0800, Chris Ruehl wrote:
-> Add support for DTS bindings for the sensirion shtc1,shtw1 and shtc3.
-> 
-> Signed-off-by: Chris Ruehl <chris.ruehl@gtsys.com.hk>
-> ---
->  drivers/hwmon/shtc1.c | 22 ++++++++++++++++++++--
->  1 file changed, 20 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/shtc1.c b/drivers/hwmon/shtc1.c
-> index a0078ccede03..61e9275eb666 100644
-> --- a/drivers/hwmon/shtc1.c
-> +++ b/drivers/hwmon/shtc1.c
-> @@ -14,6 +14,7 @@
->  #include <linux/err.h>
->  #include <linux/delay.h>
->  #include <linux/platform_data/shtc1.h>
-> +#include <linux/of.h>
->  
->  /* commands (high precision mode) */
->  static const unsigned char shtc1_cmd_measure_blocking_hpm[]    = { 0x7C, 0xA2 };
-> @@ -196,6 +197,7 @@ static int shtc1_probe(struct i2c_client *client,
->  	enum shtcx_chips chip = id->driver_data;
->  	struct i2c_adapter *adap = client->adapter;
->  	struct device *dev = &client->dev;
-> +	struct device_node *np = dev->of_node;
->  
->  	if (!i2c_check_functionality(adap, I2C_FUNC_I2C)) {
->  		dev_err(dev, "plain i2c transactions not supported\n");
-> @@ -233,8 +235,13 @@ static int shtc1_probe(struct i2c_client *client,
->  	data->client = client;
->  	data->chip = chip;
->  
-> -	if (client->dev.platform_data)
-> +	if (np) {
-> +		data->setup.blocking_io = of_property_read_bool(np, "sensirion,blocking_io");
-> +		data->setup.high_precision = of_property_read_bool(np, "sensicon,low_precision");
-> +	}
-> +	else if (client->dev.platform_data)
->  		data->setup = *(struct shtc1_platform_data *)dev->platform_data;
+2020. j=C3=BAlius 5., vas=C3=A1rnap 15:23 keltez=C3=A9ssel, Guenter Roeck =
+=C3=ADrta:
+> On 7/5/20 4:34 AM, Barnab=C3=A1s P=C5=91cze wrote:
+> [ ... ]
+>
+> > > > Furthermore, did it help answer the "who is going to maintain the d=
+river after the initial submission" question of your previous email?
+> > >
+> > > A driver is not write-and-forget. It has to be maintained, preferably=
+ by someone
+> > > with access to the hardware. Otherwise it is going to bit-rot. Do you=
+ plan to
+> > > volunteer to do that ?
+> >
+> > I have no clue what that entails, but I am assuming: fixing bugs, accep=
+ting, reviewing patches for that driver, then forwarding them upstream, may=
+be also updating the code base according to the best practices at the momen=
+t from time to time, correct?
+>
+> You would not have to forward patches upstream (I see them anyway), but
+> correct for the rest.
+>
 
-CHECK: braces {} should be used on all arms of this statement
-#46: FILE: drivers/hwmon/shtc1.c:238:
-+	if (np) {
-[...]
-+	else if (client->dev.platform_data)
-[...]
+I see, thank you for the clarification.
 
-ERROR: else should follow close brace '}'
-#50: FILE: drivers/hwmon/shtc1.c:242:
-+	}
-+	else if (client->dev.platform_data)
+
+> > I would certainly volunteer if it is needed.
+>
+> That would be great.
+>
+> Something else that came to my mind: Did you examine the DSDT ?
+> If the board vendor did the right thing, it should include an abstract
+> means to read the fan data through ACPI. That would be much better than
+> having to read it from the EC directly.
+>
+> Thanks,
+> Guenter
+
+
+I agree that it would be better, I tried this approach because the Control =
+Center software provided for Microsoft Windows uses direct port i/o, so I d=
+idn't really put much thought into the possible existence of an ACPI method=
+ to get the data, I am not familiar with ACPI either.
+
+I did, at least I tried to examine the DSDT, but I could not really find an=
+ything fan related. Now I looked again, same results. Maybe it's that I don=
+'t know what exactly I should be looking for. And I feel like the acpi/fan =
+driver should have picked it up, no? I could identify the EC, however. But =
+I don't see anything relevant there, either. That's not to say there isn't,=
+ I just couldn't find it.
+
+
+Barnab=C3=A1s P=C5=91cze
