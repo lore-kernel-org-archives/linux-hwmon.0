@@ -2,154 +2,154 @@ Return-Path: <SRS0=nCRF=AQ=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73531C433DF
-	for <linux-hwmon@archiver.kernel.org>; Sun,  5 Jul 2020 13:20:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7DF0C433E0
+	for <linux-hwmon@archiver.kernel.org>; Sun,  5 Jul 2020 13:23:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4CFA52073E
-	for <linux-hwmon@archiver.kernel.org>; Sun,  5 Jul 2020 13:20:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BF61E2075D
+	for <linux-hwmon@archiver.kernel.org>; Sun,  5 Jul 2020 13:23:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="JcsLGNzK"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XWJKQPdw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727046AbgGENUk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 5 Jul 2020 09:20:40 -0400
-Received: from mout.gmx.net ([212.227.17.21]:51913 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726898AbgGENUj (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 5 Jul 2020 09:20:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1593955238;
-        bh=QdKNbo7u0WvfgsF2qt4ROYmbR2AjRJwag1WXj9dfVMo=;
-        h=X-UI-Sender-Class:Subject:From:To:Date:In-Reply-To:References;
-        b=JcsLGNzK8KFpMJPwvqghgiYB0JUXyqGWe4Dpyp7f8f07VGFMokvUyWvaOHndra8Qr
-         iN1A2LSu2X9D+i0XOIhvQGHNEPgM/bebCi+Krxd96JUyP6OsH4B72vl4UceSY8di0z
-         jBzOB+EjvRhlZCNExJxqBru/A+VqFIDeDf2zkNGU=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.0.2] ([84.190.131.209]) by mail.gmx.com (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M6DWi-1jyfDa1kl6-006c6s for
- <linux-hwmon@vger.kernel.org>; Sun, 05 Jul 2020 15:20:38 +0200
-Message-ID: <2a4aff669c44ff56532ac721d687e2b38466b7c7.camel@gmx.de>
-Subject: Re: hwmon (nct6775): Please fix Invalid temperature source error
- for NCT6798D
-From:   Stefan Dietrich <roots@gmx.de>
-To:     linux-hwmon@vger.kernel.org
-Date:   Sun, 05 Jul 2020 15:20:38 +0200
-In-Reply-To: <e4ad12d1-3dca-2ff5-a0a6-12dc6dc22c83@roeck-us.net>
-References: <66053ce744dafbad6925df53b6ef2db1e2859740.camel@gmx.de>
-         <e4ad12d1-3dca-2ff5-a0a6-12dc6dc22c83@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.3-0ubuntu1 
+        id S1726915AbgGENX3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 5 Jul 2020 09:23:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50934 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726833AbgGENX3 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 5 Jul 2020 09:23:29 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6D0C061794
+        for <linux-hwmon@vger.kernel.org>; Sun,  5 Jul 2020 06:23:29 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id x11so14306567plo.7
+        for <linux-hwmon@vger.kernel.org>; Sun, 05 Jul 2020 06:23:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=cMDzgZhB+2WAI/hj7L5hfKUXwssqZOTEM4Ookex7ZHQ=;
+        b=XWJKQPdwTyticWt5EfzLayXdnL/4v+dB33r1e1p2afYX3zLNYZ8CjNazX4WVvliCd0
+         AagqwlXQMn/KAFLpi7Ce4w9P4Hzf9Mbp5lRkRMZ1kAmfzcovnTcohN49g5MXFOGDs+BX
+         18WFBox2hcQnug7cSoR4gWNwdwllVy5gNljad0grqFUx89PlSiaLSa0kDomBhXQRSiPK
+         7Yi5aKM5wnu5kyDHqLP8cNgHCGYJNN7Tbsui/9MchEEhm4g+2Sm9B9Fk4V5SfE2fRDzw
+         RSxSzWiwuCTzrmIKnJeAuhBJkIgOiVmcDp/20AW3gShBEBRtmfwC/nhhYnhg7quHVKuU
+         wcbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=cMDzgZhB+2WAI/hj7L5hfKUXwssqZOTEM4Ookex7ZHQ=;
+        b=OPLBmsw5/pdWX3S9SxdVx/P4a0sMq+0nPWmEP8fvy67B7yV5szMf+XCfVFll/59Qlz
+         GOG1gYcPiD6AyD8/mLM2eZQ/wmkbfwrOS+WKJQJIWTwU5d21Tik5eKp2zM0yTM1X28gu
+         50I5fLUE1OEdqPVw1TpVD4D8Zn5CAhwftXVjjTRoRb6fkWWCmAWp51Ni6V7YRbpwLvoV
+         LbBo8YDKTtptFSNoMaE1OlNZnuzaahS3ty7QcFSRI58ucoFOH5mrRVQYS6SbX2k6eMgV
+         ahT96b0OJ1UrqkyIgx+WRZiEcaMLzqMOr/2eVH+ZsBzggTJlaCCkijYfPi6hWeMm9yLk
+         VwQg==
+X-Gm-Message-State: AOAM530WTab8rtFSHzVlE/2rLx2/bSvE5uXj7J/3iaI7Av524PgaQtBz
+        EkJ5lxamavOkeLkROHCeSNSdbR7PtDY=
+X-Google-Smtp-Source: ABdhPJy/1+D5UNUq77haNDVDEGq0B6vA1JHoEMk7CxybVDrYiqw6Mb89SMtgiOBZPSVD79G8OyVjeQ==
+X-Received: by 2002:a17:902:b687:: with SMTP id c7mr37709876pls.102.1593955408101;
+        Sun, 05 Jul 2020 06:23:28 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j10sm16101566pgh.28.2020.07.05.06.23.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 05 Jul 2020 06:23:26 -0700 (PDT)
+Subject: Re: [QUESTION] fan rpm hwmon driver
+To:     =?UTF-8?Q?Barnab=c3=a1s_P=c5=91cze?= <pobrn@protonmail.com>
+Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+References: <xU_nzuNaKzomGSEsIdtEGvDVgR0MuUoti45TC5WzkVu0FscRsOEp7dzY4tGOoUkvrG9QPJethyosMSnxcXFuE-xcpqJ6DQwfnPkPlFiEcbY=@protonmail.com>
+ <3b92f53f-fd3f-a432-aae1-620582701286@roeck-us.net>
+ <vCYQSnYIKROnbBCa77NtCP1VqtQUNl8cItazgNFjTJfmzRogHKpxkUThwzQnv-HXuISOOhhZ_J_gM2Pm-Y8dwfp2c6IxY2LYirIgdbriYwQ=@protonmail.com>
+ <3259b471-c3b6-ef22-e5c6-813313395cef@roeck-us.net>
+ <gPUUkJgSquQcl0TQu3m4-RdGPCj7xKAyRqgZlbIcu0FoA3egKZHq6VUMpNDMLJSp5Vs9GTRV7QWOfKJR3Mv4zgKof9JtJn_bAjAZu6Rykkk=@protonmail.com>
+ <097a08db-2afb-f220-75d3-caa9d37fd1f9@roeck-us.net>
+ <OiRhgUQ7biZw0KwFjt27l2MOveHFmJ5I2LevL0Uh84m1lPTioycSKybzJlMzjkGpcQkVnOOI4kiY7vKQ2Yzw7-uHub8OsCUir6RsmFIE9go=@protonmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <1507eedb-c78c-7333-84ec-880e1ea1b1c8@roeck-us.net>
+Date:   Sun, 5 Jul 2020 06:23:25 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:V1aOQu4vJChPa9iOBSNNnvIiViXDIquWSSgKdRE/vhJQAqSj4fR
- lrS7xMslxqQOiDKEZm2jpzx8OCG7fuJ7clyN+GqEKpsRsAMp2nl+1RuhuhQ2uay5TH724p4
- mOr40/EJ9FcT7T2rSAbN7Z4E3zAdlVW5rH6mnknYdf8FfPtH8TweQwEbDubalebS5Z6bL95
- xsevO/QcJkjO+UnjAWLAg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:YpUaN0hlzLE=:bUFsXQaaGvpAfHWxrwBVAE
- GefcZcDGOEs1BXu5c0waSW3DTGoWIZnzaJEgfL+JxmR32ehtu9BwZCbDN4ilXVHrur0Vj6U5c
- yyQaH/GHZ8HR+W8/I00an1o+h56dhs7P+Zn+O4aIyYElqIp2kGuUc6W/NbElLbXOAIjYqFrw5
- YuoILqs17ElFvTehSyPIasvaNgTC2AWN5YHk+AWvovxPd0T5WbtD2dcximCZbhoyvvzpd5Yr0
- zIIGunlko977H+BOFMMiwcaJTdMQjEhvBWygS7+03EWxUVYG/6u8R9Q99SK4ziDEg1HGzXqIq
- soDqVs3kuAVGDfpXQZoV4UqMgsGNTT/2HY5p8Ditl60etIDuomaMoafcuxvmdzILlown9aMeb
- GyrORWszb7ZH7c9ic/un7YmB9QqRRtdFvOTj6v7JoML6awDuwZdOkymYocY+KwOAil9IGavym
- c8FC5xBzU8Wo0ashvhOf2OeWTs+NpWaa30TXKkEB6dKF3YyY0Y6IC4I9wNL7YxAHyqDRcb0Pg
- UTAE4nCrHEjIW+xLDe/2qv5+1GKGbdxjbIxPjbCe270V7gPflqbQgahS5csJjhnDtnwEm6kmR
- Oo9Kye2hOXahL94hAM9Hmx3rpLLTXDx5h0dGv43AQqUURfp68OxOTIL5bI6c+F5xihh2NuHdB
- niRZ1WUkEAJM8sDhSJcASfI45Hmrr6yLzTJmHON8IjQGdo/vhiNUMzXH+JYnndk8pwSSsScy1
- 3/Mc24WijGCda6KIzccBSH6oFX9eB3+cXUN9Zl7frqsKYOIwZBvXHejK4nmUy4DyVDgQGxmkC
- tq2+Go8RFWV2N5BBgbLe0mRKWn3RiIM/9/dPQIuSedVGVZPE+locLtEdeR6O4WisUhxpvw/De
- UiTRG1lCjbOk2/3ueq1ncUPr9VhlpvEXDxU7KsAwLN+bxN5W40uBeC0/q+9zxyx9E0c82TVJ4
- c0HOvOfro9E0dPIU8Vtu03xWXzlh0g8PmOvyEjLoLQVbl9SE8uzOGdmV2jzLo8q5rVqL09hVX
- +PS9JpKT/drI1hH2I139SJcQ2NHYzrAQV3NafHm7dcFkpmOsDH2H86ZygcrEV++hyOZc8YZFp
- TyQly5eWxGgSFhSXF2xWmdW7WCb2hVC5TcAtSV75EtLNaaklDu8/1OU+nLwUO5DttjnKS6reu
- bkL8QIQBTURM4tjJRRfAPx6VSXakZNEZCItg6o9zBOA8ceuhNT3MRnTZybcQjPPpqyuVbzp3l
- Su80Y2Wa0MKSEtrTR
+In-Reply-To: <OiRhgUQ7biZw0KwFjt27l2MOveHFmJ5I2LevL0Uh84m1lPTioycSKybzJlMzjkGpcQkVnOOI4kiY7vKQ2Yzw7-uHub8OsCUir6RsmFIE9go=@protonmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, 2020-07-03 at 10:10 -0700, Guenter Roeck wrote:
-> On 7/3/20 9:03 AM, Stefan Dietrich wrote:
-> > Hi all,
-> >
-> > with my Asus Formula XII Z490 and 5.7.0-7.1-liquorix-amd64 I'm
-> > getting
-> > the following error messages during boot:
-> >
-> > nct6775: Found NCT6798D or compatible chip at 0x2e:0x290
-> > nct6775 nct6775.656: Invalid temperature source 28 at index 0,
-> > source
-> > register 0x100, temp register 0x73
-> > nct6775 nct6775.656: Invalid temperature source 28 at index 1,
-> > source
-> > register 0x200, temp register 0x75
-> > nct6775 nct6775.656: Invalid temperature source 28 at index 2,
-> > source
-> > register 0x300, temp register 0x77
-> > nct6775 nct6775.656: Invalid temperature source 28 at index 3,
-> > source
-> > register 0x800, temp register 0x79
-> > nct6775 nct6775.656: Invalid temperature source 28 at index 4,
-> > source
-> > register 0x900, temp register 0x7b
-> > nct6775 nct6775.656: Invalid temperature source 28 at index 5,
-> > source
-> > register 0xa00, temp register 0x7d
-> >
->
-> There is nothing much if anything we can do about that. The NCT6798D
-> datasheet reports temperature source 28 as reserved. You could ask
-> Asus for support, but their usual response is that they don't support
-> Linux.
+On 7/5/20 4:34 AM, Barnabás Pőcze wrote:
+[ ... ]
 
-Thanks for the quick reply. Would you briefly outline why this makes it
-inaccessible for the NCT6776 driver? Is there a pool of registers that
-I might probe for values that could be related to the desired
-temperature values, even if they need to be scaled?
+>>
+>>> Furthermore, did it help answer the "who is going to maintain the driver after the initial submission" question of your previous email?
+>>
+>> A driver is not write-and-forget. It has to be maintained, preferably by someone
+>> with access to the hardware. Otherwise it is going to bit-rot. Do you plan to
+>> volunteer to do that ?
+>>
+> 
+> I have no clue what that entails, but I am assuming: fixing bugs, accepting, reviewing patches for that driver, then forwarding them upstream, maybe also updating the code base according to the best practices at the moment from time to time, correct?
+> 
+You would not have to forward patches upstream (I see them anyway), but
+correct for the rest.
 
+> I would certainly volunteer if it is needed.
+> 
+That would be great.
+
+Something else that came to my mind: Did you examine the DSDT ?
+If the board vendor did the right thing, it should include an abstract
+means to read the fan data through ACPI. That would be much better than
+having to read it from the EC directly.
 
 Thanks,
-Stefan
-
-> > During sensors-detect, most of the standard temperature, voltage
-> > and
-> > rpm sources are recognized, however, some of the values,
-> > particularly
-> > voltages, are off quite a bit. In addition, output of additional
->
-> Voltages need to be scaled. Scaling factors are mainboard specific
-> and
-> would have to be determined by comparing BIOS reported voltages with
-> raw voltages (board vendors usually don't provide the information).
-> Scaling factors can then be entered into /etc/sensors3.conf.
->
-> > temperature sensors (via headers on the mainboard) which are
-> > reported
-> > fine in BIOS, are missing.
-> >
->
-> Again, this is mainboard specific. We don't know how the hardware
-> reports
-> those values. Only ASUS could provide the necessary information.
-> Unfortunately, as mentioned above, they are not exactly known to be
-> Linux friendly.
->
-> Guenter
->
-> > Booting with acpi_enforce_resources=3Dlax doesn't solve this issue.
-> >
-> > I'd be happy if anyone would be able to fix this issue or give any
-> > pointers on how to do so. Unfortunately I only have very basic
-> > coding
-> > skills, but I'll be happy to assist in debugging.
-> >
-> >
-> > Cheers,
-> > Stefan
-> >
-
+Guenter
