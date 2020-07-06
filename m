@@ -1,138 +1,118 @@
-Return-Path: <SRS0=nCRF=AQ=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=NDU9=AR=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E707BC433DF
-	for <linux-hwmon@archiver.kernel.org>; Sun,  5 Jul 2020 15:47:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D7F1C433DF
+	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jul 2020 01:27:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B9F0520747
-	for <linux-hwmon@archiver.kernel.org>; Sun,  5 Jul 2020 15:47:39 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="QrO8YZ+G"
+	by mail.kernel.org (Postfix) with ESMTP id 365842070C
+	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jul 2020 01:27:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727090AbgGEPrj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 5 Jul 2020 11:47:39 -0400
-Received: from mout.gmx.net ([212.227.15.18]:57223 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726975AbgGEPrj (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 5 Jul 2020 11:47:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1593964039;
-        bh=kn1716bUWCplNijn7miEtUizF5aNDERRFpJuUu1w9Js=;
-        h=X-UI-Sender-Class:Subject:From:To:Date:In-Reply-To:References;
-        b=QrO8YZ+GExnqJkxVv6/thbeiOjLa16fQlu/+Z2ZW601DfLRM+Y1sxsEL0xzdS7R6c
-         7YqsLbmPvDFTdf3PYTz+jRnzFHL3mgVTDNFPJm+Qbs4TvtSIeEgqvyCf49tApgZ6Vh
-         JzVR4mnI97zeDwTKZKiW9kSwbnoeokSWg54RGV4c=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.0.2] ([84.190.131.209]) by mail.gmx.com (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N95e9-1kxDaS06Fz-0164Y1; Sun, 05
- Jul 2020 17:47:19 +0200
-Message-ID: <6c318b3658b94abd09bb39086b00420e65f71da6.camel@gmx.de>
-Subject: Re: hwmon (nct6775): Please fix Invalid temperature source error
- for NCT6798D
-From:   Stefan Dietrich <roots@gmx.de>
-To:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Date:   Sun, 05 Jul 2020 17:47:18 +0200
-In-Reply-To: <d54732db-255c-54be-ab43-997369e0da87@roeck-us.net>
-References: <66053ce744dafbad6925df53b6ef2db1e2859740.camel@gmx.de>
-         <e4ad12d1-3dca-2ff5-a0a6-12dc6dc22c83@roeck-us.net>
-         <48f415c34f4ca3f5239650711daaf1e11342da8e.camel@gmx.de>
-         <d54732db-255c-54be-ab43-997369e0da87@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.3-0ubuntu1 
+        id S1728651AbgGFB06 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 5 Jul 2020 21:26:58 -0400
+Received: from server-x.ipv4.hkg02.ds.network ([27.111.83.178]:56658 "EHLO
+        mail.gtsys.com.hk" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
+        with ESMTP id S1728616AbgGFB04 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 5 Jul 2020 21:26:56 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.gtsys.com.hk (Postfix) with ESMTP id 412992016B13;
+        Mon,  6 Jul 2020 09:26:51 +0800 (HKT)
+X-Virus-Scanned: Debian amavisd-new at gtsys.com.hk
+Received: from mail.gtsys.com.hk ([127.0.0.1])
+        by localhost (mail.gtsys.com.hk [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id MbPrCEWsKdKw; Mon,  6 Jul 2020 09:26:51 +0800 (HKT)
+Received: from s01.gtsys.com.hk (unknown [10.128.4.2])
+        by mail.gtsys.com.hk (Postfix) with ESMTP id 1CF5220160D4;
+        Mon,  6 Jul 2020 09:26:51 +0800 (HKT)
+Received: from [10.128.2.32] (unknown [124.217.189.122])
+        by s01.gtsys.com.hk (Postfix) with ESMTPSA id D5450C01B74;
+        Mon,  6 Jul 2020 09:26:50 +0800 (HKT)
+Subject: Re: [PATCH v2 1/2] hwmon: shtc1: add support for device tree bindings
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jack Lo <jack.lo@gtsys.com.hk>, devicetree@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20200705142515.GA1975@roeck-us.net>
+From:   Chris Ruehl <chris.ruehl@gtsys.com.hk>
+Message-ID: <0e3cc05b-2ae4-186b-d3b4-fa3ac201b128@gtsys.com.hk>
+Date:   Mon, 6 Jul 2020 09:26:50 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:+/EeFLSHsYWdwtiSAXlSmlGwLCw3Rkb/GpiearyiRWnGOQ02Ckc
- 8qHAksWMWUwtyL8ItZlAI0rEeMHLqyOWpf84sG0ORW1HFcGG28oW9A1VXVbfAtXTvn31kKP
- vdd5hFSgltCpI+dDsNfTJaiLsO74qXzl8EIaYUnjcAJtKuqAN7x1AFKELaBGtoKh1fjbxLr
- 7fFoFGaP5OnLFett/7UMg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:K5saLqtxPXw=:SzMau5/19PJjxcsQfjWBsd
- 4OtoGir14SDfFnbViRN5C9pJzZV3n2+ruMc1m5vPqTJsfOHqNjIh2QsZSUTaA8RUERx0tcvk1
- F0wt1vBQ2aDCdt7B7VNPEpXQ3lPyTaTTE6oGTnRy2kC6E7luJSnFQ0qtllBDaUTR9kbjimphq
- yruqPuuTuooS8rQie1Q38aqdR9+Vi6M5D6MggaSgYnXb0Qin9Pu6fV5As2Q/Z59gXQxj2J+7z
- +Dm3AnGd7y7IMJlAUfBk1lgW5X2s05LcML9WnqqDYd0OcQLVEXViNvSwiNo7b57VuPHfpEXx7
- 6U3q+c2SIzNLos04uzBpzQBZ2KHgZXHTr6iAUR1jiO7VvhcWt0BAAXeGeHvpJ+dc3KmEfBwyv
- rwG4jumgC8x2rPh8MpQbXd8JEMtt1RNQ+iQ4Y/orVtT7z+Zs9tl/1D6Q9I8r90dAm9w9sVCWZ
- CLip8lidceprcgKOlZ62U2+rjhPMTfbArjHZeJTseqYlchkcyUY6dBBvkvnspRIoVUyiLCDd4
- 7GL/WEbKeJ4HRdQDIje/qtGx70FV2SCgJq9Wlnr/bqdmczkVvWy0aNIEo2NWcFOXPr/KIUsQh
- uwGfSAUwyoCURpOyCZyczDMx2xQpwf1yuZsb4+dxS9DZPJc9WY3Y/9WY51H0tBqXo6IOr5BtK
- asQyr7Zw8Mecce5F4Quc7yI7nI8bf6Qr7u9PkxumboeNz4F1s9aR+hMDmUhxMVTIMCsupaI7R
- qPXjhUDnS0eBLLboo2Ap85QWXBkSWZy8jnlwMz0OzTBGLD1OTGEsGigRDB+YiSFgCS9+XUoRg
- ugHQ6OUgR0Y56SBkl6US1cv38GysiJwNwAV5BQ10OzoU5guMM4TWDhmSTEbMW3sp4V+KiRpfN
- T6byMgIz1iX7w3SvwXFMwJV9ULaQPUkZa80pTVRTBgudC4xRj9eXRy6bNC3vF3ToImGEZTr7g
- XtO8nAkdPk9HrbQhAGpDqs2N9vA846A02A2AHntGk7JviDqvKqCqwxZC3Vlhe5+0C6rl+EvUu
- YnCQnRIvt4vPdkBh1weDdhIrPXK+yvD1IXLDHdLKHKSp//CG0bZrAAe4Gk3MQVdLGgNCJJ75q
- kdM+0831w6Ky7gUNTvWgfJw5IKxPvWApG4WabrwJtmE6LlqdormxCow3rLEp0Vt4YtnjtU10x
- BKTyGXnfsjsF8Zz9/mPXec5uiTKY+WJb80m3VtXSmrNKUdD8m6epfcd4e267ADOuAfoP8=
+In-Reply-To: <20200705142515.GA1975@roeck-us.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, 2020-07-05 at 07:21 -0700, Guenter Roeck wrote:
-> On 7/5/20 6:19 AM, Stefan Dietrich wrote:
-> > On Fri, 2020-07-03 at 10:10 -0700, Guenter Roeck wrote:
-> > > On 7/3/20 9:03 AM, Stefan Dietrich wrote:
-> > > > Hi all,
-> > > >
-> > > > with my Asus Formula XII Z490 and 5.7.0-7.1-liquorix-amd64 I'm
-> > > > getting
-> > > > the following error messages during boot:
-> > > >
-> > > > nct6775: Found NCT6798D or compatible chip at 0x2e:0x290
-> > > > nct6775 nct6775.656: Invalid temperature source 28 at index 0,
-> > > > source
-> > > > register 0x100, temp register 0x73
-> > > > nct6775 nct6775.656: Invalid temperature source 28 at index 1,
-> > > > source
-> > > > register 0x200, temp register 0x75
-> > > > nct6775 nct6775.656: Invalid temperature source 28 at index 2,
-> > > > source
-> > > > register 0x300, temp register 0x77
-> > > > nct6775 nct6775.656: Invalid temperature source 28 at index 3,
-> > > > source
-> > > > register 0x800, temp register 0x79
-> > > > nct6775 nct6775.656: Invalid temperature source 28 at index 4,
-> > > > source
-> > > > register 0x900, temp register 0x7b
-> > > > nct6775 nct6775.656: Invalid temperature source 28 at index 5,
-> > > > source
-> > > > register 0xa00, temp register 0x7d
-> > > >
-> > >
-> > > There is nothing much if anything we can do about that. The
-> > > NCT6798D
-> > > datasheet reports temperature source 28 as reserved.
-> >
-> > Thanks for the quick reply. Would you briefly outline why this
-> > makes it
-> > inaccessible for the NCT6776 driver? Is there a pool of registers
-> > that
-> > I might probe for values that could be related to the desired
-> > temperature values, even if they need to be scaled?
-> >
->
-> Reserved means invalid for use. We don't know what happens if we
-> would
-> let the driver use those values. That has nothing to do with scaling.
->
-> If you like, feel free to modify the driver to accept temperature
-> source
-> 28 for NCT6798D and report the results. That should give us an idea
-> if
-> the datasheet is at fault or the board BIOS.
+Hi
 
-Ok, thanks. Unfortunately, a look at the code tells me that this is
-beyond my current skills, but I might start toying around with it some
-day ;-)
+On 5/7/2020 10:25 pm, Guenter Roeck wrote:
+> On Sun, Jul 05, 2020 at 11:47:25AM +0800, Chris Ruehl wrote:
+>> Add support for DTS bindings for the sensirion shtc1,shtw1 and shtc3.
+>>
+>> Signed-off-by: Chris Ruehl <chris.ruehl@gtsys.com.hk>
+>> ---
+>>   drivers/hwmon/shtc1.c | 22 ++++++++++++++++++++--
+>>   1 file changed, 20 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/hwmon/shtc1.c b/drivers/hwmon/shtc1.c
+>> index a0078ccede03..61e9275eb666 100644
+>> --- a/drivers/hwmon/shtc1.c
+>> +++ b/drivers/hwmon/shtc1.c
+>> @@ -14,6 +14,7 @@
+>>   #include <linux/err.h>
+>>   #include <linux/delay.h>
+>>   #include <linux/platform_data/shtc1.h>
+>> +#include <linux/of.h>
+>>   
+>>   /* commands (high precision mode) */
+>>   static const unsigned char shtc1_cmd_measure_blocking_hpm[]    = { 0x7C, 0xA2 };
+>> @@ -196,6 +197,7 @@ static int shtc1_probe(struct i2c_client *client,
+>>   	enum shtcx_chips chip = id->driver_data;
+>>   	struct i2c_adapter *adap = client->adapter;
+>>   	struct device *dev = &client->dev;
+>> +	struct device_node *np = dev->of_node;
+>>   
+>>   	if (!i2c_check_functionality(adap, I2C_FUNC_I2C)) {
+>>   		dev_err(dev, "plain i2c transactions not supported\n");
+>> @@ -233,8 +235,13 @@ static int shtc1_probe(struct i2c_client *client,
+>>   	data->client = client;
+>>   	data->chip = chip;
+>>   
+>> -	if (client->dev.platform_data)
+>> +	if (np) {
+>> +		data->setup.blocking_io = of_property_read_bool(np, "sensirion,blocking_io");
+>> +		data->setup.high_precision = of_property_read_bool(np, "sensicon,low_precision");
+>> +	}
+>> +	else if (client->dev.platform_data)
+>>   		data->setup = *(struct shtc1_platform_data *)dev->platform_data;
+> 
+> CHECK: braces {} should be used on all arms of this statement
+> #46: FILE: drivers/hwmon/shtc1.c:238:
+> +	if (np) {
+> [...]
+> +	else if (client->dev.platform_data)
+> [...]
+> 
+> ERROR: else should follow close brace '}'
+> #50: FILE: drivers/hwmon/shtc1.c:242:
+> +	}
+> +	else if (client->dev.platform_data)
+> 
 
+it bites back not using the check-patch script! I _should_ know better! :-(
 
-Stefan
+v3 then.
 
-> Guenter
+But i will wait a moment to see if someone else lift a finger.
 
+Chris
