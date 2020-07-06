@@ -2,173 +2,130 @@ Return-Path: <SRS0=NDU9=AR=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-14.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8654EC433DF
-	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jul 2020 21:54:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BCDB8C433DF
+	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jul 2020 22:10:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5929C20715
-	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jul 2020 21:54:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 91E4520675
+	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jul 2020 22:10:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X1p9r9kR"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cZEYifmy"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726795AbgGFVyP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 6 Jul 2020 17:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40050 "EHLO
+        id S1726329AbgGFWKR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 6 Jul 2020 18:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725860AbgGFVyO (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 6 Jul 2020 17:54:14 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D07C061755
-        for <linux-hwmon@vger.kernel.org>; Mon,  6 Jul 2020 14:54:14 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id cm21so8033175pjb.3
-        for <linux-hwmon@vger.kernel.org>; Mon, 06 Jul 2020 14:54:14 -0700 (PDT)
+        with ESMTP id S1725929AbgGFWKR (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 6 Jul 2020 18:10:17 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0C1C061755
+        for <linux-hwmon@vger.kernel.org>; Mon,  6 Jul 2020 15:10:16 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id v25so3358767pfm.15
+        for <linux-hwmon@vger.kernel.org>; Mon, 06 Jul 2020 15:10:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=sGCtze63WZVpZ2zt8zXmF3UfpxmZ/bWtqGVHRzpZCfE=;
-        b=X1p9r9kRkAMAKHMZcmljqFw0TctC4Tl7dgvJfssPXXe85k6dPUIaHUWQHUJSjP2juB
-         llxrG3eHvaICx2QTA6g/XpNeYa3QYQgfDr5wSeAIgGKmPFHPWvTY1mFrkMXldUCYdISS
-         l+fmA6E6Fd3ENgqEqwa5Z32c5j6gH/aOg+qbCCXAOWMO8rU5kYELav1U0MBxFI8JeQoQ
-         wLlwXLEIWz/Gpku+AstFPypyPKpM3twMjnN4jwSX/0TSiqo5KEJNENDniRKY5IrmMO9t
-         3NNUZ7AkM7Mau+ECXRn/t26s0yV7p59mj5rIT680CtB4zocgasKrlJlrf5CyGQQ/9g01
-         Krfg==
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=TeMNibGOk1cRjLoij7HYXan5nG7TvCCfcPYSz+A8zvE=;
+        b=cZEYifmyM+6ev7oAnrBGKaUTN0mINF31fNNc+bUqvmwPXf6p5iEU4fJgk0bizX+3dF
+         St1e3DxczAOooShYVpHq+AkKH5xy6Oi46AEcdeVk8TYdGI5H50tH5fuWLbyDE3HPvXS2
+         kTcHckVuGDaoorNgsEStRSEnt5bUl2/BSUu1VOqSw6jPBKGAFYk6hLZ88YOnrMbYYVSh
+         UdyZNo6i3WcgQJ9qGiz3MlybhjziEnp471F949jLEit1RM0QxM6f5Nj/G6/qlOS4CgIF
+         JP6IbL6CITsc3v8dmFEsEUlsm62V67RuNxr1LU3JQZQWV0EoJKQESgCr6JT0fasvID6u
+         kAiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=sGCtze63WZVpZ2zt8zXmF3UfpxmZ/bWtqGVHRzpZCfE=;
-        b=Xkp1TRhyYCSltQ1plHHeZVkoSCV4o6zgGW6TWFfz537uq8ViQvipvGYTPnLJtNY7MH
-         6HFZTm5S9CnPiDvz+csdypb8GikjLwhmk93Be1/Xq1UUUhMrAeVoOt1h7uOAcSnnqxqI
-         FGddey3RVj7+KgoZ/G1iy6C4sEvYoVwU3+pesRPHgBNhTZg4JFh5mFEIx5/t6AJqjGG8
-         Ha7aa4JJZw7OuUIMt0lvH4ysMtK9JAG0YY98Qb+l0SojAVNh6uih6NPEnLYuJ5adW2cH
-         CESJ/xFWzT4uZoLpuqS/MMkBFYHGGxDdSo8B7OQzVXehCTMClGH7a2WYC2mWzB+9Gxsn
-         5x3Q==
-X-Gm-Message-State: AOAM532SLLDLn352hxj15+lgvXFL5Qjwwv/cFpZwaWPqQNS889TGw4AY
-        5M/ig41eWw7BS/iZGSTrkQuCxOAVVIw=
-X-Google-Smtp-Source: ABdhPJw7T+53QoKpH9C1JgOE9lfLGCjZkcUmWgB0cI4mct7pYAS7cxWMV4mfgAwXOwl4hkgRT8becw==
-X-Received: by 2002:a17:90a:ba86:: with SMTP id t6mr1215092pjr.10.1594072453611;
-        Mon, 06 Jul 2020 14:54:13 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k26sm20286856pgt.90.2020.07.06.14.54.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jul 2020 14:54:12 -0700 (PDT)
-Subject: Re: [PATCH] hwmon: amd_energy: match for supported models
-To:     Naveen Krishna Ch <naveenkrishna.ch@gmail.com>,
-        Naveen Krishna Chatradhi <nchatrad@amd.com>
-Cc:     linux-hwmon@vger.kernel.org
-References: <20200706171715.124993-1-nchatrad@amd.com>
- <CAHfPSqDfWs+LiYo7KdVKKQ6fP0hDyCHtVhwHMiG3Sn7=aHhLBQ@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <913b00cc-10ae-911c-e7a1-a660c692a298@roeck-us.net>
-Date:   Mon, 6 Jul 2020 14:54:12 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
-MIME-Version: 1.0
-In-Reply-To: <CAHfPSqDfWs+LiYo7KdVKKQ6fP0hDyCHtVhwHMiG3Sn7=aHhLBQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=TeMNibGOk1cRjLoij7HYXan5nG7TvCCfcPYSz+A8zvE=;
+        b=FASQi4xuV7CpBZDSau5YxeYcRhLTOR0923U/8U3h2Vz4v1DDhDUcDrs3adG3HIgpqP
+         6SNId/AmeR8RK/vTTSNy8rbPBoiVLoFcfgftP9PBOgwGvh5uueE1L5s4roR3D8XFRsRI
+         /87Da9Ef3HRQvk+CdRxgCpngJuFz3Yz7+gW0bYh5vtCafHFYMKD5xd3Urjm/tm3I5ogB
+         s8q/3kSiMbhNNbcERY2pgIgidxSL5wNMAbDte4ky4a2zAqhXt7fYG/PtLB/ZvEm73Ulb
+         3sWvmwTYAdnMCh3UHEW60NkNOYOY/Xhpu1TxZhqnSTR0ZWl1dynMiwawQHR7fhzsYdSM
+         o9BA==
+X-Gm-Message-State: AOAM533eK4PSuDYQddMI2hvUHJ6nvV9oPAAAgEXg/yIQDB/lFhsCErYA
+        NVWitVLSaGXu21FBBFZNgYiuQ+G7NAC8ClCd
+X-Google-Smtp-Source: ABdhPJwv2YHMmYmDlYgUO0fIXVCDCX93tVi8nTqSYEG+geHToZYhy2QPI02Z25vhXH9dMH42YgYaJA7j/PHMpNNC
+X-Received: by 2002:a62:ab15:: with SMTP id p21mr46098016pff.146.1594073416397;
+ Mon, 06 Jul 2020 15:10:16 -0700 (PDT)
+Date:   Mon,  6 Jul 2020 22:10:00 +0000
+Message-Id: <20200706221001.1996816-1-linchuyuan@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.27.0.383.g050319c2ae-goog
+Subject: [PATCH v2 0/1] hwmon:max6697: Allow max6581 to create tempX_offset
+From:   Chu Lin <linchuyuan@google.com>
+To:     linux@roeck-us.net
+Cc:     belgaied@google.com, jasonling@google.com, jdelvare@suse.com,
+        linchuyuan@google.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zhongqil@google.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 7/6/20 10:20 AM, Naveen Krishna Ch wrote:
-> Hi Guenter,
-> 
-> On Mon, 6 Jul 2020 at 22:47, Naveen Krishna Chatradhi <nchatrad@amd.com> wrote:
->>
->> The energy counters of certain models seems to be reporting
->> inconsisten values. Hence, match for the supported models.
-> Actually, the supported models could be of family 0x17 in a range
-> between 0x30 ~ 0x3f. I did not find any macro or usage for a range
-> of models. Could you suggest to me if i've missed an existing way to
-> provide a range for models.
-> 
+Per max6581, reg 4d and reg 4e is used for temperature read offset.
+This patch will let the user specify the temperature read offset for
+max6581. This patch is tested on max6581 and only applies to max6581.
 
-I have no idea, sorry. Maybe match all of them, check for
-actually supported models in the probe function, and return
--ENODEV if the model is not supported. Alternatively,
-just list all models in the supported range.
+Testing:
+echo 16250 > temp2_offset
+cat temp2_offset
+16250
 
-Either case, how would you know that a future model in the presumably
-supported range doesn't have a bug in the microcode that makes it
-report bad data ? Assuming that this is a microcode bug, of course.
+echo 17500 > temp3_offset
+cat temp3_offset
+17500
+cat temp4_offset
+0
+cat temp2_offset
+17500
 
-Guenter
+echo 0 > temp2_offset
+cat temp2_offset
+0
+cat temp3_offset
+17500
 
->>
->> Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
->> ---
->>  drivers/hwmon/amd_energy.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/hwmon/amd_energy.c b/drivers/hwmon/amd_energy.c
->> index e95b7426106e..29603742c858 100644
->> --- a/drivers/hwmon/amd_energy.c
->> +++ b/drivers/hwmon/amd_energy.c
->> @@ -362,7 +362,7 @@ static struct platform_driver amd_energy_driver = {
->>  static struct platform_device *amd_energy_platdev;
->>
->>  static const struct x86_cpu_id cpu_ids[] __initconst = {
->> -       X86_MATCH_VENDOR_FAM(AMD, 0x17, NULL),
->> +       X86_MATCH_VENDOR_FAM_MODEL(AMD, 0x17, 0x31, NULL),
->>         {}
->>  };
->>  MODULE_DEVICE_TABLE(x86cpu, cpu_ids);
->> --
->> 2.17.1
->>
-> 
-> 
+echo -0 > temp2_offset
+cat temp2_offset
+0
+
+echo -100000 > temp2_offset
+cat temp2_input
+4875
+
+echo 10000 > temp2_offset
+cat temp2_input
+47125
+
+echo -2000 > temp2_offset
+cat temp2_input
+34875
+
+echo -0 > temp2_offset
+cat temp2_input
+37000
+
+Signed-off-by: Chu Lin <linchuyuan@google.com>
+---
+ChangeLog v1 -> v2:
+  - Simplify the offset reg raw value to milli ceisus conversion
+  - Substitute the temp1_offset with dummy attr
+  - Avoid using double negative in the macro definition
+  - Return the actual error when i2c read/write is failed
+  - clamp the value to MAX or MIN respectively if an out of range input is given
+  - Provide mux protection when multiple i2c accesses is required
+
+Chu Lin (1):
+  hwmon:max6697: Allow max6581 to create tempX_offset
+
+ drivers/hwmon/max6697.c | 100 ++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 96 insertions(+), 4 deletions(-)
+
+-- 
+2.27.0.383.g050319c2ae-goog
 
