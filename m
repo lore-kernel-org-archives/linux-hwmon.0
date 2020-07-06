@@ -2,102 +2,209 @@ Return-Path: <SRS0=NDU9=AR=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+X-Spam-Status: No, score=-5.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DCD14C433E5
-	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jul 2020 17:58:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF1C5C433DF
+	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jul 2020 19:10:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C0E0520702
-	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jul 2020 17:58:32 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="mY7qwIzK"
+	by mail.kernel.org (Postfix) with ESMTP id AF552206CD
+	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jul 2020 19:10:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729870AbgGFR6a (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 6 Jul 2020 13:58:30 -0400
-Received: from ssl.serverraum.org ([176.9.125.105]:51295 "EHLO
-        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729589AbgGFR5e (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 6 Jul 2020 13:57:34 -0400
-Received: from apollo.fritz.box (unknown [IPv6:2a02:810c:c200:2e91:6257:18ff:fec4:ca34])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 0AE3F22FB6;
-        Mon,  6 Jul 2020 19:57:31 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1594058251;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SH3Q7oVAmOBxbplM50/Ar9EjXOufx+prkqAFOd8eyNY=;
-        b=mY7qwIzKWk6E8AvehpQ/ejq0Hna41PJoJ69Kyq2HmoTq2+MyBetZ4pLxzAeE0TFL0rehIk
-        fUzP7/txfafLlqeTGtU2itbaVEnR0aGIpIdG1ZpByxALqEWhRpRT0d9MWJPRB0AgH4Cp9x
-        ltw5ZK5/so9SW9f+dkr6HZnDIYYEguk=
-From:   Michael Walle <michael@walle.cc>
-To:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Michael Walle <michael@walle.cc>
-Subject: [PATCH v5 04/13] mfd: simple-mfd-i2c: add sl28cpld support
-Date:   Mon,  6 Jul 2020 19:53:44 +0200
-Message-Id: <20200706175353.16404-5-michael@walle.cc>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200706175353.16404-1-michael@walle.cc>
-References: <20200706175353.16404-1-michael@walle.cc>
+        id S1725987AbgGFTKi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 6 Jul 2020 15:10:38 -0400
+Received: from mga05.intel.com ([192.55.52.43]:7056 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725953AbgGFTKi (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 6 Jul 2020 15:10:38 -0400
+IronPort-SDR: YYCF7VkUTv0inwQ6SWdT3h0QI7RABugpDf8KB3gDaFCKUjdVOgNn6YSqsufw2vthmANd2YIXic
+ 1BZNxSL3Aeug==
+X-IronPort-AV: E=McAfee;i="6000,8403,9674"; a="232344187"
+X-IronPort-AV: E=Sophos;i="5.75,320,1589266800"; 
+   d="scan'208";a="232344187"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2020 12:10:37 -0700
+IronPort-SDR: emJBK42coOMpWvEdgrACigrAT3BI0XZ4GyE3GGqmKAzVCUye9MTcPc1SLl1AQwcJ92CxrL4FXV
+ lTSFIQMgqZgw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,320,1589266800"; 
+   d="scan'208";a="323298060"
+Received: from lkp-server01.sh.intel.com (HELO 82346ce9ac16) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 06 Jul 2020 12:10:35 -0700
+Received: from kbuild by 82346ce9ac16 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1jsWVf-0000LG-0c; Mon, 06 Jul 2020 19:10:35 +0000
+Date:   Tue, 07 Jul 2020 03:10:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:hwmon] BUILD SUCCESS
+ bc4071aafcf4d0535ee423b69167696d6c03207d
+Message-ID: <5f037727.Bq5oyo2DdWwC+c1X%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam: Yes
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add the core support for the board management controller found on the
-SMARC-sAL28 board.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon
+branch HEAD: bc4071aafcf4d0535ee423b69167696d6c03207d  hwmon: (aspeed-pwm-tacho) Avoid possible buffer overflow
 
-At the moment, this controller is used on the Kontron SMARC-sAL28 board.
+elapsed time: 818m
 
-Signed-off-by: Michael Walle <michael@walle.cc>
+configs tested: 140
+configs skipped: 9
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+arm                                 defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                               allnoconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+arm                           corgi_defconfig
+mips                     loongson1b_defconfig
+arm                           spitz_defconfig
+arm                             ezx_defconfig
+sh                                  defconfig
+arm                      tct_hammer_defconfig
+powerpc64                           defconfig
+sh                        dreamcast_defconfig
+arm                         orion5x_defconfig
+mips                           ip22_defconfig
+sh                      rts7751r2d1_defconfig
+parisc                              defconfig
+arm                         s3c6400_defconfig
+arm                            hisi_defconfig
+powerpc64                        alldefconfig
+arc                      axs103_smp_defconfig
+mips                          rm200_defconfig
+alpha                               defconfig
+riscv                    nommu_k210_defconfig
+mips                           jazz_defconfig
+riscv                               defconfig
+sh                          landisk_defconfig
+powerpc                      ppc6xx_defconfig
+mips                          ath25_defconfig
+h8300                               defconfig
+sh                          r7785rp_defconfig
+openrisc                         allyesconfig
+sparc                            alldefconfig
+mips                  mips_paravirt_defconfig
+sh                     sh7710voipgw_defconfig
+nios2                            alldefconfig
+m68k                            q40_defconfig
+mips                      malta_kvm_defconfig
+sh                        edosk7760_defconfig
+s390                          debug_defconfig
+c6x                        evmc6457_defconfig
+arm                          gemini_defconfig
+arm                         bcm2835_defconfig
+mips                          ath79_defconfig
+mips                 decstation_r4k_defconfig
+mips                         rt305x_defconfig
+nios2                         3c120_defconfig
+mips                            gpr_defconfig
+arm                          pxa168_defconfig
+sparc64                          allyesconfig
+arm                          moxart_defconfig
+arm                            mps2_defconfig
+m68k                          multi_defconfig
+sh                          rsk7269_defconfig
+m68k                        m5307c3_defconfig
+mips                         bigsur_defconfig
+arm                       versatile_defconfig
+m68k                        stmark2_defconfig
+arm                           efm32_defconfig
+powerpc                 mpc8272_ads_defconfig
+um                            kunit_defconfig
+arm                              alldefconfig
+sh                           se7705_defconfig
+xtensa                          iss_defconfig
+i386                              allnoconfig
+i386                             allyesconfig
+i386                                defconfig
+i386                              debian-10.3
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                              allnoconfig
+m68k                           sun3_defconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+nios2                            allyesconfig
+openrisc                            defconfig
+c6x                              allyesconfig
+c6x                               allnoconfig
+nds32                               defconfig
+nds32                             allnoconfig
+csky                             allyesconfig
+csky                                defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+h8300                            allmodconfig
+xtensa                              defconfig
+arc                                 defconfig
+sh                                allnoconfig
+microblaze                        allnoconfig
+arc                              allyesconfig
+sh                               allmodconfig
+mips                             allyesconfig
+mips                              allnoconfig
+mips                             allmodconfig
+parisc                            allnoconfig
+parisc                           allyesconfig
+parisc                           allmodconfig
+powerpc                          allyesconfig
+powerpc                          rhel-kconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+powerpc                             defconfig
+i386                 randconfig-a001-20200706
+i386                 randconfig-a002-20200706
+i386                 randconfig-a006-20200706
+i386                 randconfig-a004-20200706
+i386                 randconfig-a005-20200706
+i386                 randconfig-a003-20200706
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+s390                             allyesconfig
+s390                              allnoconfig
+s390                             allmodconfig
+s390                                defconfig
+sparc                               defconfig
+sparc64                             defconfig
+sparc64                           allnoconfig
+sparc                            allyesconfig
+sparc64                          allmodconfig
+um                                allnoconfig
+um                                  defconfig
+um                               allmodconfig
+um                               allyesconfig
+x86_64                               rhel-7.6
+x86_64                    rhel-7.6-kselftests
+x86_64                               rhel-8.3
+x86_64                                  kexec
+x86_64                                   rhel
+x86_64                         rhel-7.2-clear
+x86_64                                    lkp
+x86_64                              fedora-25
+
 ---
-Changes since v4:
- - new patch
-
- drivers/mfd/simple-mfd-i2c.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2c.c
-index 1fdca89964b1..c3556c88aa13 100644
---- a/drivers/mfd/simple-mfd-i2c.c
-+++ b/drivers/mfd/simple-mfd-i2c.c
-@@ -37,6 +37,7 @@ static int simple_mfd_i2c_probe(struct i2c_client *i2c)
- }
- 
- static const struct of_device_id simple_mfd_i2c_of_match[] = {
-+	{ .compatible = "kontron,sl28cpld-r1" },
- 	{}
- };
- 
--- 
-2.20.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
