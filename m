@@ -2,48 +2,48 @@ Return-Path: <SRS0=NDU9=AR=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF1C5C433DF
-	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jul 2020 19:10:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60F19C433DF
+	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jul 2020 19:11:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AF552206CD
-	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jul 2020 19:10:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 42AFB206CD
+	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jul 2020 19:11:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725987AbgGFTKi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 6 Jul 2020 15:10:38 -0400
-Received: from mga05.intel.com ([192.55.52.43]:7056 "EHLO mga05.intel.com"
+        id S1725987AbgGFTLi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 6 Jul 2020 15:11:38 -0400
+Received: from mga01.intel.com ([192.55.52.88]:53894 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725953AbgGFTKi (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 6 Jul 2020 15:10:38 -0400
-IronPort-SDR: YYCF7VkUTv0inwQ6SWdT3h0QI7RABugpDf8KB3gDaFCKUjdVOgNn6YSqsufw2vthmANd2YIXic
- 1BZNxSL3Aeug==
-X-IronPort-AV: E=McAfee;i="6000,8403,9674"; a="232344187"
+        id S1725953AbgGFTLh (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 6 Jul 2020 15:11:37 -0400
+IronPort-SDR: Q0ivueFAKWUtQxisK9epp3Q1baheOdhLADI4Ou+TLsUDbo/gdPlgnqBBh7wfUrrj/r7mDodEbg
+ 5zgrGaceSA9g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9674"; a="165554258"
 X-IronPort-AV: E=Sophos;i="5.75,320,1589266800"; 
-   d="scan'208";a="232344187"
+   d="scan'208";a="165554258"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2020 12:10:37 -0700
-IronPort-SDR: emJBK42coOMpWvEdgrACigrAT3BI0XZ4GyE3GGqmKAzVCUye9MTcPc1SLl1AQwcJ92CxrL4FXV
- lTSFIQMgqZgw==
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2020 12:11:37 -0700
+IronPort-SDR: /AgI3fQsZDI6VqVdiDwzUfGt/5hPke79fiNFurlQWaA5MvB34uXpQNTWPh5jmfKwY0LZmryT/3
+ 0VbkMi3vE72A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.75,320,1589266800"; 
-   d="scan'208";a="323298060"
+   d="scan'208";a="314047069"
 Received: from lkp-server01.sh.intel.com (HELO 82346ce9ac16) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 06 Jul 2020 12:10:35 -0700
+  by orsmga008.jf.intel.com with ESMTP; 06 Jul 2020 12:11:35 -0700
 Received: from kbuild by 82346ce9ac16 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1jsWVf-0000LG-0c; Mon, 06 Jul 2020 19:10:35 +0000
-Date:   Tue, 07 Jul 2020 03:10:31 +0800
+        id 1jsWWd-0000LJ-7Y; Mon, 06 Jul 2020 19:11:35 +0000
+Date:   Tue, 07 Jul 2020 03:10:35 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon] BUILD SUCCESS
- bc4071aafcf4d0535ee423b69167696d6c03207d
-Message-ID: <5f037727.Bq5oyo2DdWwC+c1X%lkp@intel.com>
+Subject: [hwmon:hwmon-next] BUILD SUCCESS
+ a7cdc9f999ce7d0409ae7f7c0ba5886f737eb1c9
+Message-ID: <5f03772b.I+hoHlGQ7682nsqI%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -53,8 +53,8 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon
-branch HEAD: bc4071aafcf4d0535ee423b69167696d6c03207d  hwmon: (aspeed-pwm-tacho) Avoid possible buffer overflow
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon-next
+branch HEAD: a7cdc9f999ce7d0409ae7f7c0ba5886f737eb1c9  hwmon: (tmmp513) Replace HTTP links with HTTPS links
 
 elapsed time: 818m
 
@@ -192,9 +192,9 @@ sparc64                             defconfig
 sparc64                           allnoconfig
 sparc                            allyesconfig
 sparc64                          allmodconfig
+um                               allmodconfig
 um                                allnoconfig
 um                                  defconfig
-um                               allmodconfig
 um                               allyesconfig
 x86_64                               rhel-7.6
 x86_64                    rhel-7.6-kselftests
