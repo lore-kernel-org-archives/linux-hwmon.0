@@ -2,205 +2,332 @@ Return-Path: <SRS0=NDU9=AR=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	LONGWORDS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F65FC433DF
-	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jul 2020 17:34:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3CB8C433E0
+	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jul 2020 17:54:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 13C22206E6
-	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jul 2020 17:34:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CFA5B206DF
+	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jul 2020 17:54:37 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LN9P2bMi"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729569AbgGFReD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 6 Jul 2020 13:34:03 -0400
-Received: from mga09.intel.com ([134.134.136.24]:21091 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729297AbgGFReD (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 6 Jul 2020 13:34:03 -0400
-IronPort-SDR: LPpVwbdXm4sltUShreUqjrGbY0q3xbh1GNtX5v6swlQPgE/OGcqhrl3DYBk4MMXkB/Jd2IflWi
- Au+gDfL5YB7g==
-X-IronPort-AV: E=McAfee;i="6000,8403,9673"; a="148967416"
-X-IronPort-AV: E=Sophos;i="5.75,320,1589266800"; 
-   d="scan'208";a="148967416"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2020 10:34:02 -0700
-IronPort-SDR: 0HtwKYc61V7owIVT4+Ezh0DoSnhL8jdeAuhyvSRr6c/HrJdYgcz0WGPixA9LwSU9cLmPZ24Rl9
- OhZTuctwsRWA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,320,1589266800"; 
-   d="scan'208";a="314026248"
-Received: from lkp-server01.sh.intel.com (HELO 82346ce9ac16) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 06 Jul 2020 10:34:01 -0700
-Received: from kbuild by 82346ce9ac16 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1jsV0C-0000J2-Rr; Mon, 06 Jul 2020 17:34:00 +0000
-Date:   Tue, 07 Jul 2020 01:33:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:watchdog-next] BUILD SUCCESS
- ecd188eeff89191685b651e270bcb6266e658bcf
-Message-ID: <5f036063.aizPjcNp81b6foZN%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+        id S1729651AbgGFRyh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 6 Jul 2020 13:54:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59550 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729478AbgGFRyh (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 6 Jul 2020 13:54:37 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0857C061755
+        for <linux-hwmon@vger.kernel.org>; Mon,  6 Jul 2020 10:54:36 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id c4so21466064plo.6
+        for <linux-hwmon@vger.kernel.org>; Mon, 06 Jul 2020 10:54:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=W0KT7MUBp4ULzA/lrz9MNjkq65gb+iqSXVPHPYHRdns=;
+        b=LN9P2bMipuAjtve6DM+6REHBKjQce98SrGd/0YHWKaOWQfnz8cdLEKTSIyJuG6nrKh
+         Kaq3M6nxCOAoAWbR2uJG+bgFctKsIwe+p/b0Eu/H3mjcg+6nemWh4CR2BHA+cIQqHvRV
+         4DA4rUU5s+s1lAGsCVVpi5FYh1kMJgKR1rBAX2y/zLJfhUjQQPXar2FZBK0hdjKghxac
+         wGugPVv72bFzlzVvRagYTA/xeKqna1XP3jTKJaxuhBI/P6aBb6SQwAeeSihvoanXRmKE
+         jFruNJFa0ebEimxHqgLfHPhP/Dhdg0LUvT5dMkO+/juPFN/3uRn/EYGOjkvNqPLkW7kp
+         39ZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=W0KT7MUBp4ULzA/lrz9MNjkq65gb+iqSXVPHPYHRdns=;
+        b=ELiXCOxJotcTdDkB1Ypgv4WhlI+F1gWA949bur89DmsgevJnlpew17Jt0a1241YQBr
+         F4cteO9DKtR1OlEmSl02vd/kAdMj+KJxc5chOHisvX2J6tA1vAEFjsmGgyLxXnxxGMXM
+         9UxCjqXZJi0GZqEcK/BKqlth0QRM1iqo+AmRmApw8jIq8RrqV6keKNlkhCFbMH77a+Qk
+         antGJC7JCmfvvcVTfilNWAon9r+Bd0sgVB1Q9W2+1sqoRwuuf2disv/liY5OB/a7YRuW
+         9I1QhwD/sDpD0FNw5v/GihLPzx40O7qfFjHu9md0XenF1JHBHkuLyzhDVNn8slUJdu8+
+         MeMA==
+X-Gm-Message-State: AOAM532vAB0Mew4TMFgtSVwiNrvpm31XEvGzLHBuK18a99Sge03qev/V
+        XZELbBhG70KDNSL72/DZgsz2cL8rQBA1bDyX
+X-Google-Smtp-Source: ABdhPJx5xIqXhKVVf4e6pEmntrife0SA3xqyLciFIZhRHxFkyT2tuYJjgnqRhIDVTpQc0tMvrOwXRxqs95QEUj92
+X-Received: by 2002:aa7:8298:: with SMTP id s24mr47519552pfm.21.1594058076399;
+ Mon, 06 Jul 2020 10:54:36 -0700 (PDT)
+Date:   Mon,  6 Jul 2020 17:54:33 +0000
+In-Reply-To: <20200703010611.GA100794@roeck-us.net>
+Message-Id: <20200706175433.1948648-1-linchuyuan@google.com>
+Mime-Version: 1.0
+References: <20200703010611.GA100794@roeck-us.net>
+X-Mailer: git-send-email 2.27.0.212.ge8ba1cc988-goog
+Subject: [PATCH] hwmon:max6697: Allow max6581 to create tempX_offset
+From:   Chu Lin <linchuyuan@google.com>
+To:     linux@roeck-us.net
+Cc:     belgaied@google.com, jasonling@google.com, jdelvare@suse.com,
+        linchuyuan@google.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zhongqil@google.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  watchdog-next
-branch HEAD: ecd188eeff89191685b651e270bcb6266e658bcf  drm/aspeed: Call drm_fbdev_generic_setup after drm_dev_register
+Per max6581, reg 4d and reg 4e is used for temperature read offset.
+This patch will let the user specify the temperature read offset for
+max6581. This patch is tested on max6581 and only applies to max6581.
 
-elapsed time: 721m
+Testing:
+echo 16250 > temp2_offset
+cat temp2_offset
+16250
 
-configs tested: 136
-configs skipped: 9
+echo 17500 > temp3_offset
+cat temp3_offset
+17500
+cat temp4_offset
+0
+cat temp2_offset
+17500
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+echo 0 > temp2_offset
+cat temp2_offset
+0
+cat temp3_offset
+17500
 
-arm                                 defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                               allnoconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm64                            allmodconfig
-arm64                             allnoconfig
-arm                           corgi_defconfig
-mips                     loongson1b_defconfig
-arm                           spitz_defconfig
-arm                             ezx_defconfig
-sh                                  defconfig
-arm                      tct_hammer_defconfig
-powerpc64                           defconfig
-sh                        dreamcast_defconfig
-arm                         orion5x_defconfig
-mips                           ip22_defconfig
-sh                      rts7751r2d1_defconfig
-parisc                              defconfig
-arm                         s3c6400_defconfig
-arm                            hisi_defconfig
-powerpc64                        alldefconfig
-arc                      axs103_smp_defconfig
-mips                          rm200_defconfig
-alpha                               defconfig
-riscv                    nommu_k210_defconfig
-mips                           jazz_defconfig
-riscv                               defconfig
-sh                          landisk_defconfig
-powerpc                      ppc6xx_defconfig
-mips                          ath25_defconfig
-h8300                               defconfig
-sh                          r7785rp_defconfig
-openrisc                         allyesconfig
-sparc                            alldefconfig
-mips                  mips_paravirt_defconfig
-sh                     sh7710voipgw_defconfig
-nios2                            alldefconfig
-m68k                            q40_defconfig
-mips                      malta_kvm_defconfig
-sh                        edosk7760_defconfig
-s390                          debug_defconfig
-c6x                        evmc6457_defconfig
-arm                          gemini_defconfig
-arm                         bcm2835_defconfig
-mips                          ath79_defconfig
-mips                 decstation_r4k_defconfig
-mips                         rt305x_defconfig
-nios2                         3c120_defconfig
-mips                            gpr_defconfig
-arm                          pxa168_defconfig
-sparc64                          allyesconfig
-arm                          moxart_defconfig
-arm                            mps2_defconfig
-m68k                          multi_defconfig
-arm                           efm32_defconfig
-powerpc                 mpc8272_ads_defconfig
-arm                       versatile_defconfig
-um                            kunit_defconfig
-arm                              alldefconfig
-sh                           se7705_defconfig
-xtensa                          iss_defconfig
-i386                              allnoconfig
-i386                             allyesconfig
-i386                                defconfig
-i386                              debian-10.3
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                              allnoconfig
-m68k                           sun3_defconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-nios2                            allyesconfig
-openrisc                            defconfig
-c6x                              allyesconfig
-c6x                               allnoconfig
-nds32                               defconfig
-nds32                             allnoconfig
-csky                             allyesconfig
-csky                                defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-h8300                            allmodconfig
-xtensa                              defconfig
-arc                                 defconfig
-sh                                allnoconfig
-microblaze                        allnoconfig
-arc                              allyesconfig
-sh                               allmodconfig
-mips                             allyesconfig
-mips                              allnoconfig
-mips                             allmodconfig
-parisc                            allnoconfig
-parisc                           allyesconfig
-parisc                           allmodconfig
-powerpc                          allyesconfig
-powerpc                          rhel-kconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-powerpc                             defconfig
-i386                 randconfig-a001-20200706
-i386                 randconfig-a002-20200706
-i386                 randconfig-a006-20200706
-i386                 randconfig-a004-20200706
-i386                 randconfig-a005-20200706
-i386                 randconfig-a003-20200706
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-s390                             allyesconfig
-s390                              allnoconfig
-s390                             allmodconfig
-s390                                defconfig
-sparc                               defconfig
-sparc64                             defconfig
-sparc64                           allnoconfig
-sparc                            allyesconfig
-sparc64                          allmodconfig
-um                                allnoconfig
-um                                  defconfig
-um                               allmodconfig
-um                               allyesconfig
-x86_64                               rhel-7.6
-x86_64                    rhel-7.6-kselftests
-x86_64                               rhel-8.3
-x86_64                                  kexec
-x86_64                                   rhel
-x86_64                         rhel-7.2-clear
-x86_64                                    lkp
-x86_64                              fedora-25
+echo -0 > temp2_offset
+cat temp2_offset
+0
 
+echo -100000 > temp2_offset
+cat temp2_input
+4875
+
+echo 10000 > temp2_offset
+cat temp2_input
+47125
+
+echo -2000 > temp2_offset
+cat temp2_input
+34875
+
+echo -0 > temp2_offset
+cat temp2_input
+37000
+
+Signed-off-by: Chu Lin <linchuyuan@google.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/hwmon/max6697.c | 100 ++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 96 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/hwmon/max6697.c b/drivers/hwmon/max6697.c
+index da43f7ae3de1..4b71b3716f22 100644
+--- a/drivers/hwmon/max6697.c
++++ b/drivers/hwmon/max6697.c
+@@ -65,6 +65,9 @@ static const u8 MAX6697_REG_CRIT[] = {
+ #define MAX6581_REG_IDEALITY_SELECT	0x4c
+ #define MAX6581_REG_OFFSET		0x4d
+ #define MAX6581_REG_OFFSET_SELECT	0x4e
++#define MAX6581_OFFSET_MIN		-31750
++#define MAX6581_OFFSET_MAX		31750
++
+ 
+ #define MAX6697_CONV_TIME		156	/* ms per channel, worst case */
+ 
+@@ -180,6 +183,11 @@ static const struct max6697_chip_data max6697_chip_data[] = {
+ 	},
+ };
+ 
++static inline int max6581_offset_to_millic(int val)
++{
++	return val & (1 << 7) ? (val | 0xffffff00) * 250 : val * 250;
++}
++
+ static struct max6697_data *max6697_update_device(struct device *dev)
+ {
+ 	struct max6697_data *data = dev_get_drvdata(dev);
+@@ -325,6 +333,69 @@ static ssize_t temp_store(struct device *dev,
+ 	return ret < 0 ? ret : count;
+ }
+ 
++static ssize_t offset_store(struct device *dev,
++			    struct device_attribute *devattr, const char *buf,
++			    size_t count)
++{
++	long temp;
++	u8 val, select;
++	int ret, index;
++	struct max6697_data *data;
++
++	index = to_sensor_dev_attr(devattr)->index;
++	data = dev_get_drvdata(dev);
++	select = i2c_smbus_read_byte_data(data->client,
++					  MAX6581_REG_OFFSET_SELECT);
++	if (select < 0)
++		return select;
++	ret = kstrtol(buf, 10, &temp);
++	if (ret < 0)
++		return ret;
++	/* disable the offset for channel */
++	if (temp == 0) {
++		ret = i2c_smbus_write_byte_data(data->client,
++						MAX6581_REG_OFFSET_SELECT,
++						select & ~(1 << (index - 1)));
++		return ret < 0 ? ret : count;
++	}
++	temp = clamp_val(temp, MAX6581_OFFSET_MIN, MAX6581_OFFSET_MAX);
++	val = DIV_ROUND_CLOSEST(temp, 250);
++	mutex_lock(&data->update_lock);
++	ret = i2c_smbus_write_byte_data(data->client,
++					MAX6581_REG_OFFSET_SELECT,
++					select | (1 << (index - 1)));
++	if (ret < 0)
++		return ret;
++	ret = i2c_smbus_write_byte_data(data->client,
++					MAX6581_REG_OFFSET,
++					val);
++	mutex_unlock(&data->update_lock);
++	return ret < 0 ? ret : count;
++}
++
++static ssize_t offset_show(struct device *dev, struct device_attribute *devattr,
++			   char *buf)
++{
++	int select, ret, index;
++	struct max6697_data *data;
++
++	index = to_sensor_dev_attr(devattr)->index;
++	data = dev_get_drvdata(dev);
++	select = i2c_smbus_read_byte_data(data->client,
++					  MAX6581_REG_OFFSET_SELECT);
++	if (select < 0)
++		return select;
++	if (select & (1 << (index - 1))) {
++		ret = i2c_smbus_read_byte_data(data->client,
++					       MAX6581_REG_OFFSET);
++		if (ret < 0)
++			return ret;
++	} else {
++		return sprintf(buf, "%d\n", 0);
++	}
++	return sprintf(buf, "%d\n", max6581_offset_to_millic(ret));
++}
++
+ static SENSOR_DEVICE_ATTR_RO(temp1_input, temp_input, 0);
+ static SENSOR_DEVICE_ATTR_2_RW(temp1_max, temp, 0, MAX6697_TEMP_MAX);
+ static SENSOR_DEVICE_ATTR_2_RW(temp1_crit, temp, 0, MAX6697_TEMP_CRIT);
+@@ -383,6 +454,15 @@ static SENSOR_DEVICE_ATTR_RO(temp6_fault, alarm, 5);
+ static SENSOR_DEVICE_ATTR_RO(temp7_fault, alarm, 6);
+ static SENSOR_DEVICE_ATTR_RO(temp8_fault, alarm, 7);
+ 
++/* There is no offset for local temperature so starting from temp2 */
++static SENSOR_DEVICE_ATTR_RW(temp2_offset, offset, 1);
++static SENSOR_DEVICE_ATTR_RW(temp3_offset, offset, 2);
++static SENSOR_DEVICE_ATTR_RW(temp4_offset, offset, 3);
++static SENSOR_DEVICE_ATTR_RW(temp5_offset, offset, 4);
++static SENSOR_DEVICE_ATTR_RW(temp6_offset, offset, 5);
++static SENSOR_DEVICE_ATTR_RW(temp7_offset, offset, 6);
++static SENSOR_DEVICE_ATTR_RW(temp8_offset, offset, 7);
++
+ static DEVICE_ATTR(dummy, 0, NULL, NULL);
+ 
+ static umode_t max6697_is_visible(struct kobject *kobj, struct attribute *attr,
+@@ -391,8 +471,8 @@ static umode_t max6697_is_visible(struct kobject *kobj, struct attribute *attr,
+ 	struct device *dev = container_of(kobj, struct device, kobj);
+ 	struct max6697_data *data = dev_get_drvdata(dev);
+ 	const struct max6697_chip_data *chip = data->chip;
+-	int channel = index / 6;	/* channel number */
+-	int nr = index % 6;		/* attribute index within channel */
++	int channel = index / 8;	/* channel number */
++	int nr = index % 7;		/* attribute index within channel */
+ 
+ 	if (channel >= chip->channels)
+ 		return 0;
+@@ -401,6 +481,10 @@ static umode_t max6697_is_visible(struct kobject *kobj, struct attribute *attr,
+ 		return 0;
+ 	if (nr == 5 && !(chip->have_fault & (1 << channel)))
+ 		return 0;
++	/* offset reg is only supported on max6581 remote channels */
++	if (nr == 6)
++		if (data->type != max6581 || channel == 0)
++			return 0;
+ 
+ 	return attr->mode;
+ }
+@@ -417,6 +501,7 @@ static struct attribute *max6697_attributes[] = {
+ 	&sensor_dev_attr_temp1_crit.dev_attr.attr,
+ 	&sensor_dev_attr_temp1_crit_alarm.dev_attr.attr,
+ 	&dev_attr_dummy.attr,
++	&dev_attr_dummy.attr,
+ 
+ 	&sensor_dev_attr_temp2_input.dev_attr.attr,
+ 	&sensor_dev_attr_temp2_max.dev_attr.attr,
+@@ -424,6 +509,7 @@ static struct attribute *max6697_attributes[] = {
+ 	&sensor_dev_attr_temp2_crit.dev_attr.attr,
+ 	&sensor_dev_attr_temp2_crit_alarm.dev_attr.attr,
+ 	&sensor_dev_attr_temp2_fault.dev_attr.attr,
++	&sensor_dev_attr_temp2_offset.dev_attr.attr,
+ 
+ 	&sensor_dev_attr_temp3_input.dev_attr.attr,
+ 	&sensor_dev_attr_temp3_max.dev_attr.attr,
+@@ -431,6 +517,7 @@ static struct attribute *max6697_attributes[] = {
+ 	&sensor_dev_attr_temp3_crit.dev_attr.attr,
+ 	&sensor_dev_attr_temp3_crit_alarm.dev_attr.attr,
+ 	&sensor_dev_attr_temp3_fault.dev_attr.attr,
++	&sensor_dev_attr_temp3_offset.dev_attr.attr,
+ 
+ 	&sensor_dev_attr_temp4_input.dev_attr.attr,
+ 	&sensor_dev_attr_temp4_max.dev_attr.attr,
+@@ -438,6 +525,7 @@ static struct attribute *max6697_attributes[] = {
+ 	&sensor_dev_attr_temp4_crit.dev_attr.attr,
+ 	&sensor_dev_attr_temp4_crit_alarm.dev_attr.attr,
+ 	&sensor_dev_attr_temp4_fault.dev_attr.attr,
++	&sensor_dev_attr_temp4_offset.dev_attr.attr,
+ 
+ 	&sensor_dev_attr_temp5_input.dev_attr.attr,
+ 	&sensor_dev_attr_temp5_max.dev_attr.attr,
+@@ -445,6 +533,7 @@ static struct attribute *max6697_attributes[] = {
+ 	&sensor_dev_attr_temp5_crit.dev_attr.attr,
+ 	&sensor_dev_attr_temp5_crit_alarm.dev_attr.attr,
+ 	&sensor_dev_attr_temp5_fault.dev_attr.attr,
++	&sensor_dev_attr_temp5_offset.dev_attr.attr,
+ 
+ 	&sensor_dev_attr_temp6_input.dev_attr.attr,
+ 	&sensor_dev_attr_temp6_max.dev_attr.attr,
+@@ -452,6 +541,7 @@ static struct attribute *max6697_attributes[] = {
+ 	&sensor_dev_attr_temp6_crit.dev_attr.attr,
+ 	&sensor_dev_attr_temp6_crit_alarm.dev_attr.attr,
+ 	&sensor_dev_attr_temp6_fault.dev_attr.attr,
++	&sensor_dev_attr_temp6_offset.dev_attr.attr,
+ 
+ 	&sensor_dev_attr_temp7_input.dev_attr.attr,
+ 	&sensor_dev_attr_temp7_max.dev_attr.attr,
+@@ -459,6 +549,7 @@ static struct attribute *max6697_attributes[] = {
+ 	&sensor_dev_attr_temp7_crit.dev_attr.attr,
+ 	&sensor_dev_attr_temp7_crit_alarm.dev_attr.attr,
+ 	&sensor_dev_attr_temp7_fault.dev_attr.attr,
++	&sensor_dev_attr_temp7_offset.dev_attr.attr,
+ 
+ 	&sensor_dev_attr_temp8_input.dev_attr.attr,
+ 	&sensor_dev_attr_temp8_max.dev_attr.attr,
+@@ -466,6 +557,7 @@ static struct attribute *max6697_attributes[] = {
+ 	&sensor_dev_attr_temp8_crit.dev_attr.attr,
+ 	&sensor_dev_attr_temp8_crit_alarm.dev_attr.attr,
+ 	&sensor_dev_attr_temp8_fault.dev_attr.attr,
++	&sensor_dev_attr_temp8_offset.dev_attr.attr,
+ 	NULL
+ };
+ 
+@@ -502,8 +594,8 @@ static void max6697_get_config_of(struct device_node *node,
+ 	}
+ 	prop = of_get_property(node, "transistor-ideality", &len);
+ 	if (prop && len == 2 * sizeof(u32)) {
+-			pdata->ideality_mask = be32_to_cpu(prop[0]);
+-			pdata->ideality_value = be32_to_cpu(prop[1]);
++		pdata->ideality_mask = be32_to_cpu(prop[0]);
++		pdata->ideality_value = be32_to_cpu(prop[1]);
+ 	}
+ }
+ 
+-- 
+2.27.0.212.ge8ba1cc988-goog
+
