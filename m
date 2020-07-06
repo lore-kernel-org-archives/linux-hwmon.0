@@ -7,36 +7,36 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56FA0C433E1
-	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jul 2020 17:57:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A252C433E1
+	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jul 2020 17:57:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3B1AB2078D
-	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jul 2020 17:57:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 52C6620672
+	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jul 2020 17:57:49 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="h02ibAcm"
+	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="VeiNdRNC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729698AbgGFR5e (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 6 Jul 2020 13:57:34 -0400
-Received: from ssl.serverraum.org ([176.9.125.105]:55605 "EHLO
+        id S1729764AbgGFR5m (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 6 Jul 2020 13:57:42 -0400
+Received: from ssl.serverraum.org ([176.9.125.105]:44029 "EHLO
         ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729568AbgGFR5d (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 6 Jul 2020 13:57:33 -0400
+        with ESMTP id S1729746AbgGFR5l (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 6 Jul 2020 13:57:41 -0400
 Received: from apollo.fritz.box (unknown [IPv6:2a02:810c:c200:2e91:6257:18ff:fec4:ca34])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 419CC22FA7;
-        Mon,  6 Jul 2020 19:57:28 +0200 (CEST)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 575C223078;
+        Mon,  6 Jul 2020 19:57:38 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1594058248;
+        t=1594058258;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=U7LW/eI8YbctTo76n912stHGHfBPgnLPBHt7/yzZRBc=;
-        b=h02ibAcmWeKbv/xUuxYAnZjzQGWkg4kBokAFcMp+/4geySFAFQumnXa+MO6BZEQmDQ55QC
-        o9CnYyqwhVchdssszVQokRbiBwItJ9704qccLCLVzhrEyWi5uGaaZrv8MG6FupnhY3XD9f
-        8514gR6YRNP+4sVcz8iPsev3ahACcRw=
+        bh=c5LF50IP0lsdbsBcvX/jwWXNVBRMCu+k4mhHhigwj2o=;
+        b=VeiNdRNCumveFMkOVh5JNpW6CruwMpZaitMljx4kAz+pf8jWPy9hDyd06U3fiysDvRuGFV
+        BbUZB534Xnufy/LDDGmNDpaTVvD3VQLMYgWuWY9u6gVIaotXmrdlXo83e6zDnVQLCZFk0K
+        r6etfy1jd5BbY6oPWCRYpr4P4QkN468=
 From:   Michael Walle <michael@walle.cc>
 To:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
@@ -59,9 +59,9 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Michael Walle <michael@walle.cc>
-Subject: [PATCH v5 01/13] regmap-irq: use fwnode instead of device node in add_irq_chip()
-Date:   Mon,  6 Jul 2020 19:53:41 +0200
-Message-Id: <20200706175353.16404-2-michael@walle.cc>
+Subject: [PATCH v5 13/13] arm64: dts: freescale: sl28: enable fan support
+Date:   Mon,  6 Jul 2020 19:53:53 +0200
+Message-Id: <20200706175353.16404-14-michael@walle.cc>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200706175353.16404-1-michael@walle.cc>
 References: <20200706175353.16404-1-michael@walle.cc>
@@ -73,205 +73,40 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Convert the argument to the newer fwnode_handle instead a device tree
-node. Fortunately, there are no users for now. So this is an easy
-change.
+Add a pwm-fan mapped to the PWM channel 0 which is connected to the
+fan connector of the carrier.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
 ---
-Mark, after this patch is reviewed, could already pick it, so it is
-less likely, others will use the old regmap_add_irq_chip_np() variant?
-
 Changes since v4:
- - new patch, suggested by Andy
+ - none
 
- drivers/base/regmap/regmap-irq.c | 53 +++++++++++++++++---------------
- include/linux/regmap.h           | 21 +++++++------
- 2 files changed, 41 insertions(+), 33 deletions(-)
+Changes since v3:
+ - see cover letter
 
-diff --git a/drivers/base/regmap/regmap-irq.c b/drivers/base/regmap/regmap-irq.c
-index 4340e1d268b6..369a57e6f89d 100644
---- a/drivers/base/regmap/regmap-irq.c
-+++ b/drivers/base/regmap/regmap-irq.c
-@@ -541,9 +541,9 @@ static const struct irq_domain_ops regmap_domain_ops = {
- };
+ .../dts/freescale/fsl-ls1028a-kontron-sl28-var3-ads2.dts | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var3-ads2.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var3-ads2.dts
+index 0973a6a45217..c45d7b40e374 100644
+--- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var3-ads2.dts
++++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var3-ads2.dts
+@@ -15,6 +15,15 @@
+ 	compatible = "kontron,sl28-var3-ads2", "kontron,sl28-var3",
+ 		     "kontron,sl28", "fsl,ls1028a";
  
- /**
-- * regmap_add_irq_chip_np() - Use standard regmap IRQ controller handling
-+ * regmap_add_irq_chip_fwnode() - Use standard regmap IRQ controller handling
-  *
-- * @np: The device_node where the IRQ domain should be added to.
-+ * @fwnode: The firmware node where the IRQ domain should be added to.
-  * @map: The regmap for the device.
-  * @irq: The IRQ the device uses to signal interrupts.
-  * @irq_flags: The IRQF_ flags to use for the primary interrupt.
-@@ -557,10 +557,11 @@ static const struct irq_domain_ops regmap_domain_ops = {
-  * register cache.  The chip driver is responsible for restoring the
-  * register values used by the IRQ controller over suspend and resume.
-  */
--int regmap_add_irq_chip_np(struct device_node *np, struct regmap *map, int irq,
--			   int irq_flags, int irq_base,
--			   const struct regmap_irq_chip *chip,
--			   struct regmap_irq_chip_data **data)
-+int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
-+			       struct regmap *map, int irq,
-+			       int irq_flags, int irq_base,
-+			       const struct regmap_irq_chip *chip,
-+			       struct regmap_irq_chip_data **data)
- {
- 	struct regmap_irq_chip_data *d;
- 	int i;
-@@ -771,10 +772,12 @@ int regmap_add_irq_chip_np(struct device_node *np, struct regmap *map, int irq,
- 	}
- 
- 	if (irq_base)
--		d->domain = irq_domain_add_legacy(np, chip->num_irqs, irq_base,
-+		d->domain = irq_domain_add_legacy(to_of_node(fwnode),
-+						  chip->num_irqs, irq_base,
- 						  0, &regmap_domain_ops, d);
- 	else
--		d->domain = irq_domain_add_linear(np, chip->num_irqs,
-+		d->domain = irq_domain_add_linear(to_of_node(fwnode),
-+						  chip->num_irqs,
- 						  &regmap_domain_ops, d);
- 	if (!d->domain) {
- 		dev_err(map->dev, "Failed to create IRQ domain\n");
-@@ -808,7 +811,7 @@ int regmap_add_irq_chip_np(struct device_node *np, struct regmap *map, int irq,
- 	kfree(d);
- 	return ret;
- }
--EXPORT_SYMBOL_GPL(regmap_add_irq_chip_np);
-+EXPORT_SYMBOL_GPL(regmap_add_irq_chip_fwnode);
- 
- /**
-  * regmap_add_irq_chip() - Use standard regmap IRQ controller handling
-@@ -822,15 +825,15 @@ EXPORT_SYMBOL_GPL(regmap_add_irq_chip_np);
-  *
-  * Returns 0 on success or an errno on failure.
-  *
-- * This is the same as regmap_add_irq_chip_np, except that the device
-+ * This is the same as regmap_add_irq_chip_fwnode, except that the firmware
-  * node of the regmap is used.
-  */
- int regmap_add_irq_chip(struct regmap *map, int irq, int irq_flags,
- 			int irq_base, const struct regmap_irq_chip *chip,
- 			struct regmap_irq_chip_data **data)
- {
--	return regmap_add_irq_chip_np(map->dev->of_node, map, irq, irq_flags,
--				      irq_base, chip, data);
-+	return regmap_add_irq_chip_fwnode(dev_fwnode(map->dev), map, irq,
-+					  irq_flags, irq_base, chip, data);
- }
- EXPORT_SYMBOL_GPL(regmap_add_irq_chip);
- 
-@@ -899,10 +902,10 @@ static int devm_regmap_irq_chip_match(struct device *dev, void *res, void *data)
- }
- 
- /**
-- * devm_regmap_add_irq_chip_np() - Resource manager regmap_add_irq_chip_np()
-+ * devm_regmap_add_irq_chip_fwnode() - Resource managed regmap_add_irq_chip_fwnode()
-  *
-  * @dev: The device pointer on which irq_chip belongs to.
-- * @np: The device_node where the IRQ domain should be added to.
-+ * @fwnode: The firmware node where the IRQ domain should be added to.
-  * @map: The regmap for the device.
-  * @irq: The IRQ the device uses to signal interrupts
-  * @irq_flags: The IRQF_ flags to use for the primary interrupt.
-@@ -915,11 +918,12 @@ static int devm_regmap_irq_chip_match(struct device *dev, void *res, void *data)
-  * The &regmap_irq_chip_data will be automatically released when the device is
-  * unbound.
-  */
--int devm_regmap_add_irq_chip_np(struct device *dev, struct device_node *np,
--				struct regmap *map, int irq, int irq_flags,
--				int irq_base,
--				const struct regmap_irq_chip *chip,
--				struct regmap_irq_chip_data **data)
-+int devm_regmap_add_irq_chip_fwnode(struct device *dev,
-+				    struct fwnode_handle *fwnode,
-+				    struct regmap *map, int irq,
-+				    int irq_flags, int irq_base,
-+				    const struct regmap_irq_chip *chip,
-+				    struct regmap_irq_chip_data **data)
- {
- 	struct regmap_irq_chip_data **ptr, *d;
- 	int ret;
-@@ -929,8 +933,8 @@ int devm_regmap_add_irq_chip_np(struct device *dev, struct device_node *np,
- 	if (!ptr)
- 		return -ENOMEM;
- 
--	ret = regmap_add_irq_chip_np(np, map, irq, irq_flags, irq_base,
--				     chip, &d);
-+	ret = regmap_add_irq_chip_fwnode(fwnode, map, irq, irq_flags, irq_base,
-+					 chip, &d);
- 	if (ret < 0) {
- 		devres_free(ptr);
- 		return ret;
-@@ -941,7 +945,7 @@ int devm_regmap_add_irq_chip_np(struct device *dev, struct device_node *np,
- 	*data = d;
- 	return 0;
- }
--EXPORT_SYMBOL_GPL(devm_regmap_add_irq_chip_np);
-+EXPORT_SYMBOL_GPL(devm_regmap_add_irq_chip_fwnode);
- 
- /**
-  * devm_regmap_add_irq_chip() - Resource manager regmap_add_irq_chip()
-@@ -964,8 +968,9 @@ int devm_regmap_add_irq_chip(struct device *dev, struct regmap *map, int irq,
- 			     const struct regmap_irq_chip *chip,
- 			     struct regmap_irq_chip_data **data)
- {
--	return devm_regmap_add_irq_chip_np(dev, map->dev->of_node, map, irq,
--					   irq_flags, irq_base, chip, data);
-+	return devm_regmap_add_irq_chip_fwnode(dev, dev_fwnode(map->dev), map,
-+					       irq, irq_flags, irq_base, chip,
-+					       data);
- }
- EXPORT_SYMBOL_GPL(devm_regmap_add_irq_chip);
- 
-diff --git a/include/linux/regmap.h b/include/linux/regmap.h
-index f4917efed5c3..e3817c097791 100644
---- a/include/linux/regmap.h
-+++ b/include/linux/regmap.h
-@@ -18,6 +18,7 @@
- #include <linux/bug.h>
- #include <linux/lockdep.h>
- #include <linux/iopoll.h>
-+#include <linux/fwnode.h>
- 
- struct module;
- struct clk;
-@@ -1376,21 +1377,23 @@ struct regmap_irq_chip_data;
- int regmap_add_irq_chip(struct regmap *map, int irq, int irq_flags,
- 			int irq_base, const struct regmap_irq_chip *chip,
- 			struct regmap_irq_chip_data **data);
--int regmap_add_irq_chip_np(struct device_node *np, struct regmap *map, int irq,
--			   int irq_flags, int irq_base,
--			   const struct regmap_irq_chip *chip,
--			   struct regmap_irq_chip_data **data);
-+int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
-+			       struct regmap *map, int irq,
-+			       int irq_flags, int irq_base,
-+			       const struct regmap_irq_chip *chip,
-+			       struct regmap_irq_chip_data **data);
- void regmap_del_irq_chip(int irq, struct regmap_irq_chip_data *data);
- 
- int devm_regmap_add_irq_chip(struct device *dev, struct regmap *map, int irq,
- 			     int irq_flags, int irq_base,
- 			     const struct regmap_irq_chip *chip,
- 			     struct regmap_irq_chip_data **data);
--int devm_regmap_add_irq_chip_np(struct device *dev, struct device_node *np,
--				struct regmap *map, int irq, int irq_flags,
--				int irq_base,
--				const struct regmap_irq_chip *chip,
--				struct regmap_irq_chip_data **data);
-+int devm_regmap_add_irq_chip_fwnode(struct device *dev,
-+				    struct fwnode_handle *fwnode,
-+				    struct regmap *map, int irq,
-+				    int irq_flags, int irq_base,
-+				    const struct regmap_irq_chip *chip,
-+				    struct regmap_irq_chip_data **data);
- void devm_regmap_del_irq_chip(struct device *dev, int irq,
- 			      struct regmap_irq_chip_data *data);
- 
++	pwm-fan {
++		compatible = "pwm-fan";
++		cooling-min-state = <0>;
++		cooling-max-state = <3>;
++		#cooling-cells = <2>;
++		pwms = <&sl28cpld_pwm0 0 4000000>;
++		cooling-levels = <1 128 192 255>;
++	};
++
+ 	sound {
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
 -- 
 2.20.1
 
