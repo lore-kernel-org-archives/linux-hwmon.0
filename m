@@ -2,332 +2,234 @@ Return-Path: <SRS0=NDU9=AR=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F3CB8C433E0
-	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jul 2020 17:54:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 716A9C433DF
+	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jul 2020 17:57:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CFA5B206DF
-	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jul 2020 17:54:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2B0F020773
+	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jul 2020 17:57:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LN9P2bMi"
+	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="A13MFhFe"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729651AbgGFRyh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 6 Jul 2020 13:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59550 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729478AbgGFRyh (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 6 Jul 2020 13:54:37 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0857C061755
-        for <linux-hwmon@vger.kernel.org>; Mon,  6 Jul 2020 10:54:36 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id c4so21466064plo.6
-        for <linux-hwmon@vger.kernel.org>; Mon, 06 Jul 2020 10:54:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=W0KT7MUBp4ULzA/lrz9MNjkq65gb+iqSXVPHPYHRdns=;
-        b=LN9P2bMipuAjtve6DM+6REHBKjQce98SrGd/0YHWKaOWQfnz8cdLEKTSIyJuG6nrKh
-         Kaq3M6nxCOAoAWbR2uJG+bgFctKsIwe+p/b0Eu/H3mjcg+6nemWh4CR2BHA+cIQqHvRV
-         4DA4rUU5s+s1lAGsCVVpi5FYh1kMJgKR1rBAX2y/zLJfhUjQQPXar2FZBK0hdjKghxac
-         wGugPVv72bFzlzVvRagYTA/xeKqna1XP3jTKJaxuhBI/P6aBb6SQwAeeSihvoanXRmKE
-         jFruNJFa0ebEimxHqgLfHPhP/Dhdg0LUvT5dMkO+/juPFN/3uRn/EYGOjkvNqPLkW7kp
-         39ZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=W0KT7MUBp4ULzA/lrz9MNjkq65gb+iqSXVPHPYHRdns=;
-        b=ELiXCOxJotcTdDkB1Ypgv4WhlI+F1gWA949bur89DmsgevJnlpew17Jt0a1241YQBr
-         F4cteO9DKtR1OlEmSl02vd/kAdMj+KJxc5chOHisvX2J6tA1vAEFjsmGgyLxXnxxGMXM
-         9UxCjqXZJi0GZqEcK/BKqlth0QRM1iqo+AmRmApw8jIq8RrqV6keKNlkhCFbMH77a+Qk
-         antGJC7JCmfvvcVTfilNWAon9r+Bd0sgVB1Q9W2+1sqoRwuuf2disv/liY5OB/a7YRuW
-         9I1QhwD/sDpD0FNw5v/GihLPzx40O7qfFjHu9md0XenF1JHBHkuLyzhDVNn8slUJdu8+
-         MeMA==
-X-Gm-Message-State: AOAM532vAB0Mew4TMFgtSVwiNrvpm31XEvGzLHBuK18a99Sge03qev/V
-        XZELbBhG70KDNSL72/DZgsz2cL8rQBA1bDyX
-X-Google-Smtp-Source: ABdhPJx5xIqXhKVVf4e6pEmntrife0SA3xqyLciFIZhRHxFkyT2tuYJjgnqRhIDVTpQc0tMvrOwXRxqs95QEUj92
-X-Received: by 2002:aa7:8298:: with SMTP id s24mr47519552pfm.21.1594058076399;
- Mon, 06 Jul 2020 10:54:36 -0700 (PDT)
-Date:   Mon,  6 Jul 2020 17:54:33 +0000
-In-Reply-To: <20200703010611.GA100794@roeck-us.net>
-Message-Id: <20200706175433.1948648-1-linchuyuan@google.com>
-Mime-Version: 1.0
-References: <20200703010611.GA100794@roeck-us.net>
-X-Mailer: git-send-email 2.27.0.212.ge8ba1cc988-goog
-Subject: [PATCH] hwmon:max6697: Allow max6581 to create tempX_offset
-From:   Chu Lin <linchuyuan@google.com>
-To:     linux@roeck-us.net
-Cc:     belgaied@google.com, jasonling@google.com, jdelvare@suse.com,
-        linchuyuan@google.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zhongqil@google.com
-Content-Type: text/plain; charset="UTF-8"
+        id S1729622AbgGFR5d (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 6 Jul 2020 13:57:33 -0400
+Received: from ssl.serverraum.org ([176.9.125.105]:37863 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729413AbgGFR5c (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 6 Jul 2020 13:57:32 -0400
+Received: from apollo.fritz.box (unknown [IPv6:2a02:810c:c200:2e91:6257:18ff:fec4:ca34])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 548A822723;
+        Mon,  6 Jul 2020 19:57:26 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1594058248;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=dk/Ugy/8fVKtX17Ogq8MbVj6edIvzw0hjma/kggDoqI=;
+        b=A13MFhFe/QeCBTyre0GVifMnKPbmoqV6pRyiVgK8C509MI9CUo2c8jgzy9x8VMga9HSIJ/
+        mKl3QcgpjK187xeLGoZ++YwT/QrL4BDhSz11ovze+vL8iD7jmY5k6w1Xkb9YqTEq/gBeIU
+        QDWWq8YRyqEC9RwjXxmlgU2NdlyHUmU=
+From:   Michael Walle <michael@walle.cc>
+To:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH v5 00/13] Add support for Kontron sl28cpld
+Date:   Mon,  6 Jul 2020 19:53:40 +0200
+Message-Id: <20200706175353.16404-1-michael@walle.cc>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam: Yes
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Per max6581, reg 4d and reg 4e is used for temperature read offset.
-This patch will let the user specify the temperature read offset for
-max6581. This patch is tested on max6581 and only applies to max6581.
+The Kontron sl28cpld is a board management chip providing gpio, pwm, fan
+monitoring and an interrupt controller. For now this controller is used on
+the Kontron SMARC-sAL28 board. But because of its flexible nature, it
+might also be used on other boards in the future. The individual blocks
+(like gpio, pwm, etc) are kept intentionally small. The MFD core driver
+then instantiates different (or multiple of the same) blocks. It also
+provides the register layout so it might be updated in the future without a
+device tree change; and support other boards with a different layout or
+functionalities.
 
-Testing:
-echo 16250 > temp2_offset
-cat temp2_offset
-16250
+See also [1] for more information.
 
-echo 17500 > temp3_offset
-cat temp3_offset
-17500
-cat temp4_offset
-0
-cat temp2_offset
-17500
+This is my first take of a MFD driver. I don't know whether the subsystem
+maintainers should only be CCed on the patches which affect the subsystem
+or on all patches for this series. I've chosen the latter so you can get a
+more complete picture.
 
-echo 0 > temp2_offset
-cat temp2_offset
-0
-cat temp3_offset
-17500
+[1] https://lore.kernel.org/linux-devicetree/0e3e8204ab992d75aa07fc36af7e4ab2@walle.cc/
 
-echo -0 > temp2_offset
-cat temp2_offset
-0
+Changes since v4:
+ - see individual patches, suggested by Lee.
 
-echo -100000 > temp2_offset
-cat temp2_input
-4875
+Changes since v3:
+ - use of_platform_populate() to populate internal devices using the
+   internal register offsets as unit-addresses
+ - because we don't use mfd_cells anymore, we cannot use IORESOURCE_REG,
+   but instead parse the reg property in each individual driver
+ - dropped the following patches because they were already merged:
+     gpiolib: Introduce gpiochip_irqchip_add_domain()
+     gpio: add a reusable generic gpio_chip using regmap
+ - dropped the following patches because they are no longer needed:
+     include/linux/ioport.h: add helper to define REG resource constructs
+     mfd: mfd-core: Don't overwrite the dma_mask of the child device
+     mfd: mfd-core: match device tree node against reg property
+ - rephrase commit messages, as suggested by Thomas Gleixner
 
-echo 10000 > temp2_offset
-cat temp2_input
-47125
+Changes since v2:
+As suggested by Guenter Roeck:
+ - added sl28cpld.rst to index.rst
+ - removed sl28cpld_wdt_status()
+ - reverse christmas tree local variable ordering
+ - assign device_property_read_bool() retval directly
+ - introduce WDT_DEFAULT_TIMEOUT and use it if the hardware reports
+   0 as timeout.
+ - set WDOG_HW_RUNNING if applicable
+ - remove platform_set_drvdata() leftover
 
-echo -2000 > temp2_offset
-cat temp2_input
-34875
+As suggested by Bartosz Golaszewski:
+ - don't export gpio_regmap_simple_xlate()
+ - combine local variable declaration of the same type
+ - drop the "struct gpio_regmap_addr", instead use -1 to force an address
+   offset of zero
+ - fix typo
+ - use "struct gpio_regmap_config" pattern, keep "struct gpio_regmap"
+   private. this also means we need a getter/setter for the driver_data
+   element.
 
-echo -0 > temp2_offset
-cat temp2_input
-37000
+As suggested by Linus Walleij:
+ - don't store irq_domain in gpio-regmap. drop to_irq() altogether for now.
+   Instead there is now a new patch which lets us set the irqdomain of the
+   gpiochip_irqchip and use its .to_irq() function. This way we don't have
+   to expose the gpio_chip inside the gpio-regmap to the user.
 
-Signed-off-by: Chu Lin <linchuyuan@google.com>
----
- drivers/hwmon/max6697.c | 100 ++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 96 insertions(+), 4 deletions(-)
+Changes since v1:
+ - use of_match_table in all drivers, needed for automatic module loading,
+   when using OF_MFD_CELL()
+ - add new gpio-regmap.c which adds a generic regmap gpio_chip
+   implementation
+ - new patch for reqmap_irq, so we can reuse its implementation
+ - remove almost any code from gpio-sl28cpld.c, instead use gpio-regmap and
+   regmap-irq
+ - change the handling of the mfd core vs device tree nodes; add a new
+   property "of_reg" to the mfd_cell struct which, when set, is matched to
+   the unit-address of the device tree nodes.
+ - fix sl28cpld watchdog when it is not initialized by the bootloader.
+   Explicitly set the operation mode.
+ - also add support for kontron,assert-wdt-timeout-pin in sl28cpld-wdt.
 
-diff --git a/drivers/hwmon/max6697.c b/drivers/hwmon/max6697.c
-index da43f7ae3de1..4b71b3716f22 100644
---- a/drivers/hwmon/max6697.c
-+++ b/drivers/hwmon/max6697.c
-@@ -65,6 +65,9 @@ static const u8 MAX6697_REG_CRIT[] = {
- #define MAX6581_REG_IDEALITY_SELECT	0x4c
- #define MAX6581_REG_OFFSET		0x4d
- #define MAX6581_REG_OFFSET_SELECT	0x4e
-+#define MAX6581_OFFSET_MIN		-31750
-+#define MAX6581_OFFSET_MAX		31750
-+
- 
- #define MAX6697_CONV_TIME		156	/* ms per channel, worst case */
- 
-@@ -180,6 +183,11 @@ static const struct max6697_chip_data max6697_chip_data[] = {
- 	},
- };
- 
-+static inline int max6581_offset_to_millic(int val)
-+{
-+	return val & (1 << 7) ? (val | 0xffffff00) * 250 : val * 250;
-+}
-+
- static struct max6697_data *max6697_update_device(struct device *dev)
- {
- 	struct max6697_data *data = dev_get_drvdata(dev);
-@@ -325,6 +333,69 @@ static ssize_t temp_store(struct device *dev,
- 	return ret < 0 ? ret : count;
- }
- 
-+static ssize_t offset_store(struct device *dev,
-+			    struct device_attribute *devattr, const char *buf,
-+			    size_t count)
-+{
-+	long temp;
-+	u8 val, select;
-+	int ret, index;
-+	struct max6697_data *data;
-+
-+	index = to_sensor_dev_attr(devattr)->index;
-+	data = dev_get_drvdata(dev);
-+	select = i2c_smbus_read_byte_data(data->client,
-+					  MAX6581_REG_OFFSET_SELECT);
-+	if (select < 0)
-+		return select;
-+	ret = kstrtol(buf, 10, &temp);
-+	if (ret < 0)
-+		return ret;
-+	/* disable the offset for channel */
-+	if (temp == 0) {
-+		ret = i2c_smbus_write_byte_data(data->client,
-+						MAX6581_REG_OFFSET_SELECT,
-+						select & ~(1 << (index - 1)));
-+		return ret < 0 ? ret : count;
-+	}
-+	temp = clamp_val(temp, MAX6581_OFFSET_MIN, MAX6581_OFFSET_MAX);
-+	val = DIV_ROUND_CLOSEST(temp, 250);
-+	mutex_lock(&data->update_lock);
-+	ret = i2c_smbus_write_byte_data(data->client,
-+					MAX6581_REG_OFFSET_SELECT,
-+					select | (1 << (index - 1)));
-+	if (ret < 0)
-+		return ret;
-+	ret = i2c_smbus_write_byte_data(data->client,
-+					MAX6581_REG_OFFSET,
-+					val);
-+	mutex_unlock(&data->update_lock);
-+	return ret < 0 ? ret : count;
-+}
-+
-+static ssize_t offset_show(struct device *dev, struct device_attribute *devattr,
-+			   char *buf)
-+{
-+	int select, ret, index;
-+	struct max6697_data *data;
-+
-+	index = to_sensor_dev_attr(devattr)->index;
-+	data = dev_get_drvdata(dev);
-+	select = i2c_smbus_read_byte_data(data->client,
-+					  MAX6581_REG_OFFSET_SELECT);
-+	if (select < 0)
-+		return select;
-+	if (select & (1 << (index - 1))) {
-+		ret = i2c_smbus_read_byte_data(data->client,
-+					       MAX6581_REG_OFFSET);
-+		if (ret < 0)
-+			return ret;
-+	} else {
-+		return sprintf(buf, "%d\n", 0);
-+	}
-+	return sprintf(buf, "%d\n", max6581_offset_to_millic(ret));
-+}
-+
- static SENSOR_DEVICE_ATTR_RO(temp1_input, temp_input, 0);
- static SENSOR_DEVICE_ATTR_2_RW(temp1_max, temp, 0, MAX6697_TEMP_MAX);
- static SENSOR_DEVICE_ATTR_2_RW(temp1_crit, temp, 0, MAX6697_TEMP_CRIT);
-@@ -383,6 +454,15 @@ static SENSOR_DEVICE_ATTR_RO(temp6_fault, alarm, 5);
- static SENSOR_DEVICE_ATTR_RO(temp7_fault, alarm, 6);
- static SENSOR_DEVICE_ATTR_RO(temp8_fault, alarm, 7);
- 
-+/* There is no offset for local temperature so starting from temp2 */
-+static SENSOR_DEVICE_ATTR_RW(temp2_offset, offset, 1);
-+static SENSOR_DEVICE_ATTR_RW(temp3_offset, offset, 2);
-+static SENSOR_DEVICE_ATTR_RW(temp4_offset, offset, 3);
-+static SENSOR_DEVICE_ATTR_RW(temp5_offset, offset, 4);
-+static SENSOR_DEVICE_ATTR_RW(temp6_offset, offset, 5);
-+static SENSOR_DEVICE_ATTR_RW(temp7_offset, offset, 6);
-+static SENSOR_DEVICE_ATTR_RW(temp8_offset, offset, 7);
-+
- static DEVICE_ATTR(dummy, 0, NULL, NULL);
- 
- static umode_t max6697_is_visible(struct kobject *kobj, struct attribute *attr,
-@@ -391,8 +471,8 @@ static umode_t max6697_is_visible(struct kobject *kobj, struct attribute *attr,
- 	struct device *dev = container_of(kobj, struct device, kobj);
- 	struct max6697_data *data = dev_get_drvdata(dev);
- 	const struct max6697_chip_data *chip = data->chip;
--	int channel = index / 6;	/* channel number */
--	int nr = index % 6;		/* attribute index within channel */
-+	int channel = index / 8;	/* channel number */
-+	int nr = index % 7;		/* attribute index within channel */
- 
- 	if (channel >= chip->channels)
- 		return 0;
-@@ -401,6 +481,10 @@ static umode_t max6697_is_visible(struct kobject *kobj, struct attribute *attr,
- 		return 0;
- 	if (nr == 5 && !(chip->have_fault & (1 << channel)))
- 		return 0;
-+	/* offset reg is only supported on max6581 remote channels */
-+	if (nr == 6)
-+		if (data->type != max6581 || channel == 0)
-+			return 0;
- 
- 	return attr->mode;
- }
-@@ -417,6 +501,7 @@ static struct attribute *max6697_attributes[] = {
- 	&sensor_dev_attr_temp1_crit.dev_attr.attr,
- 	&sensor_dev_attr_temp1_crit_alarm.dev_attr.attr,
- 	&dev_attr_dummy.attr,
-+	&dev_attr_dummy.attr,
- 
- 	&sensor_dev_attr_temp2_input.dev_attr.attr,
- 	&sensor_dev_attr_temp2_max.dev_attr.attr,
-@@ -424,6 +509,7 @@ static struct attribute *max6697_attributes[] = {
- 	&sensor_dev_attr_temp2_crit.dev_attr.attr,
- 	&sensor_dev_attr_temp2_crit_alarm.dev_attr.attr,
- 	&sensor_dev_attr_temp2_fault.dev_attr.attr,
-+	&sensor_dev_attr_temp2_offset.dev_attr.attr,
- 
- 	&sensor_dev_attr_temp3_input.dev_attr.attr,
- 	&sensor_dev_attr_temp3_max.dev_attr.attr,
-@@ -431,6 +517,7 @@ static struct attribute *max6697_attributes[] = {
- 	&sensor_dev_attr_temp3_crit.dev_attr.attr,
- 	&sensor_dev_attr_temp3_crit_alarm.dev_attr.attr,
- 	&sensor_dev_attr_temp3_fault.dev_attr.attr,
-+	&sensor_dev_attr_temp3_offset.dev_attr.attr,
- 
- 	&sensor_dev_attr_temp4_input.dev_attr.attr,
- 	&sensor_dev_attr_temp4_max.dev_attr.attr,
-@@ -438,6 +525,7 @@ static struct attribute *max6697_attributes[] = {
- 	&sensor_dev_attr_temp4_crit.dev_attr.attr,
- 	&sensor_dev_attr_temp4_crit_alarm.dev_attr.attr,
- 	&sensor_dev_attr_temp4_fault.dev_attr.attr,
-+	&sensor_dev_attr_temp4_offset.dev_attr.attr,
- 
- 	&sensor_dev_attr_temp5_input.dev_attr.attr,
- 	&sensor_dev_attr_temp5_max.dev_attr.attr,
-@@ -445,6 +533,7 @@ static struct attribute *max6697_attributes[] = {
- 	&sensor_dev_attr_temp5_crit.dev_attr.attr,
- 	&sensor_dev_attr_temp5_crit_alarm.dev_attr.attr,
- 	&sensor_dev_attr_temp5_fault.dev_attr.attr,
-+	&sensor_dev_attr_temp5_offset.dev_attr.attr,
- 
- 	&sensor_dev_attr_temp6_input.dev_attr.attr,
- 	&sensor_dev_attr_temp6_max.dev_attr.attr,
-@@ -452,6 +541,7 @@ static struct attribute *max6697_attributes[] = {
- 	&sensor_dev_attr_temp6_crit.dev_attr.attr,
- 	&sensor_dev_attr_temp6_crit_alarm.dev_attr.attr,
- 	&sensor_dev_attr_temp6_fault.dev_attr.attr,
-+	&sensor_dev_attr_temp6_offset.dev_attr.attr,
- 
- 	&sensor_dev_attr_temp7_input.dev_attr.attr,
- 	&sensor_dev_attr_temp7_max.dev_attr.attr,
-@@ -459,6 +549,7 @@ static struct attribute *max6697_attributes[] = {
- 	&sensor_dev_attr_temp7_crit.dev_attr.attr,
- 	&sensor_dev_attr_temp7_crit_alarm.dev_attr.attr,
- 	&sensor_dev_attr_temp7_fault.dev_attr.attr,
-+	&sensor_dev_attr_temp7_offset.dev_attr.attr,
- 
- 	&sensor_dev_attr_temp8_input.dev_attr.attr,
- 	&sensor_dev_attr_temp8_max.dev_attr.attr,
-@@ -466,6 +557,7 @@ static struct attribute *max6697_attributes[] = {
- 	&sensor_dev_attr_temp8_crit.dev_attr.attr,
- 	&sensor_dev_attr_temp8_crit_alarm.dev_attr.attr,
- 	&sensor_dev_attr_temp8_fault.dev_attr.attr,
-+	&sensor_dev_attr_temp8_offset.dev_attr.attr,
- 	NULL
- };
- 
-@@ -502,8 +594,8 @@ static void max6697_get_config_of(struct device_node *node,
- 	}
- 	prop = of_get_property(node, "transistor-ideality", &len);
- 	if (prop && len == 2 * sizeof(u32)) {
--			pdata->ideality_mask = be32_to_cpu(prop[0]);
--			pdata->ideality_value = be32_to_cpu(prop[1]);
-+		pdata->ideality_mask = be32_to_cpu(prop[0]);
-+		pdata->ideality_value = be32_to_cpu(prop[1]);
- 	}
- }
- 
+As suggested by Bartosz Golaszewski:
+ - define registers as hex
+ - make gpio enum uppercase
+ - move parent regmap check before memory allocation
+ - use device_property_read_bool() instead of the of_ version
+ - mention the gpio flavors in the bindings documentation
+
+As suggested by Guenter Roeck:
+ - cleanup #includes and sort them
+ - use devm_watchdog_register_device()
+ - use watchdog_stop_on_reboot()
+ - provide a Documentation/hwmon/sl28cpld.rst
+ - cleaned up the weird tristate->bool and I2C=y issue. Instead mention
+   that the MFD driver is bool because of the following intc patch
+ - removed the SL28CPLD_IRQ typo
+
+As suggested by Rob Herring:
+ - combine all dt bindings docs into one patch
+ - change the node name for all gpio flavors to "gpio"
+ - removed the interrupts-extended rule
+ - cleaned up the unit-address space, see above
+
+Michael Walle (13):
+  regmap-irq: use fwnode instead of device node in add_irq_chip()
+  mfd: add simple regmap based I2C driver
+  dt-bindings: mfd: Add bindings for sl28cpld
+  mfd: simple-mfd-i2c: add sl28cpld support
+  irqchip: add sl28cpld interrupt controller support
+  watchdog: add support for sl28cpld watchdog
+  pwm: add support for sl28cpld PWM controller
+  gpio: add support for the sl28cpld GPIO controller
+  hwmon: add support for the sl28cpld hardware monitoring controller
+  arm64: dts: freescale: sl28: enable sl28cpld
+  arm64: dts: freescale: sl28: map GPIOs to input events
+  arm64: dts: freescale: sl28: enable LED support
+  arm64: dts: freescale: sl28: enable fan support
+
+ .../bindings/gpio/kontron,sl28cpld-gpio.yaml  |  54 +++++
+ .../hwmon/kontron,sl28cpld-hwmon.yaml         |  27 +++
+ .../kontron,sl28cpld-intc.yaml                |  54 +++++
+ .../bindings/mfd/kontron,sl28cpld.yaml        | 153 ++++++++++++
+ .../bindings/pwm/kontron,sl28cpld-pwm.yaml    |  35 +++
+ .../watchdog/kontron,sl28cpld-wdt.yaml        |  35 +++
+ Documentation/hwmon/index.rst                 |   1 +
+ Documentation/hwmon/sl28cpld.rst              |  36 +++
+ .../fsl-ls1028a-kontron-kbox-a-230-ls.dts     |  14 ++
+ .../fsl-ls1028a-kontron-sl28-var3-ads2.dts    |   9 +
+ .../freescale/fsl-ls1028a-kontron-sl28.dts    | 134 ++++++++++
+ drivers/base/regmap/regmap-irq.c              |  53 ++--
+ drivers/gpio/Kconfig                          |  11 +
+ drivers/gpio/Makefile                         |   1 +
+ drivers/gpio/gpio-sl28cpld.c                  | 161 ++++++++++++
+ drivers/hwmon/Kconfig                         |  10 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/sl28cpld-hwmon.c                | 149 ++++++++++++
+ drivers/irqchip/Kconfig                       |   8 +
+ drivers/irqchip/Makefile                      |   1 +
+ drivers/irqchip/irq-sl28cpld.c                |  96 ++++++++
+ drivers/mfd/Kconfig                           |   9 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/simple-mfd-i2c.c                  |  51 ++++
+ drivers/pwm/Kconfig                           |  10 +
+ drivers/pwm/Makefile                          |   1 +
+ drivers/pwm/pwm-sl28cpld.c                    | 187 ++++++++++++++
+ drivers/watchdog/Kconfig                      |  11 +
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/sl28cpld_wdt.c               | 229 ++++++++++++++++++
+ include/linux/regmap.h                        |  21 +-
+ 31 files changed, 1531 insertions(+), 33 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/gpio/kontron,sl28cpld-gpio.yaml
+ create mode 100644 Documentation/devicetree/bindings/hwmon/kontron,sl28cpld-hwmon.yaml
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/kontron,sl28cpld-intc.yaml
+ create mode 100644 Documentation/devicetree/bindings/mfd/kontron,sl28cpld.yaml
+ create mode 100644 Documentation/devicetree/bindings/pwm/kontron,sl28cpld-pwm.yaml
+ create mode 100644 Documentation/devicetree/bindings/watchdog/kontron,sl28cpld-wdt.yaml
+ create mode 100644 Documentation/hwmon/sl28cpld.rst
+ create mode 100644 drivers/gpio/gpio-sl28cpld.c
+ create mode 100644 drivers/hwmon/sl28cpld-hwmon.c
+ create mode 100644 drivers/irqchip/irq-sl28cpld.c
+ create mode 100644 drivers/mfd/simple-mfd-i2c.c
+ create mode 100644 drivers/pwm/pwm-sl28cpld.c
+ create mode 100644 drivers/watchdog/sl28cpld_wdt.c
+
 -- 
-2.27.0.212.ge8ba1cc988-goog
+2.20.1
 
