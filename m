@@ -2,117 +2,116 @@ Return-Path: <SRS0=NDU9=AR=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D7F1C433DF
-	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jul 2020 01:27:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AC45C433E0
+	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jul 2020 16:38:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 365842070C
-	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jul 2020 01:27:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 70F142073E
+	for <linux-hwmon@archiver.kernel.org>; Mon,  6 Jul 2020 16:38:22 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20150623.gappssmtp.com header.i=@bgdev-pl.20150623.gappssmtp.com header.b="VVxNk1Of"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728651AbgGFB06 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 5 Jul 2020 21:26:58 -0400
-Received: from server-x.ipv4.hkg02.ds.network ([27.111.83.178]:56658 "EHLO
-        mail.gtsys.com.hk" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
-        with ESMTP id S1728616AbgGFB04 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 5 Jul 2020 21:26:56 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.gtsys.com.hk (Postfix) with ESMTP id 412992016B13;
-        Mon,  6 Jul 2020 09:26:51 +0800 (HKT)
-X-Virus-Scanned: Debian amavisd-new at gtsys.com.hk
-Received: from mail.gtsys.com.hk ([127.0.0.1])
-        by localhost (mail.gtsys.com.hk [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id MbPrCEWsKdKw; Mon,  6 Jul 2020 09:26:51 +0800 (HKT)
-Received: from s01.gtsys.com.hk (unknown [10.128.4.2])
-        by mail.gtsys.com.hk (Postfix) with ESMTP id 1CF5220160D4;
-        Mon,  6 Jul 2020 09:26:51 +0800 (HKT)
-Received: from [10.128.2.32] (unknown [124.217.189.122])
-        by s01.gtsys.com.hk (Postfix) with ESMTPSA id D5450C01B74;
-        Mon,  6 Jul 2020 09:26:50 +0800 (HKT)
-Subject: Re: [PATCH v2 1/2] hwmon: shtc1: add support for device tree bindings
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jack Lo <jack.lo@gtsys.com.hk>, devicetree@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20200705142515.GA1975@roeck-us.net>
-From:   Chris Ruehl <chris.ruehl@gtsys.com.hk>
-Message-ID: <0e3cc05b-2ae4-186b-d3b4-fa3ac201b128@gtsys.com.hk>
-Date:   Mon, 6 Jul 2020 09:26:50 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        id S1729561AbgGFQiW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 6 Jul 2020 12:38:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47736 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729500AbgGFQiV (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 6 Jul 2020 12:38:21 -0400
+Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5AEC061794
+        for <linux-hwmon@vger.kernel.org>; Mon,  6 Jul 2020 09:38:21 -0700 (PDT)
+Received: by mail-il1-x143.google.com with SMTP id k6so33436939ili.6
+        for <linux-hwmon@vger.kernel.org>; Mon, 06 Jul 2020 09:38:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8+99WD3U/6R4HDUu0jjDRUO5gvAoEvSDisK/fWGBtg0=;
+        b=VVxNk1Ofuiz7emISK2L35m+IukHuIW416oK1Ajhtd5QO4ywQLmoMfJ8fBPXhh+oFgm
+         1F6/0dpmWhZaRlSl++KJQzyOwydlsOXEbgKx42Qc4ocLxtTbj4/jUGbOil7dSEi28JI+
+         162nK9g9Gdmxa49RnyueixSZ58ylMRJuvdurxaA7Q050W82YpSUzggS+rWeNj7r0Zt63
+         sZH2yh0k33xHOqnPZl6bhtYEFEdJ5jfjM7Qy4Vknlq6xkzbilESrkv5SLsv+R9YmOj7z
+         HXs7ly1C6fa/jym29MhNWyOyJlqHPMVU7WKQ0L0lw+vWsdbe1+0YRjog7GOmpFDJSirN
+         oqng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8+99WD3U/6R4HDUu0jjDRUO5gvAoEvSDisK/fWGBtg0=;
+        b=CFWWS5f6OxUQZ+1NmLWXX97cfdyolQWClOjADj1I/bIJfVszTfHtkkgY9r7jTsOISR
+         ttvLz26fygVlhF9+H97Rrgoerskz4+JC5ENuo7/J5zDIeAwtOm46j0gf+iG+A5jq62Ko
+         eJcobyOWqfQCqQSH/Jh6QVHDtEq33VDWRhD2w4NZeuCW0p3a89JdPq3G4rOb86Jtb/Y7
+         6OIW5h7y8j7ORJ3nbc+1EuOUOvd1b/GosTCyGn4nj0ckmHMQNhbmPgN4BLB6TQAzs6Pw
+         NF2COxL4j5lqR3TS6AY7zmhmXNbMbxM7qecufUsKrfNgMpmoh94XMo7npNfRYWm3wT0z
+         u1nQ==
+X-Gm-Message-State: AOAM530x+ryLgQmqQxkQ5ADogC0H6Km13lx07lupWdHpHU63O1RVjQpw
+        OS5QBaJeW3HqcdH+uYU+fohgENT9dBp+vJwuyiNspA==
+X-Google-Smtp-Source: ABdhPJx0SIxBz4fLuwZoUg4YqvsM3FJUy44gCdIvpRgsjRFo0Ps/VJV5gdXzkVuqIEezz8FdtGrAHOF+U2R4FhdTN3s=
+X-Received: by 2002:a92:c213:: with SMTP id j19mr31504216ilo.40.1594053500918;
+ Mon, 06 Jul 2020 09:38:20 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200705142515.GA1975@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20200629065008.27620-1-brgl@bgdev.pl> <20200629065008.27620-6-brgl@bgdev.pl>
+ <20200702124258.GA1882489@kroah.com> <CAMRc=Mc6dWCtnFT_SMGLUsggf68i3y7Njr61NyDQ7KeQ-rSErg@mail.gmail.com>
+In-Reply-To: <CAMRc=Mc6dWCtnFT_SMGLUsggf68i3y7Njr61NyDQ7KeQ-rSErg@mail.gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 6 Jul 2020 18:38:10 +0200
+Message-ID: <CAMRc=McxekKgEFe2y3R1SiA0ZhLZXsUrzMXWgwXVtHtymG75ow@mail.gmail.com>
+Subject: Re: [PATCH v2 5/6] devres: provide devm_krealloc()
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        linux-doc <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi
+On Thu, Jul 2, 2020 at 3:11 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+>
+> On Thu, Jul 2, 2020 at 2:42 PM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Mon, Jun 29, 2020 at 08:50:07AM +0200, Bartosz Golaszewski wrote:
+> > > From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> > >
+> > > Implement the managed variant of krealloc(). This function works with
+> > > all memory allocated by devm_kmalloc() (or devres functions using it
+> > > implicitly like devm_kmemdup(), devm_kstrdup() etc.).
+> > >
+> > > Managed realloc'ed chunks can be manually released with devm_kfree().
+> > >
+> > > Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+>
+> [snip!]
+>
+> >
+> > That's a lot of logic that does not seem to match up with the krealloc()
+> > logic in mm/slab_common.c, are you sure we need to do all of that?
+> >
+>
+> What are you referring to exactly? The check for rodata? It's because
+> devm_kfree() handles this case, while regular kfree() (or krealloc())
+> doesn't - there's kfree_const() but no devm_kfree_const().
+>
+> > Who wants this?
+>
+> The hwmon commit I mentioned in my response to patch 6/6 explicitly
+> mentions the lack of this helper.
+>
+> Bartosz
 
-On 5/7/2020 10:25 pm, Guenter Roeck wrote:
-> On Sun, Jul 05, 2020 at 11:47:25AM +0800, Chris Ruehl wrote:
->> Add support for DTS bindings for the sensirion shtc1,shtw1 and shtc3.
->>
->> Signed-off-by: Chris Ruehl <chris.ruehl@gtsys.com.hk>
->> ---
->>   drivers/hwmon/shtc1.c | 22 ++++++++++++++++++++--
->>   1 file changed, 20 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/hwmon/shtc1.c b/drivers/hwmon/shtc1.c
->> index a0078ccede03..61e9275eb666 100644
->> --- a/drivers/hwmon/shtc1.c
->> +++ b/drivers/hwmon/shtc1.c
->> @@ -14,6 +14,7 @@
->>   #include <linux/err.h>
->>   #include <linux/delay.h>
->>   #include <linux/platform_data/shtc1.h>
->> +#include <linux/of.h>
->>   
->>   /* commands (high precision mode) */
->>   static const unsigned char shtc1_cmd_measure_blocking_hpm[]    = { 0x7C, 0xA2 };
->> @@ -196,6 +197,7 @@ static int shtc1_probe(struct i2c_client *client,
->>   	enum shtcx_chips chip = id->driver_data;
->>   	struct i2c_adapter *adap = client->adapter;
->>   	struct device *dev = &client->dev;
->> +	struct device_node *np = dev->of_node;
->>   
->>   	if (!i2c_check_functionality(adap, I2C_FUNC_I2C)) {
->>   		dev_err(dev, "plain i2c transactions not supported\n");
->> @@ -233,8 +235,13 @@ static int shtc1_probe(struct i2c_client *client,
->>   	data->client = client;
->>   	data->chip = chip;
->>   
->> -	if (client->dev.platform_data)
->> +	if (np) {
->> +		data->setup.blocking_io = of_property_read_bool(np, "sensirion,blocking_io");
->> +		data->setup.high_precision = of_property_read_bool(np, "sensicon,low_precision");
->> +	}
->> +	else if (client->dev.platform_data)
->>   		data->setup = *(struct shtc1_platform_data *)dev->platform_data;
-> 
-> CHECK: braces {} should be used on all arms of this statement
-> #46: FILE: drivers/hwmon/shtc1.c:238:
-> +	if (np) {
-> [...]
-> +	else if (client->dev.platform_data)
-> [...]
-> 
-> ERROR: else should follow close brace '}'
-> #50: FILE: drivers/hwmon/shtc1.c:242:
-> +	}
-> +	else if (client->dev.platform_data)
-> 
+Hi Greg,
 
-it bites back not using the check-patch script! I _should_ know better! :-(
+As we've established in the discussion under the iio patch that there
+will in fact be more users of this - can this now be merged too?
 
-v3 then.
-
-But i will wait a moment to see if someone else lift a finger.
-
-Chris
+Bart
