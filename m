@@ -2,127 +2,78 @@ Return-Path: <SRS0=Tvco=AS=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3C52C433E0
-	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Jul 2020 08:01:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4C69C433E0
+	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Jul 2020 08:03:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CE36C2065F
-	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Jul 2020 08:01:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A24EE2065F
+	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Jul 2020 08:03:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728329AbgGGIBP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 7 Jul 2020 04:01:15 -0400
-Received: from server-x.ipv4.hkg02.ds.network ([27.111.83.178]:50206 "EHLO
+        id S1728417AbgGGIDw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 7 Jul 2020 04:03:52 -0400
+Received: from server-x.ipv4.hkg02.ds.network ([27.111.83.178]:50360 "EHLO
         mail.gtsys.com.hk" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
-        with ESMTP id S1726434AbgGGIBP (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 7 Jul 2020 04:01:15 -0400
+        with ESMTP id S1728121AbgGGIDu (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 7 Jul 2020 04:03:50 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by mail.gtsys.com.hk (Postfix) with ESMTP id EB8BC20187D8;
-        Tue,  7 Jul 2020 16:01:12 +0800 (HKT)
+        by mail.gtsys.com.hk (Postfix) with ESMTP id AC3CD2016B15;
+        Tue,  7 Jul 2020 16:03:48 +0800 (HKT)
 X-Virus-Scanned: Debian amavisd-new at gtsys.com.hk
 Received: from mail.gtsys.com.hk ([127.0.0.1])
         by localhost (mail.gtsys.com.hk [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id E0uig7WRyCcO; Tue,  7 Jul 2020 16:01:12 +0800 (HKT)
+        with ESMTP id z6WMaQd-Zdfo; Tue,  7 Jul 2020 16:03:48 +0800 (HKT)
 Received: from s01.gtsys.com.hk (unknown [10.128.4.2])
-        by mail.gtsys.com.hk (Postfix) with ESMTP id CBFB620160D4;
-        Tue,  7 Jul 2020 16:01:12 +0800 (HKT)
-Received: from armhf2.gtsys.com.hk (unknown [10.128.4.15])
-        by s01.gtsys.com.hk (Postfix) with ESMTP id C91C3C01F9E;
-        Tue,  7 Jul 2020 16:01:12 +0800 (HKT)
-Received: by armhf2.gtsys.com.hk (Postfix, from userid 1000)
-        id C22D02002E9; Tue,  7 Jul 2020 16:01:12 +0800 (HKT)
-From:   Chris Ruehl <chris.ruehl@gtsys.com.hk>
-To:     Chris Ruehl <chris.ruehl@gtsys.com.hk>
+        by mail.gtsys.com.hk (Postfix) with ESMTP id 87C1C20160D4;
+        Tue,  7 Jul 2020 16:03:48 +0800 (HKT)
+Received: from [10.128.2.32] (unknown [124.217.189.79])
+        by s01.gtsys.com.hk (Postfix) with ESMTPSA id 0C3ECC01F9E;
+        Tue,  7 Jul 2020 16:03:47 +0800 (HKT)
+Subject: Re: [PATCH v3 0/2] shtc1: add support for device tree bindings
 Cc:     Jack Lo <jack.lo@gtsys.com.hk>, devicetree@vger.kernel.org,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] devicetree: hwmon: shtc1: Add sensirion,shtc1.yaml
-Date:   Tue,  7 Jul 2020 16:01:03 +0800
-Message-Id: <20200707080104.23711-3-chris.ruehl@gtsys.com.hk>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200707080104.23711-1-chris.ruehl@gtsys.com.hk>
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20200707080104.23711-1-chris.ruehl@gtsys.com.hk>
+From:   Chris Ruehl <chris.ruehl@gtsys.com.hk>
+Message-ID: <c7f4805a-0cdf-ea5b-7557-c4f00fec6ee8@gtsys.com.hk>
+Date:   Tue, 7 Jul 2020 16:03:47 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200707080104.23711-1-chris.ruehl@gtsys.com.hk>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add documentation for the newly added DTS support in the shtc1 driver.
-To align with the drivers logic to have high precision by default
-a boolean sensirion,low_precision is used to switch to low precision.
 
-Signed-off-by: Chris Ruehl <chris.ruehl@gtsys.com.hk>
----
- .../bindings/hwmon/sensirion,shtc1.yaml       | 53 +++++++++++++++++++
- 1 file changed, 53 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml
+On 7/7/2020 4:01 pm, Chris Ruehl wrote:
+> Add support for DTS bindings to the shtc driver
+> The patches add the compatible table and of_property_read_bool to the
+> shtc1.c. Newly created Yaml document has been released to the
+> Documentation/devicetree/hwmon/sensirion,shtc1.yaml
+> 
+> Signed-off-by: Chris Ruehl <chris.ruehl@gtsys.com.hk>
+> ---
+>   Version 3
+> 	Fix errors report with checkpatch.pl
+> 	Correct logic, add (!) when check for sensirion,low_precision
+>   Version 2
+> 	remove the #ifdef CONFIG_OF
+> 	ignore platform data if dev->of_node is valid
+> 	use boolean only therefor use sensirion,low_precise to fit the logic
+> 	add missing driver.of_match_table entry
+>   Version 1
+> 	initial version
+> 
 
-diff --git a/Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml b/Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml
-new file mode 100644
-index 000000000000..bcccdcadd86b
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml
-@@ -0,0 +1,53 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/hwmon/sensirion,shtc1.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Sensirion SHTC1 Humidity and Temperature Sensor IC
-+
-+maintainers:
-+  - jdelvare@suse.com
-+
-+description: |
-+  The SHTC1, SHTW1 and SHTC3 are digital humidity and temperature sensor
-+  designed especially for battery-driven high-volume consumer electronics
-+  applications.
-+  For further information refere to Documentation/hwmon/shtc1.rst
-+
-+  This binding document describes the binding for the hardware monitor
-+  portion of the driver.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - sensirion,shtc1
-+      - sensirion,shtw1
-+      - sensirion,shtc3
-+
-+  reg: I2C address 0x70
-+
-+Optional properties:
-+  sensirion,blocking_io: |
-+    bool, if set the i2c bus hold until measure finished
-+  sensirion,low_precision: |
-+    bool, if set aquire data with low precision (not recommend)
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+Example:
-+  &i2c1 {
-+    status = "okay";
-+    clock-frequency = <400000>;
-+
-+    shtc3@70 {
-+      compatible = "sensirion,shtc3";
-+      reg = <0x70>
-+      sensirion,blocking_io;
-+      status = "okay";
-+    };
-+  };
--- 
-2.20.1
-
+I didn't fix the WARNINGS coming up with checkpatch, they are initial commit 
+errors when added to the kernel.
+But I have a patch pending to fix the format issue , once this is accepted.
