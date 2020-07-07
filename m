@@ -3,153 +3,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-8.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	FAKE_REPLY_C,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81CDFC433DF
-	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Jul 2020 13:35:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76197C433E0
+	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Jul 2020 14:16:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6165420658
-	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Jul 2020 13:35:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 51CBC206E2
+	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Jul 2020 14:16:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y1qEte5J"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sps7tO11"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728165AbgGGNfk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 7 Jul 2020 09:35:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43966 "EHLO
+        id S1727999AbgGGOQl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 7 Jul 2020 10:16:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727987AbgGGNfk (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 7 Jul 2020 09:35:40 -0400
+        with ESMTP id S1726805AbgGGOQk (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 7 Jul 2020 10:16:40 -0400
 Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492F7C061755;
-        Tue,  7 Jul 2020 06:35:40 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id m9so8186613pfh.0;
-        Tue, 07 Jul 2020 06:35:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF865C061755
+        for <linux-hwmon@vger.kernel.org>; Tue,  7 Jul 2020 07:16:40 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id u18so3186424pfk.10
+        for <linux-hwmon@vger.kernel.org>; Tue, 07 Jul 2020 07:16:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=rba0+/EuRhhUcr8Ye+cdIuQHVXXU4BWfVIEg0RcA/xA=;
-        b=Y1qEte5JG5fzV82+gBU9bc3hrKeZorMmLDq7pEgrLd9mme+lzJZRhmMXNSj6EUzeLv
-         yEYtaQdLrr0wFR+jTu15NwGhcx2CiPY4BgoQiOJTURPSXXS6SbTlr+WmYg6tcOFYtNsD
-         y3nDJIm2kEtlFDyX/BFxxj4s/Ed14puOliFKtIwAjQHNb6o5tq4FLUyWRXSEasMAltEO
-         slgPy92HZjtZmjsrL/VX6LtMCT3zWe451iaL9OjXP/fx2xDbnpqfVveRk1h1ajom75+a
-         VVBV4PokEhSMLHS3JXKMVZThCOJPXtYTK3bDn+d0LjTrCGpy4da0GKakVwWFAld3HQW6
-         rj2A==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=hOSCNBEQwRBsN3I3wpWdJBObZxxyTzpNRbgJykrynas=;
+        b=Sps7tO11G/rVY7+KaGjPSqWqwIFTPBr1k+r/pjSYtvG8nmgEvVieicXAYot8TS5GoN
+         ERZOrpvd8SNCoeKZPc47wB5nxGD9Xw8/lE52dEkM0ZznXsuwFKjWp4LmYhtA41pAKRWF
+         as4Gz443GZ2lluQJoCZmxLwaaZ6EfUxegfkpZ9QxcZPJute491gKgVL14AjOy1zXVb+2
+         6lIj1WVA99L8DWclNsxq/x8h0RXP5RKvwsKxSHVqrz8p34U6v9wiq+b7p8FpR/wIfDEW
+         FjdBnONPFknM2+SSEVfE9bfKrcWPgx9BEQgPNqgt2BOZMvYjyJpqkixnYBbHQYic7qYY
+         vQPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mime-version:content-disposition:user-agent;
-        bh=rba0+/EuRhhUcr8Ye+cdIuQHVXXU4BWfVIEg0RcA/xA=;
-        b=XuzSL0mjynQdBUuI0ijIwJan8gLUQ9rREZc1E8HVsCmE0AcAnk85ddULZIui+2VWyj
-         SNKrf4t9Kz9CLz81X1BkfdNruqW7AAvgHUApoRa5I4ejFva8nSBPd4XsJKrMUf3k22GV
-         HPl+0M6tObtYuDioZPIt5WAQDuFHhqUj0DAWK5INzEwH4LJIBJIF6bBx94baxJ8FmPpl
-         uXe9kWA8jDmGJqiA1MO/NlIN63sytJfAfHmcG338Bm+bFWfIbNjsHoZwSKpqNUiwqJX3
-         7lbm2cDZToFqwaRZIvObH/kpv4ddV0+6HZ+jb5mp8i0Jyc8dizjMnZfj1luq13Tqts42
-         Qv3A==
-X-Gm-Message-State: AOAM533jKJA3/1ICgMr366Cq+tuSeAgYvLx4LSsskbPz/J2J1s/mWaKc
-        giA7lWJ3gEP06VzXmakE/NQ1RyI/3yU=
-X-Google-Smtp-Source: ABdhPJw0dQGABhNhgS80LTpC36GJ6Ye3Td8BkZvAzetm7euWK+rnJ6CMWQmgTZfVScLrVdkJ3vZcRA==
-X-Received: by 2002:a62:2641:: with SMTP id m62mr19970062pfm.263.1594128939869;
-        Tue, 07 Jul 2020 06:35:39 -0700 (PDT)
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=hOSCNBEQwRBsN3I3wpWdJBObZxxyTzpNRbgJykrynas=;
+        b=TqpaQzFH+Y5D62jC1+TOxKVB0o3ihS9jXmgJR7uaRbDfMwxSxd+33XcSt33GEf/ljw
+         lYH5RrbBojcAhfYwJqn6GGM02USo5cAUft9g9VU7bkUCYLTlHTCUNaWufKOeWNnPOt4p
+         f9oaT/wrDefddwQFNWTmBhzhpOZeWf3qOGJSK6bVX1KAXPNXxhRzsoe8AChqNet0zr6L
+         int42Iqdb5G31qzWjN5c+P1aDGmfKZmnw8wYaNKG+iiIqlBhGiOnLa/xJ2cG1VvbuLmW
+         2lnwfa8NtCYmVix7coAyhKoiRfZ+9/hvMX8/z5srjTwjKiokAW3HKwybpfjLHpftZs2p
+         Aq4w==
+X-Gm-Message-State: AOAM530G5omNUKRvqvLuYAqNSa4HR49NRsyDHieqNGgrPJpb8/W1KfbE
+        y4T+k2PDpajQkBgrnyMK91j/aKuySfc=
+X-Google-Smtp-Source: ABdhPJzxlr+rK75RPdRF5ksZ1mPz5c35Q+qf4WtswanZ7FbI74IpT12KHm/9zBKFD/c98B5zNm0TWA==
+X-Received: by 2002:a63:ca0c:: with SMTP id n12mr46268918pgi.216.1594131400331;
+        Tue, 07 Jul 2020 07:16:40 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x10sm1019289pgp.47.2020.07.07.06.35.39
+        by smtp.gmail.com with ESMTPSA id c134sm8114416pfc.115.2020.07.07.07.16.39
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 07 Jul 2020 06:35:39 -0700 (PDT)
-Date:   Tue, 7 Jul 2020 06:35:38 -0700
+        Tue, 07 Jul 2020 07:16:39 -0700 (PDT)
+Date:   Tue, 7 Jul 2020 07:16:38 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Chris Ruehl <chris.ruehl@gtsys.com.hk>
-Cc:     Jack Lo <jack.lo@gtsys.com.hk>, devicetree@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] hwmon: shtc1: add support for device tree bindings
-Message-ID: <20200707133538.GA217605@roeck-us.net>
+To:     Naveen Krishna Chatradhi <nchatrad@amd.com>
+Cc:     linux-hwmon@vger.kernel.org, naveenkrishna.ch@gmail.com
+Subject: Re: [PATCH] hwmon: amd_energy: match for supported models
+Message-ID: <20200707141638.GA219827@roeck-us.net>
+References: <20200706171715.124993-1-nchatrad@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20200706171715.124993-1-nchatrad@amd.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jul 07, 2020 at 04:01:02PM +0800, Chris Ruehl wrote:
-> Add support for DTS bindings for the sensirion shtc1,shtw1 and shtc3.
+On Mon, Jul 06, 2020 at 10:47:15PM +0530, Naveen Krishna Chatradhi wrote:
+> The energy counters of certain models seems to be reporting
+> inconsisten values. Hence, match for the supported models.
 > 
-> Signed-off-by: Chris Ruehl <chris.ruehl@gtsys.com.hk>
+> Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
 
-For my reference:
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-Waiting for feedback/approval from DT maintainers.
+Applied.
 
 Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/shtc1.c | 25 ++++++++++++++++++++++---
->  1 file changed, 22 insertions(+), 3 deletions(-)
+>  drivers/hwmon/amd_energy.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/hwmon/shtc1.c b/drivers/hwmon/shtc1.c
-> index a0078ccede03..827d421b2b8f 100644
-> --- a/drivers/hwmon/shtc1.c
-> +++ b/drivers/hwmon/shtc1.c
-> @@ -14,6 +14,7 @@
->  #include <linux/err.h>
->  #include <linux/delay.h>
->  #include <linux/platform_data/shtc1.h>
-> +#include <linux/of.h>
+> diff --git a/drivers/hwmon/amd_energy.c b/drivers/hwmon/amd_energy.c
+> index e95b7426106e..29603742c858 100644
+> --- a/drivers/hwmon/amd_energy.c
+> +++ b/drivers/hwmon/amd_energy.c
+> @@ -362,7 +362,7 @@ static struct platform_driver amd_energy_driver = {
+>  static struct platform_device *amd_energy_platdev;
 >  
->  /* commands (high precision mode) */
->  static const unsigned char shtc1_cmd_measure_blocking_hpm[]    = { 0x7C, 0xA2 };
-> @@ -196,6 +197,7 @@ static int shtc1_probe(struct i2c_client *client,
->  	enum shtcx_chips chip = id->driver_data;
->  	struct i2c_adapter *adap = client->adapter;
->  	struct device *dev = &client->dev;
-> +	struct device_node *np = dev->of_node;
->  
->  	if (!i2c_check_functionality(adap, I2C_FUNC_I2C)) {
->  		dev_err(dev, "plain i2c transactions not supported\n");
-> @@ -233,8 +235,14 @@ static int shtc1_probe(struct i2c_client *client,
->  	data->client = client;
->  	data->chip = chip;
->  
-> -	if (client->dev.platform_data)
-> -		data->setup = *(struct shtc1_platform_data *)dev->platform_data;
-> +	if (np) {
-> +		data->setup.blocking_io = of_property_read_bool(np, "sensirion,blocking_io");
-> +		data->setup.high_precision = !of_property_read_bool(np, "sensicon,low_precision");
-> +	} else {
-> +		if (client->dev.platform_data)
-> +			data->setup = *(struct shtc1_platform_data *)dev->platform_data;
-> +	}
-> +
->  	shtc1_select_command(data);
->  	mutex_init(&data->update_lock);
->  
-> @@ -257,8 +265,19 @@ static const struct i2c_device_id shtc1_id[] = {
+>  static const struct x86_cpu_id cpu_ids[] __initconst = {
+> -	X86_MATCH_VENDOR_FAM(AMD, 0x17, NULL),
+> +	X86_MATCH_VENDOR_FAM_MODEL(AMD, 0x17, 0x31, NULL),
+>  	{}
 >  };
->  MODULE_DEVICE_TABLE(i2c, shtc1_id);
->  
-> +static const struct of_device_id shtc1_of_match[] = {
-> +	{ .compatible = "sensirion,shtc1" },
-> +	{ .compatible = "sensirion,shtw1" },
-> +	{ .compatible = "sensirion,shtc3" },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, shtc1_of_match);
-> +
->  static struct i2c_driver shtc1_i2c_driver = {
-> -	.driver.name  = "shtc1",
-> +	.driver = {
-> +		.name = "shtc1",
-> +		.of_match_table = shtc1_of_match,
-> +	},
->  	.probe        = shtc1_probe,
->  	.id_table     = shtc1_id,
->  };
-> -- 
-> 2.20.1
-> 
+>  MODULE_DEVICE_TABLE(x86cpu, cpu_ids);
