@@ -2,71 +2,69 @@ Return-Path: <SRS0=Tvco=AS=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D07D2C433DF
-	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Jul 2020 03:01:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B21FC433E0
+	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Jul 2020 03:03:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A2E3220708
-	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Jul 2020 03:01:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3174420708
+	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Jul 2020 03:03:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="daqEG873"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QX3DtDt2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726681AbgGGDBt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 6 Jul 2020 23:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59196 "EHLO
+        id S1727828AbgGGDDY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 6 Jul 2020 23:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726434AbgGGDBs (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 6 Jul 2020 23:01:48 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B32D8C061755;
-        Mon,  6 Jul 2020 20:01:48 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id 1so101653pfn.9;
-        Mon, 06 Jul 2020 20:01:48 -0700 (PDT)
+        with ESMTP id S1727818AbgGGDDY (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 6 Jul 2020 23:03:24 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BF4BC061755;
+        Mon,  6 Jul 2020 20:03:24 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id ch3so2681631pjb.5;
+        Mon, 06 Jul 2020 20:03:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=OQCgUwM2ShP0/N0SvzdE3xadrflgQZrSD21eF9YrU/w=;
-        b=daqEG873WEhgL7DYnv/QAZ0dpmVgfZYL4xpK7tZWZuugeu3veuHQ08hXLQXWfrupoL
-         gb/UA4qCEIgL/1SmTJS5FUnNw+9dEAEvtVjjrbLZpci1XScv96d9buXdXySolztmJlCJ
-         hCeF9Xps9K9ZUGrIx3olDIbA2wc5W4j24U6oBHu+tUCEmfyU3JykZlq82a16Zmn+zGF4
-         DV8oJ9foFNVJ9LtvCXQ948Wj9tT19qn6iN48wyawxL3LrkUIX0iMS469Txejatkihect
-         txNroVzN1XGM/BBi3Uu5O8XHazh3mZSgmP4+CVccqsWkjT6fS9Sh2CgyQDFMwll0+ceT
-         JfSA==
+        bh=IAOSkZY/ZvTM/cuAPxHrdRvDZbhec76EIxGhgmaogKM=;
+        b=QX3DtDt2YL5bx4hX5EoZiGPMkyNIohvPQLSqo7V8PD7/NFkl9GkrYUEO50vuV34eZS
+         MBtZIWqv6u+nKqs0pI2gy6KVgp+Z16FAikeo5kuPMLNjYTd4uL+0noUOgviEMaDFq5Pl
+         mTBcDJfvTE/IfSzPt2DDGeY17UA1IT/3PWuL4+G6ZJcG+gg4X0lyjFv55f76Ji/I9ejZ
+         2T3y12DN6Budq9HTIT2PE1Uj4GoENYIOiRmTUO0U9qgMTpJNYAC2t3+9DON4XNPav4YZ
+         aW7nv8aSh16qx0qEjH40S1fbrW9iYSQ3p65g8KXt2QkpcLNl8fXlqqa81yZFFlvYdnue
+         uETQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=OQCgUwM2ShP0/N0SvzdE3xadrflgQZrSD21eF9YrU/w=;
-        b=WPVXzPrD4y8qTlje8RaeWJ5FTOwh+G+m2mjGFBkgDgWxLjdhAGyM/cAjyphZaclTbj
-         ka97nosyMX7UD+44p+QZZt4udqCo+sEE8O7QrFNRWBZ/YAknosQEq2rCJBLIieyQJgsk
-         zOZX/SaHlwNxPxiOPyQEb1A991aPxMHrnIwcFfzsr9rPW9ZmkLlLSQ6AFvXAtnb/593k
-         0gChylSHu5GPf2EI4s/AYuaAOtMjVvLFeJ+2VUMIdMSGeLEP/YTnnCTI49+TksAtoJBN
-         ZpmXgugEKjskZpszfVqQOB5I6kJ/RiXiqxMST4WHHix/sPyrTV+4YcX9d5KA8iiLuzQ4
-         olRA==
-X-Gm-Message-State: AOAM532B/HBMblSSQoOzb99jiC69R2bmcX508+kQ7wohX/kCNnsWMLSM
-        yIO3YF87w7p9tBeEky3dlblezeGwri8=
-X-Google-Smtp-Source: ABdhPJyrPvjbAUbN7OSlkamQyjoyKeYpcxILuUspQfP2oTdlhers4m3hooh5MLifh/N7PUePIv0dPw==
-X-Received: by 2002:a63:b90a:: with SMTP id z10mr41143374pge.277.1594090907669;
-        Mon, 06 Jul 2020 20:01:47 -0700 (PDT)
+        bh=IAOSkZY/ZvTM/cuAPxHrdRvDZbhec76EIxGhgmaogKM=;
+        b=biaFttLXfMTIRC9XADqAbfX0lEpeoRoQ6rxwVdoTvPx0jyP3xfQ/29/54RNyCRTgkn
+         okpSyR+kEfqXU+QpvVguHTPMwB/QXvCWkL7JeDXIxvL9lbUlJBMPnt5fWTh1zgsSfVv8
+         qBbOsDQzHgchCK5TNb0CbuQV3kKAG3tGk/E5nGTufafknuEugU0DtkVARJv6Df+VvTm2
+         g/tW6EkwTajVRJQOkU6jcVakYGvjBbZ/Xuyqcf+rxW7REVLDmiFtjbMBqpuc/b1aVxl/
+         P3A19mTvlX3K7vgVh6AKs8ItverOb8kvy2s3137hIDUZb9G11NIq3EkZ3GI9GNIDMt8Y
+         77iQ==
+X-Gm-Message-State: AOAM533Sr6wWxTtZiOgi+zb5qcdc3QzG0gGFVD5XA6yZc7iCBHLhNbDt
+        MD1rjd/MjiUjwfG4MDYWo/TMksikB8I=
+X-Google-Smtp-Source: ABdhPJwVOgQJl901G0y9cE+B7MUr9uN02Rm6zLCzJvdRY9JsfU4ndGOk5W6YrfURx0BDOFebeoXyoQ==
+X-Received: by 2002:a17:902:ab8e:: with SMTP id f14mr45299469plr.80.1594091004064;
+        Mon, 06 Jul 2020 20:03:24 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b4sm732646pjn.38.2020.07.06.20.01.46
+        by smtp.gmail.com with ESMTPSA id c132sm19863805pfb.112.2020.07.06.20.03.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jul 2020 20:01:46 -0700 (PDT)
-Subject: Re: [PATCH v3 1/1] hwmon:max6697: Allows max6581 to create
- tempX_offset attributes
+        Mon, 06 Jul 2020 20:03:23 -0700 (PDT)
+Subject: Re: [PATCH v3 0/1] hwmon:max6697: Allow max6581 to create
+ tempX_offset
 To:     Chu Lin <linchuyuan@google.com>
 Cc:     belgaied@google.com, jasonling@google.com, jdelvare@suse.com,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
         zhongqil@google.com
 References: <20200707011810.2508233-1-linchuyuan@google.com>
- <20200707011810.2508233-2-linchuyuan@google.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -111,21 +109,32 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <a36fc250-5387-7534-a8ff-2b5d5196d687@roeck-us.net>
-Date:   Mon, 6 Jul 2020 20:01:45 -0700
+Message-ID: <46c25347-a9d9-3997-9aaa-7393cfccb4f7@roeck-us.net>
+Date:   Mon, 6 Jul 2020 20:03:22 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <20200707011810.2508233-2-linchuyuan@google.com>
+In-Reply-To: <20200707011810.2508233-1-linchuyuan@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 On 7/6/20 6:18 PM, Chu Lin wrote:
+> Per max6581, reg 4d and reg 4e is used for temperature read offset.
+> This patch will let the user specify the temperature read offset for
+> max6581. This patch is tested on max6581 and only applies to max6581.
+> 
+
+Since this is a single patch, you don't need patch 0.
+Just add the change log after "---" to the actual patch.
+
+Thanks,
+Guenter
+
 > Testing:
 > echo 16250 > temp2_offset
 > cat temp2_offset
@@ -166,256 +175,24 @@ On 7/6/20 6:18 PM, Chu Lin wrote:
 > 37000
 > 
 > Signed-off-by: Chu Lin <linchuyuan@google.com>
-
-Technically this is patch v4, but never mind.
-
 > ---
+> ChangeLog v2 -> v3:
+>   - Use reverse christmas tree order convension
+>   - Fix the type issue where comparision is always true
+>   - Change the line limit to 100 char instead of 80 char
+> 
+> ChangeLog v1 -> v2:
+>   - Simplify the offset reg raw value to milli ceisus conversion
+>   - Substitute the temp1_offset with dummy attr
+>   - Avoid using double negative in the macro definition
+>   - Return the actual error when i2c read/write is failed
+>   - clamp the value to MAX or MIN respectively if an out of range input is given
+>   - Provide mux protection when multiple i2c accesses is required
+> 
+> Chu Lin (1):
+>   hwmon:max6697: Allow max6581 to create tempX_offset attributes
+> 
 >  drivers/hwmon/max6697.c | 92 +++++++++++++++++++++++++++++++++++++++--
 >  1 file changed, 88 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/hwmon/max6697.c b/drivers/hwmon/max6697.c
-> index 64122eb38060..6b213e146fbe 100644
-> --- a/drivers/hwmon/max6697.c
-> +++ b/drivers/hwmon/max6697.c
-> @@ -57,6 +57,9 @@ static const u8 MAX6697_REG_CRIT[] = {
->  #define MAX6581_REG_IDEALITY_SELECT	0x4c
->  #define MAX6581_REG_OFFSET		0x4d
->  #define MAX6581_REG_OFFSET_SELECT	0x4e
-> +#define MAX6581_OFFSET_MIN		-31750
-> +#define MAX6581_OFFSET_MAX		31750
-> +
->  
-Pease no double empty lines.
-
->  #define MAX6697_CONV_TIME		156	/* ms per channel, worst case */
->  
-> @@ -172,6 +175,11 @@ static const struct max6697_chip_data max6697_chip_data[] = {
->  	},
->  };
->  
-> +static inline int max6581_offset_to_millic(int val)
-> +{
-> +	return val & (1 << 7) ? (val | 0xffffff00) * 250 : val * 250;
-
-	return sign_extend32(val, 7) * 250;
-
-> +}
-> +
->  static struct max6697_data *max6697_update_device(struct device *dev)
->  {
->  	struct max6697_data *data = dev_get_drvdata(dev);
-> @@ -317,6 +325,61 @@ static ssize_t temp_store(struct device *dev,
->  	return ret < 0 ? ret : count;
->  }
->  
-> +static ssize_t offset_store(struct device *dev,
-> +			    struct device_attribute *devattr, const char *buf,
-> +			    size_t count)
-
-I don't think this needs three lines with the new line length limit.
-
-> +{
-> +	int val, ret, index, select;
-> +	struct max6697_data *data;
-> +	long temp;
-> +
-> +	index = to_sensor_dev_attr(devattr)->index;
-> +	data = dev_get_drvdata(dev);
-> +	select = i2c_smbus_read_byte_data(data->client, MAX6581_REG_OFFSET_SELECT);
-> +	if (select < 0)
-> +		return select;
-
-Unfortunately, this is racy: The select register can be changed by another write
-after it was read here. The kstrtol() can be outside the lock, but the entire
-sequence of i2c reads and writes has to be mutex protected.
-
-> +	ret = kstrtol(buf, 10, &temp);
-> +	if (ret < 0)
-> +		return ret;
-> +	/* disable the offset for channel */
-
-                                          ... if the new offset is 0.
-
-> +	if (temp == 0) {
-
-This now has to be after the assignment of val below, and must be "if (val == 0)".
-
-> +		ret = i2c_smbus_write_byte_data(data->client, MAX6581_REG_OFFSET_SELECT,
-> +						select & ~(1 << (index - 1)));
-> +		return ret < 0 ? ret : count;
-> +	}
-> +	temp = clamp_val(temp, MAX6581_OFFSET_MIN, MAX6581_OFFSET_MAX);
-> +	val = DIV_ROUND_CLOSEST(temp, 250);
-> +	mutex_lock(&data->update_lock);
-> +	ret = i2c_smbus_write_byte_data(data->client, MAX6581_REG_OFFSET_SELECT,> +					select | (1 << (index - 1)));
-
-It might make sense to update the select register only if it actually changes
-its value. The cost for checking this is much less than the cost of the additional
-i2c write.
-
-> +	if (ret < 0)
-> +		return ret;
-
-Forgot to release the lock - needs goto
-
-> +	ret = i2c_smbus_write_byte_data(data->client, MAX6581_REG_OFFSET, val);
-> +	mutex_unlock(&data->update_lock);
-> +	return ret < 0 ? ret : count;
-> +}
-> +
-> +static ssize_t offset_show(struct device *dev, struct device_attribute *devattr,
-> +			   char *buf)
-
-Single line should be sufficient.
-
-> +{
-> +	struct max6697_data *data;
-> +	int select, ret, index;
-> +
-> +	index = to_sensor_dev_attr(devattr)->index;
-> +	data = dev_get_drvdata(dev);
-> +	select = i2c_smbus_read_byte_data(data->client, MAX6581_REG_OFFSET_SELECT);
-> +	if (select < 0)
-> +		return select;
-> +	if (select & (1 << (index - 1))) {
-> +		ret = i2c_smbus_read_byte_data(data->client, MAX6581_REG_OFFSET);
-> +		if (ret < 0)
-> +			return ret;
-> +	} else {
-> +		return sprintf(buf, "%d\n", 0);
-
-Better make this "ret = 0;".
-
-Also, this is racy: select can be changed after the first read.
-Not sure if that matters much, though.
-
-> +	}
-> +	return sprintf(buf, "%d\n", max6581_offset_to_millic(ret));
-> +}
-> +
->  static SENSOR_DEVICE_ATTR_RO(temp1_input, temp_input, 0);
->  static SENSOR_DEVICE_ATTR_2_RW(temp1_max, temp, 0, MAX6697_TEMP_MAX);
->  static SENSOR_DEVICE_ATTR_2_RW(temp1_crit, temp, 0, MAX6697_TEMP_CRIT);
-> @@ -375,6 +438,15 @@ static SENSOR_DEVICE_ATTR_RO(temp6_fault, alarm, 5);
->  static SENSOR_DEVICE_ATTR_RO(temp7_fault, alarm, 6);
->  static SENSOR_DEVICE_ATTR_RO(temp8_fault, alarm, 7);
->  
-> +/* There is no offset for local temperature so starting from temp2 */
-> +static SENSOR_DEVICE_ATTR_RW(temp2_offset, offset, 1);
-> +static SENSOR_DEVICE_ATTR_RW(temp3_offset, offset, 2);
-> +static SENSOR_DEVICE_ATTR_RW(temp4_offset, offset, 3);
-> +static SENSOR_DEVICE_ATTR_RW(temp5_offset, offset, 4);
-> +static SENSOR_DEVICE_ATTR_RW(temp6_offset, offset, 5);
-> +static SENSOR_DEVICE_ATTR_RW(temp7_offset, offset, 6);
-> +static SENSOR_DEVICE_ATTR_RW(temp8_offset, offset, 7);
-> +
->  static DEVICE_ATTR(dummy, 0, NULL, NULL);
->  
->  static umode_t max6697_is_visible(struct kobject *kobj, struct attribute *attr,
-> @@ -383,8 +455,8 @@ static umode_t max6697_is_visible(struct kobject *kobj, struct attribute *attr,
->  	struct device *dev = container_of(kobj, struct device, kobj);
->  	struct max6697_data *data = dev_get_drvdata(dev);
->  	const struct max6697_chip_data *chip = data->chip;
-> -	int channel = index / 6;	/* channel number */
-> -	int nr = index % 6;		/* attribute index within channel */
-> +	int channel = index / 8;	/* channel number */
-> +	int nr = index % 7;		/* attribute index within channel */
-
-Something is wrong here: "/ 6" and "% 6" changed to "/ 8" and "% 7".
-Why "/ 8" ?
-
->  
->  	if (channel >= chip->channels)
->  		return 0;
-> @@ -393,6 +465,10 @@ static umode_t max6697_is_visible(struct kobject *kobj, struct attribute *attr,
->  		return 0;
->  	if (nr == 5 && !(chip->have_fault & (1 << channel)))
->  		return 0;
-> +	/* offset reg is only supported on max6581 remote channels */
-> +	if (nr == 6)
-> +		if (data->type != max6581 || channel == 0)
-> +			return 0;
->  
->  	return attr->mode;
->  }
-> @@ -409,6 +485,7 @@ static struct attribute *max6697_attributes[] = {
->  	&sensor_dev_attr_temp1_crit.dev_attr.attr,
->  	&sensor_dev_attr_temp1_crit_alarm.dev_attr.attr,
->  	&dev_attr_dummy.attr,
-> +	&dev_attr_dummy.attr,
->  
->  	&sensor_dev_attr_temp2_input.dev_attr.attr,
->  	&sensor_dev_attr_temp2_max.dev_attr.attr,
-> @@ -416,6 +493,7 @@ static struct attribute *max6697_attributes[] = {
->  	&sensor_dev_attr_temp2_crit.dev_attr.attr,
->  	&sensor_dev_attr_temp2_crit_alarm.dev_attr.attr,
->  	&sensor_dev_attr_temp2_fault.dev_attr.attr,
-> +	&sensor_dev_attr_temp2_offset.dev_attr.attr,
->  
->  	&sensor_dev_attr_temp3_input.dev_attr.attr,
->  	&sensor_dev_attr_temp3_max.dev_attr.attr,
-> @@ -423,6 +501,7 @@ static struct attribute *max6697_attributes[] = {
->  	&sensor_dev_attr_temp3_crit.dev_attr.attr,
->  	&sensor_dev_attr_temp3_crit_alarm.dev_attr.attr,
->  	&sensor_dev_attr_temp3_fault.dev_attr.attr,
-> +	&sensor_dev_attr_temp3_offset.dev_attr.attr,
->  
->  	&sensor_dev_attr_temp4_input.dev_attr.attr,
->  	&sensor_dev_attr_temp4_max.dev_attr.attr,
-> @@ -430,6 +509,7 @@ static struct attribute *max6697_attributes[] = {
->  	&sensor_dev_attr_temp4_crit.dev_attr.attr,
->  	&sensor_dev_attr_temp4_crit_alarm.dev_attr.attr,
->  	&sensor_dev_attr_temp4_fault.dev_attr.attr,
-> +	&sensor_dev_attr_temp4_offset.dev_attr.attr,
->  
->  	&sensor_dev_attr_temp5_input.dev_attr.attr,
->  	&sensor_dev_attr_temp5_max.dev_attr.attr,
-> @@ -437,6 +517,7 @@ static struct attribute *max6697_attributes[] = {
->  	&sensor_dev_attr_temp5_crit.dev_attr.attr,
->  	&sensor_dev_attr_temp5_crit_alarm.dev_attr.attr,
->  	&sensor_dev_attr_temp5_fault.dev_attr.attr,
-> +	&sensor_dev_attr_temp5_offset.dev_attr.attr,
->  
->  	&sensor_dev_attr_temp6_input.dev_attr.attr,
->  	&sensor_dev_attr_temp6_max.dev_attr.attr,
-> @@ -444,6 +525,7 @@ static struct attribute *max6697_attributes[] = {
->  	&sensor_dev_attr_temp6_crit.dev_attr.attr,
->  	&sensor_dev_attr_temp6_crit_alarm.dev_attr.attr,
->  	&sensor_dev_attr_temp6_fault.dev_attr.attr,
-> +	&sensor_dev_attr_temp6_offset.dev_attr.attr,
->  
->  	&sensor_dev_attr_temp7_input.dev_attr.attr,
->  	&sensor_dev_attr_temp7_max.dev_attr.attr,
-> @@ -451,6 +533,7 @@ static struct attribute *max6697_attributes[] = {
->  	&sensor_dev_attr_temp7_crit.dev_attr.attr,
->  	&sensor_dev_attr_temp7_crit_alarm.dev_attr.attr,
->  	&sensor_dev_attr_temp7_fault.dev_attr.attr,
-> +	&sensor_dev_attr_temp7_offset.dev_attr.attr,
->  
->  	&sensor_dev_attr_temp8_input.dev_attr.attr,
->  	&sensor_dev_attr_temp8_max.dev_attr.attr,
-> @@ -458,6 +541,7 @@ static struct attribute *max6697_attributes[] = {
->  	&sensor_dev_attr_temp8_crit.dev_attr.attr,
->  	&sensor_dev_attr_temp8_crit_alarm.dev_attr.attr,
->  	&sensor_dev_attr_temp8_fault.dev_attr.attr,
-> +	&sensor_dev_attr_temp8_offset.dev_attr.attr,
->  	NULL
->  };
->  
-> @@ -494,8 +578,8 @@ static void max6697_get_config_of(struct device_node *node,
->  	}
->  	prop = of_get_property(node, "transistor-ideality", &len);
->  	if (prop && len == 2 * sizeof(u32)) {
-> -			pdata->ideality_mask = be32_to_cpu(prop[0]);
-> -			pdata->ideality_value = be32_to_cpu(prop[1]);
-> +		pdata->ideality_mask = be32_to_cpu(prop[0]);
-> +		pdata->ideality_value = be32_to_cpu(prop[1]);
-
-Unrelated change. I don't mind if you want to make that change,
-but it would have to be in a separate patch.
-
->  	}
->  }
->  
 > 
 
