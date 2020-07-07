@@ -2,78 +2,95 @@ Return-Path: <SRS0=Tvco=AS=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4C69C433E0
-	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Jul 2020 08:03:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C982C433DF
+	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Jul 2020 10:22:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A24EE2065F
-	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Jul 2020 08:03:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 606AC206F6
+	for <linux-hwmon@archiver.kernel.org>; Tue,  7 Jul 2020 10:22:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1594117322;
+	bh=+cBelIs0ehSsds8X4dHmvK2864Wy8QgaOL5fQnupcLk=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References:List-ID:From;
+	b=gj/2ADDsz83MVY2O0nJwoAwAXLXrnbTHzEh1TyuQlPczemClZEQsgmJlPCmPE4Aou
+	 psK9fyy1qRSEGKA6TbCbFaxMevxim9A3zCcObTd4+sPnEVY2LEvVU+SZXdvHuwPBlW
+	 SbSSVWn6Ul5hJHlQKJuRxgvEhBloHVRFAzT9xPIU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728417AbgGGIDw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 7 Jul 2020 04:03:52 -0400
-Received: from server-x.ipv4.hkg02.ds.network ([27.111.83.178]:50360 "EHLO
-        mail.gtsys.com.hk" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
-        with ESMTP id S1728121AbgGGIDu (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 7 Jul 2020 04:03:50 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.gtsys.com.hk (Postfix) with ESMTP id AC3CD2016B15;
-        Tue,  7 Jul 2020 16:03:48 +0800 (HKT)
-X-Virus-Scanned: Debian amavisd-new at gtsys.com.hk
-Received: from mail.gtsys.com.hk ([127.0.0.1])
-        by localhost (mail.gtsys.com.hk [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id z6WMaQd-Zdfo; Tue,  7 Jul 2020 16:03:48 +0800 (HKT)
-Received: from s01.gtsys.com.hk (unknown [10.128.4.2])
-        by mail.gtsys.com.hk (Postfix) with ESMTP id 87C1C20160D4;
-        Tue,  7 Jul 2020 16:03:48 +0800 (HKT)
-Received: from [10.128.2.32] (unknown [124.217.189.79])
-        by s01.gtsys.com.hk (Postfix) with ESMTPSA id 0C3ECC01F9E;
-        Tue,  7 Jul 2020 16:03:47 +0800 (HKT)
-Subject: Re: [PATCH v3 0/2] shtc1: add support for device tree bindings
-Cc:     Jack Lo <jack.lo@gtsys.com.hk>, devicetree@vger.kernel.org,
+        id S1728224AbgGGKU4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 7 Jul 2020 06:20:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45992 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728135AbgGGKUu (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 7 Jul 2020 06:20:50 -0400
+Received: from pobox.suse.cz (nat1.prg.suse.com [195.250.132.148])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6E657206F6;
+        Tue,  7 Jul 2020 10:20:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1594117249;
+        bh=+cBelIs0ehSsds8X4dHmvK2864Wy8QgaOL5fQnupcLk=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=ZAvb6I9vDb3w6KWUww8p1xAQaAhA2POMmlykCDVLQumMM5h/pWVPlOzvEn2QDf+KP
+         QOx8pEn3NzKUIwSz7/iLevs8Cg2BUcXxvR9e7pzUoo4/UUNnsEHyOtOTM1oKfXlXAV
+         +XdZlgf6w/1mnxL7QlX+4Yax43oPMPgkMNFx/GwU=
+Date:   Tue, 7 Jul 2020 12:20:46 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+cc:     Marius Zachmann <mail@mariuszachmann.de>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200707080104.23711-1-chris.ruehl@gtsys.com.hk>
-From:   Chris Ruehl <chris.ruehl@gtsys.com.hk>
-Message-ID: <c7f4805a-0cdf-ea5b-7557-c4f00fec6ee8@gtsys.com.hk>
-Date:   Tue, 7 Jul 2020 16:03:47 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
+Subject: Re: [PATCH v7] hwmon: add Corsair Commander Pro driver
+In-Reply-To: <20200630021642.GA155878@roeck-us.net>
+Message-ID: <nycvar.YFH.7.76.2007071220210.15962@cbobk.fhfr.pm>
+References: <20200626055936.4441-1-mail@mariuszachmann.de> <20200630021642.GA155878@roeck-us.net>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-In-Reply-To: <20200707080104.23711-1-chris.ruehl@gtsys.com.hk>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+On Mon, 29 Jun 2020, Guenter Roeck wrote:
 
-On 7/7/2020 4:01 pm, Chris Ruehl wrote:
-> Add support for DTS bindings to the shtc driver
-> The patches add the compatible table and of_property_read_bool to the
-> shtc1.c. Newly created Yaml document has been released to the
-> Documentation/devicetree/hwmon/sensirion,shtc1.yaml
+> On Fri, Jun 26, 2020 at 07:59:36AM +0200, Marius Zachmann wrote:
+> > This is v7 of a driver for the Corsair Commander Pro.
+> > It provides sysfs attributes for:
+> > - Reading fan speed
+> > - Reading temp sensors
+> > - Reading voltage values
+> > - Writing pwm and reading last written pwm
+> > - Reading fan and temp connection status
+> > 
+> > It is an usb driver, so it needs to be ignored by usbhid.
+> > The Corsair Commander Pro is a fan controller and provides
+> > no means for user interaction.
+> > The two device numbers are there, because there is a slightly
+> > different version of the same device. (Only difference
+> > seem to be in some presets.)
+> > 
+> > This is based on the staging/hwmon tree.
+> > 
+> > Signed-off-by: Marius Zachmann <mail@mariuszachmann.de>
 > 
-> Signed-off-by: Chris Ruehl <chris.ruehl@gtsys.com.hk>
-> ---
->   Version 3
-> 	Fix errors report with checkpatch.pl
-> 	Correct logic, add (!) when check for sensirion,low_precision
->   Version 2
-> 	remove the #ifdef CONFIG_OF
-> 	ignore platform data if dev->of_node is valid
-> 	use boolean only therefor use sensirion,low_precise to fit the logic
-> 	add missing driver.of_match_table entry
->   Version 1
-> 	initial version
+> For my reference:
 > 
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> 
+> Waiting for Ack from HID maintainer.
 
-I didn't fix the WARNINGS coming up with checkpatch, they are initial commit 
-errors when added to the kernel.
-But I have a patch pending to fix the format issue , once this is accepted.
+Acked-by: Jiri Kosina <jkosina@suse.cz>
+
+for the drivers/hid/hid-quirks.c hunk. Thanks,
+
+-- 
+Jiri Kosina
+SUSE Labs
+
