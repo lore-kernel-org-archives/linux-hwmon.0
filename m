@@ -2,155 +2,110 @@ Return-Path: <SRS0=Rliy=AT=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	LONGWORDS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.2 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70EBBC433E0
-	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Jul 2020 03:25:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A6D9C433E0
+	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Jul 2020 03:28:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5711020738
-	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Jul 2020 03:25:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 55C4F20738
+	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Jul 2020 03:28:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729303AbgGHDZc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 7 Jul 2020 23:25:32 -0400
-Received: from mga14.intel.com ([192.55.52.115]:46004 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728061AbgGHDZ3 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 7 Jul 2020 23:25:29 -0400
-IronPort-SDR: RckPCgAdHFxvtH/AsKHf5taD56puC+YAfUw4zI2YENGWvRi4QWrE0trKOlISAV5EaovgaCARon
- MG29Uiii8CaA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9675"; a="146801193"
-X-IronPort-AV: E=Sophos;i="5.75,326,1589266800"; 
-   d="scan'208";a="146801193"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2020 20:25:27 -0700
-IronPort-SDR: 2xKqSk0FvUgYzo8L9KkvkQKF2T8qAPRd/XgnZe4J8a27Ly+1EUyRiMEBGxwWxTPs5/be7CKd7f
- 6p6GVN3aTL2w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,326,1589266800"; 
-   d="scan'208";a="279815033"
-Received: from lkp-server01.sh.intel.com (HELO f2047cb89c8e) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 07 Jul 2020 20:25:24 -0700
-Received: from kbuild by f2047cb89c8e with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1jt0i3-0000Vi-Q9; Wed, 08 Jul 2020 03:25:23 +0000
-Date:   Wed, 08 Jul 2020 11:24:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon] BUILD SUCCESS
- 14b0e83dc4f1e52b94acaeb85a18fd7fdd46d2dc
-Message-ID: <5f053c70.QAlcfppGLIycp0DF%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1728979AbgGHD2D (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 7 Jul 2020 23:28:03 -0400
+Received: from server-x.ipv4.hkg02.ds.network ([27.111.83.178]:43594 "EHLO
+        mail.gtsys.com.hk" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
+        with ESMTP id S1728369AbgGHD2D (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 7 Jul 2020 23:28:03 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.gtsys.com.hk (Postfix) with ESMTP id 728B02000305;
+        Wed,  8 Jul 2020 11:28:00 +0800 (HKT)
+X-Virus-Scanned: Debian amavisd-new at gtsys.com.hk
+Received: from mail.gtsys.com.hk ([127.0.0.1])
+        by localhost (mail.gtsys.com.hk [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Ok6ktCoPkYuW; Wed,  8 Jul 2020 11:28:00 +0800 (HKT)
+Received: from s01.gtsys.com.hk (unknown [10.128.4.2])
+        by mail.gtsys.com.hk (Postfix) with ESMTP id 4F28220001F5;
+        Wed,  8 Jul 2020 11:28:00 +0800 (HKT)
+Received: from [10.128.2.32] (unknown [124.217.189.79])
+        by s01.gtsys.com.hk (Postfix) with ESMTPSA id A46BDC01B68;
+        Wed,  8 Jul 2020 11:27:59 +0800 (HKT)
+Subject: Re: [PATCH v2 2/2] devicetree: hwmon: shtc1: Add sensirion,shtc1.yaml
+To:     Rob Herring <robh@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, Jack Lo <jack.lo@gtsys.com.hk>,
+        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
+References: <20200705034727.1429-1-chris.ruehl@gtsys.com.hk>
+ <20200705034727.1429-3-chris.ruehl@gtsys.com.hk>
+ <20200707201532.GA558059@bogus>
+From:   Chris Ruehl <chris.ruehl@gtsys.com.hk>
+Message-ID: <713b05fa-b025-4869-7dee-b1b6af4fbd26@gtsys.com.hk>
+Date:   Wed, 8 Jul 2020 11:27:58 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <20200707201532.GA558059@bogus>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon
-branch HEAD: 14b0e83dc4f1e52b94acaeb85a18fd7fdd46d2dc  hwmon: (emc2103) fix unable to change fan pwm1_enable attribute
+On 8/7/2020 4:15 am, Rob Herring wrote:
+> On Sun, 05 Jul 2020 11:47:26 +0800, Chris Ruehl wrote:
+>> Add documentation for the newly added DTS support in the shtc1 driver.
+>> To align with the drivers logic to have high precision by default
+>> a boolean sensirion,low_precision is used to switch to low precision.
+>>
+>> Signed-off-by: Chris Ruehl <chris.ruehl@gtsys.com.hk>
+>> ---
+>>   .../bindings/hwmon/sensirion,shtc1.yaml       | 53 +++++++++++++++++++
+>>   1 file changed, 53 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml
+>>
+> 
+> 
+> My bot found errors running 'make dt_binding_check' on your patch:
+> 
+> Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml:  while parsing a flow mapping
+>    in "<unicode string>", line 43, column 9
+> did not find expected ',' or '}'
+>    in "<unicode string>", line 47, column 14
+> Documentation/devicetree/bindings/Makefile:20: recipe for target 'Documentation/devicetree/bindings/hwmon/sensirion,shtc1.example.dts' failed
+> make[1]: *** [Documentation/devicetree/bindings/hwmon/sensirion,shtc1.example.dts] Error 1
+> make[1]: *** Waiting for unfinished jobs....
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml: ignoring, error parsing file
+> warning: no schema found in file: ./Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml: ignoring, error parsing file
+> warning: no schema found in file: ./Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml
+> Makefile:1347: recipe for target 'dt_binding_check' failed
+> make: *** [dt_binding_check] Error 2
+> 
+> 
+> See https://patchwork.ozlabs.org/patch/1322963
+> 
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure dt-schema is up to date:
+> 
+> pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
+> 
+> Please check and re-submit.
+> 
 
-elapsed time: 723m
+Rob,
 
-configs tested: 86
-configs skipped: 1
+I installed now latest scheme and run dt_binding_check, its clean now.
+..
+"CHKDT   Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml
+"CHKDT   Documentation/devicetree/bindings/hwmon/adi,axi-fan-control.yaml
+..
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Will be submit with v4 of the patch set.
 
-arm                                 defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                               allnoconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm64                            allmodconfig
-arm64                             allnoconfig
-i386                              allnoconfig
-i386                             allyesconfig
-i386                                defconfig
-i386                              debian-10.3
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                              allnoconfig
-m68k                           sun3_defconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-nios2                            allyesconfig
-openrisc                            defconfig
-c6x                              allyesconfig
-c6x                               allnoconfig
-openrisc                         allyesconfig
-nds32                               defconfig
-nds32                             allnoconfig
-csky                             allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-h8300                            allmodconfig
-xtensa                              defconfig
-arc                                 defconfig
-arc                              allyesconfig
-sh                               allmodconfig
-sh                                allnoconfig
-microblaze                        allnoconfig
-mips                             allyesconfig
-mips                              allnoconfig
-mips                             allmodconfig
-parisc                            allnoconfig
-parisc                              defconfig
-parisc                           allyesconfig
-parisc                           allmodconfig
-powerpc                             defconfig
-powerpc                          allyesconfig
-powerpc                          rhel-kconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a001-20200707
-i386                 randconfig-a002-20200707
-i386                 randconfig-a006-20200707
-i386                 randconfig-a004-20200707
-i386                 randconfig-a005-20200707
-i386                 randconfig-a003-20200707
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-s390                             allyesconfig
-s390                              allnoconfig
-s390                             allmodconfig
-s390                                defconfig
-sparc                            allyesconfig
-sparc                               defconfig
-sparc64                             defconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-sparc64                          allmodconfig
-um                                allnoconfig
-um                                  defconfig
-um                               allmodconfig
-um                               allyesconfig
-x86_64                               rhel-7.6
-x86_64                    rhel-7.6-kselftests
-x86_64                               rhel-8.3
-x86_64                                  kexec
-x86_64                                   rhel
-x86_64                         rhel-7.2-clear
-x86_64                                    lkp
-x86_64                              fedora-25
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks.
+Chris
