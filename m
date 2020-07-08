@@ -6,59 +6,59 @@ X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5CE9C433DF
-	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Jul 2020 07:35:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4478FC433DF
+	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Jul 2020 07:39:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 863CC20656
-	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Jul 2020 07:35:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1FD4C20656
+	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Jul 2020 07:39:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XmHSa0Uz"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kf6x43ay"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725446AbgGHHfi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 8 Jul 2020 03:35:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42022 "EHLO
+        id S1726396AbgGHHj6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 8 Jul 2020 03:39:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726151AbgGHHff (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 Jul 2020 03:35:35 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79BEDC08E876
-        for <linux-hwmon@vger.kernel.org>; Wed,  8 Jul 2020 00:35:34 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id c11so26271716lfh.8
-        for <linux-hwmon@vger.kernel.org>; Wed, 08 Jul 2020 00:35:34 -0700 (PDT)
+        with ESMTP id S1726112AbgGHHj5 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 Jul 2020 03:39:57 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A9FC08C5DC
+        for <linux-hwmon@vger.kernel.org>; Wed,  8 Jul 2020 00:39:57 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id h22so45832274lji.9
+        for <linux-hwmon@vger.kernel.org>; Wed, 08 Jul 2020 00:39:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=BR6f0/BqJCEN1CVfcKyyqFPGBwWk+T779U9WQ9pd+T8=;
-        b=XmHSa0UzMCoKN/tnYpRpf1kVvmOC6ZnhRaRiqN4dhekdDS+dYRV4tKqjXeotjjk6CM
-         0MOlfsqx2ohqnb6RqR6ienmLqhlOgV5HpjXxdnuF+2RNshU0o9RIAIhUZSGaeqwlgB4C
-         gUW8FyQX+VrymFES8f5hJ2kMWkTZXksc4SuBtTUoukp8gzsIOf9gOetUEQ9GKiXZ9aEU
-         cTaQ5sIe+t/aBH6d25PGmD5Ym6EFRxjCK4D01B+XFLYt6JFtN/HdUdeQ6VoTnNi1Qi+J
-         7eBpWDqvtLxhJ+XWohhbbsQWumjK6uhfievDT2eH1knqhrEDjvihiHsulNpgkNzY+qj6
-         CMLQ==
+        bh=+HxgH6sad3gU6leW7SDh/gf8Hzfs0/fhZcOEjnvGhWs=;
+        b=kf6x43aymox0RXHGLm8aA9SdFQARFjcUUTid1nkeg9ibekZJqFjhwH23OVWjfAOjVS
+         PIyKh85DWMiQQ7vV4MPU9N/PHWMBXsW8ALCT0jUDOBYiRrEm93dNmyBY2QKLC8e59uXU
+         rF/LbFEzhwf7Hh9D0M9LGkfmU1uXbWrbwnSzZ8YxxZR5BL7KxyZLYny+CUf+LF90Q6OB
+         gITnA0TUKecjikeYVz6qOheu9mHlpVGZsqJgXhFyS2gl3mAaueYbWpptMe/oEQAYYllA
+         zsUp2xKjkGd9Lw4e7zUScEK+4AP896Zl4fGx27sAKWpJkoT11s4X/JaSJFPzE8k8XuwU
+         CRkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=BR6f0/BqJCEN1CVfcKyyqFPGBwWk+T779U9WQ9pd+T8=;
-        b=Oyr1ipnx6IBjeAgDklNpv16d2VHA3li7MTe6g3iWE9k4AXd1/nqfwjumnNILqAbRZR
-         WoMhasxTUiH0HeyNrrf2ZaW3wSZiQpsFtANihnClphiYwwFmjwq10XTLz3BpVtVqd69l
-         CK+QcCxt27gkt+TxySUPEwSmUliLdp4e0+ZmKABavdGG9yy5lkAHttsu/tsyD0ULbl0A
-         gjpNbuixhdlMEWL3zyGOE5EOTzLpmLEA7g3r13XhkUZfoyTyXbcdByIf+vnZku8qaCEN
-         ADfa3wOh8UOBXsRGMToJsbQpURLo2ntylGKWMd4QLjPLdt+6ahy9pCEruV7kTniWFa+p
-         TIxA==
-X-Gm-Message-State: AOAM53107QwIuqXNiWncJ9sfFBaQXT1OmjyjhDb9KNoWBo/yhXctu070
-        ubTsD9vZN0dPJistCS5DN+MtrMF8mu0TUZk+IIOEnQ==
-X-Google-Smtp-Source: ABdhPJyJ+eDL/+RhcnG7xcn/RKZTuk4K1j7DdGcaDL2nOuPTPOOM3n5gq5c736mD3TdGBOD+yswnwtLJpQbCLuN0+7s=
-X-Received: by 2002:ac2:47ed:: with SMTP id b13mr35325021lfp.21.1594193732803;
- Wed, 08 Jul 2020 00:35:32 -0700 (PDT)
+        bh=+HxgH6sad3gU6leW7SDh/gf8Hzfs0/fhZcOEjnvGhWs=;
+        b=qQ1uKIR2KKver5/cOwnVjVR5GOeEeLTP3lgXLWQtAyq3r/BqdOKMgt1jcWRTfZSr2A
+         +HHHoXABpXIJN05WtBAwwCoQYkqcQKIARYklAVPtmjt7A5LykoumERU0Z7HdtjEUJ/OS
+         lx1C2xNoEH8jviCWthJo+AvYWfOehe6n9rBqeDtOtJTjHzA0/sH0whtrzOdqA1IolAF6
+         T7rjRWnlDTnc9BM89w2Fm68AK07ZYw3rRK/G2hflFgBwIkDFhR3I1RGM/0gAQtY0nAsJ
+         V5KQAE9wivipT3Rw14imA+bPR/sKaPqdmA7JE9qveqnhAHoC69Lz16IaF49SDPC2d6Mf
+         zu2A==
+X-Gm-Message-State: AOAM530Wy0ECvDs50NHRiGQZZKyLpB4vIUtIS5Ddk8HM544pUzX2MjYu
+        3iqYdtL6kTDwGoXOAI1eCGJ7dpcWcZ+9AwAgRtd/9A==
+X-Google-Smtp-Source: ABdhPJxTYp6lBnboAKIMoKnmPkXV27lA7iN1d1K5nRqP4hkVKmZacGWC0DDRGgpoKAE/wWfaRt/VjtFi95icB142swA=
+X-Received: by 2002:a2e:9c3:: with SMTP id 186mr33775780ljj.293.1594193995825;
+ Wed, 08 Jul 2020 00:39:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200706175353.16404-1-michael@walle.cc> <20200706175353.16404-9-michael@walle.cc>
-In-Reply-To: <20200706175353.16404-9-michael@walle.cc>
+References: <20200706175353.16404-1-michael@walle.cc> <20200706175353.16404-14-michael@walle.cc>
+In-Reply-To: <20200706175353.16404-14-michael@walle.cc>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 8 Jul 2020 09:35:21 +0200
-Message-ID: <CACRpkda=C1XxLEJrVb8oMdrt1CgVyfDn7=cf7UdK0AJJwt+0Yg@mail.gmail.com>
-Subject: Re: [PATCH v5 08/13] gpio: add support for the sl28cpld GPIO controller
+Date:   Wed, 8 Jul 2020 09:39:45 +0200
+Message-ID: <CACRpkdaPO7CGNrxmjL5QH1cxP5wqku1oMtQaQgJfeKiKqiGAOg@mail.gmail.com>
+Subject: Re: [PATCH v5 13/13] arm64: dts: freescale: sl28: enable fan support
 To:     Michael Walle <michael@walle.cc>
 Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
@@ -88,22 +88,21 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+Hi Michael,
+
+just a drive-by-comment:
+
 On Mon, Jul 6, 2020 at 7:57 PM Michael Walle <michael@walle.cc> wrote:
 
-> Add support for the GPIO controller of the sl28 board management
-> controller. This driver is part of a multi-function device.
->
-> A controller has 8 lines. There are three different flavors:
-> full-featured GPIO with interrupt support, input-only and output-only.
+> Add a pwm-fan mapped to the PWM channel 0 which is connected to the
+> fan connector of the carrier.
 >
 > Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
-> Changes since v4:
 
-This is awesomely elegant now.
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
-I suppose it needs merging through MFD with the rest.
+If you have a cooling device like this, do you also have a temperature
+sensor? In that case it makes sense to add a thermal zone and a
+policy, such as I did for a device in
+6e97f0aaca4ca778905dd1dc667cbf379f4cae15
 
 Yours,
 Linus Walleij
