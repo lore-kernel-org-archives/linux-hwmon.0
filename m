@@ -2,71 +2,108 @@ Return-Path: <SRS0=Rliy=AT=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F1FCC433E2
-	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Jul 2020 04:08:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5CE9C433DF
+	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Jul 2020 07:35:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 14CA2206BE
-	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Jul 2020 04:08:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 863CC20656
+	for <linux-hwmon@archiver.kernel.org>; Wed,  8 Jul 2020 07:35:38 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XmHSa0Uz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728770AbgGHEHw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 8 Jul 2020 00:07:52 -0400
-Received: from server-x.ipv4.hkg02.ds.network ([27.111.83.178]:45384 "EHLO
-        mail.gtsys.com.hk" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
-        with ESMTP id S1728401AbgGHEHw (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 Jul 2020 00:07:52 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.gtsys.com.hk (Postfix) with ESMTP id 1E8242000305;
-        Wed,  8 Jul 2020 12:07:50 +0800 (HKT)
-X-Virus-Scanned: Debian amavisd-new at gtsys.com.hk
-Received: from mail.gtsys.com.hk ([127.0.0.1])
-        by localhost (mail.gtsys.com.hk [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Kr9PBFrsGXLm; Wed,  8 Jul 2020 12:07:50 +0800 (HKT)
-Received: from s01.gtsys.com.hk (unknown [10.128.4.2])
-        by mail.gtsys.com.hk (Postfix) with ESMTP id F1C6D20001F5;
-        Wed,  8 Jul 2020 12:07:49 +0800 (HKT)
-Received: from armhf2.gtsys.com.hk (unknown [10.128.4.15])
-        by s01.gtsys.com.hk (Postfix) with ESMTP id DA0EBC01B68;
-        Wed,  8 Jul 2020 12:07:49 +0800 (HKT)
-Received: by armhf2.gtsys.com.hk (Postfix, from userid 1000)
-        id B2D3720031F; Wed,  8 Jul 2020 12:07:49 +0800 (HKT)
-From:   Chris Ruehl <chris.ruehl@gtsys.com.hk>
-To:     Chris Ruehl <chris.ruehl@gtsys.com.hk>
-Cc:     Jack Lo <jack.lo@gtsys.com.hk>, devicetree@vger.kernel.org,
+        id S1725446AbgGHHfi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 8 Jul 2020 03:35:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42022 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726151AbgGHHff (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 8 Jul 2020 03:35:35 -0400
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79BEDC08E876
+        for <linux-hwmon@vger.kernel.org>; Wed,  8 Jul 2020 00:35:34 -0700 (PDT)
+Received: by mail-lf1-x141.google.com with SMTP id c11so26271716lfh.8
+        for <linux-hwmon@vger.kernel.org>; Wed, 08 Jul 2020 00:35:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BR6f0/BqJCEN1CVfcKyyqFPGBwWk+T779U9WQ9pd+T8=;
+        b=XmHSa0UzMCoKN/tnYpRpf1kVvmOC6ZnhRaRiqN4dhekdDS+dYRV4tKqjXeotjjk6CM
+         0MOlfsqx2ohqnb6RqR6ienmLqhlOgV5HpjXxdnuF+2RNshU0o9RIAIhUZSGaeqwlgB4C
+         gUW8FyQX+VrymFES8f5hJ2kMWkTZXksc4SuBtTUoukp8gzsIOf9gOetUEQ9GKiXZ9aEU
+         cTaQ5sIe+t/aBH6d25PGmD5Ym6EFRxjCK4D01B+XFLYt6JFtN/HdUdeQ6VoTnNi1Qi+J
+         7eBpWDqvtLxhJ+XWohhbbsQWumjK6uhfievDT2eH1knqhrEDjvihiHsulNpgkNzY+qj6
+         CMLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BR6f0/BqJCEN1CVfcKyyqFPGBwWk+T779U9WQ9pd+T8=;
+        b=Oyr1ipnx6IBjeAgDklNpv16d2VHA3li7MTe6g3iWE9k4AXd1/nqfwjumnNILqAbRZR
+         WoMhasxTUiH0HeyNrrf2ZaW3wSZiQpsFtANihnClphiYwwFmjwq10XTLz3BpVtVqd69l
+         CK+QcCxt27gkt+TxySUPEwSmUliLdp4e0+ZmKABavdGG9yy5lkAHttsu/tsyD0ULbl0A
+         gjpNbuixhdlMEWL3zyGOE5EOTzLpmLEA7g3r13XhkUZfoyTyXbcdByIf+vnZku8qaCEN
+         ADfa3wOh8UOBXsRGMToJsbQpURLo2ntylGKWMd4QLjPLdt+6ahy9pCEruV7kTniWFa+p
+         TIxA==
+X-Gm-Message-State: AOAM53107QwIuqXNiWncJ9sfFBaQXT1OmjyjhDb9KNoWBo/yhXctu070
+        ubTsD9vZN0dPJistCS5DN+MtrMF8mu0TUZk+IIOEnQ==
+X-Google-Smtp-Source: ABdhPJyJ+eDL/+RhcnG7xcn/RKZTuk4K1j7DdGcaDL2nOuPTPOOM3n5gq5c736mD3TdGBOD+yswnwtLJpQbCLuN0+7s=
+X-Received: by 2002:ac2:47ed:: with SMTP id b13mr35325021lfp.21.1594193732803;
+ Wed, 08 Jul 2020 00:35:32 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200706175353.16404-1-michael@walle.cc> <20200706175353.16404-9-michael@walle.cc>
+In-Reply-To: <20200706175353.16404-9-michael@walle.cc>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 8 Jul 2020 09:35:21 +0200
+Message-ID: <CACRpkda=C1XxLEJrVb8oMdrt1CgVyfDn7=cf7UdK0AJJwt+0Yg@mail.gmail.com>
+Subject: Re: [PATCH v5 08/13] gpio: add support for the sl28cpld GPIO controller
+To:     Michael Walle <michael@walle.cc>
+Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 0/2] shtc1: add support for device tree bindings
-Date:   Wed,  8 Jul 2020 12:07:45 +0800
-Message-Id: <20200708040748.9014-1-chris.ruehl@gtsys.com.hk>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add support for DTS bindings to the shtc driver
-The patches add the compatible table and of_property_read_bool to the
-shtc1.c. Newly created Yaml document has been released to the
-Documentation/devicetree/hwmon/sensirion,shtc1.yaml
+On Mon, Jul 6, 2020 at 7:57 PM Michael Walle <michael@walle.cc> wrote:
 
-Signed-off-by: Chris Ruehl <chris.ruehl@gtsys.com.hk>
----
- Version 4
-	Fix errors report by make dt_binding_check (devicetree)
-	Set maintainers for the yaml document to my own.
- Version 3
-	Fix errors report with checkpatch.pl
-	Correct logic, add (!) when check for sensirion,low_precision
- Version 2
-	remove the #ifdef CONFIG_OF
-	ignore platform data if dev->of_node is valid
-	use boolean only therefor use sensirion,low_precise to fit the logic
-	add missing driver.of_match_table entry
- Version 1
-	initial version
+> Add support for the GPIO controller of the sl28 board management
+> controller. This driver is part of a multi-function device.
+>
+> A controller has 8 lines. There are three different flavors:
+> full-featured GPIO with interrupt support, input-only and output-only.
+>
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+> Changes since v4:
+
+This is awesomely elegant now.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+
+I suppose it needs merging through MFD with the rest.
+
+Yours,
+Linus Walleij
