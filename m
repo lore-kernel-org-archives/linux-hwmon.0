@@ -2,152 +2,85 @@ Return-Path: <SRS0=e0Qf=AU=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC90FC433E0
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Jul 2020 22:14:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF610C433E0
+	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Jul 2020 23:13:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C3839206A1
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Jul 2020 22:14:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 800E82070E
+	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Jul 2020 23:13:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1594332867;
-	bh=dI+YKovRZcmleNvC8/pS+LSupDrqJpa9QNMy7S8kGm0=;
+	s=default; t=1594336421;
+	bh=1sOuvMmgTIqgfyJhP5qnTqBJYKZkMIqsO/8V4NDTW68=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=hsReaLonRLnY1t7c/Btkplsr5HZVbE5d63tMhuBqJWAMTlpfKupuefOiuSPCliaQ2
-	 9nBSJsRyb96xipdGrvn7h+f/lvysFUGST+s1YkaZ1yUJILj2m0XeLiKbvkYxM1c+hv
-	 LIZ5cbqlFksr4o1ZXTENECeA+6+ODLUbn/2t5RvE=
+	b=zQwVDa5eFpNMUXvyX5Vi1LSnur/JB9dpjVlpJnLZr/Fb/xWGU6FE1hR8jlcck+u8u
+	 msQoHrzj/LCZOo8XPrr8oJ/V0oUt70x7A5wkf21uvA/ViaqphhCc8x+TseTmi0CZrP
+	 FMujvIXYjrUJlBbe+u6/w4fcbxu3UP3nFHP++heY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726275AbgGIWO1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 9 Jul 2020 18:14:27 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:33217 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726228AbgGIWO1 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Jul 2020 18:14:27 -0400
-Received: by mail-io1-f68.google.com with SMTP id d18so4034665ion.0;
-        Thu, 09 Jul 2020 15:14:26 -0700 (PDT)
+        id S1726311AbgGIXNl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 9 Jul 2020 19:13:41 -0400
+Received: from mail-il1-f194.google.com ([209.85.166.194]:35461 "EHLO
+        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726222AbgGIXNl (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Jul 2020 19:13:41 -0400
+Received: by mail-il1-f194.google.com with SMTP id t18so3516962ilh.2;
+        Thu, 09 Jul 2020 16:13:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=0GI8wbwo9sGGwkY6G16fvlQaAYWT2insbPg48n1qsB0=;
-        b=KJOaIlDPC0fk2w5GzYvRRtXnmSUid6G065usnwKhWV0qWn8MRraHcaimXTvdIhCksR
-         RHIc8DWhjLY/xcyE2Ahb3xZCefT1ouuc3RDLS3ZymCO1JG2AQX+wsomRwPyYFpNMZgex
-         pr5YKa+iQzRUHn7KDSaSM6BXW/4n5ODv8QVOEbYWU9BO6+oPHppzEWMD3LBUDK5nnpnA
-         H3f+ohAQfueTlitpEFF+V4AsoPmUsH/y5XBM8/GA5Mm1tq6+ufAN9UBcatoZNVWetBxw
-         dXyfPzclEh0kDo9BNisXxHVGvUNdf3JQXHds2IlP1ZjqHxCSwuln1JVgr2azKDNOO5Ut
-         2nhg==
-X-Gm-Message-State: AOAM531pFtYcDrGkzt0iLpQbwDhn73AcF0cATXnSMANWWM5p503M1opL
-        axd84DfaBh4fl6rvBhHsUKZjFZf2kg==
-X-Google-Smtp-Source: ABdhPJz4z0YRhpJUp29LyqfDmxPtPiXxZxITILJyx22tU8BdeEEMcaWycX5iG4kXTnIURSnYmr7XnA==
-X-Received: by 2002:a05:6602:58a:: with SMTP id v10mr44439153iox.203.1594332866335;
-        Thu, 09 Jul 2020 15:14:26 -0700 (PDT)
+        bh=qVYJSmIH5pGs/4dhKNiiY1TOXTho3Eq5GDRG0ULpRKU=;
+        b=V7XIFnZuJH+UNp/ReoPeWYAQHb6LdWLXvZeDMdtKNiMUlRge1jaW1bXoM0ITCWcxG2
+         +jpR95Lhc7erG2uOnJlt84dYIwdKWoonrILoBSn4BAx03uVlfUJJfQKoO94Xeerd6tHL
+         5pppKFazt0qP6wWwBi+bIQeYWf9zsfQ+dIyYpfgtUN8FrB0FWxQhVE/AOvkRK1SupYw9
+         CiL+kVYBuauActX8WucXRjzff/qFcWZFAt3759VJF97B6dRG0Zbt8GGeRfXPMv7TrXNm
+         GnRQzsycGh0v4/2YHIN+vdlmDlJZLZp9dNxUsEcqGfKsRT/mSa6qarvJCetkmAkTHyKn
+         8qiQ==
+X-Gm-Message-State: AOAM5330fP7NFfbSlo72vGjKPh4DW/Gu24PIlxCM8NNbMTTPHrzdqPMc
+        /msfaRxlWJWkAflGOB3rUg==
+X-Google-Smtp-Source: ABdhPJwSaf8vHd4K9Dyi8pY6+VkhDEivCPd1Hgh2whPHR6+/lCW9ltyoN1fWo70Xj5XWqmqCNSCjJQ==
+X-Received: by 2002:a92:cece:: with SMTP id z14mr19176614ilq.120.1594336420385;
+        Thu, 09 Jul 2020 16:13:40 -0700 (PDT)
 Received: from xps15 ([64.188.179.254])
-        by smtp.gmail.com with ESMTPSA id b24sm2908370ioj.1.2020.07.09.15.14.25
+        by smtp.gmail.com with ESMTPSA id p84sm2739075ill.64.2020.07.09.16.13.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2020 15:14:25 -0700 (PDT)
-Received: (nullmailer pid 986760 invoked by uid 1000);
-        Thu, 09 Jul 2020 22:14:25 -0000
-Date:   Thu, 9 Jul 2020 16:14:25 -0600
+        Thu, 09 Jul 2020 16:13:39 -0700 (PDT)
+Received: (nullmailer pid 1073745 invoked by uid 1000);
+        Thu, 09 Jul 2020 23:13:38 -0000
+Date:   Thu, 9 Jul 2020 17:13:38 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     alexandru.tachici@analog.com
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux@roeck-us.net
-Subject: Re: [PATCH v5 7/7] dt-bindings: hwmon: Add bindings for ADM1266
-Message-ID: <20200709221425.GA984242@bogus>
-References: <20200624151736.95785-1-alexandru.tachici@analog.com>
- <20200624151736.95785-8-alexandru.tachici@analog.com>
+To:     Lars Povlsen <lars.povlsen@microchip.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>
+Subject: Re: [PATCH v4 1/3] dt-bindings: hwmon: Add Sparx5 temperature sensor
+Message-ID: <20200709231338.GA1073694@bogus>
+References: <20200618135951.25441-1-lars.povlsen@microchip.com>
+ <20200618135951.25441-2-lars.povlsen@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200624151736.95785-8-alexandru.tachici@analog.com>
+In-Reply-To: <20200618135951.25441-2-lars.povlsen@microchip.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Jun 24, 2020 at 06:17:36PM +0300, alexandru.tachici@analog.com wrote:
-> From: Alexandru Tachici <alexandru.tachici@analog.com>
+On Thu, 18 Jun 2020 15:59:49 +0200, Lars Povlsen wrote:
+> This add the DT binding specification for the Sparx5 temperature
+> sensor.
 > 
-> Add bindings for the Analog Devices ADM1266 sequencer.
-> 
-> Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
+> Signed-off-by: Lars Povlsen <lars.povlsen@microchip.com>
 > ---
->  .../bindings/hwmon/adi,adm1266.yaml           | 56 +++++++++++++++++++
->  1 file changed, 56 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/adi,adm1266.yaml
+>  .../bindings/hwmon/microchip,sparx5-temp.yaml | 44 +++++++++++++++++++
+>  1 file changed, 44 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,sparx5-temp.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/adi,adm1266.yaml b/Documentation/devicetree/bindings/hwmon/adi,adm1266.yaml
-> new file mode 100644
-> index 000000000000..76b62be48d56
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/adi,adm1266.yaml
-> @@ -0,0 +1,56 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/adi,adm1266.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Analog Devices ADM1266 Cascadable Super Sequencer with Margin
-> +  Control and Fault Recording
-> +
-> +maintainers:
-> +  - Alexandru Tachici <alexandru.tachici@analog.com>
-> +
-> +description: |
-> +  Analog Devices ADM1266 Cascadable Super Sequencer with Margin
-> +  Control and Fault Recording.
-> +  https://www.analog.com/media/en/technical-documentation/data-sheets/ADM1266.pdf
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - adi,adm1266
-> +
-> +  reg:
-> +    description: |
-> +      I2C address of slave device.
-> +    items:
-> +      minimum: 0x40
-> +      maximum: 0x4F
-> +
-> +  avcc-supply:
-> +    description: |
-> +      Phandle to the Avcc power supply.
-> +
-> +  adi,master-adm1266:
-> +    description: |
-> +      Represents phandle of a master ADM1266 device cascaded through the IDB.
-> +    $ref: "/schemas/types.yaml#/definitions/phandle"
-> +
-> +required:
-> +  - compatible
-> +  - reg
 
-Add:
-
-additionalProperties: false
-
-> +
-> +examples:
-> +  - |
-> +    i2c0 {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        adm1266@40 {
-> +                compatible = "adi,adm1266";
-> +                reg = <0x40>;
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-
-These aren't documented. Do you expect child nodes?
-
-> +        };
-> +    };
-> +...
-> -- 
-> 2.20.1
-> 
+Reviewed-by: Rob Herring <robh@kernel.org>
