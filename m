@@ -2,270 +2,150 @@ Return-Path: <SRS0=e0Qf=AU=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66D5DC433E0
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Jul 2020 14:01:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 628CCC433E0
+	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Jul 2020 14:05:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3C51E20708
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Jul 2020 14:01:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3AEDA2073A
+	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Jul 2020 14:05:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oGfdVkPa"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qpfoa8fC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726371AbgGIOBh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 9 Jul 2020 10:01:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42424 "EHLO
+        id S1726624AbgGIOFz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 9 Jul 2020 10:05:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726353AbgGIOBh (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Jul 2020 10:01:37 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FEBBC08C5CE;
-        Thu,  9 Jul 2020 07:01:37 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id l63so1004493pge.12;
-        Thu, 09 Jul 2020 07:01:37 -0700 (PDT)
+        with ESMTP id S1726517AbgGIOFz (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Jul 2020 10:05:55 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0737AC08C5CE;
+        Thu,  9 Jul 2020 07:05:55 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id gc9so1166371pjb.2;
+        Thu, 09 Jul 2020 07:05:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=NEOz/+dYEKltf/Afv4NXx7vYr8cUcobGnfdo+jwjuq4=;
-        b=oGfdVkPaw/KVerbh/jwrh5Eme6+UE1Ov0hPrcL19asfiB/KB0mojMzOfIi0KOJTrok
-         YgJfE0PKCiIy/lRsqNK5UA5pS5ShxYq6kVriDbfqQQq+Q0X3zy/nd5ScZZQdP81aEMrY
-         rM1Qip557Zlw2/VV2Eb1lmmsHW54OiBUYRW6ejHs/25FpRCPFU4Qy24Bp75CpAiHfWhh
-         VtNNDEH88yfWktYRTNBDbaoSdbXRr1lACNDPE5LOq3Fq22P+kphzTyycybGcaYeeo7KQ
-         oCXhr1oeth8VmEg+hbS7xR9Ay1j1v6By0xdOmyyJgzCrknE4xc1qKReGa5/xRJ/0vt7c
-         KRBQ==
+        bh=NwEhvbErLu/V10VrYepwaUe6PTwu2578knvAWxKcwIE=;
+        b=Qpfoa8fCSn6XqJ2sn3lwIOfOzdzMf9zCa32Jm7zpYhLZhqk7CSwulNF7PmzSfdPWcy
+         3qJgYRubgywQp//y2pOfqI8VUZlBokueynM7BmvffndliAknMDwVukOGiFWOvQf6ABUi
+         LLU5U2wbv8vlRqKdWXQFypPPnlLY61oJ1R+spLv26EQRnefdZuiaCYh4uIySVufNGYbQ
+         8rvOV+ghiXk9rZbmLmB9s/wWnHlOXxDgdfnnjIwc878tB6wZyqkvDdTT6MchhP52KjBd
+         LN7L937iZxtG9Tfcwwxve7HFz4Wwfu1s6cMAYjKTvmRYuyzKXRhxhTZCKPI1tMVvIUey
+         NQYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=NEOz/+dYEKltf/Afv4NXx7vYr8cUcobGnfdo+jwjuq4=;
-        b=FfSJ0UMg0/4ptf5yk0CgsY2nPHWPtBXXLZdQLGo0totJcWY499RR4fAqZVNt5JBZag
-         5e7CEnjiEYEMWUdeawkVxsFzDmMdk5l7n0D3qy3TSYyfgVY1N9KhwXkT/QkRn6WsUdjo
-         z7WAG/3/+R4A5Yp3kZH+aTD1qHjO5VjXWkg/C1pUZxO0/pweqhpeLY0E2deVVTXLri2B
-         77Yi4JUkydi/IVaiPmn3ZBjfnEzd0wlooVWiwrlGCueZgp+nkswd2761r7icV12LrZvu
-         wtzfmECndPwer80VowOD5SMczkF+Y9MvHBj3iooyh0ZkqxSz/JCwofUIRGrL5bohm0wP
-         MgJA==
-X-Gm-Message-State: AOAM533W4oEtqdWg0ceZdbeOPXQF1ocorvkbasiMsf+vWtC99iIeMsBo
-        TqBNVrP3M+Q5EC0hDtR2YLykEU1op7s=
-X-Google-Smtp-Source: ABdhPJwhBJ/xOmahcpLOzDy/gF/KFTidiBfk1GEmueonBgle1sab7N4bvPQKS6F4yjkeMR2AKEjvTw==
-X-Received: by 2002:a63:417:: with SMTP id 23mr51185366pge.44.1594303296787;
-        Thu, 09 Jul 2020 07:01:36 -0700 (PDT)
+        bh=NwEhvbErLu/V10VrYepwaUe6PTwu2578knvAWxKcwIE=;
+        b=NfP/yh0hWQWYLQOmiOxTwR2I/pZG9BtNU00e+OyXv8tnLVit428tmJ3DYFt4YqXZjK
+         gK04Di4u3p5jHrGLoBFLe6OQEtG2Z/Hv8NwodQBJ8+g6lGgPiv50Z8RPN8m+1PtX0S2H
+         cI1nFWuU4KtK3pcAKbPFcgyw2s1hLnPO6wvCA2UOdUEogGWJDYG1gb2Dew6ytYCSmMeo
+         422pdFo8Yq2kdzfWXC7BbzWBhJn/epvedx9HM7XAl4+10pe2Xva+0wGU7qe7h6tvXhFT
+         1vFNSMbHZ6SI2pare962Hl51wYzZnR/Rgo5z9LciNU+Fd4glQp1+4RU8UFUFWqHK6uav
+         wZCg==
+X-Gm-Message-State: AOAM530W3GSW4Cbo0sphwgyYM3AcCNDYTaL+cHAQLeqj/+Pov+yFYDYM
+        QE/WBUmBZTI8r0nGoznBErU=
+X-Google-Smtp-Source: ABdhPJxvV9B0/d/CooREw9Ze/1q44n+0kuGdm1qO1kmBE3ej7pRSdlQEmgo3R+PWGgYz16lLpQVQsA==
+X-Received: by 2002:a17:90a:2a4d:: with SMTP id d13mr126753pjg.195.1594303554585;
+        Thu, 09 Jul 2020 07:05:54 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f14sm2926191pgj.62.2020.07.09.07.01.35
+        by smtp.gmail.com with ESMTPSA id v197sm3076905pfc.35.2020.07.09.07.05.53
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 09 Jul 2020 07:01:35 -0700 (PDT)
-Date:   Thu, 9 Jul 2020 07:01:34 -0700
+        Thu, 09 Jul 2020 07:05:54 -0700 (PDT)
+Date:   Thu, 9 Jul 2020 07:05:53 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Marius Zachmann <mail@mariuszachmann.de>
-Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: corsair-cpro: add fan_target
-Message-ID: <20200709140134.GA61434@roeck-us.net>
-References: <20200709112439.6069-1-mail@mariuszachmann.de>
+To:     Chu Lin <linchuyuan@google.com>
+Cc:     belgaied@google.com, jasonling@google.com, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhongqil@google.com
+Subject: Re: [PATCH v2] hwmon: adm1275: Make sure we are reading enough data
+ for different chips
+Message-ID: <20200709140553.GA62629@roeck-us.net>
+References: <20200709040612.3977094-1-linchuyuan@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200709112439.6069-1-mail@mariuszachmann.de>
+In-Reply-To: <20200709040612.3977094-1-linchuyuan@google.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Jul 09, 2020 at 01:24:39PM +0200, Marius Zachmann wrote:
-> This adds fan_target entries to the corsair-cpro driver.
-> Reading the attribute from the device does not seem possible, so
-> it returns the last set value. (same as pwm)
+On Thu, Jul 09, 2020 at 04:06:12AM +0000, Chu Lin wrote:
+> Issue:
+> When PEC is enabled, binding adm1272 to the adm1275 would
+> fail due to PEC error. See below:
+> adm1275: probe of xxxx failed with error -74
 > 
-> Furthermore:
-> - removes unnecessary kernel.h include.
-> - send_usb_cmd now has one more argument which is needed for the
->   fan_target command.
+> Diagnosis:
+> Per the datasheet of adm1272, adm1278, adm1293 and amd1294,
+> PMON_CONFIG (0xd4) is 16bits wide. On the other hand,
+> PMON_CONFIG (0xd4) for adm1275 is 8bits wide. The driver should not
+> assume everything is 8bits wide and read only 8bits from it.
 > 
-> Signed-off-by: Marius Zachmann <mail@mariuszachmann.de>
+> Solution:
+> If it is adm1272, adm1278, adm1293 and adm1294, use i2c_read_word.
+> Else, use i2c_read_byte
+> 
+> Testing:
+> Binding adm1272 to the driver.
+> The change is only tested on adm1272.
+> 
+> Signed-off-by: Chu Lin <linchuyuan@google.com>
+
+Applied.
+
+Thanks a lot for analyzing and fixing the problem.
+
+Guenter
+
 > ---
->  Documentation/hwmon/corsair-cpro.rst |  3 ++
->  drivers/hwmon/corsair-cpro.c         | 62 ++++++++++++++++++++++------
->  2 files changed, 53 insertions(+), 12 deletions(-)
 > 
-> --
-> 2.27.0
+> ChangeLog v1 -> v2
+>   - Rename config_read_fn_ptr to config_read_fn
+>   - Move config_read_fn to the first line as it is the longest
+>     variable declaration
+>   - Include adm1293 and adm1294
+>   - Remove the inline comment as I think the purpose is obvious
 > 
-> diff --git a/Documentation/hwmon/corsair-cpro.rst b/Documentation/hwmon/corsair-cpro.rst
-> index 5913e23d764c..080f063d74b6 100644
-> --- a/Documentation/hwmon/corsair-cpro.rst
-> +++ b/Documentation/hwmon/corsair-cpro.rst
-> @@ -33,6 +33,9 @@ in2_input		Voltage on SATA 3.3v
->  temp[1-4]_input		Temperature on connected temperature sensors
->  fan[1-6]_input		Connected fan rpm.
->  fan[1-6]_label		Shows fan type as detected by the device.
-> +fan[1-6]_set_target	Sets fan speed target rpm. Values from 0-65535.
-> +			When reading, it reports the last value if it was set by the driver.
-> +			Otherwise returns 0.
->  pwm[1-6]		Sets the fan speed. Values from 0-255.
->  			When reading, it reports the last value if it was set by the driver.
->  			Otherwise returns 0.
-> diff --git a/drivers/hwmon/corsair-cpro.c b/drivers/hwmon/corsair-cpro.c
-> index a22583acc229..a2cb2b474f08 100644
-> --- a/drivers/hwmon/corsair-cpro.c
-> +++ b/drivers/hwmon/corsair-cpro.c
-> @@ -5,7 +5,6 @@
->   */
 > 
->  #include <linux/bitops.h>
-> -#include <linux/kernel.h>
->  #include <linux/hwmon.h>
->  #include <linux/module.h>
->  #include <linux/mutex.h>
-> @@ -51,6 +50,12 @@
->  					 * send: byte 1 is fan number
->  					 * send: byte 2 is percentage from 0 - 100
->  					 */
-> +#define CTL_SET_FAN_TARGET	0x24	/*
-> +					 * set target rpm
-> +					 * send: byte 1 is fan number
-> +					 * send: byte 2-3 is target
-> +					 * device accepts all values from 0x00 - 0xFFFF
-> +					 */
+>  drivers/hwmon/pmbus/adm1275.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
 > 
->  #define NUM_FANS		6
->  #define NUM_TEMP_SENSORS	4
-> @@ -60,13 +65,14 @@ struct ccp_device {
->  	struct mutex mutex; /* whenever buffer is used, lock before send_usb_cmd */
->  	u8 *buffer;
->  	int pwm[6];
-> +	int target[6];
->  	DECLARE_BITMAP(temp_cnct, NUM_TEMP_SENSORS);
->  	DECLARE_BITMAP(fan_cnct, NUM_FANS);
->  	char fan_label[6][LABEL_LENGTH];
->  };
-> 
->  /* send command, check for error in response, response in ccp->buffer */
-> -static int send_usb_cmd(struct ccp_device *ccp, u8 command, u8 byte1, u8 byte2)
-> +static int send_usb_cmd(struct ccp_device *ccp, u8 command, u8 byte1, u8 byte2, u8 byte3)
+> diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275.c
+> index e25f541227da..19317575d1c6 100644
+> --- a/drivers/hwmon/pmbus/adm1275.c
+> +++ b/drivers/hwmon/pmbus/adm1275.c
+> @@ -465,6 +465,7 @@ MODULE_DEVICE_TABLE(i2c, adm1275_id);
+>  static int adm1275_probe(struct i2c_client *client,
+>  			 const struct i2c_device_id *id)
 >  {
->  	int actual_length;
+> +	s32 (*config_read_fn)(const struct i2c_client *client, u8 reg);
+>  	u8 block_buffer[I2C_SMBUS_BLOCK_MAX + 1];
+>  	int config, device_config;
 >  	int ret;
-> @@ -75,6 +81,7 @@ static int send_usb_cmd(struct ccp_device *ccp, u8 command, u8 byte1, u8 byte2)
->  	ccp->buffer[0] = command;
->  	ccp->buffer[1] = byte1;
->  	ccp->buffer[2] = byte2;
-> +	ccp->buffer[3] = byte3;
-> 
->  	ret = usb_bulk_msg(ccp->udev, usb_sndintpipe(ccp->udev, 2), ccp->buffer, OUT_BUFFER_SIZE,
->  			   &actual_length, 1000);
-> @@ -103,7 +110,7 @@ static int get_data(struct ccp_device *ccp, int command, int channel)
-> 
->  	mutex_lock(&ccp->mutex);
-> 
-> -	ret = send_usb_cmd(ccp, command, channel, 0);
-> +	ret = send_usb_cmd(ccp, command, channel, 0, 0);
->  	if (ret)
->  		goto out_unlock;
-> 
-> @@ -128,7 +135,24 @@ static int set_pwm(struct ccp_device *ccp, int channel, long val)
-> 
->  	mutex_lock(&ccp->mutex);
-> 
-> -	ret = send_usb_cmd(ccp, CTL_SET_FAN_FPWM, channel, val);
-> +	ret = send_usb_cmd(ccp, CTL_SET_FAN_FPWM, channel, val, 0);
-> +
-> +	mutex_unlock(&ccp->mutex);
-> +	return ret;
-> +}
-> +
-> +static int set_target(struct ccp_device *ccp, int channel, long val)
-> +{
-> +	int ret;
-> +
-> +	if (val < 0 || val > 0xFFFF)
-> +		return -EINVAL;
-
-Please use clamp_val() here. We don't expect users to know the limits.
-That is different to pwm, which has a well known range of 0..255.
-Of course, that means you still need the kernel.h include.
-
-> +
-> +	ccp->target[channel] = val;
-> +
-> +	mutex_lock(&ccp->mutex);
-> +
-> +	ret = send_usb_cmd(ccp, CTL_SET_FAN_TARGET, channel, val >> 8, val);
-> 
->  	mutex_unlock(&ccp->mutex);
->  	return ret;
-> @@ -183,6 +207,11 @@ static int ccp_read(struct device *dev, enum hwmon_sensor_types type,
->  				return ret;
->  			*val = ret;
->  			return 0;
-> +		case hwmon_fan_target:
-> +			/* how to read target values from the device is unknown */
-> +			/* driver returns last set value or 0			*/
-> +			*val = ccp->target[channel];
-> +			return 0;
->  		default:
->  			break;
->  		}
-> @@ -231,6 +260,13 @@ static int ccp_write(struct device *dev, enum hwmon_sensor_types type,
->  			break;
->  		}
->  		break;
-> +	case hwmon_fan:
-> +		switch (attr) {
-> +		case hwmon_fan_target:
-> +			return set_target(ccp, channel, val);
-> +		default:
-> +			break;
-> +		}
->  	default:
->  		break;
->  	}
-> @@ -266,6 +302,8 @@ static umode_t ccp_is_visible(const void *data, enum hwmon_sensor_types type,
->  			return 0444;
->  		case hwmon_fan_label:
->  			return 0444;
-> +		case hwmon_fan_target:
-> +			return 0644;
->  		default:
->  			break;
->  		}
-> @@ -313,12 +351,12 @@ static const struct hwmon_channel_info *ccp_info[] = {
->  			   HWMON_T_INPUT
->  			   ),
->  	HWMON_CHANNEL_INFO(fan,
-> -			   HWMON_F_INPUT | HWMON_F_LABEL,
-> -			   HWMON_F_INPUT | HWMON_F_LABEL,
-> -			   HWMON_F_INPUT | HWMON_F_LABEL,
-> -			   HWMON_F_INPUT | HWMON_F_LABEL,
-> -			   HWMON_F_INPUT | HWMON_F_LABEL,
-> -			   HWMON_F_INPUT | HWMON_F_LABEL
-> +			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_TARGET,
-> +			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_TARGET,
-> +			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_TARGET,
-> +			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_TARGET,
-> +			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_TARGET,
-> +			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_TARGET
->  			   ),
->  	HWMON_CHANNEL_INFO(pwm,
->  			   HWMON_PWM_INPUT,
-> @@ -348,7 +386,7 @@ static int get_fan_cnct(struct ccp_device *ccp)
->  	int mode;
->  	int ret;
-> 
-> -	ret = send_usb_cmd(ccp, CTL_GET_FAN_CNCT, 0, 0);
-> +	ret = send_usb_cmd(ccp, CTL_GET_FAN_CNCT, 0, 0, 0);
->  	if (ret)
->  		return ret;
-> 
-> @@ -385,7 +423,7 @@ static int get_temp_cnct(struct ccp_device *ccp)
->  	int mode;
->  	int ret;
-> 
-> -	ret = send_usb_cmd(ccp, CTL_GET_TMP_CNCT, 0, 0);
-> +	ret = send_usb_cmd(ccp, CTL_GET_TMP_CNCT, 0, 0, 0);
->  	if (ret)
->  		return ret;
+> @@ -510,11 +511,16 @@ static int adm1275_probe(struct i2c_client *client,
+>  			   "Device mismatch: Configured %s, detected %s\n",
+>  			   id->name, mid->name);
+>  
+> -	config = i2c_smbus_read_byte_data(client, ADM1275_PMON_CONFIG);
+> +	if (mid->driver_data == adm1272 || mid->driver_data == adm1278 ||
+> +	    mid->driver_data == adm1293 || mid->driver_data == adm1294)
+> +		config_read_fn = i2c_smbus_read_word_data;
+> +	else
+> +		config_read_fn = i2c_smbus_read_byte_data;
+> +	config = config_read_fn(client, ADM1275_PMON_CONFIG);
+>  	if (config < 0)
+>  		return config;
+>  
+> -	device_config = i2c_smbus_read_byte_data(client, ADM1275_DEVICE_CONFIG);
+> +	device_config = config_read_fn(client, ADM1275_DEVICE_CONFIG);
+>  	if (device_config < 0)
+>  		return device_config;
+>  
