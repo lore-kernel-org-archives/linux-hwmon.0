@@ -4,162 +4,148 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8016DC433DF
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Jul 2020 16:53:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC90FC433E0
+	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Jul 2020 22:14:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5A5882078B
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Jul 2020 16:53:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C3839206A1
+	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Jul 2020 22:14:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1594313581;
-	bh=Ou1869HVFSvMwv+8dhYgjVi8A7KdtbtdmscrHUk5bU4=;
+	s=default; t=1594332867;
+	bh=dI+YKovRZcmleNvC8/pS+LSupDrqJpa9QNMy7S8kGm0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=lJRI9UL+hcaqM353+Npu2dwv/hIwPtGSExUF0tGAy7EPa7BJ6YXVMRn9x8kWjbU3y
-	 NdX4P7FlfpKl4VdO1BICKyjRiI7fEan1KGTlAnZV311O6PUtwET8AJLslj3Qz0Tw9f
-	 rPc4vKhDljkT3tBmVcYkA64/VcKdo91TayqwfHk4=
+	b=hsReaLonRLnY1t7c/Btkplsr5HZVbE5d63tMhuBqJWAMTlpfKupuefOiuSPCliaQ2
+	 9nBSJsRyb96xipdGrvn7h+f/lvysFUGST+s1YkaZ1yUJILj2m0XeLiKbvkYxM1c+hv
+	 LIZ5cbqlFksr4o1ZXTENECeA+6+ODLUbn/2t5RvE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726615AbgGIQxB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 9 Jul 2020 12:53:01 -0400
-Received: from mail-il1-f196.google.com ([209.85.166.196]:33367 "EHLO
-        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726339AbgGIQxA (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Jul 2020 12:53:00 -0400
-Received: by mail-il1-f196.google.com with SMTP id a11so2641751ilk.0;
-        Thu, 09 Jul 2020 09:53:00 -0700 (PDT)
+        id S1726275AbgGIWO1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 9 Jul 2020 18:14:27 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:33217 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726228AbgGIWO1 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Jul 2020 18:14:27 -0400
+Received: by mail-io1-f68.google.com with SMTP id d18so4034665ion.0;
+        Thu, 09 Jul 2020 15:14:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=7/DCDecxKksLQjx2pJx97E2fm4hbkP0T5+uzMJw8RSw=;
-        b=Mb5vSJwc6KGMq7PEECu1KP6eU13QQQDRxxSucMnH6xOdmOpbwrjRk0YjHz8uM5SFwi
-         J2muvvrKXAwND51BslJwmqoUi/vjRZsirT98PiXJMNy+qVzYfMLconPJWBbCF/4LcIcf
-         NM3xvFrzgPy3WRNYl7PEYFsR/0U91qlVN5NY4QDcialL8/9vvfBJyy+kDYRqEosUq9ba
-         3c+A84UBGf/2WLIEBG0ky/HQeKtIhDCtkEgCvNesmChf0aDHQPqJ32z+wK5PA7bk1swb
-         ksKAAXEwXGMqfK0UJn5HBJYyqlzON7yqWYsHWTiAv0JxFCsIZBvKpfUc6sjnRi9h2M7b
-         8OFA==
-X-Gm-Message-State: AOAM531pAzKvM3IS42LsYdl6rjhO3gdZ0e+AyqjoU3muYw8InEdBw85W
-        s2GrwjfxAkslz/T/uUKrUg==
-X-Google-Smtp-Source: ABdhPJxpUGLRhdHevt6FxnlHLfFjo1zs7m9mcBQFfsYIWjkHPg9D1Aon2dvz6mvRSv5guWR5rc9R2w==
-X-Received: by 2002:a92:c5c6:: with SMTP id s6mr49200705ilt.139.1594313579681;
-        Thu, 09 Jul 2020 09:52:59 -0700 (PDT)
+        bh=0GI8wbwo9sGGwkY6G16fvlQaAYWT2insbPg48n1qsB0=;
+        b=KJOaIlDPC0fk2w5GzYvRRtXnmSUid6G065usnwKhWV0qWn8MRraHcaimXTvdIhCksR
+         RHIc8DWhjLY/xcyE2Ahb3xZCefT1ouuc3RDLS3ZymCO1JG2AQX+wsomRwPyYFpNMZgex
+         pr5YKa+iQzRUHn7KDSaSM6BXW/4n5ODv8QVOEbYWU9BO6+oPHppzEWMD3LBUDK5nnpnA
+         H3f+ohAQfueTlitpEFF+V4AsoPmUsH/y5XBM8/GA5Mm1tq6+ufAN9UBcatoZNVWetBxw
+         dXyfPzclEh0kDo9BNisXxHVGvUNdf3JQXHds2IlP1ZjqHxCSwuln1JVgr2azKDNOO5Ut
+         2nhg==
+X-Gm-Message-State: AOAM531pFtYcDrGkzt0iLpQbwDhn73AcF0cATXnSMANWWM5p503M1opL
+        axd84DfaBh4fl6rvBhHsUKZjFZf2kg==
+X-Google-Smtp-Source: ABdhPJz4z0YRhpJUp29LyqfDmxPtPiXxZxITILJyx22tU8BdeEEMcaWycX5iG4kXTnIURSnYmr7XnA==
+X-Received: by 2002:a05:6602:58a:: with SMTP id v10mr44439153iox.203.1594332866335;
+        Thu, 09 Jul 2020 15:14:26 -0700 (PDT)
 Received: from xps15 ([64.188.179.254])
-        by smtp.gmail.com with ESMTPSA id r11sm2115791ilm.2.2020.07.09.09.52.58
+        by smtp.gmail.com with ESMTPSA id b24sm2908370ioj.1.2020.07.09.15.14.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2020 09:52:58 -0700 (PDT)
-Received: (nullmailer pid 505434 invoked by uid 1000);
-        Thu, 09 Jul 2020 16:51:07 -0000
-Date:   Thu, 9 Jul 2020 10:51:07 -0600
+        Thu, 09 Jul 2020 15:14:25 -0700 (PDT)
+Received: (nullmailer pid 986760 invoked by uid 1000);
+        Thu, 09 Jul 2020 22:14:25 -0000
+Date:   Thu, 9 Jul 2020 16:14:25 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Chris Ruehl <chris.ruehl@gtsys.com.hk>
-Cc:     Jack Lo <jack.lo@gtsys.com.hk>, devicetree@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] devicetree: hwmon: shtc1: Add sensirion,shtc1.yaml
-Message-ID: <20200709165107.GB498064@bogus>
-References: <20200708040748.9014-1-chris.ruehl@gtsys.com.hk>
- <20200708040748.9014-3-chris.ruehl@gtsys.com.hk>
+To:     alexandru.tachici@analog.com
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux@roeck-us.net
+Subject: Re: [PATCH v5 7/7] dt-bindings: hwmon: Add bindings for ADM1266
+Message-ID: <20200709221425.GA984242@bogus>
+References: <20200624151736.95785-1-alexandru.tachici@analog.com>
+ <20200624151736.95785-8-alexandru.tachici@analog.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200708040748.9014-3-chris.ruehl@gtsys.com.hk>
+In-Reply-To: <20200624151736.95785-8-alexandru.tachici@analog.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Jul 08, 2020 at 12:07:47PM +0800, Chris Ruehl wrote:
-> Add documentation for the newly added DTS support in the shtc1 driver.
-> To align with the drivers logic to have high precision by default
-> a boolean sensirion,low_precision is used to switch to low precision.
+On Wed, Jun 24, 2020 at 06:17:36PM +0300, alexandru.tachici@analog.com wrote:
+> From: Alexandru Tachici <alexandru.tachici@analog.com>
 > 
-> Signed-off-by: Chris Ruehl <chris.ruehl@gtsys.com.hk>
+> Add bindings for the Analog Devices ADM1266 sequencer.
+> 
+> Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
 > ---
->  .../bindings/hwmon/sensirion,shtc1.yaml       | 60 +++++++++++++++++++
->  1 file changed, 60 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml
+>  .../bindings/hwmon/adi,adm1266.yaml           | 56 +++++++++++++++++++
+>  1 file changed, 56 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/adi,adm1266.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml b/Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml
+> diff --git a/Documentation/devicetree/bindings/hwmon/adi,adm1266.yaml b/Documentation/devicetree/bindings/hwmon/adi,adm1266.yaml
 > new file mode 100644
-> index 000000000000..6725a7b646b7
+> index 000000000000..76b62be48d56
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml
-> @@ -0,0 +1,60 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +++ b/Documentation/devicetree/bindings/hwmon/adi,adm1266.yaml
+> @@ -0,0 +1,56 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/hwmon/sensirion,shtc1.yaml#
+> +$id: http://devicetree.org/schemas/hwmon/adi,adm1266.yaml#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: Sensirion SHTC1 Humidity and Temperature Sensor IC
+> +title: Analog Devices ADM1266 Cascadable Super Sequencer with Margin
+> +  Control and Fault Recording
 > +
 > +maintainers:
-> +  - chris.ruehl@gtsys.com.hk
+> +  - Alexandru Tachici <alexandru.tachici@analog.com>
 > +
 > +description: |
-> +  The SHTC1, SHTW1 and SHTC3 are digital humidity and temperature sensor
-> +  designed especially for battery-driven high-volume consumer electronics
-> +  applications.
-> +  For further information refere to Documentation/hwmon/shtc1.rst
-> +
-> +  This binding document describes the binding for the hardware monitor
-> +  portion of the driver.
+> +  Analog Devices ADM1266 Cascadable Super Sequencer with Margin
+> +  Control and Fault Recording.
+> +  https://www.analog.com/media/en/technical-documentation/data-sheets/ADM1266.pdf
 > +
 > +properties:
 > +  compatible:
 > +    enum:
-> +      - sensirion,shtc1
-> +      - sensirion,shtw1
-> +      - sensirion,shtc3
+> +      - adi,adm1266
 > +
 > +  reg:
-> +    maxItems: 1
-> +    description: I2C address 0x70
-
-If 0x70 is the only address, then do:
-
-reg:
-  const: 0x70
-
+> +    description: |
+> +      I2C address of slave device.
+> +    items:
+> +      minimum: 0x40
+> +      maximum: 0x4F
 > +
-> +  sensirion,blocking_io:
-
-s/_/-/
-
-> +    $ref: /schemas/types.yaml#definitions/flag
-> +    description:
-> +      If set the i2c bus hold until measure finished.
+> +  avcc-supply:
+> +    description: |
+> +      Phandle to the Avcc power supply.
 > +
-> +  sensirion,low_precision:
-> +    $ref: /schemas/types.yaml#definitions/flag
-
-s/_/-/
-
-> +    description:
-> +      If set aquire data with low precision (not recommended).
-> +      The driver aquire data with high precision by default.
+> +  adi,master-adm1266:
+> +    description: |
+> +      Represents phandle of a master ADM1266 device cascaded through the IDB.
+> +    $ref: "/schemas/types.yaml#/definitions/phandle"
 > +
 > +required:
 > +  - compatible
 > +  - reg
+
+Add:
+
+additionalProperties: false
+
 > +
 > +examples:
 > +  - |
-> +    i2c1 {
-> +      status = "okay";
-
-Don't show status in examples.
-
-> +      clock-frequency = <400000>;
+> +    i2c0 {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
 > +
-> +      shtc3@70 {
-> +        compatible = "sensirion,shtc3";
-> +        reg = <0x70>
-> +        sensirion,blocking_io;
-> +        status = "okay";
-> +      };
+> +        adm1266@40 {
+> +                compatible = "adi,adm1266";
+> +                reg = <0x40>;
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+
+These aren't documented. Do you expect child nodes?
+
+> +        };
 > +    };
 > +...
 > -- 
