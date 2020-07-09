@@ -2,136 +2,399 @@ Return-Path: <SRS0=e0Qf=AU=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B346BC433DF
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Jul 2020 04:06:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA9D2C433E2
+	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Jul 2020 08:50:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 844D5206F6
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Jul 2020 04:06:22 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="v+kVGjQt"
+	by mail.kernel.org (Postfix) with ESMTP id C51E520672
+	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Jul 2020 08:50:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726119AbgGIEGW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 9 Jul 2020 00:06:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35244 "EHLO
+        id S1726367AbgGIIuT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 9 Jul 2020 04:50:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726091AbgGIEGV (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Jul 2020 00:06:21 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A2A0C061A0B
-        for <linux-hwmon@vger.kernel.org>; Wed,  8 Jul 2020 21:06:21 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 205so1321647yby.19
-        for <linux-hwmon@vger.kernel.org>; Wed, 08 Jul 2020 21:06:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=1y2c3rjVWMDvkKdYX8ZNaWmxEBIIQ3QnKUzqSw9YCtw=;
-        b=v+kVGjQtYzAabSAO2hVKtBYznz8uI02EUUuXTacWLcGXnVXhea9CwSYIsZtGhtthah
-         h/+cSWroxJWyTyGcFs465H2HD9/sIjqtZFwUH03rkplMnoTi1vTfMBerm5WA517N4Qfg
-         EJeH/U3ffEFGZCS3iICsNNefitXPX3j3iy9S1ip8ujMtHfAGmuiBmxovYam+sjIF1B04
-         HFwkf3qBzbRKekmUJ68IpQMvcUg611xkelANY1Fltk4u7wAbpBNEOcXalgIV1Rw0lSIW
-         vv3tnHZ1ZDyPuikQ9k9xf1EK/mhOQPeSrLKQUH4q36ZNQ5u8zfRk8t3yIJ5iaBPNn4qH
-         92gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=1y2c3rjVWMDvkKdYX8ZNaWmxEBIIQ3QnKUzqSw9YCtw=;
-        b=gUWR9aeiY+gurp1EXrF0DS2AwT0QPcsITfdk5ZTDz/3cHucsfPz5bY+Oew/X8uSKKu
-         lwU+9qAgSX51sZXV4KZ84LUFgtYLZcRcbqO24+VZgV2ynFH3hkoMMLESUYWDg4m5JOp0
-         sKG9VMfe0aUWa0owNukZoRnMqUiNjgV5m88spgC4gnthZtgPFmXPqC71FdY6OMj6GNa8
-         /EsheTL8ClaWSyg5zVoqwe/AzLDTC1lNEa5Z+grlxZ+4I5j52tU/gxLzf7p5ndw3T7jm
-         9frNzSmMWaqa6PxGgIZJ3CTJ0zv8V8bZgHnUPjvcxYYOD5hrPkFt+O3jNq9lfEmhrH1z
-         tfNQ==
-X-Gm-Message-State: AOAM533pMXS+zDgdMLeNE41EqE62OdFDEBvJNv0ACB7eLOimsaAOCKlG
-        2aSfKVWwhZt5KWwH8E6rF8lxo8xxhinCg83v
-X-Google-Smtp-Source: ABdhPJysVuabU1/EIYkuOguPqwUhvSghCQ6RiPLy3m040sjW13pEIAe6T9sUlWstOcS5Rovj8NjC7SwRQ2He9Hk+
-X-Received: by 2002:a25:4143:: with SMTP id o64mr17348936yba.226.1594267580232;
- Wed, 08 Jul 2020 21:06:20 -0700 (PDT)
-Date:   Thu,  9 Jul 2020 04:06:12 +0000
-Message-Id: <20200709040612.3977094-1-linchuyuan@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.27.0.383.g050319c2ae-goog
-Subject: [PATCH v2] hwmon: adm1275: Make sure we are reading enough data for
- different chips
-From:   Chu Lin <linchuyuan@google.com>
-To:     linux@roeck-us.net
-Cc:     belgaied@google.com, jasonling@google.com, jdelvare@suse.com,
-        linchuyuan@google.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zhongqil@google.com
-Content-Type: text/plain; charset="UTF-8"
+        with ESMTP id S1726365AbgGIIuR (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Jul 2020 04:50:17 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFAD8C061A0B
+        for <linux-hwmon@vger.kernel.org>; Thu,  9 Jul 2020 01:50:17 -0700 (PDT)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1jtSFw-0008EV-8U; Thu, 09 Jul 2020 10:50:12 +0200
+Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1jtSFq-0005Cr-D3; Thu, 09 Jul 2020 10:50:06 +0200
+Date:   Thu, 9 Jul 2020 10:50:06 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Michael Walle <michael@walle.cc>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v5 07/13] pwm: add support for sl28cpld PWM controller
+Message-ID: <20200709085006.b54ype3p4yu64upl@pengutronix.de>
+References: <20200706175353.16404-1-michael@walle.cc>
+ <20200706175353.16404-8-michael@walle.cc>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zo5wkjqhpntpevbs"
+Content-Disposition: inline
+In-Reply-To: <20200706175353.16404-8-michael@walle.cc>
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Issue:
-When PEC is enabled, binding adm1272 to the adm1275 would
-fail due to PEC error. See below:
-adm1275: probe of xxxx failed with error -74
 
-Diagnosis:
-Per the datasheet of adm1272, adm1278, adm1293 and amd1294,
-PMON_CONFIG (0xd4) is 16bits wide. On the other hand,
-PMON_CONFIG (0xd4) for adm1275 is 8bits wide. The driver should not
-assume everything is 8bits wide and read only 8bits from it.
+--zo5wkjqhpntpevbs
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Solution:
-If it is adm1272, adm1278, adm1293 and adm1294, use i2c_read_word.
-Else, use i2c_read_byte
+Hello Michael,
 
-Testing:
-Binding adm1272 to the driver.
-The change is only tested on adm1272.
+On Mon, Jul 06, 2020 at 07:53:47PM +0200, Michael Walle wrote:
+> diff --git a/drivers/pwm/pwm-sl28cpld.c b/drivers/pwm/pwm-sl28cpld.c
+> new file mode 100644
+> index 000000000000..8ee286b605bf
+> --- /dev/null
+> +++ b/drivers/pwm/pwm-sl28cpld.c
+> @@ -0,0 +1,187 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * sl28cpld PWM driver
+> + *
+> + * Copyright 2020 Kontron Europe GmbH
+> + */
 
-Signed-off-by: Chu Lin <linchuyuan@google.com>
----
+Is there publically available documenation available? If so please add a
+link here.
 
-ChangeLog v1 -> v2
-  - Rename config_read_fn_ptr to config_read_fn
-  - Move config_read_fn to the first line as it is the longest
-    variable declaration
-  - Include adm1293 and adm1294
-  - Remove the inline comment as I think the purpose is obvious
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/kernel.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pwm.h>
+> +#include <linux/regmap.h>
+> +
+> +/*
+> + * PWM timer block registers.
+> + */
+> +#define PWM_CTRL		0x00
+> +#define   PWM_ENABLE		BIT(7)
+> +#define   PWM_MODE_250HZ	0
+> +#define   PWM_MODE_500HZ	1
+> +#define   PWM_MODE_1KHZ		2
+> +#define   PWM_MODE_2KHZ		3
+> +#define   PWM_MODE_MASK		GENMASK(1, 0)
+> +#define PWM_CYCLE		0x01
+> +#define   PWM_CYCLE_MAX		0x7f
 
+Please use a less generic prefix for your defines. Also I like having
+the defines for field names include register name. Something like:
 
- drivers/hwmon/pmbus/adm1275.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+	#define PWM_SL28CPLD_CTRL		0x00
+	#define PWM_SL28CPLD_CTRL_ENABLE		BIT(7)
+	#define PWM_SL28CPLD_CTRL_MODE_MASK		GENMASK(1, 0)
+	#define PWM_SL28CPLD_CTRL_MODE_250HZ		FIELD_PREP(PWM_SL28CPLD_CTRL_MODE_MA=
+SK, 0)
 
-diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275.c
-index e25f541227da..19317575d1c6 100644
---- a/drivers/hwmon/pmbus/adm1275.c
-+++ b/drivers/hwmon/pmbus/adm1275.c
-@@ -465,6 +465,7 @@ MODULE_DEVICE_TABLE(i2c, adm1275_id);
- static int adm1275_probe(struct i2c_client *client,
- 			 const struct i2c_device_id *id)
- {
-+	s32 (*config_read_fn)(const struct i2c_client *client, u8 reg);
- 	u8 block_buffer[I2C_SMBUS_BLOCK_MAX + 1];
- 	int config, device_config;
- 	int ret;
-@@ -510,11 +511,16 @@ static int adm1275_probe(struct i2c_client *client,
- 			   "Device mismatch: Configured %s, detected %s\n",
- 			   id->name, mid->name);
- 
--	config = i2c_smbus_read_byte_data(client, ADM1275_PMON_CONFIG);
-+	if (mid->driver_data == adm1272 || mid->driver_data == adm1278 ||
-+	    mid->driver_data == adm1293 || mid->driver_data == adm1294)
-+		config_read_fn = i2c_smbus_read_word_data;
-+	else
-+		config_read_fn = i2c_smbus_read_byte_data;
-+	config = config_read_fn(client, ADM1275_PMON_CONFIG);
- 	if (config < 0)
- 		return config;
- 
--	device_config = i2c_smbus_read_byte_data(client, ADM1275_DEVICE_CONFIG);
-+	device_config = config_read_fn(client, ADM1275_DEVICE_CONFIG);
- 	if (device_config < 0)
- 		return device_config;
- 
--- 
-2.27.0.383.g050319c2ae-goog
+> +struct sl28cpld_pwm {
+> +	struct pwm_chip pwm_chip;
+> +	struct regmap *regmap;
+> +	u32 offset;
+> +};
+> +
+> +struct sl28cpld_pwm_periods {
+> +	u8 ctrl;
+> +	unsigned long duty_cycle;
+> +};
+> +
+> +struct sl28cpld_pwm_config {
+> +	unsigned long period_ns;
+> +	u8 max_duty_cycle;
+> +};
+> +
+> +static struct sl28cpld_pwm_config sl28cpld_pwm_config[] =3D {
 
+const ? (Or drop as the values can be easily computed, see below.)
+
+> +	[PWM_MODE_250HZ] =3D { .period_ns =3D 4000000, .max_duty_cycle =3D 0x80=
+ },
+> +	[PWM_MODE_500HZ] =3D { .period_ns =3D 2000000, .max_duty_cycle =3D 0x40=
+ },
+> +	[PWM_MODE_1KHZ]  =3D { .period_ns =3D 1000000, .max_duty_cycle =3D 0x20=
+ },
+> +	[PWM_MODE_2KHZ]  =3D { .period_ns =3D  500000, .max_duty_cycle =3D 0x10=
+ },
+> +};
+> +
+> +static void sl28cpld_pwm_get_state(struct pwm_chip *chip,
+> +				   struct pwm_device *pwm,
+> +				   struct pwm_state *state)
+> +{
+> +	struct sl28cpld_pwm *priv =3D dev_get_drvdata(chip->dev);
+> +	static struct sl28cpld_pwm_config *config;
+> +	unsigned int reg;
+> +	unsigned int mode;
+> +
+> +	regmap_read(priv->regmap, priv->offset + PWM_CTRL, &reg);
+> +
+> +	state->enabled =3D reg & PWM_ENABLE;
+
+Would it be more consisted to use FIELD_GET here, too?
+
+> +
+> +	mode =3D FIELD_GET(PWM_MODE_MASK, reg);
+> +	config =3D &sl28cpld_pwm_config[mode];
+> +	state->period =3D config->period_ns;
+
+I wonder if this could be done more effectively without the above table.
+Something like:
+
+	state->period =3D 4000000 >> mode.
+=09
+(with a #define for 4000000 of course).
+
+> +	regmap_read(priv->regmap, priv->offset + PWM_CYCLE, &reg);
+> +	pwm_set_relative_duty_cycle(state, reg, config->max_duty_cycle);
+
+Oh, what a creative idea to use pwm_set_relative_duty_cycle here.
+Unfortunately it's using the wrong rounding strategy. Please enable
+PWM_DEBUG which should diagnose these problems (given enough testing).
+
+(Hmm, on second thought I'm not sure that rounding is relevant with the
+numbers of this hardware. Still it's wrong in general and I don't want
+to have others copy this.)
+
+> +}
+> +
+> +static int sl28cpld_pwm_apply(struct pwm_chip *chip, struct pwm_device *=
+pwm,
+> +			      const struct pwm_state *state)
+> +{
+> +	struct sl28cpld_pwm *priv =3D dev_get_drvdata(chip->dev);
+> +	struct sl28cpld_pwm_config *config;
+> +	unsigned int cycle;
+> +	int ret;
+> +	int mode;
+> +	u8 ctrl;
+> +
+> +	/* Get the configuration by comparing the period */
+> +	for (mode =3D 0; mode < ARRAY_SIZE(sl28cpld_pwm_config); mode++) {
+> +		config =3D &sl28cpld_pwm_config[mode];
+> +		if (state->period =3D=3D config->period_ns)
+> +			break;
+> +	}
+> +
+> +	if (mode =3D=3D ARRAY_SIZE(sl28cpld_pwm_config))
+> +		return -EINVAL;
+
+You're supposed to pick the biggest period that isn't bigger than the
+requested period. So something like:
+
+	switch(period) {
+	case 4000000 ... UINT_MAX:
+		mode =3D 0;
+		break;
+	case 2000000 ... 3999999:
+		mode =3D 1;
+		break;
+	...
+	}
+
+(or:
+
+	if period >=3D 4000000:
+		mode =3D 0
+	else:
+		// I think ... please double-check
+		mode =3D ilog2(4000000 / (period + 1)) + 1
+
+	if mode > 3:
+		return -ERANGE;
+)
+
+	real_period =3D 4000000 >> mode;
+
+> +	ctrl =3D FIELD_PREP(PWM_MODE_MASK, mode);
+> +	if (state->enabled)
+> +		ctrl |=3D PWM_ENABLE;
+> +
+> +	cycle =3D pwm_get_relative_duty_cycle(state, config->max_duty_cycle);
+
+Again the rounding is wrong. You need need to round down the requested
+duty_cycle to the next possible value. So something like:
+
+	duty_cycle =3D min(real_period, state->duty_cycle);
+
+	cycle =3D duty_cycle * (0x80 >> mode) / (4000000 >> mode);
+
+which can be further simplified to
+
+	cycle =3D duty_cycle / 31250
+
+=2E
+
+> +	/*
+> +	 * The hardware doesn't allow to set max_duty_cycle if the
+> +	 * 250Hz mode is enabled, thus we have to trap that here.
+> +	 * But because a 100% duty cycle is equal on all modes, i.e.
+
+It depends on how picky you are if you can agree here. Please document
+this in a Limitations paragraph at the top of the driver similar to
+drivers/pwm/pwm-rcar.c and others.
+
+> +	 * it is just a "all-high" output, we trap any case with a
+> +	 * 100% duty cycle and use the 500Hz mode.
+
+Please only trap on 250Hz mode. (Can be done using: if (cycle =3D=3D 0x80) I
+think)
+
+> +	 */
+> +	if (cycle =3D=3D config->max_duty_cycle) {
+> +		ctrl &=3D ~PWM_MODE_MASK;
+> +		ctrl |=3D FIELD_PREP(PWM_MODE_MASK, PWM_MODE_500HZ);
+> +		cycle =3D PWM_CYCLE_MAX;
+=09
+I would have expected 0x40 here instead of 0x7f?
+
+> +	}
+> +
+> +	ret =3D regmap_write(priv->regmap, priv->offset + PWM_CTRL, ctrl);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return regmap_write(priv->regmap, priv->offset + PWM_CYCLE, (u8)cycle);
+
+I assume this can result in broken output? Consider the hardware runs
+with mode =3D 1 & cycle =3D 0x23 and you want to go to mode =3D 0 & cycle =
+=3D
+0x42: Can this result in a period that has mode =3D 0 & cycle =3D 0x23?
+
+If this cannot be avoided, please document this in the Limitations
+paragraph.
+
+> +}
+> +
+> +static const struct pwm_ops sl28cpld_pwm_ops =3D {
+> +	.apply =3D sl28cpld_pwm_apply,
+> +	.get_state =3D sl28cpld_pwm_get_state,
+> +	.owner =3D THIS_MODULE,
+> +};
+> +
+> +static int sl28cpld_pwm_probe(struct platform_device *pdev)
+> +{
+> +	struct sl28cpld_pwm *priv;
+> +	struct pwm_chip *chip;
+> +	int ret;
+> +
+> +	if (!pdev->dev.parent)
+> +		return -ENODEV;
+> +
+> +	priv =3D devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	priv->regmap =3D dev_get_regmap(pdev->dev.parent, NULL);
+> +	if (!priv->regmap)
+> +		return -ENODEV;
+> +
+> +	ret =3D device_property_read_u32(&pdev->dev, "reg", &priv->offset);
+> +	if (ret)
+> +		return -EINVAL;
+> +
+> +	/* Initialize the pwm_chip structure */
+> +	chip =3D &priv->pwm_chip;
+> +	chip->dev =3D &pdev->dev;
+> +	chip->ops =3D &sl28cpld_pwm_ops;
+> +	chip->base =3D -1;
+> +	chip->npwm =3D 1;
+> +
+> +	ret =3D pwmchip_add(&priv->pwm_chip);
+> +	if (ret)
+> +		return ret;
+> +
+> +	platform_set_drvdata(pdev, priv);
+> +
+> +	return 0;
+> +}
+
+Please add error messages with some details for the error paths
+(preferable using %pe to indicate the error code).
+
+> +static int sl28cpld_pwm_remove(struct platform_device *pdev)
+> +{
+> +	struct sl28cpld_pwm *priv =3D platform_get_drvdata(pdev);
+> +
+> +	return pwmchip_remove(&priv->pwm_chip);
+> +}
+> +
+> +static const struct of_device_id sl28cpld_pwm_of_match[] =3D {
+> +	{ .compatible =3D "kontron,sl28cpld-pwm" },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, sl28cpld_pwm_of_match);
+> +
+> +static struct platform_driver sl28cpld_pwm_driver =3D {
+> +	.probe =3D sl28cpld_pwm_probe,
+> +	.remove	=3D sl28cpld_pwm_remove,
+> +	.driver =3D {
+> +		.name =3D "sl28cpld-pwm",
+> +		.of_match_table =3D sl28cpld_pwm_of_match,
+> +	},
+> +};
+> +module_platform_driver(sl28cpld_pwm_driver);
+> +
+> +MODULE_DESCRIPTION("sl28cpld PWM Driver");
+> +MODULE_AUTHOR("Michael Walle <michael@walle.cc>");
+> +MODULE_LICENSE("GPL");
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--zo5wkjqhpntpevbs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAl8G2joACgkQwfwUeK3K
+7AmJGgf/WBxR5LIpn0VH8Eu7pe5XA6Ic/I7iL7pbWV+u7KttKvKeJSKDQP+Rj7w/
+oTgVpPOzquY7nsgi8Xc+X980NILKIg3h/GOOWCie31utloJHocy4Xva3W4AtfJFi
+vtu5Aeunx9zaStCDvwrA/5QKsxYuMSAKWoTqzRW8gdGyyUFKG5rnS4Sz5A1Zk7Tj
+kv2pVpbVAU4JsnS8FUGQnXG32UhrZddYZKb6h6NoOIP13OybadiQ11dcsfrjguPg
+0NgNL+VHwM1nFEOOTza5u3WfaEXSFIInFev55g3TYnjOIk1mY980eNLc682VqhZX
+djlTan09K0g6k9nD5qjkmhAT8tntQw==
+=pWwP
+-----END PGP SIGNATURE-----
+
+--zo5wkjqhpntpevbs--
