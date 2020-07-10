@@ -1,86 +1,111 @@
-Return-Path: <SRS0=e0Qf=AU=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=LxHm=AV=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
+	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF610C433E0
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Jul 2020 23:13:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 202A9C433E0
+	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Jul 2020 00:43:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 800E82070E
-	for <linux-hwmon@archiver.kernel.org>; Thu,  9 Jul 2020 23:13:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1594336421;
-	bh=1sOuvMmgTIqgfyJhP5qnTqBJYKZkMIqsO/8V4NDTW68=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=zQwVDa5eFpNMUXvyX5Vi1LSnur/JB9dpjVlpJnLZr/Fb/xWGU6FE1hR8jlcck+u8u
-	 msQoHrzj/LCZOo8XPrr8oJ/V0oUt70x7A5wkf21uvA/ViaqphhCc8x+TseTmi0CZrP
-	 FMujvIXYjrUJlBbe+u6/w4fcbxu3UP3nFHP++heY=
+	by mail.kernel.org (Postfix) with ESMTP id F07D62065D
+	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Jul 2020 00:43:22 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eFBgkYUp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726311AbgGIXNl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 9 Jul 2020 19:13:41 -0400
-Received: from mail-il1-f194.google.com ([209.85.166.194]:35461 "EHLO
-        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726222AbgGIXNl (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Jul 2020 19:13:41 -0400
-Received: by mail-il1-f194.google.com with SMTP id t18so3516962ilh.2;
-        Thu, 09 Jul 2020 16:13:40 -0700 (PDT)
+        id S1726768AbgGJAnW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 9 Jul 2020 20:43:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57820 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726848AbgGJAnI (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Jul 2020 20:43:08 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A259C08C5DD
+        for <linux-hwmon@vger.kernel.org>; Thu,  9 Jul 2020 17:43:08 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id u64so4977675ybf.13
+        for <linux-hwmon@vger.kernel.org>; Thu, 09 Jul 2020 17:43:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=PChTsD7+lOfYquQN6+h5WG1wyZRkuvc0gJ7VnIMPpcI=;
+        b=eFBgkYUpUC19TYrSClaWnACSWhKB0k5jcDpo+PTCgNBUkAiDzm+ORJ7p+M7sjb66Ka
+         lWtCn0H5by6dCE82W0iKV6mmx6kRgCqc+3AxVy8yWqUYQu43g026sorjNlQ0d1PDuQAZ
+         29onMDkcy7/BpVBNOy1dwqDwjF+o8P8j+QhxUaXtj8tXYMCoJM0ZhcydfKpz4AB/eBDZ
+         zWFSbDcHte5W/BvRP/taIxaEwuwcJY6eLjxsQH1s4riNeWuJGxvmV1zSQZqbBX2rVib5
+         frgB94mh32Q9xz6rqcnyjrvx5EBbgbfZ2rBqxlsZnkuaxUTQnvF0rXIuSr1J4FI/Ark1
+         2ZUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qVYJSmIH5pGs/4dhKNiiY1TOXTho3Eq5GDRG0ULpRKU=;
-        b=V7XIFnZuJH+UNp/ReoPeWYAQHb6LdWLXvZeDMdtKNiMUlRge1jaW1bXoM0ITCWcxG2
-         +jpR95Lhc7erG2uOnJlt84dYIwdKWoonrILoBSn4BAx03uVlfUJJfQKoO94Xeerd6tHL
-         5pppKFazt0qP6wWwBi+bIQeYWf9zsfQ+dIyYpfgtUN8FrB0FWxQhVE/AOvkRK1SupYw9
-         CiL+kVYBuauActX8WucXRjzff/qFcWZFAt3759VJF97B6dRG0Zbt8GGeRfXPMv7TrXNm
-         GnRQzsycGh0v4/2YHIN+vdlmDlJZLZp9dNxUsEcqGfKsRT/mSa6qarvJCetkmAkTHyKn
-         8qiQ==
-X-Gm-Message-State: AOAM5330fP7NFfbSlo72vGjKPh4DW/Gu24PIlxCM8NNbMTTPHrzdqPMc
-        /msfaRxlWJWkAflGOB3rUg==
-X-Google-Smtp-Source: ABdhPJwSaf8vHd4K9Dyi8pY6+VkhDEivCPd1Hgh2whPHR6+/lCW9ltyoN1fWo70Xj5XWqmqCNSCjJQ==
-X-Received: by 2002:a92:cece:: with SMTP id z14mr19176614ilq.120.1594336420385;
-        Thu, 09 Jul 2020 16:13:40 -0700 (PDT)
-Received: from xps15 ([64.188.179.254])
-        by smtp.gmail.com with ESMTPSA id p84sm2739075ill.64.2020.07.09.16.13.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2020 16:13:39 -0700 (PDT)
-Received: (nullmailer pid 1073745 invoked by uid 1000);
-        Thu, 09 Jul 2020 23:13:38 -0000
-Date:   Thu, 9 Jul 2020 17:13:38 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Lars Povlsen <lars.povlsen@microchip.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH v4 1/3] dt-bindings: hwmon: Add Sparx5 temperature sensor
-Message-ID: <20200709231338.GA1073694@bogus>
-References: <20200618135951.25441-1-lars.povlsen@microchip.com>
- <20200618135951.25441-2-lars.povlsen@microchip.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200618135951.25441-2-lars.povlsen@microchip.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=PChTsD7+lOfYquQN6+h5WG1wyZRkuvc0gJ7VnIMPpcI=;
+        b=qixIvg8UC8KCRXjznFEYzLZQqXGImgrKxMyZv8KmLcN3zW+C8Dq5VWO+mid9L5sesK
+         uFFp1bny6aJg6GONo7VvpzNdS2ch/Q5aIItjmh1sdE/9lBVkkjv3LrU2OBVDN8cI5QwS
+         gPG/EU3CoPV7eQT2KSR4orjFxjoyDdFaLfdCC2Alo6zUo8/DsO0hyg+VWfZ6Lmqcdej5
+         xKKlsgJ8y87T/ObiL0eAJ6xkjv5jlyzJRbzBErLaklJJTdpoUjre662I6kwHD46LpV/o
+         ffWG2w5rUVEoKOSZRaTjxczHzi6uzHnIFnhSVNv5Yqzm1bWeGOMHlExGB/eC3lp6OLQH
+         X1cw==
+X-Gm-Message-State: AOAM5328U4l/byH8PPDotU+p0Wtp5SKpt2GMDQpYhkVvYnT3qlc7eT6b
+        2vAXkG9GiPUEtsF1GAYpjJp9bylFOkhpHKo/
+X-Google-Smtp-Source: ABdhPJw3ovj5xIgTKeUgsA84rILy0QjfSh1DlsEiwU5RWnjTdC3QlkA8ODLexpuSzMstbWzOEt5EKdjDztKvbJhN
+X-Received: by 2002:a25:c547:: with SMTP id v68mr1490103ybe.508.1594341787646;
+ Thu, 09 Jul 2020 17:43:07 -0700 (PDT)
+Date:   Fri, 10 Jul 2020 00:42:58 +0000
+Message-Id: <20200710004258.296017-1-linchuyuan@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.27.0.383.g050319c2ae-goog
+Subject: [PATCH] dt-bindings: hwmon: adm1272: add adm1272-adm1275-temp1-en binding
+From:   Chu Lin <linchuyuan@google.com>
+To:     linux@roeck-us.net
+Cc:     belgaied@google.com, jasonling@google.com, jdelvare@suse.com,
+        linchuyuan@google.com, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhongqil@google.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, 18 Jun 2020 15:59:49 +0200, Lars Povlsen wrote:
-> This add the DT binding specification for the Sparx5 temperature
-> sensor.
-> 
-> Signed-off-by: Lars Povlsen <lars.povlsen@microchip.com>
-> ---
->  .../bindings/hwmon/microchip,sparx5-temp.yaml | 44 +++++++++++++++++++
->  1 file changed, 44 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/microchip,sparx5-temp.yaml
-> 
+Problem:
+	adm1272 and adm1278 supports temperature sampling. The
+current way of enabling it requires the user manually unbind the device
+from the driver, flip the temperature sampling control bit and then bind
+the device back to the driver. It would be nice if we can control this in a
+better way by reading the dt.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Solution:
+	Introducing device tree binding adm1272-adm1278-temp1-en. If the
+flag is set, flip the temp1_en control bit on probing.
+
+Testing:
+make dt_binding_check
+
+Signed-off-by: Chu Lin <linchuyuan@google.com>
+---
+ Documentation/devicetree/bindings/hwmon/adm1275.txt | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/hwmon/adm1275.txt b/Documentation/devicetree/bindings/hwmon/adm1275.txt
+index 1ecd03f3da4d..4403fe30f005 100644
+--- a/Documentation/devicetree/bindings/hwmon/adm1275.txt
++++ b/Documentation/devicetree/bindings/hwmon/adm1275.txt
+@@ -15,6 +15,8 @@ Optional properties:
+ 
+ - shunt-resistor-micro-ohms
+ 	Shunt resistor value in micro-Ohm
++- adm1272-adm1278-temp1-en
++	Enable temperature sampling. This is supported on adm1272 and adm1278
+ 
+ Example:
+ 
+@@ -22,4 +24,5 @@ adm1272@10 {
+ 	compatible = "adi,adm1272";
+ 	reg = <0x10>;
+ 	shunt-resistor-micro-ohms = <500>;
++	adm1272-adm1278-temp1-en;
+ };
+-- 
+2.27.0.383.g050319c2ae-goog
+
