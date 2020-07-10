@@ -6,44 +6,44 @@ X-Spam-Status: No, score=-3.9 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	LONGWORDS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AE79C433E0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15468C433DF
 	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Jul 2020 04:20:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D8AF42064B
+	by mail.kernel.org (Postfix) with ESMTP id F0B3E20748
 	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Jul 2020 04:20:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725919AbgGJEUZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S1725777AbgGJEUZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Fri, 10 Jul 2020 00:20:25 -0400
-Received: from mga17.intel.com ([192.55.52.151]:40002 "EHLO mga17.intel.com"
+Received: from mga07.intel.com ([134.134.136.100]:2398 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725777AbgGJEUZ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        id S1725802AbgGJEUZ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
         Fri, 10 Jul 2020 00:20:25 -0400
-IronPort-SDR: S7FDy+2h6PFZKuWu6WPnPLMlt1+Vbu8bJEF5IfOfFG1EVnI16+tfCKoAf7RTJp3vXXouqBhNEu
- 4Xsm0LwcvVig==
-X-IronPort-AV: E=McAfee;i="6000,8403,9677"; a="128215463"
+IronPort-SDR: rC8txTGDhlaKWXcsbGMTpzXzBl8mzAae0WCjvJnc1fBHWjC4x/orNW+2OXPXk/2omCzgzeAe9O
+ +2a4Ma1Wfzwg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9677"; a="213037937"
 X-IronPort-AV: E=Sophos;i="5.75,334,1589266800"; 
-   d="scan'208";a="128215463"
+   d="scan'208";a="213037937"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2020 21:20:24 -0700
-IronPort-SDR: LVsZbWjXscZ7zzivPHayL5kx4uGLdhH6XvIJyAvOr1JQHgZShBazoG8BB5C06yWPv4yaiYaP8H
- d4nrivfiv7Gg==
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2020 21:20:24 -0700
+IronPort-SDR: XzD85jDbMlVwS3uGC79c6WRzwm6QRfTjMMMB01vV2UNYE5dEHF9Wkh2dxNtNDzkzeGkhOUXeL7
+ n0G3m49+Qg+g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.75,334,1589266800"; 
-   d="scan'208";a="458162138"
+   d="scan'208";a="389363856"
 Received: from lkp-server02.sh.intel.com (HELO 0fc60ea15964) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 09 Jul 2020 21:20:23 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 09 Jul 2020 21:20:23 -0700
 Received: from kbuild by 0fc60ea15964 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1jtkWM-000014-Sv; Fri, 10 Jul 2020 04:20:22 +0000
-Date:   Fri, 10 Jul 2020 12:20:02 +0800
+        id 1jtkWM-000012-SV; Fri, 10 Jul 2020 04:20:22 +0000
+Date:   Fri, 10 Jul 2020 12:19:57 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon-next] BUILD SUCCESS
- 7117b8140b4bbc9850c3c47a71342aec1867a55a
-Message-ID: <5f07ec72./9yd7T8NR6ReqSf4%lkp@intel.com>
+Subject: [hwmon:hwmon] BUILD SUCCESS
+ 6d1d41c075a1a54ba03370e268171fec20e06563
+Message-ID: <5f07ec6d.1A+P4LJ0Z6tEeeIM%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -53,13 +53,13 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon-next
-branch HEAD: 7117b8140b4bbc9850c3c47a71342aec1867a55a  hwmon: (corsair-cpro) add fan_target
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon
+branch HEAD: 6d1d41c075a1a54ba03370e268171fec20e06563  hwmon: (adm1275) Make sure we are reading enough data for different chips
 
 elapsed time: 725m
 
-configs tested: 107
-configs skipped: 10
+configs tested: 112
+configs skipped: 9
 
 The following configs have been built successfully.
 More configs may be tested in the coming days.
@@ -69,9 +69,9 @@ arm                              allyesconfig
 arm                              allmodconfig
 arm                               allnoconfig
 arm64                            allyesconfig
-arm64                               defconfig
 arm64                            allmodconfig
 arm64                             allnoconfig
+arm64                               defconfig
 mips                         rt305x_defconfig
 sh                                  defconfig
 nios2                            alldefconfig
@@ -81,20 +81,25 @@ powerpc                     mpc512x_defconfig
 arm                        spear6xx_defconfig
 m68k                       m5249evb_defconfig
 arm                        multi_v7_defconfig
-arm                            mmp2_defconfig
-powerpc                         wii_defconfig
 powerpc                       holly_defconfig
 x86_64                              defconfig
+arm                        shmobile_defconfig
+m68k                          atari_defconfig
+mips                        maltaup_defconfig
+powerpc                    gamecube_defconfig
+arm                         nhk8815_defconfig
 arm                         ebsa110_defconfig
 ia64                                defconfig
 csky                                defconfig
+sh                          rsk7264_defconfig
+mips                      bmips_stb_defconfig
+arm                        vexpress_defconfig
 m68k                          hp300_defconfig
 powerpc                  mpc866_ads_defconfig
 powerpc64                           defconfig
 um                             i386_defconfig
 openrisc                         allyesconfig
 sh                        edosk7705_defconfig
-m68k                          atari_defconfig
 sh                             espt_defconfig
 i386                              allnoconfig
 i386                             allyesconfig
@@ -108,10 +113,6 @@ m68k                              allnoconfig
 m68k                           sun3_defconfig
 m68k                                defconfig
 m68k                             allyesconfig
-nios2                               defconfig
-nios2                            allyesconfig
-c6x                              allyesconfig
-c6x                               allnoconfig
 nds32                               defconfig
 nds32                             allnoconfig
 csky                             allyesconfig
@@ -126,7 +127,11 @@ arc                              allyesconfig
 sh                               allmodconfig
 sh                                allnoconfig
 microblaze                        allnoconfig
+nios2                               defconfig
+nios2                            allyesconfig
 openrisc                            defconfig
+c6x                              allyesconfig
+c6x                               allnoconfig
 mips                             allyesconfig
 mips                              allnoconfig
 mips                             allmodconfig
@@ -155,10 +160,10 @@ s390                             allmodconfig
 s390                                defconfig
 sparc                            allyesconfig
 sparc                               defconfig
-sparc64                           allnoconfig
-sparc64                          allmodconfig
 sparc64                             defconfig
+sparc64                           allnoconfig
 sparc64                          allyesconfig
+sparc64                          allmodconfig
 um                               allmodconfig
 um                                allnoconfig
 um                                  defconfig
