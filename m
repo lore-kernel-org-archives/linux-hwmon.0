@@ -2,166 +2,91 @@ Return-Path: <SRS0=LxHm=AV=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5C92C433E0
-	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Jul 2020 00:44:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3470C433DF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Jul 2020 02:09:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BCA922065D
-	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Jul 2020 00:44:26 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MYNbUmQA"
+	by mail.kernel.org (Postfix) with ESMTP id CD3C82070E
+	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Jul 2020 02:09:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727003AbgGJAo0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 9 Jul 2020 20:44:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58020 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726996AbgGJAo0 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Jul 2020 20:44:26 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31188C08C5DC
-        for <linux-hwmon@vger.kernel.org>; Thu,  9 Jul 2020 17:44:26 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id r17so4999764ybj.22
-        for <linux-hwmon@vger.kernel.org>; Thu, 09 Jul 2020 17:44:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=t9i52B1pRW7NNwQem2xtfhHz6MEicsdkhoSgH5EUEqk=;
-        b=MYNbUmQAXNqG4ukLS28pTAIVaO2vxHhB9bnpmh9rZrc1N5YX4Lq8dRgGFCrN0ufd09
-         piKx95RRMn2xddJjPUsGj/I0esIuVF3VWtnunx3aA5YXBqnS+Ej33vL4rHnkGvk0sAfD
-         eaxSIw341JGOx/0diPeyckGAJx2E8P7oqQN58n0pDeuTml8MspBhdSwJQBmh37Dx1sG0
-         5UZqPA0csot1jpFpBFolSNsocwlfqHi3aSEppDR6iTFctqW3Nb/BwqlUqVpq1BeSugtI
-         bgihtvM852llZCE4toFDe5mFwXN6IGJVtVhlvoazPMtXQrgQwdSrbAz3GFVLrnPPlXV/
-         J1kA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=t9i52B1pRW7NNwQem2xtfhHz6MEicsdkhoSgH5EUEqk=;
-        b=fwXiAQzOEv+1nhmo8TpyDqf71fWylBugGmv2jY+Ny1c3dVhfAQphlWPACDBB0Vl9Xr
-         MG/mZHzq6eNHIGKsypJYUS4DFEXeeMHdUKrx/jxVvZgT6ZU0Vxb6MxMD8JakWacbkdzD
-         QSSwhyh8/6NeHY4gGpP3zmoNLK/reImTuFCPGWRFlQTiekbAOND1tBnyuW6kctH/41/t
-         IPrGbDarctsvNPt6khPDp2qNbcZwinM0Wz7CqgPNl9zahXC416UuI/6PQg5IpTzjq+WK
-         mOxG1DHOTWLViChX5tdUtSDYkDAYC/6N4yXS6XuLRmXtfjTEdKvkJGCRfGbmsxcvWidk
-         9ToQ==
-X-Gm-Message-State: AOAM531PAZvCbEvQVAJT8z1XdxGPbi+e25HLoYNmnk+DE4wo2TXh9SHa
-        i2R8DyHXTSAXKTJ4aRQ257jOzj9GdgvbhLMa
-X-Google-Smtp-Source: ABdhPJx3cXh4hzy135F82CgEDevTpjt3qDsmiQcYtuxGbFeAaepZZSPY/LdQE0FqgKXxYz3NZikYmocTfGCRD8Lh
-X-Received: by 2002:a25:b28d:: with SMTP id k13mr18719127ybj.162.1594341865353;
- Thu, 09 Jul 2020 17:44:25 -0700 (PDT)
-Date:   Fri, 10 Jul 2020 00:44:22 +0000
-Message-Id: <20200710004422.298090-1-linchuyuan@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.27.0.383.g050319c2ae-goog
-Subject: [PATCH] hwmon: adm1272: Enable temperature sampling for adm1272 adm1278
-From:   Chu Lin <linchuyuan@google.com>
-To:     linux@roeck-us.net
-Cc:     belgaied@google.com, jasonling@google.com, jdelvare@suse.com,
-        linchuyuan@google.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zhongqil@google.com
-Content-Type: text/plain; charset="UTF-8"
+        id S1726433AbgGJCI7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 9 Jul 2020 22:08:59 -0400
+Received: from server-x.ipv4.hkg02.ds.network ([27.111.83.178]:50472 "EHLO
+        mail.gtsys.com.hk" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
+        with ESMTP id S1726323AbgGJCI7 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 9 Jul 2020 22:08:59 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.gtsys.com.hk (Postfix) with ESMTP id EDF1720160C8;
+        Fri, 10 Jul 2020 10:08:56 +0800 (HKT)
+X-Virus-Scanned: Debian amavisd-new at gtsys.com.hk
+Received: from mail.gtsys.com.hk ([127.0.0.1])
+        by localhost (mail.gtsys.com.hk [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id aottJ6C8Q-Yh; Fri, 10 Jul 2020 10:08:56 +0800 (HKT)
+Received: from s01.gtsys.com.hk (unknown [10.128.4.2])
+        by mail.gtsys.com.hk (Postfix) with ESMTP id CC1E220160B5;
+        Fri, 10 Jul 2020 10:08:56 +0800 (HKT)
+Received: from [10.128.2.32] (unknown [124.217.189.79])
+        by s01.gtsys.com.hk (Postfix) with ESMTPSA id 87C61C01FBA;
+        Fri, 10 Jul 2020 10:08:56 +0800 (HKT)
+Subject: Re: [PATCH v4 2/2] devicetree: hwmon: shtc1: Add sensirion,shtc1.yaml
+To:     Rob Herring <robh@kernel.org>
+Cc:     Jack Lo <jack.lo@gtsys.com.hk>, devicetree@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200708040748.9014-1-chris.ruehl@gtsys.com.hk>
+ <20200708040748.9014-3-chris.ruehl@gtsys.com.hk>
+ <20200709165107.GB498064@bogus>
+From:   Chris Ruehl <chris.ruehl@gtsys.com.hk>
+Message-ID: <21a3f5a0-6f66-33d2-6def-725743cc67e3@gtsys.com.hk>
+Date:   Fri, 10 Jul 2020 10:08:55 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
+MIME-Version: 1.0
+In-Reply-To: <20200709165107.GB498064@bogus>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Problem:
-	adm1272 and adm1278 supports temperature sampling. The
-current way of enabling it requires the user manually unbind the device
-from the driver, flip the temperature sampling control bit and then bind
-the device back to the driver. It would be nice if we can control this in a
-better way by reading the dt.
+Hi Rob,
 
-Solution:
-	Introducing device tree binding adm1272-adm1278-temp1-en. If the
-flag is set, flip the temp1_en control bit on probing.
+On 10/7/2020 12:51 am, Rob Herring wrote:
+> On Wed, Jul 08, 2020 at 12:07:47PM +0800, Chris Ruehl wrote:
+>> Add documentation for the newly added DTS support in the shtc1 driver.
+>> To align with the drivers logic to have high precision by default
+> 
+> If 0x70 is the only address, then do:
+> 
+> reg:
+>    const: 0x70
 
-Testing:
-1). iotools smbus_write16 35 0x10 0xd4 0x0037 // disable the temp1_en
-2). recompile the dt to have  adm1272-adm1278-temp1-en set
-3). Probe the driver and make sure tempX shows up in hwmon
+yes, that make sense.
 
-Signed-off-by: Chu Lin <linchuyuan@google.com>
----
- drivers/hwmon/pmbus/adm1275.c | 36 +++++++++++++++++++++--------------
- 1 file changed, 22 insertions(+), 14 deletions(-)
+> 
+>> +
+>> +  sensirion,blocking_io:
+> 
+> s/_/-/
 
-diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275.c
-index 19317575d1c6..293308875162 100644
---- a/drivers/hwmon/pmbus/adm1275.c
-+++ b/drivers/hwmon/pmbus/adm1275.c
-@@ -475,6 +475,7 @@ static int adm1275_probe(struct i2c_client *client,
- 	const struct coefficients *coefficients;
- 	int vindex = -1, voindex = -1, cindex = -1, pindex = -1;
- 	int tindex = -1;
-+	bool temp1_en;
- 	u32 shunt;
- 
- 	if (!i2c_check_functionality(client->adapter,
-@@ -536,6 +537,9 @@ static int adm1275_probe(struct i2c_client *client,
- 	if (shunt == 0)
- 		return -EINVAL;
- 
-+	temp1_en = of_property_read_bool(client->dev.of_node, "adm1272-adm1278-temp1-en") &&
-+		(mid->driver_data == adm1272 || mid->driver_data == adm1278);
-+
- 	data->id = mid->driver_data;
- 
- 	info = &data->info;
-@@ -614,16 +618,18 @@ static int adm1275_probe(struct i2c_client *client,
- 		info->func[0] |= PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT |
- 			PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT;
- 
-+		ret = config;
-+		/* Enable temp if it is instructed by dt (it is disabled by default) */
-+		if (temp1_en && !(config & ADM1278_TEMP1_EN))
-+			config |= ADM1278_TEMP1_EN;
- 		/* Enable VOUT if not enabled (it is disabled by default) */
--		if (!(config & ADM1278_VOUT_EN)) {
-+		if (!(config & ADM1278_VOUT_EN))
- 			config |= ADM1278_VOUT_EN;
--			ret = i2c_smbus_write_byte_data(client,
--							ADM1275_PMON_CONFIG,
--							config);
-+		if (ret != config) {
-+			ret = i2c_smbus_write_word_data(client, ADM1275_PMON_CONFIG, config);
- 			if (ret < 0) {
--				dev_err(&client->dev,
--					"Failed to enable VOUT monitoring\n");
--				return -ENODEV;
-+				dev_err(&client->dev, "Failed to enable config control bits");
-+				return ret;
- 			}
- 		}
- 
-@@ -685,16 +691,18 @@ static int adm1275_probe(struct i2c_client *client,
- 		info->func[0] |= PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT |
- 			PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT;
- 
-+		ret = config;
-+		/* Enable temp if it is instructed by dt (it is disabled by default) */
-+		if (temp1_en && !(config & ADM1278_TEMP1_EN))
-+			config |= ADM1278_TEMP1_EN;
- 		/* Enable VOUT if not enabled (it is disabled by default) */
--		if (!(config & ADM1278_VOUT_EN)) {
-+		if (!(config & ADM1278_VOUT_EN))
- 			config |= ADM1278_VOUT_EN;
--			ret = i2c_smbus_write_byte_data(client,
--							ADM1275_PMON_CONFIG,
--							config);
-+		if (ret != config) {
-+			ret = i2c_smbus_write_word_data(client, ADM1275_PMON_CONFIG, config);
- 			if (ret < 0) {
--				dev_err(&client->dev,
--					"Failed to enable VOUT monitoring\n");
--				return -ENODEV;
-+				dev_err(&client->dev, "Failed to enable config control bits");
-+				return ret;
- 			}
- 		}
- 
--- 
-2.27.0.383.g050319c2ae-goog
+done!
 
+>> +
+>> +examples:
+>> +  - |
+>> +    i2c1 {
+>> +      status = "okay";
+> 
+> Don't show status in examples.
+
+Thanks for your advice.
+
+updated and patch set v5 is out soon.
+
+Chris
