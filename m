@@ -2,160 +2,105 @@ Return-Path: <SRS0=LxHm=AV=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26A76C433E2
-	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Jul 2020 16:25:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A479C433DF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Jul 2020 16:32:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0136D206F4
-	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Jul 2020 16:25:08 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20150623.gappssmtp.com header.i=@bgdev-pl.20150623.gappssmtp.com header.b="hobbJLEq"
+	by mail.kernel.org (Postfix) with ESMTP id 4C6B9206F4
+	for <linux-hwmon@archiver.kernel.org>; Fri, 10 Jul 2020 16:32:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1594398731;
+	bh=AFv6O8J4PQ1HcEt5k99qGq0Ia/Jidb3zi88XpLZUoH0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=hvmrC2ioOVEs4U+Je7LjimHnSxpCOyU0YkU+cdHH30kvnHuc8r8Me8CCaztUpoBYe
+	 TJcZ+s3vefjHfAexExQA/UdvtRggQNmllWUiX5Eun0bP6C0uGRLTgAv6Mf6Abk4kSS
+	 j+KfHlG0BBaV/8N8K4RTnl337vouwcO/ZJUvCdCk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728220AbgGJQZC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 10 Jul 2020 12:25:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33622 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728156AbgGJQZC (ORCPT
+        id S1728354AbgGJQb4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 10 Jul 2020 12:31:56 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:41206 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728317AbgGJQb4 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 10 Jul 2020 12:25:02 -0400
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC878C08C5DD
-        for <linux-hwmon@vger.kernel.org>; Fri, 10 Jul 2020 09:25:01 -0700 (PDT)
-Received: by mail-il1-x141.google.com with SMTP id r12so5568612ilh.4
-        for <linux-hwmon@vger.kernel.org>; Fri, 10 Jul 2020 09:25:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=H7XPdCmgMImqZF5JZngrO4+1byShoBQA2GaG6Zy8eaQ=;
-        b=hobbJLEqmM+wICRtCGxo8FSciKrE87YjCY5bfIUhTss0vkvgGWa+D+W96pQg9tNjrk
-         JuNjLXEhmjktE4CmN/yuM7qa2QoMD6HKRBB4viJeUCZxI9GJtZs/QuPlw+XZ2Ng8/XKu
-         8yiHkY90GhRsU/J1avCZ6B6ly27LYnl/fVFG8A404lZ2uB5K5oREfCmsZaXnOMVED+an
-         O6/GiT0Vyxn4ja3ox5HA8S5l24/2WmtnB/9zIcM7kvN+tT5bS8RVQfKxXeugk6V3l6zx
-         lkH+zAhVf3W7YdCv0MeR6Ia7W7wuYJ9jjiBVDNDm7KJSBcxL1ieYnKSpJm/vd1p7U858
-         /+0w==
+        Fri, 10 Jul 2020 12:31:56 -0400
+Received: by mail-io1-f67.google.com with SMTP id o5so6616733iow.8;
+        Fri, 10 Jul 2020 09:31:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=H7XPdCmgMImqZF5JZngrO4+1byShoBQA2GaG6Zy8eaQ=;
-        b=M7yPnrUCZvDItYxbGXUIKKF2l3gxfvFP36d2MK92zkOEN++BFKh4IOClcOmflQ6lEW
-         jEECRQyNNvthJkNDKN3bSzkqTO8OMUZMUV9ZJ1tWhGrEz62Q8M8bhw2bEUd3S/VSMd+M
-         WMZ3c3RGquuqPHVZJT3JqDS2tXVC+Suyr/n1VJTCRCKwdDqcolbpcZhponJlRKb6bwAL
-         SOGdIwpdiD0NcodMO/CBPANIWVpXVGBmeGl6HYMJh/gVZpsaiLB1b7D7msOE0v0kxZ8M
-         QueHe8EPyaOrhImaI+xeL3DDVR3HmoVgp6LSPBf21hGXbgG21As416ZvwtcUOfaF/blT
-         IMxQ==
-X-Gm-Message-State: AOAM531M0KQKlJyETGah1kgQovY4Fy/usm6BID8tT+n2vkNfMew7tuRM
-        JjsqtsmCxx2d3TqS/62inI75r+e2BQ5wBB+f2sZ2zg==
-X-Google-Smtp-Source: ABdhPJzmLRXRa132tJNdcpdJ4Dy0Mb5/hs/BvJA3zvV0lcrgQHupJU92RI4frdEdYqeKnxmpOFkBkaI7MpLUlGHuja0=
-X-Received: by 2002:a92:c00a:: with SMTP id q10mr29286029ild.220.1594398301007;
- Fri, 10 Jul 2020 09:25:01 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=k6x2zODly9ZYHpv6ACDhH5er/SlGtQVdII9NFL5Jqko=;
+        b=WTEO9DKG8+PgmKbLlujPtcq9LjY2YU4djHXitggrgwCe3lr18FswqXH/yrmySIz/vX
+         nJVAPXjAZCbp29XCxtpUmLzV76WIKQzZe6xNpZNv2yNCprkcY2Y3DgQ9JGuxssw3pB0y
+         KyobWOBizJ/LbQfUlGXOfq34pfr/msFTAbJhGkPC6mYbg9ap/f4/PykgqJKosNfFPt1c
+         8hPZni6e0LTF+/3kVXYD8ScRZ8cNwzi8Vh1/6WVRUtTQdSeiVsWUAa2Z9jnMfEKJtPjD
+         FwTWAYHm+i+/boc7ZLcMQHFiYr8q2ojU9cYoDglBuMSsgb6saf1bQkBb3dnDUVcc5MOd
+         UEsw==
+X-Gm-Message-State: AOAM532pdzgB2XZNARhL2UrgtFyf1BoCwiXDiEwxKhxtMP4K0u98mw7o
+        6ljwTjoA6BfkN2LQ8T/JyA==
+X-Google-Smtp-Source: ABdhPJxmfCqmpVl/CfTyQglNJOGk8o6upZI4VxpOAAKUQn90PZPu6KLSnHJXoTze3QrCQrvSol79Bw==
+X-Received: by 2002:a05:6638:1187:: with SMTP id f7mr79554526jas.58.1594398715148;
+        Fri, 10 Jul 2020 09:31:55 -0700 (PDT)
+Received: from xps15 ([64.188.179.254])
+        by smtp.gmail.com with ESMTPSA id z9sm3680512ilb.41.2020.07.10.09.31.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jul 2020 09:31:54 -0700 (PDT)
+Received: (nullmailer pid 2760588 invoked by uid 1000);
+        Fri, 10 Jul 2020 16:31:53 -0000
+Date:   Fri, 10 Jul 2020 10:31:53 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Chris Ruehl <chris.ruehl@gtsys.com.hk>
+Cc:     Guenter Roeck <linux@roeck-us.net>, Jack Lo <jack.lo@gtsys.com.hk>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>, devicetree@vger.kernel.org
+Subject: Re: [PATCH v5 2/2] devicetree: hwmon: shtc1: Add sensirion,shtc1.yaml
+Message-ID: <20200710163153.GA2760091@bogus>
+References: <20200710021536.27544-1-chris.ruehl@gtsys.com.hk>
+ <20200710021536.27544-3-chris.ruehl@gtsys.com.hk>
 MIME-Version: 1.0
-References: <20200629065008.27620-1-brgl@bgdev.pl> <20200629065008.27620-5-brgl@bgdev.pl>
- <5c2e7514-b6d0-1331-37b0-d17a0cdb9693@nvidia.com> <CAMRc=Mf1Laqa65hEOG3iLSQu6J-u5yHmrMNh8NMJmt3amw2A6Q@mail.gmail.com>
- <9cd4521b-aba0-616b-8957-8f21b9ba3068@nvidia.com>
-In-Reply-To: <9cd4521b-aba0-616b-8957-8f21b9ba3068@nvidia.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 10 Jul 2020 18:24:50 +0200
-Message-ID: <CAMRc=Md+iHTeaYi1F-ykb3HaDTBoiGuNr7s224ay9Jgfhy1TcA@mail.gmail.com>
-Subject: Re: [PATCH v2 4/6] devres: handle zero size in devm_kmalloc()
-To:     Jon Hunter <jonathanh@nvidia.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        linux-doc <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200710021536.27544-3-chris.ruehl@gtsys.com.hk>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Jul 10, 2020 at 6:11 PM Jon Hunter <jonathanh@nvidia.com> wrote:
->
->
-> On 10/07/2020 17:03, Bartosz Golaszewski wrote:
-> > On Fri, Jul 10, 2020 at 3:46 PM Jon Hunter <jonathanh@nvidia.com> wrote:
-> >>
-> >> Hi Bartosz,
-> >>
-> >> On 29/06/2020 07:50, Bartosz Golaszewski wrote:
-> >>> From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> >>>
-> >>> Make devm_kmalloc() behave similarly to non-managed kmalloc(): return
-> >>> ZERO_SIZE_PTR when requested size is 0. Update devm_kfree() to handle
-> >>> this case.
-> >>>
-> >>> Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> >>> ---
-> >>>  drivers/base/devres.c | 9 ++++++---
-> >>>  1 file changed, 6 insertions(+), 3 deletions(-)
-> >>>
-> >>> diff --git a/drivers/base/devres.c b/drivers/base/devres.c
-> >>> index 1df1fb10b2d9..ed615d3b9cf1 100644
-> >>> --- a/drivers/base/devres.c
-> >>> +++ b/drivers/base/devres.c
-> >>> @@ -819,6 +819,9 @@ void *devm_kmalloc(struct device *dev, size_t size, gfp_t gfp)
-> >>>  {
-> >>>       struct devres *dr;
-> >>>
-> >>> +     if (unlikely(!size))
-> >>> +             return ZERO_SIZE_PTR;
-> >>> +
-> >>>       /* use raw alloc_dr for kmalloc caller tracing */
-> >>>       dr = alloc_dr(devm_kmalloc_release, size, gfp, dev_to_node(dev));
-> >>>       if (unlikely(!dr))
-> >>> @@ -950,10 +953,10 @@ void devm_kfree(struct device *dev, const void *p)
-> >>>       int rc;
-> >>>
-> >>>       /*
-> >>> -      * Special case: pointer to a string in .rodata returned by
-> >>> -      * devm_kstrdup_const().
-> >>> +      * Special cases: pointer to a string in .rodata returned by
-> >>> +      * devm_kstrdup_const() or NULL/ZERO ptr.
-> >>>        */
-> >>> -     if (unlikely(is_kernel_rodata((unsigned long)p)))
-> >>> +     if (unlikely(is_kernel_rodata((unsigned long)p) || ZERO_OR_NULL_PTR(p)))
-> >>>               return;
-> >>>
-> >>>       rc = devres_destroy(dev, devm_kmalloc_release,
-> >>
-> >>
-> >> This change caught a bug in one of our Tegra drivers, which I am in the
-> >> process of fixing. Once I bisected to this commit it was easy to track
-> >> down, but I am wondering if there is any reason why we don't add a
-> >> WARN_ON() if size is 0 in devm_kmalloc? It was essentially what I ended
-> >> up doing to find the bug.
-> >>
-> >> Jon
-> >>
-> >> --
-> >> nvpublic
-> >
-> > Hi Jon,
-> >
-> > this is in line with what the regular kmalloc() does. If size is zero,
-> > it returns ZERO_SIZE_PTR. It's not an error condition. Actually in
-> > user-space malloc() does a similar thing: for size == 0 it allocates
-> > one-byte and returns a pointer to it (at least in glibc).
->
->
-> Yes that's fine, I was just wondering if there is any reason not to WARN
-> as well?
->
-> Cheers
-> Jon
->
+On Fri, 10 Jul 2020 10:15:35 +0800, Chris Ruehl wrote:
+> Add documentation for the newly added DTS support in the shtc1 driver.
+> To align with the drivers logic to have high precision by default
+> a boolean sensirion,low_precision is used to switch to low precision.
+> 
+> Signed-off-by: Chris Ruehl <chris.ruehl@gtsys.com.hk>
+> ---
+>  .../bindings/hwmon/sensirion,shtc1.yaml       | 57 +++++++++++++++++++
+>  1 file changed, 57 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml
+> 
 
-Why? Nothing bad happens. Regular kmalloc() doesn't warn, why should
-devm_kmalloc() do?
 
-Bartosz
+My bot found errors running 'make dt_binding_check' on your patch:
+
+Error: Documentation/devicetree/bindings/hwmon/sensirion,shtc1.example.dts:25.13-14 syntax error
+FATAL ERROR: Unable to parse input tree
+scripts/Makefile.lib:315: recipe for target 'Documentation/devicetree/bindings/hwmon/sensirion,shtc1.example.dt.yaml' failed
+make[1]: *** [Documentation/devicetree/bindings/hwmon/sensirion,shtc1.example.dt.yaml] Error 1
+make[1]: *** Waiting for unfinished jobs....
+Makefile:1347: recipe for target 'dt_binding_check' failed
+make: *** [dt_binding_check] Error 2
+
+
+See https://patchwork.ozlabs.org/patch/1326414
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure dt-schema is up to date:
+
+pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
+
+Please check and re-submit.
+
