@@ -2,473 +2,176 @@ Return-Path: <SRS0=Peah=AW=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 992D4C433E7
-	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Jul 2020 17:28:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4E27C433E0
+	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Jul 2020 18:19:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7193E207FB
-	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Jul 2020 17:28:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C1F0420748
+	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Jul 2020 18:19:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="ESE8FLhS"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nyvIq9/n"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728695AbgGKR2O (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 11 Jul 2020 13:28:14 -0400
-Received: from ssl.serverraum.org ([176.9.125.105]:42299 "EHLO
-        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728507AbgGKR2N (ORCPT
+        id S1728697AbgGKSTz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 11 Jul 2020 14:19:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46068 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728667AbgGKSTz (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 11 Jul 2020 13:28:13 -0400
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id CF69A226F6;
-        Sat, 11 Jul 2020 19:28:05 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1594488487;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=37z1OtFPWIJPH7irUlc2rZc8jjASFLh7CuJiY+XA99s=;
-        b=ESE8FLhSCtlx/GvzFNxFzl0AbnmfrwEKt6CkeBBy0ddNNGM8Tn3WTEnA328CC0lu4mh1mV
-        a//cK3sr6xYVFrEB1gCTVA3Gzl5IxkkaYGhWz3SoiHHkmu1jcWRY1WMgO23ic8hPwP7bDh
-        /QvNAd9FFN5pasrXko2aaSlILEZHDIY=
+        Sat, 11 Jul 2020 14:19:55 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21716C08C5DD;
+        Sat, 11 Jul 2020 11:19:55 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id f16so3987059pjt.0;
+        Sat, 11 Jul 2020 11:19:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=r/O31HTyFTU09sJKGsQaSt7I4ZOQ9kI3I3BUbn+Nyeg=;
+        b=nyvIq9/nKgF26KtXb4F5ugi3ouo9vHeJhVxKOr8So/RShA1xPe8EDigNpJNdi5Ory8
+         KBziLEbwleHzJDe4pXWUVdeqNygJFAwn/ptPc4iqD6oACJT8jWHenhhI9KgqMfJiWf5s
+         /V+T5LD7ggcfa3qYoBaGSMAmtqDP2Ah+Qt0o6BU9TfG3tC/YAL+3wdOq8IU9rV9r3PQj
+         xkFSi6HmBEgIffl2Jq6OS/mo8I8c4BVOM8lzJi0KQnKlZ0KW5C3pc3kbO6cl7xn2F/8K
+         M6Xtkl1jNVnfpa50J4DwXkJ0+mCdK6xN3U4LNhp4bioVvrYhz8LaBxvRGWGwzc4DL+qD
+         Q8pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=r/O31HTyFTU09sJKGsQaSt7I4ZOQ9kI3I3BUbn+Nyeg=;
+        b=NyXoLYOPmvJyOrFnCkAXblknuTspRdkqh9C0eSSwyigpsZ0NJSNKc6fYiNiEq4820u
+         rTXDuAJ95GU0JwbXH6mR+6gTd4VOnfoCpdGhYFHezgxF8D/F1kBMNLCqYz9Pv5xUSv8X
+         C60sLzD5S9djfPVCElHRe9LR+j2LzmbHerGkY8bifQpVE341zXmOHOxluRj83bI33YFr
+         NDEjd/ifbc4LY/QUlrIa/g5suhPQwjY++Uj+NPI31Q0GP/ujLPCazgbDWK8J4yXyAWL9
+         hcz558cazLI9WJjbQimEjKAmOTLah8YzeyV+abEOlpTbLwdukGVgKX7lnEUezKrt0G4e
+         XaKQ==
+X-Gm-Message-State: AOAM532v7tmNdsjzL2V2e8Ii/CV2jI0NCxrDjiwlszwtnKR+wBybkp8B
+        Nyp/YpRq8XxsF3aAEpaQ9jSzFD0giLk=
+X-Google-Smtp-Source: ABdhPJw43tu1dMlQ1k+02bgdIuQh+5/+gjxN72LqIRd2AvdcpprbR1r8oz325N9NIp31Dsv+DY/sPA==
+X-Received: by 2002:a17:902:7b92:: with SMTP id w18mr53979905pll.258.1594491594292;
+        Sat, 11 Jul 2020 11:19:54 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s30sm8789045pgn.34.2020.07.11.11.19.52
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 11 Jul 2020 11:19:53 -0700 (PDT)
+Date:   Sat, 11 Jul 2020 11:19:52 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (drivetemp) Avoid SCT usage on Toshiba DT01ACA
+ family drives
+Message-ID: <20200711181952.GA213963@roeck-us.net>
+References: <42108b47d0e3d64c6d36618425c9f920ff469600.1594404501.git.mail@maciej.szmigiero.name>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Sat, 11 Jul 2020 19:28:05 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v5 07/13] pwm: add support for sl28cpld PWM controller
-In-Reply-To: <20200709085006.b54ype3p4yu64upl@pengutronix.de>
-References: <20200706175353.16404-1-michael@walle.cc>
- <20200706175353.16404-8-michael@walle.cc>
- <20200709085006.b54ype3p4yu64upl@pengutronix.de>
-User-Agent: Roundcube Webmail/1.4.7
-Message-ID: <72858253a9094074e9c8cd7a4e1db09f@walle.cc>
-X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <42108b47d0e3d64c6d36618425c9f920ff469600.1594404501.git.mail@maciej.szmigiero.name>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Uwe,
-
-first of all, thank you for that thorough review.
-
-Am 2020-07-09 10:50, schrieb Uwe Kleine-König:
-> On Mon, Jul 06, 2020 at 07:53:47PM +0200, Michael Walle wrote:
->> diff --git a/drivers/pwm/pwm-sl28cpld.c b/drivers/pwm/pwm-sl28cpld.c
->> new file mode 100644
->> index 000000000000..8ee286b605bf
->> --- /dev/null
->> +++ b/drivers/pwm/pwm-sl28cpld.c
->> @@ -0,0 +1,187 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * sl28cpld PWM driver
->> + *
->> + * Copyright 2020 Kontron Europe GmbH
->> + */
+On Fri, Jul 10, 2020 at 08:10:03PM +0200, Maciej S. Szmigiero wrote:
+> It has been observed that Toshiba DT01ACA family drives have
+> WRITE FPDMA QUEUED command timeouts and sometimes just freeze until
+> power-cycled under heavy write loads when their temperature is getting
+> polled in SCT mode. The SMART mode seems to be fine, though.
 > 
-> Is there publically available documenation available? If so please add 
-> a
-> link here.
-
-Unfortunately not. But it should be easy enough and I'll describe it
-briefly in the header.
-
->> +
->> +#include <linux/bitfield.h>
->> +#include <linux/kernel.h>
->> +#include <linux/mod_devicetable.h>
->> +#include <linux/module.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/pwm.h>
->> +#include <linux/regmap.h>
->> +
->> +/*
->> + * PWM timer block registers.
->> + */
->> +#define PWM_CTRL		0x00
->> +#define   PWM_ENABLE		BIT(7)
->> +#define   PWM_MODE_250HZ	0
->> +#define   PWM_MODE_500HZ	1
->> +#define   PWM_MODE_1KHZ		2
->> +#define   PWM_MODE_2KHZ		3
->> +#define   PWM_MODE_MASK		GENMASK(1, 0)
->> +#define PWM_CYCLE		0x01
->> +#define   PWM_CYCLE_MAX		0x7f
+> Let's make sure we don't use SCT mode for these drives then.
 > 
-> Please use a less generic prefix for your defines. Also I like having
-> the defines for field names include register name. Something like:
+> While only the 3 TB model was actually caught exhibiting the problem let's
+> play safe here to avoid data corruption and extend the ban to the whole
+> family.
 > 
-> 	#define PWM_SL28CPLD_CTRL		0x00
-> 	#define PWM_SL28CPLD_CTRL_ENABLE		BIT(7)
-> 	#define PWM_SL28CPLD_CTRL_MODE_MASK		GENMASK(1, 0)
+> Fixes: 5b46903d8bf3 ("hwmon: Driver for disk and solid state drives with temperature sensors")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Maciej S. Szmigiero <mail@maciej.szmigiero.name>
+> ---
 
-Ok.
+I am out of town; more thorough review later. Quick feedback: Terms such
+as "blacklist" have run out of favor. Please use a different term.
 
-> 	#define
-> PWM_SL28CPLD_CTRL_MODE_250HZ		FIELD_PREP(PWM_SL28CPLD_CTRL_MODE_MASK,
-> 0)
+Thanks,
+Guenter
 
-Shouldn't we just "#define ..MODE_250HZ 1" use FIELD_PREP inside the 
-code,
-so you can actually use the normalized enumeration values, too?
-
-Actually, I'll rename the PWM_MODE to PWM_PRESCALER, because that is
-more accurate.
-
->> +struct sl28cpld_pwm {
->> +	struct pwm_chip pwm_chip;
->> +	struct regmap *regmap;
->> +	u32 offset;
->> +};
->> +
->> +struct sl28cpld_pwm_periods {
->> +	u8 ctrl;
->> +	unsigned long duty_cycle;
->> +};
->> +
->> +struct sl28cpld_pwm_config {
->> +	unsigned long period_ns;
->> +	u8 max_duty_cycle;
->> +};
->> +
->> +static struct sl28cpld_pwm_config sl28cpld_pwm_config[] = {
+> Sending again since the previous message bounced for most recipients.
 > 
-> const ? (Or drop as the values can be easily computed, see below.)
+> Notes:
+>     This behavior was observed on two different DT01ACA3 drives.
+>     
+>     Usually, a series of queued WRITE FPDMA QUEUED commands just time out,
+>     but sometimes the whole drive freezes. Merely disconnecting and
+>     reconnecting SATA interface cable then does not unfreeze the drive.
+>     
+>     One has to disconnect and reconnect the drive power connector for the
+>     drive to be detected again (suggesting the drive firmware itself has
+>     crashed).
+>     
+>     This only happens when the drive temperature is polled very often (like
+>     every second), so occasional SCT usage via smartmontools is probably
+>     safe.
 > 
->> +	[PWM_MODE_250HZ] = { .period_ns = 4000000, .max_duty_cycle = 0x80 },
->> +	[PWM_MODE_500HZ] = { .period_ns = 2000000, .max_duty_cycle = 0x40 },
->> +	[PWM_MODE_1KHZ]  = { .period_ns = 1000000, .max_duty_cycle = 0x20 },
->> +	[PWM_MODE_2KHZ]  = { .period_ns =  500000, .max_duty_cycle = 0x10 },
->> +};
->> +
->> +static void sl28cpld_pwm_get_state(struct pwm_chip *chip,
->> +				   struct pwm_device *pwm,
->> +				   struct pwm_state *state)
->> +{
->> +	struct sl28cpld_pwm *priv = dev_get_drvdata(chip->dev);
->> +	static struct sl28cpld_pwm_config *config;
->> +	unsigned int reg;
->> +	unsigned int mode;
->> +
->> +	regmap_read(priv->regmap, priv->offset + PWM_CTRL, &reg);
->> +
->> +	state->enabled = reg & PWM_ENABLE;
+>  drivers/hwmon/drivetemp.c | 37 +++++++++++++++++++++++++++++++++++++
+>  1 file changed, 37 insertions(+)
 > 
-> Would it be more consisted to use FIELD_GET here, too?
-
-I had used FIELD_GET only for bit-fields with more than one bit,
-i.e. no flags. But that is just a matter of taste, I guess. I'd
-prefer to keep the simple "reg & PWM_ENABLE". If you insist on
-the FIELD_GET() I'll change it ;)
-
->> +
->> +	mode = FIELD_GET(PWM_MODE_MASK, reg);
->> +	config = &sl28cpld_pwm_config[mode];
->> +	state->period = config->period_ns;
-> 
-> I wonder if this could be done more effectively without the above 
-> table.
-> Something like:
-> 
-> 	state->period = 4000000 >> mode.
-
-The reason I introduced a lookup table here was that I need a
-list of the supported modes; I wasn't aware of the rounding.
-See also below.
-
-> (with a #define for 4000000 of course).
-> 
->> +	regmap_read(priv->regmap, priv->offset + PWM_CYCLE, &reg);
->> +	pwm_set_relative_duty_cycle(state, reg, config->max_duty_cycle);
-> 
-> Oh, what a creative idea to use pwm_set_relative_duty_cycle here.
-
-What is that helper for then? The former versions did the same
-calculations (i.e. DIV_ROUND_CLOSEST_ULL()) just open coded. But
-I guess then it was also rounding the wrong way.
-
-> Unfortunately it's using the wrong rounding strategy. Please enable
-> PWM_DEBUG which should diagnose these problems (given enough testing).
-
-Is there any written documentation on how to round, i.e. up or down?
-I had a look Documentation/driver-api/pwm.rst again. But couldn't find
-anything. A grep DIV_ROUND_CLOSEST_ULL() turns out that quite a few
-drivers use it, so I did the same ;)
-
-> (Hmm, on second thought I'm not sure that rounding is relevant with the
-> numbers of this hardware. Still it's wrong in general and I don't want
-> to have others copy this.)
-> 
->> +}
->> +
->> +static int sl28cpld_pwm_apply(struct pwm_chip *chip, struct 
->> pwm_device *pwm,
->> +			      const struct pwm_state *state)
->> +{
->> +	struct sl28cpld_pwm *priv = dev_get_drvdata(chip->dev);
->> +	struct sl28cpld_pwm_config *config;
->> +	unsigned int cycle;
->> +	int ret;
->> +	int mode;
->> +	u8 ctrl;
->> +
->> +	/* Get the configuration by comparing the period */
->> +	for (mode = 0; mode < ARRAY_SIZE(sl28cpld_pwm_config); mode++) {
->> +		config = &sl28cpld_pwm_config[mode];
->> +		if (state->period == config->period_ns)
->> +			break;
->> +	}
->> +
->> +	if (mode == ARRAY_SIZE(sl28cpld_pwm_config))
->> +		return -EINVAL;
-> 
-> You're supposed to pick the biggest period that isn't bigger than the
-> requested period. So something like:
-> 
-> 	switch(period) {
-> 	case 4000000 ... UINT_MAX:
-> 		mode = 0;
-> 		break;
-> 	case 2000000 ... 3999999:
-> 		mode = 1;
-> 		break;
-> 	...
-> 	}
-> 
-> (or:
-> 
-> 	if period >= 4000000:
-> 		mode = 0
-> 	else:
-> 		// I think ... please double-check
-> 		mode = ilog2(4000000 / (period + 1)) + 1
-> 
-> 	if mode > 3:
-> 		return -ERANGE;
-> )
-
-I see. In this case I can of course drop the table. But the rounding
-will be then very coarse for this driver. And there is no way to get
-the value which is actually set, right? You can just read the cached
-value. So that value might be far off the actual one set in the
-hardware.
-
-During testing I've also found the following problem: Assume we set
-a period of 5000000ns; this will be rounded to 4000000ns and written
-to the hardware. But the usable duty cycle is still 0..5000000ns. The
-driver will translate this input in the following manner:
-  - 0..4000000 -> 0%..100%
-  - >4000000 -> 100%
-Is this behavior intended? Even for PWM hardware which supports finer
-grained frequencies there will be some upper and lower limits. Is
-the user of the PWM supposed to know these?
-
-> 
-> 	real_period = 4000000 >> mode;
-> 
->> +	ctrl = FIELD_PREP(PWM_MODE_MASK, mode);
->> +	if (state->enabled)
->> +		ctrl |= PWM_ENABLE;
->> +
->> +	cycle = pwm_get_relative_duty_cycle(state, config->max_duty_cycle);
-> 
-> Again the rounding is wrong. You need need to round down the requested
-> duty_cycle to the next possible value. So something like:
-> 
-> 	duty_cycle = min(real_period, state->duty_cycle);
-> 
-> 	cycle = duty_cycle * (0x80 >> mode) / (4000000 >> mode);
-> 
-> which can be further simplified to
-> 
-> 	cycle = duty_cycle / 31250
-
-Mh, this made me think where that "magic" number is coming from. Turns
-out this is the NSECS_PE_SEC / base clock of the PWM.
-
-I guess I'll rework the get_state() and apply() to just use this
-base frequency, dropping the table etc.
-
-Btw what about the polarity. Do I have to support it or can I
-return an error code if its != PWM_POLARITY_NORMAL? If so, which
-error code? EINVAL? I know I could just invert the duty cycle in
-software, but shouldn't this be done in the core for any controller
-which doesn't support changing the polarity in hardware?
-
-> 
-> .
-> 
->> +	/*
->> +	 * The hardware doesn't allow to set max_duty_cycle if the
->> +	 * 250Hz mode is enabled, thus we have to trap that here.
->> +	 * But because a 100% duty cycle is equal on all modes, i.e.
-> 
-> It depends on how picky you are if you can agree here.
-
-why is that? The only drawback is that the mode is changed without
-the user seeing it. But the PWM subsystem returns the cached state,
-right? get_state() is called only on device request (and during
-debug it seems). Actually, enabling PWM_DEBUG might choke on this
-workaround (".apply didn't pick the best available period"). Is
-this ok?
-
-> Please document
-> this in a Limitations paragraph at the top of the driver similar to
-> drivers/pwm/pwm-rcar.c and others.
-
-sure.
-
-> 
->> +	 * it is just a "all-high" output, we trap any case with a
->> +	 * 100% duty cycle and use the 500Hz mode.
-> 
-> Please only trap on 250Hz mode. (Can be done using: if (cycle == 0x80) 
-> I
-> think)
-
-you are correct.
-
-> 
->> +	 */
->> +	if (cycle == config->max_duty_cycle) {
->> +		ctrl &= ~PWM_MODE_MASK;
->> +		ctrl |= FIELD_PREP(PWM_MODE_MASK, PWM_MODE_500HZ);
->> +		cycle = PWM_CYCLE_MAX;
-> 
-> I would have expected 0x40 here instead of 0x7f?
-
-Yes, but technically, any value above 0x40 will do it. But you
-are correct, that is wrong and misleading.
-
->> +	}
->> +
->> +	ret = regmap_write(priv->regmap, priv->offset + PWM_CTRL, ctrl);
->> +	if (ret)
->> +		return ret;
->> +
->> +	return regmap_write(priv->regmap, priv->offset + PWM_CYCLE, 
->> (u8)cycle);
-> 
-> I assume this can result in broken output? Consider the hardware runs
-> with mode = 1 & cycle = 0x23 and you want to go to mode = 0 & cycle =
-> 0x42: Can this result in a period that has mode = 0 & cycle = 0x23?
-
-Isn't that always the case if a write may fail and there are more than
-one register to configure? For example, have a look at pwm-iqs620a.c.
-Btw. the get_state might also fail, but there is no return value to
-return the error.
-
-> If this cannot be avoided, please document this in the Limitations
-> paragraph.
-
-Sure. There might be (or most likely are) gliches when you change the
-mode.
-
-> 
->> +}
->> +
->> +static const struct pwm_ops sl28cpld_pwm_ops = {
->> +	.apply = sl28cpld_pwm_apply,
->> +	.get_state = sl28cpld_pwm_get_state,
->> +	.owner = THIS_MODULE,
->> +};
->> +
->> +static int sl28cpld_pwm_probe(struct platform_device *pdev)
->> +{
->> +	struct sl28cpld_pwm *priv;
->> +	struct pwm_chip *chip;
->> +	int ret;
->> +
->> +	if (!pdev->dev.parent)
->> +		return -ENODEV;
->> +
->> +	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
->> +	if (!priv)
->> +		return -ENOMEM;
->> +
->> +	priv->regmap = dev_get_regmap(pdev->dev.parent, NULL);
->> +	if (!priv->regmap)
->> +		return -ENODEV;
->> +
->> +	ret = device_property_read_u32(&pdev->dev, "reg", &priv->offset);
->> +	if (ret)
->> +		return -EINVAL;
->> +
->> +	/* Initialize the pwm_chip structure */
->> +	chip = &priv->pwm_chip;
->> +	chip->dev = &pdev->dev;
->> +	chip->ops = &sl28cpld_pwm_ops;
->> +	chip->base = -1;
->> +	chip->npwm = 1;
->> +
->> +	ret = pwmchip_add(&priv->pwm_chip);
->> +	if (ret)
->> +		return ret;
->> +
->> +	platform_set_drvdata(pdev, priv);
->> +
->> +	return 0;
->> +}
-> 
-> Please add error messages with some details for the error paths
-> (preferable using %pe to indicate the error code).
-
-Ok.
-
-> 
->> +static int sl28cpld_pwm_remove(struct platform_device *pdev)
->> +{
->> +	struct sl28cpld_pwm *priv = platform_get_drvdata(pdev);
->> +
->> +	return pwmchip_remove(&priv->pwm_chip);
->> +}
->> +
->> +static const struct of_device_id sl28cpld_pwm_of_match[] = {
->> +	{ .compatible = "kontron,sl28cpld-pwm" },
->> +	{}
->> +};
->> +MODULE_DEVICE_TABLE(of, sl28cpld_pwm_of_match);
->> +
->> +static struct platform_driver sl28cpld_pwm_driver = {
->> +	.probe = sl28cpld_pwm_probe,
->> +	.remove	= sl28cpld_pwm_remove,
->> +	.driver = {
->> +		.name = "sl28cpld-pwm",
->> +		.of_match_table = sl28cpld_pwm_of_match,
->> +	},
->> +};
->> +module_platform_driver(sl28cpld_pwm_driver);
->> +
->> +MODULE_DESCRIPTION("sl28cpld PWM Driver");
->> +MODULE_AUTHOR("Michael Walle <michael@walle.cc>");
->> +MODULE_LICENSE("GPL");
-
--michael
+> diff --git a/drivers/hwmon/drivetemp.c b/drivers/hwmon/drivetemp.c
+> index 0d4f3d97ffc6..4fd51fa8c6e3 100644
+> --- a/drivers/hwmon/drivetemp.c
+> +++ b/drivers/hwmon/drivetemp.c
+> @@ -285,6 +285,36 @@ static int drivetemp_get_scttemp(struct drivetemp_data *st, u32 attr, long *val)
+>  	return err;
+>  }
+>  
+> +static const char * const sct_blacklist_models[] = {
+> +/*
+> + * These drives will have WRITE FPDMA QUEUED command timeouts and sometimes just
+> + * freeze until power-cycled under heavy write loads when their temperature is
+> + * getting polled in SCT mode. The SMART mode seems to be fine, though.
+> + *
+> + * While only the 3 TB model was actually caught exhibiting the problem
+> + * let's play safe here to avoid data corruption and ban the whole family.
+> + */
+> +	"TOSHIBA DT01ACA0",
+> +	"TOSHIBA DT01ACA1",
+> +	"TOSHIBA DT01ACA2",
+> +	"TOSHIBA DT01ACA3",
+> +};
+> +
+> +static bool drivetemp_sct_blacklisted(struct drivetemp_data *st)
+> +{
+> +	struct scsi_device *sdev = st->sdev;
+> +	unsigned int ctr;
+> +
+> +	if (!sdev->model)
+> +		return false;
+> +
+> +	for (ctr = 0; ctr < ARRAY_SIZE(sct_blacklist_models); ctr++)
+> +		if (strncmp(sdev->model, sct_blacklist_models[ctr], 16) == 0)
+> +			return true;
+> +
+> +	return false;
+> +}
+> +
+>  static int drivetemp_identify_sata(struct drivetemp_data *st)
+>  {
+>  	struct scsi_device *sdev = st->sdev;
+> @@ -326,6 +356,13 @@ static int drivetemp_identify_sata(struct drivetemp_data *st)
+>  	/* bail out if this is not a SATA device */
+>  	if (!is_ata || !is_sata)
+>  		return -ENODEV;
+> +
+> +	if (have_sct && drivetemp_sct_blacklisted(st)) {
+> +		dev_notice(&sdev->sdev_gendev,
+> +			   "will avoid using SCT for temperature monitoring\n");
+> +		have_sct = false;
+> +	}
+> +
+>  	if (!have_sct)
+>  		goto skip_sct;
+>  
