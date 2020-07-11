@@ -2,132 +2,115 @@ Return-Path: <SRS0=Peah=AW=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 948F4C433DF
-	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Jul 2020 20:42:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DB77C433E1
+	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Jul 2020 23:59:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6CFA020720
-	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Jul 2020 20:42:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 26FC5207BB
+	for <linux-hwmon@archiver.kernel.org>; Sat, 11 Jul 2020 23:59:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727083AbgGKUmH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 11 Jul 2020 16:42:07 -0400
-Received: from vps-vb.mhejs.net ([37.28.154.113]:40854 "EHLO vps-vb.mhejs.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726961AbgGKUmH (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 11 Jul 2020 16:42:07 -0400
-Received: from MUA
-        by vps-vb.mhejs.net with esmtps (TLS1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.93.0.4)
-        (envelope-from <mail@maciej.szmigiero.name>)
-        id 1juMJu-0007mc-VO; Sat, 11 Jul 2020 22:42:03 +0200
-From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] hwmon: (drivetemp) Avoid SCT usage on Toshiba DT01ACA family drives
-Date:   Sat, 11 Jul 2020 22:41:57 +0200
-Message-Id: <8325438e25a3a5a7e6d12ef6ede8f4350e4c65be.1594500029.git.mail@maciej.szmigiero.name>
-X-Mailer: git-send-email 2.27.0
+        id S1726948AbgGKX7I (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 11 Jul 2020 19:59:08 -0400
+Received: from server-x.ipv4.hkg02.ds.network ([27.111.83.178]:53228 "EHLO
+        mail.gtsys.com.hk" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
+        with ESMTP id S1726939AbgGKX7I (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 11 Jul 2020 19:59:08 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.gtsys.com.hk (Postfix) with ESMTP id 45DBA200080F;
+        Sun, 12 Jul 2020 07:59:05 +0800 (HKT)
+X-Virus-Scanned: Debian amavisd-new at gtsys.com.hk
+Received: from mail.gtsys.com.hk ([127.0.0.1])
+        by localhost (mail.gtsys.com.hk [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Mk8KdIFMvSK7; Sun, 12 Jul 2020 07:59:05 +0800 (HKT)
+Received: from s01.gtsys.com.hk (unknown [10.128.4.2])
+        by mail.gtsys.com.hk (Postfix) with ESMTP id 1F2C6200029E;
+        Sun, 12 Jul 2020 07:59:05 +0800 (HKT)
+Received: from [10.128.2.32] (unknown [124.217.189.79])
+        by s01.gtsys.com.hk (Postfix) with ESMTPSA id BF109C019F4;
+        Sun, 12 Jul 2020 07:59:04 +0800 (HKT)
+Subject: Re: [PATCH v5 2/2] devicetree: hwmon: shtc1: Add sensirion,shtc1.yaml
+From:   Chris Ruehl <chris.ruehl@gtsys.com.hk>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>, Jack Lo <jack.lo@gtsys.com.hk>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>, devicetree@vger.kernel.org
+References: <20200710021536.27544-1-chris.ruehl@gtsys.com.hk>
+ <20200710021536.27544-3-chris.ruehl@gtsys.com.hk>
+ <20200710163153.GA2760091@bogus>
+ <d45ba090-a09b-dd51-4645-bc62e90cb9bc@gtsys.com.hk>
+Message-ID: <4189dcf7-fc67-29c4-6357-646071d7ded0@gtsys.com.hk>
+Date:   Sun, 12 Jul 2020 07:59:03 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
+In-Reply-To: <d45ba090-a09b-dd51-4645-bc62e90cb9bc@gtsys.com.hk>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-It has been observed that Toshiba DT01ACA family drives have
-WRITE FPDMA QUEUED command timeouts and sometimes just freeze until
-power-cycled under heavy write loads when their temperature is getting
-polled in SCT mode. The SMART mode seems to be fine, though.
+Morning,
 
-Let's make sure we don't use SCT mode for these drives then.
+On 11/7/2020 6:05 pm, Chris Ruehl wrote:
+> 
+> On 11/7/2020 12:31 am, Rob Herring wrote:
+>> On Fri, 10 Jul 2020 10:15:35 +0800, Chris Ruehl wrote:
+>>> Add documentation for the newly added DTS support in the shtc1 driver.
+>>> To align with the drivers logic to have high precision by default
+>>> a boolean sensirion,low_precision is used to switch to low precision.
+>>>
+>>> Signed-off-by: Chris Ruehl <chris.ruehl@gtsys.com.hk>
+>>> ---
+>>>   .../bindings/hwmon/sensirion,shtc1.yaml       | 57 +++++++++++++++++++
+>>>   1 file changed, 57 insertions(+)
+>>>   create mode 100644 
+>>> Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml
+>>>
+>>
+>>
+>> My bot found errors running 'make dt_binding_check' on your patch:
+>>
+>> Error: 
+>> Documentation/devicetree/bindings/hwmon/sensirion,shtc1.example.dts:25.13-14 
+>> syntax error
+>> FATAL ERROR: Unable to parse input tree
+>> scripts/Makefile.lib:315: recipe for target 
+>> 'Documentation/devicetree/bindings/hwmon/sensirion,shtc1.example.dt.yaml' failed
+>> make[1]: *** 
+>> [Documentation/devicetree/bindings/hwmon/sensirion,shtc1.example.dt.yaml] Error 1
+>> make[1]: *** Waiting for unfinished jobs....
+>> Makefile:1347: recipe for target 'dt_binding_check' failed
+>> make: *** [dt_binding_check] Error 2
+>>
+>>
+>> See https://patchwork.ozlabs.org/patch/1326414
+>>
+>> If you already ran 'make dt_binding_check' and didn't see the above
+>> error(s), then make sure dt-schema is up to date:
+>>
+>> pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
+>>
+>> Please check and re-submit.
+>>
+> 
+> Hi Rob,
+> 
+> I did run the test and didn't had any Error. dt-schema 2020.06 installed from 
+> git. pip3 install -e.
+> 
+> Can you help?
+> 
+> Chris
 
-While only the 3 TB model was actually caught exhibiting the problem let's
-play safe here to avoid data corruption and extend the ban to the whole
-family.
+Solved, missing ";" behind reg = <0x70>
 
-Fixes: 5b46903d8bf3 ("hwmon: Driver for disk and solid state drives with temperature sensors")
-Cc: stable@vger.kernel.org
-Signed-off-by: Maciej S. Szmigiero <mail@maciej.szmigiero.name>
----
-
-Notes:
-    This behavior was observed on two different DT01ACA3 drives.
-    
-    Usually, a series of queued WRITE FPDMA QUEUED commands just time out,
-    but sometimes the whole drive freezes. Merely disconnecting and
-    reconnecting SATA interface cable then does not unfreeze the drive.
-    
-    One has to disconnect and reconnect the drive power connector for the
-    drive to be detected again (suggesting the drive firmware itself has
-    crashed).
-    
-    This only happens when the drive temperature is polled very often (like
-    every second), so occasional SCT usage via smartmontools is probably
-    safe.
-    
-    Changes from v1:
-    'SCT blacklist' -> 'SCT avoid models'
-
- drivers/hwmon/drivetemp.c | 37 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
-
-diff --git a/drivers/hwmon/drivetemp.c b/drivers/hwmon/drivetemp.c
-index 0d4f3d97ffc6..da9cfcbecc96 100644
---- a/drivers/hwmon/drivetemp.c
-+++ b/drivers/hwmon/drivetemp.c
-@@ -285,6 +285,36 @@ static int drivetemp_get_scttemp(struct drivetemp_data *st, u32 attr, long *val)
- 	return err;
- }
- 
-+static const char * const sct_avoid_models[] = {
-+/*
-+ * These drives will have WRITE FPDMA QUEUED command timeouts and sometimes just
-+ * freeze until power-cycled under heavy write loads when their temperature is
-+ * getting polled in SCT mode. The SMART mode seems to be fine, though.
-+ *
-+ * While only the 3 TB model was actually caught exhibiting the problem
-+ * let's play safe here to avoid data corruption and ban the whole family.
-+ */
-+	"TOSHIBA DT01ACA0",
-+	"TOSHIBA DT01ACA1",
-+	"TOSHIBA DT01ACA2",
-+	"TOSHIBA DT01ACA3",
-+};
-+
-+static bool drivetemp_sct_avoid(struct drivetemp_data *st)
-+{
-+	struct scsi_device *sdev = st->sdev;
-+	unsigned int ctr;
-+
-+	if (!sdev->model)
-+		return false;
-+
-+	for (ctr = 0; ctr < ARRAY_SIZE(sct_avoid_models); ctr++)
-+		if (strncmp(sdev->model, sct_avoid_models[ctr], 16) == 0)
-+			return true;
-+
-+	return false;
-+}
-+
- static int drivetemp_identify_sata(struct drivetemp_data *st)
- {
- 	struct scsi_device *sdev = st->sdev;
-@@ -326,6 +356,13 @@ static int drivetemp_identify_sata(struct drivetemp_data *st)
- 	/* bail out if this is not a SATA device */
- 	if (!is_ata || !is_sata)
- 		return -ENODEV;
-+
-+	if (have_sct && drivetemp_sct_avoid(st)) {
-+		dev_notice(&sdev->sdev_gendev,
-+			   "will avoid using SCT for temperature monitoring\n");
-+		have_sct = false;
-+	}
-+
- 	if (!have_sct)
- 		goto skip_sct;
- 
+will resend.
