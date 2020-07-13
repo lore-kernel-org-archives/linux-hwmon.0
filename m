@@ -2,72 +2,72 @@ Return-Path: <SRS0=nJvH=AY=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96BD2C433E4
-	for <linux-hwmon@archiver.kernel.org>; Mon, 13 Jul 2020 19:32:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D1C1DC433DF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 13 Jul 2020 19:32:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 74C2F2068F
-	for <linux-hwmon@archiver.kernel.org>; Mon, 13 Jul 2020 19:32:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B20A12068F
+	for <linux-hwmon@archiver.kernel.org>; Mon, 13 Jul 2020 19:32:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VxApHa3h"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UN+G+4bG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726798AbgGMTco (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 13 Jul 2020 15:32:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48424 "EHLO
+        id S1726852AbgGMTcq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 13 Jul 2020 15:32:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726339AbgGMTcn (ORCPT
+        with ESMTP id S1726794AbgGMTcp (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 13 Jul 2020 15:32:43 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3FC8C061755;
-        Mon, 13 Jul 2020 12:32:42 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id a1so18664537ejg.12;
-        Mon, 13 Jul 2020 12:32:42 -0700 (PDT)
+        Mon, 13 Jul 2020 15:32:45 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61DE8C061755;
+        Mon, 13 Jul 2020 12:32:45 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id o18so18679215eje.7;
+        Mon, 13 Jul 2020 12:32:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=3tozMBGjpipE8A7Zgrh/XJBKD7AlEt72S9l99jpLqeM=;
-        b=VxApHa3hJPggYC+rEAWen5/qDg9RazGycltvUnMiYCsdyLHsj7qvsCnB8cWRlnLHJX
-         1Vgrf7j7/EKORH9CuNCj8izwhxqOMbl9qz3Y7JceRKy54XS8anlZ3hDaU8mI8o/IqVLR
-         AugBBP9T525nkOt2EWMmLE6fD+Yg7ZNpZeGs1+u3GMMh/6pEeD18WSamV9evudW4amTz
-         kKEXEr9XniKPog7qoq+uO5KDxEkjME1Qf/SK0vMo3QxwbFTyJ3lF1eV+KsRZ5vUqXUnC
-         Ya02YiPREvw69KXN8oWkJbr0WJJjerQnWW4zNpfuofQx6BkIFRDOdwEN8mx9aKqcJMbT
-         7HfA==
+        bh=19x8MNwEHN9x5QRgLvfQAa5L6rMotMwU5KchkSUnZWg=;
+        b=UN+G+4bGCqNu0Uc3Gy33gagbEqSXFVCeENKScn9wSAZDN8N59L8IA2qa1V+BRaFLvW
+         wq/djS9u6u638unsHuNw4CG0dggHerYgc/VnwBbVD0AoMfhTh3K29YJzwb/hPFTg91nB
+         /mIRmA6TF4h70+NM2wN85ocFZxIRW9wVYzO2sewHHTZ+s5c2b2Qv/OYdhg8fK7iJbWZo
+         9p1z0auVsc6v0i03Bg3ONTlbNROjL22jdya+vMzjUYRnyJK3vPXu71adx436A18olNPN
+         hqkt83Vfzmj4wvyqIAOOWxIk/05mn8UpXPKrhj9LIxdOb+nOc5sDZFY6ZqvB/dIF4kmU
+         8c2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=3tozMBGjpipE8A7Zgrh/XJBKD7AlEt72S9l99jpLqeM=;
-        b=qC71p9tomjfdRLAV9Yv5MUVLAb8q30OI55ZRQRNy2q06PMFcyWRL0QP6EzVCeSS210
-         Q8EZePxBhfuVQ4EP8RA2atqJRut+2Qs5bcswb00vf4jjTF27KodgmF5MKcIgdiq7R7Vl
-         0fuwq+lAthTG+Y+2anc36QLWGAmAc2EV43GNrxokrieSpo2Mvwz9OTIt2+0S82kmIEf+
-         jvsrqw09e9xXgPOn9IfoRB1brR2hpu8tL3qekxhHyVB8I1x9bgjNhuXmMcTkAwrLrpTr
-         dMLMoQUesd3s3zfeEFs9sslLUzTamRoQzPTb0rnq1NifoCrytgXOqVw9BrFgbDoMlbi3
-         vCYQ==
-X-Gm-Message-State: AOAM530pEOeCdoNt5YKup+8apRdu1rRZQ3ep4LERaBd2JpBFZanBDdy/
-        yad51C5bZJLaAvC3N/n64fo=
-X-Google-Smtp-Source: ABdhPJwbPRhCycG7wWM+Z1epowqZgV+vnjwi6pLQPETmlr5goUkfmlY2hCM96C+V/08ZAPZxJTphdg==
-X-Received: by 2002:a17:906:a28b:: with SMTP id i11mr1222495ejz.524.1594668761520;
-        Mon, 13 Jul 2020 12:32:41 -0700 (PDT)
+        bh=19x8MNwEHN9x5QRgLvfQAa5L6rMotMwU5KchkSUnZWg=;
+        b=kQG7TiuJ8TkgfqzT1clE4dg/nOJjj4Yk5Su29PtJr1z1WQ0pnrtrhytHtSOV7hFRNL
+         OZDTQRTh09Nbq4Y7V9bBA7OvFwl/gldTgQTEtQFnK5Tvpns2O4aZy14tKH9sHS1GsG3o
+         N0rv4RnZ5W/nc0x1IJ1C4BVSkUvWE9GA6F74lKNbriR5Ajt9esv8QDgXbHLlu/Cs/DoO
+         nDhkZKLljTzVp7xDrx37kZ1MnJfh15Z1kwk29PFysxFfEHjUL/CR4YddslwpiQitm1oQ
+         zu+sQvAHFjf7NPIkQ5mDUy0lIlAjgJxfpJgvBZ8ltL+dW3TECSEIzVxTri/zvNsWXXwS
+         ub9g==
+X-Gm-Message-State: AOAM531vgqwuhwfESh9zJJK1NEKUHS2Z2IrqUdMZFzdDnhsSZh7ZWOQJ
+        R4pRXvpgyaHqkR3fFOFDZow=
+X-Google-Smtp-Source: ABdhPJyCemh4KeMbIQmNplIDC1jSRXhzp5jCiC5AB7piPCzw6RpHT2gU7GTfLcgWtYBIhp26kTnOVg==
+X-Received: by 2002:a17:906:6606:: with SMTP id b6mr1346182ejp.102.1594668764091;
+        Mon, 13 Jul 2020 12:32:44 -0700 (PDT)
 Received: from localhost.localdomain ([185.95.176.207])
-        by smtp.googlemail.com with ESMTPSA id x10sm10454003ejc.46.2020.07.13.12.32.40
+        by smtp.googlemail.com with ESMTPSA id x10sm10454003ejc.46.2020.07.13.12.32.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2020 12:32:40 -0700 (PDT)
+        Mon, 13 Jul 2020 12:32:43 -0700 (PDT)
 From:   jaap aarts <jaap.aarts1@gmail.com>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         linux-hwmon@vger.kernel.org, linux-usb@vger.kernel.org
 Cc:     jaap aarts <jaap.aarts1@gmail.com>,
         Jaap Aarts <jaap.aarts1@example.com>
-Subject: [PATCH 2/6] fan support for asetek gen 6 driver
-Date:   Mon, 13 Jul 2020 21:32:23 +0200
-Message-Id: <20200713193227.189751-2-jaap.aarts1@gmail.com>
+Subject: [PATCH 5/6] allow setting enable instead of mode, and support enable 2/3/4
+Date:   Mon, 13 Jul 2020 21:32:26 +0200
+Message-Id: <20200713193227.189751-5-jaap.aarts1@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200713193227.189751-1-jaap.aarts1@gmail.com>
 References: <20200713193227.189751-1-jaap.aarts1@gmail.com>
@@ -80,356 +80,179 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 
 Signed-off-by: Jaap Aarts <jaap.aarts1@example.com>
 ---
- drivers/hwmon/asetek_gen6.c | 315 +++++++++++++++++++++++++++++++++++-
- 1 file changed, 312 insertions(+), 3 deletions(-)
+ drivers/hwmon/asetek_gen6.c | 110 ++++++++++++++++++++++++++++++------
+ 1 file changed, 93 insertions(+), 17 deletions(-)
 
 diff --git a/drivers/hwmon/asetek_gen6.c b/drivers/hwmon/asetek_gen6.c
-index 4d530a4cb71d..b82a678717ab 100644
+index d657ecc78908..19f50d5cd179 100644
 --- a/drivers/hwmon/asetek_gen6.c
 +++ b/drivers/hwmon/asetek_gen6.c
-@@ -4,7 +4,7 @@
-  * Copyright (c) Jaap Aarts 2020
-  * 
-  * Protocol reverse engineered by audiohacked
-- * https://github.com/audiohacked/OpenCorsairLink
-+ * https://github.com/audiohacked/OpendriverLink
-  */
- 
- /*
-@@ -45,6 +45,315 @@ struct driver {
- 	struct kref kref;
+@@ -64,38 +64,100 @@ struct hwmon_data {
+ 	void **channel_data;
  };
  
-+struct curve_point {
-+	uint8_t temp;
-+	uint8_t pwm;
-+};
-+
-+struct fan_hwmon_data {
-+	char fan_channel;
-+	long fan_target;
-+	unsigned char fan_pwm_target;
-+	long mode;
-+	struct curve_point curve[7];
-+};
-+
-+struct hwmon_data {
-+	struct driver *dev;
-+	int channel_count;
-+	void **channel_data;
-+	int fan_1_index;
-+};
-+
-+struct curve_point default_curve[] = {
-+	{
-+		.temp = 0x10,
-+		.pwm = 0x19,
+-struct curve_point default_curve[] = {
++struct curve_point quiet_curve[] = {
+ 	{
+-		.temp = 0x10,
+-		.pwm = 0x19,
++		.temp = 0x1F,
++		.pwm = 0x15,
+ 	},
+ 	{
+-		.temp = 0x14,
+-		.pwm = 0x19,
++		.temp = 0x21,
++		.pwm = 0x1E,
 +	},
 +	{
-+		.temp = 0x14,
-+		.pwm = 0x19,
++		.temp = 0x24,
++		.pwm = 0x25,
++	},
++	{
++		.temp = 0x27,
++		.pwm = 0x2D,
++	},
++	{
++		.temp = 0x29,
++		.pwm = 0x38,
++	},
++	{
++		.temp = 0x2C,
++		.pwm = 0x4A,
++	},
++	{
++		.temp = 0x2F,
++		.pwm = 0x64,
++	},
++};
++
++struct curve_point balanced_curve[] = {
++	{
++		.temp = 0x1C,
++		.pwm = 0x15,
++	},
++	{
++		.temp = 0x1E,
++		.pwm = 0x1B,
+ 	},
+ 	{
+ 		.temp = 0x20,
+-		.pwm = 0x27,
++		.pwm = 0x23,
+ 	},
+ 	{
+-		.temp = 0x28,
+-		.pwm = 0x32,
++		.temp = 0x22,
++		.pwm = 0x28,
+ 	},
+ 	{
+-		.temp = 0x32,
+-		.pwm = 0x4b,
++		.temp = 0x24,
++		.pwm = 0x32,
+ 	},
+ 	{
+-		.temp = 0x37,
+-		.pwm = 0x5a,
++		.temp = 0x27,
++		.pwm = 0x48,
+ 	},
+ 	{
+-		.temp = 0x3c,
++		.temp = 0x29,
+ 		.pwm = 0x64,
+ 	},
++};
+ 
++struct curve_point extreme_curve[] = {
++	{
++		.temp = 0x19,
++		.pwm = 0x28,
++	},
++	{
++		.temp = 0x1B,
++		.pwm = 0x2E,
++	},
++	{
++		.temp = 0x1D,
++		.pwm = 0x37,
++	},
++	{
++		.temp = 0x1E,
++		.pwm = 0x41,
++	},
++	{
++		.temp = 0x1F,
++		.pwm = 0x4C,
 +	},
 +	{
 +		.temp = 0x20,
-+		.pwm = 0x27,
++		.pwm = 0x56,
 +	},
 +	{
-+		.temp = 0x28,
-+		.pwm = 0x32,
-+	},
-+	{
-+		.temp = 0x32,
-+		.pwm = 0x4b,
-+	},
-+	{
-+		.temp = 0x37,
-+		.pwm = 0x5a,
-+	},
-+	{
-+		.temp = 0x3c,
++		.temp = 0x21,
 +		.pwm = 0x64,
 +	},
-+
-+};
-+
-+static const char SUCCESS[2] = { 0x12, 0x34 };
-+
-+#define SUCCES_LENGTH 3
-+
-+static bool check_succes(char command, char ret[SUCCES_LENGTH])
-+{
-+	char success[SUCCES_LENGTH] = { command };
-+	strncpy(&success[1], SUCCESS, SUCCES_LENGTH - 1);
-+	return strncmp(ret, success, SUCCES_LENGTH) == 0;
-+}
-+
-+int set_fan_target_rpm(struct driver *cdev, struct fan_hwmon_data *fan_data,
-+		       long val)
-+{
-+	int retval;
-+	int wrote;
-+	int sndpipe = usb_sndbulkpipe(cdev->udev, cdev->bulk_out_endpointAddr);
-+	int rcvpipe = usb_rcvbulkpipe(cdev->udev, cdev->bulk_in_endpointAddr);
-+
-+	char *send_buf = cdev->bulk_out_buffer;
-+	char *recv_buf = cdev->bulk_in_buffer;
-+
-+	fan_data->fan_target = val;
-+	fan_data->fan_pwm_target = 0;
-+
-+	send_buf[0] = 0x43;
-+	send_buf[1] = fan_data->fan_channel;
-+	send_buf[2] = (fan_data->fan_target >> 8);
-+	send_buf[3] = fan_data->fan_target;
-+
-+	retval = usb_bulk_msg(cdev->udev, sndpipe, send_buf, 4, &wrote, 100);
-+	if (retval != 0)
-+		return retval;
-+
-+	retval = usb_bulk_msg(cdev->udev, rcvpipe, recv_buf, 6, &wrote, 100000);
-+	if (retval != 0)
-+		return retval;
-+
-+	//no error
-+	if (!check_succes(send_buf[0], recv_buf) ||
-+	    recv_buf[3] != fan_data->fan_channel)
-+		printk(KERN_INFO "[*] Failled setting fan rpm %d,%d,%d/%d\n",
-+		       recv_buf[0], recv_buf[1], recv_buf[2], recv_buf[3]);
-+	return 0;
-+}
-+void get_fan_target_rpm(struct fan_hwmon_data *fan_data, long *val)
-+{
-+	*val = fan_data->fan_target;
-+}
-+int get_fan_current_rpm(struct driver *cdev, struct fan_hwmon_data *fan_data,
-+			long *val)
-+{
-+	int retval;
-+	int wrote;
-+	int sndpipe = usb_sndbulkpipe(cdev->udev, cdev->bulk_out_endpointAddr);
-+	int rcvpipe = usb_rcvbulkpipe(cdev->udev, cdev->bulk_in_endpointAddr);
-+
-+	char *send_buf = cdev->bulk_out_buffer;
-+	char *recv_buf = cdev->bulk_in_buffer;
-+
-+	send_buf[0] = 0x41;
-+	send_buf[1] = fan_data->fan_channel;
-+
-+	retval = usb_bulk_msg(cdev->udev, sndpipe, send_buf, 2, &wrote, 100);
-+	if (retval != 0)
-+		return retval;
-+
-+	retval = usb_bulk_msg(cdev->udev, rcvpipe, recv_buf, 6, &wrote, 100);
-+	if (retval != 0)
-+		return retval;
-+
-+	if (!check_succes(0x41, recv_buf) ||
-+	    recv_buf[3] != fan_data->fan_channel)
-+		printk(KERN_INFO "[*] Failled retreiving fan rmp %d,%d,%d/%d\n",
-+		       recv_buf[0], recv_buf[1], recv_buf[2], recv_buf[3]);
-+
-+	*val = (((uint8_t)recv_buf[4]) << 8) + (uint8_t)recv_buf[5];
-+	return 0;
-+}
-+
-+umode_t is_visible_func(const void *d, enum hwmon_sensor_types type, u32 attr,
-+			int channel)
-+{
-+	switch (type) {
-+	case hwmon_fan:
-+		switch (attr) {
-+		case hwmon_fan_input:
-+			return 0444;
-+			break;
-+		case hwmon_fan_target:
-+			return 0644;
-+			break;
-+		case hwmon_fan_min:
-+			return 0444;
-+			break;
-+		default:
-+			break;
-+		}
-+		break;
-+	default:
-+		break;
-+	}
-+	return 0;
-+}
-+
-+static int write_func(struct device *dev, enum hwmon_sensor_types type,
-+		      u32 attr, int channel, long val)
-+{
-+	struct hwmon_data *data = dev_get_drvdata(dev);
-+	struct driver *cdev = data->dev;
-+	struct fan_hwmon_data *fan_data;
-+	int retval = 0;
-+
-+	switch (type) {
-+	case hwmon_fan:;
-+		switch (attr) {
-+		case hwmon_fan_target:
-+			fan_data = data->channel_data[channel];
-+
-+			retval = usb_autopm_get_interface(cdev->interface);
-+			if (retval)
-+				goto exit;
-+
-+			if (down_trylock(&cdev->limit_sem)) {
-+				retval = -EAGAIN;
-+				goto cleanup_interface;
-+			}
-+
-+			retval = set_fan_target_rpm(cdev, fan_data, val);
-+			if (retval)
-+				goto cleanup;
-+
-+			break;
-+		default:
-+			return -EINVAL;
-+		}
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+cleanup:
-+	up(&cdev->limit_sem);
-+cleanup_interface:
-+	usb_autopm_put_interface(cdev->interface);
-+exit:
-+	return retval;
-+}
-+int read_func(struct device *dev, enum hwmon_sensor_types type, u32 attr,
-+	      int channel, long *val)
-+{
-+	struct hwmon_data *data = dev_get_drvdata(dev);
-+	struct driver *cdev = data->dev;
-+	struct fan_hwmon_data *fan_data;
-+	int retval = 0;
-+	if (channel >= data->channel_count)
-+		return -EAGAIN;
-+
-+	switch (type) {
-+	case hwmon_fan:;
-+		switch (attr) {
-+		case hwmon_fan_input:
-+			fan_data = data->channel_data[channel];
-+
-+			retval = usb_autopm_get_interface(cdev->interface);
-+			if (retval)
-+				goto exit;
-+
-+			if (down_trylock(&cdev->limit_sem)) {
-+				retval = -EAGAIN;
-+				goto cleanup_interface;
-+			}
-+
-+			retval = get_fan_current_rpm(cdev, fan_data, val);
-+			if (retval)
-+				goto cleanup;
-+
-+			break;
-+		case hwmon_fan_target:
-+			fan_data = data->channel_data[channel];
-+
-+			get_fan_target_rpm(fan_data, val);
-+			break;
-+		case hwmon_fan_min:
-+			*val = 200;
-+			break;
-+		default:
-+			return -EINVAL;
-+		}
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+cleanup:
-+	up(&cdev->limit_sem);
-+cleanup_interface:
-+	usb_autopm_put_interface(cdev->interface);
-+exit:
-+	return retval;
-+}
-+static const struct hwmon_channel_info *dual_fan[] = {
-+	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT | HWMON_F_TARGET,
-+			   HWMON_F_INPUT | HWMON_F_TARGET),
-+	NULL
-+};
-+
-+static const struct hwmon_ops asetek_6_ops = {
-+	.is_visible = is_visible_func,
-+	.read = read_func,
-+	.write = write_func,
-+};
-+
-+static const struct hwmon_chip_info lm75_chip_info = {
-+	.ops = &asetek_6_ops,
-+	.info = dual_fan,
-+};
-+
-+void hwmon_init(struct driver *dev)
-+{
-+	struct device *hwmon_dev;
-+	struct hwmon_data *data = devm_kzalloc(
-+		&dev->udev->dev, sizeof(struct hwmon_data), GFP_KERNEL);
-+	struct hwmon_chip_info *hwmon_info = devm_kzalloc(
-+		&dev->udev->dev, sizeof(struct hwmon_chip_info), GFP_KERNEL);
-+	struct fan_hwmon_data *fan1 = devm_kzalloc(
-+		&dev->udev->dev, sizeof(struct fan_hwmon_data), GFP_KERNEL);
-+	struct fan_hwmon_data *fan2 = devm_kzalloc(
-+		&dev->udev->dev, sizeof(struct fan_hwmon_data), GFP_KERNEL);
-+	data->channel_count = 2; //amount of fans
-+	data->channel_data =
-+		devm_kzalloc(&dev->udev->dev,
-+			     sizeof(char *) * data->channel_count, GFP_KERNEL);
-+
-+	hwmon_info->ops = &asetek_6_ops;
-+	hwmon_info->info = dual_fan;
-+
-+	fan1->fan_channel = 0;
-+	fan1->mode = 2;
-+	fan2->fan_channel = 1;
-+	fan2->mode = 2;
-+
-+	data->fan_1_index = 0;
-+	data->dev = dev;
-+	data->channel_data[0] = fan1;
-+	data->channel_data[1] = fan2;
-+
-+	hwmon_dev = devm_hwmon_device_register_with_info(
-+		&dev->udev->dev, "driver_fan", data, hwmon_info, NULL);
-+	printk(KERN_INFO "[*] Setup hwmon\n");
-+}
-+
-+void hwmon_deinit(struct driver *dev)
-+{
-+	hwmon_device_unregister(&dev->udev->dev);
-+	printk(KERN_INFO "[*] HWMON DISCONNECT\n");
-+}
- /* devices that work with this driver */
- static const struct usb_device_id astk_table[] = {
- 	{ USB_DEVICE(0x1b1c, 0x0c15) },
-@@ -121,7 +430,7 @@ static int astk_probe(struct usb_interface *interface,
- 	dev->bulk_out_buffer = kmalloc(dev->bulk_out_size, GFP_KERNEL);
- 	dev->bulk_out_endpointAddr = bulk_out->bEndpointAddress;
+ };
  
--	//hwmon_init(dev);
-+	hwmon_init(dev);
- 	retval = init_device(dev->udev);
- 	if (retval) {
- 		dev_err(&interface->dev, "Failled initialising this device.\n");
-@@ -139,7 +448,7 @@ static int astk_probe(struct usb_interface *interface,
- static void astk_disconnect(struct usb_interface *interface)
- {
- 	struct driver *dev = usb_get_intfdata(interface);
--	//hwmon_deinit(dev);
-+	hwmon_deinit(dev);
- 	usb_set_intfdata(interface, NULL);
- 	kref_put(&dev->kref, astk_delete);
- 	deinit_device(dev->udev);
++#define default_curve quiet_curve
+ static const char SUCCESS[2] = { 0x12, 0x34 };
+ 
+ #define SUCCES_LENGTH 3
+@@ -347,7 +409,7 @@ static int write_func(struct device *dev, enum hwmon_sensor_types type,
+ 				return retval;
+ 
+ 			goto cleanup;
+-		case hwmon_pwm_mode:
++		case hwmon_pwm_enable:
+ 			fan_data = data->channel_data[channel];
+ 
+ 			retval = usb_autopm_get_interface(cdev->interface);
+@@ -360,10 +422,12 @@ static int write_func(struct device *dev, enum hwmon_sensor_types type,
+ 			}
+ 			fan_data->mode = val;
+ 
+-			if (val == 0) {
++			switch (val) {
++			case 0:
+ 				set_fan_rpm_curve(cdev, fan_data,
+ 						  default_curve);
+-			} else if (val == 1) {
++				break;
++			case 1:
+ 				if (fan_data->fan_target != 0) {
+ 					retval = set_fan_target_rpm(
+ 						cdev, fan_data,
+@@ -377,6 +441,18 @@ static int write_func(struct device *dev, enum hwmon_sensor_types type,
+ 					if (retval)
+ 						goto cleanup;
+ 				}
++				break;
++			case 2:
++				set_fan_rpm_curve(cdev, fan_data, quiet_curve);
++				break;
++			case 3:
++				set_fan_rpm_curve(cdev, fan_data,
++						  balanced_curve);
++				break;
++			case 4:
++				set_fan_rpm_curve(cdev, fan_data,
++						  extreme_curve);
++				break;
+ 			}
+ 			goto cleanup;
+ 		default:
+@@ -465,7 +541,7 @@ int read_func(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+ 	return retval;
+ }
+ #define fan_config HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_MIN
+-#define pwm_config HWMON_PWM_INPUT | HWMON_PWM_MODE
++#define pwm_config HWMON_PWM_INPUT | HWMON_PWM_ENABLE
+ 
+ static const struct hwmon_ops asetek_6_ops = {
+ 	.is_visible = is_visible_func,
 -- 
 2.27.0
 
