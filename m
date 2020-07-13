@@ -2,108 +2,117 @@ Return-Path: <SRS0=nJvH=AY=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 811A6C433E1
-	for <linux-hwmon@archiver.kernel.org>; Mon, 13 Jul 2020 15:00:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CE5CC433E7
+	for <linux-hwmon@archiver.kernel.org>; Mon, 13 Jul 2020 16:04:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5A2732065F
-	for <linux-hwmon@archiver.kernel.org>; Mon, 13 Jul 2020 15:00:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0076D2067D
+	for <linux-hwmon@archiver.kernel.org>; Mon, 13 Jul 2020 16:04:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1594652430;
-	bh=faqXRTQRj1ai8haPxygiQcTONY0UlLlv9f1SCf6j4Gk=;
+	s=default; t=1594656275;
+	bh=x2zT3vistLw/nnrU8T8gPOcSJmVTOYCAWTFxK1GHjWk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=Dn5YkER2B3u9rvTKFykBAEN5Llp5q9wDjwP4GWH3VmzK0Rukod5pcM3uytVOmk/vp
-	 2n2SePOQFec3dfsQR9bKyAaCqtQeMpSaopu+5Nh/wgiY3USD4SJtPvW+6DSaRxUhcC
-	 EcioVQ0eejKrA5LGlGH9LGi6B9/rV4Hda9Tpfw8s=
+	b=WYABqLRXhJz/BG2LMCkqLD24Hobhj+V3jYmjqWsasZTT0viNqVPX8xlpaI0U2n5qO
+	 wJAXLIYrWD71oIDvsqppAUWPqYvrb1vuH9rgJCgi7CQ18kYjS9p5cDQvTeSOkW3GlN
+	 IOc9HGcrbnJvF5NBkkhTn8vwA39i+gaVvGu7hOj8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729492AbgGMPAZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 13 Jul 2020 11:00:25 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:35352 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729027AbgGMPAZ (ORCPT
+        id S1729776AbgGMQEb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 13 Jul 2020 12:04:31 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:44876 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729027AbgGMQEb (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 13 Jul 2020 11:00:25 -0400
-Received: by mail-io1-f67.google.com with SMTP id v8so13796065iox.2;
-        Mon, 13 Jul 2020 08:00:24 -0700 (PDT)
+        Mon, 13 Jul 2020 12:04:31 -0400
+Received: by mail-io1-f65.google.com with SMTP id i4so14006285iov.11;
+        Mon, 13 Jul 2020 09:04:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=MM2yTv6DinfgqMVw8u+xsXUDt72qpAhR1wtad/uJxSs=;
-        b=QXYE0BR/YPgl8jWfleDo3Fwwqm61a8gIX1v9FFh24MhZc0dgvkLBxASHP4ZQmOW0Ux
-         je6Jy5mhL+xvp0DhfKhcbHtQ4BC2VWievBWIPcBhP2oe7s1LNOAso8rUoUUjI3VchWAV
-         DW9xUq6429ITYDzjBffHhRjGSiGwwVpdej2j9KH731YeWFeCccNr3Bz3Codv1txm23B4
-         L+Wu+OuuDHyJvHDFdi+ZQm6ZkrL83M46ySmwfEXeGFKhkdqhummYd9hzSW4MUWK15qE6
-         IpLhodGfdAjxn9w2Fk7DmXUMOOQ4osB+oEeh0kAzWvHjExmyviUgVsYRBSJQeh7HVR1a
-         UW8w==
-X-Gm-Message-State: AOAM533p+eOefYBPpHQxLFIbzgcPhtBgnlTgJ6FTW+sGwZf3cjDHzAtL
-        Lr1d2EaEHZLY3O1WKRHRZA==
-X-Google-Smtp-Source: ABdhPJw9dH7GkiyHKPqotimBI3XEZeBw0QpeeQPxAZCZiPuu3Ko3Ig3bhS7yI9kTEPmDk7sFb4DFGw==
-X-Received: by 2002:a5e:840b:: with SMTP id h11mr102578ioj.106.1594652424139;
-        Mon, 13 Jul 2020 08:00:24 -0700 (PDT)
+        bh=0sunnV9kDrUsUSO/lW1Logo3b4p4WNuGPhwv9k+yy78=;
+        b=CDL5Dt3PPhI0ChMjEqhu/vdu8NqDoXjUnaVcNafdkb7GsgpKiR9B2Iw6IxEu+30s0U
+         8BICW3ode1gsiUVC4U8z4rWVZl28QM/wCwynWO+PoRnVc5KUyZv49AZdwvvs9PG5rm8j
+         Z/5cglDvhd38abiRrqzxVeY2cd/m6lw35wV1EPlH1kIrV+wEqmtKMquKKXaN8KDur9pQ
+         O9nNAUe2hdRIbj3AhnHxAjsyerUa0I0Jt23ts3E3ofA8qVvLPbaGXKHpwSBQEpVvxPw0
+         ouzG0Qz85L574ekv4qM7251yIBVjKBrADU3M93vUIK2G9ytEzu+hq5l+VVimwdlSSb9K
+         e5jA==
+X-Gm-Message-State: AOAM531ILEb7cDrzlGt8qdXtRZPFk2upAsHCMqpPF7bjkaIMmGjsCNft
+        MtjQS+CYYs5nyGtqjy6g3w==
+X-Google-Smtp-Source: ABdhPJxD7uq5WmIrqpNMEk2ms+CZADoNvoKAM2eqWWrJFaO+FKRn2p5bDlePNgpedl3T+/Pf63xtTg==
+X-Received: by 2002:a6b:d31a:: with SMTP id s26mr429334iob.48.1594656270186;
+        Mon, 13 Jul 2020 09:04:30 -0700 (PDT)
 Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id v10sm8394512ilj.40.2020.07.13.08.00.23
+        by smtp.gmail.com with ESMTPSA id w15sm8941248ila.65.2020.07.13.09.04.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2020 08:00:23 -0700 (PDT)
-Received: (nullmailer pid 175663 invoked by uid 1000);
-        Mon, 13 Jul 2020 15:00:22 -0000
-Date:   Mon, 13 Jul 2020 09:00:22 -0600
+        Mon, 13 Jul 2020 09:04:29 -0700 (PDT)
+Received: (nullmailer pid 303717 invoked by uid 1000);
+        Mon, 13 Jul 2020 16:04:27 -0000
+Date:   Mon, 13 Jul 2020 10:04:27 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Chris Ruehl <chris.ruehl@gtsys.com.hk>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+To:     Michael Walle <michael@walle.cc>
+Cc:     Li Yang <leoyang.li@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pwm@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        devicetree@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Jack Lo <jack.lo@gtsys.com.hk>, devicetree@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH v6 2/2] devicetree: hwmon: shtc1: Add sensirion,shtc1.yaml
-Message-ID: <20200713150022.GA175274@bogus>
-References: <20200712044411.23323-1-chris.ruehl@gtsys.com.hk>
- <20200712044411.23323-3-chris.ruehl@gtsys.com.hk>
+        Lee Jones <lee.jones@linaro.org>,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>
+Subject: Re: [PATCH v5 03/13] dt-bindings: mfd: Add bindings for sl28cpld
+Message-ID: <20200713160427.GA303616@bogus>
+References: <20200706175353.16404-1-michael@walle.cc>
+ <20200706175353.16404-4-michael@walle.cc>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200712044411.23323-3-chris.ruehl@gtsys.com.hk>
+In-Reply-To: <20200706175353.16404-4-michael@walle.cc>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, 12 Jul 2020 12:44:10 +0800, Chris Ruehl wrote:
-> Add documentation for the newly added DTS support in the shtc1 driver.
-> To align with the drivers logic to have high precision by default
-> a boolean sensirion,low_precision is used to switch to low precision.
+On Mon, 06 Jul 2020 19:53:43 +0200, Michael Walle wrote:
+> Add a device tree bindings for the board management controller found on
+> the Kontron SMARC-sAL28 board.
 > 
-> Signed-off-by: Chris Ruehl <chris.ruehl@gtsys.com.hk>
+> Signed-off-by: Michael Walle <michael@walle.cc>
 > ---
->  .../bindings/hwmon/sensirion,shtc1.yaml       | 57 +++++++++++++++++++
->  1 file changed, 57 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml
+> Changes since v4:
+>  - fix the regex of the unit-address
+> 
+> Changes since v3:
+>  - see cover letter
+> 
+>  .../bindings/gpio/kontron,sl28cpld-gpio.yaml  |  54 +++++++
+>  .../hwmon/kontron,sl28cpld-hwmon.yaml         |  27 ++++
+>  .../kontron,sl28cpld-intc.yaml                |  54 +++++++
+>  .../bindings/mfd/kontron,sl28cpld.yaml        | 153 ++++++++++++++++++
+>  .../bindings/pwm/kontron,sl28cpld-pwm.yaml    |  35 ++++
+>  .../watchdog/kontron,sl28cpld-wdt.yaml        |  35 ++++
+>  6 files changed, 358 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/gpio/kontron,sl28cpld-gpio.yaml
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/kontron,sl28cpld-hwmon.yaml
+>  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/kontron,sl28cpld-intc.yaml
+>  create mode 100644 Documentation/devicetree/bindings/mfd/kontron,sl28cpld.yaml
+>  create mode 100644 Documentation/devicetree/bindings/pwm/kontron,sl28cpld-pwm.yaml
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/kontron,sl28cpld-wdt.yaml
 > 
 
-
-My bot found errors running 'make dt_binding_check' on your patch:
-
-Documentation/devicetree/bindings/hwmon/sensirion,shtc1.example.dts:24.13-26: Warning (reg_format): /example-0/i2c1/shtc3@70:reg: property has invalid length (4 bytes) (#address-cells == 2, #size-cells == 1)
-Documentation/devicetree/bindings/hwmon/sensirion,shtc1.example.dt.yaml: Warning (pci_device_reg): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/hwmon/sensirion,shtc1.example.dt.yaml: Warning (pci_device_bus_num): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/hwmon/sensirion,shtc1.example.dt.yaml: Warning (simple_bus_reg): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/hwmon/sensirion,shtc1.example.dt.yaml: Warning (i2c_bus_reg): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/hwmon/sensirion,shtc1.example.dt.yaml: Warning (spi_bus_reg): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/hwmon/sensirion,shtc1.example.dts:22.20-26.13: Warning (avoid_default_addr_size): /example-0/i2c1/shtc3@70: Relying on default #address-cells value
-Documentation/devicetree/bindings/hwmon/sensirion,shtc1.example.dts:22.20-26.13: Warning (avoid_default_addr_size): /example-0/i2c1/shtc3@70: Relying on default #size-cells value
-Documentation/devicetree/bindings/hwmon/sensirion,shtc1.example.dt.yaml: Warning (unique_unit_address): Failed prerequisite 'avoid_default_addr_size'
-
-
-See https://patchwork.ozlabs.org/patch/1327453
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure dt-schema is up to date:
-
-pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
-
-Please check and re-submit.
-
+Reviewed-by: Rob Herring <robh@kernel.org>
