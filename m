@@ -2,117 +2,138 @@ Return-Path: <SRS0=nJvH=AY=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CE5CC433E7
-	for <linux-hwmon@archiver.kernel.org>; Mon, 13 Jul 2020 16:04:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78C54C433E1
+	for <linux-hwmon@archiver.kernel.org>; Mon, 13 Jul 2020 17:40:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0076D2067D
-	for <linux-hwmon@archiver.kernel.org>; Mon, 13 Jul 2020 16:04:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1594656275;
-	bh=x2zT3vistLw/nnrU8T8gPOcSJmVTOYCAWTFxK1GHjWk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=WYABqLRXhJz/BG2LMCkqLD24Hobhj+V3jYmjqWsasZTT0viNqVPX8xlpaI0U2n5qO
-	 wJAXLIYrWD71oIDvsqppAUWPqYvrb1vuH9rgJCgi7CQ18kYjS9p5cDQvTeSOkW3GlN
-	 IOc9HGcrbnJvF5NBkkhTn8vwA39i+gaVvGu7hOj8=
+	by mail.kernel.org (Postfix) with ESMTP id 5828020674
+	for <linux-hwmon@archiver.kernel.org>; Mon, 13 Jul 2020 17:40:39 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="fFAlKRqw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729776AbgGMQEb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 13 Jul 2020 12:04:31 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:44876 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729027AbgGMQEb (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 13 Jul 2020 12:04:31 -0400
-Received: by mail-io1-f65.google.com with SMTP id i4so14006285iov.11;
-        Mon, 13 Jul 2020 09:04:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0sunnV9kDrUsUSO/lW1Logo3b4p4WNuGPhwv9k+yy78=;
-        b=CDL5Dt3PPhI0ChMjEqhu/vdu8NqDoXjUnaVcNafdkb7GsgpKiR9B2Iw6IxEu+30s0U
-         8BICW3ode1gsiUVC4U8z4rWVZl28QM/wCwynWO+PoRnVc5KUyZv49AZdwvvs9PG5rm8j
-         Z/5cglDvhd38abiRrqzxVeY2cd/m6lw35wV1EPlH1kIrV+wEqmtKMquKKXaN8KDur9pQ
-         O9nNAUe2hdRIbj3AhnHxAjsyerUa0I0Jt23ts3E3ofA8qVvLPbaGXKHpwSBQEpVvxPw0
-         ouzG0Qz85L574ekv4qM7251yIBVjKBrADU3M93vUIK2G9ytEzu+hq5l+VVimwdlSSb9K
-         e5jA==
-X-Gm-Message-State: AOAM531ILEb7cDrzlGt8qdXtRZPFk2upAsHCMqpPF7bjkaIMmGjsCNft
-        MtjQS+CYYs5nyGtqjy6g3w==
-X-Google-Smtp-Source: ABdhPJxD7uq5WmIrqpNMEk2ms+CZADoNvoKAM2eqWWrJFaO+FKRn2p5bDlePNgpedl3T+/Pf63xtTg==
-X-Received: by 2002:a6b:d31a:: with SMTP id s26mr429334iob.48.1594656270186;
-        Mon, 13 Jul 2020 09:04:30 -0700 (PDT)
-Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id w15sm8941248ila.65.2020.07.13.09.04.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2020 09:04:29 -0700 (PDT)
-Received: (nullmailer pid 303717 invoked by uid 1000);
-        Mon, 13 Jul 2020 16:04:27 -0000
-Date:   Mon, 13 Jul 2020 10:04:27 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Li Yang <leoyang.li@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pwm@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-        devicetree@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>
-Subject: Re: [PATCH v5 03/13] dt-bindings: mfd: Add bindings for sl28cpld
-Message-ID: <20200713160427.GA303616@bogus>
-References: <20200706175353.16404-1-michael@walle.cc>
- <20200706175353.16404-4-michael@walle.cc>
+        id S1729703AbgGMRkj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 13 Jul 2020 13:40:39 -0400
+Received: from mout.gmx.net ([212.227.15.19]:55783 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729700AbgGMRki (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 13 Jul 2020 13:40:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1594662019;
+        bh=CdgJg309SEZxK0xviXVAcgdURPo6x1qBniXM5KA2Ui8=;
+        h=X-UI-Sender-Class:Subject:From:To:Cc:Date:In-Reply-To:References;
+        b=fFAlKRqwNtABZqY6igXD8UZ/vBodUPFpBAAyQF5Vh+Uk3Xe2lx7QIkvi/gcmd1hzv
+         T5bA58K651kUctM+A8CkEGUEDM3+dbK8XdxYLwypNp6fcNNCpUpluP0jj2Nv33kzn+
+         ciWFTiR9f+uc0VNgQM4+p3B6C2QJvQ3/YRy9QYVk=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.0.2] ([84.156.118.156]) by mail.gmx.com (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MulqD-1kmatU21Nz-00rmb9; Mon, 13
+ Jul 2020 19:40:19 +0200
+Message-ID: <119b8c4d3791bafae015f1643b4fba9114d3eb65.camel@gmx.de>
+Subject: Re: hwmon (nct6775): Please fix Invalid temperature source error
+ for NCT6798D
+From:   Stefan Dietrich <roots@gmx.de>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Date:   Mon, 13 Jul 2020 19:40:18 +0200
+In-Reply-To: <20200712224620.GA19097@roeck-us.net>
+References: <66053ce744dafbad6925df53b6ef2db1e2859740.camel@gmx.de>
+         <e4ad12d1-3dca-2ff5-a0a6-12dc6dc22c83@roeck-us.net>
+         <48f415c34f4ca3f5239650711daaf1e11342da8e.camel@gmx.de>
+         <d54732db-255c-54be-ab43-997369e0da87@roeck-us.net>
+         <e02ef4f8633e035ecf6019abb72e3a22bfc29732.camel@gmx.de>
+         <20200712224620.GA19097@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.3-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200706175353.16404-4-michael@walle.cc>
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:Qsz00SuLSc1ookRyjJNvu6i/6ch3BkMOcGHu97EcohXXp7ldafb
+ xfa2cERSoE9xYYHMu9P3WBtbKG2JiV+TxSTU0709zaD7jTHbwCERMgOUrBYndar/3law5Gz
+ ctSOhFCG26GXV44A5pkVbl1GuiwXMa3zmsoZ0rsiYFqAvDSMTS75bHVgpD1z4yFdJc1Zjld
+ XqLDz/Q8mQ68r3C8j3mjQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ODKUdpaXVhg=:cSHPXhseURFRcA6J7X1INu
+ ZlwsJgFwV1VVR6CFs2/9HJ48ExQMGlwO55jTC7x6YqKwVIWRd53SdaveF8H9lRh2I8LtHLOjJ
+ YiMboVQGkFKG3twxxcPLBIk7BDN73Blbebub4QCRnxBmQTGIsr0MozNKNJGVm89K0IRHkPUhx
+ NAbdC2K/31WMDXVft4zdIp9pZINLFMBaQAIQDkVeDyd0X2u/t+zJJjXhvRPNkE4m0i1vuluey
+ inMrtg3TePAGHbT8am5QKe6ILkeDoazuRYYtBBr+awCsoGYNJyE5PG92ORZ4/dXxGE+RPNbIR
+ Aj3WhbadyApaZ1e2SD9HfkQC6Bp+csUiHq8k7hwwYvTNXkd/s7aaQp7nGtv5D268RtdXYAPuU
+ rqCLi4S1xzRygsatOWgAvqFrWH9F6pf5LF9X66bwTdI6cztJJt1+EX12tCYP38p3KOtnexpLk
+ oPUVcszH46Le38jtUJqxZHDiU0/fBkvRHVOh+vYG5PPVdyZ8PNRTvM1JNDqwgvVWttn1D+qDm
+ uQBJeWeVrgMdRk3EVCZDa4sWlxPfX5EOdgT7QZldsfk591JZ+aXXSTtZPtQCX6C9Gk4/Ev30X
+ 7o1X/y76vxy8KXgpttZZoaWm+6RUPwIt/bqy3vm4XW9FQo7PLlskmFq4HCiCMIMfU2bhzuX3s
+ Kw4WN2/iUwPtfcwMFMYfjOv/1AygjFV2NInCyfLq5MsL9Ou6/xlhniZy0N+iWVgTF9Ry4VlnW
+ sNLbQpx6yG2q58intJCKqjvG5hGcvcMaRX+ZmFeu0oKNeuGBnPMyV1yosMXBuNYl8qY/Zpd2k
+ g5SPV8jSuJsKTLocG7oSokJdU0MBjwGwXqP2c2iWCDnVTBSolWLpVDXMXeNlKNDxxz8uLAHMl
+ 1YlywcMcafowAeu1g8JxNoKioquNkClnhtBqTqCOetHyKguaNeM3qlJn9TrJRBvrP9hsLbGSD
+ jjC84G/B8iKY0OGl8oWoXWPJVBM70dEBCZF0F+801JVNODcQzuiTs7kNLrxCMBipLaYVAuB/C
+ +TIbv7owzioBdR8l/nf8Ld2jNQRUSF+NKMAxPp+nMqoTeZXseHKnivFe1xyS5/sGpPJ6GOICZ
+ pkhWZUhNL9aXUB0pSPIOvp+zJYlzYIS2WRPVi1tA94rnqhaa0RBu9YdHTb8MPGpyU1v/N0SbJ
+ EoLJgnFYN/7rhgQl0RqHSTwqmX6Eyqi1ZRV2aV17iT2NniOB+7MTDtjoVSDuyqZ0CPMi26JEN
+ /GVopbk9P8E6YtQ47
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, 06 Jul 2020 19:53:43 +0200, Michael Walle wrote:
-> Add a device tree bindings for the board management controller found on
-> the Kontron SMARC-sAL28 board.
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
+On Sun, 2020-07-12 at 15:46 -0700, Guenter Roeck wrote:
+> On Sun, Jul 12, 2020 at 09:51:42AM +0200, Stefan Dietrich wrote:
+> > On Sun, 2020-07-05 at 07:21 -0700, Guenter Roeck wrote:
+> [ ... ]
+> > Would you mind giving me a pointer on how this would be done? I
+> > assume
+> > for those familiar with the driver it will be less than a handful
+> > of
+> > lines of code?!
+> > I will certainly report back as soon as I have obtained any
+> > results.
+>
+> Something like the diffs below should do. Caution - this is cut-and-
+> paste,
+> so you'll have to make the changes manually.
+>
+> Guenter
+>
 > ---
-> Changes since v4:
->  - fix the regex of the unit-address
-> 
-> Changes since v3:
->  - see cover letter
-> 
->  .../bindings/gpio/kontron,sl28cpld-gpio.yaml  |  54 +++++++
->  .../hwmon/kontron,sl28cpld-hwmon.yaml         |  27 ++++
->  .../kontron,sl28cpld-intc.yaml                |  54 +++++++
->  .../bindings/mfd/kontron,sl28cpld.yaml        | 153 ++++++++++++++++++
->  .../bindings/pwm/kontron,sl28cpld-pwm.yaml    |  35 ++++
->  .../watchdog/kontron,sl28cpld-wdt.yaml        |  35 ++++
->  6 files changed, 358 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/gpio/kontron,sl28cpld-gpio.yaml
->  create mode 100644 Documentation/devicetree/bindings/hwmon/kontron,sl28cpld-hwmon.yaml
->  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/kontron,sl28cpld-intc.yaml
->  create mode 100644 Documentation/devicetree/bindings/mfd/kontron,sl28cpld.yaml
->  create mode 100644 Documentation/devicetree/bindings/pwm/kontron,sl28cpld-pwm.yaml
->  create mode 100644 Documentation/devicetree/bindings/watchdog/kontron,sl28cpld-wdt.yaml
-> 
+> diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
+> index 7efa6bfef060..ec427ce503f0 100644
+> --- a/drivers/hwmon/nct6775.c
+> +++ b/drivers/hwmon/nct6775.c
+> @@ -786,9 +786,9 @@ static const char *const nct6798_temp_label[] =3D {
+>         "Agent1 Dimm1",
+>         "BYTE_TEMP0",
+>         "BYTE_TEMP1",
+> -       "",
+> -       "",
+> -       "",
+> +       "Unknown28",
+> +       "Unknown29",
+> +       "Unknown30",
+>         "Virtual_TEMP"
+>  };
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Dankeschoen - I just tried that, but I'm still getting
+
+[  324.901595] nct6775 nct6775.656: Invalid temperature source 28 at
+index 0, source register 0x100, temp register 0x73
+[  324.901637] nct6775 nct6775.656: Invalid temperature source 28 at
+index 1, source register 0x200, temp register 0x75
+[  324.901679] nct6775 nct6775.656: Invalid temperature source 28 at
+index 2, source register 0x300, temp register 0x77
+[  324.901722] nct6775 nct6775.656: Invalid temperature source 28 at
+index 3, source register 0x800, temp register 0x79
+[  324.901765] nct6775 nct6775.656: Invalid temperature source 28 at
+index 4, source register 0x900, temp register 0x7b
+[  324.901807] nct6775 nct6775.656: Invalid temperature source 28 at
+index 5, source register 0xa00, temp register 0x7d
+
+I double checked that it really is the modified driver that is loaded.
+Now does that mean the diffs did not do the trick, or that there's
+really nothing to see here?
+
+
+Thanks,
+Stefan
+
