@@ -2,205 +2,220 @@ Return-Path: <SRS0=kNNy=AZ=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.5 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD69AC433DF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Jul 2020 14:11:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E1ACC433F4
+	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Jul 2020 16:09:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 881A322510
-	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Jul 2020 14:11:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 52F502251F
+	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Jul 2020 16:09:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728140AbgGNOLz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 14 Jul 2020 10:11:55 -0400
-Received: from vps-vb.mhejs.net ([37.28.154.113]:51252 "EHLO vps-vb.mhejs.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728187AbgGNOLy (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 14 Jul 2020 10:11:54 -0400
-Received: from MUA
-        by vps-vb.mhejs.net with esmtps (TLS1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
-        (Exim 4.93.0.4)
-        (envelope-from <mail@maciej.szmigiero.name>)
-        id 1jvLev-0002OD-6U; Tue, 14 Jul 2020 16:11:49 +0200
-Subject: Re: [PATCH v2] hwmon: (drivetemp) Avoid SCT usage on Toshiba DT01ACA
- family drives
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <8325438e25a3a5a7e6d12ef6ede8f4350e4c65be.1594500029.git.mail@maciej.szmigiero.name>
- <50fb6686-5d36-ccb6-4620-c516472c6c0f@roeck-us.net>
-From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Autocrypt: addr=mail@maciej.szmigiero.name; prefer-encrypt=mutual; keydata=
- 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 mA==
-Message-ID: <0bf1376f-9e55-aecb-e03d-75b5fdf31339@maciej.szmigiero.name>
-Date:   Tue, 14 Jul 2020 16:11:43 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        id S1728236AbgGNQJC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 14 Jul 2020 12:09:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41260 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728202AbgGNQJC (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 14 Jul 2020 12:09:02 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 614E7C061755
+        for <linux-hwmon@vger.kernel.org>; Tue, 14 Jul 2020 09:09:02 -0700 (PDT)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1jvNUI-0006MO-Nr; Tue, 14 Jul 2020 18:08:58 +0200
+Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1jvNUG-00029L-H1; Tue, 14 Jul 2020 18:08:56 +0200
+Date:   Tue, 14 Jul 2020 18:08:56 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v5 07/13] pwm: add support for sl28cpld PWM controller
+Message-ID: <20200714160856.rjqi7lv63geil3hm@pengutronix.de>
+References: <20200706175353.16404-1-michael@walle.cc>
+ <20200706175353.16404-8-michael@walle.cc>
+ <20200709085006.b54ype3p4yu64upl@pengutronix.de>
+ <72858253a9094074e9c8cd7a4e1db09f@walle.cc>
+ <20200713084750.qj4hquzd6uz6y526@pengutronix.de>
+ <c0594c34c712ce26b3936d42c92d2361@walle.cc>
 MIME-Version: 1.0
-In-Reply-To: <50fb6686-5d36-ccb6-4620-c516472c6c0f@roeck-us.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ochzazkc36dtv4os"
+Content-Disposition: inline
+In-Reply-To: <c0594c34c712ce26b3936d42c92d2361@walle.cc>
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 14.07.2020 16:02, Guenter Roeck wrote:
-> On 7/11/20 1:41 PM, Maciej S. Szmigiero wrote:
->> It has been observed that Toshiba DT01ACA family drives have
->> WRITE FPDMA QUEUED command timeouts and sometimes just freeze until
->> power-cycled under heavy write loads when their temperature is getting
->> polled in SCT mode. The SMART mode seems to be fine, though.
->>
->> Let's make sure we don't use SCT mode for these drives then.
->>
->> While only the 3 TB model was actually caught exhibiting the problem let's
->> play safe here to avoid data corruption and extend the ban to the whole
->> family.
->>
->> Fixes: 5b46903d8bf3 ("hwmon: Driver for disk and solid state drives with temperature sensors")
->> Cc: stable@vger.kernel.org
->> Signed-off-by: Maciej S. Szmigiero <mail@maciej.szmigiero.name>
->> ---
->>
->> Notes:
->>     This behavior was observed on two different DT01ACA3 drives.
->>     
->>     Usually, a series of queued WRITE FPDMA QUEUED commands just time out,
->>     but sometimes the whole drive freezes. Merely disconnecting and
->>     reconnecting SATA interface cable then does not unfreeze the drive.
->>     
->>     One has to disconnect and reconnect the drive power connector for the
->>     drive to be detected again (suggesting the drive firmware itself has
->>     crashed).
->>     
->>     This only happens when the drive temperature is polled very often (like
->>     every second), so occasional SCT usage via smartmontools is probably
->>     safe.
->>     
->>     Changes from v1:
->>     'SCT blacklist' -> 'SCT avoid models'
->>
->>  drivers/hwmon/drivetemp.c | 37 +++++++++++++++++++++++++++++++++++++
->>  1 file changed, 37 insertions(+)
->>
->> diff --git a/drivers/hwmon/drivetemp.c b/drivers/hwmon/drivetemp.c
->> index 0d4f3d97ffc6..da9cfcbecc96 100644
->> --- a/drivers/hwmon/drivetemp.c
->> +++ b/drivers/hwmon/drivetemp.c
->> @@ -285,6 +285,36 @@ static int drivetemp_get_scttemp(struct drivetemp_data *st, u32 attr, long *val)
->>  	return err;
->>  }
->>  
->> +static const char * const sct_avoid_models[] = {
->> +/*
->> + * These drives will have WRITE FPDMA QUEUED command timeouts and sometimes just
->> + * freeze until power-cycled under heavy write loads when their temperature is
->> + * getting polled in SCT mode. The SMART mode seems to be fine, though.
->> + *
->> + * While only the 3 TB model was actually caught exhibiting the problem
->> + * let's play safe here to avoid data corruption and ban the whole family.
->> + */
->> +	"TOSHIBA DT01ACA0",
->> +	"TOSHIBA DT01ACA1",
->> +	"TOSHIBA DT01ACA2",
->> +	"TOSHIBA DT01ACA3",
->> +};
->> +
->> +static bool drivetemp_sct_avoid(struct drivetemp_data *st)
->> +{
->> +	struct scsi_device *sdev = st->sdev;
->> +	unsigned int ctr;
->> +
->> +	if (!sdev->model)
->> +		return false;
->> +
->> +	for (ctr = 0; ctr < ARRAY_SIZE(sct_avoid_models); ctr++)
->> +		if (strncmp(sdev->model, sct_avoid_models[ctr], 16) == 0)
-> 
-> Why strncmp, and why length 16 ? Both strings are, as far as I can see,
-> 0 terminated. A fixed length only asks for trouble later on as more models
-> are added to the list.
 
-The first 16 bytes of sdev->model contain the model number, the rest
-seems to be the drive serial number.
-There is no NULL separator between them.
+--ochzazkc36dtv4os
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-See how the SCSI device model is printed for the sysfs "model"
-attribute:
-https://elixir.bootlin.com/linux/v5.8-rc4/source/drivers/scsi/scsi_sysfs.c#L654
+Hello Michael,
 
-> Also, please use "!" instead of "== 0".
+On Tue, Jul 14, 2020 at 01:31:13PM +0200, Michael Walle wrote:
+> Am 2020-07-13 10:47, schrieb Uwe Kleine-K=F6nig:
+> > I already thought about proposing pwm_get_rate_hw(), but for now there
+> > is (AFAICT) no user who would need it. And it's hard to know which
+> > variant is actually preferred by consumers. My expectation is that most
+> > don't even care.
+> >=20
+> > I also have a pwm_round_rate() function in mind that will give you the
+> > actual rate without applying it. This can then be used by consumers who
+> > care. But also there is no user who would need it today.
+>=20
+> Ok. I take it that all such improvements are still in the making ;)
 
-Will do.
+If you have a real use case, present it, then I give it a boost on my
+todo list.
 
-Thanks,
-Maciej
+> > > But the PWM subsystem returns the cached state,
+> > > right? get_state() is called only on device request (and during
+> > > debug it seems). Actually, enabling PWM_DEBUG might choke on this
+> > > workaround (".apply didn't pick the best available period"). Is
+> > > this ok?
+> >=20
+> > hmm, I didn't consider this when writing the checks for PWM_DEBUG.
+> > According to the currently checked rules the expected configuration is
+> > to pick the 250Hz mode and use cycle =3D 0x7f.
+>=20
+> Not to use 0x80, which is the max_duty_cycle? Like its 0x40 for the 500Hz
+> mode.
+
+No, when I thought about a sane set of rules (and so checks for
+PWM_DEBUG) I didn't consider a PWM that can implement 100% but not for
+all otherwise available period lengths. I'm still amazed sometimes how
+different the capabilities of different implementations for something so
+seemingly easy like a PWM are.
+
+> > Hmm, I have to think about
+> > this. Maybe we should weaken the check to the cases with
+> > 0 < duty_cycle < period. Thierry, what do you think?
+> >=20
+> > Special casing 0% and 100% is annoying, but insisting 250Hz + 0x7f seems
+> > to be far from reality. (Is it?)
+>=20
+> If you mean by insisting to clip at 0x7f, yeah thats bad IMHO, because
+> the user wants an all-high line, but in the end it would be a toggling
+> line. It wouldn't be that bad for anything in between 0% and 100% but
+> IMHO its bad for exactly 0% and 100%.
+>=20
+> You could also ask the driver about known quirks, like special 0% and
+> 100% handling and exclude it from the tests accordingly.
+
+Do you care enough to propose a patch? You're in the situation to test
+it.
+
+> > > > > +	ret =3D regmap_write(priv->regmap, priv->offset + PWM_CTRL, ctr=
+l);
+> > > > > +	if (ret)
+> > > > > +		return ret;
+> > > > > +
+> > > > > +	return regmap_write(priv->regmap, priv->offset + PWM_CYCLE,
+> > > > > (u8)cycle);
+> > > >
+> > > > I assume this can result in broken output? Consider the hardware ru=
+ns
+> > > > with mode =3D 1 & cycle =3D 0x23 and you want to go to mode =3D 0 &=
+ cycle =3D
+> > > > 0x42: Can this result in a period that has mode =3D 0 & cycle =3D 0=
+x23?
+> > >=20
+> > > Isn't that always the case if a write may fail and there are more than
+> > > one register to configure?
+> >=20
+> > Depending on hardware capabilities you might not be able to prevent
+> > this yes. Unfortunately this is quite common.
+> >=20
+> > But there are hardware implementations that are not prone to such
+> > failures. (E.g. the registers written can be only shadow values that are
+> > latched into hardware only when the last value is written.)
+>=20
+> Maybe this could be improved in the future.
+
+We should somewhere describe, what an ideal PWM can do.=20
+My wishlist (just as it comes to my mind, so no guarantee of
+completeness):
+
+ - can do 0% duty cycle for all supported period lengths
+ - can do 100% duty cycle for all supported period lengths
+ - supports both polarities
+ - supports immediate change of configuration and after completion of
+   the currently running period
+ - atomic update (i.e. if you go from configuration A to configuration B
+   the hardware guarantees to only emit periods of type A and then type
+   B. (Depending on the item above, the last A period might be cut off.)
+ - emits an irq when configuration changes
+
+> > If you change only cycle but not mode, does the hardware complete the
+> > currently running period?
+>=20
+> No it does not.
+
+Please document this as a Limitation.
+=20
+> > What about disable()?
+>=20
+> Mhh well, it would do one 100% cycle.. mhh ;) Lets see if there we can
+> fix that (in hardware), not much we can do in the driver here. We are
+> _very_ constraint in size, therefore all that little edge cases fall off
+> the table.
+
+You're saying that on disable the hardware emits a constant high level
+for one cycle? I hope not ...
+
+I never programmed a CPLD to emulate a hardware PWM, but I wonder if
+these are really edge cases that increase the size of the binary?!
+
+Best regards
+Uwe
+
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--ochzazkc36dtv4os
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAl8N2JUACgkQwfwUeK3K
+7AkhFQf/QeUghp0itjnebSKuCcU1Du1FgZx19oml+qdZdrWg9phaEQGAQxXc7m+N
+HoMLWaZLv3O8L5DS4hpYKyj+hK1w7pN1qjuRbkevrgYUlDcU/NYeA+3UUfB7TAMz
+N7muhIaeivH8Z4gJfLtnFtosfOHt3sqZTEYeX5frrCTHro4f7ecgwqkbtAv9MO+M
+Ct382nabV/hgbpuyAya4PbeHtpJXqRVB4fgXFim8n86jJVZcqLgm+Cjk+NG3BABF
++gaDplLA8kTNTKJnKUxpMbKpsR4YBz6hqmP/YlhmWHweIwDy6HXMQyOkrnH0LINz
+4YQ4iZLwcCQt6CY4bEP1h+aiZJjm+g==
+=A67j
+-----END PGP SIGNATURE-----
+
+--ochzazkc36dtv4os--
