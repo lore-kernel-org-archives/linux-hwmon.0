@@ -3,69 +3,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-8.3 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EBE45C433E1
-	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Jul 2020 05:19:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D70BCC433E0
+	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Jul 2020 05:18:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C0B2821D93
-	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Jul 2020 05:19:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A858F221E7
+	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Jul 2020 05:18:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UHJPfaJ+"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="axBsVLhK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725962AbgGNFTx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 14 Jul 2020 01:19:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53808 "EHLO
+        id S1725816AbgGNFSm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 14 Jul 2020 01:18:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725306AbgGNFTx (ORCPT
+        with ESMTP id S1725306AbgGNFSm (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 14 Jul 2020 01:19:53 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC382C061755;
-        Mon, 13 Jul 2020 22:19:52 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id a14so7088025pfi.2;
-        Mon, 13 Jul 2020 22:19:52 -0700 (PDT)
+        Tue, 14 Jul 2020 01:18:42 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0994BC061755
+        for <linux-hwmon@vger.kernel.org>; Mon, 13 Jul 2020 22:18:42 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id k5so6520513plk.13
+        for <linux-hwmon@vger.kernel.org>; Mon, 13 Jul 2020 22:18:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=3NWRwXT2os0AqIko2lQKPRTRyOChAMJjYkOouXYTsag=;
-        b=UHJPfaJ+z2yNMr/GBKses61OphFXKg9+ciuuT/b3YNN7Jg3d7ecKqaYjGpmSBrfda9
-         OJkiPT1vVYUt7uIyLq6e6S+VKMC+O6097lzFr/f92DFhacAnFP6f+ZaDWdvveRm2oQ6o
-         QhFzzkEJNeg4YmXMeo70NZdqDI/1pMU4PWM+JHrNzufyTbC0yfT2f8Xdd9bFi8U9A/4k
-         wjo09fYdtkcrweSZOK2yyJJV63Vz4k3A/FMY4NgqqeMAge0xK3QajjjbnjLg9MEEdndQ
-         2OlyPX00p2VwsnQUp/VHmxkiHjBxPW8qbJ/C6+Y8Pla2KRILgNJq6UneBEZHbRnFoP4z
-         S0oQ==
+        bh=49wr6tDmOFjzAPI+MBeHg1DV8/fnyP9jQxjPXTlWXSA=;
+        b=axBsVLhKty/NPqFFv7CmL89a9b7xUKEwX7Aqsva9MXpft7z/xTY1MhWTNg3zwM9OJN
+         jEQH9cjecdGQWt/PijQbyvoihtqDCFp7wODLj9Ostbk9teCRza7MUZ9as6nxrP6YZAFH
+         GcynvFLN124ywUQd3CNEeRYEmGjj1GxAIIyrHrnH7VV8B3aZbHotujH5o8SkcNENgbLV
+         v9FMfPChpaTSNcQpkqF63gKkn5bv5APJECLn47KxbFh3Pa3JjbRIwDx4Bu8BY6YuqxK/
+         RQvWuULvBJXJsorHHv52OZwr/hBwoIjPrS1yVJ86k6IThjhLkkY1kPL+3V/bjgX9KrVW
+         zdYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=3NWRwXT2os0AqIko2lQKPRTRyOChAMJjYkOouXYTsag=;
-        b=ZOzebiTcMhi430B8RP1q1FB5rsaKUSkxyP/2018SxlX9GBtFh81XTxOccIP+V/g7JE
-         YxOWfNQhdooUA7aMYAIPsfQyzTR55uf+88aoSmgwGyw78l1srCUve/IFoW0EeOO/g8sa
-         iGudEqTYzfLiQEJMhwPVaDPLFZQ//s7ZsWu7Ytj5wAo2uYtAD3G6wSNKQCFP8f1C/qcj
-         XzOSaXWUyW5gTsiF9bAqtigqPPzGx1qPPiF7/nt6A3ceynvhzr4B7D/dWfyX6t9Nm3Bj
-         c1ud0gs/X5i635/1h7JJHuK042MAvxrZ1MrhElaE5GMHgvVYuC9LQ9/De6+mIEnHK4Na
-         0qcA==
-X-Gm-Message-State: AOAM531E0b+JjM31iV8fLwgmGgaHb2RG9E8eB4APivnYLIAY/yLTVrKs
-        w1FCuOIrqEol5wBxbF9bghw=
-X-Google-Smtp-Source: ABdhPJx96f8X+GAwVE6MNKGlG4xK2bF1+hDUbsdy/guBnt9HF3gM7JmmXlakqrRDX/Uq0lwIpzvEhg==
-X-Received: by 2002:a63:9d87:: with SMTP id i129mr2094334pgd.412.1594703992596;
-        Mon, 13 Jul 2020 22:19:52 -0700 (PDT)
+        bh=49wr6tDmOFjzAPI+MBeHg1DV8/fnyP9jQxjPXTlWXSA=;
+        b=Z/K+ikFLBmhQ75q6RvCfYppw92WkyeytqM1PnJ99S78ALyMkojicabxy6UPJLpE6Ev
+         sPOWygezHdn/ScfcwVTTpS96fBJvFDiWsgs4z7nckfAZJcC9U566w/rVnwWGZmyClvfL
+         sFNoiuGxJmJsbSIkbQSbk5Okaufk94736zRosOLBEKDa4KchfKR7U6QqIB3v/AaLiN90
+         RL29q8dFyuJfE+FltVtiY5yqhhx9lItnaE6l15jjLsdsOriv0oryPZaEckRNeRdaK7uf
+         xthk3itEZ/1vbMiz1ZoymoJ58NArwjHmhbRoK6/Oa6tv5qPl0fBoubfHbhlmA+AXULVW
+         CCrA==
+X-Gm-Message-State: AOAM5329K1NhVABO8wAZjIzfm60KvMbgkTRUhQSk7djGBXSMsJdrl7MO
+        KJLr5yn6UnR7iITxbNW1PsC6Cf1bwQQ=
+X-Google-Smtp-Source: ABdhPJwhB0lBp6XgqkJuYHmk75s/DAkeuXAJgiwD1Qof6+JGk81t5mKckzt+2uV4vsTWagSg2nG4sA==
+X-Received: by 2002:a17:902:9b8f:: with SMTP id y15mr2621964plp.322.1594703921350;
+        Mon, 13 Jul 2020 22:18:41 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h9sm15752489pfk.155.2020.07.13.22.19.51
+        by smtp.gmail.com with ESMTPSA id 141sm16117542pfw.72.2020.07.13.22.18.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jul 2020 22:19:52 -0700 (PDT)
-Subject: Re: [PATCH 1/6] skeleton for asetek gen 6 driver
-To:     jaap aarts <jaap.aarts1@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Cc:     Jaap Aarts <jaap.aarts1@example.com>
-References: <20200713193227.189751-1-jaap.aarts1@gmail.com>
+        Mon, 13 Jul 2020 22:18:40 -0700 (PDT)
+Subject: Re: hwmon (nct6775): Please fix Invalid temperature source error for
+ NCT6798D
+To:     Stefan Dietrich <roots@gmx.de>
+Cc:     linux-hwmon@vger.kernel.org
+References: <66053ce744dafbad6925df53b6ef2db1e2859740.camel@gmx.de>
+ <e4ad12d1-3dca-2ff5-a0a6-12dc6dc22c83@roeck-us.net>
+ <48f415c34f4ca3f5239650711daaf1e11342da8e.camel@gmx.de>
+ <d54732db-255c-54be-ab43-997369e0da87@roeck-us.net>
+ <e02ef4f8633e035ecf6019abb72e3a22bfc29732.camel@gmx.de>
+ <20200712224620.GA19097@roeck-us.net>
+ <119b8c4d3791bafae015f1643b4fba9114d3eb65.camel@gmx.de>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -110,12 +115,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <6167a01d-fe60-5066-a7fb-4530f9cd7650@roeck-us.net>
-Date:   Mon, 13 Jul 2020 22:19:51 -0700
+Message-ID: <2569643c-d050-1663-7da7-641211618aee@roeck-us.net>
+Date:   Mon, 13 Jul 2020 22:18:39 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200713193227.189751-1-jaap.aarts1@gmail.com>
+In-Reply-To: <119b8c4d3791bafae015f1643b4fba9114d3eb65.camel@gmx.de>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -124,9 +129,64 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 7/13/20 12:32 PM, jaap aarts wrote:
-> Signed-off-by: Jaap Aarts <jaap.aarts1@example.com>
+On 7/13/20 10:40 AM, Stefan Dietrich wrote:
+> On Sun, 2020-07-12 at 15:46 -0700, Guenter Roeck wrote:
+>> On Sun, Jul 12, 2020 at 09:51:42AM +0200, Stefan Dietrich wrote:
+>>> On Sun, 2020-07-05 at 07:21 -0700, Guenter Roeck wrote:
+>> [ ... ]
+>>> Would you mind giving me a pointer on how this would be done? I
+>>> assume
+>>> for those familiar with the driver it will be less than a handful
+>>> of
+>>> lines of code?!
+>>> I will certainly report back as soon as I have obtained any
+>>> results.
+>>
+>> Something like the diffs below should do. Caution - this is cut-and-
+>> paste,
+>> so you'll have to make the changes manually.
+>>
+>> Guenter
+>>
+>> ---
+>> diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
+>> index 7efa6bfef060..ec427ce503f0 100644
+>> --- a/drivers/hwmon/nct6775.c
+>> +++ b/drivers/hwmon/nct6775.c
+>> @@ -786,9 +786,9 @@ static const char *const nct6798_temp_label[] = {
+>>         "Agent1 Dimm1",
+>>         "BYTE_TEMP0",
+>>         "BYTE_TEMP1",
+>> -       "",
+>> -       "",
+>> -       "",
+>> +       "Unknown28",
+>> +       "Unknown29",
+>> +       "Unknown30",
+>>         "Virtual_TEMP"
+>>  };
+> 
+> Dankeschoen - I just tried that, but I'm still getting
+> 
+> [  324.901595] nct6775 nct6775.656: Invalid temperature source 28 at
+> index 0, source register 0x100, temp register 0x73
+> [  324.901637] nct6775 nct6775.656: Invalid temperature source 28 at
+> index 1, source register 0x200, temp register 0x75
+> [  324.901679] nct6775 nct6775.656: Invalid temperature source 28 at
+> index 2, source register 0x300, temp register 0x77
+> [  324.901722] nct6775 nct6775.656: Invalid temperature source 28 at
+> index 3, source register 0x800, temp register 0x79
+> [  324.901765] nct6775 nct6775.656: Invalid temperature source 28 at
+> index 4, source register 0x900, temp register 0x7b
+> [  324.901807] nct6775 nct6775.656: Invalid temperature source 28 at
+> index 5, source register 0xa00, temp register 0x7d
+> 
+> I double checked that it really is the modified driver that is loaded.
+> Now does that mean the diffs did not do the trick, or that there's
+> really nothing to see here?
+> 
 
-That e-mail address does not exist.
+
+I forgot: Also change NCT6798_TEMP_MASK to 0xffff0ffe.
 
 Guenter
