@@ -2,70 +2,73 @@ Return-Path: <SRS0=kNNy=AZ=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9B08C433E3
-	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Jul 2020 04:59:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2F28C433E4
+	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Jul 2020 05:02:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 87E35221E7
-	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Jul 2020 04:59:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C31F82193E
+	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Jul 2020 05:02:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VjbAat6x"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NUyAggr4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726534AbgGNE7E (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 14 Jul 2020 00:59:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50632 "EHLO
+        id S1725816AbgGNFCl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 14 Jul 2020 01:02:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726477AbgGNE7D (ORCPT
+        with ESMTP id S1725283AbgGNFCk (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 14 Jul 2020 00:59:03 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 641C5C061755;
-        Mon, 13 Jul 2020 21:59:03 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id cv18so640095pjb.1;
-        Mon, 13 Jul 2020 21:59:03 -0700 (PDT)
+        Tue, 14 Jul 2020 01:02:40 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8394AC061755;
+        Mon, 13 Jul 2020 22:02:40 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id t15so957585pjq.5;
+        Mon, 13 Jul 2020 22:02:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=aHwFrfp5DJN1YzrykTS+xRyjP+Xlss5LxtRFykLEPqg=;
-        b=VjbAat6xY+c3rMSObrntZ3ZQIQ6vwYRBuI93AKrvxehdnd03uuwsbQOUh6u5x4DK5F
-         MFwJga25rFx3P2V0CxKJ5PX8fZqImAnUQrC0OPE/UEOoqxEb+r+j5fC8WnvvfPWNStD5
-         g238DdQ5GoJnUkAHduBEXG0mDSYRwihJHyF2s/jaQoB8VQqCBMIZlPMIZpNOVTey67/v
-         wWEOSqUbMXjuN9WuLnoDzgaCc1Ih+dZCnG3szSM5TO0b3C3syhJP2Ymru6C11A22VUOe
-         QBes/qNRUX569FkQiborb+Xf0X5sDIXl00xTpSHKOtG9pf1THtnPxPY8cPQ4LCZ+TeJS
-         OvhA==
+        bh=6U5ECdlEMT+3YNu4JM+KLe6agpfn5zwHG7YI4uB3D5g=;
+        b=NUyAggr4fxk4YfmxxiYD/uOodyYddO9YVWg742Ry7xjiRK6UCn7vzoV0g4D56l4Yug
+         Bi+fDaPxNlQufMx6uIKQlXGVRkFJQT45eocNjz1GKM0T5a4BNgEPkFIU0bQfhjF45Stv
+         p7EkfQyfpEjq6QlquX1kIoFwe6xGBXt2BzWPYK36eEC+jQOkvxU2MMTtGICSAOO9KYin
+         krzEC376qMPrSkg9L2GTsn8UVkhf+5hcbc3zIVRjANeUOx/kVI6UATvXse08Qs0ff5QJ
+         zfuxV5YcQbR8vFze06MPx+NOqU81mUhPev8V3lZvJLJ14b6E+zAKnSOeCnuVJa5NUZWp
+         X5Vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=aHwFrfp5DJN1YzrykTS+xRyjP+Xlss5LxtRFykLEPqg=;
-        b=Epysp2+xO6vfE/KujWGZxz8njWdzvBJY0rGH9SIBNWP8egPjNuC1tYbdlqpSOTMT0d
-         jtu0+XXrEsklN9msNrpNjyQQ/88c/8vovSoYL/Xp5wgJcF+Ov0cMnSMOvLH3PCHjzALW
-         jUvT+4mDexkglh6h4Xxrbx6wwyaiOpMeQtOrJUeysZMI2gZeyH5mHz8dOdkm1GuK2xke
-         2o2uYPTnnAut5m8ZVAqJN1DjqyiFbF7BeA/+yN5U49VDkqd/e6iav5N2pfrkMBVN6Ca7
-         nf76/0BuEujIh+CdCIjebG3YbQMJzXT+HIG3SQZrcQX9I1aJeSS/bmmdZGDleIfPXABV
-         Ur6A==
-X-Gm-Message-State: AOAM532DINQ7UQYRR9XgTLj3UmHezLKlxZFHgI3WvxpuTtfdjVzHhkBf
-        BPyivMVX/Dm1nDIayXY12eE=
-X-Google-Smtp-Source: ABdhPJwN60aq2tI002VZHXhxdFfSWeV9YReXRSccduLHJvxrxcsfeJveODKxay2MUOLRTf1wLR+pQg==
-X-Received: by 2002:a17:90b:358e:: with SMTP id mm14mr2915891pjb.54.1594702742672;
-        Mon, 13 Jul 2020 21:59:02 -0700 (PDT)
+        bh=6U5ECdlEMT+3YNu4JM+KLe6agpfn5zwHG7YI4uB3D5g=;
+        b=loi7FQ0TbpQ3yz853R7g2HX2NACS9Y6+hXIR9bOWqZ5VXaq11wd4l+mx7IMAJOU0HE
+         6cfYxo+d4WRKY2T0f/EoqNUIPVRXUATCqysPNEWpMKTEfvqQx6xkqyju3yRxyQQOY69k
+         Kilg9x05TR4+iS5ElosC7bE/FIZOKnaPTBTL3r+BPqC8hsWCZP1ozmB1/ZdyZEC04tuu
+         i+RFVvSfFUI7R/iOCaKYGUIb2vtKaREU5s0EUsZGapOvrx+Q6NZ5ZDmoaa964D9s3uoJ
+         kbJX5yGtDehcOU93yF/K2xaBPr53CU2PPxk0roeOIcUeWIBty4GQyyNNeT4GQepRvuxb
+         Mthg==
+X-Gm-Message-State: AOAM531GfNy8EGqlsNTmEj3AOauCz+sHvBq6EqR+4CV581IE+AsBSYls
+        hM7r9jcSg6ijkzswYniCgrpkpbfiP2A=
+X-Google-Smtp-Source: ABdhPJz5Bg08XtxVBzJm11uat1hJW0lI8aX+3h/6q8mbtOuVFNv3ucAOKx/8TvXy3l/IuBJt2bUu8Q==
+X-Received: by 2002:a17:90a:c094:: with SMTP id o20mr2686802pjs.12.1594702959806;
+        Mon, 13 Jul 2020 22:02:39 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c30sm15546763pfj.213.2020.07.13.21.59.01
+        by smtp.gmail.com with ESMTPSA id b191sm14709621pga.13.2020.07.13.22.02.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jul 2020 21:59:01 -0700 (PDT)
-Subject: Re: [PATCH 1/6] skeleton for asetek gen 6 driver
-To:     jaap aarts <jaap.aarts1@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Cc:     Jaap Aarts <jaap.aarts1@example.com>
-References: <20200713193227.189751-1-jaap.aarts1@gmail.com>
+        Mon, 13 Jul 2020 22:02:39 -0700 (PDT)
+Subject: Re: [RFC PATCH 16/35] hwmon: (sis5595) Change PCIBIOS_SUCCESSFUL to 0
+To:     "Saheed O. Bolarinwa" <refactormyself@gmail.com>,
+        helgaas@kernel.org, Jean Delvare <jdelvare@suse.com>
+Cc:     bjorn@helgaas.com, skhan@linuxfoundation.org,
+        linux-pci@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+References: <20200713122247.10985-1-refactormyself@gmail.com>
+ <20200713122247.10985-17-refactormyself@gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -110,12 +113,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <2647223e-74c2-8fd6-f649-9e051a7d9d6b@roeck-us.net>
-Date:   Mon, 13 Jul 2020 21:59:00 -0700
+Message-ID: <cbbdf8c5-347b-0638-bc5f-c6c8469b8aa4@roeck-us.net>
+Date:   Mon, 13 Jul 2020 22:02:38 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200713193227.189751-1-jaap.aarts1@gmail.com>
+In-Reply-To: <20200713122247.10985-17-refactormyself@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -124,10 +127,33 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 7/13/20 12:32 PM, jaap aarts wrote:
-> Signed-off-by: Jaap Aarts <jaap.aarts1@example.com>
+On 7/13/20 5:22 AM, Saheed O. Bolarinwa wrote:
+> In reference to the PCI spec (Chapter 2), PCIBIOS* is an x86 concept.
+> Their scope should be limited within arch/x86.
+> 
+> Change all PCIBIOS_SUCCESSFUL to 0
+> 
+> Signed-off-by: "Saheed O. Bolarinwa" <refactormyself@gmail.com>
+> ---
+>  drivers/hwmon/sis5595.c | 8 ++++----
+>  drivers/hwmon/via686a.c | 8 ++++----
+>  drivers/hwmon/vt8231.c  | 8 ++++----
+>  3 files changed, 12 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/hwmon/sis5595.c b/drivers/hwmon/sis5595.c
+> index 0c6741f949f5..0ea174fb3048 100644
+> --- a/drivers/hwmon/sis5595.c
+> +++ b/drivers/hwmon/sis5595.c
+> @@ -825,7 +825,7 @@ static int sis5595_pci_probe(struct pci_dev *dev,
+>  		pci_write_config_word(dev, SIS5595_BASE_REG, force_addr);
+>  	}
+>  
+> -	if (PCIBIOS_SUCCESSFUL !=
+> +	if (0 !=
+>  	    pci_read_config_word(dev, SIS5595_BASE_REG, &address)) {
 
-I am not going to review code which is later changed in the
-same patch series. Please combine all patches into one.
+Yoda programming already terrible is, but "0 !=" is even worse than that
+(and completely unnecessary). If you want to clean this up, do it right
+and drop those unnecessary comparisons.
 
 Guenter
