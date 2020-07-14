@@ -4,68 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+	NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2AEFC433E0
-	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Jul 2020 14:02:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64A2FC433E2
+	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Jul 2020 14:03:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 96B1322267
-	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Jul 2020 14:02:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3990D22267
+	for <linux-hwmon@archiver.kernel.org>; Tue, 14 Jul 2020 14:03:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bFyMSkn8"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VtbkHI2E"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726793AbgGNOCG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 14 Jul 2020 10:02:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49772 "EHLO
+        id S1726062AbgGNODk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 14 Jul 2020 10:03:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726762AbgGNOCF (ORCPT
+        with ESMTP id S1725781AbgGNODj (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 14 Jul 2020 10:02:05 -0400
+        Tue, 14 Jul 2020 10:03:39 -0400
 Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BEDEC061755;
-        Tue, 14 Jul 2020 07:02:05 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id z5so7634124pgb.6;
-        Tue, 14 Jul 2020 07:02:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D85C061755;
+        Tue, 14 Jul 2020 07:03:39 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id w2so7624079pgg.10;
+        Tue, 14 Jul 2020 07:03:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=EHFzFnZIFGC7avPssRKqih5bUOJ5CCnUphktuokZn3g=;
-        b=bFyMSkn8w3ufu/eGFltsryBPd09ocwianvheyrVd0DbihYjAeLuw5XY8RYNpWSEV1h
-         j1uEawxbp9+LZej3y6E4moK8/ztdNF0VPhLMrWttTPJsObcOUYq+def3lc2BoWmUXcIo
-         2SHmEWAFRoJx2b0cEcj0M/JOkOiliJxsnZX5rz32xBzT+QHG17h2syrexTLdY9xmj7WU
-         EDxPfNckL3gbF4ANudemvtj++F4fzkaB7tcZSl/+VZaJSd9Dw6rLnWBHbZ0N2OZPjfef
-         hl1Q4tXXNj1lDBdlORI9ta7LcLG1Sz+9QB2fStZ6SQUIbHLryGDfWvE51kE2nm2tZ6+r
-         OmSw==
+        bh=2/fXNlBHkKY8U2n+OvWiDOz5lWmmKQIFHvJBN1p+UYE=;
+        b=VtbkHI2EUSu7LFWZ/cwjpzQXHnYi+YUhpqfQ1dxYgUTJEx/32Nter3aKjxfvbZRCG6
+         4KKQDwzdXe90ebYoIuFNRXDMJFapGi+0GKjR2wnhrEdyLELNffG8UITeb6P7BYEFo9bO
+         YEu5LsGM2jbg4aO3H0zGEEQG5A00s8RLX9MJw8O3k7PLB+0klC3nDb3+wD0VSrWXYyLC
+         fbRUsAAeLfsSGI5Y3XOlnbw7LeDhe9poOvwucovp+glJUQMEVHcJVOrOJSiclTy1hCme
+         AWbRF5zH7va2iSEH2AaumCgQ9cHPKxJgFNgXqBp6LW0CUkZTfXQVRSPa1TdxL/XX/+6s
+         xmiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=EHFzFnZIFGC7avPssRKqih5bUOJ5CCnUphktuokZn3g=;
-        b=NfHgN+hX+XXM7YSbySWCCE/UH3rOM/KOPlNpMUXEO7+tCDU+yH+GY8Zt2hK7hE7+tj
-         c04bbGBJvXqu/H1giljYXa9ZPELeZmG+Asuk+SAH00IPFxtcor95x6F5f045AnWreOp+
-         2KXrZWQNO0d+kM/a+1JHgvIDfYFa6LIX2K03QROaSv5sZUBpee8wYbQvZlbVwJPFNQ+q
-         H1ZfC1LcdTKyPx/z5Q5Ee/0IagZ9Omxk8QSUcgHiCgnlBwe1bkAoIakrahYQ5lRiVa20
-         M3puDKL6AwbPRqSdIszhjqah+e6zVVjOIHrG4L4Fk0jnlcVQkgxcUHB7uFc1ZrGA4WeG
-         SGFg==
-X-Gm-Message-State: AOAM532keY6UhdHYzNu5WlrkTNo58P7+f0vNZXjW/rMthKsm47gPX9iA
-        Q45xacTLm3h6fMd8Df66/soFIKUZtvk=
-X-Google-Smtp-Source: ABdhPJxuYHhu131bEQlUJtqKKGAj6385D1xIWhqRUvCASq0/UIVVckGNk3r/pwqDzybg2qkQOd/+sA==
-X-Received: by 2002:a63:6c0a:: with SMTP id h10mr3522208pgc.11.1594735324613;
-        Tue, 14 Jul 2020 07:02:04 -0700 (PDT)
+        bh=2/fXNlBHkKY8U2n+OvWiDOz5lWmmKQIFHvJBN1p+UYE=;
+        b=S5COk8/c5Gv+C95phZdGqUkZJsGAyQ0F6D0qm4q9/7G2UwqNTQoiehFChAY19dTkv+
+         npv/yUACSmcs+P7ox2uOjEHc55aswjQeHv2pT4yNVyi2k0ON33LV/h03cm9RVlAhvZoW
+         B9twMu8vAOKRVQZaiJSqD8d8jlwa2r5cT5GIRuyWVYjqcEgdcP9YbbVyxoKNnev3idJ1
+         A9FMkHy0UAkfyQHbOJ1V0+ivpeAOsvNcz3xPEC3Bocx84hndd+I56nfe8nnoyWxGeQuF
+         JpyhskC/l3MbjSZ9LH9lf9rbga276RhdAFaeDjqqKHv4BjVb3facJxZ8La5n0RgPmIbZ
+         mb/g==
+X-Gm-Message-State: AOAM533RYzntfvUtPsosEX1N5VdUsUBVstYDweYU+HzVqEQv6rvWM6MY
+        jqZ1G2jQ0FI+OYqzS2gXZi0=
+X-Google-Smtp-Source: ABdhPJz3APXGp5Dkk7NshBwh09omSj0BrLLhSR2GMtMZXp3PdfoEYWISeqosMSIEgQQ69W/VvYVjIw==
+X-Received: by 2002:a63:9353:: with SMTP id w19mr3479764pgm.13.1594735418862;
+        Tue, 14 Jul 2020 07:03:38 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f29sm15924579pga.59.2020.07.14.07.02.03
+        by smtp.gmail.com with ESMTPSA id g30sm18483045pfq.189.2020.07.14.07.03.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jul 2020 07:02:03 -0700 (PDT)
-Subject: Re: [PATCH v2] hwmon: (drivetemp) Avoid SCT usage on Toshiba DT01ACA
- family drives
-To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <8325438e25a3a5a7e6d12ef6ede8f4350e4c65be.1594500029.git.mail@maciej.szmigiero.name>
+        Tue, 14 Jul 2020 07:03:38 -0700 (PDT)
+Subject: Re: [PATCH] dt-bindings: hwmon: adm1272: add adm1272-adm1275-temp1-en
+ binding
+To:     Chu Lin <linchuyuan@google.com>, robh+dt@kernel.org
+Cc:     Kais Belgaied <belgaied@google.com>,
+        Jason Ling <jasonling@google.com>, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zhongqi Li <zhongqil@google.com>
+References: <20200710004258.296017-1-linchuyuan@google.com>
+ <CAKCA56A8b+8NA8Si7g+whkYSRqr7=JLV+726nyFiDjWQ70BTgA@mail.gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -110,12 +113,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <50fb6686-5d36-ccb6-4620-c516472c6c0f@roeck-us.net>
-Date:   Tue, 14 Jul 2020 07:02:02 -0700
+Message-ID: <f45a85ec-3e5c-9029-8c28-0a1a34398bb8@roeck-us.net>
+Date:   Tue, 14 Jul 2020 07:03:37 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <8325438e25a3a5a7e6d12ef6ede8f4350e4c65be.1594500029.git.mail@maciej.szmigiero.name>
+In-Reply-To: <CAKCA56A8b+8NA8Si7g+whkYSRqr7=JLV+726nyFiDjWQ70BTgA@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -124,105 +127,56 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 7/11/20 1:41 PM, Maciej S. Szmigiero wrote:
-> It has been observed that Toshiba DT01ACA family drives have
-> WRITE FPDMA QUEUED command timeouts and sometimes just freeze until
-> power-cycled under heavy write loads when their temperature is getting
-> polled in SCT mode. The SMART mode seems to be fine, though.
+On 7/13/20 12:24 PM, Chu Lin wrote:
+> Adding Rob to the review list.
 > 
-> Let's make sure we don't use SCT mode for these drives then.
-> 
-> While only the 3 TB model was actually caught exhibiting the problem let's
-> play safe here to avoid data corruption and extend the ban to the whole
-> family.
-> 
-> Fixes: 5b46903d8bf3 ("hwmon: Driver for disk and solid state drives with temperature sensors")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Maciej S. Szmigiero <mail@maciej.szmigiero.name>
-> ---
-> 
-> Notes:
->     This behavior was observed on two different DT01ACA3 drives.
->     
->     Usually, a series of queued WRITE FPDMA QUEUED commands just time out,
->     but sometimes the whole drive freezes. Merely disconnecting and
->     reconnecting SATA interface cable then does not unfreeze the drive.
->     
->     One has to disconnect and reconnect the drive power connector for the
->     drive to be detected again (suggesting the drive firmware itself has
->     crashed).
->     
->     This only happens when the drive temperature is polled very often (like
->     every second), so occasional SCT usage via smartmontools is probably
->     safe.
->     
->     Changes from v1:
->     'SCT blacklist' -> 'SCT avoid models'
-> 
->  drivers/hwmon/drivetemp.c | 37 +++++++++++++++++++++++++++++++++++++
->  1 file changed, 37 insertions(+)
-> 
-> diff --git a/drivers/hwmon/drivetemp.c b/drivers/hwmon/drivetemp.c
-> index 0d4f3d97ffc6..da9cfcbecc96 100644
-> --- a/drivers/hwmon/drivetemp.c
-> +++ b/drivers/hwmon/drivetemp.c
-> @@ -285,6 +285,36 @@ static int drivetemp_get_scttemp(struct drivetemp_data *st, u32 attr, long *val)
->  	return err;
->  }
->  
-> +static const char * const sct_avoid_models[] = {
-> +/*
-> + * These drives will have WRITE FPDMA QUEUED command timeouts and sometimes just
-> + * freeze until power-cycled under heavy write loads when their temperature is
-> + * getting polled in SCT mode. The SMART mode seems to be fine, though.
-> + *
-> + * While only the 3 TB model was actually caught exhibiting the problem
-> + * let's play safe here to avoid data corruption and ban the whole family.
-> + */
-> +	"TOSHIBA DT01ACA0",
-> +	"TOSHIBA DT01ACA1",
-> +	"TOSHIBA DT01ACA2",
-> +	"TOSHIBA DT01ACA3",
-> +};
-> +
-> +static bool drivetemp_sct_avoid(struct drivetemp_data *st)
-> +{
-> +	struct scsi_device *sdev = st->sdev;
-> +	unsigned int ctr;
-> +
-> +	if (!sdev->model)
-> +		return false;
-> +
-> +	for (ctr = 0; ctr < ARRAY_SIZE(sct_avoid_models); ctr++)
-> +		if (strncmp(sdev->model, sct_avoid_models[ctr], 16) == 0)
 
-Why strncmp, and why length 16 ? Both strings are, as far as I can see,
-0 terminated. A fixed length only asks for trouble later on as more models
-are added to the list.
+Rob is running a robot on DT bindings patches. Adding him like this
+very likely won't trigger the robot.
 
-Also, please use "!" instead of "== 0".
+Guenter
 
-> +			return true;
-> +
-> +	return false;
-> +}
-> +
->  static int drivetemp_identify_sata(struct drivetemp_data *st)
->  {
->  	struct scsi_device *sdev = st->sdev;
-> @@ -326,6 +356,13 @@ static int drivetemp_identify_sata(struct drivetemp_data *st)
->  	/* bail out if this is not a SATA device */
->  	if (!is_ata || !is_sata)
->  		return -ENODEV;
-> +
-> +	if (have_sct && drivetemp_sct_avoid(st)) {
-> +		dev_notice(&sdev->sdev_gendev,
-> +			   "will avoid using SCT for temperature monitoring\n");
-> +		have_sct = false;
-> +	}
-> +
->  	if (!have_sct)
->  		goto skip_sct;
->  
-> 
+> On Thu, Jul 9, 2020 at 5:43 PM Chu Lin <linchuyuan@google.com> wrote:
+>>
+>> Problem:
+>>         adm1272 and adm1278 supports temperature sampling. The
+>> current way of enabling it requires the user manually unbind the device
+>> from the driver, flip the temperature sampling control bit and then bind
+>> the device back to the driver. It would be nice if we can control this in a
+>> better way by reading the dt.
+>>
+>> Solution:
+>>         Introducing device tree binding adm1272-adm1278-temp1-en. If the
+>> flag is set, flip the temp1_en control bit on probing.
+>>
+>> Testing:
+>> make dt_binding_check
+>>
+>> Signed-off-by: Chu Lin <linchuyuan@google.com>
+>> ---
+>>  Documentation/devicetree/bindings/hwmon/adm1275.txt | 3 +++
+>>  1 file changed, 3 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/hwmon/adm1275.txt b/Documentation/devicetree/bindings/hwmon/adm1275.txt
+>> index 1ecd03f3da4d..4403fe30f005 100644
+>> --- a/Documentation/devicetree/bindings/hwmon/adm1275.txt
+>> +++ b/Documentation/devicetree/bindings/hwmon/adm1275.txt
+>> @@ -15,6 +15,8 @@ Optional properties:
+>>
+>>  - shunt-resistor-micro-ohms
+>>         Shunt resistor value in micro-Ohm
+>> +- adm1272-adm1278-temp1-en
+>> +       Enable temperature sampling. This is supported on adm1272 and adm1278
+>>
+>>  Example:
+>>
+>> @@ -22,4 +24,5 @@ adm1272@10 {
+>>         compatible = "adi,adm1272";
+>>         reg = <0x10>;
+>>         shunt-resistor-micro-ohms = <500>;
+>> +       adm1272-adm1278-temp1-en;
+>>  };
+>> --
+>> 2.27.0.383.g050319c2ae-goog
+>>
 
