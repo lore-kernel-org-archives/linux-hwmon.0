@@ -2,341 +2,182 @@ Return-Path: <SRS0=YkMd=A2=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A4B9C433E0
-	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Jul 2020 02:36:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 563E6C433DF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Jul 2020 02:33:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5759220663
-	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Jul 2020 02:36:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2DBFF2070E
+	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Jul 2020 02:33:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="vXUrQE/F"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZDFnL77P"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726609AbgGOCgZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 14 Jul 2020 22:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54378 "EHLO
+        id S1728036AbgGOCdP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 14 Jul 2020 22:33:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726396AbgGOCgY (ORCPT
+        with ESMTP id S1726908AbgGOCdP (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 14 Jul 2020 22:36:24 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83900C061755;
-        Tue, 14 Jul 2020 19:36:24 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id t6so1394815pgq.1;
-        Tue, 14 Jul 2020 19:36:24 -0700 (PDT)
+        Tue, 14 Jul 2020 22:33:15 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511CDC061755
+        for <linux-hwmon@vger.kernel.org>; Tue, 14 Jul 2020 19:33:15 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id 72so1111367ple.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 14 Jul 2020 19:33:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=1h8x5iFBVrI2txisetzzFlVtAcx/qnoB0Daw9m0+hj0=;
-        b=vXUrQE/FgaTWsuEuCFEqQKUbC9oDuHTf0mVRxKrtG0m2wp06nnnoy33KpwkV2OISeq
-         Oq8P7WuOE7Dbi8DWHG+myh/jgVJTp500qEiCBZU8tcGk2MKLViB0F1+S0jSv7kfoEMos
-         R0gVp2TFbBRD3Y4wgFiO1Kv3F3yJjR9NiJeaBCZ9724wFWgq4Z4Dk4pPltrcY1eOkPpg
-         uSWf5Q9Q4S//glbzUjwHLz1yQf3roA86qC60zt+lE3vDxi82EpIzeUlYd4pK2lUJeQvp
-         Zxpj19V5p7gsS+mToXqvfebustyyTIkf8g0sUyIEfz1I52f18sEmYxXu9YX1Sn2zWsIi
-         iFpw==
+        h=sender:subject:to:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=9nyv2CH2cwe2dKVyT24SIUY2d9MbXVF4DV2J6NeBMWc=;
+        b=ZDFnL77PvAVIfTIEFOgk88DWwAcv7ouvfYclv/qoET20ju72ClW391g9mMUZn60XA5
+         xTKvxI+S9YiMWI8AFV4jBejmqNYtlw+9MdZSL8SmQS0YfZgtVdhbq8GrD2yKTPTK3HOT
+         6bgdRuB95GCipnHoo+7kIbEDnqfXyBhVHgm7YmQJPZIsX7CDzzeXCT9Zm2lFxQKlKK9I
+         HiDyHrsxR5JafpHgySa9O/YngbmjCs1OqmUB8Is2Zh9S5GyFSc+lpABgRC6fLtlvbrtS
+         qIsxImwdNng4sswjUB3oa5VoqT7TxJTKGgb/0UDOa7xHGc5AhWULBaHXJqmtDf8E17+E
+         px1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=1h8x5iFBVrI2txisetzzFlVtAcx/qnoB0Daw9m0+hj0=;
-        b=OiK/3hmil3SaKzVXH09G3ri8MSB/VHZ6RYXkc/smT96Vcs0a+l6N71fNw/DUPXuxD0
-         SAD/BNqBLrB7jAUSQXLcJibFyUJ8PjmoE329CCFWgSplLBG2ollMA3XbPwquonBHqvAh
-         6UJhIKxkNf16wNP7WdeXNk977oS1WBnEI99CEHA1nQhz0A5noTcBgnrnkzW/pwhnYWy1
-         4Sq08BiN87aXiLTpRQE/vb3vApv/cx88VGWA77UGxLEMP44erDtgxWK3bWjdyk8AhT/F
-         htxpLyFvaeo0u3L6C7pka8OjmBZ6xTz702d755fFmoVcQe+RktN8Jp1Tnsk0Sl8cluEs
-         XR/w==
-X-Gm-Message-State: AOAM532TfkOC3mAWrvtEvzBKUi4LfJcKdIwzXuvQEORHkhqmKBVk4ZWx
-        WGaonTskMIwz4q2E8UD5JHY=
-X-Google-Smtp-Source: ABdhPJwlwny00gTNKe9Qnmz9IUlogsrmnbJAKGTpNyb0Nqhhh36ZxSwGmS8+y2p7Ea97ifyXd+lyBg==
-X-Received: by 2002:a63:8ec8:: with SMTP id k191mr5972710pge.154.1594780583996;
-        Tue, 14 Jul 2020 19:36:23 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n12sm381055pgr.88.2020.07.14.19.36.23
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 14 Jul 2020 19:36:23 -0700 (PDT)
-Date:   Tue, 14 Jul 2020 19:36:22 -0700
+        h=x-gm-message-state:sender:subject:to:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=9nyv2CH2cwe2dKVyT24SIUY2d9MbXVF4DV2J6NeBMWc=;
+        b=OOnvg6lVXO1h+jVsKy6XG1szTEXfit7/uyZ/hqEoycb5qoKZALm0AyCcC/FtzxVsvF
+         uMjcabC1MvXuXz5d/UO5pwaOfLpBJApmdPRaKAAmSX/W7m1gRqDy6Uzq6Cu1lK5Sq/h0
+         8RbzaP6AhdzWsprfURYLD9thUYivwcVoSbQZZJybHznHH26eaO6jXFv/XKWMdHqI7LH5
+         18KFRLQsAL2ei/B8oO/5l/zvpFMLeSQ0ZthOyvahLLTcIvj2vKOiW6O2w4J3/7W6upDX
+         1nT27dA4O8LDmGiXClSEr/9N3v01JkwADO99Wq6CZF5+pLKSguRmp2iAWoeJRDRj8g5J
+         wXhQ==
+X-Gm-Message-State: AOAM532nhhqj/W7PjwOZWsmZiWR8CSuO39T2410kEd0CgSxMYfpQjTiA
+        aJxvwd6i/c8fu3+NBD+89fDaZ4jr
+X-Google-Smtp-Source: ABdhPJw7pFeo9Usl9417tiAMQ7OhKko35hApZFPQehcQPjwX41vqJ1pVNHpPM8idtX7Brrxb6sEGEg==
+X-Received: by 2002:a17:90a:148:: with SMTP id z8mr8194697pje.197.1594780394542;
+        Tue, 14 Jul 2020 19:33:14 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l207sm393903pfd.79.2020.07.14.19.33.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jul 2020 19:33:13 -0700 (PDT)
+Subject: Re: hwmon (nct6775): Please fix Invalid temperature source error for
+ NCT6798D
+To:     Alexey Galakhov <agalakhov@gmail.com>, linux-hwmon@vger.kernel.org
+References: <20200715011748.3507fc2b.agalakhov@gmail.com>
+ <d2769820-426c-bc4a-bcc2-2720fde4f5bc@roeck-us.net>
+ <20200715021954.68a03582.agalakhov@gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Marius Zachmann <mail@mariuszachmann.de>
-Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: corsair-cpro: Change to hid driver
-Message-ID: <20200715023622.GA164279@roeck-us.net>
-References: <20200714105230.3126-1-mail@mariuszachmann.de>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <a134f3d8-09d6-be9c-de97-26e9c048c6a3@roeck-us.net>
+Date:   Tue, 14 Jul 2020 19:33:12 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200714105230.3126-1-mail@mariuszachmann.de>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200715021954.68a03582.agalakhov@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jul 14, 2020 at 12:52:30PM +0200, Marius Zachmann wrote:
-> I found a project which uses hidraw to communicate with the device.
-> Because I do not want to break any existing userspace code, I
-> changed this to a hid driver, so hidraw can still be used.
-> Do I need to include the hid maintainers for the undo in hid-quirks?
+On 7/14/20 5:19 PM, Alexey Galakhov wrote:
+> On Tue, 14 Jul 2020 16:58:29 -0700
+> Guenter Roeck <linux@roeck-us.net> wrote:
 > 
-That changelog needs some improvements. It should state what change
-was made, and why, but not include any questions or personal statements
-such as "I found ...".
+>> On 7/14/20 4:17 PM, Alexey Galakhov wrote:
+>>> Hi,
+>>>
+>>> I'm facing the same problem. I did some research on my machine.
+>>>
+>>> On Fri, 2020-07-03 at 10:10 -0700, Guenter Roeck wrote:
+>>>   
+>>>> There is nothing much if anything we can do about that. The NCT6798D
+>>>> datasheet reports temperature source 28 as reserved. You could ask
+>>>> Asus for support, but their usual response is that they don't support
+>>>> Linux.  
+>>>
+>>> Looks like there are different versions of the datasheet. The one of
+>>> NCT6796D, Revision 0.6 states that 28 (0x1c or 11100) is "Select PECI  
+>>
+>> We are talking about NCT6798D here.
+> 
+> I have NCT6798D on my machine and I also double-checked the chip marking
+> on the motherboard. I just looked at the 96's datasheet (not found a
+> 98's one). Even with 98 this configuration seems to be correct. Looks
+> like at least on some revisions of 98 it is not reserved and usable.
+> The fan in controlled correctly with this setting.
+> 
 
-You never really explained why you had changed the driver from hid to
-usb. Maybe you can explain that decision now ?
+FWIW: https://patchwork.kernel.org/patch/11663841/
+
+>> I have no idea how to access the "HM Read-Only" registers. The datasheets
+>> are not exactly verbal about it.
+> 
+> I successfully accessed them. The access procedure is poorly described
+> but quite simple.
+> 
+> Each of these "HM Read-Only" registers is just a plain I/O port. Just
+> inb() reads them. Their addresses are sequential. The base address
+> (address of register 00) is configured similar to the main I/O address
+> (the one which is usually 0x295). Its MSB is in register 0x64 and its
+> LSB is in 0x65 of the SuperIO. Like that:
+> 
+>   superio_select(sioreg, NCT6775_LD_HWM);
+>   hm_ro_base = superio_inb(sioreg, 0x64) << 8;
+>   hm_ro_base |= superio_inb(sioreg, 0x65);
+> 
+>   // on my machine hm_ro_base == 0x800
+> 
+>   val = inb(hm_io_base + hm_reg);
+> 
+> Hope this helps.
+> 
+Interesting. I'll keep it in mind, but I don't think I'll be able to
+submit any patches anytime soon.
 
 Thanks,
 Guenter
-
-> Signed-off-by: Marius Zachmann <mail@mariuszachmann.de>
-> ---
->  drivers/hid/hid-quirks.c     |   2 -
->  drivers/hwmon/Kconfig        |   4 +-
->  drivers/hwmon/corsair-cpro.c | 114 ++++++++++++++++++++++++++---------
->  3 files changed, 86 insertions(+), 34 deletions(-)
-> 
-> diff --git a/drivers/hid/hid-quirks.c b/drivers/hid/hid-quirks.c
-> index 7b7bc7737c53..ca8b5c261c7c 100644
-> --- a/drivers/hid/hid-quirks.c
-> +++ b/drivers/hid/hid-quirks.c
-> @@ -699,8 +699,6 @@ static const struct hid_device_id hid_ignore_list[] = {
->  	{ HID_USB_DEVICE(USB_VENDOR_ID_AXENTIA, USB_DEVICE_ID_AXENTIA_FM_RADIO) },
->  	{ HID_USB_DEVICE(USB_VENDOR_ID_BERKSHIRE, USB_DEVICE_ID_BERKSHIRE_PCWD) },
->  	{ HID_USB_DEVICE(USB_VENDOR_ID_CIDC, 0x0103) },
-> -	{ HID_USB_DEVICE(USB_VENDOR_ID_CORSAIR, 0x0c10) },
-> -	{ HID_USB_DEVICE(USB_VENDOR_ID_CORSAIR, 0x1d00) },
->  	{ HID_USB_DEVICE(USB_VENDOR_ID_CYGNAL, USB_DEVICE_ID_CYGNAL_RADIO_SI470X) },
->  	{ HID_USB_DEVICE(USB_VENDOR_ID_CYGNAL, USB_DEVICE_ID_CYGNAL_RADIO_SI4713) },
->  	{ HID_USB_DEVICE(USB_VENDOR_ID_CMEDIA, USB_DEVICE_ID_CM109) },
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 8b046a5dfa40..c603d8c8e3d2 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -441,7 +441,7 @@ config SENSORS_BT1_PVT_ALARMS
-> 
->  config SENSORS_CORSAIR_CPRO
->  	tristate "Corsair Commander Pro controller"
-> -	depends on USB
-> +	depends on HID
->  	help
->  	  If you say yes here you get support for the Corsair Commander Pro
->  	  controller.
-> @@ -1716,7 +1716,7 @@ config SENSORS_ADS7871
-> 
->  config SENSORS_AMC6821
->  	tristate "Texas Instruments AMC6821"
-> -	depends on I2C
-> +	depends on I2C
->  	help
->  	  If you say yes here you get support for the Texas Instruments
->  	  AMC6821 hardware monitoring chips.
-> diff --git a/drivers/hwmon/corsair-cpro.c b/drivers/hwmon/corsair-cpro.c
-> index fe625190e3a1..4310ee5aca24 100644
-> --- a/drivers/hwmon/corsair-cpro.c
-> +++ b/drivers/hwmon/corsair-cpro.c
-> @@ -5,13 +5,14 @@
->   */
-> 
->  #include <linux/bitops.h>
-> +#include <linux/completion.h>
-> +#include <linux/hid.h>
->  #include <linux/hwmon.h>
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/mutex.h>
->  #include <linux/slab.h>
->  #include <linux/types.h>
-> -#include <linux/usb.h>
-> 
->  #define USB_VENDOR_ID_CORSAIR			0x1b1c
->  #define USB_PRODUCT_ID_CORSAIR_COMMANDERPRO	0x0c10
-> @@ -62,7 +63,8 @@
->  #define NUM_TEMP_SENSORS	4
-> 
->  struct ccp_device {
-> -	struct usb_device *udev;
-> +	struct hid_device *hdev;
-> +	struct completion wait_input_report;
->  	struct mutex mutex; /* whenever buffer is used, lock before send_usb_cmd */
->  	u8 *buffer;
->  	int pwm[6];
-> @@ -75,7 +77,7 @@ struct ccp_device {
->  /* send command, check for error in response, response in ccp->buffer */
->  static int send_usb_cmd(struct ccp_device *ccp, u8 command, u8 byte1, u8 byte2, u8 byte3)
->  {
-> -	int actual_length;
-> +	unsigned long t;
->  	int ret;
-> 
->  	memset(ccp->buffer, 0x00, OUT_BUFFER_SIZE);
-> @@ -84,26 +86,39 @@ static int send_usb_cmd(struct ccp_device *ccp, u8 command, u8 byte1, u8 byte2,
->  	ccp->buffer[2] = byte2;
->  	ccp->buffer[3] = byte3;
-> 
-> -	ret = usb_bulk_msg(ccp->udev, usb_sndintpipe(ccp->udev, 2), ccp->buffer, OUT_BUFFER_SIZE,
-> -			   &actual_length, 1000);
-> -	if (ret)
-> -		return ret;
-> +	reinit_completion(&ccp->wait_input_report);
-> 
-> -	/* response needs to be received every time */
-> -	ret = usb_bulk_msg(ccp->udev, usb_rcvintpipe(ccp->udev, 1), ccp->buffer, IN_BUFFER_SIZE,
-> -			   &actual_length, 1000);
-> -	if (ret)
-> +	ret = hid_hw_output_report(ccp->hdev, ccp->buffer, OUT_BUFFER_SIZE);
-> +	if (ret < 0)
->  		return ret;
-> 
-> +	t = wait_for_completion_timeout(&ccp->wait_input_report, msecs_to_jiffies(300));
-> +	if (!t)
-> +		return -ETIMEDOUT;
-> +
->  	/* first byte of response is error code */
->  	if (ccp->buffer[0] != 0x00) {
-> -		dev_dbg(&ccp->udev->dev, "device response error: %d", ccp->buffer[0]);
-> +		hid_dbg(ccp->hdev, "device response error: %d", ccp->buffer[0]);
->  		return -EIO;
->  	}
-> 
->  	return 0;
->  }
-> 
-> +static int ccp_raw_event(struct hid_device *hdev, struct hid_report *report, u8 *data, int size)
-> +{
-> +	struct ccp_device *ccp = hid_get_drvdata(hdev);
-> +
-> +	/* only copy buffer when requested */
-> +	if (completion_done(&ccp->wait_input_report))
-> +		return 0;
-> +
-> +	memcpy(ccp->buffer, data, min(IN_BUFFER_SIZE, size));
-> +	complete(&ccp->wait_input_report);
-> +
-> +	return 0;
-> +}
-> +
->  /* requests and returns single data values depending on channel */
->  static int get_data(struct ccp_device *ccp, int command, int channel)
->  {
-> @@ -437,57 +452,96 @@ static int get_temp_cnct(struct ccp_device *ccp)
->  	return 0;
->  }
-> 
-> -static int ccp_probe(struct usb_interface *intf, const struct usb_device_id *id)
-> +static int ccp_probe(struct hid_device *hdev, const struct hid_device_id *id)
->  {
->  	struct device *hwmon_dev;
->  	struct ccp_device *ccp;
->  	int ret;
-> 
-> -	ccp = devm_kzalloc(&intf->dev, sizeof(*ccp), GFP_KERNEL);
-> +	ccp = devm_kzalloc(&hdev->dev, sizeof(*ccp), GFP_KERNEL);
->  	if (!ccp)
->  		return -ENOMEM;
-> 
-> -	ccp->buffer = devm_kmalloc(&intf->dev, OUT_BUFFER_SIZE, GFP_KERNEL);
-> +	ccp->buffer = devm_kmalloc(&hdev->dev, OUT_BUFFER_SIZE, GFP_KERNEL);
->  	if (!ccp->buffer)
->  		return -ENOMEM;
-> 
-> +	ret = hid_parse(hdev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = hid_hw_start(hdev, HID_CONNECT_HIDRAW);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = hid_hw_open(hdev);
-> +	if (ret)
-> +		goto out_hw_stop;
-> +
-> +	ccp->hdev = hdev;
-> +	hid_set_drvdata(hdev, ccp);
->  	mutex_init(&ccp->mutex);
-> +	init_completion(&ccp->wait_input_report);
-> 
-> -	ccp->udev = interface_to_usbdev(intf);
-> +	hid_device_io_start(hdev);
-> 
->  	/* temp and fan connection status only updates when device is powered on */
->  	ret = get_temp_cnct(ccp);
->  	if (ret)
-> -		return ret;
-> +		goto out_hw_close;
-> 
->  	ret = get_fan_cnct(ccp);
->  	if (ret)
-> -		return ret;
-> -
-> -	hwmon_dev = devm_hwmon_device_register_with_info(&intf->dev, "corsaircpro", ccp,
-> +		goto out_hw_close;
-> +	hwmon_dev = devm_hwmon_device_register_with_info(&hdev->dev, "corsaircpro", ccp,
->  							 &ccp_chip_info, 0);
-> +	if (IS_ERR(hwmon_dev)) {
-> +		ret = PTR_ERR(hwmon_dev);
-> +		goto out_hw_close;
-> +	}
-> +
-> +	return 0;
-> 
-> -	return PTR_ERR_OR_ZERO(hwmon_dev);
-> +out_hw_close:
-> +	hid_hw_close(hdev);
-> +out_hw_stop:
-> +	hid_hw_stop(hdev);
-> +	return ret;
->  }
-> 
-> -static void ccp_disconnect(struct usb_interface *intf)
-> +static void ccp_remove(struct hid_device *hdev)
->  {
-> +	hid_hw_close(hdev);
-> +	hid_hw_stop(hdev);
->  }
-> 
-> -static const struct usb_device_id ccp_devices[] = {
-> -	{ USB_DEVICE(USB_VENDOR_ID_CORSAIR, USB_PRODUCT_ID_CORSAIR_COMMANDERPRO) },
-> -	{ USB_DEVICE(USB_VENDOR_ID_CORSAIR, USB_PRODUCT_ID_CORSAIR_1000D) },
-> +static const struct hid_device_id ccp_devices[] = {
-> +	{ HID_USB_DEVICE(USB_VENDOR_ID_CORSAIR, USB_PRODUCT_ID_CORSAIR_COMMANDERPRO) },
-> +	{ HID_USB_DEVICE(USB_VENDOR_ID_CORSAIR, USB_PRODUCT_ID_CORSAIR_1000D) },
->  	{ }
->  };
-> 
-> -static struct usb_driver ccp_driver = {
-> +static struct hid_driver ccp_driver = {
->  	.name = "corsair-cpro",
-> +	.id_table = ccp_devices,
->  	.probe = ccp_probe,
-> -	.disconnect = ccp_disconnect,
-> -	.id_table = ccp_devices
-> +	.remove = ccp_remove,
-> +	.raw_event = ccp_raw_event,
->  };
-> 
-> -MODULE_DEVICE_TABLE(usb, ccp_devices);
-> +MODULE_DEVICE_TABLE(hid, ccp_devices);
->  MODULE_LICENSE("GPL");
-> 
-> -module_usb_driver(ccp_driver);
-> +static int __init ccp_init(void)
-> +{
-> +	return hid_register_driver(&ccp_driver);
-> +}
-> +
-> +static void __exit ccp_exit(void)
-> +{
-> +	hid_unregister_driver(&ccp_driver);
-> +}
-> +
-> +/* make sure, it is loaded after hid */
-> +late_initcall(ccp_init);
-> +module_exit(ccp_exit);
-> --
-> 2.27.0
