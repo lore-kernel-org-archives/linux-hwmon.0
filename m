@@ -2,182 +2,124 @@ Return-Path: <SRS0=YkMd=A2=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D51FC433DF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Jul 2020 20:41:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FCA3C433E1
+	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Jul 2020 21:39:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 065982065F
-	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Jul 2020 20:41:30 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="hQlqcyEG"
+	by mail.kernel.org (Postfix) with ESMTP id 3EC33206F5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Jul 2020 21:39:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1594849160;
+	bh=2fMIFdJWMxMZMLxUPhbRA/eCK4AngiF2WrHPJI3R26U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=cmb1eSFQ3D328BgkgQ7giLWM33rcqU4jgldmGsJsV7YnqjiYf7manzhC3f/8uSJRk
+	 C1U6T/isjnqLGbj/r2ZJWQPTAWutvIiP4Q9yMBW+YAbA2eWP1UMFA0aNLlMUAR5YNB
+	 8i4boOD07vMguacbbbvvidsc7mOnGTlBC7Qd7TVI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726715AbgGOUl2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 15 Jul 2020 16:41:28 -0400
-Received: from ssl.serverraum.org ([176.9.125.105]:47993 "EHLO
-        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726491AbgGOUl2 (ORCPT
+        id S1726786AbgGOVjU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 15 Jul 2020 17:39:20 -0400
+Received: from mail-il1-f195.google.com ([209.85.166.195]:39130 "EHLO
+        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726479AbgGOVjT (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 15 Jul 2020 16:41:28 -0400
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 71B5922F2E;
-        Wed, 15 Jul 2020 22:41:25 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1594845686;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Q3U1SBlUinuhJl85Sa7kxkMj4b/Hr+xewNJibfLEqa4=;
-        b=hQlqcyEGsOVJe8ki27bM0+KSN+OCVOGswOIHehFP1dm0qd6dipPO3oo/L/wS1eVkX+PjVm
-        0SFJ8KAlGWHXIQ7OMAkMDh5iLsvJe2Hq9hj0tYmRZ38nXzdFfbWodOAdvpk/46dwyXR/sf
-        93Hvn3zCQTK2J/heKqDRRN15nXhUsxU=
+        Wed, 15 Jul 2020 17:39:19 -0400
+Received: by mail-il1-f195.google.com with SMTP id k6so3312890ili.6;
+        Wed, 15 Jul 2020 14:39:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vrkUh7wwexXk5hb+g44Ui8rq5L2tuZFeK1IjsvUGjNk=;
+        b=SfDrFOZ0Affo3xmvd7bBCIeM3Ag0vr1FKzP16pfpqM7sjip4E6wsOVneypBySHU+GK
+         LbiLmzBfPI3UImW58IL1d2qWVC3faiC6Tpt9hyq4OUAmoG6Fb6mKcEcq2sTTHi7PULo3
+         Im2Q4kP+Gn3gm3kP046TMEQqkO6ObfBRPeV2QSdvYprqW6LttSV/PeSrK67qUaK/MPsl
+         WvRQuUQ1Q0N9iFdWrdbdfSkCLCFzuEk7UItLRbjsUK5eAdwX0pehKZ2zU+Ty/1cAsMW2
+         BJ6Edd5SxdzmQoHVtr+wJ0EBlJvNXgDs/wJP1clllDtQw83I7zLfXb6wbueRvn1O66gP
+         pDZw==
+X-Gm-Message-State: AOAM530ewB24Fe/uy9kgLWLYMBLSK0YCSq6UgLGTaWKE7KdSpfZBM8gd
+        zDUzchqB1Eb7ucpNpVxlXke/6G6SJg==
+X-Google-Smtp-Source: ABdhPJwEDw0qx3Zkz0lSKaCfP+LFe1k0hgRoQ3IJ01pLg5UrHij2iLaerPQHDAmLW5Gj/Aj12Sc1fw==
+X-Received: by 2002:a92:cf42:: with SMTP id c2mr1593003ilr.13.1594849158597;
+        Wed, 15 Jul 2020 14:39:18 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id w4sm1737856ioc.23.2020.07.15.14.39.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jul 2020 14:39:17 -0700 (PDT)
+Received: (nullmailer pid 862187 invoked by uid 1000);
+        Wed, 15 Jul 2020 21:39:17 -0000
+Date:   Wed, 15 Jul 2020 15:39:17 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     "Daniel M. Weeks" <dan@danweeks.net>
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: hwmon: Correct vendor for mcp980x
+Message-ID: <20200715213917.GA818608@bogus>
+References: <20200703153748.GA16156@dev.danweeks.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Wed, 15 Jul 2020 22:41:25 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v5 07/13] pwm: add support for sl28cpld PWM controller
-In-Reply-To: <20200715181803.nmgi32tugpbuqvjg@pengutronix.de>
-References: <20200706175353.16404-1-michael@walle.cc>
- <20200706175353.16404-8-michael@walle.cc>
- <20200709085006.b54ype3p4yu64upl@pengutronix.de>
- <72858253a9094074e9c8cd7a4e1db09f@walle.cc>
- <20200713084750.qj4hquzd6uz6y526@pengutronix.de>
- <c0594c34c712ce26b3936d42c92d2361@walle.cc>
- <20200714160856.rjqi7lv63geil3hm@pengutronix.de>
- <eedceb44cba9b54e0634f0e8e4f96f70@walle.cc>
- <20200715163620.xhi24mct5b64qpyp@pengutronix.de>
- <7d8e9f524f0fd81be282be0be50d16ad@walle.cc>
- <20200715181803.nmgi32tugpbuqvjg@pengutronix.de>
-User-Agent: Roundcube Webmail/1.4.7
-Message-ID: <8debe0ee9aff2c49a7567069d7bb9477@walle.cc>
-X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200703153748.GA16156@dev.danweeks.net>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Uwe,
+On Fri, Jul 03, 2020 at 11:37:48AM -0400, Daniel M. Weeks wrote:
+> Signed-off-by: Daniel M. Weeks <dan@danweeks.net>
 
-Am 2020-07-15 20:18, schrieb Uwe Kleine-König:
-> On Wed, Jul 15, 2020 at 07:45:10PM +0200, Michael Walle wrote:
->> 
->> Am 2020-07-15 18:36, schrieb Uwe Kleine-König:
->> > On Tue, Jul 14, 2020 at 11:09:28PM +0200, Michael Walle wrote:
->> > > > My wishlist (just as it comes to my mind, so no guarantee of
->> > > > completeness):
->> > > >
->> > > >  - can do 0% duty cycle for all supported period lengths
->> > > >  - can do 100% duty cycle for all supported period lengths
->> > > >  - supports both polarities
->> > > >  - supports immediate change of configuration and after completion of
->> > > >    the currently running period
->> > > >  - atomic update (i.e. if you go from configuration A to configuration B
->> > > >    the hardware guarantees to only emit periods of type A and then type
->> > > >    B. (Depending on the item above, the last A period might be cut off.)
->> > >
->> > > We actually discussed this, because the implementation would be
->> > > easier. But
->> > > if the change takes place immediately you might end up with a longer
->> > > duty
->> > > cycle. Assume the PWM runs at 80% duty cycle and starts with the
->> > > on-period.
->> > > If you now change that to 50% you might end up with one successive
->> > > duty
->> > > cycle of "130%". Eg. the 80% of the old and right after that you
->> > > switch to
->> > > the new 50% and then you'd have a high output which corresponds to a
->> > > 130%
->> > > cycle. I don't know if that is acceptable for all applications.
->> >
->> > I thought this is a "change takes place immediately" implementation?! So
->> > these problems are actually real here. (And this not happening is
->> > exactly
->> > my wish here. Is there a mis-understanding?)
->> 
->> I wasn't talking about the sl28cpld btw. What is the difference 
->> between
->> your proposed "change take place immediately" and "after the cycle".
->> I understand how the after the cycle should work. But how would the
->> immediate change work in your ideal PWM?
+Commit message? Isn't this going to break any users? Or we rely on i2c 
+stripping the vendor?
+
+> ---
+>  Documentation/devicetree/bindings/hwmon/lm75.txt | 2 +-
+>  drivers/hwmon/lm75.c                             | 8 ++++----
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 > 
-> If the PWM is running at 1/3 duty cycle and reconfigured for 2/3, then
-> the two scenarios are (the * marks the moment where pwm_apply_state() 
-> is
-> called, ^ marks the start of a period):
-> 
-> immediately:
-> 
->   __       __    _____    _____
->  /  \_____/  \__/     \__/
->  ^        ^     ^        ^
->                 *
-
-Ok lets assume 2/3 and change it to 1/3:
-
-    ____     ______      __
-   /    \___/      \____/  \____
-   ^        ^   ^       ^
-                *
-This will then have a longer on period than any of the settings.
-
-> and with my ideal PWM I can choose which of the two behaviours I want.
-
-Ahh, that I've missed.
-
->> > > > > > What about disable()?
->> > > > >
->> > > > > Mhh well, it would do one 100% cycle.. mhh ;) Lets see if there we can
->> > > > > fix that (in hardware), not much we can do in the driver here. We are
->> > > > > _very_ constraint in size, therefore all that little edge cases fall
->> > > > > off
->> > > > > the table.
->> > > >
->> > > > You're saying that on disable the hardware emits a constant high level
->> > > > for one cycle? I hope not ...
->> > >
->> > > Mh, I was mistaken, disabling the PWM will turn it off immediately,
->> > > but
->> >
->> > And does turn off mean, the output gets inactive?
->> > If so you might also disable the hardware if a 0% duty cycle is
->> > configured assuming this saves some energy without modifying the
->> > resulting wave form.
->> 
->> Disabling it has some side effects like switching to another function
->> for this multi function pin. So I'd rather keep it on ;)
-> 
-> So IMHO you should also keep it on when pwm_apply_state is called with
-> state.enabled = false to ensure a low output.
-
-That won't work either, because that is how you would turn on that multi
-function. Ie. it is GPIO (default input) as long as the PWM is not 
-enabled,
-otherwise its PWM.
-
--michael
+> diff --git a/Documentation/devicetree/bindings/hwmon/lm75.txt b/Documentation/devicetree/bindings/hwmon/lm75.txt
+> index 273616702c51..e5bb554cd2c3 100644
+> --- a/Documentation/devicetree/bindings/hwmon/lm75.txt
+> +++ b/Documentation/devicetree/bindings/hwmon/lm75.txt
+> @@ -14,10 +14,10 @@ Required properties:
+>  		"maxim,max6626",
+>  		"maxim,max31725",
+>  		"maxim,max31726",
+> -		"maxim,mcp980x",
+>  		"nxp,pct2075",
+>  		"st,stds75",
+>  		"st,stlm75",
+> +		"microchip,mcp980x",
+>  		"microchip,tcn75",
+>  		"ti,tmp100",
+>  		"ti,tmp101",
+> diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
+> index ba0be48aeadd..a8cfc7e4a685 100644
+> --- a/drivers/hwmon/lm75.c
+> +++ b/drivers/hwmon/lm75.c
+> @@ -690,10 +690,6 @@ static const struct of_device_id __maybe_unused lm75_of_match[] = {
+>  		.compatible = "maxim,max31726",
+>  		.data = (void *)max31725
+>  	},
+> -	{
+> -		.compatible = "maxim,mcp980x",
+> -		.data = (void *)mcp980x
+> -	},
+>  	{
+>  		.compatible = "nxp,pct2075",
+>  		.data = (void *)pct2075
+> @@ -706,6 +702,10 @@ static const struct of_device_id __maybe_unused lm75_of_match[] = {
+>  		.compatible = "st,stlm75",
+>  		.data = (void *)stlm75
+>  	},
+> +	{
+> +		.compatible = "microchip,mcp980x",
+> +		.data = (void *)mcp980x
+> +	},
+>  	{
+>  		.compatible = "microchip,tcn75",
+>  		.data = (void *)tcn75
+> -- 
+> Daniel M. Weeks
