@@ -2,121 +2,310 @@ Return-Path: <SRS0=YkMd=A2=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62AFDC433DF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Jul 2020 15:10:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D325EC433E1
+	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Jul 2020 15:14:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 427F02065D
-	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Jul 2020 15:10:05 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b8NsdDUk"
+	by mail.kernel.org (Postfix) with ESMTP id B62C520658
+	for <linux-hwmon@archiver.kernel.org>; Wed, 15 Jul 2020 15:14:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726370AbgGOPKF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 15 Jul 2020 11:10:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57726 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726332AbgGOPKE (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 15 Jul 2020 11:10:04 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A59EC061755;
-        Wed, 15 Jul 2020 08:10:04 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id t15so3108174pjq.5;
-        Wed, 15 Jul 2020 08:10:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=XNp2mtzWkyOXrH3uMDe1zxno4jUg2B4E5FPg/MLAXcM=;
-        b=b8NsdDUkMwwRdLtOlm0ekKerAdkiGqQAUJ9dGPA7igyMOfKkcsP8mxHkmacLATgCO8
-         PEGsMQndtBRCdDTgupeRuUbPo5/T0f1W7zb8ABG4Hl7q4kgpOSCfvXEtn4eet/X42CkE
-         q7RSlxrZyIq3npSOmxfCOQ2VyFcwKX7fw3ehNsysiisIt72D1iiBp4hJMv0QztiCDuDe
-         aspUcslUldMxATzW27TQt8g7YUWXvb1aJBeTnslaN/QMKqbc0r8rE7Uvhm/3tONUVq5M
-         VmARrFgna9o0qccrA4LWqyDwBE8CdMgZOk+TAf6z9NtfLXVyOn4ocwVT/qU7/5cXE3AN
-         bKJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=XNp2mtzWkyOXrH3uMDe1zxno4jUg2B4E5FPg/MLAXcM=;
-        b=AhzqzN0SRS9ujnAYacRURjUF22zEq0O3mGHa98eYFOm7NCJvlTDBXhxt0N4cAec9Yk
-         sGMztwnYpOYBVtG9O6hETVPgSkkEuJCPjQbU3rE3qAbBgVAOqW7/VduiAiQzil1abxj6
-         rd7/tkxVU2rTiykW/F4wvHTV0X7VjTkeuETrZld3EZuPzLgxYmc7k2fGLGHW7bu2vIqk
-         xfNUkXUNPhKMNAjKSi6IetKJCQFygfbDtOU9wil+v/yYv9Nuosbc3+OcVozFmea17rVf
-         R9uAvWIp5NcklOqKC2Sy05E7bkOnM5lBJIMcQe2kizcZJq7fXZBC3sH5htDhuVigj4Pr
-         +RFg==
-X-Gm-Message-State: AOAM532HtHNcTDv1DeSfBbP8gOV4l/5g5C3tZhZq12LEgt0AJ7c8Cm3N
-        n7F8lHR2mNXoE7/+E56mDdo=
-X-Google-Smtp-Source: ABdhPJzEhKi3066t5hrZzbF5B5pcNZrvyrz/2+31gySXijMDTCgvafm/3iSfg/xWcBrJyawyiCgE0Q==
-X-Received: by 2002:a17:902:c142:: with SMTP id 2mr8930549plj.222.1594825804046;
-        Wed, 15 Jul 2020 08:10:04 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w123sm2489460pfd.2.2020.07.15.08.10.03
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 15 Jul 2020 08:10:03 -0700 (PDT)
-Date:   Wed, 15 Jul 2020 08:10:02 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     jaap aarts <jaap.aarts1@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-usb@vger.kernel.org, Marius Zachmann <mail@mariuszachmann.de>
-Subject: Re: [PATCH] hwmon: add fan/pwm driver for corsair h100i platinum
-Message-ID: <20200715151002.GA120273@roeck-us.net>
-References: <20200714100337.48719-1-jaap.aarts1@gmail.com>
- <20200715030740.GB164279@roeck-us.net>
- <CACtzdJ1XNjF7d4WcMCtxWkGiWHoF37aQfYNMn+9UtKHeo07X1g@mail.gmail.com>
- <20200715144737.GD201840@roeck-us.net>
- <CACtzdJ2c6H+hbbt42Y4mjF_xgbJEiPEROK-hawGxqanH_ZHpug@mail.gmail.com>
+        id S1725885AbgGOPO2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 15 Jul 2020 11:14:28 -0400
+Received: from ms-10.1blu.de ([178.254.4.101]:35016 "EHLO ms-10.1blu.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725900AbgGOPO2 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 15 Jul 2020 11:14:28 -0400
+Received: from [78.43.71.214] (helo=marius.fritz.box)
+        by ms-10.1blu.de with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.90_1)
+        (envelope-from <mail@mariuszachmann.de>)
+        id 1jvj71-0008LG-7v; Wed, 15 Jul 2020 17:14:23 +0200
+From:   Marius Zachmann <mail@mariuszachmann.de>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Marius Zachmann <mail@mariuszachmann.de>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] hwmon: corsair-cpro: Change to HID driver
+Date:   Wed, 15 Jul 2020 17:14:19 +0200
+Message-Id: <20200715151419.43134-1-mail@mariuszachmann.de>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACtzdJ2c6H+hbbt42Y4mjF_xgbJEiPEROK-hawGxqanH_ZHpug@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
+X-Con-Id: 241080
+X-Con-U: 0-mail
+X-Originating-IP: 78.43.71.214
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Jul 15, 2020 at 05:03:52PM +0200, jaap aarts wrote:
-> On Wed, 15 Jul 2020 at 16:47, Guenter Roeck <linux@roeck-us.net> wrote:
-> >
-> > On Wed, Jul 15, 2020 at 01:18:58PM +0200, jaap aarts wrote:
-> > > On Wed, 15 Jul 2020 at 05:07, Guenter Roeck <linux@roeck-us.net> wrote:
-> > > >
-> > > > On Tue, Jul 14, 2020 at 12:03:38PM +0200, jaap aarts wrote:
-> > > > > Adds fan/pwm support for H1000i platinum.
-> > > > > Custom temp/fan curves are not supported, however
-> > > > > the presets found in the proprietary drivers are avaiable.
-> > > > >
-> > > > > Signed-off-by: Jaap Aarts <jaap.aarts1@gmail.com>
-> > > >
-> > > > +Marius Zachmann for input.
-> > > >
-> > > > Questions:
-> > > > - Does this really have to be a different driver or can it be merged into
-> > > >   the corsair-cpro driver ?
-> > > I cannot find this driver at the moment, the only corsair driver I can find
-> > > is the HID driver. As far as I know all asetek gen 6 products use the same
-> > > interface. Out of curiosity I contacted asetek to confirm, but other userland
-> > > drivers have used the same code for all products of previous generations.
-> > > > - What about HID vs. USB driver ?
-> > > This is not really a HID. I asked in the kernel newbies mailing list and
-> > > I was told HWMON is probably the right place. Most of the code is
-> > > related to HWMON so this seems to be the right place to me as well.
-> >
-> > Question is if this identifies itself as HID device. If it does,
-> > it would either have to be blacklisted in the HID core, or it would
-> > have to be implemented as hid driver. The latter would be preferred,
-> > since otherwise a userspace application accessing it directly would
-> > no longer work. Either case, the driver can and should still reside
-> > in hwmon; that was not the question.
-> Thanks for the clarification, lsusb lists bInterfaceClass as 255 or
-> "Vendor Specific Class", so not as a HID.
+This changes corsair-cpro to a hid driver using hid reports.
 
-Ok.
+Signed-off-by: Marius Zachmann <mail@mariuszachmann.de>
 
-Thanks,
-Guenter
+---
+Changes from v1
+- add comment at the beginning about using hid and hidraw
+- use hwmon_device_register_with_info and hwmon_device_unregister
+- use a define for timeout
+
+---
+ drivers/hid/hid-quirks.c     |   2 -
+ drivers/hwmon/Kconfig        |   2 +-
+ drivers/hwmon/corsair-cpro.c | 124 ++++++++++++++++++++++++++---------
+ 3 files changed, 95 insertions(+), 35 deletions(-)
+
+diff --git a/drivers/hid/hid-quirks.c b/drivers/hid/hid-quirks.c
+index 7b7bc7737c53..ca8b5c261c7c 100644
+--- a/drivers/hid/hid-quirks.c
++++ b/drivers/hid/hid-quirks.c
+@@ -699,8 +699,6 @@ static const struct hid_device_id hid_ignore_list[] = {
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_AXENTIA, USB_DEVICE_ID_AXENTIA_FM_RADIO) },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_BERKSHIRE, USB_DEVICE_ID_BERKSHIRE_PCWD) },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_CIDC, 0x0103) },
+-	{ HID_USB_DEVICE(USB_VENDOR_ID_CORSAIR, 0x0c10) },
+-	{ HID_USB_DEVICE(USB_VENDOR_ID_CORSAIR, 0x1d00) },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_CYGNAL, USB_DEVICE_ID_CYGNAL_RADIO_SI470X) },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_CYGNAL, USB_DEVICE_ID_CYGNAL_RADIO_SI4713) },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_CMEDIA, USB_DEVICE_ID_CM109) },
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 8b046a5dfa40..c603d8c8e3d2 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -441,7 +441,7 @@ config SENSORS_BT1_PVT_ALARMS
+
+ config SENSORS_CORSAIR_CPRO
+ 	tristate "Corsair Commander Pro controller"
+-	depends on USB
++	depends on HID
+ 	help
+ 	  If you say yes here you get support for the Corsair Commander Pro
+ 	  controller.
+diff --git a/drivers/hwmon/corsair-cpro.c b/drivers/hwmon/corsair-cpro.c
+index fe625190e3a1..ba378574b073 100644
+--- a/drivers/hwmon/corsair-cpro.c
++++ b/drivers/hwmon/corsair-cpro.c
+@@ -2,16 +2,21 @@
+ /*
+  * corsair-cpro.c - Linux driver for Corsair Commander Pro
+  * Copyright (C) 2020 Marius Zachmann <mail@mariuszachmann.de>
++ *
++ * This driver uses hid reports to communicate with the device to allow hidraw userspace drivers
++ * still being used. The device does not use report ids. When using hidraw and this driver
++ * simultaniously, reports could be switched.
+  */
+
+ #include <linux/bitops.h>
++#include <linux/completion.h>
++#include <linux/hid.h>
+ #include <linux/hwmon.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/mutex.h>
+ #include <linux/slab.h>
+ #include <linux/types.h>
+-#include <linux/usb.h>
+
+ #define USB_VENDOR_ID_CORSAIR			0x1b1c
+ #define USB_PRODUCT_ID_CORSAIR_COMMANDERPRO	0x0c10
+@@ -20,6 +25,7 @@
+ #define OUT_BUFFER_SIZE		63
+ #define IN_BUFFER_SIZE		16
+ #define LABEL_LENGTH		11
++#define REQ_TIMEOUT		300
+
+ #define CTL_GET_TMP_CNCT	0x10	/*
+ 					 * returns in bytes 1-4 for each temp sensor:
+@@ -62,7 +68,9 @@
+ #define NUM_TEMP_SENSORS	4
+
+ struct ccp_device {
+-	struct usb_device *udev;
++	struct hid_device *hdev;
++	struct device *hwmon_dev;
++	struct completion wait_input_report;
+ 	struct mutex mutex; /* whenever buffer is used, lock before send_usb_cmd */
+ 	u8 *buffer;
+ 	int pwm[6];
+@@ -75,7 +83,7 @@ struct ccp_device {
+ /* send command, check for error in response, response in ccp->buffer */
+ static int send_usb_cmd(struct ccp_device *ccp, u8 command, u8 byte1, u8 byte2, u8 byte3)
+ {
+-	int actual_length;
++	unsigned long t;
+ 	int ret;
+
+ 	memset(ccp->buffer, 0x00, OUT_BUFFER_SIZE);
+@@ -84,26 +92,39 @@ static int send_usb_cmd(struct ccp_device *ccp, u8 command, u8 byte1, u8 byte2,
+ 	ccp->buffer[2] = byte2;
+ 	ccp->buffer[3] = byte3;
+
+-	ret = usb_bulk_msg(ccp->udev, usb_sndintpipe(ccp->udev, 2), ccp->buffer, OUT_BUFFER_SIZE,
+-			   &actual_length, 1000);
+-	if (ret)
+-		return ret;
++	reinit_completion(&ccp->wait_input_report);
+
+-	/* response needs to be received every time */
+-	ret = usb_bulk_msg(ccp->udev, usb_rcvintpipe(ccp->udev, 1), ccp->buffer, IN_BUFFER_SIZE,
+-			   &actual_length, 1000);
+-	if (ret)
++	ret = hid_hw_output_report(ccp->hdev, ccp->buffer, OUT_BUFFER_SIZE);
++	if (ret < 0)
+ 		return ret;
+
++	t = wait_for_completion_timeout(&ccp->wait_input_report, msecs_to_jiffies(REQ_TIMEOUT));
++	if (!t)
++		return -ETIMEDOUT;
++
+ 	/* first byte of response is error code */
+ 	if (ccp->buffer[0] != 0x00) {
+-		dev_dbg(&ccp->udev->dev, "device response error: %d", ccp->buffer[0]);
++		hid_dbg(ccp->hdev, "device response error: %d", ccp->buffer[0]);
+ 		return -EIO;
+ 	}
+
+ 	return 0;
+ }
+
++static int ccp_raw_event(struct hid_device *hdev, struct hid_report *report, u8 *data, int size)
++{
++	struct ccp_device *ccp = hid_get_drvdata(hdev);
++
++	/* only copy buffer when requested */
++	if (completion_done(&ccp->wait_input_report))
++		return 0;
++
++	memcpy(ccp->buffer, data, min(IN_BUFFER_SIZE, size));
++	complete(&ccp->wait_input_report);
++
++	return 0;
++}
++
+ /* requests and returns single data values depending on channel */
+ static int get_data(struct ccp_device *ccp, int command, int channel)
+ {
+@@ -437,57 +458,98 @@ static int get_temp_cnct(struct ccp_device *ccp)
+ 	return 0;
+ }
+
+-static int ccp_probe(struct usb_interface *intf, const struct usb_device_id *id)
++static int ccp_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ {
+-	struct device *hwmon_dev;
+ 	struct ccp_device *ccp;
+ 	int ret;
+
+-	ccp = devm_kzalloc(&intf->dev, sizeof(*ccp), GFP_KERNEL);
++	ccp = devm_kzalloc(&hdev->dev, sizeof(*ccp), GFP_KERNEL);
+ 	if (!ccp)
+ 		return -ENOMEM;
+
+-	ccp->buffer = devm_kmalloc(&intf->dev, OUT_BUFFER_SIZE, GFP_KERNEL);
++	ccp->buffer = devm_kmalloc(&hdev->dev, OUT_BUFFER_SIZE, GFP_KERNEL);
+ 	if (!ccp->buffer)
+ 		return -ENOMEM;
+
++	ret = hid_parse(hdev);
++	if (ret)
++		return ret;
++
++	ret = hid_hw_start(hdev, HID_CONNECT_HIDRAW);
++	if (ret)
++		return ret;
++
++	ret = hid_hw_open(hdev);
++	if (ret)
++		goto out_hw_stop;
++
++	ccp->hdev = hdev;
++	hid_set_drvdata(hdev, ccp);
+ 	mutex_init(&ccp->mutex);
++	init_completion(&ccp->wait_input_report);
+
+-	ccp->udev = interface_to_usbdev(intf);
++	hid_device_io_start(hdev);
+
+ 	/* temp and fan connection status only updates when device is powered on */
+ 	ret = get_temp_cnct(ccp);
+ 	if (ret)
+-		return ret;
++		goto out_hw_close;
+
+ 	ret = get_fan_cnct(ccp);
+ 	if (ret)
+-		return ret;
++		goto out_hw_close;
++	ccp->hwmon_dev = hwmon_device_register_with_info(&hdev->dev, "corsaircpro",
++							 ccp, &ccp_chip_info, 0);
++	if (IS_ERR(ccp->hwmon_dev)) {
++		ret = PTR_ERR(ccp->hwmon_dev);
++		goto out_hw_close;
++	}
+
+-	hwmon_dev = devm_hwmon_device_register_with_info(&intf->dev, "corsaircpro", ccp,
+-							 &ccp_chip_info, 0);
++	return 0;
+
+-	return PTR_ERR_OR_ZERO(hwmon_dev);
++out_hw_close:
++	hid_hw_close(hdev);
++out_hw_stop:
++	hid_hw_stop(hdev);
++	return ret;
+ }
+
+-static void ccp_disconnect(struct usb_interface *intf)
++static void ccp_remove(struct hid_device *hdev)
+ {
++	struct ccp_device *ccp = hid_get_drvdata(hdev);
++
++	hwmon_device_unregister(ccp->hwmon_dev);
++	hid_hw_close(hdev);
++	hid_hw_stop(hdev);
+ }
+
+-static const struct usb_device_id ccp_devices[] = {
+-	{ USB_DEVICE(USB_VENDOR_ID_CORSAIR, USB_PRODUCT_ID_CORSAIR_COMMANDERPRO) },
+-	{ USB_DEVICE(USB_VENDOR_ID_CORSAIR, USB_PRODUCT_ID_CORSAIR_1000D) },
++static const struct hid_device_id ccp_devices[] = {
++	{ HID_USB_DEVICE(USB_VENDOR_ID_CORSAIR, USB_PRODUCT_ID_CORSAIR_COMMANDERPRO) },
++	{ HID_USB_DEVICE(USB_VENDOR_ID_CORSAIR, USB_PRODUCT_ID_CORSAIR_1000D) },
+ 	{ }
+ };
+
+-static struct usb_driver ccp_driver = {
++static struct hid_driver ccp_driver = {
+ 	.name = "corsair-cpro",
++	.id_table = ccp_devices,
+ 	.probe = ccp_probe,
+-	.disconnect = ccp_disconnect,
+-	.id_table = ccp_devices
++	.remove = ccp_remove,
++	.raw_event = ccp_raw_event,
+ };
+
+-MODULE_DEVICE_TABLE(usb, ccp_devices);
++MODULE_DEVICE_TABLE(hid, ccp_devices);
+ MODULE_LICENSE("GPL");
+
+-module_usb_driver(ccp_driver);
++static int __init ccp_init(void)
++{
++	return hid_register_driver(&ccp_driver);
++}
++
++static void __exit ccp_exit(void)
++{
++	hid_unregister_driver(&ccp_driver);
++}
++
++/* make sure it is loaded after hid */
++late_initcall(ccp_init);
++module_exit(ccp_exit);
+--
+2.27.0
