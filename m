@@ -2,180 +2,289 @@ Return-Path: <SRS0=cJ4m=A6=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,LONGWORDS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC1A6C433E0
-	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Jul 2020 14:49:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CBEBFC433E2
+	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Jul 2020 17:04:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B1BBC2080D
-	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Jul 2020 14:49:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B1F8120B1F
+	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Jul 2020 17:04:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726024AbgGSOtO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 19 Jul 2020 10:49:14 -0400
-Received: from mga03.intel.com ([134.134.136.65]:45058 "EHLO mga03.intel.com"
+        id S1726009AbgGSREc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 19 Jul 2020 13:04:32 -0400
+Received: from smtp.al2klimov.de ([78.46.175.9]:59404 "EHLO smtp.al2klimov.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725988AbgGSOtO (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 19 Jul 2020 10:49:14 -0400
-IronPort-SDR: mvJJr7qbplzNBO7qkiyg9XpqS3AKxKS6DXrF6LjZFN7SnuEza1lqYCMrduPi3m7MXT7og0XJRL
- bV83Wu2h8TOg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9687"; a="149796138"
-X-IronPort-AV: E=Sophos;i="5.75,370,1589266800"; 
-   d="scan'208";a="149796138"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2020 07:49:13 -0700
-IronPort-SDR: ZatwKFqefmYrAb6szTsMD/dkAdYBQcAzv+nkchdR0Tz6PCvH7cZIk5TxTk66dPmCx78Xl5Fh46
- xJ9NWHnSH+Bg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,370,1589266800"; 
-   d="scan'208";a="301043255"
-Received: from lkp-server02.sh.intel.com (HELO 50058c6ee6fc) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 19 Jul 2020 07:49:12 -0700
-Received: from kbuild by 50058c6ee6fc with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1jxAcp-0001AJ-I1; Sun, 19 Jul 2020 14:49:11 +0000
-Date:   Sun, 19 Jul 2020 22:47:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon-next] BUILD SUCCESS
- a346ff429dd1e89bdd9b266d1025a982fca79ea5
-Message-ID: <5f145d1f.gy0V2W+eXlRfZF/p%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1725783AbgGSREc (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 19 Jul 2020 13:04:32 -0400
+Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
+        by smtp.al2klimov.de (Postfix) with ESMTPA id 68921BC062;
+        Sun, 19 Jul 2020 17:04:26 +0000 (UTC)
+From:   "Alexander A. Klimov" <grandmaster@al2klimov.de>
+To:     linux@roeck-us.net, jdelvare@suse.com, corbet@lwn.net,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
+Subject: [PATCH for v5.9] docs: hwmon: Replace HTTP links with HTTPS ones
+Date:   Sun, 19 Jul 2020 19:04:20 +0200
+Message-Id: <20200719170420.60399-1-grandmaster@al2klimov.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Spamd-Bar: ++++++
+Authentication-Results: smtp.al2klimov.de;
+        auth=pass smtp.auth=aklimov@al2klimov.de smtp.mailfrom=grandmaster@al2klimov.de
+X-Spam: Yes
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon-next
-branch HEAD: a346ff429dd1e89bdd9b266d1025a982fca79ea5  hwmon: (adm1025) Replace HTTP links with HTTPS ones
+Rationale:
+Reduces attack surface on kernel devs opening the links for MITM
+as HTTPS traffic is much harder to manipulate.
 
-elapsed time: 1365m
+Deterministic algorithm:
+For each file:
+  If not .svg:
+    For each line:
+      If doesn't contain `\bxmlns\b`:
+        For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
+	  If neither `\bgnu\.org/license`, nor `\bmozilla\.org/MPL\b`:
+            If both the HTTP and HTTPS versions
+            return 200 OK and serve the same content:
+              Replace HTTP with HTTPS.
 
-configs tested: 110
-configs skipped: 5
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-arm                                 defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm64                            allmodconfig
-arm64                             allnoconfig
-arm                               allnoconfig
-arc                         haps_hs_defconfig
-powerpc                      ppc6xx_defconfig
-powerpc                    gamecube_defconfig
-mips                  cavium_octeon_defconfig
-mips                malta_qemu_32r6_defconfig
-arm                        vexpress_defconfig
-sh                             shx3_defconfig
-arm                      integrator_defconfig
-c6x                         dsk6455_defconfig
-m68k                         amcore_defconfig
-arm                          simpad_defconfig
-openrisc                         allyesconfig
-mips                   sb1250_swarm_defconfig
-arm                        spear6xx_defconfig
-arm                            hisi_defconfig
-powerpc64                        alldefconfig
-arm                        spear3xx_defconfig
-h8300                       h8s-sim_defconfig
-m68k                       m5475evb_defconfig
-sh                          r7780mp_defconfig
-arm                            mps2_defconfig
-um                            kunit_defconfig
-powerpc                           allnoconfig
-mips                         tb0219_defconfig
-csky                             alldefconfig
-sh                        edosk7705_defconfig
-i386                             allyesconfig
-i386                                defconfig
-i386                              debian-10.3
-i386                              allnoconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                              allnoconfig
-m68k                           sun3_defconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-nios2                            allyesconfig
-openrisc                            defconfig
-c6x                              allyesconfig
-c6x                               allnoconfig
-nds32                               defconfig
-nds32                             allnoconfig
-csky                             allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-h8300                            allmodconfig
-xtensa                              defconfig
-arc                                 defconfig
-arc                              allyesconfig
-sh                               allmodconfig
-sh                                allnoconfig
-microblaze                        allnoconfig
-mips                             allyesconfig
-mips                              allnoconfig
-mips                             allmodconfig
-parisc                            allnoconfig
-parisc                              defconfig
-parisc                           allyesconfig
-parisc                           allmodconfig
-powerpc                          allyesconfig
-powerpc                          rhel-kconfig
-powerpc                          allmodconfig
-powerpc                             defconfig
-i386                 randconfig-a001-20200719
-i386                 randconfig-a006-20200719
-i386                 randconfig-a002-20200719
-i386                 randconfig-a005-20200719
-i386                 randconfig-a003-20200719
-i386                 randconfig-a004-20200719
-i386                 randconfig-a015-20200719
-i386                 randconfig-a011-20200719
-i386                 randconfig-a016-20200719
-i386                 randconfig-a012-20200719
-i386                 randconfig-a013-20200719
-i386                 randconfig-a014-20200719
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-s390                             allyesconfig
-s390                              allnoconfig
-s390                             allmodconfig
-s390                                defconfig
-sparc                            allyesconfig
-sparc                               defconfig
-sparc64                             defconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-sparc64                          allmodconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                               rhel-8.3
-x86_64                                  kexec
-x86_64                                   rhel
-x86_64                                    lkp
-x86_64                              fedora-25
-
+Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ Continuing my work started at 93431e0607e5.
+ See also: git log --oneline '--author=Alexander A. Klimov <grandmaster@al2klimov.de>' v5.7..master
+ (Actually letting a shell for loop submit all this stuff for me.)
+
+ If there are any URLs to be removed completely
+ or at least not (just) HTTPSified:
+ Just clearly say so and I'll *undo my change*.
+ See also: https://lkml.org/lkml/2020/6/27/64
+
+ If there are any valid, but yet not changed URLs:
+ See: https://lkml.org/lkml/2020/6/26/837
+
+ If you apply the patch, please let me know.
+
+ Sorry again to all maintainers who complained about subject lines.
+ Now I realized that you want an actually perfect prefixes,
+ not just subsystem ones.
+ I tried my best...
+ And yes, *I could* (at least half-)automate it.
+ Impossible is nothing! :)
+
+
+ Documentation/hwmon/adm1275.rst  |  2 +-
+ Documentation/hwmon/lm25066.rst  |  6 +++---
+ Documentation/hwmon/ltc2978.rst  |  6 +++---
+ Documentation/hwmon/max20751.rst |  4 ++--
+ Documentation/hwmon/max34440.rst | 12 ++++++------
+ Documentation/hwmon/pmbus.rst    | 18 +++++++++---------
+ Documentation/hwmon/tps40422.rst |  2 +-
+ 7 files changed, 25 insertions(+), 25 deletions(-)
+
+diff --git a/Documentation/hwmon/adm1275.rst b/Documentation/hwmon/adm1275.rst
+index 49966ed70ec6..ce6528f90e4a 100644
+--- a/Documentation/hwmon/adm1275.rst
++++ b/Documentation/hwmon/adm1275.rst
+@@ -49,7 +49,7 @@ Supported chips:
+ 
+     Addresses scanned: -
+ 
+-    Datasheet: http://www.analog.com/media/en/technical-documentation/data-sheets/ADM1293_1294.pdf
++    Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/ADM1293_1294.pdf
+ 
+ Author: Guenter Roeck <linux@roeck-us.net>
+ 
+diff --git a/Documentation/hwmon/lm25066.rst b/Documentation/hwmon/lm25066.rst
+index 30e6e77fb3c8..9f1d7e4d3ca1 100644
+--- a/Documentation/hwmon/lm25066.rst
++++ b/Documentation/hwmon/lm25066.rst
+@@ -11,9 +11,9 @@ Supported chips:
+ 
+     Datasheets:
+ 
+-	http://www.ti.com/lit/gpn/lm25056
++	https://www.ti.com/lit/gpn/lm25056
+ 
+-	http://www.ti.com/lit/gpn/lm25056a
++	https://www.ti.com/lit/gpn/lm25056a
+ 
+   * National Semiconductor LM25066
+ 
+@@ -55,7 +55,7 @@ Supported chips:
+ 
+ 	Datasheet:
+ 
+-    http://www.ti.com/product/LM5066I
++    https://www.ti.com/product/LM5066I
+ 
+ 
+ Author: Guenter Roeck <linux@roeck-us.net>
+diff --git a/Documentation/hwmon/ltc2978.rst b/Documentation/hwmon/ltc2978.rst
+index bc5270e5a477..b99a63965cfb 100644
+--- a/Documentation/hwmon/ltc2978.rst
++++ b/Documentation/hwmon/ltc2978.rst
+@@ -179,7 +179,7 @@ Supported chips:
+ 
+     Addresses scanned: -
+ 
+-    Datasheet: http://www.analog.com/ltm4680
++    Datasheet: https://www.analog.com/ltm4680
+ 
+   * Analog Devices LTM4686
+ 
+@@ -187,7 +187,7 @@ Supported chips:
+ 
+     Addresses scanned: -
+ 
+-    Datasheet: http://www.analog.com/ltm4686
++    Datasheet: https://www.analog.com/ltm4686
+ 
+   * Analog Devices LTM4700
+ 
+@@ -195,7 +195,7 @@ Supported chips:
+ 
+     Addresses scanned: -
+ 
+-    Datasheet: http://www.analog.com/ltm4700
++    Datasheet: https://www.analog.com/ltm4700
+ 
+ 
+ 
+diff --git a/Documentation/hwmon/max20751.rst b/Documentation/hwmon/max20751.rst
+index fe701e07eaf5..f9febefce02d 100644
+--- a/Documentation/hwmon/max20751.rst
++++ b/Documentation/hwmon/max20751.rst
+@@ -9,9 +9,9 @@ Supported chips:
+ 
+     Addresses scanned: -
+ 
+-    Datasheet: http://datasheets.maximintegrated.com/en/ds/MAX20751.pdf
++    Datasheet: https://datasheets.maximintegrated.com/en/ds/MAX20751.pdf
+ 
+-    Application note: http://pdfserv.maximintegrated.com/en/an/AN5941.pdf
++    Application note: https://pdfserv.maximintegrated.com/en/an/AN5941.pdf
+ 
+ Author: Guenter Roeck <linux@roeck-us.net>
+ 
+diff --git a/Documentation/hwmon/max34440.rst b/Documentation/hwmon/max34440.rst
+index 5744df100a5d..162d289f0814 100644
+--- a/Documentation/hwmon/max34440.rst
++++ b/Documentation/hwmon/max34440.rst
+@@ -9,7 +9,7 @@ Supported chips:
+ 
+     Addresses scanned: -
+ 
+-    Datasheet: http://datasheets.maximintegrated.com/en/ds/MAX34440.pdf
++    Datasheet: https://datasheets.maximintegrated.com/en/ds/MAX34440.pdf
+ 
+   * Maxim MAX34441
+ 
+@@ -19,7 +19,7 @@ Supported chips:
+ 
+     Addresses scanned: -
+ 
+-    Datasheet: http://datasheets.maximintegrated.com/en/ds/MAX34441.pdf
++    Datasheet: https://datasheets.maximintegrated.com/en/ds/MAX34441.pdf
+ 
+   * Maxim MAX34446
+ 
+@@ -29,7 +29,7 @@ Supported chips:
+ 
+     Addresses scanned: -
+ 
+-    Datasheet: http://datasheets.maximintegrated.com/en/ds/MAX34446.pdf
++    Datasheet: https://datasheets.maximintegrated.com/en/ds/MAX34446.pdf
+ 
+   * Maxim MAX34451
+ 
+@@ -39,7 +39,7 @@ Supported chips:
+ 
+     Addresses scanned: -
+ 
+-    Datasheet: http://datasheets.maximintegrated.com/en/ds/MAX34451.pdf
++    Datasheet: https://datasheets.maximintegrated.com/en/ds/MAX34451.pdf
+ 
+   * Maxim MAX34460
+ 
+@@ -49,7 +49,7 @@ Supported chips:
+ 
+     Addresses scanned: -
+ 
+-    Datasheet: http://datasheets.maximintegrated.com/en/ds/MAX34460.pdf
++    Datasheet: https://datasheets.maximintegrated.com/en/ds/MAX34460.pdf
+ 
+   * Maxim MAX34461
+ 
+@@ -59,7 +59,7 @@ Supported chips:
+ 
+     Addresses scanned: -
+ 
+-    Datasheet: http://datasheets.maximintegrated.com/en/ds/MAX34461.pdf
++    Datasheet: https://datasheets.maximintegrated.com/en/ds/MAX34461.pdf
+ 
+ Author: Guenter Roeck <linux@roeck-us.net>
+ 
+diff --git a/Documentation/hwmon/pmbus.rst b/Documentation/hwmon/pmbus.rst
+index 2658ddee70eb..ea2b9b081391 100644
+--- a/Documentation/hwmon/pmbus.rst
++++ b/Documentation/hwmon/pmbus.rst
+@@ -21,11 +21,11 @@ Supported chips:
+ 
+     Datasheets:
+ 
+-	http://www.onsemi.com/pub_link/Collateral/ADP4000-D.PDF
++	https://www.onsemi.com/pub_link/Collateral/ADP4000-D.PDF
+ 
+-	http://www.onsemi.com/pub_link/Collateral/NCP4200-D.PDF
++	https://www.onsemi.com/pub_link/Collateral/NCP4200-D.PDF
+ 
+-	http://www.onsemi.com/pub_link/Collateral/JUNE%202009-%20REV.%200.PDF
++	https://www.onsemi.com/pub_link/Collateral/JUNE%202009-%20REV.%200.PDF
+ 
+   * Lineage Power
+ 
+@@ -53,15 +53,15 @@ Supported chips:
+ 
+     Datasheets:
+ 
+-	http://www.ti.com/lit/gpn/tps40400
++	https://www.ti.com/lit/gpn/tps40400
+ 
+-	http://www.ti.com/lit/gpn/tps544b20
++	https://www.ti.com/lit/gpn/tps544b20
+ 
+-	http://www.ti.com/lit/gpn/tps544b25
++	https://www.ti.com/lit/gpn/tps544b25
+ 
+-	http://www.ti.com/lit/gpn/tps544c20
++	https://www.ti.com/lit/gpn/tps544c20
+ 
+-	http://www.ti.com/lit/gpn/tps544c25
++	https://www.ti.com/lit/gpn/tps544c25
+ 
+   * Maxim MAX20796
+ 
+diff --git a/Documentation/hwmon/tps40422.rst b/Documentation/hwmon/tps40422.rst
+index 8fe3e1c3572e..32a62ccea192 100644
+--- a/Documentation/hwmon/tps40422.rst
++++ b/Documentation/hwmon/tps40422.rst
+@@ -9,7 +9,7 @@ Supported chips:
+ 
+     Addresses scanned: -
+ 
+-    Datasheet: http://www.ti.com/lit/gpn/tps40422
++    Datasheet: https://www.ti.com/lit/gpn/tps40422
+ 
+ Author: Zhu Laiwen <richard.zhu@nsn.com>
+ 
+-- 
+2.27.0
+
