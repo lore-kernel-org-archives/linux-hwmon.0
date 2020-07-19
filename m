@@ -7,33 +7,29 @@ X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 017C2C433E1
-	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Jul 2020 19:05:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38E11C433E1
+	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Jul 2020 19:15:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CFB8B21744
-	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Jul 2020 19:05:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 256F220734
+	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Jul 2020 19:15:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726049AbgGSTFf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 19 Jul 2020 15:05:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46622 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726009AbgGSTFf (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 19 Jul 2020 15:05:35 -0400
-Received: from smtp.al2klimov.de (smtp.al2klimov.de [IPv6:2a01:4f8:c0c:1465::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F4BC0619D2;
-        Sun, 19 Jul 2020 12:05:34 -0700 (PDT)
+        id S1726093AbgGSTPp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 19 Jul 2020 15:15:45 -0400
+Received: from smtp.al2klimov.de ([78.46.175.9]:57588 "EHLO smtp.al2klimov.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726073AbgGSTPp (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 19 Jul 2020 15:15:45 -0400
 Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
-        by smtp.al2klimov.de (Postfix) with ESMTPA id EDEB2BC06F;
-        Sun, 19 Jul 2020 19:05:31 +0000 (UTC)
+        by smtp.al2klimov.de (Postfix) with ESMTPA id 10D43BC063;
+        Sun, 19 Jul 2020 19:15:41 +0000 (UTC)
 From:   "Alexander A. Klimov" <grandmaster@al2klimov.de>
-To:     jdelvare@suse.com, linux@roeck-us.net, corbet@lwn.net,
+To:     linux@roeck-us.net, jdelvare@suse.com, corbet@lwn.net,
         linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
-Subject: [PATCH for v5.9] hwmon: (lm90) Replace HTTP links with HTTPS ones
-Date:   Sun, 19 Jul 2020 21:05:25 +0200
-Message-Id: <20200719190525.61112-1-grandmaster@al2klimov.de>
+Subject: [PATCH for v5.9] hwmon: (lm95234) Replace HTTP links with HTTPS ones
+Date:   Sun, 19 Jul 2020 21:15:34 +0200
+Message-Id: <20200719191534.61181-1-grandmaster@al2klimov.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spamd-Bar: ++++++
@@ -84,57 +80,30 @@ Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
  Impossible is nothing! :)
 
 
- Documentation/hwmon/lm90.rst | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ Documentation/hwmon/lm95234.rst | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/hwmon/lm90.rst b/Documentation/hwmon/lm90.rst
-index 78dfc01b47a2..3da8c6e06a36 100644
---- a/Documentation/hwmon/lm90.rst
-+++ b/Documentation/hwmon/lm90.rst
-@@ -51,7 +51,7 @@ Supported chips:
+diff --git a/Documentation/hwmon/lm95234.rst b/Documentation/hwmon/lm95234.rst
+index e4c14bea5efd..a44e8f529826 100644
+--- a/Documentation/hwmon/lm95234.rst
++++ b/Documentation/hwmon/lm95234.rst
+@@ -9,7 +9,7 @@ Supported chips:
  
-     Datasheet: Publicly available at the ON Semiconductor website
+     Datasheet: Publicly available at the Texas Instruments website
  
--	       http://www.onsemi.com/PowerSolutions/product.do?id=ADM1032
-+	       https://www.onsemi.com/PowerSolutions/product.do?id=ADM1032
+-	       http://www.ti.com/product/lm95233
++	       https://www.ti.com/product/lm95233
  
-   * Analog Devices ADT7461
+   * National Semiconductor / Texas Instruments LM95234
  
-@@ -61,7 +61,7 @@ Supported chips:
+@@ -17,7 +17,7 @@ Supported chips:
  
-     Datasheet: Publicly available at the ON Semiconductor website
+     Datasheet: Publicly available at the Texas Instruments website
  
--	       http://www.onsemi.com/PowerSolutions/product.do?id=ADT7461
-+	       https://www.onsemi.com/PowerSolutions/product.do?id=ADT7461
+-	       http://www.ti.com/product/lm95234
++	       https://www.ti.com/product/lm95234
  
-   * Analog Devices ADT7461A
- 
-@@ -71,7 +71,7 @@ Supported chips:
- 
-     Datasheet: Publicly available at the ON Semiconductor website
- 
--	       http://www.onsemi.com/PowerSolutions/product.do?id=ADT7461A
-+	       https://www.onsemi.com/PowerSolutions/product.do?id=ADT7461A
- 
-   * ON Semiconductor NCT1008
- 
-@@ -81,7 +81,7 @@ Supported chips:
- 
-     Datasheet: Publicly available at the ON Semiconductor website
- 
--	       http://www.onsemi.com/PowerSolutions/product.do?id=NCT1008
-+	       https://www.onsemi.com/PowerSolutions/product.do?id=NCT1008
- 
-   * Maxim MAX6646
- 
-@@ -263,7 +263,7 @@ Supported chips:
- 
-     Datasheet: Publicly available at TI website
- 
--	       http://www.ti.com/litv/pdf/sbos686
-+	       https://www.ti.com/litv/pdf/sbos686
- 
- Author: Jean Delvare <jdelvare@suse.de>
+ Author: Guenter Roeck <linux@roeck-us.net>
  
 -- 
 2.27.0
