@@ -7,33 +7,33 @@ X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A77ADC433E2
-	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Jul 2020 18:15:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91080C433E3
+	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Jul 2020 18:25:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 97BC0207DD
-	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Jul 2020 18:15:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7DBBF20B1F
+	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Jul 2020 18:25:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726085AbgGSSPl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 19 Jul 2020 14:15:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39024 "EHLO
+        id S1726618AbgGSSZt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 19 Jul 2020 14:25:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726009AbgGSSPl (ORCPT
+        with ESMTP id S1726009AbgGSSZt (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 19 Jul 2020 14:15:41 -0400
+        Sun, 19 Jul 2020 14:25:49 -0400
 Received: from smtp.al2klimov.de (smtp.al2klimov.de [IPv6:2a01:4f8:c0c:1465::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBE63C0619D2;
-        Sun, 19 Jul 2020 11:15:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AFC1C0619D2;
+        Sun, 19 Jul 2020 11:25:49 -0700 (PDT)
 Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
-        by smtp.al2klimov.de (Postfix) with ESMTPA id 1F613BC084;
-        Sun, 19 Jul 2020 18:15:36 +0000 (UTC)
+        by smtp.al2klimov.de (Postfix) with ESMTPA id 4A794BC073;
+        Sun, 19 Jul 2020 18:25:46 +0000 (UTC)
 From:   "Alexander A. Klimov" <grandmaster@al2klimov.de>
 To:     linux@roeck-us.net, jdelvare@suse.com, corbet@lwn.net,
         linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
-Subject: [PATCH for v5.9] hwmon: (ina2xx) Replace HTTP links with HTTPS ones
-Date:   Sun, 19 Jul 2020 20:15:30 +0200
-Message-Id: <20200719181530.60878-1-grandmaster@al2klimov.de>
+Subject: [PATCH for v5.9] hwmon: (jc42) Replace HTTP links with HTTPS ones
+Date:   Sun, 19 Jul 2020 20:25:39 +0200
+Message-Id: <20200719182539.60944-1-grandmaster@al2klimov.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spamd-Bar: ++++++
@@ -84,95 +84,71 @@ Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
  Impossible is nothing! :)
 
 
- Documentation/hwmon/ina2xx.rst | 10 +++++-----
- drivers/hwmon/ina2xx.c         | 10 +++++-----
- 2 files changed, 10 insertions(+), 10 deletions(-)
+ Documentation/hwmon/jc42.rst | 26 +++++++++++++-------------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/Documentation/hwmon/ina2xx.rst b/Documentation/hwmon/ina2xx.rst
-index ed81f5416331..f78a5cd44c4c 100644
---- a/Documentation/hwmon/ina2xx.rst
-+++ b/Documentation/hwmon/ina2xx.rst
-@@ -11,7 +11,7 @@ Supported chips:
+diff --git a/Documentation/hwmon/jc42.rst b/Documentation/hwmon/jc42.rst
+index 5b14b49bb6f7..19d10512f6c0 100644
+--- a/Documentation/hwmon/jc42.rst
++++ b/Documentation/hwmon/jc42.rst
+@@ -7,7 +7,7 @@ Supported chips:
  
-     Datasheet: Publicly available at the Texas Instruments website
+     Datasheets:
  
--	       http://www.ti.com/
-+	       https://www.ti.com/
+-	http://www.analog.com/static/imported-files/data_sheets/ADT7408.pdf
++	https://www.analog.com/static/imported-files/data_sheets/ADT7408.pdf
  
-   * Texas Instruments INA220
+   * Atmel AT30TS00, AT30TS002A/B, AT30TSE004A
  
-@@ -21,7 +21,7 @@ Supported chips:
+@@ -39,37 +39,37 @@ Supported chips:
  
-     Datasheet: Publicly available at the Texas Instruments website
+     Datasheets:
  
--	       http://www.ti.com/
-+	       https://www.ti.com/
+-	http://ww1.microchip.com/downloads/en/DeviceDoc/22203C.pdf
++	https://ww1.microchip.com/downloads/en/DeviceDoc/22203C.pdf
  
-   * Texas Instruments INA226
+-	http://ww1.microchip.com/downloads/en/DeviceDoc/21977b.pdf
++	https://ww1.microchip.com/downloads/en/DeviceDoc/21977b.pdf
  
-@@ -31,7 +31,7 @@ Supported chips:
+-	http://ww1.microchip.com/downloads/en/DeviceDoc/25095A.pdf
++	https://ww1.microchip.com/downloads/en/DeviceDoc/25095A.pdf
  
-     Datasheet: Publicly available at the Texas Instruments website
+-	http://ww1.microchip.com/downloads/en/DeviceDoc/21996a.pdf
++	https://ww1.microchip.com/downloads/en/DeviceDoc/21996a.pdf
  
--	       http://www.ti.com/
-+	       https://www.ti.com/
+-	http://ww1.microchip.com/downloads/en/DeviceDoc/22153c.pdf
++	https://ww1.microchip.com/downloads/en/DeviceDoc/22153c.pdf
  
-   * Texas Instruments INA230
+-	http://ww1.microchip.com/downloads/en/DeviceDoc/22327A.pdf
++	https://ww1.microchip.com/downloads/en/DeviceDoc/22327A.pdf
  
-@@ -41,7 +41,7 @@ Supported chips:
+   * NXP Semiconductors SE97, SE97B, SE98, SE98A
  
-     Datasheet: Publicly available at the Texas Instruments website
+     Datasheets:
  
--	       http://www.ti.com/
-+	       https://www.ti.com/
+-	http://www.nxp.com/documents/data_sheet/SE97.pdf
++	https://www.nxp.com/documents/data_sheet/SE97.pdf
  
-   * Texas Instruments INA231
+-	http://www.nxp.com/documents/data_sheet/SE97B.pdf
++	https://www.nxp.com/documents/data_sheet/SE97B.pdf
  
-@@ -51,7 +51,7 @@ Supported chips:
+-	http://www.nxp.com/documents/data_sheet/SE98.pdf
++	https://www.nxp.com/documents/data_sheet/SE98.pdf
  
-     Datasheet: Publicly available at the Texas Instruments website
+-	http://www.nxp.com/documents/data_sheet/SE98A.pdf
++	https://www.nxp.com/documents/data_sheet/SE98A.pdf
  
--	       http://www.ti.com/
-+	       https://www.ti.com/
+   * ON Semiconductor CAT34TS02, CAT6095
  
- Author: Lothar Felten <lothar.felten@gmail.com>
+     Datasheet:
  
-diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
-index 55d474ec7c35..0fc6d5857993 100644
---- a/drivers/hwmon/ina2xx.c
-+++ b/drivers/hwmon/ina2xx.c
-@@ -4,19 +4,19 @@
-  *
-  * INA219:
-  * Zero Drift Bi-Directional Current/Power Monitor with I2C Interface
-- * Datasheet: http://www.ti.com/product/ina219
-+ * Datasheet: https://www.ti.com/product/ina219
-  *
-  * INA220:
-  * Bi-Directional Current/Power Monitor with I2C Interface
-- * Datasheet: http://www.ti.com/product/ina220
-+ * Datasheet: https://www.ti.com/product/ina220
-  *
-  * INA226:
-  * Bi-Directional Current/Power Monitor with I2C Interface
-- * Datasheet: http://www.ti.com/product/ina226
-+ * Datasheet: https://www.ti.com/product/ina226
-  *
-  * INA230:
-  * Bi-directional Current/Power Monitor with I2C Interface
-- * Datasheet: http://www.ti.com/product/ina230
-+ * Datasheet: https://www.ti.com/product/ina230
-  *
-  * Copyright (C) 2012 Lothar Felten <lothar.felten@gmail.com>
-  * Thanks to Jan Volkering
-@@ -148,7 +148,7 @@ static const struct ina2xx_config ina2xx_config[] = {
-  * Available averaging rates for ina226. The indices correspond with
-  * the bit values expected by the chip (according to the ina226 datasheet,
-  * table 3 AVG bit settings, found at
-- * http://www.ti.com/lit/ds/symlink/ina226.pdf.
-+ * https://www.ti.com/lit/ds/symlink/ina226.pdf.
-  */
- static const int ina226_avg_tab[] = { 1, 4, 16, 64, 128, 256, 512, 1024 };
+-	http://www.onsemi.com/pub_link/Collateral/CAT34TS02-D.PDF
++	https://www.onsemi.com/pub_link/Collateral/CAT34TS02-D.PDF
+ 
+-	http://www.onsemi.com/pub/Collateral/CAT6095-D.PDF
++	https://www.onsemi.com/pub/Collateral/CAT6095-D.PDF
+ 
+   * ST Microelectronics STTS424, STTS424E02, STTS2002, STTS2004, STTS3000
  
 -- 
 2.27.0
