@@ -7,29 +7,33 @@ X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EAE22C433E2
-	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Jul 2020 18:05:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A77ADC433E2
+	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Jul 2020 18:15:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DB66C20717
-	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Jul 2020 18:05:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 97BC0207DD
+	for <linux-hwmon@archiver.kernel.org>; Sun, 19 Jul 2020 18:15:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726161AbgGSSFd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 19 Jul 2020 14:05:33 -0400
-Received: from smtp.al2klimov.de ([78.46.175.9]:43978 "EHLO smtp.al2klimov.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725783AbgGSSFd (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 19 Jul 2020 14:05:33 -0400
+        id S1726085AbgGSSPl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 19 Jul 2020 14:15:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39024 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726009AbgGSSPl (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 19 Jul 2020 14:15:41 -0400
+Received: from smtp.al2klimov.de (smtp.al2klimov.de [IPv6:2a01:4f8:c0c:1465::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBE63C0619D2;
+        Sun, 19 Jul 2020 11:15:40 -0700 (PDT)
 Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
-        by smtp.al2klimov.de (Postfix) with ESMTPA id 09DAABC078;
-        Sun, 19 Jul 2020 18:05:27 +0000 (UTC)
+        by smtp.al2klimov.de (Postfix) with ESMTPA id 1F613BC084;
+        Sun, 19 Jul 2020 18:15:36 +0000 (UTC)
 From:   "Alexander A. Klimov" <grandmaster@al2klimov.de>
 To:     linux@roeck-us.net, jdelvare@suse.com, corbet@lwn.net,
         linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
-Subject: [PATCH for v5.9] hwmon: (ina209) Replace HTTP links with HTTPS ones
-Date:   Sun, 19 Jul 2020 20:05:21 +0200
-Message-Id: <20200719180521.60811-1-grandmaster@al2klimov.de>
+Subject: [PATCH for v5.9] hwmon: (ina2xx) Replace HTTP links with HTTPS ones
+Date:   Sun, 19 Jul 2020 20:15:30 +0200
+Message-Id: <20200719181530.60878-1-grandmaster@al2klimov.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spamd-Bar: ++++++
@@ -80,36 +84,96 @@ Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
  Impossible is nothing! :)
 
 
- Documentation/hwmon/ina209.rst | 2 +-
- drivers/hwmon/ina209.c         | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Documentation/hwmon/ina2xx.rst | 10 +++++-----
+ drivers/hwmon/ina2xx.c         | 10 +++++-----
+ 2 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/Documentation/hwmon/ina209.rst b/Documentation/hwmon/ina209.rst
-index 64322075a145..162256131517 100644
---- a/Documentation/hwmon/ina209.rst
-+++ b/Documentation/hwmon/ina209.rst
-@@ -10,7 +10,7 @@ Supported chips:
-     Addresses scanned: -
+diff --git a/Documentation/hwmon/ina2xx.rst b/Documentation/hwmon/ina2xx.rst
+index ed81f5416331..f78a5cd44c4c 100644
+--- a/Documentation/hwmon/ina2xx.rst
++++ b/Documentation/hwmon/ina2xx.rst
+@@ -11,7 +11,7 @@ Supported chips:
  
-     Datasheet:
--	http://www.ti.com/lit/gpn/ina209
-+	https://www.ti.com/lit/gpn/ina209
+     Datasheet: Publicly available at the Texas Instruments website
  
- Author:
- 	- Paul Hays <Paul.Hays@cattail.ca>
-diff --git a/drivers/hwmon/ina209.c b/drivers/hwmon/ina209.c
-index 70ad1efcb3de..08ee3a64a026 100644
---- a/drivers/hwmon/ina209.c
-+++ b/drivers/hwmon/ina209.c
-@@ -14,7 +14,7 @@
-  *	Thanks to Jan Volkering
+-	       http://www.ti.com/
++	       https://www.ti.com/
+ 
+   * Texas Instruments INA220
+ 
+@@ -21,7 +21,7 @@ Supported chips:
+ 
+     Datasheet: Publicly available at the Texas Instruments website
+ 
+-	       http://www.ti.com/
++	       https://www.ti.com/
+ 
+   * Texas Instruments INA226
+ 
+@@ -31,7 +31,7 @@ Supported chips:
+ 
+     Datasheet: Publicly available at the Texas Instruments website
+ 
+-	       http://www.ti.com/
++	       https://www.ti.com/
+ 
+   * Texas Instruments INA230
+ 
+@@ -41,7 +41,7 @@ Supported chips:
+ 
+     Datasheet: Publicly available at the Texas Instruments website
+ 
+-	       http://www.ti.com/
++	       https://www.ti.com/
+ 
+   * Texas Instruments INA231
+ 
+@@ -51,7 +51,7 @@ Supported chips:
+ 
+     Datasheet: Publicly available at the Texas Instruments website
+ 
+-	       http://www.ti.com/
++	       https://www.ti.com/
+ 
+ Author: Lothar Felten <lothar.felten@gmail.com>
+ 
+diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
+index 55d474ec7c35..0fc6d5857993 100644
+--- a/drivers/hwmon/ina2xx.c
++++ b/drivers/hwmon/ina2xx.c
+@@ -4,19 +4,19 @@
   *
-  * Datasheet:
-- * http://www.ti.com/lit/gpn/ina209
-+ * https://www.ti.com/lit/gpn/ina209
+  * INA219:
+  * Zero Drift Bi-Directional Current/Power Monitor with I2C Interface
+- * Datasheet: http://www.ti.com/product/ina219
++ * Datasheet: https://www.ti.com/product/ina219
+  *
+  * INA220:
+  * Bi-Directional Current/Power Monitor with I2C Interface
+- * Datasheet: http://www.ti.com/product/ina220
++ * Datasheet: https://www.ti.com/product/ina220
+  *
+  * INA226:
+  * Bi-Directional Current/Power Monitor with I2C Interface
+- * Datasheet: http://www.ti.com/product/ina226
++ * Datasheet: https://www.ti.com/product/ina226
+  *
+  * INA230:
+  * Bi-directional Current/Power Monitor with I2C Interface
+- * Datasheet: http://www.ti.com/product/ina230
++ * Datasheet: https://www.ti.com/product/ina230
+  *
+  * Copyright (C) 2012 Lothar Felten <lothar.felten@gmail.com>
+  * Thanks to Jan Volkering
+@@ -148,7 +148,7 @@ static const struct ina2xx_config ina2xx_config[] = {
+  * Available averaging rates for ina226. The indices correspond with
+  * the bit values expected by the chip (according to the ina226 datasheet,
+  * table 3 AVG bit settings, found at
+- * http://www.ti.com/lit/ds/symlink/ina226.pdf.
++ * https://www.ti.com/lit/ds/symlink/ina226.pdf.
   */
+ static const int ina226_avg_tab[] = { 1, 4, 16, 64, 128, 256, 512, 1024 };
  
- #include <linux/kernel.h>
 -- 
 2.27.0
 
