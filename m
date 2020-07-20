@@ -8,59 +8,58 @@ X-Spam-Status: No, score=-20.6 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BD27C433DF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Jul 2020 20:14:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B105DC433E8
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Jul 2020 20:14:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 580D622482
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Jul 2020 20:14:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 89D662080D
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Jul 2020 20:14:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="K9xpXhZg"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AbCwKuR9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727123AbgGTUOb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 20 Jul 2020 16:14:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53070 "EHLO
+        id S1731154AbgGTUOr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 20 Jul 2020 16:14:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730588AbgGTUOb (ORCPT
+        with ESMTP id S1730588AbgGTUOq (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 20 Jul 2020 16:14:31 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596D2C0619D2
-        for <linux-hwmon@vger.kernel.org>; Mon, 20 Jul 2020 13:14:31 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id e127so14542817pgc.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 20 Jul 2020 13:14:31 -0700 (PDT)
+        Mon, 20 Jul 2020 16:14:46 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D232AC061794
+        for <linux-hwmon@vger.kernel.org>; Mon, 20 Jul 2020 13:14:45 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id y9so11099883plr.9
+        for <linux-hwmon@vger.kernel.org>; Mon, 20 Jul 2020 13:14:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:message-id:mime-version:subject:from:to:cc;
-        bh=krJhVfJ5+Ckuq9PCZ6ReNrT3nN79ynOsubIFQ9bjPFU=;
-        b=K9xpXhZgErGQGsCNHv6NSz6X1tT6aaqTl6hgTIO7ArQ5XkeWCK1Tq9qvYhfR9aMNwQ
-         Ohur63BSOsP2v959h/f/i92I9t7Xuie7QEeRND/fHpx+oe04OGV3Pda48NVTMU91UyQG
-         EewLAbILea9HMnQN12vwnOIYsDVOThmiyK8r/frWwoNoMutju3f8dIehVHPL7iGvkQTT
-         MRyCKur0KBpFKBdDTwRK15Wnw9Uqiitqfq446kVQkDMUVKcPuqPFLrBMQ7rllDawpRqr
-         w+lC3UoclqAeWeFjA8TlGU7Yy2Sj4bOVtQl5msDP28UKMUAW9CgLdSWBP7qAU0HmVoqe
-         GYOw==
+        bh=WXyRYBH3lUh7Umxi2hQ4QtCTReXFYZYL0z8hscZP+wo=;
+        b=AbCwKuR9T/1CW5k9yah+qNwtVfR+CZ+owvkLdgnoW02XcdReVJXFhxPJQdMZ6NBU9s
+         6n/Xmm4xRpSFeYJr4hhWiGWItWb3wd0jIwPqWY7/npRaaL3gYa4mK2XwI2UBinbq0Q5j
+         R6MCK0ksI09BwxZvNKp6JYUuQH5TiOC9nAXni7luaCYHXqYqIUhgatF6LgBbQjEx0S+l
+         KIYRE6zTsmnxP1aODkjtTaoWBfsyoSoWVpzjoyXzEZfNVVhtW8vS6ex+d33sQhZuNNfG
+         Bol7OHnyDRq4Ku5WBMfw+kVptxV/rgSFDOLx4ND/GNdcYuseULZwF0h59sswPV8fWcHD
+         icDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=krJhVfJ5+Ckuq9PCZ6ReNrT3nN79ynOsubIFQ9bjPFU=;
-        b=cTLMvvVr3N8BTWUw8zRJLd+X1E/D1W4qFqp1C/vj1lYCRKeHCRVTgqEXsFu8NISSbW
-         OzRQE/sCGrbkQLV98YNvu5oZZBC5Yj1AbfiGeWGl7RwUyj6tLqcO5TbDTHQB3K9OXpA7
-         gDYWzD40SvR0Yf43mv4DSGEn7wfIPWbTliCsv8Qrt8eHg4nCGf94P/Rsm/gGOcL0o25h
-         9cAomoilkEVUFNR6j7Hoof+KkFKKfdwWuZXzia+kUq8htCKUOpBgY4hu+MGPIFwRaNvS
-         YwjAlSkZstsH14I9WHZQGVFNju4CNx7mmXTNC+MshEbNeBCAkQDNgfGtnpMyGnJ+aENw
-         IyRw==
-X-Gm-Message-State: AOAM532KFOhSn3Ijo9tt2l0DsT/5m7melIqHjQlit/GAA4aLqDoE7lmQ
-        +U3besZ5nBlByljoef/MQybwevV2nVBzXgQf
-X-Google-Smtp-Source: ABdhPJxV4Zlcsi10sNbbXvZBXPQi8LKWus38AJAlk4iveR3bz+izOrpeCicWeLkzHq6K1HCP6piJMXv+3ln7898j
-X-Received: by 2002:a17:90a:3044:: with SMTP id q4mr589631pjl.81.1595276070672;
- Mon, 20 Jul 2020 13:14:30 -0700 (PDT)
-Date:   Mon, 20 Jul 2020 20:14:22 +0000
-Message-Id: <20200720201422.1869389-1-linchuyuan@google.com>
+        bh=WXyRYBH3lUh7Umxi2hQ4QtCTReXFYZYL0z8hscZP+wo=;
+        b=SBe2xkEHnJ40jLIprX7VG9hlZcwrNRzlMAOqfq7INKFrfGcf2YqiYIIaSHM7haHWhv
+         CSU7f9MZ8OVn7AU9qc3Rp4WE8aQMk6igB/v/LfacICOvxfmqq2/d1SFoJy/e31bEygAH
+         MehT6++wr+APJMbShASgcWO23BT+e9YTjHiYM0erdaWriSrQVkshf/YibCGLOTN4rbcg
+         UoxbIGFjCNzza27DtcuDdU2ORiwBdsLreYdfNHGfwSP+ONgbK6yyyIS2ygoPMBCS0zDL
+         hqr7nOjNud87wok2PU02x9Lz29dMaZmifTZWhz3FVqw+ToDltSiU39Nbze3OnNbLYy+m
+         v6uQ==
+X-Gm-Message-State: AOAM531vPqHGa2DEIRuXP3YNKZqVkx07lEPnanorW22Ls4iHD7Bm7dkI
+        AxyTeX1WUFnf8kK0DmacZJgOas4El0pN6LQT
+X-Google-Smtp-Source: ABdhPJzJdB5vVYeTESa4TojPzKbv2IbuTs5hlhZh2o3UdEOdno8ALDzergtCvkt5KWEBkH+J0skw3c4y5QOgwm7Z
+X-Received: by 2002:a17:90a:368c:: with SMTP id t12mr1111761pjb.90.1595276085336;
+ Mon, 20 Jul 2020 13:14:45 -0700 (PDT)
+Date:   Mon, 20 Jul 2020 20:14:41 +0000
+Message-Id: <20200720201441.1871285-1-linchuyuan@google.com>
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.28.0.rc0.105.gf9edc3c819-goog
-Subject: [PATCH v2] dt-bindings: hwmon: adm1272: add analog-temperature1-enable
- binding
+Subject: [PATCH v2] hwmon: adm1272: Enable temperature sampling for adm1272 adm1278
 From:   Chu Lin <linchuyuan@google.com>
-To:     linux@roeck-us.net, robh+dt@kernel.org, jdelvare@suse.com
+To:     linux@roeck-us.net, jdelvare@suse.com
 Cc:     =belgaied@google.com, jasonling@google.com, linchuyuan@google.com,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
         zhongqil@google.com
@@ -82,35 +81,89 @@ Solution:
 flag is set, flip the temp1_en control bit on probing.
 
 Testing:
-make dt_binding_check
+1). iotools smbus_write16 35 0x10 0xd4 0x0037 // disable the temp1_en
+2). recompile the dt to have  analog-temperature1-enable set
+3). Probe the driver and make sure tempX shows up in hwmon
 
 Signed-off-by: Chu Lin <linchuyuan@google.com>
 ---
-ChangeLog v1->v2:
-  - Rename adm1272-adm1278-temp1-en to analog-temperature1-enable
+ drivers/hwmon/pmbus/adm1275.c | 36 +++++++++++++++++++++--------------
+ 1 file changed, 22 insertions(+), 14 deletions(-)
 
- Documentation/devicetree/bindings/hwmon/adm1275.txt | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/hwmon/adm1275.txt b/Documentation/devicetree/bindings/hwmon/adm1275.txt
-index 1ecd03f3da4d..7a345c7794a2 100644
---- a/Documentation/devicetree/bindings/hwmon/adm1275.txt
-+++ b/Documentation/devicetree/bindings/hwmon/adm1275.txt
-@@ -15,6 +15,8 @@ Optional properties:
+diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275.c
+index 19317575d1c6..ae28820b3e31 100644
+--- a/drivers/hwmon/pmbus/adm1275.c
++++ b/drivers/hwmon/pmbus/adm1275.c
+@@ -475,6 +475,7 @@ static int adm1275_probe(struct i2c_client *client,
+ 	const struct coefficients *coefficients;
+ 	int vindex = -1, voindex = -1, cindex = -1, pindex = -1;
+ 	int tindex = -1;
++	bool temp1_en;
+ 	u32 shunt;
  
- - shunt-resistor-micro-ohms
- 	Shunt resistor value in micro-Ohm
-+- analog-temperature1-enable
-+	Enable temperature sampling. This is supported on adm1272 and adm1278
+ 	if (!i2c_check_functionality(client->adapter,
+@@ -536,6 +537,9 @@ static int adm1275_probe(struct i2c_client *client,
+ 	if (shunt == 0)
+ 		return -EINVAL;
  
- Example:
++	temp1_en = of_property_read_bool(client->dev.of_node, "analog-temperature1-enable") &&
++		(mid->driver_data == adm1272 || mid->driver_data == adm1278);
++
+ 	data->id = mid->driver_data;
  
-@@ -22,4 +24,5 @@ adm1272@10 {
- 	compatible = "adi,adm1272";
- 	reg = <0x10>;
- 	shunt-resistor-micro-ohms = <500>;
-+	analog-temperature1-enable;
- };
+ 	info = &data->info;
+@@ -614,16 +618,18 @@ static int adm1275_probe(struct i2c_client *client,
+ 		info->func[0] |= PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT |
+ 			PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT;
+ 
++		ret = config;
++		/* Enable temp if it is instructed by dt (it is disabled by default) */
++		if (temp1_en && !(config & ADM1278_TEMP1_EN))
++			config |= ADM1278_TEMP1_EN;
+ 		/* Enable VOUT if not enabled (it is disabled by default) */
+-		if (!(config & ADM1278_VOUT_EN)) {
++		if (!(config & ADM1278_VOUT_EN))
+ 			config |= ADM1278_VOUT_EN;
+-			ret = i2c_smbus_write_byte_data(client,
+-							ADM1275_PMON_CONFIG,
+-							config);
++		if (ret != config) {
++			ret = i2c_smbus_write_word_data(client, ADM1275_PMON_CONFIG, config);
+ 			if (ret < 0) {
+-				dev_err(&client->dev,
+-					"Failed to enable VOUT monitoring\n");
+-				return -ENODEV;
++				dev_err(&client->dev, "Failed to enable config control bits");
++				return ret;
+ 			}
+ 		}
+ 
+@@ -685,16 +691,18 @@ static int adm1275_probe(struct i2c_client *client,
+ 		info->func[0] |= PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT |
+ 			PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT;
+ 
++		ret = config;
++		/* Enable temp if it is instructed by dt (it is disabled by default) */
++		if (temp1_en && !(config & ADM1278_TEMP1_EN))
++			config |= ADM1278_TEMP1_EN;
+ 		/* Enable VOUT if not enabled (it is disabled by default) */
+-		if (!(config & ADM1278_VOUT_EN)) {
++		if (!(config & ADM1278_VOUT_EN))
+ 			config |= ADM1278_VOUT_EN;
+-			ret = i2c_smbus_write_byte_data(client,
+-							ADM1275_PMON_CONFIG,
+-							config);
++		if (ret != config) {
++			ret = i2c_smbus_write_word_data(client, ADM1275_PMON_CONFIG, config);
+ 			if (ret < 0) {
+-				dev_err(&client->dev,
+-					"Failed to enable VOUT monitoring\n");
+-				return -ENODEV;
++				dev_err(&client->dev, "Failed to enable config control bits");
++				return ret;
+ 			}
+ 		}
+ 
 -- 
 2.28.0.rc0.105.gf9edc3c819-goog
 
