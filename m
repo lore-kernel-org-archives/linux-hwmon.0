@@ -7,49 +7,49 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D6CBC43618
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Jul 2020 21:38:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02912C28E85
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Jul 2020 21:39:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5DFE222D00
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Jul 2020 21:38:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C915D22CF7
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Jul 2020 21:39:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1595281122;
-	bh=cPR2zPn5HSoqWO5iLEJ+606lEqfGx63K60WONIiPpHY=;
+	s=default; t=1595281145;
+	bh=404mlOwBRprthN1mkVirySgS0S2bS+wvcYx3rW8zKHA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=aN0SRg40gHbxGFkutoRFDBHhNFtyaM0nCFm992oz+8e+042rlz4wsdMM0yNP1XGNT
-	 qZIiBmt0fQS63kNRC3eDRbLpmnChyrmTLMNmHqfSxOKNGKQVO6rSyDAaJvze5hbljY
-	 5uSK+oOL9bdkC+8Emw9SAUN+TrB8voYz3e533x7w=
+	b=nJSbCE7LTjDEWz1mYlqpJ7hznF2/qaPA1WRg8SvBVUAP2tV81tOTVgorkUmlOhhCt
+	 Q5wRYe1njwPGnRDFzkMKK0YHbesJ/LL3vTjyfcxfOR8nMwpVVDtU4fznUMJL97Yung
+	 8rsSiWGDFtHGnd6Sm/m60ZD3ROjFtENCOCSpOFRA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728217AbgGTVik (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 20 Jul 2020 17:38:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57386 "EHLO mail.kernel.org"
+        id S1728329AbgGTVjD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 20 Jul 2020 17:39:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58110 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728214AbgGTVij (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 20 Jul 2020 17:38:39 -0400
+        id S1728319AbgGTVjD (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 20 Jul 2020 17:39:03 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AD88622CBB;
-        Mon, 20 Jul 2020 21:38:38 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CA7FA22BEF;
+        Mon, 20 Jul 2020 21:39:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595281119;
-        bh=cPR2zPn5HSoqWO5iLEJ+606lEqfGx63K60WONIiPpHY=;
+        s=default; t=1595281142;
+        bh=404mlOwBRprthN1mkVirySgS0S2bS+wvcYx3rW8zKHA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=w7px24BrMK++MpfKQNUFHvyokYLDgbc7tSgB9DLvihyVbFJfWnb31EdnQOlHvk2c5
-         IOuVCk/4dbPl8hxn69k0dKe10rzzhArPtNFrcvXpsB0/S7xU8xbTBxkLhHSPY5KpLL
-         P5edYgv/gA5Mzfz83qgJuxaqClXA2PFYfHuhHOQA=
+        b=nQ0Dtml6WfhLeFuXNAnGm5zeV5hV1m+9I/Z/Ma+8STeaIBrYeunqQ5gx7IHZh5z/G
+         j/CxXKFPK70KPrsJI6cZ9A6h+STNKrXx9x2SxjIta+YYUzTtNilNDQ0/6hpe97qOa+
+         /81e5+BdHzRKtQhgT7m59BVYIzD7Es/iVzJ2u7MM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Cristian Marussi <cristian.marussi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
+Cc:     Evgeny Novikov <novikov@ispras.ru>,
         Guenter Roeck <linux@roeck-us.net>,
-        Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 26/34] hwmon: (scmi) Fix potential buffer overflow in scmi_hwmon_probe()
-Date:   Mon, 20 Jul 2020 17:37:59 -0400
-Message-Id: <20200720213807.407380-26-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org
+Subject: [PATCH AUTOSEL 4.19 09/19] hwmon: (aspeed-pwm-tacho) Avoid possible buffer overflow
+Date:   Mon, 20 Jul 2020 17:38:40 -0400
+Message-Id: <20200720213851.407715-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200720213807.407380-1-sashal@kernel.org>
-References: <20200720213807.407380-1-sashal@kernel.org>
+In-Reply-To: <20200720213851.407715-1-sashal@kernel.org>
+References: <20200720213851.407715-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -59,41 +59,39 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Cristian Marussi <cristian.marussi@arm.com>
+From: Evgeny Novikov <novikov@ispras.ru>
 
-[ Upstream commit 3ce17cd2b94907f6d91b81b32848044b84c97606 ]
+[ Upstream commit bc4071aafcf4d0535ee423b69167696d6c03207d ]
 
-SMATCH detected a potential buffer overflow in the manipulation of
-hwmon_attributes array inside the scmi_hwmon_probe function:
+aspeed_create_fan() reads a pwm_port value using of_property_read_u32().
+If pwm_port will be more than ARRAY_SIZE(pwm_port_params), there will be
+a buffer overflow in
+aspeed_create_pwm_port()->aspeed_set_pwm_port_enable(). The patch fixes
+the potential buffer overflow.
 
-drivers/hwmon/scmi-hwmon.c:226
- scmi_hwmon_probe() error: buffer overflow 'hwmon_attributes' 6 <= 9
+Found by Linux Driver Verification project (linuxtesting.org).
 
-Fix it by statically declaring the size of the array as the maximum
-possible as defined by hwmon_max define.
-
-Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
-Link: https://lore.kernel.org/r/20200715121338.GA18761@e119603-lin.cambridge.arm.com
+Signed-off-by: Evgeny Novikov <novikov@ispras.ru>
+Link: https://lore.kernel.org/r/20200703111518.9644-1-novikov@ispras.ru
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/scmi-hwmon.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/hwmon/aspeed-pwm-tacho.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/hwmon/scmi-hwmon.c b/drivers/hwmon/scmi-hwmon.c
-index 8a7732c0bef3e..7cd13a217c615 100644
---- a/drivers/hwmon/scmi-hwmon.c
-+++ b/drivers/hwmon/scmi-hwmon.c
-@@ -147,7 +147,7 @@ static enum hwmon_sensor_types scmi_types[] = {
- 	[ENERGY] = hwmon_energy,
- };
+diff --git a/drivers/hwmon/aspeed-pwm-tacho.c b/drivers/hwmon/aspeed-pwm-tacho.c
+index 5e449eac788a1..a43fa730a513b 100644
+--- a/drivers/hwmon/aspeed-pwm-tacho.c
++++ b/drivers/hwmon/aspeed-pwm-tacho.c
+@@ -880,6 +880,8 @@ static int aspeed_create_fan(struct device *dev,
+ 	ret = of_property_read_u32(child, "reg", &pwm_port);
+ 	if (ret)
+ 		return ret;
++	if (pwm_port >= ARRAY_SIZE(pwm_port_params))
++		return -EINVAL;
+ 	aspeed_create_pwm_port(priv, (u8)pwm_port);
  
--static u32 hwmon_attributes[] = {
-+static u32 hwmon_attributes[hwmon_max] = {
- 	[hwmon_chip] = HWMON_C_REGISTER_TZ,
- 	[hwmon_temp] = HWMON_T_INPUT | HWMON_T_LABEL,
- 	[hwmon_in] = HWMON_I_INPUT | HWMON_I_LABEL,
+ 	ret = of_property_count_u8_elems(child, "cooling-levels");
 -- 
 2.25.1
 
