@@ -2,114 +2,136 @@ Return-Path: <SRS0=a0Wp=A7=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.6 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 566B7C433E0
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Jul 2020 03:12:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45E9EC433E0
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Jul 2020 04:47:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1B7E2207DD
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Jul 2020 03:12:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1A1752176B
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Jul 2020 04:47:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RBUC5MP1"
+	dkim=pass (1024-bit key) header.d=jms.id.au header.i=@jms.id.au header.b="ExhLOtf3"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726499AbgGTDM6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 19 Jul 2020 23:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36146 "EHLO
+        id S1725805AbgGTErS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 20 Jul 2020 00:47:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726510AbgGTDM6 (ORCPT
+        with ESMTP id S1725267AbgGTErS (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 19 Jul 2020 23:12:58 -0400
-Received: from mail-vs1-xe44.google.com (mail-vs1-xe44.google.com [IPv6:2607:f8b0:4864:20::e44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2060C0619D4
-        for <linux-hwmon@vger.kernel.org>; Sun, 19 Jul 2020 20:12:57 -0700 (PDT)
-Received: by mail-vs1-xe44.google.com with SMTP id d198so7751499vsc.1
-        for <linux-hwmon@vger.kernel.org>; Sun, 19 Jul 2020 20:12:57 -0700 (PDT)
+        Mon, 20 Jul 2020 00:47:18 -0400
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93AC2C0619D2;
+        Sun, 19 Jul 2020 21:47:17 -0700 (PDT)
+Received: by mail-ed1-x543.google.com with SMTP id n2so11812235edr.5;
+        Sun, 19 Jul 2020 21:47:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=jms.id.au; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=VTK/t0wOVgstUCjWFFumbAsOJwk/3XPeIbWLXHuzjRo=;
-        b=RBUC5MP1ZoysEzfohwmNwP5dNE9+dD2ndIjWHfdgGEci67W69nOh6JF++0UupL7Osf
-         mala9LAbpL4V+9Dz8q5I5kRHVYHszkRjZ5YuUkqKT50/pWR3d2sYAUqc76d9bVIXddc/
-         fYF8pFyxiS03rwbQcD0Zm7c03b3vvh3xmgYrVrQQtU15/DYsmnMtleDVeun1+YlE9Yjt
-         QmIv67ZqKGq1VHQoXa4mlchg65aT/8AnOhaIv1Lg04gw7oeROYPf0j/WzcoF3cZ3KxJm
-         z0hoFlmrUXoVhz5rA8p5OhgQo6phsf+Hzhkrg8XEat6Qa7H0JQwtqSNPz9z4C1M/Aiqs
-         i+Wg==
+        bh=X4fc45IcLsicHhtLrVqSsoKWL7WlpOp+mi3KXR3SVAc=;
+        b=ExhLOtf3Xmakmdh7RWnLzDdIOVhpIDJdrp+ojzMv74tDkBc/WYOanglWg0JJ8gWEzh
+         l8A1UTRrNwszNQvXw9jXZhvLnKAcaC61yGwpCEwM/cZaOPIT0TJk/2FBeQ0eqpV//bpf
+         ZzzNTPGT5cFr5W0sofdFuXj5UO1jLI+xJglPQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=VTK/t0wOVgstUCjWFFumbAsOJwk/3XPeIbWLXHuzjRo=;
-        b=gV/YTxKC++ow4peO2b/TutDuWHelfFZ+ZcSzpkI0vrap8HhtsAKUcoqI7N/0fw6Hzs
-         H+6MubWaqNOd/xwyszTg4hGWLT7qpCyP2G890gaSYTd7GL0A41faXRm+tkV/UYC4pQqB
-         QvZRnQI0SQIxGDndpZkUG92AujRS5jFLqPlDBaBHFcXBf0ZcwuYIXmYtOv40ZgThBjuU
-         THJ1rBDAWHI2Dr1oQPv/AfzF//77+Y3QsoeSkKbfDen+OqPYEqQ1anenqrHaa86DGmmx
-         T3Kvrg+v+AAWaUaOYWaRfRINGj2TeSLJUIwK3SMPhMwQOgQTWlyvBtIXsKmbLuoHrLDi
-         kbAQ==
-X-Gm-Message-State: AOAM5319tKmAPxRg1KqQFqPxlF2c1SxmyGprBAUndOBw8KErxxoVDw6p
-        5c/OL7vXSHRy+TkVFjfB6Eja6Wm3QuTN+Pegd8kNzQ==
-X-Google-Smtp-Source: ABdhPJzdd+PpPYk4WS7IVTp2LuoN6j5bxecEV2JlREOj7/Ffe6WZuuhrl/ebvhI40+Oh7WEKIE/jOT5Yif9NFqMY2z0=
-X-Received: by 2002:a67:ec58:: with SMTP id z24mr14219904vso.109.1595214775242;
- Sun, 19 Jul 2020 20:12:55 -0700 (PDT)
+        bh=X4fc45IcLsicHhtLrVqSsoKWL7WlpOp+mi3KXR3SVAc=;
+        b=Yh1tpxS/n0B4pxvm7SiRW9RkO6ieENClp/tGlpg239gTseSMgI9D8w+AKwr5iVjk54
+         L68XbZxM18/BVu1k1SSYrI72uosF7vSS+Gv9ZRvUVR7uS+XjEWp7VdS9UmYvsnowd3wx
+         8YGa+e1nM8qL13JNMoF8Ospk4PNyccWAXd13kCr8RcxtJ/o2CuPaMqMTBcsNB3O5hpNH
+         2MdoxPTrFcZ+tD+MGVUXV8q6u6gXUmcgXoRrDEhN1A4kl9itqtRWVOM2BEhIBac6mqlR
+         RgaIxLDclawuQsu/+nzVdnva0vDEbv+PQ5Vfr5aAXA9LIta7wbZBJ2zroqowm3+DMz35
+         nPCw==
+X-Gm-Message-State: AOAM533QIMclbDjG4SGanwTTPSCdXDHP41I+Cdqk8MQWEbQGZ+6JSEYI
+        EQ7hEoDvDmqdzwUdnVMwLf6bbHTRSmwMTNzM3Y4=
+X-Google-Smtp-Source: ABdhPJxbSSqWQ84B+4JiYW9acW9DNnNENYMzz3dZj96Ct7RscmlkP4owpxPAAFbAwlIFmF9yLot/4Gnrg36cffa7UQI=
+X-Received: by 2002:a05:6402:2067:: with SMTP id bd7mr19502715edb.143.1595220436121;
+ Sun, 19 Jul 2020 21:47:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200710004258.296017-1-linchuyuan@google.com> <20200719222222.GA78762@roeck-us.net>
-In-Reply-To: <20200719222222.GA78762@roeck-us.net>
-From:   Chu Lin <linchuyuan@google.com>
-Date:   Sun, 19 Jul 2020 20:12:44 -0700
-Message-ID: <CAKCA56CSyG3+RvmEYPpv3VC8mnmTFopd-Ee-xzF62ie80g+cag@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: hwmon: adm1272: add adm1272-adm1275-temp1-en binding
+References: <20200501150833.5251-1-eajames@linux.ibm.com> <20200501150833.5251-3-eajames@linux.ibm.com>
+ <20200719221302.GA78557@roeck-us.net>
+In-Reply-To: <20200719221302.GA78557@roeck-us.net>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Mon, 20 Jul 2020 04:47:04 +0000
+Message-ID: <CACPK8XdzUcb922brKkD8iDPvr4CGdDZXhUPM=mtuHSMc2j0sog@mail.gmail.com>
+Subject: Re: [PATCH 2/3] fsi: occ: Add support for P10
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Kais Belgaied <belgaied@google.com>,
-        Jason Ling <jasonling@google.com>, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zhongqi Li <zhongqil@google.com>
+Cc:     Eddie James <eajames@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org, linux-fsi@lists.ozlabs.org,
+        devicetree <devicetree@vger.kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Alistair Popple <alistair@popple.id.au>,
+        Jeremy Kerr <jk@ozlabs.org>, Rob Herring <robh+dt@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Jul 19, 2020 at 3:22 PM Guenter Roeck <linux@roeck-us.net> wrote:
+On Sun, 19 Jul 2020 at 22:13, Guenter Roeck <linux@roeck-us.net> wrote:
 >
-> On Fri, Jul 10, 2020 at 12:42:58AM +0000, Chu Lin wrote:
-> > Problem:
-> >       adm1272 and adm1278 supports temperature sampling. The
-> > current way of enabling it requires the user manually unbind the device
-> > from the driver, flip the temperature sampling control bit and then bind
-> > the device back to the driver. It would be nice if we can control this in a
-> > better way by reading the dt.
+> On Fri, May 01, 2020 at 10:08:32AM -0500, Eddie James wrote:
+> > The P10 OCC has a different SRAM address for the command and response
+> > buffers. In addition, the SBE commands to access the SRAM have changed
+> > format. Add versioning to the driver to handle these differences.
 > >
-> > Solution:
-> >       Introducing device tree binding adm1272-adm1278-temp1-en. If the
-> > flag is set, flip the temp1_en control bit on probing.
-> >
-> > Testing:
-> > make dt_binding_check
-> >
-> > Signed-off-by: Chu Lin <linchuyuan@google.com>
+> > Signed-off-by: Eddie James <eajames@linux.ibm.com>
+>
+> I don't recall seeing a maintainer Ack for this patch, nor any response
+> at all. I'd be happy to apply the patch through hwmon, but I would need
+> an Ack from a maintainer.
+
+That would be great. I had one question before it goes in, but once
+Eddie has sorted that out it can go through your tree.
+
+>
+> Thanks,
+> Guenter
+>
 > > ---
-> >  Documentation/devicetree/bindings/hwmon/adm1275.txt | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/hwmon/adm1275.txt b/Documentation/devicetree/bindings/hwmon/adm1275.txt
-> > index 1ecd03f3da4d..4403fe30f005 100644
-> > --- a/Documentation/devicetree/bindings/hwmon/adm1275.txt
-> > +++ b/Documentation/devicetree/bindings/hwmon/adm1275.txt
-> > @@ -15,6 +15,8 @@ Optional properties:
-> >
-> >  - shunt-resistor-micro-ohms
-> >       Shunt resistor value in micro-Ohm
-> > +- adm1272-adm1278-temp1-en
-> > +     Enable temperature sampling. This is supported on adm1272 and adm1278
->
-> I suspect this should be something like "analog,temp1-enable". Either case,
-> I would suggest to resend the series and copy DT maintainers at least on
-> this patch.
+> >  drivers/fsi/fsi-occ.c | 126 ++++++++++++++++++++++++++++++------------
+> >  1 file changed, 92 insertions(+), 34 deletions(-)
 
-Thanks for the heads up. I will send another review with a fix.
+> > @@ -508,6 +557,7 @@ static int occ_probe(struct platform_device *pdev)
+> >       struct occ *occ;
+> >       struct platform_device *hwmon_dev;
+> >       struct device *dev = &pdev->dev;
+> > +     const void *md =  of_device_get_match_data(dev);
+> >       struct platform_device_info hwmon_dev_info = {
+> >               .parent = dev,
+> >               .name = "occ-hwmon",
+> > @@ -517,6 +567,7 @@ static int occ_probe(struct platform_device *pdev)
+> >       if (!occ)
+> >               return -ENOMEM;
+> >
+> > +     occ->version = (enum versions)md;
 
-Thanks,
-Chu
+The 0day bot warns about this when bulding for 64 bit architectures.
+
+How about you drop the match data and instead match on the compatible
+string to know which version to expect?
+
+> >       occ->dev = dev;
+> >       occ->sbefifo = dev->parent;
+> >       mutex_init(&occ->occ_lock);
+> > @@ -575,7 +626,14 @@ static int occ_remove(struct platform_device *pdev)
+> >  }
+> >
+> >  static const struct of_device_id occ_match[] = {
+> > -     { .compatible = "ibm,p9-occ" },
+> > +     {
+> > +             .compatible = "ibm,p9-occ",
+> > +             .data = (void *)occ_p9
+> > +     },
+> > +     {
+> > +             .compatible = "ibm,p10-occ",
+> > +             .data = (void *)occ_p10
+> > +     },
+> >       { },
+> >  };
+> >
