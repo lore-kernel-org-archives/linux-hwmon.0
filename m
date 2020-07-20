@@ -7,49 +7,49 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02912C28E85
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Jul 2020 21:39:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BE1AC388D0
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Jul 2020 21:41:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C915D22CF7
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Jul 2020 21:39:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3D982208E4
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Jul 2020 21:41:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1595281145;
-	bh=404mlOwBRprthN1mkVirySgS0S2bS+wvcYx3rW8zKHA=;
+	s=default; t=1595281310;
+	bh=mzOX92lrI1z/vL+l8kiOBnblu9pbDp1Fzd+SgTVzpEI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=nJSbCE7LTjDEWz1mYlqpJ7hznF2/qaPA1WRg8SvBVUAP2tV81tOTVgorkUmlOhhCt
-	 Q5wRYe1njwPGnRDFzkMKK0YHbesJ/LL3vTjyfcxfOR8nMwpVVDtU4fznUMJL97Yung
-	 8rsSiWGDFtHGnd6Sm/m60ZD3ROjFtENCOCSpOFRA=
+	b=lAgnuc/NgN6M8tZlg5Tb4hsl3Ky1+TL4MHi6l4BT6TOcfc5l4ZLzhzZMiLRfaErtM
+	 nu5yYgJqlF76APqC5Jv000Jd4fJPilh221Y8SzqSQnY62r555BMnsVe3hdvJmtUKiw
+	 7JQlU5tI9cG6QvKpwWCy59ZRalqYoTpcpF6zB2ow=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728329AbgGTVjD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 20 Jul 2020 17:39:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58110 "EHLO mail.kernel.org"
+        id S1728255AbgGTVlp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 20 Jul 2020 17:41:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58986 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728319AbgGTVjD (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 20 Jul 2020 17:39:03 -0400
+        id S1728451AbgGTVjY (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 20 Jul 2020 17:39:24 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CA7FA22BEF;
-        Mon, 20 Jul 2020 21:39:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5726422CF8;
+        Mon, 20 Jul 2020 21:39:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595281142;
-        bh=404mlOwBRprthN1mkVirySgS0S2bS+wvcYx3rW8zKHA=;
+        s=default; t=1595281164;
+        bh=mzOX92lrI1z/vL+l8kiOBnblu9pbDp1Fzd+SgTVzpEI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nQ0Dtml6WfhLeFuXNAnGm5zeV5hV1m+9I/Z/Ma+8STeaIBrYeunqQ5gx7IHZh5z/G
-         j/CxXKFPK70KPrsJI6cZ9A6h+STNKrXx9x2SxjIta+YYUzTtNilNDQ0/6hpe97qOa+
-         /81e5+BdHzRKtQhgT7m59BVYIzD7Es/iVzJ2u7MM=
+        b=Y5BqSgMzsqVDCX3WdnFltMbkgmybbvSLLPznY4dpbUg/T927ryN8VleZO0740YvdK
+         A1YPRZAKDWD6BAK2hGd4wA5xix6zpJxbP76W9vygEddhJX0/nNVBuO373vyM9cvcGC
+         z57aKOUYMhwQLEhOhUvijI7CYn4WtpxDKPUVPHgY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Evgeny Novikov <novikov@ispras.ru>,
         Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org
-Subject: [PATCH AUTOSEL 4.19 09/19] hwmon: (aspeed-pwm-tacho) Avoid possible buffer overflow
-Date:   Mon, 20 Jul 2020 17:38:40 -0400
-Message-Id: <20200720213851.407715-9-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 07/13] hwmon: (aspeed-pwm-tacho) Avoid possible buffer overflow
+Date:   Mon, 20 Jul 2020 17:39:08 -0400
+Message-Id: <20200720213914.407919-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200720213851.407715-1-sashal@kernel.org>
-References: <20200720213851.407715-1-sashal@kernel.org>
+In-Reply-To: <20200720213914.407919-1-sashal@kernel.org>
+References: <20200720213914.407919-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -80,10 +80,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+)
 
 diff --git a/drivers/hwmon/aspeed-pwm-tacho.c b/drivers/hwmon/aspeed-pwm-tacho.c
-index 5e449eac788a1..a43fa730a513b 100644
+index 69b97d45e3cbb..e4337e9dda444 100644
 --- a/drivers/hwmon/aspeed-pwm-tacho.c
 +++ b/drivers/hwmon/aspeed-pwm-tacho.c
-@@ -880,6 +880,8 @@ static int aspeed_create_fan(struct device *dev,
+@@ -878,6 +878,8 @@ static int aspeed_create_fan(struct device *dev,
  	ret = of_property_read_u32(child, "reg", &pwm_port);
  	if (ret)
  		return ret;
