@@ -7,48 +7,49 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97F59C4727F
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Jul 2020 21:43:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4883BC43458
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Jul 2020 21:44:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 74EBF207FC
-	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Jul 2020 21:43:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 27C6A22BF5
+	for <linux-hwmon@archiver.kernel.org>; Mon, 20 Jul 2020 21:44:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1595281406;
-	bh=z7Xsc4pAQnAXAS8z63rxjvWkR5v1ktjL8dfKflE2mQM=;
+	s=default; t=1595281476;
+	bh=bsvqLDOLlUmaBR5IRdHrcZS4+AMxNdAhjU/AXGsiBvQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=yeP6BFR+HRIvUOAdIgY5SWq6KSt/Pvbp9yrDFZgh76lLaF/Qq8e7OS7na5RGuP5st
-	 ncv95/sw2RxZCT3Np7H/uj+o8/SSt7tiF1+qorSNLBqF5nrnjnTbUMWQ1XTAhXMnuk
-	 J0XOX+94akTQ9YRB0+8q0WIZvQ5cujHKIsY0a7pU=
+	b=cw6d775fFZFJ4Ftr146WDibc05PMp2C88y7kSdboGY7xA0crj/CmMX1dxkbX4DQK4
+	 ByUTK+1y8SLQzj+uDXnJZp3FhIiGl9SxeeziPnMhN69TPPwKEkvZB+D+ttOHRSArGy
+	 S3+PQH5VY2PXhZpdhwSW0DzQy8FcisicB6JRbN3g=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727864AbgGTVnZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 20 Jul 2020 17:43:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57156 "EHLO mail.kernel.org"
+        id S1727905AbgGTVh4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 20 Jul 2020 17:37:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56022 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728171AbgGTVic (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 20 Jul 2020 17:38:32 -0400
+        id S1727888AbgGTVhy (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 20 Jul 2020 17:37:54 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5527B22BF5;
-        Mon, 20 Jul 2020 21:38:31 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 590A222CBB;
+        Mon, 20 Jul 2020 21:37:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595281112;
-        bh=z7Xsc4pAQnAXAS8z63rxjvWkR5v1ktjL8dfKflE2mQM=;
+        s=default; t=1595281074;
+        bh=bsvqLDOLlUmaBR5IRdHrcZS4+AMxNdAhjU/AXGsiBvQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rQKG0v6qANqcJdqHramgk+/fGItdDn5TM2IUd919NupG7H9GeMeYTUDRF4Ebi0PtG
-         XIOTv1NSxzEMzQ37v6iZMAFrYNH0W8a41pQ5DnfSbXgK3jzbDPtyUXkepO3LcxNLFb
-         CTbb6aYzI+GVJ+Nqn6Rd2LZ/2be8p8KAQ+aTzjIU=
+        b=p4mgNMmYXqP6dKdYltxoAqjn2s0lqOXVMWnfnpM1ROL3QIzlJ4oTFX1VSPIB3hMfn
+         B6ga1+6Je79MmL+a+Qu0DWgpf3V7qMI9NuSQtRqAkyH5jjB647/uWmf3gLLA1c/q96
+         3+33YHPnmuqe3Zro2vyDayXSf2aE82FbZNchK3vM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Chu Lin <linchuyuan@google.com>,
+Cc:     Cristian Marussi <cristian.marussi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 20/34] hwmon: (adm1275) Make sure we are reading enough data for different chips
-Date:   Mon, 20 Jul 2020 17:37:53 -0400
-Message-Id: <20200720213807.407380-20-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.7 31/40] hwmon: (scmi) Fix potential buffer overflow in scmi_hwmon_probe()
+Date:   Mon, 20 Jul 2020 17:37:06 -0400
+Message-Id: <20200720213715.406997-31-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200720213807.407380-1-sashal@kernel.org>
-References: <20200720213807.407380-1-sashal@kernel.org>
+In-Reply-To: <20200720213715.406997-1-sashal@kernel.org>
+References: <20200720213715.406997-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -58,68 +59,41 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Chu Lin <linchuyuan@google.com>
+From: Cristian Marussi <cristian.marussi@arm.com>
 
-[ Upstream commit 6d1d41c075a1a54ba03370e268171fec20e06563 ]
+[ Upstream commit 3ce17cd2b94907f6d91b81b32848044b84c97606 ]
 
-Issue:
-When PEC is enabled, binding adm1272 to the adm1275 would
-fail due to PEC error. See below:
-adm1275: probe of xxxx failed with error -74
+SMATCH detected a potential buffer overflow in the manipulation of
+hwmon_attributes array inside the scmi_hwmon_probe function:
 
-Diagnosis:
-Per the datasheet of adm1272, adm1278, adm1293 and amd1294,
-PMON_CONFIG (0xd4) is 16bits wide. On the other hand,
-PMON_CONFIG (0xd4) for adm1275 is 8bits wide. The driver should not
-assume everything is 8bits wide and read only 8bits from it.
+drivers/hwmon/scmi-hwmon.c:226
+ scmi_hwmon_probe() error: buffer overflow 'hwmon_attributes' 6 <= 9
 
-Solution:
-If it is adm1272, adm1278, adm1293 and adm1294, use i2c_read_word.
-Else, use i2c_read_byte
+Fix it by statically declaring the size of the array as the maximum
+possible as defined by hwmon_max define.
 
-Testing:
-Binding adm1272 to the driver.
-The change is only tested on adm1272.
-
-Signed-off-by: Chu Lin <linchuyuan@google.com>
-Link: https://lore.kernel.org/r/20200709040612.3977094-1-linchuyuan@google.com
+Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+Link: https://lore.kernel.org/r/20200715121338.GA18761@e119603-lin.cambridge.arm.com
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/pmbus/adm1275.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ drivers/hwmon/scmi-hwmon.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275.c
-index 5caa37fbfc187..66b12e5ccbc65 100644
---- a/drivers/hwmon/pmbus/adm1275.c
-+++ b/drivers/hwmon/pmbus/adm1275.c
-@@ -454,6 +454,7 @@ MODULE_DEVICE_TABLE(i2c, adm1275_id);
- static int adm1275_probe(struct i2c_client *client,
- 			 const struct i2c_device_id *id)
- {
-+	s32 (*config_read_fn)(const struct i2c_client *client, u8 reg);
- 	u8 block_buffer[I2C_SMBUS_BLOCK_MAX + 1];
- 	int config, device_config;
- 	int ret;
-@@ -499,11 +500,16 @@ static int adm1275_probe(struct i2c_client *client,
- 			   "Device mismatch: Configured %s, detected %s\n",
- 			   id->name, mid->name);
+diff --git a/drivers/hwmon/scmi-hwmon.c b/drivers/hwmon/scmi-hwmon.c
+index 286d3cfda7de8..d421e691318b3 100644
+--- a/drivers/hwmon/scmi-hwmon.c
++++ b/drivers/hwmon/scmi-hwmon.c
+@@ -147,7 +147,7 @@ static enum hwmon_sensor_types scmi_types[] = {
+ 	[ENERGY] = hwmon_energy,
+ };
  
--	config = i2c_smbus_read_byte_data(client, ADM1275_PMON_CONFIG);
-+	if (mid->driver_data == adm1272 || mid->driver_data == adm1278 ||
-+	    mid->driver_data == adm1293 || mid->driver_data == adm1294)
-+		config_read_fn = i2c_smbus_read_word_data;
-+	else
-+		config_read_fn = i2c_smbus_read_byte_data;
-+	config = config_read_fn(client, ADM1275_PMON_CONFIG);
- 	if (config < 0)
- 		return config;
- 
--	device_config = i2c_smbus_read_byte_data(client, ADM1275_DEVICE_CONFIG);
-+	device_config = config_read_fn(client, ADM1275_DEVICE_CONFIG);
- 	if (device_config < 0)
- 		return device_config;
- 
+-static u32 hwmon_attributes[] = {
++static u32 hwmon_attributes[hwmon_max] = {
+ 	[hwmon_chip] = HWMON_C_REGISTER_TZ,
+ 	[hwmon_temp] = HWMON_T_INPUT | HWMON_T_LABEL,
+ 	[hwmon_in] = HWMON_I_INPUT | HWMON_I_LABEL,
 -- 
 2.25.1
 
