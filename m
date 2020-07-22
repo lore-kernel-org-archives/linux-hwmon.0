@@ -1,237 +1,190 @@
-Return-Path: <SRS0=0msx=BA=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=tjBW=BB=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9EA5C433E0
-	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Jul 2020 19:54:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36017C433E2
+	for <linux-hwmon@archiver.kernel.org>; Wed, 22 Jul 2020 08:16:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B8B902072E
-	for <linux-hwmon@archiver.kernel.org>; Tue, 21 Jul 2020 19:54:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 08E512065E
+	for <linux-hwmon@archiver.kernel.org>; Wed, 22 Jul 2020 08:16:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n+Bxp1NP"
+	dkim=pass (1024-bit key) header.d=intel.onmicrosoft.com header.i=@intel.onmicrosoft.com header.b="ixjPIJU+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730664AbgGUTyH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 21 Jul 2020 15:54:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48630 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728683AbgGUTyH (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 21 Jul 2020 15:54:07 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28535C061794
-        for <linux-hwmon@vger.kernel.org>; Tue, 21 Jul 2020 12:54:07 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id s26so11223327pfm.4
-        for <linux-hwmon@vger.kernel.org>; Tue, 21 Jul 2020 12:54:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=HInWRRkENI0tlVDMO9jmAFlYxE60W3N7Oxu/O+uTpII=;
-        b=n+Bxp1NPkB8d+6SGiG1ceE1Z1EPHQaPt3ONW5L6UGNXsOn/CvXC9AIPyBPqCg3pEk0
-         qx2ZJXgLtaiAE2ENEkiZUV7LlxKWcfeH2fEbwC8JUZyeiplF/qXhnw0tlKYmNQTez+06
-         OM/esl97sXjNVHmGFkAr2FMSLZ+pjxdxJuaj/YFSNbjhZWPI2WWaG1LK6F00kxSXa4pH
-         E6dL/BOp1CZckSaHJBu2qRwlKbkm2g19i3q30yt83brLx9c/1Ouzky4xy/zFB/0xVWPG
-         056o5mpZfjLcMfCc3SFkn7GYcdqvYBnacDAMgNMeb3SEWahtIv0aV2nB50gY4R6/QCqz
-         tBYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=HInWRRkENI0tlVDMO9jmAFlYxE60W3N7Oxu/O+uTpII=;
-        b=YTnqpfeuDSyhOpcbtLJwmrT+FDOtRs/vi4m7OYmXQZtrtpHXCvSP+8gsE3uGuM+ne9
-         zxi9brzlnpfLet9zINoKmZz/xCcXkrVqILgQuC7jk4lUF1LCs0s+htFz/Qv3mvi2k/0b
-         PJCB2rTGvJ7gdsXpOw/zS2StZxh2PTleSpf1zVDLOsTGn/tY365oP1JbpMKgiseRCofO
-         OA4x2gmloJC/otENeq6Br5n0Mp9k4VgcwMzm/Ja9PXKJBPSZ4nWS+bPDqBqS1EN9Lucs
-         6L5VRJYyvUCJVexjXnyepaBSl1NiguvyVJg6DE0Bqfcxwym043LsakI/+MF+AiSx1xKU
-         IfPA==
-X-Gm-Message-State: AOAM533n2IwI9+59SPF3ckyGgMmKnfKPDLXYBtrCEc91vEv0yVcQfA5A
-        sLwUXByCnqZ/vrvjwrTwDS7zyBgl
-X-Google-Smtp-Source: ABdhPJx1G8FDG2OtP6wivtGbYpsHeaKPrPPKdO6EO3tntoIO21XdGk8HHorO9niOXYwAmthsnGNJZQ==
-X-Received: by 2002:aa7:9ec5:: with SMTP id r5mr24228488pfq.86.1595361246384;
-        Tue, 21 Jul 2020 12:54:06 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b11sm21732606pfr.179.2020.07.21.12.54.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jul 2020 12:54:05 -0700 (PDT)
-Subject: Re: Maximum rate value of input power for pmbus device
-To:     zlukwins <zbigniew.lukwinski@linux.intel.com>
-Cc:     jae.hyun.yoo@linux.intel.com, lukasz.tuz@intel.com,
-        linux-hwmon@vger.kernel.org
-References: <ddcb240a-5444-ba46-ecdf-70350d27125f@linux.intel.com>
- <20200629165950.GB113813@roeck-us.net>
- <808c2d5c-e0d9-572c-a002-2a87430702c7@linux.intel.com>
- <0e806aa6-657d-e09b-6444-4ba430dc041f@roeck-us.net>
- <2272b8d4-84fd-3c23-db38-23b6e61fe684@linux.intel.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <0d4a7ba3-6019-4737-5d99-24da45efdd81@roeck-us.net>
-Date:   Tue, 21 Jul 2020 12:54:03 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <2272b8d4-84fd-3c23-db38-23b6e61fe684@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
+        id S1726679AbgGVIQV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 22 Jul 2020 04:16:21 -0400
+Received: from mga11.intel.com ([192.55.52.93]:40289 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726147AbgGVIQV (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 22 Jul 2020 04:16:21 -0400
+IronPort-SDR: 8YMdJHFfi1aI5MU9E4R/v16BnMrmDiMDfnU0H25RtY1hC/DY78G2pwGC+4QckhmCMf/p8OdwBP
+ +H3zNrrSswTA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9689"; a="148224784"
+X-IronPort-AV: E=Sophos;i="5.75,381,1589266800"; 
+   d="scan'208";a="148224784"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2020 01:16:19 -0700
+IronPort-SDR: eJd2MfPPoEZefRYqG64U7eL7vAJps5u7aTlg/EzCjbWiZyFPZaP+AvKlIgO2GsCUQ8Td5/WXSE
+ 2085NQ3Y3DwA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,381,1589266800"; 
+   d="scan'208";a="270680972"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by fmsmga007.fm.intel.com with ESMTP; 22 Jul 2020 01:16:19 -0700
+Received: from fmsmsx606.amr.corp.intel.com (10.18.126.86) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Wed, 22 Jul 2020 01:16:19 -0700
+Received: from FMSEDG002.ED.cps.intel.com (10.1.192.134) by
+ fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.1713.5
+ via Frontend Transport; Wed, 22 Jul 2020 01:16:19 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.107)
+ by edgegateway.intel.com (192.55.55.69) with Microsoft SMTP Server (TLS) id
+ 14.3.439.0; Wed, 22 Jul 2020 01:16:16 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jx4gxwCV6EYhj5n/hQcIpuCoZ5VCIr/cYjBovCB+fiwJWw4IRI1awCkCPkyCDjg3wY3U6PgHEqsOEHdeKdAugqM9zog9Iu6mg8MwimCch4oBKAHE5vqqZJY82Bt+rmA4SUXxExwurQAxh5795Mn4qv+awSXy5wwUNbGFM4qH3nnXKW4URL31bbstxj4CPB2+0l97d0ZJN+mVOEVB/hqQyqLqGWrOm7kY4E2iD+XyDLYVqoh3yiS/1Z6xMCkJiJNdxx6oYH+VOEkKl9BZ2aWcxVG7/brkdEERiClUGSkE3oGybkoKaW18YVup9U1cIuRUwPNPfxd6T5MsSBuRNYgiBQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UWiAiTwDFVJ7oznO4ZcdIlNJ8QbCqO4siY2DMQIB5gE=;
+ b=B1FS/FjQovMDAi/KjA6e+9IPAJBTn59Y39ywYWdhRnH2KLTHVf3iqcQHEY4jzgKmWqs3cgmFNPsxVvF+CTIFTwP9iyFaJlFTVvRL5zvWlH2D6enQmryVyQGkZhFDIDbbPa7AmrLkYumDd7aUXbtciubxPA+d02OYtIuoY7STmiCZg0gBUINdgtJ0S3XasDloPVYonEe5EWnyRsSfaC7azWP9FzKDKcCUmwdkOH1YujAcRYRqqQzCUZhiUE3hu7NOfeCpgyiN2HomG8VXeTxjY1eBPvXdY57QhLvTiwoGJwDzYKsv8VlACIQrNtGQ0QJ1VgVVUGARwCh/ZseySPolNg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UWiAiTwDFVJ7oznO4ZcdIlNJ8QbCqO4siY2DMQIB5gE=;
+ b=ixjPIJU+lNysq8tjKhP/FEzPpJ+OcgL04xeAeONo14IVYI429daUW+doGTMvO0cUsSbLPY6AIJckXjWnpqIz+86w/w48QNOZR8mmuzT0I3bRMsUZA9EdU66q2Ne93SjM6btfylMBMYbBsj7Yi3Nq7a1lDr1hu7FflYODPIS/HcM=
+Received: from MN2PR11MB4064.namprd11.prod.outlook.com (2603:10b6:208:137::18)
+ by MN2PR11MB3760.namprd11.prod.outlook.com (2603:10b6:208:fa::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3195.23; Wed, 22 Jul
+ 2020 08:16:11 +0000
+Received: from MN2PR11MB4064.namprd11.prod.outlook.com
+ ([fe80::bd66:45b5:c0ae:b9d6]) by MN2PR11MB4064.namprd11.prod.outlook.com
+ ([fe80::bd66:45b5:c0ae:b9d6%6]) with mapi id 15.20.3195.028; Wed, 22 Jul 2020
+ 08:16:11 +0000
+From:   "Xia, Hui" <hui.xia@intel.com>
+To:     jaap aarts <jaap.aarts1@gmail.com>, lkp <lkp@intel.com>
+CC:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>
+Subject: RE: [PATCH V2] hwmon: add fan/pwm driver for corsair h100i platinum
+Thread-Topic: [PATCH V2] hwmon: add fan/pwm driver for corsair h100i platinum
+Thread-Index: AQHWXbDfIyeew4xCw0OD5XhHSdiyhqkTRVOQ
+Date:   Wed, 22 Jul 2020 08:16:10 +0000
+Message-ID: <MN2PR11MB406430304153609D41BA6472E5790@MN2PR11MB4064.namprd11.prod.outlook.com>
+References: <20200717121642.41022-1-jaap.aarts1@gmail.com>
+ <202007190844.mNvV0B06%lkp@intel.com>
+ <CACtzdJ183FF31S3J2ki7E1xkAOBsGiSAudc__Q578RUR9zC5XA@mail.gmail.com>
+In-Reply-To: <CACtzdJ183FF31S3J2ki7E1xkAOBsGiSAudc__Q578RUR9zC5XA@mail.gmail.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.2.0.6
+authentication-results: gmail.com; dkim=none (message not signed)
+ header.d=none;gmail.com; dmarc=none action=none header.from=intel.com;
+x-originating-ip: [192.198.147.215]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 7869598f-89c7-4fc0-c329-08d82e177e5d
+x-ms-traffictypediagnostic: MN2PR11MB3760:
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <MN2PR11MB3760FA0A50B76F7766A7D809E5790@MN2PR11MB3760.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: MPOcYNc9yhIe1cf2YFoMR8B9Nf9fEYP4hmc4n/NPT21WbV8FBwauGbo2aLBBRBzj+wmybGg1JtF9tnISfdG4JrtVvMe1UuNwHpcO/qKxqpHHXE97UAC3JF1eWmmSbcVRGRAcHhi3zxEkGRy8OJRS2fLHeb6ZYdKi7RPUTUBqFEBISdryhZ7waKYdEwM8hPG9lztD4WcHxPJOpPctGyXQIdJwgltexed9+JUediAHCPngEIHi0Mi+mvJ1E9QRz6JC23HrJQeiXZ/hhE7+EA+CQd7xE5jGN1DOqpOgvwPgXnViecbpa94X5+6AX/BI7n8DrwaJgaVV2PO1QHJNhrSidYfufe7r4Zun9h2VaOcAFOnilFTtK2Mwnibf4QCp70rPpOfXxOIgpA7k0ecY6X4DgA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR11MB4064.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(366004)(346002)(396003)(376002)(136003)(39860400002)(33656002)(110136005)(83380400001)(5660300002)(55016002)(54906003)(26005)(66476007)(66946007)(66446008)(64756008)(66556008)(76116006)(71200400001)(186003)(83080400001)(86362001)(6506007)(7696005)(8936002)(52536014)(8676002)(478600001)(6636002)(9686003)(4326008)(2906002)(966005)(316002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: QsCy7OrZ4aKsE+cF/cGlC+9+zL0YlqJZo7F6Pj4ecTUl4+Ndm/dLygfoffjsTaQmSlO/qOBhttHTVer+WheqLURf/emAIdXiVWu11tKd2x4gpOahSHECf27byVKk2V2u27Uj4+te2otztgp8NLkaTfbXfdOTIBqFkru6/QZgl7wXnOa0GjM8E5PabT48fVW8eZTmKc+9Q1ELrqIyucTU549fsc96OFu8cC7vnZvOGMh6jyi0eUj2OArtkWoe1ZIWpUE2Qg7DTeqLcHJEgpuMNSiW2w6i5a+YgmcX44BGxT945YiSpEttBy5IzOSu4/ecnHH/V+I8RtJHwtCmMOf5jSOjV4AA2ad1uDzAuxvBxy+lXDZYUAxKuvfomY2EWJ7IWz1lk7TuW6OuyPs84+RBCiXBsekaqkY5bJuWcVdSVJi6f15Lg2VZvCLXnOvxWy+RI/e25dsESbO4eabBwm8T4O5IjxU8TL3e5gWuxMpeKBoPICQPpZMRMi0QbMkIh4JR
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR11MB4064.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7869598f-89c7-4fc0-c329-08d82e177e5d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jul 2020 08:16:11.0215
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: QhAtpNhMWQmsat5el1GN8ktd/KraCDmPTRIgu1vjCeC5iyzhEGA1IFgzNDoO5S0kI8u0x9iWIDaykPb4yjGa7Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB3760
+X-OriginatorOrg: intel.com
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 7/21/20 11:31 AM, zlukwins wrote:
-> 
-> On 7/8/20 3:33 PM, Guenter Roeck wrote:
->> On 7/8/20 3:50 AM, zlukwins wrote:
->>> On 6/29/20 6:59 PM, Guenter Roeck wrote:
->>>> +linux-hwmon@vger.kernel.org
->>>>
->>>> On Mon, Jun 29, 2020 at 08:31:11AM +0200, zlukwins wrote:
->>>>> Hi,
->>>>>
->>>>>
->>>>> I am OpenBMC FW developer working currently on some power measurement stuff.
->>>>>
->>>>> I would like to have maximum rated input power for pmubus device available
->>>>> in hwmon sysfs. This value is read by MFR_PIN_MAX command:
->>>>>
->>>>> /MFR_PIN_MAX//
->>>>> //The MFR_PIN_MIN command sets or retrieves the maximum rated value, in
->>>>> watts, of//
->>>>> //the input power./
->>>> Interesting typo in the PMBus specification. Yes, it really does associate
->>>> MFR_PIN_MIN - which doesn't seem to exist - with the maximum rated output
->>>> power.
->>>>> And I wondering which attribute shell be used to expose that value in sysfs.
->>>>> I went through documentation
->>>>> (https://www.kernel.org/doc/Documentation/hwmon/sysfs-interface) and found
->>>>> the following:
->>>>>
->>>>> power[1-*]_max            Maximum power.
->>>>>                  Unit: microWatt
->>>>>                  RW
->>>>>
->>>>> But it looks like it is already occupied by PIN_OP_WARN_LIMIT.
->>>>>
->>>>> Maybe new attribute shall be used? If so how to call that?
->>>>>
->>>> None of the standard attributes reports (or is supposed to report) rated
->>>> values, so we can not just use any of those.
->>>>
->>>> Also, we can not just add a single attribute to handle this situation,
->>>> for the simple reason that there are many more similar attributes.
->>>> PMBus specifies (this is from version 1.3.1):
->>>>
->>>> MFR_VIN_MIN
->>>> MFR_VIN_MAX
->>>> MFR_IIN_MAX
->>>> MFR_PIN_MAX
->>>> MFR_VOUT_MIN
->>>> MFR_VOUT_MAX
->>>> MFR_IOUT_MAX
->>>> MFR_POUT_MAX
->>>> MFR_TAMBIENT_MAX
->>>> MFR_TAMBIENT_MIN
->>>> MFR_MAX_TEMP_{1,2.3}
->>>>
->>>> All those report rated values. I do see the need/desire for reporting such
->>>> information. The only real solution I can see is to add a new set of
->>>> attributes to the hwmon ABI. Something like:
->>>>
->>>>      currentX_rated_min    # for consistency
->>>>      currentX_rated_max
->>>>      inX_rated_min
->>>>      inX_rated_max
->>>>      powerX_rated_min    # for consistency
->>>>      powerX_rated_max
->>>>      tempX_rated_min
->>>>      tempX_rated_max
->>>> plus maybe, for consistency:
->>>>      humidityX_rated_min
->>>>      humidityX_rated_max
->>>>
->>>> Those would be read-only attributes.
->>>>
->>>> Thoughts, comments, feedback anyone ?
->>>>
->>>> Thanks,
->>>> Guenter
->>>
->>> I really like your proposition but I guess we need to wait few more days for the feedback.
->>>
->>> But have some questions here.
->>>
->>> What about potential next steps when we all agreed to follow that approach. Should documentation modification reach upstream repository first and then e.g. pmbus hwmon module implementation?
->>>
->> We'll need a series of patches. One to amend the documentation, one to add
->> the necessary code to the hwmon core (so that the core supports it with
->> the _with_info API), one to add support to the PMBus core, and one each
->> to add support to affected drivers.
->>
->> Once this is all complete, the lm-sensors package should be updated
->> as well.
->>
->> Guenter
-> 
-> Do you think we need to wait for feedback or maybe we could implement with your proposition? Maybe I could start working on patches?
-> 
-
-I don't think we will get any further feedback. Please go ahead.
-
-Thanks,
-Guenter
-
-> 
-> Thanks
-> 
-> Zbigniew
-> 
-
+DQoNCj4tLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPkZyb206IGphYXAgYWFydHMgPGphYXAu
+YWFydHMxQGdtYWlsLmNvbT4NCj5TZW50OiAyMDIw5bm0N+aciDE55pelIDE3OjM4DQo+VG86IGtl
+cm5lbCB0ZXN0IHJvYm90IDxsa3BAaW50ZWwuY29tPg0KPkNjOiBKZWFuIERlbHZhcmUgPGpkZWx2
+YXJlQHN1c2UuY29tPjsgR3VlbnRlciBSb2VjayA8bGludXhAcm9lY2stdXMubmV0PjsNCj5saW51
+eC1od21vbkB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LXVzYkB2Z2VyLmtlcm5lbC5vcmc7IGtidWls
+ZC0NCj5hbGxAbGlzdHMuMDEub3JnDQo+U3ViamVjdDogUmU6IFtQQVRDSCBWMl0gaHdtb246IGFk
+ZCBmYW4vcHdtIGRyaXZlciBmb3IgY29yc2FpciBoMTAwaSBwbGF0aW51bQ0KPg0KPkkgdHJpZWQg
+dG8gcmVwcm9kdWNlIHRoaXMsIGJ1dCBJIGdvdCB0aGUgZXJyb3I6DQo+eHRlbnNhLWxpbnV4LWdj
+YzogZXJyb3I6IG1pc3NpbmcgYXJndW1lbnQgdG8gJy1XZnJhbWUtbGFyZ2VyLXRoYW49Jw0KPmF0
+IHRoZSBsYXN0IHN0ZXAgdXNpbmcgdGhlIHByb3ZpZGVkIGNvbmZpZy4NCkhpIEphYXAgQWFydHMs
+DQoNClNvcnJ5IHRvIG5vdCByZXByb2R1Y2UgdGhlIGVycm9yIHlvdSBtZXQuIFlvdSBjYW4gdHJ5
+IHRvIHJlcHJvZHVjZSB0aGUgbW9kcG9zdCBlcnJvcg0KV2l0aCBhbnkga2VybmVsIGNvbmZpZyB0
+aGF0IGVuYWJsZSBTRU5TT1JTX0NPUlNBSVJfSFlEUk9fSV9QUk8gYW5kIGRpc2FibGUgVVNCLg0K
+VGhlIGRyaXZlciBzdXBwb3NlZCB0byBuZWVkIGFkZCAiZGVwZW5kcyBvbiBVU0IiIGluIGtjb25m
+aWcgc2luY2UgaXQgdXNlIHVzYiBBUEkuDQoNCi0tSHVpDQoNCj4NCj5KYWFwIEFhcnRzDQo+DQo+
+T24gU3VuLCAxOSBKdWwgMjAyMCBhdCAwMjozMSwga2VybmVsIHRlc3Qgcm9ib3QgPGxrcEBpbnRl
+bC5jb20+IHdyb3RlOg0KPj4NCj4+IEhpIGphYXAsDQo+Pg0KPj4gVGhhbmsgeW91IGZvciB0aGUg
+cGF0Y2ghIFlldCBzb21ldGhpbmcgdG8gaW1wcm92ZToNCj4+DQo+PiBbYXV0byBidWlsZCB0ZXN0
+IEVSUk9SIG9uIGh3bW9uL2h3bW9uLW5leHRdIFthbHNvIGJ1aWxkIHRlc3QgRVJST1Igb24NCj4+
+IHY1LjgtcmM1IG5leHQtMjAyMDA3MTddIFtJZiB5b3VyIHBhdGNoIGlzIGFwcGxpZWQgdG8gdGhl
+IHdyb25nIGdpdA0KPj4gdHJlZSwga2luZGx5IGRyb3AgdXMgYSBub3RlLg0KPj4gQW5kIHdoZW4g
+c3VibWl0dGluZyBwYXRjaCwgd2Ugc3VnZ2VzdCB0byB1c2UgJy0tYmFzZScgYXMgZG9jdW1lbnRl
+ZCBpbg0KPj4gaHR0cHM6Ly9naXQtc2NtLmNvbS9kb2NzL2dpdC1mb3JtYXQtcGF0Y2hdDQo+Pg0K
+Pj4gdXJsOiAgICBodHRwczovL2dpdGh1Yi5jb20vMGRheS1jaS9saW51eC9jb21taXRzL2phYXAt
+YWFydHMvaHdtb24tYWRkLWZhbi0NCj5wd20tZHJpdmVyLWZvci1jb3JzYWlyLWgxMDBpLXBsYXRp
+bnVtLzIwMjAwNzE3LTIwMTkyMw0KPj4gYmFzZTogICBodHRwczovL2dpdC5rZXJuZWwub3JnL3B1
+Yi9zY20vbGludXgva2VybmVsL2dpdC9ncm9lY2svbGludXgtc3RhZ2luZy5naXQNCj5od21vbi1u
+ZXh0DQo+PiBjb25maWc6IHh0ZW5zYS1yYW5kY29uZmlnLXIwMTEtMjAyMDA3MTkgKGF0dGFjaGVk
+IGFzIC5jb25maWcpDQo+PiBjb21waWxlcjogeHRlbnNhLWxpbnV4LWdjYyAoR0NDKSA5LjMuMCBy
+ZXByb2R1Y2UgKHRoaXMgaXMgYSBXPTENCj4+IGJ1aWxkKToNCj4+ICAgICAgICAgd2dldCBodHRw
+czovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20vaW50ZWwvbGtwLQ0KPnRlc3RzL21hc3Rlci9z
+YmluL21ha2UuY3Jvc3MgLU8gfi9iaW4vbWFrZS5jcm9zcw0KPj4gICAgICAgICBjaG1vZCAreCB+
+L2Jpbi9tYWtlLmNyb3NzDQo+PiAgICAgICAgICMgc2F2ZSB0aGUgYXR0YWNoZWQgLmNvbmZpZyB0
+byBsaW51eCBidWlsZCB0cmVlDQo+PiAgICAgICAgIENPTVBJTEVSX0lOU1RBTExfUEFUSD0kSE9N
+RS8wZGF5IENPTVBJTEVSPWdjYy05LjMuMCBtYWtlLmNyb3NzDQo+PiBBUkNIPXh0ZW5zYQ0KPj4N
+Cj4+IElmIHlvdSBmaXggdGhlIGlzc3VlLCBraW5kbHkgYWRkIGZvbGxvd2luZyB0YWcgYXMgYXBw
+cm9wcmlhdGUNCj4+IFJlcG9ydGVkLWJ5OiBrZXJuZWwgdGVzdCByb2JvdCA8bGtwQGludGVsLmNv
+bT4NCj4+DQo+PiBBbGwgZXJyb3JzIChuZXcgb25lcyBwcmVmaXhlZCBieSA+Piwgb2xkIG9uZXMg
+cHJlZml4ZWQgYnkgPDwpOg0KPj4NCj4+ID4+IEVSUk9SOiBtb2Rwb3N0OiAidXNiX2RlcmVnaXN0
+ZXIiIFtkcml2ZXJzL2h3bW9uL2NvcnNhaXJfaHlkcm9faV9wcm8ua29dDQo+dW5kZWZpbmVkIQ0K
+Pj4gPj4gRVJST1I6IG1vZHBvc3Q6ICJ1c2JfcmVnaXN0ZXJfZHJpdmVyIg0KPltkcml2ZXJzL2h3
+bW9uL2NvcnNhaXJfaHlkcm9faV9wcm8ua29dIHVuZGVmaW5lZCENCj4+ID4+IEVSUk9SOiBtb2Rw
+b3N0OiAidXNiX3B1dF9kZXYiIFtkcml2ZXJzL2h3bW9uL2NvcnNhaXJfaHlkcm9faV9wcm8ua29d
+DQo+dW5kZWZpbmVkIQ0KPj4gPj4gRVJST1I6IG1vZHBvc3Q6ICJ1c2JfcHV0X2ludGYiIFtkcml2
+ZXJzL2h3bW9uL2NvcnNhaXJfaHlkcm9faV9wcm8ua29dDQo+dW5kZWZpbmVkIQ0KPj4gPj4gRVJS
+T1I6IG1vZHBvc3Q6ICJ1c2JfZ2V0X2ludGYiIFtkcml2ZXJzL2h3bW9uL2NvcnNhaXJfaHlkcm9f
+aV9wcm8ua29dDQo+dW5kZWZpbmVkIQ0KPj4gPj4gRVJST1I6IG1vZHBvc3Q6ICJ1c2JfZ2V0X2Rl
+diIgW2RyaXZlcnMvaHdtb24vY29yc2Fpcl9oeWRyb19pX3Byby5rb10NCj51bmRlZmluZWQhDQo+
+PiA+PiBFUlJPUjogbW9kcG9zdDogInVzYl9maW5kX2NvbW1vbl9lbmRwb2ludHMiDQo+W2RyaXZl
+cnMvaHdtb24vY29yc2Fpcl9oeWRyb19pX3Byby5rb10gdW5kZWZpbmVkIQ0KPj4gPj4gRVJST1I6
+IG1vZHBvc3Q6ICJ1c2JfY29udHJvbF9tc2ciDQo+W2RyaXZlcnMvaHdtb24vY29yc2Fpcl9oeWRy
+b19pX3Byby5rb10gdW5kZWZpbmVkIQ0KPj4gPj4gRVJST1I6IG1vZHBvc3Q6ICJ1c2JfYXV0b3Bt
+X3B1dF9pbnRlcmZhY2UiDQo+W2RyaXZlcnMvaHdtb24vY29yc2Fpcl9oeWRyb19pX3Byby5rb10g
+dW5kZWZpbmVkIQ0KPj4gPj4gRVJST1I6IG1vZHBvc3Q6ICJ1c2JfYXV0b3BtX2dldF9pbnRlcmZh
+Y2UiDQo+W2RyaXZlcnMvaHdtb24vY29yc2Fpcl9oeWRyb19pX3Byby5rb10gdW5kZWZpbmVkIQ0K
+Pj4gPj4gRVJST1I6IG1vZHBvc3Q6ICJ1c2JfYnVsa19tc2ciIFtkcml2ZXJzL2h3bW9uL2NvcnNh
+aXJfaHlkcm9faV9wcm8ua29dDQo+dW5kZWZpbmVkIQ0KPj4NCj4+IC0tLQ0KPj4gMC1EQVkgQ0kg
+S2VybmVsIFRlc3QgU2VydmljZSwgSW50ZWwgQ29ycG9yYXRpb24NCj4+IGh0dHBzOi8vbGlzdHMu
+MDEub3JnL2h5cGVya2l0dHkvbGlzdC9rYnVpbGQtYWxsQGxpc3RzLjAxLm9yZw0KDQo=
