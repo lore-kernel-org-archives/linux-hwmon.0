@@ -7,67 +7,68 @@ X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F953C433E3
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Jul 2020 14:39:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA7ADC433E1
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Jul 2020 14:42:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 23A52206F0
-	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Jul 2020 14:39:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C519C2065F
+	for <linux-hwmon@archiver.kernel.org>; Fri, 24 Jul 2020 14:42:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VDjigg2s"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="No2NkwNP"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726643AbgGXOjy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 24 Jul 2020 10:39:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48580 "EHLO
+        id S1726317AbgGXOmh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 24 Jul 2020 10:42:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726617AbgGXOjy (ORCPT
+        with ESMTP id S1726170AbgGXOmh (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 24 Jul 2020 10:39:54 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B60DC0619D3;
-        Fri, 24 Jul 2020 07:39:54 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id 8so5328410pjj.1;
-        Fri, 24 Jul 2020 07:39:54 -0700 (PDT)
+        Fri, 24 Jul 2020 10:42:37 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC78C0619D3;
+        Fri, 24 Jul 2020 07:42:37 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id p3so5323765pgh.3;
+        Fri, 24 Jul 2020 07:42:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+        h=sender:subject:from:to:cc:references:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=T42a3p9vNE192uHdKFY4DZtUdhQyyobUPZw8/e8ZhWk=;
-        b=VDjigg2swevxExmBfa4gyLzf1c5MkBn+FXRd4QKowdwlE4Wu38Xd1Lc399py66MvgZ
-         dYNRO4ZWlqoEwmGFL9gNcyYxUNny+9/77Yr9IK9Sf3qKSq0w+qgJJ8pAARKrFplDWHNp
-         3V/GRXNYjKiSVdKRYAHYFMVW4LqewJsJkwN6jiSDPKMxAQHtzXCr+u/ghQpITiPUzpJT
-         m+mIytK7ZmfjOp2VqhkMRamvAQDG3ILX/hb4+gEZlY+YGITKwNKrfhXeqjDyCk4TnT08
-         iJ5ZTynfNTSBdFXGAUS7oRmwltRQh4cco+OMZ4edZ2dWyAv7+XlYAQ9sf+4R8p8rXGOB
-         Siyg==
+        bh=NlxDXhQzJBIRfymTZZz6Myn8/bnQvkKsV8BVRC4R7+w=;
+        b=No2NkwNPJUYbjgYSWPLGebNThwVWdnPNrp9MkUj1yrGku/ItJSQAgxze+H0ZDc2WbH
+         lPjtJPGQ9brAmfdnu6JrwYTIwG7//0hohxOxkr8AiQhrYKOcCXPuhpc+s0/1A7cFego+
+         bYXpijpXSf/r2F16OM/cC2n6JyvDAX9U+uq/hHIw3oT+ZnRrf//ekVeR8qm7VJt+PQjC
+         oRU8DsqYqjaRvgrq/PhFZEW6g9M1hn54hrdOnyUWOYifcplK9f/RgVlFRKMFIibQttKI
+         iV5zzI/OZwElCXXV+TzblnCK4LI3exy25ksRIxqpbR49gExmpwL6R0rbXN5XH3L2ThPr
+         3jrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+        h=x-gm-message-state:sender:subject:from:to:cc:references:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=T42a3p9vNE192uHdKFY4DZtUdhQyyobUPZw8/e8ZhWk=;
-        b=AQ5kFWVJDoFW856otDn+JOX67XCtvyGf3jbSaUQVZwn/vAZyOIRmU0hS8f7HYPVT3X
-         oTGmWIoljOuIR1EHLILGUkm7E//azqzj+izuKLYKhfVKgflYrCNizHafvz+syiV2Piyz
-         JIYWz3FMqoYzrH7eoQZfPfs8NZDp9VgIK1XFKiZDYIruuXYXakhI2se6ngxiSyml4yyd
-         +xCd19Sw/FatXkHpsqYdJ4xaicCODCdrscwPAz6nNfxOG7u7YWq4ZHJDzcdfDFyOgxp4
-         TJ1iuOf20NCxiR4m+eifxrMpzfW/2B+0PmZMZrrvI4Kj2Ao1AqWtlUHX4X5Q9or/rVim
-         nGyw==
-X-Gm-Message-State: AOAM530mskyD5O7anFZNaSqRm1w5PWOAbnzhX+E9/SzkbvWJ4n0T387I
-        U0JCPTro9LYWdENRl/PYFxZV4ukE
-X-Google-Smtp-Source: ABdhPJyGpKXymj5XuTDU+/ZIOgTLkv+1vqmPovJAcJvvH+t5/jNWaJSaU11SVdHYtOa/mz1AgsJhIg==
-X-Received: by 2002:a17:90a:158f:: with SMTP id m15mr5657118pja.93.1595601593608;
-        Fri, 24 Jul 2020 07:39:53 -0700 (PDT)
+        bh=NlxDXhQzJBIRfymTZZz6Myn8/bnQvkKsV8BVRC4R7+w=;
+        b=PcUfE7vFlY9EQqfldHfVDQU8YxB07IG0fCfwVov0sLXaP1jEwULAoD0OikvMRei6nD
+         d3m2bwfB+hdbMCUb9GxenlnPy8qwYy3h+K86owfRgFWYb9VAmP3ELhRwIAx/r7YY24Pm
+         iGkN1eZbm38CGgKHaJn9cp9t5PmxzICkR6U2X+mf2AqNFUejUJuQ6RkyeSrtbgMMfZqO
+         4yPWxFIfmbYP9kAxmKDHGYTs17VhhUM6CzkydniHVLXzfgK0JjhqIw0wu9CppyRhzzw7
+         zDVVD63U8gXtNtnEdt+3gi7zINr1dsUBxZb2zeAylN5RMJZnEeiQmr5u9qiLlGVc+LKU
+         ZJ9g==
+X-Gm-Message-State: AOAM5318MRrS+7YeFvRjfs8Ydgct4OMnDdI6DyySP9ZQhta32SUfBfBY
+        tmYJ3xa4M3gHi31X1NlI/vf9dB/J
+X-Google-Smtp-Source: ABdhPJx4/2toNjLiOKUhe1ormSBYF6a2FqneYTqDjpfsXF502RIwK0Jdx9oWTQN2ca5tfxWndSqFJQ==
+X-Received: by 2002:a62:6842:: with SMTP id d63mr9252746pfc.82.1595601756499;
+        Fri, 24 Jul 2020 07:42:36 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y6sm6885167pfp.7.2020.07.24.07.39.52
+        by smtp.gmail.com with ESMTPSA id c132sm6361779pfb.112.2020.07.24.07.42.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Jul 2020 07:39:52 -0700 (PDT)
+        Fri, 24 Jul 2020 07:42:35 -0700 (PDT)
 Subject: Re: [PATCH -next] hwmon (pmbus/max20730): Whitespace cleanups in
  max20730.c
+From:   Guenter Roeck <linux@roeck-us.net>
 To:     Wang ShaoBo <bobo.shaobowang@huawei.com>
 Cc:     cj.chengjian@huawei.com, huawei.libin@huawei.com,
         jdelvare@suse.com, linux-kernel@vger.kernel.org,
         linux-hwmon@vger.kernel.org
 References: <20200724101159.48622-1-bobo.shaobowang@huawei.com>
-From:   Guenter Roeck <linux@roeck-us.net>
+ <94e99e28-0809-8ee8-5e30-2d322183fd0f@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
  RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
@@ -111,12 +112,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <94e99e28-0809-8ee8-5e30-2d322183fd0f@roeck-us.net>
-Date:   Fri, 24 Jul 2020 07:39:51 -0700
+Message-ID: <0db689ad-6d6f-ac38-fce0-7908e658fd1e@roeck-us.net>
+Date:   Fri, 24 Jul 2020 07:42:34 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200724101159.48622-1-bobo.shaobowang@huawei.com>
+In-Reply-To: <94e99e28-0809-8ee8-5e30-2d322183fd0f@roeck-us.net>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -125,36 +126,41 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 7/24/20 3:11 AM, Wang ShaoBo wrote:
-> Drop trailing whitespace.
+On 7/24/20 7:39 AM, Guenter Roeck wrote:
+> On 7/24/20 3:11 AM, Wang ShaoBo wrote:
+>> Drop trailing whitespace.
+>>
+>> Signed-off-by: Wang ShaoBo <bobo.shaobowang@huawei.com>
+>> ---
+>>  drivers/hwmon/pmbus/max20730.c | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/hwmon/pmbus/max20730.c b/drivers/hwmon/pmbus/max20730.c
+>> index 3ddc19b81b90..87d936d45d65 100644
+>> --- a/drivers/hwmon/pmbus/max20730.c
+>> +++ b/drivers/hwmon/pmbus/max20730.c
+>> @@ -309,7 +309,7 @@ static int max20730_probe(struct i2c_client *client,
+>>  				     I2C_FUNC_SMBUS_READ_WORD_DATA |
+>>  				     I2C_FUNC_SMBUS_BLOCK_DATA))
+>>  		return -ENODEV;
+>> -	
+>> +
+>>  	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, buf);
+>>  	if (ret < 0) {
+>>  		dev_err(&client->dev, "Failed to read Manufacturer ID\n");
+>> @@ -373,7 +373,7 @@ static int max20730_probe(struct i2c_client *client,
+>>  	ret = pmbus_do_probe(client, id, &data->info);
+>>  	if (ret < 0)
+>>  		return ret;
+>> -	
+>> +
+>>  	return 0;
 > 
-> Signed-off-by: Wang ShaoBo <bobo.shaobowang@huawei.com>
-> ---
->  drivers/hwmon/pmbus/max20730.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> The code you are fixing is not in the mainline kernel, and your patch
+> does not apply.
 > 
-> diff --git a/drivers/hwmon/pmbus/max20730.c b/drivers/hwmon/pmbus/max20730.c
-> index 3ddc19b81b90..87d936d45d65 100644
-> --- a/drivers/hwmon/pmbus/max20730.c
-> +++ b/drivers/hwmon/pmbus/max20730.c
-> @@ -309,7 +309,7 @@ static int max20730_probe(struct i2c_client *client,
->  				     I2C_FUNC_SMBUS_READ_WORD_DATA |
->  				     I2C_FUNC_SMBUS_BLOCK_DATA))
->  		return -ENODEV;
-> -	
-> +
->  	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, buf);
->  	if (ret < 0) {
->  		dev_err(&client->dev, "Failed to read Manufacturer ID\n");
-> @@ -373,7 +373,7 @@ static int max20730_probe(struct i2c_client *client,
->  	ret = pmbus_do_probe(client, id, &data->info);
->  	if (ret < 0)
->  		return ret;
-> -	
-> +
->  	return 0;
 
-The code you are fixing is not in the mainline kernel, and your patch
-does not apply.
+Wait, this code is in -next. I really didn't pay attention, sorry. I'll update
+the offending patch there. Thanks for bringing this to my attention.
 
 Guenter
