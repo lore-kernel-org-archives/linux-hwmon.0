@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D9F9C433E0
-	for <linux-hwmon@archiver.kernel.org>; Sat, 25 Jul 2020 23:19:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B05C6C433F1
+	for <linux-hwmon@archiver.kernel.org>; Sat, 25 Jul 2020 23:19:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EA23E2073E
-	for <linux-hwmon@archiver.kernel.org>; Sat, 25 Jul 2020 23:19:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8BB2D206C1
+	for <linux-hwmon@archiver.kernel.org>; Sat, 25 Jul 2020 23:19:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="E9ZkxZeD"
+	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="kqEGlrmP"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726784AbgGYXTB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 25 Jul 2020 19:19:01 -0400
-Received: from ssl.serverraum.org ([176.9.125.105]:43885 "EHLO
+        id S1728173AbgGYXTL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 25 Jul 2020 19:19:11 -0400
+Received: from ssl.serverraum.org ([176.9.125.105]:37695 "EHLO
         ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727912AbgGYXTA (ORCPT
+        with ESMTP id S1728158AbgGYXTI (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 25 Jul 2020 19:19:00 -0400
+        Sat, 25 Jul 2020 19:19:08 -0400
 Received: from apollo.fritz.box (unknown [IPv6:2a02:810c:c200:2e91:6257:18ff:fec4:ca34])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id CB21823E3A;
-        Sun, 26 Jul 2020 01:18:56 +0200 (CEST)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 10FBE23E4C;
+        Sun, 26 Jul 2020 01:19:05 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1595719137;
+        t=1595719145;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=eMQQPwPH6zBMKiAkGJns9PNN/bsW4dSvESSYPM21Euw=;
-        b=E9ZkxZeD4hLfdzP0mF4PvBDAIprw13kqLPvIWlJ2I2jyDDmGLpe4wYdJSAoPy+g1VHh2GK
-        04vLE2cKhuB3y6Jqusp2/TCxdWsu7URh4leGwAG51CUHs8K5j7YxOMIzLH0Zo8XrpasxHE
-        cH/LHLAfvd2L5jBpIpNBAer/nRjfhkA=
+        bh=9ai0La+0NTz47zNKNe8eCNR0aOanRg5MZY86cm9G5UM=;
+        b=kqEGlrmPMMmvf5UYnEWCX7xD16NalVyHm8iD2CKx6Y+VwWk2EGFCxx+7e2BzfsxBTFTocT
+        xKhT9AwybYVF9eTawp2dkCoEjLAYb9sPdI7mKhh5f5Hp5Tr+Nz3FtcRvrdnqlecrAVjUCY
+        XGTnkTsDPcSANAkKEr4FbAPcv5Jttyc=
 From:   Michael Walle <michael@walle.cc>
 To:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
@@ -62,9 +62,9 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Pavel Machek <pavel@ucw.cz>,
         Michael Walle <michael@walle.cc>
-Subject: [PATCH v6 01/13] mfd: add simple regmap based I2C driver
-Date:   Sun, 26 Jul 2020 01:18:22 +0200
-Message-Id: <20200725231834.25642-2-michael@walle.cc>
+Subject: [PATCH v6 09/13] arm64: dts: freescale: sl28: enable sl28cpld
+Date:   Sun, 26 Jul 2020 01:18:30 +0200
+Message-Id: <20200725231834.25642-10-michael@walle.cc>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200725231834.25642-1-michael@walle.cc>
 References: <20200725231834.25642-1-michael@walle.cc>
@@ -76,129 +76,142 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-There are I2C devices which contain several different functions but
-doesn't require any special access functions. For these kind of drivers
-an I2C regmap should be enough.
-
-Create an I2C driver which creates an I2C regmap and enumerates its
-children. If a device wants to use this as its MFD core driver, it has
-to add an individual compatible string. It may provide its own regmap
-configuration.
-
-Subdevices can use dev_get_regmap() on the parent to get their regmap
-instance.
+Add the board management controller node.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
 ---
 Changes since v5:
- - removed "select MFD_CORE" in Kconfig
- - removed help text in Kconfig, we assume that the users of this
-   driver will have a "select MFD_SIMPLE_MFD_I2C". Instead added
-   a small description to the driver itself.
- - removed "struct simple_mfd_i2c_config" and use regmap_config
-   directly
- - changed builtin_i2c_driver() to module_i2c_driver(), added
-   MODULE_ boilerplate
- - cleaned up the included files
+ - none
 
 Changes since v4:
- - new patch. Lee, please bear with me. I didn't want to delay the
-   new version (where a lot of remarks on the other patches were
-   addressed) even more, just because we haven't figured out how
-   to deal with the MFD part. So for now, I've included this one.
+ - none
 
- drivers/mfd/Kconfig          |  5 ++++
- drivers/mfd/Makefile         |  1 +
- drivers/mfd/simple-mfd-i2c.c | 55 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 61 insertions(+)
- create mode 100644 drivers/mfd/simple-mfd-i2c.c
+Changes since v3:
+ - see cover letter
 
-diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-index 33df0837ab41..c08539c7a166 100644
---- a/drivers/mfd/Kconfig
-+++ b/drivers/mfd/Kconfig
-@@ -1162,6 +1162,11 @@ config MFD_SI476X_CORE
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called si476x-core.
+ .../freescale/fsl-ls1028a-kontron-sl28.dts    | 102 ++++++++++++++++++
+ 1 file changed, 102 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts
+index 360b3a168c10..8712fe82727b 100644
+--- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts
++++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts
+@@ -8,6 +8,7 @@
  
-+config MFD_SIMPLE_MFD_I2C
-+	tristate
-+	depends on I2C
-+	select REGMAP_I2C
-+
- config MFD_SM501
- 	tristate "Silicon Motion SM501"
- 	depends on HAS_DMA
-diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-index a60e5f835283..78d24a3e7c9e 100644
---- a/drivers/mfd/Makefile
-+++ b/drivers/mfd/Makefile
-@@ -264,3 +264,4 @@ obj-$(CONFIG_MFD_STMFX) 	+= stmfx.o
- obj-$(CONFIG_MFD_KHADAS_MCU) 	+= khadas-mcu.o
+ /dts-v1/;
+ #include "fsl-ls1028a.dtsi"
++#include <dt-bindings/interrupt-controller/irq.h>
  
- obj-$(CONFIG_SGI_MFD_IOC3)	+= ioc3.o
-+obj-$(CONFIG_MFD_SIMPLE_MFD_I2C)	+= simple-mfd-i2c.o
-diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2c.c
-new file mode 100644
-index 000000000000..45090ddad104
---- /dev/null
-+++ b/drivers/mfd/simple-mfd-i2c.c
-@@ -0,0 +1,55 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * A very simple I2C MFD driver
-+ *
-+ * The driver enumerates its children and registers a common regmap. Use
-+ * dev_get_regmap(pdev->dev.parent, NULL) in the child nodes to fetch that
-+ * regmap instance.
-+ *
-+ * In the future this driver might be extended to support also other interfaces
-+ * like SPI etc.
-+ */
-+#include <linux/i2c.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of_platform.h>
-+#include <linux/regmap.h>
+ / {
+ 	model = "Kontron SMARC-sAL28";
+@@ -170,6 +171,107 @@
+ 		reg = <0x32>;
+ 	};
+ 
++	sl28cpld@4a {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		compatible = "kontron,sl28cpld-r1";
++		reg = <0x4a>;
 +
-+static const struct regmap_config simple_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+};
++		watchdog@4 {
++			compatible = "kontron,sl28cpld-wdt";
++			reg = <0x4>;
++			kontron,assert-wdt-timeout-pin;
++		};
 +
-+static int simple_mfd_i2c_probe(struct i2c_client *i2c)
-+{
-+	const struct regmap_config *config;
-+	struct regmap *regmap;
++		hwmon@b {
++			compatible = "kontron,sl28cpld-fan";
++			reg = <0xb>;
++		};
 +
-+	config = device_get_match_data(&i2c->dev);
-+	if (!config)
-+		config = &simple_regmap_config;
++		sl28cpld_pwm0: pwm@c {
++			#pwm-cells = <2>;
++			compatible = "kontron,sl28cpld-pwm";
++			reg = <0xc>;
++		};
 +
-+	regmap = devm_regmap_init_i2c(i2c, config);
-+	if (IS_ERR(regmap))
-+		return PTR_ERR(regmap);
++		sl28cpld_pwm1: pwm@e {
++			#pwm-cells = <2>;
++			compatible = "kontron,sl28cpld-pwm";
++			reg = <0xe>;
++		};
 +
-+	return devm_of_platform_populate(&i2c->dev);
-+}
++		sl28cpld_gpio0: gpio@10 {
++			compatible = "kontron,sl28cpld-gpio";
++			reg = <0x10>;
++			interrupts-extended = <&gpio2 6
++					       IRQ_TYPE_EDGE_FALLING>;
 +
-+static const struct of_device_id simple_mfd_i2c_of_match[] = {
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, simple_mfd_i2c_of_match);
++			gpio-controller;
++			#gpio-cells = <2>;
++			gpio-line-names =
++				"GPIO0_CAM0_PWR_N", "GPIO1_CAM1_PWR_N",
++				"GPIO2_CAM0_RST_N", "GPIO3_CAM1_RST_N",
++				"GPIO4_HDA_RST_N", "GPIO5_PWM_OUT",
++				"GPIO6_TACHIN", "GPIO7";
 +
-+static struct i2c_driver simple_mfd_i2c_driver = {
-+	.probe_new = simple_mfd_i2c_probe,
-+	.driver = {
-+		.name = "simple-mfd-i2c",
-+		.of_match_table = simple_mfd_i2c_of_match,
-+	},
-+};
-+module_i2c_driver(simple_mfd_i2c_driver);
++			interrupt-controller;
++			#interrupt-cells = <2>;
++		};
 +
-+MODULE_AUTHOR("Michael Walle <michael@walle.cc>");
-+MODULE_DESCRIPTION("Simple I2C MFD driver");
-+MODULE_LICENSE("GPL v2");
++		sl28cpld_gpio1: gpio@15 {
++			compatible = "kontron,sl28cpld-gpio";
++			reg = <0x15>;
++			interrupts-extended = <&gpio2 6
++					       IRQ_TYPE_EDGE_FALLING>;
++
++			gpio-controller;
++			#gpio-cells = <2>;
++			gpio-line-names =
++				"GPIO8", "GPIO9", "GPIO10", "GPIO11",
++				"", "", "", "";
++
++			interrupt-controller;
++			#interrupt-cells = <2>;
++		};
++
++		sl28cpld_gpio2: gpio@1a {
++			compatible = "kontron,sl28cpld-gpo";
++			reg = <0x1a>;
++
++			gpio-controller;
++			#gpio-cells = <2>;
++			gpio-line-names =
++				"LCD0 voltage enable",
++				"LCD0 backlight enable",
++				"eMMC reset", "LVDS bridge reset",
++				"LVDS bridge power-down",
++				"SDIO power enable",
++				"", "";
++		};
++
++		sl28cpld_gpio3: gpio@1b {
++			compatible = "kontron,sl28cpld-gpi";
++			reg = <0x1b>;
++
++			gpio-controller;
++			#gpio-cells = <2>;
++			gpio-line-names =
++				"Power button", "Force recovery", "Sleep",
++				"Battery low", "Lid state", "Charging",
++				"Charger present", "";
++		};
++
++		sl28cpld_intc: interrupt-controller@1c {
++			compatible = "kontron,sl28cpld-intc";
++			reg = <0x1c>;
++			interrupts-extended = <&gpio2 6
++					       IRQ_TYPE_EDGE_FALLING>;
++
++			interrupt-controller;
++			#interrupt-cells = <2>;
++		};
++	};
++
+ 	eeprom@50 {
+ 		compatible = "atmel,24c32";
+ 		reg = <0x50>;
 -- 
 2.20.1
 
