@@ -2,685 +2,463 @@ Return-Path: <SRS0=z702=BG=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ECC14C4345D
-	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Jul 2020 05:30:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DBC3C433F2
+	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Jul 2020 07:30:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C96E020792
-	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Jul 2020 05:30:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5013A20738
+	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Jul 2020 07:30:40 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="t3SG7ItE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727064AbgG0Fah (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 27 Jul 2020 01:30:37 -0400
-Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:30244 "EHLO
-        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726728AbgG0FaF (ORCPT
+        id S1726984AbgG0Had (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 27 Jul 2020 03:30:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57618 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726975AbgG0Hab (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 27 Jul 2020 01:30:05 -0400
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06R5Rmv5011000;
-        Mon, 27 Jul 2020 01:30:03 -0400
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com with ESMTP id 32ghn5da4s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Jul 2020 01:30:03 -0400
-Received: from SCSQMBX11.ad.analog.com (scsqmbx11.ad.analog.com [10.77.17.10])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 06R5U1MY017815
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Mon, 27 Jul 2020 01:30:02 -0400
-Received: from SCSQMBX11.ad.analog.com (10.77.17.10) by
- SCSQMBX11.ad.analog.com (10.77.17.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1779.2; Sun, 26 Jul 2020 22:30:00 -0700
-Received: from zeus.spd.analog.com (10.64.82.11) by SCSQMBX11.ad.analog.com
- (10.77.17.10) with Microsoft SMTP Server id 15.1.1779.2 via Frontend
- Transport; Sun, 26 Jul 2020 22:30:00 -0700
-Received: from localhost.localdomain ([10.48.65.12])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 06R5TksT007624;
-        Mon, 27 Jul 2020 01:29:57 -0400
-From:   <alexandru.tachici@analog.com>
-To:     <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-CC:     <robh+dt@kernel.org>, <linux@roeck-us.net>,
-        Alexandru Tachici <alexandru.tachici@analog.com>
-Subject: [PATCH v6 7/9] hwmon: pmbus: adm1266: program firmware
-Date:   Mon, 27 Jul 2020 08:31:19 +0300
-Message-ID: <20200727053121.23288-8-alexandru.tachici@analog.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200727053121.23288-1-alexandru.tachici@analog.com>
-References: <20200727053121.23288-1-alexandru.tachici@analog.com>
+        Mon, 27 Jul 2020 03:30:31 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B83C0619D2;
+        Mon, 27 Jul 2020 00:30:30 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id q4so8135311edv.13;
+        Mon, 27 Jul 2020 00:30:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=ZogJSbFZGKS4456SNdiwdnmFxJXIJiCVuG2HTKrcxT8=;
+        b=t3SG7ItEf8Ly8393lx/82hBZyrr3oVpuAY0Km9gXsURsqAI64J9bQ6sTnCl/yOVD7C
+         pt2RBSBm+AmhHmG6f/0AHrt3ZsnclMWohBUrXsiIU5665vgIovwtyOVCyuoCJhmC/mEY
+         FCx9Ry00IDV8FqeJLcNLQZkwQHmNqnlk8wG6z0RKHBXnNfPtYfg9QHtTppazNQ8mtMOa
+         RHkh+GnTQhSsS5tni3M2RbkSHSCuSCO/0ow/t8gnZ//Yi5O4SjEHGS6ZubeyyA++Lasw
+         RObPWn3Rrd9aEvrm6/5en0q9nWO82UsL1bE34lFT74LZ0AdEh9IResZcnUgb+mC7othX
+         tv0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ZogJSbFZGKS4456SNdiwdnmFxJXIJiCVuG2HTKrcxT8=;
+        b=BzsS0dlfkZv8mCSm0tNqQBDYcD+XSSyLAMchTst42VDqGNRQ+yoqppmCKrY+QDLw+S
+         5LePYXY9I8POZojktz/KZlAaKNdZOYfAen50OacWqKLiKZomQhLHueV4dHruFj8MAmZR
+         54D2sk7VIYrq65ycbBfjHmEDYCAxemZUqqFH2CBk8Si4+07EXPDnedSB5Z3wAtHBVLDu
+         Zf6HjIFbmUG7HXb+MRsIokkmBV8ruRqoEETyiHG1JLqug6FW3iEjTEudv69fDR0vK5Ip
+         AjJ7g8kwILO1/Iz5SFmAz8U8JiUkMAWddbx0U6HoCQ2t2PJ9zyTw/eWlnrO6gFN5Cvwy
+         y0NA==
+X-Gm-Message-State: AOAM530+YZqRDP9RJmQ86T2FU8MqfFpLKUccCmTVDmuoHJloQefT3A7w
+        gDklpheLByLyGVZQ7DmxttQ=
+X-Google-Smtp-Source: ABdhPJwqPHK3EGpOyshHl4BMFcurwOw5DDd3u4V9R11/0h1kYq2ZoqPeSJbQ90hDDn1EVei8kS9fIw==
+X-Received: by 2002:a05:6402:8d6:: with SMTP id d22mr13344909edz.285.1595835029549;
+        Mon, 27 Jul 2020 00:30:29 -0700 (PDT)
+Received: from localhost ([62.96.65.119])
+        by smtp.gmail.com with ESMTPSA id sd8sm4692467ejb.58.2020.07.27.00.30.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jul 2020 00:30:28 -0700 (PDT)
+Date:   Mon, 27 Jul 2020 09:30:27 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Michael Walle <michael@walle.cc>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Pavel Machek <pavel@ucw.cz>
+Subject: Re: [PATCH v6 06/13] pwm: add support for sl28cpld PWM controller
+Message-ID: <20200727073027.GA2781612@ulmo>
+References: <20200725231834.25642-1-michael@walle.cc>
+ <20200725231834.25642-7-michael@walle.cc>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ADIRoutedOnPrem: True
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-27_03:2020-07-27,2020-07-27 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- clxscore=1015 lowpriorityscore=0 bulkscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 suspectscore=0 malwarescore=0 phishscore=0 spamscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007270040
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Qxx1br4bt0+wmkIi"
+Content-Disposition: inline
+In-Reply-To: <20200725231834.25642-7-michael@walle.cc>
+User-Agent: Mutt/1.14.4 (2020-06-18)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Alexandru Tachici <alexandru.tachici@analog.com>
 
-Writing the firmware Intel hex file to the nvmem,
-of the master adm1266,  with offset 0, will now
-trigger the firmware programming of all cascaded
-devices simultaneously through pmbus.
+--Qxx1br4bt0+wmkIi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-During this process all adm1266 sequencers will be
-stopped and at the end will be issued a hard reset
-(see AN-1453 Programming the firmware).
+On Sun, Jul 26, 2020 at 01:18:27AM +0200, Michael Walle wrote:
+> Add support for the PWM controller of the sl28cpld board management
+> controller. This is part of a multi-function device driver.
+>=20
+> The controller has one PWM channel and can just generate four distinct
+> frequencies.
+>=20
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+> Changes since v5:
+>  - added brief description of the PWM hardware implementation
+>  - added hardware limitations
+>  - dropped the frequency mode table, instead calculate the prescaler
+>    value on the fly.
+>  - round the requested parameters instead of support just distinct
+>    periods.
+>  - prefix the macros by SL28CPLD_ to make them less generic
+>  - set polarity to PWM_POLARITY_NORMAL and reject inverted polarity
+>    requests.
+>  - apply the workaround just for prescaler value of 0.
+>  - make errors during probing more verbose
+>=20
+> Changes since v4:
+>  - update copyright year
+>  - remove #include <linux/of_device.h>, suggested by Andy.
+>  - make the pwm mode table look nicer, suggested by Lee.
+>  - use dev_get_drvdata(chip->dev) instead of container_of(), suggested by
+>    Lee.
+>  - use whole sentence in comments, suggested by Lee.
+>  - renamed the local "struct sl28cpld_pwm" variable to "priv" everywhere,
+>    suggested by Lee.
+>  - use pwm_{get,set}_relative_duty_cycle(), suggested by Andy.
+>  - make the comment about the 250Hz hardware limitation clearer
+>  - don't use "if (ret < 0)", but only "if (ret)", suggested by Andy.
+>  - don't use KBUID_MODNAME
+>  - remove comma in terminator line of the compatible strings list
+>  - remove the platform device table
+>=20
+> Changes since v3:
+>  - see cover letter
+>=20
+>  drivers/pwm/Kconfig        |  10 ++
+>  drivers/pwm/Makefile       |   1 +
+>  drivers/pwm/pwm-sl28cpld.c | 223 +++++++++++++++++++++++++++++++++++++
+>  3 files changed, 234 insertions(+)
+>  create mode 100644 drivers/pwm/pwm-sl28cpld.c
+>=20
+> diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
+> index 7dbcf6973d33..a0d50d70c3b9 100644
+> --- a/drivers/pwm/Kconfig
+> +++ b/drivers/pwm/Kconfig
+> @@ -428,6 +428,16 @@ config PWM_SIFIVE
+>  	  To compile this driver as a module, choose M here: the module
+>  	  will be called pwm-sifive.
+> =20
+> +config PWM_SL28CPLD
+> +	tristate "Kontron sl28cpld PWM support"
+> +	select MFD_SIMPLE_MFD_I2C
+> +	help
+> +	  Generic PWM framework driver for board management controller
+> +	  found on the Kontron sl28 CPLD.
+> +
+> +	  To compile this driver as a module, choose M here: the module
+> +	  will be called pwm-sl28cpld.
+> +
+>  config PWM_SPEAR
+>  	tristate "STMicroelectronics SPEAr PWM support"
+>  	depends on PLAT_SPEAR || COMPILE_TEST
+> diff --git a/drivers/pwm/Makefile b/drivers/pwm/Makefile
+> index 2c2ba0a03557..cbdcd55d69ee 100644
+> --- a/drivers/pwm/Makefile
+> +++ b/drivers/pwm/Makefile
+> @@ -40,6 +40,7 @@ obj-$(CONFIG_PWM_RENESAS_TPU)	+=3D pwm-renesas-tpu.o
+>  obj-$(CONFIG_PWM_ROCKCHIP)	+=3D pwm-rockchip.o
+>  obj-$(CONFIG_PWM_SAMSUNG)	+=3D pwm-samsung.o
+>  obj-$(CONFIG_PWM_SIFIVE)	+=3D pwm-sifive.o
+> +obj-$(CONFIG_PWM_SL28CPLD)	+=3D pwm-sl28cpld.o
+>  obj-$(CONFIG_PWM_SPEAR)		+=3D pwm-spear.o
+>  obj-$(CONFIG_PWM_SPRD)		+=3D pwm-sprd.o
+>  obj-$(CONFIG_PWM_STI)		+=3D pwm-sti.o
+> diff --git a/drivers/pwm/pwm-sl28cpld.c b/drivers/pwm/pwm-sl28cpld.c
+> new file mode 100644
+> index 000000000000..956fa09f3aba
+> --- /dev/null
+> +++ b/drivers/pwm/pwm-sl28cpld.c
+> @@ -0,0 +1,223 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * sl28cpld PWM driver
+> + *
+> + * Copyright (c) 2020 Michael Walle <michael@walle.cc>
+> + *
+> + * There is no public datasheet available for this PWM core. But it is e=
+asy
+> + * enough to be briefly explained. It consists of one 8-bit counter. The=
+ PWM
+> + * supports four distinct frequencies by selecting when to reset the cou=
+nter.
+> + * With the prescaler setting you can select which bit of the counter is=
+ used
+> + * to reset it. This implies that the higher the frequency the less rema=
+ining
+> + * bits are available for the actual counter.
+> + *
+> + * Let cnt[7:0] be the counter, clocked at 32kHz:
+> + * +-----------+--------+--------------+-----------+
+> + * | prescaler |  reset | counter bits | frequency |
+> + * +-----------+--------+--------------+-----------+
+> + * |         0 | cnt[7] |     cnt[6:0] |     250Hz |
+> + * |         1 | cnt[6] |     cnt[5:0] |     500Hz |
+> + * |         2 | cnt[5] |     cnt[4:0] |      1kHz |
+> + * |         3 | cnt[4] |     cnt[3:0] |      2kHz |
+> + * +-----------+--------+--------------+-----------+
+> + *
+> + * Limitations:
+> + * - The hardware cannot generate a 100% duty cycle if the prescaler is =
+0.
+> + * - The hardware cannot atomically set the prescaler and the counter va=
+lue,
+> + *   which might lead to glitches and inconsistent states if a write fai=
+ls.
+> + * - The counter is not reset if you switch the prescaler which leads
+> + *   to glitches, too.
+> + * - The duty cycle will switch immediately and not after a complete cyc=
+le.
+> + * - Depending on the actual implementation, disabling the PWM might have
+> + *   side effects. For example, if the output pin is shared with a GPIO =
+pin
+> + *   it will automatically switch back to GPIO mode.
+> + */
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/kernel.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pwm.h>
+> +#include <linux/regmap.h>
+> +
+> +/*
+> + * PWM timer block registers.
+> + */
+> +#define SL28CPLD_PWM_CTRL			0x00
+> +#define   SL28CPLD_PWM_CTRL_ENABLE		BIT(7)
+> +#define   SL28CPLD_PWM_CTRL_PRESCALER_MASK	GENMASK(1, 0)
+> +#define SL28CPLD_PWM_CYCLE			0x01
+> +#define   SL28CPLD_PWM_CYCLE_MAX		GENMASK(6, 0)
+> +
+> +#define SL28CPLD_PWM_CLK			32000 /* 32 kHz */
+> +#define SL28CPLD_PWM_MAX_DUTY_CYCLE(prescaler)	(1 << (7 - (prescaler)))
+> +#define SL28CPLD_PWM_PERIOD(prescaler) \
+> +	(NSEC_PER_SEC / SL28CPLD_PWM_CLK * SL28CPLD_PWM_MAX_DUTY_CYCLE(prescale=
+r))
+> +
+> +/*
+> + * We calculate the duty cycle like this:
+> + *   duty_cycle_ns =3D pwm_cycle_reg * max_period_ns / max_duty_cycle
+> + *
+> + * With
+> + *   max_period_ns =3D (1 << 7 - prescaler) / pwm_clk * NSEC_PER_SEC
+> + *   max_duty_cycle =3D 1 << (7 - prescaler)
+> + * this then simplifies to:
+> + *   duty_cycle_ns =3D pwm_cycle_reg / pwm_clk * NSEC_PER_SEC
+> + */
+> +#define SL28CPLD_PWM_TO_DUTY_CYCLE(reg) \
+> +	(NSEC_PER_SEC / SL28CPLD_PWM_CLK * (reg))
+> +#define SL28CPLD_PWM_FROM_DUTY_CYCLE(duty_cycle) \
+> +	(DIV_ROUND_DOWN_ULL((duty_cycle), NSEC_PER_SEC / SL28CPLD_PWM_CLK))
+> +
+> +struct sl28cpld_pwm {
+> +	struct pwm_chip pwm_chip;
+> +	struct regmap *regmap;
+> +	u32 offset;
+> +};
+> +
+> +static void sl28cpld_pwm_get_state(struct pwm_chip *chip,
+> +				   struct pwm_device *pwm,
+> +				   struct pwm_state *state)
+> +{
+> +	struct sl28cpld_pwm *priv =3D dev_get_drvdata(chip->dev);
+> +	unsigned int reg;
+> +	int prescaler;
+> +
+> +	regmap_read(priv->regmap, priv->offset + SL28CPLD_PWM_CTRL, &reg);
+> +
+> +	state->enabled =3D reg & SL28CPLD_PWM_CTRL_ENABLE;
+> +
+> +	prescaler =3D FIELD_GET(SL28CPLD_PWM_CTRL_PRESCALER_MASK, reg);
+> +	state->period =3D SL28CPLD_PWM_PERIOD(prescaler);
+> +
+> +	regmap_read(priv->regmap, priv->offset + SL28CPLD_PWM_CYCLE, &reg);
+> +	state->duty_cycle =3D SL28CPLD_PWM_TO_DUTY_CYCLE(reg);
+> +	state->polarity =3D PWM_POLARITY_NORMAL;
+> +}
+> +
+> +static int sl28cpld_pwm_apply(struct pwm_chip *chip, struct pwm_device *=
+pwm,
+> +			      const struct pwm_state *state)
+> +{
+> +	struct sl28cpld_pwm *priv =3D dev_get_drvdata(chip->dev);
+> +	unsigned int cycle, prescaler;
+> +	int ret;
+> +	u8 ctrl;
+> +
+> +	/* Polarity inversion is not supported */
+> +	if (state->polarity !=3D PWM_POLARITY_NORMAL)
+> +		return -EINVAL;
 
-Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
----
- drivers/hwmon/pmbus/adm1266.c | 501 +++++++++++++++++++++++++++++++++-
- 1 file changed, 500 insertions(+), 1 deletion(-)
+Just a note to myself since this just occurred to me: in the legacy API
+we used to have a ->set_polarity() callback that indicated whether or
+not a controller supports inversion. Since that criterion can no longer
+be used with the atomic API we may want to consider adding some sort of
+capability flags so that these checks can be performed in the core.
 
-diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
-index 34bd4e652729..376fc56abe04 100644
---- a/drivers/hwmon/pmbus/adm1266.c
-+++ b/drivers/hwmon/pmbus/adm1266.c
-@@ -9,6 +9,7 @@
- #include <linux/bitfield.h>
- #include <linux/crc8.h>
- #include <linux/debugfs.h>
-+#include <linux/delay.h>
- #include <linux/gpio/driver.h>
- #include <linux/i2c.h>
- #include <linux/i2c-smbus.h>
-@@ -18,18 +19,31 @@
- #include <linux/nvmem-consumer.h>
- #include <linux/nvmem-provider.h>
- #include "pmbus.h"
-+#include <linux/property.h>
- #include <linux/slab.h>
- #include <linux/timekeeping.h>
- 
-+#define ADM1266_STORE_USER_ALL	0x15
-+#define ADM1266_STATUS_MFR	0x80
-+#define ADM1266_IC_DEVICE_REV	0xAE
- #define ADM1266_BLACKBOX_CONFIG	0xD3
- #define ADM1266_PDIO_CONFIG	0xD4
-+#define ADM1266_SEQUENCE_CONFIG	0xD6
-+#define ADM1266_SYSTEM_CONFIG	0xD7
-+#define ADM1266_GO_COMMAND	0xD8
- #define ADM1266_READ_STATE	0xD9
- #define ADM1266_READ_BLACKBOX	0xDE
- #define ADM1266_SET_RTC		0xDF
-+#define ADM1266_LOGIC_CONFIG	0xE0
- #define ADM1266_GPIO_CONFIG	0xE1
-+#define ADM1266_USER_DATA	0xE3
- #define ADM1266_BLACKBOX_INFO	0xE6
- #define ADM1266_PDIO_STATUS	0xE9
- #define ADM1266_GPIO_STATUS	0xEA
-+#define ADM1266_MEMORY_CONFIG	0xF8
-+#define ADM1266_SWITCH_MEMORY	0xFA
-+#define ADM1266_UPDATE_FW	0xFC
-+#define ADM1266_FW_PASSWORD	0xFD
- 
- /* ADM1266 GPIO defines */
- #define ADM1266_GPIO_NR			9
-@@ -44,10 +58,35 @@
- #define ADM1266_PDIO_GLITCH_FILT(x)	FIELD_GET(GENMASK(12, 9), x)
- #define ADM1266_PDIO_OUT_CFG(x)		FIELD_GET(GENMASK(2, 0), x)
- 
-+/* ADM1266 FW_PASSWORD defines*/
-+#define ADM1266_PASSWD_CMD_LEN	17
-+#define ADM1266_CHANGE_PASSWORD	1
-+#define ADM1266_UNLOCK_DEV	2
-+#define ADM1266_LOCK_DEV	3
-+
-+/* ADM1266 STATUS_MFR defines */
-+#define ADM1266_STATUS_PART_LOCKED(x)	FIELD_GET(BIT(2), x)
-+
-+/* ADM1266 GO_COMMAND defines */
-+#define ADM1266_GO_COMMAND_STOP		BIT(0)
-+#define ADM1266_GO_COMMAND_SEQ_RES	BIT(1)
-+#define ADM1266_GO_COMMAND_HARD_RES	BIT(2)
-+
-+#define ADM1266_FIRMWARE_OFFSET		0x00000
-+#define ADM1266_FIRMWARE_SIZE		131072
- #define ADM1266_BLACKBOX_OFFSET		0x7F700
- #define ADM1266_BLACKBOX_SIZE		64
- 
- #define ADM1266_PMBUS_BLOCK_MAX		255
-+#define ADM1266_MAX_DEVICES		16
-+
-+static LIST_HEAD(registered_masters);
-+static DEFINE_MUTEX(registered_masters_lock);
-+
-+struct adm1266_data_ref {
-+	struct adm1266_data *data;
-+	struct list_head list;
-+};
- 
- struct adm1266_data {
- 	struct pmbus_driver_info info;
-@@ -57,6 +96,10 @@ struct adm1266_data {
- 	struct dentry *debugfs_dir;
- 	struct nvmem_config nvmem_config;
- 	struct nvmem_device *nvmem;
-+	bool master_dev;
-+	struct list_head cascaded_devices_list;
-+	struct mutex cascaded_devices_mutex; /* lock cascaded_devices_list */
-+	u8 nr_devices;
- 	u8 *dev_mem;
- 	struct mutex buf_mutex;
- 	u8 write_buf[ADM1266_PMBUS_BLOCK_MAX + 1] ____cacheline_aligned;
-@@ -69,6 +112,11 @@ static const struct nvmem_cell_info adm1266_nvmem_cells[] = {
- 		.offset         = ADM1266_BLACKBOX_OFFSET,
- 		.bytes          = 2048,
- 	},
-+	{
-+		.name           = "firmware",
-+		.offset         = ADM1266_FIRMWARE_OFFSET,
-+		.bytes          = ADM1266_FIRMWARE_SIZE,
-+	},
- };
- 
- DECLARE_CRC8_TABLE(pmbus_crc_table);
-@@ -123,6 +171,27 @@ static int adm1266_pmbus_group_command(struct adm1266_data *data, struct i2c_cli
- 	return ret;
- }
- 
-+static int adm1266_group_cmd(struct adm1266_data *data, u8 cmd, u8 *write_data, u8 w_len,
-+			     bool to_slaves)
-+{
-+	struct i2c_client *clients[ADM1266_MAX_DEVICES];
-+	struct adm1266_data_ref *slave_ref;
-+	int i = 0;
-+
-+	clients[i] = data->client;
-+	i++;
-+
-+	if (!to_slaves)
-+		return adm1266_pmbus_group_command(data, clients, 1, cmd, w_len, write_data);
-+
-+	list_for_each_entry(slave_ref, &data->cascaded_devices_list, list) {
-+		clients[i] = slave_ref->data->client;
-+		i++;
-+	}
-+
-+	return adm1266_pmbus_group_command(data, clients, i, cmd, w_len, write_data);
-+}
-+
- /*
-  * Different from Block Read as it sends data and waits for the slave to
-  * return a value dependent on that data. The protocol is simply a Write Block
-@@ -449,6 +518,9 @@ static int adm1266_read_mem_cell(struct adm1266_data *data, const struct nvmem_c
- 		if (ret)
- 			dev_err(&data->client->dev, "Could not read blackbox!");
- 		return ret;
-+	case ADM1266_FIRMWARE_OFFSET:
-+		/* firmware is write-only */
-+		return 0;
- 	default:
- 		return -EINVAL;
- 	}
-@@ -477,14 +549,411 @@ static int adm1266_nvmem_read(void *priv, unsigned int offset, void *val,
- 	return 0;
- }
- 
-+static int adm1266_unlock_device(struct adm1266_data *data)
-+{
-+	struct i2c_client *client = data->client;
-+	u8 passwd_cmd[ADM1266_PASSWD_CMD_LEN];
-+	int reg_val;
-+	int ret;
-+	int i;
-+
-+	memset(passwd_cmd, 0xFF, ADM1266_PASSWD_CMD_LEN);
-+	passwd_cmd[ADM1266_PASSWD_CMD_LEN - 1] = ADM1266_UNLOCK_DEV;
-+
-+	/* password needs to be written twice correctly*/
-+	for (i = 0; i < 2; i++) {
-+		ret = i2c_smbus_write_block_data(client, ADM1266_FW_PASSWORD,
-+						 ADM1266_PASSWD_CMD_LEN, passwd_cmd);
-+		if (ret < 0) {
-+			dev_err(&client->dev, "Could not write password.");
-+			return ret;
-+		}
-+
-+		/* 50 ms delay between subsequent password writes are needed*/
-+		msleep(50);
-+	}
-+
-+	/* check if device is unlocked */
-+	reg_val = pmbus_read_byte_data(client, 0, ADM1266_STATUS_MFR);
-+	if (reg_val < 0) {
-+		dev_err(&client->dev, "Could not read status.");
-+		return reg_val;
-+	}
-+	if (ADM1266_STATUS_PART_LOCKED(reg_val)) {
-+		dev_err(&client->dev, "Device locked.");
-+		return -EBUSY;
-+	}
-+
-+	return 0;
-+}
-+
-+static int adm1266_unlock_all_dev(struct adm1266_data *data)
-+{
-+	struct adm1266_data_ref *slave_ref;
-+	int ret;
-+
-+	ret = adm1266_unlock_device(data);
-+	if (ret < 0) {
-+		dev_err(&data->client->dev, "Could not unlock master.");
-+		return ret;
-+	}
-+
-+	list_for_each_entry(slave_ref, &data->cascaded_devices_list, list) {
-+		ret = adm1266_unlock_device(slave_ref->data);
-+		if (ret < 0) {
-+			dev_err(&data->client->dev, "Could not unlock slave addr: %d.",
-+				slave_ref->data->client->addr);
-+			return ret;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static int adm1266_lock_device(struct adm1266_data *data)
-+{
-+	struct i2c_client *client = data->client;
-+	u8 passwd_cmd[ADM1266_PASSWD_CMD_LEN];
-+	int reg_val;
-+	int ret;
-+
-+	memset(passwd_cmd, 0, ADM1266_PASSWD_CMD_LEN);
-+	passwd_cmd[ADM1266_PASSWD_CMD_LEN - 1] = ADM1266_LOCK_DEV;
-+
-+	ret = i2c_smbus_write_block_data(client, ADM1266_FW_PASSWORD, ADM1266_PASSWD_CMD_LEN,
-+					 passwd_cmd);
-+	if (ret < 0)
-+		return ret;
-+
-+	msleep(50);
-+
-+	/* check if device is now locked */
-+	reg_val = pmbus_read_byte_data(client, 0, ADM1266_STATUS_MFR);
-+	if (reg_val < 0)
-+		return reg_val;
-+
-+	if (!ADM1266_STATUS_PART_LOCKED(reg_val))
-+		return -EBUSY;
-+
-+	return 0;
-+}
-+
-+static void adm1266_lock_all_dev(struct adm1266_data *data)
-+{
-+	struct adm1266_data_ref *slave_ref;
-+	int ret;
-+
-+	ret = adm1266_lock_device(data);
-+	if (ret < 0)
-+		dev_warn(&data->client->dev, "Could not lock dev: %s.",
-+			 dev_name(&data->client->dev));
-+
-+	list_for_each_entry(slave_ref, &data->cascaded_devices_list, list) {
-+		ret = adm1266_lock_device(slave_ref->data);
-+		if (ret < 0)
-+			dev_warn(&slave_ref->data->client->dev, "Could not lock dev: %s.",
-+				 dev_name(&slave_ref->data->client->dev));
-+	}
-+}
-+
-+static const int write_delays[][3] = {
-+	{ADM1266_SYSTEM_CONFIG, 400, 1},
-+	{ADM1266_USER_DATA, 100, 1},
-+	{ADM1266_LOGIC_CONFIG, 200, 1},
-+	{ADM1266_SEQUENCE_CONFIG, 2500, 1},
-+	{ADM1266_UPDATE_FW, 2000, 1},
-+	{ADM1266_MEMORY_CONFIG, 100, 0},
-+	{ADM1266_STORE_USER_ALL, 300, 0},
-+};
-+
-+static int adm1266_write_hex(struct adm1266_data *data,
-+			     unsigned int offset, unsigned int size)
-+{
-+	const u8 *ending_str = ":00000001FF";
-+	u8 *hex_cmd = data->dev_mem + offset;
-+	u8 *fw_end = data->dev_mem + offset + size;
-+	unsigned int write_delay;
-+	u8 write_buf[ADM1266_PMBUS_BLOCK_MAX + 1];
-+	u8 first_writes[7];
-+	u8 byte_count;
-+	u8 reg_address;
-+	int ret;
-+	int i;
-+
-+	memset(first_writes, 1, 7);
-+
-+	while (hex_cmd < fw_end) {
-+		hex_cmd = strnchr(hex_cmd, size, ':');
-+
-+		if (!hex_cmd || hex_cmd >= fw_end) {
-+			dev_err(&data->client->dev, "Firmware ending missing.");
-+			return -EINVAL;
-+		}
-+
-+		if (!strncmp(hex_cmd, ending_str, strlen(ending_str)))
-+			break;
-+
-+		hex_cmd++;
-+
-+		ret = hex2bin(&byte_count, hex_cmd, 1);
-+		if (ret < 0)
-+			return ret;
-+
-+		ret = hex2bin(&reg_address, hex_cmd + 4, 1);
-+		if (ret < 0)
-+			return ret;
-+
-+		ret = hex2bin(write_buf, hex_cmd + 8, byte_count);
-+		if (ret < 0)
-+			return ret;
-+
-+		ret = adm1266_group_cmd(data, reg_address, write_buf, byte_count, true);
-+		if (ret < 0) {
-+			dev_err(&data->client->dev, "Firmware write error: %d.", ret);
-+			return ret;
-+		}
-+
-+		/* write to eeprom with specified delays */
-+		write_delay = 40;
-+		for (i = 0; i < 7; i++) {
-+			if (reg_address == write_delays[i][0]) {
-+				if (write_delays[i][2] && first_writes[i]) {
-+					first_writes[i] = 0;
-+					write_delay = write_delays[i][1];
-+				}
-+
-+				if (!write_delays[i][2])
-+					write_delay = write_delays[i][1];
-+			}
-+		}
-+		msleep(write_delay);
-+	}
-+
-+	return 0;
-+}
-+
-+static int adm1266_program_firmware(struct adm1266_data *data)
-+{
-+	u8 write_data[3];
-+	int ret;
-+
-+	write_data[0] = ADM1266_GO_COMMAND_STOP | ADM1266_GO_COMMAND_SEQ_RES;
-+	write_data[1] = 0x0;
-+	ret = adm1266_group_cmd(data, ADM1266_GO_COMMAND, write_data, 2, true);
-+	if (ret < 0) {
-+		dev_err(&data->client->dev, "Could not stop all devs.");
-+		return ret;
-+	}
-+
-+	/* after issuing a stop command, wait 100 ms */
-+	msleep(100);
-+
-+	ret = adm1266_unlock_all_dev(data);
-+	if (ret < 0)
-+		goto lock_all_devices;
-+
-+	write_data[0] = 0x2;
-+	write_data[1] = 0x0;
-+	write_data[2] = 0x0;
-+	ret = adm1266_group_cmd(data, ADM1266_UPDATE_FW, write_data, 3, true);
-+	if (ret < 0) {
-+		dev_err(&data->client->dev, "Could not set bootloader mode.");
-+		goto lock_all_devices;
-+	}
-+
-+	/* wait for adm1266 to enter bootloader mode */
-+	msleep(2000);
-+
-+	ret = adm1266_write_hex(data, ADM1266_FIRMWARE_OFFSET,
-+				ADM1266_FIRMWARE_SIZE);
-+	if (ret < 0) {
-+		dev_err(&data->client->dev, "Could not write hex.");
-+		goto lock_all_devices;
-+	}
-+
-+	write_data[0] = ADM1266_GO_COMMAND_HARD_RES;
-+	ret = adm1266_group_cmd(data, ADM1266_GO_COMMAND, write_data, 2, true);
-+	if (ret < 0) {
-+		dev_err(&data->client->dev, "Could not reset all devs.");
-+		goto lock_all_devices;
-+	}
-+
-+lock_all_devices:
-+	adm1266_lock_all_dev(data);
-+
-+	return ret;
-+}
-+
-+/* check if firmware/config write has ended */
-+static bool adm1266_check_ending(struct adm1266_data *data, unsigned int offset,
-+				 unsigned int size)
-+{
-+	const u8 *ending_str = ":00000001FF";
-+	u8 *hex_cmd = data->dev_mem + offset;
-+	u8 *fw_end = data->dev_mem + offset + size;
-+
-+	hex_cmd = strnchr(hex_cmd, size, ':');
-+	for (; hex_cmd && hex_cmd < fw_end;
-+	     hex_cmd = strnchr(hex_cmd, size, ':')) {
-+		if (!strncmp(hex_cmd, ending_str, strlen(ending_str)))
-+			return true;
-+
-+		hex_cmd++;
-+	}
-+
-+	return false;
-+}
-+
-+static int adm1266_write_mem_cell(struct adm1266_data *data,
-+				  const struct nvmem_cell_info *mem_cell,
-+				  unsigned int offset,
-+				  u8 *val,
-+				  size_t bytes)
-+{
-+	unsigned int cell_end = mem_cell->offset + mem_cell->bytes;
-+	unsigned int cell_start = mem_cell->offset;
-+	int (*program_func)(struct adm1266_data *data);
-+	bool fw_writen;
-+
-+	switch (mem_cell->offset) {
-+	case ADM1266_FIRMWARE_OFFSET:
-+		if (!data->master_dev) {
-+			dev_err(&data->client->dev,
-+				"Only master programs the firmware.");
-+			return -EINVAL;
-+		}
-+
-+		program_func = &adm1266_program_firmware;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	if (offset < cell_start || offset + bytes >= cell_end)
-+		return -EINVAL;
-+
-+	if (offset == mem_cell->offset)
-+		memset(data->dev_mem + mem_cell->offset, 0, mem_cell->bytes);
-+
-+	memcpy(data->dev_mem + offset, val, bytes);
-+
-+	fw_writen = adm1266_check_ending(data, mem_cell->offset,
-+					 mem_cell->bytes);
-+
-+	if (fw_writen)
-+		return program_func(data);
-+
-+	return 0;
-+}
-+
-+static int adm1266_nvmem_write(void *priv, unsigned int offset, void *val,
-+			       size_t bytes)
-+{
-+	const struct nvmem_cell_info *mem_cell;
-+	struct adm1266_data *data = priv;
-+	int ret;
-+	int i;
-+
-+	for (i = 0; i < data->nvmem_config.ncells; i++) {
-+		mem_cell = &adm1266_nvmem_cells[i];
-+
-+		if (!adm1266_cell_is_accessed(mem_cell, offset, bytes))
-+			continue;
-+
-+		ret = adm1266_write_mem_cell(data, mem_cell, offset,
-+					     val, bytes);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int adm1266_register_slave(struct adm1266_data *slave,
-+				  struct adm1266_data *master)
-+{
-+	struct adm1266_data_ref *slave_ref;
-+
-+	slave_ref = devm_kzalloc(&slave->client->dev,
-+				 sizeof(*slave_ref), GFP_KERNEL);
-+	if (!slave_ref)
-+		return -ENOMEM;
-+
-+	slave_ref->data = slave;
-+	INIT_LIST_HEAD(&slave_ref->list);
-+
-+	mutex_lock(&master->cascaded_devices_mutex);
-+	list_add_tail(&slave_ref->list, &master->cascaded_devices_list);
-+	mutex_unlock(&master->cascaded_devices_mutex);
-+
-+	return 0;
-+}
-+
-+static int adm1266_register(struct adm1266_data *data)
-+{
-+	struct fwnode_reference_args master_fwnode_ref;
-+	const struct fwnode_handle *fw;
-+	const struct fwnode_handle *master_fw;
-+	struct adm1266_data_ref *master_ref;
-+	int ret;
-+
-+	fw = dev_fwnode(&data->client->dev);
-+	INIT_LIST_HEAD(&data->cascaded_devices_list);
-+
-+	/* master devices do not have this property */
-+	if (!fwnode_property_present(fw, "adi,master-adm1266")) {
-+		data->master_dev = true;
-+
-+		master_ref = devm_kzalloc(&data->client->dev,
-+					  sizeof(*master_ref), GFP_KERNEL);
-+		if (!master_ref)
-+			return -ENOMEM;
-+
-+		master_ref->data = data;
-+		INIT_LIST_HEAD(&master_ref->list);
-+
-+		mutex_lock(&registered_masters_lock);
-+		list_add(&master_ref->list, &registered_masters);
-+		mutex_unlock(&registered_masters_lock);
-+	}
-+
-+	if (data->master_dev)
-+		return 0;
-+
-+	ret = fwnode_property_get_reference_args(fw, "adi,master-adm1266",
-+						 NULL, 0, 0,
-+						 &master_fwnode_ref);
-+	if (ret < 0) {
-+		dev_err(&data->client->dev,
-+			"Could not read adi,master-adm1266 property");
-+		return ret;
-+	}
-+
-+	mutex_lock(&registered_masters_lock);
-+
-+	/* search for the corresponding master of this slave */
-+	list_for_each_entry(master_ref, &registered_masters, list) {
-+		master_fw = dev_fwnode(&master_ref->data->client->dev);
-+
-+		if (master_fw == master_fwnode_ref.fwnode) {
-+			mutex_unlock(&registered_masters_lock);
-+			return adm1266_register_slave(data, master_ref->data);
-+		}
-+	}
-+
-+	mutex_unlock(&registered_masters_lock);
-+
-+	return -EPROBE_DEFER;
-+}
-+
- static int adm1266_config_nvmem(struct adm1266_data *data)
- {
- 	data->nvmem_config.name = dev_name(&data->client->dev);
- 	data->nvmem_config.dev = &data->client->dev;
- 	data->nvmem_config.root_only = true;
--	data->nvmem_config.read_only = true;
- 	data->nvmem_config.owner = THIS_MODULE;
- 	data->nvmem_config.reg_read = adm1266_nvmem_read;
-+	data->nvmem_config.reg_write = adm1266_nvmem_write;
- 	data->nvmem_config.cells = adm1266_nvmem_cells;
- 	data->nvmem_config.ncells = ARRAY_SIZE(adm1266_nvmem_cells);
- 	data->nvmem_config.priv = data;
-@@ -528,6 +997,21 @@ static int adm1266_set_rtc(struct adm1266_data *data)
- 					  write_buf);
- }
- 
-+static int adm1266_firmware_present(struct i2c_client *client)
-+{
-+	u8 read_buf[I2C_SMBUS_BLOCK_MAX];
-+	int ret;
-+
-+	ret = i2c_smbus_read_i2c_block_data(client, ADM1266_IC_DEVICE_REV,
-+					    8, read_buf);
-+	if (ret < 0) {
-+		dev_err(&client->dev, "Could not read firmware revision.");
-+		return ret;
-+	}
-+
-+	return !!(read_buf[0] | read_buf[1] | read_buf[2]);
-+}
-+
- static int adm1266_probe(struct i2c_client *client, const struct i2c_device_id *id)
- {
- 	struct adm1266_data *data;
-@@ -546,6 +1030,21 @@ static int adm1266_probe(struct i2c_client *client, const struct i2c_device_id *
- 
- 	crc8_populate_msb(pmbus_crc_table, 0x7);
- 	mutex_init(&data->buf_mutex);
-+	mutex_init(&data->cascaded_devices_mutex);
-+
-+	ret = adm1266_register(data);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = adm1266_firmware_present(client);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (!ret) {
-+		dev_notice(&client->dev, "Chip firmware not written.");
-+		return adm1266_config_nvmem(data);
-+	}
-+
- 
- 	ret = adm1266_config_gpio(data);
- 	if (ret < 0)
--- 
-2.20.1
+> +
+> +	/*
+> +	 * Calculate the prescaler. Pick the the biggest period that isn't
+> +	 * bigger than the requested period.
+> +	 */
+> +	prescaler =3D DIV_ROUND_UP_ULL(SL28CPLD_PWM_PERIOD(0), state->period);
+> +	prescaler =3D order_base_2(prescaler);
+> +
+> +	if (prescaler > field_max(SL28CPLD_PWM_CTRL_PRESCALER_MASK))
+> +		return -ERANGE;
+> +
+> +	ctrl =3D FIELD_PREP(SL28CPLD_PWM_CTRL_PRESCALER_MASK, prescaler);
+> +	if (state->enabled)
+> +		ctrl |=3D SL28CPLD_PWM_CTRL_ENABLE;
+> +
+> +	cycle =3D SL28CPLD_PWM_FROM_DUTY_CYCLE(state->duty_cycle);
+> +	cycle =3D min_t(unsigned int, cycle, SL28CPLD_PWM_MAX_DUTY_CYCLE(presca=
+ler));
+> +
+> +	/*
+> +	 * Work around the hardware limitation. See also above. Trap 100% duty
+> +	 * cycle if the prescaler is 0. Set prescaler to 1 instead. We don't
+> +	 * care about the frequency because its "all-one" in either case.
+> +	 *
+> +	 * We don't need to check the actual prescaler setting, because only
+> +	 * if the prescaler is 0 we can have this particular value.
+> +	 */
+> +	if (cycle =3D=3D SL28CPLD_PWM_MAX_DUTY_CYCLE(0)) {
+> +		ctrl &=3D ~SL28CPLD_PWM_CTRL_PRESCALER_MASK;
+> +		ctrl |=3D FIELD_PREP(SL28CPLD_PWM_CTRL_PRESCALER_MASK, 1);
+> +		cycle =3D SL28CPLD_PWM_MAX_DUTY_CYCLE(1);
+> +	}
+> +
+> +	ret =3D regmap_write(priv->regmap, priv->offset + SL28CPLD_PWM_CTRL, ct=
+rl);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return regmap_write(priv->regmap, priv->offset + SL28CPLD_PWM_CYCLE, (u=
+8)cycle);
+> +}
+> +
+> +static const struct pwm_ops sl28cpld_pwm_ops =3D {
+> +	.apply =3D sl28cpld_pwm_apply,
+> +	.get_state =3D sl28cpld_pwm_get_state,
+> +	.owner =3D THIS_MODULE,
+> +};
+> +
+> +static int sl28cpld_pwm_probe(struct platform_device *pdev)
+> +{
+> +	struct sl28cpld_pwm *priv;
+> +	struct pwm_chip *chip;
+> +	int ret;
+> +
+> +	if (!pdev->dev.parent)
+> +		return -ENODEV;
+> +
+> +	priv =3D devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	priv->regmap =3D dev_get_regmap(pdev->dev.parent, NULL);
+> +	if (!priv->regmap)
+> +		return -ENODEV;
+> +
+> +	ret =3D device_property_read_u32(&pdev->dev, "reg", &priv->offset);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "no 'reg' property found (%pe)\n",
+> +			ERR_PTR(ret));
+> +		return -EINVAL;
+> +	}
+> +
+> +	/* Initialize the pwm_chip structure */
+> +	chip =3D &priv->pwm_chip;
+> +	chip->dev =3D &pdev->dev;
+> +	chip->ops =3D &sl28cpld_pwm_ops;
+> +	chip->base =3D -1;
+> +	chip->npwm =3D 1;
+> +
+> +	ret =3D pwmchip_add(&priv->pwm_chip);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "failed to add PWM chip (%pe)",
+> +			ERR_PTR(ret));
+> +		return ret;
+> +	}
+> +
+> +	platform_set_drvdata(pdev, priv);
+> +
+> +	return 0;
+> +}
+> +
+> +static int sl28cpld_pwm_remove(struct platform_device *pdev)
+> +{
+> +	struct sl28cpld_pwm *priv =3D platform_get_drvdata(pdev);
+> +
+> +	return pwmchip_remove(&priv->pwm_chip);
+> +}
+> +
+> +static const struct of_device_id sl28cpld_pwm_of_match[] =3D {
+> +	{ .compatible =3D "kontron,sl28cpld-pwm" },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, sl28cpld_pwm_of_match);
+> +
+> +static struct platform_driver sl28cpld_pwm_driver =3D {
+> +	.probe =3D sl28cpld_pwm_probe,
+> +	.remove	=3D sl28cpld_pwm_remove,
+> +	.driver =3D {
+> +		.name =3D "sl28cpld-pwm",
+> +		.of_match_table =3D sl28cpld_pwm_of_match,
+> +	},
+> +};
+> +module_platform_driver(sl28cpld_pwm_driver);
+> +
+> +MODULE_DESCRIPTION("sl28cpld PWM Driver");
+> +MODULE_AUTHOR("Michael Walle <michael@walle.cc>");
+> +MODULE_LICENSE("GPL");
 
+Looks good to me. I assume Lee will want to merge this along with the
+other changes through the MFD tree? If so:
+
+Acked-by: Thierry Reding <thierry.reding@gmail.com>
+
+--Qxx1br4bt0+wmkIi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl8egpEACgkQ3SOs138+
+s6Ez9BAAhZLjThBmeOg8f81WOvTomRmiPyxu7gP1ASKSrT0Ry0avKrmLr9PZy5cn
+YoZCN5cw0qzG90nt9KvA3FWIR5t4FbFVodw2gTt7ccYKnCpvfddPUpyU9KMxcP2t
+sv3TSkDfgKj4ca8c92Ig9Ezyq5w9/JxQQrzPqiqSxZLvJ1iS8FILV65bgZJ3yPmY
+3GwOuK4QaiQUbgSxnmxJcyuhUfwwAlOIeEVg10u0BrgesB5ChNiLy9Bpbn/+ySXV
+aGJnmRVfaEjuTsCtgNBCSXNvabsDGHK++RsL8B0noCfMQbt1Map2cnHXVnNj+mQ0
+kpTC5rGnUIr+Gqo/X7E7CEHfrSY6dPyJOhkzREI6LNgLu/5yCSUKmndsiCDkwEGM
+WkEaUlsHRuZtkh7NcrM5laa/ypXNtQ5DqHzK8cO1t56JbJ47TVZLhSz38uUUjQLg
+vTGTjeybp56y+d8jj2vyxjup51FrZ2mqAMRxPPAywaMSDDLf/t9dltzXOhhJUWPP
+wDTbaBBZmZlRUmBqeRR98yWLG8wLkjZyPwsQAtoy+zv62QStA4pAHkc7golDM4tq
+exyniXweObjENYToRwIjvQFYSuBoKlmylzoJS+46WjMs57ktFckYg1xfy6SGWC/u
+6nX/tYFLZVzM9H7Z8ADntQBiwtoplEVu5Jyife4rxMN13d5qkfg=
+=ghor
+-----END PGP SIGNATURE-----
+
+--Qxx1br4bt0+wmkIi--
