@@ -1,354 +1,137 @@
-Return-Path: <SRS0=SjM/=BF=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=z702=BG=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 08C8AC433EA
-	for <linux-hwmon@archiver.kernel.org>; Sun, 26 Jul 2020 09:19:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 420FCC433E0
+	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Jul 2020 05:30:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E7FB120738
-	for <linux-hwmon@archiver.kernel.org>; Sun, 26 Jul 2020 09:19:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 25C3E20759
+	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Jul 2020 05:30:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727833AbgGZJTB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 26 Jul 2020 05:19:01 -0400
-Received: from mga03.intel.com ([134.134.136.65]:33213 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727817AbgGZJTB (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 26 Jul 2020 05:19:01 -0400
-IronPort-SDR: Iv2VaoVkLV6UjxmMvI+Uy2P/GBNd1pdhGa1f+AqVFkxY/R7sDvYU1xTgnCS/9hiub7icRPdW6A
- CHS7CKaWNrRA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9693"; a="150868924"
-X-IronPort-AV: E=Sophos;i="5.75,398,1589266800"; 
-   d="scan'208";a="150868924"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2020 02:18:52 -0700
-IronPort-SDR: Z4TYiw1c1o2TkE6KU2miscl1K06z4FRIEze0ktepLtTtHycAhZLVflE5nFRzH/2p5eIocc0wqI
- rQOKnub5oSlA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,398,1589266800"; 
-   d="scan'208";a="327727628"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by FMSMGA003.fm.intel.com with ESMTP; 26 Jul 2020 02:18:47 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jzcnt-0045sX-QV; Sun, 26 Jul 2020 12:18:45 +0300
-Date:   Sun, 26 Jul 2020 12:18:45 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Michael Walle <michael@walle.cc>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Pavel Machek <pavel@ucw.cz>
-Subject: Re: [PATCH v6 08/13] hwmon: add support for the sl28cpld hardware
- monitoring controller
-Message-ID: <20200726091845.GL3703480@smile.fi.intel.com>
-References: <20200725231834.25642-1-michael@walle.cc>
- <20200725231834.25642-9-michael@walle.cc>
+        id S1726901AbgG0FaM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 27 Jul 2020 01:30:12 -0400
+Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:35454 "EHLO
+        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726858AbgG0FaJ (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 27 Jul 2020 01:30:09 -0400
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06R5RmeS010997;
+        Mon, 27 Jul 2020 01:29:53 -0400
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com with ESMTP id 32ghn5da46-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Jul 2020 01:29:53 -0400
+Received: from SCSQMBX10.ad.analog.com (scsqmbx10.ad.analog.com [10.77.17.5])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 06R5TpEd017784
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Mon, 27 Jul 2020 01:29:51 -0400
+Received: from SCSQCASHYB7.ad.analog.com (10.77.17.133) by
+ SCSQMBX10.ad.analog.com (10.77.17.5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1779.2; Sun, 26 Jul 2020 22:29:50 -0700
+Received: from SCSQMBX11.ad.analog.com (10.77.17.10) by
+ SCSQCASHYB7.ad.analog.com (10.77.17.133) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1779.2; Sun, 26 Jul 2020 22:29:50 -0700
+Received: from zeus.spd.analog.com (10.64.82.11) by SCSQMBX11.ad.analog.com
+ (10.77.17.10) with Microsoft SMTP Server id 15.1.1779.2 via Frontend
+ Transport; Sun, 26 Jul 2020 22:29:49 -0700
+Received: from localhost.localdomain ([10.48.65.12])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 06R5TksM007624;
+        Mon, 27 Jul 2020 01:29:47 -0400
+From:   <alexandru.tachici@analog.com>
+To:     <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+CC:     <robh+dt@kernel.org>, <linux@roeck-us.net>,
+        Alexandru Tachici <alexandru.tachici@analog.com>
+Subject: [PATCH v6 0/9] hwmon: pmbus: adm1266: add support
+Date:   Mon, 27 Jul 2020 08:31:12 +0300
+Message-ID: <20200727053121.23288-1-alexandru.tachici@analog.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200725231834.25642-9-michael@walle.cc>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain
+X-ADIRoutedOnPrem: True
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-27_03:2020-07-27,2020-07-27 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ clxscore=1011 lowpriorityscore=0 bulkscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 suspectscore=0 malwarescore=0 phishscore=0 spamscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007270040
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Jul 26, 2020 at 01:18:29AM +0200, Michael Walle wrote:
-> Add support for the hardware monitoring controller of the sl28cpld board
-> management controller. This driver is part of a multi-function device.
+From: Alexandru Tachici <alexandru.tachici@analog.com>
 
-FWIW,
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Add PMBus probing driver for the adm1266 Cascadable
+Super Sequencer with Margin Control and Fault Recording.
+Driver is using the pmbus_core, creating sysfs files
+under hwmon for inputs: vh1->vh4 and vp1->vp13.
 
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> Acked-by: Guenter Roeck <linux@roeck-us.net>
-> ---
-> Changes since v5:
->  - none
-> 
-> Changes since v4:
->  - update copyright year
->  - remove #include <linux/of_device.h>, suggested by Andy.
->  - use PTR_ERR_OR_ZERO(), suggested by Andy.
->  - remove the platform device table
->  - don't use KBUID_MODNAME
-> 
-> Changes since v3:
->  - see cover letter
-> 
->  Documentation/hwmon/index.rst    |   1 +
->  Documentation/hwmon/sl28cpld.rst |  36 ++++++++
->  drivers/hwmon/Kconfig            |  10 +++
->  drivers/hwmon/Makefile           |   1 +
->  drivers/hwmon/sl28cpld-hwmon.c   | 142 +++++++++++++++++++++++++++++++
->  5 files changed, 190 insertions(+)
->  create mode 100644 Documentation/hwmon/sl28cpld.rst
->  create mode 100644 drivers/hwmon/sl28cpld-hwmon.c
-> 
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index 750d3a975d82..d90c43c82936 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -154,6 +154,7 @@ Hardware Monitoring Kernel Drivers
->     sht3x
->     shtc1
->     sis5595
-> +   sl28cpld
->     smm665
->     smsc47b397
->     smsc47m192
-> diff --git a/Documentation/hwmon/sl28cpld.rst b/Documentation/hwmon/sl28cpld.rst
-> new file mode 100644
-> index 000000000000..7ed65f78250c
-> --- /dev/null
-> +++ b/Documentation/hwmon/sl28cpld.rst
-> @@ -0,0 +1,36 @@
-> +.. SPDX-License-Identifier: GPL-2.0-only
-> +
-> +Kernel driver sl28cpld
-> +======================
-> +
-> +Supported chips:
-> +
-> +   * Kontron sl28cpld
-> +
-> +     Prefix: 'sl28cpld'
-> +
-> +     Datasheet: not available
-> +
-> +Authors: Michael Walle <michael@walle.cc>
-> +
-> +Description
-> +-----------
-> +
-> +The sl28cpld is a board management controller which also exposes a hardware
-> +monitoring controller. At the moment this controller supports a single fan
-> +supervisor. In the future there might be other flavours and additional
-> +hardware monitoring might be supported.
-> +
-> +The fan supervisor has a 7 bit counter register and a counter period of 1
-> +second. If the 7 bit counter overflows, the supervisor will automatically
-> +switch to x8 mode to support a wider input range at the loss of
-> +granularity.
-> +
-> +Sysfs entries
-> +-------------
-> +
-> +The following attributes are supported.
-> +
-> +======================= ========================================================
-> +fan1_input		Fan RPM. Assuming 2 pulses per revolution.
-> +======================= ========================================================
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 8dc28b26916e..a02829ec7386 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1479,6 +1479,16 @@ config SENSORS_RASPBERRYPI_HWMON
->  	  This driver can also be built as a module. If so, the module
->  	  will be called raspberrypi-hwmon.
->  
-> +config SENSORS_SL28CPLD
-> +	tristate "Kontron sl28cpld hardware monitoring driver"
-> +	select MFD_SIMPLE_MFD_I2C
-> +	help
-> +	  If you say yes here you get support for the fan supervisor of the
-> +	  sl28cpld board management controller.
-> +
-> +	  This driver can also be built as a module.  If so, the module
-> +	  will be called sl28cpld-hwmon.
-> +
->  config SENSORS_SHT15
->  	tristate "Sensiron humidity and temperature sensors. SHT15 and compat."
->  	depends on GPIOLIB || COMPILE_TEST
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index a8f4b35b136b..dee8511f9348 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -159,6 +159,7 @@ obj-$(CONFIG_SENSORS_S3C)	+= s3c-hwmon.o
->  obj-$(CONFIG_SENSORS_SCH56XX_COMMON)+= sch56xx-common.o
->  obj-$(CONFIG_SENSORS_SCH5627)	+= sch5627.o
->  obj-$(CONFIG_SENSORS_SCH5636)	+= sch5636.o
-> +obj-$(CONFIG_SENSORS_SL28CPLD)	+= sl28cpld-hwmon.o
->  obj-$(CONFIG_SENSORS_SHT15)	+= sht15.o
->  obj-$(CONFIG_SENSORS_SHT21)	+= sht21.o
->  obj-$(CONFIG_SENSORS_SHT3x)	+= sht3x.o
-> diff --git a/drivers/hwmon/sl28cpld-hwmon.c b/drivers/hwmon/sl28cpld-hwmon.c
-> new file mode 100644
-> index 000000000000..e48f58ec5b9c
-> --- /dev/null
-> +++ b/drivers/hwmon/sl28cpld-hwmon.c
-> @@ -0,0 +1,142 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * sl28cpld hardware monitoring driver
-> + *
-> + * Copyright 2020 Kontron Europe GmbH
-> + */
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/kernel.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/property.h>
-> +#include <linux/regmap.h>
-> +
-> +#define FAN_INPUT		0x00
-> +#define   FAN_SCALE_X8		BIT(7)
-> +#define   FAN_VALUE_MASK	GENMASK(6, 0)
-> +
-> +struct sl28cpld_hwmon {
-> +	struct regmap *regmap;
-> +	u32 offset;
-> +};
-> +
-> +static umode_t sl28cpld_hwmon_is_visible(const void *data,
-> +					 enum hwmon_sensor_types type,
-> +					 u32 attr, int channel)
-> +{
-> +	return 0444;
-> +}
-> +
-> +static int sl28cpld_hwmon_read(struct device *dev,
-> +			       enum hwmon_sensor_types type, u32 attr,
-> +			       int channel, long *input)
-> +{
-> +	struct sl28cpld_hwmon *hwmon = dev_get_drvdata(dev);
-> +	unsigned int value;
-> +	int ret;
-> +
-> +	switch (attr) {
-> +	case hwmon_fan_input:
-> +		ret = regmap_read(hwmon->regmap, hwmon->offset + FAN_INPUT,
-> +				  &value);
-> +		if (ret)
-> +			return ret;
-> +		/*
-> +		 * The register has a 7 bit value and 1 bit which indicates the
-> +		 * scale. If the MSB is set, then the lower 7 bit has to be
-> +		 * multiplied by 8, to get the correct reading.
-> +		 */
-> +		if (value & FAN_SCALE_X8)
-> +			value = FIELD_GET(FAN_VALUE_MASK, value) << 3;
-> +
-> +		/*
-> +		 * The counter period is 1000ms and the sysfs specification
-> +		 * says we should asssume 2 pulses per revolution.
-> +		 */
-> +		value *= 60 / 2;
-> +
-> +		break;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	*input = value;
-> +	return 0;
-> +}
-> +
-> +static const u32 sl28cpld_hwmon_fan_config[] = {
-> +	HWMON_F_INPUT,
-> +	0
-> +};
-> +
-> +static const struct hwmon_channel_info sl28cpld_hwmon_fan = {
-> +	.type = hwmon_fan,
-> +	.config = sl28cpld_hwmon_fan_config,
-> +};
-> +
-> +static const struct hwmon_channel_info *sl28cpld_hwmon_info[] = {
-> +	&sl28cpld_hwmon_fan,
-> +	NULL
-> +};
-> +
-> +static const struct hwmon_ops sl28cpld_hwmon_ops = {
-> +	.is_visible = sl28cpld_hwmon_is_visible,
-> +	.read = sl28cpld_hwmon_read,
-> +};
-> +
-> +static const struct hwmon_chip_info sl28cpld_hwmon_chip_info = {
-> +	.ops = &sl28cpld_hwmon_ops,
-> +	.info = sl28cpld_hwmon_info,
-> +};
-> +
-> +static int sl28cpld_hwmon_probe(struct platform_device *pdev)
-> +{
-> +	struct sl28cpld_hwmon *hwmon;
-> +	struct device *hwmon_dev;
-> +	int ret;
-> +
-> +	if (!pdev->dev.parent)
-> +		return -ENODEV;
-> +
-> +	hwmon = devm_kzalloc(&pdev->dev, sizeof(*hwmon), GFP_KERNEL);
-> +	if (!hwmon)
-> +		return -ENOMEM;
-> +
-> +	hwmon->regmap = dev_get_regmap(pdev->dev.parent, NULL);
-> +	if (!hwmon->regmap)
-> +		return -ENODEV;
-> +
-> +	ret = device_property_read_u32(&pdev->dev, "reg", &hwmon->offset);
-> +	if (ret)
-> +		return -EINVAL;
-> +
-> +	hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev,
-> +				"sl28cpld_hwmon", hwmon,
-> +				&sl28cpld_hwmon_chip_info, NULL);
-> +	if (IS_ERR(hwmon_dev))
-> +		dev_err(&pdev->dev, "failed to register as hwmon device");
-> +
-> +	return PTR_ERR_OR_ZERO(hwmon_dev);
-> +}
-> +
-> +static const struct of_device_id sl28cpld_hwmon_of_match[] = {
-> +	{ .compatible = "kontron,sl28cpld-fan" },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, sl28cpld_hwmon_of_match);
-> +
-> +static struct platform_driver sl28cpld_hwmon_driver = {
-> +	.probe = sl28cpld_hwmon_probe,
-> +	.driver = {
-> +		.name = "sl28cpld-fan",
-> +		.of_match_table = sl28cpld_hwmon_of_match,
-> +	},
-> +};
-> +module_platform_driver(sl28cpld_hwmon_driver);
-> +
-> +MODULE_DESCRIPTION("sl28cpld Hardware Monitoring Driver");
-> +MODULE_AUTHOR("Michael Walle <michael@walle.cc>");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.20.1
-> 
+1. Add PMBus probing driver for inputs vh1->vh4
+and vp1->vp13.
+
+2. Add Block Write-Read Process Call command.
+A PMBus specific implementation was required because
+block write with I2C_SMBUS_PROC_CALL flag allows a
+maximum of 32 bytes to be received.
+
+3. This makes adm1266 driver expose GPIOs
+to user-space. Currently are read only. Future
+developments on the firmware will allow
+them to be writable.
+
+4. Allow the current sate of the seqeuncer to be read
+through debugfs.
+
+5. Blackboxes are 64 bytes of chip state related data
+that is generated on faults. Use the nvmem kernel api
+to expose the blackbox chip functionality to userspace.
+
+6. Add group command support. This will allow the driver
+to stop/program all cascaded adm1266 devices at once.
+
+7. Writing the firmware hex file with offset 0
+to the nvmem of the master adm1266 will trigger
+the firmware programming of all cascaded devices.
+The master adm1266 of each device is specified in
+the devicetree.
+
+8. Writing the configuration hex file to 0x30000
+byte address of the nvmem file will trigger the
+programing of that device in particular.
+
+9. dt bindings for ADM1266.
+
+Alexandru Tachici (9):
+  hwmon: pmbus: adm1266: add support
+  hwmon: pmbus: adm1266: Add Block process call
+  hwmon: pmbus: adm1266: Add support for GPIOs
+  hwmon: pmbus: adm1266: add debugfs for states
+  hwmon: pmbus: adm1266: read blackbox
+  hwmon: pmbus: adm1266: Add group command support
+  hwmon: pmbus: adm1266: program firmware
+  hwmon: pmbus: adm1266: program configuration
+  dt-bindings: hwmon: Add bindings for ADM1266
+
+ .../bindings/hwmon/adi,adm1266.yaml           |   56 +
+ Documentation/hwmon/adm1266.rst               |   37 +
+ Documentation/hwmon/index.rst                 |    1 +
+ drivers/hwmon/pmbus/Kconfig                   |   10 +
+ drivers/hwmon/pmbus/Makefile                  |    1 +
+ drivers/hwmon/pmbus/adm1266.c                 | 1273 +++++++++++++++++
+ 6 files changed, 1378 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/adi,adm1266.yaml
+ create mode 100644 Documentation/hwmon/adm1266.rst
+ create mode 100644 drivers/hwmon/pmbus/adm1266.c
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.20.1
 
