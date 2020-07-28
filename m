@@ -1,155 +1,251 @@
-Return-Path: <SRS0=z702=BG=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=QPnZ=BH=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-8.3 required=3.0 tests=BAYES_00,
+	BODY_QUOTE_MALF_MSGID,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85F31C4345F
-	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Jul 2020 16:18:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20FCCC433E0
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Jul 2020 07:19:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6F1B921775
-	for <linux-hwmon@archiver.kernel.org>; Mon, 27 Jul 2020 16:18:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F2C9320792
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Jul 2020 07:19:54 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JXEuNNcH"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728478AbgG0QSf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 27 Jul 2020 12:18:35 -0400
-Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:59028 "EHLO
-        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731806AbgG0QSL (ORCPT
+        id S1727962AbgG1HTy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 28 Jul 2020 03:19:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53822 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727118AbgG1HTy (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 27 Jul 2020 12:18:11 -0400
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06RFxhIA030686;
-        Mon, 27 Jul 2020 12:17:55 -0400
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com with ESMTP id 32gek677xv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Jul 2020 12:17:55 -0400
-Received: from ASHBMBX9.ad.analog.com (ashbmbx9.ad.analog.com [10.64.17.10])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 06RGHsOI050871
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Mon, 27 Jul 2020 12:17:54 -0400
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1779.2; Mon, 27 Jul
- 2020 12:17:53 -0400
-Received: from zeus.spd.analog.com (10.64.82.11) by ASHBMBX8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.1.1779.2 via Frontend
- Transport; Mon, 27 Jul 2020 12:17:53 -0400
-Received: from localhost.localdomain ([10.48.65.12])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 06RGHjXA009637;
-        Mon, 27 Jul 2020 12:17:51 -0400
-From:   <alexandru.tachici@analog.com>
-To:     <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-CC:     <robh+dt@kernel.org>, <linux@roeck-us.net>,
-        Alexandru Tachici <alexandru.tachici@analog.com>
-Subject: [PATCH v7 4/9] hwmon: pmbus: adm1266: add debugfs for states
-Date:   Mon, 27 Jul 2020 19:19:23 +0300
-Message-ID: <20200727161928.14122-5-alexandru.tachici@analog.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200727161928.14122-1-alexandru.tachici@analog.com>
-References: <20200727161928.14122-1-alexandru.tachici@analog.com>
+        Tue, 28 Jul 2020 03:19:54 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DEF8C0619D4
+        for <linux-hwmon@vger.kernel.org>; Tue, 28 Jul 2020 00:19:53 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id a14so17217241wra.5
+        for <linux-hwmon@vger.kernel.org>; Tue, 28 Jul 2020 00:19:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=A6d3Z8kZUGC925O1zWNYM0bo3uk23MCvzFLEsbquiGg=;
+        b=JXEuNNcHl2rzr+ED0k+nl9svIqEnZlG4uG4Ljc30XUWAj7SnsAlzcGFXU0TA0qySQp
+         2hN8vHtrdyO41dqHRHbNgoPQzccQFeCCY6lxquSVVAhovTXq6dPgHYkQUkx8svw4D+R0
+         S4BMdFPVl/rUzIVO23T1URDRTzQGmFn9sx0zrNCH204f4ED8wjuqjvMVBZi6Ppsks+19
+         hQ7s7EkaKV6A5zuNCyrLunYI0x5kEFw4WpSbXhjth3EzCbft0KrRwaTWixEGNYRb6VuB
+         tNNZE8QWXi5j313UCjrpXPViIvmQh52nbvxLtzHyVIeCG53hZNdFNx7NVcKvUdxb0ZLk
+         0Vug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=A6d3Z8kZUGC925O1zWNYM0bo3uk23MCvzFLEsbquiGg=;
+        b=gQkuwPEpgB7mXvdopvbXwC4gGj96sLzEBCli8Ht47GyL8vML6MQBmeQaQMCi+4fmqe
+         sKncaf6BLFd1dgpHLKfNB1Qe0XxaeYCTTDTJW5+CJ0FKQPo9IoGsFC2BuBNmLAbIGyb6
+         C/PN1PiF5CTW8wuGrLBcCAIZk90+FqW/ulbb6rRbtiFrNAuwgGcdBrMMyPI7fz+Ykh9W
+         OsKOBJU0g6MFoXelgZ3ra1W5sKvmKFQlTCzu14OI/AdsScdrJX7P5RYkqRngRwc7Qh1h
+         jlJ5YQGGHOkU6V/Qs1pKseAoUINccsJ+DvbPQP+oyafETKqxvhtz2diNqpj/95YM4GWy
+         vV9w==
+X-Gm-Message-State: AOAM530WGGZ9IjHgmV+Fli7RbIHyH2iAbXwKlgUSmwohnreqHeAmaOF6
+        G9JUGSNTwhzmCMn30imWT2FVcg==
+X-Google-Smtp-Source: ABdhPJz+8EDiCF+tZuc+BFokpxg7sLtYNmRW3CW3BfMrYAARno5y9fdOlWpYou7Mu+g++TZQFZ/NPw==
+X-Received: by 2002:adf:f289:: with SMTP id k9mr24097714wro.203.1595920792029;
+        Tue, 28 Jul 2020 00:19:52 -0700 (PDT)
+Received: from dell ([2.27.167.73])
+        by smtp.gmail.com with ESMTPSA id j11sm15809923wrq.69.2020.07.28.00.19.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jul 2020 00:19:51 -0700 (PDT)
+Date:   Tue, 28 Jul 2020 08:19:49 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Michael Walle <michael@walle.cc>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Pavel Machek <pavel@ucw.cz>
+Subject: Re: [PATCH v6 01/13] mfd: add simple regmap based I2C driver
+Message-ID: <20200728071949.GE1850026@dell>
+References: <20200725231834.25642-1-michael@walle.cc>
+ <20200725231834.25642-2-michael@walle.cc>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ADIRoutedOnPrem: True
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-27_11:2020-07-27,2020-07-27 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- adultscore=0 clxscore=1015 suspectscore=0 impostorscore=0 phishscore=0
- spamscore=0 mlxlogscore=999 lowpriorityscore=0 priorityscore=1501
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007270110
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200725231834.25642-2-michael@walle.cc>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Alexandru Tachici <alexandru.tachici@analog.com>
+On Sun, 26 Jul 2020, Michael Walle wrote:
 
-Add a debugfs entry which prints the current state
-of the adm1266 sequencer.
+> There are I2C devices which contain several different functions but
+> doesn't require any special access functions. For these kind of drivers
+> an I2C regmap should be enough.
+> 
+> Create an I2C driver which creates an I2C regmap and enumerates its
+> children. If a device wants to use this as its MFD core driver, it has
+> to add an individual compatible string. It may provide its own regmap
+> configuration.
+> 
+> Subdevices can use dev_get_regmap() on the parent to get their regmap
+> instance.
+> 
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+> Changes since v5:
+>  - removed "select MFD_CORE" in Kconfig
+>  - removed help text in Kconfig, we assume that the users of this
 
-Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
----
- drivers/hwmon/pmbus/adm1266.c | 41 ++++++++++++++++++++++++++++++++++-
- 1 file changed, 40 insertions(+), 1 deletion(-)
+That's the opposite of what I asked for.
 
-diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
-index be911de02cf6..0ea016b7e113 100644
---- a/drivers/hwmon/pmbus/adm1266.c
-+++ b/drivers/hwmon/pmbus/adm1266.c
-@@ -19,6 +19,7 @@
- #include <linux/slab.h>
- 
- #define ADM1266_PDIO_CONFIG	0xD4
-+#define ADM1266_READ_STATE	0xD9
- #define ADM1266_GPIO_CONFIG	0xE1
- #define ADM1266_PDIO_STATUS	0xE9
- #define ADM1266_GPIO_STATUS	0xEA
-@@ -43,6 +44,7 @@ struct adm1266_data {
- 	struct gpio_chip gc;
- 	const char *gpio_names[ADM1266_GPIO_NR + ADM1266_PDIO_NR];
- 	struct i2c_client *client;
-+	struct dentry *debugfs_dir;
- 	struct mutex buf_mutex;
- 	u8 write_buf[ADM1266_PMBUS_BLOCK_MAX + 1] ____cacheline_aligned;
- 	u8 read_buf[ADM1266_PMBUS_BLOCK_MAX + 1] ____cacheline_aligned;
-@@ -287,6 +289,37 @@ static int adm1266_config_gpio(struct adm1266_data *data)
- 	return ret;
- }
- 
-+static int adm1266_state_read(struct seq_file *s, void *pdata)
-+{
-+	struct device *dev = s->private;
-+	struct i2c_client *client = to_i2c_client(dev);
-+	int ret;
-+
-+	ret = i2c_smbus_read_word_data(client, ADM1266_READ_STATE);
-+	if (ret < 0)
-+		return ret;
-+
-+	seq_printf(s, "%d\n", ret);
-+
-+	return 0;
-+}
-+
-+static void adm1266_init_debugfs(struct adm1266_data *data)
-+{
-+	struct dentry *root;
-+
-+	root = pmbus_get_debugfs_dir(data->client);
-+	if (!root)
-+		return;
-+
-+	data->debugfs_dir = debugfs_create_dir(data->client->name, root);
-+	if (!data->debugfs_dir)
-+		return;
-+
-+	debugfs_create_devm_seqfile(&data->client->dev, "sequencer_state", data->debugfs_dir,
-+				    adm1266_state_read);
-+}
-+
- static int adm1266_probe(struct i2c_client *client, const struct i2c_device_id *id)
- {
- 	struct adm1266_data *data;
-@@ -310,7 +343,13 @@ static int adm1266_probe(struct i2c_client *client, const struct i2c_device_id *
- 	if (ret < 0)
- 		return ret;
- 
--	return pmbus_do_probe(client, id, &data->info);
-+	ret = pmbus_do_probe(client, id, &data->info);
-+	if (ret)
-+		return ret;
-+
-+	adm1266_init_debugfs(data);
-+
-+	return 0;
- }
- 
- static const struct of_device_id adm1266_of_match[] = {
+>    driver will have a "select MFD_SIMPLE_MFD_I2C". Instead added
+>    a small description to the driver itself.
+>  - removed "struct simple_mfd_i2c_config" and use regmap_config
+>    directly
+>  - changed builtin_i2c_driver() to module_i2c_driver(), added
+>    MODULE_ boilerplate
+>  - cleaned up the included files
+> 
+> Changes since v4:
+>  - new patch. Lee, please bear with me. I didn't want to delay the
+>    new version (where a lot of remarks on the other patches were
+>    addressed) even more, just because we haven't figured out how
+>    to deal with the MFD part. So for now, I've included this one.
+> 
+>  drivers/mfd/Kconfig          |  5 ++++
+>  drivers/mfd/Makefile         |  1 +
+>  drivers/mfd/simple-mfd-i2c.c | 55 ++++++++++++++++++++++++++++++++++++
+>  3 files changed, 61 insertions(+)
+>  create mode 100644 drivers/mfd/simple-mfd-i2c.c
+> 
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index 33df0837ab41..c08539c7a166 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -1162,6 +1162,11 @@ config MFD_SI476X_CORE
+>  	  To compile this driver as a module, choose M here: the
+>  	  module will be called si476x-core.
+>  
+> +config MFD_SIMPLE_MFD_I2C
+> +	tristate
+> +	depends on I2C
+> +	select REGMAP_I2C
+
+Please provide a full help.
+
+>  config MFD_SM501
+>  	tristate "Silicon Motion SM501"
+>  	depends on HAS_DMA
+> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> index a60e5f835283..78d24a3e7c9e 100644
+> --- a/drivers/mfd/Makefile
+> +++ b/drivers/mfd/Makefile
+> @@ -264,3 +264,4 @@ obj-$(CONFIG_MFD_STMFX) 	+= stmfx.o
+>  obj-$(CONFIG_MFD_KHADAS_MCU) 	+= khadas-mcu.o
+>  
+>  obj-$(CONFIG_SGI_MFD_IOC3)	+= ioc3.o
+> +obj-$(CONFIG_MFD_SIMPLE_MFD_I2C)	+= simple-mfd-i2c.o
+> diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2c.c
+> new file mode 100644
+> index 000000000000..45090ddad104
+> --- /dev/null
+> +++ b/drivers/mfd/simple-mfd-i2c.c
+> @@ -0,0 +1,55 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * A very simple I2C MFD driver
+
+Simple MFD - I2C
+
+> + * The driver enumerates its children and registers a common regmap. Use
+> + * dev_get_regmap(pdev->dev.parent, NULL) in the child nodes to fetch that
+> + * regmap instance.
+
+This driver creates a single register map with the intention for it to
+be shared by all sub-devices.  Children can use their parent's device
+structure (dev.parent) in order reference it. 
+
+> + * In the future this driver might be extended to support also other interfaces
+> + * like SPI etc.
+
+Remove this please.
+
+> + */
+
+'\n' here.
+
+> +#include <linux/i2c.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/regmap.h>
+> +
+> +static const struct regmap_config simple_regmap_config = {
+> +	.reg_bits = 8,
+> +	.val_bits = 8,
+> +};
+> +
+> +static int simple_mfd_i2c_probe(struct i2c_client *i2c)
+> +{
+> +	const struct regmap_config *config;
+> +	struct regmap *regmap;
+> +
+> +	config = device_get_match_data(&i2c->dev);
+> +	if (!config)
+> +		config = &simple_regmap_config;
+> +
+> +	regmap = devm_regmap_init_i2c(i2c, config);
+> +	if (IS_ERR(regmap))
+> +		return PTR_ERR(regmap);
+> +
+> +	return devm_of_platform_populate(&i2c->dev);
+> +}
+> +
+> +static const struct of_device_id simple_mfd_i2c_of_match[] = {
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, simple_mfd_i2c_of_match);
+> +
+> +static struct i2c_driver simple_mfd_i2c_driver = {
+> +	.probe_new = simple_mfd_i2c_probe,
+> +	.driver = {
+> +		.name = "simple-mfd-i2c",
+> +		.of_match_table = simple_mfd_i2c_of_match,
+> +	},
+> +};
+> +module_i2c_driver(simple_mfd_i2c_driver);
+> +
+> +MODULE_AUTHOR("Michael Walle <michael@walle.cc>");
+> +MODULE_DESCRIPTION("Simple I2C MFD driver");
+
+Simple MFD - I2C driver
+
+> +MODULE_LICENSE("GPL v2");
+
 -- 
-2.20.1
-
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
