@@ -2,146 +2,122 @@ Return-Path: <SRS0=QPnZ=BH=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=BAYES_00,
-	BODY_QUOTE_MALF_MSGID,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0283C433EA
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Jul 2020 10:51:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B20A6C433DF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Jul 2020 15:26:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7EE4D20656
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Jul 2020 10:51:30 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vDkkyU+5"
+	by mail.kernel.org (Postfix) with ESMTP id 95F71206D4
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Jul 2020 15:26:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728904AbgG1Kv0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 28 Jul 2020 06:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58412 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728898AbgG1KvZ (ORCPT
+        id S1730701AbgG1P0T (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 28 Jul 2020 11:26:19 -0400
+Received: from mail.prodrive-technologies.com ([212.61.153.67]:59094 "EHLO
+        mail.prodrive-technologies.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730669AbgG1P0T (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 28 Jul 2020 06:51:25 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A78AC0619D2
-        for <linux-hwmon@vger.kernel.org>; Tue, 28 Jul 2020 03:51:25 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id 88so17812253wrh.3
-        for <linux-hwmon@vger.kernel.org>; Tue, 28 Jul 2020 03:51:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=LzOc135fINoaOyyxwY4N4SP5+/4WZUgI3XQn3ZBQrDA=;
-        b=vDkkyU+5XaTOEmRQYW0CYyR4mlMX1mtnZDopRBrR16WWZAymHLppooL3WbRsemUOlF
-         7JAG9CCFFBkNo1ck8oAFsHnGGCFpddbJZI4FvPPe/5vgXZIxS7pdXreW0pAmXl4fefVk
-         uemgsa2HPMS2pgMJSiY5gsoUuJ22Uc9FFMkDS50upr4Y5t/bruJsOn96uJd/Xej/4+wJ
-         r3z4kV7L9g728y5x+aNOBIj6JRK/2vA+lFuGJCCKMNnmmCY7vsMSYcIdJpOO1Lj/2Nk6
-         unQbNqxObw8nTIlx8MnFNeMtUIVxddRTqJvHuyaU1npKp/UQnousCC6p6CUsu9YCp0JA
-         N8gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=LzOc135fINoaOyyxwY4N4SP5+/4WZUgI3XQn3ZBQrDA=;
-        b=ZU8Ol8elBYSR5Y2w8sez2xSzVr3Lsmry1kg9XpGQQxnHmXATcwk+BMW6/vkNplJxGy
-         cK9Gyj7Ez4Wz/FKRIElbjstcwNdP24Dzw2IrhW4rwI5aGnLZomxTDG58rP2GCtbF94zP
-         1j6z5jPDjh1EIGoCmhLLOZNNJX6aSPmPTZe4SaWoJoRddtWjYL6QvHS6SArjMvgzeOc4
-         daIHYutLR+CVoDVhGx1Pu5dp+fHEbPjfsrCvXowrTQgGQb5XhEs0SUeto5f5TovxfI6w
-         hh59GxHtuRjM5+dzMSgjNcqOJlxHLUy5K+nfTLTwWWXGuesUPu0WcBSuZ2JJ4J9jhKqi
-         jo8w==
-X-Gm-Message-State: AOAM531Eg7iFXTPoImVZPmKA8vOcKQxFl7e0aIB50+NmSv41EQh7lGBM
-        kPsPRx43Q1wSg3FNdIIRemyJlA==
-X-Google-Smtp-Source: ABdhPJyXBEeI4zvLVf/tRWpqopuL2jSNCu4L9LZnKQaZP1mCTaWKou6fjAB0L+zVU5NonfUp5NxoSw==
-X-Received: by 2002:a5d:4a90:: with SMTP id o16mr23540803wrq.87.1595933483925;
-        Tue, 28 Jul 2020 03:51:23 -0700 (PDT)
-Received: from dell ([2.27.167.73])
-        by smtp.gmail.com with ESMTPSA id y189sm4194196wmd.27.2020.07.28.03.51.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jul 2020 03:51:23 -0700 (PDT)
-Date:   Tue, 28 Jul 2020 11:51:21 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Michael Walle <michael@walle.cc>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
+        Tue, 28 Jul 2020 11:26:19 -0400
+X-Greylist: delayed 350 seconds by postgrey-1.27 at vger.kernel.org; Tue, 28 Jul 2020 11:26:17 EDT
+Received: from mail.prodrive-technologies.com (localhost.localdomain [127.0.0.1])
+        by localhost (Email Security Appliance) with SMTP id 784D732EBC_F20423AB;
+        Tue, 28 Jul 2020 15:20:26 +0000 (GMT)
+Received: from mail.prodrive-technologies.com (mdb-dag.prodrive.nl [10.1.1.212])
+        (using TLSv1.2 with cipher AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "mail.prodrive-technologies.com", Issuer "GlobalSign RSA OV SSL CA 2018" (verified OK))
+        by mail.prodrive-technologies.com (Sophos Email Appliance) with ESMTPS id E7900303C1_F20422AF;
+        Tue, 28 Jul 2020 15:20:10 +0000 (GMT)
+Received: from lnxclnt2222.Prodrive.nl (10.130.5.194) by EXC03.bk.prodrive.nl
+ (10.1.1.212) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1913.5; Tue, 28
+ Jul 2020 17:20:10 +0200
+From:   Roy van Doormaal <roy.van.doormaal@prodrive-technologies.com>
+To:     <linux-hwmon@vger.kernel.org>
+CC:     Roy van Doormaal <roy.van.doormaal@prodrive-technologies.com>,
+        "Jean Delvare" <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Pavel Machek <pavel@ucw.cz>
-Subject: Re: [PATCH v6 06/13] pwm: add support for sl28cpld PWM controller
-Message-ID: <20200728105121.GG2419169@dell>
-References: <20200725231834.25642-1-michael@walle.cc>
- <20200725231834.25642-7-michael@walle.cc>
- <20200728074352.ckyfso5zwsfgupjx@pengutronix.de>
- <58b53cacc5289f17f669159beeeada03@walle.cc>
- <20200728094720.x6pucwxsfwvz6nvv@pengutronix.de>
+        open list <linux-kernel@vger.kernel.org>
+Subject: [PATCH] hwmon: (adc128d818) Fix advanced configuration register init
+Date:   Tue, 28 Jul 2020 17:18:45 +0200
+Message-ID: <20200728151846.231785-1-roy.van.doormaal@prodrive-technologies.com>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200728094720.x6pucwxsfwvz6nvv@pengutronix.de>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ClientProxiedBy: EXC03.bk.prodrive.nl (10.1.1.212) To EXC03.bk.prodrive.nl
+ (10.1.1.212)
+X-SASI-RCODE: 200
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, 28 Jul 2020, Uwe Kleine-König wrote:
-> On Tue, Jul 28, 2020 at 10:21:22AM +0200, Michael Walle wrote:
-> > Am 2020-07-28 09:43, schrieb Uwe Kleine-König:
-> > > On Sun, Jul 26, 2020 at 01:18:27AM +0200, Michael Walle wrote:
-> > > > +static int sl28cpld_pwm_probe(struct platform_device *pdev)
-> > > > +{
-> > > > +	struct sl28cpld_pwm *priv;
-> > > > +	struct pwm_chip *chip;
-> > > > +	int ret;
-> > > > +
-> > > > +	if (!pdev->dev.parent)
-> > > > +		return -ENODEV;
-> > > > +
-> > > > +	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
-> > > > +	if (!priv)
-> > > > +		return -ENOMEM;
-> > > > +
-> > > > +	priv->regmap = dev_get_regmap(pdev->dev.parent, NULL);
-> > > > +	if (!priv->regmap)
-> > > 
-> > > Error message here?
-> > 
-> > This shouldn't really happen and I put it into the same category
-> > as the two above and report no error. But I can add it.
-> 
-> For kzalloc it is right to not emit an error because a failing kzalloc
-> is already loud on its own. I missed the first error path, that should
-> get a message, too.
-> 
-> > Generally, it looked to me that more and more drivers don't
-> > really report errors anymore, but just return with an -EWHATEVER.
-> > So if someone can shed some light here, I'm all ears.
-> 
-> IMHO it's wrong not to add error messages. At one point in time it will
-> fail and then you're happy if you don't have to add printks all over the
-> place first to debug that.
+If the operation mode is non-zero and an external reference voltage is set,
+first the operation mode is written to the advanced configuration register,
+followed by the externel reference enable bit,
+resetting the configuration mode to 0.
 
-Error messages should only be omitted for -ENOMEM and if something is
-already being printed out, ideally by the sub-system API.
+To fix this, first compose the value of the advanced configuration register
+based on the configuration mode and the external reference voltage.
+The advanced configuration register is then written to the device,
+if it is different from the default register value (0x0).
 
+Signed-off-by: Roy van Doormaal <roy.van.doormaal@prodrive-technologies.com>
+---
+ drivers/hwmon/adc128d818.c | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/hwmon/adc128d818.c b/drivers/hwmon/adc128d818.c
+index f9edec195c35..571d5454c6b2 100644
+--- a/drivers/hwmon/adc128d818.c
++++ b/drivers/hwmon/adc128d818.c
+@@ -393,6 +393,7 @@ static int adc128_init_client(struct adc128_data *data)
+ {
+ 	struct i2c_client *client = data->client;
+ 	int err;
++	u8 regval = 0x0;
+ 
+ 	/*
+ 	 * Reset chip to defaults.
+@@ -403,10 +404,17 @@ static int adc128_init_client(struct adc128_data *data)
+ 		return err;
+ 
+ 	/* Set operation mode, if non-default */
+-	if (data->mode != 0) {
+-		err = i2c_smbus_write_byte_data(client,
+-						ADC128_REG_CONFIG_ADV,
+-						data->mode << 1);
++	if (data->mode != 0)
++		regval |= data->mode << 1;
++
++	/* If external vref is selected, configure the chip to use it */
++	if (data->regulator)
++		regval |= 0x01;
++
++	/* Write advanced configuration register */
++	if (regval != 0x0) {
++		err = i2c_smbus_write_byte_data(client, ADC128_REG_CONFIG_ADV,
++						regval);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -416,14 +424,6 @@ static int adc128_init_client(struct adc128_data *data)
+ 	if (err)
+ 		return err;
+ 
+-	/* If external vref is selected, configure the chip to use it */
+-	if (data->regulator) {
+-		err = i2c_smbus_write_byte_data(client,
+-						ADC128_REG_CONFIG_ADV, 0x01);
+-		if (err)
+-			return err;
+-	}
+-
+ 	return 0;
+ }
+ 
 -- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.20.1
+
