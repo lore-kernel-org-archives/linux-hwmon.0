@@ -2,65 +2,64 @@ Return-Path: <SRS0=QPnZ=BH=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
 	BODY_QUOTE_MALF_MSGID,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20FCCC433E0
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Jul 2020 07:19:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6452DC433E0
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Jul 2020 07:25:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F2C9320792
-	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Jul 2020 07:19:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 40FD420829
+	for <linux-hwmon@archiver.kernel.org>; Tue, 28 Jul 2020 07:25:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JXEuNNcH"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fFzP6Xcp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727962AbgG1HTy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 28 Jul 2020 03:19:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53822 "EHLO
+        id S1727910AbgG1HZJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 28 Jul 2020 03:25:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727118AbgG1HTy (ORCPT
+        with ESMTP id S1727116AbgG1HZI (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 28 Jul 2020 03:19:54 -0400
+        Tue, 28 Jul 2020 03:25:08 -0400
 Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DEF8C0619D4
-        for <linux-hwmon@vger.kernel.org>; Tue, 28 Jul 2020 00:19:53 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id a14so17217241wra.5
-        for <linux-hwmon@vger.kernel.org>; Tue, 28 Jul 2020 00:19:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E88C061794
+        for <linux-hwmon@vger.kernel.org>; Tue, 28 Jul 2020 00:25:08 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id f7so17237452wrw.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 28 Jul 2020 00:25:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=A6d3Z8kZUGC925O1zWNYM0bo3uk23MCvzFLEsbquiGg=;
-        b=JXEuNNcHl2rzr+ED0k+nl9svIqEnZlG4uG4Ljc30XUWAj7SnsAlzcGFXU0TA0qySQp
-         2hN8vHtrdyO41dqHRHbNgoPQzccQFeCCY6lxquSVVAhovTXq6dPgHYkQUkx8svw4D+R0
-         S4BMdFPVl/rUzIVO23T1URDRTzQGmFn9sx0zrNCH204f4ED8wjuqjvMVBZi6Ppsks+19
-         hQ7s7EkaKV6A5zuNCyrLunYI0x5kEFw4WpSbXhjth3EzCbft0KrRwaTWixEGNYRb6VuB
-         tNNZE8QWXi5j313UCjrpXPViIvmQh52nbvxLtzHyVIeCG53hZNdFNx7NVcKvUdxb0ZLk
-         0Vug==
+        bh=CVyOqzD82VIbTbSOwbuQWHWMh9I7YtQWOzBVoRyLodQ=;
+        b=fFzP6XcpfIKbOqzLN633RcbKQaEYrqDx9NZIAyxMRbtlvCHmfNFzaoyDqDAftrQzkq
+         7zm75Ps4/6uVSjbVFQ80njWz+F/t/LLUoLR0b8RTj8V6q4VQDsHQBM5QxnN3ixSinjov
+         XwB5Rm2vIQNVv+7KI7v6z5cdRmBPkwtVqRvYJGR0iIJu4rS0v84NtrU4CAo/wHJgiIyQ
+         ijRUbBfxZ9y79NR6JT9OJHgT2j+ZdyBt92llChHlXmpBlmgDj0hm2zK2zOwWYvK/pjik
+         D3ZbDDUJE5x1ODeYJqipPGA5Zfzu1pQhsTSPDUfe+UV5a5lMt+IiisIdMqOgQx+49ThV
+         1pIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=A6d3Z8kZUGC925O1zWNYM0bo3uk23MCvzFLEsbquiGg=;
-        b=gQkuwPEpgB7mXvdopvbXwC4gGj96sLzEBCli8Ht47GyL8vML6MQBmeQaQMCi+4fmqe
-         sKncaf6BLFd1dgpHLKfNB1Qe0XxaeYCTTDTJW5+CJ0FKQPo9IoGsFC2BuBNmLAbIGyb6
-         C/PN1PiF5CTW8wuGrLBcCAIZk90+FqW/ulbb6rRbtiFrNAuwgGcdBrMMyPI7fz+Ykh9W
-         OsKOBJU0g6MFoXelgZ3ra1W5sKvmKFQlTCzu14OI/AdsScdrJX7P5RYkqRngRwc7Qh1h
-         jlJ5YQGGHOkU6V/Qs1pKseAoUINccsJ+DvbPQP+oyafETKqxvhtz2diNqpj/95YM4GWy
-         vV9w==
-X-Gm-Message-State: AOAM530WGGZ9IjHgmV+Fli7RbIHyH2iAbXwKlgUSmwohnreqHeAmaOF6
-        G9JUGSNTwhzmCMn30imWT2FVcg==
-X-Google-Smtp-Source: ABdhPJz+8EDiCF+tZuc+BFokpxg7sLtYNmRW3CW3BfMrYAARno5y9fdOlWpYou7Mu+g++TZQFZ/NPw==
-X-Received: by 2002:adf:f289:: with SMTP id k9mr24097714wro.203.1595920792029;
-        Tue, 28 Jul 2020 00:19:52 -0700 (PDT)
+        bh=CVyOqzD82VIbTbSOwbuQWHWMh9I7YtQWOzBVoRyLodQ=;
+        b=BlMoUrBfAoi3t8P69GJ9yHJv7vzTCRKy6kDmQWzrCw+7+XHxUXYLkc51r8Ms5JudGR
+         bDNqzGR27n93QiwVo2vYfTJhKCOVk4iWsELCitCMP5I7uRq/ws1jKCcdrMFJgLO0Z70c
+         evo3FQLit2HZKfaibYf44ctjdGBrB4xieK8V1RqplHNDZ0oYb39LZxQa6OgVSXFWL3E+
+         z9nSpfJt57k79BPtw28jNbPOUG4RAOVbSHPv1msh0szacycmV8JKk7RUWhsM3zyowClY
+         Hib8zGgo2KuGng5Zw/bD3ABrSZcROYtiuxIeJazSPALyuED9g4SWtkA7xpjWxvS7yDIk
+         qNOA==
+X-Gm-Message-State: AOAM532qrJ2VvguNS75MG5MPVurG68WDCX9fD9C9M8wFp3aWPGXnV1N5
+        i879iRjW7XWl+7sr1JxLdudhCg==
+X-Google-Smtp-Source: ABdhPJz1YpTqlbDUFXDsWyUGZXPtHayhFsSxxtFIDbZ7aMjyWiFvHpMffWGAyH6vvBmAU2ji9WSF0w==
+X-Received: by 2002:a5d:6990:: with SMTP id g16mr23041965wru.131.1595921106735;
+        Tue, 28 Jul 2020 00:25:06 -0700 (PDT)
 Received: from dell ([2.27.167.73])
-        by smtp.gmail.com with ESMTPSA id j11sm15809923wrq.69.2020.07.28.00.19.50
+        by smtp.gmail.com with ESMTPSA id k126sm2849116wme.17.2020.07.28.00.25.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jul 2020 00:19:51 -0700 (PDT)
-Date:   Tue, 28 Jul 2020 08:19:49 +0100
+        Tue, 28 Jul 2020 00:25:06 -0700 (PDT)
+Date:   Tue, 28 Jul 2020 08:25:04 +0100
 From:   Lee Jones <lee.jones@linaro.org>
 To:     Michael Walle <michael@walle.cc>
 Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
@@ -84,15 +83,15 @@ Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Pavel Machek <pavel@ucw.cz>
-Subject: Re: [PATCH v6 01/13] mfd: add simple regmap based I2C driver
-Message-ID: <20200728071949.GE1850026@dell>
+Subject: Re: [PATCH v6 03/13] mfd: simple-mfd-i2c: add sl28cpld support
+Message-ID: <20200728072504.GG1850026@dell>
 References: <20200725231834.25642-1-michael@walle.cc>
- <20200725231834.25642-2-michael@walle.cc>
+ <20200725231834.25642-4-michael@walle.cc>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200725231834.25642-2-michael@walle.cc>
+In-Reply-To: <20200725231834.25642-4-michael@walle.cc>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
@@ -100,149 +99,25 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 
 On Sun, 26 Jul 2020, Michael Walle wrote:
 
-> There are I2C devices which contain several different functions but
-> doesn't require any special access functions. For these kind of drivers
-> an I2C regmap should be enough.
+> Add the core support for the board management controller found on the
+> SMARC-sAL28 board.
 > 
-> Create an I2C driver which creates an I2C regmap and enumerates its
-> children. If a device wants to use this as its MFD core driver, it has
-> to add an individual compatible string. It may provide its own regmap
-> configuration.
-> 
-> Subdevices can use dev_get_regmap() on the parent to get their regmap
-> instance.
+> At the moment, this controller is used on the Kontron SMARC-sAL28 board.
 > 
 > Signed-off-by: Michael Walle <michael@walle.cc>
 > ---
 > Changes since v5:
->  - removed "select MFD_CORE" in Kconfig
->  - removed help text in Kconfig, we assume that the users of this
-
-That's the opposite of what I asked for.
-
->    driver will have a "select MFD_SIMPLE_MFD_I2C". Instead added
->    a small description to the driver itself.
->  - removed "struct simple_mfd_i2c_config" and use regmap_config
->    directly
->  - changed builtin_i2c_driver() to module_i2c_driver(), added
->    MODULE_ boilerplate
->  - cleaned up the included files
+>  - none
 > 
 > Changes since v4:
->  - new patch. Lee, please bear with me. I didn't want to delay the
->    new version (where a lot of remarks on the other patches were
->    addressed) even more, just because we haven't figured out how
->    to deal with the MFD part. So for now, I've included this one.
+>  - new patch
 > 
->  drivers/mfd/Kconfig          |  5 ++++
->  drivers/mfd/Makefile         |  1 +
->  drivers/mfd/simple-mfd-i2c.c | 55 ++++++++++++++++++++++++++++++++++++
->  3 files changed, 61 insertions(+)
->  create mode 100644 drivers/mfd/simple-mfd-i2c.c
-> 
-> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> index 33df0837ab41..c08539c7a166 100644
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -1162,6 +1162,11 @@ config MFD_SI476X_CORE
->  	  To compile this driver as a module, choose M here: the
->  	  module will be called si476x-core.
->  
-> +config MFD_SIMPLE_MFD_I2C
-> +	tristate
-> +	depends on I2C
-> +	select REGMAP_I2C
+>  drivers/mfd/simple-mfd-i2c.c | 1 +
+>  1 file changed, 1 insertion(+)
 
-Please provide a full help.
+For my own reference (apply this as-is to your sign-off block):
 
->  config MFD_SM501
->  	tristate "Silicon Motion SM501"
->  	depends on HAS_DMA
-> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> index a60e5f835283..78d24a3e7c9e 100644
-> --- a/drivers/mfd/Makefile
-> +++ b/drivers/mfd/Makefile
-> @@ -264,3 +264,4 @@ obj-$(CONFIG_MFD_STMFX) 	+= stmfx.o
->  obj-$(CONFIG_MFD_KHADAS_MCU) 	+= khadas-mcu.o
->  
->  obj-$(CONFIG_SGI_MFD_IOC3)	+= ioc3.o
-> +obj-$(CONFIG_MFD_SIMPLE_MFD_I2C)	+= simple-mfd-i2c.o
-> diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2c.c
-> new file mode 100644
-> index 000000000000..45090ddad104
-> --- /dev/null
-> +++ b/drivers/mfd/simple-mfd-i2c.c
-> @@ -0,0 +1,55 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * A very simple I2C MFD driver
-
-Simple MFD - I2C
-
-> + * The driver enumerates its children and registers a common regmap. Use
-> + * dev_get_regmap(pdev->dev.parent, NULL) in the child nodes to fetch that
-> + * regmap instance.
-
-This driver creates a single register map with the intention for it to
-be shared by all sub-devices.  Children can use their parent's device
-structure (dev.parent) in order reference it. 
-
-> + * In the future this driver might be extended to support also other interfaces
-> + * like SPI etc.
-
-Remove this please.
-
-> + */
-
-'\n' here.
-
-> +#include <linux/i2c.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/regmap.h>
-> +
-> +static const struct regmap_config simple_regmap_config = {
-> +	.reg_bits = 8,
-> +	.val_bits = 8,
-> +};
-> +
-> +static int simple_mfd_i2c_probe(struct i2c_client *i2c)
-> +{
-> +	const struct regmap_config *config;
-> +	struct regmap *regmap;
-> +
-> +	config = device_get_match_data(&i2c->dev);
-> +	if (!config)
-> +		config = &simple_regmap_config;
-> +
-> +	regmap = devm_regmap_init_i2c(i2c, config);
-> +	if (IS_ERR(regmap))
-> +		return PTR_ERR(regmap);
-> +
-> +	return devm_of_platform_populate(&i2c->dev);
-> +}
-> +
-> +static const struct of_device_id simple_mfd_i2c_of_match[] = {
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, simple_mfd_i2c_of_match);
-> +
-> +static struct i2c_driver simple_mfd_i2c_driver = {
-> +	.probe_new = simple_mfd_i2c_probe,
-> +	.driver = {
-> +		.name = "simple-mfd-i2c",
-> +		.of_match_table = simple_mfd_i2c_of_match,
-> +	},
-> +};
-> +module_i2c_driver(simple_mfd_i2c_driver);
-> +
-> +MODULE_AUTHOR("Michael Walle <michael@walle.cc>");
-> +MODULE_DESCRIPTION("Simple I2C MFD driver");
-
-Simple MFD - I2C driver
-
-> +MODULE_LICENSE("GPL v2");
+  Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
 
 -- 
 Lee Jones [李琼斯]
