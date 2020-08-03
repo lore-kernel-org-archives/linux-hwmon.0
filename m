@@ -2,94 +2,86 @@ Return-Path: <SRS0=SYm6=BN=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84FD7C433E0
-	for <linux-hwmon@archiver.kernel.org>; Mon,  3 Aug 2020 05:42:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BA7EC433E1
+	for <linux-hwmon@archiver.kernel.org>; Mon,  3 Aug 2020 06:57:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 626DA206E2
-	for <linux-hwmon@archiver.kernel.org>; Mon,  3 Aug 2020 05:42:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6DB31206E9
+	for <linux-hwmon@archiver.kernel.org>; Mon,  3 Aug 2020 06:57:10 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Imiqwh2w"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727889AbgHCFmR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 3 Aug 2020 01:42:17 -0400
-Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:1702 "EHLO
-        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727956AbgHCFmR (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 3 Aug 2020 01:42:17 -0400
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0735Yjso024633;
-        Mon, 3 Aug 2020 01:41:56 -0400
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com with ESMTP id 32n69edt9c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 03 Aug 2020 01:41:56 -0400
-Received: from SCSQMBX11.ad.analog.com (scsqmbx11.ad.analog.com [10.77.17.10])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 0735fsFP034607
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Mon, 3 Aug 2020 01:41:55 -0400
-Received: from SCSQMBX10.ad.analog.com (10.77.17.5) by SCSQMBX11.ad.analog.com
- (10.77.17.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1779.2; Sun, 2 Aug 2020
- 22:41:53 -0700
-Received: from zeus.spd.analog.com (10.64.82.11) by SCSQMBX10.ad.analog.com
- (10.77.17.5) with Microsoft SMTP Server id 15.1.1779.2 via Frontend
- Transport; Sun, 2 Aug 2020 22:41:53 -0700
-Received: from localhost.localdomain ([10.48.65.12])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 0735fof3000553;
-        Mon, 3 Aug 2020 01:41:51 -0400
-From:   Alexandru Ardelean <alexandru.ardelean@analog.com>
-To:     <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <linux@roeck-us.net>, <jdelvare@suse.com>, <nuno.sa@analog.com>,
-        Alexandru Ardelean <alexandru.ardelean@analog.com>
-Subject: [PATCH] hwmon: axi-fan-control: remove duplicate macros
-Date:   Mon, 3 Aug 2020 08:43:11 +0300
-Message-ID: <20200803054311.98174-1-alexandru.ardelean@analog.com>
-X-Mailer: git-send-email 2.17.1
+        id S1727016AbgHCG5C (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 3 Aug 2020 02:57:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47810 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726224AbgHCG5C (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 3 Aug 2020 02:57:02 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFBB4C06174A;
+        Sun,  2 Aug 2020 23:57:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=S81Y7/E/1KRByHOMFTAO1WQMOll7HWoP+pv/fCo/3sI=; b=Imiqwh2wh6gfO95HVgGWdIpJ7R
+        qFqJDaURIpsOiDpUCq2k3ILdHp9/G64PbhflfbfwXUHR3YCqdMM2JIr5p2HV5QlEFNjYcibq1cAwB
+        k5jcDFqNUiYh1ErghhsIpsN5baKyFw50AsjkOnyh0RkcQvG4I/FuQV4i+K4smxUlt0gQ8ZINX4zk1
+        zqYZrKBpxdTsr3nucjd2JPKqfEkufPqh/aFaSwGu2mFtFylC2a36pyZdPfsQXEbP1+7In5Kkj2kTD
+        iIuAdnnH0jCfMh5vNRvgFzTjztCURqfBsmyFjwViAe1IQB++yIvaVvpqhNNNwV/B+lmZFzbHjUNTv
+        QTu3Qcmg==;
+Received: from hch by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1k2UOb-0005Zd-6v; Mon, 03 Aug 2020 06:56:29 +0000
+Date:   Mon, 3 Aug 2020 07:56:29 +0100
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Saheed Bolarinwa <refactormyself@gmail.com>, trix@redhat.com,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Joerg Roedel <joro@8bytes.org>, bjorn@helgaas.com,
+        skhan@linuxfoundation.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-mtd@lists.infradead.org, iommu@lists.linux-foundation.org,
+        linux-rdma@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-gpio@vger.kernel.org, linux-fpga@vger.kernel.org,
+        linux-edac@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-crypto@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net
+Subject: Re: [RFC PATCH 00/17] Drop uses of pci_read_config_*() return value
+Message-ID: <20200803065629.GA19534@infradead.org>
+References: <20200802184648.GA23190@nazgul.tnic>
+ <20200802191406.GA248232@bjorn-Precision-5520>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ADIRoutedOnPrem: True
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-08-03_04:2020-07-31,2020-08-03 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
- lowpriorityscore=0 phishscore=0 adultscore=0 spamscore=0 clxscore=1011
- mlxscore=0 malwarescore=0 suspectscore=0 priorityscore=1501
- mlxlogscore=918 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2008030041
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200802191406.GA248232@bjorn-Precision-5520>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-These macros are also present in the "include/linux/fpga/adi-axi-common.h"
-file which is included in this driver.
+On Sun, Aug 02, 2020 at 02:14:06PM -0500, Bjorn Helgaas wrote:
+> But what guarantees that a PCI config register cannot contain ~0?
+> If there's something about that in the spec I'd love to know where it
+> is because it would simplify a lot of things.
 
-This patch removes them from the AXI Fan Control driver. No sense in having
-them in 2 places.
-
-Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
----
- drivers/hwmon/axi-fan-control.c | 4 ----
- 1 file changed, 4 deletions(-)
-
-diff --git a/drivers/hwmon/axi-fan-control.c b/drivers/hwmon/axi-fan-control.c
-index 38d9cdb3db1a..e3f6b03e6764 100644
---- a/drivers/hwmon/axi-fan-control.c
-+++ b/drivers/hwmon/axi-fan-control.c
-@@ -15,10 +15,6 @@
- #include <linux/of.h>
- #include <linux/platform_device.h>
- 
--#define ADI_AXI_PCORE_VER_MAJOR(version)	(((version) >> 16) & 0xff)
--#define ADI_AXI_PCORE_VER_MINOR(version)	(((version) >> 8) & 0xff)
--#define ADI_AXI_PCORE_VER_PATCH(version)	((version) & 0xff)
--
- /* register map */
- #define ADI_REG_RSTN		0x0080
- #define ADI_REG_PWM_WIDTH	0x0084
--- 
-2.17.1
-
+There isn't.  An we even have cases like the NVMe controller memory
+buffer and persistent memory region, which are BARs that store
+abritrary values for later retreival, so it can't.  (now those
+features have a major issue with error detection, but that is another
+issue)
