@@ -1,101 +1,95 @@
-Return-Path: <SRS0=y2eS=BM=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=SYm6=BN=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2ED8DC433E3
-	for <linux-hwmon@archiver.kernel.org>; Sun,  2 Aug 2020 20:18:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84FD7C433E0
+	for <linux-hwmon@archiver.kernel.org>; Mon,  3 Aug 2020 05:42:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1A3152076B
-	for <linux-hwmon@archiver.kernel.org>; Sun,  2 Aug 2020 20:18:52 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=alien8.de header.i=@alien8.de header.b="IpVr02DQ"
+	by mail.kernel.org (Postfix) with ESMTP id 626DA206E2
+	for <linux-hwmon@archiver.kernel.org>; Mon,  3 Aug 2020 05:42:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727840AbgHBUSo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 2 Aug 2020 16:18:44 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:58748 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725910AbgHBUSo (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 2 Aug 2020 16:18:44 -0400
-Received: from nazgul.tnic (unknown [78.130.214.198])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4D2291EC02A8;
-        Sun,  2 Aug 2020 22:18:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1596399520;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=z0K+vlWV9j7wfXLQcUnvdJhwiVrF38RAZueHzdmaci0=;
-        b=IpVr02DQwE3yYwTGqHzkePquczoIuB3CSh4JRazV28rb0yxVyTjgJHeFSYXLscJQCgocj+
-        YjGRmfK2vuZ4xdnOu8V6Bj4srNoX1QpTQVYAD0HdeQama4rhKTHzaxEhs3BC4FYYx+fxXN
-        dZeZiogCz7IvNzoJKsyyZMEOy76rM2w=
-Date:   Sun, 2 Aug 2020 22:18:06 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Saheed Bolarinwa <refactormyself@gmail.com>, trix@redhat.com,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Joerg Roedel <joro@8bytes.org>, bjorn@helgaas.com,
-        skhan@linuxfoundation.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-mtd@lists.infradead.org, iommu@lists.linux-foundation.org,
-        linux-rdma@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-gpio@vger.kernel.org, linux-fpga@vger.kernel.org,
-        linux-edac@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-crypto@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net
-Subject: Re: [RFC PATCH 00/17] Drop uses of pci_read_config_*() return value
-Message-ID: <20200802201806.GA24437@nazgul.tnic>
-References: <20200802184648.GA23190@nazgul.tnic>
- <20200802191406.GA248232@bjorn-Precision-5520>
+        id S1727889AbgHCFmR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 3 Aug 2020 01:42:17 -0400
+Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:1702 "EHLO
+        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727956AbgHCFmR (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 3 Aug 2020 01:42:17 -0400
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0735Yjso024633;
+        Mon, 3 Aug 2020 01:41:56 -0400
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com with ESMTP id 32n69edt9c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 03 Aug 2020 01:41:56 -0400
+Received: from SCSQMBX11.ad.analog.com (scsqmbx11.ad.analog.com [10.77.17.10])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 0735fsFP034607
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Mon, 3 Aug 2020 01:41:55 -0400
+Received: from SCSQMBX10.ad.analog.com (10.77.17.5) by SCSQMBX11.ad.analog.com
+ (10.77.17.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1779.2; Sun, 2 Aug 2020
+ 22:41:53 -0700
+Received: from zeus.spd.analog.com (10.64.82.11) by SCSQMBX10.ad.analog.com
+ (10.77.17.5) with Microsoft SMTP Server id 15.1.1779.2 via Frontend
+ Transport; Sun, 2 Aug 2020 22:41:53 -0700
+Received: from localhost.localdomain ([10.48.65.12])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 0735fof3000553;
+        Mon, 3 Aug 2020 01:41:51 -0400
+From:   Alexandru Ardelean <alexandru.ardelean@analog.com>
+To:     <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <linux@roeck-us.net>, <jdelvare@suse.com>, <nuno.sa@analog.com>,
+        Alexandru Ardelean <alexandru.ardelean@analog.com>
+Subject: [PATCH] hwmon: axi-fan-control: remove duplicate macros
+Date:   Mon, 3 Aug 2020 08:43:11 +0300
+Message-ID: <20200803054311.98174-1-alexandru.ardelean@analog.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200802191406.GA248232@bjorn-Precision-5520>
+Content-Type: text/plain
+X-ADIRoutedOnPrem: True
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-08-03_04:2020-07-31,2020-08-03 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
+ lowpriorityscore=0 phishscore=0 adultscore=0 spamscore=0 clxscore=1011
+ mlxscore=0 malwarescore=0 suspectscore=0 priorityscore=1501
+ mlxlogscore=918 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2008030041
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Aug 02, 2020 at 02:14:06PM -0500, Bjorn Helgaas wrote:
-> Wait, I'm not convinced yet.  I know that if a PCI read fails, you
-> normally get ~0 data because the host bridge fabricates it to complete
-> the CPU load.
-> 
-> But what guarantees that a PCI config register cannot contain ~0?
+These macros are also present in the "include/linux/fpga/adi-axi-common.h"
+file which is included in this driver.
 
-Well, I don't think you can differentiate that case, right?
+This patch removes them from the AXI Fan Control driver. No sense in having
+them in 2 places.
 
-I guess this is where the driver knowledge comes into play: if the read
-returns ~0, the pci_read_config* should probably return in that case
-something like:
+Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
+---
+ drivers/hwmon/axi-fan-control.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-	PCIBIOS_READ_MAYBE_FAILED
-
-to denote it is all 1s and then the caller should be able to determine,
-based on any of domain:bus:slot.func and whatever else the driver knows
-about its hardware, whether the 1s are a valid value or an error.
-Hopefully.
-
-Or something better of which I cannot think of right now...
-
+diff --git a/drivers/hwmon/axi-fan-control.c b/drivers/hwmon/axi-fan-control.c
+index 38d9cdb3db1a..e3f6b03e6764 100644
+--- a/drivers/hwmon/axi-fan-control.c
++++ b/drivers/hwmon/axi-fan-control.c
+@@ -15,10 +15,6 @@
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
+ 
+-#define ADI_AXI_PCORE_VER_MAJOR(version)	(((version) >> 16) & 0xff)
+-#define ADI_AXI_PCORE_VER_MINOR(version)	(((version) >> 8) & 0xff)
+-#define ADI_AXI_PCORE_VER_PATCH(version)	((version) & 0xff)
+-
+ /* register map */
+ #define ADI_REG_RSTN		0x0080
+ #define ADI_REG_PWM_WIDTH	0x0084
 -- 
-Regards/Gruss,
-    Boris.
+2.17.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
