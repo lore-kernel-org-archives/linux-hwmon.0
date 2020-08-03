@@ -2,86 +2,152 @@ Return-Path: <SRS0=SYm6=BN=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BA7EC433E1
-	for <linux-hwmon@archiver.kernel.org>; Mon,  3 Aug 2020 06:57:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8CACC433E5
+	for <linux-hwmon@archiver.kernel.org>; Mon,  3 Aug 2020 09:42:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6DB31206E9
-	for <linux-hwmon@archiver.kernel.org>; Mon,  3 Aug 2020 06:57:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A815520719
+	for <linux-hwmon@archiver.kernel.org>; Mon,  3 Aug 2020 09:42:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Imiqwh2w"
+	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="iMAF7Clm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727016AbgHCG5C (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 3 Aug 2020 02:57:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47810 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726224AbgHCG5C (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 3 Aug 2020 02:57:02 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFBB4C06174A;
-        Sun,  2 Aug 2020 23:57:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=S81Y7/E/1KRByHOMFTAO1WQMOll7HWoP+pv/fCo/3sI=; b=Imiqwh2wh6gfO95HVgGWdIpJ7R
-        qFqJDaURIpsOiDpUCq2k3ILdHp9/G64PbhflfbfwXUHR3YCqdMM2JIr5p2HV5QlEFNjYcibq1cAwB
-        k5jcDFqNUiYh1ErghhsIpsN5baKyFw50AsjkOnyh0RkcQvG4I/FuQV4i+K4smxUlt0gQ8ZINX4zk1
-        zqYZrKBpxdTsr3nucjd2JPKqfEkufPqh/aFaSwGu2mFtFylC2a36pyZdPfsQXEbP1+7In5Kkj2kTD
-        iIuAdnnH0jCfMh5vNRvgFzTjztCURqfBsmyFjwViAe1IQB++yIvaVvpqhNNNwV/B+lmZFzbHjUNTv
-        QTu3Qcmg==;
-Received: from hch by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1k2UOb-0005Zd-6v; Mon, 03 Aug 2020 06:56:29 +0000
-Date:   Mon, 3 Aug 2020 07:56:29 +0100
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Saheed Bolarinwa <refactormyself@gmail.com>, trix@redhat.com,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Joerg Roedel <joro@8bytes.org>, bjorn@helgaas.com,
-        skhan@linuxfoundation.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-mtd@lists.infradead.org, iommu@lists.linux-foundation.org,
-        linux-rdma@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-gpio@vger.kernel.org, linux-fpga@vger.kernel.org,
-        linux-edac@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-crypto@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net
-Subject: Re: [RFC PATCH 00/17] Drop uses of pci_read_config_*() return value
-Message-ID: <20200803065629.GA19534@infradead.org>
-References: <20200802184648.GA23190@nazgul.tnic>
- <20200802191406.GA248232@bjorn-Precision-5520>
+        id S1726770AbgHCJmr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 3 Aug 2020 05:42:47 -0400
+Received: from ssl.serverraum.org ([176.9.125.105]:44137 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726610AbgHCJmq (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 3 Aug 2020 05:42:46 -0400
+Received: from mwalle01.sab.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id CE1A123E4C;
+        Mon,  3 Aug 2020 11:42:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1596447763;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=g4Dy/dLi6E1D/wDb90GYHTrbiKxP7kYCQp1ycKoFdbU=;
+        b=iMAF7Clm2UsINua7XoS0qmqfxe/kmaL7TUeTa0i+2N+AiwPSan3OK/Ug8+uwtDSmoKv7x+
+        zTs07W2fFd8RIPbtuDLXyZr2qPRYcJYdw9ewByXI/OfRYFAgZ/1RgViYe489wbjIHvzkZP
+        ggy2pN6vwCD5i/41D7wrUdc5BjUINvU=
+From:   Michael Walle <michael@walle.cc>
+To:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH v7 10/13] arm64: dts: freescale: sl28: map GPIOs to input events
+Date:   Mon,  3 Aug 2020 11:35:56 +0200
+Message-Id: <20200803093559.12289-11-michael@walle.cc>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200803093559.12289-1-michael@walle.cc>
+References: <20200803093559.12289-1-michael@walle.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200802191406.GA248232@bjorn-Precision-5520>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+Content-Transfer-Encoding: 8bit
+X-Spam: Yes
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Aug 02, 2020 at 02:14:06PM -0500, Bjorn Helgaas wrote:
-> But what guarantees that a PCI config register cannot contain ~0?
-> If there's something about that in the spec I'd love to know where it
-> is because it would simplify a lot of things.
+Now that we have support for GPIO lines of the SMARC connector, map the
+sleep, power and lid switch signals to the corresponding keys using the
+gpio-keys and gpio-keys-polled drivers. The power and sleep signals have
+dedicated interrupts, thus we use these ones. The lid switch is just
+mapped to a GPIO input and needs polling.
 
-There isn't.  An we even have cases like the NVMe controller memory
-buffer and persistent memory region, which are BARs that store
-abritrary values for later retreival, so it can't.  (now those
-features have a major issue with error detection, but that is another
-issue)
+Signed-off-by: Michael Walle <michael@walle.cc>
+---
+Changes since v6:
+ - none
+
+Changes since v5:
+ - none
+
+Changes since v4:
+ - none
+
+Changes since v3:
+ - see cover letter
+
+ .../freescale/fsl-ls1028a-kontron-sl28.dts    | 32 +++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts
+index 9f9834eafe65..17a2f5dacc3f 100644
+--- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts
++++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dts
+@@ -9,6 +9,8 @@
+ /dts-v1/;
+ #include "fsl-ls1028a.dtsi"
+ #include <dt-bindings/interrupt-controller/irq.h>
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/input/input.h>
+ 
+ / {
+ 	model = "Kontron SMARC-sAL28";
+@@ -23,6 +25,36 @@
+ 		spi1 = &dspi2;
+ 	};
+ 
++	buttons0 {
++		compatible = "gpio-keys";
++
++		power-button {
++			interrupts-extended = <&sl28cpld_intc
++					       4 IRQ_TYPE_EDGE_BOTH>;
++			linux,code = <KEY_POWER>;
++			label = "Power";
++		};
++
++		sleep-button {
++			interrupts-extended = <&sl28cpld_intc
++					       5 IRQ_TYPE_EDGE_BOTH>;
++			linux,code = <KEY_SLEEP>;
++			label = "Sleep";
++		};
++	};
++
++	buttons1 {
++		compatible = "gpio-keys-polled";
++		poll-interval = <200>;
++
++		lid-switch {
++			linux,input-type = <EV_SW>;
++			linux,code = <SW_LID>;
++			gpios = <&sl28cpld_gpio3 4 GPIO_ACTIVE_LOW>;
++			label = "Lid";
++		};
++	};
++
+ 	chosen {
+ 		stdout-path = "serial0:115200n8";
+ 	};
+-- 
+2.20.1
+
