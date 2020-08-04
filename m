@@ -7,95 +7,82 @@ X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C502EC433E0
-	for <linux-hwmon@archiver.kernel.org>; Tue,  4 Aug 2020 21:26:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A31FC433E0
+	for <linux-hwmon@archiver.kernel.org>; Tue,  4 Aug 2020 21:27:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AD9BD20842
-	for <linux-hwmon@archiver.kernel.org>; Tue,  4 Aug 2020 21:26:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0123720842
+	for <linux-hwmon@archiver.kernel.org>; Tue,  4 Aug 2020 21:27:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T7fS5brM"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lw3bXyot"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727008AbgHDV0I (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 4 Aug 2020 17:26:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36874 "EHLO
+        id S1727824AbgHDV1l (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 4 Aug 2020 17:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725922AbgHDV0I (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 4 Aug 2020 17:26:08 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED63DC06174A;
-        Tue,  4 Aug 2020 14:26:07 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id r11so13514964pfl.11;
-        Tue, 04 Aug 2020 14:26:07 -0700 (PDT)
+        with ESMTP id S1725922AbgHDV1l (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 4 Aug 2020 17:27:41 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B28C06174A;
+        Tue,  4 Aug 2020 14:27:41 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id i92so2127977pje.0;
+        Tue, 04 Aug 2020 14:27:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=H53lbBysrvDenqcyvIC5UIxfvFKGaXbtjEmFJwaxIpE=;
-        b=T7fS5brMmb4wsPGHicKEipC/YARUq/fZUJQbVJ+Xk4BTkzZ9GzfejLGEQPEBcZ7tAq
-         f4tgYSeSMSqesC9fJTzH37W+mPN5bA15tpvb7fttWSh/rIQXEdSWbSK0ZHQ39DFHtaEO
-         IdAvLeQZu3/LLvABjTqO53RvtXGps7eAuOMvzLaA9lEMfUqme0I6MfqEBbDREDWHRcYT
-         G5if5wjnu51vBKn+XfiPXaNCo0J6Wx1Kzh63dCvaf6CThNqef/BCWLpH5UTNMPP3d2rY
-         nmqofLZ7F4cty7/B8i/xsWuZrAUts3iHqTtgQqwkPM0E3hh0ZbWL+4COSDa6WsibYTmj
-         lIRw==
+        bh=TlZPG/7/Hcy0XpMuv6WWnygJ4Kd+cRDvXfcwELgJ9co=;
+        b=Lw3bXyotIG4kR/5OtETzRwfdzUObiA6cJOcX5K/iciQqhBZujt6cVupZCKPlMl+r1A
+         2l6qoOTX15ui9ueiUfGTgPpV1oLU/5W7VeSD+zLmYwTK5Yh9cgGZIAuEesQgVTYLNlGU
+         M3Jx58PlGWYspQSpbYCryddfm/mGLC7AHnIdjLINmY7qANFw9vhQdygQUAuOH/MK/L5e
+         9AGfIcZplYVgWY9q+GnAapJVvwh58rQTVRwiYVkYq7Ul+YzdKJZrozWUUih5gf2YeakD
+         BnIZN72C7BiBOqc31wgIvtFTBJglj5JE57D2gxA1QDUi8ua+jc+VK7P6jj9nn1IHDKRZ
+         j+Sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=H53lbBysrvDenqcyvIC5UIxfvFKGaXbtjEmFJwaxIpE=;
-        b=aT/mdz97hKM5MLgRybq3GxtXrzr8DpPfYkbxoRen8+qPf6E+3N+PFR7saJS48Ck8ru
-         mWgflwT/LWUA9w0S+rjLc5ODyBtlzNBe94YiayJXGOje5pVeoPNYXny/8N/1k6RZSxmB
-         JAJkTHXNeKgcblsBtIWoHUbPRSf/EvybTj3TLAblS/jfC+Mpr9DD+VgV5jSv8jxPJjLj
-         g9gaATsXuWrEQuqeIn1AAK8cgM1snRiVabMfOfukdCmpHAap41TjYxISLRHTj7hpfgM2
-         a7cLPIIy05Mz/SSRRJcrZNrS7DGHB3A23wu1KhPChMNMHrtQAzoFwktFd2nYVEjYlOMq
-         RDqw==
-X-Gm-Message-State: AOAM533p4KpAOGxLj+Thjx+ucfx8P9z3Z89wqFltzRVFR8p5dtE7I8+C
-        1vaZcgINkUL/gwZz52al+Us=
-X-Google-Smtp-Source: ABdhPJxillOY5cbn2FINKGZ40mF2Q8aHqizsQ7EqXczJv8PwJnzXaEl1BvDabEeUkMzRY7cIaHCkGA==
-X-Received: by 2002:a63:1a04:: with SMTP id a4mr297213pga.95.1596576367419;
-        Tue, 04 Aug 2020 14:26:07 -0700 (PDT)
+        bh=TlZPG/7/Hcy0XpMuv6WWnygJ4Kd+cRDvXfcwELgJ9co=;
+        b=H90vGegUc0MZDs2k8WEWRYJdX4XdgbYKV6cedGlCub5seOxBoWzkUewkmQaookYSpy
+         ZWffNXprvGuycqw5FWXScWg2mJgxxGuC5o1CifoiqJHfkDCaO5sbYr39+2WVPCD1SS69
+         B1kSKKllcTak7xW6eD+gGGWAL5L8WDZzapHojJRCmaLAHUu09sPLQWL2QrZnwOKLFsrV
+         onuCOntESo/AV1xyQNRhCwqoI/rpOMywfgun9WQJ2oILwiulOvCdPGyFoa/kYKAp52O0
+         +R7L1Aw8iD++k/41nPe8UR+akpyOLCzxm7q8L2ysOqZ1wUpjd71Hvr//zhBErNusQf+y
+         eB4A==
+X-Gm-Message-State: AOAM533Ua4+G0HvPxae0oUdhJyrb6lg7IfzdpcL1mt9eLA7MIGg151Tb
+        JbPFu2w+oJjESlHLZRUTTGg=
+X-Google-Smtp-Source: ABdhPJzg/DGrENEBIYBsb3BwepNHOakfxU+E6nXd5DkqkF7hUMmxOgDVKGq7MakHGJNNuu1YTXkHHQ==
+X-Received: by 2002:a17:902:b603:: with SMTP id b3mr199226pls.285.1596576460689;
+        Tue, 04 Aug 2020 14:27:40 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 63sm8759439pfu.196.2020.08.04.14.26.06
+        by smtp.gmail.com with ESMTPSA id l21sm35861pgb.35.2020.08.04.14.27.39
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 04 Aug 2020 14:26:06 -0700 (PDT)
-Date:   Tue, 4 Aug 2020 14:26:05 -0700
+        Tue, 04 Aug 2020 14:27:40 -0700 (PDT)
+Date:   Tue, 4 Aug 2020 14:27:39 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Saheed O. Bolarinwa" <refactormyself@gmail.com>
-Cc:     helgaas@kernel.org, Jean Delvare <jdelvare@suse.com>,
-        bjorn@helgaas.com, skhan@linuxfoundation.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [RFC PATCH 10/17] hwmon: Drop uses of pci_read_config_*() return
- value
-Message-ID: <20200804212605.GA218592@roeck-us.net>
-References: <20200801112446.149549-1-refactormyself@gmail.com>
- <20200801112446.149549-11-refactormyself@gmail.com>
+To:     Alexandru Ardelean <alexandru.ardelean@analog.com>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jdelvare@suse.com, nuno.sa@analog.com
+Subject: Re: [PATCH] hwmon: axi-fan-control: remove duplicate macros
+Message-ID: <20200804212739.GA218807@roeck-us.net>
+References: <20200803054311.98174-1-alexandru.ardelean@analog.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200801112446.149549-11-refactormyself@gmail.com>
+In-Reply-To: <20200803054311.98174-1-alexandru.ardelean@analog.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Aug 01, 2020 at 01:24:39PM +0200, Saheed O. Bolarinwa wrote:
-> The return value of pci_read_config_*() may not indicate a device error.
-> However, the value read by these functions is more likely to indicate
-> this kind of error. This presents two overlapping ways of reporting
-> errors and complicates error checking.
+On Mon, Aug 03, 2020 at 08:43:11AM +0300, Alexandru Ardelean wrote:
+> These macros are also present in the "include/linux/fpga/adi-axi-common.h"
+> file which is included in this driver.
 > 
-> It is possible to move to one single way of checking for error if the
-> dependency on the return value of these functions is removed, then it
-> can later be made to return void.
+> This patch removes them from the AXI Fan Control driver. No sense in having
+> them in 2 places.
 > 
-> Remove all uses of the return value of pci_read_config_*().
-> Check the actual value read for ~0. In this case, ~0 is an invalid
-> value thus it indicates some kind of error.
-> 
-> Suggested-by: Bjorn Helgaas <bjorn@helgaas.com>
-> Signed-off-by: Saheed O. Bolarinwa <refactormyself@gmail.com>
+> Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
 
 Applied.
 
@@ -103,69 +90,21 @@ Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/i5k_amb.c | 12 ++++++++----
->  drivers/hwmon/vt8231.c  |  8 ++++----
->  2 files changed, 12 insertions(+), 8 deletions(-)
+>  drivers/hwmon/axi-fan-control.c | 4 ----
+>  1 file changed, 4 deletions(-)
 > 
-> diff --git a/drivers/hwmon/i5k_amb.c b/drivers/hwmon/i5k_amb.c
-> index eeac4b04df27..b7497510323c 100644
-> --- a/drivers/hwmon/i5k_amb.c
-> +++ b/drivers/hwmon/i5k_amb.c
-> @@ -427,11 +427,13 @@ static int i5k_find_amb_registers(struct i5k_amb_data *data,
->  	if (!pcidev)
->  		return -ENODEV;
+> diff --git a/drivers/hwmon/axi-fan-control.c b/drivers/hwmon/axi-fan-control.c
+> index 38d9cdb3db1a..e3f6b03e6764 100644
+> --- a/drivers/hwmon/axi-fan-control.c
+> +++ b/drivers/hwmon/axi-fan-control.c
+> @@ -15,10 +15,6 @@
+>  #include <linux/of.h>
+>  #include <linux/platform_device.h>
 >  
-> -	if (pci_read_config_dword(pcidev, I5K_REG_AMB_BASE_ADDR, &val32))
-> +	pci_read_config_dword(pcidev, I5K_REG_AMB_BASE_ADDR, &val32);
-> +	if (val32 == (u32)~0)
->  		goto out;
->  	data->amb_base = val32;
->  
-> -	if (pci_read_config_dword(pcidev, I5K_REG_AMB_LEN_ADDR, &val32))
-> +	pci_read_config_dword(pcidev, I5K_REG_AMB_LEN_ADDR, &val32);
-> +	if (val32 == (u32)~0)
->  		goto out;
->  	data->amb_len = val32;
->  
-> @@ -458,11 +460,13 @@ static int i5k_channel_probe(u16 *amb_present, unsigned long dev_id)
->  	if (!pcidev)
->  		return -ENODEV;
->  
-> -	if (pci_read_config_word(pcidev, I5K_REG_CHAN0_PRESENCE_ADDR, &val16))
-> +	pci_read_config_word(pcidev, I5K_REG_CHAN0_PRESENCE_ADDR, &val16);
-> +	if (val16 == (u16)~0)
->  		goto out;
->  	amb_present[0] = val16;
->  
-> -	if (pci_read_config_word(pcidev, I5K_REG_CHAN1_PRESENCE_ADDR, &val16))
-> +	pci_read_config_word(pcidev, I5K_REG_CHAN1_PRESENCE_ADDR, &val16);
-> +	if (val16 == (u16)~0)
->  		goto out;
->  	amb_present[1] = val16;
->  
-> diff --git a/drivers/hwmon/vt8231.c b/drivers/hwmon/vt8231.c
-> index 2335d440f72d..6603727e15a0 100644
-> --- a/drivers/hwmon/vt8231.c
-> +++ b/drivers/hwmon/vt8231.c
-> @@ -992,8 +992,8 @@ static int vt8231_pci_probe(struct pci_dev *dev,
->  			return -ENODEV;
->  	}
->  
-> -	if (PCIBIOS_SUCCESSFUL != pci_read_config_word(dev, VT8231_BASE_REG,
-> -							&val))
-> +	pci_read_config_word(dev, VT8231_BASE_REG, &val);
-> +	if (val == (u16)~0)
->  		return -ENODEV;
->  
->  	address = val & ~(VT8231_EXTENT - 1);
-> @@ -1002,8 +1002,8 @@ static int vt8231_pci_probe(struct pci_dev *dev,
->  		return -ENODEV;
->  	}
->  
-> -	if (PCIBIOS_SUCCESSFUL != pci_read_config_word(dev, VT8231_ENABLE_REG,
-> -							&val))
-> +	pci_read_config_word(dev, VT8231_ENABLE_REG, &val);
-> +	if (val == (u16)~0)
->  		return -ENODEV;
->  
->  	if (!(val & 0x0001)) {
+> -#define ADI_AXI_PCORE_VER_MAJOR(version)	(((version) >> 16) & 0xff)
+> -#define ADI_AXI_PCORE_VER_MINOR(version)	(((version) >> 8) & 0xff)
+> -#define ADI_AXI_PCORE_VER_PATCH(version)	((version) & 0xff)
+> -
+>  /* register map */
+>  #define ADI_REG_RSTN		0x0080
+>  #define ADI_REG_PWM_WIDTH	0x0084
