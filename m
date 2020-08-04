@@ -2,92 +2,170 @@ Return-Path: <SRS0=Vl9q=BO=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB76AC433E0
-	for <linux-hwmon@archiver.kernel.org>; Tue,  4 Aug 2020 14:54:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C502EC433E0
+	for <linux-hwmon@archiver.kernel.org>; Tue,  4 Aug 2020 21:26:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C4CEA21744
-	for <linux-hwmon@archiver.kernel.org>; Tue,  4 Aug 2020 14:54:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AD9BD20842
+	for <linux-hwmon@archiver.kernel.org>; Tue,  4 Aug 2020 21:26:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b="qtxEzZCu"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T7fS5brM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729301AbgHDOyo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 4 Aug 2020 10:54:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33072 "EHLO
+        id S1727008AbgHDV0I (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 4 Aug 2020 17:26:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729273AbgHDOyn (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 4 Aug 2020 10:54:43 -0400
-X-Greylist: delayed 344 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 04 Aug 2020 07:54:43 PDT
-Received: from forward500p.mail.yandex.net (forward500p.mail.yandex.net [IPv6:2a02:6b8:0:1472:2741:0:8b7:110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A4DCC06174A
-        for <linux-hwmon@vger.kernel.org>; Tue,  4 Aug 2020 07:54:43 -0700 (PDT)
-Received: from mxback5g.mail.yandex.net (mxback5g.mail.yandex.net [IPv6:2a02:6b8:0:1472:2741:0:8b7:166])
-        by forward500p.mail.yandex.net (Yandex) with ESMTP id 423E6940350;
-        Tue,  4 Aug 2020 17:48:49 +0300 (MSK)
-Received: from localhost (localhost [::1])
-        by mxback5g.mail.yandex.net (mxback/Yandex) with ESMTP id rSFBIL9Fqs-mmIW95H6;
-        Tue, 04 Aug 2020 17:48:48 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1596552528;
-        bh=rS/+6n/koFWKSBys6+6aWID9TEc0lcxKA4Nv1F6EDF0=;
-        h=Message-Id:Cc:Subject:In-Reply-To:Date:References:To:From;
-        b=qtxEzZCu0A7cbwJIUikJA3ukGT/DD5Px3H4fZVFvDGYFa8VIRw8V8Uv82F7AT3Tb8
-         uydEkCvkihjV5Ll0vRHn5QdOKIcJtvHB4lUFHaJF9Sua/OLusutYPkHmi9HtFKcD+Z
-         BJXwcB2Qm3vr4ZS6SYZDLdo6BVLJusYdGY6VJLQQ=
-Authentication-Results: mxback5g.mail.yandex.net; dkim=pass header.i=@yandex.ru
-Received: by iva5-64778ce1ba26.qloud-c.yandex.net with HTTP;
-        Tue, 04 Aug 2020 17:48:48 +0300
-From:   Evgeny Novikov <novikov@ispras.ru>
-Envelope-From: eugenenovikov@yandex.ru
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        ldv-project-org <ldv-project@linuxtesting.org>
-In-Reply-To: <23dceaac-526d-4ee3-40de-cf354b0aeabd@roeck-us.net>
-References: <856951596540762@mail.yandex.ru> <23dceaac-526d-4ee3-40de-cf354b0aeabd@roeck-us.net>
-Subject: Re: hwmon: (sis5595) potential null pointer dereference in probe
+        with ESMTP id S1725922AbgHDV0I (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 4 Aug 2020 17:26:08 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED63DC06174A;
+        Tue,  4 Aug 2020 14:26:07 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id r11so13514964pfl.11;
+        Tue, 04 Aug 2020 14:26:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=H53lbBysrvDenqcyvIC5UIxfvFKGaXbtjEmFJwaxIpE=;
+        b=T7fS5brMmb4wsPGHicKEipC/YARUq/fZUJQbVJ+Xk4BTkzZ9GzfejLGEQPEBcZ7tAq
+         f4tgYSeSMSqesC9fJTzH37W+mPN5bA15tpvb7fttWSh/rIQXEdSWbSK0ZHQ39DFHtaEO
+         IdAvLeQZu3/LLvABjTqO53RvtXGps7eAuOMvzLaA9lEMfUqme0I6MfqEBbDREDWHRcYT
+         G5if5wjnu51vBKn+XfiPXaNCo0J6Wx1Kzh63dCvaf6CThNqef/BCWLpH5UTNMPP3d2rY
+         nmqofLZ7F4cty7/B8i/xsWuZrAUts3iHqTtgQqwkPM0E3hh0ZbWL+4COSDa6WsibYTmj
+         lIRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=H53lbBysrvDenqcyvIC5UIxfvFKGaXbtjEmFJwaxIpE=;
+        b=aT/mdz97hKM5MLgRybq3GxtXrzr8DpPfYkbxoRen8+qPf6E+3N+PFR7saJS48Ck8ru
+         mWgflwT/LWUA9w0S+rjLc5ODyBtlzNBe94YiayJXGOje5pVeoPNYXny/8N/1k6RZSxmB
+         JAJkTHXNeKgcblsBtIWoHUbPRSf/EvybTj3TLAblS/jfC+Mpr9DD+VgV5jSv8jxPJjLj
+         g9gaATsXuWrEQuqeIn1AAK8cgM1snRiVabMfOfukdCmpHAap41TjYxISLRHTj7hpfgM2
+         a7cLPIIy05Mz/SSRRJcrZNrS7DGHB3A23wu1KhPChMNMHrtQAzoFwktFd2nYVEjYlOMq
+         RDqw==
+X-Gm-Message-State: AOAM533p4KpAOGxLj+Thjx+ucfx8P9z3Z89wqFltzRVFR8p5dtE7I8+C
+        1vaZcgINkUL/gwZz52al+Us=
+X-Google-Smtp-Source: ABdhPJxillOY5cbn2FINKGZ40mF2Q8aHqizsQ7EqXczJv8PwJnzXaEl1BvDabEeUkMzRY7cIaHCkGA==
+X-Received: by 2002:a63:1a04:: with SMTP id a4mr297213pga.95.1596576367419;
+        Tue, 04 Aug 2020 14:26:07 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 63sm8759439pfu.196.2020.08.04.14.26.06
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 04 Aug 2020 14:26:06 -0700 (PDT)
+Date:   Tue, 4 Aug 2020 14:26:05 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     "Saheed O. Bolarinwa" <refactormyself@gmail.com>
+Cc:     helgaas@kernel.org, Jean Delvare <jdelvare@suse.com>,
+        bjorn@helgaas.com, skhan@linuxfoundation.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [RFC PATCH 10/17] hwmon: Drop uses of pci_read_config_*() return
+ value
+Message-ID: <20200804212605.GA218592@roeck-us.net>
+References: <20200801112446.149549-1-refactormyself@gmail.com>
+ <20200801112446.149549-11-refactormyself@gmail.com>
 MIME-Version: 1.0
-X-Mailer: Yamail [ http://yandex.ru ] 5.0
-Date:   Tue, 04 Aug 2020 17:48:48 +0300
-Message-Id: <4831596552157@mail.yandex.ru>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200801112446.149549-11-refactormyself@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-04.08.2020, 17:33, "Guenter Roeck" <linux@roeck-us.net>:
-> On 8/4/20 4:50 AM, Evgeny Novikov wrote:
->>  sis5595_pci_probe() registers platform driver callbacks and just then
->>  initializes global pointer variable s_bridge. sis5595_probe() may
->>  dereference it before this happens that can result in null pointer
->>  dereference.
->
-> sis5595_probe() is only called after the device is registered,
-> which happens in sis5595_device_add() after s_bridge is set. This is
-> a southbridge, so there won't be any hot insertion/removal events.
->
+On Sat, Aug 01, 2020 at 01:24:39PM +0200, Saheed O. Bolarinwa wrote:
+> The return value of pci_read_config_*() may not indicate a device error.
+> However, the value read by these functions is more likely to indicate
+> this kind of error. This presents two overlapping ways of reporting
+> errors and complicates error checking.
+> 
+> It is possible to move to one single way of checking for error if the
+> dependency on the return value of these functions is removed, then it
+> can later be made to return void.
+> 
+> Remove all uses of the return value of pci_read_config_*().
+> Check the actual value read for ~0. In this case, ~0 is an invalid
+> value thus it indicates some kind of error.
+> 
+> Suggested-by: Bjorn Helgaas <bjorn@helgaas.com>
+> Signed-off-by: Saheed O. Bolarinwa <refactormyself@gmail.com>
 
-Thank you for this hint. We need to tune our models appropriately.
+Applied.
 
->>  We can not swap registration of platform driver callbacks with
->>  initialization of s_bridge since sm_sis5595_exit() assumes the
->>  current order. Perhaps it has sense to implement a pci_driver.remove
->>  callback that will take care about deregistration of platform driver
->>  callbacks.
->
-> Agreed regarding the remove function. However, given the age of the chip,
-> I'd rather remove the driver than spending time on cleanup efforts.
-> This looks like a perfect candidate for depreciation.
->
+Thanks,
+Guenter
 
-This is completely up to you. Anyway the driver does not have the bug.
-
-Best regards,
-Evgeny
-
-> Guenter
+> ---
+>  drivers/hwmon/i5k_amb.c | 12 ++++++++----
+>  drivers/hwmon/vt8231.c  |  8 ++++----
+>  2 files changed, 12 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/hwmon/i5k_amb.c b/drivers/hwmon/i5k_amb.c
+> index eeac4b04df27..b7497510323c 100644
+> --- a/drivers/hwmon/i5k_amb.c
+> +++ b/drivers/hwmon/i5k_amb.c
+> @@ -427,11 +427,13 @@ static int i5k_find_amb_registers(struct i5k_amb_data *data,
+>  	if (!pcidev)
+>  		return -ENODEV;
+>  
+> -	if (pci_read_config_dword(pcidev, I5K_REG_AMB_BASE_ADDR, &val32))
+> +	pci_read_config_dword(pcidev, I5K_REG_AMB_BASE_ADDR, &val32);
+> +	if (val32 == (u32)~0)
+>  		goto out;
+>  	data->amb_base = val32;
+>  
+> -	if (pci_read_config_dword(pcidev, I5K_REG_AMB_LEN_ADDR, &val32))
+> +	pci_read_config_dword(pcidev, I5K_REG_AMB_LEN_ADDR, &val32);
+> +	if (val32 == (u32)~0)
+>  		goto out;
+>  	data->amb_len = val32;
+>  
+> @@ -458,11 +460,13 @@ static int i5k_channel_probe(u16 *amb_present, unsigned long dev_id)
+>  	if (!pcidev)
+>  		return -ENODEV;
+>  
+> -	if (pci_read_config_word(pcidev, I5K_REG_CHAN0_PRESENCE_ADDR, &val16))
+> +	pci_read_config_word(pcidev, I5K_REG_CHAN0_PRESENCE_ADDR, &val16);
+> +	if (val16 == (u16)~0)
+>  		goto out;
+>  	amb_present[0] = val16;
+>  
+> -	if (pci_read_config_word(pcidev, I5K_REG_CHAN1_PRESENCE_ADDR, &val16))
+> +	pci_read_config_word(pcidev, I5K_REG_CHAN1_PRESENCE_ADDR, &val16);
+> +	if (val16 == (u16)~0)
+>  		goto out;
+>  	amb_present[1] = val16;
+>  
+> diff --git a/drivers/hwmon/vt8231.c b/drivers/hwmon/vt8231.c
+> index 2335d440f72d..6603727e15a0 100644
+> --- a/drivers/hwmon/vt8231.c
+> +++ b/drivers/hwmon/vt8231.c
+> @@ -992,8 +992,8 @@ static int vt8231_pci_probe(struct pci_dev *dev,
+>  			return -ENODEV;
+>  	}
+>  
+> -	if (PCIBIOS_SUCCESSFUL != pci_read_config_word(dev, VT8231_BASE_REG,
+> -							&val))
+> +	pci_read_config_word(dev, VT8231_BASE_REG, &val);
+> +	if (val == (u16)~0)
+>  		return -ENODEV;
+>  
+>  	address = val & ~(VT8231_EXTENT - 1);
+> @@ -1002,8 +1002,8 @@ static int vt8231_pci_probe(struct pci_dev *dev,
+>  		return -ENODEV;
+>  	}
+>  
+> -	if (PCIBIOS_SUCCESSFUL != pci_read_config_word(dev, VT8231_ENABLE_REG,
+> -							&val))
+> +	pci_read_config_word(dev, VT8231_ENABLE_REG, &val);
+> +	if (val == (u16)~0)
+>  		return -ENODEV;
+>  
+>  	if (!(val & 0x0001)) {
