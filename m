@@ -2,134 +2,156 @@ Return-Path: <SRS0=r64E=BR=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 501C9C433E0
-	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Aug 2020 09:08:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B30DC433E1
+	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Aug 2020 10:24:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 00F3522C9F
-	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Aug 2020 09:08:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1596791314;
-	bh=WijHsodHqtnCP5/rgxNo/ZjMXudI1XgmV8xvUB+T1K0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=DUTc2KG15/fobpkUt0IhSBwuq0ZJ7lBHuPK5iCYoXHAQpcplyuUGTalio8v/bj+/7
-	 6YPuMhukTa88SpWwo9vU+NqUx5rwDnT9g4/vjTGKKSp+4e8kW0qOr2jspWaJqjje3m
-	 3aGIktY3xegVDyH3MuVcaRmhGgiB9BlRwhbPyMcw=
+	by mail.kernel.org (Postfix) with ESMTP id 1A94D2075D
+	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Aug 2020 10:24:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726756AbgHGJId (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 7 Aug 2020 05:08:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43542 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726721AbgHGJId (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 7 Aug 2020 05:08:33 -0400
-Received: from localhost (hotsplots-fix3-ip188.cust.syseleven.net [176.74.57.188])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0F50F2177B;
-        Fri,  7 Aug 2020 09:08:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596791312;
-        bh=WijHsodHqtnCP5/rgxNo/ZjMXudI1XgmV8xvUB+T1K0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KX5bhMY1f6m04DEyivCfBRu249ZQoVzGPGLD45+TbMf9NQxd4SvEID3DIhsfS9Ew6
-         5SAQxrtGyMzwALMyqBC7i90aImmyvU743HqxKVNlkA2+Kbc5CW9zJUCwd05FEuBISa
-         U37apypEz9NqCiFCubPEMrdMigoKpzahJs7lPZz0=
-Date:   Fri, 7 Aug 2020 11:08:19 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Stephen Kitt <steve@sk2.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon/pmbus: use simple i2c probe function
-Message-ID: <20200807090819.GA1178@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Stephen Kitt <steve@sk2.org>, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200807074526.14334-1-steve@sk2.org>
+        id S1727081AbgHGKYx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 7 Aug 2020 06:24:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36242 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726511AbgHGKYx (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Aug 2020 06:24:53 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C057C061575
+        for <linux-hwmon@vger.kernel.org>; Fri,  7 Aug 2020 03:24:53 -0700 (PDT)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1k3zYO-0001jw-TK; Fri, 07 Aug 2020 12:24:48 +0200
+Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1k3zYI-0003e8-3P; Fri, 07 Aug 2020 12:24:42 +0200
+Date:   Fri, 7 Aug 2020 12:24:41 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Michael Walle <michael@walle.cc>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Pavel Machek <pavel@ucw.cz>
+Subject: Re: [PATCH v7 06/13] pwm: add support for sl28cpld PWM controller
+Message-ID: <20200807102441.qcshhsc36nzj7bpn@pengutronix.de>
+References: <20200803093559.12289-1-michael@walle.cc>
+ <20200803093559.12289-7-michael@walle.cc>
+ <20200806084000.k3aj5nmqdodmb35v@pengutronix.de>
+ <e288ca6cfee819223395712e04159dd9@walle.cc>
+ <20200807074543.pfbwlhtegl3oc4zp@pengutronix.de>
+ <92116be9aa56250becc4019c6c7a1538@walle.cc>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jI8keyz6grp/JLjh"
+        protocol="application/pgp-signature"; boundary="ui3bvps5z2hxjh32"
 Content-Disposition: inline
-In-Reply-To: <20200807074526.14334-1-steve@sk2.org>
+In-Reply-To: <92116be9aa56250becc4019c6c7a1538@walle.cc>
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 
---jI8keyz6grp/JLjh
-Content-Type: text/plain; charset=us-ascii
+--ui3bvps5z2hxjh32
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 07, 2020 at 09:45:26AM +0200, Stephen Kitt wrote:
-> pmbus_do_probe doesn't use the id information provided in its second
-> argument, so this can be removed, which then allows using the
-> single-parameter i2c probe function ("probe_new") for probes.
+Hi Michael,
+
+On Fri, Aug 07, 2020 at 09:55:19AM +0200, Michael Walle wrote:
+> Am 2020-08-07 09:45, schrieb Uwe Kleine-K=F6nig:
+> > On Fri, Aug 07, 2020 at 09:28:31AM +0200, Michael Walle wrote:
+> > > Am 2020-08-06 10:40, schrieb Uwe Kleine-K=F6nig:
+> > > > On Mon, Aug 03, 2020 at 11:35:52AM +0200, Michael Walle wrote:
+> > > > > +static void sl28cpld_pwm_get_state(struct pwm_chip *chip,
+> > > > > +				   struct pwm_device *pwm,
+> > > > > +				   struct pwm_state *state)
+> > > > > +{
+> > > > > +	struct sl28cpld_pwm *priv =3D dev_get_drvdata(chip->dev);
+> > > > > +	unsigned int reg;
+> > > > > +	int prescaler;
+> > > > > +
+> > > > > +	sl28cpld_pwm_read(priv, SL28CPLD_PWM_CTRL, &reg);
+> > > > > +
+> > > > > +	state->enabled =3D reg & SL28CPLD_PWM_CTRL_ENABLE;
+> > > > > +
+> > > > > +	prescaler =3D FIELD_GET(SL28CPLD_PWM_CTRL_PRESCALER_MASK, reg);
+> > > > > +	state->period =3D SL28CPLD_PWM_PERIOD(prescaler);
+> > > > > +
+> > > > > +	sl28cpld_pwm_read(priv, SL28CPLD_PWM_CYCLE, &reg);
+> > > > > +	state->duty_cycle =3D SL28CPLD_PWM_TO_DUTY_CYCLE(reg);
+> > > >
+> > > > Should reg be masked to SL28CPLD_PWM_CYCLE_MAX, or is it guaranteed=
+ that
+> > > > the upper bits are zero?
+> > >=20
+> > > Mh, the hardware guarantees that bit7 is zero. So masking with
+> > > SL28CPLD_PWM_CYCLE_MAX won't buy us much. But what I could think
+> > > could go wrong is this: someone set the prescaler to !=3D 0 and the
+> > > duty cycle to a value greater than the max value for this particular
+> > > prescaler mode. For the above calculations this would result in a
+> > > duty_cycle greater than the period, if I'm not mistaken.
+> > >=20
+> > > The behavior of the hardware is undefined in that case (at the moment
+> > > it will be always on, I guess). So this isn't a valid setting.
+> > > Nevertheless it might happen. So what about the following:
+> > >=20
+> > > state->duty_cycle =3D min(state->duty_cycle, state->period);
+> >=20
+> > If you care about this: This can also happen (at least shortly) in
+> > sl28cpld_pwm_apply() as you write SL28CPLD_PWM_CTRL before
+> > SL28CPLD_PWM_CYCLE there.
 >=20
-> This avoids scanning the identifier tables during probes.
->=20
-> Drivers which didn't use the id are converted as-is; drivers which did
-> are modified as follows:
->=20
-> * if the information in i2c_client is sufficient, that's used instead
->   (client->name);
-> * configured v. probed comparisons are performed by comparing the
->   configured name to the detected name, instead of the ids; this
->   involves strcmp but is still cheaper than comparing all the device
->   names when scanning the tables;
-> * anything else is handled by calling i2c_match_id() with the same
->   level of error-handling (if any) as before.
->=20
-> Signed-off-by: Stephen Kitt <steve@sk2.org>
+> It could also happen if it was the other way around, couldn't it?
+> Changing modes might glitch.
 
-I haven't checked the patch in detail, just saying that the bulk move to
-probe_new is much appreciated, so:
+If you want to prevent this, you have to order the writes depending on
+prescaler increasing or decreasing.
 
-Acked-by: Wolfram Sang <wsa@kernel.org>
+Best regards
+Uwe
 
-One thing hit my eye, though:
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
->  	if (md)
->  		vs =3D (enum versions)md;
-> -	else if (id)
-> -		vs =3D (enum versions)id->driver_data;
-> +	else {
-> +		id =3D i2c_match_id(ibm_cffps_id, client);
-> +		if (id)
-> +			vs =3D (enum versions)id->driver_data;
-> +	}
-
-Missing braces in the if-block here. 'checkpatch --strict' warns about
-it:
-
-CHECK: Unbalanced braces around else statement
-#230: FILE: drivers/hwmon/pmbus/ibm-cffps.c:490:
-+	else {
-
-
---jI8keyz6grp/JLjh
+--ui3bvps5z2hxjh32
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8tGf8ACgkQFA3kzBSg
-KbZtdQ//b6QcvjufNTyaIcrB11DAmaaNphofvN8pX8/NguRQq15dYnf4wb6AYQvI
-dOGzvZUET9zP0F/uAaIdJ1fa9BhlGWyqOSLJtvenNl9hun6qvt9TxwD6JawGM4Rz
-Nq0GLUHQyXU/h7T15KdcB3aPZFML6cxdMLejWQwjdyHQQlYPywacja2yD+L/cESv
-pr+++u+k/HAAbQYoJzZswh0Q64g4mDoi06xmRhEYqMsqXGyXqDzyjEku4MNa/zpQ
-g+Rm4aKcrLUuhxl/s2jTO777C4pUYa8Spufzaa/BCxaZn2xF9kHU2JY3lJ0toY2l
-plnnbRyGrcJW/Vt1BEX1AJ8WHiMAW43ZkYAlNkbj3SlCJh40Dji8CiQEPRfxrhrb
-yPXght7ikhLcRHy9kMOkhzeprFEVsVpUArqSoujGdvRwfAOSRtGFyUN1ruMnJB6B
-911z2L72UcLHqn0O487n9T1YtOSrOSLGQ0kiZ64ADIrg7G8A68A8M5DQt2C3tYNm
-TPYA1Q3++tsvV/3F0zrZ2edsgh2N68V2+OCA/TQFVtu7mY7hGXr1hKy33guSKenI
-NGF7ERGKqe6Md+AF8ULADG37RbAKDM1EJtZ4KO5vQOfcGl7xRrE5uKPNcFKkisEy
-0ONOHdwPmNkBhYs6e2K+x64WIZg8hJAwS5NSbSl9pPq3gcV0dTk=
-=9cuk
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAl8tK+YACgkQwfwUeK3K
+7Am+ZAf/fEspbQK7oTVzKrTHBQXxu0AjknqY6yLOlTFthBSsQqbzGwekDnDjQG21
+Emw2dyTCQW7YHQaYx8l1HilDsVFiazBpJ6yG49upduH83s15tgAB4Guv2uTbrzim
+uMsqxPDtiCrjGdTw4MNt37OoKh0A2O+IAd1yuSrgDpQqWiDM0uNs+MMNZm8OQAST
+ZkVhwCFr28b9QNzUodg6d2QK5T5DWEgt6BFkPpn5SFUc/mMMQs2/3LcaBOh2Gd9/
+FqKla8k4Akpniv4OcC93n0QfOap22V69gLflWJLN2YB3Gn+BvZLqMvhAgF6cy/Ho
+jEP7yLYqhcfx644/uGqeHpOHNDm8Eg==
+=jSvw
 -----END PGP SIGNATURE-----
 
---jI8keyz6grp/JLjh--
+--ui3bvps5z2hxjh32--
