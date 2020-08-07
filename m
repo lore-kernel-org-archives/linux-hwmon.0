@@ -2,351 +2,149 @@ Return-Path: <SRS0=r64E=BR=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,FAKE_REPLY_C,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77CD2C433DF
-	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Aug 2020 15:44:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ACD87C433DF
+	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Aug 2020 15:52:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4CC5B20866
-	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Aug 2020 15:44:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 834E42075D
+	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Aug 2020 15:52:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="o840jZjy"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ksFdo6os"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725993AbgHGPof (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 7 Aug 2020 11:44:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57034 "EHLO
+        id S1726579AbgHGPwl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 7 Aug 2020 11:52:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725893AbgHGPoe (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Aug 2020 11:44:34 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BE3C061756;
-        Fri,  7 Aug 2020 08:44:34 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id f9so1078817pju.4;
-        Fri, 07 Aug 2020 08:44:34 -0700 (PDT)
+        with ESMTP id S1725815AbgHGPwj (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Aug 2020 11:52:39 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7062FC061756
+        for <linux-hwmon@vger.kernel.org>; Fri,  7 Aug 2020 08:52:39 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id p1so1232663pls.4
+        for <linux-hwmon@vger.kernel.org>; Fri, 07 Aug 2020 08:52:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=bpWPgHo+wbTkO4hzNmaoNqfR///zXD/EmTDn2T0lrOc=;
-        b=o840jZjyS1XFtrHiIHIqHaPMREtWUpAUWR7cD6u9+qKEMzaVI+of3vlHf8VtZbwppk
-         R8vpjFB5hgUv96ha9J4aoATF6Qszm2UQMPSYCbK9oFSRKc7OFnaFM83ZjsP8GgWFpqkQ
-         KovRUe+h/QOcWG4/MP918sV0lvzT7FkQhxSdDCHLoMimBz161hy8pYLV4wFHukWaDrfD
-         xh3KS/4w/kDCWAk5SdC0Hxrpu8C5XqMrcOHn8rwcDb3vgVaHBMC1qjOMWReN0vvqBwpj
-         g0FRrTImlYGKFv9qK4UwsIlp+pkUJ+sQp1Kie8uHBkWlT5CVHYuRheJa3/t0zMRxwMt1
-         NWAg==
+        h=sender:subject:to:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=hUma2YU5FJTqV18poaT+30k/KnbsnhwZG0vT1nmmw+0=;
+        b=ksFdo6os/Ko0eYOA40OvTVBs2To8JgD4+7fmhxYzIRv5cpqsr5jyOIpVK2IqmJplAv
+         Lp9teskJwtSk+fZXnScjPm0BYpTFlvhE2sGCp8ILKPUQvDZwU78VspD9U9D31PVImnRV
+         IZ4+hPeVmXXNH9IvdEXBjfdTpAoKwEcIRyrcLMLt6ZqOWRpgW6cTDiETeJAl4pmyMlnW
+         xX8zdOLjxQvOuqJNcf3z+HECIi8Y90kszcurrel2DL3WFwE2UqXbJPX2dv8oi9FXKVSG
+         pCjBs1GfSrN1DXq6ogYwb4QPhdETj/8enCFpgsC1uFQ3GdjL8fHHNZ51MOaJKldfn0Eg
+         STZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mime-version:content-disposition:user-agent;
-        bh=bpWPgHo+wbTkO4hzNmaoNqfR///zXD/EmTDn2T0lrOc=;
-        b=tReU/l8ofP7krc1irTWTkJAUaQHpX7w/6QPfGxzuudilbxfo5LMDq0KUDQeOLEqyGP
-         ffPQ9DxbDqyTKxynnn+QeOV+OuCp7tJZCh1YY6NEs7ayK5xPKeK9M9PJmUnA9EXubuJV
-         rqgrVuY14HlZDrGINnU+csNRy0c+pFiFXK3bnz86Sb0dVILq3pUq7OhFLDCc1N7dtGPp
-         mXp+FsyqNWamiXd+1pDzxhjHHcsS3qRzfOhgqBDk5reWkEda7Zh45Q7VdIdLAINztJbJ
-         I9vIIJT17DH51+lgWpn8HH+rUqL6koz/8GsqVD+w93fXcr5JLi0jNUJqGGtRbmxsjcUo
-         M1jQ==
-X-Gm-Message-State: AOAM533P1JtjbwflPuyGSROg3YqrpDovsqG7YG1n7tNqn24QogE6SF8G
-        2HY2ZANnKspDOuijfeNLA4L2sNLr
-X-Google-Smtp-Source: ABdhPJzdhEscBspVkYz3YA9Ld0dAxEqTQwfDht/1n9BSwpgwM/MUgWGfX57liX0X9ikOcmhB7ro35Q==
-X-Received: by 2002:a17:902:a5cc:: with SMTP id t12mr12087666plq.96.1596815073843;
-        Fri, 07 Aug 2020 08:44:33 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a13sm12814181pfo.49.2020.08.07.08.44.33
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 07 Aug 2020 08:44:33 -0700 (PDT)
-Date:   Fri, 7 Aug 2020 08:44:32 -0700
+        h=x-gm-message-state:sender:subject:to:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=hUma2YU5FJTqV18poaT+30k/KnbsnhwZG0vT1nmmw+0=;
+        b=jpoJpa9r8nN12LP9yOpPuCGBXeMJELisxFdrH/mBYjUAQ+/+WO3iMy3QmEfZ+eMxmc
+         wdfu5TOy2EJu8NMCVN7qI8SLT70fqC18/ipX7Vp00djUHSe2oDKL7VYTh6DfOqvFuEfl
+         N+CAwxqWzw5qdQHUN11OMjg6V9385DbDCeVXcIhP4Psc8G5NJuNhYF9aDTe2M6y9o79q
+         lJMUXow8lBtgkPB88haf+z/Mj9m6WvcOL894kk166SZ+dmsg8S2egU2nVZW4G2W2mdRi
+         ETsnZJHXd5Adwln/SUwiRC9xXo6iNW7zBHt5FNkRaW5EtyX8KF30IaC0OevvrVCmkEz3
+         9t4w==
+X-Gm-Message-State: AOAM530ud6GqDP2cElZDLbvTN0Jhuo8SV8h1lsKBhFWzYXLCWWwxSpkD
+        GUhuT+s3thUvFLjf5kSS3ZLwb7vU
+X-Google-Smtp-Source: ABdhPJyadv79jsILW5cY4ls1QvFqYsft4t3+2CPpamgS/33d6u1c14xw8gOEjvOVz4zcHdlVHUHv1Q==
+X-Received: by 2002:a17:90a:ea83:: with SMTP id h3mr15189954pjz.170.1596815558835;
+        Fri, 07 Aug 2020 08:52:38 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id r15sm14022767pfq.189.2020.08.07.08.52.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Aug 2020 08:52:38 -0700 (PDT)
+Subject: Re: [PATCH 0/3] Extending hwmon ABI with attributes for rated values
+To:     Zbigniew Lukwinski <zbigniew.lukwinski@linux.intel.com>,
+        linux-hwmon@vger.kernel.org
+References: <1596224237-32280-1-git-send-email-zbigniew.lukwinski@linux.intel.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     alexandru.tachici@analog.com
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org
-Subject: Re: [PATCH v7 8/9] hwmon: pmbus: adm1266: program configuration
-Message-ID: <20200807154432.GA39539@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <66a7bf34-3b2a-a61e-d382-8b2ab9ac1101@roeck-us.net>
+Date:   Fri, 7 Aug 2020 08:52:37 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <1596224237-32280-1-git-send-email-zbigniew.lukwinski@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Jul 27, 2020 at 07:19:27PM +0300, alexandru.tachici@analog.com wrote:
-> From: Alexandru Tachici <alexandru.tachici@analog.com>
+On 7/31/20 12:37 PM, Zbigniew Lukwinski wrote:
+> This patch series is about extending hwmon ABI with new attributes
+> for rated values. All of that is to cover PMBus specification which
+> provides registers reporting rated values:
+> PMBus Power System Mgt Protocol Specification - Part II – Revision 1.3.1,
+> chapters: 22.3.1 - 22.3.10, 22.3.15
 > 
-> Writing the configuration Intel hex file to the nvmem,
-> of an adm1266, with offset 0x30000, will now
-> trigger the configuration programming.
+> Zbigniew Lukwinski (3):
+>   docs: hwmon: Add attributes to report rated values
+>   hwmon: (core) Add support for rated attributes
+>   hwmon: (pmbus/core) Add support for rated attributes
 > 
-> During this process the adm1266 sequencer will be
-> stopped and at the end will be issued a seq reset
-> (see AN-1453 Programming the configuration).
+>  Documentation/hwmon/pmbus.rst           | 15 ++++++-
+>  Documentation/hwmon/sysfs-interface.rst | 70 +++++++++++++++++++++++++++++++++
+>  drivers/hwmon/hwmon.c                   | 10 +++++
+>  drivers/hwmon/pmbus/pmbus.h             | 13 ++++++
+>  drivers/hwmon/pmbus/pmbus_core.c        | 49 +++++++++++++++++++----
+>  include/linux/hwmon.h                   | 20 ++++++++++
+>  6 files changed, 168 insertions(+), 9 deletions(-)
 > 
-Same as writing the firmware: This should be done from userspace,
-using i2c-dev, in a controlled environment (eg manufacturing).
-It can easily brick the hardware, and should not be done in the driver.
+I have been struggling with "rated_{min,max}" vs. "{min,max}_rated",
+but then figured it does not really make a difference, and rated_ as
+prefix may actually make more sense. I'll queue the series for v5.10.
+Let's see if there is any feedback.
 
 Thanks,
 Guenter
-
-> Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
-> ---
->  drivers/hwmon/pmbus/adm1266.c | 179 +++++++++++++++++++++++++++++++++-
->  1 file changed, 178 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
-> index f851c6617870..50386c98d714 100644
-> --- a/drivers/hwmon/pmbus/adm1266.c
-> +++ b/drivers/hwmon/pmbus/adm1266.c
-> @@ -40,7 +40,10 @@
->  #define ADM1266_BLACKBOX_INFO	0xE6
->  #define ADM1266_PDIO_STATUS	0xE9
->  #define ADM1266_GPIO_STATUS	0xEA
-> +#define ADM1266_STATUS_MFR_2	0xED
-> +#define ADM1266_REFRESH_FLASH	0xF5
->  #define ADM1266_MEMORY_CONFIG	0xF8
-> +#define ADM1266_MEMORY_CRC	0xF9
->  #define ADM1266_SWITCH_MEMORY	0xFA
->  #define ADM1266_UPDATE_FW	0xFC
->  #define ADM1266_FW_PASSWORD	0xFD
-> @@ -66,6 +69,11 @@
->  
->  /* ADM1266 STATUS_MFR defines */
->  #define ADM1266_STATUS_PART_LOCKED(x)	FIELD_GET(BIT(2), x)
-> +#define ADM1266_RUNNING_REFRESH(x)	FIELD_GET(BIT(3), x)
-> +#define ADM1266_ALL_CRC_FAULT(x)	FIELD_GET(BIT(5), x)
-> +
-> +/* ADM1266 STATUS_MFR_2 defines */
-> +#define ADM1266_MAIN_CONFIG_FAULT(x)	FIELD_GET(GENMASK(9, 8), x)
->  
->  /* ADM1266 GO_COMMAND defines */
->  #define ADM1266_GO_COMMAND_STOP		BIT(0)
-> @@ -74,6 +82,8 @@
->  
->  #define ADM1266_FIRMWARE_OFFSET		0x00000
->  #define ADM1266_FIRMWARE_SIZE		131072
-> +#define ADM1266_CONFIG_OFFSET		0x30000
-> +#define ADM1266_CONFIG_SIZE		131072
->  #define ADM1266_BLACKBOX_OFFSET		0x7F700
->  #define ADM1266_BLACKBOX_SIZE		64
->  
-> @@ -117,6 +127,11 @@ static const struct nvmem_cell_info adm1266_nvmem_cells[] = {
->  		.offset         = ADM1266_FIRMWARE_OFFSET,
->  		.bytes          = ADM1266_FIRMWARE_SIZE,
->  	},
-> +	{
-> +		.name           = "configuration",
-> +		.offset         = ADM1266_CONFIG_OFFSET,
-> +		.bytes          = ADM1266_CONFIG_SIZE,
-> +	},
->  };
->  
->  DECLARE_CRC8_TABLE(pmbus_crc_table);
-> @@ -520,6 +535,9 @@ static int adm1266_read_mem_cell(struct adm1266_data *data, const struct nvmem_c
->  	case ADM1266_FIRMWARE_OFFSET:
->  		/* firmware is write-only */
->  		return 0;
-> +	case ADM1266_CONFIG_OFFSET:
-> +		/* configuration is write-only */
-> +		return 0;
->  	default:
->  		return -EINVAL;
->  	}
-> @@ -676,6 +694,7 @@ static int adm1266_write_hex(struct adm1266_data *data,
->  	u8 first_writes[7];
->  	u8 byte_count;
->  	u8 reg_address;
-> +	bool to_slaves = false;
->  	int ret;
->  	int i;
->  
-> @@ -706,7 +725,10 @@ static int adm1266_write_hex(struct adm1266_data *data,
->  		if (ret < 0)
->  			return ret;
->  
-> -		ret = adm1266_group_cmd(data, reg_address, write_buf, byte_count, true);
-> +		if (offset == ADM1266_FIRMWARE_OFFSET)
-> +			to_slaves = true;
-> +
-> +		ret = adm1266_group_cmd(data, reg_address, write_buf, byte_count, to_slaves);
->  		if (ret < 0) {
->  			dev_err(&data->client->dev, "Firmware write error: %d.", ret);
->  			return ret;
-> @@ -731,6 +753,87 @@ static int adm1266_write_hex(struct adm1266_data *data,
->  	return 0;
->  }
->  
-> +static int adm1266_verify_memory(struct adm1266_data *data)
-> +{
-> +	char cmd[2];
-> +	int ret;
-> +	int reg;
-> +
-> +	cmd[0] = 0x1;
-> +	cmd[1] = 0x0;
-> +	ret = adm1266_group_cmd(data, ADM1266_MEMORY_CRC, cmd,
-> +				sizeof(cmd), true);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/* after issuing a memory recalculate crc command, wait 1000 ms */
-> +	msleep(1000);
-> +
-> +	reg = pmbus_read_word_data(data->client, 0, 0xFF, ADM1266_STATUS_MFR_2);
-> +	if (reg < 0)
-> +		return reg;
-> +
-> +	if (ADM1266_MAIN_CONFIG_FAULT(reg)) {
-> +		dev_err(&data->client->dev, "Main memory corrupted.");
-> +		return -EFAULT;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int adm1266_refresh_memory(struct adm1266_data *data)
-> +{
-> +	unsigned int timeout = 9000;
-> +	int ret;
-> +	u8 cmd[2];
-> +
-> +	cmd[0] = 0x2;
-> +	ret = adm1266_group_cmd(data, ADM1266_REFRESH_FLASH, cmd, 1, true);
-> +	if (ret < 0) {
-> +		dev_err(&data->client->dev, "Could not refresh flash.");
-> +		return ret;
-> +	}
-> +
-> +	/* after issuing a refresh flash command, wait 9000 ms */
-> +	msleep(9000);
-> +
-> +	do {
-> +		msleep(1000);
-> +		timeout -= 1000;
-> +
-> +		ret = pmbus_read_byte_data(data->client, 0, ADM1266_STATUS_MFR);
-> +		if (ret < 0) {
-> +			dev_err(&data->client->dev, "Could not read status.");
-> +			return ret;
-> +		}
-> +
-> +	} while (ADM1266_RUNNING_REFRESH(ret) && timeout > 0);
-> +
-> +	if (timeout == 0)
-> +		return -ETIMEDOUT;
-> +
-> +	cmd[0] = 0x1;
-> +	cmd[1] = 0x0;
-> +	ret = adm1266_group_cmd(data, ADM1266_MEMORY_CRC, cmd,
-> +				sizeof(cmd), true);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/* after issuing a memory recalculate crc command, wait 1000 ms */
-> +	msleep(1000);
-> +
-> +	ret = pmbus_read_byte_data(data->client, 0, ADM1266_STATUS_MFR);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	if (ADM1266_ALL_CRC_FAULT(ret)) {
-> +		dev_err(&data->client->dev, "CRC checks failed.");
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static int adm1266_program_firmware(struct adm1266_data *data)
->  {
->  	u8 write_data[3];
-> @@ -783,6 +886,77 @@ static int adm1266_program_firmware(struct adm1266_data *data)
->  	return ret;
->  }
->  
-> +static int adm1266_program_config(struct adm1266_data *data)
-> +{
-> +	u8 cmd[2];
-> +	u8 value;
-> +	int ret;
-> +
-> +	value = ADM1266_GO_COMMAND_STOP | ADM1266_GO_COMMAND_SEQ_RES;
-> +	ret = pmbus_write_word_data(data->client, 0, ADM1266_GO_COMMAND, value);
-> +	if (ret < 0) {
-> +		dev_err(&data->client->dev, "Could not stop sequence.");
-> +		return ret;
-> +	}
-> +
-> +	/* after issuing a stop command, wait 100 ms */
-> +	msleep(100);
-> +
-> +	ret = adm1266_unlock_all_dev(data);
-> +	if (ret < 0) {
-> +		dev_err(&data->client->dev, "Could not unlock dev.");
-> +		goto lock_all_devices;
-> +	}
-> +
-> +	value = 0;
-> +	ret = i2c_smbus_write_block_data(data->client, ADM1266_SWITCH_MEMORY, 1, &value);
-> +	if (ret < 0) {
-> +		dev_err(&data->client->dev, "Could not switch to main mem.");
-> +		goto lock_all_devices;
-> +	}
-> +
-> +	/* after issuing a SWITCH_MEMORY command, wait 1000 ms */
-> +	msleep(1000);
-> +
-> +	ret = adm1266_write_hex(data, ADM1266_CONFIG_OFFSET, ADM1266_CONFIG_SIZE);
-> +	if (ret < 0) {
-> +		dev_err(&data->client->dev, "Could not write configuration.");
-> +		goto lock_all_devices;
-> +	}
-> +
-> +	ret = pmbus_write_byte(data->client, 0, ADM1266_STORE_USER_ALL);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/* after issuing a STORE_USER_ALL command, wait 300 ms */
-> +	msleep(300);
-> +
-> +	if (!data->master_dev)
-> +		goto lock_all_devices;
-> +
-> +	ret = adm1266_verify_memory(data);
-> +	if (ret < 0)
-> +		goto lock_all_devices;
-> +
-> +	cmd[0] = 0;
-> +	cmd[1] = 0;
-> +	ret = adm1266_group_cmd(data, ADM1266_GO_COMMAND, cmd, sizeof(cmd), true);
-> +	if (ret < 0) {
-> +		dev_err(&data->client->dev, "Could not restart sequence.");
-> +		goto lock_all_devices;
-> +	}
-> +
-> +	/* after issuing a restart sequence command, wait 350 ms */
-> +	msleep(350);
-> +
-> +	ret = adm1266_refresh_memory(data);
-> +
-> +lock_all_devices:
-> +	adm1266_lock_all_dev(data);
-> +
-> +	return ret;
-> +}
-> +
->  /* check if firmware/config write has ended */
->  static bool adm1266_check_ending(struct adm1266_data *data, unsigned int offset,
->  				 unsigned int size)
-> @@ -824,6 +998,9 @@ static int adm1266_write_mem_cell(struct adm1266_data *data,
->  
->  		program_func = &adm1266_program_firmware;
->  		break;
-> +	case ADM1266_CONFIG_OFFSET:
-> +		program_func = &adm1266_program_config;
-> +		break;
->  	default:
->  		return -EINVAL;
->  	}
