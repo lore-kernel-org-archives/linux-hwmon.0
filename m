@@ -2,127 +2,122 @@ Return-Path: <SRS0=r64E=BR=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,FAKE_REPLY_C,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47A63C433E0
-	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Aug 2020 17:32:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50BF8C433E0
+	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Aug 2020 19:07:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 223792224D
-	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Aug 2020 17:32:43 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UWj0ousn"
+	by mail.kernel.org (Postfix) with ESMTP id 35C9B2086A
+	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Aug 2020 19:07:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726038AbgHGRci (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 7 Aug 2020 13:32:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45358 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726078AbgHGRce (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Aug 2020 13:32:34 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDBFAC061756;
-        Fri,  7 Aug 2020 10:32:33 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id 17so1360475pfw.9;
-        Fri, 07 Aug 2020 10:32:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=j0PtF8UeW2JMfBJSFYN8MSFrjhqC5IGfPsG3kkWWGuM=;
-        b=UWj0ousnn6Qs0lXhh43orig3Q/9CutWD1tdaP8c6EklXbs5nAR5p8STS83VCnQ3mop
-         5xx/tai+v35SntfFj2yQoodaREOtRMsdDt0C9VQfJRc+vJ5U8FI7Lx+6RhMWT9z9ENGj
-         QCy8MRUQ2XHS+u8EXVcHVuGhnn5AbU+5DZ371/6kR/ya1MvYLhgaQmwDg1vi5B+dFwlt
-         e96ovKOK+piPIoUFBp04hoS0Rej1DLOkVanbkvjxcGZeSCkF2j4MaTT7zUwXzsEo7WxP
-         IP54umPsh5jvsWRvngX7omqdXKMsBftwMFUrPiwak1Iky73ms0kd2hC/4w1kb/+Nvvh0
-         hSyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mime-version:content-disposition:user-agent;
-        bh=j0PtF8UeW2JMfBJSFYN8MSFrjhqC5IGfPsG3kkWWGuM=;
-        b=TMKdEu7sTIPTb8V6VGzgiNO8mLDE08XyrT7d49ZF8oMD46KI0Phf6R7IqtUnwPide9
-         aBob8Y/RENqbItxipruVzFghofX0YDgrHLTP4DdL61rnL/Z2e2yog6JipCM8B9gqFS2F
-         dONhGKP2Eor4ChqkO/wQFMGPix6ysv9zlLZ3YjpJ3Fm6ZkdwEv5UIa/XiKzZ6ToE23Dy
-         R+QmMQ9btWYpSZXarA7BaW502QkaA/nxVT37PuEGfQaax+GBSmirD3+UatRE2sOec27m
-         mqUPNYw3Q/tZ6MzUEhlNOfVKAdwiDk1J/ZQl7hnOLnQMaRcACQ9qiamGWZa6EQu1jK5L
-         ibpw==
-X-Gm-Message-State: AOAM532oj8FtRNEVjV4OfNM3tN14zLd+VDivIAJEYYQqg3RU415RDl+U
-        gMPX1DvU8l7w51HvdWneY8M=
-X-Google-Smtp-Source: ABdhPJykcoMNcoXKXPMIGg4/VNmdiDpBj1nlUMTyuqeUvIz7bIU6uxTEawTLHTtqLZpiOgEBpn3G3g==
-X-Received: by 2002:a63:3d06:: with SMTP id k6mr12862975pga.316.1596821553329;
-        Fri, 07 Aug 2020 10:32:33 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id gn13sm11228445pjb.17.2020.08.07.10.32.32
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 07 Aug 2020 10:32:32 -0700 (PDT)
-Date:   Fri, 7 Aug 2020 10:32:31 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Stephen Kitt <steve@sk2.org>
+        id S1726175AbgHGTHX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 7 Aug 2020 15:07:23 -0400
+Received: from 9.mo69.mail-out.ovh.net ([46.105.56.78]:35063 "EHLO
+        9.mo69.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726200AbgHGTHW (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Aug 2020 15:07:22 -0400
+X-Greylist: delayed 39869 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 Aug 2020 15:07:21 EDT
+Received: from player715.ha.ovh.net (unknown [10.110.103.177])
+        by mo69.mail-out.ovh.net (Postfix) with ESMTP id 7291A99A1E
+        for <linux-hwmon@vger.kernel.org>; Fri,  7 Aug 2020 21:07:20 +0200 (CEST)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player715.ha.ovh.net (Postfix) with ESMTPSA id 76BA814E9C8DB;
+        Fri,  7 Aug 2020 19:07:13 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-100R0038ca687ab-4f78-4da8-bbe2-7590c3ca912e,
+                    B1FDDFD4E508142116FDFB9194C63E8FBE397CFD) smtp.auth=steve@sk2.org
+Date:   Fri, 7 Aug 2020 21:07:07 +0200
+From:   Stephen Kitt <steve@sk2.org>
+To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
         Wolfram Sang <wsa@kernel.org>
 Subject: Re: [PATCH v3] hwmon/pmbus: use simple i2c probe function
-Message-ID: <20200807173231.GA47449@roeck-us.net>
+Message-ID: <20200807210707.7dd1d9b9@heffalump.sk2.org>
+In-Reply-To: <20200807173231.GA47449@roeck-us.net>
+References: <20200807173231.GA47449@roeck-us.net>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ boundary="Sig_/ZFB90kCEm=UKbNJ8Un9J6qQ"; protocol="application/pgp-signature"
+X-Ovh-Tracer-Id: 11990834011428048142
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduiedrkedvgdduvdelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvffukfgjfhfogggtsehgtderreertdejnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeevledvueefvdeivefftdeugeekveethefftdffteelheejkeejjeduffeiudetkeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpqdhouhhtpdhhvghlohepphhlrgihvghrjeduhedrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehsthgvvhgvsehskhdvrdhorhhgpdhrtghpthhtoheplhhinhhugidqhhifmhhonhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Aug 07, 2020 at 06:28:01PM +0200, Stephen Kitt wrote:
-> pmbus_do_probe doesn't use the id information provided in its second
-> argument, so this can be removed, which then allows using the
-> single-parameter i2c probe function ("probe_new") for probes.
-> 
-> This avoids scanning the identifier tables during probes.
-> 
-> Drivers which didn't use the id are converted as-is; drivers which did
-> are modified as follows:
-> 
-> * if the information in i2c_client is sufficient, that's used instead
->   (client->name);
-> * configured v. probed comparisons are performed by comparing the
->   configured name to the detected name, instead of the ids; this
->   involves strcmp but is still cheaper than comparing all the device
->   names when scanning the tables;
-> * anything else is handled by calling i2c_match_id() with the same
->   level of error-handling (if any) as before.
-> 
-> Signed-off-by: Stephen Kitt <steve@sk2.org>
-> ---
-> Changes since v1:
->   - i2c_device_id declarations are left unchanged;
->   - all drivers are converted, using client info or i2c_match_id().
-> Changes since v2:
->   - updated the documentation;
->   - fixed unbalanced braces around the modified else in ibm-cffps.c.
-> 
+--Sig_/ZFB90kCEm=UKbNJ8Un9J6qQ
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-[ ... ]
+On Fri, 7 Aug 2020 10:32:31 -0700, Guenter Roeck <linux@roeck-us.net> wrote:
+> On Fri, Aug 07, 2020 at 06:28:01PM +0200, Stephen Kitt wrote:
+> > =20
+> > -static int ltc2978_probe(struct i2c_client *client,
+> > -			 const struct i2c_device_id *id)
+> > +static int ltc2978_probe(struct i2c_client *client)
+> >  {
+> >  	int i, chip_id;
+> >  	struct ltc2978_data *data;
+> > @@ -670,10 +669,10 @@ static int ltc2978_probe(struct i2c_client *clien=
+t,
+> >  		return chip_id;
+> > =20
+> >  	data->id =3D chip_id;
+> > -	if (data->id !=3D id->driver_data)
+> > +	if (strcmp(client->name, ltc2978_id[data->id].name) !=3D 0) =20
+>=20
+> I was about to apply this patch, but this is problematic: It assumes that
+> __stringify(id) =3D=3D ltc2978_id[id].name and that ltc2978_id[id].driver=
+_data
+> =3D=3D id. While that is curently the case (as far as I can see), it is s=
+till
+> unsafe. I think it would be much safer to use i2c_match_id() here.
 
->  
-> -static int ltc2978_probe(struct i2c_client *client,
-> -			 const struct i2c_device_id *id)
-> +static int ltc2978_probe(struct i2c_client *client)
->  {
->  	int i, chip_id;
->  	struct ltc2978_data *data;
-> @@ -670,10 +669,10 @@ static int ltc2978_probe(struct i2c_client *client,
->  		return chip_id;
->  
->  	data->id = chip_id;
-> -	if (data->id != id->driver_data)
-> +	if (strcmp(client->name, ltc2978_id[data->id].name) != 0)
+I=E2=80=99m not following the __stringify assumption, but I do get your poi=
+nt about
+the driver_data being a valid index into the array; that was already baked
+into the code, as
 
-I was about to apply this patch, but this is problematic: It assumes that
-__stringify(id) == ltc2978_id[id].name and that ltc2978_id[id].driver_data
-== id. While that is curently the case (as far as I can see), it is still
-unsafe. I think it would be much safer to use i2c_match_id() here.
+		dev_warn(&client->dev,
+			 "Device mismatch: Configured %s, detected %s\n",
+			 client->name,
+			 ltc2978_id[data->id].name);
 
-Thanks,
-Guenter
+but I=E2=80=99ll fix both.
+
+Similar assumptions are present in other drivers here IIRC, I=E2=80=99ll fi=
+x those
+too.
+
+Regards,
+
+Stephen
+
+--Sig_/ZFB90kCEm=UKbNJ8Un9J6qQ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEnPVX/hPLkMoq7x0ggNMC9Yhtg5wFAl8tplsACgkQgNMC9Yht
+g5zbIA//S0DouNct8J2rS/6Fe3PdwZrMiAJ7FNNKqTzQDbt7Il2R8rcdXM9HVPbH
+sxloEI7MB+HbiQFRFIXlHL5xR5oBb3cUkZzstyc+SvXo+AVjYV9B+v9vjWHKAP9Z
+GgWV65P20HCtbLAat9hDMFzTGaDcoEbBzrPOdCodPrT/mA+E287tLaubw97+uWWz
+aGaoub1huJvS4HO+DTNVX6uUBslilnZXhn/LKLDvgDOqtUMnsBIdrSI7b6bgO78r
+MVou0LxSaPOxl2+nr2xJDnQILUxzsWtOROIYWgGpU/K/xpufgHWmqk1ia0iV8lUE
+BVkF/C6uduW1Zip8QcG17c/eorIfFkkzstntnQGuicbSOWHlzvuomtUn64/zC54h
+u5gncBtmrF52+sp8YbLvhyT5EgyDDS6DY0QnPg31K+V2sfGQDACCNGeLuTGaXO5N
+qYhSzCbhYsnO4sAqonhFw4Jbyt6hbf0tLEz5ikEejRCj+7vL0BPiZYYkzEvV3qxy
+YoVDJyunjR9BIEn7DuxBRcr837TXL6gMU2ZyXB4Vu1NM/gv2VOwLoW+Ey8JcCNX9
+t4lszJmVaRseXHaNtxff0Yzp8JaLUK3v1t3NXSCsno5hGE4qTg84o9MLrW/yRGZu
+QcTEwA+udmbU8nX/Wdlm6Fih+31H95mO0ElljLfjgsUrKUP2fX8=
+=XC8G
+-----END PGP SIGNATURE-----
+
+--Sig_/ZFB90kCEm=UKbNJ8Un9J6qQ--
