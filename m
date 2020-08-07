@@ -2,127 +2,153 @@ Return-Path: <SRS0=r64E=BR=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88631C433E0
-	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Aug 2020 06:58:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 050B4C433E0
+	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Aug 2020 07:28:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7050720866
-	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Aug 2020 06:58:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B8B7B20866
+	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Aug 2020 07:28:39 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="CLO9uFSo"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726249AbgHGG6m (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 7 Aug 2020 02:58:42 -0400
-Received: from 2.mo68.mail-out.ovh.net ([46.105.52.162]:40165 "EHLO
-        2.mo68.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725805AbgHGG6m (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Aug 2020 02:58:42 -0400
-X-Greylist: delayed 1199 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 Aug 2020 02:58:40 EDT
-Received: from player697.ha.ovh.net (unknown [10.110.115.229])
-        by mo68.mail-out.ovh.net (Postfix) with ESMTP id 001AB16EAB7
-        for <linux-hwmon@vger.kernel.org>; Fri,  7 Aug 2020 08:23:34 +0200 (CEST)
-Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
-        (Authenticated sender: steve@sk2.org)
-        by player697.ha.ovh.net (Postfix) with ESMTPSA id D71D3151467EB;
-        Fri,  7 Aug 2020 06:23:28 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-98R002924d5bf1-2994-4c8b-9b6c-5998cd15a743,
-                    B1FDDFD4E508142116FDFB9194C63E8FBE397CFD) smtp.auth=steve@sk2.org
-Date:   Fri, 7 Aug 2020 08:23:27 +0200
-From:   Stephen Kitt <steve@sk2.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon/pmbus: use simple i2c probe function
-Message-ID: <20200807082327.02e8a682@heffalump.sk2.org>
-In-Reply-To: <e378e4e6-73b3-0a11-bca6-ec0d4225a010@roeck-us.net>
-References: <20200806161645.9437-1-steve@sk2.org>
-        <5f7b5828-cb7c-127a-e454-6c8b8d98777b@roeck-us.net>
-        <20200806221232.278c3878@heffalump.sk2.org>
-        <e378e4e6-73b3-0a11-bca6-ec0d4225a010@roeck-us.net>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1726471AbgHGH2j (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 7 Aug 2020 03:28:39 -0400
+Received: from ssl.serverraum.org ([176.9.125.105]:45747 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726038AbgHGH2i (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Aug 2020 03:28:38 -0400
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id CF4A922ED8;
+        Fri,  7 Aug 2020 09:28:31 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1596785315;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Tqzu9cLvHIN1w+G0QnQy/FU9UJymmPP1GnHUTyNwIWU=;
+        b=CLO9uFSoOVH3XA6dnULEy2QmA0Enr2120+59hiwzIkhJvSLxb9rm0SLTIdWKZS0qIbZFtU
+        KwVkQj9aBlA4svDMmN0bz9kL32a7s3yo8YNO/WNoOE6x6OAMBh+I4qg7O4PZqCTGIa9ifG
+        zUXv755+HfYWp7qQtzjFvlJnemNYLak=
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
- boundary="Sig_/ZP=p/855_tqUdr_mQhb1AN/"; protocol="application/pgp-signature"
-X-Ovh-Tracer-Id: 17538705802184117518
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduiedrkedugddutdelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvffukfgjfhfogggtsehgtderreertdejnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeevledvueefvdeivefftdeugeekveethefftdffteelheejkeejjeduffeiudetkeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpqdhouhhtpdhhvghlohepphhlrgihvghrieeljedrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehsthgvvhgvsehskhdvrdhorhhgpdhrtghpthhtoheplhhinhhugidqhhifmhhonhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Fri, 07 Aug 2020 09:28:31 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Pavel Machek <pavel@ucw.cz>
+Subject: Re: [PATCH v7 06/13] pwm: add support for sl28cpld PWM controller
+In-Reply-To: <20200806084000.k3aj5nmqdodmb35v@pengutronix.de>
+References: <20200803093559.12289-1-michael@walle.cc>
+ <20200803093559.12289-7-michael@walle.cc>
+ <20200806084000.k3aj5nmqdodmb35v@pengutronix.de>
+User-Agent: Roundcube Webmail/1.4.7
+Message-ID: <e288ca6cfee819223395712e04159dd9@walle.cc>
+X-Sender: michael@walle.cc
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
---Sig_/ZP=p/855_tqUdr_mQhb1AN/
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Hi Uwe, Hi Lee,
 
-On Thu, 6 Aug 2020 14:48:58 -0700, Guenter Roeck <linux@roeck-us.net> wrote:
-> On 8/6/20 1:12 PM, Stephen Kitt wrote:
-> > On Thu, 6 Aug 2020 12:15:55 -0700, Guenter Roeck <linux@roeck-us.net>
-> > wrote: =20
-> >> On 8/6/20 9:16 AM, Stephen Kitt wrote: =20
-[...]
-> >> Also, I am not convinced that replacements such as
-> >>
-> >> -	{ "ipsps1", 0 },
-> >> +	{ .name =3D "ipsps1" },
-> >>
-> >> are an improvement. I would suggest to leave that alone for
-> >> consistency (and to make it easier to add more devices to the
-> >> various drivers if that happens in the future). =20
-> >=20
-> > From reading through all the drivers using id_table, it seems to me that
-> > we could do away with driver_data altogether and move all that to
-> > driver-local structures, in many cases covering more than just an id. By
-> > only initialising the elements of the structure that are really needed,=
- I
-> > was hoping to (a) make it more obvious that driver_data isn=E2=80=99t u=
-sed, and
-> > (b) allow removing it without touching all the code again.
-> >  =20
->=20
-> I don't see it as an improvement to replace a common data structure with
-> per-driver data structures. That sounds too much like "let's re-invent
-> the wheel over and over again". If that is where things are going, I'd
-> rather have it implemented everywhere else first. I am ok with the other
-> changes, but not with this.
+Am 2020-08-06 10:40, schrieb Uwe Kleine-König:
+> On Mon, Aug 03, 2020 at 11:35:52AM +0200, Michael Walle wrote:
+>> diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
+>> index 7dbcf6973d33..a0d50d70c3b9 100644
+>> --- a/drivers/pwm/Kconfig
+>> +++ b/drivers/pwm/Kconfig
+>> @@ -428,6 +428,16 @@ config PWM_SIFIVE
+>>  	  To compile this driver as a module, choose M here: the module
+>>  	  will be called pwm-sifive.
+>> 
+>> +config PWM_SL28CPLD
+>> +	tristate "Kontron sl28cpld PWM support"
+>> +	select MFD_SIMPLE_MFD_I2C
+> 
+> Is it sensible to present this option to everyone? Maybe
+> 
+> 	depends on SOME_SYMBOL_ONLY_TRUE_ON_SL28CPLD || COMPILE_TEST
 
-I agree, and I wasn=E2=80=99t intending on encouraging re-inventing the whe=
-el in each
-driver. Let=E2=80=99s focus on probe_new for now...
+Because there is now no real MFD driver anymore, there is also
+no symbol for that. The closest would be ARCH_ARM64 but I don't
+think that is a good idea.
 
-What did you mean by =E2=80=9Cto make it easier to add more devices to the =
-various
-drivers if that happens in the future=E2=80=9D? There are already many driv=
-ers with
-multiple devices but no driver_data, dropping the explicit driver_data
-initialisation doesn=E2=80=99t necessarily make it harder to add devices, d=
-oes it?
+Lee, what do you think about adding a symbol to the MFD, which
+selects MFD_SIMPLE_MFD_I2C but doesn't enable any C modules?
 
-Regards,
+I.e.
+config MFD_SL28CPLD
+     tristate "Kontron sl28cpld"
+     select MFD_SIMPLE_MFD_I2C
+     help
+       Say yes here to add support for the Kontron sl28cpld board
+       management controller.
 
-Stephen
+Then all the other device driver could depend on the MFD_SL28CPLD
+symbol.
 
---Sig_/ZP=p/855_tqUdr_mQhb1AN/
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+[..]
 
------BEGIN PGP SIGNATURE-----
+>> +static void sl28cpld_pwm_get_state(struct pwm_chip *chip,
+>> +				   struct pwm_device *pwm,
+>> +				   struct pwm_state *state)
+>> +{
+>> +	struct sl28cpld_pwm *priv = dev_get_drvdata(chip->dev);
+>> +	unsigned int reg;
+>> +	int prescaler;
+>> +
+>> +	sl28cpld_pwm_read(priv, SL28CPLD_PWM_CTRL, &reg);
+>> +
+>> +	state->enabled = reg & SL28CPLD_PWM_CTRL_ENABLE;
+>> +
+>> +	prescaler = FIELD_GET(SL28CPLD_PWM_CTRL_PRESCALER_MASK, reg);
+>> +	state->period = SL28CPLD_PWM_PERIOD(prescaler);
+>> +
+>> +	sl28cpld_pwm_read(priv, SL28CPLD_PWM_CYCLE, &reg);
+>> +	state->duty_cycle = SL28CPLD_PWM_TO_DUTY_CYCLE(reg);
+> 
+> Should reg be masked to SL28CPLD_PWM_CYCLE_MAX, or is it guaranteed 
+> that
+> the upper bits are zero?
 
-iQIzBAEBCgAdFiEEnPVX/hPLkMoq7x0ggNMC9Yhtg5wFAl8s818ACgkQgNMC9Yht
-g5wjxA//Ugr98eRz3F0dBjgb/dsdKZ2f7yN68V/HyjcOU+Qy/lKbqqhaICkDSBlz
-9qfG5Q6fZFzZTSIJKJMBdBX/LimJP8EdqqsvqMv+oTdFF2rk/xU+GEa5GO2GBGR4
-rY6fMZwkaQAT2tFrmjj9DkGyCN1oOXuTjESGWvRNZddNCG/0jn3JmjAI3cfRIJdm
-CFcpu5aPGO/kEBEM9iwWdY3BnGXisaxMkpqblJ3IfI+O+qNDu+I74TfHEKeuTbxv
-xwbew9yP8DveTOJmRaJqJLlHYVReWH4lw01u6XJ/oxeYwK5KvG1b52c9pBug6SlK
-HmKfr9fPBhd0jY11UJf6tdLbD6lYY4Sl4pXQ+MMOWYiyzkkxXHEx4RXrZGCtlhfQ
-vMfhpw1YtRvaye6D9cbiAbR/xlAtFp0FlA2dH9kepy352pAWjHa5LZg0nGqjYtE9
-zN0JJkTmumYjvyCzcia9XNJB83kz5vU5gvlDZpMvUO47jwHTBlpUWW1cy2K0WfTW
-Y3hhxGB+NkbfxbEUStbIiA4BEBn0yEK3LT3CZ7prExgLsy8SqulTCA3m2jdoIIVq
-P/S6ZMpMHZAhxEG4Ygjl77mJ6gZlrnGY3SL1POOUpwJ9F3yGbneNBXaywpSrEzQq
-IWFlrTjVIcg6MD97OR2muSRnTKKdcToMqwPSkHNRwtd9oCycZug=
-=sd2Z
------END PGP SIGNATURE-----
+Mh, the hardware guarantees that bit7 is zero. So masking with
+SL28CPLD_PWM_CYCLE_MAX won't buy us much. But what I could think
+could go wrong is this: someone set the prescaler to != 0 and the
+duty cycle to a value greater than the max value for this particular
+prescaler mode. For the above calculations this would result in a
+duty_cycle greater than the period, if I'm not mistaken.
 
---Sig_/ZP=p/855_tqUdr_mQhb1AN/--
+The behavior of the hardware is undefined in that case (at the moment
+it will be always on, I guess). So this isn't a valid setting.
+Nevertheless it might happen. So what about the following:
+
+state->duty_cycle = min(state->duty_cycle, state->period);
+
+-michael
