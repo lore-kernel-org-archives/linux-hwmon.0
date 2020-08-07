@@ -2,109 +2,127 @@ Return-Path: <SRS0=r64E=BR=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AFFEC433E0
-	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Aug 2020 06:27:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88631C433E0
+	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Aug 2020 06:58:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F13C222CAE
-	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Aug 2020 06:27:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7050720866
+	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Aug 2020 06:58:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725845AbgHGG1x (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 7 Aug 2020 02:27:53 -0400
-Received: from server-x.ipv4.hkg02.ds.network ([27.111.83.178]:56928 "EHLO
-        mail.gtsys.com.hk" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
-        with ESMTP id S1725805AbgHGG1x (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Aug 2020 02:27:53 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.gtsys.com.hk (Postfix) with ESMTP id 8CDF320139AA;
-        Fri,  7 Aug 2020 14:27:50 +0800 (HKT)
-X-Virus-Scanned: Debian amavisd-new at gtsys.com.hk
-Received: from mail.gtsys.com.hk ([127.0.0.1])
-        by localhost (mail.gtsys.com.hk [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 9WOy95z1dk9E; Fri,  7 Aug 2020 14:27:50 +0800 (HKT)
-Received: from s01.gtsys.com.hk (unknown [10.128.4.2])
-        by mail.gtsys.com.hk (Postfix) with ESMTP id 69B1220139A7;
-        Fri,  7 Aug 2020 14:27:50 +0800 (HKT)
-Received: from [10.128.2.32] (unknown [203.145.95.159])
-        by s01.gtsys.com.hk (Postfix) with ESMTPSA id 36D4DC019FB;
-        Fri,  7 Aug 2020 14:27:49 +0800 (HKT)
-Subject: Re: [PATCH v6 2/2] devicetree: hwmon: shtc1: Add sensirion,shtc1.yaml
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jack Lo <jack.lo@gtsys.com.hk>, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>
-References: <20200712044411.23323-1-chris.ruehl@gtsys.com.hk>
- <20200712044411.23323-3-chris.ruehl@gtsys.com.hk>
- <20200713150022.GA175274@bogus>
-From:   Chris Ruehl <chris.ruehl@gtsys.com.hk>
-Message-ID: <f2b6ed1d-4109-15a9-349d-e6d2dd59b175@gtsys.com.hk>
-Date:   Fri, 7 Aug 2020 14:27:48 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726249AbgHGG6m (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 7 Aug 2020 02:58:42 -0400
+Received: from 2.mo68.mail-out.ovh.net ([46.105.52.162]:40165 "EHLO
+        2.mo68.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725805AbgHGG6m (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Aug 2020 02:58:42 -0400
+X-Greylist: delayed 1199 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 Aug 2020 02:58:40 EDT
+Received: from player697.ha.ovh.net (unknown [10.110.115.229])
+        by mo68.mail-out.ovh.net (Postfix) with ESMTP id 001AB16EAB7
+        for <linux-hwmon@vger.kernel.org>; Fri,  7 Aug 2020 08:23:34 +0200 (CEST)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player697.ha.ovh.net (Postfix) with ESMTPSA id D71D3151467EB;
+        Fri,  7 Aug 2020 06:23:28 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-98R002924d5bf1-2994-4c8b-9b6c-5998cd15a743,
+                    B1FDDFD4E508142116FDFB9194C63E8FBE397CFD) smtp.auth=steve@sk2.org
+Date:   Fri, 7 Aug 2020 08:23:27 +0200
+From:   Stephen Kitt <steve@sk2.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon/pmbus: use simple i2c probe function
+Message-ID: <20200807082327.02e8a682@heffalump.sk2.org>
+In-Reply-To: <e378e4e6-73b3-0a11-bca6-ec0d4225a010@roeck-us.net>
+References: <20200806161645.9437-1-steve@sk2.org>
+        <5f7b5828-cb7c-127a-e454-6c8b8d98777b@roeck-us.net>
+        <20200806221232.278c3878@heffalump.sk2.org>
+        <e378e4e6-73b3-0a11-bca6-ec0d4225a010@roeck-us.net>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <20200713150022.GA175274@bogus>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ boundary="Sig_/ZP=p/855_tqUdr_mQhb1AN/"; protocol="application/pgp-signature"
+X-Ovh-Tracer-Id: 17538705802184117518
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduiedrkedugddutdelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvffukfgjfhfogggtsehgtderreertdejnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeevledvueefvdeivefftdeugeekveethefftdffteelheejkeejjeduffeiudetkeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpqdhouhhtpdhhvghlohepphhlrgihvghrieeljedrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehsthgvvhgvsehskhdvrdhorhhgpdhrtghpthhtoheplhhinhhugidqhhifmhhonhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Rob,
+--Sig_/ZP=p/855_tqUdr_mQhb1AN/
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-sorry for late reply, I have my head in setup production install the dt-schema
-and rerun the check, with 2020-6 no warnings lets fix it.
+On Thu, 6 Aug 2020 14:48:58 -0700, Guenter Roeck <linux@roeck-us.net> wrote:
+> On 8/6/20 1:12 PM, Stephen Kitt wrote:
+> > On Thu, 6 Aug 2020 12:15:55 -0700, Guenter Roeck <linux@roeck-us.net>
+> > wrote: =20
+> >> On 8/6/20 9:16 AM, Stephen Kitt wrote: =20
+[...]
+> >> Also, I am not convinced that replacements such as
+> >>
+> >> -	{ "ipsps1", 0 },
+> >> +	{ .name =3D "ipsps1" },
+> >>
+> >> are an improvement. I would suggest to leave that alone for
+> >> consistency (and to make it easier to add more devices to the
+> >> various drivers if that happens in the future). =20
+> >=20
+> > From reading through all the drivers using id_table, it seems to me that
+> > we could do away with driver_data altogether and move all that to
+> > driver-local structures, in many cases covering more than just an id. By
+> > only initialising the elements of the structure that are really needed,=
+ I
+> > was hoping to (a) make it more obvious that driver_data isn=E2=80=99t u=
+sed, and
+> > (b) allow removing it without touching all the code again.
+> >  =20
+>=20
+> I don't see it as an improvement to replace a common data structure with
+> per-driver data structures. That sounds too much like "let's re-invent
+> the wheel over and over again". If that is where things are going, I'd
+> rather have it implemented everywhere else first. I am ok with the other
+> changes, but not with this.
 
-Chris
+I agree, and I wasn=E2=80=99t intending on encouraging re-inventing the whe=
+el in each
+driver. Let=E2=80=99s focus on probe_new for now...
 
-On 13/7/2020 11:00 pm, Rob Herring wrote:
-> On Sun, 12 Jul 2020 12:44:10 +0800, Chris Ruehl wrote:
->> Add documentation for the newly added DTS support in the shtc1 driver.
->> To align with the drivers logic to have high precision by default
->> a boolean sensirion,low_precision is used to switch to low precision.
->>
->> Signed-off-by: Chris Ruehl <chris.ruehl@gtsys.com.hk>
->> ---
->>   .../bindings/hwmon/sensirion,shtc1.yaml       | 57 +++++++++++++++++++
->>   1 file changed, 57 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/hwmon/sensirion,shtc1.yaml
->>
-> 
-> 
-> My bot found errors running 'make dt_binding_check' on your patch:
-> 
-> Documentation/devicetree/bindings/hwmon/sensirion,shtc1.example.dts:24.13-26: Warning (reg_format): /example-0/i2c1/shtc3@70:reg: property has invalid length (4 bytes) (#address-cells == 2, #size-cells == 1)
-> Documentation/devicetree/bindings/hwmon/sensirion,shtc1.example.dt.yaml: Warning (pci_device_reg): Failed prerequisite 'reg_format'
-> Documentation/devicetree/bindings/hwmon/sensirion,shtc1.example.dt.yaml: Warning (pci_device_bus_num): Failed prerequisite 'reg_format'
-> Documentation/devicetree/bindings/hwmon/sensirion,shtc1.example.dt.yaml: Warning (simple_bus_reg): Failed prerequisite 'reg_format'
-> Documentation/devicetree/bindings/hwmon/sensirion,shtc1.example.dt.yaml: Warning (i2c_bus_reg): Failed prerequisite 'reg_format'
-> Documentation/devicetree/bindings/hwmon/sensirion,shtc1.example.dt.yaml: Warning (spi_bus_reg): Failed prerequisite 'reg_format'
-> Documentation/devicetree/bindings/hwmon/sensirion,shtc1.example.dts:22.20-26.13: Warning (avoid_default_addr_size): /example-0/i2c1/shtc3@70: Relying on default #address-cells value
-> Documentation/devicetree/bindings/hwmon/sensirion,shtc1.example.dts:22.20-26.13: Warning (avoid_default_addr_size): /example-0/i2c1/shtc3@70: Relying on default #size-cells value
-> Documentation/devicetree/bindings/hwmon/sensirion,shtc1.example.dt.yaml: Warning (unique_unit_address): Failed prerequisite 'avoid_default_addr_size'
-> 
-> 
-> See https://patchwork.ozlabs.org/patch/1327453
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure dt-schema is up to date:
-> 
-> pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
-> 
-> Please check and re-submit.
-> 
+What did you mean by =E2=80=9Cto make it easier to add more devices to the =
+various
+drivers if that happens in the future=E2=80=9D? There are already many driv=
+ers with
+multiple devices but no driver_data, dropping the explicit driver_data
+initialisation doesn=E2=80=99t necessarily make it harder to add devices, d=
+oes it?
 
--- 
-GTSYS Limited RFID Technology
-9/F, Unit E, R07, Kwai Shing Industrial Building Phase 2,
-42-46 Tai Lin Pai Road, Kwai Chung, N.T., Hong Kong
-Tel (852) 9079 9521
+Regards,
 
-Disclaimer: https://www.gtsys.com.hk/email/classified.html
+Stephen
+
+--Sig_/ZP=p/855_tqUdr_mQhb1AN/
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEnPVX/hPLkMoq7x0ggNMC9Yhtg5wFAl8s818ACgkQgNMC9Yht
+g5wjxA//Ugr98eRz3F0dBjgb/dsdKZ2f7yN68V/HyjcOU+Qy/lKbqqhaICkDSBlz
+9qfG5Q6fZFzZTSIJKJMBdBX/LimJP8EdqqsvqMv+oTdFF2rk/xU+GEa5GO2GBGR4
+rY6fMZwkaQAT2tFrmjj9DkGyCN1oOXuTjESGWvRNZddNCG/0jn3JmjAI3cfRIJdm
+CFcpu5aPGO/kEBEM9iwWdY3BnGXisaxMkpqblJ3IfI+O+qNDu+I74TfHEKeuTbxv
+xwbew9yP8DveTOJmRaJqJLlHYVReWH4lw01u6XJ/oxeYwK5KvG1b52c9pBug6SlK
+HmKfr9fPBhd0jY11UJf6tdLbD6lYY4Sl4pXQ+MMOWYiyzkkxXHEx4RXrZGCtlhfQ
+vMfhpw1YtRvaye6D9cbiAbR/xlAtFp0FlA2dH9kepy352pAWjHa5LZg0nGqjYtE9
+zN0JJkTmumYjvyCzcia9XNJB83kz5vU5gvlDZpMvUO47jwHTBlpUWW1cy2K0WfTW
+Y3hhxGB+NkbfxbEUStbIiA4BEBn0yEK3LT3CZ7prExgLsy8SqulTCA3m2jdoIIVq
+P/S6ZMpMHZAhxEG4Ygjl77mJ6gZlrnGY3SL1POOUpwJ9F3yGbneNBXaywpSrEzQq
+IWFlrTjVIcg6MD97OR2muSRnTKKdcToMqwPSkHNRwtd9oCycZug=
+=sd2Z
+-----END PGP SIGNATURE-----
+
+--Sig_/ZP=p/855_tqUdr_mQhb1AN/--
