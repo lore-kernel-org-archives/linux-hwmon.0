@@ -2,149 +2,327 @@ Return-Path: <SRS0=r64E=BR=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,FAKE_REPLY_C,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ACD87C433DF
-	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Aug 2020 15:52:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D60EBC433DF
+	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Aug 2020 16:00:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 834E42075D
-	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Aug 2020 15:52:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AA9C02224D
+	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Aug 2020 16:00:07 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ksFdo6os"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oRp6iVZj"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726579AbgHGPwl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 7 Aug 2020 11:52:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58266 "EHLO
+        id S1726569AbgHGQAH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 7 Aug 2020 12:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725815AbgHGPwj (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Aug 2020 11:52:39 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7062FC061756
-        for <linux-hwmon@vger.kernel.org>; Fri,  7 Aug 2020 08:52:39 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id p1so1232663pls.4
-        for <linux-hwmon@vger.kernel.org>; Fri, 07 Aug 2020 08:52:39 -0700 (PDT)
+        with ESMTP id S1726078AbgHGQAG (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Aug 2020 12:00:06 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE5FC061756;
+        Fri,  7 Aug 2020 09:00:06 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id 74so1197498pfx.13;
+        Fri, 07 Aug 2020 09:00:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=hUma2YU5FJTqV18poaT+30k/KnbsnhwZG0vT1nmmw+0=;
-        b=ksFdo6os/Ko0eYOA40OvTVBs2To8JgD4+7fmhxYzIRv5cpqsr5jyOIpVK2IqmJplAv
-         Lp9teskJwtSk+fZXnScjPm0BYpTFlvhE2sGCp8ILKPUQvDZwU78VspD9U9D31PVImnRV
-         IZ4+hPeVmXXNH9IvdEXBjfdTpAoKwEcIRyrcLMLt6ZqOWRpgW6cTDiETeJAl4pmyMlnW
-         xX8zdOLjxQvOuqJNcf3z+HECIi8Y90kszcurrel2DL3WFwE2UqXbJPX2dv8oi9FXKVSG
-         pCjBs1GfSrN1DXq6ogYwb4QPhdETj/8enCFpgsC1uFQ3GdjL8fHHNZ51MOaJKldfn0Eg
-         STZA==
+        h=sender:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=WPQQlSgEdI2Eagwa12liyv9Vg/vXkk+ke4oNOGSYqvM=;
+        b=oRp6iVZjiclZ3tQtkyXp+pOlN1Xt/hHOeFJc7zz9kiG+w1RpnlOK1vaCorLa+GVoZc
+         yoNdgE0dJewp5BukDmWT3Hfxo4m63LzsEvui5wytU7f4pwJ3eHDSFZUnlD0Tkg/liPLx
+         zfH1wHOOWl+B/uDAOAjPbLMMiMhLspqpOrCTtFwHR6eMKdems8TlIHSKkb8Facd24+v6
+         N6jNBLtvCWbZVZRE8n3J0hGJfOIiwOdu9IxZCXfFf44yzh5+Pq38F734m8nweOiV++Si
+         2nH9M98HdFCDf7m3nkyLgEk8CG0cDfpjqgi4IpDRxojcjEF1o4Lbo/u9UFOcGhwp16GC
+         pM1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=hUma2YU5FJTqV18poaT+30k/KnbsnhwZG0vT1nmmw+0=;
-        b=jpoJpa9r8nN12LP9yOpPuCGBXeMJELisxFdrH/mBYjUAQ+/+WO3iMy3QmEfZ+eMxmc
-         wdfu5TOy2EJu8NMCVN7qI8SLT70fqC18/ipX7Vp00djUHSe2oDKL7VYTh6DfOqvFuEfl
-         N+CAwxqWzw5qdQHUN11OMjg6V9385DbDCeVXcIhP4Psc8G5NJuNhYF9aDTe2M6y9o79q
-         lJMUXow8lBtgkPB88haf+z/Mj9m6WvcOL894kk166SZ+dmsg8S2egU2nVZW4G2W2mdRi
-         ETsnZJHXd5Adwln/SUwiRC9xXo6iNW7zBHt5FNkRaW5EtyX8KF30IaC0OevvrVCmkEz3
-         9t4w==
-X-Gm-Message-State: AOAM530ud6GqDP2cElZDLbvTN0Jhuo8SV8h1lsKBhFWzYXLCWWwxSpkD
-        GUhuT+s3thUvFLjf5kSS3ZLwb7vU
-X-Google-Smtp-Source: ABdhPJyadv79jsILW5cY4ls1QvFqYsft4t3+2CPpamgS/33d6u1c14xw8gOEjvOVz4zcHdlVHUHv1Q==
-X-Received: by 2002:a17:90a:ea83:: with SMTP id h3mr15189954pjz.170.1596815558835;
-        Fri, 07 Aug 2020 08:52:38 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r15sm14022767pfq.189.2020.08.07.08.52.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Aug 2020 08:52:38 -0700 (PDT)
-Subject: Re: [PATCH 0/3] Extending hwmon ABI with attributes for rated values
-To:     Zbigniew Lukwinski <zbigniew.lukwinski@linux.intel.com>,
-        linux-hwmon@vger.kernel.org
-References: <1596224237-32280-1-git-send-email-zbigniew.lukwinski@linux.intel.com>
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :mime-version:content-disposition:user-agent;
+        bh=WPQQlSgEdI2Eagwa12liyv9Vg/vXkk+ke4oNOGSYqvM=;
+        b=bU4vYBA9ivWr0FOKhvxsYpGeOEfsd4UcOxnJ26csD15AOUGFQi0tLFKH3TjWCzojR7
+         WBwiapoz0gPyJIAIarTL6rik68dCbQ9L7bJbPiOITRV52J8ZJLQoDk75QfCG1MU81Ykl
+         K80l4MR8LN07ZA3zxWT2ZGWJgecvV7/OZfJyqlr04gaIPkm/boIHM2714svGxgtAyB6M
+         QdBgBqJWrvyl5SYFFZ0m3YsFmdzuB44tTMeKNziihIBemtndToTuEtCvng/IovjUusSo
+         +ahF1EkeOI7Xpq+tzRcFP1h/f76k4AyE5fIfF/7OZz2i85tX98nraUboBMxb7Lm4+iZ+
+         rbPA==
+X-Gm-Message-State: AOAM5331kl66kh79o4QhVeFesl/UpdVvo8pC8RWfXwgl4fAOYoxKo/b9
+        SGRo+foilc/7hTBsXVQomxs=
+X-Google-Smtp-Source: ABdhPJyUoNuSTCDVUJDJR+Rik5VFMf+3VlxkZ/J+FtOu2z9haZ5pRC6dABxqBugMSo+U3H3LAakcOA==
+X-Received: by 2002:a65:6287:: with SMTP id f7mr12493062pgv.307.1596816005684;
+        Fri, 07 Aug 2020 09:00:05 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id b15sm10989133pjo.48.2020.08.07.09.00.04
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 07 Aug 2020 09:00:05 -0700 (PDT)
+Date:   Fri, 7 Aug 2020 09:00:04 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
- RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
- nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
- 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
- gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
- IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
- kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
- VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
- jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
- BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
- ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
- CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
- nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
- hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
- c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
- 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
- GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
- sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
- Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
- HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
- BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
- l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
- 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
- pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
- J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
- pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
- 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
- ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
- I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
- nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
- HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
- JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
- J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
- cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
- wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
- hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
- nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
- QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
- trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
- WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
- HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <66a7bf34-3b2a-a61e-d382-8b2ab9ac1101@roeck-us.net>
-Date:   Fri, 7 Aug 2020 08:52:37 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+To:     alexandru.tachici@analog.com
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org
+Subject: Re: [PATCH v7 5/9] hwmon: pmbus: adm1266: read blackbox
+Message-ID: <20200807160004.GA39964@roeck-us.net>
 MIME-Version: 1.0
-In-Reply-To: <1596224237-32280-1-git-send-email-zbigniew.lukwinski@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 7/31/20 12:37 PM, Zbigniew Lukwinski wrote:
-> This patch series is about extending hwmon ABI with new attributes
-> for rated values. All of that is to cover PMBus specification which
-> provides registers reporting rated values:
-> PMBus Power System Mgt Protocol Specification - Part II – Revision 1.3.1,
-> chapters: 22.3.1 - 22.3.10, 22.3.15
+On Mon, Jul 27, 2020 at 07:19:24PM +0300, alexandru.tachici@analog.com wrote:
+> From: Alexandru Tachici <alexandru.tachici@analog.com>
 > 
-> Zbigniew Lukwinski (3):
->   docs: hwmon: Add attributes to report rated values
->   hwmon: (core) Add support for rated attributes
->   hwmon: (pmbus/core) Add support for rated attributes
+> Use the nvmem kernel api to expose the black box
+> chip functionality to userspace.
 > 
->  Documentation/hwmon/pmbus.rst           | 15 ++++++-
->  Documentation/hwmon/sysfs-interface.rst | 70 +++++++++++++++++++++++++++++++++
->  drivers/hwmon/hwmon.c                   | 10 +++++
->  drivers/hwmon/pmbus/pmbus.h             | 13 ++++++
->  drivers/hwmon/pmbus/pmbus_core.c        | 49 +++++++++++++++++++----
->  include/linux/hwmon.h                   | 20 ++++++++++
->  6 files changed, 168 insertions(+), 9 deletions(-)
+> Using this feature, the device is capable of recording
+> to nonvolatile flash memory the vital data about the
+> system status that caused the system to perform a
+> black box write.
 > 
-I have been struggling with "rated_{min,max}" vs. "{min,max}_rated",
-but then figured it does not really make a difference, and rated_ as
-prefix may actually make more sense. I'll queue the series for v5.10.
-Let's see if there is any feedback.
+> A blackbox is 64 bytes of data containing all the
+> status registers, last two states of the sequencer,
+> timestamp and counters. The mapping of this data is
+> described in the adm1266 datasheet.
+> 
+> On power-up the driver sets the unix time to
+> the adm1266 using the SET_RTC command. This value
+> is incremented by an internal clock and it is used
+> as timestamp for the black box feature.
+> 
+> Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
+> ---
+>  drivers/hwmon/pmbus/adm1266.c | 165 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 165 insertions(+)
+> 
+> diff --git a/drivers/hwmon/pmbus/adm1266.c b/drivers/hwmon/pmbus/adm1266.c
+> index 0ea016b7e113..b61a968d67f9 100644
+> --- a/drivers/hwmon/pmbus/adm1266.c
+> +++ b/drivers/hwmon/pmbus/adm1266.c
+> @@ -15,12 +15,19 @@
+>  #include <linux/init.h>
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+> +#include <linux/nvmem-consumer.h>
+> +#include <linux/nvmem-provider.h>
+>  #include "pmbus.h"
+>  #include <linux/slab.h>
+> +#include <linux/timekeeping.h>
+>  
+> +#define ADM1266_BLACKBOX_CONFIG	0xD3
+>  #define ADM1266_PDIO_CONFIG	0xD4
+>  #define ADM1266_READ_STATE	0xD9
+> +#define ADM1266_READ_BLACKBOX	0xDE
+> +#define ADM1266_SET_RTC		0xDF
+>  #define ADM1266_GPIO_CONFIG	0xE1
+> +#define ADM1266_BLACKBOX_INFO	0xE6
+>  #define ADM1266_PDIO_STATUS	0xE9
+>  #define ADM1266_GPIO_STATUS	0xEA
+>  
+> @@ -37,6 +44,9 @@
+>  #define ADM1266_PDIO_GLITCH_FILT(x)	FIELD_GET(GENMASK(12, 9), x)
+>  #define ADM1266_PDIO_OUT_CFG(x)		FIELD_GET(GENMASK(2, 0), x)
+>  
+> +#define ADM1266_BLACKBOX_OFFSET		0x7F700
+> +#define ADM1266_BLACKBOX_SIZE		64
+> +
+>  #define ADM1266_PMBUS_BLOCK_MAX		255
+>  
+>  struct adm1266_data {
+> @@ -45,11 +55,22 @@ struct adm1266_data {
+>  	const char *gpio_names[ADM1266_GPIO_NR + ADM1266_PDIO_NR];
+>  	struct i2c_client *client;
+>  	struct dentry *debugfs_dir;
+> +	struct nvmem_config nvmem_config;
+> +	struct nvmem_device *nvmem;
+> +	u8 *dev_mem;
+>  	struct mutex buf_mutex;
+>  	u8 write_buf[ADM1266_PMBUS_BLOCK_MAX + 1] ____cacheline_aligned;
+>  	u8 read_buf[ADM1266_PMBUS_BLOCK_MAX + 1] ____cacheline_aligned;
+>  };
+>  
+> +static const struct nvmem_cell_info adm1266_nvmem_cells[] = {
+> +	{
+> +		.name           = "blackbox",
+> +		.offset         = ADM1266_BLACKBOX_OFFSET,
+> +		.bytes          = 2048,
+> +	},
+> +};
+> +
+>  DECLARE_CRC8_TABLE(pmbus_crc_table);
+>  
+>  /*
+> @@ -320,6 +341,142 @@ static void adm1266_init_debugfs(struct adm1266_data *data)
+>  				    adm1266_state_read);
+>  }
+>  
+> +#if IS_ENABLED(CONFIG_NVMEM)
+
+Other drivers don't make this conditional, and I am not a friend of conditional
+code either if it can be avoided.
+
+The nvmem core supports dummy functions if NVMEM is not enabled.
+Either this is needed or not. If it is not needed, it should ignore nvmem
+registration errors. If it is, and only then, it should return an error.
+If it is mandatory, either select or depend on NVMEM in the Kconfig file.
 
 Thanks,
 Guenter
+
+> +static int adm1266_nvmem_read_blackbox(struct adm1266_data *data, u8 *read_buff)
+> +{
+> +	int record_count;
+> +	char index;
+> +	u8 buf[5];
+> +	int ret;
+> +
+> +	ret = i2c_smbus_read_block_data(data->client, ADM1266_BLACKBOX_INFO, buf);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (ret != 4)
+> +		return -EIO;
+> +
+> +	record_count = buf[3];
+> +
+> +	for (index = 0; index < record_count; index++) {
+> +		ret = adm1266_pmbus_block_xfer(data, ADM1266_READ_BLACKBOX, 1, &index, read_buff);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		if (ret != ADM1266_BLACKBOX_SIZE)
+> +			return -EIO;
+> +
+> +		read_buff += ADM1266_BLACKBOX_SIZE;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static bool adm1266_cell_is_accessed(const struct nvmem_cell_info *mem_cell, unsigned int offset,
+> +				     size_t bytes)
+> +{
+> +	unsigned int start_addr = offset;
+> +	unsigned int end_addr = offset + bytes;
+> +	unsigned int cell_start = mem_cell->offset;
+> +	unsigned int cell_end = mem_cell->offset + mem_cell->bytes;
+> +
+> +	return start_addr <= cell_end && cell_start <= end_addr;
+> +}
+> +
+> +static int adm1266_read_mem_cell(struct adm1266_data *data, const struct nvmem_cell_info *mem_cell)
+> +{
+> +	u8 *mem_offset;
+> +	int ret;
+> +
+> +	switch (mem_cell->offset) {
+> +	case ADM1266_BLACKBOX_OFFSET:
+> +		mem_offset = data->dev_mem + mem_cell->offset;
+> +
+> +		memset(mem_offset, 0, ADM1266_BLACKBOX_SIZE);
+> +
+> +		ret = adm1266_nvmem_read_blackbox(data, mem_offset);
+> +		if (ret)
+> +			dev_err(&data->client->dev, "Could not read blackbox!");
+> +		return ret;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+> +
+> +static int adm1266_nvmem_read(void *priv, unsigned int offset, void *val,
+> +			      size_t bytes)
+> +{
+> +	const struct nvmem_cell_info *mem_cell;
+> +	struct adm1266_data *data = priv;
+> +	int ret;
+> +	int i;
+> +
+> +	for (i = 0; i < data->nvmem_config.ncells; i++) {
+> +		mem_cell = &adm1266_nvmem_cells[i];
+> +		if (!adm1266_cell_is_accessed(mem_cell, offset, bytes))
+> +			continue;
+> +
+> +		ret = adm1266_read_mem_cell(data, mem_cell);
+> +		if (ret < 0)
+> +			return ret;
+> +	}
+> +
+> +	memcpy(val, data->dev_mem + offset, bytes);
+> +
+> +	return 0;
+> +}
+> +
+> +static int adm1266_config_nvmem(struct adm1266_data *data)
+> +{
+> +	data->nvmem_config.name = dev_name(&data->client->dev);
+> +	data->nvmem_config.dev = &data->client->dev;
+> +	data->nvmem_config.root_only = true;
+> +	data->nvmem_config.read_only = true;
+> +	data->nvmem_config.owner = THIS_MODULE;
+> +	data->nvmem_config.reg_read = adm1266_nvmem_read;
+> +	data->nvmem_config.cells = adm1266_nvmem_cells;
+> +	data->nvmem_config.ncells = ARRAY_SIZE(adm1266_nvmem_cells);
+> +	data->nvmem_config.priv = data;
+> +	data->nvmem_config.stride = 1;
+> +	data->nvmem_config.word_size = 1;
+> +	data->nvmem_config.size = 0x80000;
+> +
+> +	data->dev_mem = devm_kzalloc(&data->client->dev, data->nvmem_config.size, GFP_KERNEL);
+> +	if (!data->dev_mem)
+> +		return -ENOMEM;
+> +
+> +	data->nvmem = devm_nvmem_register(&data->client->dev, &data->nvmem_config);
+> +	if (IS_ERR(data->nvmem)) {
+> +		dev_err(&data->client->dev, "Could not register nvmem!");
+> +		return PTR_ERR(data->nvmem);
+> +	}
+> +
+> +	return 0;
+> +}
+> +#else
+> +static int adm1266_config_nvmem(struct adm1266_data *data)
+> +{
+> +	return 0;
+> +}
+> +#endif /* CONFIG_NVMEM */
+> +
+> +static int adm1266_set_rtc(struct adm1266_data *data)
+> +{
+> +	time64_t kt;
+> +	char write_buf[6];
+> +	int i;
+> +
+> +	kt = ktime_get_seconds();
+> +
+> +	memset(write_buf, 0, sizeof(write_buf));
+> +
+> +	for (i = 0; i < 4; i++)
+> +		write_buf[2 + i] = (kt >> (i * 8)) & 0xFF;
+> +
+> +	return i2c_smbus_write_block_data(data->client, ADM1266_SET_RTC, sizeof(write_buf),
+> +					  write_buf);
+> +}
+> +
+>  static int adm1266_probe(struct i2c_client *client, const struct i2c_device_id *id)
+>  {
+>  	struct adm1266_data *data;
+> @@ -343,6 +500,14 @@ static int adm1266_probe(struct i2c_client *client, const struct i2c_device_id *
+>  	if (ret < 0)
+>  		return ret;
+>  
+> +	ret = adm1266_set_rtc(data);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = adm1266_config_nvmem(data);
+> +	if (ret < 0)
+> +		return ret;
+> +
+>  	ret = pmbus_do_probe(client, id, &data->info);
+>  	if (ret)
+>  		return ret;
