@@ -2,70 +2,68 @@ Return-Path: <SRS0=r64E=BR=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A59CC433E0
-	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Aug 2020 14:15:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69BD5C433E0
+	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Aug 2020 15:23:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EDFB720866
-	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Aug 2020 14:15:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4151721744
+	for <linux-hwmon@archiver.kernel.org>; Fri,  7 Aug 2020 15:23:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="invKBJUB"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LGcIZJR7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726167AbgHGOPk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 7 Aug 2020 10:15:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43334 "EHLO
+        id S1726428AbgHGPXe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 7 Aug 2020 11:23:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726159AbgHGOPj (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Aug 2020 10:15:39 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C991C061756;
-        Fri,  7 Aug 2020 07:15:39 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id c6so946137pje.1;
-        Fri, 07 Aug 2020 07:15:39 -0700 (PDT)
+        with ESMTP id S1726489AbgHGPXd (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 Aug 2020 11:23:33 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D5BC061756;
+        Fri,  7 Aug 2020 08:23:33 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id x6so1036099pgx.12;
+        Fri, 07 Aug 2020 08:23:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to;
-        bh=3rNHsQd+IJnmQRGECHNVlsy5npf2obdnNWTh+jrObj0=;
-        b=invKBJUBBomIVacgxCMF4eSLms0SmO+PF198I/M24ObdPQArlyGpwIj4N/BkZ7Dnd0
-         aJYgskV+X+CRdkHfKmq3hWVG5RbhhRx5iaDFKQ9Z0E/BCdMrhcUmU8GATiPmCTriWxXr
-         lxZwh8BDqtiDgu1USkp9IJXBq9M4d+iv/oC5wC3te1OEyRnFryPbhwwznYkz3DMisnOD
-         TStqMMU5M1NnmmTSCAffcI3E4whisp3jkOusxDW1JyBGPUO1O84Dv3SUWoG6xdy4TL8U
-         kAmAlLCsN9PfjABj0AlsFr9JisBpv7bmgIIJS6JSvQDYfKu3jmh/DbIlOkUL+7aX2Imh
-         70qw==
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=uY95saK5XujgpJakESvzncs2nStqyQPwuBeJZVnrXEw=;
+        b=LGcIZJR7DP3BaD/IKHyK5hm1TaePqGnDegaOXcnW3Pe55Fm3XjE5hyIrsk0x4m4mtX
+         wMCz9uZTB+FuUHwLA5++Rinw7qCHT/6rOGZ88pdglXHAbykhDtbEBlfZj/pXwttIAPQV
+         ++MUsWMLJ17/cH106didjhSN/KNBvG/iQKV/O7ip/BuUGjsvWt6WnJEGTrp2Sr20PWEL
+         niU1wt3G4WtWu5QtW0ZqwDFwWPNZjr1XHF6vQ1IldXJn2/Xsj7dZ6u62LS9rHUpplRvY
+         CLiau8WDZxbM5D0bX8twEHmjXlgPgEO4I0jQ4ANnK5F7+S7pOuOBg04XtO6xYxaShlBG
+         NXhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to;
-        bh=3rNHsQd+IJnmQRGECHNVlsy5npf2obdnNWTh+jrObj0=;
-        b=ghvpsZ/L1zOPzMn3XpOoK2Hc8fhCCkBObI/yUCCD8RyvoWoPM46YTTmyDaZA02Tvkp
-         Y8pparBL1IlHIwYD1iOh788xXDmyN6xZT32YmgvQPYWTfZr93/ut8uqyEFp246i+79ps
-         XXnHTAKUMVqcHga4k/8BOc3n3OHUgYQwuH0FOulOyw64t/IvJC7F07Ah57AFdGeLfeWl
-         UgMu7c2GgcUHbcbqy5eVelJyguFO6852Nur4oUR7NhJKGPlX5rZ66jr+uxpAfVbCWJtN
-         MthP8BtUriB1NCHlNRuKU3MZ0OySZityn24tCob10agMdFfsfITvqnFN+lAcfhrDaZJT
-         PPFw==
-X-Gm-Message-State: AOAM533tHbnEabOFpI4s8JWq+9cMa4r5rOGyX6fzuern8O3lbHRmlQiv
-        loxUsabvDptWnpmRiAMp8bBKXZxJ
-X-Google-Smtp-Source: ABdhPJzGfCCEEfK5KZxnsItctcmUEdQ2CRMFH4LV1SSg1rlitqoRwCGZd1mbn1GFpfEdJPkeVZnlEg==
-X-Received: by 2002:a17:902:bb82:: with SMTP id m2mr12583154pls.115.1596809738865;
-        Fri, 07 Aug 2020 07:15:38 -0700 (PDT)
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=uY95saK5XujgpJakESvzncs2nStqyQPwuBeJZVnrXEw=;
+        b=qV0C6uE5taYV4OUnkms/pDIBwg20/xi6QB4Mk26MnUoQisRsLGNhAcFOoBCdQW2kdo
+         0cSp2O7V2r6Up6CXn0gqrmggRz4MPvGvNhnmiyDz77KrlsSd3hxDFPx8o7n9xeA8QNpn
+         2m9mJYuao+pAGj4V+RvlBXjr7YbV33EqSxerjMqF7e0DcioFsNUDrw76/aqGkLsuL5yw
+         5CD8CWHJM18Teju8aI3wk5k9iHu0HAxzIXJgAn5fTnqpQnbnn2uHc7PlsGQ/Jayrb6GA
+         n2xoNoIdX3T85ce/GIhctzxSjO+t1FETTxndDCIZ8J2ss+dzm+8jrxVtxf2jx60ZimZZ
+         vRzA==
+X-Gm-Message-State: AOAM533iV4Fvl9hdKB4svMQbcekiWw0iKopH8yWXTujHQEr3TNzLcJlB
+        +bZKy8OiPpRijKcJTAutf72CVZ+U
+X-Google-Smtp-Source: ABdhPJwQC0DUbbPpKDKpZiqtM081qsoHYQoRUrdI6bNiMuriHX6JVTlVYdqFXxIpn19f1+I32VblXQ==
+X-Received: by 2002:a63:210c:: with SMTP id h12mr11904202pgh.152.1596813812432;
+        Fri, 07 Aug 2020 08:23:32 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u24sm12671958pfm.20.2020.08.07.07.15.36
+        by smtp.gmail.com with ESMTPSA id k125sm12298004pga.48.2020.08.07.08.23.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Aug 2020 07:15:37 -0700 (PDT)
-Subject: Re: [PATCH] hwmon/pmbus: use simple i2c probe function
-To:     Stephen Kitt <steve@sk2.org>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200806161645.9437-1-steve@sk2.org>
- <5f7b5828-cb7c-127a-e454-6c8b8d98777b@roeck-us.net>
- <20200806221232.278c3878@heffalump.sk2.org>
- <e378e4e6-73b3-0a11-bca6-ec0d4225a010@roeck-us.net>
- <20200807082327.02e8a682@heffalump.sk2.org>
+        Fri, 07 Aug 2020 08:23:31 -0700 (PDT)
+Subject: Re: [PATCH v2] hwmon/pmbus: use simple i2c probe function
+To:     Stephen Kitt <steve@sk2.org>, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200807074526.14334-1-steve@sk2.org>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -110,113 +108,47 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <a25e62a8-0610-b015-001f-dec9b1600b3b@roeck-us.net>
-Date:   Fri, 7 Aug 2020 07:15:35 -0700
+Message-ID: <caf1963d-860f-1b46-49e5-ad3acc8d7877@roeck-us.net>
+Date:   Fri, 7 Aug 2020 08:23:29 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200807082327.02e8a682@heffalump.sk2.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="D3ziB1DQZlBAttgUfYcal3w192NzPdJNj"
+In-Reply-To: <20200807074526.14334-1-steve@sk2.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---D3ziB1DQZlBAttgUfYcal3w192NzPdJNj
-Content-Type: multipart/mixed; boundary="JzkhzGad8BZEbvPNhybNQ4DCkage2QZje"
+On 8/7/20 12:45 AM, Stephen Kitt wrote:
+> pmbus_do_probe doesn't use the id information provided in its second
+> argument, so this can be removed, which then allows using the
+> single-parameter i2c probe function ("probe_new") for probes.
+> 
+> This avoids scanning the identifier tables during probes.
+> 
+> Drivers which didn't use the id are converted as-is; drivers which did
+> are modified as follows:
+> 
+> * if the information in i2c_client is sufficient, that's used instead
+>   (client->name);
+> * configured v. probed comparisons are performed by comparing the
+>   configured name to the detected name, instead of the ids; this
+>   involves strcmp but is still cheaper than comparing all the device
+>   names when scanning the tables;
+> * anything else is handled by calling i2c_match_id() with the same
+>   level of error-handling (if any) as before.
+> 
+> Signed-off-by: Stephen Kitt <steve@sk2.org>
 
---JzkhzGad8BZEbvPNhybNQ4DCkage2QZje
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
+Please also update the documentation.
 
-On 8/6/20 11:23 PM, Stephen Kitt wrote:
-> On Thu, 6 Aug 2020 14:48:58 -0700, Guenter Roeck <linux@roeck-us.net> w=
-rote:
->> On 8/6/20 1:12 PM, Stephen Kitt wrote:
->>> On Thu, 6 Aug 2020 12:15:55 -0700, Guenter Roeck <linux@roeck-us.net>=
+Documentation/hwmon/pmbus-core.rst:  int pmbus_do_probe(struct i2c_client *client, const struct i2c_device_id *id,
+Documentation/hwmon/pmbus.rst:  return pmbus_do_probe(client, id, &ds1200_info);
 
->>> wrote: =20
->>>> On 8/6/20 9:16 AM, Stephen Kitt wrote: =20
-> [...]
->>>> Also, I am not convinced that replacements such as
->>>>
->>>> -	{ "ipsps1", 0 },
->>>> +	{ .name =3D "ipsps1" },
->>>>
->>>> are an improvement. I would suggest to leave that alone for
->>>> consistency (and to make it easier to add more devices to the
->>>> various drivers if that happens in the future). =20
->>>
->>> From reading through all the drivers using id_table, it seems to me t=
-hat
->>> we could do away with driver_data altogether and move all that to
->>> driver-local structures, in many cases covering more than just an id.=
- By
->>> only initialising the elements of the structure that are really neede=
-d, I
->>> was hoping to (a) make it more obvious that driver_data isn=E2=80=99t=
- used, and
->>> (b) allow removing it without touching all the code again.
->>>  =20
->>
->> I don't see it as an improvement to replace a common data structure wi=
-th
->> per-driver data structures. That sounds too much like "let's re-invent=
-
->> the wheel over and over again". If that is where things are going, I'd=
-
->> rather have it implemented everywhere else first. I am ok with the oth=
-er
->> changes, but not with this.
->=20
-> I agree, and I wasn=E2=80=99t intending on encouraging re-inventing the=
- wheel in each
-> driver. Let=E2=80=99s focus on probe_new for now...
->=20
-> What did you mean by =E2=80=9Cto make it easier to add more devices to =
-the various
-> drivers if that happens in the future=E2=80=9D? There are already many =
-drivers with
-> multiple devices but no driver_data, dropping the explicit driver_data
-> initialisation doesn=E2=80=99t necessarily make it harder to add device=
-s, does it?
->=20
-There is an existing mechanism to identify devices based on the device ID=
-,
-should that be necessary. I am not inclined to let people invent a
-separate per-driver mechanism unless the kernel community decides that
-this is the way to go.
+Also, please fix the checkpatch issue reported by Wolfram.
 
 Thanks,
 Guenter
-
-
---JzkhzGad8BZEbvPNhybNQ4DCkage2QZje--
-
---D3ziB1DQZlBAttgUfYcal3w192NzPdJNj
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEiHPvMQj9QTOCiqgVyx8mb86fmYEFAl8tYgcACgkQyx8mb86f
-mYHgXA/9G2TBy36pfKt10TOh5xKEsal0OfqImvfi8xN8RFbEb9z4Lv1x/TGZA0g9
-JxWzzesGB5ijrZJ+toXTfbn4Yz9Fa3QsdFs71LRV/pDu3mXvjiu/awJtX2ETf7wB
-5kGx7ndUwrm5blXMkEiRf9mwOen4fof+hwxylJfm7UBKaspRsAQq4//ucH1uMjgy
-Lx0jR4ogwnvUGwWi95DqFQ98tyAuJKF6x65HwxYauA/XiyZXytjOzfrXUkePlhQJ
-x0gMfhLtOIMp+H0oMCqu1aKRrOfZYZi/oJ6aD+9B5Em2jL1LjVWUrrA1Ft0+30ES
-zFP0mwayGcnh0rGqEUp3GN1zlqnVsrkSDSC0Bh4OztZHD6h/bPo4T0Vg4v+eN/Hl
-JzauCcvGpN/lScQt75UD4PuLXEp3FWcEOyTuteqWO+jfZFTyjKlPI7qEgrZrvtR2
-q9ULXRZF+Zg534crmbPyg5X7pUf1tyvX2Z+hJalCUREYBh+urxmUGko8afRnwg97
-gEILEhVJZVsladGvsS8o+jrCzYMRBotDy+Ys42X63Wx3x3SurLS56W3KWHF3t6TQ
-CfQ2hMpouhvXZLDx9XlZ/9XuH5MA3LVkQwybwWL6nbWP5w6g3QQOZ97up7HjCU00
-KIUNQl2PAnvb3TYBx0lZ4Wzj8yT7lhEYObv1sHvzNAjJCyk6MnE=
-=TNBo
------END PGP SIGNATURE-----
-
---D3ziB1DQZlBAttgUfYcal3w192NzPdJNj--
