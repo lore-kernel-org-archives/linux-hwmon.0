@@ -2,133 +2,119 @@ Return-Path: <SRS0=T2qr=BU=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9854C433E1
-	for <linux-hwmon@archiver.kernel.org>; Mon, 10 Aug 2020 07:31:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 955A8C433E0
+	for <linux-hwmon@archiver.kernel.org>; Mon, 10 Aug 2020 09:32:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B9A2B20773
-	for <linux-hwmon@archiver.kernel.org>; Mon, 10 Aug 2020 07:31:49 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="RskBIHUq"
+	by mail.kernel.org (Postfix) with ESMTP id 7630A2070B
+	for <linux-hwmon@archiver.kernel.org>; Mon, 10 Aug 2020 09:32:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1597051940;
+	bh=rYQETMEuY/Gnmi3nPJ9bLKGcfo7ypYEaqWHmvIY24Tc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=NNZBq+xAyG6B0HR7xdHqEPqi3ykhZAo5jY1nsrP3r41Bj0aLIvr3KVSoKAeIZwNSB
+	 BbnvyBSjv2kOiHsilz8Oh/H1CM+ryZh7fdH+DIuN0cCoDkoXV/shoYYyj6bxhu09Au
+	 n7Y5D+J+ISn/0vU85SR8guq7qo8GWODprbscUvrs=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726390AbgHJHbt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 10 Aug 2020 03:31:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47964 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726331AbgHJHbt (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 10 Aug 2020 03:31:49 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDBA0C061756;
-        Mon, 10 Aug 2020 00:31:48 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        id S1726761AbgHJJcQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 10 Aug 2020 05:32:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41800 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726029AbgHJJcP (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 10 Aug 2020 05:32:15 -0400
+Received: from localhost (p54b3345b.dip0.t-ipconnect.de [84.179.52.91])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id EDE7F22ED5;
-        Mon, 10 Aug 2020 09:31:38 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1597044704;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5klQWMMHU8Ee9M3fQmjdVoNMXn8r8NKjAB/+jN2Z22o=;
-        b=RskBIHUqm9dJEuq24ixJy/wnCPI1k+LlLwGD3YDaMNrIxpT7alp+IYBbidU9g/DDYL17L4
-        +i3UjQC+yZJzfyR+7fP0K9WgOcXXb0uA7lTIZWVLIgGcL8iORxooes7NnEN1Xjqmv1M1tg
-        UbCyOZUMcttJxhVpPMjuSDQ4j3mrgTQ=
+        by mail.kernel.org (Postfix) with ESMTPSA id 3A5592063A;
+        Mon, 10 Aug 2020 09:32:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1597051934;
+        bh=rYQETMEuY/Gnmi3nPJ9bLKGcfo7ypYEaqWHmvIY24Tc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZI/odSDLJ46htbJHrtKOR4bSJyXdmSnl+ezLotbpkI4adzDtDDcKnlPwWNvQDfEre
+         MWW8hGpZ8+DATaSpJW9ecUCz+MsWwIBtyEpjiJPtKFJBfZ/itGxkbl/4nKiDm62+uf
+         bP4Iog99TecSpL6t6saehA78DrIR4ISeI9rL5+4w=
+Date:   Mon, 10 Aug 2020 11:32:09 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Stephen Kitt <steve@sk2.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5] hwmon/pmbus: use simple i2c probe function
+Message-ID: <20200810093209.GA1290@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Stephen Kitt <steve@sk2.org>, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200808210004.30880-1-steve@sk2.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Mon, 10 Aug 2020 09:31:38 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Pavel Machek <pavel@ucw.cz>
-Subject: Re: [PATCH v7 06/13] pwm: add support for sl28cpld PWM controller
-In-Reply-To: <20200810071328.GB4411@dell>
-References: <20200803093559.12289-1-michael@walle.cc>
- <20200803093559.12289-7-michael@walle.cc>
- <20200806084000.k3aj5nmqdodmb35v@pengutronix.de>
- <e288ca6cfee819223395712e04159dd9@walle.cc> <20200810071328.GB4411@dell>
-User-Agent: Roundcube Webmail/1.4.7
-Message-ID: <2ca0a3a3f03a1f5b9b2777738824123b@walle.cc>
-X-Sender: michael@walle.cc
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="BXVAT5kNtrzKuDFl"
+Content-Disposition: inline
+In-Reply-To: <20200808210004.30880-1-steve@sk2.org>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Am 2020-08-10 09:13, schrieb Lee Jones:
-> On Fri, 07 Aug 2020, Michael Walle wrote:
-> 
->> Hi Uwe, Hi Lee,
->> 
->> Am 2020-08-06 10:40, schrieb Uwe Kleine-König:
->> > On Mon, Aug 03, 2020 at 11:35:52AM +0200, Michael Walle wrote:
->> > > diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
->> > > index 7dbcf6973d33..a0d50d70c3b9 100644
->> > > --- a/drivers/pwm/Kconfig
->> > > +++ b/drivers/pwm/Kconfig
->> > > @@ -428,6 +428,16 @@ config PWM_SIFIVE
->> > >  	  To compile this driver as a module, choose M here: the module
->> > >  	  will be called pwm-sifive.
->> > >
->> > > +config PWM_SL28CPLD
->> > > +	tristate "Kontron sl28cpld PWM support"
->> > > +	select MFD_SIMPLE_MFD_I2C
->> >
->> > Is it sensible to present this option to everyone? Maybe
->> >
->> > 	depends on SOME_SYMBOL_ONLY_TRUE_ON_SL28CPLD || COMPILE_TEST
->> 
->> Because there is now no real MFD driver anymore, there is also
->> no symbol for that. The closest would be ARCH_ARM64 but I don't
->> think that is a good idea.
->> 
->> Lee, what do you think about adding a symbol to the MFD, which
->> selects MFD_SIMPLE_MFD_I2C but doesn't enable any C modules?
->> 
->> I.e.
->> config MFD_SL28CPLD
->>     tristate "Kontron sl28cpld"
->>     select MFD_SIMPLE_MFD_I2C
->>     help
->>       Say yes here to add support for the Kontron sl28cpld board
->>       management controller.
->> 
->> Then all the other device driver could depend on the MFD_SL28CPLD
->> symbol.
-> 
-> You want to add a virtual symbol to prevent having to present a real
-> one?  How is that a reasonable solution?
 
-(1) Its a symbol on which all sl28cpld will depend on. Thus they will
-     all be hidden if that is not set.
-(2) the drivers itself wouldn't need to depend on MFD_SIMPLE_MFD_I2C,
-     which is more correct, because they don't have anything to do with
-     i2c.
+--BXVAT5kNtrzKuDFl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--michael
+On Sat, Aug 08, 2020 at 11:00:04PM +0200, Stephen Kitt wrote:
+> pmbus_do_probe doesn't use the id information provided in its second
+> argument, so this can be removed, which then allows using the
+> single-parameter i2c probe function ("probe_new") for probes.
+>=20
+> This avoids scanning the identifier tables during probes.
+>=20
+> Drivers which didn't use the id are converted as-is; drivers which did
+> are modified as follows:
+>=20
+> * if the information in i2c_client is sufficient, that's used instead
+>   (client->name);
+> * configured v. probed comparisons are performed by comparing the
+>   configured name to the detected name, instead of the ids; this
+>   involves strcmp but is still cheaper than comparing all the device
+>   names when scanning the tables;
+> * anything else is handled by calling i2c_match_id() with the same
+>   level of error-handling (if any) as before.
+>=20
+> Additionally, the mismatch message in the ltc2978 driver is adjusted
+> so that it no longer assumes that the driver_data is an index into
+> ltc2978_id.
+>=20
+> Signed-off-by: Stephen Kitt <steve@sk2.org>
+
+Still no detailed review, but I support (and even appreciate!) the
+conversion:
+
+Acked-by: Wolfram Sang <wsa@kernel.org>
+
+
+--BXVAT5kNtrzKuDFl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8xFBUACgkQFA3kzBSg
+KbanKg/7BAf/sKdiycBUflUoB+Aqwr8+6ECBg5faGYiLlco2Ho7OTFU5G3HbIc3+
+Ygj/5BON9feshnjbwmDu/0+Mm0T1Vr91XYHPSxq4WKTHuNZa4NiAARWfJQlZ+/h1
+a2dxBZlYrv9UT54THde7GIrJa/eScVclPa/QfQetzrEggM1D1Rjl8jlVETe7ZiuM
+AuXqLyILQwdfSvuL/sMfQ3LDPhvWmPACGhiwiJE6KuT5BKvRGYQzYVMltwHITX5a
+TqTST7AXlasj4+XBCmAbLsS8d4qodXvfSUTHnrsgAYoY6eBuV9ccnkX37TBxCDEL
+G8aG2VnEdU0glQ8EiReNZUYCswHXq7hQ9QzJz967qcounKsjchcTM+yR9Rdgj3xR
+oe71Mx37jNLozylq3mHX3MflCxR+MhuornB/r3hi76pg+VQbR3KM3o5HQxLwcmhS
+NHgUgo7E+ua0cH+/30iHrIWPJC+uVFwb/HL1ZlVOYGoexPt733EdOHRDKPRR5MQb
+EGD2WscVZwj5Gfopb+huUQmS+YsbeswH+waNIC7HFVa3lrpm78wEuFrs0rot/5Ui
+mmPx+IZBxTRGHP+RQa+dM4TTqk+KFWAul/s/puw928lvyEni5Nyv350F4F/aL8De
+Kdl75gR7rDcT/rambE4X9SJbwsqVG4ckR3FOdzu4xELKeCJnZmc=
+=P9Vd
+-----END PGP SIGNATURE-----
+
+--BXVAT5kNtrzKuDFl--
