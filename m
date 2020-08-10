@@ -2,94 +2,148 @@ Return-Path: <SRS0=T2qr=BU=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51B43C433E0
-	for <linux-hwmon@archiver.kernel.org>; Mon, 10 Aug 2020 05:48:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 908C1C433DF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 10 Aug 2020 07:13:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 28E2F20756
-	for <linux-hwmon@archiver.kernel.org>; Mon, 10 Aug 2020 05:48:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6E0B42076C
+	for <linux-hwmon@archiver.kernel.org>; Mon, 10 Aug 2020 07:13:35 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xQ1R7jn5"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725774AbgHJFsY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 10 Aug 2020 01:48:24 -0400
-Received: from mga14.intel.com ([192.55.52.115]:45752 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725763AbgHJFsX (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 10 Aug 2020 01:48:23 -0400
-IronPort-SDR: BWnfLhQ7jG9iG359zoQo7OhguVyqwTkWuctKzTyMWBUxHlVGlFdqa6oJsJjXiThFjwXTNAMUyJ
- Vj7snh0ZEJSw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9708"; a="152696572"
-X-IronPort-AV: E=Sophos;i="5.75,456,1589266800"; 
-   d="scan'208";a="152696572"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2020 22:48:23 -0700
-IronPort-SDR: Xma9uFcgoHZ12aF9aCZ1Wsx8W1HpsE56srGnOElGKQL4KQfvcTOjm62VMNtlWnPhfpKuIgksbD
- UUhT59yPTUOQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,456,1589266800"; 
-   d="scan'208";a="438568898"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga004.jf.intel.com with ESMTP; 09 Aug 2020 22:48:23 -0700
-Received: from [10.91.127.224] (zlukwins-pc.igk.intel.com [10.91.127.224])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id D3EE7580787;
-        Sun,  9 Aug 2020 22:48:22 -0700 (PDT)
-Subject: Re: [PATCH 0/3] Extending hwmon ABI with attributes for rated values
-To:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-References: <1596224237-32280-1-git-send-email-zbigniew.lukwinski@linux.intel.com>
- <66a7bf34-3b2a-a61e-d382-8b2ab9ac1101@roeck-us.net>
-From:   zlukwins <zbigniew.lukwinski@linux.intel.com>
-Message-ID: <873bc977-0930-dfbb-921d-43dabcae8035@linux.intel.com>
-Date:   Mon, 10 Aug 2020 07:39:23 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726010AbgHJHNe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 10 Aug 2020 03:13:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45150 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726135AbgHJHNd (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 10 Aug 2020 03:13:33 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2702C061788
+        for <linux-hwmon@vger.kernel.org>; Mon, 10 Aug 2020 00:13:32 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id c15so7095923wrs.11
+        for <linux-hwmon@vger.kernel.org>; Mon, 10 Aug 2020 00:13:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=+TUd9JRbZ1pyZaCnuclZ/AO9DW45PgvoNIXxTZ6zZrE=;
+        b=xQ1R7jn546DiRqc42dCW1K0GBZinc8U+spujkwGvBUURTctIhYaWn2QdhGZfToWnw/
+         5WaTr1uaqsnHbcqicFNMbrOXBvK3DRuOoa97gNdCZ3P/jMkT5DMw8Oqxo1o+rrdWnycB
+         F1Cmwbw50K8AsHAmU5ovD0YutO27HrbG0f5BRd7XGL/5CQdplPTOe43ukzJHgt0QJuIM
+         D49YXIRmo8bTF+TIGOxUn4gLC+4NkqpjzL3XxxmadY2k4VEgAi1B7xaQTHPeVPo2lVZS
+         qyQZU1p/vIReqk4RRLfGi8wx+XfFdG1W58Ic/CLzzZfCQ4+MaAjNBW4DYLLJJNqNd9tS
+         kRWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=+TUd9JRbZ1pyZaCnuclZ/AO9DW45PgvoNIXxTZ6zZrE=;
+        b=sJsq+F8R0vtI0mYxnGCdxBKz136fajCUTHxbDLeofmgmjBIaiaHfckQtms822uKWrG
+         EwUP1jDzHeUtCZyxx1ajp3UiMUTRjWR3MN7jBL+ilsTeKrFS/haFI1MN916re1NFIcu1
+         c3355tMPgGPx0hTEq/2wOoMFSGNL8NiRnF3xXaQvZYzIKvBZWabHlTCnlvyPmNUXbPDf
+         XLuvjbETQLlXBksP95NSJdIqwsi0VwH1ezUl+iSaRgruX5fgsKrNO1vbBn81nQjJRXO0
+         u7kLHT4lZsqm8CZXgY00eEyegBIVjpGqMdqxWmayayzubXUpc71UKtSXr6TA11PJ/FjG
+         Sa8g==
+X-Gm-Message-State: AOAM530LCZSef1oJOCZg2i1AILumtgskpwtTDHqzmEqBtWZoTWX0x4IG
+        QFW3e7Brcn+8d9LdgDqccQrxbw==
+X-Google-Smtp-Source: ABdhPJyqMpwZFIytM3dip4yb9zg/T5q+SVei4Y+VdZ3uIDP/QBRxHBX79zX6kLVNBEQ3N66zTYZL3w==
+X-Received: by 2002:a5d:51c3:: with SMTP id n3mr23689763wrv.104.1597043611405;
+        Mon, 10 Aug 2020 00:13:31 -0700 (PDT)
+Received: from dell ([2.27.167.73])
+        by smtp.gmail.com with ESMTPSA id t3sm3850812wrx.5.2020.08.10.00.13.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Aug 2020 00:13:30 -0700 (PDT)
+Date:   Mon, 10 Aug 2020 08:13:28 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Pavel Machek <pavel@ucw.cz>
+Subject: Re: [PATCH v7 06/13] pwm: add support for sl28cpld PWM controller
+Message-ID: <20200810071328.GB4411@dell>
+References: <20200803093559.12289-1-michael@walle.cc>
+ <20200803093559.12289-7-michael@walle.cc>
+ <20200806084000.k3aj5nmqdodmb35v@pengutronix.de>
+ <e288ca6cfee819223395712e04159dd9@walle.cc>
 MIME-Version: 1.0
-In-Reply-To: <66a7bf34-3b2a-a61e-d382-8b2ab9ac1101@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+In-Reply-To: <e288ca6cfee819223395712e04159dd9@walle.cc>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 8/7/20 5:52 PM, Guenter Roeck wrote:
-> On 7/31/20 12:37 PM, Zbigniew Lukwinski wrote:
->> This patch series is about extending hwmon ABI with new attributes
->> for rated values. All of that is to cover PMBus specification which
->> provides registers reporting rated values:
->> PMBus Power System Mgt Protocol Specification - Part II – Revision 1.3.1,
->> chapters: 22.3.1 - 22.3.10, 22.3.15
->>
->> Zbigniew Lukwinski (3):
->>    docs: hwmon: Add attributes to report rated values
->>    hwmon: (core) Add support for rated attributes
->>    hwmon: (pmbus/core) Add support for rated attributes
->>
->>   Documentation/hwmon/pmbus.rst           | 15 ++++++-
->>   Documentation/hwmon/sysfs-interface.rst | 70 +++++++++++++++++++++++++++++++++
->>   drivers/hwmon/hwmon.c                   | 10 +++++
->>   drivers/hwmon/pmbus/pmbus.h             | 13 ++++++
->>   drivers/hwmon/pmbus/pmbus_core.c        | 49 +++++++++++++++++++----
->>   include/linux/hwmon.h                   | 20 ++++++++++
->>   6 files changed, 168 insertions(+), 9 deletions(-)
->>
-> I have been struggling with "rated_{min,max}" vs. "{min,max}_rated",
-> but then figured it does not really make a difference, and rated_ as
-> prefix may actually make more sense. I'll queue the series for v5.10.
-> Let's see if there is any feedback.
->
-> Thanks,
-> Guenter
+On Fri, 07 Aug 2020, Michael Walle wrote:
 
-Sure.
+> Hi Uwe, Hi Lee,
+> 
+> Am 2020-08-06 10:40, schrieb Uwe Kleine-König:
+> > On Mon, Aug 03, 2020 at 11:35:52AM +0200, Michael Walle wrote:
+> > > diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
+> > > index 7dbcf6973d33..a0d50d70c3b9 100644
+> > > --- a/drivers/pwm/Kconfig
+> > > +++ b/drivers/pwm/Kconfig
+> > > @@ -428,6 +428,16 @@ config PWM_SIFIVE
+> > >  	  To compile this driver as a module, choose M here: the module
+> > >  	  will be called pwm-sifive.
+> > > 
+> > > +config PWM_SL28CPLD
+> > > +	tristate "Kontron sl28cpld PWM support"
+> > > +	select MFD_SIMPLE_MFD_I2C
+> > 
+> > Is it sensible to present this option to everyone? Maybe
+> > 
+> > 	depends on SOME_SYMBOL_ONLY_TRUE_ON_SL28CPLD || COMPILE_TEST
+> 
+> Because there is now no real MFD driver anymore, there is also
+> no symbol for that. The closest would be ARCH_ARM64 but I don't
+> think that is a good idea.
+> 
+> Lee, what do you think about adding a symbol to the MFD, which
+> selects MFD_SIMPLE_MFD_I2C but doesn't enable any C modules?
+> 
+> I.e.
+> config MFD_SL28CPLD
+>     tristate "Kontron sl28cpld"
+>     select MFD_SIMPLE_MFD_I2C
+>     help
+>       Say yes here to add support for the Kontron sl28cpld board
+>       management controller.
+> 
+> Then all the other device driver could depend on the MFD_SL28CPLD
+> symbol.
 
-Thanks,
+You want to add a virtual symbol to prevent having to present a real
+one?  How is that a reasonable solution?
 
-Zbigniew
-
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
