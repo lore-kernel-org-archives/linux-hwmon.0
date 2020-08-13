@@ -1,153 +1,135 @@
-Return-Path: <SRS0=j74Z=BW=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=nJF0=BX=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A47A8C433E5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Aug 2020 23:05:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2B74C433E1
+	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Aug 2020 07:09:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 809F320771
-	for <linux-hwmon@archiver.kernel.org>; Wed, 12 Aug 2020 23:05:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1597273532;
-	bh=6kwxpshrOlbOHxWnmXC6+dWtt2L5X/Drj58h8rpdMCA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=B39R5ZaADilOSImUFq7Kw3oP++7wLoEchWbOsYoP46TxXNXgveSe3KA8zcCSQ1b+a
-	 azlim/cnK8EaSPT2Z3So1HlMtpjwgt+koZ5XppEZIZlxZd4MwLDyEqY2RmhpEHWvum
-	 p0RrcsX/PvjIB0DY23NEuunpezE/VdrihGkt9lM8=
+	by mail.kernel.org (Postfix) with ESMTP id CC1AE2080C
+	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Aug 2020 07:09:44 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="KMS6Bhgh"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726578AbgHLXFW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 12 Aug 2020 19:05:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56976 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726533AbgHLXFV (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 12 Aug 2020 19:05:21 -0400
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726697AbgHMHJo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 13 Aug 2020 03:09:44 -0400
+Received: from ssl.serverraum.org ([176.9.125.105]:46899 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726044AbgHMHJn (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 13 Aug 2020 03:09:43 -0400
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9B05822BF3;
-        Wed, 12 Aug 2020 23:05:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597273520;
-        bh=6kwxpshrOlbOHxWnmXC6+dWtt2L5X/Drj58h8rpdMCA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pXDZRt76CPWxVlpilBeAf66pO/Ch1+UOaSOgdUpIGMcw2xAS2mFHBEgkKJVucyrd/
-         hFrdQmO7EEU0DOv8a5XHHMAntvFEpH8ijK+mCysryubzOS2R2XGypW54K9swm6SsIs
-         b7zU39V5JMU64Uhe2oipgDLWWHGgSe5VXnIpigps=
-Received: by mail-oi1-f170.google.com with SMTP id u63so3384377oie.5;
-        Wed, 12 Aug 2020 16:05:20 -0700 (PDT)
-X-Gm-Message-State: AOAM531IZBzkm9SW7u4Ll0dz2BzE1TEIB7GJrdP7SZFkd9Fl6578K6/D
-        TZuN3gv5Y+jYhGEA04MJz9gQHCjYIc3va2d6mQ==
-X-Google-Smtp-Source: ABdhPJx2qQebZiNBPQzgE1fpdypeYG9ycnPVX3JxYluiX5nbkNkxeZlpxpCsMAonDMWnL7JIOVI286FePABwvHucHl8=
-X-Received: by 2002:aca:bb82:: with SMTP id l124mr1235268oif.106.1597273520003;
- Wed, 12 Aug 2020 16:05:20 -0700 (PDT)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id E483222EDE;
+        Thu, 13 Aug 2020 09:09:32 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1597302580;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ok4pEqRTPwdokbHa/IMlTv6DhwAEzETP5M+d49NSRsM=;
+        b=KMS6BhghAQ9AwIZUVDheuUNtL7OEYIkis7uX8/9dUmN63Qe/n9j00W7sI8bUHvL/pRW1/7
+        wOlmzcsgJNfoPreYCDGd6SiW85qjkd2QMTfXndnjgrXQHNuuWI+BHnE3e91xiw1pZ/N7aV
+        eCxtpctn8ewVaU0Ah6sRQJrKLcV7OaI=
 MIME-Version: 1.0
-References: <20200812203618.2656699-1-robh@kernel.org> <f5dedf2d8d8057de3eaa2f9126f44cebb0653b09.camel@perches.com>
-In-Reply-To: <f5dedf2d8d8057de3eaa2f9126f44cebb0653b09.camel@perches.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 12 Aug 2020 17:05:08 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKBzqMHMMRwBJUjomxOpZAop_+TXBjLCb6ntwZzNMy=3Q@mail.gmail.com>
-Message-ID: <CAL_JsqKBzqMHMMRwBJUjomxOpZAop_+TXBjLCb6ntwZzNMy=3Q@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Whitespace clean-ups in schema files
-To:     Joe Perches <joe@perches.com>
-Cc:     devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
-        <linux-remoteproc@vger.kernel.org>,
-        Linux HWMON List <linux-hwmon@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
-        Linux Input <linux-input@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux-ALSA <alsa-devel@alsa-project.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Thu, 13 Aug 2020 09:09:32 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Pavel Machek <pavel@ucw.cz>
+Subject: Re: [PATCH v7 06/13] pwm: add support for sl28cpld PWM controller
+In-Reply-To: <2ca0a3a3f03a1f5b9b2777738824123b@walle.cc>
+References: <20200803093559.12289-1-michael@walle.cc>
+ <20200803093559.12289-7-michael@walle.cc>
+ <20200806084000.k3aj5nmqdodmb35v@pengutronix.de>
+ <e288ca6cfee819223395712e04159dd9@walle.cc> <20200810071328.GB4411@dell>
+ <2ca0a3a3f03a1f5b9b2777738824123b@walle.cc>
+User-Agent: Roundcube Webmail/1.4.7
+Message-ID: <514d83dadc2055abb5e6b5328eff4d97@walle.cc>
+X-Sender: michael@walle.cc
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Aug 12, 2020 at 4:32 PM Joe Perches <joe@perches.com> wrote:
->
-> On Wed, 2020-08-12 at 14:36 -0600, Rob Herring wrote:
-> > Clean-up incorrect indentation, extra spaces, long lines, and missing
-> > EOF newline in schema files. Most of the clean-ups are for list
-> > indentation which should always be 2 spaces more than the preceding
->                                      ^
-> > keyword.
+Am 2020-08-10 09:31, schrieb Michael Walle:
+> Am 2020-08-10 09:13, schrieb Lee Jones:
+>> On Fri, 07 Aug 2020, Michael Walle wrote:
+>> 
+>>> Hi Uwe, Hi Lee,
+>>> 
+>>> Am 2020-08-06 10:40, schrieb Uwe Kleine-König:
+>>> > On Mon, Aug 03, 2020 at 11:35:52AM +0200, Michael Walle wrote:
+>>> > > diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
+>>> > > index 7dbcf6973d33..a0d50d70c3b9 100644
+>>> > > --- a/drivers/pwm/Kconfig
+>>> > > +++ b/drivers/pwm/Kconfig
+>>> > > @@ -428,6 +428,16 @@ config PWM_SIFIVE
+>>> > >  	  To compile this driver as a module, choose M here: the module
+>>> > >  	  will be called pwm-sifive.
+>>> > >
+>>> > > +config PWM_SL28CPLD
+>>> > > +	tristate "Kontron sl28cpld PWM support"
+>>> > > +	select MFD_SIMPLE_MFD_I2C
+>>> >
+>>> > Is it sensible to present this option to everyone? Maybe
+>>> >
+>>> > 	depends on SOME_SYMBOL_ONLY_TRUE_ON_SL28CPLD || COMPILE_TEST
+>>> 
+>>> Because there is now no real MFD driver anymore, there is also
+>>> no symbol for that. The closest would be ARCH_ARM64 but I don't
+>>> think that is a good idea.
+>>> 
+>>> Lee, what do you think about adding a symbol to the MFD, which
+>>> selects MFD_SIMPLE_MFD_I2C but doesn't enable any C modules?
+>>> 
+>>> I.e.
+>>> config MFD_SL28CPLD
+>>>     tristate "Kontron sl28cpld"
+>>>     select MFD_SIMPLE_MFD_I2C
+>>>     help
+>>>       Say yes here to add support for the Kontron sl28cpld board
+>>>       management controller.
+>>> 
+>>> Then all the other device driver could depend on the MFD_SL28CPLD
+>>> symbol.
+>> 
+>> You want to add a virtual symbol to prevent having to present a real
+>> one?  How is that a reasonable solution?
+> 
+> (1) Its a symbol on which all sl28cpld will depend on. Thus they will
+>     all be hidden if that is not set.
+> (2) the drivers itself wouldn't need to depend on MFD_SIMPLE_MFD_I2C,
+>     which is more correct, because they don't have anything to do with
+>     i2c.
 
-keyword is the key part...
+Lee, would you accept such a symbol? Otherwise, I'd leave it as is.
 
-> []
-> > diff --git a/Documentation/devicetree/bindings/arm/arm,integrator.yaml b/Documentation/devicetree/bindings/arm/arm,integrator.yaml
-> > index 192ded470e32..f0daf990e077 100644
-> > --- a/Documentation/devicetree/bindings/arm/arm,integrator.yaml
-> > +++ b/Documentation/devicetree/bindings/arm/arm,integrator.yaml
-> > @@ -67,9 +67,9 @@ patternProperties:
-> >        compatible:
-> >          items:
-> >            - enum:
-> > -            - arm,integrator-ap-syscon
-> > -            - arm,integrator-cp-syscon
-> > -            - arm,integrator-sp-syscon
-> > +              - arm,integrator-ap-syscon
-> > +              - arm,integrator-cp-syscon
-> > +              - arm,integrator-sp-syscon
->
-> Confused a bit here.
->           - enum:
->         10 spaces to dash
-> old line:
->             - arm,integrator-ap-syscon
->         12 spaces to dash
-> new line:
->               - arm,integrator-ap-syscon
->         14 spaces to dash
->
-> Is it supposed to be 2 spaces more than the preceding line
-> or 4 more?
-
-If the preceding line is a list entry (i.e. starts with '-'), then
-it's 4 more spaces. It's always 2 more spaces than the preceding
-keyword start (aka json-schema vocabulary).
-
-Arguably, this style is a bit inconsistent in that the '-' counts
-toward as indentation of the current line, but not the preceding line.
-However, I think this style is a bit less error prone and easier to
-review. With the other style (always N more spaces) it's harder to
-distinguish lists vs. dicts. For example, you can have something like
-this:
-
-- key:
-  - foo
-  - bar
-
-- key:
-    foo
-    bar
-
-- key:
-  - foo
-    bar
-
-All 3 of these could be valid. Which one was intended? (Can't really
-tell here, but you can with actual DT schema.)
-
-Rob
+-michael
