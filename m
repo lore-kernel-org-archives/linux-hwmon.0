@@ -2,134 +2,120 @@ Return-Path: <SRS0=nJF0=BX=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2B74C433E1
-	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Aug 2020 07:09:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AF43C433E1
+	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Aug 2020 07:51:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CC1AE2080C
-	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Aug 2020 07:09:44 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="KMS6Bhgh"
+	by mail.kernel.org (Postfix) with ESMTP id 84CCD20791
+	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Aug 2020 07:51:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726697AbgHMHJo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 13 Aug 2020 03:09:44 -0400
-Received: from ssl.serverraum.org ([176.9.125.105]:46899 "EHLO
-        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726044AbgHMHJn (ORCPT
+        id S1726627AbgHMHvJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 13 Aug 2020 03:51:09 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:38760 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726106AbgHMHvJ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 13 Aug 2020 03:09:43 -0400
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id E483222EDE;
-        Thu, 13 Aug 2020 09:09:32 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1597302580;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ok4pEqRTPwdokbHa/IMlTv6DhwAEzETP5M+d49NSRsM=;
-        b=KMS6BhghAQ9AwIZUVDheuUNtL7OEYIkis7uX8/9dUmN63Qe/n9j00W7sI8bUHvL/pRW1/7
-        wOlmzcsgJNfoPreYCDGd6SiW85qjkd2QMTfXndnjgrXQHNuuWI+BHnE3e91xiw1pZ/N7aV
-        eCxtpctn8ewVaU0Ah6sRQJrKLcV7OaI=
+        Thu, 13 Aug 2020 03:51:09 -0400
+Received: by mail-ot1-f65.google.com with SMTP id q9so4110499oth.5;
+        Thu, 13 Aug 2020 00:51:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eU62SrftExeZEPFtSlHLsBRzbUkLx1KNOgZc6VKFeBQ=;
+        b=RKVY0mqqakUrEXk4TORV8A5/ZSMY0dexhKfXyaOKBp8tYT6+lN9tMY1gCu59dMSnI/
+         6Av5sXCLtCtfska6KBUfoUvPLN8QSlHGcwX+BKv8ZNWhNtirhMGElzBnWp56J7vtBCeA
+         RTsTm+tpM0JqO6hs1Zx9oL0KiDPnHu2wr8nXIFBaGz9jqMUEyZCYMyj21d8ckpZmX8IH
+         sIyh51oPoVvqSR3qDoGMDZJhbXuz4s9KHdaT9j4oPeIaqxws0OL9u53GcL8uZhE7hrov
+         ikjJM0LMxR/OG4BC9tZAySXGXWwQpPbcG9j3oyJJCCrBhecUJhWEIB5ZPymwSBlP+imO
+         EXuw==
+X-Gm-Message-State: AOAM531KpbVTNZA6DQGhlLakjE36ZGk11NQSWXrXhgb2m/BrbDAUDZAN
+        GTNNlK5/qceLxjH+paJhJQLuqYhFPre+GsLWPoc=
+X-Google-Smtp-Source: ABdhPJzAAKS8g3t/W5mSJd2Vboc2FEvoNvVXoru7u4kNP7jabPCwVCki2JjTk/fEfMzVv8QAFC24k07bLAU2LYhSK+k=
+X-Received: by 2002:a05:6830:1b79:: with SMTP id d25mr2990956ote.107.1597305067462;
+ Thu, 13 Aug 2020 00:51:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Thu, 13 Aug 2020 09:09:32 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Pavel Machek <pavel@ucw.cz>
-Subject: Re: [PATCH v7 06/13] pwm: add support for sl28cpld PWM controller
-In-Reply-To: <2ca0a3a3f03a1f5b9b2777738824123b@walle.cc>
-References: <20200803093559.12289-1-michael@walle.cc>
- <20200803093559.12289-7-michael@walle.cc>
- <20200806084000.k3aj5nmqdodmb35v@pengutronix.de>
- <e288ca6cfee819223395712e04159dd9@walle.cc> <20200810071328.GB4411@dell>
- <2ca0a3a3f03a1f5b9b2777738824123b@walle.cc>
-User-Agent: Roundcube Webmail/1.4.7
-Message-ID: <514d83dadc2055abb5e6b5328eff4d97@walle.cc>
-X-Sender: michael@walle.cc
+References: <20200812203618.2656699-1-robh@kernel.org>
+In-Reply-To: <20200812203618.2656699-1-robh@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 13 Aug 2020 09:50:55 +0200
+Message-ID: <CAMuHMdVXvSRF-G_TYu4P+Bqa2FZJWsUCyzqFur3Rb-tBExfbsw@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: Whitespace clean-ups in schema files
+To:     Rob Herring <robh@kernel.org>
+Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, linux-hwmon@vger.kernel.org,
+        linux-rtc@vger.kernel.org,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-iio@vger.kernel.org,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
+        <linux-remoteproc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        linux-input@vger.kernel.org, linux-clk <linux-clk@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Am 2020-08-10 09:31, schrieb Michael Walle:
-> Am 2020-08-10 09:13, schrieb Lee Jones:
->> On Fri, 07 Aug 2020, Michael Walle wrote:
->> 
->>> Hi Uwe, Hi Lee,
->>> 
->>> Am 2020-08-06 10:40, schrieb Uwe Kleine-König:
->>> > On Mon, Aug 03, 2020 at 11:35:52AM +0200, Michael Walle wrote:
->>> > > diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
->>> > > index 7dbcf6973d33..a0d50d70c3b9 100644
->>> > > --- a/drivers/pwm/Kconfig
->>> > > +++ b/drivers/pwm/Kconfig
->>> > > @@ -428,6 +428,16 @@ config PWM_SIFIVE
->>> > >  	  To compile this driver as a module, choose M here: the module
->>> > >  	  will be called pwm-sifive.
->>> > >
->>> > > +config PWM_SL28CPLD
->>> > > +	tristate "Kontron sl28cpld PWM support"
->>> > > +	select MFD_SIMPLE_MFD_I2C
->>> >
->>> > Is it sensible to present this option to everyone? Maybe
->>> >
->>> > 	depends on SOME_SYMBOL_ONLY_TRUE_ON_SL28CPLD || COMPILE_TEST
->>> 
->>> Because there is now no real MFD driver anymore, there is also
->>> no symbol for that. The closest would be ARCH_ARM64 but I don't
->>> think that is a good idea.
->>> 
->>> Lee, what do you think about adding a symbol to the MFD, which
->>> selects MFD_SIMPLE_MFD_I2C but doesn't enable any C modules?
->>> 
->>> I.e.
->>> config MFD_SL28CPLD
->>>     tristate "Kontron sl28cpld"
->>>     select MFD_SIMPLE_MFD_I2C
->>>     help
->>>       Say yes here to add support for the Kontron sl28cpld board
->>>       management controller.
->>> 
->>> Then all the other device driver could depend on the MFD_SL28CPLD
->>> symbol.
->> 
->> You want to add a virtual symbol to prevent having to present a real
->> one?  How is that a reasonable solution?
-> 
-> (1) Its a symbol on which all sl28cpld will depend on. Thus they will
->     all be hidden if that is not set.
-> (2) the drivers itself wouldn't need to depend on MFD_SIMPLE_MFD_I2C,
->     which is more correct, because they don't have anything to do with
->     i2c.
+Hi Rob,
 
-Lee, would you accept such a symbol? Otherwise, I'd leave it as is.
+On Wed, Aug 12, 2020 at 10:36 PM Rob Herring <robh@kernel.org> wrote:
+> Clean-up incorrect indentation, extra spaces, long lines, and missing
+> EOF newline in schema files. Most of the clean-ups are for list
+> indentation which should always be 2 spaces more than the preceding
+> keyword.
+>
+> Found with yamllint (which I plan to integrate into the checks).
 
--michael
+> Signed-off-by: Rob Herring <robh@kernel.org>
+
+Thanks for your patch!
+
+> --- a/Documentation/devicetree/bindings/clock/renesas,cpg-clocks.yaml
+> +++ b/Documentation/devicetree/bindings/clock/renesas,cpg-clocks.yaml
+> @@ -24,9 +24,9 @@ properties:
+>        - const: renesas,r8a7778-cpg-clocks # R-Car M1
+>        - const: renesas,r8a7779-cpg-clocks # R-Car H1
+>        - items:
+> -        - enum:
+> -            - renesas,r7s72100-cpg-clocks # RZ/A1H
+> -        - const: renesas,rz-cpg-clocks    # RZ/A1
+> +          - enum:
+> +              - renesas,r7s72100-cpg-clocks # RZ/A1H
+> +          - const: renesas,rz-cpg-clocks    # RZ/A1
+
+This change breaks alignment of the comments at the end of each line.
+
+>        - const: renesas,sh73a0-cpg-clocks  # SH-Mobile AG5
+
+(I only checked the files I care about)
+
+If you don't update commit  e0fe7fc6f2ca0781 ("dt-bindings: Whitespace
+clean-ups in schema files"), I can send a patch after v5.9-rc1.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
