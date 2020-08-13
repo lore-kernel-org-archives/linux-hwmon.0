@@ -2,148 +2,218 @@ Return-Path: <SRS0=nJF0=BX=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.5 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09ADFC433EB
-	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Aug 2020 10:31:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 270D5C433DF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Aug 2020 12:48:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E875820838
-	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Aug 2020 10:31:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F0D4D20829
+	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Aug 2020 12:48:51 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="rwOU+opn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726518AbgHMKbg convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 13 Aug 2020 06:31:36 -0400
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:35289 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726048AbgHMKbf (ORCPT
+        id S1726192AbgHMMsv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 13 Aug 2020 08:48:51 -0400
+Received: from ssl.serverraum.org ([176.9.125.105]:55101 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726053AbgHMMsu (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 13 Aug 2020 06:31:35 -0400
-Received: from [37.161.87.136] (port=46755 helo=[192.168.42.162])
-        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1k6AW9-000FlW-5k; Thu, 13 Aug 2020 12:31:29 +0200
-Subject: Re: [PATCH] dt-bindings: Whitespace clean-ups in schema files
-To:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-media@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <20200812203618.2656699-1-robh@kernel.org>
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-Message-ID: <d5808e9c-07fe-1c28-b9a6-a16abe9df458@lucaceresoli.net>
-Date:   Thu, 13 Aug 2020 12:31:28 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Thu, 13 Aug 2020 08:48:50 -0400
+Received: from mwalle01.sab.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id E85EB22FEB;
+        Thu, 13 Aug 2020 14:48:46 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1597322927;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=W3vsjuvtvKT05YvkX0b8P6sF+NlkwEsgM58H+1oBK6A=;
+        b=rwOU+opncGQLQ8CB7DULYAEAfu7G3J8X0kNwzPp3NY2oAmvd0WSPslI3nhuZbB8DpQcz9V
+        vpshEvLJT3yhczSeHq56ajcmcCsSA7Fg/iTG6UFbU2T1j+m0MxbgtQmqhxNWp0PQUyOAHN
+        VhNlzng+qV5L15lPqzJXwNVV13QsL+E=
+From:   Michael Walle <michael@walle.cc>
+To:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH v8 01/13] mfd: add simple regmap based I2C driver
+Date:   Thu, 13 Aug 2020 14:48:20 +0200
+Message-Id: <20200813124832.17349-2-michael@walle.cc>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200813124832.17349-1-michael@walle.cc>
+References: <20200813124832.17349-1-michael@walle.cc>
 MIME-Version: 1.0
-In-Reply-To: <20200812203618.2656699-1-robh@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8BIT
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Transfer-Encoding: 8bit
+X-Spam: Yes
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Rob,
+There are I2C devices which contain several different functions but
+doesn't require any special access functions. For these kind of drivers
+an I2C regmap should be enough.
 
-On 12/08/20 22:36, Rob Herring wrote:
-> Clean-up incorrect indentation, extra spaces, long lines, and missing
-> EOF newline in schema files. Most of the clean-ups are for list
-> indentation which should always be 2 spaces more than the preceding
-> keyword.
-> 
-> Found with yamllint (which I plan to integrate into the checks).
+Create an I2C driver which creates an I2C regmap and enumerates its
+children. If a device wants to use this as its MFD core driver, it has
+to add an individual compatible string. It may provide its own regmap
+configuration.
 
-[...]
+Subdevices can use dev_get_regmap() on the parent to get their regmap
+instance.
 
-> diff --git a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
-> index 3d4e1685cc55..28c6461b9a9a 100644
-> --- a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
-> +++ b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
-> @@ -95,10 +95,10 @@ allOf:
->        # Devices without builtin crystal
->        properties:
->          clock-names:
-> -            minItems: 1
-> -            maxItems: 2
-> -            items:
-> -              enum: [ xin, clkin ]
-> +          minItems: 1
-> +          maxItems: 2
-> +          items:
-> +            enum: [ xin, clkin ]
->          clocks:
->            minItems: 1
->            maxItems: 2
+Signed-off-by: Michael Walle <michael@walle.cc>
+---
+Changes since v7:
+ - none
 
-Thanks for noticing, LGTM.
+Changes since v6:
+ - added SIMPLE_MFD_I2C help text
+ - revised description in module header
 
-[...]
+Changes since v5:
+ - removed "select MFD_CORE" in Kconfig
+ - removed help text in Kconfig, we assume that the users of this
+   driver will have a "select MFD_SIMPLE_MFD_I2C". Instead added
+   a small description to the driver itself.
+ - removed "struct simple_mfd_i2c_config" and use regmap_config
+   directly
+ - changed builtin_i2c_driver() to module_i2c_driver(), added
+   MODULE_ boilerplate
+ - cleaned up the included files
 
-> diff --git a/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml b/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
-> index d7dac16a3960..36dc7b56a453 100644
-> --- a/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
-> +++ b/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
-> @@ -33,8 +33,8 @@ properties:
->      $ref: /schemas/types.yaml#/definitions/uint32
->  
->    touchscreen-min-pressure:
-> -    description: minimum pressure on the touchscreen to be achieved in order for the
-> -                 touchscreen driver to report a touch event.
-> +    description: minimum pressure on the touchscreen to be achieved in order
-> +      for the touchscreen driver to report a touch event.
+Changes since v4:
+ - new patch. Lee, please bear with me. I didn't want to delay the
+   new version (where a lot of remarks on the other patches were
+   addressed) even more, just because we haven't figured out how
+   to deal with the MFD part. So for now, I've included this one.
 
-Out of personal taste, I find the original layout more pleasant and
-readable. This third option is also good, especially for long descriptions:
+ drivers/mfd/Kconfig          | 12 ++++++++
+ drivers/mfd/Makefile         |  1 +
+ drivers/mfd/simple-mfd-i2c.c | 56 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 69 insertions(+)
+ create mode 100644 drivers/mfd/simple-mfd-i2c.c
 
-  description:
-    minimum pressure on the touchscreen to be achieved in order for the
-    touchscreen driver to report a touch event.
-
-At first glance yamllint seems to support exactly these two by default:
-
-> With indentation: {spaces: 4, check-multi-line-strings: true}
-> 
-> the following code snippet would PASS:
-> 
-> Blaise Pascal:
->     Je vous écris une longue lettre parce que
->     je n'ai pas le temps d'en écrire une courte.
-> 
-> the following code snippet would PASS:
-> 
-> Blaise Pascal: Je vous écris une longue lettre parce que
->                je n'ai pas le temps d'en écrire une courte.
-> 
-> the following code snippet would FAIL:
-> 
-> Blaise Pascal: Je vous écris une longue lettre parce que
->   je n'ai pas le temps d'en écrire une courte.
-> 
-(https://yamllint.readthedocs.io/en/stable/rules.html#module-yamllint.rules.indentation)
-
-
+diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+index 33df0837ab41..6e1a38944d28 100644
+--- a/drivers/mfd/Kconfig
++++ b/drivers/mfd/Kconfig
+@@ -1162,6 +1162,18 @@ config MFD_SI476X_CORE
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called si476x-core.
+ 
++config MFD_SIMPLE_MFD_I2C
++	tristate
++	depends on I2C
++	select REGMAP_I2C
++	help
++	  This driver creates a single register map with the intention for it
++	  to be shared by all sub-devices.
++
++	  Once the register map has been successfully initialised, any
++	  sub-devices represented by child nodes in Device Tree will be
++	  subsequently registered.
++
+ config MFD_SM501
+ 	tristate "Silicon Motion SM501"
+ 	depends on HAS_DMA
+diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+index a60e5f835283..78d24a3e7c9e 100644
+--- a/drivers/mfd/Makefile
++++ b/drivers/mfd/Makefile
+@@ -264,3 +264,4 @@ obj-$(CONFIG_MFD_STMFX) 	+= stmfx.o
+ obj-$(CONFIG_MFD_KHADAS_MCU) 	+= khadas-mcu.o
+ 
+ obj-$(CONFIG_SGI_MFD_IOC3)	+= ioc3.o
++obj-$(CONFIG_MFD_SIMPLE_MFD_I2C)	+= simple-mfd-i2c.o
+diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2c.c
+new file mode 100644
+index 000000000000..09b40ebfdf07
+--- /dev/null
++++ b/drivers/mfd/simple-mfd-i2c.c
+@@ -0,0 +1,56 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Simple MFD - I2C
++ *
++ * This driver creates a single register map with the intention for it to be
++ * shared by all sub-devices.  Children can use their parent's device structure
++ * (dev.parent) in order reference it.
++ *
++ * Once the register map has been successfully initialised, any sub-devices
++ * represented by child nodes in Device Tree will be subsequently registered.
++ */
++
++#include <linux/i2c.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/of_platform.h>
++#include <linux/regmap.h>
++
++static const struct regmap_config simple_regmap_config = {
++	.reg_bits = 8,
++	.val_bits = 8,
++};
++
++static int simple_mfd_i2c_probe(struct i2c_client *i2c)
++{
++	const struct regmap_config *config;
++	struct regmap *regmap;
++
++	config = device_get_match_data(&i2c->dev);
++	if (!config)
++		config = &simple_regmap_config;
++
++	regmap = devm_regmap_init_i2c(i2c, config);
++	if (IS_ERR(regmap))
++		return PTR_ERR(regmap);
++
++	return devm_of_platform_populate(&i2c->dev);
++}
++
++static const struct of_device_id simple_mfd_i2c_of_match[] = {
++	{}
++};
++MODULE_DEVICE_TABLE(of, simple_mfd_i2c_of_match);
++
++static struct i2c_driver simple_mfd_i2c_driver = {
++	.probe_new = simple_mfd_i2c_probe,
++	.driver = {
++		.name = "simple-mfd-i2c",
++		.of_match_table = simple_mfd_i2c_of_match,
++	},
++};
++module_i2c_driver(simple_mfd_i2c_driver);
++
++MODULE_AUTHOR("Michael Walle <michael@walle.cc>");
++MODULE_DESCRIPTION("Simple MFD - I2C driver");
++MODULE_LICENSE("GPL v2");
 -- 
-Luca
+2.20.1
 
