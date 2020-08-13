@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 270D5C433DF
-	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Aug 2020 12:48:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F14AC433E1
+	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Aug 2020 12:48:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F0D4D20829
-	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Aug 2020 12:48:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5BA6F22C9E
+	for <linux-hwmon@archiver.kernel.org>; Thu, 13 Aug 2020 12:48:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="rwOU+opn"
+	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="RGXuL2Ck"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726192AbgHMMsv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 13 Aug 2020 08:48:51 -0400
-Received: from ssl.serverraum.org ([176.9.125.105]:55101 "EHLO
+        id S1726574AbgHMMsz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 13 Aug 2020 08:48:55 -0400
+Received: from ssl.serverraum.org ([176.9.125.105]:58145 "EHLO
         ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726053AbgHMMsu (ORCPT
+        with ESMTP id S1726292AbgHMMsx (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 13 Aug 2020 08:48:50 -0400
+        Thu, 13 Aug 2020 08:48:53 -0400
 Received: from mwalle01.sab.local. (unknown [213.135.10.150])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id E85EB22FEB;
-        Thu, 13 Aug 2020 14:48:46 +0200 (CEST)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id E82D723E40;
+        Thu, 13 Aug 2020 14:48:49 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1597322927;
+        t=1597322930;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=W3vsjuvtvKT05YvkX0b8P6sF+NlkwEsgM58H+1oBK6A=;
-        b=rwOU+opncGQLQ8CB7DULYAEAfu7G3J8X0kNwzPp3NY2oAmvd0WSPslI3nhuZbB8DpQcz9V
-        vpshEvLJT3yhczSeHq56ajcmcCsSA7Fg/iTG6UFbU2T1j+m0MxbgtQmqhxNWp0PQUyOAHN
-        VhNlzng+qV5L15lPqzJXwNVV13QsL+E=
+        bh=tHkNBbBYgPYNx6iMyzSpDdM+iHiVEF3MAUN4UPSYR8o=;
+        b=RGXuL2Cka/hQmlMiLL0IGb+YWF0FE/QjiiJ20CAO6hkdrxD+pIrJxaf4rzLRisHhF/Pta8
+        gAmuA0oO1tIwGB/KNv/zzd40farWGNy398jvLoyiaHNUsCwDtTyKJ/oXUa4R5UmGAgElQr
+        oNSbbiSxuynajkIsPEWl6ORCNAqLG0M=
 From:   Michael Walle <michael@walle.cc>
 To:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
@@ -62,9 +62,9 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Pavel Machek <pavel@ucw.cz>,
         Michael Walle <michael@walle.cc>
-Subject: [PATCH v8 01/13] mfd: add simple regmap based I2C driver
-Date:   Thu, 13 Aug 2020 14:48:20 +0200
-Message-Id: <20200813124832.17349-2-michael@walle.cc>
+Subject: [PATCH v8 03/13] mfd: simple-mfd-i2c: add sl28cpld support
+Date:   Thu, 13 Aug 2020 14:48:22 +0200
+Message-Id: <20200813124832.17349-4-michael@walle.cc>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200813124832.17349-1-michael@walle.cc>
 References: <20200813124832.17349-1-michael@walle.cc>
@@ -76,144 +76,67 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-There are I2C devices which contain several different functions but
-doesn't require any special access functions. For these kind of drivers
-an I2C regmap should be enough.
+Add the core support for the board management controller found on the
+SMARC-sAL28 board.
 
-Create an I2C driver which creates an I2C regmap and enumerates its
-children. If a device wants to use this as its MFD core driver, it has
-to add an individual compatible string. It may provide its own regmap
-configuration.
+Also add a virtual symbol which pulls in the simple-mfd-i2c driver and
+provide a common symbol on which the subdevice drivers can depend on.
 
-Subdevices can use dev_get_regmap() on the parent to get their regmap
-instance.
+At the moment, this controller is used on the Kontron SMARC-sAL28 board.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
 ---
 Changes since v7:
- - none
+ - added MFD_SL28CPLD virtual Kconfig symbol
+ - Please note, that I intentionally removed the Acked-for-MFD-by
+   because of this change.
 
 Changes since v6:
- - added SIMPLE_MFD_I2C help text
- - revised description in module header
+ - renamed "sl28cpld-r1" to "sl28cpld"
 
 Changes since v5:
- - removed "select MFD_CORE" in Kconfig
- - removed help text in Kconfig, we assume that the users of this
-   driver will have a "select MFD_SIMPLE_MFD_I2C". Instead added
-   a small description to the driver itself.
- - removed "struct simple_mfd_i2c_config" and use regmap_config
-   directly
- - changed builtin_i2c_driver() to module_i2c_driver(), added
-   MODULE_ boilerplate
- - cleaned up the included files
+ - none
 
 Changes since v4:
- - new patch. Lee, please bear with me. I didn't want to delay the
-   new version (where a lot of remarks on the other patches were
-   addressed) even more, just because we haven't figured out how
-   to deal with the MFD part. So for now, I've included this one.
+ - new patch
 
- drivers/mfd/Kconfig          | 12 ++++++++
- drivers/mfd/Makefile         |  1 +
- drivers/mfd/simple-mfd-i2c.c | 56 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 69 insertions(+)
- create mode 100644 drivers/mfd/simple-mfd-i2c.c
+ drivers/mfd/Kconfig          | 10 ++++++++++
+ drivers/mfd/simple-mfd-i2c.c |  1 +
+ 2 files changed, 11 insertions(+)
 
 diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-index 33df0837ab41..6e1a38944d28 100644
+index 6e1a38944d28..ed90eb5bdc83 100644
 --- a/drivers/mfd/Kconfig
 +++ b/drivers/mfd/Kconfig
-@@ -1162,6 +1162,18 @@ config MFD_SI476X_CORE
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called si476x-core.
+@@ -1174,6 +1174,16 @@ config MFD_SIMPLE_MFD_I2C
+ 	  sub-devices represented by child nodes in Device Tree will be
+ 	  subsequently registered.
  
-+config MFD_SIMPLE_MFD_I2C
-+	tristate
-+	depends on I2C
-+	select REGMAP_I2C
++config MFD_SL28CPLD
++	tristate "Kontron sl28cpld Board Management Controller"
++	select MFD_SIMPLE_MFD_I2C
 +	help
-+	  This driver creates a single register map with the intention for it
-+	  to be shared by all sub-devices.
++	  Say yes here to enable support for the Kontron sl28cpld board
++	  management controller.
 +
-+	  Once the register map has been successfully initialised, any
-+	  sub-devices represented by child nodes in Device Tree will be
-+	  subsequently registered.
++	  It can be found on the following boards:
++		* SMARC-sAL28
 +
  config MFD_SM501
  	tristate "Silicon Motion SM501"
  	depends on HAS_DMA
-diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-index a60e5f835283..78d24a3e7c9e 100644
---- a/drivers/mfd/Makefile
-+++ b/drivers/mfd/Makefile
-@@ -264,3 +264,4 @@ obj-$(CONFIG_MFD_STMFX) 	+= stmfx.o
- obj-$(CONFIG_MFD_KHADAS_MCU) 	+= khadas-mcu.o
- 
- obj-$(CONFIG_SGI_MFD_IOC3)	+= ioc3.o
-+obj-$(CONFIG_MFD_SIMPLE_MFD_I2C)	+= simple-mfd-i2c.o
 diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2c.c
-new file mode 100644
-index 000000000000..09b40ebfdf07
---- /dev/null
+index 09b40ebfdf07..99b99d81f281 100644
+--- a/drivers/mfd/simple-mfd-i2c.c
 +++ b/drivers/mfd/simple-mfd-i2c.c
-@@ -0,0 +1,56 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Simple MFD - I2C
-+ *
-+ * This driver creates a single register map with the intention for it to be
-+ * shared by all sub-devices.  Children can use their parent's device structure
-+ * (dev.parent) in order reference it.
-+ *
-+ * Once the register map has been successfully initialised, any sub-devices
-+ * represented by child nodes in Device Tree will be subsequently registered.
-+ */
-+
-+#include <linux/i2c.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of_platform.h>
-+#include <linux/regmap.h>
-+
-+static const struct regmap_config simple_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+};
-+
-+static int simple_mfd_i2c_probe(struct i2c_client *i2c)
-+{
-+	const struct regmap_config *config;
-+	struct regmap *regmap;
-+
-+	config = device_get_match_data(&i2c->dev);
-+	if (!config)
-+		config = &simple_regmap_config;
-+
-+	regmap = devm_regmap_init_i2c(i2c, config);
-+	if (IS_ERR(regmap))
-+		return PTR_ERR(regmap);
-+
-+	return devm_of_platform_populate(&i2c->dev);
-+}
-+
-+static const struct of_device_id simple_mfd_i2c_of_match[] = {
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, simple_mfd_i2c_of_match);
-+
-+static struct i2c_driver simple_mfd_i2c_driver = {
-+	.probe_new = simple_mfd_i2c_probe,
-+	.driver = {
-+		.name = "simple-mfd-i2c",
-+		.of_match_table = simple_mfd_i2c_of_match,
-+	},
-+};
-+module_i2c_driver(simple_mfd_i2c_driver);
-+
-+MODULE_AUTHOR("Michael Walle <michael@walle.cc>");
-+MODULE_DESCRIPTION("Simple MFD - I2C driver");
-+MODULE_LICENSE("GPL v2");
+@@ -38,6 +38,7 @@ static int simple_mfd_i2c_probe(struct i2c_client *i2c)
+ }
+ 
+ static const struct of_device_id simple_mfd_i2c_of_match[] = {
++	{ .compatible = "kontron,sl28cpld" },
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(of, simple_mfd_i2c_of_match);
 -- 
 2.20.1
 
