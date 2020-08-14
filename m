@@ -2,119 +2,163 @@ Return-Path: <SRS0=9O35=BY=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+X-Spam-Status: No, score=-8.5 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 920B7C433E1
-	for <linux-hwmon@archiver.kernel.org>; Fri, 14 Aug 2020 15:14:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CF32C433DF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 14 Aug 2020 16:30:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6A2BD20768
-	for <linux-hwmon@archiver.kernel.org>; Fri, 14 Aug 2020 15:14:07 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IFe9eDvL"
+	by mail.kernel.org (Postfix) with ESMTP id E82F920855
+	for <linux-hwmon@archiver.kernel.org>; Fri, 14 Aug 2020 16:30:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726623AbgHNPOG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 14 Aug 2020 11:14:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44550 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726617AbgHNPOA (ORCPT
+        id S1728371AbgHNQa2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 14 Aug 2020 12:30:28 -0400
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:58597 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728099AbgHNQa1 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 14 Aug 2020 11:14:00 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326F1C061384;
-        Fri, 14 Aug 2020 08:14:00 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id h12so4673936pgm.7;
-        Fri, 14 Aug 2020 08:14:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=XSS7WdL7dEt4UqGKCmBkFa5bvmRGZIDyUv0fFwrbFAk=;
-        b=IFe9eDvLv9A9WCmAt+4OWHCaSPRxZrlhITfTFpa0LyTKXV2WkVTDBJnz79jmDJ/K2t
-         jUswjK3E816rd8x5TzCEXBvggIIgqCMqPScBHu0tmEVhayY4Cyaqm1Zy04W5dDr/H+oy
-         Ime2KL2luXnL7KvNlsnpbvFfYNQhkt1c+YjMXaBAhNVflOTuDItBoOMf1AraiDYtsLVc
-         YtYJ8wx7NC1DZwLSKGM/yZeyN2cAxZYf5LkAMOHRgn2HV/BvQAjgnQX0F9AXbfEkwJNE
-         PL1Vsz/5zAfae+iN2xglr+Q/jWn0mwyYAA1b/rNlmvNpuU17tn6639Vt1lxj2MrXt1Jq
-         XpQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=XSS7WdL7dEt4UqGKCmBkFa5bvmRGZIDyUv0fFwrbFAk=;
-        b=EfkCyryuJtXhsiGKYMzmYAiVk6vyd325FHoCXvtYqgiv0dzQiQqZNGL0EUnw8EQjnX
-         lf1AjtJNoXO925inSHZIr8qt/3F1DlAbqvv7KnTHwYLMLqe5vnReT8XFC4zqDWhdY18Z
-         QQtZN57fQCQj8Hd9mtEtVIFqCY/AR75cZC0tVtn3KcJGNPzy6ivrhEqaa6AwIUBoISl7
-         51A84q2g7QnwJKI2VCRu4sC5rHg/FT17ff4z4a+0oN2/VAPRO0dwh9IoF+ImrIoiRW4W
-         HrlR9henMW208OljrgQJgfrLIEQ7VpdOQWv5tpOTcRPFH5AStb8pAlZBYvzb24c3FBjU
-         CEag==
-X-Gm-Message-State: AOAM531HBchI5R5/DpXm9abMImP0BrD91RBw4LK/fGhHgEgJkkACRlO6
-        BRCuWbV1pRSa6jds4BwnEc9ZcbGqXk4=
-X-Google-Smtp-Source: ABdhPJx/R839VL0IRTIO5koe08YOukeU6NP2R9Yn5mq5Y5Lc2LzBxq6geUhYOanzZzNbvMAdbCxDgQ==
-X-Received: by 2002:a63:1a49:: with SMTP id a9mr2079119pgm.110.1597418039768;
-        Fri, 14 Aug 2020 08:13:59 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f13sm9381927pfd.215.2020.08.14.08.13.59
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 14 Aug 2020 08:13:59 -0700 (PDT)
-Date:   Fri, 14 Aug 2020 08:13:58 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Stephen Kitt <steve@sk2.org>
-Cc:     Beniamin Bia <beniamin.bia@analog.com>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drivers/hwmon/adm1177.c: use simple i2c probe
-Message-ID: <20200814151358.GA256451@roeck-us.net>
-References: <20200813160958.1506536-1-steve@sk2.org>
+        Fri, 14 Aug 2020 12:30:27 -0400
+Received: from [37.160.38.175] (port=40734 helo=[192.168.42.162])
+        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1k6cay-0001mB-F9; Fri, 14 Aug 2020 18:30:20 +0200
+Subject: Re: [PATCH] dt-bindings: Whitespace clean-ups in schema files
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
+        <linux-remoteproc@vger.kernel.org>,
+        Linux HWMON List <linux-hwmon@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
+        Linux Input <linux-input@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux-ALSA <alsa-devel@alsa-project.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>
+References: <20200812203618.2656699-1-robh@kernel.org>
+ <d5808e9c-07fe-1c28-b9a6-a16abe9df458@lucaceresoli.net>
+ <CAL_JsqKekx0VO4NROwLrgrU8+L584HaLHM9i3kCZvU+g5myeGw@mail.gmail.com>
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+Message-ID: <f1963eb9-283f-e903-2a3a-4f324d71d418@lucaceresoli.net>
+Date:   Fri, 14 Aug 2020 18:30:17 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200813160958.1506536-1-steve@sk2.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <CAL_JsqKekx0VO4NROwLrgrU8+L584HaLHM9i3kCZvU+g5myeGw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Aug 13, 2020 at 06:09:58PM +0200, Stephen Kitt wrote:
-> This driver doesn't use the id information provided by the old i2c
-> probe function, so it can trivially be converted to the simple
-> ("probe_new") form.
+Hi,
+
+On 14/08/20 16:51, Rob Herring wrote:
+> On Thu, Aug 13, 2020 at 4:31 AM Luca Ceresoli <luca@lucaceresoli.net> wrote:
+>>
+>> Hi Rob,
+>>
+>> On 12/08/20 22:36, Rob Herring wrote:
+>>> Clean-up incorrect indentation, extra spaces, long lines, and missing
+>>> EOF newline in schema files. Most of the clean-ups are for list
+>>> indentation which should always be 2 spaces more than the preceding
+>>> keyword.
+>>>
+>>> Found with yamllint (which I plan to integrate into the checks).
+>>
+>> [...]
+>>
+>>> diff --git a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
+>>> index 3d4e1685cc55..28c6461b9a9a 100644
+>>> --- a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
+>>> +++ b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
+>>> @@ -95,10 +95,10 @@ allOf:
+>>>        # Devices without builtin crystal
+>>>        properties:
+>>>          clock-names:
+>>> -            minItems: 1
+>>> -            maxItems: 2
+>>> -            items:
+>>> -              enum: [ xin, clkin ]
+>>> +          minItems: 1
+>>> +          maxItems: 2
+>>> +          items:
+>>> +            enum: [ xin, clkin ]
+>>>          clocks:
+>>>            minItems: 1
+>>>            maxItems: 2
+>>
+>> Thanks for noticing, LGTM.
+>>
+>> [...]
+>>
+>>> diff --git a/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml b/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
+>>> index d7dac16a3960..36dc7b56a453 100644
+>>> --- a/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
+>>> +++ b/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
+>>> @@ -33,8 +33,8 @@ properties:
+>>>      $ref: /schemas/types.yaml#/definitions/uint32
+>>>
+>>>    touchscreen-min-pressure:
+>>> -    description: minimum pressure on the touchscreen to be achieved in order for the
+>>> -                 touchscreen driver to report a touch event.
+>>> +    description: minimum pressure on the touchscreen to be achieved in order
+>>> +      for the touchscreen driver to report a touch event.
+>>
+>> Out of personal taste, I find the original layout more pleasant and
+>> readable. This third option is also good, especially for long descriptions:
+>>
+>>   description:
+>>     minimum pressure on the touchscreen to be achieved in order for the
+>>     touchscreen driver to report a touch event.
+>>
+>> At first glance yamllint seems to support exactly these two by default:
+>>
+>>> With indentation: {spaces: 4, check-multi-line-strings: true}
 > 
-> Signed-off-by: Stephen Kitt <steve@sk2.org>
-
-I'll apply the entire series, but please don't use entire path names
-as tag in the future but follow bubsystem rules.
-
-Thanks,
-Guenter
-
-> ---
->  drivers/hwmon/adm1177.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+> Turning on check-multi-line-strings results in 10K+ warnings, so no.
 > 
-> diff --git a/drivers/hwmon/adm1177.c b/drivers/hwmon/adm1177.c
-> index d314223a404a..6e8bb661894b 100644
-> --- a/drivers/hwmon/adm1177.c
-> +++ b/drivers/hwmon/adm1177.c
-> @@ -196,8 +196,7 @@ static void adm1177_remove(void *data)
->  	regulator_disable(st->reg);
->  }
->  
-> -static int adm1177_probe(struct i2c_client *client,
-> -			 const struct i2c_device_id *id)
-> +static int adm1177_probe(struct i2c_client *client)
->  {
->  	struct device *dev = &client->dev;
->  	struct device *hwmon_dev;
-> @@ -277,7 +276,7 @@ static struct i2c_driver adm1177_driver = {
->  		.name = "adm1177",
->  		.of_match_table = adm1177_dt_ids,
->  	},
-> -	.probe = adm1177_probe,
-> +	.probe_new = adm1177_probe,
->  	.id_table = adm1177_id,
->  };
->  module_i2c_driver(adm1177_driver);
+> The other issue is the style ruamel.yaml wants to write out is as the
+> patch does above. This matters when doing some scripted
+> transformations where we read in the files and write them back out. I
+> can somewhat work around that by first doing a pass with no changes
+> and then another pass with the actual changes, but that's completely
+> scriptable. Hopefully, ruamel learns to preserve the style better.
+
+Kind of sad, but I understand the reason as far as my understanding of
+the yaml world allows. Thanks for the explanation.
+
+[For idt,versaclock5.yaml, plus an overview of whole patch]
+Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+
+-- 
+Luca
