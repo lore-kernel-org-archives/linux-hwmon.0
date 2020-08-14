@@ -2,118 +2,158 @@ Return-Path: <SRS0=9O35=BY=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 059A5C433E1
-	for <linux-hwmon@archiver.kernel.org>; Fri, 14 Aug 2020 11:39:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47F5AC433DF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 14 Aug 2020 14:51:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D111720771
-	for <linux-hwmon@archiver.kernel.org>; Fri, 14 Aug 2020 11:39:31 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C2+cpT2T"
+	by mail.kernel.org (Postfix) with ESMTP id 25D5620855
+	for <linux-hwmon@archiver.kernel.org>; Fri, 14 Aug 2020 14:51:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1597416712;
+	bh=2azDCJAW0WmwzjFoNP1+Xf1baXp64Ykp/VUpBlKju0s=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=MSSGJwSXtNbZ8pR88akMkVaN4KJ1m4SPpwBAruR6xRfnra4a5tjZ5Fx4Yi/GfRT+r
+	 qLGdu5eyd0ELm1+eZmEiS8qWGLXsD/rGY53SoYMcX+iKX2GH0Ku66zAle0yj66Vjjg
+	 repToI6NS3hm8bB8TDkZ3pxSpHv1ZHSMlIv+itXU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727103AbgHNLjb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 14 Aug 2020 07:39:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39596 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726185AbgHNLja (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 14 Aug 2020 07:39:30 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C73C061384;
-        Fri, 14 Aug 2020 04:39:30 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id t14so7660047wmi.3;
-        Fri, 14 Aug 2020 04:39:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=PvaE6Xvjdl4FATqRBfh8A95bTlKRTVItk5/IF9Iibaw=;
-        b=C2+cpT2T5s3PRdb1iX1gNsVRN7+bzUvaFphsG2v4A4+u/IgKs/5MzA0CITX++JzJcA
-         ARxviUnSCDMZxWnYKfWsqJISab18SwV0zGWnoF9dmGH90QIb2oT5ru4T37dTkC97Utv9
-         MY8ZpHnR+dFTb2ykAzedOFZheMFAAn4iCEwvWZ6XYpN+HTN4i9v+YqJsAEfX9Kd/eQo0
-         11VZ+PJ+xuZK34tzxYeHm4LZxZL8vXxkWs0DHsYPFs++eVXi+wsdPkIrwu0QLRhl/0bj
-         hkyPEopNYgun6Zui5DIgfn2N7H6VaxP0yJVCaRrxHqpW6Y6DUA8tWaLzkYw6DLl+hLxa
-         On7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PvaE6Xvjdl4FATqRBfh8A95bTlKRTVItk5/IF9Iibaw=;
-        b=rMr0RCYYYuV/QnFOCzeV9RbAgjnAgRflwmUPc3ubiiqv7KWrX2ZyuzLs9tTQmp2f0D
-         KR4hhehC35oMqJIKOa8tdoweMviESld6qay2XVfrku5gyWyrmyb0EAbvWKoh6xLHHJ1u
-         twlQHc+HJytujpKMfhhZua4/y/OBx/xmdI/AzTDtVLwGNzcsOt2OCM4pqPnB/PVJT8Ee
-         KBSMCHOxSoUMXBQJhTlJO5uaDGkyus10DikttVoqmleM2xFExb/bLpow8rGUl35UEnxi
-         ESuLIYyC2HsoHdM7j73ldkoWZoHHC6u0KPwLKsfAbrXVP0yN7MvIzjZaPrBjleLHECHh
-         TKLA==
-X-Gm-Message-State: AOAM530dqFfewse/Ba4fHgPDbnXV9oslDweRbnoozgVsCo01F4Sew47t
-        XyHOHwkarXbzyyfJ6i5r/844kmEN2Jk=
-X-Google-Smtp-Source: ABdhPJxfBdi37/yRj31u/1yVwVd6B4rPFoZNcM/71Em90ApUpFePmeHl8qrPizZJGJzVOdZ9+Ez4rA==
-X-Received: by 2002:a7b:c38e:: with SMTP id s14mr2172037wmj.124.1597405169330;
-        Fri, 14 Aug 2020 04:39:29 -0700 (PDT)
-Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
-        by smtp.googlemail.com with ESMTPSA id o7sm15093033wrv.50.2020.08.14.04.39.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Aug 2020 04:39:28 -0700 (PDT)
-Date:   Fri, 14 Aug 2020 13:39:27 +0200
-From:   Corentin Labbe <clabbe.montjoie@gmail.com>
-To:     Stephen Kitt <steve@sk2.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drivers/hwmon/adm1029.c: use simple i2c probe
-Message-ID: <20200814113927.GA15832@Red>
-References: <20200813161129.1507599-1-steve@sk2.org>
+        id S1728133AbgHNOvj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 14 Aug 2020 10:51:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43326 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726193AbgHNOvi (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 14 Aug 2020 10:51:38 -0400
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E2C6E208B3;
+        Fri, 14 Aug 2020 14:51:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1597416697;
+        bh=2azDCJAW0WmwzjFoNP1+Xf1baXp64Ykp/VUpBlKju0s=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=bjfRL+mBKQdeXNIPuXX+sib3fYs2/XZWJHPOjPd4x196xwXtWkEnxkwGCGKCP+vXy
+         CxGeqKP68MgYI300g+hNTJd4uQCvZb/zOsnBdJ/cEKlyynKbLGyhuMbkA+R9Y9MLDY
+         rajai6Sqx8HGb8L035zTD4t0BSpxCLooD+BQeHTA=
+Received: by mail-ot1-f54.google.com with SMTP id t7so7776444otp.0;
+        Fri, 14 Aug 2020 07:51:36 -0700 (PDT)
+X-Gm-Message-State: AOAM531YqcS4MUxvcGOYChGHRoRMcVsEFsDHYR5LbkHA90TiOSl6Dmh8
+        R/b9TCtT0vzAo6TEwQr7L0CGI1coatN8YZannA==
+X-Google-Smtp-Source: ABdhPJzAQOVgwIRLTeJz+4kS8jI7uSM4yy2bV/QUkiEz2152JH8sgfiQxJMSY+wk4abg95jsoFr6h5Ymz6ZJoeFhB2g=
+X-Received: by 2002:a05:6830:1b79:: with SMTP id d25mr1995774ote.107.1597416696235;
+ Fri, 14 Aug 2020 07:51:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200813161129.1507599-1-steve@sk2.org>
+References: <20200812203618.2656699-1-robh@kernel.org> <d5808e9c-07fe-1c28-b9a6-a16abe9df458@lucaceresoli.net>
+In-Reply-To: <d5808e9c-07fe-1c28-b9a6-a16abe9df458@lucaceresoli.net>
+From:   Rob Herring <robh@kernel.org>
+Date:   Fri, 14 Aug 2020 08:51:24 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKekx0VO4NROwLrgrU8+L584HaLHM9i3kCZvU+g5myeGw@mail.gmail.com>
+Message-ID: <CAL_JsqKekx0VO4NROwLrgrU8+L584HaLHM9i3kCZvU+g5myeGw@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: Whitespace clean-ups in schema files
+To:     Luca Ceresoli <luca@lucaceresoli.net>
+Cc:     devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
+        <linux-remoteproc@vger.kernel.org>,
+        Linux HWMON List <linux-hwmon@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
+        Linux Input <linux-input@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux-ALSA <alsa-devel@alsa-project.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Aug 13, 2020 at 06:11:29PM +0200, Stephen Kitt wrote:
-> This driver doesn't use the id information provided by the old i2c
-> probe function, so it can trivially be converted to the simple
-> ("probe_new") form.
-> 
-> Signed-off-by: Stephen Kitt <steve@sk2.org>
-> ---
->  drivers/hwmon/adm1029.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/hwmon/adm1029.c b/drivers/hwmon/adm1029.c
-> index f7752a5bef31..50b1df7b008c 100644
-> --- a/drivers/hwmon/adm1029.c
-> +++ b/drivers/hwmon/adm1029.c
-> @@ -352,8 +352,7 @@ static int adm1029_init_client(struct i2c_client *client)
->  	return 1;
->  }
->  
-> -static int adm1029_probe(struct i2c_client *client,
-> -			 const struct i2c_device_id *id)
-> +static int adm1029_probe(struct i2c_client *client)
->  {
->  	struct device *dev = &client->dev;
->  	struct adm1029_data *data;
-> @@ -390,7 +389,7 @@ static struct i2c_driver adm1029_driver = {
->  	.driver = {
->  		.name = "adm1029",
->  	},
-> -	.probe		= adm1029_probe,
-> +	.probe_new	= adm1029_probe,
->  	.id_table	= adm1029_id,
->  	.detect		= adm1029_detect,
->  	.address_list	= normal_i2c,
-> -- 
-> 2.25.4
-> 
-Hello
+On Thu, Aug 13, 2020 at 4:31 AM Luca Ceresoli <luca@lucaceresoli.net> wrote:
+>
+> Hi Rob,
+>
+> On 12/08/20 22:36, Rob Herring wrote:
+> > Clean-up incorrect indentation, extra spaces, long lines, and missing
+> > EOF newline in schema files. Most of the clean-ups are for list
+> > indentation which should always be 2 spaces more than the preceding
+> > keyword.
+> >
+> > Found with yamllint (which I plan to integrate into the checks).
+>
+> [...]
+>
+> > diff --git a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
+> > index 3d4e1685cc55..28c6461b9a9a 100644
+> > --- a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
+> > +++ b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
+> > @@ -95,10 +95,10 @@ allOf:
+> >        # Devices without builtin crystal
+> >        properties:
+> >          clock-names:
+> > -            minItems: 1
+> > -            maxItems: 2
+> > -            items:
+> > -              enum: [ xin, clkin ]
+> > +          minItems: 1
+> > +          maxItems: 2
+> > +          items:
+> > +            enum: [ xin, clkin ]
+> >          clocks:
+> >            minItems: 1
+> >            maxItems: 2
+>
+> Thanks for noticing, LGTM.
+>
+> [...]
+>
+> > diff --git a/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml b/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
+> > index d7dac16a3960..36dc7b56a453 100644
+> > --- a/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
+> > +++ b/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
+> > @@ -33,8 +33,8 @@ properties:
+> >      $ref: /schemas/types.yaml#/definitions/uint32
+> >
+> >    touchscreen-min-pressure:
+> > -    description: minimum pressure on the touchscreen to be achieved in order for the
+> > -                 touchscreen driver to report a touch event.
+> > +    description: minimum pressure on the touchscreen to be achieved in order
+> > +      for the touchscreen driver to report a touch event.
+>
+> Out of personal taste, I find the original layout more pleasant and
+> readable. This third option is also good, especially for long descriptions:
+>
+>   description:
+>     minimum pressure on the touchscreen to be achieved in order for the
+>     touchscreen driver to report a touch event.
+>
+> At first glance yamllint seems to support exactly these two by default:
+>
+> > With indentation: {spaces: 4, check-multi-line-strings: true}
 
-Acked-by: Corentin LABBE <clabbe.montjoie@gmail.com>
+Turning on check-multi-line-strings results in 10K+ warnings, so no.
 
-But please give me a few day to test it.
+The other issue is the style ruamel.yaml wants to write out is as the
+patch does above. This matters when doing some scripted
+transformations where we read in the files and write them back out. I
+can somewhat work around that by first doing a pass with no changes
+and then another pass with the actual changes, but that's completely
+scriptable. Hopefully, ruamel learns to preserve the style better.
+
+Rob
