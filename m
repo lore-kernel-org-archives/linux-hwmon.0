@@ -2,99 +2,258 @@ Return-Path: <SRS0=JR9X=B2=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4072BC433E3
-	for <linux-hwmon@archiver.kernel.org>; Sun, 16 Aug 2020 01:35:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87211C433F1
+	for <linux-hwmon@archiver.kernel.org>; Sun, 16 Aug 2020 08:44:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 16D4820708
-	for <linux-hwmon@archiver.kernel.org>; Sun, 16 Aug 2020 01:35:18 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="xyN+QZeS"
+	by mail.kernel.org (Postfix) with ESMTP id 64A30206DA
+	for <linux-hwmon@archiver.kernel.org>; Sun, 16 Aug 2020 08:44:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1597567482;
+	bh=T6UwMy4v18bgR1RYSk8bKZfCqTMnyUP8XZKnI31+u3w=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=s7WrtDT0auYazVfOiTBuqAlCdHurIk5FMKRyIrte5/jRGdrQ9YPR2dlVQ2QdkcHux
+	 pMGM5qvplVEtJ0o7XPSOk3qK0lyE6AL31bmjsm4IostEKEQ4V1tIxLKxWQHd7mjXuX
+	 beV60LWUgY73PTxm/gTs/EdMadHwZRY7X5+B5pzM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728664AbgHPBfQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 15 Aug 2020 21:35:16 -0400
-Received: from mail4.protonmail.ch ([185.70.40.27]:38587 "EHLO
-        mail4.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726177AbgHPBfQ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 15 Aug 2020 21:35:16 -0400
-Date:   Sun, 16 Aug 2020 01:35:10 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail; t=1597541714;
-        bh=OQ50aq49q1k9+mZO27cW8fuaBup2xW21ONWv+GI7EFw=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=xyN+QZeSUSR7dgmxbX3uCJRPBK/v6MDuOxq8j0QVY1mIBfbuZbAwYrEFyINkOwB8b
-         5GebmE/3/zZ7ewDSgZ9rRKhWJQJ2ggWNQdCl8U4gqk6f/6By1Itp14vPHS/ME2tIAe
-         eHQI0+7WvHR2FrK6VKQFSRqgLUXrMASC7fOd1bCc=
-To:     Guenter Roeck <linux@roeck-us.net>
-From:   =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>
-Cc:     jaap aarts <jaap.aarts1@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Reply-To: =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>
-Subject: Re: [PATCH V4] hwmon: add fan/pwm driver for corsair h100i platinum
-Message-ID: <jXVNMOMJ1nqEEhjQbWGsgeGm0TWaNDSHsp-YOtCWb-Sx3NqjIEGQKjUzA8FuUgvwXijS-fUWIfokZ--M3aCZUusFduP_EHXyaiMIfdPguQY=@protonmail.com>
-In-Reply-To: <38cb8109-0868-c00c-e701-050cc0b20ac9@roeck-us.net>
-References: <20200815211617.86565-1-jaap.aarts1@gmail.com> <2uSV3Shd92hhPyvj_GgPWEXYDX0o7GczgyAP4ue9S7xTHvwhqa9-4bcdMf3XNKCZ5jkq_KN7xqDRXT_X39VTcqxdvrE5x2Dft1hqNBjhXk4=@protonmail.com> <99ee823b-b1fa-74a0-e377-31dc97e4d985@roeck-us.net> <IqRa8ZnjuWETvNkGXEMzUaLtyG7SwgZ5aZNmrh2rN_97fIHMgcHAKR7pAHteqmzuXIVEuBB5jtBN00OBzb85KA92_RyKEDaC1V8SctNLvZ8=@protonmail.com> <38cb8109-0868-c00c-e701-050cc0b20ac9@roeck-us.net>
+        id S1728047AbgHPIoc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 16 Aug 2020 04:44:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55002 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725966AbgHPIo0 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 16 Aug 2020 04:44:26 -0400
+Received: from archlinux (cpc149474-cmbg20-2-0-cust94.5-4.cable.virginm.net [82.4.196.95])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 032672067C;
+        Sun, 16 Aug 2020 08:44:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1597567464;
+        bh=T6UwMy4v18bgR1RYSk8bKZfCqTMnyUP8XZKnI31+u3w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=drEoeXpHv0E0mUqTh6XgOtxm5HjQ3BZXo/2Vyh0E5JgpqmZ5oJHeFCZAHCZB9rAXm
+         AbIb6f0WWGOxG4kSm3h11hWn0MA48MyZ6oiLma2mj2RujKNmxiI3bNdIjGxh0rdsDK
+         bybFa1BfDVi2cbQ+dCfDbBrEzAgdhLg63i6r2Z2c=
+Date:   Sun, 16 Aug 2020 09:44:18 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Sam Ravnborg <sam@ravnborg.org>
+Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-pm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-spi@vger.kernel.org,
+        linux-gpio@vger.kernel.org, netdev@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Whitespace clean-ups in schema files
+Message-ID: <20200816094418.5bd08f5f@archlinux>
+In-Reply-To: <20200812213453.GA690477@ravnborg.org>
+References: <20200812203618.2656699-1-robh@kernel.org>
+        <20200812213453.GA690477@ravnborg.org>
+X-Mailer: Claws Mail 3.17.6 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-2020. augusztus 16., vas=C3=A1rnap 2:51 keltez=C3=A9ssel, Guenter Roeck =
-=C3=ADrta:
+On Wed, 12 Aug 2020 23:34:53 +0200
+Sam Ravnborg <sam@ravnborg.org> wrote:
 
-> On 8/15/20 5:27 PM, Barnab=C3=A1s P=C5=91cze wrote:
-> >> [...]
-> >>>> +=09=09=09if (val < (2 ^ 16) - 2)
-> >>>
-> >>> Did you intend to write 2 to the power of 16? Because 2^16 is not tha=
-t.
-> >>> 2 to the power 16 may be written as '(1 << 16)' or 'BIT(16)'
-> >>> (you may need to include linux/bits.h for the latter)
-> >>>
-> >>> But something like this is my suggestion:
-> >>>
-> >>> if (val < 0 || 0xFFFF < val)
-> >>> =09return -EINVAL;
-> >>>
-> >>
-> >> I would suggest to use clamp_val; we don't expect users to know device
-> >> specific limits. Also, FTR, I won't accept any Yoda programming.
-> >>
-> >> Guenter
-> >> [...]
+> Hi Rob.
+> 
+> On Wed, Aug 12, 2020 at 02:36:18PM -0600, Rob Herring wrote:
+> > Clean-up incorrect indentation, extra spaces, long lines, and missing
+> > EOF newline in schema files. Most of the clean-ups are for list
+> > indentation which should always be 2 spaces more than the preceding
+> > keyword.
+> > 
+> > Found with yamllint (which I plan to integrate into the checks).  
+> 
+> I have browsed through the patch - and there was only a few things
+> that jumped at me.
+> 
+> With these points considered:
+> Acked-by: Sam Ravnborg <sam@ravnborg.org>
+
+Replying here as the patch doesn't seem to have made it to linux-iio
+at least. I'm not sure why...
+
+Anyhow, found it in an lkml archive so for the iio changes
+Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
+> 
+> I expect only some (few) of my points to actually results in any updates.
+> 
+> I look forward to have the lint functionality as part of the built-in
+> tools so we catch these things early.
+> 
+> 	Sam
+> 
+> > diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
+> > index f63895c8ce2d..88814a2a14a5 100644
+> > --- a/Documentation/devicetree/bindings/arm/fsl.yaml
+> > +++ b/Documentation/devicetree/bindings/arm/fsl.yaml
+> > @@ -273,8 +273,8 @@ properties:
+> >                - fsl,imx6ull-14x14-evk     # i.MX6 UltraLiteLite 14x14 EVK Board
+> >                - kontron,imx6ull-n6411-som # Kontron N6411 SOM
+> >                - myir,imx6ull-mys-6ulx-eval # MYiR Tech iMX6ULL Evaluation Board
+> > -              - toradex,colibri-imx6ull-eval            # Colibri iMX6ULL Module on Colibri Evaluation Board
+> > -              - toradex,colibri-imx6ull-wifi-eval       # Colibri iMX6ULL Wi-Fi / Bluetooth Module on Colibri Evaluation Board
+> > +              - toradex,colibri-imx6ull-eval      # Colibri iMX6ULL Module on Colibri Eval Board
+> > +              - toradex,colibri-imx6ull-wifi-eval # Colibri iMX6ULL Wi-Fi / BT Module on Colibri Eval Board
+> >            - const: fsl,imx6ull  
+> 
+> This change looks bad as it drops the alignment with the comments below.
+> See following patch chunck:
+> 
 > >
+> >        - description: Kontron N6411 S Board
+> > @@ -312,9 +312,12 @@ properties:
+> >                - toradex,colibri-imx7d                   # Colibri iMX7 Dual Module
+> >                - toradex,colibri-imx7d-aster             # Colibri iMX7 Dual Module on Aster Carrier Board
+> >                - toradex,colibri-imx7d-emmc              # Colibri iMX7 Dual 1GB (eMMC) Module
+> > -              - toradex,colibri-imx7d-emmc-aster        # Colibri iMX7 Dual 1GB (eMMC) Module on Aster Carrier Board
+> > -              - toradex,colibri-imx7d-emmc-eval-v3      # Colibri iMX7 Dual 1GB (eMMC) Module on Colibri Evaluation Board V3
+> > -              - toradex,colibri-imx7d-eval-v3           # Colibri iMX7 Dual Module on Colibri Evaluation Board V3
+> > +              - toradex,colibri-imx7d-emmc-aster        # Colibri iMX7 Dual 1GB (eMMC) Module on
+> > +                                                        #  Aster Carrier Board  
+> 
+> 
+> 
+> > diff --git a/Documentation/devicetree/bindings/display/panel/ilitek,ili9322.yaml b/Documentation/devicetree/bindings/display/panel/ilitek,ili9322.yaml
+> > index 177d48c5bd97..e89c1ea62ffa 100644
+> > --- a/Documentation/devicetree/bindings/display/panel/ilitek,ili9322.yaml
+> > +++ b/Documentation/devicetree/bindings/display/panel/ilitek,ili9322.yaml
+> > @@ -25,8 +25,7 @@ properties:
+> >    compatible:
+> >      items:
+> >        - enum:
+> > -        - dlink,dir-685-panel
+> > -
+> > +          - dlink,dir-685-panel
+> >        - const: ilitek,ili9322
 > >
-> > If you don't mind me asking, why is that? I, too, don't like Yoda condi=
-tions,
-> > but I've always thought that in this specific case - when checking if a=
- value
-> > lies within/outside a certain range - it makes the code more easily rea=
-dable
-> > if it is written like this: (lo < val && val < hi).
+> >    reset-gpios: true
+> > diff --git a/Documentation/devicetree/bindings/display/panel/ilitek,ili9881c.yaml b/Documentation/devicetree/bindings/display/panel/ilitek,ili9881c.yaml
+> > index a39332276bab..76a9068a85dd 100644
+> > --- a/Documentation/devicetree/bindings/display/panel/ilitek,ili9881c.yaml
+> > +++ b/Documentation/devicetree/bindings/display/panel/ilitek,ili9881c.yaml
+> > @@ -13,8 +13,7 @@ properties:
+> >    compatible:
+> >      items:
+> >        - enum:
+> > -        - bananapi,lhr050h41
+> > -
+> > +          - bananapi,lhr050h41
+> >        - const: ilitek,ili9881c
+> >  
+> 
+> The extra lines is a simple way to indicate that here shall be added
+> more in the future. So I like the empty line.
+> 
+> 
+> > diff --git a/Documentation/devicetree/bindings/leds/backlight/qcom-wled.yaml b/Documentation/devicetree/bindings/leds/backlight/qcom-wled.yaml
+> > index 32e0896c6bc1..47938e372987 100644
+> > --- a/Documentation/devicetree/bindings/leds/backlight/qcom-wled.yaml
+> > +++ b/Documentation/devicetree/bindings/leds/backlight/qcom-wled.yaml
+> > @@ -79,7 +79,8 @@ properties:
+> >      description: |
+> >        kHz; switching frequency.
+> >      $ref: /schemas/types.yaml#/definitions/uint32
+> > -    enum: [ 600, 640, 685, 738, 800, 872, 960, 1066, 1200, 1371, 1600, 1920, 2400, 3200, 4800, 9600 ]
+> > +    enum: [ 600, 640, 685, 738, 800, 872, 960, 1066, 1200, 1371, 1600, 1920,
+> > +            2400, 3200, 4800, 9600 ]
 > >
->
-> You are suggesting (val < lo || hi < val) here, which is a bit different.
->
-> Anyway, good for you. If you are signing up as code reviewer for a Linux =
-kernel
-> subsystem, please feel free to accept and promote such code. For me, it i=
-s just
-> confusing.
->
-> Guenter
->
+> >    qcom,ovp:
+> >      description: |  
+> 
+> In the modern world we are living in now line length of 100 chars are
+> OK. checkpatch and coding_style is updated to reflected this.
+> 
+> > diff --git a/Documentation/devicetree/bindings/spi/mikrotik,rb4xx-spi.yaml b/Documentation/devicetree/bindings/spi/mikrotik,rb4xx-spi.yaml
+> > index 4ddb42a4ae05..9102feae90a2 100644
+> > --- a/Documentation/devicetree/bindings/spi/mikrotik,rb4xx-spi.yaml
+> > +++ b/Documentation/devicetree/bindings/spi/mikrotik,rb4xx-spi.yaml
+> > @@ -33,4 +33,5 @@ examples:
+> >          reg = <0x1f000000 0x10>;
+> >      };
+> >
+> > -...
+> > \ No newline at end of file
+> > +...
+> > +  
+> 
+> Added one line too much?
+> 
+>  diff --git a/Documentation/devicetree/bindings/spi/spi-mux.yaml b/Documentation/devicetree/bindings/spi/spi-mux.yaml
+> > index 0ae692dc28b5..3d3fed63409b 100644
+> > --- a/Documentation/devicetree/bindings/spi/spi-mux.yaml
+> > +++ b/Documentation/devicetree/bindings/spi/spi-mux.yaml
+> > @@ -43,47 +43,47 @@ properties:
+> >      maxItems: 1
+> >
+> >  required:
+> > -   - compatible
+> > -   - reg
+> > -   - spi-max-frequency
+> > -   - mux-controls
+> > +  - compatible
+> > +  - reg
+> > +  - spi-max-frequency
+> > +  - mux-controls
+> >
+> >  examples:
+> > -   - |
+> > -     #include <dt-bindings/gpio/gpio.h>
+> > -     mux: mux-controller {
+> > -       compatible = "gpio-mux";
+> > -       #mux-control-cells = <0>;
+> > +  - |
+> > +    #include <dt-bindings/gpio/gpio.h>
+> > +    mux: mux-controller {
+> > +        compatible = "gpio-mux";
+> > +        #mux-control-cells = <0>;
+> >
+> > -       mux-gpios = <&gpio0 3 GPIO_ACTIVE_HIGH>;
+> > -     };
+> > +        mux-gpios = <&gpio0 3 GPIO_ACTIVE_HIGH>;
+> > +    };  
+> 
+> Example is updated to use 4-space indent. I like.
+> 
+> But many other examples are left untouched.
+> 
+> So I wonder if updating all examples to the same indent should
+> be left for another mega-patch?
+> 
+> > diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> > index f3d847832fdc..2baee2c817c1 100644
+> > --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> > +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> > @@ -993,7 +993,8 @@ patternProperties:
+> >    "^sst,.*":
+> >      description: Silicon Storage Technology, Inc.
+> >    "^sstar,.*":
+> > -    description: Xiamen Xingchen(SigmaStar) Technology Co., Ltd. (formerly part of MStar Semiconductor, Inc.)
+> > +    description: Xiamen Xingchen(SigmaStar) Technology Co., Ltd.
+> > +      (formerly part of MStar Semiconductor, Inc.)
+> >    "^st,.*":
+> >      description: STMicroelectronics
+> >    "^starry,.*":  
+> 
+> Did you check that they are all in alphabetical order?
+> I would be suprised if this is the only issue in this file.
+> 
+> 
 
-Thank you for the answer.
-
-
-Barnab=C3=A1s P=C5=91cze
