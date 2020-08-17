@@ -2,119 +2,125 @@ Return-Path: <SRS0=7cwY=B3=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99D71C433E1
-	for <linux-hwmon@archiver.kernel.org>; Mon, 17 Aug 2020 08:45:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96FFDC433DF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 17 Aug 2020 15:35:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7458620829
-	for <linux-hwmon@archiver.kernel.org>; Mon, 17 Aug 2020 08:45:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 62D9E208E4
+	for <linux-hwmon@archiver.kernel.org>; Mon, 17 Aug 2020 15:35:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I3DiPkhV"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="o431zZI4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726457AbgHQIpN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 17 Aug 2020 04:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55748 "EHLO
+        id S1730474AbgHQPfy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 17 Aug 2020 11:35:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726777AbgHQIpM (ORCPT
+        with ESMTP id S1729898AbgHQPfg (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 17 Aug 2020 04:45:12 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E15BC061388;
-        Mon, 17 Aug 2020 01:45:12 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id 3so13215560wmi.1;
-        Mon, 17 Aug 2020 01:45:12 -0700 (PDT)
+        Mon, 17 Aug 2020 11:35:36 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B05CBC061389;
+        Mon, 17 Aug 2020 08:35:35 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id 17so8403602pfw.9;
+        Mon, 17 Aug 2020 08:35:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Gy5UHS1fMumIwQbUn2ngdWfpQe9mWv4iZvUxVAFlM0Y=;
-        b=I3DiPkhV7gQOS3DppleGZtO3ailEghtHTzQgocm9hG7okEnXITNLsPnq4jMwoFt5sB
-         +npvCjxLR1ntsR+wBM3uGqRGX/59E9Z/qfWQyNkaLDdSsw8iK0JddxuifDiPb8vW3R86
-         PYWegUNzv7mXAjI6gs8Wekos5jvxOmgbkDD1UpbdUOlmbgCiWCuiYpNtyWPXDfFbSMRa
-         p/vQOgHz37il38Fe1JLFazzlvCuqGrEddFsPrO3UaN4Lbn1k/93gpDRXDw2agxVV2a38
-         8bKqzlMQfLI/xcR6sSAJ0GXyRGphkBXQOJmMPhC32WgJJK2+r7FFbf8+7mUC9BuR21WF
-         ybTw==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=qx0UgAyO31lB16ri2FAAv37Ke5Db93tL9Cirv4pO0kc=;
+        b=o431zZI4Z4wYsFST0x2SnXiEPkksHTQ+dOAdm8gRieOnxyyxp01sb1RLR5O38Cu/6t
+         H3bEAVxEGlWjyxd0hji+v8UhrBbIGyw+GlUf1BwzgB6Xv3N+ngARXXM16sw3fdfJQWUu
+         7BajSr1mWMXSknJElJK3iuffY4hNaWcNN6k8J/9J/La0UsQLAsKscnyV7z/kyNSndyE9
+         Bd51eb1uShyDLgvUqmBBpKOdN0dZgXcF8PdKLunnXfmIINRSHli+z5//cbOBNhiKXLJF
+         e4+/FQpdVpk9qg5XTc0AvN99KLliacf1/kOTBh3fcYNc+lo4cE2L0rtJ3MxVOYJVNOVt
+         oyHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Gy5UHS1fMumIwQbUn2ngdWfpQe9mWv4iZvUxVAFlM0Y=;
-        b=XvY+5PIdlxRNIKsD6whvxcJAZuTXKGa3GfrbcbEwPgDYN64OlulZY2o4P36BaZYRLN
-         aQrShe8cZkZmLPmS8qzFF99l415O38TBIKiBsjEX55YaIjfVtzIzOgkaXQdrbRM+gnn2
-         XUgzLkqNEsv/fdZ1ECpkHMMid3Te9TGx9UhTYHgONuPm77P7cyFDwu72WBrRhkMJow5Q
-         EMUIEXAlz75KdoY+/pdaz+XGTr4e6aBzydq5JNg8l568Kg3lgNOllU9lbcJkEmsLsfIX
-         /3xXY7LBH4XTF3Rq9rVCvBJJoS3AnmdxgV9Y/FUYaKI8eAsFgXfRoohK0F6eQ25Qi6Za
-         dTmA==
-X-Gm-Message-State: AOAM531bppidA2OQ0/0Y8w7w7NZaz/98aUwx2WsbWGiD5WD9TTJ6PBWG
-        GYU/5qCvHiy/Ig9c8UgDipQ6ggE891M=
-X-Google-Smtp-Source: ABdhPJx5KkuyBA4y+6nDyD95M440Ad/ITmWsDgtXh7Kr+7+a3azL6Z2IoPexVJszFj30q9T0GMs/cQ==
-X-Received: by 2002:a1c:998c:: with SMTP id b134mr13441758wme.59.1597653911208;
-        Mon, 17 Aug 2020 01:45:11 -0700 (PDT)
-Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
-        by smtp.googlemail.com with ESMTPSA id g3sm32750455wrb.59.2020.08.17.01.45.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Aug 2020 01:45:10 -0700 (PDT)
-Date:   Mon, 17 Aug 2020 10:45:08 +0200
-From:   Corentin Labbe <clabbe.montjoie@gmail.com>
-To:     Stephen Kitt <steve@sk2.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drivers/hwmon/adm1029.c: use simple i2c probe
-Message-ID: <20200817084508.GA15571@Red>
-References: <20200813161129.1507599-1-steve@sk2.org>
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=qx0UgAyO31lB16ri2FAAv37Ke5Db93tL9Cirv4pO0kc=;
+        b=SEbOs87AFNWZqZcZ24nrTw/jqsJgB4VivDY2yPpRwyMSkNnBouUTlpy8VVxLgcgIsu
+         5rE2mVZICNh0Zp5NDYD8HNjMiZetTea/kotlklt4fzmao/tfmF+bGqMFUOx2/I4unYRU
+         AcnPfTxP1OL0GxXrET/aKN+D7wy2c9bnF3yjXLLUpv10haJMUpWhaJeJU7lsybBSnVgz
+         Yn3H6dk+r1Qay2FzwK/KKElpBfG1IcwlKFuanlEQTjT9+fVhOnmlT/FiO7pTT/U9neuc
+         rYPlku7ztczDYV8VD2iAjoTEX8A5rx6vuOUz2G3nQP08PI75eBMclA+oToNAa67xWEHD
+         92Rw==
+X-Gm-Message-State: AOAM532ZHwIjcGXQTdzY2Ka7oaZZeLnYnHgaZ1lJgvcI6cUYdDrs7qgb
+        8Ma+KR+Mk0kPnsIe3LbGJtwuccqSB58=
+X-Google-Smtp-Source: ABdhPJwVRyGdL6gLtzFuisuLJ1+/NAQhGlfbnRyE0ODAwYYAtuW5w1BFkXs9/iLcFnEYbZXnZeRnPQ==
+X-Received: by 2002:a63:615:: with SMTP id 21mr10417354pgg.383.1597678535192;
+        Mon, 17 Aug 2020 08:35:35 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q2sm20745484pfc.40.2020.08.17.08.35.33
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 17 Aug 2020 08:35:34 -0700 (PDT)
+Date:   Mon, 17 Aug 2020 08:35:33 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Marius Zachmann <mail@mariuszachmann.de>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org
+Subject: Re: [PATCH v2] hwmon: corsair-cpro: fix ccp_probe, add delay [HID
+ related]
+Message-ID: <20200817153533.GA243558@roeck-us.net>
+References: <20200817070040.7952-1-mail@mariuszachmann.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200813161129.1507599-1-steve@sk2.org>
+In-Reply-To: <20200817070040.7952-1-mail@mariuszachmann.de>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Aug 13, 2020 at 06:11:29PM +0200, Stephen Kitt wrote:
-> This driver doesn't use the id information provided by the old i2c
-> probe function, so it can trivially be converted to the simple
-> ("probe_new") form.
+On Mon, Aug 17, 2020 at 09:00:40AM +0200, Marius Zachmann wrote:
+> Possibly because of the changes in usbhid/hid-core.c the first
+> raw input report is not received during ccp_probe function and it will
+> timeout. I am not sure, whether this behaviour is expected after
+> hid_device_io_start or if I am missing something.
+> As a solution this adds msleep(50) to ccp_probe so that all initial
+> input reports can be received.
 > 
-> Signed-off-by: Stephen Kitt <steve@sk2.org>
+> Signed-off-by: Marius Zachmann <mail@mariuszachmann.de>
+
+Let's just ask the HID maintainers. Is this expected, and the correct fix ?
+
+Thanks,
+Guenter
+
 > ---
->  drivers/hwmon/adm1029.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+> v2:
+> - fix accidentally deleted comment
 > 
-> diff --git a/drivers/hwmon/adm1029.c b/drivers/hwmon/adm1029.c
-> index f7752a5bef31..50b1df7b008c 100644
-> --- a/drivers/hwmon/adm1029.c
-> +++ b/drivers/hwmon/adm1029.c
-> @@ -352,8 +352,7 @@ static int adm1029_init_client(struct i2c_client *client)
->  	return 1;
->  }
->  
-> -static int adm1029_probe(struct i2c_client *client,
-> -			 const struct i2c_device_id *id)
-> +static int adm1029_probe(struct i2c_client *client)
->  {
->  	struct device *dev = &client->dev;
->  	struct adm1029_data *data;
-> @@ -390,7 +389,7 @@ static struct i2c_driver adm1029_driver = {
->  	.driver = {
->  		.name = "adm1029",
->  	},
-> -	.probe		= adm1029_probe,
-> +	.probe_new	= adm1029_probe,
->  	.id_table	= adm1029_id,
->  	.detect		= adm1029_detect,
->  	.address_list	= normal_i2c,
-> -- 
-> 2.25.4
+> ---
+>  drivers/hwmon/corsair-cpro.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-
-Hello
-
-Tested-by: Corentin Labbe <clabbe.montjoie@gmail.com>
-
-Thanks
+> diff --git a/drivers/hwmon/corsair-cpro.c b/drivers/hwmon/corsair-cpro.c
+> index 591929ec217a..c04fac1d820f 100644
+> --- a/drivers/hwmon/corsair-cpro.c
+> +++ b/drivers/hwmon/corsair-cpro.c
+> @@ -10,6 +10,7 @@
+> 
+>  #include <linux/bitops.h>
+>  #include <linux/completion.h>
+> +#include <linux/delay.h>
+>  #include <linux/hid.h>
+>  #include <linux/hwmon.h>
+>  #include <linux/kernel.h>
+> @@ -513,6 +514,7 @@ static int ccp_probe(struct hid_device *hdev, const struct hid_device_id *id)
+>  	init_completion(&ccp->wait_input_report);
+> 
+>  	hid_device_io_start(hdev);
+> +	msleep(50); /* wait before events can be received */
+> 
+>  	/* temp and fan connection status only updates when device is powered on */
+>  	ret = get_temp_cnct(ccp);
+> --
+> 2.28.0
