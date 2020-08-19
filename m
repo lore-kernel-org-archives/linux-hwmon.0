@@ -1,99 +1,229 @@
-Return-Path: <SRS0=drMo=B4=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=Cu32=B5=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59BEEC433DF
-	for <linux-hwmon@archiver.kernel.org>; Tue, 18 Aug 2020 17:51:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFDE5C433E3
+	for <linux-hwmon@archiver.kernel.org>; Wed, 19 Aug 2020 00:48:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2282420B1F
-	for <linux-hwmon@archiver.kernel.org>; Tue, 18 Aug 2020 17:51:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1597773104;
-	bh=J4/+5tA8Fug1dB4bZX92MmZfbq9+rUEgquwGY02+xII=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:List-ID:From;
-	b=BA9g/ZZCxYiUil/pJ5/twDWukXBXxjgKo2HVLhiQjwHbBLhmLsyh79oG9/a2wt+VA
-	 BUtPyvGLImV/ckIYYqRbQGZOmm1NNPGlyoT8fuaeR6mfrHPweGP6z4OcbTkMvLdcsf
-	 ppyL7K0bOhDYs0w8PHW06R9du1Edn6tBgy+cSgeI=
+	by mail.kernel.org (Postfix) with ESMTP id 9887B207FB
+	for <linux-hwmon@archiver.kernel.org>; Wed, 19 Aug 2020 00:48:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726569AbgHRRvn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 18 Aug 2020 13:51:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55270 "EHLO mail.kernel.org"
+        id S1726890AbgHSAsI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 18 Aug 2020 20:48:08 -0400
+Received: from mga01.intel.com ([192.55.52.88]:60201 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726552AbgHRRvm (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 18 Aug 2020 13:51:42 -0400
-Received: from pobox.suse.cz (nat1.prg.suse.com [195.250.132.148])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7251C2080C;
-        Tue, 18 Aug 2020 17:51:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597773102;
-        bh=J4/+5tA8Fug1dB4bZX92MmZfbq9+rUEgquwGY02+xII=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=T3wpR2WBUlCabkr4fsPmJg4+KcnhOa796FGKnSRNr7m5pn8yGRiPDm4jc9BQkjccc
-         Bwa2CLWXsztXFXONIUPACeVTcvT3h8yHJynGrOaR07PEDVjC7K88faZ/xWoL6UzYNo
-         y1zS+yT0s4GxQqfW8EFz0g5mlVCch/a6PYSb+Q7Y=
-Date:   Tue, 18 Aug 2020 19:51:38 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Marius Zachmann <mail@mariuszachmann.de>
-cc:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: corsair-cpro: fix ccp_probe, add delay [HID
- related]
-In-Reply-To: <79890342.HV0Al07Iil@marius>
-Message-ID: <nycvar.YFH.7.76.2008181948290.27422@cbobk.fhfr.pm>
-References: <20200817070040.7952-1-mail@mariuszachmann.de> <20200817153533.GA243558@roeck-us.net> <79890342.HV0Al07Iil@marius>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        id S1726862AbgHSAsF (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 18 Aug 2020 20:48:05 -0400
+IronPort-SDR: EPfEez1hGmk0IwjsjJqxd4StuiIjRvyqMb29n+vVKocix/dI8y4aUG5vvJUSN2K0LpuALAjU+k
+ kdhy9YJE1/2g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9717"; a="173075703"
+X-IronPort-AV: E=Sophos;i="5.76,329,1592895600"; 
+   d="scan'208";a="173075703"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2020 17:48:04 -0700
+IronPort-SDR: 9LlkMCOhe27QfpoYLfjsOnNGtPW+W/oQ3UpJK4aFlKVAMdSjXMiK08eEcnV4ab9Jf0Kq7KCpSn
+ 9M6lhyw6bq8Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,329,1592895600"; 
+   d="scan'208";a="371073417"
+Received: from lkp-server02.sh.intel.com (HELO 2f0d8b563e65) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 18 Aug 2020 17:48:02 -0700
+Received: from kbuild by 2f0d8b563e65 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1k8CGo-0001Ua-6u; Wed, 19 Aug 2020 00:48:02 +0000
+Date:   Wed, 19 Aug 2020 08:47:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:hwmon-next] BUILD SUCCESS
+ 4f31c8c48312dad01ce36a3eb993709bed6651b4
+Message-ID: <5f3c7696.MCnSki6MT6cGKMWE%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, 18 Aug 2020, Marius Zachmann wrote:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon-next
+branch HEAD: 4f31c8c48312dad01ce36a3eb993709bed6651b4  hwmon: (ltc2947) use simple i2c probe
 
-> > > Possibly because of the changes in usbhid/hid-core.c the first
-> > > raw input report is not received during ccp_probe function and it will
-> > > timeout. I am not sure, whether this behaviour is expected after
-> > > hid_device_io_start or if I am missing something.
-> > > As a solution this adds msleep(50) to ccp_probe so that all initial
-> > > input reports can be received.
-> > > 
-> > > Signed-off-by: Marius Zachmann <mail@mariuszachmann.de>
-> > 
-> > Let's just ask the HID maintainers. Is this expected, and the correct fix ?
-> 
-> This seems to be a problem with "HID: usbhid: do not sleep when opening
-> device". There is a bug report with some Logitech devices at the correct
-> thread. These drivers also use hid_device_io_start and fail. Seems to me,
-> this is the same problem and I retract this (not so beautiful) fix until
-> this is sorted out.
+elapsed time: 2931m
 
-[ CCing Dmitry ]
+configs tested: 159
+configs skipped: 16
 
-Yeah, this problem popped out also in other contexts, where many Logitech 
-devices didn't probe properly, because of the race where the first IRQ is 
-dropped on the floor (after hid_device_io_start() happens, but before the 
-50ms timeout passess), and report descriptor never gets parsed and 
-populated.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-As this is just a boot time micro-optimization, I am going to revert the 
-patch for 5.9 now, and we can try to fix this properly for next merge 
-window.
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+sh                        apsh4ad0a_defconfig
+arm                            hisi_defconfig
+ia64                             allyesconfig
+powerpc                       holly_defconfig
+arm                          collie_defconfig
+m68k                        stmark2_defconfig
+riscv                    nommu_k210_defconfig
+powerpc                         ps3_defconfig
+h8300                     edosk2674_defconfig
+sh                          urquell_defconfig
+ia64                        generic_defconfig
+ia64                          tiger_defconfig
+csky                                defconfig
+sh                        edosk7760_defconfig
+sh                           se7712_defconfig
+arm                         s5pv210_defconfig
+arm                        mvebu_v7_defconfig
+um                           x86_64_defconfig
+sh                           se7724_defconfig
+sh                               allmodconfig
+mips                           rs90_defconfig
+powerpc                      ppc64e_defconfig
+sh                         ecovec24_defconfig
+m68k                          amiga_defconfig
+ia64                             alldefconfig
+powerpc                    adder875_defconfig
+nds32                             allnoconfig
+mips                          rb532_defconfig
+powerpc                     mpc83xx_defconfig
+mips                      malta_kvm_defconfig
+sparc                            alldefconfig
+mips                       capcella_defconfig
+powerpc                      ppc6xx_defconfig
+arm                             mxs_defconfig
+mips                        omega2p_defconfig
+mips                       rbtx49xx_defconfig
+mips                         cobalt_defconfig
+mips                malta_kvm_guest_defconfig
+mips                malta_qemu_32r6_defconfig
+arm                          pcm027_defconfig
+ia64                            zx1_defconfig
+mips                         mpc30x_defconfig
+alpha                               defconfig
+arm                           tegra_defconfig
+arm                         s3c2410_defconfig
+m68k                          hp300_defconfig
+arm                        clps711x_defconfig
+mips                      pic32mzda_defconfig
+mips                      maltasmvp_defconfig
+arm                           sunxi_defconfig
+riscv                    nommu_virt_defconfig
+powerpc                      pmac32_defconfig
+arm                      footbridge_defconfig
+mips                        nlm_xlr_defconfig
+microblaze                      mmu_defconfig
+arm                        oxnas_v6_defconfig
+sh                               j2_defconfig
+sh                             espt_defconfig
+h8300                    h8300h-sim_defconfig
+mips                  decstation_64_defconfig
+sh                          kfr2r09_defconfig
+sh                          sdk7786_defconfig
+arm                           spitz_defconfig
+powerpc                        cell_defconfig
+powerpc                      ppc44x_defconfig
+sh                         ap325rxa_defconfig
+mips                  maltasmvp_eva_defconfig
+mips                            gpr_defconfig
+sh                        sh7785lcr_defconfig
+m68k                       m5208evb_defconfig
+arm                   milbeaut_m10v_defconfig
+c6x                        evmc6472_defconfig
+sh                           sh2007_defconfig
+mips                        nlm_xlp_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                             defconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a006-20200817
+x86_64               randconfig-a001-20200817
+x86_64               randconfig-a005-20200817
+x86_64               randconfig-a003-20200817
+x86_64               randconfig-a002-20200817
+x86_64               randconfig-a004-20200817
+i386                 randconfig-a005-20200817
+i386                 randconfig-a001-20200817
+i386                 randconfig-a002-20200817
+i386                 randconfig-a003-20200817
+i386                 randconfig-a006-20200817
+i386                 randconfig-a004-20200817
+i386                 randconfig-a005-20200818
+i386                 randconfig-a002-20200818
+i386                 randconfig-a001-20200818
+i386                 randconfig-a006-20200818
+i386                 randconfig-a003-20200818
+i386                 randconfig-a004-20200818
+x86_64               randconfig-a013-20200818
+x86_64               randconfig-a016-20200818
+x86_64               randconfig-a012-20200818
+x86_64               randconfig-a011-20200818
+x86_64               randconfig-a014-20200818
+x86_64               randconfig-a015-20200818
+i386                 randconfig-a016-20200817
+i386                 randconfig-a011-20200817
+i386                 randconfig-a013-20200817
+i386                 randconfig-a015-20200817
+i386                 randconfig-a014-20200817
+i386                 randconfig-a012-20200817
+i386                 randconfig-a016-20200818
+i386                 randconfig-a011-20200818
+i386                 randconfig-a015-20200818
+i386                 randconfig-a013-20200818
+i386                 randconfig-a012-20200818
+i386                 randconfig-a014-20200818
+x86_64               randconfig-a006-20200819
+x86_64               randconfig-a001-20200819
+x86_64               randconfig-a003-20200819
+x86_64               randconfig-a005-20200819
+x86_64               randconfig-a004-20200819
+x86_64               randconfig-a002-20200819
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
 
-Thanks,
-
--- 
-Jiri Kosina
-SUSE Labs
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
