@@ -1,138 +1,184 @@
-Return-Path: <SRS0=Cu32=B5=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=ykys=B6=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1A49C433E1
-	for <linux-hwmon@archiver.kernel.org>; Wed, 19 Aug 2020 10:52:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5596C433E3
+	for <linux-hwmon@archiver.kernel.org>; Thu, 20 Aug 2020 13:22:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D25A6207BB
-	for <linux-hwmon@archiver.kernel.org>; Wed, 19 Aug 2020 10:52:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9D6DE22D07
+	for <linux-hwmon@archiver.kernel.org>; Thu, 20 Aug 2020 13:22:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="o6wcLOra"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KdG67+29"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728074AbgHSKv4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 19 Aug 2020 06:51:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44702 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728015AbgHSKvd (ORCPT
+        id S1728559AbgHTNVy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 20 Aug 2020 09:21:54 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:25973 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1729117AbgHTNTm (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 19 Aug 2020 06:51:33 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6546AC061757
-        for <linux-hwmon@vger.kernel.org>; Wed, 19 Aug 2020 03:51:29 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id c15so21006997wrs.11
-        for <linux-hwmon@vger.kernel.org>; Wed, 19 Aug 2020 03:51:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=jkwK21g5VFdynOOGr6pwZT15bIrSzS5HHZUTr6u93Bk=;
-        b=o6wcLOra6wVLGD3LShyd1CcBwNTFU7v/kixPKoLuyTZgV+ErdoUhW0QEJzVNCoPXYI
-         GVMuHyu9mGHZ6da1NSE2yas+EN30VVUhq3LL56yw4TGf4+WrjxxNIvw5MFEoTLEWYBST
-         lOg02JNxd3WiubgOJuCDuousdR/dux4jCBQxh/GETWsGhSCiSfO61Dsjg9Tn4LUgbFNR
-         HUcLGlOZkwm6/Y9xaRLkNSK8y5WRshXuQplnM/0wWDHgHpxVDCBHp46VIcQ++pd3yMp8
-         hK1v+LcPjY5IfmK5noOrvsjPWmOf2sfi23qBLJ8IvJBWayY+TAWD6+Mac7nMjW/5AdZT
-         qtFg==
+        Thu, 20 Aug 2020 09:19:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1597929580;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=EYEbh/d854a4Cvi1ZmxUctES1NziyUONjpMTuL++zu0=;
+        b=KdG67+296sUS/O13+DONjGFaD2c0ki3U1m7m7GME2wVW1Po0iaIxDewcGkTsbWO44sH2cZ
+        ec+mIy4nro0yifSDNqUfFpSubq3CE9GEkGR9Pv6H++ZCU0iJmyOTtXi4rR6ixb6TbjtULA
+        n1uEOzFSwZ85M+Oo1TWra6v42F9v0vs=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-269-FUeuprS0MqG7t_nXsP9mNg-1; Thu, 20 Aug 2020 09:19:39 -0400
+X-MC-Unique: FUeuprS0MqG7t_nXsP9mNg-1
+Received: by mail-qt1-f198.google.com with SMTP id z5so1524082qtc.2
+        for <linux-hwmon@vger.kernel.org>; Thu, 20 Aug 2020 06:19:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=jkwK21g5VFdynOOGr6pwZT15bIrSzS5HHZUTr6u93Bk=;
-        b=N60p+C9XxyqAJlgF4Wzzz0SstXZmxnyKloTi+aiw+WpvLz9g8BBpXO3E3RSfWEdgem
-         WyonQN5ySp/G5zuNprjnvJoNt7nrrVF5W8RMFg3Al+JKGBaeXtGLavGoczzSnFRe4fx/
-         uUz9aOel60wtYk/mJ773pWwSJK8oYXVKLjHJe0xrE0JrMUn46BshqlHrREsrpjb9o0y5
-         iuovqg3tHfOKisbIzwneidhtmcJ+xu4XJT/ItPBmux8Jv3TFynUcNRrdV6LLT8HwgBlv
-         nAb0iCcmpJseDxSBV+Rj3tQ1vZ5D3jGs6uGdl0dmeL/F6L3glA6j4KyVKjJlMl94rqs9
-         CVkw==
-X-Gm-Message-State: AOAM531wZamurQ2THrDjRCfBcwp+hCs4CF+y1mKTQOvO5Hu0SdwEC6CX
-        UvlQW2/QK1V4P7D+MU7e+ajXDw==
-X-Google-Smtp-Source: ABdhPJyXRU861CmmXhvzyM0K1yAJtYGdADvkQ1ImIfcucwdx9hjZDkswr6TS7g+o481n48uSjh4ZUQ==
-X-Received: by 2002:a5d:4a0b:: with SMTP id m11mr24001808wrq.407.1597834288094;
-        Wed, 19 Aug 2020 03:51:28 -0700 (PDT)
-Received: from dell ([95.149.164.62])
-        by smtp.gmail.com with ESMTPSA id q7sm40425011wra.56.2020.08.19.03.51.26
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=EYEbh/d854a4Cvi1ZmxUctES1NziyUONjpMTuL++zu0=;
+        b=bHgMZI3Z5H+HtII7T9gXBIv+wv13ya1DC5CAny09MwzBfGFrmeyDjdLjKDgmQvXju4
+         Coy1yW1eV2Vddke07Tab9clNIWMwJlXwrnYTfcWP3kDBcbzSzlNwQKLw6LZejDsKEw8w
+         qvGr8TOGgA2s3mzVLdqoo8/OMqBJDlDDvCZwLpTuONXxwor0qc6D0UhIe/M5ABGp2jnD
+         kVjOsgmP/g+TXLfRh+qk7F3fHd0RZyJy4kt/G80fShR6emD+HyYDmS9asOcoREod6WV7
+         VNK/7IH5xkQZM2feiSCDgZISk2wBw8a17UH+uUdMyOTJ1svH1ryWz8YrljR9bUvZRfw2
+         I5+Q==
+X-Gm-Message-State: AOAM533Vi9Lc+YYPEvQwwvhIcbFnpk3z4iOfJvghjcrQfkY1lHgyQQzN
+        5qMmFgNj3d0v1ezBiv6zJYTOnRsMoSA9yLWR4JNf6KOog0ELbg3kvaSiW3xOy4dAODatkA6B1gq
+        NaXhf2rIzb6MkrKrXz/GL0Ak=
+X-Received: by 2002:ac8:71d6:: with SMTP id i22mr2532263qtp.371.1597929578429;
+        Thu, 20 Aug 2020 06:19:38 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJylmGEqva8k65GQbvrfrvomBJaM4CqPY7z4t1eMT+zT+dmuDhYUfv1MeCKO+nFkDiWH+W8K5w==
+X-Received: by 2002:ac8:71d6:: with SMTP id i22mr2532245qtp.371.1597929578139;
+        Thu, 20 Aug 2020 06:19:38 -0700 (PDT)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id b37sm3022312qtk.85.2020.08.20.06.19.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Aug 2020 03:51:27 -0700 (PDT)
-Date:   Wed, 19 Aug 2020 11:51:24 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Pavel Machek <pavel@ucw.cz>
-Subject: Re: [PATCH v8 03/13] mfd: simple-mfd-i2c: add sl28cpld support
-Message-ID: <20200819105124.GA3248864@dell>
-References: <20200813124832.17349-1-michael@walle.cc>
- <20200813124832.17349-4-michael@walle.cc>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200813124832.17349-4-michael@walle.cc>
+        Thu, 20 Aug 2020 06:19:37 -0700 (PDT)
+From:   trix@redhat.com
+To:     rydberg@bitmath.org, jdelvare@suse.com, linux@roeck-us.net
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] hwmon: applesmc: check status earlier.
+Date:   Thu, 20 Aug 2020 06:19:32 -0700
+Message-Id: <20200820131932.10590-1-trix@redhat.com>
+X-Mailer: git-send-email 2.18.1
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, 13 Aug 2020, Michael Walle wrote:
+From: Tom Rix <trix@redhat.com>
 
-> Add the core support for the board management controller found on the
-> SMARC-sAL28 board.
-> 
-> Also add a virtual symbol which pulls in the simple-mfd-i2c driver and
-> provide a common symbol on which the subdevice drivers can depend on.
-> 
-> At the moment, this controller is used on the Kontron SMARC-sAL28 board.
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
-> Changes since v7:
->  - added MFD_SL28CPLD virtual Kconfig symbol
->  - Please note, that I intentionally removed the Acked-for-MFD-by
->    because of this change.
-> 
-> Changes since v6:
->  - renamed "sl28cpld-r1" to "sl28cpld"
-> 
-> Changes since v5:
->  - none
-> 
-> Changes since v4:
->  - new patch
-> 
->  drivers/mfd/Kconfig          | 10 ++++++++++
->  drivers/mfd/simple-mfd-i2c.c |  1 +
->  2 files changed, 11 insertions(+)
+clang static analysis reports this representative problem
 
-For my own reference (apply this as-is to your sign-off block):
+applesmc.c:758:10: warning: 1st function call argument is an
+  uninitialized value
+        left = be16_to_cpu(*(__be16 *)(buffer + 6)) >> 2;
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+buffer is filled by the earlier call
 
+	ret = applesmc_read_key(LIGHT_SENSOR_LEFT_KEY, ...
+
+This problem is reported because a goto skips the status check.
+Other similar problems use data from applesmc_read_key before checking
+the status.  So move the checks to before the use.
+
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/hwmon/applesmc.c | 31 ++++++++++++++++---------------
+ 1 file changed, 16 insertions(+), 15 deletions(-)
+
+diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
+index 316618409315..a18887990f4a 100644
+--- a/drivers/hwmon/applesmc.c
++++ b/drivers/hwmon/applesmc.c
+@@ -753,15 +753,18 @@ static ssize_t applesmc_light_show(struct device *dev,
+ 	}
+ 
+ 	ret = applesmc_read_key(LIGHT_SENSOR_LEFT_KEY, buffer, data_length);
++	if (ret)
++		goto out;
+ 	/* newer macbooks report a single 10-bit bigendian value */
+ 	if (data_length == 10) {
+ 		left = be16_to_cpu(*(__be16 *)(buffer + 6)) >> 2;
+ 		goto out;
+ 	}
+ 	left = buffer[2];
++
++	ret = applesmc_read_key(LIGHT_SENSOR_RIGHT_KEY, buffer, data_length);
+ 	if (ret)
+ 		goto out;
+-	ret = applesmc_read_key(LIGHT_SENSOR_RIGHT_KEY, buffer, data_length);
+ 	right = buffer[2];
+ 
+ out:
+@@ -810,12 +813,11 @@ static ssize_t applesmc_show_fan_speed(struct device *dev,
+ 		  to_index(attr));
+ 
+ 	ret = applesmc_read_key(newkey, buffer, 2);
+-	speed = ((buffer[0] << 8 | buffer[1]) >> 2);
+-
+ 	if (ret)
+ 		return ret;
+-	else
+-		return snprintf(sysfsbuf, PAGE_SIZE, "%u\n", speed);
++
++	speed = ((buffer[0] << 8 | buffer[1]) >> 2);
++	return snprintf(sysfsbuf, PAGE_SIZE, "%u\n", speed);
+ }
+ 
+ static ssize_t applesmc_store_fan_speed(struct device *dev,
+@@ -851,12 +853,11 @@ static ssize_t applesmc_show_fan_manual(struct device *dev,
+ 	u8 buffer[2];
+ 
+ 	ret = applesmc_read_key(FANS_MANUAL, buffer, 2);
+-	manual = ((buffer[0] << 8 | buffer[1]) >> to_index(attr)) & 0x01;
+-
+ 	if (ret)
+ 		return ret;
+-	else
+-		return snprintf(sysfsbuf, PAGE_SIZE, "%d\n", manual);
++
++	manual = ((buffer[0] << 8 | buffer[1]) >> to_index(attr)) & 0x01;
++	return snprintf(sysfsbuf, PAGE_SIZE, "%d\n", manual);
+ }
+ 
+ static ssize_t applesmc_store_fan_manual(struct device *dev,
+@@ -872,10 +873,11 @@ static ssize_t applesmc_store_fan_manual(struct device *dev,
+ 		return -EINVAL;
+ 
+ 	ret = applesmc_read_key(FANS_MANUAL, buffer, 2);
+-	val = (buffer[0] << 8 | buffer[1]);
+ 	if (ret)
+ 		goto out;
+ 
++	val = (buffer[0] << 8 | buffer[1]);
++
+ 	if (input)
+ 		val = val | (0x01 << to_index(attr));
+ 	else
+@@ -951,13 +953,12 @@ static ssize_t applesmc_key_count_show(struct device *dev,
+ 	u32 count;
+ 
+ 	ret = applesmc_read_key(KEY_COUNT_KEY, buffer, 4);
+-	count = ((u32)buffer[0]<<24) + ((u32)buffer[1]<<16) +
+-						((u32)buffer[2]<<8) + buffer[3];
+-
+ 	if (ret)
+ 		return ret;
+-	else
+-		return snprintf(sysfsbuf, PAGE_SIZE, "%d\n", count);
++
++	count = ((u32)buffer[0]<<24) + ((u32)buffer[1]<<16) +
++						((u32)buffer[2]<<8) + buffer[3];
++	return snprintf(sysfsbuf, PAGE_SIZE, "%d\n", count);
+ }
+ 
+ static ssize_t applesmc_key_at_index_read_show(struct device *dev,
 -- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.18.1
+
