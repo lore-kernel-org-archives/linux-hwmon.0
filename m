@@ -2,97 +2,136 @@ Return-Path: <SRS0=38Bi=B7=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A839C433E1
-	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Aug 2020 18:28:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4F3BC433E1
+	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Aug 2020 18:30:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5414F22EBF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Aug 2020 18:28:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A68EC22EBF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Aug 2020 18:30:17 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FHJhuIII"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725802AbgHUS2B (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 21 Aug 2020 14:28:01 -0400
-Received: from 14.mo6.mail-out.ovh.net ([46.105.56.113]:57244 "EHLO
-        14.mo6.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725770AbgHUS2B (ORCPT
+        id S1725804AbgHUSaR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 21 Aug 2020 14:30:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53420 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725821AbgHUSaQ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 21 Aug 2020 14:28:01 -0400
-Received: from player799.ha.ovh.net (unknown [10.110.103.41])
-        by mo6.mail-out.ovh.net (Postfix) with ESMTP id 7CDF72242CE
-        for <linux-hwmon@vger.kernel.org>; Fri, 21 Aug 2020 18:00:44 +0200 (CEST)
-Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
-        (Authenticated sender: steve@sk2.org)
-        by player799.ha.ovh.net (Postfix) with ESMTPSA id ABD0E156BDE9D;
-        Fri, 21 Aug 2020 16:00:38 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-103G0059f190c4a-db29-4b17-b616-76cf4b1db7b5,
-                    20EB7F6BE0168D07063FB82D5C23839419BBC220) smtp.auth=steve@sk2.org
-From:   Stephen Kitt <steve@sk2.org>
-To:     Juerg Haefliger <juergh@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Stephen Kitt <steve@sk2.org>
-Subject: [PATCH] hwmon: (dme1737) use simple i2c probe
-Date:   Fri, 21 Aug 2020 18:00:35 +0200
-Message-Id: <20200821160035.590142-1-steve@sk2.org>
-X-Mailer: git-send-email 2.25.4
+        Fri, 21 Aug 2020 14:30:16 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04371C06179B;
+        Fri, 21 Aug 2020 11:30:16 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id h12so1390317pgm.7;
+        Fri, 21 Aug 2020 11:30:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=zP47110S/VhRjoKqw44D0J+M/2tpqI2WT8Gl3dFgMLU=;
+        b=FHJhuIIIl2pjvt5gC0n9ebYyiLz7oPCyOoZ204GanM2l+Dt/AZK351tSCFaXcetIgB
+         B0QuwgtbOLYh3yinGuPNmEMuTnVlomUiZvIknKW5OINsVq95f5P/8IfYpOvTztpQk7wj
+         5rKQx4S3UkuY6qUu7yzqikp5pMBrC0C27wlZZgHZ0vmAdgusHDxAyG5sy7EtJNqSH6Wl
+         OQ9tZfCKlVWZju4ne50ug0G12g6VyTIGBO2fmhyEgM8OAZohfuG6Zn2pIJdtYfRPmDME
+         ho6FzKYOww8DX4s00jUzULiSihELcvDbmTArHDtqj9RyazRKS6cbNpGU0eNKfS/zzlyr
+         dl2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=zP47110S/VhRjoKqw44D0J+M/2tpqI2WT8Gl3dFgMLU=;
+        b=YDEg1cIfjTG4m+gm5YVQ7pZEt2GVuNbk4TlbNx9FXbo5qDz1aVaui1WD4KHp58iBNp
+         vXRVh9ktSHODWT9txJCt4VTECC23BjFhjTCKFa5+5t7TUEK104LamnXe3NTmYK7WKshw
+         wp33tg58VJm6/huMU3dgAIrkePAm+oPmXL/B8b54co2QZnzCrXZTMnO9RhP5N8n0SS01
+         k0XwBKXaEKPqpvy4fKWto3X/LWTe322gwc6bP40m2EpDLNKL3PGHOKBiygo5aQJHDHA4
+         t6ft3B7Fu2rwcy7ZiqtfvmbIzE4U1F3apgVVCf85+EjRp/ZfOu09DA/X70epAswKm2gF
+         xxyg==
+X-Gm-Message-State: AOAM531rZzvKfXFmXGHjsOTYo5agichd/C7YEdgMRTv9hcq82c0NbnG8
+        OJen07qGX3g4wqmnMbvVRVw=
+X-Google-Smtp-Source: ABdhPJxp1f9fXlscpv6Qe1ELd6qPs9/3TfsCbJWXquPOKCpMw0FIPwawnTMfQ9II/Phab4f9G10iHw==
+X-Received: by 2002:aa7:8b18:: with SMTP id f24mr3453731pfd.301.1598034615578;
+        Fri, 21 Aug 2020 11:30:15 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c207sm3072159pfc.64.2020.08.21.11.30.14
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 21 Aug 2020 11:30:15 -0700 (PDT)
+Date:   Fri, 21 Aug 2020 11:30:13 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Stephen Kitt <steve@sk2.org>
+Cc:     Eric Tremblay <etremblay@distech-controls.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (tmp513) use simple i2c probe
+Message-ID: <20200821183013.GA61218@roeck-us.net>
+References: <20200821160231.592571-1-steve@sk2.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 17270178671746174236
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduiedrudduvddgkeejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeetgedugfelkeeikeetgeegteevfeeufeetuefgudeiiedthfehtdeffeekvdeffeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpqdhouhhtpdhhvghlohepphhlrgihvghrjeelledrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehsthgvvhgvsehskhdvrdhorhhgpdhrtghpthhtoheplhhinhhugidqhhifmhhonhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200821160231.592571-1-steve@sk2.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-As part of the ongoing i2c transition to the simple probe
-("probe_new"), this patch uses i2c_match_id to retrieve the
-driver_data for the probed device. The id parameter is thus no longer
-necessary and the simple probe can be used instead.
+On Fri, Aug 21, 2020 at 06:02:31PM +0200, Stephen Kitt wrote:
+> As part of the ongoing i2c transition to the simple probe
+> ("probe_new"), this patch uses i2c_match_id to retrieve the
+> driver_data for the probed device. The id parameter is thus no longer
+> necessary and the simple probe can be used instead.
+> 
+> Signed-off-by: Stephen Kitt <steve@sk2.org>
 
-Signed-off-by: Stephen Kitt <steve@sk2.org>
----
- drivers/hwmon/dme1737.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+Applied.
 
-diff --git a/drivers/hwmon/dme1737.c b/drivers/hwmon/dme1737.c
-index c3472b73fa79..c1e4cfb40c3d 100644
---- a/drivers/hwmon/dme1737.c
-+++ b/drivers/hwmon/dme1737.c
-@@ -2461,8 +2461,9 @@ static int dme1737_i2c_detect(struct i2c_client *client,
- 	return 0;
- }
- 
--static int dme1737_i2c_probe(struct i2c_client *client,
--			     const struct i2c_device_id *id)
-+static const struct i2c_device_id dme1737_id[];
-+
-+static int dme1737_i2c_probe(struct i2c_client *client)
- {
- 	struct dme1737_data *data;
- 	struct device *dev = &client->dev;
-@@ -2473,7 +2474,7 @@ static int dme1737_i2c_probe(struct i2c_client *client,
- 		return -ENOMEM;
- 
- 	i2c_set_clientdata(client, data);
--	data->type = id->driver_data;
-+	data->type = i2c_match_id(dme1737_id, client)->driver_data;
- 	data->client = client;
- 	data->name = client->name;
- 	mutex_init(&data->update_lock);
-@@ -2529,7 +2530,7 @@ static struct i2c_driver dme1737_i2c_driver = {
- 	.driver = {
- 		.name = "dme1737",
- 	},
--	.probe = dme1737_i2c_probe,
-+	.probe_new = dme1737_i2c_probe,
- 	.remove = dme1737_i2c_remove,
- 	.id_table = dme1737_id,
- 	.detect = dme1737_i2c_detect,
--- 
-2.25.4
+Thanks,
+Guenter
 
+> ---
+>  drivers/hwmon/tmp513.c | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/hwmon/tmp513.c b/drivers/hwmon/tmp513.c
+> index df66e0bc1253..9f5885b0eb74 100644
+> --- a/drivers/hwmon/tmp513.c
+> +++ b/drivers/hwmon/tmp513.c
+> @@ -709,8 +709,7 @@ static int tmp51x_configure(struct device *dev, struct tmp51x_data *data)
+>  	return 0;
+>  }
+>  
+> -static int tmp51x_probe(struct i2c_client *client,
+> -			const struct i2c_device_id *id)
+> +static int tmp51x_probe(struct i2c_client *client)
+>  {
+>  	struct device *dev = &client->dev;
+>  	struct tmp51x_data *data;
+> @@ -724,7 +723,7 @@ static int tmp51x_probe(struct i2c_client *client,
+>  	if (client->dev.of_node)
+>  		data->id = (enum tmp51x_ids)device_get_match_data(&client->dev);
+>  	else
+> -		data->id = id->driver_data;
+> +		data->id = i2c_match_id(tmp51x_id, client)->driver_data;
+>  
+>  	ret = tmp51x_configure(dev, data);
+>  	if (ret < 0) {
+> @@ -751,7 +750,7 @@ static int tmp51x_probe(struct i2c_client *client,
+>  	if (IS_ERR(hwmon_dev))
+>  		return PTR_ERR(hwmon_dev);
+>  
+> -	dev_dbg(dev, "power monitor %s\n", id->name);
+> +	dev_dbg(dev, "power monitor %s\n", client->name);
+>  
+>  	return 0;
+>  }
+> @@ -761,7 +760,7 @@ static struct i2c_driver tmp51x_driver = {
+>  		.name	= "tmp51x",
+>  		.of_match_table = of_match_ptr(tmp51x_of_match),
+>  	},
+> -	.probe		= tmp51x_probe,
+> +	.probe_new	= tmp51x_probe,
+>  	.id_table	= tmp51x_id,
+>  };
+>  
