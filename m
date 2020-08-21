@@ -1,178 +1,101 @@
-Return-Path: <SRS0=ykys=B6=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=38Bi=B7=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_2 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 33D65C433E1
-	for <linux-hwmon@archiver.kernel.org>; Thu, 20 Aug 2020 21:13:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13CB1C433E1
+	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Aug 2020 11:33:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AF9ED2075E
-	for <linux-hwmon@archiver.kernel.org>; Thu, 20 Aug 2020 21:13:44 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=bitmath.org header.i=@bitmath.org header.b="pvHkTpb5"
+	by mail.kernel.org (Postfix) with ESMTP id F14472078B
+	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Aug 2020 11:33:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728652AbgHTVNo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 20 Aug 2020 17:13:44 -0400
-Received: from mailrelay3-2.pub.mailoutpod1-cph3.one.com ([46.30.212.2]:50512
-        "EHLO mailrelay3-2.pub.mailoutpod1-cph3.one.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727030AbgHTVNl (ORCPT
+        id S1727964AbgHULdm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 21 Aug 2020 07:33:42 -0400
+Received: from 1.mo68.mail-out.ovh.net ([46.105.41.146]:33051 "EHLO
+        1.mo68.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726907AbgHULdm (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 20 Aug 2020 17:13:41 -0400
-X-Greylist: delayed 962 seconds by postgrey-1.27 at vger.kernel.org; Thu, 20 Aug 2020 17:13:40 EDT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bitmath.org; s=20191106;
-        h=content-transfer-encoding:content-type:in-reply-to:mime-version:date:
-         message-id:from:references:cc:to:subject:from;
-        bh=jtemrB4zsoa7mVFISpNS3LnmcTerk053X3gyJVZ91Ho=;
-        b=pvHkTpb5n5+xriE/BvwhCvErqEBlKs7CDgpSTkj/53k0nO9xUAEUfWTFHYb8OHoOj9sqzKPe+sOME
-         q3w/fGiSEIB1OQnrKfzYYMN/zKEcb5vb7eIuIgyM1TY/Nbwq5lFhFlvsEOG5C27iOc/Ed9nAX0VlL1
-         or3CjpEsrRlbrI4gLkBrwmLW/INWl1tJRto4DGhXUaJkpq9EeIpR+9t9PiM+66xQeyLihSyGTP2kWi
-         y7dZEkFAdGUNuwdMa38+JfAjCJVSg2oy2MKHat5Ro2TzMQhP3gGDbt7BaNVSLRHjRh1vCpA68zqAiw
-         Chh5phSqB+0iUO1Go4VCH4r9itHLKjg==
-X-HalOne-Cookie: 0ca3df440a60ca828b012abdaf5a091513d39283
-X-HalOne-ID: c6582f4f-e327-11ea-86ed-d0431ea8bb03
-Received: from [192.168.19.13] (h-98-128-166-229.na.cust.bahnhof.se [98.128.166.229])
-        by mailrelay3.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id c6582f4f-e327-11ea-86ed-d0431ea8bb03;
-        Thu, 20 Aug 2020 20:57:36 +0000 (UTC)
-Subject: Re: [PATCH] hwmon: applesmc: check status earlier.
-To:     trix@redhat.com, jdelvare@suse.com, linux@roeck-us.net
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200820131932.10590-1-trix@redhat.com>
-From:   Henrik Rydberg <rydberg@bitmath.org>
-Message-ID: <4e6435d4-4fa7-1430-528e-e3188cd3e207@bitmath.org>
-Date:   Thu, 20 Aug 2020 22:57:36 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Fri, 21 Aug 2020 07:33:42 -0400
+Received: from player735.ha.ovh.net (unknown [10.108.57.95])
+        by mo68.mail-out.ovh.net (Postfix) with ESMTP id 070C9175838
+        for <linux-hwmon@vger.kernel.org>; Fri, 21 Aug 2020 13:25:32 +0200 (CEST)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player735.ha.ovh.net (Postfix) with ESMTPSA id 7B4F8152CABB2;
+        Fri, 21 Aug 2020 11:25:25 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-104R005a6cdfe79-642f-4464-9630-78fb3fb6c30d,
+                    20EB7F6BE0168D07063FB82D5C23839419BBC220) smtp.auth=steve@sk2.org
+Date:   Fri, 21 Aug 2020 13:25:23 +0200
+From:   Stephen Kitt <steve@sk2.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Beniamin Bia <beniamin.bia@analog.com>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drivers/hwmon/adm1177.c: use simple i2c probe
+Message-ID: <20200821132456.0c9a7b54@heffalump.sk2.org>
+In-Reply-To: <20200814151358.GA256451@roeck-us.net>
+References: <20200813160958.1506536-1-steve@sk2.org>
+        <20200814151358.GA256451@roeck-us.net>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <20200820131932.10590-1-trix@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ boundary="Sig_/T8vEHXh221/e0deqj8_/PKm"; protocol="application/pgp-signature"
+X-Ovh-Tracer-Id: 12622463856318827790
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduiedrudduvddgfeegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvffukfgjfhfogggtsehgtderreertdejnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeevledvueefvdeivefftdeugeekveethefftdffteelheejkeejjeduffeiudetkeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpqdhouhhtpdhhvghlohepphhlrgihvghrjeefhedrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehsthgvvhgvsehskhdvrdhorhhgpdhrtghpthhtoheplhhinhhugidqhhifmhhonhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Tom,
+--Sig_/T8vEHXh221/e0deqj8_/PKm
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-> From: Tom Rix <trix@redhat.com>
-> 
-> clang static analysis reports this representative problem
-> 
-> applesmc.c:758:10: warning: 1st function call argument is an
->    uninitialized value
->          left = be16_to_cpu(*(__be16 *)(buffer + 6)) >> 2;
->                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> buffer is filled by the earlier call
-> 
-> 	ret = applesmc_read_key(LIGHT_SENSOR_LEFT_KEY, ...
-> 
-> This problem is reported because a goto skips the status check.
-> Other similar problems use data from applesmc_read_key before checking
-> the status.  So move the checks to before the use.
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->   drivers/hwmon/applesmc.c | 31 ++++++++++++++++---------------
->   1 file changed, 16 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
-> index 316618409315..a18887990f4a 100644
-> --- a/drivers/hwmon/applesmc.c
-> +++ b/drivers/hwmon/applesmc.c
-> @@ -753,15 +753,18 @@ static ssize_t applesmc_light_show(struct device *dev,
->   	}
->   
->   	ret = applesmc_read_key(LIGHT_SENSOR_LEFT_KEY, buffer, data_length);
-> +	if (ret)
-> +		goto out;
->   	/* newer macbooks report a single 10-bit bigendian value */
->   	if (data_length == 10) {
->   		left = be16_to_cpu(*(__be16 *)(buffer + 6)) >> 2;
->   		goto out;
->   	}
->   	left = buffer[2];
-> +
-> +	ret = applesmc_read_key(LIGHT_SENSOR_RIGHT_KEY, buffer, data_length);
->   	if (ret)
->   		goto out;
-> -	ret = applesmc_read_key(LIGHT_SENSOR_RIGHT_KEY, buffer, data_length);
->   	right = buffer[2];
->   
->   out:
-> @@ -810,12 +813,11 @@ static ssize_t applesmc_show_fan_speed(struct device *dev,
->   		  to_index(attr));
->   
->   	ret = applesmc_read_key(newkey, buffer, 2);
-> -	speed = ((buffer[0] << 8 | buffer[1]) >> 2);
-> -
->   	if (ret)
->   		return ret;
-> -	else
-> -		return snprintf(sysfsbuf, PAGE_SIZE, "%u\n", speed);
-> +
-> +	speed = ((buffer[0] << 8 | buffer[1]) >> 2);
-> +	return snprintf(sysfsbuf, PAGE_SIZE, "%u\n", speed);
->   }
->   
->   static ssize_t applesmc_store_fan_speed(struct device *dev,
-> @@ -851,12 +853,11 @@ static ssize_t applesmc_show_fan_manual(struct device *dev,
->   	u8 buffer[2];
->   
->   	ret = applesmc_read_key(FANS_MANUAL, buffer, 2);
-> -	manual = ((buffer[0] << 8 | buffer[1]) >> to_index(attr)) & 0x01;
-> -
->   	if (ret)
->   		return ret;
-> -	else
-> -		return snprintf(sysfsbuf, PAGE_SIZE, "%d\n", manual);
-> +
-> +	manual = ((buffer[0] << 8 | buffer[1]) >> to_index(attr)) & 0x01;
-> +	return snprintf(sysfsbuf, PAGE_SIZE, "%d\n", manual);
->   }
->   
->   static ssize_t applesmc_store_fan_manual(struct device *dev,
-> @@ -872,10 +873,11 @@ static ssize_t applesmc_store_fan_manual(struct device *dev,
->   		return -EINVAL;
->   
->   	ret = applesmc_read_key(FANS_MANUAL, buffer, 2);
-> -	val = (buffer[0] << 8 | buffer[1]);
->   	if (ret)
->   		goto out;
->   
-> +	val = (buffer[0] << 8 | buffer[1]);
-> +
->   	if (input)
->   		val = val | (0x01 << to_index(attr));
->   	else
-> @@ -951,13 +953,12 @@ static ssize_t applesmc_key_count_show(struct device *dev,
->   	u32 count;
->   
->   	ret = applesmc_read_key(KEY_COUNT_KEY, buffer, 4);
-> -	count = ((u32)buffer[0]<<24) + ((u32)buffer[1]<<16) +
-> -						((u32)buffer[2]<<8) + buffer[3];
-> -
->   	if (ret)
->   		return ret;
-> -	else
-> -		return snprintf(sysfsbuf, PAGE_SIZE, "%d\n", count);
-> +
-> +	count = ((u32)buffer[0]<<24) + ((u32)buffer[1]<<16) +
-> +						((u32)buffer[2]<<8) + buffer[3];
-> +	return snprintf(sysfsbuf, PAGE_SIZE, "%d\n", count);
->   }
->   
->   static ssize_t applesmc_key_at_index_read_show(struct device *dev,
-> 
+On Fri, 14 Aug 2020 08:13:58 -0700, Guenter Roeck <linux@roeck-us.net> wrot=
+e:
+> On Thu, Aug 13, 2020 at 06:09:58PM +0200, Stephen Kitt wrote:
+> > This driver doesn't use the id information provided by the old i2c
+> > probe function, so it can trivially be converted to the simple
+> > ("probe_new") form.
+> >=20
+> > Signed-off-by: Stephen Kitt <steve@sk2.org> =20
+>=20
+> I'll apply the entire series, but please don't use entire path names
+> as tag in the future but follow bubsystem rules.
 
-Looks good, thank you.
+Sorry about that, I=E2=80=99ll bear that in mind for the remaining hwmon pa=
+tches (and
+more generally).
 
-     Reviewed-by: Henrik Rydberg <rydberg@bitmath.org>
+Regards,
 
-Henrik
+Stephen
+
+--Sig_/T8vEHXh221/e0deqj8_/PKm
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEnPVX/hPLkMoq7x0ggNMC9Yhtg5wFAl8/ryMACgkQgNMC9Yht
+g5yQ6w/+KE+YETNP307h4d2A3H1iZlOMtOGg0JP62siyM6zkrFjJV373y22q9kQd
+7jF6rlPMPv/B0aFNuR/Abarlyc7kn/FDlPz6mpVomwnQVjpREIMYHgFYhrjq+u0Q
+raY5+1PN0/VF9SS1qSqs5F37yUn7MGPqoQVnntH3bqo8+UGDP8A4slGJQU+wFHd/
+7L9HwsiM5ufuVeRqLY0OssyC+0oPh+g5cdSACpZqzzyyOmMm1ojWk26fwWK9nQVQ
+UO/CILGfHyBhc7Ng5iaH0ycKRbJKyEFVfgA1Vy4uN7MkiGnCtfuvkHXgGz/L9LV/
+D7sJsxixhvs2oasO70RxCnKLMC7LVQ5bmxQ1mpuLEmnuvcgmzDpRO5eShG02yoLY
+6L0TE+SjdmAWWUigcZcUhFztALccGhCjNcuM+BMniiaHgPacT4ocNooF/e/+v7aP
+oyODufQppaSZXp7+n0wHejvV8RyumVW1kl9INDrURWUN7stPjAcNaeIXkpg+BP45
+dXyqQgY906kYyyafEr5AF886tpMOPTjaPhSVIyg7wpLxW8hdJoKzDeEDT8H6lp4Y
+5ENdR8cAw8yrb6rL6JXgFIJIMybzTiPsl6hzAvlE+wOIUOgWCCpfUFMzkEd3yBNg
+jwzzbPYAbDjgapSHjXyjaoJrc3zxq4H2ivvcRFuJQZ1j5TCnkSI=
+=9UWE
+-----END PGP SIGNATURE-----
+
+--Sig_/T8vEHXh221/e0deqj8_/PKm--
