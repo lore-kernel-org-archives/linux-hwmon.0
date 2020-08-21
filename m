@@ -7,90 +7,82 @@ X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C279CC433DF
-	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Aug 2020 18:36:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F820C433E1
+	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Aug 2020 18:39:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A939C20735
-	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Aug 2020 18:36:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E3FF420738
+	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Aug 2020 18:39:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nT9c5r+Q"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iNmJIDej"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725883AbgHUSgr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 21 Aug 2020 14:36:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54376 "EHLO
+        id S1726336AbgHUSjf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 21 Aug 2020 14:39:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725768AbgHUSgN (ORCPT
+        with ESMTP id S1725768AbgHUSjf (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 21 Aug 2020 14:36:13 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 560A1C06179A;
-        Fri, 21 Aug 2020 11:29:20 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id x6so1377371pgx.12;
-        Fri, 21 Aug 2020 11:29:20 -0700 (PDT)
+        Fri, 21 Aug 2020 14:39:35 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89BB0C061575;
+        Fri, 21 Aug 2020 11:39:34 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id p37so1407464pgl.3;
+        Fri, 21 Aug 2020 11:39:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=9Bt6z66I01y6R+MC1lpHyARTzFhlNekN+fweHpFeiRY=;
-        b=nT9c5r+Q6fDehXqVZ/+uTpIZGgpq5nhijpywnWh7GU9ASwhKa1F3JaCokPiFhddRAG
-         3UwVyd+hPhAMg79BUcaMk/ZiE8xMb9RRtXo2/+HaYRSt4wvxQKhMkSJeDHJByvmi9dBQ
-         R7yXMUiJJLHQBEirWO7jVkb8YjgCRBiLPzyDfGXbaRR85I9/pmMDdLdKAz2/HNCDN4js
-         UUEYEfnMuMHaOGnzBLQ/7g04RH6bstvrCviRTcpwT/0sr8DRffxm3Y9CW0mY+Qy5MZGR
-         OxnLAP4l29UZvV0n8aq6roysj4teUIDuDsZ6Hk+hixBNxlMl/pU+aXUKbSibjHR4ypHe
-         5wtw==
+        bh=6Wed+2KJiJXbDusUkvqx9osbk9K/bLB8+KZ5CEx8UTo=;
+        b=iNmJIDej7pY5YB0Gkj2suBA3Jwl9t7ZD0OZiL9fSPDX24XiLDEM0e95Wyn/8DSpqfX
+         zz7BjmOcvExJ8GwToRQ/le6hkexWWAnQqw8uvs2UDOBYyFUzEqPLT1AL1ErNxKqezEoe
+         LLm8hIFrN0NhqhkQOC/F2g0+GXhFbFfZnlkkTZzfYmnclUc2eJ1v2U9xTMLMViGVtm1j
+         RzF/tQwAqQhmBA4hQPqDgSH8gDK4RCI6dgEHI4JnH4guOiQEJ8U0kBA7K7xWwkVKY+zv
+         J52bpXUFixeHW5YG3B/Kb+ctBXeZArUrQO/f4pOdcUVCRpdMrYrt8pDfUw9heiB5BVLr
+         BaRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=9Bt6z66I01y6R+MC1lpHyARTzFhlNekN+fweHpFeiRY=;
-        b=eIApBCahwgCCpJTpHuIIy33BgWxau/g0zqROP5J2LxQQHTTvYoBTeMzC+uBpObTuV1
-         4dqt7vUcjsBQlXBj4eQAeXwiS4bRp2dYYjNhH5hZglTXcx85GXNZIwnDJl31bIaqoVsg
-         SuGNZtzWTBFC2lvY6kbK249oiFsdGhHtZRSxwyeYnd0PaQZqLxAcDqZXdTSDk2lJAnnO
-         iBX+FWj7PAhsz+XQ1nxWLr0+v5j264f7sQ7OC9sYH2Zf4wNjsJSsXNbmgniLWb3wgqVm
-         JKLtP+kVf4jZf7BGYsGAgn3jErdG7EyBmEqE2DvU/mFPNG6rHqtGSXuE/0zol7EI1hEK
-         ov2Q==
-X-Gm-Message-State: AOAM532JC1LNyibH3WDre7zp3wOzuF3YZpEUwuBd1IJFSwkv23NB0Dmc
-        RQDXmC494dg8qmNby4uC3B+BEGS8h6Q=
-X-Google-Smtp-Source: ABdhPJyrjHoD4PTfhL9LxNfoHoiNJ605iO5FR5xgDRpd0asbp22NLAZliZJ8j2+1CBR2INmCwlvYkA==
-X-Received: by 2002:a05:6a00:c9:: with SMTP id e9mr3485560pfj.224.1598034559865;
-        Fri, 21 Aug 2020 11:29:19 -0700 (PDT)
+        bh=6Wed+2KJiJXbDusUkvqx9osbk9K/bLB8+KZ5CEx8UTo=;
+        b=aRzdelHFp3ZyUcgW35z9YCJfaPywJAlaEOFRIh7PSUfDohZ2jhBBvg0NnVCDokpjy+
+         2H8oLLM+AOVkg7Y0jp2x8R4OFp/yclqQL6lp1yYzaCPZWxVVO8IrwMzAOM6y35cttUL4
+         WTL80AVHkxpLpWwXhTT1ydh760ynu9YonoGaV1P2vU3Xy2kkLgffYWFX8EXmB0fsBj4u
+         umoC3Om3Cy5gUxoCAOqHIAMh57OXSlfXGEreJCut8P0UcyhHcYTa8f8qMo5fZHOEXaoL
+         TMQ0aGyftW6sA04BSMZ5w1a9CetmYS3MvPgQxfVNcZBm+SM9zfDESGPKkAs3P83RD11A
+         eP1A==
+X-Gm-Message-State: AOAM53306pQcr8+TnLlgML8lYmnPk6xndgKnh+cyWH3DxHFqASG56n0T
+        DNTOc8/IINt+n8UC/AzJKV3gmOp+FUM=
+X-Google-Smtp-Source: ABdhPJwC0gExCDD5JxS1RpIHUTpceynmzw1eAoWQwOyTleiFyrZ/PfXx94gZCIzS9MB/9eaST4SHRg==
+X-Received: by 2002:a63:4557:: with SMTP id u23mr3120859pgk.197.1598035173716;
+        Fri, 21 Aug 2020 11:39:33 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z26sm2656806pgc.44.2020.08.21.11.29.19
+        by smtp.gmail.com with ESMTPSA id h193sm2843300pgc.42.2020.08.21.11.39.32
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 21 Aug 2020 11:29:19 -0700 (PDT)
-Date:   Fri, 21 Aug 2020 11:29:18 -0700
+        Fri, 21 Aug 2020 11:39:33 -0700 (PDT)
+Date:   Fri, 21 Aug 2020 11:39:31 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Stephen Kitt <steve@sk2.org>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+To:     Chris Ruehl <chris.ruehl@gtsys.com.hk>
+Cc:     Jack Lo <jack.lo@gtsys.com.hk>, devicetree@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: use simple i2c probe function
-Message-ID: <20200821182918.GA26770@roeck-us.net>
-References: <20200821160354.594715-1-steve@sk2.org>
+Subject: Re: [PATCH v8 1/2] hwmon: shtc1: add support for device tree bindings
+Message-ID: <20200821183931.GA245345@roeck-us.net>
+References: <20200815012227.32538-1-chris.ruehl@gtsys.com.hk>
+ <20200815012227.32538-2-chris.ruehl@gtsys.com.hk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200821160354.594715-1-steve@sk2.org>
+In-Reply-To: <20200815012227.32538-2-chris.ruehl@gtsys.com.hk>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Aug 21, 2020 at 06:03:54PM +0200, Stephen Kitt wrote:
-> Many hwmon drivers don't use the id information provided by the old
-> i2c probe function, and the remainder can easily be adapted to the new
-> form ("probe_new") by calling i2c_match_id explicitly.
+On Sat, Aug 15, 2020 at 09:22:26AM +0800, Chris Ruehl wrote:
+> Add support for DTS bindings for the sensirion shtc1,shtw1 and shtc3.
 > 
-> This avoids scanning the identifier tables during probes.
-> 
-> Drivers which didn't use the id are converted as-is; drivers which did
-> are modified to call i2c_match_id() with the same level of
-> error-handling (if any) as before.
-> 
-> This patch wraps up the transition for hwmon, with four stragglers not
-> included in the previous large patch.
-> 
-> Signed-off-by: Stephen Kitt <steve@sk2.org>
+> Signed-off-by: Chris Ruehl <chris.ruehl@gtsys.com.hk>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 Applied.
 
@@ -98,122 +90,66 @@ Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/adc128d818.c | 5 ++---
->  drivers/hwmon/ads7828.c    | 9 +++++----
->  drivers/hwmon/lm87.c       | 4 ++--
->  drivers/hwmon/w83795.c     | 9 +++++----
->  4 files changed, 14 insertions(+), 13 deletions(-)
+>  v8: no change
 > 
-> diff --git a/drivers/hwmon/adc128d818.c b/drivers/hwmon/adc128d818.c
-> index f9edec195c35..80511d316845 100644
-> --- a/drivers/hwmon/adc128d818.c
-> +++ b/drivers/hwmon/adc128d818.c
-> @@ -427,8 +427,7 @@ static int adc128_init_client(struct adc128_data *data)
->  	return 0;
->  }
+>  drivers/hwmon/shtc1.c | 25 ++++++++++++++++++++++---
+>  1 file changed, 22 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/hwmon/shtc1.c b/drivers/hwmon/shtc1.c
+> index a0078ccede03..7993a5ff8768 100644
+> --- a/drivers/hwmon/shtc1.c
+> +++ b/drivers/hwmon/shtc1.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/err.h>
+>  #include <linux/delay.h>
+>  #include <linux/platform_data/shtc1.h>
+> +#include <linux/of.h>
 >  
-> -static int adc128_probe(struct i2c_client *client,
-> -			const struct i2c_device_id *id)
-> +static int adc128_probe(struct i2c_client *client)
->  {
+>  /* commands (high precision mode) */
+>  static const unsigned char shtc1_cmd_measure_blocking_hpm[]    = { 0x7C, 0xA2 };
+> @@ -196,6 +197,7 @@ static int shtc1_probe(struct i2c_client *client,
+>  	enum shtcx_chips chip = id->driver_data;
+>  	struct i2c_adapter *adap = client->adapter;
 >  	struct device *dev = &client->dev;
->  	struct regulator *regulator;
-> @@ -524,7 +523,7 @@ static struct i2c_driver adc128_driver = {
->  		.name	= "adc128d818",
->  		.of_match_table = of_match_ptr(adc128_of_match),
->  	},
-> -	.probe		= adc128_probe,
-> +	.probe_new	= adc128_probe,
->  	.remove		= adc128_remove,
->  	.id_table	= adc128_id,
->  	.detect		= adc128_detect,
-> diff --git a/drivers/hwmon/ads7828.c b/drivers/hwmon/ads7828.c
-> index d895b73fde6f..7246198f0901 100644
-> --- a/drivers/hwmon/ads7828.c
-> +++ b/drivers/hwmon/ads7828.c
-> @@ -99,8 +99,9 @@ static const struct regmap_config ads2830_regmap_config = {
->  	.val_bits = 8,
->  };
+> +	struct device_node *np = dev->of_node;
 >  
-> -static int ads7828_probe(struct i2c_client *client,
-> -			 const struct i2c_device_id *id)
-> +static const struct i2c_device_id ads7828_device_ids[];
+>  	if (!i2c_check_functionality(adap, I2C_FUNC_I2C)) {
+>  		dev_err(dev, "plain i2c transactions not supported\n");
+> @@ -233,8 +235,14 @@ static int shtc1_probe(struct i2c_client *client,
+>  	data->client = client;
+>  	data->chip = chip;
+>  
+> -	if (client->dev.platform_data)
+> -		data->setup = *(struct shtc1_platform_data *)dev->platform_data;
+> +	if (np) {
+> +		data->setup.blocking_io = of_property_read_bool(np, "sensirion,blocking-io");
+> +		data->setup.high_precision = !of_property_read_bool(np, "sensicon,low-precision");
+> +	} else {
+> +		if (client->dev.platform_data)
+> +			data->setup = *(struct shtc1_platform_data *)dev->platform_data;
+> +	}
 > +
-> +static int ads7828_probe(struct i2c_client *client)
->  {
->  	struct device *dev = &client->dev;
->  	struct ads7828_platform_data *pdata = dev_get_platdata(dev);
-> @@ -141,7 +142,7 @@ static int ads7828_probe(struct i2c_client *client,
->  		chip = (enum ads7828_chips)
->  			of_device_get_match_data(&client->dev);
->  	else
-> -		chip = id->driver_data;
-> +		chip = i2c_match_id(ads7828_device_ids, client)->driver_data;
->  
->  	/* Bound Vref with min/max values */
->  	vref_mv = clamp_val(vref_mv, ADS7828_EXT_VREF_MV_MIN,
-> @@ -207,7 +208,7 @@ static struct i2c_driver ads7828_driver = {
->  	},
->  
->  	.id_table = ads7828_device_ids,
-> -	.probe = ads7828_probe,
-> +	.probe_new = ads7828_probe,
->  };
->  
->  module_i2c_driver(ads7828_driver);
-> diff --git a/drivers/hwmon/lm87.c b/drivers/hwmon/lm87.c
-> index ad501ac4a594..24cb8a1c3381 100644
-> --- a/drivers/hwmon/lm87.c
-> +++ b/drivers/hwmon/lm87.c
-> @@ -912,7 +912,7 @@ static int lm87_init_client(struct i2c_client *client)
->  	return 0;
->  }
->  
-> -static int lm87_probe(struct i2c_client *client, const struct i2c_device_id *id)
-> +static int lm87_probe(struct i2c_client *client)
->  {
->  	struct lm87_data *data;
->  	struct device *hwmon_dev;
-> @@ -994,7 +994,7 @@ static struct i2c_driver lm87_driver = {
->  		.name	= "lm87",
->  		.of_match_table = lm87_of_match,
->  	},
-> -	.probe		= lm87_probe,
-> +	.probe_new	= lm87_probe,
->  	.id_table	= lm87_id,
->  	.detect		= lm87_detect,
->  	.address_list	= normal_i2c,
-> diff --git a/drivers/hwmon/w83795.c b/drivers/hwmon/w83795.c
-> index 44f68b965aec..9cff2e399f1d 100644
-> --- a/drivers/hwmon/w83795.c
-> +++ b/drivers/hwmon/w83795.c
-> @@ -2134,8 +2134,9 @@ static void w83795_apply_temp_config(struct w83795_data *data, u8 config,
->  	}
->  }
->  
-> -static int w83795_probe(struct i2c_client *client,
-> -			const struct i2c_device_id *id)
-> +static const struct i2c_device_id w83795_id[];
-> +
-> +static int w83795_probe(struct i2c_client *client)
->  {
->  	int i;
->  	u8 tmp;
-> @@ -2148,7 +2149,7 @@ static int w83795_probe(struct i2c_client *client,
->  		return -ENOMEM;
->  
->  	i2c_set_clientdata(client, data);
-> -	data->chip_type = id->driver_data;
-> +	data->chip_type = i2c_match_id(w83795_id, client)->driver_data;
->  	data->bank = i2c_smbus_read_byte_data(client, W83795_REG_BANKSEL);
+>  	shtc1_select_command(data);
 >  	mutex_init(&data->update_lock);
 >  
-> @@ -2256,7 +2257,7 @@ static struct i2c_driver w83795_driver = {
->  	.driver = {
->  		   .name = "w83795",
->  	},
-> -	.probe		= w83795_probe,
-> +	.probe_new	= w83795_probe,
->  	.remove		= w83795_remove,
->  	.id_table	= w83795_id,
+> @@ -257,8 +265,19 @@ static const struct i2c_device_id shtc1_id[] = {
+>  };
+>  MODULE_DEVICE_TABLE(i2c, shtc1_id);
 >  
+> +static const struct of_device_id shtc1_of_match[] = {
+> +	{ .compatible = "sensirion,shtc1" },
+> +	{ .compatible = "sensirion,shtw1" },
+> +	{ .compatible = "sensirion,shtc3" },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, shtc1_of_match);
+> +
+>  static struct i2c_driver shtc1_i2c_driver = {
+> -	.driver.name  = "shtc1",
+> +	.driver = {
+> +		.name = "shtc1",
+> +		.of_match_table = shtc1_of_match,
+> +	},
+>  	.probe        = shtc1_probe,
+>  	.id_table     = shtc1_id,
+>  };
