@@ -7,42 +7,43 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 093E2C433E1
-	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Aug 2020 16:02:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32577C433DF
+	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Aug 2020 16:02:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E2324207BB
-	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Aug 2020 16:02:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0C692208DB
+	for <linux-hwmon@archiver.kernel.org>; Fri, 21 Aug 2020 16:02:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725824AbgHUQCS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 21 Aug 2020 12:02:18 -0400
-Received: from 1.mo68.mail-out.ovh.net ([46.105.41.146]:34301 "EHLO
-        1.mo68.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725866AbgHUQCL (ORCPT
+        id S1725820AbgHUQCo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 21 Aug 2020 12:02:44 -0400
+Received: from 15.mo1.mail-out.ovh.net ([188.165.38.232]:58046 "EHLO
+        15.mo1.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725935AbgHUQCn (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 21 Aug 2020 12:02:11 -0400
-Received: from player696.ha.ovh.net (unknown [10.110.103.180])
-        by mo68.mail-out.ovh.net (Postfix) with ESMTP id 2DBA717541D
-        for <linux-hwmon@vger.kernel.org>; Fri, 21 Aug 2020 18:02:09 +0200 (CEST)
+        Fri, 21 Aug 2020 12:02:43 -0400
+Received: from player755.ha.ovh.net (unknown [10.108.57.14])
+        by mo1.mail-out.ovh.net (Postfix) with ESMTP id EE1701D3B5D
+        for <linux-hwmon@vger.kernel.org>; Fri, 21 Aug 2020 18:02:40 +0200 (CEST)
 Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
         (Authenticated sender: steve@sk2.org)
-        by player696.ha.ovh.net (Postfix) with ESMTPSA id 6A9CF1576BCF9;
-        Fri, 21 Aug 2020 16:02:03 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-105G00637181793-cf53-479e-a21c-e4e735c6a36c,
+        by player755.ha.ovh.net (Postfix) with ESMTPSA id 4F52A157ED5B3;
+        Fri, 21 Aug 2020 16:02:35 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-105G006368e313c-e325-44bd-9ae6-001aee886a17,
                     20EB7F6BE0168D07063FB82D5C23839419BBC220) smtp.auth=steve@sk2.org
 From:   Stephen Kitt <steve@sk2.org>
-To:     Riku Voipio <riku.voipio@iki.fi>, Jean Delvare <jdelvare@suse.com>,
+To:     Eric Tremblay <etremblay@distech-controls.com>,
+        Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, Stephen Kitt <steve@sk2.org>
-Subject: [PATCH] hwmon: (f75375s) use simple i2c probe
-Date:   Fri, 21 Aug 2020 18:01:59 +0200
-Message-Id: <20200821160159.591293-1-steve@sk2.org>
+Subject: [PATCH] hwmon: (tmp513) use simple i2c probe
+Date:   Fri, 21 Aug 2020 18:02:31 +0200
+Message-Id: <20200821160231.592571-1-steve@sk2.org>
 X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 17294104045806177561
+X-Ovh-Tracer-Id: 17302829769863875927
 X-VR-SPAMSTATE: OK
 X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduiedrudduvddgkeejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeetgedugfelkeeikeetgeegteevfeeufeetuefgudeiiedthfehtdeffeekvdeffeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpqdhouhhtpdhhvghlohepphhlrgihvghrieeliedrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehsthgvvhgvsehskhdvrdhorhhgpdhrtghpthhtoheplhhinhhugidqhhifmhhonhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduiedrudduvddgkeejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeetgedugfelkeeikeetgeegteevfeeufeetuefgudeiiedthfehtdeffeekvdeffeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmohguvgepshhmthhpqdhouhhtpdhhvghlohepphhlrgihvghrjeehhedrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehsthgvvhgvsehskhdvrdhorhhgpdhrtghpthhtoheplhhinhhugidqhhifmhhonhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
@@ -55,51 +56,50 @@ necessary and the simple probe can be used instead.
 
 Signed-off-by: Stephen Kitt <steve@sk2.org>
 ---
- drivers/hwmon/f75375s.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ drivers/hwmon/tmp513.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/hwmon/f75375s.c b/drivers/hwmon/f75375s.c
-index eb847a7d6b83..3e567be60fb1 100644
---- a/drivers/hwmon/f75375s.c
-+++ b/drivers/hwmon/f75375s.c
-@@ -113,8 +113,7 @@ struct f75375_data {
- 
- static int f75375_detect(struct i2c_client *client,
- 			 struct i2c_board_info *info);
--static int f75375_probe(struct i2c_client *client,
--			const struct i2c_device_id *id);
-+static int f75375_probe(struct i2c_client *client);
- static int f75375_remove(struct i2c_client *client);
- 
- static const struct i2c_device_id f75375_id[] = {
-@@ -130,7 +129,7 @@ static struct i2c_driver f75375_driver = {
- 	.driver = {
- 		.name = "f75375",
- 	},
--	.probe = f75375_probe,
-+	.probe_new = f75375_probe,
- 	.remove = f75375_remove,
- 	.id_table = f75375_id,
- 	.detect = f75375_detect,
-@@ -814,8 +813,7 @@ static void f75375_init(struct i2c_client *client, struct f75375_data *data,
- 
+diff --git a/drivers/hwmon/tmp513.c b/drivers/hwmon/tmp513.c
+index df66e0bc1253..9f5885b0eb74 100644
+--- a/drivers/hwmon/tmp513.c
++++ b/drivers/hwmon/tmp513.c
+@@ -709,8 +709,7 @@ static int tmp51x_configure(struct device *dev, struct tmp51x_data *data)
+ 	return 0;
  }
  
--static int f75375_probe(struct i2c_client *client,
--		const struct i2c_device_id *id)
-+static int f75375_probe(struct i2c_client *client)
+-static int tmp51x_probe(struct i2c_client *client,
+-			const struct i2c_device_id *id)
++static int tmp51x_probe(struct i2c_client *client)
  {
- 	struct f75375_data *data;
- 	struct f75375s_platform_data *f75375s_pdata =
-@@ -832,7 +830,7 @@ static int f75375_probe(struct i2c_client *client,
+ 	struct device *dev = &client->dev;
+ 	struct tmp51x_data *data;
+@@ -724,7 +723,7 @@ static int tmp51x_probe(struct i2c_client *client,
+ 	if (client->dev.of_node)
+ 		data->id = (enum tmp51x_ids)device_get_match_data(&client->dev);
+ 	else
+-		data->id = id->driver_data;
++		data->id = i2c_match_id(tmp51x_id, client)->driver_data;
  
- 	i2c_set_clientdata(client, data);
- 	mutex_init(&data->update_lock);
--	data->kind = id->driver_data;
-+	data->kind = i2c_match_id(f75375_id, client)->driver_data;
+ 	ret = tmp51x_configure(dev, data);
+ 	if (ret < 0) {
+@@ -751,7 +750,7 @@ static int tmp51x_probe(struct i2c_client *client,
+ 	if (IS_ERR(hwmon_dev))
+ 		return PTR_ERR(hwmon_dev);
  
- 	err = sysfs_create_group(&client->dev.kobj, &f75375_group);
- 	if (err)
+-	dev_dbg(dev, "power monitor %s\n", id->name);
++	dev_dbg(dev, "power monitor %s\n", client->name);
+ 
+ 	return 0;
+ }
+@@ -761,7 +760,7 @@ static struct i2c_driver tmp51x_driver = {
+ 		.name	= "tmp51x",
+ 		.of_match_table = of_match_ptr(tmp51x_of_match),
+ 	},
+-	.probe		= tmp51x_probe,
++	.probe_new	= tmp51x_probe,
+ 	.id_table	= tmp51x_id,
+ };
+ 
 -- 
 2.25.4
 
