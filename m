@@ -2,150 +2,129 @@ Return-Path: <SRS0=zSmk=CD=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1A86C433E3
-	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Aug 2020 04:59:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45212C433E3
+	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Aug 2020 07:11:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C60C92073A
-	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Aug 2020 04:59:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0FFE62083B
+	for <linux-hwmon@archiver.kernel.org>; Tue, 25 Aug 2020 07:11:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1598339467;
+	bh=FWfgAaWELOpnq9T2ZqffNJ7A9qnO3QfKuIy+OMg+Nkc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=zWILazPY+bkpG37dk/4r7HakQ1mAHrgDuwU5lNGUvZjm1QNXKaJi363zS4XUS6COl
+	 Jv3ScoajDPvPkX9zl3b3EZidv4soq+9Jeh+VFS5BEke3TquB81mfMqcN8XnpjqdbQw
+	 8D/zxW3XN1tEckx0idaQaotzonk/5nUF5otdfphg=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728571AbgHYE4u (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 25 Aug 2020 00:56:50 -0400
-Received: from smtprelay0018.hostedemail.com ([216.40.44.18]:35610 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725792AbgHYE4q (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 25 Aug 2020 00:56:46 -0400
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay04.hostedemail.com (Postfix) with ESMTP id B846B180A9F54;
-        Tue, 25 Aug 2020 04:56:42 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-HE-Tag: chalk60_631385f27059
-X-Filterd-Recvd-Size: 5825
-Received: from joe-laptop.perches.com (unknown [47.151.133.149])
-        (Authenticated sender: joe@perches.com)
-        by omf08.hostedemail.com (Postfix) with ESMTPA;
-        Tue, 25 Aug 2020 04:56:38 +0000 (UTC)
-From:   Joe Perches <joe@perches.com>
-To:     Jiri Kosina <trivial@kernel.org>, oprofile-list@lists.sf.net,
-        linux-ide@vger.kernel.org, drbd-dev@lists.linbit.com,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, intel-gfx@lists.freedesktop.org,
-        linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-bcache@vger.kernel.org, netdev@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
-        linux-nfs@vger.kernel.org
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-ia64@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-scsi@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-fbdev@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH 00/29] treewide: Convert comma separated statements
-Date:   Mon, 24 Aug 2020 21:55:57 -0700
-Message-Id: <cover.1598331148.git.joe@perches.com>
-X-Mailer: git-send-email 2.26.0
+        id S1729370AbgHYHKj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 25 Aug 2020 03:10:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38138 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729362AbgHYHKh (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 25 Aug 2020 03:10:37 -0400
+Received: from localhost (p54b333df.dip0.t-ipconnect.de [84.179.51.223])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C35662074D;
+        Tue, 25 Aug 2020 07:10:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598339436;
+        bh=FWfgAaWELOpnq9T2ZqffNJ7A9qnO3QfKuIy+OMg+Nkc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=f3Wq0A6wK+XyCx0NdyaVbiOp2OMrI3KPwj1V3RQ/NOii/Sv8XJMYsbLmiBZPZxHLr
+         0oPOxmO4ZW2uxwUXqLpZCKZIApP5fRkbLXbO9bWzKlL5g/hG5Vx0qfVAI9CAKfOqMV
+         tmM358uBo/FCFQE7cpCl+yIXbi94y/ptPbOUqIoI=
+Date:   Tue, 25 Aug 2020 09:10:33 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-spi@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-media@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Whitespace clean-ups in schema files
+Message-ID: <20200825071033.GB1861@ninjato>
+References: <20200812203618.2656699-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="JYK4vJDZwFMowpUq"
+Content-Disposition: inline
+In-Reply-To: <20200812203618.2656699-1-robh@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-There are many comma separated statements in the kernel.
-See:https://lore.kernel.org/lkml/alpine.DEB.2.22.394.2008201856110.2524@hadrien/
 
-Convert the comma separated statements that are in if/do/while blocks
-to use braces and semicolons.
+--JYK4vJDZwFMowpUq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Many comma separated statements still exist but those are changes for
-another day.
+On Wed, Aug 12, 2020 at 02:36:18PM -0600, Rob Herring wrote:
+> Clean-up incorrect indentation, extra spaces, long lines, and missing
+> EOF newline in schema files. Most of the clean-ups are for list
+> indentation which should always be 2 spaces more than the preceding
+> keyword.
+>=20
+> Found with yamllint (which I plan to integrate into the checks).
+>=20
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-clk@vger.kernel.org
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-spi@vger.kernel.org
+> Cc: linux-gpio@vger.kernel.org
+> Cc: linux-remoteproc@vger.kernel.org
+> Cc: linux-hwmon@vger.kernel.org
+> Cc: linux-i2c@vger.kernel.org
+> Cc: linux-fbdev@vger.kernel.org
+> Cc: linux-iio@vger.kernel.org
+> Cc: linux-input@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-media@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-mmc@vger.kernel.org
+> Cc: linux-mtd@lists.infradead.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-rtc@vger.kernel.org
+> Cc: linux-serial@vger.kernel.org
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Joe Perches (29):
-  coding-style.rst: Avoid comma statements
-  alpha: Avoid comma separated statements
-  ia64: Avoid comma separated statements
-  sparc: Avoid comma separated statements
-  ata: Avoid comma separated statements
-  drbd: Avoid comma separated statements
-  lp: Avoid comma separated statements
-  dma-buf: Avoid comma separated statements
-  drm/gma500: Avoid comma separated statements
-  drm/i915: Avoid comma separated statements
-  hwmon: (scmi-hwmon): Avoid comma separated statements
-  Input: MT - Avoid comma separated statements
-  bcache: Avoid comma separated statements
-  media: Avoid comma separated statements
-  mtd: Avoid comma separated statements
-  8390: Avoid comma separated statements
-  fs_enet: Avoid comma separated statements
-  wan: sbni: Avoid comma separated statements
-  s390/tty3270: Avoid comma separated statements
-  scai/arm: Avoid comma separated statements
-  media: atomisp: Avoid comma separated statements
-  video: fbdev: Avoid comma separated statements
-  fuse: Avoid comma separated statements
-  reiserfs: Avoid comma separated statements
-  lib/zlib: Avoid comma separated statements
-  lib: zstd: Avoid comma separated statements
-  ipv6: fib6: Avoid comma separated statements
-  sunrpc: Avoid comma separated statements
-  tools: Avoid comma separated statements
+I trust you guys in figuring out the details, so for touching I2C:
 
- Documentation/process/coding-style.rst        |  17 +
- arch/alpha/kernel/pci_iommu.c                 |   8 +-
- arch/alpha/oprofile/op_model_ev4.c            |  22 +-
- arch/alpha/oprofile/op_model_ev5.c            |   8 +-
- arch/ia64/kernel/smpboot.c                    |   7 +-
- arch/sparc/kernel/smp_64.c                    |   7 +-
- drivers/ata/pata_icside.c                     |  21 +-
- drivers/block/drbd/drbd_receiver.c            |   6 +-
- drivers/char/lp.c                             |   6 +-
- drivers/dma-buf/st-dma-fence.c                |   7 +-
- drivers/gpu/drm/gma500/mdfld_intel_display.c  |  44 ++-
- drivers/gpu/drm/i915/gt/gen8_ppgtt.c          |   8 +-
- drivers/gpu/drm/i915/gt/intel_gt_requests.c   |   6 +-
- .../gpu/drm/i915/gt/selftest_workarounds.c    |   6 +-
- drivers/gpu/drm/i915/intel_runtime_pm.c       |   6 +-
- drivers/hwmon/scmi-hwmon.c                    |   6 +-
- drivers/input/input-mt.c                      |  11 +-
- drivers/md/bcache/bset.c                      |  12 +-
- drivers/md/bcache/sysfs.c                     |   6 +-
- drivers/media/i2c/msp3400-kthreads.c          |  12 +-
- drivers/media/pci/bt8xx/bttv-cards.c          |   6 +-
- drivers/media/pci/saa7134/saa7134-video.c     |   7 +-
- drivers/mtd/devices/lart.c                    |  10 +-
- drivers/net/ethernet/8390/axnet_cs.c          |  19 +-
- drivers/net/ethernet/8390/lib8390.c           |  14 +-
- drivers/net/ethernet/8390/pcnet_cs.c          |   6 +-
- .../ethernet/freescale/fs_enet/fs_enet-main.c |  11 +-
- drivers/net/wan/sbni.c                        | 101 +++---
- drivers/s390/char/tty3270.c                   |   6 +-
- drivers/scsi/arm/cumana_2.c                   |  19 +-
- drivers/scsi/arm/eesox.c                      |   9 +-
- drivers/scsi/arm/powertec.c                   |   9 +-
- .../media/atomisp/pci/atomisp_subdev.c        |   6 +-
- drivers/video/fbdev/tgafb.c                   |  12 +-
- fs/fuse/dir.c                                 |  24 +-
- fs/reiserfs/fix_node.c                        |  36 ++-
- lib/zlib_deflate/deftree.c                    |  49 ++-
- lib/zstd/compress.c                           | 120 ++++---
- lib/zstd/fse_compress.c                       |  24 +-
- lib/zstd/huf_compress.c                       |   6 +-
- net/ipv6/ip6_fib.c                            |  12 +-
- net/sunrpc/sysctl.c                           |   6 +-
- tools/lib/subcmd/help.c                       |  10 +-
- tools/power/cpupower/utils/cpufreq-set.c      |  14 +-
- tools/testing/selftests/vm/gup_benchmark.c    |  18 +-
- tools/testing/selftests/vm/userfaultfd.c      | 296 +++++++++++-------
- 46 files changed, 694 insertions(+), 382 deletions(-)
+Acked-by: Wolfram Sang <wsa@kernel.org>
 
--- 
-2.26.0
 
+--JYK4vJDZwFMowpUq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9EuWkACgkQFA3kzBSg
+KbZbPA/+MqNMzGTVXT++2afD+v/Qkum1LRbeldro+e0ewQSps4tnW/eHg9RaemYr
+BwxfsOZA+EJp0lGOnRM5/vhPMoInlSEwJSBlxtjratUScfPiR7D4ljKXGaUQv4IV
+l9cXBZuOeLnSerxdYsuGrs8M0uqe4rAc3jt/FGD4rSgawNTN1HieFaQ0vq/0I5Gi
+pyJv09alaosBuqNYc37Gqm9Ddk6xEJb8lvwrVqeS2ZGMFmfJuFlsuLKhwdgen/og
+Wik6VZEjyUHJbyZgkcwMn6rTVTnopK7E0RYmdap35Bh6MAZ3auQ4eQU2tktY3L0G
++NL/ah9FAvmPH1RAR7KmXzZxVYX2ZoWm3AJVpCIvlc9toZI5NdOwdruT+KlTLHIY
+T0vs7B3wqsrD4pHputHdDtf9iSZDB0FiTi44yJjReI72Yb47gDXXK7tOcewvq33Y
+J9dv/HeT85ER8dZ3fCssLdOsIVSE5ZGaDGjP9M4hPo5ZqM5WlMcqW13gmBsEaY3W
+quFFx4pgOXFmnO+7fCb0OIoySeTtgCMNqSwekaNsrbK8dBsFhMx62IzUwwCwL8ST
+clLrMsK81BA4v5hiU1SXC5zAJJG1W0FEpGvIuQRa5YxW8goqwIJrEuvy8jWLhg1x
+kB4BNFdQdBMg8xw0GSHGDhOZhIxgC5t/fvrbiLmqazzmbfCE1i8=
+=71f2
+-----END PGP SIGNATURE-----
+
+--JYK4vJDZwFMowpUq--
