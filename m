@@ -1,507 +1,242 @@
-Return-Path: <SRS0=FUZk=CE=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=tUAC=CF=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MSGID_FROM_MTA_HEADER,RCVD_ILLEGAL_IP,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B24F4C433E1
-	for <linux-hwmon@archiver.kernel.org>; Wed, 26 Aug 2020 22:09:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 333CCC433E1
+	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Aug 2020 05:42:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7EE8A2087C
-	for <linux-hwmon@archiver.kernel.org>; Wed, 26 Aug 2020 22:09:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F3055207BC
+	for <linux-hwmon@archiver.kernel.org>; Thu, 27 Aug 2020 05:42:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e4UyF2Iw"
+	dkim=pass (1024-bit key) header.d=amdcloud.onmicrosoft.com header.i=@amdcloud.onmicrosoft.com header.b="veC7DOz5"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726784AbgHZWJd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 26 Aug 2020 18:09:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45954 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726783AbgHZWJb (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 26 Aug 2020 18:09:31 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46C41C061574;
-        Wed, 26 Aug 2020 15:09:31 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id 2so1550356pjx.5;
-        Wed, 26 Aug 2020 15:09:31 -0700 (PDT)
+        id S1726093AbgH0Fmz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 27 Aug 2020 01:42:55 -0400
+Received: from mail-eopbgr680079.outbound.protection.outlook.com ([40.107.68.79]:30854
+        "EHLO NAM04-BN3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726070AbgH0Fmy (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 27 Aug 2020 01:42:54 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=afHQMzliNRiLbw5e2IeqYBX6HR0d/cUe6+iDwDnk/YOzS81e51gyOEHKfbz2DCfiIxPx8kx1UjvwkglCdkL1pVVwptJ0losuLY+bDJo8pW41pJGX1ZjOSipqLf3a0xnHOwhMbOOBak4jRozd9ObdpG8X9IxOeXfz1oLbsUvExZu3r28AOKZwPux5TO2yudLXFVh6LONDQAz4lxo5namZfIZCujJvEmixpVIlx9dCn9OnhCsGNbMqd75SpIJ69kwZSrs0ujdqLK1VfSJfjqhrslR5mIjoLqIMHncmyryyui13aBTqRjqwo9yYozK4sfJlf/Cu/o5URMzv3ciDibkMjA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+AAqdnjDmr4DmQ/J00++mzDgR3p/fc41wMePGuFDggU=;
+ b=L7XzVWPkN+2g5ylWU7ySAfAjpQtIL8JD8IHRzqq08EJX6cI6oWIWyuvYSGS/QYs8gc3DP9NbIvxNqaoEAXhWY8VSvxRbTSa6gYymvOvlO6PGvVyDSTiMSNGcngHu9mqtHkn6s4rJ6+VREQdZF/sL8LQfh4/vMxXTzAaBPlEG2q33YbzHvoJS2Mqrof5v2xDkeihhNdWuQctcmM1vuPzKS5EJbWdn5d1KA1/6Hz5qiQaBVAcBHszZpYFVfcO9yDoldgU31ejv+e3EPuiifZp3yJHpN/Q3JwE1J3aBrBquS5jWVb9/lmOOdAtSWY2UG0Fyrq+3D9Er0xJ9viB6urqtoA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=/zuHoYqvdzPhmaWNvI3sEmLkVFdBNbK3scuyqMVOpvs=;
-        b=e4UyF2Iwy54LWaGY3dDD6N2qJL7S5HZNwoEvcRQFYYYqIuOjDeoeTsRD6gzHZRfAAy
-         ng18TrRNzIxZIAlkyzyMCjOBBe5hLpflRfAdLcIMC2VzR+9J9HpgDAR6sW1ivJahV3iF
-         mJ+Ej2KTeVQS5CHB/20GYuivXcYkRjcKrz9T0XbLO7d0aQtn5aZlldnGfXYmlVoxZS8f
-         t9dzBa27fezBJ/mHj9PS1Ha7TZgIyCqh/z22L5L0lf5PtAgK/5TrUdF0XJbtMMopfz9O
-         F1hnNXTPKqNWBmezvgmGVvLh3ANKzpxW7YEGjWuPLlCnBcRgh8i8GY/euMtMU/DzufjS
-         YWXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=/zuHoYqvdzPhmaWNvI3sEmLkVFdBNbK3scuyqMVOpvs=;
-        b=SWV/XNBfobgbSw4xIDEzx2jpm0QLbk0BbjkcB0WxvdljzHGR1hx1qQxk+ZRuQ5+QAA
-         r2KVuvogu29tLu0jm5UTVFky4j4caHg1YzJUPRAxW3y4h9VhjvDWi8xUKefuWZQQ10tx
-         ZEgNVUkuIjCWtoGyD0xoMzWem93UpQVCLBbArdJFGRszrhO7HLrbAufuk9TcBK8rC6lK
-         QvNjLOtGBk4kHskzbSW9oNgBuAxnnvJE4cGWvXpM10/O3E0ozcquhBUho5ZGWwLIhQ0S
-         LOt9hCk2gC7pDMv7/yeHwsU9CxbNcBCLg3bmTCupf5SghW2KHErfXZrIrooI+GWU8hQL
-         eH3w==
-X-Gm-Message-State: AOAM530/ZJowuTBlflAPm1xo28c+0s4+oeQbEcGtxfWl+LRzrmXdTzTG
-        J3wjlTR28HBwkZzOOTaTaOs=
-X-Google-Smtp-Source: ABdhPJxIxpT/8RNGGHRdy88sds4Hkj5tXzCq3ntKcimrUxxFsGOHItTS8fvdR6GbLWQYcEc8culZKw==
-X-Received: by 2002:a17:90a:bc96:: with SMTP id x22mr8281548pjr.164.1598479770502;
-        Wed, 26 Aug 2020 15:09:30 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i123sm184473pfg.85.2020.08.26.15.09.29
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 26 Aug 2020 15:09:29 -0700 (PDT)
-Date:   Wed, 26 Aug 2020 15:09:28 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Ugur Usug <Ugur.Usug@maximintegrated.com>
-Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] hwmon (pmbus/max20730): add device monitoring via
- debugfs
-Message-ID: <20200826220928.GA179110@roeck-us.net>
-References: <MWHPR11MB19659276002CE27A5E36DAD2FD540@MWHPR11MB1965.namprd11.prod.outlook.com>
+ d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+AAqdnjDmr4DmQ/J00++mzDgR3p/fc41wMePGuFDggU=;
+ b=veC7DOz5Ft8T4oi7+xgAzR9FuGCYFG7LYOZkQCi94NyQY05IJ8CfsGXpMxVAVJU1+xhDOLPaL1LGu1XXt26sbbu5z9kdkmrUOJVxc+Np1/ycFfZ3TOoQoHaJL/hJt5p7940L7Y6/1/zJhEMsV2IiHDnmAkCSQ7jraiWUIFOZpg4=
+Authentication-Results: ladisch.de; dkim=none (message not signed)
+ header.d=none;ladisch.de; dmarc=none action=none header.from=amd.com;
+Received: from CY4PR12MB1494.namprd12.prod.outlook.com (2603:10b6:910:f::22)
+ by CY4PR12MB1224.namprd12.prod.outlook.com (2603:10b6:903:39::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3305.26; Thu, 27 Aug
+ 2020 05:42:49 +0000
+Received: from CY4PR12MB1494.namprd12.prod.outlook.com
+ ([fe80::f873:6fc3:45c4:2106]) by CY4PR12MB1494.namprd12.prod.outlook.com
+ ([fe80::f873:6fc3:45c4:2106%12]) with mapi id 15.20.3305.032; Thu, 27 Aug
+ 2020 05:42:49 +0000
+From:   Wei Huang <wei.huang2@amd.com>
+To:     lemens@ladisch.de
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, wei.huang2@amd.com
+Subject: [PATCH 1/2] hwmon: (k10temp) Create common functions and macros for Zen CPU families
+Date:   Thu, 27 Aug 2020 00:42:41 -0500
+Message-Id: <20200827054242.2347-1-wei.huang2@amd.com>
+X-Mailer: git-send-email 2.25.2
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-ClientProxiedBy: SN4PR0601CA0013.namprd06.prod.outlook.com
+ (2603:10b6:803:2f::23) To CY4PR12MB1494.namprd12.prod.outlook.com
+ (2603:10b6:910:f::22)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <MWHPR11MB19659276002CE27A5E36DAD2FD540@MWHPR11MB1965.namprd11.prod.outlook.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from 255.255.255.255 (255.255.255.255) by SN4PR0601CA0013.namprd06.prod.outlook.com (2603:10b6:803:2f::23) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3326.19 via Frontend Transport; Thu, 27 Aug 2020 05:42:48 +0000
+X-Mailer: git-send-email 2.25.2
+X-Originating-IP: [165.204.78.2]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: d2524eea-afe1-4b84-3e79-08d84a4c084b
+X-MS-TrafficTypeDiagnostic: CY4PR12MB1224:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <CY4PR12MB12246AA5A84C82BD98227185CF550@CY4PR12MB1224.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:202;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XVSmJ7wExyjZV4xbLjHfZ3x4lp0ES5/M+GLdidz84rmy8OMJokgOy9OyLJIabgPKB2aqwP+nNYwR+gm6XQ80R9PMPtXj2/lze6k8Ox/5uP2tJlK6isn080rditHfQDcUxasC2AOD3g8/hxCGgNdfand0vYJQuMsaQcQHhMHanD8HnpLN0rjdPrdcbrcgOyiME7KRf6osGx2f5W7KbwTfacBKEPz4orSLQZ6ZLOjUURGhThJhdubF7UDrTSLzxEMtOoJwnBKTd8LnAbx6JZWmuPQHMR8f1vPLEJ4AEg1NFknuhhhnGDRSfiQ76uri3PrkIib+UlcuNKORV/oOIzFuVA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR12MB1494.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(39860400002)(396003)(376002)(136003)(346002)(66476007)(6916009)(66946007)(66556008)(1076003)(2906002)(478600001)(8936002)(4326008)(8676002)(5660300002)(16576012)(186003)(6486002)(36756003)(52116002)(316002)(26005)(2616005)(83380400001)(6666004)(86362001)(956004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: HH3uoj6uYFQOYAk8g37h6LbQONpbchjf21DF+fMvcTtYK8krDYiiXWgTJ/YukdWgg42ElquuXgBonA5KjL4ePqx4gXJIS2zBsWpvFyVkL7OEFP7Zf2o6BI7kp6bSQgElNBeEWDZPwt/lkG8qOI3TY94Be77+uMFzkga6WYbzcpILp05wE5AZsmYjlEmSkxTLAn4lnyNEM79mh9ksa+u2yKSNgfl34i2dKC4zbibGjrrs0gQ3UFDoLmvoydozzzcsBarhwL9Iz0uluLgk3GlRC1BqahmJKJAB+//9+TQRwWnJ9LiWT7+i+3tbgQER2EY36ZDRHg4hppAWYkjP02S8k6MLe9DK5SUEEZ16m2NFmRip1b6KbwDpLy+ljONbY9nsHPmefK0QXvNIrS21BABWmwjKOtB4CEW91yv8te3bOGuWIK0aflYUunHBF7M616GmQuPsfpQoCtKq2YfJStIIrL3g6Sl/acQ7D1gIyMxCy45zQVjCPpU24C/M/5Y8Rcx38T45pahBG0PsGEJAe5gHFtvujUwvMGo5xj29ovbILQuvucVRbJiThYlGF3N63b4F51YNNWNjgN+Oyvg03ykXMg0KevHUYr1nOeEQ3eKGAANOae/SYdar/3G9SfZkmF+hdVJUafte652faaemwNv8LQ==
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d2524eea-afe1-4b84-3e79-08d84a4c084b
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR12MB1494.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Aug 2020 05:42:49.3212
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: z4DIpv0v8gMKXBGgM/DLm8z2Lyh6tsJ4+ZscmApn0M0LkoxQzDwmUVLp25S5WUN4
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1224
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Aug 26, 2020 at 09:06:04PM +0000, Ugur Usug wrote:
-> Add debugfs interface support for accessing device specific registers (MFR_VOUT_MIN, MFR_DEVSET1 and MFR_DEVSET2) and others including OPERATION, ON_OFF_CONFIG, SMB_ALERT_MASK, VOUT_MODE, VOUT_COMMAND and VOUT_MAX.
-> 
-> Signed-off-by: Ugur Usug <ugur.usug@maximintegrated.com>
+Many SMN thermal registers in Zen CPU families are common across different
+generations. For long-term code maintenance, it is better to rename these
+macro and function names to Zen.
 
-Please run checkpatch --strict and fix what it reports;
-mostly continuation alignment issues.
+Signed-off-by: Wei Huang <wei.huang2@amd.com>
+---
+ drivers/hwmon/k10temp.c | 56 +++++++++++++++++++++--------------------
+ 1 file changed, 29 insertions(+), 27 deletions(-)
 
-> ---
->  drivers/hwmon/pmbus/max20730.c | 364 ++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 363 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/max20730.c b/drivers/hwmon/pmbus/max20730.c
-> index a151a2b..aa5e2be 100644
-> --- a/drivers/hwmon/pmbus/max20730.c
-> +++ b/drivers/hwmon/pmbus/max20730.c
-> @@ -8,6 +8,7 @@
->   */
->  
->  #include <linux/bits.h>
-> +#include <linux/debugfs.h>
->  #include <linux/err.h>
->  #include <linux/i2c.h>
->  #include <linux/init.h>
-> @@ -26,16 +27,368 @@ enum chips {
->  	max20743
->  };
->  
-> +enum {
-> +	MAX20730_DEBUGFS_VOUT_MIN = 0,
-> +	MAX20730_DEBUGFS_FREQUENCY,
-> +	MAX20730_DEBUGFS_PG_DELAY,
-> +	MAX20730_DEBUGFS_INTERNAL_GAIN,
-> +	MAX20730_DEBUGFS_BOOT_VOLTAGE,
-> +	MAX20730_DEBUGFS_OUT_V_RAMP_RATE,
-> +	MAX20730_DEBUGFS_OC_PROTECT_MODE,
-> +	MAX20730_DEBUGFS_SS_TIMING,
-> +	MAX20730_DEBUGFS_IMAX,
-> +	MAX20730_DEBUGFS_OPERATION,
-> +	MAX20730_DEBUGFS_ON_OFF_CONFIG,
-> +	MAX20730_DEBUGFS_SMBALERT_MASK,
-> +	MAX20730_DEBUGFS_VOUT_MODE,
-> +	MAX20730_DEBUGFS_VOUT_COMMAND,
-> +	MAX20730_DEBUGFS_VOUT_MAX,
-> +	MAX20730_DEBUGFS_NUM_ENTRIES
-> +};
-> +
->  struct max20730_data {
->  	enum chips id;
->  	struct pmbus_driver_info info;
->  	struct mutex lock;	/* Used to protect against parallel writes */
->  	u16 mfr_devset1;
-> +	u16 mfr_devset2;
-> +	u16 mfr_voutmin;
->  };
->  
->  #define to_max20730_data(x)  container_of(x, struct max20730_data, info)
->  
-> +#define PMBUS_SMB_ALERT_MASK	0x1B
-> +
-> +#define MAX20730_MFR_VOUT_MIN	0xd1
->  #define MAX20730_MFR_DEVSET1	0xd2
-> +#define MAX20730_MFR_DEVSET2	0xd3
-> +
-> +#define MAX20730_MFR_VOUT_MIN_MASK		GENMASK(9, 0)
-> +#define MAX20730_MFR_VOUT_MIN_BIT_POS		0
-> +
-> +#define MAX20730_MFR_DEVSET1_RGAIN_MASK		(BIT(13) | BIT(14))
-> +#define MAX20730_MFR_DEVSET1_OTP_MASK		(BIT(11) | BIT(12))
-> +#define MAX20730_MFR_DEVSET1_VBOOT_MASK		(BIT(8) | BIT(9))
-> +#define MAX20730_MFR_DEVSET1_OCP_MASK		(BIT(5) | BIT(6))
-> +#define MAX20730_MFR_DEVSET1_FSW_MASK		GENMASK(4, 2)
-> +#define MAX20730_MFR_DEVSET1_TSTAT_MASK		(BIT(0) | BIT(1))
-> +
-> +#define MAX20730_MFR_DEVSET1_RGAIN_BIT_POS	13
-> +#define MAX20730_MFR_DEVSET1_OTP_BIT_POS	11
-> +#define MAX20730_MFR_DEVSET1_VBOOT_BIT_POS	8
-> +#define MAX20730_MFR_DEVSET1_OCP_BIT_POS	5
-> +#define MAX20730_MFR_DEVSET1_FSW_BIT_POS	2
-> +#define MAX20730_MFR_DEVSET1_TSTAT_BIT_POS	0
-> +
-> +#define MAX20730_MFR_DEVSET2_IMAX_MASK		GENMASK(10, 8)
-> +#define MAX20730_MFR_DEVSET2_VRATE		(BIT(6) | BIT(7))
-> +#define MAX20730_MFR_DEVSET2_OCPM_MASK		BIT(5)
-> +#define MAX20730_MFR_DEVSET2_SS_MASK		(BIT(0) | BIT(1))
-> +
-> +#define MAX20730_MFR_DEVSET2_IMAX_BIT_POS	8
-> +#define MAX20730_MFR_DEVSET2_VRATE_BIT_POS	6
-> +#define MAX20730_MFR_DEVSET2_OCPM_BIT_POS	5
-> +#define MAX20730_MFR_DEVSET2_SS_BIT_POS		0
-> +
-> +#define DEBUG_FS_DATA_MAX			8
-> +
-> +struct max20730_debugfs_data {
-> +	struct i2c_client *client;
-> +	int debugfs_entries[MAX20730_DEBUGFS_NUM_ENTRIES];
-> +};
-> +
-> +#define to_psu(x, y) container_of((x), \
-> +			struct max20730_debugfs_data, debugfs_entries[(y)])
-> +
-> +#ifdef CONFIG_DEBUG_FS
-> +static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
-> +				      size_t count, loff_t *ppos)
-> +{
-> +	int ret, len;
-> +	int *idxp = file->private_data;
-> +	int idx = *idxp;
-> +	struct max20730_debugfs_data *psu = to_psu(idxp, idx);
-> +	const struct pmbus_driver_info *info;
-> +	const struct max20730_data *data;
-> +	char tbuf[DEBUG_FS_DATA_MAX + 2] = { 0 };
-> +	u16 val;
-> +
-> +	info = pmbus_get_driver_info(psu->client);
-> +	data = to_max20730_data(info);
-> +
-> +	switch (idx) {
-> +	case MAX20730_DEBUGFS_VOUT_MIN:
-> +		len = snprintf(tbuf, 5, "%d", data->mfr_voutmin);
+diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+index 8f12995ec133..f3addb97b021 100644
+--- a/drivers/hwmon/k10temp.c
++++ b/drivers/hwmon/k10temp.c
+@@ -73,22 +73,24 @@ static DEFINE_MUTEX(nb_smu_ind_mutex);
+ #define F15H_M60H_HARDWARE_TEMP_CTRL_OFFSET	0xd8200c64
+ #define F15H_M60H_REPORTED_TEMP_CTRL_OFFSET	0xd8200ca4
+ 
+-/* F17h M01h Access througn SMN */
+-#define F17H_M01H_REPORTED_TEMP_CTRL_OFFSET	0x00059800
++/* Common for Zen CPU families (Family 17h and 18h) */
++#define ZEN_REPORTED_TEMP_CTRL_OFFSET		0x00059800
+ 
+-#define F17H_M70H_CCD_TEMP(x)			(0x00059954 + ((x) * 4))
+-#define F17H_M70H_CCD_TEMP_VALID		BIT(11)
+-#define F17H_M70H_CCD_TEMP_MASK			GENMASK(10, 0)
++#define ZEN_CCD_TEMP(x)				(0x00059954 + ((x) * 4))
++#define ZEN_CCD_TEMP_VALID			BIT(11)
++#define ZEN_CCD_TEMP_MASK			GENMASK(10, 0)
+ 
+-#define F17H_M01H_SVI				0x0005A000
+-#define F17H_M01H_SVI_TEL_PLANE0		(F17H_M01H_SVI + 0xc)
+-#define F17H_M01H_SVI_TEL_PLANE1		(F17H_M01H_SVI + 0x10)
++#define ZEN_CUR_TEMP_SHIFT			21
++#define ZEN_CUR_TEMP_RANGE_SEL_MASK		BIT(19)
+ 
+-#define CUR_TEMP_SHIFT				21
+-#define CUR_TEMP_RANGE_SEL_MASK			BIT(19)
++#define ZEN_SVI_BASE				0x0005A000
+ 
+-#define CFACTOR_ICORE				1000000	/* 1A / LSB	*/
+-#define CFACTOR_ISOC				250000	/* 0.25A / LSB	*/
++/* F17h thermal registers through SMN */
++#define F17H_M01H_SVI_TEL_PLANE0		(ZEN_SVI_BASE + 0xc)
++#define F17H_M01H_SVI_TEL_PLANE1		(ZEN_SVI_BASE + 0x10)
++
++#define F17H_CFACTOR_ICORE			1000000	/* 1A / LSB	*/
++#define F17H_CFACTOR_ISOC			250000	/* 0.25A / LSB	*/
+ 
+ struct k10temp_data {
+ 	struct pci_dev *pdev;
+@@ -168,10 +170,10 @@ static void read_tempreg_nb_f15(struct pci_dev *pdev, u32 *regval)
+ 			  F15H_M60H_REPORTED_TEMP_CTRL_OFFSET, regval);
+ }
+ 
+-static void read_tempreg_nb_f17(struct pci_dev *pdev, u32 *regval)
++static void read_tempreg_nb_zen(struct pci_dev *pdev, u32 *regval)
+ {
+ 	amd_smn_read(amd_pci_dev_to_node_id(pdev),
+-		     F17H_M01H_REPORTED_TEMP_CTRL_OFFSET, regval);
++		     ZEN_REPORTED_TEMP_CTRL_OFFSET, regval);
+ }
+ 
+ static long get_raw_temp(struct k10temp_data *data)
+@@ -180,7 +182,7 @@ static long get_raw_temp(struct k10temp_data *data)
+ 	long temp;
+ 
+ 	data->read_tempreg(data->pdev, &regval);
+-	temp = (regval >> CUR_TEMP_SHIFT) * 125;
++	temp = (regval >> ZEN_CUR_TEMP_SHIFT) * 125;
+ 	if (regval & data->temp_adjust_mask)
+ 		temp -= 49000;
+ 	return temp;
+@@ -288,8 +290,8 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
+ 			break;
+ 		case 2 ... 9:		/* Tccd{1-8} */
+ 			amd_smn_read(amd_pci_dev_to_node_id(data->pdev),
+-				     F17H_M70H_CCD_TEMP(channel - 2), &regval);
+-			*val = (regval & F17H_M70H_CCD_TEMP_MASK) * 125 - 49000;
++				     ZEN_CCD_TEMP(channel - 2), &regval);
++			*val = (regval & ZEN_CCD_TEMP_MASK) * 125 - 49000;
+ 			break;
+ 		default:
+ 			return -EOPNOTSUPP;
+@@ -438,7 +440,7 @@ static int svi_show(struct seq_file *s, void *unused)
+ {
+ 	struct k10temp_data *data = s->private;
+ 
+-	k10temp_smn_regs_show(s, data->pdev, F17H_M01H_SVI, 32);
++	k10temp_smn_regs_show(s, data->pdev, ZEN_SVI_BASE, 32);
+ 	return 0;
+ }
+ DEFINE_SHOW_ATTRIBUTE(svi);
+@@ -448,7 +450,7 @@ static int thm_show(struct seq_file *s, void *unused)
+ 	struct k10temp_data *data = s->private;
+ 
+ 	k10temp_smn_regs_show(s, data->pdev,
+-			      F17H_M01H_REPORTED_TEMP_CTRL_OFFSET, 256);
++			      ZEN_REPORTED_TEMP_CTRL_OFFSET, 256);
+ 	return 0;
+ }
+ DEFINE_SHOW_ATTRIBUTE(thm);
+@@ -528,8 +530,8 @@ static void k10temp_get_ccd_support(struct pci_dev *pdev,
+ 
+ 	for (i = 0; i < limit; i++) {
+ 		amd_smn_read(amd_pci_dev_to_node_id(pdev),
+-			     F17H_M70H_CCD_TEMP(i), &regval);
+-		if (regval & F17H_M70H_CCD_TEMP_VALID)
++			     ZEN_CCD_TEMP(i), &regval);
++		if (regval & ZEN_CCD_TEMP_VALID)
+ 			data->show_temp |= BIT(TCCD_BIT(i));
+ 	}
+ }
+@@ -565,8 +567,8 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 		data->read_htcreg = read_htcreg_nb_f15;
+ 		data->read_tempreg = read_tempreg_nb_f15;
+ 	} else if (boot_cpu_data.x86 == 0x17 || boot_cpu_data.x86 == 0x18) {
+-		data->temp_adjust_mask = CUR_TEMP_RANGE_SEL_MASK;
+-		data->read_tempreg = read_tempreg_nb_f17;
++		data->temp_adjust_mask = ZEN_CUR_TEMP_RANGE_SEL_MASK;
++		data->read_tempreg = read_tempreg_nb_zen;
+ 		data->show_temp |= BIT(TDIE_BIT);	/* show Tdie */
+ 		data->is_zen = true;
+ 
+@@ -578,15 +580,15 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 			data->show_current = !is_threadripper() && !is_epyc();
+ 			data->svi_addr[0] = F17H_M01H_SVI_TEL_PLANE0;
+ 			data->svi_addr[1] = F17H_M01H_SVI_TEL_PLANE1;
+-			data->cfactor[0] = CFACTOR_ICORE;
+-			data->cfactor[1] = CFACTOR_ISOC;
++			data->cfactor[0] = F17H_CFACTOR_ICORE;
++			data->cfactor[1] = F17H_CFACTOR_ISOC;
+ 			k10temp_get_ccd_support(pdev, data, 4);
+ 			break;
+ 		case 0x31:	/* Zen2 Threadripper */
+ 		case 0x71:	/* Zen2 */
+ 			data->show_current = !is_threadripper() && !is_epyc();
+-			data->cfactor[0] = CFACTOR_ICORE;
+-			data->cfactor[1] = CFACTOR_ISOC;
++			data->cfactor[0] = F17H_CFACTOR_ICORE;
++			data->cfactor[1] = F17H_CFACTOR_ISOC;
+ 			data->svi_addr[0] = F17H_M01H_SVI_TEL_PLANE1;
+ 			data->svi_addr[1] = F17H_M01H_SVI_TEL_PLANE0;
+ 			k10temp_get_ccd_support(pdev, data, 8);
+-- 
+2.25.2
 
-Do you really want to report raw numbers here ?
-
-> +		break;
-> +	case MAX20730_DEBUGFS_FREQUENCY:
-> +		val = (data->mfr_devset1 & MAX20730_MFR_DEVSET1_FSW_MASK)
-> +			>> MAX20730_MFR_DEVSET1_FSW_BIT_POS;
-> +		if (val == 0)
-> +			ret = 400;
-> +		else if (val == 1)
-> +			ret = 500;
-> +		else if (val == 2 || val == 3)
-> +			ret = 600;
-> +		else if (val == 4)
-> +			ret = 700;
-> +		else if (val == 5)
-> +			ret = 800;
-> +		else
-> +			ret = 900;
-> +		len = snprintf(tbuf, 4, "%d", ret);
-> +		break;
-> +	case MAX20730_DEBUGFS_PG_DELAY:
-> +		val = (data->mfr_devset1 & MAX20730_MFR_DEVSET1_TSTAT_MASK)
-> +			>> MAX20730_MFR_DEVSET1_TSTAT_BIT_POS;
-> +
-> +		if (val == 0)
-> +			strcpy(tbuf, "2000");
-> +		else if (val == 1)
-> +			strcpy(tbuf, "125");
-> +		else if (val == 2)
-> +			strcpy(tbuf, "62.5");
-> +		else
-> +			strcpy(tbuf, "32");
-> +		len = strnlen(tbuf, DEBUG_FS_DATA_MAX);
-
-FWIW, strnlen() is kind of odd here, especially since strlcpy() or similar
-was not used above. Same everywhere else, really.
-
-> +		break;
-> +
-> +	case MAX20730_DEBUGFS_INTERNAL_GAIN:
-> +		val = (data->mfr_devset1 & MAX20730_MFR_DEVSET1_RGAIN_MASK)
-> +			>> MAX20730_MFR_DEVSET1_RGAIN_BIT_POS;
-> +
-> +		if (data->id == max20734) {
-> +			/* AN6209 */
-> +			if (val == 0)
-> +				strcpy(tbuf, "0.8");
-> +			else if (val == 1)
-> +				strcpy(tbuf, "3.2");
-> +			else if (val == 2)
-> +				strcpy(tbuf, "1.6");
-> +			else
-> +				strcpy(tbuf, "6.4");
-> +		} else if (data->id == max20730 || data->id == max20710) {
-> +			/* AN6042 or AN6140 */
-> +			if (val == 0)
-> +				strcpy(tbuf, "0.9");
-> +			else if (val == 1)
-> +				strcpy(tbuf, "3.6");
-> +			else if (val == 2)
-> +				strcpy(tbuf, "1.8");
-> +			else
-> +				strcpy(tbuf, "7.2");
-> +		} else if (data->id == max20743) {
-> +			/* AN6042 */
-> +			if (val == 0)
-> +				strcpy(tbuf, "0.45");
-> +			else if (val == 1)
-> +				strcpy(tbuf, "1.8");
-> +			else if (val == 2)
-> +				strcpy(tbuf, "0.9");
-> +			else
-> +				strcpy(tbuf, "3.6");
-> +		} else
-> +			return -EINVAL;
-
-Missing { } in the last else branch. Also, I would suggest to return a string
-such as "Invalid", not an error. -EINVAL is at the very least confusing here;
-the user did not do anything wrong. The same applies to other -EINVAL return
-values.
-
-> +
-> +		len = strnlen(tbuf, DEBUG_FS_DATA_MAX);
-> +		break;
-> +	case MAX20730_DEBUGFS_BOOT_VOLTAGE:
-> +		val = (data->mfr_devset1 & MAX20730_MFR_DEVSET1_VBOOT_MASK)
-> +			>> MAX20730_MFR_DEVSET1_VBOOT_BIT_POS;
-> +
-> +		if (val == 0)
-> +			strcpy(tbuf, "0.6484");
-> +		else if (val == 1)
-> +			strcpy(tbuf, "0.8984");
-> +		else if (val == 2)
-> +			strcpy(tbuf, "1.0");
-> +		else
-> +			return -EINVAL;
-> +
-> +		len = strnlen(tbuf, DEBUG_FS_DATA_MAX);
-> +		break;
-> +	case MAX20730_DEBUGFS_OUT_V_RAMP_RATE:
-> +		val = (data->mfr_devset2 & MAX20730_MFR_DEVSET2_VRATE)
-> +			>> MAX20730_MFR_DEVSET2_VRATE_BIT_POS;
-> +
-> +		if (val == 0)
-> +			ret = 4;
-> +		else if (val == 1)
-> +			ret = 2;
-> +		else if (val == 2)
-> +			ret = 1;
-> +		else
-> +			return -EINVAL;
-> +
-> +		len = snprintf(tbuf, 2, "%d", ret);
-> +		break;
-> +	case MAX20730_DEBUGFS_OC_PROTECT_MODE:
-> +		ret = (data->mfr_devset2 & MAX20730_MFR_DEVSET2_OCPM_MASK)
-> +			>> MAX20730_MFR_DEVSET2_OCPM_BIT_POS;
-> +		len = snprintf(tbuf, 2, "%d", ret);
-> +		break;
-> +	case MAX20730_DEBUGFS_SS_TIMING:
-> +		val = (data->mfr_devset2 & MAX20730_MFR_DEVSET2_SS_MASK)
-> +			>> MAX20730_MFR_DEVSET2_SS_BIT_POS;
-> +
-> +		if (val == 0)
-> +			strcpy(tbuf, "0.75");
-> +		else if (val == 1)
-> +			strcpy(tbuf, "1.5");
-> +		else if (val == 2)
-> +			strcpy(tbuf, "3");
-> +		else
-> +			strcpy(tbuf, "6");
-> +
-> +		len = strnlen(tbuf, DEBUG_FS_DATA_MAX);
-> +		break;
-> +	case MAX20730_DEBUGFS_IMAX:
-> +		ret = (data->mfr_devset2 & MAX20730_MFR_DEVSET2_IMAX_MASK)
-> +			>> MAX20730_MFR_DEVSET2_IMAX_BIT_POS;
-> +		len = snprintf(tbuf, 2, "%d", ret);
-> +		break;
-> +	case MAX20730_DEBUGFS_OPERATION:
-> +		ret = i2c_smbus_read_byte_data(psu->client, PMBUS_OPERATION);
-> +		if (ret < 0)
-> +			return ret;
-> +		len = snprintf(tbuf, 2, "%d", ret);
-> +		break;
-> +	case MAX20730_DEBUGFS_ON_OFF_CONFIG:
-> +		ret = i2c_smbus_read_byte_data(psu->client, PMBUS_ON_OFF_CONFIG);
-> +		if (ret < 0)
-> +			return ret;
-> +		len = snprintf(tbuf, 2, "%d", ret);
-> +		break;
-> +	case MAX20730_DEBUGFS_SMBALERT_MASK:
-> +		ret = i2c_smbus_read_word_data(psu->client,
-> +							PMBUS_SMB_ALERT_MASK);
-> +		if (ret < 0)
-> +			return ret;
-> +		len = snprintf(tbuf, 3, "%d", ret);
-> +		break;
-> +	case MAX20730_DEBUGFS_VOUT_MODE:
-> +		ret = i2c_smbus_read_byte_data(psu->client, PMBUS_VOUT_MODE);
-> +		if (ret < 0)
-> +			return ret;
-> +		len = snprintf(tbuf, 2, "%d", ret);
-> +		break;
-> +	case MAX20730_DEBUGFS_VOUT_COMMAND:
-> +		ret = i2c_smbus_read_word_data(psu->client, PMBUS_VOUT_COMMAND);
-> +		if (ret < 0)
-> +			return ret;
-> +		len = snprintf(tbuf, 3, "%d", ret);
-> +		break;
-> +	case MAX20730_DEBUGFS_VOUT_MAX:
-> +		ret = i2c_smbus_read_word_data(psu->client, PMBUS_VOUT_MAX);
-> +		if (ret < 0)
-> +			return ret;
-> +		len = snprintf(tbuf, 3, "%d", ret);
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	tbuf[len] = '\n';
-> +	len += 2;
-
-Why + 2 ? Doesn't that also return the terminating '\0' ?
-Or is that on purpose ?
-
-> +
-> +	return simple_read_from_buffer(buf, count, ppos, tbuf, len);
-> +}
-> +
-> +static const struct file_operations max20730_fops = {
-> +	.llseek = noop_llseek,
-> +	.read = max20730_debugfs_read,
-> +	.write = NULL,
-> +	.open = simple_open,
-> +};
-> +
-> +static int max20730_init_debugfs(struct i2c_client *client,
-> +				struct max20730_data *data)
-> +{
-> +	int ret, i;
-> +	struct dentry *debugfs;
-> +	struct dentry *max20730_dir;
-> +	struct max20730_debugfs_data *psu;
-> +
-> +	ret = i2c_smbus_read_word_data(client, MAX20730_MFR_DEVSET2);
-> +	if (ret < 0)
-> +		return ret;
-> +	data->mfr_devset2 = ret;
-> +
-> +	ret = i2c_smbus_read_word_data(client, MAX20730_MFR_VOUT_MIN);
-> +	if (ret < 0)
-> +		return ret;
-> +	data->mfr_voutmin = ret;
-> +
-> +	psu = devm_kzalloc(&client->dev, sizeof(*psu), GFP_KERNEL);
-> +	if (!psu)
-> +		return -ENOMEM;
-> +	psu->client = client;
-> +
-> +	debugfs = pmbus_get_debugfs_dir(client);
-> +	if (!debugfs)
-> +		return -ENOENT;
-> +
-> +	max20730_dir = debugfs_create_dir(client->name, debugfs);
-> +	if (!max20730_dir)
-> +		return -ENOENT;
-> +
-> +	for (i = 0; i < MAX20730_DEBUGFS_NUM_ENTRIES; ++i)
-> +		psu->debugfs_entries[i] = i;
-> +
-> +	debugfs_create_file("vout_min", 0444, max20730_dir,
-> +			    &psu->debugfs_entries[MAX20730_DEBUGFS_VOUT_MIN],
-> +			    &max20730_fops);
-> +	debugfs_create_file("frequency", 0444, max20730_dir,
-> +			    &psu->debugfs_entries[MAX20730_DEBUGFS_FREQUENCY],
-> +			    &max20730_fops);
-> +	debugfs_create_file("power_good_delay", 0444, max20730_dir,
-> +			    &psu->debugfs_entries[MAX20730_DEBUGFS_PG_DELAY],
-> +			    &max20730_fops);
-> +	debugfs_create_file("internal_gain", 0444, max20730_dir,
-> +			    &psu->debugfs_entries[MAX20730_DEBUGFS_INTERNAL_GAIN],
-> +			    &max20730_fops);
-> +	debugfs_create_file("boot_voltage", 0444, max20730_dir,
-> +			    &psu->debugfs_entries[MAX20730_DEBUGFS_BOOT_VOLTAGE],
-> +			    &max20730_fops);
-> +	debugfs_create_file("out_voltage_ramp_rate", 0444, max20730_dir,
-> +			    &psu->debugfs_entries[MAX20730_DEBUGFS_OUT_V_RAMP_RATE],
-> +			    &max20730_fops);
-> +	debugfs_create_file("oc_protection_mode", 0444, max20730_dir,
-> +			    &psu->debugfs_entries[MAX20730_DEBUGFS_OC_PROTECT_MODE],
-> +			    &max20730_fops);
-> +	debugfs_create_file("soft_start_timing", 0444, max20730_dir,
-> +			    &psu->debugfs_entries[MAX20730_DEBUGFS_SS_TIMING],
-> +			    &max20730_fops);
-> +	debugfs_create_file("imax", 0444, max20730_dir,
-> +			    &psu->debugfs_entries[MAX20730_DEBUGFS_IMAX],
-> +			    &max20730_fops);
-> +	debugfs_create_file("operation", 0444, max20730_dir,
-> +			    &psu->debugfs_entries[MAX20730_DEBUGFS_OPERATION],
-> +			    &max20730_fops);
-> +	debugfs_create_file("on_off_config", 0444, max20730_dir,
-> +			    &psu->debugfs_entries[MAX20730_DEBUGFS_ON_OFF_CONFIG],
-> +			    &max20730_fops);
-> +	debugfs_create_file("smbalert_mask", 0444, max20730_dir,
-> +			    &psu->debugfs_entries[MAX20730_DEBUGFS_SMBALERT_MASK],
-> +			    &max20730_fops);
-> +	debugfs_create_file("vout_mode", 0444, max20730_dir,
-> +			    &psu->debugfs_entries[MAX20730_DEBUGFS_VOUT_MODE],
-> +			    &max20730_fops);
-> +	debugfs_create_file("vout_command", 0444, max20730_dir,
-> +			    &psu->debugfs_entries[MAX20730_DEBUGFS_VOUT_COMMAND],
-> +			    &max20730_fops);
-> +	debugfs_create_file("vout_max", 0444, max20730_dir,
-> +			    &psu->debugfs_entries[MAX20730_DEBUGFS_VOUT_MAX],
-> +			    &max20730_fops);
-> +
-> +	return 0;
-> +}
-> +#else
-> +static int max20730_init_debugfs(struct i2c_client *client,
-> +				struct max20730_data *data)
-> +{
-> +	return 0;
-> +}
-> +#endif /* CONFIG_DEBUG_FS */
->  
->  /*
->   * Convert discreet value to direct data format. Strictly speaking, all passed
-> @@ -370,7 +723,16 @@ static int max20730_probe(struct i2c_client *client,
->  		return ret;
->  	data->mfr_devset1 = ret;
->  
-> -	return pmbus_do_probe(client, id, &data->info);
-> +	ret = pmbus_do_probe(client, id, &data->info);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ret = max20730_init_debugfs(client, data);
-> +	if (ret)
-> +		dev_warn(dev, "Failed to register debugfs: %d\n",
-> +			 ret);
-> +
-> +	return 0;
->  }
->  
->  static const struct i2c_device_id max20730_id[] = {
