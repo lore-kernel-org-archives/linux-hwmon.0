@@ -4,52 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A6F0C433E7
-	for <linux-hwmon@archiver.kernel.org>; Mon, 31 Aug 2020 15:36:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B496CC433E6
+	for <linux-hwmon@archiver.kernel.org>; Mon, 31 Aug 2020 15:40:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ED071207EA
-	for <linux-hwmon@archiver.kernel.org>; Mon, 31 Aug 2020 15:36:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 95A7D2073A
+	for <linux-hwmon@archiver.kernel.org>; Mon, 31 Aug 2020 15:40:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1598888175;
-	bh=mpA3MbNqtFQ4NxGhPR6tP5hHJmfELPRJmAUNWdcPSq8=;
+	s=default; t=1598888437;
+	bh=p/VXYwFUJB/kg5jcz4g7W6vjlMbDu0lvknVGLt7O638=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=WbNNOk02k17TCdTg66LF94WBK6d1FQonBm3T0iwU6OJ399dENzfch1EomeSkLhl02
-	 0VvYjbbAFkrnCypGX6nDiTAW+4WvJFQ24todJGi1zAkQSeWnxgZpME2w9IBsMUOxhy
-	 19CpQ4AuynPNSAOy8SPTfeysYHT5hxe+EPWnugCI=
+	b=Brc3Xsa+p62MfTme9/keRvPQUJBhI0ySnYGokzrd/04FMrE1MxyI5hR5Yxr5leppu
+	 o7XI3+wkSOPMgrBcWH0RZgF/Sv9tOPRD1X1g/fQprNMWI2e/9xj5zQ3DGJu6caW8BI
+	 mw+z47GraBL5HiJgEnQ9H/kcFfb+MraDgqu6Dlqk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728917AbgHaPgD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 31 Aug 2020 11:36:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40948 "EHLO mail.kernel.org"
+        id S1728696AbgHaPkg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 31 Aug 2020 11:40:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38732 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728742AbgHaPaw (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 31 Aug 2020 11:30:52 -0400
+        id S1728458AbgHaP3w (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 31 Aug 2020 11:29:52 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 520F22158C;
-        Mon, 31 Aug 2020 15:30:51 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A79BD2083E;
+        Mon, 31 Aug 2020 15:29:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598887852;
-        bh=mpA3MbNqtFQ4NxGhPR6tP5hHJmfELPRJmAUNWdcPSq8=;
+        s=default; t=1598887791;
+        bh=p/VXYwFUJB/kg5jcz4g7W6vjlMbDu0lvknVGLt7O638=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xLZ4bMkfqCja3ODj9TTSVfyZRlwnY/cx802eYNAGXge19spLUmXrPNw0sNRbhIddb
-         Kjj4zqjdqk3L4LimgpVP4bfWHs+It+IjBkXKIUAiXXspqp3l8JuOcBsqxgJUr/vJ9K
-         dADrjlb4TqhlAJsgyPBSvtkqH9agjCdxlaO1yxcM=
+        b=asB7YS/NcUF1o0uF3XRYy1mKRbLNez5wYOna2R7j1rvB6HV2YgwZ7l6NT97YxiBJY
+         APSJwz813oLjgWL4NyiCTYGLIe3IXkoq7Gu/LRlNYiwXnl6I3LIXo1QYqfwANuHN/C
+         lFtInZCDqxeuZ82XbVAJIa4v9L0GTBKKi89KGZh8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Tom Rix <trix@redhat.com>, Henrik Rydberg <rydberg@bitmath.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org,
         clang-built-linux@googlegroups.com
-Subject: [PATCH AUTOSEL 5.4 07/23] hwmon: (applesmc) check status earlier.
-Date:   Mon, 31 Aug 2020 11:30:23 -0400
-Message-Id: <20200831153039.1024302-7-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.8 10/42] hwmon: (applesmc) check status earlier.
+Date:   Mon, 31 Aug 2020 11:29:02 -0400
+Message-Id: <20200831152934.1023912-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200831153039.1024302-1-sashal@kernel.org>
-References: <20200831153039.1024302-1-sashal@kernel.org>
+In-Reply-To: <20200831152934.1023912-1-sashal@kernel.org>
+References: <20200831152934.1023912-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -88,10 +88,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 16 insertions(+), 15 deletions(-)
 
 diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
-index 183ff3d251299..006bc07bcd301 100644
+index 3166184093157..a18887990f4a2 100644
 --- a/drivers/hwmon/applesmc.c
 +++ b/drivers/hwmon/applesmc.c
-@@ -748,15 +748,18 @@ static ssize_t applesmc_light_show(struct device *dev,
+@@ -753,15 +753,18 @@ static ssize_t applesmc_light_show(struct device *dev,
  	}
  
  	ret = applesmc_read_key(LIGHT_SENSOR_LEFT_KEY, buffer, data_length);
@@ -111,7 +111,7 @@ index 183ff3d251299..006bc07bcd301 100644
  	right = buffer[2];
  
  out:
-@@ -805,12 +808,11 @@ static ssize_t applesmc_show_fan_speed(struct device *dev,
+@@ -810,12 +813,11 @@ static ssize_t applesmc_show_fan_speed(struct device *dev,
  		  to_index(attr));
  
  	ret = applesmc_read_key(newkey, buffer, 2);
@@ -127,7 +127,7 @@ index 183ff3d251299..006bc07bcd301 100644
  }
  
  static ssize_t applesmc_store_fan_speed(struct device *dev,
-@@ -846,12 +848,11 @@ static ssize_t applesmc_show_fan_manual(struct device *dev,
+@@ -851,12 +853,11 @@ static ssize_t applesmc_show_fan_manual(struct device *dev,
  	u8 buffer[2];
  
  	ret = applesmc_read_key(FANS_MANUAL, buffer, 2);
@@ -143,7 +143,7 @@ index 183ff3d251299..006bc07bcd301 100644
  }
  
  static ssize_t applesmc_store_fan_manual(struct device *dev,
-@@ -867,10 +868,11 @@ static ssize_t applesmc_store_fan_manual(struct device *dev,
+@@ -872,10 +873,11 @@ static ssize_t applesmc_store_fan_manual(struct device *dev,
  		return -EINVAL;
  
  	ret = applesmc_read_key(FANS_MANUAL, buffer, 2);
@@ -156,7 +156,7 @@ index 183ff3d251299..006bc07bcd301 100644
  	if (input)
  		val = val | (0x01 << to_index(attr));
  	else
-@@ -946,13 +948,12 @@ static ssize_t applesmc_key_count_show(struct device *dev,
+@@ -951,13 +953,12 @@ static ssize_t applesmc_key_count_show(struct device *dev,
  	u32 count;
  
  	ret = applesmc_read_key(KEY_COUNT_KEY, buffer, 4);
