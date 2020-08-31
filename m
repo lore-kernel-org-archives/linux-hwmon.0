@@ -4,49 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80D3EC433E6
-	for <linux-hwmon@archiver.kernel.org>; Mon, 31 Aug 2020 15:29:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D021C43461
+	for <linux-hwmon@archiver.kernel.org>; Mon, 31 Aug 2020 15:33:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 60CAD20936
-	for <linux-hwmon@archiver.kernel.org>; Mon, 31 Aug 2020 15:29:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 652EB207EA
+	for <linux-hwmon@archiver.kernel.org>; Mon, 31 Aug 2020 15:33:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1598887781;
-	bh=YMyeZdu9AK2XDZlChIpD6tD+lXjuHM/nRNxJfMP4bXk=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=u//ReoGlLgn+/rsCRz1CMMn6OcVe05Vdt9+y/wV+6EpX//8NaQ7LxiYcn8xIejaEk
-	 57wQe8q2+lO0nC6dITVNWLD8o7UCYiEyWbogwZ2hZn+c1GGw68NbGreZ4wRmaaLApm
-	 mC62Fyy1FgWCrWaHwykkbbNctHndi3ocMK7yB+LU=
+	s=default; t=1598887983;
+	bh=T6IXcbTZtskK1L7YVm0OiBCn2pW7sfMMpBbYy0pK7wk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=DGYByF/Gil3pAMsgg3Tc3yjaGCpwOK9AjpQ/z2WxWZ33IcEqCJ5NresqwHORM1k7P
+	 HM6Y6SyacedzlFPkypkdra6YBp+yTKhpO9ezZ7bl454Cv3N+LOaIXpaLcxKr4JGa83
+	 k5cjlLI8BoXAusBYpUJ5HsPKl5mXd+eTXMxf/KoQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727902AbgHaP3h (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 31 Aug 2020 11:29:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38144 "EHLO mail.kernel.org"
+        id S1728598AbgHaPc6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 31 Aug 2020 11:32:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43530 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726755AbgHaP3h (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 31 Aug 2020 11:29:37 -0400
+        id S1729049AbgHaPcF (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 31 Aug 2020 11:32:05 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2CA7420767;
-        Mon, 31 Aug 2020 15:29:36 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D22EA21655;
+        Mon, 31 Aug 2020 15:32:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598887777;
-        bh=YMyeZdu9AK2XDZlChIpD6tD+lXjuHM/nRNxJfMP4bXk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=vCZnMO8HXIRovZkJewNRE+4TpmdeD6vq1a1GUQuI6aMPEQufBwfs5v03GJm3NmBJY
-         plOy3B9d8C8ZFFVP4Zc9RZqQZnvFav+EIIYRy7btgop1aN2IqYeBYeWlWFWFcNAELC
-         eJ7cUnerNS73fWiwgQZKg9Ys4gc8t8CzSWNOcH2s=
+        s=default; t=1598887924;
+        bh=T6IXcbTZtskK1L7YVm0OiBCn2pW7sfMMpBbYy0pK7wk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=LpQYratYUZY4s74Z+LiurR58y2AhNCW/Ey3DIOSzgjTXCnSLMzmNf6x46Fto1yDy7
+         aLWniseInGHR1LxB42HEOGBcg/RBI7b9h06ufi2Hiqngzy+l27SUzk++qujRAHRvfN
+         jl50CAhDJ6t+2Mdh23XUJ29n1rfCcW/8LQ1HII/0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Grant Peltier <grantpeltier93@gmail.com>,
+Cc:     Tom Rix <trix@redhat.com>, Henrik Rydberg <rydberg@bitmath.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 01/42] hwmon: (pmbus/isl68137) remove READ_TEMPERATURE_1 telemetry for RAA228228
-Date:   Mon, 31 Aug 2020 11:28:53 -0400
-Message-Id: <20200831152934.1023912-1-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org,
+        clang-built-linux@googlegroups.com
+Subject: [PATCH AUTOSEL 4.4 2/5] hwmon: (applesmc) check status earlier.
+Date:   Mon, 31 Aug 2020 11:31:57 -0400
+Message-Id: <20200831153200.1024898-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200831153200.1024898-1-sashal@kernel.org>
+References: <20200831153200.1024898-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -56,52 +59,121 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Grant Peltier <grantpeltier93@gmail.com>
+From: Tom Rix <trix@redhat.com>
 
-[ Upstream commit 51fb91ed5a6fa855a74731610cd5435d83d6e17f ]
+[ Upstream commit cecf7560f00a8419396a2ed0f6e5d245ccb4feac ]
 
-Per the RAA228228 datasheet, READ_TEMPERATURE_1 is not a supported PMBus
-command.
+clang static analysis reports this representative problem
 
-Signed-off-by: Grant Peltier <grantpeltier93@gmail.com>
+applesmc.c:758:10: warning: 1st function call argument is an
+  uninitialized value
+        left = be16_to_cpu(*(__be16 *)(buffer + 6)) >> 2;
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+buffer is filled by the earlier call
+
+	ret = applesmc_read_key(LIGHT_SENSOR_LEFT_KEY, ...
+
+This problem is reported because a goto skips the status check.
+Other similar problems use data from applesmc_read_key before checking
+the status.  So move the checks to before the use.
+
+Signed-off-by: Tom Rix <trix@redhat.com>
+Reviewed-by: Henrik Rydberg <rydberg@bitmath.org>
+Link: https://lore.kernel.org/r/20200820131932.10590-1-trix@redhat.com
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/pmbus/isl68137.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/hwmon/applesmc.c | 31 ++++++++++++++++---------------
+ 1 file changed, 16 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/hwmon/pmbus/isl68137.c b/drivers/hwmon/pmbus/isl68137.c
-index 0c622711ef7e0..58aa95a3c010c 100644
---- a/drivers/hwmon/pmbus/isl68137.c
-+++ b/drivers/hwmon/pmbus/isl68137.c
-@@ -67,6 +67,7 @@ enum variants {
- 	raa_dmpvr1_2rail,
- 	raa_dmpvr2_1rail,
- 	raa_dmpvr2_2rail,
-+	raa_dmpvr2_2rail_nontc,
- 	raa_dmpvr2_3rail,
- 	raa_dmpvr2_hv,
- };
-@@ -241,6 +242,10 @@ static int isl68137_probe(struct i2c_client *client,
- 		info->pages = 1;
- 		info->read_word_data = raa_dmpvr2_read_word_data;
- 		break;
-+	case raa_dmpvr2_2rail_nontc:
-+		info->func[0] &= ~PMBUS_HAVE_TEMP;
-+		info->func[1] &= ~PMBUS_HAVE_TEMP;
-+		fallthrough;
- 	case raa_dmpvr2_2rail:
- 		info->pages = 2;
- 		info->read_word_data = raa_dmpvr2_read_word_data;
-@@ -304,7 +309,7 @@ static const struct i2c_device_id raa_dmpvr_id[] = {
- 	{"raa228000", raa_dmpvr2_hv},
- 	{"raa228004", raa_dmpvr2_hv},
- 	{"raa228006", raa_dmpvr2_hv},
--	{"raa228228", raa_dmpvr2_2rail},
-+	{"raa228228", raa_dmpvr2_2rail_nontc},
- 	{"raa229001", raa_dmpvr2_2rail},
- 	{"raa229004", raa_dmpvr2_2rail},
- 	{}
+diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
+index 0af7fd311979d..587fc5c686b3c 100644
+--- a/drivers/hwmon/applesmc.c
++++ b/drivers/hwmon/applesmc.c
+@@ -758,15 +758,18 @@ static ssize_t applesmc_light_show(struct device *dev,
+ 	}
+ 
+ 	ret = applesmc_read_key(LIGHT_SENSOR_LEFT_KEY, buffer, data_length);
++	if (ret)
++		goto out;
+ 	/* newer macbooks report a single 10-bit bigendian value */
+ 	if (data_length == 10) {
+ 		left = be16_to_cpu(*(__be16 *)(buffer + 6)) >> 2;
+ 		goto out;
+ 	}
+ 	left = buffer[2];
++
++	ret = applesmc_read_key(LIGHT_SENSOR_RIGHT_KEY, buffer, data_length);
+ 	if (ret)
+ 		goto out;
+-	ret = applesmc_read_key(LIGHT_SENSOR_RIGHT_KEY, buffer, data_length);
+ 	right = buffer[2];
+ 
+ out:
+@@ -814,12 +817,11 @@ static ssize_t applesmc_show_fan_speed(struct device *dev,
+ 	sprintf(newkey, fan_speed_fmt[to_option(attr)], to_index(attr));
+ 
+ 	ret = applesmc_read_key(newkey, buffer, 2);
+-	speed = ((buffer[0] << 8 | buffer[1]) >> 2);
+-
+ 	if (ret)
+ 		return ret;
+-	else
+-		return snprintf(sysfsbuf, PAGE_SIZE, "%u\n", speed);
++
++	speed = ((buffer[0] << 8 | buffer[1]) >> 2);
++	return snprintf(sysfsbuf, PAGE_SIZE, "%u\n", speed);
+ }
+ 
+ static ssize_t applesmc_store_fan_speed(struct device *dev,
+@@ -854,12 +856,11 @@ static ssize_t applesmc_show_fan_manual(struct device *dev,
+ 	u8 buffer[2];
+ 
+ 	ret = applesmc_read_key(FANS_MANUAL, buffer, 2);
+-	manual = ((buffer[0] << 8 | buffer[1]) >> to_index(attr)) & 0x01;
+-
+ 	if (ret)
+ 		return ret;
+-	else
+-		return snprintf(sysfsbuf, PAGE_SIZE, "%d\n", manual);
++
++	manual = ((buffer[0] << 8 | buffer[1]) >> to_index(attr)) & 0x01;
++	return snprintf(sysfsbuf, PAGE_SIZE, "%d\n", manual);
+ }
+ 
+ static ssize_t applesmc_store_fan_manual(struct device *dev,
+@@ -875,10 +876,11 @@ static ssize_t applesmc_store_fan_manual(struct device *dev,
+ 		return -EINVAL;
+ 
+ 	ret = applesmc_read_key(FANS_MANUAL, buffer, 2);
+-	val = (buffer[0] << 8 | buffer[1]);
+ 	if (ret)
+ 		goto out;
+ 
++	val = (buffer[0] << 8 | buffer[1]);
++
+ 	if (input)
+ 		val = val | (0x01 << to_index(attr));
+ 	else
+@@ -954,13 +956,12 @@ static ssize_t applesmc_key_count_show(struct device *dev,
+ 	u32 count;
+ 
+ 	ret = applesmc_read_key(KEY_COUNT_KEY, buffer, 4);
+-	count = ((u32)buffer[0]<<24) + ((u32)buffer[1]<<16) +
+-						((u32)buffer[2]<<8) + buffer[3];
+-
+ 	if (ret)
+ 		return ret;
+-	else
+-		return snprintf(sysfsbuf, PAGE_SIZE, "%d\n", count);
++
++	count = ((u32)buffer[0]<<24) + ((u32)buffer[1]<<16) +
++						((u32)buffer[2]<<8) + buffer[3];
++	return snprintf(sysfsbuf, PAGE_SIZE, "%d\n", count);
+ }
+ 
+ static ssize_t applesmc_key_at_index_read_show(struct device *dev,
 -- 
 2.25.1
 
