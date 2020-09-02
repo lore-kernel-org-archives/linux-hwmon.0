@@ -4,47 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3F7CC433E6
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F10BDC433E7
 	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Sep 2020 08:30:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C04F020709
+	by mail.kernel.org (Postfix) with ESMTP id D9C3520829
 	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Sep 2020 08:30:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726268AbgIBIaN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S1726144AbgIBIaN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Wed, 2 Sep 2020 04:30:13 -0400
-Received: from mga12.intel.com ([192.55.52.136]:13140 "EHLO mga12.intel.com"
+Received: from mga09.intel.com ([134.134.136.24]:9332 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726144AbgIBIaL (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        id S1726193AbgIBIaL (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
         Wed, 2 Sep 2020 04:30:11 -0400
-IronPort-SDR: pWVFVjTnoyhkRfGNb91BRTs9SPSzlSZGrFo6B7Zdxf/KjaWFNBB28YC0djQMz+6hAAz2KjN/MT
- fd/5Z/ihSi1w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9731"; a="136863870"
+IronPort-SDR: 7m0xdvqOVaG7jDYSNP3vgguxOC/kvGdYltaQ9JUUBUlJuUbGzWxX1VVuroCF97HSWlbL91V5WT
+ WGMx/qF8BBAA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9731"; a="158343170"
 X-IronPort-AV: E=Sophos;i="5.76,381,1592895600"; 
-   d="scan'208";a="136863870"
+   d="scan'208";a="158343170"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2020 01:30:10 -0700
-IronPort-SDR: TolZjY3+Lfjt+zxTLPw8WEatxserAEoBaJHWhxNoYma+XVo9E551MApV0oJ8afkt3wkphwAzcL
- bsR9hpkMHFUQ==
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2020 01:30:09 -0700
+IronPort-SDR: unosF+riF5/6B8lM27648Quh67n0C9pq09QCLodSgDYfL3err4fykVTi2vT2WQbJ8WvSmnEeQR
+ UBEgOeRTahSA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.76,381,1592895600"; 
-   d="scan'208";a="446451036"
+   d="scan'208";a="502586580"
 Received: from lkp-server02.sh.intel.com (HELO eb469fda2af7) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 02 Sep 2020 01:30:08 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 02 Sep 2020 01:30:08 -0700
 Received: from kbuild by eb469fda2af7 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1kDO9f-00001S-MQ; Wed, 02 Sep 2020 08:30:07 +0000
-Date:   Wed, 02 Sep 2020 16:30:05 +0800
+        id 1kDO9f-00001Q-Lb; Wed, 02 Sep 2020 08:30:07 +0000
+Date:   Wed, 02 Sep 2020 16:30:03 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:watchdog-next] BUILD SUCCESS
- 9bcc726b8f669edc2075bc7a5c3ac29ac28b6e58
-Message-ID: <5f4f580d.zSxkPU80Qn+aDfGI%lkp@intel.com>
+Subject: [hwmon:hwmon-next] BUILD SUCCESS
+ 33efa9e652f54340e4b483530bfc20952f2d09e6
+Message-ID: <5f4f580b.ITagAiWhEwVPUmjD%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -54,13 +53,13 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  watchdog-next
-branch HEAD: 9bcc726b8f669edc2075bc7a5c3ac29ac28b6e58  watchdog: imx7ulp: Watchdog should continue running for wait/stop mode
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon-next
+branch HEAD: 33efa9e652f54340e4b483530bfc20952f2d09e6  hwmon: (adt7462) replace impossible fallthroughs with breaks
 
-elapsed time: 724m
+elapsed time: 723m
 
-configs tested: 149
-configs skipped: 13
+configs tested: 129
+configs skipped: 9
 
 The following configs have been built successfully.
 More configs may be tested in the coming days.
@@ -96,65 +95,37 @@ s390                       zfcpdump_defconfig
 arm                             pxa_defconfig
 arm                          gemini_defconfig
 microblaze                    nommu_defconfig
+h8300                       h8s-sim_defconfig
+powerpc                  storcenter_defconfig
+arm                   milbeaut_m10v_defconfig
+mips                            e55_defconfig
 arm                        clps711x_defconfig
 powerpc                    mvme5100_defconfig
 sh                   sh7770_generic_defconfig
 sh                           se7343_defconfig
 arm                           efm32_defconfig
-arm                        shmobile_defconfig
-sh                         microdev_defconfig
-arm                             rpc_defconfig
-powerpc                      ppc40x_defconfig
-powerpc                  mpc885_ads_defconfig
-arm                       imx_v6_v7_defconfig
-c6x                                 defconfig
-ia64                         bigsur_defconfig
-mips                        bcm63xx_defconfig
 sh                          rsk7269_defconfig
 ia64                                defconfig
 sh                  sh7785lcr_32bit_defconfig
-arm                            lart_defconfig
-arm                      pxa255-idp_defconfig
-arm                         mv78xx0_defconfig
-arm                         s3c2410_defconfig
-arm                              alldefconfig
 riscv                    nommu_k210_defconfig
 nios2                         3c120_defconfig
 m68k                             alldefconfig
 m68k                       m5475evb_defconfig
 sh                ecovec24-romimage_defconfig
-powerpc                  storcenter_defconfig
+mips                         tb0287_defconfig
+mips                     cu1000-neo_defconfig
+mips                          malta_defconfig
+powerpc                    gamecube_defconfig
 mips                      malta_kvm_defconfig
 m68k                       m5249evb_defconfig
 x86_64                              defconfig
-sh                          kfr2r09_defconfig
-arm                       aspeed_g5_defconfig
-m68k                        stmark2_defconfig
-nds32                               defconfig
-sh                          r7785rp_defconfig
-mips                         tb0226_defconfig
 nds32                            alldefconfig
 mips                    maltaup_xpa_defconfig
 arm                            dove_defconfig
 powerpc                     mpc512x_defconfig
-arm                            qcom_defconfig
-mips                          rm200_defconfig
-arc                         haps_hs_defconfig
-powerpc                      ppc64e_defconfig
-arm                          ixp4xx_defconfig
-mips                         cobalt_defconfig
-powerpc                       maple_defconfig
-arm                          simpad_defconfig
-sh                          rsk7201_defconfig
-arm                         nhk8815_defconfig
 mips                         bigsur_defconfig
 arm                        realview_defconfig
 arm                        magician_defconfig
-mips                           ip28_defconfig
-sh                          polaris_defconfig
-m68k                            q40_defconfig
-sparc                            allyesconfig
-mips                 decstation_r4k_defconfig
 ia64                             allmodconfig
 ia64                             allyesconfig
 m68k                             allmodconfig
@@ -164,6 +135,7 @@ nios2                               defconfig
 arc                              allyesconfig
 nds32                             allnoconfig
 c6x                              allyesconfig
+nds32                               defconfig
 nios2                            allyesconfig
 csky                                defconfig
 alpha                               defconfig
@@ -177,6 +149,7 @@ s390                             allyesconfig
 parisc                           allyesconfig
 s390                                defconfig
 i386                             allyesconfig
+sparc                            allyesconfig
 sparc                               defconfig
 i386                                defconfig
 mips                             allyesconfig
@@ -201,6 +174,12 @@ i386                 randconfig-a011-20200901
 i386                 randconfig-a013-20200901
 i386                 randconfig-a014-20200901
 i386                 randconfig-a012-20200901
+i386                 randconfig-a016-20200902
+i386                 randconfig-a015-20200902
+i386                 randconfig-a011-20200902
+i386                 randconfig-a013-20200902
+i386                 randconfig-a014-20200902
+i386                 randconfig-a012-20200902
 riscv                            allyesconfig
 riscv                               defconfig
 riscv                            allmodconfig
