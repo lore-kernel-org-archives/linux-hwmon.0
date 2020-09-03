@@ -1,202 +1,158 @@
-Return-Path: <SRS0=W5re=CL=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=m527=CM=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F10BDC433E7
-	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Sep 2020 08:30:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C451CC433E2
+	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Sep 2020 14:18:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D9C3520829
-	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Sep 2020 08:30:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9862A206EB
+	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Sep 2020 14:18:05 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JxpkoelX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726144AbgIBIaN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 2 Sep 2020 04:30:13 -0400
-Received: from mga09.intel.com ([134.134.136.24]:9332 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726193AbgIBIaL (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 2 Sep 2020 04:30:11 -0400
-IronPort-SDR: 7m0xdvqOVaG7jDYSNP3vgguxOC/kvGdYltaQ9JUUBUlJuUbGzWxX1VVuroCF97HSWlbL91V5WT
- WGMx/qF8BBAA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9731"; a="158343170"
-X-IronPort-AV: E=Sophos;i="5.76,381,1592895600"; 
-   d="scan'208";a="158343170"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2020 01:30:09 -0700
-IronPort-SDR: unosF+riF5/6B8lM27648Quh67n0C9pq09QCLodSgDYfL3err4fykVTi2vT2WQbJ8WvSmnEeQR
- UBEgOeRTahSA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,381,1592895600"; 
-   d="scan'208";a="502586580"
-Received: from lkp-server02.sh.intel.com (HELO eb469fda2af7) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 02 Sep 2020 01:30:08 -0700
-Received: from kbuild by eb469fda2af7 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kDO9f-00001Q-Lb; Wed, 02 Sep 2020 08:30:07 +0000
-Date:   Wed, 02 Sep 2020 16:30:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon-next] BUILD SUCCESS
- 33efa9e652f54340e4b483530bfc20952f2d09e6
-Message-ID: <5f4f580b.ITagAiWhEwVPUmjD%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1729245AbgICOSC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 3 Sep 2020 10:18:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34134 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729248AbgICORO (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 3 Sep 2020 10:17:14 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33206C061A26;
+        Thu,  3 Sep 2020 06:52:17 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id 67so2178276pgd.12;
+        Thu, 03 Sep 2020 06:52:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=eP8C1kVZZxt11Sf0zJDVbKncpALpNlPQEX3E8lh+iF0=;
+        b=JxpkoelXNWCqp6u5q7mSb8Ea36118kf2EtLltycHrz4XoZd1Vzio1OfjmLMYTvOx3q
+         I1SO+2iyIrTAEsdQbH5gRuX1SyKpSGce94o7j2s8X2DeQgqg26TWd5xIU9GKz2BMY/1r
+         w91rj7fZ7CUnktg0pCC/f2dTcf1YRE/dmi3gDkHVePJfdL5dbNjVmeqvblhXb3SI0ivX
+         B2wBukozLKnTEZCgseuGPWALkCfehYCLO8nNQ4TxxDc6m49QbytwdBxu2DG6+ce4r+xQ
+         aFtwBJiBLpRIm6SVy66I/A0wrzN9DolmPmjeILtfSycvy3eDhxLmqop07MwtllZ5ncLe
+         QEkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=eP8C1kVZZxt11Sf0zJDVbKncpALpNlPQEX3E8lh+iF0=;
+        b=mfo0PT/fBh71V31wMuukgOKFnre/eo2OxUimy1X7h/KgYbEEBstMsPQX/EN37oz1fc
+         V+bGGPaHRAzQ7zjV0H/0BwosE84ZpFTAbL0tOWDWzQw6lwZnc9K/ZCort0BATx26LpXj
+         2TTkJoawlRmQZpkQ/Kn0hYNGP7+XeWOkRLbipz1Pg8tvD1zbnZrDfpS1NkwPVYjl5hz6
+         76vfAW27vcsGBgegAZQrY5AA3Mdygok43oEu1Nqgkl+TV2zN07CJd9/Kb6ceC4u2YaRd
+         n0nkwP7O3Furjv6QJPjOrtMQQDsPzbxES0CqNO29nHsmIpG0G4GPNqz6KY9Z7DHZ11EH
+         qd0w==
+X-Gm-Message-State: AOAM531u+nrvan+kLiLXdEwCnXOnS3mpbAZtCULANTf7MmA8FKhJgWBp
+        9N3sRIMXo3xo8ei0UaAtFPu3l+g8ZbE=
+X-Google-Smtp-Source: ABdhPJwAUBfN3SLnPrAApvYUcSY4xnVp1lHWN5NkIavFbDbEHXDdMIf1IIbrsGOdLzwV0LefvyaqSQ==
+X-Received: by 2002:a17:902:7045:: with SMTP id h5mr4024342plt.4.1599141131217;
+        Thu, 03 Sep 2020 06:52:11 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g7sm3557440pfr.150.2020.09.03.06.52.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Sep 2020 06:52:10 -0700 (PDT)
+Subject: Re: [PATCH] hwmon: sparx5: Fix initial reading of temperature
+To:     Lars Povlsen <lars.povlsen@microchip.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20200903134704.8949-1-lars.povlsen@microchip.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <8ca270c9-5561-3176-61cf-7a9fbee10d1f@roeck-us.net>
+Date:   Thu, 3 Sep 2020 06:52:09 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <20200903134704.8949-1-lars.povlsen@microchip.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon-next
-branch HEAD: 33efa9e652f54340e4b483530bfc20952f2d09e6  hwmon: (adt7462) replace impossible fallthroughs with breaks
+On 9/3/20 6:47 AM, Lars Povlsen wrote:
+> If the temperature is read before the internal calibration is
+> completed, the driver returns -EIO. Instead it should return -EAGAIN
+> to encourage repeating the operation.
+> 
+> Signed-off-by: Lars Povlsen <lars.povlsen@microchip.com>
+> ---
+>  drivers/hwmon/sparx5-temp.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/sparx5-temp.c b/drivers/hwmon/sparx5-temp.c
+> index 1a2b1026b026..98be48e3a22a 100644
+> --- a/drivers/hwmon/sparx5-temp.c
+> +++ b/drivers/hwmon/sparx5-temp.c
+> @@ -56,7 +56,7 @@ static int s5_read(struct device *dev, enum hwmon_sensor_types type,
+>  	case hwmon_temp_input:
+>  		stat = readl_relaxed(hwmon->base + TEMP_STAT);
+>  		if (!(stat & TEMP_STAT_VALID))
+> -			return -EIO;
+> +			return -EAGAIN;
 
-elapsed time: 723m
+The problem is that this may result in a hard loop and effectively hang the system,
+or at least the calling process. It may be better to return -ENODATA in this situation.
 
-configs tested: 129
-configs skipped: 9
+Guenter
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-sh                           se7206_defconfig
-mips                 pnx8335_stb225_defconfig
-arm                            mmp2_defconfig
-sh                           sh2007_defconfig
-sh                        edosk7705_defconfig
-mips                      bmips_stb_defconfig
-sh                             espt_defconfig
-mips                           rs90_defconfig
-c6x                        evmc6474_defconfig
-powerpc                           allnoconfig
-arm                         shannon_defconfig
-arm                     eseries_pxa_defconfig
-arm                      footbridge_defconfig
-riscv                             allnoconfig
-sh                            migor_defconfig
-sh                          rsk7264_defconfig
-powerpc                             defconfig
-powerpc                      mgcoge_defconfig
-sh                          r7780mp_defconfig
-sh                           se7712_defconfig
-sparc                       sparc64_defconfig
-s390                       zfcpdump_defconfig
-arm                             pxa_defconfig
-arm                          gemini_defconfig
-microblaze                    nommu_defconfig
-h8300                       h8s-sim_defconfig
-powerpc                  storcenter_defconfig
-arm                   milbeaut_m10v_defconfig
-mips                            e55_defconfig
-arm                        clps711x_defconfig
-powerpc                    mvme5100_defconfig
-sh                   sh7770_generic_defconfig
-sh                           se7343_defconfig
-arm                           efm32_defconfig
-sh                          rsk7269_defconfig
-ia64                                defconfig
-sh                  sh7785lcr_32bit_defconfig
-riscv                    nommu_k210_defconfig
-nios2                         3c120_defconfig
-m68k                             alldefconfig
-m68k                       m5475evb_defconfig
-sh                ecovec24-romimage_defconfig
-mips                         tb0287_defconfig
-mips                     cu1000-neo_defconfig
-mips                          malta_defconfig
-powerpc                    gamecube_defconfig
-mips                      malta_kvm_defconfig
-m68k                       m5249evb_defconfig
-x86_64                              defconfig
-nds32                            alldefconfig
-mips                    maltaup_xpa_defconfig
-arm                            dove_defconfig
-powerpc                     mpc512x_defconfig
-mips                         bigsur_defconfig
-arm                        realview_defconfig
-arm                        magician_defconfig
-ia64                             allmodconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-x86_64               randconfig-a004-20200901
-x86_64               randconfig-a006-20200901
-x86_64               randconfig-a003-20200901
-x86_64               randconfig-a005-20200901
-x86_64               randconfig-a001-20200901
-x86_64               randconfig-a002-20200901
-i386                 randconfig-a004-20200901
-i386                 randconfig-a005-20200901
-i386                 randconfig-a006-20200901
-i386                 randconfig-a002-20200901
-i386                 randconfig-a001-20200901
-i386                 randconfig-a003-20200901
-i386                 randconfig-a016-20200901
-i386                 randconfig-a015-20200901
-i386                 randconfig-a011-20200901
-i386                 randconfig-a013-20200901
-i386                 randconfig-a014-20200901
-i386                 randconfig-a012-20200901
-i386                 randconfig-a016-20200902
-i386                 randconfig-a015-20200902
-i386                 randconfig-a011-20200902
-i386                 randconfig-a013-20200902
-i386                 randconfig-a014-20200902
-i386                 randconfig-a012-20200902
-riscv                            allyesconfig
-riscv                               defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                               rhel-8.3
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a013-20200901
-x86_64               randconfig-a016-20200901
-x86_64               randconfig-a011-20200901
-x86_64               randconfig-a012-20200901
-x86_64               randconfig-a015-20200901
-x86_64               randconfig-a014-20200901
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>  		value = stat & TEMP_STAT_TEMP;
+>  		/*
+>  		 * From register documentation:
+> --
+> 2.27.0
+> 
