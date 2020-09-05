@@ -2,208 +2,209 @@ Return-Path: <SRS0=Sfjw=CO=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.2 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD3C6C433E2
-	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Sep 2020 14:45:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45973C433E2
+	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Sep 2020 15:12:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6FC72206B8
-	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Sep 2020 14:45:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EFB942078E
+	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Sep 2020 15:12:06 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N8W4vQWj"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728625AbgIEOpl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 5 Sep 2020 10:45:41 -0400
-Received: from mga18.intel.com ([134.134.136.126]:3768 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727875AbgIEOpe (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 5 Sep 2020 10:45:34 -0400
-IronPort-SDR: wcT4TVt1AqfdAYJytRa+GJ4+PI9IoRSt2KcUAA7GYdAz6YGwGeIT2zgxYO6LsGzsn5EeH7coxb
- 8f6dwiEA3MAg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9734"; a="145568642"
-X-IronPort-AV: E=Sophos;i="5.76,394,1592895600"; 
-   d="scan'208";a="145568642"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2020 07:45:27 -0700
-IronPort-SDR: GMkVccxkoQ4odHP0ifVQDCjo+I7MBa2m4G2kjCNF3V7j9TN6oWNekIdQ9e/soXbZh/VKmg9Mpx
- f7teRsaYzliA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,394,1592895600"; 
-   d="scan'208";a="283474177"
-Received: from lkp-server02.sh.intel.com (HELO c089623da072) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 05 Sep 2020 07:45:26 -0700
-Received: from kbuild by c089623da072 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kEZRV-0000Ex-Rq; Sat, 05 Sep 2020 14:45:25 +0000
-Date:   Sat, 05 Sep 2020 22:44:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon] BUILD SUCCESS
- d50e0d75000410249090297ca55ee895f518ee27
-Message-ID: <5f53a458.Lpi18T6SR5qbqwdk%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1726590AbgIEPMF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 5 Sep 2020 11:12:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33058 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726582AbgIEPMC (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 5 Sep 2020 11:12:02 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B87C061244
+        for <linux-hwmon@vger.kernel.org>; Sat,  5 Sep 2020 08:12:00 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id kk9so2002257pjb.2
+        for <linux-hwmon@vger.kernel.org>; Sat, 05 Sep 2020 08:12:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=/pVlFUhULn0sp3a5+2saFPeRx8j+CjVlNg+Uofrs+FI=;
+        b=N8W4vQWj+kKiDsWaqG3IsFSh8g8uXrfv+ccZOQocRGdA7wCl72hBqRu21A6FkbIGOh
+         pqKRCXV6PPUV7In6bmn338nlYMMqzxlPFM1/aopx4RbMQoyN+UTuHotNUO2ZVfqNksz9
+         5SEJDc7K+ksqkLagCi9EaBbs4O320Sf0XiPc+80vnTDP6Dr9aTUZEMMBYT4mXommVM1l
+         IgNVXdrAIrIHAGW2bwsy77o1ltMtjs6tuVMehDS5cTtly0EYJd/e3Bm/7fUBQL93nwvY
+         lobqD3R3jEqUvCdVEcmD02NEAeFaz+nFy2lig9FlxMwFmE8g4R59tdQM+zRQ2qgRPi5R
+         4gyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=/pVlFUhULn0sp3a5+2saFPeRx8j+CjVlNg+Uofrs+FI=;
+        b=KPY+LGWni50v4OyVvralufB3D2aWYJU1H80TLANCj1IDsASgZbMzaPJ1czuqpyEtNo
+         8AZ5DKS55xkMi6Vhhn8jWl/ZenkgIU8pLQvEBQu8DEVHHm2a20oXpEa0ICy2qYEG458v
+         wgeX9SMAko38WKn2zUoYbkuvx96cC7GiV2YHULxfaLoV5NLegFfnWZ325+XFDyt/+U/I
+         gNgr6hJ78gKXKsGOETy5JDVcCsQsQ/JyIbT6fz8jOqK2PK/NQOwp/4Do8qZV2wbt9ne7
+         FiyLS1RzvwXlvmyB7OQyRDoEKX0tuEEFcEvAK/WzCtihof+GbIwQgYRHqPdmzUkCjESU
+         hepg==
+X-Gm-Message-State: AOAM533KImxByfR8EqbJ+CKBFKTCmW3JXX9xirS6j7hx1dgMhGAsgQTt
+        mEozb/7qZ/CMRah71UZcgrZitQ5Zvx0=
+X-Google-Smtp-Source: ABdhPJzV3OxpdYDVYH+HsKves66Db3ZoHbUxKxNMvyPJf4jL9ku6C5YSz5b76oV98wqssvXn9fmzIA==
+X-Received: by 2002:a17:90a:9416:: with SMTP id r22mr12996695pjo.108.1599318720172;
+        Sat, 05 Sep 2020 08:12:00 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u22sm8139860pgi.85.2020.09.05.08.11.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 05 Sep 2020 08:11:59 -0700 (PDT)
+Subject: Re: [PATCH 2/6] hwmon: amd_energy: optimize accumulation interval
+To:     Naveen Krishna Chatradhi <nchatrad@amd.com>,
+        linux-hwmon@vger.kernel.org
+References: <20200905143230.195049-1-nchatrad@amd.com>
+ <20200905143230.195049-3-nchatrad@amd.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <65863d33-2af7-5c40-010c-6cc5b5300a0a@roeck-us.net>
+Date:   Sat, 5 Sep 2020 08:11:58 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20200905143230.195049-3-nchatrad@amd.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon
-branch HEAD: d50e0d75000410249090297ca55ee895f518ee27  hwmon: (sparx5) Fix initial reading of temperature
+On 9/5/20 7:32 AM, Naveen Krishna Chatradhi wrote:
+> On a system with course grain resolution of energy unit (milli J) the
+> accumulation thread can be executed less frequently than on the system
+> with fine grain resolution(micro J).
+> 
+> This patch sets the accumulation thread interval to an optimum value
+> calculated based on the (energy unit) resolution supported by the
+> hardware (assuming a peak wattage of 240W).
+> 
+> Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
+> ---
+>  drivers/hwmon/amd_energy.c | 12 +++++++++++-
+>  1 file changed, 11 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/amd_energy.c b/drivers/hwmon/amd_energy.c
+> index 9580a16185b8..f0a13d6cc419 100644
+> --- a/drivers/hwmon/amd_energy.c
+> +++ b/drivers/hwmon/amd_energy.c
+> @@ -48,6 +48,7 @@ struct amd_energy_data {
+>  	struct sensor_accumulator *accums;
+>  	/* Energy Status Units */
+>  	u64 energy_units;
+> +	unsigned int timeout;
+>  	int nr_cpus;
+>  	int nr_socks;
+>  	int core_id;
+> @@ -215,6 +216,7 @@ static umode_t amd_energy_is_visible(const void *_data,
+>  static int energy_accumulator(void *p)
+>  {
+>  	struct amd_energy_data *data = (struct amd_energy_data *)p;
+> +	unsigned int timeout = data->timeout;
+>  
+>  	while (!kthread_should_stop()) {
+>  		/*
+> @@ -234,7 +236,7 @@ static int energy_accumulator(void *p)
+>  		 *
+>  		 * let us accumulate for every 100secs
+>  		 */
+> -		schedule_timeout(msecs_to_jiffies(100000));
+> +		schedule_timeout(msecs_to_jiffies(timeout));
 
-elapsed time: 1179m
+Numbers below are in seconds, used as milli-seconds here.
 
-configs tested: 135
-configs skipped: 12
+>  	}
+>  	return 0;
+>  }
+> @@ -331,6 +333,14 @@ static int amd_energy_probe(struct platform_device *pdev)
+>  	if (IS_ERR(hwmon_dev))
+>  		return PTR_ERR(hwmon_dev);
+>  
+> +	/* Once in 3 minutes for a resolution of 1/2*16 */
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+* 16 or ^ 16 ?
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arc                     haps_hs_smp_defconfig
-m68k                            q40_defconfig
-m68k                       m5208evb_defconfig
-m68k                       m5249evb_defconfig
-arm                         mv78xx0_defconfig
-sh                        edosk7705_defconfig
-arc                 nsimosci_hs_smp_defconfig
-m68k                          atari_defconfig
-mips                     loongson1c_defconfig
-mips                       bmips_be_defconfig
-xtensa                              defconfig
-mips                      maltaaprp_defconfig
-arm                         axm55xx_defconfig
-xtensa                    xip_kc705_defconfig
-m68k                                defconfig
-powerpc                          allmodconfig
-s390                                defconfig
-arc                         haps_hs_defconfig
-arm                              zx_defconfig
-powerpc                      ppc64e_defconfig
-arm                        mvebu_v5_defconfig
-mips                          malta_defconfig
-openrisc                 simple_smp_defconfig
-arm                         nhk8815_defconfig
-sh                          rsk7264_defconfig
-powerpc                          allyesconfig
-sh                           se7751_defconfig
-m68k                          amiga_defconfig
-sh                          r7785rp_defconfig
-arm                      tct_hammer_defconfig
-sh                             sh03_defconfig
-mips                      loongson3_defconfig
-powerpc                           allnoconfig
-alpha                            alldefconfig
-mips                        qi_lb60_defconfig
-arm                     am200epdkit_defconfig
-sh                     sh7710voipgw_defconfig
-arm                        multi_v7_defconfig
-nios2                            alldefconfig
-sh                          landisk_defconfig
-mips                            ar7_defconfig
-sh                           se7619_defconfig
-arc                              allyesconfig
-sh                   sh7724_generic_defconfig
-riscv                             allnoconfig
-ia64                         bigsur_defconfig
-arc                     nsimosci_hs_defconfig
-powerpc                          g5_defconfig
-arm                            hisi_defconfig
-powerpc                     skiroot_defconfig
-sh                         ecovec24_defconfig
-arm                            qcom_defconfig
-powerpc                  storcenter_defconfig
-arm                          iop32x_defconfig
-xtensa                generic_kc705_defconfig
-ia64                          tiger_defconfig
-xtensa                           allyesconfig
-mips                           xway_defconfig
-m68k                       m5275evb_defconfig
-m68k                          sun3x_defconfig
-mips                      pistachio_defconfig
-arm                            mps2_defconfig
-openrisc                    or1ksim_defconfig
-openrisc                         alldefconfig
-m68k                        stmark2_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-nios2                               defconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                             defconfig
-x86_64               randconfig-a006-20200905
-x86_64               randconfig-a004-20200905
-x86_64               randconfig-a003-20200905
-x86_64               randconfig-a005-20200905
-x86_64               randconfig-a001-20200905
-x86_64               randconfig-a002-20200905
-i386                 randconfig-a004-20200904
-i386                 randconfig-a005-20200904
-i386                 randconfig-a006-20200904
-i386                 randconfig-a002-20200904
-i386                 randconfig-a003-20200904
-i386                 randconfig-a001-20200904
-x86_64               randconfig-a013-20200904
-x86_64               randconfig-a011-20200904
-x86_64               randconfig-a016-20200904
-x86_64               randconfig-a012-20200904
-x86_64               randconfig-a015-20200904
-x86_64               randconfig-a014-20200904
-i386                 randconfig-a016-20200905
-i386                 randconfig-a015-20200905
-i386                 randconfig-a011-20200905
-i386                 randconfig-a013-20200905
-i386                 randconfig-a014-20200905
-i386                 randconfig-a012-20200905
-riscv                            allyesconfig
-riscv                               defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
+> +	if (data->energy_units == 0x10)
+> +		data->timeout = 3 * 60;
 
-clang tested configs:
-x86_64               randconfig-a006-20200904
-x86_64               randconfig-a004-20200904
-x86_64               randconfig-a003-20200904
-x86_64               randconfig-a005-20200904
-x86_64               randconfig-a001-20200904
-x86_64               randconfig-a002-20200904
+180 ms ? I assume this is a bug and meant to be 3 * 60 * 1000.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> +
+> +	/* Once in 3 days for a resolution of 1/2^6 */
+> +	if (data->energy_units == 0x6)
+> +		data->timeout = 3 * 24 * 60 * 60;
+> +
+
+... and else ?
+
+This needs to cover all cases, including those not currently existing.
+I would suggest to define a formula based on data->energy_units.
+The energy units value can be anything from 0..31. Based on your numbers,
+something like
+    timeout_ms = BIT(34 - data->energy_units);
+should do. It translates to about 3.1 days for energy_units=6, and
+4.3 minutes for energy_units=16. If that is too much, you can make it
+   timeout_ms = BIT(33 - data->energy_units);
+
+To avoid overflow, it might make sense to max out at BIT(31).
+    timeout_ms = BIT((min(31, 33 - data->energy_units));
+
+Guenter
+
+>  	data->wrap_accumulate = kthread_run(energy_accumulator, data,
+>  					    "%s", dev_name(hwmon_dev));
+>  	if (IS_ERR(data->wrap_accumulate))
+> 
+
