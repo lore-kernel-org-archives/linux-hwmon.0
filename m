@@ -2,68 +2,68 @@ Return-Path: <SRS0=Sfjw=CO=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.2 required=3.0 tests=BAYES_00,DKIM_INVALID,
+X-Spam-Status: No, score=-9.4 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+	NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45973C433E2
-	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Sep 2020 15:12:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1445EC433E2
+	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Sep 2020 15:14:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EFB942078E
-	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Sep 2020 15:12:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B6BC6208C7
+	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Sep 2020 15:14:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N8W4vQWj"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SAaIYQiU"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726590AbgIEPMF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 5 Sep 2020 11:12:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33058 "EHLO
+        id S1726468AbgIEPOh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 5 Sep 2020 11:14:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726582AbgIEPMC (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 5 Sep 2020 11:12:02 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B87C061244
-        for <linux-hwmon@vger.kernel.org>; Sat,  5 Sep 2020 08:12:00 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id kk9so2002257pjb.2
-        for <linux-hwmon@vger.kernel.org>; Sat, 05 Sep 2020 08:12:00 -0700 (PDT)
+        with ESMTP id S1726261AbgIEPO2 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 5 Sep 2020 11:14:28 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94687C061244
+        for <linux-hwmon@vger.kernel.org>; Sat,  5 Sep 2020 08:14:26 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id 5so5856454pgl.4
+        for <linux-hwmon@vger.kernel.org>; Sat, 05 Sep 2020 08:14:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=/pVlFUhULn0sp3a5+2saFPeRx8j+CjVlNg+Uofrs+FI=;
-        b=N8W4vQWj+kKiDsWaqG3IsFSh8g8uXrfv+ccZOQocRGdA7wCl72hBqRu21A6FkbIGOh
-         pqKRCXV6PPUV7In6bmn338nlYMMqzxlPFM1/aopx4RbMQoyN+UTuHotNUO2ZVfqNksz9
-         5SEJDc7K+ksqkLagCi9EaBbs4O320Sf0XiPc+80vnTDP6Dr9aTUZEMMBYT4mXommVM1l
-         IgNVXdrAIrIHAGW2bwsy77o1ltMtjs6tuVMehDS5cTtly0EYJd/e3Bm/7fUBQL93nwvY
-         lobqD3R3jEqUvCdVEcmD02NEAeFaz+nFy2lig9FlxMwFmE8g4R59tdQM+zRQ2qgRPi5R
-         4gyg==
+        bh=Q5c2OtxkM8Hg/oHmynneEMwiBa+QBL32Z9ZoycOHj4A=;
+        b=SAaIYQiUc8uFanONxTDr7Uo2IzHwW4R6kUwVeouGxEihNGPpQW8vt98cP8NyZy0ktJ
+         +39EvrtbkGCkFwSXJNGDApiLSWLuyrlxFtZg/KDZwt+ecZBe/3eeIek1LV3WzWGueNdp
+         w8g/Nf9kOoqEaEtFb/qEe/VzA5ZcIjxOVKwGSwPkIf3/wHVItK8FESdR0855mp7rYquQ
+         yjUdKIIhXh6aW8KtVIqvhK9FALqgqWykSM9sBqlYDMXdJm9i7ybQFGurTjmgQ6BFQ4SJ
+         1RTLYvlIjY/r3GRuwj4I9p4UfsMlJ2l/wrFYJE8w+0W02MjQIeiG4QY7hOPNa4fUoFsP
+         WLMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=/pVlFUhULn0sp3a5+2saFPeRx8j+CjVlNg+Uofrs+FI=;
-        b=KPY+LGWni50v4OyVvralufB3D2aWYJU1H80TLANCj1IDsASgZbMzaPJ1czuqpyEtNo
-         8AZ5DKS55xkMi6Vhhn8jWl/ZenkgIU8pLQvEBQu8DEVHHm2a20oXpEa0ICy2qYEG458v
-         wgeX9SMAko38WKn2zUoYbkuvx96cC7GiV2YHULxfaLoV5NLegFfnWZ325+XFDyt/+U/I
-         gNgr6hJ78gKXKsGOETy5JDVcCsQsQ/JyIbT6fz8jOqK2PK/NQOwp/4Do8qZV2wbt9ne7
-         FiyLS1RzvwXlvmyB7OQyRDoEKX0tuEEFcEvAK/WzCtihof+GbIwQgYRHqPdmzUkCjESU
-         hepg==
-X-Gm-Message-State: AOAM533KImxByfR8EqbJ+CKBFKTCmW3JXX9xirS6j7hx1dgMhGAsgQTt
-        mEozb/7qZ/CMRah71UZcgrZitQ5Zvx0=
-X-Google-Smtp-Source: ABdhPJzV3OxpdYDVYH+HsKves66Db3ZoHbUxKxNMvyPJf4jL9ku6C5YSz5b76oV98wqssvXn9fmzIA==
-X-Received: by 2002:a17:90a:9416:: with SMTP id r22mr12996695pjo.108.1599318720172;
-        Sat, 05 Sep 2020 08:12:00 -0700 (PDT)
+        bh=Q5c2OtxkM8Hg/oHmynneEMwiBa+QBL32Z9ZoycOHj4A=;
+        b=PgpoWmrJCOxiTbFLiqIke26H/5kCgu7x1+YaSN2SocmHLXJs/W5vGK9JHuTPANVlAW
+         ffDggPnt2uuPlZG5yDJtKt7c9q69SarWgX+9fd42La2NI3Al5zJoSle6GTxkFZLBDBYQ
+         CHtKIpEsK7mGft6EoWccN+RqIXirRBBGnntn+zP2PW5xQuBhkssw9hPEBPUwzDZgbZaA
+         5yXTzs8Rk5ZoQGbR+KeWFoOqkkkMmejeUK8NcFGYEoc807irdXJUOXrRRUu1HuuXoQLi
+         42EmjKuA37RUuVkA4c+BIc7Jy+IK41+wH6fB+ED1LqJU5U4/waeyPrTmaRA7h34Tv8em
+         lEIQ==
+X-Gm-Message-State: AOAM532XAWTwaQ6xji/VL35n5eWtjfKJ5cPlzb8ni5+tx14DbFWKMysr
+        lljosOPePaIuV6C83s4hEspVK+qmj1U=
+X-Google-Smtp-Source: ABdhPJxECZeKI8ttI2giIBZ2afaEt3M2w0+aBY3Kuk7OdrxzHYIjD1UQqq1k/yyIqAVOI95PvZ0Y3w==
+X-Received: by 2002:a63:36c6:: with SMTP id d189mr10621065pga.392.1599318861498;
+        Sat, 05 Sep 2020 08:14:21 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u22sm8139860pgi.85.2020.09.05.08.11.58
+        by smtp.gmail.com with ESMTPSA id s28sm10099976pfd.111.2020.09.05.08.14.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 05 Sep 2020 08:11:59 -0700 (PDT)
-Subject: Re: [PATCH 2/6] hwmon: amd_energy: optimize accumulation interval
+        Sat, 05 Sep 2020 08:14:21 -0700 (PDT)
+Subject: Re: [PATCH 3/6] hwmon: amd_energy: Improve the accumulation logic
 To:     Naveen Krishna Chatradhi <nchatrad@amd.com>,
         linux-hwmon@vger.kernel.org
 References: <20200905143230.195049-1-nchatrad@amd.com>
- <20200905143230.195049-3-nchatrad@amd.com>
+ <20200905143230.195049-4-nchatrad@amd.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -108,12 +108,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <65863d33-2af7-5c40-010c-6cc5b5300a0a@roeck-us.net>
-Date:   Sat, 5 Sep 2020 08:11:58 -0700
+Message-ID: <c84d9f76-beb4-c760-42be-58118c3d13c8@roeck-us.net>
+Date:   Sat, 5 Sep 2020 08:14:20 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200905143230.195049-3-nchatrad@amd.com>
+In-Reply-To: <20200905143230.195049-4-nchatrad@amd.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -123,88 +123,230 @@ List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 On 9/5/20 7:32 AM, Naveen Krishna Chatradhi wrote:
-> On a system with course grain resolution of energy unit (milli J) the
-> accumulation thread can be executed less frequently than on the system
-> with fine grain resolution(micro J).
+> Factor out the common code in the accumulation functions for core and
+> socket accumulation.
 > 
-> This patch sets the accumulation thread interval to an optimum value
-> calculated based on the (energy unit) resolution supported by the
-> hardware (assuming a peak wattage of 240W).
+> While at it, handle the return value of the amd_create_sensor() function.
 > 
 > Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
 > ---
->  drivers/hwmon/amd_energy.c | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
+>  drivers/hwmon/amd_energy.c | 126 +++++++++++++------------------------
+>  1 file changed, 45 insertions(+), 81 deletions(-)
 > 
 > diff --git a/drivers/hwmon/amd_energy.c b/drivers/hwmon/amd_energy.c
-> index 9580a16185b8..f0a13d6cc419 100644
+> index f0a13d6cc419..96c61784d05c 100644
 > --- a/drivers/hwmon/amd_energy.c
 > +++ b/drivers/hwmon/amd_energy.c
-> @@ -48,6 +48,7 @@ struct amd_energy_data {
->  	struct sensor_accumulator *accums;
->  	/* Energy Status Units */
->  	u64 energy_units;
-> +	unsigned int timeout;
->  	int nr_cpus;
->  	int nr_socks;
->  	int core_id;
-> @@ -215,6 +216,7 @@ static umode_t amd_energy_is_visible(const void *_data,
->  static int energy_accumulator(void *p)
->  {
->  	struct amd_energy_data *data = (struct amd_energy_data *)p;
-> +	unsigned int timeout = data->timeout;
+> @@ -74,108 +74,67 @@ static void get_energy_units(struct amd_energy_data *data)
+>  	data->energy_units = (rapl_units & AMD_ENERGY_UNIT_MASK) >> 8;
+>  }
 >  
->  	while (!kthread_should_stop()) {
->  		/*
-> @@ -234,7 +236,7 @@ static int energy_accumulator(void *p)
->  		 *
->  		 * let us accumulate for every 100secs
->  		 */
-> -		schedule_timeout(msecs_to_jiffies(100000));
-> +		schedule_timeout(msecs_to_jiffies(timeout));
-
-Numbers below are in seconds, used as milli-seconds here.
-
+> -static void accumulate_socket_delta(struct amd_energy_data *data,
+> -				    int sock, int cpu)
+> +static void accumulate_delta(struct amd_energy_data *data,
+> +			     int channel, int cpu, u32 reg)
+>  {
+> -	struct sensor_accumulator *s_accum;
+> +	struct sensor_accumulator *accum;
+>  	u64 input;
+>  
+>  	mutex_lock(&data->lock);
+> -	rdmsrl_safe_on_cpu(cpu, ENERGY_PKG_MSR, &input);
+> +	rdmsrl_safe_on_cpu(cpu, reg, &input);
+>  	input &= AMD_ENERGY_MASK;
+>  
+> -	s_accum = &data->accums[data->nr_cpus + sock];
+> -	if (input >= s_accum->prev_value)
+> -		s_accum->energy_ctr +=
+> -			input - s_accum->prev_value;
+> +	accum = &data->accums[channel];
+> +	if (input >= accum->prev_value)
+> +		accum->energy_ctr +=
+> +			input - accum->prev_value;
+>  	else
+> -		s_accum->energy_ctr += UINT_MAX -
+> -			s_accum->prev_value + input;
+> +		accum->energy_ctr += UINT_MAX -
+> +			accum->prev_value + input;
+>  
+> -	s_accum->prev_value = input;
+> +	accum->prev_value = input;
+>  	mutex_unlock(&data->lock);
+>  }
+>  
+> -static void accumulate_core_delta(struct amd_energy_data *data)
+> +static void read_accumulate(struct amd_energy_data *data)
+>  {
+> -	struct sensor_accumulator *c_accum;
+> -	u64 input;
+> -	int cpu;
+> +	int sock, scpu, cpu;
+> +
+> +	for (sock = 0; sock < data->nr_socks; sock++) {
+> +		scpu = cpumask_first_and(cpu_online_mask,
+> +					 cpumask_of_node(sock));
+> +
+> +		accumulate_delta(data, data->nr_cpus + sock,
+> +				 scpu, ENERGY_PKG_MSR);
+> +	}
+>  
+> -	mutex_lock(&data->lock);
+>  	if (data->core_id >= data->nr_cpus)
+>  		data->core_id = 0;
+>  
+>  	cpu = data->core_id;
+> +	if (cpu_online(cpu))
+> +		accumulate_delta(data, cpu, cpu, ENERGY_CORE_MSR);
+>  
+> -	if (!cpu_online(cpu))
+> -		goto out;
+> -
+> -	rdmsrl_safe_on_cpu(cpu, ENERGY_CORE_MSR, &input);
+> -	input &= AMD_ENERGY_MASK;
+> -
+> -	c_accum = &data->accums[cpu];
+> -
+> -	if (input >= c_accum->prev_value)
+> -		c_accum->energy_ctr +=
+> -			input - c_accum->prev_value;
+> -	else
+> -		c_accum->energy_ctr += UINT_MAX -
+> -			c_accum->prev_value + input;
+> -
+> -	c_accum->prev_value = input;
+> -
+> -out:
+>  	data->core_id++;
+> -	mutex_unlock(&data->lock);
+> -}
+> -
+> -static void read_accumulate(struct amd_energy_data *data)
+> -{
+> -	int sock;
+> -
+> -	for (sock = 0; sock < data->nr_socks; sock++) {
+> -		int cpu;
+> -
+> -		cpu = cpumask_first_and(cpu_online_mask,
+> -					cpumask_of_node(sock));
+> -
+> -		accumulate_socket_delta(data, sock, cpu);
+> -	}
+> -
+> -	accumulate_core_delta(data);
+>  }
+>  
+>  static void amd_add_delta(struct amd_energy_data *data, int ch,
+> -			  int cpu, long *val, bool is_core)
+> +			  int cpu, long *val, u32 reg)
+>  {
+> -	struct sensor_accumulator *s_accum, *c_accum;
+> +	struct sensor_accumulator *accum;
+>  	u64 input;
+>  
+>  	mutex_lock(&data->lock);
+> -	if (!is_core) {
+> -		rdmsrl_safe_on_cpu(cpu, ENERGY_PKG_MSR, &input);
+> -		input &= AMD_ENERGY_MASK;
+> -
+> -		s_accum = &data->accums[ch];
+> -		if (input >= s_accum->prev_value)
+> -			input += s_accum->energy_ctr -
+> -				  s_accum->prev_value;
+> -		else
+> -			input += UINT_MAX - s_accum->prev_value +
+> -				  s_accum->energy_ctr;
+> -	} else {
+> -		rdmsrl_safe_on_cpu(cpu, ENERGY_CORE_MSR, &input);
+> -		input &= AMD_ENERGY_MASK;
+> +	rdmsrl_safe_on_cpu(cpu, reg, &input);
+> +	input &= AMD_ENERGY_MASK;
+>  
+> -		c_accum = &data->accums[ch];
+> -		if (input >= c_accum->prev_value)
+> -			input += c_accum->energy_ctr -
+> -				 c_accum->prev_value;
+> -		else
+> -			input += UINT_MAX - c_accum->prev_value +
+> -				 c_accum->energy_ctr;
+> -	}
+> +	accum = &data->accums[ch];
+> +	if (input >= accum->prev_value)
+> +		input += accum->energy_ctr -
+> +				accum->prev_value;
+> +	else
+> +		input += UINT_MAX - accum->prev_value +
+> +				accum->energy_ctr;
+>  
+>  	/* Energy consumed = (1/(2^ESU) * RAW * 1000000UL) μJoules */
+>  	*val = div64_ul(input * 1000000UL, BIT(data->energy_units));
+> @@ -188,20 +147,22 @@ static int amd_energy_read(struct device *dev,
+>  			   u32 attr, int channel, long *val)
+>  {
+>  	struct amd_energy_data *data = dev_get_drvdata(dev);
+> +	u32 reg;
+>  	int cpu;
+>  
+>  	if (channel >= data->nr_cpus) {
+>  		cpu = cpumask_first_and(cpu_online_mask,
+>  					cpumask_of_node
+>  					(channel - data->nr_cpus));
+> -		amd_add_delta(data, channel, cpu, val, false);
+> +		reg = ENERGY_PKG_MSR;
+>  	} else {
+>  		cpu = channel;
+>  		if (!cpu_online(cpu))
+>  			return -ENODEV;
+>  
+> -		amd_add_delta(data, channel, cpu, val, true);
+> +		reg = ENERGY_CORE_MSR;
 >  	}
+> +	amd_add_delta(data, channel, cpu, val, reg);
+>  
 >  	return 0;
 >  }
-> @@ -331,6 +333,14 @@ static int amd_energy_probe(struct platform_device *pdev)
->  	if (IS_ERR(hwmon_dev))
->  		return PTR_ERR(hwmon_dev);
+> @@ -249,7 +210,7 @@ static const struct hwmon_ops amd_energy_ops = {
 >  
-> +	/* Once in 3 minutes for a resolution of 1/2*16 */
-
-* 16 or ^ 16 ?
-
-> +	if (data->energy_units == 0x10)
-> +		data->timeout = 3 * 60;
-
-180 ms ? I assume this is a bug and meant to be 3 * 60 * 1000.
-
-> +
-> +	/* Once in 3 days for a resolution of 1/2^6 */
-> +	if (data->energy_units == 0x6)
-> +		data->timeout = 3 * 24 * 60 * 60;
-> +
-
-... and else ?
-
-This needs to cover all cases, including those not currently existing.
-I would suggest to define a formula based on data->energy_units.
-The energy units value can be anything from 0..31. Based on your numbers,
-something like
-    timeout_ms = BIT(34 - data->energy_units);
-should do. It translates to about 3.1 days for energy_units=6, and
-4.3 minutes for energy_units=16. If that is too much, you can make it
-   timeout_ms = BIT(33 - data->energy_units);
-
-To avoid overflow, it might make sense to max out at BIT(31).
-    timeout_ms = BIT((min(31, 33 - data->energy_units));
-
-Guenter
-
->  	data->wrap_accumulate = kthread_run(energy_accumulator, data,
->  					    "%s", dev_name(hwmon_dev));
+>  static int amd_create_sensor(struct device *dev,
+>  			     struct amd_energy_data *data,
+> -			     u8 type, u32 config)
+> +			     enum hwmon_sensor_types type, u32 config)
+>  {
+>  	struct hwmon_channel_info *info = &data->energy_info;
+>  	struct sensor_accumulator *accums;
+> @@ -308,6 +269,7 @@ static int amd_energy_probe(struct platform_device *pdev)
+>  	struct device *hwmon_dev;
+>  	struct amd_energy_data *data;
+>  	struct device *dev = &pdev->dev;
+> +	int ret;
+>  
+>  	data = devm_kzalloc(dev,
+>  			    sizeof(struct amd_energy_data), GFP_KERNEL);
+> @@ -320,8 +282,10 @@ static int amd_energy_probe(struct platform_device *pdev)
+>  	dev_set_drvdata(dev, data);
+>  	/* Populate per-core energy reporting */
+>  	data->info[0] = &data->energy_info;
+> -	amd_create_sensor(dev, data, hwmon_energy,
+> -			  HWMON_E_INPUT | HWMON_E_LABEL);
+> +	ret = amd_create_sensor(dev, data, hwmon_energy,
+> +				HWMON_E_INPUT | HWMON_E_LABEL);
+> +	if (ret)
+> +		return ret;
+>  
+>  	mutex_init(&data->lock);
+>  	get_energy_units(data);
+> @@ -346,7 +310,7 @@ static int amd_energy_probe(struct platform_device *pdev)
 >  	if (IS_ERR(data->wrap_accumulate))
+>  		return PTR_ERR(data->wrap_accumulate);
+>  
+> -	return PTR_ERR_OR_ZERO(data->wrap_accumulate);
+> +	return 0;
+
+Actually, what you want to remove is the above if() statement, since
+PTR_ERR_OR_ZERO() is supposed to replace it.
+
+>  }
+>  
+>  static int amd_energy_remove(struct platform_device *pdev)
 > 
 
