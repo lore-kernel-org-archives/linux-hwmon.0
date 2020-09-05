@@ -8,264 +8,251 @@ X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8F9EC43461
-	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Sep 2020 14:33:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A49AC43461
+	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Sep 2020 14:33:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7D10120760
-	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Sep 2020 14:33:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4CE68206B8
+	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Sep 2020 14:33:07 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=amdcloud.onmicrosoft.com header.i=@amdcloud.onmicrosoft.com header.b="dbDZCJix"
+	dkim=pass (1024-bit key) header.d=amdcloud.onmicrosoft.com header.i=@amdcloud.onmicrosoft.com header.b="YNHYgWDp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728473AbgIEOdD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 5 Sep 2020 10:33:03 -0400
+        id S1728297AbgIEOdH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 5 Sep 2020 10:33:07 -0400
 Received: from mail-bn8nam11on2063.outbound.protection.outlook.com ([40.107.236.63]:2133
         "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728297AbgIEOdC (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 5 Sep 2020 10:33:02 -0400
+        id S1728364AbgIEOdF (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 5 Sep 2020 10:33:05 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hEF0Q638qHlruAwLn3fZVVijWGsPiJDS8yF3hnjBGiSGxsrZBV9f5hqneg9Ucv83gIlwMk6igbVVXzZXYjeRIJavOPTwIC+4Ho/1Bzua4p39ssxBuTtHPtDksgpHTLI1OFljnV7Ck5CLXtn8uVLdzj5wEoi247a08uuazHzrwivGQpj21IYtg/TV2rIoLC91T5aO1g6ASDqHdROeL/5O/uFaax9O74ZraAJDnZfGsuMJRfVGMQN27muSVtqeOujIYYb9NPg48X5DgcT9k6jRp47/lZE2NdFqhiWcJE5wPoWPos1ylrcafcg6YLj9fAS1e3oiWetRPKpZqdd5+p8/lg==
+ b=gVuwV3fe9N2VxOoXIuBb7OWSwtVfbxsuqFqIPemrzCyVormzbsrqD0tju2HQuNhPAZ3G2xd7NIXNTmCRUn8RE6irjJplKU/hA+ugvewvn8grtUq0XUOYQN/aSRJLgHam3cS+fnn4YigtGeH7v0fnhqD+oWeekx3hG6R+b0HmGJnIX0S2HZ2rXG36XXc/DQm/6MxYaT0W457IRAp5vn/ETyYezCyRvUH8ifELDHQZjHUM9bw3qEnfD3jf4COowIPukgq3yYPhqyELeG8zRPc6kLajyfwnunrnNdcp6ZERa2jWrJQLAB6O9kleW38iNH7mXVAqy+CYqC/DDZNYP1SIoQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=o8Hqp0jthVOH+uRtBvPl401ym36PQbrYoGhvH+kIKSE=;
- b=NCyO688bkx0NzOifw8X6wNGn7feU91iA0ODGu/oO5RT3i3ZVN+hFWj2igeJHy3OTfskUL6C9XvboEDEF38+WHhYUhvpkBUpwQGScQ8Q51BjvANMDDM1P6T1Bn0ek+z3FJgm8DgWqrG8+m0vgnr1gNsyWs01912v6W+bj5mX6KnYv4q3SuZArEDns6BHf1FGaNNcH8Kk1UyBsv7vpndrNcwCA2pRk2aFyVq/uDIhCc9UgcTUy7MRdTeU+ReaFarQlRCsRq+H5i1u1JVwYDGY7YXJ8ZbmNp60bFdAa67qAHYaAUgSgbrWv/4NvDZaEu9F+249JWt+22iP9WuMenQbe5Q==
+ bh=CZE8mEpZOc0DoZa4M97ogv4hgr03c4OIKFWY0MTHNyo=;
+ b=jkWNq2ea9SklaSquOVAMAnjJ+h2PSj3GPTOnK16ngBbwz01PAPXJMgEUXmmBEZYGLWY41V733xRyGX8HpSErhwDXNV0jXWO1klYdrgKOUG8RX8Zq/DjMAw2N+E0YV96MTSKVs9XLRrxV5AGn+N2CI+9rVFeMh+x11G5iwbiyfj3e0LjQRqGyoG4oWnxjQgn4k9mFGOD8aVelMqBiW761YA8wKd34eQoLIDIaXW+lK+tvak6I8gBFfS61Gxt72zdHQLL93N9Dvr5D3TusaVLWbjX4rJpI22qucptXq4KgT5FjCP0miUdpPUaAkYTxj6DvGtqmFHWGt856VffQFRoshA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=o8Hqp0jthVOH+uRtBvPl401ym36PQbrYoGhvH+kIKSE=;
- b=dbDZCJixlTscei25H0XR/vhfmDoJFHiG9T3BvSdnGmEf0KFEYBivnq9dtE64rmS+2ry0M2J6IGuuJAxWFMhwlQouS69Guxc9v9BP/l0J3MEaYuApc1V63PFP6AviWpMDXIbrQ05tBRLXsoHZPDo2hP5pP8J+Gllt1qmy/6fyLUo=
+ bh=CZE8mEpZOc0DoZa4M97ogv4hgr03c4OIKFWY0MTHNyo=;
+ b=YNHYgWDpagzCrmrrOf1Oi8NTyHf1dE3bUGU6bQvt1abIv03BeOOt0fbKkk5HR1y+L/TonbclTs51oetQiYFMw+Cna4BaqMWnMrppy+03ow8pI2u71dSi4Jee/K0g3lsyER7TCQ9y0uIm1WlUkT7CPg2R4L5ZstRM7q+aubQeeX4=
 Authentication-Results: vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=none action=none header.from=amd.com;
 Received: from DM6PR12MB4388.namprd12.prod.outlook.com (2603:10b6:5:2a9::10)
  by DM6PR12MB3114.namprd12.prod.outlook.com (2603:10b6:5:11e::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3348.16; Sat, 5 Sep
- 2020 14:32:58 +0000
+ 2020 14:33:01 +0000
 Received: from DM6PR12MB4388.namprd12.prod.outlook.com
  ([fe80::311f:8c73:8d31:7839]) by DM6PR12MB4388.namprd12.prod.outlook.com
  ([fe80::311f:8c73:8d31:7839%5]) with mapi id 15.20.3348.018; Sat, 5 Sep 2020
- 14:32:58 +0000
+ 14:33:01 +0000
 From:   Naveen Krishna Chatradhi <nchatrad@amd.com>
 To:     linux-hwmon@vger.kernel.org
 Cc:     linux@roeck-us.net, Naveen Krishna Chatradhi <nchatrad@amd.com>
-Subject: [PATCH 4/6] hwmon: amd_energy: let user enable/disable the sw accumulation
-Date:   Sat,  5 Sep 2020 20:02:28 +0530
-Message-Id: <20200905143230.195049-5-nchatrad@amd.com>
+Subject: [PATCH 5/6] hwmon: amd_energy: dump energy counters via debugfs
+Date:   Sat,  5 Sep 2020 20:02:29 +0530
+Message-Id: <20200905143230.195049-6-nchatrad@amd.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200905143230.195049-1-nchatrad@amd.com>
 References: <20200905143230.195049-1-nchatrad@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-ClientProxiedBy: MAXPR0101CA0063.INDPRD01.PROD.OUTLOOK.COM
  (2603:1096:a00:e::25) To DM6PR12MB4388.namprd12.prod.outlook.com
  (2603:10b6:5:2a9::10)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from milan-ETHANOL-X.amd.com (165.204.156.251) by MAXPR0101CA0063.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:e::25) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3348.15 via Frontend Transport; Sat, 5 Sep 2020 14:32:57 +0000
+Received: from milan-ETHANOL-X.amd.com (165.204.156.251) by MAXPR0101CA0063.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:e::25) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3348.15 via Frontend Transport; Sat, 5 Sep 2020 14:32:59 +0000
 X-Mailer: git-send-email 2.17.1
 X-Originating-IP: [165.204.156.251]
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 007faadc-a267-4937-65e7-08d851a895e6
+X-MS-Office365-Filtering-Correlation-Id: e46f72d3-7056-4b95-cdae-08d851a8976e
 X-MS-TrafficTypeDiagnostic: DM6PR12MB3114:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <DM6PR12MB3114980881D6884674757000E82A0@DM6PR12MB3114.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:270;
+X-Microsoft-Antispam-PRVS: <DM6PR12MB311486F4CEB40B81BE6C92AEE82A0@DM6PR12MB3114.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:393;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BQ5X0U1gqtpOHHR7DFdHiZryDjbD8Fw292Ot1NoWGYVZerlAmAJ0weWitM+bvlUdDwOx6XuJLS70IDhsVauX1kPImf7rpx5RklS4EkORaGf4sQEFlY80T4pU69U95aD6ZvlwMB2nJLB/R0IOqw7cKfPl8fdLZ4KrliqAPtQSetgwHrfgtMPJXt3NB3ncBhTNiUSRpZkWo6WdmzDCB6+w1GgnMEKacyhRZirkR6EiGnvBpyyXtmjXdmzc+soOClokVP1rrLJ7SxdlKu+XNCOX6/UBgxVjAN5dxFq1qwpLbutFBabXvqSWOkvNnDsdCQG5
+X-Microsoft-Antispam-Message-Info: nD8eTb8WvOSZ3XyeYjCgqPVUE9aBfTr7SF/hMfIJsYevi9gkUOQoYguedM7zefgbtCuMIhF+2dQ3mmpI955QXdQC+ROWeP2gMTzJyaQ0b/RJT8tN+PLNSO4HQHKZ2gNnyGC295uMDa5Cr4XHi8/X+HxqbmxJFuB5UJQInl/EIanNIBaU78orRW8T0x4ymXr5DY+3LY87Kd0etL3IEttq0CyHgo8XEBNfDSnOp6WC9PoUYQeIMb4u2+kyQVZuQ05Np3sjlARowLLi14hznzL18EAIeBWcsyT+KaIJ0AtFleeEwwAJXqrRE2utqg2a3nAfMtyRktC32OVYws6Zj+o2lA==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4388.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(396003)(346002)(39860400002)(366004)(376002)(52116002)(316002)(478600001)(66946007)(8676002)(7696005)(66476007)(6916009)(66556008)(26005)(6666004)(4326008)(2616005)(6486002)(83380400001)(5660300002)(956004)(16526019)(36756003)(2906002)(186003)(1076003)(8936002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: MHu2BoK1aChqqzJoBZT/ge3sHsHxdxx0d3MNbyRxKP/3sFl6jyKzkJDXsj54q7lWSZL9vWk4uVvsi+VJ/qIkUOT8TB2E4vuY7ExyXGiH5rv55YhVkOkC4EOyktUJEDU/QFLrx6OWlw9a4tlQCNICiLAYkdxdTJkAg7//Qh19UftikNP3lPQxf6gRKuQGG1pgLcIbaAnt78DdrzCHGUdOeR5MCI+dsauhRU3MkQSWlUcwA9S4wZ8r9ShfYtXQtLzrV3sjzepSly1knEXddqm9F7NoaSgydHow6cGw/DTTRlUi+Ylb52C83iQl7Y8rlOAD6XBZ/dhl6JjhEbcqXidqYal/BDRWhwzzvLJ0d2+9mN8hMXtIb4OjXreEBflFhMFyewnNwmkD9lOsiOzHWMysY8DzFooVW2ZH89PYkBQMoEjkMNloiZKAkFK6Bi4ADjWICQq4HuiAUCf5T65lBgLB3e8uOv6uUHWeCuubwWhJb9jZ3TDDMLB0nCFBHjyqsS7tpwzZabNAj/ghu3UtQKq59YeefR2EGUNCv7dOg5VZbmDWqKdOlJgHn8RnDmRIBxyXlFM2MW67Sd4hG6Pa4PvKJVoxNKlsqJfSxsfJbjLjeOHvTnjGF0Y6gLTOB0jBhkZCQa9eo+uMCF2/j2AokmmKrg==
+X-MS-Exchange-AntiSpam-MessageData: xcJG8uUrHu0v9RJ+Dc5L369sMPmBO2Inh6BCU3w1xJjJDOELb5/D5VJ6dSu3+rrkTY51ed1LFhC85hPQH83oZcEjvx9F7IKlcNdcTIUvZXW/MD0pwILri00jOGmHo139PgZuv9zSsmiy2KT87wH+eYaWgqyBaglrckCMd4fkfVcSLemuc0jnoVvc3R1DRtj/htnmcQSkwu9jdyesumXFdqLpdP912Df/FqF6lG41i9COkuL3KM1CjVZWkZPQ4TyNX8fzgIIJzML2dcurYzrvbNQMEEd6VzsTx6Mj89yrBVQDWPkLRZXlsXZ+9g54ubDVwKqYePgApx4CVO+s1EVGrt9RUBGvvh6aOtpruhckcHCOSdESn1FXSRDYVgQvTOcnRf3+Fg/zdWmmfWgeJJ7kjT9xushDPBrwFMZAHdaiGDoe5jgFt4sLnDgEmhvL+tkdwk648Ht4cvZcPJ6Xq/TDSltfCET88YT1zkd2uGIs0BEMMTUmvk2e4YXTEt8hlq6VWgiDuME3oia9vXvUKneGlcV5LMwBRlf6kzPkK9jycEhQ9AmQlzUzaFlsA/qkm33r8xPMiqAHC3G0AhKniM11n50rfacjD6XLCoWILkWhT4TnDTkbFJXBn+7IYVLg/RS3BLwWqcl+ABsahxfRwUAtKg==
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 007faadc-a267-4937-65e7-08d851a895e6
+X-MS-Exchange-CrossTenant-Network-Message-Id: e46f72d3-7056-4b95-cdae-08d851a8976e
 X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4388.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2020 14:32:58.6037
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2020 14:33:01.1236
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zYIxbK5Kl08NsrwiweN2bZD+g7LPwHnH0wGwHNzQdCBI6xey9HGKi6Dc0ShifKHr3vC6PraJqFqKlkJEEYd3tg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4rGFRhc16+MtbiC2EcJPjG8bjnvuA574jWzdcFQ6I0ZxYiDkxCLyPRJW8w856ENCIpJGVAjXn2V1Mxk3Q4cwTQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3114
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Provide an option "accumulator_status" via sysfs to enable/disable
-the software accumulation of energy counters.
+Use seq_printf to capture the core and socket energies under debugfs
+path in '/sys/kernel/debug/amd_energy/'
+file cenergy_dump: To print out the core energy counters
+file senergy_dump: To print out the socket energy counters
 
 Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
 ---
- drivers/hwmon/amd_energy.c | 104 ++++++++++++++++++++++++++++++-------
- 1 file changed, 86 insertions(+), 18 deletions(-)
+ drivers/hwmon/amd_energy.c | 110 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 110 insertions(+)
 
 diff --git a/drivers/hwmon/amd_energy.c b/drivers/hwmon/amd_energy.c
-index 96c61784d05c..c294bea56c02 100644
+index c294bea56c02..2184bd4510ed 100644
 --- a/drivers/hwmon/amd_energy.c
 +++ b/drivers/hwmon/amd_energy.c
-@@ -32,6 +32,8 @@
- #define AMD_ENERGY_UNIT_MASK	0x01F00
- #define AMD_ENERGY_MASK		0xFFFFFFFF
+@@ -8,6 +8,7 @@
+ #include <linux/bits.h>
+ #include <linux/cpu.h>
+ #include <linux/cpumask.h>
++#include <linux/debugfs.h>
+ #include <linux/delay.h>
+ #include <linux/device.h>
+ #include <linux/hwmon.h>
+@@ -20,6 +21,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/sched.h>
+ #include <linux/slab.h>
++#include <linux/smp.h>
+ #include <linux/topology.h>
+ #include <linux/types.h>
  
-+static struct device_attribute accumulate_attr;
-+
- struct sensor_accumulator {
- 	u64 energy_ctr;
- 	u64 prev_value;
-@@ -42,10 +44,12 @@ struct amd_energy_data {
- 	const struct hwmon_channel_info *info[2];
- 	struct hwmon_chip_info chip;
- 	struct task_struct *wrap_accumulate;
-+	struct device *hwmon_dev;
- 	/* Lock around the accumulator */
- 	struct mutex lock;
- 	/* An accumulator for each core and socket */
- 	struct sensor_accumulator *accums;
-+	bool accumulator_status;
- 	/* Energy Status Units */
- 	u64 energy_units;
- 	unsigned int timeout;
-@@ -128,13 +132,15 @@ static void amd_add_delta(struct amd_energy_data *data, int ch,
- 	rdmsrl_safe_on_cpu(cpu, reg, &input);
- 	input &= AMD_ENERGY_MASK;
+@@ -57,6 +59,8 @@ struct amd_energy_data {
+ 	int nr_socks;
+ 	int core_id;
+ 	char (*label)[10];
++	u64 *cdump;
++	u64 *sdump;
+ };
  
--	accum = &data->accums[ch];
--	if (input >= accum->prev_value)
--		input += accum->energy_ctr -
--				accum->prev_value;
--	else
--		input += UINT_MAX - accum->prev_value +
--				accum->energy_ctr;
-+	if (data->accumulator_status) {
-+		accum = &data->accums[ch];
-+		if (input >= accum->prev_value)
-+			input += accum->energy_ctr -
-+					accum->prev_value;
-+		else
-+			input += UINT_MAX - accum->prev_value +
-+					accum->energy_ctr;
-+	}
- 
- 	/* Energy consumed = (1/(2^ESU) * RAW * 1000000UL) μJoules */
- 	*val = div64_ul(input * 1000000UL, BIT(data->energy_units));
-@@ -264,9 +270,67 @@ static int amd_create_sensor(struct device *dev,
- 	return 0;
+ static int amd_energy_read_labels(struct device *dev,
+@@ -329,6 +333,108 @@ static int create_accumulate_status_file(struct amd_energy_data *data)
+ 				 &accumulate_attr.attr);
  }
  
-+static ssize_t amd_energy_accumulate_show(struct device *dev,
-+					  struct device_attribute *dev_attr,
-+					  char *buf)
++#ifdef CONFIG_DEBUG_FS
++static void dump_on_each_cpu(void *info)
 +{
-+	struct amd_energy_data *data = dev_get_drvdata(dev);
++	struct amd_energy_data *data = info;
++	int cpu = smp_processor_id();
 +
-+	return sprintf(buf, "%d\n", data->accumulator_status);
++	amd_add_delta(data, cpu, cpu, (long *)&data->cdump[cpu],
++		      ENERGY_CORE_MSR);
 +}
 +
-+static ssize_t amd_energy_accumulate_store(struct device *dev,
-+					   struct device_attribute *dev_attr,
-+					   const char *buf, size_t count)
++static int cenergy_dump_show(struct seq_file *s, void *unused)
 +{
-+	struct amd_energy_data *data = dev_get_drvdata(dev);
-+	bool input;
-+	int ret;
++	struct amd_energy_data *data = s->private;
++	struct cpumask *cpus_mask;
++	int i;
 +
-+	ret = kstrtobool(buf, &input);
-+	if (ret)
-+		return ret;
-+
-+	if (data->accumulator_status == input)
-+		return count;
-+
-+	if (input) {
-+		memset(data->accums, 0, (data->nr_cpus + data->nr_socks) *
-+			sizeof(struct sensor_accumulator));
-+
-+		if (!data->wrap_accumulate) {
-+			data->wrap_accumulate =
-+				kthread_run(energy_accumulator,
-+					    data, "%s", dev_name(dev));
-+			if (IS_ERR(data->wrap_accumulate))
-+				return PTR_ERR(data->wrap_accumulate);
-+		}
-+	} else {
-+		if (data && data->wrap_accumulate) {
-+			ret = kthread_stop(data->wrap_accumulate);
-+			if (ret)
-+				return ret;
-+			data->wrap_accumulate = NULL;
-+		}
++	cpus_mask = kmalloc(sizeof(*cpus_mask), GFP_KERNEL);
++	memset(data->cdump, 0, (data->nr_cpus) * sizeof(u64));
++	cpumask_clear(cpus_mask);
++	for (i = 0; i < data->nr_cpus; i++) {
++		if (cpu_online(i))
++			cpumask_set_cpu(i, cpus_mask);
 +	}
-+	data->accumulator_status = input;
 +
-+	return count;
++	on_each_cpu_mask(cpus_mask, dump_on_each_cpu, data, true);
++
++	for (i = 0; i < data->nr_cpus; i++) {
++		if (!(i & 3))
++			seq_printf(s, "Core %3d: ", i);
++
++		seq_printf(s, "%16llu ", data->cdump[i]);
++		if ((i & 3) == 3)
++			seq_puts(s, "\n");
++	}
++	seq_puts(s, "\n");
++
++	kfree(cpus_mask);
++	return 0;
 +}
++DEFINE_SHOW_ATTRIBUTE(cenergy_dump);
 +
-+static int create_accumulate_status_file(struct amd_energy_data *data)
++static int senergy_dump_show(struct seq_file *s, void *unused)
 +{
-+	accumulate_attr.attr.name = "accumulator_status";
-+	accumulate_attr.attr.mode = 0664;
-+	accumulate_attr.show = amd_energy_accumulate_show;
-+	accumulate_attr.store = amd_energy_accumulate_store;
++	struct amd_energy_data *data = s->private;
++	int i, cpu;
 +
-+	return sysfs_create_file(&data->hwmon_dev->kobj,
-+				 &accumulate_attr.attr);
++	for (i = 0; i < data->nr_socks; i++) {
++		cpu = cpumask_first_and(cpu_online_mask,
++					cpumask_of_node(i));
++		amd_add_delta(data, data->nr_cpus + i, cpu,
++			      (long *)&data->sdump[i], ENERGY_PKG_MSR);
++		seq_printf(s, "Socket %1d: %16llu\n",
++			   i, data->sdump[i]);
++	}
++
++	return 0;
 +}
++DEFINE_SHOW_ATTRIBUTE(senergy_dump);
++
++static void dump_debugfs_cleanup(void *ddir)
++{
++	debugfs_remove_recursive(ddir);
++}
++
++static int create_dump_file(struct device *dev,
++			    struct amd_energy_data *data)
++{
++	struct dentry *debugfs;
++	char name[] = "amd_energy";
++
++	data->cdump = devm_kcalloc(dev, data->nr_cpus,
++				   sizeof(u64), GFP_KERNEL);
++	if (!data->cdump)
++		return -ENOMEM;
++
++	data->sdump = devm_kcalloc(dev, data->nr_socks,
++				   sizeof(u64), GFP_KERNEL);
++	if (!data->sdump)
++		return -ENOMEM;
++
++	debugfs = debugfs_create_dir(name, NULL);
++	if (debugfs) {
++		debugfs_create_file("cenergy_dump", 0440,
++				    debugfs, data, &cenergy_dump_fops);
++		debugfs_create_file("senergy_dump", 0440,
++				    debugfs, data, &senergy_dump_fops);
++		devm_add_action_or_reset(data->hwmon_dev,
++					 dump_debugfs_cleanup, debugfs);
++	}
++
++	return 0;
++}
++#else
++
++static int create_dump_file(struct device *dev,
++			    struct amd_energy_data *data)
++{
++	return 0;
++}
++
++#endif //CONFIG_DEBUG_FS
 +
  static int amd_energy_probe(struct platform_device *pdev)
  {
--	struct device *hwmon_dev;
  	struct amd_energy_data *data;
- 	struct device *dev = &pdev->dev;
- 	int ret;
-@@ -290,12 +354,12 @@ static int amd_energy_probe(struct platform_device *pdev)
- 	mutex_init(&data->lock);
- 	get_energy_units(data);
+@@ -376,6 +482,10 @@ static int amd_energy_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
  
--	hwmon_dev = devm_hwmon_device_register_with_info(dev, DRVNAME,
--							 data,
--							 &data->chip,
--							 NULL);
--	if (IS_ERR(hwmon_dev))
--		return PTR_ERR(hwmon_dev);
-+	data->hwmon_dev = devm_hwmon_device_register_with_info(dev, DRVNAME,
-+							       data,
-+							       &data->chip,
-+							       NULL);
-+	if (IS_ERR(data->hwmon_dev))
-+		return PTR_ERR(data->hwmon_dev);
- 
- 	/* Once in 3 minutes for a resolution of 1/2*16 */
- 	if (data->energy_units == 0x10)
-@@ -305,10 +369,12 @@ static int amd_energy_probe(struct platform_device *pdev)
- 	if (data->energy_units == 0x6)
- 		data->timeout = 3 * 24 * 60 * 60;
- 
--	data->wrap_accumulate = kthread_run(energy_accumulator, data,
--					    "%s", dev_name(hwmon_dev));
--	if (IS_ERR(data->wrap_accumulate))
--		return PTR_ERR(data->wrap_accumulate);
-+	/* Disabling the energy accumulation by default */
-+	data->accumulator_status = 0;
-+
-+	ret = create_accumulate_status_file(data);
++	ret = create_dump_file(dev, data);
 +	if (ret)
 +		return ret;
- 
++
  	return 0;
  }
-@@ -317,6 +383,8 @@ static int amd_energy_remove(struct platform_device *pdev)
- {
- 	struct amd_energy_data *data = dev_get_drvdata(&pdev->dev);
- 
-+	sysfs_remove_file(&data->hwmon_dev->kobj, &accumulate_attr.attr);
-+
- 	if (data && data->wrap_accumulate)
- 		kthread_stop(data->wrap_accumulate);
  
 -- 
 2.26.2
