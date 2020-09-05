@@ -5,58 +5,58 @@ X-Spam-Level:
 X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19FEBC43461
-	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Sep 2020 13:06:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E763DC433E2
+	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Sep 2020 13:06:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C6772208DB
-	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Sep 2020 13:06:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AE2812072D
+	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Sep 2020 13:06:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=sartura-hr.20150623.gappssmtp.com header.i=@sartura-hr.20150623.gappssmtp.com header.b="DQ/jMFJv"
+	dkim=pass (2048-bit key) header.d=sartura-hr.20150623.gappssmtp.com header.i=@sartura-hr.20150623.gappssmtp.com header.b="kQNjQbg2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728608AbgIENF6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 5 Sep 2020 09:05:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42002 "EHLO
+        id S1728620AbgIENGU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 5 Sep 2020 09:06:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728572AbgIENFt (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 5 Sep 2020 09:05:49 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849FBC061245
-        for <linux-hwmon@vger.kernel.org>; Sat,  5 Sep 2020 06:05:48 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id z22so12071630ejl.7
-        for <linux-hwmon@vger.kernel.org>; Sat, 05 Sep 2020 06:05:48 -0700 (PDT)
+        with ESMTP id S1728590AbgIENFz (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 5 Sep 2020 09:05:55 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12454C061244
+        for <linux-hwmon@vger.kernel.org>; Sat,  5 Sep 2020 06:05:55 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id a26so12126674ejc.2
+        for <linux-hwmon@vger.kernel.org>; Sat, 05 Sep 2020 06:05:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=sartura-hr.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=SF1qQ5y6zS+uuXI0X6117nR7jpHsJ8QwMXzF/nJxgiY=;
-        b=DQ/jMFJvt+FCQjnz+50PJXFDwxKjYTQPxSIhBTijj220+HGAJfCJz6kCUgDRJltpLE
-         TYREY+v3rW7rUGaSwrVhMLc706WQ52m4EgeqTWjCS147oCbtiJCLuNbVfkZCLk5zunKb
-         MzHyf4v4YLQG/dw1Ej6nfzxFUlR/KS6POdin+WQ5EX+0vaZW/beF/sI5AQQfF2skrs2l
-         yZ4Qd68H5HHYo1gP7dc27LyfUgMnPcw08tIyJZQWv2/wLsaIUkIY+vrf66/5oZC9Dch+
-         cLPScIto6s5WfdK0AlB7OJCVnOhPBsHnYEOElLpdLQJMQQjRQnsDYpBSFvMk9XDppzj5
-         gJ4A==
+        bh=322eLsEkmbv53gakapl+TlGOtJ3WQUkBPPAQWpyScfE=;
+        b=kQNjQbg24wE2noUhH/XL3Yv48U/r42eVaF/Vcl6GP9z139gppRyLfkLNMKrcUheWD8
+         St2+aHKvpcrSBPge0mIzvBo3Hfg/iLDojHnF8cwbUuSvyDyuZm+fuhMTKxlPdI8NaxCh
+         JIWUsqGem8KmLGBftrsb1MIXf3av9mgDc55ZsqIOtDjJZ9V4SNelbJqI8DfFrk9HYJRD
+         EemIaP+fOJOQOueqoIaTqnGnAanjJzzUl71Z33NzkOwDuwO+ZVCeCPGkZZVp1ZEdWLlP
+         lFBI03nMva2ZDWuYc77pPrq7LeyevivgPlX8wetBM8Qqut/kbl5IjlsgBPRrUMKBPlVT
+         CSGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=SF1qQ5y6zS+uuXI0X6117nR7jpHsJ8QwMXzF/nJxgiY=;
-        b=CvW5Za/lLHXH/ZKbjy3wREo5j1mwqAECEy4XBcX26/SGB/372wjo2We3HGTkjPCrBc
-         YLlr2ZiYSdKbpMroqbvZiDz3JsIs/HWwbyGqCkLc7lkrssifbznCsBG4ySr46tjgxSAM
-         R5zVOZy0IqNTEAlxdAI8GT+96dIo8fo+oGfUYxkNdXTEh5Lc39erpDt339J4ccJnyaiP
-         paO4SQIvcJOqYK4+gChbTMmlpZApslohkX92FsrXvJQAPEMTe/Lp40w84O9hCP8R5dD3
-         ASJZcCopxENQ84+Wnzq6H0TUirjApxVyNsqQNU4qy/n41jA89flcDvU8PBAm/3o728iM
-         hjhA==
-X-Gm-Message-State: AOAM530TYgPoOpKv194Ug3HB0+Diq6rjy9663Me2BF+7ihS9DvPndd6K
-        PY4MLKZkHxPpiG8wUnMjBiEeeA==
-X-Google-Smtp-Source: ABdhPJxoi1XmHpGnVJEd12p7iaAwu3SnVjIJokGuTJEIZy9ha0sakApo0hCSJzO95UQP1fWnVKfr2w==
-X-Received: by 2002:a17:906:19c7:: with SMTP id h7mr12246865ejd.517.1599311147152;
-        Sat, 05 Sep 2020 06:05:47 -0700 (PDT)
+        bh=322eLsEkmbv53gakapl+TlGOtJ3WQUkBPPAQWpyScfE=;
+        b=WEEDRfEAjishac3586ylszuP07EYhlJtM9uUF1OLeLHRZ9hjbf6rckCGaNmJGsR1gS
+         08Ce0X0GSidU81Xobda33VUp6Ux2K0qj4Se/hBv2ORpQYIDrzarMgcH96k/3/qTqo2sn
+         5VKqJf/UxdxwcR2omvUdWQGziAJYU3QtdYBBbGbQRn8enEJR338M1Mh2Hr6JVHm3KNyO
+         M/CukwhCn0gfN3XE1ZwSGaVAB3YLZdEie2FsZvaKRLyvCfiH24I9tdaaRx9HrsBdb3tp
+         n1B/Br2/rYDoi2EREHqqlqQ3Zd2JUot7OKkjYOvaF0mtX0dmgZdAcy+dltyq7r0A8XEX
+         WzvQ==
+X-Gm-Message-State: AOAM531gBhufXnA26axsWU76Qxyr/aDW5+Efo5ZZMg7JfxP+AKvmZmHo
+        bWrjhBM73LqRww49qaJmZFAAhg==
+X-Google-Smtp-Source: ABdhPJwTFofQxT5+Xqmduh9lEX7PsTno/supz5boDjSPMZy4MCfbWku9BL2CzrpPh1wWjP/gUjz9/w==
+X-Received: by 2002:a17:906:4cc7:: with SMTP id q7mr12780600ejt.437.1599311153536;
+        Sat, 05 Sep 2020 06:05:53 -0700 (PDT)
 Received: from localhost.localdomain ([2a00:ee2:4b0d:3002:290:faff:fe54:449c])
-        by smtp.gmail.com with ESMTPSA id s18sm9372655ejd.54.2020.09.05.06.05.45
+        by smtp.gmail.com with ESMTPSA id s18sm9372655ejd.54.2020.09.05.06.05.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Sep 2020 06:05:46 -0700 (PDT)
+        Sat, 05 Sep 2020 06:05:52 -0700 (PDT)
 From:   Luka Kovacic <luka.kovacic@sartura.hr>
 To:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-leds@vger.kernel.org
@@ -64,9 +64,9 @@ Cc:     lee.jones@linaro.org, pavel@ucw.cz, dmurphy@ti.com,
         robh+dt@kernel.org, jdelvare@suse.com, linux@roeck-us.net,
         andrew@lunn.ch, jason@lakedaemon.net, gregory.clement@bootlin.com,
         luka.perkov@sartura.hr, Luka Kovacic <luka.kovacic@sartura.hr>
-Subject: [PATCH 4/7] drivers: leds: Add the iEi WT61P803 PUZZLE LED driver
-Date:   Sat,  5 Sep 2020 15:03:33 +0200
-Message-Id: <20200905130336.967622-5-luka.kovacic@sartura.hr>
+Subject: [PATCH 7/7] arm64: dts: marvell: Add a device tree for the iEi Puzzle-M801 board
+Date:   Sat,  5 Sep 2020 15:03:36 +0200
+Message-Id: <20200905130336.967622-8-luka.kovacic@sartura.hr>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200905130336.967622-1-luka.kovacic@sartura.hr>
 References: <20200905130336.967622-1-luka.kovacic@sartura.hr>
@@ -77,241 +77,573 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add support for the iEi WT61P803 PUZZLE LED driver.
-Currently only the front panel power LED is supported.
+Add initial support for the iEi Puzzle-M801 1U Rackmount Network
+Appliance board.
 
-This driver depends on the iEi WT61P803 PUZZLE MFD driver.
+The board is based on the quad-core Marvell Armada 8040 SoC and supports
+up to 16 GB of DDR4 2400 MHz ECC RAM. It has a PCIe x16 slot (x2 lanes
+only) and an M.2 type B slot.
+
+Main system hardware:
+2x USB 3.0
+4x Gigabit Ethernet
+2x SFP+
+1x SATA 3.0
+1x M.2 type B
+1x RJ45 UART
+1x SPI flash
+1x iEi WT61P803 PUZZLE Microcontroller
+1x EPSON RX8010 RTC (used instead of the integrated Marvell RTC controller)
+6x SFP+ LED
+1x HDD LED
+
+All of the hardware listed above is supported and tested in this port.
 
 Signed-off-by: Luka Kovacic <luka.kovacic@sartura.hr>
 Cc: Luka Perkov <luka.perkov@sartura.hr>
 ---
- drivers/leds/Kconfig                    |   8 ++
- drivers/leds/Makefile                   |   1 +
- drivers/leds/leds-iei-wt61p803-puzzle.c | 184 ++++++++++++++++++++++++
- 3 files changed, 193 insertions(+)
- create mode 100644 drivers/leds/leds-iei-wt61p803-puzzle.c
+ arch/arm64/boot/dts/marvell/Makefile          |   1 +
+ .../dts/marvell/armada-8040-puzzle-m801.dts   | 519 ++++++++++++++++++
+ 2 files changed, 520 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/marvell/armada-8040-puzzle-m801.dts
 
-diff --git a/drivers/leds/Kconfig b/drivers/leds/Kconfig
-index 1c181df24eae..8a25fb753dec 100644
---- a/drivers/leds/Kconfig
-+++ b/drivers/leds/Kconfig
-@@ -332,6 +332,14 @@ config LEDS_IPAQ_MICRO
- 	  Choose this option if you want to use the notification LED on
- 	  Compaq/HP iPAQ h3100 and h3600.
- 
-+config LEDS_IEI_WT61P803_PUZZLE
-+	tristate "LED Support for the iEi WT61P803 PUZZLE MCU"
-+	depends on LEDS_CLASS
-+	depends on MFD_IEI_WT61P803_PUZZLE
-+	help
-+	  This option enables support for LEDs controlled by the iEi WT61P803
-+	  M801 MCU.
-+
- config LEDS_HP6XX
- 	tristate "LED Support for the HP Jornada 6xx"
- 	depends on LEDS_CLASS
-diff --git a/drivers/leds/Makefile b/drivers/leds/Makefile
-index c2c7d7ade0d0..cd362437fefd 100644
---- a/drivers/leds/Makefile
-+++ b/drivers/leds/Makefile
-@@ -34,6 +34,7 @@ obj-$(CONFIG_LEDS_HP6XX)		+= leds-hp6xx.o
- obj-$(CONFIG_LEDS_INTEL_SS4200)		+= leds-ss4200.o
- obj-$(CONFIG_LEDS_IP30)			+= leds-ip30.o
- obj-$(CONFIG_LEDS_IPAQ_MICRO)		+= leds-ipaq-micro.o
-+obj-$(CONFIG_LEDS_IEI_WT61P803_PUZZLE)	+= leds-iei-wt61p803-puzzle.o
- obj-$(CONFIG_LEDS_IS31FL319X)		+= leds-is31fl319x.o
- obj-$(CONFIG_LEDS_IS31FL32XX)		+= leds-is31fl32xx.o
- obj-$(CONFIG_LEDS_KTD2692)		+= leds-ktd2692.o
-diff --git a/drivers/leds/leds-iei-wt61p803-puzzle.c b/drivers/leds/leds-iei-wt61p803-puzzle.c
+diff --git a/arch/arm64/boot/dts/marvell/Makefile b/arch/arm64/boot/dts/marvell/Makefile
+index 3e5f2e7a040c..e413c3261792 100644
+--- a/arch/arm64/boot/dts/marvell/Makefile
++++ b/arch/arm64/boot/dts/marvell/Makefile
+@@ -12,6 +12,7 @@ dtb-$(CONFIG_ARCH_MVEBU) += armada-8040-clearfog-gt-8k.dtb
+ dtb-$(CONFIG_ARCH_MVEBU) += armada-8040-db.dtb
+ dtb-$(CONFIG_ARCH_MVEBU) += armada-8040-mcbin.dtb
+ dtb-$(CONFIG_ARCH_MVEBU) += armada-8040-mcbin-singleshot.dtb
++dtb-$(CONFIG_ARCH_MVEBU) += armada-8040-puzzle-m801.dtb
+ dtb-$(CONFIG_ARCH_MVEBU) += armada-8080-db.dtb
+ dtb-$(CONFIG_ARCH_MVEBU) += cn9130-db.dtb
+ dtb-$(CONFIG_ARCH_MVEBU) += cn9131-db.dtb
+diff --git a/arch/arm64/boot/dts/marvell/armada-8040-puzzle-m801.dts b/arch/arm64/boot/dts/marvell/armada-8040-puzzle-m801.dts
 new file mode 100644
-index 000000000000..50d1e4e81571
+index 000000000000..2921202b4f7b
 --- /dev/null
-+++ b/drivers/leds/leds-iei-wt61p803-puzzle.c
-@@ -0,0 +1,184 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+/* iEi WT61P803 PUZZLE MCU LED Driver
-+ *
++++ b/arch/arm64/boot/dts/marvell/armada-8040-puzzle-m801.dts
+@@ -0,0 +1,519 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright (C) 2016 Marvell Technology Group Ltd.
 + * Copyright (C) 2020 Sartura Ltd.
-+ * Author: Luka Kovacic <luka.kovacic@sartura.hr>
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/mfd/iei-wt61p803-puzzle.h>
-+#include <linux/of.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+#include <linux/slab.h>
-+
-+#include <linux/leds.h>
-+
-+#define CMD_CHAR(x) (char)(x)
-+
-+/**
-+ * enum iei_wt61p803_puzzle_led_state - LED state values
 + *
-+ * @IEI_LED_OFF: The LED is turned off
-+ * @IEI_LED_ON: The LED is turned on
-+ * @IEI_LED_BLINK_5HZ: The LED will blink with a freq of 5 Hz
-+ * @IEI_LED_BLINK_1HZ: The LED will blink with a freq of 1 Hz
++ * Device Tree file for iEi Puzzle-M801
 + */
-+enum iei_wt61p803_puzzle_led_state {
-+	IEI_LED_OFF = 0x30,
-+	IEI_LED_ON = 0x31,
-+	IEI_LED_BLINK_5HZ = 0x32,
-+	IEI_LED_BLINK_1HZ = 0x33
++
++#include "armada-8040.dtsi"
++
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/leds/common.h>
++
++/ {
++	model = "iEi-Puzzle-M801";
++	compatible = "marvell,armada8040", "marvell,armada-ap806-quad", "marvell,armada-ap806";
++
++	aliases {
++		ethernet0 = &cp0_eth0;
++		ethernet1 = &cp1_eth0;
++		ethernet2 = &cp0_eth1;
++		ethernet3 = &cp0_eth2;
++		ethernet4 = &cp1_eth1;
++		ethernet5 = &cp1_eth2;
++	};
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
++	memory@0 {
++		device_type = "memory";
++		reg = <0x0 0x0 0x0 0x80000000>;
++	};
++
++	/* Regulator labels correspond with schematics */
++	v_3_3: regulator-3-3v {
++		compatible = "regulator-fixed";
++		regulator-name = "v_3_3";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		regulator-always-on;
++		status = "okay";
++	};
++
++	v_5v0_usb3_hst_vbus: regulator-usb3-vbus0 {
++		compatible = "regulator-fixed";
++		enable-active-high;
++		gpio = <&cp0_gpio2 15 GPIO_ACTIVE_HIGH>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&cp0_xhci_vbus_pins>;
++		regulator-name = "v_5v0_usb3_hst_vbus";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		status = "okay";
++	};
++
++	v_vddo_h: regulator-1-8v {
++		compatible = "regulator-fixed";
++		regulator-name = "v_vddo_h";
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <1800000>;
++		regulator-always-on;
++		status = "okay";
++	};
++
++	sfp_cp0_eth0: sfp-cp0-eth0 {
++		compatible = "sff,sfp";
++		i2c-bus = <&sfpplus0_i2c>;
++		los-gpio = <&sfpplus_gpio 11 GPIO_ACTIVE_HIGH>;
++		mod-def0-gpio = <&sfpplus_gpio 10 GPIO_ACTIVE_LOW>;
++		tx-disable-gpio = <&sfpplus_gpio 9 GPIO_ACTIVE_HIGH>;
++		tx-fault-gpio  = <&sfpplus_gpio 8 GPIO_ACTIVE_HIGH>;
++		maximum-power-milliwatt = <3000>;
++	};
++
++	sfp_cp1_eth0: sfp-cp1-eth0 {
++		compatible = "sff,sfp";
++		i2c-bus = <&sfpplus1_i2c>;
++		los-gpio = <&sfpplus_gpio 3 GPIO_ACTIVE_HIGH>;
++		mod-def0-gpio = <&sfpplus_gpio 2 GPIO_ACTIVE_LOW>;
++		tx-disable-gpio = <&sfpplus_gpio 1 GPIO_ACTIVE_HIGH>;
++		tx-fault-gpio  = <&sfpplus_gpio 0 GPIO_ACTIVE_HIGH>;
++		maximum-power-milliwatt = <3000>;
++	};
++
++	leds {
++		compatible = "gpio-leds";
++		status = "okay";
++		pinctrl-0 = <&cp0_sfpplus_led_pins &cp1_sfpplus_led_pins>;
++		pinctrl-names = "default";
++
++		led0 {
++			function = LED_FUNCTION_STATUS;
++			label = "p2_act";
++			gpios = <&cp1_gpio1 6 GPIO_ACTIVE_LOW>;
++		};
++
++		led1 {
++			function = LED_FUNCTION_STATUS;
++			label = "p1_act";
++			gpios = <&cp1_gpio1 14 GPIO_ACTIVE_LOW>;
++		};
++
++		led2 {
++			function = LED_FUNCTION_STATUS;
++			label = "p2_10g";
++			gpios = <&cp1_gpio1 7 GPIO_ACTIVE_LOW>;
++		};
++
++		led3 {
++			function = LED_FUNCTION_STATUS;
++			label = "p2_1g";
++			gpios = <&cp1_gpio1 8 GPIO_ACTIVE_LOW>;
++		};
++
++		led4 {
++			function = LED_FUNCTION_STATUS;
++			label = "p1_10g";
++			gpios = <&cp1_gpio1 10 GPIO_ACTIVE_LOW>;
++		};
++
++		led5 {
++			function = LED_FUNCTION_STATUS;
++			label = "p1_1g";
++			gpios = <&cp1_gpio1 31 GPIO_ACTIVE_LOW>;
++		};
++
++		led6 {
++			function = LED_FUNCTION_STATUS;
++			linux,default-trigger = "disk-activity";
++			label = "front-hdd-led";
++			gpios = <&cp0_gpio2 22 GPIO_ACTIVE_HIGH>;
++		};
++
++	};
 +};
 +
-+/**
-+ * struct iei_wt61p803_puzzle_led - MCU LED Driver
-+ *
-+ * @mcu: MCU struct pointer
-+ * @lock: General mutex lock for LED operations
-+ * @led_power_state: State of the front panel power LED
-+ */
-+struct iei_wt61p803_puzzle_led {
-+	struct iei_wt61p803_puzzle *mcu;
-+	struct mutex lock;
-+
-+	int led_power_state;
++&ap_sdhci0 {
++	bus-width = <8>;
++	/*
++	 * Not stable in HS modes - phy needs "more calibration", so add
++	 * the "slow-mode" and disable SDR104, SDR50 and DDR50 modes.
++	 */
++	marvell,xenon-phy-slow-mode;
++	no-1-8-v;
++	no-sd;
++	no-sdio;
++	non-removable;
++	status = "okay";
++	vqmmc-supply = <&v_vddo_h>;
 +};
 +
-+static inline struct iei_wt61p803_puzzle_led *
-+		cdev_to_iei_wt61p803_puzzle_led(struct led_classdev *led_cdev)
-+{
-+	return dev_get_drvdata(led_cdev->dev->parent);
-+}
-+
-+static int iei_wt61p803_puzzle_led_brightness_set_blocking
-+	(struct led_classdev *cdev, enum led_brightness brightness)
-+{
-+	struct iei_wt61p803_puzzle_led *mcu_led =
-+		cdev_to_iei_wt61p803_puzzle_led(cdev);
-+	unsigned char led_power_cmd[5] = { '@', 'R', '1',
-+		CMD_CHAR(IEI_LED_OFF) };
-+
-+	int ret;
-+
-+	size_t reply_size = 0;
-+	unsigned char *resp_buf = kmalloc(IEI_WT61P803_PUZZLE_BUF_SIZE, GFP_KERNEL);
-+
-+	mutex_lock(&mcu_led->lock);
-+
-+	if (brightness == LED_OFF) {
-+		led_power_cmd[3] = CMD_CHAR(IEI_LED_OFF);
-+		mcu_led->led_power_state = LED_OFF;
-+	} else {
-+		led_power_cmd[3] = CMD_CHAR(IEI_LED_ON);
-+		mcu_led->led_power_state = LED_ON;
-+	}
-+
-+	mutex_unlock(&mcu_led->lock);
-+
-+	ret = iei_wt61p803_puzzle_write_command(mcu_led->mcu, led_power_cmd,
-+			sizeof(led_power_cmd), resp_buf, &reply_size);
-+
-+	kfree(resp_buf);
-+
-+	return ret;
-+}
-+
-+static enum led_brightness
-+iei_wt61p803_puzzle_led_brightness_get(struct led_classdev *cdev)
-+{
-+	struct iei_wt61p803_puzzle_led *mcu_led =
-+		cdev_to_iei_wt61p803_puzzle_led(cdev);
-+
-+	int led_state;
-+
-+	mutex_lock(&mcu_led->lock);
-+	led_state = mcu_led->led_power_state;
-+	mutex_unlock(&mcu_led->lock);
-+
-+	return led_state;
-+}
-+
-+static int iei_wt61p803_puzzle_led_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct iei_wt61p803_puzzle *mcu = dev_get_drvdata(dev->parent);
-+	struct device_node *np = dev->of_node;
-+
-+	struct iei_wt61p803_puzzle_led *mcu_led;
-+	struct device_node *child;
-+
-+	int ret;
-+
-+	mcu_led = devm_kzalloc(dev, sizeof(*mcu_led), GFP_KERNEL);
-+	if (!mcu_led)
-+		return -ENOMEM;
-+
-+	mcu_led->mcu = mcu;
-+
-+	/* The default LED power state is 1 */
-+	mcu_led->led_power_state = 1;
-+
-+	/* Init the mutex lock */
-+	mutex_init(&mcu_led->lock);
-+
-+	dev_set_drvdata(dev, mcu_led);
-+
-+	for_each_child_of_node(np, child) {
-+		struct led_classdev *led;
-+		u32 reg;
-+
-+		led = devm_kzalloc(dev, sizeof(*led), GFP_KERNEL);
-+		if (!led)
-+			return -ENOMEM;
-+
-+		ret = of_property_read_u32(child, "reg", &reg);
-+		if (ret || reg > 1) {
-+			dev_err(dev, "Could not register 'reg' of %s\n",
-+				child->name);
-+			continue;
-+		}
-+
-+		if (of_property_read_string(child, "label", &led->name))
-+			led->name = child->name;
-+
-+		of_property_read_string(child, "linux,default-trigger",
-+				&led->default_trigger);
-+
-+		led->brightness_set_blocking =
-+			iei_wt61p803_puzzle_led_brightness_set_blocking;
-+		led->brightness_get = iei_wt61p803_puzzle_led_brightness_get;
-+
-+		led->max_brightness = 1;
-+
-+		ret = devm_led_classdev_register(dev, led);
-+		if (ret) {
-+			dev_err(dev, "Could not register %s\n", led->name);
-+			return ret;
-+		}
-+	}
-+
-+	return 0;
-+
-+}
-+
-+static const struct of_device_id iei_wt61p803_puzzle_led_of_match[] = {
-+	{ .compatible = "iei,wt61p803-puzzle-leds" },
-+	{ }
++&ap_thermal_cpu1 {
++	trips {
++		cpu_active: cpu-active {
++			temperature = <44000>;
++			hysteresis = <2000>;
++			type = "active";
++		};
++	};
++	cooling-maps {
++		fan-map {
++			trip = <&cpu_active>;
++			cooling-device = <&chassis_fan_group0 64 THERMAL_NO_LIMIT>,
++					<&chassis_fan_group1 64 THERMAL_NO_LIMIT>;
++		};
++	};
 +};
-+MODULE_DEVICE_TABLE(of, iei_wt61p803_puzzle_led_of_match);
 +
-+static struct platform_driver iei_wt61p803_puzzle_led_driver = {
-+	.driver = {
-+		.name = "iei-wt61p803-puzzle-led",
-+		.of_match_table = iei_wt61p803_puzzle_led_of_match,
-+	},
-+	.probe = iei_wt61p803_puzzle_led_probe,
++&i2c0 {
++	clock-frequency = <100000>;
++	status = "okay";
++
++	rtc@32 {
++		compatible = "epson,rx8010";
++		reg = <0x32>;
++	};
 +};
-+module_platform_driver(iei_wt61p803_puzzle_led_driver);
 +
-+MODULE_DESCRIPTION("iEi WT61P803 PUZZLE front panel LED driver");
-+MODULE_AUTHOR("Luka Kovacic <luka.kovacic@sartura.hr>");
-+MODULE_LICENSE("GPL");
-+MODULE_ALIAS("platform:leds-iei-wt61p803-puzzle");
++&spi0 {
++	status = "okay";
++	spi-flash@0 {
++		#address-cells = <0x1>;
++		#size-cells = <0x1>;
++		compatible = "jedec,spi-nor";
++		reg = <0x0>;
++		spi-max-frequency = <20000000>;
++		partition@u-boot {
++			label = "u-boot";
++			reg = <0x00000000 0x001f0000>;
++		};
++		partition@u-boot-env {
++			label = "u-boot-env";
++			reg = <0x001f0000 0x00010000>;
++		};
++		partition@ubi1 {
++			label = "ubi1";
++			reg = <0x00200000 0x03f00000>;
++		};
++		partition@ubi2 {
++			label = "ubi2";
++			reg = <0x04100000 0x03f00000>;
++		};
++	};
++};
++
++&uart0 {
++	status = "okay";
++	pinctrl-0 = <&uart0_pins>;
++	pinctrl-names = "default";
++};
++
++&uart1 {
++	status = "okay";
++	/* iEi WT61P803 PUZZLE MCU Controller */
++	mcu {
++		compatible = "iei,wt61p803-puzzle";
++		current-speed = <115200>;
++		enable-probe-beep;
++
++		leds {
++			compatible = "iei,wt61p803-puzzle-leds";
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			led@0 {
++				reg = <0>;
++				color = <LED_COLOR_ID_BLUE>;
++				label = "front-power-led";
++			};
++		};
++
++		iei-wt61p803-puzzle-hwmon {
++			compatible = "iei,wt61p803-puzzle-hwmon";
++
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			chassis_fan_group0:fan-group@0 {
++				#cooling-cells = <2>;
++				reg = <0x00>;
++				cooling-levels = <64 102 170 230 250>;
++			};
++
++			chassis_fan_group1:fan-group@1 {
++				#cooling-cells = <2>;
++				reg = <0x01>;
++				cooling-levels = <64 102 170 230 250>;
++			};
++		};
++	};
++};
++
++&cp0_rtc {
++	status = "disabled";
++};
++
++&cp0_i2c0 {
++	clock-frequency = <100000>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&cp0_i2c0_pins>;
++	status = "okay";
++
++	sfpplus_gpio: gpio@21 {
++		compatible = "nxp,pca9555";
++		reg = <0x21>;
++		gpio-controller;
++		#gpio-cells = <2>;
++	};
++
++	eeprom@54 {
++		compatible = "atmel,24c04";
++		reg = <0x54>;
++	};
++};
++
++&cp0_i2c1 {
++	clock-frequency = <100000>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&cp0_i2c1_pins>;
++	status = "okay";
++
++	i2c-switch@70 {
++		compatible = "nxp,pca9544";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		reg = <0x70>;
++
++		sfpplus0_i2c: i2c@0 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <0>;
++		};
++
++		sfpplus1_i2c: i2c@1 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <1>;
++		};
++	};
++};
++
++&cp0_uart1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&cp0_uart1_pins>;
++	status = "okay";
++};
++
++&cp0_mdio {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	status = "okay";
++
++	ge_phy2: ethernet-phy@2 {
++		reg = <0>;
++	};
++
++	ge_phy3: ethernet-phy@3 {
++		reg = <1>;
++	};
++};
++
++&cp0_pcie0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&cp0_pcie_pins>;
++	num-lanes = <1>;
++	num-viewport = <8>;
++	reset-gpios = <&cp0_gpio2 20 GPIO_ACTIVE_LOW>;
++	ranges = <0x82000000 0x0 0xc0000000 0x0 0xc0000000 0x0 0x20000000>;
++	phys = <&cp0_comphy0 0>;
++	phy-names = "cp0-pcie0-x1-phy";
++	status = "okay";
++};
++
++&cp0_pinctrl {
++	cp0_ge_mdio_pins: ge-mdio-pins {
++		marvell,pins = "mpp32", "mpp34";
++		marvell,function = "ge";
++	};
++	cp0_i2c1_pins: i2c1-pins {
++		marvell,pins = "mpp35", "mpp36";
++		marvell,function = "i2c1";
++	};
++	cp0_i2c0_pins: i2c0-pins {
++		marvell,pins = "mpp37", "mpp38";
++		marvell,function = "i2c0";
++	};
++	cp0_uart1_pins: uart1-pins {
++		marvell,pins = "mpp40", "mpp41";
++		marvell,function = "uart1";
++	};
++	cp0_xhci_vbus_pins: xhci0-vbus-pins {
++		marvell,pins = "mpp47";
++		marvell,function = "gpio";
++	};
++	cp0_pcie_pins: pcie-pins {
++		marvell,pins = "mpp52";
++		marvell,function = "gpio";
++	};
++	cp0_sdhci_pins: sdhci-pins {
++		marvell,pins = "mpp55", "mpp56", "mpp57", "mpp58", "mpp59",
++			       "mpp60", "mpp61";
++		marvell,function = "sdio";
++	};
++	cp0_sfpplus_led_pins: sfpplus-led-pins {
++		marvell,pins = "mpp54";
++		marvell,function = "gpio";
++	};
++};
++
++&cp0_ethernet {
++	status = "okay";
++};
++
++&cp0_eth0 {
++	status = "okay";
++	phy-mode = "10gbase-r";
++	phys = <&cp0_comphy4 0>;
++	local-mac-address = [00 50 43 de ff 00];
++	sfp = <&sfp_cp0_eth0>;
++	managed = "in-band-status";
++};
++
++&cp0_eth1 {
++	status = "okay";
++	phy = <&ge_phy2>;
++	phy-mode = "sgmii";
++	local-mac-address = [00 50 43 de ff 01];
++	phys = <&cp0_comphy3 1>;
++};
++
++&cp0_eth2 {
++	status = "okay";
++	phy-mode = "sgmii";
++	phys = <&cp0_comphy1 2>;
++	local-mac-address = [00 50 43 de ff 02];
++	phy = <&ge_phy3>;
++};
++
++&cp0_sata0 {
++	status = "okay";
++
++	sata-port@0 {
++		phys = <&cp0_comphy2 0>;
++		phy-names = "cp0-sata0-0-phy";
++	};
++
++	sata-port@1 {
++		phys = <&cp0_comphy5 1>;
++		phy-names = "cp0-sata0-1-phy";
++	};
++};
++
++&cp0_sdhci0 {
++	broken-cd;
++	bus-width = <4>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&cp0_sdhci_pins>;
++	status = "okay";
++	vqmmc-supply = <&v_3_3>;
++};
++
++&cp0_usb3_0 {
++	status = "okay";
++};
++
++&cp0_usb3_1 {
++	status = "okay";
++};
++
++&cp1_i2c0 {
++	clock-frequency = <100000>;
++	status = "disabled";
++};
++
++&cp1_i2c1 {
++	clock-frequency = <100000>;
++	status = "disabled";
++};
++
++&cp1_rtc {
++	status = "disabled";
++};
++
++&cp1_ethernet {
++	status = "okay";
++};
++
++&cp1_eth0 {
++	status = "okay";
++	phy-mode = "10gbase-r";
++	phys = <&cp1_comphy4 0>;
++	local-mac-address = [00 50 43 de ff 03];
++	sfp = <&sfp_cp1_eth0>;
++	managed = "in-band-status";
++};
++
++&cp1_eth1 {
++	status = "okay";
++	phy = <&ge_phy4>;
++	phy-mode = "sgmii";
++	local-mac-address = [00 50 43 de ff 04];
++	phys = <&cp1_comphy3 1>;
++};
++
++&cp1_eth2 {
++	status = "okay";
++	phy-mode = "sgmii";
++	local-mac-address = [00 50 43 de ff 05];
++	phys = <&cp1_comphy5 2>;
++	phy = <&ge_phy5>;
++};
++
++&cp1_pinctrl {
++	cp1_sfpplus_led_pins: sfpplus-led-pins {
++		marvell,pins = "mpp6", "mpp7", "mpp8", "mpp10", "mpp14", "mpp31";
++		marvell,function = "gpio";
++	};
++};
++
++&cp1_uart0 {
++	status = "disabled";
++};
++
++&cp1_comphy2 {
++	cp1_usbh0_con: connector {
++		compatible = "usb-a-connector";
++		phy-supply = <&v_5v0_usb3_hst_vbus>;
++	};
++};
++
++&cp1_usb3_0 {
++	phys = <&cp1_comphy2 0>;
++	phy-names = "cp1-usb3h0-comphy";
++	status = "okay";
++};
++
++&cp1_mdio {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	status = "okay";
++
++	ge_phy4: ethernet-phy@4 {
++		reg = <1>;
++	};
++	ge_phy5: ethernet-phy@5 {
++		reg = <0>;
++	};
++};
++
++&cp1_pcie0 {
++	num-lanes = <2>;
++	phys = <&cp1_comphy0 0>, <&cp1_comphy1 0>;
++	phy-names = "cp1-pcie0-x2-lane0-phy", "cp1-pcie0-x2-lane1-phy";
++	status = "okay";
++};
 -- 
 2.20.1
 
