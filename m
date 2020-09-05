@@ -1,112 +1,136 @@
-Return-Path: <SRS0=Y1QN=CN=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=Sfjw=CO=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8520EC43461
-	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Sep 2020 16:40:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9C9AC433E2
+	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Sep 2020 13:05:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 49E372073B
-	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Sep 2020 16:40:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6EFBF206B5
+	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Sep 2020 13:05:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YYMIgsum"
+	dkim=pass (2048-bit key) header.d=sartura-hr.20150623.gappssmtp.com header.i=@sartura-hr.20150623.gappssmtp.com header.b="d+/NisIV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726270AbgIDQkx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 4 Sep 2020 12:40:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52414 "EHLO
+        id S1726261AbgIENFg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 5 Sep 2020 09:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725966AbgIDQkv (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Sep 2020 12:40:51 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167DEC061244;
-        Fri,  4 Sep 2020 09:40:51 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id u128so4899344pfb.6;
-        Fri, 04 Sep 2020 09:40:50 -0700 (PDT)
+        with ESMTP id S1726591AbgIENFf (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 5 Sep 2020 09:05:35 -0400
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F4EC061245
+        for <linux-hwmon@vger.kernel.org>; Sat,  5 Sep 2020 06:05:33 -0700 (PDT)
+Received: by mail-ej1-x642.google.com with SMTP id i22so12082928eja.5
+        for <linux-hwmon@vger.kernel.org>; Sat, 05 Sep 2020 06:05:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=wxaOHZ/W1bVPPlxPYI5KsnVzXfiQ47igg0n361NfZVU=;
-        b=YYMIgsumLdhBj/Uz4ivpuN1T8qckEYHF5ibmSzT6XM8nIJeoLtEfMPAwstTBRyx8ux
-         XzRWyjQsIDt1vRYxng/Kb4Q4jaMy8HWc+0LYoEgbGY7qvRxh2MI7prC+4B7wX/LPK2Bf
-         5EhGX0jH48u9WUNq2eo7zEOYU9VhKlSaMTnLsojzC8CUnK9hogywvDpdQco0tdkSi6An
-         LqFNvRaOo36VBS4w6mpwOM92+J5i1dolqU0jO3dmLbMzSj4uU1XZ71BYAV8Xyxttv4LY
-         KAwcI569arZ6HeP++Atg/6h9k5GKUD7GIxKCFwHMLaxZbvocWcWn7SDBEWihIwZ/0nxn
-         VjQQ==
+        d=sartura-hr.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pjbRvbzQYX8+5j4uAJTuhnE/qBNrVlyoM0TpetFlM1Q=;
+        b=d+/NisIVaIakFDZSkmgTgQ7Wh5nZKj7D93Q+ZZ0KED00elEpXzdO1HV/JGcHPsoECW
+         CGCONpf/by9+sal0O40iUyZi2yM5dVCDadPPcTMNhOSF82VMjbUBMqj8jkARyDZYxgj2
+         Z4K1fRLcVtV0+c7k0ZVuHHUjLOtNrnCJLGx7lyQExE2zs14P2MpFOSKxcrzLEOZ4y51l
+         ebljnHVjHeDqe0Es2Q4FWnb87bdcZwhaMZ0d7N1DjTGuY4NiLhdgHaNiAJF2Hmf1KlN9
+         NdN4wBGOS5uQgk2AuI39aVXigCLjlDyRkSBD99x8oWKuAglZZhwZ9z7Y82zRFOIlzsRh
+         0NHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=wxaOHZ/W1bVPPlxPYI5KsnVzXfiQ47igg0n361NfZVU=;
-        b=FasfeJF3U2l5dt9y8Y4Ba7301hU6v9D2pM3gtFkEvJBUvKALBWGQkOEg0wPOn4Hq4n
-         ZSo4WknWA28vtC0nj8zqDKUtggZHiRb7cZo62wfgHocB7dlCs4VMI021g+bA2JQecCIP
-         voJ6bu2dxhnRMBtxB1viNCKA4d6p026kkv6fobHPXeGo0WtRDLIZACFH69EYFe+1rLhH
-         9tp/TRK7g0DMztYw3iNImlcJXaB1zM6e3D+uI/UzivQCwOapEQjYt561l3LzDBXsiYIb
-         DwfZehPlL0Bq802aPX1Trl5sGGWywc/+wFA6xjMuxTx5Wx8m+AVtcqxstxEfHU9dN0bj
-         6DmQ==
-X-Gm-Message-State: AOAM530vwSTT/FAXoiZyTvCbUjqrHtPbEPGjpj1nps8LsqiC8NKpVlDn
-        sqbL+HCxA77wfVLzSC8+Om8=
-X-Google-Smtp-Source: ABdhPJyxnXlyyApI5AYlSrIq+cwIZjdS/B/NM81GNpsZ9HImOzNeZz5Q3xFV/SocTAxCWUFC6shKug==
-X-Received: by 2002:a63:f09:: with SMTP id e9mr7987808pgl.334.1599237650528;
-        Fri, 04 Sep 2020 09:40:50 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j19sm7105220pfi.51.2020.09.04.09.40.49
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 04 Sep 2020 09:40:49 -0700 (PDT)
-Date:   Fri, 4 Sep 2020 09:40:48 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Lars Povlsen <lars.povlsen@microchip.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        linux-hwmon@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: sparx5: Fix initial reading of temperature
-Message-ID: <20200904164048.GA74175@roeck-us.net>
-References: <20200903134704.8949-1-lars.povlsen@microchip.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pjbRvbzQYX8+5j4uAJTuhnE/qBNrVlyoM0TpetFlM1Q=;
+        b=BtfXm5pAEZgGoEyaDNosTUmfh231Pt2QgxecjjHsVbGVVTHf/fXU5+lsgdPR1xVHIB
+         zHmCU52TB8VodV2J8duWckr5kRmjrkqqZ4lh+Xden2GT/83hCh33yB8t7qdXX56x+OC6
+         O8Mxl6w5LGaRInHWbksxJ6WHDCeiTzOnKqQeuZQEILOszePbd3vxXajiFwa3mSjuN2Te
+         NWOC+ZHOXf5GNUoj/H+VsLc3SkuXSWVvENJj0c0PCILa5lCwdRrYITCETV4sOOZQ4Sj5
+         toph0K+14I8C6a9n1Sy8R+oPGJATtbbJCV/EHSmUbHXoin3rXbLUpOa01tkUkI1kYF0r
+         Wgyg==
+X-Gm-Message-State: AOAM530jyRUk0lIE8VlYwniIU22XjAdWHZyfKjCeATUF0YRnZnXJjNt7
+        h5c9z5YMqLqWBa4pukaD+rZ1Pw==
+X-Google-Smtp-Source: ABdhPJw4qncjAf7blDg/PkStkUNmbheZclSDB3J/kfBUdRf5F8d3FOMK9ZcAdfbpLaq8vm8hDfEx0g==
+X-Received: by 2002:a17:906:cb98:: with SMTP id mf24mr12916030ejb.90.1599311132444;
+        Sat, 05 Sep 2020 06:05:32 -0700 (PDT)
+Received: from localhost.localdomain ([2a00:ee2:4b0d:3002:290:faff:fe54:449c])
+        by smtp.gmail.com with ESMTPSA id s18sm9372655ejd.54.2020.09.05.06.05.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Sep 2020 06:05:31 -0700 (PDT)
+From:   Luka Kovacic <luka.kovacic@sartura.hr>
+To:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-leds@vger.kernel.org
+Cc:     lee.jones@linaro.org, pavel@ucw.cz, dmurphy@ti.com,
+        robh+dt@kernel.org, jdelvare@suse.com, linux@roeck-us.net,
+        andrew@lunn.ch, jason@lakedaemon.net, gregory.clement@bootlin.com,
+        luka.perkov@sartura.hr, Luka Kovacic <luka.kovacic@sartura.hr>
+Subject: [PATCH 0/7] Add support for the iEi Puzzle-M801 board
+Date:   Sat,  5 Sep 2020 15:03:29 +0200
+Message-Id: <20200905130336.967622-1-luka.kovacic@sartura.hr>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200903134704.8949-1-lars.povlsen@microchip.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Sep 03, 2020 at 03:47:04PM +0200, Lars Povlsen wrote:
-> If the temperature is read before the internal calibration is
-> completed, the driver returns -EIO. Instead it should return -EAGAIN
-> to encourage repeating the operation.
-> 
-> Signed-off-by: Lars Povlsen <lars.povlsen@microchip.com>
+This patchset adds support for the iEi Puzzle-M801 1U Rackmount Network
+Appliance and for the iEi WT61P803 PUZZLE microcontroller, which enables
+some board specific features like fan and LED control, system power
+management and temperature sensor reading.
 
-Applied. I added a note stating that I would prefer -ENODATA, and why,
-but that this is not feasible due to thermal subsystem requirements. 
+The platform is based on the popular Marvell Armada 8040 SoC and supports
+up to 16 GB of DDR4 2400 MHz ECC RAM.
+It has a PCIe x16 slot (x2 lanes only) and an M.2 type B slot.
 
-Thanks,
-Guenter
+External chassis ports:
+2x 10 GbE SFP+
+4x 1 GbE (Marvell 88E1512P)
+2x USB 3.0
+1x RJ45 serial port
 
-> ---
->  drivers/hwmon/sparx5-temp.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> --
-> 2.27.0
-> 
-> diff --git a/drivers/hwmon/sparx5-temp.c b/drivers/hwmon/sparx5-temp.c
-> index 1a2b1026b026..98be48e3a22a 100644
-> --- a/drivers/hwmon/sparx5-temp.c
-> +++ b/drivers/hwmon/sparx5-temp.c
-> @@ -56,7 +56,7 @@ static int s5_read(struct device *dev, enum hwmon_sensor_types type,
->  	case hwmon_temp_input:
->  		stat = readl_relaxed(hwmon->base + TEMP_STAT);
->  		if (!(stat & TEMP_STAT_VALID))
-> -			return -EIO;
-> +			return -EAGAIN;
->  		value = stat & TEMP_STAT_TEMP;
->  		/*
->  		 * From register documentation:
+All notable board components are supported in this patchset.
+
+Luka Kovacic (7):
+  dt-bindings: Add iEi vendor prefix and iEi WT61P803 PUZZLE driver
+    bindings
+  drivers: mfd: Add a driver for iEi WT61P803 PUZZLE MCU
+  drivers: hwmon: Add the iEi WT61P803 PUZZLE HWMON driver
+  drivers: leds: Add the iEi WT61P803 PUZZLE LED driver
+  Documentation/ABI: Add iei-wt61p803-puzzle driver sysfs interface
+    documentation
+  MAINTAINERS: Add an entry for the iEi WT61P803 PUZZLE driver
+  arm64: dts: marvell: Add a device tree for the iEi Puzzle-M801 board
+
+ .../stable/sysfs-driver-iei-wt61p803-puzzle   |   65 +
+ .../hwmon/iei,wt61p803-puzzle-hwmon.yaml      |   41 +
+ .../leds/iei,wt61p803-puzzle-leds.yaml        |   48 +
+ .../bindings/mfd/iei,wt61p803-puzzle.yaml     |   82 ++
+ .../devicetree/bindings/vendor-prefixes.yaml  |    2 +
+ MAINTAINERS                                   |   13 +
+ arch/arm64/boot/dts/marvell/Makefile          |    1 +
+ .../dts/marvell/armada-8040-puzzle-m801.dts   |  519 +++++++
+ drivers/hwmon/Kconfig                         |    8 +
+ drivers/hwmon/Makefile                        |    1 +
+ drivers/hwmon/iei-wt61p803-puzzle-hwmon.c     |  613 ++++++++
+ drivers/leds/Kconfig                          |    8 +
+ drivers/leds/Makefile                         |    1 +
+ drivers/leds/leds-iei-wt61p803-puzzle.c       |  184 +++
+ drivers/mfd/Kconfig                           |    8 +
+ drivers/mfd/Makefile                          |    1 +
+ drivers/mfd/iei-wt61p803-puzzle.c             | 1242 +++++++++++++++++
+ include/linux/mfd/iei-wt61p803-puzzle.h       |   27 +
+ 18 files changed, 2864 insertions(+)
+ create mode 100644 Documentation/ABI/stable/sysfs-driver-iei-wt61p803-puzzle
+ create mode 100644 Documentation/devicetree/bindings/hwmon/iei,wt61p803-puzzle-hwmon.yaml
+ create mode 100644 Documentation/devicetree/bindings/leds/iei,wt61p803-puzzle-leds.yaml
+ create mode 100644 Documentation/devicetree/bindings/mfd/iei,wt61p803-puzzle.yaml
+ create mode 100644 arch/arm64/boot/dts/marvell/armada-8040-puzzle-m801.dts
+ create mode 100644 drivers/hwmon/iei-wt61p803-puzzle-hwmon.c
+ create mode 100644 drivers/leds/leds-iei-wt61p803-puzzle.c
+ create mode 100644 drivers/mfd/iei-wt61p803-puzzle.c
+ create mode 100644 include/linux/mfd/iei-wt61p803-puzzle.h
+
+-- 
+2.20.1
+
