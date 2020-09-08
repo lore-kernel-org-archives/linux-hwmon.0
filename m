@@ -2,64 +2,35 @@ Return-Path: <SRS0=0Rzu=CR=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BDFBDC433E2
-	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Sep 2020 07:42:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CBD79C43461
+	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Sep 2020 08:12:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8999521D46
-	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Sep 2020 07:42:51 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wfT5YyvY"
+	by mail.kernel.org (Postfix) with ESMTP id A121521D20
+	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Sep 2020 08:12:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729533AbgIHHmg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 8 Sep 2020 03:42:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33948 "EHLO
+        id S1729752AbgIHIMz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 8 Sep 2020 04:12:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729432AbgIHHm1 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Sep 2020 03:42:27 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B49FC061755
-        for <linux-hwmon@vger.kernel.org>; Tue,  8 Sep 2020 00:42:26 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id o5so17952181wrn.13
-        for <linux-hwmon@vger.kernel.org>; Tue, 08 Sep 2020 00:42:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=uLUFK28IISjx23/D2ml5l6aSZkYLMgDiXFORqFH61rQ=;
-        b=wfT5YyvYowSvPxHb+0/UENzgICebO//M3d0DIDWTaHQEJ5O8uHUUoMmrKzjeIMQqhp
-         NitiIv7XdDmxggV4H52sZ8GTfO2gx/qw5l/KSDtQ5k7j01HmFi8cILzZZTc1QulK7jLs
-         FJR7s1cQa4ABR9jisaKM+w4K4OH7nPjdA5yySjFdvPdEhKp9Pdb2E5jOhpoKyKzqADtF
-         9rvVG8SDZqY9Gexgx+Opxsg3NCd1mxoMtmv0mYlisOhyCFfTItVkvffAfsv2qI5glIoD
-         p6y8pTSLFo/DJ8Z8ql+PhihvnyiwtfryLTFJeF/3iqnz5513istkaHH5GvpZtlkejkLV
-         tDYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=uLUFK28IISjx23/D2ml5l6aSZkYLMgDiXFORqFH61rQ=;
-        b=FoLP/ZV9nkGF6RNWswSREPVCKK+cF0lNHfCy8SyuogT22eUjuoRXQKP/d9e9CieKG7
-         2FjWGIWYAQ811gp74R021DoStpRi4QHZX8SYes5wzJzmbm5eufxQ9crtiqyrTL1nf9PW
-         Uirb6gSaNmWVbHZZzPG6ukizViAqvry08dZB6KY90Oya8C7WvThh1+zHO8cl4h0T4lSv
-         RmL/Tf11XMpU0RC1qZxDUyIUw6jkyaJ+R7xH8bhcdvNc4hcGx5/dRoMn41jX2x/FCriH
-         oh7EwTQzCGlfoBFNNawfBhH8DWo4ezt+kkd5bdso/o3TdeD7NatJ5FVd6gPpfrmLB4OK
-         Dq8Q==
-X-Gm-Message-State: AOAM533brHRRv+Ea1zpuGSNcjQSm/wpgncZdcRdFUm8cJqr80RZKSh0j
-        eh88oz6OJtzVOC/qd6+1zKfbPA==
-X-Google-Smtp-Source: ABdhPJwKj9M+NROzity0wbbtarhMYD1iO1A/RCqJwJa4QnCTCrNVQ7+USV3LfuKpabL5+WM8PcwegQ==
-X-Received: by 2002:adf:e6c2:: with SMTP id y2mr27381258wrm.117.1599550944553;
-        Tue, 08 Sep 2020 00:42:24 -0700 (PDT)
-Received: from dell ([91.110.221.204])
-        by smtp.gmail.com with ESMTPSA id i6sm36336964wra.1.2020.09.08.00.42.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Sep 2020 00:42:23 -0700 (PDT)
-Date:   Tue, 8 Sep 2020 08:42:21 +0100
-From:   Lee Jones <lee.jones@linaro.org>
+        with ESMTP id S1729257AbgIHIMq (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Sep 2020 04:12:46 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBAB3C061757
+        for <linux-hwmon@vger.kernel.org>; Tue,  8 Sep 2020 01:12:45 -0700 (PDT)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1kFYk3-0007xo-6w; Tue, 08 Sep 2020 10:12:39 +0200
+Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1kFYjr-0007B6-Ee; Tue, 08 Sep 2020 10:12:27 +0200
+Date:   Tue, 8 Sep 2020 10:12:27 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 To:     Michael Walle <michael@walle.cc>
 Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
@@ -70,9 +41,8 @@ Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
         Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -82,44 +52,140 @@ Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Pavel Machek <pavel@ucw.cz>
-Subject: Re: [PATCH v9 00/13] Add support for Kontron sl28cpld
-Message-ID: <20200908074221.GA4400@dell>
+Subject: Re: [PATCH v9 06/13] pwm: add support for sl28cpld PWM controller
+Message-ID: <20200908081227.mxumgqipyod6iltr@pengutronix.de>
 References: <20200907213802.26745-1-michael@walle.cc>
+ <20200907213802.26745-7-michael@walle.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="mw42m5g6wzbjjufm"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200907213802.26745-1-michael@walle.cc>
+In-Reply-To: <20200907213802.26745-7-michael@walle.cc>
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, 07 Sep 2020, Michael Walle wrote:
 
-> The Kontron sl28cpld is a board management chip providing gpio, pwm, fan
-> monitoring and an interrupt controller. For now this controller is used on
-> the Kontron SMARC-sAL28 board. But because of its flexible nature, it
-> might also be used on other boards in the future. The individual blocks
-> (like gpio, pwm, etc) are kept intentionally small. The MFD core driver
-> then instantiates different (or multiple of the same) blocks. It also
-> provides the register layout so it might be updated in the future without a
-> device tree change; and support other boards with a different layout or
-> functionalities.
-> 
-> See also [1] for more information.
-> 
-> This is my first take of a MFD driver. I don't know whether the subsystem
-> maintainers should only be CCed on the patches which affect the subsystem
-> or on all patches for this series. I've chosen the latter so you can get a
-> more complete picture.
-> 
-> [1] https://lore.kernel.org/linux-devicetree/0e3e8204ab992d75aa07fc36af7e4ab2@walle.cc/
+--mw42m5g6wzbjjufm
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I'll take all of the non-ARM patches later this week.
+Hello,
 
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+just a bit of nitpicking left. If Lee is going to apply, I can care for
+a followup patch if need be.
+
+On Mon, Sep 07, 2020 at 11:37:55PM +0200, Michael Walle wrote:
+> [..]
+> +config PWM_SL28CPLD
+> +	tristate "Kontron sl28cpld PWM support"
+> +	depends on MFD_SL28CPLD ||  COMPILE_TEST
+
+s/  / / (@Lee, maybe fixup during application?)
+
+> +	help
+> +	  Generic PWM framework driver for board management controller
+> +	  found on the Kontron sl28 CPLD.
+> [...]
+> +#define SL28CPLD_PWM_CLK			32000 /* 32 kHz */
+> +#define SL28CPLD_PWM_MAX_DUTY_CYCLE(prescaler)	(1 << (7 - (prescaler)))
+> +#define SL28CPLD_PWM_PERIOD(prescaler) \
+> +	(NSEC_PER_SEC / SL28CPLD_PWM_CLK * SL28CPLD_PWM_MAX_DUTY_CYCLE(prescale=
+r))
+> +
+> +/*
+> + * We calculate the duty cycle like this:
+> + *   duty_cycle_ns =3D pwm_cycle_reg * max_period_ns / max_duty_cycle
+> + *
+> + * With
+> + *   max_period_ns =3D 1 << (7 - prescaler) / pwm_clk * NSEC_PER_SEC
+> + *   max_duty_cycle =3D 1 << (7 - prescaler)
+> + * this then simplifies to:
+> + *   duty_cycle_ns =3D pwm_cycle_reg / pwm_clk * NSEC_PER_SEC
+> + *
+> + * NSEC_PER_SEC is a multiple of SL28CPLD_PWM_CLK, therefore we're not l=
+osing
+> + * precision by doing the divison first.
+
+The division you're talking about is NSEC_PER_SEC / pwm_clk which isn't
+obvious in the formula in the line above. Maybe:
+
+	...
+	this then simplifies to:
+
+	  duty_cycle_ns =3D NSEC_PER_SEC / SL28CPLD_PWM_CLK * pwm_cycle_reg
+
+	NSEC_PER_SEC is a multiple of SL28CPLD_PWM_CLK, therefor ...
+
+to make it easier to understand the comment.
+
+> + */
+> +#define SL28CPLD_PWM_TO_DUTY_CYCLE(reg) \
+> +	(NSEC_PER_SEC / SL28CPLD_PWM_CLK * (reg))
+> +#define SL28CPLD_PWM_FROM_DUTY_CYCLE(duty_cycle) \
+> +	(DIV_ROUND_DOWN_ULL((duty_cycle), NSEC_PER_SEC / SL28CPLD_PWM_CLK))
+> [...]
+> +	/*
+> +	 * To avoid glitches when we switch the prescaler, we have to make sure
+> +	 * we have a valid duty cycle for the new mode.
+> +	 *
+> +	 * Take the current prescaler (or the current period length) into
+> +	 * account to decide whether we have to write the duty cycle or the new
+> +	 * prescaler first. If the period length is decreasing we have to
+> +	 * write the duty cycle first.
+> +	 */
+> +	write_duty_cycle_first =3D pwm->state.period > state->period;
+> +
+> +	if (write_duty_cycle_first) {
+> +		ret =3D sl28cpld_pwm_write(priv, SL28CPLD_PWM_CYCLE, cycle);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	ret =3D sl28cpld_pwm_write(priv, SL28CPLD_PWM_CTRL, ctrl);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (!write_duty_cycle_first) {
+> +		ret =3D sl28cpld_pwm_write(priv, SL28CPLD_PWM_CYCLE, cycle);
+> +		if (ret)
+> +			return ret;
+> +	}
+
+Nice! I didn't spend the necessary brain cycles to confirm this
+algorithm, but it seems you did :-)
+
+> +
+> +	return 0;
+> +}
+> [...]
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--mw42m5g6wzbjjufm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAl9XPOgACgkQwfwUeK3K
+7AkWZgf9FfNy+2V7VDKBMqCV2TdrX3JZQCu1jkarn2ieFnlW6nZVplR+63wxFR6p
+D7E4amJzibzIwMgPt79NI+1LtwNNMI4qEbPOG1zdXo4I6ug4EABv32ih3WMkkdb+
+fypHJxYyneVC9nIbRAKHkudi2QfoeikSgtmmAYMw4PG8xc/lqWS3JwNeG4YotvSz
+aGgVJqFA/2KW0YywCw1ZFv3m4SVU32nFccbo9EJOztwgKKYpN2eEqqxa7baO3jVW
+JgVzGkkGr9dmi5YYl4jZNcs+IhaPE2mFED7AopB+Hw4CD2FLzssJUFYfZiXtv3+4
+RuG7iydfC3hp+a3JWDfv66XeBzvaJQ==
+=i6C4
+-----END PGP SIGNATURE-----
+
+--mw42m5g6wzbjjufm--
