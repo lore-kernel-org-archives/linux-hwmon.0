@@ -2,121 +2,106 @@ Return-Path: <SRS0=nPw4=CS=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 418F6C43461
-	for <linux-hwmon@archiver.kernel.org>; Wed,  9 Sep 2020 18:34:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92508C433E2
+	for <linux-hwmon@archiver.kernel.org>; Wed,  9 Sep 2020 20:49:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EFDC4208FE
-	for <linux-hwmon@archiver.kernel.org>; Wed,  9 Sep 2020 18:34:37 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=sartura-hr.20150623.gappssmtp.com header.i=@sartura-hr.20150623.gappssmtp.com header.b="cc2Qt1f4"
+	by mail.kernel.org (Postfix) with ESMTP id 606EA21D79
+	for <linux-hwmon@archiver.kernel.org>; Wed,  9 Sep 2020 20:49:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1599684546;
+	bh=dTaWtRLVjVHYDXooy7OEcSgpv2GBSNMmEJmHtxn04yI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=DqoKGnIfSfjGWhxlYo2BfpWY0T63y5HX33IYOD1SDUaaCGN5AaBvM08kIOx6cfMMy
+	 f8qYPouMGqkgoHYy0aeFkgWg/3/+23PK0ByUvmgibL3HbYT8iXzlrRiDrjckK/6vn0
+	 /gbPN1QC5zYAD02gqActZLN+2Ew+gI1gIry2v8hY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728971AbgIISeh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 9 Sep 2020 14:34:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48022 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728297AbgIISef (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 9 Sep 2020 14:34:35 -0400
-Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8FCC061755
-        for <linux-hwmon@vger.kernel.org>; Wed,  9 Sep 2020 11:34:34 -0700 (PDT)
-Received: by mail-io1-xd41.google.com with SMTP id g128so4225986iof.11
-        for <linux-hwmon@vger.kernel.org>; Wed, 09 Sep 2020 11:34:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura-hr.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cc1mTJ4YBbjlfzPf25X2vuH8TH88kzjymIjnYwRDABQ=;
-        b=cc2Qt1f4dpUC0QpPCXg+9Y9XLHMA8xk6SiF4s5nmfrtFNkxDNTaG9UecXJsuyI+qKu
-         4uk4C9AxB33jv2tLG4CDXx6E8VpPQAeLG/oD9Jy7QsgmSfWzrRmK9QJHt+tZ2KnrJPEN
-         l1l7iHZWQXFC62PlvMDliggM6kXjdhhSib5wbP7JRdAIBVceTg+n0crB7GqY9SqwmSgy
-         3g2tQrPYRRWyMKaQiFKxUcMG6DxHO7x263SxL4be5W6CzxtNbAVbt8f+j8zm1MDX/8Vq
-         6N5BN/J1ZZCK0KUuyeiSBa4vAMF+V75zVCllRN6ERTjnW1/ltYGFkU9V0OufLgeRg6X8
-         Cnbw==
+        id S1730158AbgIIUtE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 9 Sep 2020 16:49:04 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:44186 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728297AbgIIUtA (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 9 Sep 2020 16:49:00 -0400
+Received: by mail-io1-f68.google.com with SMTP id g128so4666806iof.11;
+        Wed, 09 Sep 2020 13:48:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cc1mTJ4YBbjlfzPf25X2vuH8TH88kzjymIjnYwRDABQ=;
-        b=SjXZk+CmHV9jz8gniJ1/ZPk61Ao4w7sKocCSZDg3qjhxNdkkX0uF7+ay3f6izdADfi
-         YJoE5A+l+VRRK1RYJDQpKiAxGR/dgYRkmPJXUmLBzG4UEdG0tmBHDSoNTi6fuTKIwCKQ
-         q1P56FSv4lz5QDyNSSE1YvNhYvQuna9q01a+wDqh7tBiBoGz00VkBXGFOvI54Wiw/Q5r
-         /Dm2AOtfojNdQL94sBtMx7K3k1tFL4/8os+3m6j1dk/t7IhJ0sAHM01/MutC3j8gYSFH
-         WtppyGbNzmT+jn91na1DrAwlE1bj1WfTssyPoT+doWnMJIE4v/EfjmxUKWd+/lPslbiI
-         pOXA==
-X-Gm-Message-State: AOAM531YTBraWNCNz5MQPTAXLJVDwBBsv2cDtoaZRX/JI/B8FbDPxHRg
-        bUn/oyPt9Y6OyGTGOhDCz2oQFzL17GoKpjZg/yGARA==
-X-Google-Smtp-Source: ABdhPJxYIuKJ2FPIIDSc4fLvVsbvhDs4vwhRgTwzcnsP3YQbp/Eiiw42aHUKGWVr36iO8wKIwRx2XebS9rnI749AuKw=
-X-Received: by 2002:a6b:bc82:: with SMTP id m124mr4580365iof.172.1599676473721;
- Wed, 09 Sep 2020 11:34:33 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=X1yklNCC3KY/Gs5Y5NdD6OT5AMVk6VxEpKZgwPcaiH0=;
+        b=m4HQSfASEip/JpVmXXgvY9GjYTchc9oWGFobK+Ufd+IJsflf+WopPUzTkYf6efIWab
+         Go4xRTfLulrHlcN1UYDVvLU4h3rEQZiYKm54pXixWmffzFMI06D2tKvyLR/HNgWEm9on
+         eM2217LucPt4NTQ3GNpj1a0usxxEL2i5pB1LTTJVVhYYDpixc+C63OYwnfvypDDlxaiu
+         IaVBQfpuOkeQA03ySV1m9kbpaSCjrw8rgmhsYGCOgO0XQq0r2aVjqiemtMuuNzEciMlC
+         MHXZH9OYDFliz2HgA+BDwcH+VVD1ePNimw9KAtnAVxrDIKEWcHdODwiSKSdqYyILGzSv
+         ongg==
+X-Gm-Message-State: AOAM533RfP/SAhJ9zaKQZ2e4dtQBI05EW5SEFnhkzaF1T4tPUkw1jzvK
+        8ykozDm6LFfSMRa9q88xMg==
+X-Google-Smtp-Source: ABdhPJwuKsNwM3eYTa9UQ137jTI89LfA/ybJLpEwE2hfB1EGMU9XBo58RKm2vKe66ffW988f8PDohg==
+X-Received: by 2002:a5d:8e12:: with SMTP id e18mr4476925iod.99.1599684539346;
+        Wed, 09 Sep 2020 13:48:59 -0700 (PDT)
+Received: from xps15 ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id u89sm2091730ili.63.2020.09.09.13.48.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Sep 2020 13:48:58 -0700 (PDT)
+Received: (nullmailer pid 3051842 invoked by uid 1000);
+        Wed, 09 Sep 2020 20:48:48 -0000
+Date:   Wed, 9 Sep 2020 14:48:48 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Rahul Tanwar <rahul.tanwar@linux.intel.com>
+Cc:     rtanwar@maxlinear.com, cheol.yong.kim@intel.com,
+        devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        jdelvare@suse.com, andriy.shevchenko@intel.com,
+        p.zabel@pengutronix.de, linux@roeck-us.net, songjun.Wu@intel.com,
+        qi-ming.wu@intel.com, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org
+Subject: Re: [PATCH 1/2] Add DT bindings schema for PVT controller
+Message-ID: <20200909204848.GA3051408@bogus>
+References: <cover.1599634208.git.rahul.tanwar@linux.intel.com>
+ <e0fd02f63c5b6f46376eb709ebac6da36bfe26d8.1599634208.git.rahul.tanwar@linux.intel.com>
 MIME-Version: 1.0
-References: <20200905130336.967622-1-luka.kovacic@sartura.hr>
- <20200905130336.967622-5-luka.kovacic@sartura.hr> <CAHp75VfwPa9zL6HCz+qqXJ1rK2JB=ewRiK1qdrgsyxixA5R5Lg@mail.gmail.com>
- <20200909103638.GB9222@amd> <CAHp75VcV6Tn8dVjWhOW7bfcjwA_Vabw91FJ=OYit3e1rvPp1qQ@mail.gmail.com>
-In-Reply-To: <CAHp75VcV6Tn8dVjWhOW7bfcjwA_Vabw91FJ=OYit3e1rvPp1qQ@mail.gmail.com>
-From:   =?UTF-8?B?THVrYSBLb3ZhxI1pxI0=?= <luka.kovacic@sartura.hr>
-Date:   Wed, 9 Sep 2020 20:34:22 +0200
-Message-ID: <CADZsf3ZH5BAJO_0+sWtXfZuOMdOmJGFWaU_AmgOt0wDjt2_U0g@mail.gmail.com>
-Subject: Re: [PATCH 4/7] drivers: leds: Add the iEi WT61P803 PUZZLE LED driver
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Pavel Machek <pavel@ucw.cz>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        Lee Jones <lee.jones@linaro.org>, Dan Murphy <dmurphy@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Luka Perkov <luka.perkov@sartura.hr>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e0fd02f63c5b6f46376eb709ebac6da36bfe26d8.1599634208.git.rahul.tanwar@linux.intel.com>
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hello everyone,
+On Wed, 09 Sep 2020 14:52:04 +0800, Rahul Tanwar wrote:
+> PVT controller (MR75203) is used to configure & control
+> Moortec embedded analog IP which contains temprature sensor(TS),
+> voltage monitor(VM) & process detector(PD) modules.
+> 
+> Add DT bindings schema for PVT controller.
+> 
+> Signed-off-by: Rahul Tanwar <rahul.tanwar@linux.intel.com>
+> ---
+>  .../devicetree/bindings/hwmon/moortec,mr75203.yaml | 70 ++++++++++++++++++++++
+>  1 file changed, 70 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+> 
 
-I'm sending the email again, as I didn't send it as plain text
-earlier, sorry.
 
-Thanks for the comments, I'll review them and fix the issues.
+My bot found errors running 'make dt_binding_check' on your patch:
 
-This is currently the only iEi Puzzle series device that is using this
-microcontroller. Their Intel-based platforms most likely will not use
-this MCU, as they resorted to using more standard components there.
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml: required:6: {'#thermal-sensor-cells': None} is not of type 'string'
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml: ignoring, error in schema: required: 6
+warning: no schema found in file: ./Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/moortec,mr75203.example.dt.yaml: example-0: pvt@e0680000:reg:0: [3764912128, 128, 3764912256, 384, 3764912640, 512, 3764913152, 3072] is too long
+	From schema: /usr/local/lib/python3.8/dist-packages/dtschema/schemas/reg.yaml
 
-Some upcoming iEi Puzzle ARM-based boards might also implement this
-microcontroller, so I do agree that using the new API would be beneficial
-to future proof the driver.
 
-Kind regards,
-Luka
+See https://patchwork.ozlabs.org/patch/1360350
 
-On Wed, Sep 9, 2020 at 3:52 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Wed, Sep 9, 2020 at 1:36 PM Pavel Machek <pavel@ucw.cz> wrote:
-> > > > Add support for the iEi WT61P803 PUZZLE LED driver.
-> > > > Currently only the front panel power LED is supported.
-> > > >
-> > > > This driver depends on the iEi WT61P803 PUZZLE MFD driver.
-> > >
-> > > Can we make it OF independent?
-> > > See below how to achieve this.
-> >
-> > Is there reason to believe this will be found in non-OF systems?
->
-> It's one aspect. Another one is to give a better example to anybody
-> who might use this to copy'n'paste from. I believe that most of the
-> LED drivers can appear on non-DT systems.
->
-> --
-> With Best Regards,
-> Andy Shevchenko
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure dt-schema is up to date:
+
+pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
+
+Please check and re-submit.
+
