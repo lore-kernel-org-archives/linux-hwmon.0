@@ -5,72 +5,70 @@ X-Spam-Level:
 X-Spam-Status: No, score=-14.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6CF5C433E2
-	for <linux-hwmon@archiver.kernel.org>; Wed,  9 Sep 2020 16:45:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A790C433E2
+	for <linux-hwmon@archiver.kernel.org>; Wed,  9 Sep 2020 17:12:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 70CFC2166E
-	for <linux-hwmon@archiver.kernel.org>; Wed,  9 Sep 2020 16:45:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A725421919
+	for <linux-hwmon@archiver.kernel.org>; Wed,  9 Sep 2020 17:12:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tIwYV9by"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A0PopW66"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731054AbgIIQpC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 9 Sep 2020 12:45:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53914 "EHLO
+        id S1730876AbgIIRME (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 9 Sep 2020 13:12:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730606AbgIIQMj (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 9 Sep 2020 12:12:39 -0400
-Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F89CC061345;
-        Wed,  9 Sep 2020 06:50:13 -0700 (PDT)
-Received: by mail-ot1-x344.google.com with SMTP id o6so2338365ota.2;
-        Wed, 09 Sep 2020 06:50:13 -0700 (PDT)
+        with ESMTP id S1730288AbgIIPcj (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 9 Sep 2020 11:32:39 -0400
+Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100EFC0611E2;
+        Wed,  9 Sep 2020 08:05:55 -0700 (PDT)
+Received: by mail-oi1-x243.google.com with SMTP id x69so2659645oia.8;
+        Wed, 09 Sep 2020 08:05:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=cx+xJeL6+wyvQHwa4GWQclp12A+y0y4QYoTj22Fn1n0=;
-        b=tIwYV9byswYKoRoXJxU6j9aOW0yxxF3WUxpF3wUBBvv7/vM6vwEs7lNOTxDwfkSJAd
-         ABkcunXyJ0NfJlkq8bxDb8NxZgne0VjZw3nsDakQKCvQEhIr5t4/P8x2Z/um4a8g2HHa
-         KoR05kI7ra+OiMlzfIDkI+kiTNLg+oILHFpI5tYkgGRfbDbA54CDppVSufdb+CakInMT
-         hkpXFZTlAoIrq2kDrMNxOFRfdrUuzCdGvt3RO/zQ8XBFnt/kkfwAKPW7vCcw558Vkt89
-         G7uwAM06MkDvHxje6l0uucUt8ZubTUeemGlrCeal7VcOTeXvEz2n5c5POIhrXf6LpM/n
-         rrqg==
+        bh=SQN0S41PwJqlI7YUrTARcv/dLLG7Ks4iKX3FcqmKz0U=;
+        b=A0PopW66/sKGrXUfNk7iv1JQeFyENvX7fT3SLBAlSyzF4+gnZ7URJ++SCNe1DljIf6
+         +EMzgyAL6jjjgXnLbBO8UWT/Ok1Y1NGEbM4+c7i1x/fmUjhtiXpBk7iouAHdWcsxY1AD
+         3OXunghgXQChk0G/2ytTLD0rcPCu4kvAFj0TEQmjGVl+62G0+liYGo6afbIHzGkjvGqu
+         9BdpX0mv0C7nVR5KVYvgPJm2HqRx0dYtgWopoSYqFK5jpwskXxYQOZJ8s9wHhHzsx5lB
+         tzAOzpBOpDT7Xyaws1jckRHHtA5OWUtghiqh+E0bUPtXlhbIGu97EJ+EWUarfkt7+iRI
+         oCaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=cx+xJeL6+wyvQHwa4GWQclp12A+y0y4QYoTj22Fn1n0=;
-        b=jBQVCSElWRZ38G5rRnWEWTwCnG7YT/LEBOgaeH7ME8GeansEd+0Qi6K1Bi+gL8OHwo
-         0/4k5bbmSghv71YfMtC45RMlk06lSGiWFzBhEiK6U06+5ydJ/CxVQGcZOnaJOHba1Pmi
-         vyfKuCq55wvjZo/+ZD5boIb1qWTrogsKjtNHyocZZTOQoCdWadnvVpo6x9hPoDeVtd4Y
-         DZBuIgxZvvwc4+C7Xd2RW/fiSSBoL5zojaPfRv0KCW+Uy+x7W6Gk/96G73yrClge0uJs
-         XMCRDM1zcg8pCq2cy1nGAp63u2rWL5jPQGExbRZ/J33StJNCpMm2CKI37T67gvgcU3yp
-         2XPw==
-X-Gm-Message-State: AOAM532uUf+1WptM1xcOsz8gm08Jn5bKn+kLmozHF2v0bxlK6OzV3Dqz
-        x+CDwbOjDFSFJI0v350rkqI=
-X-Google-Smtp-Source: ABdhPJzX8Ze/WQBueafwFeTnSjBLy3amxl0qu1EPNFtDGtBUWjav/Y7KW2En5TvlJv34RO7/CoRzOQ==
-X-Received: by 2002:a9d:18d:: with SMTP id e13mr768727ote.165.1599659412422;
-        Wed, 09 Sep 2020 06:50:12 -0700 (PDT)
+        bh=SQN0S41PwJqlI7YUrTARcv/dLLG7Ks4iKX3FcqmKz0U=;
+        b=b3lYXwub8PwxB11EwJYM5YQ7WrQGugkc0uaWCdMPukbIWXZoUrrjeQlTyNUtFqh1x5
+         Bvig5KWue4gVRcgMXEiVgH/y41NmLwW90+mFbAJuV90YRBxs20uD1PcmKfSGrGOVlec/
+         Zps/pfXNK8dfcrk+FAVsPSizflsSyeScYXnfV/WhnDf3esLTIZX9pPhA4pxjavH6jjL9
+         lblk5aO4s6H+0iJLJ3Hm64jX0DqFYR9d17jC1TOA2loHRk0tpszKYGRtiWm77VuPpT1a
+         s5CL3cLAgpz/WSBH/Bun3r+BtSVo2Ml+0X8k00KN+igLDlSFJtwnawvPTH+k3x6fr/Y1
+         Ky2Q==
+X-Gm-Message-State: AOAM531iiCdpO7+8AzVQ+IokfEaY+vxSVDbm74YvPTtsPhCMmjUjy+hJ
+        pxLhfSuCmPp4zsMPrvIZFmk=
+X-Google-Smtp-Source: ABdhPJykvJcBzPiNJNP3z4mhM+kULC/9t2mAxd/mo91e1QU1M3W97OUiEOmPxREly33TI+pXVGV6qg==
+X-Received: by 2002:aca:d409:: with SMTP id l9mr891226oig.70.1599663954906;
+        Wed, 09 Sep 2020 08:05:54 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r20sm392921ooh.5.2020.09.09.06.50.10
+        by smtp.gmail.com with ESMTPSA id c129sm459546oia.8.2020.09.09.08.05.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Sep 2020 06:50:11 -0700 (PDT)
-Subject: Re: [PATCH] hwmon: intel-m10-bmc-hwmon: add hwmon support for Intel
- MAX 10 BMC
-To:     Xu Yilun <yilun.xu@intel.com>
-Cc:     jdelvare@suse.com, lee.jones@linaro.org,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        trix@redhat.com, matthew.gerlach@linux.intel.com,
-        russell.h.weight@intel.com, lgoncalv@redhat.com, hao.wu@intel.com,
-        mdf@kernel.org
-References: <1599546140-18804-1-git-send-email-yilun.xu@intel.com>
- <1599546140-18804-2-git-send-email-yilun.xu@intel.com>
- <7db3f229-e39e-50fa-1647-1da09471d785@roeck-us.net>
- <20200909070222.GC27300@yilunxu-OptiPlex-7050>
+        Wed, 09 Sep 2020 08:05:54 -0700 (PDT)
+Subject: Re: [PATCH 2/2] Add driver for Moortec MR75203 PVT controller
+To:     Rahul Tanwar <rahul.tanwar@linux.intel.com>, jdelvare@suse.com,
+        p.zabel@pengutronix.de, linux-hwmon@vger.kernel.org,
+        robh+dt@kernel.org
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        andriy.shevchenko@intel.com, songjun.Wu@intel.com,
+        cheol.yong.kim@intel.com, qi-ming.wu@intel.com,
+        rtanwar@maxlinear.com
+References: <cover.1599634208.git.rahul.tanwar@linux.intel.com>
+ <ecb6794a8f2ef6576421e6d5fbdf4e6a91f06b91.1599634208.git.rahul.tanwar@linux.intel.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -115,12 +113,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <e7324f1b-299c-65e6-3a51-60c8b8b688ca@roeck-us.net>
-Date:   Wed, 9 Sep 2020 06:50:09 -0700
+Message-ID: <a3b95ea8-372b-4f03-0c04-62ee9384fafb@roeck-us.net>
+Date:   Wed, 9 Sep 2020 08:05:52 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200909070222.GC27300@yilunxu-OptiPlex-7050>
+In-Reply-To: <ecb6794a8f2ef6576421e6d5fbdf4e6a91f06b91.1599634208.git.rahul.tanwar@linux.intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -129,657 +127,693 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 9/9/20 12:02 AM, Xu Yilun wrote:
-> On Tue, Sep 08, 2020 at 07:13:54AM -0700, Guenter Roeck wrote:
->> On 9/7/20 11:22 PM, Xu Yilun wrote:
->>> This patch adds hwmon functionality for Intel MAX 10 BMC chip. This BMC
->>> chip connects to a set of sensor chips to monitor current, voltage,
->>> thermal and power of different components on board. The BMC firmware is
->>> responsible for sensor data sampling and recording in shared registers.
->>> Host driver reads the sensor data from these shared registers and
->>> exposes them to users as hwmon interfaces.
->>>
->>> Signed-off-by: Xu Yilun <yilun.xu@intel.com>
->>> Signed-off-by: Wu Hao <hao.wu@intel.com>
->>> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>> Signed-off-by: Tom Rix <trix@redhat.com>
->>> ---
->>>  drivers/hwmon/Kconfig               |  11 +
->>>  drivers/hwmon/Makefile              |   1 +
->>>  drivers/hwmon/intel-m10-bmc-hwmon.c | 516 ++++++++++++++++++++++++++++++++++++
->>
->> Documentation/hwmon/intel-m10-bmc-hwmon is missing
+On 9/8/20 11:52 PM, Rahul Tanwar wrote:
+> PVT controller (MR75203) is used to configure & control
+> Moortec embedded analog IP which contains temprature
+> sensor(TS), voltage monitor(VM) & process detector(PD)
+> modules. Add driver to support MR75203 PVT controller.
 > 
-> I'll add the Doc, thanks for the remind.
+The subject needs to include a hint that this is a hardware monitoring
+driver, and the above should be "Add hardware monitoring driver to ...".
+
+> Signed-off-by: Rahul Tanwar <rahul.tanwar@linux.intel.com>
+> ---
+>  drivers/hwmon/Kconfig   |  10 +
+>  drivers/hwmon/Makefile  |   1 +
+>  drivers/hwmon/mr75203.c | 617 ++++++++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 628 insertions(+)
+>  create mode 100644 drivers/hwmon/mr75203.c
 > 
->>
->>>  3 files changed, 528 insertions(+)
->>>  create mode 100644 drivers/hwmon/intel-m10-bmc-hwmon.c
->>>
->>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
->>> index 8dc28b2..53af15c 100644
->>> --- a/drivers/hwmon/Kconfig
->>> +++ b/drivers/hwmon/Kconfig
->>> @@ -2064,6 +2064,17 @@ config SENSORS_XGENE
->>>  	  If you say yes here you get support for the temperature
->>>  	  and power sensors for APM X-Gene SoC.
->>>  
->>> +config SENSORS_INTEL_M10_BMC_HWMON
->>> +	tristate "Intel MAX10 BMC Hardware Monitoring"
->>> +	depends on MFD_INTEL_M10_BMC
->>> +	help
->>> +	  This driver provides support for the hardware monitoring functionality
->>> +	  on Intel MAX10 BMC chip.
->>> +
->>> +	  This BMC Chip is used on Intel FPGA PCIe Acceleration Cards (PAC). Its
->>> +	  sensors monitor various telemetry data of different components on the
->>> +	  card, e.g. board temperature, FPGA core temperature/voltage/current.
->>> +
->>>  if ACPI
->>>  
->>>  comment "ACPI drivers"
->>> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
->>> index a8f4b35..ba5a25a 100644
->>> --- a/drivers/hwmon/Makefile
->>> +++ b/drivers/hwmon/Makefile
->>> @@ -90,6 +90,7 @@ obj-$(CONFIG_SENSORS_IIO_HWMON) += iio_hwmon.o
->>>  obj-$(CONFIG_SENSORS_INA209)	+= ina209.o
->>>  obj-$(CONFIG_SENSORS_INA2XX)	+= ina2xx.o
->>>  obj-$(CONFIG_SENSORS_INA3221)	+= ina3221.o
->>> +obj-$(CONFIG_SENSORS_INTEL_M10_BMC_HWMON) += intel-m10-bmc-hwmon.o
->>>  obj-$(CONFIG_SENSORS_IT87)	+= it87.o
->>>  obj-$(CONFIG_SENSORS_JC42)	+= jc42.o
->>>  obj-$(CONFIG_SENSORS_K8TEMP)	+= k8temp.o
->>> diff --git a/drivers/hwmon/intel-m10-bmc-hwmon.c b/drivers/hwmon/intel-m10-bmc-hwmon.c
->>> new file mode 100644
->>> index 0000000..43e55e7
->>> --- /dev/null
->>> +++ b/drivers/hwmon/intel-m10-bmc-hwmon.c
->>> @@ -0,0 +1,516 @@
->>> +// SPDX-License-Identifier: GPL-2.0
->>> +/*
->>> + * Intel MAX 10 BMC HWMON Driver
->>> + *
->>> + * Copyright (C) 2018-2020 Intel Corporation. All rights reserved.
->>> + *
->>> + */
->>> +#include <linux/device.h>
->>> +#include <linux/hwmon.h>
->>> +#include <linux/hwmon-sysfs.h>
->>
->> Unnecessary include file.
-> 
-> Yes, I'll remove it.
-> 
->>
->>> +#include <linux/mfd/intel-m10-bmc.h>
->>> +#include <linux/module.h>
->>> +#include <linux/mod_devicetable.h>
->>> +#include <linux/platform_device.h>
->>> +
->>> +enum m10bmc_channel_type {
->>> +	M10BMC_CHT_TEMP,
->>> +	M10BMC_CHT_IN,
->>> +	M10BMC_CHT_CURR,
->>> +	M10BMC_CHT_POWER,
->>> +	M10BMC_CHT_MAX,
->>> +};
->>> +
->>> +struct m10bmc_sdata {
->>> +	unsigned int type;
->>> +	unsigned int reg_input;
->>> +	unsigned int reg_max;
->>> +	unsigned int reg_crit;
->>> +	unsigned int reg_hyst;
->>> +	unsigned int reg_min;
->>> +	unsigned int multiplier;
->>> +	const char *label;
->>> +};
->>> +
->>> +static struct m10bmc_sdata n3000bmc_sensor_tbl[] = {
->>
->> Can be const
-> 
-> Yes.
-> 
->>
->>> +	{ M10BMC_CHT_TEMP, 0x100, 0x104, 0x108, 0x10c, 0x0, 500,
->>> +	 "Board Temperature" },
->>> +	{ M10BMC_CHT_TEMP, 0x110, 0x114, 0x118, 0x0, 0x0, 500,
->>> +	 "FPGA Die Temperature" },
->>> +	{ M10BMC_CHT_TEMP, 0x11c, 0x120, 0x124, 0x0, 0x0, 500,
->>> +	 "QSFP0 Temperature" },
->>> +	{ M10BMC_CHT_IN, 0x128, 0x0, 0x0, 0x0, 0x0, 1,
->>> +	 "QSFP0 Supply Voltage" },
->>> +	{ M10BMC_CHT_TEMP, 0x12c, 0x130, 0x134, 0x0, 0x0, 500,
->>> +	 "QSFP1 Temperature" },
->>> +	{ M10BMC_CHT_IN, 0x138, 0x0, 0x0, 0x0, 0x0, 1,
->>> +	 "QSFP1 Supply Voltage" },
->>> +	{ M10BMC_CHT_IN, 0x13c, 0x0, 0x0, 0x0, 0x0, 1,
->>> +	 "FPGA Core Voltage" },
->>> +	{ M10BMC_CHT_CURR, 0x140, 0x0, 0x0, 0x0, 0x0, 1,
->>> +	 "FPGA Core Current" },
->>> +	{ M10BMC_CHT_IN, 0x144, 0x0, 0x0, 0x0, 0x0, 1,
->>> +	 "12V Backplane Voltage" },
->>> +	{ M10BMC_CHT_CURR, 0x148, 0x0, 0x0, 0x0, 0x0, 1,
->>> +	 "12V Backplane Current" },
->>> +	{ M10BMC_CHT_IN, 0x14c, 0x0, 0x0, 0x0, 0x0, 1,
->>> +	 "1.2V Voltage" },
->>> +	{M10BMC_CHT_IN, 0x150, 0x0, 0x0, 0x0, 0x0, 1,
->>> +	 "12V AUX Voltage" },
->>> +	{ M10BMC_CHT_CURR, 0x154, 0x0, 0x0, 0x0, 0x0, 1,
->>> +	 "12V AUX Current" },
->>> +	{ M10BMC_CHT_IN, 0x158, 0x0, 0x0, 0x0, 0x0, 1,
->>> +	 "1.8V Voltage" },
->>> +	{ M10BMC_CHT_IN, 0x15c, 0x0, 0x0, 0x0, 0x0, 1,
->>> +	 "3.3V Voltage" },
->>> +	{ M10BMC_CHT_POWER, 0x160, 0x0, 0x0, 0x0, 0x0, 1000,
->>> +	 "Board Power" },
->>> +	{ M10BMC_CHT_TEMP, 0x168, 0x0, 0x0, 0x0, 0x0, 500,
->>> +	 "Retimer A Temperature" },
->>> +	{ M10BMC_CHT_TEMP, 0x16c, 0x0, 0x0, 0x0, 0x0, 500,
->>> +	 "Retimer A SerDes Temperature" },
->>> +	{ M10BMC_CHT_TEMP, 0x170, 0x0, 0x0, 0x0, 0x0, 500,
->>> +	 "Retimer B Temperature" },
->>> +	{ M10BMC_CHT_TEMP, 0x174, 0x0, 0x0, 0x0, 0x0, 500,
->>> +	 "Retimer B SerDes Temperature" },
->>> +	{ M10BMC_CHT_MAX } /* sentinel */
->>> +};
->>> +
->>> +struct m10bmc_ch_group {
->>> +	int num_channels;
->>> +	struct m10bmc_sdata **data_list;
->>> +	u32 *config;
->>> +	struct hwmon_channel_info info;
->>> +};
->>> +
->>> +struct m10bmc_hwmon {
->>> +	struct device *dev;
->>> +	struct m10bmc_ch_group chgs[M10BMC_CHT_MAX];
->>> +	/* This is a NULL terminated array required by the HWMON interface */
->>> +	const struct hwmon_channel_info *info[M10BMC_CHT_MAX + 1];
->>> +	struct hwmon_chip_info chip;
->>> +	char *hw_name;
->>> +	struct intel_m10bmc *m10bmc;
->>> +	struct m10bmc_sdata *data_tbl;
->>> +};
->>> +
->>> +static enum m10bmc_channel_type
->>> +htype_to_ctype(enum hwmon_sensor_types htype)
->>> +{
->>> +	switch (htype) {
->>> +	case hwmon_temp:
->>> +		return M10BMC_CHT_TEMP;
->>> +	case hwmon_in:
->>> +		return M10BMC_CHT_IN;
->>> +	case hwmon_curr:
->>> +		return M10BMC_CHT_CURR;
->>> +	case hwmon_power:
->>> +		return M10BMC_CHT_POWER;
->>> +	default:
->>> +		return M10BMC_CHT_MAX;
->>> +	}
->>> +}
->>> +
->>> +static enum hwmon_sensor_types
->>> +ctype_to_htype(enum m10bmc_channel_type ctype)
->>> +{
->>> +	switch (ctype) {
->>> +	case M10BMC_CHT_TEMP:
->>> +		return hwmon_temp;
->>> +	case M10BMC_CHT_IN:
->>> +		return hwmon_in;
->>> +	case M10BMC_CHT_CURR:
->>> +		return hwmon_curr;
->>> +	case M10BMC_CHT_POWER:
->>> +		return hwmon_power;
->>> +	default:
->>> +		return hwmon_max;
->>> +	}
->>> +}
->>> +
->>> +static umode_t
->>> +m10bmc_hwmon_is_visible(const void *data, enum hwmon_sensor_types type,
->>> +			u32 attr, int channel)
->>> +{
->>> +	return 0444;
->>
->> It is quite unusual that limit attributes are read-only, but I guess
->> that is your call.
-> 
-> Yes, actually the real sensor configurations are done by the firmware on
-> MAX 10 BMC. We are not ready to support the sensor setting interfaces between
-> the host & BMC.
-> 
->>
->>> +}
->>> +
->>> +static struct m10bmc_sdata *
->>> +find_sensor_data(struct m10bmc_hwmon *hw, enum hwmon_sensor_types htype,
->>> +		 int channel)
->>> +{
->>> +	enum m10bmc_channel_type ctype = htype_to_ctype(htype);
->>> +	struct m10bmc_ch_group *ch_group;
->>> +
->>> +	if (ctype >= M10BMC_CHT_MAX)
->>> +		return ERR_PTR(-EOPNOTSUPP);
->>> +
->>> +	ch_group = &hw->chgs[ctype];
->>> +
->>> +	if (channel >= ch_group->num_channels)
->>> +		return ERR_PTR(-EOPNOTSUPP);
->>> +
->>> +	return ch_group->data_list[channel];
->>> +}
->>> +
->>> +static int do_sensor_read(struct m10bmc_hwmon *hw, struct m10bmc_sdata *data,
->>> +			  unsigned int regoff, long *val)
->>> +{
->>> +	unsigned int regval;
->>> +	int ret;
->>> +
->>> +	ret = m10bmc_sys_read(hw->m10bmc, regoff, &regval);
->>> +	if (ret)
->>> +		return ret;
->>> +
->>> +	/*
->>> +	 * BMC Firmware will return 0xdeadbeef if the sensor value is invalid
->>> +	 * at that time. This usually happens on sensor channels which connect
->>> +	 * to external pluggable modules, e.g. QSFP temperature and voltage.
->>> +	 * When the QSFP is unplugged from cage, driver will get 0xdeadbeef
->>> +	 * from their registers.
->>> +	 */
->>> +	if (regval == 0xdeadbeef)
->>> +		return -EBUSY;
->>> +
->>> +	*val = regval * data->multiplier;
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +static int m10bmc_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
->>> +			     u32 attr, int channel, long *val)
->>> +{
->>> +	struct m10bmc_hwmon *hw = dev_get_drvdata(dev);
->>> +	unsigned int reg, reg_hyst = 0;
->>> +	struct m10bmc_sdata *data;
->>> +	long hyst, value;
->>> +	int ret;
->>> +
->>> +	data = find_sensor_data(hw, type, channel);
->>> +	if (IS_ERR(data))
->>> +		return PTR_ERR(data);
->>> +
->>> +	switch (type) {
->>> +	case hwmon_temp:
->>> +		switch (attr) {
->>> +		case hwmon_temp_input:
->>> +			reg = data->reg_input;
->>> +			break;
->>> +		case hwmon_temp_max_hyst:
->>> +			reg_hyst = data->reg_hyst;
->>> +			fallthrough;
->>> +		case hwmon_temp_max:
->>> +			reg = data->reg_max;
->>> +			break;
->>> +		case hwmon_temp_crit_hyst:
->>> +			reg_hyst = data->reg_hyst;
->>> +			fallthrough;
->>> +		case hwmon_temp_crit:
->>> +			reg = data->reg_crit;
->>> +			break;
->>> +		default:
->>> +			return -EOPNOTSUPP;
->>> +		}
->>> +		break;
->>> +	case hwmon_in:
->>> +		switch (attr) {
->>> +		case hwmon_in_input:
->>> +			reg = data->reg_input;
->>> +			break;
->>> +		case hwmon_in_max:
->>> +			reg = data->reg_max;
->>> +			break;
->>> +		case hwmon_in_crit:
->>> +			reg = data->reg_crit;
->>> +			break;
->>> +		case hwmon_in_min:
->>> +			reg = data->reg_min;
->>> +			break;
->>> +		default:
->>> +			return -EOPNOTSUPP;
->>> +		}
->>> +		break;
->>> +	case hwmon_curr:
->>> +		switch (attr) {
->>> +		case hwmon_curr_input:
->>> +			reg = data->reg_input;
->>> +			break;
->>> +		case hwmon_curr_max:
->>> +			reg = data->reg_max;
->>> +			break;
->>> +		case hwmon_curr_crit:
->>> +			reg = data->reg_crit;
->>> +			break;
->>> +		default:
->>> +			return -EOPNOTSUPP;
->>> +		}
->>> +		break;
->>> +	case hwmon_power:
->>> +		switch (attr) {
->>> +		case hwmon_power_input:
->>> +			reg = data->reg_input;
->>> +			break;
->>> +		default:
->>> +			return -EOPNOTSUPP;
->>> +		}
->>> +		break;
->>> +	default:
->>> +		return -EOPNOTSUPP;
->>> +	}
->>> +
->>> +	ret = do_sensor_read(hw, data, reg, &value);
->>> +	if (ret)
->>> +		return ret;
->>> +
->>> +	if (reg_hyst) {
->>> +		ret = do_sensor_read(hw, data, reg_hyst, &hyst);
->>> +		if (ret)
->>> +			return ret;
->>> +
->>> +		value -= hyst;
->>> +	}
->>> +
->>> +	*val = value;
->>> +
->>> +	return ret;
->>> +}
->>> +
->>> +static int m10bmc_hwmon_read_string(struct device *dev,
->>> +				    enum hwmon_sensor_types type,
->>> +				    u32 attr, int channel, const char **str)
->>> +{
->>> +	struct m10bmc_hwmon *hw = dev_get_drvdata(dev);
->>> +	struct m10bmc_sdata *data;
->>> +
->>> +	data = find_sensor_data(hw, type, channel);
->>> +	if (!data)
->>> +		return -EOPNOTSUPP;
->>> +
->>> +	*str = data->label;
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +static const struct hwmon_ops m10bmc_hwmon_ops = {
->>> +	.is_visible = m10bmc_hwmon_is_visible,
->>> +	.read = m10bmc_hwmon_read,
->>> +	.read_string = m10bmc_hwmon_read_string,
->>> +};
->>> +
->>> +static int m10bmc_malloc_channels(struct device *dev,
->>> +				  struct m10bmc_ch_group *chg, int num_ch)
->>> +{
->>> +	chg->config = devm_kcalloc(dev, num_ch + 1,
->>> +				   sizeof(*chg->config), GFP_KERNEL);
->>> +	if (!chg->config)
->>> +		return -ENOMEM;
->>> +
->>> +	chg->data_list = devm_kcalloc(dev, num_ch, sizeof(*chg->data_list),
->>> +				      GFP_KERNEL);
->>> +	if (!chg->data_list)
->>> +		return -ENOMEM;
->>> +
->>> +	chg->info.config = chg->config;
->>> +	chg->num_channels = num_ch;
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +static void m10bmc_fill_temp_channel(struct m10bmc_hwmon *hwmon, int ch_idx,
->>> +				     struct m10bmc_sdata *data)
->>> +{
->>> +	struct m10bmc_ch_group *chg = &hwmon->chgs[M10BMC_CHT_TEMP];
->>> +
->>> +	if (data->reg_input)
->>> +		chg->config[ch_idx] |= HWMON_T_INPUT;
->>> +
->>> +	if (data->reg_max) {
->>> +		chg->config[ch_idx] |= HWMON_T_MAX;
->>> +		if (data->reg_hyst)
->>> +			chg->config[ch_idx] |= HWMON_T_MAX_HYST;
->>> +	}
->>> +
->>> +	if (data->reg_crit) {
->>> +		chg->config[ch_idx] |= HWMON_T_CRIT;
->>> +		if (data->reg_hyst)
->>> +			chg->config[ch_idx] |= HWMON_T_CRIT_HYST;
->>> +	}
->>> +
->>> +	if (data->label)
->>> +		chg->config[ch_idx] |= HWMON_T_LABEL;
->>> +
->>> +	chg->data_list[ch_idx] = data;
->>> +}
->>> +
->>> +static void m10bmc_fill_in_channel(struct m10bmc_hwmon *hwmon, int ch_idx,
->>> +				   struct m10bmc_sdata *data)
->>> +{
->>> +	struct m10bmc_ch_group *chg = &hwmon->chgs[M10BMC_CHT_IN];
->>> +
->>> +	if (data->reg_input)
->>> +		chg->config[ch_idx] |= HWMON_I_INPUT;
->>> +
->>> +	if (data->reg_max)
->>> +		chg->config[ch_idx] |= HWMON_I_MAX;
->>> +
->>> +	if (data->reg_crit)
->>> +		chg->config[ch_idx] |= HWMON_I_CRIT;
->>> +
->>> +	if (data->reg_min)
->>> +		chg->config[ch_idx] |= HWMON_I_MIN;
->>> +
->>> +	if (data->label)
->>> +		chg->config[ch_idx] |= HWMON_I_LABEL;
->>> +
->>> +	chg->data_list[ch_idx] = data;
->>> +}
->>> +
->>> +static void m10bmc_fill_curr_channel(struct m10bmc_hwmon *hwmon, int ch_idx,
->>> +				     struct m10bmc_sdata *data)
->>> +{
->>> +	struct m10bmc_ch_group *chg = &hwmon->chgs[M10BMC_CHT_CURR];
->>> +
->>> +	if (data->reg_input)
->>> +		chg->config[ch_idx] |= HWMON_C_INPUT;
->>> +
->>> +	if (data->reg_max)
->>> +		chg->config[ch_idx] |= HWMON_C_MAX;
->>> +
->>> +	if (data->reg_crit)
->>> +		chg->config[ch_idx] |= HWMON_C_CRIT;
->>> +
->>> +	if (data->label)
->>> +		chg->config[ch_idx] |= HWMON_C_LABEL;
->>> +
->>> +	chg->data_list[ch_idx] = data;
->>> +}
->>> +
->>> +static void m10bmc_fill_power_channel(struct m10bmc_hwmon *hwmon, int ch_idx,
->>> +				      struct m10bmc_sdata *data)
->>> +{
->>> +	struct m10bmc_ch_group *chg = &hwmon->chgs[M10BMC_CHT_POWER];
->>> +
->>> +	if (data->reg_input)
->>> +		chg->config[ch_idx] |= HWMON_P_INPUT;
->>> +
->>> +	if (data->label)
->>> +		chg->config[ch_idx] |= HWMON_P_LABEL;
->>> +
->>> +	chg->data_list[ch_idx] = data;
->>> +}
->>
->> A substantial amount of code in this driver busies itself to convert
->> n3000bmc_sensor_tbl[] into the hwmon_channel_info data. What is the point
->> of doing that instead of providing struct hwmon_channel_info statically ?
->> One could write a little helper program to convert one into the other,
->> and avoid all this unnecessary code.
->>
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 8dc28b26916e..2defb46677b4 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -1112,6 +1112,16 @@ config SENSORS_MENF21BMC_HWMON
+>  	  This driver can also be built as a module. If so the module
+>  	  will be called menf21bmc_hwmon.
 >  
-> There are quite a lot of sensor data in the BMC, which are listed in the
-> SPEC by the register address. And I have to classify them into type
-> groups in order to use the static hwmon_channel_info. I also need to
-> keep the alignment of the private sensor data table and
-> hwmon_channel_info, like if limit attributes are available.
+> +config SENSORS_MR75203
+> +	tristate "Moortec Semiconductor MR75203 PVT Controller"
+> +	select REGMAP_MMIO
+> +	help
+> +	  If you say yes here you get support for Moortec MR75203
+> +	  PVT controller.
+> +
+> +	  This driver can also be built as a module. If so, the module
+> +	  will be called mr75203.
+> +
+>  config SENSORS_ADCXX
+>  	tristate "National Semiconductor ADCxxxSxxx"
+>  	depends on SPI_MASTER
+> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> index a8f4b35b136b..bb4bd92a5149 100644
+> --- a/drivers/hwmon/Makefile
+> +++ b/drivers/hwmon/Makefile
+> @@ -142,6 +142,7 @@ obj-$(CONFIG_SENSORS_MCP3021)	+= mcp3021.o
+>  obj-$(CONFIG_SENSORS_TC654)	+= tc654.o
+>  obj-$(CONFIG_SENSORS_MLXREG_FAN) += mlxreg-fan.o
+>  obj-$(CONFIG_SENSORS_MENF21BMC_HWMON) += menf21bmc_hwmon.o
+> +obj-$(CONFIG_SENSORS_MR75203)	+= mr75203.o
+>  obj-$(CONFIG_SENSORS_NCT6683)	+= nct6683.o
+>  obj-$(CONFIG_SENSORS_NCT6775)	+= nct6775.o
+>  obj-$(CONFIG_SENSORS_NCT7802)	+= nct7802.o
+> diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
+> new file mode 100644
+> index 000000000000..8b616e53f27b
+> --- /dev/null
+> +++ b/drivers/hwmon/mr75203.c
+> @@ -0,0 +1,617 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2020 MaxLinear, Inc.
+> + *
+> + * This driver is for PVT controller (MR75203) which is used
+> + * to configure & control Moortec embedded analog IP to enable
+> + * multiple embedded temprature sensor(TS), voltage monitor(VM)
+> + * & process detector(PD) modules.
+> + */
+> +#include <linux/clk.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/module.h>
+> +#include <linux/mutex.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/reset.h>
+> +
+> +/* PVT Common register */
+> +#define PVT_IP_CONFIG	0x04
+> +#define TS_NUM_MSK	GENMASK(4, 0)
+> +#define TS_NUM_SFT	0
+> +#define PD_NUM_MSK	GENMASK(12, 8)
+> +#define PD_NUM_SFT	8
+> +#define VM_NUM_MSK	GENMASK(20, 16)
+> +#define VM_NUM_SFT	16
+> +#define CH_NUM_MSK	GENMASK(31, 24)
+> +#define CH_NUM_SFT	24
+> +
+> +/* Macro Common Register */
+> +#define CLK_SYNTH		0x00
+> +#define CLK_SYNTH_LO_SFT	0
+> +#define CLK_SYNTH_HI_SFT	8
+> +#define CLK_SYNTH_HOLD_SFT	16
+> +#define CLK_SYNTH_EN		BIT(24)
+> +
+> +#define SDIF_DISABLE	0x04
+> +
+> +#define SDIF_STAT	0x08
+> +#define SDIF_BUSY	BIT(0)
+> +#define SDIF_LOCK	BIT(1)
+> +
+> +#define SDIF_W		0x0c
+> +#define SDIF_PROG	BIT(31)
+> +#define SDIF_WRN_W	BIT(27)
+> +#define SDIF_WRN_R	0x00
+> +#define SDIF_ADDR_SFT	24
+> +
+> +#define SDIF_HALT	0x10
+> +#define SDIF_CTRL	0x14
+> +#define SDIF_SMPL_CTRL	0x20
+> +
+> +/* TS & PD Individual Macro Register */
+> +#define COM_REG_SIZE	0x40
+> +
+> +#define SDIF_DONE(n)	(COM_REG_SIZE + 0x14 + 0x40 * (n))
+> +#define SDIF_SMPL_DONE	BIT(0)
+> +
+> +#define SDIF_DATA(n)	(COM_REG_SIZE + 0x18 + 0x40 * (n))
+> +#define SAMPLE_DATA_MSK	GENMASK(15, 0)
+> +
+> +#define HILO_RESET(n)	(COM_REG_SIZE + 0x2c + 0x40 * (n))
+> +
+> +/* VM Individual Macro Register */
+> +#define VM_COM_REG_SIZE	0x200
+> +#define VM_SDIF_DONE(n)	(VM_COM_REG_SIZE + 0x34 + 0x200 * (n))
+> +#define VM_SDIF_DATA(n)	(VM_COM_REG_SIZE + 0x40 + 0x200 * (n))
+> +
+> +/* SDA Slave Register */
+> +#define IP_CTRL			0x00
+> +#define IP_RST_REL		BIT(1)
+> +#define IP_RUN_CONT		BIT(3)
+> +#define IP_AUTO			BIT(8)
+> +#define IP_VM_MODE		BIT(10)
+> +
+> +#define IP_CFG			0x01
+> +#define CFG0_MODE_2		BIT(0)
+> +#define CFG0_PARALLEL_OUT	0
+> +#define CFG0_12_BIT		0
+> +#define CFG1_VOL_MEAS_MODE	0
+> +#define CFG1_PARALLEL_OUT	0
+> +#define CFG1_14_BIT		0
+> +
+> +#define IP_DATA		0x03
+> +
+> +#define IP_POLL		0x04
+> +#define VM_CH_INIT	BIT(20)
+> +#define VM_CH_REQ	BIT(21)
+> +
+> +#define IP_TMR			0x05
+> +#define POWER_DELAY_CYCLE_256	0x80
+> +#define POWER_DELAY_CYCLE_64	0x40
+> +
+> +#define PVT_POLL_DELAY_US	20
+> +#define PVT_POLL_TIMEOUT	20000
+> +#define PVT_H_CONST		100000
+> +#define PVT_CAL5_CONST		2047
+> +#define PVT_G_CONST		40000
+> +#define PVT_CONV_BITS		10
+> +#define PVT_N_CONST		90
+> +#define PVT_R_CONST		245805
+> +
+> +struct pvt_device {
+> +	struct regmap		*c_map;
+> +	struct regmap		*t_map;
+> +	struct regmap		*p_map;
+> +	struct regmap		*v_map;
+> +	struct clk		*clk;
+> +	struct reset_control	*rst;
+> +	u32			t_num;
+> +	u32			p_num;
+> +	u32			v_num;
+> +	u32			ip_freq;
+> +	u8			*vm_idx;
+> +	struct mutex		lock; /* lock to protect register */
+> +};
+> +
+> +static umode_t pvt_is_visible(const void *data, enum hwmon_sensor_types type,
+> +			      u32 attr, int channel)
+> +{
+> +	switch (type) {
+> +	case hwmon_temp:
+> +		if (attr == hwmon_temp_input)
+> +			return 0444;
+> +		else
+> +			return 0;
+> +	case hwmon_in:
+> +		if (attr == hwmon_in_input)
+> +			return 0444;
+> +		else
+> +			return 0;
+> +	default:
+> +		return 0;
+> +	}
+> +}
+> +
+> +static int pvt_read_temp(struct device *dev, u32 attr, int channel, long *val)
+> +{
+> +	struct pvt_device *pvt = dev_get_drvdata(dev);
+> +	struct regmap *t_map = pvt->t_map;
+> +	u32 stat, nbs;
+> +	int ret;
+> +	u64 tmp;
+> +
+> +	if (channel >= pvt->t_num)
+> +		return -EINVAL;
+> +
+> +	switch (attr) {
+> +	case hwmon_temp_input:
+> +		mutex_lock(&pvt->lock);
+> +		ret = regmap_read_poll_timeout(t_map, SDIF_DONE(channel),
+> +					       stat, stat & SDIF_SMPL_DONE,
+> +					       PVT_POLL_DELAY_US,
+> +					       PVT_POLL_TIMEOUT);
+> +		if (ret) {
+> +			mutex_unlock(&pvt->lock);
+> +			return ret;
+> +		}
+> +
+> +		regmap_read(t_map, SDIF_DATA(channel), &nbs);
+> +		nbs &= SAMPLE_DATA_MSK;
+> +		mutex_unlock(&pvt->lock);
+> +
+> +		/*
+> +		 * Convert the register value to
+> +		 * degrees centigrade temperature
+> +		 */
+> +		tmp = nbs * PVT_H_CONST;
+> +		do_div(tmp, PVT_CAL5_CONST);
+> +		*val = tmp - PVT_G_CONST - pvt->ip_freq;
+> +
+> +		return 0;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static int pvt_read_in(struct device *dev, u32 attr, int channel, long *val)
+> +{
+> +	struct pvt_device *pvt = dev_get_drvdata(dev);
+> +	struct regmap *v_map = pvt->v_map;
+> +	u32 n, stat;
+> +	u8 vm_idx;
+> +	int ret;
+> +
+> +	if (channel >= pvt->v_num)
+> +		return -EINVAL;
+> +
+> +	vm_idx = pvt->vm_idx[channel];
+> +
+> +	switch (attr) {
+> +	case hwmon_in_input:
+> +		mutex_lock(&pvt->lock);
+> +		ret = regmap_read_poll_timeout(v_map, VM_SDIF_DONE(vm_idx),
+> +					       stat, stat & SDIF_SMPL_DONE,
+> +					       PVT_POLL_DELAY_US,
+> +					       PVT_POLL_TIMEOUT);
+> +		if (ret) {
+> +			mutex_unlock(&pvt->lock);
+> +			return ret;
+> +		}
+> +
+> +		regmap_read(v_map, VM_SDIF_DATA(vm_idx), &n);
+> +		n &= SAMPLE_DATA_MSK;
+> +		mutex_unlock(&pvt->lock);
+> +
+> +
+> +		/* Convert the N bitstream count into voltage */
+> +		*val = (PVT_N_CONST * n - PVT_R_CONST) >> PVT_CONV_BITS;
+> +
+> +		return 0;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static int pvt_read(struct device *dev, enum hwmon_sensor_types type,
+> +		    u32 attr, int channel, long *val)
+> +{
+> +	switch (type) {
+> +	case hwmon_temp:
+> +		return pvt_read_temp(dev, attr, channel, val);
+> +	case hwmon_in:
+> +		return pvt_read_in(dev, attr, channel, val);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static const u32 pvt_chip_config[] = {
+> +	HWMON_C_REGISTER_TZ,
+> +	0
+> +};
+> +
+> +static const struct hwmon_channel_info pvt_chip = {
+> +	.type = hwmon_chip,
+> +	.config = pvt_chip_config,
+> +};
+> +
+> +static struct hwmon_channel_info pvt_temp = {
+> +	.type = hwmon_temp,
+> +};
+> +
+> +static struct hwmon_channel_info pvt_in = {
+> +	.type = hwmon_in,
+> +};
+> +
+> +static const struct hwmon_ops pvt_hwmon_ops = {
+> +	.is_visible = pvt_is_visible,
+> +	.read = pvt_read,
+> +};
+> +
+> +static struct hwmon_chip_info pvt_chip_info = {
+> +	.ops = &pvt_hwmon_ops,
+> +};
+> +
+> +static int pvt_init(struct pvt_device *pvt)
+> +{
+> +	u16 sys_freq, key, middle, low = 4, high = 8;
+> +	struct regmap *t_map = pvt->t_map;
+> +	struct regmap *p_map = pvt->p_map;
+> +	struct regmap *v_map = pvt->v_map;
+> +	u32 t_num = pvt->t_num;
+> +	u32 p_num = pvt->p_num;
+> +	u32 v_num = pvt->v_num;
+> +	u32 clk_synth, val;
+> +	int ret;
+> +
+> +	sys_freq = clk_get_rate(pvt->clk) / 1000000;
+> +	while (high >= low) {
+> +		middle = DIV_ROUND_CLOSEST(low + high, 2);
+> +		key = DIV_ROUND_CLOSEST(sys_freq, middle);
+> +		if (key > 514) {
+> +			low = middle + 1;
+> +			continue;
+> +		} else if (key < 2) {
+> +			high = middle - 1;
+> +			continue;
+> +		}
+> +
+> +		break;
+> +	}
+> +
+> +	key = clamp_val(key, 2, 514) - 2;
+> +
+> +	clk_synth = ((key + 1) >> 1) << CLK_SYNTH_LO_SFT |
+> +		    (key >> 1) << CLK_SYNTH_HI_SFT |
+> +		    (key >> 1) << CLK_SYNTH_HOLD_SFT | CLK_SYNTH_EN;
+> +
+> +	pvt->ip_freq = sys_freq * 100 / (key + 2);
+> +
+> +	if (t_num) {
+> +		regmap_write(t_map, SDIF_SMPL_CTRL, 0x0);
+> +		regmap_write(t_map, SDIF_HALT, 0x0);
+> +		regmap_write(t_map, CLK_SYNTH, clk_synth);
+> +		regmap_write(t_map, SDIF_DISABLE, 0);
+> +
+> +		ret = regmap_read_poll_timeout(t_map, SDIF_STAT,
+> +					       val, !(val & SDIF_BUSY),
+> +					       PVT_POLL_DELAY_US,
+> +					       PVT_POLL_TIMEOUT);
+> +		if (ret)
+> +			return ret;
+> +
+> +		val = CFG0_MODE_2 | CFG0_PARALLEL_OUT | CFG0_12_BIT |
+> +		      IP_CFG << SDIF_ADDR_SFT | SDIF_WRN_W | SDIF_PROG;
+> +		regmap_write(t_map, SDIF_W, val);
+> +
+> +		ret = regmap_read_poll_timeout(t_map, SDIF_STAT,
+> +					       val, !(val & SDIF_BUSY),
+> +					       PVT_POLL_DELAY_US,
+> +					       PVT_POLL_TIMEOUT);
+> +		if (ret)
+> +			return ret;
+> +
+> +		val = POWER_DELAY_CYCLE_256 | IP_TMR << SDIF_ADDR_SFT |
+> +			      SDIF_WRN_W | SDIF_PROG;
+> +		regmap_write(t_map, SDIF_W, val);
+> +
+> +		ret = regmap_read_poll_timeout(t_map, SDIF_STAT,
+> +					       val, !(val & SDIF_BUSY),
+> +					       PVT_POLL_DELAY_US,
+> +					       PVT_POLL_TIMEOUT);
+> +		if (ret)
+> +			return ret;
+> +
+> +		val = IP_RST_REL | IP_RUN_CONT | IP_AUTO |
+> +		      IP_CTRL << SDIF_ADDR_SFT |
+> +		      SDIF_WRN_W | SDIF_PROG;
+> +		regmap_write(t_map, SDIF_W, val);
+> +	}
+> +
+> +	if (p_num) {
+> +		regmap_write(p_map, SDIF_HALT, 0x0);
+> +		regmap_write(p_map, SDIF_DISABLE, GENMASK(p_num - 1, 0));
+> +		regmap_write(p_map, CLK_SYNTH, clk_synth);
+> +	}
+> +
+> +	if (v_num) {
+> +		regmap_write(v_map, SDIF_SMPL_CTRL, 0x0);
+> +		regmap_write(v_map, SDIF_HALT, 0x0);
+> +		regmap_write(v_map, CLK_SYNTH, clk_synth);
+> +		regmap_write(v_map, SDIF_DISABLE, 0);
+> +
+> +		ret = regmap_read_poll_timeout(v_map, SDIF_STAT,
+> +					       val, !(val & SDIF_BUSY),
+> +					       PVT_POLL_DELAY_US,
+> +					       PVT_POLL_TIMEOUT);
+> +		if (ret)
+> +			return ret;
+> +
+> +		val = CFG1_VOL_MEAS_MODE | CFG1_PARALLEL_OUT |
+> +		      CFG1_14_BIT | IP_CFG << SDIF_ADDR_SFT |
+> +		      SDIF_WRN_W | SDIF_PROG;
+> +		regmap_write(v_map, SDIF_W, val);
+> +
+> +		ret = regmap_read_poll_timeout(v_map, SDIF_STAT,
+> +					       val, !(val & SDIF_BUSY),
+> +					       PVT_POLL_DELAY_US,
+> +					       PVT_POLL_TIMEOUT);
+> +		if (ret)
+> +			return ret;
+> +
+> +		val = POWER_DELAY_CYCLE_64 | IP_TMR << SDIF_ADDR_SFT |
+> +		      SDIF_WRN_W | SDIF_PROG;
+> +		regmap_write(v_map, SDIF_W, val);
+> +
+> +		ret = regmap_read_poll_timeout(v_map, SDIF_STAT,
+> +					       val, !(val & SDIF_BUSY),
+> +					       PVT_POLL_DELAY_US,
+> +					       PVT_POLL_TIMEOUT);
+> +		if (ret)
+> +			return ret;
+> +
+> +		val = IP_RST_REL | IP_RUN_CONT | IP_AUTO | IP_VM_MODE |
+> +		      IP_CTRL << SDIF_ADDR_SFT |
+> +		      SDIF_WRN_W | SDIF_PROG;
+> +		regmap_write(v_map, SDIF_W, val);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static struct regmap_config pvt_regmap_config = {
+> +	.reg_bits = 32,
+> +	.reg_stride = 4,
+> +	.val_bits = 32,
+> +};
+> +
+> +static int pvt_get_regmap(struct platform_device *pdev, char *reg_name)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct pvt_device *pvt = platform_get_drvdata(pdev);
+
+I am quite at loss how this is supposed to work. Platform driver
+data is not initialized with a pointer to struct pvt_device at this point.
+How does this code not crash ? What am I missing ?
+
+> +	struct regmap **reg_map;
+> +	void __iomem *io_base;
+> +	struct resource *res;
+> +
+> +	if (!strcmp(reg_name, "common"))
+> +		reg_map = &pvt->c_map;
+> +	else if (!strcmp(reg_name, "ts"))
+> +		reg_map = &pvt->t_map;
+> +	else if (!strcmp(reg_name, "pd"))
+> +		reg_map = &pvt->p_map;
+> +	else if (!strcmp(reg_name, "vm"))
+> +		reg_map = &pvt->v_map;
+> +	else
+> +		return -EINVAL;
+> +
+> +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, reg_name);
+> +	io_base = devm_ioremap_resource(dev, res);
+> +	if (IS_ERR(io_base))
+> +		return PTR_ERR(io_base);
+> +
+> +	pvt_regmap_config.name = reg_name;
+> +	*reg_map = devm_regmap_init_mmio(dev, io_base, &pvt_regmap_config);
+> +	if (IS_ERR(*reg_map)) {
+> +		dev_err(dev, "failed to init register map\n");
+> +		return PTR_ERR(*reg_map);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static void pvt_clk_disable(void *data)
+> +{
+> +	struct pvt_device *pvt = data;
+> +
+> +	clk_disable_unprepare(pvt->clk);
+> +}
+> +
+> +static int pvt_clk_enable(struct device *dev, struct pvt_device *pvt)
+> +{
+> +	int ret;
+> +
+> +	ret = clk_prepare_enable(pvt->clk);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return devm_add_action_or_reset(dev, pvt_clk_disable, pvt);
+> +}
+> +
+> +static void pvt_reset_control_assert(void *data)
+> +{
+> +	struct pvt_device *pvt = data;
+> +
+> +	reset_control_assert(pvt->rst);
+> +}
+> +
+> +static int pvt_reset_control_deassert(struct device *dev, struct pvt_device *pvt)
+> +{
+> +	int ret;
+> +
+> +	ret = reset_control_deassert(pvt->rst);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return devm_add_action_or_reset(dev, pvt_reset_control_assert, pvt);
+> +}
+> +
+> +static int mr75203_probe(struct platform_device *pdev)
+> +{
+> +	const struct hwmon_channel_info **pvt_info;
+> +	u32 ts_num, vm_num, pd_num, val, index, i;
+> +	struct device *dev = &pdev->dev;
+> +	u32 *temp_config, *in_config;
+> +	struct device *hwmon_dev;
+> +	struct pvt_device *pvt;
+> +	int ret;
+> +
+> +	pvt = devm_kzalloc(dev, sizeof(*pvt), GFP_KERNEL);
+> +	if (!pvt)
+> +		return -ENOMEM;
+> +
+> +	ret = pvt_get_regmap(pdev, "common");
+> +	if (ret)
+> +		return ret;
+> +
+> +	pvt->rst = devm_reset_control_get(dev, NULL);
+> +	if (IS_ERR(pvt->rst))
+> +		return dev_err_probe(dev, PTR_ERR(pvt->rst),
+> +				     "failed to get reset control\n");
+> +
+> +	ret = pvt_reset_control_deassert(dev, pvt);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "cannot deassert reset control\n");
+> +
+> +	pvt->clk = devm_clk_get(dev, NULL);
+> +	if (IS_ERR(pvt->clk))
+> +		return dev_err_probe(dev, PTR_ERR(pvt->clk), "failed to get clock\n");
+> +
+> +	ret = pvt_clk_enable(dev, pvt);
+> +	if (ret) {
+> +		dev_err(dev, "failed to enable clock\n");
+> +		return ret;
+> +	}
+> +
+> +	regmap_read(pvt->c_map, PVT_IP_CONFIG, &val);
+> +	ts_num = (val & TS_NUM_MSK) >> TS_NUM_SFT;
+> +	pd_num = (val & PD_NUM_MSK) >> PD_NUM_SFT;
+> +	vm_num = (val & VM_NUM_MSK) >> VM_NUM_SFT;
+> +	pvt->t_num = ts_num;
+> +	pvt->p_num = pd_num;
+> +	pvt->v_num = vm_num;
+> +	val = 0;
+> +	if (ts_num)
+> +		val++;
+> +	if (vm_num)
+> +		val++;
+> +	if (!val && !pd_num) {
+> +		dev_err(dev, "None of TS, VM or PD configured\n");
+> +		return -EINVAL;
+> +	}
+
+If ts_num and vm_num are both 0, the driver doesn't create any attributes and
+would just sit there. What would be the point of that ?
+
+> +
+> +	pvt_info = devm_kcalloc(dev, val + 2, sizeof(*pvt_info), GFP_KERNEL);
+> +	if (!pvt_info)
+> +		return -ENOMEM;
+> +	pvt_info[0] = &pvt_chip;
+> +	index = 1;
+> +
+> +	if (ts_num) {
+> +		ret = pvt_get_regmap(pdev, "ts");
+> +		if (ret)
+> +			return ret;
+> +
+> +		temp_config = devm_kcalloc(dev, ts_num + 1,
+> +					   sizeof(*temp_config), GFP_KERNEL);
+> +		if (!temp_config)
+> +			return -ENOMEM;
+> +
+> +		for (i = 0; i < ts_num; i++)
+> +			temp_config[i] = HWMON_T_INPUT;
+> +
+> +		temp_config[ts_num] = 0;
+> +		pvt_temp.config = temp_config;
+> +
+> +		pvt_info[index++] = &pvt_temp;
+> +	}
+> +
+> +	if (pd_num) {
+> +		ret = pvt_get_regmap(pdev, "pd");
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	if (vm_num) {
+> +		u32 num = vm_num;
+> +
+> +		ret = pvt_get_regmap(pdev, "vm");
+> +		if (ret)
+> +			return ret;
+> +
+> +		pvt->vm_idx = devm_kcalloc(dev, vm_num, sizeof(*pvt->vm_idx),
+> +					   GFP_KERNEL);
+> +		if (!pvt->vm_idx)
+> +			return -ENOMEM;
+> +
+> +		for (i = 0; i < vm_num; i++)
+> +			pvt->vm_idx[i] = i;
+> +
+> +		ret = of_property_read_u8_array(dev->of_node, "vm-map",
+> +						pvt->vm_idx, vm_num);
+> +
+> +		if (!ret)
+> +			for (i = 0; i < vm_num; i++)
+> +				if (pvt->vm_idx[i] >= vm_num ||
+> +				    pvt->vm_idx[i] == 0xff) {
+> +					num = i;
+> +					break;
+> +				}
+> +
+> +		in_config = devm_kcalloc(dev, num + 1,
+> +					 sizeof(*in_config), GFP_KERNEL);
+> +		if (!in_config)
+> +			return -ENOMEM;
+> +
+> +		for (i = 0; i < num; i++)
+> +			in_config[i] = HWMON_I_INPUT;
+> +
+> +		in_config[num] = 0;
+> +		pvt_in.config = in_config;
+> +
+> +		pvt_info[index++] = &pvt_in;
+> +	}
+> +
+> +	ret = pvt_init(pvt);
+> +	if (ret) {
+> +		dev_err(dev, "failed to init pvt: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	mutex_init(&pvt->lock);
+> +
+> +	pvt_info[index] = NULL;
+
+Unnecessary.
+
+> +	pvt_chip_info.info = pvt_info;
+> +	hwmon_dev = devm_hwmon_device_register_with_info(dev, "pvt",
+> +							 pvt,
+> +							 &pvt_chip_info,
+> +							 NULL);
+> +
+> +	platform_set_drvdata(pdev, pvt);
+
+Again, I fail to understand how this is supposed to work.
+
+> +	return PTR_ERR_OR_ZERO(hwmon_dev);
+> +}
+> +
+> +static const struct of_device_id moortec_pvt_of_match[] = {
+> +	{ .compatible = "moortec,mr75203" },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, moortec_pvt_of_match);
+> +
+> +static struct platform_driver moortec_pvt_driver = {
+> +	.driver = {
+> +		.name = "moortec-pvt",
+> +		.of_match_table = moortec_pvt_of_match,
+> +	},
+> +	.probe = mr75203_probe,
+> +};
+> +module_platform_driver(moortec_pvt_driver);
 > 
-
-You could split n3000bmc_sensor_tbl[] into one table per sensor type,
-and use a 1:1 index mapping. enum m10bmc_channel_type  is unnecessary
-anyway, you could have used hwmon types directly. And with one table
-per type you would not even need that.
-
-> And there is another board d5005 yet to be supported, with a different
-> sensor set.
-> 
-> So I think it may be easier we just fill one table according to SPEC, and
-> dynamically creates the hwmon_channel_info.
-> 
-
-I disagree. After splitting the table into one table per sensor type,
-the rest of the implementation becomes effectively trivial. The dynamic
-implementation is much more complex than it had to be and adds a lot
-of code which is difficult to understand and maintain.
-
-> Of course a helper program could generate the tables instead of the
-> manual work.
-> 
-Exactly. Though I really have to say that doint it manually, again
-after splitting the table, becomes quite straightforward.
-
-> I could change to static hwmon_channel_info according to your comments.
-> 
-Please do.
-
-Thanks,
-Guenter
-
-> Thanks,
-> Yilun.
-> 
->>> +
->>> +static int m10bmc_hwmon_init(struct device *dev, struct intel_m10bmc *m10bmc,
->>> +			     const char *dev_name,
->>> +			     struct m10bmc_sdata *data_tbl)
->>> +{
->>> +	int num_ch[M10BMC_CHT_MAX] = { 0 }, ret, i, j;
->>> +	struct m10bmc_sdata *data = data_tbl;
->>> +	struct device *hwmon_dev;
->>> +	struct m10bmc_hwmon *hw;
->>> +
->>> +	hw = devm_kzalloc(dev, sizeof(*hw), GFP_KERNEL);
->>> +	if (!hw)
->>> +		return -ENOMEM;
->>> +
->>> +	hw->dev = dev;
->>> +	hw->m10bmc = m10bmc;
->>> +	hw->data_tbl = data_tbl;
->>> +
->>> +	while (data->type != M10BMC_CHT_MAX) {
->>> +		if (data->type > M10BMC_CHT_MAX)
->>> +			return -EINVAL;
->>> +
->>> +		++num_ch[data->type];
->>> +		++data;
->>> +	}
->>> +
->>> +	for (i = 0; i < M10BMC_CHT_MAX; i++) {
->>> +		if (!num_ch[i])
->>> +			continue;
->>> +
->>> +		ret = m10bmc_malloc_channels(dev, &hw->chgs[i],
->>> +					     num_ch[i]);
->>> +		if (ret)
->>> +			return ret;
->>> +
->>> +		hw->chgs[i].info.type = ctype_to_htype(i);
->>> +	}
->>> +
->>> +	data = data_tbl;
->>> +	memset(&num_ch, 0, sizeof(num_ch));
->>> +	while (data->type != M10BMC_CHT_MAX) {
->>> +		switch (data->type) {
->>> +		case M10BMC_CHT_TEMP:
->>> +			m10bmc_fill_temp_channel(hw, num_ch[data->type],
->>> +						 data);
->>> +			break;
->>> +		case M10BMC_CHT_IN:
->>> +			m10bmc_fill_in_channel(hw, num_ch[data->type],
->>> +					       data);
->>> +			break;
->>> +		case M10BMC_CHT_CURR:
->>> +			m10bmc_fill_curr_channel(hw, num_ch[data->type],
->>> +						 data);
->>> +			break;
->>> +		case M10BMC_CHT_POWER:
->>> +			m10bmc_fill_power_channel(hw, num_ch[data->type],
->>> +						  data);
->>> +			break;
->>> +		}
->>> +
->>> +		++num_ch[data->type];
->>> +		++data;
->>> +	}
->>> +
->>> +	for (i = 0, j = 0; i < M10BMC_CHT_MAX; i++) {
->>> +		if (num_ch[i])
->>> +			hw->info[j++] = &hw->chgs[i].info;
->>> +	}
->>> +
->>> +	hw->chip.info = hw->info;
->>> +	hw->chip.ops = &m10bmc_hwmon_ops;
->>> +
->>> +	hw->hw_name = devm_kstrdup(dev, dev_name, GFP_KERNEL);
->>> +	if (!hw->hw_name)
->>> +		return -ENOMEM;
->>> +
->>> +	for (i = 0; hw->hw_name[i]; i++)
->>> +		if (hwmon_is_bad_char(hw->hw_name[i]))
->>> +			hw->hw_name[i] = '_';
->>> +
->>> +	hwmon_dev = devm_hwmon_device_register_with_info(dev, hw->hw_name,
->>> +							 hw, &hw->chip, NULL);
->>> +	return PTR_ERR_OR_ZERO(hwmon_dev);
->>> +}
->>> +
->>> +static int m10bmc_hwmon_probe(struct platform_device *pdev)
->>> +{
->>> +	const struct platform_device_id *id = platform_get_device_id(pdev);
->>> +	struct intel_m10bmc *m10bmc = dev_get_drvdata(pdev->dev.parent);
->>> +
->>> +	return m10bmc_hwmon_init(&pdev->dev, m10bmc, id->name,
->>> +				 (struct m10bmc_sdata *)id->driver_data);
->>> +}
->>> +
->>> +static const struct platform_device_id intel_m10bmc_hwmon_ids[] = {
->>> +	{
->>> +		.name = "n3000bmc-hwmon",
->>> +		.driver_data = (unsigned long)&n3000bmc_sensor_tbl,
->>> +	},
->>> +	{ }
->>> +};
->>> +
->>> +static struct platform_driver intel_m10bmc_hwmon_driver = {
->>> +	.probe = m10bmc_hwmon_probe,
->>> +	.driver = {
->>> +		.name = "intel-m10-bmc-hwmon",
->>> +	},
->>> +	.id_table = intel_m10bmc_hwmon_ids,
->>> +};
->>> +module_platform_driver(intel_m10bmc_hwmon_driver);
->>> +
->>> +MODULE_DEVICE_TABLE(platform, intel_m10bmc_hwmon_ids);
->>> +MODULE_AUTHOR("Intel Corporation");
->>> +MODULE_DESCRIPTION("Intel MAX 10 BMC hardware monitor");
->>> +MODULE_LICENSE("GPL");
->>>
 
