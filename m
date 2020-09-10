@@ -2,71 +2,74 @@ Return-Path: <SRS0=6Npe=CT=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 693B3C433E2
-	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Sep 2020 19:07:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52F93C433E2
+	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Sep 2020 21:37:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 251E3207DE
-	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Sep 2020 19:07:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 16516208E4
+	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Sep 2020 21:37:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oxG1nASq"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jQ+sIiio"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727070AbgIJTHq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 10 Sep 2020 15:07:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42888 "EHLO
+        id S1727027AbgIJVhl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 10 Sep 2020 17:37:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725945AbgIJTFU (ORCPT
+        with ESMTP id S1730650AbgIJNdX (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 10 Sep 2020 15:05:20 -0400
-Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34FD3C061786;
-        Thu, 10 Sep 2020 12:05:20 -0700 (PDT)
-Received: by mail-ot1-x342.google.com with SMTP id g96so6255369otb.12;
-        Thu, 10 Sep 2020 12:05:20 -0700 (PDT)
+        Thu, 10 Sep 2020 09:33:23 -0400
+Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72B7EC061756;
+        Thu, 10 Sep 2020 06:32:13 -0700 (PDT)
+Received: by mail-oi1-x241.google.com with SMTP id u126so5861841oif.13;
+        Thu, 10 Sep 2020 06:32:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:references:from:autocrypt:message-id:date
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=X2a+io7eZCknDRboBJU+6Va+kAjyZl5v5V2EWH90Jks=;
-        b=oxG1nASqkwFkAsl7zxPL5FUPHjiePdxFCSNI5jjvY8hDwhIXPK5ltJCAZw4oel8TO4
-         yfVuXjv7fGkwkFDIgOF2b/vGDKQp4L3u8B/jdsM621QnCVyZhezagnXELLkifjDAxvC+
-         IrgRAD4f25VHYDD5KUFUNpXGYdGFxBGp6Mv/mPnP+pnH+41ECSzlfClM8lJepxY2Lt6X
-         4kDFdbqBlT6b107gNm5CfKedUNFr8STdA6zFwhRbdjKjcUz/4l/x+3fTMLJck3RE9YXX
-         7Xps/bU9iw0LeNntos72SxptfGySJUoYicUWJskvB3Q80rnxKEQOIbqaLB+BOiFHyuUc
-         B3rA==
+        bh=LGZhpI1u0iTKM9cmTm80fwqZ2nxu550/OcLkA47cd4c=;
+        b=jQ+sIiio9/mNvQNxXrAHxqGLToGgxJ0q59MH0rt8EQ+5rDdl9QDgaqyjOS0UemAOOv
+         quejELK95RU6jXlfTuEJvg/thwd1tnSrgvYqP/Zv7HZUVLgHhNu/UnIVimHKgVb/Toy/
+         ARLDq3GzpX+W/YxKmn2gTotCtahRhLt+oJsTtuAJuc98BrV30wadsVjMNJlheJdapiIj
+         5QiiE+TjsBVxnSWkccDA8jSGX1c8DSB08MNCz+1oEF/jwABMV/JYYnXkuPqAa+Go4Fka
+         MISoonTWHavnjh6ckKh8mH3o0c3ixSAApXJA2C/ghuwXoHl9jOI8KSmf0aUR0X/TNulx
+         dJxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:references:from:autocrypt
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=X2a+io7eZCknDRboBJU+6Va+kAjyZl5v5V2EWH90Jks=;
-        b=HDwLuuHvSk8dGDYuiaJlwvosp9C9ul9eSHnbS/5UdLOYIYSwGMSna+lAOFGqvBQV9Z
-         aeTVPvyvZuTASAaDB6v6X2VLRk71ep9uIxLsTdRMgSLfNBMaCjoD117SJDPqm/KIs71e
-         JNuFUr/qzZJI2EM5q8nYnVQWOx40wnERcSBBwHFgV0Zq87LYmArdefCKGcvigxmpd8/U
-         XsI0TlCpw+Y/QqDMF1DQIrr8dIHtmV12RX7kuhPA52YQa/nSOZKNIPXKE/dhQvOHw8QS
-         Scz9ceLz6d1Go/O1Td54yDfHNFZa/2PZ+EP+taJVJ1WH3tMR9AzBY9Om4+pZLMrbUI5s
-         hFuA==
-X-Gm-Message-State: AOAM5326GZTpt+1LlQ2c9HYqFLZ2VAzvKc01aKGchqzg/4LKMdXPgPNx
-        U+Q7RHoe5pB38BMfN0ZveGtbTbmc6MI=
-X-Google-Smtp-Source: ABdhPJwQFtTbNRNiDxefnIREi0s5V5RCZ1ITrZYWQ3spoxdvQ8bPF6YObVqSBmrwLJZ3rbe4Q/VR5g==
-X-Received: by 2002:a9d:6d1a:: with SMTP id o26mr5066666otp.52.1599764719517;
-        Thu, 10 Sep 2020 12:05:19 -0700 (PDT)
+        bh=LGZhpI1u0iTKM9cmTm80fwqZ2nxu550/OcLkA47cd4c=;
+        b=oASE7t6cNbnH4tLCB7ASxdHqcQGrY3J0BmjKcSQDNilh5EF5ZH0WyxwsaTMdxfLUyj
+         NPD8fYhtM6y2YaLgUw6GKzvH6g3QmgDCKvKoE3izPeAXrascetBD4Vgxn9ZfE+YEAKfU
+         UImaAzQYmbC/QNrTDYF8McFOV+I1lYb1lz7gn8uZBsvI4baW99+TvmdkG/FZBUBb8f1b
+         FXmHZKJxN6tQMkoKmrnyI9XqSja/DLAHISZtUvWJl99Ti5eXOewj6s2nnIitOdoSHtcs
+         EgB6v8gMo2JFomPJZL/iRxi30q2QsTeqhYEgJHI7ZJL9RKjoR2aZcsThGoW/0tcH1Q1A
+         Cczw==
+X-Gm-Message-State: AOAM530WBd0ARU4uwGNKYxjNNrjn8+hGtvgwRRa4Qno5Q9/2cPI3Mr04
+        H5s9TABCEjm95pHbwBguOetC1VR5zvA=
+X-Google-Smtp-Source: ABdhPJzVYL2nk8PW9W25kgnQjs//6rdhzV9Y58aVZw9/t8k4GUJWBC+sUXo+/dSXbufiq5FXZ3gZdQ==
+X-Received: by 2002:a05:6808:2c5:: with SMTP id a5mr48077oid.123.1599744732547;
+        Thu, 10 Sep 2020 06:32:12 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j37sm1060521ooi.2.2020.09.10.12.05.17
+        by smtp.gmail.com with ESMTPSA id n10sm925780ooj.19.2020.09.10.06.32.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Sep 2020 12:05:18 -0700 (PDT)
-Subject: Re: [PATCH] hwmon: pmbus: max20730: adjust the vout reading given
- voltage divider
-To:     Chu Lin <linchuyuan@google.com>, jdelvare@suse.com,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        qiongwang@google.com, zhongqil@google.com, jasonling@google.com,
-        belgaied@google.com
-References: <20200910170821.1988467-1-linchuyuan@google.com>
+        Thu, 10 Sep 2020 06:32:11 -0700 (PDT)
+Subject: Re: [PATCH] hwmon: (pmbus) Expose PEC debugfs attribute
+To:     Andrew Jeffery <andrew@aj.id.au>,
+        Dan Carpenter <dan.carpenter@oracle.com>, kbuild@lists.01.org,
+        linux-hwmon@vger.kernel.org
+Cc:     kbuild test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        Jean Delvare <jdelvare@suse.com>, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+References: <20200910100516.GE12635@kadam>
+ <92b193b6-7912-1823-ca38-58cf208e68c4@roeck-us.net>
+ <1e1dbb10-1628-4498-9ce2-8c4ce79162c8@www.fastmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -111,93 +114,85 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <95072a4c-0827-8f82-b977-e66bf61ef536@roeck-us.net>
-Date:   Thu, 10 Sep 2020 12:05:16 -0700
+Message-ID: <5f1dc45b-433c-4f07-b1cb-1afff985e852@roeck-us.net>
+Date:   Thu, 10 Sep 2020 06:32:10 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200910170821.1988467-1-linchuyuan@google.com>
+In-Reply-To: <1e1dbb10-1628-4498-9ce2-8c4ce79162c8@www.fastmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 9/10/20 10:08 AM, Chu Lin wrote:
-> Problem:
-> We use voltage dividers so that the voltage presented at the voltage
-> sense pins is confusing. We might need to convert these readings to more
-> meaningful readings given the voltage divider.
+On 9/10/20 3:51 AM, Andrew Jeffery wrote:
 > 
-> Solution:
-> Read the voltage divider resistance from dts and convert the voltage
-> reading to a more meaningful reading.
 > 
-> Testing:
-> max20730 with voltage divider
+> On Thu, 10 Sep 2020, at 20:04, Guenter Roeck wrote:
+>> On 9/10/20 3:05 AM, Dan Carpenter wrote:
+>>> Hi Andrew,
+>>>
+>>> url:    https://github.com/0day-ci/linux/commits/Andrew-Jeffery/hwmon-pmbus-Expose-PEC-debugfs-attribute/20200910-010642
+>>> base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+>>> config: x86_64-randconfig-m001-20200909 (attached as .config)
+>>> compiler: gcc-9 (Debian 9.3.0-15) 9.3.0
+>>>
+>>> If you fix the issue, kindly add following tag as appropriate
+>>> Reported-by: kernel test robot <lkp@intel.com>
+>>> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+>>>
+>>> smatch warnings:
+>>> drivers/hwmon/pmbus/pmbus_core.c:2415 pmbus_debugfs_ops_pec_open() warn: '0x' prefix is confusing together with '%1llu' specifier
+>>>
+>>> # https://github.com/0day-ci/linux/commit/705b8b5588d4102256d0954086ed16c9bdf9804f
+>>> git remote add linux-review https://github.com/0day-ci/linux
+>>> git fetch --no-tags linux-review Andrew-Jeffery/hwmon-pmbus-Expose-PEC-debugfs-attribute/20200910-010642
+>>> git checkout 705b8b5588d4102256d0954086ed16c9bdf9804f
+>>> vim +2415 drivers/hwmon/pmbus/pmbus_core.c
+>>>
+>>> 705b8b5588d410 Andrew Jeffery 2020-09-09  2391  static int pmbus_debugfs_set_pec(void *data, u64 val)
+>>> 705b8b5588d410 Andrew Jeffery 2020-09-09  2392  {
+>>> 705b8b5588d410 Andrew Jeffery 2020-09-09  2393  	int rc;
+>>> 705b8b5588d410 Andrew Jeffery 2020-09-09  2394  	struct i2c_client *client = data;
+>>> 705b8b5588d410 Andrew Jeffery 2020-09-09  2395  
+>>> 705b8b5588d410 Andrew Jeffery 2020-09-09  2396  	if (!val) {
+>>> 705b8b5588d410 Andrew Jeffery 2020-09-09  2397  		client->flags &= ~I2C_CLIENT_PEC;
+>>> 705b8b5588d410 Andrew Jeffery 2020-09-09  2398  		return 0;
+>>> 705b8b5588d410 Andrew Jeffery 2020-09-09  2399  	}
+>>> 705b8b5588d410 Andrew Jeffery 2020-09-09  2400  
+>>> 705b8b5588d410 Andrew Jeffery 2020-09-09  2401  	if (val != 1)
+>>> 705b8b5588d410 Andrew Jeffery 2020-09-09  2402  		return -EINVAL;
+>>> 705b8b5588d410 Andrew Jeffery 2020-09-09  2403  
+>>> 705b8b5588d410 Andrew Jeffery 2020-09-09  2404  	rc = i2c_smbus_read_byte_data(client, PMBUS_CAPABILITY);
+>>> 705b8b5588d410 Andrew Jeffery 2020-09-09  2405  	if (rc < 0)
+>>> 705b8b5588d410 Andrew Jeffery 2020-09-09  2406  		return rc;
+>>> 705b8b5588d410 Andrew Jeffery 2020-09-09  2407  
+>>> 705b8b5588d410 Andrew Jeffery 2020-09-09  2408  	if (!(rc & PB_CAPABILITY_ERROR_CHECK))
+>>> 705b8b5588d410 Andrew Jeffery 2020-09-09  2409  		return -ENOTSUPP;
+>>> 705b8b5588d410 Andrew Jeffery 2020-09-09  2410  
+>>> 705b8b5588d410 Andrew Jeffery 2020-09-09  2411  	client->flags |= I2C_CLIENT_PEC;
+>>> 705b8b5588d410 Andrew Jeffery 2020-09-09  2412  
+>>> 705b8b5588d410 Andrew Jeffery 2020-09-09  2413  	return 0;
+>>> 705b8b5588d410 Andrew Jeffery 2020-09-09  2414  }
+>>> 705b8b5588d410 Andrew Jeffery 2020-09-09 @2415  DEFINE_DEBUGFS_ATTRIBUTE(pmbus_debugfs_ops_pec, pmbus_debugfs_get_pec,
+>>> 705b8b5588d410 Andrew Jeffery 2020-09-09  2416  			 pmbus_debugfs_set_pec, "0x%1llu\n");
+>>>                                                                                                  ^^^^^^^
+>>> Was the 1 intentional?  Anyway, you probably want to remove the 0x so
+>>> it doesn't look like hex.
+>>>
+>>
+>> Nice catch; I didn't notice the 1. It is still there in v2, but it does 
+>> seem quite useless.
 > 
-> Signed-off-by: Chu Lin <linchuyuan@google.com>
-> ---
->  drivers/hwmon/pmbus/max20730.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
+> Do you want to just rebase it out, or would you like me to send
+> a patch removing the stray 1 from v2?
 > 
-> diff --git a/drivers/hwmon/pmbus/max20730.c b/drivers/hwmon/pmbus/max20730.c
-> index c0bb05487e0e..4b56810fa894 100644
-> --- a/drivers/hwmon/pmbus/max20730.c
-> +++ b/drivers/hwmon/pmbus/max20730.c
-> @@ -29,6 +29,7 @@ struct max20730_data {
->  	struct pmbus_driver_info info;
->  	struct mutex lock;	/* Used to protect against parallel writes */
->  	u16 mfr_devset1;
-> +	u32 vout_voltage_divider[2];
->  };
->  
->  #define to_max20730_data(x)  container_of(x, struct max20730_data, info)
-> @@ -111,6 +112,12 @@ static int max20730_read_word_data(struct i2c_client *client, int page,
->  		max_c = max_current[data->id][(data->mfr_devset1 >> 5) & 0x3];
->  		ret = val_to_direct(max_c, PSC_CURRENT_OUT, info);
->  		break;
-> +	case PMBUS_READ_VOUT:
-> +		ret = pmbus_read_word_data(client, page, phase, reg);
 
-		if (ret < 0)
-			return ret;
+I'll rebase it.
 
-> +		if (data->vout_voltage_divider[0] && data->vout_voltage_divider[1])
-> +			ret = DIV_ROUND_CLOSEST(ret * data->vout_voltage_divider[1],
-> +						data->vout_voltage_divider[0]);
-
-With no range checks, ret * data->vout_voltage_divider[1] can
-easily overflow if vout_voltage_divider[] is larger than 0xffff.
-Also, the pmbus core does not expect register values larger than 0xffff
-(it typecasts the returned value explicitly to u16).
-
-[ Grumble. The PMBus specification has VOUT_SCALE commands to handle
-  this situation. It is quite annoying that this chip does not support it. ]
-
+Thanks,
 Guenter
-
-> +		break;
->  	default:
->  		ret = -ENODATA;
->  		break;
-> @@ -329,6 +336,15 @@ static int max20730_probe(struct i2c_client *client,
->  	data->id = chip_id;
->  	mutex_init(&data->lock);
->  	memcpy(&data->info, &max20730_info[chip_id], sizeof(data->info));
-> +	if (of_property_read_u32_array(client->dev.of_node, "vout-voltage-divider",
-> +				       data->vout_voltage_divider,
-> +				       ARRAY_SIZE(data->vout_voltage_divider)) != 0)
-> +		memset(data->vout_voltage_divider, 0, sizeof(data->vout_voltage_divider));
-> +	if (data->vout_voltage_divider[1] < data->vout_voltage_divider[0]) {
-> +		dev_err(dev,
-> +			"The total resistance of voltage divider is less than output resistance\n");
-> +		return -ENODEV;
-> +	}
->  
->  	ret = i2c_smbus_read_word_data(client, MAX20730_MFR_DEVSET1);
->  	if (ret < 0)
-> 
 
