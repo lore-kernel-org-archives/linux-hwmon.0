@@ -2,93 +2,156 @@ Return-Path: <SRS0=6Npe=CT=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4DA7C43461
-	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Sep 2020 02:01:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9412C43461
+	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Sep 2020 02:15:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9378C20732
-	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Sep 2020 02:01:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 73F2A207DE
+	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Sep 2020 02:15:10 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=aj.id.au header.i=@aj.id.au header.b="Scp8KEq5";
+	dkim=temperror (0-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="C8wmE0Ze"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730166AbgIJCBP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 9 Sep 2020 22:01:15 -0400
-Received: from mga07.intel.com ([134.134.136.100]:48226 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730168AbgIJBz2 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 9 Sep 2020 21:55:28 -0400
-IronPort-SDR: UBjyZnaigtKh3SFRnmBWkZhiaFa8iNsLYRoBjmlkC/ciRD/UsfRkjMx4+vPxfgr7kTHl3roQeO
- uyQBqxhfYHzg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9739"; a="222629768"
-X-IronPort-AV: E=Sophos;i="5.76,410,1592895600"; 
-   d="scan'208";a="222629768"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2020 15:46:16 -0700
-IronPort-SDR: FK1JiY7CqZ8OSgjQCphzeYsOxEkpiYaRSrhC0H+0mSPCcrkwMuY6b4+qNBbcEDxAeGS4GFuAKv
- vL0VllT++24w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,410,1592895600"; 
-   d="scan'208";a="344051183"
-Received: from lkp-server01.sh.intel.com (HELO 12ff3cf3f2e9) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 09 Sep 2020 15:46:14 -0700
-Received: from kbuild by 12ff3cf3f2e9 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kG8qz-0000cL-Vz; Wed, 09 Sep 2020 22:46:13 +0000
-Date:   Thu, 10 Sep 2020 06:45:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     kbuild-all@lists.01.org, Clemens Ladisch <clemens@ladisch.de>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        id S1728663AbgIJCPH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 9 Sep 2020 22:15:07 -0400
+Received: from out5-smtp.messagingengine.com ([66.111.4.29]:39691 "EHLO
+        out5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730469AbgIJCNA (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 9 Sep 2020 22:13:00 -0400
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id A4DA95C00C9;
+        Wed,  9 Sep 2020 22:12:56 -0400 (EDT)
+Received: from imap2 ([10.202.2.52])
+  by compute3.internal (MEProxy); Wed, 09 Sep 2020 22:12:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=
+        mime-version:message-id:in-reply-to:references:date:from:to:cc
+        :subject:content-type; s=fm3; bh=HckUuM4up1+hrv2p57Agpc2r033Xop1
+        H6JnAlq3zBCU=; b=Scp8KEq5+XaNWIzu37zalER5/GfPwnWsWzBFti5s9JUxI10
+        hQrJCy49sDfEp27lbGO8wcpv7CxmWoBaU9Oy/PCEoi0yUNu0eIURk68sLMLGUzoi
+        9N/d5zk3MfRO5hiTpjGPiuSO82b6NX9e2i8C5wdXgDM/8bBAYVLmgd6hruERI2OD
+        oCywMdn8R2ZPq6BFgikOMGrcDRieyA60pxZKIf2827kvJGbsSnzwcpSNNAlsKFC0
+        /ux0Etc/WqKm/z4GysjIE4ChctSDGX7wxab3z78Kw5pu37Ocs2w7I7mTJRBJU5r4
+        MnDix4ecAnCQWRGjB3MrpHU6jGYfJrSTiPEnY8g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=HckUuM
+        4up1+hrv2p57Agpc2r033Xop1H6JnAlq3zBCU=; b=C8wmE0Zea0bG/Bt8GaSfDu
+        Rlwzj6x3tzrTmjKnzI+cbLG/EakziIC7s7Fyy9EWd306zcoqjpoZD9IGy8neGh3i
+        r9kRgLkxNAKR86bkhXM9gvprLuxlPNmEzZP0yE4BPGrDr+tNgQRuBE9lt6Xy7p5J
+        aUPII/xl6EQb8gHSGJJuMADQXN8xg5bSLwWaRG/VOAVeOVP4vB55TQLXE7siLthd
+        UlJljhN8OnrMgZVJKP0ZkQDXiC/akXOyhcBW+omKTcf8lX9eKlI3g0JLqcpjMeYh
+        fUOTZ5uOJQLDnnWr2YKC39XHf5pP7nhE8h3m6ePBFURwLlGfyqcXN4fryuwmzimg
+        ==
+X-ME-Sender: <xms:qItZX5WM5w6enPhs6qvO7yX49dJTnCL-aBeahzS81Dv8uTszTsf-AQ>
+    <xme:qItZX5nVNnhkCsXvAugBA0SD5uImoKe61o_Svli1ZXL2hNd1S1OsdUmTWGW4Esr8p
+    S315KM5NgD1Kot2JA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedrudehiedgheehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdetnhgu
+    rhgvficulfgvfhhfvghrhidfuceorghnughrvgifsegrjhdrihgurdgruheqnecuggftrf
+    grthhtvghrnhephefhfeekgfekudevheffheeihedujeefjeevjeefudfgfeeutdeuvdeh
+    hfevueffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    eprghnughrvgifsegrjhdrihgurdgruh
+X-ME-Proxy: <xmx:qItZX1bArAFZacrRP9hUGq0qBEEN4VZOGfnT8zjA7dWYiTebE7Pb3g>
+    <xmx:qItZX8WUhhMfF1y2RQQCgwW37xvW-f-x6vv-oFy3QRE3UkKyvI02qw>
+    <xmx:qItZXzka1nGTmfJzAxeIYqairg07nR58UnHCw9Vi7TZ3aVAftT8KaQ>
+    <xmx:qItZX4zV6pQG4Sw0faCDmFym-y3ZBRXnjDTmS1QAySeVMlHd0YGDag>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id AF09DE00A6; Wed,  9 Sep 2020 22:12:55 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.3.0-259-g88fbbfa-fm-20200903.003-g88fbbfa3
+Mime-Version: 1.0
+Message-Id: <9eea0291-f225-466a-ba01-df3210bd8ead@www.fastmail.com>
+In-Reply-To: <4f2de881-1391-b1b1-18b3-8d3a06653da9@roeck-us.net>
+References: <20200909132411.2906159-1-andrew@aj.id.au>
+ <4f2de881-1391-b1b1-18b3-8d3a06653da9@roeck-us.net>
+Date:   Thu, 10 Sep 2020 11:42:34 +0930
+From:   "Andrew Jeffery" <andrew@aj.id.au>
+To:     "Guenter Roeck" <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Cc:     "Jean Delvare" <jdelvare@suse.com>, openbmc@lists.ozlabs.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: fix ptr_ret.cocci warnings
-Message-ID: <20200909224557.GA8954@4a0a5de1ca44>
-References: <202009100651.UfTNs7Q7%lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202009100651.UfTNs7Q7%lkp@intel.com>
-X-Patchwork-Hint: ignore
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Subject: Re: [PATCH] hwmon: (pmbus) Expose PEC debugfs attribute
+Content-Type: text/plain
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: kernel test robot <lkp@intel.com>
-
-drivers/hwmon/k10temp.c:548:1-3: WARNING: PTR_ERR_OR_ZERO can be used
 
 
- Use PTR_ERR_OR_ZERO rather than if(IS_ERR(...)) + PTR_ERR
+On Thu, 10 Sep 2020, at 01:01, Guenter Roeck wrote:
+> On 9/9/20 6:24 AM, Andrew Jeffery wrote:
+> > Enable runtime debug control of whether the PEC byte is exchanged with
+> > the PMBus device.
+> > 
+> > Some manufacturers have asked for the PEC to be disabled as part of
+> > debugging driver communication issues with devices.
+> > 
+> > Signed-off-by: Andrew Jeffery <andrew@aj.id.au>
+> > ---
+> >  drivers/hwmon/pmbus/pmbus_core.c | 39 ++++++++++++++++++++++++++++++++
+> >  1 file changed, 39 insertions(+)
+> > 
+> > diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+> > index 44535add3a4a..51c8502b35e9 100644
+> > --- a/drivers/hwmon/pmbus/pmbus_core.c
+> > +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> > @@ -2346,6 +2346,42 @@ static int pmbus_debugfs_get_status(void *data, u64 *val)
+> >  DEFINE_DEBUGFS_ATTRIBUTE(pmbus_debugfs_ops_status, pmbus_debugfs_get_status,
+> >  			 NULL, "0x%04llx\n");
+> >  
+> > +static int pmbus_debugfs_get_pec(void *data, u64 *val)
+> > +{
+> > +	struct i2c_client *client = data;
+> > +
+> > +	*val = !!(client->flags & I2C_CLIENT_PEC);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int pmbus_debugfs_set_pec(void *data, u64 val)
+> > +{
+> > +	int rc;
+> > +	struct i2c_client *client = data;
+> > +
+> > +	if (!val) {
+> > +		client->flags &= ~I2C_CLIENT_PEC;
+> > +		return 0;
+> > +	}
+> > +
+> > +	if (val != 1)
+> > +		return -EINVAL;
+> > +
+> > +	rc = i2c_smbus_read_byte_data(client, PMBUS_CAPABILITY);
+> > +	if (rc < 0)
+> > +		return rc;
+> > +
+> > +	if (!(rc & PB_CAPABILITY_ERROR_CHECK))
+> > +		return -ENOTSUPP;
+> 
+> WARNING: ENOTSUPP is not a SUSV4 error code, prefer EOPNOTSUPP
+> 
+> > +
+> > +	client->flags |= I2C_CLIENT_PEC;
+> > +
+> > +	return 0;
+> > +}
+> > +DEFINE_DEBUGFS_ATTRIBUTE(pmbus_debugfs_ops_pec, pmbus_debugfs_get_pec,
+> > +			 pmbus_debugfs_set_pec, "0x%1llu\n");
+> 
+> ERROR: Prefixing 0x with decimal output is defective
+> 
+> (since the displayed value is a boolean, it is also quite useless).
 
-Generated by: scripts/coccinelle/api/ptr_ret.cocci
+Indeed. I overlooked running checkpatch, sorry for the noise.
 
-Fixes: 11ba5c19102a ("hwmon: (k10temp) Take out debugfs code")
-Signed-off-by: kernel test robot <lkp@intel.com>
----
+I've sent v2 which checkpatch claims to be clean.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   7204eaa2c1f509066486f488c9dcb065d7484494
-commit: 11ba5c19102a4b08f0549026f5491948d4f33d9d [6027/6354] hwmon: (k10temp) Take out debugfs code
-
- k10temp.c |    5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
---- a/drivers/hwmon/k10temp.c
-+++ b/drivers/hwmon/k10temp.c
-@@ -545,10 +545,7 @@ static int k10temp_probe(struct pci_dev
- 	hwmon_dev = devm_hwmon_device_register_with_info(dev, "k10temp", data,
- 							 &k10temp_chip_info,
- 							 NULL);
--	if (IS_ERR(hwmon_dev))
--		return PTR_ERR(hwmon_dev);
--
--	return 0;
-+	return PTR_ERR_OR_ZERO(hwmon_dev);
- }
- 
- static const struct pci_device_id k10temp_id_table[] = {
+Andrew
