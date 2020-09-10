@@ -2,62 +2,87 @@ Return-Path: <SRS0=6Npe=CT=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF3A4C433E2
-	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Sep 2020 10:42:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5944C43461
+	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Sep 2020 10:53:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6A88A206F4
-	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Sep 2020 10:42:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 53DD620872
+	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Sep 2020 10:53:52 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=aj.id.au header.i=@aj.id.au header.b="bwWNUjqS";
+	dkim=temperror (0-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="KWjQxVuF"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726300AbgIJKme (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 10 Sep 2020 06:42:34 -0400
-Received: from mga02.intel.com ([134.134.136.20]:57014 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726059AbgIJKmW (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 10 Sep 2020 06:42:22 -0400
-IronPort-SDR: OkLs0y3qncGHzch1ayqndDUu20zMT031PONAuIQDEO/Ch73fk3vye6YtZdT/GnIUf/dni4729Y
- Glsh97Q9x6ew==
-X-IronPort-AV: E=McAfee;i="6000,8403,9739"; a="146212063"
-X-IronPort-AV: E=Sophos;i="5.76,412,1592895600"; 
-   d="scan'208";a="146212063"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2020 03:42:20 -0700
-IronPort-SDR: Wp6FjaA7MVpu0ej/9UBiIVN3UVOB2GV5sui+4rvhO8AuYtubmhVdbh+ONlwyM6/7EGaWyomwT5
- C3qh0znhT3yg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,412,1592895600"; 
-   d="scan'208";a="407723770"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga001.fm.intel.com with ESMTP; 10 Sep 2020 03:42:19 -0700
-Received: from [10.215.160.12] (rtanwar-MOBL.gar.corp.intel.com [10.215.160.12])
-        by linux.intel.com (Postfix) with ESMTP id A68F3580039;
-        Thu, 10 Sep 2020 03:42:16 -0700 (PDT)
-Subject: Re: [PATCH 2/2] Add driver for Moortec MR75203 PVT controller
-To:     Philipp Zabel <p.zabel@pengutronix.de>, jdelvare@suse.com,
-        linux@roeck-us.net, linux-hwmon@vger.kernel.org, robh+dt@kernel.org
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        andriy.shevchenko@intel.com, songjun.Wu@intel.com,
-        cheol.yong.kim@intel.com, qi-ming.wu@intel.com,
-        rtanwar@maxlinear.com
-References: <cover.1599634208.git.rahul.tanwar@linux.intel.com>
- <ecb6794a8f2ef6576421e6d5fbdf4e6a91f06b91.1599634208.git.rahul.tanwar@linux.intel.com>
- <b113e2f455f7770fc4852437b1bf3c40c8bc853e.camel@pengutronix.de>
-From:   "Tanwar, Rahul" <rahul.tanwar@linux.intel.com>
-Message-ID: <e0392219-a9aa-169b-a1eb-44644392f06f@linux.intel.com>
-Date:   Thu, 10 Sep 2020 18:42:15 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
-MIME-Version: 1.0
-In-Reply-To: <b113e2f455f7770fc4852437b1bf3c40c8bc853e.camel@pengutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+        id S1729455AbgIJKxs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 10 Sep 2020 06:53:48 -0400
+Received: from out4-smtp.messagingengine.com ([66.111.4.28]:38815 "EHLO
+        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730462AbgIJKv0 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 10 Sep 2020 06:51:26 -0400
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id C82B55C0A9A;
+        Thu, 10 Sep 2020 06:51:24 -0400 (EDT)
+Received: from imap2 ([10.202.2.52])
+  by compute3.internal (MEProxy); Thu, 10 Sep 2020 06:51:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=
+        mime-version:message-id:in-reply-to:references:date:from:to:cc
+        :subject:content-type; s=fm3; bh=DdELkvR3uhOe2Rhzrj5jKX/YqnGcR3K
+        HmymxYMrIwr0=; b=bwWNUjqSAoPCUtNTmgKq9vi0F4MIiEtGqLP0AIpCdQQYFuP
+        +va/sK76V3hyAgaBgKVB1qZbAgrhFChgsmY7GNXdvTSco/DIA0c/8l17FxNKuXw2
+        YixJJU26EiX0bdynY/HHOLrfukWs38oLWnz2sEyAIRvHTqoDjp2celGkaVIbUfHw
+        jo6P5S/fT5KIGqNhmD6E3lMvUWr0Q6fZ3pajCXxuAbMTVAYOQe2ifuxRZZ4oUGd5
+        jFWTjR/EVChQhTDNvEOSXDvSji+NL2WyeQgSezm9AhVCP8w+CetYdTMPz4SknjgL
+        6HZOsUmyO/oncZdtuU7Hkty8y0aJDPThAfY6OIA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=DdELkv
+        R3uhOe2Rhzrj5jKX/YqnGcR3KHmymxYMrIwr0=; b=KWjQxVuF/Q06Ow3Mcbf/h+
+        qmqkUnSHHUHgVIq3g8neQ8lULpyHcxJ1QGcacT8dt3xJmh5UyL5DHGMUDMvh+lVM
+        2/as8VgeyuF/bN9f5T62D+NfPMB43u6+VjXfbWSclzqbgumTbXG36I/X6Qu6uIu3
+        CfvWY0Q09GUkryw55IrePwL/XtWG1iElWO5pqe1ZiR8/RbSPf8Izi1YtqcQm5KpS
+        E9xA6/JNFCua9Au0licTKOD8MJ+vhze1LHRUWG0HQb+m/vREFEBj/aFoEmkEbGrG
+        N5Vx3gzIWcTuTvU3O0DVKrZPjhaBdUMBOyyt7KupwjcXr2cacNeJdWGXkkx8wffQ
+        ==
+X-ME-Sender: <xms:KwVaXyckm96ORkf991PJAkZeQ9ltnBFrxM18eLUiVAjL5eS9BFUNRQ>
+    <xme:KwVaX8OKc5iPW6xy0nryYLxxNQ0Dt-rgXLYklZ2SNtnV1oQ3A_9RX6kK5xxu7imX6
+    OM_07PAskDHncllwQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedrudehjedgvdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdetnhgu
+    rhgvficulfgvfhhfvghrhidfuceorghnughrvgifsegrjhdrihgurdgruheqnecuggftrf
+    grthhtvghrnhepgfefffduudeggeekleffieeuteeghfelvddtteekveevgeethfehleeg
+    udffffevnecuffhomhgrihhnpehgihhthhhusgdrtghomhdpkhgvrhhnvghlrdhorhhgne
+    cuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghnughr
+    vgifsegrjhdrihgurdgruh
+X-ME-Proxy: <xmx:KwVaXzifAbXMQSUxz7b0Qqp5JI87CDMF_zcP_OUw_TH8zUtH0JWHQA>
+    <xmx:KwVaX_-GQCPL1qFsouYJ0j5JovdSu0NwaV3bHTEKSCHlXcwGqihpPA>
+    <xmx:KwVaX-tYGs1GB09LGo-aV5ijxhaxVu-qdKZgF0vVLeHUmfJRFBgjMA>
+    <xmx:LAVaXyjhxWjGcUK6Q7rBT56Wk61JbOmLKdjGIiee5RP1JFgL74Ylvg>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 50D35E00D8; Thu, 10 Sep 2020 06:51:23 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.3.0-259-g88fbbfa-fm-20200903.003-g88fbbfa3
+Mime-Version: 1.0
+Message-Id: <1e1dbb10-1628-4498-9ce2-8c4ce79162c8@www.fastmail.com>
+In-Reply-To: <92b193b6-7912-1823-ca38-58cf208e68c4@roeck-us.net>
+References: <20200910100516.GE12635@kadam>
+ <92b193b6-7912-1823-ca38-58cf208e68c4@roeck-us.net>
+Date:   Thu, 10 Sep 2020 20:21:02 +0930
+From:   "Andrew Jeffery" <andrew@aj.id.au>
+To:     "Guenter Roeck" <linux@roeck-us.net>,
+        "Dan Carpenter" <dan.carpenter@oracle.com>, kbuild@lists.01.org,
+        linux-hwmon@vger.kernel.org
+Cc:     "kbuild test robot" <lkp@intel.com>, kbuild-all@lists.01.org,
+        "Jean Delvare" <jdelvare@suse.com>, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (pmbus) Expose PEC debugfs attribute
+Content-Type: text/plain
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
@@ -65,39 +90,63 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 
 
 
-On 10/9/2020 6:35 pm, Philipp Zabel wrote:
-> On Wed, 2020-09-09 at 14:52 +0800, Rahul Tanwar wrote:
->> PVT controller (MR75203) is used to configure & control
->> Moortec embedded analog IP which contains temprature
->> sensor(TS), voltage monitor(VM) & process detector(PD)
->> modules. Add driver to support MR75203 PVT controller.
->>
->> Signed-off-by: Rahul Tanwar <rahul.tanwar@linux.intel.com>
->> ---
-> [...]
->> +static int mr75203_probe(struct platform_device *pdev)
->> +{
->> +	const struct hwmon_channel_info **pvt_info;
->> +	u32 ts_num, vm_num, pd_num, val, index, i;
->> +	struct device *dev = &pdev->dev;
->> +	u32 *temp_config, *in_config;
->> +	struct device *hwmon_dev;
->> +	struct pvt_device *pvt;
->> +	int ret;
->> +
->> +	pvt = devm_kzalloc(dev, sizeof(*pvt), GFP_KERNEL);
->> +	if (!pvt)
->> +		return -ENOMEM;
->> +
->> +	ret = pvt_get_regmap(pdev, "common");
->> +	if (ret)
->> +		return ret;
->> +
->> +	pvt->rst = devm_reset_control_get(dev, NULL);
-> Please use devm_reset_control_get_exclusive().
+On Thu, 10 Sep 2020, at 20:04, Guenter Roeck wrote:
+> On 9/10/20 3:05 AM, Dan Carpenter wrote:
+> > Hi Andrew,
+> > 
+> > url:    https://github.com/0day-ci/linux/commits/Andrew-Jeffery/hwmon-pmbus-Expose-PEC-debugfs-attribute/20200910-010642
+> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+> > config: x86_64-randconfig-m001-20200909 (attached as .config)
+> > compiler: gcc-9 (Debian 9.3.0-15) 9.3.0
+> > 
+> > If you fix the issue, kindly add following tag as appropriate
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> > 
+> > smatch warnings:
+> > drivers/hwmon/pmbus/pmbus_core.c:2415 pmbus_debugfs_ops_pec_open() warn: '0x' prefix is confusing together with '%1llu' specifier
+> > 
+> > # https://github.com/0day-ci/linux/commit/705b8b5588d4102256d0954086ed16c9bdf9804f
+> > git remote add linux-review https://github.com/0day-ci/linux
+> > git fetch --no-tags linux-review Andrew-Jeffery/hwmon-pmbus-Expose-PEC-debugfs-attribute/20200910-010642
+> > git checkout 705b8b5588d4102256d0954086ed16c9bdf9804f
+> > vim +2415 drivers/hwmon/pmbus/pmbus_core.c
+> > 
+> > 705b8b5588d410 Andrew Jeffery 2020-09-09  2391  static int pmbus_debugfs_set_pec(void *data, u64 val)
+> > 705b8b5588d410 Andrew Jeffery 2020-09-09  2392  {
+> > 705b8b5588d410 Andrew Jeffery 2020-09-09  2393  	int rc;
+> > 705b8b5588d410 Andrew Jeffery 2020-09-09  2394  	struct i2c_client *client = data;
+> > 705b8b5588d410 Andrew Jeffery 2020-09-09  2395  
+> > 705b8b5588d410 Andrew Jeffery 2020-09-09  2396  	if (!val) {
+> > 705b8b5588d410 Andrew Jeffery 2020-09-09  2397  		client->flags &= ~I2C_CLIENT_PEC;
+> > 705b8b5588d410 Andrew Jeffery 2020-09-09  2398  		return 0;
+> > 705b8b5588d410 Andrew Jeffery 2020-09-09  2399  	}
+> > 705b8b5588d410 Andrew Jeffery 2020-09-09  2400  
+> > 705b8b5588d410 Andrew Jeffery 2020-09-09  2401  	if (val != 1)
+> > 705b8b5588d410 Andrew Jeffery 2020-09-09  2402  		return -EINVAL;
+> > 705b8b5588d410 Andrew Jeffery 2020-09-09  2403  
+> > 705b8b5588d410 Andrew Jeffery 2020-09-09  2404  	rc = i2c_smbus_read_byte_data(client, PMBUS_CAPABILITY);
+> > 705b8b5588d410 Andrew Jeffery 2020-09-09  2405  	if (rc < 0)
+> > 705b8b5588d410 Andrew Jeffery 2020-09-09  2406  		return rc;
+> > 705b8b5588d410 Andrew Jeffery 2020-09-09  2407  
+> > 705b8b5588d410 Andrew Jeffery 2020-09-09  2408  	if (!(rc & PB_CAPABILITY_ERROR_CHECK))
+> > 705b8b5588d410 Andrew Jeffery 2020-09-09  2409  		return -ENOTSUPP;
+> > 705b8b5588d410 Andrew Jeffery 2020-09-09  2410  
+> > 705b8b5588d410 Andrew Jeffery 2020-09-09  2411  	client->flags |= I2C_CLIENT_PEC;
+> > 705b8b5588d410 Andrew Jeffery 2020-09-09  2412  
+> > 705b8b5588d410 Andrew Jeffery 2020-09-09  2413  	return 0;
+> > 705b8b5588d410 Andrew Jeffery 2020-09-09  2414  }
+> > 705b8b5588d410 Andrew Jeffery 2020-09-09 @2415  DEFINE_DEBUGFS_ATTRIBUTE(pmbus_debugfs_ops_pec, pmbus_debugfs_get_pec,
+> > 705b8b5588d410 Andrew Jeffery 2020-09-09  2416  			 pmbus_debugfs_set_pec, "0x%1llu\n");
+> >                                                                                                  ^^^^^^^
+> > Was the 1 intentional?  Anyway, you probably want to remove the 0x so
+> > it doesn't look like hex.
+> > 
+> 
+> Nice catch; I didn't notice the 1. It is still there in v2, but it does 
+> seem quite useless.
 
-Well noted. Missed that, thanks.
+Do you want to just rebase it out, or would you like me to send
+a patch removing the stray 1 from v2?
 
-Regards,
-Rahul
-
+Andrew
