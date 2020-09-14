@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00268C31E40
-	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Sep 2020 21:45:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 892B1C2D0F6
+	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Sep 2020 21:45:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B902320759
-	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Sep 2020 21:45:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 509C120759
+	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Sep 2020 21:45:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="E9U+o0UW"
+	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="AiUKNDFS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726180AbgINVpB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 14 Sep 2020 17:45:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48952 "EHLO
+        id S1726091AbgINVoG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 14 Sep 2020 17:44:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726107AbgINVoR (ORCPT
+        with ESMTP id S1726057AbgINVoD (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 14 Sep 2020 17:44:17 -0400
+        Mon, 14 Sep 2020 17:44:03 -0400
 Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53E3C061797;
-        Mon, 14 Sep 2020 14:44:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A991C06178A;
+        Mon, 14 Sep 2020 14:44:02 -0700 (PDT)
 Received: from apollo.fritz.box (unknown [IPv6:2a02:810c:c200:2e91:6257:18ff:fec4:ca34])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 5444723E4A;
-        Mon, 14 Sep 2020 23:44:07 +0200 (CEST)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id D03CA22FEB;
+        Mon, 14 Sep 2020 23:43:59 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1600119847;
+        t=1600119840;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=R8b1z+iGFiRGQhOIFM3diNO1SOWmPlbWlOSVAJR1ANI=;
-        b=E9U+o0UWfl6a5fOImDoxr/uVfKVXQKLTX2clptY/xn/AHBPEUSW7cJLp09xdp7Pk3/BcQK
-        EG4jlwPlmePHPccQmCKVlg0ruZv/0gAubjBy6OvOzRwET4rk1hzqA3y3OoaBQaxxg/lSWP
-        CdcDybfvjsVmatJdBXCd03CvB2rEofY=
+        bh=L8dnOCKcMC5RBEFlEjAO7W2mHaJzoAnPqBNK582r9yE=;
+        b=AiUKNDFSL4y/yIUIBSXfNBcql0Ei4PN/d9c4IMh1BRg+D+MJUwaWGBltMOWMwdW4h8jkrf
+        EgsZHIeRQdZpVJhguXSdRYGCoher3sOD/LA7z8ckxp/zJPa1KIune9UM7Tr8pzN47W1s2d
+        qaCawGC5Pb6ZyhZOJwyGe5kk/VgGzaY=
 From:   Michael Walle <michael@walle.cc>
 To:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
@@ -65,9 +65,9 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Pavel Machek <pavel@ucw.cz>,
         Michael Walle <michael@walle.cc>
-Subject: [PATCH v10 11/13] arm64: dts: freescale: sl28: enable LED support
-Date:   Mon, 14 Sep 2020 23:43:39 +0200
-Message-Id: <20200914214341.14268-12-michael@walle.cc>
+Subject: [PATCH v10 03/13] mfd: simple-mfd-i2c: add sl28cpld support
+Date:   Mon, 14 Sep 2020 23:43:31 +0200
+Message-Id: <20200914214341.14268-4-michael@walle.cc>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200914214341.14268-1-michael@walle.cc>
 References: <20200914214341.14268-1-michael@walle.cc>
@@ -79,15 +79,16 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Now that we have support for GPIO lines of the SMARC connector, enable
-LED support on the KBox A-230-LS. There are two LEDs without fixed
-functions, one is yellow and one is green. Unfortunately, it is just one
-multi-color LED, thus while it is possible to enable both at the same
-time it is hard to tell the difference between "yellow only" and "yellow
-and green".
+Add the core support for the board management controller found on the
+SMARC-sAL28 board.
+
+Also add a virtual symbol which pulls in the simple-mfd-i2c driver and
+provide a common symbol on which the subdevice drivers can depend on.
+
+At the moment, this controller is used on the Kontron SMARC-sAL28 board.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
-Acked-by: Pavel Machek <pavel@ucw.cz>
+Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
 ---
 Changes since v9:
  - none
@@ -96,58 +97,56 @@ Changes since v8:
  - none
 
 Changes since v7:
- - use new "function" and "color" properties instead of a label
- - added default-on trigger for the power-led
+ - added MFD_SL28CPLD virtual Kconfig symbol
+ - Please note, that I intentionally removed the Acked-for-MFD-by
+   because of this change.
 
 Changes since v6:
- - none
+ - renamed "sl28cpld-r1" to "sl28cpld"
 
 Changes since v5:
- - changed the label, suggested by Pavel Machek
-
-Changes since v4:
  - none
 
-Changes since v3:
- - see cover letter
+Changes since v4:
+ - new patch
 
- .../fsl-ls1028a-kontron-kbox-a-230-ls.dts      | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ drivers/mfd/Kconfig          | 10 ++++++++++
+ drivers/mfd/simple-mfd-i2c.c |  1 +
+ 2 files changed, 11 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-kbox-a-230-ls.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-kbox-a-230-ls.dts
-index 4b4cc6a1573d..dd516c0efd8b 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-kbox-a-230-ls.dts
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-kbox-a-230-ls.dts
-@@ -11,11 +11,29 @@
+diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+index b66b60eed003..e1d3bf77b245 100644
+--- a/drivers/mfd/Kconfig
++++ b/drivers/mfd/Kconfig
+@@ -1185,6 +1185,16 @@ config MFD_SIMPLE_MFD_I2C
+ 	  sub-devices represented by child nodes in Device Tree will be
+ 	  subsequently registered.
  
- /dts-v1/;
- #include "fsl-ls1028a-kontron-sl28-var4.dts"
-+#include <dt-bindings/leds/common.h>
++config MFD_SL28CPLD
++	tristate "Kontron sl28cpld Board Management Controller"
++	select MFD_SIMPLE_MFD_I2C
++	help
++	  Say yes here to enable support for the Kontron sl28cpld board
++	  management controller.
++
++	  It can be found on the following boards:
++		* SMARC-sAL28
++
+ config MFD_SM501
+ 	tristate "Silicon Motion SM501"
+ 	depends on HAS_DMA
+diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2c.c
+index 28e96a246be1..87f684cff9a1 100644
+--- a/drivers/mfd/simple-mfd-i2c.c
++++ b/drivers/mfd/simple-mfd-i2c.c
+@@ -38,6 +38,7 @@ static int simple_mfd_i2c_probe(struct i2c_client *i2c)
+ }
  
- / {
- 	model = "Kontron KBox A-230-LS";
- 	compatible = "kontron,kbox-a-230-ls", "kontron,sl28-var4",
- 		     "kontron,sl28", "fsl,ls1028a";
-+
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		alarm-led {
-+			function = LED_FUNCTION_ALARM;
-+			color = <LED_COLOR_ID_YELLOW>;
-+			gpios = <&sl28cpld_gpio0 0 0>;
-+		};
-+
-+		power-led {
-+			linux,default-trigger = "default-on";
-+			function = LED_FUNCTION_POWER;
-+			color = <LED_COLOR_ID_GREEN>;
-+			gpios = <&sl28cpld_gpio1 3 0>;
-+		};
-+	};
+ static const struct of_device_id simple_mfd_i2c_of_match[] = {
++	{ .compatible = "kontron,sl28cpld" },
+ 	{}
  };
- 
- &enetc_mdio_pf3 {
+ MODULE_DEVICE_TABLE(of, simple_mfd_i2c_of_match);
 -- 
 2.20.1
 
