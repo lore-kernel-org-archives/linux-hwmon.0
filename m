@@ -2,158 +2,151 @@ Return-Path: <SRS0=78Vj=CX=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MSGID_FROM_MTA_HEADER,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3047C433E2
-	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Sep 2020 20:07:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28AC8C2BC11
+	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Sep 2020 21:44:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9C069208DB
-	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Sep 2020 20:07:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E47DC208DB
+	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Sep 2020 21:44:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=amdcloud.onmicrosoft.com header.i=@amdcloud.onmicrosoft.com header.b="TTKilA3N"
+	dkim=pass (1024-bit key) header.d=walle.cc header.i=@walle.cc header.b="bey4KerF"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726072AbgINUHa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 14 Sep 2020 16:07:30 -0400
-Received: from mail-dm6nam10on2051.outbound.protection.outlook.com ([40.107.93.51]:10369
-        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726043AbgINUH1 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 14 Sep 2020 16:07:27 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dfQ3ZlNK57KcX7IMk1UFbI2WJLj6QemYl5nXNjfevnmDCAcve8ZxT3ZAsIkHSyUWe8XLHftCAyF61ge4Oyodb1F9kwGQLbUC1m2KMhl9Yx2dFbp/fpk/W7YPzY7lSJTYqjgzIun5ghM+cGdnHX23FaSTgyPH+NCo50MykdFMJlz6aw8B+YLP6CwzwEYUO9hYn3IaU//2kxiEb0oaebers/tBNu5r4vZfFgbWrJHrdzg7WYWIzPmH5gDrijEtiAYUY5ZbULqDfo7752AUYCeovkEf1eYtWKhk3auQYXr/sOFdde4yV2dOSzxfdfPghhQmbSJ4RaqkN6f3jFxqwsuZjQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pT68a0tB5Mgosyuh3j2uymPxA/LZrENiFw5Du0OLcXg=;
- b=Nyo03ACLEdo2lhGyudnQ7jq3VqFZKIaXgzjl+yRyY+ojxZ5CEslEIUh/AUSjQXELU4hbznFJSj+Yf0u7Scx4Ci5G/Zuzh3RauFdBRvj+/hL7t+fdU1xEKf7y6QTKvj3uqUJH1QD6ukUJ78ZJdYoYQhX6M4leJYiX9l3Vni8wCoYnpDhrdujmJrzmdv4iyB+uXSNMArvHFGd5kWYmj4XyEp594j3iyYpFXyFj80BjYIx9hOIimKivvZPHNP6u3q6YxozSGpRs2qjgo2FJEfVbEP08TPXDHm6Mi7yH0SALkgrjJIuOmEh1m5iXyASyRRbqwd3S3wPOhMdf5OBEb61jzg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pT68a0tB5Mgosyuh3j2uymPxA/LZrENiFw5Du0OLcXg=;
- b=TTKilA3N1cMSORpreI5Wp8t8aB9WE8pioQE9wXLmVJhtPdGZGrmAIE3EKPLuoUv0ipCPN52sCfesPKjxNMo1CqCoMM/an0XmjtiAZpIFFZETODHvsdGNCv/AaGfalhy1Wg3zUOYIkSv6mk0PTTWaytMpK6XfvGWI4HH+w7OEVS0=
-Authentication-Results: roeck-us.net; dkim=none (message not signed)
- header.d=none;roeck-us.net; dmarc=none action=none header.from=amd.com;
-Received: from CY4PR12MB1494.namprd12.prod.outlook.com (2603:10b6:910:f::22)
- by CY4PR1201MB0168.namprd12.prod.outlook.com (2603:10b6:910:1d::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3370.16; Mon, 14 Sep
- 2020 20:07:23 +0000
-Received: from CY4PR12MB1494.namprd12.prod.outlook.com
- ([fe80::9067:e60d:5698:51d8]) by CY4PR12MB1494.namprd12.prod.outlook.com
- ([fe80::9067:e60d:5698:51d8%12]) with mapi id 15.20.3370.019; Mon, 14 Sep
- 2020 20:07:23 +0000
-From:   Wei Huang <wei.huang2@amd.com>
-To:     linux@roeck-us.net
-Cc:     jdelvare@suse.com, clemens@ladisch.de, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, wei.huang2@amd.com
-Subject: [PATCH 1/1] hwmon: (k10temp) Add support for Zen3 CPUs
-Date:   Mon, 14 Sep 2020 15:07:15 -0500
-Message-Id: <20200914200715.1997757-1-wei.huang2@amd.com>
-X-Mailer: git-send-email 2.24.1
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-ClientProxiedBy: DM6PR08CA0041.namprd08.prod.outlook.com
- (2603:10b6:5:1e0::15) To CY4PR12MB1494.namprd12.prod.outlook.com
- (2603:10b6:910:f::22)
+        id S1726157AbgINVos (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 14 Sep 2020 17:44:48 -0400
+Received: from ssl.serverraum.org ([176.9.125.105]:40713 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726110AbgINVoT (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 14 Sep 2020 17:44:19 -0400
+Received: from apollo.fritz.box (unknown [IPv6:2a02:810c:c200:2e91:6257:18ff:fec4:ca34])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 2A25923E4C;
+        Mon, 14 Sep 2020 23:44:09 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1600119849;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=p5We/KRQicU22waTdBcUF4kbV8vyQwKFNG5VkQR8ubs=;
+        b=bey4KerF59JHv5RHlPeV/f3KxPIjjYCVgSt5+uTYmvZENe6S9owIfNX+RCu1bB45KaHh1O
+        79L8lJ6NAIVe/JbPj2igdIYMzNqLDAGifU52I5lPcRYg3FxDfkbMdR/KcI/BC2eVG+inMz
+        DXACX/KZF7NW09UcEoOhw58Fklxwo6M=
+From:   Michael Walle <michael@walle.cc>
+To:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH v10 13/13] arm64: defconfig: enable the sl28cpld board management controller
+Date:   Mon, 14 Sep 2020 23:43:41 +0200
+Message-Id: <20200914214341.14268-14-michael@walle.cc>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200914214341.14268-1-michael@walle.cc>
+References: <20200914214341.14268-1-michael@walle.cc>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from weiserver.amd.com (165.204.77.1) by DM6PR08CA0041.namprd08.prod.outlook.com (2603:10b6:5:1e0::15) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3370.16 via Frontend Transport; Mon, 14 Sep 2020 20:07:21 +0000
-X-Mailer: git-send-email 2.24.1
-X-Originating-IP: [165.204.77.1]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 717dbf1e-4541-482c-c76e-08d858e9cab9
-X-MS-TrafficTypeDiagnostic: CY4PR1201MB0168:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <CY4PR1201MB0168678C60907EF1DE08107DCF230@CY4PR1201MB0168.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5236;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jF7ligxqpVnZgO4EhLCMXfMHh7OmR0pEW38tVOmEGPAOG5eU7XV27GV6pPXqREirLb3tl30IfkkR8yx2B6bxl/6Ws8/3sAgRbPVT5Fxq5ZSzrTC3pEo9HZAizUVmVmMAmqAE6cQcIZDsI8UZcZ4pULTd09qc7g7j6QJ5R3rzI82S4A+G8lrHozz+u4IEqItqoJgN+cAvy3wuQc79pAG+Q3dusL1kruLJvi9+4CfnNqlJEwtIBFEcwTHjaWmY+u9iMiaqQOWtWKqW/FXCPYYt3cZVaTktr7E/cMul65wB4W8sTQvJ5gCvukCjsNWGupD4
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR12MB1494.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(396003)(366004)(136003)(376002)(346002)(8676002)(36756003)(316002)(2906002)(4326008)(8936002)(6666004)(5660300002)(186003)(66946007)(7696005)(52116002)(2616005)(86362001)(6486002)(16526019)(66476007)(956004)(66556008)(26005)(478600001)(1076003)(6916009);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: bsRoUwOPAdhC3Zdp/oGeAU8TF+MbY6nE2xRFQTgxUaFIau8rfEM5tLq70HijWd7wH1RLN1RxNf4Sl8xWYsouhn8FstNAkAhppVm0YXfYvE17Dx2d2qHwas5Cm453ANQq9D1tF1PNSctb0fCcOGftigWw6mjn5+iQwG6TkPnLpp2aVIaZObjq3mmPhMXtc8Nu3iqrSyV/QoUHsF1AC37Ya3jUyidfrM37xhg1fmLN1OtH/IPJD4Nile5WEIJtiKGUliOznXUGCl3Ejx/nrFMD2zZWi+MRds9UFYZH2O3/w8oWv4YyFRVF+ujqZFWHvDRD23AIlaMQfmVSjl5YLCzM1HvVwUqT1YwVfv6kmxVsTpTzTuntyGJnP+nxh1F+603WNoKwldflRykJ6vIzpyDP04kutF0WOX93m5ETpLVOgEpWLdrpND0PU1H1N5Rbt+fAq03u5PV4Z3c77qXoClpB9+JGGED6L/PamSZXZPa8yJWwlakR/oymUCSaRFJMxXgQ3wtg3l1d2W+/nT+fsrGykbQmLzp7qHNGtFHKxa/9hGQVsw1kqkhBS+V1c1jdoVs42GhaDQ6iOSoFjjSL/Q4BcbN0pcgNLsblybn8gGkwocoorDTWtkpTrta0IIt1Iu5zkkgZWzK9sHW38181QVkYVQ==
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 717dbf1e-4541-482c-c76e-08d858e9cab9
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR12MB1494.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Sep 2020 20:07:23.0494
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PycXT7UjGyYNrqHZ2E4HFq8RHU+DKWLgXP7eN2RNZ1OjS3jkmWa6KkllkJ4d6hd6
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1201MB0168
+Content-Transfer-Encoding: 8bit
+X-Spam: Yes
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Zen3 thermal info is supported via a new PCI device ID. Also the voltage
-telemetry registers and the current factors need to be defined. k10temp
-driver then searches for CPU family 0x19 and configures k10temp_data
-accordingly.
+Enable the kernel modules for the board management controller "sl28cpld"
+which is used on the SMARC-sAL28 board.
 
-Signed-off-by: Wei Huang <wei.huang2@amd.com>
+Signed-off-by: Michael Walle <michael@walle.cc>
 ---
- drivers/hwmon/k10temp.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+Changes since v9:
+ - none
 
-diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-index 49e8ebf8da32..a250481b5a97 100644
---- a/drivers/hwmon/k10temp.c
-+++ b/drivers/hwmon/k10temp.c
-@@ -95,6 +95,13 @@ static DEFINE_MUTEX(nb_smu_ind_mutex);
- #define F17H_M31H_CFACTOR_ICORE			1000000	/* 1A / LSB	*/
- #define F17H_M31H_CFACTOR_ISOC			310000	/* 0.31A / LSB	*/
- 
-+/* F19h thermal registers through SMN */
-+#define F19H_M01_SVI_TEL_PLANE0			(ZEN_SVI_BASE + 0x14)
-+#define F19H_M01_SVI_TEL_PLANE1			(ZEN_SVI_BASE + 0x10)
-+
-+#define F19H_M01H_CFACTOR_ICORE			1000000	/* 1A / LSB	*/
-+#define F19H_M01H_CFACTOR_ISOC			310000	/* 0.31A / LSB	*/
-+
- struct k10temp_data {
- 	struct pci_dev *pdev;
- 	void (*read_htcreg)(struct pci_dev *pdev, u32 *regval);
-@@ -527,6 +534,22 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 			k10temp_get_ccd_support(pdev, data, 8);
- 			break;
- 		}
-+	} else if (boot_cpu_data.x86 == 0x19) {
-+		data->temp_adjust_mask = ZEN_CUR_TEMP_RANGE_SEL_MASK;
-+		data->read_tempreg = read_tempreg_nb_zen;
-+		data->show_temp |= BIT(TDIE_BIT);
-+		data->is_zen = true;
-+
-+		switch (boot_cpu_data.x86_model) {
-+		case 0x0 ... 0x1:	/* Zen3 */
-+			data->show_current = true;
-+			data->svi_addr[0] = F19H_M01_SVI_TEL_PLANE0;
-+			data->svi_addr[1] = F19H_M01_SVI_TEL_PLANE1;
-+			data->cfactor[0] = F19H_M01H_CFACTOR_ICORE;
-+			data->cfactor[1] = F19H_M01H_CFACTOR_ISOC;
-+			k10temp_get_ccd_support(pdev, data, 8);
-+			break;
-+		}
- 	} else {
- 		data->read_htcreg = read_htcreg_pci;
- 		data->read_tempreg = read_tempreg_pci;
-@@ -564,6 +587,7 @@ static const struct pci_device_id k10temp_id_table[] = {
- 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M30H_DF_F3) },
- 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M60H_DF_F3) },
- 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M70H_DF_F3) },
-+	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_DF_F3) },
- 	{ PCI_VDEVICE(HYGON, PCI_DEVICE_ID_AMD_17H_DF_F3) },
- 	{}
- };
+Changes since v8:
+ - none
+
+Changes since v7:
+ - added new virtual symbol CONFIG_MFD_SL28CPLD
+
+Changes since v6:
+ - none
+
+Changes since v5:
+ - new patch
+
+ arch/arm64/configs/defconfig | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 63003ec116ee..6b410dec4447 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -510,6 +510,7 @@ CONFIG_GPIO_PCA953X=y
+ CONFIG_GPIO_PCA953X_IRQ=y
+ CONFIG_GPIO_BD9571MWV=m
+ CONFIG_GPIO_MAX77620=y
++CONFIG_GPIO_SL28CPLD=m
+ CONFIG_POWER_AVS=y
+ CONFIG_QCOM_CPR=y
+ CONFIG_ROCKCHIP_IODOMAIN=y
+@@ -523,6 +524,7 @@ CONFIG_SENSORS_ARM_SCPI=y
+ CONFIG_SENSORS_LM90=m
+ CONFIG_SENSORS_PWM_FAN=m
+ CONFIG_SENSORS_RASPBERRYPI_HWMON=m
++CONFIG_SENSORS_SL28CPLD=m
+ CONFIG_SENSORS_INA2XX=m
+ CONFIG_SENSORS_INA3221=m
+ CONFIG_THERMAL_GOV_POWER_ALLOCATOR=y
+@@ -545,6 +547,7 @@ CONFIG_QCOM_TSENS=y
+ CONFIG_QCOM_SPMI_TEMP_ALARM=m
+ CONFIG_UNIPHIER_THERMAL=y
+ CONFIG_WATCHDOG=y
++CONFIG_SL28CPLD_WATCHDOG=m
+ CONFIG_ARM_SP805_WATCHDOG=y
+ CONFIG_ARM_SBSA_WATCHDOG=y
+ CONFIG_ARM_SMC_WATCHDOG=y
+@@ -570,6 +573,7 @@ CONFIG_MFD_MAX77620=y
+ CONFIG_MFD_SPMI_PMIC=y
+ CONFIG_MFD_RK808=y
+ CONFIG_MFD_SEC_CORE=y
++CONFIG_MFD_SL28CPLD=y
+ CONFIG_MFD_ROHM_BD718XX=y
+ CONFIG_MFD_WCD934X=m
+ CONFIG_REGULATOR_FIXED_VOLTAGE=y
+@@ -971,8 +975,10 @@ CONFIG_PWM_MESON=m
+ CONFIG_PWM_RCAR=m
+ CONFIG_PWM_ROCKCHIP=y
+ CONFIG_PWM_SAMSUNG=y
++CONFIG_PWM_SL28CPLD=m
+ CONFIG_PWM_SUN4I=m
+ CONFIG_PWM_TEGRA=m
++CONFIG_SL28CPLD_INTC=y
+ CONFIG_QCOM_PDC=y
+ CONFIG_RESET_IMX7=y
+ CONFIG_RESET_QCOM_AOSS=y
 -- 
-2.24.1
+2.20.1
 
