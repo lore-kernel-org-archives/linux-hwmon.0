@@ -2,423 +2,158 @@ Return-Path: <SRS0=78Vj=CX=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MSGID_FROM_MTA_HEADER,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F07BC433E2
-	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Sep 2020 17:25:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3047C433E2
+	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Sep 2020 20:07:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2CE2320735
-	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Sep 2020 17:25:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9C069208DB
+	for <linux-hwmon@archiver.kernel.org>; Mon, 14 Sep 2020 20:07:31 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=aj.id.au header.i=@aj.id.au header.b="kdODESEl";
-	dkim=temperror (0-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="EEPsHmGW"
+	dkim=pass (1024-bit key) header.d=amdcloud.onmicrosoft.com header.i=@amdcloud.onmicrosoft.com header.b="TTKilA3N"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726174AbgINRXp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 14 Sep 2020 13:23:45 -0400
-Received: from out1-smtp.messagingengine.com ([66.111.4.25]:47771 "EHLO
-        out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726458AbgINM2v (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 14 Sep 2020 08:28:51 -0400
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 937B85C00DF;
-        Mon, 14 Sep 2020 08:28:48 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Mon, 14 Sep 2020 08:28:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=from
-        :to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm3; bh=RWdG3igRn+As4
-        Qu/WKR51RueOA9kAsjc50H1IKMF3/M=; b=kdODESEl+TUUIqsBZzUwxywJ0L9QB
-        UXRl17QAWRT5+9Jd9xY9cZXD89nAGOnnw5r2/UnlOs9hXO2FSVyfzV5eaazMRcbf
-        nNASi0jq58rQcF0Hx8tZGZ1dT62snqX3+14XSMigVTHA5Pu8sM3W5OmpNjIu6p07
-        ZEn1u1L3S0tJ3TVfqP6LOkvdyUvVbwZ6wVdSlcjmvOfOyPlfRWOHIvMnqi94lFup
-        b97XNsx0iIXo5TZ7/4bzNaG2uU4f74vMWaSitWrO+v2tasVrScv0WfWhZlxwzN9Q
-        6h+ElFUBcGYCNJFM3qI6nMeWwlQqt3EV4oZheA1jW8g+kUptsFASu7NQw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :in-reply-to:message-id:mime-version:references:subject:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; bh=RWdG3igRn+As4Qu/WKR51RueOA9kAsjc50H1IKMF3/M=; b=EEPsHmGW
-        iMdNmoo9VquMaBKbRUtULa3U2VObWlJf4lqTm3Nx1y3mKuWLuvN3bQcgF8OhJpEh
-        9HUWhI+n0vO951pdKwImxRgdtGGfhBXphK7exquR2mNTI7SxyDM6p171DQaJwXOU
-        5q/dIHLopz4vksoyNPWowMBch9aOF+hjkyGScNfnN8IOzT8ll2IFK1kZktubn9F1
-        shbnX4dIOkk6HMR4ALZ7vWEB64Q1WWlGOOYjpI3QyaYziPAHbtF4eq6+rljyzqwQ
-        TTIQnMdJQdcHKtXygpZ9k/t5px8Jzh2hHJ6CDgmogDc8jkuPVvRCKP9fm4ZbtE6x
-        3/YjWqm9LVUCow==
-X-ME-Sender: <xms:AGJfX-TnjTezrBwRFnXqEb1u0_PFWoNlfTRJOf86NQ75MW-bkIgE0g>
-    <xme:AGJfXzyw6OuVvVcIbxhiYpSOXnqwkovVZy4K6SwSyQqSguA2qkibBdMOC6Ke9ak2t
-    bAhbjVdeEdMq6tP1A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedrudeiiedgheefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvffufffkofgjfhgggfestdekre
-    dtredttdenucfhrhhomheptehnughrvgifucflvghffhgvrhihuceorghnughrvgifsegr
-    jhdrihgurdgruheqnecuggftrfgrthhtvghrnhepjefgvdevheetkeevgeegleelgfelte
-    etjeffleffvdduudevieffgeetleevhfetnecukfhppedugedrvddruddtledrkeehnecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghnughrvg
-    ifsegrjhdrihgurdgruh
-X-ME-Proxy: <xmx:AGJfX71JGfe0MDNxHGzVA6MxEqKR7PDDPdKtkqAAYfulGtvpWSQgfw>
-    <xmx:AGJfX6CfIxNLy9G7DfoZDMp09ieimahdXPOom_HLdHeWIFcTdpoQyQ>
-    <xmx:AGJfX3h7WEsA06CtEPFiFB667ORb7v0EFfXPVJzvMtpa6Z_A_EFUng>
-    <xmx:AGJfX3ccGykSqZn13fX5DTH8lOV_BEVHIZRJhAGiltNj_KW_H-t_5g>
-Received: from localhost.localdomain (ppp14-2-109-85.adl-apt-pir-bras32.tpg.internode.on.net [14.2.109.85])
-        by mail.messagingengine.com (Postfix) with ESMTPA id B26BD306468E;
-        Mon, 14 Sep 2020 08:28:45 -0400 (EDT)
-From:   Andrew Jeffery <andrew@aj.id.au>
-To:     linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org
-Cc:     linux@roeck-us.net, jdelvare@suse.com, wsa@kernel.org,
-        joel@jms.id.au, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 1/2] i2c: smbus: Allow throttling of transfers to client devices
-Date:   Mon, 14 Sep 2020 21:58:10 +0930
-Message-Id: <20200914122811.3295678-2-andrew@aj.id.au>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200914122811.3295678-1-andrew@aj.id.au>
-References: <20200914122811.3295678-1-andrew@aj.id.au>
+        id S1726072AbgINUHa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 14 Sep 2020 16:07:30 -0400
+Received: from mail-dm6nam10on2051.outbound.protection.outlook.com ([40.107.93.51]:10369
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726043AbgINUH1 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 14 Sep 2020 16:07:27 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dfQ3ZlNK57KcX7IMk1UFbI2WJLj6QemYl5nXNjfevnmDCAcve8ZxT3ZAsIkHSyUWe8XLHftCAyF61ge4Oyodb1F9kwGQLbUC1m2KMhl9Yx2dFbp/fpk/W7YPzY7lSJTYqjgzIun5ghM+cGdnHX23FaSTgyPH+NCo50MykdFMJlz6aw8B+YLP6CwzwEYUO9hYn3IaU//2kxiEb0oaebers/tBNu5r4vZfFgbWrJHrdzg7WYWIzPmH5gDrijEtiAYUY5ZbULqDfo7752AUYCeovkEf1eYtWKhk3auQYXr/sOFdde4yV2dOSzxfdfPghhQmbSJ4RaqkN6f3jFxqwsuZjQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pT68a0tB5Mgosyuh3j2uymPxA/LZrENiFw5Du0OLcXg=;
+ b=Nyo03ACLEdo2lhGyudnQ7jq3VqFZKIaXgzjl+yRyY+ojxZ5CEslEIUh/AUSjQXELU4hbznFJSj+Yf0u7Scx4Ci5G/Zuzh3RauFdBRvj+/hL7t+fdU1xEKf7y6QTKvj3uqUJH1QD6ukUJ78ZJdYoYQhX6M4leJYiX9l3Vni8wCoYnpDhrdujmJrzmdv4iyB+uXSNMArvHFGd5kWYmj4XyEp594j3iyYpFXyFj80BjYIx9hOIimKivvZPHNP6u3q6YxozSGpRs2qjgo2FJEfVbEP08TPXDHm6Mi7yH0SALkgrjJIuOmEh1m5iXyASyRRbqwd3S3wPOhMdf5OBEb61jzg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pT68a0tB5Mgosyuh3j2uymPxA/LZrENiFw5Du0OLcXg=;
+ b=TTKilA3N1cMSORpreI5Wp8t8aB9WE8pioQE9wXLmVJhtPdGZGrmAIE3EKPLuoUv0ipCPN52sCfesPKjxNMo1CqCoMM/an0XmjtiAZpIFFZETODHvsdGNCv/AaGfalhy1Wg3zUOYIkSv6mk0PTTWaytMpK6XfvGWI4HH+w7OEVS0=
+Authentication-Results: roeck-us.net; dkim=none (message not signed)
+ header.d=none;roeck-us.net; dmarc=none action=none header.from=amd.com;
+Received: from CY4PR12MB1494.namprd12.prod.outlook.com (2603:10b6:910:f::22)
+ by CY4PR1201MB0168.namprd12.prod.outlook.com (2603:10b6:910:1d::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3370.16; Mon, 14 Sep
+ 2020 20:07:23 +0000
+Received: from CY4PR12MB1494.namprd12.prod.outlook.com
+ ([fe80::9067:e60d:5698:51d8]) by CY4PR12MB1494.namprd12.prod.outlook.com
+ ([fe80::9067:e60d:5698:51d8%12]) with mapi id 15.20.3370.019; Mon, 14 Sep
+ 2020 20:07:23 +0000
+From:   Wei Huang <wei.huang2@amd.com>
+To:     linux@roeck-us.net
+Cc:     jdelvare@suse.com, clemens@ladisch.de, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, wei.huang2@amd.com
+Subject: [PATCH 1/1] hwmon: (k10temp) Add support for Zen3 CPUs
+Date:   Mon, 14 Sep 2020 15:07:15 -0500
+Message-Id: <20200914200715.1997757-1-wei.huang2@amd.com>
+X-Mailer: git-send-email 2.24.1
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-ClientProxiedBy: DM6PR08CA0041.namprd08.prod.outlook.com
+ (2603:10b6:5:1e0::15) To CY4PR12MB1494.namprd12.prod.outlook.com
+ (2603:10b6:910:f::22)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from weiserver.amd.com (165.204.77.1) by DM6PR08CA0041.namprd08.prod.outlook.com (2603:10b6:5:1e0::15) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3370.16 via Frontend Transport; Mon, 14 Sep 2020 20:07:21 +0000
+X-Mailer: git-send-email 2.24.1
+X-Originating-IP: [165.204.77.1]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 717dbf1e-4541-482c-c76e-08d858e9cab9
+X-MS-TrafficTypeDiagnostic: CY4PR1201MB0168:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <CY4PR1201MB0168678C60907EF1DE08107DCF230@CY4PR1201MB0168.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5236;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jF7ligxqpVnZgO4EhLCMXfMHh7OmR0pEW38tVOmEGPAOG5eU7XV27GV6pPXqREirLb3tl30IfkkR8yx2B6bxl/6Ws8/3sAgRbPVT5Fxq5ZSzrTC3pEo9HZAizUVmVmMAmqAE6cQcIZDsI8UZcZ4pULTd09qc7g7j6QJ5R3rzI82S4A+G8lrHozz+u4IEqItqoJgN+cAvy3wuQc79pAG+Q3dusL1kruLJvi9+4CfnNqlJEwtIBFEcwTHjaWmY+u9iMiaqQOWtWKqW/FXCPYYt3cZVaTktr7E/cMul65wB4W8sTQvJ5gCvukCjsNWGupD4
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR12MB1494.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(396003)(366004)(136003)(376002)(346002)(8676002)(36756003)(316002)(2906002)(4326008)(8936002)(6666004)(5660300002)(186003)(66946007)(7696005)(52116002)(2616005)(86362001)(6486002)(16526019)(66476007)(956004)(66556008)(26005)(478600001)(1076003)(6916009);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: bsRoUwOPAdhC3Zdp/oGeAU8TF+MbY6nE2xRFQTgxUaFIau8rfEM5tLq70HijWd7wH1RLN1RxNf4Sl8xWYsouhn8FstNAkAhppVm0YXfYvE17Dx2d2qHwas5Cm453ANQq9D1tF1PNSctb0fCcOGftigWw6mjn5+iQwG6TkPnLpp2aVIaZObjq3mmPhMXtc8Nu3iqrSyV/QoUHsF1AC37Ya3jUyidfrM37xhg1fmLN1OtH/IPJD4Nile5WEIJtiKGUliOznXUGCl3Ejx/nrFMD2zZWi+MRds9UFYZH2O3/w8oWv4YyFRVF+ujqZFWHvDRD23AIlaMQfmVSjl5YLCzM1HvVwUqT1YwVfv6kmxVsTpTzTuntyGJnP+nxh1F+603WNoKwldflRykJ6vIzpyDP04kutF0WOX93m5ETpLVOgEpWLdrpND0PU1H1N5Rbt+fAq03u5PV4Z3c77qXoClpB9+JGGED6L/PamSZXZPa8yJWwlakR/oymUCSaRFJMxXgQ3wtg3l1d2W+/nT+fsrGykbQmLzp7qHNGtFHKxa/9hGQVsw1kqkhBS+V1c1jdoVs42GhaDQ6iOSoFjjSL/Q4BcbN0pcgNLsblybn8gGkwocoorDTWtkpTrta0IIt1Iu5zkkgZWzK9sHW38181QVkYVQ==
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 717dbf1e-4541-482c-c76e-08d858e9cab9
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR12MB1494.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Sep 2020 20:07:23.0494
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: PycXT7UjGyYNrqHZ2E4HFq8RHU+DKWLgXP7eN2RNZ1OjS3jkmWa6KkllkJ4d6hd6
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1201MB0168
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Some devices fail to cope in disastrous ways with the small command
-turn-around times enabled by in-kernel device drivers.
+Zen3 thermal info is supported via a new PCI device ID. Also the voltage
+telemetry registers and the current factors need to be defined. k10temp
+driver then searches for CPU family 0x19 and configures k10temp_data
+accordingly.
 
-Introduce per-client throttling of transfers to avoid these issues.
-
-Signed-off-by: Andrew Jeffery <andrew@aj.id.au>
+Signed-off-by: Wei Huang <wei.huang2@amd.com>
 ---
- drivers/i2c/i2c-core-base.c  |   8 +-
- drivers/i2c/i2c-core-smbus.c | 149 ++++++++++++++++++++++++++++-------
- drivers/i2c/i2c-core.h       |  22 ++++++
- include/linux/i2c.h          |   3 +
- 4 files changed, 151 insertions(+), 31 deletions(-)
+ drivers/hwmon/k10temp.c | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 5ec082e2039d..d5a519bcadf9 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -867,13 +867,17 @@ int i2c_dev_irq_from_resources(const struct resource *resources,
- struct i2c_client *
- i2c_new_client_device(struct i2c_adapter *adap, struct i2c_board_info const *info)
- {
-+	struct i2c_client_priv	*priv;
- 	struct i2c_client	*client;
- 	int			status;
+diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+index 49e8ebf8da32..a250481b5a97 100644
+--- a/drivers/hwmon/k10temp.c
++++ b/drivers/hwmon/k10temp.c
+@@ -95,6 +95,13 @@ static DEFINE_MUTEX(nb_smu_ind_mutex);
+ #define F17H_M31H_CFACTOR_ICORE			1000000	/* 1A / LSB	*/
+ #define F17H_M31H_CFACTOR_ISOC			310000	/* 0.31A / LSB	*/
  
--	client = kzalloc(sizeof *client, GFP_KERNEL);
--	if (!client)
-+	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
- 		return ERR_PTR(-ENOMEM);
- 
-+	mutex_init(&priv->throttle_lock);
-+	client = &priv->client;
++/* F19h thermal registers through SMN */
++#define F19H_M01_SVI_TEL_PLANE0			(ZEN_SVI_BASE + 0x14)
++#define F19H_M01_SVI_TEL_PLANE1			(ZEN_SVI_BASE + 0x10)
 +
- 	client->adapter = adap;
- 
- 	client->dev.platform_data = info->platform_data;
-diff --git a/drivers/i2c/i2c-core-smbus.c b/drivers/i2c/i2c-core-smbus.c
-index f5c9787992e9..4a9692a37e1e 100644
---- a/drivers/i2c/i2c-core-smbus.c
-+++ b/drivers/i2c/i2c-core-smbus.c
-@@ -10,6 +10,7 @@
-  * SMBus 2.0 support by Mark Studebaker <mdsxyz123@yahoo.com> and
-  * Jean Delvare <jdelvare@suse.de>
-  */
-+#include <linux/delay.h>
- #include <linux/device.h>
- #include <linux/err.h>
- #include <linux/i2c.h>
-@@ -21,6 +22,9 @@
- #define CREATE_TRACE_POINTS
- #include <trace/events/smbus.h>
- 
-+static s32 i2c_smbus_throttle_xfer(const struct i2c_client *client,
-+				   char read_write, u8 command, int protocol,
-+				   union i2c_smbus_data *data);
- 
- /* The SMBus parts */
- 
-@@ -95,9 +99,9 @@ s32 i2c_smbus_read_byte(const struct i2c_client *client)
- 	union i2c_smbus_data data;
- 	int status;
- 
--	status = i2c_smbus_xfer(client->adapter, client->addr, client->flags,
--				I2C_SMBUS_READ, 0,
--				I2C_SMBUS_BYTE, &data);
-+	status = i2c_smbus_throttle_xfer(client, I2C_SMBUS_READ, 0,
-+					 I2C_SMBUS_BYTE, &data);
++#define F19H_M01H_CFACTOR_ICORE			1000000	/* 1A / LSB	*/
++#define F19H_M01H_CFACTOR_ISOC			310000	/* 0.31A / LSB	*/
 +
- 	return (status < 0) ? status : data.byte;
- }
- EXPORT_SYMBOL(i2c_smbus_read_byte);
-@@ -112,8 +116,8 @@ EXPORT_SYMBOL(i2c_smbus_read_byte);
-  */
- s32 i2c_smbus_write_byte(const struct i2c_client *client, u8 value)
- {
--	return i2c_smbus_xfer(client->adapter, client->addr, client->flags,
--	                      I2C_SMBUS_WRITE, value, I2C_SMBUS_BYTE, NULL);
-+	return i2c_smbus_throttle_xfer(client, I2C_SMBUS_WRITE, value,
-+				       I2C_SMBUS_BYTE, NULL);
- }
- EXPORT_SYMBOL(i2c_smbus_write_byte);
- 
-@@ -130,9 +134,9 @@ s32 i2c_smbus_read_byte_data(const struct i2c_client *client, u8 command)
- 	union i2c_smbus_data data;
- 	int status;
- 
--	status = i2c_smbus_xfer(client->adapter, client->addr, client->flags,
--				I2C_SMBUS_READ, command,
--				I2C_SMBUS_BYTE_DATA, &data);
-+	status = i2c_smbus_throttle_xfer(client, I2C_SMBUS_READ, command,
-+					 I2C_SMBUS_BYTE_DATA, &data);
+ struct k10temp_data {
+ 	struct pci_dev *pdev;
+ 	void (*read_htcreg)(struct pci_dev *pdev, u32 *regval);
+@@ -527,6 +534,22 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 			k10temp_get_ccd_support(pdev, data, 8);
+ 			break;
+ 		}
++	} else if (boot_cpu_data.x86 == 0x19) {
++		data->temp_adjust_mask = ZEN_CUR_TEMP_RANGE_SEL_MASK;
++		data->read_tempreg = read_tempreg_nb_zen;
++		data->show_temp |= BIT(TDIE_BIT);
++		data->is_zen = true;
 +
- 	return (status < 0) ? status : data.byte;
- }
- EXPORT_SYMBOL(i2c_smbus_read_byte_data);
-@@ -150,10 +154,10 @@ s32 i2c_smbus_write_byte_data(const struct i2c_client *client, u8 command,
- 			      u8 value)
- {
- 	union i2c_smbus_data data;
-+
- 	data.byte = value;
--	return i2c_smbus_xfer(client->adapter, client->addr, client->flags,
--			      I2C_SMBUS_WRITE, command,
--			      I2C_SMBUS_BYTE_DATA, &data);
-+	return i2c_smbus_throttle_xfer(client, I2C_SMBUS_WRITE, command,
-+				       I2C_SMBUS_BYTE_DATA, &data);
- }
- EXPORT_SYMBOL(i2c_smbus_write_byte_data);
- 
-@@ -170,9 +174,9 @@ s32 i2c_smbus_read_word_data(const struct i2c_client *client, u8 command)
- 	union i2c_smbus_data data;
- 	int status;
- 
--	status = i2c_smbus_xfer(client->adapter, client->addr, client->flags,
--				I2C_SMBUS_READ, command,
--				I2C_SMBUS_WORD_DATA, &data);
-+	status = i2c_smbus_throttle_xfer(client, I2C_SMBUS_READ, command,
-+					 I2C_SMBUS_WORD_DATA, &data);
-+
- 	return (status < 0) ? status : data.word;
- }
- EXPORT_SYMBOL(i2c_smbus_read_word_data);
-@@ -190,10 +194,10 @@ s32 i2c_smbus_write_word_data(const struct i2c_client *client, u8 command,
- 			      u16 value)
- {
- 	union i2c_smbus_data data;
-+
- 	data.word = value;
--	return i2c_smbus_xfer(client->adapter, client->addr, client->flags,
--			      I2C_SMBUS_WRITE, command,
--			      I2C_SMBUS_WORD_DATA, &data);
-+	return i2c_smbus_throttle_xfer(client, I2C_SMBUS_WRITE, command,
-+				       I2C_SMBUS_WORD_DATA, &data);
- }
- EXPORT_SYMBOL(i2c_smbus_write_word_data);
- 
-@@ -218,9 +222,9 @@ s32 i2c_smbus_read_block_data(const struct i2c_client *client, u8 command,
- 	union i2c_smbus_data data;
- 	int status;
- 
--	status = i2c_smbus_xfer(client->adapter, client->addr, client->flags,
--				I2C_SMBUS_READ, command,
--				I2C_SMBUS_BLOCK_DATA, &data);
-+	status = i2c_smbus_throttle_xfer(client, I2C_SMBUS_READ, command,
-+					 I2C_SMBUS_BLOCK_DATA, &data);
-+
- 	if (status)
- 		return status;
- 
-@@ -248,9 +252,8 @@ s32 i2c_smbus_write_block_data(const struct i2c_client *client, u8 command,
- 		length = I2C_SMBUS_BLOCK_MAX;
- 	data.block[0] = length;
- 	memcpy(&data.block[1], values, length);
--	return i2c_smbus_xfer(client->adapter, client->addr, client->flags,
--			      I2C_SMBUS_WRITE, command,
--			      I2C_SMBUS_BLOCK_DATA, &data);
-+	return i2c_smbus_throttle_xfer(client, I2C_SMBUS_WRITE, command,
-+				       I2C_SMBUS_BLOCK_DATA, &data);
- }
- EXPORT_SYMBOL(i2c_smbus_write_block_data);
- 
-@@ -264,9 +267,9 @@ s32 i2c_smbus_read_i2c_block_data(const struct i2c_client *client, u8 command,
- 	if (length > I2C_SMBUS_BLOCK_MAX)
- 		length = I2C_SMBUS_BLOCK_MAX;
- 	data.block[0] = length;
--	status = i2c_smbus_xfer(client->adapter, client->addr, client->flags,
--				I2C_SMBUS_READ, command,
--				I2C_SMBUS_I2C_BLOCK_DATA, &data);
-+	status = i2c_smbus_throttle_xfer(client, I2C_SMBUS_READ, command,
-+					 I2C_SMBUS_I2C_BLOCK_DATA, &data);
-+
- 	if (status < 0)
- 		return status;
- 
-@@ -284,9 +287,8 @@ s32 i2c_smbus_write_i2c_block_data(const struct i2c_client *client, u8 command,
- 		length = I2C_SMBUS_BLOCK_MAX;
- 	data.block[0] = length;
- 	memcpy(data.block + 1, values, length);
--	return i2c_smbus_xfer(client->adapter, client->addr, client->flags,
--			      I2C_SMBUS_WRITE, command,
--			      I2C_SMBUS_I2C_BLOCK_DATA, &data);
-+	return i2c_smbus_throttle_xfer(client, I2C_SMBUS_WRITE, command,
-+				       I2C_SMBUS_I2C_BLOCK_DATA, &data);
- }
- EXPORT_SYMBOL(i2c_smbus_write_i2c_block_data);
- 
-@@ -547,6 +549,71 @@ s32 i2c_smbus_xfer(struct i2c_adapter *adapter, u16 addr,
- }
- EXPORT_SYMBOL(i2c_smbus_xfer);
- 
-+static int i2c_smbus_throttle_enter(const struct i2c_client *client)
-+		__acquires(&priv->throttle_lock)
-+{
-+	struct i2c_client_priv *priv;
-+	ktime_t earliest;
-+	int rc;
-+
-+	priv = to_i2c_client_priv(client);
-+
-+	if (i2c_in_atomic_xfer_mode()) {
-+		if (!mutex_trylock(&priv->throttle_lock))
-+			return -EAGAIN;
-+	} else {
-+		rc = mutex_lock_interruptible(&priv->throttle_lock);
-+		if (rc)
-+			return rc;
-+	}
-+	earliest = ktime_add_us(priv->last, priv->delay_us);
-+
-+	if (priv->delay_us && ktime_before(ktime_get(), earliest)) {
-+		if (i2c_in_atomic_xfer_mode()) {
-+			mutex_unlock(&priv->throttle_lock);
-+			return -EAGAIN;
++		switch (boot_cpu_data.x86_model) {
++		case 0x0 ... 0x1:	/* Zen3 */
++			data->show_current = true;
++			data->svi_addr[0] = F19H_M01_SVI_TEL_PLANE0;
++			data->svi_addr[1] = F19H_M01_SVI_TEL_PLANE1;
++			data->cfactor[0] = F19H_M01H_CFACTOR_ICORE;
++			data->cfactor[1] = F19H_M01H_CFACTOR_ISOC;
++			k10temp_get_ccd_support(pdev, data, 8);
++			break;
 +		}
-+
-+		usleep_range(priv->delay_us, 2 * priv->delay_us);
-+	}
-+
-+	return 0;
-+}
-+
-+static void i2c_smbus_throttle_exit(const struct i2c_client *client)
-+		__releases(&priv->throttle_lock)
-+{
-+	struct i2c_client_priv *priv;
-+
-+	priv = to_i2c_client_priv(client);
-+
-+	if (priv->delay_us)
-+		priv->last = ktime_get();
-+	mutex_unlock(&priv->throttle_lock);
-+}
-+
-+static s32 i2c_smbus_throttle_xfer(const struct i2c_client *client,
-+				   char read_write, u8 command, int protocol,
-+				   union i2c_smbus_data *data)
-+{
-+	s32 res;
-+
-+	res = i2c_smbus_throttle_enter(client);
-+	if (res)
-+		return res;
-+
-+	res = __i2c_lock_bus_helper(client->adapter);
-+	if (!res)
-+		res = __i2c_smbus_xfer(client->adapter, client->addr,
-+				       client->flags, read_write, command,
-+				       protocol, data);
-+	i2c_unlock_bus(client->adapter, I2C_LOCK_SEGMENT);
-+
-+	i2c_smbus_throttle_exit(client);
-+
-+	return res;
-+}
-+
- s32 __i2c_smbus_xfer(struct i2c_adapter *adapter, u16 addr,
- 		     unsigned short flags, char read_write,
- 		     u8 command, int protocol, union i2c_smbus_data *data)
-@@ -715,3 +782,27 @@ int of_i2c_setup_smbus_alert(struct i2c_adapter *adapter)
- }
- EXPORT_SYMBOL_GPL(of_i2c_setup_smbus_alert);
- #endif
-+
-+int i2c_smbus_throttle_client(struct i2c_client *client,
-+			       unsigned long delay_us)
-+{
-+	struct i2c_client_priv *priv;
-+	int rc;
-+
-+	priv = to_i2c_client_priv(client);
-+
-+	if (i2c_in_atomic_xfer_mode()) {
-+		if (!mutex_trylock(&priv->throttle_lock))
-+			return -EAGAIN;
-+	} else {
-+		rc = mutex_lock_interruptible(&priv->throttle_lock);
-+		if (rc)
-+			return rc;
-+	}
-+	priv->delay_us = delay_us;
-+	priv->last = ktime_get();
-+	mutex_unlock(&priv->throttle_lock);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(i2c_smbus_throttle_client);
-diff --git a/drivers/i2c/i2c-core.h b/drivers/i2c/i2c-core.h
-index 8ce261167a2d..c763c6c431f9 100644
---- a/drivers/i2c/i2c-core.h
-+++ b/drivers/i2c/i2c-core.h
-@@ -4,6 +4,28 @@
-  */
- 
- #include <linux/rwsem.h>
-+#include <linux/i2c.h>
-+#include <linux/timekeeping.h>
-+#include <linux/kernel.h>
-+#include <linux/mutex.h>
-+
-+struct i2c_client_priv {
-+	struct i2c_client client;
-+
-+	/*
-+	 * Per-client access throttling, described in terms of microsecond
-+	 * delay between the end of the nth transfer and the start of the
-+	 * (n+1)th transfer. Used to manage devices which respond poorly to
-+	 * rapid back-to-back commands.
-+	 *
-+	 * Do it in a wrapper struct to preserve const-ness of the i2c_smbus_*
-+	 * interfaces.
-+	 */
-+	struct mutex throttle_lock;
-+	unsigned long delay_us;
-+	ktime_t last;
-+};
-+#define to_i2c_client_priv(c) container_of(c, struct i2c_client_priv, client)
- 
- struct i2c_devinfo {
- 	struct list_head	list;
-diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-index fc55ea41d323..adc91587d7fa 100644
---- a/include/linux/i2c.h
-+++ b/include/linux/i2c.h
-@@ -181,8 +181,11 @@ s32 i2c_smbus_write_i2c_block_data(const struct i2c_client *client,
- s32 i2c_smbus_read_i2c_block_data_or_emulated(const struct i2c_client *client,
- 					      u8 command, u8 length,
- 					      u8 *values);
-+int i2c_smbus_throttle_client(struct i2c_client *client,
-+			       unsigned long delay_us);
- int i2c_get_device_id(const struct i2c_client *client,
- 		      struct i2c_device_identity *id);
-+
- #endif /* I2C */
- 
- /**
+ 	} else {
+ 		data->read_htcreg = read_htcreg_pci;
+ 		data->read_tempreg = read_tempreg_pci;
+@@ -564,6 +587,7 @@ static const struct pci_device_id k10temp_id_table[] = {
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M30H_DF_F3) },
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M60H_DF_F3) },
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M70H_DF_F3) },
++	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_DF_F3) },
+ 	{ PCI_VDEVICE(HYGON, PCI_DEVICE_ID_AMD_17H_DF_F3) },
+ 	{}
+ };
 -- 
-2.25.1
+2.24.1
 
