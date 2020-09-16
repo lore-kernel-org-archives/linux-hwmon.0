@@ -2,190 +2,191 @@ Return-Path: <SRS0=k+/s=CZ=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
+X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 525FEC43461
-	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Sep 2020 03:04:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F850C43461
+	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Sep 2020 03:09:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E9E7F21D95
-	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Sep 2020 03:04:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1917121D94
+	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Sep 2020 03:09:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NyKoj3h+"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="u8JR+SKL"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726128AbgIPDE1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 15 Sep 2020 23:04:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39066 "EHLO
+        id S1726023AbgIPDJW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 15 Sep 2020 23:09:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726093AbgIPDE1 (ORCPT
+        with ESMTP id S1726100AbgIPDJV (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 15 Sep 2020 23:04:27 -0400
-Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D46DFC06174A;
-        Tue, 15 Sep 2020 20:04:26 -0700 (PDT)
-Received: by mail-ot1-x341.google.com with SMTP id u25so5317095otq.6;
-        Tue, 15 Sep 2020 20:04:26 -0700 (PDT)
+        Tue, 15 Sep 2020 23:09:21 -0400
+Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8021C06174A;
+        Tue, 15 Sep 2020 20:09:20 -0700 (PDT)
+Received: by mail-ot1-x344.google.com with SMTP id y5so5342583otg.5;
+        Tue, 15 Sep 2020 20:09:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=v49V7vbkYoTBj10sWwziFhYTHsbTXwr8gPL6z6VrHDY=;
-        b=NyKoj3h+7Y+cgmDT9PEMxObBB5K6BnXXaQ7+DL6wHS+lguPyCCZaY8Vzk6/sS5NFlb
-         PnpF0hKSqFzMg6k0Ba+MStsE7ITCuMtOE3AInJL20J3szJm7aidFRxKPOjbAacTWvcf5
-         AmT7sqMkNHr96b0TInLOy+ha/29mpZRibe7wfCg7REVCAU611TETSjJs770FNkSDymzi
-         r7m1dlH87F4c78c0xmi9meN2vgTong0pXI5jVbKoN0+ziJpwgCcitB/wOCZbQFFtyMTM
-         f1mrlau1DZ2n9YxGrhLHPTjgGOd9s4cTT+bsTf4dxZervXwoIEo+dg0igtx00wNII+21
-         jZgw==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=rDIxqPOPy/jwE1fyBLQdvVBwmDeqK+FPS+2DQFsR9wU=;
+        b=u8JR+SKL2EY/e96H8DkCrV0RnTLxg9b8MC4p8V/xSYbuq5+T/lLzN3yH3v+LhXkRWV
+         FgfTEnolpKtJkyrCGEtSqkJkvEOtF1Vm16Fg/64SuQqlZZ+0HwfS91xVbZWTs8mraJpV
+         0iQCAeQcGgL8YSE95HrHvwuHOHjzEX2gvwH5G9+DlJ4yfLxThAhielf4SAU0ZmxotYsU
+         X5cACbER/eozqTSTM5pBgTTeBti1CDbGypTKakDbSWT1tdlLtqwAcPNXsxh2EWMyo8wQ
+         +hgA7WHp75ePveuBOVvR8k+Hb2P4HzdiFRwbiZ4Mpp/nBXhqYEHyvrM9NR+OxYXsmCwJ
+         XjaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=v49V7vbkYoTBj10sWwziFhYTHsbTXwr8gPL6z6VrHDY=;
-        b=PmVfuz9BI9C+InG9mKEu1hC0H2rKYXZYjUHgPBMMAvW4FeknuB41vYs0K6ZCc2V1Qi
-         tS+TW+0YghwJCb+YHC0U46fihL/H+NzkMWDjJ5lXWKgjTzkdnEVOhgWdTX4igR8P2k7w
-         AGiEMRWP7DD19O2/SWhqdpApkOjWriGJRQStZqpLbPY/6XxaoOyve0q2uSmGpFPrsnv2
-         EiBF9xVDjVvZD7+QK/zpOFwKP/jzeX2dY0vXgsUr/YLokzU/8RYiQv49NTG78ujk7eVZ
-         Ph4TYickCxKtvKNO8jHLezCXDq+MmVRRbDMMaAwBbu0+WG1WqVM1cookqNaGbo/Yo+aQ
-         zrdQ==
-X-Gm-Message-State: AOAM5338MNBlyrwKMXfXmNsWGTrKO4zZa9d8J4bq3vhEayBGMZghtreB
-        /4NKKLNlGxoOXY814Se35pw=
-X-Google-Smtp-Source: ABdhPJzMFc8bt+miVOUHkbe431Dux/uc6vPnQFzvSn+2Pft9G/cUr0K3UZVP4OqOL0NM3l2/4d5Z7Q==
-X-Received: by 2002:a9d:5e8a:: with SMTP id f10mr14494565otl.242.1600225466292;
-        Tue, 15 Sep 2020 20:04:26 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j1sm8097451oig.45.2020.09.15.20.04.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Sep 2020 20:04:25 -0700 (PDT)
-Subject: Re: [PATCH] dt-bindings: hwmon: max20730: adding device tree doc for
- max20730
-To:     Chu Lin <linchuyuan@google.com>, jdelvare@suse.com,
-        robh+dt@kernel.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        qiongwang@google.com, zhongqil@google.com, jasonling@google.com,
-        belgaied@google.com
-References: <20200910170638.1985729-1-linchuyuan@google.com>
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=rDIxqPOPy/jwE1fyBLQdvVBwmDeqK+FPS+2DQFsR9wU=;
+        b=TLI90oTscic5zL/y+c08rqWQpcnTaxPuF21vVAQlGm9FlaSwsay1qIRWvjgH6WlHJE
+         gxnfhkBycRyHpnu5orLSdoxEFcqktbPzsHhz/HGU+E+rcXmVsxeWOyta27Ob1AiBo989
+         /IMbtdgxUvyWsfzZdoxpH/42n7zgBLRsYUUU2ohJAdYPL5zj23/Estua0WN6Rd6UB4yv
+         g+Nta0xFADOtqmeXupMILhOQAR1jPW73T9ufOmgPsWIIWxAL+5WI+5yX2D2iNTneT/P9
+         t1iRj2GrTGv3msYcUgr6PzGxqi6vlwALG+oojhta2E3OaGkrc/PYSgab32K7V9SKmnex
+         5VUw==
+X-Gm-Message-State: AOAM532o8tM3YP37vAB3gNdUm0QMD8vX2u4oRq6wxbxrXB2of3aMTTWq
+        GBuA54eakPNXfSIwdDIQrGA=
+X-Google-Smtp-Source: ABdhPJz5uPpzIQEzLcXZ6Eh8mUguD2ePQE/oB9E4x0Q3rDsyMpN+hukO68DmRFZsJXjsV6tX4QwmEQ==
+X-Received: by 2002:a05:6830:2096:: with SMTP id y22mr15186350otq.158.1600225759608;
+        Tue, 15 Sep 2020 20:09:19 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e18sm8109649oiy.52.2020.09.15.20.09.18
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 15 Sep 2020 20:09:19 -0700 (PDT)
+Date:   Tue, 15 Sep 2020 20:09:18 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <6059ab76-02ff-0ab6-15bf-e34026a2f855@roeck-us.net>
-Date:   Tue, 15 Sep 2020 20:04:24 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+To:     Chu Lin <linchuyuan@google.com>
+Cc:     jdelvare@suse.com, belgaied@google.com, jasonling@google.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhongqil@google.com
+Subject: Re: [PATCH v3] hwmon: adm1272: Enable temperature sampling for
+ adm1272 adm1278
+Message-ID: <20200916030918.GA250417@roeck-us.net>
+References: <20200721034900.2055889-1-linchuyuan@google.com>
 MIME-Version: 1.0
-In-Reply-To: <20200910170638.1985729-1-linchuyuan@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200721034900.2055889-1-linchuyuan@google.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 9/10/20 10:06 AM, Chu Lin wrote:
-> Testing:
-> make dt_binding_check
+On Tue, Jul 21, 2020 at 03:49:00AM +0000, Chu Lin wrote:
+> Problem:
+> 	adm1272 and adm1278 supports temperature sampling. The
+> current way of enabling it requires the user manually unbind the device
+> from the driver, flip the temperature sampling control bit and then bind
+> the device back to the driver. It would be nice if we can control this in a
+> better way by reading the dt.
 > 
-
-This isn't really an appropriate patch description.
-
+> Solution:
+> 	Introducing device tree binding analog,temp1-enable. If the
+> flag is set, flip the temp1_en control bit on probing.
+> 
+> Testing:
+> 1). iotools smbus_write16 35 0x10 0xd4 0x0037 // disable the temp1_en
+> 2). recompile the dt to have  analog,temp1-enable set
+> 3). Probe the driver and make sure tempX shows up in hwmon
+> 
 > Signed-off-by: Chu Lin <linchuyuan@google.com>
-> ---
->  .../devicetree/bindings/hwmon/max20730.txt    | 23 +++++++++++++++++++
 
-AFAIK this needs to be written as .yaml file.
+For my reference:
 
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+We'll need to wait for DT review before I can apply the patch.
+
+Thanks,
 Guenter
 
->  MAINTAINERS                                   |  1 +
->  2 files changed, 24 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/max20730.txt
+> ---
+> ChangeLog v1->v2:
+>  - Rename adm1272-adm1278-temp1-en to analog-temperature1-enable
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/max20730.txt b/Documentation/devicetree/bindings/hwmon/max20730.txt
-> new file mode 100644
-> index 000000000000..3afb42b04567
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/max20730.txt
-> @@ -0,0 +1,23 @@
-> +max20730 properties
-> +
-> +Required properties:
-> +- compatible: Must be one of the supported compatible strings:
-> +	"maxim,max20730" for max20730
-> +	"maxim,max20734" for max20734
-> +	"maxim,max20743" for max20743
-> +- reg: I2C address
-> +
-> +Optional properties:
-> +
-> +- vout-voltage-divider
-> +	Resistance of the vout voltage divider.
-> +	Two numbers, the first number is the output resistor,
-> +	the second number is the total resistance.
-> +
-> +Example:
-> +
-> +max20730@10 {
-> +	compatible = "maxim,max20730";
-> +	reg = <0x10>;
-> +	vout-voltage-divider = <1000 2000>;
-> +};
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 0a6ac3f00ed5..a04bf34a65b8 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -12371,6 +12371,7 @@ W:	http://www.roeck-us.net/linux/drivers/
->  T:	git git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
->  S:	Maintained
->  F:	Documentation/devicetree/bindings/hwmon/ibm,cffps1.txt
-> +F:	Documentation/devicetree/bindings/hwmon/max20730.txt
->  F:	Documentation/devicetree/bindings/hwmon/max31785.txt
->  F:	Documentation/devicetree/bindings/hwmon/ltc2978.txt
->  F:	Documentation/hwmon/adm1275
+> ChangeLog v2->v3:
+>  - Rename analog-temperature1-enable analog,temp1-enable
 > 
-
+>  drivers/hwmon/pmbus/adm1275.c | 36 +++++++++++++++++++++--------------
+>  1 file changed, 22 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/adm1275.c b/drivers/hwmon/pmbus/adm1275.c
+> index 19317575d1c6..0482670281bd 100644
+> --- a/drivers/hwmon/pmbus/adm1275.c
+> +++ b/drivers/hwmon/pmbus/adm1275.c
+> @@ -475,6 +475,7 @@ static int adm1275_probe(struct i2c_client *client,
+>  	const struct coefficients *coefficients;
+>  	int vindex = -1, voindex = -1, cindex = -1, pindex = -1;
+>  	int tindex = -1;
+> +	bool temp1_en;
+>  	u32 shunt;
+>  
+>  	if (!i2c_check_functionality(client->adapter,
+> @@ -536,6 +537,9 @@ static int adm1275_probe(struct i2c_client *client,
+>  	if (shunt == 0)
+>  		return -EINVAL;
+>  
+> +	temp1_en = of_property_read_bool(client->dev.of_node, "analog,temp1-enable") &&
+> +		(mid->driver_data == adm1272 || mid->driver_data == adm1278);
+> +
+>  	data->id = mid->driver_data;
+>  
+>  	info = &data->info;
+> @@ -614,16 +618,18 @@ static int adm1275_probe(struct i2c_client *client,
+>  		info->func[0] |= PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT |
+>  			PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT;
+>  
+> +		ret = config;
+> +		/* Enable temp if it is instructed by dt (it is disabled by default) */
+> +		if (temp1_en && !(config & ADM1278_TEMP1_EN))
+> +			config |= ADM1278_TEMP1_EN;
+>  		/* Enable VOUT if not enabled (it is disabled by default) */
+> -		if (!(config & ADM1278_VOUT_EN)) {
+> +		if (!(config & ADM1278_VOUT_EN))
+>  			config |= ADM1278_VOUT_EN;
+> -			ret = i2c_smbus_write_byte_data(client,
+> -							ADM1275_PMON_CONFIG,
+> -							config);
+> +		if (ret != config) {
+> +			ret = i2c_smbus_write_word_data(client, ADM1275_PMON_CONFIG, config);
+>  			if (ret < 0) {
+> -				dev_err(&client->dev,
+> -					"Failed to enable VOUT monitoring\n");
+> -				return -ENODEV;
+> +				dev_err(&client->dev, "Failed to enable config control bits");
+> +				return ret;
+>  			}
+>  		}
+>  
+> @@ -685,16 +691,18 @@ static int adm1275_probe(struct i2c_client *client,
+>  		info->func[0] |= PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT |
+>  			PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT;
+>  
+> +		ret = config;
+> +		/* Enable temp if it is instructed by dt (it is disabled by default) */
+> +		if (temp1_en && !(config & ADM1278_TEMP1_EN))
+> +			config |= ADM1278_TEMP1_EN;
+>  		/* Enable VOUT if not enabled (it is disabled by default) */
+> -		if (!(config & ADM1278_VOUT_EN)) {
+> +		if (!(config & ADM1278_VOUT_EN))
+>  			config |= ADM1278_VOUT_EN;
+> -			ret = i2c_smbus_write_byte_data(client,
+> -							ADM1275_PMON_CONFIG,
+> -							config);
+> +		if (ret != config) {
+> +			ret = i2c_smbus_write_word_data(client, ADM1275_PMON_CONFIG, config);
+>  			if (ret < 0) {
+> -				dev_err(&client->dev,
+> -					"Failed to enable VOUT monitoring\n");
+> -				return -ENODEV;
+> +				dev_err(&client->dev, "Failed to enable config control bits");
+> +				return ret;
+>  			}
+>  		}
+>  
