@@ -2,573 +2,156 @@ Return-Path: <SRS0=k+/s=CZ=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11EE0C433E2
-	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Sep 2020 03:19:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79603C433E2
+	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Sep 2020 05:21:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CAA8821D80
-	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Sep 2020 03:19:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2E10E20936
+	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Sep 2020 05:21:40 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=aj.id.au header.i=@aj.id.au header.b="GYk+Bteg";
+	dkim=temperror (0-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="JQXwvHt9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726129AbgIPDTZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 15 Sep 2020 23:19:25 -0400
-Received: from mga09.intel.com ([134.134.136.24]:57885 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726140AbgIPDTZ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 15 Sep 2020 23:19:25 -0400
-IronPort-SDR: Vqe5QGyHUCFYMVJ6F88zDxlBol46u25FxBnpGo221RTkycGIwIh8Qoc6JFHfYYVxDVnMlx2T+l
- x39dzigDLpDg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9745"; a="160324850"
-X-IronPort-AV: E=Sophos;i="5.76,431,1592895600"; 
-   d="scan'208";a="160324850"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2020 20:19:19 -0700
-IronPort-SDR: xvvtnPMW7TRxgeEVUPvvJIx1yB8CUwIKziPlKNI8FigQCqXBSNM94PVMfgnjLAFO8KHG/Jhh0J
- tMCvcolIoRKQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,431,1592895600"; 
-   d="scan'208";a="507842371"
-Received: from yilunxu-optiplex-7050.sh.intel.com ([10.239.159.141])
-  by fmsmga005.fm.intel.com with ESMTP; 15 Sep 2020 20:19:16 -0700
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     linux@roeck-us.net, jdelvare@suse.com, lee.jones@linaro.org,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     trix@redhat.com, yilun.xu@intel.com,
-        matthew.gerlach@linux.intel.com, russell.h.weight@intel.com,
-        lgoncalv@redhat.com, hao.wu@intel.com, mdf@kernel.org
-Subject: [PATCH v2] hwmon: intel-m10-bmc-hwmon: add hwmon support for Intel MAX 10 BMC
-Date:   Wed, 16 Sep 2020 11:14:22 +0800
-Message-Id: <1600226062-25755-2-git-send-email-yilun.xu@intel.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1600226062-25755-1-git-send-email-yilun.xu@intel.com>
-References: <1600226062-25755-1-git-send-email-yilun.xu@intel.com>
+        id S1726150AbgIPFVg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 16 Sep 2020 01:21:36 -0400
+Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:34295 "EHLO
+        wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726068AbgIPFVf (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 16 Sep 2020 01:21:35 -0400
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 4C0BB469;
+        Wed, 16 Sep 2020 01:21:34 -0400 (EDT)
+Received: from imap2 ([10.202.2.52])
+  by compute3.internal (MEProxy); Wed, 16 Sep 2020 01:21:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=
+        mime-version:message-id:in-reply-to:references:date:from:to:cc
+        :subject:content-type; s=fm3; bh=Ra4+jaLN+MXOy6NAuUDpQpiZtwMKVaz
+        lgglIg2VCfnY=; b=GYk+BtegPglrn/LC4SM6TK0u+9ewxwONcvdB/dCntdIdOVM
+        5sdFn3h+Zgve+Ip+v/i0UbnnqtwsXuvIFKca60kw6yfLwiSzOmcm5pKeVQlxQEL7
+        KBXzWcW+2rkeVAlDwzZ/5zbE1ELUiNl9vCtjbo76+FF4rAB9kH2uVsIha/UMbWgH
+        4kFosVa7nCT89RFeBLYN7zH390ZfkqJ8Gzw4mOuUbuuatz971BAPiBHN9pu1goO7
+        e+/ZpbbEKVZ4FsCyg4KGcJw/Ia5M2v67HHJOwlUtkv+DgSPEYJ94enur/kDC2skJ
+        zMD1ZtojglPFTUYosBONN/RSqQD50BXSalEnw/A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=Ra4+ja
+        LN+MXOy6NAuUDpQpiZtwMKVazlgglIg2VCfnY=; b=JQXwvHt971ra+JJ+q5qOq7
+        3cG54V6pILeLeMt+dIqktlY+DFZus1VrzLz8OOPG9A9NqbUXChHPWfL/ax9f+RMX
+        79g4gv0nse9F4WDX1RhZgRDunKcXsaekq4C3CW+Y+lSQUKktiG7VKeBLVbFvOCdQ
+        yHkm+Lb9tS4rvHOaiYpqv+DYZJm7JAoCytXl4Qb1l2faKnq0g1TeaKERBnOO835n
+        FPjDHRmkh5U5Yj0yShj536oEYfvUKqmKWV36NOnHkfmzgu2P33oik7ADQpT7fpb7
+        +Dha5aquUZ0Umc4UOlYdiSrqt9eMnbUDGDPcd9vQg/dzw1rWnB3OS2nuy/ybGLyA
+        ==
+X-ME-Sender: <xms:3aBhX1mU9Ucei7AlFnXaHcR-82xUEXt6-_7hAsEhsaszO0HQXPQJ9Q>
+    <xme:3aBhXw082n4L0oOGPDHnKg63weQTh4ZURrl8z2K2FgwSGZvPsFg0NxxCT7xC2QVhy
+    EGsMQ1Rud6aM7b_aA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrtddugdekkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvufgtsehttdertderreejnecuhfhrohhmpedftehnughr
+    vgifucflvghffhgvrhihfdcuoegrnhgurhgvfiesrghjrdhiugdrrghuqeenucggtffrrg
+    htthgvrhhnpedutddtkeeugeegvddttdeukeeiuddtgfeuuddtfeeiueetfeeileettedv
+    tdfhieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grnhgurhgvfiesrghjrdhiugdrrghu
+X-ME-Proxy: <xmx:3aBhX7qXO66M7PZzQwUgxw3MePX_SUVnSAmPuJmjPq2m-ISBOh5Kjg>
+    <xmx:3aBhX1kiDCpZ_xB3_8tOpAdfaFsrRbaNYU5gXCt12n-6KW7trC9OGQ>
+    <xmx:3aBhXz1aVuIdTxol-h63De_hOub3wYRv0sfGfu6t6AVOebaYbNRn-A>
+    <xmx:3aBhX-SZYX2uzaWiSFOsnBFMwU6PFhXFTnlHL5gLaNt-LYc_IwK-4w>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 641C1E00C8; Wed, 16 Sep 2020 01:21:32 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.3.0-259-g88fbbfa-fm-20200903.003-g88fbbfa3
+Mime-Version: 1.0
+Message-Id: <48962472-b025-4b0d-90e9-60469bebf206@www.fastmail.com>
+In-Reply-To: <71067b18-c4bc-533a-0069-f21069c5fd0d@roeck-us.net>
+References: <20200914122811.3295678-1-andrew@aj.id.au>
+ <20200914122811.3295678-3-andrew@aj.id.au>
+ <71067b18-c4bc-533a-0069-f21069c5fd0d@roeck-us.net>
+Date:   Wed, 16 Sep 2020 14:51:08 +0930
+From:   "Andrew Jeffery" <andrew@aj.id.au>
+To:     "Guenter Roeck" <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+Cc:     "Jean Delvare" <jdelvare@suse.com>, wsa@kernel.org,
+        "Joel Stanley" <joel@jms.id.au>, linux-kernel@vger.kernel.org
+Subject: =?UTF-8?Q?Re:_[RFC_PATCH_2/2]_hwmon:_(pmbus/ucd9000)_Throttle_SMBus_tran?=
+ =?UTF-8?Q?sfers_to_avoid_poor_behaviour?=
+Content-Type: text/plain
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This patch adds hwmon functionality for Intel MAX 10 BMC chip. This BMC
-chip connects to a set of sensor chips to monitor current, voltage,
-thermal and power of different components on board. The BMC firmware is
-responsible for sensor data sampling and recording in shared registers.
-Host driver reads the sensor data from these shared registers and
-exposes them to users as hwmon interfaces.
 
-Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-Signed-off-by: Wu Hao <hao.wu@intel.com>
-Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-Signed-off-by: Tom Rix <trix@redhat.com>
----
-v2: add the Documentation
-    refactor the code, provide static hwmon_channel_info
-    remove Unnecessary hwmon-sysfs.h
-    make the sensor data table const
----
- Documentation/hwmon/index.rst               |   1 +
- Documentation/hwmon/intel-m10-bmc-hwmon.rst |  78 ++++++
- drivers/hwmon/Kconfig                       |  11 +
- drivers/hwmon/Makefile                      |   1 +
- drivers/hwmon/intel-m10-bmc-hwmon.c         | 355 ++++++++++++++++++++++++++++
- 5 files changed, 446 insertions(+)
- create mode 100644 Documentation/hwmon/intel-m10-bmc-hwmon.rst
- create mode 100644 drivers/hwmon/intel-m10-bmc-hwmon.c
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index a926f1a..4bcb1a7 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -74,6 +74,7 @@ Hardware Monitoring Kernel Drivers
-    ina209
-    ina2xx
-    ina3221
-+   intel-m10-bmc-hwmon
-    ir35221
-    ir38064
-    isl68137
-diff --git a/Documentation/hwmon/intel-m10-bmc-hwmon.rst b/Documentation/hwmon/intel-m10-bmc-hwmon.rst
-new file mode 100644
-index 0000000..3d148c6
---- /dev/null
-+++ b/Documentation/hwmon/intel-m10-bmc-hwmon.rst
-@@ -0,0 +1,78 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Kernel driver intel-m10-bmc-hwmon
-+=================================
-+
-+Supported chips:
-+
-+ * Intel MAX 10 BMC for Intel PAC N3000
-+
-+   Prefix: 'n3000bmc-hwmon'
-+
-+Author: Xu Yilun <yilun.xu@intel.com>
-+
-+
-+Description
-+-----------
-+
-+This driver adds the temperature, voltage, current and power reading
-+support for the Intel MAX 10 Board Management Controller (BMC) chip.
-+The BMC chip is integrated in some Intel Programmable Acceleration
-+Cards (PAC). It connects to a set of sensor chips to monitor the
-+sensor data of different components on the board. The BMC firmware is
-+responsible for sensor data sampling and recording in shared
-+registers. The host driver reads the sensor data from these shared
-+registers and exposes them to users as hwmon interfaces.
-+
-+The BMC chip is implemented using the Intel MAX 10 CPLD. It could be
-+reprogramed to some variants in order to support different Intel
-+PACs. The driver is designed to be able to distinguish between the
-+variants, but now it only supports the BMC for Intel PAC N3000.
-+
-+
-+Sysfs attributes
-+----------------
-+
-+The following attributes are supported:
-+
-+- Intel MAX 10 BMC for Intel PAC N3000:
-+
-+======================= =======================================================
-+tempX_input             Temperature of the component (specified by tempX_label)
-+tempX_max               Temperature maximum setpoint of the component
-+tempX_crit              Temperature critical setpoint of the component
-+tempX_max_hyst          Hysteresis for temperature maximum of the component
-+tempX_crit_hyst         Hysteresis for temperature critical of the component
-+temp1_label             "Board Temperature"
-+temp2_label             "FPGA Die Temperature"
-+temp3_label             "QSFP0 Temperature"
-+temp4_label             "QSFP1 Temperature"
-+temp5_label             "Retimer A Temperature"
-+temp6_label             "Retimer A SerDes Temperature"
-+temp7_label             "Retimer B Temperature"
-+temp8_label             "Retimer B SerDes Temperature"
-+
-+inX_input               Measured voltage of the component (specified by
-+                        inX_label)
-+in0_label               "QSFP0 Supply Voltage"
-+in1_label               "QSFP1 Supply Voltage"
-+in2_label               "FPGA Core Voltage"
-+in3_label               "12V Backplane Voltage"
-+in4_label               "1.2V Voltage"
-+in5_label               "12V AUX Voltage"
-+in6_label               "1.8V Voltage"
-+in7_label               "3.3V Voltage"
-+
-+currX_input             Measured current of the component (specified by
-+                        currX_label)
-+curr1_label             "FPGA Core Current"
-+curr2_label             "12V Backplane Current"
-+curr3_label             "12V AUX Current"
-+
-+powerX_input            Measured power of the component (specified by
-+                        powerX_label)
-+power1_label            "Board Power"
-+
-+======================= =======================================================
-+
-+All the attributes are read-only.
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 8dc28b2..53af15c 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -2064,6 +2064,17 @@ config SENSORS_XGENE
- 	  If you say yes here you get support for the temperature
- 	  and power sensors for APM X-Gene SoC.
- 
-+config SENSORS_INTEL_M10_BMC_HWMON
-+	tristate "Intel MAX10 BMC Hardware Monitoring"
-+	depends on MFD_INTEL_M10_BMC
-+	help
-+	  This driver provides support for the hardware monitoring functionality
-+	  on Intel MAX10 BMC chip.
-+
-+	  This BMC Chip is used on Intel FPGA PCIe Acceleration Cards (PAC). Its
-+	  sensors monitor various telemetry data of different components on the
-+	  card, e.g. board temperature, FPGA core temperature/voltage/current.
-+
- if ACPI
- 
- comment "ACPI drivers"
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index a8f4b35..ba5a25a 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -90,6 +90,7 @@ obj-$(CONFIG_SENSORS_IIO_HWMON) += iio_hwmon.o
- obj-$(CONFIG_SENSORS_INA209)	+= ina209.o
- obj-$(CONFIG_SENSORS_INA2XX)	+= ina2xx.o
- obj-$(CONFIG_SENSORS_INA3221)	+= ina3221.o
-+obj-$(CONFIG_SENSORS_INTEL_M10_BMC_HWMON) += intel-m10-bmc-hwmon.o
- obj-$(CONFIG_SENSORS_IT87)	+= it87.o
- obj-$(CONFIG_SENSORS_JC42)	+= jc42.o
- obj-$(CONFIG_SENSORS_K8TEMP)	+= k8temp.o
-diff --git a/drivers/hwmon/intel-m10-bmc-hwmon.c b/drivers/hwmon/intel-m10-bmc-hwmon.c
-new file mode 100644
-index 0000000..ce73545
---- /dev/null
-+++ b/drivers/hwmon/intel-m10-bmc-hwmon.c
-@@ -0,0 +1,355 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Intel MAX 10 BMC HWMON Driver
-+ *
-+ * Copyright (C) 2018-2020 Intel Corporation. All rights reserved.
-+ *
-+ */
-+#include <linux/device.h>
-+#include <linux/hwmon.h>
-+#include <linux/mfd/intel-m10-bmc.h>
-+#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/platform_device.h>
-+
-+struct m10bmc_sdata {
-+	unsigned int reg_input;
-+	unsigned int reg_max;
-+	unsigned int reg_crit;
-+	unsigned int reg_hyst;
-+	unsigned int reg_min;
-+	unsigned int multiplier;
-+	const char *label;
-+};
-+
-+struct m10bmc_hwmon_board_data {
-+	const struct m10bmc_sdata *temp;
-+	const struct m10bmc_sdata *in;
-+	const struct m10bmc_sdata *curr;
-+	const struct m10bmc_sdata *power;
-+	const struct hwmon_channel_info **hinfo;
-+};
-+
-+struct m10bmc_hwmon {
-+	struct device *dev;
-+	struct hwmon_chip_info chip;
-+	char *hw_name;
-+	struct intel_m10bmc *m10bmc;
-+	struct m10bmc_hwmon_board_data *bdata;
-+};
-+
-+static const struct m10bmc_sdata n3000bmc_temp_tbl[] = {
-+	{ 0x100, 0x104, 0x108, 0x10c, 0x0, 500, "Board Temperature" },
-+	{ 0x110, 0x114, 0x118, 0x0, 0x0, 500, "FPGA Die Temperature" },
-+	{ 0x11c, 0x124, 0x120, 0x0, 0x0, 500, "QSFP0 Temperature" },
-+	{ 0x12c, 0x134, 0x130, 0x0, 0x0, 500, "QSFP1 Temperature" },
-+	{ 0x168, 0x0, 0x0, 0x0, 0x0, 500, "Retimer A Temperature" },
-+	{ 0x16c, 0x0, 0x0, 0x0, 0x0, 500, "Retimer A SerDes Temperature" },
-+	{ 0x170, 0x0, 0x0, 0x0, 0x0, 500, "Retimer B Temperature" },
-+	{ 0x174, 0x0, 0x0, 0x0, 0x0, 500, "Retimer B SerDes Temperature" },
-+};
-+
-+static const struct m10bmc_sdata n3000bmc_in_tbl[] = {
-+	{ 0x128, 0x0, 0x0, 0x0, 0x0, 1, "QSFP0 Supply Voltage" },
-+	{ 0x138, 0x0, 0x0, 0x0, 0x0, 1, "QSFP1 Supply Voltage" },
-+	{ 0x13c, 0x0, 0x0, 0x0, 0x0, 1, "FPGA Core Voltage" },
-+	{ 0x144, 0x0, 0x0, 0x0, 0x0, 1, "12V Backplane Voltage" },
-+	{ 0x14c, 0x0, 0x0, 0x0, 0x0, 1, "1.2V Voltage" },
-+	{ 0x150, 0x0, 0x0, 0x0, 0x0, 1, "12V AUX Voltage" },
-+	{ 0x158, 0x0, 0x0, 0x0, 0x0, 1, "1.8V Voltage" },
-+	{ 0x15c, 0x0, 0x0, 0x0, 0x0, 1, "3.3V Voltage" },
-+};
-+
-+static const struct m10bmc_sdata n3000bmc_curr_tbl[] = {
-+	{ 0x140, 0x0, 0x0, 0x0, 0x0, 1, "FPGA Core Current" },
-+	{ 0x148, 0x0, 0x0, 0x0, 0x0, 1, "12V Backplane Current" },
-+	{ 0x154, 0x0, 0x0, 0x0, 0x0, 1, "12V AUX Current" },
-+};
-+
-+static const struct m10bmc_sdata n3000bmc_power_tbl[] = {
-+	{ 0x160, 0x0, 0x0, 0x0, 0x0, 1000, "Board Power" },
-+};
-+
-+static const struct hwmon_channel_info *n3000bmc_hinfo[] = {
-+	HWMON_CHANNEL_INFO(temp,
-+			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
-+			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-+			   HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-+			   HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-+			   HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL),
-+	HWMON_CHANNEL_INFO(in,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL),
-+	HWMON_CHANNEL_INFO(curr,
-+			   HWMON_C_INPUT | HWMON_C_LABEL,
-+			   HWMON_C_INPUT | HWMON_C_LABEL,
-+			   HWMON_C_INPUT | HWMON_C_LABEL),
-+	HWMON_CHANNEL_INFO(power,
-+			   HWMON_P_INPUT | HWMON_P_LABEL),
-+	NULL
-+};
-+
-+struct m10bmc_hwmon_board_data n3000bmc_hwmon_bdata = {
-+	.temp = n3000bmc_temp_tbl,
-+	.in = n3000bmc_in_tbl,
-+	.curr = n3000bmc_curr_tbl,
-+	.power = n3000bmc_power_tbl,
-+	.hinfo = n3000bmc_hinfo,
-+};
-+
-+static umode_t
-+m10bmc_hwmon_is_visible(const void *data, enum hwmon_sensor_types type,
-+			u32 attr, int channel)
-+{
-+	return 0444;
-+}
-+
-+static const struct m10bmc_sdata *
-+find_sensor_data(struct m10bmc_hwmon *hw, enum hwmon_sensor_types type,
-+		 int channel)
-+{
-+	const struct m10bmc_sdata *tbl;
-+
-+	switch (type) {
-+	case hwmon_temp:
-+		tbl = hw->bdata->temp;
-+		break;
-+	case hwmon_in:
-+		tbl = hw->bdata->in;
-+		break;
-+	case hwmon_curr:
-+		tbl = hw->bdata->curr;
-+		break;
-+	case hwmon_power:
-+		tbl = hw->bdata->power;
-+		break;
-+	default:
-+		return ERR_PTR(-EOPNOTSUPP);
-+	}
-+
-+	if (!tbl)
-+		return ERR_PTR(-EOPNOTSUPP);
-+
-+	return &tbl[channel];
-+}
-+
-+static int do_sensor_read(struct m10bmc_hwmon *hw,
-+			  const struct m10bmc_sdata *data,
-+			  unsigned int regoff, long *val)
-+{
-+	unsigned int regval;
-+	int ret;
-+
-+	ret = m10bmc_sys_read(hw->m10bmc, regoff, &regval);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * BMC Firmware will return 0xdeadbeef if the sensor value is invalid
-+	 * at that time. This usually happens on sensor channels which connect
-+	 * to external pluggable modules, e.g. QSFP temperature and voltage.
-+	 * When the QSFP is unplugged from cage, driver will get 0xdeadbeef
-+	 * from their registers.
-+	 */
-+	if (regval == 0xdeadbeef)
-+		return -EBUSY;
-+
-+	*val = regval * data->multiplier;
-+
-+	return 0;
-+}
-+
-+static int m10bmc_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
-+			     u32 attr, int channel, long *val)
-+{
-+	struct m10bmc_hwmon *hw = dev_get_drvdata(dev);
-+	unsigned int reg = 0, reg_hyst = 0;
-+	const struct m10bmc_sdata *data;
-+	long hyst, value;
-+	int ret;
-+
-+	data = find_sensor_data(hw, type, channel);
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
-+	switch (type) {
-+	case hwmon_temp:
-+		switch (attr) {
-+		case hwmon_temp_input:
-+			reg = data->reg_input;
-+			break;
-+		case hwmon_temp_max_hyst:
-+			reg_hyst = data->reg_hyst;
-+			fallthrough;
-+		case hwmon_temp_max:
-+			reg = data->reg_max;
-+			break;
-+		case hwmon_temp_crit_hyst:
-+			reg_hyst = data->reg_hyst;
-+			fallthrough;
-+		case hwmon_temp_crit:
-+			reg = data->reg_crit;
-+			break;
-+		default:
-+			return -EOPNOTSUPP;
-+		}
-+		break;
-+	case hwmon_in:
-+		switch (attr) {
-+		case hwmon_in_input:
-+			reg = data->reg_input;
-+			break;
-+		case hwmon_in_max:
-+			reg = data->reg_max;
-+			break;
-+		case hwmon_in_crit:
-+			reg = data->reg_crit;
-+			break;
-+		case hwmon_in_min:
-+			reg = data->reg_min;
-+			break;
-+		default:
-+			return -EOPNOTSUPP;
-+		}
-+		break;
-+	case hwmon_curr:
-+		switch (attr) {
-+		case hwmon_curr_input:
-+			reg = data->reg_input;
-+			break;
-+		case hwmon_curr_max:
-+			reg = data->reg_max;
-+			break;
-+		case hwmon_curr_crit:
-+			reg = data->reg_crit;
-+			break;
-+		default:
-+			return -EOPNOTSUPP;
-+		}
-+		break;
-+	case hwmon_power:
-+		switch (attr) {
-+		case hwmon_power_input:
-+			reg = data->reg_input;
-+			break;
-+		default:
-+			return -EOPNOTSUPP;
-+		}
-+		break;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+
-+	if (!reg)
-+		return -EOPNOTSUPP;
-+
-+	ret = do_sensor_read(hw, data, reg, &value);
-+	if (ret)
-+		return ret;
-+
-+	if (reg_hyst) {
-+		ret = do_sensor_read(hw, data, reg_hyst, &hyst);
-+		if (ret)
-+			return ret;
-+
-+		value -= hyst;
-+	}
-+
-+	*val = value;
-+
-+	return ret;
-+}
-+
-+static int m10bmc_hwmon_read_string(struct device *dev,
-+				    enum hwmon_sensor_types type,
-+				    u32 attr, int channel, const char **str)
-+{
-+	struct m10bmc_hwmon *hw = dev_get_drvdata(dev);
-+	const struct m10bmc_sdata *data;
-+
-+	data = find_sensor_data(hw, type, channel);
-+	if (IS_ERR(data))
-+		return PTR_ERR(data);
-+
-+	*str = data->label;
-+
-+	return 0;
-+}
-+
-+static const struct hwmon_ops m10bmc_hwmon_ops = {
-+	.is_visible = m10bmc_hwmon_is_visible,
-+	.read = m10bmc_hwmon_read,
-+	.read_string = m10bmc_hwmon_read_string,
-+};
-+
-+static int m10bmc_hwmon_probe(struct platform_device *pdev)
-+{
-+	const struct platform_device_id *id = platform_get_device_id(pdev);
-+	struct intel_m10bmc *m10bmc = dev_get_drvdata(pdev->dev.parent);
-+	struct device *hwmon_dev, *dev = &pdev->dev;
-+	struct m10bmc_hwmon *hw;
-+	int i;
-+
-+	if (!id || !id->driver_data) {
-+		dev_err(dev, "Failed to get board data\n");
-+		return -ENODEV;
-+	}
-+
-+	hw = devm_kzalloc(dev, sizeof(*hw), GFP_KERNEL);
-+	if (!hw)
-+		return -ENOMEM;
-+
-+	hw->dev = dev;
-+	hw->m10bmc = m10bmc;
-+	hw->bdata = (struct m10bmc_hwmon_board_data *)id->driver_data;
-+
-+	hw->chip.info = hw->bdata->hinfo;
-+	hw->chip.ops = &m10bmc_hwmon_ops;
-+
-+	hw->hw_name = devm_kstrdup(dev, id->name, GFP_KERNEL);
-+	if (!hw->hw_name)
-+		return -ENOMEM;
-+
-+	for (i = 0; hw->hw_name[i]; i++)
-+		if (hwmon_is_bad_char(hw->hw_name[i]))
-+			hw->hw_name[i] = '_';
-+
-+	hwmon_dev = devm_hwmon_device_register_with_info(dev, hw->hw_name,
-+							 hw, &hw->chip, NULL);
-+	return PTR_ERR_OR_ZERO(hwmon_dev);
-+}
-+
-+static const struct platform_device_id intel_m10bmc_hwmon_ids[] = {
-+	{
-+		.name = "n3000bmc-hwmon",
-+		.driver_data = (unsigned long)&n3000bmc_hwmon_bdata,
-+	},
-+	{ }
-+};
-+
-+static struct platform_driver intel_m10bmc_hwmon_driver = {
-+	.probe = m10bmc_hwmon_probe,
-+	.driver = {
-+		.name = "intel-m10-bmc-hwmon",
-+	},
-+	.id_table = intel_m10bmc_hwmon_ids,
-+};
-+module_platform_driver(intel_m10bmc_hwmon_driver);
-+
-+MODULE_DEVICE_TABLE(platform, intel_m10bmc_hwmon_ids);
-+MODULE_AUTHOR("Intel Corporation");
-+MODULE_DESCRIPTION("Intel MAX 10 BMC hardware monitor");
-+MODULE_LICENSE("GPL");
--- 
-2.7.4
+On Mon, 14 Sep 2020, at 23:44, Guenter Roeck wrote:
+> On 9/14/20 5:28 AM, Andrew Jeffery wrote:
+> > Short turn-around times between transfers to e.g. the UCD90320 can lead
+> > to problematic behaviour, including excessive clock stretching, bus
+> > lockups and potential corruption of the device's volatile state.
+> > 
+> > Introduce transfer throttling for the device with a minimum access
+> > delay of 1ms.
+> > 
+> 
+> Some Zilker labs devices have the same problem, though not as bad
+> to need a 1ms delay. See zl6100.c. Various LTS devices have a similar
+> problem, but there it is possible to poll the device until it is ready.
+> See ltc2978.c.
+> 
+> > Signed-off-by: Andrew Jeffery <andrew@aj.id.au>
+> > ---
+> >  drivers/hwmon/pmbus/ucd9000.c | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> > 
+> > diff --git a/drivers/hwmon/pmbus/ucd9000.c b/drivers/hwmon/pmbus/ucd9000.c
+> > index 81f4c4f166cd..a0b97d035326 100644
+> > --- a/drivers/hwmon/pmbus/ucd9000.c
+> > +++ b/drivers/hwmon/pmbus/ucd9000.c
+> > @@ -9,6 +9,7 @@
+> >  #include <linux/debugfs.h>
+> >  #include <linux/kernel.h>
+> >  #include <linux/module.h>
+> > +#include <linux/moduleparam.h>
+> >  #include <linux/of_device.h>
+> >  #include <linux/init.h>
+> >  #include <linux/err.h>
+> > @@ -18,6 +19,9 @@
+> >  #include <linux/gpio/driver.h>
+> >  #include "pmbus.h"
+> >  
+> > +static unsigned long smbus_delay_us = 1000;
+> 
+> Is that to be on the super-safe side ? Patch 0 talks about needing 250 uS.
+> 
+> > +module_param(smbus_delay_us, ulong, 0664);
+> > +
+> 
+> I would not want to have this in user control, and it should not affect devices
+> not known to be affected. 
 
+Can you clarify what you mean here? Initially I interpreted your statement as 
+meaning "Don't impose delays on the UCD90160 when the issues have only been 
+demonstrated with the UCD90320". But I've since looked at zl6100.c and its 
+delay is also exposed as a module parameter, which makes me wonder whether it 
+was unclear that smbus_delay_us here is specific to the driver's i2c_client and 
+is not a delay imposed on all SMBus accesses from the associated master. That 
+is, with the implementation I've posted here, other (non-UCD9000) devices on 
+the same bus are _not_ impacted by this value.
+
+> I would suggest an implementation similar to other
+> affected devices; again, see zl6100.c or ltc2978.c for examples.
+
+I've had a look at these two examples. As you suggest the delays in zl6100.c 
+look pretty similar to what this series implements in the i2c core. I'm finding 
+it hard to dislodge the feeling that open-coding the waits is error prone, but 
+to avoid that and not implement the waits in the i2c core means having almost 
+duplicate implementations of handlers for i2c_smbus_{read,write}*() and 
+pmbus_{read,write}*() calls in the driver.
+
+Andrew
