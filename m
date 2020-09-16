@@ -1,115 +1,144 @@
-Return-Path: <SRS0=C+CR=CY=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=k+/s=CZ=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E5BEC43461
-	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Sep 2020 21:05:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67A16C433E2
+	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Sep 2020 03:00:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2079520732
-	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Sep 2020 21:05:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 10D052076C
+	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Sep 2020 03:00:29 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="p9sHU3/8"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727986AbgIOVEv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 15 Sep 2020 17:04:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39710 "EHLO
+        id S1726039AbgIPDA2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 15 Sep 2020 23:00:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727981AbgIOVDx (ORCPT
+        with ESMTP id S1726023AbgIPDAZ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 15 Sep 2020 17:03:53 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA34EC06178B
-        for <linux-hwmon@vger.kernel.org>; Tue, 15 Sep 2020 14:03:52 -0700 (PDT)
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1kII79-00006G-Jl; Tue, 15 Sep 2020 23:03:47 +0200
-Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1kII73-00019G-6I; Tue, 15 Sep 2020 23:03:41 +0200
-Date:   Tue, 15 Sep 2020 23:03:40 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Michael Walle <michael@walle.cc>, Lee Jones <lee.jones@linaro.org>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Pavel Machek <pavel@ucw.cz>
-Subject: Re: [PATCH v10 06/13] pwm: add support for sl28cpld PWM controller
-Message-ID: <20200915210340.xg5xwmajufedyltr@pengutronix.de>
-References: <20200914214341.14268-1-michael@walle.cc>
- <20200914214341.14268-7-michael@walle.cc>
+        Tue, 15 Sep 2020 23:00:25 -0400
+Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0B3C06174A;
+        Tue, 15 Sep 2020 20:00:24 -0700 (PDT)
+Received: by mail-oi1-x244.google.com with SMTP id y6so6420282oie.5;
+        Tue, 15 Sep 2020 20:00:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=R3jKuXD/7ZqoYBirZoVU1mMyrFihhhsei3EtDXsEQKs=;
+        b=p9sHU3/8KPrt/048jU3xkIpGE8LIB0Pu6BKQmGZnLl7PJvy4l43FGehPy5/m4mUk7A
+         rZ4bbTYxve/bVEoNe+VkZKXWdPuHAmu0G/CeYawwpUDMZybFGXMkpNMJ2iMHGcDbP0Ji
+         t6HYqasYUZhTOjVW61uvW4Mci5F3xKh7ardb7s4NQqejNpfzOvDi9mDXd3m7+ZZRZljH
+         XEikgAuEJo06k09/PtUolVFl+f/xR0HfpIg77yi51LosB1GVfLNV7raQq+OQK4h/GyPF
+         3uwazDLhdFsrFS78Yh75X3QwMcwkUWw8KHL9C6O04OKx0KfBX1WiUhdZwVAgVQqqN9rG
+         Ebuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=R3jKuXD/7ZqoYBirZoVU1mMyrFihhhsei3EtDXsEQKs=;
+        b=XbvWdv3i0TZXHvkzCFI1kaAPHSSN6xijA6mmPBI70wtIfo4uSNmrmyl89F76dq3fsf
+         hrMwGdbzW3lWdzvWqToR9mGVhqBXovpGCv1Zcf6ikHX/ZdBPqZZW8X0GkC3SVG1BI26+
+         saIZ4eYHnHG89Aaup+o0wZC+NfEU3fX04ovnT29qJz8LVX4V5eFJ40yHtH9SpLPTjZpO
+         SfZ6jtP1bABLyesDYxfdNg/bJgog3zyOTtOpK/UDDspsV/A6qO8kBlSc5zX8sdi7HEYm
+         2hT8YY6M+UNV+ouuiRdqlGPWvEwrZujqu0BobxP2fAD8bpr74wBGUhdZ/KptMO0tMMXH
+         r/Gg==
+X-Gm-Message-State: AOAM532iZmZKJHDgPBBXvN69zbFh6yV2dY2f9FmD3zZF5OZmK7ToZjOc
+        69/Z4OeVN29gxGj6NgE4ufU=
+X-Google-Smtp-Source: ABdhPJzL94NqlpctCSTmWNE+N9w5baXAuXClFSztNKJuJ4HyMtDD3IXxpqFO3XjmevnBvxItEOh55w==
+X-Received: by 2002:aca:3b82:: with SMTP id i124mr1601000oia.155.1600225223678;
+        Tue, 15 Sep 2020 20:00:23 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 91sm2733054ott.55.2020.09.15.20.00.22
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 15 Sep 2020 20:00:22 -0700 (PDT)
+Date:   Tue, 15 Sep 2020 20:00:21 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Wei Huang <wei.huang2@amd.com>
+Cc:     jdelvare@suse.com, clemens@ladisch.de, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] hwmon: (k10temp) Add support for Zen3 CPUs
+Message-ID: <20200916030021.GA249710@roeck-us.net>
+References: <20200914200715.1997757-1-wei.huang2@amd.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cyiwyjcsxpn452wt"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200914214341.14268-7-michael@walle.cc>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
+In-Reply-To: <20200914200715.1997757-1-wei.huang2@amd.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+On Mon, Sep 14, 2020 at 03:07:15PM -0500, Wei Huang wrote:
+> Zen3 thermal info is supported via a new PCI device ID. Also the voltage
+> telemetry registers and the current factors need to be defined. k10temp
+> driver then searches for CPU family 0x19 and configures k10temp_data
+> accordingly.
+> 
+> Signed-off-by: Wei Huang <wei.huang2@amd.com>
 
---cyiwyjcsxpn452wt
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied.
 
-On Mon, Sep 14, 2020 at 11:43:34PM +0200, Michael Walle wrote:
-> Add support for the PWM controller of the sl28cpld board management
-> controller. This is part of a multi-function device driver.
->=20
-> The controller has one PWM channel and can just generate four distinct
-> frequencies.
->=20
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> Acked-by: Thierry Reding <thierry.reding@gmail.com>
+Thanks,
+Guenter
 
-Reviewed-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-
-@Lee: From my side taking the patch via your mfd tree is fine.
-
-Thanks for your effort to align your patch to my reviews
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---cyiwyjcsxpn452wt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAl9hLCkACgkQwfwUeK3K
-7AmJogf/X2AMslmJpJk0/t52+83yxuLmP8HEPZ/fZLyaE9/xTy0N/O2LeLsp13pK
-Jy7h+pQXkSORq2B/y38E5O+HAYSHquEkhnJKCG6sQk6gFxBH4F4eU14Y3LB7etqM
-8mNonE4LjJoNew2Mv2hBdO+9fTMum16bEe7rcQwBY3B6BYFkmad7ZK9XoDYm4cfB
-V5aLHywUaFB9/CZ2fqXDvtN/47Rf+ejnkrijTYwwu+BGf8i6bxIOUzSTHrrm5KnF
-fZ+GAFFikBriPAKpJvrVA0w3/tOhHpaOhNu405ghN4+aNwieSq0f6OZVP8IgJP3T
-c/G/lstWFGVi0MbWlbzQfVxcrCnBpg==
-=I40k
------END PGP SIGNATURE-----
-
---cyiwyjcsxpn452wt--
+> ---
+>  drivers/hwmon/k10temp.c | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+> 
+> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+> index 49e8ebf8da32..a250481b5a97 100644
+> --- a/drivers/hwmon/k10temp.c
+> +++ b/drivers/hwmon/k10temp.c
+> @@ -95,6 +95,13 @@ static DEFINE_MUTEX(nb_smu_ind_mutex);
+>  #define F17H_M31H_CFACTOR_ICORE			1000000	/* 1A / LSB	*/
+>  #define F17H_M31H_CFACTOR_ISOC			310000	/* 0.31A / LSB	*/
+>  
+> +/* F19h thermal registers through SMN */
+> +#define F19H_M01_SVI_TEL_PLANE0			(ZEN_SVI_BASE + 0x14)
+> +#define F19H_M01_SVI_TEL_PLANE1			(ZEN_SVI_BASE + 0x10)
+> +
+> +#define F19H_M01H_CFACTOR_ICORE			1000000	/* 1A / LSB	*/
+> +#define F19H_M01H_CFACTOR_ISOC			310000	/* 0.31A / LSB	*/
+> +
+>  struct k10temp_data {
+>  	struct pci_dev *pdev;
+>  	void (*read_htcreg)(struct pci_dev *pdev, u32 *regval);
+> @@ -527,6 +534,22 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+>  			k10temp_get_ccd_support(pdev, data, 8);
+>  			break;
+>  		}
+> +	} else if (boot_cpu_data.x86 == 0x19) {
+> +		data->temp_adjust_mask = ZEN_CUR_TEMP_RANGE_SEL_MASK;
+> +		data->read_tempreg = read_tempreg_nb_zen;
+> +		data->show_temp |= BIT(TDIE_BIT);
+> +		data->is_zen = true;
+> +
+> +		switch (boot_cpu_data.x86_model) {
+> +		case 0x0 ... 0x1:	/* Zen3 */
+> +			data->show_current = true;
+> +			data->svi_addr[0] = F19H_M01_SVI_TEL_PLANE0;
+> +			data->svi_addr[1] = F19H_M01_SVI_TEL_PLANE1;
+> +			data->cfactor[0] = F19H_M01H_CFACTOR_ICORE;
+> +			data->cfactor[1] = F19H_M01H_CFACTOR_ISOC;
+> +			k10temp_get_ccd_support(pdev, data, 8);
+> +			break;
+> +		}
+>  	} else {
+>  		data->read_htcreg = read_htcreg_pci;
+>  		data->read_tempreg = read_tempreg_pci;
+> @@ -564,6 +587,7 @@ static const struct pci_device_id k10temp_id_table[] = {
+>  	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M30H_DF_F3) },
+>  	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M60H_DF_F3) },
+>  	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_17H_M70H_DF_F3) },
+> +	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_DF_F3) },
+>  	{ PCI_VDEVICE(HYGON, PCI_DEVICE_ID_AMD_17H_DF_F3) },
+>  	{}
+>  };
