@@ -7,65 +7,66 @@ X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56A44C43461
-	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Sep 2020 03:01:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14700C43461
+	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Sep 2020 03:02:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 02ABA2076C
-	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Sep 2020 03:01:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C8B1621D80
+	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Sep 2020 03:02:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="p4aF3oaB"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="o/5yBane"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726134AbgIPDBV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 15 Sep 2020 23:01:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38594 "EHLO
+        id S1726093AbgIPDCu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 15 Sep 2020 23:02:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726023AbgIPDBU (ORCPT
+        with ESMTP id S1726039AbgIPDCt (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 15 Sep 2020 23:01:20 -0400
-Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E377C06174A
-        for <linux-hwmon@vger.kernel.org>; Tue, 15 Sep 2020 20:01:20 -0700 (PDT)
-Received: by mail-oi1-x241.google.com with SMTP id t76so6404617oif.7
-        for <linux-hwmon@vger.kernel.org>; Tue, 15 Sep 2020 20:01:20 -0700 (PDT)
+        Tue, 15 Sep 2020 23:02:49 -0400
+Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A68C06174A;
+        Tue, 15 Sep 2020 20:02:49 -0700 (PDT)
+Received: by mail-ot1-x343.google.com with SMTP id m12so5354634otr.0;
+        Tue, 15 Sep 2020 20:02:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=S3SQtwKhjYSUPUAEjBSDkU/T9pOG9H3QuczxbMdxwhM=;
-        b=p4aF3oaBAEzsKmyKSNe3dLoz82O2Veyp5o4h1QnDn7EzsotQMNEVFpITAn0jssqV0F
-         WUtiMh/Xa2qH1eZlpzK6M8cIJxino+yvwdGSkLBn9GbaE2ce4RqSkjOYiwb7SHfD9lFl
-         4W2qDo1JgetXxe2broW0yNpYAHm1+TyvjZRE4n0XRvA3pbAzKR+tle8Qv8UF0HI7U8mE
-         6hx2AoXgRDj1VUZ5najtKl9d91ImMviivGwsfk0Wpa2vMATU+yaKngDje2cPzcV/7E+N
-         XJ4eWguj5mCP34NfpL8JBUv4SmyzEFJMeDWyPgSOyDxogKDwtd6hcGqdXPqzeRuBdDQF
-         k0DA==
+        bh=P3ZDmBbidV1H7FTbdP5XdZRBLhou0d9Q+v5+7AuvbmI=;
+        b=o/5yBanebXShlfaIO5CgjlHQf0TJaplZfyZ52reqFoVfCnoH2dcjwWsxpqp8nA9uNd
+         avK+Dk3Ju3hvacrvy7MKffY6wRRjGCxrYNfTlV4FiRt81TC3mVPfyHQHtCO366cMy/Fq
+         DXEbD2KSieYHDd9imMRKGnWa7/3TyqfNg9KqzjYl2d83ARFsaedlT4nwCoZ7+xhH6pCo
+         bWGc3j5+v49vKLfHXtmjGPdkoB6Ln1Egz/rNZVboZTQvFg9P0bgM/eDweIbeJ9B4lY2S
+         ZVOdGcQjcZOyoxtHMaYEq+r+hpQ72txDss3wBP83BAyoauqiVNWQ8YGtS86KFH6Tpgxt
+         u3rA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=S3SQtwKhjYSUPUAEjBSDkU/T9pOG9H3QuczxbMdxwhM=;
-        b=g8G1aHOK08u3J04kofu3w7DReEoyk/XOPOyyEjq2oaZY1zfQ0ME8RTJJjqBnwzA3eU
-         HA3w4BXzYbVfFUP4nCDHLZUnlmmFm6iANczHYhqZahV8f8wE/HuK5yXAUeIPBFFLZqQ0
-         WCdaRMqg4PR42ctznQFTP5dX7DbmNLRduZJFC0Hwiczse9P0Dn2769Exd2X0wZfNBcWn
-         LD9tbHxdpIeS+knwAKtYt8Dhe7Qq5M8SAFhm3uq0qtqhaWrAOcsBvkTuy9kHiR4F9OVM
-         djhKTKTszaSkxzSnFTihZ5WD6SohwqA72Xmhg3HZc1Q0t7yqINz3JWqhed4r1CepfwQH
-         XTDA==
-X-Gm-Message-State: AOAM532ShdtQQw/k7u693O0jpqOgy7REJ77CCtsgloy9/n34YvWQAvmc
-        rI5CJqNYW6GfUvcd4BdYnYQ=
-X-Google-Smtp-Source: ABdhPJzNjnYaGu76x33qOKf1s8x8e6loxYYBiPV1AH9cIOdMgaaiKeJhNcKM+UZBQ/Gmp24xrdw7UA==
-X-Received: by 2002:a05:6808:557:: with SMTP id i23mr1648450oig.80.1600225279530;
-        Tue, 15 Sep 2020 20:01:19 -0700 (PDT)
+        bh=P3ZDmBbidV1H7FTbdP5XdZRBLhou0d9Q+v5+7AuvbmI=;
+        b=UARFQS9vas8XEfT0n3Ib9tGxlblWRjxQ7QDOSUEWGMgpr0llqN/zc3PbsXpIwHq7kC
+         39FImWnawBCNcm/PA6AF8fiE5XfHXwOO/x+/+FSOCsVq2k1mAmgtQDR3zxdWe/PDx/KD
+         +eddGk2TzCl4BPSzD5af6zpJrUgzx9dF9SM0ZpL1grKBXsqo4a7BtKhZsfUKEtcCyFec
+         Ik/AIQr6PJytPeXzG6eT00MyNCZzxoUDdcqWJNNIUCup8kESjSyA4PfBNUdYawldC953
+         /f4HxI/5fh4/5vdJN/6yG6ibmne1CYtnTd2gq7E5SJKX7thx+rk4gQj6L7nclZA9f8tb
+         ZS0g==
+X-Gm-Message-State: AOAM530TaoyapsH11fM7zfPHiv0a65tkVMGv/KP0kkvb4PeTyDyKTDXA
+        gQBTjGiGF592S7a7/w37JQ0=
+X-Google-Smtp-Source: ABdhPJyAysd7TOGh7AMBcQlQL/mfyBKjlvXjichoqG7P48+mToLkSlqu46K53Fr1UlEziwjOyGy8xg==
+X-Received: by 2002:a05:6830:12c7:: with SMTP id a7mr15757748otq.334.1600225368786;
+        Tue, 15 Sep 2020 20:02:48 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 92sm7322138ota.38.2020.09.15.20.01.18
+        by smtp.gmail.com with ESMTPSA id e19sm6483441ote.37.2020.09.15.20.02.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Sep 2020 20:01:19 -0700 (PDT)
-Subject: Re: [PATCH] [PATCH] drivers/hwmon/pmbus/delta.c: Add drivers to
- Delta's modules
-To:     "xiao.mx.ma" <734056705@qq.com>, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@bger.kernel.org,
-        xiao.mx.ma@deltaww.com, jiajia.feng@deltaww.com
-References: <tencent_B5A4994B379FFE817637FA04BA2EA24BA405@qq.com>
+        Tue, 15 Sep 2020 20:02:48 -0700 (PDT)
+Subject: Re: [PATCH v2] hwmon: pmbus: max20730: adjust the vout reading given
+ voltage divider
+To:     Chu Lin <linchuyuan@google.com>, jdelvare@suse.com,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        qiongwang@google.com, zhongqil@google.com, jasonling@google.com,
+        belgaied@google.com
+References: <20200911000050.2301678-1-linchuyuan@google.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -110,352 +111,95 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <4a887ee1-27e8-f638-c994-23f602bbf54e@roeck-us.net>
-Date:   Tue, 15 Sep 2020 20:01:17 -0700
+Message-ID: <196e30ce-634c-a543-814d-d17c6a926cf8@roeck-us.net>
+Date:   Tue, 15 Sep 2020 20:02:47 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <tencent_B5A4994B379FFE817637FA04BA2EA24BA405@qq.com>
+In-Reply-To: <20200911000050.2301678-1-linchuyuan@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-hwmon-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The subject should be something like
+On 9/10/20 5:00 PM, Chu Lin wrote:
+> Problem:
+> We use voltage dividers so that the voltage presented at the voltage
+> sense pins is confusing. We might need to convert these readings to more
+> meaningful readings given the voltage divider.
+> 
+> Solution:
+> Read the voltage divider resistance from dts and convert the voltage
+> reading to a more meaningful reading.
+> 
+> Testing:
+> max20730 with voltage divider
+> 
+> Signed-off-by: Chu Lin <linchuyuan@google.com>
 
-[PATCH] hwmon: Driver for Delta power supplies
+For my reference:
 
-On 9/15/20 6:28 PM, xiao.mx.ma wrote:
-> The <drivers/hwmon/pmbus/delta.c> provides drivers for Delta's modules.
-> Currently supports Q54SJ108A2 series and other series will continue to
-> be added in the future.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Empty line missing here.
-
-> Signed-off-by: xiao.mx.ma <734056705@qq.com>
-
-Please drop the excessive empty lines and resubmit. Also see other comments
-in the code.
-
-If you don't know how to format the file, I would suggest to use
-scripts/Lindent as starting point. That still leaves way too many
-empty lines, though. Please look into other files for examples,
-and run checkpatch --strict.
+We'll have to wait for DT review before I can apply the patch.
 
 Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/pmbus/Kconfig  |   8 ++
->  drivers/hwmon/pmbus/Makefile |   1 +
->  drivers/hwmon/pmbus/delta.c  | 234 +++++++++++++++++++++++++++++++++++
-
-Documentation/hwmon/delta.rst missing
-
->  3 files changed, 243 insertions(+)
->  create mode 100644 drivers/hwmon/pmbus/delta.c
+> ChangeLog v1 -> v2
+>   - Don't do anything to the ret if an error is returned from
+>     pmbus_read_word
+>   - avoid overflow when doing multiplication
 > 
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index e35db489b76f..a9468be10d7e 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -45,6 +45,14 @@ config SENSORS_BEL_PFE
->  	  This driver can also be built as a module. If so, the module will
->  	  be called bel-pfe.
+>  drivers/hwmon/pmbus/max20730.c | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
+> 
+> diff --git a/drivers/hwmon/pmbus/max20730.c b/drivers/hwmon/pmbus/max20730.c
+> index c0bb05487e0e..83affdad4060 100644
+> --- a/drivers/hwmon/pmbus/max20730.c
+> +++ b/drivers/hwmon/pmbus/max20730.c
+> @@ -29,6 +29,7 @@ struct max20730_data {
+>  	struct pmbus_driver_info info;
+>  	struct mutex lock;	/* Used to protect against parallel writes */
+>  	u16 mfr_devset1;
+> +	u32 vout_voltage_divider[2];
+>  };
 >  
-> +config SENSORS_DELTA
-> +	tristate "DELTA"
-
-Might be better to have a bit more text here. "Delta power suplies", maybe.
-
-> +	help
-> +	  If you say yes here you get hardware monitoring support for Delta Power Supplies.
-> +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called delta.
-> +
->  config SENSORS_IBM_CFFPS
->  	tristate "IBM Common Form Factor Power Supply"
->  	depends on LEDS_CLASS
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index c4b15db996ad..8957f5337002 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -7,6 +7,7 @@ obj-$(CONFIG_PMBUS)		+= pmbus_core.o
->  obj-$(CONFIG_SENSORS_PMBUS)	+= pmbus.o
->  obj-$(CONFIG_SENSORS_ADM1275)	+= adm1275.o
->  obj-$(CONFIG_SENSORS_BEL_PFE)	+= bel-pfe.o
-> +obj-$(CONFIG_SENSORS_DELTA)	+= delta.o
->  obj-$(CONFIG_SENSORS_IBM_CFFPS)	+= ibm-cffps.o
->  obj-$(CONFIG_SENSORS_INSPUR_IPSPS) += inspur-ipsps.o
->  obj-$(CONFIG_SENSORS_IR35221)	+= ir35221.o
-> diff --git a/drivers/hwmon/pmbus/delta.c b/drivers/hwmon/pmbus/delta.c
-> new file mode 100644
-> index 000000000000..090429881c45
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/delta.c
-> @@ -0,0 +1,234 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +
-> +/*
-> + * Driver for Q54SJ108A2, Q50SN12050, and Q50SN12072 Integrated, Step-Down
-> + * Switching Regulators
-
-This does not match the code.
-
-> + *
-> + * Copyright 2020 Delta LLC.
-> + */
-> +
-> +
-> +#include <linux/bits.h>
-> +
-> +#include <linux/err.h>
-> +
-> +#include <linux/i2c.h>
-> +
-> +#include <linux/init.h>
-> +
-> +#include <linux/kernel.h>
-> +
-> +#include <linux/module.h>
-> +
-> +#include <linux/mutex.h>
-> +
-> +#include <linux/of_device.h>
-> +
-> +#include <linux/pmbus.h>
-> +
-> +#include <linux/util_macros.h>
-> +
-> +#include "pmbus.h"
-> +
-> +enum chips {
-> +
-> +	Q54SJ108A2
-> +};
-> +
-> +static const struct pmbus_driver_info delta_info[] = {
-> +
-> +[Q54SJ108A2] = {
-> +
-> +.pages = 1,
-> +
-> +/* Source : Delta Q54SJ108A2 */
-> +
-> +.format[PSC_TEMPERATURE] = linear,
-> +
-> +.format[PSC_VOLTAGE_IN] = linear,
-> +
-> +.format[PSC_CURRENT_OUT] = linear,
-> +
-> +
-> +.func[0] = PMBUS_HAVE_VIN |
-> +
-> +PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
-> +
-> +PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
-> +
-> +PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP |
-> +
-> +PMBUS_HAVE_STATUS_INPUT,
-
-Indentation missing.
-
-> +
-> +},
-> +
-> +};
-> +
-> +
-> +
-> +static int delta_probe(struct i2c_client *client, const struct i2c_device_id *id)
-> +{
-> +
-> +	struct device *dev = &client->dev;
-> +
-> +	u8 buf[I2C_SMBUS_BLOCK_MAX + 1];
-> +
-> +	struct pmbus_driver_info *info;
-> +
-> +	enum chips chip_id;
-> +
-> +	int ret;
-> +
-> +	if (!i2c_check_functionality(client->adapter,
-> +
-> +		I2C_FUNC_SMBUS_BYTE_DATA |
-> +
-> +		I2C_FUNC_SMBUS_WORD_DATA |
-> +
-> +		I2C_FUNC_SMBUS_BLOCK_DATA))
-> +
+>  #define to_max20730_data(x)  container_of(x, struct max20730_data, info)
+> @@ -111,6 +112,14 @@ static int max20730_read_word_data(struct i2c_client *client, int page,
+>  		max_c = max_current[data->id][(data->mfr_devset1 >> 5) & 0x3];
+>  		ret = val_to_direct(max_c, PSC_CURRENT_OUT, info);
+>  		break;
+> +	case PMBUS_READ_VOUT:
+> +		ret = pmbus_read_word_data(client, page, phase, reg);
+> +		if (ret > 0 && data->vout_voltage_divider[0] && data->vout_voltage_divider[1]) {
+> +			u64 temp = DIV_ROUND_CLOSEST_ULL((u64)ret * data->vout_voltage_divider[1],
+> +							 data->vout_voltage_divider[0]);
+> +			ret = clamp_val(temp, 0, 0xffff);
+> +		}
+> +		break;
+>  	default:
+>  		ret = -ENODATA;
+>  		break;
+> @@ -329,6 +338,15 @@ static int max20730_probe(struct i2c_client *client,
+>  	data->id = chip_id;
+>  	mutex_init(&data->lock);
+>  	memcpy(&data->info, &max20730_info[chip_id], sizeof(data->info));
+> +	if (of_property_read_u32_array(client->dev.of_node, "vout-voltage-divider",
+> +				       data->vout_voltage_divider,
+> +				       ARRAY_SIZE(data->vout_voltage_divider)) != 0)
+> +		memset(data->vout_voltage_divider, 0, sizeof(data->vout_voltage_divider));
+> +	if (data->vout_voltage_divider[1] < data->vout_voltage_divider[0]) {
+> +		dev_err(dev,
+> +			"The total resistance of voltage divider is less than output resistance\n");
 > +		return -ENODEV;
-> +
-> +	if (client->dev.of_node)
-> +
-> +		chip_id = (enum chips)of_device_get_match_data(dev);
-> +
-> +	else
-> +
-> +		chip_id = id->driver_data;
-> +
-> +	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, buf);
-> +
-> +	if (ret < 0) {
-> +
-> +		dev_err(&client->dev, "Failed to read Manufacturer ID\n");
-> +
-> +		return ret;
-> +
 > +	}
-> +
-> +	if (ret != 5 || strncmp((buf), "DELTA", 5)) {
-
-Unnecessary ( ) around buf
-
-> +
-> +		buf[ret] = '\0';
-> +
-> +		dev_err(dev, "Unsupported Manufacturer ID '%s'\n", buf);
-> +
-> +		return -ENODEV;
-> +
-> +	}
-> +
-> +/*
-> + * The chips support reading PMBUS_MFR_MODEL.
-> + */
-> +
-> +	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, buf);
-> +
-> +	if (ret < 0) {
-> +
-> +		dev_err(dev, "Failed to read Manufacturer Model\n");
-> +
-> +		return ret;
-> +
-> +	}
-> +
-> +	if (ret != 14 || strncmp((buf), "Q54SJ108A2", 10)) {
-
-Unnecessary ( ) around buf
-
-> +
-> +		buf[ret] = '\0';
-> +
-> +		dev_err(dev, "Unsupported Manufacturer Model '%s'\n", buf);
-> +
-> +		return -ENODEV;
-> +
-> +	}
-> +
-> +	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_REVISION, buf);
-> +
-> +	if (ret < 0) {
-> +
-> +		dev_err(dev, "Failed to read Manufacturer Revision\n");
-> +
-> +		return ret;
-> +
-> +	}
-> +
-> +	if (ret != 4 || buf[0] != 'S') {
-> +
-> +		buf[ret] = '\0';
-> +
-> +		dev_err(dev, "Unsupported Manufacturer Revision '%s'\n", buf);
-> +
-> +		return -ENODEV;
-> +
-> +	}
-> +
-> +	info = devm_kzalloc(dev, sizeof(*info), GFP_KERNEL);
-> +
-> +	if (!info)
-> +
-> +		return -ENOMEM;
-> +
-> +	memcpy(info, &delta_info[chip_id], sizeof(*info));
-
-"info" isn't modified, so there should be no need to copy it.
-
-> +
-> +	return pmbus_do_probe(client, id, info);
-> +
-> +}
-> +
-> +
-> +
-> +static const struct i2c_device_id delta_id[] = {
-> +
-> +{ "Q54SJ108A2", Q54SJ108A2 },
-> +
-> +{ },
-> +
-
-Indentation missing.
-
-> +};
-> +
-> +
-> +
-> +MODULE_DEVICE_TABLE(i2c, delta_id);
-> +
-> +
-> +
-> +static const struct of_device_id delta_of_match[] = {
-> +
-> +{ .compatible = "delta,Q54SJ108A2", .data = (void *)Q54SJ108A2 },
-> +
-> +{ },
-> +
-Indentation missing
-
-> +};
-> +
-> +
-> +
-> +MODULE_DEVICE_TABLE(of, delta_of_match);
-> +
-> +
-> +
-> +static struct i2c_driver delta_driver = {
-> +
-> +.driver = {
-> +
-> +.name = "Q54SJ108A2",
-> +
-> +.of_match_table = delta_of_match,
-> +
-> +},
-> +
-> +.probe = delta_probe,
-> +
-> +.remove = pmbus_do_remove,
-> +
-> +.id_table = delta_id,
-> +
-Indentation missing
-
-> +};
-> +
-> +
-> +
-> +module_i2c_driver(delta_driver);
-> +
-> +
-> +
-> +MODULE_AUTHOR("Delta <734056705@qq.com>");
-> +
-> +MODULE_DESCRIPTION("PMBus driver for Delta Q54SJ108A2NCAH / Q54SJ108A2NCDH / Q54SJ108A2NCPG / Q54SJ108A2NCPH");
-
-Does not match code.
-
-> +
-> +MODULE_LICENSE("GPL");
+>  
+>  	ret = i2c_smbus_read_word_data(client, MAX20730_MFR_DEVSET1);
+>  	if (ret < 0)
 > 
 
