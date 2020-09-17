@@ -2,170 +2,114 @@ Return-Path: <SRS0=LLeq=C2=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F255C43465
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Sep 2020 20:23:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C360C43464
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Sep 2020 21:46:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2C4F3206B7
-	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Sep 2020 20:23:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C03252075B
+	for <linux-hwmon@archiver.kernel.org>; Thu, 17 Sep 2020 21:46:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FnbmoKzn"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ncae4Mqr"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726589AbgIQUXA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Sep 2020 16:23:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57418 "EHLO
+        id S1726135AbgIQVqi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 17 Sep 2020 17:46:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726234AbgIQUW7 (ORCPT
+        with ESMTP id S1726040AbgIQVqi (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Sep 2020 16:22:59 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D0D9C06178C
-        for <linux-hwmon@vger.kernel.org>; Thu, 17 Sep 2020 12:25:19 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id z4so3253055wrr.4
-        for <linux-hwmon@vger.kernel.org>; Thu, 17 Sep 2020 12:25:19 -0700 (PDT)
+        Thu, 17 Sep 2020 17:46:38 -0400
+Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9D4C06174A
+        for <linux-hwmon@vger.kernel.org>; Thu, 17 Sep 2020 14:46:38 -0700 (PDT)
+Received: by mail-ot1-x343.google.com with SMTP id h17so3416044otr.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 17 Sep 2020 14:46:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=fnNtIiw2rIjrsGeETGQ4HVhLgof6IApfDCKNZB0rtx4=;
-        b=FnbmoKzn7ml3hNVC5JMySDeca53lTjtdCXoL4cxAwzsEJrHzyEDKiOIljY35+rHymp
-         jt5GwmgM0shyZllOsgSZwY1CN+167LFzIGjPBmfNcdzVLaAOviH2qCxmpdLIINnBYKdr
-         Nenh/eU1pcNo7H7CYh7JbOgBzXixsAvVANZjgbmMpOdpEOqoSWQOaJdn0OEkqXMoKEDM
-         Q0SNuv4Q5KZUIK5oUfQtO9Gcy3oo5OvaZ3rbJ7eOSHvaN8c1rIBr1TUyzLh0jx/opgMg
-         Syx8dKN4xhP81GhQDlmyDEUOhNv4IH6zDXnd2mrLTjbJp/76i8olBPS0b7cja4sPq5o/
-         fzcw==
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id;
+        bh=S6XgPSRdEpfDqU3ZLLcG50Q4G/mvaUdxs14YJg+5lkc=;
+        b=ncae4MqroKPKNO8OKt+YgGSGmzEgdvuByJhzymGUDtcmWkxKSCsxSNuQ0T0ej7lPRw
+         PM1P8CQAgCjAcrQfQeT/Vmx7UcSUGeu0ocg9qXpnCxWhM7mEUUnqj2T0P3vJfJ7ZJLGg
+         eg/4Hj6v4f8MmnKl6rF1/UWU9hmRcD811T+qKCYVUVLSgtWBgS41kjl0NMb13BRO8gNW
+         rjgsQe802bcXJIOX2esiB2RwL4s+FDhaOEHp5lwLZWneUbmrYS3FlQAsufRDbJd+hLtV
+         CrU2Tixuq+NOzdaDxk8a0pwlshFC1xYmiOF3LsypgvB0lQuapl/AQHjB2ApLnbYSfVgU
+         HA9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=fnNtIiw2rIjrsGeETGQ4HVhLgof6IApfDCKNZB0rtx4=;
-        b=siRObF3DchlWOG/D/+dP/VGc4tkHUHinO6nPf4t3LVJvL+Aae+qmZdU9rdQQiUIply
-         azMzBYSLLhjwQiFkDShKe/9YeM9HdQmCWyZGItttHtEDumu4x+Inl/V8cOupkw2XKTgo
-         JKXz6yzS4q0RUxANIMCCwF0bfeoXMMcALoiNWuknlkcXp8riyshZBWcVQlEoDoSktsFP
-         fCzGtubrdFaAWQP52+7HDuCDUStSoZOtF77h2iUdruTtbu0//79waIcF0FJFatfgZXWH
-         6NQk8zlN2URAdfrf8fTYZIkUaX9XS6HSnj0pqcpj/SlJSnb9lMsm9KKoR7KtsbHed1uG
-         /vgg==
-X-Gm-Message-State: AOAM531TiQOgiUWrrc0wCQ55j1Inx/5EsC7t2PGWXyGvGXtRHzorlw6e
-        3WaXvb59QLdEYQ3hTzl4X5ty6Q==
-X-Google-Smtp-Source: ABdhPJwHQNEGKQiK5VaKpdrHxxRlNDliXhK+3vSwtgJ/Fr7no0AtL6d27HAF4oliOiP95GvT8d67qQ==
-X-Received: by 2002:a05:6000:100c:: with SMTP id a12mr36101704wrx.115.1600370717856;
-        Thu, 17 Sep 2020 12:25:17 -0700 (PDT)
-Received: from dell ([91.110.221.204])
-        by smtp.gmail.com with ESMTPSA id i6sm970270wra.1.2020.09.17.12.25.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2020 12:25:16 -0700 (PDT)
-Date:   Thu, 17 Sep 2020 20:25:14 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
+        bh=S6XgPSRdEpfDqU3ZLLcG50Q4G/mvaUdxs14YJg+5lkc=;
+        b=sPQ0jJJHucLITdzvbRHMdwolbafqyb0KvVnIJzU3coaHIahCb09af6DDPRfeH9srHd
+         UdKtPlGM9PK00yDC5cgUNsiNU+wH83eU6rugdwpkFW8OuEWQsRlHt/P3KSpa0y902D41
+         CEjxR+Nt2Wa6GEwevUIkeeIsBWEkQJde6k3FfDrRzSXPQlEOUznJzISpzlzjwu0+MInu
+         R/rmFNF09Z/oEGFe0Frx7ak6cJUvoSOnkRaZS4Kk23koBGrpWNvPCvrdViWpYoQiYFsD
+         jwR2UD1Q/eaYI2kpKa/YntycpfR3NY/F9CVEWehat1f3e7Q2PSa4eQOOHdAeBnGrvdf1
+         cl1w==
+X-Gm-Message-State: AOAM532ASsmbOSZ9UPYU7RuGFvNPJt216/8vIDCyo4fKS8Nh49yl8lkb
+        O/F3o6rBHs02t3/pHjRGwFtTHyY0sPw=
+X-Google-Smtp-Source: ABdhPJz/PDgr48Tp+PXndQBkxAJizozC2zpBcNaEKugbP4cPHCIxJKLSquX7aVET2pvBRtVBYTrf4Q==
+X-Received: by 2002:a9d:30d7:: with SMTP id r23mr21198298otg.186.1600379197333;
+        Thu, 17 Sep 2020 14:46:37 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j20sm803090ots.5.2020.09.17.14.46.36
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 17 Sep 2020 14:46:36 -0700 (PDT)
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Pavel Machek <pavel@ucw.cz>
-Subject: [GIT PULL] Immutable branch between MFD, HWMON, GPIO, IRQChip, PWM
- and Watchdog due for the v5.10 merge window
-Message-ID: <20200917192514.GF4678@dell>
-References: <20200914214341.14268-1-michael@walle.cc>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200914214341.14268-1-michael@walle.cc>
+        Steve Foreman <foremans@google.com>
+Subject: [PATCH] hwmon: (pmbus/max34440) Fix status register reads for MAX344{51,60,61}
+Date:   Thu, 17 Sep 2020 14:46:34 -0700
+Message-Id: <20200917214634.103912-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Enjoy!
+Starting with MAX34451, the chips of this series support STATUS_IOUT and
+STATUS_TEMPERATURE commands, and no longer report over-current and
+over-temperature status with STATUS_MFR_SPECIFIC.
 
-The following changes since commit 9123e3a74ec7b934a4a099e98af6a61c2f80bbf5:
+Fixes: 7a001dbab4ade ("hwmon: (pmbus/max34440) Add support for MAX34451.")
+Fixes: 50115ac9b6f35 ("hwmon: (pmbus/max34440) Add support for MAX34460 and MAX34461")
+Reported-by: Steve Foreman <foremans@google.com>
+Cc: Steve Foreman <foremans@google.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/hwmon/pmbus/max34440.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-  Linux 5.9-rc1 (2020-08-16 13:04:57 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-gpio-hwmon-irqchip-pwm-watchdog-v5.10
-
-for you to fetch changes up to 3f697027bcb0959d7c24d59550ab1da07c2dd609:
-
-  hwmon: Add support for the sl28cpld hardware monitoring controller (2020-09-17 16:02:42 +0100)
-
-----------------------------------------------------------------
-Immutable branch between MFD, HWMON, GPIO, IRQChip, PWM and Watchdog due for the v5.10 merge window
-
-----------------------------------------------------------------
-Michael Walle (8):
-      mfd: Add simple regmap based I2C driver
-      dt-bindings: mfd: Add bindings for sl28cpld
-      mfd: simple-mfd-i2c: Add sl28cpld support
-      irqchip: Add sl28cpld interrupt controller support
-      watchdog: add support for sl28cpld watchdog
-      pwm: Add support for sl28cpld PWM controller
-      gpio: Add support for the sl28cpld GPIO controller
-      hwmon: Add support for the sl28cpld hardware monitoring controller
-
- .../bindings/gpio/kontron,sl28cpld-gpio.yaml       |  54 +++++
- .../bindings/hwmon/kontron,sl28cpld-hwmon.yaml     |  27 +++
- .../kontron,sl28cpld-intc.yaml                     |  54 +++++
- .../devicetree/bindings/mfd/kontron,sl28cpld.yaml  | 153 ++++++++++++
- .../bindings/pwm/kontron,sl28cpld-pwm.yaml         |  35 +++
- .../bindings/watchdog/kontron,sl28cpld-wdt.yaml    |  35 +++
- Documentation/hwmon/index.rst                      |   1 +
- Documentation/hwmon/sl28cpld.rst                   |  36 +++
- drivers/gpio/Kconfig                               |  12 +
- drivers/gpio/Makefile                              |   1 +
- drivers/gpio/gpio-sl28cpld.c                       | 161 ++++++++++++
- drivers/hwmon/Kconfig                              |  10 +
- drivers/hwmon/Makefile                             |   1 +
- drivers/hwmon/sl28cpld-hwmon.c                     | 142 +++++++++++
- drivers/irqchip/Kconfig                            |   8 +
- drivers/irqchip/Makefile                           |   1 +
- drivers/irqchip/irq-sl28cpld.c                     |  96 ++++++++
- drivers/mfd/Kconfig                                |  22 ++
- drivers/mfd/Makefile                               |   1 +
- drivers/mfd/simple-mfd-i2c.c                       |  57 +++++
- drivers/pwm/Kconfig                                |  10 +
- drivers/pwm/Makefile                               |   1 +
- drivers/pwm/pwm-sl28cpld.c                         | 270 +++++++++++++++++++++
- drivers/watchdog/Kconfig                           |  11 +
- drivers/watchdog/Makefile                          |   1 +
- drivers/watchdog/sl28cpld_wdt.c                    | 229 +++++++++++++++++
- 26 files changed, 1429 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/gpio/kontron,sl28cpld-gpio.yaml
- create mode 100644 Documentation/devicetree/bindings/hwmon/kontron,sl28cpld-hwmon.yaml
- create mode 100644 Documentation/devicetree/bindings/interrupt-controller/kontron,sl28cpld-intc.yaml
- create mode 100644 Documentation/devicetree/bindings/mfd/kontron,sl28cpld.yaml
- create mode 100644 Documentation/devicetree/bindings/pwm/kontron,sl28cpld-pwm.yaml
- create mode 100644 Documentation/devicetree/bindings/watchdog/kontron,sl28cpld-wdt.yaml
- create mode 100644 Documentation/hwmon/sl28cpld.rst
- create mode 100644 drivers/gpio/gpio-sl28cpld.c
- create mode 100644 drivers/hwmon/sl28cpld-hwmon.c
- create mode 100644 drivers/irqchip/irq-sl28cpld.c
- create mode 100644 drivers/mfd/simple-mfd-i2c.c
- create mode 100644 drivers/pwm/pwm-sl28cpld.c
-
+diff --git a/drivers/hwmon/pmbus/max34440.c b/drivers/hwmon/pmbus/max34440.c
+index 18b4e071067f..de04dff28945 100644
+--- a/drivers/hwmon/pmbus/max34440.c
++++ b/drivers/hwmon/pmbus/max34440.c
+@@ -388,7 +388,6 @@ static struct pmbus_driver_info max34440_info[] = {
+ 		.func[18] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+ 		.func[19] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+ 		.func[20] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+-		.read_byte_data = max34440_read_byte_data,
+ 		.read_word_data = max34440_read_word_data,
+ 		.write_word_data = max34440_write_word_data,
+ 	},
+@@ -419,7 +418,6 @@ static struct pmbus_driver_info max34440_info[] = {
+ 		.func[15] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+ 		.func[16] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+ 		.func[17] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+-		.read_byte_data = max34440_read_byte_data,
+ 		.read_word_data = max34440_read_word_data,
+ 		.write_word_data = max34440_write_word_data,
+ 	},
+@@ -455,7 +453,6 @@ static struct pmbus_driver_info max34440_info[] = {
+ 		.func[19] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+ 		.func[20] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+ 		.func[21] = PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+-		.read_byte_data = max34440_read_byte_data,
+ 		.read_word_data = max34440_read_word_data,
+ 		.write_word_data = max34440_write_word_data,
+ 	},
 -- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.17.1
+
