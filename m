@@ -2,71 +2,72 @@ Return-Path: <SRS0=LMGB=C3=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8532C43463
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Sep 2020 03:03:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E0B1C43464
+	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Sep 2020 05:33:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 97E5920870
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Sep 2020 03:03:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 056EC21D92
+	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Sep 2020 05:33:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fk2j1F/6"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e+dvn+NU"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728029AbgIRDDz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 17 Sep 2020 23:03:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53634 "EHLO
+        id S1726366AbgIRFdm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 18 Sep 2020 01:33:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727407AbgIRCE4 (ORCPT
+        with ESMTP id S1726205AbgIRFdm (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 17 Sep 2020 22:04:56 -0400
-Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06957C06174A;
-        Thu, 17 Sep 2020 19:04:55 -0700 (PDT)
-Received: by mail-ot1-x341.google.com with SMTP id a2so3958599otr.11;
-        Thu, 17 Sep 2020 19:04:55 -0700 (PDT)
+        Fri, 18 Sep 2020 01:33:42 -0400
+Received: from mail-oo1-xc44.google.com (mail-oo1-xc44.google.com [IPv6:2607:f8b0:4864:20::c44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A713C06174A;
+        Thu, 17 Sep 2020 22:33:42 -0700 (PDT)
+Received: by mail-oo1-xc44.google.com with SMTP id r4so1155631ooq.7;
+        Thu, 17 Sep 2020 22:33:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to;
-        bh=JgBAyZtv1KdUHX/gAQyyrYj55BDEy/By7Xa7DxmA1yI=;
-        b=Fk2j1F/6itl71FwnA+DrSNdR2Wl4XO0gb/aUDB6WAYUFedng0MONlpyMhjVjTT+fS3
-         HHbvyIUosrWw6yeLdAbDpHhFPwI/pfas9exYY5AYf+IAMXcaIxXycpQGmb90dhc7oC3R
-         PJ8gwax+R+1fF8h6nfEqb4/T17sW5eDgFk8JWLJ45KtLLe1NnJnIwfOc0NNWMhotA22J
-         bJPi4MlWu426BIRZFiUVJBL580KjnKTeUm+VR88DMK4MYMr1wHFhSv0ej3L8lYTAvd7G
-         JHX8sI40oTjDbOuEKs+sefx5kpQXlWs4XYu6yDiS4idYdEb2ektkFpl2Y9pF5obKAxTM
-         OD0g==
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=n52slrPNh8OTCwL/iY9U8moP4fMc8jACR40qbsOd1Mk=;
+        b=e+dvn+NUr4NeVBFx+EQeB5m/hK0pp9xEEAoK74Ca7AbCZ7xiXqRcG29kBtpKQAmDD2
+         DdFW+7M3cYSWPrxx9EKBo8SndkbgG/f2Zt4qu2tZDRjD2/VFlF4rCrr/UiH34V7JA9dO
+         ZdXyS7LUHZopLJwTnwbWB6NY2wy5sNQEpc4neyJ6Ijn3aYH9Wiw5EbyGmJa+JHb1wljC
+         dSSCIFhbuts70ByqDD7BNMDSLvQuj/Ecwwv9s99gAq0QKBKQro4MIGmPZhov68HgSuhj
+         bAC+OdRH/HhU7C8nCL8MVUgSpAPkyz+ar7sVnmAhZudncLpEPEolcKVTyd+4bSj33oMj
+         DmfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to;
-        bh=JgBAyZtv1KdUHX/gAQyyrYj55BDEy/By7Xa7DxmA1yI=;
-        b=RcF3E3aXXorEGCRXI6jycoVikpSnU7LfmxlkiNZjRkiHA7SIyI3KMaLPPNXqRPuuy7
-         zcjECYKNd93r1fQSFLsyhymyw0aTJsXt+8FjwgeCd0JJDQi+qRnVSWxC9ui2JkgozwUe
-         9rCH2YlbCCdGf8bBgs70ncACD86DxfORM1n3L/WSC45LINjWzMbFXK6sSWbOw6sSrgbr
-         QJMcGIbQJ6meazwoIZUn1fs1RsxiSSbOFgahI6TCec9iG0wNIcsjLBSZPk2g1Ye69qBT
-         cftjTUwtaM+VeI6DIwPzFzoQ0b4DAZAymiT1oZudUWoz7LQ4Ji+R8anS9SsMPFgY+uZk
-         77ZA==
-X-Gm-Message-State: AOAM531UVrF2IqxfeuTFOkTLxfjZNpQwy/5+4hAvyzkC83HToVhYUWF3
-        b/ZwGUPYex5vZgNnlNNUHjqtjqSpl1g=
-X-Google-Smtp-Source: ABdhPJxSH5SMmhGU7Eiwux8Xtw+fyQLP+N+Rn6/6zrWE/sT42KA/mudBE3nDiZtNdbRd2Co0MVISMw==
-X-Received: by 2002:a9d:7459:: with SMTP id p25mr20537769otk.234.1600394695181;
-        Thu, 17 Sep 2020 19:04:55 -0700 (PDT)
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=n52slrPNh8OTCwL/iY9U8moP4fMc8jACR40qbsOd1Mk=;
+        b=KorxMMgFIEeNA4Y9TkdnvjJLsE67vUk1R5rokD+eVNKiwCzDcUJ0J2SZTIJWbyJPcm
+         UmOGRMIlss5pGCzBo3v5fo7i22S5DU1J5R0oNYX0ccwVOfe4mST3R3CMb1959o7hAxrg
+         XHFdK92IHzKJEISXv3ifFegkVboxbhQtf5Pi4MUaURsctTqcJqShn304WHwL17YHEhY4
+         EI3XMNAUho3uFniesuIbCr16HaUE+Ssjs49x6/0LJa7SrVf8fFCBRtjvTE7zTvWJUTqY
+         q+tbTbY+vicXPYF1jc9cY/dAaEK0WFCzCHArA6Y4SIu9H0jEHyagp5IQaAbNwgkvtKDL
+         PXqA==
+X-Gm-Message-State: AOAM532jQF64WpVmHzCFVWvMSfM2Za0L2p72CMcMUIlS4P5VNT+dWppL
+        42TGTbekigoyYGcQkiDFxH6tnzRyi8Q=
+X-Google-Smtp-Source: ABdhPJzxpIsRy9MZBg/2ecv5PZY42IOnshLWD1vCGd+J7z80XIQtWEgkGjdM2M9xc/4jfy+F+rB0Cw==
+X-Received: by 2002:a4a:7055:: with SMTP id b21mr9721960oof.26.1600407220422;
+        Thu, 17 Sep 2020 22:33:40 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 91sm1214705ott.55.2020.09.17.19.04.52
+        by smtp.gmail.com with ESMTPSA id j4sm1566833otp.75.2020.09.17.22.33.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Sep 2020 19:04:53 -0700 (PDT)
+        Thu, 17 Sep 2020 22:33:39 -0700 (PDT)
 Subject: Re: [PATCH 3/3] hwmon: (lm75) Add regulator support
-To:     Mark Brown <broonie@kernel.org>, Alban Bedel <alban.bedel@aerq.com>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
+To:     Alban Bedel <alban.bedel@aerq.com>, linux-hwmon@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 References: <20200917101819.32045-1-alban.bedel@aerq.com>
  <20200917101819.32045-4-alban.bedel@aerq.com>
- <20200917110053.GA4755@sirena.org.uk>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -111,66 +112,132 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <e5863e71-2531-b0de-c432-4bc2967d56c8@roeck-us.net>
-Date:   Thu, 17 Sep 2020 19:04:51 -0700
+Message-ID: <7986c014-b826-bad1-f19c-cdda31d20804@roeck-us.net>
+Date:   Thu, 17 Sep 2020 22:33:37 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200917110053.GA4755@sirena.org.uk>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="oNLHzmw1I7aHb2xcXcXGZxEdnGQCFEQkp"
+In-Reply-To: <20200917101819.32045-4-alban.bedel@aerq.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---oNLHzmw1I7aHb2xcXcXGZxEdnGQCFEQkp
-Content-Type: multipart/mixed; boundary="npx1QPJMHHXPGiElNcnf2YFJTuHRgqEye"
+On 9/17/20 3:18 AM, Alban Bedel wrote:
+> Add regulator support for boards where the sensor first need to be
+> powered up before it can be used.
+> 
+> Signed-off-by: Alban Bedel <alban.bedel@aerq.com>
+> ---
+>  drivers/hwmon/lm75.c | 31 +++++++++++++++++++++++++++++--
+>  1 file changed, 29 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
+> index ba0be48aeadd..b673f8d2ef20 100644
+> --- a/drivers/hwmon/lm75.c
+> +++ b/drivers/hwmon/lm75.c
+> @@ -17,6 +17,7 @@
+>  #include <linux/of.h>
+>  #include <linux/regmap.h>
+>  #include <linux/util_macros.h>
+> +#include <linux/regulator/consumer.h>
+>  #include "lm75.h"
+>  
+>  /*
+> @@ -101,6 +102,7 @@ static const unsigned short normal_i2c[] = { 0x48, 0x49, 0x4a, 0x4b, 0x4c,
+>  struct lm75_data {
+>  	struct i2c_client		*client;
+>  	struct regmap			*regmap;
+> +	struct regulator		*vs;
+>  	u8				orig_conf;
+>  	u8				current_conf;
+>  	u8				resolution;	/* In bits, 9 to 16 */
+> @@ -540,6 +542,8 @@ static void lm75_remove(void *data)
+>  	struct i2c_client *client = lm75->client;
+>  
+>  	i2c_smbus_write_byte_data(client, LM75_REG_CONF, lm75->orig_conf);
+> +	if (lm75->vs)
+> +		regulator_disable(lm75->vs);
+>  }
+>  
+>  static int
+> @@ -567,6 +571,14 @@ lm75_probe(struct i2c_client *client, const struct i2c_device_id *id)
+>  	data->client = client;
+>  	data->kind = kind;
+>  
+> +	data->vs = devm_regulator_get_optional(dev, "vs");
 
---npx1QPJMHHXPGiElNcnf2YFJTuHRgqEye
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
+Looking into the regulator API, it may be better if you use devm_regulator_get().
+AFAICS it returns a dummy regulator if there is none, and NULL if the regulator
+subsystem is disabled. So
+	data->vs = devm_regulator_get(dev, "vs");
+	if (IS_ERR(data->vs))
+		return PTR_ERR(data->vs);
+should work and would be less messy.
 
-On 9/17/20 4:00 AM, Mark Brown wrote:
-> On Thu, Sep 17, 2020 at 12:18:19PM +0200, Alban Bedel wrote:
->=20
->> +	data->vs =3D devm_regulator_get_optional(dev, "vs");
->> +	if (IS_ERR(data->vs)) {
->=20
-> Unless the device can work without power you should not be using
-> regulator_get_optional().
->=20
+> +	if (IS_ERR(data->vs)) {
+> +		if (PTR_ERR(data->vs) == -ENODEV)
+> +			data->vs = NULL;
+> +		else
+> +			return PTR_ERR(data->vs);
+> +	}
+> +
+>  	data->regmap = devm_regmap_init_i2c(client, &lm75_regmap_config);
+>  	if (IS_ERR(data->regmap))
+>  		return PTR_ERR(data->regmap);
+> @@ -581,11 +593,21 @@ lm75_probe(struct i2c_client *client, const struct i2c_device_id *id)
+>  	data->sample_time = data->params->default_sample_time;
+>  	data->resolution = data->params->default_resolution;
+>  
+> +	/* Enable the power */
+> +	if (data->vs) {
+> +		err = regulator_enable(data->vs);
+> +		if (err) {
+> +			dev_err(dev, "failed to enable regulator: %d\n", err);
+> +			return err;
+> +		}
+> +	}
+> +
 
-The driver works today without regulator, and needs to continue
-doing so.
+How about device removal ? Don't you have to call regulator_disable()
+there as well ? If so, it might be best to use devm_add_action_or_reset()
+to register a disable function.
 
+Thanks,
 Guenter
 
+>  	/* Cache original configuration */
+>  	status = i2c_smbus_read_byte_data(client, LM75_REG_CONF);
+>  	if (status < 0) {
+>  		dev_dbg(dev, "Can't read config? %d\n", status);
+> -		return status;
+> +		err = status;
+> +		goto disable_regulator;
+>  	}
+>  	data->orig_conf = status;
+>  	data->current_conf = status;
+> @@ -593,7 +615,7 @@ lm75_probe(struct i2c_client *client, const struct i2c_device_id *id)
+>  	err = lm75_write_config(data, data->params->set_mask,
+>  				data->params->clr_mask);
+>  	if (err)
+> -		return err;
+> +		goto disable_regulator;
+>  
+>  	err = devm_add_action_or_reset(dev, lm75_remove, data);
+>  	if (err)
+> @@ -608,6 +630,11 @@ lm75_probe(struct i2c_client *client, const struct i2c_device_id *id)
+>  	dev_info(dev, "%s: sensor '%s'\n", dev_name(hwmon_dev), client->name);
+>  
+>  	return 0;
+> +
+> +disable_regulator:
+> +	if (data->vs)
+> +		regulator_disable(data->vs);
+> +	return err;
+>  }
+>  
+>  static const struct i2c_device_id lm75_ids[] = {
+> 
 
---npx1QPJMHHXPGiElNcnf2YFJTuHRgqEye--
-
---oNLHzmw1I7aHb2xcXcXGZxEdnGQCFEQkp
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEiHPvMQj9QTOCiqgVyx8mb86fmYEFAl9kFcMACgkQyx8mb86f
-mYFkCRAApbWUrLrU34NeN2pqWh8G1DFeWcrTFJHjcEO4jFDbX/nsgcNR2GCK/JS5
-uQ4/zrbbz0QudxFS79L9xjr7YTOoolp0nGsAfv6hXmum1ljGiS1iOk6PeeFC47zg
-xzJzxfjsOucXH+QwOqisD9iBX/ITl+iIc8enxvehhVKWJjgDw+e6xT6XNhgb7IGh
-uZNrp1kOYgvrFRS2fe6RO6pid1ZLiiPiG3UaydUP7N11nVXL3XUAKKuP9Bk2f1qR
-96CJ1OgQqs4wz6iAXq4zayB6RPa8vmtMqHEK710aYqhWNcnz1c8A/UdRwLx6uOXC
-xAc6IDqXEADQU0oDUGzPe64A7W9/5MFBsMrNcQ2f6oQ09NzH/fQkb0KTB5tEw4y8
-57Uqbh3CsywaybRYDzmyCy+WhafDyDy07ZL/KvlZgf+qJuZYi0bIGfFxi0ipMxU4
-0qq2Xz7TRQwTPikSG/Fo96/wmQpQkhV/01I1yUDHAbPnbZf8xpCQocisd9BQKnFm
-dHjN19iPkDrhMfEsTscRAm5ldw0toBDdk9zV3j8oV3INkfuKeXXimrSi8aMoKLJY
-CtxRMlodBvZ/0x8G5JUDjsyNBW4tVEm0fjYZghlHEryP3YIgT4RxHyKyb0NffGg1
-Z7TFnrfCTqve+5kg0XjrIJBeONjmiJCQpthGJRiQF288j6lv/+U=
-=Zv+s
------END PGP SIGNATURE-----
-
---oNLHzmw1I7aHb2xcXcXGZxEdnGQCFEQkp--
