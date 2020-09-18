@@ -7,38 +7,38 @@ X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58370C43464
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Sep 2020 10:04:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8994C43463
+	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Sep 2020 10:05:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F0B8221D42
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Sep 2020 10:04:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5DA2E2075E
+	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Sep 2020 10:05:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1600423462;
-	bh=rHX2SJofq2IV2gFxJYFKOzylhVaYmIes7RqnZSio3jI=;
+	s=default; t=1600423535;
+	bh=h0lkuxqUPtrrUnI9EjvXQhkOT9wfxsfGvLGrRfcRWpw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=qHQreihALNdBnN2TjQ60gsZKmj7KYxfhE7Xnfzdwl63i3NhE3pxgEtVYHrqpsmKGD
-	 1uLXTA3krwrDJN3pO1x6rtUTI9zpOsWzU6f8hHfFFPAE6qHkexfV9dAbOnaC0MDE/8
-	 lYfKDxhVsZDNj+o7Db+HuqQWEyViFLChosqOf/L4=
+	b=Txb1p1hjxMqMXH5l9uZyXf9HlyC4XZ/B90DLWbHQVf2f07aEmUEM3T+5Uyp/4bf21
+	 zdgCpk5NL98TlT3/+iAJXiVicTdyD1dLC7z7goW+CGJLKsai/5EHkCy9AgUsFG2qMz
+	 PUVonUew8/5LFtfBqp4y89ZP2k1VKOjOw3Q/YBoc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726121AbgIRKEV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 18 Sep 2020 06:04:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50364 "EHLO mail.kernel.org"
+        id S1726415AbgIRKFc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 18 Sep 2020 06:05:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50712 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725941AbgIRKEV (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 18 Sep 2020 06:04:21 -0400
+        id S1725874AbgIRKFb (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 18 Sep 2020 06:05:31 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4627F208B8;
-        Fri, 18 Sep 2020 10:04:20 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C487520665;
+        Fri, 18 Sep 2020 10:05:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600423460;
-        bh=rHX2SJofq2IV2gFxJYFKOzylhVaYmIes7RqnZSio3jI=;
+        s=default; t=1600423531;
+        bh=h0lkuxqUPtrrUnI9EjvXQhkOT9wfxsfGvLGrRfcRWpw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kG8rJC4Cp3hvPot3IGhEDxr/XcztZKD0zBEoAcGY/UDvmDIIJspf24TsdjkIGywuC
-         zSbCqfERK3B448QOXLpaLB45J6Tl3VodqOmJvcVMwMEsg5OO6S6oEzLyXS/PNKoz0l
-         wPU+1g6T84vkWW85jwFPbT0tY9oOlsmRulj+eVfQ=
-Date:   Fri, 18 Sep 2020 11:03:30 +0100
+        b=bHddCIFCZn4+sdX5R0OHIYUPadPzF8mhaCWTel5RLNX1E0Row0SILO/lOvsav2PCO
+         8lc0l0iFGenegjZeJyefH34rt6vrt7hwHMimIz1+tXzsggxE6OsLuf4nfV+aRo639+
+         Tb4MRuZx6/tMbSOv9EQ7X/TY2wR3ZrF3p02ZI6Js=
+Date:   Fri, 18 Sep 2020 11:04:40 +0100
 From:   Mark Brown <broonie@kernel.org>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     Alban Bedel <alban.bedel@aerq.com>, linux-hwmon@vger.kernel.org,
@@ -47,16 +47,15 @@ Cc:     Alban Bedel <alban.bedel@aerq.com>, linux-hwmon@vger.kernel.org,
         Liam Girdwood <lgirdwood@gmail.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 3/3] hwmon: (lm75) Add regulator support
-Message-ID: <20200918100330.GA5703@sirena.org.uk>
+Message-ID: <20200918100440.GB5703@sirena.org.uk>
 References: <20200917101819.32045-1-alban.bedel@aerq.com>
  <20200917101819.32045-4-alban.bedel@aerq.com>
- <20200917110053.GA4755@sirena.org.uk>
- <e5863e71-2531-b0de-c432-4bc2967d56c8@roeck-us.net>
+ <7986c014-b826-bad1-f19c-cdda31d20804@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fdj2RfSjLxBAspz7"
+        protocol="application/pgp-signature"; boundary="0eh6TmSyL6TZE2Uz"
 Content-Disposition: inline
-In-Reply-To: <e5863e71-2531-b0de-c432-4bc2967d56c8@roeck-us.net>
+In-Reply-To: <7986c014-b826-bad1-f19c-cdda31d20804@roeck-us.net>
 X-Cookie: Beware of geeks bearing graft.
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
@@ -64,40 +63,35 @@ List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 
---fdj2RfSjLxBAspz7
+--0eh6TmSyL6TZE2Uz
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Thu, Sep 17, 2020 at 07:04:51PM -0700, Guenter Roeck wrote:
-> On 9/17/20 4:00 AM, Mark Brown wrote:
-> > On Thu, Sep 17, 2020 at 12:18:19PM +0200, Alban Bedel wrote:
+On Thu, Sep 17, 2020 at 10:33:37PM -0700, Guenter Roeck wrote:
+> On 9/17/20 3:18 AM, Alban Bedel wrote:
 
-> >> +	data->vs = devm_regulator_get_optional(dev, "vs");
-> >> +	if (IS_ERR(data->vs)) {
+> > +		err = regulator_enable(data->vs);
 
-> > Unless the device can work without power you should not be using
-> > regulator_get_optional().
+> How about device removal ? Don't you have to call regulator_disable()
+> there as well ? If so, it might be best to use devm_add_action_or_reset()
+> to register a disable function.
 
-> The driver works today without regulator, and needs to continue
-> doing so.
+Yes, disables should be balanced (and any attempt to unregister the
+regulator with references still held should result in a warning).
 
-And it will continue to do so if it uses the normal regulator API, it
-will as ever ensure that if no regulator is provided by the firmware a
-dummy is provided.
-
---fdj2RfSjLxBAspz7
+--0eh6TmSyL6TZE2Uz
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl9khfEACgkQJNaLcl1U
-h9Bepwf9EYuxEZIeHPaK2Y0tAjFZp9YXlbTfjm444mUIeGVycPVpixaad4WmaFfx
-GwhiOO9mbYjzskCaeTjuY365KEofDOqY68qR1D1PmX0inyYE6WQfS+gYhDaS/JFd
-LKLOM6oSst+LamCt4GljU5hPd8khylSGriDqAZey/HArmFsjiMjf/P/+kHoe6NHy
-hhDqj2FY47DZq5OfJgHnOHGWZckVlJhzprcBhXJI1fbgzsWrwN/D0yDdBNj2c6LE
-P3fPIoM4nTZCfBLydMrMoDDeSmhYb7xAeMFeeaXAVUAfbo6JJjOXb1FySeThLvAv
-H+r0E+jRWuNtHjjSZli7ckZzBOZ0eQ==
-=dCm7
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl9khjgACgkQJNaLcl1U
+h9AdDAf/YNuWEsjoIefRmZlEaEFDrFOFf++WJDvAcSCC0fP0VeoLuRhuNjHGdYDM
+jmwCuCSjeb0sX74vrLNmK6/SIsny3ffxorGP+OVo2mluxO8VRnLQT/DkgXiZ6eAH
+1Tk7/v3jzHDyeRNvXEnGmGTq4BqmSa7LgOozSOJkVWuJvfPDJQyipK4/bYF+taN0
+c5I8179rpeBwQXFfT5SywLx1G2MIxg7TfgmBqdftTnc7+dLlJ94iN7twLoprtYt4
+ujfCjaEM2+Bq3EZgIFBzIWW+j2x79l95Tm0JGPqVog4c72At13ZjgWdvBQknHzIT
+H7hOtmKbybGcenxIEVbo/ebAD8H/3A==
+=n9tP
 -----END PGP SIGNATURE-----
 
---fdj2RfSjLxBAspz7--
+--0eh6TmSyL6TZE2Uz--
