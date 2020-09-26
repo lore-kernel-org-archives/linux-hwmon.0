@@ -2,80 +2,113 @@ Return-Path: <SRS0=9z2f=DD=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB19DC2D0A8
-	for <linux-hwmon@archiver.kernel.org>; Sat, 26 Sep 2020 15:05:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8BF4C2D0A8
+	for <linux-hwmon@archiver.kernel.org>; Sat, 26 Sep 2020 17:55:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 903C32184D
-	for <linux-hwmon@archiver.kernel.org>; Sat, 26 Sep 2020 15:05:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 76A65206E5
+	for <linux-hwmon@archiver.kernel.org>; Sat, 26 Sep 2020 17:55:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728017AbgIZPFH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 26 Sep 2020 11:05:07 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:56740 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725208AbgIZPFH (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 26 Sep 2020 11:05:07 -0400
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94)
-        (envelope-from <andrew@lunn.ch>)
-        id 1kMBl0-00GHim-1i; Sat, 26 Sep 2020 17:05:02 +0200
-Date:   Sat, 26 Sep 2020 17:05:02 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
+        id S1726309AbgIZRzv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 26 Sep 2020 13:55:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53868 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725208AbgIZRzu (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 26 Sep 2020 13:55:50 -0400
+X-Greylist: delayed 336 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 26 Sep 2020 10:55:50 PDT
+Received: from mail.nic.cz (lists.nic.cz [IPv6:2001:1488:800:400::400])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D1AC0613CE
+        for <linux-hwmon@vger.kernel.org>; Sat, 26 Sep 2020 10:55:50 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2a0e:b107:ae1:0:3e97:eff:fe61:c680])
+        by mail.nic.cz (Postfix) with ESMTPSA id D48B614081C;
+        Sat, 26 Sep 2020 19:50:08 +0200 (CEST)
+Date:   Sat, 26 Sep 2020 19:50:08 +0200
+From:   Marek Behun <marek.behun@nic.cz>
 To:     Luka Kovacic <luka.kovacic@sartura.hr>
 Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-leds@vger.kernel.org,
         lee.jones@linaro.org, pavel@ucw.cz, dmurphy@ti.com,
         robh+dt@kernel.org, jdelvare@suse.com, linux@roeck-us.net,
-        jason@lakedaemon.net, gregory.clement@bootlin.com,
+        andrew@lunn.ch, jason@lakedaemon.net, gregory.clement@bootlin.com,
         luka.perkov@sartura.hr, robert.marko@sartura.hr
 Subject: Re: [PATCH v2 7/7] arm64: dts: marvell: Add a device tree for the
  iEi Puzzle-M801 board
-Message-ID: <20200926150502.GE3850848@lunn.ch>
-References: <20200926135514.26189-1-luka.kovacic@sartura.hr>
- <20200926135514.26189-8-luka.kovacic@sartura.hr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Message-ID: <20200926195008.6bd84dd3@nic.cz>
 In-Reply-To: <20200926135514.26189-8-luka.kovacic@sartura.hr>
+References: <20200926135514.26189-1-luka.kovacic@sartura.hr>
+        <20200926135514.26189-8-luka.kovacic@sartura.hr>
+X-Mailer: Claws Mail 3.17.6 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.102.2 at mail
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Sep 26, 2020 at 03:55:14PM +0200, Luka Kovacic wrote:
-> Add initial support for the iEi Puzzle-M801 1U Rackmount Network
-> Appliance board.
-> 
-> The board is based on the quad-core Marvell Armada 8040 SoC and supports
-> up to 16 GB of DDR4 2400 MHz ECC RAM. It has a PCIe x16 slot (x2 lanes
-> only) and an M.2 type B slot.
-> 
-> Main system hardware:
-> 2x USB 3.0
-> 4x Gigabit Ethernet
-> 2x SFP+
-> 1x SATA 3.0
-> 1x M.2 type B
-> 1x RJ45 UART
-> 1x SPI flash
-> 1x iEi WT61P803 PUZZLE Microcontroller
-> 1x EPSON RX8010 RTC (used instead of the integrated Marvell RTC controller)
-> 6x SFP+ LED
-> 1x HDD LED
-> 
-> All of the hardware listed above is supported and tested in this port.
-> 
-> Signed-off-by: Luka Kovacic <luka.kovacic@sartura.hr>
-> Cc: Luka Perkov <luka.perkov@sartura.hr>
-> Cc: Robert Marko <robert.marko@sartura.hr>
+On Sat, 26 Sep 2020 15:55:14 +0200
+Luka Kovacic <luka.kovacic@sartura.hr> wrote:
 
-I don't know this Marvell SoC too well, but what i see looks O.K.
+> +	leds {
+> +		compatible = "gpio-leds";
+> +		status = "okay";
+> +		pinctrl-0 = <&cp0_sfpplus_led_pins &cp1_sfpplus_led_pins>;
+> +		pinctrl-names = "default";
+> +
+> +		led0 {
+> +			function = LED_FUNCTION_STATUS;
+> +			label = "p2_act";
+> +			gpios = <&cp1_gpio1 6 GPIO_ACTIVE_LOW>;
+> +		};
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+There should be a dash in LED node name, please pass this dts via
+dt_binding_check
+  led-0 {
+    ...
+  };
 
-To get this merged, you probably need to break this patchset up and
-send the DT part to Gregory. It could be Lee will take the rest if
-there are ACKed by from the LED and HWMON maintainer.
+Also why not add the `color` property to the LED? This is DTS for a
+specific device, right?
+`label` is obsolete. The LED subsystem creates a name in form
+  [device:]color:function
+If this LED should blink for activity on port 2 (is this an ethernet
+port?), the function should be LED_FUNCTION_LAN and function-enumerator
+should be <2> (or function should be LED_FUNCTION_ACTIVITY, depending
+on how the LED subsystem goes forward with this, but certainly not
+LED_FUNCTION_STATUS), and trigger-sources should be set to point to the
+ethernet port.
 
-    Andrew
+Luka, are you willing to change this once we solve this API properly
+in LED subsystem?
+
+
+
+> +		led6 {
+> +			function = LED_FUNCTION_STATUS;
+> +			linux,default-trigger = "disk-activity";
+> +			label = "front-hdd-led";
+> +			gpios = <&cp0_gpio2 22 GPIO_ACTIVE_HIGH>;
+> +		};
+
+led-6. LED_FUNCTION_DISK. `label` deprecated.
+
+> +		leds {
+> +			compatible = "iei,wt61p803-puzzle-leds";
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +
+> +			led@0 {
+> +				reg = <0>;
+> +				color = <LED_COLOR_ID_BLUE>;
+> +				label = "front-power-led";
+> +			};
+
+Again, `label` is deprecated. Rather use function =
+<LED_FUNCTION_POWER>;
+
+Marek
