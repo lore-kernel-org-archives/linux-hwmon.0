@@ -7,711 +7,897 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD185C4727F
-	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Sep 2020 09:44:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10C0CC4727F
+	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Sep 2020 10:52:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 70C4D221E8
-	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Sep 2020 09:44:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C1F962080A
+	for <linux-hwmon@archiver.kernel.org>; Mon, 28 Sep 2020 10:52:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726681AbgI1Joj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 28 Sep 2020 05:44:39 -0400
-Received: from mga12.intel.com ([192.55.52.136]:17078 "EHLO mga12.intel.com"
+        id S1726497AbgI1KwO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 28 Sep 2020 06:52:14 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:32990 "EHLO inva021.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726465AbgI1Joj (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 28 Sep 2020 05:44:39 -0400
-IronPort-SDR: DM74yDZ6DA6O1WFU5Sa6QzyK1sl1EtRFBGj4IWx5QcIcbPjmANLvg8pKwFk9z1hIdKXnvAfH7e
- Rqp8OH1UuLYA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9757"; a="141375035"
-X-IronPort-AV: E=Sophos;i="5.77,313,1596524400"; 
-   d="scan'208";a="141375035"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2020 02:44:36 -0700
-IronPort-SDR: +DBh/PU5MZlyNBY+QgCP9jIA735HYPcopPIFLP4MqX/zPJWjmiAyUVb0Tnzc8h79zue73VGoKT
- oYupJaXIHSxA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,313,1596524400"; 
-   d="scan'208";a="293194920"
-Received: from sgsxdev001.isng.intel.com (HELO localhost) ([10.226.88.11])
-  by fmsmga007.fm.intel.com with ESMTP; 28 Sep 2020 02:44:33 -0700
-From:   Rahul Tanwar <rahul.tanwar@linux.intel.com>
-To:     jdelvare@suse.com, linux@roeck-us.net, p.zabel@pengutronix.de,
-        linux-hwmon@vger.kernel.org, robh+dt@kernel.org
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        andriy.shevchenko@intel.com, songjun.Wu@intel.com,
-        cheol.yong.kim@intel.com, qi-ming.wu@intel.com,
-        rtanwar@maxlinear.com, Rahul Tanwar <rahul.tanwar@linux.intel.com>
-Subject: [PATCH v2 2/2] Add hardware monitoring driver for Moortec MR75203 PVT controller
-Date:   Mon, 28 Sep 2020 17:44:19 +0800
-Message-Id: <e2ae260e0362c11147d99d42d80fa7154cf37308.1601285307.git.rahul.tanwar@linux.intel.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <cover.1601285307.git.rahul.tanwar@linux.intel.com>
-References: <cover.1601285307.git.rahul.tanwar@linux.intel.com>
-In-Reply-To: <cover.1601285307.git.rahul.tanwar@linux.intel.com>
-References: <cover.1601285307.git.rahul.tanwar@linux.intel.com>
+        id S1726461AbgI1KwN (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 28 Sep 2020 06:52:13 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id D25DC200205;
+        Mon, 28 Sep 2020 12:52:06 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id EC7FA2001CA;
+        Mon, 28 Sep 2020 12:52:02 +0200 (CEST)
+Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id EF05140249;
+        Mon, 28 Sep 2020 12:51:57 +0200 (CEST)
+From:   Biwen Li <biwen.li@oss.nxp.com>
+To:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
+        mark.rutland@arm.com
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Reinhard Pfau <pfau@gdsys.de>,
+        Biwen Li <biwen.li@nxp.com>
+Subject: [PATCH] hwmon: add support for SMSC EMC2305/03/02/01 fan controller
+Date:   Mon, 28 Sep 2020 18:43:26 +0800
+Message-Id: <20200928104326.40386-1-biwen.li@oss.nxp.com>
+X-Mailer: git-send-email 2.17.1
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-PVT controller (MR75203) is used to configure & control
-Moortec embedded analog IP which contains temprature
-sensor(TS), voltage monitor(VM) & process detector(PD)
-modules. Add hardware monitoring driver to support
-MR75203 PVT controller.
+From: Reinhard Pfau <pfau@gdsys.de>
 
-Signed-off-by: Rahul Tanwar <rahul.tanwar@linux.intel.com>
+Add support for SMSC EMC2305, EMC2303, EMC2302, EMC2301 fan controller
+chips.
+The driver primary supports the EMC2305 chip which provides RPM-based
+PWM control and monitoring for up to 5 fans.
+
+According to the SMSC data sheets the EMC2303, EMC2302 and EMC2301 chips
+have basically the same functionality and register layout, but support
+less fans and (in case of EMC2302 and EMC2301) less possible I2C addresses.
+The driver supports them, too.
+
+The driver supports configuration via devicetree. This can also be used
+to restrict the fans exposed via sysfs (see doc for details).
+
+Signed-off-by: Reinhard Pfau <pfau@gdsys.de>
+Signed-off-by: Biwen Li <biwen.li@nxp.com>
 ---
- drivers/hwmon/Kconfig   |  10 +
- drivers/hwmon/Makefile  |   1 +
- drivers/hwmon/mr75203.c | 605 ++++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 616 insertions(+)
- create mode 100644 drivers/hwmon/mr75203.c
+ .../devicetree/bindings/hwmon/emc2305.txt     |  33 +
+ Documentation/hwmon/emc2305.rst               |  34 +
+ MAINTAINERS                                   |   8 +
+ drivers/hwmon/Kconfig                         |  10 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/emc2305.c                       | 689 ++++++++++++++++++
+ 6 files changed, 775 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/emc2305.txt
+ create mode 100644 Documentation/hwmon/emc2305.rst
+ create mode 100644 drivers/hwmon/emc2305.c
 
+diff --git a/Documentation/devicetree/bindings/hwmon/emc2305.txt b/Documentation/devicetree/bindings/hwmon/emc2305.txt
+new file mode 100644
+index 000000000000..73165120b88a
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/emc2305.txt
+@@ -0,0 +1,33 @@
++EMC2305 (I2C)
++
++This device is a RPM-based PWM Fan Speed Controller for up to 5 fans.
++Each fan can beconfigured individually:
++
++ - The PWM mode:
++    0: PWM is disabled
++    3: RPM based PWM
++
++ - The fan divisor (for RPM mesaurement)
++   1, 2 ,4 or 8
++
++ - The target RPM speed (for RPM based PWM mode)
++   max 16000 (according to data sheet)
++
++
++ - The /emc2305 node
++
++   Required properties:
++
++   - compatible : must be "smsc,emc2305"
++   - reg : I2C bus address of the device
++   - #address-cells : must be <1>
++   - #size-cells : must be <0>
++
++   Example EMC2305 node:
++
++       emc2305@2C {
++	    compatible = "smsc,emc2305";
++	    reg = <0x2C>;
++	    #address-cells = <1>;
++	    #size-cells = <0>;
++       }
+diff --git a/Documentation/hwmon/emc2305.rst b/Documentation/hwmon/emc2305.rst
+new file mode 100644
+index 000000000000..d0cebae09ffd
+--- /dev/null
++++ b/Documentation/hwmon/emc2305.rst
+@@ -0,0 +1,34 @@
++Kernel driver emc2305
++=====================
++
++Supported chips:
++  * SMSC EMC2305, EMC2303, EMC2302, EMC2301
++    Adresses scanned: I2C 0x2c, 0x2d, 0x2e, 0x2f, 0x4c, 0x4d
++    Prefixes: 'emc2305', 'emc2303', 'emc2302', 'emc2301'
++    Datasheet: Publicly available at the MICROCHIP website :
++        http://ww1.microchip.com/downloads/en/DeviceDoc/2305.pdf
++
++Authors:
++        Reinhard Pfau, Guntermann & Drunck GmbH <pfau@gdsys.de>
++        Biwen Li <biwen.li@nxp.com>
++
++Description
++-----------
++
++The SMSC EMC2305 is a fan controller for up to 5 fans.
++The EMC2303 has the same functionality but supports only up to 3 fans.
++
++The EMC2302 supports 2 fans and the EMC2301 1 fan. These chips support less
++possible I2C addresses.
++
++Fan rotation speeds are reported in RPM.
++The driver supports the RPM based PWM control to keep a fan at a desired speed.
++To enable this function for a fan, write 3 to pwm<num>_enable and the desired
++fan speed to fan<num>_target.
++
++
++Devicetree
++----------
++
++Configuration is also possible via devicetree:
++Documentation/devicetree/bindings/hwmon/emc2305.txt
+diff --git a/MAINTAINERS b/MAINTAINERS
+index b526b8a66f8a..a506e8071259 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -15013,6 +15013,14 @@ S:	Maintained
+ F:	Documentation/hwmon/emc2103.rst
+ F:	drivers/hwmon/emc2103.c
+ 
++SMSC EMC2305 HARDWARE MONITOR DRIVER
++M:	Biwen Li <biwen.li@nxp.com>
++L:	lm-sensors@lm-sensors.org
++S:	Maintained
++F:	Documentation/hwmon/emc2305
++F:	Documentation/devicetree/bindings/hwmon/emc2305.txt
++F:	drivers/hwmon/emc2305.c
++
+ SMSC SCH5627 HARDWARE MONITOR DRIVER
+ M:	Hans de Goede <hdegoede@redhat.com>
+ L:	linux-hwmon@vger.kernel.org
 diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 8dc28b26916e..2defb46677b4 100644
+index 2fa4666d5b07..5ab3e975517a 100644
 --- a/drivers/hwmon/Kconfig
 +++ b/drivers/hwmon/Kconfig
-@@ -1112,6 +1112,16 @@ config SENSORS_MENF21BMC_HWMON
- 	  This driver can also be built as a module. If so the module
- 	  will be called menf21bmc_hwmon.
+@@ -1457,6 +1457,16 @@ config SENSORS_EMC2103
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called emc2103.
  
-+config SENSORS_MR75203
-+	tristate "Moortec Semiconductor MR75203 PVT Controller"
-+	select REGMAP_MMIO
++config SENSORS_EMC2305
++	tristate "SMSC EMC2305"
++	depends on I2C
 +	help
-+	  If you say yes here you get support for Moortec MR75203
-+	  PVT controller.
++	  If you say yes here you get support for the SMSC EMC2305
++	  fan controller chips.
 +
-+	  This driver can also be built as a module. If so, the module
-+	  will be called mr75203.
++	  This driver can also be built as a module.  If so, the module
++	  will be called emc2305.
 +
- config SENSORS_ADCXX
- 	tristate "National Semiconductor ADCxxxSxxx"
- 	depends on SPI_MASTER
+ config SENSORS_EMC6W201
+ 	tristate "SMSC EMC6W201"
+ 	depends on I2C
 diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index a8f4b35b136b..bb4bd92a5149 100644
+index b033e6733b56..b6377d32a2c9 100644
 --- a/drivers/hwmon/Makefile
 +++ b/drivers/hwmon/Makefile
-@@ -142,6 +142,7 @@ obj-$(CONFIG_SENSORS_MCP3021)	+= mcp3021.o
- obj-$(CONFIG_SENSORS_TC654)	+= tc654.o
- obj-$(CONFIG_SENSORS_MLXREG_FAN) += mlxreg-fan.o
- obj-$(CONFIG_SENSORS_MENF21BMC_HWMON) += menf21bmc_hwmon.o
-+obj-$(CONFIG_SENSORS_MR75203)	+= mr75203.o
- obj-$(CONFIG_SENSORS_NCT6683)	+= nct6683.o
- obj-$(CONFIG_SENSORS_NCT6775)	+= nct6775.o
- obj-$(CONFIG_SENSORS_NCT7802)	+= nct7802.o
-diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
+@@ -60,6 +60,7 @@ obj-$(CONFIG_SENSORS_DS620)	+= ds620.o
+ obj-$(CONFIG_SENSORS_DS1621)	+= ds1621.o
+ obj-$(CONFIG_SENSORS_EMC1403)	+= emc1403.o
+ obj-$(CONFIG_SENSORS_EMC2103)	+= emc2103.o
++obj-$(CONFIG_SENSORS_EMC2305)	+= emc2305.o
+ obj-$(CONFIG_SENSORS_EMC6W201)	+= emc6w201.o
+ obj-$(CONFIG_SENSORS_F71805F)	+= f71805f.o
+ obj-$(CONFIG_SENSORS_F71882FG)	+= f71882fg.o
+diff --git a/drivers/hwmon/emc2305.c b/drivers/hwmon/emc2305.c
 new file mode 100644
-index 000000000000..a4c0de7b2790
+index 000000000000..d0c99f9b7434
 --- /dev/null
-+++ b/drivers/hwmon/mr75203.c
-@@ -0,0 +1,605 @@
-+// SPDX-License-Identifier: GPL-2.0
++++ b/drivers/hwmon/emc2305.c
+@@ -0,0 +1,689 @@
 +/*
-+ * Copyright (C) 2020 MaxLinear, Inc.
++ * emc2305.c - hwmon driver for SMSC EMC2305 fan controller
++ * (C) Copyright 2013
++ * Copyright 2020 NXP
++ * Reinhard Pfau, Guntermann & Drunck GmbH <pfau@gdsys.de>
++ * Biwen Li <biwen.li@nxp.com>
 + *
-+ * This driver is a hardware monitoring driver for PVT controller
-+ * (MR75203) which is used to configure & control Moortec embedded
-+ * analog IP to enable multiple embedded temprature sensor(TS),
-+ * voltage monitor(VM) & process detector(PD) modules.
++ * Based on emc2103 driver by SMSC.
++ *
++ * Datasheet available at:
++ * http://ww1.microchip.com/downloads/en/DeviceDoc/2305.pdf
++ *
++ * Also supports the EMC2303 fan controller which has the same functionality
++ * and register layout as EMC2305, but supports only up to 3 fans instead of 5.
++ *
++ * Also supports EMC2302 (up to 2 fans) and EMC2301 (1 fan) fan controller.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 + */
-+#include <linux/clk.h>
-+#include <linux/hwmon.h>
++
++/*
++ * TODO / IDEAS:
++ * - expose more of the configuration and features
++ */
++
 +#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
++#include <linux/init.h>
++#include <linux/slab.h>
++#include <linux/jiffies.h>
++#include <linux/i2c.h>
++#include <linux/hwmon.h>
++#include <linux/hwmon-sysfs.h>
++#include <linux/err.h>
 +#include <linux/mutex.h>
-+#include <linux/platform_device.h>
-+#include <linux/property.h>
-+#include <linux/regmap.h>
-+#include <linux/reset.h>
++#include <linux/of.h>
 +
-+/* PVT Common register */
-+#define PVT_IP_CONFIG	0x04
-+#define TS_NUM_MSK	GENMASK(4, 0)
-+#define TS_NUM_SFT	0
-+#define PD_NUM_MSK	GENMASK(12, 8)
-+#define PD_NUM_SFT	8
-+#define VM_NUM_MSK	GENMASK(20, 16)
-+#define VM_NUM_SFT	16
-+#define CH_NUM_MSK	GENMASK(31, 24)
-+#define CH_NUM_SFT	24
-+
-+/* Macro Common Register */
-+#define CLK_SYNTH		0x00
-+#define CLK_SYNTH_LO_SFT	0
-+#define CLK_SYNTH_HI_SFT	8
-+#define CLK_SYNTH_HOLD_SFT	16
-+#define CLK_SYNTH_EN		BIT(24)
-+#define CLK_SYS_CYCLES_MAX	514
-+#define CLK_SYS_CYCLES_MIN	2
-+#define HZ_PER_MHZ		1000000L
-+
-+#define SDIF_DISABLE	0x04
-+
-+#define SDIF_STAT	0x08
-+#define SDIF_BUSY	BIT(0)
-+#define SDIF_LOCK	BIT(1)
-+
-+#define SDIF_W		0x0c
-+#define SDIF_PROG	BIT(31)
-+#define SDIF_WRN_W	BIT(27)
-+#define SDIF_WRN_R	0x00
-+#define SDIF_ADDR_SFT	24
-+
-+#define SDIF_HALT	0x10
-+#define SDIF_CTRL	0x14
-+#define SDIF_SMPL_CTRL	0x20
-+
-+/* TS & PD Individual Macro Register */
-+#define COM_REG_SIZE	0x40
-+
-+#define SDIF_DONE(n)	(COM_REG_SIZE + 0x14 + 0x40 * (n))
-+#define SDIF_SMPL_DONE	BIT(0)
-+
-+#define SDIF_DATA(n)	(COM_REG_SIZE + 0x18 + 0x40 * (n))
-+#define SAMPLE_DATA_MSK	GENMASK(15, 0)
-+
-+#define HILO_RESET(n)	(COM_REG_SIZE + 0x2c + 0x40 * (n))
-+
-+/* VM Individual Macro Register */
-+#define VM_COM_REG_SIZE	0x200
-+#define VM_SDIF_DONE(n)	(VM_COM_REG_SIZE + 0x34 + 0x200 * (n))
-+#define VM_SDIF_DATA(n)	(VM_COM_REG_SIZE + 0x40 + 0x200 * (n))
-+
-+/* SDA Slave Register */
-+#define IP_CTRL			0x00
-+#define IP_RST_REL		BIT(1)
-+#define IP_RUN_CONT		BIT(3)
-+#define IP_AUTO			BIT(8)
-+#define IP_VM_MODE		BIT(10)
-+
-+#define IP_CFG			0x01
-+#define CFG0_MODE_2		BIT(0)
-+#define CFG0_PARALLEL_OUT	0
-+#define CFG0_12_BIT		0
-+#define CFG1_VOL_MEAS_MODE	0
-+#define CFG1_PARALLEL_OUT	0
-+#define CFG1_14_BIT		0
-+
-+#define IP_DATA		0x03
-+
-+#define IP_POLL		0x04
-+#define VM_CH_INIT	BIT(20)
-+#define VM_CH_REQ	BIT(21)
-+
-+#define IP_TMR			0x05
-+#define POWER_DELAY_CYCLE_256	0x80
-+#define POWER_DELAY_CYCLE_64	0x40
-+
-+#define PVT_POLL_DELAY_US	20
-+#define PVT_POLL_TIMEOUT_US	20000
-+#define PVT_H_CONST		100000
-+#define PVT_CAL5_CONST		2047
-+#define PVT_G_CONST		40000
-+#define PVT_CONV_BITS		10
-+#define PVT_N_CONST		90
-+#define PVT_R_CONST		245805
-+
-+struct pvt_device {
-+	struct regmap		*c_map;
-+	struct regmap		*t_map;
-+	struct regmap		*p_map;
-+	struct regmap		*v_map;
-+	struct clk		*clk;
-+	struct reset_control	*rst;
-+	u32			t_num;
-+	u32			p_num;
-+	u32			v_num;
-+	u32			ip_freq;
-+	u8			*vm_idx;
++/*
++ * Addresses scanned.
++ * Listed in the same order as they appear in the EMC2305, EMC2303 data sheets.
++ *
++ * Note: these are the I2C adresses which are possible for EMC2305 and EMC2303
++ * chips.
++ * The EMC2302 supports only 0x2e (EMC2302-1) and 0x2f (EMC2302-2).
++ * The EMC2301 supports only 0x2f.
++ */
++static const unsigned short i2c_addresses[] = {
++	0x2E,
++	0x2F,
++	0x2C,
++	0x2D,
++	0x4C,
++	0x4D,
++	I2C_CLIENT_END
 +};
 +
-+static umode_t pvt_is_visible(const void *data, enum hwmon_sensor_types type,
-+			      u32 attr, int channel)
++/*
++ * global registers
++ */
++enum {
++	REG_CONFIGURATION = 0x20,
++	REG_FAN_STATUS = 0x24,
++	REG_FAN_STALL_STATUS = 0x25,
++	REG_FAN_SPIN_STATUS = 0x26,
++	REG_DRIVE_FAIL_STATUS = 0x27,
++	REG_FAN_INTERRUPT_ENABLE = 0x29,
++	REG_PWM_POLARITY_CONFIG = 0x2a,
++	REG_PWM_OUTPUT_CONFIG = 0x2b,
++	REG_PWM_BASE_FREQ_1 = 0x2c,
++	REG_PWM_BASE_FREQ_2 = 0x2d,
++	REG_SOFTWARE_LOCK = 0xef,
++	REG_PRODUCT_FEATURES = 0xfc,
++	REG_PRODUCT_ID = 0xfd,
++	REG_MANUFACTURER_ID = 0xfe,
++	REG_REVISION = 0xff
++};
++
++/*
++ * fan specific registers
++ */
++enum {
++	REG_FAN_SETTING = 0x30,
++	REG_PWM_DIVIDE = 0x31,
++	REG_FAN_CONFIGURATION_1 = 0x32,
++	REG_FAN_CONFIGURATION_2 = 0x33,
++	REG_GAIN = 0x35,
++	REG_FAN_SPIN_UP_CONFIG = 0x36,
++	REG_FAN_MAX_STEP = 0x37,
++	REG_FAN_MINIMUM_DRIVE = 0x38,
++	REG_FAN_VALID_TACH_COUNT = 0x39,
++	REG_FAN_DRIVE_FAIL_BAND_LOW = 0x3a,
++	REG_FAN_DRIVE_FAIL_BAND_HIGH = 0x3b,
++	REG_TACH_TARGET_LOW = 0x3c,
++	REG_TACH_TARGET_HIGH = 0x3d,
++	REG_TACH_READ_HIGH = 0x3e,
++	REG_TACH_READ_LOW = 0x3f,
++};
++
++#define SEL_FAN(fan, reg) (reg + fan * 0x10)
++
++/*
++ * Factor by equations [2] and [3] from data sheet; valid for fans where the
++ * number of edges equals (poles * 2 + 1).
++ */
++#define FAN_RPM_FACTOR 3932160
++
++struct emc2305_fan_data {
++	bool		enabled;
++	bool		rpm_control;
++	bool		valid;		/* registers are valid */
++	u8		poles;
++	u8		multiplier;
++	u16		tach;
++	u16		target;
++	unsigned long		last_updated;	/* in jiffies */
++};
++
++struct emc2305_data {
++	struct i2c_client	*client;
++	const struct		attribute_group *groups[6];
++	struct mutex		update_lock;
++	int			fan_count; /* num of fan */
++	struct emc2305_fan_data fan[5];
++};
++
++static int read_u8_from_i2c(struct i2c_client *client, u8 i2c_reg, u8 *output)
 +{
-+	switch (type) {
-+	case hwmon_temp:
-+		if (attr == hwmon_temp_input)
-+			return 0444;
-+		else
-+			return 0;
-+	case hwmon_in:
-+		if (attr == hwmon_in_input)
-+			return 0444;
-+		else
-+			return 0;
-+	default:
++	int status = i2c_smbus_read_byte_data(client, i2c_reg);
++	if (status < 0) {
++		dev_warn(&client->dev, "reg 0x%02x, err %d\n",
++			i2c_reg, status);
++	} else {
++		*output = status;
++	}
++	return status;
++}
++
++static void read_fan_from_i2c(struct i2c_client *client, u16 *output,
++			      u8 hi_addr, u8 lo_addr)
++{
++	u8 high_byte, lo_byte;
++
++	if (read_u8_from_i2c(client, hi_addr, &high_byte) < 0)
++		return;
++
++	if (read_u8_from_i2c(client, lo_addr, &lo_byte) < 0)
++		return;
++
++	*output = ((u16)high_byte << 5) | (lo_byte >> 3);
++}
++
++static void write_fan_target_to_i2c(struct i2c_client *client, int fan,
++				    u16 new_target)
++{
++	const u8 lo_reg = SEL_FAN(fan, REG_TACH_TARGET_LOW);
++	const u8 hi_reg = SEL_FAN(fan, REG_TACH_TARGET_HIGH);
++	u8 high_byte = (new_target & 0x1fe0) >> 5;
++	u8 low_byte = (new_target & 0x001f) << 3;
++
++	i2c_smbus_write_byte_data(client, lo_reg, low_byte);
++	i2c_smbus_write_byte_data(client, hi_reg, high_byte);
++}
++
++static void read_fan_config_from_i2c(struct i2c_client *client, int fan_idx)
++
++{
++	struct emc2305_data *data = i2c_get_clientdata(client);
++	u8 conf1;
++
++	if (read_u8_from_i2c(client, SEL_FAN(fan_idx, REG_FAN_CONFIGURATION_1),
++			     &conf1) < 0)
++		return;
++
++	data->fan[fan_idx].rpm_control = (conf1 & 0x80) != 0;
++	data->fan[fan_idx].multiplier = 1 << ((conf1 & 0x60) >> 5);
++	data->fan[fan_idx].poles = ((conf1 & 0x18) >> 3) + 1;
++}
++
++static void read_fan_data(struct i2c_client *client, int fan_idx)
++{
++	struct emc2305_data *data = i2c_get_clientdata(client);
++
++	read_fan_from_i2c(client, &data->fan[fan_idx].target,
++			  SEL_FAN(fan_idx, REG_TACH_TARGET_HIGH),
++			  SEL_FAN(fan_idx, REG_TACH_TARGET_LOW));
++	read_fan_from_i2c(client, &data->fan[fan_idx].tach,
++			  SEL_FAN(fan_idx, REG_TACH_READ_HIGH),
++			  SEL_FAN(fan_idx, REG_TACH_READ_LOW));
++}
++
++static struct emc2305_fan_data *
++emc2305_update_fan(struct i2c_client *client, int fan_idx)
++{
++	struct emc2305_data *data = i2c_get_clientdata(client);
++	struct emc2305_fan_data *fan_data = &data->fan[fan_idx];
++
++	mutex_lock(&data->update_lock);
++
++	if (time_after(jiffies, fan_data->last_updated + HZ + HZ / 2)
++	    || !fan_data->valid) {
++		read_fan_config_from_i2c(client, fan_idx);
++		read_fan_data(client, fan_idx);
++		fan_data->valid = true;
++		fan_data->last_updated = jiffies;
++	}
++
++	mutex_unlock(&data->update_lock);
++	return fan_data;
++}
++
++static struct emc2305_fan_data *
++emc2305_update_device_fan(struct device *dev, struct device_attribute *da)
++{
++	struct i2c_client *client = to_i2c_client(dev);
++	int fan_idx = to_sensor_dev_attr(da)->index;
++
++	return emc2305_update_fan(client, fan_idx);
++}
++
++/*
++ * set/ config functions
++ */
++
++/*
++ * Note: we also update the fan target here, because its value is
++ * determined in part by the fan clock divider.  This follows the principle
++ * of least surprise; the user doesn't expect the fan target to change just
++ * because the divider changed.
++ */
++static int
++emc2305_set_fan_div(struct i2c_client *client, int fan_idx, long new_div)
++{
++	struct emc2305_data *data = i2c_get_clientdata(client);
++	struct emc2305_fan_data *fan = emc2305_update_fan(client, fan_idx);
++	const u8 reg_conf1 = SEL_FAN(fan_idx, REG_FAN_CONFIGURATION_1);
++	int new_range_bits, old_div = 8 / fan->multiplier;
++	int status = 0;
++
++	if (new_div == old_div) /* No change */
 +		return 0;
-+	}
-+}
 +
-+static int pvt_read_temp(struct device *dev, u32 attr, int channel, long *val)
-+{
-+	struct pvt_device *pvt = dev_get_drvdata(dev);
-+	struct regmap *t_map = pvt->t_map;
-+	u32 stat, nbs;
-+	int ret;
-+	u64 tmp;
-+
-+	if (channel >= pvt->t_num)
-+		return -EINVAL;
-+
-+	switch (attr) {
-+	case hwmon_temp_input:
-+		ret = regmap_read_poll_timeout(t_map, SDIF_DONE(channel),
-+					       stat, stat & SDIF_SMPL_DONE,
-+					       PVT_POLL_DELAY_US,
-+					       PVT_POLL_TIMEOUT_US);
-+		if (ret)
-+			return ret;
-+
-+		regmap_read(t_map, SDIF_DATA(channel), &nbs);
-+		nbs &= SAMPLE_DATA_MSK;
-+
-+		/*
-+		 * Convert the register value to
-+		 * degrees centigrade temperature
-+		 */
-+		tmp = nbs * PVT_H_CONST;
-+		do_div(tmp, PVT_CAL5_CONST);
-+		*val = tmp - PVT_G_CONST - pvt->ip_freq;
-+
-+		return 0;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static int pvt_read_in(struct device *dev, u32 attr, int channel, long *val)
-+{
-+	struct pvt_device *pvt = dev_get_drvdata(dev);
-+	struct regmap *v_map = pvt->v_map;
-+	u32 n, stat;
-+	u8 vm_idx;
-+	int ret;
-+
-+	if (channel >= pvt->v_num)
-+		return -EINVAL;
-+
-+	vm_idx = pvt->vm_idx[channel];
-+
-+	switch (attr) {
-+	case hwmon_in_input:
-+		ret = regmap_read_poll_timeout(v_map, VM_SDIF_DONE(vm_idx),
-+					       stat, stat & SDIF_SMPL_DONE,
-+					       PVT_POLL_DELAY_US,
-+					       PVT_POLL_TIMEOUT_US);
-+		if (ret)
-+			return ret;
-+
-+		regmap_read(v_map, VM_SDIF_DATA(vm_idx), &n);
-+		n &= SAMPLE_DATA_MSK;
-+		/* Convert the N bitstream count into voltage */
-+		*val = (PVT_N_CONST * n - PVT_R_CONST) >> PVT_CONV_BITS;
-+
-+		return 0;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static int pvt_read(struct device *dev, enum hwmon_sensor_types type,
-+		    u32 attr, int channel, long *val)
-+{
-+	switch (type) {
-+	case hwmon_temp:
-+		return pvt_read_temp(dev, attr, channel, val);
-+	case hwmon_in:
-+		return pvt_read_in(dev, attr, channel, val);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static const u32 pvt_chip_config[] = {
-+	HWMON_C_REGISTER_TZ,
-+	0
-+};
-+
-+static const struct hwmon_channel_info pvt_chip = {
-+	.type = hwmon_chip,
-+	.config = pvt_chip_config,
-+};
-+
-+static struct hwmon_channel_info pvt_temp = {
-+	.type = hwmon_temp,
-+};
-+
-+static struct hwmon_channel_info pvt_in = {
-+	.type = hwmon_in,
-+};
-+
-+static const struct hwmon_ops pvt_hwmon_ops = {
-+	.is_visible = pvt_is_visible,
-+	.read = pvt_read,
-+};
-+
-+static struct hwmon_chip_info pvt_chip_info = {
-+	.ops = &pvt_hwmon_ops,
-+};
-+
-+static int pvt_init(struct pvt_device *pvt)
-+{
-+	u16 sys_freq, key, middle, low = 4, high = 8;
-+	struct regmap *t_map = pvt->t_map;
-+	struct regmap *p_map = pvt->p_map;
-+	struct regmap *v_map = pvt->v_map;
-+	u32 t_num = pvt->t_num;
-+	u32 p_num = pvt->p_num;
-+	u32 v_num = pvt->v_num;
-+	u32 clk_synth, val;
-+	int ret;
-+
-+	sys_freq = clk_get_rate(pvt->clk) / HZ_PER_MHZ;
-+	while (high >= low) {
-+		middle = (low + high + 1) / 2;
-+		key = DIV_ROUND_CLOSEST(sys_freq, middle);
-+		if (key > CLK_SYS_CYCLES_MAX) {
-+			low = middle + 1;
-+			continue;
-+		} else if (key < CLK_SYS_CYCLES_MIN) {
-+			high = middle - 1;
-+			continue;
-+		}
-+
++	switch (new_div) {
++	case 1:
++		new_range_bits = 3;
 +		break;
++	case 2:
++		new_range_bits = 2;
++		break;
++	case 4:
++		new_range_bits = 1;
++		break;
++	case 8:
++		new_range_bits = 0;
++		break;
++	default:
++		return -EINVAL;
 +	}
++
++	mutex_lock(&data->update_lock);
++
++	status = i2c_smbus_read_byte_data(client, reg_conf1);
++	if (status < 0) {
++		dev_dbg(&client->dev, "reg 0x%02x, err %d\n",
++			reg_conf1, status);
++		goto exit_unlock;
++	}
++	status &= 0x9F;
++	status |= (new_range_bits << 5);
++	status = i2c_smbus_write_byte_data(client, reg_conf1, status);
++	if (status < 0) {
++		goto exit_invalidate;
++	}
++
++	fan->multiplier = 8 / new_div;
++
++	/* update fan target if high byte is not disabled */
++	if ((fan->target & 0x1fe0) != 0x1fe0) {
++		u16 new_target = (fan->target * old_div) / new_div;
++		fan->target = min_t(u16, new_target, 0x1fff);
++		write_fan_target_to_i2c(client, fan_idx, fan->target);
++	}
++
++exit_invalidate:
++	/* invalidate fan data to force re-read from hardware */
++	fan->valid = false;
++exit_unlock:
++	mutex_unlock(&data->update_lock);
++	return status;
++}
++
++static int
++emc2305_set_fan_target(struct i2c_client *client, int fan_idx, long rpm_target)
++{
++	struct emc2305_data *data = i2c_get_clientdata(client);
++	struct emc2305_fan_data *fan = emc2305_update_fan(client, fan_idx);
 +
 +	/*
-+	 * The system supports 'clk_sys' to 'clk_ip' frequency ratios
-+	 * from 2:1 to 512:1
++	 * Datasheet states 16000 as maximum RPM target
++	 * (table 2.2 and section 4.3)
 +	 */
-+	key = clamp_val(key, CLK_SYS_CYCLES_MIN, CLK_SYS_CYCLES_MAX) - 2;
-+
-+	clk_synth = ((key + 1) >> 1) << CLK_SYNTH_LO_SFT |
-+		    (key >> 1) << CLK_SYNTH_HI_SFT |
-+		    (key >> 1) << CLK_SYNTH_HOLD_SFT | CLK_SYNTH_EN;
-+
-+	pvt->ip_freq = sys_freq * 100 / (key + 2);
-+
-+	if (t_num) {
-+		regmap_write(t_map, SDIF_SMPL_CTRL, 0x0);
-+		regmap_write(t_map, SDIF_HALT, 0x0);
-+		regmap_write(t_map, CLK_SYNTH, clk_synth);
-+		regmap_write(t_map, SDIF_DISABLE, 0x0);
-+
-+		ret = regmap_read_poll_timeout(t_map, SDIF_STAT,
-+					       val, !(val & SDIF_BUSY),
-+					       PVT_POLL_DELAY_US,
-+					       PVT_POLL_TIMEOUT_US);
-+		if (ret)
-+			return ret;
-+
-+		val = CFG0_MODE_2 | CFG0_PARALLEL_OUT | CFG0_12_BIT |
-+		      IP_CFG << SDIF_ADDR_SFT | SDIF_WRN_W | SDIF_PROG;
-+		regmap_write(t_map, SDIF_W, val);
-+
-+		ret = regmap_read_poll_timeout(t_map, SDIF_STAT,
-+					       val, !(val & SDIF_BUSY),
-+					       PVT_POLL_DELAY_US,
-+					       PVT_POLL_TIMEOUT_US);
-+		if (ret)
-+			return ret;
-+
-+		val = POWER_DELAY_CYCLE_256 | IP_TMR << SDIF_ADDR_SFT |
-+			      SDIF_WRN_W | SDIF_PROG;
-+		regmap_write(t_map, SDIF_W, val);
-+
-+		ret = regmap_read_poll_timeout(t_map, SDIF_STAT,
-+					       val, !(val & SDIF_BUSY),
-+					       PVT_POLL_DELAY_US,
-+					       PVT_POLL_TIMEOUT_US);
-+		if (ret)
-+			return ret;
-+
-+		val = IP_RST_REL | IP_RUN_CONT | IP_AUTO |
-+		      IP_CTRL << SDIF_ADDR_SFT |
-+		      SDIF_WRN_W | SDIF_PROG;
-+		regmap_write(t_map, SDIF_W, val);
-+	}
-+
-+	if (p_num) {
-+		regmap_write(p_map, SDIF_HALT, 0x0);
-+		regmap_write(p_map, SDIF_DISABLE, BIT(p_num) - 1);
-+		regmap_write(p_map, CLK_SYNTH, clk_synth);
-+	}
-+
-+	if (v_num) {
-+		regmap_write(v_map, SDIF_SMPL_CTRL, 0x0);
-+		regmap_write(v_map, SDIF_HALT, 0x0);
-+		regmap_write(v_map, CLK_SYNTH, clk_synth);
-+		regmap_write(v_map, SDIF_DISABLE, 0x0);
-+
-+		ret = regmap_read_poll_timeout(v_map, SDIF_STAT,
-+					       val, !(val & SDIF_BUSY),
-+					       PVT_POLL_DELAY_US,
-+					       PVT_POLL_TIMEOUT_US);
-+		if (ret)
-+			return ret;
-+
-+		val = CFG1_VOL_MEAS_MODE | CFG1_PARALLEL_OUT |
-+		      CFG1_14_BIT | IP_CFG << SDIF_ADDR_SFT |
-+		      SDIF_WRN_W | SDIF_PROG;
-+		regmap_write(v_map, SDIF_W, val);
-+
-+		ret = regmap_read_poll_timeout(v_map, SDIF_STAT,
-+					       val, !(val & SDIF_BUSY),
-+					       PVT_POLL_DELAY_US,
-+					       PVT_POLL_TIMEOUT_US);
-+		if (ret)
-+			return ret;
-+
-+		val = POWER_DELAY_CYCLE_64 | IP_TMR << SDIF_ADDR_SFT |
-+		      SDIF_WRN_W | SDIF_PROG;
-+		regmap_write(v_map, SDIF_W, val);
-+
-+		ret = regmap_read_poll_timeout(v_map, SDIF_STAT,
-+					       val, !(val & SDIF_BUSY),
-+					       PVT_POLL_DELAY_US,
-+					       PVT_POLL_TIMEOUT_US);
-+		if (ret)
-+			return ret;
-+
-+		val = IP_RST_REL | IP_RUN_CONT | IP_AUTO | IP_VM_MODE |
-+		      IP_CTRL << SDIF_ADDR_SFT |
-+		      SDIF_WRN_W | SDIF_PROG;
-+		regmap_write(v_map, SDIF_W, val);
-+	}
-+
-+	return 0;
-+}
-+
-+static struct regmap_config pvt_regmap_config = {
-+	.reg_bits = 32,
-+	.reg_stride = 4,
-+	.val_bits = 32,
-+};
-+
-+static int pvt_get_regmap(struct platform_device *pdev, char *reg_name,
-+			  struct pvt_device *pvt)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct regmap **reg_map;
-+	void __iomem *io_base;
-+
-+	if (!strcmp(reg_name, "common"))
-+		reg_map = &pvt->c_map;
-+	else if (!strcmp(reg_name, "ts"))
-+		reg_map = &pvt->t_map;
-+	else if (!strcmp(reg_name, "pd"))
-+		reg_map = &pvt->p_map;
-+	else if (!strcmp(reg_name, "vm"))
-+		reg_map = &pvt->v_map;
-+	else
++	if ((rpm_target < 0) || (rpm_target > 16000))
 +		return -EINVAL;
 +
-+	io_base = devm_platform_ioremap_resource_byname(pdev, reg_name);
-+	if (IS_ERR(io_base))
-+		return PTR_ERR(io_base);
++	mutex_lock(&data->update_lock);
 +
-+	pvt_regmap_config.name = reg_name;
-+	*reg_map = devm_regmap_init_mmio(dev, io_base, &pvt_regmap_config);
-+	if (IS_ERR(*reg_map)) {
-+		dev_err(dev, "failed to init register map\n");
-+		return PTR_ERR(*reg_map);
++	if (rpm_target == 0)
++		fan->target = 0x1fff;
++	else
++		fan->target = clamp_val(
++			FAN_RPM_FACTOR * fan->multiplier / rpm_target,
++			0, 0x1fff);
++
++	write_fan_target_to_i2c(client, fan_idx, fan->target);
++
++	mutex_unlock(&data->update_lock);
++	return 0;
++}
++
++static int
++emc2305_set_pwm_enable(struct i2c_client *client, int fan_idx, long enable)
++{
++	struct emc2305_data *data = i2c_get_clientdata(client);
++	struct emc2305_fan_data *fan = emc2305_update_fan(client, fan_idx);
++	const u8 reg_fan_conf1 = SEL_FAN(fan_idx, REG_FAN_CONFIGURATION_1);
++	int status = 0;
++	u8 conf_reg;
++
++	mutex_lock(&data->update_lock);
++	switch (enable) {
++	case 0:
++		fan->rpm_control = false;
++		break;
++	case 3:
++		fan->rpm_control = true;
++		break;
++	default:
++		status = -EINVAL;
++		goto exit_unlock;
++	}
++
++	status = read_u8_from_i2c(client, reg_fan_conf1, &conf_reg);
++	if (status < 0)
++		goto exit_unlock;
++
++	if (fan->rpm_control)
++		conf_reg |= 0x80;
++	else
++		conf_reg &= ~0x80;
++
++	status = i2c_smbus_write_byte_data(client, reg_fan_conf1, conf_reg);
++
++exit_unlock:
++	mutex_unlock(&data->update_lock);
++	return status;
++}
++
++static ssize_t
++fan_input_show(struct device *dev, struct device_attribute *da, char *buf)
++{
++	struct emc2305_fan_data *fan = emc2305_update_device_fan(dev, da);
++	int rpm = 0;
++
++	if (fan->tach != 0)
++		rpm = (FAN_RPM_FACTOR * fan->multiplier) / fan->tach;
++	return sprintf(buf, "%d\n", rpm);
++}
++
++static ssize_t
++fan_fault_show(struct device *dev, struct device_attribute *da, char *buf)
++{
++	struct emc2305_fan_data *fan = emc2305_update_device_fan(dev, da);
++
++	return sprintf(buf, "%d\n", (fan->tach & 0x1fe0) == 0x1fe0);
++}
++
++static ssize_t
++fan_div_show(struct device *dev, struct device_attribute *da, char *buf)
++{
++	struct emc2305_fan_data *fan = emc2305_update_device_fan(dev, da);
++
++	return sprintf(buf, "%d\n", 8 / fan->multiplier);
++}
++
++static ssize_t
++fan_div_store(struct device *dev, struct device_attribute *da,
++	    const char *buf, size_t count)
++{
++	struct i2c_client *client = to_i2c_client(dev);
++	int fan_idx = to_sensor_dev_attr(da)->index;
++	long new_div;
++	int status;
++
++	status = kstrtol(buf, 10, &new_div);
++	if (status < 0)
++		return status;
++
++	status = emc2305_set_fan_div(client, fan_idx, new_div);
++	if (status < 0)
++		return status;
++
++	return count;
++}
++
++static ssize_t
++fan_target_show(struct device *dev, struct device_attribute *da, char *buf)
++{
++	struct emc2305_fan_data *fan = emc2305_update_device_fan(dev, da);
++	int rpm = 0;
++
++	/* high byte of 0xff indicates disabled so return 0 */
++	if ((fan->target != 0) && ((fan->target & 0x1fe0) != 0x1fe0))
++		rpm = FAN_RPM_FACTOR * fan->multiplier
++			/ fan->target;
++
++	return sprintf(buf, "%d\n", rpm);
++}
++
++static ssize_t fan_target_store(struct device *dev, struct device_attribute *da,
++			      const char *buf, size_t count)
++{
++	struct i2c_client *client = to_i2c_client(dev);
++	int fan_idx = to_sensor_dev_attr(da)->index;
++	long rpm_target;
++	int status;
++
++	status = kstrtol(buf, 10, &rpm_target);
++	if (status < 0)
++		return status;
++
++	status = emc2305_set_fan_target(client, fan_idx, rpm_target);
++	if (status < 0)
++		return status;
++
++	return count;
++}
++
++static ssize_t
++pwm_enable_show(struct device *dev, struct device_attribute *da, char *buf)
++{
++	struct emc2305_fan_data *fan = emc2305_update_device_fan(dev, da);
++	return sprintf(buf, "%d\n", fan->rpm_control ? 3 : 0);
++}
++
++static ssize_t pwm_enable_store(struct device *dev, struct device_attribute *da,
++			      const char *buf, size_t count)
++{
++	struct i2c_client *client = to_i2c_client(dev);
++	int fan_idx = to_sensor_dev_attr(da)->index;
++	long new_value;
++	int status;
++
++	status = kstrtol(buf, 10, &new_value);
++	if (status < 0)
++		return -EINVAL;
++	status = emc2305_set_pwm_enable(client, fan_idx, new_value);
++	return count;
++}
++
++static SENSOR_DEVICE_ATTR_RO(fan1_input, fan_input, 0);
++static SENSOR_DEVICE_ATTR_RW(fan1_div, fan_div, 0);
++static SENSOR_DEVICE_ATTR_RW(fan1_target, fan_target, 0);
++static SENSOR_DEVICE_ATTR_RO(fan1_fault, fan_fault, 0);
++static SENSOR_DEVICE_ATTR_RO(fan2_input, fan_input, 1);
++static SENSOR_DEVICE_ATTR_RW(fan2_div, fan_div, 1);
++static SENSOR_DEVICE_ATTR_RW(fan2_target, fan_target, 1);
++static SENSOR_DEVICE_ATTR_RO(fan2_fault, fan_fault, 1);
++static SENSOR_DEVICE_ATTR_RO(fan3_input, fan_input, 2);
++static SENSOR_DEVICE_ATTR_RW(fan3_div, fan_div, 2);
++static SENSOR_DEVICE_ATTR_RW(fan3_target, fan_target, 2);
++static SENSOR_DEVICE_ATTR_RO(fan3_fault, fan_fault, 2);
++static SENSOR_DEVICE_ATTR_RO(fan4_input, fan_input, 3);
++static SENSOR_DEVICE_ATTR_RW(fan4_div, fan_div, 3);
++static SENSOR_DEVICE_ATTR_RW(fan4_target, fan_target, 3);
++static SENSOR_DEVICE_ATTR_RO(fan4_fault, fan_fault, 3);
++static SENSOR_DEVICE_ATTR_RO(fan5_input, fan_input, 4);
++static SENSOR_DEVICE_ATTR_RW(fan5_div, fan_div, 4);
++static SENSOR_DEVICE_ATTR_RW(fan5_target, fan_target, 4);
++static SENSOR_DEVICE_ATTR_RO(fan5_fault, fan_fault, 4);
++static SENSOR_DEVICE_ATTR_RW(pwm1, pwm_enable, 0);
++static SENSOR_DEVICE_ATTR_RW(pwm2, pwm_enable, 1);
++static SENSOR_DEVICE_ATTR_RW(pwm3, pwm_enable, 2);
++static SENSOR_DEVICE_ATTR_RW(pwm4, pwm_enable, 3);
++static SENSOR_DEVICE_ATTR_RW(pwm5, pwm_enable, 4);
++
++static struct attribute *emc2305_attributes_fan1[] = {
++	&sensor_dev_attr_fan1_input.dev_attr.attr,
++	&sensor_dev_attr_fan1_div.dev_attr.attr,
++	&sensor_dev_attr_fan1_target.dev_attr.attr,
++	&sensor_dev_attr_fan1_fault.dev_attr.attr,
++	&sensor_dev_attr_pwm1.dev_attr.attr,
++	NULL
++};
++
++static struct attribute *emc2305_attributes_fan2[] = {
++	&sensor_dev_attr_fan2_input.dev_attr.attr,
++	&sensor_dev_attr_fan2_div.dev_attr.attr,
++	&sensor_dev_attr_fan2_target.dev_attr.attr,
++	&sensor_dev_attr_fan2_fault.dev_attr.attr,
++	&sensor_dev_attr_pwm2.dev_attr.attr,
++	NULL
++};
++
++static struct attribute *emc2305_attributes_fan3[] = {
++	&sensor_dev_attr_fan3_input.dev_attr.attr,
++	&sensor_dev_attr_fan3_div.dev_attr.attr,
++	&sensor_dev_attr_fan3_target.dev_attr.attr,
++	&sensor_dev_attr_fan3_fault.dev_attr.attr,
++	&sensor_dev_attr_pwm3.dev_attr.attr,
++	NULL
++};
++
++static struct attribute *emc2305_attributes_fan4[] = {
++	&sensor_dev_attr_fan4_input.dev_attr.attr,
++	&sensor_dev_attr_fan4_div.dev_attr.attr,
++	&sensor_dev_attr_fan4_target.dev_attr.attr,
++	&sensor_dev_attr_fan4_fault.dev_attr.attr,
++	&sensor_dev_attr_pwm4.dev_attr.attr,
++	NULL
++};
++
++static struct attribute *emc2305_attributes_fan5[] = {
++	&sensor_dev_attr_fan5_input.dev_attr.attr,
++	&sensor_dev_attr_fan5_div.dev_attr.attr,
++	&sensor_dev_attr_fan5_target.dev_attr.attr,
++	&sensor_dev_attr_fan5_fault.dev_attr.attr,
++	&sensor_dev_attr_pwm5.dev_attr.attr,
++	NULL
++};
++
++static const struct attribute_group emc2305_fan1_group = {
++	.attrs = emc2305_attributes_fan1,
++};
++
++static const struct attribute_group emc2305_fan2_group = {
++	.attrs = emc2305_attributes_fan2,
++};
++
++static const struct attribute_group emc2305_fan3_group = {
++	.attrs = emc2305_attributes_fan3,
++};
++
++static const struct attribute_group emc2305_fan4_group = {
++	.attrs = emc2305_attributes_fan4,
++};
++
++static const struct attribute_group emc2305_fan5_group = {
++	.attrs = emc2305_attributes_fan5,
++};
++
++/*
++ * driver interface
++ */
++static int
++emc2305_probe(struct i2c_client *client, const struct i2c_device_id *id)
++{
++	struct emc2305_data *data;
++	struct device *hwmon_dev;
++	int status, idx = 0;
++
++	if (!i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_BYTE_DATA))
++		return -EIO;
++
++	data = devm_kzalloc(&client->dev, sizeof(struct emc2305_data), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++
++	i2c_set_clientdata(client, data);
++	data->client = client;
++	mutex_init(&data->update_lock);
++
++	status = i2c_smbus_read_byte_data(client, REG_PRODUCT_ID);
++	switch (status) {
++	case 0x34: /* EMC2305 */
++		data->fan_count = 5;
++		break;
++	case 0x35: /* EMC2303 */
++		data->fan_count = 3;
++		break;
++	case 0x36: /* EMC2302 */
++		data->fan_count = 2;
++		break;
++	case 0x37: /* EMC2301 */
++		data->fan_count = 1;
++		break;
++	default:
++		if (status < 0)
++			dev_err(&client->dev, "Failed to read reg REG_PRODUCT_ID, status = %d\n", status);
++		else
++			dev_err(&client->dev, "Unknown device, status = %d\n", status);
++		return status;
++	}
++
++	/* sysfs hooks */
++	data->groups[idx++] = &emc2305_fan1_group;
++	if (data->fan_count >= 2)
++		data->groups[idx++] = &emc2305_fan2_group;
++	if (data->fan_count >= 3) {
++		data->groups[idx++] = &emc2305_fan3_group;
++	}
++	if (data->fan_count == 5) {
++		data->groups[idx++] = &emc2305_fan4_group;
++		data->groups[idx++] = &emc2305_fan5_group;
++	}
++
++	hwmon_dev = devm_hwmon_device_register_with_groups(&client->dev,
++							   client->name, data,
++							   data->groups);
++	if (IS_ERR(hwmon_dev))
++		return PTR_ERR(hwmon_dev);
++
++	dev_info(&client->dev, "pwm fan controller: '%s'\n",
++		 client->name);
++
++	return 0;
++}
++
++static const struct i2c_device_id emc2305_ids[] = {
++	{ "emc2301", 0 },
++	{ "emc2302", 0 },
++	{ "emc2303", 0 },
++	{ "emc2305", 0 },
++	{ }
++};
++MODULE_DEVICE_TABLE(i2c, emc2305_ids);
++
++/* Return 0 if detection is successful, -ENODEV otherwise */
++static int
++emc2305_detect(struct i2c_client *new_client, struct i2c_board_info *info)
++{
++	struct i2c_adapter *adapter = new_client->adapter;
++	int manufacturer, product;
++
++	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE_DATA))
++		return -ENODEV;
++
++	manufacturer =
++		i2c_smbus_read_byte_data(new_client, REG_MANUFACTURER_ID);
++	if (manufacturer != 0x5D)
++		return -ENODEV;
++
++	product = i2c_smbus_read_byte_data(new_client, REG_PRODUCT_ID);
++
++	switch (product) {
++	case 0x34:
++		strlcpy(info->type, "emc2305", I2C_NAME_SIZE);
++		break;
++	case 0x35:
++		strlcpy(info->type, "emc2303", I2C_NAME_SIZE);
++		break;
++	case 0x36:
++		strlcpy(info->type, "emc2302", I2C_NAME_SIZE);
++		break;
++	case 0x37:
++		strlcpy(info->type, "emc2301", I2C_NAME_SIZE);
++		break;
++	default:
++		return -ENODEV;
 +	}
 +
 +	return 0;
 +}
 +
-+static void pvt_clk_disable(void *data)
-+{
-+	struct pvt_device *pvt = data;
-+
-+	clk_disable_unprepare(pvt->clk);
-+}
-+
-+static int pvt_clk_enable(struct device *dev, struct pvt_device *pvt)
-+{
-+	int ret;
-+
-+	ret = clk_prepare_enable(pvt->clk);
-+	if (ret)
-+		return ret;
-+
-+	return devm_add_action_or_reset(dev, pvt_clk_disable, pvt);
-+}
-+
-+static void pvt_reset_control_assert(void *data)
-+{
-+	struct pvt_device *pvt = data;
-+
-+	reset_control_assert(pvt->rst);
-+}
-+
-+static int pvt_reset_control_deassert(struct device *dev, struct pvt_device *pvt)
-+{
-+	int ret;
-+
-+	ret = reset_control_deassert(pvt->rst);
-+	if (ret)
-+		return ret;
-+
-+	return devm_add_action_or_reset(dev, pvt_reset_control_assert, pvt);
-+}
-+
-+static int mr75203_probe(struct platform_device *pdev)
-+{
-+	const struct hwmon_channel_info **pvt_info;
-+	u32 ts_num, vm_num, pd_num, val, index, i;
-+	struct device *dev = &pdev->dev;
-+	u32 *temp_config, *in_config;
-+	struct device *hwmon_dev;
-+	struct pvt_device *pvt;
-+	int ret;
-+
-+	pvt = devm_kzalloc(dev, sizeof(*pvt), GFP_KERNEL);
-+	if (!pvt)
-+		return -ENOMEM;
-+
-+	ret = pvt_get_regmap(pdev, "common", pvt);
-+	if (ret)
-+		return ret;
-+
-+	pvt->clk = devm_clk_get(dev, NULL);
-+	if (IS_ERR(pvt->clk))
-+		return dev_err_probe(dev, PTR_ERR(pvt->clk), "failed to get clock\n");
-+
-+	ret = pvt_clk_enable(dev, pvt);
-+	if (ret) {
-+		dev_err(dev, "failed to enable clock\n");
-+		return ret;
-+	}
-+
-+	pvt->rst = devm_reset_control_get_exclusive(dev, NULL);
-+	if (IS_ERR(pvt->rst))
-+		return dev_err_probe(dev, PTR_ERR(pvt->rst),
-+				     "failed to get reset control\n");
-+
-+	ret = pvt_reset_control_deassert(dev, pvt);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "cannot deassert reset control\n");
-+
-+	regmap_read(pvt->c_map, PVT_IP_CONFIG, &val);
-+	ts_num = (val & TS_NUM_MSK) >> TS_NUM_SFT;
-+	pd_num = (val & PD_NUM_MSK) >> PD_NUM_SFT;
-+	vm_num = (val & VM_NUM_MSK) >> VM_NUM_SFT;
-+	pvt->t_num = ts_num;
-+	pvt->p_num = pd_num;
-+	pvt->v_num = vm_num;
-+	val = 0;
-+	if (ts_num)
-+		val++;
-+	if (vm_num)
-+		val++;
-+	if (!val)
-+		return -ENODEV;
-+
-+	pvt_info = devm_kcalloc(dev, val + 2, sizeof(*pvt_info), GFP_KERNEL);
-+	if (!pvt_info)
-+		return -ENOMEM;
-+	pvt_info[0] = &pvt_chip;
-+	index = 1;
-+
-+	if (ts_num) {
-+		ret = pvt_get_regmap(pdev, "ts", pvt);
-+		if (ret)
-+			return ret;
-+
-+		temp_config = devm_kcalloc(dev, ts_num + 1,
-+					   sizeof(*temp_config), GFP_KERNEL);
-+		if (!temp_config)
-+			return -ENOMEM;
-+
-+		for (i = 0; i < ts_num; i++)
-+			temp_config[i] = HWMON_T_INPUT;
-+
-+		temp_config[ts_num] = 0;
-+		pvt_temp.config = temp_config;
-+
-+		pvt_info[index++] = &pvt_temp;
-+	}
-+
-+	if (pd_num) {
-+		ret = pvt_get_regmap(pdev, "pd", pvt);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	if (vm_num) {
-+		u32 num = vm_num;
-+
-+		ret = pvt_get_regmap(pdev, "vm", pvt);
-+		if (ret)
-+			return ret;
-+
-+		pvt->vm_idx = devm_kcalloc(dev, vm_num, sizeof(*pvt->vm_idx),
-+					   GFP_KERNEL);
-+		if (!pvt->vm_idx)
-+			return -ENOMEM;
-+
-+		for (i = 0; i < vm_num; i++)
-+			pvt->vm_idx[i] = i;
-+
-+		ret = device_property_read_u8_array(dev, "vm-map",
-+						    pvt->vm_idx, vm_num);
-+		if (!ret)
-+			for (i = 0; i < vm_num; i++)
-+				if (pvt->vm_idx[i] >= vm_num ||
-+				    pvt->vm_idx[i] == 0xff) {
-+					num = i;
-+					break;
-+				}
-+
-+		in_config = devm_kcalloc(dev, num + 1,
-+					 sizeof(*in_config), GFP_KERNEL);
-+		if (!in_config)
-+			return -ENOMEM;
-+
-+		memset32(in_config, HWMON_I_INPUT, num);
-+		in_config[num] = 0;
-+		pvt_in.config = in_config;
-+
-+		pvt_info[index++] = &pvt_in;
-+	}
-+
-+	ret = pvt_init(pvt);
-+	if (ret) {
-+		dev_err(dev, "failed to init pvt: %d\n", ret);
-+		return ret;
-+	}
-+
-+	pvt_chip_info.info = pvt_info;
-+	hwmon_dev = devm_hwmon_device_register_with_info(dev, "pvt",
-+							 pvt,
-+							 &pvt_chip_info,
-+							 NULL);
-+
-+	return PTR_ERR_OR_ZERO(hwmon_dev);
-+}
-+
-+static const struct of_device_id moortec_pvt_of_match[] = {
-+	{ .compatible = "moortec,mr75203" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, moortec_pvt_of_match);
-+
-+static struct platform_driver moortec_pvt_driver = {
++static struct i2c_driver emc2305_driver = {
++	.class		= I2C_CLASS_HWMON,
 +	.driver = {
-+		.name = "moortec-pvt",
-+		.of_match_table = moortec_pvt_of_match,
++		.name	= "emc2305",
 +	},
-+	.probe = mr75203_probe,
++	.probe		= emc2305_probe,
++	.id_table	= emc2305_ids,
++	.detect		= emc2305_detect,
++	.address_list	= i2c_addresses,
 +};
-+module_platform_driver(moortec_pvt_driver);
 +
-+MODULE_LICENSE("GPL v2");
++module_i2c_driver(emc2305_driver);
++
++MODULE_AUTHOR("Reinhard Pfau <pfau@gdsys>, Biwen Li <biwen.li@nxp.com>\n");
++MODULE_DESCRIPTION("SMSC EMC2305 hwmon driver");
++MODULE_LICENSE("GPL");
 -- 
-2.11.0
+2.17.1
 
