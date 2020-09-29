@@ -2,59 +2,61 @@ Return-Path: <SRS0=NIjz=DG=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
+X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MSGID_FROM_MTA_HEADER,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62750C4346E
-	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Sep 2020 10:54:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DB2BC4346E
+	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Sep 2020 10:54:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 152FE207C4
-	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Sep 2020 10:54:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3E589208FE
+	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Sep 2020 10:54:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=amdcloud.onmicrosoft.com header.i=@amdcloud.onmicrosoft.com header.b="gLGQ1CLq"
+	dkim=pass (1024-bit key) header.d=amdcloud.onmicrosoft.com header.i=@amdcloud.onmicrosoft.com header.b="XhQFuXQb"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728288AbgI2KyE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 29 Sep 2020 06:54:04 -0400
-Received: from mail-eopbgr750055.outbound.protection.outlook.com ([40.107.75.55]:17891
+        id S1728299AbgI2KyH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 29 Sep 2020 06:54:07 -0400
+Received: from mail-eopbgr750074.outbound.protection.outlook.com ([40.107.75.74]:8175
         "EHLO NAM02-BL2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725497AbgI2KyE (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 29 Sep 2020 06:54:04 -0400
+        id S1725497AbgI2KyG (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 29 Sep 2020 06:54:06 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LP2qBFlqHjXBC5K7Bsm1HVmfVSp28Zzxh8EzSlbHAQx40QjAvtAkk9+HMrXbl7gL5UoPrvQBD79MgnTcG4et/z21IgsDoIOlOfvCa4oXFggsDNrg1fVLHOccARgxaGWWrbiBsvvtq4UeKA3EGVgnF7N27RMD4UnM04AX3TeSGIya60PqAg6LEBaFp4uMndyxoHiAX4aATDd0pgDtMKvPSqwtkQEMxFxioiK3KJLZnRW8qr1plSgqLvfAWG7OCedwN1sFPY6hwv+2KoZSFefeslmqyvW4a6UcD8veHa+IeXPG6F19XnUUQRgIocWqoRKQoLmVJpmj7/wmeol/qZtZQw==
+ b=fevVtrLUe31dPhsa9X3fyW73Zso21oH8+APDFKdJ7IBiiC0wvui3YvaYIssQJWcO1Th55a+jVUZzUJ1fDwoY/de9qY+XX0bHoBhvyvMqW/p1/FE9jLZNeVgxI4AI7MB3gWHCTd3+cCtWk9mVUfJ5HysHWTSjVBPtCCNiiKZfjdUnHCfy9zueNFdDsAEEQeOtHIBoFvHraKy5dVBCXqPETCWVOwcYDExC9xm6UH+7eeskKS7ZpPE6VaqnVOalHhYdMi2sFr4BrUXnk6zRONpsJLie0fWw+vXrnfXjad1R15h1QSN1UdHx3yRr/pfhWQwmtgG+wmX7q01R5fMDEGHCbw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vyDMc+S3nJqmYLC+k0B4JI6dY0QB9kTzjT6BDj4jRU8=;
- b=BgSzXDO7M8pOiRklGASJK12Suo+nmCDFzZ7gRNuEa8xK4CLg2W0nvQ7mm18h4uaMWby+35Nknq+sQoj1+psDM2YcV0FrPIzITBP2WWG/qb7fl61TSkj+BrCiDi0X+0aL/Cf0JD4a9gooIVCrLR+o9fdb6ESqhpK+cxUhL2wssT3EzpidAfA14CCt5NfTf3bhkQoF+w5xHM0hAjpaWDBjLp7cQC2fT6qejchpQW8tBIj2jGlfEmEO99SnwoPG3AhqSVzl5WKN1R/UoYaiSlQanJJprsdR9KPq6++5maeZe+PBG1zB6AQOqfpzfdVcQpYJ0hu3MuBBiab60Dh5bvFBeA==
+ bh=qwAZXgW0oEWc1Ln9uPlWKcgGEO5AKJBRAhaDRVVd6U0=;
+ b=iJWrjoYeEd8k7el/otozbnf5BRzMZkotY1TuPDxyMlaI49dOz/2+nK3r0nS24jaX3PJjZCaQuCrjkXzwrelLh/U5X/i5jYpZ08hD8ZEYCs6dtZFGOFUk71wnHIXGgdAacAprDcBXuxg2seHogkndUWwXkOiN8FLYhbA7zfCLgcx8SXkwpNonihTK5bHzURmSxGtiB9uR86P7oZ+TFZpclK69/Oxn6wcMjlvQN4MW7EtquE7XgNbLDbEUxc0rBK0C/TvY6zpb6FLszFPeN81RZwl5K/aiY2VhvQq+ZwiUrW3hAF2Zi6rdLYSeFoCxufv54aK+UfdhHjhM8vMNK1zWXw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vyDMc+S3nJqmYLC+k0B4JI6dY0QB9kTzjT6BDj4jRU8=;
- b=gLGQ1CLq0M7sn7E8pLlKRYgPKd6fe7BO7Zj38z+VmSPS3NbkatAvGVtb3MJ+ZYmLxmaQG9r8nZ8sy0Y8nlSnYfWsRVZxSDxh5bn/mLk/E5nppFj7/H1snfBu05kNF+av9owNFkYkkTWxaGeqsPr6puZNh872bG5krSEUjrX1vtg=
+ bh=qwAZXgW0oEWc1Ln9uPlWKcgGEO5AKJBRAhaDRVVd6U0=;
+ b=XhQFuXQboTWyiiwZ0NWPHkSmMgubvIy0/NYDmGszfI5MPTXprhibXlmBgbQ5BRvry1LrFhQ6isGgD5I6a6sWtC+9bTE4wSwECGeF81plk2KIPVdP7h4u6z03+dAfVWCIGeUjiIiX8MWU4G4xRFi4O/gUQYpTPGGjmmm5Qf5B/Qs=
 Authentication-Results: vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=none action=none header.from=amd.com;
 Received: from DM6PR12MB4388.namprd12.prod.outlook.com (20.180.254.74) by
  DM5PR1201MB0105.namprd12.prod.outlook.com (10.174.106.23) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3412.20; Tue, 29 Sep 2020 10:54:01 +0000
+ 15.20.3412.20; Tue, 29 Sep 2020 10:54:04 +0000
 Received: from DM6PR12MB4388.namprd12.prod.outlook.com
  ([fe80::31b8:2b7f:39bb:23af]) by DM6PR12MB4388.namprd12.prod.outlook.com
  ([fe80::31b8:2b7f:39bb:23af%6]) with mapi id 15.20.3433.032; Tue, 29 Sep 2020
- 10:54:00 +0000
+ 10:54:04 +0000
 From:   Naveen Krishna Chatradhi <nchatrad@amd.com>
 To:     linux-hwmon@vger.kernel.org
-Cc:     naveenkrishna.ch@gmail.com,
-        Naveen Krishna Chatradhi <nchatrad@amd.com>
-Subject: [PATCH v2 0/4] hwmon: improvements to amd_energy driver
-Date:   Tue, 29 Sep 2020 16:23:18 +0530
-Message-Id: <20200929105322.8919-1-nchatrad@amd.com>
+Cc:     naveenkrishna.ch@gmail.com, Akshay Gupta <Akshay.Gupta@amd.com>
+Subject: [PATCH v2 1/4] hwmon: amd_energy: Move label out of accumulation structure
+Date:   Tue, 29 Sep 2020 16:23:19 +0530
+Message-Id: <20200929105322.8919-2-nchatrad@amd.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200929105322.8919-1-nchatrad@amd.com>
+References: <20200929105322.8919-1-nchatrad@amd.com>
 Content-Type: text/plain
 X-Originating-IP: [165.204.156.251]
 X-ClientProxiedBy: MA1PR0101CA0022.INDPRD01.PROD.OUTLOOK.COM
@@ -62,56 +64,115 @@ X-ClientProxiedBy: MA1PR0101CA0022.INDPRD01.PROD.OUTLOOK.COM
  (2603:10b6:5:2a9::10)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from milan-ETHANOL-X.amd.com (165.204.156.251) by MA1PR0101CA0022.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:21::32) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3412.20 via Frontend Transport; Tue, 29 Sep 2020 10:53:58 +0000
+Received: from milan-ETHANOL-X.amd.com (165.204.156.251) by MA1PR0101CA0022.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:21::32) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3412.20 via Frontend Transport; Tue, 29 Sep 2020 10:54:02 +0000
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 3411b77e-8edc-47a6-95cf-08d86465f8c1
+X-MS-Office365-Filtering-Correlation-Id: 954462d1-98e5-4a04-082a-08d86465fb27
 X-MS-TrafficTypeDiagnostic: DM5PR1201MB0105:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <DM5PR1201MB0105513C68C28BC3C3BDE5D4E8320@DM5PR1201MB0105.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
+X-Microsoft-Antispam-PRVS: <DM5PR1201MB01054D102258A4582508EAC1E8320@DM5PR1201MB0105.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:276;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: u+q3rMvH0LnoQ/vT1eG7JJPv+/YDPPfDG3dgPZemI+YT1gVc8raxuCvUPz6//vrBt1Mr6HbvUVkxXAY4E2HIAJUbFargYR78MEDPKtyjGuA5zjeeFpiiPb02PsTrsgUVouhNc3JagkLP751ERxfhichfAgyaOKCfU2ASeqnZhJugHlFKHisQZbdTXKBoPq6I9DKi7jWBFggYyrYZZtQ4YHcSHrf/EYh/njvVjARYL1o/6vwsoQgYwHGnja78/OSkvMwzUoSvEWXhzgtOH9HolRm5pyasF8NDXmrm8QBrWca6udZJp2kj88dlw/vjnUg/N4JJZs98sw4Wyd0W5aVdAsrS5yKzROkX2q2/Nw53LbJI1HKnFnr3E6JJ+Ebw/W3W8sXFNyGHoEMuMW1PlTr/MA46Tgc7NlJZZ8t/BapiI5Y=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4388.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(346002)(366004)(136003)(396003)(39860400002)(478600001)(8676002)(1076003)(316002)(83380400001)(66476007)(66556008)(66946007)(7696005)(52116002)(6666004)(36756003)(4326008)(2616005)(6916009)(8936002)(5660300002)(2906002)(4744005)(6486002)(956004)(26005)(16526019)(186003)(197533005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: /xDddDzmuRn4MhlHA+AFbS6xKMNra54MFZ/vImOiuf//i5odXe+PyyVtB47Okj3DBoJ5etss1ojqO/X/ELx4t+BDoIG7114ffe6mx3k0pB4xqCdVH6MjEYCd/rmTySnzbqtWdsYcMOYaEl7zFdSPaU/1P+JXl15CL/0V5JJeD5XZtPJc3fKEGPit/D3j9Co8+5Mrai5XJpexc190alkV5cHS3I/bKslSg6qbRSPqLr10tDWLgFvUsMyR5Sf6EM1rW7ZUda2wWFUknUlPw+x+hcqbIAyRxExMfj5exJ0Uzt2Fxrh/CakkpcHGalW6ULQfUs+GIk8nClBhdCFTLn3HFx0jKiCVpJfL+KKlXDiq0OMSN+HgUFlWlDIbXDg4p0+YedTcDQskPxp8MXdV0UcVvszJ/05//alOjC9yYZs152oZhA4QSA9q8HPH0uomkeuaGxEtxjKPSGR8YzxVFecA1iMRoXHXPW+pmdkwqhCxqKAtvB6xp9+p+Ly1Yugfv37W6xBJoER3yYOIwBWNvRLgUtxDJNcpHw4Tkq2UYzeJjTmgTVeILfyjYZuS/+/Bwfm7gt0D0bKjAwo7yIrUzsq3IrdvAJlfkRoSSWEjQeTltir+mEt69jYyFZYHR1JeBoFAWIbti39C+nXRmJ2b8hcwVQ==
+X-Microsoft-Antispam-Message-Info: aszSxVa3KzH75scaye0qw7Wo6Ep4nXqqrO2YKklKQhAoYYhyXAI8OZ32nUdOUEIRKXcpHb8HZdolv6rWvscT70arfTboCDCUsO9cNuVpLtSIDHxywqgBaW//1oluHvLT1WX6K2KYpT4gRbe6FJnJK0Gu72OFdL7S+yysKczB9UDjGB1ruPQOXti/pqQeGFVjtZFB+Is5KnZMm7EWqAsgGsUq995RRRSNDaxv0MbfR9yP6SrQL5BNKkk0EB1UMyduOr0l2ZYUbJ0FVD33iu2SuxssF2odDI3ZnM0Nb++O6JySarBQ3Xr6JGg+1UbWoD344EIbowMeX6NX4q2ylvSQbTi4gPoAo/ImN5tlES89rzpIIKnjsSFA7JEpAmT6zvO1
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4388.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(346002)(366004)(136003)(396003)(39860400002)(478600001)(8676002)(1076003)(316002)(83380400001)(66476007)(66556008)(66946007)(7696005)(52116002)(6666004)(36756003)(4326008)(2616005)(6916009)(8936002)(5660300002)(2906002)(6486002)(956004)(26005)(16526019)(186003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: fqQGts2bE8//IWQzVEdr/OflJBWwXhGvxoy5Bi64fogbGi/On5tS/21fNxAeyNVAYPpa47IZp01PxL77CiqAASLPHQb6ILP3hierMTZuGWAksGup2PnRjKTb+ezHvanA78z75gnjnvdiwCIsBuY3aXTtIpKfKIQvA8M22zsQzwdSZfkJzqz/kdBZPiIlYstcDl82qWP0dfbtc0iwnGxXjww6vl8j++H62Js/e+ZawnDbrli8GXyrfbfX12Bg3MbZwRwvJ7KvA7IKDGSypXqtFDUA9L1ZZIoCgNRFJMUtOXUhzLpdaohWe4IxQxB0w6GNBbPzxIiWos5/fMcr8a3n3Y3e22DG5H3j0JtaBuI5aO2T83RD75VTh7gIy6NGxPNxOwNCVrLVHJ9/b5sxejK9Ps3uSh1o3VWB5fCjP5tDnS53uDMT5H1yCcOZrV/f8viFWzGYBzglV8bVIJzh1mIv1A+JySOHyrOnRvSCbRTdgtBNFFW6Ky7wG/krnheUq7uXp06iBQfAiFU95RBwHv/YIUnG9R3kt7T3jIaW+otkp5Pi9VcvERbCM76x6YQZEfHcfjcXuBqt25QbSzLXSejKKg9atRFQ3D57kPD59D4sYg5LpN9kY8cOXk/WDvyGWJk72OXOM6cu0LL0rOmBpvizcA==
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3411b77e-8edc-47a6-95cf-08d86465f8c1
+X-MS-Exchange-CrossTenant-Network-Message-Id: 954462d1-98e5-4a04-082a-08d86465fb27
 X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4388.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2020 10:54:00.6112
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2020 10:54:04.2442
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AOF4x8Xg4AoL3+ucNBubeDyYW2zl7QCkpRTLjnkn+v+HtJ+3UudGs8KbhMf7GRViyQiCFJKEGot9lqNUnZwbUQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3T0YQWRikohrx2hvldmT1V0Jwp2zS+Uwic2qsj402E196gagwVBHItYZjRIGSn+P/z8t8nVS6ZyV+06n7oKv+w==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1201MB0105
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Guenter,
+From: Akshay Gupta <Akshay.Gupta@amd.com>
 
-Would like to know your feedback on the following feature
-for the amd_energy driver.
+At present, core & socket labels are defined in struct sensor_accumulator
+This patch moves it to the amd_energy_data structure, which will
+help in calling memset on struct sensor_accumulator to optimize the code.
 
-1) Accumulator Interval change based on reported resolution
-    - Frequency of the accumulator thread can be set during
-      the probe based on fine grain (1.625 micro J) or course
-      grain (0.125 milli J) resolutions.
+Signed-off-by: Akshay Gupta <Akshay.Gupta@amd.com>
+---
+Changes since v1:
+None
 
-Akshay Gupta (1):
-  hwmon: amd_energy: Move label out of accumulation structure
+ drivers/hwmon/amd_energy.c | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
-Naveen Krishna Chatradhi (3):
-  hwmon: amd_energy: optimize accumulation interval
-  hwmon: amd_energy: Improve the accumulation logic
-  hwmon: (amd_energy) Update driver documentation
-
- Documentation/hwmon/amd_energy.rst |   5 +
- drivers/hwmon/amd_energy.c         | 163 ++++++++++++-----------------
- 2 files changed, 72 insertions(+), 96 deletions(-)
-
+diff --git a/drivers/hwmon/amd_energy.c b/drivers/hwmon/amd_energy.c
+index 29603742c858..9580a16185b8 100644
+--- a/drivers/hwmon/amd_energy.c
++++ b/drivers/hwmon/amd_energy.c
+@@ -35,7 +35,6 @@
+ struct sensor_accumulator {
+ 	u64 energy_ctr;
+ 	u64 prev_value;
+-	char label[10];
+ };
+ 
+ struct amd_energy_data {
+@@ -52,6 +51,7 @@ struct amd_energy_data {
+ 	int nr_cpus;
+ 	int nr_socks;
+ 	int core_id;
++	char (*label)[10];
+ };
+ 
+ static int amd_energy_read_labels(struct device *dev,
+@@ -61,7 +61,7 @@ static int amd_energy_read_labels(struct device *dev,
+ {
+ 	struct amd_energy_data *data = dev_get_drvdata(dev);
+ 
+-	*str = data->accums[channel].label;
++	*str = data->label[channel];
+ 	return 0;
+ }
+ 
+@@ -253,6 +253,7 @@ static int amd_create_sensor(struct device *dev,
+ 	struct sensor_accumulator *accums;
+ 	int i, num_siblings, cpus, sockets;
+ 	u32 *s_config;
++	char (*label_l)[10];
+ 
+ 	/* Identify the number of siblings per core */
+ 	num_siblings = ((cpuid_ebx(0x8000001e) >> 8) & 0xff) + 1;
+@@ -276,21 +277,25 @@ static int amd_create_sensor(struct device *dev,
+ 	if (!accums)
+ 		return -ENOMEM;
+ 
++	label_l = devm_kcalloc(dev, cpus + sockets,
++			       sizeof(*label_l), GFP_KERNEL);
++	if (!label_l)
++		return -ENOMEM;
++
+ 	info->type = type;
+ 	info->config = s_config;
+ 
+ 	data->nr_cpus = cpus;
+ 	data->nr_socks = sockets;
+ 	data->accums = accums;
++	data->label = label_l;
+ 
+ 	for (i = 0; i < cpus + sockets; i++) {
+ 		s_config[i] = config;
+ 		if (i < cpus)
+-			scnprintf(accums[i].label, 10,
+-				  "Ecore%03u", i);
++			scnprintf(label_l[i], 10, "Ecore%03u", i);
+ 		else
+-			scnprintf(accums[i].label, 10,
+-				  "Esocket%u", (i - cpus));
++			scnprintf(label_l[i], 10, "Esocket%u", (i - cpus));
+ 	}
+ 
+ 	return 0;
 -- 
 2.17.1
 
