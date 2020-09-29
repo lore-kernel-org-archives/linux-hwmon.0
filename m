@@ -2,120 +2,116 @@ Return-Path: <SRS0=NIjz=DG=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42D6FC4346E
-	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Sep 2020 10:19:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62750C4346E
+	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Sep 2020 10:54:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DF15520C09
-	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Sep 2020 10:19:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 152FE207C4
+	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Sep 2020 10:54:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="lmpWI/Fk"
+	dkim=pass (1024-bit key) header.d=amdcloud.onmicrosoft.com header.i=@amdcloud.onmicrosoft.com header.b="gLGQ1CLq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725535AbgI2KTD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 29 Sep 2020 06:19:03 -0400
-Received: from mail-eopbgr60065.outbound.protection.outlook.com ([40.107.6.65]:37203
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        id S1728288AbgI2KyE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 29 Sep 2020 06:54:04 -0400
+Received: from mail-eopbgr750055.outbound.protection.outlook.com ([40.107.75.55]:17891
+        "EHLO NAM02-BL2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725497AbgI2KTD (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 29 Sep 2020 06:19:03 -0400
+        id S1725497AbgI2KyE (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 29 Sep 2020 06:54:04 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bhN/nS+Nq0VrL7aEnNDkNpqM89RFNNBm8nbXvLdSLLQ79ahV0HvsAuU/HMMiQe6anq/rV9ed/vJkgnbQncCGEgnA9wdDsuJ6d9X/zaac/j2wzS5nyS0a1SeHqDyC/tt0wea4MSYs4BdfCszec6gA3fVDeKiSz1CB4q1GIJqhpUTe7HOIuqnYdg9OL31tbQNnOsFEw06V6EFW/LADkOf5rV+x7dqc5aRuJXQ6Kh9KaN72LIcgeRi8yJMffjuFTu1t/7gxOCcdGKoBgGxXm+lUVqJtvzlk/beoXwFoHMjrcRfZ4DRpSuglDwQ4SVfhGTqsKQA6adxdiXlJd7Rwf4j/Vw==
+ b=LP2qBFlqHjXBC5K7Bsm1HVmfVSp28Zzxh8EzSlbHAQx40QjAvtAkk9+HMrXbl7gL5UoPrvQBD79MgnTcG4et/z21IgsDoIOlOfvCa4oXFggsDNrg1fVLHOccARgxaGWWrbiBsvvtq4UeKA3EGVgnF7N27RMD4UnM04AX3TeSGIya60PqAg6LEBaFp4uMndyxoHiAX4aATDd0pgDtMKvPSqwtkQEMxFxioiK3KJLZnRW8qr1plSgqLvfAWG7OCedwN1sFPY6hwv+2KoZSFefeslmqyvW4a6UcD8veHa+IeXPG6F19XnUUQRgIocWqoRKQoLmVJpmj7/wmeol/qZtZQw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=O3iJiqycZZlziR3GK/QHx/x1sCdpq0ltYBozgvTzKN0=;
- b=WOquIaVbXlCSyz6aCrOGARaFYJ6JrtKy8lsK0Wd5DxxxvHo0aQV+H0MFYPcJ/sZrkD7zRMzRjNwACOVkJlz8/WPORM3SGpA53LOHoldg4U/5XasucVcATTx0SYLiJeINA/4rbcR70ky+r8kyxINTrfuDemAh7M0MnwvrB4xQTNuvWIj5v3JN2KAP2pNxyOJ7eLDlg+vbo80pDAf2LZIfTcihsfWPTY2AtKgFmA/c9z9MSPvfW3JRowOD0cRCu5Ak3p7b2YGcHs4rivHv2vgIg5fvE5lFybmi6yPhCGt1rKMV4zyf5ezqv31+i4fLNc/zJmSikyj9JSxicoxXCzc96w==
+ bh=vyDMc+S3nJqmYLC+k0B4JI6dY0QB9kTzjT6BDj4jRU8=;
+ b=BgSzXDO7M8pOiRklGASJK12Suo+nmCDFzZ7gRNuEa8xK4CLg2W0nvQ7mm18h4uaMWby+35Nknq+sQoj1+psDM2YcV0FrPIzITBP2WWG/qb7fl61TSkj+BrCiDi0X+0aL/Cf0JD4a9gooIVCrLR+o9fdb6ESqhpK+cxUhL2wssT3EzpidAfA14CCt5NfTf3bhkQoF+w5xHM0hAjpaWDBjLp7cQC2fT6qejchpQW8tBIj2jGlfEmEO99SnwoPG3AhqSVzl5WKN1R/UoYaiSlQanJJprsdR9KPq6++5maeZe+PBG1zB6AQOqfpzfdVcQpYJ0hu3MuBBiab60Dh5bvFBeA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=O3iJiqycZZlziR3GK/QHx/x1sCdpq0ltYBozgvTzKN0=;
- b=lmpWI/FkZ/8dseAghmasaUiswE9gxD94A+hfv8oXexkhZ1c1jqwt9iMsAoh8kRyDXD/hkN4tczHYJhaYqW4GFkjVaIjKDOfjkMC6bT4tjza0q417sZT3L4b37R9SBXcBTG9/EPrZGhfv27/8qtxG8FQkzfL45Ojl3oAgDYGcKYw=
-Received: from DB6PR0401MB2438.eurprd04.prod.outlook.com (2603:10a6:4:33::14)
- by DB8PR04MB6907.eurprd04.prod.outlook.com (2603:10a6:10:119::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3412.22; Tue, 29 Sep
- 2020 10:18:59 +0000
-Received: from DB6PR0401MB2438.eurprd04.prod.outlook.com
- ([fe80::c8a:a759:d4ba:181e]) by DB6PR0401MB2438.eurprd04.prod.outlook.com
- ([fe80::c8a:a759:d4ba:181e%7]) with mapi id 15.20.3412.029; Tue, 29 Sep 2020
- 10:18:59 +0000
-From:   "Biwen Li (OSS)" <biwen.li@oss.nxp.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        "Biwen Li (OSS)" <biwen.li@oss.nxp.com>
-CC:     "jdelvare@suse.com" <jdelvare@suse.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Reinhard Pfau <pfau@gdsys.de>
-Subject: RE: [PATCH] hwmon: add support for SMSC EMC2305/03/02/01 fan
- controller
-Thread-Topic: [PATCH] hwmon: add support for SMSC EMC2305/03/02/01 fan
- controller
-Thread-Index: AQHWlknykGKAx8F3l0ypnNqJIqmdbw==
-Date:   Tue, 29 Sep 2020 10:18:59 +0000
-Message-ID: <DB6PR0401MB243843B6CAF36CBECFE742BB8F320@DB6PR0401MB2438.eurprd04.prod.outlook.com>
-References: <20200928104326.40386-1-biwen.li@oss.nxp.com>
- <20200928162839.GB106276@roeck-us.net>
-In-Reply-To: <20200928162839.GB106276@roeck-us.net>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: roeck-us.net; dkim=none (message not signed)
- header.d=none;roeck-us.net; dmarc=none action=none header.from=oss.nxp.com;
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [119.31.174.73]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: a7d9d6f1-b0f9-4503-e009-08d8646114a7
-x-ms-traffictypediagnostic: DB8PR04MB6907:
-x-ms-exchange-sharedmailbox-routingagent-processed: True
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB8PR04MB6907148FB43AED65E34A7D8FCE320@DB8PR04MB6907.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3826;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: KxHy2TJNRis0Sb1iqG2X1wb3jnBoMOw6S1xhReA9S5ftqphEi9kvCdOzHZXtm4ublWKt2zj/0R7FIm+m0nhbhHXsU1jd6RFwgCTT1IBA3fxOHbFuDg7vcBe4t8L2ASFhFL33rOvD0FVYprGZI0pcpVhG/N6wV4tHyB/jIdjk9zAzs8z3j8x+rQXkvWtVXWQ44cNiflVykNitx6p+cUuz+H/eGJJIi1PmugvL6WCbg/4G2r64+kjOfVPUIpfTYEYYD4hUv+mAbJc9q5nW+Z15TkMLxaKl2ZtPAdAlmw7bC668puHfwMyzpgW/6E5+KvRM4bSdHbtD+0RxCwdDVeICk2y0pi0kphflytBPRavpIMn9imqgWepvJHYUDjPdp2Pi
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR0401MB2438.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(376002)(39860400002)(396003)(366004)(346002)(55016002)(6506007)(54906003)(110136005)(33656002)(26005)(316002)(76116006)(8936002)(7696005)(186003)(66946007)(5660300002)(8676002)(478600001)(9686003)(71200400001)(52536014)(2906002)(4326008)(558084003)(66476007)(64756008)(66556008)(66446008)(86362001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: fqmMgs4xCxmiuRB5Li18JPyx9vDQbfzzXEdl3USTxUrexaXP0pUYepsIItNtJGDRdxRCDwad2YbXOU+K6zs3aFyn66gT4ES+uuoFdne3j/3cVQilsQwWix4WVZE/TLzoWsITEvIdSvUiANE8fHpMCM3rLaynRepZGO54v9CNs77pxFsz8NZXWmQtwcFsYPX1cXHFy2CbSWNtql4sogOY1BMiuk7GYQZ+YsQq5mkUO0vxnlshI3gg9fCm3gIRRTVCIIaWaSnmsIk9Qe1N0ng1iG2foVQcYFxxqvXe8Jtqqvcn3BnM16fQwi8Z13FC8hUqwolooxEBvtFxfal/n6nB7Bjpq0wf3VIfJuNkjmwCrIEZSIPtlZn3wFwYZna6QU38jQ5KRZ+/joNLURUAouBSFcUU4DISY/Pge7M+1gH2XOwjxxnN5Awlp3KhTqG2bX6+16VcAJ+Rw4JV1Fx8QmvMvnN+HbF6K3MuCv6XjDeB4++DCtul//oJLZR4tjZsUK2m/wMb3Ag61RHrx2kxVA3YhI1q+eM7sgjgdxpZSa7kp3kvf9nEJvvV0j9BGyHGWDKQabaAME9K2yWGy2DSipfxfj2KcgeFWCXeRz/J2VCY4C5V+g0kGIML+/nHupb1IpXej2LVnPx963SBSATvs35EFQ==
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ bh=vyDMc+S3nJqmYLC+k0B4JI6dY0QB9kTzjT6BDj4jRU8=;
+ b=gLGQ1CLq0M7sn7E8pLlKRYgPKd6fe7BO7Zj38z+VmSPS3NbkatAvGVtb3MJ+ZYmLxmaQG9r8nZ8sy0Y8nlSnYfWsRVZxSDxh5bn/mLk/E5nppFj7/H1snfBu05kNF+av9owNFkYkkTWxaGeqsPr6puZNh872bG5krSEUjrX1vtg=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=amd.com;
+Received: from DM6PR12MB4388.namprd12.prod.outlook.com (20.180.254.74) by
+ DM5PR1201MB0105.namprd12.prod.outlook.com (10.174.106.23) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3412.20; Tue, 29 Sep 2020 10:54:01 +0000
+Received: from DM6PR12MB4388.namprd12.prod.outlook.com
+ ([fe80::31b8:2b7f:39bb:23af]) by DM6PR12MB4388.namprd12.prod.outlook.com
+ ([fe80::31b8:2b7f:39bb:23af%6]) with mapi id 15.20.3433.032; Tue, 29 Sep 2020
+ 10:54:00 +0000
+From:   Naveen Krishna Chatradhi <nchatrad@amd.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     naveenkrishna.ch@gmail.com,
+        Naveen Krishna Chatradhi <nchatrad@amd.com>
+Subject: [PATCH v2 0/4] hwmon: improvements to amd_energy driver
+Date:   Tue, 29 Sep 2020 16:23:18 +0530
+Message-Id: <20200929105322.8919-1-nchatrad@amd.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-Originating-IP: [165.204.156.251]
+X-ClientProxiedBy: MA1PR0101CA0022.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a00:21::32) To DM6PR12MB4388.namprd12.prod.outlook.com
+ (2603:10b6:5:2a9::10)
 MIME-Version: 1.0
-X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from milan-ETHANOL-X.amd.com (165.204.156.251) by MA1PR0101CA0022.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:21::32) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3412.20 via Frontend Transport; Tue, 29 Sep 2020 10:53:58 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 3411b77e-8edc-47a6-95cf-08d86465f8c1
+X-MS-TrafficTypeDiagnostic: DM5PR1201MB0105:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <DM5PR1201MB0105513C68C28BC3C3BDE5D4E8320@DM5PR1201MB0105.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: u+q3rMvH0LnoQ/vT1eG7JJPv+/YDPPfDG3dgPZemI+YT1gVc8raxuCvUPz6//vrBt1Mr6HbvUVkxXAY4E2HIAJUbFargYR78MEDPKtyjGuA5zjeeFpiiPb02PsTrsgUVouhNc3JagkLP751ERxfhichfAgyaOKCfU2ASeqnZhJugHlFKHisQZbdTXKBoPq6I9DKi7jWBFggYyrYZZtQ4YHcSHrf/EYh/njvVjARYL1o/6vwsoQgYwHGnja78/OSkvMwzUoSvEWXhzgtOH9HolRm5pyasF8NDXmrm8QBrWca6udZJp2kj88dlw/vjnUg/N4JJZs98sw4Wyd0W5aVdAsrS5yKzROkX2q2/Nw53LbJI1HKnFnr3E6JJ+Ebw/W3W8sXFNyGHoEMuMW1PlTr/MA46Tgc7NlJZZ8t/BapiI5Y=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4388.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(346002)(366004)(136003)(396003)(39860400002)(478600001)(8676002)(1076003)(316002)(83380400001)(66476007)(66556008)(66946007)(7696005)(52116002)(6666004)(36756003)(4326008)(2616005)(6916009)(8936002)(5660300002)(2906002)(4744005)(6486002)(956004)(26005)(16526019)(186003)(197533005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: /xDddDzmuRn4MhlHA+AFbS6xKMNra54MFZ/vImOiuf//i5odXe+PyyVtB47Okj3DBoJ5etss1ojqO/X/ELx4t+BDoIG7114ffe6mx3k0pB4xqCdVH6MjEYCd/rmTySnzbqtWdsYcMOYaEl7zFdSPaU/1P+JXl15CL/0V5JJeD5XZtPJc3fKEGPit/D3j9Co8+5Mrai5XJpexc190alkV5cHS3I/bKslSg6qbRSPqLr10tDWLgFvUsMyR5Sf6EM1rW7ZUda2wWFUknUlPw+x+hcqbIAyRxExMfj5exJ0Uzt2Fxrh/CakkpcHGalW6ULQfUs+GIk8nClBhdCFTLn3HFx0jKiCVpJfL+KKlXDiq0OMSN+HgUFlWlDIbXDg4p0+YedTcDQskPxp8MXdV0UcVvszJ/05//alOjC9yYZs152oZhA4QSA9q8HPH0uomkeuaGxEtxjKPSGR8YzxVFecA1iMRoXHXPW+pmdkwqhCxqKAtvB6xp9+p+Ly1Yugfv37W6xBJoER3yYOIwBWNvRLgUtxDJNcpHw4Tkq2UYzeJjTmgTVeILfyjYZuS/+/Bwfm7gt0D0bKjAwo7yIrUzsq3IrdvAJlfkRoSSWEjQeTltir+mEt69jYyFZYHR1JeBoFAWIbti39C+nXRmJ2b8hcwVQ==
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3411b77e-8edc-47a6-95cf-08d86465f8c1
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4388.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB6PR0401MB2438.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a7d9d6f1-b0f9-4503-e009-08d8646114a7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Sep 2020 10:18:59.3576
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2020 10:54:00.6112
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: PYaBaI1oV7qA1RLNnet3aGuB4a1Y5eeJd2srf/POnXZpwGQ2p1Gi4gxfXezVvoYoQLlzyX0A3iW1jPavjeau4w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB6907
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AOF4x8Xg4AoL3+ucNBubeDyYW2zl7QCkpRTLjnkn+v+HtJ+3UudGs8KbhMf7GRViyQiCFJKEGot9lqNUnZwbUQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1201MB0105
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-> > +
-> > +	hwmon_dev =3D devm_hwmon_device_register_with_groups(&client->dev,
-> > +							   client->name, data,
-> > +							   data->groups);
->=20
-> New drivers must use "[devm_]hwmon_device_register_with_info" to register
-> with the hwmon subsystem.
 Hi Guenter,
 
-Got it, thanks.
+Would like to know your feedback on the following feature
+for the amd_energy driver.
 
-Best Regards,
-Biwen Li
->=20
-> Guenter
+1) Accumulator Interval change based on reported resolution
+    - Frequency of the accumulator thread can be set during
+      the probe based on fine grain (1.625 micro J) or course
+      grain (0.125 milli J) resolutions.
+
+Akshay Gupta (1):
+  hwmon: amd_energy: Move label out of accumulation structure
+
+Naveen Krishna Chatradhi (3):
+  hwmon: amd_energy: optimize accumulation interval
+  hwmon: amd_energy: Improve the accumulation logic
+  hwmon: (amd_energy) Update driver documentation
+
+ Documentation/hwmon/amd_energy.rst |   5 +
+ drivers/hwmon/amd_energy.c         | 163 ++++++++++++-----------------
+ 2 files changed, 72 insertions(+), 96 deletions(-)
+
+-- 
+2.17.1
+
