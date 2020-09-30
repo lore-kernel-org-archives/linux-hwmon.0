@@ -2,139 +2,758 @@ Return-Path: <SRS0=ye16=DH=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,FAKE_REPLY_C,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A077FC4727C
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Sep 2020 20:05:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D468C47420
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Sep 2020 20:31:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 639A3206A2
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Sep 2020 20:05:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E169D2074B
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Sep 2020 20:31:38 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Luxw1zrp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727438AbgI3UFb convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 30 Sep 2020 16:05:31 -0400
-Received: from mout.kundenserver.de ([212.227.126.133]:53181 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725799AbgI3UFb (ORCPT
+        id S1728660AbgI3Ubi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 30 Sep 2020 16:31:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725355AbgI3Ubi (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 30 Sep 2020 16:05:31 -0400
-X-Greylist: delayed 303 seconds by postgrey-1.27 at vger.kernel.org; Wed, 30 Sep 2020 16:05:30 EDT
-Received: from mail-qv1-f47.google.com ([209.85.219.47]) by
- mrelayeu.kundenserver.de (mreue012 [212.227.15.129]) with ESMTPSA (Nemesis)
- id 1MrOq7-1kjHaP1ozn-00oZRE; Wed, 30 Sep 2020 22:00:26 +0200
-Received: by mail-qv1-f47.google.com with SMTP id q10so1606685qvs.1;
-        Wed, 30 Sep 2020 13:00:26 -0700 (PDT)
-X-Gm-Message-State: AOAM530GCJaz7LV70OaTyWlu9gUefXZeo61PyxdY5XAj761Wk1fLSBxp
-        HrlCbTR5JsB5b2+ennTCzp1UxtSCUVpQ/24GnSQ=
-X-Google-Smtp-Source: ABdhPJyWWzEsXMV+slu96RS1qTkNBFb/0nnpZW+XtD+lfJd3MrcE3uu0eFCwIRrOZ9OSXzKQaZzQk9XaiBVgiCB1pIc=
-X-Received: by 2002:a0c:b39a:: with SMTP id t26mr4299788qve.19.1601496025174;
- Wed, 30 Sep 2020 13:00:25 -0700 (PDT)
+        Wed, 30 Sep 2020 16:31:38 -0400
+Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5B9FC061755;
+        Wed, 30 Sep 2020 13:31:37 -0700 (PDT)
+Received: by mail-oi1-x243.google.com with SMTP id v20so3179754oiv.3;
+        Wed, 30 Sep 2020 13:31:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=4iABDMkghYi/NYhVFHTDrhiY1PW4VVR4/uCcF5alG48=;
+        b=Luxw1zrpRY5LZ+VkyHp5jNIbgWMCV24bPwa87fy4NTxKWzRvF60hBRVadPGMBnutcJ
+         9lFzkTOmTCmEVD5NR8qxPHW4GomSV+xMT6Yw4uN6Q4tBwcs57rpqe/xODOlX1r3J6+WA
+         WQexNydo29qzCXwWEbsI4q6wTRHHd1o5Al1ktVKSsPphpiOQgG/N6tDMtULg58U9TQGe
+         qLyyZtbg9Kf2j2/GUR5YNpzVFEGG0D78SpT/T1TPTB+4JNQRySzCNUMxjB53jG2UONkq
+         E8Wb0lH08Tx3QM59mv48UYLHl8ZqJwBBkTzILXqHJY2QJY6ZLn8isgrTYvG8T+WU3Txb
+         ONdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :mime-version:content-disposition:user-agent;
+        bh=4iABDMkghYi/NYhVFHTDrhiY1PW4VVR4/uCcF5alG48=;
+        b=iGUs/QbSTqc5oLbFURdZmOdbWb39BLSmDQkngjpRAPUUJPckWPvvX9sAeq8Yqi9DRC
+         Z2BWHHPCxTb0aWujtmtvBSlkoFi6Hc9tdGE58gqpseHHooCA3ocPIXLJ30/k5II95UuL
+         34UCFHE/FNDCoGwUSN5w40f4Gmk+R9UWzVuoswkSQ/FwzkZuPSz1gu+S5uto5d9uP6Ow
+         0NzgDk+eDb04Qusez7FUvwEp8A/9r9G34nvICBSaXPrLh0txEnOqt7KvLdz0LSNCG9Y9
+         rvSfecD3Rtus7dKW16E4ekSzH4HRHYl8aVC4XPlg7MAhJv42b+lxCb3HpGhix9RWDVmh
+         NHxQ==
+X-Gm-Message-State: AOAM533nmWIEloBClKa1gZb7rA1SHdcsWUOlRcvAnXqTooifx4L6u8sd
+        xwu1spEMA3jmyaVswkdRYrU=
+X-Google-Smtp-Source: ABdhPJwIGtO99SkRrtW6UAXXEMoB/xzl6BnmhoPGVRbLKAQ78opBC9J01ctymNFu0EYI246askeEAA==
+X-Received: by 2002:aca:c742:: with SMTP id x63mr2256850oif.7.1601497896821;
+        Wed, 30 Sep 2020 13:31:36 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 92sm628598ota.38.2020.09.30.13.31.35
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 30 Sep 2020 13:31:35 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 30 Sep 2020 13:31:34 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Luka Kovacic <luka.kovacic@sartura.hr>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-leds@vger.kernel.org,
+        lee.jones@linaro.org, pavel@ucw.cz, dmurphy@ti.com,
+        robh+dt@kernel.org, jdelvare@suse.com, andrew@lunn.ch,
+        jason@lakedaemon.net, gregory.clement@bootlin.com,
+        luka.perkov@sartura.hr, robert.marko@sartura.hr
+Subject: Re: [PATCH v2 3/7] drivers: hwmon: Add the iEi WT61P803 PUZZLE HWMON
+ driver
+Message-ID: <20200930203134.GA239959@roeck-us.net>
 MIME-Version: 1.0
-References: <20200930105442.3f642f6c@aktux> <20200930164446.GB219887@roeck-us.net>
-In-Reply-To: <20200930164446.GB219887@roeck-us.net>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 30 Sep 2020 22:00:09 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2CbhJT+B-F+cnX+uiJep9oiLM28n045-ATaVaU41u2hw@mail.gmail.com>
-Message-ID: <CAK8P3a2CbhJT+B-F+cnX+uiJep9oiLM28n045-ATaVaU41u2hw@mail.gmail.com>
-Subject: Re: [REGRESSION] hwmon: (applesmc) avoid overlong udelay()
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Andreas Kemnade <andreas@kemnade.info>, rydberg@bitmath.org,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:l33NlXdtX+Mu6Oa+/YyShoCbG5gauRlL/D2D1spm6U9gdRS4jm4
- nsioQqsufdyTQidCoTcKA6iMExJ9qqihKtcbtpC+Zmopwxf59Q+y44OJuLupivEyIZAPvAD
- 7qtZKRPLWIW0JdxwnU+Qq+2OhJuuqc3OFYKCtBuscCjn/HFA3yGiCIScBRWkAagAcvvH6Ew
- ofBwTX2eN7s/jKtGrEe+A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:cM8AFg92N8Y=:R3W9NNxmHi1TCxzmME/fPj
- I3hBuLrdUaGkDlk8y629spfpWTxRrZi9pOmia03JNY3/+gfdUCyJCIHIzGvVIBQAohbYmwtNp
- 14ZmdrZbZjT4Bz8KcZkkmC9dVzAiGGs8cyDWsVGRdt4waDBKkac2fzOQKmRQGEBlkVvE7d3BR
- hXHL3u8lbLQkkLgvXqxKTByKUI+qxgGq4tEQLizEw+WtvrNA3WXoIrLhQmJQq3wb3X/sCilj1
- kgXmU27r3vn0TO2x2y9vWcnaSuKnJkbb6RqRpuUM3fD3k8dovWxxi3v32z2TOrayhrhBS/h1S
- 7Oe4EeYrO7oVEwvBpCaZUWHV7UdQFJZt0GEmntOadIZkREssYFN4qTyBtoPkgf2c/Oro/eaiz
- A3qolkAnSDh8pgS6mIbM1PxD4zRJsJZ/Lu47Ij7Y6bNCgjkDaimFvCW5uz8XYGYbUPz3gOR24
- gEw3X7MfD/aZqFyelABcnGipGVUjPavY8AQv189VDfW6UDzALtKab8b8UcqvxZueXijaXrbS1
- sJi/l+4kHEyBwdWbcGBpa+cfD5KV25cIypOsWp3qH84t9V1pU8JDeAUoO7Yb0P1xtpI0wtXtR
- +7PL8FQIDYV7cVflSo/90ded+i78zbgxQ5qCLZR7qZMSwlOhA9UoKNCYiHQsnSzYEw10jSXER
- bLwCwvsoNB5vWuVo3+zTJwTKQ1W81kd0tXXIw2zO3QubTkf43WFIX8v8U69XGJ+12QUE7k7pN
- aLQ5QKwGXnVmxvZbMmP3zxFNrqXJCqqUHw8f/Sq1UBOS1gerA+1C/AoYhhlHNrlp2Hn4KD228
- QC/GDJH2qUCXhloS8i7/XASFHqdUTCKX856MpwYQQDvThNE8SBpF0x6vqIfMuNDEUmx1m2U
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Sep 30, 2020 at 6:44 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Wed, Sep 30, 2020 at 10:54:42AM +0200, Andreas Kemnade wrote:
-> > Hi,
-> >
-> > after the $subject patch I get lots of errors like this:
->
-> For reference, this refers to commit fff2d0f701e6 ("hwmon: (applesmc)
-> avoid overlong udelay()").
->
-> > [  120.378614] applesmc: send_byte(0x00, 0x0300) fail: 0x40
-> > [  120.378621] applesmc: LKSB: write data fail
-> > [  120.512782] applesmc: send_byte(0x00, 0x0300) fail: 0x40
-> > [  120.512787] applesmc: LKSB: write data fail
-> >
-> > CPU sticks at low speed and no fan is turning on.
-> > Reverting this patch on top of 5.9-rc6 solves this problem.
-> >
-> > Some information from dmidecode:
-> >
-> > Base Board Information
-> >         Manufacturer: Apple Inc.
-> >         Product Name: Mac-7DF21CB3ED6977E5
-> >         Version: MacBookAir6,2
-> >
-> > Handle 0x0020, DMI type 11, 5 bytes OEM Strings         String 1: Apple ROM Version.  Model:       …,
-> > Handle 0x0020, DMI type 11, 5 bytes
-> > OEM Strings
-> >         String 1: Apple ROM Version.  Model:        MBA61.  EFI Version:  122.0.0
-> >         String 2: .0.0.  Built by:     root@saumon.  Date:         Wed Jun 10 18:
-> >         String 3: 10:36 PDT 2020.  Revision:     122 (B&I).  ROM Version:  F000_B
-> >         String 4: 00.  Build Type:   Official Build, Release.  Compiler:     Appl
-> >         String 5: e clang version 3.0 (tags/Apple/clang-211.10.1) (based on LLVM
-> >         String 6: 3.0svn).
-> >
-> > Writing to things in /sys/devices/platform/applesmc.768 gives also the
-> > said errors.
-> > But writing 1 to fan1_maunal and 5000 to fan1_output turns the fan on
-> > despite error messages.
-> >
-> Not really sure what to do here. I could revert the patch, but then we'd gain
-> clang compile failures. Arnd, any idea ?
+On Sat, Sep 26, 2020 at 03:55:10PM +0200, Luka Kovacic wrote:
+> Add the iEi WT61P803 PUZZLE HWMON driver, that handles the fan speed
+> control via PWM, reading fan speed and reading on-board temperature
+> sensors.
+> 
+> The driver registers a HWMON device and a simple thermal cooling device to
+> enable in-kernel fan management.
+> 
+> This driver depends on the iEi WT61P803 PUZZLE MFD driver.
+> 
+> Signed-off-by: Luka Kovacic <luka.kovacic@sartura.hr>
+> Cc: Luka Perkov <luka.perkov@sartura.hr>
+> Cc: Robert Marko <robert.marko@sartura.hr>
+> ---
+>  drivers/hwmon/Kconfig                     |   8 +
+>  drivers/hwmon/Makefile                    |   1 +
+>  drivers/hwmon/iei-wt61p803-puzzle-hwmon.c | 511 ++++++++++++++++++++++
+>  3 files changed, 520 insertions(+)
+>  create mode 100644 drivers/hwmon/iei-wt61p803-puzzle-hwmon.c
+> 
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 8dc28b26916e..ff279df9bf40 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -722,6 +722,14 @@ config SENSORS_IBMPOWERNV
+>  	  This driver can also be built as a module. If so, the module
+>  	  will be called ibmpowernv.
+>  
+> +config SENSORS_IEI_WT61P803_PUZZLE_HWMON
+> +	tristate "iEi WT61P803 PUZZLE MFD HWMON Driver"
+> +	depends on MFD_IEI_WT61P803_PUZZLE
+> +	help
+> +	  The iEi WT61P803 PUZZLE MFD HWMON Driver handles reading fan speed
+> +	  and writing fan PWM values. It also supports reading on-board
+> +	  temperature sensors.
+> +
+>  config SENSORS_IIO_HWMON
+>  	tristate "Hwmon driver that uses channels specified via iio maps"
+>  	depends on IIO
+> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> index a8f4b35b136b..b0afb2d6896f 100644
+> --- a/drivers/hwmon/Makefile
+> +++ b/drivers/hwmon/Makefile
+> @@ -83,6 +83,7 @@ obj-$(CONFIG_SENSORS_HIH6130)	+= hih6130.o
+>  obj-$(CONFIG_SENSORS_ULTRA45)	+= ultra45_env.o
+>  obj-$(CONFIG_SENSORS_I5500)	+= i5500_temp.o
+>  obj-$(CONFIG_SENSORS_I5K_AMB)	+= i5k_amb.o
+> +obj-$(CONFIG_SENSORS_IEI_WT61P803_PUZZLE_HWMON) += iei-wt61p803-puzzle-hwmon.o
+>  obj-$(CONFIG_SENSORS_IBMAEM)	+= ibmaem.o
+>  obj-$(CONFIG_SENSORS_IBMPEX)	+= ibmpex.o
+>  obj-$(CONFIG_SENSORS_IBMPOWERNV)+= ibmpowernv.o
+> diff --git a/drivers/hwmon/iei-wt61p803-puzzle-hwmon.c b/drivers/hwmon/iei-wt61p803-puzzle-hwmon.c
+> new file mode 100644
+> index 000000000000..2691b943936b
+> --- /dev/null
+> +++ b/drivers/hwmon/iei-wt61p803-puzzle-hwmon.c
+> @@ -0,0 +1,511 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/* iEi WT61P803 PUZZLE MCU HWMON Driver
+> + *
+> + * Copyright (C) 2020 Sartura Ltd.
+> + * Author: Luka Kovacic <luka.kovacic@sartura.hr>
+> + */
+> +
+> +#include <linux/err.h>
+> +#include <linux/hwmon-sysfs.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/irq.h>
+> +#include <linux/math64.h>
+> +#include <linux/mfd/iei-wt61p803-puzzle.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/property.h>
+> +#include <linux/slab.h>
+> +#include <linux/thermal.h>
+> +
+> +#define IEI_WT61P803_PUZZLE_HWMON_MAX_TEMP_NUM 2
+> +#define IEI_WT61P803_PUZZLE_HWMON_MAX_FAN_NUM 5
+> +#define IEI_WT61P803_PUZZLE_HWMON_MAX_PWM_NUM 2
+> +#define IEI_WT61P803_PUZZLE_HWMON_MAX_PWM_VAL 255
+> +
+> +/**
+> + * struct iei_wt61p803_puzzle_thermal_cooling_device - Thermal cooling device instance
+> + *
+> + * @mcu_hwmon:		MCU HWMON struct pointer
+> + * @tcdev:		Thermal cooling device pointer
+> + * @name:		Thermal cooling device name
+> + * @pwm_channel:	PWM channel (0 or 1)
+> + * @cooling_levels:	Thermal cooling device cooling levels
+> + */
+> +struct iei_wt61p803_puzzle_thermal_cooling_device {
+> +	struct iei_wt61p803_puzzle_hwmon *mcu_hwmon;
+> +	struct thermal_cooling_device *tcdev;
+> +	char name[THERMAL_NAME_LENGTH];
+> +	int pwm_channel;
+> +	u8 *cooling_levels;
+> +};
+> +
+> +/**
+> + * struct iei_wt61p803_puzzle_hwmon - MCU HWMON Driver
+> + *
+> + * @mcu:				MCU struct pointer
+> + * @lock				General member lock
+> + * @response_buffer			Global MCU response buffer allocation
+> + * @temp_sensor_val:			Temperature sensor values
+> + * @fan_speed_val:			FAN speed (RPM) values
+> + * @pwm_val:				PWM values (0-255)
+> + * @thermal_cooling_dev_present:	Per-channel thermal cooling device control
+> + * @cdev:				Per-channel thermal cooling device private structure
+> + */
+> +struct iei_wt61p803_puzzle_hwmon {
+> +	struct iei_wt61p803_puzzle *mcu;
+> +	struct mutex lock;
+> +	unsigned char *response_buffer;
+> +	int temp_sensor_val[IEI_WT61P803_PUZZLE_HWMON_MAX_TEMP_NUM];
+> +	int fan_speed_val[IEI_WT61P803_PUZZLE_HWMON_MAX_FAN_NUM];
+> +	int pwm_val[IEI_WT61P803_PUZZLE_HWMON_MAX_PWM_NUM];
+> +	bool thermal_cooling_dev_present[IEI_WT61P803_PUZZLE_HWMON_MAX_PWM_NUM];
+> +	struct iei_wt61p803_puzzle_thermal_cooling_device
+> +		*cdev[IEI_WT61P803_PUZZLE_HWMON_MAX_PWM_NUM];
+> +};
+> +
+> +#define raw_temp_to_milidegree_celsius(x) ((int)((x - 0x80)*1000))
 
-It seems that either I made a mistake in the conversion and it sleeps for
-less time than before, or my assumption was wrong that converting a delay to
-a sleep is safe here.
+Spaces around '*', please, and (x). checkpatch --strict will tell about it.
 
-The error message indicates that the write fails, not the read, so that
-is what I'd look at first. Right away I can see that the maximum time to
-retry is only half of what it used to be, as we used to wait for
-0x10, 0x20, 0x40, 0x80, ..., 0x20000 microseconds for a total of
-0x3fff0 microseconds (262ms), while my patch went with the 131ms
-total delay based on the comment saying "/* wait up to 128 ms for a
-status change. */".
+> +static int iei_wt61p803_puzzle_read_temp_sensor
+> +(struct iei_wt61p803_puzzle_hwmon *mcu_hwmon, int channel, int *value)
 
-Since there is sleeping wait, I see no reason the timeout couldn't
-be extended a lot, e.g. to a second, as in
+Odd multi-line alignment. Please use either
 
-#define APPLESMC_MAX_WAIT 0x100000
+static int
+iei_wt61p803_puzzle_read_temp_sensor(struct iei_wt61p803_puzzle_hwmon *mcu_hwmon, int channel,
+				     int *value)
 
-If that doesn't work, I'd try using mdelay() in place of
-usleep_range(), such as
+or
 
-           mdelay(DIV_ROUND_UP(us, USEC_PER_MSEC)));
+static int iei_wt61p803_puzzle_read_temp_sensor(struct iei_wt61p803_puzzle_hwmon *mcu_hwmon,
+						int channel, int *value)
 
-This adds back a really nasty latency, but it should avoid the
-compile-time problem.
+There are lots of those in this driver. Please run 
+checkpatch --strict and fix what it reports.
 
-Andreas, can you try those two things? (one at a time,
-not both)
+> +{
+> +	int ret;
+> +	size_t reply_size = 0;
+> +	unsigned char *resp_buf = mcu_hwmon->response_buffer;
+> +	unsigned char temp_sensor_ntc_cmd[4] = {
+> +		IEI_WT61P803_PUZZLE_CMD_HEADER_START,
+> +		IEI_WT61P803_PUZZLE_CMD_TEMP,
+> +		IEI_WT61P803_PUZZLE_CMD_TEMP_ALL
+> +	};
+> +
+> +	if (channel > 1 && channel < 0)
+> +		return -EINVAL;
 
-       Arnd
+Unnecessary range check.
+
+> +
+> +	mutex_lock(&mcu_hwmon->lock);
+> +	ret = iei_wt61p803_puzzle_write_command(mcu_hwmon->mcu,
+> +			temp_sensor_ntc_cmd, sizeof(temp_sensor_ntc_cmd),
+> +			resp_buf, &reply_size);
+
+	if (ret < 0)
+		goto unlock;
+
+> +	if (!ret) {
+> +		/* Check the number of NTC values (should be 0x32/'2') */
+> +		if (resp_buf[3] == 0x32) {
+> +			/* Write values to the struct */
+> +			mcu_hwmon->temp_sensor_val[0] =
+> +				raw_temp_to_milidegree_celsius(resp_buf[4]);
+> +			mcu_hwmon->temp_sensor_val[1] =
+> +				raw_temp_to_milidegree_celsius(resp_buf[5]);
+
+What is the point of storing the return values in mcu_hwmon->temp_sensor_val[] ?
+
+> +		}
+> +
+
+Unnecessary empty line. checkpatch --strict reports this.
+
+> +	}
+> +	*value = mcu_hwmon->temp_sensor_val[channel];
+
+unlock:
+
+> +	mutex_unlock(&mcu_hwmon->lock);
+> +
+> +	return ret;
+> +}
+> +
+> +#define raw_fan_val_to_rpm(x, y) ((int)(((x)<<8|(y))/2)*60)
+> +static int iei_wt61p803_puzzle_read_fan_speed
+> +(struct iei_wt61p803_puzzle_hwmon *mcu_hwmon, int channel, int *value)
+> +{
+> +	int ret;
+> +	size_t reply_size = 0;
+> +	unsigned char *resp_buf = mcu_hwmon->response_buffer;
+> +	unsigned char fan_speed_cmd[4] = {
+> +		IEI_WT61P803_PUZZLE_CMD_HEADER_START,
+> +		IEI_WT61P803_PUZZLE_CMD_FAN,
+> +		IEI_WT61P803_PUZZLE_CMD_FAN_RPM_0
+> +	};
+> +
+> +	switch (channel) {
+> +	case 0:
+> +		fan_speed_cmd[2] = IEI_WT61P803_PUZZLE_CMD_FAN_RPM_0;
+> +		break;
+> +	case 1:
+> +		fan_speed_cmd[2] = IEI_WT61P803_PUZZLE_CMD_FAN_RPM_1;
+> +		break;
+> +	case 2:
+> +		fan_speed_cmd[2] = IEI_WT61P803_PUZZLE_CMD_FAN_RPM_2;
+> +		break;
+> +	case 3:
+> +		fan_speed_cmd[2] = IEI_WT61P803_PUZZLE_CMD_FAN_RPM_3;
+> +		break;
+> +	case 4:
+> +		fan_speed_cmd[2] = IEI_WT61P803_PUZZLE_CMD_FAN_RPM_4;
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+
+This would be much simpler written as
+
+static const u8 fan_speed_cmds[] = {
+	IEI_WT61P803_PUZZLE_CMD_FAN_RPM_0,
+	IEI_WT61P803_PUZZLE_CMD_FAN_RPM_1,
+	IEI_WT61P803_PUZZLE_CMD_FAN_RPM_2,
+	IEI_WT61P803_PUZZLE_CMD_FAN_RPM_3,
+	IEI_WT61P803_PUZZLE_CMD_FAN_RPM_4
+};
+	...
+
+	fan_speed_cmd[2] = fan_speed_cmds[channel];
+
+> +
+> +	mutex_lock(&mcu_hwmon->lock);
+> +	ret = iei_wt61p803_puzzle_write_command(mcu_hwmon->mcu, fan_speed_cmd,
+> +			sizeof(fan_speed_cmd), resp_buf, &reply_size);
+
+	if (ret < 0)
+		goto unlock;
+
+> +	if (!ret)
+> +		mcu_hwmon->fan_speed_val[channel] = raw_fan_val_to_rpm(resp_buf[3],
+> +				resp_buf[4]);
+> +
+> +	*value = mcu_hwmon->fan_speed_val[channel];
+
+What exactly is the point of storing the result in
+mcu_hwmon->fan_speed_val[channel] ?
+
+I won't comment about similar code again, but please drop any such
+unnecessary arrays.
+
+> +	mutex_unlock(&mcu_hwmon->lock);
+> +
+> +	return 0;
+> +}
+> +
+> +static int iei_wt61p803_puzzle_write_pwm_channel
+> +(struct iei_wt61p803_puzzle_hwmon *mcu_hwmon, int channel, long pwm_set_val)
+> +{
+> +	int ret;
+> +	size_t reply_size = 0;
+> +	unsigned char *resp_buf = mcu_hwmon->response_buffer;
+> +	unsigned char pwm_set_cmd[6] = {
+> +		IEI_WT61P803_PUZZLE_CMD_HEADER_START,
+> +		IEI_WT61P803_PUZZLE_CMD_FAN,
+> +		IEI_WT61P803_PUZZLE_CMD_FAN_PWM_WRITE,
+> +		IEI_WT61P803_PUZZLE_CMD_FAN_PWM_0,
+> +		0x00
+> +	};
+> +
+> +	switch (channel) {
+> +	case 0:
+> +		pwm_set_cmd[3] = IEI_WT61P803_PUZZLE_CMD_FAN_PWM_0;
+> +		break;
+> +	case 1:
+> +		pwm_set_cmd[3] = IEI_WT61P803_PUZZLE_CMD_FAN_PWM_1;
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+
+Same as above - it would be much simpler to have IEI_WT61P803_PUZZLE_CMD_FAN_PWM_0
+and IEI_WT61P803_PUZZLE_CMD_FAN_PWM_1 in an array and get it from there.
+The range check is unnecessary.
+
+> +
+> +	if (pwm_set_val < 0 || pwm_set_val > IEI_WT61P803_PUZZLE_HWMON_MAX_PWM_VAL)
+> +		return -EINVAL;
+> +
+> +	/* Add the PWM value to the command */
+> +	pwm_set_cmd[4] = (char)pwm_set_val;
+
+I think this typecast is quite unnecessary. Besides, it is wrong, since the
+value is an unsigned char.
+
+> +
+> +	mutex_lock(&mcu_hwmon->lock);
+> +	ret = iei_wt61p803_puzzle_write_command(mcu_hwmon->mcu, pwm_set_cmd,
+> +			sizeof(pwm_set_cmd), resp_buf, &reply_size);
+
+	if (ret < 0)
+		goto unlock;
+
+> +	if (!ret) {
+> +		/* Store the PWM value */
+
+What for ?
+
+Ah yes, I think I finally get it: All this odd handling is to be able to ignore
+errors. But that is not acceptable. If there is an error, report it to the user.
+You can't really claim no error to the user when the value wasn't stored.
+
+> +		if (resp_buf[0] == IEI_WT61P803_PUZZLE_CMD_HEADER_START &&
+> +				resp_buf[1] == IEI_WT61P803_PUZZLE_CMD_RESPONSE_OK &&
+> +				resp_buf[2] == IEI_WT61P803_PUZZLE_CHECKSUM_RESPONSE_OK)
+> +			mcu_hwmon->pwm_val[channel] = (int)pwm_set_val;
+> +	}
+> +	mutex_unlock(&mcu_hwmon->lock);
+> +
+> +	return 0;
+> +}
+> +
+> +static int iei_wt61p803_puzzle_read_pwm_channel
+> +(struct iei_wt61p803_puzzle_hwmon *mcu_hwmon, int channel, int *value)
+> +{
+> +	int ret;
+> +	size_t reply_size = 0;
+> +	unsigned char *resp_buf = mcu_hwmon->response_buffer;
+> +	unsigned char pwm_get_cmd[5] = {
+> +		IEI_WT61P803_PUZZLE_CMD_HEADER_START,
+> +		IEI_WT61P803_PUZZLE_CMD_FAN,
+> +		IEI_WT61P803_PUZZLE_CMD_FAN_PWM_READ,
+> +		IEI_WT61P803_PUZZLE_CMD_FAN_PWM_0
+> +	};
+> +
+> +	switch (channel) {
+> +	case 0:
+> +		pwm_get_cmd[3] = IEI_WT61P803_PUZZLE_CMD_FAN_PWM_0;
+> +		break;
+> +	case 1:
+> +		pwm_get_cmd[3] = IEI_WT61P803_PUZZLE_CMD_FAN_PWM_1;
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+
+Same comments as before.
+
+> +
+> +	mutex_lock(&mcu_hwmon->lock);
+> +	ret = iei_wt61p803_puzzle_write_command(mcu_hwmon->mcu, pwm_get_cmd,
+> +			sizeof(pwm_get_cmd), resp_buf, &reply_size);
+> +	if (!ret) {
+> +		/* Store the PWM value */
+> +		if (resp_buf[2] == IEI_WT61P803_PUZZLE_CMD_FAN_PWM_READ)
+> +			mcu_hwmon->pwm_val[channel] = (int)resp_buf[3];
+> +	}
+
+Same comments as before.
+
+> +	*value = mcu_hwmon->pwm_val[channel];
+> +	mutex_unlock(&mcu_hwmon->lock);
+> +
+> +	return 0;
+> +}
+> +
+> +static int iei_wt61p803_puzzle_read(struct device *dev, enum hwmon_sensor_types type,
+> +		u32 attr, int channel, long *val)
+> +{
+> +	struct iei_wt61p803_puzzle_hwmon *mcu_hwmon =
+> +		dev_get_drvdata(dev->parent);
+> +	int ret, value;
+> +
+> +	switch (type) {
+> +	case hwmon_pwm:
+> +		if (attr != hwmon_pwm_input)
+> +			return -ENODEV;
+> +		ret = iei_wt61p803_puzzle_read_pwm_channel(mcu_hwmon, channel, &value);
+> +		if (ret)
+> +			return ret;
+> +		*val = (long)value;
+> +		return ret;
+> +	case hwmon_fan:
+> +		if (attr != hwmon_fan_input)
+> +			return -ENODEV;
+> +		ret = iei_wt61p803_puzzle_read_fan_speed(mcu_hwmon, channel, &value);
+> +		if (ret)
+> +			return ret;
+> +		*val = (long)value;
+
+Unncecssary typecast. Plase check all typecasts and keep only those which
+are really needed (if there are any).
+
+> +		return ret;
+
+ret is 0 here.
+
+> +	case hwmon_temp:
+> +		if (attr != hwmon_temp_input)
+> +			return -ENODEV;
+> +		ret = iei_wt61p803_puzzle_read_temp_sensor(mcu_hwmon, channel, &value);
+> +		if (ret)
+> +			return ret;
+> +		*val = (long)value;
+> +		return ret;
+
+ret is 0 here. That is sprinkled through the code. Please
+replace with "return 0;" everywhere.
+
+> +	default:
+> +		return -ENODEV;
+> +	}
+> +}
+> +
+> +static int iei_wt61p803_puzzle_write(struct device *dev, enum hwmon_sensor_types type,
+> +		u32 attr, int channel, long val)
+> +{
+> +	struct iei_wt61p803_puzzle_hwmon *mcu_hwmon =
+> +		dev_get_drvdata(dev->parent);
+> +
+> +	switch (type) {
+> +	case hwmon_pwm:
+> +		if (attr != hwmon_pwm_input)
+> +			return -ENODEV;
+> +		if (mcu_hwmon->thermal_cooling_dev_present[channel]) {
+> +			/*
+> +			 * The Thermal Framework has already claimed this specific PWM
+> +			 * channel.
+> +			 */
+> +			return -EBUSY;
+> +		}
+This won't happen (the attribute is read-only in this case), and the check is
+therefore unnecessary and just adds confusion.
+
+> +		return iei_wt61p803_puzzle_write_pwm_channel(mcu_hwmon, channel, val);
+> +	default:
+> +		return -ENODEV;
+> +	}
+
+Unless there is a plan to make other types writable, this switch statement
+is unnecessary. Only pwm attributes are writeable, after all, so the code
+won't be called for anything else.
+
+> +}
+> +
+> +static umode_t iei_wt61p803_puzzle_is_visible(const void *data,
+> +		enum hwmon_sensor_types type, u32 attr, int channel)
+> +{
+> +	const struct iei_wt61p803_puzzle_hwmon *mcu_hwmon = data;
+> +
+> +	switch (type) {
+> +	case hwmon_pwm:
+> +		switch (attr) {
+> +		case hwmon_pwm_input:
+> +			if (mcu_hwmon->thermal_cooling_dev_present[channel])
+> +				return 0444;
+> +			return 0644;
+> +		default:
+> +			return 0;
+> +		}
+> +	case hwmon_fan:
+> +		switch (attr) {
+> +		case hwmon_fan_input:
+> +			return 0444;
+> +		default:
+> +			return 0;
+> +		}
+> +	case hwmon_temp:
+> +		switch (attr) {
+> +		case hwmon_temp_input:
+> +			return 0444;
+> +		default:
+> +			return 0;
+> +		}
+> +	default:
+> +		return 0;
+> +	}
+> +}
+> +
+> +static const struct hwmon_ops iei_wt61p803_puzzle_hwmon_ops = {
+> +	.is_visible = iei_wt61p803_puzzle_is_visible,
+> +	.read = iei_wt61p803_puzzle_read,
+> +	.write = iei_wt61p803_puzzle_write,
+> +};
+> +
+> +static const struct hwmon_channel_info *iei_wt61p803_puzzle_info[] = {
+> +	HWMON_CHANNEL_INFO(pwm,
+> +			HWMON_PWM_INPUT,
+> +			HWMON_PWM_INPUT),
+> +	HWMON_CHANNEL_INFO(fan,
+> +			HWMON_F_INPUT,
+> +			HWMON_F_INPUT,
+> +			HWMON_F_INPUT,
+> +			HWMON_F_INPUT,
+> +			HWMON_F_INPUT),
+> +	HWMON_CHANNEL_INFO(temp,
+> +			HWMON_T_INPUT,
+> +			HWMON_T_INPUT),
+> +	NULL
+> +};
+> +
+> +static const struct hwmon_chip_info iei_wt61p803_puzzle_chip_info = {
+> +	.ops = &iei_wt61p803_puzzle_hwmon_ops,
+> +	.info = iei_wt61p803_puzzle_info,
+> +};
+> +
+> +static int iei_wt61p803_puzzle_get_max_state
+> +(struct thermal_cooling_device *tcdev, unsigned long *state)
+> +{
+> +	*state = IEI_WT61P803_PUZZLE_HWMON_MAX_PWM_VAL;
+> +
+> +	return 0;
+> +}
+> +static int iei_wt61p803_puzzle_get_cur_state
+> +(struct thermal_cooling_device *tcdev, unsigned long *state)
+> +{
+> +	struct iei_wt61p803_puzzle_thermal_cooling_device *cdev = tcdev->devdata;
+> +	struct iei_wt61p803_puzzle_hwmon *mcu_hwmon = cdev->mcu_hwmon;
+> +
+> +	int ret, value;
+> +
+> +	if (!mcu_hwmon)
+> +		return -EINVAL;
+> +
+> +	ret = iei_wt61p803_puzzle_read_pwm_channel(mcu_hwmon,
+> +			cdev->pwm_channel, &value);
+> +	if (ret)
+> +		return ret;
+> +
+> +	*state = (unsigned long)value;
+> +
+> +	return 0;
+> +}
+
+Missing empty line. checkpatch --strict reports this.
+
+> +static int iei_wt61p803_puzzle_set_cur_state
+> +(struct thermal_cooling_device *tcdev, unsigned long state)
+> +{
+> +	struct iei_wt61p803_puzzle_thermal_cooling_device *cdev = tcdev->devdata;
+> +	struct iei_wt61p803_puzzle_hwmon *mcu_hwmon = cdev->mcu_hwmon;
+> +
+> +	if (!mcu_hwmon)
+> +		return -EINVAL;
+> +
+> +	return iei_wt61p803_puzzle_write_pwm_channel(mcu_hwmon,
+> +			cdev->pwm_channel, state);
+> +}
+> +static const struct thermal_cooling_device_ops iei_wt61p803_puzzle_cooling_ops = {
+> +	.get_max_state = iei_wt61p803_puzzle_get_max_state,
+> +	.get_cur_state = iei_wt61p803_puzzle_get_cur_state,
+> +	.set_cur_state = iei_wt61p803_puzzle_set_cur_state,
+> +};
+> +
+> +static int iei_wt61p803_puzzle_enable_thermal_cooling_dev
+> +(struct device *dev, struct fwnode_handle *child, struct iei_wt61p803_puzzle_hwmon *mcu_hwmon)
+> +{
+> +	u32 pwm_channel;
+> +	int ret, num_levels;
+> +
+> +	struct iei_wt61p803_puzzle_thermal_cooling_device *cdev;
+> +
+> +	ret = fwnode_property_read_u32(child, "reg", &pwm_channel);
+> +	if (ret)
+> +		return ret;
+> +
+> +	mutex_lock(&mcu_hwmon->lock);
+> +	mcu_hwmon->thermal_cooling_dev_present[pwm_channel] = true;
+> +	mutex_unlock(&mcu_hwmon->lock);
+> +
+> +	num_levels = fwnode_property_read_u8_array(child, "cooling-levels", NULL, 0);
+> +	if (num_levels > 0) {
+> +		cdev = devm_kzalloc(dev, sizeof(*cdev), GFP_KERNEL);
+> +		if (!cdev)
+> +			return -ENOMEM;
+> +
+> +		cdev->cooling_levels = devm_kzalloc(dev, num_levels, GFP_KERNEL);
+> +		if (!cdev->cooling_levels)
+> +			return -ENOMEM;
+> +
+> +		ret = fwnode_property_read_u8_array(child, "cooling-levels",
+> +				cdev->cooling_levels, num_levels);
+> +		if (ret) {
+> +			dev_err(dev, "Couldn't read property 'cooling-levels'");
+> +			return ret;
+> +		}
+> +
+> +		snprintf(cdev->name, THERMAL_NAME_LENGTH, "iei_wt61p803_puzzle_%d", pwm_channel);
+> +
+> +		cdev->tcdev = devm_thermal_of_cooling_device_register(dev, NULL,
+> +				cdev->name, cdev, &iei_wt61p803_puzzle_cooling_ops);
+> +		if (IS_ERR(cdev->tcdev))
+> +			return PTR_ERR(cdev->tcdev);
+> +
+> +		cdev->mcu_hwmon = mcu_hwmon;
+> +		cdev->pwm_channel = pwm_channel;
+> +
+> +		mutex_lock(&mcu_hwmon->lock);
+> +		mcu_hwmon->cdev[pwm_channel] = cdev;
+> +		mutex_unlock(&mcu_hwmon->lock);
+> +	}
+> +	return 0;
+> +}
+> +
+> +static int iei_wt61p803_puzzle_hwmon_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct fwnode_handle *child;
+> +	struct iei_wt61p803_puzzle_hwmon *mcu_hwmon;
+> +	struct iei_wt61p803_puzzle *mcu = dev_get_drvdata(dev->parent);
+> +	struct device *hwmon_dev;
+> +	int ret;
+> +
+> +	mcu_hwmon = devm_kzalloc(dev, sizeof(*mcu_hwmon), GFP_KERNEL);
+> +	if (!mcu_hwmon)
+> +		return -ENOMEM;
+> +
+> +	mcu_hwmon->response_buffer = devm_kzalloc(dev,
+> +			IEI_WT61P803_PUZZLE_BUF_SIZE, GFP_KERNEL);
+> +	if (!mcu_hwmon->response_buffer)
+> +		return -ENOMEM;
+> +
+> +	mcu_hwmon->mcu = mcu;
+> +	mutex_init(&mcu_hwmon->lock);
+> +	platform_set_drvdata(pdev, mcu_hwmon);
+> +
+> +	hwmon_dev = devm_hwmon_device_register_with_info(dev,
+> +					"iei_wt61p803_puzzle",
+> +					mcu_hwmon,
+> +					&iei_wt61p803_puzzle_chip_info,
+> +					NULL);
+> +
+> +	/* Control fans via PWM lines via Linux Kernel */
+> +	if (IS_ENABLED(CONFIG_THERMAL)) {
+> +		device_for_each_child_node(dev, child) {
+> +			ret = iei_wt61p803_puzzle_enable_thermal_cooling_dev(dev, child, mcu_hwmon);
+> +			if (ret) {
+> +				dev_err(dev, "Enabling the PWM fan failed\n");
+> +				fwnode_handle_put(child);
+> +				return ret;
+> +			}
+> +		}
+> +	}
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id iei_wt61p803_puzzle_hwmon_id_table[] = {
+> +	{ .compatible = "iei,wt61p803-puzzle-hwmon" },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, iei_wt61p803_puzzle_hwmon_id_table);
+> +
+> +static struct platform_driver iei_wt61p803_puzzle_hwmon_driver = {
+> +	.driver = {
+> +		.name = "iei-wt61p803-puzzle-hwmon",
+> +		.of_match_table = iei_wt61p803_puzzle_hwmon_id_table,
+> +	},
+> +	.probe = iei_wt61p803_puzzle_hwmon_probe,
+> +};
+> +
+> +module_platform_driver(iei_wt61p803_puzzle_hwmon_driver);
+> +
+> +MODULE_DESCRIPTION("iEi WT61P803 PUZZLE MCU HWMON Driver");
+> +MODULE_AUTHOR("Luka Kovacic <luka.kovacic@sartura.hr>");
+> +MODULE_LICENSE("GPL");
+> -- 
+> 2.26.2
+> 
