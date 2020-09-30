@@ -2,111 +2,139 @@ Return-Path: <SRS0=ye16=DH=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.5 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF52AC4727C
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Sep 2020 20:40:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B13CC4363D
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Sep 2020 20:52:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8E14A20759
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Sep 2020 20:40:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4955820759
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Sep 2020 20:52:52 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hbbhgAEl"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ILXpOZKB"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728721AbgI3UkG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 30 Sep 2020 16:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33992 "EHLO
+        id S1725372AbgI3Uww (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 30 Sep 2020 16:52:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725355AbgI3UkG (ORCPT
+        with ESMTP id S1725355AbgI3Uwv (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 30 Sep 2020 16:40:06 -0400
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20420C061755;
-        Wed, 30 Sep 2020 13:40:06 -0700 (PDT)
-Received: by mail-ot1-x343.google.com with SMTP id c2so3180274otp.7;
-        Wed, 30 Sep 2020 13:40:06 -0700 (PDT)
+        Wed, 30 Sep 2020 16:52:51 -0400
+Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC1D6C061755;
+        Wed, 30 Sep 2020 13:52:51 -0700 (PDT)
+Received: by mail-oi1-x243.google.com with SMTP id u126so3195965oif.13;
+        Wed, 30 Sep 2020 13:52:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=5R4Mq0u607bEuDV/8t+U2BjsfHRmnX7fotbXqtuqZGE=;
-        b=hbbhgAElpq8u0rNm5SFVDZ3HNgaVdLXQdFMy78t7bJg71TViXs9tV+rIttwaJyzX1+
-         Bi7nJkA9H7/C1QFGTAHErcCdQBeN8HxGyX+KF0XyrqTjxAifOD+TrusNn+i3OnzUclnn
-         x0ABsYGAWLfeXKDD53J+wq/h5C/YlvWHrDqjWN2FI8sbZYGjCpYYfmC4gBKmTs7eOB+V
-         SlaH1K3JRq4ErnW9qC78w6yLBy9hz1TyWsyrAYjc5KDFm7881XKLLzY2HDeHSm94SbkE
-         nJTc7jAK356Arfpsf1DUHJahlQOtDsZ8A0H9G8caZfGfFsjnxY5hXTcPH8SjPTjVvO9K
-         4GRQ==
+        bh=nYY0TFDmxyVWyJBUckQyfQlvGWR4n04F0Nkv0zc7eVg=;
+        b=ILXpOZKBIzWSP+0zFt5yGa7wpW89MxCBJgHKX4ZvGrg9mlkiGGalDgi8t9yWawzYdc
+         9WWlWBYaGhf9/3RQsDEfkD7G5fXXd1W2Axj4iCBovnNbUtzJm/htl/L5qXudnnDtkDdA
+         +Y9idv6QrKc99So8SXcZl7po5e3X1g8wY8zCi+jZ8K+1WC4k/euXiamBQTjsG9bxL23f
+         XIM3xgg7+wnB7Yz3y6ikSP/2J4lhD0JhVUeo8ucxYuHnj+Yd3Lv5uogMXCnBlkBzei6R
+         cGqGdkroxlLeICGK8b8QNKSDOg84J9XLHREGm5zsUDF4FJtdlhrRa9uxdeW6b8by77Qo
+         rQJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=5R4Mq0u607bEuDV/8t+U2BjsfHRmnX7fotbXqtuqZGE=;
-        b=BqY7yIKNOqsAV7hg9PkEyWJBsLTPUNG5BSng/I1zk8hqmzcn+/JUDirnBiXoMFqZp1
-         y3oGB9i168PAElWZuv269LFpBTEGnbShpz2+FvNXCty9vowOk7do99r4Pm/WVnc5L6b2
-         nmIEcI3bI6OxbYuoMKXsLFNryMZEk+5kofBaKNv4XzVlCzsWw2JwyBzm1IMxrKETokeY
-         pZ6Nssp+KvQKkrjtNx4tHHBuWC+xQafjaZd2HgcD7n5fX79Q0C5l3pDB/902ttAORVmr
-         eHl1GIYF3j88K+mctj/DsoFQ70OJ0yadJpzNrZFNBsBwFscdyKrePp7OKOb+qtTfZoN4
-         xoJw==
-X-Gm-Message-State: AOAM533P2mnWN3+0Qs9/OvqtfiPRz2sSYofAvDMbP5CzG4NuiaQakNIA
-        nemlAZNeveh6J1e7dPW38eY=
-X-Google-Smtp-Source: ABdhPJzfDNGCDBaqE4DcONgRsYO4u3S34xVrY93cvXCUgCvdLI0J2UJOHUtIOlm1FTYk86lRhX0zoQ==
-X-Received: by 2002:a05:6830:1603:: with SMTP id g3mr2725618otr.328.1601498405554;
-        Wed, 30 Sep 2020 13:40:05 -0700 (PDT)
+        bh=nYY0TFDmxyVWyJBUckQyfQlvGWR4n04F0Nkv0zc7eVg=;
+        b=mekKS9M0mkh8k7pxgItau02FHBwT2nZoocJZPeENJWWqDkCbJBn+516+7gC8aav6xD
+         GfLQCctkg2tiYS1Mbh9NSLTMvhsj+BY236FhJaVWvrBSf/Qns8WmZiOhaSGZaEVucUUO
+         2mLnN/c9OZJifEdyR3vfm50Vwjsj4w0x9OzEs8q9vpE27sX60IIGftP6EK045/fX1CPg
+         CZjTOmMWeCMZQbNjsylnGeqDRTizPeVwAL9jpW/8LPFBRFJruML95Y29tQMtYTz/TNsd
+         AcrvuFOS760ZJLOXIn00NuUzp6C2qIGyPFNrcEtJBNev5TVnHW7RX4d/rF7C1x5OA9Ad
+         7+sA==
+X-Gm-Message-State: AOAM533DKp6zfQF1FN8nvLNtAn5ei9KhC0iIqI5yQ1+PvXL99KaPp7EK
+        KiI6XI6VSWmkxKMvK2qE58o=
+X-Google-Smtp-Source: ABdhPJzR6kME7SQeBZ3yxFfEaWo1jp5AaxRoFulozfb5gLrOrzKlDugVr9YnTvqkiHy7PdJOHrelIQ==
+X-Received: by 2002:a05:6808:a05:: with SMTP id n5mr2498022oij.154.1601499171063;
+        Wed, 30 Sep 2020 13:52:51 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x15sm690641oor.33.2020.09.30.13.40.04
+        by smtp.gmail.com with ESMTPSA id c19sm684125ooq.35.2020.09.30.13.52.50
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 30 Sep 2020 13:40:05 -0700 (PDT)
+        Wed, 30 Sep 2020 13:52:50 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 30 Sep 2020 13:40:04 -0700
+Date:   Wed, 30 Sep 2020 13:52:49 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Vadim Pasternak <vadimp@nvidia.com>
-Cc:     robh+dt@kernel.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH hwmon-next v4 2/2] dt-bindings: Add MP2975 voltage
- regulator device
-Message-ID: <20200930204004.GA241772@roeck-us.net>
-References: <20200926204957.10268-1-vadimp@nvidia.com>
- <20200926204957.10268-3-vadimp@nvidia.com>
+To:     Xu Yilun <yilun.xu@intel.com>
+Cc:     lee.jones@linaro.org, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        trix@redhat.com, matthew.gerlach@linux.intel.com,
+        russell.h.weight@intel.com, lgoncalv@redhat.com, hao.wu@intel.com,
+        mdf@kernel.org
+Subject: Re: [PATCH v3 0/2] add Intel MAX 10 BMC MFD driver & hwmon sub driver
+Message-ID: <20200930205249.GA241905@roeck-us.net>
+References: <1600669071-26235-1-git-send-email-yilun.xu@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200926204957.10268-3-vadimp@nvidia.com>
+In-Reply-To: <1600669071-26235-1-git-send-email-yilun.xu@intel.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Sep 26, 2020 at 11:49:57PM +0300, Vadim Pasternak wrote:
-> Monolithic Power Systems, Inc. (MPS) dual-loop, digital, multi-phase
-> controller.
+On Mon, Sep 21, 2020 at 02:17:49PM +0800, Xu Yilun wrote:
+> I recently realized that maintainers may have trouble to apply patches to
+> their trees if the patches depend on other being-reviewed patches. So I'm
+> trying to wrapper the 2 patches into one patchset and let all the
+> maintainers see the dependencies.
 > 
-> Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
-> Acked-by: Rob Herring <robh@kernel.org>
+> But the patch version is then not aligned between the 2 patches. I'm not
+> sure how to handle it. I just picked the smaller number on Subject, but
+> you could still see their own version changes in commit message of each
+> patch. Sorry if it makes confusing.
+> 
 
-Applied.
+If you started with separate patches, it would be much better to pick
+the larger number, and add a note into the individual patch(es) stating
+the reason for the gap. Everything else is highly confusing. I would not
+be surprised if no one in the mfd world even looks at the mfd patch
+since it went back from v6 (?) to v3 according to its subject line.
 
 Thanks,
 Guenter
 
-> ---
-> v2->v3
->  - Fix after 'make dt_binding_check'.
-> ---
->  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
->  1 file changed, 2 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-> index 4ace8039840a..b2e994bc00af 100644
-> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
-> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-> @@ -80,6 +80,8 @@ properties:
->            - fsl,mpl3115
->              # MPR121: Proximity Capacitive Touch Sensor Controller
->            - fsl,mpr121
-> +            # Monolithic Power Systems Inc. multi-phase controller mp2975
-> +          - mps,mp2975
->              # G751: Digital Temperature Sensor and Thermal Watchdog with Two-Wire Interface
->            - gmt,g751
->              # Infineon IR38064 Voltage Regulator
+> Patch #1 implements the basic functions of the BMC chip for some Intel
+> FPGA PCIe Acceleration Cards (PAC). The BMC is implemented using the
+> Intel MAX 10 CPLD.
+> 
+> This BMC chip is connected to the FPGA by a SPI bus. To provide direct
+> register access from the FPGA, the "SPI slave to Avalon Master Bridge"
+> (spi-avmm) IP is integrated in the chip. It converts encoded streams of
+> bytes from the host to the internal register read/write on the Avalon
+> bus. So This driver uses the regmap-spi-avmm for register accessing.
+> 
+> Patch #2 adds support for the hwmon sub device in Intel MAX 10 BMC
+> 
+> 
+> Xu Yilun (2):
+>   mfd: intel-m10-bmc: add Intel MAX 10 BMC chip support for Intel FPGA
+>     PAC
+>   hwmon: intel-m10-bmc-hwmon: add hwmon support for Intel MAX 10 BMC
+> 
+>  .../ABI/testing/sysfs-driver-intel-m10-bmc         |  15 +
+>  Documentation/hwmon/index.rst                      |   1 +
+>  Documentation/hwmon/intel-m10-bmc-hwmon.rst        |  78 +++++
+>  drivers/hwmon/Kconfig                              |  11 +
+>  drivers/hwmon/Makefile                             |   1 +
+>  drivers/hwmon/intel-m10-bmc-hwmon.c                | 334 +++++++++++++++++++++
+>  drivers/mfd/Kconfig                                |  13 +
+>  drivers/mfd/Makefile                               |   2 +
+>  drivers/mfd/intel-m10-bmc.c                        | 164 ++++++++++
+>  include/linux/mfd/intel-m10-bmc.h                  |  65 ++++
+>  10 files changed, 684 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/sysfs-driver-intel-m10-bmc
+>  create mode 100644 Documentation/hwmon/intel-m10-bmc-hwmon.rst
+>  create mode 100644 drivers/hwmon/intel-m10-bmc-hwmon.c
+>  create mode 100644 drivers/mfd/intel-m10-bmc.c
+>  create mode 100644 include/linux/mfd/intel-m10-bmc.h
+> 
+> -- 
+> 2.7.4
+> 
