@@ -2,291 +2,167 @@ Return-Path: <SRS0=ye16=DH=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-8.5 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EDDF6C47423
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Sep 2020 01:41:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 732D7C2D0A8
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Sep 2020 05:03:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9EB3520C09
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Sep 2020 01:41:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 10A48206A5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Sep 2020 05:03:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=sartura-hr.20150623.gappssmtp.com header.i=@sartura-hr.20150623.gappssmtp.com header.b="L5pF50Ti"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FSU6RtJy"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729395AbgI3Blt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 29 Sep 2020 21:41:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56166 "EHLO
+        id S1725440AbgI3FDu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 30 Sep 2020 01:03:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729774AbgI3BlW (ORCPT
+        with ESMTP id S1725320AbgI3FDu (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 29 Sep 2020 21:41:22 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C0B4C061755
-        for <linux-hwmon@vger.kernel.org>; Tue, 29 Sep 2020 18:41:21 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id p9so423822ejf.6
-        for <linux-hwmon@vger.kernel.org>; Tue, 29 Sep 2020 18:41:21 -0700 (PDT)
+        Wed, 30 Sep 2020 01:03:50 -0400
+Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED76C061755
+        for <linux-hwmon@vger.kernel.org>; Tue, 29 Sep 2020 22:03:50 -0700 (PDT)
+Received: by mail-ot1-x343.google.com with SMTP id n61so585598ota.10
+        for <linux-hwmon@vger.kernel.org>; Tue, 29 Sep 2020 22:03:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura-hr.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=JBnUFnJSOFEGYo9H4MHI7job+37X4slQh33wij3Ffq4=;
-        b=L5pF50TiwtNbHMdxCVqeFPFshOtBqzN9jXMRvibFj3hKtTWs2Fbg3hC4HjtcThsveE
-         fpQ3p3JV5eFwD7ugMDX0ygRY0xUtKkJxy/jNYq0azyjCNvljzIxsjsoNyNkaYcaN0uMn
-         mALj4Y5LjG81rX9WYOF/Hf0dEcaHh6wCRW+SkkV6ZlVNV33MX6F1shqZmpT6jaEQ7bsJ
-         neWKhk9GBuJ/afUmQL0DEk7xpfGpoByGG0QzzcUjbKZ27H6pxyNU+PnFStez2iwY0cBq
-         Xh8AQ2Sh/uNmP1p3OYMsivTd9cVe7g8nW7Q+U9mTh5lxwXanE1zl63vXNJcQAg1X0au5
-         DgOA==
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=274Tj2uJ9WXEaTXi4maq9PeikAbb3QBpaSDwAxcGjkE=;
+        b=FSU6RtJy10CV4mbAzlWBFuuX/jKyK/PBrYcLcicP9DCcDmcnfrDe8HauTk28juXJOV
+         uFHuwI+BnrDBudz9/fKdGCvhf1H9q4lhtZfpfT/sRYzMdjoQGXveRcdWscpwTSdNtECd
+         XYiawV0wPoIhEBLUKn8oz0904Nj2hKOFbMHd0Q5ECmo/SLFLAFYwCHezhYUhB0eWZcmB
+         N/xnDVI1sVu7NZBL4w0+p0pnFyBdQYye2FXhNdk179s4PsqGkC8ntebVABK9EnLJo34m
+         RJ7Qv6rCqvL/mLYGrd4z6W30RKH4TO6cH6hhdM84qHQMbH9OaEDOZxDk5LaPpRRhjaGg
+         MpAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=JBnUFnJSOFEGYo9H4MHI7job+37X4slQh33wij3Ffq4=;
-        b=asprI+rj9To5Uzo3dc20DjEMo8y/aHwDeXnBpe7d7JzxLBG33qkGf5c1rVE45wRbrS
-         7DEcrvT2DJAfI+1flYtkv5wqpjkWqbl9FkTr1lXE3FabHOmsdj8J/4qOwOZv8PKEBYAI
-         s2LKcg26zeKRs06RLynK2SDCAUHmL6Ikx3jdxA+4knYtwXcWZyRiRFJog4rto0C3PTz3
-         7hAD8+lhdQqgkW0JNFGpUdiZSkYEVZl62sfJt3llDpkHLPvMGcxCNQ3aEf+JV+4lc/HI
-         1+Hg/MAmksw1XITY5XZJPFcgQL7ufvd2oxUqMHaN563kdd6JwjVtbrmwpwi1hdQAd7w9
-         lCVw==
-X-Gm-Message-State: AOAM532Z0F8lsSH+xDcZ0ySvbA85E+JF8899iaE6pCD/R9QL8YtTgfsf
-        f/B4zkV/S57GwXEMhbSrnyY05A==
-X-Google-Smtp-Source: ABdhPJwTTeDEvyQkzrzl7X0r6dtd04JcYVVRYvNwohWDpUMutl9XbFBFpVGXhDvxCbUxeiUOoAN+vw==
-X-Received: by 2002:a17:906:fb15:: with SMTP id lz21mr461208ejb.185.1601430079860;
-        Tue, 29 Sep 2020 18:41:19 -0700 (PDT)
-Received: from localhost.localdomain ([2a00:ee2:4b0d:3000:290:faff:fe54:449c])
-        by smtp.gmail.com with ESMTPSA id q1sm203258ejy.37.2020.09.29.18.41.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Sep 2020 18:41:19 -0700 (PDT)
-From:   Luka Kovacic <luka.kovacic@sartura.hr>
-To:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-leds@vger.kernel.org
-Cc:     lee.jones@linaro.org, pavel@ucw.cz, dmurphy@ti.com,
-        robh+dt@kernel.org, jdelvare@suse.com, linux@roeck-us.net,
-        andrew@lunn.ch, jason@lakedaemon.net, gregory.clement@bootlin.com,
-        marek.behun@nic.cz, luka.perkov@sartura.hr,
-        robert.marko@sartura.hr, Luka Kovacic <luka.kovacic@sartura.hr>
-Subject: [PATCH v3 4/7] drivers: leds: Add the iEi WT61P803 PUZZLE LED driver
-Date:   Wed, 30 Sep 2020 03:40:55 +0200
-Message-Id: <20200930014058.44460-5-luka.kovacic@sartura.hr>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200930014058.44460-1-luka.kovacic@sartura.hr>
-References: <20200930014058.44460-1-luka.kovacic@sartura.hr>
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=274Tj2uJ9WXEaTXi4maq9PeikAbb3QBpaSDwAxcGjkE=;
+        b=CjKjd4ZZdRizw2Hw975tKcGyKrCQhBagAknVad04K4ucnOHTY14XKwr98d+Zmar7og
+         ygwRlBl+5OzG0oqPquYbXDUtb5qcYo0xEsXv8lTqNjb2j8ov+flQ8OH7HkkO21V/zl+u
+         mWLhOwzMPcP70pKVGXkT7sYe49eUuQk0f75JY8mQf1siRSELNttbEhX7DGflNsSNm7gS
+         z7CsDn+iev1eGTkEQfl4T5tzbz3Oph7jnK7Ug659N639tr5jWnwO+2nHi+M01dAVeUTg
+         lRMAuCHgSGicmDAQDsr67J97j21tZO1G/bh/F38rHd5iiRgx201SR0FLDZncAvukPEh1
+         l+uA==
+X-Gm-Message-State: AOAM531oD0f5jgjCTPci9l/YB1RuCdXReDz7aYIzOzgt+MxkYa6jarMf
+        sgDIvE15ONyi4pNfg6edrkQ=
+X-Google-Smtp-Source: ABdhPJxyIHi9+F40hsLsclk6c4USFaHOcrYcYF/yAr44EYv6PeqJwK3yloIQZcxFMYTNQnDmj+8JzA==
+X-Received: by 2002:a9d:2ac5:: with SMTP id e63mr473753otb.94.1601442229591;
+        Tue, 29 Sep 2020 22:03:49 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l1sm123417ooe.20.2020.09.29.22.03.48
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 29 Sep 2020 22:03:48 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 29 Sep 2020 22:03:47 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Naveen Krishna Chatradhi <nchatrad@amd.com>
+Cc:     linux-hwmon@vger.kernel.org, naveenkrishna.ch@gmail.com,
+        Akshay Gupta <Akshay.Gupta@amd.com>
+Subject: Re: [PATCH v2 1/4] hwmon: amd_energy: Move label out of accumulation
+ structure
+Message-ID: <20200930050347.GA193415@roeck-us.net>
+References: <20200929105322.8919-1-nchatrad@amd.com>
+ <20200929105322.8919-2-nchatrad@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200929105322.8919-2-nchatrad@amd.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add support for the iEi WT61P803 PUZZLE LED driver.
-Currently only the front panel power LED is supported.
+On Tue, Sep 29, 2020 at 04:23:19PM +0530, Naveen Krishna Chatradhi wrote:
+> From: Akshay Gupta <Akshay.Gupta@amd.com>
+> 
+> At present, core & socket labels are defined in struct sensor_accumulator
+> This patch moves it to the amd_energy_data structure, which will
+> help in calling memset on struct sensor_accumulator to optimize the code.
+> 
+> Signed-off-by: Akshay Gupta <Akshay.Gupta@amd.com>
 
-This driver depends on the iEi WT61P803 PUZZLE MFD driver.
+Series applied.
 
-Signed-off-by: Luka Kovacic <luka.kovacic@sartura.hr>
-Cc: Luka Perkov <luka.perkov@sartura.hr>
-Cc: Robert Marko <robert.marko@sartura.hr>
----
- drivers/leds/Kconfig                    |   8 ++
- drivers/leds/Makefile                   |   1 +
- drivers/leds/leds-iei-wt61p803-puzzle.c | 157 ++++++++++++++++++++++++
- 3 files changed, 166 insertions(+)
- create mode 100644 drivers/leds/leds-iei-wt61p803-puzzle.c
+Thanks,
+Guenter
 
-diff --git a/drivers/leds/Kconfig b/drivers/leds/Kconfig
-index 1c181df24eae..8a25fb753dec 100644
---- a/drivers/leds/Kconfig
-+++ b/drivers/leds/Kconfig
-@@ -332,6 +332,14 @@ config LEDS_IPAQ_MICRO
- 	  Choose this option if you want to use the notification LED on
- 	  Compaq/HP iPAQ h3100 and h3600.
- 
-+config LEDS_IEI_WT61P803_PUZZLE
-+	tristate "LED Support for the iEi WT61P803 PUZZLE MCU"
-+	depends on LEDS_CLASS
-+	depends on MFD_IEI_WT61P803_PUZZLE
-+	help
-+	  This option enables support for LEDs controlled by the iEi WT61P803
-+	  M801 MCU.
-+
- config LEDS_HP6XX
- 	tristate "LED Support for the HP Jornada 6xx"
- 	depends on LEDS_CLASS
-diff --git a/drivers/leds/Makefile b/drivers/leds/Makefile
-index c2c7d7ade0d0..cd362437fefd 100644
---- a/drivers/leds/Makefile
-+++ b/drivers/leds/Makefile
-@@ -34,6 +34,7 @@ obj-$(CONFIG_LEDS_HP6XX)		+= leds-hp6xx.o
- obj-$(CONFIG_LEDS_INTEL_SS4200)		+= leds-ss4200.o
- obj-$(CONFIG_LEDS_IP30)			+= leds-ip30.o
- obj-$(CONFIG_LEDS_IPAQ_MICRO)		+= leds-ipaq-micro.o
-+obj-$(CONFIG_LEDS_IEI_WT61P803_PUZZLE)	+= leds-iei-wt61p803-puzzle.o
- obj-$(CONFIG_LEDS_IS31FL319X)		+= leds-is31fl319x.o
- obj-$(CONFIG_LEDS_IS31FL32XX)		+= leds-is31fl32xx.o
- obj-$(CONFIG_LEDS_KTD2692)		+= leds-ktd2692.o
-diff --git a/drivers/leds/leds-iei-wt61p803-puzzle.c b/drivers/leds/leds-iei-wt61p803-puzzle.c
-new file mode 100644
-index 000000000000..b5822a835116
---- /dev/null
-+++ b/drivers/leds/leds-iei-wt61p803-puzzle.c
-@@ -0,0 +1,157 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* iEi WT61P803 PUZZLE MCU LED Driver
-+ *
-+ * Copyright (C) 2020 Sartura Ltd.
-+ * Author: Luka Kovacic <luka.kovacic@sartura.hr>
-+ */
-+
-+#include <linux/leds.h>
-+#include <linux/mfd/iei-wt61p803-puzzle.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/property.h>
-+#include <linux/slab.h>
-+
-+enum iei_wt61p803_puzzle_led_state {
-+	IEI_LED_OFF = 0x30,
-+	IEI_LED_ON = 0x31,
-+	IEI_LED_BLINK_5HZ = 0x32,
-+	IEI_LED_BLINK_1HZ = 0x33,
-+};
-+
-+/**
-+ * struct iei_wt61p803_puzzle_led - MCU LED Driver
-+ *
-+ * @mcu:		MCU struct pointer
-+ * @response_buffer	Global MCU response buffer allocation
-+ * @lock:		General mutex lock for LED operations
-+ * @led_power_state:	State of the front panel power LED
-+ * @cdev:		LED classdev
-+ */
-+struct iei_wt61p803_puzzle_led {
-+	struct iei_wt61p803_puzzle *mcu;
-+	unsigned char *response_buffer;
-+	struct mutex lock;
-+	int led_power_state;
-+	struct led_classdev cdev;
-+};
-+
-+static inline struct iei_wt61p803_puzzle_led *cdev_to_iei_wt61p803_puzzle_led
-+	(struct led_classdev *led_cdev)
-+{
-+	return dev_get_drvdata(led_cdev->dev->parent);
-+}
-+
-+static int iei_wt61p803_puzzle_led_brightness_set_blocking(struct led_classdev *cdev,
-+		enum led_brightness brightness)
-+{
-+	struct iei_wt61p803_puzzle_led *priv = cdev_to_iei_wt61p803_puzzle_led(cdev);
-+	unsigned char *resp_buf = priv->response_buffer;
-+	unsigned char led_power_cmd[5] = {
-+		IEI_WT61P803_PUZZLE_CMD_HEADER_START,
-+		IEI_WT61P803_PUZZLE_CMD_LED,
-+		IEI_WT61P803_PUZZLE_CMD_LED_POWER,
-+		(char)IEI_LED_OFF
-+	};
-+	size_t reply_size;
-+
-+	mutex_lock(&priv->lock);
-+	if (brightness == LED_OFF) {
-+		led_power_cmd[3] = (char)IEI_LED_OFF;
-+		priv->led_power_state = LED_OFF;
-+	} else {
-+		led_power_cmd[3] = (char)IEI_LED_ON;
-+		priv->led_power_state = LED_ON;
-+	}
-+	mutex_unlock(&priv->lock);
-+
-+	return iei_wt61p803_puzzle_write_command(priv->mcu, led_power_cmd,
-+			sizeof(led_power_cmd), resp_buf, &reply_size);
-+}
-+
-+static enum led_brightness
-+iei_wt61p803_puzzle_led_brightness_get(struct led_classdev *cdev)
-+{
-+	struct iei_wt61p803_puzzle_led *priv =
-+		cdev_to_iei_wt61p803_puzzle_led(cdev);
-+	int led_state;
-+
-+	mutex_lock(&priv->lock);
-+	led_state = priv->led_power_state;
-+	mutex_unlock(&priv->lock);
-+
-+	return led_state;
-+}
-+
-+static int iei_wt61p803_puzzle_led_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct iei_wt61p803_puzzle *mcu = dev_get_drvdata(dev->parent);
-+	struct iei_wt61p803_puzzle_led *priv;
-+	struct led_init_data init_data = {};
-+	struct fwnode_handle *child;
-+	int ret;
-+	u32 reg;
-+
-+	if (device_get_child_node_count(dev) != 1)
-+		return -EINVAL;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->response_buffer = devm_kzalloc(dev,
-+			IEI_WT61P803_PUZZLE_BUF_SIZE, GFP_KERNEL);
-+	if (!priv->response_buffer)
-+		return -ENOMEM;
-+
-+	priv->mcu = mcu;
-+	priv->led_power_state = 1;
-+	mutex_init(&priv->lock);
-+	dev_set_drvdata(dev, priv);
-+
-+	child = device_get_next_child_node(dev, NULL);
-+
-+	ret = fwnode_property_read_u32(child, "reg", &reg);
-+	if (ret || reg > 1) {
-+		dev_err(dev, "Could not register 'reg' (%lu)\n", (unsigned long)reg);
-+		ret = -EINVAL;
-+		goto err_child_node;
-+	}
-+
-+	priv->cdev.brightness_set_blocking = iei_wt61p803_puzzle_led_brightness_set_blocking;
-+	priv->cdev.brightness_get = iei_wt61p803_puzzle_led_brightness_get;
-+	priv->cdev.max_brightness = 1;
-+	init_data.fwnode = child;
-+
-+	ret = devm_led_classdev_register_ext(dev, &priv->cdev, &init_data);
-+	if (ret) {
-+		dev_err(dev, "Could not register LED\n");
-+		goto err_child_node;
-+	}
-+	return 0;
-+err_child_node:
-+	fwnode_handle_put(child);
-+	return ret;
-+}
-+
-+static const struct of_device_id iei_wt61p803_puzzle_led_of_match[] = {
-+	{ .compatible = "iei,wt61p803-puzzle-leds" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, iei_wt61p803_puzzle_led_of_match);
-+
-+static struct platform_driver iei_wt61p803_puzzle_led_driver = {
-+	.driver = {
-+		.name = "iei-wt61p803-puzzle-led",
-+		.of_match_table = iei_wt61p803_puzzle_led_of_match,
-+	},
-+	.probe = iei_wt61p803_puzzle_led_probe,
-+};
-+module_platform_driver(iei_wt61p803_puzzle_led_driver);
-+
-+MODULE_DESCRIPTION("iEi WT61P803 PUZZLE front panel LED driver");
-+MODULE_AUTHOR("Luka Kovacic <luka.kovacic@sartura.hr>");
-+MODULE_LICENSE("GPL");
-+MODULE_ALIAS("platform:leds-iei-wt61p803-puzzle");
--- 
-2.26.2
-
+> ---
+> Changes since v1:
+> None
+> 
+>  drivers/hwmon/amd_energy.c | 17 +++++++++++------
+>  1 file changed, 11 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/hwmon/amd_energy.c b/drivers/hwmon/amd_energy.c
+> index 29603742c858..9580a16185b8 100644
+> --- a/drivers/hwmon/amd_energy.c
+> +++ b/drivers/hwmon/amd_energy.c
+> @@ -35,7 +35,6 @@
+>  struct sensor_accumulator {
+>  	u64 energy_ctr;
+>  	u64 prev_value;
+> -	char label[10];
+>  };
+>  
+>  struct amd_energy_data {
+> @@ -52,6 +51,7 @@ struct amd_energy_data {
+>  	int nr_cpus;
+>  	int nr_socks;
+>  	int core_id;
+> +	char (*label)[10];
+>  };
+>  
+>  static int amd_energy_read_labels(struct device *dev,
+> @@ -61,7 +61,7 @@ static int amd_energy_read_labels(struct device *dev,
+>  {
+>  	struct amd_energy_data *data = dev_get_drvdata(dev);
+>  
+> -	*str = data->accums[channel].label;
+> +	*str = data->label[channel];
+>  	return 0;
+>  }
+>  
+> @@ -253,6 +253,7 @@ static int amd_create_sensor(struct device *dev,
+>  	struct sensor_accumulator *accums;
+>  	int i, num_siblings, cpus, sockets;
+>  	u32 *s_config;
+> +	char (*label_l)[10];
+>  
+>  	/* Identify the number of siblings per core */
+>  	num_siblings = ((cpuid_ebx(0x8000001e) >> 8) & 0xff) + 1;
+> @@ -276,21 +277,25 @@ static int amd_create_sensor(struct device *dev,
+>  	if (!accums)
+>  		return -ENOMEM;
+>  
+> +	label_l = devm_kcalloc(dev, cpus + sockets,
+> +			       sizeof(*label_l), GFP_KERNEL);
+> +	if (!label_l)
+> +		return -ENOMEM;
+> +
+>  	info->type = type;
+>  	info->config = s_config;
+>  
+>  	data->nr_cpus = cpus;
+>  	data->nr_socks = sockets;
+>  	data->accums = accums;
+> +	data->label = label_l;
+>  
+>  	for (i = 0; i < cpus + sockets; i++) {
+>  		s_config[i] = config;
+>  		if (i < cpus)
+> -			scnprintf(accums[i].label, 10,
+> -				  "Ecore%03u", i);
+> +			scnprintf(label_l[i], 10, "Ecore%03u", i);
+>  		else
+> -			scnprintf(accums[i].label, 10,
+> -				  "Esocket%u", (i - cpus));
+> +			scnprintf(label_l[i], 10, "Esocket%u", (i - cpus));
+>  	}
+>  
+>  	return 0;
