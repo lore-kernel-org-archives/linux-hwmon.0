@@ -2,758 +2,1074 @@ Return-Path: <SRS0=ye16=DH=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,FAKE_REPLY_C,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.5 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D468C47420
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Sep 2020 20:31:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8B52C4727C
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Sep 2020 20:39:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E169D2074B
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Sep 2020 20:31:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 560022075F
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Sep 2020 20:39:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Luxw1zrp"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mPbBoZcq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728660AbgI3Ubi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 30 Sep 2020 16:31:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
+        id S1728031AbgI3Ujx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 30 Sep 2020 16:39:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725355AbgI3Ubi (ORCPT
+        with ESMTP id S1725355AbgI3Ujw (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 30 Sep 2020 16:31:38 -0400
-Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5B9FC061755;
-        Wed, 30 Sep 2020 13:31:37 -0700 (PDT)
-Received: by mail-oi1-x243.google.com with SMTP id v20so3179754oiv.3;
-        Wed, 30 Sep 2020 13:31:37 -0700 (PDT)
+        Wed, 30 Sep 2020 16:39:52 -0400
+Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3096C061755;
+        Wed, 30 Sep 2020 13:39:52 -0700 (PDT)
+Received: by mail-ot1-x343.google.com with SMTP id m12so3217167otr.0;
+        Wed, 30 Sep 2020 13:39:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=4iABDMkghYi/NYhVFHTDrhiY1PW4VVR4/uCcF5alG48=;
-        b=Luxw1zrpRY5LZ+VkyHp5jNIbgWMCV24bPwa87fy4NTxKWzRvF60hBRVadPGMBnutcJ
-         9lFzkTOmTCmEVD5NR8qxPHW4GomSV+xMT6Yw4uN6Q4tBwcs57rpqe/xODOlX1r3J6+WA
-         WQexNydo29qzCXwWEbsI4q6wTRHHd1o5Al1ktVKSsPphpiOQgG/N6tDMtULg58U9TQGe
-         qLyyZtbg9Kf2j2/GUR5YNpzVFEGG0D78SpT/T1TPTB+4JNQRySzCNUMxjB53jG2UONkq
-         E8Wb0lH08Tx3QM59mv48UYLHl8ZqJwBBkTzILXqHJY2QJY6ZLn8isgrTYvG8T+WU3Txb
-         ONdA==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=PC4sK9WU0RjHSb2/HnUhf0CKCc813IEebOWL6I9XVsg=;
+        b=mPbBoZcqg5EPEdclRWLOTs9V0hNPZp5KXjN7gTvjsQKZ6HwF40AeDJPjyg4WyFyyQs
+         NoGI8MW910SwgVDVKYn1dhMBV0BzgSvhb3fNsZoaUop8r40tQgjhf/qSoYcWniBjvzQF
+         smTFvi+GoDvjZ7AQ+LoRx7TinQ/UqxPvAXL+0J/xBFMgmQQTJlzgYKWMAqqcIhjaA5w0
+         uWWdQ0lLiEvDzn5m56FKFJAJpA+dLHLujIe3qqMyS56fcossA4JTwjSpkca3IdCFgonQ
+         IsdbQi2Z1vNtoHgaBqsFG1EMHjC0XiKOifSpdK4qFbRkDi+yUb5OZffUXyf2F7fy0/9d
+         P6cA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mime-version:content-disposition:user-agent;
-        bh=4iABDMkghYi/NYhVFHTDrhiY1PW4VVR4/uCcF5alG48=;
-        b=iGUs/QbSTqc5oLbFURdZmOdbWb39BLSmDQkngjpRAPUUJPckWPvvX9sAeq8Yqi9DRC
-         Z2BWHHPCxTb0aWujtmtvBSlkoFi6Hc9tdGE58gqpseHHooCA3ocPIXLJ30/k5II95UuL
-         34UCFHE/FNDCoGwUSN5w40f4Gmk+R9UWzVuoswkSQ/FwzkZuPSz1gu+S5uto5d9uP6Ow
-         0NzgDk+eDb04Qusez7FUvwEp8A/9r9G34nvICBSaXPrLh0txEnOqt7KvLdz0LSNCG9Y9
-         rvSfecD3Rtus7dKW16E4ekSzH4HRHYl8aVC4XPlg7MAhJv42b+lxCb3HpGhix9RWDVmh
-         NHxQ==
-X-Gm-Message-State: AOAM533nmWIEloBClKa1gZb7rA1SHdcsWUOlRcvAnXqTooifx4L6u8sd
-        xwu1spEMA3jmyaVswkdRYrU=
-X-Google-Smtp-Source: ABdhPJwIGtO99SkRrtW6UAXXEMoB/xzl6BnmhoPGVRbLKAQ78opBC9J01ctymNFu0EYI246askeEAA==
-X-Received: by 2002:aca:c742:: with SMTP id x63mr2256850oif.7.1601497896821;
-        Wed, 30 Sep 2020 13:31:36 -0700 (PDT)
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to:user-agent;
+        bh=PC4sK9WU0RjHSb2/HnUhf0CKCc813IEebOWL6I9XVsg=;
+        b=PULav40vKMdzTHHfD4RlWjAr4WJDVncobWUcNYvHJ6i4LQxy3LVPx1AP1Y52tIrfCJ
+         ueeqWoC5EO5F0rq1FGMBXXq/2PpkmzywgJfp74twrsPRtITHB9VKm8nODngdAM7zFPC3
+         Dgcc+V/peTO3mZABh/HcyXDn2RDVdQs1Q6fgJb0ORXipGvT12azMWnpuNQDzXe/AQGY9
+         QUXB+X8n7ynepBB1XwvJ/Ws+sN81gvBjISnlKOXhJ7OGa7H8jo4mKWbg6/ok5A+92JlQ
+         j00Yg37TvdcBXmUEiIWL7VxdjLR2fLqPFtNzXOX2A1K4rrIKV2BCJDFUWynOFW0DXcyg
+         DdlA==
+X-Gm-Message-State: AOAM533omtXobrsNYyrLfLpn2xBS7DExrlHD9NeB5mL+7cTpncpfFZlQ
+        VWXfRjgjMOpDJj1BQJLQv2I=
+X-Google-Smtp-Source: ABdhPJwO6FaADdIiZQkn93EPfgiPHYGIFcqrvogB6NN86jRdQOSygeaPbtzHC6/ZYPEBs/InYO5vgg==
+X-Received: by 2002:a9d:3a34:: with SMTP id j49mr2783409otc.52.1601498391655;
+        Wed, 30 Sep 2020 13:39:51 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 92sm628598ota.38.2020.09.30.13.31.35
+        by smtp.gmail.com with ESMTPSA id g23sm678418oop.46.2020.09.30.13.39.50
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 30 Sep 2020 13:31:35 -0700 (PDT)
+        Wed, 30 Sep 2020 13:39:51 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 30 Sep 2020 13:31:34 -0700
+Date:   Wed, 30 Sep 2020 13:39:49 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Luka Kovacic <luka.kovacic@sartura.hr>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-leds@vger.kernel.org,
-        lee.jones@linaro.org, pavel@ucw.cz, dmurphy@ti.com,
-        robh+dt@kernel.org, jdelvare@suse.com, andrew@lunn.ch,
-        jason@lakedaemon.net, gregory.clement@bootlin.com,
-        luka.perkov@sartura.hr, robert.marko@sartura.hr
-Subject: Re: [PATCH v2 3/7] drivers: hwmon: Add the iEi WT61P803 PUZZLE HWMON
- driver
-Message-ID: <20200930203134.GA239959@roeck-us.net>
+To:     Vadim Pasternak <vadimp@nvidia.com>
+Cc:     robh+dt@kernel.org, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH hwmon-next v4 1/2] hwmon: (pmbus) Add support for MPS
+ Multi-phase mp2975 controller
+Message-ID: <20200930203949.GA241666@roeck-us.net>
+References: <20200926204957.10268-1-vadimp@nvidia.com>
+ <20200926204957.10268-2-vadimp@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200926204957.10268-2-vadimp@nvidia.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Sep 26, 2020 at 03:55:10PM +0200, Luka Kovacic wrote:
-> Add the iEi WT61P803 PUZZLE HWMON driver, that handles the fan speed
-> control via PWM, reading fan speed and reading on-board temperature
-> sensors.
+On Sat, Sep 26, 2020 at 11:49:56PM +0300, Vadim Pasternak wrote:
+> Add support for mp295 device from Monolithic Power Systems, Inc. (MPS)
+> vendor. This is a dual-loop, digital, multi-phase controller.
+> This device:
+> - Supports two power rail.
+> - Provides 8 pulse-width modulations (PWMs), and can be configured up
+>   to 8-phase operation for rail 1 and up to 4-phase operation for rail
+>   2.
+> - Supports two pages 0 and 1 for telemetry and also pages 2 and 3 for
+>   configuration.
+> - Can configured VOUT readout in direct or VID format and allows
+>   setting of different formats on rails 1 and 2. For VID the following
+>   protocols are available: VR13 mode with 5-mV DAC; VR13 mode with
+>   10-mV DAC, IMVP9 mode with 5-mV DAC.
 > 
-> The driver registers a HWMON device and a simple thermal cooling device to
-> enable in-kernel fan management.
-> 
-> This driver depends on the iEi WT61P803 PUZZLE MFD driver.
-> 
-> Signed-off-by: Luka Kovacic <luka.kovacic@sartura.hr>
-> Cc: Luka Perkov <luka.perkov@sartura.hr>
-> Cc: Robert Marko <robert.marko@sartura.hr>
+> Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
+
+Applied, with changes as discussed.
+
+Thanks,
+Guenter
+
 > ---
->  drivers/hwmon/Kconfig                     |   8 +
->  drivers/hwmon/Makefile                    |   1 +
->  drivers/hwmon/iei-wt61p803-puzzle-hwmon.c | 511 ++++++++++++++++++++++
->  3 files changed, 520 insertions(+)
->  create mode 100644 drivers/hwmon/iei-wt61p803-puzzle-hwmon.c
+> v3->v4
+>  Comments pointed out by Guenter:
+>  - Drop redundant 'return' from mp2975_identify_multiphase_rail2().
+>  - Fix phases assignment in mp2975_set_phase_rail2().
+>  - Fix range for the number of phases in mp2975_set_multiphase_rail2().
+>  - Drop mp2975_set_multiphase_rail2, call instead directly
+>    mp2975_set_phase_rail2(), since the phases range is already
+>    validated for rail 2.
+>  - Fix handling for the case of zero number of phases for rail 1 in
+>    mp2975_identify_multiphase(), which is valid case.
+>  - Simplify logic for rail1 and rail2 setting handling in
+>    mp2975_identify_multiphase().
+>  - Line length limit is now 100, but 'checkpatch' scripts is still
+>    consider it as error.
+>  - Modify 'switch' statement in mp2975_current_sense_gain_get().
+>  - Fix misspelled comment in mp2975_probe().
+> v1->v2
+>  Comments pointed out by Guenter:
+>  - Add doc fail to the patch#1 (it was sent as separate patch).
+>  - Use standard define for VOUT mode format.
+>  - Simplify logic in mp2975_read_phase().
+>  - Simplify calculation of phase current in mp2975_read_phase().
+>  - Modify return code handling in mp2975_read_word_data().
+>  - Add missed error handling in mp2975_read_word_data().
+>  - Drop 'fallthrough;' in  mp2975_read_word_data().
+>  - Handle error code in mp2975_identify_multiphase_rail2().
+>  - Handle error code in mp2975_identify_multiphase().
+>  - Drop 'goto' in mp2975_vout_per_rail_config_get() and mp2975_probe().
+> ---
+>  Documentation/hwmon/mp2975.rst | 116 +++++++
+>  drivers/hwmon/pmbus/Kconfig    |   9 +
+>  drivers/hwmon/pmbus/Makefile   |   1 +
+>  drivers/hwmon/pmbus/mp2975.c   | 772 +++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 898 insertions(+)
+>  create mode 100644 Documentation/hwmon/mp2975.rst
+>  create mode 100644 drivers/hwmon/pmbus/mp2975.c
 > 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 8dc28b26916e..ff279df9bf40 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -722,6 +722,14 @@ config SENSORS_IBMPOWERNV
->  	  This driver can also be built as a module. If so, the module
->  	  will be called ibmpowernv.
->  
-> +config SENSORS_IEI_WT61P803_PUZZLE_HWMON
-> +	tristate "iEi WT61P803 PUZZLE MFD HWMON Driver"
-> +	depends on MFD_IEI_WT61P803_PUZZLE
-> +	help
-> +	  The iEi WT61P803 PUZZLE MFD HWMON Driver handles reading fan speed
-> +	  and writing fan PWM values. It also supports reading on-board
-> +	  temperature sensors.
-> +
->  config SENSORS_IIO_HWMON
->  	tristate "Hwmon driver that uses channels specified via iio maps"
->  	depends on IIO
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index a8f4b35b136b..b0afb2d6896f 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -83,6 +83,7 @@ obj-$(CONFIG_SENSORS_HIH6130)	+= hih6130.o
->  obj-$(CONFIG_SENSORS_ULTRA45)	+= ultra45_env.o
->  obj-$(CONFIG_SENSORS_I5500)	+= i5500_temp.o
->  obj-$(CONFIG_SENSORS_I5K_AMB)	+= i5k_amb.o
-> +obj-$(CONFIG_SENSORS_IEI_WT61P803_PUZZLE_HWMON) += iei-wt61p803-puzzle-hwmon.o
->  obj-$(CONFIG_SENSORS_IBMAEM)	+= ibmaem.o
->  obj-$(CONFIG_SENSORS_IBMPEX)	+= ibmpex.o
->  obj-$(CONFIG_SENSORS_IBMPOWERNV)+= ibmpowernv.o
-> diff --git a/drivers/hwmon/iei-wt61p803-puzzle-hwmon.c b/drivers/hwmon/iei-wt61p803-puzzle-hwmon.c
+> diff --git a/Documentation/hwmon/mp2975.rst b/Documentation/hwmon/mp2975.rst
 > new file mode 100644
-> index 000000000000..2691b943936b
+> index 000000000000..5b0609c62f48
 > --- /dev/null
-> +++ b/drivers/hwmon/iei-wt61p803-puzzle-hwmon.c
-> @@ -0,0 +1,511 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/* iEi WT61P803 PUZZLE MCU HWMON Driver
+> +++ b/Documentation/hwmon/mp2975.rst
+> @@ -0,0 +1,116 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +Kernel driver mp2975
+> +====================
+> +
+> +Supported chips:
+> +
+> +  * MPS MP12254
+> +
+> +    Prefix: 'mp2975'
+> +
+> +Author:
+> +
+> +	Vadim Pasternak <vadimp@nvidia.com>
+> +
+> +Description
+> +-----------
+> +
+> +This driver implements support for Monolithic Power Systems, Inc. (MPS)
+> +vendor dual-loop, digital, multi-phase controller MP2975.
+> +
+> +This device:
+> +- Supports up to two power rail.
+> +- Provides 8 pulse-width modulations (PWMs), and can be configured up
+> +  to 8-phase operation for rail 1 and up to 4-phase operation for rail
+> +  2.
+> +- Supports two pages 0 and 1 for telemetry and also pages 2 and 3 for
+> +  configuration.
+> +- Can configured VOUT readout in direct or VID format and allows
+> +  setting of different formats on rails 1 and 2. For VID the following
+> +  protocols are available: VR13 mode with 5-mV DAC; VR13 mode with
+> +  10-mV DAC, IMVP9 mode with 5-mV DAC.
+> +
+> +Device supports:
+> +- SVID interface.
+> +- AVSBus interface.
+> +
+> +Device complaint with:
+> +- PMBus rev 1.3 interface.
+> +
+> +Device supports direct format for reading output current, output voltage,
+> +input and output power and temperature.
+> +Device supports linear format for reading input voltage and input power.
+> +Device supports VID and direct formats for reading output voltage.
+> +The below VID modes are supported: VR12, VR13, IMVP9.
+> +
+> +The driver provides the next attributes for the current:
+> +- for current in: input, maximum alarm;
+> +- for current out input, maximum alarm and highest values;
+> +- for phase current: input and label.
+> +attributes.
+> +The driver exports the following attributes via the 'sysfs' files, where
+> +- 'n' is number of telemetry pages (from 1 to 2);
+> +- 'k' is number of configured phases (from 1 to 8);
+> +- indexes 1, 1*n for "iin";
+> +- indexes n+1, n+2 for "iout";
+> +- indexes 2*n+1 ... 2*n + k for phases.
+> +
+> +**curr[1-{2n}]_alarm**
+> +
+> +**curr[{n+1}-{n+2}]_highest**
+> +
+> +**curr[1-{2n+k}]_input**
+> +
+> +**curr[1-{2n+k}]_label**
+> +
+> +The driver provides the next attributes for the voltage:
+> +- for voltage in: input, high critical threshold, high critical alarm, all only
+> +  from page 0;
+> +- for voltage out: input, low and high critical thresholds, low and high
+> +  critical alarms, from pages 0 and 1;
+> +The driver exports the following attributes via the 'sysfs' files, where
+> +- 'n' is number of telemetry pages (from 1 to 2);
+> +- indexes 1 for "iin";
+> +- indexes n+1, n+2 for "vout";
+> +
+> +**in[1-{2n+1}]_crit**
+> +
+> +**in[1-{2n+1}]_crit_alarm**
+> +
+> +**in[1-{2n+1}]_input**
+> +
+> +**in[1-{2n+1}]_label**
+> +
+> +**in[2-{n+1}]_lcrit**
+> +
+> +**in[2-{n+1}1_lcrit_alarm**
+> +
+> +The driver provides the next attributes for the power:
+> +- for power in alarm and input.
+> +- for power out: highest and input.
+> +The driver exports the following attributes via the 'sysfs' files, where
+> +- 'n' is number of telemetry pages (from 1 to 2);
+> +- indexes 1 for "pin";
+> +- indexes n+1, n+2 for "pout";
+> +
+> +**power1_alarm**
+> +
+> +**power[2-{n+1}]_highest**
+> +
+> +**power[1-{2n+1}]_input**
+> +
+> +**power[1-{2n+1}]_label**
+> +
+> +The driver provides the next attributes for the temperature (only from page 0):
+> +
+> +
+> +**temp1_crit**
+> +
+> +**temp1_crit_alarm**
+> +
+> +**temp1_input**
+> +
+> +**temp1_max**
+> +
+> +**temp1_max_alarm**
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index e35db489b76f..1e6157e85437 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -200,6 +200,15 @@ config SENSORS_MAX8688
+>  	  This driver can also be built as a module. If so, the module will
+>  	  be called max8688.
+>  
+> +config SENSORS_MP2975
+> +	tristate "MPS MP2975"
+> +	help
+> +	  If you say yes here you get hardware monitoring support for MPS
+> +	  MP2975 Dual Loop Digital Multi-Phase Controller.
+> +
+> +	  This driver can also be built as a module. If so, the module will
+> +	  be called mp2975.
+> +
+>  config SENSORS_PXE1610
+>  	tristate "Infineon PXE1610"
+>  	help
+> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> index c4b15db996ad..0e2832e73cfc 100644
+> --- a/drivers/hwmon/pmbus/Makefile
+> +++ b/drivers/hwmon/pmbus/Makefile
+> @@ -23,6 +23,7 @@ obj-$(CONFIG_SENSORS_MAX20751)	+= max20751.o
+>  obj-$(CONFIG_SENSORS_MAX31785)	+= max31785.o
+>  obj-$(CONFIG_SENSORS_MAX34440)	+= max34440.o
+>  obj-$(CONFIG_SENSORS_MAX8688)	+= max8688.o
+> +obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
+>  obj-$(CONFIG_SENSORS_PXE1610)	+= pxe1610.o
+>  obj-$(CONFIG_SENSORS_TPS40422)	+= tps40422.o
+>  obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
+> diff --git a/drivers/hwmon/pmbus/mp2975.c b/drivers/hwmon/pmbus/mp2975.c
+> new file mode 100644
+> index 000000000000..f2f3e74c4953
+> --- /dev/null
+> +++ b/drivers/hwmon/pmbus/mp2975.c
+> @@ -0,0 +1,772 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Hardware monitoring driver for MPS Multi-phase Digital VR Controllers
 > + *
-> + * Copyright (C) 2020 Sartura Ltd.
-> + * Author: Luka Kovacic <luka.kovacic@sartura.hr>
+> + * Copyright (C) 2020 Nvidia Technologies Ltd.
 > + */
 > +
 > +#include <linux/err.h>
-> +#include <linux/hwmon-sysfs.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/irq.h>
-> +#include <linux/math64.h>
-> +#include <linux/mfd/iei-wt61p803-puzzle.h>
-> +#include <linux/mod_devicetable.h>
+> +#include <linux/i2c.h>
+> +#include <linux/init.h>
+> +#include <linux/kernel.h>
 > +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/property.h>
-> +#include <linux/slab.h>
-> +#include <linux/thermal.h>
+> +#include "pmbus.h"
 > +
-> +#define IEI_WT61P803_PUZZLE_HWMON_MAX_TEMP_NUM 2
-> +#define IEI_WT61P803_PUZZLE_HWMON_MAX_FAN_NUM 5
-> +#define IEI_WT61P803_PUZZLE_HWMON_MAX_PWM_NUM 2
-> +#define IEI_WT61P803_PUZZLE_HWMON_MAX_PWM_VAL 255
+> +/* Vendor specific registers. */
+> +#define MP2975_MFR_APS_HYS_R2		0x0d
+> +#define MP2975_MFR_SLOPE_TRIM3		0x1d
+> +#define MP2975_MFR_VR_MULTI_CONFIG_R1	0x0d
+> +#define MP2975_MFR_VR_MULTI_CONFIG_R2	0x1d
+> +#define MP2975_MFR_APS_DECAY_ADV	0x56
+> +#define MP2975_MFR_DC_LOOP_CTRL		0x59
+> +#define MP2975_MFR_OCP_UCP_PHASE_SET	0x65
+> +#define MP2975_MFR_VR_CONFIG1		0x68
+> +#define MP2975_MFR_READ_CS1_2		0x82
+> +#define MP2975_MFR_READ_CS3_4		0x83
+> +#define MP2975_MFR_READ_CS5_6		0x84
+> +#define MP2975_MFR_READ_CS7_8		0x85
+> +#define MP2975_MFR_READ_CS9_10		0x86
+> +#define MP2975_MFR_READ_CS11_12		0x87
+> +#define MP2975_MFR_READ_IOUT_PK		0x90
+> +#define MP2975_MFR_READ_POUT_PK		0x91
+> +#define MP2975_MFR_READ_VREF_R1		0xa1
+> +#define MP2975_MFR_READ_VREF_R2		0xa3
+> +#define MP2975_MFR_OVP_TH_SET		0xe5
+> +#define MP2975_MFR_UVP_SET		0xe6
 > +
-> +/**
-> + * struct iei_wt61p803_puzzle_thermal_cooling_device - Thermal cooling device instance
-> + *
-> + * @mcu_hwmon:		MCU HWMON struct pointer
-> + * @tcdev:		Thermal cooling device pointer
-> + * @name:		Thermal cooling device name
-> + * @pwm_channel:	PWM channel (0 or 1)
-> + * @cooling_levels:	Thermal cooling device cooling levels
-> + */
-> +struct iei_wt61p803_puzzle_thermal_cooling_device {
-> +	struct iei_wt61p803_puzzle_hwmon *mcu_hwmon;
-> +	struct thermal_cooling_device *tcdev;
-> +	char name[THERMAL_NAME_LENGTH];
-> +	int pwm_channel;
-> +	u8 *cooling_levels;
+> +#define MP2975_VOUT_FORMAT		BIT(15)
+> +#define MP2975_VID_STEP_SEL_R1		BIT(4)
+> +#define MP2975_IMVP9_EN_R1		BIT(13)
+> +#define MP2975_VID_STEP_SEL_R2		BIT(3)
+> +#define MP2975_IMVP9_EN_R2		BIT(12)
+> +#define MP2975_PRT_THRES_DIV_OV_EN	BIT(14)
+> +#define MP2975_DRMOS_KCS		GENMASK(13, 12)
+> +#define MP2975_PROT_DEV_OV_OFF		10
+> +#define MP2975_PROT_DEV_OV_ON		5
+> +#define MP2975_SENSE_AMPL		BIT(11)
+> +#define MP2975_SENSE_AMPL_UNIT		1
+> +#define MP2975_SENSE_AMPL_HALF		2
+> +#define MP2975_VIN_UV_LIMIT_UNIT	8
+> +
+> +#define MP2975_MAX_PHASE_RAIL1	8
+> +#define MP2975_MAX_PHASE_RAIL2	4
+> +#define MP2975_PAGE_NUM		2
+> +
+> +#define MP2975_RAIL2_FUNC	(PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT | \
+> +				 PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT | \
+> +				 PMBUS_PHASE_VIRTUAL)
+> +
+> +struct mp2975_data {
+> +	struct pmbus_driver_info info;
+> +	int vout_scale;
+> +	int vid_step[MP2975_PAGE_NUM];
+> +	int vref[MP2975_PAGE_NUM];
+> +	int vref_off[MP2975_PAGE_NUM];
+> +	int vout_max[MP2975_PAGE_NUM];
+> +	int vout_ov_fixed[MP2975_PAGE_NUM];
+> +	int vout_format[MP2975_PAGE_NUM];
+> +	int curr_sense_gain[MP2975_PAGE_NUM];
 > +};
 > +
-> +/**
-> + * struct iei_wt61p803_puzzle_hwmon - MCU HWMON Driver
-> + *
-> + * @mcu:				MCU struct pointer
-> + * @lock				General member lock
-> + * @response_buffer			Global MCU response buffer allocation
-> + * @temp_sensor_val:			Temperature sensor values
-> + * @fan_speed_val:			FAN speed (RPM) values
-> + * @pwm_val:				PWM values (0-255)
-> + * @thermal_cooling_dev_present:	Per-channel thermal cooling device control
-> + * @cdev:				Per-channel thermal cooling device private structure
-> + */
-> +struct iei_wt61p803_puzzle_hwmon {
-> +	struct iei_wt61p803_puzzle *mcu;
-> +	struct mutex lock;
-> +	unsigned char *response_buffer;
-> +	int temp_sensor_val[IEI_WT61P803_PUZZLE_HWMON_MAX_TEMP_NUM];
-> +	int fan_speed_val[IEI_WT61P803_PUZZLE_HWMON_MAX_FAN_NUM];
-> +	int pwm_val[IEI_WT61P803_PUZZLE_HWMON_MAX_PWM_NUM];
-> +	bool thermal_cooling_dev_present[IEI_WT61P803_PUZZLE_HWMON_MAX_PWM_NUM];
-> +	struct iei_wt61p803_puzzle_thermal_cooling_device
-> +		*cdev[IEI_WT61P803_PUZZLE_HWMON_MAX_PWM_NUM];
-> +};
+> +#define to_mp2975_data(x)  container_of(x, struct mp2975_data, info)
 > +
-> +#define raw_temp_to_milidegree_celsius(x) ((int)((x - 0x80)*1000))
-
-Spaces around '*', please, and (x). checkpatch --strict will tell about it.
-
-> +static int iei_wt61p803_puzzle_read_temp_sensor
-> +(struct iei_wt61p803_puzzle_hwmon *mcu_hwmon, int channel, int *value)
-
-Odd multi-line alignment. Please use either
-
-static int
-iei_wt61p803_puzzle_read_temp_sensor(struct iei_wt61p803_puzzle_hwmon *mcu_hwmon, int channel,
-				     int *value)
-
-or
-
-static int iei_wt61p803_puzzle_read_temp_sensor(struct iei_wt61p803_puzzle_hwmon *mcu_hwmon,
-						int channel, int *value)
-
-There are lots of those in this driver. Please run 
-checkpatch --strict and fix what it reports.
-
+> +static int mp2975_read_byte_data(struct i2c_client *client, int page, int reg)
+> +{
+> +	switch (reg) {
+> +	case PMBUS_VOUT_MODE:
+> +		/*
+> +		 * Enforce VOUT direct format, since device allows to set the
+> +		 * different formats for the different rails. Conversion from
+> +		 * VID to direct provided by driver internally, in case it is
+> +		 * necessary.
+> +		 */
+> +		return PB_VOUT_MODE_DIRECT;
+> +	default:
+> +		return -ENODATA;
+> +	}
+> +}
+> +
+> +static int
+> +mp2975_read_word_helper(struct i2c_client *client, int page, int phase, u8 reg,
+> +			u16 mask)
+> +{
+> +	int ret = pmbus_read_word_data(client, page, phase, reg);
+> +
+> +	return (ret > 0) ? ret & mask : ret;
+> +}
+> +
+> +static int
+> +mp2975_vid2direct(int vrf, int val)
+> +{
+> +	switch (vrf) {
+> +	case vr12:
+> +		if (val >= 0x01)
+> +			return 250 + (val - 1) * 5;
+> +		break;
+> +	case vr13:
+> +		if (val >= 0x01)
+> +			return 500 + (val - 1) * 10;
+> +		break;
+> +	case imvp9:
+> +		if (val >= 0x01)
+> +			return 200 + (val - 1) * 10;
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +	return 0;
+> +}
+> +
+> +static int
+> +mp2975_read_phase(struct i2c_client *client, struct mp2975_data *data,
+> +		  int page, int phase, u8 reg)
+> +{
+> +	int ph_curr, ret;
+> +
+> +	ret = pmbus_read_word_data(client, page, phase, reg);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (!((phase + 1) % MP2975_PAGE_NUM))
+> +		ret >>= 8;
+> +	ret &= 0xff;
+> +
+> +	/*
+> +	 * Output value is calculated as: (READ_CSx / 80 – 1.23) / (Kcs * Rcs)
+> +	 * where:
+> +	 * - Kcs is the DrMOS current sense gain of power stage, which is
+> +	 *   obtained from the register MP2975_MFR_VR_CONFIG1, bits 13-12 with
+> +	 *   the following selection of DrMOS (data->curr_sense_gain[page]):
+> +	 *   00b - 5µA/A, 01b - 8.5µA/A, 10b - 9.7µA/A, 11b - 10µA/A.
+> +	 * - Rcs is the internal phase current sense resistor which is constant
+> +	 *   value 1kΩ.
+> +	 */
+> +	ph_curr = ret * 100 - 9800;
+> +
+> +	/*
+> +	 * Current phase sensing, providing by the device is not accurate
+> +	 * for the light load. This because sampling of current occurrence of
+> +	 * bit weight has a big deviation for light load. For handling such
+> +	 * case phase current is represented as the maximum between the value
+> +	 * calculated  above and total rail current divided by number phases.
+> +	 */
+> +	ret = pmbus_read_word_data(client, page, phase, PMBUS_READ_IOUT);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return max_t(int, DIV_ROUND_CLOSEST(ret, data->info.phases[page]),
+> +		     DIV_ROUND_CLOSEST(ph_curr, data->curr_sense_gain[page]));
+> +}
+> +
+> +static int
+> +mp2975_read_phases(struct i2c_client *client, struct mp2975_data *data,
+> +		   int page, int phase)
 > +{
 > +	int ret;
-> +	size_t reply_size = 0;
-> +	unsigned char *resp_buf = mcu_hwmon->response_buffer;
-> +	unsigned char temp_sensor_ntc_cmd[4] = {
-> +		IEI_WT61P803_PUZZLE_CMD_HEADER_START,
-> +		IEI_WT61P803_PUZZLE_CMD_TEMP,
-> +		IEI_WT61P803_PUZZLE_CMD_TEMP_ALL
-> +	};
 > +
-> +	if (channel > 1 && channel < 0)
-> +		return -EINVAL;
-
-Unnecessary range check.
-
-> +
-> +	mutex_lock(&mcu_hwmon->lock);
-> +	ret = iei_wt61p803_puzzle_write_command(mcu_hwmon->mcu,
-> +			temp_sensor_ntc_cmd, sizeof(temp_sensor_ntc_cmd),
-> +			resp_buf, &reply_size);
-
-	if (ret < 0)
-		goto unlock;
-
-> +	if (!ret) {
-> +		/* Check the number of NTC values (should be 0x32/'2') */
-> +		if (resp_buf[3] == 0x32) {
-> +			/* Write values to the struct */
-> +			mcu_hwmon->temp_sensor_val[0] =
-> +				raw_temp_to_milidegree_celsius(resp_buf[4]);
-> +			mcu_hwmon->temp_sensor_val[1] =
-> +				raw_temp_to_milidegree_celsius(resp_buf[5]);
-
-What is the point of storing the return values in mcu_hwmon->temp_sensor_val[] ?
-
+> +	if (page) {
+> +		switch (phase) {
+> +		case 0 ... 1:
+> +			ret = mp2975_read_phase(client, data, page, phase,
+> +						MP2975_MFR_READ_CS7_8);
+> +			break;
+> +		case 2 ... 3:
+> +			ret = mp2975_read_phase(client, data, page, phase,
+> +						MP2975_MFR_READ_CS9_10);
+> +			break;
+> +		case 4 ... 5:
+> +			ret = mp2975_read_phase(client, data, page, phase,
+> +						MP2975_MFR_READ_CS11_12);
+> +			break;
+> +		default:
+> +			return -ENODATA;
 > +		}
-> +
-
-Unnecessary empty line. checkpatch --strict reports this.
-
+> +	} else {
+> +		switch (phase) {
+> +		case 0 ... 1:
+> +			ret = mp2975_read_phase(client, data, page, phase,
+> +						MP2975_MFR_READ_CS1_2);
+> +			break;
+> +		case 2 ... 3:
+> +			ret = mp2975_read_phase(client, data, page, phase,
+> +						MP2975_MFR_READ_CS3_4);
+> +			break;
+> +		case 4 ... 5:
+> +			ret = mp2975_read_phase(client, data, page, phase,
+> +						MP2975_MFR_READ_CS5_6);
+> +			break;
+> +		case 6 ... 7:
+> +			ret = mp2975_read_phase(client, data, page, phase,
+> +						MP2975_MFR_READ_CS7_8);
+> +			break;
+> +		case 8 ... 9:
+> +			ret = mp2975_read_phase(client, data, page, phase,
+> +						MP2975_MFR_READ_CS9_10);
+> +			break;
+> +		case 10 ... 11:
+> +			ret = mp2975_read_phase(client, data, page, phase,
+> +						MP2975_MFR_READ_CS11_12);
+> +			break;
+> +		default:
+> +			return -ENODATA;
+> +		}
 > +	}
-> +	*value = mcu_hwmon->temp_sensor_val[channel];
-
-unlock:
-
-> +	mutex_unlock(&mcu_hwmon->lock);
+> +	return ret;
+> +}
+> +
+> +static int mp2975_read_word_data(struct i2c_client *client, int page,
+> +				 int phase, int reg)
+> +{
+> +	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
+> +	struct mp2975_data *data = to_mp2975_data(info);
+> +	int ret;
+> +
+> +	switch (reg) {
+> +	case PMBUS_OT_FAULT_LIMIT:
+> +		ret = mp2975_read_word_helper(client, page, phase, reg,
+> +					      GENMASK(7, 0));
+> +		break;
+> +	case PMBUS_VIN_OV_FAULT_LIMIT:
+> +		ret = mp2975_read_word_helper(client, page, phase, reg,
+> +					      GENMASK(7, 0));
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = DIV_ROUND_CLOSEST(ret, MP2975_VIN_UV_LIMIT_UNIT);
+> +		break;
+> +	case PMBUS_VOUT_OV_FAULT_LIMIT:
+> +		/*
+> +		 * Register provides two values for over-voltage protection
+> +		 * threshold for fixed (ovp2) and tracking (ovp1) modes. The
+> +		 * minimum of these two values is provided as over-voltage
+> +		 * fault alarm.
+> +		 */
+> +		ret = mp2975_read_word_helper(client, page, phase,
+> +					      MP2975_MFR_OVP_TH_SET,
+> +					      GENMASK(2, 0));
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = min_t(int, data->vout_max[page] + 50 * (ret + 1),
+> +			    data->vout_ov_fixed[page]);
+> +		break;
+> +	case PMBUS_VOUT_UV_FAULT_LIMIT:
+> +		ret = mp2975_read_word_helper(client, page, phase,
+> +					      MP2975_MFR_UVP_SET,
+> +					      GENMASK(2, 0));
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = DIV_ROUND_CLOSEST(data->vref[page] * 10 - 50 *
+> +					(ret + 1) * data->vout_scale, 10);
+> +		break;
+> +	case PMBUS_READ_VOUT:
+> +		ret = mp2975_read_word_helper(client, page, phase, reg,
+> +					      GENMASK(11, 0));
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		/*
+> +		 * READ_VOUT can be provided in VID or direct format. The
+> +		 * format type is specified by bit 15 of the register
+> +		 * MP2975_MFR_DC_LOOP_CTRL. The driver enforces VOUT direct
+> +		 * format, since device allows to set the different formats for
+> +		 * the different rails and also all VOUT limits registers are
+> +		 * provided in a direct format. In case format is VID - convert
+> +		 * to direct.
+> +		 */
+> +		if (data->vout_format[page] == vid)
+> +			ret = mp2975_vid2direct(info->vrm_version[page], ret);
+> +		break;
+> +	case PMBUS_VIRT_READ_POUT_MAX:
+> +		ret = mp2975_read_word_helper(client, page, phase,
+> +					      MP2975_MFR_READ_POUT_PK,
+> +					      GENMASK(12, 0));
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = DIV_ROUND_CLOSEST(ret, 4);
+> +		break;
+> +	case PMBUS_VIRT_READ_IOUT_MAX:
+> +		ret = mp2975_read_word_helper(client, page, phase,
+> +					      MP2975_MFR_READ_IOUT_PK,
+> +					      GENMASK(12, 0));
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = DIV_ROUND_CLOSEST(ret, 4);
+> +		break;
+> +	case PMBUS_READ_IOUT:
+> +		ret = mp2975_read_phases(client, data, page, phase);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		break;
+> +	case PMBUS_UT_WARN_LIMIT:
+> +	case PMBUS_UT_FAULT_LIMIT:
+> +	case PMBUS_VIN_UV_WARN_LIMIT:
+> +	case PMBUS_VIN_UV_FAULT_LIMIT:
+> +	case PMBUS_VOUT_UV_WARN_LIMIT:
+> +	case PMBUS_VOUT_OV_WARN_LIMIT:
+> +	case PMBUS_VIN_OV_WARN_LIMIT:
+> +	case PMBUS_IIN_OC_FAULT_LIMIT:
+> +	case PMBUS_IOUT_OC_LV_FAULT_LIMIT:
+> +	case PMBUS_IIN_OC_WARN_LIMIT:
+> +	case PMBUS_IOUT_OC_WARN_LIMIT:
+> +	case PMBUS_IOUT_OC_FAULT_LIMIT:
+> +	case PMBUS_IOUT_UC_FAULT_LIMIT:
+> +	case PMBUS_POUT_OP_FAULT_LIMIT:
+> +	case PMBUS_POUT_OP_WARN_LIMIT:
+> +	case PMBUS_PIN_OP_WARN_LIMIT:
+> +		return -ENXIO;
+> +	default:
+> +		return -ENODATA;
+> +	}
 > +
 > +	return ret;
 > +}
 > +
-> +#define raw_fan_val_to_rpm(x, y) ((int)(((x)<<8|(y))/2)*60)
-> +static int iei_wt61p803_puzzle_read_fan_speed
-> +(struct iei_wt61p803_puzzle_hwmon *mcu_hwmon, int channel, int *value)
+> +static int mp2975_identify_multiphase_rail2(struct i2c_client *client)
 > +{
 > +	int ret;
-> +	size_t reply_size = 0;
-> +	unsigned char *resp_buf = mcu_hwmon->response_buffer;
-> +	unsigned char fan_speed_cmd[4] = {
-> +		IEI_WT61P803_PUZZLE_CMD_HEADER_START,
-> +		IEI_WT61P803_PUZZLE_CMD_FAN,
-> +		IEI_WT61P803_PUZZLE_CMD_FAN_RPM_0
-> +	};
 > +
-> +	switch (channel) {
-> +	case 0:
-> +		fan_speed_cmd[2] = IEI_WT61P803_PUZZLE_CMD_FAN_RPM_0;
-> +		break;
+> +	/*
+> +	 * Identify multiphase for rail 2 - could be from 0 to 4.
+> +	 * In case phase number is zero – only page zero is supported
+> +	 */
+> +	ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, 2);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* Identify multiphase for rail 2 - could be from 0 to 4. */
+> +	ret = i2c_smbus_read_word_data(client, MP2975_MFR_VR_MULTI_CONFIG_R2);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret &= GENMASK(2, 0);
+> +	return (ret >= 4) ? 4 : ret;
+> +}
+> +
+> +static void mp2975_set_phase_rail1(struct pmbus_driver_info *info)
+> +{
+> +	int i;
+> +
+> +	for (i = 0 ; i < info->phases[0]; i++)
+> +		info->pfunc[i] = PMBUS_HAVE_IOUT;
+> +}
+> +
+> +static void
+> +mp2975_set_phase_rail2(struct pmbus_driver_info *info, int num_phases)
+> +{
+> +	int i;
+> +
+> +	/* Set phases for rail 2 from upper to lower. */
+> +	for (i = 1; i <= num_phases; i++)
+> +		info->pfunc[MP2975_MAX_PHASE_RAIL1 - i] = PMBUS_HAVE_IOUT;
+> +}
+> +
+> +static int
+> +mp2975_identify_multiphase(struct i2c_client *client, struct mp2975_data *data,
+> +			   struct pmbus_driver_info *info)
+> +{
+> +	int num_phases2, ret;
+> +
+> +	ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, 2);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* Identify multiphase for rail 1 - could be from 1 to 8. */
+> +	ret = i2c_smbus_read_word_data(client, MP2975_MFR_VR_MULTI_CONFIG_R1);
+> +	if (ret <= 0)
+> +		return ret;
+> +
+> +	info->phases[0] = ret & GENMASK(3, 0);
+> +
+> +	/*
+> +	 * The device provides a total of 8 PWM pins, and can be configured
+> +	 * to different phase count applications for rail 1 and rail 2.
+> +	 * Rail 1 can be set to 8 phases, while rail 2 can only be set to 4
+> +	 * phases at most. When rail 1’s phase count is configured as 0, rail
+> +	 * 1 operates with 1-phase DCM. When rail 2 phase count is configured
+> +	 * as 0, rail 2 is disabled.
+> +	 */
+> +	if (info->phases[0] > MP2975_MAX_PHASE_RAIL1)
+> +		return -EINVAL;
+> +
+> +	mp2975_set_phase_rail1(info);
+> +	num_phases2 = min(MP2975_MAX_PHASE_RAIL1 - info->phases[0],
+> +			  MP2975_MAX_PHASE_RAIL2);
+> +	if (info->phases[1] && info->phases[1] <= num_phases2)
+> +		mp2975_set_phase_rail2(info, num_phases2);
+> +
+> +	return 0;
+> +}
+> +
+> +static int
+> +mp2975_identify_vid(struct i2c_client *client, struct mp2975_data *data,
+> +		    struct pmbus_driver_info *info, u32 reg, int page,
+> +		    u32 imvp_bit, u32 vr_bit)
+> +{
+> +	int ret;
+> +
+> +	/* Identify VID mode and step selection. */
+> +	ret = i2c_smbus_read_word_data(client, reg);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (ret & imvp_bit) {
+> +		info->vrm_version[page] = imvp9;
+> +		data->vid_step[page] = MP2975_PROT_DEV_OV_OFF;
+> +	} else if (ret & vr_bit) {
+> +		info->vrm_version[page] = vr12;
+> +		data->vid_step[page] = MP2975_PROT_DEV_OV_ON;
+> +	} else {
+> +		info->vrm_version[page] = vr13;
+> +		data->vid_step[page] = MP2975_PROT_DEV_OV_OFF;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int
+> +mp2975_identify_rails_vid(struct i2c_client *client, struct mp2975_data *data,
+> +			  struct pmbus_driver_info *info)
+> +{
+> +	int ret;
+> +
+> +	ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, 2);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* Identify VID mode for rail 1. */
+> +	ret = mp2975_identify_vid(client, data, info,
+> +				  MP2975_MFR_VR_MULTI_CONFIG_R1, 0,
+> +				  MP2975_IMVP9_EN_R1, MP2975_VID_STEP_SEL_R1);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* Identify VID mode for rail 2, if connected. */
+> +	if (info->phases[1])
+> +		ret = mp2975_identify_vid(client, data, info,
+> +					  MP2975_MFR_VR_MULTI_CONFIG_R2, 1,
+> +					  MP2975_IMVP9_EN_R2,
+> +					  MP2975_VID_STEP_SEL_R2);
+> +	return ret;
+> +}
+> +
+> +static int
+> +mp2975_current_sense_gain_get(struct i2c_client *client,
+> +			      struct mp2975_data *data)
+> +{
+> +	int i, ret;
+> +
+> +	/*
+> +	 * Obtain DrMOS current sense gain of power stage from the register
+> +	 * MP2975_MFR_VR_CONFIG1, bits 13-12. The value is selected as below:
+> +	 * 00b - 5µA/A, 01b - 8.5µA/A, 10b - 9.7µA/A, 11b - 10µA/A. Other
+> +	 * values are invalid.
+> +	 */
+> +	for (i = 0 ; i < data->info.pages; i++) {
+> +		ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, i);
+> +		if (ret < 0)
+> +			return ret;
+> +		ret = i2c_smbus_read_word_data(client,
+> +					       MP2975_MFR_VR_CONFIG1);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		switch ((ret & MP2975_DRMOS_KCS) >> 12) {
+> +		case 0:
+> +			data->curr_sense_gain[i] = 50;
+> +			break;
+> +		case 1:
+> +			data->curr_sense_gain[i] = 85;
+> +			break;
+> +		case 2:
+> +			data->curr_sense_gain[i] = 97;
+> +			break;
+> +		default:
+> +			data->curr_sense_gain[i] = 100;
+> +			break;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int
+> +mp2975_vref_get(struct i2c_client *client, struct mp2975_data *data,
+> +		struct pmbus_driver_info *info)
+> +{
+> +	int ret;
+> +
+> +	ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, 3);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* Get voltage reference value for rail 1. */
+> +	ret = i2c_smbus_read_word_data(client, MP2975_MFR_READ_VREF_R1);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	data->vref[0] = ret * data->vid_step[0];
+> +
+> +	/* Get voltage reference value for rail 2, if connected. */
+> +	if (data->info.pages == MP2975_PAGE_NUM) {
+> +		ret = i2c_smbus_read_word_data(client, MP2975_MFR_READ_VREF_R2);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		data->vref[1] = ret * data->vid_step[1];
+> +	}
+> +	return 0;
+> +}
+> +
+> +static int
+> +mp2975_vref_offset_get(struct i2c_client *client, struct mp2975_data *data,
+> +		       int page)
+> +{
+> +	int ret;
+> +
+> +	ret = i2c_smbus_read_word_data(client, MP2975_MFR_OVP_TH_SET);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	switch ((ret & GENMASK(5, 3)) >> 3) {
 > +	case 1:
-> +		fan_speed_cmd[2] = IEI_WT61P803_PUZZLE_CMD_FAN_RPM_1;
+> +		data->vref_off[page] = 140;
 > +		break;
 > +	case 2:
-> +		fan_speed_cmd[2] = IEI_WT61P803_PUZZLE_CMD_FAN_RPM_2;
-> +		break;
-> +	case 3:
-> +		fan_speed_cmd[2] = IEI_WT61P803_PUZZLE_CMD_FAN_RPM_3;
+> +		data->vref_off[page] = 220;
 > +		break;
 > +	case 4:
-> +		fan_speed_cmd[2] = IEI_WT61P803_PUZZLE_CMD_FAN_RPM_4;
+> +		data->vref_off[page] = 400;
 > +		break;
 > +	default:
 > +		return -EINVAL;
 > +	}
-
-This would be much simpler written as
-
-static const u8 fan_speed_cmds[] = {
-	IEI_WT61P803_PUZZLE_CMD_FAN_RPM_0,
-	IEI_WT61P803_PUZZLE_CMD_FAN_RPM_1,
-	IEI_WT61P803_PUZZLE_CMD_FAN_RPM_2,
-	IEI_WT61P803_PUZZLE_CMD_FAN_RPM_3,
-	IEI_WT61P803_PUZZLE_CMD_FAN_RPM_4
-};
-	...
-
-	fan_speed_cmd[2] = fan_speed_cmds[channel];
-
-> +
-> +	mutex_lock(&mcu_hwmon->lock);
-> +	ret = iei_wt61p803_puzzle_write_command(mcu_hwmon->mcu, fan_speed_cmd,
-> +			sizeof(fan_speed_cmd), resp_buf, &reply_size);
-
-	if (ret < 0)
-		goto unlock;
-
-> +	if (!ret)
-> +		mcu_hwmon->fan_speed_val[channel] = raw_fan_val_to_rpm(resp_buf[3],
-> +				resp_buf[4]);
-> +
-> +	*value = mcu_hwmon->fan_speed_val[channel];
-
-What exactly is the point of storing the result in
-mcu_hwmon->fan_speed_val[channel] ?
-
-I won't comment about similar code again, but please drop any such
-unnecessary arrays.
-
-> +	mutex_unlock(&mcu_hwmon->lock);
-> +
 > +	return 0;
 > +}
 > +
-> +static int iei_wt61p803_puzzle_write_pwm_channel
-> +(struct iei_wt61p803_puzzle_hwmon *mcu_hwmon, int channel, long pwm_set_val)
+> +static int
+> +mp2975_vout_max_get(struct i2c_client *client, struct mp2975_data *data,
+> +		    struct pmbus_driver_info *info, int page)
 > +{
 > +	int ret;
-> +	size_t reply_size = 0;
-> +	unsigned char *resp_buf = mcu_hwmon->response_buffer;
-> +	unsigned char pwm_set_cmd[6] = {
-> +		IEI_WT61P803_PUZZLE_CMD_HEADER_START,
-> +		IEI_WT61P803_PUZZLE_CMD_FAN,
-> +		IEI_WT61P803_PUZZLE_CMD_FAN_PWM_WRITE,
-> +		IEI_WT61P803_PUZZLE_CMD_FAN_PWM_0,
-> +		0x00
-> +	};
 > +
-> +	switch (channel) {
-> +	case 0:
-> +		pwm_set_cmd[3] = IEI_WT61P803_PUZZLE_CMD_FAN_PWM_0;
-> +		break;
-> +	case 1:
-> +		pwm_set_cmd[3] = IEI_WT61P803_PUZZLE_CMD_FAN_PWM_1;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-
-Same as above - it would be much simpler to have IEI_WT61P803_PUZZLE_CMD_FAN_PWM_0
-and IEI_WT61P803_PUZZLE_CMD_FAN_PWM_1 in an array and get it from there.
-The range check is unnecessary.
-
+> +	/* Get maximum reference voltage of VID-DAC in VID format. */
+> +	ret = i2c_smbus_read_word_data(client, PMBUS_VOUT_MAX);
+> +	if (ret < 0)
+> +		return ret;
 > +
-> +	if (pwm_set_val < 0 || pwm_set_val > IEI_WT61P803_PUZZLE_HWMON_MAX_PWM_VAL)
-> +		return -EINVAL;
-> +
-> +	/* Add the PWM value to the command */
-> +	pwm_set_cmd[4] = (char)pwm_set_val;
-
-I think this typecast is quite unnecessary. Besides, it is wrong, since the
-value is an unsigned char.
-
-> +
-> +	mutex_lock(&mcu_hwmon->lock);
-> +	ret = iei_wt61p803_puzzle_write_command(mcu_hwmon->mcu, pwm_set_cmd,
-> +			sizeof(pwm_set_cmd), resp_buf, &reply_size);
-
-	if (ret < 0)
-		goto unlock;
-
-> +	if (!ret) {
-> +		/* Store the PWM value */
-
-What for ?
-
-Ah yes, I think I finally get it: All this odd handling is to be able to ignore
-errors. But that is not acceptable. If there is an error, report it to the user.
-You can't really claim no error to the user when the value wasn't stored.
-
-> +		if (resp_buf[0] == IEI_WT61P803_PUZZLE_CMD_HEADER_START &&
-> +				resp_buf[1] == IEI_WT61P803_PUZZLE_CMD_RESPONSE_OK &&
-> +				resp_buf[2] == IEI_WT61P803_PUZZLE_CHECKSUM_RESPONSE_OK)
-> +			mcu_hwmon->pwm_val[channel] = (int)pwm_set_val;
-> +	}
-> +	mutex_unlock(&mcu_hwmon->lock);
-> +
+> +	data->vout_max[page] = mp2975_vid2direct(info->vrm_version[page], ret &
+> +						 GENMASK(8, 0));
 > +	return 0;
 > +}
 > +
-> +static int iei_wt61p803_puzzle_read_pwm_channel
-> +(struct iei_wt61p803_puzzle_hwmon *mcu_hwmon, int channel, int *value)
+> +static int
+> +mp2975_identify_vout_format(struct i2c_client *client,
+> +			    struct mp2975_data *data, int page)
 > +{
 > +	int ret;
-> +	size_t reply_size = 0;
-> +	unsigned char *resp_buf = mcu_hwmon->response_buffer;
-> +	unsigned char pwm_get_cmd[5] = {
-> +		IEI_WT61P803_PUZZLE_CMD_HEADER_START,
-> +		IEI_WT61P803_PUZZLE_CMD_FAN,
-> +		IEI_WT61P803_PUZZLE_CMD_FAN_PWM_READ,
-> +		IEI_WT61P803_PUZZLE_CMD_FAN_PWM_0
-> +	};
 > +
-> +	switch (channel) {
-> +	case 0:
-> +		pwm_get_cmd[3] = IEI_WT61P803_PUZZLE_CMD_FAN_PWM_0;
-> +		break;
-> +	case 1:
-> +		pwm_get_cmd[3] = IEI_WT61P803_PUZZLE_CMD_FAN_PWM_1;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-
-Same comments as before.
-
+> +	ret = i2c_smbus_read_word_data(client, MP2975_MFR_DC_LOOP_CTRL);
+> +	if (ret < 0)
+> +		return ret;
 > +
-> +	mutex_lock(&mcu_hwmon->lock);
-> +	ret = iei_wt61p803_puzzle_write_command(mcu_hwmon->mcu, pwm_get_cmd,
-> +			sizeof(pwm_get_cmd), resp_buf, &reply_size);
-> +	if (!ret) {
-> +		/* Store the PWM value */
-> +		if (resp_buf[2] == IEI_WT61P803_PUZZLE_CMD_FAN_PWM_READ)
-> +			mcu_hwmon->pwm_val[channel] = (int)resp_buf[3];
-> +	}
-
-Same comments as before.
-
-> +	*value = mcu_hwmon->pwm_val[channel];
-> +	mutex_unlock(&mcu_hwmon->lock);
+> +	if (ret & MP2975_VOUT_FORMAT)
+> +		data->vout_format[page] = vid;
+> +	else
+> +		data->vout_format[page] = direct;
+> +	return 0;
+> +}
+> +
+> +static int
+> +mp2975_vout_ov_scale_get(struct i2c_client *client, struct mp2975_data *data,
+> +			 struct pmbus_driver_info *info)
+> +{
+> +	int thres_dev, sense_ampl, ret;
+> +
+> +	ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, 0);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/*
+> +	 * Get divider for over- and under-voltage protection thresholds
+> +	 * configuration from the Advanced Options of Auto Phase Shedding and
+> +	 * decay register.
+> +	 */
+> +	ret = i2c_smbus_read_word_data(client, MP2975_MFR_APS_DECAY_ADV);
+> +	if (ret >= 0)
+> +		thres_dev = ret & MP2975_PRT_THRES_DIV_OV_EN ?
+> +			    MP2975_PROT_DEV_OV_ON : MP2975_PROT_DEV_OV_OFF;
+> +	else
+> +		return ret;
+> +
+> +	/* Select the gain of remote sense amplifier. */
+> +	ret = i2c_smbus_read_word_data(client, PMBUS_VOUT_SCALE_LOOP);
+> +	if (ret >= 0)
+> +		sense_ampl = ret & MP2975_SENSE_AMPL ? MP2975_SENSE_AMPL_HALF :
+> +			     MP2975_SENSE_AMPL_UNIT;
+> +	else
+> +		return ret;
+> +
+> +	data->vout_scale = sense_ampl * thres_dev;
 > +
 > +	return 0;
 > +}
 > +
-> +static int iei_wt61p803_puzzle_read(struct device *dev, enum hwmon_sensor_types type,
-> +		u32 attr, int channel, long *val)
+> +static int
+> +mp2975_vout_per_rail_config_get(struct i2c_client *client,
+> +				struct mp2975_data *data,
+> +				struct pmbus_driver_info *info)
 > +{
-> +	struct iei_wt61p803_puzzle_hwmon *mcu_hwmon =
-> +		dev_get_drvdata(dev->parent);
-> +	int ret, value;
+> +	int i, ret;
 > +
-> +	switch (type) {
-> +	case hwmon_pwm:
-> +		if (attr != hwmon_pwm_input)
-> +			return -ENODEV;
-> +		ret = iei_wt61p803_puzzle_read_pwm_channel(mcu_hwmon, channel, &value);
-> +		if (ret)
+> +	for (i = 0; i < data->info.pages; i++) {
+> +		ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, i);
+> +		if (ret < 0)
 > +			return ret;
-> +		*val = (long)value;
-> +		return ret;
-> +	case hwmon_fan:
-> +		if (attr != hwmon_fan_input)
-> +			return -ENODEV;
-> +		ret = iei_wt61p803_puzzle_read_fan_speed(mcu_hwmon, channel, &value);
-> +		if (ret)
+> +
+> +		/* Obtain voltage reference offsets. */
+> +		ret = mp2975_vref_offset_get(client, data, i);
+> +		if (ret < 0)
 > +			return ret;
-> +		*val = (long)value;
-
-Unncecssary typecast. Plase check all typecasts and keep only those which
-are really needed (if there are any).
-
-> +		return ret;
-
-ret is 0 here.
-
-> +	case hwmon_temp:
-> +		if (attr != hwmon_temp_input)
-> +			return -ENODEV;
-> +		ret = iei_wt61p803_puzzle_read_temp_sensor(mcu_hwmon, channel, &value);
-> +		if (ret)
+> +
+> +		/* Obtain maximum voltage values. */
+> +		ret = mp2975_vout_max_get(client, data, info, i);
+> +		if (ret < 0)
 > +			return ret;
-> +		*val = (long)value;
-> +		return ret;
-
-ret is 0 here. That is sprinkled through the code. Please
-replace with "return 0;" everywhere.
-
-> +	default:
-> +		return -ENODEV;
+> +
+> +		/*
+> +		 * Get VOUT format for READ_VOUT command : VID or direct.
+> +		 * Pages on same device can be configured with different
+> +		 * formats.
+> +		 */
+> +		ret = mp2975_identify_vout_format(client, data, i);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		/*
+> +		 * Set over-voltage fixed value. Thresholds are provided as
+> +		 * fixed value, and tracking value. The minimum of them are
+> +		 * exposed as over-voltage critical threshold.
+> +		 */
+> +		data->vout_ov_fixed[i] = data->vref[i] +
+> +					 DIV_ROUND_CLOSEST(data->vref_off[i] *
+> +							   data->vout_scale,
+> +							   10);
 > +	}
-> +}
-> +
-> +static int iei_wt61p803_puzzle_write(struct device *dev, enum hwmon_sensor_types type,
-> +		u32 attr, int channel, long val)
-> +{
-> +	struct iei_wt61p803_puzzle_hwmon *mcu_hwmon =
-> +		dev_get_drvdata(dev->parent);
-> +
-> +	switch (type) {
-> +	case hwmon_pwm:
-> +		if (attr != hwmon_pwm_input)
-> +			return -ENODEV;
-> +		if (mcu_hwmon->thermal_cooling_dev_present[channel]) {
-> +			/*
-> +			 * The Thermal Framework has already claimed this specific PWM
-> +			 * channel.
-> +			 */
-> +			return -EBUSY;
-> +		}
-This won't happen (the attribute is read-only in this case), and the check is
-therefore unnecessary and just adds confusion.
-
-> +		return iei_wt61p803_puzzle_write_pwm_channel(mcu_hwmon, channel, val);
-> +	default:
-> +		return -ENODEV;
-> +	}
-
-Unless there is a plan to make other types writable, this switch statement
-is unnecessary. Only pwm attributes are writeable, after all, so the code
-won't be called for anything else.
-
-> +}
-> +
-> +static umode_t iei_wt61p803_puzzle_is_visible(const void *data,
-> +		enum hwmon_sensor_types type, u32 attr, int channel)
-> +{
-> +	const struct iei_wt61p803_puzzle_hwmon *mcu_hwmon = data;
-> +
-> +	switch (type) {
-> +	case hwmon_pwm:
-> +		switch (attr) {
-> +		case hwmon_pwm_input:
-> +			if (mcu_hwmon->thermal_cooling_dev_present[channel])
-> +				return 0444;
-> +			return 0644;
-> +		default:
-> +			return 0;
-> +		}
-> +	case hwmon_fan:
-> +		switch (attr) {
-> +		case hwmon_fan_input:
-> +			return 0444;
-> +		default:
-> +			return 0;
-> +		}
-> +	case hwmon_temp:
-> +		switch (attr) {
-> +		case hwmon_temp_input:
-> +			return 0444;
-> +		default:
-> +			return 0;
-> +		}
-> +	default:
-> +		return 0;
-> +	}
-> +}
-> +
-> +static const struct hwmon_ops iei_wt61p803_puzzle_hwmon_ops = {
-> +	.is_visible = iei_wt61p803_puzzle_is_visible,
-> +	.read = iei_wt61p803_puzzle_read,
-> +	.write = iei_wt61p803_puzzle_write,
-> +};
-> +
-> +static const struct hwmon_channel_info *iei_wt61p803_puzzle_info[] = {
-> +	HWMON_CHANNEL_INFO(pwm,
-> +			HWMON_PWM_INPUT,
-> +			HWMON_PWM_INPUT),
-> +	HWMON_CHANNEL_INFO(fan,
-> +			HWMON_F_INPUT,
-> +			HWMON_F_INPUT,
-> +			HWMON_F_INPUT,
-> +			HWMON_F_INPUT,
-> +			HWMON_F_INPUT),
-> +	HWMON_CHANNEL_INFO(temp,
-> +			HWMON_T_INPUT,
-> +			HWMON_T_INPUT),
-> +	NULL
-> +};
-> +
-> +static const struct hwmon_chip_info iei_wt61p803_puzzle_chip_info = {
-> +	.ops = &iei_wt61p803_puzzle_hwmon_ops,
-> +	.info = iei_wt61p803_puzzle_info,
-> +};
-> +
-> +static int iei_wt61p803_puzzle_get_max_state
-> +(struct thermal_cooling_device *tcdev, unsigned long *state)
-> +{
-> +	*state = IEI_WT61P803_PUZZLE_HWMON_MAX_PWM_VAL;
 > +
 > +	return 0;
 > +}
-> +static int iei_wt61p803_puzzle_get_cur_state
-> +(struct thermal_cooling_device *tcdev, unsigned long *state)
+> +
+> +static struct pmbus_driver_info mp2975_info = {
+> +	.pages = 1,
+> +	.format[PSC_VOLTAGE_IN] = linear,
+> +	.format[PSC_VOLTAGE_OUT] = direct,
+> +	.format[PSC_TEMPERATURE] = direct,
+> +	.format[PSC_CURRENT_IN] = linear,
+> +	.format[PSC_CURRENT_OUT] = direct,
+> +	.format[PSC_POWER] = direct,
+> +	.m[PSC_TEMPERATURE] = 1,
+> +	.m[PSC_VOLTAGE_OUT] = 1,
+> +	.R[PSC_VOLTAGE_OUT] = 3,
+> +	.m[PSC_CURRENT_OUT] = 1,
+> +	.m[PSC_POWER] = 1,
+> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
+> +		PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
+> +		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP | PMBUS_HAVE_POUT |
+> +		PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT | PMBUS_PHASE_VIRTUAL,
+> +	.read_byte_data = mp2975_read_byte_data,
+> +	.read_word_data = mp2975_read_word_data,
+> +};
+> +
+> +static int mp2975_probe(struct i2c_client *client,
+> +			const struct i2c_device_id *id)
 > +{
-> +	struct iei_wt61p803_puzzle_thermal_cooling_device *cdev = tcdev->devdata;
-> +	struct iei_wt61p803_puzzle_hwmon *mcu_hwmon = cdev->mcu_hwmon;
+> +	struct pmbus_driver_info *info;
+> +	struct mp2975_data *data;
+> +	int ret;
 > +
-> +	int ret, value;
+> +	data = devm_kzalloc(&client->dev, sizeof(struct mp2975_data),
+> +			    GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
 > +
-> +	if (!mcu_hwmon)
-> +		return -EINVAL;
+> +	memcpy(&data->info, &mp2975_info, sizeof(*info));
+> +	info = &data->info;
 > +
-> +	ret = iei_wt61p803_puzzle_read_pwm_channel(mcu_hwmon,
-> +			cdev->pwm_channel, &value);
+> +	/* Identify multiphase configuration for rail 2. */
+> +	ret = mp2975_identify_multiphase_rail2(client);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (ret) {
+> +		/* Two rails are connected. */
+> +		data->info.pages = MP2975_PAGE_NUM;
+> +		data->info.phases[1] = ret;
+> +		data->info.func[1] = MP2975_RAIL2_FUNC;
+> +	}
+> +
+> +	/* Identify multiphase configuration. */
+> +	ret = mp2975_identify_multiphase(client, data, info);
 > +	if (ret)
 > +		return ret;
 > +
-> +	*state = (unsigned long)value;
+> +	/* Identify VID setting per rail. */
+> +	ret = mp2975_identify_rails_vid(client, data, info);
+> +	if (ret < 0)
+> +		return ret;
 > +
-> +	return 0;
-> +}
-
-Missing empty line. checkpatch --strict reports this.
-
-> +static int iei_wt61p803_puzzle_set_cur_state
-> +(struct thermal_cooling_device *tcdev, unsigned long state)
-> +{
-> +	struct iei_wt61p803_puzzle_thermal_cooling_device *cdev = tcdev->devdata;
-> +	struct iei_wt61p803_puzzle_hwmon *mcu_hwmon = cdev->mcu_hwmon;
-> +
-> +	if (!mcu_hwmon)
-> +		return -EINVAL;
-> +
-> +	return iei_wt61p803_puzzle_write_pwm_channel(mcu_hwmon,
-> +			cdev->pwm_channel, state);
-> +}
-> +static const struct thermal_cooling_device_ops iei_wt61p803_puzzle_cooling_ops = {
-> +	.get_max_state = iei_wt61p803_puzzle_get_max_state,
-> +	.get_cur_state = iei_wt61p803_puzzle_get_cur_state,
-> +	.set_cur_state = iei_wt61p803_puzzle_set_cur_state,
-> +};
-> +
-> +static int iei_wt61p803_puzzle_enable_thermal_cooling_dev
-> +(struct device *dev, struct fwnode_handle *child, struct iei_wt61p803_puzzle_hwmon *mcu_hwmon)
-> +{
-> +	u32 pwm_channel;
-> +	int ret, num_levels;
-> +
-> +	struct iei_wt61p803_puzzle_thermal_cooling_device *cdev;
-> +
-> +	ret = fwnode_property_read_u32(child, "reg", &pwm_channel);
+> +	/* Obtain current sense gain of power stage. */
+> +	ret = mp2975_current_sense_gain_get(client, data);
 > +	if (ret)
 > +		return ret;
 > +
-> +	mutex_lock(&mcu_hwmon->lock);
-> +	mcu_hwmon->thermal_cooling_dev_present[pwm_channel] = true;
-> +	mutex_unlock(&mcu_hwmon->lock);
+> +	/* Obtain voltage reference values. */
+> +	ret = mp2975_vref_get(client, data, info);
+> +	if (ret)
+> +		return ret;
 > +
-> +	num_levels = fwnode_property_read_u8_array(child, "cooling-levels", NULL, 0);
-> +	if (num_levels > 0) {
-> +		cdev = devm_kzalloc(dev, sizeof(*cdev), GFP_KERNEL);
-> +		if (!cdev)
-> +			return -ENOMEM;
+> +	/* Obtain vout over-voltage scales. */
+> +	ret = mp2975_vout_ov_scale_get(client, data, info);
+> +	if (ret < 0)
+> +		return ret;
 > +
-> +		cdev->cooling_levels = devm_kzalloc(dev, num_levels, GFP_KERNEL);
-> +		if (!cdev->cooling_levels)
-> +			return -ENOMEM;
+> +	/* Obtain offsets, maximum and format for vout. */
+> +	ret = mp2975_vout_per_rail_config_get(client, data, info);
+> +	if (ret)
+> +		return ret;
 > +
-> +		ret = fwnode_property_read_u8_array(child, "cooling-levels",
-> +				cdev->cooling_levels, num_levels);
-> +		if (ret) {
-> +			dev_err(dev, "Couldn't read property 'cooling-levels'");
-> +			return ret;
-> +		}
-> +
-> +		snprintf(cdev->name, THERMAL_NAME_LENGTH, "iei_wt61p803_puzzle_%d", pwm_channel);
-> +
-> +		cdev->tcdev = devm_thermal_of_cooling_device_register(dev, NULL,
-> +				cdev->name, cdev, &iei_wt61p803_puzzle_cooling_ops);
-> +		if (IS_ERR(cdev->tcdev))
-> +			return PTR_ERR(cdev->tcdev);
-> +
-> +		cdev->mcu_hwmon = mcu_hwmon;
-> +		cdev->pwm_channel = pwm_channel;
-> +
-> +		mutex_lock(&mcu_hwmon->lock);
-> +		mcu_hwmon->cdev[pwm_channel] = cdev;
-> +		mutex_unlock(&mcu_hwmon->lock);
-> +	}
-> +	return 0;
+> +	return pmbus_do_probe(client, id, info);
 > +}
 > +
-> +static int iei_wt61p803_puzzle_hwmon_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct fwnode_handle *child;
-> +	struct iei_wt61p803_puzzle_hwmon *mcu_hwmon;
-> +	struct iei_wt61p803_puzzle *mcu = dev_get_drvdata(dev->parent);
-> +	struct device *hwmon_dev;
-> +	int ret;
-> +
-> +	mcu_hwmon = devm_kzalloc(dev, sizeof(*mcu_hwmon), GFP_KERNEL);
-> +	if (!mcu_hwmon)
-> +		return -ENOMEM;
-> +
-> +	mcu_hwmon->response_buffer = devm_kzalloc(dev,
-> +			IEI_WT61P803_PUZZLE_BUF_SIZE, GFP_KERNEL);
-> +	if (!mcu_hwmon->response_buffer)
-> +		return -ENOMEM;
-> +
-> +	mcu_hwmon->mcu = mcu;
-> +	mutex_init(&mcu_hwmon->lock);
-> +	platform_set_drvdata(pdev, mcu_hwmon);
-> +
-> +	hwmon_dev = devm_hwmon_device_register_with_info(dev,
-> +					"iei_wt61p803_puzzle",
-> +					mcu_hwmon,
-> +					&iei_wt61p803_puzzle_chip_info,
-> +					NULL);
-> +
-> +	/* Control fans via PWM lines via Linux Kernel */
-> +	if (IS_ENABLED(CONFIG_THERMAL)) {
-> +		device_for_each_child_node(dev, child) {
-> +			ret = iei_wt61p803_puzzle_enable_thermal_cooling_dev(dev, child, mcu_hwmon);
-> +			if (ret) {
-> +				dev_err(dev, "Enabling the PWM fan failed\n");
-> +				fwnode_handle_put(child);
-> +				return ret;
-> +			}
-> +		}
-> +	}
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id iei_wt61p803_puzzle_hwmon_id_table[] = {
-> +	{ .compatible = "iei,wt61p803-puzzle-hwmon" },
+> +static const struct i2c_device_id mp2975_id[] = {
+> +	{"mp2975", 0},
 > +	{}
 > +};
-> +MODULE_DEVICE_TABLE(of, iei_wt61p803_puzzle_hwmon_id_table);
 > +
-> +static struct platform_driver iei_wt61p803_puzzle_hwmon_driver = {
+> +MODULE_DEVICE_TABLE(i2c, mp2975_id);
+> +
+> +static const struct of_device_id __maybe_unused mp2975_of_match[] = {
+> +	{.compatible = "mps,mp2975"},
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, mp2975_of_match);
+> +
+> +static struct i2c_driver mp2975_driver = {
 > +	.driver = {
-> +		.name = "iei-wt61p803-puzzle-hwmon",
-> +		.of_match_table = iei_wt61p803_puzzle_hwmon_id_table,
+> +		.name = "mp2975",
+> +		.of_match_table = of_match_ptr(mp2975_of_match),
 > +	},
-> +	.probe = iei_wt61p803_puzzle_hwmon_probe,
+> +	.probe = mp2975_probe,
+> +	.remove = pmbus_do_remove,
+> +	.id_table = mp2975_id,
 > +};
 > +
-> +module_platform_driver(iei_wt61p803_puzzle_hwmon_driver);
+> +module_i2c_driver(mp2975_driver);
 > +
-> +MODULE_DESCRIPTION("iEi WT61P803 PUZZLE MCU HWMON Driver");
-> +MODULE_AUTHOR("Luka Kovacic <luka.kovacic@sartura.hr>");
+> +MODULE_AUTHOR("Vadim Pasternak <vadimp@nvidia.com>");
+> +MODULE_DESCRIPTION("PMBus driver for MPS MP2975 device");
 > +MODULE_LICENSE("GPL");
-> -- 
-> 2.26.2
-> 
