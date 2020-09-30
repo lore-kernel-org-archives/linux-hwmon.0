@@ -1,87 +1,158 @@
-Return-Path: <SRS0=NIjz=DG=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=ye16=DH=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39FC9C4727C
-	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Sep 2020 20:08:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B225C4727C
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Sep 2020 01:41:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D78FB2076A
-	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Sep 2020 20:08:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1601410094;
-	bh=7q8kAjFwuucbN16fk4cCvbog/4c3OL9AevBCZDkgzls=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=QWuIK5uD6/yJuWR3wvtGHTSHYIIewzxODoe2M6WPrBZpAsqqpHrd/3YA4seUw/4y5
-	 lE4AQfmYRdy3fAyNstssIIUyYdeG8Y6s4Mtej6SDObujvdpjwMQaDvVOZ7fv4zSKMC
-	 q1Tit6FaOAxUu8QzuOtPDn/2PCMvehARJtZghXcU=
+	by mail.kernel.org (Postfix) with ESMTP id 4B08B20B1F
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Sep 2020 01:41:15 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=sartura-hr.20150623.gappssmtp.com header.i=@sartura-hr.20150623.gappssmtp.com header.b="Ca86OShb"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729039AbgI2UII (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 29 Sep 2020 16:08:08 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:40562 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728761AbgI2UIG (ORCPT
+        id S1729448AbgI3BlP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 29 Sep 2020 21:41:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56128 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726689AbgI3BlO (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 29 Sep 2020 16:08:06 -0400
-Received: by mail-oi1-f195.google.com with SMTP id t76so6881570oif.7;
-        Tue, 29 Sep 2020 13:08:05 -0700 (PDT)
+        Tue, 29 Sep 2020 21:41:14 -0400
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A34C0613D0
+        for <linux-hwmon@vger.kernel.org>; Tue, 29 Sep 2020 18:41:14 -0700 (PDT)
+Received: by mail-ej1-x642.google.com with SMTP id h26so447407ejq.3
+        for <linux-hwmon@vger.kernel.org>; Tue, 29 Sep 2020 18:41:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sartura-hr.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LSkCcfd5u6tIHuoglXDv5dm2jlHVEjxvQdA65Pq0GoA=;
+        b=Ca86OShb3J5/791Ts6dB/T/Lo1vrbE/l771+QbFvBXD3CPEIWA1ERChhlaAo58wopT
+         y9lyDzJXBvYNNPjpAYZZXawwUhSC3WeZBWOkL4BXw3DVFPEN8BgjZOc3x1GuBs8uI+f8
+         e6vGlUcD62s/J47wMNpGk+QH5+ZiLpk/nHBlQsxJS4PTGf894qNORtYhyednvr7sDAKt
+         MhNtVKxE+s7pRyO1c1w4MOIQ32HZJzStq4qCyU30PxuCR/9Z1aYhz6J2Z5zlyBU3VxLh
+         NKvkcafo6n6PTTZz3/i3v9Lm1+UEQSPALQp0s3UzLx3aiuocgChB0aQNEy+x0fIEurRx
+         rGow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tEjGdyigiYq/Vew+d6aDkAbA6G15ZhYScWUVPdFWPR0=;
-        b=c/RXtgVuCXdfuwPy4DJueYl1fciar6tL2ts4w9nISpc9Vy1OLrEIOVis0GvPO3sjWQ
-         FuwEradr6+/hsmZSaAnGgw7FcucFk5Tc0i1YAwsVRtPIaMEbrC619eqDEwKSZee7gMvj
-         tOH+fTAfuacTWflaI/t/YP1FqtMkz7fIelYlQyzxDxhPh2wLGxzH5XJWeirxFmtskpbB
-         2R6uEqJLTR3clukyWNvisvb59dDd5BllIbG8kLdCUI2wg2VGNf0P8By/1IM/PuMbQZPR
-         /fScd9hCPjz7ik7zuqKLsGX+D4Nb3NmMfruUk/w/IVl+kLDRQjPPOPvhD/bw0gCJ8IDt
-         Jpsg==
-X-Gm-Message-State: AOAM532bloPzJjxlqjJIQkhlqIYmYQkZjW4+z32wdFScxx2yGfzdo2AB
-        F4PNMLFQaGmgsANHeIiJiQ==
-X-Google-Smtp-Source: ABdhPJwpsmxom2RDb8/0qLp/q4YPVAI3qAHXAncJc++/sg44rh/f6H8n1wSpUocJwRGfOboKtRWJLw==
-X-Received: by 2002:aca:578c:: with SMTP id l134mr3413248oib.119.1601410085416;
-        Tue, 29 Sep 2020 13:08:05 -0700 (PDT)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id i205sm1230997oih.23.2020.09.29.13.08.04
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LSkCcfd5u6tIHuoglXDv5dm2jlHVEjxvQdA65Pq0GoA=;
+        b=uav3SLZH/oPhrI2rmN4CGpLRVvQUQt9o1EllbYNRB0M8mgho/8I6Rkcird2oy7JtDk
+         WRKZa41W4H4OQLkIQHgQjsXkJp2CLVB1cihQ//uNnuEw4o1lKFBqBy7WnmKBrI/ooHDv
+         utCFioSuFp4Ocq1I25G53gDJJfN00rYL55u0HZdVWDaFJvUcdhiJePBFT3bjtGIhE5BV
+         iOG5N3AeSXqoTfCMo4eAGoshRjkvIGfwnI68LZp8bmK8hua7JG167LgXKIlH8BOujXBw
+         q113Jit4DR/oyGgOT975q7yIh0dL/lrqc1WudIlR5wu3Ad3ejds06btJqASP2gY10bSx
+         h5nA==
+X-Gm-Message-State: AOAM531obr7ZxnJ12Tz4ahCiI9lZ8PDYek0sKhDJUZXc+azWAxqYnyY3
+        SY4XjVMITzu37FMBqJ/98o8RqQ==
+X-Google-Smtp-Source: ABdhPJw7xUlIH00UwAgym2lIgdIfzZmulqgjFLa0U1/kjWToRVO6y2LJUfl0Y2S0PdPL1T4XgTmbkg==
+X-Received: by 2002:a17:907:64d:: with SMTP id wq13mr426766ejb.513.1601430072896;
+        Tue, 29 Sep 2020 18:41:12 -0700 (PDT)
+Received: from localhost.localdomain ([2a00:ee2:4b0d:3000:290:faff:fe54:449c])
+        by smtp.gmail.com with ESMTPSA id q1sm203258ejy.37.2020.09.29.18.41.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Sep 2020 13:08:04 -0700 (PDT)
-Received: (nullmailer pid 1077618 invoked by uid 1000);
-        Tue, 29 Sep 2020 20:08:04 -0000
-Date:   Tue, 29 Sep 2020 15:08:04 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Alban Bedel <alban.bedel@aerq.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Mark Brown <broonie@kernel.org>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] dt-bindings: hwmon: Add the +vs supply to the
- lm75 bindings
-Message-ID: <20200929200804.GA1077587@bogus>
-References: <20200928153923.134151-1-alban.bedel@aerq.com>
- <20200928153923.134151-3-alban.bedel@aerq.com>
+        Tue, 29 Sep 2020 18:41:11 -0700 (PDT)
+From:   Luka Kovacic <luka.kovacic@sartura.hr>
+To:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-leds@vger.kernel.org
+Cc:     lee.jones@linaro.org, pavel@ucw.cz, dmurphy@ti.com,
+        robh+dt@kernel.org, jdelvare@suse.com, linux@roeck-us.net,
+        andrew@lunn.ch, jason@lakedaemon.net, gregory.clement@bootlin.com,
+        marek.behun@nic.cz, luka.perkov@sartura.hr,
+        robert.marko@sartura.hr, Luka Kovacic <luka.kovacic@sartura.hr>
+Subject: [PATCH v3 0/7] Add support for the iEi Puzzle-M801 board
+Date:   Wed, 30 Sep 2020 03:40:51 +0200
+Message-Id: <20200930014058.44460-1-luka.kovacic@sartura.hr>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200928153923.134151-3-alban.bedel@aerq.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, 28 Sep 2020 17:39:22 +0200, Alban Bedel wrote:
-> Some boards might have a regulator that control the +VS supply, add it
-> to the bindings.
-> 
-> Signed-off-by: Alban Bedel <alban.bedel@aerq.com>
-> ---
-> v2: Removed the unneeded `maxItems` attribute
-> ---
->  Documentation/devicetree/bindings/hwmon/lm75.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
+This patchset adds support for the iEi Puzzle-M801 1U Rackmount Network
+Appliance and for the iEi WT61P803 PUZZLE microcontroller, which enables
+some board specific features like fan and LED control, system power
+management and temperature sensor reading.
 
-Acked-by: Rob Herring <robh@kernel.org>
+The platform is based on the popular Marvell Armada 8040 SoC and supports
+up to 16 GB of DDR4 2400 MHz ECC RAM.
+It has a PCIe x16 slot (x2 lanes only) and an M.2 type B slot.
+
+External chassis ports:
+2x 10 GbE SFP+
+4x 1 GbE (Marvell 88E1512P)
+2x USB 3.0
+1x RJ45 serial port
+
+All notable board components are supported in this patchset.
+
+Changes for v2:
+   - Use LAAs for local-mac-address and match reg values
+   - Code styling changes
+   - Error handling moved to the end of the function
+   - Define all magic numbers in the main header file
+   - Convert the driver to make it OF independent
+   - Refactor hwmon to use devm_hwmon_device_register_with_info()
+   - Reduce the number of mutex locks
+   - Allocate memory once for the response buffer
+   - Reduce managed memory allocations
+Changes for v3:
+   - Move iei-wt61p803-puzzle driver sysfs interface documentation to testing
+   - Change some internal functions to static
+   - Sync dt-bindings examples with the iEi Puzzle-M801 board dts
+   - Remove obsolete device tree properties and correct LED functions
+   - Reverse christmas tree variable declaration order, where possible
+   - MAC address sysfs function rewrite
+   - Fixed struct members size, where reasonable (MFD driver)
+   - Add an error check for hwmon_dev
+   - Use devm_led_classdev_register_ext() in the LED driver
+
+Luka Kovacic (7):
+  dt-bindings: Add iEi vendor prefix and iEi WT61P803 PUZZLE driver
+    bindings
+  drivers: mfd: Add a driver for iEi WT61P803 PUZZLE MCU
+  drivers: hwmon: Add the iEi WT61P803 PUZZLE HWMON driver
+  drivers: leds: Add the iEi WT61P803 PUZZLE LED driver
+  Documentation/ABI: Add iei-wt61p803-puzzle driver sysfs interface
+    documentation
+  MAINTAINERS: Add an entry for the iEi WT61P803 PUZZLE driver
+  arm64: dts: marvell: Add a device tree for the iEi Puzzle-M801 board
+
+ .../testing/sysfs-driver-iei-wt61p803-puzzle  |   55 +
+ .../hwmon/iei,wt61p803-puzzle-hwmon.yaml      |   41 +
+ .../leds/iei,wt61p803-puzzle-leds.yaml        |   45 +
+ .../bindings/mfd/iei,wt61p803-puzzle.yaml     |   82 ++
+ .../devicetree/bindings/vendor-prefixes.yaml  |    2 +
+ MAINTAINERS                                   |   13 +
+ arch/arm64/boot/dts/marvell/Makefile          |    1 +
+ .../dts/marvell/armada-8040-puzzle-m801.dts   |  524 +++++++++
+ drivers/hwmon/Kconfig                         |    8 +
+ drivers/hwmon/Makefile                        |    1 +
+ drivers/hwmon/iei-wt61p803-puzzle-hwmon.c     |  513 ++++++++
+ drivers/leds/Kconfig                          |    8 +
+ drivers/leds/Makefile                         |    1 +
+ drivers/leds/leds-iei-wt61p803-puzzle.c       |  157 +++
+ drivers/mfd/Kconfig                           |    8 +
+ drivers/mfd/Makefile                          |    1 +
+ drivers/mfd/iei-wt61p803-puzzle.c             | 1045 +++++++++++++++++
+ include/linux/mfd/iei-wt61p803-puzzle.h       |   69 ++
+ 18 files changed, 2574 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-driver-iei-wt61p803-puzzle
+ create mode 100644 Documentation/devicetree/bindings/hwmon/iei,wt61p803-puzzle-hwmon.yaml
+ create mode 100644 Documentation/devicetree/bindings/leds/iei,wt61p803-puzzle-leds.yaml
+ create mode 100644 Documentation/devicetree/bindings/mfd/iei,wt61p803-puzzle.yaml
+ create mode 100644 arch/arm64/boot/dts/marvell/armada-8040-puzzle-m801.dts
+ create mode 100644 drivers/hwmon/iei-wt61p803-puzzle-hwmon.c
+ create mode 100644 drivers/leds/leds-iei-wt61p803-puzzle.c
+ create mode 100644 drivers/mfd/iei-wt61p803-puzzle.c
+ create mode 100644 include/linux/mfd/iei-wt61p803-puzzle.h
+
+-- 
+2.26.2
+
