@@ -7,68 +7,67 @@ X-Spam-Status: No, score=-11.5 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F990C4727E
-	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Oct 2020 18:08:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 666CDC4727E
+	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Oct 2020 18:13:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 12A73208C7
-	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Oct 2020 18:08:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 24043206C9
+	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Oct 2020 18:13:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RYCerRbU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qzcadvf6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730103AbgJASIV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 1 Oct 2020 14:08:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35292 "EHLO
+        id S1730103AbgJASNF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 1 Oct 2020 14:13:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730029AbgJASIV (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Oct 2020 14:08:21 -0400
-Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C21C0613D0;
-        Thu,  1 Oct 2020 11:08:21 -0700 (PDT)
-Received: by mail-oi1-x243.google.com with SMTP id 26so6566361ois.5;
-        Thu, 01 Oct 2020 11:08:21 -0700 (PDT)
+        with ESMTP id S1730070AbgJASNE (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Oct 2020 14:13:04 -0400
+Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8320EC0613D0;
+        Thu,  1 Oct 2020 11:13:04 -0700 (PDT)
+Received: by mail-oi1-x244.google.com with SMTP id u126so6549737oif.13;
+        Thu, 01 Oct 2020 11:13:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=0RXPHjO88Bo5yGksZ2SXAZiFjfdhUtK7FW+8v3RNcMM=;
-        b=RYCerRbU5ginYvNutbvNVZknIP57y3tqMkUWY2bH2JTeJdp/XOqQkULfSZWLVbL8vK
-         gfT1DpzviJZqLpp1/bS83IN/3uxZqHYEzLi21emnShjm7v8uRoH++2yk7+Vu4Uv2Dx7D
-         qbl9eF5F0W6juaLRoiCEHyNqKnBvkYRs+JOHoscjisSLrY85Hk4ho7JN/0DuB+S0+Mdo
-         EtC/1WwgWe+optP7l5IW82MnexvdoZIqEfb0TzTYeWQEGXjGCOH+3/aL+H+7ifi8C0py
-         NLkaqteLkzkYlpPDea3nU+NQneUfTCt/PJxj5YYVz1CzTqN+ByPkZPtTC8UKDsQrCYXM
-         o+/g==
+        bh=SzTn2rI/Abg1eZ9zAHO1/DWnogFkdoJUTHuSooKPL2E=;
+        b=Qzcadvf6BDIWj2kiq5IHHTykWrHh+PTE1qfxqV53SovX41d7yTx5E9ITGILZrZsFCa
+         L0YiDagi6hzWUqlhI7J8n78eMglZdjfK3r2mEX93N6SMOpj2qBe/YE6OWxPdDdUKuzZ4
+         GJZ+EmdjbhG8ft28WBwygyX4jDRbICCkXoOaOj2cB9DwmLhzySW5pnHHVyIcCazvc0Y6
+         kwLqPHGDUSjB/UOopqarbdPjQQLnH9Y+VLDMMrOZ8jEpk5XYQzKL/0f5MY7fSYOv6+04
+         DpMwQ4nVSRLb+TIEic+l8zu6FzSK4fxz+ubJcVj0jSLjNKZICwe/6lwvIk9EAw19wND+
+         McDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=0RXPHjO88Bo5yGksZ2SXAZiFjfdhUtK7FW+8v3RNcMM=;
-        b=lBHUFmXoY/E8JGkwJNQTSUC4MaZ5GaL2xbvc5CaYYKLlhhq69q8eBdY+LYz3k4A5Am
-         dLWVWDtpbskqFYjP/tqCpFHa6FvU1vKok6BT8vH0Bwfg+ge+WXQ8FCgDRS73WyJCE0+Y
-         gi8vL1cbmovPJrqqTwoCgzYE1F018Cr+BNFZ552BhGfDkI8cdQwzqhhTSK7lE7O0szSD
-         Z5/GZ2LwjvDS2+uRDKaaSoULwIM6lqTiCmbGCUU8Q/hckPX5WgLbds4VM8MDuCCUZuQm
-         zo/fiP+8ejsg5ysaMtZftUb2L5VKCAOwQtfMBYEYlRdFjOJeCnkVeiHFmR1kRVs/LNvN
-         ZvqQ==
-X-Gm-Message-State: AOAM530Zeg3ZFxmPmWb02VVepcKA8Dm/SVOYE66S5eijj3Rj7ZZa5cZ3
-        F0OT/TH9U52zS4bD7KLPUAM=
-X-Google-Smtp-Source: ABdhPJz/CHdhwT9lXs9Ic3Fxgin2Xfeb1Db8R4YK5YsrF/7K3n3LK1JivJNCGe++ZEDaLwmEd3WYmA==
-X-Received: by 2002:aca:44c6:: with SMTP id r189mr776313oia.140.1601575700520;
-        Thu, 01 Oct 2020 11:08:20 -0700 (PDT)
+        bh=SzTn2rI/Abg1eZ9zAHO1/DWnogFkdoJUTHuSooKPL2E=;
+        b=FOEIYz0s9+8IJmlRI1ZEtb0xwF/8ej2E47d9tLpyFF0nSMDKVG2oyBMZuQQDIyom+4
+         RNrKyygEdRSKsJacnZo9Nbn9Y0lFsTFdkqPuWiXNuQMxCIuNCAedCkPAIZ/jS1cZsCWn
+         e6Q0kTDmCwKSE5SZ6zl9quJ7qqvmyjSDBvB/ydes45H/MxR0cKWTAdSIyINrvq96Z4gP
+         kyP0AKHbCZv003PfEdoStlhrKunjL7ZXH/0dXNTJYBncZ4xOrutssjDeHnXIVqZiNYxx
+         J9QqzhDCidJTfysFPzDf1DuqkDeyn+cbLg01YKU4mgrkbqmZpfZDmPcoG/MKO9DXMc/L
+         GMIQ==
+X-Gm-Message-State: AOAM530EBLfWMuyfy+0IQePNW7It8MdXE9jGuoWxCIDC6enTcBgntZgj
+        Rfg+xJUxnXuWqmWbPKVd9chHFoBenXA=
+X-Google-Smtp-Source: ABdhPJyxJsZP6Xw8K3zvINh8skVbgJ/emHDMHzj6V8A+FA6UlqbmaepJPNtBu3vDPFDKANe8CC379w==
+X-Received: by 2002:aca:4a4d:: with SMTP id x74mr757686oia.6.1601575983764;
+        Thu, 01 Oct 2020 11:13:03 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s13sm1388970otq.5.2020.10.01.11.08.18
+        by smtp.gmail.com with ESMTPSA id q81sm1190747oia.46.2020.10.01.11.13.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Oct 2020 11:08:19 -0700 (PDT)
+        Thu, 01 Oct 2020 11:13:03 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v4 2/3] dt-bindings: hwmon: Add the +vs supply to the lm75
- bindings
+Subject: Re: [PATCH v4 3/3] hwmon: (lm75) Add regulator support
 To:     Alban Bedel <alban.bedel@aerq.com>, linux-hwmon@vger.kernel.org
 Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>
+        linux-kernel@vger.kernel.org
 References: <20201001145738.17326-1-alban.bedel@aerq.com>
- <20201001145738.17326-3-alban.bedel@aerq.com>
+ <20201001145738.17326-4-alban.bedel@aerq.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -113,12 +112,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <9c164930-ffec-415e-caf7-4eb8c2e57576@roeck-us.net>
-Date:   Thu, 1 Oct 2020 11:08:18 -0700
+Message-ID: <8bfad666-10e7-e5d7-c4d8-3877c3f7b449@roeck-us.net>
+Date:   Thu, 1 Oct 2020 11:13:01 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20201001145738.17326-3-alban.bedel@aerq.com>
+In-Reply-To: <20201001145738.17326-4-alban.bedel@aerq.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -126,51 +125,90 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi,
-
 On 10/1/20 7:57 AM, Alban Bedel wrote:
-> Some boards might have a regulator that control the +VS supply, add it
-> to the bindings.
+> Add regulator support for boards where the sensor first need to be
+> powered up before it can be used.
 > 
 > Signed-off-by: Alban Bedel <alban.bedel@aerq.com>
-> Acked-by: Rob Herring <robh@kernel.org>
+> ---
+> v2: Rely on dummy regulators instead of explicitly handling missing
+>     regulator
+> v3: Use a devm action to handle disabling the regulator
+> ---
 
-I have nothing in my records, and nothing in patchwork, that suggests
-that Rob gave this patch an Acked-by:. Please point me to the respective
-e-mail.
+Second '---' is not needed.
 
-Patch 1/3 is also missing an Acked-by: or Reviewed-by: from a DT
-maintainer.
+I can not apply patches 1 and 2 of the series since I don't have an
+Ack from a DT maintainer, but this one looks good. Applied.
 
-Thanks,
 Guenter
 
-> ---
-> v2: Removed the unneeded `maxItems` attribute
-> ---
->  Documentation/devicetree/bindings/hwmon/lm75.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
+
+>  drivers/hwmon/lm75.c | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/lm75.yaml b/Documentation/devicetree/bindings/hwmon/lm75.yaml
-> index c9a001627945..96eed5cc7841 100644
-> --- a/Documentation/devicetree/bindings/hwmon/lm75.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/lm75.yaml
-> @@ -43,6 +43,9 @@ properties:
->    reg:
->      maxItems: 1
+> diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
+> index ba0be48aeadd..e9c1f55b2706 100644
+> --- a/drivers/hwmon/lm75.c
+> +++ b/drivers/hwmon/lm75.c
+> @@ -17,6 +17,7 @@
+>  #include <linux/of.h>
+>  #include <linux/regmap.h>
+>  #include <linux/util_macros.h>
+> +#include <linux/regulator/consumer.h>
+>  #include "lm75.h"
 >  
-> +  vs-supply:
-> +    description: phandle to the regulator that provides the +VS supply
+>  /*
+> @@ -101,6 +102,7 @@ static const unsigned short normal_i2c[] = { 0x48, 0x49, 0x4a, 0x4b, 0x4c,
+>  struct lm75_data {
+>  	struct i2c_client		*client;
+>  	struct regmap			*regmap;
+> +	struct regulator		*vs;
+>  	u8				orig_conf;
+>  	u8				current_conf;
+>  	u8				resolution;	/* In bits, 9 to 16 */
+> @@ -534,6 +536,13 @@ static const struct regmap_config lm75_regmap_config = {
+>  	.use_single_write = true,
+>  };
+>  
+> +static void lm75_disable_regulator(void *data)
+> +{
+> +	struct lm75_data *lm75 = data;
 > +
->  required:
->    - compatible
->    - reg
-> @@ -58,5 +61,6 @@ examples:
->        sensor@48 {
->          compatible = "st,stlm75";
->          reg = <0x48>;
-> +        vs-supply = <&vs>;
->        };
->      };
+> +	regulator_disable(lm75->vs);
+> +}
+> +
+>  static void lm75_remove(void *data)
+>  {
+>  	struct lm75_data *lm75 = data;
+> @@ -567,6 +576,10 @@ lm75_probe(struct i2c_client *client, const struct i2c_device_id *id)
+>  	data->client = client;
+>  	data->kind = kind;
+>  
+> +	data->vs = devm_regulator_get(dev, "vs");
+> +	if (IS_ERR(data->vs))
+> +		return PTR_ERR(data->vs);
+> +
+>  	data->regmap = devm_regmap_init_i2c(client, &lm75_regmap_config);
+>  	if (IS_ERR(data->regmap))
+>  		return PTR_ERR(data->regmap);
+> @@ -581,6 +594,17 @@ lm75_probe(struct i2c_client *client, const struct i2c_device_id *id)
+>  	data->sample_time = data->params->default_sample_time;
+>  	data->resolution = data->params->default_resolution;
+>  
+> +	/* Enable the power */
+> +	err = regulator_enable(data->vs);
+> +	if (err) {
+> +		dev_err(dev, "failed to enable regulator: %d\n", err);
+> +		return err;
+> +	}
+> +
+> +	err = devm_add_action_or_reset(dev, lm75_disable_regulator, data);
+> +	if (err)
+> +		return err;
+> +
+>  	/* Cache original configuration */
+>  	status = i2c_smbus_read_byte_data(client, LM75_REG_CONF);
+>  	if (status < 0) {
 > 
 
