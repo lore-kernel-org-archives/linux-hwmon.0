@@ -2,74 +2,73 @@ Return-Path: <SRS0=rlEW=DI=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-11.5 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C6B8C4727C
-	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Oct 2020 15:24:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F990C4727E
+	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Oct 2020 18:08:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2F4A820672
-	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Oct 2020 15:24:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 12A73208C7
+	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Oct 2020 18:08:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UpqkncCV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RYCerRbU"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732584AbgJAPYJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 1 Oct 2020 11:24:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38128 "EHLO
+        id S1730103AbgJASIV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 1 Oct 2020 14:08:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732346AbgJAPYI (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Oct 2020 11:24:08 -0400
-Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA2DC0613D0;
-        Thu,  1 Oct 2020 08:24:07 -0700 (PDT)
-Received: by mail-oi1-x242.google.com with SMTP id t76so5944259oif.7;
-        Thu, 01 Oct 2020 08:24:07 -0700 (PDT)
+        with ESMTP id S1730029AbgJASIV (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Oct 2020 14:08:21 -0400
+Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C21C0613D0;
+        Thu,  1 Oct 2020 11:08:21 -0700 (PDT)
+Received: by mail-oi1-x243.google.com with SMTP id 26so6566361ois.5;
+        Thu, 01 Oct 2020 11:08:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=KJ0lcODlDXw8TFpUzIZHU1NHT1e5m+pkkR44QXUX9D8=;
-        b=UpqkncCVYPBk6CEngOjcFt8TV1ZK9ulJhVAmhQvJnFNtjlcukqTAXXm2h1A4FRvCCE
-         6FcRVuIH4PMTqkmUfWVs8GICsGHffaGS6A68OLWyT0NB0K8fUY9+3U9EmiCd3RTwZlaz
-         6xsYenFK9PvKPTVyhd9/TsJFBW4Nvij2VmdfzOcRnbpo0H6dmO3Sq7xaO5kDQ8VvzHtS
-         jHBbKwSNlsxg3E3keDVO5nU0EZKN1J0UO7Dxl3fez5IGXgAYnnsHiSCPLTDmhDX2BfIU
-         bxpu4booygmdYXPpOkLgK2rnv/kQaPd9V8PtN6PB+dAnzkrCJ3PSAmtzFfxLb/nPIkiv
-         luIg==
+        bh=0RXPHjO88Bo5yGksZ2SXAZiFjfdhUtK7FW+8v3RNcMM=;
+        b=RYCerRbU5ginYvNutbvNVZknIP57y3tqMkUWY2bH2JTeJdp/XOqQkULfSZWLVbL8vK
+         gfT1DpzviJZqLpp1/bS83IN/3uxZqHYEzLi21emnShjm7v8uRoH++2yk7+Vu4Uv2Dx7D
+         qbl9eF5F0W6juaLRoiCEHyNqKnBvkYRs+JOHoscjisSLrY85Hk4ho7JN/0DuB+S0+Mdo
+         EtC/1WwgWe+optP7l5IW82MnexvdoZIqEfb0TzTYeWQEGXjGCOH+3/aL+H+7ifi8C0py
+         NLkaqteLkzkYlpPDea3nU+NQneUfTCt/PJxj5YYVz1CzTqN+ByPkZPtTC8UKDsQrCYXM
+         o+/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=KJ0lcODlDXw8TFpUzIZHU1NHT1e5m+pkkR44QXUX9D8=;
-        b=bKNNyJ50nNcl4jYvnll1L0UBetUzBgIRLtFvJ7GwCklXu2fRQlU5NZ8jqFHW+L6TUb
-         EjH93AX+SxMU9i+CQm8LbprOZBjamwFxwEVCoOA8Rzepu4vmlVDaSwPwoEswzmb/slwX
-         TP8pCxIDorBbEZk8f2+dwAgMVtePSNGAcooSej5pl0l6tXNB8W3xZ9ZJnm4SJFD4Qsz0
-         0ThHd58g0dy05d3dVzt5cK+W39PwOSEzXR5zeY8ZNJ5tRwlSZQ+5YSe8QfAv0HGFzkRr
-         Wx2s1p1s8Gf1p3aRKbad8QiOJeOzq2D46x9f/S7+iu4C7bQLJRHMAoUn1DiLC1HMQvFr
-         6sJA==
-X-Gm-Message-State: AOAM533YxCJL/QnBXpiLMWXCvXHg3PM2/bOLsdxvKg2xsX1/SMPkBJA4
-        IQZwDyJlnqvecnJNdt++AXA=
-X-Google-Smtp-Source: ABdhPJwrpGPqLMVfM2wcRhHnTEJGUs34nIG7oRnCQU6ATzSRekySaGpLjxWH4Uu/emYANCCDEtHBmg==
-X-Received: by 2002:aca:dd42:: with SMTP id u63mr280800oig.135.1601565847127;
-        Thu, 01 Oct 2020 08:24:07 -0700 (PDT)
+        bh=0RXPHjO88Bo5yGksZ2SXAZiFjfdhUtK7FW+8v3RNcMM=;
+        b=lBHUFmXoY/E8JGkwJNQTSUC4MaZ5GaL2xbvc5CaYYKLlhhq69q8eBdY+LYz3k4A5Am
+         dLWVWDtpbskqFYjP/tqCpFHa6FvU1vKok6BT8vH0Bwfg+ge+WXQ8FCgDRS73WyJCE0+Y
+         gi8vL1cbmovPJrqqTwoCgzYE1F018Cr+BNFZ552BhGfDkI8cdQwzqhhTSK7lE7O0szSD
+         Z5/GZ2LwjvDS2+uRDKaaSoULwIM6lqTiCmbGCUU8Q/hckPX5WgLbds4VM8MDuCCUZuQm
+         zo/fiP+8ejsg5ysaMtZftUb2L5VKCAOwQtfMBYEYlRdFjOJeCnkVeiHFmR1kRVs/LNvN
+         ZvqQ==
+X-Gm-Message-State: AOAM530Zeg3ZFxmPmWb02VVepcKA8Dm/SVOYE66S5eijj3Rj7ZZa5cZ3
+        F0OT/TH9U52zS4bD7KLPUAM=
+X-Google-Smtp-Source: ABdhPJz/CHdhwT9lXs9Ic3Fxgin2Xfeb1Db8R4YK5YsrF/7K3n3LK1JivJNCGe++ZEDaLwmEd3WYmA==
+X-Received: by 2002:aca:44c6:: with SMTP id r189mr776313oia.140.1601575700520;
+        Thu, 01 Oct 2020 11:08:20 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y24sm1373351ooq.38.2020.10.01.08.24.05
+        by smtp.gmail.com with ESMTPSA id s13sm1388970otq.5.2020.10.01.11.08.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Oct 2020 08:24:06 -0700 (PDT)
+        Thu, 01 Oct 2020 11:08:19 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v3 0/2] add Intel MAX 10 BMC MFD driver & hwmon sub driver
-To:     Xu Yilun <yilun.xu@intel.com>
-Cc:     lee.jones@linaro.org, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        trix@redhat.com, matthew.gerlach@linux.intel.com,
-        russell.h.weight@intel.com, lgoncalv@redhat.com, hao.wu@intel.com,
-        mdf@kernel.org
-References: <1600669071-26235-1-git-send-email-yilun.xu@intel.com>
- <20200930205249.GA241905@roeck-us.net>
- <20201001140834.GA5471@yilunxu-OptiPlex-7050>
+Subject: Re: [PATCH v4 2/3] dt-bindings: hwmon: Add the +vs supply to the lm75
+ bindings
+To:     Alban Bedel <alban.bedel@aerq.com>, linux-hwmon@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>
+References: <20201001145738.17326-1-alban.bedel@aerq.com>
+ <20201001145738.17326-3-alban.bedel@aerq.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -114,12 +113,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <9f4ce33a-38b6-fc51-7632-27196b2947b3@roeck-us.net>
-Date:   Thu, 1 Oct 2020 08:24:04 -0700
+Message-ID: <9c164930-ffec-415e-caf7-4eb8c2e57576@roeck-us.net>
+Date:   Thu, 1 Oct 2020 11:08:18 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20201001140834.GA5471@yilunxu-OptiPlex-7050>
+In-Reply-To: <20201001145738.17326-3-alban.bedel@aerq.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -127,85 +126,51 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10/1/20 7:08 AM, Xu Yilun wrote:
-> Hi Guenter,
+Hi,
+
+On 10/1/20 7:57 AM, Alban Bedel wrote:
+> Some boards might have a regulator that control the +VS supply, add it
+> to the bindings.
 > 
-> On Wed, Sep 30, 2020 at 01:52:49PM -0700, Guenter Roeck wrote:
->> On Mon, Sep 21, 2020 at 02:17:49PM +0800, Xu Yilun wrote:
->>> I recently realized that maintainers may have trouble to apply patches to
->>> their trees if the patches depend on other being-reviewed patches. So I'm
->>> trying to wrapper the 2 patches into one patchset and let all the
->>> maintainers see the dependencies.
->>>
->>> But the patch version is then not aligned between the 2 patches. I'm not
->>> sure how to handle it. I just picked the smaller number on Subject, but
->>> you could still see their own version changes in commit message of each
->>> patch. Sorry if it makes confusing.
->>>
->>
->> If you started with separate patches, it would be much better to pick
->> the larger number, and add a note into the individual patch(es) stating
->> the reason for the gap. Everything else is highly confusing. I would not
->> be surprised if no one in the mfd world even looks at the mfd patch
->> since it went back from v6 (?) to v3 according to its subject line.
-> 
-> I got it. Thanks for your guide.
-> 
-> Fortunately, the mfd maintainer has replied and applied the mfd patch
-> (the previous separate one). And I see you added a Reviewed-by for the hwmon
-> patch, so I assume I don't have to do anything more, is it?
-> 
-Thanks for letting me know. I applied the hwmon driver.
+> Signed-off-by: Alban Bedel <alban.bedel@aerq.com>
+> Acked-by: Rob Herring <robh@kernel.org>
+
+I have nothing in my records, and nothing in patchwork, that suggests
+that Rob gave this patch an Acked-by:. Please point me to the respective
+e-mail.
+
+Patch 1/3 is also missing an Acked-by: or Reviewed-by: from a DT
+maintainer.
 
 Thanks,
 Guenter
 
-> I'll take care of the version number next time.
+> ---
+> v2: Removed the unneeded `maxItems` attribute
+> ---
+>  Documentation/devicetree/bindings/hwmon/lm75.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> Thanks,
-> Yilun
+> diff --git a/Documentation/devicetree/bindings/hwmon/lm75.yaml b/Documentation/devicetree/bindings/hwmon/lm75.yaml
+> index c9a001627945..96eed5cc7841 100644
+> --- a/Documentation/devicetree/bindings/hwmon/lm75.yaml
+> +++ b/Documentation/devicetree/bindings/hwmon/lm75.yaml
+> @@ -43,6 +43,9 @@ properties:
+>    reg:
+>      maxItems: 1
+>  
+> +  vs-supply:
+> +    description: phandle to the regulator that provides the +VS supply
+> +
+>  required:
+>    - compatible
+>    - reg
+> @@ -58,5 +61,6 @@ examples:
+>        sensor@48 {
+>          compatible = "st,stlm75";
+>          reg = <0x48>;
+> +        vs-supply = <&vs>;
+>        };
+>      };
 > 
->>
->> Thanks,
->> Guenter
->>
->>>
->>> Patch #1 implements the basic functions of the BMC chip for some Intel
->>> FPGA PCIe Acceleration Cards (PAC). The BMC is implemented using the
->>> Intel MAX 10 CPLD.
->>>
->>> This BMC chip is connected to the FPGA by a SPI bus. To provide direct
->>> register access from the FPGA, the "SPI slave to Avalon Master Bridge"
->>> (spi-avmm) IP is integrated in the chip. It converts encoded streams of
->>> bytes from the host to the internal register read/write on the Avalon
->>> bus. So This driver uses the regmap-spi-avmm for register accessing.
->>>
->>> Patch #2 adds support for the hwmon sub device in Intel MAX 10 BMC
->>>
->>>
->>> Xu Yilun (2):
->>>   mfd: intel-m10-bmc: add Intel MAX 10 BMC chip support for Intel FPGA
->>>     PAC
->>>   hwmon: intel-m10-bmc-hwmon: add hwmon support for Intel MAX 10 BMC
->>>
->>>  .../ABI/testing/sysfs-driver-intel-m10-bmc         |  15 +
->>>  Documentation/hwmon/index.rst                      |   1 +
->>>  Documentation/hwmon/intel-m10-bmc-hwmon.rst        |  78 +++++
->>>  drivers/hwmon/Kconfig                              |  11 +
->>>  drivers/hwmon/Makefile                             |   1 +
->>>  drivers/hwmon/intel-m10-bmc-hwmon.c                | 334 +++++++++++++++++++++
->>>  drivers/mfd/Kconfig                                |  13 +
->>>  drivers/mfd/Makefile                               |   2 +
->>>  drivers/mfd/intel-m10-bmc.c                        | 164 ++++++++++
->>>  include/linux/mfd/intel-m10-bmc.h                  |  65 ++++
->>>  10 files changed, 684 insertions(+)
->>>  create mode 100644 Documentation/ABI/testing/sysfs-driver-intel-m10-bmc
->>>  create mode 100644 Documentation/hwmon/intel-m10-bmc-hwmon.rst
->>>  create mode 100644 drivers/hwmon/intel-m10-bmc-hwmon.c
->>>  create mode 100644 drivers/mfd/intel-m10-bmc.c
->>>  create mode 100644 include/linux/mfd/intel-m10-bmc.h
->>>
->>> -- 
->>> 2.7.4
->>>
 
