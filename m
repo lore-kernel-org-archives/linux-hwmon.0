@@ -4,165 +4,495 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2F48C4727D
-	for <linux-hwmon@archiver.kernel.org>; Sun,  4 Oct 2020 15:43:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B22FC4363C
+	for <linux-hwmon@archiver.kernel.org>; Sun,  4 Oct 2020 15:53:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A68EC206DD
-	for <linux-hwmon@archiver.kernel.org>; Sun,  4 Oct 2020 15:43:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C850F206C1
+	for <linux-hwmon@archiver.kernel.org>; Sun,  4 Oct 2020 15:53:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VtNTfV/I"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lFtJV+3U"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725950AbgJDPns (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 4 Oct 2020 11:43:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55540 "EHLO
+        id S1725826AbgJDPxu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 4 Oct 2020 11:53:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725937AbgJDPns (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 4 Oct 2020 11:43:48 -0400
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC2EC0613CE;
-        Sun,  4 Oct 2020 08:43:48 -0700 (PDT)
-Received: by mail-ot1-x343.google.com with SMTP id s66so6243639otb.2;
-        Sun, 04 Oct 2020 08:43:48 -0700 (PDT)
+        with ESMTP id S1725825AbgJDPxu (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 4 Oct 2020 11:53:50 -0400
+Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F4DC0613CE;
+        Sun,  4 Oct 2020 08:53:49 -0700 (PDT)
+Received: by mail-oi1-x241.google.com with SMTP id x14so6303574oic.9;
+        Sun, 04 Oct 2020 08:53:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=Qi/VID7y2SIwzNo6dbcXrRRFn4NPp8vANshNlUq5tjo=;
-        b=VtNTfV/Iil1s0ncK/AIaMq0CZUfgkksUFTrZmoopKJqeydiAfRh1LxRy3mU9AvdwyB
-         SwR4I1yYJFHbCKdAmoA3s+b7WLhXSGYmpFVm86Q018c6ukf4CFRh+MOGo+t6OnYo2njW
-         waq4ClyvivyjTQiwu/5OwmRLlpo+sDZqiL5/2h0yTUJf3nUSd//EoThMISKR6IZstLhQ
-         /vUg3QlD3tqRapIuQzatP4qMSkc87tGdCIX05rOvmpDI061xPNUBgmLI0hTmnZJLrO5P
-         aR8w4xnJT6fSQYbiP1aF2ICGwejbvNQ7Gjk4v8syV43o4sgk9kmSUiMtgiq4JtaNSKnv
-         /i1Q==
+        bh=u+sku0HH2+3QvSaCEnKkbz5kM8iPpztBRVnCPnfSqlo=;
+        b=lFtJV+3UGDTtzQ/XeCkGAq8vaM3kH+I/YUEMZ6miacZ7OBeVgpAFdQMk0RafvdMpzx
+         24czv7+zxUQlUPTGQbRxUB4l0mIu6DkyXdiHIXqXf4xARTFtFiyFLnfy85HNMi8N4FIA
+         P+qTqQW0tZ0mB2jSSkrxkOm31MIGY0Bv+PIRrissa4naYUI/FwW4aiCm/thfGV23FLzL
+         2zhkk4CWEEW0q4BZ06++U39CWu1eejLpg1n0S5dHEdPNUVtbPkIMHyD0PcEQAGHyngap
+         aTBN1ftvgOeSocYuW8B6HeGNaZgNmOru5AIKdDBPKictmeR1a69WsJn25MISqmIygVxU
+         eebw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Qi/VID7y2SIwzNo6dbcXrRRFn4NPp8vANshNlUq5tjo=;
-        b=ZNVBIIDQfnADy7zsx9VTNZW+VESqwjBIHv1A3uCMSUTS+jWMwew2WY/QoNo+8ehIx4
-         41Go9JEfGmSTXicrrtoKd6jPW82vmyJNcK6eBAEYKLLZ9/5XSA06UAlf7wYY4NKJa64G
-         1j+Kp0KuuJZD7O1f+5Z63vq97KMuxMGpkVXgFbJoo/7O+Peg5qXv00jO4DUgLH0dfR69
-         1uoJKiV0l6+CftgQzic4P8pF34q4YDVSqPjFQuidyLnUzOgB29QphbhvWofcw2aPQQrx
-         xPRtGf1O0qH25hh7OWdW2EfONqOIqvQ+axjG+OIZKRU+0uKtUpd7AQz2NriXlR/6gB2I
-         WP3Q==
-X-Gm-Message-State: AOAM532SGfmVJxLHafQdxcsANFcAZvHMfwyrZG0uOynfnmmuV83OMAEw
-        cjLHyjWr6RFY7NMFb3ezi5ZTAFT9vBU=
-X-Google-Smtp-Source: ABdhPJzx3okC9Z9OkNWFurYFJS2tGuZYCIBr3zBqB1AEawXdWvHzkzaeEpxSorZ1sNZihSNqrrGXVQ==
-X-Received: by 2002:a05:6830:45b:: with SMTP id d27mr1816297otc.15.1601826227366;
-        Sun, 04 Oct 2020 08:43:47 -0700 (PDT)
+        bh=u+sku0HH2+3QvSaCEnKkbz5kM8iPpztBRVnCPnfSqlo=;
+        b=iSJgm7WftV49cIipIqePa9DTtS/vByEObRyl2tRsN93OZK9nVQMHiqgs3w1fwNdc8B
+         wNsgXBOzp0+wP9eQS3PKwE1bVEGMMWqur2FtUCFFKWLEfjTf9ZJxDC/RTKu1ZUxbG2Kt
+         TEx09iq4/xynXDqvBApLKmcRO2U8XW+sAhgVpJFpZKpfg0PUonASk64GqsbBJRXMKHAY
+         oSPcYVjEhIPkvavi4ifcyqVFVCGy7UcHijKG6zBZTaPde+wrj3JNJ5JULmv7aA7ZkEQ7
+         3zCp4viIVwytbNzdKqXbtt5tGVOPfIlmjpSdjfwEW68SiWwK3cmHMmvKkJGgsGWVLOzy
+         xvPg==
+X-Gm-Message-State: AOAM532YYbP6ObV9VHJVbBe3kxRL1f/lUlaC7SxxLpddCdqlTHTSHxqo
+        COG6SwCNUKHrfqrmBfCvvuboNrRh4hg=
+X-Google-Smtp-Source: ABdhPJy9W1ulGjeyarn35fX9crDtbdL9e4ZrnONPc+Q9PhG2HfyS2zYYOvMFlXsO+62LnY5rnXb8HQ==
+X-Received: by 2002:aca:470e:: with SMTP id u14mr5337584oia.7.1601826829081;
+        Sun, 04 Oct 2020 08:53:49 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u15sm2083262otg.78.2020.10.04.08.43.46
+        by smtp.gmail.com with ESMTPSA id c61sm2086686otb.38.2020.10.04.08.53.48
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 04 Oct 2020 08:43:46 -0700 (PDT)
+        Sun, 04 Oct 2020 08:53:48 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 4 Oct 2020 08:43:45 -0700
+Date:   Sun, 4 Oct 2020 08:53:47 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Chu Lin <linchuyuan@google.com>
-Cc:     jdelvare@suse.com, robh+dt@kernel.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] hwmon: pmbus: max20730: adjust the vout reading
- given voltage divider
-Message-ID: <20201004154345.GA110630@roeck-us.net>
-References: <20201004031445.2321090-1-linchuyuan@google.com>
- <20201004031445.2321090-3-linchuyuan@google.com>
+To:     Ugur Usug <Ugur.Usug@maximintegrated.com>
+Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4] hwmon (pmbus/max20730): add device monitoring via
+ debugfs
+Message-ID: <20201004155347.GA113423@roeck-us.net>
+References: <MWHPR11MB1965C01083AD013C630646B2FD3B0@MWHPR11MB1965.namprd11.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201004031445.2321090-3-linchuyuan@google.com>
+In-Reply-To: <MWHPR11MB1965C01083AD013C630646B2FD3B0@MWHPR11MB1965.namprd11.prod.outlook.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Oct 04, 2020 at 03:14:45AM +0000, Chu Lin wrote:
-> Problem:
-> We use voltage dividers so that the voltage presented at the voltage
-> sense pins is confusing. We might need to convert these readings to more
-> meaningful readings given the voltage divider.
+On Tue, Sep 22, 2020 at 07:15:38PM +0000, Ugur Usug wrote:
+> Add debugfs interface support for accessing device specific registers (MFR_VOUT_MIN, 
+> MFR_DEVSET1 and MFR_DEVSET2) and others including OPERATION, ON_OFF_CONFIG, 
+> SMB_ALERT_MASK, VOUT_MODE, VOUT_COMMAND and VOUT_MAX.
 > 
-> Solution:
-> Read the voltage divider resistance from dts and convert the voltage
-> reading to a more meaningful reading.
+> This patch changes following items in max20730_debugfs_read(): 
+> - the EINVAL returns to "Invalid" or "Not supported" 
+> - strcpy() and strnlen() calls to strlcpy() calls
+> - VOUT_MODE, VOUT_COMMAND and VOUT_MAX raw outputs to unit volts
+> - terminating '\0' characters to the simple_read_from_buffer() return
 > 
-> Testing:
-> max20730 with voltage divider
-> 
-> Signed-off-by: Chu Lin <linchuyuan@google.com>
-> ---
-> ChangeLog v1 -> v2
->   hwmon: pmbus: max20730:
->   - Don't do anything to the ret if an error is returned from pmbus_read_word
->   - avoid overflow when doing multiplication
-> 
-> ChangeLog v2 -> v3
->   dt-bindings: hwmon: max20730:
->   - Provide the binding documentation in yaml format
->   hwmon: pmbus: max20730:
->   - No change
-> 
-> ChangeLog v3 -> v4
->   dt-bindings: hwmon: max20730:
->   - Fix highefficiency to high efficiency in description
->   - Fix presents to present in vout-voltage-divider
->   - Add additionalProperties: false
->   hwmon: pmbus: max20730:
->   - No change
+> Signed-off-by: Ugur Usug <ugur.usug@maximintegrated.com>
 
-You claim that there have been no changes since v2 of this patch,
-yet you dropped my Reviewed-by: tag. Any reason ?
+Applied.
 
+Thanks,
 Guenter
 
-> 
->  drivers/hwmon/pmbus/max20730.c | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
+> ---
+>  drivers/hwmon/pmbus/max20730.c | 363 ++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 362 insertions(+), 1 deletion(-)
 > 
 > diff --git a/drivers/hwmon/pmbus/max20730.c b/drivers/hwmon/pmbus/max20730.c
-> index a151a2b588a5..fbf2f1e6c969 100644
+> index a151a2b..3175c9b 100644
 > --- a/drivers/hwmon/pmbus/max20730.c
 > +++ b/drivers/hwmon/pmbus/max20730.c
-> @@ -31,6 +31,7 @@ struct max20730_data {
+> @@ -8,6 +8,7 @@
+>   */
+>  
+>  #include <linux/bits.h>
+> +#include <linux/debugfs.h>
+>  #include <linux/err.h>
+>  #include <linux/i2c.h>
+>  #include <linux/init.h>
+> @@ -26,16 +27,367 @@ enum chips {
+>  	max20743
+>  };
+>  
+> +enum {
+> +	MAX20730_DEBUGFS_VOUT_MIN = 0,
+> +	MAX20730_DEBUGFS_FREQUENCY,
+> +	MAX20730_DEBUGFS_PG_DELAY,
+> +	MAX20730_DEBUGFS_INTERNAL_GAIN,
+> +	MAX20730_DEBUGFS_BOOT_VOLTAGE,
+> +	MAX20730_DEBUGFS_OUT_V_RAMP_RATE,
+> +	MAX20730_DEBUGFS_OC_PROTECT_MODE,
+> +	MAX20730_DEBUGFS_SS_TIMING,
+> +	MAX20730_DEBUGFS_IMAX,
+> +	MAX20730_DEBUGFS_OPERATION,
+> +	MAX20730_DEBUGFS_ON_OFF_CONFIG,
+> +	MAX20730_DEBUGFS_SMBALERT_MASK,
+> +	MAX20730_DEBUGFS_VOUT_MODE,
+> +	MAX20730_DEBUGFS_VOUT_COMMAND,
+> +	MAX20730_DEBUGFS_VOUT_MAX,
+> +	MAX20730_DEBUGFS_NUM_ENTRIES
+> +};
+> +
+>  struct max20730_data {
+>  	enum chips id;
 >  	struct pmbus_driver_info info;
 >  	struct mutex lock;	/* Used to protect against parallel writes */
 >  	u16 mfr_devset1;
-> +	u32 vout_voltage_divider[2];
+> +	u16 mfr_devset2;
+> +	u16 mfr_voutmin;
 >  };
 >  
 >  #define to_max20730_data(x)  container_of(x, struct max20730_data, info)
-> @@ -114,6 +115,14 @@ static int max20730_read_word_data(struct i2c_client *client, int page,
->  		max_c = max_current[data->id][(data->mfr_devset1 >> 5) & 0x3];
->  		ret = val_to_direct(max_c, PSC_CURRENT_OUT, info);
->  		break;
-> +	case PMBUS_READ_VOUT:
-> +		ret = pmbus_read_word_data(client, page, phase, reg);
-> +		if (ret > 0 && data->vout_voltage_divider[0] && data->vout_voltage_divider[1]) {
-> +			u64 temp = DIV_ROUND_CLOSEST_ULL((u64)ret * data->vout_voltage_divider[1],
-> +							 data->vout_voltage_divider[0]);
-> +			ret = clamp_val(temp, 0, 0xffff);
+>  
+> +#define VOLT_FROM_REG(val)	DIV_ROUND_CLOSEST((val), 1 << 9)
+> +
+> +#define PMBUS_SMB_ALERT_MASK	0x1B
+> +
+> +#define MAX20730_MFR_VOUT_MIN	0xd1
+>  #define MAX20730_MFR_DEVSET1	0xd2
+> +#define MAX20730_MFR_DEVSET2	0xd3
+> +
+> +#define MAX20730_MFR_VOUT_MIN_MASK		GENMASK(9, 0)
+> +#define MAX20730_MFR_VOUT_MIN_BIT_POS		0
+> +
+> +#define MAX20730_MFR_DEVSET1_RGAIN_MASK		(BIT(13) | BIT(14))
+> +#define MAX20730_MFR_DEVSET1_OTP_MASK		(BIT(11) | BIT(12))
+> +#define MAX20730_MFR_DEVSET1_VBOOT_MASK		(BIT(8) | BIT(9))
+> +#define MAX20730_MFR_DEVSET1_OCP_MASK		(BIT(5) | BIT(6))
+> +#define MAX20730_MFR_DEVSET1_FSW_MASK		GENMASK(4, 2)
+> +#define MAX20730_MFR_DEVSET1_TSTAT_MASK		(BIT(0) | BIT(1))
+> +
+> +#define MAX20730_MFR_DEVSET1_RGAIN_BIT_POS	13
+> +#define MAX20730_MFR_DEVSET1_OTP_BIT_POS	11
+> +#define MAX20730_MFR_DEVSET1_VBOOT_BIT_POS	8
+> +#define MAX20730_MFR_DEVSET1_OCP_BIT_POS	5
+> +#define MAX20730_MFR_DEVSET1_FSW_BIT_POS	2
+> +#define MAX20730_MFR_DEVSET1_TSTAT_BIT_POS	0
+> +
+> +#define MAX20730_MFR_DEVSET2_IMAX_MASK		GENMASK(10, 8)
+> +#define MAX20730_MFR_DEVSET2_VRATE		(BIT(6) | BIT(7))
+> +#define MAX20730_MFR_DEVSET2_OCPM_MASK		BIT(5)
+> +#define MAX20730_MFR_DEVSET2_SS_MASK		(BIT(0) | BIT(1))
+> +
+> +#define MAX20730_MFR_DEVSET2_IMAX_BIT_POS	8
+> +#define MAX20730_MFR_DEVSET2_VRATE_BIT_POS	6
+> +#define MAX20730_MFR_DEVSET2_OCPM_BIT_POS	5
+> +#define MAX20730_MFR_DEVSET2_SS_BIT_POS		0
+> +
+> +#define DEBUG_FS_DATA_MAX			16
+> +
+> +struct max20730_debugfs_data {
+> +	struct i2c_client *client;
+> +	int debugfs_entries[MAX20730_DEBUGFS_NUM_ENTRIES];
+> +};
+> +
+> +#define to_psu(x, y) container_of((x), \
+> +			struct max20730_debugfs_data, debugfs_entries[(y)])
+> +
+> +#ifdef CONFIG_DEBUG_FS
+> +static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
+> +				     size_t count, loff_t *ppos)
+> +{
+> +	int ret, len;
+> +	int *idxp = file->private_data;
+> +	int idx = *idxp;
+> +	struct max20730_debugfs_data *psu = to_psu(idxp, idx);
+> +	const struct pmbus_driver_info *info;
+> +	const struct max20730_data *data;
+> +	char tbuf[DEBUG_FS_DATA_MAX] = { 0 };
+> +	u16 val;
+> +
+> +	info = pmbus_get_driver_info(psu->client);
+> +	data = to_max20730_data(info);
+> +
+> +	switch (idx) {
+> +	case MAX20730_DEBUGFS_VOUT_MIN:
+> +		ret = VOLT_FROM_REG(data->mfr_voutmin * 10000);
+> +		len = snprintf(tbuf, DEBUG_FS_DATA_MAX, "%d.%d\n",
+> +			       ret / 10000, ret % 10000);
+> +		break;
+> +	case MAX20730_DEBUGFS_FREQUENCY:
+> +		val = (data->mfr_devset1 & MAX20730_MFR_DEVSET1_FSW_MASK)
+> +			>> MAX20730_MFR_DEVSET1_FSW_BIT_POS;
+> +
+> +		if (val == 0)
+> +			ret = 400;
+> +		else if (val == 1)
+> +			ret = 500;
+> +		else if (val == 2 || val == 3)
+> +			ret = 600;
+> +		else if (val == 4)
+> +			ret = 700;
+> +		else if (val == 5)
+> +			ret = 800;
+> +		else
+> +			ret = 900;
+> +		len = snprintf(tbuf, DEBUG_FS_DATA_MAX, "%d\n", ret);
+> +		break;
+> +	case MAX20730_DEBUGFS_PG_DELAY:
+> +		val = (data->mfr_devset1 & MAX20730_MFR_DEVSET1_TSTAT_MASK)
+> +			>> MAX20730_MFR_DEVSET1_TSTAT_BIT_POS;
+> +
+> +		if (val == 0)
+> +			len = strlcpy(tbuf, "2000\n", DEBUG_FS_DATA_MAX);
+> +		else if (val == 1)
+> +			len = strlcpy(tbuf, "125\n", DEBUG_FS_DATA_MAX);
+> +		else if (val == 2)
+> +			len = strlcpy(tbuf, "62.5\n", DEBUG_FS_DATA_MAX);
+> +		else
+> +			len = strlcpy(tbuf, "32\n", DEBUG_FS_DATA_MAX);
+> +		break;
+> +	case MAX20730_DEBUGFS_INTERNAL_GAIN:
+> +		val = (data->mfr_devset1 & MAX20730_MFR_DEVSET1_RGAIN_MASK)
+> +			>> MAX20730_MFR_DEVSET1_RGAIN_BIT_POS;
+> +
+> +		if (data->id == max20734) {
+> +			/* AN6209 */
+> +			if (val == 0)
+> +				len = strlcpy(tbuf, "0.8\n", DEBUG_FS_DATA_MAX);
+> +			else if (val == 1)
+> +				len = strlcpy(tbuf, "3.2\n", DEBUG_FS_DATA_MAX);
+> +			else if (val == 2)
+> +				len = strlcpy(tbuf, "1.6\n", DEBUG_FS_DATA_MAX);
+> +			else
+> +				len = strlcpy(tbuf, "6.4\n", DEBUG_FS_DATA_MAX);
+> +		} else if (data->id == max20730 || data->id == max20710) {
+> +			/* AN6042 or AN6140 */
+> +			if (val == 0)
+> +				len = strlcpy(tbuf, "0.9\n", DEBUG_FS_DATA_MAX);
+> +			else if (val == 1)
+> +				len = strlcpy(tbuf, "3.6\n", DEBUG_FS_DATA_MAX);
+> +			else if (val == 2)
+> +				len = strlcpy(tbuf, "1.8\n", DEBUG_FS_DATA_MAX);
+> +			else
+> +				len = strlcpy(tbuf, "7.2\n", DEBUG_FS_DATA_MAX);
+> +		} else if (data->id == max20743) {
+> +			/* AN6042 */
+> +			if (val == 0)
+> +				len = strlcpy(tbuf, "0.45\n", DEBUG_FS_DATA_MAX);
+> +			else if (val == 1)
+> +				len = strlcpy(tbuf, "1.8\n", DEBUG_FS_DATA_MAX);
+> +			else if (val == 2)
+> +				len = strlcpy(tbuf, "0.9\n", DEBUG_FS_DATA_MAX);
+> +			else
+> +				len = strlcpy(tbuf, "3.6\n", DEBUG_FS_DATA_MAX);
+> +		} else {
+> +			len = strlcpy(tbuf, "Not supported\n", DEBUG_FS_DATA_MAX);
 > +		}
 > +		break;
->  	default:
->  		ret = -ENODATA;
->  		break;
-> @@ -364,6 +373,15 @@ static int max20730_probe(struct i2c_client *client,
->  	data->id = chip_id;
->  	mutex_init(&data->lock);
->  	memcpy(&data->info, &max20730_info[chip_id], sizeof(data->info));
-> +	if (of_property_read_u32_array(client->dev.of_node, "vout-voltage-divider",
-> +				       data->vout_voltage_divider,
-> +				       ARRAY_SIZE(data->vout_voltage_divider)) != 0)
-> +		memset(data->vout_voltage_divider, 0, sizeof(data->vout_voltage_divider));
-> +	if (data->vout_voltage_divider[1] < data->vout_voltage_divider[0]) {
-> +		dev_err(dev,
-> +			"The total resistance of voltage divider is less than output resistance\n");
-> +		return -ENODEV;
+> +	case MAX20730_DEBUGFS_BOOT_VOLTAGE:
+> +		val = (data->mfr_devset1 & MAX20730_MFR_DEVSET1_VBOOT_MASK)
+> +			>> MAX20730_MFR_DEVSET1_VBOOT_BIT_POS;
+> +
+> +		if (val == 0)
+> +			len = strlcpy(tbuf, "0.6484\n", DEBUG_FS_DATA_MAX);
+> +		else if (val == 1)
+> +			len = strlcpy(tbuf, "0.8984\n", DEBUG_FS_DATA_MAX);
+> +		else if (val == 2)
+> +			len = strlcpy(tbuf, "1.0\n", DEBUG_FS_DATA_MAX);
+> +		else
+> +			len = strlcpy(tbuf, "Invalid\n", DEBUG_FS_DATA_MAX);
+> +		break;
+> +	case MAX20730_DEBUGFS_OUT_V_RAMP_RATE:
+> +		val = (data->mfr_devset2 & MAX20730_MFR_DEVSET2_VRATE)
+> +			>> MAX20730_MFR_DEVSET2_VRATE_BIT_POS;
+> +
+> +		if (val == 0)
+> +			len = strlcpy(tbuf, "4\n", DEBUG_FS_DATA_MAX);
+> +		else if (val == 1)
+> +			len = strlcpy(tbuf, "2\n", DEBUG_FS_DATA_MAX);
+> +		else if (val == 2)
+> +			len = strlcpy(tbuf, "1\n", DEBUG_FS_DATA_MAX);
+> +		else
+> +			len = strlcpy(tbuf, "Invalid\n", DEBUG_FS_DATA_MAX);
+> +		break;
+> +	case MAX20730_DEBUGFS_OC_PROTECT_MODE:
+> +		ret = (data->mfr_devset2 & MAX20730_MFR_DEVSET2_OCPM_MASK)
+> +			>> MAX20730_MFR_DEVSET2_OCPM_BIT_POS;
+> +		len = snprintf(tbuf, DEBUG_FS_DATA_MAX, "%d\n", ret);
+> +		break;
+> +	case MAX20730_DEBUGFS_SS_TIMING:
+> +		val = (data->mfr_devset2 & MAX20730_MFR_DEVSET2_SS_MASK)
+> +			>> MAX20730_MFR_DEVSET2_SS_BIT_POS;
+> +
+> +		if (val == 0)
+> +			len = strlcpy(tbuf, "0.75\n", DEBUG_FS_DATA_MAX);
+> +		else if (val == 1)
+> +			len = strlcpy(tbuf, "1.5\n", DEBUG_FS_DATA_MAX);
+> +		else if (val == 2)
+> +			len = strlcpy(tbuf, "3\n", DEBUG_FS_DATA_MAX);
+> +		else
+> +			len = strlcpy(tbuf, "6\n", DEBUG_FS_DATA_MAX);
+> +		break;
+> +	case MAX20730_DEBUGFS_IMAX:
+> +		ret = (data->mfr_devset2 & MAX20730_MFR_DEVSET2_IMAX_MASK)
+> +			>> MAX20730_MFR_DEVSET2_IMAX_BIT_POS;
+> +		len = snprintf(tbuf, DEBUG_FS_DATA_MAX, "%d\n", ret);
+> +		break;
+> +	case MAX20730_DEBUGFS_OPERATION:
+> +		ret = i2c_smbus_read_byte_data(psu->client, PMBUS_OPERATION);
+> +		if (ret < 0)
+> +			return ret;
+> +		len = snprintf(tbuf, DEBUG_FS_DATA_MAX, "%d\n", ret);
+> +		break;
+> +	case MAX20730_DEBUGFS_ON_OFF_CONFIG:
+> +		ret = i2c_smbus_read_byte_data(psu->client, PMBUS_ON_OFF_CONFIG);
+> +		if (ret < 0)
+> +			return ret;
+> +		len = snprintf(tbuf, DEBUG_FS_DATA_MAX, "%d\n", ret);
+> +		break;
+> +	case MAX20730_DEBUGFS_SMBALERT_MASK:
+> +		ret = i2c_smbus_read_word_data(psu->client,
+> +					       PMBUS_SMB_ALERT_MASK);
+> +		if (ret < 0)
+> +			return ret;
+> +		len = snprintf(tbuf, DEBUG_FS_DATA_MAX, "%d\n", ret);
+> +		break;
+> +	case MAX20730_DEBUGFS_VOUT_MODE:
+> +		ret = i2c_smbus_read_byte_data(psu->client, PMBUS_VOUT_MODE);
+> +		if (ret < 0)
+> +			return ret;
+> +		len = snprintf(tbuf, DEBUG_FS_DATA_MAX, "%d\n", ret);
+> +		break;
+> +	case MAX20730_DEBUGFS_VOUT_COMMAND:
+> +		ret = i2c_smbus_read_word_data(psu->client, PMBUS_VOUT_COMMAND);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = VOLT_FROM_REG(ret * 10000);
+> +		len = snprintf(tbuf, DEBUG_FS_DATA_MAX,
+> +			       "%d.%d\n", ret / 10000, ret % 10000);
+> +		break;
+> +	case MAX20730_DEBUGFS_VOUT_MAX:
+> +		ret = i2c_smbus_read_word_data(psu->client, PMBUS_VOUT_MAX);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = VOLT_FROM_REG(ret * 10000);
+> +		len = snprintf(tbuf, DEBUG_FS_DATA_MAX,
+> +			       "%d.%d\n", ret / 10000, ret % 10000);
+> +		break;
+> +	default:
+> +		len = strlcpy(tbuf, "Invalid\n", DEBUG_FS_DATA_MAX);
 > +	}
+> +
+> +	return simple_read_from_buffer(buf, count, ppos, tbuf, len);
+> +}
+> +
+> +static const struct file_operations max20730_fops = {
+> +	.llseek = noop_llseek,
+> +	.read = max20730_debugfs_read,
+> +	.write = NULL,
+> +	.open = simple_open,
+> +};
+> +
+> +static int max20730_init_debugfs(struct i2c_client *client,
+> +				 struct max20730_data *data)
+> +{
+> +	int ret, i;
+> +	struct dentry *debugfs;
+> +	struct dentry *max20730_dir;
+> +	struct max20730_debugfs_data *psu;
+> +
+> +	ret = i2c_smbus_read_word_data(client, MAX20730_MFR_DEVSET2);
+> +	if (ret < 0)
+> +		return ret;
+> +	data->mfr_devset2 = ret;
+> +
+> +	ret = i2c_smbus_read_word_data(client, MAX20730_MFR_VOUT_MIN);
+> +	if (ret < 0)
+> +		return ret;
+> +	data->mfr_voutmin = ret;
+> +
+> +	psu = devm_kzalloc(&client->dev, sizeof(*psu), GFP_KERNEL);
+> +	if (!psu)
+> +		return -ENOMEM;
+> +	psu->client = client;
+> +
+> +	debugfs = pmbus_get_debugfs_dir(client);
+> +	if (!debugfs)
+> +		return -ENOENT;
+> +
+> +	max20730_dir = debugfs_create_dir(client->name, debugfs);
+> +	if (!max20730_dir)
+> +		return -ENOENT;
+> +
+> +	for (i = 0; i < MAX20730_DEBUGFS_NUM_ENTRIES; ++i)
+> +		psu->debugfs_entries[i] = i;
+> +
+> +	debugfs_create_file("vout_min", 0444, max20730_dir,
+> +			    &psu->debugfs_entries[MAX20730_DEBUGFS_VOUT_MIN],
+> +			    &max20730_fops);
+> +	debugfs_create_file("frequency", 0444, max20730_dir,
+> +			    &psu->debugfs_entries[MAX20730_DEBUGFS_FREQUENCY],
+> +			    &max20730_fops);
+> +	debugfs_create_file("power_good_delay", 0444, max20730_dir,
+> +			    &psu->debugfs_entries[MAX20730_DEBUGFS_PG_DELAY],
+> +			    &max20730_fops);
+> +	debugfs_create_file("internal_gain", 0444, max20730_dir,
+> +			    &psu->debugfs_entries[MAX20730_DEBUGFS_INTERNAL_GAIN],
+> +			    &max20730_fops);
+> +	debugfs_create_file("boot_voltage", 0444, max20730_dir,
+> +			    &psu->debugfs_entries[MAX20730_DEBUGFS_BOOT_VOLTAGE],
+> +			    &max20730_fops);
+> +	debugfs_create_file("out_voltage_ramp_rate", 0444, max20730_dir,
+> +			    &psu->debugfs_entries[MAX20730_DEBUGFS_OUT_V_RAMP_RATE],
+> +			    &max20730_fops);
+> +	debugfs_create_file("oc_protection_mode", 0444, max20730_dir,
+> +			    &psu->debugfs_entries[MAX20730_DEBUGFS_OC_PROTECT_MODE],
+> +			    &max20730_fops);
+> +	debugfs_create_file("soft_start_timing", 0444, max20730_dir,
+> +			    &psu->debugfs_entries[MAX20730_DEBUGFS_SS_TIMING],
+> +			    &max20730_fops);
+> +	debugfs_create_file("imax", 0444, max20730_dir,
+> +			    &psu->debugfs_entries[MAX20730_DEBUGFS_IMAX],
+> +			    &max20730_fops);
+> +	debugfs_create_file("operation", 0444, max20730_dir,
+> +			    &psu->debugfs_entries[MAX20730_DEBUGFS_OPERATION],
+> +			    &max20730_fops);
+> +	debugfs_create_file("on_off_config", 0444, max20730_dir,
+> +			    &psu->debugfs_entries[MAX20730_DEBUGFS_ON_OFF_CONFIG],
+> +			    &max20730_fops);
+> +	debugfs_create_file("smbalert_mask", 0444, max20730_dir,
+> +			    &psu->debugfs_entries[MAX20730_DEBUGFS_SMBALERT_MASK],
+> +			    &max20730_fops);
+> +	debugfs_create_file("vout_mode", 0444, max20730_dir,
+> +			    &psu->debugfs_entries[MAX20730_DEBUGFS_VOUT_MODE],
+> +			    &max20730_fops);
+> +	debugfs_create_file("vout_command", 0444, max20730_dir,
+> +			    &psu->debugfs_entries[MAX20730_DEBUGFS_VOUT_COMMAND],
+> +			    &max20730_fops);
+> +	debugfs_create_file("vout_max", 0444, max20730_dir,
+> +			    &psu->debugfs_entries[MAX20730_DEBUGFS_VOUT_MAX],
+> +			    &max20730_fops);
+> +
+> +	return 0;
+> +}
+> +#else
+> +static int max20730_init_debugfs(struct i2c_client *client,
+> +				 struct max20730_data *data)
+> +{
+> +	return 0;
+> +}
+> +#endif /* CONFIG_DEBUG_FS */
 >  
->  	ret = i2c_smbus_read_word_data(client, MAX20730_MFR_DEVSET1);
->  	if (ret < 0)
-> -- 
-> 2.28.0.806.g8561365e88-goog
-> 
+>  /*
+>   * Convert discreet value to direct data format. Strictly speaking, all passed
+> @@ -370,7 +722,16 @@ static int max20730_probe(struct i2c_client *client,
+>  		return ret;
+>  	data->mfr_devset1 = ret;
+>  
+> -	return pmbus_do_probe(client, id, &data->info);
+> +	ret = pmbus_do_probe(client, id, &data->info);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = max20730_init_debugfs(client, data);
+> +	if (ret)
+> +		dev_warn(dev, "Failed to register debugfs: %d\n",
+> +			 ret);
+> +
+> +	return 0;
+>  }
+>  
+>  static const struct i2c_device_id max20730_id[] = {
