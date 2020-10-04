@@ -2,175 +2,93 @@ Return-Path: <SRS0=wGth=DL=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C6BEC41604
-	for <linux-hwmon@archiver.kernel.org>; Sun,  4 Oct 2020 03:14:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3D28C4363C
+	for <linux-hwmon@archiver.kernel.org>; Sun,  4 Oct 2020 06:38:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 579E8206A2
-	for <linux-hwmon@archiver.kernel.org>; Sun,  4 Oct 2020 03:14:57 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SNfZWE8c"
+	by mail.kernel.org (Postfix) with ESMTP id 7B80F206C1
+	for <linux-hwmon@archiver.kernel.org>; Sun,  4 Oct 2020 06:38:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726519AbgJDDO4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 3 Oct 2020 23:14:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54290 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726442AbgJDDOx (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 3 Oct 2020 23:14:53 -0400
-Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40CECC0613D0
-        for <linux-hwmon@vger.kernel.org>; Sat,  3 Oct 2020 20:14:52 -0700 (PDT)
-Received: by mail-qt1-x849.google.com with SMTP id m13so4060986qtu.10
-        for <linux-hwmon@vger.kernel.org>; Sat, 03 Oct 2020 20:14:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:to;
-        bh=K74BKx9bHZWGmWfzS1oHKSxZQ1iYmkRG86K+uoTE8Mw=;
-        b=SNfZWE8cO6qr70BBBZzBKrn6Bz/dkBA6GcN6/4R5MWkUY1R0f44cYmd5szTuEkez34
-         PPrXCgbDPW3oPBTvUs9iv8nvsWHsxVInb9of3koDmt66BHzaIhxS75J1G881Vt9u07iv
-         /hafahl0jj1lQ9IQxInia9kxYL2K2jersPIfv7UaBSbWb3RBo3fKpM6avbQ5pbZhtrTD
-         weirjS2I3vIGGZZvqeEU9iiBdYwoH7Qh/RSPHJNodYFIJ6LyBFqchCZEcs/HT7FKYhw1
-         sxTgFxXRevaT30omW8ewh4TJrGEz/F6aJy0LcSP/o7rsk1gF8kT7cgP+eH5DjQgOGM8E
-         4bKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to;
-        bh=K74BKx9bHZWGmWfzS1oHKSxZQ1iYmkRG86K+uoTE8Mw=;
-        b=qnGMhCxWXxlgMkB8QdjtEuaVUNp56y9zCI53IRAmo5eYwNiI5ryjsh7Gd7dQ6Mb/1f
-         TpHlI6+DtqYxA/kxgVjkawMMP1gfITZIL4rCwxnRSfm97wGTKO+BZTNYAW7OM83K37WG
-         XGGijc8tqMupt/IT/7uqm3cX5TDT1HkRNrfOU9FlXBWW6sEeHU7Vsntj4zPZzIJBmzne
-         obD1/kD4SO/Rdp7J3zqgXefbZ7gxMye4eY5kuLYjTKgJYyPU33ZWOkljkyDDxNoQMyBc
-         c+Aiv1G22IxL3ESq8wtd1jf1ULB+48ghy19Cpql6AHs/1abxWubmYIKJrqbUyKDEIsBU
-         BWAg==
-X-Gm-Message-State: AOAM532gQH12WZgKbCSkGoYQAEtaO7/X5x9AjCcLMLaQSIOgC6O8cYNp
-        RzE9DLq5UUJos4kWzf4jUjN/p97YGXcZi5Ew
-X-Google-Smtp-Source: ABdhPJyPnDtt5SCSPZndKt6/zvIc82XFv4am1sypXmgSD/rEZvswkokB14SVVN08/uq7LjfJTZNOtOsuvd2yBUTQ
-Sender: "linchuyuan via sendgmr" <linchuyuan@chu-dev.c.googlers.com>
-X-Received: from chu-dev.c.googlers.com ([fda3:e722:ac3:10:24:72f4:c0a8:3cfb])
- (user=linchuyuan job=sendgmr) by 2002:a05:6214:401:: with SMTP id
- z1mr3148495qvx.53.1601781291176; Sat, 03 Oct 2020 20:14:51 -0700 (PDT)
-Date:   Sun,  4 Oct 2020 03:14:44 +0000
-In-Reply-To: <20201004031445.2321090-1-linchuyuan@google.com>
-Message-Id: <20201004031445.2321090-2-linchuyuan@google.com>
-Mime-Version: 1.0
-References: <20201004031445.2321090-1-linchuyuan@google.com>
-X-Mailer: git-send-email 2.28.0.806.g8561365e88-goog
-Subject: [PATCH v4 1/2] dt-bindings: hwmon: max20730: adding device tree doc
- for max20730
-From:   Chu Lin <linchuyuan@google.com>
-To:     linchuyuan@google.com, jdelvare@suse.com, linux@roeck-us.net,
-        robh+dt@kernel.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        id S1725846AbgJDGij (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 4 Oct 2020 02:38:39 -0400
+Received: from mga02.intel.com ([134.134.136.20]:50463 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725822AbgJDGij (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 4 Oct 2020 02:38:39 -0400
+IronPort-SDR: oRkwN+tksBQpBG3gpnd9M1QRPwcYPWC/+Hlq/ricmBeU+ZYcweNWw4uExoto5WKwZK0NseLBZZ
+ qMcF833tkoXg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9763"; a="150898396"
+X-IronPort-AV: E=Sophos;i="5.77,334,1596524400"; 
+   d="scan'208";a="150898396"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2020 23:38:34 -0700
+IronPort-SDR: EIqaZYua/mXODrDO2YZWX+rDJErjwmrYUpwAUumB7CXC5SFCkeoTcnPNTy0qLmGdVpVTHb0jOs
+ t3o05X+7hOnw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,334,1596524400"; 
+   d="scan'208";a="295760758"
+Received: from lkp-server02.sh.intel.com (HELO b5ae2f167493) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 03 Oct 2020 23:38:32 -0700
+Received: from kbuild by b5ae2f167493 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kOxfD-0000Mc-Ch; Sun, 04 Oct 2020 06:38:31 +0000
+Date:   Sun, 4 Oct 2020 14:37:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Naveen Krishna Chatradhi <nchatrad@amd.com>
+Cc:     kbuild-all@lists.01.org, linux-hwmon@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: fix ptr_ret.cocci warnings
+Message-ID: <20201004063755.GA47627@fe6c56ecaa6d>
+References: <202010041453.4f94XEJB-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202010041453.4f94XEJB-lkp@intel.com>
+X-Patchwork-Hint: ignore
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-max20730 Integrated, Step-Down Switching Regulator with PMBus
+From: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Chu Lin <linchuyuan@google.com>
+drivers/hwmon/amd_energy.c:302:1-3: WARNING: PTR_ERR_OR_ZERO can be used
+
+
+ Use PTR_ERR_OR_ZERO rather than if(IS_ERR(...)) + PTR_ERR
+
+Generated by: scripts/coccinelle/api/ptr_ret.cocci
+
+Fixes: 911766432fd2 ("hwmon: (amd_energy) Improve the accumulation logic")
+CC: Naveen Krishna Chatradhi <nchatrad@amd.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
 ---
-ChangeLog v1 -> v2
-  hwmon: pmbus: max20730:
-  - Don't do anything to the ret if an error is returned from pmbus_read_word
-  - avoid overflow when doing multiplication
 
-ChangeLog v2 -> v3
-  dt-bindings: hwmon: max20730:
-  - Provide the binding documentation in yaml format
-  hwmon: pmbus: max20730:
-  - No change
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+head:   78a28192e301da58ac408f2e98fa30aebafbfda0
+commit: 911766432fd2a6054d9813845ad3f48120bd649c [45/55] hwmon: (amd_energy) Improve the accumulation logic
 
-ChangeLog v3 -> v4
-  dt-bindings: hwmon: max20730:
-  - Fix highefficiency to high efficiency in description
-  - Fix presents to present in vout-voltage-divider
-  - Add additionalProperties: false
-  hwmon: pmbus: max20730:
-  - No change
+ amd_energy.c |    5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
- .../bindings/hwmon/maxim,max20730.yaml        | 65 +++++++++++++++++++
- 1 file changed, 65 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max20730.yaml
-
-diff --git a/Documentation/devicetree/bindings/hwmon/maxim,max20730.yaml b/Documentation/devicetree/bindings/hwmon/maxim,max20730.yaml
-new file mode 100644
-index 000000000000..93e86e3b4602
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwmon/maxim,max20730.yaml
-@@ -0,0 +1,65 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+
-+$id: http://devicetree.org/schemas/hwmon/maxim,max20730.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Maxim max20730
-+
-+maintainers:
-+  - Jean Delvare <jdelvare@suse.com>
-+  - Guenter Roeck <linux@roeck-us.net>
-+
-+description: |
-+  The MAX20730 is a fully integrated, highly efficient switching regulator
-+  with PMBus for applications operating from 4.5V to 16V and requiring
-+  up to 25A (max) load. This single-chip regulator provides extremely
-+  compact, high efficiency power-delivery solutions with high-precision
-+  output voltages and excellent transient response.
-+
-+  Datasheets:
-+    https://datasheets.maximintegrated.com/en/ds/MAX20730.pdf
-+    https://datasheets.maximintegrated.com/en/ds/MAX20734.pdf
-+    https://datasheets.maximintegrated.com/en/ds/MAX20743.pdf
-+
-+properties:
-+  compatible:
-+    enum:
-+      - maxim,max20730
-+      - maxim,max20734
-+      - maxim,max20743
-+
-+  reg:
-+    maxItems: 1
-+
-+  vout-voltage-divider:
-+    description: |
-+      If voltage divider present at vout, the voltage at voltage sensor pin
-+      will be scaled. The properties will convert the raw reading to a more
-+      meaningful number if voltage divider present. It has two numbers,
-+      the first number is the output resistor, the second number is the total
-+      resistance. Therefore, the adjusted vout is equal to
-+      Vout = Vout * output_resistance / total resistance.
-+    $ref: /schemas/types.yaml#/definitions/uint32-array
-+    minItems: 2
-+    maxItems: 2
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      max20730@10 {
-+        compatible = "maxim,max20730";
-+        reg = <0x10>;
-+        vout-voltage-divider = <1000 2000>; // vout would be scaled to 0.5
-+      };
-+    };
--- 
-2.28.0.806.g8561365e88-goog
-
+--- a/drivers/hwmon/amd_energy.c
++++ b/drivers/hwmon/amd_energy.c
+@@ -299,10 +299,7 @@ static int amd_energy_probe(struct platf
+ 
+ 	data->wrap_accumulate = kthread_run(energy_accumulator, data,
+ 					    "%s", dev_name(hwmon_dev));
+-	if (IS_ERR(data->wrap_accumulate))
+-		return PTR_ERR(data->wrap_accumulate);
+-
+-	return 0;
++	return PTR_ERR_OR_ZERO(data->wrap_accumulate);
+ }
+ 
+ static int amd_energy_remove(struct platform_device *pdev)
