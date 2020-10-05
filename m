@@ -2,103 +2,129 @@ Return-Path: <SRS0=kkoh=DM=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1415BC4363A
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 15:11:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE0B1C4363D
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 15:39:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D19ED20774
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 15:11:13 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rmMncILe"
+	by mail.kernel.org (Postfix) with ESMTP id 858632085B
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 15:39:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1601912387;
+	bh=YDa9qgcYN/rLvsHl7wxHnDzXxyPxrajJMh139W2bTQc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=MsF3N7RBvoGRgyU1LbNRlqZOYMKlA7n9TCN96slNQDH72s75ctC9cdoWc15tZ1R1V
+	 n0O6tqweDHbbf8U1QaQU0vaZ7PddqlFgJvqsBTaz32gWuT3PqO/Pxey3VwZuRFrTjJ
+	 8UJRx2cc1eH0AAR4GRjOVCRqpuYQ7txHdNjZ3kt0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727114AbgJEPLK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 5 Oct 2020 11:11:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45952 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726701AbgJEPLF (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Oct 2020 11:11:05 -0400
-Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2C2C0613CE;
-        Mon,  5 Oct 2020 08:11:04 -0700 (PDT)
-Received: by mail-oi1-x241.google.com with SMTP id c13so9018594oiy.6;
-        Mon, 05 Oct 2020 08:11:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=RwW+3cgQRN9esWDY48Mrwamv0LGOoedzUjjGGELb9gw=;
-        b=rmMncILe7hEypTqUh7SZl4WTgcv0Rnfl62dFWpviSzScI5eQnjCq5qWK8aASjpMCH/
-         pIvyyrU1/Y3t+9S/+uhPNlRkn1HmeL4k5TuQ0t28t1ZDuBPuZcklIUA1OdyPUpv+Of5b
-         vAdAPdbk4G0EBui6CPf/jjYqj+ZVRQlVI5+4gov9bj0a04cVdaTgw2TnOc2M8HfGU3jW
-         ktBxfQAuwUg5u/57y740MJvL6LqardNYv/z3CJf4T60Dq/t8Ia6Hmhzn3HzDUm3Vtw3e
-         c4+FVoJgs0BvCjzhkPbqGr6d84k7K563NtL+hmbrNorUFsdvvZo/Fmp39reqmvV7u4bd
-         BCTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=RwW+3cgQRN9esWDY48Mrwamv0LGOoedzUjjGGELb9gw=;
-        b=rOsZWmFCJmRu/r1IBJ58gNj5fgXgG2+gW2RLerOlnQlq2t5SnEWxT1/IhgQCQyA+yX
-         riKxjT4MgeZ82S2H5i4/X/KmM6S3dS5TPx3LGAbh3Xg0cPmKbpAf7nV0LLb6vbUTpYTE
-         b0I+4aKEIpkhdDNsH0JUG3Smrs5jO5TfgDDtTjtNqyCB+suPuWcrtTeYE6QnMAEbuZBu
-         8bPjtZz21Yqugh3p0onW8hwb+BFCviNFSctY4owYxzlYtmGM43vsPYfM+K1B1vGaUc9j
-         +1vx38X06pJ+opL/QFuKy9ig439POuu7W3e59xw243k41l6Hp0voGSRnFgW267iyYHOs
-         M23A==
-X-Gm-Message-State: AOAM5321xRZDXVEkjPc2+nMGkOhip8vUwh0il7zipYNVROBfaouWBuW7
-        Rujuwg8LmBPlbwoGh8Mqpes=
-X-Google-Smtp-Source: ABdhPJzxsNc/BZAute7amLsLZyrqTZQK32QsK0Ua7GECgwCRR2zZLNx+9d84Aal7Q80u83gdYAT+4A==
-X-Received: by 2002:aca:c485:: with SMTP id u127mr49637oif.92.1601910664371;
-        Mon, 05 Oct 2020 08:11:04 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s32sm2933260otb.68.2020.10.05.08.11.03
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 05 Oct 2020 08:11:03 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 5 Oct 2020 08:11:02 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Alexandru Ardelean <alexandru.ardelean@analog.com>
-Cc:     linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jdelvare@suse.com, corbet@lwn.net
-Subject: Re: [PATCH] docs: hwmon: (ltc2945): update datasheet link
-Message-ID: <20201005151102.GA44294@roeck-us.net>
-References: <20201005131226.1774081-1-alexandru.ardelean@analog.com>
+        id S1728331AbgJEPjg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 5 Oct 2020 11:39:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42716 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727972AbgJEPjW (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 5 Oct 2020 11:39:22 -0400
+Received: from earth.universe (dyndsl-095-033-158-146.ewe-ip-backbone.de [95.33.158.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1CD5C2085B;
+        Mon,  5 Oct 2020 15:39:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601912361;
+        bh=YDa9qgcYN/rLvsHl7wxHnDzXxyPxrajJMh139W2bTQc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Yt3ruZa68573tch0c/Ho1ALzHfCpTDMLesbdlPmWRDYNKB50IT55EoZp87fsRkzgz
+         7+6j5JNoNjJ3AsqOjA1un0djegx8x339kHr5uakI101R3J4o5G+KgoyioglXZXg5dL
+         Bxy38eyfhsJbMySPsKZTFlatV3r6LR8AuCR8oLYA=
+Received: by earth.universe (Postfix, from userid 1000)
+        id 1CDCB3C0C87; Mon,  5 Oct 2020 17:39:19 +0200 (CEST)
+Date:   Mon, 5 Oct 2020 17:39:19 +0200
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-iio@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, alsa-devel@alsa-project.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>, linux-clk@vger.kernel.org,
+        linux-leds@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-rockchip@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-mips@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-gpio@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        openipmi-developer@lists.sourceforge.net,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-hwmon@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-mmc@vger.kernel.org,
+        Liam Girdwood <lgirdwood@gmail.com>, linux-spi@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>, netdev@vger.kernel.org,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jonathan Cameron <jic23@kernel.org>
+Subject: Re: [PATCH] dt-bindings: Another round of adding missing
+ 'additionalProperties'
+Message-ID: <20201005153919.llmcjbz4hiqvzd4x@earth.universe>
+References: <20201002234143.3570746-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ruzfmjzmyxibtjj5"
 Content-Disposition: inline
-In-Reply-To: <20201005131226.1774081-1-alexandru.ardelean@analog.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20201002234143.3570746-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Oct 05, 2020 at 04:12:26PM +0300, Alexandru Ardelean wrote:
-> Old one isn't working anymore. Update to the latest datasheet link.
-> 
-> Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
 
-Applied.
+--ruzfmjzmyxibtjj5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
-Guenter
-
+On Fri, Oct 02, 2020 at 06:41:43PM -0500, Rob Herring wrote:
+> Another round of wack-a-mole. The json-schema default is additional
+> unknown properties are allowed, but for DT all properties should be
+> defined.
+>=20
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->  Documentation/hwmon/ltc2945.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/hwmon/ltc2945.rst b/Documentation/hwmon/ltc2945.rst
-> index 20c884985367..8d65c141ce2b 100644
-> --- a/Documentation/hwmon/ltc2945.rst
-> +++ b/Documentation/hwmon/ltc2945.rst
-> @@ -11,7 +11,7 @@ Supported chips:
->  
->      Datasheet:
->  
-> -	http://cds.linear.com/docs/en/datasheet/2945fa.pdf
-> +	https://www.analog.com/media/en/technical-documentation/data-sheets/2945fb.pdf
->  
->  Author: Guenter Roeck <linux@roeck-us.net>
->  
+>=20
+> I'll take this thru the DT tree.
+>=20
+>  [...]
+>  .../bindings/power/supply/cw2015_battery.yaml |  2 ++
+>  .../bindings/power/supply/rohm,bd99954.yaml   |  8 ++++++++
+> [...]
+
+Acked-by: Sebastian Reichel <sre@kernel.org>
+
+-- Sebastian
+
+--ruzfmjzmyxibtjj5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl97PhAACgkQ2O7X88g7
++pqkbg/9HQHD97P7Thh0rG2tNf/oTuwqdbqpGz8XffiIbWso3SaAukPavFc/b34T
+Bhf9ldAe4Jy7Sz8qDavKYO8qMWOF8av5Je5ajNG3fFmRAO28Jz1vcRsxn7JiTvlU
+SnlrNgxMlppGfzCt59G/IH6GyJVUVhZduf1HhaterbutugRNLE6LKY85rtwPlCR6
+d4+sJE+gKYJmNhxj1XYyVrXoWQs22IA8nJggb2g2l5nHfFolffKHFRXTX5Ax7WFL
+vhm/uSgz/4T9RyObm3lx4ODSSZqC3oc1E0DR3jf97rWH6xGUVFuJoAtE5ZpS5AJt
+uC3k2QQJ8mCt5fUA+khtnS4DIsF07uOzd5Hbex8NcXiFnlO/9GYWlmGXxlAnhdrk
+vSk8jlPgslc4xKpae1y8DFQiMndd9+1g0b4ZOJ6RnhaNpnOoFOIIPmC2ViRnQ8/0
+kv5w7Hop2CIxAYj3Jk1IzlmtbmJeQt39ya7uHNJhV2ISd8P3AmrkcNedPd8OV7MO
+7DrV+n/aKjH2gLYX0+377iH59APbluDQd64e+iDir2L5PP4BWXmyMOGqZ+Od7ScJ
+YT7hlpoKPVwZ1lqta77S7LDpYrRtyv8Ce5EsFineimEc1b4N51GTMh6lDPIGVcXz
+Xa1GC6kpGXU9Cx39fOb5K64cnrJ5Whplgiyv+4xd1suU1q25CZM=
+=XHTx
+-----END PGP SIGNATURE-----
+
+--ruzfmjzmyxibtjj5--
