@@ -2,69 +2,71 @@ Return-Path: <SRS0=kkoh=DM=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B81ECC4363A
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 15:03:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44262C4727D
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 15:04:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 714BB2078A
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 15:03:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 089C720FC3
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 15:04:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O////Mao"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V1NELKUy"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726012AbgJEPDK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 5 Oct 2020 11:03:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44642 "EHLO
+        id S1726760AbgJEPD3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 5 Oct 2020 11:03:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725981AbgJEPDJ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Oct 2020 11:03:09 -0400
-Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0815C0613CE
-        for <linux-hwmon@vger.kernel.org>; Mon,  5 Oct 2020 08:03:09 -0700 (PDT)
-Received: by mail-oi1-x241.google.com with SMTP id w141so8989066oia.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 05 Oct 2020 08:03:09 -0700 (PDT)
+        with ESMTP id S1726740AbgJEPD0 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Oct 2020 11:03:26 -0400
+Received: from mail-oo1-xc41.google.com (mail-oo1-xc41.google.com [IPv6:2607:f8b0:4864:20::c41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E291EC0613A7;
+        Mon,  5 Oct 2020 08:03:25 -0700 (PDT)
+Received: by mail-oo1-xc41.google.com with SMTP id o20so2319254ook.1;
+        Mon, 05 Oct 2020 08:03:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=85n7KGAmr3a89ZU52trBcPLYVfILUWt1Gk5T9XCy4j8=;
-        b=O////MaooQGePV+5ssBl9DF4T1ZnFN9BYkjubRUn4BiJPLVFoiQzla5oWsW+n0Yjfq
-         yVtsCbknYq06PWVNSm3DykY8E0VCCLAA/6F7o6lJd6cxe52Dtf+QVhVWI5J3yMYpGyuY
-         oIfyWuq1ARrEnkRIz7Dg7/lyiqfbLpsnt7TSrpK4AIo4xDLouHKV1i7kF4By/2nehrr8
-         c45rT5aJdV12HsXR1hsVBEo/m2WyrLhni6r3V0r/m+rraxH4tuQd4vdoqoDzzVhRoKwY
-         P4oCGZ9l4tC7bV2vaImE4HKn6bAEo1flgfkO0Le2YzboYGzQpWBEo9t+tuWrjtL5QpLW
-         Bbwg==
+        bh=/2zFtYu9wilP4TDkd/Rna7BSHGzMwkhX0Z9/fwroutQ=;
+        b=V1NELKUyopsyZdAf8Kay417Bvf98COkRrHA6uEhBS752b+dQ4dB4KfPiOmZad+Z//9
+         PG18UDjI7qsTImXAcm002IkTrc1DuYWuKRk7xgQERrWGQUlhEs4FA8jnwIq8RtJ47e97
+         aghMxzt+txu0ab+s/5DIr+7uoPeL40blCxS8Rgrf+Xec39pt3TUGdVAhj3tLNBq9o66Q
+         QQOSjUnLQKIZBLuo+u1TDgiwdx5hL6i+YygYWn+CQTfkzKde6tGhQ1TvPQMhhytEHMnt
+         0oBqPtTLPrEmbIWa8LndsIHMfzgtPuZ1ueGrb5feL38sroDkcXxn1AJzc73aHwoNZ6p9
+         OMjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=85n7KGAmr3a89ZU52trBcPLYVfILUWt1Gk5T9XCy4j8=;
-        b=W9nNKsLgSIW+MOGW67+q388yA887ZHa1I5GVu71/C1UP83EGSMJUpgQuOYEpAiRQgs
-         cYZMVNE3+m5DHF1EqdtJQxogjYXJmddhjOz7wg43vgrj0+lKCV8JrF9lukHZRhN3iWUH
-         Dnf8rUIT1ATYLhc+UGrjiWBSCNWFHggP37q6dxXcwQAMTpw14qK+M2g51cugnR3UK52M
-         NySd0+/oSrCB/DNsvMhVwG2Z5ofScdqL+1/lREyd4cQ+6E4X2nCK8E1GGRvMUcx9O0Mi
-         1reji/IBibrRP9F48ZaGNNJZayNxZz+/AAMPycMrJHBCsy0qpstnbtZBjvkq0NMvFIMR
-         JrJw==
-X-Gm-Message-State: AOAM533n7520GwAludNnuHTvPEL92/+IgkFsYvKgQIW4Zz+bONaYQ4YF
-        htVBMxmKE4p1JneiSCBtECQ0XfeWTTM=
-X-Google-Smtp-Source: ABdhPJxZ8IDTHJtB4zVNlGTnGfv2PeB514VcdfTykPa0vJLc06ub+9Y4rpoPqfcEtAk3QT8XHkm3WA==
-X-Received: by 2002:aca:f5cf:: with SMTP id t198mr35038oih.22.1601910188645;
-        Mon, 05 Oct 2020 08:03:08 -0700 (PDT)
+        bh=/2zFtYu9wilP4TDkd/Rna7BSHGzMwkhX0Z9/fwroutQ=;
+        b=Hzes0MPNxOImAcQLRNOTpwa12Fz0VoLNXBhVNG/hsCNO5Qk0y+scJ0AbANaDyFEUKd
+         ME9o7ZIjG+5eIClw2BAdjL/NphVd547E6ss1DInwbOuoXXq/phY+KTNGOGmUvBds4Rrb
+         8D6jU5RY+NyVgK9y2s6HoIX/KzkLTvpN3q86jQyi8W0KSIP2TBfah9ShVXOS1DTDtBXY
+         f4l131dJMaVvwuI2jYz9B/6A4epDdOn2Okw3kK4rDDcPjZ+9bGyO2E03Rl4QmO87VTSh
+         oOcNS26QKEhVywJLR8qW+aso8qPBT6nN6C23FKK5+CbRtPJjfuuPmkDJ4mIXqv8PHAz+
+         lAmA==
+X-Gm-Message-State: AOAM532c7tLUFqXLqxzAmbZEtXh/nskzjvhBUqCdM3r3u9lpkkCd+Frh
+        dteQVSsBd7EGzBYdeaJXXkRErVbxuQ0=
+X-Google-Smtp-Source: ABdhPJy87HtxXYNE5/bP+qTEC0Qbf6zMpumDglI+TIGyyN16csDoNONIo8aQF5Stu9rF7hGeMbgP/A==
+X-Received: by 2002:a4a:614f:: with SMTP id u15mr12425358ooe.70.1601910204983;
+        Mon, 05 Oct 2020 08:03:24 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i7sm2943621oto.62.2020.10.05.08.03.06
+        by smtp.gmail.com with ESMTPSA id 8sm13983oii.45.2020.10.05.08.03.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Oct 2020 08:03:07 -0700 (PDT)
+        Mon, 05 Oct 2020 08:03:24 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: hwmon: nct6775: If an ACPI driver is available for this device,
- you should use it instead of the native driver
-To:     Corentin Labbe <clabbe.montjoie@gmail.com>,
-        linux-hwmon@vger.kernel.org, jdelvare@suse.com
-References: <20201005075019.GA29306@Red>
+Subject: Re: [PATCH v4 2/2] hwmon: pmbus: max20730: adjust the vout reading
+ given voltage divider
+To:     Chu Lin <linchuyuan@google.com>, jdelvare@suse.com,
+        robh+dt@kernel.org, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20201004031445.2321090-1-linchuyuan@google.com>
+ <20201004031445.2321090-3-linchuyuan@google.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -109,12 +111,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <a3a9bc90-ed7d-4966-7566-147755b6a247@roeck-us.net>
-Date:   Mon, 5 Oct 2020 08:03:05 -0700
+Message-ID: <53b00d06-e2e7-0615-4b9f-46ac6358fdd7@roeck-us.net>
+Date:   Mon, 5 Oct 2020 08:03:23 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20201005075019.GA29306@Red>
+In-Reply-To: <20201004031445.2321090-3-linchuyuan@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -122,70 +124,92 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10/5/20 12:50 AM, Corentin Labbe wrote:
-> Hello
+On 10/3/20 8:14 PM, Chu Lin wrote:
+> Problem:
+> We use voltage dividers so that the voltage presented at the voltage
+> sense pins is confusing. We might need to convert these readings to more
+> meaningful readings given the voltage divider.
 > 
-> I have a motherboard with a nct6775 and I got this on boot:
-> nct6775: Found NCT6798D or compatible chip at 0x2e:0x290
-> ACPI Warning: SystemIO range 0x0000000000000295-0x0000000000000296 conflicts with OpRegion 0x0000000000000290-0x0000000000000299 (\AMW0.SHWM) (20200326/utaddress-204)
-> ACPI: If an ACPI driver is available for this device, you should use it instead of the native driver
-> And so the driver is not loaded.
+> Solution:
+> Read the voltage divider resistance from dts and convert the voltage
+> reading to a more meaningful reading.
 > 
-> Since I dont have an ACPI driver for it I have hacked the driver to skip this acpi_check_resource_conflict() and the driver works well:
-> nct6798-isa-0290
-> Adapter: ISA adapter
-> in0:                   936.00 mV (min =  +0.00 V, max =  +1.74 V)
-> in1:                     1.02 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-> in2:                     3.41 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-> in3:                     3.33 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-> in4:                     1.01 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-> in5:                   776.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-> in6:                     1.02 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-> in7:                     3.41 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-> in8:                     3.31 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-> in9:                   904.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-> in10:                  272.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-> in11:                  552.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-> in12:                    1.02 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-> in13:                    1.01 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-> in14:                  992.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-> fan1:                     0 RPM  (min =    0 RPM)
-> fan2:                  1138 RPM  (min =    0 RPM)
-> fan3:                  1744 RPM  (min =    0 RPM)
-> fan4:                     0 RPM  (min =    0 RPM)
-> fan5:                  2402 RPM  (min =    0 RPM)
-> fan6:                     0 RPM  (min =    0 RPM)
-> fan7:                     0 RPM  (min =    0 RPM)
-> SYSTIN:                 +38.0°C  (high = +80.0°C, hyst = +75.0°C)  sensor = thermistor
-> CPUTIN:                 +37.5°C  (high = +80.0°C, hyst = +75.0°C)  sensor = thermistor
-> AUXTIN0:                +25.0°C    sensor = thermistor
-> AUXTIN1:                +53.0°C    sensor = thermistor
-> AUXTIN2:                +20.0°C    sensor = thermistor
-> AUXTIN3:                +26.0°C    sensor = thermistor
-> SMBUSMASTER 1:          +61.5°C  
-> PCH_CHIP_CPU_MAX_TEMP:   +0.0°C  
-> PCH_CHIP_TEMP:           +0.0°C  
-> PCH_CPU_TEMP:            +0.0°C  
-> intrusion0:            ALARM
-> intrusion1:            ALARM
-> beep_enable:           disabled
+> Testing:
+> max20730 with voltage divider
 > 
-> I got the same problem with an it87 and did the same, but does it exists a better way to do this ?
-> Or does I ignore soemthing to make it works ?
+> Signed-off-by: Chu Lin <linchuyuan@google.com>
+
+For my reference (carried from v2):
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+Still waiting for DT approval.
+
+> ---
+> ChangeLog v1 -> v2
+>   hwmon: pmbus: max20730:
+>   - Don't do anything to the ret if an error is returned from pmbus_read_word
+>   - avoid overflow when doing multiplication
+> 
+> ChangeLog v2 -> v3
+>   dt-bindings: hwmon: max20730:
+>   - Provide the binding documentation in yaml format
+>   hwmon: pmbus: max20730:
+>   - No change
+> 
+> ChangeLog v3 -> v4
+>   dt-bindings: hwmon: max20730:
+>   - Fix highefficiency to high efficiency in description
+>   - Fix presents to present in vout-voltage-divider
+>   - Add additionalProperties: false
+>   hwmon: pmbus: max20730:
+>   - No change
+> 
+>  drivers/hwmon/pmbus/max20730.c | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
+> 
+> diff --git a/drivers/hwmon/pmbus/max20730.c b/drivers/hwmon/pmbus/max20730.c
+> index a151a2b588a5..fbf2f1e6c969 100644
+> --- a/drivers/hwmon/pmbus/max20730.c
+> +++ b/drivers/hwmon/pmbus/max20730.c
+> @@ -31,6 +31,7 @@ struct max20730_data {
+>  	struct pmbus_driver_info info;
+>  	struct mutex lock;	/* Used to protect against parallel writes */
+>  	u16 mfr_devset1;
+> +	u32 vout_voltage_divider[2];
+>  };
+>  
+>  #define to_max20730_data(x)  container_of(x, struct max20730_data, info)
+> @@ -114,6 +115,14 @@ static int max20730_read_word_data(struct i2c_client *client, int page,
+>  		max_c = max_current[data->id][(data->mfr_devset1 >> 5) & 0x3];
+>  		ret = val_to_direct(max_c, PSC_CURRENT_OUT, info);
+>  		break;
+> +	case PMBUS_READ_VOUT:
+> +		ret = pmbus_read_word_data(client, page, phase, reg);
+> +		if (ret > 0 && data->vout_voltage_divider[0] && data->vout_voltage_divider[1]) {
+> +			u64 temp = DIV_ROUND_CLOSEST_ULL((u64)ret * data->vout_voltage_divider[1],
+> +							 data->vout_voltage_divider[0]);
+> +			ret = clamp_val(temp, 0, 0xffff);
+> +		}
+> +		break;
+>  	default:
+>  		ret = -ENODATA;
+>  		break;
+> @@ -364,6 +373,15 @@ static int max20730_probe(struct i2c_client *client,
+>  	data->id = chip_id;
+>  	mutex_init(&data->lock);
+>  	memcpy(&data->info, &max20730_info[chip_id], sizeof(data->info));
+> +	if (of_property_read_u32_array(client->dev.of_node, "vout-voltage-divider",
+> +				       data->vout_voltage_divider,
+> +				       ARRAY_SIZE(data->vout_voltage_divider)) != 0)
+> +		memset(data->vout_voltage_divider, 0, sizeof(data->vout_voltage_divider));
+> +	if (data->vout_voltage_divider[1] < data->vout_voltage_divider[0]) {
+> +		dev_err(dev,
+> +			"The total resistance of voltage divider is less than output resistance\n");
+> +		return -ENODEV;
+> +	}
+>  
+>  	ret = i2c_smbus_read_word_data(client, MAX20730_MFR_DEVSET1);
+>  	if (ret < 0)
 > 
 
-
-You could add "acpi_enforce_resources=lax" to the kernel command line.
-Your hack (and the command line parameter) may be problematic
-if ACPI does indeed access the chip since the chip has multiple pages
-and ACPI may (unsynchronized with the kernel driver) change the page
-number.
-
-Worst case this may cause a system hang or reboot, unfortunately.
-You might at least want to decode the ACPI tables to determine what,
-if anything, it does when accessing the chip. You might be lucky
-and it doesn't really access it - some systems just reserve the address
-space but don't use it, presumably because system vendors don't want
-users to access the SuperIO chip directly.
-
-Guenter
