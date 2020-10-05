@@ -5,68 +5,66 @@ X-Spam-Level:
 X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44262C4727D
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 15:04:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FD65C4363A
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 15:09:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 089C720FC3
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 15:04:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 273D620774
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 15:09:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V1NELKUy"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b3PyHH92"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726760AbgJEPD3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 5 Oct 2020 11:03:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44688 "EHLO
+        id S1726458AbgJEPJE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 5 Oct 2020 11:09:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726740AbgJEPD0 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Oct 2020 11:03:26 -0400
-Received: from mail-oo1-xc41.google.com (mail-oo1-xc41.google.com [IPv6:2607:f8b0:4864:20::c41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E291EC0613A7;
-        Mon,  5 Oct 2020 08:03:25 -0700 (PDT)
-Received: by mail-oo1-xc41.google.com with SMTP id o20so2319254ook.1;
-        Mon, 05 Oct 2020 08:03:25 -0700 (PDT)
+        with ESMTP id S1725970AbgJEPJE (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Oct 2020 11:09:04 -0400
+Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 824C1C0613CE;
+        Mon,  5 Oct 2020 08:09:04 -0700 (PDT)
+Received: by mail-oi1-x244.google.com with SMTP id u126so8982038oif.13;
+        Mon, 05 Oct 2020 08:09:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:references:from:autocrypt:message-id:date
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=/2zFtYu9wilP4TDkd/Rna7BSHGzMwkhX0Z9/fwroutQ=;
-        b=V1NELKUyopsyZdAf8Kay417Bvf98COkRrHA6uEhBS752b+dQ4dB4KfPiOmZad+Z//9
-         PG18UDjI7qsTImXAcm002IkTrc1DuYWuKRk7xgQERrWGQUlhEs4FA8jnwIq8RtJ47e97
-         aghMxzt+txu0ab+s/5DIr+7uoPeL40blCxS8Rgrf+Xec39pt3TUGdVAhj3tLNBq9o66Q
-         QQOSjUnLQKIZBLuo+u1TDgiwdx5hL6i+YygYWn+CQTfkzKde6tGhQ1TvPQMhhytEHMnt
-         0oBqPtTLPrEmbIWa8LndsIHMfzgtPuZ1ueGrb5feL38sroDkcXxn1AJzc73aHwoNZ6p9
-         OMjA==
+        bh=5EyUBblOiDmWcpZQ14k8x7x0Ix+bWgSiATXrJ6A1d3s=;
+        b=b3PyHH92xAoIoTSb2WnNAxkFT6t1E3QWOESREMgJHHILdTqiM7tSbDT3NXRjaKlm48
+         Lb+yry5erSGfa35pCCyyrG9jXRzqD7lR/GUbme7dZHZmg9aO1E9lHk5zUFWOX7+RBCGU
+         c04wCRbsCoxbMLipk6AEYFX29BM2NmsbLdMhIhuoc8W6vly9F/IL3GGuuKpGfziU4K1d
+         mqdhLxufU+pV5NCPnfTJAXcHGmIceVa3nOjm2Ul7cAxgfVIyWiBRRX/cHgOBEVloYIvf
+         XLHQ15j3k/b1+lxRUfQHMXywX/p8RR6TTlyiQdc6KVxl/Rx22gJmAHTBH8fvmVffMsF/
+         BAFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:references:from:autocrypt
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=/2zFtYu9wilP4TDkd/Rna7BSHGzMwkhX0Z9/fwroutQ=;
-        b=Hzes0MPNxOImAcQLRNOTpwa12Fz0VoLNXBhVNG/hsCNO5Qk0y+scJ0AbANaDyFEUKd
-         ME9o7ZIjG+5eIClw2BAdjL/NphVd547E6ss1DInwbOuoXXq/phY+KTNGOGmUvBds4Rrb
-         8D6jU5RY+NyVgK9y2s6HoIX/KzkLTvpN3q86jQyi8W0KSIP2TBfah9ShVXOS1DTDtBXY
-         f4l131dJMaVvwuI2jYz9B/6A4epDdOn2Okw3kK4rDDcPjZ+9bGyO2E03Rl4QmO87VTSh
-         oOcNS26QKEhVywJLR8qW+aso8qPBT6nN6C23FKK5+CbRtPJjfuuPmkDJ4mIXqv8PHAz+
-         lAmA==
-X-Gm-Message-State: AOAM532c7tLUFqXLqxzAmbZEtXh/nskzjvhBUqCdM3r3u9lpkkCd+Frh
-        dteQVSsBd7EGzBYdeaJXXkRErVbxuQ0=
-X-Google-Smtp-Source: ABdhPJy87HtxXYNE5/bP+qTEC0Qbf6zMpumDglI+TIGyyN16csDoNONIo8aQF5Stu9rF7hGeMbgP/A==
-X-Received: by 2002:a4a:614f:: with SMTP id u15mr12425358ooe.70.1601910204983;
-        Mon, 05 Oct 2020 08:03:24 -0700 (PDT)
+        bh=5EyUBblOiDmWcpZQ14k8x7x0Ix+bWgSiATXrJ6A1d3s=;
+        b=Tf30A6wV/tP0EvOn0FpD5yF5stQoB5fQhMwAZad4ndTHGgFYs/FFpxaffFJSUpdNhN
+         9RTkSjYshLfMJyDCU272mKh+URHShGM32RIWQwfKLLC2DuPSsxio9UoJdKvFs4nLB21C
+         j25HxJ0dUO1jrZboxTfP9pcI6e9j+F5ghUcc9sJvNrKrksqzqTbjh9HbMBTuCaCxh1BW
+         X/T9MjYY5KWW2nPKLYiZfjynsvmuXFIuR4yf2HUWrgO7aL6BUe7A/KpybJLlIfVUAYAV
+         5x9JR123N/Zf+Liex4kn3QhHXnWOeASx/Bs6CofDfOFfdDJWYNDDeYz/jXzfv8XgK6sP
+         SAgw==
+X-Gm-Message-State: AOAM530xvQZkYonD7KrGX2ik9Pdaip4qyp5YMuFpirgh30sjsezYX8Mk
+        xkGk85wUbizC5lsw0bcZ3KrOKA6s6GY=
+X-Google-Smtp-Source: ABdhPJy/q3Vh54Vq5544BqYSrD+mc8Cc55hhYcxBr5SxsY2ivMjpLddChO2mblKISOFUgkfLuFi0lA==
+X-Received: by 2002:aca:db42:: with SMTP id s63mr52169oig.4.1601910543966;
+        Mon, 05 Oct 2020 08:09:03 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 8sm13983oii.45.2020.10.05.08.03.23
+        by smtp.gmail.com with ESMTPSA id k24sm53714oou.43.2020.10.05.08.09.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Oct 2020 08:03:24 -0700 (PDT)
+        Mon, 05 Oct 2020 08:09:03 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v4 2/2] hwmon: pmbus: max20730: adjust the vout reading
- given voltage divider
-To:     Chu Lin <linchuyuan@google.com>, jdelvare@suse.com,
-        robh+dt@kernel.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20201004031445.2321090-1-linchuyuan@google.com>
- <20201004031445.2321090-3-linchuyuan@google.com>
+Subject: Re: [PATCH] hwmon: (pmbus/max34440) Fix/add missing break statements
+To:     Alexandru Ardelean <alexandru.ardelean@analog.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     jdelvare@suse.com, foremans@google.com
+References: <20201005115041.1750626-1-alexandru.ardelean@analog.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -111,105 +109,73 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <53b00d06-e2e7-0615-4b9f-46ac6358fdd7@roeck-us.net>
-Date:   Mon, 5 Oct 2020 08:03:23 -0700
+Message-ID: <40cc33b8-1dcf-898d-42f1-53b4404a80b9@roeck-us.net>
+Date:   Mon, 5 Oct 2020 08:09:02 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20201004031445.2321090-3-linchuyuan@google.com>
+In-Reply-To: <20201005115041.1750626-1-alexandru.ardelean@analog.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10/3/20 8:14 PM, Chu Lin wrote:
-> Problem:
-> We use voltage dividers so that the voltage presented at the voltage
-> sense pins is confusing. We might need to convert these readings to more
-> meaningful readings given the voltage divider.
+On 10/5/20 4:50 AM, Alexandru Ardelean wrote:
+> This one was caught by the compiler.
+> Adds missing break statements, which look omitted by accident.
 > 
-> Solution:
-> Read the voltage divider resistance from dts and convert the voltage
-> reading to a more meaningful reading.
-> 
-> Testing:
-> max20730 with voltage divider
-> 
-> Signed-off-by: Chu Lin <linchuyuan@google.com>
+Most definitely.
 
-For my reference (carried from v2):
+> Fixes: 599a5ac5f96c ("hwmon: (pmbus/max34440) Fix/add missing break statements")
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+This should point to the culprit.
 
-Still waiting for DT approval.
-
+> Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
 > ---
-> ChangeLog v1 -> v2
->   hwmon: pmbus: max20730:
->   - Don't do anything to the ret if an error is returned from pmbus_read_word
->   - avoid overflow when doing multiplication
 > 
-> ChangeLog v2 -> v3
->   dt-bindings: hwmon: max20730:
->   - Provide the binding documentation in yaml format
->   hwmon: pmbus: max20730:
->   - No change
+> Maybe the lkp bot also reported this [by now].
+> I just bumped into this now, trying to work on another driver.
+> Now whether this gets applied, or a V2 is created, is not important from my
+> side.
 > 
-> ChangeLog v3 -> v4
->   dt-bindings: hwmon: max20730:
->   - Fix highefficiency to high efficiency in description
->   - Fix presents to present in vout-voltage-divider
->   - Add additionalProperties: false
->   hwmon: pmbus: max20730:
->   - No change
+Thanks, folded into the original patch.
+
+Guenter
+
+> This is a heads-up [from my side].
 > 
->  drivers/hwmon/pmbus/max20730.c | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
+>  drivers/hwmon/pmbus/max34440.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> diff --git a/drivers/hwmon/pmbus/max20730.c b/drivers/hwmon/pmbus/max20730.c
-> index a151a2b588a5..fbf2f1e6c969 100644
-> --- a/drivers/hwmon/pmbus/max20730.c
-> +++ b/drivers/hwmon/pmbus/max20730.c
-> @@ -31,6 +31,7 @@ struct max20730_data {
->  	struct pmbus_driver_info info;
->  	struct mutex lock;	/* Used to protect against parallel writes */
->  	u16 mfr_devset1;
-> +	u32 vout_voltage_divider[2];
->  };
->  
->  #define to_max20730_data(x)  container_of(x, struct max20730_data, info)
-> @@ -114,6 +115,14 @@ static int max20730_read_word_data(struct i2c_client *client, int page,
->  		max_c = max_current[data->id][(data->mfr_devset1 >> 5) & 0x3];
->  		ret = val_to_direct(max_c, PSC_CURRENT_OUT, info);
->  		break;
-> +	case PMBUS_READ_VOUT:
-> +		ret = pmbus_read_word_data(client, page, phase, reg);
-> +		if (ret > 0 && data->vout_voltage_divider[0] && data->vout_voltage_divider[1]) {
-> +			u64 temp = DIV_ROUND_CLOSEST_ULL((u64)ret * data->vout_voltage_divider[1],
-> +							 data->vout_voltage_divider[0]);
-> +			ret = clamp_val(temp, 0, 0xffff);
-> +		}
+> diff --git a/drivers/hwmon/pmbus/max34440.c b/drivers/hwmon/pmbus/max34440.c
+> index bdea52996580..f4cb196aaaf3 100644
+> --- a/drivers/hwmon/pmbus/max34440.c
+> +++ b/drivers/hwmon/pmbus/max34440.c
+> @@ -61,9 +61,11 @@ static int max34440_read_word_data(struct i2c_client *client, int page,
+>  	case PMBUS_IOUT_OC_FAULT_LIMIT:
+>  		ret = pmbus_read_word_data(client, page, phase,
+>  					   MAX34440_IOUT_OC_FAULT_LIMIT);
 > +		break;
->  	default:
->  		ret = -ENODATA;
->  		break;
-> @@ -364,6 +373,15 @@ static int max20730_probe(struct i2c_client *client,
->  	data->id = chip_id;
->  	mutex_init(&data->lock);
->  	memcpy(&data->info, &max20730_info[chip_id], sizeof(data->info));
-> +	if (of_property_read_u32_array(client->dev.of_node, "vout-voltage-divider",
-> +				       data->vout_voltage_divider,
-> +				       ARRAY_SIZE(data->vout_voltage_divider)) != 0)
-> +		memset(data->vout_voltage_divider, 0, sizeof(data->vout_voltage_divider));
-> +	if (data->vout_voltage_divider[1] < data->vout_voltage_divider[0]) {
-> +		dev_err(dev,
-> +			"The total resistance of voltage divider is less than output resistance\n");
-> +		return -ENODEV;
-> +	}
->  
->  	ret = i2c_smbus_read_word_data(client, MAX20730_MFR_DEVSET1);
->  	if (ret < 0)
+>  	case PMBUS_IOUT_OC_WARN_LIMIT:
+>  		ret = pmbus_read_word_data(client, page, phase,
+>  					   MAX34440_IOUT_OC_WARN_LIMIT);
+> +		break;
+>  	case PMBUS_VIRT_READ_VOUT_MIN:
+>  		ret = pmbus_read_word_data(client, page, phase,
+>  					   MAX34440_MFR_VOUT_MIN);
+> @@ -133,9 +135,11 @@ static int max34440_write_word_data(struct i2c_client *client, int page,
+>  	case PMBUS_IOUT_OC_FAULT_LIMIT:
+>  		ret = pmbus_write_word_data(client, page, MAX34440_IOUT_OC_FAULT_LIMIT,
+>  					    word);
+> +		break;
+>  	case PMBUS_IOUT_OC_WARN_LIMIT:
+>  		ret = pmbus_write_word_data(client, page, MAX34440_IOUT_OC_WARN_LIMIT,
+>  					    word);
+> +		break;
+>  	case PMBUS_VIRT_RESET_POUT_HISTORY:
+>  		ret = pmbus_write_word_data(client, page,
+>  					    MAX34446_MFR_POUT_PEAK, 0);
 > 
 
