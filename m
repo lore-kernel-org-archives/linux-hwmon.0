@@ -2,166 +2,109 @@ Return-Path: <SRS0=kkoh=DM=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CE37C4363A
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 09:07:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67981C4363A
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 09:27:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 505F820665
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 09:07:08 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mczHn7MV"
+	by mail.kernel.org (Postfix) with ESMTP id 34F7620774
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 09:27:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725925AbgJEJHH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 5 Oct 2020 05:07:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45924 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725915AbgJEJHH (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Oct 2020 05:07:07 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BD2C0613CE;
-        Mon,  5 Oct 2020 02:07:07 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id t14so5591383pgl.10;
-        Mon, 05 Oct 2020 02:07:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eUORg47spfL73f7H/PLu8NLMtjAqRWZqjYpdZQW2IeA=;
-        b=mczHn7MVXcsomQTFrw5fjFQDY6Z2sHBj48BuZ+oqxp0x1dRrhtzk7jZ799ntIIiXxX
-         lZJOgxdZiEewNVhmAThkQtkBri/M92ZndaceRxCWEF/3hBbUe21AvPxrFjS8zIjl5z8A
-         TeStuo/AHh2/bx8Wyk8EDbFMH62S3C2xj2r5rFPDrrzcOqmNdXvonpBbdxYLtJpGoSej
-         Pi58cFQwb2Qv5HT7FSgqsJdHGCA3M6PkZUFdKAyuEKmRS/1r61BaJ7WDBCpMTGGWsq9V
-         Cf4/5Oc/VP6cNow8noQMnn81MZA4fzac7y0IkZws1K8fvkEmFrAlJTNz/xkzaJNWsY5q
-         ohQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eUORg47spfL73f7H/PLu8NLMtjAqRWZqjYpdZQW2IeA=;
-        b=JAdKZ7VdCALXfBiDWZIRBCqbfwqiJttOyvVw8sWIc4sQ/EkO1EuTI3k+bB58kPbDmV
-         5pXklEvQ25fvJ1NTv0oniTC4cd/HAxo+JTax993H8GY6ZL5PkjjoiL+v7cW55CZ/LGuB
-         9J9XAyxBBBRLWAG5NyAXQUGiBsq+7pQWnagFsTZyz1AIVPYNCnubBFB9hO9nO7GMD21e
-         GC9ToAWUwfYbtaiIk0Kr4/fP5Q7jnT7yQ4TEF5S4P57nQZXIzh85/xN+Z1L6tMCfQKCA
-         Y1ZexHqo4WcRl77Yg0+4cV6XmZUsJYjYdPysw5cyvBQUgMIQLImYhOPf9cpIh1eDS1c1
-         zoCQ==
-X-Gm-Message-State: AOAM531TlAg5iL26cJOZr62NasEEhiSJkWFFUxcswsa2Nhh7sKGCHeIf
-        2R+h8Ww79yAAemLlGwfiuc5kgDj7mn8kQAXDgm8=
-X-Google-Smtp-Source: ABdhPJzhbg94S7Z/1w94KPVZXA60oHdU7QVEKuolCSxzPQuXMVhODL+N9B6n/+8Je+21Z9sl4PM+WEFOH36w974C6MY=
-X-Received: by 2002:a63:ec4c:: with SMTP id r12mr13296765pgj.74.1601888827197;
- Mon, 05 Oct 2020 02:07:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1601621983.git.rahul.tanwar@linux.intel.com>
- <e8c462ffc826d06c108aac45f8476083097cfa55.1601621983.git.rahul.tanwar@linux.intel.com>
- <20201002181135.GI3956970@smile.fi.intel.com> <f224391a-2e51-ec37-7045-4a16f04b5384@linux.intel.com>
-In-Reply-To: <f224391a-2e51-ec37-7045-4a16f04b5384@linux.intel.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 5 Oct 2020 12:06:48 +0300
-Message-ID: <CAHp75VcHk0qZ_pFAvZLC4+8=r7E=cqe3J+enB3UWD9X1KQQ4Ng@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] Add hardware monitoring driver for Moortec MR75203
- PVT controller
-To:     "Tanwar, Rahul" <rahul.tanwar@linux.intel.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-hwmon@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>, songjun.Wu@intel.com,
+        id S1725922AbgJEJ1y (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 5 Oct 2020 05:27:54 -0400
+Received: from mga03.intel.com ([134.134.136.65]:53116 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725891AbgJEJ1y (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 5 Oct 2020 05:27:54 -0400
+IronPort-SDR: tllKcpAyux/2IverV7CmtDJKhrp0CwajQOTOovyj4sTvcBn2RVL8nvj32CB1yj+9pMDyySip2V
+ KS38pTRk1pHg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9764"; a="163468592"
+X-IronPort-AV: E=Sophos;i="5.77,338,1596524400"; 
+   d="scan'208";a="163468592"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2020 02:27:51 -0700
+IronPort-SDR: nxJLfi3SMBzrnw1ffB+5VA/Jr74ND9wQBQIPZeAN4WBzX1QKcrfs86CheK7Qaw6MGuvH3C0NOs
+ NS+98dfCuXRw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,338,1596524400"; 
+   d="scan'208";a="340820755"
+Received: from sgsxdev001.isng.intel.com (HELO localhost) ([10.226.88.11])
+  by fmsmga004.fm.intel.com with ESMTP; 05 Oct 2020 02:27:48 -0700
+From:   Rahul Tanwar <rahul.tanwar@linux.intel.com>
+To:     jdelvare@suse.com, linux@roeck-us.net, p.zabel@pengutronix.de,
+        linux-hwmon@vger.kernel.org, robh+dt@kernel.org
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        andriy.shevchenko@intel.com, songjun.Wu@intel.com,
         cheol.yong.kim@intel.com, qi-ming.wu@intel.com,
-        rtanwar@maxlinear.com
-Content-Type: text/plain; charset="UTF-8"
+        rtanwar@maxlinear.com, Rahul Tanwar <rahul.tanwar@linux.intel.com>
+Subject: [PATCH v5 0/2] Add hwmon driver for Moortec PVT controller
+Date:   Mon,  5 Oct 2020 17:27:44 +0800
+Message-Id: <cover.1601889876.git.rahul.tanwar@linux.intel.com>
+X-Mailer: git-send-email 2.11.0
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Oct 5, 2020 at 11:53 AM Tanwar, Rahul
-<rahul.tanwar@linux.intel.com> wrote:
-> On 3/10/2020 2:11 am, Andy Shevchenko wrote:
-> > On Fri, Oct 02, 2020 at 03:04:27PM +0800, Rahul Tanwar wrote:
+Patch 1 adds DT bindings schema in YAML format.
+Patch 2 adds driver for MR75203 PVT controller.
 
-...
+v5:
+- Add bits.h header.
+- Use memset32() instead of using loop.
+- Address other code quality related review concerns.
+- Add Reviewed-by tags.
 
-> >> +            pvt_temp.config = temp_config;
-> >> +
-> >> +            pvt_info[index++] = &pvt_temp;
-> >> +    }
-> >> +
-> >> +    if (pd_num) {
-> >> +            ret = pvt_get_regmap(pdev, "pd", pvt);
-> >> +            if (ret)
-> >> +                    return ret;
-> >> +    }
-> >> +
-> >> +    if (vm_num) {
-> >> +            u32 num = vm_num;
-> >> +
-> >> +            ret = pvt_get_regmap(pdev, "vm", pvt);
-> >> +            if (ret)
-> >> +                    return ret;
-> >> +
-> >> +            pvt->vm_idx = devm_kcalloc(dev, vm_num, sizeof(*pvt->vm_idx),
-> >> +                                       GFP_KERNEL);
-> >> +            if (!pvt->vm_idx)
-> >> +                    return -ENOMEM;
-> >> +            for (i = 0; i < vm_num; i++)
-> >> +                    pvt->vm_idx[i] = i;
-> > What the point if you are replace them below in one case?
-> >
-> >> +            ret = device_property_read_u8_array(dev, "intel,vm-map",
-> >> +                                                pvt->vm_idx, vm_num);
-> >> +            if (!ret)
-> > Misses {} and because of above
-> >
-> >       if (ret) {
-> >               for () ...
-> >       } else {
-> >               for () ...
-> >       }
-> >
-> >> +                    for (i = 0; i < vm_num; i++)
-> >> +                            if (pvt->vm_idx[i] >= vm_num ||
-> >> +                                pvt->vm_idx[i] == 0xff) {
-> >> +                                    num = i;
-> >> +                                    break;
-> >> +                            }
-> > Or looking in this, perhaps move the incremental for-loop here and start it
-> > with num which is 0.
->
-> Not able to understand what exactly you are suggesting here. Presently
-> it is like below:
-> 1. Init vm_idx array with incremental values.
-> 2. Read array from device property.
-> 3. If success, figure out the last valid value and assign to num.
->
-> Can you please elaborate and explain more clearly? Thanks.
+v4:
+- Fix a spelling mistake in comments.
+- Add return value error checking for all regmap_reads/writes.
+- Remove unnecessary else statement and a validation check.
 
-device_property_read_u8_array() effectively (partially) rewrites the
-vm_idx array.
-The code above is inefficient and not clear.
-My understanding based on the above is that half of the code may be dropped.
+v3:
+- Resolve make dt_binding_check errors.
+- Add vendor prefix and type reference for one property in yaml schema.
+- Update new property name in the driver.
 
-So, clearer variant looks like this to me:
+v2:
+- Address below review concerns from Andy Shevchenko
+ * Add more info in comments for clamp_val usage for clk sys cycles.
+ * Add mod_devicetable.h & property.h and remove of.h
+ * Remove unnecessary additional mutex lock from driver. Rely on regmap's
+   internal lock.
+ * Use units in timeout macros.
+ * Use HZ_PER_MHZ instead of direct values.
+ * Use devm_platform_ioremap_resource_byname() instead of separate calls.
+ * Use device property read API instead of OF API.
+- Address below review concerns from Guenter Roeck
+ * Improve commit message - add hardware monitoring driver.
+ * Remove unnecessary platform_set_drvdata. Instead add driver data in
+   function args at one place where it is used. Fix a issue related to it.
+ * Remove unnecessary NULL assignment.
+- Address below review concerns from Philipp Zabel
+ * Switch to devm_reset_control_get_exclusive().
+ * Move reset_deassert at the last after clk_enable in probe.
+- Resolve make dt_binding_check error.
+- Add MODULE_LICENSE
 
-  ret = device_property_read_u8_array(dev, "intel,vm-map", pvt->vm_idx, vm_num);
-  if (ret) {
-    num = 0;
-  } else {
-    for (i = 0; i < vm_num; i++) {
-      if (pvt->vm_idx[i] >= vm_num || pvt->vm_idx[i] == 0xff)
-        break;
-    }
-    num = i;
-  }
-  for (i = num; i < vm_num; i++)
-    pvt->vm_idx[i] = i;
+v1:
+- Initial version.
 
-And all these require a good comment to describe why you are doing the
-trailing loop.
+
+Rahul Tanwar (2):
+  Add DT bindings schema for PVT controller
+  Add hardware monitoring driver for Moortec MR75203 PVT controller
+
+ .../devicetree/bindings/hwmon/moortec,mr75203.yaml |  71 +++
+ drivers/hwmon/Kconfig                              |  10 +
+ drivers/hwmon/Makefile                             |   1 +
+ drivers/hwmon/mr75203.c                            | 656 +++++++++++++++++++++
+ 4 files changed, 738 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+ create mode 100644 drivers/hwmon/mr75203.c
 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.11.0
+
