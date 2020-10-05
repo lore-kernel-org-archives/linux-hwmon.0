@@ -2,124 +2,168 @@ Return-Path: <SRS0=kkoh=DM=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C790C4727D
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 07:50:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88827C47425
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 08:04:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 051B12075A
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 07:50:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4E46520853
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 08:04:57 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NZZRP2Q9"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QT2sz2z2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725896AbgJEHuY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 5 Oct 2020 03:50:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33958 "EHLO
+        id S1725970AbgJEIE4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 5 Oct 2020 04:04:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725870AbgJEHuX (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Oct 2020 03:50:23 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C7AC0613CE
-        for <linux-hwmon@vger.kernel.org>; Mon,  5 Oct 2020 00:50:23 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id j136so7718712wmj.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 05 Oct 2020 00:50:23 -0700 (PDT)
+        with ESMTP id S1725944AbgJEIE4 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Oct 2020 04:04:56 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09CF7C0613B0
+        for <linux-hwmon@vger.kernel.org>; Mon,  5 Oct 2020 01:04:54 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id j2so8417595wrx.7
+        for <linux-hwmon@vger.kernel.org>; Mon, 05 Oct 2020 01:04:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:subject:message-id:mime-version:content-disposition
-         :content-transfer-encoding;
-        bh=/gNj5RGizFaiiX2S3nxX8Wjw/l9Zgq8hCxi5a/wrkhA=;
-        b=NZZRP2Q9Vnk03IPJguHkPvULnE5H6N4nn4h9m0VhNUnZLc44pqN/imE78DLESrf+ie
-         vMylgRVn12J1MIrn1M00gX9o4dEUXwVKDiQ/t6GpvdQ1Us10xJpt/zyA6jaxkny2MqUl
-         xwxgsSnb8Atm2aX3GaZrZBV9aQHYaiAKnaK8PN+mw6bWD966iLUxmUQuqpvLDNeoICJ1
-         d/bOHkPsJ36HZnZ+K1wQSxsImSRnUzUY/GtU5byDhPjilvuBjSyjFxpl9qtN/vxAetKr
-         X4znqrRceZ/Lmiyte+oE2Ho8jhwB1sfx1wu5fZHQZigxAqqvIjcZmHbJUgOqhPbugXDH
-         uewA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=IeiNTBeAySgxF765tOCATEDwXLrm3RiAjoTBQHN6wK0=;
+        b=QT2sz2z2T2ObbOF9cBuqPj/xMs2V2JkpGaC1yQPewHnLjCK6KfpJxnFBd52Yg4AGmP
+         VJxRGRPxaRQLhLWf/cJj+4TFWIvc5S6rpMyihLW8guAo+UvNRqZKoELqvBpOePuA/Etp
+         z293SdQf8ZGebrwCEz1gY7IlvwFjzz13UZb9UEwJiawxT5K21aKdmv/U8ZWx8aU8cdsz
+         g1EJ2lezQTBEJzLkUS6vaHwbRc5HEANA2MQBDDgPE/harsOdRDrcIYwSmq3urQxn7+oQ
+         VI6XlJwzca0RWlRBNRLXanZ5iKvZaicHTe2BxzY/5qO5xvvbJ/G2d1fmd5VfFwE503zT
+         3Stw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition:content-transfer-encoding;
-        bh=/gNj5RGizFaiiX2S3nxX8Wjw/l9Zgq8hCxi5a/wrkhA=;
-        b=epZZ/bPxAV1ohTlzYng4dFOGNW8+V4QyicvxmL28QdD63rir/RdCs6CI669HPFErlq
-         7q4icu67amd44WvchAuN0YrhYiOyCOVzo4X6OC/+YblgpyV4IYnTVKGRQjUUKlo+ZAam
-         2msxKdlBcrsRY9qxOCAEij8sOSS6mxPpI38rnMQukejlT/Njnk+kWcTLjTuQ/m3eiVc/
-         BZzDX/FsMWpEpNWyDtGbgpbnEnxlZN7eyZWZVTwFF42jxtUg9OYkPSP2zFn5Yt8UXNac
-         UAd8r5ryO8pi5gacKyww4uDpDzJXHjtEPn9Hc4zXptAEJc8/HSPTCGcJIEU8Pwvtj+8f
-         9SZQ==
-X-Gm-Message-State: AOAM5333hxwvIBr+mY3kF97WtKC10BS7wfAWbgmm/gnLHdOAISD1+M0U
-        stqW4L9lUmoqwpPgy5E2oYHkBQGoaqY=
-X-Google-Smtp-Source: ABdhPJw595c/LdFAn2Y4o+ewsx0Qc5YxM0FRM8BL2i3hvhMOrmwBjiXXOkZyEQHKFqmNy9FVJsKXCQ==
-X-Received: by 2002:a1c:117:: with SMTP id 23mr15312732wmb.48.1601884221742;
-        Mon, 05 Oct 2020 00:50:21 -0700 (PDT)
-Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
-        by smtp.googlemail.com with ESMTPSA id t6sm13090952wre.30.2020.10.05.00.50.20
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=IeiNTBeAySgxF765tOCATEDwXLrm3RiAjoTBQHN6wK0=;
+        b=nyYh0w36ZMITqJPEKHjirKxFF9n9x4U68ahKJuyngtzqDZIK/30pbgd6II81hSG3gs
+         p6Ba9Mxd7Kbqii8tzGnE8J0D2NJ+epIozUGNrm+1Jx9dtetUohjr+NKkoMZ6uSTM/YAV
+         0HUm8nNEm10dHMRVo1t/RcoZk1hdaxN6aOxnl0yBYj4+a5bkZsUbEBNz5t06bJaU/dPh
+         OTg+EeXaCcN1MD6JudiNn7ZmPAlaARCsvgOOyVQVNEChxfDUEvipiwlG515DwEbsAPjF
+         4zPYRLNNhc4zO0VMLccInSU+Lv9Dd4kAEM5WdsRmk/ivTWMMPqvirH1NeLO/cL3XUOVO
+         FiMg==
+X-Gm-Message-State: AOAM532iTekUO27ZNLKUsNerLgBxyIYHw8HmSs37URz3gs5jlfaNas62
+        /FjRBApMMAxJ2pvdMbfd3dyO5w==
+X-Google-Smtp-Source: ABdhPJxB5n46P+iT3QRjzewwc6VgfO5oWkwQMA51B+oAEZSgUCF8P3GFXLcjkKteouHQRqUkrIZvVQ==
+X-Received: by 2002:adf:f10e:: with SMTP id r14mr9419051wro.337.1601885092289;
+        Mon, 05 Oct 2020 01:04:52 -0700 (PDT)
+Received: from dell ([91.110.221.236])
+        by smtp.gmail.com with ESMTPSA id x2sm11899009wrl.13.2020.10.05.01.04.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Oct 2020 00:50:20 -0700 (PDT)
-Date:   Mon, 5 Oct 2020 09:50:19 +0200
-From:   Corentin Labbe <clabbe.montjoie@gmail.com>
-To:     linux-hwmon@vger.kernel.org, linux@roeck-us.net, jdelvare@suse.com
-Subject: hwmon: nct6775: If an ACPI driver is available for this device, you
- should use it instead of the native driver
-Message-ID: <20201005075019.GA29306@Red>
+        Mon, 05 Oct 2020 01:04:51 -0700 (PDT)
+Date:   Mon, 5 Oct 2020 09:04:48 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Another round of adding missing
+ 'additionalProperties'
+Message-ID: <20201005080448.GT6148@dell>
+References: <20201002234143.3570746-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201002234143.3570746-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hello
+On Fri, 02 Oct 2020, Rob Herring wrote:
 
-I have a motherboard with a nct6775 and I got this on boot:
-nct6775: Found NCT6798D or compatible chip at 0x2e:0x290
-ACPI Warning: SystemIO range 0x0000000000000295-0x0000000000000296 conflicts with OpRegion 0x0000000000000290-0x0000000000000299 (\AMW0.SHWM) (20200326/utaddress-204)
-ACPI: If an ACPI driver is available for this device, you should use it instead of the native driver
-And so the driver is not loaded.
+> Another round of wack-a-mole. The json-schema default is additional
+> unknown properties are allowed, but for DT all properties should be
+> defined.
+> 
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: Shawn Guo <shawnguo@kernel.org>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Baolin Wang <baolin.wang7@gmail.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Jonathan Cameron <jic23@kernel.org>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+> Cc: Lee Jones <lee.jones@linaro.org>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Liam Girdwood <lgirdwood@gmail.com>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: linux-clk@vger.kernel.org
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-spi@vger.kernel.org
+> Cc: linux-gpio@vger.kernel.org
+> Cc: linux-hwmon@vger.kernel.org
+> Cc: linux-iio@vger.kernel.org
+> Cc: openipmi-developer@lists.sourceforge.net
+> Cc: linux-leds@vger.kernel.org
+> Cc: linux-media@vger.kernel.org
+> Cc: linux-rockchip@lists.infradead.org
+> Cc: linux-stm32@st-md-mailman.stormreply.com
+> Cc: linux-mips@vger.kernel.org
+> Cc: linux-mmc@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-pci@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-remoteproc@vger.kernel.org
+> Cc: linux-serial@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> 
+> I'll take this thru the DT tree.
 
-Since I dont have an ACPI driver for it I have hacked the driver to skip this acpi_check_resource_conflict() and the driver works well:
-nct6798-isa-0290
-Adapter: ISA adapter
-in0:                   936.00 mV (min =  +0.00 V, max =  +1.74 V)
-in1:                     1.02 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-in2:                     3.41 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-in3:                     3.33 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-in4:                     1.01 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-in5:                   776.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-in6:                     1.02 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-in7:                     3.41 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-in8:                     3.31 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-in9:                   904.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-in10:                  272.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-in11:                  552.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-in12:                    1.02 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-in13:                    1.01 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-in14:                  992.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-fan1:                     0 RPM  (min =    0 RPM)
-fan2:                  1138 RPM  (min =    0 RPM)
-fan3:                  1744 RPM  (min =    0 RPM)
-fan4:                     0 RPM  (min =    0 RPM)
-fan5:                  2402 RPM  (min =    0 RPM)
-fan6:                     0 RPM  (min =    0 RPM)
-fan7:                     0 RPM  (min =    0 RPM)
-SYSTIN:                 +38.0∞C  (high = +80.0∞C, hyst = +75.0∞C)  sensor = thermistor
-CPUTIN:                 +37.5∞C  (high = +80.0∞C, hyst = +75.0∞C)  sensor = thermistor
-AUXTIN0:                +25.0∞C    sensor = thermistor
-AUXTIN1:                +53.0∞C    sensor = thermistor
-AUXTIN2:                +20.0∞C    sensor = thermistor
-AUXTIN3:                +26.0∞C    sensor = thermistor
-SMBUSMASTER 1:          +61.5∞C  
-PCH_CHIP_CPU_MAX_TEMP:   +0.0∞C  
-PCH_CHIP_TEMP:           +0.0∞C  
-PCH_CPU_TEMP:            +0.0∞C  
-intrusion0:            ALARM
-intrusion1:            ALARM
-beep_enable:           disabled
+[...]
 
-I got the same problem with an it87 and did the same, but does it exists a better way to do this ?
-Or does I ignore soemthing to make it works ?
+>  .../bindings/mfd/gateworks-gsc.yaml           |  2 ++
+>  .../bindings/mfd/xylon,logicvc.yaml           | 14 +++++++++++--
 
-Thanks
-Regards
+Acked-by: Lee Jones <lee.jones@linaro.org>
+
+-- 
+Lee Jones [ÊùéÁêºÊñØ]
+Senior Technical Lead - Developer Services
+Linaro.org ‚îÇ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
