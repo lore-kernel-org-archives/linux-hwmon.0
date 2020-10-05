@@ -2,89 +2,90 @@ Return-Path: <SRS0=kkoh=DM=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F7A3C4363A
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 13:12:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A4C0C4363A
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 14:38:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 02C38207BC
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 13:12:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 41FAD20776
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 14:38:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1601908708;
+	bh=qrpsw39g2HYMqSB+6zkRrrlQVSk8tcTuR+W4i5vTgiU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=J16ys+gVFgpk/W+NFnxjVHe3pQPlylFbKq1fuUm5tiC6RzaeKT+JhfBkwDkNTvSwd
+	 YaKIqnveLqvKzMnpKJXK/+GHu8Khf/phYGCqC7fUE/No0Lzok8inffclOoa40/OaLa
+	 QHfy4pYTD2OigRhsHIiLZNxu0RJ4ftEPu/+QdCWI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726032AbgJENMx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 5 Oct 2020 09:12:53 -0400
-Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:39656 "EHLO
-        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725891AbgJENMx (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 5 Oct 2020 09:12:53 -0400
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 095DCRvw029620;
-        Mon, 5 Oct 2020 09:12:37 -0400
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com with ESMTP id 33xp74m3jc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Oct 2020 09:12:36 -0400
-Received: from SCSQMBX10.ad.analog.com (scsqmbx10.ad.analog.com [10.77.17.5])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 095DCZ2t019542
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Mon, 5 Oct 2020 09:12:35 -0400
-Received: from SCSQMBX11.ad.analog.com (10.77.17.10) by
- SCSQMBX10.ad.analog.com (10.77.17.5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1779.2; Mon, 5 Oct 2020 06:12:21 -0700
-Received: from zeus.spd.analog.com (10.66.68.11) by SCSQMBX11.ad.analog.com
- (10.77.17.10) with Microsoft SMTP Server id 15.1.1779.2 via Frontend
- Transport; Mon, 5 Oct 2020 06:12:20 -0700
-Received: from saturn.ad.analog.com ([10.48.65.110])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 095DCT0b004599;
-        Mon, 5 Oct 2020 09:12:30 -0400
-From:   Alexandru Ardelean <alexandru.ardelean@analog.com>
-To:     <linux-hwmon@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <jdelvare@suse.com>, <linux@roeck-us.net>, <corbet@lwn.net>,
-        Alexandru Ardelean <alexandru.ardelean@analog.com>
-Subject: [PATCH] docs: hwmon: (ltc2945): update datasheet link
-Date:   Mon, 5 Oct 2020 16:12:26 +0300
-Message-ID: <20201005131226.1774081-1-alexandru.ardelean@analog.com>
-X-Mailer: git-send-email 2.25.1
+        id S1725960AbgJEOi2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 5 Oct 2020 10:38:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46842 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725936AbgJEOi1 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 5 Oct 2020 10:38:27 -0400
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3720020776;
+        Mon,  5 Oct 2020 14:38:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601908707;
+        bh=qrpsw39g2HYMqSB+6zkRrrlQVSk8tcTuR+W4i5vTgiU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=yCseW3CGhvBD1u87duDf4tOl/uBzHVb2eh2lLEi20G9+2nmUBe069o/Pe48dOc+Cr
+         TvCl+L76nwScIzXqYdtVOG2Wb56Ww92oEwSxQkvMfkWmjW6M2UUngpgELG7qcWj0o6
+         cCoXV8T/G/CPb6phUgcN1rGn1do0LHbUwCTFtfow=
+Received: by mail-ot1-f53.google.com with SMTP id i12so2989670ota.5;
+        Mon, 05 Oct 2020 07:38:27 -0700 (PDT)
+X-Gm-Message-State: AOAM530fgUS/XqNw54GFDzYAnms59p47NiD5v8USdrFRPeHvhdRyMju6
+        g3ZXb2V+vikyZCbxr0/c5Ze13/gAHL1NNNABbA==
+X-Google-Smtp-Source: ABdhPJxgzGZnVxNKnaUW4PGBqPAxCXhLxf/zBWeYtpXei81FHb/CaZ0SrtW1AZcxDxTzUg+Sq6ioaWDXnTPhY5ZUsRY=
+X-Received: by 2002:a9d:6b0d:: with SMTP id g13mr12169390otp.129.1601908706622;
+ Mon, 05 Oct 2020 07:38:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ADIRoutedOnPrem: True
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-10-05_07:2020-10-05,2020-10-05 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- priorityscore=1501 mlxlogscore=999 clxscore=1011 spamscore=0 bulkscore=0
- adultscore=0 lowpriorityscore=0 malwarescore=0 mlxscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2010050099
+References: <20201001145738.17326-1-alban.bedel@aerq.com> <20201001145738.17326-3-alban.bedel@aerq.com>
+ <9c164930-ffec-415e-caf7-4eb8c2e57576@roeck-us.net>
+In-Reply-To: <9c164930-ffec-415e-caf7-4eb8c2e57576@roeck-us.net>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Mon, 5 Oct 2020 09:38:14 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJa82AYJQHfxNweJBzL7rLq5Tnzr7fW87SeifwtWkAWCA@mail.gmail.com>
+Message-ID: <CAL_JsqJa82AYJQHfxNweJBzL7rLq5Tnzr7fW87SeifwtWkAWCA@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] dt-bindings: hwmon: Add the +vs supply to the lm75 bindings
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Alban Bedel <alban.bedel@aerq.com>,
+        Linux HWMON List <linux-hwmon@vger.kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Old one isn't working anymore. Update to the latest datasheet link.
+On Thu, Oct 1, 2020 at 1:08 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> Hi,
+>
+> On 10/1/20 7:57 AM, Alban Bedel wrote:
+> > Some boards might have a regulator that control the +VS supply, add it
+> > to the bindings.
+> >
+> > Signed-off-by: Alban Bedel <alban.bedel@aerq.com>
+> > Acked-by: Rob Herring <robh@kernel.org>
+>
+> I have nothing in my records, and nothing in patchwork, that suggests
+> that Rob gave this patch an Acked-by:. Please point me to the respective
+> e-mail.
 
-Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
----
- Documentation/hwmon/ltc2945.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I did on v2.
 
-diff --git a/Documentation/hwmon/ltc2945.rst b/Documentation/hwmon/ltc2945.rst
-index 20c884985367..8d65c141ce2b 100644
---- a/Documentation/hwmon/ltc2945.rst
-+++ b/Documentation/hwmon/ltc2945.rst
-@@ -11,7 +11,7 @@ Supported chips:
- 
-     Datasheet:
- 
--	http://cds.linear.com/docs/en/datasheet/2945fa.pdf
-+	https://www.analog.com/media/en/technical-documentation/data-sheets/2945fb.pdf
- 
- Author: Guenter Roeck <linux@roeck-us.net>
- 
--- 
-2.25.1
+> Patch 1/3 is also missing an Acked-by: or Reviewed-by: from a DT
+> maintainer.
 
+In my queue.
+
+Rob
