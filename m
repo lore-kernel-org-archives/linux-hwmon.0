@@ -7,69 +7,84 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72E7FC4363D
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 13:04:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F7A3C4363A
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 13:12:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 36B42207BC
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 13:04:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 02C38207BC
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 13:12:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726070AbgJENEZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 5 Oct 2020 09:04:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54458 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726727AbgJENEK (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Oct 2020 09:04:10 -0400
-X-Greylist: delayed 301 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 05 Oct 2020 05:53:48 PDT
-Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649ACC0613AC
-        for <linux-hwmon@vger.kernel.org>; Mon,  5 Oct 2020 05:53:48 -0700 (PDT)
-Received: from ramsan ([84.195.186.194])
-        by laurent.telenet-ops.be with bizsmtp
-        id cCok2300t4C55Sk01Cok9c; Mon, 05 Oct 2020 14:48:45 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan with esmtp (Exim 4.90_1)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1kPPv2-0006Yz-OV; Mon, 05 Oct 2020 14:48:44 +0200
-Received: from geert by rox.of.borg with local (Exim 4.90_1)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1kPPv2-0006xB-Lf; Mon, 05 Oct 2020 14:48:44 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Vadim Pasternak <vadimp@mellanox.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jiri Kosina <trivial@kernel.org>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH trivial] hwmon: (mlxreg-fan) Fix double "Mellanox"
-Date:   Mon,  5 Oct 2020 14:48:43 +0200
-Message-Id: <20201005124843.26688-1-geert+renesas@glider.be>
-X-Mailer: git-send-email 2.17.1
+        id S1726032AbgJENMx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 5 Oct 2020 09:12:53 -0400
+Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:39656 "EHLO
+        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725891AbgJENMx (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 5 Oct 2020 09:12:53 -0400
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 095DCRvw029620;
+        Mon, 5 Oct 2020 09:12:37 -0400
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com with ESMTP id 33xp74m3jc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 05 Oct 2020 09:12:36 -0400
+Received: from SCSQMBX10.ad.analog.com (scsqmbx10.ad.analog.com [10.77.17.5])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 095DCZ2t019542
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Mon, 5 Oct 2020 09:12:35 -0400
+Received: from SCSQMBX11.ad.analog.com (10.77.17.10) by
+ SCSQMBX10.ad.analog.com (10.77.17.5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1779.2; Mon, 5 Oct 2020 06:12:21 -0700
+Received: from zeus.spd.analog.com (10.66.68.11) by SCSQMBX11.ad.analog.com
+ (10.77.17.10) with Microsoft SMTP Server id 15.1.1779.2 via Frontend
+ Transport; Mon, 5 Oct 2020 06:12:20 -0700
+Received: from saturn.ad.analog.com ([10.48.65.110])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 095DCT0b004599;
+        Mon, 5 Oct 2020 09:12:30 -0400
+From:   Alexandru Ardelean <alexandru.ardelean@analog.com>
+To:     <linux-hwmon@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <jdelvare@suse.com>, <linux@roeck-us.net>, <corbet@lwn.net>,
+        Alexandru Ardelean <alexandru.ardelean@analog.com>
+Subject: [PATCH] docs: hwmon: (ltc2945): update datasheet link
+Date:   Mon, 5 Oct 2020 16:12:26 +0300
+Message-ID: <20201005131226.1774081-1-alexandru.ardelean@analog.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRoutedOnPrem: True
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-10-05_07:2020-10-05,2020-10-05 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ priorityscore=1501 mlxlogscore=999 clxscore=1011 spamscore=0 bulkscore=0
+ adultscore=0 lowpriorityscore=0 malwarescore=0 mlxscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2010050099
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Remove the duplicate "Mellanox" in the help text for the Mellanox FAN
-driver configuration option.
+Old one isn't working anymore. Update to the latest datasheet link.
 
-Fixes: 65afb4c8e7e4e7e7 ("hwmon: (mlxreg-fan) Add support for Mellanox FAN driver")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
 ---
- drivers/hwmon/Kconfig | 2 +-
+ Documentation/hwmon/ltc2945.rst | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 8dc28b26916ec4c8..64abec37ca9d5d0d 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -1080,7 +1080,7 @@ config SENSORS_MCP3021
- 	  will be called mcp3021.
+diff --git a/Documentation/hwmon/ltc2945.rst b/Documentation/hwmon/ltc2945.rst
+index 20c884985367..8d65c141ce2b 100644
+--- a/Documentation/hwmon/ltc2945.rst
++++ b/Documentation/hwmon/ltc2945.rst
+@@ -11,7 +11,7 @@ Supported chips:
  
- config SENSORS_MLXREG_FAN
--	tristate "Mellanox Mellanox FAN driver"
-+	tristate "Mellanox FAN driver"
- 	depends on MELLANOX_PLATFORM
- 	imply THERMAL
- 	select REGMAP
+     Datasheet:
+ 
+-	http://cds.linear.com/docs/en/datasheet/2945fa.pdf
++	https://www.analog.com/media/en/technical-documentation/data-sheets/2945fb.pdf
+ 
+ Author: Guenter Roeck <linux@roeck-us.net>
+ 
 -- 
-2.17.1
+2.25.1
 
