@@ -2,90 +2,106 @@ Return-Path: <SRS0=kkoh=DM=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A4C0C4363A
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 14:38:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2962C4363A
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 15:01:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 41FAD20776
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 14:38:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1601908708;
-	bh=qrpsw39g2HYMqSB+6zkRrrlQVSk8tcTuR+W4i5vTgiU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=J16ys+gVFgpk/W+NFnxjVHe3pQPlylFbKq1fuUm5tiC6RzaeKT+JhfBkwDkNTvSwd
-	 YaKIqnveLqvKzMnpKJXK/+GHu8Khf/phYGCqC7fUE/No0Lzok8inffclOoa40/OaLa
-	 QHfy4pYTD2OigRhsHIiLZNxu0RJ4ftEPu/+QdCWI=
+	by mail.kernel.org (Postfix) with ESMTP id 7112420674
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 15:01:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725960AbgJEOi2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 5 Oct 2020 10:38:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46842 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725936AbgJEOi1 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 5 Oct 2020 10:38:27 -0400
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3720020776;
-        Mon,  5 Oct 2020 14:38:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601908707;
-        bh=qrpsw39g2HYMqSB+6zkRrrlQVSk8tcTuR+W4i5vTgiU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=yCseW3CGhvBD1u87duDf4tOl/uBzHVb2eh2lLEi20G9+2nmUBe069o/Pe48dOc+Cr
-         TvCl+L76nwScIzXqYdtVOG2Wb56Ww92oEwSxQkvMfkWmjW6M2UUngpgELG7qcWj0o6
-         cCoXV8T/G/CPb6phUgcN1rGn1do0LHbUwCTFtfow=
-Received: by mail-ot1-f53.google.com with SMTP id i12so2989670ota.5;
-        Mon, 05 Oct 2020 07:38:27 -0700 (PDT)
-X-Gm-Message-State: AOAM530fgUS/XqNw54GFDzYAnms59p47NiD5v8USdrFRPeHvhdRyMju6
-        g3ZXb2V+vikyZCbxr0/c5Ze13/gAHL1NNNABbA==
-X-Google-Smtp-Source: ABdhPJxgzGZnVxNKnaUW4PGBqPAxCXhLxf/zBWeYtpXei81FHb/CaZ0SrtW1AZcxDxTzUg+Sq6ioaWDXnTPhY5ZUsRY=
-X-Received: by 2002:a9d:6b0d:: with SMTP id g13mr12169390otp.129.1601908706622;
- Mon, 05 Oct 2020 07:38:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <20201001145738.17326-1-alban.bedel@aerq.com> <20201001145738.17326-3-alban.bedel@aerq.com>
- <9c164930-ffec-415e-caf7-4eb8c2e57576@roeck-us.net>
-In-Reply-To: <9c164930-ffec-415e-caf7-4eb8c2e57576@roeck-us.net>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Mon, 5 Oct 2020 09:38:14 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJa82AYJQHfxNweJBzL7rLq5Tnzr7fW87SeifwtWkAWCA@mail.gmail.com>
-Message-ID: <CAL_JsqJa82AYJQHfxNweJBzL7rLq5Tnzr7fW87SeifwtWkAWCA@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] dt-bindings: hwmon: Add the +vs supply to the lm75 bindings
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Alban Bedel <alban.bedel@aerq.com>,
-        Linux HWMON List <linux-hwmon@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
+        id S1725994AbgJEPBr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 5 Oct 2020 11:01:47 -0400
+Received: from jabberwock.ucw.cz ([46.255.230.98]:37172 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725981AbgJEPBq (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Oct 2020 11:01:46 -0400
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 3DF5F1C0B7C; Mon,  5 Oct 2020 17:01:43 +0200 (CEST)
+Date:   Mon, 5 Oct 2020 17:01:42 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Vinod Koul <vkoul@kernel.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Another round of adding missing
+ 'additionalProperties'
+Message-ID: <20201005150142.GA28675@duo.ucw.cz>
+References: <20201002234143.3570746-1-robh@kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="xHFwDpU9dbj6ez1V"
+Content-Disposition: inline
+In-Reply-To: <20201002234143.3570746-1-robh@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Oct 1, 2020 at 1:08 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> Hi,
->
-> On 10/1/20 7:57 AM, Alban Bedel wrote:
-> > Some boards might have a regulator that control the +VS supply, add it
-> > to the bindings.
-> >
-> > Signed-off-by: Alban Bedel <alban.bedel@aerq.com>
-> > Acked-by: Rob Herring <robh@kernel.org>
->
-> I have nothing in my records, and nothing in patchwork, that suggests
-> that Rob gave this patch an Acked-by:. Please point me to the respective
-> e-mail.
 
-I did on v2.
+--xHFwDpU9dbj6ez1V
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Patch 1/3 is also missing an Acked-by: or Reviewed-by: from a DT
-> maintainer.
+Hi!
 
-In my queue.
+> Another round of wack-a-mole. The json-schema default is additional
+> unknown properties are allowed, but for DT all properties should be
+> defined.
 
-Rob
+for leds:
+
+Acked-by: Pavel Machek <pavel@ucw.cz>
+
+I assume you apply it..?
+								Pavel
+							=09
+
+--=20
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
+g.html
+
+--xHFwDpU9dbj6ez1V
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCX3s1VgAKCRAw5/Bqldv6
+8owIAKDAkiq29W/tD49n7es9bNcHQLqXywCfWHIfHZ6OrlZTPZUQgy45PCK/EKM=
+=qVmv
+-----END PGP SIGNATURE-----
+
+--xHFwDpU9dbj6ez1V--
