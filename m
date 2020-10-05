@@ -5,84 +5,80 @@ X-Spam-Level:
 X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BAD07C4363A
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 15:10:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1415BC4363A
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 15:11:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8481F2085B
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 15:10:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D19ED20774
+	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 15:11:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mWltcYJI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rmMncILe"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726730AbgJEPKW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 5 Oct 2020 11:10:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45802 "EHLO
+        id S1727114AbgJEPLK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 5 Oct 2020 11:11:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726859AbgJEPKK (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Oct 2020 11:10:10 -0400
-Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986A2C0613CE;
-        Mon,  5 Oct 2020 08:10:10 -0700 (PDT)
-Received: by mail-ot1-x341.google.com with SMTP id m12so8945094otr.0;
-        Mon, 05 Oct 2020 08:10:10 -0700 (PDT)
+        with ESMTP id S1726701AbgJEPLF (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Oct 2020 11:11:05 -0400
+Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2C2C0613CE;
+        Mon,  5 Oct 2020 08:11:04 -0700 (PDT)
+Received: by mail-oi1-x241.google.com with SMTP id c13so9018594oiy.6;
+        Mon, 05 Oct 2020 08:11:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=F1Z0afjwiSxiIssLndoQNyQcwPRpf3Ba8DGu293eCYU=;
-        b=mWltcYJIsUHQ3ccnkfUilO5Bk1Rcx0lC88e1sv1BeIHb9DR8Pj2L/xmqNA6OLkRdZr
-         ycg2oZEP28g/8ywUzzj/XwalBLH0Mbh1UXmJMZQMO+DGsBCx5jMPVVUs7Vm9jVD7nVMr
-         TDqWX0Zoi5tIlFTZzCNA+3Eetw7vbfG8qewOuDj2qem3+LDqJB81w51HfqjbKBzmkU37
-         zeN8STD+4x829Mkvdd+8wHHrb2DCOgfYtO6RC4XM9hEzwlCb1V/vnaQX1y6H/12XunJd
-         jfAxepOE72sZhBgr3SDzr5L19TjoCLSt1RSRULTki9CoZs64ZaRCyI8DYCj2fhNMX9u0
-         zcrA==
+        bh=RwW+3cgQRN9esWDY48Mrwamv0LGOoedzUjjGGELb9gw=;
+        b=rmMncILe7hEypTqUh7SZl4WTgcv0Rnfl62dFWpviSzScI5eQnjCq5qWK8aASjpMCH/
+         pIvyyrU1/Y3t+9S/+uhPNlRkn1HmeL4k5TuQ0t28t1ZDuBPuZcklIUA1OdyPUpv+Of5b
+         vAdAPdbk4G0EBui6CPf/jjYqj+ZVRQlVI5+4gov9bj0a04cVdaTgw2TnOc2M8HfGU3jW
+         ktBxfQAuwUg5u/57y740MJvL6LqardNYv/z3CJf4T60Dq/t8Ia6Hmhzn3HzDUm3Vtw3e
+         c4+FVoJgs0BvCjzhkPbqGr6d84k7K563NtL+hmbrNorUFsdvvZo/Fmp39reqmvV7u4bd
+         BCTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=F1Z0afjwiSxiIssLndoQNyQcwPRpf3Ba8DGu293eCYU=;
-        b=iKTLvM5ONgk6d5y64+4/Y2t1CpZ18nFcsD+UQ0283IDeI+iO17sPP/3OucgesPySdq
-         vxUMkpmxH+QiiQOJUB6QVKFhJAQRGwfJdE/FdOPQ3wS82k+Iok3Oo8UbWnbMX4vCe7ir
-         57mf1eSRVS/jTyYY6UjvW09zrveBwI+tPdIPevL1u3zewDeLyQ+DKYnjzr6DEagvNBbf
-         huLrLySxOf4tMvFFbxCmd+9qJm3qKN3VBF51P03xpfQ7C9VSmO2mAOuy2BBh85LP2QrO
-         8oHviEXoCSBFQnSO18YNIjM+8l+aqkBN28YjW97ww5KO80+SWARbQvLnun3h4eydbJE7
-         8cNw==
-X-Gm-Message-State: AOAM533J/TmZIGgdM5sAvRfJC48mqJ2qL1L0LumL0BNtY6rSLI7H66Pl
-        UBjfN40tGmmaW14pKfh+NRQ=
-X-Google-Smtp-Source: ABdhPJxVEFJ3q62PnMgQOuWhzd9lg4HJcbRhx8hoWOqCUMo/gmfQJCMmKHXq/XLGcU9+5fkobdAn5w==
-X-Received: by 2002:a05:6830:1319:: with SMTP id p25mr10586768otq.38.1601910608467;
-        Mon, 05 Oct 2020 08:10:08 -0700 (PDT)
+        bh=RwW+3cgQRN9esWDY48Mrwamv0LGOoedzUjjGGELb9gw=;
+        b=rOsZWmFCJmRu/r1IBJ58gNj5fgXgG2+gW2RLerOlnQlq2t5SnEWxT1/IhgQCQyA+yX
+         riKxjT4MgeZ82S2H5i4/X/KmM6S3dS5TPx3LGAbh3Xg0cPmKbpAf7nV0LLb6vbUTpYTE
+         b0I+4aKEIpkhdDNsH0JUG3Smrs5jO5TfgDDtTjtNqyCB+suPuWcrtTeYE6QnMAEbuZBu
+         8bPjtZz21Yqugh3p0onW8hwb+BFCviNFSctY4owYxzlYtmGM43vsPYfM+K1B1vGaUc9j
+         +1vx38X06pJ+opL/QFuKy9ig439POuu7W3e59xw243k41l6Hp0voGSRnFgW267iyYHOs
+         M23A==
+X-Gm-Message-State: AOAM5321xRZDXVEkjPc2+nMGkOhip8vUwh0il7zipYNVROBfaouWBuW7
+        Rujuwg8LmBPlbwoGh8Mqpes=
+X-Google-Smtp-Source: ABdhPJzxsNc/BZAute7amLsLZyrqTZQK32QsK0Ua7GECgwCRR2zZLNx+9d84Aal7Q80u83gdYAT+4A==
+X-Received: by 2002:aca:c485:: with SMTP id u127mr49637oif.92.1601910664371;
+        Mon, 05 Oct 2020 08:11:04 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 71sm3136451otm.81.2020.10.05.08.10.07
+        by smtp.gmail.com with ESMTPSA id s32sm2933260otb.68.2020.10.05.08.11.03
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 05 Oct 2020 08:10:07 -0700 (PDT)
+        Mon, 05 Oct 2020 08:11:03 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 5 Oct 2020 08:10:06 -0700
+Date:   Mon, 5 Oct 2020 08:11:02 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Vadim Pasternak <vadimp@mellanox.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jiri Kosina <trivial@kernel.org>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH trivial] hwmon: (mlxreg-fan) Fix double "Mellanox"
-Message-ID: <20201005151006.GA44155@roeck-us.net>
-References: <20201005124843.26688-1-geert+renesas@glider.be>
+To:     Alexandru Ardelean <alexandru.ardelean@analog.com>
+Cc:     linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jdelvare@suse.com, corbet@lwn.net
+Subject: Re: [PATCH] docs: hwmon: (ltc2945): update datasheet link
+Message-ID: <20201005151102.GA44294@roeck-us.net>
+References: <20201005131226.1774081-1-alexandru.ardelean@analog.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201005124843.26688-1-geert+renesas@glider.be>
+In-Reply-To: <20201005131226.1774081-1-alexandru.ardelean@analog.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Oct 05, 2020 at 02:48:43PM +0200, Geert Uytterhoeven wrote:
-> Remove the duplicate "Mellanox" in the help text for the Mellanox FAN
-> driver configuration option.
+On Mon, Oct 05, 2020 at 04:12:26PM +0300, Alexandru Ardelean wrote:
+> Old one isn't working anymore. Update to the latest datasheet link.
 > 
-> Fixes: 65afb4c8e7e4e7e7 ("hwmon: (mlxreg-fan) Add support for Mellanox FAN driver")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
 
 Applied.
 
@@ -90,19 +86,19 @@ Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/Kconfig | 2 +-
+>  Documentation/hwmon/ltc2945.rst | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 8dc28b26916ec4c8..64abec37ca9d5d0d 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1080,7 +1080,7 @@ config SENSORS_MCP3021
->  	  will be called mcp3021.
+> diff --git a/Documentation/hwmon/ltc2945.rst b/Documentation/hwmon/ltc2945.rst
+> index 20c884985367..8d65c141ce2b 100644
+> --- a/Documentation/hwmon/ltc2945.rst
+> +++ b/Documentation/hwmon/ltc2945.rst
+> @@ -11,7 +11,7 @@ Supported chips:
 >  
->  config SENSORS_MLXREG_FAN
-> -	tristate "Mellanox Mellanox FAN driver"
-> +	tristate "Mellanox FAN driver"
->  	depends on MELLANOX_PLATFORM
->  	imply THERMAL
->  	select REGMAP
+>      Datasheet:
+>  
+> -	http://cds.linear.com/docs/en/datasheet/2945fa.pdf
+> +	https://www.analog.com/media/en/technical-documentation/data-sheets/2945fb.pdf
+>  
+>  Author: Guenter Roeck <linux@roeck-us.net>
+>  
