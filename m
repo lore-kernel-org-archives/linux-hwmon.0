@@ -1,177 +1,212 @@
-Return-Path: <SRS0=kkoh=DM=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=xjv2=DN=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8475C4363A
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 23:06:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0752EC47423
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Oct 2020 01:10:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 59F872083B
-	for <linux-hwmon@archiver.kernel.org>; Mon,  5 Oct 2020 23:06:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CC4F9207F7
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Oct 2020 01:10:36 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=jms.id.au header.i=@jms.id.au header.b="OKZAR4QY"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="Rx8RJtC6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725917AbgJEXGG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 5 Oct 2020 19:06:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34598 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725846AbgJEXGG (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Oct 2020 19:06:06 -0400
-Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34572C0613CE
-        for <linux-hwmon@vger.kernel.org>; Mon,  5 Oct 2020 16:06:06 -0700 (PDT)
-Received: by mail-qt1-x841.google.com with SMTP id r8so11296062qtp.13
-        for <linux-hwmon@vger.kernel.org>; Mon, 05 Oct 2020 16:06:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vxxQ9gocXfWXOuxXjHODE4zl7ezUzHUPAtWaBg80uZI=;
-        b=OKZAR4QYHSO4bSHxOPrCpeKjDrid9Vx2YG1bpq2HD5DvySWLBmumwv4DDrG/ASBkkO
-         L3ZHzC9+JQdi4jFZx2cj6BwHO0vhb0ILG/ip9OQovNrat0nObEJYRmvvqWAMHVHDFzyL
-         ZXp6hnLIVxS50EEE83+72GXmyCOKmwDxi4beY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vxxQ9gocXfWXOuxXjHODE4zl7ezUzHUPAtWaBg80uZI=;
-        b=m/qlqVCi6p9aOiPMRlyeD39aAN6xWRPoSRdBc4ZInipALe/8H1xGIHa2h37vcVKcy0
-         2jAteChSNxiKraXm9wVJIVWOsMlseMpHOs9AsGtjc2sSYw6IjQRMoSr8dXQxA19Y/0wg
-         WAb91iLGvuZJ8Y96qI3/8uVEM4KRyRw4CKC6E1INr1nW0HlRNTkN7RIzTcBxx1UcHU+9
-         DnjXjN7VP4ZQuOlMbCCioc122Boup8irD/2qass6qgRVexZxlEXYGlcTYU51ATGDs/y4
-         XNQYv2mRoZVy4FpdBn5QQgDNqaZeeAjUGg3UCia+ftkso6deduPQHkCDXHqWs+Ca+iCW
-         mTdw==
-X-Gm-Message-State: AOAM531lQMtOL9J5N/e6DNNjh3WsvYtwa13unyBgZjyduUoe2IaU6Tf2
-        g0dyYMzwX/pkH/dI4aPIQlQ/l4W0RKHy7WK75xA=
-X-Google-Smtp-Source: ABdhPJwlqhxTg6QiPUsq1lIx7VWPSYa7cf+CzELJzw9BudDY1a4FEUG1/WPq1FhIt3yC6bJ2JGCN4Eemy8FyMmw+Fu8=
-X-Received: by 2002:ac8:5b82:: with SMTP id a2mr2419882qta.176.1601939165341;
- Mon, 05 Oct 2020 16:06:05 -0700 (PDT)
+        id S1725917AbgJFBKZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 5 Oct 2020 21:10:25 -0400
+Received: from mailout2.samsung.com ([203.254.224.25]:41393 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725872AbgJFBKX (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Oct 2020 21:10:23 -0400
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20201006011017epoutp0296e01a9602596620fa94cb505b1f2ccc~7QfYIgmPy1813818138epoutp02j;
+        Tue,  6 Oct 2020 01:10:17 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20201006011017epoutp0296e01a9602596620fa94cb505b1f2ccc~7QfYIgmPy1813818138epoutp02j
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1601946617;
+        bh=B4PawtUJM2t4wzU2pvIySnG7we9Bhgj1khiFTd9d9CE=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=Rx8RJtC6Yj3KjGbngnY3QrOD1xUh97k2CcjP1L4bTfTZIPheVmtqSJrA4EZdpPPOg
+         trAwp0No0N/0erQYIZqHeGT1O8Y1jJ5bsPfmRbRjm0h8DI5JF5XlW5/vhGg3S/8m9/
+         spUfOkBMrCNoisTG2YOcZI8q4vf8cCSD1/9SF9L8=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+        20201006011016epcas1p459c312e10a907b7832b22cd23eb9d8a4~7QfXew6HM1279312793epcas1p4Q;
+        Tue,  6 Oct 2020 01:10:16 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.40.154]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4C4zsY6sg8zMqYks; Tue,  6 Oct
+        2020 01:10:09 +0000 (GMT)
+Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        20.E2.09577.1F3CB7F5; Tue,  6 Oct 2020 10:10:09 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+        20201006011008epcas1p300f9dc6918a008b4b0acf5870f438a2e~7QfP7yysc1939819398epcas1p3e;
+        Tue,  6 Oct 2020 01:10:08 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20201006011008epsmtrp151af87c3414c2b6b37057fcba7d215f2~7QfP5fMXI0584005840epsmtrp1N;
+        Tue,  6 Oct 2020 01:10:08 +0000 (GMT)
+X-AuditID: b6c32a39-bfdff70000002569-24-5f7bc3f11c68
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        C1.AB.08604.0F3CB7F5; Tue,  6 Oct 2020 10:10:08 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20201006011007epsmtip14dca797b06e6c0e4525f28d6ead67ad0~7QfO-JeoX3017730177epsmtip1d;
+        Tue,  6 Oct 2020 01:10:07 +0000 (GMT)
+Subject: Re: [PATCH 4/4] dt-bindings: Explicitly allow additional properties
+ in common schemas
+To:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Albert Ou <aou@eecs.berkeley.edu>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>, dmaengine@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Jens Axboe <axboe@kernel.dk>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Richard Weinberger <richard@nod.at>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <0e155728-89b3-5f31-f008-dfd57b6c4f6b@samsung.com>
+Date:   Tue, 6 Oct 2020 10:23:28 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
+        Thunderbird/59.0
 MIME-Version: 1.0
-References: <1601504817-16752-1-git-send-email-lancelot.kao@fii-usa.com> <20201001123249.GC6152@heinlein>
-In-Reply-To: <20201001123249.GC6152@heinlein>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Mon, 5 Oct 2020 23:05:53 +0000
-Message-ID: <CACPK8XewuMZTvhh7QA6iBbkH5AqQWS9RVeZXaAF-XzAYhYsG1A@mail.gmail.com>
-Subject: Re: [PATCH linux dev-5.8] hwmon: Ampere Computing ALTRA SMPMPRO
- sensor driver
-To:     Patrick Williams <patrick@stwcx.xyz>, linux-hwmon@vger.kernel.org
-Cc:     Lancelot <lancelot.kao@fii-usa.com>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Xiaopeng XP Chen <xiao-peng.chen@fii-na.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20201005183830.486085-5-robh@kernel.org>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA01UaVBTVxSe+/KWoFKfiOXCVIHYOtUqEhF66KB1lNpXdapVy1hnbIzwBhhD
+        kknAqnQYQMCouFBcSkRgCC5sChGQTVBWaQtBUEQxrmhAFgUEXKA2EJzy7zvnfOd8850z9woF
+        NiahgzBQHsyr5FKZiJ5CFlTOd13UVxkqcU0cXQxpN28zYDBWCCD/vZaBTONRGtIiA+DE43Ya
+        kgZmQ6IhioTkqgYKMk+MUlCZ2oHg1uBLGvbpLtGQ+vJPCiLSmkl4FJlBgMGQw0BjwREK0uKT
+        KTgQl8bAw8FqBEO3NAQcHzlPgP5pCwUZwycE0Bf7gILLySMI9nflI9CMvkZQU/iEgKSqXhLu
+        9g9R0FycSEN+90UEsTn55nl6M6/qw1EEJZHnGKhPqqVh4HAVAqMxA0HBQBQNNZm3aPhHd5iB
+        iL67DKSeixZA68UyBvJLrxFQlFhHwTn9CAGV+8souJR6nIS2iAs0dDbHCiBGOx2Mf1XT8L64
+        hoH4om4EH0oLGWh/fISGC2/N2v+25JLwd0kwxNTUUCvWcNFN50kuKSuU6+7sJLm89LsEV6l5
+        zXBFWiPDpehDuL6mNsSd1iRQnK60k+Ca60M4fcYBmgu/ZiC5+y2lNNfb0MBw6VlZ1AbHrTu9
+        AnipH69y4uW+Cr9Auf8y0dpNklUSdw9X8SKxJ3wtcpJLg/hlIu91GxatDpSZjypy2iWVhZhT
+        G6RqtWjxci+VIiSYdwpQqIOXiXiln0zpqXRRS4PUIXJ/F19F0DdiV9cl7mbi9p0ByRffEUo9
+        uTun+yYVjuoFB5GVELNLcVfXfXQQTRHasIUIv0h5QlqCfoTr4zIoSzCEcElkA/mx5VR1FmMp
+        XEW4sT9lgvUS4aL2B+Osmex2bBpqGxexZbfh2nsvxucK2DRbXN0WO16g2QW4vKOVHsPTWWd8
+        +81TNIat2eX48tk3xBgm2c+x4W3r+NBZrA+uK4ia4MzAdQnt5rxQaMV64Lz0eWNpAWuH77Un
+        ExbsiK/0JArGdDHbPBV3HHuGLBa8cd/pjokNzMQvavMYC3bAnUdjJnAoTq+roi3NGoTzyhsp
+        S8ENl5+NJ8aEBex8fKl4sSXtjIven0EW4U9w72AsNUbBrDXWxNhYKHNx8yMjYcH2WLf/AH0M
+        ibST3GgnWdBOsqD9XywFkRnoU16pDvLn1WKl++Rz69H4i1/gWYhO9bxyqUCEEFUgLBSIbK1d
+        fHZLbKz9pHv28iqFRBUi49UVyN283ziBwyxfhfnLkAdLxO5L3NzcYKnYw10sFtlZP77nJLFh
+        /aXB/E6eV/Kqj32E0MohnHC0Cr9uN/qLx0oUL2mqWLHQ3SDbfHL1g0SvGblX91k3eLY8jFtZ
+        aveqKbs/bsuhz5yPcyafMvsuU3h7j1PY2sK2nxqmrTuUlOzhoBs2Zuderc5N7bmxRRs2tzg1
+        TNMTuGezH/fFwqJ5I4p5Pnsdt//2+/36gNqN+iub1iR8f2rY7dcdmWr7Q93DP288Mnvrm/gz
+        LlFLTaFZTL1uTuY227gn30WXZWWv831rMgavcpL/WCZ7fmdtxNMv7da3vtt1Q/dtzvU5lVKP
+        P2a8HqgxmbxadPLn630Hs4fnS21brSN/uFBSVb4jgV7p/FXjM+81u+0ls+x8o1dPvbk3qCTs
+        pKDj8p3erdPsMsNHRaQ6QCpeIFCppf8BncC7Z3oFAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0xTZxiA851rgRCOBcIB41SGmBHBsTD2uhlisjkO0yWbm2RbdNiMBlBA
+        RmFDWTJA5CaXOQWh0pZLASlYoFCkgIC0sMCklYsExDoRzEDuooCCshayhH9P3u95vvfPy8P5
+        BsqJFxIeJYwMF4Q6U5ZEvdb5Hfd5bWzA+2MaR5D33qfBYGzHQb0qpqHCmEWBPCEYskfHKZAu
+        7oB8QyIBMp2ehIrsNyRoiyYQDLyco+BCcRUFRXO5JMTL+wl4nKDAwGCopuFefSYJ8isyElIv
+        y2n452UHgqWBFAyurpVhoBobJEGxnI3DQvojEmplawiSp9QIUt68QNDZ8AQDqW6WgOHnSyT0
+        N+ZToJ5WIkivVpv+U5k83XoWgqaEUhp6pH9RsJihQ2A0KhDULyZS0FkxQMHd4gwa4heGaSgq
+        vYjDkLKFBnVzGwaa/C4SSlVrGGiTW0ioKrpKwEj8DQom+9NxSBLbgLG7g4LVxk4armimEaw3
+        N9AwPppJwY1Xpt1vB2sI+LspCpI6O8lDX3AX+8oITloZy01PThJcXfkwxmlTXtCcRmykuQJV
+        NLfQN4K46yl5JFfcPIlx/T3RnEqRSnFxbQaCezjYTHGzej3NlVdWkl/t/MHyYKAwNOQXYeR+
+        n1OWwTLlayxCRcRUT/eScagHT0MWPJbxYq91VNJm5jNNiJXmO2/OHdmc3g6TwzOxLavVitKQ
+        pUmZQezsQvJGa8ucYv9dGtlw7JiTbMZzS7ODM0o7dqxRT24GasSup0k2FlCMG9s6MUSZ2YbZ
+        zd5fGUNmtmZ82NqSFczMBOPCGl4NEWa2Z/xZjXwM23S2sV1544R5mQXjzdaVu5rHOLOXXZP2
+        4ZvswD4Yl2GbvJO9NZOP/4FsxVtq8ZZEvCURb0kKEKFAjsIIUVhQmMgzwjNc+KuHSBAmig4P
+        8vjpbJgKbdy823sN6JZi3qMdYTzUjlge7mxn7eEfE8C3DhScOy+MPBsQGR0qFLWj7TzC2cF6
+        6OfCH/lMkCBKeEYojBBG/v+K8Syc4jCL2x+7enjndd+V7Tp/WP9g38D3kuNtCwUdvMRrOcQ9
+        7yn+apJ0wD1G6dLm0i3ZI7F4NhZ3wr/s8Sxhm9r95aef+HgNn9Me8AtE/GFdpo9VwtShE3d6
+        JaV43TbdrmLXiQ+qVlMnjX57vEvOnFzLfrKvde/DY+OF64Xhjwb+DP399NGYcu60+Gn3bnuh
+        Plrqq3E1hF5qIattpkZHu5JKahwor5zrTPqz166tB46VyY+UH92vr/1opWbHN1a+ys7j2tIs
+        q7J5z88Lb4a4bf+u6UO/b8uXvUSWt2fm7hysh9y3n03nGn0dpxoEgQFPL1WnXoiVHL7p9C64
+        X7a30fymDsxaFjW2fO1MiIIFnm54pEjwH6+El7RiBAAA
+X-CMS-MailID: 20201006011008epcas1p300f9dc6918a008b4b0acf5870f438a2e
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20201005183933epcas1p36d2c9cc1f3ad9180421269ca74330d65
+References: <20201005183830.486085-1-robh@kernel.org>
+        <CGME20201005183933epcas1p36d2c9cc1f3ad9180421269ca74330d65@epcas1p3.samsung.com>
+        <20201005183830.486085-5-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, 1 Oct 2020 at 12:32, Patrick Williams <patrick@stwcx.xyz> wrote:
->
-> On Wed, Sep 30, 2020 at 05:26:57PM -0500, Lancelot wrote:
-> > From: Lancelot Kao <lancelot.kao@fii-usa.com>
-> >
-> > Add SMPMPro-hwmon driver to monitor Ampere CPU/Memory/VR via an
-> > i2c interface of the CPU's smpmpro management device.
-> >
-> > Signed-off-by: Xiaopeng XP Chen <xiao-peng.chen@fii-na.com>
-> > Signed-off-by: Lancelot Kao <lancelot.kao@fii-usa.com>
->
-> Nice work at adding this driver.
->
-> It does look like you've missed CC'ing upstream though.  Was this
-> intentional?  (linux-hwmon@vger.kernel.org)
+On 10/6/20 3:38 AM, Rob Herring wrote:
+> In order to add meta-schema checks for additional/unevaluatedProperties
+> being present, all schema need to make this explicit. As common/shared
+> schema are included by other schemas, they should always allow for
+> additionalProperties.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+(snip)
 
-As Patrick mentioned, let's review this on the upstream list.
+>  Documentation/devicetree/bindings/extcon/wlf,arizona.yaml    | 2 ++
+(snip)
 
-Cheers,
+For the extcon part,
+Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
 
-Joel
-
->
-> > +/* Capability Registers  */
-> > +#define TEMP_SENSOR_SUPPORT_REG      0x05
-> > +#define PWR_SENSOR_SUPPORT_REG       0x06
-> > +#define VOLT_SENSOR_SUPPORT_REG      0x07
-> > +#define OTHER_CAP_REG                    0x08
-> > +#define CORE_CLUSTER_CNT_REG 0x0B
-> > +#define SYS_CACHE_PCIE_CNT_REG       0x0C
-> > +#define SOCKET_INFO_REG              0x0D
->
-> There seems to be some sporatic indentation throughout all the #defines
-> in this file, where it appears you attempted to align the values.  Make
-> sure you have tabs set to 8-step spacing for kernel code.
->
-> > +static void smpmpro_init_device(struct i2c_client *client,
-> > +                             struct smpmpro_data *data)
-> > +{
-> > +     u16 ret;
-> > +
-> > +     ret = i2c_smbus_read_word_swapped(client, TEMP_SENSOR_SUPPORT_REG);
-> > +     if (ret < 0)
-> > +             return;
-> > +     data->temp_support_regs = ret;
->
-> i2c_smbus_read_word_swapped returns a s32 even though you're looking for
-> a u16.  By setting `ret` to u16 you've caused two problems:
->
->     * You are immediately truncating -ERRNO values into a u16 so that
->       you are unable to differentiate values like 0xFFFFFFFF as a
->       register value and -1 as an errno.
->
->     * The if condition here can never be true, so you're never catching
->       error conditions.  (An u16 can never be negative, so ret < 0 can
->       never be true.)
->
-> This issue occurs throughout the driver.
->
-> > +static int smpmpro_read_temp(struct device *dev, u32 attr, int channel,
-> > +                          long *val)
-> > +{
-> > +     struct smpmpro_data *data = dev_get_drvdata(dev);
-> > +     struct i2c_client *client = data->client;
-> > +     int ret;
->
-> You might want a sized int on this one?  Repeated in most other
-> functions.
->
-> > +static int smpmpro_read_power(struct device *dev, u32 attr, int channel,
-> > +                          long *val)
-> > +{
-> > +     struct smpmpro_data *data = dev_get_drvdata(dev);
-> > +     struct i2c_client *client = data->client;
-> > +     int ret, ret_mw;
-> > +     int ret2 = 0, ret2_mw = 0;
->
-> Any reason to not initialize ret/ret_mw?  By it being different from
-> ret2/ret2_mw it makes me question "is this ok?", which spends more time
-> in review.
->
-> > +static int smpmpro_i2c_probe(struct i2c_client *client,
-> > +                       const struct i2c_device_id *id)
-> ...
-> > +     /* Initialize the Altra SMPMPro chip */
-> > +     smpmpro_init_device(client, data);
->
-> I didn't see anything in the smpmpro_init_device function, but is there
-> anything you can or should do to ensure this device really is an
-> SMPMPro rather than exclusively relying on the device tree compatible?
->
-> > +static struct i2c_driver smpmpro_driver = {
-> > +     .class          = I2C_CLASS_HWMON,
-> > +     .probe          = smpmpro_i2c_probe,
-> > +     .driver = {
-> > +             .name   = "smpmpro",
-> > +     },
-> > +     .id_table       = smpmpro_i2c_id,
-> > +};
-> > +
-> > +module_i2c_driver(smpmpro_driver);
->
-> Are you missing the .of_match_table inside .driver?  Is that necessary
-> or useful for your use?  I'm not sure if you can have device tree
-> entries that automatically instantiate the hwmon driver otherwise.
->
-> --
-> Patrick Williams
+-- 
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
