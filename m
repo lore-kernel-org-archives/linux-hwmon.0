@@ -2,76 +2,85 @@ Return-Path: <SRS0=xjv2=DN=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CC33C4363D
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Oct 2020 21:38:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C93F4C4363D
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Oct 2020 21:51:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 450B9208B6
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Oct 2020 21:38:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1602020329;
-	bh=JYloajZ8YsveY/xj+0V6QjrAaV2nH/5sA2we9Lm1QcA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=hVRepJ75IHQfzToEX585xPgUEUfAfXUX0AV1DFsE98Beg6LCzva6i44DyQqyqKRvx
-	 d7iJNX0sq/DWpkidnYMH9JvPf6Lr6Z6M8XDaFQNmxEfgzxieBFREny1ylQo7Hy1gU4
-	 9XXFNZov5Zbr3Cufj4g4GPy5BJ/2EjUwTUbu+mlM=
+	by mail.kernel.org (Postfix) with ESMTP id 58A4D20659
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Oct 2020 21:51:47 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HBjMjiII"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726165AbgJFVit (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 6 Oct 2020 17:38:49 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:34157 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725947AbgJFVis (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Oct 2020 17:38:48 -0400
-Received: by mail-ot1-f68.google.com with SMTP id d28so310105ote.1;
-        Tue, 06 Oct 2020 14:38:46 -0700 (PDT)
+        id S1726826AbgJFVvr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 6 Oct 2020 17:51:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47458 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726730AbgJFVvq (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Oct 2020 17:51:46 -0400
+Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD2D6C061755;
+        Tue,  6 Oct 2020 14:51:46 -0700 (PDT)
+Received: by mail-ot1-x343.google.com with SMTP id f37so258577otf.12;
+        Tue, 06 Oct 2020 14:51:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=5L+gLeTbCB4MFIuoEXCXhV99qSHj08vZ9RH6pYhyr8M=;
+        b=HBjMjiII9lPdYlDVdBNEud8p77zdAFiv/3lSAMvGsKHH8RxZ851bVT+7zmPkYmMS2l
+         fewmYccfP2ZhoOxwaVG7lLDyI2z6KM/03zhWgyjJ3Pu/pyV6HOFvWh9WYup8JaARohio
+         CpHyXet1TwUUzG7YNO5tTRfaitnkfSAyN/wPQlJEzSKaFjHfocAr2BfSvUamkOvV1xKb
+         FNFfyRoIDe5NC8hT4MA+Q7T/KLM/Im4XRS1ZG/Jh12fmPKWBaKtZRvhnMA4eDVVrFkIg
+         CiTtEqyxM2p8nndiHiWCyqVjJPXrU7TFW+7rMWnXxzfY0QEU5zMAlPxKTFAHz4ig6NHd
+         +JUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VXvrI2x6b8MeVNJBRJLTPFfh0KlQpZ5q38fF1cR1cAU=;
-        b=U5xMqaV3Mtr6fUXKG8++7rPnqsKNjo5nvB3rzyG3I5W2Um+3yPqwuSgvndaNpmymzb
-         OLmpUi6TX2J799b4EAVT1aPJRLUGZyELFdpUVI3RWqRc72EWRFerSlxd9MvLFDwJGJUb
-         1UM6II6OLXwtV8lsrruHFgKA1LKEDy4GkCWNxsYQSwYtJcYtxs1GXv5AWlQPtPY758v4
-         d1znJlOKkx1I6ZlkgC1Iqk18Qqwr6xowDTPzuq/Plr3rkNP2+mc4N2855Gz3r0xZOzQQ
-         eqLwADC96mqPp4/TMslZuoVl2N2+Y9G/LfbeVhJu0IvstK1FFhBEYX42U4m+bYvzhZXO
-         wApg==
-X-Gm-Message-State: AOAM532LQ04Y7GRlVAzrzqK+276ALvWj5utNYFS+dZxelbsgjbNemv+r
-        HaKrZOADKEGSUAkIc0LFmQ==
-X-Google-Smtp-Source: ABdhPJx6Pqm69KRrvVs9ibZcmeMg64Cr1CtCQPGqwV0ckv7HoDx/3pQI8VaMtgJXuTEKgYWiwE4wMQ==
-X-Received: by 2002:a05:6830:200a:: with SMTP id e10mr4059127otp.335.1602020326490;
-        Tue, 06 Oct 2020 14:38:46 -0700 (PDT)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id 71sm1880430otm.81.2020.10.06.14.38.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Oct 2020 14:38:45 -0700 (PDT)
-Received: (nullmailer pid 2892270 invoked by uid 1000);
-        Tue, 06 Oct 2020 21:38:44 -0000
-Date:   Tue, 6 Oct 2020 16:38:44 -0500
-From:   Rob Herring <robh@kernel.org>
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=5L+gLeTbCB4MFIuoEXCXhV99qSHj08vZ9RH6pYhyr8M=;
+        b=GsqtiaQ7Cnb2Ydn7GKwcKdlVobvxv5qdgNvcdT63jZ+mOec+fMie7BE8AH3fbLtFvu
+         Y2XTipZV2RHOybI6UpjNTl+xrghCIfu06/k5UAd0YTxfr/ELJ1H+OSkqVj+c7fYwzdLJ
+         LA23Fil8l8XR68hNDppauhKwoZhFprryF1LUWKZft1D3wa3juxv2TzyB3blniZXeE9bE
+         Np+wYHOvHZvcoFglwmkUhoZqXeM4VK94D+G77dmWG9Yc8ZMswajmmdpX4LgbulCVP+nH
+         cb8Nf7QD5DQPQviW5K5u1smXzJ77J3uABcW4b07x5VNyCOPWJjCcf1hPFX+CYfInq1qd
+         ofJQ==
+X-Gm-Message-State: AOAM5325j3MdfeyD64F+HswWOIdMrOk72nOuF9gIFI1L1RrjCbzPEBAn
+        GEsVln64vCc4ZGfuJk8lpe0=
+X-Google-Smtp-Source: ABdhPJzysNBDu1Mx2hKoxCqoj/cHnY41oZNrQ3PVb0m9YiWNB33Qf6b9ti/s+dhXSJsty2t0rZ2T7Q==
+X-Received: by 2002:a9d:241:: with SMTP id 59mr1589otb.151.1602021105475;
+        Tue, 06 Oct 2020 14:51:45 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g26sm6554otn.77.2020.10.06.14.51.44
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 06 Oct 2020 14:51:45 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 6 Oct 2020 14:51:44 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
 To:     Rahul Tanwar <rahul.tanwar@linux.intel.com>
-Cc:     robh+dt@kernel.org, linux-hwmon@vger.kernel.org,
-        rtanwar@maxlinear.com, linux@roeck-us.net,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andriy.shevchenko@intel.com, qi-ming.wu@intel.com,
-        jdelvare@suse.com, songjun.Wu@intel.com, p.zabel@pengutronix.de,
-        cheol.yong.kim@intel.com
+Cc:     jdelvare@suse.com, p.zabel@pengutronix.de,
+        linux-hwmon@vger.kernel.org, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        andriy.shevchenko@intel.com, songjun.Wu@intel.com,
+        cheol.yong.kim@intel.com, qi-ming.wu@intel.com,
+        rtanwar@maxlinear.com
 Subject: Re: [PATCH v5 1/2] Add DT bindings schema for PVT controller
-Message-ID: <20201006213844.GA2892213@bogus>
+Message-ID: <20201006215144.GA96365@roeck-us.net>
 References: <cover.1601889876.git.rahul.tanwar@linux.intel.com>
  <b540b49ca47d75c5f716f8a4e4eed0664a1116bf.1601889876.git.rahul.tanwar@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <b540b49ca47d75c5f716f8a4e4eed0664a1116bf.1601889876.git.rahul.tanwar@linux.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, 05 Oct 2020 17:27:45 +0800, Rahul Tanwar wrote:
+On Mon, Oct 05, 2020 at 05:27:45PM +0800, Rahul Tanwar wrote:
 > PVT controller (MR75203) is used to configure & control
 > Moortec embedded analog IP which contains temprature sensor(TS),
 > voltage monitor(VM) & process detector(PD) modules.
@@ -79,10 +88,92 @@ On Mon, 05 Oct 2020 17:27:45 +0800, Rahul Tanwar wrote:
 > Add DT bindings schema for PVT controller.
 > 
 > Signed-off-by: Rahul Tanwar <rahul.tanwar@linux.intel.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+
+Applied to hwmon-next.
+
+Thanks,
+Guenter
+
 > ---
 >  .../devicetree/bindings/hwmon/moortec,mr75203.yaml | 71 ++++++++++++++++++++++
 >  1 file changed, 71 insertions(+)
 >  create mode 100644 Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
 > 
-
-Reviewed-by: Rob Herring <robh@kernel.org>
+> diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+> new file mode 100644
+> index 000000000000..6f3e3c01f717
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+> @@ -0,0 +1,71 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/moortec,mr75203.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Moortec Semiconductor MR75203 PVT Controller bindings
+> +
+> +maintainers:
+> +  - Rahul Tanwar <rtanwar@maxlinear.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: moortec,mr75203
+> +
+> +  reg:
+> +    items:
+> +      - description: PVT common registers
+> +      - description: PVT temprature sensor registers
+> +      - description: PVT process detector registers
+> +      - description: PVT voltage monitor registers
+> +
+> +  reg-names:
+> +    items:
+> +      - const: common
+> +      - const: ts
+> +      - const: pd
+> +      - const: vm
+> +
+> +  intel,vm-map:
+> +    description:
+> +      PVT controller has 5 VM (voltage monitor) sensors.
+> +      vm-map defines CPU core to VM instance mapping. A
+> +      value of 0xff means that VM sensor is unused.
+> +    $ref: /schemas/types.yaml#definitions/uint8-array
+> +    maxItems: 5
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  "#thermal-sensor-cells":
+> +    const: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - intel,vm-map
+> +  - clocks
+> +  - resets
+> +  - "#thermal-sensor-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    pvt: pvt@e0680000 {
+> +        compatible = "moortec,mr75203";
+> +        reg = <0xe0680000 0x80>,
+> +              <0xe0680080 0x180>,
+> +              <0xe0680200 0x200>,
+> +              <0xe0680400 0xc00>;
+> +        reg-names = "common", "ts", "pd", "vm";
+> +        intel,vm-map = [03 01 04 ff ff];
+> +        clocks = <&osc0>;
+> +        resets = <&rcu0 0x40 7>;
+> +        #thermal-sensor-cells = <1>;
+> +    };
