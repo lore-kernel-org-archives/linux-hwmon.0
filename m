@@ -2,120 +2,99 @@ Return-Path: <SRS0=xjv2=DN=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20C04C4363D
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Oct 2020 20:33:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6F9AC4363D
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Oct 2020 21:17:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CF46720760
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Oct 2020 20:33:57 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jserfl6q"
+	by mail.kernel.org (Postfix) with ESMTP id 8F00F206BE
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Oct 2020 21:17:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1602019047;
+	bh=1UGHHEtEoDm0Q+v2sdFRHoMpgYqQ//sE4QvNw2OJ7F4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=yszZp1UiMaviEXwJTmsgZD5mqJUI6dGqHXgqIb0sq9EM/sDDxR+xuet5ZJZZBpfjR
+	 Zik5lk/1il1nSxu3PJGm+S4PueYYkqohOO5LuXBxrdwcPaf13qGRfI7j70lDAOJz3/
+	 T5lqqvcgABj8F65x+XbhBFD2UdBtYd6R3ujF4lWg=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727181AbgJFUd5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 6 Oct 2020 16:33:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35380 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726012AbgJFUd5 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Oct 2020 16:33:57 -0400
-Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B5BC061755;
-        Tue,  6 Oct 2020 13:33:57 -0700 (PDT)
-Received: by mail-ot1-x341.google.com with SMTP id s66so89495otb.2;
-        Tue, 06 Oct 2020 13:33:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=0TMlbKMV2B99JtkBFVHwA4dI5Ul+dOx1FNcZbIk+0NU=;
-        b=Jserfl6q9NDbZEqdLPfWpK5xia1iP7/eBC/dKhWYIR7jUWJuBzcZVjFpBfZzjdukq0
-         ZoRKTgrNkhQEJHuXNwcen6HlUe5RTfZK55K5A/w7D8m146msmHSITbsbg0aYplHC98uG
-         xc9xSlRQ9VQyNcSG4eOe5OM0KtrM2Y+m1u75/CXtiwDLELd/jC3XhaUH9lvvPSVXA7IQ
-         i9ywYoCKULTlIpy1A9xolB/qp16+ws5HY/7pCb4hCwJRE0ZAq3BAOUKBI9n+fVSq6Sq6
-         DwDjqMMoAL2++ap8muYoq9nLaLMd0lh++jfpp2zsr0EqMIJPgEC+8bI+JzAPUneXYASH
-         lMlA==
+        id S1727365AbgJFVR1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 6 Oct 2020 17:17:27 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:36712 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727301AbgJFVR1 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Oct 2020 17:17:27 -0400
+Received: by mail-ot1-f66.google.com with SMTP id 60so228940otw.3;
+        Tue, 06 Oct 2020 14:17:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=0TMlbKMV2B99JtkBFVHwA4dI5Ul+dOx1FNcZbIk+0NU=;
-        b=cnZ/2kALlIHFudeGztKbH2YFSosr4yWz/rYRni9+YISFc/LnzBvocxKQfFBRyIrt/6
-         4VDJWzvMXTtV/2woJ+lh13KI8YORBnr+tVSFoVlIqkyuYk1QENDyxzfF7PtFpqp2kL9A
-         I87hK/9hOTeE6MTDB1GHNPjfbJFXPZTSWi+OTQo9oPf+sDQlUnCap3HTJ8JEMWrmvAej
-         34bnUKSOwch+/uerUYx1XJY2AwzC+UTqOG9bf4x5fEwASgXzuPbrKHx0HSsSdFZ6Dn9P
-         nEWYJuWPN692muFN5P5CL5VCjtM3kjJAqH063XrTwR9Eg2/xUn0tteWEvfFHZWA5IYLR
-         LNOg==
-X-Gm-Message-State: AOAM5329U4SJbhCZ3Y8w44XGEoMvOyu5Xxck49zHkzxScgjZiU4q8Svl
-        /EObjYUZ1/w+bvTOIEeoSzQ7/9mIglU=
-X-Google-Smtp-Source: ABdhPJyJvvqpKCeLedCBp+8xhomScUXD17n8gmeFux4kh5AdZI64glUB3zSpo8nVxNRM0aR0aMvacw==
-X-Received: by 2002:a9d:7501:: with SMTP id r1mr3869002otk.115.1602016436562;
-        Tue, 06 Oct 2020 13:33:56 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w3sm1545388otl.13.2020.10.06.13.33.55
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 06 Oct 2020 13:33:55 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 6 Oct 2020 13:33:54 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Alban Bedel <alban.bedel@aerq.com>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v4 2/3] dt-bindings: hwmon: Add the +vs supply to the
- lm75 bindings
-Message-ID: <20201006203354.GA88755@roeck-us.net>
-References: <20201001145738.17326-1-alban.bedel@aerq.com>
- <20201001145738.17326-3-alban.bedel@aerq.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=PDfEFjOxvV5lnlJ5Dhtp3js2iortYdXKM+0f6FyQWho=;
+        b=cpsmOD66oVflxCH+Xfp8sA7BQMedOe41NDfEIpF4Khx2c/b3gKYlwOwYYQtH2VGJKH
+         w6hb6G6yJ634502S5rDx5JEBnYl0t+ExspJGpML8u8SfhUTN08r/zlkTbjQiadUzLfFn
+         0gXOXhr7kTQOhb3+vnUEbI2hVR8hwF/0IznYJxdYkS8c0EuQMcF/iA14YcgdBzk6TIxa
+         Fd+bLwvpQXTq03Ja90Is92EYjhct/MrFcXkxbyo8+ntQzSeT6GB7BJa2Te2Ll4Y9r0Ka
+         iNpCH0uBBHc4q16f1fpdl15TrTrQaA0UAdphDDgtbG3IXql7kef1TjGC1wfG4wTq0BQb
+         pFiA==
+X-Gm-Message-State: AOAM533z3baOrozNpR+BrBtChic0xVLpXuhiexWKmtzvwbN6Y2f1QqYa
+        RDCOO74a8FgZ6RprLKXBc+NL+Jx9gSZC
+X-Google-Smtp-Source: ABdhPJxHWw8Nsyci8DS/igtGgNuSzSxHHAh9iRU+J8qZ4eCIk3SbSIp1v9rGpeD5riEEemBsERVA7g==
+X-Received: by 2002:a05:6830:2425:: with SMTP id k5mr4129010ots.86.1602019044700;
+        Tue, 06 Oct 2020 14:17:24 -0700 (PDT)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id f11sm133739oot.4.2020.10.06.14.17.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Oct 2020 14:17:24 -0700 (PDT)
+Received: (nullmailer pid 2858433 invoked by uid 1000);
+        Tue, 06 Oct 2020 21:17:22 -0000
+Date:   Tue, 6 Oct 2020 16:17:22 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Chu Lin <linchuyuan@google.com>
+Cc:     linux-hwmon@vger.kernel.org, linux@roeck-us.net,
+        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
+        jdelvare@suse.com, devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] dt-bindings: hwmon: max20730: adding device tree
+ doc for max20730
+Message-ID: <20201006211722.GA2858348@bogus>
+References: <20201004031445.2321090-1-linchuyuan@google.com>
+ <20201004031445.2321090-2-linchuyuan@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201001145738.17326-3-alban.bedel@aerq.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20201004031445.2321090-2-linchuyuan@google.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Oct 01, 2020 at 04:57:37PM +0200, Alban Bedel wrote:
-> Some boards might have a regulator that control the +VS supply, add it
-> to the bindings.
+On Sun, 04 Oct 2020 03:14:44 +0000, Chu Lin wrote:
+> max20730 Integrated, Step-Down Switching Regulator with PMBus
 > 
-> Signed-off-by: Alban Bedel <alban.bedel@aerq.com>
-> Acked-by: Rob Herring <robh@kernel.org>
-
-Applied to hwmon-next.
-
-Thanks,
-Guenter
-
+> Signed-off-by: Chu Lin <linchuyuan@google.com>
 > ---
-> v2: Removed the unneeded `maxItems` attribute
-> ---
->  Documentation/devicetree/bindings/hwmon/lm75.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
+> ChangeLog v1 -> v2
+>   hwmon: pmbus: max20730:
+>   - Don't do anything to the ret if an error is returned from pmbus_read_word
+>   - avoid overflow when doing multiplication
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/lm75.yaml b/Documentation/devicetree/bindings/hwmon/lm75.yaml
-> index c9a001627945..96eed5cc7841 100644
-> --- a/Documentation/devicetree/bindings/hwmon/lm75.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/lm75.yaml
-> @@ -43,6 +43,9 @@ properties:
->    reg:
->      maxItems: 1
->  
-> +  vs-supply:
-> +    description: phandle to the regulator that provides the +VS supply
-> +
->  required:
->    - compatible
->    - reg
-> @@ -58,5 +61,6 @@ examples:
->        sensor@48 {
->          compatible = "st,stlm75";
->          reg = <0x48>;
-> +        vs-supply = <&vs>;
->        };
->      };
+> ChangeLog v2 -> v3
+>   dt-bindings: hwmon: max20730:
+>   - Provide the binding documentation in yaml format
+>   hwmon: pmbus: max20730:
+>   - No change
+> 
+> ChangeLog v3 -> v4
+>   dt-bindings: hwmon: max20730:
+>   - Fix highefficiency to high efficiency in description
+>   - Fix presents to present in vout-voltage-divider
+>   - Add additionalProperties: false
+>   hwmon: pmbus: max20730:
+>   - No change
+> 
+>  .../bindings/hwmon/maxim,max20730.yaml        | 65 +++++++++++++++++++
+>  1 file changed, 65 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/maxim,max20730.yaml
+> 
+
+Reviewed-by: Rob Herring <robh@kernel.org>
