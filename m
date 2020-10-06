@@ -2,209 +2,179 @@ Return-Path: <SRS0=xjv2=DN=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CACA9C41604
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Oct 2020 07:24:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4542C4727F
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Oct 2020 07:37:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6932C20789
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Oct 2020 07:24:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 73D502080A
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Oct 2020 07:37:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726769AbgJFHY6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 6 Oct 2020 03:24:58 -0400
-Received: from mga14.intel.com ([192.55.52.115]:25651 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725912AbgJFHY6 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 6 Oct 2020 03:24:58 -0400
-IronPort-SDR: kbSPt6L1+d5Pdq6k9hu3qRbWFA303oiH9qrvtwt+RS2p6ZgpBRWn8EvOMWb5Gzo5f6z2aVfdCl
- vAiXZjYEFa1g==
-X-IronPort-AV: E=McAfee;i="6000,8403,9765"; a="163623695"
-X-IronPort-AV: E=Sophos;i="5.77,342,1596524400"; 
-   d="scan'208";a="163623695"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2020 00:24:57 -0700
-IronPort-SDR: 5USVVJLo84qZlfkT+EpBXMnb3DnCL8j+ZDE8J5YKMaqFaVdGNwOQZxrjJjp5fDxS8P9OTOAiIo
- IWZVK9JGB7Ng==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,342,1596524400"; 
-   d="scan'208";a="517010480"
-Received: from lkp-server02.sh.intel.com (HELO b5ae2f167493) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 06 Oct 2020 00:24:55 -0700
-Received: from kbuild by b5ae2f167493 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kPhLD-00017h-6T; Tue, 06 Oct 2020 07:24:55 +0000
-Date:   Tue, 06 Oct 2020 15:24:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon-next] BUILD SUCCESS
- f6a496a5ce8d23eee5ed6ba65d94ca95005f3e91
-Message-ID: <5f7c1b95.fEOtyBKkzcR40V5x%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1727214AbgJFHh6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 6 Oct 2020 03:37:58 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:36572 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725912AbgJFHh6 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Oct 2020 03:37:58 -0400
+Received: by mail-ot1-f65.google.com with SMTP id 60so11408196otw.3;
+        Tue, 06 Oct 2020 00:37:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8+YGZEZXCDlVSYcoSNcJ9v6pHT8JdkLtCN5s+E2ToaQ=;
+        b=L3b/PWChkoqoS3sM68KkIks1b0cT9jMiy6dEJ9WER5VSr4OUBijAy2r0ZZDu964yjz
+         VfYs+kttlFUUP4B0e2mPea0gSV3iwIyp/iscNyRT6mHVtn8iPaLkWHSACJPMMBwj+eSl
+         utbFbKULMEnBeRrgiJxKhsqHpC0l88y4yzNFHScB/x1qHcvrT7e4I0yjt3x/Sann2q4h
+         y6EQVsfVkoKicpJiyuAJVQuixqzSrEfdShe63f3CfTQY76y4JWp4uaRykmsJ7mzqt11b
+         pwyHr5l4guJHbdpXDUG3lkH7L8LwjJrWNf7+Z0I8N80RMqyHFPxvrMulIJw3KWT1NFHX
+         8Wcw==
+X-Gm-Message-State: AOAM530TkVNGXR8CUhM7L2hbvAP7zPSf1zQWRsPH5X4MYux3okdjemRq
+        M09bV9zRdfkzREB3AYB0zIRmbB0IPlE+jS+LjT4=
+X-Google-Smtp-Source: ABdhPJz2bCZlgB6we6A9AWlaXsOI2O+CwxUcnmKhPrIVPza5tGmo+mK6C98Ugzjy2W9HQnh3L0gpSmpM+xs5ujOFQMY=
+X-Received: by 2002:a05:6830:210a:: with SMTP id i10mr2082078otc.145.1601969875043;
+ Tue, 06 Oct 2020 00:37:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+References: <20201005183830.486085-1-robh@kernel.org> <20201005183830.486085-2-robh@kernel.org>
+In-Reply-To: <20201005183830.486085-2-robh@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 6 Oct 2020 09:37:43 +0200
+Message-ID: <CAMuHMdXjBSzbs4yAPJ-XUTBRZWKN61hO8vQ1-nGN5nAo7JnV-w@mail.gmail.com>
+Subject: Re: [PATCH 1/4] dt-bindings: Add missing 'unevaluatedProperties'
+To:     Rob Herring <robh@kernel.org>
+Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        linux-iio@vger.kernel.org, Viresh Kumar <vireshk@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Sebastian Reichel <sre@kernel.org>, linux-ide@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        linux-leds@vger.kernel.org, Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-rtc@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        linux-input@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-can@vger.kernel.org,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Richard Weinberger <richard@nod.at>,
+        dmaengine <dmaengine@vger.kernel.org>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon-next
-branch HEAD: f6a496a5ce8d23eee5ed6ba65d94ca95005f3e91  docs: hwmon: (ltc2945) update datasheet link
+Hi Rob,
 
-elapsed time: 725m
+On Mon, Oct 5, 2020 at 8:39 PM Rob Herring <robh@kernel.org> wrote:
+> This doesn't yet do anything in the tools, but make it explicit so we can
+> check either 'unevaluatedProperties' or 'additionalProperties' is present
+> in schemas.
+>
+> 'unevaluatedProperties' is appropriate when including another schema (via
+> '$ref') and all possible properties and/or child nodes are not
+> explicitly listed in the schema with the '$ref'.
+>
+> This is in preparation to add a meta-schema to check for missing
+> 'unevaluatedProperties' or 'additionalProperties'. This has been a
+> constant source of review issues.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-configs tested: 137
-configs skipped: 2
+Thanks for your patch!
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+>  Documentation/devicetree/bindings/bus/renesas,bsc.yaml       | 2 ++
+>  .../bindings/memory-controllers/renesas,rpc-if.yaml          | 2 ++
+>  Documentation/devicetree/bindings/net/renesas,ether.yaml     | 2 ++
+>  Documentation/devicetree/bindings/serial/renesas,hscif.yaml  | 2 ++
+>  Documentation/devicetree/bindings/serial/renesas,sci.yaml    | 2 ++
+>  Documentation/devicetree/bindings/serial/renesas,scif.yaml   | 2 ++
+>  Documentation/devicetree/bindings/serial/renesas,scifa.yaml  | 2 ++
+>  Documentation/devicetree/bindings/serial/renesas,scifb.yaml  | 2 ++
+>  Documentation/devicetree/bindings/spi/renesas,hspi.yaml      | 2 ++
+>  Documentation/devicetree/bindings/spi/renesas,rspi.yaml      | 2 ++
+>  Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml  | 2 ++
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-mips                  maltasmvp_eva_defconfig
-m68k                        mvme16x_defconfig
-sh                ecovec24-romimage_defconfig
-ia64                        generic_defconfig
-powerpc                      acadia_defconfig
-mips                       bmips_be_defconfig
-arm                         cm_x300_defconfig
-powerpc                      pasemi_defconfig
-mips                      bmips_stb_defconfig
-powerpc                      cm5200_defconfig
-powerpc                     stx_gp3_defconfig
-sh                           se7721_defconfig
-mips                         bigsur_defconfig
-arm                           stm32_defconfig
-arm                          iop32x_defconfig
-arm                          tango4_defconfig
-powerpc                mpc7448_hpc2_defconfig
-mips                        nlm_xlp_defconfig
-arm                            qcom_defconfig
-powerpc                     tqm5200_defconfig
-sh                          sdk7786_defconfig
-powerpc                      ppc40x_defconfig
-m68k                            q40_defconfig
-sh                          r7780mp_defconfig
-sparc                               defconfig
-sparc64                             defconfig
-sh                         apsh4a3a_defconfig
-arc                            hsdk_defconfig
-arm                        multi_v5_defconfig
-xtensa                           alldefconfig
-mips                          ath79_defconfig
-powerpc                         ps3_defconfig
-powerpc                  mpc885_ads_defconfig
-sh                          rsk7269_defconfig
-m68k                            mac_defconfig
-powerpc                     tqm8540_defconfig
-h8300                            alldefconfig
-arm                           efm32_defconfig
-mips                           ip27_defconfig
-sh                           se7724_defconfig
-powerpc                   lite5200b_defconfig
-arm                           omap1_defconfig
-powerpc                      chrp32_defconfig
-mips                malta_qemu_32r6_defconfig
-arm                         palmz72_defconfig
-arm                          ixp4xx_defconfig
-sh                           se7722_defconfig
-sh                   secureedge5410_defconfig
-m68k                        m5272c3_defconfig
-m68k                                defconfig
-powerpc                 mpc85xx_cds_defconfig
-ia64                             allmodconfig
-mips                        jmr3927_defconfig
-arm                         vf610m4_defconfig
-mips                          ath25_defconfig
-powerpc                 canyonlands_defconfig
-sh                          rsk7264_defconfig
-arm                        spear6xx_defconfig
-arm                           viper_defconfig
-arm                        multi_v7_defconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a006-20201005
-i386                 randconfig-a005-20201005
-i386                 randconfig-a001-20201005
-i386                 randconfig-a004-20201005
-i386                 randconfig-a003-20201005
-i386                 randconfig-a002-20201005
-i386                 randconfig-a006-20201006
-i386                 randconfig-a005-20201006
-i386                 randconfig-a001-20201006
-i386                 randconfig-a004-20201006
-i386                 randconfig-a003-20201006
-i386                 randconfig-a002-20201006
-x86_64               randconfig-a012-20201005
-x86_64               randconfig-a015-20201005
-x86_64               randconfig-a014-20201005
-x86_64               randconfig-a013-20201005
-x86_64               randconfig-a011-20201005
-x86_64               randconfig-a016-20201005
-i386                 randconfig-a014-20201005
-i386                 randconfig-a015-20201005
-i386                 randconfig-a013-20201005
-i386                 randconfig-a016-20201005
-i386                 randconfig-a011-20201005
-i386                 randconfig-a012-20201005
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
+Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-clang tested configs:
-x86_64               randconfig-a004-20201005
-x86_64               randconfig-a002-20201005
-x86_64               randconfig-a001-20201005
-x86_64               randconfig-a003-20201005
-x86_64               randconfig-a005-20201005
-x86_64               randconfig-a006-20201005
+> --- a/Documentation/devicetree/bindings/net/renesas,ether.yaml
+> +++ b/Documentation/devicetree/bindings/net/renesas,ether.yaml
+> @@ -85,6 +85,8 @@ required:
+>    - clocks
+>    - pinctrl-0
+>
+> +unevaluatedProperties: false
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+This one has received an "additionalProperties: false" in commit
+41506bff84f1563e ("dt-bindings: net: renesas, ether: Improve schema validation")
+in net-next, which you probably want to remove.
+
+> +
+>  examples:
+>    # Lager board
+>    - |
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
