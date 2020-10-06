@@ -2,260 +2,129 @@ Return-Path: <SRS0=xjv2=DN=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D85CC4363A
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Oct 2020 03:13:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C2D2C4727F
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Oct 2020 05:29:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1B5EF208A9
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Oct 2020 03:13:53 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ioUzWxbX"
+	by mail.kernel.org (Postfix) with ESMTP id 0C74A208E4
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Oct 2020 05:29:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1601962198;
+	bh=IqVDArZkdO/B6tbx3G9IqtpqMW94z4IPv/01HlGFHyY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=gzlRXH03+StITK0LQ8OJihaqyydDaLH4Xcmgb6ZjlmwbrDXUTrcpbCn+p04/7nCeg
+	 C+PISHBRMUrDBKDoX1G5V8fy88FHDxpeAy7ztjM8PUMyd7PHBXToZGyzarkzmkLmEO
+	 6mNv87zdfLrwuQ79SH8GEBeIK9bljrWphfwKBM+A=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725917AbgJFDNx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 5 Oct 2020 23:13:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44436 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725909AbgJFDNx (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 5 Oct 2020 23:13:53 -0400
-Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CEC0C0613CE
-        for <linux-hwmon@vger.kernel.org>; Mon,  5 Oct 2020 20:13:51 -0700 (PDT)
-Received: by mail-ot1-x342.google.com with SMTP id o8so10918079otl.4
-        for <linux-hwmon@vger.kernel.org>; Mon, 05 Oct 2020 20:13:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=YhkwckyNp6WfxaWpDShWfy9L42iKZ4jOtBl9eLfn3Fs=;
-        b=ioUzWxbXmPR2u+5eY5AVcms+s0c0VISF4yxTFx6x0MPjTlCqnrg25+QCrzft7a9iWH
-         t3vZ6bX1nUC7Rv9EviYQGB5xD22l7i19y17dUmJFxgC3cFhlozy3eHRGPY/GuEpCl0uh
-         wjoF1Ly4IMKj2Z2JG+p43WTPb3abRttgFY7KI3v0WH13x+e7LE7jRqpUswFhHa8g+XL/
-         /qrHnWERYKK/zoz0Lyhqi11MXMZBZ7p1qkDJ/afp27KowdqZipRAMuawo91So2txnWa8
-         HkFmBaunKbsrHiVHRFxpK/IpZM2FY8DMCAezPWvtRn2d4jcZMSNr47kSLT4rux6rIGM4
-         DBuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=YhkwckyNp6WfxaWpDShWfy9L42iKZ4jOtBl9eLfn3Fs=;
-        b=XqM+AQAHzN2aQk3c8kIIpaqnFEqkzvIMT8XwVU1Dl38jb0fRKz9lWzYfAg1cJywG3F
-         YxY0QUyqZQeLhNBmb9v4wrQ+WJZwhuEzMt5NbaMV46p9k6uL2L8W+updoonOn3jMSPoF
-         /UuvaFsCnaKeUWE/zXE1NYeLI8Hm/K8vWKD9kXNKTZ03wa24HSAhL2TffnXtgfw09mjj
-         YdxO3udHdX8KtYByUhBhS5yF6JzesWYrkar4vs2XE8NBSNth+fQh4Vff8yQKv7IwfRbV
-         YD+iDpd+7pkadJIiaygjW7wOGzOpGMVsQr8A//TgMMrljkR1t7l8T4CIjV/3CN4TXY0F
-         BeAA==
-X-Gm-Message-State: AOAM533MRLfFvwZ0cI9Y3A/kAjQiNsNgwYg5Iw+/QW0p2Eff1Scsuw1Y
-        8hxLbtheC9lbJ16CxzAodYj+j7362pQ=
-X-Google-Smtp-Source: ABdhPJxc7fj/2lasTxWaCK4CdhfvWnBUi2VbINfeWvv7312xK0LcWqI/KXGYNohgJtoJV6XalMgBYg==
-X-Received: by 2002:a9d:58cd:: with SMTP id s13mr1610088oth.12.1601954030664;
-        Mon, 05 Oct 2020 20:13:50 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d28sm557766ooa.7.2020.10.05.20.13.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Oct 2020 20:13:49 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH linux dev-5.8] hwmon: Ampere Computing ALTRA SMPMPRO
- sensor driver
-To:     Joel Stanley <joel@jms.id.au>,
-        Patrick Williams <patrick@stwcx.xyz>,
-        linux-hwmon@vger.kernel.org
-Cc:     Lancelot <lancelot.kao@fii-usa.com>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Xiaopeng XP Chen <xiao-peng.chen@fii-na.com>
-References: <1601504817-16752-1-git-send-email-lancelot.kao@fii-usa.com>
- <20201001123249.GC6152@heinlein>
- <CACPK8XewuMZTvhh7QA6iBbkH5AqQWS9RVeZXaAF-XzAYhYsG1A@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <384f0c15-1c53-7ab1-aedc-af215e73f04a@roeck-us.net>
-Date:   Mon, 5 Oct 2020 20:13:48 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726891AbgJFF3r (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 6 Oct 2020 01:29:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50050 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725912AbgJFF3q (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 6 Oct 2020 01:29:46 -0400
+Received: from localhost (unknown [122.167.144.92])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1C34120870;
+        Tue,  6 Oct 2020 05:29:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601962185;
+        bh=IqVDArZkdO/B6tbx3G9IqtpqMW94z4IPv/01HlGFHyY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XJYtCNTyvx3ozaL1aRMYZGV+bTbvDa3P+1vHmIpIZkmMpy/W3RdFSo1VlEtqd2ZwS
+         VXm0e3hsDFIgJyUblJEaSpP3cJaPtrtrYpgunMrPuk68lEyTmKEkfZetm3/aycx6/+
+         f5jbT6MC2Pw1++qOdAXkqzyJva8aLdhWHo97xSwA=
+Date:   Tue, 6 Oct 2020 10:59:40 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>, dmaengine@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Jens Axboe <axboe@kernel.dk>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Richard Weinberger <richard@nod.at>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH 1/4] dt-bindings: Add missing 'unevaluatedProperties'
+Message-ID: <20201006052940.GO2968@vkoul-mobl>
+References: <20201005183830.486085-1-robh@kernel.org>
+ <20201005183830.486085-2-robh@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CACPK8XewuMZTvhh7QA6iBbkH5AqQWS9RVeZXaAF-XzAYhYsG1A@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201005183830.486085-2-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10/5/20 4:05 PM, Joel Stanley wrote:
-> On Thu, 1 Oct 2020 at 12:32, Patrick Williams <patrick@stwcx.xyz> wrote:
->>
->> On Wed, Sep 30, 2020 at 05:26:57PM -0500, Lancelot wrote:
->>> From: Lancelot Kao <lancelot.kao@fii-usa.com>
->>>
->>> Add SMPMPro-hwmon driver to monitor Ampere CPU/Memory/VR via an
->>> i2c interface of the CPU's smpmpro management device.
->>>
->>> Signed-off-by: Xiaopeng XP Chen <xiao-peng.chen@fii-na.com>
->>> Signed-off-by: Lancelot Kao <lancelot.kao@fii-usa.com>
->>
->> Nice work at adding this driver.
->>
->> It does look like you've missed CC'ing upstream though.  Was this
->> intentional?  (linux-hwmon@vger.kernel.org)
+On 05-10-20, 13:38, Rob Herring wrote:
+> This doesn't yet do anything in the tools, but make it explicit so we can
+> check either 'unevaluatedProperties' or 'additionalProperties' is present
+> in schemas.
 > 
-> As Patrick mentioned, let's review this on the upstream list.
+> 'unevaluatedProperties' is appropriate when including another schema (via
+> '$ref') and all possible properties and/or child nodes are not
+> explicitly listed in the schema with the '$ref'.
 > 
+> This is in preparation to add a meta-schema to check for missing
+> 'unevaluatedProperties' or 'additionalProperties'. This has been a
+> constant source of review issues.
 
-I can not really comment, not having seen the entire patch.
-However, looking it up on the OpenBMC patchwork, couple of
-high level comments:
+Acked-By: Vinod Koul <vkoul@kernel.org>
 
-- Label attributes are handled by the hwmon core. Label attributes
-  outside the core are unacceptable.
-- There is no discussion about the non-standard attributes, nor a description
-  of those, nor an explanation for why they are needed (as hwmon sysfs attributes)
-  or what they report. This is unacceptable.
-  Besides, many of those attributes - say, gpi22_input, which seems to report
-  the content of GPI_WDT_STS_REG, suggesting association with a watchdog -
-  seem inappropriate for a hwmon driver to start with. It seems like the
-  hwmon driver us used as catch-all driver for this chip. Sorry,
-  that is an absolute no-go.
-
-If this patch is supposed to be submitted as upstream patch, I would suggest
-to read and follow the guidance in Documentation/hwmon/submitting-patches.rst.
-
-Guenter
-
-> Cheers,
-> 
-> Joel
-> 
->>
->>> +/* Capability Registers  */
->>> +#define TEMP_SENSOR_SUPPORT_REG      0x05
->>> +#define PWR_SENSOR_SUPPORT_REG       0x06
->>> +#define VOLT_SENSOR_SUPPORT_REG      0x07
->>> +#define OTHER_CAP_REG                    0x08
->>> +#define CORE_CLUSTER_CNT_REG 0x0B
->>> +#define SYS_CACHE_PCIE_CNT_REG       0x0C
->>> +#define SOCKET_INFO_REG              0x0D
->>
->> There seems to be some sporatic indentation throughout all the #defines
->> in this file, where it appears you attempted to align the values.  Make
->> sure you have tabs set to 8-step spacing for kernel code.
->>
->>> +static void smpmpro_init_device(struct i2c_client *client,
->>> +                             struct smpmpro_data *data)
->>> +{
->>> +     u16 ret;
->>> +
->>> +     ret = i2c_smbus_read_word_swapped(client, TEMP_SENSOR_SUPPORT_REG);
->>> +     if (ret < 0)
->>> +             return;
->>> +     data->temp_support_regs = ret;
->>
->> i2c_smbus_read_word_swapped returns a s32 even though you're looking for
->> a u16.  By setting `ret` to u16 you've caused two problems:
->>
->>     * You are immediately truncating -ERRNO values into a u16 so that
->>       you are unable to differentiate values like 0xFFFFFFFF as a
->>       register value and -1 as an errno.
->>
->>     * The if condition here can never be true, so you're never catching
->>       error conditions.  (An u16 can never be negative, so ret < 0 can
->>       never be true.)
->>
->> This issue occurs throughout the driver.
->>
->>> +static int smpmpro_read_temp(struct device *dev, u32 attr, int channel,
->>> +                          long *val)
->>> +{
->>> +     struct smpmpro_data *data = dev_get_drvdata(dev);
->>> +     struct i2c_client *client = data->client;
->>> +     int ret;
->>
->> You might want a sized int on this one?  Repeated in most other
->> functions.
->>
->>> +static int smpmpro_read_power(struct device *dev, u32 attr, int channel,
->>> +                          long *val)
->>> +{
->>> +     struct smpmpro_data *data = dev_get_drvdata(dev);
->>> +     struct i2c_client *client = data->client;
->>> +     int ret, ret_mw;
->>> +     int ret2 = 0, ret2_mw = 0;
->>
->> Any reason to not initialize ret/ret_mw?  By it being different from
->> ret2/ret2_mw it makes me question "is this ok?", which spends more time
->> in review.
->>
->>> +static int smpmpro_i2c_probe(struct i2c_client *client,
->>> +                       const struct i2c_device_id *id)
->> ...
->>> +     /* Initialize the Altra SMPMPro chip */
->>> +     smpmpro_init_device(client, data);
->>
->> I didn't see anything in the smpmpro_init_device function, but is there
->> anything you can or should do to ensure this device really is an
->> SMPMPro rather than exclusively relying on the device tree compatible?
->>
->>> +static struct i2c_driver smpmpro_driver = {
->>> +     .class          = I2C_CLASS_HWMON,
->>> +     .probe          = smpmpro_i2c_probe,
->>> +     .driver = {
->>> +             .name   = "smpmpro",
->>> +     },
->>> +     .id_table       = smpmpro_i2c_id,
->>> +};
->>> +
->>> +module_i2c_driver(smpmpro_driver);
->>
->> Are you missing the .of_match_table inside .driver?  Is that necessary
->> or useful for your use?  I'm not sure if you can have device tree
->> entries that automatically instantiate the hwmon driver otherwise.
->>
->> --
->> Patrick Williams
-
+-- 
+~Vinod
