@@ -2,149 +2,127 @@ Return-Path: <SRS0=KPlX=DO=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2285BC4363D
-	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Oct 2020 01:10:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 908D2C4363C
+	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Oct 2020 07:52:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C723A2078E
-	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Oct 2020 01:10:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 28B69207EA
+	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Oct 2020 07:52:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=sartura-hr.20150623.gappssmtp.com header.i=@sartura-hr.20150623.gappssmtp.com header.b="tQ9z9Zl/"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="GfFRV5i9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726337AbgJGBKt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 6 Oct 2020 21:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49754 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725996AbgJGBKt (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Oct 2020 21:10:49 -0400
-Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A110C0613D2
-        for <linux-hwmon@vger.kernel.org>; Tue,  6 Oct 2020 18:10:49 -0700 (PDT)
-Received: by mail-il1-x142.google.com with SMTP id q1so790778ilt.6
-        for <linux-hwmon@vger.kernel.org>; Tue, 06 Oct 2020 18:10:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura-hr.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NVWHfHuOKQpw/wHkMkUCTHI9GcrsDKWlgFwgCCsXTt8=;
-        b=tQ9z9Zl/2G/7PRrwpRrrLpUNUOSf8s0nhmDDMWtimnxfdHs1vRvuEf9t38jn42EvKp
-         HDoswwrCu4VihJFDNx+7FK9pz7XE0fxTni9Z08gKn5lkVel1YpJAQHCClzg1+CHWfMTv
-         5MQcOd7HUPjeLhq9m/NVdCrYRhXFKJ9mS9yr1r1Ha/Hn5u84cZZ55CrM8jic3cajsQMB
-         Db6sZgGK4lN57aUBrwHzlj2vraw+Jtb0Q99UjQhuQ6W0z88QxQ8aSxuqTU/Rg7GJc77b
-         YnDOAp7ADqCeIUovD2cX9e12aKOdLf2L02cAw2vkXkzwsi3lurWOOOr1FLiFetfLYwok
-         T86w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NVWHfHuOKQpw/wHkMkUCTHI9GcrsDKWlgFwgCCsXTt8=;
-        b=MIYspczn8D3jA/B4OWbk9R2ZVvAIUIZHvYvS+so5oHj1gx7RSi01/pMf4aXPWgApNO
-         2J1Ds7BbqDLw/MJCbL+l96jooLnc+lNJ5GCTAXjkgIaGiboypchN/qcTqBMAPwe50NM/
-         LGKlb3ymiajHuAomgByuYwGeHDCcA2q5WT7M/THfjxItY9taEV2Zm7DPkxpgk7tWRh2E
-         mp29G/ZklzWEylJsEKhkMImWwR6UBHAPS4nE215tvctz5MzusK1Stf++fntnsJ4R6o/Y
-         Gr6MLDuwsWn3d6SXvojT8uHyOMg0N2/j3sy0kpfsnDRghCInQXw2jyeRQ/dGnSF/bPeC
-         FCHg==
-X-Gm-Message-State: AOAM532XC+oX0hzc4qjses71fbJwjtG7UPZglMNPI1sW23qeFAlYR1ST
-        h4OBariwrcttHwhVfg9AYFMR1j2tpJfWk7bHYyQdVQ==
-X-Google-Smtp-Source: ABdhPJysHBgnkxj/7VNsn4IgW3iq6KQbvS2wJbZpy8tzWC2kbon/6gcCgtMaHeLrfziuMUZ7OUd5QgnYP5FLwSQZADg=
-X-Received: by 2002:a92:6811:: with SMTP id d17mr751971ilc.145.1602033048401;
- Tue, 06 Oct 2020 18:10:48 -0700 (PDT)
+        id S1727570AbgJGHwL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 7 Oct 2020 03:52:11 -0400
+Received: from aserp2130.oracle.com ([141.146.126.79]:42508 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726041AbgJGHwL (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 7 Oct 2020 03:52:11 -0400
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0977oBAR166717;
+        Wed, 7 Oct 2020 07:51:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
+ bh=ikR+VEwQwzc54jbFHnXgSRUTq7E7un73veYYybyYqYQ=;
+ b=GfFRV5i9Oj9cCYu2ONL2S2nExuy4uyq2YLrYa7c28rnsnzYY5VmTMNdUUnf9YjhMiYGy
+ +J7FOAX4GfOcnuItrn3+EY407yidAozstIE/aQ4oQgimW0JYe6jfGehxjl3y5oOf/Ng8
+ 5bVohYIbe/otsn4QA8+DcChQQI95QLLovft9YZekni32gMcANJxgLrzTlgV9DCfgIO5/
+ 2h5rkEZKaI2qSfESG6HnNQdNZDM/1o93bSkTshuy00R4QFIF+U5NNqDxJ+en3Esjz1xt
+ OTAbNwIawqOVlO7rbxUepg05Kze2pbvbCqRH3PkPirkdkOISSQtHfGOrcPzvhT6BFM0Y SQ== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2130.oracle.com with ESMTP id 33xetb0bug-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 07 Oct 2020 07:51:56 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0977oAw4133979;
+        Wed, 7 Oct 2020 07:51:55 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3030.oracle.com with ESMTP id 33y37y7ehn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 07 Oct 2020 07:51:55 +0000
+Received: from abhmp0004.oracle.com (abhmp0004.oracle.com [141.146.116.10])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0977psDh006529;
+        Wed, 7 Oct 2020 07:51:54 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 07 Oct 2020 00:51:53 -0700
+Date:   Wed, 7 Oct 2020 10:51:48 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Jean Delvare <jdelvare@suse.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: [PATCH] hwmon: (acpi_power_meter) clean up freeing code
+Message-ID: <20201007075148.GB2529578@mwanda>
 MIME-Version: 1.0
-References: <20200930014058.44460-1-luka.kovacic@sartura.hr>
- <20200930014058.44460-5-luka.kovacic@sartura.hr> <20200930194759.GA24378@amd> <CADZsf3ZL712nZh5nQxh5RQ=YCbM0fEK8dp-uHyOW+2FSMv+UpA@mail.gmail.com>
-In-Reply-To: <CADZsf3ZL712nZh5nQxh5RQ=YCbM0fEK8dp-uHyOW+2FSMv+UpA@mail.gmail.com>
-From:   Luka Kovacic <luka.kovacic@sartura.hr>
-Date:   Wed, 7 Oct 2020 03:10:37 +0200
-Message-ID: <CADZsf3bYHMAkbwSN657+EnpDTxgRr8qHiHDrM68UD7rJXQHDCQ@mail.gmail.com>
-Subject: Re: [PATCH v3 4/7] drivers: leds: Add the iEi WT61P803 PUZZLE LED driver
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        Lee Jones <lee.jones@linaro.org>, Dan Murphy <dmurphy@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Marek Behun <marek.behun@nic.cz>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Robert Marko <robert.marko@sartura.hr>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9766 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 spamscore=0
+ mlxscore=0 malwarescore=0 suspectscore=2 adultscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2010070051
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9766 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 mlxscore=0
+ clxscore=1011 priorityscore=1501 adultscore=0 mlxlogscore=999 phishscore=0
+ impostorscore=0 malwarescore=0 suspectscore=2 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2010070051
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Oct 6, 2020 at 8:41 AM Luka Kovacic <luka.kovacic@sartura.hr> wrote:
->
-> On Wed, Sep 30, 2020 at 9:48 PM Pavel Machek <pavel@ucw.cz> wrote:
-> >
-> > Hi!
-> >
-> > > +static int iei_wt61p803_puzzle_led_brightness_set_blocking(struct led_classdev *cdev,
-> > > +             enum led_brightness brightness)
-> > > +{
-> > > +     struct iei_wt61p803_puzzle_led *priv = cdev_to_iei_wt61p803_puzzle_led(cdev);
-> > > +     unsigned char *resp_buf = priv->response_buffer;
-> > > +     unsigned char led_power_cmd[5] = {
-> > > +             IEI_WT61P803_PUZZLE_CMD_HEADER_START,
-> > > +             IEI_WT61P803_PUZZLE_CMD_LED,
-> > > +             IEI_WT61P803_PUZZLE_CMD_LED_POWER,
-> > > +             (char)IEI_LED_OFF
-> > > +     };
-> > > +     size_t reply_size;
-> > > +
-> > > +     mutex_lock(&priv->lock);
-> > > +     if (brightness == LED_OFF) {
-> > > +             led_power_cmd[3] = (char)IEI_LED_OFF;
-> > > +             priv->led_power_state = LED_OFF;
-> > > +     } else {
-> > > +             led_power_cmd[3] = (char)IEI_LED_ON;
-> > > +             priv->led_power_state = LED_ON;
-> > > +     }
-> > > +     mutex_unlock(&priv->lock);
-> > > +
-> > > +     return iei_wt61p803_puzzle_write_command(priv->mcu, led_power_cmd,
-> > > +                     sizeof(led_power_cmd), resp_buf, &reply_size);
-> > > +}
-> >
-> > Is the mutex needed? If so, should it include the
-> > iei_wt61p803_puzzle_write_command()? Does
-> > iei_wt61p803_puzzle_write_command() have internal locking to prevent
-> > two messages from being mingled?
-> >
-> > Best regards,
-> >                                                                         Pavel
-> >
-> > --
-> > (english) http://www.livejournal.com/~pavelmachek
-> > (cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blog.html
->
-> Hello Pavel,
->
-> The mutex isn't needed and can be removed.
-> The function iei_wt61p803_puzzle_write_command() already handles its own
-> mutex locking, so a separate mutex isn't required.
->
-> Does brightness_set_blocking only block a single caller (each caller separately)
-> or does it block all callers until the previous caller is finished?
->
-> Kind regards,
-> Luka
+This code works okay but Smatch flagged it as a double free.  I've
+changed three things to make it more clear.  1)  Remove the call to
+free_capabilities() in acpi_power_meter_add().  This call is a no-op
+because the capabilities have not been allocated yet.  2)  Set "*str" to
+NULL in free_capabilities() so that way the function can be called twice
+in a row without leading to a double free.  3)  Call free_capabilities()
+in read_capabilities() instead of open coding the free.
 
-Hello Pavel,
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+ drivers/hwmon/acpi_power_meter.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-I've sent out a new patchset, but I kept the mutex in use.
-It's used to make sure only one read or write request is done at once,
-when writing
-to the LED driver private structure.
+diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
+index a270b975e90b..848718ab7312 100644
+--- a/drivers/hwmon/acpi_power_meter.c
++++ b/drivers/hwmon/acpi_power_meter.c
+@@ -725,8 +725,10 @@ static void free_capabilities(struct acpi_power_meter_resource *resource)
+ 	int i;
+ 
+ 	str = &resource->model_number;
+-	for (i = 0; i < 3; i++, str++)
++	for (i = 0; i < 3; i++, str++) {
+ 		kfree(*str);
++		*str = NULL;
++	}
+ }
+ 
+ static int read_capabilities(struct acpi_power_meter_resource *resource)
+@@ -801,9 +803,7 @@ static int read_capabilities(struct acpi_power_meter_resource *resource)
+ 	dev_info(&resource->acpi_dev->dev, "Found ACPI power meter.\n");
+ 	goto end;
+ error:
+-	str = &resource->model_number;
+-	for (i = 0; i < 3; i++, str++)
+-		kfree(*str);
++	free_capabilities(resource);
+ end:
+ 	kfree(buffer.pointer);
+ 	return res;
+@@ -874,7 +874,6 @@ static int acpi_power_meter_add(struct acpi_device *device)
+ 	strcpy(acpi_device_class(device), ACPI_POWER_METER_CLASS);
+ 	device->driver_data = resource;
+ 
+-	free_capabilities(resource);
+ 	res = read_capabilities(resource);
+ 	if (res)
+ 		goto exit_free;
+-- 
+2.28.0
 
-I have also added this description to the struct comment.
-
-Kind regards,
-Luka
