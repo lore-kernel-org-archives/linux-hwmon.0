@@ -2,119 +2,151 @@ Return-Path: <SRS0=ZarO=DQ=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1050C43467
-	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Oct 2020 15:31:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E83B8C433E7
+	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Oct 2020 23:29:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 799D022284
-	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Oct 2020 15:31:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9B23F2222E
+	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Oct 2020 23:29:05 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=sartura-hr.20150623.gappssmtp.com header.i=@sartura-hr.20150623.gappssmtp.com header.b="1GLphmj5"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389305AbgJIPaw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 9 Oct 2020 11:30:52 -0400
-Received: from mx2.suse.de ([195.135.220.15]:34414 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389135AbgJIPat (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 9 Oct 2020 11:30:49 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id B52CAAD63;
-        Fri,  9 Oct 2020 15:30:47 +0000 (UTC)
-From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-To:     f.fainelli@gmail.com, linux@roeck-us.net, jdelvare@suse.com,
-        wahrenst@gmx.net,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Eric Anholt <eric@anholt.net>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-pwm@vger.kernel.org, Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Cc:     linux-hwmon@vger.kernel.org, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] dt-bindings: pwm: Add binding for RPi firmware PWM bus
-Date:   Fri,  9 Oct 2020 17:30:28 +0200
-Message-Id: <20201009153031.986-2-nsaenzjulienne@suse.de>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201009153031.986-1-nsaenzjulienne@suse.de>
-References: <20201009153031.986-1-nsaenzjulienne@suse.de>
+        id S1727046AbgJIX02 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 9 Oct 2020 19:26:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51960 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727032AbgJIXZr (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 9 Oct 2020 19:25:47 -0400
+Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E791C0613D2
+        for <linux-hwmon@vger.kernel.org>; Fri,  9 Oct 2020 16:25:55 -0700 (PDT)
+Received: by mail-il1-x142.google.com with SMTP id l16so10751030ilt.13
+        for <linux-hwmon@vger.kernel.org>; Fri, 09 Oct 2020 16:25:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sartura-hr.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bdQJAu4yF5dce0DD49SyLKXgzP39u50c+umqE0FLgBU=;
+        b=1GLphmj5/R5BqAlFnPGRnzhsW3asqG+CCFd5rKI5mUooAraedSiE4OyXexCuybI9ab
+         xUnuGU5fG5NdgE+d1dDkiQfGVYhCMKbYNMXtqGIAnWGaB1u4aOHTG/PypcuMTIALyA4b
+         BEM9UVh5gDdrzbW6+zKMfdJXnVr5UyYiirF6OCXsG8SQCp0Om0/6ATaL5bEK0g6/mBYr
+         Qtrvz/63nBPc38xo69uBkPbUPWWTlP2SmmPRjMZckmiqMQN4xoBAxIwgGebnbT8LLlD7
+         4fKKgoVmdyOwDvmfC5OnplL/lF0NLIV5XfGQiq7dnu/UB6/cb2PFf0uU6wNBjhb/jOqJ
+         03CQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bdQJAu4yF5dce0DD49SyLKXgzP39u50c+umqE0FLgBU=;
+        b=JuUWbEB/kDjokZjUw/7lZDBiKNnhRzcuEFTPAcgR9HQYhnod5bklSWNO+HmtBwmK4A
+         owz+LMZiY73BlrRdURjAyg23CQ2CBs5O6xecV6eNDvAyJYKpVlcfPSkY+o2ajxQ4mzeI
+         H6C+Iv1BmWRkeVWVPT08gRkRiRf4XD/ty6DVSwWrwi9Q3mW9rPUctTG5SHhqiezR53Zo
+         mNJgOXagBu+K/lDSFRQTSLIBO1OGRZS3/56i4f8XyfhTgUmAdTypBBAjGj4wR8w8vnXF
+         s/NuYIz0eWqeUZFWbaZBUJWkitoRfgKOLARmaf8VgdRjsL0OsZqzbyz8LUWGqpPmSXTO
+         M4Yw==
+X-Gm-Message-State: AOAM531QTy4FrKODEh3v/6jYOhrBObrJ6Mrkuk0Rxc4h1z4eVRSCj3KU
+        zhHkzSU86yK7b3ZyWfOBCbzpPEDvxy2mHAG7x0AlJA==
+X-Google-Smtp-Source: ABdhPJxP+j1e3PZosu12MlCEp2JiKAfso8sX9UH9nEzXe5UARh1wrbVACQBg+/qhTwIeyoCWuBJU5G9A5iggmiUld6A=
+X-Received: by 2002:a92:6811:: with SMTP id d17mr11954140ilc.145.1602285954971;
+ Fri, 09 Oct 2020 16:25:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20201007004901.39859-1-luka.kovacic@sartura.hr>
+ <20201007004901.39859-5-luka.kovacic@sartura.hr> <20201007112756.GD12224@duo.ucw.cz>
+In-Reply-To: <20201007112756.GD12224@duo.ucw.cz>
+From:   Luka Kovacic <luka.kovacic@sartura.hr>
+Date:   Sat, 10 Oct 2020 01:25:43 +0200
+Message-ID: <CADZsf3Y=Z9pys=g1QtN=+vhLDV=NVK=rbF14Duv50expF=gzeA@mail.gmail.com>
+Subject: Re: [PATCH v4 4/6] drivers: leds: Add the iEi WT61P803 PUZZLE LED driver
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        Lee Jones <lee.jones@linaro.org>, Dan Murphy <dmurphy@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Marek Behun <marek.behun@nic.cz>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Robert Marko <robert.marko@sartura.hr>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The PWM bus controlling the fan in RPi's official PoE hat can only be
-controlled by the board's co-processor.
+On Wed, Oct 7, 2020 at 1:27 PM Pavel Machek <pavel@ucw.cz> wrote:
+>
+> Hi!
+>
+> > Add support for the iEi WT61P803 PUZZLE LED driver.
+> > Currently only the front panel power LED is supported.
+> >
+> > This driver depends on the iEi WT61P803 PUZZLE MFD driver.
+>
+> > +static int iei_wt61p803_puzzle_led_brightness_set_blocking(struct led_classdev *cdev,
+> > +                                                        enum led_brightness brightness)
+> > +{
+> > +     struct iei_wt61p803_puzzle_led *priv = cdev_to_iei_wt61p803_puzzle_led(cdev);
+> > +     unsigned char *resp_buf = priv->response_buffer;
+> > +     unsigned char led_power_cmd[5] = {
+> > +             IEI_WT61P803_PUZZLE_CMD_HEADER_START,
+> > +             IEI_WT61P803_PUZZLE_CMD_LED,
+> > +             IEI_WT61P803_PUZZLE_CMD_LED_POWER,
+> > +             (char)IEI_LED_OFF
+> > +     };
+> > +     size_t reply_size;
+> > +
+> > +     mutex_lock(&priv->lock);
+> > +     if (brightness == LED_OFF) {
+> > +             led_power_cmd[3] = (char)IEI_LED_OFF;
+> > +             priv->led_power_state = LED_OFF;
+> > +     } else {
+> > +             led_power_cmd[3] = (char)IEI_LED_ON;
+> > +             priv->led_power_state = LED_ON;
+> > +     }
+> > +     mutex_unlock(&priv->lock);
+>
+> Are you sure you need the mutex?
+>
+> > +     ret = devm_led_classdev_register_ext(dev, &priv->cdev, &init_data);
+> > +     if (ret) {
+> > +             dev_err(dev, "Could not register LED\n");
+> > +             goto err_child_node;
+> > +     }
+> > +     return 0;
+> > +err_child_node:
+> > +     fwnode_handle_put(child);
+> > +     return ret;
+> > +}
+>
+> Is the fwnode_handle_put(child); missing in non-error path somewhere?
+>
+> > +MODULE_LICENSE("GPL");
+>
+> Make sure this is consistent with file header. GPLv2+, if you can.
+>
+> Best regards,
+>
+>                                                                         Pavel
+> --
+> (english) http://www.livejournal.com/~pavelmachek
+> (cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blog.html
 
-Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
----
- .../arm/bcm/raspberrypi,bcm2835-firmware.yaml | 21 +++++++++++++++++++
- .../pwm/raspberrypi,firmware-pwm.h            | 13 ++++++++++++
- 2 files changed, 34 insertions(+)
- create mode 100644 include/dt-bindings/pwm/raspberrypi,firmware-pwm.h
+Hi Pavel,
 
-diff --git a/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml b/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml
-index a2c63c8b1d10..dcaf00e8602e 100644
---- a/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml
-+++ b/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml
-@@ -64,6 +64,22 @@ properties:
-       - compatible
-       - "#reset-cells"
- 
-+  pwm:
-+    type: object
-+
-+    properties:
-+      compatible:
-+        const: raspberrypi,firmware-pwm
-+
-+      "#pwm-cells":
-+        const: 1
-+        description: >
-+          The argument is the PWM bus number.
-+
-+    required:
-+      - compatible
-+      - "#pwm-cells"
-+
-     additionalProperties: false
- 
- required:
-@@ -87,5 +103,10 @@ examples:
-             compatible = "raspberrypi,firmware-reset";
-             #reset-cells = <1>;
-         };
-+
-+        pwm: pwm {
-+            compatible = "raspberrypi,firmware-pwm";
-+            #pwm-cells = <1>;
-+        };
-     };
- ...
-diff --git a/include/dt-bindings/pwm/raspberrypi,firmware-pwm.h b/include/dt-bindings/pwm/raspberrypi,firmware-pwm.h
-new file mode 100644
-index 000000000000..27c5ce68847b
---- /dev/null
-+++ b/include/dt-bindings/pwm/raspberrypi,firmware-pwm.h
-@@ -0,0 +1,13 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2020 Nicolas Saenz Julienne
-+ * Author: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-+ */
-+
-+#ifndef _DT_BINDINGS_RASPBERRYPI_FIRMWARE_PWM_H
-+#define _DT_BINDINGS_RASPBERRYPI_FIRMWARE_PWM_H
-+
-+#define RASPBERRYPI_FIRMWARE_PWM_POE		0
-+#define RASPBERRYPI_FIRMWARE_PWM_NUM		1
-+
-+#endif
--- 
-2.28.0
+The mutex is locked in
+iei_wt61p803_puzzle_led_brightness_set_blocking(), as concurrent
+access to the same private structure member should be possible, when
+reading the state
+from iei_wt61p803_puzzle_led_brightness_get().
 
+It does look like I missed the final fwnode_handle_put(child) here.
+
+My understanding regarding the license is that when
+MODULE_LICENSE("GPL") is used
+the SPDX identifier can either be GPL-2.0-only or GPL-2.0-or-later.
+
+Kind regards,
+Luka
