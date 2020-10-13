@@ -2,214 +2,114 @@ Return-Path: <SRS0=maGh=DU=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65210C433E7
-	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Oct 2020 16:50:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE140C433E7
+	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Oct 2020 16:57:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2B240252DA
-	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Oct 2020 16:50:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 95F59252FC
+	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Oct 2020 16:57:17 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fu3Bv6r8"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387963AbgJMQuv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 13 Oct 2020 12:50:51 -0400
-Received: from mx2.suse.de ([195.135.220.15]:59406 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387919AbgJMQuv (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 13 Oct 2020 12:50:51 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id CEF98B2F2;
-        Tue, 13 Oct 2020 16:50:49 +0000 (UTC)
-Message-ID: <c171c837a31dea34c845478b7c7d4bdef865b5e0.camel@suse.de>
-Subject: Re: [PATCH 3/3] pwm: Add Raspberry Pi Firmware based PWM bus
-From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-To:     Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     f.fainelli@gmail.com, linux@roeck-us.net, jdelvare@suse.com,
-        wahrenst@gmx.net, Eric Anholt <eric@anholt.net>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-pwm@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>, linux-hwmon@vger.kernel.org,
-        robh+dt@kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 13 Oct 2020 18:50:47 +0200
-In-Reply-To: <20201013121758.gl6ni4b47ei2bhdf@pengutronix.de>
-References: <20201009153031.986-1-nsaenzjulienne@suse.de>
-         <20201009153031.986-4-nsaenzjulienne@suse.de>
-         <20201012070626.fzjhp3tkmgglqnm4@pengutronix.de>
-         <7899e490543723c97ffad6f42942907f8db6b9b4.camel@suse.de>
-         <20201013121758.gl6ni4b47ei2bhdf@pengutronix.de>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-QQL4Z9L5K9obB4kJlsj+"
-User-Agent: Evolution 3.36.5 
+        id S1728667AbgJMQ5R (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 13 Oct 2020 12:57:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58958 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728624AbgJMQ5Q (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 13 Oct 2020 12:57:16 -0400
+Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2747C0613D0
+        for <linux-hwmon@vger.kernel.org>; Tue, 13 Oct 2020 09:57:16 -0700 (PDT)
+Received: by mail-oi1-x244.google.com with SMTP id w204so130519oiw.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 13 Oct 2020 09:57:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=jrzW3KaM4aEDVaIJ7RT+amjkw8uUP5hl9Ao2KynyIJ4=;
+        b=Fu3Bv6r8W6ZyBqqxqpIeyRfJ+cU5jnntUgc5iovft8Cr5nadqKV8ReWL1Pj8Tkhzh4
+         USidniDYLvh9J4ItQoiVfK0OLxmljOW9sJRXFEkn3PAGUh3nTk9iqdT0C/Ir9YlR4BOZ
+         deiMkfCuWyrIShrHUwHN7i6yBdemDxYuRMi9Z3T4phUQFWK3px1RL9CB9Nahuj7piZOj
+         M3JtunKU0EGqezvmjRJn97AlOpyqComfn52wz0PkiOw1CXMJijnBON4xvHeuO+vxAxeS
+         sGPjDiO8YfbiV4xmInZEx2ChNTxIqgDAy9rYL3AKKZkn777UkkJNadCyVR6DhtgSDHsn
+         105A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=jrzW3KaM4aEDVaIJ7RT+amjkw8uUP5hl9Ao2KynyIJ4=;
+        b=k2zgloznvxQ1j1Dh6L+BWE9NwTVJBS1MQI28iiBQz0o6gzQ1qN0l4SM1sW80vZceah
+         +FwI2RzaiVu8OHqhXk5szVZlOaUoGWI3qF6AVd+KKilyTDbHbTGFCXKSPEJsP5bmsmgj
+         JwqAz8pb7XXIltArzw8H5a4SrBfkJqQ1JTtLRsR2ktjXTt6wNopvPjFRGe6lQyiBgEjy
+         OQXnY7OqS3dsAZHvQkw8sTN29NH5TDQg419M0IDcs1QerKqlrD/lXl47FDtjeMWbhjQO
+         hednkNzoqZoiUyd0KsWNMH/1pZ+k216OJzqhVS+9wQ3eo8fopEXSbilUfzC6BZ5S4rs2
+         FnVQ==
+X-Gm-Message-State: AOAM530piJedLtlJsAc1J0XzIGdmAdl+coFzRQwdrJti+7VB8SuWSLJ7
+        TN0yfQ3chCAhZhvhCzW8BTQ=
+X-Google-Smtp-Source: ABdhPJzoNq7Ru7de5yGCHEuCJA8AogWJDK8+FDgF3bwN7t7WJPuqNGaYicXf08m6JxPzV/nJOb2F/A==
+X-Received: by 2002:aca:5212:: with SMTP id g18mr399785oib.107.1602608236245;
+        Tue, 13 Oct 2020 09:57:16 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id y51sm104641otb.47.2020.10.13.09.57.15
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 13 Oct 2020 09:57:15 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 13 Oct 2020 09:57:14 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     rahul.tanwar@linux.intel.com, linux-hwmon@vger.kernel.org
+Subject: Re: [bug report] hwmon: Add hardware monitoring driver for Moortec
+ MR75203 PVT controller
+Message-ID: <20201013165714.GJ251780@roeck-us.net>
+References: <20201013140858.GA375361@mwanda>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201013140858.GA375361@mwanda>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+On Tue, Oct 13, 2020 at 05:08:58PM +0300, Dan Carpenter wrote:
+> Hello Rahul Tanwar,
+> 
+> The patch 9d823351a337: "hwmon: Add hardware monitoring driver for
+> Moortec MR75203 PVT controller" from Oct 5, 2020, leads to the
+> following static checker warning:
+> 
+> 	drivers/hwmon/mr75203.c:479 pvt_clk_enable()
+> 	warn: 'pvt->clk' not released on lines: 479.
+> 
+> drivers/hwmon/mr75203.c
+>    471  static int pvt_clk_enable(struct device *dev, struct pvt_device *pvt)
+>    472  {
+>    473          int ret;
+>    474  
+>    475          ret = clk_prepare_enable(pvt->clk);
+>    476          if (ret)
+>    477                  return ret;
+>    478  
+>    479          return devm_add_action_or_reset(dev, pvt_clk_disable, pvt);
+> 
+> Do we have to disable the clock if devm_add_action_or_reset() fails?
+> This is sort of a new Smatch check so I'm not entirely sure of the rules
+> mysql.
 
---=-QQL4Z9L5K9obB4kJlsj+
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+devm_add_action_or_reset calls the callback function (here:
+pvt_clk_disable) if there is an error, and the callback function
+releases the clock. This is a workaround for the missing
+devm_clk_prepare_enable(); you'll find it all over the kernel
+by now.
 
-Hi Uwe,
+Guenter
 
-On Tue, 2020-10-13 at 14:17 +0200, Uwe Kleine-K=C3=B6nig wrote:
-> Hello Nicolas,
->=20
-> On Tue, Oct 13, 2020 at 01:20:00PM +0200, Nicolas Saenz Julienne wrote:
-> > On Mon, 2020-10-12 at 09:06 +0200, Uwe Kleine-K=C3=B6nig wrote:
-> > > > +	depends on RASPBERRYPI_FIRMWARE || (COMPILE_TEST && !RASPBERRYPI_=
-FIRMWARE)
-> > >=20
-> > > This is more complicated than necessary.
-> > >=20
-> > > 	depends on RASPBERRYPI_FIRMWARE || COMPILE_TEST
-> > >=20
-> > > is logically equivalent.
-> >=20
-> > It's not exactly the same, see patch 7ed915059c300 ("gpio: raspberrypi-=
-ext: fix
-> > firmware dependency ") which explains why this pattern is needed.
-
-I'll add a comment.
-
-> Hmm, this is strange, but if Arnd doesn't know a better solution, then
-> be it so. Is this idiom usual enough to not justify a comment?
->=20
-> > > What happens if duty_cycle happens to be bigger than RPI_PWM_MAX_DUTY=
-?
-> > >=20
-> > > I think the right thing to do here is:
-> > >=20
-> > > 	if (state->period < RPI_PWM_PERIOD_NS ||
-> >=20
-> > Why not using state->period !=3D RPI_PWM_PERIOD_NS here?
->=20
-> From the consumer's point of view having to hit the only correct period
-> is hard. So the usual convention is to provide the biggest period not
-> bigger than the requested one. (The idea for the future is to provide a
-> pwm_round_state() function which allows to find out the effect of
-> pwm_apply_state() with the same arguments. This then allows to
-> efficiently find the best setting for the consumer.)
-
-Fair enough.
-
-> > > Huh, why do you have to do this twice, just with different error
-> > > messages? I assume you want to set RPI_PWM_DEF_DUTY_REG? What is the
-> > > effect of writing this property?
-> >=20
-> > Obviously, I failed to change the register name.
-> >=20
-> > This is supposed to set the default duty cycle after resetting the boar=
-d. I
-> > added it so as to keep compatibility with the downstream version of thi=
-s.
-> >=20
-> > I'll add a comment to explain this.
->=20
-> fine.
->=20
-> > > > +	int ret;
-> > > > +
-> > > > +	firmware_node =3D of_get_parent(dev->of_node);
-> > > > +	if (!firmware_node) {
-> > > > +		dev_err(dev, "Missing firmware node\n");
-> > > > +		return -ENOENT;
-> > > > +	}
-> > > > +
-> > > > +	firmware =3D rpi_firmware_get(firmware_node);
-> > > > +	of_node_put(firmware_node);
-> > > > +	if (!firmware)
-> > > > +		return -EPROBE_DEFER;
-> > >=20
-> > > I don't see a mechanism that prevents the driver providing the firmwa=
-re
-> > > going away while the PWM is still in use.
-> >=20
-> > There isn't an explicit one. But since you depend on a symbol from the =
-firmware
-> > driver you won't be able to remove the kernel module before removing th=
-e PMW
-> > one.
->=20
-> this prevents the that the module is unloaded, but not that the driver
-> is unbound.
-
-Yes, if you were to unbind the firmware device all devices that depend on i=
-t
-(there are a bunch of them) would access freed memory. Yet again, there is =
-no
-hotplug functionality, so short of being useful for development it'd be ver=
-y
-rare for someone to unbind it. We've been living with it as such for a long
-time. Not to say that is something not to fix, but from my perspective it's
-just a corner-case.
-
-We are using 'simple-mfd' in order to probe all devices under the
-firmware interface, so my first intuition would be to add support for
-automatically unbinding of consumer devices in of/platform.c. See:
-
-diff --git a/drivers/of/platform.c b/drivers/of/platform.c
-index b557a0fcd4ba..d24f2412d518 100644
---- a/drivers/of/platform.c
-+++ b/drivers/of/platform.c
-@@ -390,7 +390,13 @@ static int of_platform_bus_create(struct device_node *=
-bus,
-        }
-=20
-        dev =3D of_platform_device_create_pdata(bus, bus_id, platform_data,=
- parent);
--       if (!dev || !of_match_node(matches, bus))
-+       if (!dev)
-+               return 0;
-+
-+       if (parent && of_device_is_compatible(parent->of_node, "simple-mfd"=
-))
-+               device_link_add(&dev->dev, parent, DL_FLAG_AUTOREMOVE_CONSU=
-MER);
-+
-+       if (!of_match_node(matches, bus))
-                return 0;
-=20
-        for_each_child_of_node(bus, child) {
-
-If this is too much for OF maintainers, we could simply create the link upo=
-n
-calling rpi_firmware_get().
-
-This solves the problem of getting a kernel panic because of the use after
-free, but you'll still get some warnings after unbinding from the GPIO
-subsystem, for example, as we just removed a gpiochip that still has consum=
-ers
-up. I guess device links only go so far.
-
-Any ideas/comments?
-
-Regards,
-Nicolas
-
-
---=-QQL4Z9L5K9obB4kJlsj+
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl+F2ucACgkQlfZmHno8
-x/4aKQf+OCDTj2+VaoKNpvJzA4yuSworog5ZQ/I2NeExhZZbxPTs2V2Y/HGEHegl
-n3ejX6yJGqpUsWoeqy5XXDVJhnPSfBTQRWjwzipuI6vUX0PLtJCW9GW5awPc1sTm
-NF2NOFeM0WNPaodHNqzT6JXRbYRRx1EN3NzdfMX89NZ+cx0fQSQBzeXSlqhIWvlC
-rEfGZD3hMMHr/NXzomTPgIp1Wgtq9VRcSs/gGvOzaxYqqSUKrBZf1mnMhwcM5Byb
-KHUJW+hIyCRiTUHrUGItXhRZK3lRHxZDbEN46T8HmtrV6cCRaFTCU2ozTALD47Mn
-CdvAxBZhwALSZ4+AfjB/JwB2C/HfOA==
-=DfAb
------END PGP SIGNATURE-----
-
---=-QQL4Z9L5K9obB4kJlsj+--
-
+> 
+>    480  }
+> 
+> regards,
+> dan carpenter
