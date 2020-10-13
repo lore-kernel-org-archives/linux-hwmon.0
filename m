@@ -2,181 +2,108 @@ Return-Path: <SRS0=maGh=DU=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09EE5C433E7
-	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Oct 2020 15:18:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0EA02C433DF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Oct 2020 16:48:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B74AD24910
-	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Oct 2020 15:18:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C1F54252CF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Oct 2020 16:48:15 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fnalsexw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389066AbgJMPS3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 13 Oct 2020 11:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43710 "EHLO
+        id S1728337AbgJMQsM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 13 Oct 2020 12:48:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389263AbgJMPS0 (ORCPT
+        with ESMTP id S1728328AbgJMQsM (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 13 Oct 2020 11:18:26 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82735C0613D5
-        for <linux-hwmon@vger.kernel.org>; Tue, 13 Oct 2020 08:18:26 -0700 (PDT)
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1kSM41-0008HW-Q9; Tue, 13 Oct 2020 17:18:09 +0200
-Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1kSM3z-0000Zw-Rx; Tue, 13 Oct 2020 17:18:07 +0200
-Date:   Tue, 13 Oct 2020 17:18:07 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Cc:     f.fainelli@gmail.com, linux@roeck-us.net, jdelvare@suse.com,
-        wahrenst@gmx.net, Eric Anholt <eric@anholt.net>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-pwm@vger.kernel.org, Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        linux-hwmon@vger.kernel.org, robh+dt@kernel.org,
+        Tue, 13 Oct 2020 12:48:12 -0400
+Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48B3BC0613D0;
+        Tue, 13 Oct 2020 09:48:12 -0700 (PDT)
+Received: by mail-ot1-x342.google.com with SMTP id e20so605152otj.11;
+        Tue, 13 Oct 2020 09:48:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=zwnERbtjK98BZDP38JfMSXq7lY/lqD1s9bTHt/VKNxQ=;
+        b=fnalsexwDtPHpXytFFMOxK18SuNkOWOo02GQmlvY01PwtDLnTbA3h9ze1J7gEWwB3s
+         nw2/A0BN+SXD4CYfqPFASW4qQ4keOuWRd630K+1CRSqH2NvPp23epNXnBOPLbyDwdFMK
+         0cFt9yNU6D6shDJS4odwIy2FThFKTFmCQh9hW6CoGIufme+rr7bZe0qwi+RipUDwX4TV
+         jokEF9o79sLfmtlEiUS3jMe9vRi+yJvy8hNpczEx4t3G2SqJ16SMo8vOVc7OhmKNfHFF
+         nIqAzqbJ/ieJGe+PateKL3v5kNCPAR2dIVuPcVlmZrQWJFurjuahvUu5xgvw/XWlc0LH
+         e1qA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=zwnERbtjK98BZDP38JfMSXq7lY/lqD1s9bTHt/VKNxQ=;
+        b=FZNLCtIyuXbjuyXQWMg3hPitLU26hU5IuRfe2e4e7C/x5qSCy4vRxk0q/0PNW7mtES
+         wfD+bd7Ya3WkD2v1wUIGjuTI3j2N3j7tZrtSBosWIVcZEvt6XOLlKcmQg82UHZclxGU/
+         GDPdK/g/UL6P4KCwzd2ex6dgQdXgSh+6bObc1M0X/ePm265AwfQAAsQx71I8zTzzGCCX
+         yEgF3tMQQzXIOTSvxXLAcnzKFRzwNdeBlUZUIFIKU+helxE+TsctoXECil23JXPZabWX
+         Jy6zFv86VFrU4lzGl8Azx+usYYGgJ75qlhTZyDzRh1lUVOWC+KtbKgbU8KPXgF51DLLf
+         +m2w==
+X-Gm-Message-State: AOAM5302MJKTgjeUZVDHTWtDCu6/8FPWkakEMfRVNnYRgh/SsTbKfEez
+        sLr0bvDEo9Tiin/5B2iHoa0jqGocCxI=
+X-Google-Smtp-Source: ABdhPJwVNPqv0PLgz8GYgWA3Yh2rTf52Fn1fi8rKTfwQzDltDeMJYbF2sP3DH4wXdgSErY/UEIPutg==
+X-Received: by 2002:a05:6830:199:: with SMTP id q25mr356425ota.263.1602607691597;
+        Tue, 13 Oct 2020 09:48:11 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o2sm96645oia.42.2020.10.13.09.48.10
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 13 Oct 2020 09:48:11 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 13 Oct 2020 09:48:09 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] dt-bindings: pwm: Add binding for RPi firmware PWM
- bus
-Message-ID: <20201013151807.px6o2caoh4vfzlwu@pengutronix.de>
-References: <20201009153031.986-1-nsaenzjulienne@suse.de>
- <20201009153031.986-2-nsaenzjulienne@suse.de>
- <20201012070132.it23vl6f3ytavqgj@pengutronix.de>
- <cc7842ed7f8a4db863024a0ff5d8b7d86de52f50.camel@suse.de>
- <20201013120823.hhy7wyqsb3f3ufnx@pengutronix.de>
- <f891916e193707eb55faa9ea93f294ac44925710.camel@suse.de>
+Subject: Re: [PATCH v2 01/24] docs: hwmon: adm1266.rst: fix a broken reference
+Message-ID: <20201013164809.GH251780@roeck-us.net>
+References: <cover.1602590106.git.mchehab+huawei@kernel.org>
+ <240216628f613d85fd1191b56debda611e8f659e.1602590106.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qn6okevj7lpylitq"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f891916e193707eb55faa9ea93f294ac44925710.camel@suse.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
+In-Reply-To: <240216628f613d85fd1191b56debda611e8f659e.1602590106.git.mchehab+huawei@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+On Tue, Oct 13, 2020 at 02:14:28PM +0200, Mauro Carvalho Chehab wrote:
+> The reference was missing the extension, causing the
+> check script to complain.
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
---qn6okevj7lpylitq
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-On Tue, Oct 13, 2020 at 02:33:20PM +0200, Nicolas Saenz Julienne wrote:
-> On Tue, 2020-10-13 at 14:08 +0200, Uwe Kleine-K=F6nig wrote:
-> > On Tue, Oct 13, 2020 at 12:35:38PM +0200, Nicolas Saenz Julienne wrote:
-> > > Hi Uwe, thanks for having a look at this.
-> > >=20
-> > > On Mon, 2020-10-12 at 09:01 +0200, Uwe Kleine-K=F6nig wrote:
-> > > > On Fri, Oct 09, 2020 at 05:30:28PM +0200, Nicolas Saenz Julienne wr=
-ote:
-> > > > > The PWM bus controlling the fan in RPi's official PoE hat can onl=
-y be
-> > > > > controlled by the board's co-processor.
-> > > > >=20
-> > > > > Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-> > > > > ---
-> > > > >  .../arm/bcm/raspberrypi,bcm2835-firmware.yaml | 21 +++++++++++++=
-++++++
-> > > > >  .../pwm/raspberrypi,firmware-pwm.h            | 13 ++++++++++++
-> > > > >  2 files changed, 34 insertions(+)
-> > > > >  create mode 100644 include/dt-bindings/pwm/raspberrypi,firmware-=
-pwm.h
-> > > > >=20
-> > > > > diff --git a/Documentation/devicetree/bindings/arm/bcm/raspberryp=
-i,bcm2835-firmware.yaml b/Documentation/devicetree/bindings/arm/bcm/raspber=
-rypi,bcm2835-firmware.yaml
-> > > > > index a2c63c8b1d10..dcaf00e8602e 100644
-> > > > > --- a/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm28=
-35-firmware.yaml
-> > > > > +++ b/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm28=
-35-firmware.yaml
-> > > > > @@ -64,6 +64,22 @@ properties:
-> > > > >        - compatible
-> > > > >        - "#reset-cells"
-> > > > > =20
-> > > > > +  pwm:
-> > > > > +    type: object
-> > > > > +
-> > > > > +    properties:
-> > > > > +      compatible:
-> > > > > +        const: raspberrypi,firmware-pwm
-> > > > > +
-> > > > > +      "#pwm-cells":
-> > > > > +        const: 1
-> > > > > +        description: >
-> > > > > +          The argument is the PWM bus number.
-> > > >=20
-> > > > This is wrong. #pwm-cells specifies the number of "arguments" for
-> > > > phandles pointing to this node. And I would prefer this being 2 to =
-match
-> > > > the stuff described in the generic pwm binding.
-> > >=20
-> > > I saw buses out there with the same limitation as this one (unable to=
- change
-> > > frequency) that used a single cell, so I whent with it. That said I'l=
-l be happy
-> > > to change it and drop the custom *_xlate() function in benefit of the=
- default
-> > > one.
-> >=20
-> > As the first cell after the phandle is for the period and only the
-> > second if for flags, this is a poor argument.
->=20
-> In that case aren't these bindings wrong (and associated xlate() function=
-s)?
-
-Ah, got it wrong, I want #pwm-cells =3D <3> where the first argument is
-the index, the second the period and the third flags.
-
-> google,cros-ec-pwm.yaml:
-> [...]
-> 	properties:
-> 	  compatible:
-> 	    const: google,cros-ec-pwm
-> 	  "#pwm-cells":
-> 	    description: The cell specifies the PWM index.
-> 	    const: 1
-> [...]
->=20
-> cirrus,clps711x-pwm.txt:
-> [...]
-> 	- #pwm-cells: Should be 1. The cell specifies the index of the channel.
-> [...]
->=20
-> Note that pxa-pwm.txt behaves as you comment.
-
-Hmm, this one has a custom .xlate function, too :-\
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---qn6okevj7lpylitq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAl+FxSwACgkQwfwUeK3K
-7Al3cAgAjk1ptAKwNfb6sTR0PW+B9xflMvW5NBDs7hGsT9p0ch1OQYp0pmAGdFQR
-ZdylEvKMTVooN8aLEqhADveVZQQSAj6ST3vkmCSNCl6u2c5eOtsO8GaGkassre3o
-+6hIwO2cRoUrA/rCzjA0VxQv64lRbGXBkp3Yr5Wv0r8oeys1SevM3e5zpbWgmwef
-GNcoAAkDVcpbBILvocFhWoDHtpZ+/yV6+nmaZ1AZiOl6mlU9TyA5NkRLm1oOzKXm
-ZCJt8P6k7El90eEg3VYf3verHfx1JWYuKEowDbd0k1scsm+a3+Ebgd0idoNK/Rt7
-HqnGOdnTkpnYbhuFSUqeq0D1PPW9Sg==
-=EP00
------END PGP SIGNATURE-----
-
---qn6okevj7lpylitq--
+> ---
+>  Documentation/hwmon/adm1266.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/hwmon/adm1266.rst b/Documentation/hwmon/adm1266.rst
+> index 9257f8a48650..2b877011cfdf 100644
+> --- a/Documentation/hwmon/adm1266.rst
+> +++ b/Documentation/hwmon/adm1266.rst
+> @@ -20,7 +20,7 @@ ADM1266 is a sequencer that features voltage readback from 17 channels via an
+>  integrated 12 bit SAR ADC, accessed using a PMBus interface.
+>  
+>  The driver is a client driver to the core PMBus driver. Please see
+> -Documentation/hwmon/pmbus for details on PMBus client drivers.
+> +Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
+>  
+>  
+>  Sysfs entries
+> -- 
+> 2.26.2
+> 
