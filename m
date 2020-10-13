@@ -2,149 +2,164 @@ Return-Path: <SRS0=maGh=DU=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FA39C43457
-	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Oct 2020 12:08:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 812DAC4363A
+	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Oct 2020 12:15:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B883321582
-	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Oct 2020 12:08:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2637D22284
+	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Oct 2020 12:15:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1602591337;
+	bh=ZaTen0FVonGz3YfAKiTProfR+cBfv2hpCSbt+ubcKlE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=mIrBEgnp1h9QJLeGvUtCJVcKGj7HZ3yBZkv8Jzdce3sprS7g6SkVCoBwysxGzf2+c
+	 GbXT6Qd9kpOjrRfjKuX7eFANvpxPDDw9Gev2TRjib6cWM2du3o6mcYJ2SRZVjexaqb
+	 kEM3jlHKCp6rf/2a8Knuz7BMK81P1kC67PHU4sbg=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726334AbgJMMIp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 13 Oct 2020 08:08:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42536 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726168AbgJMMIp (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 13 Oct 2020 08:08:45 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6C8C0613D0
-        for <linux-hwmon@vger.kernel.org>; Tue, 13 Oct 2020 05:08:45 -0700 (PDT)
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1kSJ6Q-0002e6-QT; Tue, 13 Oct 2020 14:08:26 +0200
-Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1kSJ6N-0006kh-Tu; Tue, 13 Oct 2020 14:08:23 +0200
-Date:   Tue, 13 Oct 2020 14:08:23 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Cc:     f.fainelli@gmail.com, linux@roeck-us.net, jdelvare@suse.com,
-        wahrenst@gmx.net, Eric Anholt <eric@anholt.net>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-pwm@vger.kernel.org, Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        linux-hwmon@vger.kernel.org, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] dt-bindings: pwm: Add binding for RPi firmware PWM
- bus
-Message-ID: <20201013120823.hhy7wyqsb3f3ufnx@pengutronix.de>
-References: <20201009153031.986-1-nsaenzjulienne@suse.de>
- <20201009153031.986-2-nsaenzjulienne@suse.de>
- <20201012070132.it23vl6f3ytavqgj@pengutronix.de>
- <cc7842ed7f8a4db863024a0ff5d8b7d86de52f50.camel@suse.de>
+        id S1727558AbgJMMPg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 13 Oct 2020 08:15:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41132 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727002AbgJMMO5 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 13 Oct 2020 08:14:57 -0400
+Received: from mail.kernel.org (ip5f5ad5b2.dynamic.kabel-deutschland.de [95.90.213.178])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1EB4222266;
+        Tue, 13 Oct 2020 12:14:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602591295;
+        bh=ZaTen0FVonGz3YfAKiTProfR+cBfv2hpCSbt+ubcKlE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=UmsrD5gE8Ycf86mMMEFcLZ13ziCA3Ha7gK5X/BS5/xZEvmMooRMuXr8kPhrTQldDA
+         3Af9REZuyDlBxbii/wwZnjngDQ+HHZ46JQrtWL897pLT5rhVCnJIDBfhq7ekdWiHn7
+         ILn2Zd1rLbiut9QCM01196coCv94H7/85uLi0+Uw=
+Received: from mchehab by mail.kernel.org with local (Exim 4.94)
+        (envelope-from <mchehab@kernel.org>)
+        id 1kSJCf-006CoS-4k; Tue, 13 Oct 2020 14:14:53 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Vadim Pasternak <vadimp@nvidia.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 17/24] docs: hwmon: mp2975.rst: address some html build warnings
+Date:   Tue, 13 Oct 2020 14:14:44 +0200
+Message-Id: <8418e2062b82314ceae5da7404fad7b2d3a3fa9a.1602590106.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <cover.1602590106.git.mchehab+huawei@kernel.org>
+References: <cover.1602590106.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2bsdrnlfcavnjroa"
-Content-Disposition: inline
-In-Reply-To: <cc7842ed7f8a4db863024a0ff5d8b7d86de52f50.camel@suse.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+    .../Documentation/hwmon/mp2975.rst:25: WARNING: Unexpected indentation.
+    .../Documentation/hwmon/mp2975.rst:27: WARNING: Block quote ends without a blank line; unexpected unindent.
+    .../Documentation/hwmon/mp2975.rst:69: WARNING: Unexpected indentation.
+    .../Documentation/hwmon/mp2975.rst:70: WARNING: Block quote ends without a blank line; unexpected unindent.
+    .../Documentation/hwmon/mp2975.rst:72: WARNING: Bullet list ends without a blank line; unexpected unindent.
+    .../Documentation/hwmon/mp2975.rst: WARNING: document isn't included in any toctree
 
---2bsdrnlfcavnjroa
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+List blocks should have blank lines before and after them,
+in order to be properly parsed.
 
-On Tue, Oct 13, 2020 at 12:35:38PM +0200, Nicolas Saenz Julienne wrote:
-> Hi Uwe, thanks for having a look at this.
->=20
-> On Mon, 2020-10-12 at 09:01 +0200, Uwe Kleine-K=F6nig wrote:
-> > On Fri, Oct 09, 2020 at 05:30:28PM +0200, Nicolas Saenz Julienne wrote:
-> > > The PWM bus controlling the fan in RPi's official PoE hat can only be
-> > > controlled by the board's co-processor.
-> > >=20
-> > > Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-> > > ---
-> > >  .../arm/bcm/raspberrypi,bcm2835-firmware.yaml | 21 +++++++++++++++++=
-++
-> > >  .../pwm/raspberrypi,firmware-pwm.h            | 13 ++++++++++++
-> > >  2 files changed, 34 insertions(+)
-> > >  create mode 100644 include/dt-bindings/pwm/raspberrypi,firmware-pwm.h
-> > >=20
-> > > diff --git a/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bc=
-m2835-firmware.yaml b/Documentation/devicetree/bindings/arm/bcm/raspberrypi=
-,bcm2835-firmware.yaml
-> > > index a2c63c8b1d10..dcaf00e8602e 100644
-> > > --- a/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-f=
-irmware.yaml
-> > > +++ b/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-f=
-irmware.yaml
-> > > @@ -64,6 +64,22 @@ properties:
-> > >        - compatible
-> > >        - "#reset-cells"
-> > > =20
-> > > +  pwm:
-> > > +    type: object
-> > > +
-> > > +    properties:
-> > > +      compatible:
-> > > +        const: raspberrypi,firmware-pwm
-> > > +
-> > > +      "#pwm-cells":
-> > > +        const: 1
-> > > +        description: >
-> > > +          The argument is the PWM bus number.
-> >=20
-> > This is wrong. #pwm-cells specifies the number of "arguments" for
-> > phandles pointing to this node. And I would prefer this being 2 to match
-> > the stuff described in the generic pwm binding.
->=20
-> I saw buses out there with the same limitation as this one (unable to cha=
-nge
-> frequency) that used a single cell, so I whent with it. That said I'll be=
- happy
-> to change it and drop the custom *_xlate() function in benefit of the def=
-ault
-> one.
+Fixes: 4beb7a028e9f ("hwmon: (pmbus) Add support for MPS Multi-phase mp2975 controller")
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ Documentation/hwmon/index.rst  |  1 +
+ Documentation/hwmon/mp2975.rst | 14 +++++++++++++-
+ 2 files changed, 14 insertions(+), 1 deletion(-)
 
-As the first cell after the phandle is for the period and only the
-second if for flags, this is a poor argument. So yes, use #pwm-cells =3D
-<2> and drop the custom xlate() function please.
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index e6b91ab12978..b797db738225 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -132,6 +132,7 @@ Hardware Monitoring Kernel Drivers
+    mcp3021
+    menf21bmc
+    mlxreg-fan
++   mp2975
+    nct6683
+    nct6775
+    nct7802
+diff --git a/Documentation/hwmon/mp2975.rst b/Documentation/hwmon/mp2975.rst
+index 5b0609c62f48..81d816b71490 100644
+--- a/Documentation/hwmon/mp2975.rst
++++ b/Documentation/hwmon/mp2975.rst
+@@ -20,6 +20,7 @@ This driver implements support for Monolithic Power Systems, Inc. (MPS)
+ vendor dual-loop, digital, multi-phase controller MP2975.
+ 
+ This device:
++
+ - Supports up to two power rail.
+ - Provides 8 pulse-width modulations (PWMs), and can be configured up
+   to 8-phase operation for rail 1 and up to 4-phase operation for rail
+@@ -32,10 +33,12 @@ This device:
+   10-mV DAC, IMVP9 mode with 5-mV DAC.
+ 
+ Device supports:
++
+ - SVID interface.
+ - AVSBus interface.
+ 
+ Device complaint with:
++
+ - PMBus rev 1.3 interface.
+ 
+ Device supports direct format for reading output current, output voltage,
+@@ -45,11 +48,14 @@ Device supports VID and direct formats for reading output voltage.
+ The below VID modes are supported: VR12, VR13, IMVP9.
+ 
+ The driver provides the next attributes for the current:
++
+ - for current in: input, maximum alarm;
+ - for current out input, maximum alarm and highest values;
+ - for phase current: input and label.
+-attributes.
++  attributes.
++
+ The driver exports the following attributes via the 'sysfs' files, where
++
+ - 'n' is number of telemetry pages (from 1 to 2);
+ - 'k' is number of configured phases (from 1 to 8);
+ - indexes 1, 1*n for "iin";
+@@ -65,11 +71,14 @@ The driver exports the following attributes via the 'sysfs' files, where
+ **curr[1-{2n+k}]_label**
+ 
+ The driver provides the next attributes for the voltage:
++
+ - for voltage in: input, high critical threshold, high critical alarm, all only
+   from page 0;
+ - for voltage out: input, low and high critical thresholds, low and high
+   critical alarms, from pages 0 and 1;
++
+ The driver exports the following attributes via the 'sysfs' files, where
++
+ - 'n' is number of telemetry pages (from 1 to 2);
+ - indexes 1 for "iin";
+ - indexes n+1, n+2 for "vout";
+@@ -87,9 +96,12 @@ The driver exports the following attributes via the 'sysfs' files, where
+ **in[2-{n+1}1_lcrit_alarm**
+ 
+ The driver provides the next attributes for the power:
++
+ - for power in alarm and input.
+ - for power out: highest and input.
++
+ The driver exports the following attributes via the 'sysfs' files, where
++
+ - 'n' is number of telemetry pages (from 1 to 2);
+ - indexes 1 for "pin";
+ - indexes n+1, n+2 for "pout";
+-- 
+2.26.2
 
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---2bsdrnlfcavnjroa
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAl+FmLQACgkQwfwUeK3K
-7AmcvAf/TOC7xjaX8VHqGKuKP8SuFXAeBpx7wweyGHUwVnngRBBVoyxFuERmjQ9A
-X82ItAQJnDm9CIltDSaYaGHevQkm6/DB9CdpGEbUMO3dN/av7XCfB1FcMt53xln3
-pEWJ2V7zUJZH9DkSfcMDK7KFpqnHs8G1SkKAY7O+0Hi7hkzY2x0BsXXhubotF9hA
-UAjhRtrcnZE2OdIs6sdmBaDItTWxmtVpYUvYcNbvHj3iTEDIAy3Z7oLFd3FlVcHG
-aHIoJpDvHEwD+KyEq18BgeAkLQG2KBn/zMH7zyAYwoS0bJ7LK6CdyYVm/gXbJZ4X
-bKAhLENE6NcEgV6+dQe0N+b4rIxqlA==
-=Cm8q
------END PGP SIGNATURE-----
-
---2bsdrnlfcavnjroa--
