@@ -2,145 +2,141 @@ Return-Path: <SRS0=KXbD=DX=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 005BDC433E7
-	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Oct 2020 09:24:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0681FC43467
+	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Oct 2020 15:15:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8600D206ED
-	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Oct 2020 09:24:19 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="QJ/nq0XA"
+	by mail.kernel.org (Postfix) with ESMTP id A08E4208E4
+	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Oct 2020 15:15:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1602861355;
+	bh=4OJOxhlwL10+hIzc3OR9WXy5yLt7RM+8bC7enpcS2dg=;
+	h=From:To:Cc:Subject:Date:List-ID:From;
+	b=LZbB38sdTbI8CeJ2ZEXsqqpBHX/fk2g9ZcPy3ajXkw4HICwDB17yIFHhzZBw9l1ce
+	 JMwNgswM/NcqAeRybEMBUQhrSQje7sFRs9KLnVqM/kDzNpCCQG5knucKj/fUqNZqyA
+	 c7CoA9kem3at1G1FkNW0E17YF/NP4IyzZhoAezL8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405203AbgJPJYT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 16 Oct 2020 05:24:19 -0400
-Received: from mail-eopbgr30079.outbound.protection.outlook.com ([40.107.3.79]:34948
-        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2404499AbgJPJYS (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 16 Oct 2020 05:24:18 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L/wyLvT1ZguhtVIyWErOAwxZiek3fuYgp/92SxY+h/zR0W/csJLmtPh4nuKpdW3vqR7WMCLjR22ZwQmOB8iKx2Nn854OwWn8Ixlx8dKSE80PLFCjo/A3evwq1P2iPq3dxsXXiHEIWz5przv6ctAVx07ay5/D6EI5hdpUoaJjFIijBajhZKoFDFkXCcEbDkOfkiXexH61S/M5p+JLmTwVrSrt9QUyWd9yEioFSbJL0UIAR/78zk/zCc+pnNEh21w+rgqSzcun202w3SlRXCHiJipcNNE9/1t6zr4ERbqLrDkTjiOL3UrcOboNvRMMxYiM7C4alRY4INOhkRqVh+rM4w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/0/5zS/t8BM1kIoF6h/iN4hsEzx1OmHTnLL9j+3qmds=;
- b=VBaKcoVuu5ar8ad5xjCchbCl+AX/hDAc752GqTiCiVXlxnd9RapGhlrQVGOtFXPa/aLfTTDYoV51haJBZ9LYIBId7Ot/OvR7gZvXtTOLHSb3nu6J7limWQZD9MoL50jS+u1k75xnIwGGJxR3xOnSkvjIAkNoRLnY5N/49LQ2UtzfMHKKcbykduqwI2fJ0oAT2QhVwegRTQk8m9/yzS/E3uj0XyzyyCAGGRX34AhLD/JLVsfRtAzDdQs2M6Qx2bBsfM1ZbJCsMNOQB/g9Zk722GP+6IuAItEuYFdIme0ckomz6g+1bwN4k0/Aj80D0+ld8maq0aWhQucFDyayOR6rww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/0/5zS/t8BM1kIoF6h/iN4hsEzx1OmHTnLL9j+3qmds=;
- b=QJ/nq0XAjDkDONZUAi1BMsY3WmT/S+XIq1PgQ8mo/g3DxgkGVDZ3WQydjmjDxQ73tL0pwR0RBJRFydZ+nNC7YrjLQNMcdLM8g4/JoK3jhmE+dRKHnyE4NV6fLcpg8UtkazuAIpeVJ3yg33zpQHR07YW4HzZEjrFEExDdWXXCdlw=
-Received: from VI1PR0401MB2446.eurprd04.prod.outlook.com
- (2603:10a6:800:4e::21) by VI1PR0401MB2446.eurprd04.prod.outlook.com
- (2603:10a6:800:4e::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3477.24; Fri, 16 Oct
- 2020 09:24:10 +0000
-Received: from VI1PR0401MB2446.eurprd04.prod.outlook.com
- ([fe80::c90a:a180:40a2:8996]) by VI1PR0401MB2446.eurprd04.prod.outlook.com
- ([fe80::c90a:a180:40a2:8996%12]) with mapi id 15.20.3477.024; Fri, 16 Oct
- 2020 09:24:10 +0000
-From:   "Biwen Li (OSS)" <biwen.li@oss.nxp.com>
-To:     Rob Herring <robh@kernel.org>,
-        "Biwen Li (OSS)" <biwen.li@oss.nxp.com>
-CC:     "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Reinhard Pfau <pfau@gdsys.de>
-Subject: RE: [PATCH] hwmon: add support for SMSC EMC2305/03/02/01 fan
- controller
-Thread-Topic: [PATCH] hwmon: add support for SMSC EMC2305/03/02/01 fan
- controller
-Thread-Index: AQHWo54a8ltQoVA500aCu7wxAPXsNw==
-Date:   Fri, 16 Oct 2020 09:24:09 +0000
-Message-ID: <VI1PR0401MB244636CEDEEC9E1F84FD18F78F030@VI1PR0401MB2446.eurprd04.prod.outlook.com>
-References: <20200928104326.40386-1-biwen.li@oss.nxp.com>
- <20200929194937.GA1046240@bogus>
-In-Reply-To: <20200929194937.GA1046240@bogus>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=oss.nxp.com;
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [119.31.174.73]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 4c326bce-4ab9-4e02-4d47-08d871b53d24
-x-ms-traffictypediagnostic: VI1PR0401MB2446:
-x-ms-exchange-sharedmailbox-routingagent-processed: True
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR0401MB24461313A2E04248AF734262CE030@VI1PR0401MB2446.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: K53pOzrS65lhC2J/WkW3iB3X1TOwG3dEUSUTHLW7H2aEJuwKnpqiQxKq6wuM3ESXz5J4M/DDgJl37TkyUPY7bvC3LIby9v+oEWM0ty6wDdHMSLc8/zoaz1Q3dnccPWYJnt4e6Muakb4Z7VakKZ3LTT8ApIlq+VvR+dMcMOcYQZ+uWH4DlJwDbR6L0s4LTxwdsv64hebWIvGci2k3OweJITGkIEu8ISy6AO7sj03vwD9g43IjdYq5SiX52yAvqIo2PhBKRo0CtPsWSNoFeRN15qoDRgHkkRB/OwdC/Kw5oLAd9i8bhHif1ixllGFh8Jq7CbJjHU//SgBpYA0vFwAWMw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0401MB2446.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(39860400002)(346002)(376002)(396003)(366004)(186003)(110136005)(54906003)(52536014)(316002)(55016002)(9686003)(8936002)(8676002)(7696005)(86362001)(33656002)(5660300002)(76116006)(71200400001)(478600001)(66946007)(66476007)(66556008)(66446008)(64756008)(26005)(4326008)(6506007)(2906002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: FhHMLFuzH/kHe9uZrNaqSlK+8Shj7qYHFbazsYLLUQAgng4m4NHmYI/rFQqW8sEL/Ld35fgcgauq+YpPskYgwPe+kV6uNoKtHVlFmmOHTqNbIFYnMHK6oe8lKm+EVN8FbFQyz9UM8tjiKflkmhySoExCw2WWG2iCjC6auBQwI3Iio7yv1oH23gsBKPNmH8GaYQoP53Hk+tEvLD5GuVIYaBMxlxVfeDS51S4i5603fY79fOtK6azXcP5i1zU9LbPs3b/D5LBL8DGq+QkQdYe+OsS5uptKUToiYtwU0Cm+hiZo2jgZ0hel/9Ci/WgylZxlad4XDimGeej24bXrEwO2WgBbtHY4IU18W94eIEwoFsINP15z7ToHHz6j8GTygMxeJ1JBwbrsrlO/+aMfbv7TZi/zI31RJoV9zNVllNJt73/0eQF53phWtpw1VIQEzrVXj09JhCqBICFheneExe6l/4WKgSzgNbkr+QQOk7aTKMzWx3Y/6ZGdU1Z2TRKJTj6Xjm16do9IjUOgXnYwO3UkDwNZMak/lnUuuxrA7lohVzA+tD7Yz4T6ZYW7jLVbj96roECrO77L7tYiJwFH55Mq++nGcjkg4NIAUONYj7tvNngxjczEYBYSs7nXmi9gH93SuEmIiHOL2aFJHXLFqnuBdQ==
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S2409900AbgJPPPw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 16 Oct 2020 11:15:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40436 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2409856AbgJPPPw (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 16 Oct 2020 11:15:52 -0400
+Received: from kozik-lap.mshome.net (unknown [194.230.155.171])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A7D3820897;
+        Fri, 16 Oct 2020 15:15:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602861351;
+        bh=4OJOxhlwL10+hIzc3OR9WXy5yLt7RM+8bC7enpcS2dg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=SWX5cJfU8mdmrvgiur8vBB1juDQuMAN326gUaFyUMgbDet9z1wUCApkZyS8gzFQ49
+         D88379d/cjY2Tv7JOem0ufX+1krTMYPPkulPd18C/O2TNgcO1pubsDdNg93YPT5Xyg
+         HgOR+gJjib+xTQb5Ij7Z+mRnwICq5KRoGN9iGQ1c=
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Andrzej Hajda <a.hajda@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org
+Cc:     Kamil Debski <kamil@wypas.org>
+Subject: [PATCH 1/4] MAINTAINERS: move Kamil Debski to credits
+Date:   Fri, 16 Oct 2020 17:15:25 +0200
+Message-Id: <20201016151528.7553-1-krzk@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR0401MB2446.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4c326bce-4ab9-4e02-4d47-08d871b53d24
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Oct 2020 09:24:10.0204
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pPRnx//iE69saqFPDXu4SbXZWveTItlYgyOrOi+5VkVrDmbI/4Dn+PoJmUeYbgwGNH6l4skC0vby3LubRlVnpQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0401MB2446
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
->=20
-> On Mon, Sep 28, 2020 at 06:43:26PM +0800, Biwen Li wrote:
-> > From: Reinhard Pfau <pfau@gdsys.de>
-> >
-> > Add support for SMSC EMC2305, EMC2303, EMC2302, EMC2301 fan controller
-> > chips.
-> > The driver primary supports the EMC2305 chip which provides RPM-based
-> > PWM control and monitoring for up to 5 fans.
-> >
-> > According to the SMSC data sheets the EMC2303, EMC2302 and EMC2301
-> > chips have basically the same functionality and register layout, but
-> > support less fans and (in case of EMC2302 and EMC2301) less possible I2=
-C
-> addresses.
-> > The driver supports them, too.
-> >
-> > The driver supports configuration via devicetree. This can also be
-> > used to restrict the fans exposed via sysfs (see doc for details).
-> >
-> > Signed-off-by: Reinhard Pfau <pfau@gdsys.de>
-> > Signed-off-by: Biwen Li <biwen.li@nxp.com>
-> > ---
-> >  .../devicetree/bindings/hwmon/emc2305.txt     |  33 +
->=20
-> Split to a separate patch and should be in DT schema format.
-> checkpatch.pl will tell you both of these things.
-Okay, got it, thanks.
->=20
-> >  Documentation/hwmon/emc2305.rst               |  34 +
-> >  MAINTAINERS                                   |   8 +
-> >  drivers/hwmon/Kconfig                         |  10 +
-> >  drivers/hwmon/Makefile                        |   1 +
-> >  drivers/hwmon/emc2305.c                       | 689
-> ++++++++++++++++++
-> >  6 files changed, 775 insertions(+)
-> >  create mode 100644
-> > Documentation/devicetree/bindings/hwmon/emc2305.txt
-> >  create mode 100644 Documentation/hwmon/emc2305.rst  create mode
-> > 100644 drivers/hwmon/emc2305.c
+Kamil Debski has not been active on LKML since 2017:
+https://lore.kernel.org/lkml/?q=f%3A%22Kamil+Debski%22
+
+Move Kamil Debski to the CREDITS file.  Thank you for the effort you put
+in to the upstream Linux kernel work.
+
+Cc: Kamil Debski <kamil@wypas.org>
+Cc: Andrzej Hajda <a.hajda@samsung.com>
+Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Cc: Sylwester Nawrocki <s.nawrocki@samsung.com>
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+---
+ CREDITS     | 6 ++++++
+ MAINTAINERS | 4 ----
+ 2 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/CREDITS b/CREDITS
+index 8592e45e3932..8dfd6a2fb3e8 100644
+--- a/CREDITS
++++ b/CREDITS
+@@ -849,6 +849,12 @@ D: trivial hack to add variable address length routing to Rose.
+ D: AX25-HOWTO, HAM-HOWTO, IPX-HOWTO, NET-2-HOWTO
+ D: ax25-utils maintainer.
+ 
++N: Kamil Debski
++E: kamil@wypas.org
++D: Samsung S5P 2D graphics acceleration and Multi Format Codec drivers
++D: Samsung USB2 phy drivers
++D: PWM fan driver
++
+ N: Helge Deller
+ E: deller@gmx.de
+ W: http://www.parisc-linux.org/
+diff --git a/MAINTAINERS b/MAINTAINERS
+index aa46cb3ce6e6..bb40bac8cf27 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2411,7 +2411,6 @@ F:	arch/arm/mach-s5pv210/
+ 
+ ARM/SAMSUNG S5P SERIES 2D GRAPHICS ACCELERATION (G2D) SUPPORT
+ M:	Kyungmin Park <kyungmin.park@samsung.com>
+-M:	Kamil Debski <kamil@wypas.org>
+ M:	Andrzej Hajda <a.hajda@samsung.com>
+ L:	linux-arm-kernel@lists.infradead.org
+ L:	linux-media@vger.kernel.org
+@@ -2437,7 +2436,6 @@ F:	drivers/media/platform/s5p-jpeg/
+ 
+ ARM/SAMSUNG S5P SERIES Multi Format Codec (MFC) SUPPORT
+ M:	Kyungmin Park <kyungmin.park@samsung.com>
+-M:	Kamil Debski <kamil@wypas.org>
+ M:	Jeongtae Park <jtp.park@samsung.com>
+ M:	Andrzej Hajda <a.hajda@samsung.com>
+ L:	linux-arm-kernel@lists.infradead.org
+@@ -14237,7 +14235,6 @@ F:	drivers/media/usb/pwc/*
+ F:	include/trace/events/pwc.h
+ 
+ PWM FAN DRIVER
+-M:	Kamil Debski <kamil@wypas.org>
+ M:	Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+ L:	linux-hwmon@vger.kernel.org
+ S:	Supported
+@@ -15519,7 +15516,6 @@ T:	git https://github.com/lmajewski/linux-samsung-thermal.git
+ F:	drivers/thermal/samsung/
+ 
+ SAMSUNG USB2 PHY DRIVER
+-M:	Kamil Debski <kamil@wypas.org>
+ M:	Sylwester Nawrocki <s.nawrocki@samsung.com>
+ L:	linux-kernel@vger.kernel.org
+ S:	Supported
+-- 
+2.25.1
+
