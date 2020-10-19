@@ -2,152 +2,165 @@ Return-Path: <SRS0=tuU4=D2=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8477BC433E7
-	for <linux-hwmon@archiver.kernel.org>; Mon, 19 Oct 2020 21:35:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92661C433E7
+	for <linux-hwmon@archiver.kernel.org>; Mon, 19 Oct 2020 22:19:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 240472231B
-	for <linux-hwmon@archiver.kernel.org>; Mon, 19 Oct 2020 21:35:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 47C3D2223C
+	for <linux-hwmon@archiver.kernel.org>; Mon, 19 Oct 2020 22:19:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=sartura-hr.20150623.gappssmtp.com header.i=@sartura-hr.20150623.gappssmtp.com header.b="poFCyAQb"
+	dkim=pass (2048-bit key) header.d=sartura-hr.20150623.gappssmtp.com header.i=@sartura-hr.20150623.gappssmtp.com header.b="wKPpET+Z"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733214AbgJSVfP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 19 Oct 2020 17:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52080 "EHLO
+        id S1733310AbgJSWTW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 19 Oct 2020 18:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733212AbgJSVfP (ORCPT
+        with ESMTP id S1733221AbgJSWTW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 19 Oct 2020 17:35:15 -0400
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52190C0613D1
-        for <linux-hwmon@vger.kernel.org>; Mon, 19 Oct 2020 14:35:15 -0700 (PDT)
-Received: by mail-io1-xd42.google.com with SMTP id k25so1655685ioh.7
-        for <linux-hwmon@vger.kernel.org>; Mon, 19 Oct 2020 14:35:15 -0700 (PDT)
+        Mon, 19 Oct 2020 18:19:22 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0CFAC0613D1
+        for <linux-hwmon@vger.kernel.org>; Mon, 19 Oct 2020 15:19:21 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id e22so1280973ejr.4
+        for <linux-hwmon@vger.kernel.org>; Mon, 19 Oct 2020 15:19:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=sartura-hr.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CN0bQxKJkdcKJBjwvzgGWcX5vlVJWJkhBAisHK3glqI=;
-        b=poFCyAQbQtgZYozTVKwBGhba69C9R2VOpfR1iB0iElMus57vyyz10YsJB878DKPliS
-         kN73S07IJiB8OYmcccldcZonVDJCILp65e87Vf1nE4OzUvOTuaF1/x8PzORo4VxJMaYc
-         Z+mDBDRf9bN6NInVliqmqoGyzwBt0Mwph5OnSUtheXfQit7/rXWwETHYFbqzZvrVO8Ky
-         3BWEVScOiJ/Thf8K+jSlS7lQNOKyoKQVyErxvrTEGVxAK3QRv/bvyrdB733Va/pI1WMG
-         4JThrWGVDVn9DDRShxybwafgkdfbXYTvesdZwLlWX3YQRDT4m64J6olTMzca5LdFOF5L
-         jtOg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=esjy4fO6uR8UuEGzW2jO/GdK5i6J6fi0x2H/iZ6R1N8=;
+        b=wKPpET+Z60l85A7FrEPFHx6GoC8am5+vXgQcj7a1kyOBVmOLsyV0F80paN+bu/E3eT
+         3LEZgQlkOhpB8ONFQVSK3mYafxu4Pe2lb2ZS+wwJnQS7L84uZ4Gmuf46olvAqzdtyEKr
+         NRq7hidNW9My8I5LWq++lPJewjPyLCB2ujjOKkfwhACqEoUxn4zZjA3cHdf3ut7Qdz6B
+         Tb3IdQHD5qvnwxbomnuI/K4RG1/TSBflctLX1gVXjHtECQuRNCKECRK4jVZeFQzMmjqK
+         dsMEUZY87gJPdKl1WM1SkPWzb3K30rRDLoWwegSV7AkYN+D4h4KPMmwgKLzmJZyhnEiw
+         XwMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CN0bQxKJkdcKJBjwvzgGWcX5vlVJWJkhBAisHK3glqI=;
-        b=dfHTv0ihBgtvqGVLL6mY8xX53fezKC+GK0tbygZwXWzT0prV6u88BuzXXns+LlKh9v
-         DySyZnayc4qQKXaIuqBA0o3+U2I43/JM/n9iE9txVeSQHGFc1EfUhS05KNHCIAYS0FRm
-         ygsyPfD24Q0ngGmDYPC2TJBfFygNbz4N97mpYnu/GTHo9tEVbFSytkJsGRkJVrNnw1V6
-         HUuiivR50FrAN04sVDaDnBJKIkeTtVGz9KNTVvS9xhiTxfvNG1xnC6T8tpZEWSJ9HZKL
-         Kn/WDb73Ka8vClC8cgH1HtkMy4DMTFahzuS/AFjHivlY4sQre6/J5JzQhHTXWeIh0Cny
-         r1AA==
-X-Gm-Message-State: AOAM533T3G6BoCYoNGi642kN6cS2wN12fNXuuVBmWt2MsyWd8PmsVXgN
-        DnXJmnZ3d7EKQv8WPby7jgzb3XSWn7XUlxqWjbFU9QjW91E=
-X-Google-Smtp-Source: ABdhPJw4mQAJXYE67VbfXCXw8FFkQWxvEARRSqm1Z8RIqdlt6/XcS+mKeyENnU8XkmzZf9eX++gROLYZIf3rsQUjrn0=
-X-Received: by 2002:a5e:cb45:: with SMTP id h5mr1257113iok.172.1603143314653;
- Mon, 19 Oct 2020 14:35:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <20201017211035.257110-1-luka.kovacic@sartura.hr>
- <20201017211035.257110-5-luka.kovacic@sartura.hr> <CAHp75VdQnNXdhs52+WFt4bQKwZ3u5euFd3d65XU+-sMSFjt8jA@mail.gmail.com>
-In-Reply-To: <CAHp75VdQnNXdhs52+WFt4bQKwZ3u5euFd3d65XU+-sMSFjt8jA@mail.gmail.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=esjy4fO6uR8UuEGzW2jO/GdK5i6J6fi0x2H/iZ6R1N8=;
+        b=aggUlCuAuXac5IxZmeRjf2lzvMePgfTZt7s+GpQEfJ25e2jEta//yVRQx7QhCF23qZ
+         RY4XuLsPlSDZcTsknUVVzKCLY5im1FC4yYQegpjRXo72EfFt0/1l2Bp8BdKyPvBCUT90
+         0T4NJVijM98FjKVCTDpf7ZrxRmb6cWi8Wka98VkHfMo+DsApy/fTL/RCtyydMTREq30E
+         FWk/0lBL9sb2Q3U82h8R/ZVAUZHoVUwwNYdxT8e3jbfG0eMRhTEnf7lmLRUVf7klrzIr
+         S6PSa2zbzg8P0aM/50+sEsUHuyTiWc/jUlXOZH3O2L1AoF8TQ05bSlGZoO2IXkbEeNDS
+         Ya/A==
+X-Gm-Message-State: AOAM530kv3yYsUQuzZ9FYMVIhw1K39W31Ucp22yoDMPqyNxy3Y1binVn
+        XqdZMO5t/9QhGjHFKcJ6F2B+pw==
+X-Google-Smtp-Source: ABdhPJy0pzsymzb1hhgBD3YNQ2LOD5EEXAd8UaXkBPI2wO+SloqCc/wyfxC+hXnSptarjy1X3gtKeg==
+X-Received: by 2002:a17:906:1246:: with SMTP id u6mr7411eja.432.1603145960487;
+        Mon, 19 Oct 2020 15:19:20 -0700 (PDT)
+Received: from localhost.localdomain ([2a00:ee2:4b0d:3001:fbc5:498b:ed6d:cfac])
+        by smtp.gmail.com with ESMTPSA id e17sm1645400ejh.64.2020.10.19.15.19.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Oct 2020 15:19:19 -0700 (PDT)
 From:   Luka Kovacic <luka.kovacic@sartura.hr>
-Date:   Mon, 19 Oct 2020 23:35:03 +0200
-Message-ID: <CADZsf3ZtrK1M1QQtVLOhx7tBk7k73M5P+A1kyx=t8RA4m=Hhpg@mail.gmail.com>
-Subject: Re: [PATCH v5 4/6] drivers: leds: Add the iEi WT61P803 PUZZLE LED driver
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        Lee Jones <lee.jones@linaro.org>, Pavel Machek <pavel@ucw.cz>,
-        Dan Murphy <dmurphy@ti.com>, Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        =?UTF-8?B?TWFyZWsgQmVow7pu?= <marek.behun@nic.cz>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Robert Marko <robert.marko@sartura.hr>
-Content-Type: text/plain; charset="UTF-8"
+To:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     lee.jones@linaro.org, pavel@ucw.cz, dmurphy@ti.com,
+        robh+dt@kernel.org, jdelvare@suse.com, linux@roeck-us.net,
+        marek.behun@nic.cz, luka.perkov@sartura.hr,
+        andy.shevchenko@gmail.com, robert.marko@sartura.hr,
+        Luka Kovacic <luka.kovacic@sartura.hr>
+Subject: [PATCH v6 0/6] Add support for the iEi WT61P803 PUZZLE MCU
+Date:   Tue, 20 Oct 2020 00:18:53 +0200
+Message-Id: <20201019221859.56680-1-luka.kovacic@sartura.hr>
+X-Mailer: git-send-email 2.26.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hello Andy,
+This patchset adds support for the iEi WT61P803 PUZZLE microcontroller,
+which enables some board specific features like fan and LED control,
+system power management and temperature sensor reading on some iEi
+Puzzle series boards.
 
-On Sun, Oct 18, 2020 at 8:50 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Sun, Oct 18, 2020 at 12:18 AM Luka Kovacic <luka.kovacic@sartura.hr> wrote:
-> >
-> > Add support for the iEi WT61P803 PUZZLE LED driver.
-> > Currently only the front panel power LED is supported.
-> >
-> > This driver depends on the iEi WT61P803 PUZZLE MFD driver.
->
-> ...
+The first board to use this functionality is iEi Puzzle-M801 1U
+Rackmount Network Appliance and is since v4 sent separately, as a
+standalone patch.
 
-I'll expand the description a bit.
+Changes for v2:
+   - Use LAAs for local-mac-address and match reg values
+   - Code styling changes
+   - Error handling moved to the end of the function
+   - Define all magic numbers in the main header file
+   - Convert the driver to make it OF independent
+   - Refactor hwmon to use devm_hwmon_device_register_with_info()
+   - Reduce the number of mutex locks
+   - Allocate memory once for the response buffer
+   - Reduce managed memory allocations
+Changes for v3:
+   - Move iei-wt61p803-puzzle driver sysfs interface documentation to testing
+   - Change some internal functions to static
+   - Sync dt-bindings examples with the iEi Puzzle-M801 board dts
+   - Remove obsolete device tree properties and correct LED functions
+   - Reverse christmas tree variable declaration order, where possible
+   - MAC address sysfs function rewrite
+   - Fixed struct members size, where reasonable (MFD driver)
+   - Add an error check for hwmon_dev
+   - Use devm_led_classdev_register_ext() in the LED driver
+Changes for v4:
+   - Clean up sensible checks reported by checkpatch --strict
+   - Document the mutex lock usage in the LED driver
+   - Fix error handling and code styling issues in the HWMON driver
+   - Break up the patchset and send the iEi Puzzle-M801 board support
+patch separately
+Changes for v5:
+   - Remove the return before goto to also fwnode_handle_put(child)
+when ret is 0 (LED driver)
+   - Change unsigned char arrays to static where applicable
+   - Fix unconventional line indentations
+   - Remove unnecessary checks in the HWMON driver
+   - Remove unnecessary type casts
+   - Clear up command array assignments, where the command array is
+modified before it is sent
+   - Resolve a checksum calculation issue
+   - Add Luka Perkov to MAINTAINERS
+Changes for v6:
+   - Use the container_of() macro to get the led_cdev parent struct
+   - Use %u instead of %lu in a printf() (LED driver) 
 
->
-> > +/**
-> > + * struct iei_wt61p803_puzzle_led - MCU LED Driver
-> > + *
-> > + * @mcu:               MCU struct pointer
-> > + * @response_buffer    Global MCU response buffer allocation
-> > + * @lock:              General mutex lock to protect simultaneous R/W access to led_power_state
-> > + * @led_power_state:   State of the front panel power LED
-> > + * @cdev:              LED classdev
-> > + */
-> > +struct iei_wt61p803_puzzle_led {
-> > +       struct iei_wt61p803_puzzle *mcu;
-> > +       unsigned char *response_buffer;
-> > +       struct mutex lock;
-> > +       int led_power_state;
->
-> > +       struct led_classdev cdev;
->
-> If you are using container_of() and move this member to be first, you
-> will effectively make the container_of() a no-op.
->
-> > +};
-> > +
-> > +static inline struct iei_wt61p803_puzzle_led *cdev_to_iei_wt61p803_puzzle_led
-> > +       (struct led_classdev *led_cdev)
-> > +{
-> > +       return dev_get_drvdata(led_cdev->dev->parent);
->
-> Why not simply call container_of()
+Luka Kovacic (6):
+  dt-bindings: Add iEi vendor prefix and iEi WT61P803 PUZZLE driver
+    bindings
+  drivers: mfd: Add a driver for iEi WT61P803 PUZZLE MCU
+  drivers: hwmon: Add the iEi WT61P803 PUZZLE HWMON driver
+  drivers: leds: Add the iEi WT61P803 PUZZLE LED driver
+  Documentation/ABI: Add iei-wt61p803-puzzle driver sysfs interface
+    documentation
+  MAINTAINERS: Add an entry for the iEi WT61P803 PUZZLE driver
 
-I agree, container_of() is much cleaner, when used here.
+ .../testing/sysfs-driver-iei-wt61p803-puzzle  |   55 +
+ .../hwmon/iei,wt61p803-puzzle-hwmon.yaml      |   41 +
+ .../leds/iei,wt61p803-puzzle-leds.yaml        |   45 +
+ .../bindings/mfd/iei,wt61p803-puzzle.yaml     |   82 ++
+ .../devicetree/bindings/vendor-prefixes.yaml  |    2 +
+ MAINTAINERS                                   |   14 +
+ drivers/hwmon/Kconfig                         |    8 +
+ drivers/hwmon/Makefile                        |    1 +
+ drivers/hwmon/iei-wt61p803-puzzle-hwmon.c     |  410 +++++++
+ drivers/leds/Kconfig                          |    8 +
+ drivers/leds/Makefile                         |    1 +
+ drivers/leds/leds-iei-wt61p803-puzzle.c       |  147 +++
+ drivers/mfd/Kconfig                           |    8 +
+ drivers/mfd/Makefile                          |    1 +
+ drivers/mfd/iei-wt61p803-puzzle.c             | 1043 +++++++++++++++++
+ include/linux/mfd/iei-wt61p803-puzzle.h       |   66 ++
+ 16 files changed, 1932 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-driver-iei-wt61p803-puzzle
+ create mode 100644 Documentation/devicetree/bindings/hwmon/iei,wt61p803-puzzle-hwmon.yaml
+ create mode 100644 Documentation/devicetree/bindings/leds/iei,wt61p803-puzzle-leds.yaml
+ create mode 100644 Documentation/devicetree/bindings/mfd/iei,wt61p803-puzzle.yaml
+ create mode 100644 drivers/hwmon/iei-wt61p803-puzzle-hwmon.c
+ create mode 100644 drivers/leds/leds-iei-wt61p803-puzzle.c
+ create mode 100644 drivers/mfd/iei-wt61p803-puzzle.c
+ create mode 100644 include/linux/mfd/iei-wt61p803-puzzle.h
 
->
-> > +}
->
-> ...
->
-> > +       ret = fwnode_property_read_u32(child, "reg", &reg);
-> > +       if (ret || reg > 1) {
-> > +               dev_err(dev, "Could not register 'reg' (%lu)\n", (unsigned long)reg);
->
-> When you cast explicitly during printf() you are doing something wrong
-> in 99.9% cases.
-> What's wrong with %u in this case?
+-- 
+2.26.2
 
-I'll remove the cast, %u should be okay.
-
->
-> > +               ret = -EINVAL;
-> > +               goto err_child_node;
-> > +       }
->
-> --
-> With Best Regards,
-> Andy Shevchenko
-
-Kind regards,
-Luka
