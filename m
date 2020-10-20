@@ -2,297 +2,111 @@ Return-Path: <SRS0=vYm8=D3=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D0D4C433E7
-	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Oct 2020 09:00:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BBAB5C4363A
+	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Oct 2020 15:24:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1811520936
-	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Oct 2020 09:00:01 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DJsnW1P0"
+	by mail.kernel.org (Postfix) with ESMTP id 5626921D6C
+	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Oct 2020 15:24:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1603207481;
+	bh=xkv3dFrvh7Kt07UxO/4foWgjUIYyyTNqqYS+af5Q8pQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=nq5H3E5fEqQkbJk8Ej55m/jTWpCu3tAzQYqYfacnFuk2r32hU/IAZAtN263reOUU/
+	 lmHQqbZNnO+TC5I+dQSTXubVuc7MRQNIMQjoGC46ja3nJSi9hv2RR7yKcbBsnEb+DG
+	 IH34VotMNm5I2cGLChDSS1bvDzuiCuA43PVnF8+E=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392223AbgJTJAB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 20 Oct 2020 05:00:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45286 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390221AbgJTJAA (ORCPT
+        id S2408726AbgJTPYl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 20 Oct 2020 11:24:41 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:41282 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728246AbgJTPYk (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 20 Oct 2020 05:00:00 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF8BC061755;
-        Tue, 20 Oct 2020 01:59:58 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id 1so694014ple.2;
-        Tue, 20 Oct 2020 01:59:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=32DXXPaYfvqxwZc+Ufdj/EMGZ4IWPmSRmpTewywNSVQ=;
-        b=DJsnW1P05d7r36kJe9UFhBkPyK47QtTUllE/9wSt6mFWlQrqhnXzAXpXrraJ63H2PI
-         t3QICPI4dBsZEBL0SC7WbjHfST3LNuN+CzDk3y+fI2J4ou0Uc2sFUD64bG+Zj2DONrDx
-         is6kd+2TSqwo0l3NQEbnGrgz4WOe9VfSh3Y5xNZ3zQ/2eCA5fVmUtl+Pb5pjkCS9B3AZ
-         +uTv2uXtx748Osd/DvW7NtpHtHFnEHce97KWof0xhKhbvDHq2dYys35j4YMar3l4gZ0O
-         eKEsXwE+NPyQt7U+QRTtkFoOLYRMr8TYKu/9fRcnC+S9BpU3uD8RBei3KpUPZSpq4yJ/
-         lGLw==
+        Tue, 20 Oct 2020 11:24:40 -0400
+Received: by mail-ot1-f67.google.com with SMTP id n15so2041015otl.8;
+        Tue, 20 Oct 2020 08:24:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=32DXXPaYfvqxwZc+Ufdj/EMGZ4IWPmSRmpTewywNSVQ=;
-        b=Ux5PUrUNWOekIDDo/cQrxv6/jp5FmfWiyL8/AO+WaNRpHAPUwbNKO41OFMVtje//7Y
-         SAXfxLbbzYtq0VbT6fXWMUui47HIwx1xhmqP7YdDAEXneyNuLAWYznchWdEI3ZZe8+1U
-         emcR7U6Je2M+dyRN9SUV8CfBG6M/Xtwx/2Ffgrk6dV5I0WRPZORgBGrhI/x+PqnRkdxb
-         90QQEtVUduY//MvbGM4Q4qjAd19L3Z1lV5nY+BtB5E6st+Rkt4GdDYMTgHyWlcWrol/S
-         Y5oRynxIMqhMDFKE5lvP0Pvq22PhszDx9o4XOo2T11RhPQ3rM7Eee8i1PtA1wvOzq/bY
-         3yig==
-X-Gm-Message-State: AOAM532ezBnZB5sWFtWB1H9lA/stSHLBgiBNm88mfBuNNcYWJDlGOvB+
-        XV6muCIezfRubneI5OeuP7/E9gi7b/W3/r66ohk=
-X-Google-Smtp-Source: ABdhPJy9hwkmHtqN6ASWpH6MTF2qZAFQwMqgbuqGxJNxCVnhfHfDYrm6umFgVnKv6i8wAf0+VfuWbMJvxUAq2uxoib0=
-X-Received: by 2002:a17:90b:305:: with SMTP id ay5mr1938344pjb.129.1603184398230;
- Tue, 20 Oct 2020 01:59:58 -0700 (PDT)
-MIME-Version: 1.0
-References: <20201019221859.56680-1-luka.kovacic@sartura.hr> <20201019221859.56680-4-luka.kovacic@sartura.hr>
-In-Reply-To: <20201019221859.56680-4-luka.kovacic@sartura.hr>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 20 Oct 2020 12:00:47 +0300
-Message-ID: <CAHp75VdnOJKwvZUOsj3bbT8tK9uZN=NufDrdhUvS886bNUpWhA@mail.gmail.com>
-Subject: Re: [PATCH v6 3/6] drivers: hwmon: Add the iEi WT61P803 PUZZLE HWMON driver
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=skxRshqOr5D6Nh058eMGdzOj0cEeQrCjIUNkB4DmNrA=;
+        b=KElqckfPGagRQ14Q+FfIyCzozVn1dw5V2P1bYaRQknmEAFK+MHP7ktISoxwHoXHua1
+         KrZ1YYOIFu+D6fcPMPcijp9BZNxLnYN2owehKit3UjjpRPG+aYzny5wcVEQ9IakVL+3/
+         EM7gpgPpatBGb+gRkqNgSyGK+HUwPniS3z4jaF86wM1becbVlsU1MUiLAvjVN4qA+zvk
+         53jiuIp37oXOD77I97SrmYlnzm+xJbAXN8mlZMKgwgkfI0jDx1cOnPgnHRqkEPEDmAf+
+         Ud12sWFEb8zHBaYb9FSTxxweNu/Oe3cFBDd0HEw8wIOgu/HOXlsjYHm+LKrARxsCEHnj
+         2cTw==
+X-Gm-Message-State: AOAM532NBvrOelKRVCeQFwEsgO38lk6gGV5A+sLKer5e0nYlJWIwH62w
+        +ZFjIZYkYfP0MgBEQUShNQ==
+X-Google-Smtp-Source: ABdhPJwZMveXwWTGOGHruCazq1Q9Nlj9oKfbTJAKUfSfdEcZCMgvrdLxZBbnqT8CPKWT50uyuxFSPg==
+X-Received: by 2002:a05:6830:1345:: with SMTP id r5mr1979825otq.6.1603207479790;
+        Tue, 20 Oct 2020 08:24:39 -0700 (PDT)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id f18sm506620otp.10.2020.10.20.08.24.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Oct 2020 08:24:38 -0700 (PDT)
+Received: (nullmailer pid 867552 invoked by uid 1000);
+        Tue, 20 Oct 2020 15:24:37 -0000
+Date:   Tue, 20 Oct 2020 10:24:37 -0500
+From:   Rob Herring <robh@kernel.org>
 To:     Luka Kovacic <luka.kovacic@sartura.hr>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Lee Jones <lee.jones@linaro.org>, Pavel Machek <pavel@ucw.cz>,
-        Dan Murphy <dmurphy@ti.com>, Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        =?UTF-8?B?TWFyZWsgQmVow7pu?= <marek.behun@nic.cz>,
-        luka.perkov@sartura.hr, robert.marko@sartura.hr
-Content-Type: text/plain; charset="UTF-8"
+Cc:     robert.marko@sartura.hr, linux-kernel@vger.kernel.org,
+        linux@roeck-us.net, robh+dt@kernel.org, pavel@ucw.cz,
+        linux-leds@vger.kernel.org, marek.behun@nic.cz,
+        luka.perkov@sartura.hr, andy.shevchenko@gmail.com, dmurphy@ti.com,
+        linux-hwmon@vger.kernel.org, jdelvare@suse.com,
+        devicetree@vger.kernel.org, lee.jones@linaro.org
+Subject: Re: [PATCH v6 1/6] dt-bindings: Add iEi vendor prefix and iEi
+ WT61P803 PUZZLE driver bindings
+Message-ID: <20201020152437.GB866676@bogus>
+References: <20201019221859.56680-1-luka.kovacic@sartura.hr>
+ <20201019221859.56680-2-luka.kovacic@sartura.hr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201019221859.56680-2-luka.kovacic@sartura.hr>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Oct 20, 2020 at 1:19 AM Luka Kovacic <luka.kovacic@sartura.hr> wrote:
->
-> Add the iEi WT61P803 PUZZLE HWMON driver, that handles the fan speed
-> control via PWM, reading fan speed and reading on-board temperature
-> sensors.
->
-> The driver registers a HWMON device and a simple thermal cooling device to
-> enable in-kernel fan management.
->
-> This driver depends on the iEi WT61P803 PUZZLE MFD driver.
+On Tue, 20 Oct 2020 00:18:54 +0200, Luka Kovacic wrote:
+> Add the iEi WT61P803 PUZZLE Device Tree bindings for MFD, HWMON and LED
+> drivers. A new vendor prefix is also added accordingly for
+> IEI Integration Corp.
+> 
+> Signed-off-by: Luka Kovacic <luka.kovacic@sartura.hr>
+> Cc: Luka Perkov <luka.perkov@sartura.hr>
+> Cc: Robert Marko <robert.marko@sartura.hr>
+> ---
+>  .../hwmon/iei,wt61p803-puzzle-hwmon.yaml      | 41 ++++++++++
+>  .../leds/iei,wt61p803-puzzle-leds.yaml        | 45 ++++++++++
+>  .../bindings/mfd/iei,wt61p803-puzzle.yaml     | 82 +++++++++++++++++++
+>  .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
+>  4 files changed, 170 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/iei,wt61p803-puzzle-hwmon.yaml
+>  create mode 100644 Documentation/devicetree/bindings/leds/iei,wt61p803-puzzle-leds.yaml
+>  create mode 100644 Documentation/devicetree/bindings/mfd/iei,wt61p803-puzzle.yaml
+> 
 
-...
 
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/* iEi WT61P803 PUZZLE MCU HWMON Driver
+My bot found errors running 'make dt_binding_check' on your patch:
 
-Shouldn't be
-/*
- * IEI ...
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/iei,wt61p803-puzzle.example.dt.yaml: iei-wt61p803-puzzle-hwmon: fan-group@0:cooling-levels: [[64, 102, 170, 230, 250]] is too short
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/iei,wt61p803-puzzle-hwmon.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/iei,wt61p803-puzzle.example.dt.yaml: iei-wt61p803-puzzle-hwmon: fan-group@1:cooling-levels: [[64, 102, 170, 230, 250]] is too short
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/hwmon/iei,wt61p803-puzzle-hwmon.yaml
 
-?
 
-...
+See https://patchwork.ozlabs.org/patch/1384521
 
-> +/**
-> + * struct iei_wt61p803_puzzle_thermal_cooling_device - Thermal cooling device instance
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure dt-schema is up to date:
 
-> + *
+pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
 
-Please, remove all these blank lines in kernel doc descriptions.
+Please check and re-submit.
 
-> + * @mcu_hwmon:         MCU HWMON struct pointer
-> + * @tcdev:             Thermal cooling device pointer
-> + * @name:              Thermal cooling device name
-> + * @pwm_channel:       PWM channel (0 or 1)
-> + * @cooling_levels:    Thermal cooling device cooling levels
-> + */
-
-...
-
-> +struct iei_wt61p803_puzzle_hwmon {
-> +       struct iei_wt61p803_puzzle *mcu;
-> +       unsigned char *response_buffer;
-> +       bool thermal_cooling_dev_present[IEI_WT61P803_PUZZLE_HWMON_MAX_PWM_NUM];
-> +       struct iei_wt61p803_puzzle_thermal_cooling_device
-> +               *cdev[IEI_WT61P803_PUZZLE_HWMON_MAX_PWM_NUM];
-
-Isn't this constant a bit too long? Perhaps drop NUM (MAX would
-suffice I think) for a starter.
-
-> +};
-
-...
-
-> +       static unsigned char temp_sensor_ntc_cmd[4] = {
-> +               IEI_WT61P803_PUZZLE_CMD_HEADER_START,
-> +               IEI_WT61P803_PUZZLE_CMD_TEMP,
-> +               IEI_WT61P803_PUZZLE_CMD_TEMP_ALL
-
-+ comma.
-
-> +       };
-
-Why not to be consistent with the rest assignments, choose either
-above form, or like you have done in the below functions.
-Also, why 4?
-
-> +       size_t reply_size = 0;
-
-How is it used in all these functions?
-
-> +       int ret;
-> +
-> +       ret = iei_wt61p803_puzzle_write_command(mcu_hwmon->mcu, temp_sensor_ntc_cmd,
-> +                                               sizeof(temp_sensor_ntc_cmd), resp_buf,
-> +                                               &reply_size);
-> +
-> +       if (ret)
-> +               return ret;
-> +
-> +       /* Check the number of NTC values (should be 0x32/'2') */
-
-> +       if (resp_buf[3] != 0x32)
-
-Instead of comment in the parentheses, just do it here
-" != '2')"
-
-> +               return -EIO;
-
-...
-
-> +static int iei_wt61p803_puzzle_read(struct device *dev, enum hwmon_sensor_types type,
-> +                                   u32 attr, int channel, long *val)
-> +{
-> +       struct iei_wt61p803_puzzle_hwmon *mcu_hwmon = dev_get_drvdata(dev->parent);
-> +       int ret;
-> +
-> +       switch (type) {
-> +       case hwmon_pwm:
-
-> +               ret = iei_wt61p803_puzzle_read_pwm_channel(mcu_hwmon, channel, val);
-> +               return ret;
-
-  return iei_...(...);
-in all such cases.
-
-> +       case hwmon_fan:
-> +               ret = iei_wt61p803_puzzle_read_fan_speed(mcu_hwmon, channel, val);
-> +               return ret;
-> +       case hwmon_temp:
-> +               ret = iei_wt61p803_puzzle_read_temp_sensor(mcu_hwmon, channel, val);
-> +               return ret;
-> +       default:
-> +               return -EINVAL;
-> +       }
-> +}
-
-...
-
-> +static umode_t iei_wt61p803_puzzle_is_visible(const void *data, enum hwmon_sensor_types type,
-> +                                             u32 attr, int channel)
-> +{
-> +       switch (type) {
-> +       case hwmon_pwm:
-
-> +               switch (attr) {
-> +               case hwmon_pwm_input:
-> +                       return 0644;
-> +               default:
-> +                       return 0;
-> +               }
-
-Isn't too long for
-  if (attr == ...)
-    return 0644;
-  break;
-
-...see below...
-
-> +       case hwmon_fan:
-> +               switch (attr) {
-> +               case hwmon_fan_input:
-> +                       return 0444;
-> +               default:
-> +                       return 0;
-> +               }
-> +       case hwmon_temp:
-> +               switch (attr) {
-> +               case hwmon_temp_input:
-> +                       return 0444;
-> +               default:
-> +                       return 0;
-> +               }
-
-> +       default:
-> +               return 0;
-
-break;
-
-> +       }
-
-return 0;
-
-?
-
-> +}
-
-...
-
-> +       mcu_hwmon->thermal_cooling_dev_present[pwm_channel] = true;
-> +
-
-> +       num_levels = fwnode_property_read_u8_array(child, "cooling-levels", NULL, 0);
-
-fwnode_property_count_u8()
-
-> +       if (num_levels > 0) {
-
-You can improve readability by reducing indentation level via
-replacement to negative conditional.
-
-> +               cdev = devm_kzalloc(dev, sizeof(*cdev), GFP_KERNEL);
-> +               if (!cdev)
-> +                       return -ENOMEM;
-> +
-> +               cdev->cooling_levels = devm_kzalloc(dev, num_levels, GFP_KERNEL);
-
-For the sake of cleaness, shouldn't it be devm_kmalloc_array() ?
-(Note, zeroing is not needed if you read entire array)
-
-> +               if (!cdev->cooling_levels)
-> +                       return -ENOMEM;
-> +
-> +               ret = fwnode_property_read_u8_array(child, "cooling-levels",
-> +                                                   cdev->cooling_levels,
-> +                                                   num_levels);
-> +               if (ret) {
-> +                       dev_err(dev, "Couldn't read property 'cooling-levels'");
-> +                       return ret;
-> +               }
-> +
-> +               snprintf(cdev->name, THERMAL_NAME_LENGTH, "iei_wt61p803_puzzle_%d", pwm_channel);
-> +
-> +               cdev->tcdev = devm_thermal_of_cooling_device_register(dev, NULL,
-> +                               cdev->name, cdev, &iei_wt61p803_puzzle_cooling_ops);
-> +               if (IS_ERR(cdev->tcdev))
-> +                       return PTR_ERR(cdev->tcdev);
-> +
-> +               cdev->mcu_hwmon = mcu_hwmon;
-> +               cdev->pwm_channel = pwm_channel;
-> +
-> +               mcu_hwmon->cdev[pwm_channel] = cdev;
-> +       }
-> +       return 0;
-> +}
-
--- 
-With Best Regards,
-Andy Shevchenko
