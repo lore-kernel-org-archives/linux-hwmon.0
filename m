@@ -1,314 +1,187 @@
-Return-Path: <SRS0=vYm8=D3=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=7FvC=D5=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74435C4363A
-	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Oct 2020 15:30:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6ECE5C4363A
+	for <linux-hwmon@archiver.kernel.org>; Thu, 22 Oct 2020 07:08:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1127A22247
-	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Oct 2020 15:30:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603207820;
-	bh=j68yQoguxyybVHPjuS6IEEll+g+5lq7oNa5HZJfxHgs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=lO6C+x+kH/sDKhVm6FQLHStSnv+Dda0PssBhMrP93Uu86921oLIt3G8UtQnHcM45i
-	 Mo6kkwCumJhK+6LB8ejXZnZyjQAZlE1uFEuF4xhTUGV2SBa5L+ItnWZTDjD1N9vX3O
-	 DaqFig6hUY51nngzLM3yO+wuganbO9scI67KRv94=
+	by mail.kernel.org (Postfix) with ESMTP id 03421222E9
+	for <linux-hwmon@archiver.kernel.org>; Thu, 22 Oct 2020 07:08:50 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Z4wVTtsP"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408688AbgJTPaT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 20 Oct 2020 11:30:19 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:35873 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728082AbgJTPaT (ORCPT
+        id S2505121AbgJVHIu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 22 Oct 2020 03:08:50 -0400
+Received: from aserp2130.oracle.com ([141.146.126.79]:59882 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2505120AbgJVHIu (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 20 Oct 2020 11:30:19 -0400
-Received: by mail-ot1-f66.google.com with SMTP id 32so2092558otm.3;
-        Tue, 20 Oct 2020 08:30:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=OwH982ml02PB39h27WKHfvcBlSDlxjx0YfyUyxqPQdQ=;
-        b=qKMukdr6FLW0PHUA2KbA//r3FMPhMBSO9YcbXInjQHzwMrzhpSfDj095jqANgXZm0t
-         DfBjtJ+0ojaY6eI/tEoirauYh1TJ2f+D0A8pAQZG29hhfeILnfyhFWZo0mZT4iyuj/Xe
-         zTb6FobmqzOmVklnf4mIYT2yL4od0U6oKG8bsWWlNL237CNZU88PRlRy6XSdSI5Csrqd
-         RGaIvV4Jc7cqxKolqc7hWdnYG2I0tN452hsvFrnkpzgVFBR2/a2FBt9cSnRhQh8ACGLK
-         EczTe+ZZTpeFCJde/VPROIg4zSh91OYFV+mwmsft1aLWD3RDYJSNrfz/IsZqtRyngK8U
-         xITA==
-X-Gm-Message-State: AOAM533v1TBjPB/ULEv/LPJfEVpQI6nPydJlD8Y4JjigD9zK8O0kWrNL
-        UVxojfsDvHQmo/ED09og1w==
-X-Google-Smtp-Source: ABdhPJzd664UX8xPntib+NhSio45LJ1JnqXAueqBmlqFbhnTAvh50wB5sFT7zq9cIPSwVWMcZSlJOA==
-X-Received: by 2002:a9d:2a88:: with SMTP id e8mr2035204otb.122.1603207817732;
-        Tue, 20 Oct 2020 08:30:17 -0700 (PDT)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id b6sm519426otl.37.2020.10.20.08.30.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Oct 2020 08:30:16 -0700 (PDT)
-Received: (nullmailer pid 874932 invoked by uid 1000);
-        Tue, 20 Oct 2020 15:30:16 -0000
-Date:   Tue, 20 Oct 2020 10:30:16 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Luka Kovacic <luka.kovacic@sartura.hr>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        lee.jones@linaro.org, pavel@ucw.cz, dmurphy@ti.com,
-        jdelvare@suse.com, linux@roeck-us.net, marek.behun@nic.cz,
-        luka.perkov@sartura.hr, andy.shevchenko@gmail.com,
-        robert.marko@sartura.hr
-Subject: Re: [PATCH v6 1/6] dt-bindings: Add iEi vendor prefix and iEi
- WT61P803 PUZZLE driver bindings
-Message-ID: <20201020153016.GC866676@bogus>
-References: <20201019221859.56680-1-luka.kovacic@sartura.hr>
- <20201019221859.56680-2-luka.kovacic@sartura.hr>
+        Thu, 22 Oct 2020 03:08:50 -0400
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09M6n0hG131210;
+        Thu, 22 Oct 2020 07:08:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
+ bh=8n5vlAtX37x347X0jG0ppw6eCz7rq6geXfy1ORIKtZQ=;
+ b=Z4wVTtsPrxA3kyP9dp+vPMsKMbHRJm//LKbO0FWGOmhblTSVCGv81nwIRHlm5PCNGErm
+ 4IXR2OFEdaYIkwr5o9uYV+fD9wUhcyZVMoStQmIxkON4/nAvsuiG3G2xdE0vlR7qRBvZ
+ m2Sn6km1dlgz1liwioP6qx2H7548sdvFe/q+RSyyQOCS6C71r+1D2xdSptc0kO20lWBg
+ TPO0aG60DrvKPh+nGJRaPzoF/dYM8V5GHYko8QBFSBDlLomyUkc0ycLXQn94BrQwwumW
+ OSJK773bz18KW7kKITv8GtmLVW45VbSIhJjtvDn2sT5891taBkjhGC6jWW7HV0UG9fCZ kA== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2130.oracle.com with ESMTP id 347p4b4arh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 22 Oct 2020 07:08:33 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09M6p22D100154;
+        Thu, 22 Oct 2020 07:08:32 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3030.oracle.com with ESMTP id 348ahyew2f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 22 Oct 2020 07:08:32 +0000
+Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 09M78UG6012245;
+        Thu, 22 Oct 2020 07:08:30 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 22 Oct 2020 00:08:30 -0700
+Date:   Thu, 22 Oct 2020 10:08:24 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Ugur Usug <Ugur.Usug@maximintegrated.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: [PATCH] hwmon: (pmbus/max20730) use scnprintf() instead of snprintf()
+Message-ID: <20201022070824.GC2817762@mwanda>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201019221859.56680-2-luka.kovacic@sartura.hr>
+X-Mailer: git-send-email haha only kidding
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9781 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0 bulkscore=0
+ malwarescore=0 spamscore=0 mlxlogscore=999 mlxscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2010220044
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9781 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 priorityscore=1501
+ clxscore=1011 malwarescore=0 mlxscore=0 bulkscore=0 lowpriorityscore=0
+ phishscore=0 adultscore=0 mlxlogscore=999 impostorscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2010220044
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Oct 20, 2020 at 12:18:54AM +0200, Luka Kovacic wrote:
-> Add the iEi WT61P803 PUZZLE Device Tree bindings for MFD, HWMON and LED
-> drivers. A new vendor prefix is also added accordingly for
-> IEI Integration Corp.
-> 
-> Signed-off-by: Luka Kovacic <luka.kovacic@sartura.hr>
-> Cc: Luka Perkov <luka.perkov@sartura.hr>
-> Cc: Robert Marko <robert.marko@sartura.hr>
-> ---
->  .../hwmon/iei,wt61p803-puzzle-hwmon.yaml      | 41 ++++++++++
->  .../leds/iei,wt61p803-puzzle-leds.yaml        | 45 ++++++++++
->  .../bindings/mfd/iei,wt61p803-puzzle.yaml     | 82 +++++++++++++++++++
->  .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
->  4 files changed, 170 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/iei,wt61p803-puzzle-hwmon.yaml
->  create mode 100644 Documentation/devicetree/bindings/leds/iei,wt61p803-puzzle-leds.yaml
->  create mode 100644 Documentation/devicetree/bindings/mfd/iei,wt61p803-puzzle.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/iei,wt61p803-puzzle-hwmon.yaml b/Documentation/devicetree/bindings/hwmon/iei,wt61p803-puzzle-hwmon.yaml
-> new file mode 100644
-> index 000000000000..37f0030df237
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/iei,wt61p803-puzzle-hwmon.yaml
-> @@ -0,0 +1,41 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/iei,wt61p803-puzzle-hwmon.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: iEi WT61P803 PUZZLE MCU HWMON module from IEI Integration Corp.
-> +
-> +maintainers:
-> +  - Luka Kovacic <luka.kovacic@sartura.hr>
-> +
-> +description: |
-> +  This module is a part of the iEi WT61P803 PUZZLE MFD device. For more details
-> +  see Documentation/devicetree/bindings/mfd/iei,wt61p803-puzzle.yaml.
-> +
-> +  The HWMON module is a sub-node of the MCU node in the Device Tree.
-> +
-> +properties:
-> +  compatible:
-> +    const: iei,wt61p803-puzzle-hwmon
-> +
-> +patternProperties:
-> +  "^fan-group@[0-1]$":
-> +    type: object
-> +    properties:
-> +      reg:
-> +        minimum: 0
-> +        maximum: 1
-> +        description:
-> +          Fan group ID
+The snprintf() function returns the number of characters which would
+have been printed if there were enough space, but the scnprintf()
+returns the number of characters which were actually printed.  If the
+buffer is not large enough, then using snprintf() would result in a
+read overflow and an information leak.
 
-Blank line between properties.
+Fixes: 8910c0bd533d ("hwmon: (pmbus/max20730) add device monitoring via debugfs")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+ drivers/hwmon/pmbus/max20730.c | 26 +++++++++++++-------------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
 
-> +      cooling-levels:
-> +        maxItems: 255
-> +        description:
-> +          Cooling levels for the fans (PWM value mapping)
-> +    description: |
-> +      Properties for each fan group.
-> +    required:
-> +      - reg
-> +
-> +required:
-> +  - compatible
+diff --git a/drivers/hwmon/pmbus/max20730.c b/drivers/hwmon/pmbus/max20730.c
+index 57923d72490c..be83b98411c7 100644
+--- a/drivers/hwmon/pmbus/max20730.c
++++ b/drivers/hwmon/pmbus/max20730.c
+@@ -122,8 +122,8 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
+ 	switch (idx) {
+ 	case MAX20730_DEBUGFS_VOUT_MIN:
+ 		ret = VOLT_FROM_REG(data->mfr_voutmin * 10000);
+-		len = snprintf(tbuf, DEBUG_FS_DATA_MAX, "%d.%d\n",
+-			       ret / 10000, ret % 10000);
++		len = scnprintf(tbuf, DEBUG_FS_DATA_MAX, "%d.%d\n",
++				ret / 10000, ret % 10000);
+ 		break;
+ 	case MAX20730_DEBUGFS_FREQUENCY:
+ 		val = (data->mfr_devset1 & MAX20730_MFR_DEVSET1_FSW_MASK)
+@@ -141,7 +141,7 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
+ 			ret = 800;
+ 		else
+ 			ret = 900;
+-		len = snprintf(tbuf, DEBUG_FS_DATA_MAX, "%d\n", ret);
++		len = scnprintf(tbuf, DEBUG_FS_DATA_MAX, "%d\n", ret);
+ 		break;
+ 	case MAX20730_DEBUGFS_PG_DELAY:
+ 		val = (data->mfr_devset1 & MAX20730_MFR_DEVSET1_TSTAT_MASK)
+@@ -223,7 +223,7 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
+ 	case MAX20730_DEBUGFS_OC_PROTECT_MODE:
+ 		ret = (data->mfr_devset2 & MAX20730_MFR_DEVSET2_OCPM_MASK)
+ 			>> MAX20730_MFR_DEVSET2_OCPM_BIT_POS;
+-		len = snprintf(tbuf, DEBUG_FS_DATA_MAX, "%d\n", ret);
++		len = scnprintf(tbuf, DEBUG_FS_DATA_MAX, "%d\n", ret);
+ 		break;
+ 	case MAX20730_DEBUGFS_SS_TIMING:
+ 		val = (data->mfr_devset2 & MAX20730_MFR_DEVSET2_SS_MASK)
+@@ -241,32 +241,32 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
+ 	case MAX20730_DEBUGFS_IMAX:
+ 		ret = (data->mfr_devset2 & MAX20730_MFR_DEVSET2_IMAX_MASK)
+ 			>> MAX20730_MFR_DEVSET2_IMAX_BIT_POS;
+-		len = snprintf(tbuf, DEBUG_FS_DATA_MAX, "%d\n", ret);
++		len = scnprintf(tbuf, DEBUG_FS_DATA_MAX, "%d\n", ret);
+ 		break;
+ 	case MAX20730_DEBUGFS_OPERATION:
+ 		ret = i2c_smbus_read_byte_data(psu->client, PMBUS_OPERATION);
+ 		if (ret < 0)
+ 			return ret;
+-		len = snprintf(tbuf, DEBUG_FS_DATA_MAX, "%d\n", ret);
++		len = scnprintf(tbuf, DEBUG_FS_DATA_MAX, "%d\n", ret);
+ 		break;
+ 	case MAX20730_DEBUGFS_ON_OFF_CONFIG:
+ 		ret = i2c_smbus_read_byte_data(psu->client, PMBUS_ON_OFF_CONFIG);
+ 		if (ret < 0)
+ 			return ret;
+-		len = snprintf(tbuf, DEBUG_FS_DATA_MAX, "%d\n", ret);
++		len = scnprintf(tbuf, DEBUG_FS_DATA_MAX, "%d\n", ret);
+ 		break;
+ 	case MAX20730_DEBUGFS_SMBALERT_MASK:
+ 		ret = i2c_smbus_read_word_data(psu->client,
+ 					       PMBUS_SMB_ALERT_MASK);
+ 		if (ret < 0)
+ 			return ret;
+-		len = snprintf(tbuf, DEBUG_FS_DATA_MAX, "%d\n", ret);
++		len = scnprintf(tbuf, DEBUG_FS_DATA_MAX, "%d\n", ret);
+ 		break;
+ 	case MAX20730_DEBUGFS_VOUT_MODE:
+ 		ret = i2c_smbus_read_byte_data(psu->client, PMBUS_VOUT_MODE);
+ 		if (ret < 0)
+ 			return ret;
+-		len = snprintf(tbuf, DEBUG_FS_DATA_MAX, "%d\n", ret);
++		len = scnprintf(tbuf, DEBUG_FS_DATA_MAX, "%d\n", ret);
+ 		break;
+ 	case MAX20730_DEBUGFS_VOUT_COMMAND:
+ 		ret = i2c_smbus_read_word_data(psu->client, PMBUS_VOUT_COMMAND);
+@@ -274,8 +274,8 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
+ 			return ret;
+ 
+ 		ret = VOLT_FROM_REG(ret * 10000);
+-		len = snprintf(tbuf, DEBUG_FS_DATA_MAX,
+-			       "%d.%d\n", ret / 10000, ret % 10000);
++		len = scnprintf(tbuf, DEBUG_FS_DATA_MAX,
++				"%d.%d\n", ret / 10000, ret % 10000);
+ 		break;
+ 	case MAX20730_DEBUGFS_VOUT_MAX:
+ 		ret = i2c_smbus_read_word_data(psu->client, PMBUS_VOUT_MAX);
+@@ -283,8 +283,8 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
+ 			return ret;
+ 
+ 		ret = VOLT_FROM_REG(ret * 10000);
+-		len = snprintf(tbuf, DEBUG_FS_DATA_MAX,
+-			       "%d.%d\n", ret / 10000, ret % 10000);
++		len = scnprintf(tbuf, DEBUG_FS_DATA_MAX,
++				"%d.%d\n", ret / 10000, ret % 10000);
+ 		break;
+ 	default:
+ 		len = strlcpy(tbuf, "Invalid\n", DEBUG_FS_DATA_MAX);
+-- 
+2.28.0
 
-additionalProperties: false
-
-> diff --git a/Documentation/devicetree/bindings/leds/iei,wt61p803-puzzle-leds.yaml b/Documentation/devicetree/bindings/leds/iei,wt61p803-puzzle-leds.yaml
-> new file mode 100644
-> index 000000000000..0d353e5803bf
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/leds/iei,wt61p803-puzzle-leds.yaml
-> @@ -0,0 +1,45 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/leds/iei,wt61p803-puzzle-leds.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: iEi WT61P803 PUZZLE MCU LED module from IEI Integration Corp.
-> +
-> +maintainers:
-> +  - Luka Kovacic <luka.kovacic@sartura.hr>
-> +
-> +description: |
-> +  This module is a part of the iEi WT61P803 PUZZLE MFD device. For more details
-> +  see Documentation/devicetree/bindings/mfd/iei,wt61p803-puzzle.yaml.
-> +
-> +  The LED module is a sub-node of the MCU node in the Device Tree.
-> +
-> +properties:
-> +  compatible:
-> +    const: iei,wt61p803-puzzle-leds
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 0
-> +
-> +patternProperties:
-> +  "^led@0$":
-
-Fixed string, not a pattern. Do you plan to add more? Define the schema 
-to what the h/w supports, not current driver support.
-
-> +    type: object
-> +    $ref: common.yaml
-> +    description: |
-> +      Properties for a single LED.
-> +
-> +    properties:
-> +      reg:
-> +        description:
-> +          Index of the LED. Only one LED is supported at the moment.
-> +        minimum: 0
-> +        maximum: 0
-> +
-> +required:
-> +  - compatible
-> +  - "#address-cells"
-> +  - "#size-cells"
-
-additionalProperties: false
-
-> diff --git a/Documentation/devicetree/bindings/mfd/iei,wt61p803-puzzle.yaml b/Documentation/devicetree/bindings/mfd/iei,wt61p803-puzzle.yaml
-> new file mode 100644
-> index 000000000000..79a232d75093
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/iei,wt61p803-puzzle.yaml
-> @@ -0,0 +1,82 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/iei,wt61p803-puzzle.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: iEi WT61P803 PUZZLE MCU from IEI Integration Corp.
-> +
-> +maintainers:
-> +  - Luka Kovacic <luka.kovacic@sartura.hr>
-> +
-> +description: |
-> +  iEi WT61P803 PUZZLE MCU is embedded in some iEi Puzzle series boards.
-> +  It's used for controlling system power states, fans, LEDs and temperature
-> +  sensors.
-> +
-> +  For Device Tree bindings of other sub-modules (HWMON, LEDs) refer to the
-> +  binding documents under the respective subsystem directories.
-> +
-> +properties:
-> +  compatible:
-> +    const: iei,wt61p803-puzzle
-> +
-> +  current-speed:
-> +    description:
-> +      Serial bus speed in bps
-> +    maxItems: 1
-> +
-> +  enable-beep: true
-> +
-> +  iei-wt61p803-hwmon:
-
-Just 'hwmon'
-
-> +    $ref: ../hwmon/iei,wt61p803-puzzle-hwmon.yaml
-> +
-> +  leds:
-> +    $ref: ../leds/iei,wt61p803-puzzle-leds.yaml
-> +
-> +required:
-> +  - compatible
-> +  - current-speed
-
-additionalProperties: false
-
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/leds/common.h>
-> +    serial {
-> +        status = "okay";
-> +        mcu {
-> +            compatible = "iei,wt61p803-puzzle";
-> +            current-speed = <115200>;
-> +            enable-beep;
-> +
-> +            leds {
-> +                compatible = "iei,wt61p803-puzzle-leds";
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +
-> +                led@0 {
-> +                    reg = <0>;
-> +                    function = LED_FUNCTION_POWER;
-> +                    color = <LED_COLOR_ID_BLUE>;
-> +                };
-> +            };
-> +
-> +            iei-wt61p803-puzzle-hwmon {
-> +                compatible = "iei,wt61p803-puzzle-hwmon";
-> +
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +
-> +                fan-group@0 {
-> +                    #cooling-cells = <2>;
-> +                    reg = <0x00>;
-> +                    cooling-levels = <64 102 170 230 250>;
-> +                };
-> +
-> +                fan-group@1 {
-> +                    #cooling-cells = <2>;
-> +                    reg = <0x01>;
-> +                    cooling-levels = <64 102 170 230 250>;
-> +                };
-> +            };
-> +        };
-> +    };
-> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> index 63996ab03521..5f2595f0b2ad 100644
-> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> @@ -467,6 +467,8 @@ patternProperties:
->      description: IC Plus Corp.
->    "^idt,.*":
->      description: Integrated Device Technologies, Inc.
-> +  "^iei,.*":
-> +    description: IEI Integration Corp.
->    "^ifi,.*":
->      description: Ingenieurburo Fur Ic-Technologie (I/F/I)
->    "^ilitek,.*":
-> -- 
-> 2.26.2
-> 
