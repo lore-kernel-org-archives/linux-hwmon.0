@@ -7,51 +7,50 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80F92C4363A
-	for <linux-hwmon@archiver.kernel.org>; Tue, 27 Oct 2020 10:02:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D571C55179
+	for <linux-hwmon@archiver.kernel.org>; Tue, 27 Oct 2020 10:02:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4105D2225C
-	for <linux-hwmon@archiver.kernel.org>; Tue, 27 Oct 2020 10:02:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2DAA62071A
+	for <linux-hwmon@archiver.kernel.org>; Tue, 27 Oct 2020 10:02:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603792931;
-	bh=aVDv8l9vGsqd3srVmIH++RlO1Kd6a8919l1iqcsJX14=;
+	s=default; t=1603792961;
+	bh=61NJdUXvXA8bBUCLfymdDzSMs6SOOMfrxefki5XHE1A=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=uy218kDmZpTgTR7VFTIhb/QLRkXvCXTqpLEb1qw9pVHMselAyMdkoZbg51qhTZSnS
-	 saXfK5Zd3cnW1/qKOejTzdIYvHXqUj9/UF3gx1tngvUnicQHNxzeVc5EVYRXKG1Xeq
-	 AsWLvSQxgt5Dg+TZvTs8DGlz2SxUw7RVyZNL0Odc=
+	b=gX4WoGuGX6Y4hAyr1IonMzWN1irfiNn6RoPBNlYd29z1XDofWv4pKLTUi2+a5J50+
+	 3Td8/lxOVwm4NnhnBXEk+bawFgFHz26tNniAArvPQkRmNLnTW0naatykN8yQhPG00T
+	 pelIkkYMYKax9VoMNs3Ma8IdXaEZ0TlOqU3r8tp0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2896819AbgJ0KBq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 27 Oct 2020 06:01:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42478 "EHLO mail.kernel.org"
+        id S2896931AbgJ0KCf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 27 Oct 2020 06:02:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42484 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2896021AbgJ0Jvn (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 27 Oct 2020 05:51:43 -0400
+        id S2896023AbgJ0Jvm (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 27 Oct 2020 05:51:42 -0400
 Received: from mail.kernel.org (ip5f5ad5af.dynamic.kabel-deutschland.de [95.90.213.175])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 18F3F22283;
+        by mail.kernel.org (Postfix) with ESMTPSA id 1A98422284;
         Tue, 27 Oct 2020 09:51:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1603792301;
-        bh=aVDv8l9vGsqd3srVmIH++RlO1Kd6a8919l1iqcsJX14=;
+        bh=61NJdUXvXA8bBUCLfymdDzSMs6SOOMfrxefki5XHE1A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MS3vkRAGZvX2RVqGtuMVaWSPlrnBfuowrbubw1J6dLKTJf0glDSnZv9kYvrzf0ofR
-         M5+Iirvos67yKMJNzOOf8Zgsu7O+KFrluiOPzhnzKOKy88So80Oiy4dq6xgu4kV7RT
-         KcFYEfZn/Pt5GYsVboOb0lxiYAIqBYVCNPfLwNLw=
+        b=VOO/UBun8AjmhL0t8cvOXHBFJZgsAteqzA5+nR2jfw1VD8A/Pz2RDn77L61HaE1ZM
+         2fHBP1Hai7stLXLn3NCXcV8oi6otGcfDEUCKT9k3WNQ5ZQjsx6H/nlYU2nh3/6fxvO
+         ijZl3H7ZqsfqHDZM0mQP5mIg48i0QFVnFz/w5ftw=
 Received: from mchehab by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1kXLdj-003FEk-4v; Tue, 27 Oct 2020 10:51:39 +0100
+        id 1kXLdi-003FEZ-W9; Tue, 27 Oct 2020 10:51:39 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
         Jonathan Corbet <corbet@lwn.net>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Vadim Pasternak <vadimp@nvidia.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 07/32] docs: hwmon: mp2975.rst: address some html build warnings
-Date:   Tue, 27 Oct 2020 10:51:11 +0100
-Message-Id: <b02f98d886ab1f5af233f8999c7a15529fc52cdc.1603791716.git.mchehab+huawei@kernel.org>
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 03/32] docs: hwmon: adm1266.rst: fix a broken reference
+Date:   Tue, 27 Oct 2020 10:51:07 +0100
+Message-Id: <3d64372dabcdcea144cdc9972c245812ea2a84cb.1603791716.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1603791716.git.mchehab+huawei@kernel.org>
 References: <cover.1603791716.git.mchehab+huawei@kernel.org>
@@ -62,105 +61,28 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-    .../Documentation/hwmon/mp2975.rst:25: WARNING: Unexpected indentation.
-    .../Documentation/hwmon/mp2975.rst:27: WARNING: Block quote ends without a blank line; unexpected unindent.
-    .../Documentation/hwmon/mp2975.rst:69: WARNING: Unexpected indentation.
-    .../Documentation/hwmon/mp2975.rst:70: WARNING: Block quote ends without a blank line; unexpected unindent.
-    .../Documentation/hwmon/mp2975.rst:72: WARNING: Bullet list ends without a blank line; unexpected unindent.
-    .../Documentation/hwmon/mp2975.rst: WARNING: document isn't included in any toctree
+The reference was missing the extension, causing the
+check script to complain.
 
-List blocks should have blank lines before and after them,
-in order to be properly parsed.
-
-Fixes: 4beb7a028e9f ("hwmon: (pmbus) Add support for MPS Multi-phase mp2975 controller")
 Acked-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/hwmon/index.rst  |  1 +
- Documentation/hwmon/mp2975.rst | 14 +++++++++++++-
- 2 files changed, 14 insertions(+), 1 deletion(-)
+ Documentation/hwmon/adm1266.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index e6b91ab12978..b797db738225 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -132,6 +132,7 @@ Hardware Monitoring Kernel Drivers
-    mcp3021
-    menf21bmc
-    mlxreg-fan
-+   mp2975
-    nct6683
-    nct6775
-    nct7802
-diff --git a/Documentation/hwmon/mp2975.rst b/Documentation/hwmon/mp2975.rst
-index 5b0609c62f48..81d816b71490 100644
---- a/Documentation/hwmon/mp2975.rst
-+++ b/Documentation/hwmon/mp2975.rst
-@@ -20,6 +20,7 @@ This driver implements support for Monolithic Power Systems, Inc. (MPS)
- vendor dual-loop, digital, multi-phase controller MP2975.
+diff --git a/Documentation/hwmon/adm1266.rst b/Documentation/hwmon/adm1266.rst
+index 9257f8a48650..2b877011cfdf 100644
+--- a/Documentation/hwmon/adm1266.rst
++++ b/Documentation/hwmon/adm1266.rst
+@@ -20,7 +20,7 @@ ADM1266 is a sequencer that features voltage readback from 17 channels via an
+ integrated 12 bit SAR ADC, accessed using a PMBus interface.
  
- This device:
-+
- - Supports up to two power rail.
- - Provides 8 pulse-width modulations (PWMs), and can be configured up
-   to 8-phase operation for rail 1 and up to 4-phase operation for rail
-@@ -32,10 +33,12 @@ This device:
-   10-mV DAC, IMVP9 mode with 5-mV DAC.
+ The driver is a client driver to the core PMBus driver. Please see
+-Documentation/hwmon/pmbus for details on PMBus client drivers.
++Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
  
- Device supports:
-+
- - SVID interface.
- - AVSBus interface.
  
- Device complaint with:
-+
- - PMBus rev 1.3 interface.
- 
- Device supports direct format for reading output current, output voltage,
-@@ -45,11 +48,14 @@ Device supports VID and direct formats for reading output voltage.
- The below VID modes are supported: VR12, VR13, IMVP9.
- 
- The driver provides the next attributes for the current:
-+
- - for current in: input, maximum alarm;
- - for current out input, maximum alarm and highest values;
- - for phase current: input and label.
--attributes.
-+  attributes.
-+
- The driver exports the following attributes via the 'sysfs' files, where
-+
- - 'n' is number of telemetry pages (from 1 to 2);
- - 'k' is number of configured phases (from 1 to 8);
- - indexes 1, 1*n for "iin";
-@@ -65,11 +71,14 @@ The driver exports the following attributes via the 'sysfs' files, where
- **curr[1-{2n+k}]_label**
- 
- The driver provides the next attributes for the voltage:
-+
- - for voltage in: input, high critical threshold, high critical alarm, all only
-   from page 0;
- - for voltage out: input, low and high critical thresholds, low and high
-   critical alarms, from pages 0 and 1;
-+
- The driver exports the following attributes via the 'sysfs' files, where
-+
- - 'n' is number of telemetry pages (from 1 to 2);
- - indexes 1 for "iin";
- - indexes n+1, n+2 for "vout";
-@@ -87,9 +96,12 @@ The driver exports the following attributes via the 'sysfs' files, where
- **in[2-{n+1}1_lcrit_alarm**
- 
- The driver provides the next attributes for the power:
-+
- - for power in alarm and input.
- - for power out: highest and input.
-+
- The driver exports the following attributes via the 'sysfs' files, where
-+
- - 'n' is number of telemetry pages (from 1 to 2);
- - indexes 1 for "pin";
- - indexes n+1, n+2 for "pout";
+ Sysfs entries
 -- 
 2.26.2
 
