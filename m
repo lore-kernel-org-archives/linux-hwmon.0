@@ -2,170 +2,111 @@ Return-Path: <SRS0=/wBM=EE=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+X-Spam-Status: No, score=-8.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93C7DC5DF9E
-	for <linux-hwmon@archiver.kernel.org>; Thu, 29 Oct 2020 15:37:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FFCFC4363A
+	for <linux-hwmon@archiver.kernel.org>; Thu, 29 Oct 2020 17:58:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4198D20747
-	for <linux-hwmon@archiver.kernel.org>; Thu, 29 Oct 2020 15:37:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603985868;
-	bh=ruBGkpQv0Tb2IcAeEwtg7VixaBK/t9SkTx2OzWdfijc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=aBO2LOQDPDvy+9mCMiJAYfXCxFkn1aKAc3rUS0d4BiQrK1JIIH/Cf+zfewyg1Qr/S
-	 GQv1tw8huiNpcBZIELZeD1Bjcrwh2ABsG4XTERNsq+ZxifFzCBSJSAvuUFyugmX5da
-	 fRHGTO0NaOnyAEsA9vLUGuHBq4ZICM1oDwvmsVRs=
+	by mail.kernel.org (Postfix) with ESMTP id 197A621534
+	for <linux-hwmon@archiver.kernel.org>; Thu, 29 Oct 2020 17:58:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728214AbgJ2Pho (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 29 Oct 2020 11:37:44 -0400
-Received: from mail-oo1-f67.google.com ([209.85.161.67]:33238 "EHLO
-        mail-oo1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727290AbgJ2Phn (ORCPT
+        id S1725971AbgJ2R60 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 29 Oct 2020 13:58:26 -0400
+Received: from jabberwock.ucw.cz ([46.255.230.98]:34492 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725805AbgJ2R60 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 29 Oct 2020 11:37:43 -0400
-Received: by mail-oo1-f67.google.com with SMTP id u5so805859oot.0;
-        Thu, 29 Oct 2020 08:37:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=U8xolxlS5asomkB9UknbMIlesmKsBuSvzYQp6xmc6Bs=;
-        b=EuuFC3CmFnnp39eKK/O98Q55/CWAiRaqhHVwM0qLARYil5cE9Nby36TyPiJAF6aTb3
-         uhg17VtRkUVsO2+JR0w5cIC3bwXUrrJIQJ3FMe8XbhAerx/nQb+CKOYvCxSzPdUZWZBg
-         j49mm1tgIhZjv1PW8YBxYcMjoKVvvhNNNizSXKDe09WHlImY62midL2V3Si0erOPKeGc
-         0QD6SDEQ4uqpkmHsqYdeyZSVv3DqMLTqKjyk1ATdauAjXgtAdO++zgzhYuyfh/5lcG6B
-         2EbTNoYwzRmhs5gkZH8cTLH8qTSSXdwLX8nRuoqt+Znnk3f0xCgKI2tuW1uHdw5cNnSv
-         aU4w==
-X-Gm-Message-State: AOAM532QwcbQKjLDcc0WSplaf3GuiEFKQkUOePLPFpNp5PkjDm3Tt82r
-        5jP17T05Hd2/tlSoLkfMew==
-X-Google-Smtp-Source: ABdhPJyE+848VL3OIBZZFQbqJdGtbbcdCkCxav93uU/i4lfp5PL5nrPg5vWK8EwxfeYi6ytTA7yIzw==
-X-Received: by 2002:a4a:972c:: with SMTP id u41mr3758758ooi.10.1603985861665;
-        Thu, 29 Oct 2020 08:37:41 -0700 (PDT)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id o8sm659452oog.47.2020.10.29.08.37.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Oct 2020 08:37:40 -0700 (PDT)
-Received: (nullmailer pid 1917055 invoked by uid 1000);
-        Thu, 29 Oct 2020 15:37:40 -0000
-Date:   Thu, 29 Oct 2020 10:37:40 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     alexandru.tachici@analog.com
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux@roeck-us.net
-Subject: Re: [PATCH 3/3] dt-binding: hwmon: Add documentation for ltc2992
-Message-ID: <20201029153740.GB1914153@bogus>
-References: <20201029094911.79173-1-alexandru.tachici@analog.com>
- <20201029094911.79173-4-alexandru.tachici@analog.com>
+        Thu, 29 Oct 2020 13:58:26 -0400
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 860BE1C0B7A; Thu, 29 Oct 2020 18:58:23 +0100 (CET)
+Date:   Thu, 29 Oct 2020 18:58:23 +0100
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Luka Kovacic <luka.kovacic@sartura.hr>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        lee.jones@linaro.org, dmurphy@ti.com, robh+dt@kernel.org,
+        jdelvare@suse.com, linux@roeck-us.net, marek.behun@nic.cz,
+        luka.perkov@sartura.hr, andy.shevchenko@gmail.com,
+        robert.marko@sartura.hr
+Subject: Re: [PATCH v7 4/6] drivers: leds: Add the IEI WT61P803 PUZZLE LED
+ driver
+Message-ID: <20201029175823.GC26053@duo.ucw.cz>
+References: <20201025005916.64747-1-luka.kovacic@sartura.hr>
+ <20201025005916.64747-5-luka.kovacic@sartura.hr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="E13BgyNx05feLLmH"
 Content-Disposition: inline
-In-Reply-To: <20201029094911.79173-4-alexandru.tachici@analog.com>
+In-Reply-To: <20201025005916.64747-5-luka.kovacic@sartura.hr>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Oct 29, 2020 at 11:49:11AM +0200, alexandru.tachici@analog.com wrote:
-> From: Alexandru Tachici <alexandru.tachici@analog.com>
-> 
-> Add documentation for ltc2992.
-> 
-> Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
+
+--E13BgyNx05feLLmH
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi!
+
+> Add support for the IEI WT61P803 PUZZLE LED driver.
+> Currently only the front panel power LED is supported,
+> since it is the only LED on this board wired through the
+> MCU.
+>=20
+> The LED is wired directly to the on-board MCU controller
+> and is toggled using an MCU command.
+>=20
+> Support for more LEDs is going to be added in case more
+> boards implement this microcontroller, as LEDs use many
+> different GPIOs.
+
+Not too bad.
+
+> This driver depends on the IEI WT61P803 PUZZLE MFD driver.
+>=20
+> Signed-off-by: Luka Kovacic <luka.kovacic@sartura.hr>
+> Cc: Luka Perkov <luka.perkov@sartura.hr>
+> Cc: Robert Marko <robert.marko@sartura.hr>
 > ---
->  .../bindings/hwmon/adi,ltc2992.yaml           | 78 +++++++++++++++++++
->  1 file changed, 78 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/adi,ltc2992.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/adi,ltc2992.yaml b/Documentation/devicetree/bindings/hwmon/adi,ltc2992.yaml
-> new file mode 100644
-> index 000000000000..1b603026ed2d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/adi,ltc2992.yaml
-> @@ -0,0 +1,78 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/adi,ltc2992.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Linear Technology 2992 Power Monitor
-> +
-> +maintainers:
-> +  - Alexandru Tachici <alexandru.tachici@analog.com>
-> +
-> +description: |
-> +  Linear Technology 2992 Dual Wide Range Power Monitor
-> +  https://www.analog.com/media/en/technical-documentation/data-sheets/ltc2992.pdf
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - adi,ltc2992
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  avcc-supply: true
-> +
-> +patternProperties:
-> +  "^channel@([0-1])$":
-> +    type: object
-> +    description: |
-> +      Represents the two supplies to be monitored.
-> +
-> +    properties:
-> +      reg:
-> +        description: |
-> +          The channel number. LTC2992 can monitor two supplies.
-> +        items:
-> +         minimum: 0
-> +         maximum: 1
-> +
-> +      shunt-resistor-micro-ohms:
-> +        description:
-> +          The value of curent sense resistor in microohms.
-> +  required:
-> +    - reg
-> +
-> +  additionalProperties: false
+>  drivers/leds/Kconfig                    |   8 ++
+>  drivers/leds/Makefile                   |   1 +
+>  drivers/leds/leds-iei-wt61p803-puzzle.c | 161 ++++++++++++++++++++++++
+>  3 files changed, 170 insertions(+)
 
-Wrong indentation is the source of the errors.
+Can you put it into drivers/leds/simple? You'll have to create it.
 
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c1 {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        ltc2992@6F {
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +
-> +                compatible = "adi,ltc2992";
-> +                reg = <0x6F>;
-> +
-> +                channel@0 {
-> +                        reg = <0x0>;
-> +                        shunt-resistor-micro-ohms = <10000>;
-> +                };
-> +
-> +                channel@1 {
-> +                        reg = <0x1>;
-> +                        shunt-resistor-micro-ohms = <10000>;
-> +                };
-> +        };
-> +    };
-> +...
-> -- 
-> 2.20.1
-> 
+> +++ b/drivers/leds/leds-iei-wt61p803-puzzle.c
+> @@ -0,0 +1,161 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+
+Make sure this is consistent with MODULE_LICENSE("GPL");. GPLv2+ would
+be nicer if you can.
+
+> +	struct mutex lock;
+
+Mutex is _way_ overkill for this. Please check that locking provided
+by LED core is not sufficient. If not, please use atomic_t or
+something.
+
+Best regards,
+								Pavel
+--=20
+http://www.livejournal.com/~pavelmachek
+
+--E13BgyNx05feLLmH
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCX5sCvwAKCRAw5/Bqldv6
+8j2+AJ0YFU6C6xHNPs7C8KJPePRrlhWVKACeIeZqPPBPkCkofGyaQ0peDTHv+P8=
+=3yWr
+-----END PGP SIGNATURE-----
+
+--E13BgyNx05feLLmH--
