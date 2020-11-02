@@ -2,55 +2,72 @@ Return-Path: <SRS0=LIwP=EI=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED7A1C388F9
-	for <linux-hwmon@archiver.kernel.org>; Mon,  2 Nov 2020 19:05:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A37F2C388F9
+	for <linux-hwmon@archiver.kernel.org>; Mon,  2 Nov 2020 22:36:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9AB6322268
-	for <linux-hwmon@archiver.kernel.org>; Mon,  2 Nov 2020 19:05:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6392B20870
+	for <linux-hwmon@archiver.kernel.org>; Mon,  2 Nov 2020 22:36:52 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="ggelSvtg"
+	dkim=pass (2048-bit key) header.d=sartura-hr.20150623.gappssmtp.com header.i=@sartura-hr.20150623.gappssmtp.com header.b="n6SP1ZMb"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726366AbgKBTFW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 2 Nov 2020 14:05:22 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:55634 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726070AbgKBTFW (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 Nov 2020 14:05:22 -0500
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0A2J4tCK090030;
-        Mon, 2 Nov 2020 13:04:55 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1604343895;
-        bh=5tRMuI4IpHf1UGKQ0FX7HKxoAuFmHgXM+99BquEoqeQ=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=ggelSvtgDDRuW4CMvo+Iw9Izw7BC+WSigYtaq1xtzvG53MXaKDO0L9pH4kAXD1Q+d
-         xki3YeA1fTtwYc1oeabLOND5+E/2cZBvZ1Sx0Z+1kcqytpAr8E0ENOf4g3ixruZS+C
-         S9UERohYSzHi4Lw/TVOGoWrBVfFlRsj11B7d4SwU=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 0A2J4tqC110866
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 2 Nov 2020 13:04:55 -0600
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Mon, 2 Nov
- 2020 13:04:55 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Mon, 2 Nov 2020 13:04:55 -0600
-Received: from [10.250.36.55] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0A2J4sru015342;
-        Mon, 2 Nov 2020 13:04:54 -0600
+        id S1726670AbgKBWgw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 2 Nov 2020 17:36:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40642 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726570AbgKBWgv (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 Nov 2020 17:36:51 -0500
+Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A53FBC061A48
+        for <linux-hwmon@vger.kernel.org>; Mon,  2 Nov 2020 14:36:51 -0800 (PST)
+Received: by mail-il1-x142.google.com with SMTP id k1so14395610ilc.10
+        for <linux-hwmon@vger.kernel.org>; Mon, 02 Nov 2020 14:36:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sartura-hr.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=l5uJS/jEKGLUY7/54yb7PsXjkj4P5AmY3KEzFYsfwHE=;
+        b=n6SP1ZMbkWoENlJDPiZ38Zcls5wfXCuU3IkRB7Xtq2Wp8wZHPQcxUvJSIZkszw4Jn7
+         o12UhWs69zVLd3cN1Az8bfLmqi3RLv5zGfKQ9JY/54iLiTr2Cb9cVvRQwts1P90eOXHm
+         0gdiC6U2wt/rGxcRuQE6OioCzZOtIbJDlWWH87qSyG9qU2JpEjrFmoUovx7eLVQ0tCt9
+         93W+hxDdSMJXhnuT8n62qY3ogMh+BxPSanvS2UoEa+rO2eorIxW/yzrtWszx6Gb9Ar6/
+         hV8bnN/akU4cFVnW6o+qLwYIs6lwmPmzv/CED8tOSn91Uvn8/RplY6TWm3cpuo20Uhgi
+         NdIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=l5uJS/jEKGLUY7/54yb7PsXjkj4P5AmY3KEzFYsfwHE=;
+        b=DK6icEGuEcW+rSm0v9H/ejlYGboSuyP+mZxez7BliWcWntugI7eRe49NUzSXG46NFU
+         O4QeBkGlPnwZT8Z8A0vqLetsWzziMcdiSa2XP4qeslNVzmjBKINwNwhnE0K6piM+DUEQ
+         g3GkN+1iwQ1j6XHjGfexPgV4PX/IzXXjvDpHw2Pf0qp9aGVb+KgkfyfNOeZBDuKEHH1R
+         CsPS6JfDJGdplUeZ96aoWHM9OoGWvBDIZXhOm7ukxOa7yLsnXk6RsUtsLyQzwiJMGQtI
+         j3wFjKXEJYn0bUMn+fNk6RWjzRndTqWYMmZUbo2UQEKA+EtIz71tWAgdKX/J90GXOlTV
+         NU5w==
+X-Gm-Message-State: AOAM533mIB/ah6llMqTlzYRD/gYJQAjv350NVePhQnu38CAAhnmqHTSl
+        nWlNmt5MK522/3k08d903EAUE8NC7iz2N7nJpLkirg==
+X-Google-Smtp-Source: ABdhPJxyEOymgPpG0rZw8fAZSubOjDL6U1YtbHy3VgZ5EYhSsP0I8io3+caw3bttxxZDVONhTIHsurRHMlzScADBZPo=
+X-Received: by 2002:a92:41cf:: with SMTP id o198mr12656899ila.262.1604356610897;
+ Mon, 02 Nov 2020 14:36:50 -0800 (PST)
+MIME-Version: 1.0
+References: <20201025005916.64747-7-luka.kovacic@sartura.hr>
+ <20201025005916.64747-6-luka.kovacic@sartura.hr> <20201025005916.64747-5-luka.kovacic@sartura.hr>
+ <20201025005916.64747-4-luka.kovacic@sartura.hr> <20201025005916.64747-3-luka.kovacic@sartura.hr>
+ <20201025005916.64747-2-luka.kovacic@sartura.hr> <20201025005916.64747-1-luka.kovacic@sartura.hr>
+ <20201029180105.GD26053@duo.ucw.cz> <CADZsf3YE3d=dtMVVYHL91Z1WFcpNN4vyJJ6RG7VnJ2V-DqE+wQ@mail.gmail.com>
+ <7821443b-ddbc-fc92-b990-14d116dda853@ti.com>
+In-Reply-To: <7821443b-ddbc-fc92-b990-14d116dda853@ti.com>
+From:   Luka Kovacic <luka.kovacic@sartura.hr>
+Date:   Mon, 2 Nov 2020 23:36:39 +0100
+Message-ID: <CADZsf3atet+Y7xfCey=R6hk+hQ0Za5Om8PFD7KcS6m3fVaLLFA@mail.gmail.com>
 Subject: Re: [PATCH v7 0/6] Add support for the IEI WT61P803 PUZZLE MCU
-To:     Pavel Machek <pavel@ucw.cz>
-CC:     Luka Kovacic <luka.kovacic@sartura.hr>,
+To:     Dan Murphy <dmurphy@ti.com>
+Cc:     Pavel Machek <pavel@ucw.cz>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        <linux-hwmon@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org,
         Linux LED Subsystem <linux-leds@vger.kernel.org>,
         devicetree <devicetree@vger.kernel.org>,
         Lee Jones <lee.jones@linaro.org>,
@@ -61,70 +78,92 @@ CC:     Luka Kovacic <luka.kovacic@sartura.hr>,
         Luka Perkov <luka.perkov@sartura.hr>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
         Robert Marko <robert.marko@sartura.hr>
-References: <20201025005916.64747-7-luka.kovacic@sartura.hr>
- <20201025005916.64747-6-luka.kovacic@sartura.hr>
- <20201025005916.64747-5-luka.kovacic@sartura.hr>
- <20201025005916.64747-4-luka.kovacic@sartura.hr>
- <20201025005916.64747-3-luka.kovacic@sartura.hr>
- <20201025005916.64747-2-luka.kovacic@sartura.hr>
- <20201025005916.64747-1-luka.kovacic@sartura.hr>
- <20201029180105.GD26053@duo.ucw.cz>
- <CADZsf3YE3d=dtMVVYHL91Z1WFcpNN4vyJJ6RG7VnJ2V-DqE+wQ@mail.gmail.com>
- <7821443b-ddbc-fc92-b990-14d116dda853@ti.com>
- <20201102190335.GA25451@duo.ucw.cz>
-From:   Dan Murphy <dmurphy@ti.com>
-Message-ID: <3d9058ca-d64e-5e55-d032-5860456e5d9a@ti.com>
-Date:   Mon, 2 Nov 2020 13:04:49 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20201102190335.GA25451@duo.ucw.cz>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hello
+Hello,
 
-On 11/2/20 1:03 PM, Pavel Machek wrote:
-> On Mon 2020-11-02 12:29:59, Dan Murphy wrote:
->> Hello
->>
->> On 11/1/20 3:56 AM, Luka Kovacic wrote:
->>> Hello Pavel,
->>>
->>> On Thu, Oct 29, 2020 at 7:01 PM Pavel Machek <pavel@ucw.cz> wrote:
->>>> Hi!
->>>>
->>>>> +What:                /sys/bus/serial/devices/.../iei_wt61p803_puzzle_core/power_status
->>>>> +Date:                September 2020
->>>>> +Contact:     Luka Kovacic <luka.kovacic@sartura.hr>
->>>>> +Description: (RO) Power status indicates the host platform power on method.
->>>>> +             Value mapping (bitwise list):
->>>>> +             0x80 - Null
->>>>> +             0x40 - Firmware flag
->>>>> +             0x20 - Power loss detection flag (powered off)
->>>>> +             0x10 - Power loss detection flag (AC mode)
->>>>> +             0x08 - Button power on
->>>>> +             0x04 - WOL power on
->>>>> +             0x02 - RTC alarm power on
->>>>> +             0x01 - AC recover power on
->>>> It would be nice to put this into standard place somewhere. Many
->>>> machines will want to expose this information.
->>> As this is specific to this microcontroller and to how it encodes
->>> these values, I don't see a need to change this.
->>> This isn't used anywhere else.
->>>
->>>> If not, at least spell out WoL, as it is not that common of acronym.
->>> Okay.
->> WoL is a very common acronym especially in the networking space
-> WoL is common. WOL is not. Better spell it out.
+On Mon, Nov 2, 2020 at 7:30 PM Dan Murphy <dmurphy@ti.com> wrote:
+>
+> Hello
+>
+> On 11/1/20 3:56 AM, Luka Kovacic wrote:
+> > Hello Pavel,
+> >
+> > On Thu, Oct 29, 2020 at 7:01 PM Pavel Machek <pavel@ucw.cz> wrote:
+> >> Hi!
+> >>
+> >>> +What:                /sys/bus/serial/devices/.../iei_wt61p803_puzzle_core/power_status
+> >>> +Date:                September 2020
+> >>> +Contact:     Luka Kovacic <luka.kovacic@sartura.hr>
+> >>> +Description: (RO) Power status indicates the host platform power on method.
+> >>> +             Value mapping (bitwise list):
+> >>> +             0x80 - Null
+> >>> +             0x40 - Firmware flag
+> >>> +             0x20 - Power loss detection flag (powered off)
+> >>> +             0x10 - Power loss detection flag (AC mode)
+> >>> +             0x08 - Button power on
+> >>> +             0x04 - WOL power on
+> >>> +             0x02 - RTC alarm power on
+> >>> +             0x01 - AC recover power on
+> >> It would be nice to put this into standard place somewhere. Many
+> >> machines will want to expose this information.
+> > As this is specific to this microcontroller and to how it encodes
+> > these values, I don't see a need to change this.
+> > This isn't used anywhere else.
+> >
+> >> If not, at least spell out WoL, as it is not that common of acronym.
+> > Okay.
+>
+> WoL is a very common acronym especially in the networking space
 
-Agreed. Especially if WOL does not mean Wake On Lan
+By WOL I meant Wake-on-LAN, I will spell out the whole acronym.
 
-Dan
+>
+> But the overall this section does not make sense
+>
+> The description says that it indicates platform power on method but what
+> is NULL power on? There are flags for power loss detection.
 
+I will clarify the value mapping and try to replicate some of these states
+so I can write a better description.
 
+>
+> Does the RTC mean that the processor real time clock woke up the uC? Or
+> that the internal RTC woke up the controller?
+
+These are all related to the platform as a whole.
+So the Marvell SoC and all of the required peripherals are turned on.
+
+>
+> And for the
+> /sys/bus/serial/devices/.../iei_wt61p803_puzzle_core/ac_recovery_status
+> what are those values?
+
+These values indicate whether the board has been shut down gracefully and
+whether it has been powered on automatically (when power came back) or by
+pressing the power button.
+I will also extend the documentation with the value mapping for this.
+
+>
+> It seems like some ABI's are documented well with formats and others are
+> just described without a format.
+>
+> For instance
+>
+> /sys/bus/serial/devices/.../iei_wt61p803_puzzle_core/version the format
+> of this version is not described but
+> /sys/bus/serial/devices/.../iei_wt61p803_puzzle_core/build_info is.
+
+I left out the version format descriptions as they are in the recognizable
+format and all of them are quite arbitrary (e.g. v1.000).
+
+>
+>
+> Dan
+>
+
+Kind regards,
+Luka
