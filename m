@@ -2,35 +2,35 @@ Return-Path: <SRS0=Pxzt=EJ=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-8.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E725AC55178
-	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Nov 2020 00:17:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1550C388F7
+	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Nov 2020 05:58:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 81FCA2225E
-	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Nov 2020 00:17:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 34763223AB
+	for <linux-hwmon@archiver.kernel.org>; Tue,  3 Nov 2020 05:58:18 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fnarfbargle.com header.i=@fnarfbargle.com header.b="oMaBZbem"
+	dkim=pass (1024-bit key) header.d=fnarfbargle.com header.i=@fnarfbargle.com header.b="xHIQoZoB"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726575AbgKCARt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 2 Nov 2020 19:17:49 -0500
-Received: from ns3.fnarfbargle.com ([103.4.19.87]:42512 "EHLO
+        id S1725997AbgKCF6R (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 3 Nov 2020 00:58:17 -0500
+Received: from ns3.fnarfbargle.com ([103.4.19.87]:49320 "EHLO
         ns3.fnarfbargle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725940AbgKCARs (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 2 Nov 2020 19:17:48 -0500
-X-Greylist: delayed 1181 seconds by postgrey-1.27 at vger.kernel.org; Mon, 02 Nov 2020 19:17:46 EST
-Received: from srv.home ([10.8.0.1] ident=heh27878)
+        with ESMTP id S1725958AbgKCF6R (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 3 Nov 2020 00:58:17 -0500
+Received: from srv.home ([10.8.0.1] ident=heh12358)
         by ns3.fnarfbargle.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.84_2)
         (envelope-from <brad@fnarfbargle.com>)
-        id 1kZjgM-0006HY-R4; Tue, 03 Nov 2020 07:56:14 +0800
+        id 1kZpJ6-0006Tu-2a; Tue, 03 Nov 2020 13:56:36 +0800
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fnarfbargle.com; s=mail;
-        h=Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject; bh=MYzpXa7Pz9hemsf0dmKOWn5cCpqeksbON08+DLuGqF4=;
-        b=oMaBZbemWGUmPzf5OQJvaegiWVL/2930KivzBX4eDplW6usD2s5Iot+Z/Ryh4MToxJHDGtAjM/k+SDKDMSB0Gp6yP0X8+7jE34m1G1HNDmUlyfMaf/QPT/uu5EWXMH4x94uATBJIfouRcK9Q7GwbUVByt7Cg0laYuE/pcpSuuOE=;
+        h=Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:References:Cc:To:From:Subject; bh=ISCp/k9iAd9MHlIzbF+VLFLF2B9AGbwsrcc2H51zWw4=;
+        b=xHIQoZoBsebAFKc9gusvWs/9bnxmnyNgCCxVl6mcrWJTZ/pheTl4CMf8DO9gRJKiwwrpLc3Rf8nckr1LDB46nq99B7q0oigFqIo5fmDCH1X66EJAwvw5yrM2Zc0hdzAIg4quf1kb6UfDN7z/NY7EEIG6o5mqoYwOrj0hwTr93kI=;
 Subject: Re: [REGRESSION] hwmon: (applesmc) avoid overlong udelay()
+From:   Brad Campbell <brad@fnarfbargle.com>
 To:     Andreas Kemnade <andreas@kemnade.info>,
         Guenter Roeck <linux@roeck-us.net>
 Cc:     Arnd Bergmann <arnd@arndb.de>, rydberg@bitmath.org,
@@ -43,297 +43,195 @@ References: <20200930105442.3f642f6c@aktux>
  <20201002002251.28462e64@aktux>
  <7543ef85-727d-96c3-947e-5b18e9e6c44d@roeck-us.net>
  <20201006090226.4275c824@kemnade.info>
-From:   Brad Campbell <brad@fnarfbargle.com>
-Message-ID: <db042e9b-be41-11b1-7059-3881b1da5c8b@fnarfbargle.com>
-Date:   Tue, 3 Nov 2020 10:56:11 +1100
+ <db042e9b-be41-11b1-7059-3881b1da5c8b@fnarfbargle.com>
+Message-ID: <68467f1b-cea1-47ea-a4d4-8319214b072a@fnarfbargle.com>
+Date:   Tue, 3 Nov 2020 16:56:32 +1100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.2.2
 MIME-Version: 1.0
-In-Reply-To: <20201006090226.4275c824@kemnade.info>
+In-Reply-To: <db042e9b-be41-11b1-7059-3881b1da5c8b@fnarfbargle.com>
 Content-Type: multipart/mixed;
- boundary="------------950FE4B4FE2534C610E592AB"
+ boundary="------------260640A5259521660CE4A5E1"
 Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 This is a multi-part message in MIME format.
---------------950FE4B4FE2534C610E592AB
+--------------260640A5259521660CE4A5E1
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 6/10/20 6:02 pm, Andreas Kemnade wrote:
-> On Thu, 1 Oct 2020 21:07:51 -0700
-> Guenter Roeck <linux@roeck-us.net> wrote:
-> 
->> On 10/1/20 3:22 PM, Andreas Kemnade wrote:
->>> On Wed, 30 Sep 2020 22:00:09 +0200
->>> Arnd Bergmann <arnd@arndb.de> wrote:
->>>    
->>>> On Wed, Sep 30, 2020 at 6:44 PM Guenter Roeck <linux@roeck-us.net> wrote:
->>>>>
->>>>> On Wed, Sep 30, 2020 at 10:54:42AM +0200, Andreas Kemnade wrote:
->>>>>> Hi,
->>>>>>
->>>>>> after the $subject patch I get lots of errors like this:
->>>>>
->>>>> For reference, this refers to commit fff2d0f701e6 ("hwmon: (applesmc)
->>>>> avoid overlong udelay()").
->>>>>     
->>>>>> [  120.378614] applesmc: send_byte(0x00, 0x0300) fail: 0x40
->>>>>> [  120.378621] applesmc: LKSB: write data fail
->>>>>> [  120.512782] applesmc: send_byte(0x00, 0x0300) fail: 0x40
->>>>>> [  120.512787] applesmc: LKSB: write data fail
->>>>>>
->>>>>> CPU sticks at low speed and no fan is turning on.
->>>>>> Reverting this patch on top of 5.9-rc6 solves this problem.
->>>>>>
->>>>>> Some information from dmidecode:
->>>>>>
->>>>>> Base Board Information
->>>>>>          Manufacturer: Apple Inc.
->>>>>>          Product Name: Mac-7DF21CB3ED6977E5
->>>>>>          Version: MacBookAir6,2
->>>>>>
->>>>>> Handle 0x0020, DMI type 11, 5 bytes OEM Strings         String 1: Apple ROM Version.  Model:       …,
->>>>>> Handle 0x0020, DMI type 11, 5 bytes
->>>>>> OEM Strings
->>>>>>          String 1: Apple ROM Version.  Model:        MBA61.  EFI Version:  122.0.0
->>>>>>          String 2: .0.0.  Built by:     root@saumon.  Date:         Wed Jun 10 18:
->>>>>>          String 3: 10:36 PDT 2020.  Revision:     122 (B&I).  ROM Version:  F000_B
->>>>>>          String 4: 00.  Build Type:   Official Build, Release.  Compiler:     Appl
->>>>>>          String 5: e clang version 3.0 (tags/Apple/clang-211.10.1) (based on LLVM
->>>>>>          String 6: 3.0svn).
->>>>>>
->>>>>> Writing to things in /sys/devices/platform/applesmc.768 gives also the
->>>>>> said errors.
->>>>>> But writing 1 to fan1_maunal and 5000 to fan1_output turns the fan on
->>>>>> despite error messages.
->>>>>>     
->>>>> Not really sure what to do here. I could revert the patch, but then we'd gain
->>>>> clang compile failures. Arnd, any idea ?
->>>>
->>>> It seems that either I made a mistake in the conversion and it sleeps for
->>>> less time than before, or my assumption was wrong that converting a delay to
->>>> a sleep is safe here.
->>>>
->>>> The error message indicates that the write fails, not the read, so that
->>>> is what I'd look at first. Right away I can see that the maximum time to
->>>> retry is only half of what it used to be, as we used to wait for
->>>> 0x10, 0x20, 0x40, 0x80, ..., 0x20000 microseconds for a total of
->>>> 0x3fff0 microseconds (262ms), while my patch went with the 131ms
->>>> total delay based on the comment saying "/* wait up to 128 ms for a
->>>> status change. */".
->>>>   
->>> Yes, that is also what I read from the code. I just thought there must
->>> be something simple, which just needs a short look from another pair of
->>> eyes.
->>>    
->>>> Since there is sleeping wait, I see no reason the timeout couldn't
->>>> be extended a lot, e.g. to a second, as in
->>>>
->>>> #define APPLESMC_MAX_WAIT 0x100000
->>>>
->>>> If that doesn't work, I'd try using mdelay() in place of
->>>> usleep_range(), such as
->>>>
->>>>             mdelay(DIV_ROUND_UP(us, USEC_PER_MSEC)));
->>>>
->>>> This adds back a really nasty latency, but it should avoid the
->>>> compile-time problem.
->>>>
->>>> Andreas, can you try those two things? (one at a time,
->>>> not both)
->>>
->>> Ok, I tried. None of them works. I rechecked my work and created real
->>> git commits out of them and CONFIG_LOCALVERSION_AUTO is also set so
->>> the usual stupid things are rules out.
->>> In detail:
->>> On top of 5.9-rc6 + *reverted* patch:
->>> diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
->>> index fd99c9df8a00..2a9bd7f2b71b 100644
->>> --- a/drivers/hwmon/applesmc.c
->>> +++ b/drivers/hwmon/applesmc.c
->>> @@ -45,7 +45,7 @@
->>>   /* wait up to 128 ms for a status change. */
->>>   #define APPLESMC_MIN_WAIT	0x0010
->>>   #define APPLESMC_RETRY_WAIT	0x0100
->>> -#define APPLESMC_MAX_WAIT	0x20000
->>> +#define APPLESMC_MAX_WAIT	0x8000
->>>   
->>>   #define APPLESMC_READ_CMD	0x10
->>>   #define APPLESMC_WRITE_CMD	0x11
->>>    
->>
->> Oh man, that code is so badlys broken.
->>
->> send_byte() repeats sending the data if it was not immediately successful.
->> That is done for both data and commands. Effectively that happens if
->> the command is not immediately accepted. However, send_argument()
->> clearly assumes that each data byte is sent exactly once. Sending
->> it more than once will mess up the key that is supposed to be sent.
->> The Apple SMC emulation code in qemu confirms that data bytes can not
->> be written more than once.
->>
->> Of course, theoretically it may be that the first data byte was not
->> accepted (after all, the ACK bit is not set), but the ACK bit is
->> not checked again after udelay(APPLESMC_RETRY_WAIT), so it may
->> well have been set in the 256 uS between its check and re-writing
->> the data.
->>
->> In other words, this entire code only works accidentally to start with.
->>
->> If you like, you could play around with the code and find out if and
->> when exactly bit 1 (busy) is set, if and when bit 2 (ack) is set, and
->> if and when any other bit is set. We could also try to read port 0x31e
->> (the error port). Maybe the we can figure out what the error actually
->> is. But then I don't really know what we could do with that information.
->>
-> Smoe research results: the second data byte seems to cause problems, not the
-> command byte.
-> 
->> Other than that, the only useful idea I have is something crazy like
->> 	if (us < 10000)
->> 		udelay(us);
->> 	else
->> 		mdelay(DIV_ROUND_CLOSEST(udelay, 1000));
->> in the hope that clang doesn't convert that back into a
->> compile-time constant and udelay().
->>
->> Overall it seems like the apple protocol may expect to receive data
->> bytes faster than 1ms apart, because that is the only real difference
->> between the original code and the new code using mdelay().
-> 
-> Yes, that explanation makes sense. If I am trying something like that, only
-> the last byte requires more than APPLESMC_MIN_WAIT. I have seen max. 256us.
-> So we could probably even use msleep for us > 1000 and udelay for anything below.
-> 
-> Regards,
-> Andreas
-> 
+On 3/11/20 10:56 am, Brad Campbell wrote:
 
-G'day Andreas,
+> 
+> I've examined the code in VirtualSMC and I'm not convinced we were not waiting on the wrong bits.
+> 
+> #define SMC_STATUS_AWAITING_DATA  BIT0  ///< Ready to read data.
+> #define SMC_STATUS_IB_CLOSED      BIT1  /// A write is pending.
+> #define SMC_STATUS_BUSY           BIT2  ///< Busy processing a command.
+> #define SMC_STATUS_GOT_COMMAND    BIT3  ///< The last input was a command.
+> #define SMC_STATUS_UKN_0x16       BIT4
+> #define SMC_STATUS_KEY_DONE       BIT5
+> #define SMC_STATUS_READY          BIT6  // Ready to work
+> #define SMC_STATUS_UKN_0x80       BIT7  // error
+> 
+> Any chance you could try this patch? It's ugly, hacked together and currently fairly undocumented, but if it works I'll figure out how to clean it up (suggestions welcome).
+> It works on my MacbookPro 11,1.
 
-I've examined the code in VirtualSMC and I'm not convinced we were not waiting on the wrong bits.
+I had some time so I spent a bit of time refactoring and trying to clarify the magic numbers.
 
-#define SMC_STATUS_AWAITING_DATA  BIT0  ///< Ready to read data.
-#define SMC_STATUS_IB_CLOSED      BIT1  /// A write is pending.
-#define SMC_STATUS_BUSY           BIT2  ///< Busy processing a command.
-#define SMC_STATUS_GOT_COMMAND    BIT3  ///< The last input was a command.
-#define SMC_STATUS_UKN_0x16       BIT4
-#define SMC_STATUS_KEY_DONE       BIT5
-#define SMC_STATUS_READY          BIT6  // Ready to work
-#define SMC_STATUS_UKN_0x80       BIT7  // error
+I also did some fuzzing of the SMC and figured out where we can loosen the masks.
+This has some debug code in it to identify if any wait loops exceed 1 loop and if the SMC is reporting anything other than a clear "I'm waiting" prior to each command.
 
-Any chance you could try this patch? It's ugly, hacked together and currently fairly undocumented, but if it works I'll figure out how to clean it up (suggestions welcome).
-It works on my MacbookPro 11,1.
+You might see some of these :
+[   51.316202] applesmc: wait_status looping 2: 0x44, 0x40, 0x4e
+[   60.002547] applesmc: wait_status looping 2: 0x44, 0x40, 0x4e
+[   60.130754] applesmc: wait_status looping 2: 0x44, 0x40, 0x4e
 
-I've also attached a script I adapted from https://github.com/floe/smc_util.git that I use to hammer the SMC with reads.
-The behavior pre 5.9 and post this patch is the same.
+I did some heavy tests and found that with the delays at the bottom of the loop about 50% of calls required no delay at all before a read or write and the other 50% require a single delay.
+I can count on one hand the number of times it's exceeded 1 loop, and the max thus far has been 5 loops.
+
+We've been treating bit 0x04 as an ack, but from my testing on the machine and what I've seen in the SMC emulator code it actually means "I'm busy in the middle of a command". Bit 0x02 seems to mean "I'm doing something and I *will* ignore anything you send me".
+Bit 0x08 means "The last thing I got was a valid command, so start sending me data".
+
+By testing and waiting for 0x02 to clear before sending or reading I haven't seen any need for retries.
+
+On my unit bit 0x40 is always active. It may not be on others. The emulator calls it a status ready, so it's tested for but that is consolidated in wait_status so it can be commented out if it doesn't work on your machine.
+
+The thing with bit 0x04 is the SMC clears it when it's no longer busy. So the last byte of data sent for a command sees it clear that bit. That explains the timeouts but the command still works. As far as the SMC is concerned it's got all the data and gone off to do its thing, but applesmc was waiting for the bit to be set. When it's in the middle of a command (from the first command byte until the last data byte is received) I've never seen bit 0x04 cleared, so using it as an "ack" works, but as said upward in the thread "probably by accident".
+
+So this code tests for an "idle" SMC before it sends a command. In this context idle just means bit 0x02 isn't set. If the SMC gets into an undefined state it can leave other bits set, but a new write with a valid command will reset the internal state machine and bring it back into line. Bit 0x08 should always be set after it has received a valid command.
+
+I've gone belt and braces by checking the status before and after each command, but with the intention of trying to catch and log anything that goes awry. Like I said above, in 50% of cases I see zero delays required so I thought testing before the delay was a worthwhile win.
+
+If anyone with a Mac having a conventional SMC and seeing issues on 5.9 could test this it'd be appreciated. I'm not saying this code is "correct", but it "works for me".
+
+If anyone actually knows what they're doing and wants to "correct" me, it'd be appreciated also.
 
 Regards,
 Brad
 
---------------950FE4B4FE2534C610E592AB
+--------------260640A5259521660CE4A5E1
 Content-Type: text/plain; charset=UTF-8;
- name="smc.patch.2"
+ name="smc.patch.5"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment;
- filename="smc.patch.2"
+ filename="smc.patch.5"
 
 ZGlmZiAtLWdpdCBhL2RyaXZlcnMvaHdtb24vYXBwbGVzbWMuYyBiL2RyaXZlcnMvaHdtb24v
-YXBwbGVzbWMuYwppbmRleCBhMTg4ODc5OTBmNGEuLjI1MDBjYzdlYmNhNSAxMDA2NDQKLS0t
+YXBwbGVzbWMuYwppbmRleCBhMTg4ODc5OTBmNGEuLmFiYjA2ZmJlN2JjMSAxMDA2NDQKLS0t
 IGEvZHJpdmVycy9od21vbi9hcHBsZXNtYy5jCisrKyBiL2RyaXZlcnMvaHdtb24vYXBwbGVz
-bWMuYwpAQCAtMTUxLDY1ICsxNTEsNTggQEAgc3RhdGljIHVuc2lnbmVkIGludCBrZXlfYXRf
-aW5kZXg7CiBzdGF0aWMgc3RydWN0IHdvcmtxdWV1ZV9zdHJ1Y3QgKmFwcGxlc21jX2xlZF93
-cTsKIAogLyoKLSAqIHdhaXRfcmVhZCAtIFdhaXQgZm9yIGEgYnl0ZSB0byBhcHBlYXIgb24g
-U01DIHBvcnQuIENhbGxlcnMgbXVzdAotICogaG9sZCBhcHBsZXNtY19sb2NrLgorICogV2Fp
-dCBmb3Igc3BlY2lmaWMgc3RhdHVzIGJpdHMgb24gdGhlIFNNQwogICovCi1zdGF0aWMgaW50
-IHdhaXRfcmVhZCh2b2lkKQorCitzdGF0aWMgaW50IHdhaXRfc3RhdHVzKHU4IHZhbCwgdTgg
-bWFzaykKIHsKLQl1bnNpZ25lZCBsb25nIGVuZCA9IGppZmZpZXMgKyAoQVBQTEVTTUNfTUFY
-X1dBSVQgKiBIWikgLyBVU0VDX1BFUl9TRUM7CiAJdTggc3RhdHVzOwogCWludCB1czsKKwl1
-bnNpZ25lZCBsb25nIGVuZCA9IGppZmZpZXMgKyAoQVBQTEVTTUNfTUFYX1dBSVQgKiBIWikg
-LyBVU0VDX1BFUl9TRUM7CiAKIAlmb3IgKHVzID0gQVBQTEVTTUNfTUlOX1dBSVQ7IHVzIDwg
-QVBQTEVTTUNfTUFYX1dBSVQ7IHVzIDw8PSAxKSB7Ci0JCXVzbGVlcF9yYW5nZSh1cywgdXMg
-KiAxNik7CiAJCXN0YXR1cyA9IGluYihBUFBMRVNNQ19DTURfUE9SVCk7Ci0JCS8qIHJlYWQ6
-IHdhaXQgZm9yIHNtYyB0byBzZXR0bGUgKi8KLQkJaWYgKHN0YXR1cyAmIDB4MDEpCisJCWlm
-ICgoc3RhdHVzICYgbWFzaykgPT0gdmFsKQogCQkJcmV0dXJuIDA7Ci0JCS8qIHRpbWVvdXQ6
-IGdpdmUgdXAgKi8KIAkJaWYgKHRpbWVfYWZ0ZXIoamlmZmllcywgZW5kKSkKIAkJCWJyZWFr
-OwotCX0KLQotCXByX3dhcm4oIndhaXRfcmVhZCgpIGZhaWw6IDB4JTAyeFxuIiwgc3RhdHVz
-KTsKKwkJdXNsZWVwX3JhbmdlKHVzLCB1cyAqIDE2KTsKKwkJfQorCXByX3dhcm4oIndhaXRf
-c3RhdHVzIHRpbWVvdXQ6IDB4JTAyeFxuIiwgc3RhdHVzKTsKIAlyZXR1cm4gLUVJTzsKIH0K
-LQorCQogLyoKICAqIHNlbmRfYnl0ZSAtIFdyaXRlIHRvIFNNQyBwb3J0LCByZXRyeWluZyB3
-aGVuIG5lY2Vzc2FyeS4gQ2FsbGVycwogICogbXVzdCBob2xkIGFwcGxlc21jX2xvY2suCiAg
-Ki8KLXN0YXRpYyBpbnQgc2VuZF9ieXRlKHU4IGNtZCwgdTE2IHBvcnQpCi17Ci0JdTggc3Rh
-dHVzOwotCWludCB1czsKLQl1bnNpZ25lZCBsb25nIGVuZCA9IGppZmZpZXMgKyAoQVBQTEVT
-TUNfTUFYX1dBSVQgKiBIWikgLyBVU0VDX1BFUl9TRUM7CiAKK3N0YXRpYyBpbnQgc2VuZF9i
-eXRlX2RhdGEodTggY21kLCB1MTYgcG9ydCwgYm9vbCBza2lwKQoreworCXU4IHdzdGF0PTB4
-NDQ7CisJaWYgKHNraXApCisJCXdzdGF0PTB4NDA7CisJaWYgKHdhaXRfc3RhdHVzKDB4NDQs
-IDB4RjYpKQorCQlnb3RvIGZhaWw7CiAJb3V0YihjbWQsIHBvcnQpOwotCWZvciAodXMgPSBB
-UFBMRVNNQ19NSU5fV0FJVDsgdXMgPCBBUFBMRVNNQ19NQVhfV0FJVDsgdXMgPDw9IDEpIHsK
-LQkJdXNsZWVwX3JhbmdlKHVzLCB1cyAqIDE2KTsKLQkJc3RhdHVzID0gaW5iKEFQUExFU01D
-X0NNRF9QT1JUKTsKLQkJLyogd3JpdGU6IHdhaXQgZm9yIHNtYyB0byBzZXR0bGUgKi8KLQkJ
-aWYgKHN0YXR1cyAmIDB4MDIpCi0JCQljb250aW51ZTsKLQkJLyogcmVhZHk6IGNtZCBhY2Nl
-cHRlZCwgcmV0dXJuICovCi0JCWlmIChzdGF0dXMgJiAweDA0KQotCQkJcmV0dXJuIDA7Ci0J
-CS8qIHRpbWVvdXQ6IGdpdmUgdXAgKi8KLQkJaWYgKHRpbWVfYWZ0ZXIoamlmZmllcywgZW5k
-KSkKLQkJCWJyZWFrOwotCQkvKiBidXN5OiBsb25nIHdhaXQgYW5kIHJlc2VuZCAqLwotCQl1
-ZGVsYXkoQVBQTEVTTUNfUkVUUllfV0FJVCk7Ci0JCW91dGIoY21kLCBwb3J0KTsKLQl9Ci0K
-LQlwcl93YXJuKCJzZW5kX2J5dGUoMHglMDJ4LCAweCUwNHgpIGZhaWw6IDB4JTAyeFxuIiwg
-Y21kLCBwb3J0LCBzdGF0dXMpOworCWlmICghIHdhaXRfc3RhdHVzKHdzdGF0LCAweEZFKSkK
-KwkJcmV0dXJuIDA7CitmYWlsOgorCXByX3dhcm4oInNlbmRfYnl0ZV9kYXRhKDB4JTAyeCwg
-MHglMDR4KSBmYWlsXG4iLCBjbWQsIEFQUExFU01DX0NNRF9QT1JUKTsKIAlyZXR1cm4gLUVJ
-TzsKIH0KIAogc3RhdGljIGludCBzZW5kX2NvbW1hbmQodTggY21kKQogewotCXJldHVybiBz
-ZW5kX2J5dGUoY21kLCBBUFBMRVNNQ19DTURfUE9SVCk7CisJaWYgKHdhaXRfc3RhdHVzKDB4
-NDAsIDB4RjIpKSB7IHByX3dhcm4oInNlbmRfY29tbWFuZCBmYWlsIDFcbiIpOworCQlnb3Rv
-IGZhaWw7fQorCW91dGIoY21kLCBBUFBMRVNNQ19DTURfUE9SVCk7CisJaWYgKHdhaXRfc3Rh
-dHVzKDB4NEMsIDB4RkYpKSB7IHByX3dhcm4oInNlbmRfY29tbWFuZCBmYWlsIDJcbiIpOwor
-CQlnb3RvIGZhaWw7fQorCXJldHVybiAwOworZmFpbDoKKwlwcl93YXJuKCJzZW5kX2NtZCgw
-eCUwMngsIDB4JTA0eCkgZmFpbFxuIiwgY21kLCBBUFBMRVNNQ19DTURfUE9SVCk7CisJcmV0
-dXJuIC1FSU87CiB9CiAKIHN0YXRpYyBpbnQgc2VuZF9hcmd1bWVudChjb25zdCBjaGFyICpr
-ZXkpCkBAIC0yMTcsNyArMjEwLDcgQEAgc3RhdGljIGludCBzZW5kX2FyZ3VtZW50KGNvbnN0
-IGNoYXIgKmtleSkKIAlpbnQgaTsKIAogCWZvciAoaSA9IDA7IGkgPCA0OyBpKyspCi0JCWlm
-IChzZW5kX2J5dGUoa2V5W2ldLCBBUFBMRVNNQ19EQVRBX1BPUlQpKQorCQlpZiAoc2VuZF9i
-eXRlX2RhdGEoa2V5W2ldLCBBUFBMRVNNQ19EQVRBX1BPUlQsZmFsc2UpKQogCQkJcmV0dXJu
-IC1FSU87CiAJcmV0dXJuIDA7CiB9CkBAIC0yMzMsMTMgKzIyNiwxMyBAQCBzdGF0aWMgaW50
-IHJlYWRfc21jKHU4IGNtZCwgY29uc3QgY2hhciAqa2V5LCB1OCAqYnVmZmVyLCB1OCBsZW4p
-CiAJfQogCiAJLyogVGhpcyBoYXMgbm8gZWZmZWN0IG9uIG5ld2VyICgyMDEyKSBTTUNzICov
-Ci0JaWYgKHNlbmRfYnl0ZShsZW4sIEFQUExFU01DX0RBVEFfUE9SVCkpIHsKKwlpZiAoc2Vu
-ZF9ieXRlX2RhdGEobGVuLCBBUFBMRVNNQ19EQVRBX1BPUlQsZmFsc2UpKSB7CiAJCXByX3dh
-cm4oIiUuNHM6IHJlYWQgbGVuIGZhaWxcbiIsIGtleSk7CiAJCXJldHVybiAtRUlPOwogCX0K
-IAogCWZvciAoaSA9IDA7IGkgPCBsZW47IGkrKykgewotCQlpZiAod2FpdF9yZWFkKCkpIHsK
-KwkJaWYgKHdhaXRfc3RhdHVzKDB4NDUsMHhGRikpIHsKIAkJCXByX3dhcm4oIiUuNHM6IHJl
-YWQgZGF0YVslZF0gZmFpbFxuIiwga2V5LCBpKTsKIAkJCXJldHVybiAtRUlPOwogCQl9CkBA
-IC0yNjksMTQgKzI2MiwxNCBAQCBzdGF0aWMgaW50IHdyaXRlX3NtYyh1OCBjbWQsIGNvbnN0
-IGNoYXIgKmtleSwgY29uc3QgdTggKmJ1ZmZlciwgdTggbGVuKQogCQlyZXR1cm4gLUVJTzsK
-IAl9CiAKLQlpZiAoc2VuZF9ieXRlKGxlbiwgQVBQTEVTTUNfREFUQV9QT1JUKSkgeworCWlm
-IChzZW5kX2J5dGVfZGF0YShsZW4sIEFQUExFU01DX0RBVEFfUE9SVCxmYWxzZSkpIHsKIAkJ
-cHJfd2FybigiJS40czogd3JpdGUgbGVuIGZhaWxcbiIsIGtleSk7CiAJCXJldHVybiAtRUlP
-OwogCX0KIAogCWZvciAoaSA9IDA7IGkgPCBsZW47IGkrKykgewotCQlpZiAoc2VuZF9ieXRl
-KGJ1ZmZlcltpXSwgQVBQTEVTTUNfREFUQV9QT1JUKSkgewotCQkJcHJfd2FybigiJXM6IHdy
-aXRlIGRhdGEgZmFpbFxuIiwga2V5KTsKKwkJaWYgKHNlbmRfYnl0ZV9kYXRhKGJ1ZmZlcltp
-XSwgQVBQTEVTTUNfREFUQV9QT1JULChpPT0obGVuLTEpKSkpIHsKKwkJCXByX3dhcm4oIiVz
-OiB3cml0ZSBkYXRhIGZhaWwgYXQgJWlcbiIsIGtleSwgaSk7CiAJCQlyZXR1cm4gLUVJTzsK
-IAkJfQogCX0K
---------------950FE4B4FE2534C610E592AB
-Content-Type: application/x-shellscript;
- name="smc_dump_linux.sh"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment;
- filename="smc_dump_linux.sh"
-
-IyEvYmluL2Jhc2gKCmk9MAptYXg9JChjYXQgL3N5cy9idXMvcGxhdGZvcm0vZHJpdmVycy9h
-cHBsZXNtYy9hcHBsZXNtYy43Njgva2V5X2NvdW50KQoKd2hpbGUgWyAkaSAtbHQgJG1heCBd
-IDsgZG8KCWVjaG8gJGkgPiAvc3lzL2J1cy9wbGF0Zm9ybS9kcml2ZXJzL2FwcGxlc21jL2Fw
-cGxlc21jLjc2OC9rZXlfYXRfaW5kZXggCglrZXluYW1lPSQoY2F0IC9zeXMvYnVzL3BsYXRm
-b3JtL2RyaXZlcnMvYXBwbGVzbWMvYXBwbGVzbWMuNzY4L2tleV9hdF9pbmRleF9uYW1lKQoJ
-a2V5dHlwZT0kKGNhdCAvc3lzL2J1cy9wbGF0Zm9ybS9kcml2ZXJzL2FwcGxlc21jL2FwcGxl
-c21jLjc2OC9rZXlfYXRfaW5kZXhfdHlwZSkKCWNhc2UgIiRrZXl0eXBlIiBpbiAKCQkidWk4
-ICIpCgkJCWtleWRhdGE9JChjYXQgL3N5cy9idXMvcGxhdGZvcm0vZHJpdmVycy9hcHBsZXNt
-Yy9hcHBsZXNtYy43Njgva2V5X2F0X2luZGV4X2RhdGEgfCBvZCAtQW4gLXZ0dTEpCgkJCTs7
-CgkJdWkxNikKCQkJa2V5ZGF0YT0kKGNhdCAvc3lzL2J1cy9wbGF0Zm9ybS9kcml2ZXJzL2Fw
-cGxlc21jL2FwcGxlc21jLjc2OC9rZXlfYXRfaW5kZXhfZGF0YSB8IG9kIC1BbiAtdnR1MiAt
-LWVuZGlhbj1iaWcpCgkJCTs7CgoJCSopCgkJCWtleWRhdGE9JChjYXQgL3N5cy9idXMvcGxh
-dGZvcm0vZHJpdmVycy9hcHBsZXNtYy9hcHBsZXNtYy43Njgva2V5X2F0X2luZGV4X2RhdGEg
-fCB4eGQgLWMgMzIgLWcgMSAtcCkKCQkJOzsKCWVzYWMKCWVjaG8gIiAgJGtleW5hbWUgIFsk
-a2V5dHlwZV0gICRrZXlkYXRhIiAkaQoJaT0kKCgkaSsxKSkKZG9uZQo=
---------------950FE4B4FE2534C610E592AB--
+bWMuYwpAQCAtNDIsNiArNDIsMTYgQEAKIAogI2RlZmluZSBBUFBMRVNNQ19NQVhfREFUQV9M
+RU5HVEggMzIKIAorLyogQXBwbGUgU01DIHN0YXR1cyBiaXRzICovCisjZGVmaW5lIFNNQ19T
+VEFUVVNfQVdBSVRJTkdfREFUQSAgMHgwMSAgLy8vPCBEYXRhIHdhaXRpbmcgdG8gYmUgcmVh
+ZAorI2RlZmluZSBTTUNfU1RBVFVTX0lCX0NMT1NFRCAgICAgIDB4MDIgIC8vLyBBIHdyaXRl
+IGlzIHBlbmRpbmcgLyB3aWxsIGlnbm9yZSBpbnB1dAorI2RlZmluZSBTTUNfU1RBVFVTX0JV
+U1kgICAgICAgICAgIDB4MDQgIC8vLzwgQnVzeSBpbiB0aGUgbWlkZGxlIG9mIGEgY29tbWFu
+ZC4KKyNkZWZpbmUgU01DX1NUQVRVU19HT1RfQ09NTUFORCAgICAweDA4ICAvLy88IFRoZSBs
+YXN0IGlucHV0IHdhcyBhIGNvbW1hbmQuCisjZGVmaW5lIFNNQ19TVEFUVVNfVUtOXzB4MTYg
+ICAgICAgMHgxMAorI2RlZmluZSBTTUNfU1RBVFVTX0tFWV9ET05FICAgICAgIDB4MjAKKyNk
+ZWZpbmUgU01DX1NUQVRVU19SRUFEWSAgICAgICAgICAweDQwICAvLyBSZWFkeSB0byB3b3Jr
+CisjZGVmaW5lIFNNQ19TVEFUVVNfVUtOXzB4ODAgICAgICAgMHg4MCAgLy8gZXJyb3IKKwog
+Lyogd2FpdCB1cCB0byAxMjggbXMgZm9yIGEgc3RhdHVzIGNoYW5nZS4gKi8KICNkZWZpbmUg
+QVBQTEVTTUNfTUlOX1dBSVQJMHgwMDEwCiAjZGVmaW5lIEFQUExFU01DX1JFVFJZX1dBSVQJ
+MHgwMTAwCkBAIC0xNTEsNjUgKzE2MSw4OCBAQCBzdGF0aWMgdW5zaWduZWQgaW50IGtleV9h
+dF9pbmRleDsKIHN0YXRpYyBzdHJ1Y3Qgd29ya3F1ZXVlX3N0cnVjdCAqYXBwbGVzbWNfbGVk
+X3dxOwogCiAvKgotICogd2FpdF9yZWFkIC0gV2FpdCBmb3IgYSBieXRlIHRvIGFwcGVhciBv
+biBTTUMgcG9ydC4gQ2FsbGVycyBtdXN0Ci0gKiBob2xkIGFwcGxlc21jX2xvY2suCisgKiBX
+YWl0IGZvciBzcGVjaWZpYyBzdGF0dXMgYml0cyB3aXRoIGEgbWFzayBvbiB0aGUgU01DCisg
+KiBVc2VkIGJlZm9yZSBhbmQgYWZ0ZXIgd3JpdGVzLCBhbmQgYmVmb3JlIHJlYWRzCiAgKi8K
+LXN0YXRpYyBpbnQgd2FpdF9yZWFkKHZvaWQpCisKK3N0YXRpYyBpbnQgd2FpdF9zdGF0dXMo
+dTggdmFsLCB1OCBtYXNrKQogewotCXVuc2lnbmVkIGxvbmcgZW5kID0gamlmZmllcyArIChB
+UFBMRVNNQ19NQVhfV0FJVCAqIEhaKSAvIFVTRUNfUEVSX1NFQzsKIAl1OCBzdGF0dXM7CiAJ
+aW50IHVzOworCWludCBsb29wcyA9IDA7CisJdW5zaWduZWQgbG9uZyBlbmQgPSBqaWZmaWVz
+ICsgKEFQUExFU01DX01BWF9XQUlUICogSFopIC8gVVNFQ19QRVJfU0VDOwogCisJLyogV2Ug
+YWx3YXlzIGNoZWNrIGZvciBzdGF0dXMgcmVhZHkgKi8KKwl2YWwgfD0gU01DX1NUQVRVU19S
+RUFEWTsKKwltYXNrIHw9IFNNQ19TVEFUVVNfUkVBRFk7CiAJZm9yICh1cyA9IEFQUExFU01D
+X01JTl9XQUlUOyB1cyA8IEFQUExFU01DX01BWF9XQUlUOyB1cyA8PD0gMSkgewotCQl1c2xl
+ZXBfcmFuZ2UodXMsIHVzICogMTYpOwogCQlzdGF0dXMgPSBpbmIoQVBQTEVTTUNfQ01EX1BP
+UlQpOwotCQkvKiByZWFkOiB3YWl0IGZvciBzbWMgdG8gc2V0dGxlICovCi0JCWlmIChzdGF0
+dXMgJiAweDAxKQorCQlpZiAoKHN0YXR1cyAmIG1hc2spID09IHZhbCkKIAkJCXJldHVybiAw
+OwotCQkvKiB0aW1lb3V0OiBnaXZlIHVwICovCiAJCWlmICh0aW1lX2FmdGVyKGppZmZpZXMs
+IGVuZCkpCiAJCQlicmVhazsKLQl9Ci0KLQlwcl93YXJuKCJ3YWl0X3JlYWQoKSBmYWlsOiAw
+eCUwMnhcbiIsIHN0YXR1cyk7CisJCXVzbGVlcF9yYW5nZSh1cywgdXMgKiAxNik7CisJCWxv
+b3BzICs9IDE7CisJCWlmIChsb29wcyA+IDEpCisJCQlwcl93YXJuKCJ3YWl0X3N0YXR1cyBs
+b29waW5nICVpOiAweCUwMngsIDB4JTAyeCwgMHglMDJ4XG4iLCBsb29wcywgc3RhdHVzLCB2
+YWwsIG1hc2spOworCQl9CisJcHJfd2Fybigid2FpdF9zdGF0dXMgdGltZW91dDogMHglMDJ4
+LCAweCUwMngsIDB4JTAyeFxuIiwgc3RhdHVzLCB2YWwsIG1hc2spOwogCXJldHVybiAtRUlP
+OwogfQogCiAvKgotICogc2VuZF9ieXRlIC0gV3JpdGUgdG8gU01DIHBvcnQsIHJldHJ5aW5n
+IHdoZW4gbmVjZXNzYXJ5LiBDYWxsZXJzCisgKiBzZW5kX2J5dGVfZGF0YSAtIFdyaXRlIHRv
+IFNNQyBkYXRhIHBvcnQuIENhbGxlcnMKICAqIG11c3QgaG9sZCBhcHBsZXNtY19sb2NrLgor
+ICogUGFyYW1ldGVyIHNraXAgbXVzdCBiZSB0cnVlIG9uIHRoZSBsYXN0IHdyaXRlIG9mIGFu
+eQorICogY29tbWFuZCBvciBpdCdsbCB0aW1lIG91dC4KICAqLwotc3RhdGljIGludCBzZW5k
+X2J5dGUodTggY21kLCB1MTYgcG9ydCkKKworc3RhdGljIGludCBzZW5kX2J5dGVfZGF0YSh1
+OCBjbWQsIHUxNiBwb3J0LCBib29sIHNraXApCiB7Ci0JdTggc3RhdHVzOwotCWludCB1czsK
+LQl1bnNpZ25lZCBsb25nIGVuZCA9IGppZmZpZXMgKyAoQVBQTEVTTUNfTUFYX1dBSVQgKiBI
+WikgLyBVU0VDX1BFUl9TRUM7CisJdTggd3N0YXQgPSAwOwogCisJaWYgKCFza2lwKQorCQl3
+c3RhdCB8PSBTTUNfU1RBVFVTX0JVU1k7CisJaWYgKHdhaXRfc3RhdHVzKFNNQ19TVEFUVVNf
+QlVTWSwKKwlTTUNfU1RBVFVTX0JVU1kgfCBTTUNfU1RBVFVTX0lCX0NMT1NFRCkpCisJCWdv
+dG8gZmFpbDsKIAlvdXRiKGNtZCwgcG9ydCk7Ci0JZm9yICh1cyA9IEFQUExFU01DX01JTl9X
+QUlUOyB1cyA8IEFQUExFU01DX01BWF9XQUlUOyB1cyA8PD0gMSkgewotCQl1c2xlZXBfcmFu
+Z2UodXMsIHVzICogMTYpOwotCQlzdGF0dXMgPSBpbmIoQVBQTEVTTUNfQ01EX1BPUlQpOwot
+CQkvKiB3cml0ZTogd2FpdCBmb3Igc21jIHRvIHNldHRsZSAqLwotCQlpZiAoc3RhdHVzICYg
+MHgwMikKLQkJCWNvbnRpbnVlOwotCQkvKiByZWFkeTogY21kIGFjY2VwdGVkLCByZXR1cm4g
+Ki8KLQkJaWYgKHN0YXR1cyAmIDB4MDQpCi0JCQlyZXR1cm4gMDsKLQkJLyogdGltZW91dDog
+Z2l2ZSB1cCAqLwotCQlpZiAodGltZV9hZnRlcihqaWZmaWVzLCBlbmQpKQotCQkJYnJlYWs7
+Ci0JCS8qIGJ1c3k6IGxvbmcgd2FpdCBhbmQgcmVzZW5kICovCi0JCXVkZWxheShBUFBMRVNN
+Q19SRVRSWV9XQUlUKTsKLQkJb3V0YihjbWQsIHBvcnQpOwotCX0KLQotCXByX3dhcm4oInNl
+bmRfYnl0ZSgweCUwMngsIDB4JTA0eCkgZmFpbDogMHglMDJ4XG4iLCBjbWQsIHBvcnQsIHN0
+YXR1cyk7CisJaWYgKCF3YWl0X3N0YXR1cyh3c3RhdCwKKwlTTUNfU1RBVFVTX1JFQURZIHwg
+U01DX1NUQVRVU19HT1RfQ09NTUFORCB8IFNNQ19TVEFUVVNfQlVTWSB8IFNNQ19TVEFUVVNf
+SUJfQ0xPU0VEKSkKKwkJcmV0dXJuIDA7CitmYWlsOgorCXByX3dhcm4oInNlbmRfYnl0ZV9k
+YXRhKDB4JTAyeCwgMHglMDR4KSBmYWlsXG4iLCBjbWQsIEFQUExFU01DX0NNRF9QT1JUKTsK
+IAlyZXR1cm4gLUVJTzsKIH0KIAorLyoKKyAqIHNlbmRfY29tbWFuZCAtIFdyaXRlIGEgY29t
+bWFuZCB0byB0aGUgU01DLiBDYWxsZXJzIG11c3QgaG9sZCBhcHBsZXNtY19sb2NrLgorICog
+SWYgU01DIGlzIGluIHVuZGVmaW5lZCBzdGF0ZSwgYW4gbmV3IGNvbW1hbmQgd3JpdGUgcmVz
+ZXRzIHRoZSBzdGF0ZSBtYWNoaW5lLgorICovCisKIHN0YXRpYyBpbnQgc2VuZF9jb21tYW5k
+KHU4IGNtZCkKIHsKLQlyZXR1cm4gc2VuZF9ieXRlKGNtZCwgQVBQTEVTTUNfQ01EX1BPUlQp
+OworCXU4IHN0YXR1czsKKworCWlmICh3YWl0X3N0YXR1cygwLAorCVNNQ19TVEFUVVNfSUJf
+Q0xPU0VEKSkgeworCQlwcl93YXJuKCJzZW5kX2NvbW1hbmQgZmFpbCAxXG4iKTsKKwkJZ290
+byBmYWlsOyB9CisKKwlzdGF0dXMgPSBpbmIoQVBQTEVTTUNfQ01EX1BPUlQpOworCWlmIChz
+dGF0dXMgIT0gMHg0MCkKKwkJcHJfd2FybigiQXQgY29tbWFuZCBzdGFydCwgU3RhdHVzIHdh
+cyAweCUyMHhcbiIsIHN0YXR1cyk7CisKKwlvdXRiKGNtZCwgQVBQTEVTTUNfQ01EX1BPUlQp
+OworCWlmICh3YWl0X3N0YXR1cyhTTUNfU1RBVFVTX0JVU1kgfCBTTUNfU1RBVFVTX0dPVF9D
+T01NQU5ELAorCVNNQ19TVEFUVVNfR09UX0NPTU1BTkQgfCBTTUNfU1RBVFVTX0JVU1kgfCBT
+TUNfU1RBVFVTX0lCX0NMT1NFRCB8CisJU01DX1NUQVRVU19BV0FJVElOR19EQVRBKSkgewor
+CQlwcl93YXJuKCJzZW5kX2NvbW1hbmQgZmFpbCAyXG4iKTsKKwkJZ290byBmYWlsOyB9CisJ
+cmV0dXJuIDA7CitmYWlsOgorCXByX3dhcm4oInNlbmRfY21kKDB4JTAyeCwgMHglMDR4KSBm
+YWlsXG4iLCBjbWQsIEFQUExFU01DX0NNRF9QT1JUKTsKKwlyZXR1cm4gLUVJTzsKIH0KIAog
+c3RhdGljIGludCBzZW5kX2FyZ3VtZW50KGNvbnN0IGNoYXIgKmtleSkKQEAgLTIxNyw3ICsy
+NTAsOCBAQCBzdGF0aWMgaW50IHNlbmRfYXJndW1lbnQoY29uc3QgY2hhciAqa2V5KQogCWlu
+dCBpOwogCiAJZm9yIChpID0gMDsgaSA8IDQ7IGkrKykKLQkJaWYgKHNlbmRfYnl0ZShrZXlb
+aV0sIEFQUExFU01DX0RBVEFfUE9SVCkpCisJLyogUGFyYW1ldGVyIHNraXAgaXMgZmFsc2Ug
+YXMgd2UgYWx3YXlzIHNlbmQgZGF0YSBhZnRlciBhbiBhcmd1bWVudCAqLworCQlpZiAoc2Vu
+ZF9ieXRlX2RhdGEoa2V5W2ldLCBBUFBMRVNNQ19EQVRBX1BPUlQsIGZhbHNlKSkKIAkJCXJl
+dHVybiAtRUlPOwogCXJldHVybiAwOwogfQpAQCAtMjMzLDEzICsyNjcsMTUgQEAgc3RhdGlj
+IGludCByZWFkX3NtYyh1OCBjbWQsIGNvbnN0IGNoYXIgKmtleSwgdTggKmJ1ZmZlciwgdTgg
+bGVuKQogCX0KIAogCS8qIFRoaXMgaGFzIG5vIGVmZmVjdCBvbiBuZXdlciAoMjAxMikgU01D
+cyAqLwotCWlmIChzZW5kX2J5dGUobGVuLCBBUFBMRVNNQ19EQVRBX1BPUlQpKSB7CisJaWYg
+KHNlbmRfYnl0ZV9kYXRhKGxlbiwgQVBQTEVTTUNfREFUQV9QT1JULCBmYWxzZSkpIHsKIAkJ
+cHJfd2FybigiJS40czogcmVhZCBsZW4gZmFpbFxuIiwga2V5KTsKIAkJcmV0dXJuIC1FSU87
+CiAJfQogCiAJZm9yIChpID0gMDsgaSA8IGxlbjsgaSsrKSB7Ci0JCWlmICh3YWl0X3JlYWQo
+KSkgeworCQlpZiAod2FpdF9zdGF0dXMoU01DX1NUQVRVU19BV0FJVElOR19EQVRBIHwgU01D
+X1NUQVRVU19CVVNZLAorCQlTTUNfU1RBVFVTX0dPVF9DT01NQU5EIHwgU01DX1NUQVRVU19C
+VVNZIHwgU01DX1NUQVRVU19JQl9DTE9TRUQgfAorCQlTTUNfU1RBVFVTX0FXQUlUSU5HX0RB
+VEEpKSB7CiAJCQlwcl93YXJuKCIlLjRzOiByZWFkIGRhdGFbJWRdIGZhaWxcbiIsIGtleSwg
+aSk7CiAJCQlyZXR1cm4gLUVJTzsKIAkJfQpAQCAtMjUwLDcgKzI4Niw3IEBAIHN0YXRpYyBp
+bnQgcmVhZF9zbWModTggY21kLCBjb25zdCBjaGFyICprZXksIHU4ICpidWZmZXIsIHU4IGxl
+bikKIAlmb3IgKGkgPSAwOyBpIDwgMTY7IGkrKykgewogCQl1ZGVsYXkoQVBQTEVTTUNfTUlO
+X1dBSVQpOwogCQlzdGF0dXMgPSBpbmIoQVBQTEVTTUNfQ01EX1BPUlQpOwotCQlpZiAoIShz
+dGF0dXMgJiAweDAxKSkKKwkJaWYgKCEoc3RhdHVzICYgU01DX1NUQVRVU19BV0FJVElOR19E
+QVRBKSkKIAkJCWJyZWFrOwogCQlkYXRhID0gaW5iKEFQUExFU01DX0RBVEFfUE9SVCk7CiAJ
+fQpAQCAtMjY5LDE0ICszMDUsMTQgQEAgc3RhdGljIGludCB3cml0ZV9zbWModTggY21kLCBj
+b25zdCBjaGFyICprZXksIGNvbnN0IHU4ICpidWZmZXIsIHU4IGxlbikKIAkJcmV0dXJuIC1F
+SU87CiAJfQogCi0JaWYgKHNlbmRfYnl0ZShsZW4sIEFQUExFU01DX0RBVEFfUE9SVCkpIHsK
+KwlpZiAoc2VuZF9ieXRlX2RhdGEobGVuLCBBUFBMRVNNQ19EQVRBX1BPUlQsIGZhbHNlKSkg
+ewogCQlwcl93YXJuKCIlLjRzOiB3cml0ZSBsZW4gZmFpbFxuIiwga2V5KTsKIAkJcmV0dXJu
+IC1FSU87CiAJfQogCiAJZm9yIChpID0gMDsgaSA8IGxlbjsgaSsrKSB7Ci0JCWlmIChzZW5k
+X2J5dGUoYnVmZmVyW2ldLCBBUFBMRVNNQ19EQVRBX1BPUlQpKSB7Ci0JCQlwcl93YXJuKCIl
+czogd3JpdGUgZGF0YSBmYWlsXG4iLCBrZXkpOworCQlpZiAoc2VuZF9ieXRlX2RhdGEoYnVm
+ZmVyW2ldLCBBUFBMRVNNQ19EQVRBX1BPUlQsIChpID09IChsZW4tMSkpKSkgeworCQkJcHJf
+d2FybigiJXM6IHdyaXRlIGRhdGEgZmFpbCBhdCAlaVxuIiwga2V5LCBpKTsKIAkJCXJldHVy
+biAtRUlPOwogCQl9CiAJfQo=
+--------------260640A5259521660CE4A5E1--
