@@ -2,235 +2,126 @@ Return-Path: <SRS0=xFUD=EK=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,FAKE_REPLY_C,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B167C388F9
-	for <linux-hwmon@archiver.kernel.org>; Wed,  4 Nov 2020 14:37:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D0EEC2D0A3
+	for <linux-hwmon@archiver.kernel.org>; Wed,  4 Nov 2020 15:22:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0FB492074B
-	for <linux-hwmon@archiver.kernel.org>; Wed,  4 Nov 2020 14:37:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3AB9B2074B
+	for <linux-hwmon@archiver.kernel.org>; Wed,  4 Nov 2020 15:22:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I1EqiRwC"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="N+ZQkza/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728675AbgKDOhU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 4 Nov 2020 09:37:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45972 "EHLO
+        id S1729992AbgKDPWc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 4 Nov 2020 10:22:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726608AbgKDOhT (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 4 Nov 2020 09:37:19 -0500
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F70C0613D3;
-        Wed,  4 Nov 2020 06:37:19 -0800 (PST)
-Received: by mail-ot1-x343.google.com with SMTP id g19so10031335otp.13;
-        Wed, 04 Nov 2020 06:37:19 -0800 (PST)
+        with ESMTP id S1730760AbgKDPWb (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 4 Nov 2020 10:22:31 -0500
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4428EC061A4C
+        for <linux-hwmon@vger.kernel.org>; Wed,  4 Nov 2020 07:22:31 -0800 (PST)
+Received: by mail-wr1-x442.google.com with SMTP id w1so22508849wrm.4
+        for <linux-hwmon@vger.kernel.org>; Wed, 04 Nov 2020 07:22:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=NFjmtsfmnj0C9Thp8xS2Sl3MiUrCZjVNBwOhOhlohCU=;
-        b=I1EqiRwCJ3zLn2W2+3IAL3Ame+dCBJzvZK4h87AiYl2cxEiad0BWbbglOLlPK5uQVa
-         7XNm3+Rd+s7/urVairePBJ8TXM5Dj7HMUq2Iw9WtGDcJvDQWHmSMbGQadi0d+TIUD1Me
-         ezql4snXWiMgmdtVBgFZ0idWdFSCuAZVMCU5UKZ+aT3KluvxOE3Ck1DuKAU9zv9eA30r
-         dRLLV7EQkp81Wdhxr3Mt71CKrXDxMflounRuaYEcwi4c45mhN46H02PG5tGIflnN5wQ+
-         1kNq3DYzKrLnB1v7UEFAn9XX8m3Y0oDQkMFH/NLzJFjSwBATC71sLil7abK9N/i84AAE
-         dC5A==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=q6hdviCMUNDpB25Riq30Bi5OEfr4eLtHUB6k7K/aZvY=;
+        b=N+ZQkza/J4iL2cPwAzJDzR2TDBxa/ygHQqtkEBsQnPxwe0lwLCJ8zkeWrONmUupLVt
+         I36bZ9MmN+isW9a3PipNRr7HFmQLJXRYh3h2jTx5SvCwWBbqSoCWaKhrJDzeS1c8lxbj
+         OKmo7GVKj1pCYRoW+pfE9quncDqfpUNXwxo8Q2FtwwzdSmRMBc3NCc75nuZwKSQzHyyQ
+         4WDnGDutraDZSK8aS66n6whaSUdnPCLbFK33gX8TbyWB6CALiLEyO2iruwRyI8YW2SCH
+         So/W0SKiq7vaa1AB+AVJUXO2DrMpjHR1Sly/IPzksIBFuIEzyH7jloN6kk2A5it9d8Ag
+         hsuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mime-version:content-disposition:user-agent;
-        bh=NFjmtsfmnj0C9Thp8xS2Sl3MiUrCZjVNBwOhOhlohCU=;
-        b=Mz/ox60FOwADPrXWo+372fydcqZyFOUct8hcC5uQsgX3R9sGfsCjoUip/sA/X2gmYC
-         3AAfhjANduVUwVdZBTAGdt7pB1tGOp8/nFMVQuKyC0gMA3XrQKWVKvezjVbEjGkhE09w
-         jiNrIaRXHQhje+Wp+fNV4J8NUqdx/hi/4peDy2XffoUdHUkWN9GS25JQ7J4t1DWVtu5X
-         QL3Ux9Esrc0knC6wqiIKoPVnZf8F2QLSbLa3dwhg9fwKeQSBjQq4uaSwsWZFUYJNx2jw
-         igSxtLUcIs0vX/3BEM81eRCyPv2vXQcf+cmO7mevz3+HJfMpqAty2ZyavfyPWftgDJk+
-         M7EA==
-X-Gm-Message-State: AOAM53126Ehgx2BAN3TyCN+ridYontP9ui98olzBxcWBq9Bjwpg2XFoN
-        jTdQ4IeOylsVvn+qlCrKd6k=
-X-Google-Smtp-Source: ABdhPJxeosxE3+mqblez0F2z0oeNuHQtstF8ju49NM3hknLO4pkALghgsEcjBc//Dza+bnB0Z4kTyw==
-X-Received: by 2002:a9d:6c4b:: with SMTP id g11mr18508267otq.265.1604500639031;
-        Wed, 04 Nov 2020 06:37:19 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f124sm491231oia.27.2020.11.04.06.37.18
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 04 Nov 2020 06:37:18 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 4 Nov 2020 06:37:17 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Yungteng Hsu <hsu.yungteng@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        alan@redhat.com
-Subject: Re: [PATCH] hwmon: (pmbus) Add driver for STMicroelectronics PM6764
- Voltage Regulator
-Message-ID: <20201104143717.GA92239@roeck-us.net>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=q6hdviCMUNDpB25Riq30Bi5OEfr4eLtHUB6k7K/aZvY=;
+        b=EpBKZ+5UGAt7ef6BeY8w9pjggda5D6KbSS3wi+daAmEopMr3CuBmc+TV7qwaBsYL34
+         Y7I0JKFPAY0PLvy20H3BT2XwcEjZXwQ0KUig9xqBsQhJqJrLyfTWRv2RPKe8Cl/xVBt0
+         r7aMdLrPXuZ6elLaA9fdFzpy6MKXpIw6u5ERjamGJMnnKZ38gxcUJ5/fQjcTCgt38pPE
+         eTGigmvRlUek1o1nkkySByQw7Yex0Doi+T8bkwNLsKVFAv8OHsw4vzwNR8X0NhWzLry0
+         oddOU87VgGtSYS4+MCjO9bUhPpqAAlUvAXPuJGgNmp2yOgvCPXxuvDZ8we4ovD5vpCli
+         ySoQ==
+X-Gm-Message-State: AOAM531kTunUSdQlnUFfybOBSdozjaBGFSH2RQdr0BYfOGlTIPseTU8W
+        e+1tbhNBn/8L7K7yTzNOHwW4CQ==
+X-Google-Smtp-Source: ABdhPJxQzdXyGNDCkYY6//Qtcy3N7vuWJ5LfVvcTG8og0tM/Z01cSnk7BnqMscR9XtB5I8c4B16htw==
+X-Received: by 2002:a5d:63cb:: with SMTP id c11mr30926563wrw.243.1604503349944;
+        Wed, 04 Nov 2020 07:22:29 -0800 (PST)
+Received: from dell ([91.110.221.242])
+        by smtp.gmail.com with ESMTPSA id y201sm2893312wmd.27.2020.11.04.07.22.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Nov 2020 07:22:29 -0800 (PST)
+Date:   Wed, 4 Nov 2020 15:22:27 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Luka Kovacic <luka.kovacic@sartura.hr>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        kbuild-all@lists.01.org, pavel@ucw.cz, dmurphy@ti.com,
+        robh+dt@kernel.org, jdelvare@suse.com, linux@roeck-us.net
+Subject: Re: [PATCH v6 2/6] drivers: mfd: Add a driver for iEi WT61P803
+ PUZZLE MCU
+Message-ID: <20201104152227.GM4488@dell>
+References: <20201019221859.56680-3-luka.kovacic@sartura.hr>
+ <202010201049.3V7m9mtx-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <202010201049.3V7m9mtx-lkp@intel.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Nov 04, 2020 at 03:09:23PM +0800, Yungteng Hsu wrote:
-> Add the pmbus driver for the STMicroelectronics pm6764 voltage regulator.
+On Tue, 20 Oct 2020, kernel test robot wrote:
+
+> Hi Luka,
 > 
-> the output voltage use the MFR_READ_VOUT 0xD4
-> vout value returned is linear11
+> Thank you for the patch! Perhaps something to improve:
 > 
-> Signed-off-by: Charles Hsu <hsu.yungteng@gmail.com>
-
-Please use standard Linux kernel code formatting rules.
-Run checkpatch --strict on the patch and make sure it does not report
-any problems.
-
-total: 1 errors, 39 warnings, 3 checks, 96 lines checked
-
-is a bit much for a 74-line patch.
-
-> ---
->  drivers/hwmon/pmbus/Kconfig    |  8 ++++
->  drivers/hwmon/pmbus/Makefile   |  1 +
->  drivers/hwmon/pmbus/pm6764tr.c | 74 ++++++++++++++++++++++++++++++++++
->  3 files changed, 83 insertions(+)
->  create mode 100644 drivers/hwmon/pmbus/pm6764tr.c
+> [auto build test WARNING on hwmon/hwmon-next]
+> [also build test WARNING on v5.9]
+> [cannot apply to pavel-linux-leds/for-next lee-mfd/for-mfd-next next-20201016]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
 > 
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index a25faf69fce3..2b487c401a4e 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -220,6 +220,14 @@ config SENSORS_MP2975
->    This driver can also be built as a module. If so, the module will
->    be called mp2975.
+> url:    https://github.com/0day-ci/linux/commits/Luka-Kovacic/Add-support-for-the-iEi-WT61P803-PUZZLE-MCU/20201020-062048
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+> config: ia64-randconfig-r002-20201020 (attached as .config)
+> compiler: ia64-linux-gcc (GCC) 9.3.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/0day-ci/linux/commit/855e7cca9db335136d09555f9983d7245fca1f4b
+>         git remote add linux-review https://github.com/0day-ci/linux
+>         git fetch --no-tags linux-review Luka-Kovacic/Add-support-for-the-iEi-WT61P803-PUZZLE-MCU/20201020-062048
+>         git checkout 855e7cca9db335136d09555f9983d7245fca1f4b
+>         # save the attached .config to linux build tree
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 make.cross ARCH=ia64 
 > 
-> +config SENSORS_PM6764TR
-> + tristate "PM6764TR"
-> + help
-> +  If you say yes here you get hardware monitoring support for PM6764TR.
-> +
-> +  This driver can also be built as a module. If so, the module will
-> +  be called pm6764tr.
-> +
->  config SENSORS_PXE1610
->   tristate "Infineon PXE1610"
->   help
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index 4c97ad0bd791..31ebdef5d4a6 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -25,6 +25,7 @@ obj-$(CONFIG_SENSORS_MAX31785) += max31785.o
->  obj-$(CONFIG_SENSORS_MAX34440) += max34440.o
->  obj-$(CONFIG_SENSORS_MAX8688) += max8688.o
->  obj-$(CONFIG_SENSORS_MP2975) += mp2975.o
-> +obj-$(CONFIG_SENSORS_PM6764TR) += pm6764tr.o
->  obj-$(CONFIG_SENSORS_PXE1610) += pxe1610.o
->  obj-$(CONFIG_SENSORS_TPS40422) += tps40422.o
->  obj-$(CONFIG_SENSORS_TPS53679) += tps53679.o
-> diff --git a/drivers/hwmon/pmbus/pm6764tr.c b/drivers/hwmon/pmbus/pm6764tr.c
-> new file mode 100644
-> index 000000000000..b125a1cbfea5
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/pm6764tr.c
-> @@ -0,0 +1,74 @@
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/init.h>
-> +#include <linux/err.h>
-> +#include <linux/slab.h>
-> +#include <linux/mutex.h>
-> +#include <linux/i2c.h>
-> +#include <linux/pmbus.h>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> drivers/mfd/iei-wt61p803-puzzle.c:311:5: warning: no previous prototype for 'iei_wt61p803_puzzle_buzzer' [-Wmissing-prototypes]
+>      311 | int iei_wt61p803_puzzle_buzzer(struct iei_wt61p803_puzzle *mcu, bool long_beep)
+>          |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Alphabetic include file order, please.
+This bot has been complaining about this patch since at least v3.
 
-> +#include "pmbus.h"
-> +
-> +#define PM6764TR_PMBUS_READ_VOUT 0xD4
+Are you going to fix the issue?  Or is it moot?
 
-tab after PM6764TR_PMBUS_READ_VOUT, please.
-
-I see you don't use any tabs in the patch. Please do.
-
-> +
-> +static int pm6764tr_read_word_data(struct i2c_client *client, int
-> page, int reg)
-
-Corrupted ?
-
-That makes me wonder if the patch was corrupted by your e-mail system,
-and if that system replaced tabs with spaces. Is that possible ?
-
-> +{
-> + int ret;
-> +
-> + switch (reg) {
-> + case PMBUS_VIRT_READ_VMON:
-> + ret = pmbus_read_word_data(client, page,
-> +   PM6764TR_PMBUS_READ_VOUT);
-
-That can be one line (line limit is now 100 columns).
-
-> + break;
-> + default:
-> + ret = -ENODATA;
-> + break;
-> + }
-> + return ret;
-> +}
-> +
-> +static struct pmbus_driver_info pm6764tr_info = {
-> + .pages = 1,
-> + .format[PSC_VOLTAGE_IN] = linear,
-> + .format[PSC_VOLTAGE_OUT] = vid,
-> + .format[PSC_TEMPERATURE] = linear,
-> + .format[PSC_CURRENT_OUT] = linear,
-> + .format[PSC_POWER] = linear,
-> + .func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN |  PMBUS_HAVE_PIN |
-> +    PMBUS_HAVE_IOUT | PMBUS_HAVE_POUT | PMBUS_HAVE_VMON |
-> + PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_VOUT |
-> + PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-> +    .read_word_data = pm6764tr_read_word_data,
-> +};
-> +
-> +static int pm6764tr_probe(struct i2c_client *client,
-> +  const struct i2c_device_id *id)
-
-Please use the new style probe function (probe_new).
-
-> +{
-> + return pmbus_do_probe(client, id, &pm6764tr_info);
-> +}
-> +
-> +static const struct i2c_device_id pm6764tr_id[] = {
-> + {"pm6764tr", 0},
-> + {}
-> +};
-> +MODULE_DEVICE_TABLE(i2c, pm6764tr_id);
-> +
-> +static const struct of_device_id pm6764tr_of_match[] = {
-> + {.compatible = "pm6764tr"},
-> + {}
-> +};
-> +/* This is the driver that will be inserted */
-> +static struct i2c_driver pm6764tr_driver = {
-> + .driver = {
-> +   .name = "pm6764tr",
-> +   .of_match_table = of_match_ptr(pm6764tr_of_match),
-> +   },
-> + .probe = pm6764tr_probe,
-> + .remove = pmbus_do_remove,
-
-pmbus_do_remove no longer exists.
-
-> + .id_table = pm6764tr_id,
-> +};
-> +
-> +module_i2c_driver(pm6764tr_driver);
-> +
-> +MODULE_AUTHOR("Charles Hsu");
-> +MODULE_DESCRIPTION("PMBus driver for  ST PM6764TR");
-> +MODULE_LICENSE("GPL");
-> --
-> 2.25.1
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
