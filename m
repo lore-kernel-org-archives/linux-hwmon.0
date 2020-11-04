@@ -4,892 +4,987 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78E35C2D0A3
-	for <linux-hwmon@archiver.kernel.org>; Wed,  4 Nov 2020 05:21:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82D37C2D0A3
+	for <linux-hwmon@archiver.kernel.org>; Wed,  4 Nov 2020 05:54:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E7CF22222B
-	for <linux-hwmon@archiver.kernel.org>; Wed,  4 Nov 2020 05:21:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0EA1122277
+	for <linux-hwmon@archiver.kernel.org>; Wed,  4 Nov 2020 05:54:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QTEnkwSi"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T5zQOTf7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727754AbgKDFVI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 4 Nov 2020 00:21:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44798 "EHLO
+        id S1727323AbgKDFyQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 4 Nov 2020 00:54:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725535AbgKDFVI (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 4 Nov 2020 00:21:08 -0500
-Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FDA8C061A4D;
-        Tue,  3 Nov 2020 21:21:07 -0800 (PST)
-Received: by mail-oo1-xc2d.google.com with SMTP id j41so4788940oof.12;
-        Tue, 03 Nov 2020 21:21:07 -0800 (PST)
+        with ESMTP id S1725535AbgKDFyQ (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 4 Nov 2020 00:54:16 -0500
+Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF5AC061A4D;
+        Tue,  3 Nov 2020 21:54:15 -0800 (PST)
+Received: by mail-oi1-x241.google.com with SMTP id m13so11962721oih.8;
+        Tue, 03 Nov 2020 21:54:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=9Pm8uoW8ZRCmYlrpP/TtoRx2wdIqISLQLAzmZnAvN/w=;
-        b=QTEnkwSid72Em3nlPd38RmI+NJHxnVpFtnxf3Ez8/MfVhLPidtREmIiCqFbjZUxuQT
-         2/BeECbtgW4gbPGnIzSxP6I5huyCAp890etBje8pOAh7rKSEK3urlGbBn9FdGpFu9rfq
-         zhTpyg/xMINQwK7nls9wKtebM/RPGIe0F3nbZ3TGwZ9kV6agKgHOHFrs9pkXXXmu2kpg
-         Kap6noJo/3E6TYZnGZdEURfjpiJIDtey8qk2O82jJeatfWr38aft/JwrwftBvwLQcLN3
-         ciB2gByW3LH6SYPCkROOnKN0exM3ipwLvkXhcNYx+vjau1sr80hhTvOxCXJPQNilfWQ6
-         XHSw==
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=vgoLVhhaA9RImyzVtlTVPW2ie5SksXn/prK+ndDfPI0=;
+        b=T5zQOTf71XbGgygPFNzVX2xFLWvXaZKQ0CYbHUzcTA1MxbIegNPm9glGt8Xw8mHj16
+         xioohab65JkO5ycNNQyGW10QFGMdfHtHxl9htCbLOh/yy315p7EauEv59Sz5fMo33a6e
+         qhqxjtcVzE2X+b/ml1nebmknYde165f7nVZ4BBHmzwwKG32z7diP5lVNDra7vgMf06fy
+         RY3VcvYkxyAFf/G30I6wCvov+XLMfSUVRogFnvz3FDrc6McqeuaGMmlUxjPvSEF8lD9c
+         nMpM6EjYJlihcAcqlN0ciHpd6kD9JE8w9+t+0BOaZDgdjOKw0JosOLduSNDJJg42Y1lk
+         4SNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=9Pm8uoW8ZRCmYlrpP/TtoRx2wdIqISLQLAzmZnAvN/w=;
-        b=TVvwuCoAa7+Kdr9J9YEEklxeI2Nj18qbqzV/mKzVQv2XDPNC6nfpd1fQEgZ6/EVwHz
-         HmOPyQXhqTIW920R1037oNSxtk3CIDvetgJ0v3czZnjSLnycxAAJXp4ELUQtHpTgetir
-         wlBVF583MYaKLPjPW6G92DTgTqRhjQLL9m/4hqmvnpHwREcEQecat5Zg0seAhGKXwa0f
-         k3mCZoYNk1U7gB9VDyj40ZM/0MWrlapMff5VpqMsJJsc1OP74hpMMWy8DgKNJoXgf9ve
-         iCVqLeugReU/lk+SDRR4r5lu4C2EeH/NsWDEOh+hYT1qu0/4MsoiVln9r+0ULJ8N9YgY
-         iNzw==
-X-Gm-Message-State: AOAM532REeb6nNmaCkHAeVBKRzyNMtegBPmNBtcqCqiJItffsOipexF6
-        LEm/1terQrw3Er4HFeu1R+A=
-X-Google-Smtp-Source: ABdhPJxatYWRY7dAu4Lg12QXNC7UAze0hUBITDSym1fKhrR9ZVNkv729WxmeeRguMzDXTAMflR//Cw==
-X-Received: by 2002:a4a:9806:: with SMTP id y6mr17816970ooi.45.1604467266534;
-        Tue, 03 Nov 2020 21:21:06 -0800 (PST)
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to:user-agent;
+        bh=vgoLVhhaA9RImyzVtlTVPW2ie5SksXn/prK+ndDfPI0=;
+        b=C3LOMbtZAACm81tzYf534afH6e70BuB1J9TIlM0lI2bMqHaDaTmNx4eMDhB40Mq8bg
+         u07kYsALp/Ko7OOmaBFTlsQ/Tq27sy6v4BSPIw8hfkp3UwzIrdCvqb+OV3Y7dEQnW4Tz
+         4oaJh8EWRfsEzMLcL5iQkHPhrpKaaSPOvSsFoDInXhWg+q/3h6H5Z7Vz71uuudCxpOF0
+         19Utt3Jl9roY/PqJV8Ca0/30wHQldGxiuEzn2lCEzwjibtLWHXLElrqrwrOubk0iKXrC
+         t1S0VzL1mPRZ1+C1Gxz1P14nVtOq7t2hke1eDlb9QOlC/k2//KyRMIrdsipnBS4jiJf8
+         QNHQ==
+X-Gm-Message-State: AOAM531+ievJT8d+y/1dC/fQroJP813NvvL4onFDmxUZoqdaR6S0tjMp
+        Xkp4A7Gp6jHCND1rhCIj3FP3zt8WeIg=
+X-Google-Smtp-Source: ABdhPJx/gpasaGYOZqL/5jQ/jpnVtn8G9d9Ikcfjse1mC3ws9+InP9Z3Mw3QFxg29CqP7Fzi6x7N7g==
+X-Received: by 2002:aca:af4a:: with SMTP id y71mr1600585oie.178.1604469254867;
+        Tue, 03 Nov 2020 21:54:14 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m11sm288050oop.6.2020.11.03.21.21.05
+        by smtp.gmail.com with ESMTPSA id m23sm285370otk.10.2020.11.03.21.54.13
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 03 Nov 2020 21:21:06 -0800 (PST)
+        Tue, 03 Nov 2020 21:54:14 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 3 Nov 2020 21:21:04 -0800
+Date:   Tue, 3 Nov 2020 21:54:13 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Wilken Gottwalt <wilken.gottwalt@posteo.net>
-Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v3] hwmon: add Corsair PSU HID controller driver
-Message-ID: <20201104052104.GA123916@roeck-us.net>
-References: <20201027131710.GA253280@monster.powergraphx.local>
+To:     alexandru.tachici@analog.com
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org
+Subject: Re: [PATCH 1/3] hwmon: ltc2992: Add support
+Message-ID: <20201104055413.GA124480@roeck-us.net>
+References: <20201029094911.79173-1-alexandru.tachici@analog.com>
+ <20201029094911.79173-2-alexandru.tachici@analog.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20201027131710.GA253280@monster.powergraphx.local>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201029094911.79173-2-alexandru.tachici@analog.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Oct 27, 2020 at 02:17:10PM +0100, Wilken Gottwalt wrote:
-> The Corsair digital power supplies of the series RMi, HXi and AXi include
-> a small micro-controller with a lot of sensors attached. The sensors can
-> be accessed by an USB connector from the outside.
+On Thu, Oct 29, 2020 at 11:49:09AM +0200, alexandru.tachici@analog.com wrote:
+> From: Alexandru Tachici <alexandru.tachici@analog.com>
 > 
-> This micro-controller provides the data by a simple proprietary USB HID
-> protocol. The data consist of temperatures, current and voltage levels,
-> power usage, uptimes, fan speed and some more. It is also possible to
-> configure the PSU (fan mode, mono/multi-rail, over current protection).
+> LTC2992 is a rail-to-rail system monitor that
+> measures current, voltage, and power of two supplies.
 > 
-> This driver provides access to the sensors/statistics of the RMi and HXi
-> series power supplies. It does not support configuring these devices,
-> because there would be many ways to misconfigure or even damage the PSU.
+> Two ADCs simultaneously measure each supply’s current.
+> A third ADC monitors the input voltages and four
+> auxiliary external voltages.
 > 
-> This patch adds:
-> - hwmon driver corsair-psu
-> - hwmon documentation
-> - updates MAINTAINERS
-> 
-> Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+> Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
 
-Applied.
-
-Thanks,
-Guenter
+High level comment: checkpatch finds a number of spelling errors.
+Please fix.
 
 > ---
-> Changes in v3:
->   - changed the email addresses because of serious email provider problems
->   - fixed all multi-line comments
->   - simplifiend some more switches
->   - added more explanations about the values provied by the micro-controller
->   - cached the raw value delivered by the usb_cmd function
-> Changes in v2:
->   - changed comments to hwmon style comments
->   - simplified some switches
->   - removed redundant code
->   - removed misuse of EIO
->   - changed a todo to a proper explanation
->   - changed debugfs init/remove code
->   - added 2 more HXi/RMi devices
->   - updated documentation
-> ---
->  Documentation/hwmon/corsair-psu.rst |  82 ++++
->  Documentation/hwmon/index.rst       |   1 +
->  MAINTAINERS                         |   7 +
->  drivers/hwmon/Kconfig               |  13 +
->  drivers/hwmon/Makefile              |   1 +
->  drivers/hwmon/corsair-psu.c         | 605 ++++++++++++++++++++++++++++
->  6 files changed, 709 insertions(+)
->  create mode 100644 Documentation/hwmon/corsair-psu.rst
->  create mode 100644 drivers/hwmon/corsair-psu.c
+>  Documentation/hwmon/index.rst   |   1 +
+>  Documentation/hwmon/ltc2992.rst |  51 +++
+>  drivers/hwmon/Kconfig           |  11 +
+>  drivers/hwmon/Makefile          |   1 +
+>  drivers/hwmon/ltc2992.c         | 735 ++++++++++++++++++++++++++++++++
+>  5 files changed, 799 insertions(+)
+>  create mode 100644 Documentation/hwmon/ltc2992.rst
+>  create mode 100644 drivers/hwmon/ltc2992.c
 > 
-> diff --git a/Documentation/hwmon/corsair-psu.rst b/Documentation/hwmon/corsair-psu.rst
+> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+> index e6b91ab12978..f759d70ae9fd 100644
+> --- a/Documentation/hwmon/index.rst
+> +++ b/Documentation/hwmon/index.rst
+> @@ -104,6 +104,7 @@ Hardware Monitoring Kernel Drivers
+>     ltc2947
+>     ltc2978
+>     ltc2990
+> +   ltc2992
+>     ltc3815
+>     ltc4151
+>     ltc4215
+> diff --git a/Documentation/hwmon/ltc2992.rst b/Documentation/hwmon/ltc2992.rst
 > new file mode 100644
-> index 000000000000..396b95c9a76a
+> index 000000000000..1dd48ef9f655
 > --- /dev/null
-> +++ b/Documentation/hwmon/corsair-psu.rst
-> @@ -0,0 +1,82 @@
-> +.. SPDX-License-Identifier: GPL-2.0-or-later
+> +++ b/Documentation/hwmon/ltc2992.rst
+> @@ -0,0 +1,51 @@
+> +.. SPDX-License-Identifier: GPL-2.0
 > +
-> +Kernel driver corsair-psu
-> +=========================
+> +Kernel driver ltc2992
+> +=====================
 > +
-> +Supported devices:
+> +Supported chips:
+> +  * Linear Technology LTC2992
+> +    Prefix: 'ltc2992'
+> +    Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/ltc2992.pdf
 > +
-> +* Corsair Power Supplies
+> +Author: Alexandru Tachici <alexandru.tachici@analog.com>
 > +
-> +  Corsair HX550i
-> +
-> +  Corsair HX650i
-> +
-> +  Corsair HX750i
-> +
-> +  Corsair HX850i
-> +
-> +  Corsair HX1000i
-> +
-> +  Corsair HX1200i
-> +
-> +  Corsair RM550i
-> +
-> +  Corsair RM650i
-> +
-> +  Corsair RM750i
-> +
-> +  Corsair RM850i
-> +
-> +  Corsair RM1000i
-> +
-> +Author: Wilken Gottwalt
 > +
 > +Description
 > +-----------
 > +
-> +This driver implements the sysfs interface for the Corsair PSUs with a HID protocol
-> +interface of the HXi and RMi series.
-> +These power supplies provide access to a micro-controller with 2 attached
-> +temperature sensors, 1 fan rpm sensor, 4 sensors for volt levels, 4 sensors for
-> +power usage and 4 sensors for current levels and addtional non-sensor information
-> +like uptimes.
+> +This driver supports hardware monitoring for Linear Technology LTC2992 power monitor.
+> +
+> +LTC2992 is is a rail-to-rail system monitor that measures current,
+> +voltage, and power of two supplies.
+> +
+> +Two ADCs simultaneously measure each supply’s current. A third ADC monitors
+> +the input voltages and four auxiliary external voltages.
+> +
 > +
 > +Sysfs entries
 > +-------------
 > +
-> +=======================	========================================================
-> +curr1_input		Total current usage
-> +curr2_input		Current on the 12v psu rail
-> +curr3_input		Current on the 5v psu rail
-> +curr4_input		Current on the 3.3v psu rail
-> +fan1_input		RPM of psu fan
-> +in0_input		Voltage of the psu ac input
-> +in1_input		Voltage of the 12v psu rail
-> +in2_input		Voltage of the 5v psu rail
-> +in3_input		Voltage of the 3.3 psu rail
-> +power1_input		Total power usage
-> +power2_input		Power usage of the 12v psu rail
-> +power3_input		Power usage of the 5v psu rail
-> +power4_input		Power usage of the 3.3v psu rail
-> +temp1_input		Temperature of the psu vrm component
-> +temp2_input		Temperature of the psu case
-> +=======================	========================================================
+> +The following attributes are supported. Limits are read-write,
+> +all other attributes are read-only.
 > +
-> +Usage Notes
-> +-----------
+> +inX_input		Measured voltage.
+> +inX_min			Minimum voltage.
+> +inX_max			Maximum voltage.
+> +inX_min_alarm		Voltage low alarm.
+> +inX_max_alarm		Voltage high alarm.
+> +inX_alarm		An overvoltage or undervoltage occured. Cleared on read.
 > +
-> +It is an USB HID device, so it is auto-detected and supports hot-swapping.
+> +currX_input		Measured current.
+> +currX_min		Minimum current.
+> +currX_max		Maximum current.
+> +currX_min_alarm		Current low alarm.
+> +currX_max_alarm		Current high alarm.
+> +currX_alarm		An overvoltage or undervoltage occured. Cleared on read.
 > +
-> +Flickering values in the rail voltage levels can be an indicator for a failing
-> +PSU. The driver also provides some additional useful values via debugfs, which
-> +do not fit into the hwmon class.
-> +
-> +Debugfs entries
-> +---------------
-> +
-> +=======================	========================================================
-> +uptime			Current uptime of the psu
-> +uptime_total		Total uptime of the psu
-> +vendor			Vendor name of the psu
-> +product			Product name of the psu
-> +=======================	========================================================
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index e6b91ab12978..408760d13813 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -49,6 +49,7 @@ Hardware Monitoring Kernel Drivers
->     bt1-pvt
->     coretemp
->     corsair-cpro
-> +   corsair-psu
->     da9052
->     da9055
->     dell-smm-hwmon
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index e73636b75f29..e1db1f6dd694 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -4496,6 +4496,13 @@ L:	linux-hwmon@vger.kernel.org
->  S:	Maintained
->  F:	drivers/hwmon/corsair-cpro.c
->  
-> +CORSAIR-PSU HARDWARE MONITOR DRIVER
-> +M:	Wilken Gottwalt <wilken.gottwalt@posteo.net>
-> +L:	linux-hwmon@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/hwmon/corsair-psu.rst
-> +F:	drivers/hwmon/corsair-psu.c
-> +
->  COSA/SRP SYNC SERIAL DRIVER
->  M:	Jan "Yenya" Kasprzak <kas@fi.muni.cz>
->  S:	Maintained
+> +powerX_input		Measured power.
+> +powerX_min		Minimum power.
+> +powerX_max		Maximum power.
+> +powerX_min_alarm	Power low alarm.
+> +powerX_max_alarm	Power high alarm.
+> +powerX_alarm		An overpower or underpower occured. Cleared on read.
 > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index a850e4f0e0bd..9d600e0c5584 100644
+> index a850e4f0e0bd..bf9e387270d6 100644
 > --- a/drivers/hwmon/Kconfig
 > +++ b/drivers/hwmon/Kconfig
-> @@ -449,6 +449,19 @@ config SENSORS_CORSAIR_CPRO
->  	  This driver can also be built as a module. If so, the module
->  	  will be called corsair-cpro.
+> @@ -858,6 +858,17 @@ config SENSORS_LTC2990
+>  	  This driver can also be built as a module. If so, the module will
+>  	  be called ltc2990.
 >  
-> +config SENSORS_CORSAIR_PSU
-> +	tristate "Corsair PSU HID controller"
-> +	depends on HID
+> +config SENSORS_LTC2992
+> +	tristate "Linear Technology LTC2992"
+> +	depends on I2C
 > +	help
-> +	  If you say yes here you get support for Corsair PSUs with a HID
-> +	  interface.
-> +	  Currently this driver supports the (RM/HX)550i, (RM/HX)650i,
-> +	  (RM/HX)750i, (RM/HX)850i, (RM/HX)1000i and HX1200i power supplies
-> +	  by Corsair.
+> +	  If you say yes here you get support for Linear Technology LTC2992
+> +	  I2C System Monitor. The LTC2992 measures current, voltage, and
+> +	  power of two supplies.
 > +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called corsair-psu.
+> +	  This driver can also be built as a module. If so, the module will
+> +	  be called ltc2992.
 > +
->  config SENSORS_DRIVETEMP
->  	tristate "Hard disk drives with temperature sensors"
->  	depends on SCSI && ATA
+>  config SENSORS_LTC4151
+>  	tristate "Linear Technology LTC4151"
+>  	depends on I2C
 > diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index 9db2903b61e5..1083bbfac779 100644
+> index 9db2903b61e5..d6172c4807c4 100644
 > --- a/drivers/hwmon/Makefile
 > +++ b/drivers/hwmon/Makefile
-> @@ -57,6 +57,7 @@ obj-$(CONFIG_SENSORS_AXI_FAN_CONTROL) += axi-fan-control.o
->  obj-$(CONFIG_SENSORS_BT1_PVT)	+= bt1-pvt.o
->  obj-$(CONFIG_SENSORS_CORETEMP)	+= coretemp.o
->  obj-$(CONFIG_SENSORS_CORSAIR_CPRO) += corsair-cpro.o
-> +obj-$(CONFIG_SENSORS_CORSAIR_PSU) += corsair-psu.o
->  obj-$(CONFIG_SENSORS_DA9052_ADC)+= da9052-hwmon.o
->  obj-$(CONFIG_SENSORS_DA9055)+= da9055-hwmon.o
->  obj-$(CONFIG_SENSORS_DELL_SMM)	+= dell-smm-hwmon.o
-> diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
+> @@ -118,6 +118,7 @@ obj-$(CONFIG_SENSORS_LTC2947)	+= ltc2947-core.o
+>  obj-$(CONFIG_SENSORS_LTC2947_I2C) += ltc2947-i2c.o
+>  obj-$(CONFIG_SENSORS_LTC2947_SPI) += ltc2947-spi.o
+>  obj-$(CONFIG_SENSORS_LTC2990)	+= ltc2990.o
+> +obj-$(CONFIG_SENSORS_LTC2992)	+= ltc2992.o
+>  obj-$(CONFIG_SENSORS_LTC4151)	+= ltc4151.o
+>  obj-$(CONFIG_SENSORS_LTC4215)	+= ltc4215.o
+>  obj-$(CONFIG_SENSORS_LTC4222)	+= ltc4222.o
+> diff --git a/drivers/hwmon/ltc2992.c b/drivers/hwmon/ltc2992.c
 > new file mode 100644
-> index 000000000000..e92d0376e7ac
+> index 000000000000..940d92b4a1d0
 > --- /dev/null
-> +++ b/drivers/hwmon/corsair-psu.c
-> @@ -0,0 +1,605 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +++ b/drivers/hwmon/ltc2992.c
+> @@ -0,0 +1,735 @@
+> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 > +/*
-> + * corsair-psu.c - Linux driver for Corsair power supplies with HID sensors interface
-> + * Copyright (C) 2020 Wilken Gottwalt <wilken.gottwalt@posteo.net>
+> + * LTC2992 - Dual Wide Range Power Monitor
+> + *
+> + * Copyright 2020 Analog Devices Inc.
 > + */
 > +
-> +#include <linux/completion.h>
-> +#include <linux/debugfs.h>
-> +#include <linux/errno.h>
-> +#include <linux/hid.h>
+> +#include <linux/bitfield.h>
+> +#include <linux/bitops.h>
+> +#include <linux/bits.h>
+> +#include <linux/err.h>
 > +#include <linux/hwmon.h>
 > +#include <linux/hwmon-sysfs.h>
-> +#include <linux/jiffies.h>
+> +#include <linux/i2c.h>
 > +#include <linux/kernel.h>
 > +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/slab.h>
-> +#include <linux/types.h>
+> +#include <linux/property.h>
+> +#include <linux/regmap.h>
 > +
-> +/*
-> + * Corsair protocol for PSUs
-> + *
-> + * message size = 64 bytes (request and response, little endian)
-> + * request:
-> + *	[length][command][param0][param1][paramX]...
-> + * reply:
-> + *	[echo of length][echo of command][data0][data1][dataX]...
-> + *
-> + *	- commands are byte sized opcodes
-> + *	- length is the sum of all bytes of the commands/params
-> + *	- the micro-controller of most of these PSUs support concatenation in the request and reply,
-> + *	  but it is better to not rely on this (it is also hard to parse)
-> + *	- the driver uses raw events to be accessible from userspace (though this is not really
-> + *	  supported, it is just there for convenience, may be removed in the future)
-> + *	- a reply always start with the length and command in the same order the request used it
-> + *	- length of the reply data is specific to the command used
-> + *	- some of the commands work on a rail and can be switched to a specific rail (0 = 12v,
-> + *	  1 = 5v, 2 = 3.3v)
-> + *	- the format of the init command 0xFE is swapped length/command bytes
-> + *	- parameter bytes amount and values are specific to the command (rail setting is the only
-> + *	  for now that uses non-zero values)
-> + *	- there are much more commands, especially for configuring the device, but they are not
-> + *	  supported because a wrong command/length can lockup the micro-controller
-> + *	- the driver supports debugfs for values not fitting into the hwmon class
-> + *	- not every device class (HXi, RMi or AXi) supports all commands
-> + *	- it is a pure sensors reading driver (will not support configuring)
-> + */
+> +#define LTC2992_CTRLB			0x01
+> +#define LTC2992_FAULT1			0x03
+> +#define LTC2992_POWER1			0x05
+> +#define LTC2992_POWER1_MAX		0x08
+> +#define LTC2992_POWER1_MIN		0x0B
+> +#define LTC2992_POWER1_MAX_THRESH	0x0E
+> +#define LTC2992_POWER1_MIN_THRESH	0x11
+> +#define LTC2992_DSENSE1			0x14
+> +#define LTC2992_DSENSE1_MAX		0x16
+> +#define LTC2992_DSENSE1_MIN		0x18
+> +#define LTC2992_DSENSE1_MAX_THRESH	0x1A
+> +#define LTC2992_DSENSE1_MIN_THRESH	0x1C
+> +#define LTC2992_SENSE1			0x1E
+> +#define LTC2992_SENSE1_MAX		0x20
+> +#define LTC2992_SENSE1_MIN		0x22
+> +#define LTC2992_SENSE1_MAX_THRESH	0x24
+> +#define LTC2992_SENSE1_MIN_THRESH	0x26
+> +#define LTC2992_G1			0x28
+> +#define LTC2992_G1_MAX			0x2A
+> +#define LTC2992_G1_MIN			0x2C
+> +#define LTC2992_G1_MAX_THRESH		0x2E
+> +#define LTC2992_G1_MIN_THRESH		0x30
+> +#define LTC2992_FAULT2			0x35
+> +#define LTC2992_G2			0x5A
+> +#define LTC2992_G2_MAX			0x5C
+> +#define LTC2992_G2_MIN			0x5E
+> +#define LTC2992_G2_MAX_THRESH		0x60
+> +#define LTC2992_G2_MIN_THRESH		0x62
+> +#define LTC2992_G3			0x64
+> +#define LTC2992_G3_MAX			0x66
+> +#define LTC2992_G3_MIN			0x68
+> +#define LTC2992_G3_MAX_THRESH		0x6A
+> +#define LTC2992_G3_MIN_THRESH		0x6C
+> +#define LTC2992_G4			0x6E
+> +#define LTC2992_G4_MAX			0x70
+> +#define LTC2992_G4_MIN			0x72
+> +#define LTC2992_G4_MAX_THRESH		0x74
+> +#define LTC2992_G4_MIN_THRESH		0x76
+> +#define LTC2992_FAULT3			0x92
 > +
-> +#define DRIVER_NAME		"corsair-psu"
+> +#define LTC2992_POWER(x)		(LTC2992_POWER1 + ((x) * 0x32))
+> +#define LTC2992_POWER_MAX(x)		(LTC2992_POWER1_MAX + ((x) * 0x32))
+> +#define LTC2992_POWER_MIN(x)		(LTC2992_POWER1_MIN + ((x) * 0x32))
+> +#define LTC2992_POWER_MAX_THRESH(x)	(LTC2992_POWER1_MAX_THRESH + ((x) * 0x32))
+> +#define LTC2992_POWER_MIN_THRESH(x)	(LTC2992_POWER1_MIN_THRESH + ((x) * 0x32))
+> +#define LTC2992_DSENSE(x)		(LTC2992_DSENSE1 + ((x) * 0x32))
+> +#define LTC2992_DSENSE_MAX(x)		(LTC2992_DSENSE1_MAX + ((x) * 0x32))
+> +#define LTC2992_DSENSE_MIN(x)		(LTC2992_DSENSE1_MIN + ((x) * 0x32))
+> +#define LTC2992_DSENSE_MAX_THRESH(x)	(LTC2992_DSENSE1_MAX_THRESH + ((x) * 0x32))
+> +#define LTC2992_DSENSE_MIN_THRESH(x)	(LTC2992_DSENSE1_MIN_THRESH + ((x) * 0x32))
+> +#define LTC2992_SENSE(x)		(LTC2992_SENSE1 + ((x) * 0x32))
+> +#define LTC2992_SENSE_MAX(x)		(LTC2992_SENSE1_MAX + ((x) * 0x32))
+> +#define LTC2992_SENSE_MIN(x)		(LTC2992_SENSE1_MIN + ((x) * 0x32))
+> +#define LTC2992_SENSE_MAX_THRESH(x)	(LTC2992_SENSE1_MAX_THRESH + ((x) * 0x32))
+> +#define LTC2992_SENSE_MIN_THRESH(x)	(LTC2992_SENSE1_MIN_THRESH + ((x) * 0x32))
+> +#define LTC2992_POWER_FAULT(x)		(LTC2992_FAULT1 + ((x) * 0x32))
+> +#define LTC2992_SENSE_FAULT(x)		(LTC2992_FAULT1 + ((x) * 0x32))
+> +#define LTC2992_DSENSE_FAULT(x)		(LTC2992_FAULT1 + ((x) * 0x32))
 > +
-> +#define REPLY_SIZE		16 /* max length of a reply to a single command */
-> +#define CMD_BUFFER_SIZE		64
-> +#define CMD_TIMEOUT_MS		250
-> +#define SECONDS_PER_HOUR	(60 * 60)
-> +#define SECONDS_PER_DAY		(SECONDS_PER_HOUR * 24)
+> +/* FAULT1 FAULT2 registers common bitfields */
+> +#define LTC2992_POWER_FAULT_MSK		GENMASK(7, 6)
+> +#define LTC2992_DSENSE_FAULT_MSK	GENMASK(5, 4)
+> +#define LTC2992_SENSE_FAULT_MSK		GENMASK(3, 2)
 > +
-> +#define PSU_CMD_SELECT_RAIL	0x00 /* expects length 2 */
-> +#define PSU_CMD_IN_VOLTS	0x88 /* the rest of the commands expect length 3 */
-> +#define PSU_CMD_IN_AMPS		0x89
-> +#define PSU_CMD_RAIL_OUT_VOLTS	0x8B
-> +#define PSU_CMD_RAIL_AMPS	0x8C
-> +#define PSU_CMD_TEMP0		0x8D
-> +#define PSU_CMD_TEMP1		0x8E
-> +#define PSU_CMD_FAN		0x90
-> +#define PSU_CMD_RAIL_WATTS	0x96
-> +#define PSU_CMD_VEND_STR	0x99
-> +#define PSU_CMD_PROD_STR	0x9A
-> +#define PSU_CMD_TOTAL_WATTS	0xEE
-> +#define PSU_CMD_TOTAL_UPTIME	0xD1
-> +#define PSU_CMD_UPTIME		0xD2
-> +#define PSU_CMD_INIT		0xFE
+> +/* FAULT1 bitfields */
+> +#define LTC2992_GPIO1_FAULT_MSK		GENMASK(1, 0)
 > +
-> +#define L_IN_VOLTS		"v_in"
-> +#define L_OUT_VOLTS_12V		"v_out +12v"
-> +#define L_OUT_VOLTS_5V		"v_out +5v"
-> +#define L_OUT_VOLTS_3_3V	"v_out +3.3v"
-> +#define L_IN_AMPS		"curr in"
-> +#define L_AMPS_12V		"curr +12v"
-> +#define L_AMPS_5V		"curr +5v"
-> +#define L_AMPS_3_3V		"curr +3.3v"
-> +#define L_FAN			"psu fan"
-> +#define L_TEMP0			"vrm temp"
-> +#define L_TEMP1			"case temp"
-> +#define L_WATTS			"power total"
-> +#define L_WATTS_12V		"power +12v"
-> +#define L_WATTS_5V		"power +5v"
-> +#define L_WATTS_3_3V		"power +3.3v"
+> +/* FAULT2 bitfields */
+> +#define LTC2992_GPIO2_FAULT_MSK		GENMASK(1, 0)
 > +
-> +static const char *const label_watts[] = {
-> +	L_WATTS,
-> +	L_WATTS_12V,
-> +	L_WATTS_5V,
-> +	L_WATTS_3_3V
+> +/* FAULT3 bitfields */
+> +#define LTC2992_GPIO3_FAULT_MSK		GENMASK(7, 6)
+> +#define LTC2992_GPIO4_FAULT_MSK		GENMASK(5, 4)
+> +
+> +#define LTC2992_IADC_NANOV_LSB		12500
+> +#define LTC2992_VADC_UV_LSB		25000
+> +#define LTC2992_VADC_GPIO_UV_LSB	500
+> +
+> +struct ltc2992_state {
+> +	struct i2c_client		*client;
+> +	struct regmap			*regmap;
+> +	u32				r_sense_uohm[2];
 > +};
 > +
-> +static const char *const label_volts[] = {
-> +	L_IN_VOLTS,
-> +	L_OUT_VOLTS_12V,
-> +	L_OUT_VOLTS_5V,
-> +	L_OUT_VOLTS_3_3V
+> +struct ltc2992_gpio_regs {
+> +	u8	data;
+> +	u8	max;
+> +	u8	min;
+> +	u8	max_thresh;
+> +	u8	min_thresh;
+> +	u8	alarm;
+> +	u8	alarm_msk;
 > +};
 > +
-> +static const char *const label_amps[] = {
-> +	L_IN_AMPS,
-> +	L_AMPS_12V,
-> +	L_AMPS_5V,
-> +	L_AMPS_3_3V
+> +static const struct ltc2992_gpio_regs ltc2992_gpio_addr_map[] = {
+> +	{
+> +		.data = LTC2992_G1,
+> +		.max = LTC2992_G1_MAX,
+> +		.min = LTC2992_G1_MIN,
+> +		.max_thresh = LTC2992_G1_MAX_THRESH,
+> +		.min_thresh = LTC2992_G1_MIN_THRESH,
+> +		.alarm = LTC2992_FAULT1,
+> +		.alarm_msk = LTC2992_GPIO1_FAULT_MSK,
+> +	},
+> +	{
+> +		.data = LTC2992_G2,
+> +		.max = LTC2992_G2_MAX,
+> +		.min = LTC2992_G2_MIN,
+> +		.max_thresh = LTC2992_G2_MAX_THRESH,
+> +		.min_thresh = LTC2992_G2_MIN_THRESH,
+> +		.alarm = LTC2992_FAULT2,
+> +		.alarm_msk = LTC2992_GPIO2_FAULT_MSK,
+> +	},
+> +	{
+> +		.data = LTC2992_G3,
+> +		.max = LTC2992_G3_MAX,
+> +		.min = LTC2992_G3_MIN,
+> +		.max_thresh = LTC2992_G3_MAX_THRESH,
+> +		.min_thresh = LTC2992_G3_MIN_THRESH,
+> +		.alarm = LTC2992_FAULT3,
+> +		.alarm_msk = LTC2992_GPIO3_FAULT_MSK,
+> +	},
+> +	{
+> +		.data = LTC2992_G4,
+> +		.max = LTC2992_G4_MAX,
+> +		.min = LTC2992_G4_MIN,
+> +		.max_thresh = LTC2992_G4_MAX_THRESH,
+> +		.min_thresh = LTC2992_G4_MIN_THRESH,
+> +		.alarm = LTC2992_FAULT3,
+> +		.alarm_msk = LTC2992_GPIO4_FAULT_MSK,
+> +	},
 > +};
 > +
-> +struct corsairpsu_data {
-> +	struct hid_device *hdev;
-> +	struct device *hwmon_dev;
-> +	struct dentry *debugfs;
-> +	struct completion wait_completion;
-> +	struct mutex lock; /* for locking access to cmd_buffer */
-> +	u8 *cmd_buffer;
-> +	char vendor[REPLY_SIZE];
-> +	char product[REPLY_SIZE];
-> +};
-> +
-> +/* some values are SMBus LINEAR11 data which need a conversion */
-> +static int corsairpsu_linear11_to_int(const int val)
+> +static int ltc2992_read_reg(struct ltc2992_state *st, u8 addr, const u8 reg_len, u32 *val)
 > +{
-> +	int exp = (val & 0xFFFF) >> 0x0B;
-> +	int mant = val & 0x7FF;
+
+The return value is at most three bytes, and it is always 0 or positive.
+That means it is really unnecessary to pass a pointer to the return
+value. I would suggest to just return the value directly as int,
+combined with the error.
+
+> +	u8 regvals[4];
+> +	int ret;
 > +	int i;
 > +
-> +	if (exp > 0x0F)
-> +		exp -= 0x20;
-> +	if (mant > 0x3FF)
-> +		mant -= 0x800;
-> +	if ((mant & 0x01) == 1)
-> +		++mant;
-> +	if (exp < 0) {
-> +		for (i = 0; i < -exp; ++i)
-> +			mant /= 2;
-> +	} else {
-> +		for (i = 0; i < exp; ++i)
-> +			mant *= 2;
+> +	ret = regmap_bulk_read(st->regmap, addr, regvals, reg_len);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	*val = 0;
+> +	for (i = 0; i < reg_len; i++)
+> +		*val |= regvals[reg_len - i - 1] << (i * 8);
+> +
+> +	return 0;
+> +}
+> +
+> +static int ltc2992_write_reg(struct ltc2992_state *st, u8 addr, const u8 reg_len, u32 val)
+> +{
+> +	u8 regvals[4];
+> +	int i;
+> +
+> +	for (i = 0; i < reg_len; i++)
+> +		regvals[reg_len - i - 1] = (val >> (i * 8)) & 0xFF;
+> +
+> +	return regmap_bulk_write(st->regmap, addr, regvals, reg_len);
+> +}
+> +
+> +static umode_t ltc2992_is_visible(const void *data, enum hwmon_sensor_types type, u32 attr,
+> +				  int channel)
+> +{
+> +	const struct ltc2992_state *st = data;
+> +
+> +	switch (type) {
+> +	case hwmon_in:
+> +		switch (attr) {
+> +		case hwmon_in_input:
+> +		case hwmon_in_min:
+> +		case hwmon_in_max:
+> +		case hwmon_in_alarm:
+> +			return 0444;
+> +		case hwmon_in_min_alarm:
+> +		case hwmon_in_max_alarm:
+> +			return 0644;
+> +		}
+> +		break;
+> +	case hwmon_curr:
+> +		switch (attr) {
+> +		case hwmon_curr_input:
+> +		case hwmon_curr_min:
+> +		case hwmon_curr_max:
+> +		case hwmon_curr_alarm:
+> +			if (st->r_sense_uohm[channel])
+> +				return 0444;
+> +			break;
+> +		case hwmon_curr_min_alarm:
+> +		case hwmon_curr_max_alarm:
+> +			if (st->r_sense_uohm[channel])
+> +				return 0644;
+> +			break;
+> +		}
+> +		break;
+> +	case hwmon_power:
+> +		switch (attr) {
+> +		case hwmon_power_input:
+> +		case hwmon_power_min:
+> +		case hwmon_power_max:
+> +		case hwmon_power_alarm:
+> +			if (st->r_sense_uohm[channel])
+> +				return 0444;
+> +			break;
+> +		case hwmon_power_min_alarm:
+> +		case hwmon_power_max_alarm:
+> +			if (st->r_sense_uohm[channel])
+> +				return 0644;
+> +			break;
+> +		}
+> +		break;
+> +	default:
+> +		break;
 > +	}
 > +
-> +	return mant;
+> +	return 0;
 > +}
 > +
-> +static int corsairpsu_usb_cmd(struct corsairpsu_data *priv, u8 p0, u8 p1, u8 p2, void *data)
+> +static int ltc2992_get_voltage(struct ltc2992_state *st, u32 reg, u32 scale, long *val)
 > +{
-> +	unsigned long time;
+> +	u32 reg_val;
 > +	int ret;
 > +
-> +	memset(priv->cmd_buffer, 0, CMD_BUFFER_SIZE);
-> +	priv->cmd_buffer[0] = p0;
-> +	priv->cmd_buffer[1] = p1;
-> +	priv->cmd_buffer[2] = p2;
-> +
-> +	reinit_completion(&priv->wait_completion);
-> +
-> +	ret = hid_hw_output_report(priv->hdev, priv->cmd_buffer, CMD_BUFFER_SIZE);
+> +	ret = ltc2992_read_reg(st, reg, 2, &reg_val);
 > +	if (ret < 0)
 > +		return ret;
 > +
-> +	time = wait_for_completion_timeout(&priv->wait_completion,
-> +					   msecs_to_jiffies(CMD_TIMEOUT_MS));
-> +	if (!time)
-> +		return -ETIMEDOUT;
+> +	reg_val = reg_val >> 4;
+> +	*val = DIV_ROUND_CLOSEST(reg_val * scale, 1000);
 > +
-> +	/*
-> +	 * at the start of the reply is an echo of the send command/length in the same order it
-> +	 * was send, not every command is supported on every device class, if a command is not
-> +	 * supported, the length value in the reply is okay, but the command value is set to 0
-> +	 */
-> +	if (p0 != priv->cmd_buffer[0] || p1 != priv->cmd_buffer[1])
+> +	return 0;
+> +}
+> +
+> +static int ltc2992_set_voltage(struct ltc2992_state *st, u32 reg, u32 scale, long val)
+> +{
+> +	val = DIV_ROUND_CLOSEST(val * 1000, scale);
+> +	val = val << 4;
+> +
+> +	return ltc2992_write_reg(st, reg, 2, val);
+> +}
+> +
+> +static int ltc2992_read_gpio_alarm(struct ltc2992_state *st, int nr_gpio, long *val)
+> +{
+> +	u32 reg_val;
+> +	int ret;
+> +
+> +	ret = ltc2992_read_reg(st, ltc2992_gpio_addr_map[nr_gpio].alarm, 1, &reg_val);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	*val = !!(reg_val & ltc2992_gpio_addr_map[nr_gpio].alarm_msk);
+> +
+> +	reg_val &= ~ltc2992_gpio_addr_map[nr_gpio].alarm_msk;
+> +	return ltc2992_write_reg(st, ltc2992_gpio_addr_map[nr_gpio].alarm, 1, reg_val);
+> +}
+> +
+> +static int ltc2992_read_gpios_in(struct device *dev, u32 attr, int nr_gpio, long *val)
+> +{
+> +	struct ltc2992_state *st = dev_get_drvdata(dev);
+> +	u32 reg;
+> +
+> +	switch (attr) {
+> +	case hwmon_in_input:
+> +		reg = ltc2992_gpio_addr_map[nr_gpio].data;
+> +		break;
+> +	case hwmon_in_min:
+> +		reg = ltc2992_gpio_addr_map[nr_gpio].min;
+> +		break;
+> +	case hwmon_in_max:
+> +		reg = ltc2992_gpio_addr_map[nr_gpio].max;
+> +		break;
+> +	case hwmon_in_min_alarm:
+> +		reg = ltc2992_gpio_addr_map[nr_gpio].min_thresh;
+> +		break;
+> +	case hwmon_in_max_alarm:
+> +		reg = ltc2992_gpio_addr_map[nr_gpio].max_thresh;
+> +		break;
+> +	case hwmon_in_alarm:
+> +		return ltc2992_read_gpio_alarm(st, nr_gpio, val);
+> +	default:
 > +		return -EOPNOTSUPP;
+> +	}
 > +
-> +	if (data)
-> +		memcpy(data, priv->cmd_buffer + 2, REPLY_SIZE);
-> +
-> +	return 0;
+> +	return ltc2992_get_voltage(st, reg, LTC2992_VADC_GPIO_UV_LSB, val);
 > +}
 > +
-> +static int corsairpsu_init(struct corsairpsu_data *priv)
+> +static int ltc2992_read_in(struct device *dev, u32 attr, int channel, long *val)
 > +{
-> +	/*
-> +	 * PSU_CMD_INIT uses swapped length/command and expects 2 parameter bytes, this command
-> +	 * actually generates a reply, but we don't need it
-> +	 */
-> +	return corsairpsu_usb_cmd(priv, PSU_CMD_INIT, 3, 0, NULL);
-> +}
-> +
-> +static int corsairpsu_fwinfo(struct corsairpsu_data *priv)
-> +{
+> +	struct ltc2992_state *st = dev_get_drvdata(dev);
+> +	u32 reg_val;
+> +	u32 reg;
 > +	int ret;
 > +
-> +	ret = corsairpsu_usb_cmd(priv, 3, PSU_CMD_VEND_STR, 0, priv->vendor);
-> +	if (ret < 0)
-> +		return ret;
+> +	if (channel > 1)
+> +		return ltc2992_read_gpios_in(dev, attr, channel - 2, val);
 > +
-> +	ret = corsairpsu_usb_cmd(priv, 3, PSU_CMD_PROD_STR, 0, priv->product);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	return 0;
-> +}
-> +
-> +static int corsairpsu_request(struct corsairpsu_data *priv, u8 cmd, u8 rail, void *data)
-> +{
-> +	int ret;
-> +
-> +	mutex_lock(&priv->lock);
-> +	switch (cmd) {
-> +	case PSU_CMD_RAIL_OUT_VOLTS:
-> +	case PSU_CMD_RAIL_AMPS:
-> +	case PSU_CMD_RAIL_WATTS:
-> +		ret = corsairpsu_usb_cmd(priv, 2, PSU_CMD_SELECT_RAIL, rail, NULL);
+> +	switch (attr) {
+> +	case hwmon_in_input:
+> +		reg = LTC2992_SENSE(channel);
+> +		break;
+> +	case hwmon_in_min:
+> +		reg = LTC2992_SENSE_MIN(channel);
+> +		break;
+> +	case hwmon_in_max:
+> +		reg = LTC2992_SENSE_MAX(channel);
+> +		break;
+> +	case hwmon_in_min_alarm:
+> +		reg = LTC2992_SENSE_MIN_THRESH(channel);
+> +		break;
+> +	case hwmon_in_max_alarm:
+> +		reg = LTC2992_SENSE_MAX_THRESH(channel);
+> +		break;
+> +	case hwmon_in_alarm:
+> +		ret = ltc2992_read_reg(st, LTC2992_SENSE_FAULT(channel), 1, &reg_val);
 > +		if (ret < 0)
-> +			goto cmd_fail;
-> +		break;
+> +			return ret;
+> +
+> +		*val = !!(reg_val & LTC2992_SENSE_FAULT_MSK);
+> +
+> +		reg_val &= ~LTC2992_SENSE_FAULT_MSK;
+> +		return ltc2992_write_reg(st, LTC2992_SENSE_FAULT(channel), 1, reg_val);
 > +	default:
-> +		break;
-> +	}
-> +
-> +	ret = corsairpsu_usb_cmd(priv, 3, cmd, 0, data);
-> +
-> +cmd_fail:
-> +	mutex_unlock(&priv->lock);
-> +	return ret;
-> +}
-> +
-> +static int corsairpsu_get_value(struct corsairpsu_data *priv, u8 cmd, u8 rail, long *val)
-> +{
-> +	u8 data[REPLY_SIZE];
-> +	long tmp;
-> +	int ret;
-> +
-> +	ret = corsairpsu_request(priv, cmd, rail, data);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/*
-> +	 * the biggest value here comes from the uptime command and to exceed MAXINT total uptime
-> +	 * needs to be about 68 years, the rest are u16 values and the biggest value coming out of
-> +	 * the LINEAR11 conversion are the watts values which are about 1200 for the strongest psu
-> +	 * supported (HX1200i)
-> +	 */
-> +	tmp = (data[3] << 24) + (data[2] << 16) + (data[1] << 8) + data[0];
-> +	switch (cmd) {
-> +	case PSU_CMD_IN_VOLTS:
-> +	case PSU_CMD_IN_AMPS:
-> +	case PSU_CMD_RAIL_OUT_VOLTS:
-> +	case PSU_CMD_RAIL_AMPS:
-> +	case PSU_CMD_TEMP0:
-> +	case PSU_CMD_TEMP1:
-> +		*val = corsairpsu_linear11_to_int(tmp & 0xFFFF) * 1000;
-> +		break;
-> +	case PSU_CMD_FAN:
-> +		/*
-> +		 * this value is best guess, so the calculated value could be wrong, it is hard
-> +		 * to ge the fan to spin in these semi-passive power supplies, which need a
-> +		 * quite high load to do so
-> +		 */
-> +		*val = ((tmp & 0xFF) << 8) + ((tmp >> 8) & 0xFF);
-> +		break;
-> +	case PSU_CMD_RAIL_WATTS:
-> +	case PSU_CMD_TOTAL_WATTS:
-> +		*val = corsairpsu_linear11_to_int(tmp & 0xFFFF) * 1000000;
-> +		break;
-> +	case PSU_CMD_TOTAL_UPTIME:
-> +	case PSU_CMD_UPTIME:
-> +		*val = tmp;
-> +		break;
-> +	default:
-> +		ret = -EOPNOTSUPP;
-> +		break;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static umode_t corsairpsu_hwmon_ops_is_visible(const void *data, enum hwmon_sensor_types type,
-> +					       u32 attr, int channel)
-> +{
-> +	if (type == hwmon_temp && (attr == hwmon_temp_input || attr == hwmon_temp_label))
-> +		return 0444;
-> +	else if (type == hwmon_fan && (attr == hwmon_fan_input || attr == hwmon_fan_label))
-> +		return 0444;
-> +	else if (type == hwmon_power && (attr == hwmon_power_input || attr == hwmon_power_label))
-> +		return 0444;
-> +	else if (type == hwmon_in && (attr == hwmon_in_input || attr == hwmon_in_label))
-> +		return 0444;
-> +	else if (type == hwmon_curr && (attr == hwmon_curr_input || attr == hwmon_curr_label))
-> +		return 0444;
-> +
-> +	return 0;
-> +}
-> +
-> +static int corsairpsu_hwmon_ops_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
-> +				     int channel, long *val)
-> +{
-> +	struct corsairpsu_data *priv = dev_get_drvdata(dev);
-> +	int ret;
-> +
-> +	if (type == hwmon_temp && attr == hwmon_temp_input && channel < 2) {
-> +		ret = corsairpsu_get_value(priv, channel ? PSU_CMD_TEMP1 : PSU_CMD_TEMP0, channel,
-> +					   val);
-> +	} else if (type == hwmon_fan && attr == hwmon_fan_input) {
-> +		ret = corsairpsu_get_value(priv, PSU_CMD_FAN, 0, val);
-> +	} else if (type == hwmon_power && attr == hwmon_power_input) {
-> +		switch (channel) {
-> +		case 0:
-> +			ret = corsairpsu_get_value(priv, PSU_CMD_TOTAL_WATTS, 0, val);
-> +			break;
-> +		case 1 ... 3:
-> +			ret = corsairpsu_get_value(priv, PSU_CMD_RAIL_WATTS, channel - 1, val);
-> +			break;
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +	} else if (type == hwmon_in && attr == hwmon_in_input) {
-> +		switch (channel) {
-> +		case 0:
-> +			ret = corsairpsu_get_value(priv, PSU_CMD_IN_VOLTS, 0, val);
-> +			break;
-> +		case 1 ... 3:
-> +			ret = corsairpsu_get_value(priv, PSU_CMD_RAIL_OUT_VOLTS, channel - 1, val);
-> +			break;
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +	} else if (type == hwmon_curr && attr == hwmon_curr_input) {
-> +		switch (channel) {
-> +		case 0:
-> +			ret = corsairpsu_get_value(priv, PSU_CMD_IN_AMPS, 0, val);
-> +			break;
-> +		case 1 ... 3:
-> +			ret = corsairpsu_get_value(priv, PSU_CMD_RAIL_AMPS, channel - 1, val);
-> +			break;
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +	} else {
 > +		return -EOPNOTSUPP;
 > +	}
 > +
+> +	return ltc2992_get_voltage(st, reg, LTC2992_VADC_UV_LSB, val);
+> +}
+> +
+> +static int ltc2992_get_current(struct ltc2992_state *st, u32 reg, u32 channel, long *val)
+> +{
+> +	u32 reg_val;
+> +	int ret;
+> +
+> +	ret = ltc2992_read_reg(st, reg, 2, &reg_val);
 > +	if (ret < 0)
 > +		return ret;
+> +
+> +	reg_val = reg_val >> 4;
+> +	*val = DIV_ROUND_CLOSEST(reg_val * LTC2992_IADC_NANOV_LSB, st->r_sense_uohm[channel]);
 > +
 > +	return 0;
 > +}
 > +
-> +static int corsairpsu_hwmon_ops_read_string(struct device *dev, enum hwmon_sensor_types type,
-> +					    u32 attr, int channel, const char **str)
+> +static int ltc2992_set_current(struct ltc2992_state *st, u32 reg, u32 channel, long val)
 > +{
-> +	if (type == hwmon_temp && attr == hwmon_temp_label) {
-> +		*str = channel ? L_TEMP1 : L_TEMP0;
-> +		return 0;
-> +	} else if (type == hwmon_fan && attr == hwmon_fan_label) {
-> +		*str = L_FAN;
-> +		return 0;
-> +	} else if (type == hwmon_power && attr == hwmon_power_label && channel < 4) {
-> +		*str = label_watts[channel];
-> +		return 0;
-> +	} else if (type == hwmon_in && attr == hwmon_in_label && channel < 4) {
-> +		*str = label_volts[channel];
-> +		return 0;
-> +	} else if (type == hwmon_curr && attr == hwmon_curr_label && channel < 4) {
-> +		*str = label_amps[channel];
-> +		return 0;
-> +	}
+> +	u32 reg_val;
 > +
-> +	return -EOPNOTSUPP;
+> +	reg_val = DIV_ROUND_CLOSEST(val * st->r_sense_uohm[channel], LTC2992_IADC_NANOV_LSB);
+> +	reg_val = reg_val << 4;
+> +
+> +	return ltc2992_write_reg(st, reg, 2, reg_val);
 > +}
 > +
-> +static const struct hwmon_ops corsairpsu_hwmon_ops = {
-> +	.is_visible	= corsairpsu_hwmon_ops_is_visible,
-> +	.read		= corsairpsu_hwmon_ops_read,
-> +	.read_string	= corsairpsu_hwmon_ops_read_string,
+> +static int ltc2992_read_curr(struct device *dev, u32 attr, int channel, long *val)
+> +{
+> +	struct ltc2992_state *st = dev_get_drvdata(dev);
+> +	u32 reg_val;
+> +	u32 reg;
+> +	int ret;
+> +
+> +	switch (attr) {
+> +	case hwmon_curr_input:
+> +		reg = LTC2992_DSENSE(channel);
+> +		break;
+> +	case hwmon_curr_min:
+> +		reg = LTC2992_DSENSE_MIN(channel);
+> +		break;
+> +	case hwmon_curr_max:
+> +		reg = LTC2992_DSENSE_MAX(channel);
+> +		break;
+
+The datasheet is a bit vague what those registers report, but I
+_think_ it is peak minimum and maximum data. If so, that should
+be reported with currX_lowest and currX_highest. Resetting
+those values should be done by writing into curr_reset_history
+It looks like there is only one reset bit (CTRLB[3]). With that, you
+can either implement all of {in,curr,power}_reset_history
+and have each reset everything, or pick just one reset_history
+attribute and document that it resets all lowest and highest
+attributes.
+
+> +	case hwmon_curr_min_alarm:
+> +		reg = LTC2992_DSENSE_MIN_THRESH(channel);
+> +		break;
+> +	case hwmon_curr_max_alarm:
+> +		reg = LTC2992_DSENSE_MAX_THRESH(channel);
+> +		break;
+
+This is wrong. The alarm attributes indicate that a limit has been exceeded.
+However, LTC2992_DSENSE_MAX_THRESH() and LTC2992_DSENSE_MIN_THRESH()
+point to limit registers. Those should be reported and set with
+currX_min and currX_max.
+
+> +	case hwmon_curr_alarm:
+> +		ret = ltc2992_read_reg(st, LTC2992_DSENSE_FAULT(channel), 1, &reg_val);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		*val = !!(reg_val & LTC2992_DSENSE_FAULT_MSK);
+> +
+This is also wrong. The chip reports min_alarm and max_alarm
+separately, and thus only the min_alarm and max_alarm attributes
+should be provided. curr_alarm should only be provided if
+the chip does not separate alarm reasons.
+
+The same problems apply to the power and voltage sensors.
+
+> +		reg_val &= ~LTC2992_DSENSE_FAULT_MSK;
+> +		return ltc2992_write_reg(st, LTC2992_DSENSE_FAULT(channel), 1, reg_val);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	return ltc2992_get_current(st, reg, channel, val);
+> +}
+> +
+> +static int ltc2992_get_power(struct ltc2992_state *st, u32 reg, u32 channel, long *val)
+> +{
+> +	u32 reg_val;
+> +	int ret;
+> +
+> +	ret = ltc2992_read_reg(st, reg, 3, &reg_val);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	*val = mul_u64_u32_div(reg_val, LTC2992_VADC_UV_LSB * LTC2992_IADC_NANOV_LSB,
+> +			       st->r_sense_uohm[channel] * 1000);
+> +
+> +	return 0;
+> +}
+> +
+> +static int ltc2992_set_power(struct ltc2992_state *st, u32 reg, u32 channel, long val)
+> +{
+> +	u32 reg_val;
+> +
+> +	reg_val = mul_u64_u32_div(val, st->r_sense_uohm[channel] * 1000,
+> +				  LTC2992_VADC_UV_LSB * LTC2992_IADC_NANOV_LSB);
+> +
+> +	return ltc2992_write_reg(st, reg, 3, reg_val);
+> +}
+> +
+> +static int ltc2992_read_power(struct device *dev, u32 attr, int channel, long *val)
+> +{
+> +	struct ltc2992_state *st = dev_get_drvdata(dev);
+> +	u32 reg_val;
+> +	u32 reg;
+> +	int ret;
+> +
+> +	switch (attr) {
+> +	case hwmon_power_input:
+> +		reg = LTC2992_POWER(channel);
+> +		break;
+> +	case hwmon_power_min:
+> +		reg = LTC2992_POWER_MIN(channel);
+> +		break;
+> +	case hwmon_power_max:
+> +		reg = LTC2992_POWER_MAX(channel);
+> +		break;
+> +	case hwmon_power_min_alarm:
+> +		reg = LTC2992_POWER_MIN_THRESH(channel);
+> +		break;
+> +	case hwmon_power_max_alarm:
+> +		reg = LTC2992_POWER_MAX_THRESH(channel);
+> +		break;
+> +	case hwmon_power_alarm:
+> +		ret = ltc2992_read_reg(st, LTC2992_POWER_FAULT(channel), 1, &reg_val);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		*val = !!(reg_val & LTC2992_POWER_FAULT_MSK);
+> +
+> +		reg_val &= ~LTC2992_POWER_FAULT_MSK;
+> +		return ltc2992_write_reg(st, LTC2992_POWER_FAULT(channel), 1, reg_val);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	return ltc2992_get_power(st, reg, channel, val);
+> +}
+> +
+> +static int ltc2992_read(struct device *dev, enum hwmon_sensor_types type, u32 attr, int channel,
+> +			long *val)
+> +{
+> +	switch (type) {
+> +	case hwmon_in:
+> +		return ltc2992_read_in(dev, attr, channel, val);
+> +	case hwmon_curr:
+> +		return ltc2992_read_curr(dev, attr, channel, val);
+> +	case hwmon_power:
+> +		return ltc2992_read_power(dev, attr, channel, val);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static int ltc2992_write_curr(struct device *dev, u32 attr, int channel, long val)
+> +{
+> +	struct ltc2992_state *st = dev_get_drvdata(dev);
+> +	u32 reg = 0;
+
+Unnecessary initialization.
+
+> +
+> +	switch (attr) {
+> +	case hwmon_curr_min_alarm:
+> +		reg = LTC2992_DSENSE_MIN_THRESH(channel);
+> +		break;
+> +	case hwmon_curr_max_alarm:
+> +		reg = LTC2992_DSENSE_MAX_THRESH(channel);
+> +		break;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	return ltc2992_set_current(st, reg, channel, val);
+> +}
+> +
+> +static int ltc2992_write_gpios_in(struct device *dev, u32 attr, int nr_gpio, long val)
+> +{
+> +	struct ltc2992_state *st = dev_get_drvdata(dev);
+> +	u32 reg;
+> +
+> +	switch (attr) {
+> +	case hwmon_in_min_alarm:
+> +		reg = ltc2992_gpio_addr_map[nr_gpio].min_thresh;
+> +		break;
+> +	case hwmon_in_max_alarm:
+> +		reg = ltc2992_gpio_addr_map[nr_gpio].max_thresh;
+> +		break;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	return ltc2992_set_voltage(st, reg, LTC2992_VADC_GPIO_UV_LSB, val);
+> +}
+> +
+> +static int ltc2992_write_in(struct device *dev, u32 attr, int channel, long val)
+> +{
+> +	struct ltc2992_state *st = dev_get_drvdata(dev);
+> +	u32 reg = 0;
+> +
+> +	if (channel > 1)
+> +		return ltc2992_write_gpios_in(dev, attr, channel - 2, val);
+> +
+> +	switch (attr) {
+> +	case hwmon_curr_min_alarm:
+> +		reg = LTC2992_SENSE_MIN_THRESH(channel);
+> +		break;
+> +	case hwmon_curr_max_alarm:
+> +		reg = LTC2992_SENSE_MAX_THRESH(channel);
+> +		break;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	return ltc2992_set_voltage(st, reg, LTC2992_VADC_UV_LSB, val);
+> +}
+> +
+> +static int ltc2992_write_power(struct device *dev, u32 attr, int channel, long val)
+> +{
+> +	struct ltc2992_state *st = dev_get_drvdata(dev);
+> +	u32 reg = 0;
+> +
+> +	switch (attr) {
+> +	case hwmon_power_min_alarm:
+> +		reg = LTC2992_POWER_MIN_THRESH(channel);
+> +		break;
+> +	case hwmon_power_max_alarm:
+> +		reg = LTC2992_POWER_MAX_THRESH(channel);
+> +		break;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	return ltc2992_set_power(st, reg, channel, val);
+> +}
+> +
+> +static int ltc2992_write(struct device *dev, enum hwmon_sensor_types type, u32 attr, int channel,
+> +			 long val)
+> +{
+> +	switch (type) {
+> +	case hwmon_in:
+> +		return ltc2992_write_in(dev, attr, channel, val);
+> +	case hwmon_curr:
+> +		return ltc2992_write_curr(dev, attr, channel, val);
+> +	case hwmon_power:
+> +		return ltc2992_write_power(dev, attr, channel, val);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static const struct hwmon_ops ltc2992_hwmon_ops = {
+> +	.is_visible = ltc2992_is_visible,
+> +	.read = ltc2992_read,
+> +	.write = ltc2992_write,
 > +};
 > +
-> +static const struct hwmon_channel_info *corsairpsu_info[] = {
-> +	HWMON_CHANNEL_INFO(chip,
-> +			   HWMON_C_REGISTER_TZ),
-> +	HWMON_CHANNEL_INFO(temp,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL,
-> +			   HWMON_T_INPUT | HWMON_T_LABEL),
-> +	HWMON_CHANNEL_INFO(fan,
-> +			   HWMON_F_INPUT | HWMON_F_LABEL),
-> +	HWMON_CHANNEL_INFO(power,
-> +			   HWMON_P_INPUT | HWMON_P_LABEL,
-> +			   HWMON_P_INPUT | HWMON_P_LABEL,
-> +			   HWMON_P_INPUT | HWMON_P_LABEL,
-> +			   HWMON_P_INPUT | HWMON_P_LABEL),
-> +	HWMON_CHANNEL_INFO(in,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL,
-> +			   HWMON_I_INPUT | HWMON_I_LABEL),
-> +	HWMON_CHANNEL_INFO(curr,
-> +			   HWMON_C_INPUT | HWMON_C_LABEL,
-> +			   HWMON_C_INPUT | HWMON_C_LABEL,
-> +			   HWMON_C_INPUT | HWMON_C_LABEL,
-> +			   HWMON_C_INPUT | HWMON_C_LABEL),
+> +static const u32 ltc2992_in_config[] = {
+> +	HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX | HWMON_I_MIN_ALARM |
+> +	HWMON_I_MAX_ALARM | HWMON_I_ALARM,
+> +	HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX | HWMON_I_MIN_ALARM |
+> +	HWMON_I_MAX_ALARM | HWMON_I_ALARM,
+> +	HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX | HWMON_I_MIN_ALARM |
+> +	HWMON_I_MAX_ALARM | HWMON_I_ALARM,
+> +	HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX | HWMON_I_MIN_ALARM |
+> +	HWMON_I_MAX_ALARM | HWMON_I_ALARM,
+> +	HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX | HWMON_I_MIN_ALARM |
+> +	HWMON_I_MAX_ALARM | HWMON_I_ALARM,
+> +	HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX | HWMON_I_MIN_ALARM |
+> +	HWMON_I_MAX_ALARM | HWMON_I_ALARM,
+> +	0
+> +};
+> +
+> +static const struct hwmon_channel_info ltc2992_in = {
+> +	.type = hwmon_in,
+> +	.config = ltc2992_in_config,
+> +};
+> +
+> +static const u32 ltc2992_curr_config[] = {
+> +	HWMON_C_INPUT | HWMON_C_MIN | HWMON_C_MAX | HWMON_C_MIN_ALARM | HWMON_C_MAX_ALARM |
+> +	HWMON_C_ALARM,
+> +	HWMON_C_INPUT | HWMON_C_MIN | HWMON_C_MAX | HWMON_C_MIN_ALARM | HWMON_C_MAX_ALARM |
+> +	HWMON_C_ALARM,
+> +	0
+> +};
+> +
+> +static const struct hwmon_channel_info ltc2992_curr = {
+> +	.type = hwmon_curr,
+> +	.config = ltc2992_curr_config,
+> +};
+> +
+> +static const u32 ltc2992_power_config[] = {
+> +	HWMON_P_INPUT | HWMON_P_MIN | HWMON_P_MAX | HWMON_P_MIN_ALARM | HWMON_P_MAX_ALARM |
+> +	HWMON_P_ALARM,
+> +	HWMON_P_INPUT | HWMON_P_MIN | HWMON_P_MAX | HWMON_P_MIN_ALARM | HWMON_P_MAX_ALARM |
+> +	HWMON_P_ALARM,
+> +	0
+> +};
+> +
+> +static const struct hwmon_channel_info ltc2992_power = {
+> +	.type = hwmon_power,
+> +	.config = ltc2992_power_config,
+> +};
+> +
+> +static const struct hwmon_channel_info *ltc2992_info[] = {
+> +	&ltc2992_in,
+> +	&ltc2992_curr,
+> +	&ltc2992_power,
 > +	NULL
 > +};
 > +
-> +static const struct hwmon_chip_info corsairpsu_chip_info = {
-> +	.ops	= &corsairpsu_hwmon_ops,
-> +	.info	= corsairpsu_info,
+> +static const struct hwmon_chip_info ltc2992_chip_info = {
+> +	.ops = &ltc2992_hwmon_ops,
+> +	.info = ltc2992_info,
 > +};
 > +
-> +#ifdef CONFIG_DEBUG_FS
+> +static const struct regmap_config ltc2992_regmap_config = {
+> +	.reg_bits = 8,
+> +	.val_bits = 8,
+> +	.max_register = 0xE8,
+> +};
 > +
-> +static void print_uptime(struct seq_file *seqf, u8 cmd)
+> +static int ltc2992_parse_dt(struct ltc2992_state *st)
 > +{
-> +	struct corsairpsu_data *priv = seqf->private;
-> +	long val;
+> +	struct fwnode_handle *fwnode;
+> +	struct fwnode_handle *child;
+> +	u32 addr;
+> +	u32 val;
 > +	int ret;
 > +
-> +	ret = corsairpsu_get_value(priv, cmd, 0, &val);
-> +	if (ret < 0) {
-> +		seq_puts(seqf, "N/A\n");
-> +		return;
+> +	fwnode = dev_fwnode(&st->client->dev);
+
+This is the only use of st->client. Just pass dev as parameter
+instead.
+
+> +
+> +	fwnode_for_each_available_child_node(fwnode, child) {
+> +		ret = fwnode_property_read_u32(child, "reg", &addr);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		if (addr > 1)
+> +			return -EINVAL;
+> +
+> +		ret = fwnode_property_read_u32(child, "shunt-resistor-micro-ohms", &val);
+> +		if (!ret)
+> +			st->r_sense_uohm[addr] = val;
 > +	}
 > +
-> +	if (val > SECONDS_PER_DAY) {
-> +		seq_printf(seqf, "%ld day(s), %02ld:%02ld:%02ld\n", val / SECONDS_PER_DAY,
-> +			   val % SECONDS_PER_DAY / SECONDS_PER_HOUR, val % SECONDS_PER_HOUR / 60,
-> +			   val % 60);
-> +		return;
-> +	}
-> +
-> +	seq_printf(seqf, "%02ld:%02ld:%02ld\n", val % SECONDS_PER_DAY / SECONDS_PER_HOUR,
-> +		   val % SECONDS_PER_HOUR / 60, val % 60);
-> +}
-> +
-> +static int uptime_show(struct seq_file *seqf, void *unused)
-> +{
-> +	print_uptime(seqf, PSU_CMD_UPTIME);
-> +
 > +	return 0;
 > +}
-> +DEFINE_SHOW_ATTRIBUTE(uptime);
 > +
-> +static int uptime_total_show(struct seq_file *seqf, void *unused)
+> +static int ltc2992_i2c_probe(struct i2c_client *client, const struct i2c_device_id *id)
 > +{
-> +	print_uptime(seqf, PSU_CMD_TOTAL_UPTIME);
-> +
-> +	return 0;
-> +}
-> +DEFINE_SHOW_ATTRIBUTE(uptime_total);
-> +
-> +static int vendor_show(struct seq_file *seqf, void *unused)
-> +{
-> +	struct corsairpsu_data *priv = seqf->private;
-> +
-> +	seq_printf(seqf, "%s\n", priv->vendor);
-> +
-> +	return 0;
-> +}
-> +DEFINE_SHOW_ATTRIBUTE(vendor);
-> +
-> +static int product_show(struct seq_file *seqf, void *unused)
-> +{
-> +	struct corsairpsu_data *priv = seqf->private;
-> +
-> +	seq_printf(seqf, "%s\n", priv->product);
-> +
-> +	return 0;
-> +}
-> +DEFINE_SHOW_ATTRIBUTE(product);
-> +
-> +static void corsairpsu_debugfs_init(struct corsairpsu_data *priv)
-> +{
-> +	char name[32];
-> +
-> +	scnprintf(name, sizeof(name), "%s-%s", DRIVER_NAME, dev_name(&priv->hdev->dev));
-> +
-> +	priv->debugfs = debugfs_create_dir(name, NULL);
-> +	debugfs_create_file("uptime", 0444, priv->debugfs, priv, &uptime_fops);
-> +	debugfs_create_file("uptime_total", 0444, priv->debugfs, priv, &uptime_total_fops);
-> +	debugfs_create_file("vendor", 0444, priv->debugfs, priv, &vendor_fops);
-> +	debugfs_create_file("product", 0444, priv->debugfs, priv, &product_fops);
-> +}
-> +
-> +#else
-> +
-> +static void corsairpsu_debugfs_init(struct corsairpsu_data *priv)
-> +{
-> +}
-> +
-> +#endif
-> +
-> +static int corsairpsu_probe(struct hid_device *hdev, const struct hid_device_id *id)
-> +{
-> +	struct corsairpsu_data *priv;
+> +	struct device *hwmon_dev;
+> +	struct ltc2992_state *st;
 > +	int ret;
 > +
-> +	priv = devm_kzalloc(&hdev->dev, sizeof(struct corsairpsu_data), GFP_KERNEL);
-> +	if (!priv)
+> +	if (!i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_BYTE_DATA))
+> +		return -ENODEV;
+> +
+> +	st = devm_kzalloc(&client->dev, sizeof(*st), GFP_KERNEL);
+> +	if (!st)
 > +		return -ENOMEM;
 > +
-> +	priv->cmd_buffer = devm_kmalloc(&hdev->dev, CMD_BUFFER_SIZE, GFP_KERNEL);
-> +	if (!priv->cmd_buffer)
-> +		return -ENOMEM;
+> +	st->client = client;
+> +	st->regmap = devm_regmap_init_i2c(client, &ltc2992_regmap_config);
+> +	if (IS_ERR(st->regmap))
+> +		return PTR_ERR(st->regmap);
 > +
-> +	ret = hid_parse(hdev);
-> +	if (ret)
+> +	ret = ltc2992_parse_dt(st);
+> +	if (ret < 0)
 > +		return ret;
 > +
-> +	ret = hid_hw_start(hdev, HID_CONNECT_HIDRAW);
-> +	if (ret)
-> +		return ret;
+> +	hwmon_dev = devm_hwmon_device_register_with_info(&client->dev, client->name, st,
+> +							 &ltc2992_chip_info, NULL);
 > +
-> +	ret = hid_hw_open(hdev);
-> +	if (ret)
-> +		goto fail_and_stop;
-> +
-> +	priv->hdev = hdev;
-> +	hid_set_drvdata(hdev, priv);
-> +	mutex_init(&priv->lock);
-> +	init_completion(&priv->wait_completion);
-> +
-> +	hid_device_io_start(hdev);
-> +
-> +	ret = corsairpsu_init(priv);
-> +	if (ret < 0) {
-> +		dev_err(&hdev->dev, "unable to initialize device (%d)\n", ret);
-> +		goto fail_and_stop;
-> +	}
-> +
-> +	ret = corsairpsu_fwinfo(priv);
-> +	if (ret < 0) {
-> +		dev_err(&hdev->dev, "unable to query firmware (%d)\n", ret);
-> +		goto fail_and_stop;
-> +	}
-> +
-> +	priv->hwmon_dev = hwmon_device_register_with_info(&hdev->dev, "corsairpsu", priv,
-> +							  &corsairpsu_chip_info, 0);
-> +
-> +	if (IS_ERR(priv->hwmon_dev)) {
-> +		ret = PTR_ERR(priv->hwmon_dev);
-> +		goto fail_and_close;
-> +	}
-> +
-> +	corsairpsu_debugfs_init(priv);
-> +
-> +	return 0;
-> +
-> +fail_and_close:
-> +	hid_hw_close(hdev);
-> +fail_and_stop:
-> +	hid_hw_stop(hdev);
-> +	return ret;
+> +	return PTR_ERR_OR_ZERO(hwmon_dev);
 > +}
 > +
-> +static void corsairpsu_remove(struct hid_device *hdev)
-> +{
-> +	struct corsairpsu_data *priv = hid_get_drvdata(hdev);
-> +
-> +	debugfs_remove_recursive(priv->debugfs);
-> +	hwmon_device_unregister(priv->hwmon_dev);
-> +	hid_hw_close(hdev);
-> +	hid_hw_stop(hdev);
-> +}
-> +
-> +static int corsairpsu_raw_event(struct hid_device *hdev, struct hid_report *report, u8 *data,
-> +				int size)
-> +{
-> +	struct corsairpsu_data *priv = hid_get_drvdata(hdev);
-> +
-> +	if (completion_done(&priv->wait_completion))
-> +		return 0;
-> +
-> +	memcpy(priv->cmd_buffer, data, min(CMD_BUFFER_SIZE, size));
-> +	complete(&priv->wait_completion);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct hid_device_id corsairpsu_idtable[] = {
-> +	{ HID_USB_DEVICE(0x1b1c, 0x1c03) }, /* Corsair HX550i */
-> +	{ HID_USB_DEVICE(0x1b1c, 0x1c04) }, /* Corsair HX650i */
-> +	{ HID_USB_DEVICE(0x1b1c, 0x1c05) }, /* Corsair HX750i */
-> +	{ HID_USB_DEVICE(0x1b1c, 0x1c06) }, /* Corsair HX850i */
-> +	{ HID_USB_DEVICE(0x1b1c, 0x1c07) }, /* Corsair HX1000i */
-> +	{ HID_USB_DEVICE(0x1b1c, 0x1c08) }, /* Corsair HX1200i */
-> +	{ HID_USB_DEVICE(0x1b1c, 0x1c09) }, /* Corsair RM550i */
-> +	{ HID_USB_DEVICE(0x1b1c, 0x1c0a) }, /* Corsair RM650i */
-> +	{ HID_USB_DEVICE(0x1b1c, 0x1c0b) }, /* Corsair RM750i */
-> +	{ HID_USB_DEVICE(0x1b1c, 0x1c0c) }, /* Corsair RM850i */
-> +	{ HID_USB_DEVICE(0x1b1c, 0x1c0d) }, /* Corsair RM1000i */
-> +	{ },
+> +static const struct of_device_id ltc2992_of_match[] = {
+> +	{ .compatible = "adi,ltc2992" },
+> +	{ }
 > +};
-> +MODULE_DEVICE_TABLE(hid, corsairpsu_idtable);
+> +MODULE_DEVICE_TABLE(of, ltc2992_of_match);
 > +
-> +static struct hid_driver corsairpsu_driver = {
-> +	.name		= DRIVER_NAME,
-> +	.id_table	= corsairpsu_idtable,
-> +	.probe		= corsairpsu_probe,
-> +	.remove		= corsairpsu_remove,
-> +	.raw_event	= corsairpsu_raw_event,
+> +static const struct i2c_device_id ltc2992_i2c_id[] = {
+> +	{"ltc2992", 0},
+> +	{}
 > +};
-> +module_hid_driver(corsairpsu_driver);
+> +MODULE_DEVICE_TABLE(i2c, ltc2992_i2c_id);
 > +
-> +MODULE_LICENSE("GPL");
-> +MODULE_AUTHOR("Wilken Gottwalt <wilken.gottwalt@posteo.net>");
-> +MODULE_DESCRIPTION("Linux driver for Corsair power supplies with HID sensors interface");
+> +static struct i2c_driver ltc2992_i2c_driver = {
+> +	.driver = {
+> +		.name = "ltc2992",
+> +		.of_match_table = ltc2992_of_match,
+> +	},
+> +	.probe    = ltc2992_i2c_probe,
+
+The probe function is being deprecated. Please use probe_new instead.
+
+> +	.id_table = ltc2992_i2c_id,
+> +};
+> +
+> +module_i2c_driver(ltc2992_i2c_driver);
+> +
+> +MODULE_AUTHOR("Alexandru Tachici <alexandru.tachici@analog.com>");
+> +MODULE_DESCRIPTION("Hwmon driver for Linear Technology 2992");
+> +MODULE_LICENSE("Dual BSD/GPL");
