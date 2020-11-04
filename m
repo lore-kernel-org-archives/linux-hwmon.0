@@ -7,44 +7,44 @@ X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98CA3C2D0A3
-	for <linux-hwmon@archiver.kernel.org>; Wed,  4 Nov 2020 17:27:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06FF2C4741F
+	for <linux-hwmon@archiver.kernel.org>; Wed,  4 Nov 2020 17:27:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5E9DC20782
+	by mail.kernel.org (Postfix) with ESMTP id B27C820759
 	for <linux-hwmon@archiver.kernel.org>; Wed,  4 Nov 2020 17:27:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726847AbgKDR1L (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S1726604AbgKDR1L (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Wed, 4 Nov 2020 12:27:11 -0500
 Received: from mga09.intel.com ([134.134.136.24]:20271 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726604AbgKDR1L (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        id S1726849AbgKDR1L (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
         Wed, 4 Nov 2020 12:27:11 -0500
-IronPort-SDR: +5PCpQIR2Mj2YY1hNIEnzZVgJ5mGxzyRnjlBYkXCIlAr9cSXemG7OF0Er2jbLLXpa/BnXSsx/R
- DaRhkoch2qRQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9795"; a="169400349"
+IronPort-SDR: aEsMGXo70q1ouZt4NHQM1i+iHgUSI7OTjA+2l3di2w7yA4uk6mXq8f3L9tMK+ATA1eq3rLZNXP
+ JlwHSOHPGKIw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9795"; a="169400351"
 X-IronPort-AV: E=Sophos;i="5.77,451,1596524400"; 
-   d="scan'208";a="169400349"
+   d="scan'208";a="169400351"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2020 09:26:59 -0800
-IronPort-SDR: uILug3cyhHMhsPMOS1zwG4iDVzwsSeJc483vFxsS4liubZXAcjJHEoeDZGobhI348AJMA7zPB0
- MhZcOvGko/nA==
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2020 09:27:00 -0800
+IronPort-SDR: MXq5QCEhcyDB1/VQJT9e/wFQZsLOHO/m3IO9D3ntjpqc32daVITEvMPdci9ovFWYqNd/s6iIXG
+ 20smoaiXr7Mg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.77,451,1596524400"; 
-   d="scan'208";a="471298981"
+   d="scan'208";a="306492220"
 Received: from lkp-server02.sh.intel.com (HELO e61783667810) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 04 Nov 2020 09:26:58 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 04 Nov 2020 09:26:58 -0800
 Received: from kbuild by e61783667810 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1kaMYj-00011g-JS; Wed, 04 Nov 2020 17:26:57 +0000
-Date:   Thu, 05 Nov 2020 01:26:21 +0800
+        id 1kaMYk-00011m-2d; Wed, 04 Nov 2020 17:26:58 +0000
+Date:   Thu, 05 Nov 2020 01:26:22 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon] BUILD SUCCESS
- 18e8db7f6526928858dfa99b49d831497f0f8df8
-Message-ID: <5fa2e43d.gVHuaM9i4NqGismz%lkp@intel.com>
+Subject: [hwmon:hwmon-next] BUILD SUCCESS
+ ce15cd2cee8bd802c47ec37bf93e640d594ede71
+Message-ID: <5fa2e43e.eBhNN1EkEcdyJEW/%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -53,12 +53,12 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon
-branch HEAD: 18e8db7f6526928858dfa99b49d831497f0f8df8  hwmon: (pmbus) Add mutex locking for sysfs reads
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon-next
+branch HEAD: ce15cd2cee8bd802c47ec37bf93e640d594ede71  hwmon: add Corsair PSU HID controller driver
 
 elapsed time: 723m
 
-configs tested: 168
+configs tested: 163
 configs skipped: 2
 
 The following configs have been built successfully.
@@ -141,12 +141,6 @@ openrisc                         alldefconfig
 mips                          malta_defconfig
 powerpc                  storcenter_defconfig
 arc                          axs103_defconfig
-powerpc                      chrp32_defconfig
-mips                  decstation_64_defconfig
-ia64                      gensparse_defconfig
-riscv                          rv32_defconfig
-powerpc                     kilauea_defconfig
-mips                        nlm_xlp_defconfig
 riscv                    nommu_virt_defconfig
 sh                     sh7710voipgw_defconfig
 arm                         orion5x_defconfig
@@ -220,6 +214,7 @@ i386                 randconfig-a012-20201104
 riscv                    nommu_k210_defconfig
 riscv                             allnoconfig
 riscv                               defconfig
+riscv                          rv32_defconfig
 riscv                            allmodconfig
 x86_64                                   rhel
 x86_64                           allyesconfig
