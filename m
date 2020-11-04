@@ -4,786 +4,892 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E110C2D0A3
-	for <linux-hwmon@archiver.kernel.org>; Wed,  4 Nov 2020 03:21:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78E35C2D0A3
+	for <linux-hwmon@archiver.kernel.org>; Wed,  4 Nov 2020 05:21:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5011E206FB
-	for <linux-hwmon@archiver.kernel.org>; Wed,  4 Nov 2020 03:21:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E7CF22222B
+	for <linux-hwmon@archiver.kernel.org>; Wed,  4 Nov 2020 05:21:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j/Ia4reo"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QTEnkwSi"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729021AbgKDDVd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 3 Nov 2020 22:21:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54688 "EHLO
+        id S1727754AbgKDFVI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 4 Nov 2020 00:21:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728759AbgKDDVc (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 3 Nov 2020 22:21:32 -0500
-Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31910C061A4D;
-        Tue,  3 Nov 2020 19:21:31 -0800 (PST)
-Received: by mail-ot1-x344.google.com with SMTP id k3so6215321otp.12;
-        Tue, 03 Nov 2020 19:21:31 -0800 (PST)
+        with ESMTP id S1725535AbgKDFVI (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 4 Nov 2020 00:21:08 -0500
+Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FDA8C061A4D;
+        Tue,  3 Nov 2020 21:21:07 -0800 (PST)
+Received: by mail-oo1-xc2d.google.com with SMTP id j41so4788940oof.12;
+        Tue, 03 Nov 2020 21:21:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=HeVarH5yGAovOqFnBV42aLuM75y37aMiQX55ANuT+O0=;
-        b=j/Ia4reoD8Thioz9NXvyndYIypg9iuM5tidBtlwUtjG5ICQZyr5FICysPYtfiDUF5q
-         FTpHN7v1yq1Jlu4bLut0RyI+ODfDYaZ8aShwEtxUgJpRZ/nIb7PjXvab7FarS+e2VWqh
-         OxW+h8ioxudTreo53HU6sARTh87zMblXBNly6FczNQZNleAVSvK7pAcrpDe135aKFe4O
-         c/m+mkdQWnVkkjxpsYXLj/XqzmUOkcGhtdXFz1ycpcu1g7dEGCEUdRNFUU0hHy3RMPUQ
-         kLluAHvihyxqPWnC3TuPNTByOBf/9+pIJSjxEfIUQeoN0/y1QSErqJ15o0NqW1XSME6m
-         F2nw==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=9Pm8uoW8ZRCmYlrpP/TtoRx2wdIqISLQLAzmZnAvN/w=;
+        b=QTEnkwSid72Em3nlPd38RmI+NJHxnVpFtnxf3Ez8/MfVhLPidtREmIiCqFbjZUxuQT
+         2/BeECbtgW4gbPGnIzSxP6I5huyCAp890etBje8pOAh7rKSEK3urlGbBn9FdGpFu9rfq
+         zhTpyg/xMINQwK7nls9wKtebM/RPGIe0F3nbZ3TGwZ9kV6agKgHOHFrs9pkXXXmu2kpg
+         Kap6noJo/3E6TYZnGZdEURfjpiJIDtey8qk2O82jJeatfWr38aft/JwrwftBvwLQcLN3
+         ciB2gByW3LH6SYPCkROOnKN0exM3ipwLvkXhcNYx+vjau1sr80hhTvOxCXJPQNilfWQ6
+         XHSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=HeVarH5yGAovOqFnBV42aLuM75y37aMiQX55ANuT+O0=;
-        b=De4i+RuKOTpoOMMxxc5DTUe5N9obDPZdpOUcjKr1ioFHEiCK7BH35tJ9z0dxVsIBhA
-         Rh74xsXp4iGhQxHcvLXftCQuxYzxweWBmGdaOEI579TDVLC5k3HwGQbWfkOLqZYdD3uG
-         n1T1uI/fpuvGLBNV2xWnBrifpq1/18C5rwSJc4He7VF5NS0nrMJaru0ZE74mmc9orBC0
-         OZpMRgFwF/MD9zndnbrsuEqZ3fh4YXOqqgHc59Wqmp/nf/IBn96roh5riPT1id6ckt0W
-         TLCLyfGrn8SG2W76rMjfHD4XCN/YHn8AswxWeBrjd/cFUZgb5/himNMJZyrR8jcQuoEK
-         vlDg==
-X-Gm-Message-State: AOAM530OUSBtwZlk8LEN0551WtvAwV6dyRsO+88WoqTLcRJjPC6s+zu4
-        XEN2zG6JAOlgiiK9SS6/5VnASyKGNIM=
-X-Google-Smtp-Source: ABdhPJxPE/L8kj1hChHfhtXc1Xg1fit5UHDn3MXIlDtPkLa+kDdxj8clifPAm5wm/tSKI8in6qbYJQ==
-X-Received: by 2002:a9d:39ca:: with SMTP id y68mr2391435otb.237.1604460088308;
-        Tue, 03 Nov 2020 19:21:28 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v10sm199170otq.69.2020.11.03.19.21.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Nov 2020 19:21:27 -0800 (PST)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=9Pm8uoW8ZRCmYlrpP/TtoRx2wdIqISLQLAzmZnAvN/w=;
+        b=TVvwuCoAa7+Kdr9J9YEEklxeI2Nj18qbqzV/mKzVQv2XDPNC6nfpd1fQEgZ6/EVwHz
+         HmOPyQXhqTIW920R1037oNSxtk3CIDvetgJ0v3czZnjSLnycxAAJXp4ELUQtHpTgetir
+         wlBVF583MYaKLPjPW6G92DTgTqRhjQLL9m/4hqmvnpHwREcEQecat5Zg0seAhGKXwa0f
+         k3mCZoYNk1U7gB9VDyj40ZM/0MWrlapMff5VpqMsJJsc1OP74hpMMWy8DgKNJoXgf9ve
+         iCVqLeugReU/lk+SDRR4r5lu4C2EeH/NsWDEOh+hYT1qu0/4MsoiVln9r+0ULJ8N9YgY
+         iNzw==
+X-Gm-Message-State: AOAM532REeb6nNmaCkHAeVBKRzyNMtegBPmNBtcqCqiJItffsOipexF6
+        LEm/1terQrw3Er4HFeu1R+A=
+X-Google-Smtp-Source: ABdhPJxatYWRY7dAu4Lg12QXNC7UAze0hUBITDSym1fKhrR9ZVNkv729WxmeeRguMzDXTAMflR//Cw==
+X-Received: by 2002:a4a:9806:: with SMTP id y6mr17816970ooi.45.1604467266534;
+        Tue, 03 Nov 2020 21:21:06 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m11sm288050oop.6.2020.11.03.21.21.05
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 03 Nov 2020 21:21:06 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v6] hwmon:Driver for Delta power supplies Q54SJ108A2
-To:     "xiao.mx.ma" <734056705@qq.com>, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xiao.mx.ma@deltaww.com, jiajia.feng@deltaww.com
-References: <tencent_8E53A3B5A0BD227044009A0774F1E9FB6909@qq.com>
+Date:   Tue, 3 Nov 2020 21:21:04 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <f60efcc3-bbb6-c851-e72e-c532bf7e1a88@roeck-us.net>
-Date:   Tue, 3 Nov 2020 19:21:26 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+To:     Wilken Gottwalt <wilken.gottwalt@posteo.net>
+Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v3] hwmon: add Corsair PSU HID controller driver
+Message-ID: <20201104052104.GA123916@roeck-us.net>
+References: <20201027131710.GA253280@monster.powergraphx.local>
 MIME-Version: 1.0
-In-Reply-To: <tencent_8E53A3B5A0BD227044009A0774F1E9FB6909@qq.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201027131710.GA253280@monster.powergraphx.local>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 11/3/20 5:36 PM, xiao.mx.ma wrote:
-> From: "xiao.ma" <xiao.mx.ma@deltaww.com>
+On Tue, Oct 27, 2020 at 02:17:10PM +0100, Wilken Gottwalt wrote:
+> The Corsair digital power supplies of the series RMi, HXi and AXi include
+> a small micro-controller with a lot of sensors attached. The sensors can
+> be accessed by an USB connector from the outside.
 > 
-> The <drivers/hwmon/pmbus/delta.c> provides a driver for Delta's modules.
-> Currently supports Q54SJ108A2 series and other series will continue to be
-> added in the future.
+> This micro-controller provides the data by a simple proprietary USB HID
+> protocol. The data consist of temperatures, current and voltage levels,
+> power usage, uptimes, fan speed and some more. It is also possible to
+> configure the PSU (fan mode, mono/multi-rail, over current protection).
 > 
-> Signed-off-by: xiao.ma <xiao.mx.ma@deltaww.com>
+> This driver provides access to the sensors/statistics of the RMi and HXi
+> series power supplies. It does not support configuring these devices,
+> because there would be many ways to misconfigure or even damage the PSU.
+> 
+> This patch adds:
+> - hwmon driver corsair-psu
+> - hwmon documentation
+> - updates MAINTAINERS
+> 
+> Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+
+Applied.
+
+Thanks,
+Guenter
+
 > ---
+> Changes in v3:
+>   - changed the email addresses because of serious email provider problems
+>   - fixed all multi-line comments
+>   - simplifiend some more switches
+>   - added more explanations about the values provied by the micro-controller
+>   - cached the raw value delivered by the usb_cmd function
+> Changes in v2:
+>   - changed comments to hwmon style comments
+>   - simplified some switches
+>   - removed redundant code
+>   - removed misuse of EIO
+>   - changed a todo to a proper explanation
+>   - changed debugfs init/remove code
+>   - added 2 more HXi/RMi devices
+>   - updated documentation
+> ---
+>  Documentation/hwmon/corsair-psu.rst |  82 ++++
+>  Documentation/hwmon/index.rst       |   1 +
+>  MAINTAINERS                         |   7 +
+>  drivers/hwmon/Kconfig               |  13 +
+>  drivers/hwmon/Makefile              |   1 +
+>  drivers/hwmon/corsair-psu.c         | 605 ++++++++++++++++++++++++++++
+>  6 files changed, 709 insertions(+)
+>  create mode 100644 Documentation/hwmon/corsair-psu.rst
+>  create mode 100644 drivers/hwmon/corsair-psu.c
 > 
-> Notes:
->     Patch v2 changelog:
->     	Add delta.rst in Documentation/hwmon.
->     	Tristate "DELTA" in Kconfig is changed to "DELTA_POWER_SUPPLIES".
->     	Modify code: drop the excessive empty lines, correct the comment content, adjust indent, remove extra brackets.
->     Patch v3 changelog:
->     	Add delta.rst to Documentation/hwmon/index.rst.
->     	Tristate "DELTA_POWER_SUPPLIES" in Kconfig is changed to "Delta Power Supplies".
->     Patch v4 changelog:
->     	Correct the spelling "Temperature" in the delta.rst.
->     	Add Write_protect when write command VOUT_OV_FAULT_RESPONSE and IOUT_OC_FAULT_RESPONSE.
->     Patch v5 changelog:
->     	Add some non-standard attributes in sysfs system.
->     Patch v6 changelog:
->     	delta.c and delta.rst are renamed to q54sj108a2.c and q54sj108a2.rst.
->     	Add q54sj108a2 to index.rst.
->     	Tristate in Kconfig is changed to "Delta Power Supplies Q54SJ108A2".
->     	The non-standard attributes are added to debugfs.
-> 
->  Documentation/hwmon/index.rst      |   1 +
->  Documentation/hwmon/q54sj108a2.rst |  52 +++
->  drivers/hwmon/pmbus/Kconfig        |   9 +
->  drivers/hwmon/pmbus/Makefile       |   1 +
->  drivers/hwmon/pmbus/q54sj108a2.c   | 488 +++++++++++++++++++++++++++++
->  5 files changed, 551 insertions(+)
->  create mode 100644 Documentation/hwmon/q54sj108a2.rst
->  create mode 100755 drivers/hwmon/pmbus/q54sj108a2.c
-> 
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index b797db738225..4bb680b3c7ea 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -148,6 +148,7 @@ Hardware Monitoring Kernel Drivers
->     powr1220
->     pxe1610
->     pwm-fan
-> +   q54sj108a2
->     raspberrypi-hwmon
->     sch5627
->     sch5636
-> diff --git a/Documentation/hwmon/q54sj108a2.rst b/Documentation/hwmon/q54sj108a2.rst
+> diff --git a/Documentation/hwmon/corsair-psu.rst b/Documentation/hwmon/corsair-psu.rst
 > new file mode 100644
-> index 000000000000..a575bdfa7c18
+> index 000000000000..396b95c9a76a
 > --- /dev/null
-> +++ b/Documentation/hwmon/q54sj108a2.rst
-> @@ -0,0 +1,52 @@
-> +Kernel driver q54sj108a2
-> +=====================
+> +++ b/Documentation/hwmon/corsair-psu.rst
+> @@ -0,0 +1,82 @@
+> +.. SPDX-License-Identifier: GPL-2.0-or-later
 > +
-> +Supported chips:
+> +Kernel driver corsair-psu
+> +=========================
 > +
-> +  * DELTA Q54SJ108A2NCAH, Q54SJ108A2NCDH, Q54SJ108A2NCPG, Q54SJ108A2NCPH
+> +Supported devices:
 > +
-> +    Prefix: 'Q54SJ108A2'
+> +* Corsair Power Supplies
 > +
-> +    Addresses scanned: -
+> +  Corsair HX550i
 > +
-> +    Datasheet: https://filecenter.delta-china.com.cn/products/download/01/0102/datasheet/DS_Q54SJ108A2.pdf
+> +  Corsair HX650i
 > +
-> +Authors:
-> +    Xiao.ma <xiao.mx.ma@deltaww.com>
+> +  Corsair HX750i
 > +
+> +  Corsair HX850i
+> +
+> +  Corsair HX1000i
+> +
+> +  Corsair HX1200i
+> +
+> +  Corsair RM550i
+> +
+> +  Corsair RM650i
+> +
+> +  Corsair RM750i
+> +
+> +  Corsair RM850i
+> +
+> +  Corsair RM1000i
+> +
+> +Author: Wilken Gottwalt
 > +
 > +Description
 > +-----------
 > +
-> +This driver implements support for DELTA Q54SJ108A2NCAH, Q54SJ108A2NCDH, 
-> +Q54SJ108A2NCPG, and Q54SJ108A2NCPH 1/4 Brick DC/DC Regulated Power Module 
-> +with PMBus support.
-> +
-> +The driver is a client driver to the core PMBus driver.
-> +Please see Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
-> +
-> +
-> +Usage Notes
-> +-----------
-> +
-> +This driver does not auto-detect devices. You will have to instantiate the
-> +devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
-> +details.
-> +
+> +This driver implements the sysfs interface for the Corsair PSUs with a HID protocol
+> +interface of the HXi and RMi series.
+> +These power supplies provide access to a micro-controller with 2 attached
+> +temperature sensors, 1 fan rpm sensor, 4 sensors for volt levels, 4 sensors for
+> +power usage and 4 sensors for current levels and addtional non-sensor information
+> +like uptimes.
 > +
 > +Sysfs entries
 > +-------------
 > +
-> +===================== ===== ==================================================
-> +curr1_alarm           RO    Output current alarm
-> +curr1_input           RO    Output current
-> +curr1_label           RO    'iout1'
-> +in1_alarm             RO    Input voltage alarm
-> +in1_input             RO    Input voltage
-> +in1_label             RO    'vin'
-> +in2_alarm             RO    Output voltage alarm
-> +in2_input             RO    Output voltage
-> +in2_label             RO    'vout1'
-> +temp1_alarm           RO    Temperature alarm
-> +temp1_input           RO    Chip temperature
-> +===================== ===== ==================================================
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index a25faf69fce3..01de280820ee 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -229,6 +229,15 @@ config SENSORS_PXE1610
->  	  This driver can also be built as a module. If so, the module will
->  	  be called pxe1610.
+> +=======================	========================================================
+> +curr1_input		Total current usage
+> +curr2_input		Current on the 12v psu rail
+> +curr3_input		Current on the 5v psu rail
+> +curr4_input		Current on the 3.3v psu rail
+> +fan1_input		RPM of psu fan
+> +in0_input		Voltage of the psu ac input
+> +in1_input		Voltage of the 12v psu rail
+> +in2_input		Voltage of the 5v psu rail
+> +in3_input		Voltage of the 3.3 psu rail
+> +power1_input		Total power usage
+> +power2_input		Power usage of the 12v psu rail
+> +power3_input		Power usage of the 5v psu rail
+> +power4_input		Power usage of the 3.3v psu rail
+> +temp1_input		Temperature of the psu vrm component
+> +temp2_input		Temperature of the psu case
+> +=======================	========================================================
+> +
+> +Usage Notes
+> +-----------
+> +
+> +It is an USB HID device, so it is auto-detected and supports hot-swapping.
+> +
+> +Flickering values in the rail voltage levels can be an indicator for a failing
+> +PSU. The driver also provides some additional useful values via debugfs, which
+> +do not fit into the hwmon class.
+> +
+> +Debugfs entries
+> +---------------
+> +
+> +=======================	========================================================
+> +uptime			Current uptime of the psu
+> +uptime_total		Total uptime of the psu
+> +vendor			Vendor name of the psu
+> +product			Product name of the psu
+> +=======================	========================================================
+> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+> index e6b91ab12978..408760d13813 100644
+> --- a/Documentation/hwmon/index.rst
+> +++ b/Documentation/hwmon/index.rst
+> @@ -49,6 +49,7 @@ Hardware Monitoring Kernel Drivers
+>     bt1-pvt
+>     coretemp
+>     corsair-cpro
+> +   corsair-psu
+>     da9052
+>     da9055
+>     dell-smm-hwmon
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index e73636b75f29..e1db1f6dd694 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -4496,6 +4496,13 @@ L:	linux-hwmon@vger.kernel.org
+>  S:	Maintained
+>  F:	drivers/hwmon/corsair-cpro.c
 >  
-> +config SENSORS_Q54SJ108A2
-> +	tristate "Delta Power Supplies Q54SJ108A2"
+> +CORSAIR-PSU HARDWARE MONITOR DRIVER
+> +M:	Wilken Gottwalt <wilken.gottwalt@posteo.net>
+> +L:	linux-hwmon@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/hwmon/corsair-psu.rst
+> +F:	drivers/hwmon/corsair-psu.c
+> +
+>  COSA/SRP SYNC SERIAL DRIVER
+>  M:	Jan "Yenya" Kasprzak <kas@fi.muni.cz>
+>  S:	Maintained
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index a850e4f0e0bd..9d600e0c5584 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -449,6 +449,19 @@ config SENSORS_CORSAIR_CPRO
+>  	  This driver can also be built as a module. If so, the module
+>  	  will be called corsair-cpro.
+>  
+> +config SENSORS_CORSAIR_PSU
+> +	tristate "Corsair PSU HID controller"
+> +	depends on HID
 > +	help
-> +	  If you say yes here you get hardware monitoring support for Delta
-> +	  Q54SJ108A2 series Power Supplies.
+> +	  If you say yes here you get support for Corsair PSUs with a HID
+> +	  interface.
+> +	  Currently this driver supports the (RM/HX)550i, (RM/HX)650i,
+> +	  (RM/HX)750i, (RM/HX)850i, (RM/HX)1000i and HX1200i power supplies
+> +	  by Corsair.
 > +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called q54sj108a2.
+> +	  This driver can also be built as a module. If so, the module
+> +	  will be called corsair-psu.
 > +
->  config SENSORS_TPS40422
->  	tristate "TI TPS40422"
->  	help
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index 4c97ad0bd791..a50122cd455b 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -26,6 +26,7 @@ obj-$(CONFIG_SENSORS_MAX34440)	+= max34440.o
->  obj-$(CONFIG_SENSORS_MAX8688)	+= max8688.o
->  obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
->  obj-$(CONFIG_SENSORS_PXE1610)	+= pxe1610.o
-> +obj-$(CONFIG_SENSORS_Q54SJ108A2)	+= q54sj108a2.o
->  obj-$(CONFIG_SENSORS_TPS40422)	+= tps40422.o
->  obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
->  obj-$(CONFIG_SENSORS_UCD9000)	+= ucd9000.o
-> diff --git a/drivers/hwmon/pmbus/q54sj108a2.c b/drivers/hwmon/pmbus/q54sj108a2.c
-> new file mode 100755
-> index 000000000000..b6c912373ff6
+>  config SENSORS_DRIVETEMP
+>  	tristate "Hard disk drives with temperature sensors"
+>  	depends on SCSI && ATA
+> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> index 9db2903b61e5..1083bbfac779 100644
+> --- a/drivers/hwmon/Makefile
+> +++ b/drivers/hwmon/Makefile
+> @@ -57,6 +57,7 @@ obj-$(CONFIG_SENSORS_AXI_FAN_CONTROL) += axi-fan-control.o
+>  obj-$(CONFIG_SENSORS_BT1_PVT)	+= bt1-pvt.o
+>  obj-$(CONFIG_SENSORS_CORETEMP)	+= coretemp.o
+>  obj-$(CONFIG_SENSORS_CORSAIR_CPRO) += corsair-cpro.o
+> +obj-$(CONFIG_SENSORS_CORSAIR_PSU) += corsair-psu.o
+>  obj-$(CONFIG_SENSORS_DA9052_ADC)+= da9052-hwmon.o
+>  obj-$(CONFIG_SENSORS_DA9055)+= da9055-hwmon.o
+>  obj-$(CONFIG_SENSORS_DELL_SMM)	+= dell-smm-hwmon.o
+> diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
+> new file mode 100644
+> index 000000000000..e92d0376e7ac
 > --- /dev/null
-> +++ b/drivers/hwmon/pmbus/q54sj108a2.c
-> @@ -0,0 +1,488 @@
+> +++ b/drivers/hwmon/corsair-psu.c
+> @@ -0,0 +1,605 @@
 > +// SPDX-License-Identifier: GPL-2.0-or-later
 > +/*
-> + * Driver for Delta modules, Q54SJ108A2 series 1/4 Brick DC/DC
-> + * Regulated Power Module
-> + *
-> + * Copyright 2020 Delta LLC.
+> + * corsair-psu.c - Linux driver for Corsair power supplies with HID sensors interface
+> + * Copyright (C) 2020 Wilken Gottwalt <wilken.gottwalt@posteo.net>
 > + */
 > +
-> +#include <linux/bits.h>
+> +#include <linux/completion.h>
 > +#include <linux/debugfs.h>
-> +#include <linux/err.h>
-> +#include <linux/fs.h>
-> +#include <linux/i2c.h>
-> +#include <linux/init.h>
+> +#include <linux/errno.h>
+> +#include <linux/hid.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/hwmon-sysfs.h>
+> +#include <linux/jiffies.h>
 > +#include <linux/kernel.h>
 > +#include <linux/module.h>
 > +#include <linux/mutex.h>
-> +#include <linux/of_device.h>
-> +#include <linux/pmbus.h>
-> +#include <linux/util_macros.h>
-> +#include "pmbus.h"
+> +#include <linux/slab.h>
+> +#include <linux/types.h>
 > +
-> +#define STORE_DEFAULT_ALL         0x11
-> +#define ERASE_BLACKBOX_DATA       0xD1
-> +#define READ_HISTORY_EVENT_NUMBER 0xD2
-> +#define READ_HISTORY_EVENTS       0xE0
-> +#define SET_HISTORY_EVENT_OFFSET  0xE1
-> +#define PMBUS_CMD_FLASH_KEY_WRITE 0xEC
+> +/*
+> + * Corsair protocol for PSUs
+> + *
+> + * message size = 64 bytes (request and response, little endian)
+> + * request:
+> + *	[length][command][param0][param1][paramX]...
+> + * reply:
+> + *	[echo of length][echo of command][data0][data1][dataX]...
+> + *
+> + *	- commands are byte sized opcodes
+> + *	- length is the sum of all bytes of the commands/params
+> + *	- the micro-controller of most of these PSUs support concatenation in the request and reply,
+> + *	  but it is better to not rely on this (it is also hard to parse)
+> + *	- the driver uses raw events to be accessible from userspace (though this is not really
+> + *	  supported, it is just there for convenience, may be removed in the future)
+> + *	- a reply always start with the length and command in the same order the request used it
+> + *	- length of the reply data is specific to the command used
+> + *	- some of the commands work on a rail and can be switched to a specific rail (0 = 12v,
+> + *	  1 = 5v, 2 = 3.3v)
+> + *	- the format of the init command 0xFE is swapped length/command bytes
+> + *	- parameter bytes amount and values are specific to the command (rail setting is the only
+> + *	  for now that uses non-zero values)
+> + *	- there are much more commands, especially for configuring the device, but they are not
+> + *	  supported because a wrong command/length can lockup the micro-controller
+> + *	- the driver supports debugfs for values not fitting into the hwmon class
+> + *	- not every device class (HXi, RMi or AXi) supports all commands
+> + *	- it is a pure sensors reading driver (will not support configuring)
+> + */
 > +
-> +enum chips {
-> +	Q54SJ108A2
+> +#define DRIVER_NAME		"corsair-psu"
+> +
+> +#define REPLY_SIZE		16 /* max length of a reply to a single command */
+> +#define CMD_BUFFER_SIZE		64
+> +#define CMD_TIMEOUT_MS		250
+> +#define SECONDS_PER_HOUR	(60 * 60)
+> +#define SECONDS_PER_DAY		(SECONDS_PER_HOUR * 24)
+> +
+> +#define PSU_CMD_SELECT_RAIL	0x00 /* expects length 2 */
+> +#define PSU_CMD_IN_VOLTS	0x88 /* the rest of the commands expect length 3 */
+> +#define PSU_CMD_IN_AMPS		0x89
+> +#define PSU_CMD_RAIL_OUT_VOLTS	0x8B
+> +#define PSU_CMD_RAIL_AMPS	0x8C
+> +#define PSU_CMD_TEMP0		0x8D
+> +#define PSU_CMD_TEMP1		0x8E
+> +#define PSU_CMD_FAN		0x90
+> +#define PSU_CMD_RAIL_WATTS	0x96
+> +#define PSU_CMD_VEND_STR	0x99
+> +#define PSU_CMD_PROD_STR	0x9A
+> +#define PSU_CMD_TOTAL_WATTS	0xEE
+> +#define PSU_CMD_TOTAL_UPTIME	0xD1
+> +#define PSU_CMD_UPTIME		0xD2
+> +#define PSU_CMD_INIT		0xFE
+> +
+> +#define L_IN_VOLTS		"v_in"
+> +#define L_OUT_VOLTS_12V		"v_out +12v"
+> +#define L_OUT_VOLTS_5V		"v_out +5v"
+> +#define L_OUT_VOLTS_3_3V	"v_out +3.3v"
+> +#define L_IN_AMPS		"curr in"
+> +#define L_AMPS_12V		"curr +12v"
+> +#define L_AMPS_5V		"curr +5v"
+> +#define L_AMPS_3_3V		"curr +3.3v"
+> +#define L_FAN			"psu fan"
+> +#define L_TEMP0			"vrm temp"
+> +#define L_TEMP1			"case temp"
+> +#define L_WATTS			"power total"
+> +#define L_WATTS_12V		"power +12v"
+> +#define L_WATTS_5V		"power +5v"
+> +#define L_WATTS_3_3V		"power +3.3v"
+> +
+> +static const char *const label_watts[] = {
+> +	L_WATTS,
+> +	L_WATTS_12V,
+> +	L_WATTS_5V,
+> +	L_WATTS_3_3V
 > +};
 > +
-> +enum {
-> +	DELTA_DEBUGFS_OPERATION = 0,
-> +	DELTA_DEBUGFS_CLEARFAULT,
-> +	DELTA_DEBUGFS_WRITEPROTECT,
-> +	DELTA_DEBUGFS_STOREDEFAULT,
-> +	DELTA_DEBUGFS_VOOV_RESPONSE,
-> +	DELTA_DEBUGFS_IOOC_RESPONSE,
-> +	DELTA_DEBUGFS_PMBUS_VERSION,
-> +	DELTA_DEBUGFS_MFR_ID,
-> +	DELTA_DEBUGFS_MFR_MODEL,
-> +	DELTA_DEBUGFS_MFR_REVISION,
-> +	DELTA_DEBUGFS_MFR_LOCATION,
-> +	DELTA_DEBUGFS_BLACKBOX_ERASE,
-> +	DELTA_DEBUGFS_BLACKBOX_READ_OFFSET,
-> +	DELTA_DEBUGFS_BLACKBOX_SET_OFFSET,
-> +	DELTA_DEBUGFS_BLACKBOX_READ,
-> +	DELTA_DEBUGFS_FLASH_KEY,
-> +	DELTA_DEBUGFS_NUM_ENTRIES
+> +static const char *const label_volts[] = {
+> +	L_IN_VOLTS,
+> +	L_OUT_VOLTS_12V,
+> +	L_OUT_VOLTS_5V,
+> +	L_OUT_VOLTS_3_3V
 > +};
 > +
-> +struct delta_data {
-> +	enum chips chip;
-> +	struct i2c_client *client;
-> +
-> +	int debugfs_entries[DELTA_DEBUGFS_NUM_ENTRIES];
+> +static const char *const label_amps[] = {
+> +	L_IN_AMPS,
+> +	L_AMPS_12V,
+> +	L_AMPS_5V,
+> +	L_AMPS_3_3V
 > +};
 > +
-> +#define to_psu(x, y) container_of((x), struct delta_data, debugfs_entries[(y)])
-> +
-> +static struct pmbus_driver_info delta_info[] = {
-> +	[Q54SJ108A2] = {
-> +		.pages = 1,
-> +
-> +		/* Source : Delta Q54SJ108A2 */
-> +		.format[PSC_TEMPERATURE] = linear,
-> +		.format[PSC_VOLTAGE_IN] = linear,
-> +		.format[PSC_CURRENT_OUT] = linear,
-> +
-> +		.func[0] = PMBUS_HAVE_VIN |
-> +		PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
-> +		PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
-> +		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP |
-> +		PMBUS_HAVE_STATUS_INPUT,
-> +	},
-> +};
-> +
-> +static void char_to_char(const char *charin, char *charout, int charinsize)
-> +{
-> +	int i;
-> +	char char_temp[2 * I2C_SMBUS_BLOCK_MAX + 1];
-> +
-> +	for (i = 0; i < charinsize; i++) {
-> +		char_temp[i*2] = *(charin + i) & 0x0F;
-> +		char_temp[i*2+1] = (*(charin + i) & 0xF0) >> 4;
-> +	}
-> +
-> +	for (i = 0; i < (charinsize * 2); i++) {
-> +		if ((char_temp[i] >= 0) && (char_temp[i] <= 9))
-> +			*(charout + charinsize * 2 - 1 - i) = char_temp[i] + '0';
-> +		else if ((char_temp[i] >= 0xA) && (char_temp[i] <= 0xF))
-> +			*(charout + charinsize * 2 - 1 - i) = (char_temp[i] - 0xA) + 'A';
-> +	}
-> +}
-
-Please use bin2hex() or similar.
-
-> +
-> +static ssize_t delta_debugfs_read(struct file *file, char __user *buf,
-> +				      size_t count, loff_t *ppos)
-> +{
-> +	int rc;
-> +	int *idxp = file->private_data;
-> +	int idx = *idxp;
-> +	struct delta_data *psu = to_psu(idxp, idx);
-> +	char data[I2C_SMBUS_BLOCK_MAX + 2] = { 0 };
-> +	char data_char[I2C_SMBUS_BLOCK_MAX + 2] = { 0 };
-> +
-> +	switch (idx) {
-> +	case DELTA_DEBUGFS_OPERATION:
-> +		rc = i2c_smbus_read_byte_data(psu->client, PMBUS_OPERATION);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		rc = snprintf(data, 3, "%02x", rc);
-> +		goto done;
-> +	case DELTA_DEBUGFS_WRITEPROTECT:
-> +		rc = i2c_smbus_read_byte_data(psu->client, PMBUS_WRITE_PROTECT);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		rc = snprintf(data, 3, "%02x", rc);
-> +		goto done;
-> +	case DELTA_DEBUGFS_VOOV_RESPONSE:
-> +		rc = i2c_smbus_read_byte_data(psu->client, PMBUS_VOUT_OV_FAULT_RESPONSE);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		rc = snprintf(data, 3, "%02x", rc);
-> +		goto done;
-> +	case DELTA_DEBUGFS_IOOC_RESPONSE:
-> +		rc = i2c_smbus_read_byte_data(psu->client, PMBUS_IOUT_OC_FAULT_RESPONSE);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		rc = snprintf(data, 3, "%02x", rc);
-> +		goto done;
-> +	case DELTA_DEBUGFS_PMBUS_VERSION:
-> +		rc = i2c_smbus_read_byte_data(psu->client, PMBUS_REVISION);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		rc = snprintf(data, 3, "%02x", rc);
-> +		goto done;
-> +	case DELTA_DEBUGFS_MFR_ID:
-> +		rc = i2c_smbus_read_block_data(psu->client, PMBUS_MFR_ID, data);
-> +		if (rc < 0)
-> +			return rc;
-> +		break;
-> +	case DELTA_DEBUGFS_MFR_MODEL:
-> +		rc = i2c_smbus_read_block_data(psu->client, PMBUS_MFR_MODEL, data);
-> +		if (rc < 0)
-> +			return rc;
-> +		break;
-> +	case DELTA_DEBUGFS_MFR_REVISION:
-> +		rc = i2c_smbus_read_block_data(psu->client, PMBUS_MFR_REVISION, data);
-> +		if (rc < 0)
-> +			return rc;
-> +		break;
-> +	case DELTA_DEBUGFS_MFR_LOCATION:
-> +		rc = i2c_smbus_read_block_data(psu->client, PMBUS_MFR_LOCATION, data);
-> +		if (rc < 0)
-> +			return rc;
-> +		break;
-> +	case DELTA_DEBUGFS_BLACKBOX_READ_OFFSET:
-> +		rc = i2c_smbus_read_byte_data(psu->client, READ_HISTORY_EVENT_NUMBER);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		rc = snprintf(data, 3, "%02x", rc);
-> +		goto done;
-> +	case DELTA_DEBUGFS_BLACKBOX_READ:
-> +		rc = i2c_smbus_read_block_data(psu->client, READ_HISTORY_EVENTS, data_char);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		char_to_char(data_char, data, 32);
-> +
-
-That writes 64 bytes into a buffer of size I2C_SMBUS_BLOCK_MAX + 2 = 34.
-That really makes me wonder what happens if it is actually executed.
-Did you try ?
-
-> +		rc = 64;
-> +		break;
-> +	case DELTA_DEBUGFS_FLASH_KEY:
-> +		rc = i2c_smbus_read_block_data(psu->client, PMBUS_CMD_FLASH_KEY_WRITE, data_char);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		char_to_char(data_char, data, 4);
-> +
-> +		rc = 8;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +done:
-> +	data[rc] = '\n';
-> +	rc += 2;
-
-Is that supposed to return the terminating '\0' ?
-
-> +
-> +	return simple_read_from_buffer(buf, count, ppos, data, rc);
-> +}
-> +
-> +static int char_to_int(const char *buff)
-> +{
-> +	int i, index;
-> +	int value = 0;
-> +	const char *str;
-> +
-> +	if ((*buff == '0') && (*(buff+1) == 'x')) {
-> +		index = 16;
-> +		str = buff + 2;
-> +	} else
-> +		return -1;
-> +
-> +	for (i = 0; i < (strlen(str) - 1); i++) {
-> +		if (*(str+i) >= '0' && *(str+i) <= '9')
-> +			value = value * index + (*(str+i) - '0');
-> +		else if (*(str+i) >= 'a' && *(str+i) <= 'f') {
-> +			if (index == 16)
-> +				value = value * index + (*(str+i) - 'a' + 10);
-> +			else
-> +				return -1;
-> +		} else if (*(str+i) >= 'A' && *(str+i) <= 'F') {
-> +			if (index == 16)
-> +				value = value * index + (*(str+i) - 'A' + 10);
-> +			else
-> +				return -1;
-> +		} else
-> +			return -1;
-> +	}
-> +
-> +	return value;
-> +}
-> +
-
-Please use standard functions. I don't see the need to reinvent kstrtoint and friends.
-
-
-> +static ssize_t delta_debugfs_write(struct file *file, const char __user *buf,
-> +				size_t count, loff_t *ppos)
-> +{
-> +	u8 data;
-> +	u8 flash_key[4];
-> +	ssize_t rc;
-> +	int *idxp = file->private_data;
-> +	int idx = *idxp;
-> +	struct delta_data *psu = to_psu(idxp, idx);
-> +
-> +	rc = i2c_smbus_write_byte_data(psu->client, PMBUS_WRITE_PROTECT, 0);
-> +	if (rc)
-> +		return rc;
-> +
-> +	switch (idx) {
-> +	case DELTA_DEBUGFS_OPERATION:
-> +		data = char_to_int(buf);
-> +
-> +		rc = i2c_smbus_write_byte_data(psu->client, PMBUS_OPERATION, data);
-> +		if (rc)
-> +			return rc;
-> +
-> +		rc = 1;
-> +		break;
-> +	case DELTA_DEBUGFS_CLEARFAULT:
-> +		rc = i2c_smbus_write_byte(psu->client, PMBUS_CLEAR_FAULTS);
-> +		if (rc)
-> +			return rc;
-> +
-> +		rc = 1;
-> +		break;
-> +	case DELTA_DEBUGFS_STOREDEFAULT:
-> +		flash_key[0] = 0x7E;
-> +		flash_key[1] = 0x15;
-> +		flash_key[2] = 0xDC;
-> +		flash_key[3] = 0x42;
-> +		rc = i2c_smbus_write_block_data(psu->client, PMBUS_CMD_FLASH_KEY_WRITE, 4, flash_key);
-> +		if (rc < 0)
-> +			return rc;
-> +
-> +		rc = i2c_smbus_write_byte(psu->client, STORE_DEFAULT_ALL);
-> +		if (rc)
-> +			return rc;
-> +
-> +		rc = 1;
-> +		break;
-> +	case DELTA_DEBUGFS_VOOV_RESPONSE:
-> +		data = char_to_int(buf);
-> +
-> +		rc = i2c_smbus_write_byte_data(psu->client, PMBUS_VOUT_OV_FAULT_RESPONSE, data);
-> +		if (rc)
-> +			return rc;
-> +
-> +		rc = 1;
-> +		break;
-> +	case DELTA_DEBUGFS_IOOC_RESPONSE:
-> +		data = char_to_int(buf);
-> +
-> +		rc = i2c_smbus_write_byte_data(psu->client, PMBUS_IOUT_OC_FAULT_RESPONSE, data);
-> +		if (rc)
-> +			return rc;
-> +
-> +		rc = 1;
-> +		break;
-> +	case DELTA_DEBUGFS_BLACKBOX_ERASE:
-> +		rc = i2c_smbus_write_byte(psu->client, ERASE_BLACKBOX_DATA);
-> +		if (rc)
-> +			return rc;
-> +
-> +		rc = 1;
-> +		break;
-> +	case DELTA_DEBUGFS_BLACKBOX_SET_OFFSET:
-> +		data = char_to_int(buf);
-> +
-> +		rc = i2c_smbus_write_byte_data(psu->client, SET_HISTORY_EVENT_OFFSET, data);
-> +		if (rc)
-> +			return rc;
-> +
-> +		rc = 1;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	return rc;
-
-Unless I am missing something, this always returns 1. Why not just return 1 directly ?
-And why not return 'count', as would be more common ?
-
-> +}
-> +
-> +static const struct file_operations delta_fops = {
-> +	.llseek = noop_llseek,
-> +	.read = delta_debugfs_read,
-> +	.write = delta_debugfs_write,
-> +	.open = simple_open,
-> +};
-> +
-> +static int delta_probe(struct i2c_client *client, const struct i2c_device_id *id)
-> +{
-> +	struct device *dev = &client->dev;
-> +	u8 buf[I2C_SMBUS_BLOCK_MAX + 1];
-> +	struct pmbus_driver_info *info;
-> +	enum chips chip_id;
-> +	int ret, i;
+> +struct corsairpsu_data {
+> +	struct hid_device *hdev;
+> +	struct device *hwmon_dev;
 > +	struct dentry *debugfs;
-> +	struct dentry *delta_dir;
-> +	struct delta_data *psu;
+> +	struct completion wait_completion;
+> +	struct mutex lock; /* for locking access to cmd_buffer */
+> +	u8 *cmd_buffer;
+> +	char vendor[REPLY_SIZE];
+> +	char product[REPLY_SIZE];
+> +};
 > +
-> +	if (!i2c_check_functionality(client->adapter,
-> +				     I2C_FUNC_SMBUS_BYTE_DATA |
-> +				     I2C_FUNC_SMBUS_WORD_DATA |
-> +				     I2C_FUNC_SMBUS_BLOCK_DATA))
-> +		return -ENODEV;
+> +/* some values are SMBus LINEAR11 data which need a conversion */
+> +static int corsairpsu_linear11_to_int(const int val)
+> +{
+> +	int exp = (val & 0xFFFF) >> 0x0B;
+> +	int mant = val & 0x7FF;
+> +	int i;
 > +
-> +	if (client->dev.of_node)
-> +		chip_id = (enum chips)of_device_get_match_data(dev);
-> +	else
-> +		chip_id = id->driver_data;
+> +	if (exp > 0x0F)
+> +		exp -= 0x20;
+> +	if (mant > 0x3FF)
+> +		mant -= 0x800;
+> +	if ((mant & 0x01) == 1)
+> +		++mant;
+> +	if (exp < 0) {
+> +		for (i = 0; i < -exp; ++i)
+> +			mant /= 2;
+> +	} else {
+> +		for (i = 0; i < exp; ++i)
+> +			mant *= 2;
+> +	}
 > +
-> +	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, buf);
-> +	if (ret < 0) {
-> +		dev_err(&client->dev, "Failed to read Manufacturer ID\n");
+> +	return mant;
+> +}
+> +
+> +static int corsairpsu_usb_cmd(struct corsairpsu_data *priv, u8 p0, u8 p1, u8 p2, void *data)
+> +{
+> +	unsigned long time;
+> +	int ret;
+> +
+> +	memset(priv->cmd_buffer, 0, CMD_BUFFER_SIZE);
+> +	priv->cmd_buffer[0] = p0;
+> +	priv->cmd_buffer[1] = p1;
+> +	priv->cmd_buffer[2] = p2;
+> +
+> +	reinit_completion(&priv->wait_completion);
+> +
+> +	ret = hid_hw_output_report(priv->hdev, priv->cmd_buffer, CMD_BUFFER_SIZE);
+> +	if (ret < 0)
 > +		return ret;
-> +	}
-> +	if (ret != 5 || strncmp(buf, "DELTA", 5)) {
-> +		buf[ret] = '\0';
-> +		dev_err(dev, "Unsupported Manufacturer ID '%s'\n", buf);
-> +		return -ENODEV;
-> +	}
+> +
+> +	time = wait_for_completion_timeout(&priv->wait_completion,
+> +					   msecs_to_jiffies(CMD_TIMEOUT_MS));
+> +	if (!time)
+> +		return -ETIMEDOUT;
 > +
 > +	/*
-> +	 * The chips support reading PMBUS_MFR_MODEL.
+> +	 * at the start of the reply is an echo of the send command/length in the same order it
+> +	 * was send, not every command is supported on every device class, if a command is not
+> +	 * supported, the length value in the reply is okay, but the command value is set to 0
 > +	 */
-> +	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, buf);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to read Manufacturer Model\n");
-> +		return ret;
-> +	}
-> +	if (ret != 14 || strncmp(buf, "Q54SJ108A2", 10)) {
-> +		buf[ret] = '\0';
-> +		dev_err(dev, "Unsupported Manufacturer Model '%s'\n", buf);
-> +		return -ENODEV;
-> +	}
+> +	if (p0 != priv->cmd_buffer[0] || p1 != priv->cmd_buffer[1])
+> +		return -EOPNOTSUPP;
 > +
-> +	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_REVISION, buf);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to read Manufacturer Revision\n");
-> +		return ret;
-> +	}
-> +	if (ret != 4 || buf[0] != 'S') {
-> +		buf[ret] = '\0';
-> +		dev_err(dev, "Unsupported Manufacturer Revision '%s'\n", buf);
-> +		return -ENODEV;
-> +	}
+> +	if (data)
+> +		memcpy(data, priv->cmd_buffer + 2, REPLY_SIZE);
 > +
-> +	info = devm_kzalloc(dev, sizeof(*info), GFP_KERNEL);
-> +	if (!info)
-> +		return -ENOMEM;
-> +
-> +	ret = pmbus_do_probe(client, id, &delta_info[chip_id]);
-> +	if (ret)
-> +		return ret;
-> +
-> +	psu = devm_kzalloc(&client->dev, sizeof(*psu), GFP_KERNEL);
-> +	if (!psu)
-> +		return 0;
-> +
-> +	psu->client = client;
-> +
-> +	debugfs = pmbus_get_debugfs_dir(client);
-> +	if (!debugfs)
-> +		return 0;
-> +
-> +	delta_dir = debugfs_create_dir(client->name, debugfs);
-> +	if (!delta_dir)
-> +		return 0;
-> +
-
-Error checking of debugfs functions is discouraged. While that is arguable,
-I keep getting follow-up patches to remove all such error checks. Please drop.
-
-> +	for (i = 0; i < DELTA_DEBUGFS_NUM_ENTRIES; ++i)
-> +		psu->debugfs_entries[i] = i;
-> +
-> +	debugfs_create_file("operation", 0644, delta_dir,
-> +			    &psu->debugfs_entries[DELTA_DEBUGFS_OPERATION],
-> +			    &delta_fops);
-> +	debugfs_create_file("clear_fault", 0200, delta_dir,
-> +			    &psu->debugfs_entries[DELTA_DEBUGFS_CLEARFAULT],
-> +			    &delta_fops);
-> +	debugfs_create_file("write_protect", 0444, delta_dir,
-> +			    &psu->debugfs_entries[DELTA_DEBUGFS_WRITEPROTECT],
-> +			    &delta_fops);
-> +	debugfs_create_file("store_default", 0200, delta_dir,
-> +			    &psu->debugfs_entries[DELTA_DEBUGFS_STOREDEFAULT],
-> +			    &delta_fops);
-> +	debugfs_create_file("vo_ov_response", 0644, delta_dir,
-> +			    &psu->debugfs_entries[DELTA_DEBUGFS_VOOV_RESPONSE],
-> +			    &delta_fops);
-> +	debugfs_create_file("io_oc_response", 0644, delta_dir,
-> +			    &psu->debugfs_entries[DELTA_DEBUGFS_IOOC_RESPONSE],
-> +			    &delta_fops);
-> +	debugfs_create_file("pmbus_revision", 0444, delta_dir,
-> +			    &psu->debugfs_entries[DELTA_DEBUGFS_PMBUS_VERSION],
-> +			    &delta_fops);
-> +	debugfs_create_file("mfr_id", 0444, delta_dir,
-> +			    &psu->debugfs_entries[DELTA_DEBUGFS_MFR_ID],
-> +			    &delta_fops);
-> +	debugfs_create_file("mfr_model", 0444, delta_dir,
-> +			    &psu->debugfs_entries[DELTA_DEBUGFS_MFR_MODEL],
-> +			    &delta_fops);
-> +	debugfs_create_file("mfr_revision", 0444, delta_dir,
-> +			    &psu->debugfs_entries[DELTA_DEBUGFS_MFR_REVISION],
-> +			    &delta_fops);
-> +	debugfs_create_file("mfr_location", 0444, delta_dir,
-> +			    &psu->debugfs_entries[DELTA_DEBUGFS_MFR_LOCATION],
-> +			    &delta_fops);
-> +	debugfs_create_file("blackbox_erase", 0200, delta_dir,
-> +			    &psu->debugfs_entries[DELTA_DEBUGFS_BLACKBOX_ERASE],
-> +			    &delta_fops);
-> +	debugfs_create_file("blackbox_read_offset", 0444, delta_dir,
-> +			    &psu->debugfs_entries[DELTA_DEBUGFS_BLACKBOX_READ_OFFSET],
-> +			    &delta_fops);
-> +	debugfs_create_file("blackbox_set_offset", 0200, delta_dir,
-> +			    &psu->debugfs_entries[DELTA_DEBUGFS_BLACKBOX_SET_OFFSET],
-> +			    &delta_fops);
-> +	debugfs_create_file("blackbox_read", 0444, delta_dir,
-> +			    &psu->debugfs_entries[DELTA_DEBUGFS_BLACKBOX_READ],
-> +			    &delta_fops);
-> +	debugfs_create_file("flash_key", 0444, delta_dir,
-> +			    &psu->debugfs_entries[DELTA_DEBUGFS_FLASH_KEY],
-> +			    &delta_fops);
 > +	return 0;
 > +}
 > +
-> +static const struct i2c_device_id delta_id[] = {
-> +	{ "Q54SJ108A2", Q54SJ108A2 },
+> +static int corsairpsu_init(struct corsairpsu_data *priv)
+> +{
+> +	/*
+> +	 * PSU_CMD_INIT uses swapped length/command and expects 2 parameter bytes, this command
+> +	 * actually generates a reply, but we don't need it
+> +	 */
+> +	return corsairpsu_usb_cmd(priv, PSU_CMD_INIT, 3, 0, NULL);
+> +}
+> +
+> +static int corsairpsu_fwinfo(struct corsairpsu_data *priv)
+> +{
+> +	int ret;
+> +
+> +	ret = corsairpsu_usb_cmd(priv, 3, PSU_CMD_VEND_STR, 0, priv->vendor);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = corsairpsu_usb_cmd(priv, 3, PSU_CMD_PROD_STR, 0, priv->product);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static int corsairpsu_request(struct corsairpsu_data *priv, u8 cmd, u8 rail, void *data)
+> +{
+> +	int ret;
+> +
+> +	mutex_lock(&priv->lock);
+> +	switch (cmd) {
+> +	case PSU_CMD_RAIL_OUT_VOLTS:
+> +	case PSU_CMD_RAIL_AMPS:
+> +	case PSU_CMD_RAIL_WATTS:
+> +		ret = corsairpsu_usb_cmd(priv, 2, PSU_CMD_SELECT_RAIL, rail, NULL);
+> +		if (ret < 0)
+> +			goto cmd_fail;
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	ret = corsairpsu_usb_cmd(priv, 3, cmd, 0, data);
+> +
+> +cmd_fail:
+> +	mutex_unlock(&priv->lock);
+> +	return ret;
+> +}
+> +
+> +static int corsairpsu_get_value(struct corsairpsu_data *priv, u8 cmd, u8 rail, long *val)
+> +{
+> +	u8 data[REPLY_SIZE];
+> +	long tmp;
+> +	int ret;
+> +
+> +	ret = corsairpsu_request(priv, cmd, rail, data);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/*
+> +	 * the biggest value here comes from the uptime command and to exceed MAXINT total uptime
+> +	 * needs to be about 68 years, the rest are u16 values and the biggest value coming out of
+> +	 * the LINEAR11 conversion are the watts values which are about 1200 for the strongest psu
+> +	 * supported (HX1200i)
+> +	 */
+> +	tmp = (data[3] << 24) + (data[2] << 16) + (data[1] << 8) + data[0];
+> +	switch (cmd) {
+> +	case PSU_CMD_IN_VOLTS:
+> +	case PSU_CMD_IN_AMPS:
+> +	case PSU_CMD_RAIL_OUT_VOLTS:
+> +	case PSU_CMD_RAIL_AMPS:
+> +	case PSU_CMD_TEMP0:
+> +	case PSU_CMD_TEMP1:
+> +		*val = corsairpsu_linear11_to_int(tmp & 0xFFFF) * 1000;
+> +		break;
+> +	case PSU_CMD_FAN:
+> +		/*
+> +		 * this value is best guess, so the calculated value could be wrong, it is hard
+> +		 * to ge the fan to spin in these semi-passive power supplies, which need a
+> +		 * quite high load to do so
+> +		 */
+> +		*val = ((tmp & 0xFF) << 8) + ((tmp >> 8) & 0xFF);
+> +		break;
+> +	case PSU_CMD_RAIL_WATTS:
+> +	case PSU_CMD_TOTAL_WATTS:
+> +		*val = corsairpsu_linear11_to_int(tmp & 0xFFFF) * 1000000;
+> +		break;
+> +	case PSU_CMD_TOTAL_UPTIME:
+> +	case PSU_CMD_UPTIME:
+> +		*val = tmp;
+> +		break;
+> +	default:
+> +		ret = -EOPNOTSUPP;
+> +		break;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static umode_t corsairpsu_hwmon_ops_is_visible(const void *data, enum hwmon_sensor_types type,
+> +					       u32 attr, int channel)
+> +{
+> +	if (type == hwmon_temp && (attr == hwmon_temp_input || attr == hwmon_temp_label))
+> +		return 0444;
+> +	else if (type == hwmon_fan && (attr == hwmon_fan_input || attr == hwmon_fan_label))
+> +		return 0444;
+> +	else if (type == hwmon_power && (attr == hwmon_power_input || attr == hwmon_power_label))
+> +		return 0444;
+> +	else if (type == hwmon_in && (attr == hwmon_in_input || attr == hwmon_in_label))
+> +		return 0444;
+> +	else if (type == hwmon_curr && (attr == hwmon_curr_input || attr == hwmon_curr_label))
+> +		return 0444;
+> +
+> +	return 0;
+> +}
+> +
+> +static int corsairpsu_hwmon_ops_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+> +				     int channel, long *val)
+> +{
+> +	struct corsairpsu_data *priv = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	if (type == hwmon_temp && attr == hwmon_temp_input && channel < 2) {
+> +		ret = corsairpsu_get_value(priv, channel ? PSU_CMD_TEMP1 : PSU_CMD_TEMP0, channel,
+> +					   val);
+> +	} else if (type == hwmon_fan && attr == hwmon_fan_input) {
+> +		ret = corsairpsu_get_value(priv, PSU_CMD_FAN, 0, val);
+> +	} else if (type == hwmon_power && attr == hwmon_power_input) {
+> +		switch (channel) {
+> +		case 0:
+> +			ret = corsairpsu_get_value(priv, PSU_CMD_TOTAL_WATTS, 0, val);
+> +			break;
+> +		case 1 ... 3:
+> +			ret = corsairpsu_get_value(priv, PSU_CMD_RAIL_WATTS, channel - 1, val);
+> +			break;
+> +		default:
+> +			return -EOPNOTSUPP;
+> +		}
+> +	} else if (type == hwmon_in && attr == hwmon_in_input) {
+> +		switch (channel) {
+> +		case 0:
+> +			ret = corsairpsu_get_value(priv, PSU_CMD_IN_VOLTS, 0, val);
+> +			break;
+> +		case 1 ... 3:
+> +			ret = corsairpsu_get_value(priv, PSU_CMD_RAIL_OUT_VOLTS, channel - 1, val);
+> +			break;
+> +		default:
+> +			return -EOPNOTSUPP;
+> +		}
+> +	} else if (type == hwmon_curr && attr == hwmon_curr_input) {
+> +		switch (channel) {
+> +		case 0:
+> +			ret = corsairpsu_get_value(priv, PSU_CMD_IN_AMPS, 0, val);
+> +			break;
+> +		case 1 ... 3:
+> +			ret = corsairpsu_get_value(priv, PSU_CMD_RAIL_AMPS, channel - 1, val);
+> +			break;
+> +		default:
+> +			return -EOPNOTSUPP;
+> +		}
+> +	} else {
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static int corsairpsu_hwmon_ops_read_string(struct device *dev, enum hwmon_sensor_types type,
+> +					    u32 attr, int channel, const char **str)
+> +{
+> +	if (type == hwmon_temp && attr == hwmon_temp_label) {
+> +		*str = channel ? L_TEMP1 : L_TEMP0;
+> +		return 0;
+> +	} else if (type == hwmon_fan && attr == hwmon_fan_label) {
+> +		*str = L_FAN;
+> +		return 0;
+> +	} else if (type == hwmon_power && attr == hwmon_power_label && channel < 4) {
+> +		*str = label_watts[channel];
+> +		return 0;
+> +	} else if (type == hwmon_in && attr == hwmon_in_label && channel < 4) {
+> +		*str = label_volts[channel];
+> +		return 0;
+> +	} else if (type == hwmon_curr && attr == hwmon_curr_label && channel < 4) {
+> +		*str = label_amps[channel];
+> +		return 0;
+> +	}
+> +
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +static const struct hwmon_ops corsairpsu_hwmon_ops = {
+> +	.is_visible	= corsairpsu_hwmon_ops_is_visible,
+> +	.read		= corsairpsu_hwmon_ops_read,
+> +	.read_string	= corsairpsu_hwmon_ops_read_string,
+> +};
+> +
+> +static const struct hwmon_channel_info *corsairpsu_info[] = {
+> +	HWMON_CHANNEL_INFO(chip,
+> +			   HWMON_C_REGISTER_TZ),
+> +	HWMON_CHANNEL_INFO(temp,
+> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+> +			   HWMON_T_INPUT | HWMON_T_LABEL),
+> +	HWMON_CHANNEL_INFO(fan,
+> +			   HWMON_F_INPUT | HWMON_F_LABEL),
+> +	HWMON_CHANNEL_INFO(power,
+> +			   HWMON_P_INPUT | HWMON_P_LABEL,
+> +			   HWMON_P_INPUT | HWMON_P_LABEL,
+> +			   HWMON_P_INPUT | HWMON_P_LABEL,
+> +			   HWMON_P_INPUT | HWMON_P_LABEL),
+> +	HWMON_CHANNEL_INFO(in,
+> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_LABEL),
+> +	HWMON_CHANNEL_INFO(curr,
+> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+> +			   HWMON_C_INPUT | HWMON_C_LABEL),
+> +	NULL
+> +};
+> +
+> +static const struct hwmon_chip_info corsairpsu_chip_info = {
+> +	.ops	= &corsairpsu_hwmon_ops,
+> +	.info	= corsairpsu_info,
+> +};
+> +
+> +#ifdef CONFIG_DEBUG_FS
+> +
+> +static void print_uptime(struct seq_file *seqf, u8 cmd)
+> +{
+> +	struct corsairpsu_data *priv = seqf->private;
+> +	long val;
+> +	int ret;
+> +
+> +	ret = corsairpsu_get_value(priv, cmd, 0, &val);
+> +	if (ret < 0) {
+> +		seq_puts(seqf, "N/A\n");
+> +		return;
+> +	}
+> +
+> +	if (val > SECONDS_PER_DAY) {
+> +		seq_printf(seqf, "%ld day(s), %02ld:%02ld:%02ld\n", val / SECONDS_PER_DAY,
+> +			   val % SECONDS_PER_DAY / SECONDS_PER_HOUR, val % SECONDS_PER_HOUR / 60,
+> +			   val % 60);
+> +		return;
+> +	}
+> +
+> +	seq_printf(seqf, "%02ld:%02ld:%02ld\n", val % SECONDS_PER_DAY / SECONDS_PER_HOUR,
+> +		   val % SECONDS_PER_HOUR / 60, val % 60);
+> +}
+> +
+> +static int uptime_show(struct seq_file *seqf, void *unused)
+> +{
+> +	print_uptime(seqf, PSU_CMD_UPTIME);
+> +
+> +	return 0;
+> +}
+> +DEFINE_SHOW_ATTRIBUTE(uptime);
+> +
+> +static int uptime_total_show(struct seq_file *seqf, void *unused)
+> +{
+> +	print_uptime(seqf, PSU_CMD_TOTAL_UPTIME);
+> +
+> +	return 0;
+> +}
+> +DEFINE_SHOW_ATTRIBUTE(uptime_total);
+> +
+> +static int vendor_show(struct seq_file *seqf, void *unused)
+> +{
+> +	struct corsairpsu_data *priv = seqf->private;
+> +
+> +	seq_printf(seqf, "%s\n", priv->vendor);
+> +
+> +	return 0;
+> +}
+> +DEFINE_SHOW_ATTRIBUTE(vendor);
+> +
+> +static int product_show(struct seq_file *seqf, void *unused)
+> +{
+> +	struct corsairpsu_data *priv = seqf->private;
+> +
+> +	seq_printf(seqf, "%s\n", priv->product);
+> +
+> +	return 0;
+> +}
+> +DEFINE_SHOW_ATTRIBUTE(product);
+> +
+> +static void corsairpsu_debugfs_init(struct corsairpsu_data *priv)
+> +{
+> +	char name[32];
+> +
+> +	scnprintf(name, sizeof(name), "%s-%s", DRIVER_NAME, dev_name(&priv->hdev->dev));
+> +
+> +	priv->debugfs = debugfs_create_dir(name, NULL);
+> +	debugfs_create_file("uptime", 0444, priv->debugfs, priv, &uptime_fops);
+> +	debugfs_create_file("uptime_total", 0444, priv->debugfs, priv, &uptime_total_fops);
+> +	debugfs_create_file("vendor", 0444, priv->debugfs, priv, &vendor_fops);
+> +	debugfs_create_file("product", 0444, priv->debugfs, priv, &product_fops);
+> +}
+> +
+> +#else
+> +
+> +static void corsairpsu_debugfs_init(struct corsairpsu_data *priv)
+> +{
+> +}
+> +
+> +#endif
+> +
+> +static int corsairpsu_probe(struct hid_device *hdev, const struct hid_device_id *id)
+> +{
+> +	struct corsairpsu_data *priv;
+> +	int ret;
+> +
+> +	priv = devm_kzalloc(&hdev->dev, sizeof(struct corsairpsu_data), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	priv->cmd_buffer = devm_kmalloc(&hdev->dev, CMD_BUFFER_SIZE, GFP_KERNEL);
+> +	if (!priv->cmd_buffer)
+> +		return -ENOMEM;
+> +
+> +	ret = hid_parse(hdev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = hid_hw_start(hdev, HID_CONNECT_HIDRAW);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = hid_hw_open(hdev);
+> +	if (ret)
+> +		goto fail_and_stop;
+> +
+> +	priv->hdev = hdev;
+> +	hid_set_drvdata(hdev, priv);
+> +	mutex_init(&priv->lock);
+> +	init_completion(&priv->wait_completion);
+> +
+> +	hid_device_io_start(hdev);
+> +
+> +	ret = corsairpsu_init(priv);
+> +	if (ret < 0) {
+> +		dev_err(&hdev->dev, "unable to initialize device (%d)\n", ret);
+> +		goto fail_and_stop;
+> +	}
+> +
+> +	ret = corsairpsu_fwinfo(priv);
+> +	if (ret < 0) {
+> +		dev_err(&hdev->dev, "unable to query firmware (%d)\n", ret);
+> +		goto fail_and_stop;
+> +	}
+> +
+> +	priv->hwmon_dev = hwmon_device_register_with_info(&hdev->dev, "corsairpsu", priv,
+> +							  &corsairpsu_chip_info, 0);
+> +
+> +	if (IS_ERR(priv->hwmon_dev)) {
+> +		ret = PTR_ERR(priv->hwmon_dev);
+> +		goto fail_and_close;
+> +	}
+> +
+> +	corsairpsu_debugfs_init(priv);
+> +
+> +	return 0;
+> +
+> +fail_and_close:
+> +	hid_hw_close(hdev);
+> +fail_and_stop:
+> +	hid_hw_stop(hdev);
+> +	return ret;
+> +}
+> +
+> +static void corsairpsu_remove(struct hid_device *hdev)
+> +{
+> +	struct corsairpsu_data *priv = hid_get_drvdata(hdev);
+> +
+> +	debugfs_remove_recursive(priv->debugfs);
+> +	hwmon_device_unregister(priv->hwmon_dev);
+> +	hid_hw_close(hdev);
+> +	hid_hw_stop(hdev);
+> +}
+> +
+> +static int corsairpsu_raw_event(struct hid_device *hdev, struct hid_report *report, u8 *data,
+> +				int size)
+> +{
+> +	struct corsairpsu_data *priv = hid_get_drvdata(hdev);
+> +
+> +	if (completion_done(&priv->wait_completion))
+> +		return 0;
+> +
+> +	memcpy(priv->cmd_buffer, data, min(CMD_BUFFER_SIZE, size));
+> +	complete(&priv->wait_completion);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct hid_device_id corsairpsu_idtable[] = {
+> +	{ HID_USB_DEVICE(0x1b1c, 0x1c03) }, /* Corsair HX550i */
+> +	{ HID_USB_DEVICE(0x1b1c, 0x1c04) }, /* Corsair HX650i */
+> +	{ HID_USB_DEVICE(0x1b1c, 0x1c05) }, /* Corsair HX750i */
+> +	{ HID_USB_DEVICE(0x1b1c, 0x1c06) }, /* Corsair HX850i */
+> +	{ HID_USB_DEVICE(0x1b1c, 0x1c07) }, /* Corsair HX1000i */
+> +	{ HID_USB_DEVICE(0x1b1c, 0x1c08) }, /* Corsair HX1200i */
+> +	{ HID_USB_DEVICE(0x1b1c, 0x1c09) }, /* Corsair RM550i */
+> +	{ HID_USB_DEVICE(0x1b1c, 0x1c0a) }, /* Corsair RM650i */
+> +	{ HID_USB_DEVICE(0x1b1c, 0x1c0b) }, /* Corsair RM750i */
+> +	{ HID_USB_DEVICE(0x1b1c, 0x1c0c) }, /* Corsair RM850i */
+> +	{ HID_USB_DEVICE(0x1b1c, 0x1c0d) }, /* Corsair RM1000i */
 > +	{ },
 > +};
+> +MODULE_DEVICE_TABLE(hid, corsairpsu_idtable);
 > +
-> +MODULE_DEVICE_TABLE(i2c, delta_id);
-> +
-> +static const struct of_device_id delta_of_match[] = {
-> +	{ .compatible = "delta,Q54SJ108A2", .data = (void *)Q54SJ108A2 },
-> +	{ },
+> +static struct hid_driver corsairpsu_driver = {
+> +	.name		= DRIVER_NAME,
+> +	.id_table	= corsairpsu_idtable,
+> +	.probe		= corsairpsu_probe,
+> +	.remove		= corsairpsu_remove,
+> +	.raw_event	= corsairpsu_raw_event,
 > +};
+> +module_hid_driver(corsairpsu_driver);
 > +
-> +MODULE_DEVICE_TABLE(of, delta_of_match);
-> +
-> +static struct i2c_driver delta_driver = {
-> +	.driver = {
-> +		.name = "Q54SJ108A2",
-> +		.of_match_table = delta_of_match,
-> +	},
-> +	.probe = delta_probe,
-
-New drivers are supposed to use the probe_new function.
-
-> +	.remove = pmbus_do_remove,
-
-No longer exists.
-
-> +	.id_table = delta_id,
-> +};
-> +
-> +module_i2c_driver(delta_driver);
-> +
-> +MODULE_AUTHOR("Xiao.Ma <xiao.mx.ma@deltaww.com>");
-> +MODULE_DESCRIPTION("PMBus driver for Delta Q54SJ108A2 series modules");
 > +MODULE_LICENSE("GPL");
-> 
-
+> +MODULE_AUTHOR("Wilken Gottwalt <wilken.gottwalt@posteo.net>");
+> +MODULE_DESCRIPTION("Linux driver for Corsair power supplies with HID sensors interface");
