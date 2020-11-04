@@ -2,139 +2,235 @@ Return-Path: <SRS0=xFUD=EK=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,FAKE_REPLY_C,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C244C2D0A3
-	for <linux-hwmon@archiver.kernel.org>; Wed,  4 Nov 2020 13:21:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B167C388F9
+	for <linux-hwmon@archiver.kernel.org>; Wed,  4 Nov 2020 14:37:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9C0F320759
-	for <linux-hwmon@archiver.kernel.org>; Wed,  4 Nov 2020 13:21:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0FB492074B
+	for <linux-hwmon@archiver.kernel.org>; Wed,  4 Nov 2020 14:37:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="gfV+qyr4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I1EqiRwC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729847AbgKDNVn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 4 Nov 2020 08:21:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34084 "EHLO
+        id S1728675AbgKDOhU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 4 Nov 2020 09:37:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729198AbgKDNVm (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 4 Nov 2020 08:21:42 -0500
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A866C0613D3;
-        Wed,  4 Nov 2020 05:21:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=L5Sp8yv4XVh4jBgjORaZ7Ijor6kyCTS5Y9KdAFYyr5c=; b=gfV+qyr4NT0Fv18UFUzLTT93G9
-        jCSW7cb6DkobyE5UQ4+uEWl1VX4aSZfx3bZrSAwPvLxnGo5NLgwRzyB9tc5fezuR4HVeIwsGoi9k/
-        tCG5+aV1mHi2uZ1NBfLsijPe/G8LNh6DFydow3bbQEXzMoYjN7acVHXlb3lf0nIH3ATI=;
-Received: from p200300ccff08bb001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff08:bb00:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1kaIil-0007wd-R6; Wed, 04 Nov 2020 14:21:04 +0100
-Date:   Wed, 4 Nov 2020 14:20:57 +0100
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Brad Campbell <brad@fnarfbargle.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>, Arnd Bergmann <arnd@arndb.de>,
-        rydberg@bitmath.org, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        hns@goldelico.com
-Subject: Re: [REGRESSION] hwmon: (applesmc) avoid overlong udelay()
-Message-ID: <20201104142057.62493c12@aktux>
-In-Reply-To: <68467f1b-cea1-47ea-a4d4-8319214b072a@fnarfbargle.com>
-References: <20200930105442.3f642f6c@aktux>
-        <20200930164446.GB219887@roeck-us.net>
-        <CAK8P3a2CbhJT+B-F+cnX+uiJep9oiLM28n045-ATaVaU41u2hw@mail.gmail.com>
-        <20201002002251.28462e64@aktux>
-        <7543ef85-727d-96c3-947e-5b18e9e6c44d@roeck-us.net>
-        <20201006090226.4275c824@kemnade.info>
-        <db042e9b-be41-11b1-7059-3881b1da5c8b@fnarfbargle.com>
-        <68467f1b-cea1-47ea-a4d4-8319214b072a@fnarfbargle.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        with ESMTP id S1726608AbgKDOhT (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 4 Nov 2020 09:37:19 -0500
+Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F70C0613D3;
+        Wed,  4 Nov 2020 06:37:19 -0800 (PST)
+Received: by mail-ot1-x343.google.com with SMTP id g19so10031335otp.13;
+        Wed, 04 Nov 2020 06:37:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=NFjmtsfmnj0C9Thp8xS2Sl3MiUrCZjVNBwOhOhlohCU=;
+        b=I1EqiRwCJ3zLn2W2+3IAL3Ame+dCBJzvZK4h87AiYl2cxEiad0BWbbglOLlPK5uQVa
+         7XNm3+Rd+s7/urVairePBJ8TXM5Dj7HMUq2Iw9WtGDcJvDQWHmSMbGQadi0d+TIUD1Me
+         ezql4snXWiMgmdtVBgFZ0idWdFSCuAZVMCU5UKZ+aT3KluvxOE3Ck1DuKAU9zv9eA30r
+         dRLLV7EQkp81Wdhxr3Mt71CKrXDxMflounRuaYEcwi4c45mhN46H02PG5tGIflnN5wQ+
+         1kNq3DYzKrLnB1v7UEFAn9XX8m3Y0oDQkMFH/NLzJFjSwBATC71sLil7abK9N/i84AAE
+         dC5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :mime-version:content-disposition:user-agent;
+        bh=NFjmtsfmnj0C9Thp8xS2Sl3MiUrCZjVNBwOhOhlohCU=;
+        b=Mz/ox60FOwADPrXWo+372fydcqZyFOUct8hcC5uQsgX3R9sGfsCjoUip/sA/X2gmYC
+         3AAfhjANduVUwVdZBTAGdt7pB1tGOp8/nFMVQuKyC0gMA3XrQKWVKvezjVbEjGkhE09w
+         jiNrIaRXHQhje+Wp+fNV4J8NUqdx/hi/4peDy2XffoUdHUkWN9GS25JQ7J4t1DWVtu5X
+         QL3Ux9Esrc0knC6wqiIKoPVnZf8F2QLSbLa3dwhg9fwKeQSBjQq4uaSwsWZFUYJNx2jw
+         igSxtLUcIs0vX/3BEM81eRCyPv2vXQcf+cmO7mevz3+HJfMpqAty2ZyavfyPWftgDJk+
+         M7EA==
+X-Gm-Message-State: AOAM53126Ehgx2BAN3TyCN+ridYontP9ui98olzBxcWBq9Bjwpg2XFoN
+        jTdQ4IeOylsVvn+qlCrKd6k=
+X-Google-Smtp-Source: ABdhPJxeosxE3+mqblez0F2z0oeNuHQtstF8ju49NM3hknLO4pkALghgsEcjBc//Dza+bnB0Z4kTyw==
+X-Received: by 2002:a9d:6c4b:: with SMTP id g11mr18508267otq.265.1604500639031;
+        Wed, 04 Nov 2020 06:37:19 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f124sm491231oia.27.2020.11.04.06.37.18
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 04 Nov 2020 06:37:18 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 4 Nov 2020 06:37:17 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Yungteng Hsu <hsu.yungteng@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        alan@redhat.com
+Subject: Re: [PATCH] hwmon: (pmbus) Add driver for STMicroelectronics PM6764
+ Voltage Regulator
+Message-ID: <20201104143717.GA92239@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, 3 Nov 2020 16:56:32 +1100
-Brad Campbell <brad@fnarfbargle.com> wrote:
+On Wed, Nov 04, 2020 at 03:09:23PM +0800, Yungteng Hsu wrote:
+> Add the pmbus driver for the STMicroelectronics pm6764 voltage regulator.
+> 
+> the output voltage use the MFR_READ_VOUT 0xD4
+> vout value returned is linear11
+> 
+> Signed-off-by: Charles Hsu <hsu.yungteng@gmail.com>
 
-> On 3/11/20 10:56 am, Brad Campbell wrote:
->=20
-> >=20
-> > I've examined the code in VirtualSMC and I'm not convinced we were not =
-waiting on the wrong bits.
-> >=20
-> > #define SMC_STATUS_AWAITING_DATA=C2=A0 BIT0=C2=A0 ///< Ready to read da=
-ta.
-> > #define SMC_STATUS_IB_CLOSED=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 BIT1=C2=A0 /=
-// A write is pending.
-> > #define SMC_STATUS_BUSY=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 BIT2=C2=A0 ///< Busy processing a command.
-> > #define SMC_STATUS_GOT_COMMAND=C2=A0=C2=A0=C2=A0 BIT3=C2=A0 ///< The la=
-st input was a command.
-> > #define SMC_STATUS_UKN_0x16=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 BIT4
-> > #define SMC_STATUS_KEY_DONE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 BIT5
-> > #define SMC_STATUS_READY=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 BIT6=C2=A0 // Ready to work
-> > #define SMC_STATUS_UKN_0x80=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 BIT7=C2=
-=A0 // error
-> >=20
-> > Any chance you could try this patch? It's ugly, hacked together and cur=
-rently fairly undocumented, but if it works I'll figure out how to clean it=
- up (suggestions welcome).
-> > It works on my MacbookPro 11,1. =20
->=20
-> I had some time so I spent a bit of time refactoring and trying to clarif=
-y the magic numbers.
->=20
-> I also did some fuzzing of the SMC and figured out where we can loosen th=
-e masks.
-> This has some debug code in it to identify if any wait loops exceed 1 loo=
-p and if the SMC is reporting anything other than a clear "I'm waiting" pri=
-or to each command.
->=20
-> You might see some of these :
-> [   51.316202] applesmc: wait_status looping 2: 0x44, 0x40, 0x4e
-> [   60.002547] applesmc: wait_status looping 2: 0x44, 0x40, 0x4e
-> [   60.130754] applesmc: wait_status looping 2: 0x44, 0x40, 0x4e
->=20
-> I did some heavy tests and found that with the delays at the bottom of th=
-e loop about 50% of calls required no delay at all before a read or write a=
-nd the other 50% require a single delay.
-> I can count on one hand the number of times it's exceeded 1 loop, and the=
- max thus far has been 5 loops.
->=20
-That matches my experience. The only delay is at the end of the
-command. Critcal seems to be that there is not too much delay in between.
+Please use standard Linux kernel code formatting rules.
+Run checkpatch --strict on the patch and make sure it does not report
+any problems.
 
-[...]
-> If anyone with a Mac having a conventional SMC and seeing issues on 5.9 c=
-ould test this it'd be appreciated. I'm not saying this code is "correct", =
-but it "works for me".
->=20
-Seems to work here.
- dmesg  | grep applesmc
+total: 1 errors, 39 warnings, 3 checks, 96 lines checked
 
-[    1.350782] applesmc: key=3D561 fan=3D1 temp=3D33 index=3D33 acc=3D0 lux=
-=3D2 kbd=3D1
-[    1.350922] applesmc applesmc.768: hwmon_device_register() is deprecated=
-. Please convert the driver to use hwmon_device_register_with_info().
-[   17.748504] applesmc: wait_status looping 2: 0x4a, 0x4c, 0x4f
-[  212.008952] applesmc: wait_status looping 2: 0x44, 0x40, 0x4e
-[  213.033930] applesmc: wait_status looping 2: 0x44, 0x40, 0x4e
-[  213.167908] applesmc: wait_status looping 2: 0x44, 0x40, 0x4e
-[  219.087854] applesmc: wait_status looping 2: 0x44, 0x40, 0x4e
+is a bit much for a 74-line patch.
 
-Tested it on top of 5.9
+> ---
+>  drivers/hwmon/pmbus/Kconfig    |  8 ++++
+>  drivers/hwmon/pmbus/Makefile   |  1 +
+>  drivers/hwmon/pmbus/pm6764tr.c | 74 ++++++++++++++++++++++++++++++++++
+>  3 files changed, 83 insertions(+)
+>  create mode 100644 drivers/hwmon/pmbus/pm6764tr.c
+> 
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index a25faf69fce3..2b487c401a4e 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -220,6 +220,14 @@ config SENSORS_MP2975
+>    This driver can also be built as a module. If so, the module will
+>    be called mp2975.
+> 
+> +config SENSORS_PM6764TR
+> + tristate "PM6764TR"
+> + help
+> +  If you say yes here you get hardware monitoring support for PM6764TR.
+> +
+> +  This driver can also be built as a module. If so, the module will
+> +  be called pm6764tr.
+> +
+>  config SENSORS_PXE1610
+>   tristate "Infineon PXE1610"
+>   help
+> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> index 4c97ad0bd791..31ebdef5d4a6 100644
+> --- a/drivers/hwmon/pmbus/Makefile
+> +++ b/drivers/hwmon/pmbus/Makefile
+> @@ -25,6 +25,7 @@ obj-$(CONFIG_SENSORS_MAX31785) += max31785.o
+>  obj-$(CONFIG_SENSORS_MAX34440) += max34440.o
+>  obj-$(CONFIG_SENSORS_MAX8688) += max8688.o
+>  obj-$(CONFIG_SENSORS_MP2975) += mp2975.o
+> +obj-$(CONFIG_SENSORS_PM6764TR) += pm6764tr.o
+>  obj-$(CONFIG_SENSORS_PXE1610) += pxe1610.o
+>  obj-$(CONFIG_SENSORS_TPS40422) += tps40422.o
+>  obj-$(CONFIG_SENSORS_TPS53679) += tps53679.o
+> diff --git a/drivers/hwmon/pmbus/pm6764tr.c b/drivers/hwmon/pmbus/pm6764tr.c
+> new file mode 100644
+> index 000000000000..b125a1cbfea5
+> --- /dev/null
+> +++ b/drivers/hwmon/pmbus/pm6764tr.c
+> @@ -0,0 +1,74 @@
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/init.h>
+> +#include <linux/err.h>
+> +#include <linux/slab.h>
+> +#include <linux/mutex.h>
+> +#include <linux/i2c.h>
+> +#include <linux/pmbus.h>
 
-Regards,
-Andreas
+Alphabetic include file order, please.
+
+> +#include "pmbus.h"
+> +
+> +#define PM6764TR_PMBUS_READ_VOUT 0xD4
+
+tab after PM6764TR_PMBUS_READ_VOUT, please.
+
+I see you don't use any tabs in the patch. Please do.
+
+> +
+> +static int pm6764tr_read_word_data(struct i2c_client *client, int
+> page, int reg)
+
+Corrupted ?
+
+That makes me wonder if the patch was corrupted by your e-mail system,
+and if that system replaced tabs with spaces. Is that possible ?
+
+> +{
+> + int ret;
+> +
+> + switch (reg) {
+> + case PMBUS_VIRT_READ_VMON:
+> + ret = pmbus_read_word_data(client, page,
+> +   PM6764TR_PMBUS_READ_VOUT);
+
+That can be one line (line limit is now 100 columns).
+
+> + break;
+> + default:
+> + ret = -ENODATA;
+> + break;
+> + }
+> + return ret;
+> +}
+> +
+> +static struct pmbus_driver_info pm6764tr_info = {
+> + .pages = 1,
+> + .format[PSC_VOLTAGE_IN] = linear,
+> + .format[PSC_VOLTAGE_OUT] = vid,
+> + .format[PSC_TEMPERATURE] = linear,
+> + .format[PSC_CURRENT_OUT] = linear,
+> + .format[PSC_POWER] = linear,
+> + .func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN |  PMBUS_HAVE_PIN |
+> +    PMBUS_HAVE_IOUT | PMBUS_HAVE_POUT | PMBUS_HAVE_VMON |
+> + PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_VOUT |
+> + PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+> +    .read_word_data = pm6764tr_read_word_data,
+> +};
+> +
+> +static int pm6764tr_probe(struct i2c_client *client,
+> +  const struct i2c_device_id *id)
+
+Please use the new style probe function (probe_new).
+
+> +{
+> + return pmbus_do_probe(client, id, &pm6764tr_info);
+> +}
+> +
+> +static const struct i2c_device_id pm6764tr_id[] = {
+> + {"pm6764tr", 0},
+> + {}
+> +};
+> +MODULE_DEVICE_TABLE(i2c, pm6764tr_id);
+> +
+> +static const struct of_device_id pm6764tr_of_match[] = {
+> + {.compatible = "pm6764tr"},
+> + {}
+> +};
+> +/* This is the driver that will be inserted */
+> +static struct i2c_driver pm6764tr_driver = {
+> + .driver = {
+> +   .name = "pm6764tr",
+> +   .of_match_table = of_match_ptr(pm6764tr_of_match),
+> +   },
+> + .probe = pm6764tr_probe,
+> + .remove = pmbus_do_remove,
+
+pmbus_do_remove no longer exists.
+
+> + .id_table = pm6764tr_id,
+> +};
+> +
+> +module_i2c_driver(pm6764tr_driver);
+> +
+> +MODULE_AUTHOR("Charles Hsu");
+> +MODULE_DESCRIPTION("PMBus driver for  ST PM6764TR");
+> +MODULE_LICENSE("GPL");
+> --
+> 2.25.1
