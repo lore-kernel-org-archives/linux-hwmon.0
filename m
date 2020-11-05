@@ -2,100 +2,254 @@ Return-Path: <SRS0=vQlV=EL=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 586C0C00A89
-	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Nov 2020 12:44:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10DF0C00A89
+	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Nov 2020 13:01:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E93D920756
-	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Nov 2020 12:44:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B2D5620735
+	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Nov 2020 13:01:52 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IqktlwYS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730044AbgKEMoM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 5 Nov 2020 07:44:12 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:59181 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725468AbgKEMoM (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 5 Nov 2020 07:44:12 -0500
-Received: from 1.general.cking.uk.vpn ([10.172.193.212])
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <colin.king@canonical.com>)
-        id 1kaecb-0001QT-Ht; Thu, 05 Nov 2020 12:44:09 +0000
-Subject: Re: [PATCH][next] hwmon: corsair-psu: fix unintentional sign
- extension issue
-To:     Wilken Gottwalt <wilken.gottwalt@posteo.net>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20201105115019.41735-1-colin.king@canonical.com>
- <20201105133233.10edda5b@monster.powergraphx.local>
-From:   Colin Ian King <colin.king@canonical.com>
-Message-ID: <0ad7f7e1-564c-1644-8e11-c2eacc1ba667@canonical.com>
-Date:   Thu, 5 Nov 2020 12:44:08 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        id S1726777AbgKENBw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 5 Nov 2020 08:01:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58968 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725468AbgKENBw (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 5 Nov 2020 08:01:52 -0500
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE02BC0613CF;
+        Thu,  5 Nov 2020 05:01:51 -0800 (PST)
+Received: by mail-lf1-x143.google.com with SMTP id b1so2141996lfp.11;
+        Thu, 05 Nov 2020 05:01:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rte+RN1GlZT+o4zocXut02cNP7YGnRzgrklvV1qGkzE=;
+        b=IqktlwYSaSyiiKHV7cf4qZCHEFS3k+iWPGg2cRWbzpkbEnXj8GUpJ8pNQByaWgLsSk
+         14AldybKLtCznbuVJGBmAs1Qne0mUiaZ/sCfPJKiy0uWaxhNwMZs8UDqj17f5McIqNx2
+         RSD5EuG9J998rEzfy9gycWRvqJ53whqlhzuagjkssV0sDXnqjr9+iXh7TGc6ZUuP3SNk
+         Ox9HuaMuFXzYptTTeQpoHky9vl3liNdqLbEBDiMx4Q34xewFPmEQL+LYrv/G+s5QaGVn
+         BOG5i1RO1Xe204VCZUHzBHm+n+dkuNEB2JB+0bVpEAaFsOtYgQQAR5Wgs32quBg8fTSL
+         q6jQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rte+RN1GlZT+o4zocXut02cNP7YGnRzgrklvV1qGkzE=;
+        b=mo/rasgRsojGkD8hP/vuRDm0haGlWTiH65sgQ0Y661BYI6Ur2BqfpvUfi0XciW0gmK
+         ClOUfXzRydDIA4xa2IHSuLmS/nOGvtJ753cQFk7bpolK8CCOQEVFpup3Mywp/f5nXK7B
+         Rat33ojvCGXl6rbfQ6YCKRCq/BMVmj/Oes5T1X44byWqSBTac1HGR015/W6uI9trZgxk
+         rxxq5celC0BdbUe6HI3QOMM25eAwo0mnCPthWTqRmFOQcucK+g/1f/j++6y9i8+L92Cm
+         0JEeZ+YqsjN6SvPFTfSXeFxXBZA9dJbslOF83Sfl/2CmsvzNOyiIIZcQMyp99daeZjS3
+         vJuQ==
+X-Gm-Message-State: AOAM53367CqMzjjxaLO/CLvEMN8RWln/XGRNwso1xA8tFgSZoSzqfhM8
+        MD4h3fNZ8LzS2hD6rhreqpsGeh4Ejrsh6B9N+vA=
+X-Google-Smtp-Source: ABdhPJxotpSij5A3nSWVUAW3LYc1Xx2PO1q6zcg8dwl4mYSge/mG1s9sQUtsk4Y+FeWxtCbyUWu6qtw5CyipNHOYjSM=
+X-Received: by 2002:ac2:5a5d:: with SMTP id r29mr914185lfn.456.1604581310256;
+ Thu, 05 Nov 2020 05:01:50 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20201105133233.10edda5b@monster.powergraphx.local>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20201104143717.GA92239@roeck-us.net>
+In-Reply-To: <20201104143717.GA92239@roeck-us.net>
+From:   Charles Hsu <hsu.yuegteng@gmail.com>
+Date:   Thu, 5 Nov 2020 21:01:38 +0800
+Message-ID: <CAJArhDYH4pXc4MHbxUNxHLmP4Haiv_WyaNDktAByWQdgtOTWLA@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (pmbus) Add driver for STMicroelectronics PM6764
+ Voltage Regulator
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Yungteng Hsu <hsu.yungteng@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        alan@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 05/11/2020 12:32, Wilken Gottwalt wrote:
-> On Thu,  5 Nov 2020 11:50:19 +0000
-> Colin King <colin.king@canonical.com> wrote:
-> 
->> From: Colin Ian King <colin.king@canonical.com>
->>
->> The shifting of the u8 integer data[3] by 24 bits to the left will
->> be promoted to a 32 bit signed int and then sign-extended to a
->> long. In the event that the top bit of data[3] is set then all
->> then all the upper 32 bits of a 64 bit long end up as also being
->> set because of the sign-extension. Fix this by casting data[3] to
->> a long before the shift.
->>
->> Addresses-Coverity: ("Unintended sign extension")
->> Fixes: ce15cd2cee8b ("hwmon: add Corsair PSU HID controller driver")
->> Signed-off-by: Colin Ian King <colin.king@canonical.com>
->> ---
->>  drivers/hwmon/corsair-psu.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
->> index e92d0376e7ac..5d19a888231a 100644
->> --- a/drivers/hwmon/corsair-psu.c
->> +++ b/drivers/hwmon/corsair-psu.c
->> @@ -241,7 +241,7 @@ static int corsairpsu_get_value(struct corsairpsu_data *priv, u8 cmd, u8
->> rail, l
->>  	 * the LINEAR11 conversion are the watts values which are about 1200 for the strongest
->> psu
->>  	 * supported (HX1200i)
->>  	 */
->> -	tmp = (data[3] << 24) + (data[2] << 16) + (data[1] << 8) + data[0];
->> +	tmp = ((long)data[3] << 24) + (data[2] << 16) + (data[1] << 8) + data[0];
->>  	switch (cmd) {
->>  	case PSU_CMD_IN_VOLTS:
->>  	case PSU_CMD_IN_AMPS:
-> 
-> Yeah, this could happen if the uptime value in the micro-controller gets bigger
-> than 68 years (in seconds), and it is the only value which actually uses more
-> than 2 bytes for the representation. So what about architectures which are 32 bit
-> wide and where a long has 32 bits? I guess this simple cast is not enough.
+On Wed, Nov 4, 2020 at 10:40 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On Wed, Nov 04, 2020 at 03:09:23PM +0800, Yungteng Hsu wrote:
+> > Add the pmbus driver for the STMicroelectronics pm6764 voltage regulator.
+> >
+> > the output voltage use the MFR_READ_VOUT 0xD4
+> > vout value returned is linear11
+> >
+> > Signed-off-by: Charles Hsu <hsu.yungteng@gmail.com>
+>
+> Please use standard Linux kernel code formatting rules.
+> Run checkpatch --strict on the patch and make sure it does not report
+> any problems.
+>
+> total: 1 errors, 39 warnings, 3 checks, 96 lines checked
+>
+> is a bit much for a 74-line patch.
+>
 
-For 32 bits (unsigned) the 4 u8 values in data represents ~136 years no
-matter if we use a 32 or 64 bit long for tmp. The cast to long is
-signed, so yes, that's ~68 years in seconds. So perhaps
-corsairpsu_get_value() should be passing a unsigned long for the *val
-arg and tmp should be unsigned long too?
+Okay, I got it.
 
-> 
-> greetings,
-> Wilken
-> 
+> > ---
+> >  drivers/hwmon/pmbus/Kconfig    |  8 ++++
+> >  drivers/hwmon/pmbus/Makefile   |  1 +
+> >  drivers/hwmon/pmbus/pm6764tr.c | 74 ++++++++++++++++++++++++++++++++++
+> >  3 files changed, 83 insertions(+)
+> >  create mode 100644 drivers/hwmon/pmbus/pm6764tr.c
+> >
+> > diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> > index a25faf69fce3..2b487c401a4e 100644
+> > --- a/drivers/hwmon/pmbus/Kconfig
+> > +++ b/drivers/hwmon/pmbus/Kconfig
+> > @@ -220,6 +220,14 @@ config SENSORS_MP2975
+> >    This driver can also be built as a module. If so, the module will
+> >    be called mp2975.
+> >
+> > +config SENSORS_PM6764TR
+> > + tristate "PM6764TR"
+> > + help
+> > +  If you say yes here you get hardware monitoring support for PM6764TR.
+> > +
+> > +  This driver can also be built as a module. If so, the module will
+> > +  be called pm6764tr.
+> > +
+> >  config SENSORS_PXE1610
+> >   tristate "Infineon PXE1610"
+> >   help
+> > diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> > index 4c97ad0bd791..31ebdef5d4a6 100644
+> > --- a/drivers/hwmon/pmbus/Makefile
+> > +++ b/drivers/hwmon/pmbus/Makefile
+> > @@ -25,6 +25,7 @@ obj-$(CONFIG_SENSORS_MAX31785) += max31785.o
+> >  obj-$(CONFIG_SENSORS_MAX34440) += max34440.o
+> >  obj-$(CONFIG_SENSORS_MAX8688) += max8688.o
+> >  obj-$(CONFIG_SENSORS_MP2975) += mp2975.o
+> > +obj-$(CONFIG_SENSORS_PM6764TR) += pm6764tr.o
+> >  obj-$(CONFIG_SENSORS_PXE1610) += pxe1610.o
+> >  obj-$(CONFIG_SENSORS_TPS40422) += tps40422.o
+> >  obj-$(CONFIG_SENSORS_TPS53679) += tps53679.o
+> > diff --git a/drivers/hwmon/pmbus/pm6764tr.c b/drivers/hwmon/pmbus/pm6764tr.c
+> > new file mode 100644
+> > index 000000000000..b125a1cbfea5
+> > --- /dev/null
+> > +++ b/drivers/hwmon/pmbus/pm6764tr.c
+> > @@ -0,0 +1,74 @@
+> > +#include <linux/kernel.h>
+> > +#include <linux/module.h>
+> > +#include <linux/init.h>
+> > +#include <linux/err.h>
+> > +#include <linux/slab.h>
+> > +#include <linux/mutex.h>
+> > +#include <linux/i2c.h>
+> > +#include <linux/pmbus.h>
+>
+> Alphabetic include file order, please.
+>
 
+update include file order in v2.
+
+> > +#include "pmbus.h"
+> > +
+> > +#define PM6764TR_PMBUS_READ_VOUT 0xD4
+>
+> tab after PM6764TR_PMBUS_READ_VOUT, please.
+>
+> I see you don't use any tabs in the patch. Please do.
+>
+> > +
+> > +static int pm6764tr_read_word_data(struct i2c_client *client, int
+> > page, int reg)
+>
+> Corrupted ?
+>
+> That makes me wonder if the patch was corrupted by your e-mail system,
+> and if that system replaced tabs with spaces. Is that possible ?
+>
+
+This is corrupted by e-mail system,
+and tabs are replaced with spaces.
+I'll check the e-mail system setting and updated in v2.
+
+> > +{
+> > + int ret;
+> > +
+> > + switch (reg) {
+> > + case PMBUS_VIRT_READ_VMON:
+> > + ret = pmbus_read_word_data(client, page,
+> > +   PM6764TR_PMBUS_READ_VOUT);
+>
+> That can be one line (line limit is now 100 columns).
+>
+
+fix to one line in v2.
+
+> > + break;
+> > + default:
+> > + ret = -ENODATA;
+> > + break;
+> > + }
+> > + return ret;
+> > +}
+> > +
+> > +static struct pmbus_driver_info pm6764tr_info = {
+> > + .pages = 1,
+> > + .format[PSC_VOLTAGE_IN] = linear,
+> > + .format[PSC_VOLTAGE_OUT] = vid,
+> > + .format[PSC_TEMPERATURE] = linear,
+> > + .format[PSC_CURRENT_OUT] = linear,
+> > + .format[PSC_POWER] = linear,
+> > + .func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN |  PMBUS_HAVE_PIN |
+> > +    PMBUS_HAVE_IOUT | PMBUS_HAVE_POUT | PMBUS_HAVE_VMON |
+> > + PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_VOUT |
+> > + PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+> > +    .read_word_data = pm6764tr_read_word_data,
+> > +};
+> > +
+> > +static int pm6764tr_probe(struct i2c_client *client,
+> > +  const struct i2c_device_id *id)
+>
+> Please use the new style probe function (probe_new).
+>
+
+Change form .probe to .probe_new in v2.
+
+> > +{
+> > + return pmbus_do_probe(client, id, &pm6764tr_info);
+> > +}
+> > +
+> > +static const struct i2c_device_id pm6764tr_id[] = {
+> > + {"pm6764tr", 0},
+> > + {}
+> > +};
+> > +MODULE_DEVICE_TABLE(i2c, pm6764tr_id);
+> > +
+> > +static const struct of_device_id pm6764tr_of_match[] = {
+> > + {.compatible = "pm6764tr"},
+> > + {}
+> > +};
+> > +/* This is the driver that will be inserted */
+> > +static struct i2c_driver pm6764tr_driver = {
+> > + .driver = {
+> > +   .name = "pm6764tr",
+> > +   .of_match_table = of_match_ptr(pm6764tr_of_match),
+> > +   },
+> > + .probe = pm6764tr_probe,
+> > + .remove = pmbus_do_remove,
+>
+> pmbus_do_remove no longer exists.
+>
+
+remove .remove = pmbus_do_remove in v2.
+
+> > + .id_table = pm6764tr_id,
+> > +};
+> > +
+> > +module_i2c_driver(pm6764tr_driver);
+> > +
+> > +MODULE_AUTHOR("Charles Hsu");
+> > +MODULE_DESCRIPTION("PMBus driver for  ST PM6764TR");
+> > +MODULE_LICENSE("GPL");
+> > --
+> > 2.25.1
