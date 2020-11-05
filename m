@@ -2,90 +2,99 @@ Return-Path: <SRS0=vQlV=EL=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1AACC00A89
-	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Nov 2020 09:49:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 963EDC00A89
+	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Nov 2020 10:31:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 674B3221F8
-	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Nov 2020 09:49:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1604569749;
-	bh=QBR2Tc/9WNzTItkRBAt9IIJdb9EsfXRdlj3TCpicmg4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=14vXmlyNtYmrEVt/Hd6WDEVgsGO1RZMumTyIJev2u9sK/z8HhKCrYzI49kwZyghGn
-	 3GpZ4atfYTo+qDsxQR10N31Sqtd+H6EDP7HnYglsq6NgDdCdHzbMNSBV4RzVFZMFVG
-	 /1oeRHYQydnAUJB52Hm4CdrESn137TV38uvtNO4U=
+	by mail.kernel.org (Postfix) with ESMTP id 08BB720A8B
+	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Nov 2020 10:31:48 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=bitmath.org header.i=@bitmath.org header.b="ASEgTDKF"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725862AbgKEJtI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 5 Nov 2020 04:49:08 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35112 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725308AbgKEJtI (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 5 Nov 2020 04:49:08 -0500
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5EFCD21D46;
-        Thu,  5 Nov 2020 09:49:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604569747;
-        bh=QBR2Tc/9WNzTItkRBAt9IIJdb9EsfXRdlj3TCpicmg4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ux2MHWMezbdTAo81cgm1ldp+hleWgwwW1SttCwLqTfOlLCiDBDKGSSfYGNkaM0b9W
-         M2JupBXyoHhxYXzW4mcmGnlFXoLNCg0oyI1Rf3AztWdDhXWtRgPj3RRDyj/cUmewRf
-         TSxUIaP7q7NvhBXJ4p1LHOsMpauLbRD8w0dxGTsE=
-Received: by mail-wm1-f50.google.com with SMTP id h62so922745wme.3;
-        Thu, 05 Nov 2020 01:49:07 -0800 (PST)
-X-Gm-Message-State: AOAM5337p3gXvOPcsVILJyqjg8RZoj4NEyC0l6XdqCVSpgGz3Jgoo/A/
-        N+cQzK1MgDaFuzNbcl9cHQiJUDxwzuimyi8G/hQ=
-X-Google-Smtp-Source: ABdhPJwAVTDv6MUiz/sUTWF6rT7rByTwI3xxgju//qMYNu5dRGzqQlZc8Ge4oUCahSSPXmbn6Zo+Hvxg4DXvv4ReSCQ=
-X-Received: by 2002:a1c:b746:: with SMTP id h67mr1726797wmf.43.1604569745838;
- Thu, 05 Nov 2020 01:49:05 -0800 (PST)
-MIME-Version: 1.0
-References: <20200930105442.3f642f6c@aktux> <20200930164446.GB219887@roeck-us.net>
- <CAK8P3a2CbhJT+B-F+cnX+uiJep9oiLM28n045-ATaVaU41u2hw@mail.gmail.com>
- <20201002002251.28462e64@aktux> <7543ef85-727d-96c3-947e-5b18e9e6c44d@roeck-us.net>
- <20201006090226.4275c824@kemnade.info> <db042e9b-be41-11b1-7059-3881b1da5c8b@fnarfbargle.com>
- <68467f1b-cea1-47ea-a4d4-8319214b072a@fnarfbargle.com> <20201104142057.62493c12@aktux>
- <2436afef-99c6-c352-936d-567bf553388c@fnarfbargle.com> <7a085650-2399-08c0-3c4d-6cd1fa28a365@roeck-us.net>
- <fc36d066-c432-e7d2-312f-a0a592446fe2@fnarfbargle.com>
-In-Reply-To: <fc36d066-c432-e7d2-312f-a0a592446fe2@fnarfbargle.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Thu, 5 Nov 2020 10:48:49 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1HtyrkMkbEr+CCbsC0kpTjEfgNZhir2SvG2tR1ORFMow@mail.gmail.com>
-Message-ID: <CAK8P3a1HtyrkMkbEr+CCbsC0kpTjEfgNZhir2SvG2tR1ORFMow@mail.gmail.com>
-Subject: Re: [REGRESSION] hwmon: (applesmc) avoid overlong udelay()
+        id S1728949AbgKEKbs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 5 Nov 2020 05:31:48 -0500
+Received: from mailrelay2-2.pub.mailoutpod1-cph3.one.com ([46.30.212.1]:46045
+        "EHLO mailrelay2-2.pub.mailoutpod1-cph3.one.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728416AbgKEKbs (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 5 Nov 2020 05:31:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bitmath.org; s=20191106;
+        h=content-transfer-encoding:content-type:in-reply-to:mime-version:date:
+         message-id:from:references:cc:to:subject:from;
+        bh=E/Pff/B07dXKxlEt4by3cKElbeA6Phi+MNFJDeXUMiE=;
+        b=ASEgTDKFF5yC5T1J3GdA3B07v02y8G2hrkbnhTp0Y9oRASgOHZiR2u5bdcZvw+SEiCwTY5j54gBmg
+         p4fVwVutMi6KC7ArbY9Twbe5c1QniIjbAGvTjPy35Rc5cRTauwdTco2ObCjKGq4OTJLcdTesHldwV8
+         yEIUvqAlUGiaZRcFTFG4vT8mqjC2tshh63cpsJgrE5Hy+3YR0zTOuRNdw4E5Krvc0tCHKe5JvGXV0Z
+         R07aB5CSrxHIKhurGaU9HddAqqbk90rucw/5ws4GI5GLDuekTZM6lX67i/fULL94QTHEB0nRV6WFgm
+         i6IriY2sKr/YS88I4P3NONVIbMc0Asg==
+X-HalOne-Cookie: cfcf971154434c981b222b5b215374cfdaf36976
+X-HalOne-ID: 195d10c5-1f52-11eb-84b8-d0431ea8a290
+Received: from [192.168.19.13] (h-155-4-128-97.na.cust.bahnhof.se [155.4.128.97])
+        by mailrelay2.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id 195d10c5-1f52-11eb-84b8-d0431ea8a290;
+        Thu, 05 Nov 2020 10:31:44 +0000 (UTC)
+Subject: Re: [PATCH] applesmc: Re-work SMC comms v2
 To:     Brad Campbell <brad@fnarfbargle.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        Jean Delvare <jdelvare@suse.com>,
-        Arnd Bergmann <arnd@arndb.de>, rydberg@bitmath.org,
-        linux-hwmon@vger.kernel.org,
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-hwmon@vger.kernel.org,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>
-Content-Type: text/plain; charset="UTF-8"
+        hns@goldelico.com, Guenter Roeck <linux@roeck-us.net>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Jean Delvare <jdelvare@suse.com>
+References: <20200930105442.3f642f6c@aktux>
+ <20200930164446.GB219887@roeck-us.net>
+ <CAK8P3a2CbhJT+B-F+cnX+uiJep9oiLM28n045-ATaVaU41u2hw@mail.gmail.com>
+ <20201002002251.28462e64@aktux>
+ <7543ef85-727d-96c3-947e-5b18e9e6c44d@roeck-us.net>
+ <20201006090226.4275c824@kemnade.info>
+ <db042e9b-be41-11b1-7059-3881b1da5c8b@fnarfbargle.com>
+ <68467f1b-cea1-47ea-a4d4-8319214b072a@fnarfbargle.com>
+ <20201104142057.62493c12@aktux>
+ <2436afef-99c6-c352-936d-567bf553388c@fnarfbargle.com>
+ <7a085650-2399-08c0-3c4d-6cd1fa28a365@roeck-us.net>
+ <fc36d066-c432-e7d2-312f-a0a592446fe2@fnarfbargle.com>
+ <10027199-5d31-93e7-9bd8-7baaebff8b71@roeck-us.net>
+ <70331f82-35a1-50bd-685d-0b06061dd213@fnarfbargle.com>
+ <3c72ccc3-4de1-b5d0-423d-7b8c80991254@fnarfbargle.com>
+ <6d071547-10ee-ca92-ec8b-4b5069d04501@bitmath.org>
+ <8e117844-d62a-bcb1-398d-c59cc0d4b878@fnarfbargle.com>
+From:   Henrik Rydberg <rydberg@bitmath.org>
+Message-ID: <e5a856b1-fb1a-db5d-0fde-c86d0bcca1df@bitmath.org>
+Date:   Thu, 5 Nov 2020 11:31:54 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
+MIME-Version: 1.0
+In-Reply-To: <8e117844-d62a-bcb1-398d-c59cc0d4b878@fnarfbargle.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Nov 5, 2020 at 6:05 AM Brad Campbell <brad@fnarfbargle.com> wrote:
+On 2020-11-05 09:30, Brad Campbell wrote:
+> On 5/11/20 6:56 pm, Henrik Rydberg wrote:
+>> Hi Brad,
+>>
+>> Great to see this effort, it is certainly an area which could be improved. After having seen several generations of Macbooks while modifying much of that code, it became clear that the SMC communication got refreshed a few times over the years. Every tiny change had to be tested on all machines, or kept separate for a particular generation, or something would break.
+>>
+>> I have not followed the back story here, but I imagine the need has arisen because of a new refresh, and so this patch only needs to strictly apply to a new generation. I would therefore advice that you write the patch in that way, reducing the actual change to zero for earlier generations. It also makes it easier to test the effect of the new approach on older systems. I should be able to help testing on a 2008 and 2011 model once we get to that stage.
+> 
+> G'day Henrik,
+> 
+> Unfortunately I didn't make these changes to accommodate a "new generation". Changes made in kernel 5.9 broke it on my machine and in looking at why didn't identify any obvious causes, so I re-worked some of the comms.
+> 
+> I can't guarantee it won't break older machines which is why I've asked for help testing it. I only have a MacbookPro 11,1 and an iMac 12,2. It fixes both of those.
+> 
+> Help testing would be much appreciated.
 
-> Appreciate the feedback.
->
-> This would be the bare minimum based on the bits use in the original code. If the original code worked "well enough" then this should be relatively safe.
->
-> Tested on both machines I have access to.
+I see, this makes much more sense. I may be able to run some tests 
+tonight. Meanwhile, looking at the patch, the status variable in 
+send_command looks superfluous now that there is a wait_status() before it.
 
-For the patch:
-
-Acked-by: Arnd Bergmann <arnd@arndb.de>
-
-I'm glad you figured out something that works. This all looks reasonable and
-it makes much more sense than the original version that I tried to clean up
-just based on the code comments but without having access to hardware or
-documentation.
-
-       Arnd
+Thanks,
+Henrik
