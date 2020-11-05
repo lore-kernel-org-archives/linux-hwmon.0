@@ -2,254 +2,131 @@ Return-Path: <SRS0=vQlV=EL=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10DF0C00A89
-	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Nov 2020 13:01:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74861C4742C
+	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Nov 2020 14:15:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B2D5620735
-	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Nov 2020 13:01:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0C8882071A
+	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Nov 2020 14:15:52 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IqktlwYS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ha1QZSee"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726777AbgKENBw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 5 Nov 2020 08:01:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58968 "EHLO
+        id S1731044AbgKEOPw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 5 Nov 2020 09:15:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725468AbgKENBw (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 5 Nov 2020 08:01:52 -0500
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE02BC0613CF;
-        Thu,  5 Nov 2020 05:01:51 -0800 (PST)
-Received: by mail-lf1-x143.google.com with SMTP id b1so2141996lfp.11;
-        Thu, 05 Nov 2020 05:01:51 -0800 (PST)
+        with ESMTP id S1730922AbgKEOPw (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 5 Nov 2020 09:15:52 -0500
+Received: from mail-oo1-xc42.google.com (mail-oo1-xc42.google.com [IPv6:2607:f8b0:4864:20::c42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078CEC0613CF;
+        Thu,  5 Nov 2020 06:15:52 -0800 (PST)
+Received: by mail-oo1-xc42.google.com with SMTP id n16so458936ooj.2;
+        Thu, 05 Nov 2020 06:15:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rte+RN1GlZT+o4zocXut02cNP7YGnRzgrklvV1qGkzE=;
-        b=IqktlwYSaSyiiKHV7cf4qZCHEFS3k+iWPGg2cRWbzpkbEnXj8GUpJ8pNQByaWgLsSk
-         14AldybKLtCznbuVJGBmAs1Qne0mUiaZ/sCfPJKiy0uWaxhNwMZs8UDqj17f5McIqNx2
-         RSD5EuG9J998rEzfy9gycWRvqJ53whqlhzuagjkssV0sDXnqjr9+iXh7TGc6ZUuP3SNk
-         Ox9HuaMuFXzYptTTeQpoHky9vl3liNdqLbEBDiMx4Q34xewFPmEQL+LYrv/G+s5QaGVn
-         BOG5i1RO1Xe204VCZUHzBHm+n+dkuNEB2JB+0bVpEAaFsOtYgQQAR5Wgs32quBg8fTSL
-         q6jQ==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=y++wwA2trwoLTeidmcO6HyXS/KDcURbyY/O4LhQQQ6M=;
+        b=ha1QZSeeAlAiTnjwS63lsPoRvbfSsQWqdLQ2EGZjZBRoudlDSqohQgFDSuR0xtuj+U
+         xyY75x/1lUo9RaZOfMPjtFwXZso4SNSE83B9Yu9pqIQij8XCIWx1S3lHNVymVsUXoU1U
+         KuXjpdbOY+rFru/M89FZ5/vt5uoFgXrGCjTQQ7lQgiAo0tNuyA5YW0iAhX/9smMKEfNW
+         7R3frLknjvlimjnqUMRgzwGu+RgqLOHzNF3RYhnVEiABY/4K0mZPkVqYtWVh0ZAEgVSX
+         QsNF5ikBNYngO93BU3vozWy5Qpr4DJSVAybU2GAPW14CYUS3ciP57EtgUy2tP/5RH5ls
+         qmVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rte+RN1GlZT+o4zocXut02cNP7YGnRzgrklvV1qGkzE=;
-        b=mo/rasgRsojGkD8hP/vuRDm0haGlWTiH65sgQ0Y661BYI6Ur2BqfpvUfi0XciW0gmK
-         ClOUfXzRydDIA4xa2IHSuLmS/nOGvtJ753cQFk7bpolK8CCOQEVFpup3Mywp/f5nXK7B
-         Rat33ojvCGXl6rbfQ6YCKRCq/BMVmj/Oes5T1X44byWqSBTac1HGR015/W6uI9trZgxk
-         rxxq5celC0BdbUe6HI3QOMM25eAwo0mnCPthWTqRmFOQcucK+g/1f/j++6y9i8+L92Cm
-         0JEeZ+YqsjN6SvPFTfSXeFxXBZA9dJbslOF83Sfl/2CmsvzNOyiIIZcQMyp99daeZjS3
-         vJuQ==
-X-Gm-Message-State: AOAM53367CqMzjjxaLO/CLvEMN8RWln/XGRNwso1xA8tFgSZoSzqfhM8
-        MD4h3fNZ8LzS2hD6rhreqpsGeh4Ejrsh6B9N+vA=
-X-Google-Smtp-Source: ABdhPJxotpSij5A3nSWVUAW3LYc1Xx2PO1q6zcg8dwl4mYSge/mG1s9sQUtsk4Y+FeWxtCbyUWu6qtw5CyipNHOYjSM=
-X-Received: by 2002:ac2:5a5d:: with SMTP id r29mr914185lfn.456.1604581310256;
- Thu, 05 Nov 2020 05:01:50 -0800 (PST)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=y++wwA2trwoLTeidmcO6HyXS/KDcURbyY/O4LhQQQ6M=;
+        b=AGqebtsEOSksDwCEQ8XeMslWP55mzl9cI97HKNCKCmLQRhBtBP6KDwhoevi5YKBPWQ
+         EbBBG+BaKxS9piddC6WhcSAjSk4eRoghIRQECFbMj0cd1PmCR5VB4EXktrUdXFZH6tog
+         HB4rAIP/UilLpbJoamVXpUUTS3RdDZqdILKiQfEVG35bLv34TSyRBJS5iEHeDT3t5VOg
+         Pb8WK7cA86fEgfmLbRdScgeC0DcqYeyP9vS199xDulmZOLwFecWGkU6jjgImEKUyN0/5
+         PDs2yGRUYd9V76ZSVjCwF3UZmNIHflFrMgWqXHlWCI+816lpNIT2CajKboe3Aea7eZsE
+         /V0A==
+X-Gm-Message-State: AOAM530zCjjc2S/iNC3jcNWMuFzYTA7wllWIrCy6SF6QiVbJp6EH+H8R
+        85ucHxMnAPajFwLt65WAaQUT9lSYHdU=
+X-Google-Smtp-Source: ABdhPJxbVW5EMauDC4fb3QXE0Z5KS/uYP+xGsu5usDkf7xMtKhy4T/g/tl9bfb7eojbjgiAFpTS6FA==
+X-Received: by 2002:a4a:cf09:: with SMTP id l9mr1987400oos.30.1604585751422;
+        Thu, 05 Nov 2020 06:15:51 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m11sm358655oop.6.2020.11.05.06.15.50
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 05 Nov 2020 06:15:50 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 5 Nov 2020 06:15:49 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Wilken Gottwalt <wilken.gottwalt@posteo.net>
+Cc:     Colin King <colin.king@canonical.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] hwmon: corsair-psu: fix unintentional sign
+ extension issue
+Message-ID: <20201105141549.GA1389@roeck-us.net>
+References: <20201105115019.41735-1-colin.king@canonical.com>
+ <20201105133233.10edda5b@monster.powergraphx.local>
 MIME-Version: 1.0
-References: <20201104143717.GA92239@roeck-us.net>
-In-Reply-To: <20201104143717.GA92239@roeck-us.net>
-From:   Charles Hsu <hsu.yuegteng@gmail.com>
-Date:   Thu, 5 Nov 2020 21:01:38 +0800
-Message-ID: <CAJArhDYH4pXc4MHbxUNxHLmP4Haiv_WyaNDktAByWQdgtOTWLA@mail.gmail.com>
-Subject: Re: [PATCH] hwmon: (pmbus) Add driver for STMicroelectronics PM6764
- Voltage Regulator
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Yungteng Hsu <hsu.yungteng@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        alan@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201105133233.10edda5b@monster.powergraphx.local>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Nov 4, 2020 at 10:40 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Wed, Nov 04, 2020 at 03:09:23PM +0800, Yungteng Hsu wrote:
-> > Add the pmbus driver for the STMicroelectronics pm6764 voltage regulator.
-> >
-> > the output voltage use the MFR_READ_VOUT 0xD4
-> > vout value returned is linear11
-> >
-> > Signed-off-by: Charles Hsu <hsu.yungteng@gmail.com>
->
-> Please use standard Linux kernel code formatting rules.
-> Run checkpatch --strict on the patch and make sure it does not report
-> any problems.
->
-> total: 1 errors, 39 warnings, 3 checks, 96 lines checked
->
-> is a bit much for a 74-line patch.
->
-
-Okay, I got it.
-
+On Thu, Nov 05, 2020 at 01:32:33PM +0100, Wilken Gottwalt wrote:
+> On Thu,  5 Nov 2020 11:50:19 +0000
+> Colin King <colin.king@canonical.com> wrote:
+> 
+> > From: Colin Ian King <colin.king@canonical.com>
+> > 
+> > The shifting of the u8 integer data[3] by 24 bits to the left will
+> > be promoted to a 32 bit signed int and then sign-extended to a
+> > long. In the event that the top bit of data[3] is set then all
+> > then all the upper 32 bits of a 64 bit long end up as also being
+> > set because of the sign-extension. Fix this by casting data[3] to
+> > a long before the shift.
+> > 
+> > Addresses-Coverity: ("Unintended sign extension")
+> > Fixes: ce15cd2cee8b ("hwmon: add Corsair PSU HID controller driver")
+> > Signed-off-by: Colin Ian King <colin.king@canonical.com>
 > > ---
-> >  drivers/hwmon/pmbus/Kconfig    |  8 ++++
-> >  drivers/hwmon/pmbus/Makefile   |  1 +
-> >  drivers/hwmon/pmbus/pm6764tr.c | 74 ++++++++++++++++++++++++++++++++++
-> >  3 files changed, 83 insertions(+)
-> >  create mode 100644 drivers/hwmon/pmbus/pm6764tr.c
-> >
-> > diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> > index a25faf69fce3..2b487c401a4e 100644
-> > --- a/drivers/hwmon/pmbus/Kconfig
-> > +++ b/drivers/hwmon/pmbus/Kconfig
-> > @@ -220,6 +220,14 @@ config SENSORS_MP2975
-> >    This driver can also be built as a module. If so, the module will
-> >    be called mp2975.
-> >
-> > +config SENSORS_PM6764TR
-> > + tristate "PM6764TR"
-> > + help
-> > +  If you say yes here you get hardware monitoring support for PM6764TR.
-> > +
-> > +  This driver can also be built as a module. If so, the module will
-> > +  be called pm6764tr.
-> > +
-> >  config SENSORS_PXE1610
-> >   tristate "Infineon PXE1610"
-> >   help
-> > diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> > index 4c97ad0bd791..31ebdef5d4a6 100644
-> > --- a/drivers/hwmon/pmbus/Makefile
-> > +++ b/drivers/hwmon/pmbus/Makefile
-> > @@ -25,6 +25,7 @@ obj-$(CONFIG_SENSORS_MAX31785) += max31785.o
-> >  obj-$(CONFIG_SENSORS_MAX34440) += max34440.o
-> >  obj-$(CONFIG_SENSORS_MAX8688) += max8688.o
-> >  obj-$(CONFIG_SENSORS_MP2975) += mp2975.o
-> > +obj-$(CONFIG_SENSORS_PM6764TR) += pm6764tr.o
-> >  obj-$(CONFIG_SENSORS_PXE1610) += pxe1610.o
-> >  obj-$(CONFIG_SENSORS_TPS40422) += tps40422.o
-> >  obj-$(CONFIG_SENSORS_TPS53679) += tps53679.o
-> > diff --git a/drivers/hwmon/pmbus/pm6764tr.c b/drivers/hwmon/pmbus/pm6764tr.c
-> > new file mode 100644
-> > index 000000000000..b125a1cbfea5
-> > --- /dev/null
-> > +++ b/drivers/hwmon/pmbus/pm6764tr.c
-> > @@ -0,0 +1,74 @@
-> > +#include <linux/kernel.h>
-> > +#include <linux/module.h>
-> > +#include <linux/init.h>
-> > +#include <linux/err.h>
-> > +#include <linux/slab.h>
-> > +#include <linux/mutex.h>
-> > +#include <linux/i2c.h>
-> > +#include <linux/pmbus.h>
->
-> Alphabetic include file order, please.
->
+> >  drivers/hwmon/corsair-psu.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
+> > index e92d0376e7ac..5d19a888231a 100644
+> > --- a/drivers/hwmon/corsair-psu.c
+> > +++ b/drivers/hwmon/corsair-psu.c
+> > @@ -241,7 +241,7 @@ static int corsairpsu_get_value(struct corsairpsu_data *priv, u8 cmd, u8
+> > rail, l
+> >  	 * the LINEAR11 conversion are the watts values which are about 1200 for the strongest
+> > psu
+> >  	 * supported (HX1200i)
+> >  	 */
+> > -	tmp = (data[3] << 24) + (data[2] << 16) + (data[1] << 8) + data[0];
+> > +	tmp = ((long)data[3] << 24) + (data[2] << 16) + (data[1] << 8) + data[0];
+> >  	switch (cmd) {
+> >  	case PSU_CMD_IN_VOLTS:
+> >  	case PSU_CMD_IN_AMPS:
+> 
+> Yeah, this could happen if the uptime value in the micro-controller gets bigger
+> than 68 years (in seconds), and it is the only value which actually uses more
+> than 2 bytes for the representation. So what about architectures which are 32 bit
+> wide and where a long has 32 bits? I guess this simple cast is not enough.
+> 
 
-update include file order in v2.
+The hwmon subsystem uses 'long' to pass values back to the core.
+While that may be a bit unfortunate as it doesn't support uptimes
+of more than 68 years in seconds, we are not going to change the
+hwmon core to accommodate it. If the incoming data is always
+expected to be positive, and you don't want to risk the overflow,
+feel free to either use "data[3] & 0x7f" instead, or max out the
+result at INT_MAX (from <linux/limits.h>).
 
-> > +#include "pmbus.h"
-> > +
-> > +#define PM6764TR_PMBUS_READ_VOUT 0xD4
->
-> tab after PM6764TR_PMBUS_READ_VOUT, please.
->
-> I see you don't use any tabs in the patch. Please do.
->
-> > +
-> > +static int pm6764tr_read_word_data(struct i2c_client *client, int
-> > page, int reg)
->
-> Corrupted ?
->
-> That makes me wonder if the patch was corrupted by your e-mail system,
-> and if that system replaced tabs with spaces. Is that possible ?
->
-
-This is corrupted by e-mail system,
-and tabs are replaced with spaces.
-I'll check the e-mail system setting and updated in v2.
-
-> > +{
-> > + int ret;
-> > +
-> > + switch (reg) {
-> > + case PMBUS_VIRT_READ_VMON:
-> > + ret = pmbus_read_word_data(client, page,
-> > +   PM6764TR_PMBUS_READ_VOUT);
->
-> That can be one line (line limit is now 100 columns).
->
-
-fix to one line in v2.
-
-> > + break;
-> > + default:
-> > + ret = -ENODATA;
-> > + break;
-> > + }
-> > + return ret;
-> > +}
-> > +
-> > +static struct pmbus_driver_info pm6764tr_info = {
-> > + .pages = 1,
-> > + .format[PSC_VOLTAGE_IN] = linear,
-> > + .format[PSC_VOLTAGE_OUT] = vid,
-> > + .format[PSC_TEMPERATURE] = linear,
-> > + .format[PSC_CURRENT_OUT] = linear,
-> > + .format[PSC_POWER] = linear,
-> > + .func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN |  PMBUS_HAVE_PIN |
-> > +    PMBUS_HAVE_IOUT | PMBUS_HAVE_POUT | PMBUS_HAVE_VMON |
-> > + PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_VOUT |
-> > + PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-> > +    .read_word_data = pm6764tr_read_word_data,
-> > +};
-> > +
-> > +static int pm6764tr_probe(struct i2c_client *client,
-> > +  const struct i2c_device_id *id)
->
-> Please use the new style probe function (probe_new).
->
-
-Change form .probe to .probe_new in v2.
-
-> > +{
-> > + return pmbus_do_probe(client, id, &pm6764tr_info);
-> > +}
-> > +
-> > +static const struct i2c_device_id pm6764tr_id[] = {
-> > + {"pm6764tr", 0},
-> > + {}
-> > +};
-> > +MODULE_DEVICE_TABLE(i2c, pm6764tr_id);
-> > +
-> > +static const struct of_device_id pm6764tr_of_match[] = {
-> > + {.compatible = "pm6764tr"},
-> > + {}
-> > +};
-> > +/* This is the driver that will be inserted */
-> > +static struct i2c_driver pm6764tr_driver = {
-> > + .driver = {
-> > +   .name = "pm6764tr",
-> > +   .of_match_table = of_match_ptr(pm6764tr_of_match),
-> > +   },
-> > + .probe = pm6764tr_probe,
-> > + .remove = pmbus_do_remove,
->
-> pmbus_do_remove no longer exists.
->
-
-remove .remove = pmbus_do_remove in v2.
-
-> > + .id_table = pm6764tr_id,
-> > +};
-> > +
-> > +module_i2c_driver(pm6764tr_driver);
-> > +
-> > +MODULE_AUTHOR("Charles Hsu");
-> > +MODULE_DESCRIPTION("PMBus driver for  ST PM6764TR");
-> > +MODULE_LICENSE("GPL");
-> > --
-> > 2.25.1
+Thanks,
+Guenter
