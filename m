@@ -2,54 +2,54 @@ Return-Path: <SRS0=vQlV=EL=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A334C00A89
-	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Nov 2020 08:12:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C964AC4742C
+	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Nov 2020 08:16:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AC6332083B
-	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Nov 2020 08:12:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 67312206C1
+	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Nov 2020 08:16:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="ins9tDVY"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="FxWOGn5o"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726787AbgKEIMo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 5 Nov 2020 03:12:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41970 "EHLO
+        id S1730117AbgKEIQZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 5 Nov 2020 03:16:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725287AbgKEIMn (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 5 Nov 2020 03:12:43 -0500
+        with ESMTP id S1729909AbgKEIPz (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 5 Nov 2020 03:15:55 -0500
 Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA9CEC0613CF;
-        Thu,  5 Nov 2020 00:12:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCCFC0613CF;
+        Thu,  5 Nov 2020 00:15:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
         MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
         :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=u7VceP9EIJyP1WdZq41UI9GffxXizeWBZW8ZyCMQqJI=; b=ins9tDVYC0pdDkTd82t93yaiS3
-        cN/1e+7/utKFGrIsTmEteckzrIZ0J50omwL3zqfB3uwZ4IvBh+gfzsB7nUUpQY/1zfVAX6lCsg0q6
-        oc3xx7s4PCXUHSIkWcNF0w8V35NOLmZveco/G3UAizP7Jh5CJ206xm/0lz5dWLnv0eQA=;
+        bh=5ET2Th0DyRXW62bKDsEdxAhHY06okhpZXJ0yl0uHDqo=; b=FxWOGn5oEkgTjRrq4kihtZ4t7D
+        gVqnMswbqzI0Ypo9pHJQWmqjgoMfcEcx5p9TqSrRPm7nzpeQTzTLPkpaoogG5WrtnMGFfKD6ypBgt
+        pu3Q9uQbB5OOgX2EOhMynlFNXxtxNsRnTAEp63LCarsf+dd0CbgRg04EkvlUPj2TjM20=;
 Received: from p200300ccff0ddc001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff0d:dc00:1a3d:a2ff:febf:d33a] helo=aktux)
         by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.89)
         (envelope-from <andreas@kemnade.info>)
-        id 1kaaNh-0005Nz-II; Thu, 05 Nov 2020 09:12:29 +0100
-Date:   Thu, 5 Nov 2020 09:12:28 +0100
+        id 1kaaQu-0005PD-DV; Thu, 05 Nov 2020 09:15:48 +0100
+Date:   Thu, 5 Nov 2020 09:15:47 +0100
 From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Brad Campbell <brad@fnarfbargle.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
+To:     Henrik Rydberg <rydberg@bitmath.org>
+Cc:     Brad Campbell <brad@fnarfbargle.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>,
-        Arnd Bergmann <arnd@arndb.de>, rydberg@bitmath.org,
-        linux-hwmon@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, linux-hwmon@vger.kernel.org,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         hns@goldelico.com
 Subject: Re: [PATCH] applesmc: Re-work SMC comms v2
-Message-ID: <20201105091228.128624ba@aktux>
-In-Reply-To: <3c72ccc3-4de1-b5d0-423d-7b8c80991254@fnarfbargle.com>
+Message-ID: <20201105091547.3335aed6@aktux>
+In-Reply-To: <6d071547-10ee-ca92-ec8b-4b5069d04501@bitmath.org>
 References: <20200930105442.3f642f6c@aktux>
         <20200930164446.GB219887@roeck-us.net>
         <CAK8P3a2CbhJT+B-F+cnX+uiJep9oiLM28n045-ATaVaU41u2hw@mail.gmail.com>
@@ -65,6 +65,7 @@ References: <20200930105442.3f642f6c@aktux>
         <10027199-5d31-93e7-9bd8-7baaebff8b71@roeck-us.net>
         <70331f82-35a1-50bd-685d-0b06061dd213@fnarfbargle.com>
         <3c72ccc3-4de1-b5d0-423d-7b8c80991254@fnarfbargle.com>
+        <6d071547-10ee-ca92-ec8b-4b5069d04501@bitmath.org>
 X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -73,29 +74,28 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, 5 Nov 2020 18:26:24 +1100
-Brad Campbell <brad@fnarfbargle.com> wrote:
+On Thu, 5 Nov 2020 08:56:04 +0100
+Henrik Rydberg <rydberg@bitmath.org> wrote:
 
-> Commit fff2d0f701e6 ("hwmon: (applesmc) avoid overlong udelay()") introduced
-> an issue whereby communication with the SMC became unreliable with write
-> errors like :
+> Hi Brad,
 > 
-> [  120.378614] applesmc: send_byte(0x00, 0x0300) fail: 0x40
-> [  120.378621] applesmc: LKSB: write data fail
-> [  120.512782] applesmc: send_byte(0x00, 0x0300) fail: 0x40
-> [  120.512787] applesmc: LKSB: write data fail
+> Great to see this effort, it is certainly an area which could be 
+> improved. After having seen several generations of Macbooks while 
+> modifying much of that code, it became clear that the SMC communication 
+> got refreshed a few times over the years. Every tiny change had to be 
+> tested on all machines, or kept separate for a particular generation, or 
+> something would break.
 > 
-> The original code appeared to be timing sensitive and was not reliable with
-> the timing changes in the aforementioned commit.
+> I have not followed the back story here, but I imagine the need has 
+> arisen because of a new refresh, and so this patch only needs to 
+> strictly apply to a new generation. I would therefore advice that you 
+> write the patch in that way, reducing the actual change to zero for 
+> earlier generations. It also makes it easier to test the effect of the 
+> new approach on older systems. I should be able to help testing on a 
+> 2008 and 2011 model once we get to that stage.
 > 
-> This patch re-factors the SMC communication to remove the timing 
-> dependencies and restore function with the changes previously committed.
-> 
-> v2 : Address logic and coding style
-> 
-> Reported-by: Andreas Kemnade <andreas@kemnade.info>
-> Fixes: fff2d0f701e6 ("hwmon: (applesmc) avoid overlong udelay()")
-> Signed-off-by: Brad Campbell <brad@fnarfbargle.com>
-> 
-Still works here:
-Tested-by: Andreas Kemnade <andreas@kemnade.info> # MacBookAir6,2
+Well, the issue has arisen because of a change in kernel to make clang
+happy. So it is not a new Apple device causing trouble.
+
+Regards,
+Andreas
