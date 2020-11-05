@@ -2,100 +2,70 @@ Return-Path: <SRS0=vQlV=EL=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C964AC4742C
-	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Nov 2020 08:16:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FD42C00A89
+	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Nov 2020 08:30:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 67312206C1
-	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Nov 2020 08:16:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B670220729
+	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Nov 2020 08:30:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="FxWOGn5o"
+	dkim=pass (2048-bit key) header.d=fullbizgoal.com header.i=@fullbizgoal.com header.b="IKO8gM/n"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730117AbgKEIQZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 5 Nov 2020 03:16:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42474 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729909AbgKEIPz (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 5 Nov 2020 03:15:55 -0500
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCCFC0613CF;
-        Thu,  5 Nov 2020 00:15:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=5ET2Th0DyRXW62bKDsEdxAhHY06okhpZXJ0yl0uHDqo=; b=FxWOGn5oEkgTjRrq4kihtZ4t7D
-        gVqnMswbqzI0Ypo9pHJQWmqjgoMfcEcx5p9TqSrRPm7nzpeQTzTLPkpaoogG5WrtnMGFfKD6ypBgt
-        pu3Q9uQbB5OOgX2EOhMynlFNXxtxNsRnTAEp63LCarsf+dd0CbgRg04EkvlUPj2TjM20=;
-Received: from p200300ccff0ddc001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff0d:dc00:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1kaaQu-0005PD-DV; Thu, 05 Nov 2020 09:15:48 +0100
-Date:   Thu, 5 Nov 2020 09:15:47 +0100
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Henrik Rydberg <rydberg@bitmath.org>
-Cc:     Brad Campbell <brad@fnarfbargle.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-hwmon@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        hns@goldelico.com
-Subject: Re: [PATCH] applesmc: Re-work SMC comms v2
-Message-ID: <20201105091547.3335aed6@aktux>
-In-Reply-To: <6d071547-10ee-ca92-ec8b-4b5069d04501@bitmath.org>
-References: <20200930105442.3f642f6c@aktux>
-        <20200930164446.GB219887@roeck-us.net>
-        <CAK8P3a2CbhJT+B-F+cnX+uiJep9oiLM28n045-ATaVaU41u2hw@mail.gmail.com>
-        <20201002002251.28462e64@aktux>
-        <7543ef85-727d-96c3-947e-5b18e9e6c44d@roeck-us.net>
-        <20201006090226.4275c824@kemnade.info>
-        <db042e9b-be41-11b1-7059-3881b1da5c8b@fnarfbargle.com>
-        <68467f1b-cea1-47ea-a4d4-8319214b072a@fnarfbargle.com>
-        <20201104142057.62493c12@aktux>
-        <2436afef-99c6-c352-936d-567bf553388c@fnarfbargle.com>
-        <7a085650-2399-08c0-3c4d-6cd1fa28a365@roeck-us.net>
-        <fc36d066-c432-e7d2-312f-a0a592446fe2@fnarfbargle.com>
-        <10027199-5d31-93e7-9bd8-7baaebff8b71@roeck-us.net>
-        <70331f82-35a1-50bd-685d-0b06061dd213@fnarfbargle.com>
-        <3c72ccc3-4de1-b5d0-423d-7b8c80991254@fnarfbargle.com>
-        <6d071547-10ee-ca92-ec8b-4b5069d04501@bitmath.org>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1729604AbgKEIao (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 5 Nov 2020 03:30:44 -0500
+Received: from mail.fullbizgoal.com ([80.211.27.207]:50136 "EHLO
+        server1.mail.fullbizgoal.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729301AbgKEIao (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 5 Nov 2020 03:30:44 -0500
+Received: by server1.mail.fullbizgoal.com (Postfix, from userid 1001)
+        id 2ECA2A5277; Thu,  5 Nov 2020 08:30:27 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fullbizgoal.com;
+        s=mail; t=1604565043;
+        bh=1A+RQztZunBjkjQlXgr2uQY18vlGaIq8j7jGOmWqiI0=;
+        h=Date:From:To:Subject:From;
+        b=IKO8gM/nbZfTSEPnsnjb7fIvBMS4VCd/R2Gcg7hz6TsDnKn5r9Uwid9Kg8JCbAq9P
+         HK0o1zPAePqt1MbVseXvhrkz/fqb8Eh/ryqSp4z9Y1YIV4fn+1K4t4cdfSnQHYcqom
+         Cw6zmXCW+lg3MIXhib3XS1zk76CWrv3SNUIYtsOkH37SucPu1twmRhMvImhwoJkMNc
+         KLPV+KXF3zr8SlhN2OBjvfrrMo8uHUKVB4pMP+UAMryANEvEDnJ3AA7Gyw0ocWdwKt
+         4/NwnRvdzeoTmMpmIk9LFxJ6B0Rl8JVaElQFn1oB6kB8TiNO9/OpxXwUoI6E04xYGn
+         lorJgCPJqpF+g==
+Received: by mail.fullbizgoal.com for <linux-hwmon@vger.kernel.org>; Thu,  5 Nov 2020 08:30:14 GMT
+Message-ID: <20201105074501-0.1.2o.ez21.0.0zn78l9oyo@fullbizgoal.com>
+Date:   Thu,  5 Nov 2020 08:30:14 GMT
+From:   "Ethan Smith" <ethan.smith@fullbizgoal.com>
+To:     <linux-hwmon@vger.kernel.org>
+Subject: Disinfectant
+X-Mailer: mail.fullbizgoal.com
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, 5 Nov 2020 08:56:04 +0100
-Henrik Rydberg <rydberg@bitmath.org> wrote:
+Good morning,
 
-> Hi Brad,
-> 
-> Great to see this effort, it is certainly an area which could be 
-> improved. After having seen several generations of Macbooks while 
-> modifying much of that code, it became clear that the SMC communication 
-> got refreshed a few times over the years. Every tiny change had to be 
-> tested on all machines, or kept separate for a particular generation, or 
-> something would break.
-> 
-> I have not followed the back story here, but I imagine the need has 
-> arisen because of a new refresh, and so this patch only needs to 
-> strictly apply to a new generation. I would therefore advice that you 
-> write the patch in that way, reducing the actual change to zero for 
-> earlier generations. It also makes it easier to test the effect of the 
-> new approach on older systems. I should be able to help testing on a 
-> 2008 and 2011 model once we get to that stage.
-> 
-Well, the issue has arisen because of a change in kernel to make clang
-happy. So it is not a new Apple device causing trouble.
+looking for companies interested in raising additional capital by diversi=
+fying their offer in soaps, liquids and gels for hand disinfection and co=
+smetics for body and hair care.
 
-Regards,
-Andreas
+The distribution of innovative products corresponding to the current pref=
+erences of customers in the field of hygiene and preventive healthcare al=
+lows our partners to gain new markets and achieve better economic results=
+=2E
+
+In addition to products with bactericidal action, our range includes show=
+er gels, shampoos and hair conditioners, as well as efficient, concentrat=
+ed detergents.
+
+The versatility (suitable for all skin types) combined with an affordable=
+ price means that customers make an informed choice of a product among ot=
+hers available on the market.
+
+Are you interested in cooperation?
+
+Ethan Smith
