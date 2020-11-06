@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-5.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE283C4741F
-	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Nov 2020 16:26:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51B20C2D0A3
+	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Nov 2020 20:02:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BAB3921556
-	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Nov 2020 16:26:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A98672072E
+	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Nov 2020 20:02:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=bitmath.org header.i=@bitmath.org header.b="SFsmAipP"
+	dkim=pass (2048-bit key) header.d=bitmath.org header.i=@bitmath.org header.b="GwwduhUR"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726732AbgKFQ0f (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 6 Nov 2020 11:26:35 -0500
-Received: from mailrelay1-2.pub.mailoutpod1-cph3.one.com ([46.30.212.0]:60051
-        "EHLO mailrelay1-2.pub.mailoutpod1-cph3.one.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726565AbgKFQ0f (ORCPT
+        id S1728277AbgKFUCY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 6 Nov 2020 15:02:24 -0500
+Received: from mailrelay2-2.pub.mailoutpod1-cph3.one.com ([46.30.212.1]:31361
+        "EHLO mailrelay2-2.pub.mailoutpod1-cph3.one.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728120AbgKFUCY (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 6 Nov 2020 11:26:35 -0500
+        Fri, 6 Nov 2020 15:02:24 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bitmath.org; s=20191106;
-        h=content-type:in-reply-to:mime-version:date:message-id:references:cc:to:from:
-         subject:from;
-        bh=SxG8W321K37P/2Nept94VZxZoM7KKo/nS12XQk8CKNk=;
-        b=SFsmAipPQwR2Ej+GWfwALmQG1dY9mUnDiQ0xGUQCM8C/SnrvRvcpWQtpLf92UF/q6QxgfqxvnBZaZ
-         X+imnkYcJ/31lzotgGQeIImNvUUW0QcEY4jRac6eM7Wqu5JU6owF+ReiocL2luudvkrPIslNlk3ByB
-         kyLqGnqeZNLl7R4WuUtxyun5eiwFWbt8GR+x+EZj1m1e4jtOTo3dSyPxrIVfe9CdhU51Bj0eStE995
-         RuaiVMcdCloPKMGf/+FlWUZ/mc+YsqxSXTz6+qBn2sl586S28o7UdgF2JU4fTr9/stHGE9Uy71yPgM
-         TeX4Psatzlf8fkuLF1ojxrry7dHy0qQ==
-X-HalOne-Cookie: 163c5e454e45403160b48d3b89fde72e40892aa8
-X-HalOne-ID: d2c0e733-204c-11eb-9654-d0431ea8a283
+        h=content-transfer-encoding:content-type:in-reply-to:mime-version:date:
+         message-id:references:cc:to:from:subject:from;
+        bh=pGS+hRIpgZjBebzJuXnWRieKofFe11yfaznBGKJtRhk=;
+        b=GwwduhURhWi2rqn7PJ9NkknQ1j90kPiJ7LyZSBrgZKeEpZYHap0S2aBsKT72hnOMVbPjG9VcKsHiJ
+         F+yQReD5OHqxYgT9F8D3/u1RoNTrqIZcC2W7TISuJxZeIbNrnv0l6ULiaG5P2TKgablASlEK2W7vMV
+         eyMJ/bwl0jnMIJC6/qdMIr8QqVxbaxTCbCnlGV0thA8Q2MAW9eh30ZIMf5eIiJHfEgNMvY3XnGhGEF
+         ZH0XECqdCcsO3iQzM/37mpLNeeeHSaz7ZPuu9gaGrSFIE3YhtJggq5XoOT5OFo+fPLTp4eZnYLOSnT
+         kvoVTjrSl3iw1wPRSSz+2oxAvDurvXA==
+X-HalOne-Cookie: b7aca7b6cdc0a30bc058387c825741d339e1fc31
+X-HalOne-ID: f9d6d3b5-206a-11eb-84b8-d0431ea8a290
 Received: from [192.168.19.13] (h-155-4-128-97.na.cust.bahnhof.se [155.4.128.97])
-        by mailrelay1.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id d2c0e733-204c-11eb-9654-d0431ea8a283;
-        Fri, 06 Nov 2020 16:26:29 +0000 (UTC)
+        by mailrelay2.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id f9d6d3b5-206a-11eb-84b8-d0431ea8a290;
+        Fri, 06 Nov 2020 20:02:19 +0000 (UTC)
 Subject: Re: [PATCH] applesmc: Re-work SMC comms v2
 From:   Henrik Rydberg <rydberg@bitmath.org>
 To:     Brad Campbell <brad@fnarfbargle.com>
@@ -64,129 +64,32 @@ References: <20200930105442.3f642f6c@aktux>
  <6d071547-10ee-ca92-ec8b-4b5069d04501@bitmath.org>
  <8e117844-d62a-bcb1-398d-c59cc0d4b878@fnarfbargle.com>
  <e5a856b1-fb1a-db5d-0fde-c86d0bcca1df@bitmath.org>
-Message-ID: <aa60f673-427a-1a47-7593-54d1404c3c92@bitmath.org>
-Date:   Fri, 6 Nov 2020 17:26:42 +0100
+ <aa60f673-427a-1a47-7593-54d1404c3c92@bitmath.org>
+Message-ID: <9109d059-d9cb-7464-edba-3f42aa78ce92@bitmath.org>
+Date:   Fri, 6 Nov 2020 21:02:32 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <e5a856b1-fb1a-db5d-0fde-c86d0bcca1df@bitmath.org>
-Content-Type: multipart/mixed;
- boundary="------------B6F41B33EAEA186500550465"
+In-Reply-To: <aa60f673-427a-1a47-7593-54d1404c3c92@bitmath.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------B6F41B33EAEA186500550465
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+> So as it stands, it does not work at all. I will continue to check 
+> another machine, and see if I can get something working.
 
->> I can't guarantee it won't break older machines which is why I've 
->> asked for help testing it. I only have a MacbookPro 11,1 and an iMac 
->> 12,2. It fixes both of those.
->>
->> Help testing would be much appreciated.
-> 
-> I see, this makes much more sense. I may be able to run some tests 
-> tonight. Meanwhile, looking at the patch, the status variable in 
-> send_command looks superfluous now that there is a wait_status() before it.
+On the MacBookAir3,1 the situation is somewhat better.
 
-Ok, it took some time to get the machines up to speed, but so far I have 
-managed to run some tests on an MacBookAir1,1. I only managed to upgrade 
-up to 4.15, so I had to revert the inputdev polling patch, but the rest 
-applied without problems. I recovered an old test program I used to use 
-(attached), and checked for failures and reads per second
+The first three tree positions result in zero failures and 10 reads per 
+second. The fourth yields zero failues and 11 reads per second, within 
+the margin of similarity.
 
-*** hwmon: (applesmc) switch to using input device polling mode
+So, the patch appears to have no apparent effect on the 3,1 series.
 
-At this point in the tree, with this reverted, I see 0 failures and 55 
-reads per second.
-
-*** hwmon: (applesmc) avoid overlong udelay()
-
-With this applied, I see 0 failures and 16 reads per second.
-
-*** hwmon: (applesmc) check status earlier.
-
-With this applied, I see 0 failures and 16 reads per second.
-
-*** (HEAD -> stable) applesmc: Re-work SMC comms v2
-
-With this applied, the kernel hangs in module probe, and the kernel log 
-is flooded with read failures.
-
-So as it stands, it does not work at all. I will continue to check 
-another machine, and see if I can get something working.
+Now onto fixing the 1,1 behavior.
 
 Henrik
 
---------------B6F41B33EAEA186500550465
-Content-Type: application/x-shellscript;
- name="applesmc-test.sh"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment;
- filename="applesmc-test.sh"
-
-IyEvYmluL2Jhc2gKIwojIFRoaXMgc2NyaXB0IHRlc3RzIHRoZSBwcmVzZW5jZSBhbmQgcGVy
-Zm9ybWFuY2Ugb2YKIyB0aGUgYXBwbGVzbWMgbW9kdWxlIG9uIEFwcGxlIG1hY3RlbCBjb21w
-dXRlcnMuCiMKIyBrb3N1bWk2OEB1YnVudHVmb3J1bXMub3JnCiMKCmlmIFsgYHdob2FtaWAg
-IT0gInJvb3QiIF07IHRoZW4KICAgIGVjaG8gInNjcmlwdCBtdXN0IGJlIHJ1biBhcyByb290
-IChydW4gd2l0aCBzdWRvKSIKICAgIGV4aXQgMQpmaQoKZGV2PS9zeXMvZGV2aWNlcy9wbGF0
-Zm9ybS9hcHBsZXNtYy43NjgKCmVjaG8gLW4gIm1vZGVsOiAiCmRtaWRlY29kZSAtcyBzeXN0
-ZW0tcHJvZHVjdC1uYW1lCmVjaG8KCiMgQWNjZWxlcm9tZXRlcgplY2hvIC1uICJhY2NlbGVy
-b21ldGVyOiIKaWYgWyAtYSAkZGV2L3Bvc2l0aW9uIF07IHRoZW4KICAgIGVjaG8gLW4gIiBw
-cmVzZW50IgogICAgb3V0PWBjYXQgJGRldi9wb3NpdGlvbiAyPi9kZXYvbnVsbGAKICAgIGlm
-IFsgJD8gPSAwIF07IHRoZW4KICAgICAgICBlY2hvIC1uICIsIHJlYWRhYmxlLCBvdXRwdXQ6
-ICRvdXQiCiAgICBlbHNlCiAgICAgICAgZWNobyAtbiAiLCBub3QgcmVhZGFibGUiCiAgICBm
-aQplbHNlCiAgICBlY2hvIC1uICIgbm90IHByZXNlbnQiCmZpCmVjaG8KCiMgRmFuIC0gb25s
-eSBjaGVjayBmaXJzdCBmYW4KZWNobyAtbiAiZmFuOiAgICAgICAgICAiCmlmIFsgLWEgJGRl
-di9mYW4xX291dHB1dCBdOyB0aGVuCiAgICBlY2hvIC1uICIgcHJlc2VudCIKICAgIG91dD1g
-Y2F0ICRkZXYvZmFuMV9vdXRwdXQgMj4vZGV2L251bGxgCiAgICBpZiBbICQ/ID0gMCBdOyB0
-aGVuCiAgICAgICAgZWNobyAtbiAiLCByZWFkYWJsZSwgb3V0cHV0OiAkb3V0IgogICAgZWxz
-ZQogICAgICAgIGVjaG8gLW4gIiwgbm90IHJlYWRhYmxlIgogICAgZmkKZWxzZQogICAgZWNo
-byAtbiAiIG5vdCBwcmVzZW50IgpmaQplY2hvCgojIExpZ2h0CmVjaG8gLW4gImxpZ2h0OiAg
-ICAgICAgIgppZiBbIC1hICRkZXYvbGlnaHQgXTsgdGhlbgogICAgZWNobyAtbiAiIHByZXNl
-bnQiCiAgICBvdXQ9YGNhdCAkZGV2L2xpZ2h0IDI+L2Rldi9udWxsYAogICAgaWYgWyAkPyA9
-IDAgXTsgdGhlbgogICAgICAgIGVjaG8gLW4gIiwgcmVhZGFibGUsIG91dHB1dDogJG91dCIK
-ICAgIGVsc2UKICAgICAgICBlY2hvIC1uICIsIG5vdCByZWFkYWJsZSIKICAgIGZpCmVsc2UK
-ICAgIGVjaG8gLW4gIiBub3QgcHJlc2VudCIKZmkKZWNobwoKIyBMZWRzCmxlZHM9YGxzICRk
-ZXYvbGVkcy8qL2JyaWdodG5lc3MgMj4vZGV2L251bGxgCmVjaG8gLW4gImxlZHM6ICAgICAg
-ICAgIgppZiBbICIkbGVkcyIgIT0gIiIgXTsgdGhlbgogICAgZWNobyAiIHByZXNlbnQsIgog
-ICAgZm9yIHggaW4gJGxlZHM7IGRvCiAgICAgICAgZWNobyAtbiAiIGxlZDogICAgICAgICAg
-ICAgICAgICAgIgogICAgICAgIG91dD1gY2F0ICR4IDI+L2Rldi9udWxsYAogICAgICAgIGlm
-IFsgJD8gPSAwIF07IHRoZW4KICAgICAgICAgICAgZWNobyAtbiAicmVhZGFibGUsIG91dHB1
-dDogJG91dCIKICAgICAgICBlbHNlCiAgICAgICAgICAgIGVjaG8gLW4gIm5vdCByZWFkYWJs
-ZSIKICAgICAgICBmaQogICAgICAgIGVjaG8KICAgIGRvbmUKZWxzZQogICAgZWNobyAiIG5v
-dCBwcmVzZW50IgpmaQoKIyBUZW1wZXJhdHVyZXMKdGVtcHM9YGxzICRkZXYvdGVtcCppbnB1
-dCAyPi9kZXYvbnVsbGAKZWNobyAtbiAidGVtcGVyYXR1cmVzOiAiCmlmIFsgIiR0ZW1wcyIg
-IT0gIiIgXTsgdGhlbgogICAgZWNobyAiIHByZXNlbnQsIgogICAgZm9yIHggaW4gJHRlbXBz
-OyBkbwogICAgICAgIGVjaG8gLW4gIiB0ZW1wZXJhdHVyZTogICAgICAgICAgICIKICAgICAg
-ICBvdXQ9YGNhdCAkeCAyPi9kZXYvbnVsbGAKICAgICAgICBpZiBbICQ/ID0gMCBdOyB0aGVu
-CiAgICAgICAgICAgIGVjaG8gLW4gInJlYWRhYmxlLCBvdXRwdXQ6ICRvdXQiCiAgICAgICAg
-ZWxzZQogICAgICAgICAgICBlY2hvIC1uICJub3QgcmVhZGFibGUiCiAgICAgICAgZmkKICAg
-ICAgICBlY2hvCiAgICBkb25lCmVsc2UKICAgIGVjaG8gIiBub3QgcHJlc2VudCIKZmkKCiMg
-UGVyZm9ybWFuY2UKZWNobyAtbiAicGVyZm9ybWFuY2U6ICAgIgppZiBbICIkdGVtcHMiICE9
-ICIiIF07IHRoZW4KICAgIGVjaG8gInJlYWRpbmcgYWxsIHRlbXBlcmF0dXJlcyIKICAgIHR5
-cGVzZXQgLWkgaT0wCiAgICB0eXBlc2V0IC1pIGU9MAogICAgdHlwZXNldCAtaSBuPTUwMAog
-ICAgdHlwZXNldCAtaSB0MT1gZGF0ZSArJXNgCiAgICB3aGlsZSBbICRpIC1sdCAkbiBdOyBk
-bwogICAgICAgIG91dD1gY2F0ICR0ZW1wcyAyPi9kZXYvbnVsbGAKICAgICAgICBpZiBbICQ/
-ICE9IDAgXTsgdGhlbgogICAgICAgICAgICBlPSRlKzEKICAgICAgICBmaQogICAgICAgIGk9
-JGkrMQogICAgZG9uZQogICAgdHlwZXNldCAtaSB0Mj1gZGF0ZSArJXNgCiAgICBmYWlsPWBl
-Y2hvIHNjYWxlPTMnOycgJGUvJG4gfCBiY2AKICAgIHNwZWVkPWBlY2hvICRuLycoJyR0Mi0k
-dDEnKScgfCBiY2AKICAgIGVjaG8gIiBmYWlsIGZyZXF1ZW5jeTogICAgICAgIiAkZmFpbAog
-ICAgZWNobyAiIHJlYWRzIHBlciBzZWNvbmQ6ICAgICAiICRzcGVlZAplbHNlCiAgICBlY2hv
-ICIgbm90IHBlcmZvcm1lZCIKZmkKZWNobwoKY2QgJGRldgoKIyBGYW4gY29udHJvbCB2ZXJz
-aW9uCmVjaG8gLW4gInNtYy1mYW46ICIKCnR5cGVzZXQgLWkgbXRfaXg9MAp0eXBlc2V0IC1p
-IHNmX2l4PTAKdHlwZXNldCAtaSBpeD0xCnR5cGVzZXQgLWkgaXhtYXg9YGNhdCBrZXlfY291
-bnRgCgojIGZpbmQgdGhlIGluZGV4IG9mIHRoZSBNdCBhbmQgU2YgcmVnaXN0ZXJzCndoaWxl
-IFsgJGl4IC1sdCAkaXhtYXggXTsgZG8KICAgIGVjaG8gLW4gJGl4ID4ga2V5X2F0X2luZGV4
-CiAgICBuYW1lPWBjYXQga2V5X2F0X2luZGV4X25hbWUgMj4gL2Rldi9udWxsYAogICAgaWYg
-WyAiJG5hbWUiID0gIkYwTXQiIF07IHRoZW4KCWVjaG8gLW4gIiBNdCIKCW10X2l4PSRpeAog
-ICAgZmkKICAgIGlmIFsgIiRuYW1lIiA9ICJGMFNmIiBdOyB0aGVuCgllY2hvIC1uICIgU2Yi
-CglzZl9peD0kaXgKICAgIGZpCiAgICBpeD0kaXgrMQpkb25lCgppZiBbICRtdF9peCA9IDAg
-LWEgJHNmX2l4ICE9IDAgXTsgdGhlbgogICAgZWNobyAtbiAiIHR5cGUgQSIKZmkKCmlmIFsg
-JG10X2l4ICE9IDAgLWEgJHNmX2l4ICE9IDAgXTsgdGhlbgogICAgZWNobyAtbiAiIHR5cGUg
-QiIKZmkKCmlmIFsgJG10X2l4ICE9IDAgLWEgJHNmX2l4ID0gMCBdOyB0aGVuCiAgICBlY2hv
-IC1uICIgdHlwZSBDIgpmaQplY2hvCg==
---------------B6F41B33EAEA186500550465--
