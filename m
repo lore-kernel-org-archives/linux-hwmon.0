@@ -1,113 +1,293 @@
-Return-Path: <SRS0=vQlV=EL=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=EIaL=EM=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E22BC55179
-	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Nov 2020 16:42:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B6DDC388F7
+	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Nov 2020 00:03:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BDDEC2080D
-	for <linux-hwmon@archiver.kernel.org>; Thu,  5 Nov 2020 16:42:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C60BA20759
+	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Nov 2020 00:03:46 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=konsulko.com header.i=@konsulko.com header.b="YSA5TqNv"
+	dkim=pass (1024-bit key) header.d=fnarfbargle.com header.i=@fnarfbargle.com header.b="nZabsBfn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730854AbgKEQmV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 5 Nov 2020 11:42:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37268 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725862AbgKEQmV (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 5 Nov 2020 11:42:21 -0500
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECDAAC0613CF
-        for <linux-hwmon@vger.kernel.org>; Thu,  5 Nov 2020 08:42:20 -0800 (PST)
-Received: by mail-wr1-x443.google.com with SMTP id e6so2543183wro.1
-        for <linux-hwmon@vger.kernel.org>; Thu, 05 Nov 2020 08:42:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=konsulko.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LQUi4QNCkeBjCHL4o8+DwLkZZm/NfdNMirZ1wMzh4YI=;
-        b=YSA5TqNvKd2zU3fUObWUZT2whTuqWtut5nYw6G5nJT/qwT+8EpZfOPifwsk/wnKxia
-         e6OmYi5nHBz5rtqlFZN4A9FmBi2Cx8DIOypzFaclfDXLzSf2fwivdw3o75yattQ37J4d
-         utP6P58iipK8KorZzg3Y6ko16IZT4eUqB5lU0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LQUi4QNCkeBjCHL4o8+DwLkZZm/NfdNMirZ1wMzh4YI=;
-        b=LyIZIXVIht7V2TWUqbny/6vqm+4xnbx/HBbrF9y3JUxXSx1g1ql1bkQ8ExecrwJ3/1
-         +Gc04uciMuOyOTVbILZyZCMsW6uSG0pdWsJtxjozTjxGdEFPq4OScMTc/X6O90flmh93
-         dg3IZtVGl61+iI460nsmi+zLoKhFEM6O07BMd2ATA5wad3FjmbUdCd8qmRoVdDj28F30
-         yZ2FtpWv41j1x7hA39m80SPHQjd5aRsxmZKNxh29fE5ImcEYPXrIcZDzpPZ4j0kLddJe
-         93dmTZoTEG2CHScP9HbYJJRyzmLANGyFjHhNHa4oEYABCol7bocV9SMDBh8HeeRIQWJk
-         VpDw==
-X-Gm-Message-State: AOAM531PR1haTv11fxYPpCzen8kPFgLigP/hcFUwXA7xeKEeNdgi5UJN
-        SLwv2GKaD+CAP13IqdNumSx3FVCZfpb4AQ==
-X-Google-Smtp-Source: ABdhPJwzdSllNKnOj3cf/yR6RHmY8bx5gCGy85E20jA475tshH6pU9CR4KLkfiksHyMX/HUXwvzDvQ==
-X-Received: by 2002:adf:f286:: with SMTP id k6mr4027017wro.34.1604594539695;
-        Thu, 05 Nov 2020 08:42:19 -0800 (PST)
-Received: from alpha.home.b5net.uk (cpc76132-clif11-2-0-cust249.12-4.cable.virginm.net. [80.7.160.250])
-        by smtp.gmail.com with ESMTPSA id j13sm3303141wru.86.2020.11.05.08.42.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Nov 2020 08:42:19 -0800 (PST)
-From:   Paul Barker <pbarker@konsulko.com>
-To:     Kamil Debski <kamil@wypas.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Paul Barker <pbarker@konsulko.com>, linux-hwmon@vger.kernel.org
-Subject: [PATCH v2] hwmon: pwm-fan: Fix RPM calculation
-Date:   Thu,  5 Nov 2020 16:41:46 +0000
-Message-Id: <20201105164146.182254-1-pbarker@konsulko.com>
-X-Mailer: git-send-email 2.29.2
+        id S1732533AbgKFADq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 5 Nov 2020 19:03:46 -0500
+Received: from ns3.fnarfbargle.com ([103.4.19.87]:55424 "EHLO
+        ns3.fnarfbargle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729784AbgKFADp (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 5 Nov 2020 19:03:45 -0500
+Received: from srv.home ([10.8.0.1] ident=heh11857)
+        by ns3.fnarfbargle.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.84_2)
+        (envelope-from <brad@fnarfbargle.com>)
+        id 1kapCc-0000gA-Iq; Fri, 06 Nov 2020 08:02:02 +0800
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fnarfbargle.com; s=mail;
+        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject; bh=mrnTQlx4URaoQZqylMNRHrV1WLBTM2LXvxwuxfk7iBE=;
+        b=nZabsBfnWrO6boX58eIQCS1Rl7kpr2TjCDMDq7y59O7S89dzXKX1YFhLHlKQpN697YdFzHWPo2++RgYLP0QkmewHd67/gmmktlF8PsrLyXcPrVRU/u3I0wQMutLbplzcrltGVoBTPMslLa1vS/vuO7uWeAEyIJBeQToH2CKQSic=;
+Subject: Re: [PATCH] applesmc: Re-work SMC comms v2
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, rydberg@bitmath.org,
+        linux-hwmon@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        hns@goldelico.com, Henrik Rydberg <rydberg@bitmath.org>
+References: <20200930105442.3f642f6c@aktux>
+ <20200930164446.GB219887@roeck-us.net>
+ <CAK8P3a2CbhJT+B-F+cnX+uiJep9oiLM28n045-ATaVaU41u2hw@mail.gmail.com>
+ <20201002002251.28462e64@aktux>
+ <7543ef85-727d-96c3-947e-5b18e9e6c44d@roeck-us.net>
+ <20201006090226.4275c824@kemnade.info>
+ <db042e9b-be41-11b1-7059-3881b1da5c8b@fnarfbargle.com>
+ <68467f1b-cea1-47ea-a4d4-8319214b072a@fnarfbargle.com>
+ <20201104142057.62493c12@aktux>
+ <2436afef-99c6-c352-936d-567bf553388c@fnarfbargle.com>
+ <7a085650-2399-08c0-3c4d-6cd1fa28a365@roeck-us.net>
+ <fc36d066-c432-e7d2-312f-a0a592446fe2@fnarfbargle.com>
+ <10027199-5d31-93e7-9bd8-7baaebff8b71@roeck-us.net>
+ <70331f82-35a1-50bd-685d-0b06061dd213@fnarfbargle.com>
+ <3c72ccc3-4de1-b5d0-423d-7b8c80991254@fnarfbargle.com>
+ <e59440cb-72bc-4e48-4ff0-54ceb8e3ae91@roeck-us.net>
+From:   Brad Campbell <brad@fnarfbargle.com>
+Message-ID: <34ff244b-fe98-fcf5-eb61-95a529a52c45@fnarfbargle.com>
+Date:   Fri, 6 Nov 2020 11:02:00 +1100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.2.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <e59440cb-72bc-4e48-4ff0-54ceb8e3ae91@roeck-us.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-To convert the number of pulses counted into an RPM estimation, we need
-to divide by the width of our measurement interval instead of
-multiplying by it.
+On 6/11/20 3:12 am, Guenter Roeck wrote:
+> On 11/4/20 11:26 PM, Brad Campbell wrote:
+>> Commit fff2d0f701e6 ("hwmon: (applesmc) avoid overlong udelay()") introduced
+>> an issue whereby communication with the SMC became unreliable with write
+>> errors like :
+>>
+>> [  120.378614] applesmc: send_byte(0x00, 0x0300) fail: 0x40
+>> [  120.378621] applesmc: LKSB: write data fail
+>> [  120.512782] applesmc: send_byte(0x00, 0x0300) fail: 0x40
+>> [  120.512787] applesmc: LKSB: write data fail
+>>
+>> The original code appeared to be timing sensitive and was not reliable with
+>> the timing changes in the aforementioned commit.
+>>
+>> This patch re-factors the SMC communication to remove the timing 
+>> dependencies and restore function with the changes previously committed.
+>>
+> 
+> Still a few formatting problems, but I like this version. Id take
+> care of the formatting myself, but send_command() will need a change.
 
-We also don't need to do 64-bit division, with 32-bits we can handle a
-fan running at over 4 million RPM.
+Nope, I'm more than happy to sort it all out. It's a learning process.
 
-As the sample_timer() function is called once per second, delta will usually
-be just over 1000 and should never be zero, avoiding the risk of a divide by
-zero exception.
+I'd still like this to get some wider testing before I consider it ready to go
+so extra revisions don't worry me.
 
-Signed-off-by: Paul Barker <pbarker@konsulko.com>
----
- drivers/hwmon/pwm-fan.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+> Subject should be
+> 	[PATCH v<version>] hwmon: (applesmc) ...
 
-diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-index bdba2143021a..2f2950629892 100644
---- a/drivers/hwmon/pwm-fan.c
-+++ b/drivers/hwmon/pwm-fan.c
-@@ -54,14 +54,13 @@ static irqreturn_t pulse_handler(int irq, void *dev_id)
- static void sample_timer(struct timer_list *t)
- {
- 	struct pwm_fan_ctx *ctx = from_timer(ctx, t, rpm_timer);
-+	unsigned int delta = ktime_ms_delta(ktime_get(), ctx->sample_start);
- 	int pulses;
--	u64 tmp;
+Thanks.
  
- 	pulses = atomic_read(&ctx->pulses);
- 	atomic_sub(pulses, &ctx->pulses);
--	tmp = (u64)pulses * ktime_ms_delta(ktime_get(), ctx->sample_start) * 60;
--	do_div(tmp, ctx->pulses_per_revolution * 1000);
--	ctx->rpm = tmp;
-+	ctx->rpm = (unsigned int)(pulses * 1000 * 60) /
-+		(ctx->pulses_per_revolution * delta);
- 
- 	ctx->sample_start = ktime_get();
- 	mod_timer(&ctx->rpm_timer, jiffies + HZ);
--- 
-2.29.2
+>> v2 : Address logic and coding style
+> 
+> Change log should be after '---'
 
+No worries, can do.
+
+> 
+>>
+>> Reported-by: Andreas Kemnade <andreas@kemnade.info>
+>> Fixes: fff2d0f701e6 ("hwmon: (applesmc) avoid overlong udelay()")
+>> Signed-off-by: Brad Campbell <brad@fnarfbargle.com>
+>>
+>> ---
+>> diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
+>> index a18887990f4a..de890f3ec12f 100644
+>> --- a/drivers/hwmon/applesmc.c
+>> +++ b/drivers/hwmon/applesmc.c
+>> @@ -42,6 +42,11 @@
+>>  
+>>  #define APPLESMC_MAX_DATA_LENGTH 32
+>>  
+>> +/* Apple SMC status bits */
+>> +#define SMC_STATUS_AWAITING_DATA  BIT(0) /* SMC has data waiting */
+>> +#define SMC_STATUS_IB_CLOSED      BIT(1) /* Will ignore any input */
+>> +#define SMC_STATUS_BUSY           BIT(2) /* Command in progress */
+>> +
+> 
+> Hah, tricked you here ;-). Using "BIT()" requires
+> 
+> #include <linux/bits.h>
+
+"requires" ?? 
+It compiles and tests without warning, but I'll certainly add it in.
+
+
+>>  /* wait up to 128 ms for a status change. */
+>>  #define APPLESMC_MIN_WAIT	0x0010
+>>  #define APPLESMC_RETRY_WAIT	0x0100
+>> @@ -151,65 +156,69 @@ static unsigned int key_at_index;
+>>  static struct workqueue_struct *applesmc_led_wq;
+>>  
+>>  /*
+>> - * wait_read - Wait for a byte to appear on SMC port. Callers must
+>> - * hold applesmc_lock.
+>> + * Wait for specific status bits with a mask on the SMC
+>> + * Used before and after writes, and before reads
+>>   */
+>> -static int wait_read(void)
+>> +
+>> +static int wait_status(u8 val, u8 mask)
+>>  {
+>>  	unsigned long end = jiffies + (APPLESMC_MAX_WAIT * HZ) / USEC_PER_SEC;
+>>  	u8 status;
+>>  	int us;
+>>  
+>>  	for (us = APPLESMC_MIN_WAIT; us < APPLESMC_MAX_WAIT; us <<= 1) {
+>> -		usleep_range(us, us * 16);
+>>  		status = inb(APPLESMC_CMD_PORT);
+>> -		/* read: wait for smc to settle */
+>> -		if (status & 0x01)
+>> +		if ((status & mask) == val)
+>>  			return 0;
+>>  		/* timeout: give up */
+>>  		if (time_after(jiffies, end))
+>>  			break;
+>> -	}
+>> -
+>> -	pr_warn("wait_read() fail: 0x%02x\n", status);
+>> +		usleep_range(us, us * 16);
+>> +		}
+> 
+> Bad indentation of "}"
+
+Yeah, I've found my editor "less than optimal" and I've had to correct a few
+tab related indent problems manually. Thanks.
+ 
+>>  	return -EIO;
+>>  }
+>>  
+>>  /*
+>> - * send_byte - Write to SMC port, retrying when necessary. Callers
+>> + * send_byte_data - Write to SMC data port. Callers
+>>   * must hold applesmc_lock.
+>> + * Parameter skip must be true on the last write of any
+>> + * command or it'll time out.
+>>   */
+>> -static int send_byte(u8 cmd, u16 port)
+>> +
+>> +static int send_byte_data(u8 cmd, u16 port, bool skip)
+>>  {
+>> -	u8 status;
+>> -	int us;
+>> -	unsigned long end = jiffies + (APPLESMC_MAX_WAIT * HZ) / USEC_PER_SEC;
+>> +	int ret;
+>>  
+>> +	ret = wait_status(SMC_STATUS_BUSY, SMC_STATUS_BUSY | SMC_STATUS_IB_CLOSED);
+>> +	if (ret)
+>> +		return ret;
+>>  	outb(cmd, port);
+>> -	for (us = APPLESMC_MIN_WAIT; us < APPLESMC_MAX_WAIT; us <<= 1) {
+>> -		usleep_range(us, us * 16);
+>> -		status = inb(APPLESMC_CMD_PORT);
+>> -		/* write: wait for smc to settle */
+>> -		if (status & 0x02)
+>> -			continue;
+>> -		/* ready: cmd accepted, return */
+>> -		if (status & 0x04)
+>> -			return 0;
+>> -		/* timeout: give up */
+>> -		if (time_after(jiffies, end))
+>> -			break;
+>> -		/* busy: long wait and resend */
+>> -		udelay(APPLESMC_RETRY_WAIT);
+>> -		outb(cmd, port);
+>> -	}
+>> +	return wait_status(skip ? 0 : SMC_STATUS_BUSY, SMC_STATUS_BUSY);
+>> +}
+>>  
+>> -	pr_warn("send_byte(0x%02x, 0x%04x) fail: 0x%02x\n", cmd, port, status);
+>> -	return -EIO;
+>> +static int send_byte(u8 cmd, u16 port)
+>> +{
+>> +	return send_byte_data(cmd, port, false);
+>>  }
+>>  
+>> +/*
+>> + * send_command - Write a command to the SMC. Callers must hold applesmc_lock.
+>> + * If SMC is in undefined state, any new command write resets the state machine.
+>> + */
+>> +
+>>  static int send_command(u8 cmd)
+>>  {
+>> -	return send_byte(cmd, APPLESMC_CMD_PORT);
+>> +	u8 status;
+>> +	int ret;
+>> +
+>> +	ret = wait_status(0, SMC_STATUS_IB_CLOSED);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	status = inb(APPLESMC_CMD_PORT);
+>> +
+> 
+> Is this read necessary ? 'status' isn't used subsequently, meaning we'll
+> probably get static analyzer warnings about a variable which is assigned
+> but unused. If the read is necessary, just don't assign it to a variable.
+
+No it's not. It's hangover from incompletely remove debug statements.
+Henrik Rydberg picked that one up yesterday.
+
+>> +	outb(cmd, APPLESMC_CMD_PORT);
+>> +	return wait_status(SMC_STATUS_BUSY, SMC_STATUS_BUSY);
+>>  }
+>>  
+>>  static int send_argument(const char *key)
+>> @@ -239,7 +248,9 @@ static int read_smc(u8 cmd, const char *key, u8 *buffer, u8 len)
+>>  	}
+>>  
+>>  	for (i = 0; i < len; i++) {
+>> -		if (wait_read()) {
+>> +		if (wait_status(SMC_STATUS_AWAITING_DATA | SMC_STATUS_BUSY,
+>> +				SMC_STATUS_AWAITING_DATA | SMC_STATUS_BUSY |
+>> +				SMC_STATUS_IB_CLOSED)) {
+>>  			pr_warn("%.4s: read data[%d] fail\n", key, i);
+>>  			return -EIO;
+>>  		}
+>> @@ -250,7 +261,7 @@ static int read_smc(u8 cmd, const char *key, u8 *buffer, u8 len)
+>>  	for (i = 0; i < 16; i++) {
+>>  		udelay(APPLESMC_MIN_WAIT);
+>>  		status = inb(APPLESMC_CMD_PORT);
+>> -		if (!(status & 0x01))
+>> +		if (!(status & SMC_STATUS_AWAITING_DATA))
+>>  			break;
+>>  		data = inb(APPLESMC_DATA_PORT);
+>>  	}
+>> @@ -275,7 +286,7 @@ static int write_smc(u8 cmd, const char *key, const u8 *buffer, u8 len)
+>>  	}
+>>  
+>>  	for (i = 0; i < len; i++) {
+>> -		if (send_byte(buffer[i], APPLESMC_DATA_PORT)) {
+>> +		if (send_byte_data(buffer[i], APPLESMC_DATA_PORT, i == len - 1)) {
+>>  			pr_warn("%s: write data fail\n", key);
+>>  			return -EIO;
+>>  		}
+>>
+> 
+> 
+
+I'll get a v3 in when I get some more test results.
+
+Much appreciated.
+Regards,
+Brad
