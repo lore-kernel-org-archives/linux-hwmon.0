@@ -2,222 +2,191 @@ Return-Path: <SRS0=EIaL=EM=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70D56C55179
-	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Nov 2020 13:17:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE283C4741F
+	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Nov 2020 16:26:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1444620702
-	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Nov 2020 13:17:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BAB3921556
+	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Nov 2020 16:26:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="igwT2yX+"
+	dkim=pass (2048-bit key) header.d=bitmath.org header.i=@bitmath.org header.b="SFsmAipP"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727443AbgKFNR3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 6 Nov 2020 08:17:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60944 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726939AbgKFNR3 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 6 Nov 2020 08:17:29 -0500
-Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9C2C0613CF;
-        Fri,  6 Nov 2020 05:17:29 -0800 (PST)
-Received: by mail-oi1-x241.google.com with SMTP id m17so1284436oie.4;
-        Fri, 06 Nov 2020 05:17:29 -0800 (PST)
+        id S1726732AbgKFQ0f (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 6 Nov 2020 11:26:35 -0500
+Received: from mailrelay1-2.pub.mailoutpod1-cph3.one.com ([46.30.212.0]:60051
+        "EHLO mailrelay1-2.pub.mailoutpod1-cph3.one.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726565AbgKFQ0f (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 6 Nov 2020 11:26:35 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Cl/ycZxtnI9EC0QYhyMPuP34JYCjCitMnzolMq2mMYg=;
-        b=igwT2yX+dPROCTZS0VYU32dwBZ6KOKqxzQZfUPK8/8zY6LJO27gznweVXzPTDclqdE
-         lTT7BV3vWljwZ5JiRYSasGJCSq75Dbyw5yTLl0scXLVFnBt0nVNJQxX3fgrCqrRjyWoy
-         8I18aYYx4gOYgeUw2//FuxG3B3IrYFDXZ+WEZ09hXWLH9u7sAa2CykwR8ryw9a70AvFF
-         Ovqx9k3yB+s5ZChoWdkZbfcELA5bieIjNjO+zZIFAPrIeC1UFRq2vQcJKAls4642br+E
-         oBXbLGf+ZFd6japLzWcZRGdD5546IKtHHIZrLUMe/EpN3YhuE0zcqbSGkDRmnSJpNBgJ
-         qUmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Cl/ycZxtnI9EC0QYhyMPuP34JYCjCitMnzolMq2mMYg=;
-        b=DpkCXWaH6a6gkKPASQbaWbyapY7iCacKV3yeq/wvHPyYJVaQ5HNc4wHPnFUT4dB8c6
-         AlYLkPo8o2P4/0CcJL2T1WVoUESzSKKHRc2+r6ZsN/koDoPP5ct02JmCEdAMrXF8HtfV
-         Vu2rlayMruqsJRlWefM3ZuRcD3kSOnc7FN+fIUAELxg8aK+Ae1ztmj0jF3Rh3WGnPHQP
-         Mpl+9IpkG5rb2xaDuc0zmiCB6GYfq66NrSlOLcDYEGWaH6LdVnutu77aaLzlUtdwHOxX
-         bRjLAhVDhJmwQQRGx+vPhXzf6xF0Od3SE9sfO2I9tEKG6La4HOH9K55y2/6t5G1lSDxx
-         yTbg==
-X-Gm-Message-State: AOAM5302OvrelioNfU+TkkV4x0YBRr7Mn074BfM0JVW97XSWgi35Q2p/
-        gfjFQSu7OAvLGwfKfIvLutc=
-X-Google-Smtp-Source: ABdhPJyE961wLos4Gmwzl5WTb6Fjh4d9g/34rIDrgJs1XAOJ18jf4WbzkbrZPsmRpbJcmTp0uBthdw==
-X-Received: by 2002:aca:4306:: with SMTP id q6mr985911oia.169.1604668648506;
-        Fri, 06 Nov 2020 05:17:28 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 4sm246503oij.40.2020.11.06.05.17.27
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 06 Nov 2020 05:17:28 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 6 Nov 2020 05:17:27 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Alexandru Ardelean <alexandru.ardelean@analog.com>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jdelvare@suse.com, ardeleanalex@gmail.com, Mark.Thoren@analog.com
-Subject: Re: [PATCH 3/3] hwmon: (ltc2945): add support for sense resistor
-Message-ID: <20201106131727.GD14837@roeck-us.net>
-References: <20201106101825.30960-1-alexandru.ardelean@analog.com>
- <20201106101825.30960-3-alexandru.ardelean@analog.com>
+        d=bitmath.org; s=20191106;
+        h=content-type:in-reply-to:mime-version:date:message-id:references:cc:to:from:
+         subject:from;
+        bh=SxG8W321K37P/2Nept94VZxZoM7KKo/nS12XQk8CKNk=;
+        b=SFsmAipPQwR2Ej+GWfwALmQG1dY9mUnDiQ0xGUQCM8C/SnrvRvcpWQtpLf92UF/q6QxgfqxvnBZaZ
+         X+imnkYcJ/31lzotgGQeIImNvUUW0QcEY4jRac6eM7Wqu5JU6owF+ReiocL2luudvkrPIslNlk3ByB
+         kyLqGnqeZNLl7R4WuUtxyun5eiwFWbt8GR+x+EZj1m1e4jtOTo3dSyPxrIVfe9CdhU51Bj0eStE995
+         RuaiVMcdCloPKMGf/+FlWUZ/mc+YsqxSXTz6+qBn2sl586S28o7UdgF2JU4fTr9/stHGE9Uy71yPgM
+         TeX4Psatzlf8fkuLF1ojxrry7dHy0qQ==
+X-HalOne-Cookie: 163c5e454e45403160b48d3b89fde72e40892aa8
+X-HalOne-ID: d2c0e733-204c-11eb-9654-d0431ea8a283
+Received: from [192.168.19.13] (h-155-4-128-97.na.cust.bahnhof.se [155.4.128.97])
+        by mailrelay1.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id d2c0e733-204c-11eb-9654-d0431ea8a283;
+        Fri, 06 Nov 2020 16:26:29 +0000 (UTC)
+Subject: Re: [PATCH] applesmc: Re-work SMC comms v2
+From:   Henrik Rydberg <rydberg@bitmath.org>
+To:     Brad Campbell <brad@fnarfbargle.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-hwmon@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        hns@goldelico.com, Guenter Roeck <linux@roeck-us.net>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Jean Delvare <jdelvare@suse.com>
+References: <20200930105442.3f642f6c@aktux>
+ <20200930164446.GB219887@roeck-us.net>
+ <CAK8P3a2CbhJT+B-F+cnX+uiJep9oiLM28n045-ATaVaU41u2hw@mail.gmail.com>
+ <20201002002251.28462e64@aktux>
+ <7543ef85-727d-96c3-947e-5b18e9e6c44d@roeck-us.net>
+ <20201006090226.4275c824@kemnade.info>
+ <db042e9b-be41-11b1-7059-3881b1da5c8b@fnarfbargle.com>
+ <68467f1b-cea1-47ea-a4d4-8319214b072a@fnarfbargle.com>
+ <20201104142057.62493c12@aktux>
+ <2436afef-99c6-c352-936d-567bf553388c@fnarfbargle.com>
+ <7a085650-2399-08c0-3c4d-6cd1fa28a365@roeck-us.net>
+ <fc36d066-c432-e7d2-312f-a0a592446fe2@fnarfbargle.com>
+ <10027199-5d31-93e7-9bd8-7baaebff8b71@roeck-us.net>
+ <70331f82-35a1-50bd-685d-0b06061dd213@fnarfbargle.com>
+ <3c72ccc3-4de1-b5d0-423d-7b8c80991254@fnarfbargle.com>
+ <6d071547-10ee-ca92-ec8b-4b5069d04501@bitmath.org>
+ <8e117844-d62a-bcb1-398d-c59cc0d4b878@fnarfbargle.com>
+ <e5a856b1-fb1a-db5d-0fde-c86d0bcca1df@bitmath.org>
+Message-ID: <aa60f673-427a-1a47-7593-54d1404c3c92@bitmath.org>
+Date:   Fri, 6 Nov 2020 17:26:42 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201106101825.30960-3-alexandru.ardelean@analog.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <e5a856b1-fb1a-db5d-0fde-c86d0bcca1df@bitmath.org>
+Content-Type: multipart/mixed;
+ boundary="------------B6F41B33EAEA186500550465"
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Nov 06, 2020 at 12:18:25PM +0200, Alexandru Ardelean wrote:
-> The sense resistor is a parameter of the board. It should be configured in
-> the driver via a device-tree / ACPI property, so that the proper current
-> measurements can be done in the driver.
-> 
-> It shouldn't be necessary that userspace need to know about the value of
-> the resistor. It makes things a bit harder to make the application code
-> portable from one board to another.
-> 
-> This change implements support for the sense resistor to be configured from
-> DT/ACPI and used in current calculations.
-> 
+This is a multi-part message in MIME format.
+--------------B6F41B33EAEA186500550465
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-This will require a matching deevicetree document.
-
-> Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
-> ---
->  drivers/hwmon/ltc2945.c | 48 ++++++++++++++++++-----------------------
->  1 file changed, 21 insertions(+), 27 deletions(-)
+>> I can't guarantee it won't break older machines which is why I've 
+>> asked for help testing it. I only have a MacbookPro 11,1 and an iMac 
+>> 12,2. It fixes both of those.
+>>
+>> Help testing would be much appreciated.
 > 
-> diff --git a/drivers/hwmon/ltc2945.c b/drivers/hwmon/ltc2945.c
-> index 75d997d31e01..500401a82c49 100644
-> --- a/drivers/hwmon/ltc2945.c
-> +++ b/drivers/hwmon/ltc2945.c
-> @@ -61,9 +61,11 @@
->  /**
->   * struct ltc2945_state - driver instance specific data
->   * @regmap		regmap object to access device registers
-> + * @r_sense_uohm	current sense resistor value
->   */
->  struct ltc2945_state {
->  	struct regmap		*regmap;
-> +	u32			r_sense_uohm;
->  };
->  
->  static inline bool is_power_reg(u8 reg)
-> @@ -101,9 +103,8 @@ static long long ltc2945_reg_to_val(struct device *dev, u8 reg)
->  	case LTC2945_MAX_POWER_THRES_H:
->  	case LTC2945_MIN_POWER_THRES_H:
->  		/*
-> -		 * Convert to uW by assuming current is measured with
-> -		 * an 1mOhm sense resistor, similar to current
-> -		 * measurements.
-> +		 * Convert to uW by and scale it with the configured
-> +		 * sense resistor, similar to current measurements.
->  		 * Control register bit 0 selects if voltage at SENSE+/VDD
->  		 * or voltage at ADIN is used to measure power.
->  		 */
-> @@ -112,10 +113,10 @@ static long long ltc2945_reg_to_val(struct device *dev, u8 reg)
->  			return ret;
->  		if (control & CONTROL_MULT_SELECT) {
->  			/* 25 mV * 25 uV = 0.625 uV resolution. */
-> -			val *= 625LL;
-> +			val = DIV_ROUND_CLOSEST_ULL(val * 625LL * 1000, st->r_sense_uohm);
->  		} else {
->  			/* 0.5 mV * 25 uV = 0.0125 uV resolution. */
-> -			val = (val * 25LL) >> 1;
-> +			val = DIV_ROUND_CLOSEST_ULL(val * 25LL * 1000, st->r_sense_uohm) >> 1;
->  		}
->  		break;
->  	case LTC2945_VIN_H:
-> @@ -140,13 +141,10 @@ static long long ltc2945_reg_to_val(struct device *dev, u8 reg)
->  	case LTC2945_MAX_SENSE_THRES_H:
->  	case LTC2945_MIN_SENSE_THRES_H:
->  		/*
-> -		 * 25 uV resolution. Convert to current as measured with
-> -		 * an 1 mOhm sense resistor, in mA. If a different sense
-> -		 * resistor is installed, calculate the actual current by
-> -		 * dividing the reported current by the sense resistor value
-> -		 * in mOhm.
-> +		 * 25 uV resolution. Convert to current and scale it
-> +		 * with the value of the sense resistor.
->  		 */
-> -		val *= 25;
-> +		val = DIV_ROUND_CLOSEST_ULL(val * 25 * 1000, st->r_sense_uohm);
->  		break;
->  	default:
->  		return -EINVAL;
-> @@ -169,9 +167,8 @@ static int ltc2945_val_to_reg(struct device *dev, u8 reg,
->  	case LTC2945_MAX_POWER_THRES_H:
->  	case LTC2945_MIN_POWER_THRES_H:
->  		/*
-> -		 * Convert to register value by assuming current is measured
-> -		 * with an 1mOhm sense resistor, similar to current
-> -		 * measurements.
-> +		 * Convert to register value, scale it with the configured sense
-> +		 * resistor value, similar to current measurements.
->  		 * Control register bit 0 selects if voltage at SENSE+/VDD
->  		 * or voltage at ADIN is used to measure power, which in turn
->  		 * determines register calculations.
-> @@ -181,14 +178,10 @@ static int ltc2945_val_to_reg(struct device *dev, u8 reg,
->  			return ret;
->  		if (control & CONTROL_MULT_SELECT) {
->  			/* 25 mV * 25 uV = 0.625 uV resolution. */
-> -			val = DIV_ROUND_CLOSEST_ULL(val, 625);
-> +			val = DIV_ROUND_CLOSEST_ULL(val * 1000, 625 * st->r_sense_uohm);
->  		} else {
-> -			/*
-> -			 * 0.5 mV * 25 uV = 0.0125 uV resolution.
-> -			 * Divide first to avoid overflow;
-> -			 * accept loss of accuracy.
-> -			 */
-> -			val = DIV_ROUND_CLOSEST_ULL(val, 25) * 2;
-> +			/* 0.5 mV * 25 uV = 0.0125 uV resolution. */
-> +			val = DIV_ROUND_CLOSEST_ULL(val * 2 * 1000, 25 * st->r_sense_uohm);
->  		}
->  		break;
->  	case LTC2945_VIN_H:
-> @@ -213,13 +206,10 @@ static int ltc2945_val_to_reg(struct device *dev, u8 reg,
->  	case LTC2945_MAX_SENSE_THRES_H:
->  	case LTC2945_MIN_SENSE_THRES_H:
->  		/*
-> -		 * 25 uV resolution. Convert to current as measured with
-> -		 * an 1 mOhm sense resistor, in mA. If a different sense
-> -		 * resistor is installed, calculate the actual current by
-> -		 * dividing the reported current by the sense resistor value
-> -		 * in mOhm.
-> +		 * 25 uV resolution. Convert to current and scale it
-> +		 * with the value of the sense resistor, in mA.
->  		 */
-> -		val = DIV_ROUND_CLOSEST_ULL(val, 25);
-> +		val = DIV_ROUND_CLOSEST_ULL(val * 1000, 25 * st->r_sense_uohm);
->  		break;
->  	default:
->  		return -EINVAL;
-> @@ -475,6 +465,10 @@ static int ltc2945_probe(struct i2c_client *client)
->  		return PTR_ERR(regmap);
->  	}
->  
-> +	if (device_property_read_u32(dev, "shunt-resistor-micro-ohms",
-> +				     &st->r_sense_uohm))
-> +		st->r_sense_uohm = 1000;
-> +
+> I see, this makes much more sense. I may be able to run some tests 
+> tonight. Meanwhile, looking at the patch, the status variable in 
+> send_command looks superfluous now that there is a wait_status() before it.
 
-Devicetree could set shunt-resistor-micro-ohms to 0, which would result
-in divide by 0 errors.
+Ok, it took some time to get the machines up to speed, but so far I have 
+managed to run some tests on an MacBookAir1,1. I only managed to upgrade 
+up to 4.15, so I had to revert the inputdev polling patch, but the rest 
+applied without problems. I recovered an old test program I used to use 
+(attached), and checked for failures and reads per second
 
-Guenter
+*** hwmon: (applesmc) switch to using input device polling mode
 
->  	st->regmap = regmap;
->  
->  	/* Clear faults */
-> -- 
-> 2.27.0
-> 
+At this point in the tree, with this reverted, I see 0 failures and 55 
+reads per second.
+
+*** hwmon: (applesmc) avoid overlong udelay()
+
+With this applied, I see 0 failures and 16 reads per second.
+
+*** hwmon: (applesmc) check status earlier.
+
+With this applied, I see 0 failures and 16 reads per second.
+
+*** (HEAD -> stable) applesmc: Re-work SMC comms v2
+
+With this applied, the kernel hangs in module probe, and the kernel log 
+is flooded with read failures.
+
+So as it stands, it does not work at all. I will continue to check 
+another machine, and see if I can get something working.
+
+Henrik
+
+--------------B6F41B33EAEA186500550465
+Content-Type: application/x-shellscript;
+ name="applesmc-test.sh"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="applesmc-test.sh"
+
+IyEvYmluL2Jhc2gKIwojIFRoaXMgc2NyaXB0IHRlc3RzIHRoZSBwcmVzZW5jZSBhbmQgcGVy
+Zm9ybWFuY2Ugb2YKIyB0aGUgYXBwbGVzbWMgbW9kdWxlIG9uIEFwcGxlIG1hY3RlbCBjb21w
+dXRlcnMuCiMKIyBrb3N1bWk2OEB1YnVudHVmb3J1bXMub3JnCiMKCmlmIFsgYHdob2FtaWAg
+IT0gInJvb3QiIF07IHRoZW4KICAgIGVjaG8gInNjcmlwdCBtdXN0IGJlIHJ1biBhcyByb290
+IChydW4gd2l0aCBzdWRvKSIKICAgIGV4aXQgMQpmaQoKZGV2PS9zeXMvZGV2aWNlcy9wbGF0
+Zm9ybS9hcHBsZXNtYy43NjgKCmVjaG8gLW4gIm1vZGVsOiAiCmRtaWRlY29kZSAtcyBzeXN0
+ZW0tcHJvZHVjdC1uYW1lCmVjaG8KCiMgQWNjZWxlcm9tZXRlcgplY2hvIC1uICJhY2NlbGVy
+b21ldGVyOiIKaWYgWyAtYSAkZGV2L3Bvc2l0aW9uIF07IHRoZW4KICAgIGVjaG8gLW4gIiBw
+cmVzZW50IgogICAgb3V0PWBjYXQgJGRldi9wb3NpdGlvbiAyPi9kZXYvbnVsbGAKICAgIGlm
+IFsgJD8gPSAwIF07IHRoZW4KICAgICAgICBlY2hvIC1uICIsIHJlYWRhYmxlLCBvdXRwdXQ6
+ICRvdXQiCiAgICBlbHNlCiAgICAgICAgZWNobyAtbiAiLCBub3QgcmVhZGFibGUiCiAgICBm
+aQplbHNlCiAgICBlY2hvIC1uICIgbm90IHByZXNlbnQiCmZpCmVjaG8KCiMgRmFuIC0gb25s
+eSBjaGVjayBmaXJzdCBmYW4KZWNobyAtbiAiZmFuOiAgICAgICAgICAiCmlmIFsgLWEgJGRl
+di9mYW4xX291dHB1dCBdOyB0aGVuCiAgICBlY2hvIC1uICIgcHJlc2VudCIKICAgIG91dD1g
+Y2F0ICRkZXYvZmFuMV9vdXRwdXQgMj4vZGV2L251bGxgCiAgICBpZiBbICQ/ID0gMCBdOyB0
+aGVuCiAgICAgICAgZWNobyAtbiAiLCByZWFkYWJsZSwgb3V0cHV0OiAkb3V0IgogICAgZWxz
+ZQogICAgICAgIGVjaG8gLW4gIiwgbm90IHJlYWRhYmxlIgogICAgZmkKZWxzZQogICAgZWNo
+byAtbiAiIG5vdCBwcmVzZW50IgpmaQplY2hvCgojIExpZ2h0CmVjaG8gLW4gImxpZ2h0OiAg
+ICAgICAgIgppZiBbIC1hICRkZXYvbGlnaHQgXTsgdGhlbgogICAgZWNobyAtbiAiIHByZXNl
+bnQiCiAgICBvdXQ9YGNhdCAkZGV2L2xpZ2h0IDI+L2Rldi9udWxsYAogICAgaWYgWyAkPyA9
+IDAgXTsgdGhlbgogICAgICAgIGVjaG8gLW4gIiwgcmVhZGFibGUsIG91dHB1dDogJG91dCIK
+ICAgIGVsc2UKICAgICAgICBlY2hvIC1uICIsIG5vdCByZWFkYWJsZSIKICAgIGZpCmVsc2UK
+ICAgIGVjaG8gLW4gIiBub3QgcHJlc2VudCIKZmkKZWNobwoKIyBMZWRzCmxlZHM9YGxzICRk
+ZXYvbGVkcy8qL2JyaWdodG5lc3MgMj4vZGV2L251bGxgCmVjaG8gLW4gImxlZHM6ICAgICAg
+ICAgIgppZiBbICIkbGVkcyIgIT0gIiIgXTsgdGhlbgogICAgZWNobyAiIHByZXNlbnQsIgog
+ICAgZm9yIHggaW4gJGxlZHM7IGRvCiAgICAgICAgZWNobyAtbiAiIGxlZDogICAgICAgICAg
+ICAgICAgICAgIgogICAgICAgIG91dD1gY2F0ICR4IDI+L2Rldi9udWxsYAogICAgICAgIGlm
+IFsgJD8gPSAwIF07IHRoZW4KICAgICAgICAgICAgZWNobyAtbiAicmVhZGFibGUsIG91dHB1
+dDogJG91dCIKICAgICAgICBlbHNlCiAgICAgICAgICAgIGVjaG8gLW4gIm5vdCByZWFkYWJs
+ZSIKICAgICAgICBmaQogICAgICAgIGVjaG8KICAgIGRvbmUKZWxzZQogICAgZWNobyAiIG5v
+dCBwcmVzZW50IgpmaQoKIyBUZW1wZXJhdHVyZXMKdGVtcHM9YGxzICRkZXYvdGVtcCppbnB1
+dCAyPi9kZXYvbnVsbGAKZWNobyAtbiAidGVtcGVyYXR1cmVzOiAiCmlmIFsgIiR0ZW1wcyIg
+IT0gIiIgXTsgdGhlbgogICAgZWNobyAiIHByZXNlbnQsIgogICAgZm9yIHggaW4gJHRlbXBz
+OyBkbwogICAgICAgIGVjaG8gLW4gIiB0ZW1wZXJhdHVyZTogICAgICAgICAgICIKICAgICAg
+ICBvdXQ9YGNhdCAkeCAyPi9kZXYvbnVsbGAKICAgICAgICBpZiBbICQ/ID0gMCBdOyB0aGVu
+CiAgICAgICAgICAgIGVjaG8gLW4gInJlYWRhYmxlLCBvdXRwdXQ6ICRvdXQiCiAgICAgICAg
+ZWxzZQogICAgICAgICAgICBlY2hvIC1uICJub3QgcmVhZGFibGUiCiAgICAgICAgZmkKICAg
+ICAgICBlY2hvCiAgICBkb25lCmVsc2UKICAgIGVjaG8gIiBub3QgcHJlc2VudCIKZmkKCiMg
+UGVyZm9ybWFuY2UKZWNobyAtbiAicGVyZm9ybWFuY2U6ICAgIgppZiBbICIkdGVtcHMiICE9
+ICIiIF07IHRoZW4KICAgIGVjaG8gInJlYWRpbmcgYWxsIHRlbXBlcmF0dXJlcyIKICAgIHR5
+cGVzZXQgLWkgaT0wCiAgICB0eXBlc2V0IC1pIGU9MAogICAgdHlwZXNldCAtaSBuPTUwMAog
+ICAgdHlwZXNldCAtaSB0MT1gZGF0ZSArJXNgCiAgICB3aGlsZSBbICRpIC1sdCAkbiBdOyBk
+bwogICAgICAgIG91dD1gY2F0ICR0ZW1wcyAyPi9kZXYvbnVsbGAKICAgICAgICBpZiBbICQ/
+ICE9IDAgXTsgdGhlbgogICAgICAgICAgICBlPSRlKzEKICAgICAgICBmaQogICAgICAgIGk9
+JGkrMQogICAgZG9uZQogICAgdHlwZXNldCAtaSB0Mj1gZGF0ZSArJXNgCiAgICBmYWlsPWBl
+Y2hvIHNjYWxlPTMnOycgJGUvJG4gfCBiY2AKICAgIHNwZWVkPWBlY2hvICRuLycoJyR0Mi0k
+dDEnKScgfCBiY2AKICAgIGVjaG8gIiBmYWlsIGZyZXF1ZW5jeTogICAgICAgIiAkZmFpbAog
+ICAgZWNobyAiIHJlYWRzIHBlciBzZWNvbmQ6ICAgICAiICRzcGVlZAplbHNlCiAgICBlY2hv
+ICIgbm90IHBlcmZvcm1lZCIKZmkKZWNobwoKY2QgJGRldgoKIyBGYW4gY29udHJvbCB2ZXJz
+aW9uCmVjaG8gLW4gInNtYy1mYW46ICIKCnR5cGVzZXQgLWkgbXRfaXg9MAp0eXBlc2V0IC1p
+IHNmX2l4PTAKdHlwZXNldCAtaSBpeD0xCnR5cGVzZXQgLWkgaXhtYXg9YGNhdCBrZXlfY291
+bnRgCgojIGZpbmQgdGhlIGluZGV4IG9mIHRoZSBNdCBhbmQgU2YgcmVnaXN0ZXJzCndoaWxl
+IFsgJGl4IC1sdCAkaXhtYXggXTsgZG8KICAgIGVjaG8gLW4gJGl4ID4ga2V5X2F0X2luZGV4
+CiAgICBuYW1lPWBjYXQga2V5X2F0X2luZGV4X25hbWUgMj4gL2Rldi9udWxsYAogICAgaWYg
+WyAiJG5hbWUiID0gIkYwTXQiIF07IHRoZW4KCWVjaG8gLW4gIiBNdCIKCW10X2l4PSRpeAog
+ICAgZmkKICAgIGlmIFsgIiRuYW1lIiA9ICJGMFNmIiBdOyB0aGVuCgllY2hvIC1uICIgU2Yi
+CglzZl9peD0kaXgKICAgIGZpCiAgICBpeD0kaXgrMQpkb25lCgppZiBbICRtdF9peCA9IDAg
+LWEgJHNmX2l4ICE9IDAgXTsgdGhlbgogICAgZWNobyAtbiAiIHR5cGUgQSIKZmkKCmlmIFsg
+JG10X2l4ICE9IDAgLWEgJHNmX2l4ICE9IDAgXTsgdGhlbgogICAgZWNobyAtbiAiIHR5cGUg
+QiIKZmkKCmlmIFsgJG10X2l4ICE9IDAgLWEgJHNmX2l4ID0gMCBdOyB0aGVuCiAgICBlY2hv
+IC1uICIgdHlwZSBDIgpmaQplY2hvCg==
+--------------B6F41B33EAEA186500550465--
