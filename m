@@ -1,139 +1,373 @@
-Return-Path: <SRS0=EIaL=EM=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=FooB=EN=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2033C2D0A3
-	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Nov 2020 23:22:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F8BDC388F7
+	for <linux-hwmon@archiver.kernel.org>; Sat,  7 Nov 2020 18:31:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5AE7E206CB
-	for <linux-hwmon@archiver.kernel.org>; Fri,  6 Nov 2020 23:22:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 91E12208C7
+	for <linux-hwmon@archiver.kernel.org>; Sat,  7 Nov 2020 18:31:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HTj0zMH1"
+	dkim=pass (2048-bit key) header.d=bitmath.org header.i=@bitmath.org header.b="bx+f1G+H"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728097AbgKFXWF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 6 Nov 2020 18:22:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43072 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727264AbgKFXWE (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 6 Nov 2020 18:22:04 -0500
-Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2957C0613CF;
-        Fri,  6 Nov 2020 15:22:02 -0800 (PST)
-Received: by mail-qk1-x743.google.com with SMTP id 12so2702170qkl.8;
-        Fri, 06 Nov 2020 15:22:02 -0800 (PST)
+        id S1726614AbgKGSbK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 7 Nov 2020 13:31:10 -0500
+Received: from mailrelay4-2.pub.mailoutpod1-cph3.one.com ([46.30.212.3]:31751
+        "EHLO mailrelay4-2.pub.mailoutpod1-cph3.one.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726021AbgKGSbJ (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 7 Nov 2020 13:31:09 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9kgi0XFLYWD6SBPla2WObtfMjgECeVYCZRoQd1futD0=;
-        b=HTj0zMH1IJDsOOrRiedp+5luIkjzzA3oO6+2Di7/2QwarPAUQbSQMnjFB/+6BEqA8G
-         3WxkdJ2hKJrQtq0BGVLiA/KY9+5tkTrMt1yNey7ELX3Ke/+Tdf89PqkbECUBN6ORBz9+
-         D42lzaAiHwN84PphlafQmYxF7COHaemXRzUPJgN58GiWItn2jlORW0nUmY3lxZEjXCaJ
-         9XBkp58yN8pQQPeETTidCfGrWDgahpu/RomYIxpHfP1Q32Di/r9LYp/JEXUpcg4uutir
-         Up8Lz0kWdixZkW9mmolP9z/k0Mj+vF20ygCvlUI2395UXghmlJ5r+HA3iqHDbdoVWBNP
-         fxig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9kgi0XFLYWD6SBPla2WObtfMjgECeVYCZRoQd1futD0=;
-        b=Mc/6tTA1Gm0CGzNwl2+ALzSuh1wcV5x3mLfWAed0FfSUpH+8c2SFGII4BLW9PQO9L4
-         B4lcrppcv/JuWMmU6RIUHcb1GA9TbSpPvYqT0LG6GwKNvl9Dq/cLrtYlmvRtenBFz52u
-         Z7BgZeIXEJ63ZyrgZmW1kYk8VGT2drel/D4xU0GfKMI65HsJhmjzeO9sxndHskwhQYmt
-         33UtOuC97xlkw4M1wDkFZ1hDtoFCVH6HVvfN4ThRltGXABQ/ldo0cA7TAXkaHAD/JBLo
-         nVuwRY38fIfFAZL3kl94WPV9QJTjIgCPCY8dead2g3jXsqoFfTF+UKR7FUo0gX0tg075
-         QOAg==
-X-Gm-Message-State: AOAM532pgvpRM9Gzi+2z+3b/lKJrQvc8DCzcSPrt48nLtNCTdchD2nc7
-        PfW0V6I1adksxvGiAm9ek6A=
-X-Google-Smtp-Source: ABdhPJwbx8GpfjJuXp8KFROGysEGuq3/hzTzMj+TuJrIFAVmgzGFdP165EopHlyVzHZxQtGDIBgy/w==
-X-Received: by 2002:a37:d0c:: with SMTP id 12mr3931626qkn.418.1604704921837;
-        Fri, 06 Nov 2020 15:22:01 -0800 (PST)
-Received: from ubuntu-m3-large-x86 ([2604:1380:45f1:1d00::1])
-        by smtp.gmail.com with ESMTPSA id m2sm1577647qtu.62.2020.11.06.15.22.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Nov 2020 15:22:00 -0800 (PST)
-Date:   Fri, 6 Nov 2020 16:21:59 -0700
-From:   Nathan Chancellor <natechancellor@gmail.com>
-To:     Matt Turner <mattst88@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Henrik Rydberg <rydberg@bitmath.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Richard Fontana <rfontana@redhat.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Subject: Re: [PATCH] hwmon: applesmc: avoid overlong udelay()
-Message-ID: <20201106232159.GA3586073@ubuntu-m3-large-x86>
-References: <20201106231710.GA29287@macbook>
+        d=bitmath.org; s=20191106;
+        h=content-transfer-encoding:content-type:in-reply-to:mime-version:date:
+         message-id:references:cc:to:from:subject:from;
+        bh=p3PbTb+Cq5DBv6T/N0pHjzdGEMwCxu84V9BqU/mJRgQ=;
+        b=bx+f1G+HZ4Ae74L/MITHrYiF143QVKEe/GlBzWYTtmOcG2DkLld3/LADDtnZIO65qTu5iYCNRTPPX
+         MbRnwFMfKBArH8ZOVaKEfafD24HPYAHhx7bgu/HgMVR1jnMxJhWeUuy5UcQzp//hTYChB0W9uN/8DV
+         bqaa7WlGQkVgJwzbgnWlGlQC65UVz4CYw4bnuftsrmco1/EpMt0LuziOTYhJjFJ+VJXG7oYH+SS13w
+         o0znhy0UxvMTQIhW4fw19I73uX+G6cklz9Ff04wrPk51tkmMBtnw0ARHvqNS3VHjGvrA0jNQyEWNmq
+         0pU50TjzdRNNk0dbVfElHUaX/RnPoMA==
+X-HalOne-Cookie: f80572ca68637df08d6fef21497c3d34cbfcdfb5
+X-HalOne-ID: 63bd4e96-2127-11eb-bb7e-d0431ea8bb10
+Received: from [192.168.19.13] (h-155-4-128-97.na.cust.bahnhof.se [155.4.128.97])
+        by mailrelay4.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id 63bd4e96-2127-11eb-bb7e-d0431ea8bb10;
+        Sat, 07 Nov 2020 18:31:02 +0000 (UTC)
+Subject: Re: [PATCH] applesmc: Re-work SMC comms v2
+From:   Henrik Rydberg <rydberg@bitmath.org>
+To:     Brad Campbell <brad@fnarfbargle.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-hwmon@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        hns@goldelico.com, Guenter Roeck <linux@roeck-us.net>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Jean Delvare <jdelvare@suse.com>
+References: <20200930105442.3f642f6c@aktux>
+ <CAK8P3a2CbhJT+B-F+cnX+uiJep9oiLM28n045-ATaVaU41u2hw@mail.gmail.com>
+ <20201002002251.28462e64@aktux>
+ <7543ef85-727d-96c3-947e-5b18e9e6c44d@roeck-us.net>
+ <20201006090226.4275c824@kemnade.info>
+ <db042e9b-be41-11b1-7059-3881b1da5c8b@fnarfbargle.com>
+ <68467f1b-cea1-47ea-a4d4-8319214b072a@fnarfbargle.com>
+ <20201104142057.62493c12@aktux>
+ <2436afef-99c6-c352-936d-567bf553388c@fnarfbargle.com>
+ <7a085650-2399-08c0-3c4d-6cd1fa28a365@roeck-us.net>
+ <fc36d066-c432-e7d2-312f-a0a592446fe2@fnarfbargle.com>
+ <10027199-5d31-93e7-9bd8-7baaebff8b71@roeck-us.net>
+ <70331f82-35a1-50bd-685d-0b06061dd213@fnarfbargle.com>
+ <3c72ccc3-4de1-b5d0-423d-7b8c80991254@fnarfbargle.com>
+ <6d071547-10ee-ca92-ec8b-4b5069d04501@bitmath.org>
+ <8e117844-d62a-bcb1-398d-c59cc0d4b878@fnarfbargle.com>
+ <e5a856b1-fb1a-db5d-0fde-c86d0bcca1df@bitmath.org>
+ <aa60f673-427a-1a47-7593-54d1404c3c92@bitmath.org>
+ <9109d059-d9cb-7464-edba-3f42aa78ce92@bitmath.org>
+Message-ID: <5310c0ab-0f80-1f9e-8807-066223edae13@bitmath.org>
+Date:   Sat, 7 Nov 2020 19:31:15 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201106231710.GA29287@macbook>
+In-Reply-To: <9109d059-d9cb-7464-edba-3f42aa78ce92@bitmath.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Nov 06, 2020 at 06:17:10PM -0500, Matt Turner wrote:
-> On my late 2013 Macbook Pro, I have a couple of scripts that set the
-> fans to auto or full-speed:
+On 2020-11-06 21:02, Henrik Rydberg wrote:
+>> So as it stands, it does not work at all. I will continue to check 
+>> another machine, and see if I can get something working.
 > 
-> fan-hi:
-> #!/bin/sh
-> sudo sh -c 'echo 1 > /sys/devices/platform/applesmc.768/fan1_manual
->             echo 1 > /sys/devices/platform/applesmc.768/fan2_manual
->             cat /sys/devices/platform/applesmc.768/fan1_max > /sys/devices/platform/applesmc.768/fan1_output
->             cat /sys/devices/platform/applesmc.768/fan2_max > /sys/devices/platform/applesmc.768/fan2_output'
+> On the MacBookAir3,1 the situation is somewhat better.
 > 
-> fan-auto:
-> #!/bin/sh
-> sudo sh -c 'echo 0 > /sys/devices/platform/applesmc.768/fan1_manual
->             echo 0 > /sys/devices/platform/applesmc.768/fan2_manual'
+> The first three tree positions result in zero failures and 10 reads per 
+> second. The fourth yields zero failues and 11 reads per second, within 
+> the margin of similarity.
 > 
-> Running ./fan-hi and then ./fan-auto on Linux v5.6 works and doesn't
-> cause any problems, but after updating to v5.9 I see this in dmesg:
+> So, the patch appears to have no apparent effect on the 3,1 series.
 > 
-> [Nov 6 17:24] applesmc: send_byte(0x01, 0x0300) fail: 0x40
-> [  +0.000005] applesmc: FS! : write data fail
-> [  +0.191777] applesmc: send_byte(0x30, 0x0300) fail: 0x40
-> [  +0.000009] applesmc: F0Tg: write data fail
-> [  +7.097416] applesmc: send_byte(0x00, 0x0300) fail: 0x40
-> [  +0.000006] applesmc: FS! : write data fail
-> 
-> and the fan controls don't work.
-> 
-> Googling turned up this [1] which looks like the same problem. They said
-> it began occurring between v5.7 and v5.8, so I looked and found this
-> commit.
-> 
-> After reverting commit fff2d0f701e6753591609739f8ab9be1c8e80ebb from
-> v5.9, I no longer see the errors in dmesg and the fan controls work
-> again.
-> 
-> Any ideas what the problem is?
-> 
-> Thanks,
-> Matt
-> 
-> [1] https://stackoverflow.com/questions/63505469/cant-write-data-to-applesmc-error-after-upgrade-to-arch-linux-kernel-5-8-1
-> 
+> Now onto fixing the 1,1 behavior.
 
-There is another thread on this regression:
+Hi again,
 
-https://lore.kernel.org/lkml/20200930105442.3f642f6c@aktux/
+This patch, v3, works for me, on both MBA1,1 and MBA3,1. Both machines 
+yields 25 reads per second.
 
-Looks like Brad Campbell has a patch that has some success in fixing the
-regression (although others are saying it breaks their setup...):
+It turns out that the origin code has a case that was not carried over 
+to the v2 patch; the command byte needs to be resent upon the wrong 
+status code. I added that back. Also, there seems to be a basic response 
+time that needs to be respected, so I added back a small fixed delay 
+after each write operation. I also took the liberty to reduce the number 
+of status reads, and clean up error handling. Checkpatch is happy with 
+this version.
 
-https://lore.kernel.org/lkml/3c72ccc3-4de1-b5d0-423d-7b8c80991254@fnarfbargle.com/
+The code obviously needs to be retested on the other machines, but the 
+logic still follows what you wrote, Brad, and I have also checked it 
+against the VirtualSMC code. It appears to make sense, so hopefully 
+there wont be additional issues.
 
-Might be worth giving it a shot and jumping in so you get CC'd on
-further revisions.
+Thanks,
+Henrik
 
-Cheers,
-Nathan
+ From be4a32620b2b611472af3e35f9b50004e678efd5 Mon Sep 17 00:00:00 2001
+From: Brad Campbell <brad@fnarfbargle.com>
+Date: Thu, 5 Nov 2020 18:26:24 +1100
+Subject: [PATCH] applesmc: Re-work SMC comms v3
+
+Commit fff2d0f701e6 ("hwmon: (applesmc) avoid overlong udelay()")
+introduced an issue whereby communication with the SMC became
+unreliable with write errors like:
+
+[  120.378614] applesmc: send_byte(0x00, 0x0300) fail: 0x40
+[  120.378621] applesmc: LKSB: write data fail
+[  120.512782] applesmc: send_byte(0x00, 0x0300) fail: 0x40
+[  120.512787] applesmc: LKSB: write data fail
+
+The original code appeared to be timing sensitive and was not reliable with
+the timing changes in the aforementioned commit.
+
+This patch re-factors the SMC communication to remove the timing
+dependencies and restore function with the changes previously committed.
+
+v2 : Address logic and coding style
+v3 : Modifications for MacBookAir1,1
+
+Reported-by: Andreas Kemnade <andreas@kemnade.info>
+Fixes: fff2d0f701e6 ("hwmon: (applesmc) avoid overlong udelay()")
+Signed-off-by: Brad Campbell <brad@fnarfbargle.com>
+Signed-off-by: Henrik Rydberg <rydberg@bitmath.org>
+---
+  drivers/hwmon/applesmc.c | 132 +++++++++++++++++++++------------------
+  1 file changed, 70 insertions(+), 62 deletions(-)
+
+diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
+index a18887990f4a..08289827da1e 100644
+--- a/drivers/hwmon/applesmc.c
++++ b/drivers/hwmon/applesmc.c
+@@ -42,6 +42,11 @@
+
+  #define APPLESMC_MAX_DATA_LENGTH 32
+
++/* Apple SMC status bits */
++#define SMC_STATUS_AWAITING_DATA  BIT(0) /* SMC has data waiting */
++#define SMC_STATUS_IB_CLOSED      BIT(1) /* Will ignore any input */
++#define SMC_STATUS_BUSY           BIT(2) /* Command in progress */
++
+  /* wait up to 128 ms for a status change. */
+  #define APPLESMC_MIN_WAIT	0x0010
+  #define APPLESMC_RETRY_WAIT	0x0100
+@@ -151,65 +156,76 @@ static unsigned int key_at_index;
+  static struct workqueue_struct *applesmc_led_wq;
+
+  /*
+- * wait_read - Wait for a byte to appear on SMC port. Callers must
+- * hold applesmc_lock.
++ * Wait for specific status bits with a mask on the SMC
++ * Used before and after writes, and before reads
+   */
+-static int wait_read(void)
++
++static int wait_status(u8 val, u8 mask)
+  {
+  	unsigned long end = jiffies + (APPLESMC_MAX_WAIT * HZ) / USEC_PER_SEC;
+  	u8 status;
+  	int us;
+
+  	for (us = APPLESMC_MIN_WAIT; us < APPLESMC_MAX_WAIT; us <<= 1) {
+-		usleep_range(us, us * 16);
+  		status = inb(APPLESMC_CMD_PORT);
+-		/* read: wait for smc to settle */
+-		if (status & 0x01)
++		if ((status & mask) == val)
+  			return 0;
+  		/* timeout: give up */
+  		if (time_after(jiffies, end))
+  			break;
++		usleep_range(us, us * 16);
+  	}
+
+-	pr_warn("wait_read() fail: 0x%02x\n", status);
++	if (debug)
++		pr_warn("%s fail: 0x%02x 0x%02x 0x%02x\n", __func__, val, mask, status);
+  	return -EIO;
+  }
+
+  /*
+- * send_byte - Write to SMC port, retrying when necessary. Callers
++ * send_byte_data - Write to SMC data port. Callers
+   * must hold applesmc_lock.
++ * Parameter skip must be true on the last write of any
++ * command or it'll time out.
+   */
+-static int send_byte(u8 cmd, u16 port)
++
++static int send_byte_data(u8 cmd, u16 port, bool skip)
++{
++	outb(cmd, port);
++	udelay(APPLESMC_MIN_WAIT);
++	return wait_status(SMC_STATUS_BUSY, SMC_STATUS_BUSY | 
+SMC_STATUS_IB_CLOSED);
++}
++
++/*
++ * send_command - Write a command to the SMC. Callers must hold 
+applesmc_lock.
++ * If SMC is in undefined state, any new command write resets the state 
+machine.
++ */
++
++static int send_command(u8 cmd)
+  {
++	int ret;
++	int i;
+  	u8 status;
+-	int us;
+-	unsigned long end = jiffies + (APPLESMC_MAX_WAIT * HZ) / USEC_PER_SEC;
+
+-	outb(cmd, port);
+-	for (us = APPLESMC_MIN_WAIT; us < APPLESMC_MAX_WAIT; us <<= 1) {
+-		usleep_range(us, us * 16);
++	ret = wait_status(0, SMC_STATUS_IB_CLOSED);
++	if (ret)
++		return ret;
++
++	for (i = 0; i < 16; i++) {
++		outb(cmd, APPLESMC_CMD_PORT);
++		udelay(APPLESMC_MIN_WAIT);
++		ret = wait_status(0, SMC_STATUS_IB_CLOSED);
++		if (ret)
++			return ret;
+  		status = inb(APPLESMC_CMD_PORT);
+-		/* write: wait for smc to settle */
+-		if (status & 0x02)
+-			continue;
+-		/* ready: cmd accepted, return */
+-		if (status & 0x04)
++		if (status & SMC_STATUS_BUSY)
+  			return 0;
+-		/* timeout: give up */
+-		if (time_after(jiffies, end))
+-			break;
+-		/* busy: long wait and resend */
+-		udelay(APPLESMC_RETRY_WAIT);
+-		outb(cmd, port);
++		usleep_range(APPLESMC_RETRY_WAIT, APPLESMC_RETRY_WAIT * 16);
+  	}
+
+-	pr_warn("send_byte(0x%02x, 0x%04x) fail: 0x%02x\n", cmd, port, status);
+-	return -EIO;
+-}
++	if (debug)
++		pr_warn("%s fail: 0x%02x\n", __func__, status);
+
+-static int send_command(u8 cmd)
+-{
+-	return send_byte(cmd, APPLESMC_CMD_PORT);
++	return -EIO;
+  }
+
+  static int send_argument(const char *key)
+@@ -217,32 +233,28 @@ static int send_argument(const char *key)
+  	int i;
+
+  	for (i = 0; i < 4; i++)
+-		if (send_byte(key[i], APPLESMC_DATA_PORT))
++		if (send_byte_data(key[i], APPLESMC_DATA_PORT, false))
+  			return -EIO;
+  	return 0;
+  }
+
++static int send_length(u8 len, bool skip)
++{
++	return send_byte_data(len, APPLESMC_DATA_PORT, skip);
++}
++
+  static int read_smc(u8 cmd, const char *key, u8 *buffer, u8 len)
+  {
+  	u8 status, data = 0;
+  	int i;
+
+-	if (send_command(cmd) || send_argument(key)) {
+-		pr_warn("%.4s: read arg fail\n", key);
+-		return -EIO;
+-	}
+-
+-	/* This has no effect on newer (2012) SMCs */
+-	if (send_byte(len, APPLESMC_DATA_PORT)) {
+-		pr_warn("%.4s: read len fail\n", key);
+-		return -EIO;
+-	}
++	if (send_command(cmd) || send_argument(key) || send_length(len, 1))
++		goto err;
+
+  	for (i = 0; i < len; i++) {
+-		if (wait_read()) {
+-			pr_warn("%.4s: read data[%d] fail\n", key, i);
+-			return -EIO;
+-		}
++		if (wait_status(SMC_STATUS_AWAITING_DATA,
++						SMC_STATUS_AWAITING_DATA | SMC_STATUS_IB_CLOSED))
++			goto err;
+  		buffer[i] = inb(APPLESMC_DATA_PORT);
+  	}
+
+@@ -250,7 +262,7 @@ static int read_smc(u8 cmd, const char *key, u8 
+*buffer, u8 len)
+  	for (i = 0; i < 16; i++) {
+  		udelay(APPLESMC_MIN_WAIT);
+  		status = inb(APPLESMC_CMD_PORT);
+-		if (!(status & 0x01))
++		if (!(status & SMC_STATUS_AWAITING_DATA))
+  			break;
+  		data = inb(APPLESMC_DATA_PORT);
+  	}
+@@ -258,30 +270,26 @@ static int read_smc(u8 cmd, const char *key, u8 
+*buffer, u8 len)
+  		pr_warn("flushed %d bytes, last value is: %d\n", i, data);
+
+  	return 0;
++err:
++	pr_warn("read cmd fail: %x %.4s %d\n", cmd, key, len);
++	return -EIO;
+  }
+
+  static int write_smc(u8 cmd, const char *key, const u8 *buffer, u8 len)
+  {
+  	int i;
+
+-	if (send_command(cmd) || send_argument(key)) {
+-		pr_warn("%s: write arg fail\n", key);
+-		return -EIO;
+-	}
++	if (send_command(cmd) || send_argument(key) || send_length(len, 0))
++		goto err;
+
+-	if (send_byte(len, APPLESMC_DATA_PORT)) {
+-		pr_warn("%.4s: write len fail\n", key);
+-		return -EIO;
+-	}
+-
+-	for (i = 0; i < len; i++) {
+-		if (send_byte(buffer[i], APPLESMC_DATA_PORT)) {
+-			pr_warn("%s: write data fail\n", key);
+-			return -EIO;
+-		}
+-	}
++	for (i = 0; i < len; i++)
++		if (send_byte_data(buffer[i], APPLESMC_DATA_PORT, i == len - 1))
++			goto err;
+
+  	return 0;
++err:
++	pr_warn("write cmd fail: %x %.4s %d\n", cmd, key, len);
++	return -EIO;
+  }
+
+  static int read_register_count(unsigned int *count)
+-- 
+2.29.2
+
