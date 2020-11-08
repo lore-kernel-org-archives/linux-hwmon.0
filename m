@@ -7,109 +7,115 @@ X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE107C388F9
-	for <linux-hwmon@archiver.kernel.org>; Sun,  8 Nov 2020 03:36:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4403AC388F7
+	for <linux-hwmon@archiver.kernel.org>; Sun,  8 Nov 2020 03:47:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 91E1020760
-	for <linux-hwmon@archiver.kernel.org>; Sun,  8 Nov 2020 03:36:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EB58E207C3
+	for <linux-hwmon@archiver.kernel.org>; Sun,  8 Nov 2020 03:47:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TjmYwpm+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sc7Y6XUw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728388AbgKHDgx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 7 Nov 2020 22:36:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50474 "EHLO
+        id S1726099AbgKHDr0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 7 Nov 2020 22:47:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728367AbgKHDgw (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 7 Nov 2020 22:36:52 -0500
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B67EBC0613CF;
-        Sat,  7 Nov 2020 19:36:52 -0800 (PST)
-Received: by mail-ot1-x343.google.com with SMTP id g19so5302755otp.13;
-        Sat, 07 Nov 2020 19:36:52 -0800 (PST)
+        with ESMTP id S1726062AbgKHDr0 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 7 Nov 2020 22:47:26 -0500
+Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 060B7C0613CF
+        for <linux-hwmon@vger.kernel.org>; Sat,  7 Nov 2020 19:47:26 -0800 (PST)
+Received: by mail-oi1-x243.google.com with SMTP id w188so683400oib.1
+        for <linux-hwmon@vger.kernel.org>; Sat, 07 Nov 2020 19:47:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=nLXzgOfO7NwishsE41YtVTb8qe2kc+Jpqp7NgInv2kE=;
-        b=TjmYwpm+tV3BgPgJ9S0soYAEgKebFCQsVmWVYQGaGkhG23i94GOs+WUfb19bDABk7Y
-         FX1eZG5U2CCo4mxYWJt3zMNunbcCLmqAumF2FBGbA3zfdhyCegNzAl2mrpVZw8GNA5Rc
-         db2djVI9zBukceMsmpFEbyVXyr07zHpTvFOjuzWYPlEeCNWqA2g7BcjStDFGkAasKZMP
-         8WbfgwHK8wsiRBswQM0u4QPlpqhmS8qnOZIhoHNXf0rCt1C/tVC+lwquQAiOQiaur4YW
-         tdlYeggOZY47zTawQ4c+8VH4ytaOTUcLNSFMfBNHCnGrn8Va8pJqkjwRZD+mp2kNv/lB
-         eDiA==
+        bh=LEBUtMA1rbGCEQCDbR+cC9uGHtq8GeULnrll7o8Ex+s=;
+        b=Sc7Y6XUwEoYN3NW4ymgtIfMOo9+3bRvrqZyHOn3yRA6/CdVXVZBXIAeD8zYph6aSr/
+         87m7ETmlnYNWAh5W5JCy0K2UAFh8ODTgY7LT2+GzH2s7e5Jxe4ndhown352eXO1uaUO5
+         LcOPGTwznLw3PGX/8QuIqOmZ2DbRHyVSIrvSKfnBwU/hj9Jedr6px48Rn/uSCTauDPcP
+         m/1OK3JzbBafKTbhFqa8C2k8n/WlWTohmZ2xov6GVpXTBN50DaeJGdpNDrbaY8/sET2Y
+         xzyPAdJhAwwsoi2KFTc3vdpwzajOzvdzfh4r1NtLjjZHOFUEChsrKSTwYkLcqKFWryLA
+         7QyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=nLXzgOfO7NwishsE41YtVTb8qe2kc+Jpqp7NgInv2kE=;
-        b=JB+XIhFkDG2HpX2PhBrP0YYkTBwb6uGjMe3bss+YAAFBV9HrHNYetdNup7TMjepeW0
-         t4NkuThdAk2rUnlnENQ9fIxCmcTfcLdhhfXoo6V+TDOJ2IYdaIEbsNMFnzpxKwcJ1dDK
-         1O1zMC1kjKHMRK0YidrW/ktGBIjg0PWdqtWs3LJtCbHCIxy542TwQAyjYXaddameFfoy
-         06fpgX86NZiQebFWxCd6A1dW1JJJ0N/AsdNlj34D1CjjsnrblBz5GHpkx+4zbhVUU73n
-         SdO+xsSnEAsZm1X8AVXQpXnXTSdMMvtW7RuEiG9MRwfRwESvaGLR0rtZUOc4aItWp3Ls
-         a94w==
-X-Gm-Message-State: AOAM532RBkaEViXTsl9XNF4jU0nIo4MhZnnYfNDiAXf7nY0YLXIjTt/z
-        PBbux5L/rdGdyy5r42r4hS4=
-X-Google-Smtp-Source: ABdhPJxObq/F3pY+So1BQQ0vkYc/Am1xYS3CEMJ/WtVP5QpkkVdm8ko5vqdsRAwsDF6+l4mrwres1g==
-X-Received: by 2002:a9d:62c5:: with SMTP id z5mr5695339otk.351.1604806612060;
-        Sat, 07 Nov 2020 19:36:52 -0800 (PST)
+        bh=LEBUtMA1rbGCEQCDbR+cC9uGHtq8GeULnrll7o8Ex+s=;
+        b=BJnfN3q0GAN4N6GLpU8AC0+2OBS7CEMsVQuhmteZRw5l6AQiBk+nW8UqvRvNCAFfj3
+         LAR/KZGvJOS1fWq+s3X1kJiuQMY2f3fI+X3XQM4NhL+uyk17EA3la/lJdTo88pogdPcy
+         9mi6i0W+gktswWz0LOmIqB4QoIdiyiOzdpPfSNaeScZpW+ua24aANjySYDFkwk2BlF6R
+         Pyx89cTtusEnnVEBdIV6qeNMtcltwMXkltzuActLI1F9fZ80MAjXgxrd8TlunLNs8XUu
+         tt9HFgD80XBGaSNP+um6rSxRmiaaW6PBrh+pNZ3oqlJc1va1y91c+YksoVW80XVhpCqF
+         eyqw==
+X-Gm-Message-State: AOAM533OTXv+rmO2X+1GH2qdIKSoNp/lv1d74csnFuVQ7Mu+TLnR+LRb
+        by5ND1GHnl4vN/x1aZCuFmTkbFNcq4s=
+X-Google-Smtp-Source: ABdhPJz8bNW/5PtlZSkHFaAc6zoZEdFVHiU6ouAZXdP1fvbXYf5vTLOOnMaWLEiRAo/is3MmxcpZNA==
+X-Received: by 2002:aca:f4cf:: with SMTP id s198mr2376617oih.53.1604807245471;
+        Sat, 07 Nov 2020 19:47:25 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 72sm1527982otd.11.2020.11.07.19.36.50
+        by smtp.gmail.com with ESMTPSA id h8sm1566701otm.72.2020.11.07.19.47.24
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 07 Nov 2020 19:36:51 -0800 (PST)
+        Sat, 07 Nov 2020 19:47:24 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 7 Nov 2020 19:36:50 -0800
+Date:   Sat, 7 Nov 2020 19:47:23 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Colin King <colin.king@canonical.com>
-Cc:     Wilken Gottwalt <wilken.gottwalt@posteo.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next] hwmon: corsair-psu: fix unintentional sign
- extension issue
-Message-ID: <20201108033650.GA133578@roeck-us.net>
-References: <20201105115019.41735-1-colin.king@canonical.com>
+To:     Paul Barker <pbarker@konsulko.com>
+Cc:     Kamil Debski <kamil@wypas.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v2] hwmon: pwm-fan: Fix RPM calculation
+Message-ID: <20201108034723.GA133975@roeck-us.net>
+References: <20201105164146.182254-1-pbarker@konsulko.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201105115019.41735-1-colin.king@canonical.com>
+In-Reply-To: <20201105164146.182254-1-pbarker@konsulko.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Nov 05, 2020 at 11:50:19AM +0000, Colin King wrote:
-> From: Colin Ian King <colin.king@canonical.com>
+On Thu, Nov 05, 2020 at 04:41:46PM +0000, Paul Barker wrote:
+> To convert the number of pulses counted into an RPM estimation, we need
+> to divide by the width of our measurement interval instead of
+> multiplying by it.
 > 
-> The shifting of the u8 integer data[3] by 24 bits to the left will
-> be promoted to a 32 bit signed int and then sign-extended to a
-> long. In the event that the top bit of data[3] is set then all
-> then all the upper 32 bits of a 64 bit long end up as also being
-> set because of the sign-extension. Fix this by casting data[3] to
-> a long before the shift.
+> We also don't need to do 64-bit division, with 32-bits we can handle a
+> fan running at over 4 million RPM.
 > 
-> Addresses-Coverity: ("Unintended sign extension")
-> Fixes: ce15cd2cee8b ("hwmon: add Corsair PSU HID controller driver")
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
-
-I wasn't sure if I am going to get another version of this patch.
-Either case, I applied this now.
-
-Guenter
-
+> As the sample_timer() function is called once per second, delta will usually
+> be just over 1000 and should never be zero, avoiding the risk of a divide by
+> zero exception.
+> 
+> Signed-off-by: Paul Barker <pbarker@konsulko.com>
 > ---
->  drivers/hwmon/corsair-psu.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/hwmon/pwm-fan.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
-> index e92d0376e7ac..5d19a888231a 100644
-> --- a/drivers/hwmon/corsair-psu.c
-> +++ b/drivers/hwmon/corsair-psu.c
-> @@ -241,7 +241,7 @@ static int corsairpsu_get_value(struct corsairpsu_data *priv, u8 cmd, u8 rail, l
->  	 * the LINEAR11 conversion are the watts values which are about 1200 for the strongest psu
->  	 * supported (HX1200i)
->  	 */
-> -	tmp = (data[3] << 24) + (data[2] << 16) + (data[1] << 8) + data[0];
-> +	tmp = ((long)data[3] << 24) + (data[2] << 16) + (data[1] << 8) + data[0];
->  	switch (cmd) {
->  	case PSU_CMD_IN_VOLTS:
->  	case PSU_CMD_IN_AMPS:
+> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
+> index bdba2143021a..2f2950629892 100644
+> --- a/drivers/hwmon/pwm-fan.c
+> +++ b/drivers/hwmon/pwm-fan.c
+> @@ -54,14 +54,13 @@ static irqreturn_t pulse_handler(int irq, void *dev_id)
+>  static void sample_timer(struct timer_list *t)
+>  {
+>  	struct pwm_fan_ctx *ctx = from_timer(ctx, t, rpm_timer);
+> +	unsigned int delta = ktime_ms_delta(ktime_get(), ctx->sample_start);
+>  	int pulses;
+> -	u64 tmp;
+>  
+>  	pulses = atomic_read(&ctx->pulses);
+>  	atomic_sub(pulses, &ctx->pulses);
+> -	tmp = (u64)pulses * ktime_ms_delta(ktime_get(), ctx->sample_start) * 60;
+> -	do_div(tmp, ctx->pulses_per_revolution * 1000);
+> -	ctx->rpm = tmp;
+> +	ctx->rpm = (unsigned int)(pulses * 1000 * 60) /
+> +		(ctx->pulses_per_revolution * delta);
+
+delta can, at least in theory, be 0. While that is quite unlikely to happen,
+the code should handle this situation.
+
+>  
+>  	ctx->sample_start = ktime_get();
+>  	mod_timer(&ctx->rpm_timer, jiffies + HZ);
