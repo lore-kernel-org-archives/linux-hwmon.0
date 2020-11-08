@@ -2,264 +2,114 @@ Return-Path: <SRS0=Oktm=EO=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BEF0BC388F9
-	for <linux-hwmon@archiver.kernel.org>; Sun,  8 Nov 2020 01:00:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE107C388F9
+	for <linux-hwmon@archiver.kernel.org>; Sun,  8 Nov 2020 03:36:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 54B1920885
-	for <linux-hwmon@archiver.kernel.org>; Sun,  8 Nov 2020 01:00:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 91E1020760
+	for <linux-hwmon@archiver.kernel.org>; Sun,  8 Nov 2020 03:36:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fnarfbargle.com header.i=@fnarfbargle.com header.b="VVD0PYnO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TjmYwpm+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726043AbgKHBA3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 7 Nov 2020 20:00:29 -0500
-Received: from ns3.fnarfbargle.com ([103.4.19.87]:41478 "EHLO
-        ns3.fnarfbargle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725838AbgKHBA2 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 7 Nov 2020 20:00:28 -0500
-Received: from srv.home ([10.8.0.1] ident=heh18629)
-        by ns3.fnarfbargle.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.84_2)
-        (envelope-from <brad@fnarfbargle.com>)
-        id 1kbZ3p-0001e1-T5; Sun, 08 Nov 2020 09:00:01 +0800
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fnarfbargle.com; s=mail;
-        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject; bh=rnKrYeIxAT41Kb8JnzWq78NR23AV+A5CY1fGvJJT7vk=;
-        b=VVD0PYnOD7uiu95EWfTQphrNsQ0Att6f4K/QcZqx8n1EsL0QL/0sejIdm+k202uW0jj5DGyUez0bpnPGGXsYfI06CZzJDWLP0kVw8ZUFdUsnT1HQeCs+c6watq4LJNX1j8oFgVa9Ld3cGHIxLVyRaJOsc1eKJdVty9SATq6nNbY=;
-Subject: [PATCH v3] applesmc: Re-work SMC comms
-To:     Henrik Rydberg <rydberg@bitmath.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-hwmon@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        hns@goldelico.com, Guenter Roeck <linux@roeck-us.net>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        Jean Delvare <jdelvare@suse.com>
-References: <20200930105442.3f642f6c@aktux> <20201002002251.28462e64@aktux>
- <7543ef85-727d-96c3-947e-5b18e9e6c44d@roeck-us.net>
- <20201006090226.4275c824@kemnade.info>
- <db042e9b-be41-11b1-7059-3881b1da5c8b@fnarfbargle.com>
- <68467f1b-cea1-47ea-a4d4-8319214b072a@fnarfbargle.com>
- <20201104142057.62493c12@aktux>
- <2436afef-99c6-c352-936d-567bf553388c@fnarfbargle.com>
- <7a085650-2399-08c0-3c4d-6cd1fa28a365@roeck-us.net>
- <fc36d066-c432-e7d2-312f-a0a592446fe2@fnarfbargle.com>
- <10027199-5d31-93e7-9bd8-7baaebff8b71@roeck-us.net>
- <70331f82-35a1-50bd-685d-0b06061dd213@fnarfbargle.com>
- <3c72ccc3-4de1-b5d0-423d-7b8c80991254@fnarfbargle.com>
- <6d071547-10ee-ca92-ec8b-4b5069d04501@bitmath.org>
- <8e117844-d62a-bcb1-398d-c59cc0d4b878@fnarfbargle.com>
- <e5a856b1-fb1a-db5d-0fde-c86d0bcca1df@bitmath.org>
- <aa60f673-427a-1a47-7593-54d1404c3c92@bitmath.org>
- <9109d059-d9cb-7464-edba-3f42aa78ce92@bitmath.org>
- <5310c0ab-0f80-1f9e-8807-066223edae13@bitmath.org>
-From:   Brad Campbell <brad@fnarfbargle.com>
-Message-ID: <57057d07-d3a0-8713-8365-7b12ca222bae@fnarfbargle.com>
-Date:   Sun, 8 Nov 2020 12:00:03 +1100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.2.2
+        id S1728388AbgKHDgx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 7 Nov 2020 22:36:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50474 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728367AbgKHDgw (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 7 Nov 2020 22:36:52 -0500
+Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B67EBC0613CF;
+        Sat,  7 Nov 2020 19:36:52 -0800 (PST)
+Received: by mail-ot1-x343.google.com with SMTP id g19so5302755otp.13;
+        Sat, 07 Nov 2020 19:36:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=nLXzgOfO7NwishsE41YtVTb8qe2kc+Jpqp7NgInv2kE=;
+        b=TjmYwpm+tV3BgPgJ9S0soYAEgKebFCQsVmWVYQGaGkhG23i94GOs+WUfb19bDABk7Y
+         FX1eZG5U2CCo4mxYWJt3zMNunbcCLmqAumF2FBGbA3zfdhyCegNzAl2mrpVZw8GNA5Rc
+         db2djVI9zBukceMsmpFEbyVXyr07zHpTvFOjuzWYPlEeCNWqA2g7BcjStDFGkAasKZMP
+         8WbfgwHK8wsiRBswQM0u4QPlpqhmS8qnOZIhoHNXf0rCt1C/tVC+lwquQAiOQiaur4YW
+         tdlYeggOZY47zTawQ4c+8VH4ytaOTUcLNSFMfBNHCnGrn8Va8pJqkjwRZD+mp2kNv/lB
+         eDiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=nLXzgOfO7NwishsE41YtVTb8qe2kc+Jpqp7NgInv2kE=;
+        b=JB+XIhFkDG2HpX2PhBrP0YYkTBwb6uGjMe3bss+YAAFBV9HrHNYetdNup7TMjepeW0
+         t4NkuThdAk2rUnlnENQ9fIxCmcTfcLdhhfXoo6V+TDOJ2IYdaIEbsNMFnzpxKwcJ1dDK
+         1O1zMC1kjKHMRK0YidrW/ktGBIjg0PWdqtWs3LJtCbHCIxy542TwQAyjYXaddameFfoy
+         06fpgX86NZiQebFWxCd6A1dW1JJJ0N/AsdNlj34D1CjjsnrblBz5GHpkx+4zbhVUU73n
+         SdO+xsSnEAsZm1X8AVXQpXnXTSdMMvtW7RuEiG9MRwfRwESvaGLR0rtZUOc4aItWp3Ls
+         a94w==
+X-Gm-Message-State: AOAM532RBkaEViXTsl9XNF4jU0nIo4MhZnnYfNDiAXf7nY0YLXIjTt/z
+        PBbux5L/rdGdyy5r42r4hS4=
+X-Google-Smtp-Source: ABdhPJxObq/F3pY+So1BQQ0vkYc/Am1xYS3CEMJ/WtVP5QpkkVdm8ko5vqdsRAwsDF6+l4mrwres1g==
+X-Received: by 2002:a9d:62c5:: with SMTP id z5mr5695339otk.351.1604806612060;
+        Sat, 07 Nov 2020 19:36:52 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 72sm1527982otd.11.2020.11.07.19.36.50
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 07 Nov 2020 19:36:51 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 7 Nov 2020 19:36:50 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Colin King <colin.king@canonical.com>
+Cc:     Wilken Gottwalt <wilken.gottwalt@posteo.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] hwmon: corsair-psu: fix unintentional sign
+ extension issue
+Message-ID: <20201108033650.GA133578@roeck-us.net>
+References: <20201105115019.41735-1-colin.king@canonical.com>
 MIME-Version: 1.0
-In-Reply-To: <5310c0ab-0f80-1f9e-8807-066223edae13@bitmath.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201105115019.41735-1-colin.king@canonical.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-G'day Henrik,
+On Thu, Nov 05, 2020 at 11:50:19AM +0000, Colin King wrote:
+> From: Colin Ian King <colin.king@canonical.com>
+> 
+> The shifting of the u8 integer data[3] by 24 bits to the left will
+> be promoted to a 32 bit signed int and then sign-extended to a
+> long. In the event that the top bit of data[3] is set then all
+> then all the upper 32 bits of a 64 bit long end up as also being
+> set because of the sign-extension. Fix this by casting data[3] to
+> a long before the shift.
+> 
+> Addresses-Coverity: ("Unintended sign extension")
+> Fixes: ce15cd2cee8b ("hwmon: add Corsair PSU HID controller driver")
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
 
-I noticed you'd also loosened up the requirement for SMC_STATUS_BUSY in read_smc(). I assume
-that causes problems on the early Macbook. This is revised on the one sent earlier.
-If you could test this on your Air1,1 it'd be appreciated.
+I wasn't sure if I am going to get another version of this patch.
+Either case, I applied this now.
 
+Guenter
 
-Commit fff2d0f701e6 ("hwmon: (applesmc) avoid overlong udelay()") introduced
-an issue whereby communication with the SMC became unreliable with write
-errors like :
-
-[  120.378614] applesmc: send_byte(0x00, 0x0300) fail: 0x40
-[  120.378621] applesmc: LKSB: write data fail
-[  120.512782] applesmc: send_byte(0x00, 0x0300) fail: 0x40
-[  120.512787] applesmc: LKSB: write data fail
-
-The original code appeared to be timing sensitive and was not reliable with
-the timing changes in the aforementioned commit.
-
-This patch re-factors the SMC communication to remove the timing 
-dependencies and restore function with the changes previously committed.
-
-Tested on : MacbookAir6,2 MacBookPro11,1 iMac12,2
-
-Fixes: fff2d0f701e6 ("hwmon: (applesmc) avoid overlong udelay()")
-Reported-by: Andreas Kemnade <andreas@kemnade.info>
-Tested-by: Andreas Kemnade <andreas@kemnade.info> # MacBookAir6,2
-Acked-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Brad Campbell <brad@fnarfbargle.com>
-Signed-off-by: Henrik Rydberg <rydberg@bitmath.org>
-
----
-Changelog : 
-v1 : Inital attempt
-v2 : Address logic and coding style
-v3 : Removed some debug hangover. Added tested-by. Modifications for MacBookAir1,1
-
-diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
-index a18887990f4a..3e968abb37aa 100644
---- a/drivers/hwmon/applesmc.c
-+++ b/drivers/hwmon/applesmc.c
-@@ -32,6 +32,7 @@
- #include <linux/hwmon.h>
- #include <linux/workqueue.h>
- #include <linux/err.h>
-+#include <linux/bits.h>
- 
- /* data port used by Apple SMC */
- #define APPLESMC_DATA_PORT	0x300
-@@ -42,6 +43,11 @@
- 
- #define APPLESMC_MAX_DATA_LENGTH 32
- 
-+/* Apple SMC status bits */
-+#define SMC_STATUS_AWAITING_DATA  BIT(0) /* SMC has data waiting */
-+#define SMC_STATUS_IB_CLOSED      BIT(1) /* Will ignore any input */
-+#define SMC_STATUS_BUSY           BIT(2) /* Command in progress */
-+
- /* wait up to 128 ms for a status change. */
- #define APPLESMC_MIN_WAIT	0x0010
- #define APPLESMC_RETRY_WAIT	0x0100
-@@ -151,65 +157,73 @@ static unsigned int key_at_index;
- static struct workqueue_struct *applesmc_led_wq;
- 
- /*
-- * wait_read - Wait for a byte to appear on SMC port. Callers must
-- * hold applesmc_lock.
-+ * Wait for specific status bits with a mask on the SMC
-+ * Used before and after writes, and before reads
-  */
--static int wait_read(void)
-+
-+static int wait_status(u8 val, u8 mask)
- {
- 	unsigned long end = jiffies + (APPLESMC_MAX_WAIT * HZ) / USEC_PER_SEC;
- 	u8 status;
- 	int us;
- 
-+	udelay(APPLESMC_MIN_WAIT);
- 	for (us = APPLESMC_MIN_WAIT; us < APPLESMC_MAX_WAIT; us <<= 1) {
--		usleep_range(us, us * 16);
- 		status = inb(APPLESMC_CMD_PORT);
--		/* read: wait for smc to settle */
--		if (status & 0x01)
-+		if ((status & mask) == val)
- 			return 0;
- 		/* timeout: give up */
- 		if (time_after(jiffies, end))
- 			break;
-+		usleep_range(us, us * 16);
- 	}
--
--	pr_warn("wait_read() fail: 0x%02x\n", status);
- 	return -EIO;
- }
- 
- /*
-- * send_byte - Write to SMC port, retrying when necessary. Callers
-+ * send_byte_data - Write to SMC data port. Callers
-  * must hold applesmc_lock.
-+ * Parameter skip must be true on the last write of any
-+ * command or it'll time out.
-  */
--static int send_byte(u8 cmd, u16 port)
-+
-+static int send_byte_data(u8 cmd, u16 port, bool skip)
- {
--	u8 status;
--	int us;
--	unsigned long end = jiffies + (APPLESMC_MAX_WAIT * HZ) / USEC_PER_SEC;
-+	int ret;
- 
-+	ret = wait_status(SMC_STATUS_BUSY, SMC_STATUS_BUSY | SMC_STATUS_IB_CLOSED);
-+	if (ret)
-+		return ret;
- 	outb(cmd, port);
--	for (us = APPLESMC_MIN_WAIT; us < APPLESMC_MAX_WAIT; us <<= 1) {
--		usleep_range(us, us * 16);
--		status = inb(APPLESMC_CMD_PORT);
--		/* write: wait for smc to settle */
--		if (status & 0x02)
--			continue;
--		/* ready: cmd accepted, return */
--		if (status & 0x04)
--			return 0;
--		/* timeout: give up */
--		if (time_after(jiffies, end))
--			break;
--		/* busy: long wait and resend */
--		udelay(APPLESMC_RETRY_WAIT);
--		outb(cmd, port);
--	}
-+	return wait_status(skip ? 0 : SMC_STATUS_BUSY, SMC_STATUS_BUSY);
-+}
- 
--	pr_warn("send_byte(0x%02x, 0x%04x) fail: 0x%02x\n", cmd, port, status);
--	return -EIO;
-+static int send_byte(u8 cmd, u16 port)
-+{
-+	return send_byte_data(cmd, port, false);
- }
- 
-+/*
-+ * send_command - Write a command to the SMC. Callers must hold applesmc_lock.
-+ * If SMC is in undefined state, any new command write resets the state machine.
-+ */
-+
- static int send_command(u8 cmd)
- {
--	return send_byte(cmd, APPLESMC_CMD_PORT);
-+	int ret;
-+	int i;
-+
-+	for (i = 0; i < 16; i++) {
-+		ret = wait_status(0, SMC_STATUS_IB_CLOSED);
-+		if (ret)
-+			return ret;
-+
-+		outb(cmd, APPLESMC_CMD_PORT);
-+		ret = wait_status(SMC_STATUS_BUSY, SMC_STATUS_BUSY);
-+		if (!ret)
-+			return ret;
-+	}
-+	return -EIO;
- }
- 
- static int send_argument(const char *key)
-@@ -239,7 +253,8 @@ static int read_smc(u8 cmd, const char *key, u8 *buffer, u8 len)
- 	}
- 
- 	for (i = 0; i < len; i++) {
--		if (wait_read()) {
-+		if (wait_status(SMC_STATUS_AWAITING_DATA,
-+				SMC_STATUS_AWAITING_DATA | SMC_STATUS_IB_CLOSED)) {
- 			pr_warn("%.4s: read data[%d] fail\n", key, i);
- 			return -EIO;
- 		}
-@@ -250,7 +265,7 @@ static int read_smc(u8 cmd, const char *key, u8 *buffer, u8 len)
- 	for (i = 0; i < 16; i++) {
- 		udelay(APPLESMC_MIN_WAIT);
- 		status = inb(APPLESMC_CMD_PORT);
--		if (!(status & 0x01))
-+		if (!(status & SMC_STATUS_AWAITING_DATA))
- 			break;
- 		data = inb(APPLESMC_DATA_PORT);
- 	}
-@@ -275,7 +290,7 @@ static int write_smc(u8 cmd, const char *key, const u8 *buffer, u8 len)
- 	}
- 
- 	for (i = 0; i < len; i++) {
--		if (send_byte(buffer[i], APPLESMC_DATA_PORT)) {
-+		if (send_byte_data(buffer[i], APPLESMC_DATA_PORT, i == len - 1)) {
- 			pr_warn("%s: write data fail\n", key);
- 			return -EIO;
- 		}
+> ---
+>  drivers/hwmon/corsair-psu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
+> index e92d0376e7ac..5d19a888231a 100644
+> --- a/drivers/hwmon/corsair-psu.c
+> +++ b/drivers/hwmon/corsair-psu.c
+> @@ -241,7 +241,7 @@ static int corsairpsu_get_value(struct corsairpsu_data *priv, u8 cmd, u8 rail, l
+>  	 * the LINEAR11 conversion are the watts values which are about 1200 for the strongest psu
+>  	 * supported (HX1200i)
+>  	 */
+> -	tmp = (data[3] << 24) + (data[2] << 16) + (data[1] << 8) + data[0];
+> +	tmp = ((long)data[3] << 24) + (data[2] << 16) + (data[1] << 8) + data[0];
+>  	switch (cmd) {
+>  	case PSU_CMD_IN_VOLTS:
+>  	case PSU_CMD_IN_AMPS:
