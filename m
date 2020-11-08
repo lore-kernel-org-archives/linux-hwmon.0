@@ -2,43 +2,43 @@ Return-Path: <SRS0=Oktm=EO=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7451C388F2
-	for <linux-hwmon@archiver.kernel.org>; Sun,  8 Nov 2020 08:22:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F61CC388F2
+	for <linux-hwmon@archiver.kernel.org>; Sun,  8 Nov 2020 08:35:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3133720719
-	for <linux-hwmon@archiver.kernel.org>; Sun,  8 Nov 2020 08:22:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C07F7206F4
+	for <linux-hwmon@archiver.kernel.org>; Sun,  8 Nov 2020 08:35:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=bitmath.org header.i=@bitmath.org header.b="Q+Nu9eZK"
+	dkim=pass (2048-bit key) header.d=bitmath.org header.i=@bitmath.org header.b="LFMWMpUN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728179AbgKHIWH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 8 Nov 2020 03:22:07 -0500
-Received: from mailrelay1-2.pub.mailoutpod1-cph3.one.com ([46.30.212.0]:26657
+        id S1726144AbgKHIfW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 8 Nov 2020 03:35:22 -0500
+Received: from mailrelay1-2.pub.mailoutpod1-cph3.one.com ([46.30.212.0]:56187
         "EHLO mailrelay1-2.pub.mailoutpod1-cph3.one.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726178AbgKHIWH (ORCPT
+        by vger.kernel.org with ESMTP id S1726099AbgKHIfW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 8 Nov 2020 03:22:07 -0500
+        Sun, 8 Nov 2020 03:35:22 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bitmath.org; s=20191106;
         h=content-transfer-encoding:content-type:in-reply-to:mime-version:date:
          message-id:from:references:cc:to:subject:from;
-        bh=vcNxa8iue2751WIIc39z1vwhRHUbXhsp3/e3p7XyzFM=;
-        b=Q+Nu9eZKLBv+w/mIVGV2z68aLti+/evalA6kRi+r/mMLTKiZXGpEJ4oQZuO/arz/QjMahEdgu3Yvj
-         rx17ytYYFtg5Yu9msDoBxeC9SG4WTVsllVFMuETcCZ89LTc+KjL49nsVZaMAI/MoLmYVHLZHuDb//o
-         cWxo3IGuUEpFtzLCGUT3gazOPrQ7gld6e8a9L9ouO6sPLPlWdDxihzVbhRW04qvUEZHeScsdN/+P0f
-         HM/BKqOM17AgDWflqhypR3EGWt/nw/AnshP4HjiG6n8JTAWjNY7TXyz7zwrpzVdAiOwWFUNob+Vhoh
-         pmAT5ccKgW6yqbMIlRCQ9CK8ZU21WqA==
-X-HalOne-Cookie: 0cc1958e164cd661d1012c3cb799f400dc010809
-X-HalOne-ID: 7a4837aa-219b-11eb-9658-d0431ea8a283
+        bh=6qkho/qWzg4BMWgNKrZIpGhwl5Wi0G5G8oSQ4foPpSc=;
+        b=LFMWMpUNldnUPbbAyq31h4DgjYBlve9MmmAFvZWcD3wwVBPVLHkPggJKLMm3wXTvXGcXuzpekK5So
+         7pJkR6Y1oDTAC14RTNG71irgww7sFHg5c7WbZa33fSdbH2hiMHASwf9tjo3/YAEIVtwfTLZznvdpKJ
+         BizyFwlr0LOa3XcJUa0eRZ/YWfY9klt6osgloe8dShIEsMUHXkXAMg8oJNUYlUFcuvtYE55A15syxK
+         HF3kcS1hSmkQ5AOt89CiCynixn1VeMP8kUZjd8m+C3INMhkeNxDvU2hZqseiERo7GGvz5OlNye9tGG
+         0PMHZtr9d5nSuTopmOI9gnyuwbSx23g==
+X-HalOne-Cookie: 84779ecd025a8fde8be3209049157a3622d93a8e
+X-HalOne-ID: 53c62c29-219d-11eb-9658-d0431ea8a283
 Received: from [192.168.19.13] (h-155-4-128-97.na.cust.bahnhof.se [155.4.128.97])
         by mailrelay1.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id 7a4837aa-219b-11eb-9658-d0431ea8a283;
-        Sun, 08 Nov 2020 08:22:02 +0000 (UTC)
-Subject: Re: [PATCH] applesmc: Re-work SMC comms v2
+        id 53c62c29-219d-11eb-9658-d0431ea8a283;
+        Sun, 08 Nov 2020 08:35:16 +0000 (UTC)
+Subject: Re: [PATCH v3] applesmc: Re-work SMC comms
 To:     Brad Campbell <brad@fnarfbargle.com>
 Cc:     Arnd Bergmann <arnd@arndb.de>, linux-hwmon@vger.kernel.org,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
@@ -63,14 +63,14 @@ References: <20200930105442.3f642f6c@aktux> <20201002002251.28462e64@aktux>
  <aa60f673-427a-1a47-7593-54d1404c3c92@bitmath.org>
  <9109d059-d9cb-7464-edba-3f42aa78ce92@bitmath.org>
  <5310c0ab-0f80-1f9e-8807-066223edae13@bitmath.org>
- <26d3f4f5-2e9a-cd20-1531-74cf44ef738c@fnarfbargle.com>
+ <57057d07-d3a0-8713-8365-7b12ca222bae@fnarfbargle.com>
 From:   Henrik Rydberg <rydberg@bitmath.org>
-Message-ID: <bddf0050-4189-4ca4-8077-71683bcc4b10@bitmath.org>
-Date:   Sun, 8 Nov 2020 09:22:14 +0100
+Message-ID: <41909045-9486-78d9-76c2-73b99a901b83@bitmath.org>
+Date:   Sun, 8 Nov 2020 09:35:28 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <26d3f4f5-2e9a-cd20-1531-74cf44ef738c@fnarfbargle.com>
+In-Reply-To: <57057d07-d3a0-8713-8365-7b12ca222bae@fnarfbargle.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -80,41 +80,213 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 
 Hi Brad,
 
+On 2020-11-08 02:00, Brad Campbell wrote:
 > G'day Henrik,
 > 
-> Which kernel was this based on? It won't apply to my 5.9 tree.
+> I noticed you'd also loosened up the requirement for SMC_STATUS_BUSY in read_smc(). I assume
+> that causes problems on the early Macbook. This is revised on the one sent earlier.
+> If you could test this on your Air1,1 it'd be appreciated.
 
-I was being lazy and applied the diff to linus/master on top of my 
-current stable branch. More importantly, I sent the mail out from an 
-email client that may not format the patch properly; I'll fix that.
+No, I managed to screw up the patch; you can see that I carefully added 
+the same treatment for the read argument, being unsure if the BUSY state 
+would remain during the AVAILABLE data phase. I can check that again, 
+but unfortunately the patch in this email shows the same problem.
 
-> I assume the sprinkling of udelay(APPLESMC_MIN_WAIT) means the SMC is
-> slow in getting its status register set up. Could we instead just put
-> a single one of those up-front in wait_status?
-
-That works fine, just a matter of taste.
-
-> Any chance you could try this one? I've added a retry to send_command and
-> added a single global APPLESMC_MIN_WAIT before each status read.
-> 
->  From looking at your modified send_command, it appears the trigger for a
-> retry is sending a command and the SMC doing absolutely nothing. This
-> should do the same thing.
-
-Not quite, unfortunately. The patch that works waits for a drop of 
-IB_CLOSED, then checks the BUSY status. If not seen, it resends 
-immediately, never expecting to see it. The patch in this email creates 
-a dreadfully sluggish probe, and the occasional failure.
-
-> Interestingly enough, by adding the udelay to wait_status on my machine I've
-> gone from 24 reads/s to 50 reads/s.
-
-Yep, I experience the same positive effect.
-
-> I've left out the remainder of the cleanups. Once we get a minimally working
-> patch I was going to look at a few cleanups, and I have some patches pending
-> to allow writing to the SMC from userspace (for setting BCLM and BFCL mainly)
-
-All fine. I will respond to the v3 mail separately.
+I think it may be worthwhile to rethink the behavior of wait_status() 
+here. If one machine shows no change after a certain status bit change, 
+then perhaps the others share that behavior, and we are waiting in vain. 
+Just imagine how many years of cpu that is, combined. ;-)
 
 Henrik
+
+> 
+> Commit fff2d0f701e6 ("hwmon: (applesmc) avoid overlong udelay()") introduced
+> an issue whereby communication with the SMC became unreliable with write
+> errors like :
+> 
+> [  120.378614] applesmc: send_byte(0x00, 0x0300) fail: 0x40
+> [  120.378621] applesmc: LKSB: write data fail
+> [  120.512782] applesmc: send_byte(0x00, 0x0300) fail: 0x40
+> [  120.512787] applesmc: LKSB: write data fail
+> 
+> The original code appeared to be timing sensitive and was not reliable with
+> the timing changes in the aforementioned commit.
+> 
+> This patch re-factors the SMC communication to remove the timing
+> dependencies and restore function with the changes previously committed.
+> 
+> Tested on : MacbookAir6,2 MacBookPro11,1 iMac12,2
+> 
+> Fixes: fff2d0f701e6 ("hwmon: (applesmc) avoid overlong udelay()")
+> Reported-by: Andreas Kemnade <andreas@kemnade.info>
+> Tested-by: Andreas Kemnade <andreas@kemnade.info> # MacBookAir6,2
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Brad Campbell <brad@fnarfbargle.com>
+> Signed-off-by: Henrik Rydberg <rydberg@bitmath.org>
+> 
+> ---
+> Changelog :
+> v1 : Inital attempt
+> v2 : Address logic and coding style
+> v3 : Removed some debug hangover. Added tested-by. Modifications for MacBookAir1,1
+> 
+> diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
+> index a18887990f4a..3e968abb37aa 100644
+> --- a/drivers/hwmon/applesmc.c
+> +++ b/drivers/hwmon/applesmc.c
+> @@ -32,6 +32,7 @@
+>   #include <linux/hwmon.h>
+>   #include <linux/workqueue.h>
+>   #include <linux/err.h>
+> +#include <linux/bits.h>
+>   
+>   /* data port used by Apple SMC */
+>   #define APPLESMC_DATA_PORT	0x300
+> @@ -42,6 +43,11 @@
+>   
+>   #define APPLESMC_MAX_DATA_LENGTH 32
+>   
+> +/* Apple SMC status bits */
+> +#define SMC_STATUS_AWAITING_DATA  BIT(0) /* SMC has data waiting */
+> +#define SMC_STATUS_IB_CLOSED      BIT(1) /* Will ignore any input */
+> +#define SMC_STATUS_BUSY           BIT(2) /* Command in progress */
+> +
+>   /* wait up to 128 ms for a status change. */
+>   #define APPLESMC_MIN_WAIT	0x0010
+>   #define APPLESMC_RETRY_WAIT	0x0100
+> @@ -151,65 +157,73 @@ static unsigned int key_at_index;
+>   static struct workqueue_struct *applesmc_led_wq;
+>   
+>   /*
+> - * wait_read - Wait for a byte to appear on SMC port. Callers must
+> - * hold applesmc_lock.
+> + * Wait for specific status bits with a mask on the SMC
+> + * Used before and after writes, and before reads
+>    */
+> -static int wait_read(void)
+> +
+> +static int wait_status(u8 val, u8 mask)
+>   {
+>   	unsigned long end = jiffies + (APPLESMC_MAX_WAIT * HZ) / USEC_PER_SEC;
+>   	u8 status;
+>   	int us;
+>   
+> +	udelay(APPLESMC_MIN_WAIT);
+>   	for (us = APPLESMC_MIN_WAIT; us < APPLESMC_MAX_WAIT; us <<= 1) {
+> -		usleep_range(us, us * 16);
+>   		status = inb(APPLESMC_CMD_PORT);
+> -		/* read: wait for smc to settle */
+> -		if (status & 0x01)
+> +		if ((status & mask) == val)
+>   			return 0;
+>   		/* timeout: give up */
+>   		if (time_after(jiffies, end))
+>   			break;
+> +		usleep_range(us, us * 16);
+>   	}
+> -
+> -	pr_warn("wait_read() fail: 0x%02x\n", status);
+>   	return -EIO;
+>   }
+>   
+>   /*
+> - * send_byte - Write to SMC port, retrying when necessary. Callers
+> + * send_byte_data - Write to SMC data port. Callers
+>    * must hold applesmc_lock.
+> + * Parameter skip must be true on the last write of any
+> + * command or it'll time out.
+>    */
+> -static int send_byte(u8 cmd, u16 port)
+> +
+> +static int send_byte_data(u8 cmd, u16 port, bool skip)
+>   {
+> -	u8 status;
+> -	int us;
+> -	unsigned long end = jiffies + (APPLESMC_MAX_WAIT * HZ) / USEC_PER_SEC;
+> +	int ret;
+>   
+> +	ret = wait_status(SMC_STATUS_BUSY, SMC_STATUS_BUSY | SMC_STATUS_IB_CLOSED);
+> +	if (ret)
+> +		return ret;
+>   	outb(cmd, port);
+> -	for (us = APPLESMC_MIN_WAIT; us < APPLESMC_MAX_WAIT; us <<= 1) {
+> -		usleep_range(us, us * 16);
+> -		status = inb(APPLESMC_CMD_PORT);
+> -		/* write: wait for smc to settle */
+> -		if (status & 0x02)
+> -			continue;
+> -		/* ready: cmd accepted, return */
+> -		if (status & 0x04)
+> -			return 0;
+> -		/* timeout: give up */
+> -		if (time_after(jiffies, end))
+> -			break;
+> -		/* busy: long wait and resend */
+> -		udelay(APPLESMC_RETRY_WAIT);
+> -		outb(cmd, port);
+> -	}
+> +	return wait_status(skip ? 0 : SMC_STATUS_BUSY, SMC_STATUS_BUSY);
+> +}
+>   
+> -	pr_warn("send_byte(0x%02x, 0x%04x) fail: 0x%02x\n", cmd, port, status);
+> -	return -EIO;
+> +static int send_byte(u8 cmd, u16 port)
+> +{
+> +	return send_byte_data(cmd, port, false);
+>   }
+>   
+> +/*
+> + * send_command - Write a command to the SMC. Callers must hold applesmc_lock.
+> + * If SMC is in undefined state, any new command write resets the state machine.
+> + */
+> +
+>   static int send_command(u8 cmd)
+>   {
+> -	return send_byte(cmd, APPLESMC_CMD_PORT);
+> +	int ret;
+> +	int i;
+> +
+> +	for (i = 0; i < 16; i++) {
+> +		ret = wait_status(0, SMC_STATUS_IB_CLOSED);
+> +		if (ret)
+> +			return ret;
+> +
+> +		outb(cmd, APPLESMC_CMD_PORT);
+> +		ret = wait_status(SMC_STATUS_BUSY, SMC_STATUS_BUSY);
+> +		if (!ret)
+> +			return ret;
+> +	}
+> +	return -EIO;
+>   }
+>   
+>   static int send_argument(const char *key)
+> @@ -239,7 +253,8 @@ static int read_smc(u8 cmd, const char *key, u8 *buffer, u8 len)
+>   	}
+>   
+>   	for (i = 0; i < len; i++) {
+> -		if (wait_read()) {
+> +		if (wait_status(SMC_STATUS_AWAITING_DATA,
+> +				SMC_STATUS_AWAITING_DATA | SMC_STATUS_IB_CLOSED)) {
+>   			pr_warn("%.4s: read data[%d] fail\n", key, i);
+>   			return -EIO;
+>   		}
+> @@ -250,7 +265,7 @@ static int read_smc(u8 cmd, const char *key, u8 *buffer, u8 len)
+>   	for (i = 0; i < 16; i++) {
+>   		udelay(APPLESMC_MIN_WAIT);
+>   		status = inb(APPLESMC_CMD_PORT);
+> -		if (!(status & 0x01))
+> +		if (!(status & SMC_STATUS_AWAITING_DATA))
+>   			break;
+>   		data = inb(APPLESMC_DATA_PORT);
+>   	}
+> @@ -275,7 +290,7 @@ static int write_smc(u8 cmd, const char *key, const u8 *buffer, u8 len)
+>   	}
+>   
+>   	for (i = 0; i < len; i++) {
+> -		if (send_byte(buffer[i], APPLESMC_DATA_PORT)) {
+> +		if (send_byte_data(buffer[i], APPLESMC_DATA_PORT, i == len - 1)) {
+>   			pr_warn("%s: write data fail\n", key);
+>   			return -EIO;
+>   		}
+> 
+
