@@ -2,34 +2,34 @@ Return-Path: <SRS0=Oktm=EO=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71876C388F9
-	for <linux-hwmon@archiver.kernel.org>; Sun,  8 Nov 2020 00:11:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BEF0BC388F9
+	for <linux-hwmon@archiver.kernel.org>; Sun,  8 Nov 2020 01:00:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 09887208FE
-	for <linux-hwmon@archiver.kernel.org>; Sun,  8 Nov 2020 00:11:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 54B1920885
+	for <linux-hwmon@archiver.kernel.org>; Sun,  8 Nov 2020 01:00:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fnarfbargle.com header.i=@fnarfbargle.com header.b="EwNO2Pgq"
+	dkim=pass (1024-bit key) header.d=fnarfbargle.com header.i=@fnarfbargle.com header.b="VVD0PYnO"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726132AbgKHAL5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 7 Nov 2020 19:11:57 -0500
-Received: from ns3.fnarfbargle.com ([103.4.19.87]:44192 "EHLO
+        id S1726043AbgKHBA3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 7 Nov 2020 20:00:29 -0500
+Received: from ns3.fnarfbargle.com ([103.4.19.87]:41478 "EHLO
         ns3.fnarfbargle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726043AbgKHAL5 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 7 Nov 2020 19:11:57 -0500
-Received: from srv.home ([10.8.0.1] ident=heh3199)
+        with ESMTP id S1725838AbgKHBA2 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 7 Nov 2020 20:00:28 -0500
+Received: from srv.home ([10.8.0.1] ident=heh18629)
         by ns3.fnarfbargle.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.84_2)
         (envelope-from <brad@fnarfbargle.com>)
-        id 1kbYGv-0001dS-L3; Sun, 08 Nov 2020 08:09:29 +0800
+        id 1kbZ3p-0001e1-T5; Sun, 08 Nov 2020 09:00:01 +0800
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fnarfbargle.com; s=mail;
-        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject; bh=W11utpUc9JqwXMy6WRNFpPy4tcbCcr4lnQf/725rYWc=;
-        b=EwNO2PgqSX96XKcIHsxk+s7s5u+6HSRnGsUFryeJfCmPt4p5E0keYdboSu777HT6uQN6qjOiSEsIq4W6IhWXhJhHco/lFcJOVZf4YZcQGBJdTrjHgqsZ4/i1DmHSOpADGMObcxa/pYd7K+ZGAWEwlPWVGcXoFbwZUobl8ezGYKA=;
-Subject: Re: [PATCH] applesmc: Re-work SMC comms v2
+        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject; bh=rnKrYeIxAT41Kb8JnzWq78NR23AV+A5CY1fGvJJT7vk=;
+        b=VVD0PYnOD7uiu95EWfTQphrNsQ0Att6f4K/QcZqx8n1EsL0QL/0sejIdm+k202uW0jj5DGyUez0bpnPGGXsYfI06CZzJDWLP0kVw8ZUFdUsnT1HQeCs+c6watq4LJNX1j8oFgVa9Ld3cGHIxLVyRaJOsc1eKJdVty9SATq6nNbY=;
+Subject: [PATCH v3] applesmc: Re-work SMC comms
 To:     Henrik Rydberg <rydberg@bitmath.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>, linux-hwmon@vger.kernel.org,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
@@ -55,8 +55,8 @@ References: <20200930105442.3f642f6c@aktux> <20201002002251.28462e64@aktux>
  <9109d059-d9cb-7464-edba-3f42aa78ce92@bitmath.org>
  <5310c0ab-0f80-1f9e-8807-066223edae13@bitmath.org>
 From:   Brad Campbell <brad@fnarfbargle.com>
-Message-ID: <26d3f4f5-2e9a-cd20-1531-74cf44ef738c@fnarfbargle.com>
-Date:   Sun, 8 Nov 2020 11:09:31 +1100
+Message-ID: <57057d07-d3a0-8713-8365-7b12ca222bae@fnarfbargle.com>
+Date:   Sun, 8 Nov 2020 12:00:03 +1100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.2.2
 MIME-Version: 1.0
@@ -68,55 +68,45 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 8/11/20 5:31 am, Henrik Rydberg wrote:
-> On 2020-11-06 21:02, Henrik Rydberg wrote:
->>> So as it stands, it does not work at all. I will continue to check another machine, and see if I can get something working.
->>
->> On the MacBookAir3,1 the situation is somewhat better.
->>
->> The first three tree positions result in zero failures and 10 reads per second. The fourth yields zero failues and 11 reads per second, within the margin of similarity.
->>
->> So, the patch appears to have no apparent effect on the 3,1 series.
->>
->> Now onto fixing the 1,1 behavior.
-> 
-> Hi again,
-> 
-> This patch, v3, works for me, on both MBA1,1 and MBA3,1. Both machines yields 25 reads per second.
-> 
-> It turns out that the origin code has a case that was not carried over to the v2 patch; the command byte needs to be resent upon the wrong status code. I added that back. Also, there seems to be a basic response time that needs to be respected, so I added back a small fixed delay after each write operation. I also took the liberty to reduce the number of status reads, and clean up error handling. Checkpatch is happy with this version.
-> 
-> The code obviously needs to be retested on the other machines, but the logic still follows what you wrote, Brad, and I have also checked it against the VirtualSMC code. It appears to make sense, so hopefully there wont be additional issues.
-> 
-> Thanks,
-> Henrik
-> 
-
 G'day Henrik,
 
-Which kernel was this based on? It won't apply to my 5.9 tree.
+I noticed you'd also loosened up the requirement for SMC_STATUS_BUSY in read_smc(). I assume
+that causes problems on the early Macbook. This is revised on the one sent earlier.
+If you could test this on your Air1,1 it'd be appreciated.
 
-I assume the sprinkling of udelay(APPLESMC_MIN_WAIT) means the SMC is
-slow in getting its status register set up. Could we instead just put
-a single one of those up-front in wait_status?
 
-Any chance you could try this one? I've added a retry to send_command and 
-added a single global APPLESMC_MIN_WAIT before each status read.
+Commit fff2d0f701e6 ("hwmon: (applesmc) avoid overlong udelay()") introduced
+an issue whereby communication with the SMC became unreliable with write
+errors like :
 
-From looking at your modified send_command, it appears the trigger for a 
-retry is sending a command and the SMC doing absolutely nothing. This
-should do the same thing.
+[  120.378614] applesmc: send_byte(0x00, 0x0300) fail: 0x40
+[  120.378621] applesmc: LKSB: write data fail
+[  120.512782] applesmc: send_byte(0x00, 0x0300) fail: 0x40
+[  120.512787] applesmc: LKSB: write data fail
 
-Interestingly enough, by adding the udelay to wait_status on my machine I've
-gone from 24 reads/s to 50 reads/s.
+The original code appeared to be timing sensitive and was not reliable with
+the timing changes in the aforementioned commit.
 
-I've left out the remainder of the cleanups. Once we get a minimally working
-patch I was going to look at a few cleanups, and I have some patches pending
-to allow writing to the SMC from userspace (for setting BCLM and BFCL mainly)
+This patch re-factors the SMC communication to remove the timing 
+dependencies and restore function with the changes previously committed.
 
+Tested on : MacbookAir6,2 MacBookPro11,1 iMac12,2
+
+Fixes: fff2d0f701e6 ("hwmon: (applesmc) avoid overlong udelay()")
+Reported-by: Andreas Kemnade <andreas@kemnade.info>
+Tested-by: Andreas Kemnade <andreas@kemnade.info> # MacBookAir6,2
+Acked-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Brad Campbell <brad@fnarfbargle.com>
+Signed-off-by: Henrik Rydberg <rydberg@bitmath.org>
+
+---
+Changelog : 
+v1 : Inital attempt
+v2 : Address logic and coding style
+v3 : Removed some debug hangover. Added tested-by. Modifications for MacBookAir1,1
 
 diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
-index a18887990f4a..2190de78b5f5 100644
+index a18887990f4a..3e968abb37aa 100644
 --- a/drivers/hwmon/applesmc.c
 +++ b/drivers/hwmon/applesmc.c
 @@ -32,6 +32,7 @@
@@ -230,12 +220,12 @@ index a18887990f4a..2190de78b5f5 100644
 -	return send_byte(cmd, APPLESMC_CMD_PORT);
 +	int ret;
 +	int i;
-+		
-+	for (i=0; i < 16; i++) {
++
++	for (i = 0; i < 16; i++) {
 +		ret = wait_status(0, SMC_STATUS_IB_CLOSED);
 +		if (ret)
 +			return ret;
-+	
++
 +		outb(cmd, APPLESMC_CMD_PORT);
 +		ret = wait_status(SMC_STATUS_BUSY, SMC_STATUS_BUSY);
 +		if (!ret)
@@ -245,18 +235,17 @@ index a18887990f4a..2190de78b5f5 100644
  }
  
  static int send_argument(const char *key)
-@@ -239,7 +253,9 @@ static int read_smc(u8 cmd, const char *key, u8 *buffer, u8 len)
+@@ -239,7 +253,8 @@ static int read_smc(u8 cmd, const char *key, u8 *buffer, u8 len)
  	}
  
  	for (i = 0; i < len; i++) {
 -		if (wait_read()) {
-+		if (wait_status(SMC_STATUS_AWAITING_DATA | SMC_STATUS_BUSY,
-+				SMC_STATUS_AWAITING_DATA | SMC_STATUS_BUSY |
-+				SMC_STATUS_IB_CLOSED)) {
++		if (wait_status(SMC_STATUS_AWAITING_DATA,
++				SMC_STATUS_AWAITING_DATA | SMC_STATUS_IB_CLOSED)) {
  			pr_warn("%.4s: read data[%d] fail\n", key, i);
  			return -EIO;
  		}
-@@ -250,7 +266,7 @@ static int read_smc(u8 cmd, const char *key, u8 *buffer, u8 len)
+@@ -250,7 +265,7 @@ static int read_smc(u8 cmd, const char *key, u8 *buffer, u8 len)
  	for (i = 0; i < 16; i++) {
  		udelay(APPLESMC_MIN_WAIT);
  		status = inb(APPLESMC_CMD_PORT);
@@ -265,7 +254,7 @@ index a18887990f4a..2190de78b5f5 100644
  			break;
  		data = inb(APPLESMC_DATA_PORT);
  	}
-@@ -275,7 +291,7 @@ static int write_smc(u8 cmd, const char *key, const u8 *buffer, u8 len)
+@@ -275,7 +290,7 @@ static int write_smc(u8 cmd, const char *key, const u8 *buffer, u8 len)
  	}
  
  	for (i = 0; i < len; i++) {
@@ -274,5 +263,3 @@ index a18887990f4a..2190de78b5f5 100644
  			pr_warn("%s: write data fail\n", key);
  			return -EIO;
  		}
-
-
