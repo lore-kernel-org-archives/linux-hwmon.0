@@ -7,39 +7,31 @@ X-Spam-Status: No, score=-5.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB79BC2D0A3
-	for <linux-hwmon@archiver.kernel.org>; Mon,  9 Nov 2020 17:08:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80A66C4741F
+	for <linux-hwmon@archiver.kernel.org>; Mon,  9 Nov 2020 22:54:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2155620E65
-	for <linux-hwmon@archiver.kernel.org>; Mon,  9 Nov 2020 17:08:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 171AB206CB
+	for <linux-hwmon@archiver.kernel.org>; Mon,  9 Nov 2020 22:54:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=bitmath.org header.i=@bitmath.org header.b="XBhGmXct"
+	dkim=pass (1024-bit key) header.d=fnarfbargle.com header.i=@fnarfbargle.com header.b="BwbGv2fA"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730315AbgKIRIh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 9 Nov 2020 12:08:37 -0500
-Received: from mailrelay3-2.pub.mailoutpod1-cph3.one.com ([46.30.212.2]:54662
-        "EHLO mailrelay3-2.pub.mailoutpod1-cph3.one.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729923AbgKIRIh (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 9 Nov 2020 12:08:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bitmath.org; s=20191106;
-        h=content-transfer-encoding:content-type:in-reply-to:mime-version:date:
-         message-id:from:references:cc:to:subject:from;
-        bh=8WkeL/6Obia5iGe0PEgUkq1rnWgBWM4eJz++BJCuECY=;
-        b=XBhGmXcthbsXR9ONVJpA8kLO2pdJSB512455S6J3FhUbIG8df+oxzXy3NzsThJQH+TAh7BgiTRovE
-         KqGkBOmv38dB70n9ndzGEZLspWc9qS/pBPRZUM2zfKrgFgcRBNuFigW/jtjUEByWzTT98h4XWRh+96
-         seLRbifQKLuu5hENbZaj+xA5gFhwnLNC7x3FHEbOT3pJ3z72OwR56dC6OBnv7lwI9b1S3V+buXoksb
-         7IwkkKul3mTd68RQ+xEvRl0s0wTgVsNrTWCjAog9RllpdKLDaAwPQLq2koBkKWuogyfVwHHxrK7vBs
-         vtd5SkHA9qMfLy6jammpeNMIyabIgZQ==
-X-HalOne-Cookie: 63cb47a66e693f08a3ac8867ab094fba82142490
-X-HalOne-ID: 319dc5e4-22ae-11eb-a80d-d0431ea8bb03
-Received: from [192.168.19.13] (h-155-4-128-97.na.cust.bahnhof.se [155.4.128.97])
-        by mailrelay3.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id 319dc5e4-22ae-11eb-a80d-d0431ea8bb03;
-        Mon, 09 Nov 2020 17:08:32 +0000 (UTC)
+        id S1729452AbgKIWyC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 9 Nov 2020 17:54:02 -0500
+Received: from ns3.fnarfbargle.com ([103.4.19.87]:38586 "EHLO
+        ns3.fnarfbargle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729247AbgKIWyC (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 9 Nov 2020 17:54:02 -0500
+Received: from srv.home ([10.8.0.1] ident=heh9587)
+        by ns3.fnarfbargle.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.84_2)
+        (envelope-from <brad@fnarfbargle.com>)
+        id 1kcG18-00030h-Ju; Tue, 10 Nov 2020 06:52:06 +0800
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fnarfbargle.com; s=mail;
+        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:References:Cc:To:Subject:From; bh=pNbZC2H0hQDv1qeMH/s/pyxn640YnlXS6c4hfzQzgbo=;
+        b=BwbGv2fAYMuzgjIbp8kS4TPxq3Xci/bdV0Skjf2lq7wutKet6SLVe0ZD1MPKJ4K8gaFGaF4Q/LBUCfXz24NUgy5h6TxXYDG7L+SKhNEB6tl2gO5CyQIKjphnGxnDLIsAIuXTpYKvwAcjl+U+VzaI8yrtlOKmOEJ8oA+fOf8/CMY=;
+From:   Brad Campbell <brad@fnarfbargle.com>
 Subject: Re: [PATCH v3] applesmc: Re-work SMC comms
-To:     Brad Campbell <brad@fnarfbargle.com>
+To:     Henrik Rydberg <rydberg@bitmath.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
         Andreas Kemnade <andreas@kemnade.info>,
         linux-hwmon@vger.kernel.org,
@@ -60,59 +52,72 @@ References: <70331f82-35a1-50bd-685d-0b06061dd213@fnarfbargle.com>
  <bdabe861-8717-8948-80a0-ca2173c2e22a@fnarfbargle.com>
  <af08ee3b-313d-700c-7e70-c57d20d3be5d@bitmath.org>
  <d4e53a42-d86b-ce2b-7422-22b5ff5593e8@fnarfbargle.com>
-From:   Henrik Rydberg <rydberg@bitmath.org>
-Message-ID: <d091286d-00ac-bd96-b1ea-0e789f02fa07@bitmath.org>
-Date:   Mon, 9 Nov 2020 18:08:43 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+ <d091286d-00ac-bd96-b1ea-0e789f02fa07@bitmath.org>
+Message-ID: <a59218a3-63ff-f08d-5d3c-96e4cebb76af@fnarfbargle.com>
+Date:   Tue, 10 Nov 2020 09:52:07 +1100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.2.2
 MIME-Version: 1.0
-In-Reply-To: <d4e53a42-d86b-ce2b-7422-22b5ff5593e8@fnarfbargle.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <d091286d-00ac-bd96-b1ea-0e789f02fa07@bitmath.org>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Brad,
+On 10/11/20 4:08 am, Henrik Rydberg wrote:
+> Hi Brad,
+> 
+>> Out of morbid curiosity I grabbed an older MacOS AppleSMC.kext (10.7) and ran it through the disassembler.
+>>
+>> Every read/write to the SMC starts the same way with a check to make sure the SMC is in a sane state. If it's not, a read command is sent to try and kick it back into line :
+>> Wait for 0x04 to clear. This is 1,000,000 iterations of "read status, check if 0x04 is set, delay 10uS".
+>> If it clears, move on. If it doesn't, try and send a read command (just the command 0x10) and wait for the busy flag to clear again with the same loop.
+>>
+>> So in theory if the SMC was locked up, it'd be into the weeds for 20 seconds before it pushed the error out.
+>>
+>> So, lets say we've waited long enough and the busy flag dropped :
+>>
+>> Each command write is :
+>> Wait for 0x02 to clear. This is 1,000,000 iterations of "read status, check if 0x02 is set, delay 10uS".
+>> Send command
+>>
+>> Each data byte write is :
+>> Wait for 0x02 to clear. This is 1,000,000 iterations of "read status, check if 0x02 is set, delay 10uS".
+>> Immediate and single status read, check 0x04. If not set, abort.
+>> Send data byte
+>>
+>> Each data byte read is :
+>> read staus, wait for 0x01 and 0x04 to be set. delay 10uS and repeat. Abort if fail.
+>>
+>> Each timeout is 1,000,000 loops with a 10uS delay.
+>>
+>> So aside from the startup set which occurs on *every* read or write set, status checks happen before a command or data write, and not at all after.
+>> Under no circumstances are writes of any kind re-tried, but these timeouts are up to 10 seconds!
+> 
+> Great findings here. But from this, it would seem we are doing almost the right thing already, no? The essential difference seems to be that where the kext does a read to wake up the SMC, while we retry the first command until it works. If would of course be very interesting to know if that makes a difference.
 
-> Out of morbid curiosity I grabbed an older MacOS AppleSMC.kext (10.7) and ran it through the disassembler.
-> 
-> Every read/write to the SMC starts the same way with a check to make sure the SMC is in a sane state. If it's not, a read command is sent to try and kick it back into line :
-> Wait for 0x04 to clear. This is 1,000,000 iterations of "read status, check if 0x04 is set, delay 10uS".
-> If it clears, move on. If it doesn't, try and send a read command (just the command 0x10) and wait for the busy flag to clear again with the same loop.
-> 
-> So in theory if the SMC was locked up, it'd be into the weeds for 20 seconds before it pushed the error out.
-> 
-> So, lets say we've waited long enough and the busy flag dropped :
-> 
-> Each command write is :
-> Wait for 0x02 to clear. This is 1,000,000 iterations of "read status, check if 0x02 is set, delay 10uS".
-> Send command
-> 
-> Each data byte write is :
-> Wait for 0x02 to clear. This is 1,000,000 iterations of "read status, check if 0x02 is set, delay 10uS".
-> Immediate and single status read, check 0x04. If not set, abort.
-> Send data byte
-> 
-> Each data byte read is :
-> read staus, wait for 0x01 and 0x04 to be set. delay 10uS and repeat. Abort if fail.
-> 
-> Each timeout is 1,000,000 loops with a 10uS delay.
-> 
-> So aside from the startup set which occurs on *every* read or write set, status checks happen before a command or data write, and not at all after.
-> Under no circumstances are writes of any kind re-tried, but these timeouts are up to 10 seconds!
+It does make a significant difference here. It doesn't use the read to wake up the SMC as such. It appears to use the read to get the SMC in sync with the driver. It only performs the extra read if the busy line is still active when it shouldn't be and provided the driver plays by the rules it only seems to do it once on init and only if the SMC thinks it's mid command (so has been left in an undefined state).
 
-Great findings here. But from this, it would seem we are doing almost 
-the right thing already, no? The essential difference seems to be that 
-where the kext does a read to wake up the SMC, while we retry the first 
-command until it works. If would of course be very interesting to know 
-if that makes a difference.
+Re-working the driver to use the logic described my MacbookPro11,1 goes from 40 reads/sec to 125 reads/sec. My iMac12,2 goes from 17 reads/sec to 30.
 
-> That would indicate that the requirement for retries on the early Mac means we're not waiting long enough somewhere. Not that I'm suggesting we do another re-work, but when I get back in front of my iMac which does 17 transactions per second with this driver, I might re-work it similar to the Apple driver and see what happens.
+I have one issue to understand before I post a patch.
+
+If the SMC is in an inconsistent state (as in busy persistently high) then the driver issues a read command and waits for busy to drop (and it does, and bit 0x08 goes high on my laptop but nothing checks that). That is to a point expected based on the poking I did early on in this process.
+On the other hand, when we perform a read or a write, the driver issues a read or write command and the following commands to send the key rely on the busy bit being set.
+
+Now, in practice this works, and I've sent spurious commands to get things out of sync and after a long wait it syncs back up. I just want to try and understand the state machine inside the SMC a bit better before posting another patch.
+
+ 
+>> That would indicate that the requirement for retries on the early Mac means we're not waiting long enough somewhere. Not that I'm suggesting we do another re-work, but when I get back in front of my iMac which does 17 transactions per second with this driver, I might re-work it similar to the Apple driver and see what happens.
+>>
+>> Oh, and it looks like the 0x40 flag that is on mine is the "I have an interrupt pending" flag, and the result should be able to be read from 0x31F. I'll play with that when I get time. That probably explains why IRQ9 screams until the kernel gags it on this machine as it's not being given any love.
 > 
-> Oh, and it looks like the 0x40 flag that is on mine is the "I have an interrupt pending" flag, and the result should be able to be read from 0x31F. I'll play with that when I get time. That probably explains why IRQ9 screams until the kernel gags it on this machine as it's not being given any love.
+> Sounds good, getting interrupts working would have been nice.
 
-Sounds good, getting interrupts working would have been nice.
+I've put it on my list of things to look at. There's a lot of magic constants in the interrupt handler.
 
-Henrik
+Regards,
+Brad
+
