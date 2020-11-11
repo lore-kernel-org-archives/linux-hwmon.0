@@ -2,177 +2,113 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 293ABC388F9
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Nov 2020 15:29:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CEA0AC5517A
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Nov 2020 15:44:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A9F3D206A1
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Nov 2020 15:29:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 65D8B206A1
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Nov 2020 15:44:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mQJaTVIs"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jkudc6OK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726774AbgKKP3G (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 11 Nov 2020 10:29:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43694 "EHLO
+        id S1727398AbgKKPoF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 11 Nov 2020 10:44:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726222AbgKKP3F (ORCPT
+        with ESMTP id S1726625AbgKKPoE (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 11 Nov 2020 10:29:05 -0500
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2FCBC0613D1;
-        Wed, 11 Nov 2020 07:29:03 -0800 (PST)
-Received: by mail-pl1-x642.google.com with SMTP id b3so1119937pls.11;
-        Wed, 11 Nov 2020 07:29:03 -0800 (PST)
+        Wed, 11 Nov 2020 10:44:04 -0500
+Received: from mail-oo1-xc43.google.com (mail-oo1-xc43.google.com [IPv6:2607:f8b0:4864:20::c43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6982C0613D1;
+        Wed, 11 Nov 2020 07:44:03 -0800 (PST)
+Received: by mail-oo1-xc43.google.com with SMTP id g4so531752oom.9;
+        Wed, 11 Nov 2020 07:44:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pwRVrFra8SIDqBViKRT8+sopac1emNPXdeWfLdCx/PU=;
-        b=mQJaTVIsOIU5VBvFXVXxcNzdEOp7JgNzKHizWfLFXo63izxmVoVLEmRbnoBJtzeWIM
-         vJc9q0liQ/zwgxiqhjaY9jnunVR7/1KORY86WpNh1lQs56mJmth2mnOxlfvaEF7pPr1x
-         q/Tlujipn12QQsyQiCPxLXZC++QWPY1e99D1rjb4uiTNTM70ozg1aqvQEVd+1+uabXk0
-         K9kAW9lwmz0khpKgU8BadHj7qPWC75pyjJFzrLJKMH6p34o1v3Hl+c0pF4Sa7M9AlC5D
-         iWbCcoH7tzD2wuNGhCN83EVVXPsw5vHEYmMFXDM2X+hF8LTPsfnTeCnS8Sq/fi398Gi/
-         GPpw==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=KtgnHEv0ZUDEzDpdBhmj/ZPPcj7et8nJoEnMD6FoA1A=;
+        b=jkudc6OKmTxCmblJ37+tr//d+vLS1hdeQHfYvA9QtKIPyg+vR+NAml22QLXNW/Alh1
+         dakfA5wKEkQwxH9hNvzUJCVz8lhOWHPPmGlS1j7vVYDfhz2LD37PBM78/D0T6C5lJAJ7
+         3+QXfHm4QbljVGTXNzWTFAcyiSjoYoG/3XZmk0sGrlT/5SIf+xOdQJLHoKp5Mzn4d5oN
+         ne3W45cAGheS2ACt2wrsit+XkB3K4WHDTTxai1EN57nnBASMmx61HIlCXaTiYgrt5r7q
+         Q4hbWO8T29YBgd3vzA0+1MkpcUnzcV+kZJq7bnsn1zGW+kc+Bo4KHQh/6WM23J7DPphI
+         wpZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pwRVrFra8SIDqBViKRT8+sopac1emNPXdeWfLdCx/PU=;
-        b=HvOIXLpBioEulOmtyztC5qha2nB34IwU1saFGhC7zVFAXv/E8XN9dGtgIAkFdK8Y7D
-         sxhtT1BeUxQ6ZXwwdx86ACfVZmJZ02LRvK4dWaJaAefg2O6R6jZiJzFfKHdO+0bQvt6c
-         J6Frc+Ey1l4BbKnuxiixPc9OuCCC92dyB9cGMWN+dzbOOa5is/PbXHOootAs42tLELZU
-         6Q9jCSYKE/GAr6zup63OK2sLBBkaNTkz0qA5A/1lWKVCNuDtroyV020x57wZ7Q6UGLmn
-         DXR+DeLviNOYxsIn6sqPsxRPdoaNxKhLalKyOlxmK5yCRNEXPvUk4w85A6JlbaPQm8ms
-         VzDQ==
-X-Gm-Message-State: AOAM531L6t0KA78DwuI2CIaWKsOMl93jx8wee6xMJrCi+E54FnlZL9ur
-        yg2pwBpj8p1TxyOzkb2Y5qYCfvutAjCGL1BvTaHZQi82zU8=
-X-Google-Smtp-Source: ABdhPJzBn5AbgkRw64Otzg1aSbw28IMGYKXIGBMJdsbFNn+GGpeOhpskLORmCCfNCKLSzFDg6F7GMSHjYnQgFBJ5+bA=
-X-Received: by 2002:a17:902:8e8b:b029:d2:4276:1df0 with SMTP id
- bg11-20020a1709028e8bb02900d242761df0mr21648951plb.62.1605108543319; Wed, 11
- Nov 2020 07:29:03 -0800 (PST)
-MIME-Version: 1.0
-References: <20201111091259.46773-1-alexandru.ardelean@analog.com>
- <20201111091259.46773-3-alexandru.ardelean@analog.com> <41f86559-9165-40f9-e7f3-3e7f5eca7315@roeck-us.net>
-In-Reply-To: <41f86559-9165-40f9-e7f3-3e7f5eca7315@roeck-us.net>
-From:   Alexandru Ardelean <ardeleanalex@gmail.com>
-Date:   Wed, 11 Nov 2020 17:28:51 +0200
-Message-ID: <CA+U=DsrOTOZr2pmwAH7T6Jt8TZXNsLJBza482tmFOkyGLuGvAg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] docs: hwmon: (ltc2945): change type of val to ULL
- in ltc2945_val_to_reg()
-To:     Guenter Roeck <linux@roeck-us.net>
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=KtgnHEv0ZUDEzDpdBhmj/ZPPcj7et8nJoEnMD6FoA1A=;
+        b=ESyqPruqzaTTvijT86OIuw2bUb6do2u2j/GeRCqlmS2YCOVpRjTl7L6nQypN3yLT6J
+         SIIRIKH/iUeAUqAvsE+9LnAC5QOLDUWVlZz2j8sBpRvQsgOGOy5lxDvbLC0u5DpgXdtP
+         D8PUZhGjALBRgL7lpInwk5kn4cpStJcZkstGRKDRUzeDEMWWryLHBNEtHoBpUr9Xor2/
+         TpAfYSKd+zwzlbQNue2woAkqZJOrHDYVMr9js6GUiEiqLES4uHA1nPNosZ9iI+uh9dZr
+         6KkZPSc5vvgME8EdmVzCYffXcJiBPcAnSdXQBKRemv7PIHZ+IYrez3rtBGKpNJiSLPG+
+         bwpA==
+X-Gm-Message-State: AOAM530CUtZdfvsiNHAAWiqbCLGQsIR3QhI3RqzQkWi23wa5DLtMCAb9
+        ZsmXamilIMCaU709FTAnFC0=
+X-Google-Smtp-Source: ABdhPJw6wo4yfJelx0Tzx3yo4UFtVYSpvfIjFolpBogp/8xxZ1IJslTAOX3YX3VIVi8yO5C3n3FRZg==
+X-Received: by 2002:a4a:d752:: with SMTP id h18mr9146032oot.62.1605109443294;
+        Wed, 11 Nov 2020 07:44:03 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o63sm587194ooa.10.2020.11.11.07.44.01
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 11 Nov 2020 07:44:02 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 11 Nov 2020 07:44:01 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Alexandru Ardelean <ardeleanalex@gmail.com>
 Cc:     Alexandru Ardelean <alexandru.ardelean@analog.com>,
         linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         LKML <linux-kernel@vger.kernel.org>,
         Rob Herring <robh+dt@kernel.org>, jdelvare@suse.com,
         "Thoren, Mark" <mark.thoren@analog.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v2 2/4] docs: hwmon: (ltc2945): change type of val to ULL
+ in ltc2945_val_to_reg()
+Message-ID: <20201111154401.GA151426@roeck-us.net>
+References: <20201111091259.46773-1-alexandru.ardelean@analog.com>
+ <20201111091259.46773-3-alexandru.ardelean@analog.com>
+ <41f86559-9165-40f9-e7f3-3e7f5eca7315@roeck-us.net>
+ <CA+U=DsrOTOZr2pmwAH7T6Jt8TZXNsLJBza482tmFOkyGLuGvAg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+U=DsrOTOZr2pmwAH7T6Jt8TZXNsLJBza482tmFOkyGLuGvAg@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Nov 11, 2020 at 4:54 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 11/11/20 1:12 AM, Alexandru Ardelean wrote:
-> > In order to account for any potential overflows that could occur.
+On Wed, Nov 11, 2020 at 05:28:51PM +0200, Alexandru Ardelean wrote:
+> On Wed, Nov 11, 2020 at 4:54 PM Guenter Roeck <linux@roeck-us.net> wrote:
 > >
-> > Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
->
-> Thinking about it, this can only really happen if the user provides
-> excessive values for limit attributes. Those are currently clamped
-> later, after the conversion. I think it would be better to modify
-> the code to apply a clamp _before_ the conversion as well instead
-> of trying to solve the overflow problem with unsigned long long.
->
-> Either case, can you send me a register dump for this chip ?
-
-I asked Mark to help out on this.
-Right now I don't have a board around my home-office.
-I"m just pulling patches from our own tree to send upstream.
-Is there a specific command you have in mind for this i2cdump?
-
-Is the output of something like this fine:
-# i2cdump -r 0x00-0x31 1 0x6f
-?
-
-We have a board that's being developed with this driver (and chip).
-I think Mark will try to read values from the eval-board [since he has
-one around].
-
-Thanks
-Alex
-
-> I'd like to write a module test script to actually check if there
-> are any over/underflows or other problems.
->
-> Thanks,
-> Guenter
->
-> > ---
-> >  drivers/hwmon/ltc2945.c | 12 ++++++------
-> >  1 file changed, 6 insertions(+), 6 deletions(-)
+> > On 11/11/20 1:12 AM, Alexandru Ardelean wrote:
+> > > In order to account for any potential overflows that could occur.
+> > >
+> > > Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
 > >
-> > diff --git a/drivers/hwmon/ltc2945.c b/drivers/hwmon/ltc2945.c
-> > index 1cea710df668..6d4569a25471 100644
-> > --- a/drivers/hwmon/ltc2945.c
-> > +++ b/drivers/hwmon/ltc2945.c
-> > @@ -155,7 +155,7 @@ static long long ltc2945_reg_to_val(struct device *dev, u8 reg)
-> >  }
+> > Thinking about it, this can only really happen if the user provides
+> > excessive values for limit attributes. Those are currently clamped
+> > later, after the conversion. I think it would be better to modify
+> > the code to apply a clamp _before_ the conversion as well instead
+> > of trying to solve the overflow problem with unsigned long long.
 > >
-> >  static int ltc2945_val_to_reg(struct device *dev, u8 reg,
-> > -                           unsigned long val)
-> > +                           unsigned long long val)
-> >  {
-> >       struct ltc2945_state *st = dev_get_drvdata(dev);
-> >       struct regmap *regmap = st->regmap;
-> > @@ -181,14 +181,14 @@ static int ltc2945_val_to_reg(struct device *dev, u8 reg,
-> >                       return ret;
-> >               if (control & CONTROL_MULT_SELECT) {
-> >                       /* 25 mV * 25 uV = 0.625 uV resolution. */
-> > -                     val = DIV_ROUND_CLOSEST(val, 625);
-> > +                     val = DIV_ROUND_CLOSEST_ULL(val, 625);
-> >               } else {
-> >                       /*
-> >                        * 0.5 mV * 25 uV = 0.0125 uV resolution.
-> >                        * Divide first to avoid overflow;
-> >                        * accept loss of accuracy.
-> >                        */
-> > -                     val = DIV_ROUND_CLOSEST(val, 25) * 2;
-> > +                     val = DIV_ROUND_CLOSEST_ULL(val, 25) * 2;
-> >               }
-> >               break;
-> >       case LTC2945_VIN_H:
-> > @@ -197,7 +197,7 @@ static int ltc2945_val_to_reg(struct device *dev, u8 reg,
-> >       case LTC2945_MAX_VIN_THRES_H:
-> >       case LTC2945_MIN_VIN_THRES_H:
-> >               /* 25 mV resolution. */
-> > -             val /= 25;
-> > +             val = div_u64(val, 25);
-> >               break;
-> >       case LTC2945_ADIN_H:
-> >       case LTC2945_MAX_ADIN_H:
-> > @@ -219,7 +219,7 @@ static int ltc2945_val_to_reg(struct device *dev, u8 reg,
-> >                * dividing the reported current by the sense resistor value
-> >                * in mOhm.
-> >                */
-> > -             val = DIV_ROUND_CLOSEST(val, 25);
-> > +             val = DIV_ROUND_CLOSEST_ULL(val, 25);
-> >               break;
-> >       default:
-> >               return -EINVAL;
-> > @@ -247,7 +247,7 @@ static ssize_t ltc2945_value_store(struct device *dev,
-> >       struct ltc2945_state *st = dev_get_drvdata(dev);
-> >       struct regmap *regmap = st->regmap;
-> >       u8 reg = attr->index;
-> > -     unsigned long val;
-> > +     unsigned long long val;
-> >       u8 regbuf[3];
-> >       int num_regs;
-> >       int regval;
-> >
->
+> > Either case, can you send me a register dump for this chip ?
+> 
+> I asked Mark to help out on this.
+> Right now I don't have a board around my home-office.
+> I"m just pulling patches from our own tree to send upstream.
+> Is there a specific command you have in mind for this i2cdump?
+> 
+> Is the output of something like this fine:
+> # i2cdump -r 0x00-0x31 1 0x6f
+> ?
+
+Yes, that should do, assuming the chip is on bus #1, address 0x6f.
+
+Thanks,
+Guenter
