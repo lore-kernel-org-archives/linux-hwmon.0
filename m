@@ -2,143 +2,85 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AE89C55ABD
-	for <linux-hwmon@archiver.kernel.org>; Tue, 10 Nov 2020 20:14:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02DD5C388F7
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Nov 2020 03:40:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0D47F20809
-	for <linux-hwmon@archiver.kernel.org>; Tue, 10 Nov 2020 20:14:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6F2AB207BB
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Nov 2020 03:39:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=sartura-hr.20150623.gappssmtp.com header.i=@sartura-hr.20150623.gappssmtp.com header.b="UMpcvPcj"
+	dkim=pass (1024-bit key) header.d=fnarfbargle.com header.i=@fnarfbargle.com header.b="UYcfKDyI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726307AbgKJUOq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 10 Nov 2020 15:14:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58346 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729862AbgKJUOq (ORCPT
+        id S1725900AbgKKDj6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 10 Nov 2020 22:39:58 -0500
+Received: from ns3.fnarfbargle.com ([103.4.19.87]:42330 "EHLO
+        ns3.fnarfbargle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725870AbgKKDj5 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 10 Nov 2020 15:14:46 -0500
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA24C0613D4
-        for <linux-hwmon@vger.kernel.org>; Tue, 10 Nov 2020 12:14:46 -0800 (PST)
-Received: by mail-io1-xd42.google.com with SMTP id n12so15668408ioc.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 10 Nov 2020 12:14:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura-hr.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=LcGHI5HLTTMixiAoo4DwvdYmU5XWNIEPWiELjO+QW7Y=;
-        b=UMpcvPcjlLhh/kl5mvTfd50lcLioF3hMJ3jOu6/aMUZXHLGcTwvS1+TMHy/M2b1+BO
-         w4AoJQVRln8SBbIHpkfDVh6JBlDmSNWhlRKyzGsSny9MdOp63eo/6RAm6nk2cq55ek6p
-         MsHNuJ0MRZyB5CMbcPDhlooJFaHaAaVcYMwHzJ7Nx3k/G3PRvNlCmrM+DLbhi66Fspml
-         fPktd6wG14MGC5gS7CbKnKGw6sEEwWFaHi7CivlT2av+mmJVYAGOaQjf149Rt5FxZqz/
-         8aysjOEOvnul07C0FBmTv1JXjy5PWuEDVfyB6GS3SrqaXcKSIkmEJyFZgrGML3wesK7m
-         c3Qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=LcGHI5HLTTMixiAoo4DwvdYmU5XWNIEPWiELjO+QW7Y=;
-        b=W1FiPiUCoI3mikyK4MJ2EoRgEXw3fvc/TKW0X+8kUnuuNS96Xggj3dTfLQdHK0uopv
-         eIy77GVYIDLjLH4mcW2HgyF50LMXuCy3V4Pz+ADFFq5H+RZoRDx/fG7RHZPfSM3iQIl/
-         yjxC6BgDiN8ISAgJ8BeFnU+mds0H74aiwU+wlLu8myBdSCggUXBSqpqLoNuPKCQBETiY
-         ZK1wV6oVXzH+PQY1m7YIPtDU3bGBvCd9ywXqz9VM/9r0TGHYQa+oR3nnizCy/bD+QmFu
-         /KN3KGDpZj67yeUSGNx4ysvFm62EM+hlmm11j4Qrlbn88fgZviaP1QyoHNfgXDQt+RUK
-         e13A==
-X-Gm-Message-State: AOAM533POl6ywkJVsYeS7WNkF6WPN71TdND19rqpE0Na5HrP7cE53TuB
-        YUp/lo+bOtiAikRapr5KIaaXX2jgMWOQqtpLqQfEgg==
-X-Google-Smtp-Source: ABdhPJxJ5nCLlaslCGZ7rFMK8sVF6fRf6ubFOx1K9c+PBlOt2+l8gZJm22j48T4dN13f9n/gOQ/tqr7wSsDzhgVdI+I=
-X-Received: by 2002:a02:c64f:: with SMTP id k15mr17291198jan.75.1605039285501;
- Tue, 10 Nov 2020 12:14:45 -0800 (PST)
+        Tue, 10 Nov 2020 22:39:57 -0500
+Received: from srv.home ([10.8.0.1] ident=heh29180)
+        by ns3.fnarfbargle.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.84_2)
+        (envelope-from <brad@fnarfbargle.com>)
+        id 1kcgxC-000434-49; Wed, 11 Nov 2020 11:37:50 +0800
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fnarfbargle.com; s=mail;
+        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:References:Cc:To:From:Subject; bh=QbZ4v8/BuXQPYFybt+rEG4mvWF5ncSIq5z8b8FxAZlg=;
+        b=UYcfKDyIkFUSJNX2kR1JPmJ+Aex7sWXj2lbliMAXwQ7WCiXPJnK48tCq6ZmhLuLay5pGKp69EKnEg3zvBaByhimn3FDSUtLnzJBdcVpFL2jX65a6p09QMv21tt/tZ2+K0Podbq2UNMis6AgUVbfFxAY7syelegEE1qBPBzeU2r4=;
+Subject: [PATCH v4 0/1] applesmc: Re-work SMC comms
+From:   Brad Campbell <brad@fnarfbargle.com>
+To:     Henrik Rydberg <rydberg@bitmath.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-hwmon@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        hns@goldelico.com, Guenter Roeck <linux@roeck-us.net>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Jean Delvare <jdelvare@suse.com>
+References: <20200930105442.3f642f6c@aktux> <20201002002251.28462e64@aktux>
+ <7543ef85-727d-96c3-947e-5b18e9e6c44d@roeck-us.net>
+ <20201006090226.4275c824@kemnade.info>
+ <db042e9b-be41-11b1-7059-3881b1da5c8b@fnarfbargle.com>
+ <68467f1b-cea1-47ea-a4d4-8319214b072a@fnarfbargle.com>
+ <20201104142057.62493c12@aktux>
+ <2436afef-99c6-c352-936d-567bf553388c@fnarfbargle.com>
+ <7a085650-2399-08c0-3c4d-6cd1fa28a365@roeck-us.net>
+ <fc36d066-c432-e7d2-312f-a0a592446fe2@fnarfbargle.com>
+ <10027199-5d31-93e7-9bd8-7baaebff8b71@roeck-us.net>
+ <70331f82-35a1-50bd-685d-0b06061dd213@fnarfbargle.com>
+ <3c72ccc3-4de1-b5d0-423d-7b8c80991254@fnarfbargle.com>
+ <6d071547-10ee-ca92-ec8b-4b5069d04501@bitmath.org>
+ <8e117844-d62a-bcb1-398d-c59cc0d4b878@fnarfbargle.com>
+ <e5a856b1-fb1a-db5d-0fde-c86d0bcca1df@bitmath.org>
+ <aa60f673-427a-1a47-7593-54d1404c3c92@bitmath.org>
+ <9109d059-d9cb-7464-edba-3f42aa78ce92@bitmath.org>
+ <5310c0ab-0f80-1f9e-8807-066223edae13@bitmath.org>
+ <57057d07-d3a0-8713-8365-7b12ca222bae@fnarfbargle.com>
+Message-ID: <e5c6242a-5207-0f9a-5803-2dc164425b5b@fnarfbargle.com>
+Date:   Wed, 11 Nov 2020 14:37:49 +1100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.2.2
 MIME-Version: 1.0
-References: <20201019221859.56680-3-luka.kovacic@sartura.hr>
- <202010201049.3V7m9mtx-lkp@intel.com> <20201104152227.GM4488@dell>
-In-Reply-To: <20201104152227.GM4488@dell>
-From:   Luka Kovacic <luka.kovacic@sartura.hr>
-Date:   Tue, 10 Nov 2020 21:14:34 +0100
-Message-ID: <CADZsf3ZW2kvqoq=fnuYajRHtSOZzjL7O-Ycmif6d_Jucd3nFJQ@mail.gmail.com>
-Subject: Re: [PATCH v6 2/6] drivers: mfd: Add a driver for iEi WT61P803 PUZZLE MCU
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     kernel test robot <lkp@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>, kbuild-all@lists.01.org,
-        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <57057d07-d3a0-8713-8365-7b12ca222bae@fnarfbargle.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hello,
+G'day All,
 
-On Wed, Nov 4, 2020 at 4:22 PM Lee Jones <lee.jones@linaro.org> wrote:
->
-> On Tue, 20 Oct 2020, kernel test robot wrote:
->
-> > Hi Luka,
-> >
-> > Thank you for the patch! Perhaps something to improve:
-> >
-> > [auto build test WARNING on hwmon/hwmon-next]
-> > [also build test WARNING on v5.9]
-> > [cannot apply to pavel-linux-leds/for-next lee-mfd/for-mfd-next next-20=
-201016]
-> > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > And when submitting patch, we suggest to use '--base' as documented in
-> > https://git-scm.com/docs/git-format-patch]
-> >
-> > url:    https://github.com/0day-ci/linux/commits/Luka-Kovacic/Add-suppo=
-rt-for-the-iEi-WT61P803-PUZZLE-MCU/20201020-062048
-> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-st=
-aging.git hwmon-next
-> > config: ia64-randconfig-r002-20201020 (attached as .config)
-> > compiler: ia64-linux-gcc (GCC) 9.3.0
-> > reproduce (this is a W=3D1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/s=
-bin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # https://github.com/0day-ci/linux/commit/855e7cca9db335136d095=
-55f9983d7245fca1f4b
-> >         git remote add linux-review https://github.com/0day-ci/linux
-> >         git fetch --no-tags linux-review Luka-Kovacic/Add-support-for-t=
-he-iEi-WT61P803-PUZZLE-MCU/20201020-062048
-> >         git checkout 855e7cca9db335136d09555f9983d7245fca1f4b
-> >         # save the attached .config to linux build tree
-> >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-9.3.0 make.cr=
-oss ARCH=3Dia64
-> >
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All warnings (new ones prefixed by >>):
-> >
-> > >> drivers/mfd/iei-wt61p803-puzzle.c:311:5: warning: no previous protot=
-ype for 'iei_wt61p803_puzzle_buzzer' [-Wmissing-prototypes]
-> >      311 | int iei_wt61p803_puzzle_buzzer(struct iei_wt61p803_puzzle *m=
-cu, bool long_beep)
-> >          |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
->
-> This bot has been complaining about this patch since at least v3.
->
-> Are you going to fix the issue?  Or is it moot?
+Versions 1-3 of this patch were various attempts to try and simplify/clarify the communication to the SMC in order to remove the timing sensitivity which was exposed by Commit fff2d0f701e6 ("hwmon: (applesmc) avoid overlong udelay()"). As with the original author(s), we were limited in not having any documentation and relying on a "poke it and see what happens".
 
-Yes, I'll fix the issue in the next patchset.
+Whilst version 3 ticked all the boxes from a performance and reliability standpoint it still wasn't clear why it worked and why retries were required when sending a command to the SMC. I dug into the OSX driver to try and seek some clarity around that and found a very simple "state corrector" for want of a better word, whereby any interaction with the SMC was preceded by a simple 3 step process (found in smc_sane()) which ensured the SMC was in the right state to accept a transaction (or ultimately reported as broken). My testing has shown this routine is generally only required once on driver load to sync up the state machine, however it's purpose is to pull the SMC back into line if its internal state machine gets out of sync. This was likely happening with the command retry loop in the earlier versions, however due to the way the status bits were being checked it was unclear.
 
->
-> --
-> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
-> Senior Technical Lead - Developer Services
-> Linaro.org =E2=94=82 Open source software for Arm SoCs
-> Follow Linaro: Facebook | Twitter | Blog
+The other thing that was clear is outside of the "state corrector", all checking of SMC status bits happened before a read/write, not after. By re-working the comms to follow this protocol I believe we've simplified the code, made the actual operation clearer and removed *all* timing dependencies. This has also allowed a simplification of the timing in wait_status and a reduction in the waits incurred.
 
-Kind regards,
-Luka
+Henrik further simplified wait_status by leaving the minimum wait in usleep_range as 8uS. Testing on multiple machines has borne this out resulting in less loops/sleeps and no apparent impact in the performance of the driver (and in fact an increase on my iMac12,2 with a _very_ slow SMC). It also allowed for the removal of the jiffy based timeout as worst case it's going to sleep for a couple of seconds. The OSX driver puts a 10s timeout on every wait.
+
+So, after much testing I'll submit v4 for comment and further testing.
+
+Regards,
+Brad
