@@ -2,103 +2,93 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84460C388F9
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Nov 2020 08:13:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F01AEC4742C
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Nov 2020 09:08:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0FE30206B5
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Nov 2020 08:13:23 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Czhh1dXG"
+	by mail.kernel.org (Postfix) with ESMTP id 9238B206E3
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Nov 2020 09:08:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725903AbgKKINW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 11 Nov 2020 03:13:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58836 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725468AbgKKINW (ORCPT
+        id S1726509AbgKKJIZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 11 Nov 2020 04:08:25 -0500
+Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:8920 "EHLO
+        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726130AbgKKJIY (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 11 Nov 2020 03:13:22 -0500
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4A8C0613D1;
-        Wed, 11 Nov 2020 00:13:22 -0800 (PST)
-Received: by mail-pg1-x543.google.com with SMTP id h6so976031pgk.4;
-        Wed, 11 Nov 2020 00:13:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=iitQh+q0FehiLOu43hjjhxpuoRgl98YfNKBT516DQYM=;
-        b=Czhh1dXG+fwgj+ZQkXc2uNm118mSTuHDaEhV6Ist2DRhb8kajD2WQvL9QqO0+ypROq
-         PXtHcg36gqod6Hbs2Pbl4SUAuAo8M3pjniYVHAHRTmZC+jcGDlUSXx0VWmiWI2q4cXvZ
-         FoZ/mII6eZGxyMvf+gB9UT8kowp6AMTVJY5KOKQPoAVJb1VymUC4aAZ7KZFPIUd8qRXw
-         vTyt+nRS9tYPpZmBvu5xrxQklGwILQ7BlWBMzMA5BMcRz9ZORKDT/OUxNg9q7O44gxye
-         oy//KCwnJAEgiH3Uxspa8hgDodYJIXAs4wVl9FGxuvcTG5Py27m+rZU3ls9Y0SzgpVRI
-         VBdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=iitQh+q0FehiLOu43hjjhxpuoRgl98YfNKBT516DQYM=;
-        b=Ai3+/L9Ng39KZxfaXVNFUeHBCyYeJK90oepF56arO1IbGH/zg4jAuipsBSAm0X3bb6
-         JeEMeTaKgkGabGkC+r9qX0S7oGH+lrGLoLi2vNKc/AhSRucYkoRDIh/DBXKi2TlACbx2
-         6HiCCFaboCUNAW+SUrL3yEI4aAXcB03OeYqM2e1vhtjgDzeOkGZ1zNxOK8kJCJtgExlN
-         W8PHnye2jGbfsEcPt/fyDHUPadh4j1Rmf51tOBv5M30JHBFu6AOal42p+X8Cl/bNkqEv
-         M/Zg85fvJ08/ujiQrzpmv7VeRMPiLgZJjMMosfYR54QSj+bEbBJmA0MVRGtn1W97y4H+
-         dnsQ==
-X-Gm-Message-State: AOAM532CuweChxePrpOl9POUyJTrsJcQgc8OwqjFt8JybaZMN3ynATKN
-        lGDVkvel7SvBYy/WuyBOrHfLzDUvFv00
-X-Google-Smtp-Source: ABdhPJxYPan4v7/DonqVyf1X76RnRlHbsJeLLo0Pzx/dOCMb/4dqVii1RB0aISxsCH5Ml9v6rTRNKw==
-X-Received: by 2002:a63:5864:: with SMTP id i36mr10876045pgm.68.1605082401603;
-        Wed, 11 Nov 2020 00:13:21 -0800 (PST)
-Received: from he-cluster.localdomain (67.216.221.250.16clouds.com. [67.216.221.250])
-        by smtp.gmail.com with ESMTPSA id w127sm1562138pfc.172.2020.11.11.00.13.20
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 11 Nov 2020 00:13:20 -0800 (PST)
-From:   xiakaixu1987@gmail.com
-X-Google-Original-From: kaixuxia@tencent.com
-To:     jdelvare@suse.com, linux@roeck-us.net
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kaixu Xia <kaixuxia@tencent.com>
-Subject: [PATCH] hwmon: Fix unsigned 'reg' compared with zero in amc6821_update_device
-Date:   Wed, 11 Nov 2020 16:13:16 +0800
-Message-Id: <1605082396-26560-1-git-send-email-kaixuxia@tencent.com>
-X-Mailer: git-send-email 1.8.3.1
+        Wed, 11 Nov 2020 04:08:24 -0500
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AB981ax014206;
+        Wed, 11 Nov 2020 04:08:06 -0500
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+        by mx0a-00128a01.pphosted.com with ESMTP id 34nsc94j4h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 Nov 2020 04:08:06 -0500
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 0AB985LK040528
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Wed, 11 Nov 2020 04:08:05 -0500
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1779.2; Wed, 11 Nov
+ 2020 04:08:04 -0500
+Received: from zeus.spd.analog.com (10.66.68.11) by ASHBMBX9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.1.1779.2 via Frontend
+ Transport; Wed, 11 Nov 2020 04:08:04 -0500
+Received: from localhost.localdomain ([10.48.65.12])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 0AB981gE023509;
+        Wed, 11 Nov 2020 04:08:01 -0500
+From:   Alexandru Ardelean <alexandru.ardelean@analog.com>
+To:     <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <robh+dt@kernel.org>, <linux@roeck-us.net>, <jdelvare@suse.com>,
+        <mark.thoren@analog.com>, <ardeleanalex@gmail.com>,
+        Alexandru Ardelean <alexandru.ardelean@analog.com>
+Subject: [PATCH v2 0/4] hwmon: (ltc2945): add support for sense resistor
+Date:   Wed, 11 Nov 2020 11:12:55 +0200
+Message-ID: <20201111091259.46773-1-alexandru.ardelean@analog.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-11_02:2020-11-10,2020-11-11 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
+ priorityscore=1501 bulkscore=0 clxscore=1015 lowpriorityscore=0
+ impostorscore=0 adultscore=0 phishscore=0 mlxlogscore=999 malwarescore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2011110050
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Kaixu Xia <kaixuxia@tencent.com>
+This changeset adds support the sense resistor that can be connected on
+a board to computer current & power.
 
-The unsigned variable reg is assigned a return value from the call
-to i2c_smbus_read_byte_data(), which may return negative error code.
+The sense resistor is a parameter of the board. It should be configured in
+the driver via a device-tree / ACPI property, so that the proper current
+measurements can be done in the driver.
 
-Fixes coccicheck warning:
+Changelog v1 -> v2:
+* https://lore.kernel.org/linux-hwmon/20201106101825.30960-1-alexandru.ardelean@analog.com/
+* reverted kstrotoull() -> kstrtoul()
+* added sanity check for resistor, to prevent crashing when DT provides
+  zero value
+* add DT binding doc for ltc2945
 
-./drivers/hwmon/amc6821.c:215:6-9: WARNING: Unsigned expression compared with zero: reg > 0
-./drivers/hwmon/amc6821.c:228:6-9: WARNING: Unsigned expression compared with zero: reg > 0
+Alexandru Ardelean (4):
+  hwmon: (ltc2945): wrap regmap into an ltc2945_state struct
+  docs: hwmon: (ltc2945): change type of val to ULL in
+    ltc2945_val_to_reg()
+  hwmon: (ltc2945): add support for sense resistor
+  dt-bindings: hwmon: ltc2945: add device tree doc for ltc2945
 
-Reported-by: Tosk Robot <tencent_os_robot@tencent.com>
-Signed-off-by: Kaixu Xia <kaixuxia@tencent.com>
----
- drivers/hwmon/amc6821.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../bindings/hwmon/adi,ltc2945.yaml           | 49 ++++++++++
+ drivers/hwmon/ltc2945.c                       | 89 +++++++++++--------
+ 2 files changed, 103 insertions(+), 35 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/adi,ltc2945.yaml
 
-diff --git a/drivers/hwmon/amc6821.c b/drivers/hwmon/amc6821.c
-index 6b1ce2242c61..ce7c9f412538 100644
---- a/drivers/hwmon/amc6821.c
-+++ b/drivers/hwmon/amc6821.c
-@@ -166,7 +166,7 @@ static struct amc6821_data *amc6821_update_device(struct device *dev)
- 	struct amc6821_data *data = dev_get_drvdata(dev);
- 	struct i2c_client *client = data->client;
- 	int timeout = HZ;
--	u8 reg;
-+	s8 reg;
- 	int i;
- 
- 	mutex_lock(&data->update_lock);
 -- 
-2.20.0
+2.17.1
 
