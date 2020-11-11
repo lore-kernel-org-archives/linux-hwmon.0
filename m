@@ -2,129 +2,120 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BBE0FC56201
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Nov 2020 16:47:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A9A8C388F9
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Nov 2020 20:05:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4F2AD2072C
-	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Nov 2020 16:47:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B1430207F7
+	for <linux-hwmon@archiver.kernel.org>; Wed, 11 Nov 2020 20:05:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=konsulko.com header.i=@konsulko.com header.b="IJvGQL+2"
+	dkim=pass (2048-bit key) header.d=bitmath.org header.i=@bitmath.org header.b="Hb6Pwf9C"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727420AbgKKQrW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 11 Nov 2020 11:47:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55964 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726220AbgKKQrW (ORCPT
+        id S1725924AbgKKUFy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 11 Nov 2020 15:05:54 -0500
+Received: from mailrelay1-2.pub.mailoutpod1-cph3.one.com ([46.30.212.0]:26210
+        "EHLO mailrelay1-2.pub.mailoutpod1-cph3.one.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725920AbgKKUFy (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 11 Nov 2020 11:47:22 -0500
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A420C0617A6
-        for <linux-hwmon@vger.kernel.org>; Wed, 11 Nov 2020 08:47:20 -0800 (PST)
-Received: by mail-wr1-x441.google.com with SMTP id b8so3192407wrn.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 11 Nov 2020 08:47:20 -0800 (PST)
+        Wed, 11 Nov 2020 15:05:54 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=konsulko.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sl6mRWJb6hC+B/3B7ZMIFDt8R8T+DTATTRfELGyMhE4=;
-        b=IJvGQL+2FgRTdcH9Fr3MoIumViEpJAa5mwMfIBphrtYTKrixTO/Zt2eAgT2WrfJo7G
-         bnlIs0wu7/ryHrHtcB/rawgO2SBH57Lt6XcmB1daodFZjs1fbS3agnf3g3qJEOEOa8Pw
-         kYHcBMVaCRy/oqIOkT8+kZko6Ryhx0Mbm6sb0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sl6mRWJb6hC+B/3B7ZMIFDt8R8T+DTATTRfELGyMhE4=;
-        b=LVxZy+iXxY7TMQ7lS+P7lxlYa+Rq7mHnlG62adxmJldq12pVkLJU2+2deTu/C5IG0K
-         W2WzdoUcjKnYUg8jZfnczbGMBZkItYdWQYTrLDoVsmiQBSE7SJuFrkUCnsbmUERBOStU
-         776clHEKiUmGy7rY0GTsm/eXKJPPDCtnpQmQlbICL/pstRwZyo0nQNGlh7Zr3sAiKsdo
-         +AyQSEM9GWEIlOqX+E4BfCQCtJqad2JgHv56CC95h7O/y/XQL3+rG+/wVlo/g5Ab1q85
-         OvBDYCuKoDRLEqJ4K7A49pfurFzn9WIPIZV/bT+VwMHfLgnaHEVmi2WsDc4eqeM83xUa
-         IE/g==
-X-Gm-Message-State: AOAM530lYUFoAgSWFyhs/FnsLj/1WujU8q11T8idxuO6LEy3XlRAFYBS
-        9hyKrHAuRLIGTNdPqYM2ICDCDA==
-X-Google-Smtp-Source: ABdhPJx0l/JUortFpH8EE2sqKVul683H7hEAzUN896SDfW6+z94JE/PBuApFQC61BjGmI833n82P0g==
-X-Received: by 2002:a5d:4fc1:: with SMTP id h1mr31015539wrw.226.1605113239205;
-        Wed, 11 Nov 2020 08:47:19 -0800 (PST)
-Received: from alpha.home.b5net.uk (cpc76132-clif11-2-0-cust249.12-4.cable.virginm.net. [80.7.160.250])
-        by smtp.gmail.com with ESMTPSA id 71sm3250877wrm.20.2020.11.11.08.47.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2020 08:47:18 -0800 (PST)
-From:   Paul Barker <pbarker@konsulko.com>
-To:     Kamil Debski <kamil@wypas.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        d=bitmath.org; s=20191106;
+        h=content-transfer-encoding:content-type:in-reply-to:mime-version:date:
+         message-id:from:references:cc:to:subject:from;
+        bh=bLnllL/t03j3i5XoFNTbRyx56nqfkYo3HdLiGc5a8n8=;
+        b=Hb6Pwf9CvYHxV+yIKLNEyp5qgkAeRp3GpPFRiD49GKF2hmpUN0qhS6L35KXfBkQnB3LvvWUo+SFku
+         r6aPR9CHZ4LuiCcE1mFmoDypCP/r4fJKUdRWwQ0fgX8N52JuXb6oj34cnMg67PCkG1Yw/3dkBGztfm
+         j1DkYpiUqmnR2iKEA2IueEwzDp886lZRXefHFCfLWHqK8R1lJTbwFczmZwQpz6sasuWGvaXn6S8ykj
+         xalp/b6WsT7Tt4TXgfQyOsbshQ5S8NwxleagF+stvb7S80FQq904tdJz7S6gwhD9l7B2ULra+YjWl7
+         83eCIKCKPBF8jg7XqoxnF0NymdAviOg==
+X-HalOne-Cookie: eaabbb6561265111dafb1c10745e60b401987cdd
+X-HalOne-ID: 4ab3dac0-2459-11eb-965a-d0431ea8a283
+Received: from [192.168.19.13] (h-155-4-128-97.na.cust.bahnhof.se [155.4.128.97])
+        by mailrelay1.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id 4ab3dac0-2459-11eb-965a-d0431ea8a283;
+        Wed, 11 Nov 2020 20:05:49 +0000 (UTC)
+Subject: Re: [PATCH v5 1/1] applesmc: Re-work SMC comms
+To:     Brad Campbell <brad@fnarfbargle.com>, linux-hwmon@vger.kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        hns@goldelico.com, Andreas Kemnade <andreas@kemnade.info>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
-Cc:     Paul Barker <pbarker@konsulko.com>, linux-hwmon@vger.kernel.org
-Subject: [PATCH v5] hwmon: pwm-fan: Fix RPM calculation
-Date:   Wed, 11 Nov 2020 16:46:43 +0000
-Message-Id: <20201111164643.7087-1-pbarker@konsulko.com>
-X-Mailer: git-send-email 2.29.2
+References: <20200930105442.3f642f6c@aktux>
+ <68467f1b-cea1-47ea-a4d4-8319214b072a@fnarfbargle.com>
+ <20201104142057.62493c12@aktux>
+ <2436afef-99c6-c352-936d-567bf553388c@fnarfbargle.com>
+ <7a085650-2399-08c0-3c4d-6cd1fa28a365@roeck-us.net>
+ <fc36d066-c432-e7d2-312f-a0a592446fe2@fnarfbargle.com>
+ <10027199-5d31-93e7-9bd8-7baaebff8b71@roeck-us.net>
+ <70331f82-35a1-50bd-685d-0b06061dd213@fnarfbargle.com>
+ <3c72ccc3-4de1-b5d0-423d-7b8c80991254@fnarfbargle.com>
+ <6d071547-10ee-ca92-ec8b-4b5069d04501@bitmath.org>
+ <8e117844-d62a-bcb1-398d-c59cc0d4b878@fnarfbargle.com>
+ <e5a856b1-fb1a-db5d-0fde-c86d0bcca1df@bitmath.org>
+ <aa60f673-427a-1a47-7593-54d1404c3c92@bitmath.org>
+ <9109d059-d9cb-7464-edba-3f42aa78ce92@bitmath.org>
+ <5310c0ab-0f80-1f9e-8807-066223edae13@bitmath.org>
+ <57057d07-d3a0-8713-8365-7b12ca222bae@fnarfbargle.com>
+ <4eca09dc-7b32-767c-eab0-b9ad8b41efcc@fnarfbargle.com>
+ <b6345525-c4d0-6949-1231-a47c3053e343@roeck-us.net>
+ <8c525b3b-b4a6-8ee4-8128-a20e0ad408e4@fnarfbargle.com>
+From:   Henrik Rydberg <rydberg@bitmath.org>
+Message-ID: <29b03865-f00a-f121-b7a5-c4b9179a27cb@bitmath.org>
+Date:   Wed, 11 Nov 2020 21:05:59 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <8c525b3b-b4a6-8ee4-8128-a20e0ad408e4@fnarfbargle.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-To convert the number of pulses counted into an RPM estimation, we need
-to divide by the width of our measurement interval instead of
-multiplying by it. If the width of the measurement interval is zero we
-don't update the RPM value to avoid dividing by zero.
+On 2020-11-11 14:06, Brad Campbell wrote:
+> Commit fff2d0f701e6 ("hwmon: (applesmc) avoid overlong udelay()")
+> introduced an issue whereby communication with the SMC became
+> unreliable with write errors like :
+> 
+> [  120.378614] applesmc: send_byte(0x00, 0x0300) fail: 0x40
+> [  120.378621] applesmc: LKSB: write data fail
+> [  120.512782] applesmc: send_byte(0x00, 0x0300) fail: 0x40
+> [  120.512787] applesmc: LKSB: write data fail
+> 
+> The original code appeared to be timing sensitive and was not reliable
+> with the timing changes in the aforementioned commit.
+> 
+> This patch re-factors the SMC communication to remove the timing
+> dependencies and restore function with the changes previously
+> committed. Logic changes based on inspection of the Apple SMC kext.
+> 
+> Tested on : MacbookAir6,2 MacBookPro11,1 iMac12,2, MacBookAir1,1,
+> MacBookAir3,1
+> 
+> Fixes: fff2d0f701e6 ("hwmon: (applesmc) avoid overlong udelay()")
+> Reported-by: Andreas Kemnade <andreas@kemnade.info>
+> Tested-by: Andreas Kemnade <andreas@kemnade.info> # MacBookAir6,2
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Brad Campbell <brad@fnarfbargle.com>
+> Signed-off-by: Henrik Rydberg <rydberg@bitmath.org>
+> 
+> ---
+> Changelog :
+> v1 : Initial attempt
+> v2 : Address logic and coding style
+> v3 : Removed some debug hangover. Added tested-by. Modifications for MacBookAir1,1
+> v4 : Re-factored logic based on Apple driver. Simplified wait_status loop
+> v5 : Re-wrote status loop. Simplified busy check in send_byte(). Fixed formatting
 
-We also don't need to do 64-bit division, with 32-bits we can handle a
-fan running at over 4 million RPM.
+Hi Brad,
 
-Signed-off-by: Paul Barker <pbarker@konsulko.com>
----
+This version is still working fine on the MBA1,1, at 50 reads per second.
 
-  Changes from v4:
-
-    * Don't update ctx->sample_start if delta=0.
-
-  Changes from v2:
-
-    * Don't update the RPM value if delta=0.
-
- drivers/hwmon/pwm-fan.c | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-index bdba2143021a..1f63807c0399 100644
---- a/drivers/hwmon/pwm-fan.c
-+++ b/drivers/hwmon/pwm-fan.c
-@@ -54,16 +54,18 @@ static irqreturn_t pulse_handler(int irq, void *dev_id)
- static void sample_timer(struct timer_list *t)
- {
- 	struct pwm_fan_ctx *ctx = from_timer(ctx, t, rpm_timer);
-+	unsigned int delta = ktime_ms_delta(ktime_get(), ctx->sample_start);
- 	int pulses;
--	u64 tmp;
- 
--	pulses = atomic_read(&ctx->pulses);
--	atomic_sub(pulses, &ctx->pulses);
--	tmp = (u64)pulses * ktime_ms_delta(ktime_get(), ctx->sample_start) * 60;
--	do_div(tmp, ctx->pulses_per_revolution * 1000);
--	ctx->rpm = tmp;
-+	if (delta) {
-+		pulses = atomic_read(&ctx->pulses);
-+		atomic_sub(pulses, &ctx->pulses);
-+		ctx->rpm = (unsigned int)(pulses * 1000 * 60) /
-+			(ctx->pulses_per_revolution * delta);
-+
-+		ctx->sample_start = ktime_get();
-+	}
- 
--	ctx->sample_start = ktime_get();
- 	mod_timer(&ctx->rpm_timer, jiffies + HZ);
- }
- 
-
-base-commit: f8394f232b1eab649ce2df5c5f15b0e528c92091
--- 
-2.29.2
-
+Thanks,
+Henrik
