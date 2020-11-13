@@ -2,209 +2,253 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 746DDC5519F
-	for <linux-hwmon@archiver.kernel.org>; Fri, 13 Nov 2020 01:38:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4C60C2D0E4
+	for <linux-hwmon@archiver.kernel.org>; Fri, 13 Nov 2020 03:08:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 03102216C4
-	for <linux-hwmon@archiver.kernel.org>; Fri, 13 Nov 2020 01:38:31 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.b="1BxIjr2w"
+	by mail.kernel.org (Postfix) with ESMTP id 46CB620A8B
+	for <linux-hwmon@archiver.kernel.org>; Fri, 13 Nov 2020 03:08:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726017AbgKMBib (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 12 Nov 2020 20:38:31 -0500
-Received: from gproxy2-pub.mail.unifiedlayer.com ([69.89.18.3]:37199 "EHLO
-        gproxy2-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725965AbgKMBia (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 12 Nov 2020 20:38:30 -0500
-X-Greylist: delayed 1229 seconds by postgrey-1.27 at vger.kernel.org; Thu, 12 Nov 2020 20:38:29 EST
-Received: from cmgw14.unifiedlayer.com (unknown [10.9.0.14])
-        by gproxy2.mail.unifiedlayer.com (Postfix) with ESMTP id 045251E0A8E
-        for <linux-hwmon@vger.kernel.org>; Thu, 12 Nov 2020 18:17:59 -0700 (MST)
-Received: from bh-25.webhostbox.net ([208.91.199.152])
-        by cmsmtp with ESMTP
-        id dNiwkLrwYwNNldNiwkaelo; Thu, 12 Nov 2020 18:17:59 -0700
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.3 cv=Mpx8FVSe c=1 sm=1 tr=0
- a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=kj9zAlcOel0A:10:nop_charset_1
- a=nNwsprhYR40A:10:nop_rcvd_month_year
- a=evQFzbml-YQA:10:endurance_base64_authed_username_1 a=O-VtBXd9AAAA:8
- a=UyM4BhjcAAAA:8 a=zB1a_UxOHncF7umjrPUA:9 a=CjuIK1q_8ugA:10:nop_charset_2
- a=Np7NcwolvJ1Z-9SFZm_z:22 a=uB82QCMfG9HbZJC9J9IY:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=wrgCwdsGC5L05GQI0Ld/rSMDXoTRLGxKSon8DqiTim4=; b=1BxIjr2wDpHNp0WKkQ+70F5NXv
-        EwDPe5zwgYDgdjvjC0NzaFNLsXK/heBaTniEUa2QjBomVNqFhXaozCGgH9pTcpWF0v3+XokZxWg+1
-        vDRjCgLhTgu/qMDnBJ4uQgIuyy0lYZufD3EzBxOjzRMEdHZ+EO0kVSLJw5VzSVfYGO+9MB9EM4s1r
-        K3gND0ZhJnVNfvYoYAVoyLmwbSn9F4CEs9mpLvmujsAtd+TqA7Q+k7emoUyiLLGtcg6u5QUiSJqnU
-        xcZvT2Sqs6f80JVKRpTejt7om178vAbaWZfQsO9Oma6FyxmGz9K/nWx1CqEBQWmOq6BoLJulFKDGk
-        iv6qqaKA==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:46278 helo=localhost)
-        by bh-25.webhostbox.net with esmtpa (Exim 4.93)
-        (envelope-from <linux@roeck-us.net>)
-        id 1kdNiw-000lQP-4K; Fri, 13 Nov 2020 01:17:58 +0000
-Date:   Thu, 12 Nov 2020 17:17:57 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Brad Campbell <brad@fnarfbargle.com>
+        id S1726024AbgKMDIP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 12 Nov 2020 22:08:15 -0500
+Received: from mga18.intel.com ([134.134.136.126]:52175 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726017AbgKMDIP (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 12 Nov 2020 22:08:15 -0500
+IronPort-SDR: QnLyg4pEHB7T86nahI+rU8Tm+pe56gEXPztcSA/bk3cl1vTNZ8zrNtnZfZDYBklwrUiovqXSn4
+ LtpBTrljRw2w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9803"; a="158196663"
+X-IronPort-AV: E=Sophos;i="5.77,473,1596524400"; 
+   d="scan'208";a="158196663"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2020 19:08:15 -0800
+IronPort-SDR: /Z2mDOa4L4Fqx3a2DBUUqv+0IlQIUMnkLjsSPvWSE4IJe1G7l6KFjn3YXWmlsgVOi6BM+sYn2Y
+ U6RC8HEZEdJQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,473,1596524400"; 
+   d="scan'208";a="366812036"
+Received: from lkp-server02.sh.intel.com (HELO 697932c29306) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 12 Nov 2020 19:08:13 -0800
+Received: from kbuild by 697932c29306 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kdPRd-00000q-99; Fri, 13 Nov 2020 03:08:13 +0000
+Date:   Fri, 13 Nov 2020 11:07:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v2] applesmc: Cleanups on top of re-work comms
-Message-ID: <20201113011757.GA208190@roeck-us.net>
-References: <4a99004c-e0e8-1b42-cbbd-ad727a238a64@fnarfbargle.com>
+Subject: [hwmon:hwmon] BUILD SUCCESS
+ 4d64bb4ba5ecf4831448cdb2fe16d0ae91b2b40b
+Message-ID: <5fadf868.rJbuFuQEWkZz7Jx/%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4a99004c-e0e8-1b42-cbbd-ad727a238a64@fnarfbargle.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1kdNiw-000lQP-4K
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:46278
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 1
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Nov 13, 2020 at 09:38:07AM +1100, Brad Campbell wrote:
-> A couple of small cleanups on top of the comms changes for applesmc.c :
-> 
-> send_byte() is always called with APPLESMC_CMD_PORT.
-> Consolidate writing length with other setup parameters.
-> Consolidate read and write error messages to a single statement each.
-> 
-> Suggested-by: Henrik Rydberg <rydberg@bitmath.org>
-> Signed-off-by: Brad Campbell <brad@fnarfbargle.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon
+branch HEAD: 4d64bb4ba5ecf4831448cdb2fe16d0ae91b2b40b  hwmon: (applesmc) Re-work SMC comms
 
-Changes are ok with me. Can I get some Reviewed-by: / Tested-by: tags ?
+elapsed time: 722m
 
-Thanks,
-Guenter
+configs tested: 181
+configs skipped: 3
 
-> ---
-> Changelog :
-> v1 : Initial cleanup
-> v2 : Re-work to suit smc-comms rework v6
-> 
-> Index: linux-stable/drivers/hwmon/applesmc.c
-> ===================================================================
-> --- linux-stable.orig/drivers/hwmon/applesmc.c
-> +++ linux-stable/drivers/hwmon/applesmc.c
-> @@ -182,7 +182,7 @@ static int wait_status(u8 val, u8 mask)
->  
->  /* send_byte - Write to SMC data port. Callers must hold applesmc_lock. */
->  
-> -static int send_byte(u8 cmd, u16 port)
-> +static int send_byte(u8 cmd)
->  {
->  	int status;
->  
-> @@ -199,7 +199,7 @@ static int send_byte(u8 cmd, u16 port)
->  	if (status)
->  		return status;
->  
-> -	outb(cmd, port);
-> +	outb(cmd, APPLESMC_DATA_PORT);
->  	return 0;
->  }
->  
-> @@ -240,7 +240,7 @@ static int send_argument(const char *key
->  	int i;
->  
->  	for (i = 0; i < 4; i++)
-> -		if (send_byte(key[i], APPLESMC_DATA_PORT))
-> +		if (send_byte(key[i]))
->  			return -EIO;
->  	return 0;
->  }
-> @@ -255,23 +255,13 @@ static int read_smc(u8 cmd, const char *
->  	if (ret)
->  		return ret;
->  
-> -	if (send_command(cmd) || send_argument(key)) {
-> -		pr_warn("%.4s: read arg fail\n", key);
-> -		return -EIO;
-> -	}
-> -
-> -	/* This has no effect on newer (2012) SMCs */
-> -	if (send_byte(len, APPLESMC_DATA_PORT)) {
-> -		pr_warn("%.4s: read len fail\n", key);
-> -		return -EIO;
-> -	}
-> +	if (send_command(cmd) || send_argument(key) || send_byte(len))
-> +		goto err;
->  
->  	for (i = 0; i < len; i++) {
->  		if (wait_status(SMC_STATUS_AWAITING_DATA | SMC_STATUS_BUSY,
-> -				SMC_STATUS_AWAITING_DATA | SMC_STATUS_BUSY)) {
-> -			pr_warn("%.4s: read data[%d] fail\n", key, i);
-> -			return -EIO;
-> -		}
-> +				SMC_STATUS_AWAITING_DATA | SMC_STATUS_BUSY))
-> +			goto err;
->  		buffer[i] = inb(APPLESMC_DATA_PORT);
->  	}
->  
-> @@ -287,6 +277,9 @@ static int read_smc(u8 cmd, const char *
->  		pr_warn("flushed %d bytes, last value is: %d\n", i, data);
->  
->  	return wait_status(0, SMC_STATUS_BUSY);
-> +err:
-> +	pr_warn("read cmd fail: %x %.4s %d\n", cmd, key, len);
-> +	return -EIO;
->  }
->  
->  static int write_smc(u8 cmd, const char *key, const u8 *buffer, u8 len)
-> @@ -298,24 +291,17 @@ static int write_smc(u8 cmd, const char
->  	if (ret)
->  		return ret;
->  
-> -	if (send_command(cmd) || send_argument(key)) {
-> -		pr_warn("%s: write arg fail\n", key);
-> -		return -EIO;
-> -	}
-> -
-> -	if (send_byte(len, APPLESMC_DATA_PORT)) {
-> -		pr_warn("%.4s: write len fail\n", key);
-> -		return -EIO;
-> -	}
-> +	if (send_command(cmd) || send_argument(key) || send_byte(len))
-> +		goto err;
->  
-> -	for (i = 0; i < len; i++) {
-> -		if (send_byte(buffer[i], APPLESMC_DATA_PORT)) {
-> -			pr_warn("%s: write data fail\n", key);
-> -			return -EIO;
-> -		}
-> -	}
-> +	for (i = 0; i < len; i++)
-> +		if (send_byte(buffer[i]))
-> +			goto err;
->  
->  	return wait_status(0, SMC_STATUS_BUSY);
-> +err:
-> +	pr_warn("write cmd fail: %x %.4s %d\n", cmd, key, len);
-> +	return -EIO;
->  }
->  
->  static int read_register_count(unsigned int *count)
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                         bcm2835_defconfig
+arm                        shmobile_defconfig
+arm                        spear6xx_defconfig
+arm                       aspeed_g5_defconfig
+ia64                        generic_defconfig
+sh                   rts7751r2dplus_defconfig
+sh                         microdev_defconfig
+powerpc                      katmai_defconfig
+sh                   sh7770_generic_defconfig
+sh                            hp6xx_defconfig
+riscv                            allmodconfig
+powerpc                    ge_imp3a_defconfig
+sparc                               defconfig
+sparc64                          alldefconfig
+sh                        dreamcast_defconfig
+powerpc                       maple_defconfig
+openrisc                            defconfig
+powerpc                      acadia_defconfig
+sh                          rsk7201_defconfig
+arm                  colibri_pxa300_defconfig
+arm                            lart_defconfig
+powerpc                    mvme5100_defconfig
+powerpc                        icon_defconfig
+mips                   sb1250_swarm_defconfig
+mips                        workpad_defconfig
+m68k                         apollo_defconfig
+sh                ecovec24-romimage_defconfig
+riscv                            alldefconfig
+arm                          pxa3xx_defconfig
+powerpc                     pq2fads_defconfig
+arm                           tegra_defconfig
+powerpc                 mpc8315_rdb_defconfig
+sh                           se7722_defconfig
+powerpc                        warp_defconfig
+arm                  colibri_pxa270_defconfig
+arm                              alldefconfig
+arm                           h3600_defconfig
+m68k                        m5407c3_defconfig
+m68k                        mvme16x_defconfig
+sh                          rsk7203_defconfig
+mips                     loongson1b_defconfig
+arm                             mxs_defconfig
+sh                          sdk7786_defconfig
+mips                       bmips_be_defconfig
+arm                           efm32_defconfig
+mips                         tb0287_defconfig
+powerpc                      arches_defconfig
+c6x                         dsk6455_defconfig
+powerpc                     kmeter1_defconfig
+nds32                            alldefconfig
+powerpc64                           defconfig
+arm                       imx_v6_v7_defconfig
+arm                        cerfcube_defconfig
+m68k                        mvme147_defconfig
+arm                         shannon_defconfig
+powerpc                     asp8347_defconfig
+powerpc                         wii_defconfig
+sh                           sh2007_defconfig
+mips                malta_kvm_guest_defconfig
+i386                             alldefconfig
+mips                        maltaup_defconfig
+arm                         mv78xx0_defconfig
+mips                          malta_defconfig
+arm                      footbridge_defconfig
+xtensa                              defconfig
+mips                 decstation_r4k_defconfig
+arm                         nhk8815_defconfig
+c6x                        evmc6457_defconfig
+powerpc                    socrates_defconfig
+powerpc                 mpc832x_rdb_defconfig
+powerpc                   lite5200b_defconfig
+m68k                         amcore_defconfig
+mips                       lemote2f_defconfig
+powerpc                 mpc832x_mds_defconfig
+arm                         assabet_defconfig
+arm                          pxa168_defconfig
+microblaze                          defconfig
+s390                          debug_defconfig
+arm                         socfpga_defconfig
+m68k                        m5307c3_defconfig
+ia64                      gensparse_defconfig
+m68k                        stmark2_defconfig
+m68k                             alldefconfig
+powerpc                      ep88xc_defconfig
+arc                         haps_hs_defconfig
+arm                      jornada720_defconfig
+powerpc                      obs600_defconfig
+arm64                            alldefconfig
+powerpc                     tqm8548_defconfig
+sh                        sh7785lcr_defconfig
+arm                         orion5x_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a006-20201112
+i386                 randconfig-a005-20201112
+i386                 randconfig-a002-20201112
+i386                 randconfig-a001-20201112
+i386                 randconfig-a003-20201112
+i386                 randconfig-a004-20201112
+i386                 randconfig-a006-20201111
+i386                 randconfig-a005-20201111
+i386                 randconfig-a002-20201111
+i386                 randconfig-a001-20201111
+i386                 randconfig-a003-20201111
+i386                 randconfig-a004-20201111
+x86_64               randconfig-a015-20201111
+x86_64               randconfig-a011-20201111
+x86_64               randconfig-a014-20201111
+x86_64               randconfig-a013-20201111
+x86_64               randconfig-a016-20201111
+x86_64               randconfig-a012-20201111
+i386                 randconfig-a012-20201112
+i386                 randconfig-a014-20201112
+i386                 randconfig-a016-20201112
+i386                 randconfig-a011-20201112
+i386                 randconfig-a015-20201112
+i386                 randconfig-a013-20201112
+i386                 randconfig-a012-20201111
+i386                 randconfig-a014-20201111
+i386                 randconfig-a016-20201111
+i386                 randconfig-a011-20201111
+i386                 randconfig-a015-20201111
+i386                 randconfig-a013-20201111
+i386                 randconfig-a012-20201113
+i386                 randconfig-a014-20201113
+i386                 randconfig-a016-20201113
+i386                 randconfig-a011-20201113
+i386                 randconfig-a015-20201113
+i386                 randconfig-a013-20201113
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a003-20201111
+x86_64               randconfig-a005-20201111
+x86_64               randconfig-a004-20201111
+x86_64               randconfig-a002-20201111
+x86_64               randconfig-a006-20201111
+x86_64               randconfig-a001-20201111
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
