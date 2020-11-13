@@ -7,63 +7,63 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86F54C55ABD
-	for <linux-hwmon@archiver.kernel.org>; Fri, 13 Nov 2020 15:09:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5FB4C388F7
+	for <linux-hwmon@archiver.kernel.org>; Fri, 13 Nov 2020 15:09:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2CA9122249
-	for <linux-hwmon@archiver.kernel.org>; Fri, 13 Nov 2020 15:09:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A46782225D
+	for <linux-hwmon@archiver.kernel.org>; Fri, 13 Nov 2020 15:09:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=konsulko.com header.i=@konsulko.com header.b="FCSaLYo3"
+	dkim=pass (1024-bit key) header.d=konsulko.com header.i=@konsulko.com header.b="dXybmEmD"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726614AbgKMPJg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 13 Nov 2020 10:09:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37042 "EHLO
+        id S1726324AbgKMPJi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 13 Nov 2020 10:09:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726278AbgKMPJg (ORCPT
+        with ESMTP id S1726278AbgKMPJi (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 13 Nov 2020 10:09:36 -0500
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729E6C0613D1
-        for <linux-hwmon@vger.kernel.org>; Fri, 13 Nov 2020 07:09:36 -0800 (PST)
-Received: by mail-wm1-x344.google.com with SMTP id 10so8420074wml.2
-        for <linux-hwmon@vger.kernel.org>; Fri, 13 Nov 2020 07:09:36 -0800 (PST)
+        Fri, 13 Nov 2020 10:09:38 -0500
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77F7C0613D1
+        for <linux-hwmon@vger.kernel.org>; Fri, 13 Nov 2020 07:09:37 -0800 (PST)
+Received: by mail-wm1-x343.google.com with SMTP id w24so8811339wmi.0
+        for <linux-hwmon@vger.kernel.org>; Fri, 13 Nov 2020 07:09:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=konsulko.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=SC6v/9U+HIlsnisZ5co4yMBSoBpm8f6NrRqUBASHBlM=;
-        b=FCSaLYo3AnegtxIfnMkLC7divq/Lmt8U5Jpc+kWHyokEMXARdifg1u9BsBEvo2/2Qx
-         w0QugCGQQdsBSC8igPLc6TjZDpWLodGL/4ogVqPvlkc7QGwcPr9PTX516xfKeQ6g5xur
-         GA90uyWkiowZycaLG4+I8UJlzb+QVGIthVWyA=
+        bh=zlVLQ/eSSwM5CkwG1+n/Ft7FPgN9/8zKQeZjhQqRfeo=;
+        b=dXybmEmDuBX0Q1fgLUW0rXxBcBqR3kyUaQwV/rqQox5FPWTpQufr/i8HBueAxjobKG
+         OA5qR52jYsjNS5ISEomcDIPuMAqZkMMio0ir6XFMJXUGxsOIb0CL2OG34me89wpikBTy
+         eOPCiyLAE0fs91tGo4FCVwfzcvpDozki429rU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=SC6v/9U+HIlsnisZ5co4yMBSoBpm8f6NrRqUBASHBlM=;
-        b=WvLOs6fYv17/9M0adHEUyUOgHgEmij2H/K8v5Nl5/VD9BM4cLNz/mOfg64B1DE0qwj
-         ZKodF1MlduN+z0w39EMH3e0mk6dEm6Hd4mU3KMG9eEU3UnbS6cudaEP/h5//5clK/CJh
-         WhybYZhNDWbdoHJRpdu4p3PSsFf5E9n7KPYlSVXRThxpfKdKMc5SPbiCei/R5SMJTiMl
-         +P0gHia9wu1lCIBgVOF10x/LBZ7/2oFbvA9DobePTB8XXT7pL7VMoRgQeNG60+kHQDTF
-         hwkxe2zwV1LR/xtBrh1Q1KMZsdFbfwX5BCJg1irjSxRLisher3+S+nWy1iOnRsflm+Ru
-         tIrQ==
-X-Gm-Message-State: AOAM530b0C15ufQjju2u2HynRTzrN9/6DMmj1WW7+pYcMIMyAnkSivQM
-        qukYd9eC1+dUytqGqOJEH9RrvA==
-X-Google-Smtp-Source: ABdhPJyeRhF0vcqqQVFDPNNIKMScBufW/HxBk9zFiQHUKMs0Woc/dmd4ExG3nIEtLx44kjfjlo8IrQ==
-X-Received: by 2002:a1c:8150:: with SMTP id c77mr3174978wmd.26.1605280174287;
-        Fri, 13 Nov 2020 07:09:34 -0800 (PST)
+        bh=zlVLQ/eSSwM5CkwG1+n/Ft7FPgN9/8zKQeZjhQqRfeo=;
+        b=NTOCZD51v9N2XgMeBPqRp8ni+Mr3OFWy8p4uDEcMu93oYMmfHeDvwm7qilifcYlXWp
+         48jsUIV05dck7KcsTj1qyOyt6e00WZxH/7MCOgXdXHZUaLws4WomvEMgoSeGSTO4IxvQ
+         a0j2xdnAapiUil9Aocw7iAacc1OPnvL/CSJB58uq8DxX1uNR3x20+o17+wT7ftvruWMv
+         wLsCflneE1j4y7DHX36iT2qj3HW9yggb7APHBLvSI55K/aPvBa2gG5GAGZ83uoHy4x2x
+         aAJ4MExi6rhoaxiYwwwR8F0M1hTMyopT5ElRTxlbf0zFkXktgZUABay6nbpvgpZJELW6
+         kWxw==
+X-Gm-Message-State: AOAM531wkvXx+ewPHHeu5yaI7V3bKnCrlss8QOyg1266TJae1XZO9MUq
+        Bj+NkAxaJtm+lEYH9/huqY/pbw==
+X-Google-Smtp-Source: ABdhPJwZSl/Nrkh8PVuucGCJcZccnMJjUUPOD+SvWk9eTg+BfGjZe9a5IFYjEfSfmZbga09ZP4CJ7Q==
+X-Received: by 2002:a05:600c:230e:: with SMTP id 14mr2976635wmo.119.1605280175577;
+        Fri, 13 Nov 2020 07:09:35 -0800 (PST)
 Received: from alpha.home.b5net.uk (cpc76132-clif11-2-0-cust249.12-4.cable.virginm.net. [80.7.160.250])
-        by smtp.gmail.com with ESMTPSA id v2sm11368221wrm.96.2020.11.13.07.09.33
+        by smtp.gmail.com with ESMTPSA id v2sm11368221wrm.96.2020.11.13.07.09.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Nov 2020 07:09:33 -0800 (PST)
+        Fri, 13 Nov 2020 07:09:35 -0800 (PST)
 From:   Paul Barker <pbarker@konsulko.com>
 To:     Kamil Debski <kamil@wypas.org>,
         Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
 Cc:     Paul Barker <pbarker@konsulko.com>, linux-hwmon@vger.kernel.org
-Subject: [PATCH v2 1/4] hwmon: pwm-fan: Refactor pwm_fan_probe
-Date:   Fri, 13 Nov 2020 15:08:50 +0000
-Message-Id: <20201113150853.155495-2-pbarker@konsulko.com>
+Subject: [PATCH v2 2/4] hwmon: pwm-fan: Dynamically setup attribute groups
+Date:   Fri, 13 Nov 2020 15:08:51 +0000
+Message-Id: <20201113150853.155495-3-pbarker@konsulko.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201113150853.155495-1-pbarker@konsulko.com>
 References: <20201113150853.155495-1-pbarker@konsulko.com>
@@ -73,99 +73,123 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Use platform_irq_count to determine the number of fan tachometer inputs
-configured in the device tree. At this stage we support either 0 or 1
-inputs.
-
-Once we have this information we only need to read the
-pulses-per-revolution value if a fan tachometer is actually configured
-via an IRQ value.
-
-Also add a debug print of the IRQ number and the pulses-per-revolution
-value to aid in investigating issues.
+Instead of implementing an is_visible function we can dynamically
+populate the attribute group for the device based on whether a fan
+tachometer input is configured or not.
 
 Signed-off-by: Paul Barker <pbarker@konsulko.com>
 ---
- drivers/hwmon/pwm-fan.c | 50 +++++++++++++++++++++++++++--------------
- 1 file changed, 33 insertions(+), 17 deletions(-)
+ drivers/hwmon/pwm-fan.c | 55 +++++++++++++++++------------------------
+ 1 file changed, 23 insertions(+), 32 deletions(-)
 
 diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-index 1f63807c0399..efe2764f42d3 100644
+index efe2764f42d3..c4e0059ccaec 100644
 --- a/drivers/hwmon/pwm-fan.c
 +++ b/drivers/hwmon/pwm-fan.c
-@@ -286,7 +286,7 @@ static int pwm_fan_probe(struct platform_device *pdev)
- 	struct device *hwmon;
+@@ -31,6 +31,8 @@ struct pwm_fan_ctx {
+ 	atomic_t pulses;
+ 	unsigned int rpm;
+ 	u8 pulses_per_revolution;
++	struct sensor_device_attribute sensor_attr;
++
+ 	ktime_t sample_start;
+ 	struct timer_list rpm_timer;
+ 
+@@ -39,6 +41,9 @@ struct pwm_fan_ctx {
+ 	unsigned int pwm_fan_max_state;
+ 	unsigned int *pwm_fan_cooling_levels;
+ 	struct thermal_cooling_device *cdev;
++
++	struct attribute_group fan_group;
++	struct attribute_group *fan_groups[2];
+ };
+ 
+ /* This handler assumes self resetting edge triggered interrupt. */
+@@ -138,36 +143,6 @@ static ssize_t rpm_show(struct device *dev,
+ }
+ 
+ static SENSOR_DEVICE_ATTR_RW(pwm1, pwm, 0);
+-static SENSOR_DEVICE_ATTR_RO(fan1_input, rpm, 0);
+-
+-static struct attribute *pwm_fan_attrs[] = {
+-	&sensor_dev_attr_pwm1.dev_attr.attr,
+-	&sensor_dev_attr_fan1_input.dev_attr.attr,
+-	NULL,
+-};
+-
+-static umode_t pwm_fan_attrs_visible(struct kobject *kobj, struct attribute *a,
+-				     int n)
+-{
+-	struct device *dev = container_of(kobj, struct device, kobj);
+-	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
+-
+-	/* Hide fan_input in case no interrupt is available  */
+-	if (n == 1 && ctx->irq <= 0)
+-		return 0;
+-
+-	return a->mode;
+-}
+-
+-static const struct attribute_group pwm_fan_group = {
+-	.attrs = pwm_fan_attrs,
+-	.is_visible = pwm_fan_attrs_visible,
+-};
+-
+-static const struct attribute_group *pwm_fan_groups[] = {
+-	&pwm_fan_group,
+-	NULL,
+-};
+ 
+ /* thermal cooling device callbacks */
+ static int pwm_fan_get_max_state(struct thermal_cooling_device *cdev,
+@@ -287,6 +262,7 @@ static int pwm_fan_probe(struct platform_device *pdev)
  	int ret;
  	struct pwm_state state = { };
--	u32 ppr = 2;
-+	int tach_count;
+ 	int tach_count;
++	size_t sz;
  
  	ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
  	if (!ctx)
-@@ -300,10 +300,6 @@ static int pwm_fan_probe(struct platform_device *pdev)
+@@ -340,6 +316,13 @@ static int pwm_fan_probe(struct platform_device *pdev)
+ 		return dev_err_probe(dev, tach_count,
+ 				     "Could not get number of fan tachometer inputs\n");
  
- 	platform_set_drvdata(pdev, ctx);
- 
--	ctx->irq = platform_get_irq_optional(pdev, 0);
--	if (ctx->irq == -EPROBE_DEFER)
--		return ctx->irq;
--
- 	ctx->reg_en = devm_regulator_get_optional(dev, "fan");
- 	if (IS_ERR(ctx->reg_en)) {
- 		if (PTR_ERR(ctx->reg_en) != -ENODEV)
-@@ -339,20 +335,40 @@ static int pwm_fan_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
--	of_property_read_u32(dev->of_node, "pulses-per-revolution", &ppr);
--	ctx->pulses_per_revolution = ppr;
--	if (!ctx->pulses_per_revolution) {
--		dev_err(dev, "pulses-per-revolution can't be zero.\n");
--		return -EINVAL;
--	}
-+	tach_count = platform_irq_count(pdev);
-+	if (tach_count < 0)
-+		return dev_err_probe(dev, tach_count,
-+				     "Could not get number of fan tachometer inputs\n");
++	sz = (2 + tach_count) * sizeof(struct attribute *);
++	ctx->fan_group.attrs = devm_kzalloc(dev, sz, GFP_KERNEL);
++	if (!ctx->fan_group.attrs)
++		return -ENOMEM;
 +
-+	if (tach_count > 0) {
-+		u32 ppr = 2;
++	ctx->fan_group.attrs[0] = &sensor_dev_attr_pwm1.dev_attr.attr;
 +
-+		ctx->irq = platform_get_irq(pdev, 0);
-+		if (ctx->irq == -EPROBE_DEFER)
-+			return ctx->irq;
-+		if (ctx->irq > 0) {
-+			ret = devm_request_irq(dev, ctx->irq, pulse_handler, 0,
-+					       pdev->name, ctx);
-+			if (ret) {
-+				dev_err(dev,
-+					"Failed to request interrupt: %d\n",
-+					ret);
-+				return ret;
-+			}
-+		}
+ 	if (tach_count > 0) {
+ 		u32 ppr = 2;
  
--	if (ctx->irq > 0) {
--		ret = devm_request_irq(dev, ctx->irq, pulse_handler, 0,
--				       pdev->name, ctx);
--		if (ret) {
--			dev_err(dev, "Failed to request interrupt: %d\n", ret);
--			return ret;
-+		of_property_read_u32(dev->of_node,
-+				     "pulses-per-revolution",
-+				     &ppr);
-+		ctx->pulses_per_revolution = ppr;
-+		if (!ctx->pulses_per_revolution) {
-+			dev_err(dev, "pulses-per-revolution can't be zero.\n");
-+			return -EINVAL;
+@@ -366,6 +349,13 @@ static int pwm_fan_probe(struct platform_device *pdev)
+ 			return -EINVAL;
  		}
+ 
++		sysfs_attr_init(&ctx->sensor_attr.dev_attr.attr);
 +
-+		dev_dbg(dev, "tach: irq=%d, pulses_per_revolution=%d\n",
-+			ctx->irq, ctx->pulses_per_revolution);
++		ctx->sensor_attr.dev_attr.attr.name = "fan1_input";
++		ctx->sensor_attr.dev_attr.attr.mode = 0444;
++		ctx->sensor_attr.dev_attr.show = rpm_show;
++		ctx->fan_group.attrs[1] = &ctx->sensor_attr.dev_attr.attr;
 +
- 		ctx->sample_start = ktime_get();
+ 		dev_dbg(dev, "tach: irq=%d, pulses_per_revolution=%d\n",
+ 			ctx->irq, ctx->pulses_per_revolution);
+ 
+@@ -373,8 +363,9 @@ static int pwm_fan_probe(struct platform_device *pdev)
  		mod_timer(&ctx->rpm_timer, jiffies + HZ);
  	}
+ 
+-	hwmon = devm_hwmon_device_register_with_groups(dev, "pwmfan",
+-						       ctx, pwm_fan_groups);
++	ctx->fan_groups[0] = &ctx->fan_group;
++	hwmon = devm_hwmon_device_register_with_groups(dev, "pwmfan", ctx,
++			(const struct attribute_group **)ctx->fan_groups);
+ 	if (IS_ERR(hwmon)) {
+ 		dev_err(dev, "Failed to register hwmon device\n");
+ 		return PTR_ERR(hwmon);
 -- 
 2.29.2
 
