@@ -2,157 +2,116 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF3FBC4742C
-	for <linux-hwmon@archiver.kernel.org>; Fri, 13 Nov 2020 14:47:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 350A6C388F7
+	for <linux-hwmon@archiver.kernel.org>; Fri, 13 Nov 2020 15:09:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 85EB721D79
-	for <linux-hwmon@archiver.kernel.org>; Fri, 13 Nov 2020 14:47:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C51BB2225D
+	for <linux-hwmon@archiver.kernel.org>; Fri, 13 Nov 2020 15:09:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bI6ho+WI"
+	dkim=pass (1024-bit key) header.d=konsulko.com header.i=@konsulko.com header.b="M/ZWOhl0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726536AbgKMOrW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 13 Nov 2020 09:47:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33372 "EHLO
+        id S1726439AbgKMPJf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 13 Nov 2020 10:09:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726267AbgKMOrV (ORCPT
+        with ESMTP id S1726278AbgKMPJf (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 13 Nov 2020 09:47:21 -0500
-Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFCC2C0613D1;
-        Fri, 13 Nov 2020 06:47:21 -0800 (PST)
-Received: by mail-ot1-x342.google.com with SMTP id n15so9110243otl.8;
-        Fri, 13 Nov 2020 06:47:21 -0800 (PST)
+        Fri, 13 Nov 2020 10:09:35 -0500
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DB2CC0613D1
+        for <linux-hwmon@vger.kernel.org>; Fri, 13 Nov 2020 07:09:35 -0800 (PST)
+Received: by mail-wm1-x341.google.com with SMTP id s13so8764729wmh.4
+        for <linux-hwmon@vger.kernel.org>; Fri, 13 Nov 2020 07:09:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        d=konsulko.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=grU8H/KguaHoMwmJMkHUlAaKVmi6QrCxjzxZ5xt2rd8=;
-        b=bI6ho+WI7Hj3viwbxlnmbzDL+h6+2x71spKWS4S5KGYMUJhyGdMFcjCqzGbtRaSB3o
-         up4gZClozIpQ33AmAC2bU0nq7IC8jDFwB99+VSpwZt65+7y+3LTvzSMW7Rj2+4Sxnj2v
-         yHeweGa0qdHoLROQ7bFTVpjr2i/EEUElWfXf/rZeca4FrV1/4FtUQD9gw1xcemiU16R1
-         6PK85YrTH2dHOm8GGy+Ru3KbfxqQrxEhPU2P1zBulyS4MEJLRjo9iLqm+50wC/bjvG64
-         7xs0Hrn8RyjhQLa6KYoJeA8cPyXzv28iPtGPfXHEpXFbJbJ+P/g0ntTEBVOykdABjWAL
-         4s5w==
+        bh=baCErcbE3soaUBy5li1RWE5HHwEvUnefLnc3iQT2Mb8=;
+        b=M/ZWOhl0Ik8AUmBNDlu0cE2r3Mn3CdeH3zMUw6DcrW14qGTpky9w1G9GAfLWgUYIsY
+         gIStj3CYm0aFmDqq7BH+ZQQc9sadinouoGaJvAMhXHDb/wQOWM1okQLiED1ZgwvXj4+H
+         K7pLY1UTEXIFpcxR+VzUgdDoGvGfVVGxPI2N8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=grU8H/KguaHoMwmJMkHUlAaKVmi6QrCxjzxZ5xt2rd8=;
-        b=DYw3MCcQREdAeHBkQDWs4cqQlPXD+K9CN+4pnLnOzYHrSk5t9MtwAFL3spEQ027NRF
-         Sj4pR781itPFO9l0A9ZCfSXnH6B5rFMCBVD/DCbMNAh+wSNEVhE/3402SaKoxIqk/W+X
-         EckFXE9bAowDNrqSyphQm0Nf+PQdW4Rg9YoX69NJRfxq+NfXgiJbu0xSk8BKHgndJipp
-         ouqr1mZf0Adb5KZhWOF7LihfgZ91CsW3kwN/2e4rZaKn05yx/IWQ4O/TFTfFt9dUwoe3
-         hWtNeFsSLxfoMZg0HsxolFSWkwaAiY7EWufkcbGUL6IV87oJMFBhVZIP8KSDD53+tB98
-         ro/g==
-X-Gm-Message-State: AOAM532w1YAUzSfDRzVVpv1QJdETpUh5MivtE9KG1gmh1a3rCC2yc/DW
-        jB/+sNPqXf//i7IK9nALLn0cU1/zvLQ=
-X-Google-Smtp-Source: ABdhPJyQTCE57lH/5q17EUm/6E7EBkys8R6EN/TPdpYeSBkogeaIT4/u0YphgGS4zph62nTBML+0rA==
-X-Received: by 2002:a9d:7e84:: with SMTP id m4mr1763623otp.199.1605278840978;
-        Fri, 13 Nov 2020 06:47:20 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x63sm1908844oif.37.2020.11.13.06.47.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Nov 2020 06:47:20 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH] hwmon: amd_energy: modify the visibility of the counters
-To:     Salvatore Bonaccorso <carnil@debian.org>
-Cc:     Naveen Krishna Chatradhi <nchatrad@amd.com>,
-        linux-hwmon@vger.kernel.org, naveenkrishna.ch@gmail.com,
-        stable@vger.kernel.org
-References: <20201112172159.8781-1-nchatrad@amd.com>
- <238e3cf7-582f-a265-5300-9b44948107b0@roeck-us.net>
- <20201113135834.GA354992@eldamar.lan>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <e15bce7b-2aa7-1bd6-8419-b35233b9cca8@roeck-us.net>
-Date:   Fri, 13 Nov 2020 06:47:18 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=baCErcbE3soaUBy5li1RWE5HHwEvUnefLnc3iQT2Mb8=;
+        b=czpi2ApczfpvMjZ78uBXpHA8w1ebq4VjrAs8P4oPYJfcYvNVP+4lBkqzDOtBzzIgp8
+         R0Y0Wc1zjwKTrtzoXiWT5XlZsYodpPZES9xKjDArz29OCtWlAJT9ZpbM8NLSKs+SvBaC
+         Tf3UaotkLg0LPT0sJo4tSWqdWPSWhONYhanyntqoXp0sUcbAdhirD7QudMeXPsc2Y8xZ
+         NX9KLgX4PQx7pm4pzYrmJR1puQpwU8jJ8sAkdHfz4sf1dH9pzmMw13Ij8XCmWWkMzavM
+         zaq7ckqOWGJLcRuSQFLG/+RwBbqQ+9g7KqNri8BJOFMQd/mq4KxFC7WKBIphwV5vjwx9
+         BM0w==
+X-Gm-Message-State: AOAM5314EHeawGajVrkz+9Tw7HX3r25Df0MndFsbZ83uXmb21m7pgI5t
+        iNmdQOldAaQ5/j+FwXW9xal7kA==
+X-Google-Smtp-Source: ABdhPJzQ0GGjHv7EEj0M59PHz6hdsdcC3OF8QcEPbtaOtN8kJ0q7IqaTIBKi3YjnvgZrVZiW0nH2xg==
+X-Received: by 2002:a1c:1d82:: with SMTP id d124mr3161440wmd.12.1605280173249;
+        Fri, 13 Nov 2020 07:09:33 -0800 (PST)
+Received: from alpha.home.b5net.uk (cpc76132-clif11-2-0-cust249.12-4.cable.virginm.net. [80.7.160.250])
+        by smtp.gmail.com with ESMTPSA id v2sm11368221wrm.96.2020.11.13.07.09.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Nov 2020 07:09:32 -0800 (PST)
+From:   Paul Barker <pbarker@konsulko.com>
+To:     Kamil Debski <kamil@wypas.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Paul Barker <pbarker@konsulko.com>, linux-hwmon@vger.kernel.org
+Subject: [PATCH v2 0/4] pwm-fan: Support multiple tachometer inputs
+Date:   Fri, 13 Nov 2020 15:08:49 +0000
+Message-Id: <20201113150853.155495-1-pbarker@konsulko.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-In-Reply-To: <20201113135834.GA354992@eldamar.lan>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 11/13/20 5:58 AM, Salvatore Bonaccorso wrote:
-> Hi,
-> 
-> On Thu, Nov 12, 2020 at 09:24:22AM -0800, Guenter Roeck wrote:
->> On 11/12/20 9:21 AM, Naveen Krishna Chatradhi wrote:
->>> This patch limits the visibility to owner and groups only for the
->>> energy counters exposed through the hwmon based amd_energy driver.
->>>
->>> Cc: stable@vger.kernel.org
->>> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->>> Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
->>
->> This is very unusual, and may mess up the "sensors" command.
->> What problem is this trying to solve ?
-> 
-> Is this related to
-> 
-> https://bugzilla.redhat.com/show_bug.cgi?id=1897402
-> https://support.lenovo.com/lu/uk/product_security/LEN-50481
-> https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-12912
-> 
+These changes were made to support a custom board where one PWM output
+is routed to two fans, each of which has a tachometer signal routed to a
+GPIO input on the SoC.
 
-I guess so. The real fix would presumably be to read the power
-in the background. Of course, that won't work because reading
-it continuously or frequently causes power fluctuations. I'll
-apply the patch, but if there are complaints from users
-afterwards that "sensors" is broken I'll simply revert the
-entire driver.
+As the custom board doesn't currently support the latest mainline kernel
+I've tested these changes on a SanCloud BeagleBone Enhanced using an
+oscilloscope to check the PWM output and a signal generator to simulate
+the fan tachometer signals. I've tested variants of the device tree with
+0, 1 and 2 fan tachometer inputs configured to ensure the logic in the
+probe function is correct.
 
-Guenter
+The device tree bindings changes have been submitted in a separate
+series:
+https://lore.kernel.org/linux-devicetree/20200920180943.352526-1-pbarker@konsulko.com/
+
+These changes can also be pulled from:
+
+  https://gitlab.com/pbarker.dev/staging/linux.git
+  tag: for-hwmon/pwm-fan-tachometers-v2_2020-11-13
+
+Changes since v1:
+
+  * Split RPM calculation fix into a separate patch which has now been
+    accepted.
+
+  * Break the changes down into smaller patches so they're easier to
+    review.
+
+  * Rebased changes on hwmon-next.
+
+Paul Barker (4):
+  hwmon: pwm-fan: Refactor pwm_fan_probe
+  hwmon: pwm-fan: Dynamically setup attribute groups
+  hwmon: pwm-fan: Store tach data separately
+  hwmon: pwm-fan: Support multiple fan tachometers
+
+ drivers/hwmon/pwm-fan.c | 155 ++++++++++++++++++++++++----------------
+ 1 file changed, 95 insertions(+), 60 deletions(-)
+
+
+base-commit: 414920a4a5d5613e4aa77c89944f9c1dc86b06c4
+-- 
+2.29.2
+
