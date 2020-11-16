@@ -2,92 +2,76 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32046C63697
-	for <linux-hwmon@archiver.kernel.org>; Sun, 15 Nov 2020 19:09:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 246AFC63697
+	for <linux-hwmon@archiver.kernel.org>; Mon, 16 Nov 2020 17:36:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DDB4C22450
-	for <linux-hwmon@archiver.kernel.org>; Sun, 15 Nov 2020 19:09:43 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="XWLUDuNm"
+	by mail.kernel.org (Postfix) with ESMTP id C29A3223BF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 16 Nov 2020 17:36:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727464AbgKOTJZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 15 Nov 2020 14:09:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36000 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726823AbgKOTJY (ORCPT
+        id S1733024AbgKPRgX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 16 Nov 2020 12:36:23 -0500
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:45582 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731590AbgKPRgW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 15 Nov 2020 14:09:24 -0500
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8CC6C0613D1
-        for <linux-hwmon@vger.kernel.org>; Sun, 15 Nov 2020 11:09:24 -0800 (PST)
-Received: by mail-pf1-x443.google.com with SMTP id v12so11287012pfm.13
-        for <linux-hwmon@vger.kernel.org>; Sun, 15 Nov 2020 11:09:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id;
-        bh=ujoTivO0ZJwnK7oE4zr4LTdLFw3eF11FNlG4Lc9FRsU=;
-        b=XWLUDuNm8sfMSQBx8Enb+OoisiNDWBe07iLBLHlunasah8Io6+jQNEsuxgE+PtnKx4
-         XqaU7laR5LoxtFtw7ag3j6BCe9oFpj9m3WmmdUAX1B/HHlR7iXpSuJfatS6MpL6RXNgx
-         N/P/i6HZjclYqfStZGqLhcqd19JTpN11lXTNbAc7StqZSvgeh9uvlHjYD3AFPf4HZZLZ
-         2VMIiZhIZ5b85C/nHvBcHU+bdvDWAGLm354y20GnbG9pMeIx4Gnhy8ETnPyedQ/YX4gx
-         UjdbeUEJL2OhUFIVsAHnUKJDv4U4hVTYVHN/FCVzzWpJ8lG4jRa9nLrSDEpkO/Rm83rr
-         uUBg==
+        Mon, 16 Nov 2020 12:36:22 -0500
+Received: by mail-ot1-f68.google.com with SMTP id k3so16754828otp.12;
+        Mon, 16 Nov 2020 09:36:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=ujoTivO0ZJwnK7oE4zr4LTdLFw3eF11FNlG4Lc9FRsU=;
-        b=Y0AjrFzlkj4wh9DxtyA2d1FbWDUPFJdaq9pnQzDWkCLPH9OVC6nisZxQ2r8IdXCkdL
-         2Ok2XmSzzUr3MSPLHA7BMMdzsAYjm6oSAO3cPcICyXvArSi06TmjIv/LSwOrNE3BH8If
-         u1I81aktd9yjgqCUvagZjYIFs4k5zQkojeVjKFQCuQfBJ89quNVqxwROCrhOu6LsInab
-         BsBCnIR96lEOBM0YqZED8JG5QhUopz9GYa4d/ogqJtTgNbeJRn+bVZ+KSQviWp/881i/
-         G+go1Am/UCPEmPtt/hovuL/OZFgs2GrjIHtgppmmIMEz7cl4A5UGo6OkR4qq2CklLNZL
-         NiQA==
-X-Gm-Message-State: AOAM5319goO9JCg3Rt2R17gQ95a+5bbw84hggMw45pbZM2F9Od7w5p0K
-        K751XRZhJOKU52lSUbY2MwoTLsd7qgAowA==
-X-Google-Smtp-Source: ABdhPJzDpvDDoDeAQtR4qPQ1yu0uEmuzbFEazgM7zReICe9a0mIboMZnlkDXc4LXEvKg8T2k0AqWzg==
-X-Received: by 2002:a17:90a:708c:: with SMTP id g12mr12536790pjk.36.1605467364349;
-        Sun, 15 Nov 2020 11:09:24 -0800 (PST)
-Received: from localhost.localdomain ([163.172.76.58])
-        by smtp.googlemail.com with ESMTPSA id gk22sm15616211pjb.39.2020.11.15.11.09.20
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Eu89zIOkkQ+RwpYfgoglgMZA8e7V2O4a44a0i8NV0Ww=;
+        b=uWz5skyCwca/Lw5bEb00tD4rsww1ygt+PSKDS/tY8PTd11z3uaVh7tbFPnvBqBM4gu
+         hpXuCT8m/vgW7MObbszDFJ5KaidNfmkZ+xZOGxo3pKUKXBdLWG8oySxl7QRKKMW2qXqv
+         BTDSshLG13X3gosSdKISEMjeofoYPkFzgJ6yUf0qKtubwO3urwMjdVKbIi9gnV2AUUBh
+         irHY1/Yq1/o9YtGAUF42xLV/6qD4ImLwDpA3vJmw1j/9moHQyIP/vwC0Bs1yhTgL3ll5
+         Ng+W09Rbbmv8Zng6Z8ReU1LTMij/TNke9bkUwTGGfeguGcYQ2Tr+PdCWWikXdtDJVQCX
+         SdoA==
+X-Gm-Message-State: AOAM533E54YwADmk2E4Vuxg7l6X/gXCp/tBeEcQ4itgRjB58RjRYH61q
+        1a/8gWRTGXq/aSOnX5kBeQ==
+X-Google-Smtp-Source: ABdhPJzcJKA6DG3DNaW7RINXauhrTJBWHQr9psD8GzmUDpKfVnqr1JGdZSSOZD10NyPP2yCcXifMAA==
+X-Received: by 2002:a05:6830:3151:: with SMTP id c17mr270339ots.336.1605548181631;
+        Mon, 16 Nov 2020 09:36:21 -0800 (PST)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id d26sm4944086ooh.19.2020.11.16.09.36.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Nov 2020 11:09:23 -0800 (PST)
-From:   Corentin Labbe <clabbe@baylibre.com>
-To:     jdelvare@suse.com, linux@roeck-us.net
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH] hwmon: drivetemp: fix typo temperatire => temperature
-Date:   Sun, 15 Nov 2020 19:09:10 +0000
-Message-Id: <20201115190910.12539-1-clabbe@baylibre.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 16 Nov 2020 09:36:21 -0800 (PST)
+Received: (nullmailer pid 1852133 invoked by uid 1000);
+        Mon, 16 Nov 2020 17:36:20 -0000
+Date:   Mon, 16 Nov 2020 11:36:20 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Alexandru Ardelean <alexandru.ardelean@analog.com>
+Cc:     linux-kernel@vger.kernel.org, mark.thoren@analog.com,
+        devicetree@vger.kernel.org, jdelvare@suse.com,
+        ardeleanalex@gmail.com, linux@roeck-us.net,
+        linux-hwmon@vger.kernel.org, robh+dt@kernel.org
+Subject: Re: [PATCH v2 4/4] dt-bindings: hwmon: ltc2945: add device tree doc
+ for ltc2945
+Message-ID: <20201116173620.GA1852071@bogus>
+References: <20201111091259.46773-1-alexandru.ardelean@analog.com>
+ <20201111091259.46773-5-alexandru.ardelean@analog.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201111091259.46773-5-alexandru.ardelean@analog.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This patch fix a trivial typo temperatire => temperature.
+On Wed, 11 Nov 2020 11:12:59 +0200, Alexandru Ardelean wrote:
+> This change adds a device-tree binding documentation for the Linear
+> Technology (now Analog Devices) LTC2945 Wide Range I2C Power Monitor.
+> 
+> Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
+> ---
+>  .../bindings/hwmon/adi,ltc2945.yaml           | 49 +++++++++++++++++++
+>  1 file changed, 49 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/adi,ltc2945.yaml
+> 
 
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
----
- drivers/hwmon/drivetemp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/drivetemp.c b/drivers/hwmon/drivetemp.c
-index 72c760373957..1eb37106a220 100644
---- a/drivers/hwmon/drivetemp.c
-+++ b/drivers/hwmon/drivetemp.c
-@@ -10,7 +10,7 @@
-  *    hwmon: Driver for SCSI/ATA temperature sensors
-  *    by Constantin Baranov <const@mimas.ru>, submitted September 2009
-  *
-- * This drive supports reporting the temperatire of SATA drives. It can be
-+ * This drive supports reporting the temperature of SATA drives. It can be
-  * easily extended to report the temperature of SCSI drives.
-  *
-  * The primary means to read drive temperatures and temperature limits
--- 
-2.26.2
-
+Reviewed-by: Rob Herring <robh@kernel.org>
