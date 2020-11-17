@@ -2,74 +2,159 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DA34C2D0A3
-	for <linux-hwmon@archiver.kernel.org>; Mon, 16 Nov 2020 19:13:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BEC2FC64E7B
+	for <linux-hwmon@archiver.kernel.org>; Tue, 17 Nov 2020 01:10:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1E2612225B
-	for <linux-hwmon@archiver.kernel.org>; Mon, 16 Nov 2020 19:13:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7795924691
+	for <linux-hwmon@archiver.kernel.org>; Tue, 17 Nov 2020 01:10:17 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W4EdQQK5"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726722AbgKPTN5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 16 Nov 2020 14:13:57 -0500
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:44491 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725879AbgKPTN5 (ORCPT
+        id S1731665AbgKQBKA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 16 Nov 2020 20:10:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59908 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728779AbgKQBJ7 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 16 Nov 2020 14:13:57 -0500
-Received: by mail-ot1-f68.google.com with SMTP id f16so17051741otl.11;
-        Mon, 16 Nov 2020 11:13:55 -0800 (PST)
+        Mon, 16 Nov 2020 20:09:59 -0500
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B115C0613CF;
+        Mon, 16 Nov 2020 17:09:59 -0800 (PST)
+Received: by mail-pg1-x544.google.com with SMTP id f18so14804698pgi.8;
+        Mon, 16 Nov 2020 17:09:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=tLK4An+hDGibqk+F+KB9Iylic4mHms0AyKGZoLHI+Fo=;
+        b=W4EdQQK5c99k1YHeZ5PdPfwRC8Gpa/e69373mXPobeW92VK94XgaPhJ7Lia/01VVpc
+         +C0O5aKlrRsUwaAmIYSbEBPt+X3Dd1EW8chADG+6RbSkyZZJB3d4uWi7VD7mPpssPfdq
+         QEGa04fY2BH2CBBdtQWEIs03StolYUB2a6rhJBSOGPn1w1ld7qLyGDz9O2ZV0BrnMpY7
+         3sCAu4LQeWCztXrLpGgYf/ovvJfQpg+i4FKVpraBdG9pY1d7Im/tfrUXaG3IfczRfjeb
+         7ICS9g3uSaYwQ64BQFlC0dZ964Cs76THuj14LmY/CBxQREHuttauSlLHmyiRnHoVrOL7
+         TZXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=K6I9Q7uYU+1V06QV1nRfkMu2gtpH5bALi2iSib07hAE=;
-        b=IbBVHkMM7Ze1vvvUW0xefCsL4VnRmdrt210hT3FY1a8LUotE1GPogegpsXxcJ12h1x
-         vlXfzdM3g+v12Dtfqr5EGAT84H69AUJzmmHXCP67OqPhNX2GVZNhDOi+/53SAA38lPjl
-         WvJCCiP+4Oe+xPhTqssGnuzC000vBDk+cdDqq7ihgshMUKPlaEztjXEujXefYOCS3BAm
-         itOHfQ1t0S8r6+esnVAzwQlVVQNr8HECazql9InEz3UOJE1xWqDOjsq0YS+xuyhTLece
-         cH0IJNFQtTLSpN2wgrF61IjFtvnBedVeMPI0M2QJCVlaa/2zgMqR4SjPsProikFhmkwI
-         q7oQ==
-X-Gm-Message-State: AOAM531E2WBdBfh8kGtd/iR8YPSCp1iLgZaRPe4MHx1Y6GDIGC6kPctj
-        r/65RPj4gQJIEeGx8jKmgQ==
-X-Google-Smtp-Source: ABdhPJylE0odHk1sUNwAg8pufVRl8nRqtkr00hbaJG1PTMd3S3PhR4MMd5bGJauQ+tZgDh2163zwHw==
-X-Received: by 2002:a05:6830:236d:: with SMTP id r13mr630308oth.34.1605554035585;
-        Mon, 16 Nov 2020 11:13:55 -0800 (PST)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id 85sm5015804oie.30.2020.11.16.11.13.54
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=tLK4An+hDGibqk+F+KB9Iylic4mHms0AyKGZoLHI+Fo=;
+        b=makJvdceBAlSdGi6B8SadMW7GSw2ZqUO3RnN0iiW7VHWrdtgtQu1nwuHEM31eTcAXA
+         6REnwb/gwsIWQEzAv4tcPEK2mEWEsPEmJ4WWdPZcyrZhX+yWHaeUJjZJe4fGVTjBV2n7
+         IR7D/jp0O2GMfiLHdERnWTtvypZeUG+IXLP6h38pOs+M3i6eQTwQP5EAh1fF8wKCCIrD
+         ANY8kxefig31p8BQ28bTvib2WACkm2LVc9LOJtOvvV1Z+Xs7rb37etEAGeqRAad2y8V4
+         tcpvf0Y9417mOVz8covDNIO93IcmECKAVvZCa3/MnmgYMnHkEdHlI63dpCPlX1IHZrd7
+         8vhQ==
+X-Gm-Message-State: AOAM530iT2KDzBfD9fJnt2PY/ewbX/xQtzG5D70eT/E0V9LkCDqDJHxW
+        hYOzlw8ZfRdt6M7wijzn15M=
+X-Google-Smtp-Source: ABdhPJwKqCZdq0GrtoR6CKHJ9lffDESA4ZjLWcy9Axn4FuX/WQCGOH1oxy+fII7QPTvqfsbwnQJZcg==
+X-Received: by 2002:a63:441c:: with SMTP id r28mr1581268pga.184.1605575398722;
+        Mon, 16 Nov 2020 17:09:58 -0800 (PST)
+Received: from taoren-ubuntu-R90MNF91.thefacebook.com (c-73-252-146-110.hsd1.ca.comcast.net. [73.252.146.110])
+        by smtp.gmail.com with ESMTPSA id m23sm7362091pfo.136.2020.11.16.17.09.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Nov 2020 11:13:54 -0800 (PST)
-Received: (nullmailer pid 1977880 invoked by uid 1000);
-        Mon, 16 Nov 2020 19:13:54 -0000
-Date:   Mon, 16 Nov 2020 13:13:54 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     alexandru.tachici@analog.com
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, linux@roeck-us.net, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] dt-binding: hwmon: Add documentation for ltc2992
-Message-ID: <20201116191354.GA1977819@bogus>
-References: <20201111162057.73055-1-alexandru.tachici@analog.com>
- <20201111162057.73055-4-alexandru.tachici@analog.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201111162057.73055-4-alexandru.tachici@analog.com>
+        Mon, 16 Nov 2020 17:09:58 -0800 (PST)
+From:   rentao.bupt@gmail.com
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, openbmc@lists.ozlabs.org, taoren@fb.com,
+        mikechoi@fb.com
+Cc:     Tao Ren <rentao.bupt@gmail.com>
+Subject: [PATCH 2/2] docs: hwmon: Document max127 driver
+Date:   Mon, 16 Nov 2020 17:09:44 -0800
+Message-Id: <20201117010944.28457-3-rentao.bupt@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20201117010944.28457-1-rentao.bupt@gmail.com>
+References: <20201117010944.28457-1-rentao.bupt@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, 11 Nov 2020 18:20:57 +0200, alexandru.tachici@analog.com wrote:
-> From: Alexandru Tachici <alexandru.tachici@analog.com>
-> 
-> Add documentation for ltc2992.
-> 
-> Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
-> ---
->  .../bindings/hwmon/adi,ltc2992.yaml           | 80 +++++++++++++++++++
->  1 file changed, 80 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/adi,ltc2992.yaml
-> 
+From: Tao Ren <rentao.bupt@gmail.com>
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Add documentation for max127 hardware monitoring driver.
+
+Signed-off-by: Tao Ren <rentao.bupt@gmail.com>
+---
+ Documentation/hwmon/index.rst  |  1 +
+ Documentation/hwmon/max127.rst | 43 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 44 insertions(+)
+ create mode 100644 Documentation/hwmon/max127.rst
+
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index 408760d13813..0a07b6000c20 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -111,6 +111,7 @@ Hardware Monitoring Kernel Drivers
+    ltc4245
+    ltc4260
+    ltc4261
++   max127
+    max16064
+    max16065
+    max1619
+diff --git a/Documentation/hwmon/max127.rst b/Documentation/hwmon/max127.rst
+new file mode 100644
+index 000000000000..e50225a61c1a
+--- /dev/null
++++ b/Documentation/hwmon/max127.rst
+@@ -0,0 +1,43 @@
++.. SPDX-License-Identifier: GPL-2.0-or-later
++
++Kernel driver max127
++====================
++
++Author:
++
++  * Tao Ren <rentao.bupt@gmail.com>
++
++Supported chips:
++
++  * Maxim MAX127
++
++    Prefix: 'max127'
++
++    Datasheet: https://datasheets.maximintegrated.com/en/ds/MAX127-MAX128.pdf
++
++Description
++-----------
++
++The MAX127 is a multirange, 12-bit data acquisition system (DAS) providing
++8 analog input channels that are independently software programmable for
++a variety of ranges. The available ranges are {0,5V}, {0,10V}, {-5,5V}
++and {-10,10V}.
++
++The MAX127 features a 2-wire, I2C-compatible serial interface that allows
++communication among multiple devices using SDA and SCL lines.
++
++Sysfs interface
++---------------
++
++  ============== ==============================================================
++  in[0-7]_input  The conversion value for the corresponding channel.
++		 RO
++
++  in[0-7]_min    The lower limit (in Volt) for the corresponding channel.
++		 For the MAX127, it will be adjusted to -10, -5, or 0.
++		 RW
++
++  in[0-7]_max    The higher limit (in Volt) for the corresponding channel.
++		 For the MAX127, it will be adjusted to 0, 5, or 10.
++		 RW
++  ============== ==============================================================
+-- 
+2.17.1
+
