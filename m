@@ -2,177 +2,104 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3BEBC2D0E4
-	for <linux-hwmon@archiver.kernel.org>; Tue, 17 Nov 2020 05:36:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BF070C2D0E4
+	for <linux-hwmon@archiver.kernel.org>; Tue, 17 Nov 2020 07:26:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 40168241A7
-	for <linux-hwmon@archiver.kernel.org>; Tue, 17 Nov 2020 05:36:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 52C472463B
+	for <linux-hwmon@archiver.kernel.org>; Tue, 17 Nov 2020 07:26:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.b="EDQ0fqvi"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="p/gnF/Va"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726316AbgKQFgD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 17 Nov 2020 00:36:03 -0500
-Received: from gproxy4-pub.mail.unifiedlayer.com ([69.89.23.142]:36117 "EHLO
-        gproxy4-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725964AbgKQFgC (ORCPT
+        id S1726511AbgKQH0x (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 17 Nov 2020 02:26:53 -0500
+Received: from userp2120.oracle.com ([156.151.31.85]:58044 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726466AbgKQH0w (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 17 Nov 2020 00:36:02 -0500
-X-Greylist: delayed 1205 seconds by postgrey-1.27 at vger.kernel.org; Tue, 17 Nov 2020 00:36:02 EST
-Received: from cmgw12.unifiedlayer.com (unknown [10.9.0.12])
-        by gproxy4.mail.unifiedlayer.com (Postfix) with ESMTP id AEC2D175AF3
-        for <linux-hwmon@vger.kernel.org>; Mon, 16 Nov 2020 22:15:57 -0700 (MST)
-Received: from bh-25.webhostbox.net ([208.91.199.152])
-        by cmsmtp with ESMTP
-        id etLRksMsTeMJHetLRk1BeI; Mon, 16 Nov 2020 22:15:57 -0700
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.3 cv=XoLUx2N9 c=1 sm=1 tr=0
- a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=kj9zAlcOel0A:10:nop_charset_1
- a=nNwsprhYR40A:10:nop_rcvd_month_year
- a=evQFzbml-YQA:10:endurance_base64_authed_username_1 a=pGLkceISAAAA:8
- a=jtbBNqsHAAAA:8 a=-ewzHdp9FFKJ1sXwa_MA:9 a=CjuIK1q_8ugA:10:nop_charset_2
- a=RWaeYqt-Cn-VcsFsiLGo:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=UQyFykvQVTwc24qYJBcae8eSoAzAlxI0Tnd7zOVCoKU=; b=EDQ0fqviE9CQsRJDq23M3o2wgl
-        xXbuXMOOg4Cx7I3kr0N4RlZyI2ybQ+8sam9EGoGNzDL+czNM7sBpfHkqh/jdCa9KipiWHC/h3K2WQ
-        YdSdkItu1dkVDdT8fz2Vt4EZwEuUPxNVxYj9VPMlueEhqsKD4Rg3Tf5JFLCJUwrKfAHNvPw2XutBL
-        gmS947YYdDsbqnqDBFhm55s6Ff+mx+fDQRjJ0ojuiul7LG+QIW+MK6A1ZLtnM6E1vdIu06IcOxwx+
-        x9aYZmDM9O8vOHOgF2KnSFoZXui1XeIzl8yUyNU82fSTOTeBTQzO6Nby9Wrx1NenrzWAaCjozKOhZ
-        TDYb9f3g==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:47310 helo=localhost)
-        by bh-25.webhostbox.net with esmtpa (Exim 4.93)
-        (envelope-from <linux@roeck-us.net>)
-        id 1ketLQ-003qy2-D7; Tue, 17 Nov 2020 05:15:56 +0000
-Date:   Mon, 16 Nov 2020 21:15:55 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     rentao.bupt@gmail.com
-Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, openbmc@lists.ozlabs.org, taoren@fb.com,
-        mikechoi@fb.com
-Subject: Re: [PATCH 2/2] docs: hwmon: Document max127 driver
-Message-ID: <20201117051555.GB208504@roeck-us.net>
-References: <20201117010944.28457-1-rentao.bupt@gmail.com>
- <20201117010944.28457-3-rentao.bupt@gmail.com>
+        Tue, 17 Nov 2020 02:26:52 -0500
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AH7Nu4N125481;
+        Tue, 17 Nov 2020 07:24:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
+ bh=LdOYEyOdL9XySTd7XDlW9yCUa8NLCtLfAr3prYad7zo=;
+ b=p/gnF/Vaxi03vcAGHSiZWwzLeEfGTd3wB26/JDol7qC/yN1bo8SZrOdZ0KsneIim3B7S
+ 8+1qWqY06oPEf7jfQsc8H7G0xdjE9djNQvLqFnKadZ6jN4TXjeCRCoHOrUoUo+vRZQIO
+ //mSypqHQF6WPcu8BXqalqjcEPufqQDcFlfZhbHH7EtRKbHJ1Nzws7RiZ1HTzenR0Bk4
+ zMsVPpz1gLPBq4Czs3nxHtKPYo1FZXWAd7Si5CMNmbPmmLlGJSB+CG+aKJSIiAl7xXoz
+ StH4H3pI7iCck5yJGInleGHzwiRsj8ANM4he2B/8BKyWmJVkH+JFxRE/EvQxu3Nki8y1 LQ== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2120.oracle.com with ESMTP id 34t7vn0x2u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 17 Nov 2020 07:24:10 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0AH7EX4o073840;
+        Tue, 17 Nov 2020 07:24:09 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3030.oracle.com with ESMTP id 34ts5vq1c3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 17 Nov 2020 07:24:09 +0000
+Received: from abhmp0009.oracle.com (abhmp0009.oracle.com [141.146.116.15])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0AH7O83l025443;
+        Tue, 17 Nov 2020 07:24:08 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 16 Nov 2020 23:24:07 -0800
+Date:   Tue, 17 Nov 2020 10:24:01 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Henrik Rydberg <rydberg@bitmath.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Brad Campbell <brad@fnarfbargle.com>,
+        linux-hwmon@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: [PATCH] hwmon: (applesmc) Fix smc_sane() function
+Message-ID: <20201117072401.GE1111239@mwanda>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201117010944.28457-3-rentao.bupt@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1ketLQ-003qy2-D7
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:47310
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 25
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
+X-Mailer: git-send-email haha only kidding
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9807 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 spamscore=0 phishscore=0
+ suspectscore=0 mlxscore=0 malwarescore=0 bulkscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2011170051
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9807 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=0
+ malwarescore=0 bulkscore=0 impostorscore=0 lowpriorityscore=0 spamscore=0
+ adultscore=0 mlxscore=0 priorityscore=1501 phishscore=0 clxscore=1011
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2011170052
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Nov 16, 2020 at 05:09:44PM -0800, rentao.bupt@gmail.com wrote:
-> From: Tao Ren <rentao.bupt@gmail.com>
-> 
-> Add documentation for max127 hardware monitoring driver.
-> 
-> Signed-off-by: Tao Ren <rentao.bupt@gmail.com>
-> ---
->  Documentation/hwmon/index.rst  |  1 +
->  Documentation/hwmon/max127.rst | 43 ++++++++++++++++++++++++++++++++++
->  2 files changed, 44 insertions(+)
->  create mode 100644 Documentation/hwmon/max127.rst
-> 
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index 408760d13813..0a07b6000c20 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -111,6 +111,7 @@ Hardware Monitoring Kernel Drivers
->     ltc4245
->     ltc4260
->     ltc4261
-> +   max127
->     max16064
->     max16065
->     max1619
-> diff --git a/Documentation/hwmon/max127.rst b/Documentation/hwmon/max127.rst
-> new file mode 100644
-> index 000000000000..e50225a61c1a
-> --- /dev/null
-> +++ b/Documentation/hwmon/max127.rst
-> @@ -0,0 +1,43 @@
-> +.. SPDX-License-Identifier: GPL-2.0-or-later
-> +
-> +Kernel driver max127
-> +====================
-> +
-> +Author:
-> +
-> +  * Tao Ren <rentao.bupt@gmail.com>
-> +
-> +Supported chips:
-> +
-> +  * Maxim MAX127
-> +
-> +    Prefix: 'max127'
-> +
-> +    Datasheet: https://datasheets.maximintegrated.com/en/ds/MAX127-MAX128.pdf
-> +
-> +Description
-> +-----------
-> +
-> +The MAX127 is a multirange, 12-bit data acquisition system (DAS) providing
-> +8 analog input channels that are independently software programmable for
-> +a variety of ranges. The available ranges are {0,5V}, {0,10V}, {-5,5V}
-> +and {-10,10V}.
-> +
-> +The MAX127 features a 2-wire, I2C-compatible serial interface that allows
-> +communication among multiple devices using SDA and SCL lines.
-> +
-> +Sysfs interface
-> +---------------
-> +
-> +  ============== ==============================================================
-> +  in[0-7]_input  The conversion value for the corresponding channel.
-> +		 RO
-> +
-> +  in[0-7]_min    The lower limit (in Volt) for the corresponding channel.
-> +		 For the MAX127, it will be adjusted to -10, -5, or 0.
-> +		 RW
-> +
-> +  in[0-7]_max    The higher limit (in Volt) for the corresponding channel.
-> +		 For the MAX127, it will be adjusted to 0, 5, or 10.
-> +		 RW
+This test is reversed so the function will return without sending
+the APPLESMC_READ_CMD or completing the rest of the function.
 
-This should explain that the limits set the ADC range.
+Fixes: 4d64bb4ba5ec ("hwmon: (applesmc) Re-work SMC comms")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+ drivers/hwmon/applesmc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +  ============== ==============================================================
-> -- 
-> 2.17.1
-> 
+diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
+index 79b498f816fe..289b39537683 100644
+--- a/drivers/hwmon/applesmc.c
++++ b/drivers/hwmon/applesmc.c
+@@ -227,7 +227,7 @@ static int smc_sane(void)
+ 	int ret;
+ 
+ 	ret = wait_status(0, SMC_STATUS_BUSY);
+-	if (!ret)
++	if (ret)
+ 		return ret;
+ 	ret = send_command(APPLESMC_READ_CMD);
+ 	if (ret)
+-- 
+2.29.2
+
