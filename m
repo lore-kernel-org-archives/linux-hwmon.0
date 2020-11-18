@@ -2,247 +2,165 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A347C6379D
-	for <linux-hwmon@archiver.kernel.org>; Wed, 18 Nov 2020 15:46:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DA89C64E69
+	for <linux-hwmon@archiver.kernel.org>; Wed, 18 Nov 2020 23:10:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AA11224794
-	for <linux-hwmon@archiver.kernel.org>; Wed, 18 Nov 2020 15:46:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 00C1A246D1
+	for <linux-hwmon@archiver.kernel.org>; Wed, 18 Nov 2020 23:10:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.b="VTfwCaRv"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="uMnzVzhm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726654AbgKRPqG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 18 Nov 2020 10:46:06 -0500
-Received: from gproxy7-pub.mail.unifiedlayer.com ([70.40.196.235]:60950 "EHLO
-        gproxy7-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726677AbgKRPqF (ORCPT
+        id S1727251AbgKRXJj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 18 Nov 2020 18:09:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35188 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726457AbgKRXJi (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 18 Nov 2020 10:46:05 -0500
-X-Greylist: delayed 1495 seconds by postgrey-1.27 at vger.kernel.org; Wed, 18 Nov 2020 10:46:04 EST
-Received: from CMGW (unknown [10.9.0.13])
-        by gproxy7.mail.unifiedlayer.com (Postfix) with ESMTP id 1996B215C68
-        for <linux-hwmon@vger.kernel.org>; Wed, 18 Nov 2020 08:21:03 -0700 (MST)
-Received: from bh-25.webhostbox.net ([208.91.199.152])
-        by cmsmtp with ESMTP
-        id fPGYk98L3i1lMfPGYk96nn; Wed, 18 Nov 2020 08:21:03 -0700
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.2 cv=Xe759Mx5 c=1 sm=1 tr=0
- a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=kj9zAlcOel0A:10 a=nNwsprhYR40A:10
- a=evQFzbml-YQA:10 a=gAnH3GRIAAAA:8 a=orx1m2IVeNyU1SGiEpsA:9 a=CjuIK1q_8ugA:10
- a=oVHKYsEdi7-vN-J5QA_j:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=MG1Pe5b9gOp+QsfW2IYJZdVPI+qgDMHAO+V4Clvd6ps=; b=VTfwCaRv1EMC80SLorAXAK3LFN
-        AOfS1yQgwAoknQ61znasQQThLmEitTU/g8uh8kUgIb7bGtrprbL38uhTQbdtvwQ8YfLdTtUm+EfkI
-        7ww9Vnmze8C8wpA8953sphnYnRoBVPYvsw6dltYg7T5Lhaff2aZvZJ1zqOzZOcagQqOxwOzzhFVgs
-        Q3/V3S6rsjjBEs1We1qrdV2+FLU9mXvPyzC1fH5q8M8XR5lW9yfpqKkOeKlgwmJumXRkOUzHCnomy
-        Rmnc26uUbeq5qCXSgEx9M5G0buI0NK91n1/9oaIAH3Y4ibfE27Ta8KOBmNNaih/Ob2XCwIjwMoDEt
-        eelQbhIg==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54746 helo=localhost)
-        by bh-25.webhostbox.net with esmtpa (Exim 4.93)
-        (envelope-from <linux@roeck-us.net>)
-        id 1kfPGY-000z4j-7o; Wed, 18 Nov 2020 15:21:02 +0000
-Date:   Wed, 18 Nov 2020 07:21:01 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Alexandru Ardelean <ardeleanalex@gmail.com>
-Cc:     Alexandru Ardelean <alexandru.ardelean@analog.com>,
-        linux-hwmon@vger.kernel.org,
-        devicetree <devicetree@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, jdelvare@suse.com,
-        "Thoren, Mark" <mark.thoren@analog.com>
-Subject: Re: [PATCH v2 3/4] hwmon: (ltc2945): add support for sense resistor
-Message-ID: <20201118152101.GB174391@roeck-us.net>
-References: <20201111091259.46773-1-alexandru.ardelean@analog.com>
- <20201111091259.46773-4-alexandru.ardelean@analog.com>
- <CA+U=Dsqh1MDGjWfULdnmw5+2tTD4dutiodqr+uCdPhsFMbs=iQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+U=Dsqh1MDGjWfULdnmw5+2tTD4dutiodqr+uCdPhsFMbs=iQ@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1kfPGY-000z4j-7o
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:54746
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 14
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
+        Wed, 18 Nov 2020 18:09:38 -0500
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80508C0613D4;
+        Wed, 18 Nov 2020 15:09:55 -0800 (PST)
+Received: by mail-pg1-x542.google.com with SMTP id r18so2411539pgu.6;
+        Wed, 18 Nov 2020 15:09:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=S4SV7UWqaAO4+KNigQEQ+xlXa5i4hvXUtpTZN2jrHlA=;
+        b=uMnzVzhmPlLPZ0/M2t6pQ+/a395zQleD37ySHopmwQHi4ghvFtsIYAuEEUi6scn2oE
+         WjTuRb77VxCgNSlatY0O5bWDL2EiY+PXnJbPwJaluV4vC2qtJKuzyyJMxCW/ucs4NyKe
+         D6UQC1mlWQe/JZJGxrieQSi4pgLDj+AeWS5cTJzd96Usyo+5jw+yzp2wMIDEU2Q9ZqsZ
+         ICJCcPd5L9Du5QfGItxLs1Jhao0h5CbGZLyD+J5V3qIdveZ3hSKzNiEmBUhjBP8agbM6
+         YzZytOLol+oTy2zCVuyaCvIhJkmTPA3GMplkkuDpFGzSVcWrWuWLHLy2h6EiPXUMw4ib
+         rC0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=S4SV7UWqaAO4+KNigQEQ+xlXa5i4hvXUtpTZN2jrHlA=;
+        b=OxUuXGgP3oKdli648U7oXIwkzQ+WirCZUT9SBwEhqZTR40uII0QSTJsadsVP+kI8Gm
+         u/dskVQjGSFebyeQOZTFDoW6qff20mWZuhkc9ys+R0tb1K2L84g+zyIiWuL+IzWIi9Am
+         DMEaDpCzvzxBEolr4JnUTF2E+0dSdnmlPMxtl16L605ai4lRecubK41vInvf1aN1OlZl
+         NVY1z76rXzTYfI13OAdNPZ+h942QTrjXhz4Tj1hn6dAEjaOWRfN82fPlsRby4eT365lS
+         FqGoQ1wU81FdBd9539PnLHgYQ+DjGAZoeQmdmpPvGxHydaU/CKrNshZMu92b8rBzHFaa
+         PMKg==
+X-Gm-Message-State: AOAM533X7DpfEF59+ntSPHg5CD/RKi/UZj6ZUA/DtO0Ub5lSZ2de7Fzu
+        2RFepkL8MEk9xi8KKNirwoY=
+X-Google-Smtp-Source: ABdhPJzu9wrEysVlRm1/cjj7lif5xoT+FkSGrGUKs2fsSy8kVxEFM/1XL01MQtqHSGgEVT7zhSxWRg==
+X-Received: by 2002:a63:154e:: with SMTP id 14mr10380799pgv.49.1605740995078;
+        Wed, 18 Nov 2020 15:09:55 -0800 (PST)
+Received: from taoren-ubuntu-R90MNF91.thefacebook.com (c-73-252-146-110.hsd1.ca.comcast.net. [73.252.146.110])
+        by smtp.gmail.com with ESMTPSA id b21sm2565304pji.24.2020.11.18.15.09.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Nov 2020 15:09:54 -0800 (PST)
+From:   rentao.bupt@gmail.com
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, openbmc@lists.ozlabs.org, taoren@fb.com,
+        mikechoi@fb.com
+Cc:     Tao Ren <rentao.bupt@gmail.com>
+Subject: [PATCH v2 2/2] docs: hwmon: Document max127 driver
+Date:   Wed, 18 Nov 2020 15:09:29 -0800
+Message-Id: <20201118230929.18147-3-rentao.bupt@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20201118230929.18147-1-rentao.bupt@gmail.com>
+References: <20201118230929.18147-1-rentao.bupt@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Nov 18, 2020 at 04:43:07PM +0200, Alexandru Ardelean wrote:
-> On Wed, Nov 11, 2020 at 11:08 AM Alexandru Ardelean
-> <alexandru.ardelean@analog.com> wrote:
-> >
-> > The sense resistor is a parameter of the board. It should be configured in
-> > the driver via a device-tree / ACPI property, so that the proper current
-> > measurements can be done in the driver.
-> >
-> > It shouldn't be necessary that userspace need to know about the value of
-> > the resistor. It makes things a bit harder to make the application code
-> > portable from one board to another.
-> >
-> > This change implements support for the sense resistor to be configured from
-> > DT/ACPI and used in current calculations.
-> >
-> > Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
-> > ---
-> >  drivers/hwmon/ltc2945.c | 53 ++++++++++++++++++++---------------------
-> >  1 file changed, 26 insertions(+), 27 deletions(-)
-> >
-> > diff --git a/drivers/hwmon/ltc2945.c b/drivers/hwmon/ltc2945.c
-> > index 6d4569a25471..909dd92a7a20 100644
-> > --- a/drivers/hwmon/ltc2945.c
-> > +++ b/drivers/hwmon/ltc2945.c
-> > @@ -61,9 +61,11 @@
-> >  /**
-> >   * struct ltc2945_state - driver instance specific data
-> >   * @regmap             regmap object to access device registers
-> > + * @r_sense_uohm       current sense resistor value
-> >   */
-> >  struct ltc2945_state {
-> >         struct regmap           *regmap;
-> > +       u32                     r_sense_uohm;
-> >  };
-> >
-> >  static inline bool is_power_reg(u8 reg)
-> > @@ -101,9 +103,8 @@ static long long ltc2945_reg_to_val(struct device *dev, u8 reg)
-> >         case LTC2945_MAX_POWER_THRES_H:
-> >         case LTC2945_MIN_POWER_THRES_H:
-> >                 /*
-> > -                * Convert to uW by assuming current is measured with
-> > -                * an 1mOhm sense resistor, similar to current
-> > -                * measurements.
-> > +                * Convert to uW by and scale it with the configured
-> > +                * sense resistor, similar to current measurements.
-> >                  * Control register bit 0 selects if voltage at SENSE+/VDD
-> >                  * or voltage at ADIN is used to measure power.
-> >                  */
-> > @@ -112,10 +113,10 @@ static long long ltc2945_reg_to_val(struct device *dev, u8 reg)
-> >                         return ret;
-> >                 if (control & CONTROL_MULT_SELECT) {
-> >                         /* 25 mV * 25 uV = 0.625 uV resolution. */
-> > -                       val *= 625LL;
-> > +                       val = DIV_ROUND_CLOSEST_ULL(val * 625LL * 1000, st->r_sense_uohm);
-> >                 } else {
-> >                         /* 0.5 mV * 25 uV = 0.0125 uV resolution. */
-> > -                       val = (val * 25LL) >> 1;
-> > +                       val = DIV_ROUND_CLOSEST_ULL(val * 25LL * 1000, st->r_sense_uohm) >> 1;
-> >                 }
-> >                 break;
-> >         case LTC2945_VIN_H:
-> > @@ -140,13 +141,10 @@ static long long ltc2945_reg_to_val(struct device *dev, u8 reg)
-> >         case LTC2945_MAX_SENSE_THRES_H:
-> >         case LTC2945_MIN_SENSE_THRES_H:
-> >                 /*
-> > -                * 25 uV resolution. Convert to current as measured with
-> > -                * an 1 mOhm sense resistor, in mA. If a different sense
-> > -                * resistor is installed, calculate the actual current by
-> > -                * dividing the reported current by the sense resistor value
-> > -                * in mOhm.
-> > +                * 25 uV resolution. Convert to current and scale it
-> > +                * with the value of the sense resistor.
-> >                  */
-> > -               val *= 25;
-> > +               val = DIV_ROUND_CLOSEST_ULL(val * 25 * 1000, st->r_sense_uohm);
-> >                 break;
-> >         default:
-> >                 return -EINVAL;
-> > @@ -169,9 +167,8 @@ static int ltc2945_val_to_reg(struct device *dev, u8 reg,
-> >         case LTC2945_MAX_POWER_THRES_H:
-> >         case LTC2945_MIN_POWER_THRES_H:
-> >                 /*
-> > -                * Convert to register value by assuming current is measured
-> > -                * with an 1mOhm sense resistor, similar to current
-> > -                * measurements.
-> > +                * Convert to register value, scale it with the configured sense
-> > +                * resistor value, similar to current measurements.
-> >                  * Control register bit 0 selects if voltage at SENSE+/VDD
-> >                  * or voltage at ADIN is used to measure power, which in turn
-> >                  * determines register calculations.
-> > @@ -181,14 +178,10 @@ static int ltc2945_val_to_reg(struct device *dev, u8 reg,
-> >                         return ret;
-> >                 if (control & CONTROL_MULT_SELECT) {
-> >                         /* 25 mV * 25 uV = 0.625 uV resolution. */
-> > -                       val = DIV_ROUND_CLOSEST_ULL(val, 625);
-> > +                       val = DIV_ROUND_CLOSEST_ULL(val * 1000, 625 * st->r_sense_uohm);
-> 
-> I think that in this ltc2945_val_to_reg(), I should do the math the
-> other way around.
-> i.e.    val = DIV_ROUND_CLOSEST_ULL(val * st->r_sense_uohm, 625000);
-> 
-> I got confused initially and did it wrong.
-> 
-Good catch.
+From: Tao Ren <rentao.bupt@gmail.com>
 
-Guenter
+Add documentation for the max127 hardware monitoring driver.
 
-> >                 } else {
-> > -                       /*
-> > -                        * 0.5 mV * 25 uV = 0.0125 uV resolution.
-> > -                        * Divide first to avoid overflow;
-> > -                        * accept loss of accuracy.
-> > -                        */
-> > -                       val = DIV_ROUND_CLOSEST_ULL(val, 25) * 2;
-> > +                       /* 0.5 mV * 25 uV = 0.0125 uV resolution. */
-> > +                       val = DIV_ROUND_CLOSEST_ULL(val * 2 * 1000, 25 * st->r_sense_uohm);
-> >                 }
-> >                 break;
-> >         case LTC2945_VIN_H:
-> > @@ -213,13 +206,10 @@ static int ltc2945_val_to_reg(struct device *dev, u8 reg,
-> >         case LTC2945_MAX_SENSE_THRES_H:
-> >         case LTC2945_MIN_SENSE_THRES_H:
-> >                 /*
-> > -                * 25 uV resolution. Convert to current as measured with
-> > -                * an 1 mOhm sense resistor, in mA. If a different sense
-> > -                * resistor is installed, calculate the actual current by
-> > -                * dividing the reported current by the sense resistor value
-> > -                * in mOhm.
-> > +                * 25 uV resolution. Convert to current and scale it
-> > +                * with the value of the sense resistor, in mA.
-> >                  */
-> > -               val = DIV_ROUND_CLOSEST_ULL(val, 25);
-> > +               val = DIV_ROUND_CLOSEST_ULL(val * 1000, 25 * st->r_sense_uohm);
-> >                 break;
-> >         default:
-> >                 return -EINVAL;
-> > @@ -475,6 +465,15 @@ static int ltc2945_probe(struct i2c_client *client)
-> >                 return PTR_ERR(regmap);
-> >         }
-> >
-> > +       if (device_property_read_u32(dev, "shunt-resistor-micro-ohms",
-> > +                                    &st->r_sense_uohm))
-> > +               st->r_sense_uohm = 1000;
-> > +
-> > +       if (st->r_sense_uohm == 0) {
-> > +               dev_err(dev, "Zero value provided for sense resistor in DT");
-> > +               return -EINVAL;
-> > +       }
-> > +
-> >         st->regmap = regmap;
-> >
-> >         /* Clear faults */
-> > --
-> > 2.17.1
-> >
+Signed-off-by: Tao Ren <rentao.bupt@gmail.com>
+---
+ Changes in v2:
+   - add more description for min/max sysfs nodes.
+   - convert values from volt to millivolt in the document.
+
+ Documentation/hwmon/index.rst  |  1 +
+ Documentation/hwmon/max127.rst | 45 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 46 insertions(+)
+ create mode 100644 Documentation/hwmon/max127.rst
+
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index 408760d13813..0a07b6000c20 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -111,6 +111,7 @@ Hardware Monitoring Kernel Drivers
+    ltc4245
+    ltc4260
+    ltc4261
++   max127
+    max16064
+    max16065
+    max1619
+diff --git a/Documentation/hwmon/max127.rst b/Documentation/hwmon/max127.rst
+new file mode 100644
+index 000000000000..dc192dd9c37c
+--- /dev/null
++++ b/Documentation/hwmon/max127.rst
+@@ -0,0 +1,45 @@
++.. SPDX-License-Identifier: GPL-2.0-or-later
++
++Kernel driver max127
++====================
++
++Author:
++
++  * Tao Ren <rentao.bupt@gmail.com>
++
++Supported chips:
++
++  * Maxim MAX127
++
++    Prefix: 'max127'
++
++    Datasheet: https://datasheets.maximintegrated.com/en/ds/MAX127-MAX128.pdf
++
++Description
++-----------
++
++The MAX127 is a multirange, 12-bit data acquisition system (DAS) providing
++8 analog input channels that are independently software programmable for
++a variety of ranges. The available ranges are {0,5V}, {0,10V}, {-5,5V}
++and {-10,10V}.
++
++The MAX127 features a 2-wire, I2C-compatible serial interface that allows
++communication among multiple devices using SDA and SCL lines.
++
++Sysfs interface
++---------------
++
++  ============== ==============================================================
++  in[0-7]_input  The input voltage (in mV) of the corresponding channel.
++		 RO
++
++  in[0-7]_min    The lower input limit (in mV) for the corresponding channel.
++		 ADC range and LSB will be updated when the limit is changed.
++		 For the MAX127, it will be adjusted to -10000, -5000, or 0.
++		 RW
++
++  in[0-7]_max    The higher input limit (in mV) for the corresponding channel.
++		 ADC range and LSB will be updated when the limit is changed.
++		 For the MAX127, it will be adjusted to 0, 5000, or 10000.
++		 RW
++  ============== ==============================================================
+-- 
+2.17.1
+
