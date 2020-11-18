@@ -2,62 +2,29 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D26B7C64E7C
-	for <linux-hwmon@archiver.kernel.org>; Wed, 18 Nov 2020 23:10:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31AB7C63798
+	for <linux-hwmon@archiver.kernel.org>; Wed, 18 Nov 2020 23:28:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 78602246F1
-	for <linux-hwmon@archiver.kernel.org>; Wed, 18 Nov 2020 23:10:16 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rEThL2sa"
+	by mail.kernel.org (Postfix) with ESMTP id D1BD1246E0
+	for <linux-hwmon@archiver.kernel.org>; Wed, 18 Nov 2020 23:28:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726584AbgKRXJe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 18 Nov 2020 18:09:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35174 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726457AbgKRXJe (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 18 Nov 2020 18:09:34 -0500
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CECDC0613D4;
-        Wed, 18 Nov 2020 15:09:51 -0800 (PST)
-Received: by mail-pg1-x543.google.com with SMTP id j19so2411168pgg.5;
-        Wed, 18 Nov 2020 15:09:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=BFitlouLqV5WjAV4yis+SNy1ksEBkbSXVdeVWFMxCgQ=;
-        b=rEThL2sa7EQ5kIQx32rvLbR/kFdz1zobSEUYn4oWYiSZ4fA73aYTdSOu4tSDHYJoMm
-         T600ICRuLEf/w3lxxqIF8O2/k2boZvhWmlWC8MX+OBnC/RnG8giTFafP7Q+YW95HAbqV
-         Zh+cqbqUeMs9FLz1SCwfZ4jD7b8lcgyEUlUgelSgw0eBLuSLueMKtyoE7G/YpKRS4p/y
-         tB11JM1yp8XTNVQsAkHU/bDEB40dw6FVx2yrsvm+KlQcVnEEr2pBhz6MbkycbDgakMmb
-         1jRj1sawhQ1dr3AWU9pmAdj7W9EmlaN+HWUnWEr7nC2hAOAjAYabbl9r5HrGC59WJztp
-         wUmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=BFitlouLqV5WjAV4yis+SNy1ksEBkbSXVdeVWFMxCgQ=;
-        b=q2XgbAfBA9tG3stRvp+QNkm6w0MCsQcW5yAjtUUk3qnmz/Wic4VbSgWeThF80Xx/ER
-         WTA+2oFI2S1Rpqi7M1FWMCqVA7ZGG32jiGt4uk5VdK3/VwuXDayGlz3/PuhC1SKRCuIa
-         w7gBOUiJsYaG+ThUR4Owzif4BePLZFrSzMBc0Fuh+hPkyP+qsbY4x4IHcZJvDSSgDvIh
-         G9tUOpq+QgPKGdV95xjT7ljnNPJ3psrHmcfFrVTjkrZWjFk+08o8AYAkMzly6RxnB2Jc
-         Q4RgHTkbagfdLOSN65nFqiw1Mcq5MVeOfN0zpUabW/+FPP5WX8URt7gMR09yXt2uUndV
-         S1Fg==
-X-Gm-Message-State: AOAM533gXXmGotRQGRffxn7r6sfHhHnfCRLx408u/nybho7uoeTyiWRx
-        8zTPYcyOr8irSkTaWqpUwWCpCr/yEyAWq6tP
-X-Google-Smtp-Source: ABdhPJzuBMVJyfNRuwEIiXq+MUjq865yCE7VpOiJ98dctqAKDL1P+66d8xBL1pFHeAegwr/cCe+HPw==
-X-Received: by 2002:a63:4513:: with SMTP id s19mr10194192pga.254.1605740990817;
-        Wed, 18 Nov 2020 15:09:50 -0800 (PST)
-Received: from taoren-ubuntu-R90MNF91.thefacebook.com (c-73-252-146-110.hsd1.ca.comcast.net. [73.252.146.110])
-        by smtp.gmail.com with ESMTPSA id b21sm2565304pji.24.2020.11.18.15.09.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Nov 2020 15:09:50 -0800 (PST)
-From:   rentao.bupt@gmail.com
-To:     Jean Delvare <jdelvare@suse.com>,
+        id S1726243AbgKRX1k (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 18 Nov 2020 18:27:40 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:36756 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725823AbgKRX1k (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 18 Nov 2020 18:27:40 -0500
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94)
+        (envelope-from <andrew@lunn.ch>)
+        id 1kfWr9-007oy0-2l; Thu, 19 Nov 2020 00:27:19 +0100
+Date:   Thu, 19 Nov 2020 00:27:19 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     rentao.bupt@gmail.com
+Cc:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Jonathan Corbet <corbet@lwn.net>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -70,36 +37,26 @@ To:     Jean Delvare <jdelvare@suse.com>,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org, openbmc@lists.ozlabs.org, taoren@fb.com,
         mikechoi@fb.com
-Cc:     Tao Ren <rentao.bupt@gmail.com>
-Subject: [PATCH v2 0/2] hwmon: (max127) Add Maxim MAX127 hardware monitoring
-Date:   Wed, 18 Nov 2020 15:09:27 -0800
-Message-Id: <20201118230929.18147-1-rentao.bupt@gmail.com>
-X-Mailer: git-send-email 2.17.1
+Subject: Re: [PATCH v2 0/2] hwmon: (max127) Add Maxim MAX127 hardware
+ monitoring
+Message-ID: <20201118232719.GI1853236@lunn.ch>
+References: <20201118230929.18147-1-rentao.bupt@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201118230929.18147-1-rentao.bupt@gmail.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Tao Ren <rentao.bupt@gmail.com>
+On Wed, Nov 18, 2020 at 03:09:27PM -0800, rentao.bupt@gmail.com wrote:
+> From: Tao Ren <rentao.bupt@gmail.com>
+> 
+> The patch series adds hardware monitoring driver for the Maxim MAX127
+> chip.
 
-The patch series adds hardware monitoring driver for the Maxim MAX127
-chip.
+Hi Tao
 
-Patch #1 adds the max127 hardware monitoring driver, and patch #2 adds
-documentation for the driver.
+Why are using sending a hwmon driver to the networking mailing list?
 
-Tao Ren (2):
-  hwmon: (max127) Add Maxim MAX127 hardware monitoring driver
-  docs: hwmon: Document max127 driver
-
- Documentation/hwmon/index.rst  |   1 +
- Documentation/hwmon/max127.rst |  45 +++++
- drivers/hwmon/Kconfig          |   9 +
- drivers/hwmon/Makefile         |   1 +
- drivers/hwmon/max127.c         | 346 +++++++++++++++++++++++++++++++++
- 5 files changed, 402 insertions(+)
- create mode 100644 Documentation/hwmon/max127.rst
- create mode 100644 drivers/hwmon/max127.c
-
--- 
-2.17.1
-
+    Andrew
