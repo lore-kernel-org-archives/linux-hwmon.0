@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-15.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10D13C64E7B
-	for <linux-hwmon@archiver.kernel.org>; Wed, 18 Nov 2020 15:41:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A347C6379D
+	for <linux-hwmon@archiver.kernel.org>; Wed, 18 Nov 2020 15:46:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9C50A20870
-	for <linux-hwmon@archiver.kernel.org>; Wed, 18 Nov 2020 15:41:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AA11224794
+	for <linux-hwmon@archiver.kernel.org>; Wed, 18 Nov 2020 15:46:46 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.b="WHtILMRb"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.b="VTfwCaRv"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726663AbgKRPlF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 18 Nov 2020 10:41:05 -0500
-Received: from gproxy6-pub.mail.unifiedlayer.com ([67.222.39.168]:47037 "EHLO
-        gproxy6-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727476AbgKRPlE (ORCPT
+        id S1726654AbgKRPqG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 18 Nov 2020 10:46:06 -0500
+Received: from gproxy7-pub.mail.unifiedlayer.com ([70.40.196.235]:60950 "EHLO
+        gproxy7-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726677AbgKRPqF (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 18 Nov 2020 10:41:04 -0500
-X-Greylist: delayed 1270 seconds by postgrey-1.27 at vger.kernel.org; Wed, 18 Nov 2020 10:41:04 EST
+        Wed, 18 Nov 2020 10:46:05 -0500
+X-Greylist: delayed 1495 seconds by postgrey-1.27 at vger.kernel.org; Wed, 18 Nov 2020 10:46:04 EST
 Received: from CMGW (unknown [10.9.0.13])
-        by gproxy6.mail.unifiedlayer.com (Postfix) with ESMTP id B742C1E07B2
-        for <linux-hwmon@vger.kernel.org>; Wed, 18 Nov 2020 08:19:52 -0700 (MST)
+        by gproxy7.mail.unifiedlayer.com (Postfix) with ESMTP id 1996B215C68
+        for <linux-hwmon@vger.kernel.org>; Wed, 18 Nov 2020 08:21:03 -0700 (MST)
 Received: from bh-25.webhostbox.net ([208.91.199.152])
         by cmsmtp with ESMTP
-        id fPFQk97ydi1lMfPFQk96Rr; Wed, 18 Nov 2020 08:19:52 -0700
+        id fPGYk98L3i1lMfPGYk96nn; Wed, 18 Nov 2020 08:21:03 -0700
 X-Authority-Reason: nr=8
 X-Authority-Analysis: v=2.2 cv=Xe759Mx5 c=1 sm=1 tr=0
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
  a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=kj9zAlcOel0A:10 a=nNwsprhYR40A:10
- a=evQFzbml-YQA:10 a=_jlGtV7tAAAA:8 a=gAnH3GRIAAAA:8 a=yR8B6WPNGrYVYh0K3BIA:9
- a=CjuIK1q_8ugA:10 a=nlm17XC03S6CtCLSeiRr:22 a=oVHKYsEdi7-vN-J5QA_j:22
+ a=evQFzbml-YQA:10 a=gAnH3GRIAAAA:8 a=orx1m2IVeNyU1SGiEpsA:9 a=CjuIK1q_8ugA:10
+ a=oVHKYsEdi7-vN-J5QA_j:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
         :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
         :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
         Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
         List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=AiAUNtDXMHNhxHyCyNxAtwiZ6bmCnCJ1srdQH5dUjE0=; b=WHtILMRbPEMBo0znGXhG6MVSyK
-        LDKre+4/O8+JJLr5o8zJtbYtTg5LTuGGtHkE4k9sNO43JQjM96okNHSgjCTssnWTp+Ha+WH49TMsb
-        /QVZwWvV6PtbKPD+D5CSFlVLjkEuxVdPEJkMw4VSlTHIpQ5MZ8M4jm/H/GtwUkSk9A4jj/VpYZH0F
-        NPEDpVbeE7GAUVqK+BzvI9MJMgyDP3b6AYUprefMRbfUp5WQyBfGeye8k0DwlRQuDvtTSlLZF1CFK
-        RvNHuNNyfkcnAZkqZ6vVMkS7xvfYvSUryo8g23OZaR5BZFxTACljjV0JicXqJgUXl2tiAMGLwbqI3
-        jtYokgxQ==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54742 helo=localhost)
+        bh=MG1Pe5b9gOp+QsfW2IYJZdVPI+qgDMHAO+V4Clvd6ps=; b=VTfwCaRv1EMC80SLorAXAK3LFN
+        AOfS1yQgwAoknQ61znasQQThLmEitTU/g8uh8kUgIb7bGtrprbL38uhTQbdtvwQ8YfLdTtUm+EfkI
+        7ww9Vnmze8C8wpA8953sphnYnRoBVPYvsw6dltYg7T5Lhaff2aZvZJ1zqOzZOcagQqOxwOzzhFVgs
+        Q3/V3S6rsjjBEs1We1qrdV2+FLU9mXvPyzC1fH5q8M8XR5lW9yfpqKkOeKlgwmJumXRkOUzHCnomy
+        Rmnc26uUbeq5qCXSgEx9M5G0buI0NK91n1/9oaIAH3Y4ibfE27Ta8KOBmNNaih/Ob2XCwIjwMoDEt
+        eelQbhIg==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54746 helo=localhost)
         by bh-25.webhostbox.net with esmtpa (Exim 4.93)
         (envelope-from <linux@roeck-us.net>)
-        id 1kfPFP-000yZx-Pw; Wed, 18 Nov 2020 15:19:51 +0000
-Date:   Wed, 18 Nov 2020 07:19:51 -0800
+        id 1kfPGY-000z4j-7o; Wed, 18 Nov 2020 15:21:02 +0000
+Date:   Wed, 18 Nov 2020 07:21:01 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Alexandru Ardelean <ardeleanalex@gmail.com>
 Cc:     Alexandru Ardelean <alexandru.ardelean@analog.com>,
@@ -60,17 +60,15 @@ Cc:     Alexandru Ardelean <alexandru.ardelean@analog.com>,
         LKML <linux-kernel@vger.kernel.org>,
         Rob Herring <robh+dt@kernel.org>, jdelvare@suse.com,
         "Thoren, Mark" <mark.thoren@analog.com>
-Subject: Re: [PATCH v2 2/4] docs: hwmon: (ltc2945): change type of val to ULL
- in ltc2945_val_to_reg()
-Message-ID: <20201118151951.GA174391@roeck-us.net>
+Subject: Re: [PATCH v2 3/4] hwmon: (ltc2945): add support for sense resistor
+Message-ID: <20201118152101.GB174391@roeck-us.net>
 References: <20201111091259.46773-1-alexandru.ardelean@analog.com>
- <20201111091259.46773-3-alexandru.ardelean@analog.com>
- <41f86559-9165-40f9-e7f3-3e7f5eca7315@roeck-us.net>
- <CA+U=DsraJrjf14gYDFxM8ccQ+aBYURdCyoQheR7tzUWT-UOakw@mail.gmail.com>
+ <20201111091259.46773-4-alexandru.ardelean@analog.com>
+ <CA+U=Dsqh1MDGjWfULdnmw5+2tTD4dutiodqr+uCdPhsFMbs=iQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+U=DsraJrjf14gYDFxM8ccQ+aBYURdCyoQheR7tzUWT-UOakw@mail.gmail.com>
+In-Reply-To: <CA+U=Dsqh1MDGjWfULdnmw5+2tTD4dutiodqr+uCdPhsFMbs=iQ@mail.gmail.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
 X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
@@ -80,123 +78,171 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1kfPFP-000yZx-Pw
+X-Exim-ID: 1kfPGY-000z4j-7o
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:54742
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:54746
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 6
+X-Email-Count: 14
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Nov 18, 2020 at 04:40:24PM +0200, Alexandru Ardelean wrote:
-> On Wed, Nov 11, 2020 at 4:54 PM Guenter Roeck <linux@roeck-us.net> wrote:
+On Wed, Nov 18, 2020 at 04:43:07PM +0200, Alexandru Ardelean wrote:
+> On Wed, Nov 11, 2020 at 11:08 AM Alexandru Ardelean
+> <alexandru.ardelean@analog.com> wrote:
 > >
-> > On 11/11/20 1:12 AM, Alexandru Ardelean wrote:
-> > > In order to account for any potential overflows that could occur.
-> > >
-> > > Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
+> > The sense resistor is a parameter of the board. It should be configured in
+> > the driver via a device-tree / ACPI property, so that the proper current
+> > measurements can be done in the driver.
 > >
-> > Thinking about it, this can only really happen if the user provides
-> > excessive values for limit attributes. Those are currently clamped
-> > later, after the conversion. I think it would be better to modify
-> > the code to apply a clamp _before_ the conversion as well instead
-> > of trying to solve the overflow problem with unsigned long long.
+> > It shouldn't be necessary that userspace need to know about the value of
+> > the resistor. It makes things a bit harder to make the application code
+> > portable from one board to another.
+> >
+> > This change implements support for the sense resistor to be configured from
+> > DT/ACPI and used in current calculations.
+> >
+> > Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
+> > ---
+> >  drivers/hwmon/ltc2945.c | 53 ++++++++++++++++++++---------------------
+> >  1 file changed, 26 insertions(+), 27 deletions(-)
+> >
+> > diff --git a/drivers/hwmon/ltc2945.c b/drivers/hwmon/ltc2945.c
+> > index 6d4569a25471..909dd92a7a20 100644
+> > --- a/drivers/hwmon/ltc2945.c
+> > +++ b/drivers/hwmon/ltc2945.c
+> > @@ -61,9 +61,11 @@
+> >  /**
+> >   * struct ltc2945_state - driver instance specific data
+> >   * @regmap             regmap object to access device registers
+> > + * @r_sense_uohm       current sense resistor value
+> >   */
+> >  struct ltc2945_state {
+> >         struct regmap           *regmap;
+> > +       u32                     r_sense_uohm;
+> >  };
+> >
+> >  static inline bool is_power_reg(u8 reg)
+> > @@ -101,9 +103,8 @@ static long long ltc2945_reg_to_val(struct device *dev, u8 reg)
+> >         case LTC2945_MAX_POWER_THRES_H:
+> >         case LTC2945_MIN_POWER_THRES_H:
+> >                 /*
+> > -                * Convert to uW by assuming current is measured with
+> > -                * an 1mOhm sense resistor, similar to current
+> > -                * measurements.
+> > +                * Convert to uW by and scale it with the configured
+> > +                * sense resistor, similar to current measurements.
+> >                  * Control register bit 0 selects if voltage at SENSE+/VDD
+> >                  * or voltage at ADIN is used to measure power.
+> >                  */
+> > @@ -112,10 +113,10 @@ static long long ltc2945_reg_to_val(struct device *dev, u8 reg)
+> >                         return ret;
+> >                 if (control & CONTROL_MULT_SELECT) {
+> >                         /* 25 mV * 25 uV = 0.625 uV resolution. */
+> > -                       val *= 625LL;
+> > +                       val = DIV_ROUND_CLOSEST_ULL(val * 625LL * 1000, st->r_sense_uohm);
+> >                 } else {
+> >                         /* 0.5 mV * 25 uV = 0.0125 uV resolution. */
+> > -                       val = (val * 25LL) >> 1;
+> > +                       val = DIV_ROUND_CLOSEST_ULL(val * 25LL * 1000, st->r_sense_uohm) >> 1;
+> >                 }
+> >                 break;
+> >         case LTC2945_VIN_H:
+> > @@ -140,13 +141,10 @@ static long long ltc2945_reg_to_val(struct device *dev, u8 reg)
+> >         case LTC2945_MAX_SENSE_THRES_H:
+> >         case LTC2945_MIN_SENSE_THRES_H:
+> >                 /*
+> > -                * 25 uV resolution. Convert to current as measured with
+> > -                * an 1 mOhm sense resistor, in mA. If a different sense
+> > -                * resistor is installed, calculate the actual current by
+> > -                * dividing the reported current by the sense resistor value
+> > -                * in mOhm.
+> > +                * 25 uV resolution. Convert to current and scale it
+> > +                * with the value of the sense resistor.
+> >                  */
+> > -               val *= 25;
+> > +               val = DIV_ROUND_CLOSEST_ULL(val * 25 * 1000, st->r_sense_uohm);
+> >                 break;
+> >         default:
+> >                 return -EINVAL;
+> > @@ -169,9 +167,8 @@ static int ltc2945_val_to_reg(struct device *dev, u8 reg,
+> >         case LTC2945_MAX_POWER_THRES_H:
+> >         case LTC2945_MIN_POWER_THRES_H:
+> >                 /*
+> > -                * Convert to register value by assuming current is measured
+> > -                * with an 1mOhm sense resistor, similar to current
+> > -                * measurements.
+> > +                * Convert to register value, scale it with the configured sense
+> > +                * resistor value, similar to current measurements.
+> >                  * Control register bit 0 selects if voltage at SENSE+/VDD
+> >                  * or voltage at ADIN is used to measure power, which in turn
+> >                  * determines register calculations.
+> > @@ -181,14 +178,10 @@ static int ltc2945_val_to_reg(struct device *dev, u8 reg,
+> >                         return ret;
+> >                 if (control & CONTROL_MULT_SELECT) {
+> >                         /* 25 mV * 25 uV = 0.625 uV resolution. */
+> > -                       val = DIV_ROUND_CLOSEST_ULL(val, 625);
+> > +                       val = DIV_ROUND_CLOSEST_ULL(val * 1000, 625 * st->r_sense_uohm);
 > 
-> Coming back to this, I think that using the shunt resistor value
-> (which is in micro-ohms), and multiplying with multiples of 1000, the
-> chances of overflow grow quite a lot.
-> I could be wrong, but that is how it looks when I try to do some math
-> with the shunt resistor in place.
+> I think that in this ltc2945_val_to_reg(), I should do the math the
+> other way around.
+> i.e.    val = DIV_ROUND_CLOSEST_ULL(val * st->r_sense_uohm, 625000);
 > 
-> Looking at the clamping code, it looks like the initial version is
-> quite simple & straightforward.
-> I mean when doing the math and getting values out of range, clamping
-> afterwards to 0xffffff for power values is quite handy.
-> And clamping everything else to 0xfff for voltage also looks pretty simple.
-> We can do some clamping before, but it looks like it's extra math that
-> is already done in the conversion code anyway.
+> I got confused initially and did it wrong.
 > 
-> Hopefully, I'm not missing something here :)
->
-
-Using ull operations when not necessary can also be quite expensive,
-and I'd rather avoid it. I'd rather see an extra clamp than ull.
+Good catch.
 
 Guenter
 
+> >                 } else {
+> > -                       /*
+> > -                        * 0.5 mV * 25 uV = 0.0125 uV resolution.
+> > -                        * Divide first to avoid overflow;
+> > -                        * accept loss of accuracy.
+> > -                        */
+> > -                       val = DIV_ROUND_CLOSEST_ULL(val, 25) * 2;
+> > +                       /* 0.5 mV * 25 uV = 0.0125 uV resolution. */
+> > +                       val = DIV_ROUND_CLOSEST_ULL(val * 2 * 1000, 25 * st->r_sense_uohm);
+> >                 }
+> >                 break;
+> >         case LTC2945_VIN_H:
+> > @@ -213,13 +206,10 @@ static int ltc2945_val_to_reg(struct device *dev, u8 reg,
+> >         case LTC2945_MAX_SENSE_THRES_H:
+> >         case LTC2945_MIN_SENSE_THRES_H:
+> >                 /*
+> > -                * 25 uV resolution. Convert to current as measured with
+> > -                * an 1 mOhm sense resistor, in mA. If a different sense
+> > -                * resistor is installed, calculate the actual current by
+> > -                * dividing the reported current by the sense resistor value
+> > -                * in mOhm.
+> > +                * 25 uV resolution. Convert to current and scale it
+> > +                * with the value of the sense resistor, in mA.
+> >                  */
+> > -               val = DIV_ROUND_CLOSEST_ULL(val, 25);
+> > +               val = DIV_ROUND_CLOSEST_ULL(val * 1000, 25 * st->r_sense_uohm);
+> >                 break;
+> >         default:
+> >                 return -EINVAL;
+> > @@ -475,6 +465,15 @@ static int ltc2945_probe(struct i2c_client *client)
+> >                 return PTR_ERR(regmap);
+> >         }
 > >
-> > Either case, can you send me a register dump for this chip ?
-> > I'd like to write a module test script to actually check if there
-> > are any over/underflows or other problems.
+> > +       if (device_property_read_u32(dev, "shunt-resistor-micro-ohms",
+> > +                                    &st->r_sense_uohm))
+> > +               st->r_sense_uohm = 1000;
+> > +
+> > +       if (st->r_sense_uohm == 0) {
+> > +               dev_err(dev, "Zero value provided for sense resistor in DT");
+> > +               return -EINVAL;
+> > +       }
+> > +
+> >         st->regmap = regmap;
 > >
-> > Thanks,
-> > Guenter
-> >
-> > > ---
-> > >  drivers/hwmon/ltc2945.c | 12 ++++++------
-> > >  1 file changed, 6 insertions(+), 6 deletions(-)
-> > >
-> > > diff --git a/drivers/hwmon/ltc2945.c b/drivers/hwmon/ltc2945.c
-> > > index 1cea710df668..6d4569a25471 100644
-> > > --- a/drivers/hwmon/ltc2945.c
-> > > +++ b/drivers/hwmon/ltc2945.c
-> > > @@ -155,7 +155,7 @@ static long long ltc2945_reg_to_val(struct device *dev, u8 reg)
-> > >  }
-> > >
-> > >  static int ltc2945_val_to_reg(struct device *dev, u8 reg,
-> > > -                           unsigned long val)
-> > > +                           unsigned long long val)
-> > >  {
-> > >       struct ltc2945_state *st = dev_get_drvdata(dev);
-> > >       struct regmap *regmap = st->regmap;
-> > > @@ -181,14 +181,14 @@ static int ltc2945_val_to_reg(struct device *dev, u8 reg,
-> > >                       return ret;
-> > >               if (control & CONTROL_MULT_SELECT) {
-> > >                       /* 25 mV * 25 uV = 0.625 uV resolution. */
-> > > -                     val = DIV_ROUND_CLOSEST(val, 625);
-> > > +                     val = DIV_ROUND_CLOSEST_ULL(val, 625);
-> > >               } else {
-> > >                       /*
-> > >                        * 0.5 mV * 25 uV = 0.0125 uV resolution.
-> > >                        * Divide first to avoid overflow;
-> > >                        * accept loss of accuracy.
-> > >                        */
-> > > -                     val = DIV_ROUND_CLOSEST(val, 25) * 2;
-> > > +                     val = DIV_ROUND_CLOSEST_ULL(val, 25) * 2;
-> > >               }
-> > >               break;
-> > >       case LTC2945_VIN_H:
-> > > @@ -197,7 +197,7 @@ static int ltc2945_val_to_reg(struct device *dev, u8 reg,
-> > >       case LTC2945_MAX_VIN_THRES_H:
-> > >       case LTC2945_MIN_VIN_THRES_H:
-> > >               /* 25 mV resolution. */
-> > > -             val /= 25;
-> > > +             val = div_u64(val, 25);
-> > >               break;
-> > >       case LTC2945_ADIN_H:
-> > >       case LTC2945_MAX_ADIN_H:
-> > > @@ -219,7 +219,7 @@ static int ltc2945_val_to_reg(struct device *dev, u8 reg,
-> > >                * dividing the reported current by the sense resistor value
-> > >                * in mOhm.
-> > >                */
-> > > -             val = DIV_ROUND_CLOSEST(val, 25);
-> > > +             val = DIV_ROUND_CLOSEST_ULL(val, 25);
-> > >               break;
-> > >       default:
-> > >               return -EINVAL;
-> > > @@ -247,7 +247,7 @@ static ssize_t ltc2945_value_store(struct device *dev,
-> > >       struct ltc2945_state *st = dev_get_drvdata(dev);
-> > >       struct regmap *regmap = st->regmap;
-> > >       u8 reg = attr->index;
-> > > -     unsigned long val;
-> > > +     unsigned long long val;
-> > >       u8 regbuf[3];
-> > >       int num_regs;
-> > >       int regval;
-> > >
+> >         /* Clear faults */
+> > --
+> > 2.17.1
 > >
