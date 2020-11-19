@@ -2,71 +2,99 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97ADFC64E7A
-	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Nov 2020 17:49:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D742DC56201
+	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Nov 2020 17:53:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5C3BA2472B
-	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Nov 2020 17:49:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 67F9C246CE
+	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Nov 2020 17:53:56 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EUXaa1+d"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729293AbgKSRtj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 19 Nov 2020 12:49:39 -0500
-Received: from foss.arm.com ([217.140.110.172]:36166 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729275AbgKSRti (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 19 Nov 2020 12:49:38 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 665B315DB;
-        Thu, 19 Nov 2020 09:49:38 -0800 (PST)
-Received: from e120937-lin.home (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8C4A03F70D;
-        Thu, 19 Nov 2020 09:49:36 -0800 (PST)
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     sudeep.holla@arm.com, lukasz.luba@arm.com,
-        james.quinlan@broadcom.com, Jonathan.Cameron@Huawei.com,
-        egranata@google.com, jbhayana@google.com,
-        peter.hilber@opensynergy.com, mikhail.golubev@opensynergy.com,
-        Igor.Skalkin@opensynergy.com,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH v4 3/6] hwmon: scmi: update hwmon internal scale data type
-Date:   Thu, 19 Nov 2020 17:49:03 +0000
-Message-Id: <20201119174906.43862-4-cristian.marussi@arm.com>
+        id S1728175AbgKSRxe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 19 Nov 2020 12:53:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39122 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727535AbgKSRxe (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 19 Nov 2020 12:53:34 -0500
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07772C0613CF;
+        Thu, 19 Nov 2020 09:53:34 -0800 (PST)
+Received: by mail-pf1-x442.google.com with SMTP id t8so5190229pfg.8;
+        Thu, 19 Nov 2020 09:53:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=Q5bokItvl+fmuIZW/0y8NwDSrtKawLhWKURQ2+FWucA=;
+        b=EUXaa1+dR5q61YJ40WibXLDQtMqjkX2z3HUPNxZCT4F0baHJnL4zDsSFOkfKHK7gEt
+         x9BUpxhQo3dAQ9WrWmssEC5Ntrgu8Eg1fudHqtbpRvgrfuE20rdjVHJtSQ3cXgPe/Ykm
+         A5W+9KONVdkO4ETFuaZDyE4DQCPQnhj7iM4EMMUzmXfLsSK1GCYA+JqJuCNV5Baydt3R
+         s0RkufpD308s5/h3HHxHG4Ly2Gy8m3qfzuKdhLmIFfFZmQkDgMRQ+P4OmtSw1LOmYZEv
+         t5EJuTzTDyQbelOQZs8gvgy2AsuMRaapOPwJPVLZzmpcGxiayd+bASsj7a3A9jSOX5Vp
+         WAlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Q5bokItvl+fmuIZW/0y8NwDSrtKawLhWKURQ2+FWucA=;
+        b=Yq7ddsT1ZaIwBxnE2UItxDN/3gUVPP68/HGzhPda7KewNH7n8ZwD8PbifnU19OZzb/
+         jik0qB6DxVzN7+UglUbUIKrFkahRPx7YLR/EKCRAqoki9NQR6PPiHVIq2UFRHeJ08X11
+         cV4KyDhRJBRg5FVLzGf2jb0i9+pytMz+7FZUfbejHYQAYXDzx2AjUoDp1GDC1hENI7nb
+         D/5jA2ddT2c8bb9EzvwxnQXChJj32WHxd/wC0UxMYdohtCB2Ql28gWj8ATSgzNS2FMOF
+         56aDg6IgOISDBJTMPTV2Du7VQlUuuo70JxSM31OfwObdrw3bOPgeKV6M+3hU+RrRubq/
+         wlPg==
+X-Gm-Message-State: AOAM530NPJUiXeDD+ET8z6rw1z4Ki5VVFB4jZDBqEAeo0lGL9BPqZkBL
+        wyiCspe2ynJCw4sBseZRGT4=
+X-Google-Smtp-Source: ABdhPJzpp2pD+waX4s/GGGEVKwpsDvaGKkli/44tFNmwJvveZ6gIWvD46Y+t/gxjlnuxyxifYbo7hQ==
+X-Received: by 2002:aa7:9198:0:b029:18b:3835:3796 with SMTP id x24-20020aa791980000b029018b38353796mr10893256pfa.9.1605808413518;
+        Thu, 19 Nov 2020 09:53:33 -0800 (PST)
+Received: from taoren-ubuntu-R90MNF91.thefacebook.com (c-73-252-146-110.hsd1.ca.comcast.net. [73.252.146.110])
+        by smtp.gmail.com with ESMTPSA id 144sm482858pfb.71.2020.11.19.09.53.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Nov 2020 09:53:32 -0800 (PST)
+From:   rentao.bupt@gmail.com
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org, taoren@fb.com, mikechoi@fb.com
+Cc:     Tao Ren <rentao.bupt@gmail.com>
+Subject: [PATCH v3 0/2] hwmon: (max127) Add Maxim MAX127 hardware monitoring
+Date:   Thu, 19 Nov 2020 09:53:22 -0800
+Message-Id: <20201119175324.22472-1-rentao.bupt@gmail.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201119174906.43862-1-cristian.marussi@arm.com>
-References: <20201119174906.43862-1-cristian.marussi@arm.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Use an int to calculate scale values inside scmi_hwmon_scale() to match
-the updated scale data type in struct scmi_sensor_info.
+From: Tao Ren <rentao.bupt@gmail.com>
 
-Cc: linux-hwmon@vger.kernel.org
-Cc: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
----
- drivers/hwmon/scmi-hwmon.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The patch series adds hardware monitoring driver for the Maxim MAX127
+chip.
 
-diff --git a/drivers/hwmon/scmi-hwmon.c b/drivers/hwmon/scmi-hwmon.c
-index 09ce30cba54b..17d064e58938 100644
---- a/drivers/hwmon/scmi-hwmon.c
-+++ b/drivers/hwmon/scmi-hwmon.c
-@@ -30,7 +30,7 @@ static inline u64 __pow10(u8 x)
- 
- static int scmi_hwmon_scale(const struct scmi_sensor_info *sensor, u64 *value)
- {
--	s8 scale = sensor->scale;
-+	int scale = sensor->scale;
- 	u64 f;
- 
- 	switch (sensor->type) {
+Patch #1 adds the max127 hardware monitoring driver, and patch #2 adds
+documentation for the driver.
+
+Resending the patch series (v3) with XDP maintainers removed from to/cc
+list to reduce noise.
+
+Tao Ren (2):
+  hwmon: (max127) Add Maxim MAX127 hardware monitoring driver
+  docs: hwmon: Document max127 driver
+
+ Documentation/hwmon/index.rst  |   1 +
+ Documentation/hwmon/max127.rst |  45 +++++
+ drivers/hwmon/Kconfig          |   9 +
+ drivers/hwmon/Makefile         |   1 +
+ drivers/hwmon/max127.c         | 346 +++++++++++++++++++++++++++++++++
+ 5 files changed, 402 insertions(+)
+ create mode 100644 Documentation/hwmon/max127.rst
+ create mode 100644 drivers/hwmon/max127.c
+
 -- 
 2.17.1
 
