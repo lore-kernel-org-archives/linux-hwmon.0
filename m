@@ -2,96 +2,71 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69120C56201
-	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Nov 2020 17:18:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97ADFC64E7A
+	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Nov 2020 17:49:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 080492468B
-	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Nov 2020 17:18:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5C3BA2472B
+	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Nov 2020 17:49:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727513AbgKSRSU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 19 Nov 2020 12:18:20 -0500
-Received: from smtprelay0148.hostedemail.com ([216.40.44.148]:37040 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727166AbgKSRSU (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 19 Nov 2020 12:18:20 -0500
-X-Greylist: delayed 500 seconds by postgrey-1.27 at vger.kernel.org; Thu, 19 Nov 2020 12:18:19 EST
-Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
-        by smtpgrave07.hostedemail.com (Postfix) with ESMTP id 63CD818001BF9
-        for <linux-hwmon@vger.kernel.org>; Thu, 19 Nov 2020 17:10:00 +0000 (UTC)
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay03.hostedemail.com (Postfix) with ESMTP id B61D8837F24A;
-        Thu, 19 Nov 2020 17:09:58 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-HE-Tag: honey44_0e0784727344
-X-Filterd-Recvd-Size: 2491
-Received: from XPS-9350.home (unknown [47.151.133.149])
-        (Authenticated sender: joe@perches.com)
-        by omf02.hostedemail.com (Postfix) with ESMTPA;
-        Thu, 19 Nov 2020 17:09:55 +0000 (UTC)
-Message-ID: <088057533a9feb330964bdab0b1b8d2f69b7a22c.camel@perches.com>
-Subject: Re: XDP maintainer match (Was  [PATCH v2 0/2] hwmon: (max127) Add
- Maxim MAX127 hardware monitoring)
-From:   Joe Perches <joe@perches.com>
-To:     Jesper Dangaard Brouer <brouer@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Tao Ren <rentao.bupt@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, openbmc@lists.ozlabs.org, taoren@fb.com,
-        mikechoi@fb.com
-Date:   Thu, 19 Nov 2020 09:09:53 -0800
-In-Reply-To: <20201119173535.1474743d@carbon>
-References: <20201118230929.18147-1-rentao.bupt@gmail.com>
-         <20201118232719.GI1853236@lunn.ch>
-         <20201118234252.GA18681@taoren-ubuntu-R90MNF91>
-         <20201119010119.GA248686@roeck-us.net>
-         <20201119012653.GA249502@roeck-us.net>
-         <20201119074634.2e9cb21b@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-         <20201119173535.1474743d@carbon>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.38.1-1 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1729293AbgKSRtj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 19 Nov 2020 12:49:39 -0500
+Received: from foss.arm.com ([217.140.110.172]:36166 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729275AbgKSRti (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 19 Nov 2020 12:49:38 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 665B315DB;
+        Thu, 19 Nov 2020 09:49:38 -0800 (PST)
+Received: from e120937-lin.home (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8C4A03F70D;
+        Thu, 19 Nov 2020 09:49:36 -0800 (PST)
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     sudeep.holla@arm.com, lukasz.luba@arm.com,
+        james.quinlan@broadcom.com, Jonathan.Cameron@Huawei.com,
+        egranata@google.com, jbhayana@google.com,
+        peter.hilber@opensynergy.com, mikhail.golubev@opensynergy.com,
+        Igor.Skalkin@opensynergy.com,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        linux-hwmon@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v4 3/6] hwmon: scmi: update hwmon internal scale data type
+Date:   Thu, 19 Nov 2020 17:49:03 +0000
+Message-Id: <20201119174906.43862-4-cristian.marussi@arm.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20201119174906.43862-1-cristian.marussi@arm.com>
+References: <20201119174906.43862-1-cristian.marussi@arm.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, 2020-11-19 at 17:35 +0100, Jesper Dangaard Brouer wrote:
-> On Thu, 19 Nov 2020 07:46:34 -0800 Jakub Kicinski <kuba@kernel.org> wrote:
+Use an int to calculate scale values inside scmi_hwmon_scale() to match
+the updated scale data type in struct scmi_sensor_info.
 
-> I think it is a good idea to change the keyword (K:), but I'm not sure
-> this catch what we want, maybe it does.  The pattern match are meant to
-> catch drivers containing XDP related bits.
-> 
-> Previously Joe Perches <joe@perches.com> suggested this pattern match,
-> which I don't fully understand... could you explain Joe?
-> 
->   (?:\b|_)xdp(?:\b|_)
+Cc: linux-hwmon@vger.kernel.org
+Cc: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+---
+ drivers/hwmon/scmi-hwmon.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This regex matches only:
-
-	xdp
-	xdp_<anything>
-	<anything>_xdp_<anything>
-	<anything>_xdp
-
-> For the filename (N:) regex match, I'm considering if we should remove
-> it and list more files explicitly.  I think normal glob * pattern
-> works, which should be sufficient.
-
-Lists are generally more specific than regex globs.
-
+diff --git a/drivers/hwmon/scmi-hwmon.c b/drivers/hwmon/scmi-hwmon.c
+index 09ce30cba54b..17d064e58938 100644
+--- a/drivers/hwmon/scmi-hwmon.c
++++ b/drivers/hwmon/scmi-hwmon.c
+@@ -30,7 +30,7 @@ static inline u64 __pow10(u8 x)
+ 
+ static int scmi_hwmon_scale(const struct scmi_sensor_info *sensor, u64 *value)
+ {
+-	s8 scale = sensor->scale;
++	int scale = sensor->scale;
+ 	u64 f;
+ 
+ 	switch (sensor->type) {
+-- 
+2.17.1
 
