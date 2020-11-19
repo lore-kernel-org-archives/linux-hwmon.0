@@ -2,125 +2,135 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D876DC56201
-	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Nov 2020 18:17:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BABBAC6379D
+	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Nov 2020 20:43:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 74ADC24199
-	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Nov 2020 18:17:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 74B3B2158C
+	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Nov 2020 20:43:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=amdcloud.onmicrosoft.com header.i=@amdcloud.onmicrosoft.com header.b="Ig9gHYzm"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YkZZUcOh"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728704AbgKSSRZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 19 Nov 2020 13:17:25 -0500
-Received: from mail-dm6nam11on2061.outbound.protection.outlook.com ([40.107.223.61]:24288
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728277AbgKSSRZ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 19 Nov 2020 13:17:25 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ECQ4m36GVfVt8mwSxcEb8d5TiYWgdDg0NHImGQuavvRYvJx0ylrodkteJI3SanNeVdZUcigFsLiEy/MBoHIFua2ISPIynSAy5tEs8vMRqIWzrk7qNwufgabRw5JL7HnmYUXYwNf0luSgfr/9NA6d9fFKnCECyNEPNPBAbxkcp/EvkR2G88/IO9XIR0AxlPVRsyAGBUITlDib97xXtf7BDy3oP0VYZ1l4JjEYqoYwh1DfX2oAUUZyqdBncdivKtZ0Ub2Zwv+dgazvpKAsGLipD5hom+C6zl1lo2TnAX+Ia2ejd1y1yOitK4Zrth9UrC6oLVRFX9Xdi/HTWaoSKSJkMQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=f+V3TyIzU4MZA5kqcu1y6QvCN89oLV6O/RiTCm8XZ9w=;
- b=Ba7Qbk/qUjkyvCi0B25IyX6bdbvhGNPokFPV6qFzwrJ4C8513cvHysDmLJMRtDkLLigURzKSJjwYSCch8rAIyzpk4a0UODvCTZ/b8jMyBK0gnflaw3ekosAzl4wY2FQ3SdZNIX02HSqZ2DCCsN1/FE8lktiVIjNtGurpXQZhgGaWhLSsHum1hJIS/M8uvh4GUZP2w/L1gnxwuYRTk/Lwvp040YOQIR9gXU/++u8BczhQs5r/mr2eeQc/d+jnwKXPThoMPVsNaZNHDLyprOPHz54ba1VNK4CJDcAXiD5BEi23Z8H3CXCZrSp+oA/LJi/ZxJ9JoadAxYJm+Nn7/B+Mlg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=f+V3TyIzU4MZA5kqcu1y6QvCN89oLV6O/RiTCm8XZ9w=;
- b=Ig9gHYzmtvFK2lpvyGaBhQ9rcSiKoWeyHVoL7ssQeFePhd5jMwIhTqvEBSXpmH+XhyzDOuXIQepLxzHYcHgIG9bvKRGoiGsHlYD0s4vlwFe0mCBdO5zSWJITSSr1bSDSHPMFFf4TvMsQAKZ+vYx9QuYFOQT0GEdY/XnLT82i/jM=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB4388.namprd12.prod.outlook.com (2603:10b6:5:2a9::10)
- by DM5PR12MB1833.namprd12.prod.outlook.com (2603:10b6:3:111::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.20; Thu, 19 Nov
- 2020 18:17:23 +0000
-Received: from DM6PR12MB4388.namprd12.prod.outlook.com
- ([fe80::84e9:dd44:12cf:bdb3]) by DM6PR12MB4388.namprd12.prod.outlook.com
- ([fe80::84e9:dd44:12cf:bdb3%4]) with mapi id 15.20.3589.022; Thu, 19 Nov 2020
- 18:17:22 +0000
-From:   Naveen Krishna Chatradhi <NaveenKrishna.Chatradhi@amd.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     Naveen Krishna Chatradhi <NaveenKrishna.Chatradhi@amd.com>
-Subject: [PATCH 2/2] docs: hwmon: (amd_energy) update documentation
-Date:   Fri, 20 Nov 2020 00:12:46 +0530
-Message-Id: <20201119184246.228322-2-NaveenKrishna.Chatradhi@amd.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20201119184246.228322-1-NaveenKrishna.Chatradhi@amd.com>
-References: <20201119184246.228322-1-NaveenKrishna.Chatradhi@amd.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [165.204.156.251]
-X-ClientProxiedBy: MA1PR01CA0081.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00::21)
- To DM6PR12MB4388.namprd12.prod.outlook.com (2603:10b6:5:2a9::10)
+        id S1726281AbgKSUmT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 19 Nov 2020 15:42:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:50022 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726122AbgKSUmR (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 19 Nov 2020 15:42:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1605818536;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pgYqjANhFZVw2xsV1NPryI63UVScbHN7GEpAwzgrcBA=;
+        b=YkZZUcOhgjbqs0dFE0fdahNBR14lida7kIYW/rmHr9+vJ90U798AZTbjFM+deEMxf7nySg
+        +ls01ctKa+HN8ivadiNpwHVnVo2M2BXIdTM9ONWBOdbDbKIoA9W91f0PaZ67SeQZE/dZfv
+        DWXuIBB9ux2rOtiSnoG/AkSSXI+RUiY=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-428-J2xKKEZ6OOWubPMcg1L6iQ-1; Thu, 19 Nov 2020 15:42:10 -0500
+X-MC-Unique: J2xKKEZ6OOWubPMcg1L6iQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C76F11005D5C;
+        Thu, 19 Nov 2020 20:42:04 +0000 (UTC)
+Received: from carbon (unknown [10.36.110.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7DFF810016F4;
+        Thu, 19 Nov 2020 20:41:56 +0000 (UTC)
+Date:   Thu, 19 Nov 2020 21:41:55 +0100
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Joe Perches <joe@perches.com>, Guenter Roeck <linux@roeck-us.net>,
+        Tao Ren <rentao.bupt@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, openbmc@lists.ozlabs.org, taoren@fb.com,
+        mikechoi@fb.com, brouer@redhat.com
+Subject: Re: XDP maintainer match (Was  [PATCH v2 0/2] hwmon: (max127) Add
+ Maxim MAX127 hardware monitoring)
+Message-ID: <20201119214155.5285e2d2@carbon>
+In-Reply-To: <20201119095928.01fd10e0@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+References: <20201118230929.18147-1-rentao.bupt@gmail.com>
+        <20201118232719.GI1853236@lunn.ch>
+        <20201118234252.GA18681@taoren-ubuntu-R90MNF91>
+        <20201119010119.GA248686@roeck-us.net>
+        <20201119012653.GA249502@roeck-us.net>
+        <20201119074634.2e9cb21b@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+        <20201119173535.1474743d@carbon>
+        <088057533a9feb330964bdab0b1b8d2f69b7a22c.camel@perches.com>
+        <20201119095928.01fd10e0@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from SLES15.amd.com (165.204.156.251) by MA1PR01CA0081.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00::21) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.20 via Frontend Transport; Thu, 19 Nov 2020 18:17:21 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 8a656918-9a33-47e9-e9a3-08d88cb75c16
-X-MS-TrafficTypeDiagnostic: DM5PR12MB1833:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <DM5PR12MB1833050783EC058C6FC4D3E5E8E00@DM5PR12MB1833.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1443;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: b1DiNDk9EO0L9Uvz/KunDYc5AbbIKMpQSVadpIC9uzb3BNL0SxDbDzuAtYZf0OmLNZ0uPb/WHhVUe6OBi0TNaJlsR6buriK3178hHz8gHKjcpMWE8SQ3BxuPt0Ct+pf85hCYsMkIaBewFhw5WFUhun8DkbJImQ296glymrk5tehUcbZFYhvUYhqpqHfJ9vR5B3zcL4zMxFT6HmOqFeYOpURvpwgzsARfDydjE6993s1xwRmGj3AVzOt1pGiqEAzbgjLrzcm/zVSxjDx+HdLVz4h+DKIUdSV2pVa21sea/PsdbNINoxqdj0lqEtnMyEm1aBfruC0QghQQnQeyYwkD7Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4388.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(376002)(346002)(366004)(136003)(396003)(8676002)(1076003)(15650500001)(956004)(6486002)(86362001)(8936002)(6916009)(16526019)(26005)(2616005)(6666004)(52116002)(7696005)(478600001)(316002)(36756003)(5660300002)(83380400001)(66946007)(66476007)(4326008)(186003)(2906002)(66556008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: fa1/5Bife4XxT8EMZTSarIBCWNiTvTjk7pwjfunTFJEKr/rDEsYRQ7UyO3tMpjKwrHzJUGRO5fY/AmErqaHU8JaCWZ7ublidsM9dDwIZEfU6+EQy2diUVqmpqdxdIJ1HPxq2UoZhbjEG//MvZ18HortKHntZg2a641RmdiULA6F/b4wZ5Tfd2r/gSSqkIqOXnS2Kilt28duKlWaUAcZKATOfmpDlQvzRwHKQvQVawcCcEe3AoyAWnUc/rdeLWE5gsGw9AnGZd3pzVjmdM3Rxv1ZRK9zzXBNRYX6ivv+KJLkds0/q4cnLsglrARwwFRSOmr+6sfFU0oDeSF1tpI6EqcPo/kB26SaqCmlJZubV4qK3CJZMbYctHWoPTrg0k2ssPR1REtnWY/Nv0YyIcCDEHyEt1uWN6FPIpn9CZgdtoiCd4Bm/i5a4zXODtf53/nqHpYIJ6JqhTjQ5kWhOQpnD5fGzK4+mdISK0SrU5yvsHfQr5QhDweH/rAkWtUSWrNFptIvSu/XFKCF3YdO3Ic5hfy4Bhva4hyeYr2OZAwzt9VgRtkLXg/mcyinOUbH3dybqiqLEMQAU1co02KksshBLrgbVrknpL1sFrp2GFvGctuLkgccIoB0VuItNMNBogWlQs5bn3Kl6y8Qc6nW8f2iY/Q==
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8a656918-9a33-47e9-e9a3-08d88cb75c16
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4388.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Nov 2020 18:17:22.8637
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9ih4CWPpuUVPNe/lN/Ov5p8FOFnP7O5b6FsH4sZgy9mK5R/W0vk4w6MP1hprcAlZB5p9ljRDhyUJ4sR9WjvgVw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1833
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Update the supported processors and mention vulnerability fix.
+On Thu, 19 Nov 2020 09:59:28 -0800
+Jakub Kicinski <kuba@kernel.org> wrote:
 
-Signed-off-by: Naveen Krishna Chatradhi <NaveenKrishna.Chatradhi@amd.com>
----
- Documentation/hwmon/amd_energy.rst | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+> On Thu, 19 Nov 2020 09:09:53 -0800 Joe Perches wrote:
+> > On Thu, 2020-11-19 at 17:35 +0100, Jesper Dangaard Brouer wrote: =20
+> > > On Thu, 19 Nov 2020 07:46:34 -0800 Jakub Kicinski <kuba@kernel.org> w=
+rote:   =20
+> >  =20
+> > > I think it is a good idea to change the keyword (K:), but I'm not sure
+> > > this catch what we want, maybe it does.  The pattern match are meant =
+to
+> > > catch drivers containing XDP related bits.
+> > >=20
+> > > Previously Joe Perches <joe@perches.com> suggested this pattern match,
+> > > which I don't fully understand... could you explain Joe?
+> > >=20
+> > > =C2=A0=C2=A0(?:\b|_)xdp(?:\b|_)   =20
+> >=20
+> > This regex matches only:
+> >=20
+> > 	xdp
+> > 	xdp_<anything>
+> > 	<anything>_xdp_<anything>
+> > 	<anything>_xdp
+> >  =20
+> > > For the filename (N:) regex match, I'm considering if we should remove
+> > > it and list more files explicitly.  I think normal glob * pattern
+> > > works, which should be sufficient.   =20
+> >=20
+> > Lists are generally more specific than regex globs. =20
+>=20
+> Checking like Alexei did it seems Joe's version is faster and better:
+>=20
+> $ git grep -l -E "[^a-z0-9]xdp[^a-z0-9]" | wc -l
+> 295
+> $ git grep -l -E '(\b|_)xdp(\b|_)' | wc -l
+> 297
+> $ time git grep -l -E '(\b|_)xdp(\b|_)' > /tmp/a
 
-diff --git a/Documentation/hwmon/amd_energy.rst b/Documentation/hwmon/amd_energy.rst
-index 86e4ebc5cbc2..7d6fb4b0181b 100644
---- a/Documentation/hwmon/amd_energy.rst
-+++ b/Documentation/hwmon/amd_energy.rst
-@@ -5,7 +5,9 @@ Kernel driver amd_energy
- 
- Supported chips:
- 
--* AMD Family 17h Processors
-+* AMD Family 17h Processors: Model 30h
-+
-+* AMD Family 19h Processors: Model 01h
- 
-   Prefix: 'amd_energy'
- 
-@@ -112,3 +114,6 @@ energy[N]_input EcoreX	  Core Energy   X = [0] to [nr_cpus - 1]
- energy[N]_input EsocketX  Socket Energy X = [0] to [nr_socks -1]
- 			  Measured input socket energy
- =============== ========  ======================================
-+
-+Note: To address CVE-2020-12912, the visibility of the energy[N]_input
-+attributes is restricted to owner and groups only.
--- 
-2.26.2
+Okay, I guess this is the pattern you want: '(\b|_)xdp(\b|_)'
+
+=20
+> Joe would you like to send a patch, or should I?
+
+As you noticed I already send out a patch, I can send a new with your
+pattern, as it seems to be faster.
+
+--=20
+Best regards,
+  Jesper Dangaard Brouer
+  MSc.CS, Principal Kernel Engineer at Red Hat
+  LinkedIn: http://www.linkedin.com/in/brouer
 
