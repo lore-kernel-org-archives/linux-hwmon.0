@@ -2,159 +2,120 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EA08C64E75
-	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Nov 2020 17:53:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A300C64E7A
+	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Nov 2020 17:59:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BACC6246D1
-	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Nov 2020 17:53:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B22F1246E0
+	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Nov 2020 17:59:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SPWvYU2D"
+	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="v4ZtqpY2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729299AbgKSRxi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 19 Nov 2020 12:53:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39134 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727535AbgKSRxh (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 19 Nov 2020 12:53:37 -0500
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293A9C0613CF;
-        Thu, 19 Nov 2020 09:53:37 -0800 (PST)
-Received: by mail-pf1-x442.google.com with SMTP id w6so5223914pfu.1;
-        Thu, 19 Nov 2020 09:53:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=ohg0oJ87lTSLWpA2Zkajq7Ec19JHlvcX3mrDjoh7A+4=;
-        b=SPWvYU2D1eVcQ+2w65iVGl6q6+jVTpgUw6pDny2n4jrNj7rmt3cUTzZiIQ99HHK91C
-         q+2dl9IfxOD/LVL6WfRkI2e7KZ8wFVljPXrACM2voGt0m4glw3em/VZu66t+BIdIUbfW
-         aZmUNft6r0lH7XxXvNy3S4L7eqYhsdMoORwW8SsYoleoy/7q/gvqK//hBvZJ1PVE3gFy
-         maAy+n2BY4tu+F7gDVvi9VKKpybuRpmL3J0qI1IG+gDe/mgneH+BgmwBijiidvvDxX8X
-         ooJYQ9RB8YXOsl+KMtDuqaca3OMQq86YVCuVafECchW+A+E4Q9pkqM3q6LFXiTk8LFRM
-         bVGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=ohg0oJ87lTSLWpA2Zkajq7Ec19JHlvcX3mrDjoh7A+4=;
-        b=RK/HCpaDx4wuLiHNiVfXlxC4FuuIiY62KfjEeEHQetFZFf+sktIACCuVslK3QSWwCW
-         IH52t2cqjJGpqWjPJRFW3qQ73R7srFfjkAftAjUCLs4rNDqY7u5ugyxJUMnlf7Xx3BvP
-         FSRusxK/wtwa7AF5edMuw022QF2YdAnoQDKBRLrAh8Y/tBXf3qRYL2cgqXleDlM+xLSj
-         hA5cfePvLoezTiF45tfeWMRD+/eE3jihfSOx9l/j2e3BL+vJ96pRFLpGKNvq+k53P0W3
-         LHA+br9DuDr48uRmB1TBeUdJ3NDxzc+UGB364D6sJ/YupvKeNaUCqTOjd91PYizDBcT9
-         QR+Q==
-X-Gm-Message-State: AOAM533gExDgZU46Q96UrXaTUxAMAS7uPHx5rRCPF1eyXCkodNUaFNOO
-        26OHVz+JFrGxzgipx60AIvrdPmhDzSz+sTWt
-X-Google-Smtp-Source: ABdhPJyBohN3X1dbPoB5yZrMXkCYfOLlvE8+V0Q6voVdgLbu5TjNEaqQp2A9zwKfkl3gKwtJJ1Uc0g==
-X-Received: by 2002:a17:90a:940f:: with SMTP id r15mr5639577pjo.219.1605808416714;
-        Thu, 19 Nov 2020 09:53:36 -0800 (PST)
-Received: from taoren-ubuntu-R90MNF91.thefacebook.com (c-73-252-146-110.hsd1.ca.comcast.net. [73.252.146.110])
-        by smtp.gmail.com with ESMTPSA id 144sm482858pfb.71.2020.11.19.09.53.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Nov 2020 09:53:36 -0800 (PST)
-From:   rentao.bupt@gmail.com
-To:     Jean Delvare <jdelvare@suse.com>,
+        id S1729625AbgKSR7b (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 19 Nov 2020 12:59:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59360 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729265AbgKSR7a (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 19 Nov 2020 12:59:30 -0500
+Received: from kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net (unknown [163.114.132.5])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 382EC2225B;
+        Thu, 19 Nov 2020 17:59:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605808770;
+        bh=Ta3tsz+YYOgNDaVSrDSReSog0hdPUxrDoz7tjhPgBp8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=v4ZtqpY2LAz/9Nfm6jgZ5XJMCJesqYR/Z4WxVWn3ygJvWBVacjqbC2MVHDaO5xuuV
+         KHOQFQoHiIvHJ3UeOFKgiRAX5aVTwFGJ4B5NeinELaVuWGB3/aMAetQHqBghFvPb03
+         xS+00bjvrJE6FVTSlRLcXq9sfIhkgFS9Elb6L0wg=
+Date:   Thu, 19 Nov 2020 09:59:28 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Joe Perches <joe@perches.com>
+Cc:     Jesper Dangaard Brouer <brouer@redhat.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        openbmc@lists.ozlabs.org, taoren@fb.com, mikechoi@fb.com
-Cc:     Tao Ren <rentao.bupt@gmail.com>
-Subject: [PATCH v3 2/2] docs: hwmon: Document max127 driver
-Date:   Thu, 19 Nov 2020 09:53:24 -0800
-Message-Id: <20201119175324.22472-3-rentao.bupt@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201119175324.22472-1-rentao.bupt@gmail.com>
-References: <20201119175324.22472-1-rentao.bupt@gmail.com>
+        Tao Ren <rentao.bupt@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, openbmc@lists.ozlabs.org, taoren@fb.com,
+        mikechoi@fb.com
+Subject: Re: XDP maintainer match (Was  [PATCH v2 0/2] hwmon: (max127) Add
+ Maxim MAX127 hardware monitoring)
+Message-ID: <20201119095928.01fd10e0@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <088057533a9feb330964bdab0b1b8d2f69b7a22c.camel@perches.com>
+References: <20201118230929.18147-1-rentao.bupt@gmail.com>
+        <20201118232719.GI1853236@lunn.ch>
+        <20201118234252.GA18681@taoren-ubuntu-R90MNF91>
+        <20201119010119.GA248686@roeck-us.net>
+        <20201119012653.GA249502@roeck-us.net>
+        <20201119074634.2e9cb21b@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+        <20201119173535.1474743d@carbon>
+        <088057533a9feb330964bdab0b1b8d2f69b7a22c.camel@perches.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Tao Ren <rentao.bupt@gmail.com>
+On Thu, 19 Nov 2020 09:09:53 -0800 Joe Perches wrote:
+> On Thu, 2020-11-19 at 17:35 +0100, Jesper Dangaard Brouer wrote:
+> > On Thu, 19 Nov 2020 07:46:34 -0800 Jakub Kicinski <kuba@kernel.org> wro=
+te: =20
+>=20
+> > I think it is a good idea to change the keyword (K:), but I'm not sure
+> > this catch what we want, maybe it does.  The pattern match are meant to
+> > catch drivers containing XDP related bits.
+> >=20
+> > Previously Joe Perches <joe@perches.com> suggested this pattern match,
+> > which I don't fully understand... could you explain Joe?
+> >=20
+> > =C2=A0=C2=A0(?:\b|_)xdp(?:\b|_) =20
+>=20
+> This regex matches only:
+>=20
+> 	xdp
+> 	xdp_<anything>
+> 	<anything>_xdp_<anything>
+> 	<anything>_xdp
+>=20
+> > For the filename (N:) regex match, I'm considering if we should remove
+> > it and list more files explicitly.  I think normal glob * pattern
+> > works, which should be sufficient. =20
+>=20
+> Lists are generally more specific than regex globs.
 
-Add documentation for the max127 hardware monitoring driver.
+Checking like Alexei did it seems Joe's version is faster and better:
 
-Signed-off-by: Tao Ren <rentao.bupt@gmail.com>
----
- Changes in v3:
-   - no code change. xdp maintainers were removed from to/cc list.
- Changes in v2:
-   - add more description for min/max sysfs nodes.
-   - convert values from volt to millivolt in the document.
+$ git grep -l -E "[^a-z0-9]xdp[^a-z0-9]" | wc -l
+295
+$ git grep -l -E '(\b|_)xdp(\b|_)' | wc -l
+297
+$ time git grep -l -E '(\b|_)xdp(\b|_)' > /tmp/a
 
- Documentation/hwmon/index.rst  |  1 +
- Documentation/hwmon/max127.rst | 45 ++++++++++++++++++++++++++++++++++
- 2 files changed, 46 insertions(+)
- create mode 100644 Documentation/hwmon/max127.rst
+real	0m5.171s
+user	0m32.657s
+sys	0m0.664s
+$ time git grep -l -E "[^a-z0-9]xdp[^a-z0-9]" > /tmp/b
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index 408760d13813..0a07b6000c20 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -111,6 +111,7 @@ Hardware Monitoring Kernel Drivers
-    ltc4245
-    ltc4260
-    ltc4261
-+   max127
-    max16064
-    max16065
-    max1619
-diff --git a/Documentation/hwmon/max127.rst b/Documentation/hwmon/max127.rst
-new file mode 100644
-index 000000000000..dc192dd9c37c
---- /dev/null
-+++ b/Documentation/hwmon/max127.rst
-@@ -0,0 +1,45 @@
-+.. SPDX-License-Identifier: GPL-2.0-or-later
-+
-+Kernel driver max127
-+====================
-+
-+Author:
-+
-+  * Tao Ren <rentao.bupt@gmail.com>
-+
-+Supported chips:
-+
-+  * Maxim MAX127
-+
-+    Prefix: 'max127'
-+
-+    Datasheet: https://datasheets.maximintegrated.com/en/ds/MAX127-MAX128.pdf
-+
-+Description
-+-----------
-+
-+The MAX127 is a multirange, 12-bit data acquisition system (DAS) providing
-+8 analog input channels that are independently software programmable for
-+a variety of ranges. The available ranges are {0,5V}, {0,10V}, {-5,5V}
-+and {-10,10V}.
-+
-+The MAX127 features a 2-wire, I2C-compatible serial interface that allows
-+communication among multiple devices using SDA and SCL lines.
-+
-+Sysfs interface
-+---------------
-+
-+  ============== ==============================================================
-+  in[0-7]_input  The input voltage (in mV) of the corresponding channel.
-+		 RO
-+
-+  in[0-7]_min    The lower input limit (in mV) for the corresponding channel.
-+		 ADC range and LSB will be updated when the limit is changed.
-+		 For the MAX127, it will be adjusted to -10000, -5000, or 0.
-+		 RW
-+
-+  in[0-7]_max    The higher input limit (in mV) for the corresponding channel.
-+		 ADC range and LSB will be updated when the limit is changed.
-+		 For the MAX127, it will be adjusted to 0, 5000, or 10000.
-+		 RW
-+  ============== ==============================================================
--- 
-2.17.1
+real	0m16.627s
+user	1m48.149s
+sys	0m0.977s
+09:56 linux$ diff /tmp/a /tmp/b
+4d3
+< Documentation/networking/index.rst
+189d187
+< samples/bpf/.gitignore
 
+
+Joe would you like to send a patch, or should I?
