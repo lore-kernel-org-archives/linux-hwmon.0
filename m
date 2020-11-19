@@ -2,68 +2,43 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EDF3C64E8A
-	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Nov 2020 16:37:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69120C56201
+	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Nov 2020 17:18:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0ABD4241A6
-	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Nov 2020 16:37:27 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZjIHp4Xb"
+	by mail.kernel.org (Postfix) with ESMTP id 080492468B
+	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Nov 2020 17:18:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727952AbgKSQga (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 19 Nov 2020 11:36:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55414 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727435AbgKSQga (ORCPT
+        id S1727513AbgKSRSU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 19 Nov 2020 12:18:20 -0500
+Received: from smtprelay0148.hostedemail.com ([216.40.44.148]:37040 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727166AbgKSRSU (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 19 Nov 2020 11:36:30 -0500
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07211C0613CF;
-        Thu, 19 Nov 2020 08:36:30 -0800 (PST)
-Received: by mail-lf1-x141.google.com with SMTP id w142so9139127lff.8;
-        Thu, 19 Nov 2020 08:36:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+GL1geUz8ksyok3o+HModRJUNdxfeUOLSXkwVu2pzVw=;
-        b=ZjIHp4XbVLR3mEdwG18h+SFeiMuVhrEnm1I+o4JxYe6xHL5cGGoXTKaqksF40qh8AV
-         2a15evGdxclpi/ZpK3Ojgi1SDjsiUalaB5XrqUBfjloVKgOnM1hLIsAlAyxTrZzPWMrQ
-         p2Rpa9Q8r9pw/XLekQzHqIvCkjO+b6dNblaWQHeesD9xdO2t4KU1JbYUFndDC7ID7L1X
-         CpbGZj+Q/Up26Jch8B7PWpmY/IWjeHqKISZiCEfyZ5Clq9X6mWAsqoZm3LwIkr919haZ
-         S2B3+4g+z6fSO4nVDsNN8M3/frXb6a00DBqqUhskplPrNUbshRN9IyZhpdD/elrJmc0U
-         AS1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+GL1geUz8ksyok3o+HModRJUNdxfeUOLSXkwVu2pzVw=;
-        b=aU3qadSBa7oknL5/q5aYKb0PeVs1gt9CN3aE2NHuaiEQek22HE6/UHJQ39zFJEROgi
-         eoHRMxXS3gV9+JANG3NrslyVzQn968Nc+pROmFyBd4nPhJDEekCpxXsKoGRilX3Ns5UE
-         VxVmS88BpScPnX3594qB9DifaBZW55o2rzBSRwQNjA4IVnXyIXOGFo2KBj1yHF5bAmla
-         jdMLTlk/aA8/uf7kxpJ850NDMTIifbAbNpRmDkZosRqzRIYvQHLqLlZPKYrxnYmzY3OI
-         U9zm3AiusLqqH9S/m1WCxabGxHnvw3zpfoQdySr38JOKFVC5P6AkvGuuOK/6ugn8frrO
-         gbyg==
-X-Gm-Message-State: AOAM5304kl0yznGzfigqrVQGCRnmxzDPTlP4lIg4Mk1ZzjaSllRb5Zyb
-        ZGAXbkqVPVRtqRi7nMdYtOXZtekiDG1bpviMPSU=
-X-Google-Smtp-Source: ABdhPJxXfPjRWHEbwDGN5Oo7lGcgZBlLqA+m05kWlN7DzRDYiiWURZwOXfqHnCGxcIQDLNCmrccAvLKQJw5PMbW1Ys8=
-X-Received: by 2002:a19:48ca:: with SMTP id v193mr5856891lfa.263.1605803788474;
- Thu, 19 Nov 2020 08:36:28 -0800 (PST)
-MIME-Version: 1.0
-References: <20201118230929.18147-1-rentao.bupt@gmail.com> <20201118232719.GI1853236@lunn.ch>
- <20201118234252.GA18681@taoren-ubuntu-R90MNF91> <20201119010119.GA248686@roeck-us.net>
- <20201119012653.GA249502@roeck-us.net> <20201119074634.2e9cb21b@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <20201119074634.2e9cb21b@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 19 Nov 2020 08:36:17 -0800
-Message-ID: <CAADnVQL86rs=bc+fg1EsHYZzYGC_WWOPtAVWWTqwmA_6SToGUA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] hwmon: (max127) Add Maxim MAX127 hardware monitoring
-To:     Jakub Kicinski <kuba@kernel.org>
+        Thu, 19 Nov 2020 12:18:20 -0500
+X-Greylist: delayed 500 seconds by postgrey-1.27 at vger.kernel.org; Thu, 19 Nov 2020 12:18:19 EST
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave07.hostedemail.com (Postfix) with ESMTP id 63CD818001BF9
+        for <linux-hwmon@vger.kernel.org>; Thu, 19 Nov 2020 17:10:00 +0000 (UTC)
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay03.hostedemail.com (Postfix) with ESMTP id B61D8837F24A;
+        Thu, 19 Nov 2020 17:09:58 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-HE-Tag: honey44_0e0784727344
+X-Filterd-Recvd-Size: 2491
+Received: from XPS-9350.home (unknown [47.151.133.149])
+        (Authenticated sender: joe@perches.com)
+        by omf02.hostedemail.com (Postfix) with ESMTPA;
+        Thu, 19 Nov 2020 17:09:55 +0000 (UTC)
+Message-ID: <088057533a9feb330964bdab0b1b8d2f69b7a22c.camel@perches.com>
+Subject: Re: XDP maintainer match (Was  [PATCH v2 0/2] hwmon: (max127) Add
+ Maxim MAX127 hardware monitoring)
+From:   Joe Perches <joe@perches.com>
+To:     Jesper Dangaard Brouer <brouer@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>
 Cc:     Guenter Roeck <linux@roeck-us.net>,
         Tao Ren <rentao.bupt@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
         Jean Delvare <jdelvare@suse.com>,
@@ -73,94 +48,50 @@ Cc:     Guenter Roeck <linux@roeck-us.net>,
         "David S . Miller" <davem@davemloft.net>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
-        linux-hwmon@vger.kernel.org,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, openbmc@lists.ozlabs.org,
-        taoren@fb.com, mikechoi@fb.com
-Content-Type: text/plain; charset="UTF-8"
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, openbmc@lists.ozlabs.org, taoren@fb.com,
+        mikechoi@fb.com
+Date:   Thu, 19 Nov 2020 09:09:53 -0800
+In-Reply-To: <20201119173535.1474743d@carbon>
+References: <20201118230929.18147-1-rentao.bupt@gmail.com>
+         <20201118232719.GI1853236@lunn.ch>
+         <20201118234252.GA18681@taoren-ubuntu-R90MNF91>
+         <20201119010119.GA248686@roeck-us.net>
+         <20201119012653.GA249502@roeck-us.net>
+         <20201119074634.2e9cb21b@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+         <20201119173535.1474743d@carbon>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.38.1-1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Nov 19, 2020 at 7:46 AM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Wed, 18 Nov 2020 17:26:53 -0800 Guenter Roeck wrote:
-> > On Wed, Nov 18, 2020 at 05:01:19PM -0800, Guenter Roeck wrote:
-> > > On Wed, Nov 18, 2020 at 03:42:53PM -0800, Tao Ren wrote:
-> > > > On Thu, Nov 19, 2020 at 12:27:19AM +0100, Andrew Lunn wrote:
-> > > > > On Wed, Nov 18, 2020 at 03:09:27PM -0800, rentao.bupt@gmail.com wrote:
-> > > > > > From: Tao Ren <rentao.bupt@gmail.com>
-> > > > > >
-> > > > > > The patch series adds hardware monitoring driver for the Maxim MAX127
-> > > > > > chip.
-> > > > >
-> > > > > Hi Tao
-> > > > >
-> > > > > Why are using sending a hwmon driver to the networking mailing list?
-> > > > >
-> > > > >     Andrew
-> > > >
-> > > > Hi Andrew,
-> > > >
-> > > > I added netdev because the mailing list is included in "get_maintainer.pl
-> > > > Documentation/hwmon/index.rst" output. Is it the right command to find
-> > > > reviewers? Could you please suggest? Thank you.
-> > >
-> > > I have no idea why running get_maintainer.pl on
-> > > Documentation/hwmon/index.rst returns such a large list of mailing
-> > > lists and people. For some reason it includes everyone in the XDP
-> > > maintainer list. If anyone has an idea how that happens, please
-> > > let me know - we'll want to get this fixed to avoid the same problem
-> > > in the future.
-> >
-> > I found it. The XDP maintainer entry has:
-> >
-> > K:    xdp
-> >
-> > This matches Documentation/hwmon/index.rst.
-> >
-> > $ grep xdp Documentation/hwmon/index.rst
-> >    xdpe12284
-> >
-> > It seems to me that a context match such as "xdp" in MAINTAINERS isn't
-> > really appropriate. "xdp" matches a total of 348 files in the kernel.
-> > The large majority of those is not XDP related. The maintainers
-> > of XDP (and all the listed mailing lists) should not be surprised
-> > to get a large number of odd review requests if they want to review
-> > every single patch on files which include the term "xdp".
->
-> Agreed, we should fix this. For maintainers with high patch volume life
-> would be so much easier if people CCed the right folks to get reviews,
-> so we should try our best to fix get_maintainer.
->
-> XDP folks, any opposition to changing the keyword / filename to:
->
->         [^a-z0-9]xdp[^a-z0-9]
+On Thu, 2020-11-19 at 17:35 +0100, Jesper Dangaard Brouer wrote:
+> On Thu, 19 Nov 2020 07:46:34 -0800 Jakub Kicinski <kuba@kernel.org> wrote:
 
-Reducing regex makes sense.
-git grep -l -E "xdp"|wc -l
-348
-git grep -l -E "[^a-z0-9]xdp[^a-z0-9]"|wc -l
-295
+> I think it is a good idea to change the keyword (K:), but I'm not sure
+> this catch what we want, maybe it does.  The pattern match are meant to
+> catch drivers containing XDP related bits.
+> 
+> Previously Joe Perches <joe@perches.com> suggested this pattern match,
+> which I don't fully understand... could you explain Joe?
+> 
+>   (?:\b|_)xdp(?:\b|_)
 
-The false positive match was:
-+drivers/hwmon/pmbus/Kconfig
-+drivers/hwmon/pmbus/Makefile
-+drivers/hwmon/pmbus/xdpe12284.c
-+drivers/net/ethernet/natsemi/ns83820.c
-+drivers/net/ethernet/neterion/s2io.c
-+drivers/net/ethernet/neterion/s2io.h
-+drivers/net/ethernet/neterion/vxge/vxge-config.c
-+drivers/net/ethernet/neterion/vxge/vxge-config.h
-+drivers/net/ethernet/neterion/vxge/vxge-traffic.c
-+drivers/net/ethernet/sis/sis900.c
-+drivers/net/ethernet/sis/sis900.h
-+drivers/net/wireless/ath/ath5k/ath5k.h
-+drivers/net/wireless/ath/ath5k/base.c
-+drivers/net/wireless/ath/ath5k/debug.c
-+drivers/net/wireless/ath/ath5k/dma.c
+This regex matches only:
 
-so it's pretty much hwmon and few drivers.
-I agree that sparing xdp from hwmon patches is a good thing :)
+	xdp
+	xdp_<anything>
+	<anything>_xdp_<anything>
+	<anything>_xdp
+
+> For the filename (N:) regex match, I'm considering if we should remove
+> it and list more files explicitly.  I think normal glob * pattern
+> works, which should be sufficient.
+
+Lists are generally more specific than regex globs.
+
+
