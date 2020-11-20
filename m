@@ -2,135 +2,100 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BABBAC6379D
-	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Nov 2020 20:43:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34FAAC388F9
+	for <linux-hwmon@archiver.kernel.org>; Fri, 20 Nov 2020 01:03:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 74B3B2158C
-	for <linux-hwmon@archiver.kernel.org>; Thu, 19 Nov 2020 20:43:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C24BD221FC
+	for <linux-hwmon@archiver.kernel.org>; Fri, 20 Nov 2020 01:03:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YkZZUcOh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="arL66hRr"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726281AbgKSUmT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 19 Nov 2020 15:42:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:50022 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726122AbgKSUmR (ORCPT
+        id S1726224AbgKTBD2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 19 Nov 2020 20:03:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48980 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726189AbgKTBD2 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 19 Nov 2020 15:42:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1605818536;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pgYqjANhFZVw2xsV1NPryI63UVScbHN7GEpAwzgrcBA=;
-        b=YkZZUcOhgjbqs0dFE0fdahNBR14lida7kIYW/rmHr9+vJ90U798AZTbjFM+deEMxf7nySg
-        +ls01ctKa+HN8ivadiNpwHVnVo2M2BXIdTM9ONWBOdbDbKIoA9W91f0PaZ67SeQZE/dZfv
-        DWXuIBB9ux2rOtiSnoG/AkSSXI+RUiY=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-428-J2xKKEZ6OOWubPMcg1L6iQ-1; Thu, 19 Nov 2020 15:42:10 -0500
-X-MC-Unique: J2xKKEZ6OOWubPMcg1L6iQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C76F11005D5C;
-        Thu, 19 Nov 2020 20:42:04 +0000 (UTC)
-Received: from carbon (unknown [10.36.110.8])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7DFF810016F4;
-        Thu, 19 Nov 2020 20:41:56 +0000 (UTC)
-Date:   Thu, 19 Nov 2020 21:41:55 +0100
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Joe Perches <joe@perches.com>, Guenter Roeck <linux@roeck-us.net>,
-        Tao Ren <rentao.bupt@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, openbmc@lists.ozlabs.org, taoren@fb.com,
-        mikechoi@fb.com, brouer@redhat.com
-Subject: Re: XDP maintainer match (Was  [PATCH v2 0/2] hwmon: (max127) Add
- Maxim MAX127 hardware monitoring)
-Message-ID: <20201119214155.5285e2d2@carbon>
-In-Reply-To: <20201119095928.01fd10e0@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-References: <20201118230929.18147-1-rentao.bupt@gmail.com>
-        <20201118232719.GI1853236@lunn.ch>
-        <20201118234252.GA18681@taoren-ubuntu-R90MNF91>
-        <20201119010119.GA248686@roeck-us.net>
-        <20201119012653.GA249502@roeck-us.net>
-        <20201119074634.2e9cb21b@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-        <20201119173535.1474743d@carbon>
-        <088057533a9feb330964bdab0b1b8d2f69b7a22c.camel@perches.com>
-        <20201119095928.01fd10e0@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+        Thu, 19 Nov 2020 20:03:28 -0500
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA9AC0613CF;
+        Thu, 19 Nov 2020 17:03:28 -0800 (PST)
+Received: by mail-pl1-x643.google.com with SMTP id v21so2701868plo.12;
+        Thu, 19 Nov 2020 17:03:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZcFqPyelBpW+q1MVwPl/wMjp1ZaAK3VKC/DF+b1t6gY=;
+        b=arL66hRrdWpXc64BuKEk42pESDJsNPmZtGA5Lrpb/NQTimzpProSZM4lOj54pIXfnL
+         VCNyihIHwMHiedWHlYKoZknLhFDQ08Kp7IXwKZUTS6lVe9OiDWRdl8wzbNnMgt1Y2pu9
+         uPiGSqDIOp0Pl2G6E79sW5UVvojd8Ix4xqO5j3octK+TorRs0lxhJ5E9FN/+Yc1apTlu
+         xWeMefYeXFVhE0DsFIMRHsn3WhavOg1DOnd+t7dsCHa3ys4qD2baTHhfB7437YJaMiDW
+         gZQcFx9b3081K5k78GKfPS3TDufi5b6b/FpA0tE8og06KipF9odcSKDKDspcFY7kOILn
+         6mCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=ZcFqPyelBpW+q1MVwPl/wMjp1ZaAK3VKC/DF+b1t6gY=;
+        b=Y9Teys4rOoZ6jSpjyzPQzdlqu7DWp/UKoDkyf9Et9A7cEHTXcg2SpEsOek0Z5+HABh
+         Xpw+th9cr9BNUnPIvgtzViMBWO9NcpTr2bwzISQAJGGFHg3lwY3hgzmEt2feeZA5R6d+
+         b3Hjg0P/JgVGeM/mz16pqrZtHCC5d9ZWwvY1hs9S6VPZ3D8gSTuYNlh3NhFeF1cBI8a3
+         j3cgzjKVOygSKJ7NSBNesrSOpSJrXPEcOPIuZ1qG6zwA/nHDwMhdHIVUwGrurHlXz3y9
+         34oPyxp3gQw9LRuCxo1Zee5kBFz0vxKKaI8ugbwyjnAV9KMEhT2sTmOPlXw8HWNc/Pbn
+         kloQ==
+X-Gm-Message-State: AOAM531alJB+3gwunbtxf7U2KVm20T9H8qgNogdHWZeRfMvVm/2FrXek
+        niE71YJk8WVWIKPUFA5l7KE=
+X-Google-Smtp-Source: ABdhPJzTBo2rpYScILcX37x8woBLO7ZvTZMu/a7ycBuPq6JR3JqxJt5lu+mfo5ofQoEcgTvFYqOyIQ==
+X-Received: by 2002:a17:902:164:b029:d6:a42a:a952 with SMTP id 91-20020a1709020164b02900d6a42aa952mr11334120plb.44.1605834206443;
+        Thu, 19 Nov 2020 17:03:26 -0800 (PST)
+Received: from localhost.localdomain ([45.124.203.19])
+        by smtp.gmail.com with ESMTPSA id q14sm1205273pfl.163.2020.11.19.17.03.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Nov 2020 17:03:25 -0800 (PST)
+Sender: "joel.stan@gmail.com" <joel.stan@gmail.com>
+From:   Joel Stanley <joel@jms.id.au>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Eddie James <eajames@linux.ibm.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andrew Jeffery <andrew@aj.id.au>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-fsi@lists.ozlabs.org
+Subject: [PATCH v2 0/3] occ: Add support for P10
+Date:   Fri, 20 Nov 2020 11:33:12 +1030
+Message-Id: <20201120010315.190737-1-joel@jms.id.au>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, 19 Nov 2020 09:59:28 -0800
-Jakub Kicinski <kuba@kernel.org> wrote:
+Hi Guenter, here's v2 of this series on behalf of Eddie. I made the
+change to the compatible string that we spoke about in v2, and I'm happy
+for these to go through the hwmon tree.
 
-> On Thu, 19 Nov 2020 09:09:53 -0800 Joe Perches wrote:
-> > On Thu, 2020-11-19 at 17:35 +0100, Jesper Dangaard Brouer wrote: =20
-> > > On Thu, 19 Nov 2020 07:46:34 -0800 Jakub Kicinski <kuba@kernel.org> w=
-rote:   =20
-> >  =20
-> > > I think it is a good idea to change the keyword (K:), but I'm not sure
-> > > this catch what we want, maybe it does.  The pattern match are meant =
-to
-> > > catch drivers containing XDP related bits.
-> > >=20
-> > > Previously Joe Perches <joe@perches.com> suggested this pattern match,
-> > > which I don't fully understand... could you explain Joe?
-> > >=20
-> > > =C2=A0=C2=A0(?:\b|_)xdp(?:\b|_)   =20
-> >=20
-> > This regex matches only:
-> >=20
-> > 	xdp
-> > 	xdp_<anything>
-> > 	<anything>_xdp_<anything>
-> > 	<anything>_xdp
-> >  =20
-> > > For the filename (N:) regex match, I'm considering if we should remove
-> > > it and list more files explicitly.  I think normal glob * pattern
-> > > works, which should be sufficient.   =20
-> >=20
-> > Lists are generally more specific than regex globs. =20
->=20
-> Checking like Alexei did it seems Joe's version is faster and better:
->=20
-> $ git grep -l -E "[^a-z0-9]xdp[^a-z0-9]" | wc -l
-> 295
-> $ git grep -l -E '(\b|_)xdp(\b|_)' | wc -l
-> 297
-> $ time git grep -l -E '(\b|_)xdp(\b|_)' > /tmp/a
+v1: https://lore.kernel.org/linux-hwmon/20200501150833.5251-1-eajames@linux.ibm.com/
 
-Okay, I guess this is the pattern you want: '(\b|_)xdp(\b|_)'
+The OCC in the P10 has a number of differences from the P9. Add some logic to
+handle the differences in accessing the OCC from the service processor, and
+support the new temperature sensor type.
 
-=20
-> Joe would you like to send a patch, or should I?
+Eddie James (3):
+  dt-bindings: fsi: Add P10 OCC device documentation
+  fsi: occ: Add support for P10
+  hwmon: (occ) Add new temperature sensor type
 
-As you noticed I already send out a patch, I can send a new with your
-pattern, as it seems to be faster.
+ .../devicetree/bindings/fsi/ibm,p9-occ.txt    |  12 +-
+ drivers/fsi/fsi-occ.c                         | 125 +++++++++++++-----
+ drivers/hwmon/occ/common.c                    |  75 +++++++++++
+ 3 files changed, 172 insertions(+), 40 deletions(-)
 
---=20
-Best regards,
-  Jesper Dangaard Brouer
-  MSc.CS, Principal Kernel Engineer at Red Hat
-  LinkedIn: http://www.linkedin.com/in/brouer
+-- 
+2.29.2
 
