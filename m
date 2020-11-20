@@ -2,202 +2,498 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B56D7C63697
-	for <linux-hwmon@archiver.kernel.org>; Fri, 20 Nov 2020 01:03:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42C59C83016
+	for <linux-hwmon@archiver.kernel.org>; Fri, 20 Nov 2020 18:22:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 55C47221FC
-	for <linux-hwmon@archiver.kernel.org>; Fri, 20 Nov 2020 01:03:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 02E4622D0A
+	for <linux-hwmon@archiver.kernel.org>; Fri, 20 Nov 2020 18:22:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F1JjmCJA"
+	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="nJTP3XwD"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726593AbgKTBDn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 19 Nov 2020 20:03:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49020 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726260AbgKTBDm (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 19 Nov 2020 20:03:42 -0500
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5319C0613CF;
-        Thu, 19 Nov 2020 17:03:42 -0800 (PST)
-Received: by mail-pl1-x643.google.com with SMTP id 5so3958567plj.8;
-        Thu, 19 Nov 2020 17:03:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=P7zt9mcXsIDW+980vgQ3Cy0UH+65s4CoUr/DUZ7hl/E=;
-        b=F1JjmCJAREfbuy6PVO1YJt5jWLt4B8DfPMHiKtVTGx5EZN0juv84LbUDJqdBx6oNos
-         C6S/+9RfEN9/HlD5uAmUuOJDecLoshraZXaLkW7Od93kZlyC1mIhYfJXdq/GVyx8O5R0
-         x9ALYq+gYgl9mHtwE1ut+Kytb0rj2YHuC8CiGBshcrLMvuhi6Ax1okTu112MDKJJoLtL
-         3zfdiGBcTm59wn7/M6IrsjIFXvIkYcBsJHAVosMFEZ3FhzFAzqQu6IgAmb6N01MtwfzF
-         B/q8aTgqNF0/dEgkDBGto+w7XSkdNb2KtiKRUXfF54Shxb8MUWWivXmZ5DEupvONwG7X
-         oHeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=P7zt9mcXsIDW+980vgQ3Cy0UH+65s4CoUr/DUZ7hl/E=;
-        b=BlfbtRIC/tCLb6W2eIq7HtmuxU5DwSwoe0ovoamZJoce6CHd1u36UocSpInBKlwJ1j
-         taUEz9qezMNPrEh5GJ4r+2JR7SASqBk2E4aQJEptLvGeZdwsDovtMiG76KGB1h5qnEMV
-         s+82kZRa5TpJT6rCm/np4zNHXCW6DXg9+m3lJ0iwDpCd+Lv3K0I7jpc87tGtTcrfY9lC
-         u1v7MhanCKANEwHGMs7H935S/Vfdt8A2ArMrraG0GkbVCgenS3nbFXXPOY+DPpMbmDBB
-         GS7/F3rt0vCfzMVBILNRHuPmKCmLGqmfirFuv6vwUpHv69eMIXuTEosuN2n4niThqkmM
-         JlaA==
-X-Gm-Message-State: AOAM530Vqi6kCuxdunFU9OmMsWkXUE643bhc6pU3GZAbQt2HBikQPj4Q
-        GxMM9zEdGSFUEMhnTIdaLo4=
-X-Google-Smtp-Source: ABdhPJy1pAAHTdurNdN8pGcUQcJZZbHWg8a2jpy/Kls4crc0P7AANVyMS7SA5yc5eKK+KH7fjkO6ag==
-X-Received: by 2002:a17:902:7288:b029:d9:124:a262 with SMTP id d8-20020a1709027288b02900d90124a262mr11033454pll.44.1605834222281;
-        Thu, 19 Nov 2020 17:03:42 -0800 (PST)
-Received: from localhost.localdomain ([45.124.203.19])
-        by smtp.gmail.com with ESMTPSA id q14sm1205273pfl.163.2020.11.19.17.03.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Nov 2020 17:03:40 -0800 (PST)
-Sender: "joel.stan@gmail.com" <joel.stan@gmail.com>
-From:   Joel Stanley <joel@jms.id.au>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Eddie James <eajames@linux.ibm.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andrew Jeffery <andrew@aj.id.au>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-fsi@lists.ozlabs.org
-Subject: [PATCH v2 3/3] hwmon: (occ) Add new temperature sensor type
-Date:   Fri, 20 Nov 2020 11:33:15 +1030
-Message-Id: <20201120010315.190737-4-joel@jms.id.au>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201120010315.190737-1-joel@jms.id.au>
-References: <20201120010315.190737-1-joel@jms.id.au>
+        id S1728820AbgKTSVo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 20 Nov 2020 13:21:44 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45246 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726898AbgKTSVm (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 20 Nov 2020 13:21:42 -0500
+Received: from embeddedor (187-162-31-110.static.axtel.net [187.162.31.110])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 44F062242B;
+        Fri, 20 Nov 2020 18:21:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605896500;
+        bh=zypEenmW5uIwS3bf91X44vQpHhZ/gwwpABBFg9PXdgs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=nJTP3XwDXBXE6z6mnOPSIRaB7LUA+fTNQC4crGQ0MB9NYdfKeothVG2nUhmCQkqWV
+         HRju6dmHoPHhGnor+9/d70zp/zSm3b3cQQg/t0Glx8hFQrCr+IRChnOcINpmrGrvux
+         v00dkQlV3Myz+BPYM8RwrCmoCIOOdaKMOJr+ablQ=
+Date:   Fri, 20 Nov 2020 12:21:39 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     alsa-devel@alsa-project.org, amd-gfx@lists.freedesktop.org,
+        bridge@lists.linux-foundation.org, ceph-devel@vger.kernel.org,
+        cluster-devel@redhat.com, coreteam@netfilter.org,
+        devel@driverdev.osuosl.org, dm-devel@redhat.com,
+        drbd-dev@lists.linbit.com, dri-devel@lists.freedesktop.org,
+        GR-everest-linux-l2@marvell.com, GR-Linux-NIC-Dev@marvell.com,
+        intel-gfx@lists.freedesktop.org, intel-wired-lan@lists.osuosl.org,
+        keyrings@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+        linux-acpi@vger.kernel.org, linux-afs@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net,
+        linux-block@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-cifs@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-decnet-user@lists.sourceforge.net,
+        linux-ext4@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-geode@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-hams@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-i3c@lists.infradead.org, linux-ide@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mm@kvack.org,
+        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, nouveau@lists.freedesktop.org,
+        op-tee@lists.trustedfirmware.org, oss-drivers@netronome.com,
+        patches@opensource.cirrus.com, rds-devel@oss.oracle.com,
+        reiserfs-devel@vger.kernel.org, samba-technical@lists.samba.org,
+        selinux@vger.kernel.org, target-devel@vger.kernel.org,
+        tipc-discussion@lists.sourceforge.net,
+        usb-storage@lists.one-eyed-alien.net,
+        virtualization@lists.linux-foundation.org,
+        wcn36xx@lists.infradead.org, x86@kernel.org,
+        xen-devel@lists.xenproject.org, linux-hardening@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>, Joe Perches <joe@perches.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Subject: [PATCH 000/141] Fix fall-through warnings for Clang
+Message-ID: <cover.1605896059.git.gustavoars@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Eddie James <eajames@linux.ibm.com>
+Hi all,
 
-The latest version of the On-Chip Controller (OCC) has a different
-format for the temperature sensor data. Add a new temperature sensor
-version to handle this data.
+This series aims to fix almost all remaining fall-through warnings in
+order to enable -Wimplicit-fallthrough for Clang.
 
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
-Reviewed-by: Joel Stanley <joel@jms.id.au>
-Signed-off-by: Joel Stanley <joel@jms.id.au>
----
- drivers/hwmon/occ/common.c | 75 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
+In preparation to enable -Wimplicit-fallthrough for Clang, explicitly
+add multiple break/goto/return/fallthrough statements instead of just
+letting the code fall through to the next case.
 
-diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
-index a71777990d49..7a5e539b567b 100644
---- a/drivers/hwmon/occ/common.c
-+++ b/drivers/hwmon/occ/common.c
-@@ -41,6 +41,14 @@ struct temp_sensor_2 {
- 	u8 value;
- } __packed;
- 
-+struct temp_sensor_10 {
-+	u32 sensor_id;
-+	u8 fru_type;
-+	u8 value;
-+	u8 throttle;
-+	u8 reserved;
-+} __packed;
-+
- struct freq_sensor_1 {
- 	u16 sensor_id;
- 	u16 value;
-@@ -307,6 +315,60 @@ static ssize_t occ_show_temp_2(struct device *dev,
- 	return snprintf(buf, PAGE_SIZE - 1, "%u\n", val);
- }
- 
-+static ssize_t occ_show_temp_10(struct device *dev,
-+				struct device_attribute *attr, char *buf)
-+{
-+	int rc;
-+	u32 val = 0;
-+	struct temp_sensor_10 *temp;
-+	struct occ *occ = dev_get_drvdata(dev);
-+	struct occ_sensors *sensors = &occ->sensors;
-+	struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
-+
-+	rc = occ_update_response(occ);
-+	if (rc)
-+		return rc;
-+
-+	temp = ((struct temp_sensor_10 *)sensors->temp.data) + sattr->index;
-+
-+	switch (sattr->nr) {
-+	case 0:
-+		val = get_unaligned_be32(&temp->sensor_id);
-+		break;
-+	case 1:
-+		val = temp->value;
-+		if (val == OCC_TEMP_SENSOR_FAULT)
-+			return -EREMOTEIO;
-+
-+		/*
-+		 * VRM doesn't return temperature, only alarm bit. This
-+		 * attribute maps to tempX_alarm instead of tempX_input for
-+		 * VRM
-+		 */
-+		if (temp->fru_type != OCC_FRU_TYPE_VRM) {
-+			/* sensor not ready */
-+			if (val == 0)
-+				return -EAGAIN;
-+
-+			val *= 1000;
-+		}
-+		break;
-+	case 2:
-+		val = temp->fru_type;
-+		break;
-+	case 3:
-+		val = temp->value == OCC_TEMP_SENSOR_FAULT;
-+		break;
-+	case 4:
-+		val = temp->throttle * 1000;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return snprintf(buf, PAGE_SIZE - 1, "%u\n", val);
-+}
-+
- static ssize_t occ_show_freq_1(struct device *dev,
- 			       struct device_attribute *attr, char *buf)
- {
-@@ -745,6 +807,10 @@ static int occ_setup_sensor_attrs(struct occ *occ)
- 		num_attrs += (sensors->temp.num_sensors * 4);
- 		show_temp = occ_show_temp_2;
- 		break;
-+	case 0x10:
-+		num_attrs += (sensors->temp.num_sensors * 5);
-+		show_temp = occ_show_temp_10;
-+		break;
- 	default:
- 		sensors->temp.num_sensors = 0;
- 	}
-@@ -844,6 +910,15 @@ static int occ_setup_sensor_attrs(struct occ *occ)
- 			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
- 						     show_temp, NULL, 3, i);
- 			attr++;
-+
-+			if (sensors->temp.version == 0x10) {
-+				snprintf(attr->name, sizeof(attr->name),
-+					 "temp%d_max", s);
-+				attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-+							     show_temp, NULL,
-+							     4, i);
-+				attr++;
-+			}
- 		}
- 	}
- 
+Notice that in order to enable -Wimplicit-fallthrough for Clang, this
+change[1] is meant to be reverted at some point. So, this patch helps
+to move in that direction.
+
+Something important to mention is that there is currently a discrepancy
+between GCC and Clang when dealing with switch fall-through to empty case
+statements or to cases that only contain a break/continue/return
+statement[2][3][4].
+
+Now that the -Wimplicit-fallthrough option has been globally enabled[5],
+any compiler should really warn on missing either a fallthrough annotation
+or any of the other case-terminating statements (break/continue/return/
+goto) when falling through to the next case statement. Making exceptions
+to this introduces variation in case handling which may continue to lead
+to bugs, misunderstandings, and a general lack of robustness. The point
+of enabling options like -Wimplicit-fallthrough is to prevent human error
+and aid developers in spotting bugs before their code is even built/
+submitted/committed, therefore eliminating classes of bugs. So, in order
+to really accomplish this, we should, and can, move in the direction of
+addressing any error-prone scenarios and get rid of the unintentional
+fallthrough bug-class in the kernel, entirely, even if there is some minor
+redundancy. Better to have explicit case-ending statements than continue to
+have exceptions where one must guess as to the right result. The compiler
+will eliminate any actual redundancy.
+
+Note that there is already a patch in mainline that addresses almost
+40,000 of these issues[6].
+
+I'm happy to carry this whole series in my own tree if people are OK
+with it. :)
+
+[1] commit e2079e93f562c ("kbuild: Do not enable -Wimplicit-fallthrough for clang for now")
+[2] ClangBuiltLinux#636
+[3] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=91432
+[4] https://godbolt.org/z/xgkvIh
+[5] commit a035d552a93b ("Makefile: Globally enable fall-through warning")
+[6] commit 4169e889e588 ("include: jhash/signal: Fix fall-through warnings for Clang")
+
+Thanks!
+
+Gustavo A. R. Silva (141):
+  afs: Fix fall-through warnings for Clang
+  ASoC: codecs: Fix fall-through warnings for Clang
+  cifs: Fix fall-through warnings for Clang
+  drm/amdgpu: Fix fall-through warnings for Clang
+  drm/radeon: Fix fall-through warnings for Clang
+  gfs2: Fix fall-through warnings for Clang
+  gpio: Fix fall-through warnings for Clang
+  IB/hfi1: Fix fall-through warnings for Clang
+  igb: Fix fall-through warnings for Clang
+  ima: Fix fall-through warnings for Clang
+  ipv4: Fix fall-through warnings for Clang
+  ixgbe: Fix fall-through warnings for Clang
+  media: dvb-frontends: Fix fall-through warnings for Clang
+  media: usb: dvb-usb-v2: Fix fall-through warnings for Clang
+  netfilter: Fix fall-through warnings for Clang
+  nfsd: Fix fall-through warnings for Clang
+  nfs: Fix fall-through warnings for Clang
+  qed: Fix fall-through warnings for Clang
+  qlcnic: Fix fall-through warnings for Clang
+  scsi: aic7xxx: Fix fall-through warnings for Clang
+  scsi: aic94xx: Fix fall-through warnings for Clang
+  scsi: bfa: Fix fall-through warnings for Clang
+  staging: rtl8723bs: core: Fix fall-through warnings for Clang
+  staging: vt6655: Fix fall-through warnings for Clang
+  bnxt_en: Fix fall-through warnings for Clang
+  ceph: Fix fall-through warnings for Clang
+  drbd: Fix fall-through warnings for Clang
+  drm/amd/display: Fix fall-through warnings for Clang
+  e1000: Fix fall-through warnings for Clang
+  ext2: Fix fall-through warnings for Clang
+  ext4: Fix fall-through warnings for Clang
+  floppy: Fix fall-through warnings for Clang
+  fm10k: Fix fall-through warnings for Clang
+  IB/mlx4: Fix fall-through warnings for Clang
+  IB/qedr: Fix fall-through warnings for Clang
+  ice: Fix fall-through warnings for Clang
+  Input: pcspkr - Fix fall-through warnings for Clang
+  isofs: Fix fall-through warnings for Clang
+  ixgbevf: Fix fall-through warnings for Clang
+  kprobes/x86: Fix fall-through warnings for Clang
+  mm: Fix fall-through warnings for Clang
+  net: 3c509: Fix fall-through warnings for Clang
+  net: cassini: Fix fall-through warnings for Clang
+  net/mlx4: Fix fall-through warnings for Clang
+  net: mscc: ocelot: Fix fall-through warnings for Clang
+  netxen_nic: Fix fall-through warnings for Clang
+  nfp: Fix fall-through warnings for Clang
+  perf/x86: Fix fall-through warnings for Clang
+  pinctrl: Fix fall-through warnings for Clang
+  RDMA/mlx5: Fix fall-through warnings for Clang
+  reiserfs: Fix fall-through warnings for Clang
+  security: keys: Fix fall-through warnings for Clang
+  selinux: Fix fall-through warnings for Clang
+  target: Fix fall-through warnings for Clang
+  uprobes/x86: Fix fall-through warnings for Clang
+  vxge: Fix fall-through warnings for Clang
+  watchdog: Fix fall-through warnings for Clang
+  xen-blkfront: Fix fall-through warnings for Clang
+  regulator: as3722: Fix fall-through warnings for Clang
+  habanalabs: Fix fall-through warnings for Clang
+  tee: Fix fall-through warnings for Clang
+  HID: usbhid: Fix fall-through warnings for Clang
+  HID: input: Fix fall-through warnings for Clang
+  ACPI: Fix fall-through warnings for Clang
+  airo: Fix fall-through warnings for Clang
+  ALSA: hdspm: Fix fall-through warnings for Clang
+  ALSA: pcsp: Fix fall-through warnings for Clang
+  ALSA: sb: Fix fall-through warnings for Clang
+  ath5k: Fix fall-through warnings for Clang
+  atm: fore200e: Fix fall-through warnings for Clang
+  braille_console: Fix fall-through warnings for Clang
+  can: peak_usb: Fix fall-through warnings for Clang
+  carl9170: Fix fall-through warnings for Clang
+  cfg80211: Fix fall-through warnings for Clang
+  crypto: ccree - Fix fall-through warnings for Clang
+  decnet: Fix fall-through warnings for Clang
+  dm raid: Fix fall-through warnings for Clang
+  drm/amd/pm: Fix fall-through warnings for Clang
+  drm: Fix fall-through warnings for Clang
+  drm/i915/gem: Fix fall-through warnings for Clang
+  drm/nouveau/clk: Fix fall-through warnings for Clang
+  drm/nouveau: Fix fall-through warnings for Clang
+  drm/nouveau/therm: Fix fall-through warnings for Clang
+  drm/via: Fix fall-through warnings for Clang
+  firewire: core: Fix fall-through warnings for Clang
+  hwmon: (corsair-cpro) Fix fall-through warnings for Clang
+  hwmon: (max6621) Fix fall-through warnings for Clang
+  i3c: master: cdns: Fix fall-through warnings for Clang
+  ide: Fix fall-through warnings for Clang
+  iio: adc: cpcap: Fix fall-through warnings for Clang
+  iwlwifi: iwl-drv: Fix fall-through warnings for Clang
+  libata: Fix fall-through warnings for Clang
+  mac80211: Fix fall-through warnings for Clang
+  media: atomisp: Fix fall-through warnings for Clang
+  media: dvb_frontend: Fix fall-through warnings for Clang
+  media: rcar_jpu: Fix fall-through warnings for Clang
+  media: saa7134: Fix fall-through warnings for Clang
+  mmc: sdhci-of-arasan: Fix fall-through warnings for Clang
+  mt76: mt7615: Fix fall-through warnings for Clang
+  mtd: cfi: Fix fall-through warnings for Clang
+  mtd: mtdchar: Fix fall-through warnings for Clang
+  mtd: onenand: Fix fall-through warnings for Clang
+  mtd: rawnand: fsmc: Fix fall-through warnings for Clang
+  mtd: rawnand: stm32_fmc2: Fix fall-through warnings for Clang
+  net: ax25: Fix fall-through warnings for Clang
+  net: bridge: Fix fall-through warnings for Clang
+  net: core: Fix fall-through warnings for Clang
+  netfilter: ipt_REJECT: Fix fall-through warnings for Clang
+  net: netrom: Fix fall-through warnings for Clang
+  net/packet: Fix fall-through warnings for Clang
+  net: plip: Fix fall-through warnings for Clang
+  net: rose: Fix fall-through warnings for Clang
+  nl80211: Fix fall-through warnings for Clang
+  phy: qcom-usb-hs: Fix fall-through warnings for Clang
+  rds: Fix fall-through warnings for Clang
+  rt2x00: Fix fall-through warnings for Clang
+  rtl8xxxu: Fix fall-through warnings for Clang
+  rtw88: Fix fall-through warnings for Clang
+  rxrpc: Fix fall-through warnings for Clang
+  scsi: aacraid: Fix fall-through warnings for Clang
+  scsi: aha1740: Fix fall-through warnings for Clang
+  scsi: csiostor: Fix fall-through warnings for Clang
+  scsi: lpfc: Fix fall-through warnings for Clang
+  scsi: stex: Fix fall-through warnings for Clang
+  sctp: Fix fall-through warnings for Clang
+  slimbus: messaging: Fix fall-through warnings for Clang
+  staging: qlge: Fix fall-through warnings for Clang
+  staging: vt6656: Fix fall-through warnings for Clang
+  SUNRPC: Fix fall-through warnings for Clang
+  tipc: Fix fall-through warnings for Clang
+  tpm: Fix fall-through warnings for Clang
+  ubi: Fix fall-through warnings for Clang
+  usb: Fix fall-through warnings for Clang
+  video: fbdev: lxfb_ops: Fix fall-through warnings for Clang
+  video: fbdev: pm2fb: Fix fall-through warnings for Clang
+  virtio_net: Fix fall-through warnings for Clang
+  wcn36xx: Fix fall-through warnings for Clang
+  xen/manage: Fix fall-through warnings for Clang
+  xfrm: Fix fall-through warnings for Clang
+  zd1201: Fix fall-through warnings for Clang
+  Input: libps2 - Fix fall-through warnings for Clang
+
+ arch/x86/events/core.c                                    | 2 +-
+ arch/x86/kernel/kprobes/core.c                            | 1 +
+ arch/x86/kernel/uprobes.c                                 | 2 ++
+ drivers/accessibility/braille/braille_console.c           | 1 +
+ drivers/acpi/sbshc.c                                      | 1 +
+ drivers/ata/libata-eh.c                                   | 1 +
+ drivers/atm/fore200e.c                                    | 1 +
+ drivers/block/drbd/drbd_receiver.c                        | 1 +
+ drivers/block/drbd/drbd_req.c                             | 1 +
+ drivers/block/floppy.c                                    | 1 +
+ drivers/block/xen-blkfront.c                              | 1 +
+ drivers/char/tpm/eventlog/tpm1.c                          | 1 +
+ drivers/crypto/ccree/cc_cipher.c                          | 3 +++
+ drivers/firewire/core-topology.c                          | 1 +
+ drivers/gpio/gpio-ath79.c                                 | 1 +
+ drivers/gpio/gpiolib-acpi.c                               | 1 +
+ drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c                    | 1 +
+ drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c                     | 1 +
+ drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c                     | 1 +
+ drivers/gpu/drm/amd/amdgpu/vi.c                           | 1 +
+ drivers/gpu/drm/amd/display/dc/bios/bios_parser.c         | 1 +
+ drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c        | 2 ++
+ drivers/gpu/drm/amd/display/dc/core/dc_link.c             | 1 +
+ drivers/gpu/drm/amd/pm/powerplay/si_dpm.c                 | 2 +-
+ .../gpu/drm/amd/pm/powerplay/smumgr/polaris10_smumgr.c    | 1 +
+ drivers/gpu/drm/drm_bufs.c                                | 1 +
+ drivers/gpu/drm/i915/gem/i915_gem_shrinker.c              | 1 +
+ drivers/gpu/drm/nouveau/nouveau_bo.c                      | 1 +
+ drivers/gpu/drm/nouveau/nouveau_connector.c               | 1 +
+ drivers/gpu/drm/nouveau/nvkm/subdev/clk/nv50.c            | 1 +
+ drivers/gpu/drm/nouveau/nvkm/subdev/therm/gf119.c         | 1 +
+ drivers/gpu/drm/radeon/ci_dpm.c                           | 2 +-
+ drivers/gpu/drm/radeon/r300.c                             | 1 +
+ drivers/gpu/drm/radeon/si_dpm.c                           | 2 +-
+ drivers/gpu/drm/via/via_irq.c                             | 1 +
+ drivers/hid/hid-input.c                                   | 1 +
+ drivers/hid/usbhid/hid-core.c                             | 2 ++
+ drivers/hwmon/corsair-cpro.c                              | 1 +
+ drivers/hwmon/max6621.c                                   | 2 +-
+ drivers/i3c/master/i3c-master-cdns.c                      | 2 ++
+ drivers/ide/siimage.c                                     | 1 +
+ drivers/iio/adc/cpcap-adc.c                               | 1 +
+ drivers/infiniband/hw/hfi1/qp.c                           | 1 +
+ drivers/infiniband/hw/hfi1/tid_rdma.c                     | 5 +++++
+ drivers/infiniband/hw/mlx4/mad.c                          | 1 +
+ drivers/infiniband/hw/mlx5/qp.c                           | 1 +
+ drivers/infiniband/hw/qedr/main.c                         | 1 +
+ drivers/input/misc/pcspkr.c                               | 1 +
+ drivers/input/serio/libps2.c                              | 2 +-
+ drivers/md/dm-raid.c                                      | 1 +
+ drivers/media/dvb-core/dvb_frontend.c                     | 1 +
+ drivers/media/dvb-frontends/cx24120.c                     | 1 +
+ drivers/media/dvb-frontends/dib0090.c                     | 2 ++
+ drivers/media/dvb-frontends/drxk_hard.c                   | 1 +
+ drivers/media/dvb-frontends/m88rs2000.c                   | 1 +
+ drivers/media/pci/saa7134/saa7134-tvaudio.c               | 1 +
+ drivers/media/platform/rcar_jpu.c                         | 1 +
+ drivers/media/usb/dvb-usb-v2/af9015.c                     | 1 +
+ drivers/media/usb/dvb-usb-v2/lmedm04.c                    | 1 +
+ drivers/misc/habanalabs/gaudi/gaudi.c                     | 1 +
+ drivers/mmc/host/sdhci-of-arasan.c                        | 4 ++++
+ drivers/mtd/chips/cfi_cmdset_0001.c                       | 1 +
+ drivers/mtd/chips/cfi_cmdset_0002.c                       | 2 ++
+ drivers/mtd/chips/cfi_cmdset_0020.c                       | 2 ++
+ drivers/mtd/mtdchar.c                                     | 1 +
+ drivers/mtd/nand/onenand/onenand_samsung.c                | 1 +
+ drivers/mtd/nand/raw/fsmc_nand.c                          | 1 +
+ drivers/mtd/nand/raw/stm32_fmc2_nand.c                    | 2 ++
+ drivers/mtd/ubi/build.c                                   | 1 +
+ drivers/net/can/usb/peak_usb/pcan_usb_core.c              | 2 ++
+ drivers/net/ethernet/3com/3c509.c                         | 1 +
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c                 | 1 +
+ drivers/net/ethernet/intel/e1000/e1000_hw.c               | 1 +
+ drivers/net/ethernet/intel/fm10k/fm10k_mbx.c              | 2 ++
+ drivers/net/ethernet/intel/ice/ice_txrx_lib.c             | 1 +
+ drivers/net/ethernet/intel/igb/e1000_phy.c                | 1 +
+ drivers/net/ethernet/intel/igb/igb_ethtool.c              | 1 +
+ drivers/net/ethernet/intel/igb/igb_ptp.c                  | 1 +
+ drivers/net/ethernet/intel/ixgbe/ixgbe_82599.c            | 2 ++
+ drivers/net/ethernet/intel/ixgbe/ixgbe_common.c           | 1 +
+ drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c              | 1 +
+ drivers/net/ethernet/intel/ixgbe/ixgbe_ptp.c              | 1 +
+ drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c         | 1 +
+ drivers/net/ethernet/mellanox/mlx4/resource_tracker.c     | 1 +
+ drivers/net/ethernet/mscc/ocelot_vcap.c                   | 1 +
+ drivers/net/ethernet/neterion/vxge/vxge-config.c          | 1 +
+ drivers/net/ethernet/netronome/nfp/nfp_net_repr.c         | 1 +
+ drivers/net/ethernet/qlogic/netxen/netxen_nic_init.c      | 1 +
+ drivers/net/ethernet/qlogic/qed/qed_l2.c                  | 1 +
+ drivers/net/ethernet/qlogic/qed/qed_sriov.c               | 1 +
+ drivers/net/ethernet/qlogic/qlcnic/qlcnic_io.c            | 1 +
+ drivers/net/ethernet/qlogic/qlcnic/qlcnic_main.c          | 1 +
+ drivers/net/ethernet/sun/cassini.c                        | 1 +
+ drivers/net/plip/plip.c                                   | 2 ++
+ drivers/net/virtio_net.c                                  | 1 +
+ drivers/net/wireless/ath/ath5k/mac80211-ops.c             | 1 +
+ drivers/net/wireless/ath/carl9170/tx.c                    | 1 +
+ drivers/net/wireless/ath/wcn36xx/smd.c                    | 2 +-
+ drivers/net/wireless/cisco/airo.c                         | 1 +
+ drivers/net/wireless/intel/iwlwifi/iwl-drv.c              | 2 +-
+ drivers/net/wireless/mediatek/mt76/mt7615/eeprom.c        | 2 +-
+ drivers/net/wireless/ralink/rt2x00/rt2x00queue.c          | 1 +
+ drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c     | 8 ++++----
+ drivers/net/wireless/realtek/rtw88/fw.c                   | 2 +-
+ drivers/net/wireless/zydas/zd1201.c                       | 2 +-
+ drivers/phy/qualcomm/phy-qcom-usb-hs.c                    | 1 +
+ drivers/pinctrl/renesas/pinctrl-rza1.c                    | 1 +
+ drivers/regulator/as3722-regulator.c                      | 3 ++-
+ drivers/scsi/aacraid/commsup.c                            | 1 +
+ drivers/scsi/aha1740.c                                    | 1 +
+ drivers/scsi/aic7xxx/aic79xx_core.c                       | 4 +++-
+ drivers/scsi/aic7xxx/aic7xxx_core.c                       | 4 ++--
+ drivers/scsi/aic94xx/aic94xx_scb.c                        | 2 ++
+ drivers/scsi/aic94xx/aic94xx_task.c                       | 2 ++
+ drivers/scsi/bfa/bfa_fcs_lport.c                          | 2 +-
+ drivers/scsi/bfa/bfa_ioc.c                                | 6 ++++--
+ drivers/scsi/csiostor/csio_wr.c                           | 1 +
+ drivers/scsi/lpfc/lpfc_bsg.c                              | 1 +
+ drivers/scsi/stex.c                                       | 1 +
+ drivers/slimbus/messaging.c                               | 1 +
+ drivers/staging/media/atomisp/pci/runtime/isys/src/rx.c   | 1 +
+ drivers/staging/qlge/qlge_main.c                          | 1 +
+ drivers/staging/rtl8723bs/core/rtw_cmd.c                  | 1 +
+ drivers/staging/rtl8723bs/core/rtw_mlme_ext.c             | 1 +
+ drivers/staging/rtl8723bs/core/rtw_wlan_util.c            | 1 +
+ drivers/staging/vt6655/device_main.c                      | 1 +
+ drivers/staging/vt6655/rxtx.c                             | 2 ++
+ drivers/staging/vt6656/main_usb.c                         | 1 +
+ drivers/target/target_core_iblock.c                       | 1 +
+ drivers/target/target_core_pr.c                           | 1 +
+ drivers/tee/tee_core.c                                    | 1 +
+ drivers/usb/gadget/function/f_fs.c                        | 2 ++
+ drivers/usb/gadget/function/f_loopback.c                  | 2 +-
+ drivers/usb/gadget/function/f_sourcesink.c                | 1 +
+ drivers/usb/gadget/udc/dummy_hcd.c                        | 2 ++
+ drivers/usb/host/fotg210-hcd.c                            | 2 +-
+ drivers/usb/host/isp116x-hcd.c                            | 1 +
+ drivers/usb/host/max3421-hcd.c                            | 1 +
+ drivers/usb/host/oxu210hp-hcd.c                           | 1 +
+ drivers/usb/misc/yurex.c                                  | 1 +
+ drivers/usb/musb/tusb6010.c                               | 1 +
+ drivers/usb/storage/ene_ub6250.c                          | 1 +
+ drivers/usb/storage/uas.c                                 | 1 +
+ drivers/video/fbdev/geode/lxfb_ops.c                      | 1 +
+ drivers/video/fbdev/pm2fb.c                               | 1 +
+ drivers/watchdog/machzwd.c                                | 1 +
+ drivers/xen/manage.c                                      | 1 +
+ fs/afs/cmservice.c                                        | 5 +++++
+ fs/afs/fsclient.c                                         | 4 ++++
+ fs/afs/vlclient.c                                         | 1 +
+ fs/ceph/dir.c                                             | 2 ++
+ fs/cifs/inode.c                                           | 1 +
+ fs/cifs/sess.c                                            | 1 +
+ fs/cifs/smbdirect.c                                       | 1 +
+ fs/ext2/inode.c                                           | 1 +
+ fs/ext4/super.c                                           | 1 +
+ fs/gfs2/inode.c                                           | 2 ++
+ fs/gfs2/recovery.c                                        | 1 +
+ fs/isofs/rock.c                                           | 1 +
+ fs/nfs/nfs3acl.c                                          | 1 +
+ fs/nfs/nfs4client.c                                       | 1 +
+ fs/nfs/nfs4proc.c                                         | 2 ++
+ fs/nfs/nfs4state.c                                        | 1 +
+ fs/nfs/pnfs.c                                             | 2 ++
+ fs/nfsd/nfs4state.c                                       | 1 +
+ fs/nfsd/nfsctl.c                                          | 1 +
+ fs/reiserfs/namei.c                                       | 1 +
+ mm/mm_init.c                                              | 1 +
+ mm/vmscan.c                                               | 1 +
+ net/ax25/af_ax25.c                                        | 1 +
+ net/bridge/br_input.c                                     | 1 +
+ net/core/dev.c                                            | 1 +
+ net/decnet/dn_route.c                                     | 2 +-
+ net/ipv4/ah4.c                                            | 1 +
+ net/ipv4/esp4.c                                           | 1 +
+ net/ipv4/fib_semantics.c                                  | 1 +
+ net/ipv4/ip_vti.c                                         | 1 +
+ net/ipv4/ipcomp.c                                         | 1 +
+ net/ipv4/netfilter/ipt_REJECT.c                           | 1 +
+ net/mac80211/cfg.c                                        | 2 ++
+ net/netfilter/nf_conntrack_proto_dccp.c                   | 1 +
+ net/netfilter/nf_tables_api.c                             | 1 +
+ net/netfilter/nft_ct.c                                    | 1 +
+ net/netrom/nr_route.c                                     | 4 ++++
+ net/packet/af_packet.c                                    | 1 +
+ net/rds/tcp_connect.c                                     | 1 +
+ net/rds/threads.c                                         | 2 ++
+ net/rose/rose_route.c                                     | 2 ++
+ net/rxrpc/af_rxrpc.c                                      | 1 +
+ net/sctp/input.c                                          | 3 ++-
+ net/sunrpc/rpc_pipe.c                                     | 1 +
+ net/sunrpc/xprtsock.c                                     | 1 +
+ net/tipc/link.c                                           | 1 +
+ net/wireless/nl80211.c                                    | 1 +
+ net/wireless/util.c                                       | 1 +
+ net/xfrm/xfrm_interface.c                                 | 1 +
+ security/integrity/ima/ima_main.c                         | 1 +
+ security/integrity/ima/ima_policy.c                       | 2 ++
+ security/keys/process_keys.c                              | 1 +
+ security/selinux/hooks.c                                  | 1 +
+ sound/drivers/pcsp/pcsp_input.c                           | 1 +
+ sound/isa/sb/sb8_main.c                                   | 1 +
+ sound/pci/rme9652/hdspm.c                                 | 1 +
+ sound/soc/codecs/adav80x.c                                | 1 +
+ sound/soc/codecs/arizona.c                                | 1 +
+ sound/soc/codecs/cs42l52.c                                | 1 +
+ sound/soc/codecs/cs42l56.c                                | 1 +
+ sound/soc/codecs/cs47l92.c                                | 1 +
+ sound/soc/codecs/wm8962.c                                 | 1 +
+ 209 files changed, 264 insertions(+), 26 deletions(-)
+
 -- 
-2.29.2
+2.27.0
 
