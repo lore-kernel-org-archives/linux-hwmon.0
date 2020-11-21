@@ -2,136 +2,128 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD9A7C64E75
-	for <linux-hwmon@archiver.kernel.org>; Fri, 20 Nov 2020 22:21:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9F01C388F9
+	for <linux-hwmon@archiver.kernel.org>; Sat, 21 Nov 2020 17:21:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6D46724654
-	for <linux-hwmon@archiver.kernel.org>; Fri, 20 Nov 2020 22:21:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 688FB221FC
+	for <linux-hwmon@archiver.kernel.org>; Sat, 21 Nov 2020 17:21:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="th/UjqVc"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.b="r28lvnde"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728704AbgKTWVb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 20 Nov 2020 17:21:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49258 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728362AbgKTWV3 (ORCPT
+        id S1726562AbgKURVD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 21 Nov 2020 12:21:03 -0500
+Received: from gproxy8-pub.mail.unifiedlayer.com ([67.222.33.93]:55979 "EHLO
+        gproxy8-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726305AbgKURVC (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 20 Nov 2020 17:21:29 -0500
-Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED15C061A04;
-        Fri, 20 Nov 2020 14:21:29 -0800 (PST)
-Received: by mail-yb1-xb43.google.com with SMTP id 10so9964113ybx.9;
-        Fri, 20 Nov 2020 14:21:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=29/AaAKKWIjlxKBDiu42mXe16/c3LUzQvTdn0Wctw9g=;
-        b=th/UjqVcversiy9gEUr46cKRrhHywr0iTgf9mzUejm+T3/Jtu2c6ftjob7N1dnOe2S
-         rGVMit/4Gqy7ZDqW+do8x9wI8RCPt/cmuWncILsoBuux3CBAtfG8gT+eTL8wiBVSM5EH
-         rDgxqkIvK+vUXnfhgj71GxYIUQH1hInVNMbCl5+3prik9RGhi+hsmul85xXuf9uJVr2L
-         NGLQGWDmOXXHg4l9XujW0HrVyacbE3Q1QSLAkLJ0BjE5AdFqhLyeU3T8/6+nJ9hH0JSR
-         o1vAVeqr6Bt+/W6rGIwrn7PuvAvMGRmk1Avx4k6vjCg8etglRiDTMnimrqKcX/KEsNCP
-         0CAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=29/AaAKKWIjlxKBDiu42mXe16/c3LUzQvTdn0Wctw9g=;
-        b=g6dF/T3IXVX8QT4MfDxe+zp+ZIZ9xHCuMvUBvTX6zqjs95vMoZCWRjOR8ZvnplwSFE
-         MpW7FRJ+Cocr8Ai+2u86hCuhUCXhzTl/KKj91vXaqYUhzxnR9kkROQOnLFCEmRZKla1D
-         /TWlHYZvWd31yby8t+xuOaetfQfCA2rnKbYtvImZQoEgF4bMcyOH0wDgheWTNO/AQcgq
-         vKJHu61yvY4IK3yHPMgnP62czhvJ3I6HVNj4LuPzgNFrgnx06uPJAt0tvxIYKvpgGW+N
-         wvCFfMuDeRyb4r/j+b87COnXbi+be8kDhPqdSYEtYbeDyH//DWkZBm0w3V06nDyXNEdi
-         ds0A==
-X-Gm-Message-State: AOAM533E6x8M4HleYo3hGWOidsXyMY+wptATrgMwyVNBk+Ieg+ndwvCB
-        qvPHidvB8XuYLS48BjmsDU0X4FK8+hiPxZdptxg=
-X-Google-Smtp-Source: ABdhPJzYUhkcjTyH5GIcOV5fWMsl+OUdzem471zLY9usW3RhV8izQIRbyESMTmZwFikqgbfOQQqVvSSQCZzBPJX4q90=
-X-Received: by 2002:a5b:40e:: with SMTP id m14mr22113400ybp.33.1605910888617;
- Fri, 20 Nov 2020 14:21:28 -0800 (PST)
+        Sat, 21 Nov 2020 12:21:02 -0500
+X-Greylist: delayed 1315 seconds by postgrey-1.27 at vger.kernel.org; Sat, 21 Nov 2020 12:21:02 EST
+Received: from cmgw14.unifiedlayer.com (unknown [10.9.0.14])
+        by gproxy8.mail.unifiedlayer.com (Postfix) with ESMTP id 6B8251AB092
+        for <linux-hwmon@vger.kernel.org>; Sat, 21 Nov 2020 09:59:06 -0700 (MST)
+Received: from bh-25.webhostbox.net ([208.91.199.152])
+        by cmsmtp with ESMTP
+        id gWE5kQjATwNNlgWE6keHWp; Sat, 21 Nov 2020 09:59:06 -0700
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.3 cv=BoezP7f5 c=1 sm=1 tr=0
+ a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=kj9zAlcOel0A:10:nop_charset_1
+ a=nNwsprhYR40A:10:nop_rcvd_month_year
+ a=evQFzbml-YQA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=_jlGtV7tAAAA:8 a=7CQSdrXTAAAA:8 a=2M5tUyfAVdibolAbR3cA:9
+ a=CjuIK1q_8ugA:10:nop_charset_2 a=AjGcO6oz07-iQ99wixmX:22
+ a=nlm17XC03S6CtCLSeiRr:22 a=a-qgeE7W1pNrGK8U0ZQC:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=2vcIO4pCUjm64D/qilEE5CXFzPfD8btnRxk3dxvAE4o=; b=r28lvndeQOQuEL2MB/HRk6Gzqb
+        UeifVyeOYK5hQQvF/rYzNwV+DGDJ9/Ww8q6L5EthecJRUq6NrKbJfd/2m2Vx6wVChYKHBYBGRlxZx
+        NJhykulrKthvigzlrqtOtWwTVXjCSVxDVAR5PHknNNRuzsP0ls/8vwZhHPVr0ZJSCN2J0h/cRQje/
+        UINtlqfn7t4CJBg2y9vpnmeLdoLBspI8wuq4IxpwhrskkZj77NMyWOCZ1yvdSCriePtbkrWzNRg8h
+        bSRSRP3wnmkcWMo8Cri4ER+LG3pHKubEMMum2q+i1pMyNgSxR+JwBfdUnXosCQ8ildxyC7oaeSwCQ
+        /l3PhI5w==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:40692 helo=localhost)
+        by bh-25.webhostbox.net with esmtpa (Exim 4.93)
+        (envelope-from <linux@roeck-us.net>)
+        id 1kgWE4-002Xca-I4; Sat, 21 Nov 2020 16:59:04 +0000
+Date:   Sat, 21 Nov 2020 08:59:03 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        sudeep.holla@arm.com, lukasz.luba@arm.com,
+        james.quinlan@broadcom.com, Jonathan.Cameron@Huawei.com,
+        egranata@google.com, jbhayana@google.com,
+        peter.hilber@opensynergy.com, mikhail.golubev@opensynergy.com,
+        Igor.Skalkin@opensynergy.com, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v4 3/6] hwmon: scmi: update hwmon internal scale data type
+Message-ID: <20201121165903.GA111877@roeck-us.net>
+References: <20201119174906.43862-1-cristian.marussi@arm.com>
+ <20201119174906.43862-4-cristian.marussi@arm.com>
 MIME-Version: 1.0
-References: <cover.1605896059.git.gustavoars@kernel.org>
-In-Reply-To: <cover.1605896059.git.gustavoars@kernel.org>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Fri, 20 Nov 2020 23:21:17 +0100
-Message-ID: <CANiq72=E_gEVvqUUTSqU4zegC2=yZSTM4b=4G-iofp6d3=UgWQ@mail.gmail.com>
-Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        alsa-devel@alsa-project.org, amd-gfx@lists.freedesktop.org,
-        bridge@lists.linux-foundation.org, ceph-devel@vger.kernel.org,
-        cluster-devel@redhat.com, coreteam@netfilter.org,
-        devel@driverdev.osuosl.org, dm-devel@redhat.com,
-        drbd-dev@lists.linbit.com, dri-devel@lists.freedesktop.org,
-        GR-everest-linux-l2@marvell.com, GR-Linux-NIC-Dev@marvell.com,
-        intel-gfx@lists.freedesktop.org, intel-wired-lan@lists.osuosl.org,
-        keyrings@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-        linux-acpi@vger.kernel.org, linux-afs@lists.infradead.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net,
-        linux-block@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-cifs@vger.kernel.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-decnet-user@lists.sourceforge.net,
-        Ext4 Developers List <linux-ext4@vger.kernel.org>,
-        linux-fbdev@vger.kernel.org, linux-geode@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-hams@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i3c@lists.infradead.org,
-        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input <linux-input@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-mmc@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
-        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        netfilter-devel@vger.kernel.org, nouveau@lists.freedesktop.org,
-        op-tee@lists.trustedfirmware.org, oss-drivers@netronome.com,
-        patches@opensource.cirrus.com, rds-devel@oss.oracle.com,
-        reiserfs-devel@vger.kernel.org, samba-technical@lists.samba.org,
-        selinux@vger.kernel.org, target-devel@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net,
-        usb-storage@lists.one-eyed-alien.net,
-        virtualization@lists.linux-foundation.org,
-        wcn36xx@lists.infradead.org,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        xen-devel@lists.xenproject.org, linux-hardening@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>, Joe Perches <joe@perches.com>,
-        Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201119174906.43862-4-cristian.marussi@arm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1kgWE4-002Xca-I4
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:40692
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 1
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Gustavo,
+On Thu, Nov 19, 2020 at 05:49:03PM +0000, Cristian Marussi wrote:
+> Use an int to calculate scale values inside scmi_hwmon_scale() to match
+> the updated scale data type in struct scmi_sensor_info.
+> 
+> Cc: linux-hwmon@vger.kernel.org
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
 
-On Fri, Nov 20, 2020 at 7:21 PM Gustavo A. R. Silva
-<gustavoars@kernel.org> wrote:
->
-> Hi all,
->
-> This series aims to fix almost all remaining fall-through warnings in
-> order to enable -Wimplicit-fallthrough for Clang.
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-Thanks for this.
+[ Assuming this will be pushed togesther with the other patches in the series ]
 
-Since this warning is reliable in both/all compilers and we are
-eventually getting rid of all the cases, what about going even further
-and making it an error right after?
+Guenter
 
-Cheers,
-Miguel
+> ---
+>  drivers/hwmon/scmi-hwmon.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/scmi-hwmon.c b/drivers/hwmon/scmi-hwmon.c
+> index 09ce30cba54b..17d064e58938 100644
+> --- a/drivers/hwmon/scmi-hwmon.c
+> +++ b/drivers/hwmon/scmi-hwmon.c
+> @@ -30,7 +30,7 @@ static inline u64 __pow10(u8 x)
+>  
+>  static int scmi_hwmon_scale(const struct scmi_sensor_info *sensor, u64 *value)
+>  {
+> -	s8 scale = sensor->scale;
+> +	int scale = sensor->scale;
+>  	u64 f;
+>  
+>  	switch (sensor->type) {
+> -- 
+> 2.17.1
+> 
