@@ -2,72 +2,71 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
+X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45358C388F9
-	for <linux-hwmon@archiver.kernel.org>; Sat, 21 Nov 2020 18:50:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26C45C5519F
+	for <linux-hwmon@archiver.kernel.org>; Sat, 21 Nov 2020 18:51:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E31752100A
-	for <linux-hwmon@archiver.kernel.org>; Sat, 21 Nov 2020 18:50:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CE9AA2100A
+	for <linux-hwmon@archiver.kernel.org>; Sat, 21 Nov 2020 18:51:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.b="Y/HNNQ55"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.b="rXxT8kLI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728215AbgKUSuN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 21 Nov 2020 13:50:13 -0500
-Received: from gproxy1-pub.mail.unifiedlayer.com ([69.89.25.95]:54442 "EHLO
-        gproxy1-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726556AbgKUSuN (ORCPT
+        id S1728317AbgKUSvx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 21 Nov 2020 13:51:53 -0500
+Received: from gproxy8-pub.mail.unifiedlayer.com ([67.222.33.93]:38352 "EHLO
+        gproxy8-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727163AbgKUSvx (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 21 Nov 2020 13:50:13 -0500
-Received: from cmgw11.unifiedlayer.com (unknown [10.9.0.11])
-        by gproxy1.mail.unifiedlayer.com (Postfix) with ESMTP id 50F80BA3851FC
-        for <linux-hwmon@vger.kernel.org>; Sat, 21 Nov 2020 11:50:12 -0700 (MST)
+        Sat, 21 Nov 2020 13:51:53 -0500
+Received: from cmgw14.unifiedlayer.com (unknown [10.9.0.14])
+        by gproxy8.mail.unifiedlayer.com (Postfix) with ESMTP id 899671AB099
+        for <linux-hwmon@vger.kernel.org>; Sat, 21 Nov 2020 11:51:52 -0700 (MST)
 Received: from bh-25.webhostbox.net ([208.91.199.152])
         by cmsmtp with ESMTP
-        id gXxbke8hAdCH5gXxckjss2; Sat, 21 Nov 2020 11:50:12 -0700
+        id gXzEkR8NSwNNlgXzEkeg0E; Sat, 21 Nov 2020 11:51:52 -0700
 X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.3 cv=LM5Ivqe9 c=1 sm=1 tr=0
+X-Authority-Analysis: v=2.3 cv=BoezP7f5 c=1 sm=1 tr=0
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
  a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=kj9zAlcOel0A:10:nop_charset_1
  a=nNwsprhYR40A:10:nop_rcvd_month_year
- a=evQFzbml-YQA:10:endurance_base64_authed_username_1 a=iH7RfIX4AAAA:20
- a=VwQbUJbxAAAA:8 a=_jlGtV7tAAAA:8 a=C2tvwzfEKYeKYKrD1t0A:9
- a=CjuIK1q_8ugA:10:nop_charset_2 a=AjGcO6oz07-iQ99wixmX:22
- a=nlm17XC03S6CtCLSeiRr:22
+ a=evQFzbml-YQA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=VnNF1IyMAAAA:8 a=G9OVi-XX-SaVrF5UqbQA:9 a=CjuIK1q_8ugA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
         :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
         :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
         Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
         List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=8b9vr57xzkf1VDiWMstyj8UQWq9B2jqEErH6/3baziY=; b=Y/HNNQ55DkowKcg9mRP964rJLn
-        R31Nkc9jjVHkphn7fZKVmVEgWnO+WVREtoZLerrqsD43hvYRoIoI7lgARFK/xdWv1TYfq9AmD6lns
-        ghbkldxj4bKTZZXMnQhNjE78ih6jNunK9TU+VsQDvM/PV6pQVj4TrG+wwn0sWefHAoePyfrw1YGzj
-        Qhmd0dMWr2eIzsmzS8gmUPwpJGDwmjs7y6lKY/EatyKQp2OGwOpsW6PE/Zj4NrSyr0dKhGa3pICBq
-        hOoPnJXLtzU+hFR8uAu7Pn/x9HFD5Nek+a98wOlZCmWexT52p27s2Ku4ANN/roaYiMUucylFOrtq3
-        V1kjmVpQ==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:40992 helo=localhost)
+        bh=HotaPkXnnpv3O3DIEezLBKrXxNiD0dVLa4OpYyJGbVE=; b=rXxT8kLIjYMFJ0NTHFNeIef7W8
+        nBClDWJC3f/IkYwxtWppURf5lc3RrmUJQgUD8VM4qjArsm9h1vFEYlcXubvxcOPPz9ETeScoxnigF
+        RKisfl1BNXu9PSa8gQSekgmkTdGba2v4rt+JabvcyS/pnSPMM60nZMmu/f2u31+3T6vswIjYqW7c0
+        F5CUCXX7TAtIVPGjfvY8UErrPXjjKsoBxt8pqKxF0dDtmys35Y8694DBA4I8oXgUT0nbegtxecfTC
+        za1hKfrL50JZ4Xpkt8zCVC/R2XlooYLQ6m3DJUXEBsPAEPt7Djd+Q2Ew1ZPE2MHBnSTsMkuwRTVpy
+        AJvA1LkA==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:40998 helo=localhost)
         by bh-25.webhostbox.net with esmtpa (Exim 4.93)
         (envelope-from <linux@roeck-us.net>)
-        id 1kgXxb-003CZP-AS; Sat, 21 Nov 2020 18:50:11 +0000
-Date:   Sat, 21 Nov 2020 10:50:10 -0800
+        id 1kgXzD-003D3U-Gp; Sat, 21 Nov 2020 18:51:51 +0000
+Date:   Sat, 21 Nov 2020 10:51:51 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Marius Zachmann <mail@mariuszachmann.de>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 086/141] hwmon: (corsair-cpro) Fix fall-through warnings
- for Clang
-Message-ID: <20201121185010.GB114144@roeck-us.net>
-References: <cover.1605896059.git.gustavoars@kernel.org>
- <be5c59f9bc4bac8c968bbd7443d08eaaf8a28ef8.1605896060.git.gustavoars@kernel.org>
+To:     Joel Stanley <joel@jms.id.au>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Eddie James <eajames@linux.ibm.com>,
+        Andrew Jeffery <andrew@aj.id.au>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-fsi@lists.ozlabs.org
+Subject: Re: [PATCH v2 0/3] occ: Add support for P10
+Message-ID: <20201121185150.GD114144@roeck-us.net>
+References: <20201120010315.190737-1-joel@jms.id.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <be5c59f9bc4bac8c968bbd7443d08eaaf8a28ef8.1605896060.git.gustavoars@kernel.org>
+In-Reply-To: <20201120010315.190737-1-joel@jms.id.au>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
 X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
@@ -77,45 +76,47 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1kgXxb-003CZP-AS
+X-Exim-ID: 1kgXzD-003D3U-Gp
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:40992
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:40998
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 62
+X-Email-Count: 72
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Nov 20, 2020 at 12:36:04PM -0600, Gustavo A. R. Silva wrote:
-> In preparation to enable -Wimplicit-fallthrough for Clang, fix a warning
-> by explicitly adding a break statement instead of letting the code fall
-> through to the next case.
+On Fri, Nov 20, 2020 at 11:33:12AM +1030, Joel Stanley wrote:
+> Hi Guenter, here's v2 of this series on behalf of Eddie. I made the
+> change to the compatible string that we spoke about in v2, and I'm happy
+> for these to go through the hwmon tree.
 > 
-> Link: https://github.com/KSPP/linux/issues/115
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+I'll be happy to do that, as soon as we get a Reviewed-by: tag for the DT
+change.
 
-> ---
->  drivers/hwmon/corsair-cpro.c | 1 +
->  1 file changed, 1 insertion(+)
+Thanks,
+Guenter
+
+> v1: https://lore.kernel.org/linux-hwmon/20200501150833.5251-1-eajames@linux.ibm.com/
 > 
-> diff --git a/drivers/hwmon/corsair-cpro.c b/drivers/hwmon/corsair-cpro.c
-> index 591929ec217a..fa6aa4fc8b52 100644
-> --- a/drivers/hwmon/corsair-cpro.c
-> +++ b/drivers/hwmon/corsair-cpro.c
-> @@ -310,6 +310,7 @@ static int ccp_write(struct device *dev, enum hwmon_sensor_types type,
->  		default:
->  			break;
->  		}
-> +		break;
->  	default:
->  		break;
->  	}
+> The OCC in the P10 has a number of differences from the P9. Add some logic to
+> handle the differences in accessing the OCC from the service processor, and
+> support the new temperature sensor type.
+> 
+> Eddie James (3):
+>   dt-bindings: fsi: Add P10 OCC device documentation
+>   fsi: occ: Add support for P10
+>   hwmon: (occ) Add new temperature sensor type
+> 
+>  .../devicetree/bindings/fsi/ibm,p9-occ.txt    |  12 +-
+>  drivers/fsi/fsi-occ.c                         | 125 +++++++++++++-----
+>  drivers/hwmon/occ/common.c                    |  75 +++++++++++
+>  3 files changed, 172 insertions(+), 40 deletions(-)
+> 
 > -- 
-> 2.27.0
+> 2.29.2
 > 
