@@ -2,159 +2,194 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4ADAFC64E7D
-	for <linux-hwmon@archiver.kernel.org>; Sun, 22 Nov 2020 16:17:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E002BC5519F
+	for <linux-hwmon@archiver.kernel.org>; Sun, 22 Nov 2020 16:43:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1469A208FE
-	for <linux-hwmon@archiver.kernel.org>; Sun, 22 Nov 2020 16:17:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 81D7120724
+	for <linux-hwmon@archiver.kernel.org>; Sun, 22 Nov 2020 16:43:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ECdUiFoz"
+	dkim=pass (1024-bit key) header.d=amdcloud.onmicrosoft.com header.i=@amdcloud.onmicrosoft.com header.b="ThD/+4p2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728132AbgKVQRO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 22 Nov 2020 11:17:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39308 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728098AbgKVQRI (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 22 Nov 2020 11:17:08 -0500
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31DFAC061A56
-        for <linux-hwmon@vger.kernel.org>; Sun, 22 Nov 2020 08:17:06 -0800 (PST)
-Received: by mail-pf1-x443.google.com with SMTP id w6so12597691pfu.1
-        for <linux-hwmon@vger.kernel.org>; Sun, 22 Nov 2020 08:17:06 -0800 (PST)
+        id S1727936AbgKVQmx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 22 Nov 2020 11:42:53 -0500
+Received: from mail-bn7nam10on2077.outbound.protection.outlook.com ([40.107.92.77]:21184
+        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728074AbgKVQmw (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 22 Nov 2020 11:42:52 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=e/gEREBSPqo4ivg8wvnZ/N50tQQGsRNWreAzdcCD680Hgnx4bGm75ysLhHwOAjsPxzTbvinSKU+g+l+7IYJ2PvwHF1HAfCrDDkqqyAW92stp6G2HKHQwWfFiuRgZ4woVBp49hfZjpBq2TuGi2UX4ZSlaGzkSdzF77J4KAN4bJLCkBlw5apnkjoVr8TlSd+lEK4UOmh5txIJoojtzmr7eGwxHaL+TrvJFBWMIyiGHjNvbuuyw3f3E6O9Pk54ScyeFyFlQSi3HI+xDV0Sn1JsYK5PCloTy0ADcrwh9RxA+FHCfVUT+dIGF0qncltJZ2HnL8Ar1zg1ajAtAcgP2fISMrA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wK8LbihOJOL6c3KTsiWjSogOLnDKsTrm+afyIEpVmiM=;
+ b=nPVCIqA2aOzxNjPjBrPNdHyincL+uMkyJ0d58aMBDYtHhwtolwQY5jKARXI2fLNLGK68RNei0SRtcIaxUzy4UR6m6VCxMkSC9wu//ZnWu1f7LVEUF9hRqEjpv0D6Pi/FDsRhn39NcOaHW1zkhnT3CA2ISi2todP3/LIX3vQUi4dFD5FFcAtY81sfKof8Qf2YWTVSn64QsNYmi2gw+FcTKrCOtB7nwrOdD83weAq5gt7oD27VLY25Qem+7TzEHqo1Az9Nnw6FZjch78GGa5a/Uo69PrFSpIs3cmW1RoGCPzSn6YwYzE896u2K3tG5bcta1FtoKGtiHzv9xmLDKCDgXg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9LoGd3XD212DnUOzzxWdBwAHKcFiABUM1eku/Z5s9PQ=;
-        b=ECdUiFozoGotedNMltHxGvt7ELeQp/og9KGaJat0+erwcdPPWVCrU8KkW+JV4RYPeo
-         GTWUobzmr0s313q/lzhn4jF5RxJP4nhZO/aj20hZaH8d/g/a456RbO+LKniOS4LntN7M
-         GHx9cYZv8xWYKIg8n9C3ZJn+Q+L/6/s35hbx0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9LoGd3XD212DnUOzzxWdBwAHKcFiABUM1eku/Z5s9PQ=;
-        b=jxHwcC39GOyzZEyplmpnKYVnkQIVW5MEQaimtDBqmCtuGKtT4pW+vb/rq635h19fJ9
-         r8HWcOU+6Tg+CF1xsYA/ZQk6kTzg0UcyUlBk17Rhk0qhdYBxJuPYHPbzeS+/Jzz9TBfe
-         JSzQQDNa7mH/FMjmwOh2V1AXgKdChr3dph4ciTxw/cZfnrvyTBKLVMtfMjiu7UsuJDh1
-         ZME3Retyb2NwYLJ3POCn+HL4/m1bj41/Wr4MBowx1Ov9Kyb4two0PgBj7UKzmlo2EfqB
-         6y94HOZFWsM4bzPiHiE0rB9CwFdA4YXHCU+SX1nATV/aZJ/9F1AE/9PNtBCxtKSazlT6
-         txxw==
-X-Gm-Message-State: AOAM533/WBcQTMupbU28TWIkgq0PuPxi4X9fsb9ucbjxaAFSWcCW+Bc1
-        TC5iYJWf9eaRw/KIV5oNMNCXLQ==
-X-Google-Smtp-Source: ABdhPJwZLmFbbTaRxBkTtuJWbjEgTUtKMFpd77L8KmHflX2OUVWZyNqpGNaeYR87Y149sjgotBbRUA==
-X-Received: by 2002:a62:790f:0:b029:18a:ae57:353f with SMTP id u15-20020a62790f0000b029018aae57353fmr22300068pfc.78.1606061825417;
-        Sun, 22 Nov 2020 08:17:05 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id t5sm10642660pjj.31.2020.11.22.08.17.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Nov 2020 08:17:04 -0800 (PST)
-Date:   Sun, 22 Nov 2020 08:17:03 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        amd-gfx@lists.freedesktop.org, bridge@lists.linux-foundation.org,
-        ceph-devel@vger.kernel.org, cluster-devel@redhat.com,
-        coreteam@netfilter.org, devel@driverdev.osuosl.org,
-        dm-devel@redhat.com, drbd-dev@lists.linbit.com,
-        dri-devel@lists.freedesktop.org, GR-everest-linux-l2@marvell.com,
-        GR-Linux-NIC-Dev@marvell.com, intel-gfx@lists.freedesktop.org,
-        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
-        linux1394-devel@lists.sourceforge.net, linux-acpi@vger.kernel.org,
-        linux-afs@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net,
-        linux-block@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-cifs@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-decnet-user@lists.sourceforge.net,
-        linux-ext4@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-geode@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-hams@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-i3c@lists.infradead.org, linux-ide@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mm@kvack.org,
-        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, nouveau@lists.freedesktop.org,
-        op-tee@lists.trustedfirmware.org, oss-drivers@netronome.com,
-        patches@opensource.cirrus.com, rds-devel@oss.oracle.com,
-        reiserfs-devel@vger.kernel.org, samba-technical@lists.samba.org,
-        selinux@vger.kernel.org, target-devel@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net,
-        usb-storage@lists.one-eyed-alien.net,
-        virtualization@lists.linux-foundation.org,
-        wcn36xx@lists.infradead.org, x86@kernel.org,
-        xen-devel@lists.xenproject.org, linux-hardening@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>, Joe Perches <joe@perches.com>
-Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
-Message-ID: <202011220816.8B6591A@keescook>
-References: <cover.1605896059.git.gustavoars@kernel.org>
- <20201120105344.4345c14e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <202011201129.B13FDB3C@keescook>
- <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wK8LbihOJOL6c3KTsiWjSogOLnDKsTrm+afyIEpVmiM=;
+ b=ThD/+4p2WYsxdViOu2Qe8FySaRyA5zX1mz0y3woJsXuc0ti7+z3eRxyKguzhD0uIlEBlnk3ylrdUoVdKSUxRGFiCjWc5DZ005+T7tKmad7UvBQnBmtyzq+T2H2T1FJd44cQt3PZRY5ohQ+96b7cuOSCmlfOEBvH8n30SgpkHkUw=
+Received: from DM6PR12MB4388.namprd12.prod.outlook.com (2603:10b6:5:2a9::10)
+ by DM6PR12MB3116.namprd12.prod.outlook.com (2603:10b6:5:38::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.20; Sun, 22 Nov
+ 2020 16:42:47 +0000
+Received: from DM6PR12MB4388.namprd12.prod.outlook.com
+ ([fe80::84e9:dd44:12cf:bdb3]) by DM6PR12MB4388.namprd12.prod.outlook.com
+ ([fe80::84e9:dd44:12cf:bdb3%4]) with mapi id 15.20.3589.030; Sun, 22 Nov 2020
+ 16:42:47 +0000
+From:   "Chatradhi, Naveen Krishna" <NaveenKrishna.Chatradhi@amd.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     Salvatore Bonaccorso <carnil@debian.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "naveenkrishna.ch@gmail.com" <naveenkrishna.ch@gmail.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH] hwmon: amd_energy: modify the visibility of the counters
+Thread-Topic: [PATCH] hwmon: amd_energy: modify the visibility of the counters
+Thread-Index: AQHWuRhfPkP7JZ+0TkWLTfmjzaPqdanEvyEAgAFY1QCADa3pgIAAbySAgAAyaVA=
+Date:   Sun, 22 Nov 2020 16:42:47 +0000
+Message-ID: <DM6PR12MB438839666CD2BA3524D80E24E8FD0@DM6PR12MB4388.namprd12.prod.outlook.com>
+References: <20201112172159.8781-1-nchatrad@amd.com>
+ <238e3cf7-582f-a265-5300-9b44948107b0@roeck-us.net>
+ <20201113135834.GA354992@eldamar.lan>
+ <DM6PR12MB438866557FEE8F42C0F6AF26E8FD0@DM6PR12MB4388.namprd12.prod.outlook.com>
+ <20201122133011.GA48943@roeck-us.net>
+In-Reply-To: <20201122133011.GA48943@roeck-us.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_c3918902-4ff3-42f6-8eb5-e5d9c71daf16_Enabled=true;
+ MSIP_Label_c3918902-4ff3-42f6-8eb5-e5d9c71daf16_SetDate=2020-11-22T16:41:35Z;
+ MSIP_Label_c3918902-4ff3-42f6-8eb5-e5d9c71daf16_Method=Privileged;
+ MSIP_Label_c3918902-4ff3-42f6-8eb5-e5d9c71daf16_Name=Internal Use Only -
+ Restricted;
+ MSIP_Label_c3918902-4ff3-42f6-8eb5-e5d9c71daf16_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_c3918902-4ff3-42f6-8eb5-e5d9c71daf16_ActionId=033416b9-264a-4ca8-a19e-00006888cc28;
+ MSIP_Label_c3918902-4ff3-42f6-8eb5-e5d9c71daf16_ContentBits=1
+msip_label_76546daa-41b6-470c-bb85-f6f40f044d7f_enabled: true
+msip_label_76546daa-41b6-470c-bb85-f6f40f044d7f_setdate: 2020-11-22T16:41:24Z
+msip_label_76546daa-41b6-470c-bb85-f6f40f044d7f_method: Standard
+msip_label_76546daa-41b6-470c-bb85-f6f40f044d7f_name: Internal Use Only -
+ Unrestricted
+msip_label_76546daa-41b6-470c-bb85-f6f40f044d7f_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
+msip_label_76546daa-41b6-470c-bb85-f6f40f044d7f_actionid: d398964b-1fee-4c7c-9827-00009e55998b
+msip_label_76546daa-41b6-470c-bb85-f6f40f044d7f_contentbits: 0
+msip_label_c3918902-4ff3-42f6-8eb5-e5d9c71daf16_enabled: true
+msip_label_c3918902-4ff3-42f6-8eb5-e5d9c71daf16_setdate: 2020-11-22T16:41:37Z
+msip_label_c3918902-4ff3-42f6-8eb5-e5d9c71daf16_method: Privileged
+msip_label_c3918902-4ff3-42f6-8eb5-e5d9c71daf16_name: Internal Use Only -
+ Restricted
+msip_label_c3918902-4ff3-42f6-8eb5-e5d9c71daf16_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
+msip_label_c3918902-4ff3-42f6-8eb5-e5d9c71daf16_actionid: 5f1cc869-6b80-4be7-b580-0000c29d9a0b
+msip_label_c3918902-4ff3-42f6-8eb5-e5d9c71daf16_contentbits: 0
+authentication-results: roeck-us.net; dkim=none (message not signed)
+ header.d=none;roeck-us.net; dmarc=none action=none header.from=amd.com;
+x-originating-ip: [175.101.104.2]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: bc6b75ed-8c93-496a-9584-08d88f05a48d
+x-ms-traffictypediagnostic: DM6PR12MB3116:
+x-microsoft-antispam-prvs: <DM6PR12MB3116147554E942C753F5C6E4E8FD0@DM6PR12MB3116.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6430;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 65YjAoK0tbcRppn//Ui9QmxPeFYATCdu0JLC85w3vdp26+Ta97EgMFXOpoX8uPJl4IRg3ug77zSKWnJbQmYdY4NkMzIwAUm3vz6Wn5Nq9mtjVCBR3gxXFByA2U6DudAuc84NbveKY6olKhU+8KH/ZegGXYTvJOov9Rx3SOKjF2HubFc+Dobl1z2XXPV934Kir8tMmhZSSiFDrlm1lVbDQIn8j/2hYWO3uLHJDtUN4SvrP71EUBpQlFZCgY0KDovuyaWeW7eDldM+mRaHFNiMDz0fg53Hovmw5tr9SEg7HAiDdRR645UzH3VWqwhiH94uXCc1orcCT1gnY1VYJgALYg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4388.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(366004)(346002)(136003)(376002)(39850400004)(9686003)(86362001)(55016002)(83380400001)(316002)(6916009)(26005)(54906003)(71200400001)(53546011)(6506007)(52536014)(33656002)(478600001)(5660300002)(7696005)(66556008)(66476007)(66446008)(64756008)(66946007)(186003)(4326008)(8676002)(76116006)(8936002)(2906002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: Y1qZCPGg2ez3XCcTpHtn+R2cb1lvop57C9Pqy+Ex1lSMjVkVZ7dNNGeqYz0yI9aFRckVt3JrmIObwNjpLaHJtmOjwprUT+Od5x4RdGEAak/96ly82UWRPIy1E6yUzW7htnSABLz9SeFqs3qgq2UufAwtAd7ii/ImeEXbY4hxA61850QnO4OWUjvNEy9+m7beTqHEYCwKAwVynO8pcq42R6U9RpQpdLvSW1EUSeXIlINp6fLPm8Uk30RfXwkbT7HIlMGkRrWIUpwo9d6cnW5E1LP0aoz1OAQ9LfDEVO/XDksbZ48i0a5bs5C/r+vkK1JyWaHJJujxXmNaCBrTCDzNDtTAnZPnMd7ple6lw5nmL9AD7YZDOyeNOCniMkDiPjlFUMCI5nXp6GDeAJqX8uAPcpWXt5dYchH2isNTQnSXETQANYDtej9ahihtkXMDBJwznZPTbXAHpxB6I8KqvpBv6hDIqiFH/fb390tKiAKzRBf8899hIvkLOMKyUr9abzajXfa3OJZkEB6k0K14xSGm7BWwob94mGVOCTvQeiI6HbuCrq6nFSK6bBJwuAOivOX2GEw84ZIpbvJ+unGvaf3XTi9eSSOSqA2o68zcMQlrh77Tmz8C/ogi76SWPSlATBzpKlIAOnIv5UWD227/I66Maw==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4388.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bc6b75ed-8c93-496a-9584-08d88f05a48d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Nov 2020 16:42:47.0260
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: HNowbI9IW992OOXbr+VY5TUEmX2dm25RnBOzM7Ale/WrWCqoqQ3skoca85Qqv3dgOD7tMmMFRf8oTikRM7cHYg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3116
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Nov 20, 2020 at 11:51:42AM -0800, Jakub Kicinski wrote:
-> On Fri, 20 Nov 2020 11:30:40 -0800 Kees Cook wrote:
-> > On Fri, Nov 20, 2020 at 10:53:44AM -0800, Jakub Kicinski wrote:
-> > > On Fri, 20 Nov 2020 12:21:39 -0600 Gustavo A. R. Silva wrote:  
-> > > > This series aims to fix almost all remaining fall-through warnings in
-> > > > order to enable -Wimplicit-fallthrough for Clang.
-> > > > 
-> > > > In preparation to enable -Wimplicit-fallthrough for Clang, explicitly
-> > > > add multiple break/goto/return/fallthrough statements instead of just
-> > > > letting the code fall through to the next case.
-> > > > 
-> > > > Notice that in order to enable -Wimplicit-fallthrough for Clang, this
-> > > > change[1] is meant to be reverted at some point. So, this patch helps
-> > > > to move in that direction.
-> > > > 
-> > > > Something important to mention is that there is currently a discrepancy
-> > > > between GCC and Clang when dealing with switch fall-through to empty case
-> > > > statements or to cases that only contain a break/continue/return
-> > > > statement[2][3][4].  
-> > > 
-> > > Are we sure we want to make this change? Was it discussed before?
-> > > 
-> > > Are there any bugs Clangs puritanical definition of fallthrough helped
-> > > find?
-> > > 
-> > > IMVHO compiler warnings are supposed to warn about issues that could
-> > > be bugs. Falling through to default: break; can hardly be a bug?!  
-> > 
-> > It's certainly a place where the intent is not always clear. I think
-> > this makes all the cases unambiguous, and doesn't impact the machine
-> > code, since the compiler will happily optimize away any behavioral
-> > redundancy.
-> 
-> If none of the 140 patches here fix a real bug, and there is no change
-> to machine code then it sounds to me like a W=2 kind of a warning.
+[AMD Official Use Only - Approved for External Use]
 
-FWIW, this series has found at least one bug so far:
-https://lore.kernel.org/lkml/CAFCwf11izHF=g1mGry1fE5kvFFFrxzhPSM6qKAO8gxSp=Kr_CQ@mail.gmail.com/
+Hi Guenter,
 
--- 
-Kees Cook
+> A much better fix would have been to cache RAPL data for a short period o=
+f time. To avoid any possibility of attacks, maybe add some random interval=
+. Something like this:
+Thanks for the tip, I will check this out.
+
+> In accumulate_delta():
+>        accums->next_update =3D jiffies + HZ / 2 + get_random_int % HZ;
+
+> In amd_energy_read():
+>        accum =3D &data->accums[channel];
+>        if (time_after(accum->next_update))
+Do you mean if (time_after(jiffies, accum->next_update))
+
+>                accumulate_delta(data, channel, cpu, reg);
+>        *val =3D div64_ul(accum->energy_ctr * 1000000UL, BIT(data->energy_=
+units));
+
+> and drop amd_add_delta().
+
+Regards,
+Naveenk
+
+-----Original Message-----
+From: Guenter Roeck <linux@roeck-us.net>=20
+Sent: Sunday, November 22, 2020 7:00 PM
+To: Chatradhi, Naveen Krishna <NaveenKrishna.Chatradhi@amd.com>
+Cc: Salvatore Bonaccorso <carnil@debian.org>; linux-hwmon@vger.kernel.org; =
+naveenkrishna.ch@gmail.com; stable@vger.kernel.org
+Subject: Re: [PATCH] hwmon: amd_energy: modify the visibility of the counte=
+rs
+
+[CAUTION: External Email]
+
+On Sun, Nov 22, 2020 at 06:56:24AM +0000, Chatradhi, Naveen Krishna wrote:
+> [AMD Official Use Only - Approved for External Use]
+>
+> Hi Guenter, Salvatore
+>
+> > This is very unusual, and may mess up the "sensors" command.
+> > What problem is this trying to solve ?
+> Guenter, sorry for the delayed response.
+> This fix is required to address the possible side channel attack reported=
+ in CVE-2020-12912.
+>
+[ ... ]
+>
+> >> ?
+> Yes, Salvatore, thanks for bringing the links.
+>
+A much better fix would have been to cache RAPL data for a short period of =
+time. To avoid any possibility of attacks, maybe add some random interval. =
+Something like this:
+
+In accumulate_delta():
+        accums->next_update =3D jiffies + HZ / 2 + get_random_int % HZ;
+
+In amd_energy_read():
+        accum =3D &data->accums[channel];
+        if (time_after(accum->next_update))
+                accumulate_delta(data, channel, cpu, reg);
+        *val =3D div64_ul(accum->energy_ctr * 1000000UL, BIT(data->energy_u=
+nits));
+
+and drop amd_add_delta().
+
+Guenter
