@@ -2,521 +2,162 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DFCFC56202
-	for <linux-hwmon@archiver.kernel.org>; Mon, 23 Nov 2020 13:19:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB5E8C56202
+	for <linux-hwmon@archiver.kernel.org>; Mon, 23 Nov 2020 14:06:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0C2852076E
-	for <linux-hwmon@archiver.kernel.org>; Mon, 23 Nov 2020 13:19:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9CE122075A
+	for <linux-hwmon@archiver.kernel.org>; Mon, 23 Nov 2020 14:06:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.b="5k3CokD0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="uc3VE1PZ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388209AbgKWNSp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 23 Nov 2020 08:18:45 -0500
-Received: from gproxy5-pub.mail.unifiedlayer.com ([67.222.38.55]:60645 "EHLO
-        gproxy5-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732387AbgKWNSk (ORCPT
+        id S1730568AbgKWOFt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 23 Nov 2020 09:05:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42406 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730352AbgKWOFq (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 23 Nov 2020 08:18:40 -0500
-Received: from cmgw12.unifiedlayer.com (unknown [10.9.0.12])
-        by gproxy5.mail.unifiedlayer.com (Postfix) with ESMTP id EFDC3140668
-        for <linux-hwmon@vger.kernel.org>; Mon, 23 Nov 2020 06:18:33 -0700 (MST)
-Received: from bh-25.webhostbox.net ([208.91.199.152])
-        by cmsmtp with ESMTP
-        id hBjlkdBpXeMJHhBjlkl6TB; Mon, 23 Nov 2020 06:18:33 -0700
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.3 cv=T72iscCQ c=1 sm=1 tr=0
- a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=nNwsprhYR40A:10:nop_rcvd_month_year
- a=evQFzbml-YQA:10:endurance_base64_authed_username_1 a=pGLkceISAAAA:8
- a=FOH2dFAWAAAA:8 a=eJIs5Ax8GuWUTwcQiUoA:9 a=7Zwj6sZBwVKJAoWSPKxL6X1jA+E=:19
- a=QEXdDO2ut3YA:10:nop_charset_2 a=i3VuKzQdj-NEYjvDI-p3:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=EqjbpuYCB63XFCsnvvldJSGoPeW8YbemiiuetxwkKkA=; b=5k3CokD0kMJF6D270Xcp2Wh+SN
-        Ka7rZrgtt645XOyb/2HCVHo+CLm9bQDbvk9we46odDa7goLPUOoAYzxOWKlqQrgpuVOJQ3vvLyxN3
-        IAOZvon6B2w6Xn7wHufyLOGFtZhxWNiU0KF8idzvUwWNdlTcPQz+kHi5ee05Dy7ZpvrIxbzJeHQ9p
-        425uYlrR8Db+zME7Uw2CSgGk3gMtyewwrggbQj8LvJKAkEjKcOoCplSWMrBs/lzfkQ5nTL+WsLgVb
-        EuHga+PZBZgE099R4AQkx6enWhxlAuZhOKV8a8L3JhZuzBPwcKPI/RT658N4k34dgDHHZHU5k5r5Y
-        W8DujQ9A==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:50882 helo=localhost)
-        by bh-25.webhostbox.net with esmtpa (Exim 4.93)
-        (envelope-from <linux@roeck-us.net>)
-        id 1khBjk-0012M1-Ps; Mon, 23 Nov 2020 13:18:32 +0000
-Date:   Mon, 23 Nov 2020 05:18:32 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     rentao.bupt@gmail.com
-Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
-        taoren@fb.com, mikechoi@fb.com
-Subject: Re: [PATCH v4 1/2] hwmon: (max127) Add Maxim MAX127 hardware
- monitoring driver
-Message-ID: <20201123131832.GB136636@roeck-us.net>
-References: <20201123074532.3730-1-rentao.bupt@gmail.com>
- <20201123074532.3730-2-rentao.bupt@gmail.com>
+        Mon, 23 Nov 2020 09:05:46 -0500
+Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15474C0613CF;
+        Mon, 23 Nov 2020 06:05:44 -0800 (PST)
+Received: by mail-yb1-xb43.google.com with SMTP id 10so16032864ybx.9;
+        Mon, 23 Nov 2020 06:05:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RhHqKgQbKUW77nc47JuvCnp+w8QNxENxQLSt6AHkTqQ=;
+        b=uc3VE1PZNnY/Z1NgZXLeWe/Nj5hsoBfQkeeHXaE+d0SDr9xNRMPYxU1o6fpuaiqkgi
+         yuFjhawxyOxFbziEfkWs4inb92LCIVTnNTVXAL7657JtY5jUPnHae9XC4JONvfltcDzK
+         9TpDS0ylXwfesoyru6or5tLuj2Wgq4fxc0XGG5evkxw7F5K63x1NbbMukm854FcfQLy0
+         gnTDe+NWIPcxyPxl6ZwlkcZY1OnasK1C98JFaIzSzrlrdcg6icgY2nCNokwGspTvBpMG
+         u0c2fJxhgJsKPBZAzgP85ZG8VhKJUulmNcJ8sZ+phgCZ9U4trQ3IF/NnqsJiuQ1qY+5Q
+         UH8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RhHqKgQbKUW77nc47JuvCnp+w8QNxENxQLSt6AHkTqQ=;
+        b=WedzhOTXaYjPvNaPhmohdRJ+58gonX0b+ZI3sjwFseX7aF5YDJk0KL0cBl/X1uVgsC
+         We1dczeA+a4BK//RvFHkRTxDc8BbTalyjcQ4gnkIU9cfPcqJg+tZC+68mMrkubh7AGNF
+         fvO9dxWcqQW+4jlWSA7EhFOjC+n4jFiOB8jUMl7Ex3eiIqW1poARTffV5jYeQBAu2OMK
+         sBygNg3BHt5eyDS5b2o48qFp8QnKJ2TYxM0fi6Wij1HP/cKim9lhpUlhBdCEtnnK+OjH
+         QzeyboGg6JxYcFDMMePMGw5mChseG7FQWM1KsCbS1BMq1YrycaQ3I+n+89mM8kqD+8Qa
+         Tamg==
+X-Gm-Message-State: AOAM5326FS91Tk/kyeYNAWweyK5tdCS3nYjJ+iR0xlt/wSuuwpjMlR9n
+        Xjc1+NNgNNNn3BpMzB57GgYvVZWxZhDGGINKkQk=
+X-Google-Smtp-Source: ABdhPJz9DsZ58e7OIIOr/VE9Xtax3PWaLuFuRyVLpjTsCzIYcuPGWJiVUhGusztX9v02ET+47HU3GtURC6oS5LfC9Lw=
+X-Received: by 2002:a5b:40e:: with SMTP id m14mr35121900ybp.33.1606140343388;
+ Mon, 23 Nov 2020 06:05:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201123074532.3730-2-rentao.bupt@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1khBjk-0012M1-Ps
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:50882
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 16
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
+References: <cover.1605896059.git.gustavoars@kernel.org> <20201120105344.4345c14e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <202011201129.B13FDB3C@keescook> <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <202011220816.8B6591A@keescook> <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com>
+ <CANiq72nZrHWTA4_Msg6MP9snTyenC6-eGfD27CyfNSu7QoVZbw@mail.gmail.com> <alpine.LNX.2.23.453.2011230938390.7@nippy.intranet>
+In-Reply-To: <alpine.LNX.2.23.453.2011230938390.7@nippy.intranet>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Mon, 23 Nov 2020 15:05:31 +0100
+Message-ID: <CANiq72=z+tmuey9wj3Kk7wX5s0hTHpsQdLhAqcOVNrHon6xn5Q@mail.gmail.com>
+Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
+To:     Finn Thain <fthain@telegraphics.com.au>
+Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Kees Cook <keescook@chromium.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        alsa-devel@alsa-project.org, amd-gfx@lists.freedesktop.org,
+        bridge@lists.linux-foundation.org, ceph-devel@vger.kernel.org,
+        cluster-devel@redhat.com, coreteam@netfilter.org,
+        devel@driverdev.osuosl.org, dm-devel@redhat.com,
+        drbd-dev@lists.linbit.com, dri-devel@lists.freedesktop.org,
+        GR-everest-linux-l2@marvell.com, GR-Linux-NIC-Dev@marvell.com,
+        intel-gfx@lists.freedesktop.org, intel-wired-lan@lists.osuosl.org,
+        keyrings@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+        linux-acpi@vger.kernel.org, linux-afs@lists.infradead.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net,
+        linux-block@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-cifs@vger.kernel.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-decnet-user@lists.sourceforge.net,
+        Ext4 Developers List <linux-ext4@vger.kernel.org>,
+        linux-fbdev@vger.kernel.org, linux-geode@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-hams@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-i3c@lists.infradead.org,
+        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input <linux-input@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-mmc@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
+        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        netfilter-devel@vger.kernel.org, nouveau@lists.freedesktop.org,
+        op-tee@lists.trustedfirmware.org, oss-drivers@netronome.com,
+        patches@opensource.cirrus.com, rds-devel@oss.oracle.com,
+        reiserfs-devel@vger.kernel.org, samba-technical@lists.samba.org,
+        selinux@vger.kernel.org, target-devel@vger.kernel.org,
+        tipc-discussion@lists.sourceforge.net,
+        usb-storage@lists.one-eyed-alien.net,
+        virtualization@lists.linux-foundation.org,
+        wcn36xx@lists.infradead.org,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        xen-devel@lists.xenproject.org, linux-hardening@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>, Joe Perches <joe@perches.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Nov 22, 2020 at 11:45:31PM -0800, rentao.bupt@gmail.com wrote:
-> From: Tao Ren <rentao.bupt@gmail.com>
-> 
-> Add hardware monitoring driver for the Maxim MAX127 chip.
-> 
-> MAX127 min/max range handling code is inspired by the max197 driver.
-> 
-> Signed-off-by: Tao Ren <rentao.bupt@gmail.com>
-> ---
->  Changes in v4:
->    - delete unnecessary "#include" lines.
->    - simplify i2c_transfer() error handling.
->    - add mutex to protect ctrl_byte in write_min|max() functions.
->  Changes in v3:
->    - no code change. xdp maintainers were removed from to/cc list.
->  Changes in v2:
->    - replace devm_hwmon_device_register_with_groups() with
->      devm_hwmon_device_register_with_info() API.
->    - divide min/max read and write methods to separate functions.
->    - fix raw-to-vin conversion logic.
->    - refine ctrl_byte handling so mutex is not needed to protect the
->      byte.
->    - improve i2c_transfer() error handling.
->    - a few other improvements (comments, variable naming, and etc.).
-> 
->  drivers/hwmon/Kconfig  |   9 ++
->  drivers/hwmon/Makefile |   1 +
->  drivers/hwmon/max127.c | 346 +++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 356 insertions(+)
->  create mode 100644 drivers/hwmon/max127.c
-> 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 9d600e0c5584..716df51edc87 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -950,6 +950,15 @@ config SENSORS_MAX1111
->  	  This driver can also be built as a module. If so, the module
->  	  will be called max1111.
->  
-> +config SENSORS_MAX127
-> +	tristate "Maxim MAX127 12-bit 8-channel Data Acquisition System"
-> +	depends on I2C
-> +	help
-> +	  Say y here to support Maxim's MAX127 DAS chips.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called max127.
-> +
->  config SENSORS_MAX16065
->  	tristate "Maxim MAX16065 System Manager and compatibles"
->  	depends on I2C
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index 1083bbfac779..01ca5d3fbad4 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -127,6 +127,7 @@ obj-$(CONFIG_SENSORS_LTC4260)	+= ltc4260.o
->  obj-$(CONFIG_SENSORS_LTC4261)	+= ltc4261.o
->  obj-$(CONFIG_SENSORS_LTQ_CPUTEMP) += ltq-cputemp.o
->  obj-$(CONFIG_SENSORS_MAX1111)	+= max1111.o
-> +obj-$(CONFIG_SENSORS_MAX127)	+= max127.o
->  obj-$(CONFIG_SENSORS_MAX16065)	+= max16065.o
->  obj-$(CONFIG_SENSORS_MAX1619)	+= max1619.o
->  obj-$(CONFIG_SENSORS_MAX1668)	+= max1668.o
-> diff --git a/drivers/hwmon/max127.c b/drivers/hwmon/max127.c
-> new file mode 100644
-> index 000000000000..1c54146b6086
-> --- /dev/null
-> +++ b/drivers/hwmon/max127.c
-> @@ -0,0 +1,346 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Hardware monitoring driver for MAX127.
-> + *
-> + * Copyright (c) 2020 Facebook Inc.
-> + */
-> +
-> +#include <linux/err.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/i2c.h>
-> +#include <linux/init.h>
-> +#include <linux/module.h>
-> +
-> +/*
-> + * MAX127 Control Byte. Refer to MAX127 datasheet, Table 1 "Control-Byte
-> + * Format" for details.
-> + */
-> +#define MAX127_CTRL_START	BIT(7)
-> +#define MAX127_CTRL_SEL_SHIFT	4
-> +#define MAX127_CTRL_RNG		BIT(3)
-> +#define MAX127_CTRL_BIP		BIT(2)
-> +#define MAX127_CTRL_PD1		BIT(1)
-> +#define MAX127_CTRL_PD0		BIT(0)
-> +
-> +#define MAX127_NUM_CHANNELS	8
-> +#define MAX127_SET_CHANNEL(ch)	(((ch) & 7) << MAX127_CTRL_SEL_SHIFT)
-> +
-> +/*
-> + * MAX127 channel input ranges. Refer to MAX127 datasheet, Table 3 "Range
-> + * and Polarity Selection" for details.
-> + */
-> +#define MAX127_FULL_RANGE	10000	/* 10V */
-> +#define MAX127_HALF_RANGE	5000	/* 5V */
-> +
-> +/*
-> + * MAX127 returns 2 bytes at read:
-> + *   - the first byte contains data[11:4].
-> + *   - the second byte contains data[3:0] (MSB) and 4 dummy 0s (LSB).
-> + * Refer to MAX127 datasheet, "Read a Conversion (Read Cycle)" section
-> + * for details.
-> + */
-> +#define MAX127_DATA_LEN		2
-> +#define MAX127_DATA_SHIFT	4
-> +
-> +#define MAX127_SIGN_BIT		BIT(11)
-> +
-> +struct max127_data {
-> +	struct mutex lock;
-> +	struct i2c_client *client;
-> +	u8 ctrl_byte[MAX127_NUM_CHANNELS];
-> +};
-> +
-> +static int max127_select_channel(struct i2c_client *client, u8 ctrl_byte)
-> +{
-> +	int status;
-> +	struct i2c_msg msg = {
-> +		.addr = client->addr,
-> +		.flags = 0,
-> +		.len = sizeof(ctrl_byte),
-> +		.buf = &ctrl_byte,
-> +	};
-> +
-> +	status = i2c_transfer(client->adapter, &msg, 1);
-> +
-> +	return (status == 1) ? 0 : -EIO;
+On Sun, Nov 22, 2020 at 11:54 PM Finn Thain <fthain@telegraphics.com.au> wrote:
+>
+> We should also take into account optimisim about future improvements in
+> tooling.
 
-This isn't what I said and asked for. It drops the unnecessary else,
-but now it overwrites an error value.
+Not sure what you mean here. There is no reliable way to guess what
+the intention was with a missing fallthrough, even if you parsed
+whitespace and indentation.
 
-Guenter
+> It is if you want to spin it that way.
 
-> +}
-> +
-> +static int max127_read_channel(struct i2c_client *client, long *val)
-> +{
-> +	int status;
-> +	u8 i2c_data[MAX127_DATA_LEN];
-> +	struct i2c_msg msg = {
-> +		.addr = client->addr,
-> +		.flags = I2C_M_RD,
-> +		.len = sizeof(i2c_data),
-> +		.buf = i2c_data,
-> +	};
-> +
-> +	status = i2c_transfer(client->adapter, &msg, 1);
-> +	if (status != 1)
-> +		return -EIO;
+How is that a "spin"? It is a fact that we won't get *implicit*
+fallthrough mistakes anymore (in particular if we make it a hard
+error).
 
-This isn't what I asked for.
+> But what we inevitably get is changes like this:
+>
+>  case 3:
+>         this();
+> +       break;
+>  case 4:
+>         hmmm();
+>
+> Why? Mainly to silence the compiler. Also because the patch author argued
+> successfully that they had found a theoretical bug, often in mature code.
 
-Guenter
+If someone changes control flow, that is on them. Every kernel
+developer knows what `break` does.
 
-> +
-> +	*val = (i2c_data[1] >> MAX127_DATA_SHIFT) |
-> +		((u16)i2c_data[0] << MAX127_DATA_SHIFT);
-> +	return 0;
-> +}
-> +
-> +static long max127_process_raw(u8 ctrl_byte, long raw)
-> +{
-> +	long scale, weight;
-> +
-> +	/*
-> +	 * MAX127's data coding is binary in unipolar mode with 1 LSB =
-> +	 * (Full-Scale/4096) and two’s complement binary in bipolar mode
-> +	 * with 1 LSB = [(2 x |FS|)/4096].
-> +	 * Refer to MAX127 datasheet, "Transfer Function" section for
-> +	 * details.
-> +	 */
-> +	scale = (ctrl_byte & MAX127_CTRL_RNG) ? MAX127_FULL_RANGE :
-> +						MAX127_HALF_RANGE;
-> +	if (ctrl_byte & MAX127_CTRL_BIP) {
-> +		weight = (raw & MAX127_SIGN_BIT);
-> +		raw &= ~MAX127_SIGN_BIT;
-> +		raw -= weight;
-> +		raw *= 2;
-> +	}
-> +
-> +	return raw * scale / 4096;
-> +}
-> +
-> +static int max127_read_input(struct max127_data *data, int channel, long *val)
-> +{
-> +	long raw;
-> +	int status;
-> +	struct i2c_client *client = data->client;
-> +	u8 ctrl_byte = data->ctrl_byte[channel];
-> +
-> +	mutex_lock(&data->lock);
-> +
-> +	status = max127_select_channel(client, ctrl_byte);
-> +	if (status)
-> +		goto exit;
-> +
-> +	status = max127_read_channel(client, &raw);
-> +	if (status)
-> +		goto exit;
-> +
-> +	*val = max127_process_raw(ctrl_byte, raw);
-> +
-> +exit:
-> +	mutex_unlock(&data->lock);
-> +	return status;
-> +}
-> +
-> +static int max127_read_min(struct max127_data *data, int channel, long *val)
-> +{
-> +	u8 rng_bip = (data->ctrl_byte[channel] >> 2) & 3;
-> +	static const int min_input_map[4] = {
-> +		0,			/* RNG=0, BIP=0 */
-> +		-MAX127_HALF_RANGE,	/* RNG=0, BIP=1 */
-> +		0,			/* RNG=1, BIP=0 */
-> +		-MAX127_FULL_RANGE,	/* RNG=1, BIP=1 */
-> +	};
-> +
-> +	*val = min_input_map[rng_bip];
-> +	return 0;
-> +}
-> +
-> +static int max127_read_max(struct max127_data *data, int channel, long *val)
-> +{
-> +	u8 rng_bip = (data->ctrl_byte[channel] >> 2) & 3;
-> +	static const int max_input_map[4] = {
-> +		MAX127_HALF_RANGE,	/* RNG=0, BIP=0 */
-> +		MAX127_HALF_RANGE,	/* RNG=0, BIP=1 */
-> +		MAX127_FULL_RANGE,	/* RNG=1, BIP=0 */
-> +		MAX127_FULL_RANGE,	/* RNG=1, BIP=1 */
-> +	};
-> +
-> +	*val = max_input_map[rng_bip];
-> +	return 0;
-> +}
-> +
-> +static int max127_write_min(struct max127_data *data, int channel, long val)
-> +{
-> +	u8 ctrl;
-> +
-> +	mutex_lock(&data->lock);
-> +
-> +	ctrl = data->ctrl_byte[channel];
-> +	if (val <= -MAX127_FULL_RANGE) {
-> +		ctrl |= (MAX127_CTRL_RNG | MAX127_CTRL_BIP);
-> +	} else if (val < 0) {
-> +		ctrl |= MAX127_CTRL_BIP;
-> +		ctrl &= ~MAX127_CTRL_RNG;
-> +	} else {
-> +		ctrl &= ~MAX127_CTRL_BIP;
-> +	}
-> +	data->ctrl_byte[channel] = ctrl;
-> +
-> +	mutex_unlock(&data->lock);
-> +
-> +	return 0;
-> +}
-> +
-> +static int max127_write_max(struct max127_data *data, int channel, long val)
-> +{
-> +	mutex_lock(&data->lock);
-> +
-> +	if (val >= MAX127_FULL_RANGE)
-> +		data->ctrl_byte[channel] |= MAX127_CTRL_RNG;
-> +	else
-> +		data->ctrl_byte[channel] &= ~MAX127_CTRL_RNG;
-> +
-> +	mutex_unlock(&data->lock);
-> +
-> +	return 0;
-> +}
-> +
-> +static umode_t max127_is_visible(const void *_data,
-> +				 enum hwmon_sensor_types type,
-> +				 u32 attr, int channel)
-> +{
-> +	if (type == hwmon_in) {
-> +		switch (attr) {
-> +		case hwmon_in_input:
-> +			return 0444;
-> +
-> +		case hwmon_in_min:
-> +		case hwmon_in_max:
-> +			return 0644;
-> +
-> +		default:
-> +			break;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int max127_read(struct device *dev, enum hwmon_sensor_types type,
-> +			u32 attr, int channel, long *val)
-> +{
-> +	int status;
-> +	struct max127_data *data = dev_get_drvdata(dev);
-> +
-> +	if (type != hwmon_in)
-> +		return -EOPNOTSUPP;
-> +
-> +	switch (attr) {
-> +	case hwmon_in_input:
-> +		status = max127_read_input(data, channel, val);
-> +		break;
-> +
-> +	case hwmon_in_min:
-> +		status = max127_read_min(data, channel, val);
-> +		break;
-> +
-> +	case hwmon_in_max:
-> +		status = max127_read_max(data, channel, val);
-> +		break;
-> +
-> +	default:
-> +		status = -EOPNOTSUPP;
-> +		break;
-> +	}
-> +
-> +	return status;
-> +}
-> +
-> +static int max127_write(struct device *dev, enum hwmon_sensor_types type,
-> +			u32 attr, int channel, long val)
-> +{
-> +	int status;
-> +	struct max127_data *data = dev_get_drvdata(dev);
-> +
-> +	if (type != hwmon_in)
-> +		return -EOPNOTSUPP;
-> +
-> +	switch (attr) {
-> +	case hwmon_in_min:
-> +		status = max127_write_min(data, channel, val);
-> +		break;
-> +
-> +	case hwmon_in_max:
-> +		status = max127_write_max(data, channel, val);
-> +		break;
-> +
-> +	default:
-> +		status = -EOPNOTSUPP;
-> +		break;
-> +	}
-> +
-> +	return status;
-> +}
-> +
-> +static const struct hwmon_ops max127_hwmon_ops = {
-> +	.is_visible = max127_is_visible,
-> +	.read = max127_read,
-> +	.write = max127_write,
-> +};
-> +
-> +static const struct hwmon_channel_info *max127_info[] = {
-> +	HWMON_CHANNEL_INFO(in,
-> +			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX,
-> +			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX,
-> +			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX,
-> +			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX,
-> +			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX,
-> +			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX,
-> +			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX,
-> +			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX),
-> +	NULL,
-> +};
-> +
-> +static const struct hwmon_chip_info max127_chip_info = {
-> +	.ops = &max127_hwmon_ops,
-> +	.info = max127_info,
-> +};
-> +
-> +static int max127_probe(struct i2c_client *client,
-> +			const struct i2c_device_id *id)
-> +{
-> +	int i;
-> +	struct device *hwmon_dev;
-> +	struct max127_data *data;
-> +	struct device *dev = &client->dev;
-> +
-> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	data->client = client;
-> +	mutex_init(&data->lock);
-> +	for (i = 0; i < ARRAY_SIZE(data->ctrl_byte); i++)
-> +		data->ctrl_byte[i] = (MAX127_CTRL_START |
-> +				      MAX127_SET_CHANNEL(i));
-> +
-> +	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name,
-> +							 data,
-> +							 &max127_chip_info,
-> +							 NULL);
-> +
-> +	return PTR_ERR_OR_ZERO(hwmon_dev);
-> +}
-> +
-> +static const struct i2c_device_id max127_id[] = {
-> +	{ "max127", 0 },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(i2c, max127_id);
-> +
-> +static struct i2c_driver max127_driver = {
-> +	.class		= I2C_CLASS_HWMON,
-> +	.driver = {
-> +		.name	= "max127",
-> +	},
-> +	.probe		= max127_probe,
-> +	.id_table	= max127_id,
-> +};
-> +
-> +module_i2c_driver(max127_driver);
-> +
-> +MODULE_LICENSE("GPL");
-> +MODULE_AUTHOR("Mike Choi <mikechoi@fb.com>");
-> +MODULE_AUTHOR("Tao Ren <rentao.bupt@gmail.com>");
-> +MODULE_DESCRIPTION("MAX127 Hardware Monitoring driver");
-> -- 
-> 2.17.1
-> 
+> But is anyone keeping score of the regressions? If unreported bugs count,
+> what about unreported regressions?
+
+Introducing `fallthrough` does not change semantics. If you are really
+keen, you can always compare the objects because the generated code
+shouldn't change.
+
+Cheers,
+Miguel
