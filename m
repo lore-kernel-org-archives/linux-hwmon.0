@@ -2,165 +2,96 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01879C5519F
-	for <linux-hwmon@archiver.kernel.org>; Mon, 23 Nov 2020 03:32:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BDD9AC2D0E4
+	for <linux-hwmon@archiver.kernel.org>; Mon, 23 Nov 2020 07:45:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BF5D920727
-	for <linux-hwmon@archiver.kernel.org>; Mon, 23 Nov 2020 03:32:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5D9292073C
+	for <linux-hwmon@archiver.kernel.org>; Mon, 23 Nov 2020 07:45:42 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FfdFOa/y"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726875AbgKWDcD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 22 Nov 2020 22:32:03 -0500
-Received: from mga14.intel.com ([192.55.52.115]:59363 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725831AbgKWDcD (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 22 Nov 2020 22:32:03 -0500
-IronPort-SDR: v9DLHTrWHLv31OMshjmwmuHYjC1+tb5cvKHe1NAT8xyoovvxciTfpGEmDtgQJ02/db1UJvdOoG
- T8wz75MctI6Q==
-X-IronPort-AV: E=McAfee;i="6000,8403,9813"; a="170911950"
-X-IronPort-AV: E=Sophos;i="5.78,361,1599548400"; 
-   d="scan'208";a="170911950"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2020 19:32:02 -0800
-IronPort-SDR: T80OoMIJ2P5XTMvRK36RGaROQ4NFnXdKAdovOiX+9rsAwUO2mQUx0byeFoXUie7yXXBBpgd6s/
- qdf8nFFuWLAA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,361,1599548400"; 
-   d="scan'208";a="369889294"
-Received: from lkp-server01.sh.intel.com (HELO ce8054c7261d) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 22 Nov 2020 19:32:01 -0800
-Received: from kbuild by ce8054c7261d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kh2a8-0000Q6-JT; Mon, 23 Nov 2020 03:32:00 +0000
-Date:   Mon, 23 Nov 2020 11:31:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon-next] BUILD SUCCESS
- 232937dc35694a934f39dd1cd7246d5132e1f4f3
-Message-ID: <5fbb2cf8.0UkCC2SLh+h9wpMT%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+        id S1727483AbgKWHpm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 23 Nov 2020 02:45:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40264 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725320AbgKWHpl (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 23 Nov 2020 02:45:41 -0500
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14C9C0613CF;
+        Sun, 22 Nov 2020 23:45:41 -0800 (PST)
+Received: by mail-pg1-x543.google.com with SMTP id s63so3597547pgc.8;
+        Sun, 22 Nov 2020 23:45:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=BFitlouLqV5WjAV4yis+SNy1ksEBkbSXVdeVWFMxCgQ=;
+        b=FfdFOa/yYakciFlKN4s4XKzdLppr3kFkdihyIqw6pVOmbiIvPV4hnA+HOCX4tMdJ+5
+         kwyOZ0IOBV9C7zvY/+LD4FRDDCj2Q9g2o+MammUxnHjQuLzmzl5ebbdUFr/aYZkuQH3C
+         IsIOwrPgUGdg0wO9jVME4yIEKj2FWwGFU1itdcjjBAK/EbVOOBSB+05kb2xFoNQvHwRZ
+         GHX2T2H9d0UZjf3vKW8fPqcS62E9J1TeIJxPmTSaEdPelUFsnI6tc66YG/bUWZpBwg+P
+         4jtC2j1P1NTvwMzGEHgU01iAQ8z5Xqvo0t5lGYPHEfwq/XeubjjrkA8tVy7q9CPlCVDU
+         RViQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=BFitlouLqV5WjAV4yis+SNy1ksEBkbSXVdeVWFMxCgQ=;
+        b=C0xR4+hmCZrNS0Fhbc9EEGxlZ1qG2zNPwl47M5/WmpUcCdMDAJkxjS+XysG7cam3X9
+         5RmDNvVDK8meg9mwTsqrmrRgD6uTpD0edMcVjXUbCrvzddxIgfGTOqLVVP3AguZP18rL
+         MBIMYGK/GWhRl/zJIk+VqHfwCiXyRxuFawycbaGeIh5zThJ8CKKY5t0IhHIF31V9i1N2
+         EI8dbFecRpEKYqxlE9yh8p9e/cRdokodr5ulSXln3LAIZQqypIzzlfvUt8z4WfA8uv4v
+         c0QRoRDCfDJM18tq6ULfLajzEieLbkmiRa13+QWmuzZOdzKJ5MmASGdXzPbvCJk1s8y/
+         j5Yw==
+X-Gm-Message-State: AOAM530P0Ie4Mu3yo5VGmiCHSq0pEwhRYvjg/uF7gE4vK35vNcZFNKGN
+        93NdPKv80zv89rlerp1SaaQ=
+X-Google-Smtp-Source: ABdhPJyXUUqOuVScJwF1uK//p0FtqpPoILzGVsy9yWd3AX1S6EqzWMd6jO710sDbiwjkEihrx4PXIg==
+X-Received: by 2002:a65:4c0a:: with SMTP id u10mr527328pgq.294.1606117541329;
+        Sun, 22 Nov 2020 23:45:41 -0800 (PST)
+Received: from taoren-ubuntu-R90MNF91.thefacebook.com (c-73-252-146-110.hsd1.ca.comcast.net. [73.252.146.110])
+        by smtp.gmail.com with ESMTPSA id 12sm13176340pjn.19.2020.11.22.23.45.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 Nov 2020 23:45:40 -0800 (PST)
+From:   rentao.bupt@gmail.com
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org, taoren@fb.com, mikechoi@fb.com
+Cc:     Tao Ren <rentao.bupt@gmail.com>
+Subject: [PATCH v4 0/2] hwmon: (max127) Add Maxim MAX127 hardware monitoring
+Date:   Sun, 22 Nov 2020 23:45:30 -0800
+Message-Id: <20201123074532.3730-1-rentao.bupt@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon-next
-branch HEAD: 232937dc35694a934f39dd1cd7246d5132e1f4f3  docs: hwmon: (amd_energy) update documentation
+From: Tao Ren <rentao.bupt@gmail.com>
 
-elapsed time: 721m
+The patch series adds hardware monitoring driver for the Maxim MAX127
+chip.
 
-configs tested: 93
-configs skipped: 2
+Patch #1 adds the max127 hardware monitoring driver, and patch #2 adds
+documentation for the driver.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Tao Ren (2):
+  hwmon: (max127) Add Maxim MAX127 hardware monitoring driver
+  docs: hwmon: Document max127 driver
 
-gcc tested configs:
-arm                              allyesconfig
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allmodconfig
-mips                         bigsur_defconfig
-mips                          malta_defconfig
-arm                      footbridge_defconfig
-arc                           tb10x_defconfig
-arm                       spear13xx_defconfig
-sh                           se7750_defconfig
-xtensa                         virt_defconfig
-powerpc                      acadia_defconfig
-powerpc                     mpc83xx_defconfig
-sh                           se7721_defconfig
-powerpc                     akebono_defconfig
-powerpc                      cm5200_defconfig
-powerpc                      bamboo_defconfig
-powerpc                      ppc40x_defconfig
-arm                             pxa_defconfig
-mips                           ip27_defconfig
-arm                        mvebu_v5_defconfig
-powerpc                     tqm8560_defconfig
-ia64                             alldefconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a004-20201122
-i386                 randconfig-a003-20201122
-i386                 randconfig-a002-20201122
-i386                 randconfig-a005-20201122
-i386                 randconfig-a001-20201122
-i386                 randconfig-a006-20201122
-i386                 randconfig-a012-20201122
-i386                 randconfig-a013-20201122
-i386                 randconfig-a011-20201122
-i386                 randconfig-a016-20201122
-i386                 randconfig-a014-20201122
-i386                 randconfig-a015-20201122
-x86_64               randconfig-a006-20201122
-x86_64               randconfig-a003-20201122
-x86_64               randconfig-a004-20201122
-x86_64               randconfig-a005-20201122
-x86_64               randconfig-a001-20201122
-x86_64               randconfig-a002-20201122
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
+ Documentation/hwmon/index.rst  |   1 +
+ Documentation/hwmon/max127.rst |  45 +++++
+ drivers/hwmon/Kconfig          |   9 +
+ drivers/hwmon/Makefile         |   1 +
+ drivers/hwmon/max127.c         | 346 +++++++++++++++++++++++++++++++++
+ 5 files changed, 402 insertions(+)
+ create mode 100644 Documentation/hwmon/max127.rst
+ create mode 100644 drivers/hwmon/max127.c
 
-clang tested configs:
-x86_64               randconfig-a015-20201122
-x86_64               randconfig-a011-20201122
-x86_64               randconfig-a014-20201122
-x86_64               randconfig-a016-20201122
-x86_64               randconfig-a012-20201122
-x86_64               randconfig-a013-20201122
+-- 
+2.17.1
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
