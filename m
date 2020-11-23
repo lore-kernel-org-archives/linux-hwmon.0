@@ -2,250 +2,141 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D857BC63777
-	for <linux-hwmon@archiver.kernel.org>; Mon, 23 Nov 2020 19:03:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1798C6379F
+	for <linux-hwmon@archiver.kernel.org>; Mon, 23 Nov 2020 20:04:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6D2D920728
-	for <linux-hwmon@archiver.kernel.org>; Mon, 23 Nov 2020 19:03:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 58D3D20717
+	for <linux-hwmon@archiver.kernel.org>; Mon, 23 Nov 2020 20:04:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cpumtOl8"
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="Zr1EZlr7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729217AbgKWTDN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 23 Nov 2020 14:03:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60218 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729140AbgKWTDN (ORCPT
+        id S1728880AbgKWUD4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 23 Nov 2020 15:03:56 -0500
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:17000 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726770AbgKWUDy (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 23 Nov 2020 14:03:13 -0500
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196A6C0613CF;
-        Mon, 23 Nov 2020 11:03:13 -0800 (PST)
-Received: by mail-pg1-x543.google.com with SMTP id t3so1273846pgi.11;
-        Mon, 23 Nov 2020 11:03:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=yMuGjAGAYA+5ImbfC3OSe/xsrUqI4pHb2wVel7Ahm0Y=;
-        b=cpumtOl8Hz9K/isd0gwzNo8XSlMa4wMmT8gH7nLi/Mc16Nd4BOlI/+Mq6l4WyKKzR5
-         eargzdQq2Z6yaF/D2/DWzFt4X0iwusR6LHTk90uX9o1s0gGWJ+Gl3R9KeRcov0jIBd/D
-         ieQX8eU3sCM8QAvANmDPMq9bFYGRbA8MZHeM1h07Arc8Ft/4MN7k8C+MdILF1xt3Fas2
-         db1VzZnZoguVudl4f0KhSFVpoEcO69ywT4gtWgAtGKHtNLHB0li9p3xEpNx8Zqtd/X03
-         roxC1VjTUgOybpemA64HOjAYDMNh63oVORwXvvYdMWrYMLmLzS/e3BeZ42Lh1FP1DX9V
-         mBsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=yMuGjAGAYA+5ImbfC3OSe/xsrUqI4pHb2wVel7Ahm0Y=;
-        b=OKr/pOFeCR6buSLpO3MALpxgozQkLa/OUaWpk2ln45tsm/ZqB1zCCjwR/YYuxBU0aC
-         Jz7THwR/jqirDmYuYTXkOMRJ9Owf1JcnqfLw0Pl/85oMXn7EI+ePRXJs1XajB2f47VpJ
-         HUOh8BBnKc1ZDjEuv7DTiHfJIbsG/GPeZDeT4Ipy0xRkAJwR6ZAgUJVeu/MFDxm2xsz8
-         RtWyMtgxNVJzK1zqElBxIHZ+Nk0+RmqjelrsfX+tyzkkgyDh3gTceVBi/3dxJif5NDPY
-         ZkoBJpjb+4T/ruYNV5RyalQ9fl0YjAhQv7f4d1dYOYm7pIaJRWFHH8+rN1kMMDP1PK53
-         tDHQ==
-X-Gm-Message-State: AOAM531nbryLYzBwBBV0zhOvXNMK+/KeBYvpcS/YDfiBd0Gcxausb/w/
-        H3o+E7OAYDNfGNg+uko4ZXA=
-X-Google-Smtp-Source: ABdhPJwl8aybCD5NSXzQDDjdEDdtIbfM9OHag1+2pZRRFIqG+7hmC9anyar4R3Lrk+dUKLLVIGRhzA==
-X-Received: by 2002:a62:52c6:0:b029:18c:a1fa:2fc2 with SMTP id g189-20020a6252c60000b029018ca1fa2fc2mr777841pfb.50.1606158192579;
-        Mon, 23 Nov 2020 11:03:12 -0800 (PST)
-Received: from taoren-ubuntu-R90MNF91 (c-73-252-146-110.hsd1.ca.comcast.net. [73.252.146.110])
-        by smtp.gmail.com with ESMTPSA id z128sm11365946pgz.69.2020.11.23.11.03.11
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 23 Nov 2020 11:03:12 -0800 (PST)
-Date:   Mon, 23 Nov 2020 11:03:09 -0800
-From:   Tao Ren <rentao.bupt@gmail.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
-        taoren@fb.com, mikechoi@fb.com
-Subject: Re: [PATCH v4 1/2] hwmon: (max127) Add Maxim MAX127 hardware
- monitoring driver
-Message-ID: <20201123190308.GB7697@taoren-ubuntu-R90MNF91>
-References: <20201123074532.3730-1-rentao.bupt@gmail.com>
- <20201123074532.3730-2-rentao.bupt@gmail.com>
- <20201123131832.GB136636@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+        Mon, 23 Nov 2020 15:03:54 -0500
+Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5fbc15a70004>; Mon, 23 Nov 2020 12:03:51 -0800
+Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 23 Nov
+ 2020 20:03:49 +0000
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.103)
+ by HQMAIL107.nvidia.com (172.20.187.13) with Microsoft SMTP Server (TLS) id
+ 15.0.1473.3 via Frontend Transport; Mon, 23 Nov 2020 20:03:49 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gITd84wMHHzcOptjQRg1Bi4wKYLoloErjGXTzbxbsYYxXpRm6DfDjP1G8JsqPPruG8n8djHpWT3ChykgCoTQdTlPHkj05TPw7WZ4Y46HlI8bprZC3XuF3n009Te/qaTwPxc9ef3s3wxgnUStlvtZrJvP5WQhh3MIKLFTGEWjhLXWcgs1VmoV9q6ndrBwWgPhsRBIC9rKh9qqm9cf9Ujr9sks/ml2cZ4bW16uPSJVifE1ke5RuUikXPZ60YcpNVw15sbmeBPfJ8v059YAkVfr8AOpsBgi+OymMySTg/JYVNFtVJ2pGo3M9pC5txLp474ztgTCR2D9RfvqUQOXT+42RA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QophqWBVIGhmInjMMmoN1JCz5yEuED07MVw87J8AVUY=;
+ b=dpOj+p56VpZQgFejSTc+TjZx9PpIbmIlWcJPfXyA8QiV6hyerQ1PNIg37pZm/OoPMM7dRNU+MPO2Sxmva5Z6iKtLQpQNkcM79tS52of8WjxHEmReB+Qc/VB0gzy26dU2FtXMoEzn5Rx6YHRp97uhlWeSk7Nsi1BUrieORD+G9yqkgKBmwQvC726s6EkJ0s32uNc7iMGffyCjKbyBtSLggJX9G9WEJ0m0GYQlYWRE7aVXL+Iy16bXoksvn7nW7YXP74v45GAqxPt7EElquzCZ4kXurFfWXXWM9ThsUobGLm/yb7wWVAmTEM+ttWZwc1mR7P3I+RsId2H9o2Xiqq+zAg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+Received: from DM6PR12MB3834.namprd12.prod.outlook.com (2603:10b6:5:14a::12)
+ by DM6PR12MB4338.namprd12.prod.outlook.com (2603:10b6:5:2a2::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.21; Mon, 23 Nov
+ 2020 20:03:48 +0000
+Received: from DM6PR12MB3834.namprd12.prod.outlook.com
+ ([fe80::e40c:730c:156c:2ef9]) by DM6PR12MB3834.namprd12.prod.outlook.com
+ ([fe80::e40c:730c:156c:2ef9%7]) with mapi id 15.20.3589.022; Mon, 23 Nov 2020
+ 20:03:48 +0000
+Date:   Mon, 23 Nov 2020 16:03:45 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <amd-gfx@lists.freedesktop.org>,
+        <bridge@lists.linux-foundation.org>, <ceph-devel@vger.kernel.org>,
+        <cluster-devel@redhat.com>, <coreteam@netfilter.org>,
+        <devel@driverdev.osuosl.org>, <dm-devel@redhat.com>,
+        <drbd-dev@lists.linbit.com>, <dri-devel@lists.freedesktop.org>,
+        <GR-everest-linux-l2@marvell.com>, <GR-Linux-NIC-Dev@marvell.com>,
+        <intel-gfx@lists.freedesktop.org>,
+        <intel-wired-lan@lists.osuosl.org>, <keyrings@vger.kernel.org>,
+        <linux1394-devel@lists.sourceforge.net>,
+        <linux-acpi@vger.kernel.org>, <linux-afs@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        <linux-atm-general@lists.sourceforge.net>,
+        <linux-block@vger.kernel.org>, <linux-can@vger.kernel.org>,
+        <linux-cifs@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
+        <linux-decnet-user@lists.sourceforge.net>,
+        <linux-ext4@vger.kernel.org>, <linux-fbdev@vger.kernel.org>,
+        <linux-geode@lists.infradead.org>, <linux-gpio@vger.kernel.org>,
+        <linux-hams@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
+        <linux-i3c@lists.infradead.org>, <linux-ide@vger.kernel.org>,
+        <linux-iio@vger.kernel.org>, <linux-input@vger.kernel.org>,
+        <linux-integrity@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-media@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <linux-mm@kvack.org>, <linux-mtd@lists.infradead.org>,
+        <linux-nfs@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linux-renesas-soc@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <linux-sctp@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-usb@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
+        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <netfilter-devel@vger.kernel.org>, <nouveau@lists.freedesktop.org>,
+        <op-tee@lists.trustedfirmware.org>, <oss-drivers@netronome.com>,
+        <patches@opensource.cirrus.com>, <rds-devel@oss.oracle.com>,
+        <reiserfs-devel@vger.kernel.org>,
+        <samba-technical@lists.samba.org>, <selinux@vger.kernel.org>,
+        <target-devel@vger.kernel.org>,
+        <tipc-discussion@lists.sourceforge.net>,
+        <usb-storage@lists.one-eyed-alien.net>,
+        <virtualization@lists.linux-foundation.org>,
+        <wcn36xx@lists.infradead.org>, <x86@kernel.org>,
+        <xen-devel@lists.xenproject.org>,
+        <linux-hardening@vger.kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>, Joe Perches <joe@perches.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
+Message-ID: <20201123200345.GA38546@nvidia.com>
+References: <cover.1605896059.git.gustavoars@kernel.org>
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20201123131832.GB136636@roeck-us.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <cover.1605896059.git.gustavoars@kernel.org>
+X-ClientProxiedBy: MN2PR03CA0013.namprd03.prod.outlook.com
+ (2603:10b6:208:23a::18) To DM6PR12MB3834.namprd12.prod.outlook.com
+ (2603:10b6:5:14a::12)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from mlx.ziepe.ca (156.34.48.30) by MN2PR03CA0013.namprd03.prod.outlook.com (2603:10b6:208:23a::18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.20 via Frontend Transport; Mon, 23 Nov 2020 20:03:47 +0000
+Received: from jgg by mlx with local (Exim 4.94)        (envelope-from <jgg@nvidia.com>)        id 1khI3t-000A35-Tb; Mon, 23 Nov 2020 16:03:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1606161831; bh=QophqWBVIGhmInjMMmoN1JCz5yEuED07MVw87J8AVUY=;
+        h=ARC-Seal:ARC-Message-Signature:ARC-Authentication-Results:Date:
+         From:To:CC:Subject:Message-ID:References:Content-Type:
+         Content-Disposition:In-Reply-To:X-ClientProxiedBy:MIME-Version:
+         X-MS-Exchange-MessageSentRepresentingType;
+        b=Zr1EZlr7FGouweCXJ2A3YJZ8lxsTazMwmiIDkNNgeYuPc4M3hA0h9guNHLXrnnLeX
+         Dp0jtpGLpYuZZsYit0m8+Y/3Pgk+U78P2KDuhjfei0oh+kHbQnRfzB2jD1Wu7rVyZ8
+         A2iuCgvA8hhwNVx8Bo/l4LfRAECKvf8eJj6um7c8+wyJ6oFgyijvPixB8Xcq6YNTLj
+         o7o09Zdo2SkPJV9Ld82VvGAW1KENwGx8qxL8L4kHw5xGizl/kk/4FLfOCs8mx17bXD
+         N2PIS7AsaPoH2bHogxWrZ7vcH6YOCMGYKk/oZQ1BhSoaDoH96AMZAs9BCirfcyYEMq
+         3EMRDyReptNPA==
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Nov 23, 2020 at 05:18:32AM -0800, Guenter Roeck wrote:
-> On Sun, Nov 22, 2020 at 11:45:31PM -0800, rentao.bupt@gmail.com wrote:
-> > From: Tao Ren <rentao.bupt@gmail.com>
-> > 
-> > Add hardware monitoring driver for the Maxim MAX127 chip.
-> > 
-> > MAX127 min/max range handling code is inspired by the max197 driver.
-> > 
-> > Signed-off-by: Tao Ren <rentao.bupt@gmail.com>
-> > ---
-> >  Changes in v4:
-> >    - delete unnecessary "#include" lines.
-> >    - simplify i2c_transfer() error handling.
-> >    - add mutex to protect ctrl_byte in write_min|max() functions.
-> >  Changes in v3:
-> >    - no code change. xdp maintainers were removed from to/cc list.
-> >  Changes in v2:
-> >    - replace devm_hwmon_device_register_with_groups() with
-> >      devm_hwmon_device_register_with_info() API.
-> >    - divide min/max read and write methods to separate functions.
-> >    - fix raw-to-vin conversion logic.
-> >    - refine ctrl_byte handling so mutex is not needed to protect the
-> >      byte.
-> >    - improve i2c_transfer() error handling.
-> >    - a few other improvements (comments, variable naming, and etc.).
-> > 
-> >  drivers/hwmon/Kconfig  |   9 ++
-> >  drivers/hwmon/Makefile |   1 +
-> >  drivers/hwmon/max127.c | 346 +++++++++++++++++++++++++++++++++++++++++
-> >  3 files changed, 356 insertions(+)
-> >  create mode 100644 drivers/hwmon/max127.c
-> > 
-> > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> > index 9d600e0c5584..716df51edc87 100644
-> > --- a/drivers/hwmon/Kconfig
-> > +++ b/drivers/hwmon/Kconfig
-> > @@ -950,6 +950,15 @@ config SENSORS_MAX1111
-> >  	  This driver can also be built as a module. If so, the module
-> >  	  will be called max1111.
-> >  
-> > +config SENSORS_MAX127
-> > +	tristate "Maxim MAX127 12-bit 8-channel Data Acquisition System"
-> > +	depends on I2C
-> > +	help
-> > +	  Say y here to support Maxim's MAX127 DAS chips.
-> > +
-> > +	  This driver can also be built as a module. If so, the module
-> > +	  will be called max127.
-> > +
-> >  config SENSORS_MAX16065
-> >  	tristate "Maxim MAX16065 System Manager and compatibles"
-> >  	depends on I2C
-> > diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> > index 1083bbfac779..01ca5d3fbad4 100644
-> > --- a/drivers/hwmon/Makefile
-> > +++ b/drivers/hwmon/Makefile
-> > @@ -127,6 +127,7 @@ obj-$(CONFIG_SENSORS_LTC4260)	+= ltc4260.o
-> >  obj-$(CONFIG_SENSORS_LTC4261)	+= ltc4261.o
-> >  obj-$(CONFIG_SENSORS_LTQ_CPUTEMP) += ltq-cputemp.o
-> >  obj-$(CONFIG_SENSORS_MAX1111)	+= max1111.o
-> > +obj-$(CONFIG_SENSORS_MAX127)	+= max127.o
-> >  obj-$(CONFIG_SENSORS_MAX16065)	+= max16065.o
-> >  obj-$(CONFIG_SENSORS_MAX1619)	+= max1619.o
-> >  obj-$(CONFIG_SENSORS_MAX1668)	+= max1668.o
-> > diff --git a/drivers/hwmon/max127.c b/drivers/hwmon/max127.c
-> > new file mode 100644
-> > index 000000000000..1c54146b6086
-> > --- /dev/null
-> > +++ b/drivers/hwmon/max127.c
-> > @@ -0,0 +1,346 @@
-> > +// SPDX-License-Identifier: GPL-2.0+
-> > +/*
-> > + * Hardware monitoring driver for MAX127.
-> > + *
-> > + * Copyright (c) 2020 Facebook Inc.
-> > + */
-> > +
-> > +#include <linux/err.h>
-> > +#include <linux/hwmon.h>
-> > +#include <linux/i2c.h>
-> > +#include <linux/init.h>
-> > +#include <linux/module.h>
-> > +
-> > +/*
-> > + * MAX127 Control Byte. Refer to MAX127 datasheet, Table 1 "Control-Byte
-> > + * Format" for details.
-> > + */
-> > +#define MAX127_CTRL_START	BIT(7)
-> > +#define MAX127_CTRL_SEL_SHIFT	4
-> > +#define MAX127_CTRL_RNG		BIT(3)
-> > +#define MAX127_CTRL_BIP		BIT(2)
-> > +#define MAX127_CTRL_PD1		BIT(1)
-> > +#define MAX127_CTRL_PD0		BIT(0)
-> > +
-> > +#define MAX127_NUM_CHANNELS	8
-> > +#define MAX127_SET_CHANNEL(ch)	(((ch) & 7) << MAX127_CTRL_SEL_SHIFT)
-> > +
-> > +/*
-> > + * MAX127 channel input ranges. Refer to MAX127 datasheet, Table 3 "Range
-> > + * and Polarity Selection" for details.
-> > + */
-> > +#define MAX127_FULL_RANGE	10000	/* 10V */
-> > +#define MAX127_HALF_RANGE	5000	/* 5V */
-> > +
-> > +/*
-> > + * MAX127 returns 2 bytes at read:
-> > + *   - the first byte contains data[11:4].
-> > + *   - the second byte contains data[3:0] (MSB) and 4 dummy 0s (LSB).
-> > + * Refer to MAX127 datasheet, "Read a Conversion (Read Cycle)" section
-> > + * for details.
-> > + */
-> > +#define MAX127_DATA_LEN		2
-> > +#define MAX127_DATA_SHIFT	4
-> > +
-> > +#define MAX127_SIGN_BIT		BIT(11)
-> > +
-> > +struct max127_data {
-> > +	struct mutex lock;
-> > +	struct i2c_client *client;
-> > +	u8 ctrl_byte[MAX127_NUM_CHANNELS];
-> > +};
-> > +
-> > +static int max127_select_channel(struct i2c_client *client, u8 ctrl_byte)
-> > +{
-> > +	int status;
-> > +	struct i2c_msg msg = {
-> > +		.addr = client->addr,
-> > +		.flags = 0,
-> > +		.len = sizeof(ctrl_byte),
-> > +		.buf = &ctrl_byte,
-> > +	};
-> > +
-> > +	status = i2c_transfer(client->adapter, &msg, 1);
-> > +
-> > +	return (status == 1) ? 0 : -EIO;
-> 
-> This isn't what I said and asked for. It drops the unnecessary else,
-> but now it overwrites an error value.
-> 
-> Guenter
-> 
-> > +}
-> > +
-> > +static int max127_read_channel(struct i2c_client *client, long *val)
-> > +{
-> > +	int status;
-> > +	u8 i2c_data[MAX127_DATA_LEN];
-> > +	struct i2c_msg msg = {
-> > +		.addr = client->addr,
-> > +		.flags = I2C_M_RD,
-> > +		.len = sizeof(i2c_data),
-> > +		.buf = i2c_data,
-> > +	};
-> > +
-> > +	status = i2c_transfer(client->adapter, &msg, 1);
-> > +	if (status != 1)
-> > +		return -EIO;
-> 
-> This isn't what I asked for.
-> 
-> Guenter
+On Fri, Nov 20, 2020 at 12:21:39PM -0600, Gustavo A. R. Silva wrote:
 
-Both places are fixed in v5. Thanks for the clarify, Guenter.
+>   IB/hfi1: Fix fall-through warnings for Clang
+>   IB/mlx4: Fix fall-through warnings for Clang
+>   IB/qedr: Fix fall-through warnings for Clang
+>   RDMA/mlx5: Fix fall-through warnings for Clang
 
+I picked these four to the rdma tree, thanks
 
-Cheers,
-
-Tao
+Jason
