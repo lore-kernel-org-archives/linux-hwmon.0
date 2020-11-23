@@ -2,144 +2,165 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9456C6379F
-	for <linux-hwmon@archiver.kernel.org>; Sun, 22 Nov 2020 23:05:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01879C5519F
+	for <linux-hwmon@archiver.kernel.org>; Mon, 23 Nov 2020 03:32:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B18B320773
-	for <linux-hwmon@archiver.kernel.org>; Sun, 22 Nov 2020 23:05:04 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="WmZvrZ8S";
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="WmZvrZ8S"
+	by mail.kernel.org (Postfix) with ESMTP id BF5D920727
+	for <linux-hwmon@archiver.kernel.org>; Mon, 23 Nov 2020 03:32:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726654AbgKVXEo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 22 Nov 2020 18:04:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45216 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725788AbgKVXEm (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 22 Nov 2020 18:04:42 -0500
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB334C0613CF;
-        Sun, 22 Nov 2020 15:04:41 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 587D812808F8;
-        Sun, 22 Nov 2020 15:04:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1606086281;
-        bh=ampKVWKUqLiKYyObj0dhEgltdPGbsuliUrstEBadWMw=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=WmZvrZ8SISP4O7CkmRRwRn7Ww4EqbFeoj9AudkGWHrTHPvBGVyYGXPtxxL5/3UBwZ
-         KEGMUiR7FBhAVO42W5uBkyouydambEWUMRvvMR32eyWutkJh8vdHwfKrPde3Z6lPQr
-         zwZuERjUvzNlbmlNByqn4M9h7sLDVk7BBiQeo3h4=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ANo_7oL4BAZt; Sun, 22 Nov 2020 15:04:41 -0800 (PST)
-Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:600:8280:66d1::527])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 9178D12808F6;
-        Sun, 22 Nov 2020 15:04:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1606086281;
-        bh=ampKVWKUqLiKYyObj0dhEgltdPGbsuliUrstEBadWMw=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=WmZvrZ8SISP4O7CkmRRwRn7Ww4EqbFeoj9AudkGWHrTHPvBGVyYGXPtxxL5/3UBwZ
-         KEGMUiR7FBhAVO42W5uBkyouydambEWUMRvvMR32eyWutkJh8vdHwfKrPde3Z6lPQr
-         zwZuERjUvzNlbmlNByqn4M9h7sLDVk7BBiQeo3h4=
-Message-ID: <c3371b7c15ed30b92e9bb8609ff65bdaa0ef61fa.camel@HansenPartnership.com>
-Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Finn Thain <fthain@telegraphics.com.au>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        alsa-devel@alsa-project.org, amd-gfx@lists.freedesktop.org,
-        bridge@lists.linux-foundation.org, ceph-devel@vger.kernel.org,
-        cluster-devel@redhat.com, coreteam@netfilter.org,
-        devel@driverdev.osuosl.org, dm-devel@redhat.com,
-        drbd-dev@lists.linbit.com, dri-devel@lists.freedesktop.org,
-        GR-everest-linux-l2@marvell.com, GR-Linux-NIC-Dev@marvell.com,
-        intel-gfx@lists.freedesktop.org, intel-wired-lan@lists.osuosl.org,
-        keyrings@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-        linux-acpi@vger.kernel.org, linux-afs@lists.infradead.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net,
-        linux-block@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-cifs@vger.kernel.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-decnet-user@lists.sourceforge.net,
-        Ext4 Developers List <linux-ext4@vger.kernel.org>,
-        linux-fbdev@vger.kernel.org, linux-geode@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-hams@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i3c@lists.infradead.org,
-        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input <linux-input@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-mmc@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
-        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        netfilter-devel@vger.kernel.org, nouveau@lists.freedesktop.org,
-        op-tee@lists.trustedfirmware.org, oss-drivers@netronome.com,
-        patches@opensource.cirrus.com, rds-devel@oss.oracle.com,
-        reiserfs-devel@vger.kernel.org, samba-technical@lists.samba.org,
-        selinux@vger.kernel.org, target-devel@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net,
-        usb-storage@lists.one-eyed-alien.net,
-        virtualization@lists.linux-foundation.org,
-        wcn36xx@lists.infradead.org,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        xen-devel@lists.xenproject.org, linux-hardening@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>, Joe Perches <joe@perches.com>
-Date:   Sun, 22 Nov 2020 15:04:36 -0800
-In-Reply-To: <alpine.LNX.2.23.453.2011230938390.7@nippy.intranet>
-References: <cover.1605896059.git.gustavoars@kernel.org>
-         <20201120105344.4345c14e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-         <202011201129.B13FDB3C@keescook>
-         <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-         <202011220816.8B6591A@keescook>
-         <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com>
-         <CANiq72nZrHWTA4_Msg6MP9snTyenC6-eGfD27CyfNSu7QoVZbw@mail.gmail.com>
-         <alpine.LNX.2.23.453.2011230938390.7@nippy.intranet>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        id S1726875AbgKWDcD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 22 Nov 2020 22:32:03 -0500
+Received: from mga14.intel.com ([192.55.52.115]:59363 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725831AbgKWDcD (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 22 Nov 2020 22:32:03 -0500
+IronPort-SDR: v9DLHTrWHLv31OMshjmwmuHYjC1+tb5cvKHe1NAT8xyoovvxciTfpGEmDtgQJ02/db1UJvdOoG
+ T8wz75MctI6Q==
+X-IronPort-AV: E=McAfee;i="6000,8403,9813"; a="170911950"
+X-IronPort-AV: E=Sophos;i="5.78,361,1599548400"; 
+   d="scan'208";a="170911950"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2020 19:32:02 -0800
+IronPort-SDR: T80OoMIJ2P5XTMvRK36RGaROQ4NFnXdKAdovOiX+9rsAwUO2mQUx0byeFoXUie7yXXBBpgd6s/
+ qdf8nFFuWLAA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,361,1599548400"; 
+   d="scan'208";a="369889294"
+Received: from lkp-server01.sh.intel.com (HELO ce8054c7261d) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 22 Nov 2020 19:32:01 -0800
+Received: from kbuild by ce8054c7261d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kh2a8-0000Q6-JT; Mon, 23 Nov 2020 03:32:00 +0000
+Date:   Mon, 23 Nov 2020 11:31:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:hwmon-next] BUILD SUCCESS
+ 232937dc35694a934f39dd1cd7246d5132e1f4f3
+Message-ID: <5fbb2cf8.0UkCC2SLh+h9wpMT%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, 2020-11-23 at 09:54 +1100, Finn Thain wrote:
-> But is anyone keeping score of the regressions? If unreported bugs
-> count, what about unreported regressions?
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon-next
+branch HEAD: 232937dc35694a934f39dd1cd7246d5132e1f4f3  docs: hwmon: (amd_energy) update documentation
 
-Well, I was curious about the former (obviously no tool will tell me
-about the latter), so I asked git what patches had a fall-through
-series named in a fixes tag and these three popped out:
+elapsed time: 721m
 
-9cf51446e686 bpf, powerpc: Fix misuse of fallthrough in bpf_jit_comp()
-6a9dc5fd6170 lib: Revert use of fallthrough pseudo-keyword in lib/
-91dbd73a1739 mips/oprofile: Fix fallthrough placement
+configs tested: 93
+configs skipped: 2
 
-I don't think any of these is fixing a significant problem, but they
-did cause someone time and trouble to investigate.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-James
+gcc tested configs:
+arm                              allyesconfig
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allmodconfig
+mips                         bigsur_defconfig
+mips                          malta_defconfig
+arm                      footbridge_defconfig
+arc                           tb10x_defconfig
+arm                       spear13xx_defconfig
+sh                           se7750_defconfig
+xtensa                         virt_defconfig
+powerpc                      acadia_defconfig
+powerpc                     mpc83xx_defconfig
+sh                           se7721_defconfig
+powerpc                     akebono_defconfig
+powerpc                      cm5200_defconfig
+powerpc                      bamboo_defconfig
+powerpc                      ppc40x_defconfig
+arm                             pxa_defconfig
+mips                           ip27_defconfig
+arm                        mvebu_v5_defconfig
+powerpc                     tqm8560_defconfig
+ia64                             alldefconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a004-20201122
+i386                 randconfig-a003-20201122
+i386                 randconfig-a002-20201122
+i386                 randconfig-a005-20201122
+i386                 randconfig-a001-20201122
+i386                 randconfig-a006-20201122
+i386                 randconfig-a012-20201122
+i386                 randconfig-a013-20201122
+i386                 randconfig-a011-20201122
+i386                 randconfig-a016-20201122
+i386                 randconfig-a014-20201122
+i386                 randconfig-a015-20201122
+x86_64               randconfig-a006-20201122
+x86_64               randconfig-a003-20201122
+x86_64               randconfig-a004-20201122
+x86_64               randconfig-a005-20201122
+x86_64               randconfig-a001-20201122
+x86_64               randconfig-a002-20201122
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
 
+clang tested configs:
+x86_64               randconfig-a015-20201122
+x86_64               randconfig-a011-20201122
+x86_64               randconfig-a014-20201122
+x86_64               randconfig-a016-20201122
+x86_64               randconfig-a012-20201122
+x86_64               randconfig-a013-20201122
 
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
