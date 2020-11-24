@@ -2,174 +2,225 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6680CC2D0E4
-	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Nov 2020 01:33:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5DA4C2D0E4
+	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Nov 2020 02:04:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 10A30206FA
-	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Nov 2020 01:33:27 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mZ10EKN9"
+	by mail.kernel.org (Postfix) with ESMTP id 30311206C0
+	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Nov 2020 02:04:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729611AbgKXBdG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 23 Nov 2020 20:33:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36014 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728631AbgKXBdF (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 23 Nov 2020 20:33:05 -0500
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1473C061A4D
-        for <linux-hwmon@vger.kernel.org>; Mon, 23 Nov 2020 17:33:04 -0800 (PST)
-Received: by mail-pf1-x444.google.com with SMTP id y7so16789905pfq.11
-        for <linux-hwmon@vger.kernel.org>; Mon, 23 Nov 2020 17:33:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1Fpt+3NGNjcuXPoKd+YKzvfWCCI+i2QS11ln4xb/K2c=;
-        b=mZ10EKN9Q6HwSmECmmsUHbUHF/oTLT4c/YpQVGCE0gPLnlz6SgHQW3ieQ7zeUHJnUi
-         XUPs+F1GoZaFLBKWU3CvMTPUTS8a5+RdM3NBjgdsJpNB5L7Gee8a5rDblh6bnWIWT9TK
-         uir+AjWjaGJnRAA0K84IM0yu+WQnaSePUaJNJPiE7LfLBhB3Pd0A4gWblql3Lao7defI
-         n9Uw15itvZVSId22hyle+f6GM1M4THjCwMgL7v1hyU5f7oNm+YC3/Fk6KnTIGBq7Lgby
-         +eM5Ju8Jh9l5BxBe3HwjA5bt+bnUjVm7e9zM9zQUlIbVcSVLiqKYS2m+arIIzBAIXu/j
-         s+uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1Fpt+3NGNjcuXPoKd+YKzvfWCCI+i2QS11ln4xb/K2c=;
-        b=jTQheS1ziUTkHaQgD/9ohl80te9fFLwjxJmrGi+1ijgnRkhkYNrLI853UdTAuBcwAh
-         DymaDsklmNsTBaeGebW3TokfbxRa7zGhSsbO/CyT9MWTaLn3d5YIFcyPVqvZYn6IlG8P
-         kf9FjSU5bpTq+79QSgi4egEs4ZVNiqTlJzyy1kSAD1YGdiGONs0UrZyob9TwrIMLtSAx
-         +S7dtrbg7RWMuIN1MDMLFvU1Ca2DcvbwKEsLhDc+xJUR5cP+gMG5fVvGph62JzVUIxAp
-         aa0Z1HKTmcx/lVEDNBluY0jFcKbJnCQcW23OWna5FTNmv/QJK0DvFXXfo+gkNfAhrnOf
-         sc2A==
-X-Gm-Message-State: AOAM531kafdBoCjiqnDFvBPYTWBQlOi8caawdCml/3PC/GLmVxqViVtF
-        tSB2j86YSAH02q1YAuSkiKr3ogsM9G46cRXcCs2l+g==
-X-Google-Smtp-Source: ABdhPJwQDF2vxX46wbajF4ioOOwzM/J33jC4qlEIQ0nX0CJ8Ae2/iYNAtfiNkgC6UbM9BT3sKlieSNPFWrTquhIIwSk=
-X-Received: by 2002:a65:6a4e:: with SMTP id o14mr1859973pgu.263.1606181584110;
- Mon, 23 Nov 2020 17:33:04 -0800 (PST)
+        id S1726532AbgKXCDl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 23 Nov 2020 21:03:41 -0500
+Received: from mga11.intel.com ([192.55.52.93]:30674 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726376AbgKXCDl (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 23 Nov 2020 21:03:41 -0500
+IronPort-SDR: /frTIO4NHZ75cDpDSujWklToLjFHCdUPgdI7f5SGKj2QG5itX15rYm1UAH/1AGwT0uFMtUzZzB
+ zaWkVpEUN2Eg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9814"; a="168367996"
+X-IronPort-AV: E=Sophos;i="5.78,364,1599548400"; 
+   d="scan'208";a="168367996"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2020 18:03:40 -0800
+IronPort-SDR: D7eip0dzArH3FSALYvkRzhDAyUnDmmwsZ5M0LZles/MR/1ozLtv1/exwKb/bFq6Gy0+2840wnk
+ p7iki/IcdvIA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,364,1599548400"; 
+   d="scan'208";a="313089331"
+Received: from lkp-server01.sh.intel.com (HELO 1138cb5768e3) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 23 Nov 2020 18:03:39 -0800
+Received: from kbuild by 1138cb5768e3 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1khNgA-0000IG-HH; Tue, 24 Nov 2020 02:03:38 +0000
+Date:   Tue, 24 Nov 2020 10:03:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:hwmon-next] BUILD SUCCESS
+ 9e6f991ca2627acc563c2eeec2e2740066fbce0c
+Message-ID: <5fbc69ec.X6CTD20d+ZoiDEYC%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <cover.1605896059.git.gustavoars@kernel.org> <20201120105344.4345c14e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <202011201129.B13FDB3C@keescook> <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <202011220816.8B6591A@keescook>
-In-Reply-To: <202011220816.8B6591A@keescook>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 23 Nov 2020 17:32:51 -0800
-Message-ID: <CAKwvOdntVfXj2WRR5n6Kw7BfG7FdKpTeHeh5nPu5AzwVMhOHTg@mail.gmail.com>
-Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, alsa-devel@alsa-project.org,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        bridge@lists.linux-foundation.org, ceph-devel@vger.kernel.org,
-        cluster-devel@redhat.com, coreteam@netfilter.org,
-        devel@driverdev.osuosl.org, dm-devel@redhat.com,
-        drbd-dev@lists.linbit.com,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        GR-everest-linux-l2@marvell.com, GR-Linux-NIC-Dev@marvell.com,
-        intel-gfx@lists.freedesktop.org, intel-wired-lan@lists.osuosl.org,
-        keyrings@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-        linux-acpi@vger.kernel.org, linux-afs@lists.infradead.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-atm-general@lists.sourceforge.net,
-        linux-block@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-cifs@vger.kernel.org,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        linux-decnet-user@lists.sourceforge.net,
-        linux-ext4@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-geode@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-hams@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-i3c@lists.infradead.org, linux-ide@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-rdma@vger.kernel.org,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        netfilter-devel@vger.kernel.org, nouveau@lists.freedesktop.org,
-        op-tee@lists.trustedfirmware.org, oss-drivers@netronome.com,
-        patches@opensource.cirrus.com, rds-devel@oss.oracle.com,
-        reiserfs-devel@vger.kernel.org, samba-technical@lists.samba.org,
-        selinux@vger.kernel.org, target-devel@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net,
-        usb-storage@lists.one-eyed-alien.net,
-        virtualization@lists.linux-foundation.org,
-        wcn36xx@lists.infradead.org,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        xen-devel@lists.xenproject.org, linux-hardening@vger.kernel.org,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>, Joe Perches <joe@perches.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Nov 22, 2020 at 8:17 AM Kees Cook <keescook@chromium.org> wrote:
->
-> On Fri, Nov 20, 2020 at 11:51:42AM -0800, Jakub Kicinski wrote:
-> > If none of the 140 patches here fix a real bug, and there is no change
-> > to machine code then it sounds to me like a W=2 kind of a warning.
->
-> FWIW, this series has found at least one bug so far:
-> https://lore.kernel.org/lkml/CAFCwf11izHF=g1mGry1fE5kvFFFrxzhPSM6qKAO8gxSp=Kr_CQ@mail.gmail.com/
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon-next
+branch HEAD: 9e6f991ca2627acc563c2eeec2e2740066fbce0c  dt-bindings: hwmon: pwm-fan: Support multiple fan tachometer inputs
 
-So looks like the bulk of these are:
-switch (x) {
-  case 0:
-    ++x;
-  default:
-    break;
-}
+elapsed time: 722m
 
-I have a patch that fixes those up for clang:
-https://reviews.llvm.org/D91895
+configs tested: 153
+configs skipped: 2
 
-There's 3 other cases that don't quite match between GCC and Clang I
-observe in the kernel:
-switch (x) {
-  case 0:
-    ++x;
-  default:
-    goto y;
-}
-y:;
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-switch (x) {
-  case 0:
-    ++x;
-  default:
-    return;
-}
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                            zeus_defconfig
+powerpc                   bluestone_defconfig
+sh                         apsh4a3a_defconfig
+arm                        mvebu_v7_defconfig
+sh                     magicpanelr2_defconfig
+arm                         nhk8815_defconfig
+arc                 nsimosci_hs_smp_defconfig
+arm                           u8500_defconfig
+powerpc                     tqm8555_defconfig
+c6x                        evmc6472_defconfig
+xtensa                         virt_defconfig
+sh                          r7780mp_defconfig
+arm                       netwinder_defconfig
+xtensa                              defconfig
+arm                            u300_defconfig
+mips                             allyesconfig
+arm                        keystone_defconfig
+mips                           ip32_defconfig
+powerpc                      tqm8xx_defconfig
+m68k                        mvme16x_defconfig
+powerpc                  storcenter_defconfig
+powerpc                      acadia_defconfig
+powerpc                     mpc512x_defconfig
+mips                        vocore2_defconfig
+sh                           se7724_defconfig
+csky                             alldefconfig
+arm                            dove_defconfig
+m68k                           sun3_defconfig
+sh                   rts7751r2dplus_defconfig
+sh                          rsk7203_defconfig
+arm                          gemini_defconfig
+arm                         s5pv210_defconfig
+sparc64                          alldefconfig
+arm                       aspeed_g4_defconfig
+arm                        shmobile_defconfig
+arm                           h3600_defconfig
+c6x                                 defconfig
+arc                              alldefconfig
+mips                           ip27_defconfig
+powerpc                    mvme5100_defconfig
+arm                  colibri_pxa270_defconfig
+nds32                             allnoconfig
+powerpc                           allnoconfig
+nds32                            alldefconfig
+arm                         cm_x300_defconfig
+mips                        jmr3927_defconfig
+ia64                      gensparse_defconfig
+powerpc                     powernv_defconfig
+sh                           se7751_defconfig
+mips                     loongson1b_defconfig
+arm                          tango4_defconfig
+xtensa                  nommu_kc705_defconfig
+mips                     decstation_defconfig
+arm                        mvebu_v5_defconfig
+arm                            xcep_defconfig
+powerpc                     kilauea_defconfig
+powerpc                   motionpro_defconfig
+powerpc                      chrp32_defconfig
+sh                          rsk7269_defconfig
+mips                malta_qemu_32r6_defconfig
+arm                             rpc_defconfig
+powerpc                     pseries_defconfig
+powerpc                 mpc8540_ads_defconfig
+arm                        magician_defconfig
+mips                       lemote2f_defconfig
+arc                                 defconfig
+sh                          urquell_defconfig
+sh                          sdk7780_defconfig
+alpha                               defconfig
+sh                         ecovec24_defconfig
+arm                           corgi_defconfig
+powerpc                       ppc64_defconfig
+powerpc                     taishan_defconfig
+mips                           ci20_defconfig
+arc                     nsimosci_hs_defconfig
+xtensa                  audio_kc705_defconfig
+mips                       rbtx49xx_defconfig
+arm                            mps2_defconfig
+c6x                        evmc6474_defconfig
+arm                        spear3xx_defconfig
+arm                     davinci_all_defconfig
+xtensa                generic_kc705_defconfig
+mips                          rb532_defconfig
+powerpc                 canyonlands_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+i386                 randconfig-a004-20201123
+i386                 randconfig-a003-20201123
+i386                 randconfig-a002-20201123
+i386                 randconfig-a005-20201123
+i386                 randconfig-a001-20201123
+i386                 randconfig-a006-20201123
+x86_64               randconfig-a015-20201123
+x86_64               randconfig-a011-20201123
+x86_64               randconfig-a014-20201123
+x86_64               randconfig-a016-20201123
+x86_64               randconfig-a012-20201123
+x86_64               randconfig-a013-20201123
+i386                 randconfig-a012-20201123
+i386                 randconfig-a013-20201123
+i386                 randconfig-a011-20201123
+i386                 randconfig-a016-20201123
+i386                 randconfig-a014-20201123
+i386                 randconfig-a015-20201123
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
 
-switch (x) {
-  case 0:
-    ++x;
-  default:
-    ;
-}
+clang tested configs:
+x86_64               randconfig-a006-20201123
+x86_64               randconfig-a003-20201123
+x86_64               randconfig-a004-20201123
+x86_64               randconfig-a005-20201123
+x86_64               randconfig-a002-20201123
+x86_64               randconfig-a001-20201123
 
-Based on your link, and Nathan's comment on my patch, maybe Clang
-should continue to warn for the above (at least the `default: return;`
-case) and GCC should change?  While the last case looks harmless,
-there were only 1 or 2 across the tree in my limited configuration
-testing; I really think we should just add `break`s for those.
--- 
-Thanks,
-~Nick Desaulniers
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
