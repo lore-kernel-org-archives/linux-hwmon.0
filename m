@@ -2,112 +2,638 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C44FCC63697
-	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Nov 2020 02:49:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15980C63697
+	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Nov 2020 03:25:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8286D20720
-	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Nov 2020 02:49:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 915FE20866
+	for <linux-hwmon@archiver.kernel.org>; Tue, 24 Nov 2020 03:25:02 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="GqGntqNY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728802AbgKXCsm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 23 Nov 2020 21:48:42 -0500
-Received: from kvm5.telegraphics.com.au ([98.124.60.144]:53350 "EHLO
-        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725907AbgKXCsl (ORCPT
+        id S1729034AbgKXDYt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 23 Nov 2020 22:24:49 -0500
+Received: from m15111.mail.126.com ([220.181.15.111]:37386 "EHLO
+        m15111.mail.126.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726876AbgKXDYs (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 23 Nov 2020 21:48:41 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by kvm5.telegraphics.com.au (Postfix) with ESMTP id EF15F2AA0D;
-        Mon, 23 Nov 2020 21:48:35 -0500 (EST)
-Date:   Tue, 24 Nov 2020 13:48:34 +1100 (AEDT)
-From:   Finn Thain <fthain@telegraphics.com.au>
-To:     Joe Perches <joe@perches.com>
-cc:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Kees Cook <keescook@chromium.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        alsa-devel@alsa-project.org, amd-gfx@lists.freedesktop.org,
-        bridge@lists.linux-foundation.org, ceph-devel@vger.kernel.org,
-        cluster-devel@redhat.com, coreteam@netfilter.org,
-        devel@driverdev.osuosl.org, dm-devel@redhat.com,
-        drbd-dev@lists.linbit.com, dri-devel@lists.freedesktop.org,
-        GR-everest-linux-l2@marvell.com, GR-Linux-NIC-Dev@marvell.com,
-        intel-gfx@lists.freedesktop.org, intel-wired-lan@lists.osuosl.org,
-        keyrings@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-        linux-acpi@vger.kernel.org, linux-afs@lists.infradead.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net,
-        linux-block@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-cifs@vger.kernel.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-decnet-user@lists.sourceforge.net,
-        Ext4 Developers List <linux-ext4@vger.kernel.org>,
-        linux-fbdev@vger.kernel.org, linux-geode@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-hams@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i3c@lists.infradead.org,
-        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input <linux-input@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-mmc@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
-        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        netfilter-devel@vger.kernel.org, nouveau@lists.freedesktop.org,
-        op-tee@lists.trustedfirmware.org, oss-drivers@netronome.com,
-        patches@opensource.cirrus.com, rds-devel@oss.oracle.com,
-        reiserfs-devel@vger.kernel.org, samba-technical@lists.samba.org,
-        selinux@vger.kernel.org, target-devel@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net,
-        usb-storage@lists.one-eyed-alien.net,
-        virtualization@lists.linux-foundation.org,
-        wcn36xx@lists.infradead.org,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        xen-devel@lists.xenproject.org, linux-hardening@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>
-Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
-In-Reply-To: <e72a1aaef8673553a3ee9dfa033d6e893e00abcd.camel@perches.com>
-Message-ID: <alpine.LNX.2.23.453.2011241210310.7@nippy.intranet>
-References: <cover.1605896059.git.gustavoars@kernel.org>  <20201120105344.4345c14e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>  <202011201129.B13FDB3C@keescook>  <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>  <202011220816.8B6591A@keescook>
-  <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com>  <CANiq72nZrHWTA4_Msg6MP9snTyenC6-eGfD27CyfNSu7QoVZbw@mail.gmail.com>  <alpine.LNX.2.23.453.2011230938390.7@nippy.intranet>  <CANiq72=z+tmuey9wj3Kk7wX5s0hTHpsQdLhAqcOVNrHon6xn5Q@mail.gmail.com>
-  <alpine.LNX.2.23.453.2011241036520.7@nippy.intranet> <e72a1aaef8673553a3ee9dfa033d6e893e00abcd.camel@perches.com>
+        Mon, 23 Nov 2020 22:24:48 -0500
+X-Greylist: delayed 1886 seconds by postgrey-1.27 at vger.kernel.org; Mon, 23 Nov 2020 22:24:43 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Z05wg
+        D9RX6CIvsqpUjNItZZwZbO5X9/CPdvK/gx2kIg=; b=GqGntqNYkuD5LzP0E0Tm0
+        RzqjjX56SBtQzAMAtfgLzh8mnmLLGeJv/MA3oCqYy0tTSDmMeWrEwIfI9C/WNitG
+        SACNdNeMXfc5f8fqJirmRnKoVsYV+WGYciOr1EbRmFPy0Xh4K7p+3Ln4u9lYqXTs
+        WQpa3nLn63qoHt8fxxf76w=
+Received: from localhost (unknown [223.104.212.20])
+        by smtp1 (Coremail) with SMTP id C8mowAAXDFp3dbxfZTt3Lg--.49622S2;
+        Tue, 24 Nov 2020 10:52:40 +0800 (CST)
+From:   "xiao.ma" <max701@126.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xiao.mx.ma@deltaww.com,
+        jiajia.feng@deltaww.com
+Subject: [PATCH v9] hwmon:Driver for Delta power supplies Q54SJ108A2
+Date:   Mon, 23 Nov 2020 16:52:36 -1000
+Message-Id: <20201124025236.1627-1-max701@126.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: C8mowAAXDFp3dbxfZTt3Lg--.49622S2
+X-Coremail-Antispam: 1Uf129KBjvAXoW3try5WrW3tF18KFW5Wr1xKrg_yoW8Aw1xto
+        WUKFWru3WDJr13CrW8GF1xtFyDWr4DGrZ7Ar15KrZIkasIkF1rWF13twn0gwnxX398WFW3
+        Z345Awn8taySy3WUn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+        AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxUoucEUUUUU
+X-Originating-IP: [223.104.212.20]
+X-CM-SenderInfo: ppd0liar6rjloofrz/1tbi5RnmOFpD6Hyz2gAAsG
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+From: "xiao.ma" <xiao.mx.ma@deltaww.com>
 
-On Mon, 23 Nov 2020, Joe Perches wrote:
+The driver supports Q54SJ108A2 series modules of Delta.
+Standard attributes are in the sysfs, and other attributes are in the debugfs.
 
-> On Tue, 2020-11-24 at 11:58 +1100, Finn Thain wrote:
-> > it's not for me to prove that such patches don't affect code 
-> > generation. That's for the patch author and (unfortunately) for 
-> > reviewers.
-> 
-> Ideally, that proof would be provided by the compilation system itself 
-> and not patch authors nor reviewers nor maintainers.
-> 
-> Unfortunately gcc does not guarantee repeatability or deterministic 
-> output. To my knowledge, neither does clang.
-> 
+Signed-off-by: xiao.ma <xiao.mx.ma@deltaww.com>
+---
 
-Yes, I've said the same thing myself. But having attempted it, I now think 
-this is a hard problem. YMMV.
+Notes:
+    Patch v2 changelog:
+    	Add delta.rst in Documentation/hwmon.
+    	Tristate "DELTA" in Kconfig is changed to "DELTA_POWER_SUPPLIED".
+    	Modify code: drop the excessive empty lines, correct the comment content, adjust indent, remove extra brackets.
+    Patch v3 changelog:
+    	Add delta.rst to Documentation/hwmon/index.rst.
+    	Tristate "DELTA_POWER_SUPPLES" in Kconfig is changed to "Delta Power Supplies".
+    Patch v4 changelog:
+    	Correct the spelling "Temperature" in the delta.rst.
+    	Add Write_protect when write command VOUT_OV_RESPONSE and IOUT_OC_FAULT_RESPONSE.
+    Patch v5 changelog:
+    	Add some non-standard attributes in sysfs system.
+    Patch v6 changelog:
+    	delta.c and delta.rst are renamed to q54sj108a2.c and q54sj108a2.rst.
+    	Add q54sj108a2 to index.rst.
+    	Tristate in Kconfig is changed to "Delta Power Supplies Q54SJ108A2".
+    	The non-standard attributes are added to debugfs.
+    Patch v7 changelog:
+    	Use standard fuctions bin2hex and hex2bin.
+    	The return of debugfs write is changed to count.
+    	Drop the error checking of debugfs functions.
+    	Use probe_new fuction.
+    	Remove the .remove fuction.
+    Patch v8 changelog:
+    	Use kstrtou8_from_user instead of hex2bin.
+    	Remove included head files which are not used.
+    	Done label in debugfs_read fuction is deleted.
+    	Change email to send the patch.
+    Patch v9 changelog:
+    	Fix the compile errors and warnings.
 
-https://lore.kernel.org/linux-scsi/alpine.LNX.2.22.394.2004281017310.12@nippy.intranet/
-https://lore.kernel.org/linux-scsi/alpine.LNX.2.22.394.2005211358460.8@nippy.intranet/
+ Documentation/hwmon/index.rst      |   1 +
+ Documentation/hwmon/q54sj108a2.rst |  52 ++++
+ drivers/hwmon/pmbus/Kconfig        |   9 +
+ drivers/hwmon/pmbus/Makefile       |   1 +
+ drivers/hwmon/pmbus/q54sj108a2.c   | 422 +++++++++++++++++++++++++++++
+ 5 files changed, 485 insertions(+)
+ create mode 100644 Documentation/hwmon/q54sj108a2.rst
+ create mode 100755 drivers/hwmon/pmbus/q54sj108a2.c
+
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index b797db738225..4bb680b3c7ea 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -148,6 +148,7 @@ Hardware Monitoring Kernel Drivers
+    powr1220
+    pxe1610
+    pwm-fan
++   q54sj108a2
+    raspberrypi-hwmon
+    sch5627
+    sch5636
+diff --git a/Documentation/hwmon/q54sj108a2.rst b/Documentation/hwmon/q54sj108a2.rst
+new file mode 100644
+index 000000000000..a575bdfa7c18
+--- /dev/null
++++ b/Documentation/hwmon/q54sj108a2.rst
+@@ -0,0 +1,52 @@
++Kernel driver q54sj108a2
++=====================
++
++Supported chips:
++
++  * DELTA Q54SJ108A2NCAH, Q54SJ108A2NCDH, Q54SJ108A2NCPG, Q54SJ108A2NCPH
++
++    Prefix: 'Q54SJ108A2'
++
++    Addresses scanned: -
++
++    Datasheet: https://filecenter.delta-china.com.cn/products/download/01/0102/datasheet/DS_Q54SJ108A2.pdf
++
++Authors:
++    Xiao.ma <xiao.mx.ma@deltaww.com>
++
++
++Description
++-----------
++
++This driver implements support for DELTA Q54SJ108A2NCAH, Q54SJ108A2NCDH, 
++Q54SJ108A2NCPG, and Q54SJ108A2NCPH 1/4 Brick DC/DC Regulated Power Module 
++with PMBus support.
++
++The driver is a client driver to the core PMBus driver.
++Please see Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
++
++
++Usage Notes
++-----------
++
++This driver does not auto-detect devices. You will have to instantiate the
++devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
++details.
++
++
++Sysfs entries
++-------------
++
++===================== ===== ==================================================
++curr1_alarm           RO    Output current alarm
++curr1_input           RO    Output current
++curr1_label           RO    'iout1'
++in1_alarm             RO    Input voltage alarm
++in1_input             RO    Input voltage
++in1_label             RO    'vin'
++in2_alarm             RO    Output voltage alarm
++in2_input             RO    Output voltage
++in2_label             RO    'vout1'
++temp1_alarm           RO    Temperature alarm
++temp1_input           RO    Chip temperature
++===================== ===== ==================================================
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index a25faf69fce3..01de280820ee 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -229,6 +229,15 @@ config SENSORS_PXE1610
+ 	  This driver can also be built as a module. If so, the module will
+ 	  be called pxe1610.
+ 
++config SENSORS_Q54SJ108A2
++	tristate "Delta Power Supplies Q54SJ108A2"
++	help
++	  If you say yes here you get hardware monitoring support for Delta
++	  Q54SJ108A2 series Power Supplies.
++
++	  This driver can also be built as a module. If so, the module will
++	  be called q54sj108a2.
++
+ config SENSORS_TPS40422
+ 	tristate "TI TPS40422"
+ 	help
+diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+index 4c97ad0bd791..a50122cd455b 100644
+--- a/drivers/hwmon/pmbus/Makefile
++++ b/drivers/hwmon/pmbus/Makefile
+@@ -26,6 +26,7 @@ obj-$(CONFIG_SENSORS_MAX34440)	+= max34440.o
+ obj-$(CONFIG_SENSORS_MAX8688)	+= max8688.o
+ obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
+ obj-$(CONFIG_SENSORS_PXE1610)	+= pxe1610.o
++obj-$(CONFIG_SENSORS_Q54SJ108A2)	+= q54sj108a2.o
+ obj-$(CONFIG_SENSORS_TPS40422)	+= tps40422.o
+ obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
+ obj-$(CONFIG_SENSORS_UCD9000)	+= ucd9000.o
+diff --git a/drivers/hwmon/pmbus/q54sj108a2.c b/drivers/hwmon/pmbus/q54sj108a2.c
+new file mode 100755
+index 000000000000..1b434e3f7995
+--- /dev/null
++++ b/drivers/hwmon/pmbus/q54sj108a2.c
+@@ -0,0 +1,422 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Driver for Delta modules, Q54SJ108A2 series 1/4 Brick DC/DC
++ * Regulated Power Module
++ *
++ * Copyright 2020 Delta LLC.
++ */
++
++#include <linux/debugfs.h>
++#include <linux/i2c.h>
++#include <linux/module.h>
++#include <linux/of_device.h>
++#include "pmbus.h"
++
++#define STORE_DEFAULT_ALL         0x11
++#define ERASE_BLACKBOX_DATA       0xD1
++#define READ_HISTORY_EVENT_NUMBER 0xD2
++#define READ_HISTORY_EVENTS       0xE0
++#define SET_HISTORY_EVENT_OFFSET  0xE1
++#define PMBUS_CMD_FLASH_KEY_WRITE 0xEC
++
++enum chips {
++	Q54SJ108A2
++};
++
++enum {
++	Q54SJ108A2_DEBUGFS_OPERATION = 0,
++	Q54SJ108A2_DEBUGFS_CLEARFAULT,
++	Q54SJ108A2_DEBUGFS_WRITEPROTECT,
++	Q54SJ108A2_DEBUGFS_STOREDEFAULT,
++	Q54SJ108A2_DEBUGFS_VOOV_RESPONSE,
++	Q54SJ108A2_DEBUGFS_IOOC_RESPONSE,
++	Q54SJ108A2_DEBUGFS_PMBUS_VERSION,
++	Q54SJ108A2_DEBUGFS_MFR_ID,
++	Q54SJ108A2_DEBUGFS_MFR_MODEL,
++	Q54SJ108A2_DEBUGFS_MFR_REVISION,
++	Q54SJ108A2_DEBUGFS_MFR_LOCATION,
++	Q54SJ108A2_DEBUGFS_BLACKBOX_ERASE,
++	Q54SJ108A2_DEBUGFS_BLACKBOX_READ_OFFSET,
++	Q54SJ108A2_DEBUGFS_BLACKBOX_SET_OFFSET,
++	Q54SJ108A2_DEBUGFS_BLACKBOX_READ,
++	Q54SJ108A2_DEBUGFS_FLASH_KEY,
++	Q54SJ108A2_DEBUGFS_NUM_ENTRIES
++};
++
++struct q54sj108a2_data {
++	enum chips chip;
++	struct i2c_client *client;
++
++	int debugfs_entries[Q54SJ108A2_DEBUGFS_NUM_ENTRIES];
++};
++
++#define to_psu(x, y) container_of((x), struct q54sj108a2_data, debugfs_entries[(y)])
++
++static struct pmbus_driver_info q54sj108a2_info[] = {
++	[Q54SJ108A2] = {
++		.pages = 1,
++
++		/* Source : Delta Q54SJ108A2 */
++		.format[PSC_TEMPERATURE] = linear,
++		.format[PSC_VOLTAGE_IN] = linear,
++		.format[PSC_CURRENT_OUT] = linear,
++
++		.func[0] = PMBUS_HAVE_VIN |
++		PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
++		PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
++		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP |
++		PMBUS_HAVE_STATUS_INPUT,
++	},
++};
++
++static ssize_t q54sj108a2_debugfs_read(struct file *file, char __user *buf,
++				      size_t count, loff_t *ppos)
++{
++	int rc;
++	int *idxp = file->private_data;
++	int idx = *idxp;
++	struct q54sj108a2_data *psu = to_psu(idxp, idx);
++	char data[I2C_SMBUS_BLOCK_MAX + 2] = { 0 };
++	char data_char[I2C_SMBUS_BLOCK_MAX + 2] = { 0 };
++	char *res;
++
++	switch (idx) {
++	case Q54SJ108A2_DEBUGFS_OPERATION:
++		rc = i2c_smbus_read_byte_data(psu->client, PMBUS_OPERATION);
++		if (rc < 0)
++			return rc;
++
++		rc = snprintf(data, 3, "%02x", rc);
++		break;
++	case Q54SJ108A2_DEBUGFS_WRITEPROTECT:
++		rc = i2c_smbus_read_byte_data(psu->client, PMBUS_WRITE_PROTECT);
++		if (rc < 0)
++			return rc;
++
++		rc = snprintf(data, 3, "%02x", rc);
++		break;
++	case Q54SJ108A2_DEBUGFS_VOOV_RESPONSE:
++		rc = i2c_smbus_read_byte_data(psu->client, PMBUS_VOUT_OV_FAULT_RESPONSE);
++		if (rc < 0)
++			return rc;
++
++		rc = snprintf(data, 3, "%02x", rc);
++		break;
++	case Q54SJ108A2_DEBUGFS_IOOC_RESPONSE:
++		rc = i2c_smbus_read_byte_data(psu->client, PMBUS_IOUT_OC_FAULT_RESPONSE);
++		if (rc < 0)
++			return rc;
++
++		rc = snprintf(data, 3, "%02x", rc);
++		break;
++	case Q54SJ108A2_DEBUGFS_PMBUS_VERSION:
++		rc = i2c_smbus_read_byte_data(psu->client, PMBUS_REVISION);
++		if (rc < 0)
++			return rc;
++
++		rc = snprintf(data, 3, "%02x", rc);
++		break;
++	case Q54SJ108A2_DEBUGFS_MFR_ID:
++		rc = i2c_smbus_read_block_data(psu->client, PMBUS_MFR_ID, data);
++		if (rc < 0)
++			return rc;
++		break;
++	case Q54SJ108A2_DEBUGFS_MFR_MODEL:
++		rc = i2c_smbus_read_block_data(psu->client, PMBUS_MFR_MODEL, data);
++		if (rc < 0)
++			return rc;
++		break;
++	case Q54SJ108A2_DEBUGFS_MFR_REVISION:
++		rc = i2c_smbus_read_block_data(psu->client, PMBUS_MFR_REVISION, data);
++		if (rc < 0)
++			return rc;
++		break;
++	case Q54SJ108A2_DEBUGFS_MFR_LOCATION:
++		rc = i2c_smbus_read_block_data(psu->client, PMBUS_MFR_LOCATION, data);
++		if (rc < 0)
++			return rc;
++		break;
++	case Q54SJ108A2_DEBUGFS_BLACKBOX_READ_OFFSET:
++		rc = i2c_smbus_read_byte_data(psu->client, READ_HISTORY_EVENT_NUMBER);
++		if (rc < 0)
++			return rc;
++
++		rc = snprintf(data, 3, "%02x", rc);
++		break;
++	case Q54SJ108A2_DEBUGFS_BLACKBOX_READ:
++		rc = i2c_smbus_read_block_data(psu->client, READ_HISTORY_EVENTS, data);
++		if (rc < 0)
++			return rc;
++
++		res = bin2hex(data, data_char, 32);
++		rc = res - data;
++
++		break;
++	case Q54SJ108A2_DEBUGFS_FLASH_KEY:
++		rc = i2c_smbus_read_block_data(psu->client, PMBUS_CMD_FLASH_KEY_WRITE, data);
++		if (rc < 0)
++			return rc;
++
++		res = bin2hex(data, data_char, 4);
++		rc = res - data;
++
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	data[rc] = '\n';
++	rc += 2;
++
++	return simple_read_from_buffer(buf, count, ppos, data, rc);
++}
++
++static ssize_t q54sj108a2_debugfs_write(struct file *file, const char __user *buf,
++					size_t count, loff_t *ppos)
++{
++	u8 flash_key[4];
++	u8 dst_data;
++	ssize_t rc;
++	int *idxp = file->private_data;
++	int idx = *idxp;
++	struct q54sj108a2_data *psu = to_psu(idxp, idx);
++
++	rc = i2c_smbus_write_byte_data(psu->client, PMBUS_WRITE_PROTECT, 0);
++	if (rc)
++		return rc;
++
++	switch (idx) {
++	case Q54SJ108A2_DEBUGFS_OPERATION:
++		rc = kstrtou8_from_user(buf, count, 0, &dst_data);
++		if (rc < 0)
++			return rc;
++
++		rc = i2c_smbus_write_byte_data(psu->client, PMBUS_OPERATION, dst_data);
++		if (rc < 0)
++			return rc;
++
++		break;
++	case Q54SJ108A2_DEBUGFS_CLEARFAULT:
++		rc = i2c_smbus_write_byte(psu->client, PMBUS_CLEAR_FAULTS);
++		if (rc < 0)
++			return rc;
++
++		break;
++	case Q54SJ108A2_DEBUGFS_STOREDEFAULT:
++		flash_key[0] = 0x7E;
++		flash_key[1] = 0x15;
++		flash_key[2] = 0xDC;
++		flash_key[3] = 0x42;
++		rc = i2c_smbus_write_block_data(psu->client, PMBUS_CMD_FLASH_KEY_WRITE, 4, flash_key);
++		if (rc < 0)
++			return rc;
++
++		rc = i2c_smbus_write_byte(psu->client, STORE_DEFAULT_ALL);
++		if (rc < 0)
++			return rc;
++
++		break;
++	case Q54SJ108A2_DEBUGFS_VOOV_RESPONSE:
++		rc = kstrtou8_from_user(buf, count, 0, &dst_data);
++		if (rc < 0)
++			return rc;
++
++		rc = i2c_smbus_write_byte_data(psu->client, PMBUS_VOUT_OV_FAULT_RESPONSE, dst_data);
++		if (rc < 0)
++			return rc;
++
++		break;
++	case Q54SJ108A2_DEBUGFS_IOOC_RESPONSE:
++		rc = kstrtou8_from_user(buf, count, 0, &dst_data);
++		if (rc < 0)
++			return rc;
++
++		rc = i2c_smbus_write_byte_data(psu->client, PMBUS_IOUT_OC_FAULT_RESPONSE, dst_data);
++		if (rc < 0)
++			return rc;
++
++		break;
++	case Q54SJ108A2_DEBUGFS_BLACKBOX_ERASE:
++		rc = i2c_smbus_write_byte(psu->client, ERASE_BLACKBOX_DATA);
++		if (rc < 0)
++			return rc;
++
++		break;
++	case Q54SJ108A2_DEBUGFS_BLACKBOX_SET_OFFSET:
++		rc = kstrtou8_from_user(buf, count, 0, &dst_data);
++		if (rc < 0)
++			return rc;
++
++		rc = i2c_smbus_write_byte_data(psu->client, SET_HISTORY_EVENT_OFFSET, dst_data);
++		if (rc < 0)
++			return rc;
++
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	return count;
++}
++
++static const struct file_operations q54sj108a2_fops = {
++	.llseek = noop_llseek,
++	.read = q54sj108a2_debugfs_read,
++	.write = q54sj108a2_debugfs_write,
++	.open = simple_open,
++};
++
++static const struct i2c_device_id q54sj108a2_id[] = {
++	{ "Q54SJ108A2", Q54SJ108A2 },
++	{ },
++};
++
++MODULE_DEVICE_TABLE(i2c, q54sj108a2_id);
++
++static int q54sj108a2_probe(struct i2c_client *client)
++{
++	struct device *dev = &client->dev;
++	u8 buf[I2C_SMBUS_BLOCK_MAX + 1];
++	enum chips chip_id;
++	int ret, i;
++	struct dentry *debugfs;
++	struct dentry *q54sj108a2_dir;
++	struct q54sj108a2_data *psu;
++
++	if (!i2c_check_functionality(client->adapter,
++				     I2C_FUNC_SMBUS_BYTE_DATA |
++				     I2C_FUNC_SMBUS_WORD_DATA |
++				     I2C_FUNC_SMBUS_BLOCK_DATA))
++		return -ENODEV;
++
++	if (client->dev.of_node)
++		chip_id = (enum chips)(unsigned long)of_device_get_match_data(dev);
++	else
++		chip_id = i2c_match_id(q54sj108a2_id, client)->driver_data;
++
++	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, buf);
++	if (ret < 0) {
++		dev_err(&client->dev, "Failed to read Manufacturer ID\n");
++		return ret;
++	}
++	if (ret != 5 || strncmp(buf, "DELTA", 5)) {
++		buf[ret] = '\0';
++		dev_err(dev, "Unsupported Manufacturer ID '%s'\n", buf);
++		return -ENODEV;
++	}
++
++	/*
++	 * The chips support reading PMBUS_MFR_MODEL.
++	 */
++	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, buf);
++	if (ret < 0) {
++		dev_err(dev, "Failed to read Manufacturer Model\n");
++		return ret;
++	}
++	if (ret != 14 || strncmp(buf, "Q54SJ108A2", 10)) {
++		buf[ret] = '\0';
++		dev_err(dev, "Unsupported Manufacturer Model '%s'\n", buf);
++		return -ENODEV;
++	}
++
++	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_REVISION, buf);
++	if (ret < 0) {
++		dev_err(dev, "Failed to read Manufacturer Revision\n");
++		return ret;
++	}
++	if (ret != 4 || buf[0] != 'S') {
++		buf[ret] = '\0';
++		dev_err(dev, "Unsupported Manufacturer Revision '%s'\n", buf);
++		return -ENODEV;
++	}
++
++	ret = pmbus_do_probe(client, &q54sj108a2_info[chip_id]);
++	if (ret)
++		return ret;
++
++	psu = devm_kzalloc(&client->dev, sizeof(*psu), GFP_KERNEL);
++	if (!psu)
++		return 0;
++
++	psu->client = client;
++
++	debugfs = pmbus_get_debugfs_dir(client);
++
++	q54sj108a2_dir = debugfs_create_dir(client->name, debugfs);
++
++	for (i = 0; i < Q54SJ108A2_DEBUGFS_NUM_ENTRIES; ++i)
++		psu->debugfs_entries[i] = i;
++
++	debugfs_create_file("operation", 0644, q54sj108a2_dir,
++			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_OPERATION],
++			    &q54sj108a2_fops);
++	debugfs_create_file("clear_fault", 0200, q54sj108a2_dir,
++			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_CLEARFAULT],
++			    &q54sj108a2_fops);
++	debugfs_create_file("write_protect", 0444, q54sj108a2_dir,
++			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_WRITEPROTECT],
++			    &q54sj108a2_fops);
++	debugfs_create_file("store_default", 0200, q54sj108a2_dir,
++			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_STOREDEFAULT],
++			    &q54sj108a2_fops);
++	debugfs_create_file("vo_ov_response", 0644, q54sj108a2_dir,
++			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_VOOV_RESPONSE],
++			    &q54sj108a2_fops);
++	debugfs_create_file("io_oc_response", 0644, q54sj108a2_dir,
++			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_IOOC_RESPONSE],
++			    &q54sj108a2_fops);
++	debugfs_create_file("pmbus_revision", 0444, q54sj108a2_dir,
++			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_PMBUS_VERSION],
++			    &q54sj108a2_fops);
++	debugfs_create_file("mfr_id", 0444, q54sj108a2_dir,
++			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_MFR_ID],
++			    &q54sj108a2_fops);
++	debugfs_create_file("mfr_model", 0444, q54sj108a2_dir,
++			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_MFR_MODEL],
++			    &q54sj108a2_fops);
++	debugfs_create_file("mfr_revision", 0444, q54sj108a2_dir,
++			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_MFR_REVISION],
++			    &q54sj108a2_fops);
++	debugfs_create_file("mfr_location", 0444, q54sj108a2_dir,
++			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_MFR_LOCATION],
++			    &q54sj108a2_fops);
++	debugfs_create_file("blackbox_erase", 0200, q54sj108a2_dir,
++			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_BLACKBOX_ERASE],
++			    &q54sj108a2_fops);
++	debugfs_create_file("blackbox_read_offset", 0444, q54sj108a2_dir,
++			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_BLACKBOX_READ_OFFSET],
++			    &q54sj108a2_fops);
++	debugfs_create_file("blackbox_set_offset", 0200, q54sj108a2_dir,
++			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_BLACKBOX_SET_OFFSET],
++			    &q54sj108a2_fops);
++	debugfs_create_file("blackbox_read", 0444, q54sj108a2_dir,
++			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_BLACKBOX_READ],
++			    &q54sj108a2_fops);
++	debugfs_create_file("flash_key", 0444, q54sj108a2_dir,
++			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_FLASH_KEY],
++			    &q54sj108a2_fops);
++
++	return 0;
++}
++
++static const struct of_device_id q54sj108a2_of_match[] = {
++	{ .compatible = "delta,Q54SJ108A2", .data = (void *)Q54SJ108A2 },
++	{ },
++};
++
++MODULE_DEVICE_TABLE(of, q54sj108a2_of_match);
++
++static struct i2c_driver q54sj108a2_driver = {
++	.driver = {
++		.name = "Q54SJ108A2",
++		.of_match_table = q54sj108a2_of_match,
++	},
++	.probe_new = q54sj108a2_probe,
++	.id_table = q54sj108a2_id,
++};
++
++module_i2c_driver(q54sj108a2_driver);
++
++MODULE_AUTHOR("Xiao.Ma <xiao.mx.ma@deltaww.com>");
++MODULE_DESCRIPTION("PMBus driver for Delta Q54SJ108A2 series modules");
++MODULE_LICENSE("GPL");
+-- 
+2.25.1
+
