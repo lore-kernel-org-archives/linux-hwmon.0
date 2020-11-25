@@ -2,247 +2,118 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DF77C64E7A
-	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Nov 2020 12:25:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AAC34C5519F
+	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Nov 2020 14:41:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BFE99206F9
-	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Nov 2020 12:25:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3E55E2083E
+	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Nov 2020 14:41:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GyrkIL7r"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.b="rhB2jare"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726826AbgKYMYx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 25 Nov 2020 07:24:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48686 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727780AbgKYMYl (ORCPT
+        id S1729148AbgKYOlD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 25 Nov 2020 09:41:03 -0500
+Received: from gproxy5-pub.mail.unifiedlayer.com ([67.222.38.55]:54248 "EHLO
+        gproxy5-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725616AbgKYOlC (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 25 Nov 2020 07:24:41 -0500
-Received: from mail-vs1-xe44.google.com (mail-vs1-xe44.google.com [IPv6:2607:f8b0:4864:20::e44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D65C061A4F
-        for <linux-hwmon@vger.kernel.org>; Wed, 25 Nov 2020 04:24:40 -0800 (PST)
-Received: by mail-vs1-xe44.google.com with SMTP id r5so1095215vsp.7
-        for <linux-hwmon@vger.kernel.org>; Wed, 25 Nov 2020 04:24:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9IH0l2L/ELs04A0W/6GC4nhC0e+RvRGWJ1bAzD1+dFc=;
-        b=GyrkIL7rJc/Wrkz9wtYqXZYvGBry6qXFkQono0nmrBFDlUCiGmbX9ByD1wUhih87ZW
-         XCd/8etF0h65aGuVNHVvGVnSoIRV2cIFxWeuMsMEKDZ+SIKsK6eM3KIHPaY2Au+pxfCB
-         jFmSmO0a8jtSnIjbAi/709gkMW9hnqxggrhUNIGI/2GrlejcLn7tyz9MFlSEpE31y19Z
-         9ARaZhNBbaKZzII6ioDoEFmbbi01XI+4/fF65wWR3SGfZuCMoV2cgGUJ8Osa8sFeqdbz
-         KLllcyBsC3gtRPDbq4Yc+z3inKaZT7D05cYTb7CBHNDdR/afLH0A7E5JHrBWilMAefn4
-         uS6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9IH0l2L/ELs04A0W/6GC4nhC0e+RvRGWJ1bAzD1+dFc=;
-        b=SC+eS2qrjHwVI8eBrKpSgGA1bULDOFXulw3h9eBjz0xVLo+tD64ir1xk82WiX2mD29
-         uxCd+ffsVt/KWThYH+sDZA8AmdFgzFyNd8DNXFXIRs0RvhxEEu07OoeJbSkqh2lIxvfj
-         tFzizS9sxOm4UMCdDIwfdy54I+V31Le5nxBPpffo+o7C6gcUUt9gBVeoGWioEG9Cwqsf
-         WyVFlOJt8fuMs6bJ6nYJXYAWn8GMPjif5kMJp6NVzrQCE5Jfd4BQPVJUWqtXX1TB0FCq
-         nJCxleX+U2P36H3xNsArHLn9YgNYeAZ0e5Rnp5oYBP8FZWdmeCOJcPcA+pdL/yHwbCdE
-         rbcg==
-X-Gm-Message-State: AOAM532irMElSs2DP2v2eHoZrw7Vig+G0mTcjTiMD3A3o+fBXr5PJsG9
-        Yt/9Oy5pE/UsRoVWubXtdhTWGAmKXNH/AuS5sjDycMPrBinywA==
-X-Google-Smtp-Source: ABdhPJySo35UzNwHodlreVMfJuWPwHO1z+zkcbFfSYU3Avf+sN4n16LJPBb97SBockWyJEKx3Xs8q1wCvzejZmwrmAM=
-X-Received: by 2002:a62:7905:0:b029:197:f300:5a2a with SMTP id
- u5-20020a6279050000b0290197f3005a2amr2898775pfc.30.1606307078380; Wed, 25 Nov
- 2020 04:24:38 -0800 (PST)
+        Wed, 25 Nov 2020 09:41:02 -0500
+Received: from cmgw11.unifiedlayer.com (unknown [10.9.0.11])
+        by gproxy5.mail.unifiedlayer.com (Postfix) with ESMTP id EE7ED14056D
+        for <linux-hwmon@vger.kernel.org>; Wed, 25 Nov 2020 07:41:01 -0700 (MST)
+Received: from bh-25.webhostbox.net ([208.91.199.152])
+        by cmsmtp with ESMTP
+        id hvyfk4ZgcdCH5hvyfk9kke; Wed, 25 Nov 2020 07:41:01 -0700
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.3 cv=CKwEoyjD c=1 sm=1 tr=0
+ a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=kj9zAlcOel0A:10:nop_charset_1
+ a=nNwsprhYR40A:10:nop_rcvd_month_year
+ a=evQFzbml-YQA:10:endurance_base64_authed_username_1 a=i0EeH86SAAAA:8
+ a=gn4bIdh1MlNQuH4KYN4A:9 a=CjuIK1q_8ugA:10:nop_charset_2
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=whq5Ve+sFwJrmiYOMx+jfwgja+nzE1LKf0PSfqEI2lU=; b=rhB2jareZPLHqd3xOQIFEFcnGf
+        gukUK+o2EiH4je+MDxzjD2HE8v1HIlKu/dbUb2obz7I+nG0LIOK+4ecCKvxijM6EqrsYS4mUguHMq
+        dqdrM8GVtzWHeeOQbn3+dvXXsSpEzr/vtykS2WfrkrJ8u/4L2GUDOooQWqpPLizvcNa8xxZ4wsbsc
+        FUy8RKq+yhF+N2YL8yjsO6d3DtV3D4ZYVtO4fIMrkQAQaeApjDzyAHl4OyiUnHGBf4Gn4qt/tll+6
+        NUa64BmVeCSXDAZS1blsVtTKqG24Oo4phviykJahZG249mtIqf5S5NJQHU7zHog8eT4P+9AmrkF3S
+        chz89gWA==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:34486 helo=localhost)
+        by bh-25.webhostbox.net with esmtpa (Exim 4.93)
+        (envelope-from <linux@roeck-us.net>)
+        id 1khvyf-002UPP-31; Wed, 25 Nov 2020 14:41:01 +0000
+Date:   Wed, 25 Nov 2020 06:41:00 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Zhang Qilong <zhangqilong3@huawei.com>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (ina3221) Fix PM usage counter unbalance in
+ ina3221_write_enable
+Message-ID: <20201125144100.GA97684@roeck-us.net>
+References: <20201123102000.3864999-1-zhangqilong3@huawei.com>
 MIME-Version: 1.0
-References: <202011201129.B13FDB3C@keescook> <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <202011220816.8B6591A@keescook> <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com>
- <ca071decb87cc7e905411423c05a48f9fd2f58d7.camel@perches.com>
- <0147972a72bc13f3629de8a32dee6f1f308994b5.camel@HansenPartnership.com>
- <d8d1e9add08cdd4158405e77762d4946037208f8.camel@perches.com>
- <dbd2cb703ed9eefa7dde9281ea26ab0f7acc8afe.camel@HansenPartnership.com>
- <20201123130348.GA3119@embeddedor> <8f5611bb015e044fa1c0a48147293923c2d904e4.camel@HansenPartnership.com>
- <202011241327.BB28F12F6@keescook> <a841536fe65bb33f1c72ce2455a6eb47a0107565.camel@HansenPartnership.com>
-In-Reply-To: <a841536fe65bb33f1c72ce2455a6eb47a0107565.camel@HansenPartnership.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 25 Nov 2020 04:24:27 -0800
-Message-ID: <CAKwvOdkGBn7nuWTAqrORMeN1G+w3YwBfCqqaRD2nwvoAXKi=Aw@mail.gmail.com>
-Subject: Re: [Intel-wired-lan] [PATCH 000/141] Fix fall-through warnings for Clang
-To:     James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Joe Perches <joe@perches.com>,
-        Jakub Kicinski <kuba@kernel.org>, alsa-devel@alsa-project.org,
-        linux-atm-general@lists.sourceforge.net,
-        reiserfs-devel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        linux-fbdev@vger.kernel.org,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        linux-ide@vger.kernel.org, dm-devel@redhat.com,
-        keyrings@vger.kernel.org, linux-mtd@lists.infradead.org,
-        GR-everest-linux-l2@marvell.com, wcn36xx@lists.infradead.org,
-        samba-technical@lists.samba.org, linux-i3c@lists.infradead.org,
-        linux1394-devel@lists.sourceforge.net,
-        linux-afs@lists.infradead.org,
-        usb-storage@lists.one-eyed-alien.net, drbd-dev@lists.linbit.com,
-        devel@driverdev.osuosl.org, linux-cifs@vger.kernel.org,
-        rds-devel@oss.oracle.com, linux-scsi@vger.kernel.org,
-        linux-rdma@vger.kernel.org, oss-drivers@netronome.com,
-        bridge@lists.linux-foundation.org,
-        linux-security-module@vger.kernel.org,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        linux-stm32@st-md-mailman.stormreply.com, cluster-devel@redhat.com,
-        linux-acpi@vger.kernel.org, coreteam@netfilter.org,
-        intel-wired-lan@lists.osuosl.org, linux-input@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        tipc-discussion@lists.sourceforge.net, linux-ext4@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        selinux@vger.kernel.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        intel-gfx@lists.freedesktop.org, linux-geode@lists.infradead.org,
-        linux-can@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-gpio@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        linux-mediatek@lists.infradead.org, xen-devel@lists.xenproject.org,
-        nouveau@lists.freedesktop.org, linux-hams@vger.kernel.org,
-        ceph-devel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-hwmon@vger.kernel.org,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        linux-nfs@vger.kernel.org, GR-Linux-NIC-Dev@marvell.com,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Network Development <netdev@vger.kernel.org>,
-        linux-decnet-user@lists.sourceforge.net, linux-mmc@vger.kernel.org,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-sctp@vger.kernel.org, linux-usb@vger.kernel.org,
-        netfilter-devel@vger.kernel.org,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>, patches@opensource.cirrus.com,
-        linux-integrity@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201123102000.3864999-1-zhangqilong3@huawei.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1khvyf-002UPP-31
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:34486
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 42
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Nov 24, 2020 at 11:05 PM James Bottomley
-<James.Bottomley@hansenpartnership.com> wrote:
->
-> On Tue, 2020-11-24 at 13:32 -0800, Kees Cook wrote:
-> > We already enable -Wimplicit-fallthrough globally, so that's not the
-> > discussion. The issue is that Clang is (correctly) even more strict
-> > than GCC for this, so these are the remaining ones to fix for full
-> > Clang coverage too.
-> >
-> > People have spent more time debating this already than it would have
-> > taken to apply the patches. :)
->
-> You mean we've already spent 90% of the effort to come this far so we
-> might as well go the remaining 10% because then at least we get some
-> return? It's certainly a clinching argument in defence procurement ...
+On Mon, Nov 23, 2020 at 06:20:00PM +0800, Zhang Qilong wrote:
+> pm_runtime_get_sync will increment pm usage counter
+> even it failed. Forgetting to putting operation will
+> result in reference leak here. We fix it by replacing
+> it with pm_runtime_resume_and_get to keep usage counter
+> balanced.
+> 
+> Fixes: 323aeb0eb5d9a ("hwmon: (ina3221) Add PM runtime support")
+> Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
 
-So developers and distributions using Clang can't have
--Wimplicit-fallthrough enabled because GCC is less strict (which has
-been shown in this thread to lead to bugs)?  We'd like to have nice
-things too, you know.
+Applied.
 
-I even agree that most of the churn comes from
-
-case 0:
-  ++x;
-default:
-  break;
-
-which I have a patch for: https://reviews.llvm.org/D91895.  I agree
-that can never lead to bugs.  But that's not the sole case of this
-series, just most of them.
-
-Though, note how the reviewer (C++ spec editor and clang front end
-owner) in https://reviews.llvm.org/D91895 even asks in that review how
-maybe a new flag would be more appropriate for a watered
-down/stylistic variant of the existing behavior.  And if the current
-wording of Documentation/process/deprecated.rst around "fallthrough"
-is a straightforward rule of thumb, I kind of agree with him.
-
->
-> > This is about robustness and language wrangling. It's a big code-
-> > base, and this is the price of our managing technical debt for
-> > permanent robustness improvements. (The numbers I ran from Gustavo's
-> > earlier patches were that about 10% of the places adjusted were
-> > identified as legitimate bugs being fixed. This final series may be
-> > lower, but there are still bugs being found from it -- we need to
-> > finish this and shut the door on it for good.)
->
-> I got my six patches by analyzing the lwn.net report of the fixes that
-> was cited which had 21 of which 50% didn't actually change the emitted
-> code, and 25% didn't have a user visible effect.
->
-> But the broader point I'm making is just because the compiler people
-> come up with a shiny new warning doesn't necessarily mean the problem
-
-That's not what this is though; you're attacking a strawman.  I'd
-encourage you to bring that up when that actually occurs, unlike this
-case since it's actively hindering getting -Wimplicit-fallthrough
-enabled for Clang.  This is not a shiny new warning; it's already on
-for GCC and has existed in both compilers for multiple releases.
-
-And I'll also note that warnings are warnings and not errors because
-they cannot be proven to be bugs in 100% of cases, but they have led
-to bugs in the past.  They require a human to review their intent and
-remove ambiguities.  If 97% of cases would end in a break ("Expert C
-Programming: Deep C Secrets" - Peter van der Linden), then it starts
-to look to me like a language defect; certainly an incorrectly chosen
-default.  But the compiler can't know those 3% were intentional,
-unless you're explicit for those exceptional cases.
-
-> it's detecting is one that causes us actual problems in the code base.
-> I'd really be happier if we had a theory about what classes of CVE or
-> bug we could eliminate before we embrace the next new warning.
-
-We don't generally file CVEs and waiting for them to occur might be
-too reactive, but I agree that pointing to some additional
-documentation in commit messages about how a warning could lead to a
-bug would make it clearer to reviewers why being able to enable it
-treewide, even if there's no bug in their particular subsystem, is in
-the general interest of the commons.
-
-On Mon, Nov 23, 2020 at 7:58 AM James Bottomley
-<James.Bottomley@hansenpartnership.com> wrote:
->
-> We're also complaining about the inability to recruit maintainers:
->
-> https://www.theregister.com/2020/06/30/hard_to_find_linux_maintainers_says_torvalds/
->
-> And burn out:
->
-> http://antirez.com/news/129
->
-> The whole crux of your argument seems to be maintainers' time isn't
-> important so we should accept all trivial patches ... I'm pushing back
-> on that assumption in two places, firstly the valulessness of the time
-> and secondly that all trivial patches are valuable.
-
-It's critical to the longevity of any open source project that there
-are not single points of failure.  If someone is not expendable or
-replaceable (or claims to be) then that's a risk to the project and a
-bottleneck.  Not having a replacement in training or some form of
-redundancy is short sighted.
-
-If trivial patches are adding too much to your workload, consider
-training a co-maintainer or asking for help from one of your reviewers
-whom you trust.  I don't doubt it's hard to find maintainers, but
-existing maintainers should go out of their way to entrust
-co-maintainers especially when they find their workload becomes too
-high.  And reviewing/picking up trivial patches is probably a great
-way to get started.  If we allow too much knowledge of any one
-subsystem to collect with one maintainer, what happens when that
-maintainer leaves the community (which, given a finite lifespan, is an
-inevitability)?
--- 
 Thanks,
-~Nick Desaulniers
+Guenter
+
+> ---
+>  drivers/hwmon/ina3221.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
+> index 72cfdc007e60..d80bd3efcd6d 100644
+> --- a/drivers/hwmon/ina3221.c
+> +++ b/drivers/hwmon/ina3221.c
+> @@ -489,7 +489,7 @@ static int ina3221_write_enable(struct device *dev, int channel, bool enable)
+>  
+>  	/* For enabling routine, increase refcount and resume() at first */
+>  	if (enable) {
+> -		ret = pm_runtime_get_sync(ina->pm_dev);
+> +		ret = pm_runtime_resume_and_get(ina->pm_dev);
+>  		if (ret < 0) {
+>  			dev_err(dev, "Failed to get PM runtime\n");
+>  			return ret;
