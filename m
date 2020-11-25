@@ -2,156 +2,199 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AE6BC6379D
-	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Nov 2020 22:27:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4CC8C83016
+	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Nov 2020 22:45:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 10AD5206F9
-	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Nov 2020 22:27:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 812CA206B5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Nov 2020 22:45:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.b="yc0I02J9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mE3/9/w1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387490AbgKYW10 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 25 Nov 2020 17:27:26 -0500
-Received: from gproxy3-pub.mail.unifiedlayer.com ([69.89.30.42]:60646 "EHLO
-        gproxy3-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2387474AbgKYW1Z (ORCPT
+        id S1731956AbgKYWom (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 25 Nov 2020 17:44:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60936 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727365AbgKYWol (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 25 Nov 2020 17:27:25 -0500
-Received: from CMGW (unknown [10.9.0.13])
-        by gproxy3.mail.unifiedlayer.com (Postfix) with ESMTP id 1A0D64000E
-        for <linux-hwmon@vger.kernel.org>; Wed, 25 Nov 2020 15:27:23 -0700 (MST)
-Received: from bh-25.webhostbox.net ([208.91.199.152])
-        by cmsmtp with ESMTP
-        id i3FykoIaTi1lMi3FyknCon; Wed, 25 Nov 2020 15:27:23 -0700
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.2 cv=CoPPSjwD c=1 sm=1 tr=0
- a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=kj9zAlcOel0A:10 a=nNwsprhYR40A:10
- a=evQFzbml-YQA:10 a=k-42gJp3AAAA:8 a=VwQbUJbxAAAA:8 a=rCKKwiYUAAAA:20
- a=Sjg5zyESi43zRNGYTtgA:9 a=CjuIK1q_8ugA:10 a=uCSXFHLys93vLW5PjgO_:22
- a=AjGcO6oz07-iQ99wixmX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=GAxD1Bw9wbDDgLrYVtYOJKfJpiz/+m2eJJw+44jLvhE=; b=yc0I02J9RJ/Gj3JLD45LqdL3ue
-        G9VggGbR035jytGQ2AjM6ZQWqxkOj1h0iC+L9F+x/g2iRHaZg+VcbB0XpAkXn6xNl7Wn1WUTUDJsm
-        89YEK29O0dIBGfMBvud9Y10PNVWoShJkxeXykIzovdcHK+hKTIfkm/SLWqtKAiygZlp+p3EBlbxJ2
-        aYTvnwY8dZsf8jhaent3HneT+8sTKXjGJ9KzFznvLvm61iPb23I6EzOlS4aHpsuW2P7hIwMAFKwT7
-        wlhcvSQeam444XjkQ9dU8eoQBxWSwv8wBqZuGk7yC1m378K1Km1ws+6g5M7YoQ9pe0xjFDWlBh0XH
-        CxiJ5Fwg==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:35802 helo=localhost)
-        by bh-25.webhostbox.net with esmtpa (Exim 4.93)
-        (envelope-from <linux@roeck-us.net>)
-        id 1ki3Fy-001OZt-2b; Wed, 25 Nov 2020 22:27:22 +0000
-Date:   Wed, 25 Nov 2020 14:27:21 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Paul Barker <pbarker@konsulko.com>
-Cc:     Kamil Debski <kamil@wypas.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Dongjin Kim <tobetter@gmail.com>
-Subject: Re: [PATCH v2 0/4] pwm-fan: Support multiple tachometer inputs
-Message-ID: <20201125222721.GA106613@roeck-us.net>
-References: <20201113150853.155495-1-pbarker@konsulko.com>
- <CAM9ZRVvng=E_-ZPYSYwC0537+CxTv3=BsiWp0_eGprt8Jqgzkw@mail.gmail.com>
+        Wed, 25 Nov 2020 17:44:41 -0500
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CDD7C0617A7;
+        Wed, 25 Nov 2020 14:44:40 -0800 (PST)
+Received: by mail-wm1-x342.google.com with SMTP id h21so247913wmb.2;
+        Wed, 25 Nov 2020 14:44:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=mMrMdknFbsC77SFRvwwD3pm1cwl3V2MP65kzVJE6tY4=;
+        b=mE3/9/w1S1BsFafykdzrNl6nUKLQtv3irXzEz/AwtJdLppuZQnzVWeoYFC7Qb5OQef
+         2DAcZ7D6Froq/rlKPIBwqGtt0C/0XmhDJf/Ua0btTGl1wBl77rh04suLM7Drqc/fd1vb
+         erjCUGXrwTRfKAEK60/5plkWP59Lm5M7QZ9ENMraFyUEU5TYdKtuuKGBjQ65xtLyj0UE
+         nayIBzzwS8QdOAkDbWxTvDHZJGPoguOAiztDitejPSo1Rp931ceTN4KgHMls79AEVEp8
+         0UjkiGW0It0CwNfB/koaXcS1sEgjLFm2K1jcT9QDdZUmcgiCMPoll+6KvJ2hAfFlaA1V
+         8PSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=mMrMdknFbsC77SFRvwwD3pm1cwl3V2MP65kzVJE6tY4=;
+        b=R38/AmTlsvIM12T7AyYl9h5ED9p/mJot6malZaFBOIhS1UbeLy13OmOyiz1xgjm04T
+         /HydEJD7nW6ZSDAP65iNZ4ZyQpQlKfNvvG8Zrwvv8uLZSOWvDS2YWdYP5VxYEjwyVAE8
+         YSM+eHBamHifsktd0Jjq0qynS/ayYPbhL9PwSiXdby3yGWsiEU1fpts0VkT3C/7OPWXj
+         ocRKFhPpzn6ePa6qPzRQhHBuDfNd4agXbMDyMhpJ4ap7fdFyO0BWuBv8VWH5RgyxCUwY
+         6Y0qWuDQb3TIvXwQT3pLdiSqYvZXlMRLdWDiZDbV/WByUr20I1nWQ2LPTZlO1wjSr71m
+         2AEQ==
+X-Gm-Message-State: AOAM532eKSvBjVG+OsfR5iiFXRN7Ljtttg7gTeLIoTGmff0y9VxAQec7
+        jDz3jNowF+BUGdrP0/LKn/s=
+X-Google-Smtp-Source: ABdhPJzVXPr1uOlB1vaw2cfl6zSoOiLq1F6oo5r6Yg/UanqxqpZONWe00UKvdrBaRFZ4o0pgYT/ByA==
+X-Received: by 2002:a7b:cf0a:: with SMTP id l10mr6364382wmg.103.1606344279394;
+        Wed, 25 Nov 2020 14:44:39 -0800 (PST)
+Received: from [192.168.1.122] (cpc92720-cmbg20-2-0-cust364.5-4.cable.virginm.net. [82.21.83.109])
+        by smtp.gmail.com with ESMTPSA id h15sm6411655wrw.15.2020.11.25.14.44.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Nov 2020 14:44:38 -0800 (PST)
+Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        alsa-devel@alsa-project.org, amd-gfx@lists.freedesktop.org,
+        bridge@lists.linux-foundation.org, ceph-devel@vger.kernel.org,
+        cluster-devel@redhat.com, coreteam@netfilter.org,
+        devel@driverdev.osuosl.org, dm-devel@redhat.com,
+        drbd-dev@lists.linbit.com, dri-devel@lists.freedesktop.org,
+        GR-everest-linux-l2@marvell.com, GR-Linux-NIC-Dev@marvell.com,
+        intel-gfx@lists.freedesktop.org, intel-wired-lan@lists.osuosl.org,
+        keyrings@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+        linux-acpi@vger.kernel.org, linux-afs@lists.infradead.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net,
+        linux-block@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-cifs@vger.kernel.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-decnet-user@lists.sourceforge.net,
+        Ext4 Developers List <linux-ext4@vger.kernel.org>,
+        linux-fbdev@vger.kernel.org, linux-geode@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-hams@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-i3c@lists.infradead.org,
+        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input <linux-input@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-mmc@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
+        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        netfilter-devel@vger.kernel.org, nouveau@lists.freedesktop.org,
+        op-tee@lists.trustedfirmware.org, oss-drivers@netronome.com,
+        patches@opensource.cirrus.com, rds-devel@oss.oracle.com,
+        reiserfs-devel@vger.kernel.org, samba-technical@lists.samba.org,
+        selinux@vger.kernel.org, target-devel@vger.kernel.org,
+        tipc-discussion@lists.sourceforge.net,
+        usb-storage@lists.one-eyed-alien.net,
+        virtualization@lists.linux-foundation.org,
+        wcn36xx@lists.infradead.org,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        xen-devel@lists.xenproject.org, linux-hardening@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>, Joe Perches <joe@perches.com>
+References: <cover.1605896059.git.gustavoars@kernel.org>
+ <20201120105344.4345c14e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <202011201129.B13FDB3C@keescook>
+ <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <202011220816.8B6591A@keescook>
+ <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com>
+ <CANiq72nZrHWTA4_Msg6MP9snTyenC6-eGfD27CyfNSu7QoVZbw@mail.gmail.com>
+ <1c7d7fde126bc0acf825766de64bf2f9b888f216.camel@HansenPartnership.com>
+ <CANiq72m22Jb5_+62NnwX8xds2iUdWDMAqD8PZw9cuxdHd95W0A@mail.gmail.com>
+ <fc45750b6d0277c401015b7aa11e16cd15f32ab2.camel@HansenPartnership.com>
+ <CANiq72k5tpDoDPmJ0ZWc1DGqm+81Gi-uEENAtvEs9v3SZcx6_Q@mail.gmail.com>
+ <4993259d01a0064f8bb22770503490f9252f3659.camel@HansenPartnership.com>
+ <CANiq72kqO=bYMJnFS2uYRpgWATJ=uXxZuNUsTXT+3aLtrpnzvQ@mail.gmail.com>
+From:   Edward Cree <ecree.xilinx@gmail.com>
+Message-ID: <44005bde-f6d4-5eaa-39b8-1a5efeedb2d3@gmail.com>
+Date:   Wed, 25 Nov 2020 22:44:35 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAM9ZRVvng=E_-ZPYSYwC0537+CxTv3=BsiWp0_eGprt8Jqgzkw@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1ki3Fy-001OZt-2b
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:35802
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 4
-X-Org:  HG=direseller_whb_net_legacy;ORG=directi;
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
+In-Reply-To: <CANiq72kqO=bYMJnFS2uYRpgWATJ=uXxZuNUsTXT+3aLtrpnzvQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Nov 25, 2020 at 04:45:27PM +0000, Paul Barker wrote:
-> On Fri, 13 Nov 2020 at 15:09, Paul Barker <pbarker@konsulko.com> wrote:
-> >
-> > These changes were made to support a custom board where one PWM output
-> > is routed to two fans, each of which has a tachometer signal routed to a
-> > GPIO input on the SoC.
-> >
-> > As the custom board doesn't currently support the latest mainline kernel
-> > I've tested these changes on a SanCloud BeagleBone Enhanced using an
-> > oscilloscope to check the PWM output and a signal generator to simulate
-> > the fan tachometer signals. I've tested variants of the device tree with
-> > 0, 1 and 2 fan tachometer inputs configured to ensure the logic in the
-> > probe function is correct.
-> >
-> > The device tree bindings changes have been submitted in a separate
-> > series:
-> > https://lore.kernel.org/linux-devicetree/20200920180943.352526-1-pbarker@konsulko.com/
-> >
-> > These changes can also be pulled from:
-> >
-> >   https://gitlab.com/pbarker.dev/staging/linux.git
-> >   tag: for-hwmon/pwm-fan-tachometers-v2_2020-11-13
-> >
-> > Changes since v1:
-> >
-> >   * Split RPM calculation fix into a separate patch which has now been
-> >     accepted.
-> >
-> >   * Break the changes down into smaller patches so they're easier to
-> >     review.
-> >
-> >   * Rebased changes on hwmon-next.
-> >
-> > Paul Barker (4):
-> >   hwmon: pwm-fan: Refactor pwm_fan_probe
-> >   hwmon: pwm-fan: Dynamically setup attribute groups
-> >   hwmon: pwm-fan: Store tach data separately
-> >   hwmon: pwm-fan: Support multiple fan tachometers
-> >
-> >  drivers/hwmon/pwm-fan.c | 155 ++++++++++++++++++++++++----------------
-> >  1 file changed, 95 insertions(+), 60 deletions(-)
-> >
-> >
-> > base-commit: 414920a4a5d5613e4aa77c89944f9c1dc86b06c4
-> > --
-> > 2.29.2
-> >
-> 
-> Has anyone had a chance to look at this series? I see that the
-> corresponding dt-bindings change has been accepted into the hwmon-next
-> tree but I've not heard anything back on these patches.
-> 
-Still on my list. Sorry, I have been buried in work, and being stuck in
-the middle of nowhere (aka Wyoming) last week with a broken charge port
-on a Tesla didn't help.
+On 25/11/2020 00:32, Miguel Ojeda wrote:
+> I have said *authoring* lines of *this* kind takes a minute per line.
+> Specifically: lines fixing the fallthrough warning mechanically and
+> repeatedly where the compiler tells you to, and doing so full-time for
+> a month.
+<snip>
+> It is useful since it makes intent clear.
+To make the intent clear, you have to first be certain that you
+ understand the intent; otherwise by adding either a break or a
+ fallthrough to suppress the warning you are just destroying the
+ information that "the intent of this code is unknown".
+Figuring out the intent of a piece of unfamiliar code takes more
+ than 1 minute; just because
+    case foo:
+        thing;
+    case bar:
+        break;
+ produces identical code to
+    case foo:
+        thing;
+        break;
+    case bar:
+        break;
+ doesn't mean that *either* is correct — maybe the author meant
+ to write
+    case foo:
+        return thing;
+    case bar:
+        break;
+ and by inserting that break you've destroyed the marker that
+ would direct someone who knew what the code was about to look
+ at that point in the code and spot the problem.
+Thus, you *always* have to look at more than just the immediate
+ mechanical context of the code, to make a proper judgement that
+ yes, this was the intent.  If you think that that sort of thing
+ can be done in an *average* time of one minute, then I hope you
+ stay away from code I'm responsible for!
+One minute would be an optimistic target for code that, as the
+ maintainer, one is already somewhat familiar with.  For code
+ that you're seeing for the first time, as is usually the case
+ with the people doing these mechanical fix-a-warning patches,
+ it's completely unrealistic.
 
-> I also see that a patch just got sent to this list which will conflict
-> with this series
-> (https://lore.kernel.org/linux-hwmon/20201125163242.GA1264232@paju/T/#u).
-> It'd be good to get feedback so that either myself, Dongjin Kim or
-> both of us can re-work our patches to be compatible.
-> 
-I have seen it. I hope I'll get to your series over the weekend.
-Sorry for the delay.
+A warning is only useful because it makes you *think* about the
+ code.  If you suppress the warning without doing that thinking,
+ then you made the warning useless; and if the warning made you
+ think about code that didn't *need* it, then the warning was
+ useless from the start.
 
-Guenter
+So make your mind up: does Clang's stricter -Wimplicit-fallthrough
+ flag up code that needs thought (in which case the fixes take
+ effort both to author and to review) or does it flag up code
+ that can be mindlessly "fixed" (in which case the warning is
+ worthless)?  Proponents in this thread seem to be trying to
+ have it both ways.
+
+-ed
