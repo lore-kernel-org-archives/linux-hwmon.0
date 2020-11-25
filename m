@@ -2,195 +2,131 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D3E5C56201
-	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Nov 2020 16:33:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E5FDC83013
+	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Nov 2020 16:45:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2FC8C21527
-	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Nov 2020 16:33:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1B9FA21527
+	for <linux-hwmon@archiver.kernel.org>; Wed, 25 Nov 2020 16:45:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CZNpdfGR"
+	dkim=pass (1024-bit key) header.d=konsulko.com header.i=@konsulko.com header.b="qHemW7gA"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731396AbgKYQcx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 25 Nov 2020 11:32:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59224 "EHLO
+        id S1732150AbgKYQpj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 25 Nov 2020 11:45:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730719AbgKYQcx (ORCPT
+        with ESMTP id S1732124AbgKYQpj (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 25 Nov 2020 11:32:53 -0500
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A86C0613D4;
-        Wed, 25 Nov 2020 08:32:53 -0800 (PST)
-Received: by mail-pf1-x444.google.com with SMTP id y7so2802716pfq.11;
-        Wed, 25 Nov 2020 08:32:53 -0800 (PST)
+        Wed, 25 Nov 2020 11:45:39 -0500
+Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BCB8C0613D4
+        for <linux-hwmon@vger.kernel.org>; Wed, 25 Nov 2020 08:45:39 -0800 (PST)
+Received: by mail-oi1-x243.google.com with SMTP id j15so3513875oih.4
+        for <linux-hwmon@vger.kernel.org>; Wed, 25 Nov 2020 08:45:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:subject:message-id:mime-version:content-disposition;
-        bh=6fLXoA7PiZQVIkhM/9E4bl7cs888uadju3YY2CeMd0A=;
-        b=CZNpdfGRkiqMC8e51Csl4YelMAnjpLkWVSSLMCBTlPwzKE2z+5payHxO3MeT9WJkYR
-         n6LSaJ/aBQ0gVPaJaI+yxRku+VBPP3eCKmLjs+spPMCAoU+SoiJTKd6+x/uCYvGWRmhm
-         ECF1UxLQ7SsTPmd6DFPN+s3mU7T1BoUxfbtURXTzr3a19Ig/6tLxs6Mx0xxkYk9weLXU
-         LLmvUEklvxhAkmfeorhE5c8lQrE74MhsicJKxroRdAODjaGlASjzhLxG4u1J+IwFrSZa
-         vn+06JJDkYkarRJIdWmZZACw7pqfB6T6B2AUlZwDDBsPtQehhamMk8LmKS6lKEuod3ic
-         V2Fg==
+        d=konsulko.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=//aeNIk4e2H5K/5bLZxrHq7kfsI+sxwIOG3dlkQOdLY=;
+        b=qHemW7gAjn7Ma4W/tHso5itx2bGM3ICY71/izQ+JD5MxjtC7Q+zjvBynjEuCgNKvhv
+         IL2t1DSwnBPHYg+HSzDLM2CtZn2H3J4fOaZHDh0sB0ErQtsA2oRWU4LW3gD+HFmR7KnB
+         1AnItlrWfcWhQGcgOkZhv+a454Bdh1pMhr09w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition;
-        bh=6fLXoA7PiZQVIkhM/9E4bl7cs888uadju3YY2CeMd0A=;
-        b=fm89dUb7kCvlo0jFFStmKpz4GW+R3KBDdQj4z4aqaPT7VFkf0BW0K/INjmIMvnN2NW
-         nrq103lN41By9lRze30jNk42sZlSDFEodqovqnASS4iuRa53V7htijlSiWijxUc9tdDm
-         jH8DxzH4Cog5ItOXcch00kYXGKqk3GPUa0Pp+uUnMXQ9sDEbaomGekyPNMvW+Gh7v5lm
-         gk/CG+Sw1xMxmG/sgh3G77ukKwrKlav5ODV9++llHHmYB+1tAsrHAi+AcfTD5twFKb0C
-         0EOonO/T2h/AseKDP9WoOvnEIEtO2LhwkpcJ0GKD+sIn3jk1wZDCEK4LSxANaHHdKTTS
-         0Z2g==
-X-Gm-Message-State: AOAM533pjQxk5YLB3EL7QX8f5MQfMGhkBgmKmGe2OFHtQuKwAN9emCPK
-        y9SV5GO9T2LN2ClZJhv+nXs=
-X-Google-Smtp-Source: ABdhPJyWrphxD+wQM8UWkGfwLi4rstYwkvd0Vgk1p55hHG3yEST4I/TkHq4Z6u6ysSe/2upnfABZxQ==
-X-Received: by 2002:a17:90a:5d93:: with SMTP id t19mr5057545pji.220.1606321972544;
-        Wed, 25 Nov 2020 08:32:52 -0800 (PST)
-Received: from paju ([116.124.119.85])
-        by smtp.gmail.com with ESMTPSA id y1sm2369925pfe.80.2020.11.25.08.32.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Nov 2020 08:32:51 -0800 (PST)
-Date:   Thu, 26 Nov 2020 01:32:42 +0900
-From:   Dongjin Kim <tobetter@gmail.com>
-To:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (pwm-fan) add fan pwm1_enable attribute
-Message-ID: <20201125163242.GA1264232@paju>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=//aeNIk4e2H5K/5bLZxrHq7kfsI+sxwIOG3dlkQOdLY=;
+        b=NXR3ffwI+F1nK7I5TvcLoRust4avtvCS54/K3lWXENdHgshPexGr4kidAnFML1purn
+         ic+xzufts1ftrqBnStlK7DJHdfDx+73Qt1WoKlN7bP1O8KUTY/kMAcvXYEJ5UxojAIqS
+         vB5c4bmQI3CdSLyFmgw062RG3s4VrxEgf6lchUBygW3gT4oB+3cKcoru/9devpdtjEZv
+         sHvQhSAFFc9GCpYXuq+Wyz86ak4bUKjC7hMduoPav1gDFLcVnaWPw4DMfR9TxTMxLJEu
+         T2pvgU0bkfJPeg/CPEvOM8hNhde4gqSTRXHl+0o5aivHgoqM3uH5s5P4XT2gok56LSRr
+         bQoA==
+X-Gm-Message-State: AOAM530mmWI4D0vmtqP6Qug+3YoT01fxHTDak0d+w9CYoj0cQXraJ4Kd
+        qIT3EjXM8P3fZWDzXuJz602KoOcg478L2pv82qoaQw==
+X-Google-Smtp-Source: ABdhPJzYOWObgQ+4fBeg2bGVJnX8RJycdhCLxyJ1uETC9h0SGng4Klu9S3sPvZgwQlGTaeyjNaFBbgtq/LMS2ayxq1Y=
+X-Received: by 2002:aca:4d51:: with SMTP id a78mr2720393oib.27.1606322738128;
+ Wed, 25 Nov 2020 08:45:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20201113150853.155495-1-pbarker@konsulko.com>
+In-Reply-To: <20201113150853.155495-1-pbarker@konsulko.com>
+From:   Paul Barker <pbarker@konsulko.com>
+Date:   Wed, 25 Nov 2020 16:45:27 +0000
+Message-ID: <CAM9ZRVvng=E_-ZPYSYwC0537+CxTv3=BsiWp0_eGprt8Jqgzkw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] pwm-fan: Support multiple tachometer inputs
+To:     Kamil Debski <kamil@wypas.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, Dongjin Kim <tobetter@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This patch adds to new attribute 'pwm1_enable' to change the fan speed
-control method as documented in 'Documentation/hwmon/sysfs-interface'.
+On Fri, 13 Nov 2020 at 15:09, Paul Barker <pbarker@konsulko.com> wrote:
+>
+> These changes were made to support a custom board where one PWM output
+> is routed to two fans, each of which has a tachometer signal routed to a
+> GPIO input on the SoC.
+>
+> As the custom board doesn't currently support the latest mainline kernel
+> I've tested these changes on a SanCloud BeagleBone Enhanced using an
+> oscilloscope to check the PWM output and a signal generator to simulate
+> the fan tachometer signals. I've tested variants of the device tree with
+> 0, 1 and 2 fan tachometer inputs configured to ensure the logic in the
+> probe function is correct.
+>
+> The device tree bindings changes have been submitted in a separate
+> series:
+> https://lore.kernel.org/linux-devicetree/20200920180943.352526-1-pbarker@konsulko.com/
+>
+> These changes can also be pulled from:
+>
+>   https://gitlab.com/pbarker.dev/staging/linux.git
+>   tag: for-hwmon/pwm-fan-tachometers-v2_2020-11-13
+>
+> Changes since v1:
+>
+>   * Split RPM calculation fix into a separate patch which has now been
+>     accepted.
+>
+>   * Break the changes down into smaller patches so they're easier to
+>     review.
+>
+>   * Rebased changes on hwmon-next.
+>
+> Paul Barker (4):
+>   hwmon: pwm-fan: Refactor pwm_fan_probe
+>   hwmon: pwm-fan: Dynamically setup attribute groups
+>   hwmon: pwm-fan: Store tach data separately
+>   hwmon: pwm-fan: Support multiple fan tachometers
+>
+>  drivers/hwmon/pwm-fan.c | 155 ++++++++++++++++++++++++----------------
+>  1 file changed, 95 insertions(+), 60 deletions(-)
+>
+>
+> base-commit: 414920a4a5d5613e4aa77c89944f9c1dc86b06c4
+> --
+> 2.29.2
+>
 
-Signed-off-by: Dongjin Kim <tobetter@gmail.com>
----
- drivers/hwmon/pwm-fan.c | 52 ++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 46 insertions(+), 6 deletions(-)
+Has anyone had a chance to look at this series? I see that the
+corresponding dt-bindings change has been accepted into the hwmon-next
+tree but I've not heard anything back on these patches.
 
-diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-index 1f63807c0399..834275309421 100644
---- a/drivers/hwmon/pwm-fan.c
-+++ b/drivers/hwmon/pwm-fan.c
-@@ -39,6 +39,7 @@ struct pwm_fan_ctx {
- 	unsigned int pwm_fan_max_state;
- 	unsigned int *pwm_fan_cooling_levels;
- 	struct thermal_cooling_device *cdev;
-+	int enable;
- };
- 
- /* This handler assumes self resetting edge triggered interrupt. */
-@@ -76,6 +77,10 @@ static int  __set_pwm(struct pwm_fan_ctx *ctx, unsigned long pwm)
- 	struct pwm_state state = { };
- 
- 	mutex_lock(&ctx->lock);
-+
-+	if (ctx->enable == 0)
-+		pwm = MAX_PWM;
-+
- 	if (ctx->pwm_value == pwm)
- 		goto exit_set_pwm_err;
- 
-@@ -137,11 +142,42 @@ static ssize_t rpm_show(struct device *dev,
- 	return sprintf(buf, "%u\n", ctx->rpm);
- }
- 
-+static ssize_t enable_store(struct device *dev,
-+		struct device_attribute *attr,
-+		const char *buf, size_t count)
-+{
-+	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
-+	int err;
-+	unsigned long val;
-+
-+	err = kstrtoul(buf, 10, &val);
-+	if (err)
-+		return err;
-+
-+	mutex_lock(&ctx->lock);
-+	ctx->enable = val;
-+	mutex_unlock(&ctx->lock);
-+
-+	err = __set_pwm(ctx, ctx->pwm_fan_cooling_levels[ctx->pwm_fan_state]);
-+
-+	return err ? err : count;
-+}
-+
-+static ssize_t enable_show(struct device *dev, struct device_attribute *attr,
-+			   char *buf)
-+{
-+	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
-+
-+	return sprintf(buf, "%u\n", ctx->enable);
-+}
-+
- static SENSOR_DEVICE_ATTR_RW(pwm1, pwm, 0);
-+static SENSOR_DEVICE_ATTR_RW(pwm1_enable, enable, 0);
- static SENSOR_DEVICE_ATTR_RO(fan1_input, rpm, 0);
- 
- static struct attribute *pwm_fan_attrs[] = {
- 	&sensor_dev_attr_pwm1.dev_attr.attr,
-+	&sensor_dev_attr_pwm1_enable.dev_attr.attr,
- 	&sensor_dev_attr_fan1_input.dev_attr.attr,
- 	NULL,
- };
-@@ -153,7 +189,7 @@ static umode_t pwm_fan_attrs_visible(struct kobject *kobj, struct attribute *a,
- 	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
- 
- 	/* Hide fan_input in case no interrupt is available  */
--	if (n == 1 && ctx->irq <= 0)
-+	if (n == 2 && ctx->irq <= 0)
- 		return 0;
- 
- 	return a->mode;
-@@ -200,7 +236,7 @@ static int
- pwm_fan_set_cur_state(struct thermal_cooling_device *cdev, unsigned long state)
- {
- 	struct pwm_fan_ctx *ctx = cdev->devdata;
--	int ret;
-+	int ret = 0;
- 
- 	if (!ctx || (state > ctx->pwm_fan_max_state))
- 		return -EINVAL;
-@@ -208,10 +244,12 @@ pwm_fan_set_cur_state(struct thermal_cooling_device *cdev, unsigned long state)
- 	if (state == ctx->pwm_fan_state)
- 		return 0;
- 
--	ret = __set_pwm(ctx, ctx->pwm_fan_cooling_levels[state]);
--	if (ret) {
--		dev_err(&cdev->device, "Cannot set pwm!\n");
--		return ret;
-+	if (ctx->enable >= 2) {
-+		ret = __set_pwm(ctx, ctx->pwm_fan_cooling_levels[state]);
-+		if (ret) {
-+			dev_err(&cdev->device, "Cannot set pwm!\n");
-+			return ret;
-+		}
- 	}
- 
- 	ctx->pwm_fan_state = state;
-@@ -298,6 +336,8 @@ static int pwm_fan_probe(struct platform_device *pdev)
- 	if (IS_ERR(ctx->pwm))
- 		return dev_err_probe(dev, PTR_ERR(ctx->pwm), "Could not get PWM\n");
- 
-+	ctx->enable = 2;
-+
- 	platform_set_drvdata(pdev, ctx);
- 
- 	ctx->irq = platform_get_irq_optional(pdev, 0);
+I also see that a patch just got sent to this list which will conflict
+with this series
+(https://lore.kernel.org/linux-hwmon/20201125163242.GA1264232@paju/T/#u).
+It'd be good to get feedback so that either myself, Dongjin Kim or
+both of us can re-work our patches to be compatible.
+
+Thanks,
+
 -- 
-2.25.1
-
+Paul Barker
+Konsulko Group
