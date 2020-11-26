@@ -2,163 +2,224 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44FC5C56202
-	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Nov 2020 11:40:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62C34C83016
+	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Nov 2020 14:54:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 77DEB20658
-	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Nov 2020 11:40:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1EB8420B80
+	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Nov 2020 14:54:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="QGPf2fBj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QWuS1TBf"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726062AbgKZLkW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 26 Nov 2020 06:40:22 -0500
-Received: from mout02.posteo.de ([185.67.36.66]:38659 "EHLO mout02.posteo.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725980AbgKZLkV (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 26 Nov 2020 06:40:21 -0500
-Received: from submission (posteo.de [89.146.220.130]) 
-        by mout02.posteo.de (Postfix) with ESMTPS id 97A602400FC
-        for <linux-hwmon@vger.kernel.org>; Thu, 26 Nov 2020 12:40:19 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-        t=1606390819; bh=mPeZ5XsgllBppPwyq/izzl8/zrGd7JvDlZWqr+4K+M0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=QGPf2fBjJ3hGepwiBtTJZSeoxGezscXVTJnFR1tUtALNtneDjs+62Qb8m6Qlu3XJu
-         OvFfYzXGZY9GeqzgyNcgQ8nAx92M0S5CB5xYZBMZWzAeWTdYZgeqNTPga0P6L3EA75
-         V6mRisPAziaWkP/shlFfUeP2LUwUYhDBcYo+gEYfqRbiRNoy58cygCtDnEdKxTfn2L
-         Hq5qHhIvVlRPN6jflkzJOmkkWPjB3dY8bxjTxDX61j6B6RBnjoM8jIBfBwy6A8lzx6
-         5XwqPFmkmv0AxO/dDIlm6UQxg2mtWZWLWH/c3EBHjvW7HzLueK767OdkeEQtgQYrUy
-         XtPHJiU8/31ig==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4ChbR62jq0z6tm5;
-        Thu, 26 Nov 2020 12:40:18 +0100 (CET)
-Date:   Thu, 26 Nov 2020 12:40:16 +0100
-From:   Wilken Gottwalt <wilken.gottwalt@posteo.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
-Subject: [PATCH] hwmon: corsair-psu: update supported devices
-Message-ID: <X7+T4aZSUuzfsf7H@monster.powergraphx.local>
+        id S2391272AbgKZOxn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 26 Nov 2020 09:53:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41656 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391237AbgKZOxk (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 26 Nov 2020 09:53:40 -0500
+Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2597BC0617A7;
+        Thu, 26 Nov 2020 06:53:40 -0800 (PST)
+Received: by mail-yb1-xb42.google.com with SMTP id 2so1842167ybc.12;
+        Thu, 26 Nov 2020 06:53:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=DTotsfb8u+PB0eT0g4gTrA/vgT4HfiDZTYQ/geteWC4=;
+        b=QWuS1TBfImi/m9J+5lB37414TjwoB+kfRyX/7ohuLNDuEazbBA4fEE506RPmuhzrQT
+         KCYao+uRLv4Su9SW/eKLjGfymcNDAcVP9irkT5MfO/ys+N1YXqwwODp/at6Hjf5mbn7y
+         sEjBq+fitA5RwLT9szzutyPemHxF/3vzz+qMkDnIA1HF+rIjtAU7PcoRO+GQ0ANzP2/3
+         4RgPAdoGGim7svP8Zrp9IWC0s7kVtrSQn/PXobh5aGfJoVk3uyVZYliED/q0Nk6tCoA8
+         W9fyUHPup50QVVdVd9NqYx0m2pkDUcyuxLwwV68mOS3NFLJOgvtFKpngAgg7rBEfKLyO
+         Kn5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=DTotsfb8u+PB0eT0g4gTrA/vgT4HfiDZTYQ/geteWC4=;
+        b=mBK0BS6TVWjBRFU3odjyPBI0qUdtX5J2whJBBOZokPbmjZIFVhPQnqE5GmfY4vHvbV
+         HT2pTD/gdZPIyz+Ka8PZGwpqbqdnkJfeOU9ZWd1J0G+AjKdTWQiUQCXttTdwVpWBkqMv
+         ZINBj1InBzUZ/P06rN6Bt3BjJ6CSLqJSeAuQxg9CxkWZIOoaLDaG++1QWREVsBaSYvRt
+         rJ6vRbz1dUvdEIH2YPGs/ain50d2odcAPpiaD9QrMy94hESh3GeN4484YDZQR0EzvWHR
+         D1wuVku4ZKmbiM7N92dZI/sc7+qWB6e5/CKVhuCqFPMTebfStQrhTXq966yIKfcdlSzb
+         lORw==
+X-Gm-Message-State: AOAM530vshkiTFDvlahcV12UmE3qEmIlTM0l8dSkFhzBb5xKoNJCfxZ0
+        N+i4NOp+YhaNoPiX0GTlQqWA0Bm14r406uJVaEc=
+X-Google-Smtp-Source: ABdhPJxnOXTYq+iR4KCiqWmvI5brXjGTtWFP5n3J8AJAa70YoLiXvitjZtrbfPlByRts+Q0mJZBucXgMnTrbOCoAA44=
+X-Received: by 2002:a25:aac5:: with SMTP id t63mr5128050ybi.22.1606402419264;
+ Thu, 26 Nov 2020 06:53:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <cover.1605896059.git.gustavoars@kernel.org> <20201120105344.4345c14e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <202011201129.B13FDB3C@keescook> <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <202011220816.8B6591A@keescook> <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com>
+ <CANiq72nZrHWTA4_Msg6MP9snTyenC6-eGfD27CyfNSu7QoVZbw@mail.gmail.com>
+ <1c7d7fde126bc0acf825766de64bf2f9b888f216.camel@HansenPartnership.com>
+ <CANiq72m22Jb5_+62NnwX8xds2iUdWDMAqD8PZw9cuxdHd95W0A@mail.gmail.com>
+ <fc45750b6d0277c401015b7aa11e16cd15f32ab2.camel@HansenPartnership.com>
+ <CANiq72k5tpDoDPmJ0ZWc1DGqm+81Gi-uEENAtvEs9v3SZcx6_Q@mail.gmail.com>
+ <4993259d01a0064f8bb22770503490f9252f3659.camel@HansenPartnership.com>
+ <CANiq72kqO=bYMJnFS2uYRpgWATJ=uXxZuNUsTXT+3aLtrpnzvQ@mail.gmail.com> <44005bde-f6d4-5eaa-39b8-1a5efeedb2d3@gmail.com>
+In-Reply-To: <44005bde-f6d4-5eaa-39b8-1a5efeedb2d3@gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Thu, 26 Nov 2020 15:53:27 +0100
+Message-ID: <CANiq72nobq=ptWK-qWxU91JHqkKhMcRtJNnw2XJd5-vSJWZd8Q@mail.gmail.com>
+Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
+To:     Edward Cree <ecree.xilinx@gmail.com>
+Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Kees Cook <keescook@chromium.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        alsa-devel@alsa-project.org,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        bridge@lists.linux-foundation.org, ceph-devel@vger.kernel.org,
+        cluster-devel@redhat.com, coreteam@netfilter.org,
+        devel@driverdev.osuosl.org, dm-devel@redhat.com,
+        drbd-dev@lists.linbit.com,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        GR-everest-linux-l2@marvell.com, GR-Linux-NIC-Dev@marvell.com,
+        intel-gfx@lists.freedesktop.org, intel-wired-lan@lists.osuosl.org,
+        keyrings@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+        linux-acpi@vger.kernel.org, linux-afs@lists.infradead.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-atm-general@lists.sourceforge.net,
+        linux-block@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-cifs@vger.kernel.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-decnet-user@lists.sourceforge.net,
+        Ext4 Developers List <linux-ext4@vger.kernel.org>,
+        linux-fbdev@vger.kernel.org, linux-geode@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-hams@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-i3c@lists.infradead.org,
+        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input <linux-input@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-mmc@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
+        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-rdma@vger.kernel.org,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        netfilter-devel@vger.kernel.org, nouveau@lists.freedesktop.org,
+        op-tee@lists.trustedfirmware.org, oss-drivers@netronome.com,
+        patches@opensource.cirrus.com, rds-devel@oss.oracle.com,
+        reiserfs-devel@vger.kernel.org, samba-technical@lists.samba.org,
+        selinux@vger.kernel.org, target-devel@vger.kernel.org,
+        tipc-discussion@lists.sourceforge.net,
+        usb-storage@lists.one-eyed-alien.net,
+        virtualization@lists.linux-foundation.org,
+        wcn36xx@lists.infradead.org,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        xen-devel@lists.xenproject.org, linux-hardening@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>, Joe Perches <joe@perches.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Adds support for another Corsair PSUs series: AX760i, AX860i, AX1200i,
-AX1500i and AX1600i. The first 3 power supplies are supported through
-the Corsair Link USB Dongle which is some kind of USB/Serial/TTL
-converter especially made for the COM ports of these power supplies.
-There are 3 known revisions of these adapters. The AX1500i power supply
-has revision 3 built into the case and AX1600i is the only one in that
-series, which has an unique usb hid id like the RM/RX series.
+On Wed, Nov 25, 2020 at 11:44 PM Edward Cree <ecree.xilinx@gmail.com> wrote=
+:
+>
+> To make the intent clear, you have to first be certain that you
+>  understand the intent; otherwise by adding either a break or a
+>  fallthrough to suppress the warning you are just destroying the
+>  information that "the intent of this code is unknown".
 
-The patch also changes the usb hid ids to use upper case letters to be
-consistent with the rest of the hex numbers in the driver and updates
-the hwmon documentation.
+If you don't know what the intent of your own code is, then you
+*already* have a problem in your hands.
 
-This patch adds:
-- hwmon/corsair-psu documentation update
-- corsair-psu driver update
+> Figuring out the intent of a piece of unfamiliar code takes more
+>  than 1 minute; just because
+>     case foo:
+>         thing;
+>     case bar:
+>         break;
+>  produces identical code to
+>     case foo:
+>         thing;
+>         break;
+>     case bar:
+>         break;
+>  doesn't mean that *either* is correct =E2=80=94 maybe the author meant
 
-Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
----
- Documentation/hwmon/corsair-psu.rst | 10 +++++++++
- drivers/hwmon/Kconfig               |  7 +++---
- drivers/hwmon/corsair-psu.c         | 33 +++++++++++++++++++----------
- 3 files changed, 36 insertions(+), 14 deletions(-)
+What takes 1 minute is adding it *mechanically* by the author, i.e. so
+that you later compare whether codegen is the same.
 
-diff --git a/Documentation/hwmon/corsair-psu.rst b/Documentation/hwmon/corsair-psu.rst
-index 396b95c9a76a..6227e9046d73 100644
---- a/Documentation/hwmon/corsair-psu.rst
-+++ b/Documentation/hwmon/corsair-psu.rst
-@@ -7,6 +7,16 @@ Supported devices:
- 
- * Corsair Power Supplies
- 
-+  Corsair AX760i (by Corsair Link USB Dongle)
-+
-+  Corsair AX860i (by Corsair Link USB Dongle)
-+
-+  Corsair AX1200i (by Corsair Link USB Dongle)
-+
-+  Corsair AX1500i (by builtin Corsair Link USB Dongle)
-+
-+  Corsair AX1600i
-+
-   Corsair HX550i
- 
-   Corsair HX650i
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 716df51edc87..3c059fc23cd6 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -453,11 +453,12 @@ config SENSORS_CORSAIR_PSU
- 	tristate "Corsair PSU HID controller"
- 	depends on HID
- 	help
--	  If you say yes here you get support for Corsair PSUs with a HID
-+	  If you say yes here you get support for Corsair PSUs with an USB HID
- 	  interface.
- 	  Currently this driver supports the (RM/HX)550i, (RM/HX)650i,
--	  (RM/HX)750i, (RM/HX)850i, (RM/HX)1000i and HX1200i power supplies
--	  by Corsair.
-+	  (RM/HX)750i, (RM/HX)850i, (RM/HX)1000i, HX1200i and AX1600i power
-+	  supplies by Corsair. The AX760i, AX860i, AX1200i and AX1500i
-+	  power supplies are supported through the Corsair Link USB Dongle.
- 
- 	  This driver can also be built as a module. If so, the module
- 	  will be called corsair-psu.
-diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
-index 99494056f4bd..0146dda3e2c3 100644
---- a/drivers/hwmon/corsair-psu.c
-+++ b/drivers/hwmon/corsair-psu.c
-@@ -571,17 +571,28 @@ static int corsairpsu_raw_event(struct hid_device *hdev, struct hid_report *repo
- }
- 
- static const struct hid_device_id corsairpsu_idtable[] = {
--	{ HID_USB_DEVICE(0x1b1c, 0x1c03) }, /* Corsair HX550i */
--	{ HID_USB_DEVICE(0x1b1c, 0x1c04) }, /* Corsair HX650i */
--	{ HID_USB_DEVICE(0x1b1c, 0x1c05) }, /* Corsair HX750i */
--	{ HID_USB_DEVICE(0x1b1c, 0x1c06) }, /* Corsair HX850i */
--	{ HID_USB_DEVICE(0x1b1c, 0x1c07) }, /* Corsair HX1000i */
--	{ HID_USB_DEVICE(0x1b1c, 0x1c08) }, /* Corsair HX1200i */
--	{ HID_USB_DEVICE(0x1b1c, 0x1c09) }, /* Corsair RM550i */
--	{ HID_USB_DEVICE(0x1b1c, 0x1c0a) }, /* Corsair RM650i */
--	{ HID_USB_DEVICE(0x1b1c, 0x1c0b) }, /* Corsair RM750i */
--	{ HID_USB_DEVICE(0x1b1c, 0x1c0c) }, /* Corsair RM850i */
--	{ HID_USB_DEVICE(0x1b1c, 0x1c0d) }, /* Corsair RM1000i */
-+	/*
-+	 * The Corsair USB/COM Dongles appear in at least 3 different revisions, where rev 1 and 2
-+	 * are commonly used with the AX760i, AX860i and AX1200i, while rev3 is rarely seen with
-+	 * these PSUs. Rev3 is also build into the AX1500i, while the AX1600i is the first PSU of
-+	 * this series which has an unique usb hid id. Though, the actual device name is part of
-+	 * the HID message protocol, so it doesn't matter which dongle is connected.
-+	 */
-+	{ HID_USB_DEVICE(0x1B1C, 0x1C00) }, /* Corsair Link USB/COM Dongle rev1 */
-+	{ HID_USB_DEVICE(0x1B1C, 0x1C01) }, /* Corsair Link USB/COM Dongle rev2 */
-+	{ HID_USB_DEVICE(0x1B1C, 0x1C02) }, /* Corsair Link USB/COM Dongle rev3 (AX1500i) */
-+	{ HID_USB_DEVICE(0x1B1C, 0x1C03) }, /* Corsair HX550i */
-+	{ HID_USB_DEVICE(0x1B1C, 0x1C04) }, /* Corsair HX650i */
-+	{ HID_USB_DEVICE(0x1B1C, 0x1C05) }, /* Corsair HX750i */
-+	{ HID_USB_DEVICE(0x1B1C, 0x1C06) }, /* Corsair HX850i */
-+	{ HID_USB_DEVICE(0x1B1C, 0x1C07) }, /* Corsair HX1000i */
-+	{ HID_USB_DEVICE(0x1B1C, 0x1C08) }, /* Corsair HX1200i */
-+	{ HID_USB_DEVICE(0x1B1C, 0x1C09) }, /* Corsair RM550i */
-+	{ HID_USB_DEVICE(0x1B1C, 0x1C0A) }, /* Corsair RM650i */
-+	{ HID_USB_DEVICE(0x1B1C, 0x1C0B) }, /* Corsair RM750i */
-+	{ HID_USB_DEVICE(0x1B1C, 0x1C0C) }, /* Corsair RM850i */
-+	{ HID_USB_DEVICE(0x1B1C, 0x1C0D) }, /* Corsair RM1000i */
-+	{ HID_USB_DEVICE(0x1B1C, 0x1C11) }, /* Corsair AX1600i */
- 	{ },
- };
- MODULE_DEVICE_TABLE(hid, corsairpsu_idtable);
--- 
-2.29.2
+>  to write
+>     case foo:
+>         return thing;
+>     case bar:
+>         break;
+>  and by inserting that break you've destroyed the marker that
+>  would direct someone who knew what the code was about to look
+>  at that point in the code and spot the problem.
 
+Then it means you already have a bug. This patchset gives the
+maintainer a chance to notice it, which is a good thing. The "you've
+destroyed the market" claim is bogus, because:
+  1. you were not looking into it
+  2. you didn't notice the bug so far
+  3. is implicit -- harder to spot
+  4. is only useful if you explicitly take a look at this kind of bug.
+So why don't you do it now?
+
+> Thus, you *always* have to look at more than just the immediate
+>  mechanical context of the code, to make a proper judgement that
+>  yes, this was the intent.
+
+I find that is the responsibility of the maintainers and reviewers for
+tree-wide patches like this, assuming they want. They can also keep
+the behavior (and the bugs) without spending time. Their choice.
+
+> If you think that that sort of thing
+>  can be done in an *average* time of one minute, then I hope you
+>  stay away from code I'm responsible for!
+
+Please don't accuse others of recklessness or incompetence, especially
+if you didn't understand what they said.
+
+> A warning is only useful because it makes you *think* about the
+>  code.  If you suppress the warning without doing that thinking,
+>  then you made the warning useless; and if the warning made you
+>  think about code that didn't *need* it, then the warning was
+>  useless from the start.
+
+We are not suppressing the warning. Quite the opposite, in fact.
+
+> So make your mind up: does Clang's stricter -Wimplicit-fallthrough
+>  flag up code that needs thought (in which case the fixes take
+>  effort both to author and to review)
+
+As I said several times already, it does take time to review if the
+maintainer wants to take the chance to see if they had a bug to begin
+with, but it does not require thought for the author if they just go
+for equivalent codegen.
+
+> or does it flag up code
+>  that can be mindlessly "fixed" (in which case the warning is
+>  worthless)?  Proponents in this thread seem to be trying to
+>  have it both ways.
+
+A warning is not worthless just because you can mindlessly fix it.
+There are many counterexamples, e.g. many
+checkpatch/lint/lang-format/indentation warnings, functional ones like
+the `if (a =3D b)` warning...
+
+Cheers,
+Miguel
