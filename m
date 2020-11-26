@@ -2,264 +2,208 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FE64C56202
-	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Nov 2020 15:42:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2110C64E75
+	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Nov 2020 16:18:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2DEFB21D40
-	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Nov 2020 15:42:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 829B4207BC
+	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Nov 2020 16:18:31 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K31kxDd9"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UrXDoUgT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730602AbgKZPmy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 26 Nov 2020 10:42:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49292 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729947AbgKZPmy (ORCPT
+        id S2391361AbgKZQSa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 26 Nov 2020 11:18:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:30253 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2391443AbgKZQSa (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 26 Nov 2020 10:42:54 -0500
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79DE2C0613D4;
-        Thu, 26 Nov 2020 07:42:54 -0800 (PST)
-Received: by mail-pg1-x541.google.com with SMTP id t3so1998257pgi.11;
-        Thu, 26 Nov 2020 07:42:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=CH+cRNcg6MuSmBZwmsnT45warB+8Gw1kJctD4TAiICU=;
-        b=K31kxDd9vM9/hNaDD0lbBgcCmZiYStH3NzemVSJgFmcw8f/MPpCJ8JKrD1YQmDaaoI
-         7PwA6QG/BHw9meKkyCnMlsVyTSwcCdJaILsEWHcYdcvEe3I+xUh3iu/xhqiLC01r2IYK
-         Q0hDxOzw2uGumOK/hPsvjYqYXVduPo+VpQzkuymFCva+Z/ho4/tFOd5dmQlXctoRsa/0
-         YIrimRiFTmmtPXizxUaGfGF0mITQV1B7EfSMnA22z1igx5h7+rTktVYM4ZzXUTeercel
-         cEvUaAJmKrbatCt50YGDX5Z/CCJ+BNEfi3/TPKeDwUECZEbyX2cyt+yw1mgIULCh9A3K
-         3BvA==
+        Thu, 26 Nov 2020 11:18:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1606407508;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=IL7sPB68gF1YeWIUFuBJ//YIBDjI3bDL6qHHKubt/Z0=;
+        b=UrXDoUgTxqj1WRS8neld6HV6fanuCB2c0WlpqmfwON3ejDu/FMVt0X7ml3vyqXOkPXTaHP
+        iyzjRcaEhT909GCHvuy4UukfBBVO3DDHbtx6yRTBEFxNxYSd2Xp6GyufOqP8gIVepFFwdR
+        sF5812evLGCZkSl+1M/68FsLiI2eGX4=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-500-9k7cobA_OpOpBoI23hfSmw-1; Thu, 26 Nov 2020 11:18:26 -0500
+X-MC-Unique: 9k7cobA_OpOpBoI23hfSmw-1
+Received: by mail-qt1-f200.google.com with SMTP id t17so1509542qtp.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 26 Nov 2020 08:18:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CH+cRNcg6MuSmBZwmsnT45warB+8Gw1kJctD4TAiICU=;
-        b=h6Q0TdbQeeviKV0SqJX1jrF4BQpEV/bdQsomC1k9GeUzPQcSiiQKfcI2Zav2hHxUZP
-         P37hxancQpmiBueApIbLGxr6hiplm7dEdnKGSLoogAEU3xJpWrGpGX4/b1mjPTDR2wBj
-         DYocEKt0+TZ28mcJo8p00DegKyRaNlIfWeoR7/44jwYyiobCkmuETTislXpa3H851hyi
-         JgZ9QSDvNyyUecOuk0YYGdZMwW+uRt2kUkJe2tItpgyWQqjhvdmnFs2Vm0xsUbngutPw
-         UrkxPkyXgAb57qM6pcWRb9zQhOUN9UWs2PLrA97gg5WAQ+Xo3cRaWCeb0hM2Qeg2/kvB
-         IlTA==
-X-Gm-Message-State: AOAM53039j2WxlTy7ASYYfphM35Omz4hODHj24QCJIqGgfBb08YLkzWG
-        nibsThqOPofVICQ9MOkA5Y4=
-X-Google-Smtp-Source: ABdhPJzrJUJJBUX9aOuyg94JNER1KvknscYF0DOo3GMaSmBan1j7fJNSIZluMNo5qqqaxgowoPGwRA==
-X-Received: by 2002:aa7:824d:0:b029:18b:ad77:1a2b with SMTP id e13-20020aa7824d0000b029018bad771a2bmr3117593pfn.25.1606405373935;
-        Thu, 26 Nov 2020 07:42:53 -0800 (PST)
-Received: from paju ([116.124.119.85])
-        by smtp.gmail.com with ESMTPSA id fh22sm7383602pjb.45.2020.11.26.07.42.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Nov 2020 07:42:52 -0800 (PST)
-Date:   Fri, 27 Nov 2020 00:42:47 +0900
-From:   Dongjin Kim <tobetter@gmail.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (pwm-fan) add fan pwm1_enable attribute
-Message-ID: <20201126154247.GA24875@paju>
-References: <20201125163242.GA1264232@paju>
- <20201126020536.GE111386@roeck-us.net>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IL7sPB68gF1YeWIUFuBJ//YIBDjI3bDL6qHHKubt/Z0=;
+        b=s5E2XFN4UCjL/Q7WS7BBYUqQtva7KHTjAUZ1hNfn+vTirF88g2ECKIBhlioM8o9fVN
+         HhIty94+T0XqnxiIgg7URbZTVMJ/3WGPraw4r4AMW1K+vhnn9ttWExfbvtBCAO89TsJf
+         xq0EgD7Yav+4Ysps1NRDafBSugMZ7Q+4eDL7Q4hfr2s4YAa0KglMnJdAx9F3lXf/wlVC
+         ugpR7Y6/vscDHKaxarp8mXrQUM1pRrGh8AETn3fBxR6f4r4EegGWI/opwaJQG7r9s+Xc
+         /8l9kPb7jDNXwk2Cs8BseZCcdwhXZL8uIw6vs2QL5Yr3lSKzzrkGCzrDDdnngkIfaiYp
+         WRKA==
+X-Gm-Message-State: AOAM530gKSoZ0MhgdJAdnhHpMxgjiAizT5rWs8GWVpGjWTadKKIlzhUx
+        xB/0V0zg5FCQtfnB8Elf4zcIg4tE1S3FoO7vXMjbVK15tb3L03JEnocvIRH03wDaVnzRm3O/04Y
+        puxUsgNYSUtbwtnW+ozX2GfkZF9EHY35Xu0MmOBE=
+X-Received: by 2002:ac8:bc7:: with SMTP id p7mr3699875qti.91.1606407505950;
+        Thu, 26 Nov 2020 08:18:25 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzCU4CKAolN2PpaYdMoKCHma/+NC3lHjkQkQkRPTWC20j3rANbYTTy+FG9V7n634RRlgf0kcsxPjR4LO+NB5fA=
+X-Received: by 2002:a37:ac8:: with SMTP id 191mr3793888qkk.381.1606407504531;
+ Thu, 26 Nov 2020 08:18:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201126020536.GE111386@roeck-us.net>
+References: <cover.1605896059.git.gustavoars@kernel.org> <20201120105344.4345c14e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <202011201129.B13FDB3C@keescook> <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <202011220816.8B6591A@keescook> <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com>
+ <CANiq72nZrHWTA4_Msg6MP9snTyenC6-eGfD27CyfNSu7QoVZbw@mail.gmail.com>
+ <1c7d7fde126bc0acf825766de64bf2f9b888f216.camel@HansenPartnership.com>
+ <CANiq72m22Jb5_+62NnwX8xds2iUdWDMAqD8PZw9cuxdHd95W0A@mail.gmail.com>
+ <fc45750b6d0277c401015b7aa11e16cd15f32ab2.camel@HansenPartnership.com>
+ <CANiq72k5tpDoDPmJ0ZWc1DGqm+81Gi-uEENAtvEs9v3SZcx6_Q@mail.gmail.com>
+ <4993259d01a0064f8bb22770503490f9252f3659.camel@HansenPartnership.com>
+ <CANiq72kqO=bYMJnFS2uYRpgWATJ=uXxZuNUsTXT+3aLtrpnzvQ@mail.gmail.com>
+ <44005bde-f6d4-5eaa-39b8-1a5efeedb2d3@gmail.com> <CANiq72nobq=ptWK-qWxU91JHqkKhMcRtJNnw2XJd5-vSJWZd8Q@mail.gmail.com>
+ <CAMuHMdV5kOakvZJMWLxbpigFPS+Xuw6DVYsWCWZy7wGsv3idcw@mail.gmail.com>
+In-Reply-To: <CAMuHMdV5kOakvZJMWLxbpigFPS+Xuw6DVYsWCWZy7wGsv3idcw@mail.gmail.com>
+From:   Karol Herbst <kherbst@redhat.com>
+Date:   Thu, 26 Nov 2020 17:18:13 +0100
+Message-ID: <CACO55tsBj3gLECoMWtViDitd7fVTnW+Cp0LVmqYkR=QFBJkEmQ@mail.gmail.com>
+Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        bridge@lists.linux-foundation.org,
+        target-devel <target-devel@vger.kernel.org>,
+        linux-iio@vger.kernel.org,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        virtualization@lists.linux-foundation.org,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        linux-ide@vger.kernel.org, dm-devel@redhat.com,
+        keyrings@vger.kernel.org,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        GR-everest-linux-l2@marvell.com, wcn36xx@lists.infradead.org,
+        linux-i3c@lists.infradead.org,
+        linux1394-devel@lists.sourceforge.net,
+        linux-afs@lists.infradead.org,
+        Lars Ellenberg <drbd-dev@lists.linbit.com>,
+        driverdevel <devel@driverdev.osuosl.org>,
+        linux-cifs@vger.kernel.org, rds-devel@oss.oracle.com,
+        scsi <linux-scsi@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        oss-drivers@netronome.com, linux-atm-general@lists.sourceforge.net,
+        ceph-devel <ceph-devel@vger.kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        linux-stm32@st-md-mailman.stormreply.com, cluster-devel@redhat.com,
+        usb-storage@lists.one-eyed-alien.net, coreteam@netfilter.org,
+        intel-wired-lan@lists.osuosl.org,
+        linux-input <linux-input@vger.kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Ext4 Developers List <linux-ext4@vger.kernel.org>,
+        NetFilter <netfilter-devel@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>, selinux@vger.kernel.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        linux-sctp@vger.kernel.org, reiserfs-devel@vger.kernel.org,
+        linux-geode@lists.infradead.org, linux-block@vger.kernel.org,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        op-tee@lists.trustedfirmware.org,
+        linux-mediatek@lists.infradead.org, xen-devel@lists.xenproject.org,
+        Nouveau Dev <nouveau@lists.freedesktop.org>,
+        linux-hams@vger.kernel.org,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        linux-can@vger.kernel.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-hwmon@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        GR-Linux-NIC-Dev@marvell.com, Linux-MM <linux-mm@kvack.org>,
+        Network Development <netdev@vger.kernel.org>,
+        linux-decnet-user@lists.sourceforge.net,
+        samba-technical@lists.samba.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        tipc-discussion@lists.sourceforge.net,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        patches@opensource.cirrus.com, Joe Perches <joe@perches.com>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        "open list:NFS, SUNRPC, AND..." <linux-nfs@vger.kernel.org>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Nov 25, 2020 at 06:05:36PM -0800, Guenter Roeck wrote:
-> On Thu, Nov 26, 2020 at 01:32:42AM +0900, Dongjin Kim wrote:
-> > This patch adds to new attribute 'pwm1_enable' to change the fan speed
-> > control method as documented in 'Documentation/hwmon/sysfs-interface'.
-> > 
-> > Signed-off-by: Dongjin Kim <tobetter@gmail.com>
-> 
-> The new attribute needs to be documented in
-> Documentation/hwmon/pwm-fan.rst, with supported values.
-> 
-> > ---
-> >  drivers/hwmon/pwm-fan.c | 52 ++++++++++++++++++++++++++++++++++++-----
-> >  1 file changed, 46 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-> > index 1f63807c0399..834275309421 100644
-> > --- a/drivers/hwmon/pwm-fan.c
-> > +++ b/drivers/hwmon/pwm-fan.c
-> > @@ -39,6 +39,7 @@ struct pwm_fan_ctx {
-> >  	unsigned int pwm_fan_max_state;
-> >  	unsigned int *pwm_fan_cooling_levels;
-> >  	struct thermal_cooling_device *cdev;
-> > +	int enable;
-> >  };
-> >  
-> >  /* This handler assumes self resetting edge triggered interrupt. */
-> > @@ -76,6 +77,10 @@ static int  __set_pwm(struct pwm_fan_ctx *ctx, unsigned long pwm)
-> >  	struct pwm_state state = { };
-> >  
-> >  	mutex_lock(&ctx->lock);
-> > +
-> > +	if (ctx->enable == 0)
-> > +		pwm = MAX_PWM;
-> > +
-> >  	if (ctx->pwm_value == pwm)
-> >  		goto exit_set_pwm_err;
-> >  
-> > @@ -137,11 +142,42 @@ static ssize_t rpm_show(struct device *dev,
-> >  	return sprintf(buf, "%u\n", ctx->rpm);
-> >  }
-> >  
-> > +static ssize_t enable_store(struct device *dev,
-> > +		struct device_attribute *attr,
-> > +		const char *buf, size_t count)
-> > +{
-> > +	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
-> > +	int err;
-> > +	unsigned long val;
-> > +
-> > +	err = kstrtoul(buf, 10, &val);
-> > +	if (err)
-> > +		return err;
-> > +
-> 
-> 'val' must be validated and only accept permitted values.
-Sure.
-> 
-> > +	mutex_lock(&ctx->lock);
-> > +	ctx->enable = val;
-> > +	mutex_unlock(&ctx->lock);
-> > +
-> > +	err = __set_pwm(ctx, ctx->pwm_fan_cooling_levels[ctx->pwm_fan_state]);
-> > +
-> > +	return err ? err : count;
-> > +}
-> > +
-> > +static ssize_t enable_show(struct device *dev, struct device_attribute *attr,
-> > +			   char *buf)
-> > +{
-> > +	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
-> > +
-> > +	return sprintf(buf, "%u\n", ctx->enable);
-> > +}
-> > +
-> >  static SENSOR_DEVICE_ATTR_RW(pwm1, pwm, 0);
-> > +static SENSOR_DEVICE_ATTR_RW(pwm1_enable, enable, 0);
-> >  static SENSOR_DEVICE_ATTR_RO(fan1_input, rpm, 0);
-> >  
-> >  static struct attribute *pwm_fan_attrs[] = {
-> >  	&sensor_dev_attr_pwm1.dev_attr.attr,
-> > +	&sensor_dev_attr_pwm1_enable.dev_attr.attr,
-> >  	&sensor_dev_attr_fan1_input.dev_attr.attr,
-> >  	NULL,
-> >  };
-> > @@ -153,7 +189,7 @@ static umode_t pwm_fan_attrs_visible(struct kobject *kobj, struct attribute *a,
-> >  	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
-> >  
-> >  	/* Hide fan_input in case no interrupt is available  */
-> > -	if (n == 1 && ctx->irq <= 0)
-> > +	if (n == 2 && ctx->irq <= 0)
-> >  		return 0;
-> >  
-> >  	return a->mode;
-> > @@ -200,7 +236,7 @@ static int
-> >  pwm_fan_set_cur_state(struct thermal_cooling_device *cdev, unsigned long state)
-> >  {
-> >  	struct pwm_fan_ctx *ctx = cdev->devdata;
-> > -	int ret;
-> > +	int ret = 0;
-> >  
-> >  	if (!ctx || (state > ctx->pwm_fan_max_state))
-> >  		return -EINVAL;
-> > @@ -208,10 +244,12 @@ pwm_fan_set_cur_state(struct thermal_cooling_device *cdev, unsigned long state)
-> >  	if (state == ctx->pwm_fan_state)
-> >  		return 0;
-> >  
-> > -	ret = __set_pwm(ctx, ctx->pwm_fan_cooling_levels[state]);
-> > -	if (ret) {
-> > -		dev_err(&cdev->device, "Cannot set pwm!\n");
-> > -		return ret;
-> > +	if (ctx->enable >= 2) {
-> 
-> What is "automatic" here ? I don't see how this driver or the underlying
-> pwm controller/chip would support automatic fan speed control. This is
-> completely independent of thermal control: thermal device support does _not_
-> imply or suggest "automatic" fan speed control from a pwm chip perspective.
-> 
-My understanding of 'automatic' is to set the fan speed by a thermal device
-with the trip points, it changes the cooling state and change the fan speed.
-Please correct me if I am wrong.
-
-> This makes me also very concerned about this attribute in the first please:
-> All it does, in its current implementation, is to disable thermal device 
-> control. That is not the idea here, and it doesn't make any sense to me.
-> On the contrary, all I can find is that it is dangerous.
-> 
-I don't intend to change the thermal control itself in 'manual' mode, but does
-not change the fan speed with given cooling state. In 'automatic' mode, the
-fan speed will be changed by the thermal device.
-
-> Please describe in detail what you think this attribute is supposed to
-> accomplish, and why you think it is needed or even makes sense. Overriding
-> thermal control doesn't make sense to me: If you want that, just disable
-> thermal control, or don't register this device as cooling device in the
-> first place.  Other than that, the whole driver implies manual pwm control.
-> That means pwm can already be "disabled" by writing a 0 pwm value. An
-> additional attributes doesn't add value and only makes the driver ABI
-> unnecessarily complex. So please prepare a detailed rationale to convince
-> me otherwise.
+On Thu, Nov 26, 2020 at 4:28 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
 >
-I am using this driver to run a fan on ARM SBC and thought 'fancontrol' can
-help to map the fan speed with pwm value if necessary instead of using the pwm
-values in a device tree by writing '1' to 'pwm1_enable'. When this driver is
-not registered as a cooling device, as you suggested, OS should provide the
-default fancontrol config to run fully in manual mode if my understanding is
-correct. Based on this what I am thinking is that OS images for ARM SBC should
-have a fan control service or a tool if it allows user to change the fan speed.
-But this could be very various for all SBC, I would prefer to provide the
-default cooling device in the device tree to prevent the absence of fan
-control due to the missing or wrong config.
+> Hi Miguel,
+>
+> On Thu, Nov 26, 2020 at 3:54 PM Miguel Ojeda
+> <miguel.ojeda.sandonis@gmail.com> wrote:
+> > On Wed, Nov 25, 2020 at 11:44 PM Edward Cree <ecree.xilinx@gmail.com> wrote:
+> > > To make the intent clear, you have to first be certain that you
+> > >  understand the intent; otherwise by adding either a break or a
+> > >  fallthrough to suppress the warning you are just destroying the
+> > >  information that "the intent of this code is unknown".
+> >
+> > If you don't know what the intent of your own code is, then you
+> > *already* have a problem in your hands.
+>
+> The maintainer is not necessarily the owner/author of the code, and
+> thus may not know the intent of the code.
+>
+> > > or does it flag up code
+> > >  that can be mindlessly "fixed" (in which case the warning is
+> > >  worthless)?  Proponents in this thread seem to be trying to
+> > >  have it both ways.
+> >
+> > A warning is not worthless just because you can mindlessly fix it.
+> > There are many counterexamples, e.g. many
+> > checkpatch/lint/lang-format/indentation warnings, functional ones like
+> > the `if (a = b)` warning...
+>
+> BTW, you cannot mindlessly fix the latter, as you cannot know if
+> "(a == b)" or "((a = b))" was intended, without understanding the code
+> (and the (possibly unavailable) data sheet, and the hardware, ...).
+>
 
-> We can have a separate discussion if disabling a pwm controller using the
-> hwmon ABI should disable that pwm controller from a thermal (cooling) device
-> perspective. If so, we'll need to think about the implications. We can not
-> just disable thermal cooling device support without telling the thermal
-> subsystem that this means of temperature control doesn't work anymore.
-> That should, however, be a completely separate discussion, independent
-> of this driver, and it should include thermal subsystem maintainers
-> and the thermal subsystem mailing list.
-Ok, thank you for your advice and review. :)
+to allow assignments in if statements was clearly a mistake and if you
+need outside information to understand the code, your code is the
+issue already.
 
-Dongjin.
-> 
-> Thanks,
-> Guenter
-> 
-> > +		ret = __set_pwm(ctx, ctx->pwm_fan_cooling_levels[state]);
-> > +		if (ret) {
-> > +			dev_err(&cdev->device, "Cannot set pwm!\n");
-> > +			return ret;
-> > +		}
-> >  	}
-> >  
-> >  	ctx->pwm_fan_state = state;
-> > @@ -298,6 +336,8 @@ static int pwm_fan_probe(struct platform_device *pdev)
-> >  	if (IS_ERR(ctx->pwm))
-> >  		return dev_err_probe(dev, PTR_ERR(ctx->pwm), "Could not get PWM\n");
-> >  
-> > +	ctx->enable = 2;
-> > +
-> >  	platform_set_drvdata(pdev, ctx);
-> >  
-> >  	ctx->irq = platform_get_irq_optional(pdev, 0);
-> > -- 
-> > 2.25.1
-> > 
+> P.S. So far I've stayed out of this thread, as I like it if the compiler
+>      flags possible mistakes.  After all I was the one fixing new
+>      "may be used uninitialized" warnings thrown up by gcc-4.1, until
+>      (a bit later than) support for that compiler was removed...
+>
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
+> _______________________________________________
+> dri-devel mailing list
+> dri-devel@lists.freedesktop.org
+> https://lists.freedesktop.org/mailman/listinfo/dri-devel
+>
+
