@@ -7,63 +7,65 @@ X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C13F2C56201
-	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Nov 2020 01:39:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B18BFC56201
+	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Nov 2020 01:45:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3404620B1F
-	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Nov 2020 01:39:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3D7CC20B1F
+	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Nov 2020 01:45:43 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.b="i5PBsdhH"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.b="yLV7LShA"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731411AbgKZBjG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 25 Nov 2020 20:39:06 -0500
-Received: from gproxy5-pub.mail.unifiedlayer.com ([67.222.38.55]:38545 "EHLO
-        gproxy5-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731060AbgKZBjG (ORCPT
+        id S1731040AbgKZBp1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 25 Nov 2020 20:45:27 -0500
+Received: from gproxy4-pub.mail.unifiedlayer.com ([69.89.23.142]:56951 "EHLO
+        gproxy4-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726009AbgKZBp1 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 25 Nov 2020 20:39:06 -0500
-Received: from CMGW (unknown [10.9.0.13])
-        by gproxy5.mail.unifiedlayer.com (Postfix) with ESMTP id E01B5140743
-        for <linux-hwmon@vger.kernel.org>; Wed, 25 Nov 2020 18:39:04 -0700 (MST)
+        Wed, 25 Nov 2020 20:45:27 -0500
+Received: from cmgw12.unifiedlayer.com (unknown [10.9.0.12])
+        by gproxy4.mail.unifiedlayer.com (Postfix) with ESMTP id BFF44176343
+        for <linux-hwmon@vger.kernel.org>; Wed, 25 Nov 2020 18:45:26 -0700 (MST)
 Received: from bh-25.webhostbox.net ([208.91.199.152])
         by cmsmtp with ESMTP
-        id i6FUkp6Qsi1lMi6FUknzW1; Wed, 25 Nov 2020 18:39:04 -0700
+        id i6LekxjteeMJHi6Lek5I0y; Wed, 25 Nov 2020 18:45:26 -0700
 X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.2 cv=CoPPSjwD c=1 sm=1 tr=0
+X-Authority-Analysis: v=2.3 cv=Dpx4Bl3+ c=1 sm=1 tr=0
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10 a=nNwsprhYR40A:10
- a=evQFzbml-YQA:10 a=pGLkceISAAAA:8 a=8b9GpE9nAAAA:8 a=64J-flk6gbOkI1un91IA:9
- a=QEXdDO2ut3YA:10 a=T3LWEMljR5ZiDmsYVIUa:22
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=kj9zAlcOel0A:10:nop_charset_1
+ a=nNwsprhYR40A:10:nop_rcvd_month_year
+ a=evQFzbml-YQA:10:endurance_base64_authed_username_1 a=k-42gJp3AAAA:8
+ a=_jlGtV7tAAAA:8 a=CzpCDfCmYOB-EhiA7ZkA:9 a=CjuIK1q_8ugA:10:nop_charset_2
+ a=uCSXFHLys93vLW5PjgO_:22 a=nlm17XC03S6CtCLSeiRr:22
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Vgd8UP9Xtpzz9pNeI40scUxQsv3ndEwlgg0D4uubbcg=; b=i5PBsdhHTJ5jj5Q3XiiRGuBMvg
-        J7Bykrf/jvB4SMWA14bcVcIevaT2OpFbTRKWsDmvZINAzwo5ntupk4YOXDQRBHNTT6QlH2TibMRZx
-        lkXu+YbwYkAhtFb/wcP6Y/A/jXTmn9Rx4EWmlzcJ75w/DpHX4n/85BxdcgBIrlwB+KQAzkZ1h7pBj
-        SZDv2igTGdSsIZmPLPpg/K6S4ellZduwuE40pF4tVhsCb78F30kBcgXtagTznvIRaMmpjinTYo2Ck
-        xfGolCCnvCsBTyOY+ojUzpbuAzy9Bz+C22mAzDif5fPZhNGDerIMKJ8mU4iE6aTF/k25/6hBjhU0e
-        dbEa7xyA==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:36376 helo=localhost)
+        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Zypw0dI7Wi9fB7HddjxJ7as97tr3VosQbpzHWpsm780=; b=yLV7LShAjovvfqS+zadinUhlVu
+        GheJNLxAQgWdHfy21s1F+kOEq3URpsObPlB4yRpCiGBPGsNl9/76lHMK+9ddIoKeux+ODU/kByoMj
+        l7TWAZelqr6lyeJB8xDbzOYfXTP3cmUfUQl3vW46WOx2dG2COTa54tg0fejK1xc/9Mg9zpPM2NNhZ
+        ydWCexFmmmcNLLHWBHLfywgFfIOP8xwYHTiwQCs2ipM5G1LUYtfkNOxxw6e5+r1RdCMNAcb+p+Lvw
+        fMkNHIxZlJmdzcRJDqq+y9xndBrVT7Rx5hi2daCyeLQHn6XUHmMiIus8LjeijWkLKgyBrQgWrN57l
+        U7w2Fq0w==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:36398 helo=localhost)
         by bh-25.webhostbox.net with esmtpa (Exim 4.93)
         (envelope-from <linux@roeck-us.net>)
-        id 1ki6FT-002acJ-Ua; Thu, 26 Nov 2020 01:39:04 +0000
-Date:   Wed, 25 Nov 2020 17:39:03 -0800
+        id 1ki6Ld-002cZJ-Rt; Thu, 26 Nov 2020 01:45:25 +0000
+Date:   Wed, 25 Nov 2020 17:45:25 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Charles <hsu.yungteng@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        alan@redhat.com
-Subject: Re: [PATCH v4] hwmon: Add driver for STMicroelectronics PM6764
- Voltage Regulator
-Message-ID: <20201126013903.GB111386@roeck-us.net>
-References: <859f2714-cedc-0342-4d10-789abd8d2c52@gmail.com>
+To:     Paul Barker <pbarker@konsulko.com>
+Cc:     Kamil Debski <kamil@wypas.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] hwmon: pwm-fan: Refactor pwm_fan_probe
+Message-ID: <20201126014525.GD111386@roeck-us.net>
+References: <20201113150853.155495-1-pbarker@konsulko.com>
+ <20201113150853.155495-2-pbarker@konsulko.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <859f2714-cedc-0342-4d10-789abd8d2c52@gmail.com>
+In-Reply-To: <20201113150853.155495-2-pbarker@konsulko.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
 X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
@@ -73,250 +75,118 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1ki6FT-002acJ-Ua
+X-Exim-ID: 1ki6Ld-002cZJ-Rt
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:36376
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:36398
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 6
+X-Email-Count: 14
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Nov 19, 2020 at 07:43:41PM +0800, Charles wrote:
-> Add the pmbus driver for the STMicroelectronics pm6764 voltage regulator.
+On Fri, Nov 13, 2020 at 03:08:50PM +0000, Paul Barker wrote:
+> Use platform_irq_count to determine the number of fan tachometer inputs
+> configured in the device tree. At this stage we support either 0 or 1
+> inputs.
 > 
-> the output voltage use the MFR_READ_VOUT 0xD4
-> vout value returned is linear11
+> Once we have this information we only need to read the
+> pulses-per-revolution value if a fan tachometer is actually configured
+> via an IRQ value.
 > 
-> Signed-off-by: Charles Hsu <hsu.yungteng@gmail.com>
+> Also add a debug print of the IRQ number and the pulses-per-revolution
+> value to aid in investigating issues.
+> 
+> Signed-off-by: Paul Barker <pbarker@konsulko.com>
+
+For my reference:
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
 > ---
+>  drivers/hwmon/pwm-fan.c | 50 +++++++++++++++++++++++++++--------------
+>  1 file changed, 33 insertions(+), 17 deletions(-)
 > 
-> v4:
->  - Add pm6764tr to Documentation/hwmon/index.rst.
-> v3:
->  - Add Documentation(Documentation/hwmon/pm6764tr.rst).
->  - Fix include order.
-> v2:
->  - Fix formatting.
->  - Remove pmbus_do_remove.
->  - Change from .probe to .probe_new.
-> v1:
->  - Initial patchset.
-> ---
-> 
->  Documentation/hwmon/index.rst    |  1 +
->  Documentation/hwmon/pm6764tr.rst | 33 ++++++++++++++
->  drivers/hwmon/pmbus/Kconfig      |  9 ++++
->  drivers/hwmon/pmbus/Makefile     |  1 +
->  drivers/hwmon/pmbus/pm6764tr.c   | 78 ++++++++++++++++++++++++++++++++
->  5 files changed, 122 insertions(+)
->  create mode 100644 Documentation/hwmon/pm6764tr.rst
->  create mode 100644 drivers/hwmon/pmbus/pm6764tr.c
-> 
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index b797db738225..1bbd05e41de4 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -144,6 +144,7 @@ Hardware Monitoring Kernel Drivers
->     pc87360
->     pc87427
->     pcf8591
-> +   pm6764tr
->     pmbus
->     powr1220
->     pxe1610
-> diff --git a/Documentation/hwmon/pm6764tr.rst
-> b/Documentation/hwmon/pm6764tr.rst
-> new file mode 100644
-> index 000000000000..5e8092e39297
-> --- /dev/null
-> +++ b/Documentation/hwmon/pm6764tr.rst
-> @@ -0,0 +1,33 @@
-> +.. SPDX-License-Identifier: GPL-2.0-only
+> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
+> index 1f63807c0399..efe2764f42d3 100644
+> --- a/drivers/hwmon/pwm-fan.c
+> +++ b/drivers/hwmon/pwm-fan.c
+> @@ -286,7 +286,7 @@ static int pwm_fan_probe(struct platform_device *pdev)
+>  	struct device *hwmon;
+>  	int ret;
+>  	struct pwm_state state = { };
+> -	u32 ppr = 2;
+> +	int tach_count;
+>  
+>  	ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
+>  	if (!ctx)
+> @@ -300,10 +300,6 @@ static int pwm_fan_probe(struct platform_device *pdev)
+>  
+>  	platform_set_drvdata(pdev, ctx);
+>  
+> -	ctx->irq = platform_get_irq_optional(pdev, 0);
+> -	if (ctx->irq == -EPROBE_DEFER)
+> -		return ctx->irq;
+> -
+>  	ctx->reg_en = devm_regulator_get_optional(dev, "fan");
+>  	if (IS_ERR(ctx->reg_en)) {
+>  		if (PTR_ERR(ctx->reg_en) != -ENODEV)
+> @@ -339,20 +335,40 @@ static int pwm_fan_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		return ret;
+>  
+> -	of_property_read_u32(dev->of_node, "pulses-per-revolution", &ppr);
+> -	ctx->pulses_per_revolution = ppr;
+> -	if (!ctx->pulses_per_revolution) {
+> -		dev_err(dev, "pulses-per-revolution can't be zero.\n");
+> -		return -EINVAL;
+> -	}
+> +	tach_count = platform_irq_count(pdev);
+> +	if (tach_count < 0)
+> +		return dev_err_probe(dev, tach_count,
+> +				     "Could not get number of fan tachometer inputs\n");
 > +
-> +Kernel driver pm6764tr
-> +======================
+> +	if (tach_count > 0) {
+> +		u32 ppr = 2;
 > +
-> +Supported chips:
+> +		ctx->irq = platform_get_irq(pdev, 0);
+> +		if (ctx->irq == -EPROBE_DEFER)
+> +			return ctx->irq;
+> +		if (ctx->irq > 0) {
+> +			ret = devm_request_irq(dev, ctx->irq, pulse_handler, 0,
+> +					       pdev->name, ctx);
+> +			if (ret) {
+> +				dev_err(dev,
+> +					"Failed to request interrupt: %d\n",
+> +					ret);
+> +				return ret;
+> +			}
+> +		}
+>  
+> -	if (ctx->irq > 0) {
+> -		ret = devm_request_irq(dev, ctx->irq, pulse_handler, 0,
+> -				       pdev->name, ctx);
+> -		if (ret) {
+> -			dev_err(dev, "Failed to request interrupt: %d\n", ret);
+> -			return ret;
+> +		of_property_read_u32(dev->of_node,
+> +				     "pulses-per-revolution",
+> +				     &ppr);
+> +		ctx->pulses_per_revolution = ppr;
+> +		if (!ctx->pulses_per_revolution) {
+> +			dev_err(dev, "pulses-per-revolution can't be zero.\n");
+> +			return -EINVAL;
+>  		}
 > +
-> +  * ST PM6764TR
+> +		dev_dbg(dev, "tach: irq=%d, pulses_per_revolution=%d\n",
+> +			ctx->irq, ctx->pulses_per_revolution);
 > +
-> +    Prefix: 'pm6764tr'
-> +
-> +    Addresses scanned: -
-> +
-> +    Datasheet: http://www.st.com/resource/en/data_brief/pm6764.pdf
-> +
-> +Authors:
-> + <hsu.yungteng@gmail.com>
-> +
-> +Description:
-> +------------
-> +
-> +This driver supports the STMicroelectronics PM6764TR chip. The PM6764TR is
-> a high
-> +performance digital controller designed to power Intel’s VR12.5 processors
-> and memories.
-
-This patch is corrupted (line wraps) and thus does not apply.
-
-> +
-> +The device utilizes digital technology to implement all control and power
-> management
-> +functions to provide maximum flexibility and performance. The NVM is
-> embedded to store
-> +custom configurations. The PM6764TR device features up to 4-phase
-> programmable operation.
-> +
-> +The PM6764TR supports power state transitions featuring VFDE, and
-> programmable DPM
-> +maintaining the best efficiency over all loading conditions without
-> compromising transient
-> +response. The device assures fast and independent protectionagainstload
-> overcurrent,
-> +under/overvoltage and feedback disconnections.
-> +
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index a25faf69fce3..9c846facce9f 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -220,6 +220,15 @@ config SENSORS_MP2975
->        This driver can also be built as a module. If so, the module will
->        be called mp2975.
-> 
-> +config SENSORS_PM6764TR
-> +    tristate "ST PM6764TR"
-> +    help
-> +      If you say yes here you get hardware monitoring support for ST
-> +      PM6764TR.
-> +
-> +      This driver can also be built as a module. If so, the module will
-> +      be called pm6764tr.
-> +
->  config SENSORS_PXE1610
->      tristate "Infineon PXE1610"
->      help
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index 4c97ad0bd791..31ebdef5d4a6 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -25,6 +25,7 @@ obj-$(CONFIG_SENSORS_MAX31785)    += max31785.o
->  obj-$(CONFIG_SENSORS_MAX34440)    += max34440.o
->  obj-$(CONFIG_SENSORS_MAX8688)    += max8688.o
->  obj-$(CONFIG_SENSORS_MP2975)    += mp2975.o
-> +obj-$(CONFIG_SENSORS_PM6764TR)    += pm6764tr.o
->  obj-$(CONFIG_SENSORS_PXE1610)    += pxe1610.o
->  obj-$(CONFIG_SENSORS_TPS40422)    += tps40422.o
->  obj-$(CONFIG_SENSORS_TPS53679)    += tps53679.o
-> diff --git a/drivers/hwmon/pmbus/pm6764tr.c b/drivers/hwmon/pmbus/pm6764tr.c
-> new file mode 100644
-> index 000000000000..2ab68036bb0c
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/pm6764tr.c
-> @@ -0,0 +1,78 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Hardware monitoring driver for STMicroelectronics digital controller
-> PM6764TR
-> + */
-> +
-> +#include <linux/err.h>
-> +#include <linux/i2c.h>
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/pmbus.h>
-> +#include <linux/slab.h>
-
-Please check include file requirements. (At least) mutex.h and slab.h
-seem unnecessary.
-
-> +#include "pmbus.h"
-> +
-> +#define PM6764TR_PMBUS_READ_VOUT    0xD4
-> +
-> +static int pm6764tr_read_word_data(struct i2c_client *client, int page, int
-> reg)
-
-Another corruption.
-
-> +{
-> +    int ret;
-> +
-> +    switch (reg) {
-> +    case PMBUS_VIRT_READ_VMON:
-> +        ret = pmbus_read_word_data(client, page, PM6764TR_PMBUS_READ_VOUT);
-> +        break;
-> +    default:
-> +        ret = -ENODATA;
-> +        break;
-> +    }
-> +    return ret;
-> +}
-> +
-> +static struct pmbus_driver_info pm6764tr_info = {
-> +    .pages = 1,
-> +    .format[PSC_VOLTAGE_IN] = linear,
-> +    .format[PSC_VOLTAGE_OUT] = vid,
-> +    .format[PSC_TEMPERATURE] = linear,
-> +    .format[PSC_CURRENT_OUT] = linear,
-> +    .format[PSC_POWER] = linear,
-> +    .func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN |  PMBUS_HAVE_PIN |
-> +        PMBUS_HAVE_IOUT | PMBUS_HAVE_POUT | PMBUS_HAVE_VMON |
-> +        PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_VOUT |
-> +        PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-> +    .read_word_data = pm6764tr_read_word_data,
-> +};
-> +
-> +static int pm6764tr_probe(struct i2c_client *client,
-> +              const struct i2c_device_id *id)
-
-Please align continuation lines with "(" in the preceding line
-(checkpatch --strict will tell). 
-
-> +{
-> +    return pmbus_do_probe(client, id, &pm6764tr_info);
-> +}
-> +
-> +static const struct i2c_device_id pm6764tr_id[] = {
-> +    {"pm6764tr", 0},
-> +    {}
-> +};
-> +MODULE_DEVICE_TABLE(i2c, pm6764tr_id);
-> +
-> +static const struct of_device_id pm6764tr_of_match[] = {
-> +    {.compatible = "pm6764tr"},
-
-As mentioned in the other e-mail, this should be something
-like "st,pm6764tr", and a reference should be added to 
-Documentation/devicetree/bindings/trivial-devices.yaml.
-
-Thanks,
-Guenter
-
-> +    {}
-> +};
-> +
-> +/* This is the driver that will be inserted */
-> +static struct i2c_driver pm6764tr_driver = {
-> +    .driver = {
-> +           .name = "pm6764tr",
-> +           .of_match_table = of_match_ptr(pm6764tr_of_match),
-> +           },
-> +    .probe_new = pm6764tr_probe,
-> +    .id_table = pm6764tr_id,
-> +};
-> +
-> +module_i2c_driver(pm6764tr_driver);
-> +
-> +MODULE_AUTHOR("Charles Hsu");
-> +MODULE_DESCRIPTION("PMBus driver for  ST PM6764TR");
-> +MODULE_LICENSE("GPL");
+>  		ctx->sample_start = ktime_get();
+>  		mod_timer(&ctx->rpm_timer, jiffies + HZ);
+>  	}
 > -- 
-> 2.25.1
+> 2.29.2
 > 
