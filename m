@@ -2,144 +2,314 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71FBFC64E7C
-	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Nov 2020 00:30:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24173C56202
+	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Nov 2020 00:53:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 21DAE21734
-	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Nov 2020 00:30:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AA035206D9
+	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Nov 2020 00:53:09 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IHCr/GuO"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729002AbgKZAap (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 25 Nov 2020 19:30:45 -0500
-Received: from kvm5.telegraphics.com.au ([98.124.60.144]:42610 "EHLO
-        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726009AbgKZAao (ORCPT
+        id S1729131AbgKZAwy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 25 Nov 2020 19:52:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52648 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726009AbgKZAwy (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 25 Nov 2020 19:30:44 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by kvm5.telegraphics.com.au (Postfix) with ESMTP id 742A42A495;
-        Wed, 25 Nov 2020 19:30:37 -0500 (EST)
-Date:   Thu, 26 Nov 2020 11:30:36 +1100 (AEDT)
-From:   Finn Thain <fthain@telegraphics.com.au>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Joe Perches <joe@perches.com>,
-        Jakub Kicinski <kuba@kernel.org>, alsa-devel@alsa-project.org,
-        linux-atm-general@lists.sourceforge.net,
-        reiserfs-devel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        linux-fbdev@vger.kernel.org,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        linux-ide@vger.kernel.org, dm-devel@redhat.com,
-        keyrings@vger.kernel.org, linux-mtd@lists.infradead.org,
-        GR-everest-linux-l2@marvell.com, wcn36xx@lists.infradead.org,
-        samba-technical@lists.samba.org, linux-i3c@lists.infradead.org,
-        linux1394-devel@lists.sourceforge.net,
-        linux-afs@lists.infradead.org,
-        usb-storage@lists.one-eyed-alien.net, drbd-dev@lists.linbit.com,
-        devel@driverdev.osuosl.org, linux-cifs@vger.kernel.org,
-        rds-devel@oss.oracle.com, linux-scsi@vger.kernel.org,
-        linux-rdma@vger.kernel.org, oss-drivers@netronome.com,
-        bridge@lists.linux-foundation.org,
-        linux-security-module@vger.kernel.org,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        linux-stm32@st-md-mailman.stormreply.com, cluster-devel@redhat.com,
-        linux-acpi@vger.kernel.org, coreteam@netfilter.org,
-        intel-wired-lan@lists.osuosl.org, linux-input@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        tipc-discussion@lists.sourceforge.net, linux-ext4@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        selinux@vger.kernel.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        intel-gfx@lists.freedesktop.org, linux-geode@lists.infradead.org,
-        linux-can@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-gpio@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        linux-mediatek@lists.infradead.org, xen-devel@lists.xenproject.org,
-        nouveau@lists.freedesktop.org, linux-hams@vger.kernel.org,
-        ceph-devel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-hwmon@vger.kernel.org,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        linux-nfs@vger.kernel.org, GR-Linux-NIC-Dev@marvell.com,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Network Development <netdev@vger.kernel.org>,
-        linux-decnet-user@lists.sourceforge.net, linux-mmc@vger.kernel.org,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-sctp@vger.kernel.org, linux-usb@vger.kernel.org,
-        netfilter-devel@vger.kernel.org,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>, patches@opensource.cirrus.com,
-        linux-integrity@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: [Intel-wired-lan] [PATCH 000/141] Fix fall-through warnings for
- Clang
-In-Reply-To: <CAKwvOdna5Zj_O=sB7Q0jHZX0BJSaakX=ZyftwQ_3=L3-ZB54XQ@mail.gmail.com>
-Message-ID: <alpine.LNX.2.23.453.2011261031290.6@nippy.intranet>
-References: <202011201129.B13FDB3C@keescook> <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com> <202011220816.8B6591A@keescook> <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com> <ca071decb87cc7e905411423c05a48f9fd2f58d7.camel@perches.com>
- <0147972a72bc13f3629de8a32dee6f1f308994b5.camel@HansenPartnership.com> <d8d1e9add08cdd4158405e77762d4946037208f8.camel@perches.com> <dbd2cb703ed9eefa7dde9281ea26ab0f7acc8afe.camel@HansenPartnership.com> <20201123130348.GA3119@embeddedor>
- <8f5611bb015e044fa1c0a48147293923c2d904e4.camel@HansenPartnership.com> <202011241327.BB28F12F6@keescook> <a841536fe65bb33f1c72ce2455a6eb47a0107565.camel@HansenPartnership.com> <CAKwvOdkGBn7nuWTAqrORMeN1G+w3YwBfCqqaRD2nwvoAXKi=Aw@mail.gmail.com>
- <alpine.LNX.2.23.453.2011260750300.6@nippy.intranet> <CAKwvOdna5Zj_O=sB7Q0jHZX0BJSaakX=ZyftwQ_3=L3-ZB54XQ@mail.gmail.com>
+        Wed, 25 Nov 2020 19:52:54 -0500
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E01BC0613D4;
+        Wed, 25 Nov 2020 16:52:52 -0800 (PST)
+Received: by mail-pf1-x444.google.com with SMTP id y7so55470pfq.11;
+        Wed, 25 Nov 2020 16:52:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=gJSR8VY56+ZbIzPwd/t5uTP9e1n8H4nOv7O6etXlWEk=;
+        b=IHCr/GuO5EDeECcNd4w/RVtrid6ZaoOVJAcc78ukskYIBP6JnZGAlzTsz6cO5bWA64
+         LhkSqBpZWbIdYlWdY2n9c5r0x+EWRPkgN9FcTMo0FjzdDAK4QusK9hHeQt25VRjzw8TC
+         P7hXTWmoLo4zBgY+57epDoZ+beGvsj3AgDfNGRgT8uGq4FlqH7U9kOEL9hf70T6tCZtU
+         NgwHjf7XuUcC27YEHPsL9Szl6P7u/A+7c9ocm5Fjm90Pq9k5mRmcZeMAO4vsVbywHto3
+         +c+GeF33Nf40pbfseMQNRrt6/e8f/0NZ0bLoyahiSxIcIIQ4sW+NPx/FGvBaAWSogJGv
+         fYVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=gJSR8VY56+ZbIzPwd/t5uTP9e1n8H4nOv7O6etXlWEk=;
+        b=gt065O/H4ZjQVHWJxd3dVAu4wvVT48prIil53GOYBoTTLazIA1WeaM/MS0wTJf9Yhf
+         IHcACIEs3KlvbGZlZLiqAc5D4qrHfUG4/I69KBrJYktDLXDojIZ/vX9PX19XxO13IlRq
+         M/3y9tQ4V7HNPIZQKT49nNp/Y57OVO/55+yNpzsa2YfK0rE3C9lLPHw0Y6i/mSdsq0Qr
+         umgefYoXAo/9bz04kKTLUbcusaho/D5FeqtELlXvhH8pKwpklb3zwuyPNmsfeUFqVcMq
+         DH9Bkg3Cf16G3nm5HPAxRX17PJRTVJJHg9Hb9QqpZcpNiYC3eM/n/7ZnYNo5HNHMLr9i
+         OqeA==
+X-Gm-Message-State: AOAM530ebbaeDMoTRPez18f7yt6an92+/wpKIRaJI6aXwu4MVFWULrBL
+        ZK7/gWdovfujtLtxbiLhE3I=
+X-Google-Smtp-Source: ABdhPJyZWK71QlA0x8DZBYGXc3spceuOjsO6xq8kETzdrL9DUcaIQzkqjeZEXZ/37X4o6qZmoTVOnA==
+X-Received: by 2002:a05:6a00:1593:b029:198:195:4d93 with SMTP id u19-20020a056a001593b029019801954d93mr548590pfk.32.1606351972029;
+        Wed, 25 Nov 2020 16:52:52 -0800 (PST)
+Received: from [10.10.15.233] (220-135-135-179.HINET-IP.hinet.net. [220.135.135.179])
+        by smtp.gmail.com with ESMTPSA id 199sm3039093pfb.219.2020.11.25.16.52.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Nov 2020 16:52:51 -0800 (PST)
+Subject: Re: [PATCH v4] hwmon: Add driver for STMicroelectronics PM6764
+ Voltage Regulator
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        alan@redhat.com
+References: <35937351-f5ba-f019-c173-17f42c36da54@gmail.com>
+ <20201122153618.GA21246@roeck-us.net>
+From:   Charles <hsu.yungteng@gmail.com>
+Message-ID: <a2d8c14a-de43-ccc8-56f0-9286117d1497@gmail.com>
+Date:   Thu, 26 Nov 2020 08:50:37 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20201122153618.GA21246@roeck-us.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+On 22/11/2020 下午11:36, Guenter Roeck wrote:
+> On Wed, Nov 11, 2020 at 03:10:08PM +0800, Charles wrote:
+>> Add the pmbus driver for the STMicroelectronics pm6764 voltage regulator.
+>>
+>> the output voltage use the MFR_READ_VOUT 0xD4
+>> vout value returned is linear11
+>>
+>> Signed-off-by: Charles Hsu <hsu.yungteng@gmail.com>
+> Please fix all checkpatch errors and warnings before resubmitting,
+> and make sure that your e-mail agent does not corrupt the patch.
+>
+> Guenter
+>
+
+There is still a warning can't fix.
+
+Device tree bindings should be their own patch, right?
+
+I'm not sure which patch should I submit first.
+
+WARNING: DT compatible string "pm6764tr" appears un-documented -- check 
+./Documentation/devicetree/bindings/
+#189: FILE: drivers/hwmon/pmbus/pm6764tr.c:60:
+
++    {.compatible = "pm6764tr"},
 
 
-On Wed, 25 Nov 2020, Nick Desaulniers wrote:
+>> ---
+>>
+>> v4:
+>>    - Add pm6764tr to Documentation/hwmon/index.rst.
+>> v3:
+>>    - Add Documentation(Documentation/hwmon/pm6764tr.rst).
+>>    - Fix include order.
+>> v2:
+>>    - Fix formatting.
+>>    - Remove pmbus_do_remove.
+>>    - Change from .probe to .probe_new.
+>> v1:
+>>    - Initial patchset.
+>> ---
+>>
+>>    Documentation/hwmon/index.rst    |  1 +
+>>    Documentation/hwmon/pm6764tr.rst | 33 ++++++++++++++
+>>    drivers/hwmon/pmbus/Kconfig      |  9 ++++
+>>    drivers/hwmon/pmbus/Makefile     |  1 +
+>>    drivers/hwmon/pmbus/pm6764tr.c   | 78 ++++++++++++++++++++++++++++++++
+>>    5 files changed, 122 insertions(+)
+>>    create mode 100644 Documentation/hwmon/pm6764tr.rst
+>>    create mode 100644 drivers/hwmon/pmbus/pm6764tr.c
+>>
+>> +MODULE_DESCRIPTION("PMBus driver for  ST PM6764TR");
+>> +MODULE_LICENSE("GPL");
+>>
+>> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+>> index b797db738225..1bbd05e41de4 100644
+>> --- a/Documentation/hwmon/index.rst
+>> +++ b/Documentation/hwmon/index.rst
+>> @@ -144,6 +144,7 @@ Hardware Monitoring Kernel Drivers
+>>       pc87360
+>>       pc87427
+>>       pcf8591
+>> +   pm6764tr
+>>       pmbus
+>>       powr1220
+>>       pxe1610
+>> diff --git a/Documentation/hwmon/pm6764tr.rst
+>> b/Documentation/hwmon/pm6764tr.rst
+>> new file mode 100644
+>> index 000000000000..5e8092e39297
+>> --- /dev/null
+>> +++ b/Documentation/hwmon/pm6764tr.rst
+>> @@ -0,0 +1,33 @@
+>> +.. SPDX-License-Identifier: GPL-2.0-only
+>> +
+>> +Kernel driver pm6764tr
+>> +======================
+>> +
+>> +Supported chips:
+>> +
+>> +  * ST PM6764TR
+>> +
+>> +    Prefix: 'pm6764tr'
+>> +
+>> +    Addresses scanned: -
+>> +
+>> +    Datasheet: http://www.st.com/resource/en/data_brief/pm6764.pdf
+>> +
+>> +Authors:
+>> +    <hsu.yungteng@gmail.com>
+>> +
+>> +Description:
+>> +------------
+>> +
+>> +This driver supports the STMicroelectronics PM6764TR chip. The PM6764TR
+>> is a high
+>> +performance digital controller designed to power Intel’s VR12.5
+>> processors and memories.
+>> +
+>> +The device utilizes digital technology to implement all control and
+>> power management
+>> +functions to provide maximum flexibility and performance. The NVM is
+>> embedded to store
+>> +custom configurations. The PM6764TR device features up to 4-phase
+>> programmable operation.
+>> +
+>> +The PM6764TR supports power state transitions featuring VFDE, and
+>> programmable DPM
+>> +maintaining the best efficiency over all loading conditions without
+>> compromising transient
+>> +response. The device assures fast and independent protectionagainstload
+>> overcurrent,
+>> +under/overvoltage and feedback disconnections.
+>> +
+>> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+>> index a25faf69fce3..9c846facce9f 100644
+>> --- a/drivers/hwmon/pmbus/Kconfig
+>> +++ b/drivers/hwmon/pmbus/Kconfig
+>> @@ -220,6 +220,15 @@ config SENSORS_MP2975
+>>          This driver can also be built as a module. If so, the module will
+>>          be called mp2975.
+>>
+>> +config SENSORS_PM6764TR
+>> +    tristate "ST PM6764TR"
+>> +    help
+>> +      If you say yes here you get hardware monitoring support for ST
+>> +      PM6764TR.
+>> +
+>> +      This driver can also be built as a module. If so, the module will
+>> +      be called pm6764tr.
+>> +
+>>    config SENSORS_PXE1610
+>>        tristate "Infineon PXE1610"
+>>        help
+>> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+>> index 4c97ad0bd791..31ebdef5d4a6 100644
+>> --- a/drivers/hwmon/pmbus/Makefile
+>> +++ b/drivers/hwmon/pmbus/Makefile
+>> @@ -25,6 +25,7 @@ obj-$(CONFIG_SENSORS_MAX31785)    += max31785.o
+>>    obj-$(CONFIG_SENSORS_MAX34440)    += max34440.o
+>>    obj-$(CONFIG_SENSORS_MAX8688)    += max8688.o
+>>    obj-$(CONFIG_SENSORS_MP2975)    += mp2975.o
+>> +obj-$(CONFIG_SENSORS_PM6764TR)    += pm6764tr.o
+>>    obj-$(CONFIG_SENSORS_PXE1610)    += pxe1610.o
+>>    obj-$(CONFIG_SENSORS_TPS40422)    += tps40422.o
+>>    obj-$(CONFIG_SENSORS_TPS53679)    += tps53679.o
+>> diff --git a/drivers/hwmon/pmbus/pm6764tr.c b/drivers/hwmon/pmbus/pm6764tr.c
+>> new file mode 100644
+>> index 000000000000..2ab68036bb0c
+>> --- /dev/null
+>> +++ b/drivers/hwmon/pmbus/pm6764tr.c
+>> @@ -0,0 +1,78 @@
+>> +// SPDX-License-Identifier: GPL-2.0+
+>> +/*
+>> + * Hardware monitoring driver for STMicroelectronics digital controller
+>> PM6764TR
+>> + */
+>> +
+>> +#include <linux/err.h>
+>> +#include <linux/i2c.h>
+>> +#include <linux/init.h>
+>> +#include <linux/kernel.h>
+>> +#include <linux/module.h>
+>> +#include <linux/mutex.h>
+>> +#include <linux/pmbus.h>
+>> +#include <linux/slab.h>
+>> +#include "pmbus.h"
+>> +
+>> +#define PM6764TR_PMBUS_READ_VOUT    0xD4
+>> +
+>> +static int pm6764tr_read_word_data(struct i2c_client *client, int page,
+>> int reg)
+>> +{
+>> +    int ret;
+>> +
+>> +    switch (reg) {
+>> +    case PMBUS_VIRT_READ_VMON:
+>> +        ret = pmbus_read_word_data(client, page, PM6764TR_PMBUS_READ_VOUT);
+>> +        break;
+>> +    default:
+>> +        ret = -ENODATA;
+>> +        break;
+>> +    }
+>> +    return ret;
+>> +}
+>> +
+>> +static struct pmbus_driver_info pm6764tr_info = {
+>> +    .pages = 1,
+>> +    .format[PSC_VOLTAGE_IN] = linear,
+>> +    .format[PSC_VOLTAGE_OUT] = vid,
+>> +    .format[PSC_TEMPERATURE] = linear,
+>> +    .format[PSC_CURRENT_OUT] = linear,
+>> +    .format[PSC_POWER] = linear,
+>> +    .func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN |  PMBUS_HAVE_PIN |
+>> +        PMBUS_HAVE_IOUT | PMBUS_HAVE_POUT | PMBUS_HAVE_VMON |
+>> +        PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_VOUT |
+>> +        PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+>> +    .read_word_data = pm6764tr_read_word_data,
+>> +};
+>> +
+>> +static int pm6764tr_probe(struct i2c_client *client,
+>> +              const struct i2c_device_id *id)
+>> +{
+>> +    return pmbus_do_probe(client, id, &pm6764tr_info);
+>> +}
+>> +
+>> +static const struct i2c_device_id pm6764tr_id[] = {
+>> +    {"pm6764tr", 0},
+>> +    {}
+>> +};
+>> +MODULE_DEVICE_TABLE(i2c, pm6764tr_id);
+>> +
+>> +static const struct of_device_id pm6764tr_of_match[] = {
+>> +    {.compatible = "pm6764tr"},
+>> +    {}
+>> +};
+>> +
+>> +/* This is the driver that will be inserted */
+>> +static struct i2c_driver pm6764tr_driver = {
+>> +    .driver = {
+>> +           .name = "pm6764tr",
+>> +           .of_match_table = of_match_ptr(pm6764tr_of_match),
+>> +           },
+>> +    .probe_new = pm6764tr_probe,
+>> +    .id_table = pm6764tr_id,
+>> +};
+>> +
+>> +module_i2c_driver(pm6764tr_driver);
+>> +
+>> +MODULE_AUTHOR("Charles Hsu");
 
-> On Wed, Nov 25, 2020 at 1:33 PM Finn Thain <fthain@telegraphics.com.au> wrote:
-> >
-> > Or do you think that a codebase can somehow satisfy multiple checkers 
-> > and their divergent interpretations of the language spec?
-> 
-> Have we found any cases yet that are divergent? I don't think so. 
 
-You mean, aside from -Wimplicit-fallthrough? I'm glad you asked. How about 
--Wincompatible-pointer-types and -Wframe-larger-than?
-
-All of the following files have been affected by divergent diagnostics 
-produced by clang and gcc.
-
-arch/arm64/include/asm/neon-intrinsics.h
-arch/powerpc/xmon/Makefile
-drivers/gpu/drm/i915/Makefile
-drivers/gpu/drm/i915/i915_utils.h
-drivers/staging/media/atomisp/pci/atomisp_subdev.c
-fs/ext4/super.c
-include/trace/events/qla.h
-net/mac80211/rate.c
-tools/lib/string.c
-tools/perf/util/setup.py
-tools/scripts/Makefile.include
-
-And if I searched for 'smatch' or 'coverity' instead of 'clang' I'd 
-probably find more divergence.
-
-Here are some of the relevant commits.
-
-0738c8b5915c7eaf1e6007b441008e8f3b460443
-9c87156cce5a63735d1218f0096a65c50a7a32aa
-babaab2f473817f173a2d08e410c25abf5ed0f6b
-065e5e559555e2f100bc95792a8ef1b609bbe130
-93f56de259376d7e4fff2b2d104082e1fa66e237
-6c4798d3f08b81c2c52936b10e0fa872590c96ae
-b7a313d84e853049062011d78cb04b6decd12f5c
-093b75ef5995ea35d7f6bdb6c7b32a42a1999813
-
-And before you object, "but -Wconstant-logical-operand is a clang-only 
-warning! it can't be divergent with gcc!", consider that the special cases 
-added to deal with clang-only warnings have to be removed when gcc catches 
-up, which is more churn. Now multiply that by the number of checkers you 
-care about.
