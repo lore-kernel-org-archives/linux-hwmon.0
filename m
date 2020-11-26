@@ -6,44 +6,44 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
 	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DDFA8C56201
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BAADEC56202
 	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Nov 2020 03:01:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 89856216C4
+	by mail.kernel.org (Postfix) with ESMTP id 5F98921534
 	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Nov 2020 03:01:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731813AbgKZDBj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 25 Nov 2020 22:01:39 -0500
-Received: from mga06.intel.com ([134.134.136.31]:2602 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731887AbgKZDBi (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        id S1732040AbgKZDBi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Wed, 25 Nov 2020 22:01:38 -0500
-IronPort-SDR: QUdTX7nuqyr3Ol1Eii+wxX9QyZa3R9y1QkQxsWQmn1xgQr2VNulpfFCQNvZfiP8bayTUFrTqTB
- 6aRbNqxn9s+Q==
-X-IronPort-AV: E=McAfee;i="6000,8403,9816"; a="233835282"
+Received: from mga12.intel.com ([192.55.52.136]:12459 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731813AbgKZDBi (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 25 Nov 2020 22:01:38 -0500
+IronPort-SDR: g/20U3zUv+txThjDMMzEbiWq9zkQRzbczMtS/pWRJ8zTp67Q3pmGCFoxMOscN3MDtLhWv+u9jI
+ 0mtVwOgD7WAQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9816"; a="151487312"
 X-IronPort-AV: E=Sophos;i="5.78,370,1599548400"; 
-   d="scan'208";a="233835282"
+   d="scan'208";a="151487312"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2020 19:01:37 -0800
-IronPort-SDR: XRf05/uHz10Q+K9cXEew5CLZyAaBTFhvxP/XJ3ax+qe39lEC8TZ92wwGCt7EE4u3vwQo0etEpO
- wzRQ3ezw4U0A==
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2020 19:01:37 -0800
+IronPort-SDR: 3FaP2U0Xi3wpgxHmZk8ctcDQDQakuG8/y1BBtZ7bps9Yo36OSHyFhedgU1pRoxYpFpwsuAR7ew
+ FWoVi1y2Bnvg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.78,370,1599548400"; 
-   d="scan'208";a="547546782"
+   d="scan'208";a="328216707"
 Received: from lkp-server01.sh.intel.com (HELO dd79da36dde1) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 25 Nov 2020 19:01:36 -0800
+  by orsmga003.jf.intel.com with ESMTP; 25 Nov 2020 19:01:36 -0800
 Received: from kbuild by dd79da36dde1 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1ki7XL-00002i-HI; Thu, 26 Nov 2020 03:01:35 +0000
-Date:   Thu, 26 Nov 2020 11:00:56 +0800
+        id 1ki7XL-00002l-KG; Thu, 26 Nov 2020 03:01:35 +0000
+Date:   Thu, 26 Nov 2020 11:00:53 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon-next] BUILD SUCCESS
- e6e2c18f63c62df778ce484945fccad088594533
-Message-ID: <5fbf1a68.4lzSmq44U4m3UbqG%lkp@intel.com>
+Subject: [hwmon:hwmon] BUILD SUCCESS
+ 5452ef62fbc3c5ac86f8c80ce1201a07618abc9c
+Message-ID: <5fbf1a65./CeKN20g8DX8pWks%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -52,8 +52,8 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon-next
-branch HEAD: e6e2c18f63c62df778ce484945fccad088594533  docs: hwmon: Document max127 driver
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon
+branch HEAD: 5452ef62fbc3c5ac86f8c80ce1201a07618abc9c  hwmon: (ina3221) Fix PM usage counter unbalance in ina3221_write_enable
 
 elapsed time: 724m
 
