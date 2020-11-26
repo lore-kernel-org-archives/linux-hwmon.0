@@ -4,68 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B18BFC56201
-	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Nov 2020 01:45:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50B3FC56202
+	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Nov 2020 02:05:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3D7CC20B1F
-	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Nov 2020 01:45:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EFBD120B1F
+	for <linux-hwmon@archiver.kernel.org>; Thu, 26 Nov 2020 02:05:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.b="yLV7LShA"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.b="nsyNOnBc"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731040AbgKZBp1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 25 Nov 2020 20:45:27 -0500
-Received: from gproxy4-pub.mail.unifiedlayer.com ([69.89.23.142]:56951 "EHLO
-        gproxy4-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726009AbgKZBp1 (ORCPT
+        id S1732219AbgKZCFn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 25 Nov 2020 21:05:43 -0500
+Received: from gproxy10-pub.mail.unifiedlayer.com ([69.89.20.226]:35003 "EHLO
+        gproxy10-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730764AbgKZCFn (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 25 Nov 2020 20:45:27 -0500
-Received: from cmgw12.unifiedlayer.com (unknown [10.9.0.12])
-        by gproxy4.mail.unifiedlayer.com (Postfix) with ESMTP id BFF44176343
-        for <linux-hwmon@vger.kernel.org>; Wed, 25 Nov 2020 18:45:26 -0700 (MST)
+        Wed, 25 Nov 2020 21:05:43 -0500
+Received: from cmgw11.unifiedlayer.com (unknown [10.9.0.11])
+        by gproxy10.mail.unifiedlayer.com (Postfix) with ESMTP id 50FD7140454
+        for <linux-hwmon@vger.kernel.org>; Wed, 25 Nov 2020 19:05:38 -0700 (MST)
 Received: from bh-25.webhostbox.net ([208.91.199.152])
         by cmsmtp with ESMTP
-        id i6LekxjteeMJHi6Lek5I0y; Wed, 25 Nov 2020 18:45:26 -0700
+        id i6fBk8ntbdCH5i6fCkDulp; Wed, 25 Nov 2020 19:05:38 -0700
 X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.3 cv=Dpx4Bl3+ c=1 sm=1 tr=0
+X-Authority-Analysis: v=2.3 cv=fdWDNXYF c=1 sm=1 tr=0
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
  a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=kj9zAlcOel0A:10:nop_charset_1
  a=nNwsprhYR40A:10:nop_rcvd_month_year
- a=evQFzbml-YQA:10:endurance_base64_authed_username_1 a=k-42gJp3AAAA:8
- a=_jlGtV7tAAAA:8 a=CzpCDfCmYOB-EhiA7ZkA:9 a=CjuIK1q_8ugA:10:nop_charset_2
- a=uCSXFHLys93vLW5PjgO_:22 a=nlm17XC03S6CtCLSeiRr:22
+ a=evQFzbml-YQA:10:endurance_base64_authed_username_1 a=pGLkceISAAAA:8
+ a=eX1YPQDVfOTyLoVd2wsA:9 a=CjuIK1q_8ugA:10:nop_charset_2
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
         :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
         :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
         Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
         List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Zypw0dI7Wi9fB7HddjxJ7as97tr3VosQbpzHWpsm780=; b=yLV7LShAjovvfqS+zadinUhlVu
-        GheJNLxAQgWdHfy21s1F+kOEq3URpsObPlB4yRpCiGBPGsNl9/76lHMK+9ddIoKeux+ODU/kByoMj
-        l7TWAZelqr6lyeJB8xDbzOYfXTP3cmUfUQl3vW46WOx2dG2COTa54tg0fejK1xc/9Mg9zpPM2NNhZ
-        ydWCexFmmmcNLLHWBHLfywgFfIOP8xwYHTiwQCs2ipM5G1LUYtfkNOxxw6e5+r1RdCMNAcb+p+Lvw
-        fMkNHIxZlJmdzcRJDqq+y9xndBrVT7Rx5hi2daCyeLQHn6XUHmMiIus8LjeijWkLKgyBrQgWrN57l
-        U7w2Fq0w==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:36398 helo=localhost)
+        bh=F8wfvX156Z88/LtCTW7gwEjZRmerPZiT5sMZ/oUU+4s=; b=nsyNOnBc7i/MHPK3YYGPullOiI
+        yYHZoYnTu0HokLCv5TiLH1sP7dAguzP25TShgs468xKJ5sFHdlgUcK4sirfcCgFAAz08wnMuLDoTv
+        b6ik5WzG/2WNTIcIvWNNGhLLYteFy17WO5YBVfnivcL7s13gviHUCMs74JzdvFlkq9OYdWvioh2EP
+        3ed5+8Vj80tNFtuEipOufiwddXHojhawU1C8lFrN3VXiZ9a0wZ5uD9Xe+u4QfnHNzX1RMtgr3A2jH
+        BS2oj4TOY8C8W0BXitKaixwwwZY2rB4OpT4G6EU6JlVYMd/94O29YoI0W84FWuCsu6Sq4OmA4FJWt
+        vw56U1hg==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:36450 helo=localhost)
         by bh-25.webhostbox.net with esmtpa (Exim 4.93)
         (envelope-from <linux@roeck-us.net>)
-        id 1ki6Ld-002cZJ-Rt; Thu, 26 Nov 2020 01:45:25 +0000
-Date:   Wed, 25 Nov 2020 17:45:25 -0800
+        id 1ki6fB-002lF3-C4; Thu, 26 Nov 2020 02:05:37 +0000
+Date:   Wed, 25 Nov 2020 18:05:36 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Paul Barker <pbarker@konsulko.com>
-Cc:     Kamil Debski <kamil@wypas.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] hwmon: pwm-fan: Refactor pwm_fan_probe
-Message-ID: <20201126014525.GD111386@roeck-us.net>
-References: <20201113150853.155495-1-pbarker@konsulko.com>
- <20201113150853.155495-2-pbarker@konsulko.com>
+To:     Dongjin Kim <tobetter@gmail.com>
+Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (pwm-fan) add fan pwm1_enable attribute
+Message-ID: <20201126020536.GE111386@roeck-us.net>
+References: <20201125163242.GA1264232@paju>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201113150853.155495-2-pbarker@konsulko.com>
+In-Reply-To: <20201125163242.GA1264232@paju>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
 X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
@@ -75,118 +73,178 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1ki6Ld-002cZJ-Rt
+X-Exim-ID: 1ki6fB-002lF3-C4
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:36398
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:36450
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 14
+X-Email-Count: 2
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Nov 13, 2020 at 03:08:50PM +0000, Paul Barker wrote:
-> Use platform_irq_count to determine the number of fan tachometer inputs
-> configured in the device tree. At this stage we support either 0 or 1
-> inputs.
+On Thu, Nov 26, 2020 at 01:32:42AM +0900, Dongjin Kim wrote:
+> This patch adds to new attribute 'pwm1_enable' to change the fan speed
+> control method as documented in 'Documentation/hwmon/sysfs-interface'.
 > 
-> Once we have this information we only need to read the
-> pulses-per-revolution value if a fan tachometer is actually configured
-> via an IRQ value.
-> 
-> Also add a debug print of the IRQ number and the pulses-per-revolution
-> value to aid in investigating issues.
-> 
-> Signed-off-by: Paul Barker <pbarker@konsulko.com>
+> Signed-off-by: Dongjin Kim <tobetter@gmail.com>
 
-For my reference:
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+The new attribute needs to be documented in
+Documentation/hwmon/pwm-fan.rst, with supported values.
 
 > ---
->  drivers/hwmon/pwm-fan.c | 50 +++++++++++++++++++++++++++--------------
->  1 file changed, 33 insertions(+), 17 deletions(-)
+>  drivers/hwmon/pwm-fan.c | 52 ++++++++++++++++++++++++++++++++++++-----
+>  1 file changed, 46 insertions(+), 6 deletions(-)
 > 
 > diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-> index 1f63807c0399..efe2764f42d3 100644
+> index 1f63807c0399..834275309421 100644
 > --- a/drivers/hwmon/pwm-fan.c
 > +++ b/drivers/hwmon/pwm-fan.c
-> @@ -286,7 +286,7 @@ static int pwm_fan_probe(struct platform_device *pdev)
->  	struct device *hwmon;
->  	int ret;
+> @@ -39,6 +39,7 @@ struct pwm_fan_ctx {
+>  	unsigned int pwm_fan_max_state;
+>  	unsigned int *pwm_fan_cooling_levels;
+>  	struct thermal_cooling_device *cdev;
+> +	int enable;
+>  };
+>  
+>  /* This handler assumes self resetting edge triggered interrupt. */
+> @@ -76,6 +77,10 @@ static int  __set_pwm(struct pwm_fan_ctx *ctx, unsigned long pwm)
 >  	struct pwm_state state = { };
-> -	u32 ppr = 2;
-> +	int tach_count;
 >  
->  	ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
->  	if (!ctx)
-> @@ -300,10 +300,6 @@ static int pwm_fan_probe(struct platform_device *pdev)
+>  	mutex_lock(&ctx->lock);
+> +
+> +	if (ctx->enable == 0)
+> +		pwm = MAX_PWM;
+> +
+>  	if (ctx->pwm_value == pwm)
+>  		goto exit_set_pwm_err;
 >  
+> @@ -137,11 +142,42 @@ static ssize_t rpm_show(struct device *dev,
+>  	return sprintf(buf, "%u\n", ctx->rpm);
+>  }
+>  
+> +static ssize_t enable_store(struct device *dev,
+> +		struct device_attribute *attr,
+> +		const char *buf, size_t count)
+> +{
+> +	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
+> +	int err;
+> +	unsigned long val;
+> +
+> +	err = kstrtoul(buf, 10, &val);
+> +	if (err)
+> +		return err;
+> +
+
+'val' must be validated and only accept permitted values.
+
+> +	mutex_lock(&ctx->lock);
+> +	ctx->enable = val;
+> +	mutex_unlock(&ctx->lock);
+> +
+> +	err = __set_pwm(ctx, ctx->pwm_fan_cooling_levels[ctx->pwm_fan_state]);
+> +
+> +	return err ? err : count;
+> +}
+> +
+> +static ssize_t enable_show(struct device *dev, struct device_attribute *attr,
+> +			   char *buf)
+> +{
+> +	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
+> +
+> +	return sprintf(buf, "%u\n", ctx->enable);
+> +}
+> +
+>  static SENSOR_DEVICE_ATTR_RW(pwm1, pwm, 0);
+> +static SENSOR_DEVICE_ATTR_RW(pwm1_enable, enable, 0);
+>  static SENSOR_DEVICE_ATTR_RO(fan1_input, rpm, 0);
+>  
+>  static struct attribute *pwm_fan_attrs[] = {
+>  	&sensor_dev_attr_pwm1.dev_attr.attr,
+> +	&sensor_dev_attr_pwm1_enable.dev_attr.attr,
+>  	&sensor_dev_attr_fan1_input.dev_attr.attr,
+>  	NULL,
+>  };
+> @@ -153,7 +189,7 @@ static umode_t pwm_fan_attrs_visible(struct kobject *kobj, struct attribute *a,
+>  	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
+>  
+>  	/* Hide fan_input in case no interrupt is available  */
+> -	if (n == 1 && ctx->irq <= 0)
+> +	if (n == 2 && ctx->irq <= 0)
+>  		return 0;
+>  
+>  	return a->mode;
+> @@ -200,7 +236,7 @@ static int
+>  pwm_fan_set_cur_state(struct thermal_cooling_device *cdev, unsigned long state)
+>  {
+>  	struct pwm_fan_ctx *ctx = cdev->devdata;
+> -	int ret;
+> +	int ret = 0;
+>  
+>  	if (!ctx || (state > ctx->pwm_fan_max_state))
+>  		return -EINVAL;
+> @@ -208,10 +244,12 @@ pwm_fan_set_cur_state(struct thermal_cooling_device *cdev, unsigned long state)
+>  	if (state == ctx->pwm_fan_state)
+>  		return 0;
+>  
+> -	ret = __set_pwm(ctx, ctx->pwm_fan_cooling_levels[state]);
+> -	if (ret) {
+> -		dev_err(&cdev->device, "Cannot set pwm!\n");
+> -		return ret;
+> +	if (ctx->enable >= 2) {
+
+What is "automatic" here ? I don't see how this driver or the underlying
+pwm controller/chip would support automatic fan speed control. This is
+completely independent of thermal control: thermal device support does _not_
+imply or suggest "automatic" fan speed control from a pwm chip perspective.
+
+This makes me also very concerned about this attribute in the first please:
+All it does, in its current implementation, is to disable thermal device 
+control. That is not the idea here, and it doesn't make any sense to me.
+On the contrary, all I can find is that it is dangerous.
+
+Please describe in detail what you think this attribute is supposed to
+accomplish, and why you think it is needed or even makes sense. Overriding
+thermal control doesn't make sense to me: If you want that, just disable
+thermal control, or don't register this device as cooling device in the
+first place.  Other than that, the whole driver implies manual pwm control.
+That means pwm can already be "disabled" by writing a 0 pwm value. An
+additional attributes doesn't add value and only makes the driver ABI
+unnecessarily complex. So please prepare a detailed rationale to convince
+me otherwise.
+
+We can have a separate discussion if disabling a pwm controller using the
+hwmon ABI should disable that pwm controller from a thermal (cooling) device
+perspective. If so, we'll need to think about the implications. We can not
+just disable thermal cooling device support without telling the thermal
+subsystem that this means of temperature control doesn't work anymore.
+That should, however, be a completely separate discussion, independent
+of this driver, and it should include thermal subsystem maintainers
+and the thermal subsystem mailing list.
+
+Thanks,
+Guenter
+
+> +		ret = __set_pwm(ctx, ctx->pwm_fan_cooling_levels[state]);
+> +		if (ret) {
+> +			dev_err(&cdev->device, "Cannot set pwm!\n");
+> +			return ret;
+> +		}
+>  	}
+>  
+>  	ctx->pwm_fan_state = state;
+> @@ -298,6 +336,8 @@ static int pwm_fan_probe(struct platform_device *pdev)
+>  	if (IS_ERR(ctx->pwm))
+>  		return dev_err_probe(dev, PTR_ERR(ctx->pwm), "Could not get PWM\n");
+>  
+> +	ctx->enable = 2;
+> +
 >  	platform_set_drvdata(pdev, ctx);
 >  
-> -	ctx->irq = platform_get_irq_optional(pdev, 0);
-> -	if (ctx->irq == -EPROBE_DEFER)
-> -		return ctx->irq;
-> -
->  	ctx->reg_en = devm_regulator_get_optional(dev, "fan");
->  	if (IS_ERR(ctx->reg_en)) {
->  		if (PTR_ERR(ctx->reg_en) != -ENODEV)
-> @@ -339,20 +335,40 @@ static int pwm_fan_probe(struct platform_device *pdev)
->  	if (ret)
->  		return ret;
->  
-> -	of_property_read_u32(dev->of_node, "pulses-per-revolution", &ppr);
-> -	ctx->pulses_per_revolution = ppr;
-> -	if (!ctx->pulses_per_revolution) {
-> -		dev_err(dev, "pulses-per-revolution can't be zero.\n");
-> -		return -EINVAL;
-> -	}
-> +	tach_count = platform_irq_count(pdev);
-> +	if (tach_count < 0)
-> +		return dev_err_probe(dev, tach_count,
-> +				     "Could not get number of fan tachometer inputs\n");
-> +
-> +	if (tach_count > 0) {
-> +		u32 ppr = 2;
-> +
-> +		ctx->irq = platform_get_irq(pdev, 0);
-> +		if (ctx->irq == -EPROBE_DEFER)
-> +			return ctx->irq;
-> +		if (ctx->irq > 0) {
-> +			ret = devm_request_irq(dev, ctx->irq, pulse_handler, 0,
-> +					       pdev->name, ctx);
-> +			if (ret) {
-> +				dev_err(dev,
-> +					"Failed to request interrupt: %d\n",
-> +					ret);
-> +				return ret;
-> +			}
-> +		}
->  
-> -	if (ctx->irq > 0) {
-> -		ret = devm_request_irq(dev, ctx->irq, pulse_handler, 0,
-> -				       pdev->name, ctx);
-> -		if (ret) {
-> -			dev_err(dev, "Failed to request interrupt: %d\n", ret);
-> -			return ret;
-> +		of_property_read_u32(dev->of_node,
-> +				     "pulses-per-revolution",
-> +				     &ppr);
-> +		ctx->pulses_per_revolution = ppr;
-> +		if (!ctx->pulses_per_revolution) {
-> +			dev_err(dev, "pulses-per-revolution can't be zero.\n");
-> +			return -EINVAL;
->  		}
-> +
-> +		dev_dbg(dev, "tach: irq=%d, pulses_per_revolution=%d\n",
-> +			ctx->irq, ctx->pulses_per_revolution);
-> +
->  		ctx->sample_start = ktime_get();
->  		mod_timer(&ctx->rpm_timer, jiffies + HZ);
->  	}
+>  	ctx->irq = platform_get_irq_optional(pdev, 0);
 > -- 
-> 2.29.2
+> 2.25.1
 > 
