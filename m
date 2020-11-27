@@ -2,293 +2,354 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+X-Spam-Status: No, score=-15.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8978EC2D0E4
-	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Nov 2020 16:10:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 860C4C2D0E4
+	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Nov 2020 16:10:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 41447208D5
-	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Nov 2020 16:10:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 20679208D5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Nov 2020 16:10:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=konsulko.com header.i=@konsulko.com header.b="BjIuPB8/"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.b="BCNdXvzM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730826AbgK0QK3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 27 Nov 2020 11:10:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48902 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726889AbgK0QK2 (ORCPT
+        id S1730876AbgK0QKy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 27 Nov 2020 11:10:54 -0500
+Received: from gproxy2-pub.mail.unifiedlayer.com ([69.89.18.3]:55279 "EHLO
+        gproxy2-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730324AbgK0QKy (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 27 Nov 2020 11:10:28 -0500
-Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B831C0613D1
-        for <linux-hwmon@vger.kernel.org>; Fri, 27 Nov 2020 08:10:27 -0800 (PST)
-Received: by mail-oi1-x242.google.com with SMTP id y74so6342541oia.11
-        for <linux-hwmon@vger.kernel.org>; Fri, 27 Nov 2020 08:10:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=konsulko.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eYEdwKr2b7wjSSZToji0jUi86bV85T0/r4g0TROn0Rc=;
-        b=BjIuPB8/+edrgcfqZO6mYq42BHqNmgVJ648JiNmGK2ZzFnACH6jRQx81k6iCRdah+I
-         cb+1jpJUJPVWjki4UycUXDzLbxqJODtG/RTDhdL5GhhGwsdJyghsGAiOb6mrP0GB05Ee
-         Vvyfxnd+ynNvdcL+oUIeCXJUirMoGuuHvnJFI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eYEdwKr2b7wjSSZToji0jUi86bV85T0/r4g0TROn0Rc=;
-        b=cah21Fym1+Wwa0z9XGgPqs9CYGbN3pqbKjsIbiGkjbQkow4TcH43pQ+/VmgVTbgixT
-         mvutCWFJarWu9byyam5+MMU6acth+rvrivOR7yHMeBjA9hirkIe70mj5l0MafIiwGCE+
-         JU2od8geo1ACkjMPZDA5+LPdpqTI4W4IH4hzwmnTwItSkFid4WN9Et96SOYoGRti2p8H
-         pjr37wf7EpwOl9328oShnMUksVVxnpceKl68VH0dKw7tos0WeIC8sBRornbh6kD/wCkJ
-         ZRRLISdfRIVHwfmG3s3BozmS3QDpbXOLRI+D6E7eM2Aw9opjk0xhBzWkcYrE6l4I4NKh
-         w0rw==
-X-Gm-Message-State: AOAM533bGhgb47Gn47G06aQ2fUOAAPAEssQHLDUWarG+nE6eU8Kegv+F
-        ngd5F4BV/IJq8mYMKn9ZEJysBzm6H29lneygY0M+9g==
-X-Google-Smtp-Source: ABdhPJxwvyU4QsOl/QWk/DQC2pGtZrMx1vP/bxKIgeS4PUMjHbvBMpIevcb9L74nqHYtMIdwMFB6i/RVJLpKoxTxwjk=
-X-Received: by 2002:aca:f3d6:: with SMTP id r205mr5854564oih.152.1606493426575;
- Fri, 27 Nov 2020 08:10:26 -0800 (PST)
+        Fri, 27 Nov 2020 11:10:54 -0500
+Received: from cmgw14.unifiedlayer.com (unknown [10.9.0.14])
+        by gproxy2.mail.unifiedlayer.com (Postfix) with ESMTP id 87B2B1E08A4
+        for <linux-hwmon@vger.kernel.org>; Fri, 27 Nov 2020 09:10:53 -0700 (MST)
+Received: from bh-25.webhostbox.net ([208.91.199.152])
+        by cmsmtp with ESMTP
+        id igKik8QDtwNNligKjkL6R1; Fri, 27 Nov 2020 09:10:53 -0700
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.3 cv=cqm1bWwi c=1 sm=1 tr=0
+ a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=nNwsprhYR40A:10:nop_rcvd_month_year
+ a=evQFzbml-YQA:10:endurance_base64_authed_username_1 a=pGLkceISAAAA:8
+ a=VwQbUJbxAAAA:8 a=8b9GpE9nAAAA:8 a=gXLdhW2jAAAA:8 a=QyXUC8HyAAAA:8
+ a=a_SMFhY1PeCmZ4XiELsA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=T3LWEMljR5ZiDmsYVIUa:22 a=Dn9eIPSr_RzuO0KTJioD:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=QJGvqtSrdAvrBQvUHBYdnxNztPyZAk6Gn39o5VoA3mY=; b=BCNdXvzM904tvkdHPRepKe+nFP
+        +vlxScFNpUu7p4C6CJ0q9LzSQdxN94BOlzMg3TepDLxRTyE6OoH+R/O3ppeix3VtnQnYSUkrWzpOn
+        hP07heEZv+8cffAjW7fd2BmIMhcC32bzR/lD66XB0lgiUbF2No5BC7msh2mpMhcSphWcbW2zj8FMf
+        hDuVFnR8PaxqHc/ZNhq6Z2oSREZR/OBuypu1AGggl1M3pJ19D7nR3dfhCcslUOjjH7u0kt9qtUqWv
+        rRskB9qS1w+BzMZjKovGIeH764cUl7fweIufx6RoVDQJ8vuwEuXeRt3RdqvhucTui+6VEm2mMnYgs
+        C8QUwZdg==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:43460 helo=localhost)
+        by bh-25.webhostbox.net with esmtpa (Exim 4.93)
+        (envelope-from <linux@roeck-us.net>)
+        id 1kigKi-002ml1-HK; Fri, 27 Nov 2020 16:10:52 +0000
+Date:   Fri, 27 Nov 2020 08:10:51 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Charles <hsu.yungteng@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        alan@redhat.com
+Subject: Re: [PATCH v5] hwmon: Add driver for STMicroelectronics PM6764
+ Voltage Regulator
+Message-ID: <20201127161051.GA9881@roeck-us.net>
+References: <f8766ea1-b4ee-f298-a5a4-dc83f9a54617@gmail.com>
 MIME-Version: 1.0
-References: <20201126174408.755-1-pbarker@konsulko.com> <20201126174408.755-3-pbarker@konsulko.com>
- <20201127155539.GA9519@roeck-us.net>
-In-Reply-To: <20201127155539.GA9519@roeck-us.net>
-From:   Paul Barker <pbarker@konsulko.com>
-Date:   Fri, 27 Nov 2020 16:10:15 +0000
-Message-ID: <CAM9ZRVvSDn+FHBk3dsfxHpkVaw2XzRcqOvY6oPK-70y_mfqQZQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] hwmon: pwm-fan: Convert to hwmon_device_register_with_info
- API
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Kamil Debski <kamil@wypas.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f8766ea1-b4ee-f298-a5a4-dc83f9a54617@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1kigKi-002ml1-HK
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:43460
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 2
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, 27 Nov 2020 at 15:55, Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Thu, Nov 26, 2020 at 05:44:08PM +0000, Paul Barker wrote:
-> > The pwm-fan driver is updated to use the recommended API.
-> >
-> > Signed-off-by: Paul Barker <pbarker@konsulko.com>
-> > ---
-> >  drivers/hwmon/pwm-fan.c | 112 +++++++++++++++++++++++++---------------
-> >  1 file changed, 71 insertions(+), 41 deletions(-)
-> >
-> > diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-> > index efe2764f42d3..c8a1d41d6f06 100644
-> > --- a/drivers/hwmon/pwm-fan.c
-> > +++ b/drivers/hwmon/pwm-fan.c
-> > @@ -8,7 +8,6 @@
-> >   */
-> >
-> >  #include <linux/hwmon.h>
-> > -#include <linux/hwmon-sysfs.h>
-> >  #include <linux/interrupt.h>
-> >  #include <linux/module.h>
-> >  #include <linux/mutex.h>
-> > @@ -39,6 +38,28 @@ struct pwm_fan_ctx {
-> >       unsigned int pwm_fan_max_state;
-> >       unsigned int *pwm_fan_cooling_levels;
-> >       struct thermal_cooling_device *cdev;
-> > +
-> > +     struct hwmon_chip_info info;
-> > +};
-> > +
-> > +static const u32 pwm_fan_channel_config_pwm[] = {
-> > +     HWMON_PWM_INPUT,
-> > +     0
-> > +};
-> > +
-> > +static const struct hwmon_channel_info pwm_fan_channel_pwm = {
-> > +     .type = hwmon_pwm,
-> > +     .config = pwm_fan_channel_config_pwm,
-> > +};
-> > +
-> > +static const u32 pwm_fan_channel_config_fan[] = {
-> > +     HWMON_F_INPUT,
-> > +     0
-> > +};
-> > +
-> > +static const struct hwmon_channel_info pwm_fan_channel_fan = {
-> > +     .type = hwmon_fan,
-> > +     .config = pwm_fan_channel_config_fan,
-> >  };
->
-> In general I'd suggest to use the HWMON_CHANNEL_INFO() macro instead,
-> but I think this is to prepare for a dynamic number of channels.
-> With that in mind, it is ok.
->
-> >
-> >  /* This handler assumes self resetting edge triggered interrupt. */
-> > @@ -103,14 +124,14 @@ static void pwm_fan_update_state(struct pwm_fan_ctx *ctx, unsigned long pwm)
-> >       ctx->pwm_fan_state = i;
-> >  }
-> >
-> > -static ssize_t pwm_store(struct device *dev, struct device_attribute *attr,
-> > -                      const char *buf, size_t count)
-> > +static int pwm_fan_write(struct device *dev, enum hwmon_sensor_types type,
-> > +                      u32 attr, int channel, long val)
-> >  {
-> >       struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
-> > -     unsigned long pwm;
-> > +     unsigned long pwm = val;
-> >       int ret;
-> >
-> > -     if (kstrtoul(buf, 10, &pwm) || pwm > MAX_PWM)
-> > +     if (pwm > MAX_PWM)
-> >               return -EINVAL;
->
-> This happens to catch negative values, but it is odd and somewhat difficult
-> to review and understand. I would suggest to drop the pwm variable and use
->         if (val < 0 || val > MAX_PWM)
->                 return -EINVAL;
-> instead.
->
-> >
-> >       ret = __set_pwm(ctx, pwm);
-> > @@ -118,55 +139,50 @@ static ssize_t pwm_store(struct device *dev, struct device_attribute *attr,
-> >               return ret;
-> >
-> >       pwm_fan_update_state(ctx, pwm);
-> > -     return count;
-> > +     return 0;
-> >  }
-> >
-> > -static ssize_t pwm_show(struct device *dev, struct device_attribute *attr,
-> > -                     char *buf)
-> > +static int pwm_fan_read(struct device *dev, enum hwmon_sensor_types type,
-> > +                     u32 attr, int channel, long *val)
-> >  {
-> >       struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
-> >
-> > -     return sprintf(buf, "%u\n", ctx->pwm_value);
-> > -}
-> > +     switch (type) {
-> > +     case hwmon_pwm:
-> > +             *val = ctx->pwm_value;
-> > +             return 0;
-> >
-> > -static ssize_t rpm_show(struct device *dev,
-> > -                     struct device_attribute *attr, char *buf)
-> > -{
-> > -     struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
-> > +     case hwmon_fan:
-> > +             *val = ctx->rpm;
-> > +             return 0;
-> >
-> > -     return sprintf(buf, "%u\n", ctx->rpm);
-> > +     default:
-> > +             return -EINVAL;
->
->                 return -EOPNOTSUPP;
->
-> > +     }
-> >  }
-> >
-> > -static SENSOR_DEVICE_ATTR_RW(pwm1, pwm, 0);
-> > -static SENSOR_DEVICE_ATTR_RO(fan1_input, rpm, 0);
-> > +static umode_t pwm_fan_is_visible(const void *data,
-> > +                               enum hwmon_sensor_types type,
-> > +                               u32 attr, int channel)
-> > +{
-> > +     struct pwm_fan_ctx *ctx = (struct pwm_fan_ctx *)data;
-> >
-> > -static struct attribute *pwm_fan_attrs[] = {
-> > -     &sensor_dev_attr_pwm1.dev_attr.attr,
-> > -     &sensor_dev_attr_fan1_input.dev_attr.attr,
-> > -     NULL,
-> > -};
-> > +     switch (type) {
-> > +     case hwmon_pwm:
-> > +             return 0644;
-> >
-> > -static umode_t pwm_fan_attrs_visible(struct kobject *kobj, struct attribute *a,
-> > -                                  int n)
-> > -{
-> > -     struct device *dev = container_of(kobj, struct device, kobj);
-> > -     struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
-> > +     case hwmon_fan:
-> > +             return 0444;
-> >
-> > -     /* Hide fan_input in case no interrupt is available  */
-> > -     if (n == 1 && ctx->irq <= 0)
-> > +     default:
-> >               return 0;
-> > -
-> > -     return a->mode;
-> > +     }
-> >  }
-> >
-> > -static const struct attribute_group pwm_fan_group = {
-> > -     .attrs = pwm_fan_attrs,
-> > -     .is_visible = pwm_fan_attrs_visible,
-> > -};
-> > -
-> > -static const struct attribute_group *pwm_fan_groups[] = {
-> > -     &pwm_fan_group,
-> > -     NULL,
-> > +static const struct hwmon_ops pwm_fan_hwmon_ops = {
-> > +     .is_visible = pwm_fan_is_visible,
-> > +     .read = pwm_fan_read,
-> > +     .write = pwm_fan_write,
-> >  };
-> >
-> >  /* thermal cooling device callbacks */
-> > @@ -287,6 +303,8 @@ static int pwm_fan_probe(struct platform_device *pdev)
-> >       int ret;
-> >       struct pwm_state state = { };
-> >       int tach_count;
-> > +     size_t sz;
-> > +     const struct hwmon_channel_info **channels;
-> >
-> >       ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
-> >       if (!ctx)
-> > @@ -340,6 +358,13 @@ static int pwm_fan_probe(struct platform_device *pdev)
-> >               return dev_err_probe(dev, tach_count,
-> >                                    "Could not get number of fan tachometer inputs\n");
-> >
-> > +     sz = (2 + tach_count) * sizeof(struct hwmon_channel_info *);
-> > +     channels = devm_kzalloc(dev, sz, GFP_KERNEL);
->
-> devm_kcalloc() is preferred.
->         channels = devm_kcalloc(dev, tach_count + 2,
->                                 sizeof(struct hwmon_channel_info *), GFP_KERNEL);
->
-> > +     if (!channels)
-> > +             return -ENOMEM;
-> > +
-> > +     channels[0] = &pwm_fan_channel_pwm;
-> > +
-> >       if (tach_count > 0) {
-> >               u32 ppr = 2;
-> >
-> > @@ -371,10 +396,15 @@ static int pwm_fan_probe(struct platform_device *pdev)
-> >
-> >               ctx->sample_start = ktime_get();
-> >               mod_timer(&ctx->rpm_timer, jiffies + HZ);
-> > +
-> > +             channels[1] = &pwm_fan_channel_fan;
-> >       }
-> >
-> > -     hwmon = devm_hwmon_device_register_with_groups(dev, "pwmfan",
-> > -                                                    ctx, pwm_fan_groups);
-> > +     ctx->info.ops = &pwm_fan_hwmon_ops;
-> > +     ctx->info.info = channels;
-> > +
-> > +     hwmon = devm_hwmon_device_register_with_info(dev, "pwmfan",
-> > +                                                  ctx, &ctx->info, NULL);
-> >       if (IS_ERR(hwmon)) {
-> >               dev_err(dev, "Failed to register hwmon device\n");
-> >               return PTR_ERR(hwmon);
+On Fri, Nov 27, 2020 at 09:59:01AM +0800, Charles wrote:
+> Add the pmbus driver for the STMicroelectronics pm6764 voltage regulator.
+> 
+> the output voltage use the MFR_READ_VOUT 0xD4
+> vout value returned is linear11
+> 
+> Signed-off-by: Charles Hsu <hsu.yungteng@gmail.com>
 
-Thanks for the review. Those are all straightforward changes so I'll
-make them and send a v2.
+This patch (again) didn't make it to any of the mailing lists.
+Please try to find out why this is the case. I usually pick up
+patches from https://patchwork.kernel.org/project/linux-hwmon/list/,
+and may easily miss a patch if I can't find it there.
 
--- 
-Paul Barker
-Konsulko Group
+> ---
+> 
+> v5:
+>  - Add MAINTAINERS
+>  - Add a reference into trivial-devices.yaml
+> v4:
+>  - Add pm6764tr to Documentation/hwmon/index.rst.
+> v3:
+>  - Add Documentation(Documentation/hwmon/pm6764tr.rst).
+>  - Fix include order.
+> v2:
+>  - Fix formatting.
+>  - Remove pmbus_do_remove.
+>  - Change from .probe to .probe_new.
+> v1:
+>  - Initial patchset.
+> 
+> ---
+> 
+>  .../devicetree/bindings/trivial-devices.yaml  |  2 +
+>  Documentation/hwmon/index.rst                 |  1 +
+>  Documentation/hwmon/pm6764tr.rst              | 33 ++++++++
+>  MAINTAINERS                                   |  7 ++
+>  drivers/hwmon/pmbus/Kconfig                   |  9 +++
+>  drivers/hwmon/pmbus/Makefile                  |  1 +
+>  drivers/hwmon/pmbus/pm6764tr.c                | 76 +++++++++++++++++++
+>  7 files changed, 129 insertions(+)
+>  create mode 100644 Documentation/hwmon/pm6764tr.rst
+>  create mode 100644 drivers/hwmon/pmbus/pm6764tr.c
+> 
+> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+> index ab623ba930d5..cdd7bdb6abbb 100644
+> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+> @@ -348,6 +348,8 @@ properties:
+>            - socionext,synquacer-tpm-mmio
+>              # i2c serial eeprom  (24cxx)
+>            - st,24c256
+> +            # SMBus/I2C Voltage Regulator
+> +          - st,pm6764tr
+>              # Ambient Light Sensor with SMBUS/Two Wire Serial Interface
+>            - taos,tsl2550
+>              # 8-Channels, 12-bit ADC
+
+This, like all devicetre changes, needs to be a separate patch.
+Also, please make sure to copy dt maintainers and the dt mailing list
+when you send that patch.
+
+> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+> index b797db738225..1bbd05e41de4 100644
+> --- a/Documentation/hwmon/index.rst
+> +++ b/Documentation/hwmon/index.rst
+> @@ -144,6 +144,7 @@ Hardware Monitoring Kernel Drivers
+>     pc87360
+>     pc87427
+>     pcf8591
+> +   pm6764tr
+>     pmbus
+>     powr1220
+>     pxe1610
+> diff --git a/Documentation/hwmon/pm6764tr.rst b/Documentation/hwmon/pm6764tr.rst
+> new file mode 100644
+> index 000000000000..5e8092e39297
+> --- /dev/null
+> +++ b/Documentation/hwmon/pm6764tr.rst
+> @@ -0,0 +1,33 @@
+> +.. SPDX-License-Identifier: GPL-2.0-only
+> +
+> +Kernel driver pm6764tr
+> +======================
+> +
+> +Supported chips:
+> +
+> +  * ST PM6764TR
+> +
+> +    Prefix: 'pm6764tr'
+> +
+> +    Addresses scanned: -
+> +
+> +    Datasheet: http://www.st.com/resource/en/data_brief/pm6764.pdf
+> +
+> +Authors:
+> +	<hsu.yungteng@gmail.com>
+> +
+> +Description:
+> +------------
+> +
+> +This driver supports the STMicroelectronics PM6764TR chip. The PM6764TR is a high
+> +performance digital controller designed to power Intel’s VR12.5 processors and memories.
+> +
+
+Unrelated side note: I understand this means that you are forced to keep the
+datasheet under wraps, which in turn means I can not suggest functionality
+improvements since I don't have access to it. If the chip happens to support
+per-rail telemetry, you might want to consider adding support for that in a
+follow-up patch.
+
+> +The device utilizes digital technology to implement all control and power management
+> +functions to provide maximum flexibility and performance. The NVM is embedded to store
+> +custom configurations. The PM6764TR device features up to 4-phase programmable operation.
+> +
+> +The PM6764TR supports power state transitions featuring VFDE, and programmable DPM
+> +maintaining the best efficiency over all loading conditions without compromising transient
+> +response. The device assures fast and independent protectionagainstload overcurrent,
+
+"protectionagainstload" -> "protection against load"
+
+> +under/overvoltage and feedback disconnections.
+> +
+
+Drop empty line at end.
+
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 94ac10a153c7..a3fea132c4ed 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -13904,6 +13904,13 @@ M:	Logan Gunthorpe <logang@deltatee.com>
+>  S:	Maintained
+>  F:	drivers/dma/plx_dma.c
+
+Add empty line.
+
+> +PM6764TR DRIVER
+> +M:	Charles Hsu	<hsu.yungteng@gmail.com>
+> +L:	linux-hwmon@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/hwmon/pm6764tr.rst
+> +F:	drivers/hwmon/pmbus/pm6764tr.c
+> +
+>  PM-GRAPH UTILITY
+>  M:	"Todd E Brandt" <todd.e.brandt@linux.intel.com>
+>  L:	linux-pm@vger.kernel.org
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index a25faf69fce3..9c846facce9f 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -220,6 +220,15 @@ config SENSORS_MP2975
+>  	  This driver can also be built as a module. If so, the module will
+>  	  be called mp2975.
+
+Add empty line.
+
+> +config SENSORS_PM6764TR
+> +	tristate "ST PM6764TR"
+> +	help
+> +	  If you say yes here you get hardware monitoring support for ST
+> +	  PM6764TR.
+> +
+> +	  This driver can also be built as a module. If so, the module will
+> +	  be called pm6764tr.
+> +
+>  config SENSORS_PXE1610
+>  	tristate "Infineon PXE1610"
+>  	help
+> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> index 4c97ad0bd791..31ebdef5d4a6 100644
+> --- a/drivers/hwmon/pmbus/Makefile
+> +++ b/drivers/hwmon/pmbus/Makefile
+> @@ -25,6 +25,7 @@ obj-$(CONFIG_SENSORS_MAX31785)	+= max31785.o
+>  obj-$(CONFIG_SENSORS_MAX34440)	+= max34440.o
+>  obj-$(CONFIG_SENSORS_MAX8688)	+= max8688.o
+>  obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
+> +obj-$(CONFIG_SENSORS_PM6764TR)	+= pm6764tr.o
+>  obj-$(CONFIG_SENSORS_PXE1610)	+= pxe1610.o
+>  obj-$(CONFIG_SENSORS_TPS40422)	+= tps40422.o
+>  obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
+> diff --git a/drivers/hwmon/pmbus/pm6764tr.c b/drivers/hwmon/pmbus/pm6764tr.c
+> new file mode 100644
+> index 000000000000..70747c21c66e
+> --- /dev/null
+> +++ b/drivers/hwmon/pmbus/pm6764tr.c
+> @@ -0,0 +1,76 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Hardware monitoring driver for STMicroelectronics digital controller PM6764TR
+> + */
+> +
+> +#include <linux/err.h>
+> +#include <linux/i2c.h>
+> +#include <linux/init.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/pmbus.h>
+> +#include "pmbus.h"
+> +
+> +#define PM6764TR_PMBUS_READ_VOUT	0xD4
+> +
+> +static int pm6764tr_read_word_data(struct i2c_client *client, int page, int reg)
+> +{
+> +	int ret;
+> +
+> +	switch (reg) {
+> +	case PMBUS_VIRT_READ_VMON:
+> +		ret = pmbus_read_word_data(client, page, PM6764TR_PMBUS_READ_VOUT);
+> +		break;
+> +	default:
+> +		ret = -ENODATA;
+> +		break;
+> +	}
+> +	return ret;
+> +}
+> +
+> +static struct pmbus_driver_info pm6764tr_info = {
+> +	.pages = 1,
+> +	.format[PSC_VOLTAGE_IN] = linear,
+> +	.format[PSC_VOLTAGE_OUT] = vid,
+> +	.format[PSC_TEMPERATURE] = linear,
+> +	.format[PSC_CURRENT_OUT] = linear,
+> +	.format[PSC_POWER] = linear,
+> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN |  PMBUS_HAVE_PIN |
+> +	    PMBUS_HAVE_IOUT | PMBUS_HAVE_POUT | PMBUS_HAVE_VMON |
+> +		PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_VOUT |
+> +		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+> +	.read_word_data = pm6764tr_read_word_data,
+> +};
+> +
+> +static int pm6764tr_probe(struct i2c_client *client,
+> +			  const struct i2c_device_id *id)
+> +{
+> +	return pmbus_do_probe(client, id, &pm6764tr_info);
+> +}
+> +
+> +static const struct i2c_device_id pm6764tr_id[] = {
+> +	{"pm6764tr", 0},
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(i2c, pm6764tr_id);
+> +
+> +static const struct of_device_id pm6764tr_of_match[] = {
+> +	{.compatible = "st,pm6764tr"},
+> +	{}
+> +};
+> +
+> +/* This is the driver that will be inserted */
+> +static struct i2c_driver pm6764tr_driver = {
+> +	.driver = {
+> +		   .name = "pm6764tr",
+> +		   .of_match_table = of_match_ptr(pm6764tr_of_match),
+> +		   },
+> +	.probe_new = pm6764tr_probe,
+> +	.id_table = pm6764tr_id,
+> +};
+> +
+> +module_i2c_driver(pm6764tr_driver);
+> +
+> +MODULE_AUTHOR("Charles Hsu");
+> +MODULE_DESCRIPTION("PMBus driver for  ST PM6764TR");
+> +MODULE_LICENSE("GPL");
+> -- 
+> 2.25.1
+> 
