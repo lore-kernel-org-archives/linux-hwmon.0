@@ -2,71 +2,70 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
+X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 860C4C2D0E4
-	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Nov 2020 16:10:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9D7EC3E8C5
+	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Nov 2020 16:30:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 20679208D5
-	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Nov 2020 16:10:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 76404221EB
+	for <linux-hwmon@archiver.kernel.org>; Fri, 27 Nov 2020 16:30:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.b="BCNdXvzM"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.b="zHyxCsFr"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730876AbgK0QKy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 27 Nov 2020 11:10:54 -0500
-Received: from gproxy2-pub.mail.unifiedlayer.com ([69.89.18.3]:55279 "EHLO
-        gproxy2-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730324AbgK0QKy (ORCPT
+        id S1730985AbgK0Qak (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 27 Nov 2020 11:30:40 -0500
+Received: from gproxy10-pub.mail.unifiedlayer.com ([69.89.20.226]:57793 "EHLO
+        gproxy10-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730603AbgK0Qaj (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 27 Nov 2020 11:10:54 -0500
-Received: from cmgw14.unifiedlayer.com (unknown [10.9.0.14])
-        by gproxy2.mail.unifiedlayer.com (Postfix) with ESMTP id 87B2B1E08A4
-        for <linux-hwmon@vger.kernel.org>; Fri, 27 Nov 2020 09:10:53 -0700 (MST)
+        Fri, 27 Nov 2020 11:30:39 -0500
+Received: from cmgw10.unifiedlayer.com (unknown [10.9.0.10])
+        by gproxy10.mail.unifiedlayer.com (Postfix) with ESMTP id 7B2B2140438
+        for <linux-hwmon@vger.kernel.org>; Fri, 27 Nov 2020 09:30:37 -0700 (MST)
 Received: from bh-25.webhostbox.net ([208.91.199.152])
         by cmsmtp with ESMTP
-        id igKik8QDtwNNligKjkL6R1; Fri, 27 Nov 2020 09:10:53 -0700
+        id igdokPqZuDlydigdpkEEaV; Fri, 27 Nov 2020 09:30:37 -0700
 X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.3 cv=cqm1bWwi c=1 sm=1 tr=0
+X-Authority-Analysis: v=2.3 cv=Kev8TzQD c=1 sm=1 tr=0
  a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=kj9zAlcOel0A:10:nop_charset_1
  a=nNwsprhYR40A:10:nop_rcvd_month_year
  a=evQFzbml-YQA:10:endurance_base64_authed_username_1 a=pGLkceISAAAA:8
- a=VwQbUJbxAAAA:8 a=8b9GpE9nAAAA:8 a=gXLdhW2jAAAA:8 a=QyXUC8HyAAAA:8
- a=a_SMFhY1PeCmZ4XiELsA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=T3LWEMljR5ZiDmsYVIUa:22 a=Dn9eIPSr_RzuO0KTJioD:22
+ a=75MfFJLnZXMnBOZUvNoA:9 a=CjuIK1q_8ugA:10:nop_charset_2
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=QJGvqtSrdAvrBQvUHBYdnxNztPyZAk6Gn39o5VoA3mY=; b=BCNdXvzM904tvkdHPRepKe+nFP
-        +vlxScFNpUu7p4C6CJ0q9LzSQdxN94BOlzMg3TepDLxRTyE6OoH+R/O3ppeix3VtnQnYSUkrWzpOn
-        hP07heEZv+8cffAjW7fd2BmIMhcC32bzR/lD66XB0lgiUbF2No5BC7msh2mpMhcSphWcbW2zj8FMf
-        hDuVFnR8PaxqHc/ZNhq6Z2oSREZR/OBuypu1AGggl1M3pJ19D7nR3dfhCcslUOjjH7u0kt9qtUqWv
-        rRskB9qS1w+BzMZjKovGIeH764cUl7fweIufx6RoVDQJ8vuwEuXeRt3RdqvhucTui+6VEm2mMnYgs
-        C8QUwZdg==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:43460 helo=localhost)
+        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=WPpuTU+XUm25A1NDRVwyMF19Teqymq03fFkeuI9GXnA=; b=zHyxCsFrX7bWa03wZe/GMyD0Ma
+        55HOyadKScxlt80FZacrqecHeqfi/j+uqm23wOSNsJZZlqxKh+F7kwqIMqiD+YMArYBwOoRzCX7py
+        XFF2eiyOCaBoKSgDqgptxeJ5ruCDVslk/KW3ScnLYpT5pLaVGFI0wTP1guqDHEt0JxNNfbkIJNqgq
+        es+0tmtBXtVSsZFcjZGrrmkrb82UWfZaWGUut4bGx5aMtFzCmz2YOi/vh5SfhwnLBqfF59h2/mrCj
+        NrkYQSXpqSneeo5SjiUrBWaYz+6G5O5oJ8rfwNA9j8HUQ6e9Jrc+aoaxoBar7Rw/2/3G51tBigLBS
+        oYxprw0A==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:43514 helo=localhost)
         by bh-25.webhostbox.net with esmtpa (Exim 4.93)
         (envelope-from <linux@roeck-us.net>)
-        id 1kigKi-002ml1-HK; Fri, 27 Nov 2020 16:10:52 +0000
-Date:   Fri, 27 Nov 2020 08:10:51 -0800
+        id 1kigdo-002sex-Ht; Fri, 27 Nov 2020 16:30:36 +0000
+Date:   Fri, 27 Nov 2020 08:30:35 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Charles <hsu.yungteng@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        alan@redhat.com
-Subject: Re: [PATCH v5] hwmon: Add driver for STMicroelectronics PM6764
- Voltage Regulator
-Message-ID: <20201127161051.GA9881@roeck-us.net>
-References: <f8766ea1-b4ee-f298-a5a4-dc83f9a54617@gmail.com>
+To:     Dongjin Kim <tobetter@gmail.com>
+Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (pwm-fan) add fan pwm1_enable attribute
+Message-ID: <20201127163035.GC9881@roeck-us.net>
+References: <20201125163242.GA1264232@paju>
+ <20201126020536.GE111386@roeck-us.net>
+ <20201126154247.GA24875@paju>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f8766ea1-b4ee-f298-a5a4-dc83f9a54617@gmail.com>
+In-Reply-To: <20201126154247.GA24875@paju>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
 X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
@@ -76,280 +75,222 @@ X-AntiAbuse: Sender Address Domain - roeck-us.net
 X-BWhitelist: no
 X-Source-IP: 108.223.40.66
 X-Source-L: No
-X-Exim-ID: 1kigKi-002ml1-HK
+X-Exim-ID: 1kigdo-002sex-Ht
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:43460
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:43514
 X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 2
+X-Email-Count: 11
 X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
 X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Nov 27, 2020 at 09:59:01AM +0800, Charles wrote:
-> Add the pmbus driver for the STMicroelectronics pm6764 voltage regulator.
+On Fri, Nov 27, 2020 at 12:42:47AM +0900, Dongjin Kim wrote:
+> On Wed, Nov 25, 2020 at 06:05:36PM -0800, Guenter Roeck wrote:
+> > On Thu, Nov 26, 2020 at 01:32:42AM +0900, Dongjin Kim wrote:
+> > > This patch adds to new attribute 'pwm1_enable' to change the fan speed
+> > > control method as documented in 'Documentation/hwmon/sysfs-interface'.
+> > > 
+> > > Signed-off-by: Dongjin Kim <tobetter@gmail.com>
+> > 
+> > The new attribute needs to be documented in
+> > Documentation/hwmon/pwm-fan.rst, with supported values.
+> > 
+> > > ---
+> > >  drivers/hwmon/pwm-fan.c | 52 ++++++++++++++++++++++++++++++++++++-----
+> > >  1 file changed, 46 insertions(+), 6 deletions(-)
+> > > 
+> > > diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
+> > > index 1f63807c0399..834275309421 100644
+> > > --- a/drivers/hwmon/pwm-fan.c
+> > > +++ b/drivers/hwmon/pwm-fan.c
+> > > @@ -39,6 +39,7 @@ struct pwm_fan_ctx {
+> > >  	unsigned int pwm_fan_max_state;
+> > >  	unsigned int *pwm_fan_cooling_levels;
+> > >  	struct thermal_cooling_device *cdev;
+> > > +	int enable;
+> > >  };
+> > >  
+> > >  /* This handler assumes self resetting edge triggered interrupt. */
+> > > @@ -76,6 +77,10 @@ static int  __set_pwm(struct pwm_fan_ctx *ctx, unsigned long pwm)
+> > >  	struct pwm_state state = { };
+> > >  
+> > >  	mutex_lock(&ctx->lock);
+> > > +
+> > > +	if (ctx->enable == 0)
+> > > +		pwm = MAX_PWM;
+> > > +
+> > >  	if (ctx->pwm_value == pwm)
+> > >  		goto exit_set_pwm_err;
+> > >  
+> > > @@ -137,11 +142,42 @@ static ssize_t rpm_show(struct device *dev,
+> > >  	return sprintf(buf, "%u\n", ctx->rpm);
+> > >  }
+> > >  
+> > > +static ssize_t enable_store(struct device *dev,
+> > > +		struct device_attribute *attr,
+> > > +		const char *buf, size_t count)
+> > > +{
+> > > +	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
+> > > +	int err;
+> > > +	unsigned long val;
+> > > +
+> > > +	err = kstrtoul(buf, 10, &val);
+> > > +	if (err)
+> > > +		return err;
+> > > +
+> > 
+> > 'val' must be validated and only accept permitted values.
+> Sure.
+> > 
+> > > +	mutex_lock(&ctx->lock);
+> > > +	ctx->enable = val;
+> > > +	mutex_unlock(&ctx->lock);
+> > > +
+> > > +	err = __set_pwm(ctx, ctx->pwm_fan_cooling_levels[ctx->pwm_fan_state]);
+> > > +
+> > > +	return err ? err : count;
+> > > +}
+> > > +
+> > > +static ssize_t enable_show(struct device *dev, struct device_attribute *attr,
+> > > +			   char *buf)
+> > > +{
+> > > +	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
+> > > +
+> > > +	return sprintf(buf, "%u\n", ctx->enable);
+> > > +}
+> > > +
+> > >  static SENSOR_DEVICE_ATTR_RW(pwm1, pwm, 0);
+> > > +static SENSOR_DEVICE_ATTR_RW(pwm1_enable, enable, 0);
+> > >  static SENSOR_DEVICE_ATTR_RO(fan1_input, rpm, 0);
+> > >  
+> > >  static struct attribute *pwm_fan_attrs[] = {
+> > >  	&sensor_dev_attr_pwm1.dev_attr.attr,
+> > > +	&sensor_dev_attr_pwm1_enable.dev_attr.attr,
+> > >  	&sensor_dev_attr_fan1_input.dev_attr.attr,
+> > >  	NULL,
+> > >  };
+> > > @@ -153,7 +189,7 @@ static umode_t pwm_fan_attrs_visible(struct kobject *kobj, struct attribute *a,
+> > >  	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
+> > >  
+> > >  	/* Hide fan_input in case no interrupt is available  */
+> > > -	if (n == 1 && ctx->irq <= 0)
+> > > +	if (n == 2 && ctx->irq <= 0)
+> > >  		return 0;
+> > >  
+> > >  	return a->mode;
+> > > @@ -200,7 +236,7 @@ static int
+> > >  pwm_fan_set_cur_state(struct thermal_cooling_device *cdev, unsigned long state)
+> > >  {
+> > >  	struct pwm_fan_ctx *ctx = cdev->devdata;
+> > > -	int ret;
+> > > +	int ret = 0;
+> > >  
+> > >  	if (!ctx || (state > ctx->pwm_fan_max_state))
+> > >  		return -EINVAL;
+> > > @@ -208,10 +244,12 @@ pwm_fan_set_cur_state(struct thermal_cooling_device *cdev, unsigned long state)
+> > >  	if (state == ctx->pwm_fan_state)
+> > >  		return 0;
+> > >  
+> > > -	ret = __set_pwm(ctx, ctx->pwm_fan_cooling_levels[state]);
+> > > -	if (ret) {
+> > > -		dev_err(&cdev->device, "Cannot set pwm!\n");
+> > > -		return ret;
+> > > +	if (ctx->enable >= 2) {
+> > 
+> > What is "automatic" here ? I don't see how this driver or the underlying
+> > pwm controller/chip would support automatic fan speed control. This is
+> > completely independent of thermal control: thermal device support does _not_
+> > imply or suggest "automatic" fan speed control from a pwm chip perspective.
+> > 
+> My understanding of 'automatic' is to set the fan speed by a thermal device
+> with the trip points, it changes the cooling state and change the fan speed.
+> Please correct me if I am wrong.
+
+Yes, you are wrong. "automatic" means the controller performs pwm control
+automatically, on its own, without interference by the Linux kernel or userspace.
+It is also autonomous to thermal subsystem control. In general, "automatic" and
+thermal control by the Linux kernel contradict each other: "automatic" implies
+that the device is _not_ under thermal subsystem control. That would, from
+a device perspective, be "manual".
+
 > 
-> the output voltage use the MFR_READ_VOUT 0xD4
-> vout value returned is linear11
+> > This makes me also very concerned about this attribute in the first please:
+> > All it does, in its current implementation, is to disable thermal device 
+> > control. That is not the idea here, and it doesn't make any sense to me.
+> > On the contrary, all I can find is that it is dangerous.
+> > 
+> I don't intend to change the thermal control itself in 'manual' mode, but does
+> not change the fan speed with given cooling state. In 'automatic' mode, the
+> fan speed will be changed by the thermal device.
 > 
-> Signed-off-by: Charles Hsu <hsu.yungteng@gmail.com>
+> > Please describe in detail what you think this attribute is supposed to
+> > accomplish, and why you think it is needed or even makes sense. Overriding
+> > thermal control doesn't make sense to me: If you want that, just disable
+> > thermal control, or don't register this device as cooling device in the
+> > first place.  Other than that, the whole driver implies manual pwm control.
+> > That means pwm can already be "disabled" by writing a 0 pwm value. An
+> > additional attributes doesn't add value and only makes the driver ABI
+> > unnecessarily complex. So please prepare a detailed rationale to convince
+> > me otherwise.
+> >
+> I am using this driver to run a fan on ARM SBC and thought 'fancontrol' can
+> help to map the fan speed with pwm value if necessary instead of using the pwm
+> values in a device tree by writing '1' to 'pwm1_enable'. When this driver is
+> not registered as a cooling device, as you suggested, OS should provide the
+> default fancontrol config to run fully in manual mode if my understanding is
+> correct. Based on this what I am thinking is that OS images for ARM SBC should
+> have a fan control service or a tool if it allows user to change the fan speed.
+> But this could be very various for all SBC, I would prefer to provide the
+> default cooling device in the device tree to prevent the absence of fan
+> control due to the missing or wrong config.
 
-This patch (again) didn't make it to any of the mailing lists.
-Please try to find out why this is the case. I usually pick up
-patches from https://patchwork.kernel.org/project/linux-hwmon/list/,
-and may easily miss a patch if I can't find it there.
+'fancontrol' and in-kernel thermal management should not both run at the same
+time. In-kernel thermal control would in general be preferred, and should be
+configurable through the thermal subsystem. Either case, we can't use hwmon
+attributes to switch between the two methods for thermal control. If
+'fancontrol' is to be used, the thermal subsystem should be completely
+disabled. However, again, I would not recommend doing that since it is much more
+comprehensive than 'fancontrol'.
 
-> ---
+Guenter
+
 > 
-> v5:
->  - Add MAINTAINERS
->  - Add a reference into trivial-devices.yaml
-> v4:
->  - Add pm6764tr to Documentation/hwmon/index.rst.
-> v3:
->  - Add Documentation(Documentation/hwmon/pm6764tr.rst).
->  - Fix include order.
-> v2:
->  - Fix formatting.
->  - Remove pmbus_do_remove.
->  - Change from .probe to .probe_new.
-> v1:
->  - Initial patchset.
+> > We can have a separate discussion if disabling a pwm controller using the
+> > hwmon ABI should disable that pwm controller from a thermal (cooling) device
+> > perspective. If so, we'll need to think about the implications. We can not
+> > just disable thermal cooling device support without telling the thermal
+> > subsystem that this means of temperature control doesn't work anymore.
+> > That should, however, be a completely separate discussion, independent
+> > of this driver, and it should include thermal subsystem maintainers
+> > and the thermal subsystem mailing list.
+> Ok, thank you for your advice and review. :)
 > 
-> ---
-> 
->  .../devicetree/bindings/trivial-devices.yaml  |  2 +
->  Documentation/hwmon/index.rst                 |  1 +
->  Documentation/hwmon/pm6764tr.rst              | 33 ++++++++
->  MAINTAINERS                                   |  7 ++
->  drivers/hwmon/pmbus/Kconfig                   |  9 +++
->  drivers/hwmon/pmbus/Makefile                  |  1 +
->  drivers/hwmon/pmbus/pm6764tr.c                | 76 +++++++++++++++++++
->  7 files changed, 129 insertions(+)
->  create mode 100644 Documentation/hwmon/pm6764tr.rst
->  create mode 100644 drivers/hwmon/pmbus/pm6764tr.c
-> 
-> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-> index ab623ba930d5..cdd7bdb6abbb 100644
-> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
-> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-> @@ -348,6 +348,8 @@ properties:
->            - socionext,synquacer-tpm-mmio
->              # i2c serial eeprom  (24cxx)
->            - st,24c256
-> +            # SMBus/I2C Voltage Regulator
-> +          - st,pm6764tr
->              # Ambient Light Sensor with SMBUS/Two Wire Serial Interface
->            - taos,tsl2550
->              # 8-Channels, 12-bit ADC
-
-This, like all devicetre changes, needs to be a separate patch.
-Also, please make sure to copy dt maintainers and the dt mailing list
-when you send that patch.
-
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index b797db738225..1bbd05e41de4 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -144,6 +144,7 @@ Hardware Monitoring Kernel Drivers
->     pc87360
->     pc87427
->     pcf8591
-> +   pm6764tr
->     pmbus
->     powr1220
->     pxe1610
-> diff --git a/Documentation/hwmon/pm6764tr.rst b/Documentation/hwmon/pm6764tr.rst
-> new file mode 100644
-> index 000000000000..5e8092e39297
-> --- /dev/null
-> +++ b/Documentation/hwmon/pm6764tr.rst
-> @@ -0,0 +1,33 @@
-> +.. SPDX-License-Identifier: GPL-2.0-only
-> +
-> +Kernel driver pm6764tr
-> +======================
-> +
-> +Supported chips:
-> +
-> +  * ST PM6764TR
-> +
-> +    Prefix: 'pm6764tr'
-> +
-> +    Addresses scanned: -
-> +
-> +    Datasheet: http://www.st.com/resource/en/data_brief/pm6764.pdf
-> +
-> +Authors:
-> +	<hsu.yungteng@gmail.com>
-> +
-> +Description:
-> +------------
-> +
-> +This driver supports the STMicroelectronics PM6764TR chip. The PM6764TR is a high
-> +performance digital controller designed to power Intel’s VR12.5 processors and memories.
-> +
-
-Unrelated side note: I understand this means that you are forced to keep the
-datasheet under wraps, which in turn means I can not suggest functionality
-improvements since I don't have access to it. If the chip happens to support
-per-rail telemetry, you might want to consider adding support for that in a
-follow-up patch.
-
-> +The device utilizes digital technology to implement all control and power management
-> +functions to provide maximum flexibility and performance. The NVM is embedded to store
-> +custom configurations. The PM6764TR device features up to 4-phase programmable operation.
-> +
-> +The PM6764TR supports power state transitions featuring VFDE, and programmable DPM
-> +maintaining the best efficiency over all loading conditions without compromising transient
-> +response. The device assures fast and independent protectionagainstload overcurrent,
-
-"protectionagainstload" -> "protection against load"
-
-> +under/overvoltage and feedback disconnections.
-> +
-
-Drop empty line at end.
-
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 94ac10a153c7..a3fea132c4ed 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -13904,6 +13904,13 @@ M:	Logan Gunthorpe <logang@deltatee.com>
->  S:	Maintained
->  F:	drivers/dma/plx_dma.c
-
-Add empty line.
-
-> +PM6764TR DRIVER
-> +M:	Charles Hsu	<hsu.yungteng@gmail.com>
-> +L:	linux-hwmon@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/hwmon/pm6764tr.rst
-> +F:	drivers/hwmon/pmbus/pm6764tr.c
-> +
->  PM-GRAPH UTILITY
->  M:	"Todd E Brandt" <todd.e.brandt@linux.intel.com>
->  L:	linux-pm@vger.kernel.org
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index a25faf69fce3..9c846facce9f 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -220,6 +220,15 @@ config SENSORS_MP2975
->  	  This driver can also be built as a module. If so, the module will
->  	  be called mp2975.
-
-Add empty line.
-
-> +config SENSORS_PM6764TR
-> +	tristate "ST PM6764TR"
-> +	help
-> +	  If you say yes here you get hardware monitoring support for ST
-> +	  PM6764TR.
-> +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called pm6764tr.
-> +
->  config SENSORS_PXE1610
->  	tristate "Infineon PXE1610"
->  	help
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index 4c97ad0bd791..31ebdef5d4a6 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -25,6 +25,7 @@ obj-$(CONFIG_SENSORS_MAX31785)	+= max31785.o
->  obj-$(CONFIG_SENSORS_MAX34440)	+= max34440.o
->  obj-$(CONFIG_SENSORS_MAX8688)	+= max8688.o
->  obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
-> +obj-$(CONFIG_SENSORS_PM6764TR)	+= pm6764tr.o
->  obj-$(CONFIG_SENSORS_PXE1610)	+= pxe1610.o
->  obj-$(CONFIG_SENSORS_TPS40422)	+= tps40422.o
->  obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
-> diff --git a/drivers/hwmon/pmbus/pm6764tr.c b/drivers/hwmon/pmbus/pm6764tr.c
-> new file mode 100644
-> index 000000000000..70747c21c66e
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/pm6764tr.c
-> @@ -0,0 +1,76 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Hardware monitoring driver for STMicroelectronics digital controller PM6764TR
-> + */
-> +
-> +#include <linux/err.h>
-> +#include <linux/i2c.h>
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/pmbus.h>
-> +#include "pmbus.h"
-> +
-> +#define PM6764TR_PMBUS_READ_VOUT	0xD4
-> +
-> +static int pm6764tr_read_word_data(struct i2c_client *client, int page, int reg)
-> +{
-> +	int ret;
-> +
-> +	switch (reg) {
-> +	case PMBUS_VIRT_READ_VMON:
-> +		ret = pmbus_read_word_data(client, page, PM6764TR_PMBUS_READ_VOUT);
-> +		break;
-> +	default:
-> +		ret = -ENODATA;
-> +		break;
-> +	}
-> +	return ret;
-> +}
-> +
-> +static struct pmbus_driver_info pm6764tr_info = {
-> +	.pages = 1,
-> +	.format[PSC_VOLTAGE_IN] = linear,
-> +	.format[PSC_VOLTAGE_OUT] = vid,
-> +	.format[PSC_TEMPERATURE] = linear,
-> +	.format[PSC_CURRENT_OUT] = linear,
-> +	.format[PSC_POWER] = linear,
-> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN |  PMBUS_HAVE_PIN |
-> +	    PMBUS_HAVE_IOUT | PMBUS_HAVE_POUT | PMBUS_HAVE_VMON |
-> +		PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_VOUT |
-> +		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-> +	.read_word_data = pm6764tr_read_word_data,
-> +};
-> +
-> +static int pm6764tr_probe(struct i2c_client *client,
-> +			  const struct i2c_device_id *id)
-> +{
-> +	return pmbus_do_probe(client, id, &pm6764tr_info);
-> +}
-> +
-> +static const struct i2c_device_id pm6764tr_id[] = {
-> +	{"pm6764tr", 0},
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(i2c, pm6764tr_id);
-> +
-> +static const struct of_device_id pm6764tr_of_match[] = {
-> +	{.compatible = "st,pm6764tr"},
-> +	{}
-> +};
-> +
-> +/* This is the driver that will be inserted */
-> +static struct i2c_driver pm6764tr_driver = {
-> +	.driver = {
-> +		   .name = "pm6764tr",
-> +		   .of_match_table = of_match_ptr(pm6764tr_of_match),
-> +		   },
-> +	.probe_new = pm6764tr_probe,
-> +	.id_table = pm6764tr_id,
-> +};
-> +
-> +module_i2c_driver(pm6764tr_driver);
-> +
-> +MODULE_AUTHOR("Charles Hsu");
-> +MODULE_DESCRIPTION("PMBus driver for  ST PM6764TR");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.25.1
-> 
+> Dongjin.
+> > 
+> > Thanks,
+> > Guenter
+> > 
+> > > +		ret = __set_pwm(ctx, ctx->pwm_fan_cooling_levels[state]);
+> > > +		if (ret) {
+> > > +			dev_err(&cdev->device, "Cannot set pwm!\n");
+> > > +			return ret;
+> > > +		}
+> > >  	}
+> > >  
+> > >  	ctx->pwm_fan_state = state;
+> > > @@ -298,6 +336,8 @@ static int pwm_fan_probe(struct platform_device *pdev)
+> > >  	if (IS_ERR(ctx->pwm))
+> > >  		return dev_err_probe(dev, PTR_ERR(ctx->pwm), "Could not get PWM\n");
+> > >  
+> > > +	ctx->enable = 2;
+> > > +
+> > >  	platform_set_drvdata(pdev, ctx);
+> > >  
+> > >  	ctx->irq = platform_get_irq_optional(pdev, 0);
+> > > -- 
+> > > 2.25.1
+> > > 
