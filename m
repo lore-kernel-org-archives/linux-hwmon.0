@@ -2,357 +2,369 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-20.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AFE14C5519F
-	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Nov 2020 07:49:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A121DC64E8A
+	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Nov 2020 10:55:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4064C20709
-	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Nov 2020 07:49:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CF3E020727
+	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Nov 2020 10:55:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FOTAc2NL"
+	dkim=pass (2048-bit key) header.d=protocubo.io header.i=@protocubo.io header.b="XTN11q0q"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727042AbgK3HtO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 30 Nov 2020 02:49:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41710 "EHLO
+        id S1726325AbgK3KzF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 30 Nov 2020 05:55:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725965AbgK3HtN (ORCPT
+        with ESMTP id S1726158AbgK3KzF (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 30 Nov 2020 02:49:13 -0500
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC96C0613CF;
-        Sun, 29 Nov 2020 23:48:33 -0800 (PST)
-Received: by mail-pf1-x442.google.com with SMTP id w187so9876611pfd.5;
-        Sun, 29 Nov 2020 23:48:33 -0800 (PST)
+        Mon, 30 Nov 2020 05:55:05 -0500
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD7CC0613D4
+        for <linux-hwmon@vger.kernel.org>; Mon, 30 Nov 2020 02:54:24 -0800 (PST)
+Received: by mail-io1-xd41.google.com with SMTP id n14so6454142iom.10
+        for <linux-hwmon@vger.kernel.org>; Mon, 30 Nov 2020 02:54:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=zAjHSZn5y902wry3Iep1PIFrktIPXS71UwHnv6V3yTI=;
-        b=FOTAc2NLM9A6Ifh4MjFtESDZoVa6bbTGHJ+gCvRRvdlVpxN7xMo15JEa+OVULEY8GF
-         eGAPzNzsL8wkiia/MlZNblwTZTTMBli3ouw04oaRjZuK6tj/HK68GrtOgmysg1yonJlO
-         d/V3d7wG+cgNZrwjWcoRDesD5+4YgW96hiq7HustcH2nTSzwq7/IJD3zB5n0B4xTPt6A
-         /DU9jmGmqunGMhapo7yWEGtGiyAiXut3sFREezXLlNRbMR3IBID5I68BfAgYJUXyr33y
-         esWC1nq3C17jYr6rLmt1EUJofURUNY6aKa+t87LT+vN6KO3CFWyJ/ehTpri5EHWVtAbb
-         HA/w==
+        d=protocubo.io; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=s4l3gewVlZe5ZOafzbEC5CjqY4dywpuN1SzTrmO0Wkc=;
+        b=XTN11q0qncOWjFXqEKE2kwqHIAqK7jbECPYpKF4YKo2/vMla4hjndP5iXshywsMrUH
+         Rdsi8h+xal4O2qdSXdim632eCLKAOoFCMETdzZN7sQAPk9+76JPYmfw9pt7ogpL5RCr5
+         2FhFCM4QwKpwv1+hActw50tUjmZE05rqx+nbeD8QLD4T0WrguBedxHX8wA/ng9r2caY5
+         roRM9MdP2dWJ+60yjWG+9SQ9Fm6+55AG1v7c64+HUMDQf++VEzPbxDwzUlxnfDG3uTW4
+         jzuexj2EiQkRP8VQKRAxtBzmxG+wYltKb5seDzTGnlOrsjpJj7JhI6rgC3fJ1X9lgzgk
+         CLWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=zAjHSZn5y902wry3Iep1PIFrktIPXS71UwHnv6V3yTI=;
-        b=CnAx5t6BQ94kaVkytrOO0RKbzet9vL3mIjo/F00/d01qpdyW/IKpTqAndhxZ5cRXgj
-         vGT7vxwChpe71atLpG6s06yV4KKUXTEKrtiK59DbmIT5mk/yiIOorPsfCiGwHVkQUJiu
-         Es30nWCDZ344YQzJUjVa61y0YY8Pg6+EGksYYrMpp26Dr2jBJadbtIUS+5Hng9iaaOYG
-         O1mz/fKh1IvOjLQG2tapalHgF+0WO4vqcm22nQG1ha4VTAQsldWpSh4NGFmdxWuy/r4e
-         lGtLrOHHwdZXd6BfqehBv8aZ5V8EmaklyNuoZ5L2qp9uSVySKxsfCiG2/N4wRlUNUb/H
-         BKJw==
-X-Gm-Message-State: AOAM531uRlQRzich45/ejtOLTGzx6np4OSykY2zRNCOSOQUjqibP1vLc
-        786LRi321Qa4JEqq/y/kaNSieSxMgrinDQ==
-X-Google-Smtp-Source: ABdhPJyXSNKpPVDV+6mARxn1QiRP2ZQlUREol3iTnXbRV9QwHSpd3oXC/66Rw55LlAPPaRvtgwc1jg==
-X-Received: by 2002:a63:b516:: with SMTP id y22mr16636909pge.140.1606722512822;
-        Sun, 29 Nov 2020 23:48:32 -0800 (PST)
-Received: from [10.10.15.233] (220-135-135-179.HINET-IP.hinet.net. [220.135.135.179])
-        by smtp.gmail.com with ESMTPSA id s21sm14704699pgk.52.2020.11.29.23.48.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 29 Nov 2020 23:48:32 -0800 (PST)
-Subject: Re: [PATCH v5] hwmon: Add driver for STMicroelectronics PM6764
- Voltage Regulator
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        alan@redhat.com
-References: <f8766ea1-b4ee-f298-a5a4-dc83f9a54617@gmail.com>
- <20201127161051.GA9881@roeck-us.net>
-From:   Charles <hsu.yungteng@gmail.com>
-Message-ID: <5c78a15e-4c4a-992c-ff5b-7bb709057871@gmail.com>
-Date:   Mon, 30 Nov 2020 15:46:19 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=s4l3gewVlZe5ZOafzbEC5CjqY4dywpuN1SzTrmO0Wkc=;
+        b=Ztd3cLxIxv/O3fAlIXILzKowzLX+GTYEVAczQ+qTuTzSusYh6zFUae209kkHIDf/b/
+         tcrsGSmdzzXW+1dunzz+xXGq7iKM8WEkkK6jM1syp5uWIUmms1p3gPRtxoyJrpjPFa3f
+         Fu0jp6ilsTEIp+JpTrH2BheLfPKgzrIP1Ii7HM/B0I1PqmTWsrloWvkxMBKNCTPaKVhG
+         qL41cfqzY6mYMhpHH4WsqxFbImA32i1iWMfu4OQRe1XomXexUBlcvL50RoFkmNTf66Re
+         hmLJe8Izhvg1BzcLYuYycWFyD0iwsuJkdwscQivotcSyRzFotkPoli5PwOmbGQskn7OL
+         7/rw==
+X-Gm-Message-State: AOAM530NniDLGCE+JXlaujjHOHoagAm3g2thQ2uoviAoixZR9MHPRyF9
+        KgfzZodWiheNqayePOMiK8VAGFZPTVyuoAx1pzFCNvXCbk0=
+X-Google-Smtp-Source: ABdhPJy305vPA1VDA2FTxtywb7eu2GzM/CYif75YKgISnW82xstLdjJWSFY+epMGMVuBC/BMeXx2GEAwisZp9ST9nis=
+X-Received: by 2002:a02:cd87:: with SMTP id l7mr2295292jap.117.1606733663864;
+ Mon, 30 Nov 2020 02:54:23 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20201127161051.GA9881@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+References: <X7+T4aZSUuzfsf7H@monster.powergraphx.local> <CANS_-EN8rgFEyE5rDw3=JLUYNwLQexafn7efvMC_=+4s2h1R6Q@mail.gmail.com>
+ <20201128113524.24f4f56f@monster.powergraphx.local> <CANS_-EPK75zrVRtBKxO-00RZD-XWrixJD8DH1_d=80rbazXQng@mail.gmail.com>
+ <20201129073618.082c2291@monster.powergraphx.local> <20201129130049.GB120875@roeck-us.net>
+ <20201129165443.51d22225@monster.powergraphx.local> <20201129215933.GA131003@roeck-us.net>
+ <20201130062230.2141750a@monster.powergraphx.local>
+In-Reply-To: <20201130062230.2141750a@monster.powergraphx.local>
+From:   Jonas Malaco <jonas@protocubo.io>
+Date:   Mon, 30 Nov 2020 07:53:48 -0300
+Message-ID: <CANS_-ENZ-QSUVvYBFfk5i5k56=6HBDnmQrfabhY_afY5QZhtzQ@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: corsair-psu: update supported devices
+To:     Wilken Gottwalt <wilken.gottwalt@posteo.net>
+Cc:     Guenter Roeck <linux@roeck-us.net>, linux-kernel@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 28/11/2020 上午12:10, Guenter Roeck wrote:
-> On Fri, Nov 27, 2020 at 09:59:01AM +0800, Charles wrote:
->> Add the pmbus driver for the STMicroelectronics pm6764 voltage regulator.
->>
->> the output voltage use the MFR_READ_VOUT 0xD4
->> vout value returned is linear11
->>
->> Signed-off-by: Charles Hsu <hsu.yungteng@gmail.com>
-> This patch (again) didn't make it to any of the mailing lists.
-> Please try to find out why this is the case. I usually pick up
-> patches from https://patchwork.kernel.org/project/linux-hwmon/list/,
-> and may easily miss a patch if I can't find it there.
+On Mon, Nov 30, 2020 at 2:22 AM Wilken Gottwalt
+<wilken.gottwalt@posteo.net> wrote:
 >
->> ---
->>
->> v5:
->>   - Add MAINTAINERS
->>   - Add a reference into trivial-devices.yaml
->> v4:
->>   - Add pm6764tr to Documentation/hwmon/index.rst.
->> v3:
->>   - Add Documentation(Documentation/hwmon/pm6764tr.rst).
->>   - Fix include order.
->> v2:
->>   - Fix formatting.
->>   - Remove pmbus_do_remove.
->>   - Change from .probe to .probe_new.
->> v1:
->>   - Initial patchset.
->>
->> ---
->>
->>   .../devicetree/bindings/trivial-devices.yaml  |  2 +
->>   Documentation/hwmon/index.rst                 |  1 +
->>   Documentation/hwmon/pm6764tr.rst              | 33 ++++++++
->>   MAINTAINERS                                   |  7 ++
->>   drivers/hwmon/pmbus/Kconfig                   |  9 +++
->>   drivers/hwmon/pmbus/Makefile                  |  1 +
->>   drivers/hwmon/pmbus/pm6764tr.c                | 76 +++++++++++++++++++
->>   7 files changed, 129 insertions(+)
->>   create mode 100644 Documentation/hwmon/pm6764tr.rst
->>   create mode 100644 drivers/hwmon/pmbus/pm6764tr.c
->>
->> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
->> index ab623ba930d5..cdd7bdb6abbb 100644
->> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
->> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
->> @@ -348,6 +348,8 @@ properties:
->>             - socionext,synquacer-tpm-mmio
->>               # i2c serial eeprom  (24cxx)
->>             - st,24c256
->> +            # SMBus/I2C Voltage Regulator
->> +          - st,pm6764tr
->>               # Ambient Light Sensor with SMBUS/Two Wire Serial Interface
->>             - taos,tsl2550
->>               # 8-Channels, 12-bit ADC
-> This, like all devicetre changes, needs to be a separate patch.
-> Also, please make sure to copy dt maintainers and the dt mailing list
-> when you send that patch.
-
-
-Thank you for your suggestions.
-
-I will send that patch as soon as possible.
-
-
->> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
->> index b797db738225..1bbd05e41de4 100644
->> --- a/Documentation/hwmon/index.rst
->> +++ b/Documentation/hwmon/index.rst
->> @@ -144,6 +144,7 @@ Hardware Monitoring Kernel Drivers
->>      pc87360
->>      pc87427
->>      pcf8591
->> +   pm6764tr
->>      pmbus
->>      powr1220
->>      pxe1610
->> diff --git a/Documentation/hwmon/pm6764tr.rst b/Documentation/hwmon/pm6764tr.rst
->> new file mode 100644
->> index 000000000000..5e8092e39297
->> --- /dev/null
->> +++ b/Documentation/hwmon/pm6764tr.rst
->> @@ -0,0 +1,33 @@
->> +.. SPDX-License-Identifier: GPL-2.0-only
->> +
->> +Kernel driver pm6764tr
->> +======================
->> +
->> +Supported chips:
->> +
->> +  * ST PM6764TR
->> +
->> +    Prefix: 'pm6764tr'
->> +
->> +    Addresses scanned: -
->> +
->> +    Datasheet: http://www.st.com/resource/en/data_brief/pm6764.pdf
->> +
->> +Authors:
->> +	<hsu.yungteng@gmail.com>
->> +
->> +Description:
->> +------------
->> +
->> +This driver supports the STMicroelectronics PM6764TR chip. The PM6764TR is a high
->> +performance digital controller designed to power Intel’s VR12.5 processors and memories.
->> +
-> Unrelated side note: I understand this means that you are forced to keep the
-> datasheet under wraps, which in turn means I can not suggest functionality
-> improvements since I don't have access to it. If the chip happens to support
-> per-rail telemetry, you might want to consider adding support for that in a
-> follow-up patch.
+> On Sun, 29 Nov 2020 13:59:33 -0800
+> Guenter Roeck <linux@roeck-us.net> wrote:
 >
->> +The device utilizes digital technology to implement all control and power management
->> +functions to provide maximum flexibility and performance. The NVM is embedded to store
->> +custom configurations. The PM6764TR device features up to 4-phase programmable operation.
->> +
->> +The PM6764TR supports power state transitions featuring VFDE, and programmable DPM
->> +maintaining the best efficiency over all loading conditions without compromising transient
->> +response. The device assures fast and independent protectionagainstload overcurrent,
-> "protectionagainstload" -> "protection against load"
+> > On Sun, Nov 29, 2020 at 04:54:43PM +0100, Wilken Gottwalt wrote:
+> > > On Sun, 29 Nov 2020 05:00:49 -0800
+> > > Guenter Roeck <linux@roeck-us.net> wrote:
+> > >
+> > > > On Sun, Nov 29, 2020 at 07:36:18AM +0100, Wilken Gottwalt wrote:
+> > > > > On Sat, 28 Nov 2020 17:21:40 -0300
+> > > > > Jonas Malaco <jonas@protocubo.io> wrote:
+> > > > >
+> > > > > > On Sat, Nov 28, 2020 at 7:35 AM Wilken Gottwalt
+> > > > > > <wilken.gottwalt@posteo.net> wrote:
+> > > > > > >
+> > > > > > > On Sat, 28 Nov 2020 02:37:38 -0300
+> > > > > > > Jonas Malaco <jonas@protocubo.io> wrote:
+> > > > > > >
+> > > > > > > > On Thu, Nov 26, 2020 at 8:43 AM Wilken Gottwalt
+> > > > > > > > <wilken.gottwalt@posteo.net> wrote:
+> > > > > > > > >
+> > > > > > > > > Adds support for another Corsair PSUs series: AX760i, AX860i, AX1200i,
+> > > > > > > > > AX1500i and AX1600i. The first 3 power supplies are supported through
+> > > > > > > > > the Corsair Link USB Dongle which is some kind of USB/Serial/TTL
+> > > > > > > > > converter especially made for the COM ports of these power supplies.
+> > > > > > > > > There are 3 known revisions of these adapters. The AX1500i power supply
+> > > > > > > > > has revision 3 built into the case and AX1600i is the only one in that
+> > > > > > > > > series, which has an unique usb hid id like the RM/RX series.
+> > > > > > > >
+> > > > > > > > Can I ask what AXi power supplies were tested?
+> > > > > > > >
+> > > > > > > > I ask because, based on the user-space implementations I am aware of,
+> > > > > > > > the AXi dongle protocol appears to be different from the RMi/HXi series.
+> > > > > > >
+> > > > > > > I was not able to test this against the AX power supplies, they are really
+> > > > > > > hard to find (and are far to expensive). But I went through all these tools
+> > > > > > > and stuck to the most common commands, which all 3 series support. Not every
+> > > > > > > series supports all commands (there also seem to be different firmwares in
+> > > > > > > the micro-conrollers). But this is fine, some sensors will show up as N/A.
+> > > > > > > Even my HX850i does not support all commands covered in this driver.
+> > > > > >
+> > > > > > I think the similarities come from all using wrappers over the PMBus
+> > > > > > interface to the voltage controller.  But I am not sure the wrapping
+> > > > > > protocols are identical.
+> > > > > >
+> > > > > > For example, cpsumon shows significantly more things going on during a
+> > > > > > read than what is needed for the RMi/HXi series.[1]
+> > > > > >
+> > > > > > [1] https://github.com/ka87/cpsumon/blob/fd639684d7f9/libcpsumon/src/cpsumon.c#L213-L231
+> > > > > >
+> > > > > >
+> > > > > > >
+> > > > > > > > AXi dongle:
+> > > > > > > >  - https://github.com/ka87/cpsumon
+> > > > > > >
+> > > > > > > This tool made me to consider including the AX series, because it uses some
+> > > > > > > of the same commands on the AX760i, AX860i, AX1200i and AX1500i. But it is
+> > > > > > > a usb-serial tool only. But it was nice to know, that the commands are mostly
+> > > > > > > the same. I left out all the commands for configuring, PCIe power rails,
+> > > > > > > efficiency and others which do not really belong into hwmon.
+> > > > > > >
+> > > > > > > > RMi/HXi:
+> > > > > > > >  - https://github.com/jonasmalacofilho/liquidctl
+> > > > > > > >  - https://github.com/audiohacked/OpenCorsairLink
+> > > > > > >
+> > > > > > > This tool made me include the AX series, because it uses the rmi protocol
+> > > > > > > component for the rmi driver (RM/HX series) and the corsair dongles.
+> > > > > >
+> > > > > > The corsairlink_driver_dongle has no implementations for reading sensor
+> > > > > > data (compare that with the corsairlink_driver_rmi).[2][3]  There is
+> > > > > > also no code that actually tries to read (write) from (to) the device
+> > > > > > using that dongle driver.[4]
+> > > > > >
+> > > > > > I also looked at a few of the issues, and all of the ones I read
+> > > > > > mentioned AXi support being under development, and the hypothesis of the
+> > > > > > AXi series being compatible with the RMi/HXi code still remaining to be
+> > > > > > confirmed.
+> > > > > >
+> > > > > > [2]
+> > > > > > https://github.com/audiohacked/OpenCorsairLink/blob/61d336a61b85/drivers/dongle.c#L33-L39
+> > > > > > [3]
+> > > > > > https://github.com/audiohacked/OpenCorsairLink/blob/61d336a61b85/drivers/rmi.c#L33-L57
+> > > > > > [4] https://github.com/audiohacked/OpenCorsairLink/blob/61d336a61b85/main.c#L106
+> > > > > >
+> > > > > >
+> > > > > > >
+> > > > > > > >  - https://github.com/notaz/corsairmi
+> > > > > > >
+> > > > > > > This one covers only some HX/RM PSUs, but is uses the rawhid access which
+> > > > > > > made me looking up the actual usb chips/bridges Corsair uses.
+> > > > > > >
+> > > > > > > >
+> > > > > > > > One additional concern is that the non-HID AXi dongles may only have bulk
+> > > > > > > > USB endpoints, and this is a HID driver.[1]
+> > > > > > >
+> > > > > > > You are right, in the case of the dongles it could be different. But I did
+> > > > > > > some research on Corsair usb driven devices and they really like to stick to
+> > > > > > > the cp210x, which is an usb hid bridge. The commit
+> > > > > > > b9326057a3d8447f5d2e74a7b521ccf21add2ec0 actually covers two Corsair USB
+> > > > > > > dongles as a cp210x device. So it is very likely that all Corsair PSUs with
+> > > > > > > such an interface/dongle use usb hid. But I'm completely open to get proven
+> > > > > > > wrong. Actually I really would like to see this tested by people who have
+> > > > > > > access to the more rare devices.
+> > > > > >
+> > > > > > I could be wrong (and I am sorry for the noise if that is the case), but
+> > > > > > as far as I can see the cp210x does not create a HID device.
+> > > > >
+> > > > > No no, this is fine. It really helps if some more people are looking into this.
+> > > > > I wish I had access to at least one of the later models (AX1500i/AX1600i), I
+> > > > > make mistakes from time to time. And it really doesn't help that Corsair changes
+> > > > > single devices in the same product line by firmware update. The AX1600i seems to
+> > > > > be the only one, which uses exactly the same protocol like the RM/HX series, but
+> > > > > is missing the actual usb hid part. But there seems to be a firmware where the
+> > > > > usb hid part was available for a short time. So, what to do? Remove the AXi part
+> > > > > completely or keep only the AX1600i?
+> > > > >
+> > > > > Guenter, what would you suggest?
+> > > > >
+> > > > I'd suggest to remove it completely, and explain the reason. Anything else will
+> > > > just create trouble with people demanding to know why their power supply is not
+> > > > supported even though it is listed as supported. And, believe me, you don't want
+> > > > to be on the receiving side of those complaints. The Internet is much less
+> > > > friendly nowadays than it used to be.
+> > >
+> > > So how is the procedure for this? Just revert it and make a common patch out of
+> > > it with a proper explanation?
+> > >
+> > > And yeah, I know exactly what you mean. I remember very well how the "internet"
+> > > got it first ugly hit in the 90s with the upcoming of Flash ... and then the
+> > > "social media". :D Thanks for your help.
+> > >
+> >
+> > Can I just drop your previous patch and you send me another - more restrictive -
+> > one ?
 >
->> +under/overvoltage and feedback disconnections.
->> +
-> Drop empty line at end.
+> Yeah, dropping is fine. There is no need for another patch after that, this was
+> a patch only dealing with the AXi series.
+
+And I'm sorry for throwing cold water at the patch.
+
+Hopefully we'll find someone with one of these AXi PSUs once the RMi/HXi
+driver is widely available on distros.
+
+Thanks,
+Jonas
+
+> greetings,
+> Wilken
 >
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 94ac10a153c7..a3fea132c4ed 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -13904,6 +13904,13 @@ M:	Logan Gunthorpe <logang@deltatee.com>
->>   S:	Maintained
->>   F:	drivers/dma/plx_dma.c
-> Add empty line.
-
-
-There is an empty line here,
-
-Should I add one more empty line?
-
-
->> +PM6764TR DRIVER
->> +M:	Charles Hsu	<hsu.yungteng@gmail.com>
->> +L:	linux-hwmon@vger.kernel.org
->> +S:	Maintained
->> +F:	Documentation/hwmon/pm6764tr.rst
->> +F:	drivers/hwmon/pmbus/pm6764tr.c
->> +
->>   PM-GRAPH UTILITY
->>   M:	"Todd E Brandt" <todd.e.brandt@linux.intel.com>
->>   L:	linux-pm@vger.kernel.org
->> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
->> index a25faf69fce3..9c846facce9f 100644
->> --- a/drivers/hwmon/pmbus/Kconfig
->> +++ b/drivers/hwmon/pmbus/Kconfig
->> @@ -220,6 +220,15 @@ config SENSORS_MP2975
->>   	  This driver can also be built as a module. If so, the module will
->>   	  be called mp2975.
-> Add empty line.
-
-
-Same as above.
-
-
->> +config SENSORS_PM6764TR
->> +	tristate "ST PM6764TR"
->> +	help
->> +	  If you say yes here you get hardware monitoring support for ST
->> +	  PM6764TR.
->> +
->> +	  This driver can also be built as a module. If so, the module will
->> +	  be called pm6764tr.
->> +
->>   config SENSORS_PXE1610
->>   	tristate "Infineon PXE1610"
->>   	help
->> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
->> index 4c97ad0bd791..31ebdef5d4a6 100644
->> --- a/drivers/hwmon/pmbus/Makefile
->> +++ b/drivers/hwmon/pmbus/Makefile
->> @@ -25,6 +25,7 @@ obj-$(CONFIG_SENSORS_MAX31785)	+= max31785.o
->>   obj-$(CONFIG_SENSORS_MAX34440)	+= max34440.o
->>   obj-$(CONFIG_SENSORS_MAX8688)	+= max8688.o
->>   obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
->> +obj-$(CONFIG_SENSORS_PM6764TR)	+= pm6764tr.o
->>   obj-$(CONFIG_SENSORS_PXE1610)	+= pxe1610.o
->>   obj-$(CONFIG_SENSORS_TPS40422)	+= tps40422.o
->>   obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
->> diff --git a/drivers/hwmon/pmbus/pm6764tr.c b/drivers/hwmon/pmbus/pm6764tr.c
->> new file mode 100644
->> index 000000000000..70747c21c66e
->> --- /dev/null
->> +++ b/drivers/hwmon/pmbus/pm6764tr.c
->> @@ -0,0 +1,76 @@
->> +// SPDX-License-Identifier: GPL-2.0+
->> +/*
->> + * Hardware monitoring driver for STMicroelectronics digital controller PM6764TR
->> + */
->> +
->> +#include <linux/err.h>
->> +#include <linux/i2c.h>
->> +#include <linux/init.h>
->> +#include <linux/kernel.h>
->> +#include <linux/module.h>
->> +#include <linux/pmbus.h>
->> +#include "pmbus.h"
->> +
->> +#define PM6764TR_PMBUS_READ_VOUT	0xD4
->> +
->> +static int pm6764tr_read_word_data(struct i2c_client *client, int page, int reg)
->> +{
->> +	int ret;
->> +
->> +	switch (reg) {
->> +	case PMBUS_VIRT_READ_VMON:
->> +		ret = pmbus_read_word_data(client, page, PM6764TR_PMBUS_READ_VOUT);
->> +		break;
->> +	default:
->> +		ret = -ENODATA;
->> +		break;
->> +	}
->> +	return ret;
->> +}
->> +
->> +static struct pmbus_driver_info pm6764tr_info = {
->> +	.pages = 1,
->> +	.format[PSC_VOLTAGE_IN] = linear,
->> +	.format[PSC_VOLTAGE_OUT] = vid,
->> +	.format[PSC_TEMPERATURE] = linear,
->> +	.format[PSC_CURRENT_OUT] = linear,
->> +	.format[PSC_POWER] = linear,
->> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN |  PMBUS_HAVE_PIN |
->> +	    PMBUS_HAVE_IOUT | PMBUS_HAVE_POUT | PMBUS_HAVE_VMON |
->> +		PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_VOUT |
->> +		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
->> +	.read_word_data = pm6764tr_read_word_data,
->> +};
->> +
->> +static int pm6764tr_probe(struct i2c_client *client,
->> +			  const struct i2c_device_id *id)
->> +{
->> +	return pmbus_do_probe(client, id, &pm6764tr_info);
->> +}
->> +
->> +static const struct i2c_device_id pm6764tr_id[] = {
->> +	{"pm6764tr", 0},
->> +	{}
->> +};
->> +MODULE_DEVICE_TABLE(i2c, pm6764tr_id);
->> +
->> +static const struct of_device_id pm6764tr_of_match[] = {
->> +	{.compatible = "st,pm6764tr"},
->> +	{}
->> +};
->> +
->> +/* This is the driver that will be inserted */
->> +static struct i2c_driver pm6764tr_driver = {
->> +	.driver = {
->> +		   .name = "pm6764tr",
->> +		   .of_match_table = of_match_ptr(pm6764tr_of_match),
->> +		   },
->> +	.probe_new = pm6764tr_probe,
->> +	.id_table = pm6764tr_id,
->> +};
->> +
->> +module_i2c_driver(pm6764tr_driver);
->> +
->> +MODULE_AUTHOR("Charles Hsu");
->> +MODULE_DESCRIPTION("PMBus driver for  ST PM6764TR");
->> +MODULE_LICENSE("GPL");
->> -- 
->> 2.25.1
->>
-
+> > Thanks,
+> > Guenter
+> >
+> > > greetings,
+> > > Wilken
+> > >
+> > > > Guenter
+> > > >
+> > > > > > Thanks again,
+> > > > > > Jonas
+> > > > > >
+> > > > > >
+> > > > > > >
+> > > > > > > > Thanks,
+> > > > > > > > Jonas
+> > > > > > > >
+> > > > > > > > [1] https://github.com/ka87/cpsumon/issues/4
+> > > > > > >
+> > > > > > > Yes ... that one. The last revision of the dongle could indeed be a problem.
+> > > > > > > But I'm not really sure what is described here. The last commenter is actually
+> > > > > > > the one who provided the cp210x patch mentioned up there. The problem here is,
+> > > > > > > the AX1500i has both connectors, USB and that other one. I call it the other
+> > > > > > > one because it is the only PSU where it is labeled I2C COMM instead of COMM
+> > > > > > > only. But at the same time this tools uses the same commands for this PSU.
+> > > > > > >
+> > > > > > > So, only some real hardware tests will show.
+> > > > > > >
+> > > > > > > Greetings,
+> > > > > > > Wilken
+> > > > > > >
+> > > > > > > > >
+> > > > > > > > > The patch also changes the usb hid ids to use upper case letters to be
+> > > > > > > > > consistent with the rest of the hex numbers in the driver and updates
+> > > > > > > > > the hwmon documentation.
+> > > > > > > > >
+> > > > > > > > > This patch adds:
+> > > > > > > > > - hwmon/corsair-psu documentation update
+> > > > > > > > > - corsair-psu driver update
+> > > > > > > > >
+> > > > > > > > > Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+> > > > > > > > > ---
+> > > > > > > > >  Documentation/hwmon/corsair-psu.rst | 10 +++++++++
+> > > > > > > > >  drivers/hwmon/Kconfig               |  7 +++---
+> > > > > > > > >  drivers/hwmon/corsair-psu.c         | 33 +++++++++++++++++++----------
+> > > > > > > > >  3 files changed, 36 insertions(+), 14 deletions(-)
+> > > > > > > > >
+> > > > > > > > > diff --git a/Documentation/hwmon/corsair-psu.rst
+> > > > > > > > > b/Documentation/hwmon/corsair-psu.rst index 396b95c9a76a..6227e9046d73 100644
+> > > > > > > > > --- a/Documentation/hwmon/corsair-psu.rst
+> > > > > > > > > +++ b/Documentation/hwmon/corsair-psu.rst
+> > > > > > > > > @@ -7,6 +7,16 @@ Supported devices:
+> > > > > > > > >
+> > > > > > > > >  * Corsair Power Supplies
+> > > > > > > > >
+> > > > > > > > > +  Corsair AX760i (by Corsair Link USB Dongle)
+> > > > > > > > > +
+> > > > > > > > > +  Corsair AX860i (by Corsair Link USB Dongle)
+> > > > > > > > > +
+> > > > > > > > > +  Corsair AX1200i (by Corsair Link USB Dongle)
+> > > > > > > > > +
+> > > > > > > > > +  Corsair AX1500i (by builtin Corsair Link USB Dongle)
+> > > > > > > > > +
+> > > > > > > > > +  Corsair AX1600i
+> > > > > > > > > +
+> > > > > > > > >    Corsair HX550i
+> > > > > > > > >
+> > > > > > > > >    Corsair HX650i
+> > > > > > > > > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> > > > > > > > > index 716df51edc87..3c059fc23cd6 100644
+> > > > > > > > > --- a/drivers/hwmon/Kconfig
+> > > > > > > > > +++ b/drivers/hwmon/Kconfig
+> > > > > > > > > @@ -453,11 +453,12 @@ config SENSORS_CORSAIR_PSU
+> > > > > > > > >         tristate "Corsair PSU HID controller"
+> > > > > > > > >         depends on HID
+> > > > > > > > >         help
+> > > > > > > > > -         If you say yes here you get support for Corsair PSUs with a HID
+> > > > > > > > > +         If you say yes here you get support for Corsair PSUs with an USB HID
+> > > > > > > > >           interface.
+> > > > > > > > >           Currently this driver supports the (RM/HX)550i, (RM/HX)650i,
+> > > > > > > > > -         (RM/HX)750i, (RM/HX)850i, (RM/HX)1000i and HX1200i power supplies
+> > > > > > > > > -         by Corsair.
+> > > > > > > > > +         (RM/HX)750i, (RM/HX)850i, (RM/HX)1000i, HX1200i and AX1600i power
+> > > > > > > > > +         supplies by Corsair. The AX760i, AX860i, AX1200i and AX1500i
+> > > > > > > > > +         power supplies are supported through the Corsair Link USB Dongle.
+> > > > > > > > >
+> > > > > > > > >           This driver can also be built as a module. If so, the module
+> > > > > > > > >           will be called corsair-psu.
+> > > > > > > > > diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
+> > > > > > > > > index 99494056f4bd..0146dda3e2c3 100644
+> > > > > > > > > --- a/drivers/hwmon/corsair-psu.c
+> > > > > > > > > +++ b/drivers/hwmon/corsair-psu.c
+> > > > > > > > > @@ -571,17 +571,28 @@ static int corsairpsu_raw_event(struct hid_device *hdev,
+> > > > > > > > > struct hid_report *repo }
+> > > > > > > > >
+> > > > > > > > >  static const struct hid_device_id corsairpsu_idtable[] = {
+> > > > > > > > > -       { HID_USB_DEVICE(0x1b1c, 0x1c03) }, /* Corsair HX550i */
+> > > > > > > > > -       { HID_USB_DEVICE(0x1b1c, 0x1c04) }, /* Corsair HX650i */
+> > > > > > > > > -       { HID_USB_DEVICE(0x1b1c, 0x1c05) }, /* Corsair HX750i */
+> > > > > > > > > -       { HID_USB_DEVICE(0x1b1c, 0x1c06) }, /* Corsair HX850i */
+> > > > > > > > > -       { HID_USB_DEVICE(0x1b1c, 0x1c07) }, /* Corsair HX1000i */
+> > > > > > > > > -       { HID_USB_DEVICE(0x1b1c, 0x1c08) }, /* Corsair HX1200i */
+> > > > > > > > > -       { HID_USB_DEVICE(0x1b1c, 0x1c09) }, /* Corsair RM550i */
+> > > > > > > > > -       { HID_USB_DEVICE(0x1b1c, 0x1c0a) }, /* Corsair RM650i */
+> > > > > > > > > -       { HID_USB_DEVICE(0x1b1c, 0x1c0b) }, /* Corsair RM750i */
+> > > > > > > > > -       { HID_USB_DEVICE(0x1b1c, 0x1c0c) }, /* Corsair RM850i */
+> > > > > > > > > -       { HID_USB_DEVICE(0x1b1c, 0x1c0d) }, /* Corsair RM1000i */
+> > > > > > > > > +       /*
+> > > > > > > > > +        * The Corsair USB/COM Dongles appear in at least 3 different revisions,
+> > > > > > > > > where rev 1 and 2
+> > > > > > > > > +        * are commonly used with the AX760i, AX860i and AX1200i, while rev3 is
+> > > > > > > > > rarely seen with
+> > > > > > > > > +        * these PSUs. Rev3 is also build into the AX1500i, while the AX1600i is the
+> > > > > > > > > first PSU of
+> > > > > > > > > +        * this series which has an unique usb hid id. Though, the actual device
+> > > > > > > > > name is part of
+> > > > > > > > > +        * the HID message protocol, so it doesn't matter which dongle is connected.
+> > > > > > > > > +        */
+> > > > > > > > > +       { HID_USB_DEVICE(0x1B1C, 0x1C00) }, /* Corsair Link USB/COM Dongle rev1 */
+> > > > > > > > > +       { HID_USB_DEVICE(0x1B1C, 0x1C01) }, /* Corsair Link USB/COM Dongle rev2 */
+> > > > > > > > > +       { HID_USB_DEVICE(0x1B1C, 0x1C02) }, /* Corsair Link USB/COM Dongle rev3
+> > > > > > > > > (AX1500i) */
+> > > > > > > > > +       { HID_USB_DEVICE(0x1B1C, 0x1C03) }, /* Corsair HX550i */
+> > > > > > > > > +       { HID_USB_DEVICE(0x1B1C, 0x1C04) }, /* Corsair HX650i */
+> > > > > > > > > +       { HID_USB_DEVICE(0x1B1C, 0x1C05) }, /* Corsair HX750i */
+> > > > > > > > > +       { HID_USB_DEVICE(0x1B1C, 0x1C06) }, /* Corsair HX850i */
+> > > > > > > > > +       { HID_USB_DEVICE(0x1B1C, 0x1C07) }, /* Corsair HX1000i */
+> > > > > > > > > +       { HID_USB_DEVICE(0x1B1C, 0x1C08) }, /* Corsair HX1200i */
+> > > > > > > > > +       { HID_USB_DEVICE(0x1B1C, 0x1C09) }, /* Corsair RM550i */
+> > > > > > > > > +       { HID_USB_DEVICE(0x1B1C, 0x1C0A) }, /* Corsair RM650i */
+> > > > > > > > > +       { HID_USB_DEVICE(0x1B1C, 0x1C0B) }, /* Corsair RM750i */
+> > > > > > > > > +       { HID_USB_DEVICE(0x1B1C, 0x1C0C) }, /* Corsair RM850i */
+> > > > > > > > > +       { HID_USB_DEVICE(0x1B1C, 0x1C0D) }, /* Corsair RM1000i */
+> > > > > > > > > +       { HID_USB_DEVICE(0x1B1C, 0x1C11) }, /* Corsair AX1600i */
+> > > > > > > > >         { },
+> > > > > > > > >  };
+> > > > > > > > >  MODULE_DEVICE_TABLE(hid, corsairpsu_idtable);
+> > > > > > > > > --
+> > > > > > > > > 2.29.2
+> > > > > > > > >
+> > > > > > >
+> > > > >
+> > >
+>
