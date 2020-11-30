@@ -2,239 +2,147 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 460B9C64E7B
-	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Nov 2020 15:00:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A33EFC63777
+	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Nov 2020 16:41:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C156B206D8
-	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Nov 2020 15:00:24 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=roeck-us.net header.i=@roeck-us.net header.b="liZ32ShV"
+	by mail.kernel.org (Postfix) with ESMTP id 513AA206F9
+	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Nov 2020 16:41:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726885AbgK3O77 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 30 Nov 2020 09:59:59 -0500
-Received: from gproxy7-pub.mail.unifiedlayer.com ([70.40.196.235]:56983 "EHLO
-        gproxy7-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727154AbgK3O75 (ORCPT
+        id S1727365AbgK3Ql4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 30 Nov 2020 11:41:56 -0500
+Received: from mx1.yrkesakademin.fi ([85.134.45.194]:58114 "EHLO
+        mx1.yrkesakademin.fi" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727154AbgK3Qlz (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 30 Nov 2020 09:59:57 -0500
-Received: from cmgw15.unifiedlayer.com (unknown [10.9.0.15])
-        by gproxy7.mail.unifiedlayer.com (Postfix) with ESMTP id A8D75215CC0
-        for <linux-hwmon@vger.kernel.org>; Mon, 30 Nov 2020 07:59:13 -0700 (MST)
-Received: from bh-25.webhostbox.net ([208.91.199.152])
-        by cmsmtp with ESMTP
-        id jke1kCWUCh41ljke1kFd2U; Mon, 30 Nov 2020 07:59:13 -0700
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.3 cv=GNom7NFK c=1 sm=1 tr=0
- a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=nNwsprhYR40A:10:nop_rcvd_month_year
- a=evQFzbml-YQA:10:endurance_base64_authed_username_1 a=pGLkceISAAAA:8
- a=VwQbUJbxAAAA:8 a=8b9GpE9nAAAA:8 a=gXLdhW2jAAAA:8 a=YfHuQ6WfqXg4DGKjl5kA:9
- a=QEXdDO2ut3YA:10:nop_charset_2 a=AjGcO6oz07-iQ99wixmX:22
- a=T3LWEMljR5ZiDmsYVIUa:22 a=Dn9eIPSr_RzuO0KTJioD:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=PhxDst6bxvMrZJlbqwjEwlHuP3jCoB2Pdz3+Y0YB6RM=; b=liZ32ShVXOHVTGVczaXGId4W7/
-        T3VVC9AoHCm3eYIlMk91os4YjU2uHpPSK6wLAJj7R+NU4e+JeS0iWHbttOKFNOpMlzILudIBTXJ3N
-        xEteaLC9ZhYiU+h+Z7djCn66dWjE85BGYr6K9kO5Pc0dZwS95SsoJQ7ZALn00HgjH5/rPrt9lHq1H
-        JsT+GUdXFUW147kth5F6mL26hKhZWzUAD3BdO/UOD1gJruwkXaHYXEAEzOMhxGJlBmLnz8IwirVl6
-        ApGAUHaBGNkA4LEMuWfzrgIcUVDxMzti+QAHW6Vx0wKvT2vhVNwRhUqAtSKmWsXD+ApOZfzljrEAP
-        KFwqFZSw==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:55722 helo=localhost)
-        by bh-25.webhostbox.net with esmtpa (Exim 4.93)
-        (envelope-from <linux@roeck-us.net>)
-        id 1kjke0-0034uB-PF; Mon, 30 Nov 2020 14:59:12 +0000
-Date:   Mon, 30 Nov 2020 06:59:12 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Charles <hsu.yungteng@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        alan@redhat.com
-Subject: Re: [PATCH v5] hwmon: Add driver for STMicroelectronics PM6764
- Voltage Regulator
-Message-ID: <20201130145912.GA17093@roeck-us.net>
-References: <f8766ea1-b4ee-f298-a5a4-dc83f9a54617@gmail.com>
- <20201127161051.GA9881@roeck-us.net>
- <5c78a15e-4c4a-992c-ff5b-7bb709057871@gmail.com>
+        Mon, 30 Nov 2020 11:41:55 -0500
+X-Greylist: delayed 943 seconds by postgrey-1.27 at vger.kernel.org; Mon, 30 Nov 2020 11:41:54 EST
+Subject: Re: [PATCH] hwmon: corsair-psu: update supported devices
+To:     Wilken Gottwalt <wilken.gottwalt@posteo.net>,
+        Thomas Backlund <tmb@iki.fi>
+CC:     Jonas Malaco <jonas@protocubo.io>, <linux-kernel@vger.kernel.org>,
+        "Jean Delvare" <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Jonathan Corbet" <corbet@lwn.net>, <linux-hwmon@vger.kernel.org>
+References: <X7+T4aZSUuzfsf7H@monster.powergraphx.local>
+ <CANS_-EN8rgFEyE5rDw3=JLUYNwLQexafn7efvMC_=+4s2h1R6Q@mail.gmail.com>
+ <20201128113524.24f4f56f@monster.powergraphx.local>
+ <4917cc59-aa35-7fb1-d2d0-75039523816f@iki.fi>
+ <s7R3iA2S9eDO5XZ9rdqzYCvN9eu2DaNKUQCmSn_4XxsrxD-93-gtY9DFGxbthP9CVsquOXoocwbZfwNKo7XLaQ==@protonmail.internalid>
+ <20201130154915.760923fd@monster.powergraphx.local>
+From:   Backlund Thomas <tmb@iki.fi>
+Message-ID: <6185cc04-da71-5b68-0bc8-931af6fa2dc9@iki.fi>
+Date:   Mon, 30 Nov 2020 18:25:30 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+In-Reply-To: <20201130154915.760923fd@monster.powergraphx.local>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <5c78a15e-4c4a-992c-ff5b-7bb709057871@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1kjke0-0034uB-PF
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:55722
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 12
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
+Content-Language: sv
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Nov 30, 2020 at 03:46:19PM +0800, Charles wrote:
-> On 28/11/2020 上午12:10, Guenter Roeck wrote:
-> > On Fri, Nov 27, 2020 at 09:59:01AM +0800, Charles wrote:
-> > > Add the pmbus driver for the STMicroelectronics pm6764 voltage regulator.
-> > > 
-> > > the output voltage use the MFR_READ_VOUT 0xD4
-> > > vout value returned is linear11
-> > > 
-> > > Signed-off-by: Charles Hsu <hsu.yungteng@gmail.com>
-> > This patch (again) didn't make it to any of the mailing lists.
-> > Please try to find out why this is the case. I usually pick up
-> > patches from https://patchwork.kernel.org/project/linux-hwmon/list/,
-> > and may easily miss a patch if I can't find it there.
-> > 
-> > > ---
-> > > 
-> > > v5:
-> > >   - Add MAINTAINERS
-> > >   - Add a reference into trivial-devices.yaml
-> > > v4:
-> > >   - Add pm6764tr to Documentation/hwmon/index.rst.
-> > > v3:
-> > >   - Add Documentation(Documentation/hwmon/pm6764tr.rst).
-> > >   - Fix include order.
-> > > v2:
-> > >   - Fix formatting.
-> > >   - Remove pmbus_do_remove.
-> > >   - Change from .probe to .probe_new.
-> > > v1:
-> > >   - Initial patchset.
-> > > 
-> > > ---
-> > > 
-> > >   .../devicetree/bindings/trivial-devices.yaml  |  2 +
-> > >   Documentation/hwmon/index.rst                 |  1 +
-> > >   Documentation/hwmon/pm6764tr.rst              | 33 ++++++++
-> > >   MAINTAINERS                                   |  7 ++
-> > >   drivers/hwmon/pmbus/Kconfig                   |  9 +++
-> > >   drivers/hwmon/pmbus/Makefile                  |  1 +
-> > >   drivers/hwmon/pmbus/pm6764tr.c                | 76 +++++++++++++++++++
-> > >   7 files changed, 129 insertions(+)
-> > >   create mode 100644 Documentation/hwmon/pm6764tr.rst
-> > >   create mode 100644 drivers/hwmon/pmbus/pm6764tr.c
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-> > > index ab623ba930d5..cdd7bdb6abbb 100644
-> > > --- a/Documentation/devicetree/bindings/trivial-devices.yaml
-> > > +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-> > > @@ -348,6 +348,8 @@ properties:
-> > >             - socionext,synquacer-tpm-mmio
-> > >               # i2c serial eeprom  (24cxx)
-> > >             - st,24c256
-> > > +            # SMBus/I2C Voltage Regulator
-> > > +          - st,pm6764tr
-> > >               # Ambient Light Sensor with SMBUS/Two Wire Serial Interface
-> > >             - taos,tsl2550
-> > >               # 8-Channels, 12-bit ADC
-> > This, like all devicetre changes, needs to be a separate patch.
-> > Also, please make sure to copy dt maintainers and the dt mailing list
-> > when you send that patch.
-> 
-> 
-> Thank you for your suggestions.
-> 
-> I will send that patch as soon as possible.
-> 
-> 
-> > > diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> > > index b797db738225..1bbd05e41de4 100644
-> > > --- a/Documentation/hwmon/index.rst
-> > > +++ b/Documentation/hwmon/index.rst
-> > > @@ -144,6 +144,7 @@ Hardware Monitoring Kernel Drivers
-> > >      pc87360
-> > >      pc87427
-> > >      pcf8591
-> > > +   pm6764tr
-> > >      pmbus
-> > >      powr1220
-> > >      pxe1610
-> > > diff --git a/Documentation/hwmon/pm6764tr.rst b/Documentation/hwmon/pm6764tr.rst
-> > > new file mode 100644
-> > > index 000000000000..5e8092e39297
-> > > --- /dev/null
-> > > +++ b/Documentation/hwmon/pm6764tr.rst
-> > > @@ -0,0 +1,33 @@
-> > > +.. SPDX-License-Identifier: GPL-2.0-only
-> > > +
-> > > +Kernel driver pm6764tr
-> > > +======================
-> > > +
-> > > +Supported chips:
-> > > +
-> > > +  * ST PM6764TR
-> > > +
-> > > +    Prefix: 'pm6764tr'
-> > > +
-> > > +    Addresses scanned: -
-> > > +
-> > > +    Datasheet: http://www.st.com/resource/en/data_brief/pm6764.pdf
-> > > +
-> > > +Authors:
-> > > +	<hsu.yungteng@gmail.com>
-> > > +
-> > > +Description:
-> > > +------------
-> > > +
-> > > +This driver supports the STMicroelectronics PM6764TR chip. The PM6764TR is a high
-> > > +performance digital controller designed to power Intel’s VR12.5 processors and memories.
-> > > +
-> > Unrelated side note: I understand this means that you are forced to keep the
-> > datasheet under wraps, which in turn means I can not suggest functionality
-> > improvements since I don't have access to it. If the chip happens to support
-> > per-rail telemetry, you might want to consider adding support for that in a
-> > follow-up patch.
-> > 
-> > > +The device utilizes digital technology to implement all control and power management
-> > > +functions to provide maximum flexibility and performance. The NVM is embedded to store
-> > > +custom configurations. The PM6764TR device features up to 4-phase programmable operation.
-> > > +
-> > > +The PM6764TR supports power state transitions featuring VFDE, and programmable DPM
-> > > +maintaining the best efficiency over all loading conditions without compromising transient
-> > > +response. The device assures fast and independent protectionagainstload overcurrent,
-> > "protectionagainstload" -> "protection against load"
-> > 
-> > > +under/overvoltage and feedback disconnections.
-> > > +
-> > Drop empty line at end.
-> > 
-> > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > index 94ac10a153c7..a3fea132c4ed 100644
-> > > --- a/MAINTAINERS
-> > > +++ b/MAINTAINERS
-> > > @@ -13904,6 +13904,13 @@ M:	Logan Gunthorpe <logang@deltatee.com>
-> > >   S:	Maintained
-> > >   F:	drivers/dma/plx_dma.c
-> > Add empty line.
-> 
-> 
-> There is an empty line here,
-> 
-> Should I add one more empty line?
-> 
-One empty line is needed. Maybe I missed it. I am looking forward to the
-next version of your patch; then we'll see.
+Den 30.11.2020 kl. 16:49, skrev Wilken Gottwalt:
+> On Mon, 30 Nov 2020 14:43:44 +0200
+> Thomas Backlund <tmb@iki.fi> wrote:
+>
+>> Den 28.11.2020 kl. 12:35, skrev Wilken Gottwalt:
+>>> On Sat, 28 Nov 2020 02:37:38 -0300
+>>> Jonas Malaco <jonas@protocubo.io> wrote:
+>>>
+>>>> On Thu, Nov 26, 2020 at 8:43 AM Wilken Gottwalt
+>>>> <wilken.gottwalt@posteo.net> wrote:
+>>>>> Adds support for another Corsair PSUs series: AX760i, AX860i, AX1200i,
+>>>>> AX1500i and AX1600i. The first 3 power supplies are supported through
+>>>>> the Corsair Link USB Dongle which is some kind of USB/Serial/TTL
+>>>>> converter especially made for the COM ports of these power supplies.
+>>>>> There are 3 known revisions of these adapters. The AX1500i power supply
+>>>>> has revision 3 built into the case and AX1600i is the only one in that
+>>>>> series, which has an unique usb hid id like the RM/RX series.
+>>>> Can I ask what AXi power supplies were tested?
+>>>>
+>>>> I ask because, based on the user-space implementations I am aware of,
+>>>> the AXi dongle protocol appears to be different from the RMi/HXi series.
+>>> I was not able to test this against the AX power supplies, they are really
+>>> hard to find (and are far to expensive). But I went through all these tools
+>>> and stuck to the most common commands, which all 3 series support. Not every
+>>> series supports all commands (there also seem to be different firmwares in
+>>> the micro-conrollers). But this is fine, some sensors will show up as N/A.
+>>> Even my HX850i does not support all commands covered in this driver.
+>>>
+>> What kind of tests do you want / need ?
+>>
+>> I have an AX860i here.
+> Oh nice. Lets start with an usb info dump. Can you give me the full dump of
+> lsusb -vd <device> of the Corsair USB dongle?
 
-Thanks,
-Guenter
+$ lsusb  -vd  1b1c:1c00
+
+Bus 011 Device 005: ID 1b1c:1c00 Corsair Controller for Corsair Link
+Device Descriptor:
+   bLength                18
+   bDescriptorType         1
+   bcdUSB               1.10
+   bDeviceClass            0
+   bDeviceSubClass         0
+   bDeviceProtocol         0
+   bMaxPacketSize0        64
+   idVendor           0x1b1c Corsair
+   idProduct          0x1c00 Controller for Corsair Link
+   bcdDevice            1.00
+   iManufacturer           1 Silicon Labs
+   iProduct                2 Corsair Link TM USB Dongle
+   iSerial                 3 R7480347
+   bNumConfigurations      1
+   Configuration Descriptor:
+     bLength                 9
+     bDescriptorType         2
+     wTotalLength       0x0020
+     bNumInterfaces          1
+     bConfigurationValue     1
+     iConfiguration          0
+     bmAttributes         0x80
+       (Bus Powered)
+     MaxPower              100mA
+     Interface Descriptor:
+       bLength                 9
+       bDescriptorType         4
+       bInterfaceNumber        0
+       bAlternateSetting       0
+       bNumEndpoints           2
+       bInterfaceClass       255 Vendor Specific Class
+       bInterfaceSubClass      0
+       bInterfaceProtocol      0
+       iInterface              2 Corsair Link TM USB Dongle
+       Endpoint Descriptor:
+         bLength                 7
+         bDescriptorType         5
+         bEndpointAddress     0x81  EP 1 IN
+         bmAttributes            2
+           Transfer Type            Bulk
+           Synch Type               None
+           Usage Type               Data
+         wMaxPacketSize     0x0040  1x 64 bytes
+         bInterval               0
+       Endpoint Descriptor:
+         bLength                 7
+         bDescriptorType         5
+         bEndpointAddress     0x01  EP 1 OUT
+         bmAttributes            2
+           Transfer Type            Bulk
+           Synch Type               None
+           Usage Type               Data
+         wMaxPacketSize     0x0040  1x 64 bytes
+         bInterval               0
+can't get debug descriptor: Resource temporarily unavailable
+Device Status:     0x0000
+   (Bus Powered)
+
+--
+
+Thomas
+
+
