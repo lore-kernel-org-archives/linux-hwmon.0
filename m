@@ -2,147 +2,104 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A33EFC63777
-	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Nov 2020 16:41:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8880CC63777
+	for <linux-hwmon@archiver.kernel.org>; Tue,  1 Dec 2020 00:32:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 513AA206F9
-	for <linux-hwmon@archiver.kernel.org>; Mon, 30 Nov 2020 16:41:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1FEBC20706
+	for <linux-hwmon@archiver.kernel.org>; Tue,  1 Dec 2020 00:32:03 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="R88iTfRV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727365AbgK3Ql4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 30 Nov 2020 11:41:56 -0500
-Received: from mx1.yrkesakademin.fi ([85.134.45.194]:58114 "EHLO
-        mx1.yrkesakademin.fi" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727154AbgK3Qlz (ORCPT
+        id S1728457AbgLAAcC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 30 Nov 2020 19:32:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56906 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726316AbgLAAcC (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 30 Nov 2020 11:41:55 -0500
-X-Greylist: delayed 943 seconds by postgrey-1.27 at vger.kernel.org; Mon, 30 Nov 2020 11:41:54 EST
-Subject: Re: [PATCH] hwmon: corsair-psu: update supported devices
-To:     Wilken Gottwalt <wilken.gottwalt@posteo.net>,
-        Thomas Backlund <tmb@iki.fi>
-CC:     Jonas Malaco <jonas@protocubo.io>, <linux-kernel@vger.kernel.org>,
-        "Jean Delvare" <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Jonathan Corbet" <corbet@lwn.net>, <linux-hwmon@vger.kernel.org>
-References: <X7+T4aZSUuzfsf7H@monster.powergraphx.local>
- <CANS_-EN8rgFEyE5rDw3=JLUYNwLQexafn7efvMC_=+4s2h1R6Q@mail.gmail.com>
- <20201128113524.24f4f56f@monster.powergraphx.local>
- <4917cc59-aa35-7fb1-d2d0-75039523816f@iki.fi>
- <s7R3iA2S9eDO5XZ9rdqzYCvN9eu2DaNKUQCmSn_4XxsrxD-93-gtY9DFGxbthP9CVsquOXoocwbZfwNKo7XLaQ==@protonmail.internalid>
- <20201130154915.760923fd@monster.powergraphx.local>
-From:   Backlund Thomas <tmb@iki.fi>
-Message-ID: <6185cc04-da71-5b68-0bc8-931af6fa2dc9@iki.fi>
-Date:   Mon, 30 Nov 2020 18:25:30 +0200
+        Mon, 30 Nov 2020 19:32:02 -0500
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439B7C0613CF
+        for <linux-hwmon@vger.kernel.org>; Mon, 30 Nov 2020 16:31:22 -0800 (PST)
+Received: by mail-lj1-x241.google.com with SMTP id y7so21092407lji.8
+        for <linux-hwmon@vger.kernel.org>; Mon, 30 Nov 2020 16:31:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=X/bKBturRyIf9vMXnB4V35qfxrB0eSEPoc0/x0nF2eU=;
+        b=R88iTfRVb4F7Pq1bsAQjgSL7Jfetnmbut1dZQgSQmn8Wk3qzqs4NVHIsDq3ul55xxY
+         deQC7k6sMchjPYAf9ZKrsLgbOILTiNNoE5dl3uaCLcZuGyIXPnfYZc4IAuN4Ex915pJQ
+         QiLLylgjJihakVxmX0udSjcclnJfbkvM+LvAayR22ITiBsvUgOjGhOKNUi0/Z4WAdpKB
+         lXbRBeOzk7tDn+nlOY7TDuvR0ORhz0mwN5bQ01qVKb8NROkmx9OLuxbNMW2PTIo9PQGV
+         kbAN/qZ4y+AKdDqbQSOSK0M0wdCvuGHkgilFf+AJ+fJn0An6OX8pfCCidAuEdfKDu8kw
+         es3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=X/bKBturRyIf9vMXnB4V35qfxrB0eSEPoc0/x0nF2eU=;
+        b=nytMMwLbA8X4+qIW2gnHQEPPZ6D+Mb2TliUWbYZnaGzAvaK3FeLWUeAZ/Rb9k8lTpY
+         nkyuAbYaIwp1nSoFe+0rXw4v2ObIq+1rrpDJA81/ip8UI0a2S1WKHfKJdT3LrmPXhN/u
+         z9RjjgF82/FI2qDNog7oStIQ53SSOsFkqaCBEoSLE7nVTM0mgcHuN88JgrxEcyAp777b
+         2P1y//tyXvWGpXfnbjokmKOt2/oZKwaLlgGcyhTkh2FkRTQ6Y5cALAGM2yHeJ3JZh1/a
+         cRHg9TaIeSTs+0ZeVpfpy0N87PZ9NnPRhAAuutitj5Nsskf/iNJlNE6xhbot7hcu3mmv
+         QHsQ==
+X-Gm-Message-State: AOAM530ylDzkGAgwxM06odVOubsxwXnvbQdqINfSdpm8XzVtsPElfnbu
+        HWdEur6kt9bleN2oIYUv8j8Ynw==
+X-Google-Smtp-Source: ABdhPJzidyDJ/SYMmPFhPBtHSfz2wcKljDTL5MCm/DZKMEPBh4dSfw4K/awKjb+x64TjviAtHEW/sA==
+X-Received: by 2002:a2e:878c:: with SMTP id n12mr91604lji.319.1606782680750;
+        Mon, 30 Nov 2020 16:31:20 -0800 (PST)
+Received: from localhost (c-9b28e555.07-21-73746f28.bbcust.telenor.se. [85.229.40.155])
+        by smtp.gmail.com with ESMTPSA id f10sm24868ljf.26.2020.11.30.16.31.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Nov 2020 16:31:20 -0800 (PST)
+From:   Anders Roxell <anders.roxell@linaro.org>
+To:     b.zolnierkie@samsung.com, jdelvare@suse.com, linux@roeck-us.net
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: [PATCH] drivers: hwmon: pwm-fan: fix warning unused variable 'ctx'
+Date:   Tue,  1 Dec 2020 01:31:18 +0100
+Message-Id: <20201201003118.2219422-1-anders.roxell@linaro.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-In-Reply-To: <20201130154915.760923fd@monster.powergraphx.local>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Language: sv
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Den 30.11.2020 kl. 16:49, skrev Wilken Gottwalt:
-> On Mon, 30 Nov 2020 14:43:44 +0200
-> Thomas Backlund <tmb@iki.fi> wrote:
->
->> Den 28.11.2020 kl. 12:35, skrev Wilken Gottwalt:
->>> On Sat, 28 Nov 2020 02:37:38 -0300
->>> Jonas Malaco <jonas@protocubo.io> wrote:
->>>
->>>> On Thu, Nov 26, 2020 at 8:43 AM Wilken Gottwalt
->>>> <wilken.gottwalt@posteo.net> wrote:
->>>>> Adds support for another Corsair PSUs series: AX760i, AX860i, AX1200i,
->>>>> AX1500i and AX1600i. The first 3 power supplies are supported through
->>>>> the Corsair Link USB Dongle which is some kind of USB/Serial/TTL
->>>>> converter especially made for the COM ports of these power supplies.
->>>>> There are 3 known revisions of these adapters. The AX1500i power supply
->>>>> has revision 3 built into the case and AX1600i is the only one in that
->>>>> series, which has an unique usb hid id like the RM/RX series.
->>>> Can I ask what AXi power supplies were tested?
->>>>
->>>> I ask because, based on the user-space implementations I am aware of,
->>>> the AXi dongle protocol appears to be different from the RMi/HXi series.
->>> I was not able to test this against the AX power supplies, they are really
->>> hard to find (and are far to expensive). But I went through all these tools
->>> and stuck to the most common commands, which all 3 series support. Not every
->>> series supports all commands (there also seem to be different firmwares in
->>> the micro-conrollers). But this is fine, some sensors will show up as N/A.
->>> Even my HX850i does not support all commands covered in this driver.
->>>
->> What kind of tests do you want / need ?
->>
->> I have an AX860i here.
-> Oh nice. Lets start with an usb info dump. Can you give me the full dump of
-> lsusb -vd <device> of the Corsair USB dongle?
+When building hwmon/pwm-fan the following unused-variable warning shows
+up:
 
-$ lsusb  -vd  1b1c:1c00
+/tmp/drivers/hwmon/pwm-fan.c: In function ‘pwm_fan_is_visible’:
+/tmp/drivers/hwmon/pwm-fan.c:167:22: warning: unused variable ‘ctx’ [-Wunused-variable]
 
-Bus 011 Device 005: ID 1b1c:1c00 Corsair Controller for Corsair Link
-Device Descriptor:
-   bLength                18
-   bDescriptorType         1
-   bcdUSB               1.10
-   bDeviceClass            0
-   bDeviceSubClass         0
-   bDeviceProtocol         0
-   bMaxPacketSize0        64
-   idVendor           0x1b1c Corsair
-   idProduct          0x1c00 Controller for Corsair Link
-   bcdDevice            1.00
-   iManufacturer           1 Silicon Labs
-   iProduct                2 Corsair Link TM USB Dongle
-   iSerial                 3 R7480347
-   bNumConfigurations      1
-   Configuration Descriptor:
-     bLength                 9
-     bDescriptorType         2
-     wTotalLength       0x0020
-     bNumInterfaces          1
-     bConfigurationValue     1
-     iConfiguration          0
-     bmAttributes         0x80
-       (Bus Powered)
-     MaxPower              100mA
-     Interface Descriptor:
-       bLength                 9
-       bDescriptorType         4
-       bInterfaceNumber        0
-       bAlternateSetting       0
-       bNumEndpoints           2
-       bInterfaceClass       255 Vendor Specific Class
-       bInterfaceSubClass      0
-       bInterfaceProtocol      0
-       iInterface              2 Corsair Link TM USB Dongle
-       Endpoint Descriptor:
-         bLength                 7
-         bDescriptorType         5
-         bEndpointAddress     0x81  EP 1 IN
-         bmAttributes            2
-           Transfer Type            Bulk
-           Synch Type               None
-           Usage Type               Data
-         wMaxPacketSize     0x0040  1x 64 bytes
-         bInterval               0
-       Endpoint Descriptor:
-         bLength                 7
-         bDescriptorType         5
-         bEndpointAddress     0x01  EP 1 OUT
-         bmAttributes            2
-           Transfer Type            Bulk
-           Synch Type               None
-           Usage Type               Data
-         wMaxPacketSize     0x0040  1x 64 bytes
-         bInterval               0
-can't get debug descriptor: Resource temporarily unavailable
-Device Status:     0x0000
-   (Bus Powered)
+Remove the unneeded variable declaration 'ctx'.
 
---
+Fixes: 439ed83acc19 ("hwmon: (pwm-fan) Convert to hwmon_device_register_with_info API")
+Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+---
+ drivers/hwmon/pwm-fan.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-Thomas
-
+diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
+index 57b574837b58..777439f48c14 100644
+--- a/drivers/hwmon/pwm-fan.c
++++ b/drivers/hwmon/pwm-fan.c
+@@ -164,8 +164,6 @@ static umode_t pwm_fan_is_visible(const void *data,
+ 				  enum hwmon_sensor_types type,
+ 				  u32 attr, int channel)
+ {
+-	struct pwm_fan_ctx *ctx = (struct pwm_fan_ctx *)data;
+-
+ 	switch (type) {
+ 	case hwmon_pwm:
+ 		return 0644;
+-- 
+2.29.2
 
