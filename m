@@ -2,105 +2,141 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB258C64E7B
-	for <linux-hwmon@archiver.kernel.org>; Tue,  1 Dec 2020 15:20:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5067DC71155
+	for <linux-hwmon@archiver.kernel.org>; Tue,  1 Dec 2020 19:11:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D411D2076C
-	for <linux-hwmon@archiver.kernel.org>; Tue,  1 Dec 2020 15:20:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D42BC20639
+	for <linux-hwmon@archiver.kernel.org>; Tue,  1 Dec 2020 19:11:02 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=iki.fi header.i=@iki.fi header.b="wS+vgeOL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jWGxoJVm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389163AbgLAPUu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 1 Dec 2020 10:20:50 -0500
-Received: from meesny.iki.fi ([195.140.195.201]:43216 "EHLO meesny.iki.fi"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387678AbgLAPUu (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 1 Dec 2020 10:20:50 -0500
-Received: from [10.32.112.20] (unknown [85.134.33.118])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: tmb)
-        by meesny.iki.fi (Postfix) with ESMTPSA id 35CDF205A6;
-        Tue,  1 Dec 2020 17:20:07 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-        t=1606836007;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3q14FNmAeDp4Ro+7AHoPqgM/pFoG0Bl0GKr6ZP04YkI=;
-        b=wS+vgeOL8qjYiN/RryToKSzPyCaHi0o7Oj8LIlhIdf51Pn4amtJT2CSPQBGmLlaG5hRSIT
-        bCcxt1TwqKn6iNg7GQ7ESyzcBWmsKE7LEzkDiOLLOU0LY3ri+1Zk2UBPqxX7az4AqZuHPL
-        aTWdMysIGZoMSbPh0gnw12SjqbohHGQ=
-Subject: Re: [PATCH] hwmon: corsair-psu: update supported devices
-To:     Wilken Gottwalt <wilken.gottwalt@posteo.net>,
-        Backlund Thomas <tmb@iki.fi>
-Cc:     Jonas Malaco <jonas@protocubo.io>, linux-kernel@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
-References: <X7+T4aZSUuzfsf7H@monster.powergraphx.local>
- <CANS_-EN8rgFEyE5rDw3=JLUYNwLQexafn7efvMC_=+4s2h1R6Q@mail.gmail.com>
- <20201128113524.24f4f56f@monster.powergraphx.local>
- <4917cc59-aa35-7fb1-d2d0-75039523816f@iki.fi>
- <s7R3iA2S9eDO5XZ9rdqzYCvN9eu2DaNKUQCmSn_4XxsrxD-93-gtY9DFGxbthP9CVsquOXoocwbZfwNKo7XLaQ==@protonmail.internalid>
- <20201130154915.760923fd@monster.powergraphx.local>
- <6185cc04-da71-5b68-0bc8-931af6fa2dc9@iki.fi>
- <-je9uwScwR9_PkQlpZgHYO98IHe2gIxkIcGfmhyqk72ZxZkU5E8T_G9YKmPPXTQXDOTnQD5Dah5cAwJnbkqWbA==@protonmail.internalid>
- <20201201082438.515bb23f@monster.powergraphx.local>
-From:   Thomas Backlund <tmb@iki.fi>
-Message-ID: <05ef2c7d-1deb-12a3-65d4-f5585a3a9670@iki.fi>
-Date:   Tue, 1 Dec 2020 17:20:07 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        id S1727356AbgLATKr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 1 Dec 2020 14:10:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33360 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726871AbgLATKp (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 1 Dec 2020 14:10:45 -0500
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0883C0613CF
+        for <linux-hwmon@vger.kernel.org>; Tue,  1 Dec 2020 11:09:59 -0800 (PST)
+Received: by mail-pl1-x641.google.com with SMTP id k5so1677439plt.6
+        for <linux-hwmon@vger.kernel.org>; Tue, 01 Dec 2020 11:09:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=d1woGiBV2GTNGxzxpa8s59z3SnS9/3boxLOfUkVkkNU=;
+        b=jWGxoJVm7l5laLbk+nnb1ChzEm94ZBGuSihH/Lg1kWrwTXVxLY3vIG4tsbsO+SsTGM
+         dbuFpT9PEEJlbx8lf8HzfkSl22WZ/e3GxI5PYVWPi8o4r2gg8UxY+Rbdm1o+JGWgnF5z
+         rsfPqP3+ygQ9pZHOFKb2B56mA/REgnF+aGLbdYsFQ5SWjNclMPfhM3Vke0ALz+lOt40+
+         QL+dwr2/ocMXZ28C59t8ornSNfF2qs3jJU0v97qKzy1I10C8fhwg0uFkR2g7K3shtCcg
+         QcamzmYL1A23SfsDtfNqsI/jxwQ1BOm6OmRxCNCbVR+Td1UgALK6iO5MgultsINR+Imd
+         H+WQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=d1woGiBV2GTNGxzxpa8s59z3SnS9/3boxLOfUkVkkNU=;
+        b=A2Gby2SWG+Fj4h1g6eVhGVRg2gdaQch2K+L0gGRpMJoXhWNm5iE0TGxZYqkX/0k5JS
+         fDwxNn5NLt9LvoZjRZy0VhanQVrTuz/ZZ5S3U/koJqap9a2/mGT8o5hUpgtYnvTOOnwc
+         4A+Z0DhzCAUlLjWswHDN58YGVfbPNw8CdKwlD6qn0qtdq2M3fS8/CZVKVl/VLq5GXJJi
+         vA06C2Jn4EGTZY5AfqI0iAREwNoemEFV2riEvKtnKx+m7+cW4xn1H+gFBx3GmzNW7DuY
+         gHmmkCeXUrA6nXWYZkcZXXDdOHJQDhlN2zEd4z65kR7vikkdOmIWB1unPbEq6w3Kfnwy
+         lhDg==
+X-Gm-Message-State: AOAM533FHemmabRQA+Vi0I8CCleob8Zw0tqVqHT8o2wbya9wwB06sDpa
+        1wKgVouzBQw6NS/pWO630e67RAe19ZC7RqII
+X-Google-Smtp-Source: ABdhPJyv9AeDXir2EgJZQjTnKmdwT4zzUAE83MPfpSWAoqZXS8j5fAIs9Ygq1rMDnPGQjWqPlWEOww==
+X-Received: by 2002:a17:902:eb54:b029:da:29d7:cffd with SMTP id i20-20020a170902eb54b02900da29d7cffdmr4288354pli.28.1606849797838;
+        Tue, 01 Dec 2020 11:09:57 -0800 (PST)
+Received: from localhost.localdomain (c-71-202-86-11.hsd1.ca.comcast.net. [71.202.86.11])
+        by smtp.googlemail.com with ESMTPSA id j9sm504839pfi.116.2020.12.01.11.09.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Dec 2020 11:09:57 -0800 (PST)
+From:   David Bartley <andareed@gmail.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     David Bartley <andareed@gmail.com>
+Subject: [PATCH] hwmon: (nct6683) Support NCT6687D.
+Date:   Tue,  1 Dec 2020 11:09:31 -0800
+Message-Id: <20201201190931.72437-1-andareed@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-In-Reply-To: <20201201082438.515bb23f@monster.powergraphx.local>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: sv
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1606836007; a=rsa-sha256; cv=none;
-        b=xMbyXlSZh0bPLrt47w32jz+mQGkokyg2TIDGMIunjYcvJ8NYoazrCzBSsSWYDoxa9lA96h
-        whXRkOXZFZvCjzsxTYysa8Yu8gSXtVw940pjynrrWLToH4xwR6redqBSzsrmyVuJGtUDuW
-        gGZouwd29A4MVuZhq7L2mYgQRr+aAJc=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=meesny; t=1606836007;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3q14FNmAeDp4Ro+7AHoPqgM/pFoG0Bl0GKr6ZP04YkI=;
-        b=ZmFDlPq2BlaHedqaWVv3Z7XRSw6adlSSYyueFXG9YsfQlfkmj15PSYQQS9gGg06Ma25HnN
-        cSbvzmmBKL6ePlE3a3+u8Zc4i1LLbpvQJEotQnRfI8dS5bc53zS7pZgZgPK4Uf25NWI+om
-        BOpWg9A9ANgzY35evi5/qNDK09r5iKY=
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=tmb smtp.mailfrom=tmb@iki.fi
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Den 01.12.2020 kl. 09:24, skrev Wilken Gottwalt:
+This is found on many MSI motherboards.
 
-> Thank you. Hmm yeah, this dongle has no usb hid part. So this driver will not
-> work with this dongle for sure. I already have an idea how to support all 3
-> series, though it involves a lot of testing. I would provide a github repo
-> with tools and test kernel modules if you are interested. But I don't know
-> yet how long it will take, I work on other stuff which has a higher prio.
->
+Signed-off-by: David Bartley <andareed@gmail.com>
+---
+ Documentation/hwmon/nct6683.rst | 3 ++-
+ drivers/hwmon/nct6683.c         | 7 +++++++
+ 2 files changed, 9 insertions(+), 1 deletion(-)
 
-Yes, I'm interested...
-
-Just drop me a note when you have something to test.
-
-
---
-
-Thomas
-
+diff --git a/Documentation/hwmon/nct6683.rst b/Documentation/hwmon/nct6683.rst
+index efbf7e9703ec..7ceab770ae4e 100644
+--- a/Documentation/hwmon/nct6683.rst
++++ b/Documentation/hwmon/nct6683.rst
+@@ -3,7 +3,7 @@ Kernel driver nct6683
+ 
+ Supported chips:
+ 
+-  * Nuvoton NCT6683D
++  * Nuvoton NCT6683D/NCT6687D
+ 
+     Prefix: 'nct6683'
+ 
+@@ -61,4 +61,5 @@ Board		Firmware version
+ Intel DH87RL	NCT6683D EC firmware version 1.0 build 04/03/13
+ Intel DH87MC	NCT6683D EC firmware version 1.0 build 04/03/13
+ Intel DB85FL	NCT6683D EC firmware version 1.0 build 04/03/13
++MSI B550	N/A
+ =============== ===============================================
+diff --git a/drivers/hwmon/nct6683.c b/drivers/hwmon/nct6683.c
+index 2d299149f4d2..53e8d0cb3231 100644
+--- a/drivers/hwmon/nct6683.c
++++ b/drivers/hwmon/nct6683.c
+@@ -63,6 +63,7 @@ static const char * const nct6683_chip_names[] = {
+ 
+ #define SIO_NCT6681_ID		0xb270	/* for later */
+ #define SIO_NCT6683_ID		0xc730
++#define SIO_NCT6687_ID		0xd590
+ #define SIO_ID_MASK		0xFFF0
+ 
+ static inline void
+@@ -164,6 +165,7 @@ superio_exit(int ioreg)
+ #define NCT6683_REG_CUSTOMER_ID		0x602
+ #define NCT6683_CUSTOMER_ID_INTEL	0x805
+ #define NCT6683_CUSTOMER_ID_MITAC	0xa0e
++#define NCT6683_CUSTOMER_ID_MSI		0x201
+ 
+ #define NCT6683_REG_BUILD_YEAR		0x604
+ #define NCT6683_REG_BUILD_MONTH		0x605
+@@ -1218,6 +1220,8 @@ static int nct6683_probe(struct platform_device *pdev)
+ 		break;
+ 	case NCT6683_CUSTOMER_ID_MITAC:
+ 		break;
++	case NCT6683_CUSTOMER_ID_MSI:
++		break;
+ 	default:
+ 		if (!force)
+ 			return -ENODEV;
+@@ -1352,6 +1356,9 @@ static int __init nct6683_find(int sioaddr, struct nct6683_sio_data *sio_data)
+ 	case SIO_NCT6683_ID:
+ 		sio_data->kind = nct6683;
+ 		break;
++	case SIO_NCT6687_ID:
++		sio_data->kind = nct6683;
++		break;
+ 	default:
+ 		if (val != 0xffff)
+ 			pr_debug("unsupported chip ID: 0x%04x\n", val);
+-- 
+2.27.0
 
