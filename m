@@ -2,326 +2,89 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,FAKE_REPLY_C,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.5 required=3.0 tests=BAYES_00,
+	CHARSET_FARAWAY_HEADER,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F97DC64E7B
-	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Dec 2020 13:24:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EAA9C64E7C
+	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Dec 2020 14:28:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EB6BF217A0
-	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Dec 2020 13:24:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D6B0D21D42
+	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Dec 2020 14:28:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727050AbgLBNY0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 2 Dec 2020 08:24:26 -0500
-Received: from gproxy3-pub.mail.unifiedlayer.com ([69.89.30.42]:41109 "EHLO
-        gproxy3-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726567AbgLBNYZ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 2 Dec 2020 08:24:25 -0500
-Received: from cmgw10.unifiedlayer.com (unknown [10.9.0.10])
-        by gproxy3.mail.unifiedlayer.com (Postfix) with ESMTP id D7555402B3
-        for <linux-hwmon@vger.kernel.org>; Wed,  2 Dec 2020 06:23:35 -0700 (MST)
-Received: from bh-25.webhostbox.net ([208.91.199.152])
-        by cmsmtp with ESMTP
-        id kS6ZkyGKHDlydkS6Zklfu9; Wed, 02 Dec 2020 06:23:35 -0700
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.3 cv=COQEoyjD c=1 sm=1 tr=0
- a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=zTNgK-yGK50A:10:nop_rcvd_month_year
- a=evQFzbml-YQA:10:endurance_base64_authed_username_1 a=pGLkceISAAAA:8
- a=8b9GpE9nAAAA:8 a=gXLdhW2jAAAA:8 a=VwQbUJbxAAAA:8 a=QyXUC8HyAAAA:8
- a=64J-flk6gbOkI1un91IA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=T3LWEMljR5ZiDmsYVIUa:22 a=Dn9eIPSr_RzuO0KTJioD:22 a=AjGcO6oz07-iQ99wixmX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=yai6RlLMf2iF9dG1o2AJCZj8WAbMBVEu2RcDAH563bU=; b=RXbICKByoSeBHukdOj3l0Vp0ry
-        pRXm4jWlnP2EdHr+ErjaKLHvhx1Ga7vusv7tZOkBCFF2/X2Td0ipkBi5YOvtzSlKzwDXm9eLPuvlV
-        28tV0xq50wG2ODk8gy9cLsQk4tPDTS6Flckx/EiMbyv64ctL+xD9upF4GEriT/hnnyY44NqTGPZgs
-        veoeQf8BHKGfQtrto/BZjIxC1qlD9BNBj4D3ifTUzDt1fSXpnR9jK0She3MTxlhdvMHWhibhgwdAl
-        Z65nP2UdN5BqA6MAYB80IvV2e/6fCazV9hx52+IwcSmYUlrL9wmtdH1cK+HZaacnfxIZJ0UIvkvln
-        za+Sr9xA==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:37720 helo=localhost)
-        by bh-25.webhostbox.net with esmtpa (Exim 4.93)
-        (envelope-from <linux@roeck-us.net>)
-        id 1kkS6Y-001uvT-Rm; Wed, 02 Dec 2020 13:23:34 +0000
-Date:   Wed, 2 Dec 2020 05:23:34 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Charles <hsu.yungteng@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        alan@redhat.com
-Subject: Re: [PATCH v6] hwmon: Add driver for STMicroelectronics PM6764
- Voltage Regulator
-Message-ID: <20201202132334.GA168086@roeck-us.net>
+        id S1728058AbgLBO2d (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 2 Dec 2020 09:28:33 -0500
+Received: from szxga03-in.huawei.com ([45.249.212.189]:2390 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727460AbgLBO2c (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 2 Dec 2020 09:28:32 -0500
+Received: from DGGEMM403-HUB.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4CmLrz6TKkz4y1G;
+        Wed,  2 Dec 2020 22:27:15 +0800 (CST)
+Received: from dggema757-chm.china.huawei.com (10.1.198.199) by
+ DGGEMM403-HUB.china.huawei.com (10.3.20.211) with Microsoft SMTP Server (TLS)
+ id 14.3.487.0; Wed, 2 Dec 2020 22:27:49 +0800
+Received: from dggema755-chm.china.huawei.com (10.1.198.197) by
+ dggema757-chm.china.huawei.com (10.1.198.199) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.1913.5; Wed, 2 Dec 2020 22:27:49 +0800
+Received: from dggema755-chm.china.huawei.com ([10.1.198.197]) by
+ dggema755-chm.china.huawei.com ([10.1.198.197]) with mapi id 15.01.1913.007;
+ Wed, 2 Dec 2020 22:27:49 +0800
+From:   zhangqilong <zhangqilong3@huawei.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Subject: =?gb2312?B?tPC4tDogW1BBVENIXSBod21vbjogKGluYTMyMjEpIEZpeCBQTSB1c2FnZSBj?=
+ =?gb2312?B?b3VudGVyIHVuYmFsYW5jZSBpbiBpbmEzMjIxX3dyaXRlX2VuYWJsZQ==?=
+Thread-Topic: [PATCH] hwmon: (ina3221) Fix PM usage counter unbalance in
+ ina3221_write_enable
+Thread-Index: AQHWxfxWp2nym2mwjkeQSqb3sapJ3qnj36sw
+Date:   Wed, 2 Dec 2020 14:27:49 +0000
+Message-ID: <2ba39483c16c487eb5f7bd373212e96c@huawei.com>
+References: <20201123102000.3864999-1-zhangqilong3@huawei.com>
+ <20201129030422.GA96772@roeck-us.net>
+In-Reply-To: <20201129030422.GA96772@roeck-us.net>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.174.179.28]
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1kkS6Y-001uvT-Rm
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:37720
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 3
-X-Org:  HG=direseller_whb_net_legacy;ORG=directi;
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Dec 02, 2020 at 02:11:04PM +0800, Charles wrote:
-> Add the pmbus driver for the STMicroelectronics pm6764 voltage regulator.
-> 
-> the output voltage use the MFR_READ_VOUT 0xD4
-> vout value returned is linear11
-> 
-> Signed-off-by: Charles Hsu <hsu.yungteng@gmail.com>
-> ---
-> 
-> v6:
->  - Fix misspelling.
-> v5:
->  - Add MAINTAINERS.
->  - Add a reference into trivial-devices.yaml.
-> v4:
->  - Add pm6764tr to Documentation/hwmon/index.rst.
-> v3:
->  - Add Documentation(Documentation/hwmon/pm6764tr.rst).
->  - Fix include order.
-> v2:
->  - Fix formatting.
->  - Remove pmbus_do_remove.
->  - Change from .probe to .probe_new.
-> v1:
->  - Initial patchset.
-> 
-> ---
->  Documentation/hwmon/index.rst    |  1 +
->  Documentation/hwmon/pm6764tr.rst | 32 ++++++++++++++
->  MAINTAINERS                      |  7 +++
->  drivers/hwmon/pmbus/Kconfig      |  9 ++++
->  drivers/hwmon/pmbus/Makefile     |  1 +
->  drivers/hwmon/pmbus/pm6764tr.c   | 76 ++++++++++++++++++++++++++++++++
->  6 files changed, 126 insertions(+)
->  create mode 100644 Documentation/hwmon/pm6764tr.rst
->  create mode 100644 drivers/hwmon/pmbus/pm6764tr.c
-> 
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index b797db738225..1bbd05e41de4 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -144,6 +144,7 @@ Hardware Monitoring Kernel Drivers
->     pc87360
->     pc87427
->     pcf8591
-> +   pm6764tr
->     pmbus
->     powr1220
->     pxe1610
-> diff --git a/Documentation/hwmon/pm6764tr.rst b/Documentation/hwmon/pm6764tr.rst
-> new file mode 100644
-> index 000000000000..a1fb8fea2326
-> --- /dev/null
-> +++ b/Documentation/hwmon/pm6764tr.rst
-> @@ -0,0 +1,32 @@
-> +.. SPDX-License-Identifier: GPL-2.0-only
-> +
-> +Kernel driver pm6764tr
-> +======================
-> +
-> +Supported chips:
-> +
-> +  * ST PM6764TR
-> +
-> +    Prefix: 'pm6764tr'
-> +
-> +    Addresses scanned: -
-> +
-> +    Datasheet: http://www.st.com/resource/en/data_brief/pm6764.pdf
-> +
-> +Authors:
-> +	<hsu.yungteng@gmail.com>
-> +
-> +Description:
-> +------------
-> +
-> +This driver supports the STMicroelectronics PM6764TR chip. The PM6764TR is a high
-> +performance digital controller designed to power Intel’s VR12.5 processors and memories.
-> +
-> +The device utilizes digital technology to implement all control and power management
-> +functions to provide maximum flexibility and performance. The NVM is embedded to store
-> +custom configurations. The PM6764TR device features up to 4-phase programmable operation.
-> +
-> +The PM6764TR supports power state transitions featuring VFDE, and programmable DPM
-> +maintaining the best efficiency over all loading conditions without compromising transient
-> +response. The device assures fast and independent protection against load overcurrent,
-> +under/overvoltage and feedback disconnections.
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 94ac10a153c7..a3fea132c4ed 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -13904,6 +13904,13 @@ M:	Logan Gunthorpe <logang@deltatee.com>
->  S:	Maintained
->  F:	drivers/dma/plx_dma.c
-> +PM6764TR DRIVER
-
-I dn't know what happened, but this line ...
-
-> +M:	Charles Hsu	<hsu.yungteng@gmail.com>
-> +L:	linux-hwmon@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/hwmon/pm6764tr.rst
-> +F:	drivers/hwmon/pmbus/pm6764tr.c
-> +
->  PM-GRAPH UTILITY
->  M:	"Todd E Brandt" <todd.e.brandt@linux.intel.com>
->  L:	linux-pm@vger.kernel.org
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index a25faf69fce3..9c846facce9f 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -220,6 +220,15 @@ config SENSORS_MP2975
->  	  This driver can also be built as a module. If so, the module will
->  	  be called mp2975.
-> +config SENSORS_PM6764TR
-
-... and this line report that the patch is corrupted when I try to apply it.
-Looking into the files, there is supposed to be an empty line before
-"config SENSORS_PM6764TR" and before "PM6764TR DRIVER". If I add those
-empty lines, the patch applies. checkpatch also reports problems associated
-with that corruption as well as other problems. On top of that, the patch
-does not show up in patchwork.
-
-Please fix whatever is causing those problems and resubmit. I would suggest
-to try to apply the patch yourself with "git am ..." before you send it out.
-
-You'll also need a separate patch to add st,pm6764tr to trivial_devices.
-
-Thanks,
-Guenter
-
-> +	tristate "ST PM6764TR"
-> +	help
-> +	  If you say yes here you get hardware monitoring support for ST
-> +	  PM6764TR.
-> +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called pm6764tr.
-> +
->  config SENSORS_PXE1610
->  	tristate "Infineon PXE1610"
->  	help
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index 4c97ad0bd791..31ebdef5d4a6 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -25,6 +25,7 @@ obj-$(CONFIG_SENSORS_MAX31785)	+= max31785.o
->  obj-$(CONFIG_SENSORS_MAX34440)	+= max34440.o
->  obj-$(CONFIG_SENSORS_MAX8688)	+= max8688.o
->  obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
-> +obj-$(CONFIG_SENSORS_PM6764TR)	+= pm6764tr.o
->  obj-$(CONFIG_SENSORS_PXE1610)	+= pxe1610.o
->  obj-$(CONFIG_SENSORS_TPS40422)	+= tps40422.o
->  obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
-> diff --git a/drivers/hwmon/pmbus/pm6764tr.c b/drivers/hwmon/pmbus/pm6764tr.c
-> new file mode 100644
-> index 000000000000..70747c21c66e
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/pm6764tr.c
-> @@ -0,0 +1,76 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Hardware monitoring driver for STMicroelectronics digital controller PM6764TR
-> + */
-> +
-> +#include <linux/err.h>
-> +#include <linux/i2c.h>
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/pmbus.h>
-> +#include "pmbus.h"
-> +
-> +#define PM6764TR_PMBUS_READ_VOUT	0xD4
-> +
-> +static int pm6764tr_read_word_data(struct i2c_client *client, int page, int reg)
-> +{
-> +	int ret;
-> +
-> +	switch (reg) {
-> +	case PMBUS_VIRT_READ_VMON:
-> +		ret = pmbus_read_word_data(client, page, PM6764TR_PMBUS_READ_VOUT);
-> +		break;
-> +	default:
-> +		ret = -ENODATA;
-> +		break;
-> +	}
-> +	return ret;
-> +}
-> +
-> +static struct pmbus_driver_info pm6764tr_info = {
-> +	.pages = 1,
-> +	.format[PSC_VOLTAGE_IN] = linear,
-> +	.format[PSC_VOLTAGE_OUT] = vid,
-> +	.format[PSC_TEMPERATURE] = linear,
-> +	.format[PSC_CURRENT_OUT] = linear,
-> +	.format[PSC_POWER] = linear,
-> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN |  PMBUS_HAVE_PIN |
-> +	    PMBUS_HAVE_IOUT | PMBUS_HAVE_POUT | PMBUS_HAVE_VMON |
-> +		PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_VOUT |
-> +		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
-> +	.read_word_data = pm6764tr_read_word_data,
-> +};
-> +
-> +static int pm6764tr_probe(struct i2c_client *client,
-> +			  const struct i2c_device_id *id)
-> +{
-> +	return pmbus_do_probe(client, id, &pm6764tr_info);
-> +}
-> +
-> +static const struct i2c_device_id pm6764tr_id[] = {
-> +	{"pm6764tr", 0},
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(i2c, pm6764tr_id);
-> +
-> +static const struct of_device_id pm6764tr_of_match[] = {
-> +	{.compatible = "st,pm6764tr"},
-> +	{}
-> +};
-> +
-> +/* This is the driver that will be inserted */
-> +static struct i2c_driver pm6764tr_driver = {
-> +	.driver = {
-> +		   .name = "pm6764tr",
-> +		   .of_match_table = of_match_ptr(pm6764tr_of_match),
-> +		   },
-> +	.probe_new = pm6764tr_probe,
-> +	.id_table = pm6764tr_id,
-> +};
-> +
-> +module_i2c_driver(pm6764tr_driver);
-> +
-> +MODULE_AUTHOR("Charles Hsu");
-> +MODULE_DESCRIPTION("PMBus driver for  ST PM6764TR");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.25.1
-> 
+SEksDQoNCj4gDQo+IE9uIE1vbiwgTm92IDIzLCAyMDIwIGF0IDA2OjIwOjAwUE0gKzA4MDAsIFpo
+YW5nIFFpbG9uZyB3cm90ZToNCj4gPiBwbV9ydW50aW1lX2dldF9zeW5jIHdpbGwgaW5jcmVtZW50
+IHBtIHVzYWdlIGNvdW50ZXIgZXZlbiBpdCBmYWlsZWQuDQo+ID4gRm9yZ2V0dGluZyB0byBwdXR0
+aW5nIG9wZXJhdGlvbiB3aWxsIHJlc3VsdCBpbiByZWZlcmVuY2UgbGVhayBoZXJlLiBXZQ0KPiA+
+IGZpeCBpdCBieSByZXBsYWNpbmcgaXQgd2l0aCBwbV9ydW50aW1lX3Jlc3VtZV9hbmRfZ2V0IHRv
+IGtlZXAgdXNhZ2UNCj4gPiBjb3VudGVyIGJhbGFuY2VkLg0KPiA+DQo+IFR1cm5zIG91dCB0aGlz
+IGZ1bmN0aW9uIGRvZXNuJ3QgZXhpc3QgaW4gdGhlIG1haW5saW5lIGtlcm5lbCwgbWVhbmluZyBp
+dCBjYW4gbm90DQo+IGJlIHVzZWQgdG8gZml4IGEgcGF0Y2ggaW4gdGhlIG1haW5saW5lIGtlcm5l
+bC4NCj4gSSBkcm9wcGVkIHRoaXMgcGF0Y2ggZnJvbSBteSBxdWV1ZS4NCj4gDQoNCkkgYW0gc29y
+cnkgLEkgZm9yZ290IHRvIGFkZCB0aGUgZGVwZW5kZW5jeSwgdGhlIGNvbW1pdCBpcyBhcyBmbG93
+aW5nOg0KDQoJaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQv
+dG9ydmFsZHMvbGludXguZ2l0L2NvbW1pdC8/aD12NS4xMC1yYzYmaWQ9ZGQ4MDg4ZDVhODk2OWRj
+MmI0MmY3MWQ3YmMwMWMyNWM2MWE3ODA2Ng0KDQpJIHdpbGwgdXBkYXRlIHRoZSBkZXNjcmlwdGlv
+biBuZXh0IHZlcnNpb24uDQoNCkJlc3QgcmVnYXJkcywNClpoYW5nIFFpbG9uZyAgDQoNCj4gR3Vl
+bnRlcg0KPiANCj4gPiBGaXhlczogMzIzYWViMGViNWQ5YSAoImh3bW9uOiAoaW5hMzIyMSkgQWRk
+IFBNIHJ1bnRpbWUgc3VwcG9ydCIpDQo+ID4gU2lnbmVkLW9mZi1ieTogWmhhbmcgUWlsb25nIDx6
+aGFuZ3FpbG9uZzNAaHVhd2VpLmNvbT4NCj4gPiAtLS0NCj4gPiAgZHJpdmVycy9od21vbi9pbmEz
+MjIxLmMgfCAyICstDQo+ID4gIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxl
+dGlvbigtKQ0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvaHdtb24vaW5hMzIyMS5jIGIv
+ZHJpdmVycy9od21vbi9pbmEzMjIxLmMgaW5kZXgNCj4gPiA3MmNmZGMwMDdlNjAuLmQ4MGJkM2Vm
+Y2Q2ZCAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL2h3bW9uL2luYTMyMjEuYw0KPiA+ICsrKyBi
+L2RyaXZlcnMvaHdtb24vaW5hMzIyMS5jDQo+ID4gQEAgLTQ4OSw3ICs0ODksNyBAQCBzdGF0aWMg
+aW50IGluYTMyMjFfd3JpdGVfZW5hYmxlKHN0cnVjdCBkZXZpY2UNCj4gPiAqZGV2LCBpbnQgY2hh
+bm5lbCwgYm9vbCBlbmFibGUpDQo+ID4NCj4gPiAgCS8qIEZvciBlbmFibGluZyByb3V0aW5lLCBp
+bmNyZWFzZSByZWZjb3VudCBhbmQgcmVzdW1lKCkgYXQgZmlyc3QgKi8NCj4gPiAgCWlmIChlbmFi
+bGUpIHsNCj4gPiAtCQlyZXQgPSBwbV9ydW50aW1lX2dldF9zeW5jKGluYS0+cG1fZGV2KTsNCj4g
+PiArCQlyZXQgPSBwbV9ydW50aW1lX3Jlc3VtZV9hbmRfZ2V0KGluYS0+cG1fZGV2KTsNCj4gPiAg
+CQlpZiAocmV0IDwgMCkgew0KPiA+ICAJCQlkZXZfZXJyKGRldiwgIkZhaWxlZCB0byBnZXQgUE0g
+cnVudGltZVxuIik7DQo+ID4gIAkJCXJldHVybiByZXQ7DQo=
