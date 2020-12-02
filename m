@@ -2,639 +2,326 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,FAKE_REPLY_C,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F3D8DC64E8A
-	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Dec 2020 08:36:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F97DC64E7B
+	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Dec 2020 13:24:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7D1F322202
-	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Dec 2020 08:36:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EB6BF217A0
+	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Dec 2020 13:24:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728540AbgLBIgr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 2 Dec 2020 03:36:47 -0500
-Received: from m15113.mail.126.com ([220.181.15.113]:37713 "EHLO
-        m15113.mail.126.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728052AbgLBIgq (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 2 Dec 2020 03:36:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=mIWMX
-        k6bAr5ed3mL3HtP2Df+7zDxqBKkwm+TGBglJBc=; b=NcxeDDeAZ9sa9XTtUFtCQ
-        4OUdzJc7BjetT027tP9SuyHv9cUb90QyHh6NV4AFEfKbPMGaAsOvjM5hOVfhlnFb
-        hVgjyyoDYIuIoaXGLcfsA1VDwl33nQhZQMnpwd7kmiCYCBjpRxySQC0PCRXdFw13
-        8m43OHMAc9Nq4gbvF3cUdY=
-Received: from localhost (unknown [117.136.120.74])
-        by smtp3 (Coremail) with SMTP id DcmowAD36fz3Asdfg0jKMA--.20989S2;
-        Wed, 02 Dec 2020 10:59:04 +0800 (CST)
-From:   "xiao.ma" <max701@126.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xiao.mx.ma@deltaww.com,
-        jiajia.feng@deltaww.com
-Subject: [PATCH v10] hwmon:Driver for Delta power supplies Q54SJ108A2
-Date:   Tue,  1 Dec 2020 16:59:00 -1000
-Message-Id: <20201202025900.1842-1-max701@126.com>
-X-Mailer: git-send-email 2.20.1
+        id S1727050AbgLBNY0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 2 Dec 2020 08:24:26 -0500
+Received: from gproxy3-pub.mail.unifiedlayer.com ([69.89.30.42]:41109 "EHLO
+        gproxy3-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726567AbgLBNYZ (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 2 Dec 2020 08:24:25 -0500
+Received: from cmgw10.unifiedlayer.com (unknown [10.9.0.10])
+        by gproxy3.mail.unifiedlayer.com (Postfix) with ESMTP id D7555402B3
+        for <linux-hwmon@vger.kernel.org>; Wed,  2 Dec 2020 06:23:35 -0700 (MST)
+Received: from bh-25.webhostbox.net ([208.91.199.152])
+        by cmsmtp with ESMTP
+        id kS6ZkyGKHDlydkS6Zklfu9; Wed, 02 Dec 2020 06:23:35 -0700
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.3 cv=COQEoyjD c=1 sm=1 tr=0
+ a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=zTNgK-yGK50A:10:nop_rcvd_month_year
+ a=evQFzbml-YQA:10:endurance_base64_authed_username_1 a=pGLkceISAAAA:8
+ a=8b9GpE9nAAAA:8 a=gXLdhW2jAAAA:8 a=VwQbUJbxAAAA:8 a=QyXUC8HyAAAA:8
+ a=64J-flk6gbOkI1un91IA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=T3LWEMljR5ZiDmsYVIUa:22 a=Dn9eIPSr_RzuO0KTJioD:22 a=AjGcO6oz07-iQ99wixmX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=yai6RlLMf2iF9dG1o2AJCZj8WAbMBVEu2RcDAH563bU=; b=RXbICKByoSeBHukdOj3l0Vp0ry
+        pRXm4jWlnP2EdHr+ErjaKLHvhx1Ga7vusv7tZOkBCFF2/X2Td0ipkBi5YOvtzSlKzwDXm9eLPuvlV
+        28tV0xq50wG2ODk8gy9cLsQk4tPDTS6Flckx/EiMbyv64ctL+xD9upF4GEriT/hnnyY44NqTGPZgs
+        veoeQf8BHKGfQtrto/BZjIxC1qlD9BNBj4D3ifTUzDt1fSXpnR9jK0She3MTxlhdvMHWhibhgwdAl
+        Z65nP2UdN5BqA6MAYB80IvV2e/6fCazV9hx52+IwcSmYUlrL9wmtdH1cK+HZaacnfxIZJ0UIvkvln
+        za+Sr9xA==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:37720 helo=localhost)
+        by bh-25.webhostbox.net with esmtpa (Exim 4.93)
+        (envelope-from <linux@roeck-us.net>)
+        id 1kkS6Y-001uvT-Rm; Wed, 02 Dec 2020 13:23:34 +0000
+Date:   Wed, 2 Dec 2020 05:23:34 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Charles <hsu.yungteng@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        alan@redhat.com
+Subject: Re: [PATCH v6] hwmon: Add driver for STMicroelectronics PM6764
+ Voltage Regulator
+Message-ID: <20201202132334.GA168086@roeck-us.net>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DcmowAD36fz3Asdfg0jKMA--.20989S2
-X-Coremail-Antispam: 1Uf129KBjvAXoWfJF13Zry3Xr4DKw1kKrW8Crg_yoW8Aw43Zo
-        WUKFWru3WDJr13CrW8GF1xtFyUWr4DGrZ7Ar15KrZIkasIkF1rWF15tw1YgwnxX3y5WFW3
-        Zry5Jwn8taySy3W7n29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-        AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxUwxRDDUUUU
-X-Originating-IP: [117.136.120.74]
-X-CM-SenderInfo: ppd0liar6rjloofrz/1tbi5RjuOFpD6Kt+uQAAs2
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1kkS6Y-001uvT-Rm
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:37720
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 3
+X-Org:  HG=direseller_whb_net_legacy;ORG=directi;
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: "xiao.ma" <xiao.mx.ma@deltaww.com>
+On Wed, Dec 02, 2020 at 02:11:04PM +0800, Charles wrote:
+> Add the pmbus driver for the STMicroelectronics pm6764 voltage regulator.
+> 
+> the output voltage use the MFR_READ_VOUT 0xD4
+> vout value returned is linear11
+> 
+> Signed-off-by: Charles Hsu <hsu.yungteng@gmail.com>
+> ---
+> 
+> v6:
+>  - Fix misspelling.
+> v5:
+>  - Add MAINTAINERS.
+>  - Add a reference into trivial-devices.yaml.
+> v4:
+>  - Add pm6764tr to Documentation/hwmon/index.rst.
+> v3:
+>  - Add Documentation(Documentation/hwmon/pm6764tr.rst).
+>  - Fix include order.
+> v2:
+>  - Fix formatting.
+>  - Remove pmbus_do_remove.
+>  - Change from .probe to .probe_new.
+> v1:
+>  - Initial patchset.
+> 
+> ---
+>  Documentation/hwmon/index.rst    |  1 +
+>  Documentation/hwmon/pm6764tr.rst | 32 ++++++++++++++
+>  MAINTAINERS                      |  7 +++
+>  drivers/hwmon/pmbus/Kconfig      |  9 ++++
+>  drivers/hwmon/pmbus/Makefile     |  1 +
+>  drivers/hwmon/pmbus/pm6764tr.c   | 76 ++++++++++++++++++++++++++++++++
+>  6 files changed, 126 insertions(+)
+>  create mode 100644 Documentation/hwmon/pm6764tr.rst
+>  create mode 100644 drivers/hwmon/pmbus/pm6764tr.c
+> 
+> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+> index b797db738225..1bbd05e41de4 100644
+> --- a/Documentation/hwmon/index.rst
+> +++ b/Documentation/hwmon/index.rst
+> @@ -144,6 +144,7 @@ Hardware Monitoring Kernel Drivers
+>     pc87360
+>     pc87427
+>     pcf8591
+> +   pm6764tr
+>     pmbus
+>     powr1220
+>     pxe1610
+> diff --git a/Documentation/hwmon/pm6764tr.rst b/Documentation/hwmon/pm6764tr.rst
+> new file mode 100644
+> index 000000000000..a1fb8fea2326
+> --- /dev/null
+> +++ b/Documentation/hwmon/pm6764tr.rst
+> @@ -0,0 +1,32 @@
+> +.. SPDX-License-Identifier: GPL-2.0-only
+> +
+> +Kernel driver pm6764tr
+> +======================
+> +
+> +Supported chips:
+> +
+> +  * ST PM6764TR
+> +
+> +    Prefix: 'pm6764tr'
+> +
+> +    Addresses scanned: -
+> +
+> +    Datasheet: http://www.st.com/resource/en/data_brief/pm6764.pdf
+> +
+> +Authors:
+> +	<hsu.yungteng@gmail.com>
+> +
+> +Description:
+> +------------
+> +
+> +This driver supports the STMicroelectronics PM6764TR chip. The PM6764TR is a high
+> +performance digital controller designed to power Intel’s VR12.5 processors and memories.
+> +
+> +The device utilizes digital technology to implement all control and power management
+> +functions to provide maximum flexibility and performance. The NVM is embedded to store
+> +custom configurations. The PM6764TR device features up to 4-phase programmable operation.
+> +
+> +The PM6764TR supports power state transitions featuring VFDE, and programmable DPM
+> +maintaining the best efficiency over all loading conditions without compromising transient
+> +response. The device assures fast and independent protection against load overcurrent,
+> +under/overvoltage and feedback disconnections.
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 94ac10a153c7..a3fea132c4ed 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -13904,6 +13904,13 @@ M:	Logan Gunthorpe <logang@deltatee.com>
+>  S:	Maintained
+>  F:	drivers/dma/plx_dma.c
+> +PM6764TR DRIVER
 
-The driver supports Q54SJ108A2 series modules of Delta.
-Standard attributes are in sysfs, and other attributes are in debugfs.
+I dn't know what happened, but this line ...
 
-Signed-off-by: xiao.ma <xiao.mx.ma@deltaww.com>
----
+> +M:	Charles Hsu	<hsu.yungteng@gmail.com>
+> +L:	linux-hwmon@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/hwmon/pm6764tr.rst
+> +F:	drivers/hwmon/pmbus/pm6764tr.c
+> +
+>  PM-GRAPH UTILITY
+>  M:	"Todd E Brandt" <todd.e.brandt@linux.intel.com>
+>  L:	linux-pm@vger.kernel.org
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index a25faf69fce3..9c846facce9f 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -220,6 +220,15 @@ config SENSORS_MP2975
+>  	  This driver can also be built as a module. If so, the module will
+>  	  be called mp2975.
+> +config SENSORS_PM6764TR
 
-Notes:
-    Patch v2 changelog:
-    	Add delta.rst in Documentation/hwmon.
-    	Tristate "DELTA" in Kconfig is changed to "DELTA_POWER_SUPPLIED".
-    	Modify code: drop the excessive empty lines, correct the comment content, adjust indent, remove extra brackets.
-    Patch v3 changelog:
-    	Add delta.rst to Documentation/hwmon/index.rst.
-    	Tristate "DELTA_POWER_SUPPLIES" in Kconfig is changed to "Delta Power Supplies".
-    Patch v4 changelog:
-    	Correct the spelling "Temperature" in the delta.rst.
-    	Add Write_protect when write command VOUT_OV_RESPONSE and IOUT_OC_FAULT_RESPONSE.
-    Patch v5 changelog:
-    	Add some non-standard attributes in sysfs system.
-    Patch v6 changelog:
-    	delta.c and delta.rst are renamed to q54sj108a2.c and q54sj108a2.rst.
-    	Add q54sj108a2 to index.rst.
-    	Tristate in Kconfig is changed to "Delta Power Supplies Q54SJ108A2".
-    	The non-standard attributes are added to debugfs.
-    Patch v7 changelog:
-    	Use standard fuctions bin2hex and hex2bin.
-    	The return of debugfs write is changed to count.
-    	Drop the error checking of debugfs fuctions.
-    	Use probe_new fuction.
-    	Remove the .remove fuction.
-    Patch v8 changelog:
-    	Use kstrtou8_from_user instead of hex2bin.
-    	Remove included head files which are not used.
-    	Done label in debugfs_read fuction is deleted.
-    	Change email to send the patch.
-    Patch v9 changelog:
-    	Fix the compile errors and warnings.
-    Patch v10 changelog:
-    	Fix the reports from checkpatch.
-    	Name of driver is changed to "q54sj108a2".
+... and this line report that the patch is corrupted when I try to apply it.
+Looking into the files, there is supposed to be an empty line before
+"config SENSORS_PM6764TR" and before "PM6764TR DRIVER". If I add those
+empty lines, the patch applies. checkpatch also reports problems associated
+with that corruption as well as other problems. On top of that, the patch
+does not show up in patchwork.
 
- Documentation/hwmon/index.rst      |   1 +
- Documentation/hwmon/q54sj108a2.rst |  54 ++++
- drivers/hwmon/pmbus/Kconfig        |   9 +
- drivers/hwmon/pmbus/Makefile       |   1 +
- drivers/hwmon/pmbus/q54sj108a2.c   | 422 +++++++++++++++++++++++++++++
- 5 files changed, 487 insertions(+)
- create mode 100644 Documentation/hwmon/q54sj108a2.rst
- create mode 100644 drivers/hwmon/pmbus/q54sj108a2.c
+Please fix whatever is causing those problems and resubmit. I would suggest
+to try to apply the patch yourself with "git am ..." before you send it out.
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index b797db738225..4bb680b3c7ea 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -148,6 +148,7 @@ Hardware Monitoring Kernel Drivers
-    powr1220
-    pxe1610
-    pwm-fan
-+   q54sj108a2
-    raspberrypi-hwmon
-    sch5627
-    sch5636
-diff --git a/Documentation/hwmon/q54sj108a2.rst b/Documentation/hwmon/q54sj108a2.rst
-new file mode 100644
-index 000000000000..fabce671985a
---- /dev/null
-+++ b/Documentation/hwmon/q54sj108a2.rst
-@@ -0,0 +1,54 @@
-+.. SPDX-License-Identifier: GPL-2.0-or-later
-+
-+Kernel driver q54sj108a2
-+=====================
-+
-+Supported chips:
-+
-+  * DELTA Q54SJ108A2NCAH, Q54SJ108A2NCDH, Q54SJ108A2NCPG, Q54SJ108A2NCPH
-+
-+    Prefix: 'Q54SJ108A2'
-+
-+    Addresses scanned: -
-+
-+    Datasheet: https://filecenter.delta-china.com.cn/products/download/01/0102/datasheet/DS_Q54SJ108A2.pdf
-+
-+Authors:
-+    Xiao.ma <xiao.mx.ma@deltaww.com>
-+
-+
-+Description
-+-----------
-+
-+This driver implements support for DELTA Q54SJ108A2NCAH, Q54SJ108A2NCDH,
-+Q54SJ108A2NCPG, and Q54SJ108A2NCPH 1/4 Brick DC/DC Regulated Power Module
-+with PMBus support.
-+
-+The driver is a client driver to the core PMBus driver.
-+Please see Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
-+
-+
-+Usage Notes
-+-----------
-+
-+This driver does not auto-detect devices. You will have to instantiate the
-+devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
-+details.
-+
-+
-+Sysfs entries
-+-------------
-+
-+===================== ===== ==================================================
-+curr1_alarm           RO    Output current alarm
-+curr1_input           RO    Output current
-+curr1_label           RO    'iout1'
-+in1_alarm             RO    Input voltage alarm
-+in1_input             RO    Input voltage
-+in1_label             RO    'vin'
-+in2_alarm             RO    Output voltage alarm
-+in2_input             RO    Output voltage
-+in2_label             RO    'vout1'
-+temp1_alarm           RO    Temperature alarm
-+temp1_input           RO    Chip temperature
-+===================== ===== ==================================================
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index a25faf69fce3..01de280820ee 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -229,6 +229,15 @@ config SENSORS_PXE1610
- 	  This driver can also be built as a module. If so, the module will
- 	  be called pxe1610.
- 
-+config SENSORS_Q54SJ108A2
-+	tristate "Delta Power Supplies Q54SJ108A2"
-+	help
-+	  If you say yes here you get hardware monitoring support for Delta
-+	  Q54SJ108A2 series Power Supplies.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called q54sj108a2.
-+
- config SENSORS_TPS40422
- 	tristate "TI TPS40422"
- 	help
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index 4c97ad0bd791..a50122cd455b 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -26,6 +26,7 @@ obj-$(CONFIG_SENSORS_MAX34440)	+= max34440.o
- obj-$(CONFIG_SENSORS_MAX8688)	+= max8688.o
- obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
- obj-$(CONFIG_SENSORS_PXE1610)	+= pxe1610.o
-+obj-$(CONFIG_SENSORS_Q54SJ108A2)	+= q54sj108a2.o
- obj-$(CONFIG_SENSORS_TPS40422)	+= tps40422.o
- obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
- obj-$(CONFIG_SENSORS_UCD9000)	+= ucd9000.o
-diff --git a/drivers/hwmon/pmbus/q54sj108a2.c b/drivers/hwmon/pmbus/q54sj108a2.c
-new file mode 100644
-index 000000000000..cbeb1b1ea60c
---- /dev/null
-+++ b/drivers/hwmon/pmbus/q54sj108a2.c
-@@ -0,0 +1,422 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Driver for Delta modules, Q54SJ108A2 series 1/4 Brick DC/DC
-+ * Regulated Power Module
-+ *
-+ * Copyright 2020 Delta LLC.
-+ */
-+
-+#include <linux/debugfs.h>
-+#include <linux/i2c.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include "pmbus.h"
-+
-+#define STORE_DEFAULT_ALL         0x11
-+#define ERASE_BLACKBOX_DATA       0xD1
-+#define READ_HISTORY_EVENT_NUMBER 0xD2
-+#define READ_HISTORY_EVENTS       0xE0
-+#define SET_HISTORY_EVENT_OFFSET  0xE1
-+#define PMBUS_FLASH_KEY_WRITE     0xEC
-+
-+enum chips {
-+	q54sj108a2
-+};
-+
-+enum {
-+	Q54SJ108A2_DEBUGFS_OPERATION = 0,
-+	Q54SJ108A2_DEBUGFS_CLEARFAULT,
-+	Q54SJ108A2_DEBUGFS_WRITEPROTECT,
-+	Q54SJ108A2_DEBUGFS_STOREDEFAULT,
-+	Q54SJ108A2_DEBUGFS_VOOV_RESPONSE,
-+	Q54SJ108A2_DEBUGFS_IOOC_RESPONSE,
-+	Q54SJ108A2_DEBUGFS_PMBUS_VERSION,
-+	Q54SJ108A2_DEBUGFS_MFR_ID,
-+	Q54SJ108A2_DEBUGFS_MFR_MODEL,
-+	Q54SJ108A2_DEBUGFS_MFR_REVISION,
-+	Q54SJ108A2_DEBUGFS_MFR_LOCATION,
-+	Q54SJ108A2_DEBUGFS_BLACKBOX_ERASE,
-+	Q54SJ108A2_DEBUGFS_BLACKBOX_READ_OFFSET,
-+	Q54SJ108A2_DEBUGFS_BLACKBOX_SET_OFFSET,
-+	Q54SJ108A2_DEBUGFS_BLACKBOX_READ,
-+	Q54SJ108A2_DEBUGFS_FLASH_KEY,
-+	Q54SJ108A2_DEBUGFS_NUM_ENTRIES
-+};
-+
-+struct q54sj108a2_data {
-+	enum chips chip;
-+	struct i2c_client *client;
-+
-+	int debugfs_entries[Q54SJ108A2_DEBUGFS_NUM_ENTRIES];
-+};
-+
-+#define to_psu(x, y) container_of((x), struct q54sj108a2_data, debugfs_entries[(y)])
-+
-+static struct pmbus_driver_info q54sj108a2_info[] = {
-+	[q54sj108a2] = {
-+		.pages = 1,
-+
-+		/* Source : Delta Q54SJ108A2 */
-+		.format[PSC_TEMPERATURE] = linear,
-+		.format[PSC_VOLTAGE_IN] = linear,
-+		.format[PSC_CURRENT_OUT] = linear,
-+
-+		.func[0] = PMBUS_HAVE_VIN |
-+		PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
-+		PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
-+		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP |
-+		PMBUS_HAVE_STATUS_INPUT,
-+	},
-+};
-+
-+static ssize_t  q54sj108a2_debugfs_read(struct file *file, char __user *buf,
-+					size_t count, loff_t *ppos)
-+{
-+	int rc;
-+	int *idxp = file->private_data;
-+	int idx = *idxp;
-+	struct q54sj108a2_data *psu = to_psu(idxp, idx);
-+	char data[I2C_SMBUS_BLOCK_MAX + 2] = { 0 };
-+	char data_char[I2C_SMBUS_BLOCK_MAX + 2] = { 0 };
-+	char *res;
-+
-+	switch (idx) {
-+	case Q54SJ108A2_DEBUGFS_OPERATION:
-+		rc = i2c_smbus_read_byte_data(psu->client, PMBUS_OPERATION);
-+		if (rc < 0)
-+			return rc;
-+
-+		rc = snprintf(data, 3, "%02x", rc);
-+		break;
-+	case Q54SJ108A2_DEBUGFS_WRITEPROTECT:
-+		rc = i2c_smbus_read_byte_data(psu->client, PMBUS_WRITE_PROTECT);
-+		if (rc < 0)
-+			return rc;
-+
-+		rc = snprintf(data, 3, "%02x", rc);
-+		break;
-+	case Q54SJ108A2_DEBUGFS_VOOV_RESPONSE:
-+		rc = i2c_smbus_read_byte_data(psu->client, PMBUS_VOUT_OV_FAULT_RESPONSE);
-+		if (rc < 0)
-+			return rc;
-+
-+		rc = snprintf(data, 3, "%02x", rc);
-+		break;
-+	case Q54SJ108A2_DEBUGFS_IOOC_RESPONSE:
-+		rc = i2c_smbus_read_byte_data(psu->client, PMBUS_IOUT_OC_FAULT_RESPONSE);
-+		if (rc < 0)
-+			return rc;
-+
-+		rc = snprintf(data, 3, "%02x", rc);
-+		break;
-+	case Q54SJ108A2_DEBUGFS_PMBUS_VERSION:
-+		rc = i2c_smbus_read_byte_data(psu->client, PMBUS_REVISION);
-+		if (rc < 0)
-+			return rc;
-+
-+		rc = snprintf(data, 3, "%02x", rc);
-+		break;
-+	case Q54SJ108A2_DEBUGFS_MFR_ID:
-+		rc = i2c_smbus_read_block_data(psu->client, PMBUS_MFR_ID, data);
-+		if (rc < 0)
-+			return rc;
-+		break;
-+	case Q54SJ108A2_DEBUGFS_MFR_MODEL:
-+		rc = i2c_smbus_read_block_data(psu->client, PMBUS_MFR_MODEL, data);
-+		if (rc < 0)
-+			return rc;
-+		break;
-+	case Q54SJ108A2_DEBUGFS_MFR_REVISION:
-+		rc = i2c_smbus_read_block_data(psu->client, PMBUS_MFR_REVISION, data);
-+		if (rc < 0)
-+			return rc;
-+		break;
-+	case Q54SJ108A2_DEBUGFS_MFR_LOCATION:
-+		rc = i2c_smbus_read_block_data(psu->client, PMBUS_MFR_LOCATION, data);
-+		if (rc < 0)
-+			return rc;
-+		break;
-+	case Q54SJ108A2_DEBUGFS_BLACKBOX_READ_OFFSET:
-+		rc = i2c_smbus_read_byte_data(psu->client, READ_HISTORY_EVENT_NUMBER);
-+		if (rc < 0)
-+			return rc;
-+
-+		rc = snprintf(data, 3, "%02x", rc);
-+		break;
-+	case Q54SJ108A2_DEBUGFS_BLACKBOX_READ:
-+		rc = i2c_smbus_read_block_data(psu->client, READ_HISTORY_EVENTS, data);
-+		if (rc < 0)
-+			return rc;
-+
-+		res = bin2hex(data, data_char, 32);
-+		rc = res - data;
-+
-+		break;
-+	case Q54SJ108A2_DEBUGFS_FLASH_KEY:
-+		rc = i2c_smbus_read_block_data(psu->client, PMBUS_FLASH_KEY_WRITE, data);
-+		if (rc < 0)
-+			return rc;
-+
-+		res = bin2hex(data, data_char, 4);
-+		rc = res - data;
-+
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	data[rc] = '\n';
-+	rc += 2;
-+
-+	return simple_read_from_buffer(buf, count, ppos, data, rc);
-+}
-+
-+static ssize_t q54sj108a2_debugfs_write(struct file *file, const char __user *buf,
-+					size_t count, loff_t *ppos)
-+{
-+	u8 flash_key[4];
-+	u8 dst_data;
-+	ssize_t rc;
-+	int *idxp = file->private_data;
-+	int idx = *idxp;
-+	struct q54sj108a2_data *psu = to_psu(idxp, idx);
-+
-+	rc = i2c_smbus_write_byte_data(psu->client, PMBUS_WRITE_PROTECT, 0);
-+	if (rc)
-+		return rc;
-+
-+	switch (idx) {
-+	case Q54SJ108A2_DEBUGFS_OPERATION:
-+		rc = kstrtou8_from_user(buf, count, 0, &dst_data);
-+		if (rc < 0)
-+			return rc;
-+
-+		rc = i2c_smbus_write_byte_data(psu->client, PMBUS_OPERATION, dst_data);
-+		if (rc < 0)
-+			return rc;
-+
-+		break;
-+	case Q54SJ108A2_DEBUGFS_CLEARFAULT:
-+		rc = i2c_smbus_write_byte(psu->client, PMBUS_CLEAR_FAULTS);
-+		if (rc < 0)
-+			return rc;
-+
-+		break;
-+	case Q54SJ108A2_DEBUGFS_STOREDEFAULT:
-+		flash_key[0] = 0x7E;
-+		flash_key[1] = 0x15;
-+		flash_key[2] = 0xDC;
-+		flash_key[3] = 0x42;
-+		rc = i2c_smbus_write_block_data(psu->client, PMBUS_FLASH_KEY_WRITE, 4, flash_key);
-+		if (rc < 0)
-+			return rc;
-+
-+		rc = i2c_smbus_write_byte(psu->client, STORE_DEFAULT_ALL);
-+		if (rc < 0)
-+			return rc;
-+
-+		break;
-+	case Q54SJ108A2_DEBUGFS_VOOV_RESPONSE:
-+		rc = kstrtou8_from_user(buf, count, 0, &dst_data);
-+		if (rc < 0)
-+			return rc;
-+
-+		rc = i2c_smbus_write_byte_data(psu->client, PMBUS_VOUT_OV_FAULT_RESPONSE, dst_data);
-+		if (rc < 0)
-+			return rc;
-+
-+		break;
-+	case Q54SJ108A2_DEBUGFS_IOOC_RESPONSE:
-+		rc = kstrtou8_from_user(buf, count, 0, &dst_data);
-+		if (rc < 0)
-+			return rc;
-+
-+		rc = i2c_smbus_write_byte_data(psu->client, PMBUS_IOUT_OC_FAULT_RESPONSE, dst_data);
-+		if (rc < 0)
-+			return rc;
-+
-+		break;
-+	case Q54SJ108A2_DEBUGFS_BLACKBOX_ERASE:
-+		rc = i2c_smbus_write_byte(psu->client, ERASE_BLACKBOX_DATA);
-+		if (rc < 0)
-+			return rc;
-+
-+		break;
-+	case Q54SJ108A2_DEBUGFS_BLACKBOX_SET_OFFSET:
-+		rc = kstrtou8_from_user(buf, count, 0, &dst_data);
-+		if (rc < 0)
-+			return rc;
-+
-+		rc = i2c_smbus_write_byte_data(psu->client, SET_HISTORY_EVENT_OFFSET, dst_data);
-+		if (rc < 0)
-+			return rc;
-+
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return count;
-+}
-+
-+static const struct file_operations q54sj108a2_fops = {
-+	.llseek = noop_llseek,
-+	.read = q54sj108a2_debugfs_read,
-+	.write = q54sj108a2_debugfs_write,
-+	.open = simple_open,
-+};
-+
-+static const struct i2c_device_id q54sj108a2_id[] = {
-+	{ "q54sj108a2", q54sj108a2 },
-+	{ },
-+};
-+
-+MODULE_DEVICE_TABLE(i2c, q54sj108a2_id);
-+
-+static int q54sj108a2_probe(struct i2c_client *client)
-+{
-+	struct device *dev = &client->dev;
-+	u8 buf[I2C_SMBUS_BLOCK_MAX + 1];
-+	enum chips chip_id;
-+	int ret, i;
-+	struct dentry *debugfs;
-+	struct dentry *q54sj108a2_dir;
-+	struct q54sj108a2_data *psu;
-+
-+	if (!i2c_check_functionality(client->adapter,
-+				     I2C_FUNC_SMBUS_BYTE_DATA |
-+				     I2C_FUNC_SMBUS_WORD_DATA |
-+				     I2C_FUNC_SMBUS_BLOCK_DATA))
-+		return -ENODEV;
-+
-+	if (client->dev.of_node)
-+		chip_id = (enum chips)(unsigned long)of_device_get_match_data(dev);
-+	else
-+		chip_id = i2c_match_id(q54sj108a2_id, client)->driver_data;
-+
-+	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, buf);
-+	if (ret < 0) {
-+		dev_err(&client->dev, "Failed to read Manufacturer ID\n");
-+		return ret;
-+	}
-+	if (ret != 5 || strncmp(buf, "DELTA", 5)) {
-+		buf[ret] = '\0';
-+		dev_err(dev, "Unsupported Manufacturer ID '%s'\n", buf);
-+		return -ENODEV;
-+	}
-+
-+	/*
-+	 * The chips support reading PMBUS_MFR_MODEL.
-+	 */
-+	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, buf);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to read Manufacturer Model\n");
-+		return ret;
-+	}
-+	if (ret != 14 || strncmp(buf, "Q54SJ108A2", 10)) {
-+		buf[ret] = '\0';
-+		dev_err(dev, "Unsupported Manufacturer Model '%s'\n", buf);
-+		return -ENODEV;
-+	}
-+
-+	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_REVISION, buf);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to read Manufacturer Revision\n");
-+		return ret;
-+	}
-+	if (ret != 4 || buf[0] != 'S') {
-+		buf[ret] = '\0';
-+		dev_err(dev, "Unsupported Manufacturer Revision '%s'\n", buf);
-+		return -ENODEV;
-+	}
-+
-+	ret = pmbus_do_probe(client, &q54sj108a2_info[chip_id]);
-+	if (ret)
-+		return ret;
-+
-+	psu = devm_kzalloc(&client->dev, sizeof(*psu), GFP_KERNEL);
-+	if (!psu)
-+		return 0;
-+
-+	psu->client = client;
-+
-+	debugfs = pmbus_get_debugfs_dir(client);
-+
-+	q54sj108a2_dir = debugfs_create_dir(client->name, debugfs);
-+
-+	for (i = 0; i < Q54SJ108A2_DEBUGFS_NUM_ENTRIES; ++i)
-+		psu->debugfs_entries[i] = i;
-+
-+	debugfs_create_file("operation", 0644, q54sj108a2_dir,
-+			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_OPERATION],
-+			    &q54sj108a2_fops);
-+	debugfs_create_file("clear_fault", 0200, q54sj108a2_dir,
-+			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_CLEARFAULT],
-+			    &q54sj108a2_fops);
-+	debugfs_create_file("write_protect", 0444, q54sj108a2_dir,
-+			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_WRITEPROTECT],
-+			    &q54sj108a2_fops);
-+	debugfs_create_file("store_default", 0200, q54sj108a2_dir,
-+			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_STOREDEFAULT],
-+			    &q54sj108a2_fops);
-+	debugfs_create_file("vo_ov_response", 0644, q54sj108a2_dir,
-+			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_VOOV_RESPONSE],
-+			    &q54sj108a2_fops);
-+	debugfs_create_file("io_oc_response", 0644, q54sj108a2_dir,
-+			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_IOOC_RESPONSE],
-+			    &q54sj108a2_fops);
-+	debugfs_create_file("pmbus_revision", 0444, q54sj108a2_dir,
-+			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_PMBUS_VERSION],
-+			    &q54sj108a2_fops);
-+	debugfs_create_file("mfr_id", 0444, q54sj108a2_dir,
-+			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_MFR_ID],
-+			    &q54sj108a2_fops);
-+	debugfs_create_file("mfr_model", 0444, q54sj108a2_dir,
-+			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_MFR_MODEL],
-+			    &q54sj108a2_fops);
-+	debugfs_create_file("mfr_revision", 0444, q54sj108a2_dir,
-+			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_MFR_REVISION],
-+			    &q54sj108a2_fops);
-+	debugfs_create_file("mfr_location", 0444, q54sj108a2_dir,
-+			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_MFR_LOCATION],
-+			    &q54sj108a2_fops);
-+	debugfs_create_file("blackbox_erase", 0200, q54sj108a2_dir,
-+			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_BLACKBOX_ERASE],
-+			    &q54sj108a2_fops);
-+	debugfs_create_file("blackbox_read_offset", 0444, q54sj108a2_dir,
-+			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_BLACKBOX_READ_OFFSET],
-+			    &q54sj108a2_fops);
-+	debugfs_create_file("blackbox_set_offset", 0200, q54sj108a2_dir,
-+			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_BLACKBOX_SET_OFFSET],
-+			    &q54sj108a2_fops);
-+	debugfs_create_file("blackbox_read", 0444, q54sj108a2_dir,
-+			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_BLACKBOX_READ],
-+			    &q54sj108a2_fops);
-+	debugfs_create_file("flash_key", 0444, q54sj108a2_dir,
-+			    &psu->debugfs_entries[Q54SJ108A2_DEBUGFS_FLASH_KEY],
-+			    &q54sj108a2_fops);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id q54sj108a2_of_match[] = {
-+	{ .compatible = "delta,q54sj108a2", .data = (void *)q54sj108a2 },
-+	{ },
-+};
-+
-+MODULE_DEVICE_TABLE(of, q54sj108a2_of_match);
-+
-+static struct i2c_driver q54sj108a2_driver = {
-+	.driver = {
-+		.name = "q54sj108a2",
-+		.of_match_table = q54sj108a2_of_match,
-+	},
-+	.probe_new = q54sj108a2_probe,
-+	.id_table = q54sj108a2_id,
-+};
-+
-+module_i2c_driver(q54sj108a2_driver);
-+
-+MODULE_AUTHOR("Xiao.Ma <xiao.mx.ma@deltaww.com>");
-+MODULE_DESCRIPTION("PMBus driver for Delta Q54SJ108A2 series modules");
-+MODULE_LICENSE("GPL");
--- 
-2.25.1
+You'll also need a separate patch to add st,pm6764tr to trivial_devices.
 
+Thanks,
+Guenter
+
+> +	tristate "ST PM6764TR"
+> +	help
+> +	  If you say yes here you get hardware monitoring support for ST
+> +	  PM6764TR.
+> +
+> +	  This driver can also be built as a module. If so, the module will
+> +	  be called pm6764tr.
+> +
+>  config SENSORS_PXE1610
+>  	tristate "Infineon PXE1610"
+>  	help
+> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> index 4c97ad0bd791..31ebdef5d4a6 100644
+> --- a/drivers/hwmon/pmbus/Makefile
+> +++ b/drivers/hwmon/pmbus/Makefile
+> @@ -25,6 +25,7 @@ obj-$(CONFIG_SENSORS_MAX31785)	+= max31785.o
+>  obj-$(CONFIG_SENSORS_MAX34440)	+= max34440.o
+>  obj-$(CONFIG_SENSORS_MAX8688)	+= max8688.o
+>  obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
+> +obj-$(CONFIG_SENSORS_PM6764TR)	+= pm6764tr.o
+>  obj-$(CONFIG_SENSORS_PXE1610)	+= pxe1610.o
+>  obj-$(CONFIG_SENSORS_TPS40422)	+= tps40422.o
+>  obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
+> diff --git a/drivers/hwmon/pmbus/pm6764tr.c b/drivers/hwmon/pmbus/pm6764tr.c
+> new file mode 100644
+> index 000000000000..70747c21c66e
+> --- /dev/null
+> +++ b/drivers/hwmon/pmbus/pm6764tr.c
+> @@ -0,0 +1,76 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Hardware monitoring driver for STMicroelectronics digital controller PM6764TR
+> + */
+> +
+> +#include <linux/err.h>
+> +#include <linux/i2c.h>
+> +#include <linux/init.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/pmbus.h>
+> +#include "pmbus.h"
+> +
+> +#define PM6764TR_PMBUS_READ_VOUT	0xD4
+> +
+> +static int pm6764tr_read_word_data(struct i2c_client *client, int page, int reg)
+> +{
+> +	int ret;
+> +
+> +	switch (reg) {
+> +	case PMBUS_VIRT_READ_VMON:
+> +		ret = pmbus_read_word_data(client, page, PM6764TR_PMBUS_READ_VOUT);
+> +		break;
+> +	default:
+> +		ret = -ENODATA;
+> +		break;
+> +	}
+> +	return ret;
+> +}
+> +
+> +static struct pmbus_driver_info pm6764tr_info = {
+> +	.pages = 1,
+> +	.format[PSC_VOLTAGE_IN] = linear,
+> +	.format[PSC_VOLTAGE_OUT] = vid,
+> +	.format[PSC_TEMPERATURE] = linear,
+> +	.format[PSC_CURRENT_OUT] = linear,
+> +	.format[PSC_POWER] = linear,
+> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN |  PMBUS_HAVE_PIN |
+> +	    PMBUS_HAVE_IOUT | PMBUS_HAVE_POUT | PMBUS_HAVE_VMON |
+> +		PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_VOUT |
+> +		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
+> +	.read_word_data = pm6764tr_read_word_data,
+> +};
+> +
+> +static int pm6764tr_probe(struct i2c_client *client,
+> +			  const struct i2c_device_id *id)
+> +{
+> +	return pmbus_do_probe(client, id, &pm6764tr_info);
+> +}
+> +
+> +static const struct i2c_device_id pm6764tr_id[] = {
+> +	{"pm6764tr", 0},
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(i2c, pm6764tr_id);
+> +
+> +static const struct of_device_id pm6764tr_of_match[] = {
+> +	{.compatible = "st,pm6764tr"},
+> +	{}
+> +};
+> +
+> +/* This is the driver that will be inserted */
+> +static struct i2c_driver pm6764tr_driver = {
+> +	.driver = {
+> +		   .name = "pm6764tr",
+> +		   .of_match_table = of_match_ptr(pm6764tr_of_match),
+> +		   },
+> +	.probe_new = pm6764tr_probe,
+> +	.id_table = pm6764tr_id,
+> +};
+> +
+> +module_i2c_driver(pm6764tr_driver);
+> +
+> +MODULE_AUTHOR("Charles Hsu");
+> +MODULE_DESCRIPTION("PMBus driver for  ST PM6764TR");
+> +MODULE_LICENSE("GPL");
+> -- 
+> 2.25.1
+> 
