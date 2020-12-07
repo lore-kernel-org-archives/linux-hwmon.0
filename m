@@ -6,123 +6,73 @@ X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD09EC4361B
-	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Dec 2020 21:13:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CC05C0018C
+	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Dec 2020 22:14:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8CD91207F7
-	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Dec 2020 21:13:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1C00923977
+	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Dec 2020 22:14:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726092AbgLGVNn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 7 Dec 2020 16:13:43 -0500
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:37843 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725885AbgLGVNm (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 7 Dec 2020 16:13:42 -0500
-Received: by mail-ot1-f67.google.com with SMTP id o11so11213384ote.4;
-        Mon, 07 Dec 2020 13:13:26 -0800 (PST)
+        id S1726527AbgLGWNo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 7 Dec 2020 17:13:44 -0500
+Received: from mail-oo1-f67.google.com ([209.85.161.67]:32992 "EHLO
+        mail-oo1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726231AbgLGWNn (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 7 Dec 2020 17:13:43 -0500
+Received: by mail-oo1-f67.google.com with SMTP id f8so3592213oou.0;
+        Mon, 07 Dec 2020 14:13:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=9GzWk47iE/pkkA8VjjM3WdGe/Ch4l5wgwdzbUuZu4qg=;
-        b=U99aihKTG3LCrD4QjWrO9rcTzDFaF0BxC7FOJBGMquvu/j85ENWaWbUB9R1ttRR95I
-         FtDcIsv0daLzrGr4vDMU+9lJ7v9gvGf6v6zH33qzW4jN6smfsaSRXLOtTtE8/WyqcKfz
-         j93NWJYM5x7Mt2qMVOFXZo/37xjV4RWH8jQhlAacl47QUKh7FhFzLqfjG3BhuwMACq0J
-         j4yJwUUBmzpN9Lx8kE/F9a3/HqLq/VtJo7exw1CrETb0t/VbJWmZNBONT/WuFC6Ec2wA
-         QgX726A+zpu+D4kvjxrhIx+GJnIcxkqvWTKqrHT61yDRiFbgldfGItblcoOMgm/9feUQ
-         sEDw==
-X-Gm-Message-State: AOAM5316gU1QyLlaKJ9pOu1JV1yvJcvcKRENrhKxzFPWZf9nXJg/m5sF
-        +4D1s5ma4iZQHCFOJ5J7mw==
-X-Google-Smtp-Source: ABdhPJx7wqla09dt3DsGgVgBoLRm0pdPR5DxxxKf38g12KRw58G9dkOAHccq9OtKWvuSSvg4UKsEOA==
-X-Received: by 2002:a9d:4715:: with SMTP id a21mr14868375otf.220.1607375581404;
-        Mon, 07 Dec 2020 13:13:01 -0800 (PST)
+        bh=48t+bOSWWAxhp/tegsOE6F95FDw1uWSdhgQF+J+swBg=;
+        b=eAaO4V2dNKoOtLf8N71OoNSc2EUoWpiKalNMLK86rvrXIdxGesij+P4Y9VauQlBgCq
+         pGW3uNQ15MxuW+WMDnu5omIykGcAsHLCuCEMw/ZWR2ON4U/XyWTd6kgZK2Mtg8K6V4yq
+         4CXOJDTJrq/+/NgmpnU16J9in7tgUUR48/nyHeYkOJRbxRiw7uH+GTAp3n1hlsYB/Ja/
+         VQY5ukv+kv5GOtwCk4jD5WGPXQvQPE4kIZ3Sr5xNMdwuvfdkn7kh0dqXPT5ljIbbs7Mo
+         c9HTKfSFEeHEol0WNyfhAlrDtvY6p+FeQLqoyNWqXsWPSfXfRkZyjwTCy+/an96V3Rol
+         XCog==
+X-Gm-Message-State: AOAM532iR+Nhxyu1WMirDFdsz2HjQa04acQrM7P3JpU+Srs2XxHG36gj
+        de+XOrfe8uqUw2npCnnTuA==
+X-Google-Smtp-Source: ABdhPJzUUSjy0quOPbp/g8awC+ferlhaMKmZw7lCZs26C/Jnpj7fIIhyckPClhkzRPismucgeUD8lQ==
+X-Received: by 2002:a4a:d043:: with SMTP id x3mr14268036oor.19.1607379183035;
+        Mon, 07 Dec 2020 14:13:03 -0800 (PST)
 Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id 8sm3417238oii.45.2020.12.07.13.13.00
+        by smtp.gmail.com with ESMTPSA id v4sm1366519otk.50.2020.12.07.14.13.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Dec 2020 13:13:00 -0800 (PST)
-Received: (nullmailer pid 833974 invoked by uid 1000);
-        Mon, 07 Dec 2020 21:12:59 -0000
-Date:   Mon, 7 Dec 2020 15:12:59 -0600
+        Mon, 07 Dec 2020 14:13:02 -0800 (PST)
+Received: (nullmailer pid 930521 invoked by uid 1000);
+        Mon, 07 Dec 2020 22:13:01 -0000
+Date:   Mon, 7 Dec 2020 16:13:01 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Kun Yi <kunyi@google.com>
-Subject: Re: [PATCH 4/4] dt-bindings: hwmon: convert AD ADM1275 bindings to
- dt-schema
-Message-ID: <20201207211259.GA832269@robh.at.kernel.org>
-References: <20201117220807.208747-1-krzk@kernel.org>
- <20201117220807.208747-4-krzk@kernel.org>
+To:     Joel Stanley <joel@jms.id.au>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Rob Herring <robh+dt@kernel.org>, linux-fsi@lists.ozlabs.org,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Eddie James <eajames@linux.ibm.com>, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] dt-bindings: fsi: Add P10 OCC device documentation
+Message-ID: <20201207221301.GA930468@robh.at.kernel.org>
+References: <20201120010315.190737-1-joel@jms.id.au>
+ <20201120010315.190737-2-joel@jms.id.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201117220807.208747-4-krzk@kernel.org>
+In-Reply-To: <20201120010315.190737-2-joel@jms.id.au>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Nov 17, 2020 at 11:08:07PM +0100, Krzysztof Kozlowski wrote:
-> Convert the Analog Devices ADM1275 bindings to dt-schema.
+On Fri, 20 Nov 2020 11:33:13 +1030, Joel Stanley wrote:
+> From: Eddie James <eajames@linux.ibm.com>
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> Add the P10 compatible string.
+> 
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> Reviewed-by: Joel Stanley <joel@jms.id.au>
+> Signed-off-by: Joel Stanley <joel@jms.id.au>
 > ---
->  .../bindings/hwmon/adi,adm1275.yaml           | 58 +++++++++++++++++++
->  .../devicetree/bindings/hwmon/adm1275.txt     | 25 --------
->  Documentation/hwmon/adm1275.rst               |  2 +-
->  3 files changed, 59 insertions(+), 26 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
->  delete mode 100644 Documentation/devicetree/bindings/hwmon/adm1275.txt
+>  Documentation/devicetree/bindings/fsi/ibm,p9-occ.txt | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
-> new file mode 100644
-> index 000000000000..2cad28c499dc
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
-> @@ -0,0 +1,58 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +
-> +$id: http://devicetree.org/schemas/hwmon/adi,adm1275.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Analog Devices ADM1075/ADM127x/ADM129x digital power monitors
-> +
-> +maintainers:
-> +  - Krzysztof Kozlowski <krzk@kernel.org>
-> +
-> +description: |
-> +  The ADM1293 and ADM1294 are high accuracy integrated digital power monitors
-> +  that offer digital current, voltage, and power monitoring using an on-chip,
-> +  12-bit analog-to-digital converter (ADC), communicated through a PMBus
-> +  compliant I2C interface.
-> +
-> +  Datasheets:
-> +    https://www.analog.com/en/products/adm1294.html
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - adi,adm1075
-> +      - adi,adm1272
-> +      - adi,adm1275
-> +      - adi,adm1276
-> +      - adi,adm1278
-> +      - adi,adm1293
-> +      - adi,adm1294
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  shunt-resistor-micro-ohms:
-> +    description:
-> +      Shunt resistor value in micro-Ohm.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
 
-Don't need a type if you have units. With that dropped,
-
-Reviewed-by: Rob Herring <robh@kernel.org>
+Acked-by: Rob Herring <robh@kernel.org>
