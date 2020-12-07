@@ -2,104 +2,125 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A77F9C433FE
-	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Dec 2020 15:27:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 299ADC4361B
+	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Dec 2020 15:48:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7CFF22371F
-	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Dec 2020 15:27:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E1ED723731
+	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Dec 2020 15:48:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726447AbgLGP1t (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 7 Dec 2020 10:27:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49218 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726208AbgLGP1s (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 7 Dec 2020 10:27:48 -0500
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C675C061793;
-        Mon,  7 Dec 2020 07:27:08 -0800 (PST)
-Received: by mail-ej1-x641.google.com with SMTP id g20so20079998ejb.1;
-        Mon, 07 Dec 2020 07:27:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=Rp+P9Or0j6DWseCgzSCSqRpb92TpbMCw1CU1y05qoqE=;
-        b=Pq2ZX5lkuoFxgjEs2KbqSFVL8cPKnNUupOT96huS/FSYFvGZngyjS0dyT0ePGCtmcB
-         gi/GMTzAOEnvAUyxuDq5cP8wyz7sQcmF92iWmYEFgo7kgdu1sidKig17oX4pI7O8DXx1
-         KrURhX8NWWPXWsbNp5MAvZqqlRUD8Wodenq9EBCEI+OX0bzjZ6xpQWoFhn6sBNOAjbjo
-         eXwPMOKEWaNCbt2RJt2YoTVTPw3WFGUKHtS2t20PC0ebnTaDjuTrelb1c7k0nIYVmSiH
-         upX7oDZ7ld38LnxUCLBcROz3K3WK3w05gVt993YAnw0bYDFCOBCFWZ4c5AHVyEa7ARgP
-         z7mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=Rp+P9Or0j6DWseCgzSCSqRpb92TpbMCw1CU1y05qoqE=;
-        b=UvWwCK3gJt7thPm5rcNtHW+sVHNlKYez5UBKKOHe4Bli4/JR6Tgi6uQAWughXbyk7R
-         dB28AVawOjlrjxuK9f5b7SC8lp5bYp/+iJFwUoGKV0xGrNHUyKwoXDTmiPTCEwrMbMvM
-         GaGnZRite55Nb8Xi2XLRZ5TFoSW2n+WemlRxeHhEyx/Irh6Q32+bTbVSamTTd1l4HHo6
-         gI6Mk295yA2sBSgkeqHVzGMQwLw1Fcx0fbm6qPC7FOOiqZJyEkjFMN7Qsm09dKgswCU3
-         +UDGyIyvk7vBNWM+igssOHm1+wWXprSLCtCVGuVdhq5kaiLtHAfnV6zPxivWTf5t32AJ
-         nPpg==
-X-Gm-Message-State: AOAM532/1pVGQFwBRZUzEmIsahG1CRWoNLy2Jex86fT2/vZNKDuug7vz
-        1d+JXz7QPEE4VXkQWAj7As4=
-X-Google-Smtp-Source: ABdhPJwS+yVLfyk+DMzk+wdAwq7aCn8HcI2xyoCiXvzJWGCYxKrDcHFWVHOYMkjyDqbUA+sV2oJILw==
-X-Received: by 2002:a17:906:118c:: with SMTP id n12mr19888808eja.167.1607354827345;
-        Mon, 07 Dec 2020 07:27:07 -0800 (PST)
-Received: from felia.fritz.box ([2001:16b8:2d4a:c600:c0f8:50a9:4ab0:a9ab])
-        by smtp.gmail.com with ESMTPSA id t26sm13928513edt.69.2020.12.07.07.27.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Dec 2020 07:27:06 -0800 (PST)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] hwmon: pmbus: correct title underline length
-Date:   Mon,  7 Dec 2020 16:26:58 +0100
-Message-Id: <20201207152658.32444-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726230AbgLGPsQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 7 Dec 2020 10:48:16 -0500
+Received: from gproxy8-pub.mail.unifiedlayer.com ([67.222.33.93]:45897 "EHLO
+        gproxy8-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725917AbgLGPsQ (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 7 Dec 2020 10:48:16 -0500
+Received: from cmgw12.unifiedlayer.com (unknown [10.9.0.12])
+        by gproxy8.mail.unifiedlayer.com (Postfix) with ESMTP id 022C11AB0AB
+        for <linux-hwmon@vger.kernel.org>; Mon,  7 Dec 2020 08:47:35 -0700 (MST)
+Received: from bh-25.webhostbox.net ([208.91.199.152])
+        by cmsmtp with ESMTP
+        id mIjekLJ9LeMJHmIjekRAIl; Mon, 07 Dec 2020 08:47:35 -0700
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.3 cv=CrqRjEwD c=1 sm=1 tr=0
+ a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=kj9zAlcOel0A:10:nop_charset_1
+ a=zTNgK-yGK50A:10:nop_rcvd_month_year
+ a=evQFzbml-YQA:10:endurance_base64_authed_username_1 a=pGLkceISAAAA:8
+ a=aUUhapolnoLvr2g7utAA:9 a=CjuIK1q_8ugA:10:nop_charset_2
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=gBytMmuiFgYWYPWFzExR31Z/H0j/t4BFhzTX+2b3O0k=; b=jhKdHOfWP5f1ooxEOCvPg/L6M9
+        zDnLo2Tp2pYHW3vL9En+osqEXvE2sU+93g6ktm527fISmpQ3KCO2nLimfPO08pwc/tuZ0qhib6ojp
+        YgyYxYeOj5KOBEdOvoOuTsgZogwf954K5cAWz94qus0idUkZH3LWK/w+HSW+jvyrdWGKNgO+eCpH8
+        8BSF0bUcWXJJtjy83uhIV86ASlXK0eJmBcwgL8qGibzI90MT6u8VmXqjq7TkNFiwnLYKIQqZglMhf
+        EuKpSEz87qAwfLEz5YKRisJqGkuuKZgRg+aM0l2BjMsV84k3zWE0PLgUPzsoWq/PnwnpdCrFsMqeR
+        fZ/2BEkQ==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:59828 helo=localhost)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <linux@roeck-us.net>)
+        id 1kmIjd-002qlk-VR; Mon, 07 Dec 2020 15:47:34 +0000
+Date:   Mon, 7 Dec 2020 07:47:33 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: pmbus: correct title underline length
+Message-ID: <20201207154733.GA42429@roeck-us.net>
+References: <20201207152658.32444-1-lukas.bulwahn@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201207152658.32444-1-lukas.bulwahn@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1kmIjd-002qlk-VR
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:59828
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 5
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Commit b722d7b9e4da ("hwmon: (pmbus) Driver for Delta power supplies
-Q54SJ108A2") provides new documentation for DELTA Q54SJ108A2NC* drivers,
-but the title underline was too short.
+On Mon, Dec 07, 2020 at 04:26:58PM +0100, Lukas Bulwahn wrote:
+> Commit b722d7b9e4da ("hwmon: (pmbus) Driver for Delta power supplies
+> Q54SJ108A2") provides new documentation for DELTA Q54SJ108A2NC* drivers,
+> but the title underline was too short.
+> 
+> make htmldocs warns:
+> 
+>   Documentation/hwmon/q54sj108a2.rst:4: WARNING: Title underline too short.
+> 
+> Adjust the title underline to the correct length.
+> 
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 
-make htmldocs warns:
+Applied.
 
-  Documentation/hwmon/q54sj108a2.rst:4: WARNING: Title underline too short.
+Thanks,
+Guenter
 
-Adjust the title underline to the correct length.
-
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-applies on next-20201207 and the hwmon -next tree
-
-Guenter, Jean, please pick this minor doc fix on your -next tree.
-
- Documentation/hwmon/q54sj108a2.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Documentation/hwmon/q54sj108a2.rst b/Documentation/hwmon/q54sj108a2.rst
-index fabce671985a..035312d25c34 100644
---- a/Documentation/hwmon/q54sj108a2.rst
-+++ b/Documentation/hwmon/q54sj108a2.rst
-@@ -1,7 +1,7 @@
- .. SPDX-License-Identifier: GPL-2.0-or-later
- 
- Kernel driver q54sj108a2
--=====================
-+========================
- 
- Supported chips:
- 
--- 
-2.17.1
-
+> ---
+> applies on next-20201207 and the hwmon -next tree
+> 
+> Guenter, Jean, please pick this minor doc fix on your -next tree.
+> 
+>  Documentation/hwmon/q54sj108a2.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/hwmon/q54sj108a2.rst b/Documentation/hwmon/q54sj108a2.rst
+> index fabce671985a..035312d25c34 100644
+> --- a/Documentation/hwmon/q54sj108a2.rst
+> +++ b/Documentation/hwmon/q54sj108a2.rst
+> @@ -1,7 +1,7 @@
+>  .. SPDX-License-Identifier: GPL-2.0-or-later
+>  
+>  Kernel driver q54sj108a2
+> -=====================
+> +========================
+>  
+>  Supported chips:
+>  
