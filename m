@@ -2,107 +2,104 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 21ACDC4361B
-	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Dec 2020 14:25:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A77F9C433FE
+	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Dec 2020 15:27:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DC42221D46
-	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Dec 2020 14:25:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7CFF22371F
+	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Dec 2020 15:27:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726209AbgLGOY4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 7 Dec 2020 09:24:56 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:36648 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726207AbgLGOY4 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 7 Dec 2020 09:24:56 -0500
-Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <colin.king@canonical.com>)
-        id 1kmHQw-0003JI-DO; Mon, 07 Dec 2020 14:24:10 +0000
-From:   Colin King <colin.king@canonical.com>
+        id S1726447AbgLGP1t (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 7 Dec 2020 10:27:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49218 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726208AbgLGP1s (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 7 Dec 2020 10:27:48 -0500
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C675C061793;
+        Mon,  7 Dec 2020 07:27:08 -0800 (PST)
+Received: by mail-ej1-x641.google.com with SMTP id g20so20079998ejb.1;
+        Mon, 07 Dec 2020 07:27:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=Rp+P9Or0j6DWseCgzSCSqRpb92TpbMCw1CU1y05qoqE=;
+        b=Pq2ZX5lkuoFxgjEs2KbqSFVL8cPKnNUupOT96huS/FSYFvGZngyjS0dyT0ePGCtmcB
+         gi/GMTzAOEnvAUyxuDq5cP8wyz7sQcmF92iWmYEFgo7kgdu1sidKig17oX4pI7O8DXx1
+         KrURhX8NWWPXWsbNp5MAvZqqlRUD8Wodenq9EBCEI+OX0bzjZ6xpQWoFhn6sBNOAjbjo
+         eXwPMOKEWaNCbt2RJt2YoTVTPw3WFGUKHtS2t20PC0ebnTaDjuTrelb1c7k0nIYVmSiH
+         upX7oDZ7ld38LnxUCLBcROz3K3WK3w05gVt993YAnw0bYDFCOBCFWZ4c5AHVyEa7ARgP
+         z7mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Rp+P9Or0j6DWseCgzSCSqRpb92TpbMCw1CU1y05qoqE=;
+        b=UvWwCK3gJt7thPm5rcNtHW+sVHNlKYez5UBKKOHe4Bli4/JR6Tgi6uQAWughXbyk7R
+         dB28AVawOjlrjxuK9f5b7SC8lp5bYp/+iJFwUoGKV0xGrNHUyKwoXDTmiPTCEwrMbMvM
+         GaGnZRite55Nb8Xi2XLRZ5TFoSW2n+WemlRxeHhEyx/Irh6Q32+bTbVSamTTd1l4HHo6
+         gI6Mk295yA2sBSgkeqHVzGMQwLw1Fcx0fbm6qPC7FOOiqZJyEkjFMN7Qsm09dKgswCU3
+         +UDGyIyvk7vBNWM+igssOHm1+wWXprSLCtCVGuVdhq5kaiLtHAfnV6zPxivWTf5t32AJ
+         nPpg==
+X-Gm-Message-State: AOAM532/1pVGQFwBRZUzEmIsahG1CRWoNLy2Jex86fT2/vZNKDuug7vz
+        1d+JXz7QPEE4VXkQWAj7As4=
+X-Google-Smtp-Source: ABdhPJwS+yVLfyk+DMzk+wdAwq7aCn8HcI2xyoCiXvzJWGCYxKrDcHFWVHOYMkjyDqbUA+sV2oJILw==
+X-Received: by 2002:a17:906:118c:: with SMTP id n12mr19888808eja.167.1607354827345;
+        Mon, 07 Dec 2020 07:27:07 -0800 (PST)
+Received: from felia.fritz.box ([2001:16b8:2d4a:c600:c0f8:50a9:4ab0:a9ab])
+        by smtp.gmail.com with ESMTPSA id t26sm13928513edt.69.2020.12.07.07.27.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Dec 2020 07:27:06 -0800 (PST)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
 To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        linux-hwmon@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] hwmon: ltc2992: fix less than zero comparisons with an unsigned integer
-Date:   Mon,  7 Dec 2020 14:24:10 +0000
-Message-Id: <20201207142410.168987-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.29.2
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] hwmon: pmbus: correct title underline length
+Date:   Mon,  7 Dec 2020 16:26:58 +0100
+Message-Id: <20201207152658.32444-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+Commit b722d7b9e4da ("hwmon: (pmbus) Driver for Delta power supplies
+Q54SJ108A2") provides new documentation for DELTA Q54SJ108A2NC* drivers,
+but the title underline was too short.
 
-There are several occurrances of a less than zero error check on
-a u32 unsigned integer. These will never be true. Fix this by making
-reg_value a plain int.
+make htmldocs warns:
 
-Addresses-Coverity: ("Unsigned comparison against zero")
-Fixes: e126370240e0 ("hwmon: (ltc2992) Add support")
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
+  Documentation/hwmon/q54sj108a2.rst:4: WARNING: Title underline too short.
+
+Adjust the title underline to the correct length.
+
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 ---
- drivers/hwmon/ltc2992.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+applies on next-20201207 and the hwmon -next tree
 
-diff --git a/drivers/hwmon/ltc2992.c b/drivers/hwmon/ltc2992.c
-index 69dbb5aa5dc2..4382105bf142 100644
---- a/drivers/hwmon/ltc2992.c
-+++ b/drivers/hwmon/ltc2992.c
-@@ -480,7 +480,7 @@ static int ltc2992_read_gpios_in(struct device *dev, u32 attr, int nr_gpio, long
+Guenter, Jean, please pick this minor doc fix on your -next tree.
+
+ Documentation/hwmon/q54sj108a2.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Documentation/hwmon/q54sj108a2.rst b/Documentation/hwmon/q54sj108a2.rst
+index fabce671985a..035312d25c34 100644
+--- a/Documentation/hwmon/q54sj108a2.rst
++++ b/Documentation/hwmon/q54sj108a2.rst
+@@ -1,7 +1,7 @@
+ .. SPDX-License-Identifier: GPL-2.0-or-later
  
- static int ltc2992_read_in_alarm(struct ltc2992_state *st, int channel, long *val, u32 attr)
- {
--	u32 reg_val;
-+	int reg_val;
- 	u32 mask;
+ Kernel driver q54sj108a2
+-=====================
++========================
  
- 	if (attr == hwmon_in_max_alarm)
-@@ -534,7 +534,7 @@ static int ltc2992_read_in(struct device *dev, u32 attr, int channel, long *val)
+ Supported chips:
  
- static int ltc2992_get_current(struct ltc2992_state *st, u32 reg, u32 channel, long *val)
- {
--	u32 reg_val;
-+	int reg_val;
- 
- 	reg_val = ltc2992_read_reg(st, reg, 2);
- 	if (reg_val < 0)
-@@ -558,7 +558,7 @@ static int ltc2992_set_current(struct ltc2992_state *st, u32 reg, u32 channel, l
- 
- static int ltc2992_read_curr_alarm(struct ltc2992_state *st, int channel, long *val, u32 attr)
- {
--	u32 reg_val;
-+	int reg_val;
- 	u32 mask;
- 
- 	if (attr == hwmon_curr_max_alarm)
-@@ -609,7 +609,7 @@ static int ltc2992_read_curr(struct device *dev, u32 attr, int channel, long *va
- 
- static int ltc2992_get_power(struct ltc2992_state *st, u32 reg, u32 channel, long *val)
- {
--	u32 reg_val;
-+	int reg_val;
- 
- 	reg_val = ltc2992_read_reg(st, reg, 3);
- 	if (reg_val < 0)
-@@ -633,7 +633,7 @@ static int ltc2992_set_power(struct ltc2992_state *st, u32 reg, u32 channel, lon
- 
- static int ltc2992_read_power_alarm(struct ltc2992_state *st, int channel, long *val, u32 attr)
- {
--	u32 reg_val;
-+	int reg_val;
- 	u32 mask;
- 
- 	if (attr == hwmon_power_max_alarm)
 -- 
-2.29.2
+2.17.1
 
