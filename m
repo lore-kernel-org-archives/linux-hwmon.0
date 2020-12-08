@@ -2,137 +2,159 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7217BC4361B
-	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Dec 2020 08:14:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DF78C433FE
+	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Dec 2020 09:30:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 377CF23A51
-	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Dec 2020 08:14:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3D44223A84
+	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Dec 2020 09:30:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727449AbgLHIOf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 8 Dec 2020 03:14:35 -0500
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:53597 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725927AbgLHIOf (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Dec 2020 03:14:35 -0500
-Received: by mail-wm1-f65.google.com with SMTP id k10so1356787wmi.3;
-        Tue, 08 Dec 2020 00:14:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yve/ZADh457qg7/+Dy6j2VWCsLzLDQxW7IculdMabgw=;
-        b=iudvjKp0Hse5eTwK6AbgVcZTPmjckXRnu63DjMMwHkE4vjiKmLDLFeFRP8u5OXr8OF
-         7h+fIxpC3jS1AWDk1DGFaS9ssOJr60dQlsP6Y25npypaO01WuY4QmkP+ZLpMzI/UwnCb
-         VGJzB/LokT/DSsYUai7aQk1yUYvCDAkh9pYuPd8GW65Mkroin8RaT1IEyn5PeVhy+tS9
-         7J+uHw5IxR7NqOuTACaiFJUWCPxY3UQvPF4aC+ks3kR4QyY18H0ROTcZYq69PNq2eaOp
-         WUuC8JnUPsh1M1BxRFcv/33GqrZsvfCucjhLQGPSMzb5MqE9tKcL915kwezW5Z0smgDY
-         sGgg==
-X-Gm-Message-State: AOAM532EaeSFgjyiL/s99wnpqXAzTiKGD2P4VQnfClFd4X8MqI+qhE4J
-        XZoe6pLXo5R5y8JrccJeCPY=
-X-Google-Smtp-Source: ABdhPJzct0mSavW2Re8RCZYEbB9nX5jsRfbK4x1GZ/R7YI+2oplEjfaegPoKXVXSZoIbTskLyPV1SQ==
-X-Received: by 2002:a1c:e3c4:: with SMTP id a187mr2645626wmh.58.1607415232866;
-        Tue, 08 Dec 2020 00:13:52 -0800 (PST)
-Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
-        by smtp.googlemail.com with ESMTPSA id z8sm2158130wmg.17.2020.12.08.00.13.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Dec 2020 00:13:51 -0800 (PST)
-Date:   Tue, 8 Dec 2020 09:13:50 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Rob Herring <robh@kernel.org>, Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Kun Yi <kunyi@google.com>
-Subject: Re: [PATCH 4/4] dt-bindings: hwmon: convert AD ADM1275 bindings to
- dt-schema
-Message-ID: <20201208081350.GA5088@kozik-lap>
-References: <20201117220807.208747-1-krzk@kernel.org>
- <20201117220807.208747-4-krzk@kernel.org>
- <20201207211259.GA832269@robh.at.kernel.org>
- <20201208001916.GA59429@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201208001916.GA59429@roeck-us.net>
+        id S1728822AbgLHJa1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 8 Dec 2020 04:30:27 -0500
+Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:60156 "EHLO
+        mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728192AbgLHJa1 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 8 Dec 2020 04:30:27 -0500
+Received: from Internal Mail-Server by MTLPINE1 (envelope-from vadimp@nvidia.com)
+        with SMTP; 8 Dec 2020 11:29:36 +0200
+Received: from r-build-lowlevel.mtr.labs.mlnx. (r-build-lowlevel.mtr.labs.mlnx [10.209.0.190])
+        by labmailer.mlnx (8.13.8/8.13.8) with ESMTP id 0B89Ta3F026351;
+        Tue, 8 Dec 2020 11:29:36 +0200
+From:   Vadim Pasternak <vadimp@nvidia.com>
+To:     linux@roeck-us.net
+Cc:     linux-hwmon@vger.kernel.org, Vadim Pasternak <vadimp@nvidia.com>
+Subject: [PATCH hwmon-next 1/1] hwmon: (mlxreg-fan) Add support for fan drawers capability and present registers
+Date:   Tue,  8 Dec 2020 11:29:31 +0200
+Message-Id: <20201208092931.1074-1-vadimp@nvidia.com>
+X-Mailer: git-send-email 2.11.0
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Dec 07, 2020 at 04:19:16PM -0800, Guenter Roeck wrote:
-> On Mon, Dec 07, 2020 at 03:12:59PM -0600, Rob Herring wrote:
-> > On Tue, Nov 17, 2020 at 11:08:07PM +0100, Krzysztof Kozlowski wrote:
-> > > Convert the Analog Devices ADM1275 bindings to dt-schema.
-> > > 
-> > > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> > > ---
-> > >  .../bindings/hwmon/adi,adm1275.yaml           | 58 +++++++++++++++++++
-> > >  .../devicetree/bindings/hwmon/adm1275.txt     | 25 --------
-> > >  Documentation/hwmon/adm1275.rst               |  2 +-
-> > >  3 files changed, 59 insertions(+), 26 deletions(-)
-> > >  create mode 100644 Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
-> > >  delete mode 100644 Documentation/devicetree/bindings/hwmon/adm1275.txt
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
-> > > new file mode 100644
-> > > index 000000000000..2cad28c499dc
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
-> > > @@ -0,0 +1,58 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +
-> > > +$id: http://devicetree.org/schemas/hwmon/adi,adm1275.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: Analog Devices ADM1075/ADM127x/ADM129x digital power monitors
-> > > +
-> > > +maintainers:
-> > > +  - Krzysztof Kozlowski <krzk@kernel.org>
-> > > +
-> > > +description: |
-> > > +  The ADM1293 and ADM1294 are high accuracy integrated digital power monitors
-> > > +  that offer digital current, voltage, and power monitoring using an on-chip,
-> > > +  12-bit analog-to-digital converter (ADC), communicated through a PMBus
-> > > +  compliant I2C interface.
-> > > +
-> > > +  Datasheets:
-> > > +    https://www.analog.com/en/products/adm1294.html
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    enum:
-> > > +      - adi,adm1075
-> > > +      - adi,adm1272
-> > > +      - adi,adm1275
-> > > +      - adi,adm1276
-> > > +      - adi,adm1278
-> > > +      - adi,adm1293
-> > > +      - adi,adm1294
-> > > +
-> > > +  reg:
-> > > +    maxItems: 1
-> > > +
-> > > +  shunt-resistor-micro-ohms:
-> > > +    description:
-> > > +      Shunt resistor value in micro-Ohm.
-> > > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > 
-> > Don't need a type if you have units. With that dropped,
-> > 
-> 
-> Sorry, I am not familiar with the terminology. Does that refer to
-> the '$ref' line ?
+Add support for fan drawer's capability and present registers in order
+to set mapping between the fan drawers and tachometers. Some systems
+are equipped with fan drawers with one tachometer inside. Others with
+fan drawers with several tachometers inside. Using present register
+along with tachometer-to-drawer mapping allows to skip reading missed
+tachometers and expose input for them as zero, instead of exposing
+fault code returned by hardware.
 
-Yes, it's the $ref line which can be safely removed. The core dt-schema
-applies such $ref if the property name ends with '-micro-ohms'.
+Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
+---
+ drivers/hwmon/mlxreg-fan.c | 46 +++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 45 insertions(+), 1 deletion(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/hwmon/mlxreg-fan.c b/drivers/hwmon/mlxreg-fan.c
+index ed8d59d4eecb..ab743929a6cd 100644
+--- a/drivers/hwmon/mlxreg-fan.c
++++ b/drivers/hwmon/mlxreg-fan.c
+@@ -67,11 +67,13 @@
+  * @connected: indicates if tachometer is connected;
+  * @reg: register offset;
+  * @mask: fault mask;
++ * @prsnt: present register offset;
+  */
+ struct mlxreg_fan_tacho {
+ 	bool connected;
+ 	u32 reg;
+ 	u32 mask;
++	u32 prsnt;
+ };
+ 
+ /*
+@@ -92,6 +94,7 @@ struct mlxreg_fan_pwm {
+  * @regmap: register map of parent device;
+  * @tacho: tachometer data;
+  * @pwm: PWM data;
++ * @tachos_per_drwr - number of tachometers per drawer;
+  * @samples: minimum allowed samples per pulse;
+  * @divider: divider value for tachometer RPM calculation;
+  * @cooling: cooling device levels;
+@@ -103,6 +106,7 @@ struct mlxreg_fan {
+ 	struct mlxreg_core_platform_data *pdata;
+ 	struct mlxreg_fan_tacho tacho[MLXREG_FAN_MAX_TACHO];
+ 	struct mlxreg_fan_pwm pwm;
++	int tachos_per_drwr;
+ 	int samples;
+ 	int divider;
+ 	u8 cooling_levels[MLXREG_FAN_MAX_STATE + 1];
+@@ -123,6 +127,26 @@ mlxreg_fan_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+ 		tacho = &fan->tacho[channel];
+ 		switch (attr) {
+ 		case hwmon_fan_input:
++			/*
++			 * Check FAN presence: FAN related bit in presence register is one,
++			 * if FAN is not physically connected, zero - otherwise.
++			 */
++			if (tacho->prsnt) {
++				err = regmap_read(fan->regmap, tacho->prsnt, &regval);
++				if (err)
++					return err;
++
++				/*
++				 * Map channel to presence bit - drawer can be equipped with
++				 * one or few FANs, while presence is indicated per drawer.
++				 */
++				if ((BIT(channel / fan->tachos_per_drwr) & regval)) {
++					/* FAN is not connected - return zero for FAN speed. */
++					*val = 0;
++					return 0;
++				}
++			}
++
+ 			err = regmap_read(fan->regmap, tacho->reg, &regval);
+ 			if (err)
+ 				return err;
+@@ -388,9 +412,11 @@ static int mlxreg_fan_speed_divider_get(struct mlxreg_fan *fan,
+ static int mlxreg_fan_config(struct mlxreg_fan *fan,
+ 			     struct mlxreg_core_platform_data *pdata)
+ {
++	int tacho_num = 0, regval, regsize, drwr_avail = 0, tacho_avail = 0, i;
+ 	struct mlxreg_core_data *data = pdata->data;
+ 	bool configured = false;
+-	int tacho_num = 0, i;
++	unsigned long drwrs;
++	u32 bit;
+ 	int err;
+ 
+ 	fan->samples = MLXREG_FAN_TACHO_SAMPLES_PER_PULSE_DEF;
+@@ -415,7 +441,9 @@ static int mlxreg_fan_config(struct mlxreg_fan *fan,
+ 
+ 			fan->tacho[tacho_num].reg = data->reg;
+ 			fan->tacho[tacho_num].mask = data->mask;
++			fan->tacho[tacho_num].prsnt = data->reg_prsnt;
+ 			fan->tacho[tacho_num++].connected = true;
++			tacho_avail++;
+ 		} else if (strnstr(data->label, "pwm", sizeof(data->label))) {
+ 			if (fan->pwm.connected) {
+ 				dev_err(fan->dev, "duplicate pwm entry: %s\n",
+@@ -453,6 +481,22 @@ static int mlxreg_fan_config(struct mlxreg_fan *fan,
+ 		}
+ 	}
+ 
++	if (pdata->capability) {
++		/* Obtain the number of FAN drawers, supported by system. */
++		err = regmap_read(fan->regmap, pdata->capability, &regval);
++		if (err) {
++			dev_err(fan->dev, "Failed to query capability register 0x%08x\n",
++				pdata->capability);
++			return err;
++		}
++		regsize = regmap_get_val_bytes(fan->regmap);
++		drwrs = regval;
++		for_each_set_bit(bit, &drwrs, 8 * regsize)
++			drwr_avail++;
++		/* Set the number of tachometers per one drawer. */
++		fan->tachos_per_drwr = tacho_avail / drwr_avail;
++	}
++
+ 	/* Init cooling levels per PWM state. */
+ 	for (i = 0; i < MLXREG_FAN_SPEED_MIN_LEVEL; i++)
+ 		fan->cooling_levels[i] = MLXREG_FAN_SPEED_MIN_LEVEL;
+-- 
+2.11.0
 
