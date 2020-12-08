@@ -2,163 +2,106 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1206AC4361B
-	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Dec 2020 00:20:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60813C19437
+	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Dec 2020 02:42:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D0E14239ED
-	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Dec 2020 00:19:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2959B23433
+	for <linux-hwmon@archiver.kernel.org>; Tue,  8 Dec 2020 02:42:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727722AbgLHAT7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 7 Dec 2020 19:19:59 -0500
-Received: from gproxy2-pub.mail.unifiedlayer.com ([69.89.18.3]:49169 "EHLO
-        gproxy2-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727075AbgLHAT7 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 7 Dec 2020 19:19:59 -0500
-Received: from cmgw11.unifiedlayer.com (unknown [10.9.0.11])
-        by gproxy2.mail.unifiedlayer.com (Postfix) with ESMTP id 80A2D1E3497
-        for <linux-hwmon@vger.kernel.org>; Mon,  7 Dec 2020 17:19:18 -0700 (MST)
-Received: from bh-25.webhostbox.net ([208.91.199.152])
-        by cmsmtp with ESMTP
-        id mQirkZvlzdCH5mQiskdIN3; Mon, 07 Dec 2020 17:19:18 -0700
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.3 cv=Tu7Iegfh c=1 sm=1 tr=0
- a=QNED+QcLUkoL9qulTODnwA==:117 a=2cfIYNtKkjgZNaOwnGXpGw==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=kj9zAlcOel0A:10:nop_charset_1
- a=zTNgK-yGK50A:10:nop_rcvd_month_year
- a=evQFzbml-YQA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=gEfo2CItAAAA:8 a=gAnH3GRIAAAA:8 a=zGQ2m3odkreZA2kYg2QA:9
- a=CjuIK1q_8ugA:10:nop_charset_2 a=Q7RPfSbWTOsA:10:demote_hacked_domain_1
- a=yllJabXkTJAA:10:demote_hacked_domain_7 a=AjGcO6oz07-iQ99wixmX:22
- a=sptkURWiP4Gy88Gu7hUp:22 a=oVHKYsEdi7-vN-J5QA_j:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
-        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
-        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=4eNIuJvGf9dzYaNGC/fEaC3RxpCv7V0tT4GVf8YTdV0=; b=XJ8Kq5HMNlHErvgMuwlXTUkS69
-        m3iu1F1cTG5aIo3EoSlJ3bwP//scZ7kniKWdAz3DeBcUfYSeLuiobRESgWMuOaBLtXXqkXDGSt7Ej
-        gPeVOW4GQ1PWULKRif5T22Rog2OG5OJkiSiJ7Xt4OB/U3kF2kYSzoIyPQLteiwURckJgN/3RxNbeH
-        h2rlIxv6ssIIdbauWlfErc8LnTzm7UXHM0QdP4VaJd0Gjb3WzZrKehVNcCzcdTWCvYSBNQbCUryqZ
-        4752VQSaKGvPAKAhlmn7OkV0TmJgS2j3TXc2KjmAmxNQcU91qtAONZhg+JeZzqI1aNr9xezgqKlDr
-        krw/WQ1A==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:33534 helo=localhost)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <linux@roeck-us.net>)
-        id 1kmQir-001v7K-Ce; Tue, 08 Dec 2020 00:19:17 +0000
-Date:   Mon, 7 Dec 2020 16:19:16 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Kun Yi <kunyi@google.com>
-Subject: Re: [PATCH 4/4] dt-bindings: hwmon: convert AD ADM1275 bindings to
- dt-schema
-Message-ID: <20201208001916.GA59429@roeck-us.net>
-References: <20201117220807.208747-1-krzk@kernel.org>
- <20201117220807.208747-4-krzk@kernel.org>
- <20201207211259.GA832269@robh.at.kernel.org>
+        id S1727958AbgLHCmQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 7 Dec 2020 21:42:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41492 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726896AbgLHCmP (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 7 Dec 2020 21:42:15 -0500
+Received: from mail-qv1-xf42.google.com (mail-qv1-xf42.google.com [IPv6:2607:f8b0:4864:20::f42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69625C061794;
+        Mon,  7 Dec 2020 18:41:35 -0800 (PST)
+Received: by mail-qv1-xf42.google.com with SMTP id p12so7621010qvj.13;
+        Mon, 07 Dec 2020 18:41:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0XjVgTEL8rQFOCFz+jo+PbV3JFHakTiNHErSrpfLt1A=;
+        b=R78Hyn5Hm0zClT4oLPvwmmGHJ/NZnYOq6YvJ3dok83R6lub3MTs9UuYFq7rJKd39OT
+         Th4OFMSuZKTpC0cqaqwmpfV2DS7shAM4jCyZWVRxKpGLd1fV13sLnIe5xLw9Id19UCZt
+         nQ0hD2CxSht8NDoK/cVvJ+4NFojkfU6qVWK8U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0XjVgTEL8rQFOCFz+jo+PbV3JFHakTiNHErSrpfLt1A=;
+        b=Hx/rWQMj8zA4OZ/08bUaxcLSeFBDe+WES7vQeDMvVXgGh698oqx+JZuKnmSOCVoRyH
+         ibqEtCzPkBL2T7FKzIROTbgd/ttHIIEO5sh22FyHoPKMpUdA4nt0wjbdg0u3Hek92pjj
+         0HCGxpnghr1TiEN88a+DlxG9CawleQ7UeQ5JPE9aX3RNkCCmiUWL3kPSUavrFv6EeI1u
+         esk/413Zg8l4LRKI676QG3ZstJaC5AGeeHssyhJ904S1fUfE/PTQH9Pea0IarOw/Qbb1
+         Okv9DDnhv9/yzblKoS+4mG9Tj5dsH4A7kM61uuFwnnknWl6hOuY1n20tuJrJtmEr0siq
+         Kfjw==
+X-Gm-Message-State: AOAM530bXklNzm4/i075mlncOuIbTkRrLH5lnPzWQupphOQAf550OZoW
+        p+d76IaZZCwB+5VRf/ZebT1bsmSQv8QoFP2+6FE=
+X-Google-Smtp-Source: ABdhPJxLCLgZLW9LLx4nvn+gh95HaohAb8GesxEGpkQOEjwV4hpPMVrOR5UZf+E5QY+yePtIaXRVmkkT9IVqdA05/aA=
+X-Received: by 2002:a05:6214:c66:: with SMTP id t6mr19789047qvj.43.1607395294632;
+ Mon, 07 Dec 2020 18:41:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201207211259.GA832269@robh.at.kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1kmQir-001v7K-Ce
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:33534
-X-Source-Auth: guenter@roeck-us.net
-X-Email-Count: 36
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
+References: <20201120010315.190737-1-joel@jms.id.au> <20201121185150.GD114144@roeck-us.net>
+In-Reply-To: <20201121185150.GD114144@roeck-us.net>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Tue, 8 Dec 2020 02:41:22 +0000
+Message-ID: <CACPK8Xcf1xhPZNqpxuZE22uqDFR7rb1Wv-RW802bx2S-nphpzA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/3] occ: Add support for P10
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Eddie James <eajames@linux.ibm.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org, linux-fsi@lists.ozlabs.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Dec 07, 2020 at 03:12:59PM -0600, Rob Herring wrote:
-> On Tue, Nov 17, 2020 at 11:08:07PM +0100, Krzysztof Kozlowski wrote:
-> > Convert the Analog Devices ADM1275 bindings to dt-schema.
-> > 
-> > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> > ---
-> >  .../bindings/hwmon/adi,adm1275.yaml           | 58 +++++++++++++++++++
-> >  .../devicetree/bindings/hwmon/adm1275.txt     | 25 --------
-> >  Documentation/hwmon/adm1275.rst               |  2 +-
-> >  3 files changed, 59 insertions(+), 26 deletions(-)
-> >  create mode 100644 Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
-> >  delete mode 100644 Documentation/devicetree/bindings/hwmon/adm1275.txt
-> > 
-> > diff --git a/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
-> > new file mode 100644
-> > index 000000000000..2cad28c499dc
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
-> > @@ -0,0 +1,58 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +
-> > +$id: http://devicetree.org/schemas/hwmon/adi,adm1275.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Analog Devices ADM1075/ADM127x/ADM129x digital power monitors
-> > +
-> > +maintainers:
-> > +  - Krzysztof Kozlowski <krzk@kernel.org>
-> > +
-> > +description: |
-> > +  The ADM1293 and ADM1294 are high accuracy integrated digital power monitors
-> > +  that offer digital current, voltage, and power monitoring using an on-chip,
-> > +  12-bit analog-to-digital converter (ADC), communicated through a PMBus
-> > +  compliant I2C interface.
-> > +
-> > +  Datasheets:
-> > +    https://www.analog.com/en/products/adm1294.html
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - adi,adm1075
-> > +      - adi,adm1272
-> > +      - adi,adm1275
-> > +      - adi,adm1276
-> > +      - adi,adm1278
-> > +      - adi,adm1293
-> > +      - adi,adm1294
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  shunt-resistor-micro-ohms:
-> > +    description:
-> > +      Shunt resistor value in micro-Ohm.
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> 
-> Don't need a type if you have units. With that dropped,
-> 
+On Sat, 21 Nov 2020 at 18:55, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On Fri, Nov 20, 2020 at 11:33:12AM +1030, Joel Stanley wrote:
+> > Hi Guenter, here's v2 of this series on behalf of Eddie. I made the
+> > change to the compatible string that we spoke about in v2, and I'm happy
+> > for these to go through the hwmon tree.
+> >
+>
+> I'll be happy to do that, as soon as we get a Reviewed-by: tag for the DT
+> change.
 
-Sorry, I am not familiar with the terminology. Does that refer to
-the '$ref' line ?
+Rob has sent that through now, so this should be good to go in.
 
-Thanks,
-Guenter
+Thank you.
+
+>
+> Thanks,
+> Guenter
+>
+> > v1: https://lore.kernel.org/linux-hwmon/20200501150833.5251-1-eajames@linux.ibm.com/
+> >
+> > The OCC in the P10 has a number of differences from the P9. Add some logic to
+> > handle the differences in accessing the OCC from the service processor, and
+> > support the new temperature sensor type.
+> >
+> > Eddie James (3):
+> >   dt-bindings: fsi: Add P10 OCC device documentation
+> >   fsi: occ: Add support for P10
+> >   hwmon: (occ) Add new temperature sensor type
+> >
+> >  .../devicetree/bindings/fsi/ibm,p9-occ.txt    |  12 +-
+> >  drivers/fsi/fsi-occ.c                         | 125 +++++++++++++-----
+> >  drivers/hwmon/occ/common.c                    |  75 +++++++++++
+> >  3 files changed, 172 insertions(+), 40 deletions(-)
+> >
+> > --
+> > 2.29.2
+> >
