@@ -2,166 +2,97 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D497C4167B
-	for <linux-hwmon@archiver.kernel.org>; Wed,  9 Dec 2020 19:50:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98A75C4361B
+	for <linux-hwmon@archiver.kernel.org>; Wed,  9 Dec 2020 20:06:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DE9FB2337F
-	for <linux-hwmon@archiver.kernel.org>; Wed,  9 Dec 2020 19:50:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5BD99239D1
+	for <linux-hwmon@archiver.kernel.org>; Wed,  9 Dec 2020 20:06:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388017AbgLITuY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 9 Dec 2020 14:50:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57680 "EHLO
+        id S1729522AbgLIUGa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 9 Dec 2020 15:06:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733113AbgLITtY (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 9 Dec 2020 14:49:24 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35754C0613CF;
-        Wed,  9 Dec 2020 11:48:44 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id v85so3017644oia.6;
-        Wed, 09 Dec 2020 11:48:44 -0800 (PST)
+        with ESMTP id S1728197AbgLIUGa (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 9 Dec 2020 15:06:30 -0500
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FDC5C0613CF
+        for <linux-hwmon@vger.kernel.org>; Wed,  9 Dec 2020 12:05:50 -0800 (PST)
+Received: by mail-yb1-xb44.google.com with SMTP id v67so2491625ybi.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 09 Dec 2020 12:05:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=19G5L9YUDXmxI3uSq/S+oJKSbuLCcM6JRD0UmuNglzM=;
-        b=acQ5wZEedJ7MuUO73ClQhDhIhaivdFvMPo9Ss7yiZYI+CZ59KtWvIbQmkFefSMexlr
-         LJMGMpzTv+3d+Od1oWUnWe4IP2AH+Vz5SaT0LV18GYB4hZB+8D57halSB9WOJjWiRL5u
-         wDqqjA3FSQduxstz+FSHbAG7FBnyguFiHcjYfgLsX+76Fs6fiTGJ5ZHdNF7vWZUw9DPb
-         04H1GsTA7HksNm7Tskwj6Ax0NF254qzwhBBfuVh+nvvVCAoeUhaQnWJdvz1kB6DAJpIH
-         bJlpI6VGKHYRTSk02VGdZ46vWMsrUSuP4nS1AaOmF3I1Vj4y01claQVNrBvQL/GOqnVC
-         gAkw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UJFbJKS4ao2IYWnP688A2notPvXlz7UasrM6xISzh+8=;
+        b=QDiJPF9xycQy1Pj/orhm89DVRY6pFrFjw68vKz5rnAaHraU3S5lkVmMlO8ErQjRbZb
+         HHc+iOkyFgKjrZU6JoVoF1kyJRssmNtrtQlLWlsEPw/o+LDmRPdAlluYlielV4ucBoYt
+         fUyQ6AcOENrkcK0NMQFSmqT5CSvtAnWnkbq3m1MTc+vNuouXCdkW91VAiIpc6dmrmwec
+         0ZG5iXr5olO6PB0OLZ4HWmVnfh+TL3WYbeWKWKk09rdJi6YntF3vzbFsv2ZJe9plLtRU
+         4P2Y5gKjklEUgIpoXdghgCmpHDXmFSG7O3MYnYVmCRryZuRexgBz8fqQQYw7yiAEGTgM
+         zJSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=19G5L9YUDXmxI3uSq/S+oJKSbuLCcM6JRD0UmuNglzM=;
-        b=EqV7cxdy5DdJ757kDj7VMzn1naKWJ8cbIceRORU7dF+WmNc/tsm3x1qMggsp7OlmVA
-         1NutHRMx1L9uTtWSeoMrDM5fiSoazgaIM7ZwQBXK/Cfkwsv/l1nuQ86sjquWuMnxmpXY
-         CALTfqBF2a5aL3sj1Xz42Wg4b5sJbZU8Ft4ieg3NgM2iE/R2xEYCOMX+gE5KR0wisvvN
-         Cid6VKRyMbZVazGHwZPSBnn6B266MuwWkXNmKEX7iGkJt96Xe3mR0O00fHBtaWigB+Bn
-         V3T2sVF+vFBTM+gZFEcn+JmOdiSe/EmcvrXg6Y0181y21QfSjHa4Vx0mH/vXyqtniUfW
-         5p8A==
-X-Gm-Message-State: AOAM530rsLV4LBnImkSi7+Se7TErsltR13s0sXeF3anELhKO2KwJP0yY
-        NRWV7mD64OwEv7CK4H6WDqBq7u4z6L8=
-X-Google-Smtp-Source: ABdhPJwhTjFNVs8f2/svBvPxzy5ZWVu7y2lHjC1OKQW8EXMIdh2DoTFxUNG4aXDxpCE7FTlD3n5tmA==
-X-Received: by 2002:aca:b3c3:: with SMTP id c186mr2859416oif.39.1607543323218;
-        Wed, 09 Dec 2020 11:48:43 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j46sm533101oof.36.2020.12.09.11.48.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Dec 2020 11:48:42 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: IIO Driver for TMP117 Temperature sensor
-To:     Alexandru Ardelean <ardeleanalex@gmail.com>,
-        Puranjay Mohan <puranjay12@gmail.com>
-Cc:     linux-iio <linux-iio@vger.kernel.org>, linux-hwmon@vger.kernel.org
-References: <CANk7y0gAChikUBf-ap328YNQd4nrw63BiFH9dRLLDuZ0SnneMA@mail.gmail.com>
- <CA+U=Dsr=SCdSsbsbdY++NwD4xQjr6PZuoOqa_Ctq6ig+GuvO=w@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <dd7f7015-aed4-8628-0f23-e144fdacc9e7@roeck-us.net>
-Date:   Wed, 9 Dec 2020 11:48:40 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UJFbJKS4ao2IYWnP688A2notPvXlz7UasrM6xISzh+8=;
+        b=mc380aq2izAklwmWv3CD9phSC1KpkEPz1Tvm1ZoZGiSXDSaetES69znNmLqm9d5iFR
+         +lDvgx8OK/R9XGxxnqf4c0p/K4gRv3n/HtuPpAdj9PpGZS5H/SaCUrg4dEsv3S8XVCT4
+         0C69LHM3LgkF9KBcvlI7tePyN0CjLkD5RUDVcvNeeK2blf7/YWN4LjkJHkBkJlwWX4Zf
+         gnn3O6aLhEiSO6i8bRva1i8T2aWyg4RqTW1/akqAOrqebXU0hTcsfLUKDvCV1bXSS3c1
+         aVrcCRhE/2bIGycjbKnr1HLxeLUpZEgbjNN/qs3Efmu+TLSlsJo5vDsB3Mk/1Scq78Wi
+         gCnA==
+X-Gm-Message-State: AOAM531ae1xemr/en4JHTn2JOCO6Pwc+kx0gyym+N5xYhRZ9nbIZVCts
+        NlEmZBrlECE6L0dPM0I6jGsiwpF2pzB0AT0zNMKHBV8Qea4=
+X-Google-Smtp-Source: ABdhPJwPCJVYgl/2NVZsEFtS38iC80imDng5XrFybXI7WfSYAAmQUISQG/gdX6CiN34gkK6AAJ4V9DqLu9nh5XVG438=
+X-Received: by 2002:a25:9204:: with SMTP id b4mr5970303ybo.98.1607544349281;
+ Wed, 09 Dec 2020 12:05:49 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CA+U=Dsr=SCdSsbsbdY++NwD4xQjr6PZuoOqa_Ctq6ig+GuvO=w@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <a14b8be6-e8b4-c658-2cd6-a2f280be0f99@gmail.com>
+ <20201208204059.GA73427@roeck-us.net> <DM6PR12MB4388D95FCC7AD13E3E6AE26FE8CC0@DM6PR12MB4388.namprd12.prod.outlook.com>
+ <CAGPDPzDC4zqoeR9dctNfmHv21uB4+NQ5ij7WfeOa2ueT0DY1zw@mail.gmail.com> <DM6PR12MB438881D1D0F87627E78310C7E8CC0@DM6PR12MB4388.namprd12.prod.outlook.com>
+In-Reply-To: <DM6PR12MB438881D1D0F87627E78310C7E8CC0@DM6PR12MB4388.namprd12.prod.outlook.com>
+From:   Sandeep <sandy.8925@gmail.com>
+Date:   Thu, 10 Dec 2020 01:35:34 +0530
+Message-ID: <CAGPDPzB_h651WdkZJWSopfTAisHqBjXd1SXat_vMD8EZf7Oy_A@mail.gmail.com>
+Subject: Re: [PATCH] Add support for Zen 2 CPUs to amd_energy driver
+To:     "Chatradhi, Naveen Krishna" <NaveenKrishna.Chatradhi@amd.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 12/9/20 12:11 AM, Alexandru Ardelean wrote:
-> On Tue, Dec 8, 2020 at 6:10 PM Puranjay Mohan <puranjay12@gmail.com> wrote:
->>
->> I have this TI's TMP117 sensor with me and I was thinking about writing an
->> IIO driver for it as a hobby project. Is the IIO subsystem the correct
->> place for this driver? if yes, can someone help me get started with this,
->> I haven't written an IIO driver before. I have this sensor and also a
->> raspberry pi with me for testing.
-> 
-> This could also fit into drivers/hwmon.
-> Looking at the HWMON subsystem there are more TMP drivers there
-> (TMP102/103/108/401/513).
-> The first 3 seem a bit more similar to TMP117 (in terms of register map).
-> 
+On Wed, 9 Dec 2020 at 20:58, Chatradhi, Naveen Krishna
+<NaveenKrishna.Chatradhi@amd.com> wrote:
+>
+> [AMD Official Use Only - Approved for External Use]
+>
+> Hi Sandeep,
+>
+> >> Sure, I'll run that test. I have a 3900X though, which is 12 core, so do I have to adjust anything for that CPU, or just run with the parameters you've specified?
+>
+> I'm trying to get hold of a system to test it myself. In the meanwhile, you may run the following command
+> in the back ground and read the counters (cores and socket) at 5 to 10 secs apart and
+> sum of the diff of core counters should be not be > diff of socket counters
+>
+> sudo ./avx-turbo --iters 1000000000 --spec avx256_fma_t/12
+>
+> You may refer https://www.spinics.net/lists/linux-hwmon/msg08255.html link for more background of the testing.
+>
+> Regards,
+> Naveenk
+>
 
-It would probably be better suited for hwmon (it has limit registers,
-suggesting a common use as hardware monitoring device).
+Do you already have a script or something that I can run to
+automatically gather this information (i.e check values every 5
+seconds, calculate differences and check if the results line up)?
+Doing this manually, sounds like a lot of work that I really don't
+want to get into.
 
-> Let's see what others have to add.
-> But, all-in-all whatever driver you end up writing, the easiest method
-> is to copy an existing similar driver and extend it.
-> Sometimes, a part can be added to an existing driver.
-> At a quick scan through existing drivers, it doesn't look like TMP117
-> is similar to existing drivers, so it may require a new driver
-> altogether.
-
-I don't see an immediate match either, but the tmp102 hwmon driver
-might be a good start.
-
-Guenter
-
-> I may have missed something though.
-> 
-> Thanks
-> Alex
-> 
->>
->> --
->> Thanks and Regards
->>
->> Yours Truly,
->>
->> Puranjay Mohan
-
+- Sandeep
