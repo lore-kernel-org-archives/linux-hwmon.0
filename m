@@ -2,177 +2,289 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 301F2C4167B
-	for <linux-hwmon@archiver.kernel.org>; Fri, 11 Dec 2020 03:27:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD38EC433FE
+	for <linux-hwmon@archiver.kernel.org>; Fri, 11 Dec 2020 09:50:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E486C23E54
-	for <linux-hwmon@archiver.kernel.org>; Fri, 11 Dec 2020 03:27:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7E34223F36
+	for <linux-hwmon@archiver.kernel.org>; Fri, 11 Dec 2020 09:50:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390024AbgLKD1E (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 10 Dec 2020 22:27:04 -0500
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:40456 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2395060AbgLKD04 (ORCPT
+        id S2405679AbgLKJtv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 11 Dec 2020 04:49:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57946 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405685AbgLKJtu (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 10 Dec 2020 22:26:56 -0500
-Received: by mail-ot1-f68.google.com with SMTP id j12so7053412ota.7;
-        Thu, 10 Dec 2020 19:26:40 -0800 (PST)
+        Fri, 11 Dec 2020 04:49:50 -0500
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B696C0613D3;
+        Fri, 11 Dec 2020 01:49:10 -0800 (PST)
+Received: by mail-pj1-x1042.google.com with SMTP id h7so1587633pjk.1;
+        Fri, 11 Dec 2020 01:49:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JBoMhoNsYSUmHOByBj0xCh3ibWRQ1E2P2SuWlUAPYpM=;
+        b=BQiZqWeRq5iQcB29t+jyNA/9VCyjLntJAmZWrHoOe7Wc/lKt7pjsSjd0PMg9/c7A9i
+         H/RQf1m7zRm90ozxNg2oK0O6p5V60vCgwB/jE+OJ0G8LALKFMn2ZBgzIBTY/H3hckBCR
+         F9JH+joCn8Eh1+amzKVUXg/m2Y2oHp+T+55+WRP3r+re0rzgU0R1dTRwfiTNfs5o51lw
+         +YCeMjbigauDqbEOaF4yOHlawydU4I9kdzR7VNShnEusS1CRwxLXtwOAJgnlmeXhx8/a
+         FhdukEBWIWcEVEBFwWRfYQ579tHA3YRPAyX241PzoVI8pvTJyb1eehVJZsLgwn5ixn7y
+         CA8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FQJ0xYZsg9VuDPNWynmVTQgQAdgxX+zz3aAN9OxOmEM=;
-        b=d/f4UNFeg0HHbmHPFOpSsLhZ9EWrx8IATokW+ttdpaInc0tihLkboJyMoWdypXYVQ0
-         e1oQQzpvWFcIehMgATMxRFx3jmP21mQlO/tjE8Itgf21AJ+09B1Xlp0hkP4SUTZ2yfdK
-         q24kNiN/cBNxqqsBzFDA4OHVRU398RLpds7y1NeDzbguj6cK+foFdpOuIyHRXQWdpwtz
-         WsrJCF7GW1x8tEVEbOjAPhYwaKdKIUlpMgo4y3i78RNBetsLKHri1ybEjybBJpS0e18d
-         LM/QD66ukI/Kq6ssr7Tx1pkc3uIcsrpkJfBUZu8k1Ek1Msl3ZBK0mzEEGvECNcxt9E0x
-         73NQ==
-X-Gm-Message-State: AOAM531WnLt9PsoIFBA7vepOA7QiGBUJcI5csXNY8H8mndYS4gZI8XWH
-        n56wo/mBI8Ma4IdziSgjEA==
-X-Google-Smtp-Source: ABdhPJzKUGBasM7BAwLTxygGxXIuMZ4ml/wcGxyjJSYLcS6Bmb5p1q1zlC+Ak1f0+07k0olzZmbmgg==
-X-Received: by 2002:a9d:3a2:: with SMTP id f31mr8646104otf.216.1607657175132;
-        Thu, 10 Dec 2020 19:26:15 -0800 (PST)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id x66sm1498750oig.56.2020.12.10.19.26.12
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JBoMhoNsYSUmHOByBj0xCh3ibWRQ1E2P2SuWlUAPYpM=;
+        b=e0DfHtAKeFd1Xx4Pdq10Qv1f6XdRjfqorNpmzAV1Bl4NOC9aknw/ECqQUwF1uGqdwR
+         S+Ak775Ilh+vHyzWCvl364bTIXjt7qNyxwPIbotI/ff0CUALh0falzlx5goV55wjHi+5
+         VXW67HRCsF/4STzn6GakQWUPYfEex+B8kWbyUGi7X5/QYAmNHXu6MRo99paeOQqegej/
+         sV1mqtjW0xMcdAkb4nJ8dDEzC7fJ0ncRIljHMB6O4pPh/5wB9NmTwF8B2U/Dz9fW+XgB
+         N5M5F/ImyrE0PZRvwQTCeVRcn0T2GGrT63dPk9zIP7FaDCm7CMCUJRUnaLYiYOUTK6EO
+         Hq0g==
+X-Gm-Message-State: AOAM531wrsJiKk3BGRsvRlYZmhNCI9Hf63EQBbePtFIJyceBDH7NADA6
+        eqXBPGlffHJbcLUiWMGa6ENWex2Wf98=
+X-Google-Smtp-Source: ABdhPJyrpGLx8XPYtnAQiZOtYyIT8i9RMs5xxS+gcqU+jlM5zsW8y2y6naNyG+z88vxq3zWOfHdERQ==
+X-Received: by 2002:a17:90a:f404:: with SMTP id ch4mr12027837pjb.78.1607680149292;
+        Fri, 11 Dec 2020 01:49:09 -0800 (PST)
+Received: from charles-System-Product-Name.dhcpserver.local (220-135-135-179.HINET-IP.hinet.net. [220.135.135.179])
+        by smtp.googlemail.com with ESMTPSA id a31sm3805894pgb.93.2020.12.11.01.49.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Dec 2020 19:26:14 -0800 (PST)
-Received: (nullmailer pid 3574126 invoked by uid 1000);
-        Fri, 11 Dec 2020 03:26:12 -0000
-Date:   Thu, 10 Dec 2020 21:26:12 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Troy Lee <troy_lee@aspeedtech.com>
-Cc:     openbmc@lists.ozlabs.org, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
-        <linux-aspeed@lists.ozlabs.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        leetroy@gmail.com, ryan_chen@aspeedtech.com,
-        chiawei_wang@aspeedtech.com, billy_tsai@aspeedtech.com
-Subject: Re: [PATCH 1/4] dt-bindings: hwmon: Add Aspeed AST2600 PWM/Fan
-Message-ID: <20201211032612.GA3565720@robh.at.kernel.org>
-References: <20201209075921.26689-1-troy_lee@aspeedtech.com>
- <20201209075921.26689-2-troy_lee@aspeedtech.com>
+        Fri, 11 Dec 2020 01:49:08 -0800 (PST)
+From:   Charles Hsu <hsu.yungteng@gmail.com>
+To:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux@roeck-us.net
+Cc:     alan@redhat.com, Charles Hsu <hsu.yungteng@gmail.com>
+Subject: [PATCH v6] hwmon: Add driver for STMicroelectronics PM6764 Voltage Regulator.
+Date:   Fri, 11 Dec 2020 17:46:05 +0800
+Message-Id: <20201211094605.270734-1-hsu.yungteng@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201209075921.26689-2-troy_lee@aspeedtech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Dec 09, 2020 at 03:59:17PM +0800, Troy Lee wrote:
-> For supporting a new AST2600 PWM/Fan hwmon driver, we add a new binding.
-> 
-> Signed-off-by: Troy Lee <troy_lee@aspeedtech.com>
-> ---
->  .../bindings/hwmon/aspeed2600-pwm-tacho.txt   | 69 +++++++++++++++++++
+The output voltage use the MFR_READ_VOUT 0xD4
+Vout value returned is linear11.
 
-Bindings are in DT schema format now.
+Signed-off-by: Charles Hsu <hsu.yungteng@gmail.com>
+---
+v6:
+ - Fix misspelling.
+v5:
+ - Add MAINTAINERS.
+v4:
+ - Add pm6764tr to Documentation/hwmon/index.rst.
+v3:
+ - Add Documentation(Documentation/hwmon/pm6764tr.rst).
+ - Fix include order.
+v2:
+ - Fix formatting.
+ - Remove pmbus_do_remove.
+ - Change from .probe to .probe_new.
+v1:
+ - Initial patchset.
+---
+ Documentation/hwmon/index.rst    |  1 +
+ Documentation/hwmon/pm6764tr.rst | 32 ++++++++++++++
+ MAINTAINERS                      |  7 +++
+ drivers/hwmon/pmbus/Kconfig      |  9 ++++
+ drivers/hwmon/pmbus/Makefile     |  1 +
+ drivers/hwmon/pmbus/pm6764tr.c   | 76 ++++++++++++++++++++++++++++++++
+ 6 files changed, 126 insertions(+)
+ create mode 100644 Documentation/hwmon/pm6764tr.rst
+ create mode 100644 drivers/hwmon/pmbus/pm6764tr.c
 
->  1 file changed, 69 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/aspeed2600-pwm-tacho.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/aspeed2600-pwm-tacho.txt b/Documentation/devicetree/bindings/hwmon/aspeed2600-pwm-tacho.txt
-> new file mode 100644
-> index 000000000000..61b11914352f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/aspeed2600-pwm-tacho.txt
-> @@ -0,0 +1,69 @@
-> +ASPEED AST2600 PWM and Fan Tacho controller device driver
-> +
-> +The ASPEED PWM controller can support upto 16 PWM outputs. The ASPEED Fan Tacho
-> +controller can support upto 16 Fan tachometer inputs.
-> +
-> +There can be upto 16 fans supported. Each fan can have one PWM output and
-> +one Fan tach inputs.
-> +
-> +Required properties for pwm-tacho node:
-> +- #address-cells : should be 1.
-> +
-> +- #size-cells : should be 0.
-> +
-> +- #cooling-cells: should be 2.
-> +
-> +- reg : address and length of the register set for the device.
-> +
-> +- pinctrl-names : a pinctrl state named "default" must be defined.
-> +
-> +- pinctrl-0 : phandle referencing pin configuration of the PWM ports.
-> +
-> +- compatible : should be "aspeed,ast2600-pwm-tachometer".
-> +
-> +- clocks : phandle to clock provider with the clock number in the second cell
-> +
-> +- resets : phandle to reset controller with the reset number in the second cell
-> +
-> +fan subnode format:
-> +===================
-> +Under fan subnode there can upto 16 child nodes, with each child node
-> +representing a fan. There are 16 fans each fan can have one PWM port and one
-> +Fan tach inputs.
-> +For PWM port can be configured cooling-levels to create cooling device.
-> +Cooling device could be bound to a thermal zone for the thermal control.
-> +
-> +Required properties for each child node:
-> +- reg : should specify PWM source port.
-> +	integer value in the range 0x00 to 0x0f with 0x00 indicating PWM port 0
-> +	and 0x0f indicating PWM port F.
-> +
-> +- cooling-levels: PWM duty cycle values in a range from 0 to 255
-> +                  which correspond to thermal cooling states.
-> +
-> +- aspeed,fan-tach-ch : should specify the Fan tach input channel.
-> +                integer value in the range 0 through 15, with 0 indicating
-> +		Fan tach channel 0 and 15 indicating Fan tach channel 15.
-> +		Atleast one Fan tach input channel is required.
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index b797db738225..b3ed0047543b 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -144,6 +144,7 @@ Hardware Monitoring Kernel Drivers
+    pc87360
+    pc87427
+    pcf8591
++   pm6764
+    pmbus
+    powr1220
+    pxe1610
+diff --git a/Documentation/hwmon/pm6764tr.rst b/Documentation/hwmon/pm6764tr.rst
+new file mode 100644
+index 000000000000..4681780d3f0d
+--- /dev/null
++++ b/Documentation/hwmon/pm6764tr.rst
+@@ -0,0 +1,32 @@
++.. SPDX-License-Identifier: GPL-2.0-only
++
++Kernel driver pm6764tr
++======================
++
++Supported chips:
++
++  * ST PM6764TR
++
++	Prefix: 'pm6764tr'
++
++	Addresses scanned: -
++
++	Datasheet: http://www.st.com/resource/en/data_brief/pm6764.pdf
++
++Authors:
++	<hsu.yungteng@gmail.com>
++
++Description:
++------------
++
++This driver supports the STMicroelectronics PM6764TR chip. The PM6764TR is a high
++performance digital controller designed to power Intel’s VR12.5 processors and memories.
++
++The device utilizes digital technology to implement all control and power management
++functions to provide maximum flexibility and performance. The NVM is embedded to store
++custom configurations. The PM6764TR device features up to 4-phase programmable operation.
++
++The PM6764TR supports power state transitions featuring VFDE, and programmable DPM
++maintaining the best efficiency over all loading conditions without compromising transient
++response. The device assures fast and independent protection against load overcurrent,
++under/overvoltage and feedback disconnections.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 2daa6ee673f7..0456a2101622 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -13893,6 +13893,13 @@ M:	Logan Gunthorpe <logang@deltatee.com>
+ S:	Maintained
+ F:	drivers/dma/plx_dma.c
+ 
++PM6764TR DRIVER
++M:	Charles Hsu	<hsu.yungteng@gmail.com>
++L:	linux-hwmon@vger.kernel.org
++S:	Maintained
++F:	Documentation/hwmon/pm6764tr.rst
++F:	drivers/hwmon/pmbus/pm6764tr.c
++
+ PM-GRAPH UTILITY
+ M:	"Todd E Brandt" <todd.e.brandt@linux.intel.com>
+ L:	linux-pm@vger.kernel.org
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index a25faf69fce3..9c846facce9f 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -220,6 +220,15 @@ config SENSORS_MP2975
+ 	  This driver can also be built as a module. If so, the module will
+ 	  be called mp2975.
+ 
++config SENSORS_PM6764TR
++	tristate "ST PM6764TR"
++	help
++	  If you say yes here you get hardware monitoring support for ST
++	  PM6764TR.
++
++	  This driver can also be built as a module. If so, the module will
++	  be called pm6764tr.
++
+ config SENSORS_PXE1610
+ 	tristate "Infineon PXE1610"
+ 	help
+diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+index 4c97ad0bd791..31ebdef5d4a6 100644
+--- a/drivers/hwmon/pmbus/Makefile
++++ b/drivers/hwmon/pmbus/Makefile
+@@ -25,6 +25,7 @@ obj-$(CONFIG_SENSORS_MAX31785)	+= max31785.o
+ obj-$(CONFIG_SENSORS_MAX34440)	+= max34440.o
+ obj-$(CONFIG_SENSORS_MAX8688)	+= max8688.o
+ obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
++obj-$(CONFIG_SENSORS_PM6764TR)	+= pm6764tr.o
+ obj-$(CONFIG_SENSORS_PXE1610)	+= pxe1610.o
+ obj-$(CONFIG_SENSORS_TPS40422)	+= tps40422.o
+ obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
+diff --git a/drivers/hwmon/pmbus/pm6764tr.c b/drivers/hwmon/pmbus/pm6764tr.c
+new file mode 100644
+index 000000000000..9531f370d7df
+--- /dev/null
++++ b/drivers/hwmon/pmbus/pm6764tr.c
+@@ -0,0 +1,76 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Hardware monitoring driver for STMicroelectronics digital controller PM6764TR
++ */
++
++#include <linux/err.h>
++#include <linux/i2c.h>
++#include <linux/init.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/pmbus.h>
++#include "pmbus.h"
++
++#define PM6764TR_PMBUS_READ_VOUT	0xD4
++
++static int pm6764tr_read_word_data(struct i2c_client *client, int page, int reg)
++{
++	int ret;
++
++	switch (reg) {
++	case PMBUS_VIRT_READ_VMON:
++		ret = pmbus_read_word_data(client, page, PM6764TR_PMBUS_READ_VOUT);
++		break;
++	default:
++		ret = -ENODATA;
++		break;
++	}
++	return ret;
++}
++
++static struct pmbus_driver_info pm6764tr_info = {
++	.pages = 1,
++	.format[PSC_VOLTAGE_IN] = linear,
++	.format[PSC_VOLTAGE_OUT] = vid,
++	.format[PSC_TEMPERATURE] = linear,
++	.format[PSC_CURRENT_OUT] = linear,
++	.format[PSC_POWER] = linear,
++	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN |  PMBUS_HAVE_PIN |
++		PMBUS_HAVE_IOUT | PMBUS_HAVE_POUT | PMBUS_HAVE_VMON |
++		PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_VOUT |
++		PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP,
++	.read_word_data = pm6764tr_read_word_data,
++};
++
++static int pm6764tr_probe(struct i2c_client *client,
++			  const struct i2c_device_id *id)
++{
++	return pmbus_do_probe(client, id, &pm6764tr_info);
++}
++
++static const struct i2c_device_id pm6764tr_id[] = {
++	{"pm6764tr", 0},
++	{}
++};
++MODULE_DEVICE_TABLE(i2c, pm6764tr_id);
++
++static const struct of_device_id pm6764tr_of_match[] = {
++	{.compatible = "st,pm6764tr"},
++	{}
++};
++
++/* This is the driver that will be inserted */
++static struct i2c_driver pm6764tr_driver = {
++	.driver = {
++		   .name = "pm6764tr",
++		   .of_match_table = of_match_ptr(pm6764tr_of_match),
++		   },
++	.probe_new = pm6764tr_probe,
++	.id_table = pm6764tr_id,
++};
++
++module_i2c_driver(pm6764tr_driver);
++
++MODULE_AUTHOR("Charles Hsu");
++MODULE_DESCRIPTION("PMBus driver for  ST PM6764TR");
++MODULE_LICENSE("GPL");
+-- 
+2.25.1
 
-Already has 'fan-tach-ch' in npcm750-pwm-fan.txt.
-
-> +
-> +- aspeed,target-pwm : Specify the frequency of PWM. The value range from 24 to
-> +		      780000. Default value will be set to 25000.
-> +
-> +- aspeed,pulse-pr : Specify tacho pulse per revolution of the fan. A general
-> +		    parameter of pulse-pr is 2.
-
-Already have 'pulses-per-revolution' property in pwm-fan.txt. Use that.
-
-Really, all these should be in a common fan schema that you reference.
-
-> +
-> +Examples:
-> +
-> +&pwm_tacho {
-> +	status = "okay";
-
-Don't show status in examples.
-
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_pwm0_default &pinctrl_tach0_default>;
-> +
-> +	fan@0 {
-> +		reg = <0x00>;
-> +		aspeed,target-pwm = <25000>;
-> +		cooling-levels = /bits/ 8 <125 151 177 203 229 255>;
-> +		aspeed,fan-tach-ch = /bits/ 8 <0x00>;
-> +		aspeed,pulse-pr = <2>;
-> +	};
-> +};
-> -- 
-> 2.17.1
-> 
