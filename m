@@ -2,91 +2,203 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A347C4361B
-	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Dec 2020 09:05:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F026C2BB48
+	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Dec 2020 09:22:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1847B22225
-	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Dec 2020 09:04:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1C0F12226A
+	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Dec 2020 09:22:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726749AbgLOJE0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 15 Dec 2020 04:04:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48438 "EHLO
+        id S1727689AbgLOJVq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 15 Dec 2020 04:21:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727727AbgLOJEU (ORCPT
+        with ESMTP id S1727815AbgLOJVa (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 15 Dec 2020 04:04:20 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E80C0617A6
-        for <linux-hwmon@vger.kernel.org>; Tue, 15 Dec 2020 01:04:04 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id o11so18636140ote.4
-        for <linux-hwmon@vger.kernel.org>; Tue, 15 Dec 2020 01:04:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=konsulko.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8Os33hzl1I4JrVcBc2NboLIV9AXajTqEGTG/MO5gIIA=;
-        b=JSyKIzas5kymBH6tBxEg4KYgJIS7B1ABlQS0ZgbHcDVUhMtOJOIBkUG8oVUf2xyE38
-         Yi/DwKl/rcy7yjH3AulYbMJTt0+ojd4c4GkFRfUDBUXDhhdGL1N0TDOAvVIxD+4+acjU
-         mONy013pwy8tLKUjRRdsuZz+CRSx1++cmK49I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8Os33hzl1I4JrVcBc2NboLIV9AXajTqEGTG/MO5gIIA=;
-        b=m+awyAMYxCqCiVpsSDuIBPABKGWwS8sx8lbz5bWor1DdGyBIGV7l7Y3F6HsExCVXym
-         0wKzIQFI166ja8dOhWeZj32NEO/jcy4zqC1E6B0iHbwdPfDYDmI7qYX945keqfpn/JJV
-         PRUsCGhqHhpVUWNYDHZC4CV+Tu6BoC7qOrplde8uuaTmp4Zc2XeeSDVveNS4lbFKozlQ
-         AR102Ntc+xEieNm2KtXIcM+ZpFzIy+AMpd/WxBikmZ5RDQFo9PjNhzuafF/G8ZlQ8SGn
-         jl49EhXWR9Re1Y6Y5blqQr0h2hYvQP2XELSLIiwqs6V/9DFMWrcTuu6Kn8zb0mB+pca4
-         VUlg==
-X-Gm-Message-State: AOAM530qkxkelqt+OYKStd1g+CkiwOxA68Y/2Fi/IsLuvkCNhiw7MCKh
-        8OngP2TfAnqTds4KvLvfED4JGffqHiY595tJnGgB9GmiERw=
-X-Google-Smtp-Source: ABdhPJyFYzqWRHlZ726aYfoNePEegTQzd/kmmERgpbYpHGtgjMjXkYZ33v0YYXoHy1iJRlrBAen1+2smr+YM4qBD52o=
-X-Received: by 2002:a9d:7a4b:: with SMTP id z11mr22482636otm.305.1608023044378;
- Tue, 15 Dec 2020 01:04:04 -0800 (PST)
+        Tue, 15 Dec 2020 04:21:30 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53396C06179C
+        for <linux-hwmon@vger.kernel.org>; Tue, 15 Dec 2020 01:20:50 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1kp6Ve-0007Fq-F8; Tue, 15 Dec 2020 10:20:42 +0100
+Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1kp6Ve-00020J-4a; Tue, 15 Dec 2020 10:20:42 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH 2/2] hwmon: pwm-fan: stop using legacy PWM functions and some cleanups
+Date:   Tue, 15 Dec 2020 10:20:31 +0100
+Message-Id: <20201215092031.152243-2-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20201215092031.152243-1-u.kleine-koenig@pengutronix.de>
+References: <20201215092031.152243-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-References: <20201214213044.27252-1-linux@roeck-us.net> <CAM9ZRVs3gBoYYQ+M1qUiLpuFTD0c_vxdNgDTXoXisne-Y8ZwQg@mail.gmail.com>
- <20201215005406.GA232073@roeck-us.net>
-In-Reply-To: <20201215005406.GA232073@roeck-us.net>
-From:   Paul Barker <pbarker@konsulko.com>
-Date:   Tue, 15 Dec 2020 09:03:55 +0000
-Message-ID: <CAM9ZRVvdPTK79m-fRJ=++3=hUy2onApMVP8EQ2PaYcdVuq_irw@mail.gmail.com>
-Subject: Re: [GIT PULL] hwmon updates for v5.11
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-hwmon@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-hwmon@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, 15 Dec 2020 at 00:54, Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Mon, Dec 14, 2020 at 10:06:23PM +0000, Paul Barker wrote:
-> > On Mon, 14 Dec 2020 at 21:32, Guenter Roeck <linux@roeck-us.net> wrote:
-> > >
-> > > Paul Barker (3):
-> > >       dt-bindings: hwmon: pwm-fan: Support multiple fan tachometer inputs
-> >
-> > Should this one go in at this stage? The patches to implement support
-> > for multiple fan tachometer inputs are still outstanding. So the
-> > dt-binding will be left documenting a feature which isn't yet
-> > supported.
-> >
-> I don't see a problem with that, the patch has been in -next for weeks,
-> and I announced that I applied it.
->
-> Is that a formal objection ?
+pwm_apply_state() does what the legacy functions pwm_config() and
+pwm_{en,dis}able() do in a single function call. This simplifies error
+handling and is more efficient for new-style PWM hardware drivers.
 
-No, you know the process better than me, I just wanted to ensure the
-status was clear. If the patch is ok to be included in this state then
-I'm happy.
+Instead of repeatedly querying the PWM framework about the initial PWM
+configuration, cache the settings in driver data.
 
+Also use __set_pwm() in .probe() to have the algorithm calculating the PWM
+state in a single place.
+
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/hwmon/pwm-fan.c | 47 +++++++++++++++++------------------------
+ 1 file changed, 19 insertions(+), 28 deletions(-)
+
+diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
+index ec171f2b684a..4ccad5a87019 100644
+--- a/drivers/hwmon/pwm-fan.c
++++ b/drivers/hwmon/pwm-fan.c
+@@ -25,6 +25,7 @@
+ struct pwm_fan_ctx {
+ 	struct mutex lock;
+ 	struct pwm_device *pwm;
++	struct pwm_state pwm_state;
+ 	struct regulator *reg_en;
+ 
+ 	int irq;
+@@ -73,18 +74,17 @@ static int  __set_pwm(struct pwm_fan_ctx *ctx, unsigned long pwm)
+ {
+ 	unsigned long period;
+ 	int ret = 0;
+-	struct pwm_state state = { };
++	struct pwm_state *state = &ctx->pwm_state;
+ 
+ 	mutex_lock(&ctx->lock);
+ 	if (ctx->pwm_value == pwm)
+ 		goto exit_set_pwm_err;
+ 
+-	pwm_init_state(ctx->pwm, &state);
+-	period = ctx->pwm->args.period;
+-	state.duty_cycle = DIV_ROUND_UP(pwm * (period - 1), MAX_PWM);
+-	state.enabled = pwm ? true : false;
++	period = state->period;
++	state->duty_cycle = DIV_ROUND_UP(pwm * (period - 1), MAX_PWM);
++	state->enabled = pwm ? true : false;
+ 
+-	ret = pwm_apply_state(ctx->pwm, &state);
++	ret = pwm_apply_state(ctx->pwm, state);
+ 	if (!ret)
+ 		ctx->pwm_value = pwm;
+ exit_set_pwm_err:
+@@ -274,7 +274,9 @@ static void pwm_fan_regulator_disable(void *data)
+ static void pwm_fan_pwm_disable(void *__ctx)
+ {
+ 	struct pwm_fan_ctx *ctx = __ctx;
+-	pwm_disable(ctx->pwm);
++
++	ctx->pwm_state.enabled = false;
++	pwm_apply_state(ctx->pwm, &ctx->pwm_state);
+ 	del_timer_sync(&ctx->rpm_timer);
+ }
+ 
+@@ -285,7 +287,6 @@ static int pwm_fan_probe(struct platform_device *pdev)
+ 	struct pwm_fan_ctx *ctx;
+ 	struct device *hwmon;
+ 	int ret;
+-	struct pwm_state state = { };
+ 	u32 ppr = 2;
+ 
+ 	ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
+@@ -324,22 +325,20 @@ static int pwm_fan_probe(struct platform_device *pdev)
+ 
+ 	ctx->pwm_value = MAX_PWM;
+ 
+-	pwm_init_state(ctx->pwm, &state);
++	pwm_init_state(ctx->pwm, &ctx->pwm_state);
++
+ 	/*
+ 	 * __set_pwm assumes that MAX_PWM * (period - 1) fits into an unsigned
+ 	 * long. Check this here to prevent the fan running at a too low
+ 	 * frequency.
+ 	 */
+-	if (state.period > ULONG_MAX / MAX_PWM + 1) {
++	if (ctx->pwm_state.period > ULONG_MAX / MAX_PWM + 1) {
+ 		dev_err(dev, "Configured period too big\n");
+ 		return -EINVAL;
+ 	}
+ 
+ 	/* Set duty cycle to maximum allowed and enable PWM output */
+-	state.duty_cycle = ctx->pwm->args.period - 1;
+-	state.enabled = true;
+-
+-	ret = pwm_apply_state(ctx->pwm, &state);
++	ret = __set_pwm(ctx, MAX_PWM);
+ 	if (ret) {
+ 		dev_err(dev, "Failed to configure PWM: %d\n", ret);
+ 		return ret;
+@@ -399,17 +398,16 @@ static int pwm_fan_probe(struct platform_device *pdev)
+ static int pwm_fan_disable(struct device *dev)
+ {
+ 	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
+-	struct pwm_args args;
+ 	int ret;
+ 
+-	pwm_get_args(ctx->pwm, &args);
+-
+ 	if (ctx->pwm_value) {
+-		ret = pwm_config(ctx->pwm, 0, args.period);
++		/* keep ctx->pwm_state unmodified for pwm_fan_resume() */
++		struct pwm_state state = ctx->pwm_state;
++		state.duty_cycle = 0;
++		state.enabled = false;
++		ret = pwm_apply_state(ctx->pwm, &state);
+ 		if (ret < 0)
+ 			return ret;
+-
+-		pwm_disable(ctx->pwm);
+ 	}
+ 
+ 	if (ctx->reg_en) {
+@@ -437,8 +435,6 @@ static int pwm_fan_suspend(struct device *dev)
+ static int pwm_fan_resume(struct device *dev)
+ {
+ 	struct pwm_fan_ctx *ctx = dev_get_drvdata(dev);
+-	struct pwm_args pargs;
+-	unsigned long duty;
+ 	int ret;
+ 
+ 	if (ctx->reg_en) {
+@@ -452,12 +448,7 @@ static int pwm_fan_resume(struct device *dev)
+ 	if (ctx->pwm_value == 0)
+ 		return 0;
+ 
+-	pwm_get_args(ctx->pwm, &pargs);
+-	duty = DIV_ROUND_UP_ULL(ctx->pwm_value * (pargs.period - 1), MAX_PWM);
+-	ret = pwm_config(ctx->pwm, duty, pargs.period);
+-	if (ret)
+-		return ret;
+-	return pwm_enable(ctx->pwm);
++	return pwm_apply_state(ctx->pwm, &ctx->pwm_state);
+ }
+ #endif
+ 
 -- 
-Paul Barker
-Konsulko Group
+2.29.2
+
