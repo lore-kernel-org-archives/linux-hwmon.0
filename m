@@ -2,93 +2,91 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99BCDC4361B
-	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Dec 2020 00:55:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A347C4361B
+	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Dec 2020 09:05:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 517E3206A5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Dec 2020 00:55:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1847B22225
+	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Dec 2020 09:04:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729093AbgLOAy5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 14 Dec 2020 19:54:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58134 "EHLO
+        id S1726749AbgLOJE0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 15 Dec 2020 04:04:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728056AbgLOAyt (ORCPT
+        with ESMTP id S1727727AbgLOJEU (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 14 Dec 2020 19:54:49 -0500
-Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BC1C061793;
-        Mon, 14 Dec 2020 16:54:09 -0800 (PST)
-Received: by mail-oi1-x242.google.com with SMTP id 15so21459408oix.8;
-        Mon, 14 Dec 2020 16:54:08 -0800 (PST)
+        Tue, 15 Dec 2020 04:04:20 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E80C0617A6
+        for <linux-hwmon@vger.kernel.org>; Tue, 15 Dec 2020 01:04:04 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id o11so18636140ote.4
+        for <linux-hwmon@vger.kernel.org>; Tue, 15 Dec 2020 01:04:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Jgwr0b/sBVKsgL8w068J7d7YYBY9apYQaCRhZY+dA34=;
-        b=tbZPN9GraqPXE92iD9fUl6HVslxYDTCqAWyhFRuUmNRz5r33jAEXW9kY4xzQMrvKPy
-         EdWaimHGMs5JbpmjIqLns0xz1FKTZCtZxX9z5KoDWwtDF41970Ikrhq9ZPpxu0ylw6kG
-         3XKhJKjUQwPoCMZE/pAjyKFXsqw7UbIHC13FU1jk/d0lEnX7hJT1bpDNdtfCAH1H2bCy
-         87yZx/UoUhX8fealQsWjKb0b5AA4SP7OcLUQgBUBQyeRgfAhIV88XoOPza31IPP3cy3B
-         D5aVDHgK6uupVT6Weilcdz9HkgpI4THAB8dpZHi7WxCe3gjBDN6ti4wqhtJp3+1ij0Vi
-         L29Q==
+        d=konsulko.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8Os33hzl1I4JrVcBc2NboLIV9AXajTqEGTG/MO5gIIA=;
+        b=JSyKIzas5kymBH6tBxEg4KYgJIS7B1ABlQS0ZgbHcDVUhMtOJOIBkUG8oVUf2xyE38
+         Yi/DwKl/rcy7yjH3AulYbMJTt0+ojd4c4GkFRfUDBUXDhhdGL1N0TDOAvVIxD+4+acjU
+         mONy013pwy8tLKUjRRdsuZz+CRSx1++cmK49I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Jgwr0b/sBVKsgL8w068J7d7YYBY9apYQaCRhZY+dA34=;
-        b=BSNpuaxR9wTAdivSH7Eb6ftoG6xzvib+G77pPSx1t390iscXRnIPZxtpAi2ZKvBxWI
-         gkG8QkcXAS8F1CZ6XbKQQJliAvl7Zft3Mra/WJ/S6CQlo4Nm+04Vo+3bxjt6JSXP1Afv
-         VpLLVGIE2klUAkzMVBgm11IhlZWf2hBE7plCKGEmnK/1tMoK8m2tdGBs4MaZj10qaMlw
-         EfYl3ArOdGQL9KRl2u4kNKJt3V3vy169lzd997OiHxaoS6M3TJzGgNphC6zJyHpl+r5e
-         7AISgJ8iXxUJJNucE3gN8LOHpfGVHNtNvQ09CInPX+A9WbuP/MAfCelHjIlbtQMDDx81
-         Gpig==
-X-Gm-Message-State: AOAM533aQFifNUzOfjz2SiSabWRVMvFml4zmV9TyyZu0n1E04qK3E/Ax
-        PQtAttiLRh2IH9rrXcBx/SdOFOqzihw=
-X-Google-Smtp-Source: ABdhPJz5svAmooIEUis52Tw9I3iic1Uk7bxUiLFX/g61bnZgBb+YmrWDatE1GqXsovkVZOzQYedbEA==
-X-Received: by 2002:aca:b254:: with SMTP id b81mr19840108oif.42.1607993648336;
-        Mon, 14 Dec 2020 16:54:08 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 100sm25959otm.27.2020.12.14.16.54.07
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 14 Dec 2020 16:54:07 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 14 Dec 2020 16:54:06 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Paul Barker <pbarker@konsulko.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8Os33hzl1I4JrVcBc2NboLIV9AXajTqEGTG/MO5gIIA=;
+        b=m+awyAMYxCqCiVpsSDuIBPABKGWwS8sx8lbz5bWor1DdGyBIGV7l7Y3F6HsExCVXym
+         0wKzIQFI166ja8dOhWeZj32NEO/jcy4zqC1E6B0iHbwdPfDYDmI7qYX945keqfpn/JJV
+         PRUsCGhqHhpVUWNYDHZC4CV+Tu6BoC7qOrplde8uuaTmp4Zc2XeeSDVveNS4lbFKozlQ
+         AR102Ntc+xEieNm2KtXIcM+ZpFzIy+AMpd/WxBikmZ5RDQFo9PjNhzuafF/G8ZlQ8SGn
+         jl49EhXWR9Re1Y6Y5blqQr0h2hYvQP2XELSLIiwqs6V/9DFMWrcTuu6Kn8zb0mB+pca4
+         VUlg==
+X-Gm-Message-State: AOAM530qkxkelqt+OYKStd1g+CkiwOxA68Y/2Fi/IsLuvkCNhiw7MCKh
+        8OngP2TfAnqTds4KvLvfED4JGffqHiY595tJnGgB9GmiERw=
+X-Google-Smtp-Source: ABdhPJyFYzqWRHlZ726aYfoNePEegTQzd/kmmERgpbYpHGtgjMjXkYZ33v0YYXoHy1iJRlrBAen1+2smr+YM4qBD52o=
+X-Received: by 2002:a9d:7a4b:: with SMTP id z11mr22482636otm.305.1608023044378;
+ Tue, 15 Dec 2020 01:04:04 -0800 (PST)
+MIME-Version: 1.0
+References: <20201214213044.27252-1-linux@roeck-us.net> <CAM9ZRVs3gBoYYQ+M1qUiLpuFTD0c_vxdNgDTXoXisne-Y8ZwQg@mail.gmail.com>
+ <20201215005406.GA232073@roeck-us.net>
+In-Reply-To: <20201215005406.GA232073@roeck-us.net>
+From:   Paul Barker <pbarker@konsulko.com>
+Date:   Tue, 15 Dec 2020 09:03:55 +0000
+Message-ID: <CAM9ZRVvdPTK79m-fRJ=++3=hUy2onApMVP8EQ2PaYcdVuq_irw@mail.gmail.com>
+Subject: Re: [GIT PULL] hwmon updates for v5.11
+To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         linux-hwmon@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [GIT PULL] hwmon updates for v5.11
-Message-ID: <20201215005406.GA232073@roeck-us.net>
-References: <20201214213044.27252-1-linux@roeck-us.net>
- <CAM9ZRVs3gBoYYQ+M1qUiLpuFTD0c_vxdNgDTXoXisne-Y8ZwQg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAM9ZRVs3gBoYYQ+M1qUiLpuFTD0c_vxdNgDTXoXisne-Y8ZwQg@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Dec 14, 2020 at 10:06:23PM +0000, Paul Barker wrote:
-> On Mon, 14 Dec 2020 at 21:32, Guenter Roeck <linux@roeck-us.net> wrote:
+On Tue, 15 Dec 2020 at 00:54, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On Mon, Dec 14, 2020 at 10:06:23PM +0000, Paul Barker wrote:
+> > On Mon, 14 Dec 2020 at 21:32, Guenter Roeck <linux@roeck-us.net> wrote:
+> > >
+> > > Paul Barker (3):
+> > >       dt-bindings: hwmon: pwm-fan: Support multiple fan tachometer inputs
 > >
-> > Paul Barker (3):
-> >       dt-bindings: hwmon: pwm-fan: Support multiple fan tachometer inputs
-> 
-> Should this one go in at this stage? The patches to implement support
-> for multiple fan tachometer inputs are still outstanding. So the
-> dt-binding will be left documenting a feature which isn't yet
-> supported.
-> 
-I don't see a problem with that, the patch has been in -next for weeks,
-and I announced that I applied it.
+> > Should this one go in at this stage? The patches to implement support
+> > for multiple fan tachometer inputs are still outstanding. So the
+> > dt-binding will be left documenting a feature which isn't yet
+> > supported.
+> >
+> I don't see a problem with that, the patch has been in -next for weeks,
+> and I announced that I applied it.
+>
+> Is that a formal objection ?
 
-Is that a formal objection ?
+No, you know the process better than me, I just wanted to ensure the
+status was clear. If the patch is ok to be included in this state then
+I'm happy.
 
-Guenter
+-- 
+Paul Barker
+Konsulko Group
