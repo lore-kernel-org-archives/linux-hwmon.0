@@ -2,112 +2,99 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C89F8C2BB9A
-	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Dec 2020 13:30:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3223C4361B
+	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Dec 2020 18:34:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 873132220F
-	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Dec 2020 13:30:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B8ED4225A9
+	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Dec 2020 18:34:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727175AbgLONau (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 15 Dec 2020 08:30:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33218 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727093AbgLONal (ORCPT
+        id S1729618AbgLOSeN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 15 Dec 2020 13:34:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:24609 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731137AbgLOSeM (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 15 Dec 2020 08:30:41 -0500
-Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F31C0617A6
-        for <linux-hwmon@vger.kernel.org>; Tue, 15 Dec 2020 05:30:01 -0800 (PST)
-Received: by mail-oi1-x242.google.com with SMTP id w124so20161406oia.6
-        for <linux-hwmon@vger.kernel.org>; Tue, 15 Dec 2020 05:30:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=konsulko.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Wylm9iahzB85sQo54swV1gzcAf2MyfM2fa6Wh1DtC5Q=;
-        b=Z1Mzh7YynW7F1kcqiCpd5Klq3L93ZS0Fy2g6Nr19gHjlkOq6rxVMK8EwoMwd+3mp1x
-         jidbCuIPZfpbQTc9IBxXAw2mmacKS9FrGhjZ2ctVoigppo8WD2Q+G/8m5jQIHAO7qt8B
-         Cmx3RKjnTzjNNtQG6De5htPy2AV69iQpCmCi4=
+        Tue, 15 Dec 2020 13:34:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1608057165;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=V0mOKUC1c9jIdmBHrE2UTrYyCPIaALN4ciYRI/jsXN4=;
+        b=TzvsO85l2m6SITXAHqTbsA3sztrVTZwuA6QSLnc4s9otpnNjt5wRzGffGm9S96Na1ey/1h
+        FQkcYKmJ1Q9KLfGftUazgYlq17BbiWsxZIK32dfw0fTqXsEo6fmtMLIJm6H0Ze1sKFIHhd
+        RDy4CofcaWX0nNvH1u3tUvd0tJTURSw=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-425-5qLk8qnfN32HMgK7Ztf0fA-1; Tue, 15 Dec 2020 13:32:44 -0500
+X-MC-Unique: 5qLk8qnfN32HMgK7Ztf0fA-1
+Received: by mail-qk1-f198.google.com with SMTP id g26so8136324qkk.13
+        for <linux-hwmon@vger.kernel.org>; Tue, 15 Dec 2020 10:32:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Wylm9iahzB85sQo54swV1gzcAf2MyfM2fa6Wh1DtC5Q=;
-        b=cV8tLSkCChwXMTyljojA8cq4sbq7F34r9P1hrG8DiUwj11QKv/oWdLHsc1G7ZLuWzF
-         27NDKC8vkzJAbnaWgrZ+JV2K/a4CZigg8LjvFPqMjCF1imNggGzuxB6C3U48sol3yPdN
-         BR1VHGpzBVcrK2GgHyzetUZGePK3o8tvAf1GuGl9M0gfD5wAaPLZdRQ9i0aDZP3RDrOr
-         YqtpnWxntJ7Whxi3m+qB4/pnzffXKSjIkVc1PrkgZTIJrbaxeb5gyhSGZc/xoMJ2FJAj
-         mv/tTMXgkYxTvOvBExFUNjMTwrqFrDIfefksw+CTY3Lhesp10Xn2zNe5SUUh8kmfmc9o
-         J+vA==
-X-Gm-Message-State: AOAM532s53LlIh0qNgLHv2hV5CBLQClMVNhRUslvc42qbrCjVE1CF1cs
-        LiWUQESScFijEVOJfwFMOHxZeEIghk5MBkMtl14hkw==
-X-Google-Smtp-Source: ABdhPJxo1xWSIVDrc64/AyUTXU4nduTXm5NBLuT/Yhv8n+UbW+r67wC9ARsRn+RkJZenMsC6UWg7aVm4Nw5yaxTqMhk=
-X-Received: by 2002:aca:f3d6:: with SMTP id r205mr21442279oih.152.1608039000558;
- Tue, 15 Dec 2020 05:30:00 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=V0mOKUC1c9jIdmBHrE2UTrYyCPIaALN4ciYRI/jsXN4=;
+        b=szEnT69tYa0/+Jp93wPzSpW/Rm3J1wayu1XMDinKftT71+wkqtZBbieuht/Q5ufTWi
+         H0GfKIzO3M9do042CAd/Clm8EU7Gk9zzqr/mjjCiwkUUPdlRBQlWIc0CboomfOsJ24cH
+         GlibnlwPzvohBgGOyvhe+wusVA+J8WzuR48zvYat6CfVCk/hRRmRA3i3Hv72j+0SctcY
+         mfgRBSfgWvpUqkujbT/ksANH128NZyhY2aa4zPCrYvw9sUfshLJslTaUWsyF04IYt0/w
+         JNtRRKqDayPhbGKNrvCkb++34kAS1SS9RulbvXmfEzNGviMN5K+oDEFcRdzJKgbdJSfN
+         F5LQ==
+X-Gm-Message-State: AOAM531lW35cp9g5OYMuddLBaJ3smbtH0dDtiznyc2rwLFtxNJr8/+Ve
+        J5QVIrGHJlxGRulK6pYoMJts+lAgMBReQN6gZiRlRg13kfaB3gFIBjGZd/pGfBrT9UfnmaHlbzt
+        Nm1kEumNtStl+PaJptglzfU4=
+X-Received: by 2002:a37:a309:: with SMTP id m9mr39408174qke.477.1608057163626;
+        Tue, 15 Dec 2020 10:32:43 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyc5XN+2gohiXP7OSbNvjdyFmfV9/NJ44oCCK6YQmcFB2K7lGIoz9MSF/0FEVZdBB17AZAOCQ==
+X-Received: by 2002:a37:a309:: with SMTP id m9mr39408149qke.477.1608057163421;
+        Tue, 15 Dec 2020 10:32:43 -0800 (PST)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id 6sm17779099qko.3.2020.12.15.10.32.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Dec 2020 10:32:42 -0800 (PST)
+From:   trix@redhat.com
+To:     jdelvare@suse.com, linux@roeck-us.net
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] hwmon: remove h from printk format specifier
+Date:   Tue, 15 Dec 2020 10:32:37 -0800
+Message-Id: <20201215183237.2071770-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20201215092031.152243-1-u.kleine-koenig@pengutronix.de>
- <CAM9ZRVt1wRUuGSniDvS2PME=O-Y3YtVHgTh27qn5Dkj_kUc3AQ@mail.gmail.com> <20201215125604.iygkycrlxmkq5kzx@pengutronix.de>
-In-Reply-To: <20201215125604.iygkycrlxmkq5kzx@pengutronix.de>
-From:   Paul Barker <pbarker@konsulko.com>
-Date:   Tue, 15 Dec 2020 13:29:49 +0000
-Message-ID: <CAM9ZRVuq8YgbuN1fCNaft_RaEu88V0SGYYxy7EHxGE1OFkoy2Q@mail.gmail.com>
-Subject: Re: [PATCH 1/2] hwmon: pwm-fan: Ensure that calculation doesn't
- discard big period values
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     linux-hwmon@vger.kernel.org, linux-pwm@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        kernel@pengutronix.de, Lee Jones <lee.jones@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, 15 Dec 2020 at 12:56, Uwe Kleine-K=C3=B6nig
-<u.kleine-koenig@pengutronix.de> wrote:
->
-> On Tue, Dec 15, 2020 at 11:29:39AM +0000, Paul Barker wrote:
-> > On Tue, 15 Dec 2020 at 09:23, Uwe Kleine-K=C3=B6nig
-> > <u.kleine-koenig@pengutronix.de> wrote:
-> > >
-> > > With MAX_PWM being defined to 255 the code
-> > >
-> > >         unsigned long period;
-> > >         ...
-> > >         period =3D ctx->pwm->args.period;
-> > >         state.duty_cycle =3D DIV_ROUND_UP(pwm * (period - 1), MAX_PWM=
-);
-> >
-> > Reviewing this I noticed that in pwm_fan_resume() we use
-> > DIV_ROUND_UP_ULL for what looks like essentially the same calculation.
->
-> After my second patch this isn't true any more. With it applied
-> __set_pwm is the only place in the driver that calculates this stuff.
->
-> > Could we just switch this line to DIV_ROUND_UP_ULL instead?
->
-> Yes that would work, but actually I don't expect someone specifiying a
-> period big enough to justify the additional overhead of a 64 bit
-> division.
+From: Tom Rix <trix@redhat.com>
 
-So ULONG_MAX / (MAX_PWM + 1) is 16.7 million on 32-bit platforms. As
-the period is in nanoseconds (if I understand correctly), this would
-allow a period of up to 16.7ms and so a minimum frequency of around
-60Hz.
+See Documentation/core-api/printk-formats.rst.
+h should no longer be used in the format specifier for printk.
 
-That does seem fairly reasonable to me but it's probably worth making
-a note of these limits in the commit message for future reference.
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/hwmon/smsc47m1.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks,
+diff --git a/drivers/hwmon/smsc47m1.c b/drivers/hwmon/smsc47m1.c
+index b637836b58a1..37531b5c8254 100644
+--- a/drivers/hwmon/smsc47m1.c
++++ b/drivers/hwmon/smsc47m1.c
+@@ -682,7 +682,7 @@ static int __init smsc47m1_handle_resources(unsigned short address,
+ 			/* Request the resources */
+ 			if (!devm_request_region(dev, start, len, DRVNAME)) {
+ 				dev_err(dev,
+-					"Region 0x%hx-0x%hx already in use!\n",
++					"Region 0x%x-0x%x already in use!\n",
+ 					start, start + len);
+ 				return -EBUSY;
+ 			}
+-- 
+2.27.0
 
---=20
-Paul Barker
-Konsulko Group
