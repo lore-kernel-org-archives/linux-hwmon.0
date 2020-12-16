@@ -2,76 +2,79 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41684C2BBCA
-	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Dec 2020 13:47:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5F06C4361B
+	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Dec 2020 13:49:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E1DCB233CE
-	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Dec 2020 13:47:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 64DFC2255F
+	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Dec 2020 13:49:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726350AbgLPNr0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 16 Dec 2020 08:47:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33630 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725947AbgLPNrZ (ORCPT
+        id S1726364AbgLPNss (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 16 Dec 2020 08:48:48 -0500
+Received: from mail-oi1-f171.google.com ([209.85.167.171]:38977 "EHLO
+        mail-oi1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726246AbgLPNsr (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 16 Dec 2020 08:47:25 -0500
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C5A7C0617A6
-        for <linux-hwmon@vger.kernel.org>; Wed, 16 Dec 2020 05:46:45 -0800 (PST)
-Received: from ramsan.of.borg ([84.195.186.194])
-        by xavier.telenet-ops.be with bizsmtp
-        id 51mj2400S4C55Sk011mjbC; Wed, 16 Dec 2020 14:46:44 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1kpX8d-00BB86-MB; Wed, 16 Dec 2020 14:46:43 +0100
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1kpX8c-005YG7-Pf; Wed, 16 Dec 2020 14:46:42 +0100
+        Wed, 16 Dec 2020 08:48:47 -0500
+Received: by mail-oi1-f171.google.com with SMTP id w124so24392832oia.6;
+        Wed, 16 Dec 2020 05:48:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1aJt+uK8IXa2MEy4a+4D7ocSuQCiL0op/j6Lfuqhewk=;
+        b=NytQClV7hktI0RARjJBwkXe00FZAq74jVSXEgZZiRmlpxCRuOTxxrUzokTd6g6g5AU
+         KKB0ThMICUVTWHsZOPhkI34vDOvsTXIAekarp9HKXUI/32dTqrBtW9vcvj6XZFlmyS7c
+         8d+nnOAzMTvwq7+Gw2JJnvr/Tst0dxtjS7HJhkfAXEJ5qSY44+kNHMmPd68BFhdW4xq5
+         AvJiQgJ0ieY1s+e64MNbNV1xw17WQ0vLEG9m2dmobj72RfJxvM2YlpoisfKmJjZNj9qe
+         6c+nZM3OFbAg93vfh/f/BXNltRKXdocLmwcuv8H7vvKLmwIbJFo/Lgn6ks6FdbrU6oEo
+         55vg==
+X-Gm-Message-State: AOAM531gPfrTz9RBz6Zz5MA9L55qYv+mWo+XiqUxNnzjcJohGLpZfODy
+        3DK1/UofIGVmjD4k3aEzOwEJanTBjQ61vX93FYU=
+X-Google-Smtp-Source: ABdhPJw/4S1xC9TWpBiJmWLzeo4io/CgmzlZZ9pFLpIoKY81x2UCCDYGc+cabQ0ItvM8vFMkf2hIFmtXkzDVSc2RNgA=
+X-Received: by 2002:aca:ec09:: with SMTP id k9mr1960776oih.153.1608126487037;
+ Wed, 16 Dec 2020 05:48:07 -0800 (PST)
+MIME-Version: 1.0
+References: <20201216134626.1323224-1-geert@linux-m68k.org>
+In-Reply-To: <20201216134626.1323224-1-geert@linux-m68k.org>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 16 Dec 2020 14:47:55 +0100
+Message-ID: <CAMuHMdUR7d9-CqnPCm77UAeKVQOoR4RbOed1BZJqScPF4NMU+Q@mail.gmail.com>
+Subject: Re: [PATCH 1/3] ARM: uncompress: Fix dbgadtb size parameter name
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>, Kun Yi <kunyi@google.com>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [PATCH] hwmon: SENSORS_SBTSI should depend on X86
-Date:   Wed, 16 Dec 2020 14:46:41 +0100
-Message-Id: <20201216134641.1323288-1-geert@linux-m68k.org>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Cc:     linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linus Walleij <linus.walleij@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The AMD SB Temperature Sensor Interface (SB-TSI) is only present on AMD
-X86 SoCs.  Hence add a dependency on X86, to prevent asking the user
-about this driver when configuring a kernel without AMD X86 platform
-support.
+On Wed, Dec 16, 2020 at 2:46 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> From: Geert Uytterhoeven <geert+renesas@glider.be>
+>
+> The dbgadtb macro is passed the size of the appended DTB, not the end
+> address.
+>
+> Fixes: c03e41470e901123 ("ARM: 9010/1: uncompress: Print the location of appended DTB")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Fixes: e7bb1a2ab8c4b156 ("hwmon: (sbtsi) Add basic support for SB-TSI sensors")
-Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
----
- drivers/hwmon/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+Please ignore. I screwed up some scripting. Sorry for the mess.
 
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 1ecf697d8d99b70c..63d28f98108d4bb5 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -1536,6 +1536,7 @@ config SENSORS_SL28CPLD
- config SENSORS_SBTSI
- 	tristate "Emulated SB-TSI temperature sensor"
- 	depends on I2C
-+	depends on X86 || COMPILE_TEST
- 	help
- 	  If you say yes here you get support for emulated temperature
- 	  sensors on AMD SoCs with SB-TSI interface connected to a BMC device.
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.25.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
