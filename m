@@ -2,61 +2,88 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D409AC3526A
-	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Dec 2020 01:02:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E015DC4361B
+	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Dec 2020 13:47:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A233523A03
-	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Dec 2020 01:02:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9CF002255F
+	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Dec 2020 13:47:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726632AbgLPBBz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 15 Dec 2020 20:01:55 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51026 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726660AbgLPBBZ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 15 Dec 2020 20:01:25 -0500
-Subject: Re: [GIT PULL] hwmon updates for v5.11
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608080406;
-        bh=zN+1kJBwJ1A140GJkDykYX7m3jTzRgzeADHx7HPe5Hg=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=jA6Mguo5RBHViJ2JoHSwlXgBtq3AVP7iI1fjpjlUTGbuYQK9E9hGLWaH3ia3+5i5d
-         82bygSIGuM7ThJBxeg5D6TbCGkaQ25K3etz3z7v2ayb+ujIA5byxkMHs7jhCnzYXd7
-         2Grpvt1KkyFo5zILiWUj6mgaU7YLlUgq3fPb3XT5a1C61zY2KhtPPbDCwNoyid6Ogo
-         sCOpWHkvmA/KgAUJeK8Kz06DWg5cjoNYv9TWIO7LcDV+3Xol9RnKK4XB+86nohh4qE
-         3CHWJ1BuVcg/4HJPdQ1gkx0kVtIoEjJUGMhj3HgGRyJAku7N/d4u2NRT7nsEtNKHYu
-         6TXhU+4l6Yy8Q==
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20201214213044.27252-1-linux@roeck-us.net>
-References: <20201214213044.27252-1-linux@roeck-us.net>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20201214213044.27252-1-linux@roeck-us.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.11
-X-PR-Tracked-Commit-Id: 1a033769a4fe9a86ee791fd553b6a996dd76e026
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 0f97458173a23c8f218f6041767d0a145a13abe6
-Message-Id: <160808040643.29502.7266565145835614289.pr-tracker-bot@kernel.org>
-Date:   Wed, 16 Dec 2020 01:00:06 +0000
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+        id S1726345AbgLPNrL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 16 Dec 2020 08:47:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33590 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725947AbgLPNrK (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 16 Dec 2020 08:47:10 -0500
+Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E36C06179C
+        for <linux-hwmon@vger.kernel.org>; Wed, 16 Dec 2020 05:46:29 -0800 (PST)
+Received: from ramsan.of.borg ([84.195.186.194])
+        by baptiste.telenet-ops.be with bizsmtp
+        id 51mU2400A4C55Sk011mUC3; Wed, 16 Dec 2020 14:46:28 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1kpX8O-00BB80-2W; Wed, 16 Dec 2020 14:46:28 +0100
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1kpX8N-005YF9-2Q; Wed, 16 Dec 2020 14:46:27 +0100
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, Kun Yi <kunyi@google.com>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH 1/3] ARM: uncompress: Fix dbgadtb size parameter name
+Date:   Wed, 16 Dec 2020 14:46:22 +0100
+Message-Id: <20201216134626.1323224-1-geert@linux-m68k.org>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The pull request you sent on Mon, 14 Dec 2020 13:30:44 -0800:
+From: Geert Uytterhoeven <geert+renesas@glider.be>
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.11
+The dbgadtb macro is passed the size of the appended DTB, not the end
+address.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/0f97458173a23c8f218f6041767d0a145a13abe6
+Fixes: c03e41470e901123 ("ARM: 9010/1: uncompress: Print the location of appended DTB")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ arch/arm/boot/compressed/head.S | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thank you!
-
+diff --git a/arch/arm/boot/compressed/head.S b/arch/arm/boot/compressed/head.S
+index 87d6be9340febdc8..835ce64f1674c9a2 100644
+--- a/arch/arm/boot/compressed/head.S
++++ b/arch/arm/boot/compressed/head.S
+@@ -116,7 +116,7 @@
+ 		/*
+ 		 * Debug print of the final appended DTB location
+ 		 */
+-		.macro dbgadtb, begin, end
++		.macro dbgadtb, begin, size
+ #ifdef DEBUG
+ 		kputc   #'D'
+ 		kputc   #'T'
+@@ -129,7 +129,7 @@
+ 		kputc	#'('
+ 		kputc	#'0'
+ 		kputc	#'x'
+-		kphex	\end, 8		/* End of appended DTB */
++		kphex	\size, 8	/* Size of appended DTB */
+ 		kputc	#')'
+ 		kputc	#'\n'
+ #endif
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.25.1
+
