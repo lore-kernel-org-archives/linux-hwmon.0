@@ -2,204 +2,671 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66B2EC4361B
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Dec 2020 14:50:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 190DDC0018C
+	for <linux-hwmon@archiver.kernel.org>; Sat, 19 Dec 2020 19:12:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 31ACB23A9A
-	for <linux-hwmon@archiver.kernel.org>; Fri, 18 Dec 2020 14:50:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C98F82395C
+	for <linux-hwmon@archiver.kernel.org>; Sat, 19 Dec 2020 19:12:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726567AbgLROu6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 18 Dec 2020 09:50:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35056 "EHLO
+        id S1727312AbgLSTMb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 19 Dec 2020 14:12:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726139AbgLROu5 (ORCPT
+        with ESMTP id S1727309AbgLSTM2 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 18 Dec 2020 09:50:57 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C563DC0617A7;
-        Fri, 18 Dec 2020 06:50:16 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id 15so3026568oix.8;
-        Fri, 18 Dec 2020 06:50:16 -0800 (PST)
+        Sat, 19 Dec 2020 14:12:28 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CECCAC061285
+        for <linux-hwmon@vger.kernel.org>; Sat, 19 Dec 2020 11:11:31 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id y24so5090266edt.10
+        for <linux-hwmon@vger.kernel.org>; Sat, 19 Dec 2020 11:11:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=PDhh2QYxhqf/NjkdLJAa1X6Anzc6tIJP/VpTb7TEtrc=;
-        b=B5oFWXOqrmW3a8kinnktYYuRy0yuWBVMFXX6hzCF/A0q5JYK0gKniKmqI/PCFHG/DF
-         SjrWM658GI5kUJOVWgnGHW8N2bikE0553xXIn/rJoxxGy7Wk1FZlJNUfKBz5ulxK5ncL
-         4i2xjv20K3lVc28SxYqA413qzBLsUs70HGiB0SXIzTy5ZW7eNKUYvm2B+4+bhmVl6gj6
-         z4A3p7v63ZbwwHMBYUJLFF6z+0Wvai5xTpytuLOi7j5DxHOPFOzPsXmOYEa72rhGI/X8
-         UYVrXl1hsZuTTQcAV3fQOao7dCIDj6JCrALVyYqfT9H0efLyp+oW7lXg8OUg46nyZwGr
-         2K7w==
+        d=sartura-hr.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=s7hO3Gp8tJyHmhIuRXQ3RM2n0ZDtWWcfg2Jl7QCBQi8=;
+        b=uNvkmqd6DQGcsGK/IU6R7EiBlhAM2mZanB+UhHwAZ1FGPMroFqM/zjQN5sVUrRd6Su
+         xMQF2PdjyMeygeNgD+CAe2PnZ1f2ijbIoNcy+/AICmd4/ixtA2xURBPLDNAuGwNv9dVw
+         dWzmqYG7rPoaC1FSnAV121nalKzLzdmKYItgY+FRQbrJh0AB0quveTH7zusciAQL9NJu
+         d+Y1VaxY3L3n+2kDFwFlgZpWpkyNdu1SQbh3AeaIqvMNQvn93gZuaCEu0ZDEayKBNIyQ
+         vQdwrJZPFrutu8yrLn9tqBzc7sWqifb/tOjYTq2yOB5pWHbKrD2Js3hFuW9+oUwBly4P
+         fnLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=PDhh2QYxhqf/NjkdLJAa1X6Anzc6tIJP/VpTb7TEtrc=;
-        b=pG1pY/mQCYVOr7mA78HF6Imhfe3YQIE6d4/KYWjSYeW4W9+BZfKNvaAEifzMAtdqOM
-         WWJ/bO4bwRca6nQXWmM1EAe57o7rTm6wrINXMUbsvdTNmgcn3xBNZQ19h5/2n8hpsGO7
-         rjUY7LA7Dm4k+jsV70X99WSw0IwhhF6eo+mAtnRuShEtOFqoYJNd+qLt4w8brFYRryfA
-         6mKMPkdcReV3d5ryP+ZIm4I0FnX02EoxQUAq4GmvVcU46Blq6eOb9QAmqivTuKYdgoaq
-         k2Gw/WghKmkqbW5Mwe4mu+xPNXqsdvj1Cxa/Hu8LE3K6ypSDj1nzvm+GnCUU28mf6sC2
-         ZH1Q==
-X-Gm-Message-State: AOAM531nDNiSMocu+1xsiW9ktUjG20PWZ39C0owZvuJ5CQ4lXGxajODi
-        sjUINXJwTkTuCrlDFzwoxLxBsbA83NM=
-X-Google-Smtp-Source: ABdhPJwSCfNLbSznicVtf6AY+lJSTORoGEfuFwwrZksbjsBw1aKEXT7BjTctlRm2qpWTCzO9AWXXog==
-X-Received: by 2002:aca:5a42:: with SMTP id o63mr2835832oib.69.1608303016265;
-        Fri, 18 Dec 2020 06:50:16 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c12sm1037271oig.35.2020.12.18.06.50.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Dec 2020 06:50:15 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH 2/3] hwmon: add Texas Instruments TPS23861 driver
-To:     Robert Marko <robert.marko@sartura.hr>, jdelvare@suse.com,
-        robh+dt@kernel.org, linux-hwmon@vger.kernel.org,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=s7hO3Gp8tJyHmhIuRXQ3RM2n0ZDtWWcfg2Jl7QCBQi8=;
+        b=Cy1VaZx3nj0MsWGfxujxYiLUdu4W4T2jaQRoQRiyy25o1/qXd3xruWletewN5OGP9E
+         M9UM9zasv8qDVsJFl7r5G+EPycexlMhX4kT/qSCj5KuId3pMHRDb7l1mIoEMS4+oSTLe
+         Fn0Ws8L4JnFd6NJ1x1+guks+WZZLvrCBnN2+LRdzlxwaKi/AG/hMU25p2n+Jd91UqyMz
+         WD0Xb43VeAvqjFMBSIuroAh8HKS5IAcqvtV3etvXvB+mhbNFTpQ1e+N2R4VhXlNzHNUi
+         Vfqlz8ZJo6osItKAeHxp8thALXAx83e+61+qyZ2/1dc+xd6ubjn4kU6+VXpiUQ374M/c
+         7Aew==
+X-Gm-Message-State: AOAM533pkCOvFM4WRmE1nrxYl0R8HsJA4fCcX8mIu7AkqPnvEPcVoh5N
+        U2XrxB/A9KoLx6tf1agva2Apvw==
+X-Google-Smtp-Source: ABdhPJy+m59OF7qK9x+W3UTVSEifZDoTbWIgZqwYmDK4g96i3KNCrKdFeYRLGLgiPhRii0B/rm6maQ==
+X-Received: by 2002:a50:9991:: with SMTP id m17mr9892263edb.48.1608405090427;
+        Sat, 19 Dec 2020 11:11:30 -0800 (PST)
+Received: from localhost.localdomain ([88.207.4.44])
+        by smtp.googlemail.com with ESMTPSA id o10sm7081955eju.89.2020.12.19.11.11.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Dec 2020 11:11:29 -0800 (PST)
+From:   Robert Marko <robert.marko@sartura.hr>
+To:     jdelvare@suse.com, robh+dt@kernel.org, linux-hwmon@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Luka Perkov <luka.perkov@sartura.hr>
-References: <20201218130329.258254-1-robert.marko@sartura.hr>
- <20201218130329.258254-2-robert.marko@sartura.hr>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <9dd93c41-aa11-ebfb-7f72-0ee188268976@roeck-us.net>
-Date:   Fri, 18 Dec 2020 06:50:14 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+Cc:     Robert Marko <robert.marko@sartura.hr>,
+        Luka Perkov <luka.perkov@sartura.hr>
+Subject: [PATCH v2 2/3] hwmon: add Texas Instruments TPS23861 driver
+Date:   Sat, 19 Dec 2020 20:11:20 +0100
+Message-Id: <20201219191121.85142-2-robert.marko@sartura.hr>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20201219191121.85142-1-robert.marko@sartura.hr>
+References: <20201219191121.85142-1-robert.marko@sartura.hr>
 MIME-Version: 1.0
-In-Reply-To: <20201218130329.258254-2-robert.marko@sartura.hr>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 12/18/20 5:03 AM, Robert Marko wrote:
-> Add basic monitoring support as well as port on/off control for Texas
-> Instruments TPS23861 PoE PSE IC.
-> 
-> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-> Cc: Luka Perkov <luka.perkov@sartura.hr>
-> ---
->  drivers/hwmon/Kconfig    |  11 ++
->  drivers/hwmon/Makefile   |   1 +
->  drivers/hwmon/tps23861.c | 398 +++++++++++++++++++++++++++++++++++++++
->  3 files changed, 410 insertions(+)
->  create mode 100644 drivers/hwmon/tps23861.c
-> 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index a850e4f0e0bd..3368ecfa7a9c 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1102,6 +1102,17 @@ config SENSORS_TC654
->  	  This driver can also be built as a module. If so, the module
->  	  will be called tc654.
->  
-> +config SENSORS_TPS23861
-> +	tristate "Texas Instruments TPS23861 PoE PSE"
-> +	depends on I2C
-> +	select REGMAP_I2C
-> +	help
-> +	  If you say yes here you get support for Texas Instruments
-> +	  TPS23861 802.3at PoE PSE chips.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called tps23861.
-> +
->  config SENSORS_MENF21BMC_HWMON
->  	tristate "MEN 14F021P00 BMC Hardware Monitoring"
->  	depends on MFD_MENF21BMC
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index 9db2903b61e5..7493e9d5dc43 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -141,6 +141,7 @@ obj-$(CONFIG_SENSORS_MAX31790)	+= max31790.o
->  obj-$(CONFIG_SENSORS_MC13783_ADC)+= mc13783-adc.o
->  obj-$(CONFIG_SENSORS_MCP3021)	+= mcp3021.o
->  obj-$(CONFIG_SENSORS_TC654)	+= tc654.o
-> +obj-$(CONFIG_SENSORS_TPS23861)	+= tps23861.o
->  obj-$(CONFIG_SENSORS_MLXREG_FAN) += mlxreg-fan.o
->  obj-$(CONFIG_SENSORS_MENF21BMC_HWMON) += menf21bmc_hwmon.o
->  obj-$(CONFIG_SENSORS_MR75203)	+= mr75203.o
-> diff --git a/drivers/hwmon/tps23861.c b/drivers/hwmon/tps23861.c
-> new file mode 100644
-> index 000000000000..e8b614267084
-> --- /dev/null
-> +++ b/drivers/hwmon/tps23861.c
-> @@ -0,0 +1,398 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Driver for the TI TPS23861 PoE PSE.
-> + *
-> + * Author: Robert Marko <robert.marko@sartura.hr>
-> + */
-> +
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/hwmon-sysfs.h>
-> +#include <linux/i2c.h>
-> +#include <linux/regmap.h>
-> +#include <linux/bitfield.h>
-> +#include <linux/delay.h>
+Add basic monitoring support as well as port on/off control for Texas
+Instruments TPS23861 PoE PSE IC.
 
-Alphabetic include file order, please.
+Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+Cc: Luka Perkov <luka.perkov@sartura.hr>
+---
+Changes in v2:
+* Convert to devm_hwmon_device_register_with_info()
+* Change license
 
-[ ... ]
+ drivers/hwmon/Kconfig    |  11 +
+ drivers/hwmon/Makefile   |   1 +
+ drivers/hwmon/tps23861.c | 538 +++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 550 insertions(+)
+ create mode 100644 drivers/hwmon/tps23861.c
 
-> +	hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
-> +							   data, tps23861_groups);
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index a850e4f0e0bd..3368ecfa7a9c 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -1102,6 +1102,17 @@ config SENSORS_TC654
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called tc654.
+ 
++config SENSORS_TPS23861
++	tristate "Texas Instruments TPS23861 PoE PSE"
++	depends on I2C
++	select REGMAP_I2C
++	help
++	  If you say yes here you get support for Texas Instruments
++	  TPS23861 802.3at PoE PSE chips.
++
++	  This driver can also be built as a module. If so, the module
++	  will be called tps23861.
++
+ config SENSORS_MENF21BMC_HWMON
+ 	tristate "MEN 14F021P00 BMC Hardware Monitoring"
+ 	depends on MFD_MENF21BMC
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index 9db2903b61e5..7493e9d5dc43 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -141,6 +141,7 @@ obj-$(CONFIG_SENSORS_MAX31790)	+= max31790.o
+ obj-$(CONFIG_SENSORS_MC13783_ADC)+= mc13783-adc.o
+ obj-$(CONFIG_SENSORS_MCP3021)	+= mcp3021.o
+ obj-$(CONFIG_SENSORS_TC654)	+= tc654.o
++obj-$(CONFIG_SENSORS_TPS23861)	+= tps23861.o
+ obj-$(CONFIG_SENSORS_MLXREG_FAN) += mlxreg-fan.o
+ obj-$(CONFIG_SENSORS_MENF21BMC_HWMON) += menf21bmc_hwmon.o
+ obj-$(CONFIG_SENSORS_MR75203)	+= mr75203.o
+diff --git a/drivers/hwmon/tps23861.c b/drivers/hwmon/tps23861.c
+new file mode 100644
+index 000000000000..2bb804ccdc8e
+--- /dev/null
++++ b/drivers/hwmon/tps23861.c
+@@ -0,0 +1,538 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (c) 2020 Sartura Ltd.
++ *
++ * Driver for the TI TPS23861 PoE PSE.
++ *
++ * Author: Robert Marko <robert.marko@sartura.hr>
++ */
++
++#include <linux/bitfield.h>
++#include <linux/delay.h>
++#include <linux/hwmon-sysfs.h>
++#include <linux/hwmon.h>
++#include <linux/i2c.h>
++#include <linux/module.h>
++#include <linux/of_device.h>
++#include <linux/regmap.h>
++
++#define TEMPERATURE			0x2c
++#define INPUT_VOLTAGE_LSB		0x2e
++#define INPUT_VOLTAGE_MSB		0x2f
++#define PORT_1_CURRENT_LSB		0x30
++#define PORT_1_CURRENT_MSB		0x31
++#define PORT_1_VOLTAGE_LSB		0x32
++#define PORT_1_VOLTAGE_MSB		0x33
++#define PORT_2_CURRENT_LSB		0x34
++#define PORT_2_CURRENT_MSB		0x35
++#define PORT_2_VOLTAGE_LSB		0x36
++#define PORT_2_VOLTAGE_MSB		0x37
++#define PORT_3_CURRENT_LSB		0x38
++#define PORT_3_CURRENT_MSB		0x39
++#define PORT_3_VOLTAGE_LSB		0x3a
++#define PORT_3_VOLTAGE_MSB		0x3b
++#define PORT_4_CURRENT_LSB		0x3c
++#define PORT_4_CURRENT_MSB		0x3d
++#define PORT_4_VOLTAGE_LSB		0x3e
++#define PORT_4_VOLTAGE_MSB		0x3f
++#define PORT_N_CURRENT_LSB_OFFSET	0x04
++#define PORT_N_VOLTAGE_LSB_OFFSET	0x04
++#define VOLTAGE_CURRENT_MASK		GENMASK(13, 0)
++#define PORT_1_STATUS			0x0c
++#define PORT_2_STATUS			0x0d
++#define PORT_3_STATUS			0x0e
++#define PORT_4_STATUS			0x0f
++#define PORT_STATUS_CLASS_MASK		GENMASK(7, 4)
++#define PORT_STATUS_DETECT_MASK		GENMASK(3, 0)
++#define PORT_CLASS_UNKNOWN		0
++#define PORT_CLASS_1			1
++#define PORT_CLASS_2			2
++#define PORT_CLASS_3			3
++#define PORT_CLASS_4			4
++#define PORT_CLASS_RESERVED		5
++#define PORT_CLASS_0			6
++#define PORT_CLASS_OVERCURRENT		7
++#define PORT_CLASS_MISMATCH		8
++#define PORT_DETECT_UNKNOWN		0
++#define PORT_DETECT_SHORT		1
++#define PORT_DETECT_RESERVED		2
++#define PORT_DETECT_RESISTANCE_LOW	3
++#define PORT_DETECT_RESISTANCE_OK	4
++#define PORT_DETECT_RESISTANCE_HIGH	5
++#define PORT_DETECT_OPEN_CIRCUIT	6
++#define PORT_DETECT_RESERVED_2		7
++#define PORT_DETECT_MOSFET_FAULT	8
++#define PORT_DETECT_LEGACY		9
++/* Measurment beyond clamp voltage */
++#define PORT_DETECT_CAPACITANCE_INVALID_BEYOND	10
++/* Insufficient voltage delta */
++#define PORT_DETECT_CAPACITANCE_INVALID_DELTA	11
++#define PORT_DETECT_CAPACITANCE_OUT_OF_RANGE	12
++#define POE_PLUS				0x40
++
++#define DETECT_CLASS_RESTART		0x18
++#define POWER_ENABLE			0x19
++
++#define TEMPERATURE_LSB			652 /* 0.652 degrees Celsius */
++#define VOLTAGE_LSB			3662 /* 3.662 mV */
++#define SHUNT_RESISTOR_DEFAULT		255000 /* 255 mOhm */
++#define CURRENT_LSB_255			62260 /* 62.260 uA */
++#define CURRENT_LSB_250			61039 /* 61.039 uA */
++
++struct tps23861_data {
++	struct regmap *regmap;
++	u32 shunt_resistor;
++};
++
++static struct regmap_config tps23861_regmap_config = {
++	.reg_bits = 8,
++	.val_bits = 8,
++};
++
++static int tps23861_read_temp(struct tps23861_data *data, long *val)
++{
++	unsigned int regval;
++	int err;
++
++	err = regmap_read(data->regmap, TEMPERATURE, &regval);
++	if (err < 0)
++		return err;
++
++	*val = (regval * TEMPERATURE_LSB) - 20000;
++
++	return 0;
++}
++
++static int tps23861_read_voltage(struct tps23861_data *data, int channel,
++				 long *val)
++{
++	unsigned int regval;
++	int err;
++
++	if (channel < 4) {
++		err = regmap_bulk_read(data->regmap,
++				       PORT_1_VOLTAGE_LSB + channel * PORT_N_VOLTAGE_LSB_OFFSET,
++				       &regval, 2);
++	} else {
++		err = regmap_bulk_read(data->regmap,
++				       INPUT_VOLTAGE_LSB,
++				       &regval, 2);
++	}
++	if (err < 0)
++		return err;
++
++	*val = (FIELD_GET(VOLTAGE_CURRENT_MASK, regval) * VOLTAGE_LSB) / 1000;
++
++	return 0;
++}
++
++static int tps23861_read_current(struct tps23861_data *data, int channel,
++				 long *val)
++{
++	unsigned int current_lsb;
++	unsigned int regval;
++	int err;
++
++	if (data->shunt_resistor == SHUNT_RESISTOR_DEFAULT)
++		current_lsb = CURRENT_LSB_255;
++	else
++		current_lsb = CURRENT_LSB_250;
++
++	err = regmap_bulk_read(data->regmap,
++			       PORT_1_CURRENT_LSB + channel * PORT_N_CURRENT_LSB_OFFSET,
++			       &regval, 2);
++	if (err < 0)
++		return err;
++
++	*val = (FIELD_GET(VOLTAGE_CURRENT_MASK, regval) * current_lsb) / 1000000;
++
++	return 0;
++}
++
++static int tps23861_calculate_power(struct tps23861_data *data, int channel,
++				    long *val)
++{
++	long voltage, current_ma;
++	int err;
++
++	err = tps23861_read_voltage(data, channel, &voltage);
++	if (err < 0)
++		return err;
++
++	err = tps23861_read_current(data, channel, &current_ma);
++	if (err < 0)
++		return err;
++
++	*val = voltage * current_ma;
++
++	return 0;
++}
++
++static umode_t tps23861_is_visible(const void *data, enum hwmon_sensor_types type,
++				   u32 attr, int channel)
++{
++	switch (type) {
++	case hwmon_temp:
++		switch (attr) {
++		case hwmon_temp_input:
++			return 0444;
++		}
++		break;
++	case hwmon_in:
++		switch (attr) {
++		case hwmon_in_input:
++		case hwmon_in_label:
++			return 0444;
++		}
++		break;
++	case hwmon_curr:
++		switch (attr) {
++		case hwmon_curr_input:
++		case hwmon_curr_label:
++			return 0444;
++		}
++		break;
++	case hwmon_power:
++		switch (attr) {
++		case hwmon_power_input:
++		case hwmon_power_label:
++			return 0444;
++		}
++		break;
++	default:
++		break;
++	}
++
++	return 0;
++}
++
++static int tps23861_read(struct device *dev, enum hwmon_sensor_types type,
++			 u32 attr, int channel, long *val)
++{
++	struct tps23861_data *data = dev_get_drvdata(dev);
++	int err;
++
++	switch (type) {
++	case hwmon_temp:
++		switch (attr) {
++		case hwmon_temp_input:
++			err = tps23861_read_temp(data, val);
++			break;
++		default:
++			return -EINVAL;
++		}
++		break;
++	case hwmon_in:
++		switch (attr) {
++		case hwmon_in_input:
++			err = tps23861_read_voltage(data, channel, val);
++			break;
++		default:
++			return -EINVAL;
++		}
++		break;
++	case hwmon_curr:
++		switch (attr) {
++		case hwmon_curr_input:
++			err = tps23861_read_current(data, channel, val);
++			break;
++		default:
++			return -EINVAL;
++		}
++		break;
++	case hwmon_power:
++		switch (attr) {
++		case hwmon_power_input:
++			err = tps23861_calculate_power(data, channel, val);
++			break;
++		default:
++			return -EINVAL;
++		}
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	return err;
++}
++
++static const char * const tps23861_port_label[] = {
++	"Port1",
++	"Port2",
++	"Port3",
++	"Port4",
++	"Input",
++};
++
++static int tps23861_read_string(struct device *dev,
++				enum hwmon_sensor_types type,
++				u32 attr, int channel, const char **str)
++{
++	switch (type) {
++	case hwmon_in:
++	case hwmon_curr:
++	case hwmon_power:
++		*str = tps23861_port_label[channel];
++		break;
++	default:
++		return -EOPNOTSUPP;
++	}
++	return 0;
++}
++
++static const struct hwmon_channel_info *tps23861_info[] = {
++	HWMON_CHANNEL_INFO(chip,
++			   HWMON_C_REGISTER_TZ),
++	HWMON_CHANNEL_INFO(temp,
++			   HWMON_T_INPUT),
++	HWMON_CHANNEL_INFO(in,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL,
++			   HWMON_I_INPUT | HWMON_I_LABEL),
++	HWMON_CHANNEL_INFO(curr,
++			   HWMON_C_INPUT | HWMON_C_LABEL,
++			   HWMON_C_INPUT | HWMON_C_LABEL,
++			   HWMON_C_INPUT | HWMON_C_LABEL,
++			   HWMON_C_INPUT | HWMON_C_LABEL),
++	HWMON_CHANNEL_INFO(power,
++			   HWMON_P_INPUT | HWMON_P_LABEL,
++			   HWMON_P_INPUT | HWMON_P_LABEL,
++			   HWMON_P_INPUT | HWMON_P_LABEL,
++			   HWMON_P_INPUT | HWMON_P_LABEL),
++	NULL
++};
++
++static const struct hwmon_ops tps23861_hwmon_ops = {
++	.is_visible = tps23861_is_visible,
++	.read = tps23861_read,
++	.read_string = tps23861_read_string,
++};
++
++static const struct hwmon_chip_info tps23861_chip_info = {
++	.ops = &tps23861_hwmon_ops,
++	.info = tps23861_info,
++};
++
++static ssize_t tps23861_port_status_show(struct device *dev,
++					 struct device_attribute *da,
++					 char *buf)
++{
++	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
++	struct tps23861_data *data = dev_get_drvdata(dev);
++	char *detect_status, *class_status;
++	unsigned int regval;
++	u8 class, detect;
++
++	regmap_read(data->regmap, attr->index, &regval);
++	detect = FIELD_GET(PORT_STATUS_DETECT_MASK, regval);
++	class = FIELD_GET(PORT_STATUS_CLASS_MASK, regval);
++
++	switch (detect) {
++	case PORT_DETECT_UNKNOWN:
++		detect_status = "Unknown device";
++		break;
++	case PORT_DETECT_SHORT:
++		detect_status = "Short circuit detected";
++		break;
++	case PORT_DETECT_RESISTANCE_LOW:
++		detect_status = "Too low resistance detected";
++		break;
++	case PORT_DETECT_RESISTANCE_OK:
++		detect_status = "Valid resistance detected";
++		break;
++	case PORT_DETECT_RESISTANCE_HIGH:
++		detect_status = "Too high resistance detected";
++		break;
++	case PORT_DETECT_OPEN_CIRCUIT:
++		detect_status = "Open circuit detected";
++		break;
++	case PORT_DETECT_MOSFET_FAULT:
++		detect_status = "MOSFET fault detected";
++		break;
++	case PORT_DETECT_LEGACY:
++		detect_status = "Legacy device detected";
++		break;
++	case PORT_DETECT_CAPACITANCE_INVALID_BEYOND:
++		detect_status = "Invalid capacitance, beyond clamp voltage";
++		break;
++	case PORT_DETECT_CAPACITANCE_INVALID_DELTA:
++		detect_status = "Invalid capacitance, insufficient voltage delta";
++		break;
++	case PORT_DETECT_CAPACITANCE_OUT_OF_RANGE:
++		detect_status = "Valid capacitance, outside of legacy range";
++		break;
++	case PORT_DETECT_RESERVED:
++	case PORT_DETECT_RESERVED_2:
++	default:
++		return -EINVAL;
++	}
++
++	switch (class) {
++	case PORT_CLASS_UNKNOWN:
++		class_status = "Unknown class";
++		break;
++	case PORT_CLASS_RESERVED:
++	case PORT_CLASS_0:
++		class_status = "Class 0";
++		break;
++	case PORT_CLASS_1:
++		class_status = "Class 1";
++		break;
++	case PORT_CLASS_2:
++		class_status = "Class 2";
++		break;
++	case PORT_CLASS_3:
++		class_status = "Class 3";
++		break;
++	case PORT_CLASS_4:
++		class_status = "Class 4";
++		break;
++	case PORT_CLASS_OVERCURRENT:
++		class_status = "Overcurrent";
++		break;
++	case PORT_CLASS_MISMATCH:
++		class_status = "Class mismatch";
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	return snprintf(buf, PAGE_SIZE, "%s, %s\n", detect_status, class_status);
++}
++
++static ssize_t tps23861_poe_plus_show(struct device *dev,
++				      struct device_attribute *da,
++				      char *buf)
++{
++	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
++	struct tps23861_data *data = dev_get_drvdata(dev);
++	char *ports[4];
++	unsigned int regval;
++	int i;
++
++	regmap_read(data->regmap, attr->index, &regval);
++
++	for (i = 0; i < 4; i++) {
++		if (BIT(i + 4) & regval)
++			ports[i] = "Yes";
++		else
++			ports[i] = "No";
++	}
++
++	return snprintf(buf, PAGE_SIZE, "Port 1: %s\nPort 2: %s\nPort 3: %s\nPort 4: %s\n",
++			ports[0], ports[1], ports[2], ports[3]);
++}
++
++static ssize_t tps23861_port_disable_store(struct device *dev,
++					   struct device_attribute *da,
++					   const char *buf, size_t count)
++{
++	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
++	struct tps23861_data *data = dev_get_drvdata(dev);
++	unsigned int regval, port;
++	int ret;
++
++	ret = kstrtouint(buf, 0, &port);
++	if (ret < 0)
++		return ret;
++
++	regmap_read(data->regmap, attr->index, &regval);
++	regval |= BIT(port + 3);
++	regmap_write(data->regmap, attr->index, regval);
++
++	return count;
++}
++
++static ssize_t tps23861_port_enable_store(struct device *dev,
++					  struct device_attribute *da,
++					  const char *buf, size_t count)
++{
++	struct sensor_device_attribute *attr = to_sensor_dev_attr(da);
++	struct tps23861_data *data = dev_get_drvdata(dev);
++	unsigned int regval, port;
++	int ret;
++
++	ret = kstrtouint(buf, 0, &port);
++	if (ret < 0)
++		return ret;
++
++	regmap_read(data->regmap, attr->index, &regval);
++	regval |= BIT(port - 1);
++	regval |= BIT(port + 3);
++	regmap_write(data->regmap, attr->index, regval);
++
++	return count;
++}
++
++static SENSOR_DEVICE_ATTR_RO(port1_status, tps23861_port_status, PORT_1_STATUS);
++static SENSOR_DEVICE_ATTR_RO(port2_status, tps23861_port_status, PORT_2_STATUS);
++static SENSOR_DEVICE_ATTR_RO(port3_status, tps23861_port_status, PORT_3_STATUS);
++static SENSOR_DEVICE_ATTR_RO(port4_status, tps23861_port_status, PORT_4_STATUS);
++static SENSOR_DEVICE_ATTR_RO(poe_plus_status, tps23861_poe_plus, POE_PLUS);
++static SENSOR_DEVICE_ATTR_WO(port_disable, tps23861_port_disable, POWER_ENABLE);
++static SENSOR_DEVICE_ATTR_WO(port_enable, tps23861_port_enable, DETECT_CLASS_RESTART);
++
++static struct attribute *tps23861_attrs[] = {
++	&sensor_dev_attr_port1_status.dev_attr.attr,
++	&sensor_dev_attr_port2_status.dev_attr.attr,
++	&sensor_dev_attr_port3_status.dev_attr.attr,
++	&sensor_dev_attr_port4_status.dev_attr.attr,
++	&sensor_dev_attr_poe_plus_status.dev_attr.attr,
++	&sensor_dev_attr_port_disable.dev_attr.attr,
++	&sensor_dev_attr_port_enable.dev_attr.attr,
++	NULL,
++};
++
++static const struct attribute_group tps23861_group = {
++	.attrs = tps23861_attrs,
++};
++__ATTRIBUTE_GROUPS(tps23861);
++
++static int tps23861_probe(struct i2c_client *client)
++{
++	struct device *dev = &client->dev;
++	struct tps23861_data *data;
++	struct device *hwmon_dev;
++	u32 shunt_resistor;
++
++	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++
++	data->regmap = devm_regmap_init_i2c(client, &tps23861_regmap_config);
++	if (IS_ERR(data->regmap)) {
++		dev_err(dev, "failed to allocate register map\n");
++		return PTR_ERR(data->regmap);
++	}
++
++	if (of_property_read_u32(dev->of_node, "shunt-resistor-micro-ohms", &shunt_resistor) < 0)
++		data->shunt_resistor = shunt_resistor;
++	else
++		data->shunt_resistor = SHUNT_RESISTOR_DEFAULT;
++
++	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name,
++							 data, &tps23861_chip_info,
++							 tps23861_groups);
++	return PTR_ERR_OR_ZERO(hwmon_dev);
++}
++
++static const struct of_device_id __maybe_unused tps23861_of_match[] = {
++	{ .compatible = "ti,tps23861", },
++	{ },
++};
++MODULE_DEVICE_TABLE(of, tps23861_of_match);
++
++static struct i2c_driver tps23861_driver = {
++	.probe_new		= tps23861_probe,
++	.driver = {
++		.name		= "tps23861",
++		.of_match_table	= of_match_ptr(tps23861_of_match),
++	},
++};
++module_i2c_driver(tps23861_driver);
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Robert Marko <robert.marko@sartura.hr>");
++MODULE_DESCRIPTION("TI TPS23861 PoE PSE");
+-- 
+2.29.2
 
-Please rework to use devm_hwmon_device_register_with_info().
-
-Thanks,
-Guenter
