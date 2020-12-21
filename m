@@ -5,59 +5,59 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.5 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CA15C433E6
-	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Dec 2020 18:46:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8617CC433E0
+	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Dec 2020 18:54:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6ADB7230FC
-	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Dec 2020 18:46:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2DFCF225AA
+	for <linux-hwmon@archiver.kernel.org>; Mon, 21 Dec 2020 18:54:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727028AbgLUSqM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 21 Dec 2020 13:46:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55418 "EHLO
+        id S1725908AbgLUSym (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 21 Dec 2020 13:54:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727354AbgLUSqL (ORCPT
+        with ESMTP id S1725811AbgLUSym (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 21 Dec 2020 13:46:11 -0500
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB7AC0613D6;
-        Mon, 21 Dec 2020 10:45:31 -0800 (PST)
-Received: by mail-oi1-x22b.google.com with SMTP id q205so12195910oig.13;
-        Mon, 21 Dec 2020 10:45:31 -0800 (PST)
+        Mon, 21 Dec 2020 13:54:42 -0500
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C38C0613D6;
+        Mon, 21 Dec 2020 10:54:02 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id s75so12293328oih.1;
+        Mon, 21 Dec 2020 10:54:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=538vDXbRJSEubocffpkJedr5iifX6oTeq1nWBgpEjIk=;
-        b=QzKYohtUFWKtt8hhmItgtk9NrV2Pu2M+IHB7DNwEvyM3gzdc2LCw2hLFQr3OlOC89g
-         JzfpxGYfuOBPD4JvQimXpjxlvbYGAWUO2zL0HLQy9/h0pAQAW2ABpm2zOBO4qAvD5kCq
-         dw4vQ3rKBt+pjqAEAVyE3s0K696797p+OJoM+dD8XvmBd9DgMB595dwSN7W9xtmBt61Z
-         62XrUvvp+5RpF8d9YqUnVdJFrKkV2f1mWWyq+8GJ7OGzIxdK798kUUyF+L8gH5v3MSKC
-         84vpivhO9gyGgQDm6hc2gwVs5gG7G/1BM0b1s8ShGq/PA4IzSIoWGVA1IORd31vvIQ+p
-         oWIQ==
+        bh=4jp7QRkp9t9nUV5yJoaxxs7UbfaoT81JLHi6AlSaPrg=;
+        b=Q53ubYpPuTIT09V7L1hQHOC5RPYvgkZEx30HUZjf6BRjkR9AgSKCmzCJY/X4ZiU3AE
+         whNXRUz5ZNheDcwnYaiWZbZKrg7R3w4HgwNXeeZtgxjO1FUlcte8hM+oPMb6lfR9qhh5
+         8CGuJnpYIp2etRASRpU6yxqmMbuOypc0p1tR6Qmc/ohW1GYtc5IOKgLk7FkItowDbkpP
+         bkkI8npMsVC4cEGF91wBdcm3yZ5LimwlNombi4Q+QFamc3gioWuP+qZyXeVhA8X5x/Ra
+         etIvVof3YPyOSRrnsfwx+L/pt6s3fjKnAa1PsAfaSqfJL+o6nEAWugC1pK9iTxM0Dw1h
+         +3gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=538vDXbRJSEubocffpkJedr5iifX6oTeq1nWBgpEjIk=;
-        b=LqCaF1aonUovivb2WrBxEET/lsK7pAGGiB7duURT59l/SJuKjFfmhU5IUJGfG95BVo
-         XY+vuzKwwMbnwFMdLw2mDcXmSdL58/7I+aPCf0lQq73Dyw5jMBzq8CsXwfix5XGR/dlK
-         Xxr8k5UJ6KW85hpXEXX4ag3LkIpETIlFdu/d9yO3GLBXoDQ5oz8UkYrfsAI8CcYzDhA3
-         igsFGGrDZmU1Jcb6V1gF7tT8vKQwI5eyGGpVwNEg3c4iuuqx39Ce8YyBMfErbe0lqZg+
-         NIm2hIaL3pHLSc74FfDX4c6an/b2J+auWq88u8G3lrp+aBGEB97RaZrDuyacMLZsYyg8
-         XqCw==
-X-Gm-Message-State: AOAM530jtTPz7rsHfnbtpA23buGIsXIOT+lQc3VpRYBlHxFflB4RfLki
-        fRu6ZSOKMw2F58SR/MLtWFf7fPLjLA8=
-X-Google-Smtp-Source: ABdhPJwltxurvmlhe1OT026OM2XYPRvi2mw0QGWht04cduIBGfvCEnCfDHipc/a5KcNBbvl930c7Cw==
-X-Received: by 2002:a54:4709:: with SMTP id k9mr11588989oik.178.1608569656571;
-        Mon, 21 Dec 2020 08:54:16 -0800 (PST)
+        bh=4jp7QRkp9t9nUV5yJoaxxs7UbfaoT81JLHi6AlSaPrg=;
+        b=TEnmKcqaixyscqgx7kiOZqLu2+2b0zUegkvWkG5598f6A2JrOqRUpfPbrnVjDKO3+E
+         d9zNIuBpVJSE2DtOfaWy2w2hwTn/nKXfOm6HgXLCrcATHM8rBr9hCaw9nS/EEYtESXNs
+         2Z952kWWpGzwIttU2loY9yosZRTjJ/V4TLtxTj193T7anetPD0H2zwygm3Xj7zUUPFdr
+         31uckRdt8ELELCN8y9FhR3CBNSck5vckF1rXSbXj0dX9st0yDgANYiS9ZSUKR2GImMR/
+         As8luHUJG3UpfN4yw+wYij5wt9BjUez8na/8qOhguq4qvcbIvWOZoexFGwtRjek0h+le
+         o6/w==
+X-Gm-Message-State: AOAM533sv/2WQMDFcBcx6UmJCj4f/6OGIpiIoTDG9CgVqyQwR1WXxs8R
+        HKs/053SmMNToxicrpN8D/UOshTx2yI=
+X-Google-Smtp-Source: ABdhPJzVa7KaXR5PzjaXiYGtDEQWqsBBR7j0Nbmtf51cFmeGMTTJLSG2iq25BnwfUXf5LZnBTtiKsg==
+X-Received: by 2002:aca:5d42:: with SMTP id r63mr11951048oib.94.1608576841597;
+        Mon, 21 Dec 2020 10:54:01 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f67sm3894538otb.60.2020.12.21.08.54.14
+        by smtp.gmail.com with ESMTPSA id t12sm3874774oot.21.2020.12.21.10.53.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Dec 2020 08:54:15 -0800 (PST)
+        Mon, 21 Dec 2020 10:54:00 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
 Subject: Re: [PATCH 1/2] hwmon: (pmbus) Add a NO_PEC flag to probe chips with
  faulty CAPABILITY
@@ -65,6 +65,8 @@ To:     Eddie James <eajames@linux.ibm.com>, linux-hwmon@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, jdelvare@suse.com, bjwyman@gmail.com
 References: <20201221163058.33257-1-eajames@linux.ibm.com>
  <20201221163058.33257-2-eajames@linux.ibm.com>
+ <f96ded73-93de-dc7d-36af-7f100e71817a@roeck-us.net>
+ <d64b8971e5d14106e3f51fd4f0328762ec35cd7c.camel@linux.ibm.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -109,81 +111,105 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <f96ded73-93de-dc7d-36af-7f100e71817a@roeck-us.net>
-Date:   Mon, 21 Dec 2020 08:54:13 -0800
+Message-ID: <7ee04917-d023-8888-9f3f-4303c496f80d@roeck-us.net>
+Date:   Mon, 21 Dec 2020 10:53:58 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20201221163058.33257-2-eajames@linux.ibm.com>
+In-Reply-To: <d64b8971e5d14106e3f51fd4f0328762ec35cd7c.camel@linux.ibm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 12/21/20 8:30 AM, Eddie James wrote:
-> Some PMBus chips don't respond with valid data when reading the
-> CAPABILITY register. For instance the register may report that the
-> chip supports PEC when in reality it does not. For such chips, PEC
-> must not be enabled while probing the chip, so add a flag so that
-> device drivers can force PEC off.
+On 12/21/20 10:32 AM, Eddie James wrote:
+> On Mon, 2020-12-21 at 08:54 -0800, Guenter Roeck wrote:
+>> On 12/21/20 8:30 AM, Eddie James wrote:
+>>> Some PMBus chips don't respond with valid data when reading the
+>>> CAPABILITY register. For instance the register may report that the
+>>> chip supports PEC when in reality it does not. For such chips, PEC
+>>> must not be enabled while probing the chip, so add a flag so that
+>>> device drivers can force PEC off.
+>>>
+>>
+>> I think the flag should indicate that the capability register
+>> shall not be read/used. That the capability register is currently
+>> only used to check for PEC is secondary. We might,for example,
+>> start using it to check for alert support or to check the numeric
+>> format.
+> 
+> OK, that makes sense. I'll rename the flag in v2, how does
+> PMBUS_NO_CAPABILITY sound?
 > 
 
-I think the flag should indicate that the capability register
-shall not be read/used. That the capability register is currently
-only used to check for PEC is secondary. We might,for example,
-start using it to check for alert support or to check the numeric
-format.
+sgtm
 
 Thanks,
 Guenter
 
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> ---
->  drivers/hwmon/pmbus/pmbus_core.c |  8 +++++---
->  include/linux/pmbus.h            | 10 ++++++++++
->  2 files changed, 15 insertions(+), 3 deletions(-)
+> Thanks for the quick reply,
+> Eddie
 > 
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index 192442b3b7a2..3de1657dde35 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -2204,9 +2204,11 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
->  	}
->  
->  	/* Enable PEC if the controller supports it */
-> -	ret = i2c_smbus_read_byte_data(client, PMBUS_CAPABILITY);
-> -	if (ret >= 0 && (ret & PB_CAPABILITY_ERROR_CHECK))
-> -		client->flags |= I2C_CLIENT_PEC;
-> +	if (!(data->flags & PMBUS_NO_PEC)) {
-> +		ret = i2c_smbus_read_byte_data(client, PMBUS_CAPABILITY);
-> +		if (ret >= 0 && (ret & PB_CAPABILITY_ERROR_CHECK))
-> +			client->flags |= I2C_CLIENT_PEC;
-> +	}
->  
->  	/*
->  	 * Check if the chip is write protected. If it is, we can not clear
-> diff --git a/include/linux/pmbus.h b/include/linux/pmbus.h
-> index 1ea5bae708a1..9bdc8a581b03 100644
-> --- a/include/linux/pmbus.h
-> +++ b/include/linux/pmbus.h
-> @@ -34,6 +34,16 @@
->   */
->  #define PMBUS_WRITE_PROTECTED	BIT(1)
->  
-> +/*
-> + * PMBUS_NO_PEC
-> + *
-> + * Some PMBus chips don't respond with valid data when reading the CAPABILITY
-> + * register. In this case, the register may report that the chip supports PEC
-> + * with bit 7 (PB_CAPABILITY_ERROR_CHECK) when in reality it's not supported.
-> + * For such chips, PEC must not be enabled before probing the chip.
-> + */
-> +#define PMBUS_NO_PEC			BIT(2)
-> +
->  struct pmbus_platform_data {
->  	u32 flags;		/* Device specific flags */
->  
+>>
+>> Thanks,
+>> Guenter
+>>
+>>> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+>>> ---
+>>>  drivers/hwmon/pmbus/pmbus_core.c |  8 +++++---
+>>>  include/linux/pmbus.h            | 10 ++++++++++
+>>>  2 files changed, 15 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/drivers/hwmon/pmbus/pmbus_core.c
+>>> b/drivers/hwmon/pmbus/pmbus_core.c
+>>> index 192442b3b7a2..3de1657dde35 100644
+>>> --- a/drivers/hwmon/pmbus/pmbus_core.c
+>>> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+>>> @@ -2204,9 +2204,11 @@ static int pmbus_init_common(struct
+>>> i2c_client *client, struct pmbus_data *data,
+>>>  	}
+>>>  
+>>>  	/* Enable PEC if the controller supports it */
+>>> -	ret = i2c_smbus_read_byte_data(client, PMBUS_CAPABILITY);
+>>> -	if (ret >= 0 && (ret & PB_CAPABILITY_ERROR_CHECK))
+>>> -		client->flags |= I2C_CLIENT_PEC;
+>>> +	if (!(data->flags & PMBUS_NO_PEC)) {
+>>> +		ret = i2c_smbus_read_byte_data(client,
+>>> PMBUS_CAPABILITY);
+>>> +		if (ret >= 0 && (ret & PB_CAPABILITY_ERROR_CHECK))
+>>> +			client->flags |= I2C_CLIENT_PEC;
+>>> +	}
+>>>  
+>>>  	/*
+>>>  	 * Check if the chip is write protected. If it is, we can not
+>>> clear
+>>> diff --git a/include/linux/pmbus.h b/include/linux/pmbus.h
+>>> index 1ea5bae708a1..9bdc8a581b03 100644
+>>> --- a/include/linux/pmbus.h
+>>> +++ b/include/linux/pmbus.h
+>>> @@ -34,6 +34,16 @@
+>>>   */
+>>>  #define PMBUS_WRITE_PROTECTED	BIT(1)
+>>>  
+>>> +/*
+>>> + * PMBUS_NO_PEC
+>>> + *
+>>> + * Some PMBus chips don't respond with valid data when reading the
+>>> CAPABILITY
+>>> + * register. In this case, the register may report that the chip
+>>> supports PEC
+>>> + * with bit 7 (PB_CAPABILITY_ERROR_CHECK) when in reality it's not
+>>> supported.
+>>> + * For such chips, PEC must not be enabled before probing the
+>>> chip.
+>>> + */
+>>> +#define PMBUS_NO_PEC			BIT(2)
+>>> +
+>>>  struct pmbus_platform_data {
+>>>  	u32 flags;		/* Device specific flags */
+>>>  
+>>>
 > 
 
