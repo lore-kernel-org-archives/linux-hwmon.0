@@ -2,94 +2,144 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86056C433E0
-	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Dec 2020 06:17:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22AD9C43331
+	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Dec 2020 14:31:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4FB072313F
-	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Dec 2020 06:17:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E96AC2312E
+	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Dec 2020 14:31:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726010AbgLVGRN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 22 Dec 2020 01:17:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48704 "EHLO
+        id S1727708AbgLVObG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 22 Dec 2020 09:31:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725783AbgLVGRN (ORCPT
+        with ESMTP id S1727172AbgLVObF (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 22 Dec 2020 01:17:13 -0500
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51732C0613D6;
-        Mon, 21 Dec 2020 22:16:33 -0800 (PST)
-Received: by mail-oi1-x22b.google.com with SMTP id 15so13755373oix.8;
-        Mon, 21 Dec 2020 22:16:33 -0800 (PST)
+        Tue, 22 Dec 2020 09:31:05 -0500
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F34FC0611CC
+        for <linux-hwmon@vger.kernel.org>; Tue, 22 Dec 2020 06:30:20 -0800 (PST)
+Received: by mail-ej1-x641.google.com with SMTP id x16so18496042ejj.7
+        for <linux-hwmon@vger.kernel.org>; Tue, 22 Dec 2020 06:30:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=GsJ9t2DQksVa84TtSFlyEhbEZGFOhW7YiKQ7R1UqKy8=;
-        b=bHxHTKPRZbhOdCdGWAjyXLPdWWNJtJ3xlHnWeiegAPHf/DOSq2CKeoKhiGig3UYKSz
-         t3+9AJq8ZK1VoAu8r5spoVYSE0JbK1T3j4h/Q3X5FiRKcLaNBo8pBo3sRXHH8FGldihw
-         1IWAUSfSyJ54++5bVrgW9Fhs0jvGcwSvCTOVMI+1L7XHSgpyqvRa5FXsJWnP1SRsntS6
-         6utXuVGbLV5CY+rydHvsLFer3WN/XDCLtK30ISGmLObYDlP8tJiCQkVbYe2o8/ORsc7W
-         oCQqNyyY6QdHiAKiJSGQOw2TWBhZL9zzTp7yo284oDd3vpY4aoehZwkgoCDFh5EwilMx
-         QXwA==
+        d=sartura-hr.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Mamze14+WiY2yuDsLyQBfAVHfVo7/eHBt2nEYPH4G8k=;
+        b=P+tLYH814vFy8X3uaUxmmBuEZST3sh4KNwNPw5cq4yyLVZ24CC85n59ejW6iTCaiYy
+         DAHXafVb8AK3v3JrYtp9SLr7f8LRQj4BFdPs657AEdq5kIF32i3XyDtcdUcjx9sTY2s1
+         glzGUXEZE+OokTrCg518sECumfn6VrTfmItt8zWXPrt2FmNBGOZuJXnG1LweMp/tD7qx
+         Ohvro7beW6cCP3+hv3oAGfJt1NxRl8soFq+8IonNseE3bReMCls26YmY2F8LU5finuf9
+         VP9anXsQR6qJCDf1QkUG72LwAz4PegUQpowX5/gvoSceZYfGvGTH9khseG3k+2sQXE4X
+         hxkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=GsJ9t2DQksVa84TtSFlyEhbEZGFOhW7YiKQ7R1UqKy8=;
-        b=Dgs3RwK3ikyEkfLg+SkPWBcPgH83pQ3Hwcd/2Txa1iBFUa7RxhhgY8Z+XAz2d3m0T0
-         GiVzjmNWgQRLGt7HU+h2tD3paKsQhtUqwtjlpsXwA/p62aP/XO8z1Kjjn/WYiOJT9fLm
-         XzWh8KPpzqD8U+S+Rl2jm2E9qzx26SuixDU5HSh1Cj4TQufaTPsxRyNCfhrabwmjoUV/
-         pZCve+LjhynKWpIIpV09P1a8Gl1Gab9EuwCyIWIIQJVuuWYChQwOgOj1BoOcjY9HPP+6
-         rV3Wh4GiDiPA7muStf3UCwnTJcehSbaiX/I5RtgYxyxzOMVvUyg4ufks9VD00f8GIh7y
-         yUOw==
-X-Gm-Message-State: AOAM533BMhuCVd6oEiarGeJo+nxx0D2NUSSigrUof0YExfmVb3XWQKRk
-        Gj7CE8MReXgoTkTuMG5RnUNWEljloDE=
-X-Google-Smtp-Source: ABdhPJycVllZh0KDGzUfdrd7FjSu0ARgUDiD6w3Gzg+UGjD150HFquaX1LYcFY5C5ktqV//WX202Sw==
-X-Received: by 2002:aca:af4d:: with SMTP id y74mr12893615oie.105.1608617792738;
-        Mon, 21 Dec 2020 22:16:32 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f67sm4305127otb.60.2020.12.21.22.16.31
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 21 Dec 2020 22:16:31 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 21 Dec 2020 22:16:30 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Gabriel C <nix.or.die@googlemail.com>
-Cc:     linux-hwmon@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Wei Huang <wei.huang2@amd.com>
-Subject: Re: k10temp: ZEN3 readings are broken
-Message-ID: <20201222061630.GB76917@roeck-us.net>
-References: <CAEJqkgiiU7miC13iT6DufjFAsHkNZk6rBAw=KRRnHe47kTZDnw@mail.gmail.com>
- <9d621d34-e5ce-301a-1b89-92c0791fe348@roeck-us.net>
- <CAEJqkgjFVBEDxCVB+P3CjirRkCZW1_6s18AgOKpe+6er3VShpA@mail.gmail.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Mamze14+WiY2yuDsLyQBfAVHfVo7/eHBt2nEYPH4G8k=;
+        b=hFtX5w6SxPwx3BWXE1ip7pMmNheSaTNrsAZ5LTGQ74cZeqVBcqVRDqn+fP1rPoibVC
+         hwVlH95kd4G0tYm+4Ovh0kst1M2acE/qwBTfmQ1Ew6u7OTfqgMOK4USVXi01nn6xkgy4
+         swRNGJYqNXeOuwAvArbRwBzwfogGnQjEV5hZkn8EKZLEKC5DpzP6MP8AXSUMne9S4XO7
+         IeW9VdZNCU1L8uqQSidHC5yZygUo7Xp4R8XtTi0EmR3C1a0nORL0w+A19tXwhQRs/zs5
+         zTn5Cg7Lz1cUZq0SnCVyP6d5/5NtYzjL6pCyshX+GlpRvCJgHJHFzt3gj9P7vZi1HT83
+         1mYw==
+X-Gm-Message-State: AOAM533ms7D5upHx2weECpopumXeuhlWM8d3sgSsVCl9yAF+ptbok2id
+        4vCF69sTQHIBNtMMpdhkgufeDw==
+X-Google-Smtp-Source: ABdhPJy1yQdgnSoNPEttYoUC5gC39TEY11L8aFkLEY4st3GwB0I7XW2JNrPkgay34R/PXDk+P2mHYg==
+X-Received: by 2002:a17:906:350b:: with SMTP id r11mr20577385eja.143.1608647418876;
+        Tue, 22 Dec 2020 06:30:18 -0800 (PST)
+Received: from localhost.localdomain (dh207-99-167.xnet.hr. [88.207.99.167])
+        by smtp.googlemail.com with ESMTPSA id z1sm8434896edm.89.2020.12.22.06.30.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Dec 2020 06:30:17 -0800 (PST)
+From:   Robert Marko <robert.marko@sartura.hr>
+To:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Robert Marko <robert.marko@sartura.hr>,
+        Luka Perkov <luka.perkov@sartura.hr>
+Subject: [PATCH v3 1/3] dt-bindings: hwmon: Add TI TPS23861 bindings
+Date:   Tue, 22 Dec 2020 15:30:10 +0100
+Message-Id: <20201222143012.1618807-1-robert.marko@sartura.hr>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEJqkgjFVBEDxCVB+P3CjirRkCZW1_6s18AgOKpe+6er3VShpA@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Dec 22, 2020 at 05:33:17AM +0100, Gabriel C wrote:
-[ ... ]
-> At least is what the weird amd_energy driver added and since is only supporting
-> fam 17h model 0x31 which is TR 3000 & SP3 Rome, I guess fam 19h 0x1 is
-> TR/SP3 ZEN3.
+Document bindings for the Texas Instruments TPS23861 driver.
 
-The limited model support is because people nowadays are not willing to
-accept that reported values may not always be perfect ... and the reported
-energy for non-server parts is known to be not always perfect. Kind of an
-odd situation: If we support non-server parts, we have people complain
-that values are not perfect. If we only support server parts, we have
-people complain that only server parts are supported. For us, that is
-a lose-lose situation. I used to think that is is better to report
-_something_, but the (sometimes loud) complaints about lack of perfection
-teached me a lesson. So now my reaction is to drop support if I get
-complaints about lack of perfection.
+Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+Cc: Luka Perkov <luka.perkov@sartura.hr>
+---
+ .../bindings/hwmon/ti,tps23861.yaml           | 53 +++++++++++++++++++
+ 1 file changed, 53 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml
 
-Guenter
+diff --git a/Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml b/Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml
+new file mode 100644
+index 000000000000..a7a801f54398
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml
+@@ -0,0 +1,53 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++
++$id: http://devicetree.org/schemas/hwmon/ti,tps23861.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: TI TPS23861 PoE PSE
++
++maintainers:
++  - Robert Marko <robert.marko@sartura.hr>
++
++description: |
++  The TPS23861 is a IEEE 802.3at Quad Port Power-over-Ethernet PSE Controller.
++
++  Datasheets:
++  https://www.ti.com/lit/gpn/tps23861
++
++
++properties:
++  compatible:
++    enum:
++      - ti,tps23861
++
++  reg:
++    maxItems: 1
++
++  shunt-resistor-micro-ohms:
++    description: |
++      The value of curent sense resistor in microohms.
++    items:
++      default: 255000
++      minimum: 250000
++      maximum: 255000
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++          #address-cells = <1>;
++          #size-cells = <0>;
++
++          tps23861@30 {
++              compatible = "ti,tps23861";
++              reg = <0x30>;
++              shunt-resistor-micro-ohms = <255000>;
++          };
++    };
+-- 
+2.29.2
+
