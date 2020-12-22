@@ -2,120 +2,107 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF9C2C433DB
-	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Dec 2020 15:27:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 09396C433E6
+	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Dec 2020 15:27:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A11D422B2B
+	by mail.kernel.org (Postfix) with ESMTP id D13CF2312E
 	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Dec 2020 15:27:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727940AbgLVP10 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 22 Dec 2020 10:27:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48634 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727936AbgLVP1Z (ORCPT
+        id S1727883AbgLVP1j (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 22 Dec 2020 10:27:39 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:15490 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727019AbgLVP1i (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 22 Dec 2020 10:27:25 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51072C0613D3;
-        Tue, 22 Dec 2020 07:26:45 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id s26so32801117lfc.8;
-        Tue, 22 Dec 2020 07:26:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+GMr5VCPTqCz2ZfWhdjCVasC/tsHX8qwCEfhYsLYdAg=;
-        b=pjBMMl7HgkRiFIGdJygUked00u2rRnsciWj9vSEfaT/mIpaxKhZufXxFk2vBRyY18S
-         qJ5uX+ckghvmzYTJDp2IzlzaQ2szcafhnR3gQnlaeu6IrOzdztqIVa9OzjBwtRObvM9/
-         qcDZ73SUtfEkc6UCCzA5al/d8cTdspT/HuZdxqJPwfeq2OHmrz3la33ZODuWkAzHpcRD
-         7lGHfN+LcOaTRA1pIOGSMrPBdMCz0dWBE5ADWtB3u62zAQF5FuLUfYjjn+ymfs7LOaNv
-         e5+RMSA6Kaf3RT5+50pHGKmQANRXGEZJ36FYs01w/7rMxKBmxAbb4ovJn+/RQKJVsoGi
-         bECw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+GMr5VCPTqCz2ZfWhdjCVasC/tsHX8qwCEfhYsLYdAg=;
-        b=HCv2s0r3qS9UGLY1q8/jN+ocZd4EbjKHJVvgp7zeoj+ywyzlUUu1SI/8w8+MiipftQ
-         InEkJdcEH98HSFhWjrgUIJauVEkkEjZXwIZiFlQY/ztc8AX6wLuPkVWyPJeRKbbgdNWw
-         KpcGuthwArcgJqvgs1rMbaKV68vrCw6M2pH1nDR+GY7cnrhSK/Zpm57/44jyFRp31gx7
-         w2X/RaT50+8YfCmRlEtrTCU1m46Jmwy0yMSqknDX4pRhzB9+oAMdkGh87IxLuiOo8ffJ
-         tJ72URG9F/zgbrLqAKEvQm4hG4N55LoTQP9CIqyMg43hajxrdL8wvE7ko1k8p2eb7VBV
-         nQNA==
-X-Gm-Message-State: AOAM533FMYX6TN9NT6v0YATS2HeEmZXY9RNHoBeffzfrK5qZzC5nVUhH
-        TJmt/w9z2H9tJdUzNdLW7Px96KC9JTB7bb0HKQ==
-X-Google-Smtp-Source: ABdhPJz537Kn4W1RrlvyWs6eRYuxgQbuy8tUZsNZm94P4bwr7Xj51Bl698w6GAPxN1is/kt4T7LI1NtskOJk2KmKP44=
-X-Received: by 2002:a19:23d8:: with SMTP id j207mr9670559lfj.144.1608650803872;
- Tue, 22 Dec 2020 07:26:43 -0800 (PST)
+        Tue, 22 Dec 2020 10:27:38 -0500
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0BMF2B6Q191006;
+        Tue, 22 Dec 2020 10:26:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=GSUOkVavLqmMr4kIEXjy9VN3CQpH+tPgx6drE9F5Gz0=;
+ b=QesyxSOFRZT0cZmU4qznjrqsRpu4n1/2RkKDpw64ggACZ9WpWvpA7hnTHMl4XZSpQIYw
+ eQN25TVkYGx1blFUupG9xOU8Z8BUN4VpmcU1YG3kOOEVOK9cXmx3XNghT8HcHO1jxYyX
+ xOB4Uztcd2zPL5SG4vHIsBADnEoutw5XVCAQCv4hOxF/w289VaeoqKBKGW3V3VOJNUVP
+ Dgm4+NnOmoXv5M9LSEASHlFDJimABSihylkuySR3UbKS8OrXdj4IZqU8QSHe0wGfbY0d
+ kt91bnX8ClfMo8qPtsdIJ0wi77XHJvKFB6WJF8w0CGnwUEFfb49aWw5369UFZBGNhTMN Yg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 35kjc2sy85-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Dec 2020 10:26:43 -0500
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0BMFQC6Z096081;
+        Tue, 22 Dec 2020 10:26:42 -0500
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 35kjc2sy7v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Dec 2020 10:26:42 -0500
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0BMFHAm0018453;
+        Tue, 22 Dec 2020 15:26:42 GMT
+Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
+        by ppma03dal.us.ibm.com with ESMTP id 35k02erdpx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Dec 2020 15:26:42 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0BMFQeHA20840888
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 22 Dec 2020 15:26:40 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C6100BE053;
+        Tue, 22 Dec 2020 15:26:40 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6D9DBBE04F;
+        Tue, 22 Dec 2020 15:26:40 +0000 (GMT)
+Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.211.57.15])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue, 22 Dec 2020 15:26:40 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, jdelvare@suse.com,
+        linux@roeck-us.net, eajames@linux.ibm.com, bjwyman@gmail.com
+Subject: [PATCH v2 0/2] hwmon: (pmbus) Add the PMBUS_NO_CAPABILITY flag
+Date:   Tue, 22 Dec 2020 09:26:38 -0600
+Message-Id: <20201222152640.27749-1-eajames@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <CAEJqkgiiU7miC13iT6DufjFAsHkNZk6rBAw=KRRnHe47kTZDnw@mail.gmail.com>
- <9d621d34-e5ce-301a-1b89-92c0791fe348@roeck-us.net> <CAEJqkgjFVBEDxCVB+P3CjirRkCZW1_6s18AgOKpe+6er3VShpA@mail.gmail.com>
- <20201222061630.GB76917@roeck-us.net>
-In-Reply-To: <20201222061630.GB76917@roeck-us.net>
-From:   Gabriel C <nix.or.die@googlemail.com>
-Date:   Tue, 22 Dec 2020 16:26:17 +0100
-Message-ID: <CAEJqkggMJMKS5E2n26nvoCfq1tnokQG+WQi+WH4J7gNNz+0o5A@mail.gmail.com>
-Subject: Re: k10temp: ZEN3 readings are broken
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Wei Huang <wei.huang2@amd.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2020-12-22_07:2020-12-21,2020-12-22 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
+ lowpriorityscore=0 suspectscore=0 mlxlogscore=843 impostorscore=0
+ mlxscore=0 spamscore=0 bulkscore=0 clxscore=1015 phishscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012220107
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Am Di., 22. Dez. 2020 um 07:16 Uhr schrieb Guenter Roeck <linux@roeck-us.net>:
->
-> On Tue, Dec 22, 2020 at 05:33:17AM +0100, Gabriel C wrote:
-> [ ... ]
-> > At least is what the weird amd_energy driver added and since is only supporting
-> > fam 17h model 0x31 which is TR 3000 & SP3 Rome, I guess fam 19h 0x1 is
-> > TR/SP3 ZEN3.
->
-> The limited model support is because people nowadays are not willing to
-> accept that reported values may not always be perfect ... and the reported
-> energy for non-server parts is known to be not always perfect. Kind of an
-> odd situation: If we support non-server parts, we have people complain
-> that values are not perfect. If we only support server parts, we have
-> people complain that only server parts are supported. For us, that is
-> a lose-lose situation. I used to think that is is better to report
-> _something_, but the (sometimes loud) complaints about lack of perfection
-> teached me a lesson. So now my reaction is to drop support if I get
-> complaints about lack of perfection.
->
+Some PMBus chips, like some power supplies supported by the cffps driver,
+don't respond with valid data when reading the CAPABILITY register. Add a
+platform data flag that device drivers can set to tell the PMBus core
+driver that it shouldn't use the CAPABILITY register. The second patch
+sets this flag for the cffps driver.
 
-I agree it is an odd situation with these modules, but having
-something is better than nothing.
-As for the amd_energy driver, yes it is off on some platforms by 2%-5%
-or alike but without having
-that support in the kernel, regardless of the module, we cannot ever
-come to perfection or near it.
+Changes since v1:
+ - Rename the flag to PMBUS_NO_CAPABILITY and adjust the associated
+   comment accordingly.
 
-For both k10temp & amd_energy driver I suggest to not drop the support
- but add kernel modules
-options disabled by default, much like a lot laptop platform drivers
-have for different reasons.
+Eddie James (2):
+  hwmon: (pmbus) Add a PMBUS_NO_CAPABILITY platform data flag
+  hwmon: (pmbus/ibm-cffps) Set the PMBUS_NO_CAPABILITY flag
 
-The amd_energy driver could have some any_ryzen option which turned
-off by default.
-That way people may decide if they want to use it even when not 100%
-perfect and can report
-back on platforms the reporting is accurate.
-Waiting for AMD to give us ID of what may be in their eyes accurate is
-like waiting for pigs to fly.
+ drivers/hwmon/pmbus/ibm-cffps.c  | 2 +-
+ drivers/hwmon/pmbus/pmbus_core.c | 8 +++++---
+ include/linux/pmbus.h            | 9 +++++++++
+ 3 files changed, 15 insertions(+), 4 deletions(-)
 
-The k10temp module much like the same, some experimental_voltage_report module
-option will be fine for now, I think.
+-- 
+2.27.0
 
-I'm also sure owner of AMD HW will help out optimizing and maintaining the code.
-
-> Guenter
-
-Best Regards,
-
-Gabriel C.
