@@ -2,101 +2,63 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C819C433DB
-	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Dec 2020 16:23:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DEF24C433DB
+	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Dec 2020 22:24:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0AFA522AAE
-	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Dec 2020 16:23:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B6D79207B1
+	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Dec 2020 22:24:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727844AbgLVQX2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 22 Dec 2020 11:23:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57270 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727827AbgLVQX2 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 22 Dec 2020 11:23:28 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E95B6C0613D3;
-        Tue, 22 Dec 2020 08:22:47 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id x13so12366220oto.8;
-        Tue, 22 Dec 2020 08:22:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id;
-        bh=6ew9qbzNLraaN+foW5JE4dmX208tLCsl+zWQ19IzhC8=;
-        b=SSEat8yfatElTLyK8rphkk2sBsjNcDGLNkbpArUyqZYqUb5A3n18fP6aZ32ADNLT+X
-         k2MNiDQSXhb9+OnbdizF9hdqczTHXVNUPY+n1OS5bj1yVvfKBiyF2asA8CrjLUc4G0AE
-         GZtRv8yWOZzX5kEPhjdq4QBtHFc530CXenbZEcee1NJ1biLwAtX8uYhJdedVKy6deWt7
-         tk/QvCPIxwwYHhq5YS73jh7bgGsNSriLBDjuAWQc35HLSeUF38JXX/gp1Q2EPukSlB8z
-         UlOb9iQk9Cre6rdXvwTum3ejh/17VVGLP4dvqzzEjPtso2/8+HTK6B3czNKTI+88uyHD
-         1uxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
-        bh=6ew9qbzNLraaN+foW5JE4dmX208tLCsl+zWQ19IzhC8=;
-        b=kluPWB2b9QWEsnNly1gOM5DxXQJUwi0XOcgBQM5tpFRrrbP5iZzgjZmkCO7mpSY5Du
-         7RACnv4FnfdVh0jDmi7nxKK5QDb0H9ycpwVtdZDR98wpqOF09K8E4UkD9GTo5NLL+mG2
-         IuCH071KyJDmyFa8Tl+7h3bBRX5wMxH5xm4GAE5sxef8a4dZhRx/UggvjmFdyGjjrvVC
-         6/j/5ZybVliIoCBQ5r1iAAojD7CvKYONDdU++MylyZvb1rtLcRHijrqW8gUp29zjAGEw
-         XFdXUWrjaFrELjf5qzrgdJPBooj2euAyXNqA33sDqqbs5ksEjCrBsrmqpCh2dExhXzrK
-         Z0Yg==
-X-Gm-Message-State: AOAM531OIOMHadJxGt2GHU5O68MDXir98xv8REhaMzZOBmDAO0HygkNn
-        PMEOgRr6SiM745gjwZ9AO7v9/Co3xkk=
-X-Google-Smtp-Source: ABdhPJzmDTduxE7D9jkLlR27P4g2ni135Hbif6RNC692cOVpKggTitoPAggzbO4vKbFJ/6/eDs1OnQ==
-X-Received: by 2002:a05:6830:188:: with SMTP id q8mr16411290ota.96.1608654166302;
-        Tue, 22 Dec 2020 08:22:46 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n13sm4561465otk.58.2020.12.22.08.22.45
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 22 Dec 2020 08:22:45 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon updates for v5.11-take2
-Date:   Tue, 22 Dec 2020 08:22:44 -0800
-Message-Id: <20201222162244.181444-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.17.1
+        id S1727435AbgLVWYn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 22 Dec 2020 17:24:43 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49778 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726329AbgLVWYn (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 22 Dec 2020 17:24:43 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id C1750207B1;
+        Tue, 22 Dec 2020 22:24:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1608675842;
+        bh=0/qr0/SHKFayzMQdFTEFldJQ1CZ5J4cpywnn7hdQG2U=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=jE23D+H1qMXQlK9+19F5HMG2EBekkH1LUnAreDOfBXl9SVImT7/Yw14wodMTDDubl
+         7H/UeQ9XqYbY1jZXC3E+ESj2AJikG+SA5wSuhLUZ57IbQLIfVNLex8B9Q5DH7v7Yj7
+         PDXrLut76WDCYofMIk/7oRYEnIu2UjC/sKsUU4UeNHok61FCG7SpWiygDFtOsSJWkt
+         vbQR8k+lx2VPS2vBFeEPvSEKVDkOWD2Y/hpfv99wNBU33bFD7fymIeLg7YuyoY2JDc
+         uRSOCzv5EZjmXtyWDCqNtCFs9Xv6FDmtyGfVAXBSWFiQa/2kkegj0Wmcc3xVIepV2R
+         NTAGE9xYXC7vQ==
+Subject: Re: [GIT PULL] hwmon updates for v5.11-take2
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20201222162244.181444-1-linux@roeck-us.net>
+References: <20201222162244.181444-1-linux@roeck-us.net>
+X-PR-Tracked-List-Id: <linux-hwmon.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20201222162244.181444-1-linux@roeck-us.net>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.11-take2
+X-PR-Tracked-Commit-Id: 0a4e668b5d52eed8026f5d717196b02b55fb2dc6
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 4e31dcc0a9231462f0e275544b5aebc668481a4e
+Message-Id: <160867584263.8550.1876748907808389592.pr-tracker-bot@kernel.org>
+Date:   Tue, 22 Dec 2020 22:24:02 +0000
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Linus,
+The pull request you sent on Tue, 22 Dec 2020 08:22:44 -0800:
 
-Please pull hwmon updates for Linux v5.11-take2 from signed tag:
+> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.11-take2
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.11-take2
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/4e31dcc0a9231462f0e275544b5aebc668481a4e
 
-Thanks,
-Guenter
-------
+Thank you!
 
-The following changes since commit 8653b778e454a7708847aeafe689bce07aeeb94e:
-
-  Merge tag 'clk-for-linus' of git://git.kernel.org/pub/scm/linux/kernel/git/clk/linux (2020-12-21 10:39:37 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v5.11-take2
-
-for you to fetch changes up to 0a4e668b5d52eed8026f5d717196b02b55fb2dc6:
-
-  hwmon: (k10temp) Remove support for displaying voltage and current on Zen CPUs (2020-12-22 08:18:36 -0800)
-
-----------------------------------------------------------------
-hwmon patches for v5.11 (take 2)
-
-The only patch in this series is removal of voltage and current reporting
-for AMD Zen CPUs. Turns out that was not worth the trouble.
-
-----------------------------------------------------------------
-Guenter Roeck (1):
-      hwmon: (k10temp) Remove support for displaying voltage and current on Zen CPUs
-
- drivers/hwmon/k10temp.c | 98 -------------------------------------------------
- 1 file changed, 98 deletions(-)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
