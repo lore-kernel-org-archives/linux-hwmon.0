@@ -2,142 +2,185 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EC62C433DB
-	for <linux-hwmon@archiver.kernel.org>; Wed, 23 Dec 2020 11:28:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 636A4C433E0
+	for <linux-hwmon@archiver.kernel.org>; Wed, 23 Dec 2020 14:26:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D2BA3222F9
-	for <linux-hwmon@archiver.kernel.org>; Wed, 23 Dec 2020 11:28:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2575E2313C
+	for <linux-hwmon@archiver.kernel.org>; Wed, 23 Dec 2020 14:26:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728442AbgLWL2j (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 23 Dec 2020 06:28:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35434 "EHLO
+        id S1727464AbgLWO0h (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 23 Dec 2020 09:26:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728421AbgLWL2j (ORCPT
+        with ESMTP id S1726419AbgLWO0h (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 23 Dec 2020 06:28:39 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CBE9C0613D3;
-        Wed, 23 Dec 2020 03:27:58 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id y19so39175969lfa.13;
-        Wed, 23 Dec 2020 03:27:58 -0800 (PST)
+        Wed, 23 Dec 2020 09:26:37 -0500
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC82C0613D6;
+        Wed, 23 Dec 2020 06:25:56 -0800 (PST)
+Received: by mail-ot1-x334.google.com with SMTP id j20so15118068otq.5;
+        Wed, 23 Dec 2020 06:25:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Mq7oGyUGa59E1kgWxLfMA1Jci1ObdTHArjOhZkOa91w=;
-        b=cgwOvH1fNHe4eE0bHZQlCVZB/LJlra1wXoDb3tu2t5HFMc/IHOuLNI5MGy6veUtq6D
-         l7GLpFZ8ANgItpF/g7Pfh2zlUsDuTgMuBoaR5EDo4zebl6j8MVxyQ5C1AE5dNdm1/DJv
-         m5BA3qeOR+6+U1PjVMe5cX+OIwMXCJSddBCHLybeHGmuUVhzhkvvFZWslBudY+nKGHt7
-         ge3MZmEPQqJbqbBYUybFMN+ZDbCkIFv1R8bTFJ8bnK3xrezvPQhl/MwgK7RXo1l3tCsJ
-         usuN3YH563xngmQnHpilwrHcOZQwr6NhjiXZ1eq4Kjk6uNUibpawwfbYmbE5C2nH/DpY
-         OKBQ==
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=fEcnt/Un2EDi62ILI861Z5k4Fp15xzDNHdZFR8+dXbk=;
+        b=dZy4uq5yyb9nyk7421cPRWw9v/ZJRvPvM9w7jjpe03/eWZbbyMHZuRJYOpi611j7DB
+         iCWexdJ9cH01hKyJihRzxd6AqK1n5ojyLOAB+YmR+8+khEWumpbRoah/Dq3nnNhwkA6k
+         WUSCbPKOarGthVWuOF/kHGQpsTuR61xwNwdvl7YQ1QHZb5UFXvBy7EqOWD7779iUJqpT
+         NWEcilnUDK+IvOULh3ejPYqLTXcpmp7GyF0MxOx0hHLddSOn0w7uk7MKdejfHjzFMbDG
+         U8m4q0zX65x6aRf8p/N474lMmK5f9RrKSIXRnrEO+GxOy2znufNMRnx8HUOFjZt6Mddh
+         1oQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Mq7oGyUGa59E1kgWxLfMA1Jci1ObdTHArjOhZkOa91w=;
-        b=UipJi2/0+NJAhkkpd3tZARVUhgFePw0mXK86l9545lTSLaWunWdf81vPqvTLpy7upf
-         Swd634TYwfxjIXcxiDgxcB9VntTiCCODe2Xok+7QAI629oaV2k0inY/bC+pzn8+QixDr
-         sOslsVBU2GLQQurUxjwNSYBfReMTCgB/9EnM588tGoRLxLWg2GLn/OUeGGezxeiHD9L1
-         pFQFCAJX1WWyFcnS7KZ5AUdzWWbKF0JhOdog8Eldp1lAHeHLrw2tTb4jpVqIOfKUlsH0
-         qW+OstQ2tJ4EdPlEaTgBWcLW3mpIviXIcZKRBu5DbhQGOjSH5+vPfu6um6rh5w8KHKCE
-         /iRQ==
-X-Gm-Message-State: AOAM532bxPwYcUsqoJLWraDJWdZgbUN0anZqtp3ftJHY6sMfos04Tne2
-        3nY+SIOvtGrDyjyt270HFUNGUPJXHTQ02vU8WQ==
-X-Google-Smtp-Source: ABdhPJzFmVEWyECPcvq3nmrFAqBmpc8vLWoM++LtINdW2awkRwtsUMmHAHH16P7cOE7u7hkWk0PnM+afXZ//vgOEBJc=
-X-Received: by 2002:a05:6512:491:: with SMTP id v17mr10245162lfq.148.1608722877158;
- Wed, 23 Dec 2020 03:27:57 -0800 (PST)
-MIME-Version: 1.0
-References: <CAEJqkgiiU7miC13iT6DufjFAsHkNZk6rBAw=KRRnHe47kTZDnw@mail.gmail.com>
- <9d621d34-e5ce-301a-1b89-92c0791fe348@roeck-us.net> <4483r6o2-245o-147-s71r-s64ss3nqr8ps@vanv.qr>
-In-Reply-To: <4483r6o2-245o-147-s71r-s64ss3nqr8ps@vanv.qr>
-From:   Gabriel C <nix.or.die@googlemail.com>
-Date:   Wed, 23 Dec 2020 12:27:31 +0100
-Message-ID: <CAEJqkgg9nbSmfByP2dZFR8RjCiTHfWpXN7sFjOkuhKoRgHLKUw@mail.gmail.com>
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=fEcnt/Un2EDi62ILI861Z5k4Fp15xzDNHdZFR8+dXbk=;
+        b=RwnLvU80oQx8btcH3FE6DwW3w/d/WtICrDDpL0AVucoT6Auh2Gp0i3w3QuRO0/2cuV
+         CoNw5fXA35T86lrDvB2TFybKQxVvngg67JDcvjsemjkT1tFVdW85zyDZDVva4OlDxCGe
+         5fCzGxGFkltzt5XlzhKhzM1xTZT9YibOc6XKJDrsK0WQJYOI5kHi7dYQWmSfObF8c+04
+         P3GCrvL9WeG2E09xdpxK+FgPjI3K/07R9CzqP4tsf7Mh/VG+nz7wFgSKAsrR/QF5tRfl
+         TcbYQ+1bqjtrZZRZ1L/sTpgyQ/sQu8rfDQpCycbMda+nZGAlRV9P4eJ5s6d4W7npp7p1
+         Zh1Q==
+X-Gm-Message-State: AOAM530jexBjw2v98kU8CbNn6gBqJ6Z+HOD/5DQZA0XrmI0byaLVBBGg
+        WfhR3kstlEMCRNlNT4Susog=
+X-Google-Smtp-Source: ABdhPJxlA5wuYcZjYORVFqH6bp5FJM+yD3Kg0QbqoMkMIZeiP93dRyCko/uTBITrsES2ALEaOAJmkg==
+X-Received: by 2002:a05:6830:717:: with SMTP id y23mr20147339ots.268.1608733556307;
+        Wed, 23 Dec 2020 06:25:56 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 8sm5564387otq.18.2020.12.23.06.25.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Dec 2020 06:25:54 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
 Subject: Re: k10temp: ZEN3 readings are broken
 To:     Jan Engelhardt <jengelh@inai.de>
-Cc:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+Cc:     Gabriel C <nix.or.die@googlemail.com>, linux-hwmon@vger.kernel.org,
         LKML <linux-kernel@vger.kernel.org>,
         Wei Huang <wei.huang2@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+References: <CAEJqkgiiU7miC13iT6DufjFAsHkNZk6rBAw=KRRnHe47kTZDnw@mail.gmail.com>
+ <9d621d34-e5ce-301a-1b89-92c0791fe348@roeck-us.net>
+ <4483r6o2-245o-147-s71r-s64ss3nqr8ps@vanv.qr>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <a259d4da-e66b-30c0-f3de-f32f31ae148e@roeck-us.net>
+Date:   Wed, 23 Dec 2020 06:25:53 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <4483r6o2-245o-147-s71r-s64ss3nqr8ps@vanv.qr>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Am Mi., 23. Dez. 2020 um 11:41 Uhr schrieb Jan Engelhardt <jengelh@inai.de>=
-:
->
->
+On 12/23/20 2:41 AM, Jan Engelhardt wrote:
+> 
 > On Tuesday 2020-12-22 04:58, Guenter Roeck wrote:
-> >On 12/21/20 5:45 PM, Gabriel C wrote:
-> >> Hello Guenter,
-> >>
-> >> while trying to add ZEN3 support for zenpower out of tree modules, I f=
-ind out
-> >> the in-kernel k10temp driver is broken with ZEN3 ( and partially ZEN2 =
-even ).
-> >
-> >[...] since I do not have time to actively maintain
-> >the driver, since each chip variant seems to use different addresses and=
- scales,
-> >and since the information about voltages and currents is unpublished by =
-AMD,
-> >I'll remove support for voltage/current readings from the upstream drive=
-r.
->
+>> On 12/21/20 5:45 PM, Gabriel C wrote:
+>>> Hello Guenter,
+>>>
+>>> while trying to add ZEN3 support for zenpower out of tree modules, I find out
+>>> the in-kernel k10temp driver is broken with ZEN3 ( and partially ZEN2 even ).
+>>
+>> [...] since I do not have time to actively maintain
+>> the driver, since each chip variant seems to use different addresses and scales,
+>> and since the information about voltages and currents is unpublished by AMD,
+>> I'll remove support for voltage/current readings from the upstream driver.
+> 
 > I support that decision.
->
-> /proc/cpuinfo::AMD Ryzen 7 3700X 8-Core Processor, fam 23 model 113 step =
-0
->
+> 
+> /proc/cpuinfo::AMD Ryzen 7 3700X 8-Core Processor, fam 23 model 113 step 0
+> 
 > A synthetic load (perl -e '1 while 1') x 16 shows:
 > Adapter: PCI adapter
 > Vcore:        +1.28 V
 > Vsoc:         +1.02 V
-> Tctl:         +94.8=C2=B0C
-> Tdie:         +94.8=C2=B0C
-> Tccd1:        +94.8=C2=B0C
+> Tctl:         +94.8°C
+> Tdie:         +94.8°C
+> Tccd1:        +94.8°C
 > Icore:       +76.00 A
 > Isoc:         +6.75 A
->
+> 
 > A BOINC workload on average:
 > k10temp-pci-00c3
 > Adapter: PCI adapter
-> Vcore:        +1.17 V
-> Vsoc:         +1.02 V
-> Tctl:         +94.9=C2=B0C
-> Tdie:         +94.9=C2=B0C
-> Tccd1:        +95.0=C2=B0C
-> Icore:       +88.00 A
-> Isoc:         +8.00 A
->
+> Vcore:        +1.17 V  
+> Vsoc:         +1.02 V  
+> Tctl:         +94.9°C  
+> Tdie:         +94.9°C  
+> Tccd1:        +95.0°C  
+> Icore:       +88.00 A  
+> Isoc:         +8.00 A  
+> 
 > The BOINC workload, when it momentarily spikes:
 > Adapter: PCI adapter
-> Vcore:        +1.32 V
-> Vsoc:         +1.02 V
-> Tctl:         +94.1=C2=B0C
-> Tdie:         +94.1=C2=B0C
-> Tccd1:        +96.0=C2=B0C
-> Icore:       +105.00 A
-> Isoc:         +7.75 A
->
-> For a processor sold as a 65 W part, observing reported sensors as
-> 88 A x 1.17 V + 8 A x 1.02 V =3D 111.12 W just can't be. We are off by a
+> Vcore:        +1.32 V  
+> Vsoc:         +1.02 V  
+> Tctl:         +94.1°C  
+> Tdie:         +94.1°C  
+> Tccd1:        +96.0°C  
+> Icore:       +105.00 A  
+> Isoc:         +7.75 A  
+> 
+> For a processor sold as a 65 W part, observing reported sensors as 
+> 88 A x 1.17 V + 8 A x 1.02 V = 111.12 W just can't be. We are off by a 
 > factor of about 2.
+> 
 
-Just before I forget, even with 100% correct code you could still be off by
-a factor of 2 with a broken BIOS or a vendor who is trying to bypass AMD
-spec limits.
+Currents were always supposed to be unscaled. So this post is again
+proving my point.
 
-See as an example this topic:
-https://cutt.ly/7h1bT48
+Either case, the code removing voltage and current support is now upstream.
 
-Best Regards,
-
-Gabriel C
+Guenter
