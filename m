@@ -7,64 +7,68 @@ X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A672C433E0
-	for <linux-hwmon@archiver.kernel.org>; Wed, 23 Dec 2020 21:31:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E7FDC433DB
+	for <linux-hwmon@archiver.kernel.org>; Wed, 23 Dec 2020 21:43:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1EF8E22273
-	for <linux-hwmon@archiver.kernel.org>; Wed, 23 Dec 2020 21:31:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EBCA42246B
+	for <linux-hwmon@archiver.kernel.org>; Wed, 23 Dec 2020 21:43:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728141AbgLWVb1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 23 Dec 2020 16:31:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43026 "EHLO
+        id S1725985AbgLWVnM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 23 Dec 2020 16:43:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727422AbgLWVb1 (ORCPT
+        with ESMTP id S1725811AbgLWVnM (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 23 Dec 2020 16:31:27 -0500
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B695C061794
-        for <linux-hwmon@vger.kernel.org>; Wed, 23 Dec 2020 13:30:47 -0800 (PST)
-Received: by mail-ot1-x332.google.com with SMTP id b24so315903otj.0
-        for <linux-hwmon@vger.kernel.org>; Wed, 23 Dec 2020 13:30:47 -0800 (PST)
+        Wed, 23 Dec 2020 16:43:12 -0500
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBB3C061794;
+        Wed, 23 Dec 2020 13:42:31 -0800 (PST)
+Received: by mail-ot1-x334.google.com with SMTP id j20so314681otq.5;
+        Wed, 23 Dec 2020 13:42:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=fcPUKZ7DATnDP8E5/E2JKJnQ4djyOttzHembUp6XaZE=;
-        b=mxP0fwJIqEnRbdnteiEeGcCwKN1VkhrptODQ3EGNCtVYlCeQ7Ykf6JBlkbuUsr6j5E
-         U/F0EtO5pKIhf6P7uLWozJ29oy0wZtK9DL4vqOUtRs+xaRj6aT3JgzfZcAd9ZKkNbxqI
-         zHj+r96Dbvqc14cpWyZjHjXud2zDhQ/bWD4/2xwHAm11YbadBuRUALJUGAtKitgAQSKr
-         3maBLPRkQis3it1+M0ubJ1IcLbThqz5rdBD6ifYxGXrO+dyJ30nwu5v8M6CgubyHCme3
-         5mQ3v32t6xdxGLTX5PklhN7CAJ49Uf8y7JfNMSm/VM6He2hfEEuslPJj165OoEt0KeZF
-         +n9w==
+        bh=VmrWLe4I4zuTOgIyNJuVjkGWRkDBtXR16ouccbG+D18=;
+        b=Hq/SwR6LFIkvuXGbd1to5P+I/xPkuOA4CkggPjxoozQPm+SC/3SEG9BsiovEctHy5Z
+         qAUdGg/P7UQzeRSkWmTSpLKRPohFDak3XMT3+6aoFjtSyFr80kQxLuOBfYPqsLsah0+z
+         uI0ElJOi3/Arpi3jpOGvnV+8uSbVOwusc1CMVSiUfawz06mZKG2m6eUWUDNJbGTQCFG2
+         l4Q7lu2qp77v36Y2ouYAT0mFbuzi9/wqYxvg5NSDa9ITQVMTIEolKR/ImGaBF1b5ilXj
+         +g14+O6NPHRwl4PvlNDis6Iis2zNcCyD2S4xC8D9L9mg68nAJpcw7fbMWWXoWWjJW9zI
+         VbAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=fcPUKZ7DATnDP8E5/E2JKJnQ4djyOttzHembUp6XaZE=;
-        b=Z4zj3hdx98pYAqiPD4xJtk9/BwS56u3TCsLRz5F1ejwov5DesNsE+3m+rToi1twm8d
-         4x7OFwDF+jQfduxPUWj2v3gFHf/ztU73a60HL7M9gj40JrThFpCoXUGU51WnNxjAAuU+
-         P+9GJ+3/qq5iETziq5MQEYa6afIUfHRDu2nAEmknQ8q3YrQIFk1PnCmKVjjGLGl1ZjiN
-         TDEfDl9qL+65YLWE6FSiuUjuqnCfKwBokf6Yu2XAvrwagYpHn6SArTbdAYb3UHxwOHeu
-         w+iPxyPz124k/P1iVYClhyhyN3UFEHL7dRmkgUMHUpsFuNeLOW/fP6lZeRRiwLc+bg4/
-         yT1Q==
-X-Gm-Message-State: AOAM530vnih4G5kRo7/TtPalQDUGz5qf/n07jmuEFult/NBsGsF/33b7
-        0TAt6wDrT/QyBRsTnURD2dK9xCwI5oc=
-X-Google-Smtp-Source: ABdhPJyqMrT6NVb9XYPEHQP2X1pVkZ/6BZrVJRcivhiPNgJJDhshqZ2/fHPc7Gs1ivGpE/CDHsWSwQ==
-X-Received: by 2002:a05:6830:1e0c:: with SMTP id s12mr20436777otr.152.1608759046113;
-        Wed, 23 Dec 2020 13:30:46 -0800 (PST)
+        bh=VmrWLe4I4zuTOgIyNJuVjkGWRkDBtXR16ouccbG+D18=;
+        b=DPaHVnHkSq6f6bz0c+6VDWeVfxtUwhUv8wOGCGo7+qR64ukvknY6Cw0AdxOr7c+tfg
+         UXH2lutFNW2t1GsyCMQqmh+fNaAu2axqX2BK7vjOhC+daf+xbFmvO3xYpgGi9NKRrqsH
+         qZlaBqIXWxaE050KkLcyfPRZd5u0sB0w8gDHaX20mF/3sIPjDRg3WNabTerTvnEiaRqN
+         OHVFBhohyQUSxAopu1pm2fMbpAIL14FmEfJeH04RJWXe0U5sQrsYfBaeXQsIjdR4KKkS
+         Hg0no6TAegxEwtYXFsd5XCPEYMpSs1CZohmNbZ+s1Gj37AaUR1uzjw8upjhmZ9uOZFxW
+         jpYQ==
+X-Gm-Message-State: AOAM531It2OLsrtQ0n+XRx7zzeCtn/W46vAcqFFHISnwxNS3JBri7z8I
+        Tj0cvWBc2PNLrzH9P1Ttrp2S4SENsx8=
+X-Google-Smtp-Source: ABdhPJxN4hoLbZZLl1Sqvblt3jGAsevFLmV2swOxk5s3dAjiQVD7g0CdJUoe2WUgh/sN8SBnWcpgjg==
+X-Received: by 2002:a05:6830:20d5:: with SMTP id z21mr20640036otq.310.1608759750742;
+        Wed, 23 Dec 2020 13:42:30 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g200sm5722606oib.19.2020.12.23.13.30.44
+        by smtp.gmail.com with ESMTPSA id o49sm5925007ota.51.2020.12.23.13.42.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Dec 2020 13:30:45 -0800 (PST)
+        Wed, 23 Dec 2020 13:42:30 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH] hwmon: (abx500): Decomission abx500 driver
+Subject: Re: [PATCH] hwmon: (ntc_thermistor): try reading processed
 To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-References: <20201221125521.768082-1-linus.walleij@linaro.org>
- <20201221190402.GA162140@roeck-us.net>
- <CACRpkdbLW6MJ_uy5X7GJ0_dfPOC0wYA8wVj4ijcGwCNeOjS9fg@mail.gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Chris Lesiak <chris.lesiak@licor.com>,
+        Jonathan Cameron <jic23@cam.ac.uk>,
+        linux-iio <linux-iio@vger.kernel.org>
+References: <20201219224143.686074-1-linus.walleij@linaro.org>
+ <6d339a6c-6f8c-4a5e-718b-c90a9fbb8c01@roeck-us.net>
+ <CACRpkdZTVAoDbbJqTJbxv1ZDyAMsB_h9TAdKKbxqBYGp4-b_jg@mail.gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -109,33 +113,61 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <0ad60e02-4590-8ae0-684b-abfe058e4186@roeck-us.net>
-Date:   Wed, 23 Dec 2020 13:30:43 -0800
+Message-ID: <d990e08f-6f18-836d-89a5-01102a4faa45@roeck-us.net>
+Date:   Wed, 23 Dec 2020 13:42:28 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <CACRpkdbLW6MJ_uy5X7GJ0_dfPOC0wYA8wVj4ijcGwCNeOjS9fg@mail.gmail.com>
+In-Reply-To: <CACRpkdZTVAoDbbJqTJbxv1ZDyAMsB_h9TAdKKbxqBYGp4-b_jg@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 12/23/20 1:11 PM, Linus Walleij wrote:
-> On Mon, Dec 21, 2020 at 8:04 PM Guenter Roeck <linux@roeck-us.net> wrote:
+On 12/23/20 1:08 PM, Linus Walleij wrote:
+> On Mon, Dec 21, 2020 at 5:15 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> 
+>>> -     ret = iio_convert_raw_to_processed(channel, raw, &uv, 1000);
+>>> -     if (ret < 0) {
+>>> -             /* Assume 12 bit ADC with vref at pullup_uv */
+>>> -             uv = (pdata->pullup_uv * (s64)raw) >> 12;
+>>> +             /*
+>>> +              * FIXME: This fallback to using a raw read and then right
+>>> +              * out assume the ADC is 12 bits and hard-coding scale
+>>> +              * to 1000 seems a bit dangerous. Should it simply be
+>>> +              * deleted?
+>>> +              */
 >>
->> Applied to hwmon-next. Note that I also removed the driver
->> documentation.
+>> The hwmon ABI specifically supports unscaled values, which can then be
+>> scaled in userspace using the sensors configuration file.
+>> Given that we return the pseudo-scaled value to userspace today,
+>> it seems to me that it would do more harm to change that instead of just
+>> leaving it in place.
 > 
-> I screwed up because I forgot to commit the changes to Makefile
-> and Kconfig so this will yield build errors :/
+> I see.
 > 
-> I will send a v2 so you can decide what to do, sorry for the mess.
+> I tried to drill down and see the history of the driver and in the
+> original commit all values are scaled with the function
+> get_temp_mC() which indicates that the driver has always
+> intended to return millicentigrades, not unscaled values (as
+> far as I can tell).
 > 
 
-Your v2 still does not remove the documentation, so I'd have to go in
-(again) and repeat that removal. Given that, I'll just fix up v1
-(hopefully this time for good). Thanks for the note.
+Sure. That isn't the problem. I didn't say that the value reported
+to userspace _shall_ be unscaled, I said that the ABI supports it.
+
+We are not discussing your patch here, just the comment. You don't
+answer the basic question: What should the driver do if the iio
+subsystem only delivers raw values ? I suggested we should just keep
+the current assumption in this case, ie do the fixed conversion,
+and let userspace handle any necessary adjustments. You seem to object.
+With your patch, we get a comment in the driver suggesting that some
+code should be removed. In my opinion, such a comment comment does
+not add any value. Ether we drop the code or we don't, and I dislike
+removing it.
+
+That results in my usual fallback: When in doubt, do nothing.
 
 Guenter
