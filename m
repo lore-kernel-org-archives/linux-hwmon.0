@@ -2,99 +2,97 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01694C433DB
-	for <linux-hwmon@archiver.kernel.org>; Wed, 23 Dec 2020 00:54:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96757C433E0
+	for <linux-hwmon@archiver.kernel.org>; Wed, 23 Dec 2020 10:49:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B6750221F7
-	for <linux-hwmon@archiver.kernel.org>; Wed, 23 Dec 2020 00:54:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 57EDA207F7
+	for <linux-hwmon@archiver.kernel.org>; Wed, 23 Dec 2020 10:49:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726275AbgLWAyb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 22 Dec 2020 19:54:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51020 "EHLO
+        id S1726638AbgLWKtO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 23 Dec 2020 05:49:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726069AbgLWAya (ORCPT
+        with ESMTP id S1726022AbgLWKtO (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 22 Dec 2020 19:54:30 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3F1C0613D3;
-        Tue, 22 Dec 2020 16:53:50 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id g20so20683017ejb.1;
-        Tue, 22 Dec 2020 16:53:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jhwq8dFCnYRB1GRDZAa/1oWzJtmgPF7TILAcsF6Iqv0=;
-        b=QpxCpqkRXdK+CKFv29ntOoplOxMiYGDU6xEVbswo2Fjw2p5tWIgtFrJkSUo0EZjSUF
-         50ldsbvfJvwlqllT19d5ZjFj1FJzykrE86RcSmTd1hmaWurzBQWXYBFVpaezqXHeuS9y
-         z3N34e9eriU00qmRlaZVEr6Uud6ML3gHiRJn/IrvJGcIDsiEwcx1xz+dHyG3YMNZHdqN
-         5Ic8XdSRwoyhY869ZDrxFqnlL+gwzkBUGw8GBGNpBJuPUjC+KOuY/SP8M+h/OrYq7YKs
-         X+Ki5zsUSeIfIrLzFZ39/z543soIBaHlYXc9hfXoCmuPXW9ePI0z3OYz5tJiC8lE1J/T
-         Gr4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jhwq8dFCnYRB1GRDZAa/1oWzJtmgPF7TILAcsF6Iqv0=;
-        b=hViat7m2RV6Ga8p8iPkUStVjjtlpREQvEe1tQHD56PCAXN0pPo66KRUGnQJNR3JdqW
-         MtOgpEgsosJVsYgV/2i1+0NOCzmEsJyvbpiMGF8fYVuoalamm+wSO0uM5R8VUNmY/YAU
-         A9cZnQjYcM/LcUbbfzLyRn89PWpQ+c+xJW3+99zkl3JBDk5DIfqvPbhs6ZkIFWkSRFin
-         rldGJWX1ZPD/Vs8Ijod04HCvBVav9pyzXz2Nj11fnF3t0zTdLQvhwVTAAJ3ECy72kWSt
-         IKVaIRcB1bUQ8R+7ejwEpXw2gsJuPJWbmREOanQyl39SPG4SIy13ss+T/UvfA23KZsNw
-         KUYw==
-X-Gm-Message-State: AOAM53206JnqNxJ0l0t+UP70bOi/sBkW7fYz2b5/MFpNaM1Rk6Q5PYFp
-        4t3jV+aFOXgK+Wvj01bzXg==
-X-Google-Smtp-Source: ABdhPJxXgrXvFDYDXXlnCyFl+1D630wBoTUdP8V0HxqwsqR/txVDpIsK7cOzOgC7GCm6FH/bN5ohvw==
-X-Received: by 2002:a17:906:a2d0:: with SMTP id by16mr21599305ejb.207.1608684829109;
-        Tue, 22 Dec 2020 16:53:49 -0800 (PST)
-Received: from crazy-nitroan51543.fritz.box (business-24-134-37-65.pool2.vodafone-ip.de. [24.134.37.65])
-        by smtp.gmail.com with ESMTPSA id k21sm31625058edq.26.2020.12.22.16.53.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Dec 2020 16:53:47 -0800 (PST)
-From:   Gabriel Craciunescu <nix.or.die@googlemail.com>
-X-Google-Original-From: Gabriel Craciunescu <nix.or.die@gmail.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Gabriel Craciunescu <nix.or.die@gmail.com>
-Subject: [PATCH] hwmon: k10temp: Zen3 Ryzen Desktop CPUs support
-Date:   Wed, 23 Dec 2020 01:53:15 +0100
-Message-Id: <20201223005315.20077-1-nix.or.die@gmail.com>
-X-Mailer: git-send-email 2.29.2
+        Wed, 23 Dec 2020 05:49:14 -0500
+X-Greylist: delayed 398 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 23 Dec 2020 02:48:33 PST
+Received: from a3.inai.de (a3.inai.de [IPv6:2a01:4f8:10b:45d8::f5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B07AC0613D3
+        for <linux-hwmon@vger.kernel.org>; Wed, 23 Dec 2020 02:48:33 -0800 (PST)
+Received: by a3.inai.de (Postfix, from userid 25121)
+        id 0147B588D24FF; Wed, 23 Dec 2020 11:41:51 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by a3.inai.de (Postfix) with ESMTP id F12DB60046354;
+        Wed, 23 Dec 2020 11:41:51 +0100 (CET)
+Date:   Wed, 23 Dec 2020 11:41:51 +0100 (CET)
+From:   Jan Engelhardt <jengelh@inai.de>
+To:     Guenter Roeck <linux@roeck-us.net>
+cc:     Gabriel C <nix.or.die@googlemail.com>, linux-hwmon@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Wei Huang <wei.huang2@amd.com>
+Subject: Re: k10temp: ZEN3 readings are broken
+In-Reply-To: <9d621d34-e5ce-301a-1b89-92c0791fe348@roeck-us.net>
+Message-ID: <4483r6o2-245o-147-s71r-s64ss3nqr8ps@vanv.qr>
+References: <CAEJqkgiiU7miC13iT6DufjFAsHkNZk6rBAw=KRRnHe47kTZDnw@mail.gmail.com> <9d621d34-e5ce-301a-1b89-92c0791fe348@roeck-us.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The module has only support for Zen3 server CPUs right now.
-Add support for Family 0x19, model 0x21 which are Zen3 Ryzen Desktop CPUs.
-Tested on 5800x, 5900x and 5950x CPUs.
 
-Signed-off-by: Gabriel Craciunescu <nix.or.die@gmail.com>
----
- drivers/hwmon/k10temp.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+On Tuesday 2020-12-22 04:58, Guenter Roeck wrote:
+>On 12/21/20 5:45 PM, Gabriel C wrote:
+>> Hello Guenter,
+>> 
+>> while trying to add ZEN3 support for zenpower out of tree modules, I find out
+>> the in-kernel k10temp driver is broken with ZEN3 ( and partially ZEN2 even ).
+>
+>[...] since I do not have time to actively maintain
+>the driver, since each chip variant seems to use different addresses and scales,
+>and since the information about voltages and currents is unpublished by AMD,
+>I'll remove support for voltage/current readings from the upstream driver.
 
-diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-index 3bc2551577a3..5b1677d85b3f 100644
---- a/drivers/hwmon/k10temp.c
-+++ b/drivers/hwmon/k10temp.c
-@@ -448,7 +448,8 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 		data->is_zen = true;
- 
- 		switch (boot_cpu_data.x86_model) {
--		case 0x0 ... 0x1:	/* Zen3 */
-+		case 0x0 ... 0x1:	/* Zen3 SP3/TR */
-+		case 0x21:		/* ZEN3 Ryzen Desktop */
- 			k10temp_get_ccd_support(pdev, data, 8);
- 			break;
- 		}
--- 
-2.29.2
+I support that decision.
 
+/proc/cpuinfo::AMD Ryzen 7 3700X 8-Core Processor, fam 23 model 113 step 0
+
+A synthetic load (perl -e '1 while 1') x 16 shows:
+Adapter: PCI adapter
+Vcore:        +1.28 V
+Vsoc:         +1.02 V
+Tctl:         +94.8°C
+Tdie:         +94.8°C
+Tccd1:        +94.8°C
+Icore:       +76.00 A
+Isoc:         +6.75 A
+
+A BOINC workload on average:
+k10temp-pci-00c3
+Adapter: PCI adapter
+Vcore:        +1.17 V  
+Vsoc:         +1.02 V  
+Tctl:         +94.9°C  
+Tdie:         +94.9°C  
+Tccd1:        +95.0°C  
+Icore:       +88.00 A  
+Isoc:         +8.00 A  
+
+The BOINC workload, when it momentarily spikes:
+Adapter: PCI adapter
+Vcore:        +1.32 V  
+Vsoc:         +1.02 V  
+Tctl:         +94.1°C  
+Tdie:         +94.1°C  
+Tccd1:        +96.0°C  
+Icore:       +105.00 A  
+Isoc:         +7.75 A  
+
+For a processor sold as a 65 W part, observing reported sensors as 
+88 A x 1.17 V + 8 A x 1.02 V = 111.12 W just can't be. We are off by a 
+factor of about 2.
