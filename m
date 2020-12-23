@@ -2,71 +2,69 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 636A4C433E0
-	for <linux-hwmon@archiver.kernel.org>; Wed, 23 Dec 2020 14:26:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72AD1C4332E
+	for <linux-hwmon@archiver.kernel.org>; Wed, 23 Dec 2020 15:37:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2575E2313C
-	for <linux-hwmon@archiver.kernel.org>; Wed, 23 Dec 2020 14:26:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5875923341
+	for <linux-hwmon@archiver.kernel.org>; Wed, 23 Dec 2020 15:37:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727464AbgLWO0h (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 23 Dec 2020 09:26:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34448 "EHLO
+        id S1727438AbgLWPhS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 23 Dec 2020 10:37:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726419AbgLWO0h (ORCPT
+        with ESMTP id S1726733AbgLWPhR (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 23 Dec 2020 09:26:37 -0500
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC82C0613D6;
-        Wed, 23 Dec 2020 06:25:56 -0800 (PST)
-Received: by mail-ot1-x334.google.com with SMTP id j20so15118068otq.5;
-        Wed, 23 Dec 2020 06:25:56 -0800 (PST)
+        Wed, 23 Dec 2020 10:37:17 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8592FC061794;
+        Wed, 23 Dec 2020 07:36:37 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id j12so15302053ota.7;
+        Wed, 23 Dec 2020 07:36:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=fEcnt/Un2EDi62ILI861Z5k4Fp15xzDNHdZFR8+dXbk=;
-        b=dZy4uq5yyb9nyk7421cPRWw9v/ZJRvPvM9w7jjpe03/eWZbbyMHZuRJYOpi611j7DB
-         iCWexdJ9cH01hKyJihRzxd6AqK1n5ojyLOAB+YmR+8+khEWumpbRoah/Dq3nnNhwkA6k
-         WUSCbPKOarGthVWuOF/kHGQpsTuR61xwNwdvl7YQ1QHZb5UFXvBy7EqOWD7779iUJqpT
-         NWEcilnUDK+IvOULh3ejPYqLTXcpmp7GyF0MxOx0hHLddSOn0w7uk7MKdejfHjzFMbDG
-         U8m4q0zX65x6aRf8p/N474lMmK5f9RrKSIXRnrEO+GxOy2znufNMRnx8HUOFjZt6Mddh
-         1oQQ==
+        bh=/di7368pOkIPlIzeVBD2GD+PNjipcCG9u8jRY0WIBJE=;
+        b=sgp2VIy2Rz1VXpRz3VkZkVbf9vBmUzaHlkkr+0PZXAxCeu2Qeqt4pZ9zw1AVBVusL0
+         +X1KHlW/DwhhhdUU0M88KMfX27G7PUGg71Do6VOZrnq/E+PxeOe0E5zcKGrYAdzQfBhM
+         2gtrKZpe23ulsmIRh1zsM9j07fI8XKdoylO1RXysfydmn324Sv5nnlFKDfffLZsgzptk
+         nYbTWPY9JGXUxcS+1sPofkz7NKFjkYMuBXudNwzC8yNhcmQTw3imiDKY/na63EJ7ydJL
+         eyxq1/9jBiIn8vhQ02B20jdTMXaRltxM6b6SXcU+ikUCp2OGo/zwW1sUUMN+ac8EPCUO
+         c4bQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=fEcnt/Un2EDi62ILI861Z5k4Fp15xzDNHdZFR8+dXbk=;
-        b=RwnLvU80oQx8btcH3FE6DwW3w/d/WtICrDDpL0AVucoT6Auh2Gp0i3w3QuRO0/2cuV
-         CoNw5fXA35T86lrDvB2TFybKQxVvngg67JDcvjsemjkT1tFVdW85zyDZDVva4OlDxCGe
-         5fCzGxGFkltzt5XlzhKhzM1xTZT9YibOc6XKJDrsK0WQJYOI5kHi7dYQWmSfObF8c+04
-         P3GCrvL9WeG2E09xdpxK+FgPjI3K/07R9CzqP4tsf7Mh/VG+nz7wFgSKAsrR/QF5tRfl
-         TcbYQ+1bqjtrZZRZ1L/sTpgyQ/sQu8rfDQpCycbMda+nZGAlRV9P4eJ5s6d4W7npp7p1
-         Zh1Q==
-X-Gm-Message-State: AOAM530jexBjw2v98kU8CbNn6gBqJ6Z+HOD/5DQZA0XrmI0byaLVBBGg
-        WfhR3kstlEMCRNlNT4Susog=
-X-Google-Smtp-Source: ABdhPJxlA5wuYcZjYORVFqH6bp5FJM+yD3Kg0QbqoMkMIZeiP93dRyCko/uTBITrsES2ALEaOAJmkg==
-X-Received: by 2002:a05:6830:717:: with SMTP id y23mr20147339ots.268.1608733556307;
-        Wed, 23 Dec 2020 06:25:56 -0800 (PST)
+        bh=/di7368pOkIPlIzeVBD2GD+PNjipcCG9u8jRY0WIBJE=;
+        b=XqqlEsv2Lb1q0qlqsNvs9y8niJHvXkZOPj4aYvLGsaWoEd/f7pcHHM+kD+ARas5S7F
+         /1b5XPi2XaeKcKX8kIsiDLifHoeCX1O3fklZ/r8tSC0YGvr8fgWwd3tUjSA4H5eYvSR1
+         vBogl4QE45dbpnt1GgnFVZ2hAFVo+icygR/dzX6fa00Ok/NbzpeclQuJfIS72DfUmXpE
+         l9sy70ggwC9ZL9lLD22XlYiwYqIApHIJ6pRQT0F69JUNno9czgpwlRxIshvFTRBthlts
+         qEYeIDZWsWj+aZtJKtRyHzFd/KEUcQfXqt50wJn6aTMWuzrK60qgB033B7JcREw14KAQ
+         vJtw==
+X-Gm-Message-State: AOAM531DTEqbnguKhm9G5KmmU4teyuDdeX0g3mZTjfqxSlnaW8scgsdx
+        aJVh7tzhV2AncKoorrWHLI0=
+X-Google-Smtp-Source: ABdhPJwCm++ND1HJNT6+UuvuyG3LVDnh39A9ZY/dOXNo6eMu5jJiSieQ5lRXMcL99EBV8/v+I17iVA==
+X-Received: by 2002:a05:6830:1411:: with SMTP id v17mr20432599otp.352.1608737796961;
+        Wed, 23 Dec 2020 07:36:36 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 8sm5564387otq.18.2020.12.23.06.25.54
+        by smtp.gmail.com with ESMTPSA id t18sm5447406otc.64.2020.12.23.07.36.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Dec 2020 06:25:54 -0800 (PST)
+        Wed, 23 Dec 2020 07:36:35 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: k10temp: ZEN3 readings are broken
-To:     Jan Engelhardt <jengelh@inai.de>
-Cc:     Gabriel C <nix.or.die@googlemail.com>, linux-hwmon@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Wei Huang <wei.huang2@amd.com>
-References: <CAEJqkgiiU7miC13iT6DufjFAsHkNZk6rBAw=KRRnHe47kTZDnw@mail.gmail.com>
- <9d621d34-e5ce-301a-1b89-92c0791fe348@roeck-us.net>
- <4483r6o2-245o-147-s71r-s64ss3nqr8ps@vanv.qr>
+Subject: Re: [PATCH] hwmon: k10temp: Zen3 Ryzen Desktop CPUs support
+To:     Gabriel Craciunescu <nix.or.die@googlemail.com>,
+        linux-hwmon@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Gabriel Craciunescu <nix.or.die@gmail.com>
+References: <20201223005315.20077-1-nix.or.die@gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -111,76 +109,27 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <a259d4da-e66b-30c0-f3de-f32f31ae148e@roeck-us.net>
-Date:   Wed, 23 Dec 2020 06:25:53 -0800
+Message-ID: <eb3bca39-404a-8e4f-808c-04124fbab273@roeck-us.net>
+Date:   Wed, 23 Dec 2020 07:36:33 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <4483r6o2-245o-147-s71r-s64ss3nqr8ps@vanv.qr>
+In-Reply-To: <20201223005315.20077-1-nix.or.die@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 12/23/20 2:41 AM, Jan Engelhardt wrote:
+On 12/22/20 4:53 PM, Gabriel Craciunescu wrote:
+> The module has only support for Zen3 server CPUs right now.
+> Add support for Family 0x19, model 0x21 which are Zen3 Ryzen Desktop CPUs.
+> Tested on 5800x, 5900x and 5950x CPUs.
 > 
-> On Tuesday 2020-12-22 04:58, Guenter Roeck wrote:
->> On 12/21/20 5:45 PM, Gabriel C wrote:
->>> Hello Guenter,
->>>
->>> while trying to add ZEN3 support for zenpower out of tree modules, I find out
->>> the in-kernel k10temp driver is broken with ZEN3 ( and partially ZEN2 even ).
->>
->> [...] since I do not have time to actively maintain
->> the driver, since each chip variant seems to use different addresses and scales,
->> and since the information about voltages and currents is unpublished by AMD,
->> I'll remove support for voltage/current readings from the upstream driver.
-> 
-> I support that decision.
-> 
-> /proc/cpuinfo::AMD Ryzen 7 3700X 8-Core Processor, fam 23 model 113 step 0
-> 
-> A synthetic load (perl -e '1 while 1') x 16 shows:
-> Adapter: PCI adapter
-> Vcore:        +1.28 V
-> Vsoc:         +1.02 V
-> Tctl:         +94.8°C
-> Tdie:         +94.8°C
-> Tccd1:        +94.8°C
-> Icore:       +76.00 A
-> Isoc:         +6.75 A
-> 
-> A BOINC workload on average:
-> k10temp-pci-00c3
-> Adapter: PCI adapter
-> Vcore:        +1.17 V  
-> Vsoc:         +1.02 V  
-> Tctl:         +94.9°C  
-> Tdie:         +94.9°C  
-> Tccd1:        +95.0°C  
-> Icore:       +88.00 A  
-> Isoc:         +8.00 A  
-> 
-> The BOINC workload, when it momentarily spikes:
-> Adapter: PCI adapter
-> Vcore:        +1.32 V  
-> Vsoc:         +1.02 V  
-> Tctl:         +94.1°C  
-> Tdie:         +94.1°C  
-> Tccd1:        +96.0°C  
-> Icore:       +105.00 A  
-> Isoc:         +7.75 A  
-> 
-> For a processor sold as a 65 W part, observing reported sensors as 
-> 88 A x 1.17 V + 8 A x 1.02 V = 111.12 W just can't be. We are off by a 
-> factor of about 2.
-> 
+> Signed-off-by: Gabriel Craciunescu <nix.or.die@gmail.com>
 
-Currents were always supposed to be unscaled. So this post is again
-proving my point.
+Applied.
 
-Either case, the code removing voltage and current support is now upstream.
-
+Thanks,
 Guenter
