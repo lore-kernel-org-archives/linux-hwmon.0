@@ -2,63 +2,99 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DEF24C433DB
-	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Dec 2020 22:24:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01694C433DB
+	for <linux-hwmon@archiver.kernel.org>; Wed, 23 Dec 2020 00:54:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B6D79207B1
-	for <linux-hwmon@archiver.kernel.org>; Tue, 22 Dec 2020 22:24:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B6750221F7
+	for <linux-hwmon@archiver.kernel.org>; Wed, 23 Dec 2020 00:54:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727435AbgLVWYn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 22 Dec 2020 17:24:43 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49778 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726329AbgLVWYn (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 22 Dec 2020 17:24:43 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id C1750207B1;
-        Tue, 22 Dec 2020 22:24:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608675842;
-        bh=0/qr0/SHKFayzMQdFTEFldJQ1CZ5J4cpywnn7hdQG2U=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=jE23D+H1qMXQlK9+19F5HMG2EBekkH1LUnAreDOfBXl9SVImT7/Yw14wodMTDDubl
-         7H/UeQ9XqYbY1jZXC3E+ESj2AJikG+SA5wSuhLUZ57IbQLIfVNLex8B9Q5DH7v7Yj7
-         PDXrLut76WDCYofMIk/7oRYEnIu2UjC/sKsUU4UeNHok61FCG7SpWiygDFtOsSJWkt
-         vbQR8k+lx2VPS2vBFeEPvSEKVDkOWD2Y/hpfv99wNBU33bFD7fymIeLg7YuyoY2JDc
-         uRSOCzv5EZjmXtyWDCqNtCFs9Xv6FDmtyGfVAXBSWFiQa/2kkegj0Wmcc3xVIepV2R
-         NTAGE9xYXC7vQ==
-Subject: Re: [GIT PULL] hwmon updates for v5.11-take2
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20201222162244.181444-1-linux@roeck-us.net>
-References: <20201222162244.181444-1-linux@roeck-us.net>
-X-PR-Tracked-List-Id: <linux-hwmon.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20201222162244.181444-1-linux@roeck-us.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.11-take2
-X-PR-Tracked-Commit-Id: 0a4e668b5d52eed8026f5d717196b02b55fb2dc6
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 4e31dcc0a9231462f0e275544b5aebc668481a4e
-Message-Id: <160867584263.8550.1876748907808389592.pr-tracker-bot@kernel.org>
-Date:   Tue, 22 Dec 2020 22:24:02 +0000
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+        id S1726275AbgLWAyb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 22 Dec 2020 19:54:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51020 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726069AbgLWAya (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 22 Dec 2020 19:54:30 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3F1C0613D3;
+        Tue, 22 Dec 2020 16:53:50 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id g20so20683017ejb.1;
+        Tue, 22 Dec 2020 16:53:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jhwq8dFCnYRB1GRDZAa/1oWzJtmgPF7TILAcsF6Iqv0=;
+        b=QpxCpqkRXdK+CKFv29ntOoplOxMiYGDU6xEVbswo2Fjw2p5tWIgtFrJkSUo0EZjSUF
+         50ldsbvfJvwlqllT19d5ZjFj1FJzykrE86RcSmTd1hmaWurzBQWXYBFVpaezqXHeuS9y
+         z3N34e9eriU00qmRlaZVEr6Uud6ML3gHiRJn/IrvJGcIDsiEwcx1xz+dHyG3YMNZHdqN
+         5Ic8XdSRwoyhY869ZDrxFqnlL+gwzkBUGw8GBGNpBJuPUjC+KOuY/SP8M+h/OrYq7YKs
+         X+Ki5zsUSeIfIrLzFZ39/z543soIBaHlYXc9hfXoCmuPXW9ePI0z3OYz5tJiC8lE1J/T
+         Gr4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jhwq8dFCnYRB1GRDZAa/1oWzJtmgPF7TILAcsF6Iqv0=;
+        b=hViat7m2RV6Ga8p8iPkUStVjjtlpREQvEe1tQHD56PCAXN0pPo66KRUGnQJNR3JdqW
+         MtOgpEgsosJVsYgV/2i1+0NOCzmEsJyvbpiMGF8fYVuoalamm+wSO0uM5R8VUNmY/YAU
+         A9cZnQjYcM/LcUbbfzLyRn89PWpQ+c+xJW3+99zkl3JBDk5DIfqvPbhs6ZkIFWkSRFin
+         rldGJWX1ZPD/Vs8Ijod04HCvBVav9pyzXz2Nj11fnF3t0zTdLQvhwVTAAJ3ECy72kWSt
+         IKVaIRcB1bUQ8R+7ejwEpXw2gsJuPJWbmREOanQyl39SPG4SIy13ss+T/UvfA23KZsNw
+         KUYw==
+X-Gm-Message-State: AOAM53206JnqNxJ0l0t+UP70bOi/sBkW7fYz2b5/MFpNaM1Rk6Q5PYFp
+        4t3jV+aFOXgK+Wvj01bzXg==
+X-Google-Smtp-Source: ABdhPJxXgrXvFDYDXXlnCyFl+1D630wBoTUdP8V0HxqwsqR/txVDpIsK7cOzOgC7GCm6FH/bN5ohvw==
+X-Received: by 2002:a17:906:a2d0:: with SMTP id by16mr21599305ejb.207.1608684829109;
+        Tue, 22 Dec 2020 16:53:49 -0800 (PST)
+Received: from crazy-nitroan51543.fritz.box (business-24-134-37-65.pool2.vodafone-ip.de. [24.134.37.65])
+        by smtp.gmail.com with ESMTPSA id k21sm31625058edq.26.2020.12.22.16.53.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Dec 2020 16:53:47 -0800 (PST)
+From:   Gabriel Craciunescu <nix.or.die@googlemail.com>
+X-Google-Original-From: Gabriel Craciunescu <nix.or.die@gmail.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Gabriel Craciunescu <nix.or.die@gmail.com>
+Subject: [PATCH] hwmon: k10temp: Zen3 Ryzen Desktop CPUs support
+Date:   Wed, 23 Dec 2020 01:53:15 +0100
+Message-Id: <20201223005315.20077-1-nix.or.die@gmail.com>
+X-Mailer: git-send-email 2.29.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The pull request you sent on Tue, 22 Dec 2020 08:22:44 -0800:
+The module has only support for Zen3 server CPUs right now.
+Add support for Family 0x19, model 0x21 which are Zen3 Ryzen Desktop CPUs.
+Tested on 5800x, 5900x and 5950x CPUs.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.11-take2
+Signed-off-by: Gabriel Craciunescu <nix.or.die@gmail.com>
+---
+ drivers/hwmon/k10temp.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/4e31dcc0a9231462f0e275544b5aebc668481a4e
-
-Thank you!
-
+diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+index 3bc2551577a3..5b1677d85b3f 100644
+--- a/drivers/hwmon/k10temp.c
++++ b/drivers/hwmon/k10temp.c
+@@ -448,7 +448,8 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 		data->is_zen = true;
+ 
+ 		switch (boot_cpu_data.x86_model) {
+-		case 0x0 ... 0x1:	/* Zen3 */
++		case 0x0 ... 0x1:	/* Zen3 SP3/TR */
++		case 0x21:		/* ZEN3 Ryzen Desktop */
+ 			k10temp_get_ccd_support(pdev, data, 8);
+ 			break;
+ 		}
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.29.2
+
