@@ -2,159 +2,132 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81F9BC433E0
-	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Dec 2020 01:16:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 430DCC433DB
+	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Dec 2020 01:40:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 437E122517
-	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Dec 2020 01:16:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E4E842256F
+	for <linux-hwmon@archiver.kernel.org>; Thu, 24 Dec 2020 01:40:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728292AbgLXBQx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 23 Dec 2020 20:16:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49260 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728128AbgLXBQw (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 23 Dec 2020 20:16:52 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485E3C061794
-        for <linux-hwmon@vger.kernel.org>; Wed, 23 Dec 2020 17:16:12 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id h22so1585535lfu.2
-        for <linux-hwmon@vger.kernel.org>; Wed, 23 Dec 2020 17:16:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=czptFay4sxNBxdeX/6m7zLzHRzM7f7t5O5r/8rNb9WY=;
-        b=MOitgnklA9nPkbQDPPZWhF3Newd29xfvrKfIyeL3ceJwWHM9u9R4qREux9s6XUHTNo
-         HWIRA5ttZjedSn4AAGtKxhcrpyat9BTyo0iz/lGnygYM3O/qabPBcFB5LgYzU5QaCyQh
-         GvBMUuAqc5ulkso4GDL1bfSEUjnMrfSS4uPfLEPWGaszn8QE2CNqvZ6HiY3f/RYCeVXt
-         ATWe4fCB7vSZdCncGFZpbQOL+CeFjwJXhAB8aJMd+PEgzNQ8uc2ZTF+0kZOcycOc0m0e
-         01yGm2wxfWgtCrf1v2ko2TdGG8adJBD+kChssaXP7pybT/9lNVVhat1iifUVFm/dyM9i
-         HlBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=czptFay4sxNBxdeX/6m7zLzHRzM7f7t5O5r/8rNb9WY=;
-        b=ug9/0DiURiR8R2CDLRNSiELoobl72Uv0ZKVGiHZHhUz7aR352Nwc+0qBsR5+LMe/+X
-         EmYwFV9Qe7P+723jEZhKu4AzlyEoa96GQ7wxOyr1jf4U+iIvjhe1QHHtifZlTZY4TFVI
-         y/P3dg157BArRJ0JPNZHAol0DZ+dfKb0aMA7cWh8ZiziZy/iyN+lokSL1ln2DutjgqLr
-         7oCafh2sLscILqXZ8F/DwxgtzduzYdxuO2LkOULnrNW4/0rha/yTx2wCnaxpTa3C1FSs
-         0tGJ+gbMR9FifLA1p8C6TPjd0mRBQKE9iBoRj1kAOkC+EZvW8ZfIUEbwSCr+p7W6bL5k
-         b5EA==
-X-Gm-Message-State: AOAM533dNOKQo/nE5eH6z6xNBSR0j3BAGbv6H244zM59sgTFGkSDfBOs
-        41nMfdzsnGXpV9H+Aer4wDb6rg==
-X-Google-Smtp-Source: ABdhPJyXNecBYFgx3Lc+NnQfjxozy15FNnezF3UuBFNN3Yscr2dukVi6HX35a7/f/F8czxE2M+K9nQ==
-X-Received: by 2002:a05:651c:1027:: with SMTP id w7mr12338558ljm.297.1608772570839;
-        Wed, 23 Dec 2020 17:16:10 -0800 (PST)
-Received: from localhost.localdomain (c-92d7225c.014-348-6c756e10.bbcust.telenor.se. [92.34.215.146])
-        by smtp.gmail.com with ESMTPSA id v7sm3416210lfg.9.2020.12.23.17.16.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Dec 2020 17:16:10 -0800 (PST)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Jean Delvare <jdelvare@suse.com>,
+        id S1727719AbgLXBke (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 23 Dec 2020 20:40:34 -0500
+Received: from mail-bn7nam10on2099.outbound.protection.outlook.com ([40.107.92.99]:25953
+        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726288AbgLXBke (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 23 Dec 2020 20:40:34 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QuvThA4VPbEx+mFkDBNhA+2dCowoEDIF0MeGoWgZpBVJ02/gzkWhrZ+Q+S2zG9MFIxLOhCYbdLKq622qIiYttr0ymczr+tTE7i3Fcspq+G77iad2IdGOXPjGVthDVOzdAQWjxMZVZqhybw6mPKgF4g98YdamsWQozUGQ1H8LTZXK8pp1VTIsjZjJ8QToFXFTl2ZfEsF5RH2Sj2hjT4EGoyTmPJc9NZgz2ddZG5Z1xCc77/yU6GzPc+M/lxvq6fNGpoMt+xZGvgivXMppcVz3+2T5JxTizPrh64yqlBvqiAuL0YzRo66DJj8GfjLDGZ2aoIXl0xq3pf403zJvzW1ERA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=asJcjVmMAfqtlOaUIJur06HqIYwFQdpqG+ZFXXUv7hk=;
+ b=e99Qsl3uwI68knzcpAAsXzbvDwaNvnFwtiCXdNP2ASobqcW56kCtyIEI3VVof8cm6f5I74fSaNlz9swoMaYNGBdo99PKx4u2h7y4bV+wgtaPgvowsmB2fBGRtFCxoXe/YPQg2UlFPpj0VCi9vn75wS5cyH7Zrmz4PmWKyQnsL0hWORFh+t8BjquWmDk93JX8n/mnawrD4EMhx4pbHqLMlapW6nOtL37kJE+pkYmeuQkk7IHVJbM+SMl7b+48nX7F7DuzdxEen0wuc47cAakPLoq2p2sgvl9/VFtgCzwvl7qTYL/8pEAFht/VZuCVOz4NKGhF0ejGx6MVYjTk/Jp6Qg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=licor.com; dmarc=pass action=none header.from=licor.com;
+ dkim=pass header.d=licor.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=licor.onmicrosoft.com;
+ s=selector2-licor-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=asJcjVmMAfqtlOaUIJur06HqIYwFQdpqG+ZFXXUv7hk=;
+ b=R180miw7dEJ9tsqIU5kDhqVVqTksvlg8vvzzHjPeP/dSDp1FUh+JGdGjit57Z5f0tR0i0VybSnGSU1BSOduSvb/TEt5zOe8neeveEbiPqAA9PY+Hx2RjJfck5QgcKesK6/kgxRGDlZV1WIEq8v9L+2EuvMyDj15fgqSKWzTnCqw=
+Received: from SN6PR08MB5565.namprd08.prod.outlook.com (2603:10b6:805:100::20)
+ by SN6PR08MB4127.namprd08.prod.outlook.com (2603:10b6:805:1e::31) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3676.25; Thu, 24 Dec
+ 2020 01:39:40 +0000
+Received: from SN6PR08MB5565.namprd08.prod.outlook.com
+ ([fe80::d10:7b1a:5c08:a041]) by SN6PR08MB5565.namprd08.prod.outlook.com
+ ([fe80::d10:7b1a:5c08:a041%6]) with mapi id 15.20.3676.033; Thu, 24 Dec 2020
+ 01:39:40 +0000
+From:   Chris Lesiak <chris.lesiak@licor.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
+CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
         Peter Rosin <peda@axentia.se>,
-        Chris Lesiak <chris.lesiak@licor.com>,
-        Jonathan Cameron <jic23@cam.ac.uk>, linux-iio@vger.kernel.org
-Subject: [PATCH v2] hwmon: (ntc_thermistor): try reading processed
-Date:   Thu, 24 Dec 2020 02:16:07 +0100
-Message-Id: <20201224011607.1059534-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.29.2
+        Jonathan Cameron <jic23@cam.ac.uk>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
+Subject: Re: [PATCH v2] hwmon: (ntc_thermistor): try reading processed
+Thread-Topic: [PATCH v2] hwmon: (ntc_thermistor): try reading processed
+Thread-Index: AQHW2ZJfsXXsNRhKIU23+9Zg5xYZMaoFcfpp
+Date:   Thu, 24 Dec 2020 01:39:40 +0000
+Message-ID: <SN6PR08MB556580B228FEC722C4A75B669ADD0@SN6PR08MB5565.namprd08.prod.outlook.com>
+References: <20201224011607.1059534-1-linus.walleij@linaro.org>
+In-Reply-To: <20201224011607.1059534-1-linus.walleij@linaro.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: linaro.org; dkim=none (message not signed)
+ header.d=none;linaro.org; dmarc=none action=none header.from=licor.com;
+x-originating-ip: [2603:80a0:801:c200:7551:df18:fd64:c52e]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 0c0fcd0d-7919-4b21-5d5d-08d8a7acc7e1
+x-ms-traffictypediagnostic: SN6PR08MB4127:
+x-microsoft-antispam-prvs: <SN6PR08MB41271C2782D2F5720E1ED72D9ADD0@SN6PR08MB4127.namprd08.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:3173;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: uQm1d5ZUib4OTB83Bw//cyMzlhkaZg9R7YHRsNTEVNBOVaV/MwuGfqbvQkw1dnbRmeDUD+HfCn81OjmBPO1cftud8Eb5PzT7/gmYQxKLx/C3QkcxrFtZaAB0co3RkXhrD4YqWShYFMAgfiCFWkhEXuK+XZnDyW6wzSSR+Kc+phRLR0yXqZiQp6ziDOq8bUJrRyouWbj+kPz5WuVIKnFuXoD1DEHYNuZ5JlxjQyPuq56Nk2Qg1qaQP3H5jk12M3+nSRsaTtTUx02SBHmUZBYrt44Wkj9QXWrjy5l0X72CWajNG8N1ejKDimL3QLeTvljNhg/iRDDAs8Irt2GuAtTFI+g7C+HUfHcOPdIXodkfXNXNZFSRQvvKue51EJxsFbQcrhZYzwmOc5B/PI35zmgTmw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR08MB5565.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(136003)(376002)(346002)(39850400004)(396003)(186003)(8936002)(6506007)(33656002)(7696005)(76116006)(71200400001)(66446008)(86362001)(66946007)(4744005)(66556008)(4326008)(66476007)(64756008)(44832011)(8676002)(478600001)(2906002)(110136005)(54906003)(9686003)(316002)(5660300002)(52536014)(55016002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: =?iso-8859-1?Q?cRu942siUlPXvGsvIbWMjEfg3bdfOYNujIfNBf1GY7R/1AhmqiXXWzB9zk?=
+ =?iso-8859-1?Q?eaNBNLBb8SQlq4QVBZo+zE0e8LjyRZIpNhPG3fiarCsqLkqyujfuvtUiRm?=
+ =?iso-8859-1?Q?pFzD34InfNsHCq4XJveFkgUdFu6MwD41y9VJCotZWnt8UnUhFBCwOQIlgx?=
+ =?iso-8859-1?Q?SrcVMVCqHXyXHR3TGEZXOh9BlN2UKLEhWLe0WzdlIX+emhuQmoSlsOkinF?=
+ =?iso-8859-1?Q?1fP4Ih92C3kXyC/XVaGP/vQ753bcrFAlqAbG3BULOfzL+NJCE7QH6SmgzF?=
+ =?iso-8859-1?Q?LT5aFdGkOky4elhLm/aFEQts8VyXKyGLaa1lQjMXgzCLFMgXAWlWizLx/5?=
+ =?iso-8859-1?Q?c7bqRwhFwtYCxBArHSi/b6sNTJhU/OKWgcOZb7odhXmSyFBdg9oLr7mrjO?=
+ =?iso-8859-1?Q?GCu+hMqpeGx1HtRis1Vac0z1CJwNZ0oQMYwWzXL3kdopJzUTVv6BmZReSw?=
+ =?iso-8859-1?Q?nJx1G9Y/YkDxNKUEda9g51uiXcJ/ekt9QcaqGAlfjeRa/vxYmonLVJ+ddk?=
+ =?iso-8859-1?Q?nHmJu9lB1bPncMKYTLrTe0Qb5DYSG5bDAvGSruLFMK6bvSXBj+8rJ6GpwG?=
+ =?iso-8859-1?Q?wE9WoO8AEOBuvLGDrZ21Ef6CmePRs/TfwsDqBIHtw+ig5QKb1+TRzgnX5Q?=
+ =?iso-8859-1?Q?56BxG4pIJ99ee9g4zZgEZtNbXmVhYoEpvREJhgplXF9fXod5wy7Qp9INGy?=
+ =?iso-8859-1?Q?ZF3Wih23P5rAcQ0n2KXwZI1Xx/F1B8cFT434uTEJ9hodpPYPnPF4TJtm4y?=
+ =?iso-8859-1?Q?A8hFQ/EslEfOkonneOb4WLiovgA1/NtmJPC+WqTB8BiCcEBNDaxf+kU2JE?=
+ =?iso-8859-1?Q?RPMEFD8dNLlYVS+bNjDjco2QC4jpiswuzVPKrth1hknVr+MZLiZh2vLwVh?=
+ =?iso-8859-1?Q?9XwNqmQR75ZSQEhvbhYcDUxCWsXlGBh8S8UWRKqHZDcAtc5++RwHdOLoLn?=
+ =?iso-8859-1?Q?T5TOyUvmTsOmkJoNNgijv/0/vmR+C/+dV+VNmICyulLpgy+XAFFFS3YKq5?=
+ =?iso-8859-1?Q?Boeg4/Ndih5CYI68OUA+xwTo3KsfrechdqTU9D0Pcw7vEBjhMWikIehCZl?=
+ =?iso-8859-1?Q?g6yTt5ImhK4bGCYptAuJVvc=3D?=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: licor.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR08MB5565.namprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0c0fcd0d-7919-4b21-5d5d-08d8a7acc7e1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Dec 2020 01:39:40.1744
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 48c70abd-da5a-4c6c-86cb-5e003ca01574
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: J8dwCyIsRH/s0Gouuv57O2YuQAXDh/AJkRcUYSzdDAeTIY64wIqZssNcC79EzybEsLKAQ0X9gDb8r/RgYP9/AA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR08MB4127
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Before trying the custom method of reading the sensor
-as raw and then converting, just use
-iio_read_channel_processed() which first tries to
-see if the ADC can provide a processed value directly,
-else reads raw and applies scaling inside of IIO
-using the scale attributes of the ADC. We need to
-multiply the scaled value with 1000 to get to
-microvolts from millivolts which is what processed
-IIO channels returns.
-
-Keep the code that assumes 12bit ADC around as a
-fallback.
-
-This gives correct readings on the AB8500 thermistor
-inputs used in the Ux500 HREFP520 platform for reading
-battery and board temperature.
-
-Cc: Peter Rosin <peda@axentia.se>
-Cc: Chris Lesiak <chris.lesiak@licor.com>
-Cc: Jonathan Cameron <jic23@cam.ac.uk>
-Cc: linux-iio@vger.kernel.org
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
-ChangeLog v1->v2:
-- Fix the patch to multiply the processed value by
-  1000 to get to microvolts from millivolts.
-- Fix up the confusion in the commit message.
-- Drop pointless comments about the code, we keep the
-  original code path around if processed reads don't
-  work, nothing bad with that.
----
- drivers/hwmon/ntc_thermistor.c | 33 ++++++++++++++++++++++++---------
- 1 file changed, 24 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/hwmon/ntc_thermistor.c b/drivers/hwmon/ntc_thermistor.c
-index 3aad62a0e661..c1c02cc454fc 100644
---- a/drivers/hwmon/ntc_thermistor.c
-+++ b/drivers/hwmon/ntc_thermistor.c
-@@ -326,18 +326,33 @@ struct ntc_data {
- static int ntc_adc_iio_read(struct ntc_thermistor_platform_data *pdata)
- {
- 	struct iio_channel *channel = pdata->chan;
--	int raw, uv, ret;
-+	int uv, ret;
- 
--	ret = iio_read_channel_raw(channel, &raw);
-+	ret = iio_read_channel_processed(channel, &uv);
- 	if (ret < 0) {
--		pr_err("read channel() error: %d\n", ret);
--		return ret;
--	}
-+		int raw;
- 
--	ret = iio_convert_raw_to_processed(channel, raw, &uv, 1000);
--	if (ret < 0) {
--		/* Assume 12 bit ADC with vref at pullup_uv */
--		uv = (pdata->pullup_uv * (s64)raw) >> 12;
-+		/*
-+		 * This fallback uses a raw read and then
-+		 * assumes the ADC is 12 bits, scaling with
-+		 * a factor 1000 to get to microvolts.
-+		 */
-+		ret = iio_read_channel_raw(channel, &raw);
-+		if (ret < 0) {
-+			pr_err("read channel() error: %d\n", ret);
-+			return ret;
-+		}
-+		ret = iio_convert_raw_to_processed(channel, raw, &uv, 1000);
-+		if (ret < 0) {
-+			/* Assume 12 bit ADC with vref at pullup_uv */
-+			uv = (pdata->pullup_uv * (s64)raw) >> 12;
-+		}
-+	} else {
-+		/*
-+		 * The processed channel is in millivolts, so scale this
-+		 * to microvolts.
-+		 */
-+		uv *= 1000;
- 	}
- 
- 	return uv;
--- 
-2.29.2
-
+Please don't use iio_read_channel_processed and convert from milliVolts to=
+=0A=
+microVolts by multiplying by 1000.  My use case requires the additional=0A=
+precision that iio_read_channel_raw followed by iio_convert_raw_to_processe=
+d=0A=
+with the 1000X scaler provides.=0A=
+=0A=
+But I'm unsure about keeping the fallback 12-bit ADC in place.  I kept it s=
+o as=0A=
+not to break Naveen Krishna Chatradhi's use case.  But I'm not sure it stil=
+l works=0A=
+after commit adc8ec5ff183d09ae7a9d2dd31125401d302ba63=0A=
+"iio: inkern: pass through raw values if no scaling".  Before the commit,=
+=0A=
+iio_convert_raw_to_processed returned a negative number if there was no=0A=
+scaling available.  Now, it returns the raw value.=0A=
+Does that mean that the raw value is already scaled to the correct units?=
+=0A=
+Or does that mean that the scale is unknown and all you get is counts?=
