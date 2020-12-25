@@ -2,62 +2,64 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B129AC433DB
-	for <linux-hwmon@archiver.kernel.org>; Fri, 25 Dec 2020 22:56:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B7E9C433E0
+	for <linux-hwmon@archiver.kernel.org>; Fri, 25 Dec 2020 23:02:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2D13622248
-	for <linux-hwmon@archiver.kernel.org>; Fri, 25 Dec 2020 22:56:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DEE60221F2
+	for <linux-hwmon@archiver.kernel.org>; Fri, 25 Dec 2020 23:02:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727442AbgLYWz6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 25 Dec 2020 17:55:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44154 "EHLO
+        id S1726737AbgLYXCn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 25 Dec 2020 18:02:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727379AbgLYWz5 (ORCPT
+        with ESMTP id S1725910AbgLYXCm (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 25 Dec 2020 17:55:57 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580B1C061757
-        for <linux-hwmon@vger.kernel.org>; Fri, 25 Dec 2020 14:55:17 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id m25so11839013lfc.11
-        for <linux-hwmon@vger.kernel.org>; Fri, 25 Dec 2020 14:55:17 -0800 (PST)
+        Fri, 25 Dec 2020 18:02:42 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73668C061757
+        for <linux-hwmon@vger.kernel.org>; Fri, 25 Dec 2020 15:02:02 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id o19so11985349lfo.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 25 Dec 2020 15:02:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=NgjsHXb/WHneIk8ytfiZho9SSMfNf0stCcaFNeLlmJo=;
-        b=lUDo0krFF0crggGoL1caSrRep+JwTjAmoCsujYmJVaPnB9wSEWnuTaHiL2snK79Nis
-         tEhg7LIaIGSpEDNSSBFQOEn5ACgh0ER8LuPGTg7QDJrT6Ymrz5uN1MNOVzXsa1jCl1BI
-         b3XaZ71A/mH29IOC/r0WNV+gKwpGfn3mOydlcQPzfK23+8nDtfgGHMQdqZfV/bUQa+5z
-         oMu10NmvGHg2Hn+pFLLCZKZaKKaOB/+xyNS58HcvBVSqVSBLAE5wtxABOPcvkgw4UdqD
-         4bhKqcaBHR9jDRWS7lzdRZuafkgXjn8RuQ3EUKuyFDLNzJsJQguCFrxKFk9j2omjQtMP
-         gf1A==
+        bh=W7kgYUPj5wyVPSjt7NtTM40G6jAIhR4GN3Ie87rla5k=;
+        b=vaUTs5BujakkEV4Lxkldz/infgxH0RkRWSeL+vctTx9AvRHZdJJUBNb0FJntwIRlb1
+         K9zjqHFLyJe8Hj3WwhDi8tli7mUx6agsQVqrXAfKK4PZGF1i751snasvzJXrjRtP3N+j
+         +VGRnIGEQo8dx2DgKml6s6YsYld79dV+er/jUncSAJ/OXjNFBUZnLoFcoFHWEAamI3TG
+         +/Vk7Nb9Llk1ki//kL0PrtmURbhJqkxrGMPiuDgs7mAttgRXzkV8mGN/ZnLw+SiswG+l
+         xuH2/1tJteQ22fqt03TG6F87p01HEYuKMUiutCDu6yeFBHC0/gpTMvWifjTGiIWpGaij
+         RrSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=NgjsHXb/WHneIk8ytfiZho9SSMfNf0stCcaFNeLlmJo=;
-        b=E5vggZKWUjuNz/Er727G/chbKxqbpK6+J/ceNuskdroiKpCEWi+Vf5pjBiTo+9PJjU
-         rOJrO/S5dqm80zo0rTSg4kofPv1kW4P91vmrlL5yQn3CWBgKtHEaHkLC4ksbVOVX3pZt
-         LxEtO7+0PGxqoAMaPQPTrQaLRBKpXm9xYEuV5bPxN0Mb6ktgahr2tQYNKwn9llK+aJ/4
-         V1TUXH3cgb8lU5i+nM0VAUvl/08ma/3RMP3f1RrMExohInWL8/r1gyLBkPDlydY7O4CP
-         6hWXNf6WdqRg6C8KBsYDyLl72WiIrOCU3PLYyfZkYnyPMQFB+V4uPDi+dmVkFR02muNR
-         mCgQ==
-X-Gm-Message-State: AOAM533ixOoP/DVJywdX/OPaXDL3SwhTT3YQe/qCCm4M/L/PVtFRrnvU
-        SfFFibY8d4lolBff9phNqRZXVkfZLn3mL/2zdrd2yQ==
-X-Google-Smtp-Source: ABdhPJxkmj0uNGPpRQIQfVAFgFCJ5wtfGLiiFI0Ga9kjKuA/ANtKo4D2b5QfllwFpqn6lD9ZPqlhWBxdWoBT2CqiZF4=
-X-Received: by 2002:a2e:586:: with SMTP id 128mr18206952ljf.273.1608936915621;
- Fri, 25 Dec 2020 14:55:15 -0800 (PST)
+        bh=W7kgYUPj5wyVPSjt7NtTM40G6jAIhR4GN3Ie87rla5k=;
+        b=Mw/FWtuvDKuzJhm/U77OG51koFf7FLzci3QWt1ijEtOm8I3sqH8KXuPR9E1stP2ubB
+         +J5LhLHe5MqDB4UB7vbkgT3QF/pBawcLxR7Fah0T6BOkBhWS9vGLIOv0FilUKEdw29UE
+         p2o3ZYbHzQo22dNVmu/j1y+AexhOtsU/8RXCsyhDsfRUD0mZPvNUj0zGED61Sfqih3JA
+         FZfKkzUrgfi8CosCVtWc57Ti4IKNk3bxDrnMCPegEKe31NMV0lUc+eoVgN+z2sDj8ZD+
+         /SVmwDyZLdm2Ht5oyCF7gXaZSPMFLY4NxWtyrVXReVI8O6Kc0dVT53XpXPuQprO7vimJ
+         Ixsg==
+X-Gm-Message-State: AOAM533eI82ZR+OmBhcv/0s5CLZKtS+Alze/dX9IEEP1i8I4i4SupxBV
+        85kR/QLsVj2Gw0xMaF+C/gV2BNRCv2iuip3DmWKewQ==
+X-Google-Smtp-Source: ABdhPJwoHbDlFdgOO0TTuX060NKMOOgybjhfodifrEyR6nOxde9rkAKHRfgO3UMuJ0OvY3hKSbtY+qNvffZImBepJb4=
+X-Received: by 2002:a05:651c:205b:: with SMTP id t27mr17406796ljo.368.1608937320775;
+ Fri, 25 Dec 2020 15:02:00 -0800 (PST)
 MIME-Version: 1.0
-References: <20201224011607.1059534-1-linus.walleij@linaro.org> <SN6PR08MB556580B228FEC722C4A75B669ADD0@SN6PR08MB5565.namprd08.prod.outlook.com>
-In-Reply-To: <SN6PR08MB556580B228FEC722C4A75B669ADD0@SN6PR08MB5565.namprd08.prod.outlook.com>
+References: <20201224011607.1059534-1-linus.walleij@linaro.org>
+ <SN6PR08MB556580B228FEC722C4A75B669ADD0@SN6PR08MB5565.namprd08.prod.outlook.com>
+ <SN6PR08MB55657ED2F83CE43C97C9C1749ADD0@SN6PR08MB5565.namprd08.prod.outlook.com>
+In-Reply-To: <SN6PR08MB55657ED2F83CE43C97C9C1749ADD0@SN6PR08MB5565.namprd08.prod.outlook.com>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 25 Dec 2020 23:55:04 +0100
-Message-ID: <CACRpkdZJT386M5y5cyCLYaWDhS+AnpXgB__VEshvYKbxN_=wPg@mail.gmail.com>
+Date:   Sat, 26 Dec 2020 00:01:49 +0100
+Message-ID: <CACRpkdbEcxkjLb-zJDui6bq2=OQA=v5-OG_6P0svX48AUMLyEA@mail.gmail.com>
 Subject: Re: [PATCH v2] hwmon: (ntc_thermistor): try reading processed
 To:     Chris Lesiak <chris.lesiak@licor.com>
 Cc:     Jean Delvare <jdelvare@suse.com>,
@@ -71,44 +73,43 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Dec 24, 2020 at 2:39 AM Chris Lesiak <chris.lesiak@licor.com> wrote:
+On Thu, Dec 24, 2020 at 4:15 AM Chris Lesiak <chris.lesiak@licor.com> wrote:
 
-> Please don't use iio_read_channel_processed and convert from milliVolts to
-> microVolts by multiplying by 1000.  My use case requires the additional
-> precision that iio_read_channel_raw followed by iio_convert_raw_to_processed
-> with the 1000X scaler provides.
+> A closer reading of the "iio: inkern: pass through raw values if no scaling"
+> commit leads me to believe that even when the sensor provides no scale,
+> the returned value is expected to be in the correct units.
+>
+> If that is true, there was a bug in the commit.
+> It failed to apply the caller supplied scale that ntc_thermistor.c relies on
+> to convert from milliVolts to microVolts.
+>
+> Linus, would this change address your original problem?
+>
+> diff --git a/drivers/iio/inkern.c b/drivers/iio/inkern.c
+> index fe30bcb6a57b..79787474d511 100644
+> --- a/drivers/iio/inkern.c
+> +++ b/drivers/iio/inkern.c
+> @@ -587,7 +587,7 @@ static int iio_convert_raw_to_processed_unlocked(struct iio_channel *chan,
+>                  * Just pass raw values as processed if no scaling is
+>                  * available.
+>                  */
+> -               *processed = raw;
+> +               *processed = raw * scale;
+>                 return 0;
+>         }
 
-I have to do this change because my ADC driver only provides processed
-channels (drivers/iio/adc/ab8500-gpadc.c). It provides raw values and
-it provides processed values but no scale. That means your code will
-not work, sadly. It will result in the raw value being used without scaling.
+I do not think the raw values have any obligation to be in
+e.g. millivolts. They may be, by chance.
 
-The reason that the ADC cannot provide scaling is that the scale is not
-linear and based on calibration. IIO scaling is only linear.
+In my case, it is just an unscaled byte [0..255].
 
-After this change the driver will use the processed values directly if possible,
-since these are in millivolts they need to be multiplied by 1000.
+So it unfortunately does not solve my problem, because in my driver,
+that does not support scaling, the result will be the raw value
+* 1000 which is not going to be microvolts at all, because the
+raw values are not millivolts, rather a value 0..255.
 
-Notice that actually this NTC driver is the only driver in the entire
-kernel that uses iio_convert_raw_to_processed(). (Well lmp91000.c
-calls it to convert its own raw value to a processed one, so will
-result in a recursive call.) I kind of find the call
-dubious outside of IIO itself, it feels like calling
-iio_read_channel_processed() is more
-natural? Who outside of IIO needs the raw value really?
-It's what I used in all of my drivers.
-
-> But I'm unsure about keeping the fallback 12-bit ADC in place.  I kept it so as
-> not to break Naveen Krishna Chatradhi's use case.  But I'm not sure it still works
-> after commit adc8ec5ff183d09ae7a9d2dd31125401d302ba63
-> "iio: inkern: pass through raw values if no scaling".  Before the commit,
-> iio_convert_raw_to_processed returned a negative number if there was no
-> scaling available.  Now, it returns the raw value.
-> Does that mean that the raw value is already scaled to the correct units?
-> Or does that mean that the scale is unknown and all you get is counts?
-
-As far as I can tell it is the former of these two, as you point out
-in your second mail.
+However if I used the processed values, the value will be
+adjusted non-linearly to millivolts.
 
 Yours,
 Linus Walleij
