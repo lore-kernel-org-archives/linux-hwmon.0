@@ -2,80 +2,120 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E2A1C433E0
-	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Dec 2020 03:55:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 404A6C433E6
+	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Dec 2020 14:26:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 232D421D94
-	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Dec 2020 03:55:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0943F208BA
+	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Dec 2020 14:26:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727018AbgL2DzQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 28 Dec 2020 22:55:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45644 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726014AbgL2DzQ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 28 Dec 2020 22:55:16 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6DCCC0613D6;
-        Mon, 28 Dec 2020 19:54:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=nfSJJiBRRh3gR0oJDJf5MDGnGvnvpbyxOsiI4umA4Q0=; b=RriK5QGVdQwfz6XAzPD2YMGgT5
-        4PNhr/Vh4FKKAeKfoUPtG7Zc/ryLfhKfoYVSIcMoJrJC+Gu5PuTPPYUpq0WvHmn73++ehuv098bpb
-        RQLXVF7xrPMY2OAnEbqFVW+Y1+I3enmd2JrIGMs0o9KZ6s+W5RiReG6sAK0gmObGpzgWOUJ+t2BBD
-        HNR27KM4GLxkL3WBC8AT0fbHoJ/4RekM5KuZqeS+J/YB/v1CDBsAkGE5LJ8LIvolg/FMCW76qSm/x
-        JUCmar38OOql1O9ugJ4HpCNZTAbul/gekiwytDKuPAz2rn8jKmjshHtHpbLOyADs6crPQTd/Yhyyn
-        l7D5qa9Q==;
-Received: from [2601:1c0:6280:3f0::2c43] (helo=smtpauth.infradead.org)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1ku65g-0000j1-HE; Tue, 29 Dec 2020 03:54:33 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>, Kun Yi <kunyi@google.com>,
+        id S1726138AbgL2O0P (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 29 Dec 2020 09:26:15 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55924 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726014AbgL2O0P (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 29 Dec 2020 09:26:15 -0500
+Received: from archlinux (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id ECC6A20825;
+        Tue, 29 Dec 2020 14:25:33 +0000 (UTC)
+Date:   Tue, 29 Dec 2020 14:25:31 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Chris Lesiak <chris.lesiak@licor.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: [PATCH] hwmon: fix sbtsi_temp Documenation kernel-doc warning
-Date:   Mon, 28 Dec 2020 19:54:28 -0800
-Message-Id: <20201229035428.31270-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.26.2
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Jonathan Cameron <jic23@cam.ac.uk>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
+Subject: Re: [PATCH v2] hwmon: (ntc_thermistor): try reading processed
+Message-ID: <20201229142531.3a4ceedc@archlinux>
+In-Reply-To: <SN6PR08MB5565A63054BD03141EC56DC29ADA0@SN6PR08MB5565.namprd08.prod.outlook.com>
+References: <20201224011607.1059534-1-linus.walleij@linaro.org>
+        <SN6PR08MB556580B228FEC722C4A75B669ADD0@SN6PR08MB5565.namprd08.prod.outlook.com>
+        <CACRpkdZJT386M5y5cyCLYaWDhS+AnpXgB__VEshvYKbxN_=wPg@mail.gmail.com>
+        <SN6PR08MB556511839F0A54D34E898EB79ADB0@SN6PR08MB5565.namprd08.prod.outlook.com>
+        <CACRpkdbxzuYrFeU2H2LGaWb3kKqfZ4-SpWu5FiXdFVyz82-zWw@mail.gmail.com>
+        <SN6PR08MB55654976327EF62990D4DD919ADA0@SN6PR08MB5565.namprd08.prod.outlook.com>
+        <CACRpkdYVruMggRHtOLWZ01N5yYx8GqAK3OtKC13Z=669eznurA@mail.gmail.com>
+        <SN6PR08MB5565A63054BD03141EC56DC29ADA0@SN6PR08MB5565.namprd08.prod.outlook.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Fix Documentation/hwmon/ kernel-doc warning in 5.11-rc1:
+On Sun, 27 Dec 2020 22:08:24 +0000
+Chris Lesiak <chris.lesiak@licor.com> wrote:
 
-lnx-511-rc1/Documentation/hwmon/sbtsi_temp.rst:4: WARNING: Title underline too short.
+> Linus Walleij <linus.walleij@linaro.org> wrote:
+> > Aha you mean that iio_read_channel_processed() loses
+> > precision when converting raw to scaled?  
+> 
+> Yes.  For example, take a 16-bit ADC with 4.096 V reference.
+> The native resolution is 62.5 microVolts.
+> Yet iio_read_channel_processed() can only give integer milliVolts.
+> iio_read_channel_raw() followed by iio_convert_raw_to_processed()
+> with a scale of 1000 will preserve more of the native resolution.
+> User space can do this by using floating point numbers when
+> converting to processed.
+> 
+> You are likely to lose precision for all ADCs greater than about 12-bit.
+> 
+> Chris Lesiak <chris.leisak@licor.com> wrote:
+> >> I'd prefer a solution similar to the existing implementation of
+> >> iio_read_channel_processed.  
+> 
+> > That seems like the wrong way to work around a problem in
+> > the core.  
+> 
+> > If iio_read_channel_processed() loses precision we should
+> > fix iio_read_channel_processed() and not try to work around
+> > the problem in the consumers.  
+> 
+> > It's fine to fix all the consumers in the kernel.  
+> 
+> > What about changing the signature of:  
+> 
+> > int iio_read_channel_processed(struct iio_channel *chan, int *val)  
+> 
+> > to:  
+> 
+> > int iio_read_channel_processed(struct iio_channel *chan, int *val,
+> > unsigned int scale)  
+> 
+> > And just augment all calls to pass 1 except the ntc driver
+> > which then passes 1000 in the last argument?  
+> 
+> > If Jonathan agrees I can fix a patch to alter all the ~50
+> > call sites like this and include the change to this NTC
+> > driver.  
+> 
+> That would meet my needs and does address what I think is a
+> shortcoming in the existing iio_read_channel_processed interface.
+I'm fine with this proposal as well.  Makes a lot of sense given
+there is no particular reason why another subsystem should want to
+convert to IIO base units (here milivolts).
 
-Kernel driver sbtsi_temp
-==================
+The only other way I could think of doing it would be to
+have iio_read_channel_processed 'return' a pair of integers and
+type etc IIO_VAL_INT_PLUS_MICRO much like read_raw etc does inside
+the actual drivers.
 
-Fixes: 6ec3fcf556fe ("hwmon: (sbtsi) Add documentation")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Kun Yi <kunyi@google.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Jean Delvare <jdelvare@suse.com>
-Cc: linux-hwmon@vger.kernel.org
----
- Documentation/hwmon/sbtsi_temp.rst |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+It would be a bit clunky to implement however and potentially require
+some messy maths in the consumers.
 
---- lnx-511-rc1.orig/Documentation/hwmon/sbtsi_temp.rst
-+++ lnx-511-rc1/Documentation/hwmon/sbtsi_temp.rst
-@@ -1,7 +1,7 @@
- .. SPDX-License-Identifier: GPL-2.0-or-later
- 
- Kernel driver sbtsi_temp
--==================
-+========================
- 
- Supported hardware:
- 
+May want to think about whether we need additional sanity checks for
+overflow etc.   Seems unlikely we'd hit hit them for voltage, but
+we might for some other types of sensor where the base unit is much
+smaller (wrt to real world values).
+
+Jonathan
+
