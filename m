@@ -2,129 +2,210 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB354C433E0
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Dec 2020 16:13:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BC23C433E0
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Dec 2020 16:19:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 74C9020770
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Dec 2020 16:13:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0AE9D20780
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Dec 2020 16:19:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726533AbgL3QNc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 30 Dec 2020 11:13:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41104 "EHLO
+        id S1726514AbgL3QSu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 30 Dec 2020 11:18:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726230AbgL3QNc (ORCPT
+        with ESMTP id S1726371AbgL3QSu (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 30 Dec 2020 11:13:32 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9FF0C061799
-        for <linux-hwmon@vger.kernel.org>; Wed, 30 Dec 2020 08:12:51 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id x13so19117678oic.5
-        for <linux-hwmon@vger.kernel.org>; Wed, 30 Dec 2020 08:12:51 -0800 (PST)
+        Wed, 30 Dec 2020 11:18:50 -0500
+Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B77CC06179B
+        for <linux-hwmon@vger.kernel.org>; Wed, 30 Dec 2020 08:18:10 -0800 (PST)
+Received: by mail-oo1-xc2a.google.com with SMTP id x23so3798473oop.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 30 Dec 2020 08:18:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=wl1W2RPq3i9N082YD5r+y5k0zCkfLrW6r5kSZSEhXT4=;
-        b=iParR7rAgsvKw9maE5lGAaKCIElDrj21Y0h9Qlgv5zdi88UpxaQwv6sWr4+vhaYsH+
-         ltl++BEkkBDMEIf/wKylfLKfXgbqdc9uM7x2Q/wq5muFtCobmEg/bryuz4NA5hhaAcQF
-         6+oWIu+M4zEszDmK4x2gfSZ2LotuScKwdQmY4hGc3NV9RKRxwNZ3PDQ7ABWMW7IbT6SP
-         7qRuPHVFrKhT/niFXpjS39DLoxKA7Odrp0UCXcP5Iar1Pc6/u0NFVDuDmSJJNJpA08KF
-         zMiTDN1v2FoCoTBzqLTYLGiLhgdM0NUXPwvKXmQ6ZudRkIkLZF1g20GSlGxQBEwZBwO6
-         FB2A==
+        bh=Niq9uGw2Gn+HoflvSpDW2ElojGvxeblOZnC6RN++OyU=;
+        b=q7zU+MYICZG7TD1ptEIN+vlndPcRR8FPMXcWooC0eMFCfLosde948NfftELX1GATKr
+         fon0kWb85MEpi27g7hV620V9Gni8LQkMoe9Id+i10Ee1Ww0s7OHvfXSj5XJ4f7diuGSm
+         AuiTHdzpKgCNyZdMPiwQCcr773sJHiIzVLeQJFn11H8z1uac2+MIKT/hTacmmx4AO83p
+         D4bB6LtPHmfq0LMJFziwUDBz57nSR4frALnnHA1o3F0G7xhvvyB6BB8Neu10mK3rkn08
+         ej40aDmVz1Mv7EjGI4e4yzDynu/xVvUsKSkCSsa1TEEJAQ4WWNo/mEipgsQ5awqIPzJ/
+         B7Uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=wl1W2RPq3i9N082YD5r+y5k0zCkfLrW6r5kSZSEhXT4=;
-        b=JmY1FaZbEWOn47MVlerEGVrwYXp5EUwNiIgQqzuaf2tdYJC4WIrOSeUPaez/lpljyh
-         979z7JoOZ3CXXfoS+X6COlbdcarm8W6XoNCoEZMncO3GFSozuGH75W67Ht3ZnkY1t41s
-         QIljylz8GT5DqY0Bn3BdiecD2LGoSRyFIb0WRJSjoQ7xcrzyCpJ1FQEV5NVmuyMHbG0L
-         HKSarkQVokD8TIstIqeH4eFFHPXQwilplQQDqLVu1gOR66/RIWEIISf96vkkNdSF3QGP
-         9pYovYPGbFJda8cE92Qdo94/CWLIdvRrUZBbvnaPQKlt5IUvvkmemegwlf4rmOeiu+rR
-         H5mQ==
-X-Gm-Message-State: AOAM531fHV5LNTs9CWC3vU9l6yQj2+561K3C6Fk3pu5Ig4n6klRPezkq
-        lGyIKF75wr+PaInR3Ae/jv8=
-X-Google-Smtp-Source: ABdhPJw8K8imijJ/0pyLPkAoylYPxvnIfz0mPhA4A2e76w4E5F6OG2ZviphF2eht7S5rvkNGrrSP3w==
-X-Received: by 2002:aca:cc01:: with SMTP id c1mr5703217oig.18.1609344771457;
-        Wed, 30 Dec 2020 08:12:51 -0800 (PST)
+        bh=Niq9uGw2Gn+HoflvSpDW2ElojGvxeblOZnC6RN++OyU=;
+        b=n3ckh85o5tLzsB4nKfFb2jOnEJk1fk0mPj+/2eFVm7NsK3h0ZpHBXHeUu4w48i7HYz
+         yTCkV2gk3zI1lf3jwcOmrRTDgmYyv/+IdrX/k64YljvzU2CXLYHeP1pMn8lro57eURur
+         by9fj4wu1UiRSor9juev4Nht/KbAv7IvkPpEZ4FbnD4Lh+LqemfXM8CEACHm3vVZD0rH
+         nWcEBqGh/ZtLVMA/RMnjh4fB+BiZvOGGVL9qBVV/41nOaJKNABiOHsCue2vVAlDQ3CfH
+         aEKhEvII5aMl6gDj4a5AXYq4ayVE67DrgnORtKLtfw/FhDZsi/ORi7eNoHrFvylLMqFS
+         COhA==
+X-Gm-Message-State: AOAM533f48eHfEcxjDFm5rrOJv2NBJ5rcNiS6l2mmRz0wQ3yCaBBGKXn
+        +TDm+JvwvTBqXmbORRR12XA=
+X-Google-Smtp-Source: ABdhPJz0q5Cb37xNEryx2woUa57cujZB8Tr+OyTJY4hyOptFzWhHweIL8grUyS3ugW3Jap4Xzcaj2Q==
+X-Received: by 2002:a4a:b987:: with SMTP id e7mr19188463oop.92.1609345089505;
+        Wed, 30 Dec 2020 08:18:09 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s77sm11162361oos.27.2020.12.30.08.12.50
+        by smtp.gmail.com with ESMTPSA id a52sm9487234otc.46.2020.12.30.08.18.08
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 30 Dec 2020 08:12:50 -0800 (PST)
+        Wed, 30 Dec 2020 08:18:08 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 30 Dec 2020 08:12:49 -0800
+Date:   Wed, 30 Dec 2020 08:18:07 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: (abx500): Decomission abx500 driver
-Message-ID: <20201230161249.GA101363@roeck-us.net>
-References: <20201223211319.937757-1-linus.walleij@linaro.org>
+To:     Paul Barker <pbarker@konsulko.com>
+Cc:     Kamil Debski <kamil@wypas.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] hwmon: pwm-fan: Store tach data separately
+Message-ID: <20201230161807.GA102122@roeck-us.net>
+References: <20201212195008.6036-1-pbarker@konsulko.com>
+ <20201212195008.6036-2-pbarker@konsulko.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201223211319.937757-1-linus.walleij@linaro.org>
+In-Reply-To: <20201212195008.6036-2-pbarker@konsulko.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Dec 23, 2020 at 10:13:19PM +0100, Linus Walleij wrote:
-> This deletes the ABx500 hwmon driver, the only supported
-> variant being the AB8500.
+On Sat, Dec 12, 2020 at 07:50:07PM +0000, Paul Barker wrote:
+> The data for the (optional) fan tachometer input is moved to a separate
+> structure which is only allocated if an input is actually configured.
 > 
-> This driver has been replaced by generic frameworks. By
-> inspecting the abx500 sysfs files we see that it contains
-> things such as temp1_max, temp1_max_alarm, temp1_max_hyst,
-> temp1_max_hyst_alarm, temp1_min, temp1_min_alarm.
+> After this change the pulse IRQ handler takes a pointer to the
+> tachometer data structure instead of the whole device context.
 > 
-> It becomes obvious that the abx500.c is a reimplementation
-> of thermal zones. This is not very strange as the generic
-> thermal zones were not invented when this driver was merged
-> so people were rolling their own.
-> 
-> The ab8500.c driver contains conversion tables for handling
-> a thermistor on ADC channels AUX1 and AUX2.
-> 
-> I managed to replace the functionality of the driver with:
-> 
-> - Activation of the ntc_thermistor.c driver,
->   CONFIG_SENSORS_NTC_THERMISTOR
-> - Activation of thermal zones, CONFIG_THERMAL
-> - In the device tree, connecting the NTC driver to the
->   processed IIO channels from the AB8500 GPADC ADC forming
->   two instances of NTC sensors.
-> - Connecting the two NTC sensors to a "chassis" thermal zone
->   in the device tree and setting that to hit the CPU frequency
->   at 50 degrees celsius and do a critical shutdown at 70
->   degrees celsius, deploying a policy using the sensors.
-> 
-> After talking to the original authors we concluded that the
-> driver was never properly parameterized in production so
-> what we now have in the device tree is already puts the
-> thermistors to better use than what the hwmon driver did.
-> 
-> The two remaining channels for two battery temperatures is
-> already handled in the charging algorithms but can be
-> optionally extended to thermal zones as well if we want
-> these to trigger critical shutdown for the platform.
-> 
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
-> ChangeLog v1->v2:
-> - Also drop the Kconfig and Makefile entries. I was
->   sloppy and didn't commit all changes in my tree.
+> Signed-off-by: Paul Barker <pbarker@konsulko.com>
 
-Looks like my response didn't make it to the list. Sigh.
-Continuously struggling with e-mail servers believing that
-I am a spammer.
-
-Anyway, I applied v1 and fixed everything up there (Makefile,
-Kconfig, and removed documentation). No need to resend.
+Applied.
 
 Thanks,
 Guenter
+
+> ---
+>  drivers/hwmon/pwm-fan.c | 52 +++++++++++++++++++++++++----------------
+>  1 file changed, 32 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
+> index 777439f48c14..4a7f0e87b08f 100644
+> --- a/drivers/hwmon/pwm-fan.c
+> +++ b/drivers/hwmon/pwm-fan.c
+> @@ -21,15 +21,19 @@
+>  
+>  #define MAX_PWM 255
+>  
+> +struct pwm_fan_tach {
+> +	int irq;
+> +	atomic_t pulses;
+> +	unsigned int rpm;
+> +	u8 pulses_per_revolution;
+> +};
+> +
+>  struct pwm_fan_ctx {
+>  	struct mutex lock;
+>  	struct pwm_device *pwm;
+>  	struct regulator *reg_en;
+>  
+> -	int irq;
+> -	atomic_t pulses;
+> -	unsigned int rpm;
+> -	u8 pulses_per_revolution;
+> +	struct pwm_fan_tach *tach;
+>  	ktime_t sample_start;
+>  	struct timer_list rpm_timer;
+>  
+> @@ -65,9 +69,9 @@ static const struct hwmon_channel_info pwm_fan_channel_fan = {
+>  /* This handler assumes self resetting edge triggered interrupt. */
+>  static irqreturn_t pulse_handler(int irq, void *dev_id)
+>  {
+> -	struct pwm_fan_ctx *ctx = dev_id;
+> +	struct pwm_fan_tach *tach = dev_id;
+>  
+> -	atomic_inc(&ctx->pulses);
+> +	atomic_inc(&tach->pulses);
+>  
+>  	return IRQ_HANDLED;
+>  }
+> @@ -75,14 +79,15 @@ static irqreturn_t pulse_handler(int irq, void *dev_id)
+>  static void sample_timer(struct timer_list *t)
+>  {
+>  	struct pwm_fan_ctx *ctx = from_timer(ctx, t, rpm_timer);
+> +	struct pwm_fan_tach *tach = ctx->tach;
+>  	unsigned int delta = ktime_ms_delta(ktime_get(), ctx->sample_start);
+>  	int pulses;
+>  
+>  	if (delta) {
+> -		pulses = atomic_read(&ctx->pulses);
+> -		atomic_sub(pulses, &ctx->pulses);
+> -		ctx->rpm = (unsigned int)(pulses * 1000 * 60) /
+> -			(ctx->pulses_per_revolution * delta);
+> +		pulses = atomic_read(&tach->pulses);
+> +		atomic_sub(pulses, &tach->pulses);
+> +		tach->rpm = (unsigned int)(pulses * 1000 * 60) /
+> +			(tach->pulses_per_revolution * delta);
+>  
+>  		ctx->sample_start = ktime_get();
+>  	}
+> @@ -152,7 +157,7 @@ static int pwm_fan_read(struct device *dev, enum hwmon_sensor_types type,
+>  		return 0;
+>  
+>  	case hwmon_fan:
+> -		*val = ctx->rpm;
+> +		*val = ctx->tach->rpm;
+>  		return 0;
+>  
+>  	default:
+> @@ -362,14 +367,21 @@ static int pwm_fan_probe(struct platform_device *pdev)
+>  	channels[0] = &pwm_fan_channel_pwm;
+>  
+>  	if (tach_count > 0) {
+> +		struct pwm_fan_tach *tach;
+>  		u32 ppr = 2;
+>  
+> -		ctx->irq = platform_get_irq(pdev, 0);
+> -		if (ctx->irq == -EPROBE_DEFER)
+> -			return ctx->irq;
+> -		if (ctx->irq > 0) {
+> -			ret = devm_request_irq(dev, ctx->irq, pulse_handler, 0,
+> -					       pdev->name, ctx);
+> +		tach = devm_kzalloc(dev, sizeof(struct pwm_fan_tach),
+> +					 GFP_KERNEL);
+> +		if (!tach)
+> +			return -ENOMEM;
+> +		ctx->tach = tach;
+> +
+> +		tach->irq = platform_get_irq(pdev, 0);
+> +		if (tach->irq == -EPROBE_DEFER)
+> +			return tach->irq;
+> +		if (tach->irq > 0) {
+> +			ret = devm_request_irq(dev, tach->irq, pulse_handler, 0,
+> +					       pdev->name, tach);
+>  			if (ret) {
+>  				dev_err(dev,
+>  					"Failed to request interrupt: %d\n",
+> @@ -381,14 +393,14 @@ static int pwm_fan_probe(struct platform_device *pdev)
+>  		of_property_read_u32(dev->of_node,
+>  				     "pulses-per-revolution",
+>  				     &ppr);
+> -		ctx->pulses_per_revolution = ppr;
+> -		if (!ctx->pulses_per_revolution) {
+> +		tach->pulses_per_revolution = ppr;
+> +		if (!tach->pulses_per_revolution) {
+>  			dev_err(dev, "pulses-per-revolution can't be zero.\n");
+>  			return -EINVAL;
+>  		}
+>  
+>  		dev_dbg(dev, "tach: irq=%d, pulses_per_revolution=%d\n",
+> -			ctx->irq, ctx->pulses_per_revolution);
+> +			tach->irq, tach->pulses_per_revolution);
+>  
+>  		ctx->sample_start = ktime_get();
+>  		mod_timer(&ctx->rpm_timer, jiffies + HZ);
