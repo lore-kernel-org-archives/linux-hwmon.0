@@ -2,136 +2,104 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46457C433E0
-	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Dec 2020 16:54:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B4CFC433E6
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Dec 2020 16:05:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 121CE207C9
-	for <linux-hwmon@archiver.kernel.org>; Tue, 29 Dec 2020 16:54:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DF5EF2222A
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Dec 2020 16:05:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726168AbgL2Qyn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 29 Dec 2020 11:54:43 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37740 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726178AbgL2Qyn (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 29 Dec 2020 11:54:43 -0500
-Received: from archlinux (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 99A4A207C9;
-        Tue, 29 Dec 2020 16:54:01 +0000 (UTC)
-Date:   Tue, 29 Dec 2020 16:53:57 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Chris Lesiak <chris.lesiak@licor.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Jonathan Cameron <jic23@cam.ac.uk>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
-Subject: Re: [PATCH v2] hwmon: (ntc_thermistor): try reading processed
-Message-ID: <20201229165357.3b833682@archlinux>
-In-Reply-To: <20201229163346.GA57378@roeck-us.net>
-References: <20201224011607.1059534-1-linus.walleij@linaro.org>
-        <SN6PR08MB556580B228FEC722C4A75B669ADD0@SN6PR08MB5565.namprd08.prod.outlook.com>
-        <CACRpkdZJT386M5y5cyCLYaWDhS+AnpXgB__VEshvYKbxN_=wPg@mail.gmail.com>
-        <SN6PR08MB556511839F0A54D34E898EB79ADB0@SN6PR08MB5565.namprd08.prod.outlook.com>
-        <CACRpkdbxzuYrFeU2H2LGaWb3kKqfZ4-SpWu5FiXdFVyz82-zWw@mail.gmail.com>
-        <SN6PR08MB55654976327EF62990D4DD919ADA0@SN6PR08MB5565.namprd08.prod.outlook.com>
-        <CACRpkdYVruMggRHtOLWZ01N5yYx8GqAK3OtKC13Z=669eznurA@mail.gmail.com>
-        <SN6PR08MB5565A63054BD03141EC56DC29ADA0@SN6PR08MB5565.namprd08.prod.outlook.com>
-        <20201229142531.3a4ceedc@archlinux>
-        <20201229163346.GA57378@roeck-us.net>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S1726261AbgL3QF1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 30 Dec 2020 11:05:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39856 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726161AbgL3QF1 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 30 Dec 2020 11:05:27 -0500
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05090C061799
+        for <linux-hwmon@vger.kernel.org>; Wed, 30 Dec 2020 08:04:47 -0800 (PST)
+Received: by mail-ot1-x330.google.com with SMTP id d8so15715367otq.6
+        for <linux-hwmon@vger.kernel.org>; Wed, 30 Dec 2020 08:04:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=rUfS6vmHBIAz8tP+boIh2aUKllg96I3C66K3oakk940=;
+        b=REU1isX5LoQbuxZGbUpOpGDz0wkBAsDK+ofMG9MeZ3P/f/UCaVMq1ii0vs9e/4yrP4
+         1Z/hqQfx1LkInBI3V/8DxzMYp5NMqvOwBH06fYrWbkPSQ871SYh4SDE02kydNSHXuKHp
+         xFdTp+TfF+sL0KFZo1tjmU6iVyIYwRHVofM7WqplQtBJaL4i/CkALtFC+KqAqzYp2G+Q
+         vWoGwifRjQ8rbzJFzFVUy175y+79CQ7ejuiBR7cdz0c4dyFQT+y7+sGfVL+PWB8DrATX
+         6hZJrnT+5poVpO/5366nbT3jbBt8dipzSfgEWPm21xTFGh8pY0NmcIVYKjhgCgAiob5n
+         7F1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=rUfS6vmHBIAz8tP+boIh2aUKllg96I3C66K3oakk940=;
+        b=Sc0/Hd2Y/rq51pV1gqUXdEXEUXJsxpNQyRRF7rN3retduqLcZGSQzoOFgKWt2hOD5x
+         Zh1dQkxJJlZyeajIwYXTngNKBFlRd+kTIvdzFWaULmfkPOjQPN8ZAKePgmm6TFQJQye0
+         kW6+v/oiLnfuJzsC1UmeWk7+NkiJ4oQbLyAZk8w25Efb0fDXNnhIsBRFWlu+RZSAqf4B
+         ASY3Juokxbm4JlElUc13Gf0rwIzRboLNUr/2EmKC0cw405YuP0VX4HqNRdDSF1B2jeBv
+         2tBL4VbzIvgYvkDBkxq7OonqKBbC8aCooRU4wxlVUL///YwLNbH7I4DAJp9nF4h8CIfy
+         iGMg==
+X-Gm-Message-State: AOAM5332cz0OMTjAnPwcSnUxzTv9NwOEPdin/lDEztMwt4u5ngb81U8w
+        ZFx8cqu2k0WK8bHGuFLayOyt1ezY+04=
+X-Google-Smtp-Source: ABdhPJzBxQn0KGbyypy4jD4w/zGX0bXV3tiguiGcy982GVdHTQb7uB0WVd+M/xZnfsIM7rIr1Cqw9Q==
+X-Received: by 2002:a9d:6c11:: with SMTP id f17mr39805819otq.83.1609344286435;
+        Wed, 30 Dec 2020 08:04:46 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j9sm5902463ooq.1.2020.12.30.08.04.44
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 30 Dec 2020 08:04:45 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 30 Dec 2020 08:04:43 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Tian Tao <tiantao6@hisilicon.com>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (gpio-fan): Switch to using the new API
+ kobj_to_dev()
+Message-ID: <20201230160443.GA100576@roeck-us.net>
+References: <1609211837-54930-1-git-send-email-tiantao6@hisilicon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1609211837-54930-1-git-send-email-tiantao6@hisilicon.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, 29 Dec 2020 08:33:46 -0800
-Guenter Roeck <linux@roeck-us.net> wrote:
-
-> On Tue, Dec 29, 2020 at 02:25:31PM +0000, Jonathan Cameron wrote:
-> > On Sun, 27 Dec 2020 22:08:24 +0000
-> > Chris Lesiak <chris.lesiak@licor.com> wrote:
-> >   
-> > > Linus Walleij <linus.walleij@linaro.org> wrote:  
-> > > > Aha you mean that iio_read_channel_processed() loses
-> > > > precision when converting raw to scaled?    
-> > > 
-> > > Yes.  For example, take a 16-bit ADC with 4.096 V reference.
-> > > The native resolution is 62.5 microVolts.
-> > > Yet iio_read_channel_processed() can only give integer milliVolts.
-> > > iio_read_channel_raw() followed by iio_convert_raw_to_processed()
-> > > with a scale of 1000 will preserve more of the native resolution.
-> > > User space can do this by using floating point numbers when
-> > > converting to processed.
-> > > 
-> > > You are likely to lose precision for all ADCs greater than about 12-bit.
-> > > 
-> > > Chris Lesiak <chris.leisak@licor.com> wrote:  
-> > > >> I'd prefer a solution similar to the existing implementation of
-> > > >> iio_read_channel_processed.    
-> > >   
-> > > > That seems like the wrong way to work around a problem in
-> > > > the core.    
-> > >   
-> > > > If iio_read_channel_processed() loses precision we should
-> > > > fix iio_read_channel_processed() and not try to work around
-> > > > the problem in the consumers.    
-> > >   
-> > > > It's fine to fix all the consumers in the kernel.    
-> > >   
-> > > > What about changing the signature of:    
-> > >   
-> > > > int iio_read_channel_processed(struct iio_channel *chan, int *val)    
-> > >   
-> > > > to:    
-> > >   
-> > > > int iio_read_channel_processed(struct iio_channel *chan, int *val,
-> > > > unsigned int scale)    
-> > >   
-> > > > And just augment all calls to pass 1 except the ntc driver
-> > > > which then passes 1000 in the last argument?    
-> > >   
-> > > > If Jonathan agrees I can fix a patch to alter all the ~50
-> > > > call sites like this and include the change to this NTC
-> > > > driver.    
-> > > 
-> > > That would meet my needs and does address what I think is a
-> > > shortcoming in the existing iio_read_channel_processed interface.  
-> > I'm fine with this proposal as well.  Makes a lot of sense given
-> > there is no particular reason why another subsystem should want to
-> > convert to IIO base units (here milivolts).
-> > 
-> > The only other way I could think of doing it would be to
-> > have iio_read_channel_processed 'return' a pair of integers and
-> > type etc IIO_VAL_INT_PLUS_MICRO much like read_raw etc does inside
-> > the actual drivers.
-> > 
-> > It would be a bit clunky to implement however and potentially require
-> > some messy maths in the consumers.
-> > 
-> > May want to think about whether we need additional sanity checks for
-> > overflow etc.   Seems unlikely we'd hit hit them for voltage, but
-> > we might for some other types of sensor where the base unit is much
-> > smaller (wrt to real world values).
-> >   
+On Tue, Dec 29, 2020 at 11:17:17AM +0800, Tian Tao wrote:
+> fixed the following coccicheck:
+> drivers/hwmon/gpio-fan.c:302:60-61: WARNING opportunity for
+> kobj_to_dev()
 > 
-> All this makes me wonder if it would be better to add a separate
-> API function (iio_read_channel_processed_scale ?) instead of replacing
-> the existing one. Changing 50+ callers at the same time sounds messy.
+> Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
 
-Agreed - definitely makes more sense to do it that way.  
+Applied.
 
-Jonathan
+Thanks,
+Guenter
 
+> ---
+>  drivers/hwmon/gpio-fan.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Guenter
-
+> diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
+> index 3ea4021..befe989 100644
+> --- a/drivers/hwmon/gpio-fan.c
+> +++ b/drivers/hwmon/gpio-fan.c
+> @@ -299,7 +299,7 @@ static DEVICE_ATTR(fan1_target, 0644, fan1_input_show, set_rpm);
+>  static umode_t gpio_fan_is_visible(struct kobject *kobj,
+>  				   struct attribute *attr, int index)
+>  {
+> -	struct device *dev = container_of(kobj, struct device, kobj);
+> +	struct device *dev = kobj_to_dev(kobj);
+>  	struct gpio_fan_data *data = dev_get_drvdata(dev);
+>  
+>  	if (index == 0 && !data->alarm_gpio)
