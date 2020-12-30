@@ -7,79 +7,87 @@ X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B4CFC433E6
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Dec 2020 16:05:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 597E5C433DB
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Dec 2020 16:06:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DF5EF2222A
-	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Dec 2020 16:05:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2DD0220795
+	for <linux-hwmon@archiver.kernel.org>; Wed, 30 Dec 2020 16:06:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726261AbgL3QF1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 30 Dec 2020 11:05:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39856 "EHLO
+        id S1726261AbgL3QGw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 30 Dec 2020 11:06:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726161AbgL3QF1 (ORCPT
+        with ESMTP id S1726247AbgL3QGw (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 30 Dec 2020 11:05:27 -0500
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05090C061799
-        for <linux-hwmon@vger.kernel.org>; Wed, 30 Dec 2020 08:04:47 -0800 (PST)
-Received: by mail-ot1-x330.google.com with SMTP id d8so15715367otq.6
-        for <linux-hwmon@vger.kernel.org>; Wed, 30 Dec 2020 08:04:46 -0800 (PST)
+        Wed, 30 Dec 2020 11:06:52 -0500
+Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C248C061799;
+        Wed, 30 Dec 2020 08:06:12 -0800 (PST)
+Received: by mail-oo1-xc2e.google.com with SMTP id j21so3773043oou.11;
+        Wed, 30 Dec 2020 08:06:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=rUfS6vmHBIAz8tP+boIh2aUKllg96I3C66K3oakk940=;
-        b=REU1isX5LoQbuxZGbUpOpGDz0wkBAsDK+ofMG9MeZ3P/f/UCaVMq1ii0vs9e/4yrP4
-         1Z/hqQfx1LkInBI3V/8DxzMYp5NMqvOwBH06fYrWbkPSQ871SYh4SDE02kydNSHXuKHp
-         xFdTp+TfF+sL0KFZo1tjmU6iVyIYwRHVofM7WqplQtBJaL4i/CkALtFC+KqAqzYp2G+Q
-         vWoGwifRjQ8rbzJFzFVUy175y+79CQ7ejuiBR7cdz0c4dyFQT+y7+sGfVL+PWB8DrATX
-         6hZJrnT+5poVpO/5366nbT3jbBt8dipzSfgEWPm21xTFGh8pY0NmcIVYKjhgCgAiob5n
-         7F1g==
+        bh=6SzscdfDYZ3AWwOMa8dxs5/f1OXDyD1UfZM98ruH7nI=;
+        b=MOGEJ/eoMEkvsaKbFFRs7lpe4PAvsurB+6P/m83nMFfeM1f6uuuaU5CtP4CGJqR3Xj
+         AiVre2G+pOEe9ZUxAp2md2LhD+rKvmrBFEsm6QbPMN0v7vLjlzuucUV3ziuwQpTxJsZG
+         85WCZmZejYCD2qZ3TNVII/FWqgsakti+nL8N/QHIXTD5imoxkDdxwCu27u9KHOi/7w01
+         uGkEVbFSZRdczVGHVILHIhKLjULq+LDPmCxZ0yHuAiHz0iUnmub0DHrA1kG9JyD03dnZ
+         1bmUEPZwXr3WHuL9q734Cboa/pQr7VMqcJFrmSpxPVmDVPJpC+AGU6D4dIg8i49dO/d/
+         TKaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=rUfS6vmHBIAz8tP+boIh2aUKllg96I3C66K3oakk940=;
-        b=Sc0/Hd2Y/rq51pV1gqUXdEXEUXJsxpNQyRRF7rN3retduqLcZGSQzoOFgKWt2hOD5x
-         Zh1dQkxJJlZyeajIwYXTngNKBFlRd+kTIvdzFWaULmfkPOjQPN8ZAKePgmm6TFQJQye0
-         kW6+v/oiLnfuJzsC1UmeWk7+NkiJ4oQbLyAZk8w25Efb0fDXNnhIsBRFWlu+RZSAqf4B
-         ASY3Juokxbm4JlElUc13Gf0rwIzRboLNUr/2EmKC0cw405YuP0VX4HqNRdDSF1B2jeBv
-         2tBL4VbzIvgYvkDBkxq7OonqKBbC8aCooRU4wxlVUL///YwLNbH7I4DAJp9nF4h8CIfy
-         iGMg==
-X-Gm-Message-State: AOAM5332cz0OMTjAnPwcSnUxzTv9NwOEPdin/lDEztMwt4u5ngb81U8w
-        ZFx8cqu2k0WK8bHGuFLayOyt1ezY+04=
-X-Google-Smtp-Source: ABdhPJzBxQn0KGbyypy4jD4w/zGX0bXV3tiguiGcy982GVdHTQb7uB0WVd+M/xZnfsIM7rIr1Cqw9Q==
-X-Received: by 2002:a9d:6c11:: with SMTP id f17mr39805819otq.83.1609344286435;
-        Wed, 30 Dec 2020 08:04:46 -0800 (PST)
+        bh=6SzscdfDYZ3AWwOMa8dxs5/f1OXDyD1UfZM98ruH7nI=;
+        b=SsqjlhePVOX0wBlJqR1wCLHmwS/ggoM//qSxuF900KSGKYIRpl2nGnyGW1B/mHS+TY
+         vRNllxGNaGI5gszEyY9eeNc3SyFE7pm1w1UooeDgjnheZmX7TuXBJfbCs/R5L+8tRQVo
+         kQ50PV4zJ5VQWGeXDPX8hAAA/G4RTHuAbEj7erRrndjBLIOMC1c3tAlrFuZAZnLMCXhJ
+         F7T4/cmo7Z66rhD0hsqZEVaZspEXrfX5zxsDmATYIjBFnK/sHtF9UMQEj0wDb2l3m5XT
+         LXSJIe8CzQxJ43TdSv+o9Sv/1aEYCg5lHYWQjcU1T2cp1fQUfhgjO1gyoU6Ky1ISzkPY
+         62aw==
+X-Gm-Message-State: AOAM530TWimpgPYwHNlFAPH+EZZQq11uzTmRETe30+RxzK89nhfK9ifL
+        hEARa2CtzRIxzIw3YPWd7lg=
+X-Google-Smtp-Source: ABdhPJy1oniZW/w1U4QOcA/XYb8W7GTMg9HHc+CiZWGOy9Kq1kbT/yVBX4y6vCbMksF1qSnA84fv6A==
+X-Received: by 2002:a05:6820:503:: with SMTP id m3mr37334650ooj.83.1609344371859;
+        Wed, 30 Dec 2020 08:06:11 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j9sm5902463ooq.1.2020.12.30.08.04.44
+        by smtp.gmail.com with ESMTPSA id a14sm7076406oie.12.2020.12.30.08.06.10
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 30 Dec 2020 08:04:45 -0800 (PST)
+        Wed, 30 Dec 2020 08:06:11 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 30 Dec 2020 08:04:43 -0800
+Date:   Wed, 30 Dec 2020 08:06:09 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Tian Tao <tiantao6@hisilicon.com>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (gpio-fan): Switch to using the new API
- kobj_to_dev()
-Message-ID: <20201230160443.GA100576@roeck-us.net>
-References: <1609211837-54930-1-git-send-email-tiantao6@hisilicon.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Kun Yi <kunyi@google.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] hwmon: fix sbtsi_temp Documenation kernel-doc warning
+Message-ID: <20201230160609.GA100770@roeck-us.net>
+References: <20201229035428.31270-1-rdunlap@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1609211837-54930-1-git-send-email-tiantao6@hisilicon.com>
+In-Reply-To: <20201229035428.31270-1-rdunlap@infradead.org>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Dec 29, 2020 at 11:17:17AM +0800, Tian Tao wrote:
-> fixed the following coccicheck:
-> drivers/hwmon/gpio-fan.c:302:60-61: WARNING opportunity for
-> kobj_to_dev()
+On Mon, Dec 28, 2020 at 07:54:28PM -0800, Randy Dunlap wrote:
+> Fix Documentation/hwmon/ kernel-doc warning in 5.11-rc1:
 > 
-> Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
+> lnx-511-rc1/Documentation/hwmon/sbtsi_temp.rst:4: WARNING: Title underline too short.
+> 
+> Kernel driver sbtsi_temp
+> ==================
+> 
+> Fixes: 6ec3fcf556fe ("hwmon: (sbtsi) Add documentation")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Kun Yi <kunyi@google.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: linux-hwmon@vger.kernel.org
 
 Applied.
 
@@ -87,19 +95,17 @@ Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/gpio-fan.c | 2 +-
+>  Documentation/hwmon/sbtsi_temp.rst |    2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
-> index 3ea4021..befe989 100644
-> --- a/drivers/hwmon/gpio-fan.c
-> +++ b/drivers/hwmon/gpio-fan.c
-> @@ -299,7 +299,7 @@ static DEVICE_ATTR(fan1_target, 0644, fan1_input_show, set_rpm);
->  static umode_t gpio_fan_is_visible(struct kobject *kobj,
->  				   struct attribute *attr, int index)
->  {
-> -	struct device *dev = container_of(kobj, struct device, kobj);
-> +	struct device *dev = kobj_to_dev(kobj);
->  	struct gpio_fan_data *data = dev_get_drvdata(dev);
+> --- lnx-511-rc1.orig/Documentation/hwmon/sbtsi_temp.rst
+> +++ lnx-511-rc1/Documentation/hwmon/sbtsi_temp.rst
+> @@ -1,7 +1,7 @@
+>  .. SPDX-License-Identifier: GPL-2.0-or-later
 >  
->  	if (index == 0 && !data->alarm_gpio)
+>  Kernel driver sbtsi_temp
+> -==================
+> +========================
+>  
+>  Supported hardware:
+>  
