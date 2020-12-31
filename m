@@ -2,116 +2,189 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D42AC433DB
-	for <linux-hwmon@archiver.kernel.org>; Thu, 31 Dec 2020 01:20:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8359BC433E0
+	for <linux-hwmon@archiver.kernel.org>; Thu, 31 Dec 2020 04:40:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2C9EE21973
-	for <linux-hwmon@archiver.kernel.org>; Thu, 31 Dec 2020 01:19:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 581132158C
+	for <linux-hwmon@archiver.kernel.org>; Thu, 31 Dec 2020 04:40:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726289AbgLaBTo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 30 Dec 2020 20:19:44 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:10013 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726285AbgLaBTo (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 30 Dec 2020 20:19:44 -0500
-Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4D5qz512wmzj1bC;
-        Thu, 31 Dec 2020 09:18:09 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- DGGEMS414-HUB.china.huawei.com (10.3.19.214) with Microsoft SMTP Server id
- 14.3.498.0; Thu, 31 Dec 2020 09:18:55 +0800
-From:   Tian Tao <tiantao6@hisilicon.com>
-To:     <jdelvare@suse.com>, <linux@roeck-us.net>
-CC:     <linux-hwmon@vger.kernel.org>
-Subject: [PATCH] hwmon: (it87): Switch to using the new API kobj_to_dev()
-Date:   Thu, 31 Dec 2020 09:18:55 +0800
-Message-ID: <1609377535-29964-1-git-send-email-tiantao6@hisilicon.com>
-X-Mailer: git-send-email 2.7.4
+        id S1726354AbgLaEki (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 30 Dec 2020 23:40:38 -0500
+Received: from mga06.intel.com ([134.134.136.31]:36479 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726348AbgLaEki (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 30 Dec 2020 23:40:38 -0500
+IronPort-SDR: Fy5nmuFShEHyCCetG4K2iDKt6hBGtyBW73MLkDDixXkpUsfF+U8F5KZHbVOCyC5jIlGcngXkyl
+ xoNEDSuWj8gg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9850"; a="238221954"
+X-IronPort-AV: E=Sophos;i="5.78,463,1599548400"; 
+   d="scan'208";a="238221954"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2020 20:39:57 -0800
+IronPort-SDR: AgtKzo6tTWYR7K9Av6smjC6ouikhSLaMjraRlI1P7YSK6L5bqRw52aOm9StUHvqSEtLLw6Gfhv
+ Z9U29AcwOBsg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,463,1599548400"; 
+   d="scan'208";a="396086069"
+Received: from lkp-server02.sh.intel.com (HELO 4242b19f17ef) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 30 Dec 2020 20:39:56 -0800
+Received: from kbuild by 4242b19f17ef with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kupkh-0004h3-Mv; Thu, 31 Dec 2020 04:39:55 +0000
+Date:   Thu, 31 Dec 2020 12:39:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:hwmon] BUILD SUCCESS
+ 1eda52334e6d13eb1a85f713ce06dd39342b5020
+Message-ID: <5fed5616.yQSoLOXARO29Rm0R%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.56]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Switch to using the new API kobj_to_dev() to fix the below warnning:
-drivers/hwmon/it87.c:2293:60-61: WARNING opportunity for kobj_to_dev()
-drivers/hwmon/it87.c:2161:60-61: WARNING opportunity for kobj_to_dev()
-drivers/hwmon/it87.c:1984:60-61: WARNING opportunity for kobj_to_dev()
-drivers/hwmon/it87.c:2129:60-61: WARNING opportunity for kobj_to_dev()
-drivers/hwmon/it87.c:2232:60-61: WARNING opportunity for kobj_to_dev()
-drivers/hwmon/it87.c:2068:60-61: WARNING opportunity for kobj_to_dev()
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon
+branch HEAD: 1eda52334e6d13eb1a85f713ce06dd39342b5020  hwmon: (pwm-fan) Ensure that calculation doesn't discard big period values
 
-Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
+elapsed time: 722m
+
+configs tested: 119
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                    vt8500_v6_v7_defconfig
+mips                         rt305x_defconfig
+parisc                              defconfig
+m68k                        m5407c3_defconfig
+arm                             mxs_defconfig
+mips                        qi_lb60_defconfig
+arm                         vf610m4_defconfig
+microblaze                          defconfig
+sh                     sh7710voipgw_defconfig
+arm                         s3c6400_defconfig
+mips                           rs90_defconfig
+h8300                    h8300h-sim_defconfig
+sh                             shx3_defconfig
+mips                   sb1250_swarm_defconfig
+m68k                         apollo_defconfig
+sh                          sdk7780_defconfig
+mips                    maltaup_xpa_defconfig
+arm                        cerfcube_defconfig
+mips                      maltaaprp_defconfig
+arm                  colibri_pxa300_defconfig
+mips                      fuloong2e_defconfig
+powerpc                      ppc6xx_defconfig
+powerpc                     mpc83xx_defconfig
+mips                       lemote2f_defconfig
+arm                          imote2_defconfig
+s390                       zfcpdump_defconfig
+xtensa                    xip_kc705_defconfig
+powerpc                 mpc832x_rdb_defconfig
+sh                        edosk7760_defconfig
+parisc                           allyesconfig
+powerpc                  iss476-smp_defconfig
+mips                     loongson1b_defconfig
+mips                     loongson1c_defconfig
+x86_64                           alldefconfig
+m68k                           sun3_defconfig
+mips                           ip22_defconfig
+powerpc                      ppc44x_defconfig
+powerpc                    sam440ep_defconfig
+arc                     haps_hs_smp_defconfig
+ia64                             alldefconfig
+powerpc                     tqm8541_defconfig
+arm                      tct_hammer_defconfig
+powerpc                      walnut_defconfig
+arm                        mvebu_v5_defconfig
+arm                           sunxi_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                             allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                               tinyconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a005-20201230
+x86_64               randconfig-a001-20201230
+x86_64               randconfig-a006-20201230
+x86_64               randconfig-a002-20201230
+x86_64               randconfig-a004-20201230
+x86_64               randconfig-a003-20201230
+i386                 randconfig-a005-20201230
+i386                 randconfig-a006-20201230
+i386                 randconfig-a004-20201230
+i386                 randconfig-a003-20201230
+i386                 randconfig-a002-20201230
+i386                 randconfig-a001-20201230
+i386                 randconfig-a016-20201230
+i386                 randconfig-a014-20201230
+i386                 randconfig-a012-20201230
+i386                 randconfig-a015-20201230
+i386                 randconfig-a011-20201230
+i386                 randconfig-a013-20201230
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a015-20201230
+x86_64               randconfig-a014-20201230
+x86_64               randconfig-a016-20201230
+x86_64               randconfig-a011-20201230
+x86_64               randconfig-a013-20201230
+x86_64               randconfig-a012-20201230
+
 ---
- drivers/hwmon/it87.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/hwmon/it87.c b/drivers/hwmon/it87.c
-index fac9b5c..418a177 100644
---- a/drivers/hwmon/it87.c
-+++ b/drivers/hwmon/it87.c
-@@ -1981,7 +1981,7 @@ static SENSOR_DEVICE_ATTR(in9_label, S_IRUGO, show_label, NULL, 3);
- static umode_t it87_in_is_visible(struct kobject *kobj,
- 				  struct attribute *attr, int index)
- {
--	struct device *dev = container_of(kobj, struct device, kobj);
-+	struct device *dev = kobj_to_dev(kobj);
- 	struct it87_data *data = dev_get_drvdata(dev);
- 	int i = index / 5;	/* voltage index */
- 	int a = index % 5;	/* attribute index */
-@@ -2065,7 +2065,7 @@ static const struct attribute_group it87_group_in = {
- static umode_t it87_temp_is_visible(struct kobject *kobj,
- 				    struct attribute *attr, int index)
- {
--	struct device *dev = container_of(kobj, struct device, kobj);
-+	struct device *dev = kobj_to_dev(kobj);
- 	struct it87_data *data = dev_get_drvdata(dev);
- 	int i = index / 7;	/* temperature index */
- 	int a = index % 7;	/* attribute index */
-@@ -2126,7 +2126,7 @@ static const struct attribute_group it87_group_temp = {
- static umode_t it87_is_visible(struct kobject *kobj,
- 			       struct attribute *attr, int index)
- {
--	struct device *dev = container_of(kobj, struct device, kobj);
-+	struct device *dev = kobj_to_dev(kobj);
- 	struct it87_data *data = dev_get_drvdata(dev);
- 
- 	if ((index == 2 || index == 3) && !data->has_vid)
-@@ -2158,7 +2158,7 @@ static const struct attribute_group it87_group = {
- static umode_t it87_fan_is_visible(struct kobject *kobj,
- 				   struct attribute *attr, int index)
- {
--	struct device *dev = container_of(kobj, struct device, kobj);
-+	struct device *dev = kobj_to_dev(kobj);
- 	struct it87_data *data = dev_get_drvdata(dev);
- 	int i = index / 5;	/* fan index */
- 	int a = index % 5;	/* attribute index */
-@@ -2229,7 +2229,7 @@ static const struct attribute_group it87_group_fan = {
- static umode_t it87_pwm_is_visible(struct kobject *kobj,
- 				   struct attribute *attr, int index)
- {
--	struct device *dev = container_of(kobj, struct device, kobj);
-+	struct device *dev = kobj_to_dev(kobj);
- 	struct it87_data *data = dev_get_drvdata(dev);
- 	int i = index / 4;	/* pwm index */
- 	int a = index % 4;	/* attribute index */
-@@ -2290,7 +2290,7 @@ static const struct attribute_group it87_group_pwm = {
- static umode_t it87_auto_pwm_is_visible(struct kobject *kobj,
- 					struct attribute *attr, int index)
- {
--	struct device *dev = container_of(kobj, struct device, kobj);
-+	struct device *dev = konj_to_dev(kobj);
- 	struct it87_data *data = dev_get_drvdata(dev);
- 	int i = index / 11;	/* pwm index */
- 	int a = index % 11;	/* attribute index */
--- 
-2.7.4
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
