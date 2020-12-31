@@ -2,196 +2,82 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A311C433E0
-	for <linux-hwmon@archiver.kernel.org>; Thu, 31 Dec 2020 04:41:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 401F9C433E0
+	for <linux-hwmon@archiver.kernel.org>; Thu, 31 Dec 2020 12:09:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EC49F2158C
-	for <linux-hwmon@archiver.kernel.org>; Thu, 31 Dec 2020 04:41:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E13FD222BB
+	for <linux-hwmon@archiver.kernel.org>; Thu, 31 Dec 2020 12:09:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726348AbgLaEli (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 30 Dec 2020 23:41:38 -0500
-Received: from mga03.intel.com ([134.134.136.65]:45947 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726037AbgLaEli (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 30 Dec 2020 23:41:38 -0500
-IronPort-SDR: pcPqWP2x0nmHbBjpU/Bx/OX7AyTiWb22sSPV7RqG8nnrzu8tgx1TkoiT7HqfBsTDQ+W/qhYV2s
- BkfmJCe6M9mw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9850"; a="176765861"
-X-IronPort-AV: E=Sophos;i="5.78,463,1599548400"; 
-   d="scan'208";a="176765861"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2020 20:40:57 -0800
-IronPort-SDR: 6M1a4WylPTIi4ijuFNc2kjyk5JalED9nb44qRcg2qEYxqPXonRsHNMwXYm+P7aH7zc20Vrb04W
- zkn8EAd6v/Dw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,463,1599548400"; 
-   d="scan'208";a="393680090"
-Received: from lkp-server02.sh.intel.com (HELO 4242b19f17ef) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 30 Dec 2020 20:40:56 -0800
-Received: from kbuild by 4242b19f17ef with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kuplf-0004h6-NJ; Thu, 31 Dec 2020 04:40:55 +0000
-Date:   Thu, 31 Dec 2020 12:39:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon-next] BUILD SUCCESS
- bae99e301bea3902b29f6b17cc13f7e9c1088a4f
-Message-ID: <5fed561b.Mjy7DVIhpCVdnNzz%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1726230AbgLaMJL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 31 Dec 2020 07:09:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54608 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726071AbgLaMJL (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 31 Dec 2020 07:09:11 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88287C061573
+        for <linux-hwmon@vger.kernel.org>; Thu, 31 Dec 2020 04:08:30 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id m12so43659425lfo.7
+        for <linux-hwmon@vger.kernel.org>; Thu, 31 Dec 2020 04:08:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=A8YfmrkPt06S2wB4h546eXOdcb3JZ5qR24+QCgl/+1I=;
+        b=YadZY7XKpyjdAjy4r379JEqa8l2gmRkg6QgQ5DoEsAhurYd1RORtWO3abMe/uplfa6
+         r7iDDeSNrVh+7DOWizn9xPfdYrHXYWY+AG+wGDXFPqmuPInRjwURrJ+Z5sRSeZtNhaqR
+         TDVZPGIpvyEF2YUIBmLeT1iAWhRty3KheKrlWcLlJPfZ1m/NF+3G2JGHNP9SS+K3Xv3h
+         Jmxo/dV69Nig91vExGu4feFgPWCA8Kp94sW7XWut9i3LgdDa8wy9QB90q2Qa0giQZV+3
+         YtLYBh9ctFX8FDTdOQIJYC2mvOo4AxMicQrMJ4RpMEk8Lq8hqLoh+GbwZHIExNjLbDdT
+         RSZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=A8YfmrkPt06S2wB4h546eXOdcb3JZ5qR24+QCgl/+1I=;
+        b=S7+oiAeA/e+v1CwSkjmyfFlFKRWN9p4epL+AYwnPsWLEB1mZTC2qjEx1iqp/1UymRZ
+         lTCX0ayj7Ahgqc7ST1VUhHF1r1C+zuMdGvTCo6FpFx/++VdFd7Z6inN56Og7ndvz9CC0
+         qLjww4uWeWs27OS+KBu/MQlMTBkJfUoMlPsesEGq8JRbXiEDO29o/QxuJ67KC0HpwopY
+         nKRr/0a0414fkCqp58ViMOBTKZZPBucSiHdUUNrgLVXSHvWvTDp8ZWjQk5XBY+QvLQ/7
+         K+6/LsZ2wD9uvG80JNWktZVxX/KN+u03ngrJxEQ4ByKDtj0Ho8mh5tj8DE9A/JD1I1sY
+         HIJw==
+X-Gm-Message-State: AOAM5325qIMThj/uy9qhIzJ251md0nHPED7PFKZUpfM3mRtEiBKIqsax
+        ZfsHELHrJSuOBkIueAWJQjP99ONkVeS1bmg62z4gPtPeqEg=
+X-Google-Smtp-Source: ABdhPJxWH0Sb0w0In3sEfI6fTYks4V/H+/NKqogifvJQmPb7TovtPTVcXEWEp0+uR0GwJTb4aFCc3d8NKukXCUhukTs=
+X-Received: by 2002:a2e:85d1:: with SMTP id h17mr26761742ljj.438.1609416508928;
+ Thu, 31 Dec 2020 04:08:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+References: <20201223211319.937757-1-linus.walleij@linaro.org> <20201230161249.GA101363@roeck-us.net>
+In-Reply-To: <20201230161249.GA101363@roeck-us.net>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 31 Dec 2020 13:08:18 +0100
+Message-ID: <CACRpkdYs-_EdKNSjSaSBK-Uc7-ghHZHBzgwFD08a4WL2jTZxiQ@mail.gmail.com>
+Subject: Re: [PATCH v2] hwmon: (abx500): Decomission abx500 driver
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon-next
-branch HEAD: bae99e301bea3902b29f6b17cc13f7e9c1088a4f  hwmon: (pwm-fan) Support multiple fan tachometers
+On Wed, Dec 30, 2020 at 5:12 PM Guenter Roeck <linux@roeck-us.net> wrote:
 
-elapsed time: 722m
+> Looks like my response didn't make it to the list. Sigh.
+> Continuously struggling with e-mail servers believing that
+> I am a spammer.
 
-configs tested: 126
-configs skipped: 3
+Oh I got it anyways.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> Anyway, I applied v1 and fixed everything up there (Makefile,
+> Kconfig, and removed documentation). No need to resend.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-xtensa                         virt_defconfig
-mips                            ar7_defconfig
-powerpc                      ppc6xx_defconfig
-c6x                        evmc6474_defconfig
-sh                          urquell_defconfig
-arc                      axs103_smp_defconfig
-arm                        realview_defconfig
-mips                         mpc30x_defconfig
-sh                           se7343_defconfig
-xtensa                  cadence_csp_defconfig
-mips                        qi_lb60_defconfig
-arm                         vf610m4_defconfig
-microblaze                          defconfig
-sh                     sh7710voipgw_defconfig
-arm                         s3c6400_defconfig
-mips                           rs90_defconfig
-h8300                    h8300h-sim_defconfig
-sh                             shx3_defconfig
-mips                   sb1250_swarm_defconfig
-m68k                         apollo_defconfig
-sh                          sdk7780_defconfig
-mips                    maltaup_xpa_defconfig
-arm                        cerfcube_defconfig
-mips                      maltaaprp_defconfig
-powerpc                      tqm8xx_defconfig
-arm                        mvebu_v5_defconfig
-arm                           u8500_defconfig
-sh                  sh7785lcr_32bit_defconfig
-powerpc                     skiroot_defconfig
-arm                        oxnas_v6_defconfig
-s390                       zfcpdump_defconfig
-xtensa                    xip_kc705_defconfig
-powerpc                 mpc832x_rdb_defconfig
-sh                        edosk7760_defconfig
-parisc                           allyesconfig
-powerpc                  iss476-smp_defconfig
-mips                     loongson1b_defconfig
-mips                     loongson1c_defconfig
-x86_64                           alldefconfig
-m68k                           sun3_defconfig
-mips                           ip22_defconfig
-powerpc                      ppc44x_defconfig
-powerpc                    sam440ep_defconfig
-arc                     haps_hs_smp_defconfig
-ia64                             alldefconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a005-20201230
-x86_64               randconfig-a001-20201230
-x86_64               randconfig-a006-20201230
-x86_64               randconfig-a002-20201230
-x86_64               randconfig-a004-20201230
-x86_64               randconfig-a003-20201230
-i386                 randconfig-a005-20201230
-i386                 randconfig-a006-20201230
-i386                 randconfig-a004-20201230
-i386                 randconfig-a003-20201230
-i386                 randconfig-a002-20201230
-i386                 randconfig-a001-20201230
-x86_64               randconfig-a015-20201231
-x86_64               randconfig-a014-20201231
-x86_64               randconfig-a011-20201231
-x86_64               randconfig-a016-20201231
-x86_64               randconfig-a013-20201231
-x86_64               randconfig-a012-20201231
-i386                 randconfig-a016-20201230
-i386                 randconfig-a014-20201230
-i386                 randconfig-a012-20201230
-i386                 randconfig-a015-20201230
-i386                 randconfig-a011-20201230
-i386                 randconfig-a013-20201230
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+OK thanks a lot, sorry for all of my screwups.
 
-clang tested configs:
-x86_64               randconfig-a015-20201230
-x86_64               randconfig-a014-20201230
-x86_64               randconfig-a016-20201230
-x86_64               randconfig-a011-20201230
-x86_64               randconfig-a013-20201230
-x86_64               randconfig-a012-20201230
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Yours,
+Linus Walleij
