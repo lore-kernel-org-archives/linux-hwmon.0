@@ -2,98 +2,99 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D988C433DB
-	for <linux-hwmon@archiver.kernel.org>; Thu, 31 Dec 2020 15:36:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5350C433E9
+	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Jan 2021 01:29:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2EFED20798
-	for <linux-hwmon@archiver.kernel.org>; Thu, 31 Dec 2020 15:36:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 72D81222BB
+	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Jan 2021 01:29:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726830AbgLaPfi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 31 Dec 2020 10:35:38 -0500
-Received: from mail-oi1-f180.google.com ([209.85.167.180]:35250 "EHLO
-        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726071AbgLaPfh (ORCPT
+        id S1726583AbhAAB3T (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 31 Dec 2020 20:29:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35660 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726044AbhAAB3T (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 31 Dec 2020 10:35:37 -0500
-Received: by mail-oi1-f180.google.com with SMTP id s2so22164055oij.2;
-        Thu, 31 Dec 2020 07:35:21 -0800 (PST)
+        Thu, 31 Dec 2020 20:29:19 -0500
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEBDAC061573;
+        Thu, 31 Dec 2020 17:28:38 -0800 (PST)
+Received: by mail-ot1-x32f.google.com with SMTP id j12so19215096ota.7;
+        Thu, 31 Dec 2020 17:28:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=nqTYURsZuNosp7QXLy1d+4/Lg7owmkjDgemSirLf0O8=;
+        b=OBpHXDjH3ZWbdl1j6JYel4Rfg+SjCgJdzU+UmLFLM0Ez2bF5Zj6yBKB75qPXf/eSHg
+         QtLTH0tU2epVH72kkFizk7eFUsMsfHat5k5zVTzIZD7RWlT5pNbNEAVYb2bXvrTUt3mQ
+         g/9sMXZ1oDhIns5W9v1Q+6b3lWtmIEFQt4wklx73I48+qrlam4773I8NFHWyZ/T5U22x
+         gdZL5kSTblTkywr/0aixFGM/sV0guRs/9WdbhNMTAAeqMjOAjP8MXfm6bSm9XEdoes5q
+         kFNPuorOrSQa1UQXcoXvzGdw7U3d5FnLgsAVZbqdCFablogmnJOP3ox9W+p5rggVCvFk
+         kh8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=d/j65F0xDeODzWQ7ItCBXGTIo7MfPYId6+AMLyCdHMo=;
-        b=Upk3o48fNW0UA4btqOqhgESVTgVfzjgbxsaVu9raRirbsVmILzxB4fQnsF1hzut5qW
-         bnd+9G69vi+xnB6MZHYsAA39HdtPVW+3YSDbe2e93Zq98WLe9WKK0RVnc8KTXVB/adMJ
-         R8o9G1lomgPCVJncmI66vukDF3U6F8RcnS+Z82QuyRAajhtrJieJ3dTJNyT0Q+cvH42n
-         x5yZ8TDLu6tLD4Kzk6+rpeT7GIMBupv3iEnE5agLj+fr+yRxJF/qt/aD5FU5/JkZOUhC
-         ovTuEZC7NYC956bxtyezit5U0doTsYetnWTDs6AaKgpG5XJKZcoJt1wfw69RkL1KfuLJ
-         DAHg==
-X-Gm-Message-State: AOAM5315dpOgGHjNPtEcG4nV/paA/j6F3BPh12F5myv404Wg6pTVvLwI
-        2j1RsDWHm86uYECFpGCVmRj3WZ76Zw==
-X-Google-Smtp-Source: ABdhPJwyhSC7NMQ5mvKqpnkKyC/xlzouqKLhslB1LhVgY0S5xZqFE84DSoQ+iZLaIOmB3FFlBE74Mw==
-X-Received: by 2002:aca:130a:: with SMTP id e10mr7909601oii.163.1609428895898;
-        Thu, 31 Dec 2020 07:34:55 -0800 (PST)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id c204sm10932224oob.44.2020.12.31.07.34.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Dec 2020 07:34:55 -0800 (PST)
-Received: (nullmailer pid 1828659 invoked by uid 1000);
-        Thu, 31 Dec 2020 15:34:48 -0000
-From:   Rob Herring <robh@kernel.org>
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=nqTYURsZuNosp7QXLy1d+4/Lg7owmkjDgemSirLf0O8=;
+        b=Yu5vIdLsoD0MoLe1MbNaLGV7J69pKZK24+UlzggrVh7bVQSnn22LW56QZ9zZfdNBbQ
+         a7Rak9uWsRIkiKWvYPiI6tNgoRq+Kw2sNdzFWJ32Bp/ASX0E8kqUhO+UW5v3z4S/pgl4
+         3ZihBr2sBnsazlDwFYVpY+uG2Y1cZbqhM5Q5W1weYsMexxAdsjko4jzEcevNjnTVziBn
+         la1ZfJGPVRURg4lh98KMktjT2aa1MKtAvgOUHNNB0f0Dv3Lh3/l6DFYbQJR57Lug/PU9
+         Xks6FEuppBe1DAN7O50fGhtmEOfzhNn+Ub6HmtlSdKTKBEkTYYqcLV7yFtzui/e3GaFo
+         XCfQ==
+X-Gm-Message-State: AOAM533VTQtFlP8mA8BZyb6QTWlQVuXGUF9JeXJDAkY6S9bvdwpPn1tZ
+        DXIaF4uw35pxWMw/iyDRQXc=
+X-Google-Smtp-Source: ABdhPJyK2xr4CLSiYfimv85b2ILkMBMwDP2MyFbSRpiwBdmIprcYs5SIhdKU7gPQNzguqIf/oSIf0A==
+X-Received: by 2002:a9d:8ea:: with SMTP id 97mr20145960otf.223.1609464518081;
+        Thu, 31 Dec 2020 17:28:38 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t2sm8762554otj.47.2020.12.31.17.28.36
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 31 Dec 2020 17:28:36 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 31 Dec 2020 17:28:35 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
 To:     Campion Kang <campion.kang@advantech.com.tw>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        AceLan Kao <chia-lin.kao@canonical.com>,
-        Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org,
+Cc:     linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        linux-watchdog@vger.kernel.org
-In-Reply-To: <20201231123948.10473-3-campion.kang@advantech.com.tw>
-References: <20201231123948.10473-1-campion.kang@advantech.com.tw> <20201231123948.10473-3-campion.kang@advantech.com.tw>
-Subject: Re: [PATCH v5 3/6] dt-bindings: mfd: ahc1ec0.yaml: Add Advantech embedded controller - AHC1EC0
-Date:   Thu, 31 Dec 2020 08:34:48 -0700
-Message-Id: <1609428888.845662.1828658.nullmailer@robh.at.kernel.org>
+        linux-watchdog@vger.kernel.org,
+        AceLan Kao <chia-lin.kao@canonical.com>
+Subject: Re: [PATCH v5 5/6] hwmon: ahc1ec0-hwmon: Add sub-device hwmon for
+ Advantech embedded controller
+Message-ID: <20210101012835.GA87441@roeck-us.net>
+References: <20201231123948.10473-1-campion.kang@advantech.com.tw>
+ <20201231123948.10473-5-campion.kang@advantech.com.tw>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201231123948.10473-5-campion.kang@advantech.com.tw>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, 31 Dec 2020 20:39:45 +0800, Campion Kang wrote:
-> Add DT binding schema for Advantech embedded controller AHC1EC0.
+On Thu, Dec 31, 2020 at 08:39:47PM +0800, Campion Kang wrote:
+> This is one of sub-device driver for Advantech embedded controller
+> AHC1EC0. This driver provides sysfs ABI for Advantech related
+> applications to monitor the system status.
 > 
 > Signed-off-by: Campion Kang <campion.kang@advantech.com.tw>
 > ---
->  .../devicetree/bindings/mfd/ahc1ec0.yaml      | 69 +++++++++++++++++++
->  1 file changed, 69 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/ahc1ec0.yaml
-> 
+>  drivers/hwmon/Kconfig         |  10 +
 
-My bot found errors running 'make dt_binding_check' on your patch:
+[ ... ]
 
-yamllint warnings/errors:
+> +	lmsensor_data.hwmon_dev = devm_hwmon_device_register_with_groups(&pdev->dev,
+> +			"ahc1ec0-hwmon", adv_ec_data, ahc1ec0_groups);
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/mfd/ahc1ec0.example.dts:19:18: fatal error: dt-bindings/mfd/ahc1ec0.h: No such file or directory
-   19 |         #include <dt-bindings/mfd/ahc1ec0.h>
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[1]: *** [scripts/Makefile.lib:344: Documentation/devicetree/bindings/mfd/ahc1ec0.example.dt.yaml] Error 1
-make: *** [Makefile:1370: dt_binding_check] Error 2
+New drivers must use [devm_]hwmon_device_register_with_info() and will
+otherwise not be accepted.
 
-See https://patchwork.ozlabs.org/patch/1421561
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Guenter
