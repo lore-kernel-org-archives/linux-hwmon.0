@@ -2,99 +2,138 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5350C433E9
-	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Jan 2021 01:29:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62DD9C433E0
+	for <linux-hwmon@archiver.kernel.org>; Sun,  3 Jan 2021 16:40:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 72D81222BB
-	for <linux-hwmon@archiver.kernel.org>; Fri,  1 Jan 2021 01:29:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2D27620754
+	for <linux-hwmon@archiver.kernel.org>; Sun,  3 Jan 2021 16:40:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726583AbhAAB3T (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 31 Dec 2020 20:29:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35660 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726044AbhAAB3T (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 31 Dec 2020 20:29:19 -0500
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEBDAC061573;
-        Thu, 31 Dec 2020 17:28:38 -0800 (PST)
-Received: by mail-ot1-x32f.google.com with SMTP id j12so19215096ota.7;
-        Thu, 31 Dec 2020 17:28:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=nqTYURsZuNosp7QXLy1d+4/Lg7owmkjDgemSirLf0O8=;
-        b=OBpHXDjH3ZWbdl1j6JYel4Rfg+SjCgJdzU+UmLFLM0Ez2bF5Zj6yBKB75qPXf/eSHg
-         QtLTH0tU2epVH72kkFizk7eFUsMsfHat5k5zVTzIZD7RWlT5pNbNEAVYb2bXvrTUt3mQ
-         g/9sMXZ1oDhIns5W9v1Q+6b3lWtmIEFQt4wklx73I48+qrlam4773I8NFHWyZ/T5U22x
-         gdZL5kSTblTkywr/0aixFGM/sV0guRs/9WdbhNMTAAeqMjOAjP8MXfm6bSm9XEdoes5q
-         kFNPuorOrSQa1UQXcoXvzGdw7U3d5FnLgsAVZbqdCFablogmnJOP3ox9W+p5rggVCvFk
-         kh8Q==
+        id S1727440AbhACQkY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 3 Jan 2021 11:40:24 -0500
+Received: from mail-il1-f180.google.com ([209.85.166.180]:37152 "EHLO
+        mail-il1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726844AbhACQkV (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 3 Jan 2021 11:40:21 -0500
+Received: by mail-il1-f180.google.com with SMTP id k8so23162692ilr.4;
+        Sun, 03 Jan 2021 08:40:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=nqTYURsZuNosp7QXLy1d+4/Lg7owmkjDgemSirLf0O8=;
-        b=Yu5vIdLsoD0MoLe1MbNaLGV7J69pKZK24+UlzggrVh7bVQSnn22LW56QZ9zZfdNBbQ
-         a7Rak9uWsRIkiKWvYPiI6tNgoRq+Kw2sNdzFWJ32Bp/ASX0E8kqUhO+UW5v3z4S/pgl4
-         3ZihBr2sBnsazlDwFYVpY+uG2Y1cZbqhM5Q5W1weYsMexxAdsjko4jzEcevNjnTVziBn
-         la1ZfJGPVRURg4lh98KMktjT2aa1MKtAvgOUHNNB0f0Dv3Lh3/l6DFYbQJR57Lug/PU9
-         Xks6FEuppBe1DAN7O50fGhtmEOfzhNn+Ub6HmtlSdKTKBEkTYYqcLV7yFtzui/e3GaFo
-         XCfQ==
-X-Gm-Message-State: AOAM533VTQtFlP8mA8BZyb6QTWlQVuXGUF9JeXJDAkY6S9bvdwpPn1tZ
-        DXIaF4uw35pxWMw/iyDRQXc=
-X-Google-Smtp-Source: ABdhPJyK2xr4CLSiYfimv85b2ILkMBMwDP2MyFbSRpiwBdmIprcYs5SIhdKU7gPQNzguqIf/oSIf0A==
-X-Received: by 2002:a9d:8ea:: with SMTP id 97mr20145960otf.223.1609464518081;
-        Thu, 31 Dec 2020 17:28:38 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t2sm8762554otj.47.2020.12.31.17.28.36
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 31 Dec 2020 17:28:36 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 31 Dec 2020 17:28:35 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Campion Kang <campion.kang@advantech.com.tw>
-Cc:     linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org,
-        AceLan Kao <chia-lin.kao@canonical.com>
-Subject: Re: [PATCH v5 5/6] hwmon: ahc1ec0-hwmon: Add sub-device hwmon for
- Advantech embedded controller
-Message-ID: <20210101012835.GA87441@roeck-us.net>
-References: <20201231123948.10473-1-campion.kang@advantech.com.tw>
- <20201231123948.10473-5-campion.kang@advantech.com.tw>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zeml2GAhWGvlyObknefZT18uus2BWf4wQLF3uVJZpZw=;
+        b=Xoh23xcMgXReJWPsfqxngxbBTqbZGnYlNTnjMwZRSYL+n1MJ6LSOODMLmBLTxCNq+/
+         tCzZXve3pRz7bopwWCUKkCMr5Sz2I0WCzD0sKA8DjTxsFcL0cpWK1a901i6Th4Ui25CP
+         mIMV+UI7XmaSysqakvo5//HlLkCJPTappktfeFhrJJZ73MdkFac09Fc5oIIGGFKt7SId
+         OLNkuTTKPLeHpl4psk2HBoR7qCj36LSSSiwJnAJxlWJfZJlDwvBmgwFVXhAj6WNqGOBR
+         VX98EJd9G/GwDBdIuK/UN3JuTjMavzip8K8rV2ufJ5dB2qRB1ahCLIALL37I6fIpUCnr
+         rDSA==
+X-Gm-Message-State: AOAM530IOyF9jEiTwDdB9MsPDT6j0P7SAPADuk9Znno79eNEjIZWS00T
+        g0j3w5sQIdTah8eurRePGxGvSMEc1w==
+X-Google-Smtp-Source: ABdhPJzM6d8PEvYyediwGe+XcJGdCdnnt5tUfePOMvaIpJMIL4Mq/pWK64weXF+uLd/cbTnmaIbHXA==
+X-Received: by 2002:a05:6e02:60f:: with SMTP id t15mr67597160ils.250.1609691980702;
+        Sun, 03 Jan 2021 08:39:40 -0800 (PST)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id l4sm39764006ilo.29.2021.01.03.08.39.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Jan 2021 08:39:39 -0800 (PST)
+Received: (nullmailer pid 4011573 invoked by uid 1000);
+        Sun, 03 Jan 2021 16:39:36 -0000
+Date:   Sun, 3 Jan 2021 09:39:36 -0700
+From:   Rob Herring <robh@kernel.org>
+To:     Robert Marko <robert.marko@sartura.hr>
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Luka Perkov <luka.perkov@sartura.hr>
+Subject: Re: [PATCH v3 1/3] dt-bindings: hwmon: Add TI TPS23861 bindings
+Message-ID: <20210103163936.GA4009325@robh.at.kernel.org>
+References: <20201222143012.1618807-1-robert.marko@sartura.hr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201231123948.10473-5-campion.kang@advantech.com.tw>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20201222143012.1618807-1-robert.marko@sartura.hr>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Dec 31, 2020 at 08:39:47PM +0800, Campion Kang wrote:
-> This is one of sub-device driver for Advantech embedded controller
-> AHC1EC0. This driver provides sysfs ABI for Advantech related
-> applications to monitor the system status.
+On Tue, Dec 22, 2020 at 03:30:10PM +0100, Robert Marko wrote:
+> Document bindings for the Texas Instruments TPS23861 driver.
 > 
-> Signed-off-by: Campion Kang <campion.kang@advantech.com.tw>
+> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> Cc: Luka Perkov <luka.perkov@sartura.hr>
 > ---
->  drivers/hwmon/Kconfig         |  10 +
+>  .../bindings/hwmon/ti,tps23861.yaml           | 53 +++++++++++++++++++
+>  1 file changed, 53 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml b/Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml
+> new file mode 100644
+> index 000000000000..a7a801f54398
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml
+> @@ -0,0 +1,53 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +
+> +$id: http://devicetree.org/schemas/hwmon/ti,tps23861.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: TI TPS23861 PoE PSE
+> +
+> +maintainers:
+> +  - Robert Marko <robert.marko@sartura.hr>
+> +
+> +description: |
+> +  The TPS23861 is a IEEE 802.3at Quad Port Power-over-Ethernet PSE Controller.
+> +
+> +  Datasheets:
+> +  https://www.ti.com/lit/gpn/tps23861
+> +
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - ti,tps23861
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  shunt-resistor-micro-ohms:
+> +    description: |
+> +      The value of curent sense resistor in microohms.
 
-[ ... ]
+s/curent/current/
 
-> +	lmsensor_data.hwmon_dev = devm_hwmon_device_register_with_groups(&pdev->dev,
-> +			"ahc1ec0-hwmon", adv_ec_data, ahc1ec0_groups);
+> +    items:
 
-New drivers must use [devm_]hwmon_device_register_with_info() and will
-otherwise not be accepted.
+Drop 'items', not an array.
 
-Guenter
+> +      default: 255000
+> +      minimum: 250000
+> +      maximum: 255000
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +          #address-cells = <1>;
+> +          #size-cells = <0>;
+> +
+> +          tps23861@30 {
+> +              compatible = "ti,tps23861";
+> +              reg = <0x30>;
+> +              shunt-resistor-micro-ohms = <255000>;
+> +          };
+> +    };
+> -- 
+> 2.29.2
+> 
