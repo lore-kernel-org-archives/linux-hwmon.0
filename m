@@ -2,138 +2,80 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62DD9C433E0
-	for <linux-hwmon@archiver.kernel.org>; Sun,  3 Jan 2021 16:40:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5960AC433DB
+	for <linux-hwmon@archiver.kernel.org>; Mon,  4 Jan 2021 02:06:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2D27620754
-	for <linux-hwmon@archiver.kernel.org>; Sun,  3 Jan 2021 16:40:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1B8CF20784
+	for <linux-hwmon@archiver.kernel.org>; Mon,  4 Jan 2021 02:06:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727440AbhACQkY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 3 Jan 2021 11:40:24 -0500
-Received: from mail-il1-f180.google.com ([209.85.166.180]:37152 "EHLO
-        mail-il1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726844AbhACQkV (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 3 Jan 2021 11:40:21 -0500
-Received: by mail-il1-f180.google.com with SMTP id k8so23162692ilr.4;
-        Sun, 03 Jan 2021 08:40:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zeml2GAhWGvlyObknefZT18uus2BWf4wQLF3uVJZpZw=;
-        b=Xoh23xcMgXReJWPsfqxngxbBTqbZGnYlNTnjMwZRSYL+n1MJ6LSOODMLmBLTxCNq+/
-         tCzZXve3pRz7bopwWCUKkCMr5Sz2I0WCzD0sKA8DjTxsFcL0cpWK1a901i6Th4Ui25CP
-         mIMV+UI7XmaSysqakvo5//HlLkCJPTappktfeFhrJJZ73MdkFac09Fc5oIIGGFKt7SId
-         OLNkuTTKPLeHpl4psk2HBoR7qCj36LSSSiwJnAJxlWJfZJlDwvBmgwFVXhAj6WNqGOBR
-         VX98EJd9G/GwDBdIuK/UN3JuTjMavzip8K8rV2ufJ5dB2qRB1ahCLIALL37I6fIpUCnr
-         rDSA==
-X-Gm-Message-State: AOAM530IOyF9jEiTwDdB9MsPDT6j0P7SAPADuk9Znno79eNEjIZWS00T
-        g0j3w5sQIdTah8eurRePGxGvSMEc1w==
-X-Google-Smtp-Source: ABdhPJzM6d8PEvYyediwGe+XcJGdCdnnt5tUfePOMvaIpJMIL4Mq/pWK64weXF+uLd/cbTnmaIbHXA==
-X-Received: by 2002:a05:6e02:60f:: with SMTP id t15mr67597160ils.250.1609691980702;
-        Sun, 03 Jan 2021 08:39:40 -0800 (PST)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id l4sm39764006ilo.29.2021.01.03.08.39.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Jan 2021 08:39:39 -0800 (PST)
-Received: (nullmailer pid 4011573 invoked by uid 1000);
-        Sun, 03 Jan 2021 16:39:36 -0000
-Date:   Sun, 3 Jan 2021 09:39:36 -0700
-From:   Rob Herring <robh@kernel.org>
-To:     Robert Marko <robert.marko@sartura.hr>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Luka Perkov <luka.perkov@sartura.hr>
-Subject: Re: [PATCH v3 1/3] dt-bindings: hwmon: Add TI TPS23861 bindings
-Message-ID: <20210103163936.GA4009325@robh.at.kernel.org>
-References: <20201222143012.1618807-1-robert.marko@sartura.hr>
+        id S1727426AbhADCGf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 3 Jan 2021 21:06:35 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:9709 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726026AbhADCGf (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 3 Jan 2021 21:06:35 -0500
+Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4D8Jpx2c0Wzl0nP;
+        Mon,  4 Jan 2021 10:04:41 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
+ DGGEMS408-HUB.china.huawei.com (10.3.19.208) with Microsoft SMTP Server id
+ 14.3.498.0; Mon, 4 Jan 2021 10:05:47 +0800
+From:   Tian Tao <tiantao6@hisilicon.com>
+To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <joel@jms.id.au>,
+        <andrew@aj.id.au>, <p.zabel@pengutronix.de>
+CC:     <linux-hwmon@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-aspeed@lists.ozlabs.org>
+Subject: [PATCH] hwmon: (aspeed-pwm-tacho): Switch to using the new API kobj_to_dev()
+Date:   Mon, 4 Jan 2021 10:05:45 +0800
+Message-ID: <1609725945-13895-1-git-send-email-tiantao6@hisilicon.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201222143012.1618807-1-robert.marko@sartura.hr>
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.56]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Dec 22, 2020 at 03:30:10PM +0100, Robert Marko wrote:
-> Document bindings for the Texas Instruments TPS23861 driver.
-> 
-> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-> Cc: Luka Perkov <luka.perkov@sartura.hr>
-> ---
->  .../bindings/hwmon/ti,tps23861.yaml           | 53 +++++++++++++++++++
->  1 file changed, 53 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml b/Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml
-> new file mode 100644
-> index 000000000000..a7a801f54398
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml
-> @@ -0,0 +1,53 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +
-> +$id: http://devicetree.org/schemas/hwmon/ti,tps23861.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: TI TPS23861 PoE PSE
-> +
-> +maintainers:
-> +  - Robert Marko <robert.marko@sartura.hr>
-> +
-> +description: |
-> +  The TPS23861 is a IEEE 802.3at Quad Port Power-over-Ethernet PSE Controller.
-> +
-> +  Datasheets:
-> +  https://www.ti.com/lit/gpn/tps23861
-> +
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - ti,tps23861
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  shunt-resistor-micro-ohms:
-> +    description: |
-> +      The value of curent sense resistor in microohms.
+fixed the following coccicheck:
+drivers/hwmon/aspeed-pwm-tacho.c:634:60-61: WARNING opportunity for
+kobj_to_dev()
+drivers/hwmon/aspeed-pwm-tacho.c:623:60-61: WARNING opportunity for
+kobj_to_dev()
 
-s/curent/current/
+Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
+---
+ drivers/hwmon/aspeed-pwm-tacho.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> +    items:
+diff --git a/drivers/hwmon/aspeed-pwm-tacho.c b/drivers/hwmon/aspeed-pwm-tacho.c
+index 3d8239f..3cb88d6 100644
+--- a/drivers/hwmon/aspeed-pwm-tacho.c
++++ b/drivers/hwmon/aspeed-pwm-tacho.c
+@@ -620,7 +620,7 @@ static ssize_t rpm_show(struct device *dev, struct device_attribute *attr,
+ static umode_t pwm_is_visible(struct kobject *kobj,
+ 			      struct attribute *a, int index)
+ {
+-	struct device *dev = container_of(kobj, struct device, kobj);
++	struct device *dev = kobj_to_dev(kobj);
+ 	struct aspeed_pwm_tacho_data *priv = dev_get_drvdata(dev);
+ 
+ 	if (!priv->pwm_present[index])
+@@ -631,7 +631,7 @@ static umode_t pwm_is_visible(struct kobject *kobj,
+ static umode_t fan_dev_is_visible(struct kobject *kobj,
+ 				  struct attribute *a, int index)
+ {
+-	struct device *dev = container_of(kobj, struct device, kobj);
++	struct device *dev = kobj_to_dev(kobj);
+ 	struct aspeed_pwm_tacho_data *priv = dev_get_drvdata(dev);
+ 
+ 	if (!priv->fan_tach_present[index])
+-- 
+2.7.4
 
-Drop 'items', not an array.
-
-> +      default: 255000
-> +      minimum: 250000
-> +      maximum: 255000
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +          #address-cells = <1>;
-> +          #size-cells = <0>;
-> +
-> +          tps23861@30 {
-> +              compatible = "ti,tps23861";
-> +              reg = <0x30>;
-> +              shunt-resistor-micro-ohms = <255000>;
-> +          };
-> +    };
-> -- 
-> 2.29.2
-> 
