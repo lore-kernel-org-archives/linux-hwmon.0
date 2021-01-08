@@ -2,94 +2,99 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5381FC433E0
-	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Jan 2021 09:19:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04EB9C433E9
+	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Jan 2021 15:33:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 07AE322BEA
-	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Jan 2021 09:19:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B8D9C23A1D
+	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Jan 2021 15:33:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727529AbhAHJTm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 8 Jan 2021 04:19:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34964 "EHLO
+        id S1727943AbhAHPdg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 8 Jan 2021 10:33:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726120AbhAHJTm (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 8 Jan 2021 04:19:42 -0500
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083C8C0612F4;
-        Fri,  8 Jan 2021 01:19:02 -0800 (PST)
-Received: by mail-io1-xd2b.google.com with SMTP id t8so9094780iov.8;
-        Fri, 08 Jan 2021 01:19:01 -0800 (PST)
+        with ESMTP id S1727931AbhAHPdf (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 8 Jan 2021 10:33:35 -0500
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9383EC061381;
+        Fri,  8 Jan 2021 07:32:41 -0800 (PST)
+Received: by mail-ot1-x32f.google.com with SMTP id j20so9994548otq.5;
+        Fri, 08 Jan 2021 07:32:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=K0UzHOd3okV0qpJMc682hFBfathXKjKul5nXUx2yUFc=;
-        b=F8f7tTd5RCkx2C4eh3Qvv9dClv2bZtMk3yyiFQQx74z0WQqkC3TBDn8Yf4geL8cTaF
-         ndytfDet/nngjB6Wis7vk27FHZ8mNuUHlTVii2bpCDGq8MrM8Flknior7qEVgvIzlqDf
-         Y96Z9QwPlV2dI16gKEMzFOdAIuS4VAkPBpj9pmYaV3/Npky3HQ5yqar+A0tDU+6lmQ88
-         pYGuA6e3bTSZOEqOjEcSYwppb/8mdcTiso6KDjtlPlwSCB1hTyJTSwxNkVxprH9iO+pd
-         tqNDFhjh7kpAYWRgePSKmB6YgS+v8Z8+WUNPBZk3mBBh+arxrnE77wCAwxnH63n/Y0DC
-         5C7A==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=PxfKbo/Ze1UYEnyLqJyQ+l1xApQcxjj0mRY/83IgHlg=;
+        b=Z/tiZeGFENf8jEpMCP2cXuG3JdPh+B3mIjUt8P3RhVDPXwsSBv1ArVnySGo1i/UdFu
+         zCcF0hXUJqngHpUUu9dMZLOIXOkE7/dBoZA+3OzeHiv5AbUxGVk51EfcybB3BZyYf/7S
+         VGzB8vAui+KZedNE5jYLhK9yQC+UoFqss9Ivw6Y4uldwRhK0bmiAl3lwivfmBhTWNmQ3
+         UpvgDRJWQFqWKN2soPvF/5AAwHaoeTTDtBeZI/JcOefwMzbSDQyGPLcna/VsFkV/Q1Lg
+         d5pdCmehROCOk27gNzzTlhCh1gKR3n669w4OV6SXJk0b7XBPPx2WVYjlerOZ6IyhK/QN
+         5i2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=K0UzHOd3okV0qpJMc682hFBfathXKjKul5nXUx2yUFc=;
-        b=jKTuXexB6CA6lFzc9OYijHwFSiP1UE/GzUeIJjLZmRWceBnCZ8/PwW0/lXO3QDUZN9
-         DSYGFTT55nPfwNeD6f/j4+ae2hYIvc3++q/ORlIKOxjeIWZOK9LrHMedZFSVqj02aezC
-         f1pyAl6GDvz1Gxg+qA4AMfUMxGhdXp82p7laoDirSylpT4xnut/L7bt3r+ymMGT/6LtP
-         9z04UIai/b1qPgPmD+f49MshU2dbeqWGWuajIgGOFwzyp1ZbBCCxx3MvLX7cQUI+Ox5y
-         CmhP8u5LVCfWGsMTGAQpfstuMWRQ4AqTGAxZFIOnmGmBzfLeHHTW9D4KKg3yVVUKBv5C
-         ZgLQ==
-X-Gm-Message-State: AOAM5332ED25lCByUWub96Mf2R6lJPBkJPbYJHL/KTRDfgfnlTn3lHJq
-        +bomgjXz0zoc6EComz7Rtfe/VfvHAqQ0Xupxa7w=
-X-Google-Smtp-Source: ABdhPJyfjLwgvHCGe6CncF0auRwlIUDRFyy4qz1UYNc+B5B0sgSfo5G7aPXzeVtJYm+wsjlb0rJtWZX+RmqLQs2yFpA=
-X-Received: by 2002:a02:3f62:: with SMTP id c34mr2662497jaf.16.1610097541408;
- Fri, 08 Jan 2021 01:19:01 -0800 (PST)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=PxfKbo/Ze1UYEnyLqJyQ+l1xApQcxjj0mRY/83IgHlg=;
+        b=TlbjI/0ZpKOOp7ryFfpKJXVv7WIrMxooktchjYnO8A07sq7C2tE18A+p3F3KjhuMND
+         JYMfcOr8+BoNrkxyXhJ+AhmKjXIhO9sIXTVkz34ZSzufgmPP3MwkjnzY/F/vL/03jI5w
+         Dz7aypXU5pPIDopkuhsDsqDAAeV32+7Ilb1x85yInSFFd6tb5ddY7TuIA/4H6JCD9IFS
+         DW6w7knxK9N4YQ56vOJMNgv2UniccuG/A8bIM9V9IHEe5VWXKNGsXahJnE5f8QUOfJOQ
+         vdzydSmFbkKZHnVoTWBFm19EIkpWsAfM3tO77o900yw+HRp71bKTXshdDuaIHM7BlGbe
+         kTig==
+X-Gm-Message-State: AOAM532zMPnmPbKUNK3xuggLP7d02SiWz/FDMhfJnbWJLn3N+nQy20ob
+        OVk+D4bhQKWrvPONJU3Pc41DBKrwnU4=
+X-Google-Smtp-Source: ABdhPJzdOLIrde+HjmZZkzFt06Ucd7tRBJlrB9k6S0/i47+wuYoKjTWni0MdVlAn58yyF7p1MGMBEw==
+X-Received: by 2002:a9d:7b53:: with SMTP id f19mr3002189oto.93.1610119960068;
+        Fri, 08 Jan 2021 07:32:40 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 39sm1816229otu.6.2021.01.08.07.32.37
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 08 Jan 2021 07:32:38 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 8 Jan 2021 07:32:37 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     David Arcari <darcari@redhat.com>
+Cc:     linux-hwmon@vger.kernel.org,
+        Naveen Krishna Chatradhi <nchatrad@amd.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (amd_energy) fix allocation of hwmon_channel_info
+ config
+Message-ID: <20210108153237.GA182053@roeck-us.net>
+References: <20210107144707.6927-1-darcari@redhat.com>
 MIME-Version: 1.0
-References: <20210107103417.16010-1-alexandru.ardelean@analog.com>
- <20210107103417.16010-4-alexandru.ardelean@analog.com> <20210107152538.GC13040@roeck-us.net>
- <CA+U=Dspo0aovB4M76FoUaPpfYN-ZiCkCUc1Am24Mq7VSHRStEQ@mail.gmail.com> <20210107173548.GA49383@roeck-us.net>
-In-Reply-To: <20210107173548.GA49383@roeck-us.net>
-From:   Alexandru Ardelean <ardeleanalex@gmail.com>
-Date:   Fri, 8 Jan 2021 11:18:49 +0200
-Message-ID: <CA+U=Dsr+AZrn8MBkYbXzQqhYxph1tiU1ja5GaSeZSsy5m=55Gw@mail.gmail.com>
-Subject: Re: [PATCH v3 3/4] hwmon: (ltc2945): add support for sense resistor
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Alexandru Ardelean <alexandru.ardelean@analog.com>,
-        linux-hwmon@vger.kernel.org,
-        devicetree <devicetree@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, jdelvare@suse.com,
-        "Thoren, Mark" <mark.thoren@analog.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210107144707.6927-1-darcari@redhat.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Jan 7, 2021 at 7:35 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Thu, Jan 07, 2021 at 05:44:33PM +0200, Alexandru Ardelean wrote:
-> > >
-> > > Note that this patch doesn't compile on 32-bit targets.
-> >
-> > Yeah, my bad.
-> > I only tested with  make allmodconfig, and that doesn't do a good job
-> > at providing linker issues.
-> >
-> The problem is the 64-bit divide operation introduced with your patch.
-> You'd see that if you build allmodconfig with ARCH=i386.
+On Thu, Jan 07, 2021 at 09:47:07AM -0500, David Arcari wrote:
+> hwmon, specifically hwmon_num_channel_attrs, expects the config
+> array in the hwmon_channel_info structure to be terminated by
+> a zero entry.  amd_energy does not honor this convention.  As
+> result, a KASAN warning is possible.  Fix this by adding an
+> additional entry and setting it to zero.
+> 
+> Fixes: 8abee9566b7e ("hwmon: Add amd_energy driver to report energy counters")
+> 
+> Signed-off-by: David Arcari <darcari@redhat.com>
+> Cc: Naveen Krishna Chatradhi <nchatrad@amd.com>
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: stable@vger.kernel.org
+> Signed-off-by: David Arcari <darcari@redhat.com>
+> Acked-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
 
-Oh, right.
-That thought actually escaped me.
+Applied.
 
-Thanks for the tip
-Alex
-
->
-> Guenter
+Thanks,
+Guenter
