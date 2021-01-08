@@ -2,557 +2,197 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BEDC9C433E6
-	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Jan 2021 19:41:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B47F5C433DB
+	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Jan 2021 05:50:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7B00C23447
-	for <linux-hwmon@archiver.kernel.org>; Thu,  7 Jan 2021 19:41:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5B7EA224B1
+	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Jan 2021 05:50:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729335AbhAGTk7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 7 Jan 2021 14:40:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48544 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729330AbhAGTk7 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 7 Jan 2021 14:40:59 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01AF8C0612F4
-        for <linux-hwmon@vger.kernel.org>; Thu,  7 Jan 2021 11:40:19 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id o13so17403291lfr.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 07 Jan 2021 11:40:18 -0800 (PST)
+        id S1726312AbhAHFt4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 8 Jan 2021 00:49:56 -0500
+Received: from mail-mw2nam12on2086.outbound.protection.outlook.com ([40.107.244.86]:5312
+        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725844AbhAHFt4 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 8 Jan 2021 00:49:56 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NbqhmFMakf844J/ysjxUxTW3xhbAfPEJKOWScFuq5RUwHFCuINoO+dBlMYInbq3CmT4RkeNgYqOpV3oFkzNVp7wNQA6mUAJfGwa/VpfCEkCxCT0QfcU+AZoSig3+i66V3S2xCloMlkODB7Y8lSrXlU+usK5loaaPlWf83wJ9oHE9aZHjlJoXO6UMTVFXSgqmeUtg7pIk545rH2AqowtKJjRACcXuzaHtA0Cr0RsyNaH+1PqLnPoySunQOpzNwAqEerhg6BBa9+kWnUBQyooTzo4T4iUpxXD/MQGE+U2TfiyxV8sqEURNBbsRZo7jAmnu4DGOw6zf/6LRNQeY+RO7GQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3xcleXbDGsR7WUTislfp+brWYCR/8Ir+gpVQE0qIx80=;
+ b=RO8UB0jwZTAPlQeemQ4q9KjwmRbsx+Uvw8LazlQb6fOIan5sDR+ohFwrrs/rQXAx3SRlIlohUH7lzM3rDnkAr9ZCtldKVqaApW3m7cPGmNzfba5d8ZU5o4tp4+NwkygZeMWK7xE2pbKJEoS+3IUza7o5R6lpbAZhQOEIqr0RSazL50zThf7lZTUy6V8At4lTf5hWwreLOX5p/vkFSXJ0IdsdEUawW7/o5vAMONuYgx17f8gM8TyGLnn4Eoa+rb0/Io5+8WlucYQ/Q5NyCJteVBtYek9fZogwdeA6NWvHZcf3ffIAMhXWsR8YwDhC4TRkxrJ2xr59sh6vtRYfc12edQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=q0JtJMI42dsCbtkxoydBz5um+QVkSevaw/DRQqsI4gA=;
-        b=sXDpwR+gcg7Q6KiopnhgQxB4wvIhnHalISEP4iEmViwOcGdbb33+7I4k/ep8AmuPvG
-         5hXYsgBekRLOW+QCT38Q/um0m+kIixiUjljz+dW3gJfZbX/6pdhz2iazkiyZR/3VajQk
-         BojLV7+LouhNAMLTEpP+QnbnnFLPvAyVEG+3Q78xfOO+4Snc/1VvLmxc3ZHI6BpwOsTL
-         rtMBLBbIebdNuU1KVqG2EbnDngD4RDjb460QzTTsr+TsHJfdxuTFNYfA0j+Afnt7xCRg
-         9KEH4Qyo4zGAI2fq+hMKmeOkXjmL1GxfD9rIkz4X8zzpVP9ysDAkDWb5vzj5XtsckeUR
-         +9uA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=q0JtJMI42dsCbtkxoydBz5um+QVkSevaw/DRQqsI4gA=;
-        b=nnkuY8klPr4PFwunapMyIMA9mlQ6pMUvg19ggTVsQ/0NSwqkAl01+f1svKTQ1rRZUT
-         RToDFguwx/MGFk8kPJZ3ifxVQuie6poLdR9T8/PPXwud+KX1GKrSLmri3llBtnQCY91B
-         LbVRvDS5vVH7/nUKZ6+/ttHv5+clE0cMv4nOO2o/utSuVfz9qYG18FIc/1e7Ql9A77kC
-         A+dvm5DI+rUbakT9oOSnYG48qERe/MUZo9lfgy8L12cMnHvlk2A5T9k+KCDXp7zdOyjA
-         lPKCOuQQ2mbDp/XJhUqZn9iNAlpGES5ndvNmqtfJnRnZ/tYr6yL6wltpa+3n3XkkQZsZ
-         45vg==
-X-Gm-Message-State: AOAM531JYsg01kFjm1pUYW/b9/TcTjGPHuh3hkE+6yGxA804yFAuY/Te
-        pPcILupg+xuJ9m9i+M2B9g4Uk6gq8FsGTA==
-X-Google-Smtp-Source: ABdhPJzEP9876GfWZ0RJuP0h/lJcC2weYJAGSpHZA0PWSIo4YPPnqsVH8nBfmpKrQAy8kZC7OQEX1g==
-X-Received: by 2002:a05:6512:491:: with SMTP id v17mr136281lfq.148.1610048416928;
-        Thu, 07 Jan 2021 11:40:16 -0800 (PST)
-Received: from desktop (94-255-234-122.cust.bredband2.com. [94.255.234.122])
-        by smtp.gmail.com with ESMTPSA id n10sm1502491lji.99.2021.01.07.11.40.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jan 2021 11:40:16 -0800 (PST)
-Date:   Thu, 7 Jan 2021 20:40:14 +0100
-From:   "Johannes Cornelis Draaijer (datdenkikniet)" <jcdra1@gmail.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     linux@roeck-us.net, delvare@suse.com
-Subject: [PATCH v3] hwmon: Add AHT10 Temperature and Humidity Sensor Driver
-Message-ID: <20210107194014.GA88780@desktop>
+ d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3xcleXbDGsR7WUTislfp+brWYCR/8Ir+gpVQE0qIx80=;
+ b=jF9OlIOEesm7+63PmoAyIA5XuMZ1DRXAAOfYFMdp3z5V/jM/nr6MA4dIMtFOYHlpq3sEoJN+o7QLvnkxLlwpiUnd/Sbt5fHCeAIotMSYA73zPYjfL2aUQUI9bjYfDjqp1uh8nShHw7yInPq83K2R2GOvamJON0eTMKlIUBTS+KU=
+Received: from DM6PR12MB4388.namprd12.prod.outlook.com (2603:10b6:5:2a9::10)
+ by DM5PR12MB1833.namprd12.prod.outlook.com (2603:10b6:3:111::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3742.6; Fri, 8 Jan
+ 2021 05:49:03 +0000
+Received: from DM6PR12MB4388.namprd12.prod.outlook.com
+ ([fe80::84e9:dd44:12cf:bdb3]) by DM6PR12MB4388.namprd12.prod.outlook.com
+ ([fe80::84e9:dd44:12cf:bdb3%6]) with mapi id 15.20.3742.006; Fri, 8 Jan 2021
+ 05:49:03 +0000
+From:   "Chatradhi, Naveen Krishna" <NaveenKrishna.Chatradhi@amd.com>
+To:     David Arcari <darcari@redhat.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+CC:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH] hwmon: (amd_energy) fix allocation of hwmon_channel_info
+ config
+Thread-Topic: [PATCH] hwmon: (amd_energy) fix allocation of hwmon_channel_info
+ config
+Thread-Index: AQHW5QQZdSyCjckTx0WGIHiGz4uxF6odMEOA
+Date:   Fri, 8 Jan 2021 05:49:03 +0000
+Message-ID: <DM6PR12MB4388220A9F55F5DDC984B91FE8AE0@DM6PR12MB4388.namprd12.prod.outlook.com>
+References: <20210107144707.6927-1-darcari@redhat.com>
+In-Reply-To: <20210107144707.6927-1-darcari@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_c3918902-4ff3-42f6-8eb5-e5d9c71daf16_Enabled=true;
+ MSIP_Label_c3918902-4ff3-42f6-8eb5-e5d9c71daf16_SetDate=2021-01-08T05:48:07Z;
+ MSIP_Label_c3918902-4ff3-42f6-8eb5-e5d9c71daf16_Method=Privileged;
+ MSIP_Label_c3918902-4ff3-42f6-8eb5-e5d9c71daf16_Name=Internal Use Only -
+ Restricted;
+ MSIP_Label_c3918902-4ff3-42f6-8eb5-e5d9c71daf16_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_c3918902-4ff3-42f6-8eb5-e5d9c71daf16_ActionId=fa637c64-fb07-47e6-b07b-000052bed65a;
+ MSIP_Label_c3918902-4ff3-42f6-8eb5-e5d9c71daf16_ContentBits=1
+msip_label_c3918902-4ff3-42f6-8eb5-e5d9c71daf16_enabled: true
+msip_label_c3918902-4ff3-42f6-8eb5-e5d9c71daf16_setdate: 2021-01-08T05:48:59Z
+msip_label_c3918902-4ff3-42f6-8eb5-e5d9c71daf16_method: Privileged
+msip_label_c3918902-4ff3-42f6-8eb5-e5d9c71daf16_name: Internal Use Only -
+ Restricted
+msip_label_c3918902-4ff3-42f6-8eb5-e5d9c71daf16_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
+msip_label_c3918902-4ff3-42f6-8eb5-e5d9c71daf16_actionid: 18486720-8e3c-4f38-a78a-0000883627e9
+msip_label_c3918902-4ff3-42f6-8eb5-e5d9c71daf16_contentbits: 0
+dlp-product: dlpe-windows
+dlp-version: 11.5.0.60
+dlp-reaction: no-action
+authentication-results: redhat.com; dkim=none (message not signed)
+ header.d=none;redhat.com; dmarc=none action=none header.from=amd.com;
+x-originating-ip: [175.101.104.147]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 30c39e59-f83c-4e26-8332-08d8b3991ab3
+x-ms-traffictypediagnostic: DM5PR12MB1833:
+x-microsoft-antispam-prvs: <DM5PR12MB1833826426878B732C1D1499E8AE0@DM5PR12MB1833.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:454;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: QuovBIt3pMtuMbuUSp8tQZ1djdFJecodZKhwwPY7Znh+bEpZtRbIJ3nCyqHHTqSrTLJcnKVaRwLoviFoaaDiq43daNGcHNBHH2/7XMOrJSC5HWLpV1cDsS2PzbUQwaJRfHMzyW5lmgKwJ5ojeOp1IV9j2PnVoiUtbKDjvhXOYtf+z6iqiECV6Rhadfy+xq5kdKYJM/MMFYdVtJH5olXhCGf5+2jgXH3j8kX2nUZ1+BhqQaM2JyeSf12d0Q9K+8o3QLSL0tGCXJphX9UhgGvWVjNydS5wN6Z1TRXcdrB8wnI65Ii3fJ/0QwFsQMaAWMxtKu2JA4d40LPmPB8/6yUCZppkl24bt8mr5cimOX4hT1IOdpEhtIxjqsMVULyp8JTj
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4388.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(136003)(346002)(396003)(39860400002)(376002)(26005)(83380400001)(86362001)(6506007)(55016002)(4326008)(186003)(9686003)(7696005)(8676002)(66556008)(54906003)(8936002)(53546011)(110136005)(316002)(33656002)(66946007)(478600001)(5660300002)(76116006)(66446008)(66476007)(52536014)(71200400001)(64756008)(2906002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?CTPRpXYVMR4M670j+lMAkqeqJR+LEqDI3JzeUuoq6O+l5dXmbObqESK1eT9R?=
+ =?us-ascii?Q?a6Di7GrcVgTAvRjgcT2E0lSSFADR8S18FnsNAWvuGpEuiS7ctJKlwIIFBEVK?=
+ =?us-ascii?Q?MNpPxhjA0Vf3h2T/1BFVg7ZcVL+kup9P24A6Nt6jrbey2NE9jnWmuUcdY1xR?=
+ =?us-ascii?Q?6vXXxCR2gfbMR9f5wJiGXKn67AUHnPa3Kmzbhoce5CLPqeyFRr8U++icfDzh?=
+ =?us-ascii?Q?WgsT4a6/7gXf4scRwGhvAG287JV94vLRwCOsQe83Q/osXjglizzZxjZahBQd?=
+ =?us-ascii?Q?uXWiBEwZEPwybtOcDUlPGaIytm6708WHLBzLkovsltaLHihDBHGvTdXVUEIm?=
+ =?us-ascii?Q?BOQ4OBL02k6pMtHZJSL5e1MwfThW5C1YoUm0fy6nxabhYgFNxzHA0QAQI+Tc?=
+ =?us-ascii?Q?2cYMPdGtiSkH1zH80ErElz3JVA/ddSbIa4GX6tMaDeV8jmx3LVBJHK5N5K/G?=
+ =?us-ascii?Q?MnSAC0Tf5oRFHoNZ1+zJd3TeAOZO9TfTG6Rl1w4D+n6AgMluQKKG0kRpWcL0?=
+ =?us-ascii?Q?MBliTMqR+B127IRKB7QCwti1YRX4aim9RBxFXHoACAhRfiGbiRjnKH/HVBCY?=
+ =?us-ascii?Q?tnTDoqmyiuJc0tbH/8EeRKeOJDGheNGZ4kLzKJUnOIDWFUf2tz/kmi6yXi0u?=
+ =?us-ascii?Q?8/EctCUC+73MAqegdaAoTIj8+4nF9K6YQkXcU4RpgxI3qEAjuNwLw8vVK4Gn?=
+ =?us-ascii?Q?cCSdqBjcfx1dIqwrLIwt7Cfh3XuiykVNKFv6Dnk/bP6ABX39zIN6RhZpuFNQ?=
+ =?us-ascii?Q?s+XuiDvAmBO5s7cjyUlRGRt4BoQWiYVCXz+ZVYhHE64C+fqwk7P6s6fUzq2n?=
+ =?us-ascii?Q?O+UAelU4DYaqBn98pBJdLA2b7GNkulT0WShrvybKOLkpclv+vXw9Y3TH8tJZ?=
+ =?us-ascii?Q?hXlAlEDCBqS4Dac8BOXIWPb7YbiH7L37jvNAORbQCI7xHO3i3heT2sDCq3eN?=
+ =?us-ascii?Q?43EJRJnL4VZwRs1WmgiBs4Fc01nT+DrWNf2oQ/KT+m4=3D?=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4388.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 30c39e59-f83c-4e26-8332-08d8b3991ab3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Jan 2021 05:49:03.1090
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: sbG+x4IxTzS8QiIML4FoziEUW6Np4mxRKLvRxUvq8mxwHyArI1oCSoA6wlMGX9jh9kVxWUzdOdivWzOaQ8cVqg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1833
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This patch adds a hwmon driver for the AHT10 Temperature and
-Humidity sensor. It has a maximum sample rate, as the datasheet
-states that the chip may heat up if it is sampled more than once
-every two seconds.
+[AMD Official Use Only - Approved for External Use]
 
-Has been tested a to work on a raspberrypi0w
+Hi David,
 
-Changes from v2:
-Add reference to documentation to index.rst
-Properly align defines
-Clamp value instead of returning error
-Adjust return values
-Remove unnecessary print, check and comment
+Thank you for noticing and submitting a fix. You may use
+Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
 
-Major changes from initial patch:
-Removed devicetree/of references
-Removed aht10_reset, aht10_remove
-Add documentation
-Switch to hwmon channels, attributes and info
-More appropriate usage of mutex
-Return standard error codes
-Add checking statements for errors that are returned
-Other code improvements as suggested
+Regards,
+Naveenk
 
-Signed-off-by: Johannes Cornelis Draaijer (datdenkikniet) <jcdra1@gmail.com>
+-----Original Message-----
+From: David Arcari <darcari@redhat.com>=20
+Sent: Thursday, January 7, 2021 8:17 PM
+To: linux-hwmon@vger.kernel.org
+Cc: David Arcari <darcari@redhat.com>; Chatradhi, Naveen Krishna <NaveenKri=
+shna.Chatradhi@amd.com>; Jean Delvare <jdelvare@suse.com>; Guenter Roeck <l=
+inux@roeck-us.net>; linux-kernel@vger.kernel.org; stable@vger.kernel.org
+Subject: [PATCH] hwmon: (amd_energy) fix allocation of hwmon_channel_info c=
+onfig
+
+[CAUTION: External Email]
+
+hwmon, specifically hwmon_num_channel_attrs, expects the config array in th=
+e hwmon_channel_info structure to be terminated by a zero entry.  amd_energ=
+y does not honor this convention.  As result, a KASAN warning is possible. =
+ Fix this by adding an additional entry and setting it to zero.
+
+Fixes: 8abee9566b7e ("hwmon: Add amd_energy driver to report energy counter=
+s")
+
+Signed-off-by: David Arcari <darcari@redhat.com>
+Cc: Naveen Krishna Chatradhi <nchatrad@amd.com>
+[naveenk:] Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-kernel@vger.kernel.org
+Cc: stable@vger.kernel.org
 ---
- Documentation/hwmon/aht10.rst |  46 +++++
- Documentation/hwmon/index.rst |   1 +
- drivers/hwmon/Kconfig         |  10 +
- drivers/hwmon/Makefile        |   1 +
- drivers/hwmon/aht10.c         | 347 ++++++++++++++++++++++++++++++++++
- 5 files changed, 405 insertions(+)
- create mode 100644 Documentation/hwmon/aht10.rst
- create mode 100644 drivers/hwmon/aht10.c
+ drivers/hwmon/amd_energy.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/hwmon/aht10.rst b/Documentation/hwmon/aht10.rst
-new file mode 100644
-index 000000000000..482262ca117c
---- /dev/null
-+++ b/Documentation/hwmon/aht10.rst
-@@ -0,0 +1,46 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Kernel driver aht10
-+=====================
-+
-+Supported chips:
-+
-+  * Aosong AHT10
-+
-+    Prefix: 'aht10'
-+
-+    Addresses scanned: None
-+
-+    Datasheet:
-+
-+      Chinese: http://www.aosong.com/userfiles/files/media/AHT10%E4%BA%A7%E5%93%81%E6%89%8B%E5%86%8C%20A3%2020201210.pdf
-+      English: https://server4.eca.ir/eshop/AHT10/Aosong_AHT10_en_draft_0c.pdf
-+
-+Author: Johannes Cornelis Draaijer <jcdra1@gmail.com>
-+
-+
-+Description
-+-----------
-+
-+The AHT10 is a Temperature and Humidity sensor
-+
-+The address of this i2c device may only be 0x38
-+
-+Usage Notes
-+-----------
-+
-+This driver does not probe for AHT10 devices, as there is no reliable
-+way to determine if an i2c chip is or isn't an AHT10. The device has
-+to be instantiated explicitly with the address 0x38. See
-+Documentation/i2c/instantiating-devices.rst for details.
-+
-+Sysfs entries
-+-------------
-+
-+=============== ============================================
-+temp1_input     Measured temperature in millidegrees Celcius
-+humidity1_input Measured humidity in %H
-+update_interval The minimum interval for polling the sensor,
-+                in milliseconds. Writable. Must be at
-+                least 2000.
-+=============== ============================================
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index 55ff4b7c5349..4a9507d177a0 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -38,6 +38,7 @@ Hardware Monitoring Kernel Drivers
-    adt7462
-    adt7470
-    adt7475
-+   aht10
-    amc6821
-    amd_energy
-    asb100
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 288ae9f63588..96bad243d729 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -257,6 +257,16 @@ config SENSORS_ADT7475
- 	  This driver can also be built as a module. If so, the module
- 	  will be called adt7475.
- 
-+config SENSORS_AHT10
-+	tristate "Aosong AHT10"
-+	depends on I2C
-+	help
-+	  If you say yes here, you get support for the Aosong AHT10
-+	  temperature and humidity sensors
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called aht10.
-+
- config SENSORS_AS370
- 	tristate "Synaptics AS370 SoC hardware monitoring driver"
- 	help
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index 3e32c21f5efe..6cb44d54e628 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -45,6 +45,7 @@ obj-$(CONFIG_SENSORS_ADT7411)	+= adt7411.o
- obj-$(CONFIG_SENSORS_ADT7462)	+= adt7462.o
- obj-$(CONFIG_SENSORS_ADT7470)	+= adt7470.o
- obj-$(CONFIG_SENSORS_ADT7475)	+= adt7475.o
-+obj-$(CONFIG_SENSORS_AHT10)	+= aht10.o
- obj-$(CONFIG_SENSORS_AMD_ENERGY) += amd_energy.o
- obj-$(CONFIG_SENSORS_APPLESMC)	+= applesmc.o
- obj-$(CONFIG_SENSORS_ARM_SCMI)	+= scmi-hwmon.o
-diff --git a/drivers/hwmon/aht10.c b/drivers/hwmon/aht10.c
-new file mode 100644
-index 000000000000..9eea75646beb
---- /dev/null
-+++ b/drivers/hwmon/aht10.c
-@@ -0,0 +1,347 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+/*
-+ * aht10.c - Linux hwmon driver for AHT10 Temperature and Humidity sensor
-+ * Copyright (C) 2020 Johannes Cornelis Draaijer
-+ */
-+
-+#include <linux/delay.h>
-+#include <linux/hwmon.h>
-+#include <linux/i2c.h>
-+#include <linux/ktime.h>
-+#include <linux/module.h>
-+
-+#define AHT10_ADDR 0x38
-+#define AHT10_MEAS_SIZE 6
-+
-+/*
-+ * Poll intervals (in milliseconds)
-+ */
-+#define AHT10_DEFAULT_MIN_POLL_INTERVAL	2000
-+#define AHT10_MIN_POLL_INTERVAL		2000
-+
-+/*
-+ * I2C command delays (in microseconds)
-+ */
-+#define AHT10_MEAS_DELAY	80000
-+#define AHT10_CMD_DELAY		350000
-+#define AHT10_DELAY_EXTRA	100000
-+
-+/*
-+ * Command bytes
-+ */
-+#define AHT10_CMD_INIT	0b11100001
-+#define AHT10_CMD_MEAS	0b10101100
-+#define AHT10_CMD_RST	0b10111010
-+
-+/*
-+ * Flags in the answer byte/command
-+ */
-+#define AHT10_CAL_ENABLED	BIT(3)
-+#define AHT10_BUSY		BIT(7)
-+#define AHT10_MODE_NOR		(BIT(5) | BIT(6))
-+#define AHT10_MODE_CYC		BIT(5)
-+#define AHT10_MODE_CMD		BIT(6)
-+
-+#define AHT10_MAX_POLL_INTERVAL_LEN	30
-+
-+/**
-+ *   struct aht10_data - All the data required to operate an AHT10 chip
-+ *   @client: the i2c client associated with the AHT10
-+ *   @lock: a mutex that is used to prevent parallel access to the
-+ *          i2c client
-+ *   @min_poll_interval: the minimum poll interval
-+ *                   While the poll rate limit is not 100% necessary,
-+ *                   the datasheet recommends that a measurement
-+ *                   is not performed too often to prevent
-+ *                   the chip from warming up due to the heat it generates.
-+ *                   If it's unwanted, it can be ignored setting it to
-+ *                   it to 0. Default value is 2000 ms
-+ *   @previous_poll_time: the previous time that the AHT10
-+ *                        was polled
-+ *   @temperature: the latest temperature value received from
-+ *                 the AHT10
-+ *   @humidity: the latest humidity value received from the
-+ *              AHT10
-+ */
-+
-+struct aht10_data {
-+	struct i2c_client *client;
-+	/*
-+	 * Prevent simultaneous access to the i2c
-+	 * client and previous_poll_time
-+	 */
-+	struct mutex lock;
-+	ktime_t min_poll_interval;
-+	ktime_t previous_poll_time;
-+	int temperature;
-+	int humidity;
-+};
-+
-+/**
-+ * aht10_init() - Initialize an AHT10 chip
-+ * @client: the i2c client associated with the AHT10
-+ * @data: the data associated with this AHT10 chip
-+ * Return: 0 if succesfull, 1 if not
-+ */
-+static int aht10_init(struct aht10_data *data)
-+{
-+	const u8 cmd_init[] = {AHT10_CMD_INIT, AHT10_CAL_ENABLED | AHT10_MODE_CYC,
-+			       0x00};
-+	int res;
-+	u8 status;
-+	struct i2c_client *client = data->client;
-+
-+	res = i2c_master_send(client, cmd_init, 3);
-+	if (res < 0)
-+		return res;
-+
-+	usleep_range(AHT10_CMD_DELAY, AHT10_CMD_DELAY +
-+		     AHT10_DELAY_EXTRA);
-+
-+	res = i2c_master_recv(client, &status, 1);
-+	if (res != 1)
-+		return -ENODATA;
-+
-+	if (status & AHT10_BUSY)
-+		return -EBUSY;
-+
-+	return 0;
-+}
-+
-+/**
-+ * aht10_polltime_expired() - check if the minimum poll interval has
-+ *                                  expired
-+ * @data: the data containing the time to compare
-+ * Return: 1 if the minimum poll interval has expired, 0 if not
-+ */
-+static int aht10_polltime_expired(struct aht10_data *data)
-+{
-+	ktime_t current_time = ktime_get_boottime();
-+	ktime_t difference = ktime_sub(current_time, data->previous_poll_time);
-+
-+	return ktime_after(difference, data->min_poll_interval);
-+}
-+
-+/**
-+ * aht10_read_values() - read and parse the raw data from the AHT10
-+ * @aht10_data: the struct aht10_data to use for the lock
-+ * Return: 0 if succesfull, 1 if not
-+ */
-+static int aht10_read_values(struct aht10_data *data)
-+{
-+	const u8 cmd_meas[] = {AHT10_CMD_MEAS, 0x33, 0x00};
-+	u32 temp, hum;
-+	int res;
-+	u8 raw_data[AHT10_MEAS_SIZE];
-+	struct i2c_client *client = data->client;
-+
-+	mutex_lock(&data->lock);
-+	if (aht10_polltime_expired(data)) {
-+		res = i2c_master_send(client, cmd_meas, sizeof(cmd_meas));
-+		if (res < 0)
-+			return res;
-+
-+		usleep_range(AHT10_MEAS_DELAY,
-+			     AHT10_MEAS_DELAY + AHT10_DELAY_EXTRA);
-+
-+		res = i2c_master_recv(client, raw_data, AHT10_MEAS_SIZE);
-+		if (res != 6) {
-+			mutex_unlock(&data->lock);
-+			if (res >= 0)
-+				return -ENODATA;
-+			else
-+				return res;
-+		}
-+
-+		hum =   ((u32)raw_data[1] << 12u) |
-+			((u32)raw_data[2] << 4u) |
-+			((raw_data[3] & 0xF0u) >> 4u);
-+
-+		temp =  ((u32)(raw_data[3] & 0x0Fu) << 16u) |
-+			((u32)raw_data[4] << 8u) |
-+			raw_data[5];
-+
-+		temp = ((temp * 625) >> 15u) * 10;
-+		hum = ((hum * 625) >> 16u) * 10;
-+
-+		data->temperature = (int)temp - 50000;
-+		data->humidity = hum;
-+		data->previous_poll_time = ktime_get_boottime();
-+	}
-+	mutex_unlock(&data->lock);
-+	return 0;
-+}
-+
-+/**
-+ * aht10_interval_write() - store the given minimum poll interval.
-+ * Return: 0 on success, -EINVAL if a value lower than the
-+ *         AHT10_MIN_POLL_INTERVAL is given
-+ */
-+static ssize_t aht10_interval_write(struct aht10_data *data,
-+				    long val)
-+{
-+	data->min_poll_interval = ms_to_ktime(clamp_val(val, 2000, LONG_MAX));
-+	return 0;
-+}
-+
-+/**
-+ * aht10_interval_read() - read the minimum poll interval
-+ *                            in milliseconds
-+ */
-+static ssize_t aht10_interval_read(struct aht10_data *data,
-+				   long *val)
-+{
-+	*val = ktime_to_ms(data->min_poll_interval);
-+	return 0;
-+}
-+
-+/**
-+ * aht10_temperature1_read() - read the temperature in millidegrees
-+ */
-+static int aht10_temperature1_read(struct aht10_data *data, long *val)
-+{
-+	int res;
-+
-+	res = aht10_read_values(data);
-+	if (res < 0)
-+		return res;
-+
-+	*val = data->temperature;
-+	return 0;
-+}
-+
-+/**
-+ * aht10_humidity1_read() - read the relative humidity in millipercent
-+ */
-+static int aht10_humidity1_read(struct aht10_data *data, long *val)
-+{
-+	int res;
-+
-+	res = aht10_read_values(data);
-+	if (res < 0)
-+		return res;
-+
-+	*val = data->humidity;
-+	return 0;
-+}
-+
-+static umode_t aht10_hwmon_visible(const void *data, enum hwmon_sensor_types type,
-+				   u32 attr, int channel)
-+{
-+	switch (type) {
-+	case hwmon_temp:
-+	case hwmon_humidity:
-+		return 0444;
-+	case hwmon_chip:
-+		return 0644;
-+	default:
-+		return 0;
-+	}
-+}
-+
-+static int aht10_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
-+			    u32 attr, int channel, long *val)
-+{
-+	struct aht10_data *data = dev_get_drvdata(dev);
-+
-+	switch (type) {
-+	case hwmon_temp:
-+		return aht10_temperature1_read(data, val);
-+	case hwmon_humidity:
-+		return aht10_humidity1_read(data, val);
-+	case hwmon_chip:
-+		return aht10_interval_read(data, val);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static int aht10_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
-+			     u32 attr, int channel, long val)
-+{
-+	struct aht10_data *data = dev_get_drvdata(dev);
-+
-+	switch (type) {
-+	case hwmon_chip:
-+		return aht10_interval_write(data, val);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static const struct hwmon_channel_info *aht10_info[] = {
-+	HWMON_CHANNEL_INFO(chip, HWMON_C_UPDATE_INTERVAL),
-+	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
-+	HWMON_CHANNEL_INFO(humidity, HWMON_H_INPUT),
-+	NULL,
-+};
-+
-+static const struct hwmon_ops aht10_hwmon_ops = {
-+	.is_visible = aht10_hwmon_visible,
-+	.read = aht10_hwmon_read,
-+	.write = aht10_hwmon_write,
-+};
-+
-+static const struct hwmon_chip_info aht10_chip_info = {
-+	.ops = &aht10_hwmon_ops,
-+	.info = aht10_info,
-+};
-+
-+static int aht10_probe(struct i2c_client *client,
-+		       const struct i2c_device_id *aht10_id)
-+{
-+	struct device *device = &client->dev;
-+	struct device *hwmon_dev;
-+	struct aht10_data *data;
-+	int res;
-+
-+	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
-+		return -ENOENT;
-+
-+	data = devm_kzalloc(device, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	data->min_poll_interval = ms_to_ktime(AHT10_DEFAULT_MIN_POLL_INTERVAL);
-+	data->client = client;
-+
-+	mutex_init(&data->lock);
-+
-+	res = aht10_init(data);
-+	if (res < 0)
-+		return res;
-+
-+	res = aht10_read_values(data);
-+	if (res < 0)
-+		return res;
-+
-+	hwmon_dev = devm_hwmon_device_register_with_info(device,
-+							 client->name,
-+							 data,
-+							 &aht10_chip_info,
-+							 NULL);
-+
-+	return PTR_ERR_OR_ZERO(hwmon_dev);
-+}
-+
-+static const struct i2c_device_id aht10_id[] = {
-+	{ "aht10", 0 },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(i2c, aht10_id);
-+
-+static struct i2c_driver aht10_driver = {
-+	.driver = {
-+		.name = "aht10",
-+	},
-+	.probe      = aht10_probe,
-+	.id_table   = aht10_id,
-+};
-+
-+module_i2c_driver(aht10_driver);
-+
-+MODULE_AUTHOR("Johannes Cornelis Draaijer <jcdra1@gmail.com>");
-+MODULE_DESCRIPTION("AHT10 Temperature and Humidity sensor driver");
-+MODULE_VERSION("1.0");
-+MODULE_LICENSE("GPL v2");
--- 
-2.25.1
+diff --git a/drivers/hwmon/amd_energy.c b/drivers/hwmon/amd_energy.c index =
+9b306448b7a0..822c2e74b98d 100644
+--- a/drivers/hwmon/amd_energy.c
++++ b/drivers/hwmon/amd_energy.c
+@@ -222,7 +222,7 @@ static int amd_create_sensor(struct device *dev,
+         */
+        cpus =3D num_present_cpus() / num_siblings;
 
+-       s_config =3D devm_kcalloc(dev, cpus + sockets,
++       s_config =3D devm_kcalloc(dev, cpus + sockets + 1,
+                                sizeof(u32), GFP_KERNEL);
+        if (!s_config)
+                return -ENOMEM;
+@@ -254,6 +254,7 @@ static int amd_create_sensor(struct device *dev,
+                        scnprintf(label_l[i], 10, "Esocket%u", (i - cpus));
+        }
+
++       s_config[i] =3D 0;
+        return 0;
+ }
+
+--
+2.18.1
