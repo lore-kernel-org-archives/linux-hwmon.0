@@ -5,94 +5,80 @@ X-Spam-Level:
 X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04EB9C433E9
-	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Jan 2021 15:33:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99A6CC433DB
+	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Jan 2021 15:35:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B8D9C23A1D
-	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Jan 2021 15:33:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6469A239A1
+	for <linux-hwmon@archiver.kernel.org>; Fri,  8 Jan 2021 15:35:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727943AbhAHPdg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 8 Jan 2021 10:33:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36546 "EHLO
+        id S1726430AbhAHPfd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 8 Jan 2021 10:35:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727931AbhAHPdf (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 8 Jan 2021 10:33:35 -0500
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9383EC061381;
-        Fri,  8 Jan 2021 07:32:41 -0800 (PST)
-Received: by mail-ot1-x32f.google.com with SMTP id j20so9994548otq.5;
-        Fri, 08 Jan 2021 07:32:41 -0800 (PST)
+        with ESMTP id S1725806AbhAHPfc (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 8 Jan 2021 10:35:32 -0500
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE11C061380
+        for <linux-hwmon@vger.kernel.org>; Fri,  8 Jan 2021 07:34:52 -0800 (PST)
+Received: by mail-ot1-x333.google.com with SMTP id d8so9991457otq.6
+        for <linux-hwmon@vger.kernel.org>; Fri, 08 Jan 2021 07:34:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=PxfKbo/Ze1UYEnyLqJyQ+l1xApQcxjj0mRY/83IgHlg=;
-        b=Z/tiZeGFENf8jEpMCP2cXuG3JdPh+B3mIjUt8P3RhVDPXwsSBv1ArVnySGo1i/UdFu
-         zCcF0hXUJqngHpUUu9dMZLOIXOkE7/dBoZA+3OzeHiv5AbUxGVk51EfcybB3BZyYf/7S
-         VGzB8vAui+KZedNE5jYLhK9yQC+UoFqss9Ivw6Y4uldwRhK0bmiAl3lwivfmBhTWNmQ3
-         UpvgDRJWQFqWKN2soPvF/5AAwHaoeTTDtBeZI/JcOefwMzbSDQyGPLcna/VsFkV/Q1Lg
-         d5pdCmehROCOk27gNzzTlhCh1gKR3n669w4OV6SXJk0b7XBPPx2WVYjlerOZ6IyhK/QN
-         5i2A==
+        bh=C3YP9u3buB0qacNeLmH7//35l62Dv7XIXbK4jxqPEH8=;
+        b=OSegogdb2DRks0kDFSrMFXj8iRaGH1rCfAV9cmTV5+vD4KlgyVbu5eLXMR6qZtnayZ
+         RQG2uiVeoWkNfVqBAoQYz4VfAVMUT83v+Xq0/Z0nocuFfqYD8zPiSF4cPqIDvVZdqJIV
+         gFZF5yQaRyYPeRMmGkjTp1SMtx0LYWH3QV6U/wXD8aUeEHDu+Snkx/qd/B8v7llbblsa
+         KEKt4joXCYZ9xieyP+OAi3q2D/HhaFM2dqKVYjr/lAN0T5FzUgVI26M1MCzNxDgcN+KD
+         7YK0eTvmcpacoHvmhygKdijCS0q1Jh2Nwi/WJiS+99lwnMJt0uHZwc2Oeol1Kv+venCH
+         kiPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=PxfKbo/Ze1UYEnyLqJyQ+l1xApQcxjj0mRY/83IgHlg=;
-        b=TlbjI/0ZpKOOp7ryFfpKJXVv7WIrMxooktchjYnO8A07sq7C2tE18A+p3F3KjhuMND
-         JYMfcOr8+BoNrkxyXhJ+AhmKjXIhO9sIXTVkz34ZSzufgmPP3MwkjnzY/F/vL/03jI5w
-         Dz7aypXU5pPIDopkuhsDsqDAAeV32+7Ilb1x85yInSFFd6tb5ddY7TuIA/4H6JCD9IFS
-         DW6w7knxK9N4YQ56vOJMNgv2UniccuG/A8bIM9V9IHEe5VWXKNGsXahJnE5f8QUOfJOQ
-         vdzydSmFbkKZHnVoTWBFm19EIkpWsAfM3tO77o900yw+HRp71bKTXshdDuaIHM7BlGbe
-         kTig==
-X-Gm-Message-State: AOAM532zMPnmPbKUNK3xuggLP7d02SiWz/FDMhfJnbWJLn3N+nQy20ob
-        OVk+D4bhQKWrvPONJU3Pc41DBKrwnU4=
-X-Google-Smtp-Source: ABdhPJzdOLIrde+HjmZZkzFt06Ucd7tRBJlrB9k6S0/i47+wuYoKjTWni0MdVlAn58yyF7p1MGMBEw==
-X-Received: by 2002:a9d:7b53:: with SMTP id f19mr3002189oto.93.1610119960068;
-        Fri, 08 Jan 2021 07:32:40 -0800 (PST)
+        bh=C3YP9u3buB0qacNeLmH7//35l62Dv7XIXbK4jxqPEH8=;
+        b=hTGFyJCEJchioHBheSXqcW5BRtxYcwcQLlDASWO9FfgPPhut+xEAePFSt2W66P9Xhx
+         qR2JHEowIhDpdCMiZW/KxxEBbnOfePC3bs69P64+LCIUAKH8m8xrsmaE+roH5SdxoY/7
+         zKrGV3ANiHtfbaJBeBDNFsw87oel59oRcqskW5fURVmqBndH/+I7mrcAZu5332f1sqbg
+         /tbaOCuqlVctDJgVQHjnAGrw8fytL4gxupPe+saLyXJPs5/1Fa7N/lpISTZr+2ZKkfop
+         RqK2x0TojY/ssJKJ/1hsEpQdaTPA3Lsopj8GLjiOu5c0vdUAq2Y6jogIOtUnmTaxlcwb
+         2Vkw==
+X-Gm-Message-State: AOAM532PHegFyJQqehzQA1XdUbbGGSSdAyadPrR9X7h2YvNaD0lZtymR
+        4+e7IlF9ik2Dfe/3v+J527I=
+X-Google-Smtp-Source: ABdhPJx1ZHIt+W8g+wNwOQSZNB1A4Cch28oIs1bnXkMgg7kTp0IjRSuZ+y6/tqHXqySEe0LJFIlTXw==
+X-Received: by 2002:a05:6830:160f:: with SMTP id g15mr3026822otr.129.1610120091980;
+        Fri, 08 Jan 2021 07:34:51 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 39sm1816229otu.6.2021.01.08.07.32.37
+        by smtp.gmail.com with ESMTPSA id q18sm1783173ood.35.2021.01.08.07.34.50
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 08 Jan 2021 07:32:38 -0800 (PST)
+        Fri, 08 Jan 2021 07:34:51 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 8 Jan 2021 07:32:37 -0800
+Date:   Fri, 8 Jan 2021 07:34:50 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     David Arcari <darcari@redhat.com>
-Cc:     linux-hwmon@vger.kernel.org,
-        Naveen Krishna Chatradhi <nchatrad@amd.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (amd_energy) fix allocation of hwmon_channel_info
- config
-Message-ID: <20210108153237.GA182053@roeck-us.net>
-References: <20210107144707.6927-1-darcari@redhat.com>
+To:     Tian Tao <tiantao6@hisilicon.com>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (max6650): Switch to using the new API
+ kobj_to_dev()
+Message-ID: <20210108153450.GA260273@roeck-us.net>
+References: <1609376621-46463-1-git-send-email-tiantao6@hisilicon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210107144707.6927-1-darcari@redhat.com>
+In-Reply-To: <1609376621-46463-1-git-send-email-tiantao6@hisilicon.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Jan 07, 2021 at 09:47:07AM -0500, David Arcari wrote:
-> hwmon, specifically hwmon_num_channel_attrs, expects the config
-> array in the hwmon_channel_info structure to be terminated by
-> a zero entry.  amd_energy does not honor this convention.  As
-> result, a KASAN warning is possible.  Fix this by adding an
-> additional entry and setting it to zero.
+On Thu, Dec 31, 2020 at 09:03:41AM +0800, Tian Tao wrote:
+> Switch to using the new API kobj_to_dev() to fix the below warnning:
+> drivers/hwmon/max6650.c:324:60-61: WARNING opportunity for
+> kobj_to_dev().
 > 
-> Fixes: 8abee9566b7e ("hwmon: Add amd_energy driver to report energy counters")
-> 
-> Signed-off-by: David Arcari <darcari@redhat.com>
-> Cc: Naveen Krishna Chatradhi <nchatrad@amd.com>
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: linux-kernel@vger.kernel.org
-> Cc: stable@vger.kernel.org
-> Signed-off-by: David Arcari <darcari@redhat.com>
-> Acked-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
+> Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
 
 Applied.
 
