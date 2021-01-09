@@ -2,204 +2,114 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20503C433E0
-	for <linux-hwmon@archiver.kernel.org>; Sat,  9 Jan 2021 16:46:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CEA7C433E0
+	for <linux-hwmon@archiver.kernel.org>; Sat,  9 Jan 2021 18:23:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CE2A623884
-	for <linux-hwmon@archiver.kernel.org>; Sat,  9 Jan 2021 16:46:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 344B223A03
+	for <linux-hwmon@archiver.kernel.org>; Sat,  9 Jan 2021 18:23:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726294AbhAIQqA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 9 Jan 2021 11:46:00 -0500
-Received: from mga01.intel.com ([192.55.52.88]:6934 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725872AbhAIQqA (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 9 Jan 2021 11:46:00 -0500
-IronPort-SDR: S5eLBnK0eono6XP3kCCU5O7zGjleSJhEotruBO+vd1on5FxMIkaBN29ibsbXJyxklMRJA80J+L
- M42Fyyqxdakg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9859"; a="196289433"
-X-IronPort-AV: E=Sophos;i="5.79,334,1602572400"; 
-   d="scan'208";a="196289433"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2021 08:45:19 -0800
-IronPort-SDR: 6kBrGmAWmsAOsiF/ZXcwi1c+i4NPyDgClfHnNpk9+nILK2spk2AIS50oAJSTmquK65Yjbha8hu
- tLBQlzo2unUQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,334,1602572400"; 
-   d="scan'208";a="403656583"
-Received: from lkp-server01.sh.intel.com (HELO 412602b27703) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 09 Jan 2021 08:45:18 -0800
-Received: from kbuild by 412602b27703 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kyHMc-000187-92; Sat, 09 Jan 2021 16:45:18 +0000
-Date:   Sun, 10 Jan 2021 00:44:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon-next] BUILD SUCCESS
- d1f7b079ce5b69c88c813439eea6a9c133f0846b
-Message-ID: <5ff9dd6b.YycfAObNiaLenmlV%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1726013AbhAISXZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 9 Jan 2021 13:23:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38786 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725966AbhAISXZ (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 9 Jan 2021 13:23:25 -0500
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F3EC061786;
+        Sat,  9 Jan 2021 10:22:45 -0800 (PST)
+Received: by mail-ot1-x329.google.com with SMTP id j12so13019602ota.7;
+        Sat, 09 Jan 2021 10:22:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nSlEJcVDQ1Is7F8HzL1P4/BpSTCC8IQf3uYHrRHbZMs=;
+        b=DmHvlbUnniUweykeBHqKFo922FZWPH+Jtj/z/Bs0sr22H7FX1Y56KZ/tTIwdiGD6po
+         KskJOjY+wBew3YDlrWjhoDa41VAqRcI+S0Pec9x0BJr9lAXx7ql9WbHG5jGHUxFCf7sR
+         LasgNNZMLl+SArMglAlUdoaTQ6Y0rK2OcOfUcIoIyWN/ZzraR31sALeYa8IwtDzmjEcV
+         dXeHuCYVLByaM5sTCbAYdVhsnEIoyxnUFxhbJMgYJh08rzjxmomv3ugGnkQzOg3fJHxt
+         a1ne+KysVgYv+QH8ux6LSVRnGpJJEJPOUxlry746XWDELhXo3DeKUxjszY+4zb5RLFWJ
+         7B1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=nSlEJcVDQ1Is7F8HzL1P4/BpSTCC8IQf3uYHrRHbZMs=;
+        b=ebesDq2dlbUQUtMPfshrjFvGpz2xgsOOgsgtnhyeWsbBXvAvUGlILNHOru4Ie75Suj
+         sFf36UsvqMEZ+O9f1yFTJo6EuhOdye/P+q6IS9CDR++o+YP4cPs3QniuVqKZCw910rx4
+         889LboPOjXVUJk+9BXzP2EVRgd3+Uc9DfcPe4MfDQzTfRh8NJ1E45cVAnbcPbc9WMcbD
+         PiCV2c4TvUh14tbAnrPt/cP7dx/9dAv9TI1UAgZXUCEM/5rKMEToWzRGpqmCu0qUy62y
+         CXeMB5ZlkBQkvBpn8d/84huJKOA4M70cegTG/ZxjQ/So1+bvYnON+DcRybo/a9YwmARw
+         WSgA==
+X-Gm-Message-State: AOAM531ctY8NLL0Wajb+XmMHO3gblQqeycqR2EqETVaZ9JwV/No00jM8
+        L7fMrCBgKntDXcdntY9BSIqMCJYPDMA=
+X-Google-Smtp-Source: ABdhPJymgxtCVJEvFFC6LqVxnD0uOQO+24tFJRkTxsLqwrMRK3RsdJSZ/44/CMzaQF3EZ6mAmcSp0A==
+X-Received: by 2002:a9d:6ad2:: with SMTP id m18mr6499235otq.3.1610216564481;
+        Sat, 09 Jan 2021 10:22:44 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i1sm2601101otr.81.2021.01.09.10.22.42
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 09 Jan 2021 10:22:43 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for v5.11-rc3
+Date:   Sat,  9 Jan 2021 10:22:41 -0800
+Message-Id: <20210109182241.179998-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git  hwmon-next
-branch HEAD: d1f7b079ce5b69c88c813439eea6a9c133f0846b  hwmon: (aspeed-pwm-tacho) Switch to using the new API kobj_to_dev()
+Hi Linus,
 
-elapsed time: 829m
+Please pull hwmon fixes for Linux v5.11-rc3 from signed tag:
 
-configs tested: 135
-configs skipped: 2
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.11-rc3
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Thanks,
+Guenter
+------
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-openrisc                            defconfig
-powerpc                      arches_defconfig
-mips                        qi_lb60_defconfig
-powerpc                     sbc8548_defconfig
-openrisc                 simple_smp_defconfig
-sh                           se7780_defconfig
-powerpc                      mgcoge_defconfig
-mips                      malta_kvm_defconfig
-m68k                        mvme16x_defconfig
-powerpc                         wii_defconfig
-riscv                          rv32_defconfig
-mips                           ip28_defconfig
-riscv                            alldefconfig
-mips                        jmr3927_defconfig
-arm                           spitz_defconfig
-arm                        magician_defconfig
-sh                            migor_defconfig
-arm                           efm32_defconfig
-powerpc                     redwood_defconfig
-h8300                               defconfig
-m68k                        stmark2_defconfig
-powerpc                    sam440ep_defconfig
-mips                         tb0219_defconfig
-mips                      bmips_stb_defconfig
-powerpc                      ppc6xx_defconfig
-mips                  decstation_64_defconfig
-arm                         lpc18xx_defconfig
-arm                        mvebu_v7_defconfig
-microblaze                          defconfig
-arm                        oxnas_v6_defconfig
-m68k                                defconfig
-m68k                         apollo_defconfig
-powerpc64                           defconfig
-arm                       cns3420vb_defconfig
-m68k                        mvme147_defconfig
-sh                            shmin_defconfig
-powerpc                  iss476-smp_defconfig
-sh                      rts7751r2d1_defconfig
-arm                       omap2plus_defconfig
-mips                     cu1830-neo_defconfig
-alpha                            alldefconfig
-mips                           ci20_defconfig
-arm                          pxa3xx_defconfig
-riscv                    nommu_virt_defconfig
-sh                           se7619_defconfig
-riscv                            allmodconfig
-mips                           ip22_defconfig
-ia64                                defconfig
-powerpc                     pseries_defconfig
-arm                         lpc32xx_defconfig
-powerpc                     kilauea_defconfig
-m68k                             allyesconfig
-arm                       aspeed_g5_defconfig
-m68k                       m5249evb_defconfig
-mips                      maltaaprp_defconfig
-arc                          axs103_defconfig
-arm                     eseries_pxa_defconfig
-sh                          r7780mp_defconfig
-powerpc                      acadia_defconfig
-riscv                            allyesconfig
-arc                          axs101_defconfig
-mips                           gcw0_defconfig
-mips                      pic32mzda_defconfig
-parisc                generic-32bit_defconfig
-powerpc                mpc7448_hpc2_defconfig
-mips                      pistachio_defconfig
-ia64                             allmodconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a004-20210108
-x86_64               randconfig-a006-20210108
-x86_64               randconfig-a001-20210108
-x86_64               randconfig-a002-20210108
-x86_64               randconfig-a003-20210108
-x86_64               randconfig-a005-20210108
-i386                 randconfig-a005-20210108
-i386                 randconfig-a002-20210108
-i386                 randconfig-a001-20210108
-i386                 randconfig-a003-20210108
-i386                 randconfig-a006-20210108
-i386                 randconfig-a004-20210108
-i386                 randconfig-a016-20210108
-i386                 randconfig-a011-20210108
-i386                 randconfig-a014-20210108
-i386                 randconfig-a015-20210108
-i386                 randconfig-a013-20210108
-i386                 randconfig-a012-20210108
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
 
-clang tested configs:
-x86_64               randconfig-a013-20210108
-x86_64               randconfig-a011-20210108
-x86_64               randconfig-a012-20210108
-x86_64               randconfig-a016-20210108
-x86_64               randconfig-a014-20210108
-x86_64               randconfig-a015-20210108
+  Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v5.11-rc3
+
+for you to fetch changes up to 84e261553e6f919bf0b4d65244599ab2b41f1da5:
+
+  hwmon: (amd_energy) fix allocation of hwmon_channel_info config (2021-01-08 07:31:03 -0800)
+
+----------------------------------------------------------------
+hwmon fixes for v5.11-rc3
+
+Fix possible KASAN issue in amd_energy driver
+Avoid configuration problem in pwm-fan driver
+Fix kernel-doc warning in sbtsi_temp documentation
+
+----------------------------------------------------------------
+David Arcari (1):
+      hwmon: (amd_energy) fix allocation of hwmon_channel_info config
+
+Randy Dunlap (1):
+      hwmon: (sbtsi_temp) Fix Documenation kernel-doc warning
+
+Uwe Kleine-König (1):
+      hwmon: (pwm-fan) Ensure that calculation doesn't discard big period values
+
+ Documentation/hwmon/sbtsi_temp.rst |  2 +-
+ drivers/hwmon/amd_energy.c         |  3 ++-
+ drivers/hwmon/pwm-fan.c            | 12 +++++++++++-
+ 3 files changed, 14 insertions(+), 3 deletions(-)
