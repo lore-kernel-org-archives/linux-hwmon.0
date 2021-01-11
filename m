@@ -2,63 +2,63 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9321C433E0
-	for <linux-hwmon@archiver.kernel.org>; Sat,  9 Jan 2021 19:52:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7764BC433DB
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Jan 2021 09:53:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 92EF523A7F
-	for <linux-hwmon@archiver.kernel.org>; Sat,  9 Jan 2021 19:52:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 323A522AAD
+	for <linux-hwmon@archiver.kernel.org>; Mon, 11 Jan 2021 09:53:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726303AbhAITv4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 9 Jan 2021 14:51:56 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52154 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726281AbhAITv4 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 9 Jan 2021 14:51:56 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 1221823A9C;
-        Sat,  9 Jan 2021 19:51:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610221876;
-        bh=ckA9Tc5B0Triy8FRcAYqWNWwkXVzkpkmp3avIB4gV4I=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=ZW90txely72jWZdjtapnK1EqlfLPgojp7zZ70rHCxuk00OSkI33SLWkjyoU4okCg/
-         BnW1xvE9lU7IpsGTygszqdqX+EANzJiKqbjWJceyG9XxmtE/qVLfXO2zkEdx2aAYYg
-         gV9mjbKPpeJZBAMBqEVMAZHZZWtIJcFzLwyhBuuaVKGd4dQYNOdME5Kp7WEgQSoh7H
-         Gm9jwRFIQFFsOE0PxrtrfBMe3VYYhkarFt66yRmjX6itTHkUirf4/HRaPzmZsah5pX
-         GD6ZJHcgxfttLdbWrjHksQ7/Wj+BLa4Lzkn0NRStt/M58jrMAPqOdz6w81lAARG7o0
-         SXHRn6AE0/0hA==
-Subject: Re: [GIT PULL] hwmon fixes for v5.11-rc3
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20210109182241.179998-1-linux@roeck-us.net>
-References: <20210109182241.179998-1-linux@roeck-us.net>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20210109182241.179998-1-linux@roeck-us.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.11-rc3
-X-PR-Tracked-Commit-Id: 84e261553e6f919bf0b4d65244599ab2b41f1da5
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 2ff90100ace886895e4fbb2850b8d5e49d931ed6
-Message-Id: <161022187605.8002.8826109552221406606.pr-tracker-bot@kernel.org>
-Date:   Sat, 09 Jan 2021 19:51:16 +0000
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+        id S1728736AbhAKJxA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 11 Jan 2021 04:53:00 -0500
+Received: from out30-42.freemail.mail.aliyun.com ([115.124.30.42]:53811 "EHLO
+        out30-42.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728685AbhAKJxA (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 11 Jan 2021 04:53:00 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=abaci-bugfix@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0ULMSoy0_1610358731;
+Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:abaci-bugfix@linux.alibaba.com fp:SMTPD_---0ULMSoy0_1610358731)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 11 Jan 2021 17:52:17 +0800
+From:   YANG LI <abaci-bugfix@linux.alibaba.com>
+To:     jdelvare@suse.com
+Cc:     linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        YANG LI <abaci-bugfix@linux.alibaba.com>
+Subject: [PATCH] hwmon: abx500: style: Simplify bool comparison
+Date:   Mon, 11 Jan 2021 17:52:09 +0800
+Message-Id: <1610358729-86795-1-git-send-email-abaci-bugfix@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The pull request you sent on Sat,  9 Jan 2021 10:22:41 -0800:
+Fix the following coccicheck warning:
+./drivers/hwmon/abx500.c:84:8-26: WARNING: Comparison to bool
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.11-rc3
+Signed-off-by: YANG LI <abaci-bugfix@linux.alibaba.com>
+Reported-by: Abaci Robot<abaci@linux.alibaba.com>
+---
+ drivers/hwmon/abx500.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/2ff90100ace886895e4fbb2850b8d5e49d931ed6
-
-Thank you!
-
+diff --git a/drivers/hwmon/abx500.c b/drivers/hwmon/abx500.c
+index 4b96488..3879b13 100644
+--- a/drivers/hwmon/abx500.c
++++ b/drivers/hwmon/abx500.c
+@@ -81,7 +81,7 @@ static void gpadc_monitor(struct work_struct *work)
+ 
+ 		if (data->min[i] != 0) {
+ 			if (temp < data->min[i]) {
+-				if (data->min_alarm[i] == false) {
++				if (!data->min_alarm[i]) {
+ 					data->min_alarm[i] = true;
+ 					updated_min_alarm = true;
+ 				}
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+1.8.3.1
+
