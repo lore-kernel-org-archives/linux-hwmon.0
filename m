@@ -7,42 +7,42 @@ X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B638FC43332
-	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Jan 2021 13:12:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49E64C4332B
+	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Jan 2021 13:18:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7145A23122
-	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Jan 2021 13:12:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EFD0A22571
+	for <linux-hwmon@archiver.kernel.org>; Tue, 12 Jan 2021 13:18:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730918AbhALNL4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 12 Jan 2021 08:11:56 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54640 "EHLO mail.kernel.org"
+        id S1727727AbhALNRh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 12 Jan 2021 08:17:37 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53840 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404378AbhALM6B (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 12 Jan 2021 07:58:01 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 51E6B23123;
-        Tue, 12 Jan 2021 12:57:02 +0000 (UTC)
+        id S2389835AbhALM5Q (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 12 Jan 2021 07:57:16 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8C8D22313B;
+        Tue, 12 Jan 2021 12:56:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610456223;
-        bh=huvx6FbaDlrGtA7rGasohIzVoKsnlmlhFZJKqOwooeI=;
+        s=k20201202; t=1610456169;
+        bh=JL2CyNISPQy4If4ZizhtYPcGYuhw7Rf1LAlS2ehGsuE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m3o49wdcNwcTP/nowkO0/V058TY7Si266LOuAylz3j+sgfayIP4csQfOPG9uba4AN
-         9kJK8NwhKpgNcOnazssIWvH2V8OJoC7ldGTt62q8OpFkGdSdE7q0TweuTpuYc0U1eJ
-         v+EStlV8+g5ImgGjun8ViXtbPEfLfQrhQ21SzpscBN7cC+DRtWLfcAmi5kFJ3+OHSc
-         3OkKiCykUAjvriD9+soDpVV6KDImjE60nUn3ut4G+xbq9Il+ToeQtGenV7eLqojS1v
-         QQmTWuYCuFWVopSMoB8iaDjfOj+IgEYeoFCSdOrzWLZr08wBgItSshhPxRvOWRIyww
-         tSU0DLhnaR4bg==
+        b=XljfOV89P/oDMOIYh4lEudliHbKBPVtJbQUGL0J0Y2wNH2f6ACFVU5JQBGzhOk+MX
+         yATSNLz+x+osGEgFytGOk/uJUo82++2DxB53hb5HMXRy4z6ZKDr/4qsfMDQ4JFrRWa
+         aO1xqxp/fT9y6CqlpcbJL+uHuBsKH/Z9lK9z5bMH6+++WYyhBG+0mIKlFaG0MyYaOo
+         XrlNWQXgqi5gI4OETnPGkmJv+zxu1AyG1aCh6ypPnSvMJ7Nlx3l1qZXOna+LNh75xV
+         WPtycfZ/G/ANxK4dgvzBmGsyvJ9f8S1uwZougtbcU0q9qVaj19ieF9fh+1/y1Mm/UL
+         3aAhTJ3rVFqfA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>,
         Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 13/28] hwmon: (pwm-fan) Ensure that calculation doesn't discard big period values
-Date:   Tue, 12 Jan 2021 07:56:29 -0500
-Message-Id: <20210112125645.70739-13-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 26/51] hwmon: (pwm-fan) Ensure that calculation doesn't discard big period values
+Date:   Tue, 12 Jan 2021 07:55:08 -0500
+Message-Id: <20210112125534.70280-26-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210112125645.70739-1-sashal@kernel.org>
-References: <20210112125645.70739-1-sashal@kernel.org>
+In-Reply-To: <20210112125534.70280-1-sashal@kernel.org>
+References: <20210112125534.70280-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
@@ -78,10 +78,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 11 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-index c88ce77fe6763..df6f042fb605e 100644
+index 1f63807c0399e..ec171f2b684a1 100644
 --- a/drivers/hwmon/pwm-fan.c
 +++ b/drivers/hwmon/pwm-fan.c
-@@ -330,8 +330,18 @@ static int pwm_fan_probe(struct platform_device *pdev)
+@@ -324,8 +324,18 @@ static int pwm_fan_probe(struct platform_device *pdev)
  
  	ctx->pwm_value = MAX_PWM;
  
