@@ -7,26 +7,26 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8282C433E6
-	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Jan 2021 07:11:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 101FAC4332E
+	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Jan 2021 07:12:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5C2C923123
-	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Jan 2021 07:11:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C91EC23131
+	for <linux-hwmon@archiver.kernel.org>; Wed, 13 Jan 2021 07:12:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726460AbhAMHLp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 13 Jan 2021 02:11:45 -0500
-Received: from twspam01.aspeedtech.com ([211.20.114.71]:52878 "EHLO
+        id S1726663AbhAMHLy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 13 Jan 2021 02:11:54 -0500
+Received: from twspam01.aspeedtech.com ([211.20.114.71]:52882 "EHLO
         twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726475AbhAMHLo (ORCPT
+        with ESMTP id S1726521AbhAMHLp (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 13 Jan 2021 02:11:44 -0500
+        Wed, 13 Jan 2021 02:11:45 -0500
 Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 10D741ul005404;
-        Wed, 13 Jan 2021 15:04:01 +0800 (GMT-8)
+        by twspam01.aspeedtech.com with ESMTP id 10D73vAU005374;
+        Wed, 13 Jan 2021 15:03:57 +0800 (GMT-8)
         (envelope-from troy_lee@aspeedtech.com)
 Received: from localhost.localdomain (192.168.100.253) by TWMBX02.aspeed.com
  (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 13 Jan
- 2021 15:09:01 +0800
+ 2021 15:08:57 +0800
 From:   Troy Lee <troy_lee@aspeedtech.com>
 To:     <openbmc@lists.ozlabs.org>, Jean Delvare <jdelvare@suse.com>,
         "Guenter Roeck" <linux@roeck-us.net>,
@@ -47,9 +47,9 @@ To:     <openbmc@lists.ozlabs.org>, Jean Delvare <jdelvare@suse.com>,
         "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
 CC:     <chiawei_wang@aspeedtech.com>, <leetroy@gmail.com>,
         <troy_lee@aspeedtech.com>
-Subject: [PATCH v2 3/4] ARM: dts: aspeed: Add Aspeed AST2600 PWM/Fan node in devicetree
-Date:   Wed, 13 Jan 2021 07:08:47 +0000
-Message-ID: <20210113070850.1184506-4-troy_lee@aspeedtech.com>
+Subject: [PATCH v2 1/4] dt-bindings: hwmon: Add Aspeed AST2600 PWM/Fan
+Date:   Wed, 13 Jan 2021 07:08:45 +0000
+Message-ID: <20210113070850.1184506-2-troy_lee@aspeedtech.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210113070850.1184506-1-troy_lee@aspeedtech.com>
 References: <20210113070850.1184506-1-troy_lee@aspeedtech.com>
@@ -60,207 +60,165 @@ X-Originating-IP: [192.168.100.253]
 X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
  (192.168.0.24)
 X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 10D741ul005404
+X-MAIL: twspam01.aspeedtech.com 10D73vAU005374
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Create a common node in aspeed-g6.dtsi and add fan nodes for 
-aspeed-ast2600-evb.dts file.
+We add binding for supporting a new AST2600 PWM/Fan hwmon driver.
 
 Changes since v1:
-- rename properties name in child node
+- dt binding with DT schema format
 
 Signed-off-by: Troy Lee <troy_lee@aspeedtech.com>
 ---
- arch/arm/boot/dts/aspeed-ast2600-evb.dts | 152 +++++++++++++++++++++++
- arch/arm/boot/dts/aspeed-g6.dtsi         |  10 ++
- 2 files changed, 162 insertions(+)
+ .../hwmon/aspeed,ast2600-pwm-tachometer.yaml  | 137 ++++++++++++++++++
+ 1 file changed, 137 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/aspeed,ast2600-pwm-tachometer.yaml
 
-diff --git a/arch/arm/boot/dts/aspeed-ast2600-evb.dts b/arch/arm/boot/dts/aspeed-ast2600-evb.dts
-index 89be13197780..d94e70b957fb 100644
---- a/arch/arm/boot/dts/aspeed-ast2600-evb.dts
-+++ b/arch/arm/boot/dts/aspeed-ast2600-evb.dts
-@@ -23,6 +23,158 @@ memory@80000000 {
- 	};
- };
- 
-+&pwm_tacho {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_pwm0_default &pinctrl_tach0_default
-+			&pinctrl_pwm1_default &pinctrl_tach1_default
-+			&pinctrl_pwm2_default &pinctrl_tach2_default
-+			&pinctrl_pwm3_default &pinctrl_tach3_default
-+			&pinctrl_pwm4_default &pinctrl_tach4_default
-+			&pinctrl_pwm5_default &pinctrl_tach5_default
-+			&pinctrl_pwm6_default &pinctrl_tach6_default
-+			&pinctrl_pwm7_default &pinctrl_tach7_default
-+			&pinctrl_pwm8g1_default &pinctrl_tach8_default
-+			&pinctrl_pwm9g1_default &pinctrl_tach9_default
-+			&pinctrl_pwm10g1_default &pinctrl_tach10_default
-+			&pinctrl_pwm11g1_default &pinctrl_tach11_default
-+			&pinctrl_pwm12g1_default &pinctrl_tach12_default
-+			&pinctrl_pwm13g1_default &pinctrl_tach13_default
-+			&pinctrl_pwm14g1_default &pinctrl_tach14_default
-+			&pinctrl_pwm15g1_default &pinctrl_tach15_default>;
+diff --git a/Documentation/devicetree/bindings/hwmon/aspeed,ast2600-pwm-tachometer.yaml b/Documentation/devicetree/bindings/hwmon/aspeed,ast2600-pwm-tachometer.yaml
+new file mode 100644
+index 000000000000..b84076a4a338
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwmon/aspeed,ast2600-pwm-tachometer.yaml
+@@ -0,0 +1,137 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
 +
-+	fan@1 {
-+		reg = <0x00>;
-+		aspeed,pwm-freq = <25000>;
-+		aspeed,falling-point = /bits/ 8 <100>;
-+		cooling-levels = /bits/ 8 <125 151 177 203 229 255>;
-+		fan-tach-ch = /bits/ 8 <0x00>;
-+		aspeed,tacho-div = <3>;
-+		pulses-per-revolution = <1>;
-+	};
++$id: http://devicetree.org/schemas/hwmon/aspeed,ast2600-pwm-tachometer.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+	fan@2 {
-+		reg = <0x01>;
-+		aspeed,pwm-freq = <25000>;
-+		aspeed,falling-point = /bits/ 8 <100>;
-+		cooling-levels = /bits/ 8 <125 151 177 203 229 255>;
-+		fan-tach-ch = /bits/ 8 <0x01>;
-+		pulses-per-revolution = <1>;
-+	};
++title: ASPEED AST2600 PWM and Fan Tacho controller device driver
 +
-+	fan@3 {
-+		reg = <0x02>;
-+		aspeed,pwm-freq = <25000>;
-+		cooling-levels = /bits/ 8 <125 151 177 203 229 255>;
-+		fan-tach-ch = /bits/ 8 <0x02>;
-+		pulses-per-revolution = <2>;
-+	};
++maintainers:
++  - Ryan Chen <ryan_chen@aspeedtech.com>
 +
-+	fan@4 {
-+		reg = <0x03>;
-+		aspeed,pwm-freq = <25000>;
-+		cooling-levels = /bits/ 8 <125 151 177 203 229 255>;
-+		fan-tach-ch = /bits/ 8 <0x03>;
-+		pulses-per-revolution = <2>;
-+	};
++description: |
++  The ASPEED PWM controller can support upto 16 PWM outputs. The ASPEED Fan Tacho
++  controller can support upto 16 Fan tachometer inputs.
++  There can be upto 16 fans supported. Each fan can have one PWM output and
++  one Fan tach inputs.
 +
-+	fan@5 {
-+		reg = <0x04>;
-+		aspeed,pwm-freq = <25000>;
-+		cooling-levels = /bits/ 8 <125 151 177 203 229 255>;
-+		fan-tach-ch = /bits/ 8 <0x04>;
-+		pulses-per-revolution = <2>;
-+	};
++properties:
++  compatible:
++    const: aspeed,ast2600-pwm-tachometer
 +
-+	fan@6 {
-+		reg = <0x05>;
-+		aspeed,pwm-freq = <25000>;
-+		cooling-levels = /bits/ 8 <125 151 177 203 229 255>;
-+		fan-tach-ch = /bits/ 8 <0x05>;
-+		pulses-per-revolution = <2>;
-+	};
++  "#address-cells":
++    const: 1
 +
-+	fan@7 {
-+		reg = <0x06>;
-+		aspeed,pwm-freq = <25000>;
-+		cooling-levels = /bits/ 8 <125 151 177 203 229 255>;
-+		fan-tach-ch = /bits/ 8 <0x06>;
-+		pulses-per-revolution = <2>;
-+	};
++  "#size-cells":
++    const: 0
 +
-+	fan@8 {
-+		reg = <0x07>;
-+		aspeed,pwm-freq = <25000>;
-+		cooling-levels = /bits/ 8 <125 151 177 203 229 255>;
-+		fan-tach-ch = /bits/ 8 <0x07>;
-+		pulses-per-revolution = <2>;
-+	};
++  "#cooling-cells":
++    const: 2
 +
-+	fan@9 {
-+		reg = <0x08>;
-+		aspeed,pwm-freq = <25000>;
-+		cooling-levels = /bits/ 8 <125 151 177 203 229 255>;
-+		fan-tach-ch = /bits/ 8 <0x08>;
-+		pulses-per-revolution = <2>;
-+	};
++  reg:
++    description:
++      Address and length of the register set for the device.
 +
-+	fan@10 {
-+		reg = <0x09>;
-+		aspeed,pwm-freq = <25000>;
-+		cooling-levels = /bits/ 8 <125 151 177 203 229 255>;
-+		fan-tach-ch = /bits/ 8 <0x09>;
-+		pulses-per-revolution = <2>;
-+	};
++  clocks:
++    description:
++      phandle to clock provider with the clock number in the second cell
 +
-+	fan@11 {
-+		reg = <0x0a>;
-+		aspeed,pwm-freq = <25000>;
-+		cooling-levels = /bits/ 8 <125 151 177 203 229 255>;
-+		fan-tach-ch = /bits/ 8 <0x0a>;
-+		pulses-per-revolution = <2>;
-+	};
++  resets:
++    description:
++      phandle to reset controller with the reset number in the second cell
 +
-+	fan@12 {
-+		reg = <0x0b>;
-+		aspeed,pwm-freq = <25000>;
-+		cooling-levels = /bits/ 8 <125 151 177 203 229 255>;
-+		fan-tach-ch = /bits/ 8 <0x0b>;
-+		pulses-per-revolution = <2>;
-+	};
++patternProperties:
++  "@[0-9]+$":
++    type: object
++    description:
++      Under fan subnode there can upto 16 child nodes, with each child node
++      representing a fan. There are 16 fans each fan can have one PWM port and one
++      Fan tach inputs.
++      For PWM port can be configured cooling-levels to create cooling device.
++      Cooling device could be bound to a thermal zone for the thermal control.
 +
-+	fan@13 {
-+		reg = <0x0c>;
-+		aspeed,pwm-freq = <25000>;
-+		cooling-levels = /bits/ 8 <125 151 177 203 229 255>;
-+		fan-tach-ch = /bits/ 8 <0x0c>;
-+		pulses-per-revolution = <2>;
-+	};
++    properties:
++      reg:
++        minimum: 0
++        maximum: 15
++        description:
++          This property identify the PWM control channel of this fan.
 +
-+	fan@14 {
-+		reg = <0x0d>;
-+		aspeed,pwm-freq = <25000>;
-+		cooling-levels = /bits/ 8 <125 151 177 203 229 255>;
-+		fan-tach-ch = /bits/ 8 <0x0d>;
-+		pulses-per-revolution = <2>;
-+	};
++      fan-tach-ch:
++        $ref: /schemas/types.yaml#/definitions/uint8
++        minimum: 0
++        maximum: 15
++        description:
++          This property identify the fan tach input channel.
 +
-+	fan@15 {
-+		reg = <0x0e>;
-+		aspeed,pwm-freq = <25000>;
-+		cooling-levels = /bits/ 8 <125 151 177 203 229 255>;
-+		fan-tach-ch = /bits/ 8 <0x0e>;
-+		pulses-per-revolution = <2>;
-+	};
++      pulses-per-revolution:
++        $ref: /schemas/types.yaml#/definitions/uint32
++        default: 2
++        minimum: 1
++        description:
++          Specify tacho pulse per revolution of the fan.
 +
-+	fan@16 {
-+		reg = <0x0f>;
-+		aspeed,pwm-freq = <25000>;
-+		cooling-levels = /bits/ 8 <125 151 177 203 229 255>;
-+		fan-tach-ch = /bits/ 8 <0x0f>;
-+		pulses-per-revolution = <2>;
-+	};
-+};
++      cooling-levels:
++        description:
++          PWM duty cycle values in a range from 0 to 255
++          which correspond to thermal cooling states.
 +
- &mdio0 {
- 	status = "okay";
- 
-diff --git a/arch/arm/boot/dts/aspeed-g6.dtsi b/arch/arm/boot/dts/aspeed-g6.dtsi
-index 810b0676ab03..0369f8db123a 100644
---- a/arch/arm/boot/dts/aspeed-g6.dtsi
-+++ b/arch/arm/boot/dts/aspeed-g6.dtsi
-@@ -304,6 +304,16 @@ apb {
- 			#size-cells = <1>;
- 			ranges;
- 
-+			pwm_tacho: pwm-tacho-controller@1e610000 {
-+				compatible = "aspeed,ast2600-pwm-tachometer";
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				reg = <0x1e610000 0x100>;
-+				clocks = <&syscon ASPEED_CLK_AHB>;
-+				resets = <&syscon ASPEED_RESET_PWM>;
-+				status = "disabled";
-+			};
++      aspeed,pwm-freq:
++        $ref: /schemas/types.yaml#/definitions/uint32
++        default: 25000
++        minimum: 24
++        maximum: 780000
++        description:
++          Specify the frequency of PWM.
 +
- 			syscon: syscon@1e6e2000 {
- 				compatible = "aspeed,ast2600-scu", "syscon", "simple-mfd";
- 				reg = <0x1e6e2000 0x1000>;
++      aspeed,inverse-pin:
++        type: boolean
++        description:
++          Inverse PWM output signal.
++
++      aspeed,falling-point:
++        $ref: /schemas/types.yaml#/definitions/uint8
++        default: 10
++        minimum: 0
++        maximum: 255
++        description:
++          Initialize the pulse width.
++
++    required:
++      - fan-tach-ch
++      - reg
++
++    additionalProperties: true
++
++required:
++ - compatible
++ - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    pwm_tacho: pwm-tacho-controller@1e610000 {
++        compatible = "aspeed,ast2600-pwm-tachometer";
++        #address-cells = <1>;
++        #size-cells = <0>;
++        reg = <0x1e610000 0x100>;
++
++        fan@1 {
++            reg = <0x00>;
++            aspeed,pwm-freq = <25000>;
++            cooling-levels = /bits/ 8 <125 151 177 203 229 255>;
++            fan-tach-ch = /bits/ 8 <0x00>;
++            pulses-per-revolution = <2>;
++        };
++
++        fan@2 {
++            reg = <0x01>;
++            aspeed,pwm-freq = <25000>;
++            cooling-levels = /bits/ 8 <125 151 177 203 229 255>;
++            fan-tach-ch = /bits/ 8 <0x01>;
++            pulses-per-revolution = <2>;
++        };
++    };
++...
 -- 
 2.25.1
 
