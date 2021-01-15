@@ -2,140 +2,262 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52605C433DB
-	for <linux-hwmon@archiver.kernel.org>; Thu, 14 Jan 2021 19:32:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F156BC433E0
+	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Jan 2021 01:49:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 265D523B53
-	for <linux-hwmon@archiver.kernel.org>; Thu, 14 Jan 2021 19:32:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AB26023A5B
+	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Jan 2021 01:49:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727746AbhANTbv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 14 Jan 2021 14:31:51 -0500
-Received: from mail-oi1-f179.google.com ([209.85.167.179]:36317 "EHLO
-        mail-oi1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725781AbhANTbv (ORCPT
+        id S1731671AbhAOBtT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 14 Jan 2021 20:49:19 -0500
+Received: from twspam01.aspeedtech.com ([211.20.114.71]:32577 "EHLO
+        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731536AbhAOBtS (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 14 Jan 2021 14:31:51 -0500
-Received: by mail-oi1-f179.google.com with SMTP id 9so7126806oiq.3;
-        Thu, 14 Jan 2021 11:31:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jCW/74dk4/r2pTUeRiZ/lnXm69baMKCS/KFRrpnvniY=;
-        b=q91N9MnWjUosYjc8G2O4ZDPBdOSWueuqySLX2MZQgmJpD/Nj4SzVVZiG5hL6XgsDBo
-         quxQBMTwS7i/P1YG4yhQ5NT39hpS3lxb2dOHJE2xnaEwXD3xQl1ct6ERCBdUNWerlpHE
-         JGyp3brubY23VQDNNuS9kSE4TfGsTcGDH6WVtxEx0vHkheTb/N5YqosG7mZoJsL7gWNu
-         fEyFJ67tTi5or4Yv/wp1l2v0Qlx1jlMNGlrSlvPFh0xcgNH2rbZUTw3wSG0yhVZWB1nb
-         /nGavetcWHhkisD80oNZFNnR20tcJvULEakZ6ylF8WTDjpt+GlGlGlrxk54ROdKE4Qzh
-         +46Q==
-X-Gm-Message-State: AOAM531T8hkMk64Dm02JZJq/PyzMe9qudf9mn6mWNxtVPxl2H8lx6Oc+
-        QSqXkIjIme0GhrPv4S5kvsJJ3ojmYA==
-X-Google-Smtp-Source: ABdhPJz81BTCFtHgx3zSCLgFeQQfXJoask7vf+brnMbnlpYkFgiiyvjdENxkrgkUXCeNWStSR65fkQ==
-X-Received: by 2002:aca:b20a:: with SMTP id b10mr3512096oif.75.1610652670139;
-        Thu, 14 Jan 2021 11:31:10 -0800 (PST)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id 63sm1243184otx.2.2021.01.14.11.31.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jan 2021 11:31:09 -0800 (PST)
-Received: (nullmailer pid 3432430 invoked by uid 1000);
-        Thu, 14 Jan 2021 19:31:08 -0000
-Date:   Thu, 14 Jan 2021 13:31:08 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Robert Marko <robert.marko@sartura.hr>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        corbet@lwn.net, linux-doc@vger.kernel.org,
-        Luka Perkov <luka.perkov@sartura.hr>
-Subject: Re: [PATCH v4 1/3] dt-bindings: hwmon: Add TI TPS23861 bindings
-Message-ID: <20210114193108.GA3430334@robh.at.kernel.org>
-References: <20210111135708.3703175-1-robert.marko@sartura.hr>
+        Thu, 14 Jan 2021 20:49:18 -0500
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 10F1fQeI052501;
+        Fri, 15 Jan 2021 09:41:26 +0800 (GMT-8)
+        (envelope-from troy_lee@aspeedtech.com)
+Received: from aspeedtech.com (192.168.100.253) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 15 Jan
+ 2021 09:46:31 +0800
+Date:   Fri, 15 Jan 2021 01:46:31 +0000
+From:   Troy Lee <troy_lee@aspeedtech.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Ryan Chen <ryan_chen@aspeedtech.com>,
+        "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
+        <linux-aspeed@lists.ozlabs.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        ChiaWei Wang <chiawei_wang@aspeedtech.com>,
+        "leetroy@gmail.com" <leetroy@gmail.com>
+Subject: Re: [PATCH v2 1/4] dt-bindings: hwmon: Add Aspeed AST2600 PWM/Fan
+Message-ID: <20210115014631.GA1391@aspeedtech.com>
+References: <20210113070850.1184506-1-troy_lee@aspeedtech.com>
+ <20210113070850.1184506-2-troy_lee@aspeedtech.com>
+ <20210114141317.GA2823834@robh.at.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <20210111135708.3703175-1-robert.marko@sartura.hr>
+In-Reply-To: <20210114141317.GA2823834@robh.at.kernel.org>
+X-Originating-IP: [192.168.100.253]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 10F1fQeI052501
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Jan 11, 2021 at 02:57:06PM +0100, Robert Marko wrote:
-> Document bindings for the Texas Instruments TPS23861 driver.
-> 
-> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-> Cc: Luka Perkov <luka.perkov@sartura.hr>
-> ---
-> Changes in v4:
-> * Correct shunt binding
-> 
->  .../bindings/hwmon/ti,tps23861.yaml           | 52 +++++++++++++++++++
->  1 file changed, 52 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml b/Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml
-> new file mode 100644
-> index 000000000000..891eee9489aa
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml
-> @@ -0,0 +1,52 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +
-> +$id: http://devicetree.org/schemas/hwmon/ti,tps23861.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: TI TPS23861 PoE PSE
-> +
-> +maintainers:
-> +  - Robert Marko <robert.marko@sartura.hr>
-> +
-> +description: |
-> +  The TPS23861 is a IEEE 802.3at Quad Port Power-over-Ethernet PSE Controller.
-> +
-> +  Datasheets:
-> +  https://www.ti.com/lit/gpn/tps23861
-> +
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - ti,tps23861
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  shunt-resistor-micro-ohms:
-> +    description: The value of curent sense resistor in microohms.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
+Hi Rob,
 
-Don't need a type $ref as that's already defined for anything with 
-units.
+Thanks for reviewing.
 
-> +    default: 255000
-> +    minimum: 250000
-> +    maximum: 255000
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +          #address-cells = <1>;
-> +          #size-cells = <0>;
-> +
-> +          tps23861@30 {
-> +              compatible = "ti,tps23861";
-> +              reg = <0x30>;
-> +              shunt-resistor-micro-ohms = <255000>;
-> +          };
-> +    };
-> -- 
-> 2.29.2
+The 01/14/2021 22:13, Rob Herring wrote:
+> On Wed, Jan 13, 2021 at 07:08:45AM +0000, Troy Lee wrote:
+> > We add binding for supporting a new AST2600 PWM/Fan hwmon driver.
+> > 
+> > Changes since v1:
+> > - dt binding with DT schema format
+> > 
+> > Signed-off-by: Troy Lee <troy_lee@aspeedtech.com>
+> > ---
+> >  .../hwmon/aspeed,ast2600-pwm-tachometer.yaml  | 137 ++++++++++++++++++
+> >  1 file changed, 137 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/hwmon/aspeed,ast2600-pwm-tachometer.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/hwmon/aspeed,ast2600-pwm-tachometer.yaml b/Documentation/devicetree/bindings/hwmon/aspeed,ast2600-pwm-tachometer.yaml
+> > new file mode 100644
+> > index 000000000000..b84076a4a338
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/hwmon/aspeed,ast2600-pwm-tachometer.yaml
+> > @@ -0,0 +1,137 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +
+> > +$id: http://devicetree.org/schemas/hwmon/aspeed,ast2600-pwm-tachometer.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: ASPEED AST2600 PWM and Fan Tacho controller device driver
+> > +
+> > +maintainers:
+> > +  - Ryan Chen <ryan_chen@aspeedtech.com>
+> > +
+> > +description: |
+> > +  The ASPEED PWM controller can support upto 16 PWM outputs. The ASPEED Fan Tacho
+> > +  controller can support upto 16 Fan tachometer inputs.
+> > +  There can be upto 16 fans supported. Each fan can have one PWM output and
+> > +  one Fan tach inputs.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: aspeed,ast2600-pwm-tachometer
+> > +
+> > +  "#address-cells":
+> > +    const: 1
+> > +
+> > +  "#size-cells":
+> > +    const: 0
+> > +
+> > +  "#cooling-cells":
+> > +    const: 2
+> > +
+> > +  reg:
+> > +    description:
+> > +      Address and length of the register set for the device.
 > 
+> No need for generic descriptions. That's every 'reg'.
+> 
+> What you need is how many entries and what each one is if more than 1. 
+> If only 1, then just 'maxItems: 1'
+> 
+> > +
+> > +  clocks:
+> > +    description:
+> > +      phandle to clock provider with the clock number in the second cell
+> 
+> Same here.
+> 
+> > +
+> > +  resets:
+> > +    description:
+> > +      phandle to reset controller with the reset number in the second cell
+> 
+> And here.
+> 
+> > +
+> > +patternProperties:
+> > +  "@[0-9]+$":
+> 
+> If every node is a fan and there are up to 16:
+> 
+> ^fan@[0-9a-f]$
+> 
+I will update these in v3 patch set.
+
+> > +    type: object
+> > +    description:
+> > +      Under fan subnode there can upto 16 child nodes, with each child node
+> > +      representing a fan. There are 16 fans each fan can have one PWM port and one
+> > +      Fan tach inputs.
+> > +      For PWM port can be configured cooling-levels to create cooling device.
+> > +      Cooling device could be bound to a thermal zone for the thermal control.
+> > +
+> > +    properties:
+> > +      reg:
+> > +        minimum: 0
+> > +        maximum: 15
+> > +        description:
+> > +          This property identify the PWM control channel of this fan.
+> > +
+> > +      fan-tach-ch:
+> > +        $ref: /schemas/types.yaml#/definitions/uint8
+> > +        minimum: 0
+> > +        maximum: 15
+> > +        description:
+> > +          This property identify the fan tach input channel.
+> > +
+> > +      pulses-per-revolution:
+> > +        $ref: /schemas/types.yaml#/definitions/uint32
+> > +        default: 2
+> > +        minimum: 1
+> > +        description:
+> > +          Specify tacho pulse per revolution of the fan.
+> > +
+> > +      cooling-levels:
+> > +        description:
+> > +          PWM duty cycle values in a range from 0 to 255
+> > +          which correspond to thermal cooling states.
+> > +
+> > +      aspeed,pwm-freq:
+> > +        $ref: /schemas/types.yaml#/definitions/uint32
+> > +        default: 25000
+> > +        minimum: 24
+> > +        maximum: 780000
+> > +        description:
+> > +          Specify the frequency of PWM.
+> 
+> Units? Use a unit suffix and then drop the $ref.
+> 
+I'll change it to pwm-freq-hz.
+
+> > +
+> > +      aspeed,inverse-pin:
+> > +        type: boolean
+> > +        description:
+> > +          Inverse PWM output signal.
+> > +
+> > +      aspeed,falling-point:
+> > +        $ref: /schemas/types.yaml#/definitions/uint8
+> > +        default: 10
+> > +        minimum: 0
+> > +        maximum: 255
+> 
+> 0-255 is already the range of uint8, so drop.
+> 
+I'll drop it in v3.
+
+Thanks,
+Troy Lee
+> > +        description:
+> > +          Initialize the pulse width.
+> > +
+> > +    required:
+> > +      - fan-tach-ch
+> > +      - reg
+> > +
+> > +    additionalProperties: true
+> > +
+> > +required:
+> > + - compatible
+> > + - reg
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    pwm_tacho: pwm-tacho-controller@1e610000 {
+> > +        compatible = "aspeed,ast2600-pwm-tachometer";
+> > +        #address-cells = <1>;
+> > +        #size-cells = <0>;
+> > +        reg = <0x1e610000 0x100>;
+> > +
+> > +        fan@1 {
+> > +            reg = <0x00>;
+> > +            aspeed,pwm-freq = <25000>;
+> > +            cooling-levels = /bits/ 8 <125 151 177 203 229 255>;
+> > +            fan-tach-ch = /bits/ 8 <0x00>;
+> > +            pulses-per-revolution = <2>;
+> > +        };
+> > +
+> > +        fan@2 {
+> > +            reg = <0x01>;
+> > +            aspeed,pwm-freq = <25000>;
+> > +            cooling-levels = /bits/ 8 <125 151 177 203 229 255>;
+> > +            fan-tach-ch = /bits/ 8 <0x01>;
+> > +            pulses-per-revolution = <2>;
+> > +        };
+> > +    };
+> > +...
+> > -- 
+> > 2.25.1
+> > 
