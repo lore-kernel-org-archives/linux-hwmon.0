@@ -2,262 +2,95 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F156BC433E0
-	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Jan 2021 01:49:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8B25C433DB
+	for <linux-hwmon@archiver.kernel.org>; Mon, 18 Jan 2021 12:39:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AB26023A5B
-	for <linux-hwmon@archiver.kernel.org>; Fri, 15 Jan 2021 01:49:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9FE82222BB
+	for <linux-hwmon@archiver.kernel.org>; Mon, 18 Jan 2021 12:39:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731671AbhAOBtT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 14 Jan 2021 20:49:19 -0500
-Received: from twspam01.aspeedtech.com ([211.20.114.71]:32577 "EHLO
-        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731536AbhAOBtS (ORCPT
+        id S2404106AbhARMiy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 18 Jan 2021 07:38:54 -0500
+Received: from aclms3.advantech.com.tw ([125.252.70.86]:57631 "EHLO
+        aclms3.advantech.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404100AbhARMiv (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 14 Jan 2021 20:49:18 -0500
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 10F1fQeI052501;
-        Fri, 15 Jan 2021 09:41:26 +0800 (GMT-8)
-        (envelope-from troy_lee@aspeedtech.com)
-Received: from aspeedtech.com (192.168.100.253) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 15 Jan
- 2021 09:46:31 +0800
-Date:   Fri, 15 Jan 2021 01:46:31 +0000
-From:   Troy Lee <troy_lee@aspeedtech.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
+        Mon, 18 Jan 2021 07:38:51 -0500
+Received: from taipei09.ADVANTECH.CORP (unverified [172.20.0.236]) by ACLMS4.ADVANTECH.CORP
+ (Clearswift SMTPRS 5.6.0) with ESMTP id <Te423a06fb1ac1401c812dc@ACLMS4.ADVANTECH.CORP>;
+ Mon, 18 Jan 2021 20:37:40 +0800
+Received: from localhost (172.16.12.146) by taipei09.ADVANTECH.CORP
+ (172.20.0.236) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 18 Jan
+ 2021 20:37:56 +0800
+From:   Campion Kang <campion.kang@advantech.com.tw>
+To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Ryan Chen <ryan_chen@aspeedtech.com>,
-        "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
-        <linux-aspeed@lists.ozlabs.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        ChiaWei Wang <chiawei_wang@aspeedtech.com>,
-        "leetroy@gmail.com" <leetroy@gmail.com>
-Subject: Re: [PATCH v2 1/4] dt-bindings: hwmon: Add Aspeed AST2600 PWM/Fan
-Message-ID: <20210115014631.GA1391@aspeedtech.com>
-References: <20210113070850.1184506-1-troy_lee@aspeedtech.com>
- <20210113070850.1184506-2-troy_lee@aspeedtech.com>
- <20210114141317.GA2823834@robh.at.kernel.org>
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        <linux-hwmon@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
+        AceLan Kao <chia-lin.kao@canonical.com>,
+        Campion Kang <campion.kang@advantech.com.tw>
+Subject: [PATCH v6 2/6] mfd: ahc1ec0: Add Advantech EC include file used by dt-bindings
+Date:   Mon, 18 Jan 2021 20:37:45 +0800
+Message-ID: <20210118123749.4769-2-campion.kang@advantech.com.tw>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210118123749.4769-1-campion.kang@advantech.com.tw>
+References: <20210118123749.4769-1-campion.kang@advantech.com.tw>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <20210114141317.GA2823834@robh.at.kernel.org>
-X-Originating-IP: [192.168.100.253]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 10F1fQeI052501
+Content-Type: text/plain
+X-Originating-IP: [172.16.12.146]
+X-ClientProxiedBy: ACLCAS4.ADVANTECH.CORP (172.20.2.20) To
+ taipei09.ADVANTECH.CORP (172.20.0.236)
+X-TM-SNTS-SMTP: 73C7DFBFE117426ED13E45A7EDC55497CF2A7F30645A3214E07EF9C3460BB1E32000:8
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Rob,
+This files defines the sud-device types and hwmon profiles support by
+Advantech embedded controller.
 
-Thanks for reviewing.
+Signed-off-by: Campion Kang <campion.kang@advantech.com.tw>
+---
+ include/dt-bindings/mfd/ahc1ec0-dt.h | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+ create mode 100644 include/dt-bindings/mfd/ahc1ec0-dt.h
 
-The 01/14/2021 22:13, Rob Herring wrote:
-> On Wed, Jan 13, 2021 at 07:08:45AM +0000, Troy Lee wrote:
-> > We add binding for supporting a new AST2600 PWM/Fan hwmon driver.
-> > 
-> > Changes since v1:
-> > - dt binding with DT schema format
-> > 
-> > Signed-off-by: Troy Lee <troy_lee@aspeedtech.com>
-> > ---
-> >  .../hwmon/aspeed,ast2600-pwm-tachometer.yaml  | 137 ++++++++++++++++++
-> >  1 file changed, 137 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/hwmon/aspeed,ast2600-pwm-tachometer.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/hwmon/aspeed,ast2600-pwm-tachometer.yaml b/Documentation/devicetree/bindings/hwmon/aspeed,ast2600-pwm-tachometer.yaml
-> > new file mode 100644
-> > index 000000000000..b84076a4a338
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/hwmon/aspeed,ast2600-pwm-tachometer.yaml
-> > @@ -0,0 +1,137 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +
-> > +$id: http://devicetree.org/schemas/hwmon/aspeed,ast2600-pwm-tachometer.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: ASPEED AST2600 PWM and Fan Tacho controller device driver
-> > +
-> > +maintainers:
-> > +  - Ryan Chen <ryan_chen@aspeedtech.com>
-> > +
-> > +description: |
-> > +  The ASPEED PWM controller can support upto 16 PWM outputs. The ASPEED Fan Tacho
-> > +  controller can support upto 16 Fan tachometer inputs.
-> > +  There can be upto 16 fans supported. Each fan can have one PWM output and
-> > +  one Fan tach inputs.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: aspeed,ast2600-pwm-tachometer
-> > +
-> > +  "#address-cells":
-> > +    const: 1
-> > +
-> > +  "#size-cells":
-> > +    const: 0
-> > +
-> > +  "#cooling-cells":
-> > +    const: 2
-> > +
-> > +  reg:
-> > +    description:
-> > +      Address and length of the register set for the device.
-> 
-> No need for generic descriptions. That's every 'reg'.
-> 
-> What you need is how many entries and what each one is if more than 1. 
-> If only 1, then just 'maxItems: 1'
-> 
-> > +
-> > +  clocks:
-> > +    description:
-> > +      phandle to clock provider with the clock number in the second cell
-> 
-> Same here.
-> 
-> > +
-> > +  resets:
-> > +    description:
-> > +      phandle to reset controller with the reset number in the second cell
-> 
-> And here.
-> 
-> > +
-> > +patternProperties:
-> > +  "@[0-9]+$":
-> 
-> If every node is a fan and there are up to 16:
-> 
-> ^fan@[0-9a-f]$
-> 
-I will update these in v3 patch set.
+diff --git a/include/dt-bindings/mfd/ahc1ec0-dt.h b/include/dt-bindings/mfd/ahc1ec0-dt.h
+new file mode 100644
+index 000000000000..389a7a7f8f02
+--- /dev/null
++++ b/include/dt-bindings/mfd/ahc1ec0-dt.h
+@@ -0,0 +1,25 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Device Tree defines for Advantech Embedded Controller (AHC1EC0)
++ */
++
++#ifndef _DT_BINDINGS_MFD_AHC1EC0_H
++#define _DT_BINDINGS_MFD_AHC1EC0_H
++
++/* Sub-device Definitions */
++#define AHC1EC0_SUBDEV_BRIGHTNESS 0x0
++#define AHC1EC0_SUBDEV_EEPROM     0x1
++#define AHC1EC0_SUBDEV_GPIO       0x2
++#define AHC1EC0_SUBDEV_HWMON      0x3
++#define AHC1EC0_SUBDEV_LED        0x4
++#define AHC1EC0_SUBDEV_WDT        0x5
++
++/* HWMON Profile Definitions */
++#define AHC1EC0_HWMON_PRO_TEMPLATE 0x0
++#define AHC1EC0_HWMON_PRO_TPC5XXX  0x1
++#define AHC1EC0_HWMON_PRO_PRVR4    0x2
++#define AHC1EC0_HWMON_PRO_UNO2271G 0x3
++#define AHC1EC0_HWMON_PRO_UNO1172A 0x4
++#define AHC1EC0_HWMON_PRO_UNO1372G 0x5
++
++#endif /* _DT_BINDINGS_MFD_AHC1EC0_H */
+-- 
+2.17.1
 
-> > +    type: object
-> > +    description:
-> > +      Under fan subnode there can upto 16 child nodes, with each child node
-> > +      representing a fan. There are 16 fans each fan can have one PWM port and one
-> > +      Fan tach inputs.
-> > +      For PWM port can be configured cooling-levels to create cooling device.
-> > +      Cooling device could be bound to a thermal zone for the thermal control.
-> > +
-> > +    properties:
-> > +      reg:
-> > +        minimum: 0
-> > +        maximum: 15
-> > +        description:
-> > +          This property identify the PWM control channel of this fan.
-> > +
-> > +      fan-tach-ch:
-> > +        $ref: /schemas/types.yaml#/definitions/uint8
-> > +        minimum: 0
-> > +        maximum: 15
-> > +        description:
-> > +          This property identify the fan tach input channel.
-> > +
-> > +      pulses-per-revolution:
-> > +        $ref: /schemas/types.yaml#/definitions/uint32
-> > +        default: 2
-> > +        minimum: 1
-> > +        description:
-> > +          Specify tacho pulse per revolution of the fan.
-> > +
-> > +      cooling-levels:
-> > +        description:
-> > +          PWM duty cycle values in a range from 0 to 255
-> > +          which correspond to thermal cooling states.
-> > +
-> > +      aspeed,pwm-freq:
-> > +        $ref: /schemas/types.yaml#/definitions/uint32
-> > +        default: 25000
-> > +        minimum: 24
-> > +        maximum: 780000
-> > +        description:
-> > +          Specify the frequency of PWM.
-> 
-> Units? Use a unit suffix and then drop the $ref.
-> 
-I'll change it to pwm-freq-hz.
-
-> > +
-> > +      aspeed,inverse-pin:
-> > +        type: boolean
-> > +        description:
-> > +          Inverse PWM output signal.
-> > +
-> > +      aspeed,falling-point:
-> > +        $ref: /schemas/types.yaml#/definitions/uint8
-> > +        default: 10
-> > +        minimum: 0
-> > +        maximum: 255
-> 
-> 0-255 is already the range of uint8, so drop.
-> 
-I'll drop it in v3.
-
-Thanks,
-Troy Lee
-> > +        description:
-> > +          Initialize the pulse width.
-> > +
-> > +    required:
-> > +      - fan-tach-ch
-> > +      - reg
-> > +
-> > +    additionalProperties: true
-> > +
-> > +required:
-> > + - compatible
-> > + - reg
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    pwm_tacho: pwm-tacho-controller@1e610000 {
-> > +        compatible = "aspeed,ast2600-pwm-tachometer";
-> > +        #address-cells = <1>;
-> > +        #size-cells = <0>;
-> > +        reg = <0x1e610000 0x100>;
-> > +
-> > +        fan@1 {
-> > +            reg = <0x00>;
-> > +            aspeed,pwm-freq = <25000>;
-> > +            cooling-levels = /bits/ 8 <125 151 177 203 229 255>;
-> > +            fan-tach-ch = /bits/ 8 <0x00>;
-> > +            pulses-per-revolution = <2>;
-> > +        };
-> > +
-> > +        fan@2 {
-> > +            reg = <0x01>;
-> > +            aspeed,pwm-freq = <25000>;
-> > +            cooling-levels = /bits/ 8 <125 151 177 203 229 255>;
-> > +            fan-tach-ch = /bits/ 8 <0x01>;
-> > +            pulses-per-revolution = <2>;
-> > +        };
-> > +    };
-> > +...
-> > -- 
-> > 2.25.1
-> > 
