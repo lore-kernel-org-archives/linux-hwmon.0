@@ -2,106 +2,113 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E235C433DB
-	for <linux-hwmon@archiver.kernel.org>; Sat, 23 Jan 2021 16:09:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81B24C433E0
+	for <linux-hwmon@archiver.kernel.org>; Sat, 23 Jan 2021 16:15:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F292D22A84
-	for <linux-hwmon@archiver.kernel.org>; Sat, 23 Jan 2021 16:09:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 58F4022A84
+	for <linux-hwmon@archiver.kernel.org>; Sat, 23 Jan 2021 16:15:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725798AbhAWQJk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 23 Jan 2021 11:09:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43954 "EHLO
+        id S1726057AbhAWQOv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 23 Jan 2021 11:14:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725550AbhAWQJj (ORCPT
+        with ESMTP id S1725932AbhAWQOs (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 23 Jan 2021 11:09:39 -0500
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF557C06174A
-        for <linux-hwmon@vger.kernel.org>; Sat, 23 Jan 2021 08:08:58 -0800 (PST)
-Received: by mail-ot1-x32a.google.com with SMTP id k8so8295026otr.8
-        for <linux-hwmon@vger.kernel.org>; Sat, 23 Jan 2021 08:08:58 -0800 (PST)
+        Sat, 23 Jan 2021 11:14:48 -0500
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1363C0613D6;
+        Sat, 23 Jan 2021 08:14:07 -0800 (PST)
+Received: by mail-oi1-x22a.google.com with SMTP id j25so4325130oii.0;
+        Sat, 23 Jan 2021 08:14:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=HyafWA/fguU4cRHnCu0cBiZhUMVnzefHIjHu7C+dDfw=;
-        b=FlmaG4BIMjJEnDX+SaaTYvHFmZJTzViKbA32KZRFw4G61T/U9X4FJ3S6x90LUYiDA+
-         nBpihWhhZhWaSkbfJ+QKEmG+x0P8Qj5H+jW9sW/yXr0+zCX2VgWcUUR/d/yYjD/0BCfv
-         Kh/zFcdmH8DvhOCVi00mKNR1dmrkQFiMAFeplWQB6Nga4uvBJvfQqepepNbggAeUCke/
-         T1ZUJWovgjDEG9Y2MLxsrrIt77KgzBfy4J5p95SaOqO0yNua2dO9+n/oFwDL6UcctBLy
-         InoCmtay9Wexj8O/6JIqWvmHN7EtwojnOo3R4vBb1lUUt0nXcUqNjGrd8H/v9WyEfyYS
-         VwKw==
+        bh=aGOwdo7IiEjB/o8PzIQ44cs8SlfL93ZRbT69u9ZgBSA=;
+        b=vBfeVFCOy6eV/pI2NrmOSdW6HDuYebvlWjjpg3Zc3Bl+xLB0PPQUw2FXULxuLp03mX
+         z9Wj9DWEi8zTyhwvjdA3feOpjdwaWcSuCHtRKlENDryeqOG2zCGWMB3/8ykTyZ0r5HV7
+         sAgv5E/OfpqrR0+kUmAg6kh1N3I+wwpuwiagAP+C4sqnD+N9ihP7HlfSc7540kce76Qp
+         wkhWgyQKihteORYFEDPUBy/pC/9SCfggequ9pfvktOk0iUUWwUoFbzrWJcxzVUymoPZN
+         iQUQ3nYFj9f3cxJwKwg13Vnbj/cuucvoQAqK7v3QJvBYDBJJah2F3FP1QWudGTAMKnqm
+         iDzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=HyafWA/fguU4cRHnCu0cBiZhUMVnzefHIjHu7C+dDfw=;
-        b=THnWr1Q/f4eNl8VD8Rcbu53OPzCH2pXZnkcZswZxky0Cl0qurioi/CXc0EqhmHN1TU
-         bsq6+Eh2WRfqHS0jTTgth9BaBt2wCWJPKh5KkpkBeQg+e5DASGfIdP3GACzDjj/dQmmF
-         GLZcnb50wWQtsfoPiK0gMQvbXIrpRtk5PNj38I1oY60GFLIkIroOiTxhd0hplKip3WPi
-         DKl7snP6rHlWKtK2iu4JJmF5kIyOiMvhsrpZPocQ72D9dI4HTgquRa6q/EnZRnS8h4kP
-         o979jL6P3qBt0uMqifBhgX/v3Wh2Vy3g7/G2HxSLmDii0NoUxvrwUdI0npKaTDFOMBZg
-         9rfg==
-X-Gm-Message-State: AOAM5307P+pTv7h4+VJIru6xsEFGm2d1VIkbigTcy7EOLEEvwbxloc+C
-        PO/upzVpkeWsVW/txl0sbqWfAKu6dmI=
-X-Google-Smtp-Source: ABdhPJxGp5o/imfWjL0i5ZzjuE0+uCR96WFeESH0KWV0fka9fENlSFYH8qJe0XAQv7s9r+QjBKyvxQ==
-X-Received: by 2002:a05:6830:90a:: with SMTP id v10mr7079609ott.364.1611418138235;
-        Sat, 23 Jan 2021 08:08:58 -0800 (PST)
+        bh=aGOwdo7IiEjB/o8PzIQ44cs8SlfL93ZRbT69u9ZgBSA=;
+        b=mnoaRBVtAZphLrAVFV/W/oZqud1S7T9evEDo9OM2tvuL2hs2OvCR8xM5Bmc7if4x5E
+         4EsqH6yLg4ML0rRgPTeHBoSslFwv/FzlVHMpANSvZhQ9RXo1nScuwyjoXfYvi6nHmcgN
+         EyZQzu3vYJuJ0Nt1AIG/nz6BSzrAoBsq+t/cdBDVKZLP/k5Ioy/fpsezRu08mK8n8CDW
+         tHo46jT7QQUAzey5d7B8EROeGcuesLeo7S4qDbV6iRXYDZNMplS79tvSwovi4ArsYw0w
+         HbmM8ECExsvNjfJ5x9n/KY6t1RHH3sJEpUUAT1qaJGQ796+1Vg6QkaU85CUFGo8/o1Nz
+         22Cw==
+X-Gm-Message-State: AOAM533BfOmClIBfDU6IJXiZmdESRMKAIdu5Egidm//MuAS5lGgF+4Kk
+        bLAqZ76/CJI07NDOumnby4c=
+X-Google-Smtp-Source: ABdhPJwUX1wZ0HjqJqPPmC6y8f3rdsNa8J0yV/pB7b5Xzuxhi7oi8U92QTpcFe8nyjssXaaj3SuVKQ==
+X-Received: by 2002:aca:b5d6:: with SMTP id e205mr6465360oif.15.1611418447275;
+        Sat, 23 Jan 2021 08:14:07 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i9sm2422335oii.34.2021.01.23.08.08.56
+        by smtp.gmail.com with ESMTPSA id r8sm2406529oth.20.2021.01.23.08.14.05
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 23 Jan 2021 08:08:57 -0800 (PST)
+        Sat, 23 Jan 2021 08:14:06 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 23 Jan 2021 08:08:56 -0800
+Date:   Sat, 23 Jan 2021 08:14:05 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Johannes Cornelis Draaijer (datdenkikniet)" <jcdra1@gmail.com>
-Cc:     linux-hwmon@vger.kernel.org, delvare@suse.com
-Subject: Re: [PATCH v3] hwmon: Add AHT10 Temperature and Humidity Sensor
- Driver
-Message-ID: <20210123160856.GA50415@roeck-us.net>
-References: <20210107194014.GA88780@desktop>
+To:     Troy Lee <troy_lee@aspeedtech.com>
+Cc:     openbmc@lists.ozlabs.org, Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Ryan Chen <ryan_chen@aspeedtech.com>,
+        "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
+        <linux-aspeed@lists.ozlabs.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        chiawei_wang@aspeedtech.com, leetroy@gmail.com
+Subject: Re: [PATCH v2 4/4] hwmon: Support Aspeed AST2600 PWM/Fan tachometer
+Message-ID: <20210123161405.GA50622@roeck-us.net>
+References: <20210113070850.1184506-1-troy_lee@aspeedtech.com>
+ <20210113070850.1184506-5-troy_lee@aspeedtech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210107194014.GA88780@desktop>
+In-Reply-To: <20210113070850.1184506-5-troy_lee@aspeedtech.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Jan 07, 2021 at 08:40:14PM +0100, Johannes Cornelis Draaijer (datdenkikniet) wrote:
-> This patch adds a hwmon driver for the AHT10 Temperature and
-> Humidity sensor. It has a maximum sample rate, as the datasheet
-> states that the chip may heat up if it is sampled more than once
-> every two seconds.
+On Wed, Jan 13, 2021 at 07:08:48AM +0000, Troy Lee wrote:
+> Add Aspeed AST2600 PWM/Fan tacho driver. AST2600 has 16 PWM channel and
+> 16 FAN tacho channel.
 > 
-> Has been tested a to work on a raspberrypi0w
+> Changes since v1:
+> - fixed review comments
+> - fixed double-looped calculation of div_h and div_l
+> - moving configuration to device tree
+> - register hwmon driver with devm_hwmon_device_register_with_info()
 > 
-> Changes from v2:
-> Add reference to documentation to index.rst
-> Properly align defines
-> Clamp value instead of returning error
-> Adjust return values
-> Remove unnecessary print, check and comment
-> 
-> Major changes from initial patch:
-> Removed devicetree/of references
-> Removed aht10_reset, aht10_remove
-> Add documentation
-> Switch to hwmon channels, attributes and info
-> More appropriate usage of mutex
-> Return standard error codes
-> Add checking statements for errors that are returned
-> Other code improvements as suggested
-> 
-> Signed-off-by: Johannes Cornelis Draaijer (datdenkikniet) <jcdra1@gmail.com>
+> Signed-off-by: Troy Lee <troy_lee@aspeedtech.com>
 
-Applied.
+checkpatch says:
+
+total: 0 errors, 9 warnings, 26 checks, 779 lines checked
+
+This is a bit much. Please run checkpatch --strict and fix the issues
+it reports. Please also fix the issues reported by 0-day as well as
+the issues reported by the bindings robot, and resubmit.
 
 Thanks,
 Guenter
