@@ -2,220 +2,141 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B660C433DB
-	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Jan 2021 09:13:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23FAAC433E0
+	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Jan 2021 18:06:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BC73722D02
-	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Jan 2021 09:13:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DF2592251F
+	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Jan 2021 18:06:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726032AbhAYJNG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 25 Jan 2021 04:13:06 -0500
-Received: from mga12.intel.com ([192.55.52.136]:30507 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726861AbhAYGR0 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 25 Jan 2021 01:17:26 -0500
-IronPort-SDR: qyX4DgFPLxZIns/4/6HvAoUTbJtR48NUTLLwW6RKSXLtJOjxGV7URVdTtXzLyD8LRu4CjsdhCT
- OUkh1jrk1qRw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9874"; a="158847331"
-X-IronPort-AV: E=Sophos;i="5.79,372,1602572400"; 
-   d="scan'208";a="158847331"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2021 22:16:12 -0800
-IronPort-SDR: BRDEVp/k2/cmethnKJokNLOIMUJlYMvCAihazWjUqMHH/JRB8NIJtrgjI1F1ugF6sH30Zwsinw
- KtjFLm5V0mhw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,372,1602572400"; 
-   d="scan'208";a="387187205"
-Received: from lkp-server02.sh.intel.com (HELO 625d3a354f04) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 24 Jan 2021 22:16:11 -0800
-Received: from kbuild by 625d3a354f04 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1l3vAY-00001w-MP; Mon, 25 Jan 2021 06:16:10 +0000
-Date:   Mon, 25 Jan 2021 13:46:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon-next] BUILD SUCCESS
- 08124c74c93cca0d2a103fbbf980df17986e65f4
-Message-ID: <600e5b23.1leGrN7xr5p0MlkW%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1731191AbhAYSGI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 25 Jan 2021 13:06:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35494 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731129AbhAYSGB (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 25 Jan 2021 13:06:01 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C44C061797;
+        Mon, 25 Jan 2021 10:05:20 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id y19so28385898iov.2;
+        Mon, 25 Jan 2021 10:05:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=+aL0fFGSd2hHhX1foJGcaTOt1XHt4P+imCuVYIdpXgA=;
+        b=sT7OiZSLtqZDgoBTi8QeiduUPtYM7a3AbWlVlkgqDtUCsn5SuRuyBIKc2Gwi4x0sis
+         r9M1LmslSJay/vDCipMiHRJjn4lmYIGYyT1Eeyq3Wid5QEAGaRcSWZFyQaFbSInCwlQI
+         qkmsC8lx5qL+Cl0ryn2305iHmWaUb5KaT9Dh5/Lk1W5ia+jybA6rtMiKibzzYg5oAS4Y
+         60H9HNw0S/eSA5BulYIMWJd1fPddMvlvcDuoNH0358YuKivdAYEBIHqlNvXX3hPVyxPU
+         8YU+A/mTpjeJFu6057q7Za6/z2s3PELIiLMum7oJJGKRw7L/Qm9MHRcxDSy/66ncGd4S
+         DHqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=+aL0fFGSd2hHhX1foJGcaTOt1XHt4P+imCuVYIdpXgA=;
+        b=N3H4pubthNxAHyTi6zMeyQUSzM479xQhheRpopyF3nXyLXQIDbsGeTdHFucv3hbO4M
+         gdC+dpwdKKQ0AVm93nnlzs4hiVcnZUC8PSjyEHs4gPOYfq0w6Kr3va2Fcz2C0JiHQVCB
+         c2nbIX7tSC++43LzI5t1F9iSAXBf4n5eenps51AQ+wcJfI2g4a8XsMlEj7P+UGf5TXkh
+         YBxgq6tVP5mBjvLKENQ4xuwJ+yYODlyUen/CKXKTYnKd6Gf1Px3dqvGRm1D5dRD76qdX
+         WBCjuY6EtkbLl5n9UIYEOIHrbdEP+Tu5Nj13hhqXBhs79NWURG9VmTQsibkC41Yc5SbS
+         zPUw==
+X-Gm-Message-State: AOAM532deW99aQ80oyMMKqfDx+Tu1qbfWZoGCME0eFwi2mAUiD3KiFo8
+        VJ8wf+gQoV+MqkRBxcWAvSkU0la5ZtsNIIKD2VE=
+X-Google-Smtp-Source: ABdhPJy0m8NQdKU+D2Xr/21OA4cWpRmMdDC0FkfmQMKvssxUCySHvd9XbuqE6/F7SQ9hdImDkDU2lgsA1yL3Ggn9uX0=
+X-Received: by 2002:a05:6e02:1aa8:: with SMTP id l8mr1402991ilv.251.1611597920147;
+ Mon, 25 Jan 2021 10:05:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+References: <a09eea7616881d40d2db2fb5fa2770dc6166bdae.1611456351.git.tommyhebb@gmail.com>
+ <20210125100540.55wbgdsem3htplx3@pali>
+In-Reply-To: <20210125100540.55wbgdsem3htplx3@pali>
+From:   Tom Hebb <tommyhebb@gmail.com>
+Date:   Mon, 25 Jan 2021 10:05:08 -0800
+Message-ID: <CAMcCCgTo87HmwexZS696ok16e9s_8gRgFd38uoLP34r7TbAzBg@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (dell-smm) Add XPS 15 L502X to fan control blacklist
+To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Bob Hepple <bob.hepple@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 08124c74c93cca0d2a103fbbf980df17986e65f4  hwmon: (pwm-fan) stop using legacy PWM functions and some cleanups
+On Mon, Jan 25, 2021 at 2:05 AM Pali Roh=C3=A1r <pali@kernel.org> wrote:
+>
+> On Saturday 23 January 2021 18:46:08 Thomas Hebb wrote:
+> > It has been reported[0] that the Dell XPS 15 L502X exhibits similar
+> > freezing behavior to the other systems[1] on this blacklist. The issue
+> > was exposed by a prior change of mine to automatically load
+> > dell_smm_hwmon on a wider set of XPS models. To fix the regression, add
+> > this model to the blacklist.
+> >
+> > [0] https://bugzilla.kernel.org/show_bug.cgi?id=3D211081
+> > [1] https://bugzilla.kernel.org/show_bug.cgi?id=3D195751
+> >
+> > Fixes: b8a13e5e8f37 ("hwmon: (dell-smm) Use one DMI match for all XPS m=
+odels")
+> > Cc: stable@vger.kernel.org
+> > Reported-by: Bob Hepple <bob.hepple@gmail.com>
+> > Tested-by: Bob Hepple <bob.hepple@gmail.com>
+> > Signed-off-by: Thomas Hebb <tommyhebb@gmail.com>
+> > ---
+> >
+> >  drivers/hwmon/dell-smm-hwmon.c | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> >
+> > diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hw=
+mon.c
+> > index ec448f5f2dc3..73b9db9e3aab 100644
+> > --- a/drivers/hwmon/dell-smm-hwmon.c
+> > +++ b/drivers/hwmon/dell-smm-hwmon.c
+> > @@ -1159,6 +1159,13 @@ static struct dmi_system_id i8k_blacklist_fan_su=
+pport_dmi_table[] __initdata =3D {
+> >                       DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "XPS13 9333"),
+> >               },
+> >       },
+> > +     {
+> > +             .ident =3D "Dell XPS 15 L502X",
+> > +             .matches =3D {
+> > +                     DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
+> > +                     DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Dell System XP=
+S L502X"),
+>
+> Hello! Are you sure that it is required to completely disable fan
+> support? And not only access to fan type label for which is different
+> blaclist i8k_blacklist_fan_type_dmi_table?
 
-elapsed time: 753m
+This is a good question. We didn't try the other list. Bob is the one with =
+the
+affected system. Could you try moving the added block of code from
+i8k_blacklist_fan_support_dmi_table a few lines up to
+i8k_blacklist_fan_type_dmi_table, Bob, to see if the issue reappears or if =
+it
+remains fixed?
 
-configs tested: 150
-configs skipped: 2
+>
+> And have you reported this issue to Dell support?
+>
+> > +             },
+> > +     },
+> >       { }
+> >  };
+> >
+> > --
+> > 2.30.0
+> >
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+(Apologies for the previous HTML copy of this reply, to those directly CCed=
+.)
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-sh                          rsk7264_defconfig
-powerpc                 linkstation_defconfig
-arm                      pxa255-idp_defconfig
-arm                     am200epdkit_defconfig
-mips                      pistachio_defconfig
-xtensa                  cadence_csp_defconfig
-h8300                     edosk2674_defconfig
-arm                         axm55xx_defconfig
-c6x                                 defconfig
-powerpc                 mpc832x_mds_defconfig
-sparc                               defconfig
-arm                       aspeed_g5_defconfig
-arm                          pcm027_defconfig
-mips                        qi_lb60_defconfig
-mips                  decstation_64_defconfig
-powerpc                      chrp32_defconfig
-arm                             mxs_defconfig
-mips                     cu1000-neo_defconfig
-powerpc                     tqm8560_defconfig
-powerpc64                        alldefconfig
-sh                        sh7757lcr_defconfig
-mips                         tb0287_defconfig
-sh                      rts7751r2d1_defconfig
-mips                         tb0219_defconfig
-mips                           ip27_defconfig
-m68k                         apollo_defconfig
-arc                        nsimosci_defconfig
-arm                         hackkit_defconfig
-sparc                            allyesconfig
-sh                               j2_defconfig
-powerpc                        fsp2_defconfig
-mips                       rbtx49xx_defconfig
-mips                        bcm47xx_defconfig
-powerpc                  mpc885_ads_defconfig
-s390                          debug_defconfig
-arm                          iop32x_defconfig
-arm                          tango4_defconfig
-mips                        nlm_xlr_defconfig
-arm                          pxa3xx_defconfig
-sh                            shmin_defconfig
-powerpc                     mpc512x_defconfig
-arm                      integrator_defconfig
-h8300                       h8s-sim_defconfig
-powerpc                      mgcoge_defconfig
-arm                           h5000_defconfig
-sh                     sh7710voipgw_defconfig
-arm                          imote2_defconfig
-mips                     loongson1b_defconfig
-arm                            dove_defconfig
-arm                            mps2_defconfig
-sh                   rts7751r2dplus_defconfig
-nios2                            alldefconfig
-mips                       capcella_defconfig
-mips                          ath25_defconfig
-arm                          simpad_defconfig
-sh                           se7751_defconfig
-mips                         bigsur_defconfig
-csky                             alldefconfig
-arm                          pxa168_defconfig
-nds32                            alldefconfig
-powerpc                     tqm8541_defconfig
-arm                        shmobile_defconfig
-powerpc                     tqm8555_defconfig
-arm                         s5pv210_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a001-20210124
-i386                 randconfig-a002-20210124
-i386                 randconfig-a004-20210124
-i386                 randconfig-a006-20210124
-i386                 randconfig-a005-20210124
-i386                 randconfig-a003-20210124
-i386                 randconfig-a001-20210125
-i386                 randconfig-a002-20210125
-i386                 randconfig-a004-20210125
-i386                 randconfig-a006-20210125
-i386                 randconfig-a005-20210125
-i386                 randconfig-a003-20210125
-x86_64               randconfig-a012-20210124
-x86_64               randconfig-a016-20210124
-x86_64               randconfig-a015-20210124
-x86_64               randconfig-a011-20210124
-x86_64               randconfig-a013-20210124
-x86_64               randconfig-a014-20210124
-i386                 randconfig-a013-20210124
-i386                 randconfig-a011-20210124
-i386                 randconfig-a012-20210124
-i386                 randconfig-a015-20210124
-i386                 randconfig-a014-20210124
-i386                 randconfig-a016-20210124
-x86_64               randconfig-a003-20210125
-x86_64               randconfig-a002-20210125
-x86_64               randconfig-a001-20210125
-x86_64               randconfig-a005-20210125
-x86_64               randconfig-a006-20210125
-x86_64               randconfig-a004-20210125
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a003-20210124
-x86_64               randconfig-a002-20210124
-x86_64               randconfig-a001-20210124
-x86_64               randconfig-a005-20210124
-x86_64               randconfig-a006-20210124
-x86_64               randconfig-a004-20210124
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-Tom
