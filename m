@@ -7,42 +7,42 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81399C433E0
-	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Jan 2021 06:19:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B660C433DB
+	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Jan 2021 09:13:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3CEFD22CA2
-	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Jan 2021 06:19:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BC73722D02
+	for <linux-hwmon@archiver.kernel.org>; Mon, 25 Jan 2021 09:13:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726340AbhAYGTY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 25 Jan 2021 01:19:24 -0500
-Received: from mga07.intel.com ([134.134.136.100]:56099 "EHLO mga07.intel.com"
+        id S1726032AbhAYJNG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 25 Jan 2021 04:13:06 -0500
+Received: from mga12.intel.com ([192.55.52.136]:30507 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726973AbhAYGRh (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 25 Jan 2021 01:17:37 -0500
-IronPort-SDR: OgkVN/jNX5HkistKB9DfYj0BBai/kqPHGLMnHN/7L9qY2McCYbND39ihB0H9vXCODgh9hpYieZ
- h6E4EaR7ZhXg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9874"; a="243746782"
+        id S1726861AbhAYGR0 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 25 Jan 2021 01:17:26 -0500
+IronPort-SDR: qyX4DgFPLxZIns/4/6HvAoUTbJtR48NUTLLwW6RKSXLtJOjxGV7URVdTtXzLyD8LRu4CjsdhCT
+ OUkh1jrk1qRw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9874"; a="158847331"
 X-IronPort-AV: E=Sophos;i="5.79,372,1602572400"; 
-   d="scan'208";a="243746782"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2021 22:16:12 -0800
-IronPort-SDR: rlxveXfTiEbT6FdVuRu5xs8hT2oT9nxllSUEwrqlGsTjRSPme23Mp2w4tGn4AQccy1gRVYshxk
- jgPXMdsbD1Dw==
+   d="scan'208";a="158847331"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2021 22:16:12 -0800
+IronPort-SDR: BRDEVp/k2/cmethnKJokNLOIMUJlYMvCAihazWjUqMHH/JRB8NIJtrgjI1F1ugF6sH30Zwsinw
+ KtjFLm5V0mhw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.79,372,1602572400"; 
-   d="scan'208";a="361099413"
+   d="scan'208";a="387187205"
 Received: from lkp-server02.sh.intel.com (HELO 625d3a354f04) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 24 Jan 2021 22:16:11 -0800
+  by orsmga008.jf.intel.com with ESMTP; 24 Jan 2021 22:16:11 -0800
 Received: from kbuild by 625d3a354f04 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1l3vAY-00001J-F3; Mon, 25 Jan 2021 06:16:10 +0000
-Date:   Mon, 25 Jan 2021 13:46:02 +0800
+        id 1l3vAY-00001w-MP; Mon, 25 Jan 2021 06:16:10 +0000
+Date:   Mon, 25 Jan 2021 13:46:11 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon] BUILD SUCCESS
- 9247ccc054077143cb753a8cbe20ab9e7ebcf02c
-Message-ID: <600e5b1a.n4HowV9JI6fOS+Jl%lkp@intel.com>
+Subject: [hwmon:hwmon-next] BUILD SUCCESS
+ 08124c74c93cca0d2a103fbbf980df17986e65f4
+Message-ID: <600e5b23.1leGrN7xr5p0MlkW%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -51,12 +51,12 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
-branch HEAD: 9247ccc054077143cb753a8cbe20ab9e7ebcf02c  hwmon: (dell-smm) Add XPS 15 L502X to fan control blacklist
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 08124c74c93cca0d2a103fbbf980df17986e65f4  hwmon: (pwm-fan) stop using legacy PWM functions and some cleanups
 
 elapsed time: 753m
 
-configs tested: 154
+configs tested: 150
 configs skipped: 2
 
 The following configs have been built successfully.
@@ -78,11 +78,11 @@ h8300                     edosk2674_defconfig
 arm                         axm55xx_defconfig
 c6x                                 defconfig
 powerpc                 mpc832x_mds_defconfig
+sparc                               defconfig
 arm                       aspeed_g5_defconfig
 arm                          pcm027_defconfig
 mips                        qi_lb60_defconfig
 mips                  decstation_64_defconfig
-sparc                               defconfig
 powerpc                      chrp32_defconfig
 arm                             mxs_defconfig
 mips                     cu1000-neo_defconfig
@@ -110,10 +110,6 @@ arm                          pxa3xx_defconfig
 sh                            shmin_defconfig
 powerpc                     mpc512x_defconfig
 arm                      integrator_defconfig
-arm                         cm_x300_defconfig
-powerpc                 mpc8540_ads_defconfig
-sh                          r7785rp_defconfig
-arm                           sunxi_defconfig
 h8300                       h8s-sim_defconfig
 powerpc                      mgcoge_defconfig
 arm                           h5000_defconfig
