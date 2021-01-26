@@ -2,83 +2,107 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+X-Spam-Status: No, score=-16.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F809C433DB
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Jan 2021 06:57:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07852C433E6
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Jan 2021 07:36:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 612DF20727
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Jan 2021 06:57:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CBD7020663
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Jan 2021 07:36:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231435AbhA0G5V (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 27 Jan 2021 01:57:21 -0500
-Received: from mx2.suse.de ([195.135.220.15]:34828 "EHLO mx2.suse.de"
+        id S314601AbhA0AAc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 26 Jan 2021 19:00:32 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48712 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231196AbhA0Gvh (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 27 Jan 2021 01:51:37 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id DBE44AF2B;
-        Wed, 27 Jan 2021 06:50:55 +0000 (UTC)
-Date:   Wed, 27 Jan 2021 07:50:55 +0100
-Message-ID: <s5hk0ryzxdc.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        id S2390018AbhAZSbw (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 26 Jan 2021 13:31:52 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 620E32224C;
+        Tue, 26 Jan 2021 18:31:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611685871;
+        bh=hwpSfinBZDh5+w+x/QjBXQLW3oRDY80SILSq+Y5HHDo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=DbOc4zipI517A/lToLn+hLdBxnb+4ETZgccGUoDS8yTx9I8CKUKe43KkrBpH2KNhG
+         e0TC9cE2cVJ36WFnsJ5mT095cOpAHT5QBmTtwlylevIm6IP0hcaSUAzzfro3uxMJIF
+         ftPMqQ63SPF0NLgoBnzcnp/s94+cuxluyG8rzolofAm/h1bKrECj7/ccYV4kmB1vRP
+         F3OJZfdJjkZSOKkNmVSk39VQGoAJkWiDpZdGvacm5sx9jttzp/E0xjt64kZQM1LItN
+         4uizTTRZqSBEgLk+gwWSVJbledYwceh17445fTuiVRxVGoXCXXuARoGHCK/hClwAoG
+         sMu42Mx2KdqFg==
+Received: by mail-qk1-f175.google.com with SMTP id x81so14041717qkb.0;
+        Tue, 26 Jan 2021 10:31:11 -0800 (PST)
+X-Gm-Message-State: AOAM532aqv1C31Bb7aQWOAOMfsnMtd3ajgVQFfokF2vfpvpQBkAUz0Yy
+        g6+e7zqNEHRYM4iHXVAoFNYOnpZ4D1fK8nGDrw==
+X-Google-Smtp-Source: ABdhPJx5ciP8LyJGQSq/H1+pseWon7Ig+U4yOWlMwo2IZRc9cg1vUsBdUbLWYhYdqnQx92cYs4tCNXh/KuAPK0M0fVw=
+X-Received: by 2002:a37:642:: with SMTP id 63mr6985257qkg.311.1611685870559;
+ Tue, 26 Jan 2021 10:31:10 -0800 (PST)
+MIME-Version: 1.0
+References: <20210123034428.2841052-1-swboyd@chromium.org> <20210123034428.2841052-6-swboyd@chromium.org>
+In-Reply-To: <20210123034428.2841052-6-swboyd@chromium.org>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 26 Jan 2021 12:30:58 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJbdfhqNF4xgues0Rm7KS8_8Xq2767q7DcdyeQ_Vqb58Q@mail.gmail.com>
+Message-ID: <CAL_JsqJbdfhqNF4xgues0Rm7KS8_8Xq2767q7DcdyeQ_Vqb58Q@mail.gmail.com>
+Subject: Re: [PATCH v2 5/6] hwmon: (lm70) Avoid undefined reference to match table
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Corentin Chary <corentin.chary@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-spi@vger.kernel.org,
-        acpi4asus-user@lists.sourceforge.net, linux-hwmon@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, alsa-devel@alsa-project.org,
-        linux-acpi@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH] ACPI: Test for ACPI_SUCCESS rather than !ACPI_FAILURE
-In-Reply-To: <20210126202317.2914080-1-helgaas@kernel.org>
-References: <20210126202317.2914080-1-helgaas@kernel.org>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
- FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
- (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
-Content-Type: text/plain; charset=US-ASCII
+        Frank Rowand <frowand.list@gmail.com>,
+        Linux HWMON List <linux-hwmon@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, 26 Jan 2021 21:23:17 +0100,
-Bjorn Helgaas wrote:
-> 
-> From: Bjorn Helgaas <bhelgaas@google.com>
-> 
-> The double negative makes it hard to read "if (!ACPI_FAILURE(status))".
-> Replace it with "if (ACPI_SUCCESS(status))".
-> 
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+On Fri, Jan 22, 2021 at 9:44 PM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> We're going to remove of_match_ptr() from the definition of
+> of_match_device() when CONFIG_OF=n. This way we can always be certain
+> that of_match_device() acts the same when CONFIG_OF is set and when it
+> isn't. Add of_match_ptr() here so that this doesn't break when that
+> change is made to the of_match_device() API.
+>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> Acked-by: Guenter Roeck <linux@roeck-us.net>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Frank Rowand <frowand.list@gmail.com>
+> Cc: <linux-hwmon@vger.kernel.org>
 > ---
-> 
-> This isn't really an ACPI patch, but I'm sending it to you, Rafael, since
-> it seems easier to just apply these all at once.  But I'd be happy to split
-> them up into individual patches if you'd rather.
-> 
-> 
->  drivers/gpu/drm/amd/amdgpu/amdgpu_bios.c | 4 ++--
->  drivers/gpu/drm/radeon/radeon_bios.c     | 4 ++--
->  drivers/hwmon/acpi_power_meter.c         | 4 ++--
->  drivers/platform/x86/asus-laptop.c       | 6 +++---
->  drivers/spi/spi.c                        | 2 +-
->  sound/pci/hda/hda_intel.c                | 4 ++--
+>
+> Please ack so Rob can apply.
+>
+>  drivers/hwmon/lm70.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/hwmon/lm70.c b/drivers/hwmon/lm70.c
+> index ae2b84263a44..e3153ae80634 100644
+> --- a/drivers/hwmon/lm70.c
+> +++ b/drivers/hwmon/lm70.c
+> @@ -178,7 +178,7 @@ static int lm70_probe(struct spi_device *spi)
+>         struct lm70 *p_lm70;
+>         int chip;
+>
+> -       of_match = of_match_device(lm70_of_ids, &spi->dev);
+> +       of_match = of_match_device(of_match_ptr(lm70_of_ids), &spi->dev);
+>         if (of_match)
+>                 chip = (int)(uintptr_t)of_match->data;
 
-For the sound/*:
-Acked-by: Takashi Iwai <tiwai@suse.de>
+Why can't this do:
 
+if (spi->dev.of_node)
+    chip = (int)(uintptr_t)of_device_get_match_data();
+else {
 
-thanks,
-
-Takashi
+>         else {
+> --
+> https://chromeos.dev
+>
