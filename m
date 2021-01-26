@@ -2,138 +2,212 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-19.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8A06C433DB
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Jan 2021 00:00:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A302C433DB
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Jan 2021 00:12:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8180420679
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Jan 2021 00:00:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EDEEA20679
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Jan 2021 00:12:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727243AbhAZXqr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 26 Jan 2021 18:46:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47448 "EHLO mail.kernel.org"
+        id S2389525AbhA0ACw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 26 Jan 2021 19:02:52 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37810 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729073AbhAZSV7 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 26 Jan 2021 13:21:59 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7E859207BC;
-        Tue, 26 Jan 2021 18:21:17 +0000 (UTC)
+        id S1731660AbhAZUYE (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 26 Jan 2021 15:24:04 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2F2B122241;
+        Tue, 26 Jan 2021 20:23:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611685277;
-        bh=MXfhwHib5lhIxe0d2EionO+qD1p7JOcTGIR5T//GcjU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Vyv6zeCgPBGRmLOGE+ZvJN/iEJbaZMbXGNiKs6W7mrLLyXtdvyXRRMjhIUG4flGz0
-         SObPNEWXGHHwcJfUJNuiMDGYMFH/8ozn34f5YEANN+7bqYaurnkm8GG9NwrvNlziq/
-         O+icUTumPpIZFw8RhAofdIEpRpC2YkiAovXOWMQqJg9uQPP3e+v84gtclOugTGmOcV
-         ++aSNFIc4sQpch4zq96vzAnzS+3zaa/mBeaevzYjYP5n9QywZGVOgMQYAiyYmOP+pZ
-         Sq1U3Xwms5ZLaHqaPI4yniW31jcyXpj/T+SM9Ctu5ovfB008PliOds9wV4CCoDyhwc
-         GyVUoh4d1+tyA==
-Received: by mail-ed1-f43.google.com with SMTP id c6so20960185ede.0;
-        Tue, 26 Jan 2021 10:21:17 -0800 (PST)
-X-Gm-Message-State: AOAM531+bSa8/wfSUxTkMkqCWoYP6KAcEK0RB3tUKorghTKbVy0gruDu
-        l16YNSHn7Vbd0RkSMdhlUX5JAJttecisG/5fnw==
-X-Google-Smtp-Source: ABdhPJwqon1vbLCOlmss6J+2GsHVOo4w9BY+GyxQEwzER9kIB9CkFOtLUal0HAuyf9bfo2h5vrYSv5GPYVZbdJOig20=
-X-Received: by 2002:a05:6402:1751:: with SMTP id v17mr5717873edx.289.1611685276124;
- Tue, 26 Jan 2021 10:21:16 -0800 (PST)
-MIME-Version: 1.0
-References: <20210123034428.2841052-1-swboyd@chromium.org>
-In-Reply-To: <20210123034428.2841052-1-swboyd@chromium.org>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 26 Jan 2021 12:21:04 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+voSRnHEEkUZSasdKGrXiBs3yCmzHp6Ua4WNuAgnh4AQ@mail.gmail.com>
-Message-ID: <CAL_Jsq+voSRnHEEkUZSasdKGrXiBs3yCmzHp6Ua4WNuAgnh4AQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/6] Stop NULLifying match pointer in of_match_device()
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
+        s=k20201202; t=1611692602;
+        bh=+EsghCNbKfoMSubSdhekrk7Lexni+2yNl926lkdHUas=;
+        h=From:To:Cc:Subject:Date:From;
+        b=qwRjUfaK417oQM28DFY8h3Ud1rcErIYR4T7Bmp0ZdAgKa8w/gXoTZIhygR/b+QPRG
+         ThnmNkLq6RievbT9icGV7yrwEj9kslvhrvzHMBIAe+3azHatZ+o54YYVY/VFvQvBG1
+         2gntQ3GiBy8pF00YTQQcx72bZ9S7TkTNnBSvI0+t+3R2q4faV0Vu9DS2TNjfCIy/sl
+         BN+RCQ+4b7QG2hM1TNlRmNed7E7oQyQNG8sJnffJFrhym128OmaPciCSTCDWH32zBb
+         eAWcDx0UiTtUizZXKQiyM8Yvcav5WB15Ojw/VbEQ8Gjnt6a25MtgXar7j9Ql1PQyCB
+         tvzORGfjCd4Jg==
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Jean Delvare <jdelvare@suse.com>, Jiri Slaby <jslaby@suse.com>,
-        Linux HWMON List <linux-hwmon@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-omap <linux-omap@vger.kernel.org>,
-        "open list:MEDIA DRIVERS FOR RENESAS - FCP" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Richard Leitner <richard.leitner@skidata.com>
-Content-Type: text/plain; charset="UTF-8"
+        Corentin Chary <corentin.chary@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     linux-spi@vger.kernel.org, acpi4asus-user@lists.sourceforge.net,
+        linux-hwmon@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        alsa-devel@alsa-project.org, linux-acpi@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: [PATCH] ACPI: Test for ACPI_SUCCESS rather than !ACPI_FAILURE
+Date:   Tue, 26 Jan 2021 14:23:17 -0600
+Message-Id: <20210126202317.2914080-1-helgaas@kernel.org>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Jan 22, 2021 at 9:44 PM Stephen Boyd <swboyd@chromium.org> wrote:
->
-> (This is a continuation of this series[1] per Rob's request. I've picked
-> up the acks, etc. with b4 and compile tested the patches along with an
-> arm64 allmodconfig build. Presumably Rob will pick these up directly.)
->
-> of_match_device() uses of_match_ptr() to make the match table argument
-> NULL via the pre-processor when CONFIG_OF=n. This makes life harder for
-> compilers who think that match tables are never used and warn about
-> unused variables when CONFIG_OF=n. This series changes various callers
-> to use of_device_get_match_data() instead, which doesn't have this
-> problem, and removes the of_match_ptr() usage from of_match_device() so
-> that the compiler can stop complaining about unused variables. It will
-> do dead code elimination instead and remove the match table if it isn't
-> actually used.
->
-> [1] https://lore.kernel.org/r/20191004214334.149976-1-swboyd@chromium.org
->
-> Cc: Alexandre Torgue <alexandre.torgue@st.com>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Frank Rowand <frowand.list@gmail.com>
-> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Grygorii Strashko <grygorii.strashko@ti.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Jacopo Mondi <jacopo@jmondi.org>
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Jiri Slaby <jslaby@suse.com>
-> Cc: <linux-hwmon@vger.kernel.org>
-> Cc: <linux-kernel@vger.kernel.org>,
-> Cc: <linux-media@vger.kernel.org>
-> Cc: <linux-omap@vger.kernel.org>
-> Cc: <linux-renesas-soc@vger.kernel.org>
-> Cc: <linux-serial@vger.kernel.org>
-> Cc: <linux-usb@vger.kernel.org>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-> Cc: Richard Leitner <richard.leitner@skidata.com>
-> Cc: Rob Herring <robh+dt@kernel.org>
->
-> Stephen Boyd (6):
->   media: renesas-ceu: Use of_device_get_match_data()
->   drivers: net: davinci_mdio: Use of_device_get_match_data()
->   serial: stm32: Use of_device_get_match_data()
->   usb: usb251xb: Use of_device_get_match_data()
->   hwmon: (lm70) Avoid undefined reference to match table
->   of/device: Don't NULLify match table in of_match_device() with
->     CONFIG_OF=n
->
->  drivers/hwmon/lm70.c                   |  2 +-
->  drivers/media/platform/renesas-ceu.c   |  2 +-
->  drivers/net/ethernet/ti/davinci_mdio.c | 12 ++---
->  drivers/tty/serial/stm32-usart.c       | 71 ++++++++++++--------------
->  drivers/tty/serial/stm32-usart.h       |  2 +-
->  drivers/usb/misc/usb251xb.c            | 12 ++---
->  include/linux/of_device.h              |  4 +-
->  7 files changed, 47 insertions(+), 58 deletions(-)
+From: Bjorn Helgaas <bhelgaas@google.com>
 
-Series applied.
+The double negative makes it hard to read "if (!ACPI_FAILURE(status))".
+Replace it with "if (ACPI_SUCCESS(status))".
+
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+---
+
+This isn't really an ACPI patch, but I'm sending it to you, Rafael, since
+it seems easier to just apply these all at once.  But I'd be happy to split
+them up into individual patches if you'd rather.
 
 
-Rob
+ drivers/gpu/drm/amd/amdgpu/amdgpu_bios.c | 4 ++--
+ drivers/gpu/drm/radeon/radeon_bios.c     | 4 ++--
+ drivers/hwmon/acpi_power_meter.c         | 4 ++--
+ drivers/platform/x86/asus-laptop.c       | 6 +++---
+ drivers/spi/spi.c                        | 2 +-
+ sound/pci/hda/hda_intel.c                | 4 ++--
+ 6 files changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_bios.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_bios.c
+index 6333cada1e09..055f600eeed8 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_bios.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_bios.c
+@@ -291,7 +291,7 @@ static bool amdgpu_atrm_get_bios(struct amdgpu_device *adev)
+ 			continue;
+ 
+ 		status = acpi_get_handle(dhandle, "ATRM", &atrm_handle);
+-		if (!ACPI_FAILURE(status)) {
++		if (ACPI_SUCCESS(status)) {
+ 			found = true;
+ 			break;
+ 		}
+@@ -304,7 +304,7 @@ static bool amdgpu_atrm_get_bios(struct amdgpu_device *adev)
+ 				continue;
+ 
+ 			status = acpi_get_handle(dhandle, "ATRM", &atrm_handle);
+-			if (!ACPI_FAILURE(status)) {
++			if (ACPI_SUCCESS(status)) {
+ 				found = true;
+ 				break;
+ 			}
+diff --git a/drivers/gpu/drm/radeon/radeon_bios.c b/drivers/gpu/drm/radeon/radeon_bios.c
+index bb29cf02974d..43bbbfd6ade8 100644
+--- a/drivers/gpu/drm/radeon/radeon_bios.c
++++ b/drivers/gpu/drm/radeon/radeon_bios.c
+@@ -205,7 +205,7 @@ static bool radeon_atrm_get_bios(struct radeon_device *rdev)
+ 			continue;
+ 
+ 		status = acpi_get_handle(dhandle, "ATRM", &atrm_handle);
+-		if (!ACPI_FAILURE(status)) {
++		if (ACPI_SUCCESS(status)) {
+ 			found = true;
+ 			break;
+ 		}
+@@ -218,7 +218,7 @@ static bool radeon_atrm_get_bios(struct radeon_device *rdev)
+ 				continue;
+ 
+ 			status = acpi_get_handle(dhandle, "ATRM", &atrm_handle);
+-			if (!ACPI_FAILURE(status)) {
++			if (ACPI_SUCCESS(status)) {
+ 				found = true;
+ 				break;
+ 			}
+diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
+index 848718ab7312..7d3ddcba34ce 100644
+--- a/drivers/hwmon/acpi_power_meter.c
++++ b/drivers/hwmon/acpi_power_meter.c
+@@ -161,7 +161,7 @@ static ssize_t set_avg_interval(struct device *dev,
+ 	mutex_lock(&resource->lock);
+ 	status = acpi_evaluate_integer(resource->acpi_dev->handle, "_PAI",
+ 				       &args, &data);
+-	if (!ACPI_FAILURE(status))
++	if (ACPI_SUCCESS(status))
+ 		resource->avg_interval = temp;
+ 	mutex_unlock(&resource->lock);
+ 
+@@ -232,7 +232,7 @@ static ssize_t set_cap(struct device *dev, struct device_attribute *devattr,
+ 	mutex_lock(&resource->lock);
+ 	status = acpi_evaluate_integer(resource->acpi_dev->handle, "_SHL",
+ 				       &args, &data);
+-	if (!ACPI_FAILURE(status))
++	if (ACPI_SUCCESS(status))
+ 		resource->cap = temp;
+ 	mutex_unlock(&resource->lock);
+ 
+diff --git a/drivers/platform/x86/asus-laptop.c b/drivers/platform/x86/asus-laptop.c
+index 0edafe687fa9..bfea656e910c 100644
+--- a/drivers/platform/x86/asus-laptop.c
++++ b/drivers/platform/x86/asus-laptop.c
+@@ -861,7 +861,7 @@ static ssize_t infos_show(struct device *dev, struct device_attribute *attr,
+ 	 * The significance of others is yet to be found.
+ 	 */
+ 	rv = acpi_evaluate_integer(asus->handle, "SFUN", NULL, &temp);
+-	if (!ACPI_FAILURE(rv))
++	if (ACPI_SUCCESS(rv))
+ 		len += sprintf(page + len, "SFUN value         : %#x\n",
+ 			       (uint) temp);
+ 	/*
+@@ -873,7 +873,7 @@ static ssize_t infos_show(struct device *dev, struct device_attribute *attr,
+ 	 * takes several seconds to run on some systems.
+ 	 */
+ 	rv = acpi_evaluate_integer(asus->handle, "HWRS", NULL, &temp);
+-	if (!ACPI_FAILURE(rv))
++	if (ACPI_SUCCESS(rv))
+ 		len += sprintf(page + len, "HWRS value         : %#x\n",
+ 			       (uint) temp);
+ 	/*
+@@ -884,7 +884,7 @@ static ssize_t infos_show(struct device *dev, struct device_attribute *attr,
+ 	 * silently ignored.
+ 	 */
+ 	rv = acpi_evaluate_integer(asus->handle, "ASYM", NULL, &temp);
+-	if (!ACPI_FAILURE(rv))
++	if (ACPI_SUCCESS(rv))
+ 		len += sprintf(page + len, "ASYM value         : %#x\n",
+ 			       (uint) temp);
+ 	if (asus->dsdt_info) {
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 720ab34784c1..801d8b499788 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -2210,7 +2210,7 @@ static acpi_status acpi_register_spi_device(struct spi_controller *ctlr,
+ 		return AE_OK;
+ 
+ 	if (!lookup.max_speed_hz &&
+-	    !ACPI_FAILURE(acpi_get_parent(adev->handle, &parent_handle)) &&
++	    ACPI_SUCCESS(acpi_get_parent(adev->handle, &parent_handle)) &&
+ 	    ACPI_HANDLE(ctlr->dev.parent) == parent_handle) {
+ 		/* Apple does not use _CRS but nested devices for SPI slaves */
+ 		acpi_spi_parse_apple_properties(adev, &lookup);
+diff --git a/sound/pci/hda/hda_intel.c b/sound/pci/hda/hda_intel.c
+index 770ad25f1907..fe8049cd2765 100644
+--- a/sound/pci/hda/hda_intel.c
++++ b/sound/pci/hda/hda_intel.c
+@@ -1444,7 +1444,7 @@ static bool atpx_present(void)
+ 		dhandle = ACPI_HANDLE(&pdev->dev);
+ 		if (dhandle) {
+ 			status = acpi_get_handle(dhandle, "ATPX", &atpx_handle);
+-			if (!ACPI_FAILURE(status)) {
++			if (ACPI_SUCCESS(status)) {
+ 				pci_dev_put(pdev);
+ 				return true;
+ 			}
+@@ -1454,7 +1454,7 @@ static bool atpx_present(void)
+ 		dhandle = ACPI_HANDLE(&pdev->dev);
+ 		if (dhandle) {
+ 			status = acpi_get_handle(dhandle, "ATPX", &atpx_handle);
+-			if (!ACPI_FAILURE(status)) {
++			if (ACPI_SUCCESS(status)) {
+ 				pci_dev_put(pdev);
+ 				return true;
+ 			}
+-- 
+2.25.1
+
