@@ -2,107 +2,158 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-17.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 07852C433E6
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Jan 2021 07:36:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73719C433E9
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Jan 2021 09:22:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CBD7020663
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Jan 2021 07:36:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 24E812075B
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Jan 2021 09:22:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S314601AbhA0AAc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 26 Jan 2021 19:00:32 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48712 "EHLO mail.kernel.org"
+        id S234988AbhA0JW3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 27 Jan 2021 04:22:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38116 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390018AbhAZSbw (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 26 Jan 2021 13:31:52 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 620E32224C;
-        Tue, 26 Jan 2021 18:31:11 +0000 (UTC)
+        id S234905AbhA0JUQ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 27 Jan 2021 04:20:16 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4DAB32075B;
+        Wed, 27 Jan 2021 09:19:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611685871;
-        bh=hwpSfinBZDh5+w+x/QjBXQLW3oRDY80SILSq+Y5HHDo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=DbOc4zipI517A/lToLn+hLdBxnb+4ETZgccGUoDS8yTx9I8CKUKe43KkrBpH2KNhG
-         e0TC9cE2cVJ36WFnsJ5mT095cOpAHT5QBmTtwlylevIm6IP0hcaSUAzzfro3uxMJIF
-         ftPMqQ63SPF0NLgoBnzcnp/s94+cuxluyG8rzolofAm/h1bKrECj7/ccYV4kmB1vRP
-         F3OJZfdJjkZSOKkNmVSk39VQGoAJkWiDpZdGvacm5sx9jttzp/E0xjt64kZQM1LItN
-         4uizTTRZqSBEgLk+gwWSVJbledYwceh17445fTuiVRxVGoXCXXuARoGHCK/hClwAoG
-         sMu42Mx2KdqFg==
-Received: by mail-qk1-f175.google.com with SMTP id x81so14041717qkb.0;
-        Tue, 26 Jan 2021 10:31:11 -0800 (PST)
-X-Gm-Message-State: AOAM532aqv1C31Bb7aQWOAOMfsnMtd3ajgVQFfokF2vfpvpQBkAUz0Yy
-        g6+e7zqNEHRYM4iHXVAoFNYOnpZ4D1fK8nGDrw==
-X-Google-Smtp-Source: ABdhPJx5ciP8LyJGQSq/H1+pseWon7Ig+U4yOWlMwo2IZRc9cg1vUsBdUbLWYhYdqnQx92cYs4tCNXh/KuAPK0M0fVw=
-X-Received: by 2002:a37:642:: with SMTP id 63mr6985257qkg.311.1611685870559;
- Tue, 26 Jan 2021 10:31:10 -0800 (PST)
+        s=k20201202; t=1611739176;
+        bh=tM1ozBWi0uNXg+q6YwCl7gQK0QJHNvuk0ARRzfvOIGg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=E0QsD4JmQWrPsrwfkMc2X4WAYeHGU337JKTcNXDH2J5yb3+Bf82hY8aQsmrNisX0A
+         nfmwljPRi6atQpAOuFiFLkDyhBbzEF1uDP2AiKNciMOavpRHDNoZXnJn38B1ug6mPz
+         ka7rb0jZWIfFVi6ENpnk3USHaKX1w61DkOnMXQ7VlcGNqppncGaDSkhJ0xPASj7JYv
+         c7aLoCHPyd96wZtKR1hbvnrhd9AB2OLCujGFVl7iq0XShpeHA/MSmh0Tanqxbb09LU
+         g45fDzhU/PE+BPGCTO29a1ccig97GEzCtvfFWERv64ap6030ytWVHdSz+T3/Wi2wRa
+         fWa3q6J3Zq5cg==
+Received: by pali.im (Postfix)
+        id D03AC5CD; Wed, 27 Jan 2021 10:19:33 +0100 (CET)
+Date:   Wed, 27 Jan 2021 10:19:33 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Tom Hebb <tommyhebb@gmail.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Bob Hepple <bob.hepple@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (dell-smm) Add XPS 15 L502X to fan control
+ blacklist
+Message-ID: <20210127091933.haq6nmbmx3cskh5t@pali>
+References: <a09eea7616881d40d2db2fb5fa2770dc6166bdae.1611456351.git.tommyhebb@gmail.com>
+ <20210125100540.55wbgdsem3htplx3@pali>
+ <CAMcCCgTo87HmwexZS696ok16e9s_8gRgFd38uoLP34r7TbAzBg@mail.gmail.com>
+ <CAHzpm2hk4+0FyFrcGYN-JJfx5Ka8yoM8mTsYZA_4WHfWYGa4yQ@mail.gmail.com>
+ <CAHzpm2h2X8ZKEtRxnD-mwyEv=B8J+tH_spFGD2VzfwGdRAaHMw@mail.gmail.com>
+ <CAMcCCgQRDRi1LpxJBTvKcB+dALJJsn=n5Q=Wyvfcw9LGqqjq7Q@mail.gmail.com>
 MIME-Version: 1.0
-References: <20210123034428.2841052-1-swboyd@chromium.org> <20210123034428.2841052-6-swboyd@chromium.org>
-In-Reply-To: <20210123034428.2841052-6-swboyd@chromium.org>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 26 Jan 2021 12:30:58 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJbdfhqNF4xgues0Rm7KS8_8Xq2767q7DcdyeQ_Vqb58Q@mail.gmail.com>
-Message-ID: <CAL_JsqJbdfhqNF4xgues0Rm7KS8_8Xq2767q7DcdyeQ_Vqb58Q@mail.gmail.com>
-Subject: Re: [PATCH v2 5/6] hwmon: (lm70) Avoid undefined reference to match table
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Linux HWMON List <linux-hwmon@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMcCCgQRDRi1LpxJBTvKcB+dALJJsn=n5Q=Wyvfcw9LGqqjq7Q@mail.gmail.com>
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Jan 22, 2021 at 9:44 PM Stephen Boyd <swboyd@chromium.org> wrote:
->
-> We're going to remove of_match_ptr() from the definition of
-> of_match_device() when CONFIG_OF=n. This way we can always be certain
-> that of_match_device() acts the same when CONFIG_OF is set and when it
-> isn't. Add of_match_ptr() here so that this doesn't break when that
-> change is made to the of_match_device() API.
->
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> Acked-by: Guenter Roeck <linux@roeck-us.net>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Frank Rowand <frowand.list@gmail.com>
-> Cc: <linux-hwmon@vger.kernel.org>
-> ---
->
-> Please ack so Rob can apply.
->
->  drivers/hwmon/lm70.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/hwmon/lm70.c b/drivers/hwmon/lm70.c
-> index ae2b84263a44..e3153ae80634 100644
-> --- a/drivers/hwmon/lm70.c
-> +++ b/drivers/hwmon/lm70.c
-> @@ -178,7 +178,7 @@ static int lm70_probe(struct spi_device *spi)
->         struct lm70 *p_lm70;
->         int chip;
->
-> -       of_match = of_match_device(lm70_of_ids, &spi->dev);
-> +       of_match = of_match_device(of_match_ptr(lm70_of_ids), &spi->dev);
->         if (of_match)
->                 chip = (int)(uintptr_t)of_match->data;
+On Tuesday 26 January 2021 00:15:13 Tom Hebb wrote:
+> Bob reports that blacklisting the fan type label is not sufficient.
+> See his message to me below.
 
-Why can't this do:
+Ok! Thank you for confirmation.
 
-if (spi->dev.of_node)
-    chip = (int)(uintptr_t)of_device_get_match_data();
-else {
+And my second question which I have asked:
+And have you reported this issue to Dell support?
 
->         else {
-> --
-> https://chromeos.dev
->
+> On Mon, Jan 25, 2021 at 3:38 PM Bob Hepple <bob.hepple@gmail.com> wrote:
+> >
+> > Hi Tom,
+> >
+> > Big nope this end with L502x in i8k_blacklist_fan_type_dmi_table:
+> >
+> > Jan 26 09:35:47 achar kernel: psmouse serio1: TouchPad at
+> > isa0060/serio1/input0 lost synchronization, throwing 1 bytes>
+> >
+> > ... and lots of trackpad stall/stutters.
+> >
+> > Cheers
+> >
+> >
+> > Bob
+> >
+> >
+> >
+> > On Tue, 26 Jan 2021 at 08:09, Bob Hepple <bob.hepple@gmail.com> wrote:
+> > >
+> > > ... compiling now ... results in a coupla hours
+> > >
+> > > Cheers
+> > >
+> > >
+> > > Bob
+> > >
+> > > On Tue, 26 Jan 2021 at 04:05, Tom Hebb <tommyhebb@gmail.com> wrote:
+> > > >
+> > > > On Mon, Jan 25, 2021 at 2:05 AM Pali Rohár <pali@kernel.org> wrote:
+> > > > >
+> > > > > On Saturday 23 January 2021 18:46:08 Thomas Hebb wrote:
+> > > > > > It has been reported[0] that the Dell XPS 15 L502X exhibits similar
+> > > > > > freezing behavior to the other systems[1] on this blacklist. The issue
+> > > > > > was exposed by a prior change of mine to automatically load
+> > > > > > dell_smm_hwmon on a wider set of XPS models. To fix the regression, add
+> > > > > > this model to the blacklist.
+> > > > > >
+> > > > > > [0] https://bugzilla.kernel.org/show_bug.cgi?id=211081
+> > > > > > [1] https://bugzilla.kernel.org/show_bug.cgi?id=195751
+> > > > > >
+> > > > > > Fixes: b8a13e5e8f37 ("hwmon: (dell-smm) Use one DMI match for all XPS models")
+> > > > > > Cc: stable@vger.kernel.org
+> > > > > > Reported-by: Bob Hepple <bob.hepple@gmail.com>
+> > > > > > Tested-by: Bob Hepple <bob.hepple@gmail.com>
+> > > > > > Signed-off-by: Thomas Hebb <tommyhebb@gmail.com>
+> > > > > > ---
+> > > > > >
+> > > > > >  drivers/hwmon/dell-smm-hwmon.c | 7 +++++++
+> > > > > >  1 file changed, 7 insertions(+)
+> > > > > >
+> > > > > > diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+> > > > > > index ec448f5f2dc3..73b9db9e3aab 100644
+> > > > > > --- a/drivers/hwmon/dell-smm-hwmon.c
+> > > > > > +++ b/drivers/hwmon/dell-smm-hwmon.c
+> > > > > > @@ -1159,6 +1159,13 @@ static struct dmi_system_id i8k_blacklist_fan_support_dmi_table[] __initdata = {
+> > > > > >                       DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "XPS13 9333"),
+> > > > > >               },
+> > > > > >       },
+> > > > > > +     {
+> > > > > > +             .ident = "Dell XPS 15 L502X",
+> > > > > > +             .matches = {
+> > > > > > +                     DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
+> > > > > > +                     DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Dell System XPS L502X"),
+> > > > >
+> > > > > Hello! Are you sure that it is required to completely disable fan
+> > > > > support? And not only access to fan type label for which is different
+> > > > > blaclist i8k_blacklist_fan_type_dmi_table?
+> > > >
+> > > > This is a good question. We didn't try the other list. Bob is the one with the
+> > > > affected system. Could you try moving the added block of code from
+> > > > i8k_blacklist_fan_support_dmi_table a few lines up to
+> > > > i8k_blacklist_fan_type_dmi_table, Bob, to see if the issue reappears or if it
+> > > > remains fixed?
+> > > >
+> > > > >
+> > > > > And have you reported this issue to Dell support?
+> > > > >
+> > > > > > +             },
+> > > > > > +     },
+> > > > > >       { }
+> > > > > >  };
+> > > > > >
+> > > > > > --
+> > > > > > 2.30.0
+> > > > > >
+> > > >
+> > > > (Apologies for the previous HTML copy of this reply, to those directly CCed.)
+> > > >
+> > > > -Tom
