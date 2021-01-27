@@ -2,79 +2,91 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA51EC433E6
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Jan 2021 09:47:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA8E6C433E6
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Jan 2021 11:32:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 765B62076E
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Jan 2021 09:47:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 87D282075E
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Jan 2021 11:32:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235453AbhA0Jqp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 27 Jan 2021 04:46:45 -0500
-Received: from smtp.outgoing.loopia.se ([93.188.3.37]:29476 "EHLO
-        smtp.outgoing.loopia.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232864AbhA0I7r (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 27 Jan 2021 03:59:47 -0500
-X-Greylist: delayed 772 seconds by postgrey-1.27 at vger.kernel.org; Wed, 27 Jan 2021 03:59:46 EST
-Received: from s807.loopia.se (localhost [127.0.0.1])
-        by s807.loopia.se (Postfix) with ESMTP id 555162464450
-        for <linux-hwmon@vger.kernel.org>; Wed, 27 Jan 2021 09:42:35 +0100 (CET)
-Received: from s500.loopia.se (unknown [172.22.191.5])
-        by s807.loopia.se (Postfix) with ESMTP id 354E52E29A02;
-        Wed, 27 Jan 2021 09:42:35 +0100 (CET)
-Received: from s471.loopia.se (unknown [172.22.191.6])
-        by s500.loopia.se (Postfix) with ESMTP id 241561E28537;
-        Wed, 27 Jan 2021 09:42:35 +0100 (CET)
-X-Virus-Scanned: amavisd-new at amavis.loopia.se
-Received: from s500.loopia.se ([172.22.191.6])
-        by s471.loopia.se (s471.loopia.se [172.22.190.11]) (amavisd-new, port 10024)
-        with LMTP id qXO9IDQ8dZBx; Wed, 27 Jan 2021 09:42:34 +0100 (CET)
-X-Loopia-Auth: user
-X-Loopia-User: carl@hgsystem.se
-X-Loopia-Originating-IP: 94.234.44.220
-Received: from localhost.localdomain (unknown [94.234.44.220])
-        (Authenticated sender: carl@hgsystem.se)
-        by s500.loopia.se (Postfix) with ESMTPSA id 174361E24FD1;
-        Wed, 27 Jan 2021 09:42:34 +0100 (CET)
-From:   Erik Rosen <erik.rosen@metormote.com>
-To:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        id S236864AbhA0Lcc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 27 Jan 2021 06:32:32 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34356 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234567AbhA0La2 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 27 Jan 2021 06:30:28 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A2EE32076E;
+        Wed, 27 Jan 2021 11:29:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611746980;
+        bh=MeXh87PhrXGbxuFNLGsx1zwPAc25m19iwuT8SQtjfxM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mN3AANCpN24xFffemzewOHV6grTdbxxS9mB86vkxuBnaH3UP65G7fhJ4XbU6mlVuE
+         bOiBn8AfBKsWcqHfnUgWPLEAy33uVN10uS5fxR406SbIoPD4l268dDhS1W4Vxl9ezo
+         x4y55qp7EzLbFu321LifyESl+IQmsbmjvi2F3gTdPIiLWNZhEtRkdbub/V9Zo/3vO5
+         amAQlDSJT2ZV8QlvHhU2KUn5QsFEpcfSYWtWqntRrXXnT2HdrN2pIHjQUXjdBvLpx5
+         1JHhFLbfXqlhonfYw2i2gWc5UclrLPTcG5HvjMB8+FAlq2V/GQAECRgaSoZioVa5hO
+         BTi4jsm5haKKw==
+Date:   Wed, 27 Jan 2021 11:28:57 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     Erik Rosen <erik.rosen@metormote.com>
-Subject: [PATCH 0/1] Add ST STPDDC60 pmbus driver
-Date:   Wed, 27 Jan 2021 09:41:39 +0100
-Message-Id: <20210127084140.35626-1-erik.rosen@metormote.com>
-X-Mailer: git-send-email 2.11.0 (Apple Git-81)
+        Corentin Chary <corentin.chary@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-spi@vger.kernel.org,
+        acpi4asus-user@lists.sourceforge.net, linux-hwmon@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, alsa-devel@alsa-project.org,
+        linux-acpi@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH] ACPI: Test for ACPI_SUCCESS rather than !ACPI_FAILURE
+Message-ID: <20210127112857.GA4387@sirena.org.uk>
+References: <20210126202317.2914080-1-helgaas@kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bg08WKrSYDhXBjb5"
+Content-Disposition: inline
+In-Reply-To: <20210126202317.2914080-1-helgaas@kernel.org>
+X-Cookie: La-dee-dee, la-dee-dah.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This patch adds a pmbus client driver for the ST STPDDC60 Universal
-Digital Multicell Controller chip. The technical specification is
-not made publicly available, but the pmbus parts are described in the
-specification for the BMR481 converter.
 
-The patch has been tested with a Flex BMR481 converter module.
+--bg08WKrSYDhXBjb5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, Jan 26, 2021 at 02:23:17PM -0600, Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
+>=20
+> The double negative makes it hard to read "if (!ACPI_FAILURE(status))".
+> Replace it with "if (ACPI_SUCCESS(status))".
 
-Erik Rosen (1):
-  Add ST STPDDC60 pmbus driver
+Acked-by: Mark Brown <broonie@kernel.org>
 
- Documentation/hwmon/index.rst    |   1 +
- Documentation/hwmon/stpddc60.rst |  79 +++++++++++++
- MAINTAINERS                      |   7 ++
- drivers/hwmon/pmbus/Kconfig      |  10 ++
- drivers/hwmon/pmbus/Makefile     |   2 +
- drivers/hwmon/pmbus/stpddc60.c   | 188 +++++++++++++++++++++++++++++++
- 6 files changed, 287 insertions(+)
- create mode 100644 Documentation/hwmon/stpddc60.rst
- create mode 100644 drivers/hwmon/pmbus/stpddc60.c
+--bg08WKrSYDhXBjb5
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-2.20.1
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmARTngACgkQJNaLcl1U
+h9C2dwf9GE0PHhDzOzGae10MRkXBNzBdmeTf035YAM12jQ6o9G9kDK3xBSA64Jcy
+rr3+mkHvYkCEBEdAzV25MDRg2iXAoLBYJdmfMHXt/u9D0aJf80gMEXgrUDE6yjQo
+AJvXTJrJqu+KS2RMpnxIHfO1rXRZrQMIAln9GbePtqKjGUN5cx6QJKUDYyrMlevp
+9KZr/ClGQmLOYJ7suU9mr1NFgEgf6XnsU7Gq6BGuyo10GO62Qg3bztHtkiiRxz/x
+zvr9PngfutrIGT7qfvKBSmWk2y50qe5XDeJRD8e6YbFS/Ge5LnOwmNc24jjts04w
+OE5TwTVKRHFfy39WTQ3IdmJaznDhqg==
+=b7Y/
+-----END PGP SIGNATURE-----
+
+--bg08WKrSYDhXBjb5--
