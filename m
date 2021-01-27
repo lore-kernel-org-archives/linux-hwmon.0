@@ -2,158 +2,420 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73719C433E9
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Jan 2021 09:22:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AEEDC433E6
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Jan 2021 09:46:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 24E812075B
-	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Jan 2021 09:22:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 358DF20771
+	for <linux-hwmon@archiver.kernel.org>; Wed, 27 Jan 2021 09:46:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234988AbhA0JW3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 27 Jan 2021 04:22:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38116 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234905AbhA0JUQ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 27 Jan 2021 04:20:16 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4DAB32075B;
-        Wed, 27 Jan 2021 09:19:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611739176;
-        bh=tM1ozBWi0uNXg+q6YwCl7gQK0QJHNvuk0ARRzfvOIGg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E0QsD4JmQWrPsrwfkMc2X4WAYeHGU337JKTcNXDH2J5yb3+Bf82hY8aQsmrNisX0A
-         nfmwljPRi6atQpAOuFiFLkDyhBbzEF1uDP2AiKNciMOavpRHDNoZXnJn38B1ug6mPz
-         ka7rb0jZWIfFVi6ENpnk3USHaKX1w61DkOnMXQ7VlcGNqppncGaDSkhJ0xPASj7JYv
-         c7aLoCHPyd96wZtKR1hbvnrhd9AB2OLCujGFVl7iq0XShpeHA/MSmh0Tanqxbb09LU
-         g45fDzhU/PE+BPGCTO29a1ccig97GEzCtvfFWERv64ap6030ytWVHdSz+T3/Wi2wRa
-         fWa3q6J3Zq5cg==
-Received: by pali.im (Postfix)
-        id D03AC5CD; Wed, 27 Jan 2021 10:19:33 +0100 (CET)
-Date:   Wed, 27 Jan 2021 10:19:33 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Tom Hebb <tommyhebb@gmail.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Bob Hepple <bob.hepple@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (dell-smm) Add XPS 15 L502X to fan control
- blacklist
-Message-ID: <20210127091933.haq6nmbmx3cskh5t@pali>
-References: <a09eea7616881d40d2db2fb5fa2770dc6166bdae.1611456351.git.tommyhebb@gmail.com>
- <20210125100540.55wbgdsem3htplx3@pali>
- <CAMcCCgTo87HmwexZS696ok16e9s_8gRgFd38uoLP34r7TbAzBg@mail.gmail.com>
- <CAHzpm2hk4+0FyFrcGYN-JJfx5Ka8yoM8mTsYZA_4WHfWYGa4yQ@mail.gmail.com>
- <CAHzpm2h2X8ZKEtRxnD-mwyEv=B8J+tH_spFGD2VzfwGdRAaHMw@mail.gmail.com>
- <CAMcCCgQRDRi1LpxJBTvKcB+dALJJsn=n5Q=Wyvfcw9LGqqjq7Q@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMcCCgQRDRi1LpxJBTvKcB+dALJJsn=n5Q=Wyvfcw9LGqqjq7Q@mail.gmail.com>
-User-Agent: NeoMutt/20180716
+        id S234224AbhA0Jqe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 27 Jan 2021 04:46:34 -0500
+Received: from smtp.outgoing.loopia.se ([93.188.3.37]:31286 "EHLO
+        smtp.outgoing.loopia.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234217AbhA0JAA (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 27 Jan 2021 04:00:00 -0500
+Received: from s807.loopia.se (localhost [127.0.0.1])
+        by s807.loopia.se (Postfix) with ESMTP id 783A524694A0
+        for <linux-hwmon@vger.kernel.org>; Wed, 27 Jan 2021 09:42:43 +0100 (CET)
+Received: from s500.loopia.se (unknown [172.22.191.5])
+        by s807.loopia.se (Postfix) with ESMTP id 57CC32E29A02;
+        Wed, 27 Jan 2021 09:42:43 +0100 (CET)
+Received: from s474.loopia.se (unknown [172.22.191.6])
+        by s500.loopia.se (Postfix) with ESMTP id 42C9E1E32E90;
+        Wed, 27 Jan 2021 09:42:43 +0100 (CET)
+X-Virus-Scanned: amavisd-new at amavis.loopia.se
+Received: from s500.loopia.se ([172.22.191.6])
+        by s474.loopia.se (s474.loopia.se [172.22.190.14]) (amavisd-new, port 10024)
+        with LMTP id QkIGDK_0Ygsc; Wed, 27 Jan 2021 09:42:42 +0100 (CET)
+X-Loopia-Auth: user
+X-Loopia-User: carl@hgsystem.se
+X-Loopia-Originating-IP: 94.234.44.220
+Received: from localhost.localdomain (unknown [94.234.44.220])
+        (Authenticated sender: carl@hgsystem.se)
+        by s500.loopia.se (Postfix) with ESMTPSA id D13251E32EB5;
+        Wed, 27 Jan 2021 09:42:41 +0100 (CET)
+From:   Erik Rosen <erik.rosen@metormote.com>
+To:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     Erik Rosen <erik.rosen@metormote.com>
+Subject: [PATCH 1/1] Add ST STPDDC60 pmbus driver
+Date:   Wed, 27 Jan 2021 09:41:40 +0100
+Message-Id: <20210127084140.35626-2-erik.rosen@metormote.com>
+X-Mailer: git-send-email 2.11.0 (Apple Git-81)
+In-Reply-To: <20210127084140.35626-1-erik.rosen@metormote.com>
+References: <20210127084140.35626-1-erik.rosen@metormote.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tuesday 26 January 2021 00:15:13 Tom Hebb wrote:
-> Bob reports that blacklisting the fan type label is not sufficient.
-> See his message to me below.
+Add ST STPDDC60 pmbus client driver.
 
-Ok! Thank you for confirmation.
+Signed-off-by: Erik Rosen <erik.rosen@metormote.com>
+---
+ Documentation/hwmon/index.rst    |   1 +
+ Documentation/hwmon/stpddc60.rst |  79 +++++++++++++
+ MAINTAINERS                      |   7 ++
+ drivers/hwmon/pmbus/Kconfig      |  10 ++
+ drivers/hwmon/pmbus/Makefile     |   2 +
+ drivers/hwmon/pmbus/stpddc60.c   | 188 +++++++++++++++++++++++++++++++
+ 6 files changed, 287 insertions(+)
+ create mode 100644 Documentation/hwmon/stpddc60.rst
+ create mode 100644 drivers/hwmon/pmbus/stpddc60.c
 
-And my second question which I have asked:
-And have you reported this issue to Dell support?
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index fcb870ce6286..94b4fcf182cd 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -169,6 +169,7 @@ Hardware Monitoring Kernel Drivers
+    smsc47m192
+    smsc47m1
+    sparx5-temp
++   stpddc60
+    tc654
+    tc74
+    thmc50
+diff --git a/Documentation/hwmon/stpddc60.rst b/Documentation/hwmon/stpddc60.rst
+new file mode 100644
+index 000000000000..11d5a9977e80
+--- /dev/null
++++ b/Documentation/hwmon/stpddc60.rst
+@@ -0,0 +1,79 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++Kernel driver stpddc60
++======================
++
++Supported chips:
++
++  * ST STPDDC60
++
++    Prefix: 'stpddc60', 'bmr481'
++
++    Addresses scanned: -
++
++    Datasheet: https://flexpowermodules.com/documents/fpm-techspec-bmr481
++
++Author: Erik Rosen <erik.rosen@metormote.com>
++
++
++Description
++-----------
++
++This driver supports hardware monitoring for ST STPDDC60 controller chip and
++compatible modules.
++
++The driver is a client driver to the core PMBus driver. Please see
++Documentation/hwmon/pmbus.rst and Documentation.hwmon/pmbus-core for details
++on PMBus client drivers.
++
++
++Usage Notes
++-----------
++
++This driver does not auto-detect devices. You will have to instantiate the
++devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
++details.
++
++The vout under- and over-voltage limits are read-only for this chip.
++
++
++Platform data support
++---------------------
++
++The driver supports standard PMBus driver platform data.
++
++
++Sysfs entries
++-------------
++
++The following attributes are supported. Vin, iout and temp limits
++are read-write; all other attributes are read-only.
++
++======================= ========================================================
++in1_label		"vin"
++in1_input		Measured input voltage.
++in1_lcrit		Critical minimum input voltage.
++in1_crit		Critical maximum input voltage.
++in1_lcrit_alarm		Input voltage critical low alarm.
++in1_crit_alarm		Input voltage critical high alarm.
++
++in2_label		"vout1"
++in2_input		Measured output voltage.
++in2_lcrit		Critical minimum output Voltage.
++in2_crit		Critical maximum output voltage.
++in2_lcrit_alarm		Critical output voltage critical low alarm.
++in2_crit_alarm		Critical output voltage critical high alarm.
++
++curr1_label		"iout1"
++curr1_input		Measured output current.
++curr1_max		Maximum output current.
++curr1_max_alarm		Output current high alarm.
++curr1_crit		Critical maximum output current.
++curr1_crit_alarm	Output current critical high alarm.
++
++temp1_input		Measured maximum temperature of all phases.
++temp1_max		Maximum temperature limit.
++temp1_max_alarm		High temperature alarm.
++temp1_crit		Critical maximum temperature limit.
++temp1_crit_alarm	Critical maximum temperature alarm.
++======================= ========================================================
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 992fe3b0900a..e4c696f8eabe 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -16819,6 +16819,13 @@ L:	linux-i2c@vger.kernel.org
+ S:	Maintained
+ F:	drivers/i2c/busses/i2c-stm32*
+ 
++ST STPDDC60 DRIVER
++M:	Daniel Nilsson <daniel.nilsson@flex.com>
++L:	linux-hwmon@vger.kernel.org
++S:	Maintained
++F:	Documentation/hwmon/stpddc60.rst
++F:	drivers/hwmon/pmbus/stpddc60.c
++
+ ST VL53L0X ToF RANGER(I2C) IIO DRIVER
+ M:	Song Qiang <songqiang1304521@gmail.com>
+ L:	linux-iio@vger.kernel.org
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index 03606d4298a4..b2becdd84b11 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -247,6 +247,16 @@ config SENSORS_Q54SJ108A2
+ 	  This driver can also be built as a module. If so, the module will
+ 	  be called q54sj108a2.
+ 
++config SENSORS_STPDDC60
++	tristate "ST STPDDC60"
++	help
++	  If you say yes here you get hardware monitoring support for ST
++	  STPDDC60 Universal Digital Multicell Controller, as well as for
++	  Flex BMR481.
++
++	  This driver can also be built as a module. If so, the module will
++	  be called stpddc60.
++
+ config SENSORS_TPS40422
+ 	tristate "TI TPS40422"
+ 	help
+diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+index 6a4ba0fdc1db..ef468806238c 100644
+--- a/drivers/hwmon/pmbus/Makefile
++++ b/drivers/hwmon/pmbus/Makefile
+@@ -28,9 +28,11 @@ obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
+ obj-$(CONFIG_SENSORS_PM6764TR)	+= pm6764tr.o
+ obj-$(CONFIG_SENSORS_PXE1610)	+= pxe1610.o
+ obj-$(CONFIG_SENSORS_Q54SJ108A2)	+= q54sj108a2.o
++obj-$(CONFIG_SENSORS_STPDDC60)	+= stpddc60.o
+ obj-$(CONFIG_SENSORS_TPS40422)	+= tps40422.o
+ obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
+ obj-$(CONFIG_SENSORS_UCD9000)	+= ucd9000.o
+ obj-$(CONFIG_SENSORS_UCD9200)	+= ucd9200.o
+ obj-$(CONFIG_SENSORS_XDPE122)	+= xdpe12284.o
+ obj-$(CONFIG_SENSORS_ZL6100)	+= zl6100.o
++
+diff --git a/drivers/hwmon/pmbus/stpddc60.c b/drivers/hwmon/pmbus/stpddc60.c
+new file mode 100644
+index 000000000000..4e3ab260a3c2
+--- /dev/null
++++ b/drivers/hwmon/pmbus/stpddc60.c
+@@ -0,0 +1,188 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Hardware monitoring driver for the STPDDC60 controller
++ *
++ * Copyright (c) 2021 Flextronics International Sweden AB.
++ */
++
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/init.h>
++#include <linux/err.h>
++#include <linux/i2c.h>
++#include <linux/pmbus.h>
++#include "pmbus.h"
++
++enum chips { stpddc60 };
++
++static const struct i2c_device_id stpddc60_id[] = {
++	{"stpddc60", stpddc60},
++	{"bmr481", stpddc60},
++	{}
++};
++MODULE_DEVICE_TABLE(i2c, stpddc60_id);
++
++static struct pmbus_driver_info stpddc60_info = {
++	.pages = 1,
++	.func[0] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
++		| PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT
++		| PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP
++		| PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT
++		| PMBUS_HAVE_POUT,
++};
++
++/*
++ * Convert VID value to milli-volt
++ */
++static long stpddc60_vid2mv(int val)
++{
++	long rv = 0;
++
++	if (val >= 0x01)
++		rv = 250 + (val - 1) * 5;
++
++	return rv;
++}
++
++/*
++ * Convert milli-volt to linear
++ */
++static int stpddc60_mv2l(long mv)
++{
++	int rv;
++
++	rv = (mv << 8) / 1000;
++
++	return rv;
++}
++
++/*
++ * The VOUT_COMMAND register uses the VID format but the vout alarm limit
++ * registers use the linear format so we override VOUT_MODE here to force
++ * linear format for all registers.
++ */
++static int stpddc60_read_byte_data(struct i2c_client *client, int page, int reg)
++{
++	int ret;
++
++	if (page > 0)
++		return -ENXIO;
++
++	switch (reg) {
++	case PMBUS_VOUT_MODE:
++		ret = 0x18;
++		break;
++	default:
++		ret = -ENODATA;
++		break;
++	}
++
++	return ret;
++}
++
++/*
++ * Do the necessary conversions between VID and linear data format.
++ */
++static int stpddc60_read_word_data(struct i2c_client *client, int page,
++				   int phase, int reg)
++{
++	int ret;
++
++	if (page > 0)
++		return -ENXIO;
++
++	switch (reg) {
++	case PMBUS_READ_VOUT:
++		ret = pmbus_read_word_data(client, page, phase, reg);
++		if (ret < 0)
++			return ret;
++		ret = stpddc60_mv2l(stpddc60_vid2mv(ret));
++		break;
++	case PMBUS_VOUT_OV_FAULT_LIMIT:
++	case PMBUS_VOUT_UV_FAULT_LIMIT:
++		ret = pmbus_read_word_data(client, page, phase, reg);
++		if (ret < 0)
++			return ret;
++		ret &= 0x07ff;
++		break;
++	default:
++		ret = -ENODATA;
++		break;
++	}
++
++	return ret;
++}
++
++/*
++ * The vout under- and over-voltage limits are readonly for this chip.
++ */
++static int stpddc60_write_word_data(struct i2c_client *client, int page,
++				    int reg, u16 word)
++{
++	int ret;
++
++	if (page > 0)
++		return -ENXIO;
++
++	switch (reg) {
++	case PMBUS_VOUT_OV_FAULT_LIMIT:
++		ret = -EACCES;
++		break;
++	case PMBUS_VOUT_UV_FAULT_LIMIT:
++		ret = -EACCES;
++		break;
++	default:
++		ret = -ENODATA;
++		break;
++	}
++
++	return ret;
++}
++
++static int stpddc60_probe(struct i2c_client *client,
++			  const struct i2c_device_id *id)
++{
++	int status;
++	u8 device_id[I2C_SMBUS_BLOCK_MAX + 1];
++	const struct i2c_device_id *mid;
++	struct pmbus_driver_info *info = &stpddc60_info;
++
++	if (!i2c_check_functionality(client->adapter,
++				     I2C_FUNC_SMBUS_READ_BYTE_DATA
++				     | I2C_FUNC_SMBUS_BLOCK_DATA))
++		return -ENODEV;
++
++	status = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, device_id);
++	if (status < 0) {
++		dev_err(&client->dev, "Failed to read Manufacturer Model\n");
++		return status;
++	}
++	for (mid = stpddc60_id; mid->name[0]; mid++) {
++		if (!strncasecmp(mid->name, device_id, strlen(mid->name)))
++			break;
++	}
++	if (!mid->name[0]) {
++		dev_err(&client->dev, "Unsupported device\n");
++		return -ENODEV;
++	}
++
++	info->read_byte_data = stpddc60_read_byte_data;
++	info->read_word_data = stpddc60_read_word_data;
++	info->write_word_data = stpddc60_write_word_data;
++
++	return pmbus_do_probe(client, info);
++}
++
++static struct i2c_driver stpddc60_driver = {
++	.driver = {
++		   .name = "stpddc60",
++		   },
++	.probe = stpddc60_probe,
++	.id_table = stpddc60_id,
++};
++
++module_i2c_driver(stpddc60_driver);
++
++MODULE_AUTHOR("Erik Rosen <erik.rosen@metormote.com>");
++MODULE_DESCRIPTION("PMBus driver for ST STPDDC60");
++MODULE_LICENSE("GPL");
+-- 
+2.20.1
 
-> On Mon, Jan 25, 2021 at 3:38 PM Bob Hepple <bob.hepple@gmail.com> wrote:
-> >
-> > Hi Tom,
-> >
-> > Big nope this end with L502x in i8k_blacklist_fan_type_dmi_table:
-> >
-> > Jan 26 09:35:47 achar kernel: psmouse serio1: TouchPad at
-> > isa0060/serio1/input0 lost synchronization, throwing 1 bytes>
-> >
-> > ... and lots of trackpad stall/stutters.
-> >
-> > Cheers
-> >
-> >
-> > Bob
-> >
-> >
-> >
-> > On Tue, 26 Jan 2021 at 08:09, Bob Hepple <bob.hepple@gmail.com> wrote:
-> > >
-> > > ... compiling now ... results in a coupla hours
-> > >
-> > > Cheers
-> > >
-> > >
-> > > Bob
-> > >
-> > > On Tue, 26 Jan 2021 at 04:05, Tom Hebb <tommyhebb@gmail.com> wrote:
-> > > >
-> > > > On Mon, Jan 25, 2021 at 2:05 AM Pali Rohár <pali@kernel.org> wrote:
-> > > > >
-> > > > > On Saturday 23 January 2021 18:46:08 Thomas Hebb wrote:
-> > > > > > It has been reported[0] that the Dell XPS 15 L502X exhibits similar
-> > > > > > freezing behavior to the other systems[1] on this blacklist. The issue
-> > > > > > was exposed by a prior change of mine to automatically load
-> > > > > > dell_smm_hwmon on a wider set of XPS models. To fix the regression, add
-> > > > > > this model to the blacklist.
-> > > > > >
-> > > > > > [0] https://bugzilla.kernel.org/show_bug.cgi?id=211081
-> > > > > > [1] https://bugzilla.kernel.org/show_bug.cgi?id=195751
-> > > > > >
-> > > > > > Fixes: b8a13e5e8f37 ("hwmon: (dell-smm) Use one DMI match for all XPS models")
-> > > > > > Cc: stable@vger.kernel.org
-> > > > > > Reported-by: Bob Hepple <bob.hepple@gmail.com>
-> > > > > > Tested-by: Bob Hepple <bob.hepple@gmail.com>
-> > > > > > Signed-off-by: Thomas Hebb <tommyhebb@gmail.com>
-> > > > > > ---
-> > > > > >
-> > > > > >  drivers/hwmon/dell-smm-hwmon.c | 7 +++++++
-> > > > > >  1 file changed, 7 insertions(+)
-> > > > > >
-> > > > > > diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> > > > > > index ec448f5f2dc3..73b9db9e3aab 100644
-> > > > > > --- a/drivers/hwmon/dell-smm-hwmon.c
-> > > > > > +++ b/drivers/hwmon/dell-smm-hwmon.c
-> > > > > > @@ -1159,6 +1159,13 @@ static struct dmi_system_id i8k_blacklist_fan_support_dmi_table[] __initdata = {
-> > > > > >                       DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "XPS13 9333"),
-> > > > > >               },
-> > > > > >       },
-> > > > > > +     {
-> > > > > > +             .ident = "Dell XPS 15 L502X",
-> > > > > > +             .matches = {
-> > > > > > +                     DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> > > > > > +                     DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Dell System XPS L502X"),
-> > > > >
-> > > > > Hello! Are you sure that it is required to completely disable fan
-> > > > > support? And not only access to fan type label for which is different
-> > > > > blaclist i8k_blacklist_fan_type_dmi_table?
-> > > >
-> > > > This is a good question. We didn't try the other list. Bob is the one with the
-> > > > affected system. Could you try moving the added block of code from
-> > > > i8k_blacklist_fan_support_dmi_table a few lines up to
-> > > > i8k_blacklist_fan_type_dmi_table, Bob, to see if the issue reappears or if it
-> > > > remains fixed?
-> > > >
-> > > > >
-> > > > > And have you reported this issue to Dell support?
-> > > > >
-> > > > > > +             },
-> > > > > > +     },
-> > > > > >       { }
-> > > > > >  };
-> > > > > >
-> > > > > > --
-> > > > > > 2.30.0
-> > > > > >
-> > > >
-> > > > (Apologies for the previous HTML copy of this reply, to those directly CCed.)
-> > > >
-> > > > -Tom
