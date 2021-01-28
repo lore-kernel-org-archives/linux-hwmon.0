@@ -7,42 +7,42 @@ X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C65AC433E0
-	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Jan 2021 15:24:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13310C433E0
+	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Jan 2021 15:25:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DB3E264DF5
-	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Jan 2021 15:24:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AF84364DEF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Jan 2021 15:25:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232541AbhA1PYZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 28 Jan 2021 10:24:25 -0500
-Received: from mga05.intel.com ([192.55.52.43]:5869 "EHLO mga05.intel.com"
+        id S231623AbhA1PZV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 28 Jan 2021 10:25:21 -0500
+Received: from mga12.intel.com ([192.55.52.136]:50066 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231875AbhA1PXG (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 28 Jan 2021 10:23:06 -0500
-IronPort-SDR: ylLASE0BLs+TXHpteldOChz5BRMTfDmwTqtzbw4Ki10ud2dBVRryuX3UhEWopfX+ZFbS+fRtMP
- wFkECBZUH3MQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9878"; a="265082286"
+        id S232244AbhA1PYD (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 28 Jan 2021 10:24:03 -0500
+IronPort-SDR: hKfDOOe9HWmkgjmTfq0l05XFbpI8CpuJ3sebq7YHZOh/kK7lqkvcJmG6A5Wqi6A8j2WJvyB9Pq
+ qh/IPwL3l0bA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9878"; a="159422506"
 X-IronPort-AV: E=Sophos;i="5.79,382,1602572400"; 
-   d="scan'208";a="265082286"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2021 07:22:15 -0800
-IronPort-SDR: t1lqtcdWol5FfGCIcvjfm2DC5nFI2OgpdlakzqsnIINI/jZDsswu7qANoRMmR1Hfnbhnji6Ha/
- SSZeAnB3FE0A==
+   d="scan'208";a="159422506"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2021 07:22:15 -0800
+IronPort-SDR: rvVJTDp4rnGE9Ra5J+cHvxZgv4czBd9uv9Np1UgFmx9IbQi87+qZRd7LeZ2oYUATdr9Q63iKZX
+ 1m9kZ+QtvRzg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.79,382,1602572400"; 
-   d="scan'208";a="369888856"
+   d="scan'208";a="388851161"
 Received: from lkp-server02.sh.intel.com (HELO 625d3a354f04) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 28 Jan 2021 07:22:14 -0800
+  by orsmga008.jf.intel.com with ESMTP; 28 Jan 2021 07:22:14 -0800
 Received: from kbuild by 625d3a354f04 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1l597d-0002zo-HC; Thu, 28 Jan 2021 15:22:13 +0000
-Date:   Thu, 28 Jan 2021 23:21:44 +0800
+        id 1l597d-0002zl-CZ; Thu, 28 Jan 2021 15:22:13 +0000
+Date:   Thu, 28 Jan 2021 23:21:47 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon-next] BUILD SUCCESS
- dd52b01be3a58c3df3a8a7bb41574fb79c802ee0
-Message-ID: <6012d688.uWbWkc41dWM5UWFd%lkp@intel.com>
+Subject: [hwmon:watchdog-next] BUILD SUCCESS
+ 076c67fa41683737fa7765763e706bd706a990c3
+Message-ID: <6012d68b.khFecJ15GNtTPnk4%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -51,12 +51,12 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: dd52b01be3a58c3df3a8a7bb41574fb79c802ee0  hwmon: (pmbus/max16601) Add support for MAX16508
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
+branch HEAD: 076c67fa41683737fa7765763e706bd706a990c3  watchdog: qcom: Remove incorrect usage of QCOM_WDT_ENABLE_IRQ
 
 elapsed time: 725m
 
-configs tested: 138
+configs tested: 143
 configs skipped: 2
 
 The following configs have been built successfully.
@@ -126,11 +126,16 @@ mips                   sb1250_swarm_defconfig
 openrisc                            defconfig
 ia64                        generic_defconfig
 openrisc                 simple_smp_defconfig
+powerpc                    sam440ep_defconfig
+arm                         hackkit_defconfig
+powerpc                 mpc8272_ads_defconfig
+arm                         vf610m4_defconfig
+arm                        trizeps4_defconfig
+sh                        edosk7705_defconfig
 mips                  cavium_octeon_defconfig
 sparc                            allyesconfig
 powerpc                  storcenter_defconfig
 x86_64                              defconfig
-powerpc                    sam440ep_defconfig
 arm                           tegra_defconfig
 mips                          ath79_defconfig
 m68k                        mvme16x_defconfig
