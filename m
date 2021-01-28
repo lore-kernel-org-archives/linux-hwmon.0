@@ -2,155 +2,216 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BCD41C433E0
-	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Jan 2021 05:08:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A802C433DB
+	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Jan 2021 13:56:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 88C8664DCC
-	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Jan 2021 05:08:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3F62064DD8
+	for <linux-hwmon@archiver.kernel.org>; Thu, 28 Jan 2021 13:56:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbhA1FIy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 28 Jan 2021 00:08:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35776 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbhA1FIy (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 28 Jan 2021 00:08:54 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE200C061573;
-        Wed, 27 Jan 2021 21:08:13 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id ke15so5876832ejc.12;
-        Wed, 27 Jan 2021 21:08:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=fdsoQ6aqbCvZf0PWuN79SpgzgiUeOULiFlVAD49MHZQ=;
-        b=MJOYhrl3fE7B5fqUzUbkBRfz7LFlkZqHestvIb5iCIcLQxBCHa8MAmzn25FCIPpgJU
-         7Oww+VaSX4v+CeItvMCfgCyUs4MvZi4Qo+Lj7hgiUWXPw+rSzUhmXvPa76vDwOfTY0Mw
-         epEs3Kgqd0SneEU9Hb/KZOgamZvp1OVOVkiDQivGzLIatqA1ZDWm/s2UPZdzAb45UI/1
-         buxh4lhqLetmupuZdUrfzAS9crwlQsIZT1Mo0X0TcCWf16wzl94LkiGF7UiJPhEuxb1D
-         8qKhW/WnJ8OL/Qr1a4zbr4WArajNkr+uOAU2/fhC8+AgrwUQQvbHzwWsvdlACwYCjeeP
-         08hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=fdsoQ6aqbCvZf0PWuN79SpgzgiUeOULiFlVAD49MHZQ=;
-        b=KYUk3UbqunY4zkFPVwP28HGsEvoJoedPDCiAAe//VK0yToY42xd7vHh9urJK4P4aiB
-         2SuQsVRGrT6J7qKiHXwD0dj9vX0WSPpGHg08F/ItpX0nCDDsouTRK08Hrl52LppfEAd9
-         9+g5ESWxtRt3r/1Fiu6zCYqPnbfN8TQJo7BQGlYXOdAqeCGnqFj2OzbJbwAlyr+Gi8Tz
-         5NBig8PNNteZkTQsFIk+5CCHUsN5rfZNZbz4ge8IQyr75KxcCdGeNwRaSLg1nZxQDJXp
-         AKnJmREsvgusede6g0QXvXG3gX6oe0FlksmSZ5EMDUHJmIh18tU+AWfbbISt9lpjMFwF
-         BcmQ==
-X-Gm-Message-State: AOAM532vCtJi75DpdDUZqqAAJ3FIBp7za6JE+Rvu8qrCNlJ3jvMEWced
-        DI+ngAseaMQcXRkgoICLL/lfj7vzxuSsnnOm/AE=
-X-Google-Smtp-Source: ABdhPJz4dD8JjSQiV7vDT8TkDrvQdCi57sJHQzZD95/ulLOlrEpUuGT2zcUp0u7Kuh3knjWTWudW9K7sYT3Y9wVPQgg=
-X-Received: by 2002:a17:906:5ad0:: with SMTP id x16mr9495925ejs.135.1611810492671;
- Wed, 27 Jan 2021 21:08:12 -0800 (PST)
-MIME-Version: 1.0
-References: <a09eea7616881d40d2db2fb5fa2770dc6166bdae.1611456351.git.tommyhebb@gmail.com>
- <20210125100540.55wbgdsem3htplx3@pali> <20210125201938.GB78651@roeck-us.net>
- <20210125202130.afwhcuznietmqo5s@pali> <20210127230001.7zeeczkfj33zj5sw@pali> <aef96a2a-9e27-32a2-62a5-92b8d87b9136@roeck-us.net>
-In-Reply-To: <aef96a2a-9e27-32a2-62a5-92b8d87b9136@roeck-us.net>
-From:   Bob Hepple <bob.hepple@gmail.com>
-Date:   Thu, 28 Jan 2021 15:08:01 +1000
-Message-ID: <CAHzpm2jOi1VnQR_kun-Y15jXskExYF7dV-o0-T0-pvLy+J8jsQ@mail.gmail.com>
-Subject: Re: [PATCH] hwmon: (dell-smm) Add XPS 15 L502X to fan control blacklist
+        id S229847AbhA1N46 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 28 Jan 2021 08:56:58 -0500
+Received: from mga06.intel.com ([134.134.136.31]:7655 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229825AbhA1N44 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 28 Jan 2021 08:56:56 -0500
+IronPort-SDR: sKWU0Z1w69EpIgthw9DW3LVQyXjaS3ORegAeT9mOwEMLKUeAbvU4nvg2pjQohKRWI+IefNPezb
+ DkjASXKj8qdQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9877"; a="241760110"
+X-IronPort-AV: E=Sophos;i="5.79,382,1602572400"; 
+   d="scan'208";a="241760110"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2021 05:56:12 -0800
+IronPort-SDR: kSk/9goxasdpZ5HG64W2Q1r5tNx9cFuXUpH+g4ZOsTO/C4igGgkgKu8eAx4I98SnMrIzvYyBCo
+ yYgWVQCZ3bZA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,382,1602572400"; 
+   d="scan'208";a="578626798"
+Received: from lkp-server02.sh.intel.com (HELO 625d3a354f04) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 28 Jan 2021 05:56:11 -0800
+Received: from kbuild by 625d3a354f04 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1l57mM-0002xO-Cl; Thu, 28 Jan 2021 13:56:10 +0000
+Date:   Thu, 28 Jan 2021 21:55:56 +0800
+From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        Thomas Hebb <tommyhebb@gmail.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:hwmon] BUILD SUCCESS
+ 4008bc7d39537bb3be166d8a3129c4980e1dd7dc
+Message-ID: <6012c26c.n6LbP5hpBgx1ghYJ%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-I've posted something on the Dell Community site as I can't get to the
-proper support pages (expired warranty).
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
+branch HEAD: 4008bc7d39537bb3be166d8a3129c4980e1dd7dc  hwmon: (dell-smm) Add XPS 15 L502X to fan control blacklist
 
-https://www.dell.com/community/XPS/Linux-kernel-regression-in-fan-control-d=
-ell-smm-hwmon-c-on-XPS/m-p/7794672#M77826
+elapsed time: 724m
 
-I have read that the Dell Social Networks people forward this sort of
-stuff to the Dell Developers ...
+configs tested: 146
+configs skipped: 2
 
-Cheers
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Bob
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                  colibri_pxa300_defconfig
+powerpc                   bluestone_defconfig
+nios2                         3c120_defconfig
+arc                        vdk_hs38_defconfig
+sh                           se7724_defconfig
+mips                malta_qemu_32r6_defconfig
+powerpc                      mgcoge_defconfig
+powerpc                          g5_defconfig
+powerpc                         ps3_defconfig
+nds32                            alldefconfig
+c6x                        evmc6457_defconfig
+m68k                            q40_defconfig
+m68k                       m5208evb_defconfig
+sh                            titan_defconfig
+arm                     eseries_pxa_defconfig
+xtensa                    xip_kc705_defconfig
+mips                            gpr_defconfig
+arm                          pxa910_defconfig
+arm                         lpc18xx_defconfig
+sh                         microdev_defconfig
+mips                         mpc30x_defconfig
+riscv                               defconfig
+arc                     nsimosci_hs_defconfig
+c6x                        evmc6474_defconfig
+mips                           ip28_defconfig
+alpha                            alldefconfig
+powerpc                    gamecube_defconfig
+sparc                       sparc32_defconfig
+mips                         tb0226_defconfig
+mips                      pic32mzda_defconfig
+powerpc                     pseries_defconfig
+arm                          ep93xx_defconfig
+openrisc                    or1ksim_defconfig
+sh                         apsh4a3a_defconfig
+arm                       aspeed_g5_defconfig
+arm                        mvebu_v5_defconfig
+m68k                       m5275evb_defconfig
+powerpc                      ppc44x_defconfig
+nios2                            allyesconfig
+m68k                        m5407c3_defconfig
+powerpc                 mpc8313_rdb_defconfig
+arm                  colibri_pxa270_defconfig
+arm                       multi_v4t_defconfig
+sh                        sh7785lcr_defconfig
+arm                        oxnas_v6_defconfig
+arc                           tb10x_defconfig
+m68k                        mvme147_defconfig
+m68k                        m5272c3_defconfig
+arm                       aspeed_g4_defconfig
+c6x                        evmc6678_defconfig
+mips                          malta_defconfig
+xtensa                generic_kc705_defconfig
+sh                          rsk7269_defconfig
+mips                            ar7_defconfig
+sh                          sdk7780_defconfig
+mips                      malta_kvm_defconfig
+sh                   secureedge5410_defconfig
+arc                              alldefconfig
+mips                   sb1250_swarm_defconfig
+openrisc                            defconfig
+ia64                        generic_defconfig
+openrisc                 simple_smp_defconfig
+mips                  cavium_octeon_defconfig
+sparc                            allyesconfig
+powerpc                  storcenter_defconfig
+x86_64                              defconfig
+powerpc                    sam440ep_defconfig
+arm                           tegra_defconfig
+mips                          ath79_defconfig
+powerpc                    ge_imp3a_defconfig
+arm                         at91_dt_defconfig
+arm                            lart_defconfig
+sh                          r7785rp_defconfig
+ia64                         bigsur_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+nds32                               defconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                               defconfig
+i386                               tinyconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a001-20210128
+i386                 randconfig-a002-20210128
+i386                 randconfig-a004-20210128
+i386                 randconfig-a005-20210128
+i386                 randconfig-a003-20210128
+i386                 randconfig-a006-20210128
+x86_64               randconfig-a012-20210128
+x86_64               randconfig-a015-20210128
+x86_64               randconfig-a016-20210128
+x86_64               randconfig-a011-20210128
+x86_64               randconfig-a013-20210128
+x86_64               randconfig-a014-20210128
+i386                 randconfig-a013-20210128
+i386                 randconfig-a011-20210128
+i386                 randconfig-a012-20210128
+i386                 randconfig-a016-20210128
+i386                 randconfig-a014-20210128
+i386                 randconfig-a015-20210128
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
 
-On Thu, 28 Jan 2021 at 11:46, Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 1/27/21 3:00 PM, Pali Roh=C3=A1r wrote:
-> > On Monday 25 January 2021 21:21:30 Pali Roh=C3=A1r wrote:
-> >> On Monday 25 January 2021 12:19:38 Guenter Roeck wrote:
-> >>> On Mon, Jan 25, 2021 at 11:05:40AM +0100, Pali Roh=C3=A1r wrote:
-> >>>> On Saturday 23 January 2021 18:46:08 Thomas Hebb wrote:
-> >>>>> It has been reported[0] that the Dell XPS 15 L502X exhibits similar
-> >>>>> freezing behavior to the other systems[1] on this blacklist. The is=
-sue
-> >>>>> was exposed by a prior change of mine to automatically load
-> >>>>> dell_smm_hwmon on a wider set of XPS models. To fix the regression,=
- add
-> >>>>> this model to the blacklist.
-> >>>>>
-> >>>>> [0] https://bugzilla.kernel.org/show_bug.cgi?id=3D211081
-> >>>>> [1] https://bugzilla.kernel.org/show_bug.cgi?id=3D195751
-> >>>>>
-> >>>>> Fixes: b8a13e5e8f37 ("hwmon: (dell-smm) Use one DMI match for all X=
-PS models")
-> >>>>> Cc: stable@vger.kernel.org
-> >>>>> Reported-by: Bob Hepple <bob.hepple@gmail.com>
-> >>>>> Tested-by: Bob Hepple <bob.hepple@gmail.com>
-> >>>>> Signed-off-by: Thomas Hebb <tommyhebb@gmail.com>
-> >>>>> ---
-> >>>>>
-> >>>>>  drivers/hwmon/dell-smm-hwmon.c | 7 +++++++
-> >>>>>  1 file changed, 7 insertions(+)
-> >>>>>
-> >>>>> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-sm=
-m-hwmon.c
-> >>>>> index ec448f5f2dc3..73b9db9e3aab 100644
-> >>>>> --- a/drivers/hwmon/dell-smm-hwmon.c
-> >>>>> +++ b/drivers/hwmon/dell-smm-hwmon.c
-> >>>>> @@ -1159,6 +1159,13 @@ static struct dmi_system_id i8k_blacklist_fa=
-n_support_dmi_table[] __initdata =3D {
-> >>>>>                   DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "XPS13 9333"),
-> >>>>>           },
-> >>>>>   },
-> >>>>> + {
-> >>>>> +         .ident =3D "Dell XPS 15 L502X",
-> >>>>> +         .matches =3D {
-> >>>>> +                 DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> >>>>> +                 DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Dell System XP=
-S L502X"),
-> >>>>
-> >>>> Hello! Are you sure that it is required to completely disable fan
-> >>>> support? And not only access to fan type label for which is differen=
-t
-> >>>> blaclist i8k_blacklist_fan_type_dmi_table?
-> >>>>
-> >>>
-> >>> I'll drop this patch from my branch. Please send a Reviewed-by: or Ac=
-ked-by: tag
-> >>> if/when I should apply it.
-> >>
-> >> Of course! We will just wait for Bob test results.
-> >
-> > Guenter, now we have all needed information, fix is really needed in
-> > this form. So you can add my:
-> >
-> > Reviewed-by: Pali Roh=C3=A1r <pali@kernel.org>
-> >
->
-> Applied (again)
->
-> Thanks,
-> Guenter
+clang tested configs:
+x86_64               randconfig-a002-20210128
+x86_64               randconfig-a003-20210128
+x86_64               randconfig-a001-20210128
+x86_64               randconfig-a005-20210128
+x86_64               randconfig-a006-20210128
+x86_64               randconfig-a004-20210128
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
