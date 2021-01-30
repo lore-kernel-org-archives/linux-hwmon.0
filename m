@@ -2,72 +2,70 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 591AFC433E0
-	for <linux-hwmon@archiver.kernel.org>; Sat, 30 Jan 2021 16:13:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 191AEC433E0
+	for <linux-hwmon@archiver.kernel.org>; Sat, 30 Jan 2021 16:21:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 21B9564DD8
-	for <linux-hwmon@archiver.kernel.org>; Sat, 30 Jan 2021 16:13:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D417E6146D
+	for <linux-hwmon@archiver.kernel.org>; Sat, 30 Jan 2021 16:21:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231903AbhA3QLm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 30 Jan 2021 11:11:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57302 "EHLO
+        id S232183AbhA3QVN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 30 Jan 2021 11:21:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232223AbhA3QA4 (ORCPT
+        with ESMTP id S232123AbhA3PmL (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 30 Jan 2021 11:00:56 -0500
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F338C061573;
-        Sat, 30 Jan 2021 08:00:11 -0800 (PST)
-Received: by mail-ot1-x32b.google.com with SMTP id 36so11768949otp.2;
-        Sat, 30 Jan 2021 08:00:11 -0800 (PST)
+        Sat, 30 Jan 2021 10:42:11 -0500
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21FEC06178A;
+        Sat, 30 Jan 2021 07:41:06 -0800 (PST)
+Received: by mail-ot1-x333.google.com with SMTP id d7so11734964otf.3;
+        Sat, 30 Jan 2021 07:41:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=i1Y1GTOXeVZe95V2JMXKUZfz/w0hpueKYPv2Yf7uGAs=;
-        b=TJk49GIMvxm8PC4RfvcwIkVnLjUb9fdi4O9N3k202Cr26Y2EP1cNSNlEqRAj5lUaA6
-         PU0MBMk2AmnH0cKXOkoyCAPqu0ktzoAhnszUP4cYM/J/sxUVreV5JpuT45qcwMDlZiWG
-         NViamyuqqvUFGmaYOhkSuSrYDSRHRhmzpv3CKRFOWsD/ammnqPCKaEFTtLd5umNR5q+Z
-         QUSS618OeKeAGmNWemzTgu/kq7QBx5FG6jNAukVJQzT5iSUApP3C1dQK0sTy0JupYAyr
-         8o2qfw8eNprVU9DAA/bGv/NfiYNGlejbq2id2hz0s7x+hMd1DTQCd9EOGNNeqYAS5laP
-         tqBQ==
+        bh=81se6Lcpcw2fZva6F9Ubr8dtwoIiC2BFGJQh0BvXsY4=;
+        b=bupJBQRl42wKF2cMHXtczHR/q0fxte3EICmQJvKqeVgqwz70dYsuBB8kT7hrXmBjR8
+         UdHk87XoURWIl8bu+EHtQYV7cuIvDNh8D/eNeQNatzL4rs4JY87AVbQAtNm/8B9n/swU
+         yimj/4N2x2mEJq/se6pNWdy8aTJ/fkHiIw3SfcpCHL6JHVDTgIinjN6k9iSmL5MeMJ2W
+         nv+7WGutax0e6ppqPRimNPNb+7GisquIz37u3hYRFMZ42H1ooimUjmxRB0fcc5VC2UmX
+         M0NsoBBLMLxkZ7F6Ha1lvW7EVzTkE2E46EUgwSyTXlrUWoFOZ8Y7ahqnj6JJ+Kud+UoX
+         TxwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=i1Y1GTOXeVZe95V2JMXKUZfz/w0hpueKYPv2Yf7uGAs=;
-        b=evSacaWKYtJOp8GSObiuBvzrVgJcS96M6E6BJHa0iLoEMWpzePKROdqW5DZJ+kE6CJ
-         kmn7yBd276EEyyY4hfJVOV66n1wOPtjwBR0GSYgXysDrGjZJ81XOAhakTx3PC/fpNvhx
-         FCbsKedhdYRP5ViOGjc9rfKw7Qu0d+aeJHlHdDOOd4zIVkxT5E7MCf33QXh9aEp9wCS2
-         EqOOsg4rt+L61Eykl3BAyL9tGUzbvFtbfJ0/4PK5pv5rv41UVr3I7lnoX8JawWBvjyxV
-         or95dOihx2tVmzD9F1a4kGK3ygjEB2uy1tdAiypJG4k99pMZu9DVOvlZCBtq9Uqxgm+B
-         0Zww==
-X-Gm-Message-State: AOAM531cJjzujEO2lJnC193BcI1TzpcR2fD5zGiwhto3fo5tNkMNf7JO
-        mPHl8f/PhjsTU0XIdTdW71pluHhHIvQ=
-X-Google-Smtp-Source: ABdhPJyVqJ2/gwKsiVCbI4qg6JOkNVpDlDvQjENT/WO304Me/CpY++JqOAF4eEMta4EpLQzHiGfaHw==
-X-Received: by 2002:a9d:21ca:: with SMTP id s68mr2090823otb.164.1612022410137;
-        Sat, 30 Jan 2021 08:00:10 -0800 (PST)
+        bh=81se6Lcpcw2fZva6F9Ubr8dtwoIiC2BFGJQh0BvXsY4=;
+        b=bQnPHTZ0CWNMysXIc2aeH/C9d9gj63Nc4lyYvefjvETg7JO+OiZi6dR2HbVSH2bKBq
+         nl6JVjKpVWwXO/JGzkY5Rf306ngoitZubPcO661+1Jcse5McYoL10HXCZF+XIljBim0z
+         Ygqwu2nnOZQk/1cGDhThQ2QLok35m+Izb/qUV4aGQjXhMe6DA6qXw6Xuy3VzFVFJnfUc
+         +He/M/5sxwGk87aGg/anh2xfwhqeQv9iPT1rcy03bGZ22Xa7z4lMPepn34BBg0B8xyyc
+         ekzwNDwFT6eI1qc17EwkOYmtOZwGAjP1vj/wBmdzrgaz8EjyfUvkS+YW/99phhxbs2Ny
+         g3gQ==
+X-Gm-Message-State: AOAM530xULw2RXbjlKxpP6M085wttU7XHAns/jMqeWCEg19cOt83sWi8
+        jbIpYELhjZU9L3NFOy+9C17adC5bKQo=
+X-Google-Smtp-Source: ABdhPJzgQOHXnmBn/BVnHjYb4SjRnboJ9zyGZBELtaokhj/it96fJDqfHIOD2+Tsld0j4RpuG0ptJQ==
+X-Received: by 2002:a9d:4c9a:: with SMTP id m26mr6007759otf.7.1612021265923;
+        Sat, 30 Jan 2021 07:41:05 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w66sm3171077oif.21.2021.01.30.08.00.08
+        by smtp.gmail.com with ESMTPSA id p132sm3094072oia.41.2021.01.30.07.41.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 30 Jan 2021 08:00:09 -0800 (PST)
+        Sat, 30 Jan 2021 07:41:05 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH] hwmon: lm75: Use zero lm75_type for lm75
-To:     "Matwey V. Kornilov" <matwey.kornilov@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Javier Martinez Canillas <javier@osg.samsung.com>,
+Subject: Re: [PATCH 1/2] hwmon: lm75: Add NXP LM75A to of_match list
+To:     "Matwey V. Kornilov" <matwey@sai.msu.ru>,
+        Jean Delvare <jdelvare@suse.com>,
         "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>
-References: <20210130101038.26331-1-matwey@sai.msu.ru>
- <a771f5b8-aa24-b736-4e8f-b3b46a15dcb6@roeck-us.net>
- <CAJs94EY=hDwNun_kzNQdMHmC27KEZV6urxcKm9xbHriJ_1m3UQ@mail.gmail.com>
+Cc:     matwey.kornilov@gmail.com
+References: <20210130103823.28914-1-matwey@sai.msu.ru>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -112,74 +110,54 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <dae2c13a-877e-fd54-bb6a-ed7c2c3d1e66@roeck-us.net>
-Date:   Sat, 30 Jan 2021 08:00:07 -0800
+Message-ID: <82abc622-a625-b1bc-39b4-f9e1849036ee@roeck-us.net>
+Date:   Sat, 30 Jan 2021 07:41:03 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <CAJs94EY=hDwNun_kzNQdMHmC27KEZV6urxcKm9xbHriJ_1m3UQ@mail.gmail.com>
+In-Reply-To: <20210130103823.28914-1-matwey@sai.msu.ru>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 1/30/21 7:43 AM, Matwey V. Kornilov wrote:
+On 1/30/21 2:38 AM, Matwey V. Kornilov wrote:
+> NXP LM75A is compatible with original LM75A while it has improved
+> 11-bit precision.
 > 
+> https://www.nxp.com/docs/en/data-sheet/LM75A.pdf
 > 
-> сб, 30 янв. 2021 г. в 18:31, Guenter Roeck <linux@roeck-us.net <mailto:linux@roeck-us.net>>:
->>
->> On 1/30/21 2:10 AM, Matwey V. Kornilov wrote:
->> > There is a logical flaw in lm75_probe() function introduced in
->> >
->> >     e97a45f1b460 ("hwmon: (lm75) Add OF device ID table")
->> >
->> > Note, that of_device_get_match_data() returns NULL when no match
->> > found. This is the case when OF node exists but has unknown
->> > compatible line, while the module is still loaded via i2c
->> > detection.
->> >
->> > arch/powerpc/boot/dts/fsl/p2041rdb.dts:
->> >
->> >     lm75b@48 {
->> >       compatible = "nxp,lm75a";
->> >       reg = <0x48>;
->> >     };
->> >
->> > In this case, the sensor is mistakenly considered as ADT75 variant.
->> > The simplest way to handle this issue is to make the LM75 code
->> > zero.
->> >
->>
->> This doesn't really solve the problem since it would match _all_
->> non-existing entries with lm75 (instead of whatever is intended).
+> Signed-off-by: Matwey V. Kornilov <matwey@sai.msu.ru>
+> ---
+>  drivers/hwmon/lm75.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> Just exactly how it happened before e97a45f1b460
-> 
->> That doesn't matter for lm75a, but it would matter if someone
->> would enter, say, "bla,adt75".
->>
->> On a side note, "nxp,lm75a" (nor "nxp,lm75", for that matter) is not a
->> documented compatible string for this driver. If anything, we would
->> need a means to explicitly reject such undefined compatible strings.
->> One option might be to define the first entry in enum lm75_type
->> explicitly as invalid, check for it and reject it if returned.
-> 
-> It is fine for me. I am afraid that this will break some dts files in the tree.
-> The following compatible strings missed in the driver are currently in use:
-> 
-> ti,lm75
-> nxp,lm75
-> nxp,lm75a
-> 
-> I suppose these boards currently rely on the i2c detection path.
+> diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
+> index 3aa7f9454f57..37dc903ebf54 100644
+> --- a/drivers/hwmon/lm75.c
+> +++ b/drivers/hwmon/lm75.c
+> @@ -699,6 +699,10 @@ static const struct of_device_id __maybe_unused lm75_of_match[] = {
+>  		.compatible = "national,lm75b",
+>  		.data = (void *)lm75b
+>  	},
+> +	{
+> +		.compatible = "nxp,lm75a",
+> +		.data = (void *)lm75b
+
+This should get a different identifier (such as lm75a_nxp or whatever)
+because otherwise the results would be different on non-devicetree
+systems which would only match "lm75a".
+
+> +	},
+>  	{
+>  		.compatible = "maxim,max6625",
+>  		.data = (void *)max6625
 > 
 
-Correct. But relying on a bug doesn't improve the situation.
-The above compatible strings need to be documented (and properly
-implemented), or removed. And we really need a better means to handle
-NULL returns from of_device_get_match_data(). Maybe we should use
-of_match_device() instead and check for a NULL return.
+Both "nxp,lm75a" and "nxp,lm75b" need to be added to
+Documentation/devicetree/bindings/hwmon/lm75.yaml (in a separate
+patch with copy to dt maintainers for review).
 
 Guenter
