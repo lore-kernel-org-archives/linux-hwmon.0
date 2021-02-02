@@ -7,31 +7,31 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CB1DC433DB
-	for <linux-hwmon@archiver.kernel.org>; Tue,  2 Feb 2021 08:40:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 853CAC433DB
+	for <linux-hwmon@archiver.kernel.org>; Tue,  2 Feb 2021 08:50:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F412864F59
-	for <linux-hwmon@archiver.kernel.org>; Tue,  2 Feb 2021 08:40:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3EBF864F69
+	for <linux-hwmon@archiver.kernel.org>; Tue,  2 Feb 2021 08:50:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232630AbhBBIkd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 2 Feb 2021 03:40:33 -0500
-Received: from out30-57.freemail.mail.aliyun.com ([115.124.30.57]:52645 "EHLO
+        id S231781AbhBBIuU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 2 Feb 2021 03:50:20 -0500
+Received: from out30-57.freemail.mail.aliyun.com ([115.124.30.57]:51579 "EHLO
         out30-57.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232701AbhBBIk1 (ORCPT
+        by vger.kernel.org with ESMTP id S232744AbhBBIuR (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 2 Feb 2021 03:40:27 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04420;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0UNfe22u_1612255158;
-Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0UNfe22u_1612255158)
+        Tue, 2 Feb 2021 03:50:17 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0UNfEMIj_1612255745;
+Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0UNfEMIj_1612255745)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 02 Feb 2021 16:39:24 +0800
+          Tue, 02 Feb 2021 16:49:11 +0800
 From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 To:     linux@roeck-us.net
 Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Subject: [PATCH] hwmon: (pmbus) convert sysfs sprintf/snprintf family to sysfs_emit
-Date:   Tue,  2 Feb 2021 16:39:17 +0800
-Message-Id: <1612255157-40897-1-git-send-email-jiapeng.chong@linux.alibaba.com>
+Subject: [PATCH v2] hwmon: (pmbus) convert sysfs sprintf/snprintf family to sysfs_emit
+Date:   Tue,  2 Feb 2021 16:49:03 +0800
+Message-Id: <1612255743-52579-1-git-send-email-jiapeng.chong@linux.alibaba.com>
 X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
@@ -51,11 +51,14 @@ sprintf.
 Reported-by: Abaci Robot<abaci@linux.alibaba.com>
 Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 ---
+Changes in v2:
+  -Modified code space.
+
  drivers/hwmon/pmbus/inspur-ipsps.c | 28 ++++++++++++++--------------
  1 file changed, 14 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/hwmon/pmbus/inspur-ipsps.c b/drivers/hwmon/pmbus/inspur-ipsps.c
-index 88c5865..c1f8526 100644
+index 88c5865..bf593fd 100644
 --- a/drivers/hwmon/pmbus/inspur-ipsps.c
 +++ b/drivers/hwmon/pmbus/inspur-ipsps.c
 @@ -70,7 +70,7 @@ static ssize_t ipsps_string_show(struct device *dev,
@@ -75,8 +78,8 @@ index 88c5865..c1f8526 100644
 -			data[1], data[2]/* < 100 */, data[3]/*< 10*/,
 -			data[4], data[5]/* < 100 */);
 +	return sysfs_emit(buf, "%u.%02u%u-%u.%02u\n",
-+			   data[1], data[2]/* < 100 */, data[3]/*< 10*/,
-+			   data[4], data[5]/* < 100 */);
++			  data[1], data[2]/* < 100 */, data[3]/*< 10*/,
++			  data[4], data[5]/* < 100 */);
  }
  
  static ssize_t ipsps_mode_show(struct device *dev,
@@ -88,22 +91,22 @@ index 88c5865..c1f8526 100644
 -				MODE_ACTIVE_STRING,
 -				MODE_STANDBY_STRING, MODE_REDUNDANCY_STRING);
 +		return sysfs_emit(buf, "[%s] %s %s\n",
-+				   MODE_ACTIVE_STRING,
-+				   MODE_STANDBY_STRING, MODE_REDUNDANCY_STRING);
++				  MODE_ACTIVE_STRING,
++				  MODE_STANDBY_STRING, MODE_REDUNDANCY_STRING);
  	case MODE_STANDBY:
 -		return snprintf(buf, PAGE_SIZE, "%s [%s] %s\n",
 -				MODE_ACTIVE_STRING,
 -				MODE_STANDBY_STRING, MODE_REDUNDANCY_STRING);
 +		return sysfs_emit(buf, "%s [%s] %s\n",
-+				   MODE_ACTIVE_STRING,
-+				   MODE_STANDBY_STRING, MODE_REDUNDANCY_STRING);
++				  MODE_ACTIVE_STRING,
++				  MODE_STANDBY_STRING, MODE_REDUNDANCY_STRING);
  	case MODE_REDUNDANCY:
 -		return snprintf(buf, PAGE_SIZE, "%s %s [%s]\n",
 -				MODE_ACTIVE_STRING,
 -				MODE_STANDBY_STRING, MODE_REDUNDANCY_STRING);
 +		return sysfs_emit(buf, "%s %s [%s]\n",
-+				   MODE_ACTIVE_STRING,
-+				   MODE_STANDBY_STRING, MODE_REDUNDANCY_STRING);
++				  MODE_ACTIVE_STRING,
++				  MODE_STANDBY_STRING, MODE_REDUNDANCY_STRING);
  	default:
 -		return snprintf(buf, PAGE_SIZE, "unspecified\n");
 +		return sysfs_emit(buf, "unspecified\n");
