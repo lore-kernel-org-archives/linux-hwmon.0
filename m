@@ -4,104 +4,130 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82C6AC433DB
-	for <linux-hwmon@archiver.kernel.org>; Tue,  2 Feb 2021 00:25:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D1D7C433E0
+	for <linux-hwmon@archiver.kernel.org>; Tue,  2 Feb 2021 00:27:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3B55364E8D
-	for <linux-hwmon@archiver.kernel.org>; Tue,  2 Feb 2021 00:25:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5536B64E8D
+	for <linux-hwmon@archiver.kernel.org>; Tue,  2 Feb 2021 00:27:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbhBBAZj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 1 Feb 2021 19:25:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44054 "EHLO
+        id S231355AbhBBA11 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 1 Feb 2021 19:27:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbhBBAZj (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 1 Feb 2021 19:25:39 -0500
-Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000CEC061573;
-        Mon,  1 Feb 2021 16:24:58 -0800 (PST)
-Received: by mail-oo1-xc2c.google.com with SMTP id q3so4733934oog.4;
-        Mon, 01 Feb 2021 16:24:58 -0800 (PST)
+        with ESMTP id S230000AbhBBA1Y (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 1 Feb 2021 19:27:24 -0500
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6239BC06174A;
+        Mon,  1 Feb 2021 16:26:44 -0800 (PST)
+Received: by mail-ot1-x32b.google.com with SMTP id v1so18216724ott.10;
+        Mon, 01 Feb 2021 16:26:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=hfIxrdFOJeBnjVBYWdy8JF+xIHAh9pPujDvVWdys060=;
-        b=Ebn3FJwcMGwNWigpwl6Z/49KoPswpZkeec3vJ9E/r+voxzQ7qroJvUQnJcGEJQovSr
-         K6fVxyC86SqQ0BKFGAZ3Evt1YmNZOvk1rqg6jIIr1AxtrLDhE/nMjs8Tw25oUBhfSO7w
-         65wp1Mc2ZPfpIs2KH9rRykLZ5JQ7ivnX8PQssovDH7mJXEs/HUzhphfHyMEJDYx04Ehh
-         eRyYcdywmucUNxh4OEH9DxIkbd0Zy6N7ZR2HAGfAm8xLkDtywNO8frX3e8RCm6Evv8Q8
-         HsYBHTeZbsEfDJ8n4HdRsfPvVfCNPMKIX5NjqJAqZnFP0bRcL68pHydByGUjRT+leGOL
-         jywQ==
+        bh=i6JkiAwSb3HBncqwTBbNhVXvsBhU0XSQ0XjjnMxZCrA=;
+        b=vXfnVQJ/4p12PigbXVY/AFuTQ4Za4g4X9UFiFxW4ilPDmmLLWKxmwdB4IyPD6svi9I
+         lGAIdtjEMP0FDFMzWTs1/I2xW6NmoOZ1rqz0fUZ6Aedb8hqPPJs4GVn3LmXWHl1hY6r1
+         xIzVJgWvDHucseriQkfKRHhTylT8n8W10/1VukAQpamc1GslIym+JCmZte8PoYRZZRXM
+         nut2utaq4P7e7sUZktm3YsVsHqYAW2CsCRwRQgncJdx8v4AzZAoMkiH42ifB1NnrAyEU
+         Y0AUDbW6PKz3jTo+9WEoU8DaXfqFNdcItsuQ8IT75PJfESVzlf4EMOHwS/vJzuf99lav
+         E1Qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=hfIxrdFOJeBnjVBYWdy8JF+xIHAh9pPujDvVWdys060=;
-        b=D09XrvToYXgT/AoYftTGnv2iF4nG81CaZczz5+Eyd+pboYi3/XQQv+PFyEexC/jfmi
-         bRIeq3Xoqc2ZVOyYz7WKjAvGcwyD3naMJM0NOOgzSxlDKNqL/n+uha3qBMkxuVw2/NqW
-         eBWzvbdERKGSKIFBkSqOeXBNRfAcgiFM04HNZULAFnczLq6d9dqhSxoEYqP2HW+OA+nA
-         guV9WTMOGCF/6Wr52x+SeQTaOi6gStWC/6n+AbYvU/fQGFC/OaqfD5IaVnMlnvdcsUFk
-         eeK1j+zFqmWD1q+UIUuVGcDnhkiRPmA/VyMculYWq/UcNn8KIBV6jm9c0R/br1+sELVO
-         Op8w==
-X-Gm-Message-State: AOAM530bM4ugTaW7cj+IJWyUajNhfhM16qNFHiUsuEqGMt0yXZzud5hR
-        BSqWrb16Vq/UlFfwU6Hc8seIbEhqDQk=
-X-Google-Smtp-Source: ABdhPJxQnFBWQJWNV950YaurNGRrcUnJdcmgabit2HlAd5YrkARcxQ3Q8Y5DzFx+vFKfPF7F7wBhfg==
-X-Received: by 2002:a4a:558e:: with SMTP id e136mr13745153oob.18.1612225498477;
-        Mon, 01 Feb 2021 16:24:58 -0800 (PST)
+        bh=i6JkiAwSb3HBncqwTBbNhVXvsBhU0XSQ0XjjnMxZCrA=;
+        b=RqoGPEGbqahvMp4O9E/M4MdqmaCLm5bygzxgzFQLqS7+TVJ2wtbuFOU9G6sWHO0AVU
+         0yBz5sH/abE8H3lAtXwE34gIS1Ssa5Q7+EUxs2cvPQhepeIBND3GuTIoC3p3KuoY2/Dp
+         n0LILyzeSWKAYz3Vn/AFwKSU0LKY1LYqZIq9n7COYDxgpfGSNVjfn9wlOpb6o0/yq3PM
+         0zTOhLTgf8HcJYbbdRumd7c/nmYNGZ9MsSdoPxkO0M1xdKdE4VXRqaO5p+QeuNcqZ72b
+         wJeRwLeAI2suF9PHbkGkby8q3eLqZ474oBoHPzLEt97sSnctPv+kBWXs4RrOpZZVXb1S
+         98sQ==
+X-Gm-Message-State: AOAM5310BWcvq5MXHBbL8hN6VJgmDI7ohT/1pMGrnXdjwmifiClUcyXK
+        4bn5TgSoAOAY45l1YSikVBWnt0frZtQ=
+X-Google-Smtp-Source: ABdhPJzgev/QUJjMekZCovxlgS+zHHkw+ZzLuDKpXS8T/aAy17+vzrcEXZtfoP51NI4Lt/vNDX1TeA==
+X-Received: by 2002:a9d:21ca:: with SMTP id s68mr9207777otb.164.1612225603782;
+        Mon, 01 Feb 2021 16:26:43 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g23sm4398330otk.72.2021.02.01.16.24.57
+        by smtp.gmail.com with ESMTPSA id a28sm4555729ook.24.2021.02.01.16.26.42
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 01 Feb 2021 16:24:57 -0800 (PST)
+        Mon, 01 Feb 2021 16:26:43 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 1 Feb 2021 16:24:56 -0800
+Date:   Mon, 1 Feb 2021 16:26:41 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Erik Rosen <erik.rosen@metormote.com>
 Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
         Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH 1/2] Clear sensor data after chip write
-Message-ID: <20210202002456.GA117432@roeck-us.net>
+Subject: Re: [PATCH 2/2] Remove unnecessary pmbus_clear_cache function call
+Message-ID: <20210202002641.GA117591@roeck-us.net>
 References: <20210201195929.1200-1-erik.rosen@metormote.com>
- <20210201195929.1200-2-erik.rosen@metormote.com>
+ <20210201195929.1200-3-erik.rosen@metormote.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210201195929.1200-2-erik.rosen@metormote.com>
+In-Reply-To: <20210201195929.1200-3-erik.rosen@metormote.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Feb 01, 2021 at 08:59:28PM +0100, Erik Rosen wrote:
-> Set the sensor->data field to -ENODATA to force a chip access next time
-> the sensor value is read.
+On Mon, Feb 01, 2021 at 08:59:29PM +0100, Erik Rosen wrote:
+> It is no longer necessary to clear the cache to update the sensor value
+> from the chip.
 > 
 > Signed-off-by: Erik Rosen <erik.rosen@metormote.com>
 
-Applied. Please remember to add subsystem and driver to future patches.
-In this case, I added:
-
-hwmon: (pmbus) ...
+Applied, after prepending subject with "hwmon: (pmbus/lm25066)".
 
 Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/pmbus/pmbus_core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/hwmon/pmbus/lm25066.c | 5 -----
+>  1 file changed, 5 deletions(-)
 > 
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index 192442b3b7a2..e27f23eee1e3 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -974,7 +974,7 @@ static ssize_t pmbus_set_sensor(struct device *dev,
->  	if (ret < 0)
->  		rv = ret;
->  	else
-> -		sensor->data = regval;
-> +		sensor->data = -ENODATA;
->  	mutex_unlock(&data->update_lock);
->  	return rv;
->  }
+> diff --git a/drivers/hwmon/pmbus/lm25066.c b/drivers/hwmon/pmbus/lm25066.c
+> index c75a6bf39641..e9a66fd9e144 100644
+> --- a/drivers/hwmon/pmbus/lm25066.c
+> +++ b/drivers/hwmon/pmbus/lm25066.c
+> @@ -371,21 +371,18 @@ static int lm25066_write_word_data(struct i2c_client *client, int page, int reg,
+>  	case PMBUS_VIN_OV_WARN_LIMIT:
+>  		word = ((s16)word < 0) ? 0 : clamp_val(word, 0, data->rlimit);
+>  		ret = pmbus_write_word_data(client, 0, reg, word);
+> -		pmbus_clear_cache(client);
+>  		break;
+>  	case PMBUS_IIN_OC_WARN_LIMIT:
+>  		word = ((s16)word < 0) ? 0 : clamp_val(word, 0, data->rlimit);
+>  		ret = pmbus_write_word_data(client, 0,
+>  					    LM25066_MFR_IIN_OC_WARN_LIMIT,
+>  					    word);
+> -		pmbus_clear_cache(client);
+>  		break;
+>  	case PMBUS_PIN_OP_WARN_LIMIT:
+>  		word = ((s16)word < 0) ? 0 : clamp_val(word, 0, data->rlimit);
+>  		ret = pmbus_write_word_data(client, 0,
+>  					    LM25066_MFR_PIN_OP_WARN_LIMIT,
+>  					    word);
+> -		pmbus_clear_cache(client);
+>  		break;
+>  	case PMBUS_VIRT_VMON_UV_WARN_LIMIT:
+>  		/* Adjust from VIN coefficients (for LM25056) */
+> @@ -393,7 +390,6 @@ static int lm25066_write_word_data(struct i2c_client *client, int page, int reg,
+>  		word = ((s16)word < 0) ? 0 : clamp_val(word, 0, data->rlimit);
+>  		ret = pmbus_write_word_data(client, 0,
+>  					    LM25056_VAUX_UV_WARN_LIMIT, word);
+> -		pmbus_clear_cache(client);
+>  		break;
+>  	case PMBUS_VIRT_VMON_OV_WARN_LIMIT:
+>  		/* Adjust from VIN coefficients (for LM25056) */
+> @@ -401,7 +397,6 @@ static int lm25066_write_word_data(struct i2c_client *client, int page, int reg,
+>  		word = ((s16)word < 0) ? 0 : clamp_val(word, 0, data->rlimit);
+>  		ret = pmbus_write_word_data(client, 0,
+>  					    LM25056_VAUX_OV_WARN_LIMIT, word);
+> -		pmbus_clear_cache(client);
+>  		break;
+>  	case PMBUS_VIRT_RESET_PIN_HISTORY:
+>  		ret = pmbus_write_byte(client, 0, LM25066_CLEAR_PIN_PEAK);
