@@ -2,204 +2,161 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52E81C433E0
-	for <linux-hwmon@archiver.kernel.org>; Wed,  3 Feb 2021 19:58:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4E49C433DB
+	for <linux-hwmon@archiver.kernel.org>; Wed,  3 Feb 2021 20:54:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 033FF64F6C
-	for <linux-hwmon@archiver.kernel.org>; Wed,  3 Feb 2021 19:58:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7B38864F91
+	for <linux-hwmon@archiver.kernel.org>; Wed,  3 Feb 2021 20:54:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230122AbhBCT63 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 3 Feb 2021 14:58:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41654 "EHLO
+        id S232405AbhBCUst (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 3 Feb 2021 15:48:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbhBCT60 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 3 Feb 2021 14:58:26 -0500
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B76BC061573;
-        Wed,  3 Feb 2021 11:57:46 -0800 (PST)
-Received: by mail-oi1-x22e.google.com with SMTP id m7so1129459oiw.12;
-        Wed, 03 Feb 2021 11:57:46 -0800 (PST)
+        with ESMTP id S232073AbhBCUqR (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 3 Feb 2021 15:46:17 -0500
+Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB89C061573;
+        Wed,  3 Feb 2021 12:44:07 -0800 (PST)
+Received: by mail-oo1-xc31.google.com with SMTP id d3so208518ool.7;
+        Wed, 03 Feb 2021 12:44:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=T4SSlPqi/d0aRr5sSX2BwpZ1qnFmtPFAXm66EDENBWs=;
-        b=lIfl6EOTuMbmnq7Me/l/OT0fdxOXE1psNiisy+POrxtSIg/Y13k6WDLUyOxMwWO0wN
-         6mtHrNeaL2afQtNpwvaEVKFwsFTwZsmU35hi0D1Rh6ip1UUqcHjqkHRYvDv+18UfMJLo
-         9Cr3S2oLUmDfbOh8G83+tzxI+WJrjvD1tON8h23y6OieKC77a1a27MLM+bHePOCMcUbm
-         qXOcfcpKW43EORBOL2G8XUGXakdI9f4rdLOXKaryqCV8/qerkZDESSEr0j71kI7c2Z0N
-         ogjNneCgDb6bwJlrLvwp6Y9zZr5XfvWW2XbLRFg5hUsBuQ9R1sa03QJNK2mEIIbZbowq
-         maoA==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=F00Pr4eI96W+kjuNb1lq/HlQiDzd19IAAA28dQujcBw=;
+        b=d2JTLTHYNtnhKARJzADsZERVVmS05IW84ZJFeuRlIEvRV+KVVXcN4I/kEBK+O5agX0
+         2mqQFqPsKkKJ2q+GG4lHcoes76PYK0kcE87uhB9G7SI4z7ddOahNFJ/W3qiPHhRBif4f
+         v9SPeF5bw3ow17Fc/t38OKhHKc2VaaYV5UyyDOGxqmSPqrcjt2ltsACMXLsGIIZ7RELD
+         xUrZVCnUq70AF2HhLHW0AnYWFBO79/ei5+t4jHgCv0SMmtJYZzAfIg9VJmfsRJybPdly
+         j3an8MgU7JJtnZ4sd+Yq1Vt7mBlT0bfCNBcdP0b7XUWfbCs2JxLoi6gTUwk6oFIUOHa1
+         IADA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=T4SSlPqi/d0aRr5sSX2BwpZ1qnFmtPFAXm66EDENBWs=;
-        b=ldBE0ItXu7QnIblvFCC4umPOh0XzSDbzmTRypgqSZcq+FXJ9kweZj8HHVdtZoELiMQ
-         D1OygwJGgiQ4L9D/g3vGYzAETI/PM2bOR2aVRjEOUk5fer1u4c3Ia48iiYr8mKPltk9d
-         fPve/lsphFWu2k08yI0qqrT2WOUjOZahJy2uN2nsWxxKubQd5QT/AQOaGXtv/2bCqIYh
-         INQ/sUTbbSPS4Zm9EI6kjg3TzeyLGXYIMGElC7IgdT1G6KaVJQRKFX+tW4mlRGuzBvYK
-         U1lrfIb06px0H9IYhNE3fFUd47ywNMXE83aatAadaxo5YXJvDCpuiMmJyVuA9qXGKAvL
-         mXcA==
-X-Gm-Message-State: AOAM5332vpNldF0nwmztrAahgA7B/PFBsCKWxSbZ3KHbfHLad+PEW6sr
-        ouNESm9B2zrFuHH02uOms1afRFpPvnI=
-X-Google-Smtp-Source: ABdhPJxxybGoMClNvsMY4KfIkETAoKRnHZbK39inds51Er5MkBq1ZhXtkbrtwtkPap4eAbjOKf+lKQ==
-X-Received: by 2002:aca:3bd6:: with SMTP id i205mr3053696oia.82.1612382265638;
-        Wed, 03 Feb 2021 11:57:45 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m10sm653594oim.42.2021.02.03.11.57.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Feb 2021 11:57:44 -0800 (PST)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=F00Pr4eI96W+kjuNb1lq/HlQiDzd19IAAA28dQujcBw=;
+        b=bWgUfYTxVXYFMdyHnpnhpb3Hzwt/5fvutZm31axKxTC+Sp+uX0jZyzj1Jp6Tdz2s3a
+         +FxYj1GcsTU9mfxzDV7YUjdPvzE8PivM2mVndgF43efefNVPHyh1OmuQqqKlJ0C/mzjX
+         Umhgca7dmoPyJXn6S7zKb7NaVajYYH7mzk7k6NcrKRHxvr2TBIICgyYe+qJJAimXaiXg
+         HWVmkBo5/TT+BgC+br/hx3Vyoq8tAnX9tRXYzCh+8e3lQhGNqYJ6WzjzE9KCBqZMTzev
+         I1Jjo9Ios99yQ94q6K8tsAprkpfRPUeiLMJealvmOXHrZ68ncZQ+u+NKYusAV1IeWCkD
+         5j4w==
+X-Gm-Message-State: AOAM531NLiIMtTNUcKTvuqIX5JdT5d56fhJtoNBeHHkjJxC5fQpn+Imb
+        czhvTlC362dwdPMsAtoQh+HBCwToDkQ=
+X-Google-Smtp-Source: ABdhPJykcpC8jNC5GAbu1nFy8AX4LJFCsBY/um+VwD7tZPewed3y6748/CmrGwmaiiz7fXkJ2jcxSg==
+X-Received: by 2002:a4a:e6d2:: with SMTP id v18mr3299928oot.40.1612385047146;
+        Wed, 03 Feb 2021 12:44:07 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n27sm699690oij.36.2021.02.03.12.44.06
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 03 Feb 2021 12:44:06 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH 1/2] hwmon: lm75: Add NXP LM75A to of_match list
-To:     "Matwey V. Kornilov" <matwey.kornilov@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20210130103823.28914-1-matwey@sai.msu.ru>
- <82abc622-a625-b1bc-39b4-f9e1849036ee@roeck-us.net>
- <CAJs94EbBAK1LAZt4pfbzbUCxJtRo8kTAxdaN=y_gRbuvX0rz8Q@mail.gmail.com>
+Date:   Wed, 3 Feb 2021 12:44:05 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <2588ea5c-630e-6509-689d-4c8fea358e9b@roeck-us.net>
-Date:   Wed, 3 Feb 2021 11:57:42 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] hwmon: (pmbus) convert sysfs sprintf/snprintf family
+ to sysfs_emit
+Message-ID: <20210203204405.GG106766@roeck-us.net>
+References: <1612255743-52579-1-git-send-email-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
-In-Reply-To: <CAJs94EbBAK1LAZt4pfbzbUCxJtRo8kTAxdaN=y_gRbuvX0rz8Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1612255743-52579-1-git-send-email-jiapeng.chong@linux.alibaba.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2/3/21 9:13 AM, Matwey V. Kornilov wrote:
+On Tue, Feb 02, 2021 at 04:49:03PM +0800, Jiapeng Chong wrote:
+> Fix the following coccicheck warning:
 > 
+> ./drivers/hwmon/pmbus/inspur-ipsps.c:73:8-16: WARNING: use scnprintf or
+> sprintf.
 > 
-> сб, 30 янв. 2021 г. в 18:41, Guenter Roeck <linux@roeck-us.net <mailto:linux@roeck-us.net>>:
->>
->> On 1/30/21 2:38 AM, Matwey V. Kornilov wrote:
->> > NXP LM75A is compatible with original LM75A while it has improved
->> > 11-bit precision.
->> >
->> > https://www.nxp.com/docs/en/data-sheet/LM75A.pdf
->> >
->> > Signed-off-by: Matwey V. Kornilov <matwey@sai.msu.ru <mailto:matwey@sai.msu.ru>>
->> > ---
->> >  drivers/hwmon/lm75.c | 4 ++++
->> >  1 file changed, 4 insertions(+)
->> >
->> > diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
->> > index 3aa7f9454f57..37dc903ebf54 100644
->> > --- a/drivers/hwmon/lm75.c
->> > +++ b/drivers/hwmon/lm75.c
->> > @@ -699,6 +699,10 @@ static const struct of_device_id __maybe_unused lm75_of_match[] = {
->> >               .compatible = "national,lm75b",
->> >               .data = (void *)lm75b
->> >       },
->> > +     {
->> > +             .compatible = "nxp,lm75a",
->> > +             .data = (void *)lm75b
->>
->> This should get a different identifier (such as lm75a_nxp or whatever)
->> because otherwise the results would be different on non-devicetree
->> systems which would only match "lm75a".
->>
+> ./drivers/hwmon/pmbus/inspur-ipsps.c:114:9-17: WARNING: use scnprintf or
+> sprintf.
 > 
-> Sorry, I don't understand it. Non-devicetree systems won't use this table at all.
->  
-... and instantiate the driver with "lm75a", ie differently than on a devicetree
-system. Some purist could then complain that they have to instantiate the driver
-as lm75b even though it is a lm75a to get the higher resolution.
+> ./drivers/hwmon/pmbus/inspur-ipsps.c:94:8-16: WARNING: use scnprintf or
+> sprintf.
+> 
+> Reported-by: Abaci Robot<abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 
-Besides, I just noticed that the resolution for the limit registers for nxp's
-version of LM75A is different than the resolution of the temperature register.
-That means that you'll need a separate entry for this chip anyway,
-one that specifies a .default_resolution of 11 and .resolution_limits of 9.
-
-Making things worse, that also applies to NXP's version of LM75B. And
-the resolution of TI's version of LM75B/C is 9 bit for both temperature
-and limit registers, which does make me wonder where the 11 bit in the
-driver comes from ... oh, yes, that was commit 799fc602143024 ("hwmon:
-(lm75) Add support for the NXP LM75B"). The devicetree table was added later,
-and with that the entry was wrongly attributed to National and not to NXP.
-
-So in reality we'd really need a number of additional entries to
-match sensor and limit resolutions correctly.
-
-National/TI: Resolution is always 9 bit for LM95 and LM95A/B/C.
-NXP: Resolution is 11 bit for temperature, 9 bit for limits for LM75A/B.
-Oh, as it turns out the limit register resolution for NXP's PCT2075 is
-also 9 bit. Sigh.
+Please refrain from such changes. I'll accept them only if other changes
+are made to the driver at the same time.
 
 Guenter
 
->>
->> > +     },
->> >       {
->> >               .compatible = "maxim,max6625",
->> >               .data = (void *)max6625
->> >
->>
->> Both "nxp,lm75a" and "nxp,lm75b" need to be added to
->> Documentation/devicetree/bindings/hwmon/lm75.yaml (in a separate
->> patch with copy to dt maintainers for review).
->>
->> Guenter
+> ---
+> Changes in v2:
+>   -Modified code space.
 > 
+>  drivers/hwmon/pmbus/inspur-ipsps.c | 28 ++++++++++++++--------------
+>  1 file changed, 14 insertions(+), 14 deletions(-)
 > 
+> diff --git a/drivers/hwmon/pmbus/inspur-ipsps.c b/drivers/hwmon/pmbus/inspur-ipsps.c
+> index 88c5865..bf593fd 100644
+> --- a/drivers/hwmon/pmbus/inspur-ipsps.c
+> +++ b/drivers/hwmon/pmbus/inspur-ipsps.c
+> @@ -70,7 +70,7 @@ static ssize_t ipsps_string_show(struct device *dev,
+>  	p = memscan(data, '#', rc);
+>  	*p = '\0';
+>  
+> -	return snprintf(buf, PAGE_SIZE, "%s\n", data);
+> +	return sysfs_emit(buf, "%s\n", data);
+>  }
+>  
+>  static ssize_t ipsps_fw_version_show(struct device *dev,
+> @@ -91,9 +91,9 @@ static ssize_t ipsps_fw_version_show(struct device *dev,
+>  	if (rc != 6)
+>  		return -EPROTO;
+>  
+> -	return snprintf(buf, PAGE_SIZE, "%u.%02u%u-%u.%02u\n",
+> -			data[1], data[2]/* < 100 */, data[3]/*< 10*/,
+> -			data[4], data[5]/* < 100 */);
+> +	return sysfs_emit(buf, "%u.%02u%u-%u.%02u\n",
+> +			  data[1], data[2]/* < 100 */, data[3]/*< 10*/,
+> +			  data[4], data[5]/* < 100 */);
+>  }
+>  
+>  static ssize_t ipsps_mode_show(struct device *dev,
+> @@ -111,19 +111,19 @@ static ssize_t ipsps_mode_show(struct device *dev,
+>  
+>  	switch (rc) {
+>  	case MODE_ACTIVE:
+> -		return snprintf(buf, PAGE_SIZE, "[%s] %s %s\n",
+> -				MODE_ACTIVE_STRING,
+> -				MODE_STANDBY_STRING, MODE_REDUNDANCY_STRING);
+> +		return sysfs_emit(buf, "[%s] %s %s\n",
+> +				  MODE_ACTIVE_STRING,
+> +				  MODE_STANDBY_STRING, MODE_REDUNDANCY_STRING);
+>  	case MODE_STANDBY:
+> -		return snprintf(buf, PAGE_SIZE, "%s [%s] %s\n",
+> -				MODE_ACTIVE_STRING,
+> -				MODE_STANDBY_STRING, MODE_REDUNDANCY_STRING);
+> +		return sysfs_emit(buf, "%s [%s] %s\n",
+> +				  MODE_ACTIVE_STRING,
+> +				  MODE_STANDBY_STRING, MODE_REDUNDANCY_STRING);
+>  	case MODE_REDUNDANCY:
+> -		return snprintf(buf, PAGE_SIZE, "%s %s [%s]\n",
+> -				MODE_ACTIVE_STRING,
+> -				MODE_STANDBY_STRING, MODE_REDUNDANCY_STRING);
+> +		return sysfs_emit(buf, "%s %s [%s]\n",
+> +				  MODE_ACTIVE_STRING,
+> +				  MODE_STANDBY_STRING, MODE_REDUNDANCY_STRING);
+>  	default:
+> -		return snprintf(buf, PAGE_SIZE, "unspecified\n");
+> +		return sysfs_emit(buf, "unspecified\n");
+>  	}
+>  }
+>  
+> -- 
+> 1.8.3.1
 > 
-> --
-> With best regards,
-> Matwey V. Kornilov
-
