@@ -5,69 +5,67 @@ X-Spam-Level:
 X-Spam-Status: No, score=-15.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D50C5C433E0
-	for <linux-hwmon@archiver.kernel.org>; Tue,  2 Feb 2021 20:55:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52E81C433E0
+	for <linux-hwmon@archiver.kernel.org>; Wed,  3 Feb 2021 19:58:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8E62C64F61
-	for <linux-hwmon@archiver.kernel.org>; Tue,  2 Feb 2021 20:55:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 033FF64F6C
+	for <linux-hwmon@archiver.kernel.org>; Wed,  3 Feb 2021 19:58:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233895AbhBBUyw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 2 Feb 2021 15:54:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54230 "EHLO
+        id S230122AbhBCT63 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 3 Feb 2021 14:58:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbhBBUyv (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 2 Feb 2021 15:54:51 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE996C061573;
-        Tue,  2 Feb 2021 12:54:10 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id w8so24301701oie.2;
-        Tue, 02 Feb 2021 12:54:10 -0800 (PST)
+        with ESMTP id S229931AbhBCT60 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 3 Feb 2021 14:58:26 -0500
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B76BC061573;
+        Wed,  3 Feb 2021 11:57:46 -0800 (PST)
+Received: by mail-oi1-x22e.google.com with SMTP id m7so1129459oiw.12;
+        Wed, 03 Feb 2021 11:57:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=gfp5Wubi9kJH3jYYB/shKlrSDDynt76ZZ+uDiCu9JDw=;
-        b=Lap1UaXysWsq+yYLR7Wp6DuXJz64qcHJMTAYJZoR4qiIgYbO+1/qa+lI7QOr0L8Q+q
-         hifNBjNgd52MVjTY3Dy/Ofw8ebTtUHaq1Bt045pEBqMJFY/a38VHMQseKafjSyyps0u5
-         fLEf4ZCse+Tz5jJD22UjblR1nkJYwqEX96MI9k7Bvhw+7NyCeMD6cKr7xMa0WYYM0u8w
-         kE7CEWRXxG9jITJt83SKEgYkMHmHW3yzA8xy36tUYKurtylGk8PnYDs9qzPWPMAsL/5V
-         Ltx13/At0X7gDKqA3vfMTlLbOsnfXtV9Ba+BGk+GiBBxSrnrAnvn6s9S4sYayryjxsF4
-         TpUA==
+        bh=T4SSlPqi/d0aRr5sSX2BwpZ1qnFmtPFAXm66EDENBWs=;
+        b=lIfl6EOTuMbmnq7Me/l/OT0fdxOXE1psNiisy+POrxtSIg/Y13k6WDLUyOxMwWO0wN
+         6mtHrNeaL2afQtNpwvaEVKFwsFTwZsmU35hi0D1Rh6ip1UUqcHjqkHRYvDv+18UfMJLo
+         9Cr3S2oLUmDfbOh8G83+tzxI+WJrjvD1tON8h23y6OieKC77a1a27MLM+bHePOCMcUbm
+         qXOcfcpKW43EORBOL2G8XUGXakdI9f4rdLOXKaryqCV8/qerkZDESSEr0j71kI7c2Z0N
+         ogjNneCgDb6bwJlrLvwp6Y9zZr5XfvWW2XbLRFg5hUsBuQ9R1sa03QJNK2mEIIbZbowq
+         maoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=gfp5Wubi9kJH3jYYB/shKlrSDDynt76ZZ+uDiCu9JDw=;
-        b=YIS3D8adu7bwJwkSbrXIb4Ec6DVHIsAER0LdbPHXFxCEPELqIIPRdmXtQl7EyAWLry
-         BDLP8OumkHm3HxwmZETdm3mTCOzfNHrUOy2aSiGFzHHBFKZLsjpoGTvChYrLhhuNKH2a
-         /3ZcQYnHZ/QRQdMuzGiBhKg5G+8iEQ10I4rquy++nsaqd7spohbW6OfhNHMaoF34P9Au
-         AQbTr37BTn9a9Pco52F7gfN/E2olICkAHT5EhbGFXQcXKbfjaKK/d1JGdK5lonhbLdTT
-         Ov6DvQjdpKbxwXToou05lCc2+REjkLbXeAGqmsGg8HH3OkXBRcUsQtib9fYumWZb6SIA
-         RO5Q==
-X-Gm-Message-State: AOAM532SXoMVowKGhuo6VYyQ+/cq2BYGmrD/yVTSllxRMXhJquonC/3n
-        Uu/YSO7Lqy1AuOyfvLIUgXZArNAdUNg=
-X-Google-Smtp-Source: ABdhPJxKyveeVP9PhpVj3Oe6AXEyGHws55UPuEbPU1/AJXVOMJBIwSuuuJove4lsFdI7sYzKO2S8hA==
-X-Received: by 2002:a05:6808:24a:: with SMTP id m10mr4147662oie.95.1612299250111;
-        Tue, 02 Feb 2021 12:54:10 -0800 (PST)
+        bh=T4SSlPqi/d0aRr5sSX2BwpZ1qnFmtPFAXm66EDENBWs=;
+        b=ldBE0ItXu7QnIblvFCC4umPOh0XzSDbzmTRypgqSZcq+FXJ9kweZj8HHVdtZoELiMQ
+         D1OygwJGgiQ4L9D/g3vGYzAETI/PM2bOR2aVRjEOUk5fer1u4c3Ia48iiYr8mKPltk9d
+         fPve/lsphFWu2k08yI0qqrT2WOUjOZahJy2uN2nsWxxKubQd5QT/AQOaGXtv/2bCqIYh
+         INQ/sUTbbSPS4Zm9EI6kjg3TzeyLGXYIMGElC7IgdT1G6KaVJQRKFX+tW4mlRGuzBvYK
+         U1lrfIb06px0H9IYhNE3fFUd47ywNMXE83aatAadaxo5YXJvDCpuiMmJyVuA9qXGKAvL
+         mXcA==
+X-Gm-Message-State: AOAM5332vpNldF0nwmztrAahgA7B/PFBsCKWxSbZ3KHbfHLad+PEW6sr
+        ouNESm9B2zrFuHH02uOms1afRFpPvnI=
+X-Google-Smtp-Source: ABdhPJxxybGoMClNvsMY4KfIkETAoKRnHZbK39inds51Er5MkBq1ZhXtkbrtwtkPap4eAbjOKf+lKQ==
+X-Received: by 2002:aca:3bd6:: with SMTP id i205mr3053696oia.82.1612382265638;
+        Wed, 03 Feb 2021 11:57:45 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r6sm13208oij.29.2021.02.02.12.54.08
+        by smtp.gmail.com with ESMTPSA id m10sm653594oim.42.2021.02.03.11.57.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Feb 2021 12:54:09 -0800 (PST)
+        Wed, 03 Feb 2021 11:57:44 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v3] hwmon: lm75: Handle broken device nodes gracefully
+Subject: Re: [PATCH 1/2] hwmon: lm75: Add NXP LM75A to of_match list
 To:     "Matwey V. Kornilov" <matwey.kornilov@gmail.com>
 Cc:     Jean Delvare <jdelvare@suse.com>,
-        Javier Martinez Canillas <javier@osg.samsung.com>,
         "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>
-References: <20210202142113.5456-1-matwey@sai.msu.ru>
- <20210202183737.28747-1-matwey@sai.msu.ru>
- <c0cf9573-74bb-fef9-a14b-7a5eef781c4a@roeck-us.net>
- <CAJs94Ea--d7tW6ZYOjMhHsaXAJZjtivazw+0CAopFmNbYsgAgQ@mail.gmail.com>
+References: <20210130103823.28914-1-matwey@sai.msu.ru>
+ <82abc622-a625-b1bc-39b4-f9e1849036ee@roeck-us.net>
+ <CAJs94EbBAK1LAZt4pfbzbUCxJtRo8kTAxdaN=y_gRbuvX0rz8Q@mail.gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -112,12 +110,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <4055b084-6042-2a75-03d0-1c475df81295@roeck-us.net>
-Date:   Tue, 2 Feb 2021 12:54:07 -0800
+Message-ID: <2588ea5c-630e-6509-689d-4c8fea358e9b@roeck-us.net>
+Date:   Wed, 3 Feb 2021 11:57:42 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <CAJs94Ea--d7tW6ZYOjMhHsaXAJZjtivazw+0CAopFmNbYsgAgQ@mail.gmail.com>
+In-Reply-To: <CAJs94EbBAK1LAZt4pfbzbUCxJtRo8kTAxdaN=y_gRbuvX0rz8Q@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -125,92 +123,80 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2/2/21 11:31 AM, Matwey V. Kornilov wrote:
+On 2/3/21 9:13 AM, Matwey V. Kornilov wrote:
 > 
 > 
-> вт, 2 февр. 2021 г. в 22:29, Guenter Roeck <linux@roeck-us.net <mailto:linux@roeck-us.net>>:
+> сб, 30 янв. 2021 г. в 18:41, Guenter Roeck <linux@roeck-us.net <mailto:linux@roeck-us.net>>:
 >>
->> On 2/2/21 10:37 AM, Matwey V. Kornilov wrote:
->> > There is a logical flaw in lm75_probe() function introduced in
+>> On 1/30/21 2:38 AM, Matwey V. Kornilov wrote:
+>> > NXP LM75A is compatible with original LM75A while it has improved
+>> > 11-bit precision.
 >> >
->> >     commit e97a45f1b460 ("hwmon: (lm75) Add OF device ID table")
+>> > https://www.nxp.com/docs/en/data-sheet/LM75A.pdf
 >> >
->> > Note, that of_device_get_match_data() returns NULL when no match
->> > is found. This is the case when OF node exists but has unknown
->> > compatible line, while the module is still loaded via i2c
->> > detection.
->> >
->> > arch/powerpc/boot/dts/fsl/p2041rdb.dts:
->> >
->> >     lm75b@48 {
->> >       compatible = "nxp,lm75a";
->> >       reg = <0x48>;
->> >     };
->> >
->> > In this case, the sensor is mistakenly considered as ADT75 variant.
->> >
->> > Fixes: e97a45f1b460 ("hwmon: (lm75) Add OF device ID table")
 >> > Signed-off-by: Matwey V. Kornilov <matwey@sai.msu.ru <mailto:matwey@sai.msu.ru>>
+>> > ---
+>> >  drivers/hwmon/lm75.c | 4 ++++
+>> >  1 file changed, 4 insertions(+)
+>> >
+>> > diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
+>> > index 3aa7f9454f57..37dc903ebf54 100644
+>> > --- a/drivers/hwmon/lm75.c
+>> > +++ b/drivers/hwmon/lm75.c
+>> > @@ -699,6 +699,10 @@ static const struct of_device_id __maybe_unused lm75_of_match[] = {
+>> >               .compatible = "national,lm75b",
+>> >               .data = (void *)lm75b
+>> >       },
+>> > +     {
+>> > +             .compatible = "nxp,lm75a",
+>> > +             .data = (void *)lm75b
 >>
->> Looks good, but we'll also need a solution for the existing devicetree
->> nodes since they are being used. The best solution would probably
->> be to document and add "nxp,lm75a" to the list of devicetree nodes.
->> The same applies to other used but not documented compatible strings
->> (I think you sent a list earlier if I recall correctly).
+>> This should get a different identifier (such as lm75a_nxp or whatever)
+>> because otherwise the results would be different on non-devicetree
+>> systems which would only match "lm75a".
 >>
->> Sorry that I didn't bring this up earlier, but I am concerned that
->> if we don't do this, this patch might be considered a regression.
 > 
-> 
-> What if I just concatenate this patch with the other patch series where "nxp,lm75a" compatible string is introduced?
+> Sorry, I don't understand it. Non-devicetree systems won't use this table at all.
 >  
+... and instantiate the driver with "lm75a", ie differently than on a devicetree
+system. Some purist could then complain that they have to instantiate the driver
+as lm75b even though it is a lm75a to get the higher resolution.
 
-It just has to be handled in one series, best with the compatible string(s)
-introduced first and then this patch as last patch of the series.
+Besides, I just noticed that the resolution for the limit registers for nxp's
+version of LM75A is different than the resolution of the temperature register.
+That means that you'll need a separate entry for this chip anyway,
+one that specifies a .default_resolution of 11 and .resolution_limits of 9.
 
-Thanks,
+Making things worse, that also applies to NXP's version of LM75B. And
+the resolution of TI's version of LM75B/C is 9 bit for both temperature
+and limit registers, which does make me wonder where the 11 bit in the
+driver comes from ... oh, yes, that was commit 799fc602143024 ("hwmon:
+(lm75) Add support for the NXP LM75B"). The devicetree table was added later,
+and with that the entry was wrongly attributed to National and not to NXP.
+
+So in reality we'd really need a number of additional entries to
+match sensor and limit resolutions correctly.
+
+National/TI: Resolution is always 9 bit for LM95 and LM95A/B/C.
+NXP: Resolution is 11 bit for temperature, 9 bit for limits for LM75A/B.
+Oh, as it turns out the limit register resolution for NXP's PCT2075 is
+also 9 bit. Sigh.
+
 Guenter
 
 >>
+>> > +     },
+>> >       {
+>> >               .compatible = "maxim,max6625",
+>> >               .data = (void *)max6625
+>> >
 >>
->> Thanks,
+>> Both "nxp,lm75a" and "nxp,lm75b" need to be added to
+>> Documentation/devicetree/bindings/hwmon/lm75.yaml (in a separate
+>> patch with copy to dt maintainers for review).
+>>
 >> Guenter
->>
->> > ---
->> >  Changes since v2:
->> >  * fixed typo in the message
->> >  * fixed brackets
->> >
->> >  drivers/hwmon/lm75.c | 13 ++++++++++---
->> >  1 file changed, 10 insertions(+), 3 deletions(-)
->> >
->> > diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
->> > index e447febd121a..53882c334a0d 100644
->> > --- a/drivers/hwmon/lm75.c
->> > +++ b/drivers/hwmon/lm75.c
->> > @@ -561,10 +561,17 @@ static int lm75_probe(struct i2c_client *client)
->> >       int status, err;
->> >       enum lm75_type kind;
->> >
->> > -     if (client->dev.of_node)
->> > -             kind = (enum lm75_type)of_device_get_match_data(&client->dev);
->> > -     else
->> > +     if (dev->of_node) {
->> > +             const struct of_device_id *match =
->> > +                     of_match_device(dev->driver->of_match_table, dev);
->> > +
->> > +             if (!match)
->> > +                     return -ENODEV;
->> > +
->> > +             kind = (enum lm75_type)(match->data);
->> > +     } else {
->> >               kind = i2c_match_id(lm75_ids, client)->driver_data;
->> > +     }
->> >
->> >       if (!i2c_check_functionality(client->adapter,
->> >                       I2C_FUNC_SMBUS_BYTE_DATA | I2C_FUNC_SMBUS_WORD_DATA))
->> >
->>
+> 
 > 
 > 
 > --
