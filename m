@@ -4,161 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65EA3C433DB
-	for <linux-hwmon@archiver.kernel.org>; Fri,  5 Feb 2021 21:23:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 571F1C433DB
+	for <linux-hwmon@archiver.kernel.org>; Fri,  5 Feb 2021 21:38:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2ED7064D79
-	for <linux-hwmon@archiver.kernel.org>; Fri,  5 Feb 2021 21:23:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0D1C464FBC
+	for <linux-hwmon@archiver.kernel.org>; Fri,  5 Feb 2021 21:38:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233643AbhBEVW7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 5 Feb 2021 16:22:59 -0500
-Received: from mail-oi1-f171.google.com ([209.85.167.171]:34834 "EHLO
-        mail-oi1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233816AbhBEVWR (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 5 Feb 2021 16:22:17 -0500
-Received: by mail-oi1-f171.google.com with SMTP id w8so9025962oie.2;
-        Fri, 05 Feb 2021 13:22:00 -0800 (PST)
+        id S231790AbhBEViL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 5 Feb 2021 16:38:11 -0500
+Received: from mail-oi1-f174.google.com ([209.85.167.174]:32913 "EHLO
+        mail-oi1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231699AbhBEVdh (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 5 Feb 2021 16:33:37 -0500
+Received: by mail-oi1-f174.google.com with SMTP id j25so9066110oii.0;
+        Fri, 05 Feb 2021 13:33:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=jocZMba4zIL2h1yCNatGbik1KvXn4y8YG1xTFpkN/Co=;
-        b=VYbwU+vjRnQ7LryvnO+z0mcRvOWam2Wjao4Ve3IVQO8pt2uo7BCFcAm/QujniCledz
-         F/6mA8yDoZyuacvHlhZmJvWdpjphTVydip/2lVzIWi/BcJ9KMthpGjd5UPX5hoWRfPHw
-         LQ7ClVsvV/jAkdX9Ril49c04Zq+NznRGU21aLLvH04O9sRnQX4PKCVW+Jz4/lFNi4/xe
-         9vTJhk+ug4mSNV8xE3g2vSq4qrjcAkJOn2X44bSGka1etyOFG065bqUzeJZpyz2idYaT
-         TGY4mvT6igAz0rYfer2AMduhb5KYC/KMrp/8ztfV5aMBZw9owRM4Gp1onWmGHQ8cwQmj
-         9f7g==
-X-Gm-Message-State: AOAM531H1OtySxBpce/jqYViYIMkWoFXQwVfyWytNTuwUzQFkjGE2OAM
-        0woi7ZoVWWwYj8UtgP+qSu3iHalBAA==
-X-Google-Smtp-Source: ABdhPJyBctuEa2lJbXV3As6EdaWOf8hcdJvn9AQoelXaG4VA2D6LMqtHhVNUj/qEHT7t+fAFVfQWEA==
-X-Received: by 2002:aca:3b06:: with SMTP id i6mr4363448oia.81.1612560095487;
-        Fri, 05 Feb 2021 13:21:35 -0800 (PST)
+        bh=86eO/CLFxDsv5n6pTUydgpIRqU5ON+6WVGskNxWogxA=;
+        b=nnceqZNaX8p4AxoOeczekdkvj2ZdP5JyLb2gG3WuYMVOGewFe90GxSm14i2E0lUsFG
+         BkSzn72pYuSLdA5vljtjoCCBz859tz3HYe07yxLINDYSCnEKDojqTsXfIvoG3zYZ0NbU
+         cCfn6rZNaYj5Mqk+lxgHb1GUZY//jYmgmpP/smhWiUS/R1y7wYcyT2UGn3bPTR4M39U6
+         t5xWw3mexIaMcr/atDlmsjQw4gLmTIeWptjG8qXxD5YKFa2DoINbtGQg/AR7ZQ0FpXnI
+         jrvs+GF5YZ+s4YJLwqdPoqiLaBpZiZpcp+sDQ8aC2IgPCcFnQx8boqhng6oPGJsmcBdK
+         5Rkw==
+X-Gm-Message-State: AOAM5335AhW0ZDCjxiq2XYSBzoioJgOiOUk9qtQR2EYYeJqGQ+xuNfgI
+        KbTK5VIKs4ihNI8fC6rwfw==
+X-Google-Smtp-Source: ABdhPJwKCKLqY/zf52ITpGj52KvCSevpP49mjoubxMi9PUwPQMtCCEx7UBJSzNbPQ08yn9IGf+K1lw==
+X-Received: by 2002:aca:308a:: with SMTP id w132mr4243401oiw.69.1612560776545;
+        Fri, 05 Feb 2021 13:32:56 -0800 (PST)
 Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id q20sm2040441otf.2.2021.02.05.13.21.33
+        by smtp.gmail.com with ESMTPSA id v67sm2102221otb.43.2021.02.05.13.32.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Feb 2021 13:21:34 -0800 (PST)
-Received: (nullmailer pid 3765901 invoked by uid 1000);
-        Fri, 05 Feb 2021 21:21:33 -0000
-Date:   Fri, 5 Feb 2021 15:21:33 -0600
+        Fri, 05 Feb 2021 13:32:55 -0800 (PST)
+Received: (nullmailer pid 3784899 invoked by uid 1000);
+        Fri, 05 Feb 2021 21:32:54 -0000
+Date:   Fri, 5 Feb 2021 15:32:54 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Campion Kang <campion.kang@advantech.com.tw>
-Cc:     Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-hwmon@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        AceLan Kao <chia-lin.kao@canonical.com>
-Subject: Re: [PATCH v6 3/6] dt-bindings: mfd: ahc1ec0.yaml: Add Advantech
- embedded controller - AHC1EC0
-Message-ID: <20210205212133.GA3759495@robh.at.kernel.org>
-References: <20210118123749.4769-1-campion.kang@advantech.com.tw>
- <20210118123749.4769-3-campion.kang@advantech.com.tw>
+To:     Robert Marko <robert.marko@sartura.hr>
+Cc:     linux-doc@vger.kernel.org, linux@roeck-us.net, robh+dt@kernel.org,
+        jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, Luka Perkov <luka.perkov@sartura.hr>,
+        linux-kernel@vger.kernel.org, corbet@lwn.net
+Subject: Re: [PATCH v5 1/3] dt-bindings: hwmon: Add TI TPS23861 bindings
+Message-ID: <20210205213254.GA3784838@robh.at.kernel.org>
+References: <20210121134434.2782405-1-robert.marko@sartura.hr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210118123749.4769-3-campion.kang@advantech.com.tw>
+In-Reply-To: <20210121134434.2782405-1-robert.marko@sartura.hr>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Jan 18, 2021 at 08:37:46PM +0800, Campion Kang wrote:
-> Add DT binding schema for Advantech embedded controller AHC1EC0.
+On Thu, 21 Jan 2021 14:44:32 +0100, Robert Marko wrote:
+> Document bindings for the Texas Instruments TPS23861 driver.
 > 
-> Changed since V5:
-> 	- rename dt-bindings/mfd/ahc1ec0.h to dt-bindings/mfd/ahc1ec0-dt.h
-> 	that found errors by bot 'make dt_binding_check'
-> 
-> Signed-off-by: Campion Kang <campion.kang@advantech.com.tw>
+> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> Cc: Luka Perkov <luka.perkov@sartura.hr>
 > ---
->  .../devicetree/bindings/mfd/ahc1ec0.yaml      | 69 +++++++++++++++++++
->  1 file changed, 69 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/ahc1ec0.yaml
+> Changes in v5:
+> * Drop uint32 reference
 > 
-> diff --git a/Documentation/devicetree/bindings/mfd/ahc1ec0.yaml b/Documentation/devicetree/bindings/mfd/ahc1ec0.yaml
-> new file mode 100644
-> index 000000000000..40af14bb9c0a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/ahc1ec0.yaml
-> @@ -0,0 +1,69 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/ahc1ec0.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Advantech Embedded Controller (AHC1EC0)
-> +
-> +maintainers:
-> +  - Campion Kang <campion.kang@advantech.com.tw>
-> +
-> +description: |
-> +  AHC1EC0 is one of the embedded controllers used by Advantech to provide several
-> +  functions such as watchdog, hwmon, brightness, etc. Advantech related applications
-> +  can control the whole system via these functions.
-> +
-> +properties:
-> +  compatible:
-> +    const: advantech,ahc1ec0
-> +
-> +  advantech,sub-dev-nb:
-> +    description:
-> +      The number of sub-devices specified in the platform.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    maxItems: 1
-
-You don't need this, just count the length of the next property:
-
-> +
-> +  advantech,sub-dev:
-> +    description:
-> +      A list of the sub-devices supported in the platform. Defines for the
-> +      appropriate values can found in dt-bindings/mfd/ahc1ec0-dt.h.
-> +    $ref: "/schemas/types.yaml#/definitions/uint32-array"
-> +    minItems: 1
-> +    maxItems: 6
-
-But as I said before, this binding is odd. It doesn't look like how we 
-do any other MFD. Either we have child nodes or they are implicit.
-
-> +
-> +  advantech,hwmon-profile:
-> +    description:
-> +      The number of sub-devices specified in the platform. Defines for the
-> +      hwmon profiles can found in dt-bindings/mfd/ahc1ec0-dt.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - advantech,sub-dev-nb
-> +  - advantech,sub-dev
-> +
-> +if:
-> +  properties:
-> +    advantech,sub-dev:
-> +      contains:
-> +        const: 0x3
-> +then:
-> +  required:
-> +    - advantech,hwmon-profile
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/mfd/ahc1ec0-dt.h>
-> +    ahc1ec0 {
-> +        compatible = "advantech,ahc1ec0";
-> +
-> +        advantech,sub-dev-nb = <2>;
-> +        advantech,sub-dev = <AHC1EC0_SUBDEV_HWMON
-> +                             AHC1EC0_SUBDEV_WDT>;
-> +
-> +        advantech,hwmon-profile = <AHC1EC0_HWMON_PRO_UNO2271G>;
-> +    };
-> -- 
-> 2.17.1
+> Changes in v4:
+> * Correct shunt binding
 > 
+>  .../bindings/hwmon/ti,tps23861.yaml           | 51 +++++++++++++++++++
+>  1 file changed, 51 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml
+> 
+
+Reviewed-by: Rob Herring <robh@kernel.org>
