@@ -2,115 +2,163 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 862B3C433E6
-	for <linux-hwmon@archiver.kernel.org>; Fri,  5 Feb 2021 20:10:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65EA3C433DB
+	for <linux-hwmon@archiver.kernel.org>; Fri,  5 Feb 2021 21:23:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3FC3064FBF
-	for <linux-hwmon@archiver.kernel.org>; Fri,  5 Feb 2021 20:10:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2ED7064D79
+	for <linux-hwmon@archiver.kernel.org>; Fri,  5 Feb 2021 21:23:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233077AbhBES13 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 5 Feb 2021 13:27:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34770 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233706AbhBES1S (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 5 Feb 2021 13:27:18 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EC17364FBA;
-        Fri,  5 Feb 2021 20:09:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612555742;
-        bh=beiP1QVTcTtnz/28je3Db2hFbKVGRBpJgYPrzRQ3FJY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=HiHatxkiTqo19TZ7agC6KDqUsgXV67Li8ly2L0wqDAIgO/TnRxAG2RsEVs5oqP6c+
-         UaOzHqagc4QJeLih2kXFAEt5d7GhSEhvjlhL3gH10/QCgaTVU1AQai8Mn1NFjTiezP
-         i1wgd9CTA84LgzCyhkwn5/kx2hr1+O0JvExsTupHij3anIzI/f4gsgHmz14r0nXCYL
-         l0+YcKZuoB+EBsv5ijeTNTCycIDJJ3bqKmtNaMYKKxf/lWGat0JwJxc2r6hSYJ80aS
-         IrqB6hXBSMagUQ342uqUdCGIfPNEt/aJJPrbGL+JfG1RPWW1Icry7tJhu+BlO9Wj7x
-         cGUyryDyXIy7Q==
-Date:   Fri, 5 Feb 2021 14:08:59 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Yicong Yang <yangyicong@hisilicon.com>, gregkh@linuxfoundation.org,
-        jdelvare@suse.com, giometti@enneenne.com, abbotti@mev.co.uk,
-        hsweeten@visionengravers.com, kw@linux.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-kbuild@vger.kernel.org, masahiroy@kernel.org,
-        michal.lkml@markovi.net, prime.zeng@huawei.com,
-        linuxarm@openeuler.org
-Subject: Re: [PATCH 2/4] hwmon: Use subdir-ccflags-* to inherit debug flag
-Message-ID: <20210205200859.GA193526@bjorn-Precision-5520>
+        id S233643AbhBEVW7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 5 Feb 2021 16:22:59 -0500
+Received: from mail-oi1-f171.google.com ([209.85.167.171]:34834 "EHLO
+        mail-oi1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233816AbhBEVWR (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 5 Feb 2021 16:22:17 -0500
+Received: by mail-oi1-f171.google.com with SMTP id w8so9025962oie.2;
+        Fri, 05 Feb 2021 13:22:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jocZMba4zIL2h1yCNatGbik1KvXn4y8YG1xTFpkN/Co=;
+        b=VYbwU+vjRnQ7LryvnO+z0mcRvOWam2Wjao4Ve3IVQO8pt2uo7BCFcAm/QujniCledz
+         F/6mA8yDoZyuacvHlhZmJvWdpjphTVydip/2lVzIWi/BcJ9KMthpGjd5UPX5hoWRfPHw
+         LQ7ClVsvV/jAkdX9Ril49c04Zq+NznRGU21aLLvH04O9sRnQX4PKCVW+Jz4/lFNi4/xe
+         9vTJhk+ug4mSNV8xE3g2vSq4qrjcAkJOn2X44bSGka1etyOFG065bqUzeJZpyz2idYaT
+         TGY4mvT6igAz0rYfer2AMduhb5KYC/KMrp/8ztfV5aMBZw9owRM4Gp1onWmGHQ8cwQmj
+         9f7g==
+X-Gm-Message-State: AOAM531H1OtySxBpce/jqYViYIMkWoFXQwVfyWytNTuwUzQFkjGE2OAM
+        0woi7ZoVWWwYj8UtgP+qSu3iHalBAA==
+X-Google-Smtp-Source: ABdhPJyBctuEa2lJbXV3As6EdaWOf8hcdJvn9AQoelXaG4VA2D6LMqtHhVNUj/qEHT7t+fAFVfQWEA==
+X-Received: by 2002:aca:3b06:: with SMTP id i6mr4363448oia.81.1612560095487;
+        Fri, 05 Feb 2021 13:21:35 -0800 (PST)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id q20sm2040441otf.2.2021.02.05.13.21.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Feb 2021 13:21:34 -0800 (PST)
+Received: (nullmailer pid 3765901 invoked by uid 1000);
+        Fri, 05 Feb 2021 21:21:33 -0000
+Date:   Fri, 5 Feb 2021 15:21:33 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Campion Kang <campion.kang@advantech.com.tw>
+Cc:     Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-hwmon@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        AceLan Kao <chia-lin.kao@canonical.com>
+Subject: Re: [PATCH v6 3/6] dt-bindings: mfd: ahc1ec0.yaml: Add Advantech
+ embedded controller - AHC1EC0
+Message-ID: <20210205212133.GA3759495@robh.at.kernel.org>
+References: <20210118123749.4769-1-campion.kang@advantech.com.tw>
+ <20210118123749.4769-3-campion.kang@advantech.com.tw>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210205182832.GA186268@roeck-us.net>
+In-Reply-To: <20210118123749.4769-3-campion.kang@advantech.com.tw>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Feb 05, 2021 at 10:28:32AM -0800, Guenter Roeck wrote:
-> On Fri, Feb 05, 2021 at 05:44:13PM +0800, Yicong Yang wrote:
-> > From: Junhao He <hejunhao2@hisilicon.com>
-> > 
-> > Use subdir-ccflags-* instead of ccflags-* to inherit the debug
-> > settings from Kconfig when traversing subdirectories.
-> > 
-> > Suggested-by: Bjorn Helgaas <bhelgaas@google.com>
-> > Signed-off-by: Junhao He <hejunhao2@hisilicon.com>
-> > Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+On Mon, Jan 18, 2021 at 08:37:46PM +0800, Campion Kang wrote:
+> Add DT binding schema for Advantech embedded controller AHC1EC0.
 > 
-> What problem does this fix ? Maybe I am missing it, but I don't see
-> DEBUG being used in a subdirectory of drivers/hwmon.
+> Changed since V5:
+> 	- rename dt-bindings/mfd/ahc1ec0.h to dt-bindings/mfd/ahc1ec0-dt.h
+> 	that found errors by bot 'make dt_binding_check'
+> 
+> Signed-off-by: Campion Kang <campion.kang@advantech.com.tw>
+> ---
+>  .../devicetree/bindings/mfd/ahc1ec0.yaml      | 69 +++++++++++++++++++
+>  1 file changed, 69 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/ahc1ec0.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/ahc1ec0.yaml b/Documentation/devicetree/bindings/mfd/ahc1ec0.yaml
+> new file mode 100644
+> index 000000000000..40af14bb9c0a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/ahc1ec0.yaml
+> @@ -0,0 +1,69 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/ahc1ec0.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Advantech Embedded Controller (AHC1EC0)
+> +
+> +maintainers:
+> +  - Campion Kang <campion.kang@advantech.com.tw>
+> +
+> +description: |
+> +  AHC1EC0 is one of the embedded controllers used by Advantech to provide several
+> +  functions such as watchdog, hwmon, brightness, etc. Advantech related applications
+> +  can control the whole system via these functions.
+> +
+> +properties:
+> +  compatible:
+> +    const: advantech,ahc1ec0
+> +
+> +  advantech,sub-dev-nb:
+> +    description:
+> +      The number of sub-devices specified in the platform.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    maxItems: 1
 
-It's my fault for raising this question [1].  Yicong fixed a real
-problem in drivers/pci, where we are currently using
+You don't need this, just count the length of the next property:
 
-  ccflags-$(CONFIG_PCI_DEBUG) := -DDEBUG
+> +
+> +  advantech,sub-dev:
+> +    description:
+> +      A list of the sub-devices supported in the platform. Defines for the
+> +      appropriate values can found in dt-bindings/mfd/ahc1ec0-dt.h.
+> +    $ref: "/schemas/types.yaml#/definitions/uint32-array"
+> +    minItems: 1
+> +    maxItems: 6
 
-so CONFIG_PCI_DEBUG=y turns on debug in drivers/pci, but not in the
-subdirectories.  That's surprising to users.
+But as I said before, this binding is odd. It doesn't look like how we 
+do any other MFD. Either we have child nodes or they are implicit.
 
-So my question was whether we should default to using subdir-ccflags
-for -DDEBUG in general, and only use ccflags when we have
-subdirectories that have their own debug options, e.g.,
-
-  drivers/i2c/Makefile:ccflags-$(CONFIG_I2C_DEBUG_CORE) := -DDEBUG
-  drivers/i2c/algos/Makefile:ccflags-$(CONFIG_I2C_DEBUG_ALGO) := -DDEBUG
-  drivers/i2c/busses/Makefile:ccflags-$(CONFIG_I2C_DEBUG_BUS) := -DDEBUG
-  drivers/i2c/muxes/Makefile:ccflags-$(CONFIG_I2C_DEBUG_BUS) := -DDEBUG
-
-I mentioned drivers/hwmon along with a few others that have
-subdirectories, do not have per-subdirectory debug options, and use
-ccflags.  I didn't try to determine whether those subdirectories
-currently use -DDEBUG.
-
-In the case of drivers/hwmon, several drivers do use pr_debug(),
-and CONFIG_HWMON_DEBUG_CHIP=y turns those on.  But if somebody
-were to add pr_debug() to drivers/hwmon/occ/common.c, for example,
-CONFIG_HWMON_DEBUG_CHIP=y would *not* turn it on.  That sounds
-surprising to me, but if that's what you intend, that's totally fine.
-
-[1] https://lore.kernel.org/r/20210204161048.GA68790@bjorn-Precision-5520
-
-> > ---
-> >  drivers/hwmon/Makefile | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> > index 09a86c5..1c0c089 100644
-> > --- a/drivers/hwmon/Makefile
-> > +++ b/drivers/hwmon/Makefile
-> > @@ -201,5 +201,5 @@ obj-$(CONFIG_SENSORS_XGENE)	+= xgene-hwmon.o
-> >  obj-$(CONFIG_SENSORS_OCC)	+= occ/
-> >  obj-$(CONFIG_PMBUS)		+= pmbus/
-> >  
-> > -ccflags-$(CONFIG_HWMON_DEBUG_CHIP) := -DDEBUG
-> > +subdir-ccflags-$(CONFIG_HWMON_DEBUG_CHIP) := -DDEBUG
-> >  
-> > -- 
-> > 2.8.1
-> > 
+> +
+> +  advantech,hwmon-profile:
+> +    description:
+> +      The number of sub-devices specified in the platform. Defines for the
+> +      hwmon profiles can found in dt-bindings/mfd/ahc1ec0-dt.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - advantech,sub-dev-nb
+> +  - advantech,sub-dev
+> +
+> +if:
+> +  properties:
+> +    advantech,sub-dev:
+> +      contains:
+> +        const: 0x3
+> +then:
+> +  required:
+> +    - advantech,hwmon-profile
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/mfd/ahc1ec0-dt.h>
+> +    ahc1ec0 {
+> +        compatible = "advantech,ahc1ec0";
+> +
+> +        advantech,sub-dev-nb = <2>;
+> +        advantech,sub-dev = <AHC1EC0_SUBDEV_HWMON
+> +                             AHC1EC0_SUBDEV_WDT>;
+> +
+> +        advantech,hwmon-profile = <AHC1EC0_HWMON_PRO_UNO2271G>;
+> +    };
+> -- 
+> 2.17.1
+> 
