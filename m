@@ -2,101 +2,61 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22F49C433E0
-	for <linux-hwmon@archiver.kernel.org>; Sat,  6 Feb 2021 02:47:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F445C433E0
+	for <linux-hwmon@archiver.kernel.org>; Sat,  6 Feb 2021 09:53:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E378864F92
-	for <linux-hwmon@archiver.kernel.org>; Sat,  6 Feb 2021 02:47:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F2B0464E53
+	for <linux-hwmon@archiver.kernel.org>; Sat,  6 Feb 2021 09:52:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231293AbhBFCpX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 5 Feb 2021 21:45:23 -0500
-Received: from condef-02.nifty.com ([202.248.20.67]:32514 "EHLO
-        condef-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231660AbhBFClX (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 5 Feb 2021 21:41:23 -0500
-X-Greylist: delayed 502 seconds by postgrey-1.27 at vger.kernel.org; Fri, 05 Feb 2021 21:41:18 EST
-Received: from conssluserg-06.nifty.com ([10.126.8.85])by condef-02.nifty.com with ESMTP id 1160sDqm007252;
-        Sat, 6 Feb 2021 09:54:13 +0900
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47]) (authenticated)
-        by conssluserg-06.nifty.com with ESMTP id 1160r6ML013051;
-        Sat, 6 Feb 2021 09:53:06 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 1160r6ML013051
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1612572787;
-        bh=GPySi5FWUUgt3Nf/zevYzreQ14QCHC7dq4Gj7Iu6PdM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=KzoShgNcKgDb7aRIUtJmJ1rx2FCzGlFX5m421RSg8KaR+ZHU8DcZFfkcqCpImJ9Se
-         20oACGiCEzq35ncdGVLdFr6G1HYhyWy3yG5j/x9hhHGP5NxMYVrw8h5YL8Obo6YLgf
-         0JL+92QeKSoxYEWm/F+wV2qZUWoO7N4oDG5iKl1+/QwFmgAkEuLBfJn6y9tjzrDebn
-         CkTvpcRmcekx+4ZSrH5eVn29+qe268TkYo2LZ43I6TRxiQJVDMNn33AogXk8F6sYKx
-         vh58eyX+5U0MuKjD6MMyeih7AS0CJ0J0dJLiYuJsou+U3K8BZAAhnwrtxQ+ZftcYw/
-         XzdXCJifY0GFQ==
-X-Nifty-SrcIP: [209.85.216.47]
-Received: by mail-pj1-f47.google.com with SMTP id nm1so4543652pjb.3;
-        Fri, 05 Feb 2021 16:53:06 -0800 (PST)
-X-Gm-Message-State: AOAM530vi38FgUq3BStni3+djPmsdCkMkd75APd+ouP2CUqitGa9qRye
-        8vhfsDS++evyT1BiAfd2zU/jnAdQ25D8Yun4xHI=
-X-Google-Smtp-Source: ABdhPJy2iadLfW+f/QGkcC2eqfoUOehXlU0LObloB/V5zjeO+YCzFrx6L4Mi1lzQVdV+RNvC/ncuPB1ZZ0t1rSii5I8=
-X-Received: by 2002:a17:902:bb87:b029:e1:d1f:2736 with SMTP id
- m7-20020a170902bb87b02900e10d1f2736mr6360693pls.1.1612572786057; Fri, 05 Feb
- 2021 16:53:06 -0800 (PST)
+        id S229529AbhBFJwm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 6 Feb 2021 04:52:42 -0500
+Received: from lnfm1.sai.msu.ru ([93.180.26.255]:39731 "EHLO lnfm1.sai.msu.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229507AbhBFJwk (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 6 Feb 2021 04:52:40 -0500
+Received: from dragon.sai.msu.ru (dragon.sai.msu.ru [93.180.26.172])
+        by lnfm1.sai.msu.ru (8.14.1/8.12.8) with ESMTP id 1169pdDX029775;
+        Sat, 6 Feb 2021 12:51:44 +0300
+Received: from oak.local (unknown [83.167.113.121])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by dragon.sai.msu.ru (Postfix) with ESMTPSA id ACA2013A94;
+        Sat,  6 Feb 2021 12:51:40 +0300 (MSK)
+From:   "Matwey V. Kornilov" <matwey@sai.msu.ru>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Matwey V. Kornilov" <matwey@sai.msu.ru>
+Subject: [PATCH v4 0/4] hwmon: lm75: Handle broken device nodes gracefully
+Date:   Sat,  6 Feb 2021 12:51:17 +0300
+Message-Id: <20210206095121.20625-1-matwey@sai.msu.ru>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <2588ea5c-630e-6509-689d-4c8fea358e9b@roeck-us.net>
+References: <2588ea5c-630e-6509-689d-4c8fea358e9b@roeck-us.net>
 MIME-Version: 1.0
-References: <1612518255-23052-1-git-send-email-yangyicong@hisilicon.com>
- <1612518255-23052-5-git-send-email-yangyicong@hisilicon.com> <YB0VxBrYM3BSoxrc@kroah.com>
-In-Reply-To: <YB0VxBrYM3BSoxrc@kroah.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sat, 6 Feb 2021 09:52:28 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQoUZYxswxT9zkq=G_2A4tdkhkedMyQhj8eHkBeqz7+Lw@mail.gmail.com>
-Message-ID: <CAK7LNAQoUZYxswxT9zkq=G_2A4tdkhkedMyQhj8eHkBeqz7+Lw@mail.gmail.com>
-Subject: Re: [PATCH 4/4] staging: comedi: Use subdir-ccflags-* to inherit
- debug flag
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Yicong Yang <yangyicong@hisilicon.com>, jdelvare@suse.com,
-        Guenter Roeck <linux@roeck-us.net>, giometti@enneenne.com,
-        Ian Abbott <abbotti@mev.co.uk>,
-        Hartley Sweeten <hsweeten@visionengravers.com>, kw@linux.com,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org, devel@driverdev.osuosl.org,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>, linuxarm@openeuler.org,
-        prime.zeng@huawei.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Feb 5, 2021 at 6:54 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Fri, Feb 05, 2021 at 05:44:15PM +0800, Yicong Yang wrote:
-> > From: Junhao He <hejunhao2@hisilicon.com>
-> >
-> > Use subdir-ccflags-* instead of ccflags-* to inherit the debug
-> > settings from Kconfig when traversing subdirectories.
->
-> Again, explain _why_.
->
-> Please read the section entitled "The canonical patch format" in the
-> kernel file, Documentation/SubmittingPatches for what a proper changelog
-> should look like.
->
-> thanks,
->
-> greg k-h
+This series is to fix a logical issue in lm75 driver.
+The actual fix is in the last patch. 
+Other patches are present in order not to break existing users.
 
+Matwey V. Kornilov (4):
+  hwmon: lm75: Add lm75 to of_match list
+  hwmon: lm75: Add nxp,lm75a to of_match list
+  hwmon: lm75: Add ti,lm75 to of_match list
+  hwmon: lm75: Handle broken device nodes gracefully
 
-I think this is a good clean-up,
-assuming CONFIG_COMEDI_DEBUG intends to
-give the DEBUG flag to all source files
-under drivers/staging/comedi/.
-
-
+ .../devicetree/bindings/hwmon/lm75.yaml       |  3 ++
+ drivers/hwmon/lm75.c                          | 32 +++++++++++++++++--
+ 2 files changed, 32 insertions(+), 3 deletions(-)
 
 -- 
-Best Regards
-Masahiro Yamada
+2.26.2
+
