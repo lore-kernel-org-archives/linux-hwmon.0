@@ -2,81 +2,94 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20FBDC433E0
-	for <linux-hwmon@archiver.kernel.org>; Sun,  7 Feb 2021 11:13:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D70AC433E0
+	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Feb 2021 10:49:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CF67C64DEB
-	for <linux-hwmon@archiver.kernel.org>; Sun,  7 Feb 2021 11:13:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B166D64E76
+	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Feb 2021 10:49:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229506AbhBGLN1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 7 Feb 2021 06:13:27 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:12081 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbhBGLN0 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 7 Feb 2021 06:13:26 -0500
-Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4DYRKY3MdlzMWRN;
-        Sun,  7 Feb 2021 19:10:57 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- DGGEMS405-HUB.china.huawei.com (10.3.19.205) with Microsoft SMTP Server id
- 14.3.498.0; Sun, 7 Feb 2021 19:12:37 +0800
-From:   Tian Tao <tiantao6@hisilicon.com>
-To:     <jdelvare@suse.com>, <linux@roeck-us.net>,
-        <thierry.reding@gmail.com>, <lee.jones@linaro.org>
-CC:     <openbmc@lists.ozlabs.org>, <linux-hwmon@vger.kernel.org>,
-        <linux-pwm@vger.kernel.org>
-Subject: [PATCH] hwmon: (npcm750-pwm-fan): replace spin_lock_irqsave by spin_lock in hard IRQ
-Date:   Sun, 7 Feb 2021 19:12:13 +0800
-Message-ID: <1612696333-50502-1-git-send-email-tiantao6@hisilicon.com>
-X-Mailer: git-send-email 2.7.4
+        id S229719AbhBHKtV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 8 Feb 2021 05:49:21 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:12150 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232605AbhBHKqA (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 8 Feb 2021 05:46:00 -0500
+Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4DZ2gW6mNZz1658y;
+        Mon,  8 Feb 2021 18:43:35 +0800 (CST)
+Received: from [127.0.0.1] (10.69.38.196) by DGGEMS404-HUB.china.huawei.com
+ (10.3.19.204) with Microsoft SMTP Server id 14.3.498.0; Mon, 8 Feb 2021
+ 18:44:52 +0800
+Subject: Re: [PATCH 1/4] driver core: Use subdir-ccflags-* to inherit debug
+ flag
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <jdelvare@suse.com>, <linux@roeck-us.net>, <giometti@enneenne.com>,
+        <abbotti@mev.co.uk>, <hsweeten@visionengravers.com>,
+        <kw@linux.com>, <helgaas@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-hwmon@vger.kernel.org>, <devel@driverdev.osuosl.org>,
+        <linux-kbuild@vger.kernel.org>, <masahiroy@kernel.org>,
+        <michal.lkml@markovi.net>, <linuxarm@openeuler.org>,
+        <prime.zeng@huawei.com>
+References: <1612518255-23052-1-git-send-email-yangyicong@hisilicon.com>
+ <1612518255-23052-2-git-send-email-yangyicong@hisilicon.com>
+ <YB0Vk6ERJ3lFc3WD@kroah.com>
+From:   Yicong Yang <yangyicong@hisilicon.com>
+Message-ID: <08017751-a1be-ea07-50de-73d14ab6d57e@hisilicon.com>
+Date:   Mon, 8 Feb 2021 18:44:52 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.56]
+In-Reply-To: <YB0Vk6ERJ3lFc3WD@kroah.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.69.38.196]
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The code has been in a irq-disabled context since it is hard IRQ. There
-is no necessity to do it again.
+Hi Greg,
 
-Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
----
- drivers/hwmon/npcm750-pwm-fan.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+On 2021/2/5 17:53, Greg KH wrote:
+> On Fri, Feb 05, 2021 at 05:44:12PM +0800, Yicong Yang wrote:
+>> From: Junhao He <hejunhao2@hisilicon.com>
+>>
+>> Use subdir-ccflags-* instead of ccflags-* to inherit the debug
+>> settings from Kconfig when traversing subdirectories.
+> 
+> That says what you do, but not _why_ you are doing it.
 
-diff --git a/drivers/hwmon/npcm750-pwm-fan.c b/drivers/hwmon/npcm750-pwm-fan.c
-index 11a2860..6c27af1 100644
---- a/drivers/hwmon/npcm750-pwm-fan.c
-+++ b/drivers/hwmon/npcm750-pwm-fan.c
-@@ -481,12 +481,11 @@ static inline void npcm7xx_check_cmp(struct npcm7xx_pwm_fan_data *data,
- static irqreturn_t npcm7xx_fan_isr(int irq, void *dev_id)
- {
- 	struct npcm7xx_pwm_fan_data *data = dev_id;
--	unsigned long flags;
- 	int module;
- 	u8 flag;
- 
- 	module = irq - data->fan_irq[0];
--	spin_lock_irqsave(&data->fan_lock[module], flags);
-+	spin_lock(&data->fan_lock[module]);
- 
- 	flag = ioread8(NPCM7XX_FAN_REG_TICTRL(data->fan_base, module));
- 	if (flag > 0) {
-@@ -496,7 +495,7 @@ static irqreturn_t npcm7xx_fan_isr(int irq, void *dev_id)
- 		return IRQ_HANDLED;
- 	}
- 
--	spin_unlock_irqrestore(&data->fan_lock[module], flags);
-+	spin_unlock(&data->fan_lock[module]);
- 
- 	return IRQ_NONE;
- }
--- 
-2.7.4
+i'll illustrate the reason and reword the commit.
+
+> 
+> What does this offer in benefit of the existing way?  What is it fixing?
+> Why do this "churn"?
+
+currently we have added ccflags-$(CONFIG_DEBUG_DRIVER) := -DDEBUG in the Makefile
+of driver/base and driver/base/power, but not in the subdirectory
+driver/base/firmware_loader. we cannot turn the debug on for subdirectory
+firmware_loader if we config DEBUG_DRIVER and there is no kconfig option
+for the it.
+
+as there is no other debug config in the subdirectory of driver/base,
+CONFIG_DEBUG_DRIVER may also mean turn on the debug in the subdirectories, so use
+subdir-ccflags-* instead for the -DDEBUG will allow us to enable debug for all
+the subdirectories.
+
+Thanks,
+Yicong
+
+> 
+> thanks,
+> 
+> greg k-h
+> 
+> .
+> 
 
