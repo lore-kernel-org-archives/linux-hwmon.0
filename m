@@ -2,97 +2,103 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.5 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B71DC433DB
-	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Feb 2021 11:14:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 935D1C433DB
+	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Feb 2021 12:38:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1FA5A64E79
-	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Feb 2021 11:14:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 46E5A64E50
+	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Feb 2021 12:38:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231690AbhBILOH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 9 Feb 2021 06:14:07 -0500
-Received: from szxga07-in.huawei.com ([45.249.212.35]:12883 "EHLO
-        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231567AbhBILLy (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 9 Feb 2021 06:11:54 -0500
-Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4DZgC80hJcz7jJn;
-        Tue,  9 Feb 2021 19:09:40 +0800 (CST)
-Received: from localhost.localdomain (10.67.165.24) by
- DGGEMS407-HUB.china.huawei.com (10.3.19.207) with Microsoft SMTP Server id
- 14.3.498.0; Tue, 9 Feb 2021 19:10:57 +0800
-From:   Yicong Yang <yangyicong@hisilicon.com>
-To:     <gregkh@linuxfoundation.org>, <jdelvare@suse.com>,
-        <linux@roeck-us.net>, <giometti@enneenne.com>, <abbotti@mev.co.uk>,
-        <hsweeten@visionengravers.com>, <kw@linux.com>,
-        <helgaas@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
-        <devel@driverdev.osuosl.org>, <linux-kbuild@vger.kernel.org>,
-        <masahiroy@kernel.org>, <michal.lkml@markovi.net>
-CC:     <prime.zeng@huawei.com>, <yangyicong@hisilicon.com>,
-        <linuxarm@openeuler.org>
-Subject: [PATCH v2 1/4] driver core: Use subdir-ccflags-* to inherit debug flag
-Date:   Tue, 9 Feb 2021 19:08:16 +0800
-Message-ID: <1612868899-9185-2-git-send-email-yangyicong@hisilicon.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1612868899-9185-1-git-send-email-yangyicong@hisilicon.com>
+        id S230093AbhBIMhw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 9 Feb 2021 07:37:52 -0500
+Received: from smtpcmd0872.aruba.it ([62.149.156.72]:37901 "EHLO
+        smtpcmd0872.aruba.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230097AbhBIMhv (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 9 Feb 2021 07:37:51 -0500
+X-Greylist: delayed 577 seconds by postgrey-1.27 at vger.kernel.org; Tue, 09 Feb 2021 07:37:51 EST
+Received: from [192.168.1.56] ([79.0.204.227])
+        by Aruba Outgoing Smtp  with ESMTPSA
+        id 9S6Slz4POHTby9S6Sl0V2E; Tue, 09 Feb 2021 13:26:53 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+        t=1612873613; bh=mDUswk8o3BSLtbN9FBZukK6zJHlk4RbhcvaAExyA0nw=;
+        h=Subject:To:From:Date:MIME-Version:Content-Type;
+        b=Kzl1EYSpnas8XmF09hgxgzzlq2cQfYNdikTV0R866v6FMi18rsR2jWVgS6ccBui0q
+         gu/2VBPSRuxNS3lgMEbTkGPRrXRGRpmUJIpU8OHOj7OUqzy/o8lfidC5a1IVHy9fUM
+         ifOzehfJ+swDJDepMjKUkMl/t5TLwkCGCF8VvMGb1LyCcywhjMeUBK28Q4njRQxsad
+         0jkbGPw7zasSDzwI+CIP46O5RDOafo5UjAXFJttwfb2OzRSmlB08ORdiroaLqs85Ju
+         kuFmKTN9jCV9f6jHyTt/4MLwX8PcDuEjJwfSaq5+3DPIc0QcH0oVkEme3g6U8tidQL
+         D279Xfw9JloGg==
+Subject: Re: [PATCH v2 3/4] pps: Use subdir-ccflags-* to inherit debug flag
+To:     Yicong Yang <yangyicong@hisilicon.com>, gregkh@linuxfoundation.org,
+        jdelvare@suse.com, linux@roeck-us.net, abbotti@mev.co.uk,
+        hsweeten@visionengravers.com, kw@linux.com, helgaas@kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-kbuild@vger.kernel.org, masahiroy@kernel.org,
+        michal.lkml@markovi.net
+Cc:     prime.zeng@huawei.com, linuxarm@openeuler.org
 References: <1612868899-9185-1-git-send-email-yangyicong@hisilicon.com>
+ <1612868899-9185-4-git-send-email-yangyicong@hisilicon.com>
+From:   Rodolfo Giometti <giometti@enneenne.com>
+Message-ID: <36b30ed8-a930-d1c3-2725-c6653f23490c@enneenne.com>
+Date:   Tue, 9 Feb 2021 13:26:48 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.165.24]
-X-CFilter-Loop: Reflected
+In-Reply-To: <1612868899-9185-4-git-send-email-yangyicong@hisilicon.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfJOtvfcS9SDUIzmTBtbnLxCn9w5jBVsknznaedOo9e7Vr0rIPrGhQrxsiBlKpKQMo8p9WoIyfGExvxm3eRi5IThCUTGOTOoVORppicdkKLU7ntqvJoHq
+ QPY+Q4cFW3Qlnf7BXKIc2bDD9sR81IdWZPdqhWl/yG48Ze9YsxPcF4EaYAPM6n3pKPXeSqxq5W1TIuiAFAd+LM0Ova77sJiY6RuiBeRT09UY9W4NVDKR9Hkg
+ a+qYxNAviyYwMOQiB2hPv+rhKM7AMAmDD2DbOV3UaW+NIxAFUrCK/7wn4arJAwvL20rc7Plqq6DOaoxQW0IeazmOynuZjtKG7vOWanwkDv8Dy81kUXJz2TRw
+ A98aGs49XrGCwUBoSyPANKkVLIThLhFOpbFjHXJigrI56FCF4i5CPE/sW+9yft4Fzsw4/OWCNlVYtFGUPjthKo3eN1ifKBIoZCFk8NEVZgcz+/qXlqFRgWLk
+ fvmyn/dQzshzuqGfxjd+GEWY4GymmulB0+7tZhyPHgUVBJghPfRKUNyhhcq2Xu/rU808RhuuLRpvDsskEfKDqfYhLAVimMMdoa6tVgHW2u7qAUURgcKCchUZ
+ 2JbWhCTFJW3iPgCh7EQYmY8Q2NzEZomvywfunnw8/O3EJ30YCuMdQHUYzwrJkjGmuBwVkcM50nXNQsldL103nFTq8x/GsuzwHACgBRF3vE7So7UKAAsHJffY
+ D8C8+hAeAqXWlXGr71ctDJ2XrJBTtwqP
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Junhao He <hejunhao2@hisilicon.com>
+On 09/02/21 12:08, Yicong Yang wrote:
+> From: Junhao He <hejunhao2@hisilicon.com>
+> 
+> We use ccflags-$(CONFIG_PPS_DEBUG) for the debug
+> message in drivers/pps, but the DEBUG flag will not pass to
+> the subdirectory.
+> 
+> Considering CONFIG_HWMON_DEBUG_CHIP intends to turn on debug
+> recursively under driver/pps, so it will be clearer to use
+> subdir-ccflags-* instead of ccflags-* to inherit
+> the debug settings from Kconfig when traversing subdirectories.
+> 
+> Suggested-by: Bjorn Helgaas <bhelgaas@google.com>
+> Signed-off-by: Junhao He <hejunhao2@hisilicon.com>
+> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> ---
+>  drivers/pps/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pps/Makefile b/drivers/pps/Makefile
+> index ceaf65c..7a2d3f7 100644
+> --- a/drivers/pps/Makefile
+> +++ b/drivers/pps/Makefile
+> @@ -8,4 +8,4 @@ pps_core-$(CONFIG_NTP_PPS)	+= kc.o
+>  obj-$(CONFIG_PPS)		:= pps_core.o
+>  obj-y				+= clients/ generators/
+>  
+> -ccflags-$(CONFIG_PPS_DEBUG) := -DDEBUG
+> +subdir-ccflags-$(CONFIG_PPS_DEBUG) := -DDEBUG
+> 
 
-Currently we can turn on the debug message in the top directory
-driver/base and subdirectory driver/base/power with kconfig
-option CONFIG_DEBUG_DRIVER. But the DEBUG flags will not
-pass to subdirectory drvier/base/firmware_loader which
-the ccflags-$(CONFIG_DEBUG_DRIVER) is missing and there is
-no kconfig option to turn on the debug message for it.
+Acked-by: Rodolfo Giometti <giometti@enneenne.com>
 
-Use subdir-ccflags-* for the DEBUG flag in the top directory
-will fix this. Considering CONFIG_DEBUG_DRIVER intends
-to turn on the debug recursively, use subdir-cclags-* will
-be clearer and avoid omittance of DEBUG define
-in the subdirectory.
-
-Suggested-by: Bjorn Helgaas <bhelgaas@google.com>
-Signed-off-by: Junhao He <hejunhao2@hisilicon.com>
-Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
----
- drivers/base/Makefile       | 2 +-
- drivers/base/power/Makefile | 2 --
- 2 files changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/base/Makefile b/drivers/base/Makefile
-index 5e7bf96..c6bdf19 100644
---- a/drivers/base/Makefile
-+++ b/drivers/base/Makefile
-@@ -27,5 +27,5 @@ obj-$(CONFIG_GENERIC_ARCH_TOPOLOGY) += arch_topology.o
- 
- obj-y			+= test/
- 
--ccflags-$(CONFIG_DEBUG_DRIVER) := -DDEBUG
-+subdir-ccflags-$(CONFIG_DEBUG_DRIVER) := -DDEBUG
- 
-diff --git a/drivers/base/power/Makefile b/drivers/base/power/Makefile
-index 8fdd007..2990167 100644
---- a/drivers/base/power/Makefile
-+++ b/drivers/base/power/Makefile
-@@ -5,5 +5,3 @@ obj-$(CONFIG_PM_TRACE_RTC)	+= trace.o
- obj-$(CONFIG_PM_GENERIC_DOMAINS)	+=  domain.o domain_governor.o
- obj-$(CONFIG_HAVE_CLK)	+= clock_ops.o
- obj-$(CONFIG_PM_QOS_KUNIT_TEST) += qos-test.o
--
--ccflags-$(CONFIG_DEBUG_DRIVER) := -DDEBUG
 -- 
-2.8.1
-
+GNU/Linux Solutions                  e-mail: giometti@enneenne.com
+Linux Device Driver                          giometti@linux.it
+Embedded Systems                     phone:  +39 349 2432127
+UNIX programming                     skype:  rodolfo.giometti
