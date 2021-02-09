@@ -2,103 +2,125 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.5 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 935D1C433DB
-	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Feb 2021 12:38:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47552C433E0
+	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Feb 2021 15:07:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 46E5A64E50
-	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Feb 2021 12:38:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F32CF64E88
+	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Feb 2021 15:07:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbhBIMhw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 9 Feb 2021 07:37:52 -0500
-Received: from smtpcmd0872.aruba.it ([62.149.156.72]:37901 "EHLO
-        smtpcmd0872.aruba.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230097AbhBIMhv (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 9 Feb 2021 07:37:51 -0500
-X-Greylist: delayed 577 seconds by postgrey-1.27 at vger.kernel.org; Tue, 09 Feb 2021 07:37:51 EST
-Received: from [192.168.1.56] ([79.0.204.227])
-        by Aruba Outgoing Smtp  with ESMTPSA
-        id 9S6Slz4POHTby9S6Sl0V2E; Tue, 09 Feb 2021 13:26:53 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-        t=1612873613; bh=mDUswk8o3BSLtbN9FBZukK6zJHlk4RbhcvaAExyA0nw=;
-        h=Subject:To:From:Date:MIME-Version:Content-Type;
-        b=Kzl1EYSpnas8XmF09hgxgzzlq2cQfYNdikTV0R866v6FMi18rsR2jWVgS6ccBui0q
-         gu/2VBPSRuxNS3lgMEbTkGPRrXRGRpmUJIpU8OHOj7OUqzy/o8lfidC5a1IVHy9fUM
-         ifOzehfJ+swDJDepMjKUkMl/t5TLwkCGCF8VvMGb1LyCcywhjMeUBK28Q4njRQxsad
-         0jkbGPw7zasSDzwI+CIP46O5RDOafo5UjAXFJttwfb2OzRSmlB08ORdiroaLqs85Ju
-         kuFmKTN9jCV9f6jHyTt/4MLwX8PcDuEjJwfSaq5+3DPIc0QcH0oVkEme3g6U8tidQL
-         D279Xfw9JloGg==
-Subject: Re: [PATCH v2 3/4] pps: Use subdir-ccflags-* to inherit debug flag
-To:     Yicong Yang <yangyicong@hisilicon.com>, gregkh@linuxfoundation.org,
-        jdelvare@suse.com, linux@roeck-us.net, abbotti@mev.co.uk,
+        id S232043AbhBIPHo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 9 Feb 2021 10:07:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49656 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232014AbhBIPHm (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 9 Feb 2021 10:07:42 -0500
+Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64E3C06178A;
+        Tue,  9 Feb 2021 07:07:01 -0800 (PST)
+Received: by mail-oo1-xc2d.google.com with SMTP id 123so4311658ooi.13;
+        Tue, 09 Feb 2021 07:07:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=bjxmsAAlaEuDY9+PSLnzX23gCEFtWGdplw8kECzDAe0=;
+        b=j0Lv1K0lAyO/aXssmrb2JSZHcKCXRO4dHOzcsVMzGZ65kKP2JFgGXgG/PaJsPQmWyL
+         PH8Szb7vv3OS37Av5B78PgUF9qUpBk+6szQZ0Mfc8jSxBierincFetlK43SpuOzrUSix
+         JDDATP8QCbQ/aXeHyIJqqZd7pJSUDfMkAMtY2cLwiTzpZBSQR2VGEVrGoEiA/22eFBBo
+         +2ZJvXCwq/arwcW35AZo8Y99RUJ3pHuVD2TUi39R4P3fZW+D3AHUywDpJIcez+2zvwAw
+         fDD91rMnpF03sjoHuA3XsLqaWXEjraCCqrggCHNCij4oj5FWSNRnCtWAs9gcs4N0aJNk
+         ZQ/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=bjxmsAAlaEuDY9+PSLnzX23gCEFtWGdplw8kECzDAe0=;
+        b=YJIY52PEM4ulXD/cjpIJtQfHfoIPkiYCOukIwyFI4G/+FxhMVrs51yjRk5sQDco0iz
+         pLzXaKIpLSq7yQZ257pRcGzizqprQmAiTYOiFQ2o8uzflnEoqiGYKAL42DLOY0EQhS/z
+         +XFLy6Ck4IWtnLqVRs8ZodsxW7WmKPXFPzKcCorvcf/3/1rK4yK7mZ4tE0wniSm8rPr5
+         qD+tK3EWaPPGGJnxlIPgHAbOKTwbxKDyAVN3e1hr6TECp5FlLStbQJryHDjk11Q9g3Sg
+         cgJSkTxeIhjnnyzw58HyBbUhNPzAUFxBMJg0eNmFD8los4gYCiof/3AUlkn4lVZwqaKh
+         tk3w==
+X-Gm-Message-State: AOAM532ZyTEl8RsS3B/kVAaNRyYBXgIc9vrVHUYsHaw9adMndNOHblzF
+        pJ7fuUa1r2/NHQ1cfcRiJVg=
+X-Google-Smtp-Source: ABdhPJzdEtSfPGrXG09x+Nc8Hru0U15ym9pUPhGZOCl+C3Q5W19I9KAYsqOfSP9595rJ8B9hyn1HDA==
+X-Received: by 2002:a4a:97a7:: with SMTP id w36mr1076981ooi.64.1612883221140;
+        Tue, 09 Feb 2021 07:07:01 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id p23sm4534821otk.51.2021.02.09.07.06.59
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 09 Feb 2021 07:07:00 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 9 Feb 2021 07:06:58 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Yicong Yang <yangyicong@hisilicon.com>
+Cc:     gregkh@linuxfoundation.org, jdelvare@suse.com,
+        giometti@enneenne.com, abbotti@mev.co.uk,
         hsweeten@visionengravers.com, kw@linux.com, helgaas@kernel.org,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-hwmon@vger.kernel.org, devel@driverdev.osuosl.org,
         linux-kbuild@vger.kernel.org, masahiroy@kernel.org,
-        michal.lkml@markovi.net
-Cc:     prime.zeng@huawei.com, linuxarm@openeuler.org
+        michal.lkml@markovi.net, prime.zeng@huawei.com,
+        linuxarm@openeuler.org
+Subject: Re: [PATCH v2 2/4] hwmon: Use subdir-ccflags-* to inherit debug flag
+Message-ID: <20210209150658.GA31002@roeck-us.net>
 References: <1612868899-9185-1-git-send-email-yangyicong@hisilicon.com>
- <1612868899-9185-4-git-send-email-yangyicong@hisilicon.com>
-From:   Rodolfo Giometti <giometti@enneenne.com>
-Message-ID: <36b30ed8-a930-d1c3-2725-c6653f23490c@enneenne.com>
-Date:   Tue, 9 Feb 2021 13:26:48 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+ <1612868899-9185-3-git-send-email-yangyicong@hisilicon.com>
 MIME-Version: 1.0
-In-Reply-To: <1612868899-9185-4-git-send-email-yangyicong@hisilicon.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfJOtvfcS9SDUIzmTBtbnLxCn9w5jBVsknznaedOo9e7Vr0rIPrGhQrxsiBlKpKQMo8p9WoIyfGExvxm3eRi5IThCUTGOTOoVORppicdkKLU7ntqvJoHq
- QPY+Q4cFW3Qlnf7BXKIc2bDD9sR81IdWZPdqhWl/yG48Ze9YsxPcF4EaYAPM6n3pKPXeSqxq5W1TIuiAFAd+LM0Ova77sJiY6RuiBeRT09UY9W4NVDKR9Hkg
- a+qYxNAviyYwMOQiB2hPv+rhKM7AMAmDD2DbOV3UaW+NIxAFUrCK/7wn4arJAwvL20rc7Plqq6DOaoxQW0IeazmOynuZjtKG7vOWanwkDv8Dy81kUXJz2TRw
- A98aGs49XrGCwUBoSyPANKkVLIThLhFOpbFjHXJigrI56FCF4i5CPE/sW+9yft4Fzsw4/OWCNlVYtFGUPjthKo3eN1ifKBIoZCFk8NEVZgcz+/qXlqFRgWLk
- fvmyn/dQzshzuqGfxjd+GEWY4GymmulB0+7tZhyPHgUVBJghPfRKUNyhhcq2Xu/rU808RhuuLRpvDsskEfKDqfYhLAVimMMdoa6tVgHW2u7qAUURgcKCchUZ
- 2JbWhCTFJW3iPgCh7EQYmY8Q2NzEZomvywfunnw8/O3EJ30YCuMdQHUYzwrJkjGmuBwVkcM50nXNQsldL103nFTq8x/GsuzwHACgBRF3vE7So7UKAAsHJffY
- D8C8+hAeAqXWlXGr71ctDJ2XrJBTtwqP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1612868899-9185-3-git-send-email-yangyicong@hisilicon.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 09/02/21 12:08, Yicong Yang wrote:
+On Tue, Feb 09, 2021 at 07:08:17PM +0800, Yicong Yang wrote:
 > From: Junhao He <hejunhao2@hisilicon.com>
 > 
-> We use ccflags-$(CONFIG_PPS_DEBUG) for the debug
-> message in drivers/pps, but the DEBUG flag will not pass to
+> We use ccflags-$(CONFIG_HWMON_DEBUG_CHIP) for the debug
+> message in drivers/hwmon, but the DEBUG flag will not pass to
 > the subdirectory.
 > 
-> Considering CONFIG_HWMON_DEBUG_CHIP intends to turn on debug
-> recursively under driver/pps, so it will be clearer to use
-> subdir-ccflags-* instead of ccflags-* to inherit
-> the debug settings from Kconfig when traversing subdirectories.
+> Considering CONFIG_HWMON_DEBUG_CHIP intends to have DEBUG
+> recursively in driver/hwmon. It will be clearer
+> to use subdir-ccflags-* instead of ccflags-* to inherit
+> the debug settings from Kconfig when traversing subdirectories,
+> and it will avoid omittance of DEBUG define when debug messages
+> added in the subdirectories.
 > 
+
+The above paragraph doesn't add clarity and may as well be dropped.
+On the other side, the commit message still doesn't mention that
+pr_debug depends on DEBUG, which I am sure many people don't know
+or remember. This is the prime reason why this patch is acceptable,
+so it most definitely needs to be mentioned here.
+
+Guenter
+
 > Suggested-by: Bjorn Helgaas <bhelgaas@google.com>
 > Signed-off-by: Junhao He <hejunhao2@hisilicon.com>
 > Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
 > ---
->  drivers/pps/Makefile | 2 +-
+>  drivers/hwmon/Makefile | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/pps/Makefile b/drivers/pps/Makefile
-> index ceaf65c..7a2d3f7 100644
-> --- a/drivers/pps/Makefile
-> +++ b/drivers/pps/Makefile
-> @@ -8,4 +8,4 @@ pps_core-$(CONFIG_NTP_PPS)	+= kc.o
->  obj-$(CONFIG_PPS)		:= pps_core.o
->  obj-y				+= clients/ generators/
+> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> index 09a86c5..1c0c089 100644
+> --- a/drivers/hwmon/Makefile
+> +++ b/drivers/hwmon/Makefile
+> @@ -201,5 +201,5 @@ obj-$(CONFIG_SENSORS_XGENE)	+= xgene-hwmon.o
+>  obj-$(CONFIG_SENSORS_OCC)	+= occ/
+>  obj-$(CONFIG_PMBUS)		+= pmbus/
 >  
-> -ccflags-$(CONFIG_PPS_DEBUG) := -DDEBUG
-> +subdir-ccflags-$(CONFIG_PPS_DEBUG) := -DDEBUG
+> -ccflags-$(CONFIG_HWMON_DEBUG_CHIP) := -DDEBUG
+> +subdir-ccflags-$(CONFIG_HWMON_DEBUG_CHIP) := -DDEBUG
+>  
+> -- 
+> 2.8.1
 > 
-
-Acked-by: Rodolfo Giometti <giometti@enneenne.com>
-
--- 
-GNU/Linux Solutions                  e-mail: giometti@enneenne.com
-Linux Device Driver                          giometti@linux.it
-Embedded Systems                     phone:  +39 349 2432127
-UNIX programming                     skype:  rodolfo.giometti
