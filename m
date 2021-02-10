@@ -2,109 +2,111 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.5 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A65DEC433E9
-	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Feb 2021 18:36:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D9A4C433E6
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Feb 2021 09:44:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 711AB64EC2
-	for <linux-hwmon@archiver.kernel.org>; Tue,  9 Feb 2021 18:36:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1514F64DDF
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Feb 2021 09:44:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233196AbhBISfl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 9 Feb 2021 13:35:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35820 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233401AbhBISYq (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 9 Feb 2021 13:24:46 -0500
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECA8C06121F;
-        Tue,  9 Feb 2021 10:13:01 -0800 (PST)
-Received: by mail-oi1-x22e.google.com with SMTP id d20so20384236oiw.10;
-        Tue, 09 Feb 2021 10:13:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=oa6DIBlUBDjgLjl7fKLR0bNKD9fvWJxSjDvRdBN8rNs=;
-        b=RJmjruDbCmhPnGCXvObmynJVXh1yxk7CBtbLPrpQEXxqGNgxi1luf7EP/q4LQtX+j8
-         fcXzc7Ppxwftg8R4Lqg+kOXTgLoKUWeinEXw52irLwN1PCLe7+xEPQbrZ+rM2nk8JbdJ
-         gVRBYjXxw5whBcdjicCbPmEnB2x6ms/FPvpz3t3uxkN3rPZRO7aEl7UJgNK68DYpVXDZ
-         9bIaTcqhtPAFDjK6OXy9SYTcuNiJlaxwMpXZ2SeRcLJ94doUqVMrGKv35ELa4M9IlHOL
-         hskQUl7eHDoMuxEMgvDYzlnBK9PthdgcwOtSyG0tviphcUcYBCDekRyVQ20rj+1NneaF
-         AD/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=oa6DIBlUBDjgLjl7fKLR0bNKD9fvWJxSjDvRdBN8rNs=;
-        b=j4yDRXeaiNbFs31osZKRZ+JjGJDGAirCd/M5vfJEbBW2bCh40QwC3XXlBIZUt4aaa4
-         h6LwuSlNQH85UHP7HGumpJzU/uS0qbeZxSA07XsJq1gFsPtXRFVzwMjApJ+0jD9ahiHb
-         gu3Q7wXhXYC0y04IYkUkMOsdDkQKoPyvVStgqhfF4dxFttrY3Ymo8U1ReGhuMGG/uSNp
-         5BNpUQ164eMkRb/wkt59Z0dlM4zeXdcMGALkaeS/Dy43Wpv8kxznz8kWDh8FNxu5F29/
-         n+ERRK4ny0L4VlTKMN0TqiqQvYlNtbEfwZ1E+PzAR/Y2XLOlOfH/9Yd9hyFD68UirMG4
-         TR9Q==
-X-Gm-Message-State: AOAM5302Ztx2HmoZYvsFbeNMphK5m/o3N//7IT7L7jaQyUam5zvSB9RW
-        f5n/QTkKVgB2b/S0Os8vMQkf1vzGu/0=
-X-Google-Smtp-Source: ABdhPJwBs8uqKWKjyg3tFGRyqCiOBygH3sD2GheG1zUroFxQ3azgE2HwLzZ1SPbtDfwc3JCleHzSMQ==
-X-Received: by 2002:a05:6808:1c5:: with SMTP id x5mr3281063oic.160.1612894381280;
-        Tue, 09 Feb 2021 10:13:01 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m10sm4502608oim.42.2021.02.09.10.13.00
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 09 Feb 2021 10:13:00 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 9 Feb 2021 10:12:59 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-hwmon@vger.kernel.org, linux-fsi@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, jk@ozlabs.org, joel@jms.id.au,
-        alistair@popple.id.au, jdelvare@suse.com
-Subject: Re: [PATCH 4/4] hwmon: (occ) Print response status in first poll
- error message
-Message-ID: <20210209181259.GF142661@roeck-us.net>
-References: <20210209171235.20624-1-eajames@linux.ibm.com>
- <20210209171235.20624-5-eajames@linux.ibm.com>
+        id S229866AbhBJJoh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 10 Feb 2021 04:44:37 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:12606 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229864AbhBJJmz (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 10 Feb 2021 04:42:55 -0500
+Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4DbFB74MS2z165Dl;
+        Wed, 10 Feb 2021 17:40:47 +0800 (CST)
+Received: from [127.0.0.1] (10.69.38.196) by DGGEMS405-HUB.china.huawei.com
+ (10.3.19.205) with Microsoft SMTP Server id 14.3.498.0; Wed, 10 Feb 2021
+ 17:42:01 +0800
+Subject: Re: [PATCH v2 2/4] hwmon: Use subdir-ccflags-* to inherit debug flag
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     <gregkh@linuxfoundation.org>, <jdelvare@suse.com>,
+        <giometti@enneenne.com>, <abbotti@mev.co.uk>,
+        <hsweeten@visionengravers.com>, <kw@linux.com>,
+        <helgaas@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
+        <devel@driverdev.osuosl.org>, <linux-kbuild@vger.kernel.org>,
+        <masahiroy@kernel.org>, <michal.lkml@markovi.net>,
+        <prime.zeng@huawei.com>, <linuxarm@openeuler.org>
+References: <1612868899-9185-1-git-send-email-yangyicong@hisilicon.com>
+ <1612868899-9185-3-git-send-email-yangyicong@hisilicon.com>
+ <20210209150658.GA31002@roeck-us.net>
+From:   Yicong Yang <yangyicong@hisilicon.com>
+Message-ID: <128d71da-b07b-237c-d6a5-205513f3b093@hisilicon.com>
+Date:   Wed, 10 Feb 2021 17:42:01 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210209171235.20624-5-eajames@linux.ibm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20210209150658.GA31002@roeck-us.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.69.38.196]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Feb 09, 2021 at 11:12:35AM -0600, Eddie James wrote:
-> In order to better debug problems starting up the driver, print
-> the response status from the OCC in the error logged when the first
-> poll command fails.
+On 2021/2/9 23:06, Guenter Roeck wrote:
+> On Tue, Feb 09, 2021 at 07:08:17PM +0800, Yicong Yang wrote:
+>> From: Junhao He <hejunhao2@hisilicon.com>
+>>
+>> We use ccflags-$(CONFIG_HWMON_DEBUG_CHIP) for the debug
+>> message in drivers/hwmon, but the DEBUG flag will not pass to
+>> the subdirectory.
+>>
+>> Considering CONFIG_HWMON_DEBUG_CHIP intends to have DEBUG
+>> recursively in driver/hwmon. It will be clearer
+>> to use subdir-ccflags-* instead of ccflags-* to inherit
+>> the debug settings from Kconfig when traversing subdirectories,
+>> and it will avoid omittance of DEBUG define when debug messages
+>> added in the subdirectories.
+>>
 > 
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> The above paragraph doesn't add clarity and may as well be dropped.
+> On the other side, the commit message still doesn't mention that
+> pr_debug depends on DEBUG, which I am sure many people don't know
+> or remember. This is the prime reason why this patch is acceptable,
+> so it most definitely needs to be mentioned here.
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+sorry, i didn't realize that you mean this. will impove this in the next
+version after the lunar new year holiday over.
 
-> ---
->  drivers/hwmon/occ/common.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+Thanks,
+Yicong
+
 > 
-> diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
-> index ee0c5d12dfdf..f71d62b57468 100644
-> --- a/drivers/hwmon/occ/common.c
-> +++ b/drivers/hwmon/occ/common.c
-> @@ -1161,8 +1161,9 @@ int occ_setup(struct occ *occ, const char *name)
->  		dev_info(occ->bus_dev, "host is not ready\n");
->  		return rc;
->  	} else if (rc < 0) {
-> -		dev_err(occ->bus_dev, "failed to get OCC poll response: %d\n",
-> -			rc);
-> +		dev_err(occ->bus_dev,
-> +			"failed to get OCC poll response=%02x: %d\n",
-> +			occ->resp.return_status, rc);
->  		return rc;
->  	}
->  
-> -- 
-> 2.27.0
+> Guenter
 > 
+>> Suggested-by: Bjorn Helgaas <bhelgaas@google.com>
+>> Signed-off-by: Junhao He <hejunhao2@hisilicon.com>
+>> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+>> ---
+>>  drivers/hwmon/Makefile | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+>> index 09a86c5..1c0c089 100644
+>> --- a/drivers/hwmon/Makefile
+>> +++ b/drivers/hwmon/Makefile
+>> @@ -201,5 +201,5 @@ obj-$(CONFIG_SENSORS_XGENE)	+= xgene-hwmon.o
+>>  obj-$(CONFIG_SENSORS_OCC)	+= occ/
+>>  obj-$(CONFIG_PMBUS)		+= pmbus/
+>>  
+>> -ccflags-$(CONFIG_HWMON_DEBUG_CHIP) := -DDEBUG
+>> +subdir-ccflags-$(CONFIG_HWMON_DEBUG_CHIP) := -DDEBUG
+>>  
+>> -- 
+>> 2.8.1
+>>
+> 
+> .
+> 
+
