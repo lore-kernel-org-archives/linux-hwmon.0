@@ -2,111 +2,111 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.5 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D9A4C433E6
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Feb 2021 09:44:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE172C433DB
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Feb 2021 11:45:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1514F64DDF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Feb 2021 09:44:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9E10864DF5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Feb 2021 11:45:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbhBJJoh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 10 Feb 2021 04:44:37 -0500
-Received: from szxga04-in.huawei.com ([45.249.212.190]:12606 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbhBJJmz (ORCPT
+        id S230302AbhBJLpF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 10 Feb 2021 06:45:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33904 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229679AbhBJLnA (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 10 Feb 2021 04:42:55 -0500
-Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4DbFB74MS2z165Dl;
-        Wed, 10 Feb 2021 17:40:47 +0800 (CST)
-Received: from [127.0.0.1] (10.69.38.196) by DGGEMS405-HUB.china.huawei.com
- (10.3.19.205) with Microsoft SMTP Server id 14.3.498.0; Wed, 10 Feb 2021
- 17:42:01 +0800
-Subject: Re: [PATCH v2 2/4] hwmon: Use subdir-ccflags-* to inherit debug flag
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     <gregkh@linuxfoundation.org>, <jdelvare@suse.com>,
-        <giometti@enneenne.com>, <abbotti@mev.co.uk>,
-        <hsweeten@visionengravers.com>, <kw@linux.com>,
-        <helgaas@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
-        <devel@driverdev.osuosl.org>, <linux-kbuild@vger.kernel.org>,
-        <masahiroy@kernel.org>, <michal.lkml@markovi.net>,
-        <prime.zeng@huawei.com>, <linuxarm@openeuler.org>
-References: <1612868899-9185-1-git-send-email-yangyicong@hisilicon.com>
- <1612868899-9185-3-git-send-email-yangyicong@hisilicon.com>
- <20210209150658.GA31002@roeck-us.net>
-From:   Yicong Yang <yangyicong@hisilicon.com>
-Message-ID: <128d71da-b07b-237c-d6a5-205513f3b093@hisilicon.com>
-Date:   Wed, 10 Feb 2021 17:42:01 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Wed, 10 Feb 2021 06:43:00 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6747C061221
+        for <linux-hwmon@vger.kernel.org>; Wed, 10 Feb 2021 03:42:07 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id u14so1560524wmq.4
+        for <linux-hwmon@vger.kernel.org>; Wed, 10 Feb 2021 03:42:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=IN+db2cORNt7VkGGcBYrI5DAOlBAd7luCiB6c6UTORg=;
+        b=A+lqcb1Mco2IH4sWZvbvEORyp44FjHIA2kKgYhWKHPRcBkihslWgY+eyCxjObLl4xM
+         IJdLu77vzz0H46AfAyGLrLZ3P1y6a5z1GwgMJhI4clGjeFf+PyAsCenM3g5U2vflKhew
+         Ju+igjclW8aHFZvW5zgCxQyfWMS4Xu5pD9ywx63JFAYNlS4WSR6nbO70ZKcfoghRGb4z
+         Rf0JtLIheyrZWr3WvWIiahz7R05/j8oqaJTIUkNIo+kjiEWRTPpEAZUcmb+bwwR3TthY
+         w8gny9neoDuQOvARwJ0yj7al35enKLxoqYkPmwR0BkgrFFw+H8Knypppuo27DmWcolMY
+         g6AA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IN+db2cORNt7VkGGcBYrI5DAOlBAd7luCiB6c6UTORg=;
+        b=Vx2LPt+G4v/OobaCrDej5J782qE3byHzWz4un9HPyS+QnJZjIfk5Imw/kjBXFAqZSM
+         RsP5xnAHXrREadFZcrMSoU0Rfx8dM59ZyHRXSaO6ULyZ1TKevK1/qa5j55YTcKtDT+qv
+         9ePBQY2BGAvAOaljOGZ/+VM5sTZbW+OnA6axHJpWrzs5GgOWf67ShbIJPJgUmGNgAmPA
+         pZ4EnVtYN85khcnfGCO2PdMzzNU6uz0x1toyFKVxfPeeZBs7XPb9l2gbvzRRPN3eNqzD
+         PwwdwBGWACrdV8nPflDkJckCb/OrxFmroL8IXFAFNm1aam3FJ3LfQZwXdom4pSy8pLRn
+         XCCQ==
+X-Gm-Message-State: AOAM531Da/+36sGWDW7mUIZNzV9l1zyVWMDQg2/bQz0p/9Z9PI40ISmN
+        +z2oFNDU7Ar71WP1/ZfaLWEsNA==
+X-Google-Smtp-Source: ABdhPJzcqeZvzBcu69WDOYa0AXEj+jkTjIK/0ivShR9A511clPVo2aBOAWDwimsl6o1C8uR6vnac8Q==
+X-Received: by 2002:a7b:c215:: with SMTP id x21mr2619209wmi.61.1612957326535;
+        Wed, 10 Feb 2021 03:42:06 -0800 (PST)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id y63sm2154970wmd.21.2021.02.10.03.42.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Feb 2021 03:42:05 -0800 (PST)
+Date:   Wed, 10 Feb 2021 11:42:03 +0000
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Yicong Yang <yangyicong@hisilicon.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, jdelvare@suse.com,
+        linux@roeck-us.net, giometti@enneenne.com, abbotti@mev.co.uk,
+        hsweeten@visionengravers.com, kw@linux.com, helgaas@kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-kbuild@vger.kernel.org, masahiroy@kernel.org,
+        michal.lkml@markovi.net, linuxarm@openeuler.org,
+        prime.zeng@huawei.com
+Subject: Re: [PATCH 1/4] driver core: Use subdir-ccflags-* to inherit debug
+ flag
+Message-ID: <20210210114203.jvhst2veqbx73r5g@maple.lan>
+References: <1612518255-23052-1-git-send-email-yangyicong@hisilicon.com>
+ <1612518255-23052-2-git-send-email-yangyicong@hisilicon.com>
+ <YB0Vk6ERJ3lFc3WD@kroah.com>
+ <08017751-a1be-ea07-50de-73d14ab6d57e@hisilicon.com>
+ <YCEWtxYgbRPET4Sr@kroah.com>
+ <1f0b2f37-db56-c220-dfe1-8c376031404f@hisilicon.com>
 MIME-Version: 1.0
-In-Reply-To: <20210209150658.GA31002@roeck-us.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.69.38.196]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1f0b2f37-db56-c220-dfe1-8c376031404f@hisilicon.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2021/2/9 23:06, Guenter Roeck wrote:
-> On Tue, Feb 09, 2021 at 07:08:17PM +0800, Yicong Yang wrote:
->> From: Junhao He <hejunhao2@hisilicon.com>
->>
->> We use ccflags-$(CONFIG_HWMON_DEBUG_CHIP) for the debug
->> message in drivers/hwmon, but the DEBUG flag will not pass to
->> the subdirectory.
->>
->> Considering CONFIG_HWMON_DEBUG_CHIP intends to have DEBUG
->> recursively in driver/hwmon. It will be clearer
->> to use subdir-ccflags-* instead of ccflags-* to inherit
->> the debug settings from Kconfig when traversing subdirectories,
->> and it will avoid omittance of DEBUG define when debug messages
->> added in the subdirectories.
->>
+On Mon, Feb 08, 2021 at 09:09:20PM +0800, Yicong Yang wrote:
+> On 2021/2/8 18:47, Greg KH wrote:
+> > On Mon, Feb 08, 2021 at 06:44:52PM +0800, Yicong Yang wrote:
+> >> On 2021/2/5 17:53, Greg KH wrote:
+> >>> What does this offer in benefit of the existing way?  What is it fixing?
+> >>> Why do this "churn"?
+> >>
+> >> currently we have added ccflags-$(CONFIG_DEBUG_DRIVER) := -DDEBUG in the Makefile
+> >> of driver/base and driver/base/power, but not in the subdirectory
+> >> driver/base/firmware_loader. we cannot turn the debug on for subdirectory
+> >> firmware_loader if we config DEBUG_DRIVER and there is no kconfig option
+> >> for the it.
+> > 
+> > Is that necessary?  Does that directory need it?
 > 
-> The above paragraph doesn't add clarity and may as well be dropped.
-> On the other side, the commit message still doesn't mention that
-> pr_debug depends on DEBUG, which I am sure many people don't know
-> or remember. This is the prime reason why this patch is acceptable,
-> so it most definitely needs to be mentioned here.
+> there are several debug prints in firmware_loader/main.c:
+> 
+> ./main.c:207:   pr_debug("%s: fw-%s fw_priv=%p\n", __func__, fw_name, fw_priv);
+> ./main.c:245:                   pr_debug("batched request - sharing the same struct fw_priv and lookup for multiple requests\n");
+> <snip>
 
-sorry, i didn't realize that you mean this. will impove this in the next
-version after the lunar new year holiday over.
+Even if these are not in scope for CONFIG_DEBUG_DRVIER there is a
+config option that would allow you to observe them without changing
+any code (CONFIG_DYNAMIC_DEBUG).
 
-Thanks,
-Yicong
 
-> 
-> Guenter
-> 
->> Suggested-by: Bjorn Helgaas <bhelgaas@google.com>
->> Signed-off-by: Junhao He <hejunhao2@hisilicon.com>
->> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
->> ---
->>  drivers/hwmon/Makefile | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
->> index 09a86c5..1c0c089 100644
->> --- a/drivers/hwmon/Makefile
->> +++ b/drivers/hwmon/Makefile
->> @@ -201,5 +201,5 @@ obj-$(CONFIG_SENSORS_XGENE)	+= xgene-hwmon.o
->>  obj-$(CONFIG_SENSORS_OCC)	+= occ/
->>  obj-$(CONFIG_PMBUS)		+= pmbus/
->>  
->> -ccflags-$(CONFIG_HWMON_DEBUG_CHIP) := -DDEBUG
->> +subdir-ccflags-$(CONFIG_HWMON_DEBUG_CHIP) := -DDEBUG
->>  
->> -- 
->> 2.8.1
->>
-> 
-> .
-> 
-
+Daniel.
