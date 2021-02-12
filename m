@@ -2,135 +2,102 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46389C433E0
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Feb 2021 17:24:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CD89C433DB
+	for <linux-hwmon@archiver.kernel.org>; Fri, 12 Feb 2021 04:28:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1596E64DCD
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Feb 2021 17:24:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BD0ED64DD1
+	for <linux-hwmon@archiver.kernel.org>; Fri, 12 Feb 2021 04:28:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231327AbhBKRYO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 11 Feb 2021 12:24:14 -0500
-Received: from mail-dm6nam11on2078.outbound.protection.outlook.com ([40.107.223.78]:45792
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230404AbhBKRWF (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 11 Feb 2021 12:22:05 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=J8CeHj7qZ1GH6vQNb6/b4moWYO3126GaQ5GCuYXFcWTUQAp5X1UKnCc6XvmS63wue+VmnsLRRph7hfDWY551LdnqNVywDd0Zj0H9+n1l6SRawXqsqLbM2xg2eME43QU1orjqo5BcAVD7X0XbDLdrQEFSRhQ8yXQBXvftQNvHzFFq1xuRYAbxaw0u9mHG9VR3EgPn093ogM49s9QWk2P7zo79RcUEG9hpzs4f0SgvQhcn2fxe8A5K00n/rjXHay1acGeHg5u6Jy0yWzYsEg2FgxLLpMI3pYjscxn8NzFHOsAm9/DU+rmiCD0HHtlrD+fCSvluca9CfJaMW/6Ixmm4Bg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4rTMZp0w4awKbZLtjHiYLnRHoZu6J4ofXsRfiOD0Jm4=;
- b=VVPemLmz8oYyPyQ2j2G3Y3IuyMhIMIC88L8CwB5WPvgr4RWWLav8fiEWygfHEdeS7pKK6JRyhGC19HJdvZ5HyeODo0kB8JlfCDzHTD4kcm0inAqvmpLczyylWn4TaRL1f0IK0T2IYetvi85Uwz5gilDVlBcXAG5gF+jxCqsA1ZUuxUMhwkaz531nrV+aYgwQKT3ps5dkdKSAR+wrakhN9HUHs9jbdEQl6c59VPGECYgyulLffarkWskjLcjB0jhlUZXlvZqW8kuHh1LB3fHVE3jZJyXDEwYGC0Eb3riNcVMpXr6T87/XQr+Pa1Uj8nJAJ2ySsxsXcoZWTIIjKYrP+w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4rTMZp0w4awKbZLtjHiYLnRHoZu6J4ofXsRfiOD0Jm4=;
- b=B5ow6i6ApzGXTI37fJ0mCDtcLMJZzOt/FEDPUIbS19GpfkVzfViAErVtYrdxUafj1jCet7lNfGA3nqEbi3nrPv5nOEN9lKArWzTGI55rzoXKtDdlP4/mLhIkF3ch0/Hz7+GSVZ5xBaLJbAYai0SSzPTmng8GgnKCbKU7ihwYxkI=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB4388.namprd12.prod.outlook.com (2603:10b6:5:2a9::10)
- by DM6PR12MB3515.namprd12.prod.outlook.com (2603:10b6:5:15f::30) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3846.27; Thu, 11 Feb
- 2021 17:21:13 +0000
-Received: from DM6PR12MB4388.namprd12.prod.outlook.com
- ([fe80::fde6:793d:cca2:977b]) by DM6PR12MB4388.namprd12.prod.outlook.com
- ([fe80::fde6:793d:cca2:977b%4]) with mapi id 15.20.3846.027; Thu, 11 Feb 2021
- 17:21:13 +0000
-From:   Naveen Krishna Chatradhi <nchatrad@amd.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     naveenkrishna.ch@gmail.com, linux@roeck-us.net,
-        Naveen Krishna Chatradhi <nchatrad@amd.com>
-Subject: [PATCH] hwmon: (amd_energy) Add AMD family 19h model 30h x86 match
-Date:   Thu, 11 Feb 2021 22:50:54 +0530
-Message-Id: <20210211172054.246276-1-nchatrad@amd.com>
-X-Mailer: git-send-email 2.17.1
-Content-Type: text/plain
-X-Originating-IP: [165.204.156.251]
-X-ClientProxiedBy: MA1PR01CA0165.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a00:71::35) To DM6PR12MB4388.namprd12.prod.outlook.com
- (2603:10b6:5:2a9::10)
+        id S229497AbhBLE2Q (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 11 Feb 2021 23:28:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50412 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229493AbhBLE2O (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 11 Feb 2021 23:28:14 -0500
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9100CC061574
+        for <linux-hwmon@vger.kernel.org>; Thu, 11 Feb 2021 20:27:34 -0800 (PST)
+Received: by mail-ot1-x32a.google.com with SMTP id e5so7301386otb.11
+        for <linux-hwmon@vger.kernel.org>; Thu, 11 Feb 2021 20:27:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=ZCPLjQ0tetH4zY0aZPRPB/xut1vCOPDu0eYVB66aZq0=;
+        b=W/XRSHSDCAwsh6K63lVjLCWk29a+6ubf8n6k4IF0OEjBdGbK6nBhM6iVZb+ih8m8WG
+         4rx8mqO2Vq8RML5cW0WoQsRUHmmMfv8JCbBwCbuFeFmUqOI1YYl8+7rEt+D7hbzcwAvy
+         q13gHmBMRygtJMMQyS+u5qXuxfok0fmuUCsXD7z5PIYk5eaSUcU+xnL5tuxCn+a6bPC5
+         84AR8QSS4hZYEuJjWmLMDEhpCAKhelZdRzNwqH/vWVWV4awDpLA64XIjsFL43W4BP/GF
+         cksOI9DU6KrE55Ih/wgLw0UW9pL4O3v5B2iJW5ruP64NRWYqIXLiPQdgDIW0geWSTaKi
+         MaOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ZCPLjQ0tetH4zY0aZPRPB/xut1vCOPDu0eYVB66aZq0=;
+        b=HRDSyX1eGOlrfoOR8pr6kFcW6vYzO2ccKPPyNH38NZMZ6wojywoGLpWizFK44T/4Di
+         H0qpZNdHAEDvKHbSsRlJtrbZGttjromP2eRJXuc9dKBTwb4bw77yTduEo0C+Iy6ILiLP
+         jXgYY19KEBytePjeyfctyg9Dq9XVQEWpylPSoWLE3rsWJVdfyYMaQInYKbkJwuO5z6y6
+         2UKeBVKMm73HFQ/AlXLkakV9YmNia1y2/3SejZFncEjVMNjJCmzV+6c8lSjHy039CxCJ
+         0TWxPfL18aftOk+/7uMNfqiV/pgW29fHXKUzoz1Yp08KPrT0suBGnkkG5kY9y2mY3o5h
+         E4wg==
+X-Gm-Message-State: AOAM530BBQMgbYi/p/6obbjIK3QUl16Fgr/w5RNE5QZK43DZnZXHoD+U
+        PhnI9WMhFJh99MzKUBsiKvM=
+X-Google-Smtp-Source: ABdhPJxGxWKVp7qpJnntA0itDpvzA5Kc6HANfnvn7MLgQs9qL4t3lq17pol8IL8ASnuw6Y4yzHeYAw==
+X-Received: by 2002:a9d:4f0b:: with SMTP id d11mr881582otl.208.1613104054073;
+        Thu, 11 Feb 2021 20:27:34 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w134sm1630730oia.56.2021.02.11.20.27.33
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 11 Feb 2021 20:27:33 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 11 Feb 2021 20:27:32 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Naveen Krishna Chatradhi <nchatrad@amd.com>
+Cc:     linux-hwmon@vger.kernel.org, naveenkrishna.ch@gmail.com
+Subject: Re: [PATCH] hwmon: (amd_energy) Add AMD family 19h model 30h x86
+ match
+Message-ID: <20210212042732.GA104319@roeck-us.net>
+References: <20210211172054.246276-1-nchatrad@amd.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from milan-ETHANOL-X.amd.com (165.204.156.251) by MA1PR01CA0165.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:71::35) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3846.28 via Frontend Transport; Thu, 11 Feb 2021 17:21:11 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: f60bdff9-f71c-48dc-bc0b-08d8ceb16e50
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3515:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <DM6PR12MB3515A0C41481A36D27981E9CE88C9@DM6PR12MB3515.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3044;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SNA1ND6k6LXmrb0zAXUyIc5EeuDkBhp1RwX7cbZwVCCfqsF79ZjU0oafjlWzOgD+tIm96fh9+Kf4v45xJucntUsQsYGzDShVamdVHxa0km4naFq3mjLwI+wa/3nd+u2moPfifmFdRA98eCxLHqgozbN1s68yNeC/kgrOxhaKzRJXHWZei73uSj88c6EcLUhNQ1m6uOreoGfT3zFCGRb8+BnwNiO8iIudU53ipnjOff6n++OcycO67nOgcI+FowmwGPfIGurrUY41Byi/X0fsMsscrAW0XrbTvIoVU7+oaNigg/qmeTU8yG2p0xOwocBOL/fBdDHfsRRIGjjZlzcU8zovHdOFfhFNUJ6OTZ2hIfQWOEn3slZzN9BM7HZ7JUV2jiubxFECFjkLKfblRTmsfWBHU4H68Eb9mXxJ1K8axn3IfpIyyD3i37vDb2COHANazma6c1mY8gRqVpfnGVJnugF5CQjqaDzMHLnG0PxwHMFo5ylaKQ2lvAO1tFD30MBs+jAmCnjQRUJtNDKF4DI9pQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4388.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(346002)(376002)(136003)(396003)(366004)(66946007)(52116002)(186003)(6666004)(16526019)(6486002)(2616005)(66556008)(956004)(26005)(7696005)(6916009)(316002)(4326008)(8936002)(5660300002)(478600001)(1076003)(36756003)(8676002)(2906002)(4744005)(66476007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?4qRBjKcwGdrND+gOd/BP6+LSfItOVhm02GzPgXJVXaQyLX9O28arP91PsMkE?=
- =?us-ascii?Q?F+LPHTsmY69qR6ucwyv4HcQ8ITmzfIzd5otPuXrkTaLjLTvR7QDTlqDcd2Mr?=
- =?us-ascii?Q?ku2HsOfKqipSdA48LLqpUcR+EMl00mzE9s/yNUzJmn724FQCmE+SLXC1G3VA?=
- =?us-ascii?Q?O7bjvuy7TIiO4xvTFNxFUdGxOHRSoLgU5EVRHdlO2enXlqWb9TD27e1/kGGH?=
- =?us-ascii?Q?TmeZ3rT613wpxkfkF8fRn9jIfffUFCVt6S8hLrv7hcEbqo8b7jkQfG64kQSA?=
- =?us-ascii?Q?rzPRN39++XB0yPJu7wfsNQJLgkDUBh2z14TkGbJBt38CRPC23dnfKYYtRzmC?=
- =?us-ascii?Q?QR0Ebardmy/I9CrEOEXnzhq+UAiYQD4PrDx8RFSQJSuuEo32+8Nz6WrQIaA/?=
- =?us-ascii?Q?Tz8CC3gIEpqo6lKJmYQQVbXqMMTM7xHifThlGDLMxZkCwNP0m1QuQtFITYc7?=
- =?us-ascii?Q?eRSLThK3O2stM4AO7h8C8koRacrqmkpHC+f3uLEEKxCl1zlYh8Djccffo1ys?=
- =?us-ascii?Q?dll8GhILCW5jAY6dsQuN/48s2uvPsgShh1bUzApbbuVSqP5H6kjOZG7Yx+gb?=
- =?us-ascii?Q?/V/937AO/3FFZyK/642kRE7J43wuO9XHzMfwYeJfxAiWo31KeyX6H/W6O1si?=
- =?us-ascii?Q?0NWT+NvGcdSAA0ZgV6NRKFktdQ/1Ujw+Sq7jEXo0aoROId5/8Ts5iOV0gJe8?=
- =?us-ascii?Q?QcMjz6qk7bfMljRnqsLh6Vrk/rH8nuDihz6yz40ZfG2p5epnFQma0tMP/QPH?=
- =?us-ascii?Q?dgea5hd0yXN1PqpyWgfm3h1zdN0HDPIZpcASM1RVjLORQWQFc3bhyiTuCI6E?=
- =?us-ascii?Q?rRz409zCJ9Kv9MzvU7VxT2rRsosXzGoNTqnckBryCMShxQs8c/0bvs5opKwd?=
- =?us-ascii?Q?4AxbvOMF0nYha3PPIACj6y/tPwCx2UOQ/4VyOUmS5uSVtyZ55V4JGqsXQBgo?=
- =?us-ascii?Q?wR8jW5DM+QX2GwhIG7Rt0Ue+R5zhUxU0uVTi34dLCkR075lBKqZCCOFI1Vle?=
- =?us-ascii?Q?HfmgLLpOZeCwetDFXEpmtD3rus/eJ5dpahCMwyoYKMQC9AVy1grZmVYLKlje?=
- =?us-ascii?Q?r9kf/hKmIgJ54WR0gZBVK8puhZe4Yaz5pO445I/nyKfU5ErXe+lLDLQwVKTv?=
- =?us-ascii?Q?qsZUna81n8LyPFeAiKAmbQkiNGb/0ru4PZzcA+Kgm4xmH5luoS6L5pLmaR2E?=
- =?us-ascii?Q?0+wQomeWhvZX+9GeacQTbBG3KDGjgchVaAJ0a7P34+wPexzkL8khh52nkHhe?=
- =?us-ascii?Q?ByQp0nBuned9BnjQPno9UlTVeLpDgSmQ20FftkV+bn3dN1XeDKyLgeLnNiXo?=
- =?us-ascii?Q?BREJrXiOhd4MgJMfrUPWdZPV?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f60bdff9-f71c-48dc-bc0b-08d8ceb16e50
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4388.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Feb 2021 17:21:13.2295
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1z4NQ7L69XNs3bgoOhiXOsmk0uUoIB8t7uMgSJejqENIkPG0CqcUQGXuGj9mcrfjV4QI1jX6rG+A90tGjkqr9Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3515
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210211172054.246276-1-nchatrad@amd.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add X86 CPU match for AMD family 19h model 30h. This is necessary to
-enable support for energy reporting via the amd_energy module.
+On Thu, Feb 11, 2021 at 10:50:54PM +0530, Naveen Krishna Chatradhi wrote:
+> Add X86 CPU match for AMD family 19h model 30h. This is necessary to
+> enable support for energy reporting via the amd_energy module.
+> 
+> Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
 
-Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
----
- drivers/hwmon/amd_energy.c | 1 +
- 1 file changed, 1 insertion(+)
+Applied.
 
-diff --git a/drivers/hwmon/amd_energy.c b/drivers/hwmon/amd_energy.c
-index 822c2e74b98d..a86cc8d6d93d 100644
---- a/drivers/hwmon/amd_energy.c
-+++ b/drivers/hwmon/amd_energy.c
-@@ -333,6 +333,7 @@ static struct platform_device *amd_energy_platdev;
- static const struct x86_cpu_id cpu_ids[] __initconst = {
- 	X86_MATCH_VENDOR_FAM_MODEL(AMD, 0x17, 0x31, NULL),
- 	X86_MATCH_VENDOR_FAM_MODEL(AMD, 0x19, 0x01, NULL),
-+	X86_MATCH_VENDOR_FAM_MODEL(AMD, 0x19, 0x30, NULL),
- 	{}
- };
- MODULE_DEVICE_TABLE(x86cpu, cpu_ids);
--- 
-2.17.1
+Thanks,
+Guenter
 
+> ---
+>  drivers/hwmon/amd_energy.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/hwmon/amd_energy.c b/drivers/hwmon/amd_energy.c
+> index 822c2e74b98d..a86cc8d6d93d 100644
+> --- a/drivers/hwmon/amd_energy.c
+> +++ b/drivers/hwmon/amd_energy.c
+> @@ -333,6 +333,7 @@ static struct platform_device *amd_energy_platdev;
+>  static const struct x86_cpu_id cpu_ids[] __initconst = {
+>  	X86_MATCH_VENDOR_FAM_MODEL(AMD, 0x17, 0x31, NULL),
+>  	X86_MATCH_VENDOR_FAM_MODEL(AMD, 0x19, 0x01, NULL),
+> +	X86_MATCH_VENDOR_FAM_MODEL(AMD, 0x19, 0x30, NULL),
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(x86cpu, cpu_ids);
