@@ -5,79 +5,80 @@ X-Spam-Level:
 X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C2D2C433E0
-	for <linux-hwmon@archiver.kernel.org>; Fri, 12 Feb 2021 04:30:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13937C433E0
+	for <linux-hwmon@archiver.kernel.org>; Fri, 12 Feb 2021 04:31:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C8C9D64E62
-	for <linux-hwmon@archiver.kernel.org>; Fri, 12 Feb 2021 04:30:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E0AD964DE3
+	for <linux-hwmon@archiver.kernel.org>; Fri, 12 Feb 2021 04:31:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229582AbhBLEaB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 11 Feb 2021 23:30:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50794 "EHLO
+        id S229562AbhBLEbA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 11 Feb 2021 23:31:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbhBLEaA (ORCPT
+        with ESMTP id S229497AbhBLEa7 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 11 Feb 2021 23:30:00 -0500
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E0FCC061574
-        for <linux-hwmon@vger.kernel.org>; Thu, 11 Feb 2021 20:29:20 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id k10so7350772otl.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 11 Feb 2021 20:29:20 -0800 (PST)
+        Thu, 11 Feb 2021 23:30:59 -0500
+Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A9BC061574;
+        Thu, 11 Feb 2021 20:30:18 -0800 (PST)
+Received: by mail-oo1-xc31.google.com with SMTP id s23so935340oot.12;
+        Thu, 11 Feb 2021 20:30:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=mO/EQ3ImhmnftnWHylmfgd7wo6YIsDmwlJLbtuyLszw=;
-        b=kCtPTZ1Pl62ZYCdaCWpuqhFIyoB2c+kiEfLBVDOyGvwouy3ha8Yzndne5cQL3DZH80
-         H0uxMKJ6FYVsZs7cH6PdcUNrikQiP+0iv/JGdQ1DdiwaF0fg2mRQFbB9cTDXb0L4R4HI
-         TRoV+gKytuq9jNraKYtU1SuWOSgauUNh3tlaZUPCGcbvfzfe4Tpx4FsAsdM9cSpxe2Hd
-         vhzsXSYxRCH0RmA7Wi+mq5NnmDRIH+2lNRkcn7ztaN/CwoP7Ljo7LmleTP7KTC0YJD0G
-         rvIzvrXpSCWqnklr4wv5VPn/XXkVh64fBl3DEDMSbqRbxlGl7qCLjajDKG9InbJffJ57
-         EmSw==
+        bh=aOeCDqDzBA3dsZYfJecar357cM/2/of0V8qDCALwWfY=;
+        b=i4f4fMqcZZXCsUdY9/WeSgZIgObL9iEP6Bvy0U7zXUmBUNtk8UWtFI0rF1fxusFDtp
+         kjN9lvIQ1AkzCPHWpnbpOXpFO83pq4182mSK+uEVXR8pkdLyN/XJMc043TPXDC5yejii
+         OvnhGe0TaHiWDZeJ8x7ZGEAbJ5HzWYxYIQXTCgTYaWAcdg7M6g+FUmwx7GmphOOeuSs/
+         LH6IhGDoPD0PXCSRRd9qvkX4wOUoVq2U14IZQdMXnnHeP0muEomAyuiLCM53MlpoPltX
+         QMDFtL46QVeFsxVQWSUDGPyMQs+XT4c/VxG59SNIoHbFVAyz1l++eYseWyyLT+2wpXVe
+         vE/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=mO/EQ3ImhmnftnWHylmfgd7wo6YIsDmwlJLbtuyLszw=;
-        b=uHCyoFZZJdZk8N3EHFJOSfBCJ/DX+V9G/+zb0X2fDuyNrC4KxCmxz8O714UWcIQamB
-         2E24PFhpU76HMxIDhzUyiHogCFQVLA+j4LL1vRWfrkQVkkxa2I32hsuOmeJdv9/+GYPh
-         f1lmYdaCN5gNDO7ZptXWW09XuHV9+RJPDuyPXcPlprE4P4bedpKsEVtbC7uFV9PsaxuP
-         5i5G5u/QFuamnGtmJEghEP0MVR9VadWo0FAf+59nsPILstGw/9qgOOcE+2qVokvuEGyB
-         S/3lfwqhg05GIh5EBCecrNanpSQgNpnlaUPwXHOfCchifAQfz50cc/v8N+J5hTZuWA0V
-         7rsA==
-X-Gm-Message-State: AOAM533GVodq+5gmqqWTzP6jEfSboB0n/k4RIr0o2LL5hKaIefXkTNoF
-        QF+k12rnFCJE/g9nv6/keAU=
-X-Google-Smtp-Source: ABdhPJz7T0Mhmu3piwAb5MOhkUM00m3HnSOSS9NuO0gV0BCrNYccXH+3iJ3vItYqoZhuRtGfm++WWw==
-X-Received: by 2002:a9d:2c2:: with SMTP id 60mr822099otl.357.1613104160036;
-        Thu, 11 Feb 2021 20:29:20 -0800 (PST)
+        bh=aOeCDqDzBA3dsZYfJecar357cM/2/of0V8qDCALwWfY=;
+        b=PV1Ai0lNQnQY2NVJL8cE74+y33mzlq5oo/GLOyLnusTie1Ok6v2alsavjxGgYPJaq7
+         7PoXirU9g2GWnp804CDi6O/xPIpEJzFfGEThdDbiZLKETi+GjRlfPVmO+yaTpSjUcQ8X
+         LKZ2I/ldc/KnpxnpiyUi1LMALJa1viKhxeBk7J39UI1SGhXNiZizE8voLZkhpyd/7gLz
+         nNnbjDqNdu3Co4ako8ux59tOILSsgPh1c+dtFimIIzeZ9qCx7yPTJGMlWUx292Pl9Mzg
+         IuwFHSn93Erhk5De38/kXyAJRSSppuY9jsLrj7kN38/3DucHlnt2Tox0Jrr2FcXauIdO
+         WOyA==
+X-Gm-Message-State: AOAM532FhZR8o8ncM4Vf9PHmsVV/5RYaLV0cvU1J+gjfbn0pHfur38vj
+        l0NSSfxlAAHFQPu0N+aLAZY=
+X-Google-Smtp-Source: ABdhPJzxdhJXCakra3xPLLVyujacVXook4u1jf93dBk65e5glZOkHxhDKOK61G5iCM81gs4+m4teoQ==
+X-Received: by 2002:a4a:4958:: with SMTP id z85mr775192ooa.38.1613104218273;
+        Thu, 11 Feb 2021 20:30:18 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b14sm1340138ooj.26.2021.02.11.20.29.19
+        by smtp.gmail.com with ESMTPSA id 88sm1449171otx.15.2021.02.11.20.30.17
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 11 Feb 2021 20:29:19 -0800 (PST)
+        Thu, 11 Feb 2021 20:30:17 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 11 Feb 2021 20:29:18 -0800
+Date:   Thu, 11 Feb 2021 20:30:16 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Tian Tao <tiantao6@hisilicon.com>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (da9052): Switch to using the new API
- kobj_to_dev()
-Message-ID: <20210212042918.GA104534@roeck-us.net>
-References: <1612860208-51088-1-git-send-email-tiantao6@hisilicon.com>
+Cc:     jdelvare@suse.com, thierry.reding@gmail.com, lee.jones@linaro.org,
+        openbmc@lists.ozlabs.org, linux-hwmon@vger.kernel.org,
+        linux-pwm@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (npcm750-pwm-fan): replace spin_lock_irqsave by
+ spin_lock in hard IRQ
+Message-ID: <20210212043016.GA104680@roeck-us.net>
+References: <1612696333-50502-1-git-send-email-tiantao6@hisilicon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1612860208-51088-1-git-send-email-tiantao6@hisilicon.com>
+In-Reply-To: <1612696333-50502-1-git-send-email-tiantao6@hisilicon.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Feb 09, 2021 at 04:43:28PM +0800, Tian Tao wrote:
-> Switch to using the new API kobj_to_dev() to fix the below warnning:
-> /drivers/hwmon/da9052-hwmon.c:302:60-61: WARNING opportunity for
-> kobj_to_dev().
+On Sun, Feb 07, 2021 at 07:12:13PM +0800, Tian Tao wrote:
+> The code has been in a irq-disabled context since it is hard IRQ. There
+> is no necessity to do it again.
 > 
 > Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
 
@@ -87,19 +88,33 @@ Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/da9052-hwmon.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/hwmon/npcm750-pwm-fan.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/hwmon/da9052-hwmon.c b/drivers/hwmon/da9052-hwmon.c
-> index 4af2fc3..ed6c5df 100644
-> --- a/drivers/hwmon/da9052-hwmon.c
-> +++ b/drivers/hwmon/da9052-hwmon.c
-> @@ -299,7 +299,7 @@ static ssize_t label_show(struct device *dev,
->  static umode_t da9052_channel_is_visible(struct kobject *kobj,
->  					 struct attribute *attr, int index)
+> diff --git a/drivers/hwmon/npcm750-pwm-fan.c b/drivers/hwmon/npcm750-pwm-fan.c
+> index 11a2860..6c27af1 100644
+> --- a/drivers/hwmon/npcm750-pwm-fan.c
+> +++ b/drivers/hwmon/npcm750-pwm-fan.c
+> @@ -481,12 +481,11 @@ static inline void npcm7xx_check_cmp(struct npcm7xx_pwm_fan_data *data,
+>  static irqreturn_t npcm7xx_fan_isr(int irq, void *dev_id)
 >  {
-> -	struct device *dev = container_of(kobj, struct device, kobj);
-> +	struct device *dev = kobj_to_dev(kobj);
->  	struct da9052_hwmon *hwmon = dev_get_drvdata(dev);
->  	struct device_attribute *dattr = container_of(attr,
->  				struct device_attribute, attr);
+>  	struct npcm7xx_pwm_fan_data *data = dev_id;
+> -	unsigned long flags;
+>  	int module;
+>  	u8 flag;
+>  
+>  	module = irq - data->fan_irq[0];
+> -	spin_lock_irqsave(&data->fan_lock[module], flags);
+> +	spin_lock(&data->fan_lock[module]);
+>  
+>  	flag = ioread8(NPCM7XX_FAN_REG_TICTRL(data->fan_base, module));
+>  	if (flag > 0) {
+> @@ -496,7 +495,7 @@ static irqreturn_t npcm7xx_fan_isr(int irq, void *dev_id)
+>  		return IRQ_HANDLED;
+>  	}
+>  
+> -	spin_unlock_irqrestore(&data->fan_lock[module], flags);
+> +	spin_unlock(&data->fan_lock[module]);
+>  
+>  	return IRQ_NONE;
+>  }
