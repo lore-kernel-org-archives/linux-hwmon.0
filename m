@@ -3,500 +3,147 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE9A7C433E0
-	for <linux-hwmon@archiver.kernel.org>; Sat, 13 Feb 2021 01:16:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15ACFC433E0
+	for <linux-hwmon@archiver.kernel.org>; Sat, 13 Feb 2021 11:59:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A3BE660203
-	for <linux-hwmon@archiver.kernel.org>; Sat, 13 Feb 2021 01:16:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D22736023B
+	for <linux-hwmon@archiver.kernel.org>; Sat, 13 Feb 2021 11:59:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbhBMBPx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 12 Feb 2021 20:15:53 -0500
-Received: from mga17.intel.com ([192.55.52.151]:48897 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229708AbhBMBPx (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 12 Feb 2021 20:15:53 -0500
-IronPort-SDR: 66UHp97mbimJIjXo+aytlY/Fs5NNKxBjLFgFfqEcLCqvFKkU0+0w2F9jWuXOl4BPXTK0Mt1N5w
- SDlrGftFjTCw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9893"; a="162256737"
-X-IronPort-AV: E=Sophos;i="5.81,175,1610438400"; 
-   d="scan'208";a="162256737"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2021 17:15:12 -0800
-IronPort-SDR: /27sA+2+Iu35epihV9U8MxfrLenKI0RA0XUmKqKwNMitCIdOwCouVX7YuQnyI/ojw2/riK3rvE
- EX3G7D2gWhFg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,175,1610438400"; 
-   d="scan'208";a="423403964"
-Received: from lkp-server02.sh.intel.com (HELO cd560a204411) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 12 Feb 2021 17:15:10 -0800
-Received: from kbuild by cd560a204411 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lAjWg-000508-43; Sat, 13 Feb 2021 01:15:10 +0000
-Date:   Sat, 13 Feb 2021 09:14:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon-next] BUILD REGRESSION
- de3a46504a58426f1c91117be601ae270180bc93
-Message-ID: <602727f7.1ucv4X4AIKBfAkyH%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S229531AbhBML7I (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 13 Feb 2021 06:59:08 -0500
+Received: from mail-lf1-f50.google.com ([209.85.167.50]:33776 "EHLO
+        mail-lf1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229580AbhBML7I (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 13 Feb 2021 06:59:08 -0500
+Received: by mail-lf1-f50.google.com with SMTP id b2so3338062lfq.0;
+        Sat, 13 Feb 2021 03:58:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=GosurqFqirHdQWyzX6cWeJ6swt8DHy8QXcFDoJi5ZkU=;
+        b=OSpgtWiaMP41tltyjBK9m9F26XZGhn3fjci5HPUz+Dh1HmYxE3YJlwn25YBfr80MVo
+         w9blByx/FQDPVdXecmairzfHmeqCp2j8tjDBHHePneZYXcZ6qPGFPWZs4WuVPTfgrWMi
+         zCVHA2g2TVd+Buc/8SG7QB9mLpq3/LXzJmu6Xzn8p1u32Wrv7bYrZGIRaZenT+0qOayn
+         eZldQUnGvhKXd7+TnyMxy0FxqQ2oQ86pQajeAIxVizLxQW1r2JWPPdTKaBi1w+7VyRMg
+         MubGOrtVNJxBDtXla/J7ag873GWnFd45sRaupzyhUv0LOLT1USmrrZKHk+kiJTagCeSl
+         IeOA==
+X-Gm-Message-State: AOAM533T/+wiY0e1JXAhUiT5BF7l0Dtuw/2umlLJr7MUb9G1nTcWC18N
+        gbNSv7htTlGsGUtWM3QDng4=
+X-Google-Smtp-Source: ABdhPJzkMegmGR3Q1jpC7ira2DsUWneGtFG/3HdAvrJEBdUAnT0Wtr1aUFM0Qwze3n3LrKxXHRY7jw==
+X-Received: by 2002:a05:6512:3741:: with SMTP id a1mr3794390lfs.137.1613217505179;
+        Sat, 13 Feb 2021 03:58:25 -0800 (PST)
+Received: from localhost.localdomain (dc7vkhyyyyyyyyyyyyycy-3.rev.dnainternet.fi. [2001:14ba:16e2:8300::4])
+        by smtp.gmail.com with ESMTPSA id r6sm1853428lfc.8.2021.02.13.03.58.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 13 Feb 2021 03:58:24 -0800 (PST)
+Date:   Sat, 13 Feb 2021 13:58:17 +0200
+From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+To:     mazziesaccount@gmail.com, matti.vaittinen@fi.rohmeurope.com
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: [RFC PATCH 0/7] Add managed version of delayed work init
+Message-ID: <cover.1613216412.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: de3a46504a58426f1c91117be601ae270180bc93  MAINTAINERS: Add entry for Texas Instruments TPS23861 PoE PSE
+It's not rare that device drivers need delayed work.
+It's not rare that this work needs driver's data.
 
-Error/Warning reports:
+Often this means that driver must ensure the work is not queued when
+driver exits. Usually this is done by ensuring new work is not added and
+then calling cancel_delayed_work_sync() at remove(). In many cases this
+may also require cleanup at probe error path - which is easy to forget.
 
-https://lore.kernel.org/linux-hwmon/202102122211.QIGWxrQn-lkp@intel.com
-https://lore.kernel.org/linux-hwmon/202102130038.Vo68Vu7N-lkp@intel.com
+It might be helpful for (a) few drivers if there was a work init
+function which would ensure cancel_delayed_work_sync() is called at
+driver exit. So this series implements one on top of devm and replaces
+the obvious cases where only thing remove call-back in a driver does is
+cancelling the work. There might be other cases where we could switch
+more than just work cancellation to use managed version and thus get rid
+of remove.
 
-Error/Warning in current branch:
+Main reson why this is RFC is that I had hard time deciding where this
+function should be introduced. It's not nice to include all device stuff
+in workqueue - because many workqueue users are not interested in
+devices. In same way, not all of the devices are interested in WQs.
+OTOH, adding own file just for this sounds like an overkill.
 
-drivers/hwmon/npcm750-pwm-fan.c:494:51: error: 'flags' undeclared (first use in this function); did you mean 'flag'?
-drivers/hwmon/npcm750-pwm-fan.c:494:51: error: use of undeclared identifier 'flags'; did you mean 'flag'?
+This time I decided that it is more correct that devices use WQs than
+that WQs use devices. Hence the function is introduced in
+include/linux/device.h and drivers/base/devres.c
 
-Error/Warning ids grouped by kconfigs:
+--
 
-gcc_recent_errors
-|-- alpha-allyesconfig
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- alpha-randconfig-p002-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- alpha-randconfig-r004-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- alpha-randconfig-r013-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- arc-allyesconfig
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- arc-randconfig-r016-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- arc-randconfig-r024-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- arc-randconfig-r032-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- arm-allmodconfig
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- arm-allyesconfig
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- arm-randconfig-p001-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- arm-randconfig-r012-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- arm64-allyesconfig
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- arm64-randconfig-r031-20210212
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- arm64-randconfig-r032-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- c6x-allyesconfig
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- c6x-randconfig-r011-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- c6x-randconfig-r015-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- c6x-randconfig-r022-20210211
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- csky-randconfig-c004-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- h8300-allyesconfig
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- i386-allyesconfig
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- i386-randconfig-a002-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- i386-randconfig-a002-20210212
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- i386-randconfig-a003-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- i386-randconfig-a005-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- i386-randconfig-a005-20210212
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- i386-randconfig-a006-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- i386-randconfig-a006-20210212
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- i386-randconfig-a011-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- i386-randconfig-a011-20210211
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- i386-randconfig-a013-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- i386-randconfig-a013-20210211
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- i386-randconfig-a014-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- i386-randconfig-a014-20210211
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- i386-randconfig-a015-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- i386-randconfig-a015-20210211
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- i386-randconfig-a016-20210211
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- i386-randconfig-c004-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- i386-randconfig-m021-20210211
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- i386-randconfig-m031-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- i386-randconfig-r004-20210211
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- i386-randconfig-r015-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- i386-randconfig-s002-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- i386-randconfig-s031-20210211
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- ia64-allmodconfig
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- ia64-allyesconfig
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- ia64-randconfig-r001-20210211
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- ia64-randconfig-r015-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- ia64-randconfig-r021-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- m68k-allmodconfig
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- m68k-allyesconfig
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- m68k-randconfig-r001-20210211
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- m68k-randconfig-r003-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- microblaze-randconfig-r013-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- microblaze-randconfig-r014-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- mips-allmodconfig
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- mips-allyesconfig
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- mips-randconfig-r016-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- mips-randconfig-s032-20210211
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- nds32-allyesconfig
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- nds32-randconfig-r002-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- nds32-randconfig-r011-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- nds32-randconfig-r035-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- nds32-randconfig-s031-20210211
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- nios2-allmodconfig
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- nios2-allyesconfig
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- nios2-randconfig-r012-20210212
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- nios2-randconfig-r014-20210212
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- nios2-randconfig-r021-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- nios2-randconfig-s031-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- nios2-randconfig-s032-20210211
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- openrisc-randconfig-r002-20210212
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- openrisc-randconfig-r003-20210212
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- openrisc-randconfig-r005-20210211
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- openrisc-randconfig-r012-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- openrisc-randconfig-r024-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- openrisc-randconfig-s031-20210211
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- parisc-allyesconfig
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- parisc-randconfig-p002-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- parisc-randconfig-r035-20210212
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- powerpc-allmodconfig
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- powerpc-allyesconfig
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- powerpc-randconfig-r004-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- powerpc64-randconfig-r002-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- riscv-allmodconfig
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- riscv-allyesconfig
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- riscv-randconfig-p001-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- s390-allyesconfig
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- s390-randconfig-m031-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- s390-randconfig-r033-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- sh-allmodconfig
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- sh-randconfig-r002-20210211
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- sh-randconfig-r014-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- sh-randconfig-s032-20210211
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- sparc-allyesconfig
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- sparc-randconfig-r011-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- sparc-randconfig-r013-20210212
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- sparc-randconfig-r014-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- sparc-randconfig-r035-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- sparc64-allyesconfig
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- sparc64-randconfig-c003-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- sparc64-randconfig-r001-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- sparc64-randconfig-r006-20210212
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- sparc64-randconfig-r026-20210211
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- sparc64-randconfig-r034-20210212
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- sparc64-randconfig-s032-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- x86_64-allyesconfig
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- x86_64-randconfig-a002-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- x86_64-randconfig-a004-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- x86_64-randconfig-c002-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- x86_64-randconfig-c002-20210211
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- x86_64-randconfig-m001-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- x86_64-randconfig-m001-20210211
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- x86_64-randconfig-r005-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- x86_64-randconfig-s021-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- x86_64-randconfig-s022-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- x86_64-randconfig-s022-20210212
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-|-- xtensa-allyesconfig
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
-`-- xtensa-randconfig-r004-20210209
-    `-- drivers-hwmon-npcm750-pwm-fan.c:error:flags-undeclared-(first-use-in-this-function)
+Matti Vaittinen (7):
+  drivers: base: Add resource managed version of delayed work init
+  extconn: Clean-up few drivers by using managed work init
+  hwmon: raspberry-pi: Clean-up few drivers by using managed work init
+  platform/x86: gpd pocket fan: Clean-up by using managed work init
+  power: supply: Clean-up few drivers by using managed work init
+  regulator: qcom_spmi-regulator: Clean-up by using managed work init
+  watchdog: retu_wdt: Clean-up by using managed work init
 
-clang_recent_errors
-|-- arm-randconfig-r001-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:use-of-undeclared-identifier-flags
-|-- arm-randconfig-r036-20210212
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:use-of-undeclared-identifier-flags
-|-- arm64-randconfig-r025-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:use-of-undeclared-identifier-flags
-|-- powerpc64-randconfig-r026-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:use-of-undeclared-identifier-flags
-|-- x86_64-randconfig-a003-20210211
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:use-of-undeclared-identifier-flags
-|-- x86_64-randconfig-a005-20210211
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:use-of-undeclared-identifier-flags
-|-- x86_64-randconfig-a011-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:use-of-undeclared-identifier-flags
-|-- x86_64-randconfig-a012-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:use-of-undeclared-identifier-flags
-|-- x86_64-randconfig-a013-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:use-of-undeclared-identifier-flags
-|-- x86_64-randconfig-a014-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:use-of-undeclared-identifier-flags
-|-- x86_64-randconfig-a015-20210209
-|   `-- drivers-hwmon-npcm750-pwm-fan.c:error:use-of-undeclared-identifier-flags
-`-- x86_64-randconfig-a016-20210209
-    `-- drivers-hwmon-npcm750-pwm-fan.c:error:use-of-undeclared-identifier-flags
+ drivers/base/devres.c                        | 33 ++++++++++++++++++++
+ drivers/extcon/extcon-gpio.c                 | 14 ++-------
+ drivers/extcon/extcon-intel-int3496.c        | 15 ++-------
+ drivers/extcon/extcon-palmas.c               | 16 +++-------
+ drivers/extcon/extcon-qcom-spmi-misc.c       | 16 +++-------
+ drivers/hwmon/raspberrypi-hwmon.c            | 16 +++-------
+ drivers/platform/x86/gpd-pocket-fan.c        | 16 +++-------
+ drivers/power/supply/axp20x_usb_power.c      | 15 +++------
+ drivers/power/supply/bq24735-charger.c       | 17 +++-------
+ drivers/power/supply/ltc2941-battery-gauge.c | 19 ++++-------
+ drivers/power/supply/sbs-battery.c           | 15 +++------
+ drivers/regulator/qcom_spmi-regulator.c      | 33 +++++---------------
+ drivers/watchdog/retu_wdt.c                  | 21 +++----------
+ include/linux/device.h                       |  5 +++
+ 14 files changed, 95 insertions(+), 156 deletions(-)
 
-elapsed time: 725m
 
-configs tested: 155
-configs skipped: 3
+base-commit: 92bf22614b21a2706f4993b278017e437f7785b3
+-- 
+2.25.4
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                         shannon_defconfig
-arm                     davinci_all_defconfig
-arc                        vdk_hs38_defconfig
-sh                        sh7763rdp_defconfig
-c6x                        evmc6474_defconfig
-nios2                         3c120_defconfig
-powerpc                     tqm5200_defconfig
-arm                           u8500_defconfig
-mips                        nlm_xlp_defconfig
-sh                      rts7751r2d1_defconfig
-m68k                            q40_defconfig
-arm                            lart_defconfig
-arm                            pleb_defconfig
-arm                   milbeaut_m10v_defconfig
-h8300                            alldefconfig
-arm                         axm55xx_defconfig
-sparc                            allyesconfig
-sh                        apsh4ad0a_defconfig
-mips                       bmips_be_defconfig
-powerpc                  iss476-smp_defconfig
-sh                           se7705_defconfig
-m68k                          hp300_defconfig
-powerpc                 linkstation_defconfig
-sh                            migor_defconfig
-mips                      maltasmvp_defconfig
-m68k                                defconfig
-powerpc                 xes_mpc85xx_defconfig
-powerpc                 mpc832x_rdb_defconfig
-m68k                        m5407c3_defconfig
-c6x                              allyesconfig
-mips                           jazz_defconfig
-powerpc                 mpc832x_mds_defconfig
-mips                       capcella_defconfig
-arm                       netwinder_defconfig
-powerpc64                        alldefconfig
-powerpc64                           defconfig
-arc                              alldefconfig
-microblaze                      mmu_defconfig
-powerpc                 mpc834x_mds_defconfig
-powerpc                        fsp2_defconfig
-powerpc                      ppc64e_defconfig
-mips                           ci20_defconfig
-powerpc                   bluestone_defconfig
-sh                          rsk7203_defconfig
-nds32                               defconfig
-powerpc                    gamecube_defconfig
-mips                          ath79_defconfig
-s390                          debug_defconfig
-powerpc                       holly_defconfig
-powerpc                     kmeter1_defconfig
-powerpc                     mpc5200_defconfig
-openrisc                  or1klitex_defconfig
-arm                       cns3420vb_defconfig
-arm                           h5000_defconfig
-arm                        clps711x_defconfig
-arc                        nsim_700_defconfig
-powerpc                      pmac32_defconfig
-openrisc                 simple_smp_defconfig
-powerpc                        icon_defconfig
-xtensa                         virt_defconfig
-mips                         bigsur_defconfig
-arm                        magician_defconfig
-mips                            e55_defconfig
-parisc                              defconfig
-parisc                generic-32bit_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                               defconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a006-20210209
-x86_64               randconfig-a001-20210209
-x86_64               randconfig-a005-20210209
-x86_64               randconfig-a004-20210209
-x86_64               randconfig-a002-20210209
-x86_64               randconfig-a003-20210209
-i386                 randconfig-a001-20210209
-i386                 randconfig-a005-20210209
-i386                 randconfig-a003-20210209
-i386                 randconfig-a002-20210209
-i386                 randconfig-a006-20210209
-i386                 randconfig-a004-20210209
-i386                 randconfig-a003-20210212
-i386                 randconfig-a005-20210212
-i386                 randconfig-a002-20210212
-i386                 randconfig-a001-20210212
-i386                 randconfig-a004-20210212
-i386                 randconfig-a006-20210212
-i386                 randconfig-a016-20210209
-i386                 randconfig-a013-20210209
-i386                 randconfig-a012-20210209
-i386                 randconfig-a014-20210209
-i386                 randconfig-a011-20210209
-i386                 randconfig-a015-20210209
-i386                 randconfig-a016-20210211
-i386                 randconfig-a014-20210211
-i386                 randconfig-a012-20210211
-i386                 randconfig-a013-20210211
-i386                 randconfig-a011-20210211
-i386                 randconfig-a015-20210211
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
 
-clang tested configs:
-x86_64               randconfig-a003-20210211
-x86_64               randconfig-a002-20210211
-x86_64               randconfig-a001-20210211
-x86_64               randconfig-a004-20210211
-x86_64               randconfig-a005-20210211
-x86_64               randconfig-a006-20210211
-x86_64               randconfig-a013-20210209
-x86_64               randconfig-a014-20210209
-x86_64               randconfig-a015-20210209
-x86_64               randconfig-a012-20210209
-x86_64               randconfig-a016-20210209
-x86_64               randconfig-a011-20210209
+-- 
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =] 
