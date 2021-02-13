@@ -7,71 +7,50 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02A20C433E0
-	for <linux-hwmon@archiver.kernel.org>; Sat, 13 Feb 2021 12:00:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99961C433E0
+	for <linux-hwmon@archiver.kernel.org>; Sat, 13 Feb 2021 12:07:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C58256023B
-	for <linux-hwmon@archiver.kernel.org>; Sat, 13 Feb 2021 12:00:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6491364DEE
+	for <linux-hwmon@archiver.kernel.org>; Sat, 13 Feb 2021 12:07:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229584AbhBML7p (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 13 Feb 2021 06:59:45 -0500
-Received: from mail-lj1-f181.google.com ([209.85.208.181]:41921 "EHLO
-        mail-lj1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbhBML7g (ORCPT
+        id S229671AbhBMMHw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 13 Feb 2021 07:07:52 -0500
+Received: from mail-lj1-f176.google.com ([209.85.208.176]:36399 "EHLO
+        mail-lj1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229665AbhBMMHv (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 13 Feb 2021 06:59:36 -0500
-Received: by mail-lj1-f181.google.com with SMTP id e17so2145556ljl.8;
-        Sat, 13 Feb 2021 03:59:19 -0800 (PST)
+        Sat, 13 Feb 2021 07:07:51 -0500
+Received: by mail-lj1-f176.google.com with SMTP id k22so1527181ljg.3;
+        Sat, 13 Feb 2021 04:07:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Og3EKyxPUKMGfzz8yqu0JBwP+v96RpWUBQsEZbrHD+8=;
-        b=inRjugq8dZYlJ6CKvLuFRZuygDwWgg/eI1qK0UtvZC5aXeTHWXAZnh4CmXIvaUpdET
-         RZbmyLvO2Jgjrc8l/m7pxQ6AQfapVpdoTDVR72Z3a3f2BFyr5+VCS57NzbTlVjVIKga6
-         PWwfLi6Ytk0GX9K3QgfsxOUXNqecAQaYp8Ri+Z0dNzn9zCQd5KJ9+TTG7fZ973FNzx6k
-         d/hPzIS96BCawHPV9lkFNxvvqKXl7tnRfA12eivyl0Zn56uwyCHdacF0JNqDawGw395+
-         X3reRIZlP3l4ffScErusYdied3SeyAqU1qQEBxYPIsBUMPKUkViW4qjtO8v51+ZvPj2l
-         vIHg==
-X-Gm-Message-State: AOAM5311BlORlGJ4wtfdqkHqgDcrgZjlZFL437zEnwtxdQcCWfr5k3Je
-        sarltkWfCO+KaWsm9Jx+z1g=
-X-Google-Smtp-Source: ABdhPJxj3xe2a6po48BGrT8aKajunBGOzOMxU/3dhpzzTPYFHT/e8seZG86Yo2/QJ4xnTqfESId53w==
-X-Received: by 2002:a2e:7a18:: with SMTP id v24mr4030132ljc.55.1613217533531;
-        Sat, 13 Feb 2021 03:58:53 -0800 (PST)
+        bh=TnTBU1+fTq7WCrFIKnTtQ8WkLlihATaeGTPRkGLiE34=;
+        b=X4+7ifdtP3CY8HxOOkPjJuUeEccJ2msPjjf5JAmM3txVLgivL2QpWnZrmM44v1hynf
+         ZD0Fm86L8tZJR84roMWGuqoAtZkfBanDMVSB2B0msIAN0ybBG9P7Qso06zlsWIt+dOdj
+         RTrREOBUSoH6UmG+8OyXK7NFNfyEGvzrDgIlJbF21S7JmOo3i+h/dqDs7iMhSE1lOdIl
+         8S1YoILTjxRagmlC79pvrQ6J7JGqKD3bnKuxoY1MrBg/MXa/Dku0lQPJf9aAa5Xdlk4o
+         pRFRSeR0yoLZhrWyeeotTYcpHRS7BppB71U2XabmJAt/z9kL4K0EsFloHBan7dNkycTs
+         p8Dg==
+X-Gm-Message-State: AOAM531vJqBwgnbnz9u5ndBrHo/jJfWCk0eiIBzFwIzgNogWVY5vefh0
+        +B3xQBGg1u42AT0p07onRTw=
+X-Google-Smtp-Source: ABdhPJymzneR3YwaNqRS8ezgKX9krTo8PVlWLJhEHOaQ2poYAdT31jq/OmB2MJP2z4m1qRk5Js1wEw==
+X-Received: by 2002:a2e:89d0:: with SMTP id c16mr4373471ljk.206.1613218029069;
+        Sat, 13 Feb 2021 04:07:09 -0800 (PST)
 Received: from localhost.localdomain (dc7vkhyyyyyyyyyyyyycy-3.rev.dnainternet.fi. [2001:14ba:16e2:8300::4])
-        by smtp.gmail.com with ESMTPSA id v72sm1838780lfa.77.2021.02.13.03.58.51
+        by smtp.gmail.com with ESMTPSA id h15sm1272111lfc.279.2021.02.13.04.07.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Feb 2021 03:58:52 -0800 (PST)
-Date:   Sat, 13 Feb 2021 13:58:44 +0200
+        Sat, 13 Feb 2021 04:07:08 -0800 (PST)
+Date:   Sat, 13 Feb 2021 14:07:02 +0200
 From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 To:     mazziesaccount@gmail.com, matti.vaittinen@fi.rohmeurope.com
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mgross@linux.intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: [RFC PATCH 1/7] drivers: base: Add resource managed version of
- delayed work init
-Message-ID: <1230b0d2ba99ad546d72ab079e76cb1b3df32afb.1613216412.git.matti.vaittinen@fi.rohmeurope.com>
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: [RFC PATCH 3/7] hwmon: raspberry-pi: Clean-up few drivers by using
+ managed work init
+Message-ID: <1ee4b1bcc926b60e513e8f5cd586e744de2cb12d.1613216412.git.matti.vaittinen@fi.rohmeurope.com>
 References: <cover.1613216412.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -81,81 +60,60 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-A few drivers which need a delayed work-queue must cancel work at exit.
-Some of those implement remove solely for this purpose. Help drivers
-to avoid unnecessary remove and error-branch implementation by adding
-managed verision of delayed work initialization
+Few drivers implement remove call-back only for ensuring a delayed
+work gets cancelled prior driver removal. Clean-up these by switching
+to use devm_delayed_work_autocancel() instead.
+
+This change is compile-tested only. All testing is appreciated.
 
 Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 ---
- drivers/base/devres.c  | 33 +++++++++++++++++++++++++++++++++
- include/linux/device.h |  5 +++++
- 2 files changed, 38 insertions(+)
+ drivers/hwmon/raspberrypi-hwmon.c | 16 +++++-----------
+ 1 file changed, 5 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/base/devres.c b/drivers/base/devres.c
-index fb9d5289a620..2879595bb5a4 100644
---- a/drivers/base/devres.c
-+++ b/drivers/base/devres.c
-@@ -1231,3 +1231,36 @@ void devm_free_percpu(struct device *dev, void __percpu *pdata)
- 			       (void *)pdata));
- }
- EXPORT_SYMBOL_GPL(devm_free_percpu);
-+
-+static void dev_delayed_work_drop(struct device *dev, void *res)
-+{
-+	cancel_delayed_work_sync(*(struct delayed_work **)res);
-+}
-+
-+/**
-+ * devm_delayed_work_autocancel - Resource-managed work allocation
-+ * @dev: Device which lifetime work is bound to
-+ * @pdata: work to be cancelled when device exits
-+ *
-+ * Initialize work which is automatically cancelled when device exits.
-+ * A few drivers need delayed work which must be cancelled before driver
-+ * is unload to avoid accessing removed resources.
-+ * devm_delayed_work_autocancel() can be used to omit the explicit
-+ * cancelleation when driver is unload.
-+ */
-+int devm_delayed_work_autocancel(struct device *dev, struct delayed_work *w,
-+				 void (*worker)(struct work_struct *work))
-+{
-+	struct delayed_work **ptr;
-+
-+	ptr = devres_alloc(dev_delayed_work_drop, sizeof(*ptr), GFP_KERNEL);
-+	if (!ptr)
-+		return -ENOMEM;
-+
-+	INIT_DELAYED_WORK(w, worker);
-+	*ptr = w;
-+	devres_add(dev, ptr);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(devm_delayed_work_autocancel);
-diff --git a/include/linux/device.h b/include/linux/device.h
-index 1779f90eeb4c..192456198de7 100644
---- a/include/linux/device.h
-+++ b/include/linux/device.h
-@@ -27,6 +27,7 @@
- #include <linux/uidgid.h>
- #include <linux/gfp.h>
- #include <linux/overflow.h>
-+#include <linux/workqueue.h>
- #include <linux/device/bus.h>
- #include <linux/device/class.h>
- #include <linux/device/driver.h>
-@@ -249,6 +250,10 @@ void __iomem *devm_of_iomap(struct device *dev,
- 			    struct device_node *node, int index,
- 			    resource_size_t *size);
+diff --git a/drivers/hwmon/raspberrypi-hwmon.c b/drivers/hwmon/raspberrypi-hwmon.c
+index d3a64a35f7a9..acfa674932bc 100644
+--- a/drivers/hwmon/raspberrypi-hwmon.c
++++ b/drivers/hwmon/raspberrypi-hwmon.c
+@@ -106,6 +106,7 @@ static int rpi_hwmon_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	struct rpi_hwmon_data *data;
++	int ret;
  
-+/* delayed work which is cancelled when driver exits */
-+int devm_delayed_work_autocancel(struct device *dev, struct delayed_work *w,
-+				 void (*worker)(struct work_struct *work));
-+
- /* allows to add/remove a custom action to devres stack */
- int devm_add_action(struct device *dev, void (*action)(void *), void *data);
- void devm_remove_action(struct device *dev, void (*action)(void *), void *data);
+ 	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+ 	if (!data)
+@@ -119,7 +120,10 @@ static int rpi_hwmon_probe(struct platform_device *pdev)
+ 							       &rpi_chip_info,
+ 							       NULL);
+ 
+-	INIT_DELAYED_WORK(&data->get_values_poll_work, get_values_poll);
++	ret = devm_delayed_work_autocancel(dev, &data->get_values_poll_work,
++					   get_values_poll);
++	if (ret)
++		return ret;
+ 	platform_set_drvdata(pdev, data);
+ 
+ 	if (!PTR_ERR_OR_ZERO(data->hwmon_dev))
+@@ -128,18 +132,8 @@ static int rpi_hwmon_probe(struct platform_device *pdev)
+ 	return PTR_ERR_OR_ZERO(data->hwmon_dev);
+ }
+ 
+-static int rpi_hwmon_remove(struct platform_device *pdev)
+-{
+-	struct rpi_hwmon_data *data = platform_get_drvdata(pdev);
+-
+-	cancel_delayed_work_sync(&data->get_values_poll_work);
+-
+-	return 0;
+-}
+-
+ static struct platform_driver rpi_hwmon_driver = {
+ 	.probe = rpi_hwmon_probe,
+-	.remove = rpi_hwmon_remove,
+ 	.driver = {
+ 		.name = "raspberrypi-hwmon",
+ 	},
 -- 
 2.25.4
 
