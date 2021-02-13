@@ -2,70 +2,71 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-17.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FBC3C433E0
-	for <linux-hwmon@archiver.kernel.org>; Sat, 13 Feb 2021 14:53:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05911C433E9
+	for <linux-hwmon@archiver.kernel.org>; Sat, 13 Feb 2021 15:05:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6A1A864DE7
-	for <linux-hwmon@archiver.kernel.org>; Sat, 13 Feb 2021 14:53:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C68C864E56
+	for <linux-hwmon@archiver.kernel.org>; Sat, 13 Feb 2021 15:05:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbhBMOxl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 13 Feb 2021 09:53:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:51967 "EHLO
+        id S229647AbhBMPFf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 13 Feb 2021 10:05:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:59953 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229665AbhBMOxj (ORCPT
+        by vger.kernel.org with ESMTP id S229653AbhBMPFX (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 13 Feb 2021 09:53:39 -0500
+        Sat, 13 Feb 2021 10:05:23 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1613227931;
+        s=mimecast20190719; t=1613228634;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=l4ytx6mSORryC9/ckDkwUt9Y5elBZy+A8DMLR/SeLFA=;
-        b=YkBb++FqeCQexIcmLPVkI5USioZuspB2wIiOToCT7mhsRmPb5LgLGjA5vsN5KfVKGLI4Sq
-        boDY8iQv3jbvgvt02p1HnkG+nYZnQRLr/wr/osuMwrtu129NApDYIzz8ou21qZeXHE/vLP
-        YSXa/Vpz6Vc3eu0RNddpjhrrRj2HSXU=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-381-FXXvgByFPlW0wRUS1q-Hog-1; Sat, 13 Feb 2021 09:52:09 -0500
-X-MC-Unique: FXXvgByFPlW0wRUS1q-Hog-1
-Received: by mail-ej1-f71.google.com with SMTP id jg11so2332981ejc.23
-        for <linux-hwmon@vger.kernel.org>; Sat, 13 Feb 2021 06:52:09 -0800 (PST)
+        bh=IbRDXnVkgokeWfj3+Tz6V/zFRi6EhFaMmZsqs9gupxU=;
+        b=ENqh9evqPuQWB9mvGOjNSj++ltO6kgqfhTBJNcWhVTAcG/SNd3KSXSCifL4CfrRWeRvaCX
+        PNfPrc/MpRl7j7A9GzeBjgKSF74jXhldLiIkH2Hex2dAmOHzi1J2nLunyMklfywJoWQVgW
+        OpQseGjbpbs3FvylatYdxWKWKHM9qkE=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-394-hRtcl9XIOi26RA99G_Pf6g-1; Sat, 13 Feb 2021 10:03:53 -0500
+X-MC-Unique: hRtcl9XIOi26RA99G_Pf6g-1
+Received: by mail-ej1-f69.google.com with SMTP id gx1so2304382ejc.21
+        for <linux-hwmon@vger.kernel.org>; Sat, 13 Feb 2021 07:03:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=l4ytx6mSORryC9/ckDkwUt9Y5elBZy+A8DMLR/SeLFA=;
-        b=arFhmLm4bpdIgTyjwKWisTcnkjzD53xwkArNZoSLovDv3IqNZRY8FnIZ5UPqSLHDy1
-         zWReplLo+ANoXPCOkyc5CsLp4vW/BsZdilgi8YU0mIYvKvwrCT5x8eLZlOSy+b+6H45m
-         JVtAbbkaRhRTpovHVpuc5uUOet0vyBnUlAm3pdNUIC5T4Dok50nXdHcG1CntGJiuwphM
-         wKXcKTlkLUu9z0Fz8MmJFPucLbQwOhKMryS8ihfN1CnqY83lpeJ9Pbj/yEk5RuGOssV9
-         lClYRCIzNU27LApGLlZA7DRxCFc3R3AUGZOPY9VaXZ6X5LTXEn4dcd3hJOVei5F4K9A5
-         uFwA==
-X-Gm-Message-State: AOAM530VXlGQXyLOKXDqP5LyE/Zl8JlFMqLZV8Rze5i08jDGEDo/2woG
-        7nfHuWV2v301EOXK85hSSKHETUw6j5a622POaC7bQcggXH10d6zEsRMBonX8IJhEH6/6qQp5EQs
-        mTCWOaaWu2XUQHjTbmBHP5Ag=
-X-Received: by 2002:a17:907:9702:: with SMTP id jg2mr7971734ejc.48.1613227928321;
-        Sat, 13 Feb 2021 06:52:08 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz+usicOJdFKmvK0rRWYdbK1mDMpi9ZfQVA/OyFldns5N6tfGUHahQmjNCyMiVXxtGpFFsc3w==
-X-Received: by 2002:a17:907:9702:: with SMTP id jg2mr7971712ejc.48.1613227928165;
-        Sat, 13 Feb 2021 06:52:08 -0800 (PST)
+        bh=IbRDXnVkgokeWfj3+Tz6V/zFRi6EhFaMmZsqs9gupxU=;
+        b=D6Ddrp+Fugd8J81exXuubE5Gj98ALM6iYVpijLJ+F+Orfkw7jXNwm1c238fDWrWUQ7
+         kY9Vq06wtuoK/mLssaCafqq151RUYNbmeojgmioetJAHRCIkVjHM9eirBNFXV+XOb1lO
+         /oFzf7wL48EK1oCIIbRSwSZwkTbJwGQzPw8dDld84M9nG28A0aEGV6DzlbV2xgb9EB1d
+         3hgsei1mkgee+iyWEw7PqGHVd69zgFF06z7qhYQATpXi8WVU3fTEdi3CgYYK8E5kBtPW
+         fIV7u3BDovLb/6PnuK7DV4neg6tfeKhJPkfAtU5RzIjah/utPbupphNwj96GFTND+kzT
+         qbnQ==
+X-Gm-Message-State: AOAM530QNWoNzoPegixCS5V7ToVciM4LjbE+PaSIlL0VpSLrBUom2s7w
+        OWeqEwLH4viASzVLBXBE1ULmOttdXvbBg5UcmndF6I6ugnD0uP7ER+Q628Tpg/b0zY63LmwJ/Jt
+        1ab31m5Ob1fG26JvC/8IwAOg=
+X-Received: by 2002:a17:907:933:: with SMTP id au19mr7841002ejc.51.1613228631789;
+        Sat, 13 Feb 2021 07:03:51 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxQA3MDWp7v8eys+7/AkHpFQVgSaKlfsGAQwnsKfJRExVSbdJsT33N7b5HRBf683Jie9jfUBw==
+X-Received: by 2002:a17:907:933:: with SMTP id au19mr7840959ejc.51.1613228631502;
+        Sat, 13 Feb 2021 07:03:51 -0800 (PST)
 Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id dk18sm7308096edb.92.2021.02.13.06.52.07
+        by smtp.gmail.com with ESMTPSA id k27sm7817070eje.67.2021.02.13.07.03.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 13 Feb 2021 06:52:07 -0800 (PST)
+        Sat, 13 Feb 2021 07:03:51 -0800 (PST)
 Subject: Re: [RFC PATCH 1/7] drivers: base: Add resource managed version of
  delayed work init
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        mazziesaccount@gmail.com, "Rafael J. Wysocki" <rafael@kernel.org>,
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        mazziesaccount@gmail.com
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
         Chanwoo Choi <cw00.choi@samsung.com>,
         Andy Gross <agross@kernel.org>,
@@ -89,16 +90,13 @@ Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
 References: <cover.1613216412.git.matti.vaittinen@fi.rohmeurope.com>
  <1230b0d2ba99ad546d72ab079e76cb1b3df32afb.1613216412.git.matti.vaittinen@fi.rohmeurope.com>
- <YCfDAly9b0zHMpJT@kroah.com>
- <284d4a13-5cc8-e23c-7e99-c03db5415bf1@redhat.com>
- <YCfVKyXbeJXNbMsd@kroah.com>
- <eecf8ad6-a99d-8ad0-fc7e-f87d015add3f@redhat.com>
-Message-ID: <529a5122-ff3a-2af0-52ed-b13216fa49d1@redhat.com>
-Date:   Sat, 13 Feb 2021 15:52:06 +0100
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <2fb4b305-a93f-f91e-3001-dab5057e39cc@redhat.com>
+Date:   Sat, 13 Feb 2021 16:03:50 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.7.0
 MIME-Version: 1.0
-In-Reply-To: <eecf8ad6-a99d-8ad0-fc7e-f87d015add3f@redhat.com>
+In-Reply-To: <1230b0d2ba99ad546d72ab079e76cb1b3df32afb.1613216412.git.matti.vaittinen@fi.rohmeurope.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -108,52 +106,125 @@ X-Mailing-List: linux-hwmon@vger.kernel.org
 
 Hi,
 
-On 2/13/21 3:38 PM, Hans de Goede wrote:
-> Hi,
+On 2/13/21 12:58 PM, Matti Vaittinen wrote:
+> A few drivers which need a delayed work-queue must cancel work at exit.
+> Some of those implement remove solely for this purpose. Help drivers
+> to avoid unnecessary remove and error-branch implementation by adding
+> managed verision of delayed work initialization
 > 
-> On 2/13/21 2:33 PM, Greg Kroah-Hartman wrote:
-
-<snip>
-
-> Having this new devm_delayed_work_autocancel() helper will allow a
-> bunch of drivers to move away from mixing the 2, which is a good thing
-> in my book.
+> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> ---
+>  drivers/base/devres.c  | 33 +++++++++++++++++++++++++++++++++
+>  include/linux/device.h |  5 +++++
+>  2 files changed, 38 insertions(+)
 > 
-> As I said above I believe that having devm_delayed_work_autocancel() (1)
-> in our toolbox will be a good thing to have. Driver authors can then choose
-> to use it; or they can choose to not use it if they don't like it.
-> 
-> I know that the reason why I did not use it in the
-> drivers/extcon/extcon-intel-int3496.c driver is because it was not available
-> if it had been available then I would definitely have used it, as it avoids the
-> mixing of resource-management styles which that driver is currently doing.
-> 
-> And I think that that is what this is ultimately about, there are 2 styles
-> of resource-management:
-> 
-> 1. manual
-> 2. devm based
-> 
-> And they both have their pros and cons, problems mostly arise when mixing them
-> and adding new devm helpers for commonly used cleanup patterns is a good thing
-> as it helps to get rid of mixing these 2 styles in a single driver.
+> diff --git a/drivers/base/devres.c b/drivers/base/devres.c
+> index fb9d5289a620..2879595bb5a4 100644
+> --- a/drivers/base/devres.c
+> +++ b/drivers/base/devres.c
+> @@ -1231,3 +1231,36 @@ void devm_free_percpu(struct device *dev, void __percpu *pdata)
+>  			       (void *)pdata));
+>  }
+>  EXPORT_SYMBOL_GPL(devm_free_percpu);
+> +
+> +static void dev_delayed_work_drop(struct device *dev, void *res)
+> +{
+> +	cancel_delayed_work_sync(*(struct delayed_work **)res);
+> +}
+> +
+> +/**
+> + * devm_delayed_work_autocancel - Resource-managed work allocation
+> + * @dev: Device which lifetime work is bound to
+> + * @pdata: work to be cancelled when device exits
+> + *
+> + * Initialize work which is automatically cancelled when device exits.
+> + * A few drivers need delayed work which must be cancelled before driver
+> + * is unload to avoid accessing removed resources.
+> + * devm_delayed_work_autocancel() can be used to omit the explicit
+> + * cancelleation when driver is unload.
+> + */
+> +int devm_delayed_work_autocancel(struct device *dev, struct delayed_work *w,
+> +				 void (*worker)(struct work_struct *work))
+> +{
+> +	struct delayed_work **ptr;
+> +
+> +	ptr = devres_alloc(dev_delayed_work_drop, sizeof(*ptr), GFP_KERNEL);
+> +	if (!ptr)
+> +		return -ENOMEM;
+> +
+> +	INIT_DELAYED_WORK(w, worker);
+> +	*ptr = w;
+> +	devres_add(dev, ptr);
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(devm_delayed_work_autocancel);
 
-I just noticed that I forgot to fill in the (1) footnote above:
+This is a bit of a micro-optimization I must admit, but I think you can
+just make this a static inline using devm_add_action, which would avoid
+growing the base kernel image and avoid adding yet another symbol to
+the exported symbols table.
 
-1) And we probably will want one for non delayed work items to: devm_work_autocancel(),
-but lets cross that bridge when we get there.
+I think something like this should work:
 
-Also when reviewing: "[RFC PATCH 2/7] extconn: Clean-up few drivers by using managed work init"
-I noticed that the extcon-qcom-spmi-misc.c and extcon-palmas.c follow the same standard
-pattern of having an IRQ which queues a delayed work and they both miss the devm_free_irq
-call before the cancel_delayed_work_sync() on driver release. So just patch 2/7 here
-fixes 3 driver-release race conditions (fixing 3/4 drivers which it touches) as a
-bonus to the code-cleanup which it does.
+static int devm_delayed_work_autocancel(struct device *dev, struct delayed_work *w,
+					void (*worker)(struct work_struct *work)) {
+	INIT_DELAYED_WORK(w, worker);
+	return devm_add_action(dev, (void (*action)(void *))cancel_delayed_work_sync, w);
+}
 
-So as this clearly seems to be fixing a bunch of bugs, by simply completely removing the
-buggy code driver remove callbacks, this really seems like a good idea to me.
+I'm not sure about the cast, that may need something like this instead:
+
+typedef void (*devm_action_func)(void *);
+
+static int devm_delayed_work_autocancel(struct device *dev, struct delayed_work *w,
+					void (*worker)(struct work_struct *work)) {
+	INIT_DELAYED_WORK(w, worker);
+	return devm_add_action(dev, (devm_action_func)cancel_delayed_work_sync, w);
+}
+
+As said this is a bit of a micro-optimization. But if we want to add others too,
+say one for non delayed works, then at some point in time this is going to start
+to add up (a bit) wrt symbol-table size and base kernel-image size.
+
+And if you go the static inline route, I guess you could add this in
+
+include/linux/workqueue.h
+
+instead and putting workqueue devm cleanup helpers there seems better
+then putting random devm cleanup helpers in include/linux/device.h .
 
 Regards,
 
 Hans
+
+
+
+
+
+
+> diff --git a/include/linux/device.h b/include/linux/device.h
+> index 1779f90eeb4c..192456198de7 100644
+> --- a/include/linux/device.h
+> +++ b/include/linux/device.h
+> @@ -27,6 +27,7 @@
+>  #include <linux/uidgid.h>
+>  #include <linux/gfp.h>
+>  #include <linux/overflow.h>
+> +#include <linux/workqueue.h>
+>  #include <linux/device/bus.h>
+>  #include <linux/device/class.h>
+>  #include <linux/device/driver.h>
+> @@ -249,6 +250,10 @@ void __iomem *devm_of_iomap(struct device *dev,
+>  			    struct device_node *node, int index,
+>  			    resource_size_t *size);
+>  
+> +/* delayed work which is cancelled when driver exits */
+> +int devm_delayed_work_autocancel(struct device *dev, struct delayed_work *w,
+> +				 void (*worker)(struct work_struct *work));
+> +
+>  /* allows to add/remove a custom action to devres stack */
+>  int devm_add_action(struct device *dev, void (*action)(void *), void *data);
+>  void devm_remove_action(struct device *dev, void (*action)(void *), void *data);
+> 
 
