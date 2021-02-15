@@ -2,165 +2,228 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65231C433DB
-	for <linux-hwmon@archiver.kernel.org>; Sun, 14 Feb 2021 04:02:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0C00C433E0
+	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Feb 2021 04:42:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2CD9A64E4E
-	for <linux-hwmon@archiver.kernel.org>; Sun, 14 Feb 2021 04:02:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B532C64DEC
+	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Feb 2021 04:42:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbhBNEC0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 13 Feb 2021 23:02:26 -0500
-Received: from mga14.intel.com ([192.55.52.115]:54982 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229485AbhBNECZ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 13 Feb 2021 23:02:25 -0500
-IronPort-SDR: AUeg4tjp5rrj9CAp13nD1Sy8vm/27ux4XCpTMh0PJloeqtGVGClrlUe43T0KHDxVcWLWDq3WjB
- 9+4e+OEOYycA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9894"; a="181780781"
-X-IronPort-AV: E=Sophos;i="5.81,176,1610438400"; 
-   d="scan'208";a="181780781"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2021 20:01:38 -0800
-IronPort-SDR: sbiMLt++FagnQ6+IhX0VLfzgNZiqC0z5TaIkve/Rw6YTeAfAG7w2kyUV1B9Dm3FT/ZG/IPCRVY
- iQg4szwsru8Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,176,1610438400"; 
-   d="scan'208";a="400287840"
-Received: from lkp-server02.sh.intel.com (HELO cd560a204411) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 13 Feb 2021 20:01:36 -0800
-Received: from kbuild by cd560a204411 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lB8bI-0006LR-6m; Sun, 14 Feb 2021 04:01:36 +0000
-Date:   Sun, 14 Feb 2021 12:00:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon-next] BUILD SUCCESS
- 6ab3332cc692ad04dfa30c92d3391aea8b971ef2
-Message-ID: <6028a063.3B+WWkkb8QZtOQmw%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S229918AbhBOEmX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 14 Feb 2021 23:42:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41344 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229890AbhBOEmV (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 14 Feb 2021 23:42:21 -0500
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF32C061574;
+        Sun, 14 Feb 2021 20:41:40 -0800 (PST)
+Received: by mail-ot1-x32e.google.com with SMTP id s107so4998399otb.8;
+        Sun, 14 Feb 2021 20:41:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xvNrMCNzeG5peRpvoYDXlqkLQtIOmANJBYJ6+Met1ik=;
+        b=Zc2HjOiEpoRZipF3j47aZ9UNmDjbLhP48VhnL9+WrloRaq688ocY/vyWs6eM54ULdQ
+         JVzGAx8qYcUMT95HIR6qrPWpzOyh5GcEdaYl3MhIOGRom8f6bbwQ8Ucb6YSKHRiRaCDd
+         qXJli+FCuUqPlea6QFH3z8JrVhqIZPQSl4I/IVunQGXAwNH73Wl+crf/RRXXLIyNZtx8
+         fWyOI8OWMMi4C196oTBpmEoSPutO6A22qVOr1wDvghVKvNuZ/85pHBy4oYCWiI+d5KzL
+         IFdHIWUrmZwEIB4lq6QOnGYuR8fkT9QTMokwMiIN56eumoDJIGs+lSN//sMDfzvUZOT7
+         wGSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=xvNrMCNzeG5peRpvoYDXlqkLQtIOmANJBYJ6+Met1ik=;
+        b=bxbStxutfkGO0+tc+/pLryJxLF4f30uasbs31//3kmLfz28mz9wmLDzzSamo/9my7t
+         lxXQNlM//qGL9mcQSWz1C2pOre19LyJ0cBIf5F15lEy1VtlZPThkSKO/B/ulxAEDYe+g
+         NacOhw80baxWdI8hiTq5yZxRhQ1hIP5NBQADOAMyQGmOrVzTSrH0v05RVGUciIdnA+z8
+         CAcFuMgvagNee8Twj0qzTd/+YFiQcQbiH9cup+C1eO/fsZkMlKEf6x11vMFOG5Owcljp
+         JFWWmLKIzI2gvVyLpNipBIiVE9EAWFGPPx8YT0tU5qnHHKGPDpbS8V7FeL5lTXMyn1mo
+         fbzw==
+X-Gm-Message-State: AOAM5303rx2Ao60+9mulQuoiLKgzGDTzGWWmSe95Tw6wzwk8bVdF4Tld
+        issLZgKmKGi84mRx9iRL4LZoTVyYeio=
+X-Google-Smtp-Source: ABdhPJwODt0seuDPiIfGBYDb0e9YwpwXJ9Jc2K68Zt37I8Lvt3MxXSAsNhtZHqXtIXsTDbG2cGxu5Q==
+X-Received: by 2002:a9d:7986:: with SMTP id h6mr9991790otm.310.1613364099891;
+        Sun, 14 Feb 2021 20:41:39 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z24sm3454358ote.1.2021.02.14.20.41.38
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 14 Feb 2021 20:41:39 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon updates for v5.12
+Date:   Sun, 14 Feb 2021 20:41:38 -0800
+Message-Id: <20210215044138.35831-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 6ab3332cc692ad04dfa30c92d3391aea8b971ef2  MAINTAINERS: Add entry for Texas Instruments TPS23861 PoE PSE
+Hi Linus,
 
-elapsed time: 726m
+Please pull hwmon updates for Linux v5.12 from signed tag:
 
-configs tested: 95
-configs skipped: 2
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.12
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Thanks,
+Guenter
+------
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-powerpc                    socrates_defconfig
-powerpc                        fsp2_defconfig
-powerpc                mpc7448_hpc2_defconfig
-powerpc                      ppc44x_defconfig
-powerpc                 mpc836x_mds_defconfig
-mips                malta_kvm_guest_defconfig
-sparc                               defconfig
-sparc                            alldefconfig
-xtensa                          iss_defconfig
-sh                           se7721_defconfig
-m68k                       m5208evb_defconfig
-powerpc                      makalu_defconfig
-xtensa                  nommu_kc705_defconfig
-sh                           se7206_defconfig
-arm                             mxs_defconfig
-powerpc                     rainier_defconfig
-arm                          collie_defconfig
-mips                           ip22_defconfig
-powerpc                 mpc837x_rdb_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                               tinyconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a003-20210214
-x86_64               randconfig-a002-20210214
-x86_64               randconfig-a001-20210214
-x86_64               randconfig-a004-20210214
-x86_64               randconfig-a005-20210214
-x86_64               randconfig-a006-20210214
-i386                 randconfig-a003-20210214
-i386                 randconfig-a005-20210214
-i386                 randconfig-a002-20210214
-i386                 randconfig-a006-20210214
-i386                 randconfig-a004-20210214
-i386                 randconfig-a001-20210214
-i386                 randconfig-a016-20210214
-i386                 randconfig-a014-20210214
-i386                 randconfig-a012-20210214
-i386                 randconfig-a013-20210214
-i386                 randconfig-a011-20210214
-i386                 randconfig-a015-20210214
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+The following changes since commit 19c329f6808995b142b3966301f217c831e7cf31:
 
-clang tested configs:
-x86_64               randconfig-a016-20210214
-x86_64               randconfig-a013-20210214
-x86_64               randconfig-a012-20210214
-x86_64               randconfig-a015-20210214
-x86_64               randconfig-a014-20210214
-x86_64               randconfig-a011-20210214
+  Linux 5.11-rc4 (2021-01-17 16:37:05 -0800)
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v5.12
+
+for you to fetch changes up to 6ab3332cc692ad04dfa30c92d3391aea8b971ef2:
+
+  MAINTAINERS: Add entry for Texas Instruments TPS23861 PoE PSE (2021-02-12 07:02:55 -0800)
+
+----------------------------------------------------------------
+hwmon updates for v5.12
+
+- New drivers
+  Texas Instruments TPS23861 driver
+  AHT10 Temperature and Humidity Sensor Driver
+
+- Support for new chips/variants to existing drivers
+  Add AMD family 19h model 30h x86 match to amd_energy driver
+  Add Zen3 Ryzen Desktop CPUs support to k10temp driver
+  Add support for MAX16508 to max16601 driver
+  Support revision "B" of max31785
+  Add support for ASRock boards to nct6683 driver
+
+- Driver removals
+  (abx500) Decomission abx500 driver
+
+Various other minor fixes and improvements.
+
+----------------------------------------------------------------
+Blaž Hrastnik (1):
+      hwmon: (nct6683) Support ASRock boards
+
+Dan Carpenter (1):
+      hwmon: (aht10) Unlock on error in aht10_read_values()
+
+Eddie James (2):
+      hwmon: (pmbus) Add a PMBUS_NO_CAPABILITY platform data flag
+      hwmon: (pmbus/ibm-cffps) Set the PMBUS_NO_CAPABILITY flag
+
+Erik Rosen (2):
+      hwmon: (pmbus) Clear sensor data after chip write
+      hwmon: (pmbus/lm25066) Remove unnecessary pmbus_clear_cache function call
+
+Gabriel Craciunescu (1):
+      hwmon: (k10temp) Zen3 Ryzen Desktop CPUs support
+
+Guenter Roeck (3):
+      hwmon: (abx500) Decomission abx500 driver
+      hwmon: (pmbus/max16601) Determine and use number of populated phases
+      hwmon: (pmbus/max16601) Add support for MAX16508
+
+Jiapeng Zhong (2):
+      hwmon: (applesmc) Assign boolean values to a bool variable
+      hwmon: (pmbus) Simplify the calculation of variables
+
+Johannes Cornelis Draaijer (datdenkikniet) (1):
+      hwmon: Add AHT10 Temperature and Humidity Sensor Driver
+
+Matthew Barth (1):
+      hwmon: (pmbus/max31785) Support revision "B"
+
+Mauro Carvalho Chehab (1):
+      hwmon: (ina2) update ti,ina2xx.yaml reference in documentation
+
+Naveen Krishna Chatradhi (1):
+      hwmon: (amd_energy) Add AMD family 19h model 30h x86 match
+
+Paul Barker (2):
+      hwmon: (pwm-fan) Store tach data separately
+      hwmon: (pwm-fan) Support multiple fan tachometers
+
+Robert Marko (3):
+      dt-bindings: hwmon: Add TI TPS23861 bindings
+      hwmon: add Texas Instruments TPS23861 driver
+      MAINTAINERS: Add entry for Texas Instruments TPS23861 PoE PSE
+
+Thomas Hebb (1):
+      hwmon: (dell-smm) Add XPS 15 L502X to fan control blacklist
+
+Tian Tao (5):
+      hwmon: (w83627ehf) Switch to using the new API kobj_to_dev()
+      hwmon: (gpio-fan) Switch to using the new API kobj_to_dev()
+      hwmon: (max6650) Switch to using the new API kobj_to_dev()
+      hwmon: (aspeed-pwm-tacho) Switch to using the new API kobj_to_dev()
+      hwmon: (da9052) Switch to using the new API kobj_to_dev()
+
+Tom Rix (1):
+      hwmon: (smsc47m1) Remove 'h' from printk format specifier
+
+Uwe Kleine-König (1):
+      hwmon: (pwm-fan) stop using legacy PWM functions and some cleanups
+
+Zheng Yongjun (1):
+      hwmon: (pc87360) convert comma to semicolon
+
+ .../devicetree/bindings/hwmon/ti,tps23861.yaml     |  51 ++
+ Documentation/hwmon/ab8500.rst                     |  26 -
+ Documentation/hwmon/abx500.rst                     |  32 --
+ Documentation/hwmon/aht10.rst                      |  46 ++
+ Documentation/hwmon/ina2xx.rst                     |   2 +-
+ Documentation/hwmon/index.rst                      |   4 +-
+ Documentation/hwmon/max16601.rst                   | 197 +++----
+ Documentation/hwmon/nct6683.rst                    |   1 +
+ Documentation/hwmon/tps23861.rst                   |  41 ++
+ MAINTAINERS                                        |   9 +
+ drivers/hwmon/Kconfig                              |  34 +-
+ drivers/hwmon/Makefile                             |   3 +-
+ drivers/hwmon/ab8500.c                             | 224 --------
+ drivers/hwmon/abx500.c                             | 487 -----------------
+ drivers/hwmon/abx500.h                             |  69 ---
+ drivers/hwmon/aht10.c                              | 348 ++++++++++++
+ drivers/hwmon/amd_energy.c                         |   1 +
+ drivers/hwmon/applesmc.c                           |   2 +-
+ drivers/hwmon/aspeed-pwm-tacho.c                   |   4 +-
+ drivers/hwmon/da9052-hwmon.c                       |   2 +-
+ drivers/hwmon/dell-smm-hwmon.c                     |   7 +
+ drivers/hwmon/gpio-fan.c                           |   2 +-
+ drivers/hwmon/k10temp.c                            |   3 +-
+ drivers/hwmon/max6650.c                            |   2 +-
+ drivers/hwmon/nct6683.c                            |   3 +
+ drivers/hwmon/pc87360.c                            |   4 +-
+ drivers/hwmon/pmbus/Kconfig                        |   4 +-
+ drivers/hwmon/pmbus/ibm-cffps.c                    |   2 +-
+ drivers/hwmon/pmbus/lm25066.c                      |   5 -
+ drivers/hwmon/pmbus/max16601.c                     |  91 +++-
+ drivers/hwmon/pmbus/max31785.c                     |  13 +-
+ drivers/hwmon/pmbus/pmbus_core.c                   |  12 +-
+ drivers/hwmon/pwm-fan.c                            | 159 +++---
+ drivers/hwmon/smsc47m1.c                           |   2 +-
+ drivers/hwmon/tps23861.c                           | 601 +++++++++++++++++++++
+ drivers/hwmon/w83627ehf.c                          |   2 +-
+ include/linux/pmbus.h                              |   9 +
+ 37 files changed, 1416 insertions(+), 1088 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tps23861.yaml
+ delete mode 100644 Documentation/hwmon/ab8500.rst
+ delete mode 100644 Documentation/hwmon/abx500.rst
+ create mode 100644 Documentation/hwmon/aht10.rst
+ create mode 100644 Documentation/hwmon/tps23861.rst
+ delete mode 100644 drivers/hwmon/ab8500.c
+ delete mode 100644 drivers/hwmon/abx500.c
+ delete mode 100644 drivers/hwmon/abx500.h
+ create mode 100644 drivers/hwmon/aht10.c
+ create mode 100644 drivers/hwmon/tps23861.c
