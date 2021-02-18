@@ -2,492 +2,154 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A166C433E0
-	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Feb 2021 14:41:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5C5EC433DB
+	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Feb 2021 18:35:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1069F64E3E
-	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Feb 2021 14:41:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9D60364E92
+	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Feb 2021 18:35:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231740AbhBROk6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 18 Feb 2021 09:40:58 -0500
-Received: from smtp.outgoing.loopia.se ([93.188.3.37]:56057 "EHLO
-        smtp.outgoing.loopia.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232245AbhBRM4N (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 18 Feb 2021 07:56:13 -0500
-Received: from s807.loopia.se (localhost [127.0.0.1])
-        by s807.loopia.se (Postfix) with ESMTP id B845310D22B5
-        for <linux-hwmon@vger.kernel.org>; Thu, 18 Feb 2021 12:53:23 +0100 (CET)
-Received: from s645.loopia.se (unknown [172.22.191.5])
-        by s807.loopia.se (Postfix) with ESMTP id 988242E27599;
-        Thu, 18 Feb 2021 12:53:23 +0100 (CET)
-Received: from s470.loopia.se (unknown [172.22.191.5])
-        by s645.loopia.se (Postfix) with ESMTP id 7BC4C1579F65;
-        Thu, 18 Feb 2021 12:53:23 +0100 (CET)
-X-Virus-Scanned: amavisd-new at amavis.loopia.se
-Received: from s630.loopia.se ([172.22.191.6])
-        by s470.loopia.se (s470.loopia.se [172.22.190.10]) (amavisd-new, port 10024)
-        with UTF8LMTP id 3QocaL6aW7_B; Thu, 18 Feb 2021 12:53:22 +0100 (CET)
-X-Loopia-Auth: user
-X-Loopia-User: carl@hgsystem.se
-X-Loopia-Originating-IP: 94.234.46.141
-Received: from localhost.localdomain (c-5eea2e8d-74736162.cust.telenor.se [94.234.46.141])
-        (Authenticated sender: carl@hgsystem.se)
-        by s630.loopia.se (Postfix) with ESMTPSA id 5EDBA13B9372;
-        Thu, 18 Feb 2021 12:53:21 +0100 (CET)
-From:   Erik Rosen <erik.rosen@metormote.com>
-To:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        id S232476AbhBRSfP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 18 Feb 2021 13:35:15 -0500
+Received: from mga18.intel.com ([134.134.136.126]:24502 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233602AbhBRQbv (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 18 Feb 2021 11:31:51 -0500
+IronPort-SDR: bEyzum6oA3kRNfGD43MyymPdSDcJ+YLrFnc3BUYF/gw9kptZX4OG1ZwNBsD3WxCrvDUs5uAT7K
+ NywfAw+4poJQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9898"; a="171226748"
+X-IronPort-AV: E=Sophos;i="5.81,187,1610438400"; 
+   d="scan'208";a="171226748"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2021 08:28:22 -0800
+IronPort-SDR: 8wV6FNxP8SE0d4WHFpdRVuaFuCTVydh3gBnRbO6D/bXLTESQYwmiHqSvYcvTGhorUg/aee8is/
+ q6876h3NGC7Q==
+X-IronPort-AV: E=Sophos;i="5.81,187,1610438400"; 
+   d="scan'208";a="367582619"
+Received: from smtp.ostc.intel.com ([10.54.29.231])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2021 08:28:21 -0800
+Received: from localhost (mtg-dev.jf.intel.com [10.54.74.10])
+        by smtp.ostc.intel.com (Postfix) with ESMTP id 25BFD6365;
+        Thu, 18 Feb 2021 08:28:21 -0800 (PST)
+Date:   Thu, 18 Feb 2021 08:28:21 -0800
+From:   mark gross <mgross@linux.intel.com>
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     mazziesaccount@gmail.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     Erik Rosen <erik.rosen@metormote.com>
-Subject: [PATCH v3 2/2] hwmon: (pmbus/stpddc60) Add ST STPDDC60 pmbus driver
-Date:   Thu, 18 Feb 2021 12:52:49 +0100
-Message-Id: <20210218115249.28513-3-erik.rosen@metormote.com>
-X-Mailer: git-send-email 2.11.0 (Apple Git-81)
-In-Reply-To: <20210218115249.28513-1-erik.rosen@metormote.com>
-References: <20210218115249.28513-1-erik.rosen@metormote.com>
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: Re: [RFC PATCH 0/7] Add managed version of delayed work init
+Message-ID: <20210218162821.GP154917@linux.intel.com>
+Reply-To: mgross@linux.intel.com
+References: <cover.1613216412.git.matti.vaittinen@fi.rohmeurope.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1613216412.git.matti.vaittinen@fi.rohmeurope.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add hardware monitoring support for ST STPDDC60 Unversal Digital
-Multicell Controller.
+On Sat, Feb 13, 2021 at 01:58:17PM +0200, Matti Vaittinen wrote:
+> It's not rare that device drivers need delayed work.
+> It's not rare that this work needs driver's data.
+> 
+> Often this means that driver must ensure the work is not queued when
+> driver exits. Usually this is done by ensuring new work is not added and
+> then calling cancel_delayed_work_sync() at remove(). In many cases this
+> may also require cleanup at probe error path - which is easy to forget.
+> 
+> It might be helpful for (a) few drivers if there was a work init
+ why the (a) and not just a?
 
-Signed-off-by: Erik Rosen <erik.rosen@metormote.com>
----
- Documentation/hwmon/index.rst    |   1 +
- Documentation/hwmon/stpddc60.rst |  90 +++++++++++
- MAINTAINERS                      |   7 +
- drivers/hwmon/pmbus/Kconfig      |  10 ++
- drivers/hwmon/pmbus/Makefile     |   2 +
- drivers/hwmon/pmbus/stpddc60.c   | 248 +++++++++++++++++++++++++++++++
- 6 files changed, 358 insertions(+)
- create mode 100644 Documentation/hwmon/stpddc60.rst
- create mode 100644 drivers/hwmon/pmbus/stpddc60.c
+> function which would ensure cancel_delayed_work_sync() is called at
+> driver exit. So this series implements one on top of devm and replaces
+> the obvious cases where only thing remove call-back in a driver does is
+> cancelling the work. There might be other cases where we could switch
+> more than just work cancellation to use managed version and thus get rid
+> of remove.
+> 
+> Main reson why this is RFC is that I had hard time deciding where this
+> function should be introduced. It's not nice to include all device stuff
+> in workqueue - because many workqueue users are not interested in
+> devices. In same way, not all of the devices are interested in WQs.
+> OTOH, adding own file just for this sounds like an overkill.
+s/own/one
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index fcb870ce6286..94b4fcf182cd 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -169,6 +169,7 @@ Hardware Monitoring Kernel Drivers
-    smsc47m192
-    smsc47m1
-    sparx5-temp
-+   stpddc60
-    tc654
-    tc74
-    thmc50
-diff --git a/Documentation/hwmon/stpddc60.rst b/Documentation/hwmon/stpddc60.rst
-new file mode 100644
-index 000000000000..7f7ce7f7871b
---- /dev/null
-+++ b/Documentation/hwmon/stpddc60.rst
-@@ -0,0 +1,90 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Kernel driver stpddc60
-+======================
-+
-+Supported chips:
-+
-+  * ST STPDDC60
-+
-+    Prefix: 'stpddc60', 'bmr481'
-+
-+    Addresses scanned: -
-+
-+    Datasheet: https://flexpowermodules.com/documents/fpm-techspec-bmr481
-+
-+Author: Erik Rosen <erik.rosen@metormote.com>
-+
-+
-+Description
-+-----------
-+
-+This driver supports hardware monitoring for ST STPDDC60 controller chip and
-+compatible modules.
-+
-+The driver is a client driver to the core PMBus driver. Please see
-+Documentation/hwmon/pmbus.rst and Documentation.hwmon/pmbus-core for details
-+on PMBus client drivers.
-+
-+
-+Usage Notes
-+-----------
-+
-+This driver does not auto-detect devices. You will have to instantiate the
-+devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
-+details.
-+
-+The vout under- and over-voltage limits are set in relation to the commanded
-+output voltage as a positive or negative offset in the interval 50mV to 400mV
-+in 50mV steps. This means that the absolute values of the limits will change
-+when the commanded output voltage changes. Also, care should be taken when
-+writing to those limits since in the worst case the commanded output voltage
-+could change at the same time as the limit is written to, wich will lead to
-+unpredictable results.
-+
-+
-+Platform data support
-+---------------------
-+
-+The driver supports standard PMBus driver platform data.
-+
-+
-+Sysfs entries
-+-------------
-+
-+The following attributes are supported. Vin, iout, pout and temp limits
-+are read-write; all other attributes are read-only.
-+
-+======================= ========================================================
-+in1_label		"vin"
-+in1_input		Measured input voltage.
-+in1_lcrit		Critical minimum input voltage.
-+in1_crit		Critical maximum input voltage.
-+in1_lcrit_alarm		Input voltage critical low alarm.
-+in1_crit_alarm		Input voltage critical high alarm.
-+
-+in2_label		"vout1"
-+in2_input		Measured output voltage.
-+in2_lcrit		Critical minimum output voltage.
-+in2_crit		Critical maximum output voltage.
-+in2_lcrit_alarm		Critical output voltage critical low alarm.
-+in2_crit_alarm		Critical output voltage critical high alarm.
-+
-+curr1_label		"iout1"
-+curr1_input		Measured output current.
-+curr1_max		Maximum output current.
-+curr1_max_alarm		Output current high alarm.
-+curr1_crit		Critical maximum output current.
-+curr1_crit_alarm	Output current critical high alarm.
-+
-+power1_label		"pout1"
-+power1_input		Measured output power.
-+power1_crit		Critical maximum output power.
-+power1_crit_alarm	Output power critical high alarm.
-+
-+temp1_input		Measured maximum temperature of all phases.
-+temp1_max		Maximum temperature limit.
-+temp1_max_alarm		High temperature alarm.
-+temp1_crit		Critical maximum temperature limit.
-+temp1_crit_alarm	Critical maximum temperature alarm.
-+======================= ========================================================
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 992fe3b0900a..e4c696f8eabe 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16819,6 +16819,13 @@ L:	linux-i2c@vger.kernel.org
- S:	Maintained
- F:	drivers/i2c/busses/i2c-stm32*
- 
-+ST STPDDC60 DRIVER
-+M:	Daniel Nilsson <daniel.nilsson@flex.com>
-+L:	linux-hwmon@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/hwmon/stpddc60.rst
-+F:	drivers/hwmon/pmbus/stpddc60.c
-+
- ST VL53L0X ToF RANGER(I2C) IIO DRIVER
- M:	Song Qiang <songqiang1304521@gmail.com>
- L:	linux-iio@vger.kernel.org
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index 03606d4298a4..b2becdd84b11 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -247,6 +247,16 @@ config SENSORS_Q54SJ108A2
- 	  This driver can also be built as a module. If so, the module will
- 	  be called q54sj108a2.
- 
-+config SENSORS_STPDDC60
-+	tristate "ST STPDDC60"
-+	help
-+	  If you say yes here you get hardware monitoring support for ST
-+	  STPDDC60 Universal Digital Multicell Controller, as well as for
-+	  Flex BMR481.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called stpddc60.
-+
- config SENSORS_TPS40422
- 	tristate "TI TPS40422"
- 	help
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index 6a4ba0fdc1db..ef468806238c 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -28,9 +28,11 @@ obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
- obj-$(CONFIG_SENSORS_PM6764TR)	+= pm6764tr.o
- obj-$(CONFIG_SENSORS_PXE1610)	+= pxe1610.o
- obj-$(CONFIG_SENSORS_Q54SJ108A2)	+= q54sj108a2.o
-+obj-$(CONFIG_SENSORS_STPDDC60)	+= stpddc60.o
- obj-$(CONFIG_SENSORS_TPS40422)	+= tps40422.o
- obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
- obj-$(CONFIG_SENSORS_UCD9000)	+= ucd9000.o
- obj-$(CONFIG_SENSORS_UCD9200)	+= ucd9200.o
- obj-$(CONFIG_SENSORS_XDPE122)	+= xdpe12284.o
- obj-$(CONFIG_SENSORS_ZL6100)	+= zl6100.o
-+
-diff --git a/drivers/hwmon/pmbus/stpddc60.c b/drivers/hwmon/pmbus/stpddc60.c
-new file mode 100644
-index 000000000000..3e6709542b63
---- /dev/null
-+++ b/drivers/hwmon/pmbus/stpddc60.c
-@@ -0,0 +1,248 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Hardware monitoring driver for the STPDDC60 controller
-+ *
-+ * Copyright (c) 2021 Flextronics International Sweden AB.
-+ */
-+
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/init.h>
-+#include <linux/err.h>
-+#include <linux/i2c.h>
-+#include <linux/pmbus.h>
-+#include "pmbus.h"
-+
-+#define STPDDC60_MFR_READ_VOUT		0xd2
-+#define STPDDC60_MFR_OV_LIMIT_OFFSET	0xe5
-+#define STPDDC60_MFR_UV_LIMIT_OFFSET	0xe6
-+
-+static const struct i2c_device_id stpddc60_id[] = {
-+	{"stpddc60", 0},
-+	{"bmr481", 0},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(i2c, stpddc60_id);
-+
-+static struct pmbus_driver_info stpddc60_info = {
-+	.pages = 1,
-+	.func[0] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
-+		| PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT
-+		| PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP
-+		| PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT
-+		| PMBUS_HAVE_POUT,
-+};
-+
-+/*
-+ * Calculate the closest absolute offset between commanded vout value
-+ * and limit value in steps of 50mv in the range 0 (50mv) to 7 (400mv).
-+ * Return 0 if the upper limit is lower than vout or if the lower limit
-+ * is higher than vout.
-+ */
-+static u8 stpddc60_get_offset(int vout, u16 limit, bool over)
-+{
-+	int offset;
-+	long v, l;
-+
-+	v = 250 + (vout - 1) * 5; /* Convert VID to mv */
-+	l = (limit * 1000L) >> 8; /* Convert LINEAR to mv */
-+
-+	if (over == (l < v))
-+		return 0;
-+
-+	offset = DIV_ROUND_CLOSEST(abs(l - v), 50);
-+
-+	if (offset > 0)
-+		offset--;
-+
-+	return clamp_val(offset, 0, 7);
-+}
-+
-+/*
-+ * Adjust the linear format word to use the given fixed exponent.
-+ */
-+static u16 stpddc60_adjust_linear(u16 word, s16 fixed)
-+{
-+	s16 e, m, d;
-+
-+	e = ((s16)word) >> 11;
-+	m = ((s16)((word & 0x7ff) << 5)) >> 5;
-+	d = e - fixed;
-+
-+	if (d >= 0)
-+		m <<= d;
-+	else
-+		m >>= -d;
-+
-+	return clamp_val(m, 0, 0x3ff) | ((fixed << 11) & 0xf800);
-+}
-+
-+/*
-+ * The VOUT_COMMAND register uses the VID format but the vout alarm limit
-+ * registers use the LINEAR format so we override VOUT_MODE here to force
-+ * LINEAR format for all registers.
-+ */
-+static int stpddc60_read_byte_data(struct i2c_client *client, int page, int reg)
-+{
-+	int ret;
-+
-+	if (page > 0)
-+		return -ENXIO;
-+
-+	switch (reg) {
-+	case PMBUS_VOUT_MODE:
-+		ret = 0x18;
-+		break;
-+	default:
-+		ret = -ENODATA;
-+		break;
-+	}
-+
-+	return ret;
-+}
-+
-+/*
-+ * The vout related registers return values in LINEAR11 format when LINEAR16
-+ * is expected. Clear the top 5 bits to set the exponent part to zero to
-+ * convert the value to LINEAR16 format.
-+ */
-+static int stpddc60_read_word_data(struct i2c_client *client, int page,
-+				   int phase, int reg)
-+{
-+	int ret;
-+
-+	if (page > 0)
-+		return -ENXIO;
-+
-+	switch (reg) {
-+	case PMBUS_READ_VOUT:
-+		ret = pmbus_read_word_data(client, page, phase,
-+					   STPDDC60_MFR_READ_VOUT);
-+		if (ret < 0)
-+			return ret;
-+		ret &= 0x7ff;
-+		break;
-+	case PMBUS_VOUT_OV_FAULT_LIMIT:
-+	case PMBUS_VOUT_UV_FAULT_LIMIT:
-+		ret = pmbus_read_word_data(client, page, phase, reg);
-+		if (ret < 0)
-+			return ret;
-+		ret &= 0x7ff;
-+		break;
-+	default:
-+		ret = -ENODATA;
-+		break;
-+	}
-+
-+	return ret;
-+}
-+
-+/*
-+ * The vout under- and over-voltage limits are set as an offset relative to
-+ * the commanded vout voltage. The vin, iout, pout and temp limits must use
-+ * the same fixed exponent the chip uses to encode the data when read.
-+ */
-+static int stpddc60_write_word_data(struct i2c_client *client, int page,
-+				    int reg, u16 word)
-+{
-+	int ret;
-+	u8 offset;
-+
-+	if (page > 0)
-+		return -ENXIO;
-+
-+	switch (reg) {
-+	case PMBUS_VOUT_OV_FAULT_LIMIT:
-+		ret = pmbus_read_word_data(client, page, 0xff,
-+					   PMBUS_VOUT_COMMAND);
-+		if (ret < 0)
-+			return ret;
-+		offset = stpddc60_get_offset(ret, word, true);
-+		ret = pmbus_write_byte_data(client, page,
-+					    STPDDC60_MFR_OV_LIMIT_OFFSET,
-+					    offset);
-+		break;
-+	case PMBUS_VOUT_UV_FAULT_LIMIT:
-+		ret = pmbus_read_word_data(client, page, 0xff,
-+					   PMBUS_VOUT_COMMAND);
-+		if (ret < 0)
-+			return ret;
-+		offset = stpddc60_get_offset(ret, word, false);
-+		ret = pmbus_write_byte_data(client, page,
-+					    STPDDC60_MFR_UV_LIMIT_OFFSET,
-+					    offset);
-+		break;
-+	case PMBUS_VIN_OV_FAULT_LIMIT:
-+	case PMBUS_VIN_UV_FAULT_LIMIT:
-+	case PMBUS_OT_FAULT_LIMIT:
-+	case PMBUS_OT_WARN_LIMIT:
-+	case PMBUS_IOUT_OC_FAULT_LIMIT:
-+	case PMBUS_IOUT_OC_WARN_LIMIT:
-+	case PMBUS_POUT_OP_FAULT_LIMIT:
-+		ret = pmbus_read_word_data(client, page, 0xff, reg);
-+		if (ret < 0)
-+			return ret;
-+		word = stpddc60_adjust_linear(word, ret >> 11);
-+		ret = pmbus_write_word_data(client, page, reg, word);
-+		break;
-+	default:
-+		ret = -ENODATA;
-+		break;
-+	}
-+
-+	return ret;
-+}
-+
-+static int stpddc60_probe(struct i2c_client *client)
-+{
-+	int status;
-+	u8 device_id[I2C_SMBUS_BLOCK_MAX + 1];
-+	const struct i2c_device_id *mid;
-+	struct pmbus_driver_info *info = &stpddc60_info;
-+
-+	if (!i2c_check_functionality(client->adapter,
-+				     I2C_FUNC_SMBUS_READ_BYTE_DATA
-+				     | I2C_FUNC_SMBUS_BLOCK_DATA))
-+		return -ENODEV;
-+
-+	status = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, device_id);
-+	if (status < 0) {
-+		dev_err(&client->dev, "Failed to read Manufacturer Model\n");
-+		return status;
-+	}
-+	for (mid = stpddc60_id; mid->name[0]; mid++) {
-+		if (!strncasecmp(mid->name, device_id, strlen(mid->name)))
-+			break;
-+	}
-+	if (!mid->name[0]) {
-+		dev_err(&client->dev, "Unsupported device\n");
-+		return -ENODEV;
-+	}
-+
-+	info->read_byte_data = stpddc60_read_byte_data;
-+	info->read_word_data = stpddc60_read_word_data;
-+	info->write_word_data = stpddc60_write_word_data;
-+
-+	status = pmbus_do_probe(client, info);
-+	if (status < 0)
-+		return status;
-+
-+	pmbus_set_update(client, PMBUS_VOUT_OV_FAULT_LIMIT, true);
-+	pmbus_set_update(client, PMBUS_VOUT_UV_FAULT_LIMIT, true);
-+
-+	return 0;
-+}
-+
-+static struct i2c_driver stpddc60_driver = {
-+	.driver = {
-+		   .name = "stpddc60",
-+		   },
-+	.probe_new = stpddc60_probe,
-+	.id_table = stpddc60_id,
-+};
-+
-+module_i2c_driver(stpddc60_driver);
-+
-+MODULE_AUTHOR("Erik Rosen <erik.rosen@metormote.com>");
-+MODULE_DESCRIPTION("PMBus driver for ST STPDDC60");
-+MODULE_LICENSE("GPL");
--- 
-2.20.1
+--mark
 
+> 
+> This time I decided that it is more correct that devices use WQs than
+> that WQs use devices. Hence the function is introduced in
+> include/linux/device.h and drivers/base/devres.c
+> 
+> --
+> 
+> Matti Vaittinen (7):
+>   drivers: base: Add resource managed version of delayed work init
+>   extconn: Clean-up few drivers by using managed work init
+>   hwmon: raspberry-pi: Clean-up few drivers by using managed work init
+>   platform/x86: gpd pocket fan: Clean-up by using managed work init
+>   power: supply: Clean-up few drivers by using managed work init
+>   regulator: qcom_spmi-regulator: Clean-up by using managed work init
+>   watchdog: retu_wdt: Clean-up by using managed work init
+> 
+>  drivers/base/devres.c                        | 33 ++++++++++++++++++++
+>  drivers/extcon/extcon-gpio.c                 | 14 ++-------
+>  drivers/extcon/extcon-intel-int3496.c        | 15 ++-------
+>  drivers/extcon/extcon-palmas.c               | 16 +++-------
+>  drivers/extcon/extcon-qcom-spmi-misc.c       | 16 +++-------
+>  drivers/hwmon/raspberrypi-hwmon.c            | 16 +++-------
+>  drivers/platform/x86/gpd-pocket-fan.c        | 16 +++-------
+>  drivers/power/supply/axp20x_usb_power.c      | 15 +++------
+>  drivers/power/supply/bq24735-charger.c       | 17 +++-------
+>  drivers/power/supply/ltc2941-battery-gauge.c | 19 ++++-------
+>  drivers/power/supply/sbs-battery.c           | 15 +++------
+>  drivers/regulator/qcom_spmi-regulator.c      | 33 +++++---------------
+>  drivers/watchdog/retu_wdt.c                  | 21 +++----------
+>  include/linux/device.h                       |  5 +++
+>  14 files changed, 95 insertions(+), 156 deletions(-)
+> 
+> 
+> base-commit: 92bf22614b21a2706f4993b278017e437f7785b3
+> -- 
+> 2.25.4
+> 
+> 
+> -- 
+> Matti Vaittinen, Linux device drivers
+> ROHM Semiconductors, Finland SWDC
+> Kiviharjunlenkki 1E
+> 90220 OULU
+> FINLAND
+> 
+> ~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+> Simon says - in Latin please.
+> ~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+> Thanks to Simon Glass for the translation =] 
