@@ -2,196 +2,243 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB3A8C433E6
-	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Feb 2021 15:13:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FD1DC433E9
+	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Feb 2021 15:15:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8237A64DF5
-	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Feb 2021 15:13:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F110764E2E
+	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Feb 2021 15:15:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230367AbhBVPNb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 22 Feb 2021 10:13:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39936 "EHLO
+        id S231362AbhBVPPI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 22 Feb 2021 10:15:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230202AbhBVPNZ (ORCPT
+        with ESMTP id S231311AbhBVPO0 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 22 Feb 2021 10:13:25 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A172C061786;
-        Mon, 22 Feb 2021 07:12:43 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id i9so3926085wml.5;
-        Mon, 22 Feb 2021 07:12:43 -0800 (PST)
+        Mon, 22 Feb 2021 10:14:26 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A0EC061221;
+        Mon, 22 Feb 2021 07:12:57 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id x16so13835424wmk.3;
+        Mon, 22 Feb 2021 07:12:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=W0TOeWb9HGAVOiFV96tO3iwrSfpr1HUMq4Lyw23rID8=;
-        b=FXji/u2iaXY+XOLURddZgd2B9Komiw4Zs+cHylXgLODWE9GujYAMZXOAJt49ncgKkj
-         KXasUXoXmvp4d8wnMqKd80kcI7te+i8Ssj5jDkgEWFuHlI+B6a2sASXp0MxfAR6JnXe8
-         PMBmzH05uvtN8ixL0Xf+EQKCWEzHPeryma2B8WEKKwAVtI0pXqr1NlCyNenHmBJpSL8S
-         /+oAK7AHbhG8Bp1qrmvN2UnpdRZab4b+NfCGuGFlZhbfGdnHHN2BEQP/z7fvhdeo8a9n
-         SKJFfnaPm0+G5TFN4ZPUDwZLEAxSLZT3kXUZZdZbgYAQSBq86aQw+eD/RGBp29tx1xWa
-         GH7Q==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=wq4bDTy7O0vk/Xl+ds0X25qRB7OEnbCpsrwWx7YRZDc=;
+        b=EWsVGNiIfiAcsHDWWrBuDfJ4HB/Yx65evF3pcHQ49AcFAsLtIVjJgbtPtnIOVVgbMU
+         rTmE3lmoF8kswxq3stmLItzpXu5iDLSXUAH8TkorU+U9306F+cC0cXkgDooGGHkZ1/ip
+         aaizJ+GXbNvK9eYjocx0vXNq5tFQWOec96RtxdzDT7H1VvqrFusc+kS19qP5lTK9vLCT
+         xx9AcO+UQWJqOv7QmIKkcxojx/Pzc4wiP4G8h2Y0FvA8pd8liGA1IwYQfhaFFcuQeH/f
+         uUaclQgc0h2SGBx5pvft17Gt2cmXL9752DIiMFpDCtu71yXFidMCqCwo7ld1lD3OaMS9
+         mPKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=W0TOeWb9HGAVOiFV96tO3iwrSfpr1HUMq4Lyw23rID8=;
-        b=AiJa2u4ZYYG4cGGbUvDlKsPNrYsvn5sC3tbefZHBa1Fet7VYgmMduMZdM6UvoN1GPC
-         S5Z3ig8x9Qa5yh2+itwSGbSgnFMSj3sQQcJlLBHyTGB/o/sGGyxj0hyg1cJxe9jN3KTa
-         yWoiDNiT2DU/alDTIBxJBKNYfcHPbSlcUp4VBZ4obMKn1JzDiTCcKD2dp4bP6384QFVU
-         4UODJjq/Ebe8gqeo6wqkcKzxqh2Lvav9qQyC77kHNvop/ZnlBo6llZhXb7vaNPT2x+87
-         HclkeuZrk5h/tBIIsOGCOOugYCCWMjjxLP2/lbKyUO+v7iAEQMwjZb6LMpL4CZVyjw48
-         irbA==
-X-Gm-Message-State: AOAM531Y+q21hjEBnQGvbOWuWFArByIiEuZ4QoCeH6wPNcMuUr4lHDu1
-        xf9Si1zm2rbgoTrQSCoOO2eztQ63JJXBOhEpv9I=
-X-Google-Smtp-Source: ABdhPJwJjaqNTMZMEqWfwHu3GKPnp7PUpKeoIN2SSKme4SlDCBTSRJD1aRWbEX4S9qfmjT5mjltYPQ==
-X-Received: by 2002:a05:600c:26c4:: with SMTP id 4mr9157865wmv.126.1614006761746;
-        Mon, 22 Feb 2021 07:12:41 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=wq4bDTy7O0vk/Xl+ds0X25qRB7OEnbCpsrwWx7YRZDc=;
+        b=g9Hmq+dyxUJXxSp3XxjstzVNGWq+QYVnsDtaJFhKzhXCzcB/8EcDFmRPsdYPD4OwVG
+         Z5wob5bSjRZxe2JBXC0ClwuYbNC2sqe5y8wGg+USpi+4ldq1emnKjM3pptwZFsw+nLJB
+         Wr7pIfrzb+SCXqME0/WUy5Fg/QVRXb6DYQ0hKQVqz2NHQidZjp/VIjWNPjSQj8QwBDZH
+         Ag+29VYDXIRtIeZzeiJlCcGE+Hw1HVudUPvN4SlrNPqKjDZchhZYtewYuRp3YyBMZ3V4
+         X8dd7NMObA1NFaUPqWaw8/xIb/lt4Godn+a3JuFuoAeu/t0DxdO3e8EzCVhGsG8Qapha
+         WJrw==
+X-Gm-Message-State: AOAM530lF3tM7Itm5Qr/PE12InmAyFXLWE6F8R9f42BVvHw/6n3WY8LV
+        EM59lb1djBUttXuC2HjE8hNm7KPkZoGvFcpfRhA=
+X-Google-Smtp-Source: ABdhPJyJWNmCSm/Ui0rMFFKZx/hnNI+YYBQlrfpdochjr/Q5i7g2NMK3qCKtgS6PUnTBdo+H1ja/VA==
+X-Received: by 2002:a05:600c:410d:: with SMTP id j13mr9505033wmi.55.1614006775620;
+        Mon, 22 Feb 2021 07:12:55 -0800 (PST)
 Received: from debby (176-141-241-253.abo.bbox.fr. [176.141.241.253])
-        by smtp.gmail.com with ESMTPSA id q25sm20952001wmq.15.2021.02.22.07.12.40
+        by smtp.gmail.com with ESMTPSA id x18sm27976407wrs.16.2021.02.22.07.12.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Feb 2021 07:12:41 -0800 (PST)
+        Mon, 22 Feb 2021 07:12:55 -0800 (PST)
 From:   Romain Perier <romain.perier@gmail.com>
 To:     Kees Cook <keescook@chromium.org>,
-        kernel-hardening@lists.openwall.com, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jiri Pirko <jiri@nvidia.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jessica Yu <jeyu@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Steffen Maier <maier@linux.ibm.com>,
-        Benjamin Block <bblock@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     Romain Perier <romain.perier@gmail.com>, cgroups@vger.kernel.org,
-        linux-crypto@vger.kernel.org, netdev@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-integrity@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-hwmon@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 00/20] Manual replacement of all strlcpy in favor of strscpy
-Date:   Mon, 22 Feb 2021 16:12:11 +0100
-Message-Id: <20210222151231.22572-1-romain.perier@gmail.com>
+        kernel-hardening@lists.openwall.com,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Romain Perier <romain.perier@gmail.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 11/20] hwmon: Manual replacement of the deprecated strlcpy() with return values
+Date:   Mon, 22 Feb 2021 16:12:22 +0100
+Message-Id: <20210222151231.22572-12-romain.perier@gmail.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210222151231.22572-1-romain.perier@gmail.com>
+References: <20210222151231.22572-1-romain.perier@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-strlcpy() copy a C-String into a sized buffer, the result is always a
-valid NULL-terminated that fits in the buffer, howerver it has severals
-issues. It reads the source buffer first, which is dangerous if it is non
-NULL-terminated or if the corresponding buffer is unbounded. Its safe
-replacement is strscpy(), as suggested in the deprecated interface [1].
+The strlcpy() reads the entire source buffer first, it is dangerous if
+the source buffer lenght is unbounded or possibility non NULL-terminated.
+It can lead to linear read overflows, crashes, etc...
 
-We plan to make this contribution in two steps:
-- Firsly all cases of strlcpy's return value are manually replaced by the
-  corresponding calls of strscpy() with the new handling of the return
-  value (as the return code is different in case of error).
-- Then all other cases are automatically replaced by using coccinelle.
+As recommended in the deprecated interfaces [1], it should be replaced
+by strscpy.
 
-This series covers manual replacements.
+This commit replaces all calls to strlcpy that handle the return values
+by the corresponding strscpy calls with new handling of the return
+values (as it is quite different between the two functions).
 
 [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
 
-Romain Perier (20):
-  cgroup: Manual replacement of the deprecated strlcpy() with return
-    values
-  crypto: Manual replacement of the deprecated strlcpy() with return
-    values
-  devlink: Manual replacement of the deprecated strlcpy() with return
-    values
-  dma-buf: Manual replacement of the deprecated strlcpy() with return
-    values
-  kobject: Manual replacement of the deprecated strlcpy() with return
-    values
-  ima: Manual replacement of the deprecated strlcpy() with return values
-  SUNRPC: Manual replacement of the deprecated strlcpy() with return
-    values
-  kernfs: Manual replacement of the deprecated strlcpy() with return
-    values
-  m68k/atari: Manual replacement of the deprecated strlcpy() with return
-    values
-  module: Manual replacement of the deprecated strlcpy() with return
-    values
-  hwmon: Manual replacement of the deprecated strlcpy() with return
-    values
-  s390/hmcdrv: Manual replacement of the deprecated strlcpy() with
-    return values
-  scsi: zfcp: Manual replacement of the deprecated strlcpy() with return
-    values
-  target: Manual replacement of the deprecated strlcpy() with return
-    values
-  ALSA: usb-audio: Manual replacement of the deprecated strlcpy() with
-    return values
-  tracing/probe: Manual replacement of the deprecated strlcpy() with
-    return values
-  vt: Manual replacement of the deprecated strlcpy() with return values
-  usb: gadget: f_midi: Manual replacement of the deprecated strlcpy()
-    with return values
-  usbip: usbip_host: Manual replacement of the deprecated strlcpy() with
-    return values
-  s390/watchdog: Manual replacement of the deprecated strlcpy() with
-    return values
+Signed-off-by: Romain Perier <romain.perier@gmail.com>
+---
+ drivers/hwmon/pmbus/max20730.c |   66 +++++++++++++++++++++--------------------
+ 1 file changed, 35 insertions(+), 31 deletions(-)
 
- arch/m68k/emu/natfeat.c                 |  6 +--
- crypto/lrw.c                            |  6 +--
- crypto/xts.c                            |  6 +--
- drivers/dma-buf/dma-buf.c               |  4 +-
- drivers/hwmon/pmbus/max20730.c          | 66 +++++++++++++------------
- drivers/s390/char/diag_ftp.c            |  4 +-
- drivers/s390/char/sclp_ftp.c            |  6 +--
- drivers/s390/scsi/zfcp_fc.c             |  8 +--
- drivers/target/target_core_configfs.c   | 33 ++++---------
- drivers/tty/vt/keyboard.c               |  5 +-
- drivers/usb/gadget/function/f_midi.c    |  4 +-
- drivers/usb/gadget/function/f_printer.c |  8 +--
- drivers/usb/usbip/stub_main.c           |  6 +--
- drivers/watchdog/diag288_wdt.c          | 12 +++--
- fs/kernfs/dir.c                         | 27 +++++-----
- kernel/cgroup/cgroup.c                  |  2 +-
- kernel/module.c                         |  4 +-
- kernel/trace/trace_uprobe.c             | 11 ++---
- lib/kobject_uevent.c                    |  6 +--
- net/core/devlink.c                      |  6 +--
- net/sunrpc/clnt.c                       |  6 ++-
- security/integrity/ima/ima_policy.c     |  8 ++-
- sound/usb/card.c                        |  4 +-
- 23 files changed, 129 insertions(+), 119 deletions(-)
-
--- 
-2.20.1
+diff --git a/drivers/hwmon/pmbus/max20730.c b/drivers/hwmon/pmbus/max20730.c
+index 9dd3dd79bc18..a384b57b7327 100644
+--- a/drivers/hwmon/pmbus/max20730.c
++++ b/drivers/hwmon/pmbus/max20730.c
+@@ -107,7 +107,8 @@ struct max20730_debugfs_data {
+ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
+ 				     size_t count, loff_t *ppos)
+ {
+-	int ret, len;
++	int ret;
++	ssize_t len;
+ 	int *idxp = file->private_data;
+ 	int idx = *idxp;
+ 	struct max20730_debugfs_data *psu = to_psu(idxp, idx);
+@@ -148,13 +149,13 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
+ 			>> MAX20730_MFR_DEVSET1_TSTAT_BIT_POS;
+ 
+ 		if (val == 0)
+-			len = strlcpy(tbuf, "2000\n", DEBUG_FS_DATA_MAX);
++			len = strscpy(tbuf, "2000\n", DEBUG_FS_DATA_MAX);
+ 		else if (val == 1)
+-			len = strlcpy(tbuf, "125\n", DEBUG_FS_DATA_MAX);
++			len = strscpy(tbuf, "125\n", DEBUG_FS_DATA_MAX);
+ 		else if (val == 2)
+-			len = strlcpy(tbuf, "62.5\n", DEBUG_FS_DATA_MAX);
++			len = strscpy(tbuf, "62.5\n", DEBUG_FS_DATA_MAX);
+ 		else
+-			len = strlcpy(tbuf, "32\n", DEBUG_FS_DATA_MAX);
++			len = strscpy(tbuf, "32\n", DEBUG_FS_DATA_MAX);
+ 		break;
+ 	case MAX20730_DEBUGFS_INTERNAL_GAIN:
+ 		val = (data->mfr_devset1 & MAX20730_MFR_DEVSET1_RGAIN_MASK)
+@@ -163,35 +164,35 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
+ 		if (data->id == max20734) {
+ 			/* AN6209 */
+ 			if (val == 0)
+-				len = strlcpy(tbuf, "0.8\n", DEBUG_FS_DATA_MAX);
++				len = strscpy(tbuf, "0.8\n", DEBUG_FS_DATA_MAX);
+ 			else if (val == 1)
+-				len = strlcpy(tbuf, "3.2\n", DEBUG_FS_DATA_MAX);
++				len = strscpy(tbuf, "3.2\n", DEBUG_FS_DATA_MAX);
+ 			else if (val == 2)
+-				len = strlcpy(tbuf, "1.6\n", DEBUG_FS_DATA_MAX);
++				len = strscpy(tbuf, "1.6\n", DEBUG_FS_DATA_MAX);
+ 			else
+-				len = strlcpy(tbuf, "6.4\n", DEBUG_FS_DATA_MAX);
++				len = strscpy(tbuf, "6.4\n", DEBUG_FS_DATA_MAX);
+ 		} else if (data->id == max20730 || data->id == max20710) {
+ 			/* AN6042 or AN6140 */
+ 			if (val == 0)
+-				len = strlcpy(tbuf, "0.9\n", DEBUG_FS_DATA_MAX);
++				len = strscpy(tbuf, "0.9\n", DEBUG_FS_DATA_MAX);
+ 			else if (val == 1)
+-				len = strlcpy(tbuf, "3.6\n", DEBUG_FS_DATA_MAX);
++				len = strscpy(tbuf, "3.6\n", DEBUG_FS_DATA_MAX);
+ 			else if (val == 2)
+-				len = strlcpy(tbuf, "1.8\n", DEBUG_FS_DATA_MAX);
++				len = strscpy(tbuf, "1.8\n", DEBUG_FS_DATA_MAX);
+ 			else
+-				len = strlcpy(tbuf, "7.2\n", DEBUG_FS_DATA_MAX);
++				len = strscpy(tbuf, "7.2\n", DEBUG_FS_DATA_MAX);
+ 		} else if (data->id == max20743) {
+ 			/* AN6042 */
+ 			if (val == 0)
+-				len = strlcpy(tbuf, "0.45\n", DEBUG_FS_DATA_MAX);
++				len = strscpy(tbuf, "0.45\n", DEBUG_FS_DATA_MAX);
+ 			else if (val == 1)
+-				len = strlcpy(tbuf, "1.8\n", DEBUG_FS_DATA_MAX);
++				len = strscpy(tbuf, "1.8\n", DEBUG_FS_DATA_MAX);
+ 			else if (val == 2)
+-				len = strlcpy(tbuf, "0.9\n", DEBUG_FS_DATA_MAX);
++				len = strscpy(tbuf, "0.9\n", DEBUG_FS_DATA_MAX);
+ 			else
+-				len = strlcpy(tbuf, "3.6\n", DEBUG_FS_DATA_MAX);
++				len = strscpy(tbuf, "3.6\n", DEBUG_FS_DATA_MAX);
+ 		} else {
+-			len = strlcpy(tbuf, "Not supported\n", DEBUG_FS_DATA_MAX);
++			len = strscpy(tbuf, "Not supported\n", DEBUG_FS_DATA_MAX);
+ 		}
+ 		break;
+ 	case MAX20730_DEBUGFS_BOOT_VOLTAGE:
+@@ -199,26 +200,26 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
+ 			>> MAX20730_MFR_DEVSET1_VBOOT_BIT_POS;
+ 
+ 		if (val == 0)
+-			len = strlcpy(tbuf, "0.6484\n", DEBUG_FS_DATA_MAX);
++			len = strscpy(tbuf, "0.6484\n", DEBUG_FS_DATA_MAX);
+ 		else if (val == 1)
+-			len = strlcpy(tbuf, "0.8984\n", DEBUG_FS_DATA_MAX);
++			len = strscpy(tbuf, "0.8984\n", DEBUG_FS_DATA_MAX);
+ 		else if (val == 2)
+-			len = strlcpy(tbuf, "1.0\n", DEBUG_FS_DATA_MAX);
++			len = strscpy(tbuf, "1.0\n", DEBUG_FS_DATA_MAX);
+ 		else
+-			len = strlcpy(tbuf, "Invalid\n", DEBUG_FS_DATA_MAX);
++			len = strscpy(tbuf, "Invalid\n", DEBUG_FS_DATA_MAX);
+ 		break;
+ 	case MAX20730_DEBUGFS_OUT_V_RAMP_RATE:
+ 		val = (data->mfr_devset2 & MAX20730_MFR_DEVSET2_VRATE)
+ 			>> MAX20730_MFR_DEVSET2_VRATE_BIT_POS;
+ 
+ 		if (val == 0)
+-			len = strlcpy(tbuf, "4\n", DEBUG_FS_DATA_MAX);
++			len = strscpy(tbuf, "4\n", DEBUG_FS_DATA_MAX);
+ 		else if (val == 1)
+-			len = strlcpy(tbuf, "2\n", DEBUG_FS_DATA_MAX);
++			len = strscpy(tbuf, "2\n", DEBUG_FS_DATA_MAX);
+ 		else if (val == 2)
+-			len = strlcpy(tbuf, "1\n", DEBUG_FS_DATA_MAX);
++			len = strscpy(tbuf, "1\n", DEBUG_FS_DATA_MAX);
+ 		else
+-			len = strlcpy(tbuf, "Invalid\n", DEBUG_FS_DATA_MAX);
++			len = strscpy(tbuf, "Invalid\n", DEBUG_FS_DATA_MAX);
+ 		break;
+ 	case MAX20730_DEBUGFS_OC_PROTECT_MODE:
+ 		ret = (data->mfr_devset2 & MAX20730_MFR_DEVSET2_OCPM_MASK)
+@@ -230,13 +231,13 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
+ 			>> MAX20730_MFR_DEVSET2_SS_BIT_POS;
+ 
+ 		if (val == 0)
+-			len = strlcpy(tbuf, "0.75\n", DEBUG_FS_DATA_MAX);
++			len = strscpy(tbuf, "0.75\n", DEBUG_FS_DATA_MAX);
+ 		else if (val == 1)
+-			len = strlcpy(tbuf, "1.5\n", DEBUG_FS_DATA_MAX);
++			len = strscpy(tbuf, "1.5\n", DEBUG_FS_DATA_MAX);
+ 		else if (val == 2)
+-			len = strlcpy(tbuf, "3\n", DEBUG_FS_DATA_MAX);
++			len = strscpy(tbuf, "3\n", DEBUG_FS_DATA_MAX);
+ 		else
+-			len = strlcpy(tbuf, "6\n", DEBUG_FS_DATA_MAX);
++			len = strscpy(tbuf, "6\n", DEBUG_FS_DATA_MAX);
+ 		break;
+ 	case MAX20730_DEBUGFS_IMAX:
+ 		ret = (data->mfr_devset2 & MAX20730_MFR_DEVSET2_IMAX_MASK)
+@@ -287,9 +288,12 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
+ 				"%d.%d\n", ret / 10000, ret % 10000);
+ 		break;
+ 	default:
+-		len = strlcpy(tbuf, "Invalid\n", DEBUG_FS_DATA_MAX);
++		len = strscpy(tbuf, "Invalid\n", DEBUG_FS_DATA_MAX);
+ 	}
+ 
++	if (len == -E2BIG)
++		return -E2BIG;
++
+ 	return simple_read_from_buffer(buf, count, ppos, tbuf, len);
+ }
+ 
 
