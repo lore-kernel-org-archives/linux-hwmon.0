@@ -2,307 +2,137 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF222C433E0
-	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Feb 2021 15:47:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8AB5C433E6
+	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Feb 2021 16:39:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 715FC64DAF
-	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Feb 2021 15:47:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9509664E83
+	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Feb 2021 16:39:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230412AbhBVPrI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 22 Feb 2021 10:47:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47188 "EHLO
+        id S230218AbhBVQim (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 22 Feb 2021 11:38:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230084AbhBVPq7 (ORCPT
+        with ESMTP id S230036AbhBVQiU (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 22 Feb 2021 10:46:59 -0500
-Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83DDFC061574;
-        Mon, 22 Feb 2021 07:46:17 -0800 (PST)
-Received: by mail-oo1-xc32.google.com with SMTP id f26so3055983oog.5;
-        Mon, 22 Feb 2021 07:46:17 -0800 (PST)
+        Mon, 22 Feb 2021 11:38:20 -0500
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4205FC061356
+        for <linux-hwmon@vger.kernel.org>; Mon, 22 Feb 2021 08:36:56 -0800 (PST)
+Received: by mail-ot1-x336.google.com with SMTP id s3so9366710otg.5
+        for <linux-hwmon@vger.kernel.org>; Mon, 22 Feb 2021 08:36:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=vHkq8WDTCU+eTW+Y+ogXk/LjXUPfvpkd05kCTtdlmLw=;
-        b=KOO32uLaiXzFh0O2LFZ9bBgNrS6MwjmBM0YFq+L6jlki8ag/VzPUdSNECSrbAKH0JB
-         mz8wg9sJNZ4GzG9Yi62+1CkS8ZG0obC+xiQh5PzjZnlFHEmvnGf+q9Yqh8uY3gdQCivP
-         iwkahzfXOiyj1vU3+1AWSHAdqlW3aamaOnodqMcnp0Rf982swQyJOGCfRbxVEpNyL2B4
-         kFpE6doy47DwJHpfvoxXoi76tPL9djiTImEXQBO7Y5uG/80POF5PcjsJSrHcHlJckDkC
-         U02k1p59IRmdBesZx4P+R/l95TcuOlQObI1YGR/lt2OfsabrLZ+kPU0uIYDLKD9l3KCB
-         3QbQ==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=CQtzj2ET+OspvcT7VasFUJh31XI2DgueE7K7chQefu0=;
+        b=JgIAcXbmqnUtAzeQggrQMFDw+iRD7712f5b6XLlsNpGFq/2OH71ZR8eVPcYSvV8O9Z
+         Q4ZFhr/HY3qIL2VVw5am2ZXMqQjcHv6oQm57icBzxpF2r/H6pUN28Ic0UVcMNAWR0oM3
+         Nk4pk+06r39DoxUQo5VbU8V6VX0ewSDT/6fu0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=vHkq8WDTCU+eTW+Y+ogXk/LjXUPfvpkd05kCTtdlmLw=;
-        b=q6O6aQ5yOAarzlDM4FlaIrGnoHcIEmr+TTr2YpTqF/jbPg7MV2QjleiGCQHUl2RkOe
-         shXIVO03SCJx3pvbOPwBiSNnMnruP8SKZWRXSUXtIUK/xwN2mRp2iKD/e41AtcX6euBj
-         qh2ktD3NCjv01QaHmM7Qo65Ti+kG35G1kqa7Gdx5fGI/G8efJ7lfYMbjnpTPVZ7KpmoH
-         s3ph/1qdy/r5J1U8awGN7pc0qHoH6ZKuoC/gnq/Sdde3ApF0XJFEfIAdvB7Zkx88/vYc
-         DGueVoTZDxbrSCU76EViL9DQ1c6N6H1roqUVigTj0QXuPSzUVpwjWnEEwAXwkhSpLXWW
-         ps9A==
-X-Gm-Message-State: AOAM532S8GNd9cFQonp4AFEApPvV1i9xMiYXtvdXIG7urdK7siXxLqkD
-        cHYHwfI12u32TwZIrjxnSLUjLMMq3MY=
-X-Google-Smtp-Source: ABdhPJzGDRnpcu79XSRPB9s+HHOD9MqU/9UDnsuQzlpngq4xlKIz6lGVkTWhGS375SrH8+UBWcVxbw==
-X-Received: by 2002:a4a:ab08:: with SMTP id i8mr16739312oon.40.1614008776621;
-        Mon, 22 Feb 2021 07:46:16 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 88sm3701594oto.3.2021.02.22.07.46.15
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=CQtzj2ET+OspvcT7VasFUJh31XI2DgueE7K7chQefu0=;
+        b=CAayWuz9M1U78z8ZB7MiGOkqqHu1fwFswo3x7o2P0XA0nHFJxgp6hrhIb/ip1i9Y0d
+         haN7x3z1pHwGxKK4R3dXTDluNMFg7Jwm/gzbtRXbs7jJVh5JCPfLogQG5lWb3ZRAkg/2
+         mhrIXQ+YcsAnVXcUDSuX1bl5JD5Yu2fTKNzvu35icu9kK7v+kl0AsJqymy20t4qJTtnl
+         DbBHLBvkQik551jjLRCQ+vGIouqpU2W9G7P5uiBQnZSP2hTscgl/ZL5ZyflFoiHGB9+4
+         Na0qs5JELT5+e4wfharwqzWbPCkabOxvscWf2nfiXdqK1hhezQ5xvrywjFtql/XQNaYA
+         uSWw==
+X-Gm-Message-State: AOAM533m9ksIiF/OgZ0+5VpJYqDJ3sez37a41Hgr+CAUwPGwBMbmXMnD
+        WdL3m1UVUb2cnNFYL9l4XCmBxA==
+X-Google-Smtp-Source: ABdhPJyA692d/UkhfnySsVsus41uILuIidqyduT1DxwFO8wUlVI27VDOIjP5WOhWxUUsjwOOYq7M6Q==
+X-Received: by 2002:a05:6830:314d:: with SMTP id c13mr16134049ots.124.1614011814286;
+        Mon, 22 Feb 2021 08:36:54 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id 7sm3712035oth.38.2021.02.22.08.36.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Feb 2021 07:46:16 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH 11/20] hwmon: Manual replacement of the deprecated
- strlcpy() with return values
+        Mon, 22 Feb 2021 08:36:53 -0800 (PST)
+Subject: Re: [PATCH 00/20] Manual replacement of all strlcpy in favor of
+ strscpy
 To:     Romain Perier <romain.perier@gmail.com>,
         Kees Cook <keescook@chromium.org>,
-        kernel-hardening@lists.openwall.com
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+        kernel-hardening@lists.openwall.com, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jiri Pirko <jiri@nvidia.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Jessica Yu <jeyu@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Steffen Maier <maier@linux.ibm.com>,
+        Benjamin Block <bblock@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     cgroups@vger.kernel.org, linux-crypto@vger.kernel.org,
+        netdev@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-integrity@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-hwmon@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
 References: <20210222151231.22572-1-romain.perier@gmail.com>
- <20210222151231.22572-12-romain.perier@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <3b8dd556-8c09-9686-dec6-9d523a9762a8@roeck-us.net>
-Date:   Mon, 22 Feb 2021 07:46:14 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <936bcf5e-2006-7643-7804-9efa318b3e2b@linuxfoundation.org>
+Date:   Mon, 22 Feb 2021 09:36:51 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-In-Reply-To: <20210222151231.22572-12-romain.perier@gmail.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20210222151231.22572-1-romain.perier@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 2/22/21 7:12 AM, Romain Perier wrote:
-> The strlcpy() reads the entire source buffer first, it is dangerous if
-> the source buffer lenght is unbounded or possibility non NULL-terminated.
-
-length
-
-> It can lead to linear read overflows, crashes, etc...
+On 2/22/21 8:12 AM, Romain Perier wrote:
+> strlcpy() copy a C-String into a sized buffer, the result is always a
+> valid NULL-terminated that fits in the buffer, howerver it has severals
+> issues. It reads the source buffer first, which is dangerous if it is non
+> NULL-terminated or if the corresponding buffer is unbounded. Its safe
+> replacement is strscpy(), as suggested in the deprecated interface [1].
 > 
-Not here. This description is misleading.
-
-> As recommended in the deprecated interfaces [1], it should be replaced
-> by strscpy.
-> 
-> This commit replaces all calls to strlcpy that handle the return values
-> by the corresponding strscpy calls with new handling of the return
-> values (as it is quite different between the two functions).
-> 
-> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
-> 
-> Signed-off-by: Romain Perier <romain.perier@gmail.com>
-
-This patch just adds pain to injury, as the source 'buffers' are all fixed
-strings and their length will never exceed the maximum buffer length.
-I really don't see the point of using strscpy() in this situation.
-
-> ---
->  drivers/hwmon/pmbus/max20730.c |   66 +++++++++++++++++++++--------------------
-
-This patch only modifies a single driver and should be tagged as such.
-
->  1 file changed, 35 insertions(+), 31 deletions(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/max20730.c b/drivers/hwmon/pmbus/max20730.c
-> index 9dd3dd79bc18..a384b57b7327 100644
-> --- a/drivers/hwmon/pmbus/max20730.c
-> +++ b/drivers/hwmon/pmbus/max20730.c
-> @@ -107,7 +107,8 @@ struct max20730_debugfs_data {
->  static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
->  				     size_t count, loff_t *ppos)
->  {
-> -	int ret, len;
-> +	int ret;
-> +	ssize_t len;
->  	int *idxp = file->private_data;
->  	int idx = *idxp;
->  	struct max20730_debugfs_data *psu = to_psu(idxp, idx);
-> @@ -148,13 +149,13 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
->  			>> MAX20730_MFR_DEVSET1_TSTAT_BIT_POS;
->  
->  		if (val == 0)
-> -			len = strlcpy(tbuf, "2000\n", DEBUG_FS_DATA_MAX);
-> +			len = strscpy(tbuf, "2000\n", DEBUG_FS_DATA_MAX);
->  		else if (val == 1)
-> -			len = strlcpy(tbuf, "125\n", DEBUG_FS_DATA_MAX);
-> +			len = strscpy(tbuf, "125\n", DEBUG_FS_DATA_MAX);
->  		else if (val == 2)
-> -			len = strlcpy(tbuf, "62.5\n", DEBUG_FS_DATA_MAX);
-> +			len = strscpy(tbuf, "62.5\n", DEBUG_FS_DATA_MAX);
->  		else
-> -			len = strlcpy(tbuf, "32\n", DEBUG_FS_DATA_MAX);
-> +			len = strscpy(tbuf, "32\n", DEBUG_FS_DATA_MAX);
->  		break;
->  	case MAX20730_DEBUGFS_INTERNAL_GAIN:
->  		val = (data->mfr_devset1 & MAX20730_MFR_DEVSET1_RGAIN_MASK)
-> @@ -163,35 +164,35 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
->  		if (data->id == max20734) {
->  			/* AN6209 */
->  			if (val == 0)
-> -				len = strlcpy(tbuf, "0.8\n", DEBUG_FS_DATA_MAX);
-> +				len = strscpy(tbuf, "0.8\n", DEBUG_FS_DATA_MAX);
->  			else if (val == 1)
-> -				len = strlcpy(tbuf, "3.2\n", DEBUG_FS_DATA_MAX);
-> +				len = strscpy(tbuf, "3.2\n", DEBUG_FS_DATA_MAX);
->  			else if (val == 2)
-> -				len = strlcpy(tbuf, "1.6\n", DEBUG_FS_DATA_MAX);
-> +				len = strscpy(tbuf, "1.6\n", DEBUG_FS_DATA_MAX);
->  			else
-> -				len = strlcpy(tbuf, "6.4\n", DEBUG_FS_DATA_MAX);
-> +				len = strscpy(tbuf, "6.4\n", DEBUG_FS_DATA_MAX);
->  		} else if (data->id == max20730 || data->id == max20710) {
->  			/* AN6042 or AN6140 */
->  			if (val == 0)
-> -				len = strlcpy(tbuf, "0.9\n", DEBUG_FS_DATA_MAX);
-> +				len = strscpy(tbuf, "0.9\n", DEBUG_FS_DATA_MAX);
->  			else if (val == 1)
-> -				len = strlcpy(tbuf, "3.6\n", DEBUG_FS_DATA_MAX);
-> +				len = strscpy(tbuf, "3.6\n", DEBUG_FS_DATA_MAX);
->  			else if (val == 2)
-> -				len = strlcpy(tbuf, "1.8\n", DEBUG_FS_DATA_MAX);
-> +				len = strscpy(tbuf, "1.8\n", DEBUG_FS_DATA_MAX);
->  			else
-> -				len = strlcpy(tbuf, "7.2\n", DEBUG_FS_DATA_MAX);
-> +				len = strscpy(tbuf, "7.2\n", DEBUG_FS_DATA_MAX);
->  		} else if (data->id == max20743) {
->  			/* AN6042 */
->  			if (val == 0)
-> -				len = strlcpy(tbuf, "0.45\n", DEBUG_FS_DATA_MAX);
-> +				len = strscpy(tbuf, "0.45\n", DEBUG_FS_DATA_MAX);
->  			else if (val == 1)
-> -				len = strlcpy(tbuf, "1.8\n", DEBUG_FS_DATA_MAX);
-> +				len = strscpy(tbuf, "1.8\n", DEBUG_FS_DATA_MAX);
->  			else if (val == 2)
-> -				len = strlcpy(tbuf, "0.9\n", DEBUG_FS_DATA_MAX);
-> +				len = strscpy(tbuf, "0.9\n", DEBUG_FS_DATA_MAX);
->  			else
-> -				len = strlcpy(tbuf, "3.6\n", DEBUG_FS_DATA_MAX);
-> +				len = strscpy(tbuf, "3.6\n", DEBUG_FS_DATA_MAX);
->  		} else {
-> -			len = strlcpy(tbuf, "Not supported\n", DEBUG_FS_DATA_MAX);
-> +			len = strscpy(tbuf, "Not supported\n", DEBUG_FS_DATA_MAX);
->  		}
->  		break;
->  	case MAX20730_DEBUGFS_BOOT_VOLTAGE:
-> @@ -199,26 +200,26 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
->  			>> MAX20730_MFR_DEVSET1_VBOOT_BIT_POS;
->  
->  		if (val == 0)
-> -			len = strlcpy(tbuf, "0.6484\n", DEBUG_FS_DATA_MAX);
-> +			len = strscpy(tbuf, "0.6484\n", DEBUG_FS_DATA_MAX);
->  		else if (val == 1)
-> -			len = strlcpy(tbuf, "0.8984\n", DEBUG_FS_DATA_MAX);
-> +			len = strscpy(tbuf, "0.8984\n", DEBUG_FS_DATA_MAX);
->  		else if (val == 2)
-> -			len = strlcpy(tbuf, "1.0\n", DEBUG_FS_DATA_MAX);
-> +			len = strscpy(tbuf, "1.0\n", DEBUG_FS_DATA_MAX);
->  		else
-> -			len = strlcpy(tbuf, "Invalid\n", DEBUG_FS_DATA_MAX);
-> +			len = strscpy(tbuf, "Invalid\n", DEBUG_FS_DATA_MAX);
->  		break;
->  	case MAX20730_DEBUGFS_OUT_V_RAMP_RATE:
->  		val = (data->mfr_devset2 & MAX20730_MFR_DEVSET2_VRATE)
->  			>> MAX20730_MFR_DEVSET2_VRATE_BIT_POS;
->  
->  		if (val == 0)
-> -			len = strlcpy(tbuf, "4\n", DEBUG_FS_DATA_MAX);
-> +			len = strscpy(tbuf, "4\n", DEBUG_FS_DATA_MAX);
->  		else if (val == 1)
-> -			len = strlcpy(tbuf, "2\n", DEBUG_FS_DATA_MAX);
-> +			len = strscpy(tbuf, "2\n", DEBUG_FS_DATA_MAX);
->  		else if (val == 2)
-> -			len = strlcpy(tbuf, "1\n", DEBUG_FS_DATA_MAX);
-> +			len = strscpy(tbuf, "1\n", DEBUG_FS_DATA_MAX);
->  		else
-> -			len = strlcpy(tbuf, "Invalid\n", DEBUG_FS_DATA_MAX);
-> +			len = strscpy(tbuf, "Invalid\n", DEBUG_FS_DATA_MAX);
->  		break;
->  	case MAX20730_DEBUGFS_OC_PROTECT_MODE:
->  		ret = (data->mfr_devset2 & MAX20730_MFR_DEVSET2_OCPM_MASK)
-> @@ -230,13 +231,13 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
->  			>> MAX20730_MFR_DEVSET2_SS_BIT_POS;
->  
->  		if (val == 0)
-> -			len = strlcpy(tbuf, "0.75\n", DEBUG_FS_DATA_MAX);
-> +			len = strscpy(tbuf, "0.75\n", DEBUG_FS_DATA_MAX);
->  		else if (val == 1)
-> -			len = strlcpy(tbuf, "1.5\n", DEBUG_FS_DATA_MAX);
-> +			len = strscpy(tbuf, "1.5\n", DEBUG_FS_DATA_MAX);
->  		else if (val == 2)
-> -			len = strlcpy(tbuf, "3\n", DEBUG_FS_DATA_MAX);
-> +			len = strscpy(tbuf, "3\n", DEBUG_FS_DATA_MAX);
->  		else
-> -			len = strlcpy(tbuf, "6\n", DEBUG_FS_DATA_MAX);
-> +			len = strscpy(tbuf, "6\n", DEBUG_FS_DATA_MAX);
->  		break;
->  	case MAX20730_DEBUGFS_IMAX:
->  		ret = (data->mfr_devset2 & MAX20730_MFR_DEVSET2_IMAX_MASK)
-> @@ -287,9 +288,12 @@ static ssize_t max20730_debugfs_read(struct file *file, char __user *buf,
->  				"%d.%d\n", ret / 10000, ret % 10000);
->  		break;
->  	default:
-> -		len = strlcpy(tbuf, "Invalid\n", DEBUG_FS_DATA_MAX);
-> +		len = strscpy(tbuf, "Invalid\n", DEBUG_FS_DATA_MAX);
->  	}
->  
-> +	if (len == -E2BIG)
-> +		return -E2BIG;
-> +
->  	return simple_read_from_buffer(buf, count, ppos, tbuf, len);
->  }
->  
+> We plan to make this contribution in two steps:
+> - Firsly all cases of strlcpy's return value are manually replaced by the
+>    corresponding calls of strscpy() with the new handling of the return
+>    value (as the return code is different in case of error).
+> - Then all other cases are automatically replaced by using coccinelle.
 > 
 
+Cool. A quick check shows me 1031 strscpy() calls with no return
+checks. All or some of these probably need to be reviewed and add
+return checks. Is this something that is in the plan to address as
+part of this work?
+
+thanks,
+-- Shuah
