@@ -2,223 +2,165 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 222D1C433E0
-	for <linux-hwmon@archiver.kernel.org>; Mon,  1 Mar 2021 12:47:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67DEEC4332D
+	for <linux-hwmon@archiver.kernel.org>; Sun, 28 Feb 2021 17:13:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D7636601FE
-	for <linux-hwmon@archiver.kernel.org>; Mon,  1 Mar 2021 12:47:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3881364ECE
+	for <linux-hwmon@archiver.kernel.org>; Sun, 28 Feb 2021 17:13:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235134AbhCAMrP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 1 Mar 2021 07:47:15 -0500
-Received: from mail-mw2nam12on2091.outbound.protection.outlook.com ([40.107.244.91]:65057
-        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235018AbhCAMrO (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 1 Mar 2021 07:47:14 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SH74+kRDxQUUmd1/r8AtMrhvdjHLXV6ArVrxCRA0l0fmqLhNaCqqV12/RB6KvjIO/K9hKoblYW+0W8xiUCc8hvZ8gW3ZobiBc/XHeFIOaZZjslQ2l8h0byrC7dzb2mXhrvVMScOF/HEIVwAYpNLSbxvPIMEvzCCawHGzYUwDXh714uNEoDLizsIInVij2CFEZNehZOS4WHMBlnn+D1agyIl1PFMh1tjE1lrZIyuRQJTmCUSTuQzDMBRng4x0AXv2SgrJsASdOTOHJrFV0BzVNPl7Pp/L3xWEwWvIuV0t++1FJrf2LRobY5f4I7IUFf6tuvEHV3A0BOjx/MRapibqtw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=guj5ZvMxk9PlGkADhiHwbUMQ51dQ3aBSm26frPeNQeU=;
- b=MaRPfABuxuQUrtIf3o6W1fFbAmFRX7uuolgMvYaUgciXCpN48p9nrCAvnEhCTfqdoWMihz/ujMrmADph4qTYU9fSQ0OsQwNU32xcKOpqLvoFnkZ2GOxBQNNjGxVrsKgWNQqYsxa7gXJsX4Y4yZQyAKtn9OXbQym/YTKvm4FeRjcoUNPuVnc8rbFSbQfIu4QztPDqQKBshQz4giT/SVriK4YZX76H5BrAYQj0uD6q3t/upSOomJ97RKKhaVaOvdml7+NsMouCP1MAVHuwYNuubDdl/sVQaeyau4SvP9fUKbH6oczPLbQ9JMCwGr+OPoUgOic7SRputIsfd8Kmcz65Lw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
+        id S231327AbhB1RMq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 28 Feb 2021 12:12:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49154 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230461AbhB1RMj (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 28 Feb 2021 12:12:39 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10048C06174A;
+        Sun, 28 Feb 2021 09:11:58 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id g5so23843438ejt.2;
+        Sun, 28 Feb 2021 09:11:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=guj5ZvMxk9PlGkADhiHwbUMQ51dQ3aBSm26frPeNQeU=;
- b=VdL9Jmsje0iydCzot3Poysgmj6BzXWakEaH7h3broMCb8EKCXDUqqAZkd2WHMWLtUwt7Wxh6ldESEACYtbuMmGP3399XrDVJarUksbW0ZFKZg6HlB9ifilkLwc4VrtGkf3VQbp+du7KYZz5hHMIA6cujeW91TEvEQx8xbJyU2dE=
-Authentication-Results: os.amperecomputing.com; dkim=none (message not signed)
- header.d=none;os.amperecomputing.com; dmarc=none action=none
- header.from=os.amperecomputing.com;
-Received: from MW2PR0102MB3482.prod.exchangelabs.com (2603:10b6:302:c::32) by
- MWHPR01MB2720.prod.exchangelabs.com (2603:10b6:300:fd::23) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3890.23; Mon, 1 Mar 2021 12:46:19 +0000
-Received: from MW2PR0102MB3482.prod.exchangelabs.com
- ([fe80::682c:4e20:b53d:e660]) by MW2PR0102MB3482.prod.exchangelabs.com
- ([fe80::682c:4e20:b53d:e660%7]) with mapi id 15.20.3890.028; Mon, 1 Mar 2021
- 12:46:19 +0000
-Subject: Re: [PATCH 2/4] mfd: simple-mfd-i2c: Adds Ampere's Altra SMpro
- support
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org,
-        Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-References: <20210225101854.13896-1-quan@os.amperecomputing.com>
- <20210225101854.13896-3-quan@os.amperecomputing.com>
- <20210226083114.GE641347@dell>
-From:   Quan Nguyen <quan@os.amperecomputing.com>
-Message-ID: <f4b00f4c-6e6c-810d-d16d-5d01ebf4d36d@os.amperecomputing.com>
-Date:   Mon, 1 Mar 2021 19:46:08 +0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.16; rv:78.0)
- Gecko/20100101 Thunderbird/78.8.0
-In-Reply-To: <20210226083114.GE641347@dell>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [118.69.219.201]
-X-ClientProxiedBy: HK2PR02CA0168.apcprd02.prod.outlook.com
- (2603:1096:201:1f::28) To MW2PR0102MB3482.prod.exchangelabs.com
- (2603:10b6:302:c::32)
+        d=gmail.com; s=20161025;
+        h=date:from:to:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=dfQ46OGWItLgoKPUR/Czwfd0qqTUSj25+jf5yrElG/4=;
+        b=GzeA/aDB2UBhnNVhm++I/Jk3Up7Sjll8FWko6UUVrR8GbwUj6tdWvj7U7T3p1JnaWE
+         tuDT5n8KyfWwgonEFcDAlbP9Wnm/lzI5ynLZd5zXrmZLcqy0e5qJFV+Ury6tgPUdhcIC
+         ZnUpySrUVv3A0oExsLsVOkNej6wDTO/NVed1e1lRxfeovoJIixufVCuML3LKRgEXHaK6
+         AQIpA41ncR2vIctG/YIpRBR7PPh4Vs9caRlig7rCLuPUPKUXlteysI6kNYwN/3Yc//ci
+         tD2NQsug/MYd9mQ+dWSVvw0ZV+w1YK/V6hQL8df04yN35+nWGaht76tutf0kiQ1Fxgq5
+         E6Vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dfQ46OGWItLgoKPUR/Czwfd0qqTUSj25+jf5yrElG/4=;
+        b=DFk3PQk4Tg5+x/JyUn1GIB9WRKbs4ZjvCjYZr9JKO8621MT6/JMbxVEVcdDoUwHVL+
+         For3KnKO03QZ25kxJo4JrfZHSkIeuz8ttxAxFkjgF2q6WYdlaegFsyL7pwebxMCJOuh/
+         NrMre9pjnYhb6I4oOeQe6UNOpaC6IPz2m13QnfLeVZ2YZGlmr1DYxmPi+bvVPkKasB7e
+         u9RBjICZzwxg7kg714yWmesb+O+Rtbcpc99VRzJxNj+AhqwCvcU1kFYQqrqosKdGeMu3
+         qv1KRTCKEbd/EDeY1ITs68EsyfQGwPqrqB4AdfJhZ2zoof+PofoZAtTFpktFx3ZcE2nA
+         XTjg==
+X-Gm-Message-State: AOAM5304vRkhWj/qH8naxa3syBxpk1crx5yAp/FsV3b7mRkxQxwuuOcN
+        4SYwXjH8z05UBhk34i8rBvOfdoP18tGg
+X-Google-Smtp-Source: ABdhPJw5sLbCUCcgxkhNvC6IgO3vmNaTgOeasYPBEho60Poa4WNRXoZ/cPiXNkLCHgbgyBJUziViqw==
+X-Received: by 2002:a17:906:acb:: with SMTP id z11mr3855755ejf.193.1614532316774;
+        Sun, 28 Feb 2021 09:11:56 -0800 (PST)
+Received: from localhost.localdomain ([46.53.249.223])
+        by smtp.gmail.com with ESMTPSA id fw3sm6654338ejb.82.2021.02.28.09.11.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 Feb 2021 09:11:56 -0800 (PST)
+Date:   Sun, 28 Feb 2021 20:11:54 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org, linux-arch@vger.kernel.org
+Subject: [PATCH 12/11] pragma once: scripted treewide conversion
+Message-ID: <YDvO2kmidKZaK26j@localhost.localdomain>
+References: <YDvLYzsGu+l1pQ2y@localhost.localdomain>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [10.38.33.120] (118.69.219.201) by HK2PR02CA0168.apcprd02.prod.outlook.com (2603:1096:201:1f::28) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3890.20 via Frontend Transport; Mon, 1 Mar 2021 12:46:15 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e3ce00d6-1599-41f5-248e-08d8dcb002d3
-X-MS-TrafficTypeDiagnostic: MWHPR01MB2720:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <MWHPR01MB2720258E3EECFA95A223ED40F29A9@MWHPR01MB2720.prod.exchangelabs.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: V0KBaay5DVObAVOelw2zyXGUe5CcfvutSp2W3yTdZcyJRF6MVnvhXndOUs2LoKjw7/9InOZVmNk32BdicquYWYlRxH1whcbZKhxG6D+6Fcw15PKPJOrIYvX/jIt49Ral2OyLok8LcF67kIOephdWS1dt8asU2MCmPiE/RmF2Lp1FI6kN+B16YYMmw+Ue2A8Tw6QhlqbZkOpmCmng6Kyo23IEJgfhcTChiLpf9qtuvWWIaZXnZW/CBz1BCuCqb2TYfYiQYD8DKKMkjO/xUTdmk3Fy42RCuCbdJMabiO3Ot4/wI/P7KQiXlIqBO8rw9QculJNilV3HeNG/3MlO5oKNJ+E2E19Dr2nDWjYuVAwiJcqDnRou1himWob1AGld5/xRbKoE22J1VnBDxOMrI+cc9N74Oc1UvSm4BVJq96fQOpDRN8Ci19VIGzOdgDAcoBffZc2iEII9RTu9mn8IxZm2QxsqcsOlngSRkDSxSep9orbnAQn/H+nVWUODk4msEGEudJKbWgb+SjT40gcXoezGYcWqBbCuUqIQcahu0gEMCHzcifQkCz1YdeF1OOgDuG4CcT4Q0fnZmmveEHHHEz6+FoWPimla4rZJ7E/WgppWWn0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR0102MB3482.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(4636009)(39840400004)(366004)(396003)(376002)(346002)(136003)(83380400001)(16526019)(186003)(26005)(86362001)(31696002)(8676002)(8936002)(4326008)(6666004)(53546011)(107886003)(5660300002)(6486002)(478600001)(66946007)(66476007)(66556008)(956004)(7416002)(2616005)(54906003)(16576012)(316002)(31686004)(52116002)(2906002)(6916009)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?ZHB1bmtZNm0wOUhLOTZpSS85dGs1c0F4azFjMk9aTWhaNUl4SVErWFAzTktq?=
- =?utf-8?B?YVVOd3ordEI2YmJsMkwxdzBpaVY1aTJGeGxKWGpCcFNxTWdnUlFOVk5MUHFm?=
- =?utf-8?B?SkJPYkl3YW5WeS9ySEpZMUJJUFJ5ejJtRHVPSk9jOHJiQTF6MlhEdmE3WXkw?=
- =?utf-8?B?ZHRMLzV3Z1E5ZzlBVmJmdHpYS2JiNVVkNjFERVpKTkh5dHJoajAwODZZR1lI?=
- =?utf-8?B?TnFZVDAzSTlKU2k5WlBPbjA4YlgzU1dxM3YrT00vZmxWVmpiWkpPQ3JZc1F0?=
- =?utf-8?B?MVhIYnYwcHBiVWZKWTM1cWpmeDNndmF1WUl1MUFKVFRKcldZQ0RaazVRZXpa?=
- =?utf-8?B?QmRBQ1lVL3Y3cjd4VlVzOHBsbHRpWVVNejFNK1JlbGQ0OWRHYjQ5aUVmTldE?=
- =?utf-8?B?cTVhVkhkcERvUS9yL2ZRN1JNQmJKa2Joekk3MU5mL2FnV04vYlE5ZXp0ME0x?=
- =?utf-8?B?c2RIS0RqdXlIZ3Q1bmI5WXZDQUxmYlh0dCtJcFUvWldDcGFBbi84aHh3YXlN?=
- =?utf-8?B?L3ZEOFNKSHY0MTNYZ21NeWFicGF1OTV6dlZtU3FJRE9nR2Z1WHQ5a3craWk0?=
- =?utf-8?B?cktSUDFFQUo1Yi9KeDJrOEpiUjhuWGVUZkdJQXFLcWtXYnRRNERXSWRBSW5I?=
- =?utf-8?B?OXJPWmxUaXlFNjNpZG1wOTFvUElsc3BtQ1VyOC9ZNXFnRU5sa01iYkd6SDRQ?=
- =?utf-8?B?VjdSM2YreHcxRVhvdklLNVFDVnpTbFdMSEMrN200SmJqQ2hWVWZaQmE5dlB5?=
- =?utf-8?B?S08vVUx1YXQ5SnZPZy8vaEw5SzhCRTdQb3RMWUh4UC9NVCthcU53SGhUeTJJ?=
- =?utf-8?B?VzlHU2hiaDhmL2V5SU1qUExsM0dJYlIwVE1Sa1BtelRJaEttV2kyckpJbTc5?=
- =?utf-8?B?eTJJUE1GYTErSnlKOW9yejRRWlNFOEloMlNGbEpHc0ZCTVF6emdXdnR3aWFO?=
- =?utf-8?B?a1JaSTB0WmdJc1hCaWZkZlRXb29kNnVWTE1EMVNhWXNrNEhydlBwSHNrcERs?=
- =?utf-8?B?YUNMZ082cnFidWpReE0rQzQxODBCMFhleTZuK01oemN1dmgrT2tvT05HRFdI?=
- =?utf-8?B?Y1FMVG56Z3pxMnIzZnpvUUxNbnU2WmNKcWZRc2V0aUkvNzJWWk9nV0k4WGU1?=
- =?utf-8?B?WU1kbVBiRnJvTGt4MXNlRkdObUU0N2pXOW5SaklwNG1DRTVRRlFaaTV6NHJa?=
- =?utf-8?B?UFdrNU8wUlRXaVBmdmRCY3lqcEpXN3BOMGFNQ0xLdzVvYmVPakZQcWRZelg0?=
- =?utf-8?B?anRxVlJnTjAzOWpaKzl1SFcwQlRkMExZL2t6OGNkUm8zQUl1d3h5NGZMYm5p?=
- =?utf-8?B?MG52VkorYzQrMzFxK3BjajU5VVgzZm9idk9GMGdPSmpQUzE2RnlJcG5vSWVI?=
- =?utf-8?B?UFQ2Wm82eU9LMG5oQUdXQWw0K0dzVUlBZEh3K09YRjNscVpxdG94OVBuRjk4?=
- =?utf-8?B?eEFPanU2OERFUmR4UXREOHlkRmdGRDgvODh3NGxPSmZDZ0s0QVBPMnVaTDR2?=
- =?utf-8?B?VVpGcFJMRG9TQjhLRDRVb3pDZVFhMG52bmJyclFtaGZRMDg4MTVOZjR3RkxG?=
- =?utf-8?B?VmtyYUtNUCtZVnJwc2I0WXpQYkZiVUFGQlBVN2d6STkzdm1zZ2wxZlVtZzFZ?=
- =?utf-8?B?b2tPZHoyY1VpOWZ0Wm5PajZwRXNYeGM1Tkh2MTFONmUvdHpxdHNycGFFUFhO?=
- =?utf-8?B?NktrWU9Sb3JYTnJnLzZHSGEwT2FKVkFKZkluVk5HQ0lHMkdqdGRWb0dxanM1?=
- =?utf-8?Q?RklODXOBsyQbKsHPVnJYBTOd5dwV8zLJOWyJpK2?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e3ce00d6-1599-41f5-248e-08d8dcb002d3
-X-MS-Exchange-CrossTenant-AuthSource: MW2PR0102MB3482.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2021 12:46:19.7299
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hiJ7K4wi5e/aqydDEKPRZrpRCQ6WGOF3ktq/w4qTf1GRqWihVEI3zJEI4wYt6tRiHKC3hdKqgsF+wpMapKW/KRnvFeO3epy/Y4BO69/McaI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR01MB2720
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YDvLYzsGu+l1pQ2y@localhost.localdomain>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 26/02/2021 15:31, Lee Jones wrote:
-> On Thu, 25 Feb 2021, Quan Nguyen wrote:
-> 
->> Adds an MFD driver for SMpro found on the Mt.Jade hardware reference
->> platform with Ampere's Altra processor family.
->>
->> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
->> ---
->>   drivers/mfd/Kconfig          | 10 ++++++++++
->>   drivers/mfd/simple-mfd-i2c.c | 15 +++++++++++++--
->>   2 files changed, 23 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
->> index b74efa469e90..5414371bdea1 100644
->> --- a/drivers/mfd/Kconfig
->> +++ b/drivers/mfd/Kconfig
->> @@ -77,6 +77,16 @@ config MFD_AS3711
->>   	help
->>   	  Support for the AS3711 PMIC from AMS
->>   
->> +config MFD_SMPRO
->> +	tristate "Ampere Computing MFD SMpro core driver"
->> +	select MFD_SIMPLE_MFD_I2C
-> 
-> Nice to see another user here.
-> 
->> +	help
->> +	  Say yes here to enable SMpro driver support for Ampere's Altra
->> +	  processor family.
->> +
->> +	  Ampere's Altra SMpro exposes an I2C regmap interface that can
->> +	  be accessed by child devices.
->> +
->>   config MFD_AS3722
->>   	tristate "ams AS3722 Power Management IC"
->>   	select MFD_CORE
->> diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2c.c
->> index 87f684cff9a1..0459a9fbd3f5 100644
->> --- a/drivers/mfd/simple-mfd-i2c.c
->> +++ b/drivers/mfd/simple-mfd-i2c.c
->> @@ -21,14 +21,24 @@ static const struct regmap_config simple_regmap_config = {
->>   	.val_bits = 8,
->>   };
->>   
->> +static const struct regmap_config simple_word_regmap_config = {
->> +	.reg_bits = 8,
->> +	.val_bits = 16,
->> +};
->> +
->>   static int simple_mfd_i2c_probe(struct i2c_client *i2c)
->>   {
->>   	const struct regmap_config *config;
->>   	struct regmap *regmap;
->>   
->>   	config = device_get_match_data(&i2c->dev);
->> -	if (!config)
->> -		config = &simple_regmap_config;
->> +	if (!config) {
->> +		if (of_device_is_compatible(i2c->dev.of_node,
->> +						"ampere,ac01-smpro"))
-> 
-> Could you use 'struct of_device_id's .data attribute instead please?
-> 
-Thank you, but I'm not sure if I got it right.
+[  Bcc a lot of lists so that people understand what's this is all         ]
+[  about without creating uber-cc-thread.                                  ]
+[  Apologies if I missed your subsystem                                    ]
+[  Please see [PATCH 11/11: pragma once: conversion script (in Python 2)]  ]
 
-Do you mean we could use .data attribute to get the expected 
-reg_bits/val_bits values and translate them to simple_word_regmap_config 
-without the need to match the compatible string ?
+Hi, Linus.
 
->> +			config = &simple_word_regmap_config;
->> +		else
->> +			config = &simple_regmap_config;
->> +	}
->>   
->>   	regmap = devm_regmap_init_i2c(i2c, config);
->>   	if (IS_ERR(regmap))
->> @@ -39,6 +49,7 @@ static int simple_mfd_i2c_probe(struct i2c_client *i2c)
->>   
->>   static const struct of_device_id simple_mfd_i2c_of_match[] = {
->>   	{ .compatible = "kontron,sl28cpld" },
->> +	{ .compatible = "ampere,ac01-smpro" },
->>   	{}
->>   };
->>   MODULE_DEVICE_TABLE(of, simple_mfd_i2c_of_match);
-> 
+Please run the script below from top-level directory, it will convert
+most kernel headers to #pragma once directive advancing them into
+21-st century.
 
+The advantages are:
+
+* less LOC
+
+	18087 files changed, 18878 insertions(+), 99804 deletions(-)
+	= -81 kLOC (give or take)
+
+* less mental tax on developers forced to name things which aren't even
+  real code
+
+* less junk in preprocessor hashtables and editors/IDEs autocompletion
+  lists
+
+There are two bit exceptions: UAPI headers and ACPICA.
+Given ubiquity of #pragma once, I personally think even these subsystems
+should be converted in the future.
+
+Compile tested on alpha, arc, arm, arm64, h8300, ia64, m68k, microblaze,
+mips, nios2, parisc, powerpc, riscv, s390, sh, sparc, um-i386, um-x86_64,
+i386, x86_64, xtensa (allnoconfig, all defconfigs, allmodconfig with or
+without SMP/DEBUG_KERNEL + misc stuff).
+
+Not compile tested on csky, hexagon, nds32, openrisc. 
+
+Love,
+	Alexey
+
+Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
+
+
+
+#!/bin/sh -x
+find . -type f -name '*.h' -print	|\
+LC_ALL=C sort				|\
+sed -e 's#^./##g'			|\
+xargs ./scripts/pragma-once.py
+
+find . -type d -name 'uapi' | xargs git checkout -f
+git checkout -f arch/alpha/include/asm/cmpxchg.h
+git checkout -f arch/arm/mach-imx/hardware.h
+git checkout -f arch/arm/mach-ixp4xx/include/mach/hardware.h
+git checkout -f arch/arm/mach-sa1100/include/mach/hardware.h
+git checkout -f arch/mips/include/asm/mips-cps.h
+git checkout -f arch/x86/boot/boot.h
+git checkout -f arch/x86/boot/ctype.h
+git checkout -f arch/x86/include/asm/cpufeatures.h
+git checkout -f arch/x86/include/asm/disabled-features.h
+git checkout -f arch/x86/include/asm/required-features.h
+git checkout -f arch/x86/include/asm/vmxfeatures.h
+git checkout -f arch/x86/include/asm/vvar.h
+git checkout -f drivers/acpi/acpica/
+git checkout -f drivers/gpu/drm/amd/pm/inc/vega10_ppsmc.h
+git checkout -f drivers/gpu/drm/amd/pm/powerplay/ppsmc.h
+git checkout -f drivers/input/misc/yealink.h
+git checkout -f drivers/media/usb/dvb-usb-v2/mxl111sf-demod.h
+git checkout -f drivers/media/usb/dvb-usb-v2/mxl111sf-tuner.h
+git checkout -f drivers/pcmcia/yenta_socket.h
+git checkout -f drivers/staging/rtl8723bs/include/hal_com_h2c.h
+git checkout -f include/linux/acpi.h
+git checkout -f include/linux/bitops.h
+git checkout -f include/linux/compiler_types.h
+git checkout -f include/linux/device.h
+git checkout -f include/linux/kbuild.h
+git checkout -f include/linux/libfdt_env.h
+git checkout -f include/linux/local_lock.h
+git checkout -f include/linux/spinlock.h
+git checkout -f include/linux/spinlock_api_smp.h
+git checkout -f include/linux/spinlock_types.h
+git checkout -f include/linux/tracepoint.h
+git checkout -f mm/gup_test.h
+git checkout -f net/batman-adv/main.h
+git checkout -f scripts/dtc/
+git checkout -f tools/include/linux/bitops.h
+git checkout -f tools/include/linux/compiler.h
+git checkout -f tools/testing/selftests/clone3/clone3_selftests.h
+git checkout -f tools/testing/selftests/futex/include/atomic.h
+git checkout -f tools/testing/selftests/futex/include/futextest.h
+git checkout -f tools/testing/selftests/futex/include/logging.h
+git checkout -f tools/testing/selftests/kselftest.h
+git checkout -f tools/testing/selftests/kselftest_harness.h
+git checkout -f tools/testing/selftests/pidfd/pidfd.h
+git checkout -f tools/testing/selftests/x86/helpers.h
