@@ -2,67 +2,67 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87F83C433DB
-	for <linux-hwmon@archiver.kernel.org>; Wed,  3 Mar 2021 02:11:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB734C43381
+	for <linux-hwmon@archiver.kernel.org>; Wed,  3 Mar 2021 02:20:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 43A9064E6C
-	for <linux-hwmon@archiver.kernel.org>; Wed,  3 Mar 2021 02:11:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 725E864E7A
+	for <linux-hwmon@archiver.kernel.org>; Wed,  3 Mar 2021 02:20:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235526AbhCCCAv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 2 Mar 2021 21:00:51 -0500
-Received: from mail1.bemta23.messagelabs.com ([67.219.246.2]:19524 "EHLO
-        mail1.bemta23.messagelabs.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235324AbhCBGTK (ORCPT
+        id S235442AbhCCCIp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 2 Mar 2021 21:08:45 -0500
+Received: from mail1.bemta24.messagelabs.com ([67.219.250.1]:51557 "EHLO
+        mail1.bemta24.messagelabs.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1835868AbhCBGYC (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 2 Mar 2021 01:19:10 -0500
-Received: from [100.112.1.13] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
-        by server-2.bemta.az-b.us-east-1.aws.symcld.net id 9E/EE-00973-C67DD306; Tue, 02 Mar 2021 06:13:00 +0000
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrIIsWRWlGSWpSXmKPExsWS8eIhj272dds
-  Eg0/fdS3OTgi0aH+9ldHi8q45bBZPFp5hcmDx2Pm9gd1j/ZarLB6fN8kFMEexZuYl5VcksGZc
-  mPKZuWADb8Xp1WtYGhjPcnUxcnEICfxnlOhZ+pO5i5ETyHnJKLHsjVAXIwcHm4CCxIN9qiBhE
-  YFcic4998FKmAUsJJb/eMgIYgsLGElc+3WQCcRmEVCR+N8zASzOK2Au0bi7gxXElhCQl3h7pJ
-  sNxOYEsh9daGSBWCUn0dPzhRWiXlDi5MwnLBDzJSQOvnjBDNGrJNGz4AoLyDkSAgkS055oTGD
-  kn4WkYxaSjgWMTKsYTZOKMtMzSnITM3N0DQ0MdA0NjXQNdU0M9BKrdJP0Sot1UxOLS3QN9RLL
-  i/WKK3OTc1L08lJLNjECQzalgFFjB2Pnmw96hxglOZiURHm3HLNNEOJLyk+pzEgszogvKs1JL
-  T7EKMPBoSTB+/8qUE6wKDU9tSItMwcYPzBpCQ4eJRFe8fNAad7igsTc4sx0iNQpRkUpcd60a0
-  AJAZBERmkeXBssZi8xykoJ8zIyMDAI8RSkFuVmlqDKv2IU52BUEuZ9ArKdJzOvBG76K6DFTEC
-  LtwdagSwuSURISTUwLfp0J0DkhNn6Bz6BwllXtx95/kdp+YHpM6TcWvNEXUyeL37MdKbB7L5H
-  /kYHCeknRTvq57PHrbgxL0Jp+kL+vrWmy4vMy9gTT+bvtJH9LTAhiP3mVw3/TMtDe+eyJv77b
-  9b+x6SnrWnm5emPd9rwXzjede3V2XoJ+6Dp7D9rApkvlqc/r+bQ5AsVXb30e9/mx22MjhkzX9
-  zccuOdWzKLxyc+jYQfRrvyt4s1vpoz2e+VQLvIvkiGMMG/m4KX1uW9lvp2x0Kh/PH+iQXPmv2
-  L5n9+Fsdh9DUw4u/vavsDsebP7P/+7FVeevuCIGfapGXzn8Qo9jHXVK6xrJa9evyOnJl8W/TF
-  Gbfvnn2WYHHKSImlOCPRUIu5qDgRAE+8CbpUAwAA
+        Tue, 2 Mar 2021 01:24:02 -0500
+Received: from [100.112.128.20] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
+        by server-1.bemta.az-a.us-west-2.aws.symcld.net id D0/1D-57987-8E8DD306; Tue, 02 Mar 2021 06:19:20 +0000
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrKIsWRWlGSWpSXmKPExsWSLveKXffFDds
+  Eg3t/WSzOTgi0aH+9ldHi8q45bBZPFp5hcmDx2Pm9gd1j/ZarLB6fN8kFMEexZuYl5VcksGbM
+  ef+NrWADb8XK2c/YGxjPcnUxcnEICfxnlDg8fx07hPMSyPmygLGLkYODTUBB4sE+1S5GTg4Rg
+  VyJzj33mUFsZgELieU/HjKC2MICRhL3pu5iB7FZBFQk1h6dxQpi8wqYS1za8Q8sLiEgL/H2SD
+  cbiM0JZD+60MgCYgsJyEn09HyBqheUODnzCQvEfAmJgy9eMEP0Kkn0LLjCAnKOhECCxLQnGhM
+  Y+Wch6ZiFpGMBI9MqRoukosz0jJLcxMwcXUMDA11DQyNdQ2MDXSNTI73EKt1EvdJi3fLU4hJd
+  ILe8WK+4Mjc5J0UvL7VkEyMwdFMKmv7sYPz76oPeIUZJDiYlUd4tx2wThPiS8lMqMxKLM+KLS
+  nNSiw8xynBwKEnwKl4HygkWpaanVqRl5gDjCCYtwcGjJMIrfh4ozVtckJhbnJkOkTrFqCglzl
+  sF0icAksgozYNrg8XuJUZZKWFeRgYGBiGegtSi3MwSVPlXjOIcjErCvBIgU3gy80rgpr8CWsw
+  EtHh7oBXI4pJEhJRUAxO7YnH9Z+vgx/L8vKzVFltM6p/9URCvtmla6iF56miL3oZDumuv/eHI
+  b318oeuKnU2VTsfc8vbP/ypXH+i4fdhWOUZiflTx0/uH9zPrNFQ9aY7gNChr6Z69n83Rs0S2s
+  vHi6xVHfl8V8a4r8mXKmpfOa7T2VV/ThE8OW2L+Mv26etj/hX7W8ru7pRj29VU+YBFymPTw4b
+  ZPxxy5o1/k2tWKPvj37qDZ0almW948uXLe+NymS2w23/Rmu0pNnuknue2V06c7E1f931A80d7
+  VgFv32OxHn20r94k71YuG6fxzPnH9Sf1CFoPnukKtiy7+D5UzDdI7yzlNbKKaVPb02/1pWiWi
+  jga1R34uZv3zTkqJpTgj0VCLuag4EQAW5QSXWAMAAA==
 X-Env-Sender: lijq9@lenovo.com
-X-Msg-Ref: server-24.tower-386.messagelabs.com!1614665579!432228!1
-X-Originating-IP: [104.232.225.12]
+X-Msg-Ref: server-17.tower-326.messagelabs.com!1614665957!71754!1
+X-Originating-IP: [103.30.234.7]
 X-SYMC-ESS-Client-Auth: outbound-route-from=pass
 X-StarScan-Received: 
 X-StarScan-Version: 9.60.3; banners=-,-,-
 X-VirusChecked: Checked
-Received: (qmail 13553 invoked from network); 2 Mar 2021 06:12:59 -0000
-Received: from unknown (HELO lenovo.com) (104.232.225.12)
-  by server-24.tower-386.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 2 Mar 2021 06:12:59 -0000
+Received: (qmail 27960 invoked from network); 2 Mar 2021 06:19:19 -0000
+Received: from unknown (HELO lenovo.com) (103.30.234.7)
+  by server-17.tower-326.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 2 Mar 2021 06:19:19 -0000
 Received: from pekwpmail03.lenovo.com (unknown [10.96.93.81])
         (using TLSv1.2 with cipher AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by Forcepoint Email with ESMTPS id 68109B9BFEDE79D64B14;
-        Tue,  2 Mar 2021 01:12:58 -0500 (EST)
+        by Forcepoint Email with ESMTPS id 4A47398D6DC8A83A44C4;
+        Tue,  2 Mar 2021 14:19:17 +0800 (CST)
 Received: from localhost.localdomain (100.67.100.104) by
  pekwpmail03.lenovo.com (10.96.93.81) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2106.2; Tue, 2 Mar 2021 14:12:53 +0800
+ 15.1.2106.2; Tue, 2 Mar 2021 14:19:12 +0800
 From:   Jiqi Li <lijq9@lenovo.com>
 To:     <jdelvare@suse.com>, <linux@roeck-us.net>,
         <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 CC:     <markpearson@lenovo.com>, Jiqi Li <lijq9@lenovo.com>
-Subject: [PATCH] hwmon: (nct6883) Support NCT6886d
-Date:   Tue, 2 Mar 2021 14:12:05 +0800
-Message-ID: <20210302061205.1825664-1-lijq9@lenovo.com>
+Subject: [PATCH] hwmon: (nct6883) Support NCT6686d
+Date:   Tue, 2 Mar 2021 14:18:49 +0800
+Message-ID: <20210302061849.1825806-1-lijq9@lenovo.com>
 X-Mailer: git-send-email 2.18.2
 In-Reply-To: <lijq9@lenovo.com>
 References: <lijq9@lenovo.com>
@@ -75,7 +75,7 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add support for NCT6886d chip used in the Lenovo P620.
+Add support for NCT6686d chip used in the Lenovo P620.
 
 Signed-off-by: Jiqi Li <lijq9@lenovo.com>
 Reviewed-by: Mark Pearson <markpearson@lenovo.com>
