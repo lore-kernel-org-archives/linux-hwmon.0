@@ -5,146 +5,363 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AFAC6C433E0
-	for <linux-hwmon@archiver.kernel.org>; Thu,  4 Mar 2021 10:50:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42EEBC433E0
+	for <linux-hwmon@archiver.kernel.org>; Thu,  4 Mar 2021 11:01:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 83CDE64F2C
-	for <linux-hwmon@archiver.kernel.org>; Thu,  4 Mar 2021 10:50:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 14A9064F34
+	for <linux-hwmon@archiver.kernel.org>; Thu,  4 Mar 2021 11:01:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238984AbhCDKtg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 4 Mar 2021 05:49:36 -0500
-Received: from mail1.bemta23.messagelabs.com ([67.219.246.3]:54273 "EHLO
-        mail1.bemta23.messagelabs.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238976AbhCDKtY (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 4 Mar 2021 05:49:24 -0500
-Received: from [100.112.2.115] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
-        by server-3.bemta.az-b.us-east-1.aws.symcld.net id 0E/E5-29643-B1AB0406; Thu, 04 Mar 2021 10:44:43 +0000
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrBIsWRWlGSWpSXmKPExsWSLveKXVd6l0O
-  CwcQ+JouzEwIt2l9vZbS4vGsOm8WThWeYHFg8dn5vYPdYv+Uqi8fnTXIBzFGsmXlJ+RUJrBn3
-  Ji1kK5ggUDGvTaWB8SVPFyMXh5DAf0aJlx87mCGcF4wS3+5OYeti5OBgE1CQeLBPtYuRk0NEI
-  Feic899ZhCbWcBCYvmPh4wgJcICphJLtvGBhFkEVCR+L97KBmLzCphLbDvWywRiSwjIS7w90g
-  0VF5Q4OfMJC8QYCYmDL14wg4yREFCUmLjBEMJMkJj2RGMCI+8sJA2zkDQsYGRaxWiWVJSZnlG
-  Sm5iZo2toYKBraGikC4SmxnqJVbpJeqXFuqmJxSW6hnqJ5cV6xZW5yTkpenmpJZsYgQGYUsD0
-  dwfjudcf9A4xSnIwKYnyqm90SBDiS8pPqcxILM6ILyrNSS0+xCjDwaEkwVu1AygnWJSanlqRl
-  pkDjAaYtAQHj5II75vtQGne4oLE3OLMdIjUKUZFKXHezp1ACQGQREZpHlwbLAIvMcpKCfMyMj
-  AwCPEUpBblZpagyr9iFOdgVBLmvQ+ynSczrwRu+iugxUxAi2e52YEsLklESEk1MM3nbw9assT
-  Ym++LpfZOFTYG77XWfWuuB+2b7LmFc03RQ9OTn/46LO3bNXEjt2me9t6wpPirV1jOPs8sCFXf
-  cZArYbuZfMCnVU/9jNTWmp9+kdt0rmTNo4/Bz7hq+1f9OX0+LUC7RnROum9EQU+NkWazf7Gv8
-  trPLzK4VKLX39q5Snmj8yGVT4c3Vi/0Dnh3e1Xn1ak+e4/HrV06IXrTmjcXeEsOvTGT9t9o0n
-  moJnSxYmjvJIF33rKNyX5Ovxo/cwWfTHy5MOM+S/T85Nfsx97UTfs2m9/gQMyiNXP8D3bvnNj
-  gG7ZP8sOPgClBU5YGzLy1OW/v92Xl/h9Fy25HpEp8OumrNnX9K7+yVQfv+n1VYinOSDTUYi4q
-  TgQAGTU6TjsDAAA=
-X-Env-Sender: lijq9@lenovo.com
-X-Msg-Ref: server-15.tower-396.messagelabs.com!1614854681!876990!1
-X-Originating-IP: [103.30.234.7]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.60.3; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 30237 invoked from network); 4 Mar 2021 10:44:42 -0000
-Received: from unknown (HELO lenovo.com) (103.30.234.7)
-  by server-15.tower-396.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 4 Mar 2021 10:44:42 -0000
-Received: from pekwpmail03.lenovo.com (unknown [10.96.93.81])
-        (using TLSv1.2 with cipher AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by Forcepoint Email with ESMTPS id A932FE70EC940082EEAA;
-        Thu,  4 Mar 2021 18:44:40 +0800 (CST)
-Received: from localhost.localdomain (100.67.100.45) by pekwpmail03.lenovo.com
- (10.96.93.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2106.2; Thu, 4 Mar 2021
- 18:44:27 +0800
-From:   Jiqi Li <lijq9@lenovo.com>
-To:     <jdelvare@suse.com>, <linux@roeck-us.net>,
-        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <markpearson@lenovo.com>, Jiqi Li <lijq9@lenovo.com>
-Subject: [PATCH v2] hwmon: (nct6883) Support NCT6686D
-Date:   Thu, 4 Mar 2021 18:44:21 +0800
-Message-ID: <20210304104421.1912934-1-lijq9@lenovo.com>
-X-Mailer: git-send-email 2.18.2
+        id S239226AbhCDLAr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 4 Mar 2021 06:00:47 -0500
+Received: from mail-wm1-f43.google.com ([209.85.128.43]:36369 "EHLO
+        mail-wm1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239106AbhCDLAl (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 4 Mar 2021 06:00:41 -0500
+Received: by mail-wm1-f43.google.com with SMTP id k66so9222736wmf.1;
+        Thu, 04 Mar 2021 03:00:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RANBnD46ojmlSMccdilRdjvDcaZ6u/VFb9a869Iq5XU=;
+        b=k/KvLQlzVFSSdzxEXi7HR8pHR1NFyjTyoj1PQztsHJzjFkyarqMGc7lqkIb6yzjYt3
+         akO7VeysmsYANNaru9AhiAZa2bNKcPy2R5Dei/FhBUGQL109Xd8RO/pr3yrCMA6PVtOG
+         3ejX09LHtTqF2B68BI7UZiMOxJvhvmMYGEI59mlXlbS/BzOGUuNT1BWmUKUy9pJtUiwc
+         gzAaAlc03DuTiS5RUYEpr/75+OUj5tT1QerPRUAeNWBosQC/p5/Mgdlse4Gt25EqASXt
+         RnlpiDWwPNUOEV5C51C0youuoQbGgrr5bRNUDIMzNr0qwMe3eXkMHCfFKsD5Ig/LWKX8
+         Kg3A==
+X-Gm-Message-State: AOAM531+b+YLChCQLnHwpqugzoOXTQv57Q5GBvP63j/hphtK23V0jK4A
+        u9lZitv4lErsWtkFKRYPxVY=
+X-Google-Smtp-Source: ABdhPJy9psosJAJzPkFtViYYM9+1QFnG3jbrArOHYWSu0xYl6j08YYMahfmJOMk7q24BUS7maJ9bSA==
+X-Received: by 2002:a1c:ddc6:: with SMTP id u189mr3361967wmg.171.1614855600261;
+        Thu, 04 Mar 2021 03:00:00 -0800 (PST)
+Received: from localhost ([2a02:8308:387:c900:a7b5:b859:9449:c07b])
+        by smtp.gmail.com with ESMTPSA id d85sm9420246wmd.15.2021.03.04.02.59.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Mar 2021 02:59:59 -0800 (PST)
+From:   =?UTF-8?q?V=C3=A1clav=20Kubern=C3=A1t?= <kubernat@cesnet.cz>
+Cc:     =?UTF-8?q?V=C3=A1clav=20Kubern=C3=A1t?= <kubernat@cesnet.cz>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/7] hwmon: (max31790) Rework to use regmap
+Date:   Thu,  4 Mar 2021 11:58:24 +0100
+Message-Id: <20210304105830.507176-1-kubernat@cesnet.cz>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [100.67.100.45]
-X-ClientProxiedBy: reswpmail04.lenovo.com (10.62.32.23) To
- pekwpmail03.lenovo.com (10.96.93.81)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add support for NCT6686D chip used in the Lenovo P620.
+Converting the driver to use regmap makes it more generic. It also makes
+it a lot easier to debug through debugfs.
 
-Signed-off-by: Jiqi Li <lijq9@lenovo.com>
-Reviewed-by: Mark Pearson <markpearson@lenovo.com>
+Signed-off-by: Václav Kubernát <kubernat@cesnet.cz>
 ---
-Changes in v2: Corrected typo from NCT6886D to NCT6686D
----
- drivers/hwmon/nct6683.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ drivers/hwmon/Kconfig    |   1 +
+ drivers/hwmon/max31790.c | 148 +++++++++++++++++++++++++++------------
+ 2 files changed, 105 insertions(+), 44 deletions(-)
 
-diff --git a/drivers/hwmon/nct6683.c b/drivers/hwmon/nct6683.c
-index a23047a3bfe2..256e8d62f858 100644
---- a/drivers/hwmon/nct6683.c
-+++ b/drivers/hwmon/nct6683.c
-@@ -1,7 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0-or-later
- /*
-  * nct6683 - Driver for the hardware monitoring functionality of
-- *	     Nuvoton NCT6683D/NCT6687D eSIO
-+ *	     Nuvoton NCT6683D/NCT6686D/NCT6687D eSIO
-  *
-  * Copyright (C) 2013  Guenter Roeck <linux@roeck-us.net>
-  *
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 54f04e61fb83..c2ec57672c4e 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -1092,6 +1092,7 @@ config SENSORS_MAX6697
+ config SENSORS_MAX31790
+ 	tristate "Maxim MAX31790 sensor chip"
+ 	depends on I2C
++	select REGMAP_I2C
+ 	help
+ 	  If you say yes here you get support for 6-Channel PWM-Output
+ 	  Fan RPM Controller.
+diff --git a/drivers/hwmon/max31790.c b/drivers/hwmon/max31790.c
+index 86e6c71db685..ca413985b5f9 100644
+--- a/drivers/hwmon/max31790.c
++++ b/drivers/hwmon/max31790.c
 @@ -12,6 +12,7 @@
-  *
-  * Chip        #vin    #fan    #pwm    #temp  chip ID
-  * nct6683d     21(1)   16      8       32(1) 0xc730
-+ * nct6686d     21(1)   16      8       32(1) 0xd440
-  * nct6687d     21(1)   16      8       32(1) 0xd590
-  *
-  * Notes:
-@@ -33,7 +34,7 @@
- #include <linux/platform_device.h>
+ #include <linux/init.h>
+ #include <linux/jiffies.h>
+ #include <linux/module.h>
++#include <linux/regmap.h>
  #include <linux/slab.h>
  
--enum kinds { nct6683, nct6687 };
-+enum kinds { nct6683, nct6686, nct6687 };
+ /* MAX31790 registers */
+@@ -46,11 +47,35 @@
  
- static bool force;
- module_param(force, bool, 0);
-@@ -41,11 +42,13 @@ MODULE_PARM_DESC(force, "Set to one to enable support for unknown vendors");
+ #define NR_CHANNEL			6
  
- static const char * const nct6683_device_names[] = {
- 	"nct6683",
-+	"nct6686",
- 	"nct6687",
++#define MAX31790_REG_USER_BYTE_67	0x67
++
++#define BULK_TO_U16(msb, lsb)		(((msb) << 8) + (lsb))
++#define U16_MSB(num)			(((num) & 0xFF00) >> 8)
++#define U16_LSB(num)			((num) & 0x00FF)
++
++static const struct regmap_range max31790_ro_range = {
++	.range_min = MAX31790_REG_TACH_COUNT(0),
++	.range_max = MAX31790_REG_PWMOUT(0) - 1,
++};
++
++static const struct regmap_access_table max31790_wr_table = {
++	.no_ranges = &max31790_ro_range,
++	.n_no_ranges = 1,
++};
++
++static const struct regmap_config max31790_regmap_config = {
++	.reg_bits = 8,
++	.val_bits = 8,
++	.reg_stride = 1,
++	.max_register = MAX31790_REG_USER_BYTE_67,
++	.wr_table = &max31790_wr_table,
++};
++
+ /*
+  * Client data (each client gets its own)
+  */
+ struct max31790_data {
+-	struct i2c_client *client;
++	struct regmap *regmap;
+ 	struct mutex update_lock;
+ 	bool valid; /* zero until following fields are valid */
+ 	unsigned long last_updated; /* in jiffies */
+@@ -67,53 +92,72 @@ struct max31790_data {
+ static struct max31790_data *max31790_update_device(struct device *dev)
+ {
+ 	struct max31790_data *data = dev_get_drvdata(dev);
+-	struct i2c_client *client = data->client;
++	struct regmap *regmap = data->regmap;
+ 	struct max31790_data *ret = data;
+ 	int i;
+ 	int rv;
++	int val;
++	u8 val_bulk[2];
+ 
+ 	mutex_lock(&data->update_lock);
+ 
+ 	if (time_after(jiffies, data->last_updated + HZ) || !data->valid) {
+-		rv = i2c_smbus_read_byte_data(client,
+-				MAX31790_REG_FAN_FAULT_STATUS1);
++		rv = regmap_read(regmap,
++				 MAX31790_REG_FAN_FAULT_STATUS1,
++				 &val);
+ 		if (rv < 0)
+ 			goto abort;
+-		data->fault_status = rv & 0x3F;
++		data->fault_status = val & 0x3F;
+ 
+-		rv = i2c_smbus_read_byte_data(client,
+-				MAX31790_REG_FAN_FAULT_STATUS2);
++		rv = regmap_read(regmap,
++				 MAX31790_REG_FAN_FAULT_STATUS2,
++				 &val);
+ 		if (rv < 0)
+ 			goto abort;
+-		data->fault_status |= (rv & 0x3F) << 6;
++		data->fault_status |= (val & 0x3F) << 6;
+ 
+ 		for (i = 0; i < NR_CHANNEL; i++) {
+-			rv = i2c_smbus_read_word_swapped(client,
+-					MAX31790_REG_TACH_COUNT(i));
++			rv = regmap_bulk_read(regmap,
++					      MAX31790_REG_TACH_COUNT(i),
++					      val_bulk,
++					      2);
+ 			if (rv < 0)
+ 				goto abort;
+-			data->tach[i] = rv;
++			data->tach[i] = BULK_TO_U16(val_bulk[0],
++						    val_bulk[1]);
+ 
+ 			if (data->fan_config[i]
+ 			    & MAX31790_FAN_CFG_TACH_INPUT) {
+-				rv = i2c_smbus_read_word_swapped(client,
+-					MAX31790_REG_TACH_COUNT(NR_CHANNEL
+-								+ i));
++				rv = regmap_bulk_read(regmap,
++						      MAX31790_REG_TACH_COUNT(NR_CHANNEL
++									      + i),
++					      val_bulk,
++					      2);
+ 				if (rv < 0)
+ 					goto abort;
+-				data->tach[NR_CHANNEL + i] = rv;
++
++				data->tach[NR_CHANNEL + i] =
++					BULK_TO_U16(val_bulk[0],
++						    val_bulk[1]);
+ 			} else {
+-				rv = i2c_smbus_read_word_swapped(client,
+-						MAX31790_REG_PWMOUT(i));
++				rv = regmap_bulk_read(regmap,
++						      MAX31790_REG_PWMOUT(i),
++						      val_bulk,
++						      2);
+ 				if (rv < 0)
+ 					goto abort;
+-				data->pwm[i] = rv;
++				data->pwm[i] = BULK_TO_U16(val_bulk[0],
++							   val_bulk[1]);
+ 
+-				rv = i2c_smbus_read_word_swapped(client,
+-						MAX31790_REG_TARGET_COUNT(i));
++				rv = regmap_bulk_read(regmap,
++						      MAX31790_REG_TARGET_COUNT(i),
++						      val_bulk,
++						      2);
+ 				if (rv < 0)
+ 					goto abort;
+-				data->target_count[i] = rv;
++				data->target_count[i] =
++					BULK_TO_U16(val_bulk[0],
++						    val_bulk[1]);
+ 			}
+ 		}
+ 
+@@ -191,11 +235,12 @@ static int max31790_write_fan(struct device *dev, u32 attr, int channel,
+ 			      long val)
+ {
+ 	struct max31790_data *data = dev_get_drvdata(dev);
+-	struct i2c_client *client = data->client;
++	struct regmap *regmap = data->regmap;
+ 	int target_count;
+ 	int err = 0;
+ 	u8 bits;
+ 	int sr;
++	u8 bulk_val[2];
+ 
+ 	mutex_lock(&data->update_lock);
+ 
+@@ -207,9 +252,9 @@ static int max31790_write_fan(struct device *dev, u32 attr, int channel,
+ 			((data->fan_dynamics[channel] &
+ 			  ~MAX31790_FAN_DYN_SR_MASK) |
+ 			 (bits << MAX31790_FAN_DYN_SR_SHIFT));
+-		err = i2c_smbus_write_byte_data(client,
+-					MAX31790_REG_FAN_DYNAMICS(channel),
+-					data->fan_dynamics[channel]);
++		err = regmap_write(regmap,
++				   MAX31790_REG_FAN_DYNAMICS(channel),
++				   data->fan_dynamics[channel]);
+ 		if (err < 0)
+ 			break;
+ 
+@@ -218,10 +263,13 @@ static int max31790_write_fan(struct device *dev, u32 attr, int channel,
+ 		target_count = clamp_val(target_count, 0x1, 0x7FF);
+ 
+ 		data->target_count[channel] = target_count << 5;
++		bulk_val[0] = U16_MSB(data->target_count[channel]);
++		bulk_val[1] = U16_LSB(data->target_count[channel]);
+ 
+-		err = i2c_smbus_write_word_swapped(client,
++		err = regmap_bulk_write(regmap,
+ 					MAX31790_REG_TARGET_COUNT(channel),
+-					data->target_count[channel]);
++					bulk_val,
++					2);
+ 		break;
+ 	default:
+ 		err = -EOPNOTSUPP;
+@@ -287,9 +335,10 @@ static int max31790_write_pwm(struct device *dev, u32 attr, int channel,
+ 			      long val)
+ {
+ 	struct max31790_data *data = dev_get_drvdata(dev);
+-	struct i2c_client *client = data->client;
++	struct regmap *regmap = data->regmap;
+ 	u8 fan_config;
+ 	int err = 0;
++	u8 bulk_val[2];
+ 
+ 	mutex_lock(&data->update_lock);
+ 
+@@ -300,9 +349,12 @@ static int max31790_write_pwm(struct device *dev, u32 attr, int channel,
+ 			break;
+ 		}
+ 		data->pwm[channel] = val << 8;
+-		err = i2c_smbus_write_word_swapped(client,
+-						   MAX31790_REG_PWMOUT(channel),
+-						   data->pwm[channel]);
++		bulk_val[0] = U16_MSB(data->pwm[channel]);
++		bulk_val[1] = U16_LSB(data->pwm[channel]);
++		err = regmap_bulk_write(regmap,
++					MAX31790_REG_PWMOUT(channel),
++					bulk_val,
++					2);
+ 		break;
+ 	case hwmon_pwm_enable:
+ 		fan_config = data->fan_config[channel];
+@@ -321,9 +373,9 @@ static int max31790_write_pwm(struct device *dev, u32 attr, int channel,
+ 			break;
+ 		}
+ 		data->fan_config[channel] = fan_config;
+-		err = i2c_smbus_write_byte_data(client,
+-					MAX31790_REG_FAN_CONFIG(channel),
+-					fan_config);
++		err = regmap_write(regmap,
++				   MAX31790_REG_FAN_CONFIG(channel),
++				   fan_config);
+ 		break;
+ 	default:
+ 		err = -EOPNOTSUPP;
+@@ -426,23 +478,25 @@ static const struct hwmon_chip_info max31790_chip_info = {
+ 	.info = max31790_info,
  };
  
- static const char * const nct6683_chip_names[] = {
- 	"NCT6683D",
-+	"NCT6686D",
- 	"NCT6687D",
- };
+-static int max31790_init_client(struct i2c_client *client,
++static int max31790_init_client(struct regmap *regmap,
+ 				struct max31790_data *data)
+ {
+-	int i, rv;
++	int i, rv, val;
  
-@@ -66,6 +69,7 @@ static const char * const nct6683_chip_names[] = {
+ 	for (i = 0; i < NR_CHANNEL; i++) {
+-		rv = i2c_smbus_read_byte_data(client,
+-				MAX31790_REG_FAN_CONFIG(i));
++		rv = regmap_read(regmap,
++				 MAX31790_REG_FAN_CONFIG(i),
++				 &val);
+ 		if (rv < 0)
+ 			return rv;
+-		data->fan_config[i] = rv;
++		data->fan_config[i] = val;
  
- #define SIO_NCT6681_ID		0xb270	/* for later */
- #define SIO_NCT6683_ID		0xc730
-+#define SIO_NCT6686_ID		0xd440
- #define SIO_NCT6687_ID		0xd590
- #define SIO_ID_MASK		0xFFF0
+-		rv = i2c_smbus_read_byte_data(client,
+-				MAX31790_REG_FAN_DYNAMICS(i));
++		rv = regmap_read(regmap,
++				 MAX31790_REG_FAN_DYNAMICS(i),
++				 &val);
+ 		if (rv < 0)
+ 			return rv;
+-		data->fan_dynamics[i] = rv;
++		data->fan_dynamics[i] = val;
+ 	}
  
-@@ -1362,6 +1366,9 @@ static int __init nct6683_find(int sioaddr, struct nct6683_sio_data *sio_data)
- 	case SIO_NCT6683_ID:
- 		sio_data->kind = nct6683;
- 		break;
-+	case SIO_NCT6686_ID:
-+		sio_data->kind = nct6686;
-+		break;
- 	case SIO_NCT6687_ID:
- 		sio_data->kind = nct6687;
- 		break;
+ 	return 0;
+@@ -464,13 +518,19 @@ static int max31790_probe(struct i2c_client *client)
+ 	if (!data)
+ 		return -ENOMEM;
+ 
+-	data->client = client;
+ 	mutex_init(&data->update_lock);
+ 
++	data->regmap = devm_regmap_init_i2c(client, &max31790_regmap_config);
++
++	if (IS_ERR(data->regmap)) {
++		dev_err(dev, "failed to allocate register map\n");
++		return PTR_ERR(data->regmap);
++	}
++
+ 	/*
+ 	 * Initialize the max31790 chip
+ 	 */
+-	err = max31790_init_client(client, data);
++	err = max31790_init_client(data->regmap, data);
+ 	if (err)
+ 		return err;
+ 
 -- 
-2.18.2
+2.30.1
 
