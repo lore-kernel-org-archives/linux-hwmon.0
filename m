@@ -2,102 +2,76 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-21.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9744BC433DB
-	for <linux-hwmon@archiver.kernel.org>; Thu,  4 Mar 2021 15:40:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16E54C43381
+	for <linux-hwmon@archiver.kernel.org>; Fri,  5 Mar 2021 09:53:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7009464F1E
-	for <linux-hwmon@archiver.kernel.org>; Thu,  4 Mar 2021 15:40:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DCFFE65004
+	for <linux-hwmon@archiver.kernel.org>; Fri,  5 Mar 2021 09:53:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235102AbhCDPjc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 4 Mar 2021 10:39:32 -0500
-Received: from mx3.molgen.mpg.de ([141.14.17.11]:40053 "EHLO mx1.molgen.mpg.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235261AbhCDPjV (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 4 Mar 2021 10:39:21 -0500
-Received: from localhost.localdomain (ip5f5aed34.dynamic.kabel-deutschland.de [95.90.237.52])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id D2AFF20645D71;
-        Thu,  4 Mar 2021 16:38:38 +0100 (CET)
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
+        id S229517AbhCEJxG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 5 Mar 2021 04:53:06 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43374 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229520AbhCEJxB (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 5 Mar 2021 04:53:01 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3B31264FE9;
+        Fri,  5 Mar 2021 09:53:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614937980;
+        bh=AQkQVnVFWVRfrhHzYaVpWwDXLniWq/KwNuU/2JTjAYY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=iqNNkl+XHv8aY7VPk/6k81fIjyJtp6YhO6A2g+MjsujC0oOp+s8+iY5r2rJ7SeNTI
+         kLlhwqxY6dC6hKKYMhY+7LYL7fE2VGdNNDP0ezbuHcsEK8geuQcxbbAfxmp3kKmFC1
+         +/oVDCy3xDfNe5a5Y78rz/1OIwiVkQezLeNgrABgbdou+VOr+6fEU/rTgLPfgGOJ0i
+         XKKqYucfJH5QY1zgt8j/M5MWGWCqaPBqqa/mV8AFrDt71Bh4aB8pAquMmPnL8gTsYW
+         mS6dcGrj75fwgeBBItL1lKJU7PA+3Yfml1l5/lOdt/xCUnQXKq9hUo3Z3oxnk6DaAv
+         QjX8FzC/CULrg==
+Date:   Fri, 5 Mar 2021 03:52:58 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, Guohan Lu <lguohan@gmail.com>,
-        Boyang Yu <byu@arista.com>, Paul Menzel <pmenzel@molgen.mpg.de>
-Subject: [PATCH] hwmon: (lm90) Fix false alarm when writing convrate on max6658
-Date:   Thu,  4 Mar 2021 16:38:32 +0100
-Message-Id: <20210304153832.19275-1-pmenzel@molgen.mpg.de>
-X-Mailer: git-send-email 2.30.1
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH RESEND][next] hwmon: (max6621) Fix fall-through warnings for
+ Clang
+Message-ID: <20210305095258.GA141583@embeddedor>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Boyang Yu <byu@arista.com>
+In preparation to enable -Wimplicit-fallthrough for Clang, fix a warning
+by explicitly adding a break statement instead of letting the code fall
+through to the next case.
 
-We found that the max6658 sometimes issues a false alarm when its
-convrate is changed, with the current hwmon driver. This workaround
-will fix it by stopping the conversion before setting the convrate.
-
-Upstream the patch added added to the SONiC Linux kernel in merge/pull
-request #82 [1][2].
-
-[1]: https://github.com/Azure/sonic-linux-kernel/pull/82
-[2]: https://github.com/Azure/sonic-linux-kernel/commit/d03f6167f64b2bfa1330ff7b33fe217f68ab7028
-
-[pmenzel: Forward port patch from 4.19 to 5.12-rc1+]
-Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
+Link: https://github.com/KSPP/linux/issues/115
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 ---
- drivers/hwmon/lm90.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ drivers/hwmon/max6621.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-index ebbfd5f352c0..0c1a91b715e8 100644
---- a/drivers/hwmon/lm90.c
-+++ b/drivers/hwmon/lm90.c
-@@ -639,7 +639,11 @@ static int lm90_set_convrate(struct i2c_client *client, struct lm90_data *data,
- 		if (interval >= update_interval * 3 / 4)
+diff --git a/drivers/hwmon/max6621.c b/drivers/hwmon/max6621.c
+index 367855d5edae..7821132e17fa 100644
+--- a/drivers/hwmon/max6621.c
++++ b/drivers/hwmon/max6621.c
+@@ -156,7 +156,7 @@ max6621_is_visible(const void *data, enum hwmon_sensor_types type, u32 attr,
+ 		default:
  			break;
- 
--	err = lm90_write_convrate(data, i);
-+	if (data->kind == max6657)
-+		err = max6657_write_convrate(client, i);
-+	else
-+		err = lm90_write_convrate(data, i);
-+
- 	data->update_interval = DIV_ROUND_CLOSEST(update_interval, 64);
- 	return err;
- }
-@@ -1649,7 +1653,11 @@ static void lm90_restore_conf(void *_data)
- 	struct i2c_client *client = data->client;
- 
- 	/* Restore initial configuration */
--	lm90_write_convrate(data, data->convrate_orig);
-+	if (data->kind == max6657)
-+		max6657_write_convrate(client, data->convrate_orig);
-+	else
-+		lm90_write_convrate(data, data->convrate_orig);
-+
- 	i2c_smbus_write_byte_data(client, LM90_REG_W_CONFIG1,
- 				  data->config_orig);
- }
-@@ -1672,7 +1680,8 @@ static int lm90_init_client(struct i2c_client *client, struct lm90_data *data)
- 	data->config_orig = config;
- 	data->config = config;
- 
--	lm90_set_convrate(client, data, 500); /* 500ms; 2Hz conversion rate */
-+	if (data->kind != max6657)
-+		lm90_set_convrate(client, data, 500); /* 500ms; 2Hz conversion rate */
- 
- 	/* Check Temperature Range Select */
- 	if (data->kind == adt7461 || data->kind == tmp451) {
+ 		}
+-
++		break;
+ 	default:
+ 		break;
+ 	}
 -- 
-2.30.1
+2.27.0
 
