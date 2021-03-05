@@ -2,76 +2,97 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 358B3C433E6
-	for <linux-hwmon@archiver.kernel.org>; Fri,  5 Mar 2021 09:54:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00A5AC433E6
+	for <linux-hwmon@archiver.kernel.org>; Fri,  5 Mar 2021 12:19:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DC78364FE8
-	for <linux-hwmon@archiver.kernel.org>; Fri,  5 Mar 2021 09:54:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B4E3164FEE
+	for <linux-hwmon@archiver.kernel.org>; Fri,  5 Mar 2021 12:19:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbhCEJyK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 5 Mar 2021 04:54:10 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43708 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229591AbhCEJyC (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 5 Mar 2021 04:54:02 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5E48464E6B;
-        Fri,  5 Mar 2021 09:54:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614938042;
-        bh=EDWczzYjws+UwHiOw+guGGb5YTRT6q0FhhbiEi73sYA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=WGEdAGRuk3ErvLHIAPXCtcYFC26hvLh2O2woRcKq7laRLWLheeQQQas/Y0rbYZT4j
-         R9kgxYxXoQ/Vhsc28b27KsHNe76XAN6zGpfzOWxKBJNkYj7ROymtWiS5Z/4AGfVkMX
-         cHtf94XdV9JBnSlgbtuDhunZaz5DEHRsYDkmhIofIgxYUISL3g+3CdyFJMiTVGIAKJ
-         v20pQo2iwr+isLhatOsFgYoB1tEuM+lf71eDNi46zQicbxK+O3kOn4TnaRE7QVLprJ
-         P4BA6/3qIKG2BdKatpAoqNFYP8PXjP25Du1nTkp3hUa0mJ3uFlLeWAsUuFlBtdqv12
-         eA91agR2Tl7ww==
-Date:   Fri, 5 Mar 2021 03:53:59 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Marius Zachmann <mail@mariuszachmann.de>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH RESEND][next] hwmon: (corsair-cpro) Fix fall-through warnings
- for Clang
-Message-ID: <20210305095359.GA141682@embeddedor>
+        id S229517AbhCEMSo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 5 Mar 2021 07:18:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34498 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229493AbhCEMSg (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 5 Mar 2021 07:18:36 -0500
+X-Greylist: delayed 605 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 05 Mar 2021 04:18:36 PST
+Received: from office2.cesnet.cz (office2.cesnet.cz [IPv6:2001:718:1:101::144:244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD1EC061574;
+        Fri,  5 Mar 2021 04:18:36 -0800 (PST)
+Received: from localhost (ip-94-112-197-160.net.upcbroadband.cz [94.112.197.160])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by office2.cesnet.cz (Postfix) with ESMTPSA id A7734400064;
+        Fri,  5 Mar 2021 13:08:27 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cesnet.cz;
+        s=office2-2020; t=1614946108;
+        bh=PrDtuf4GNCuIf4buOVLl6wJYuOH+X5xKlXypeeu9GN4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=jgMNm3hO/+H22rHcWQrHZDE5HcGXkdemAE/4whSzhI9xjMwYTSkINWYN89nyItky4
+         OzxeArZsGPHPWOg/XhpUtCsHX4Vy7uPsLVANoUwsmtoRbdBhgU8xp766Kj8387QpVo
+         gKvKYTNpYTT+uuhECJuAjZYZMoAJ3dyhvgjiR1hcO18yTQ10mmqJfKjMZij/iyMhPx
+         roMUNtx5JCMcmsV3SyMYi2ChexAPKT6PilPTXQTkDASgAHH98p1ecD1YSHZqwgCbQ/
+         JqDZPGNN2A/R7UEAJuJuRf9q914i1Lf740OWM1D7z9jZ5EcYM8H5qxhKxQ63XKKCmk
+         rEZV7l2wo6gdQ==
+From:   =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
+To:     =?iso-8859-1?Q?V=E1clav_Kubern=E1t?= <kubernat@cesnet.cz>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        <linux-hwmon@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 3/7] hwmon: (max31790) Allow setting pulses
+Date:   Fri, 05 Mar 2021 13:08:26 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Message-ID: <ad1c3054-e9a2-4299-aeed-94e36d6d3d12@cesnet.cz>
+In-Reply-To: <20210304105830.507176-3-kubernat@cesnet.cz>
+References: <20210304105830.507176-1-kubernat@cesnet.cz>
+ <20210304105830.507176-3-kubernat@cesnet.cz>
+Organization: CESNET
+User-Agent: Trojita/unstable-2020-07-06; Qt/5.15.2; xcb; Linux; 
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-In preparation to enable -Wimplicit-fallthrough for Clang, fix a warning
-by explicitly adding a break statement instead of letting the code fall
-through to the next case.
+> @@ -285,6 +295,9 @@ static int max31790_write_fan(struct device=20
+> *dev, u32 attr, int channel,
+>  =09=09=09=09   MAX31790_REG_FAN_CONFIG(channel),
+>  =09=09=09=09   data->fan_config[channel]);
+>  =09=09break;
+> +=09case hwmon_fan_pulses:
+> +=09=09data->pulses[channel] =3D val;
+> +=09=09break;
 
-Link: https://github.com/KSPP/linux/issues/115
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- drivers/hwmon/corsair-cpro.c | 1 +
- 1 file changed, 1 insertion(+)
+This needs input validation, otherwise it's possible to write 0 in there=20
+and you get a division-by-zero in the kernel context:
 
-diff --git a/drivers/hwmon/corsair-cpro.c b/drivers/hwmon/corsair-cpro.c
-index 591929ec217a..fa6aa4fc8b52 100644
---- a/drivers/hwmon/corsair-cpro.c
-+++ b/drivers/hwmon/corsair-cpro.c
-@@ -310,6 +310,7 @@ static int ccp_write(struct device *dev, enum hwmon_sensor_types type,
- 		default:
- 			break;
- 		}
-+		break;
- 	default:
- 		break;
- 	}
--- 
-2.27.0
+[102109.999968] Division by zero in kernel.
+[102110.003917] CPU: 1 PID: 27590 Comm: cat Not tainted 5.9.3-cla-cfb #42
+[102110.010462] Hardware name: Marvell Armada 380/385 (Device Tree)
+[102110.016497] [<c010f16c>] (unwind_backtrace) from [<c010ae40>]=20
+(show_stack+0x10/0x14)
+[102110.024355] [<c010ae40>] (show_stack) from [<c083ba30>]=20
+(dump_stack+0x94/0xa8)
+[102110.031689] [<c083ba30>] (dump_stack) from [<c083a3fc>]=20
+(Ldiv0+0x8/0x2c)
+[102110.038499] [<c083a3fc>] (Ldiv0) from [<c064c1ac>]=20
+(max31790_read+0x174/0x204)
+[102110.045836] [<c064c1ac>] (max31790_read) from [<c0646fdc>]=20
+(hwmon_attr_show+0x44/0x138)
+...
 
+A similar error can also happen when setting the fan speed to 0 RPM.=20
+That's, however, not an error caused by this patch series AFAIK. I *think*=20=
+
+that RPM_TO_REG should be changed to check if `rpm` is 0, and if so, set=20
+the register directly to the maximal value of 0x7ff (in another patch).
+
+With kind regards,
+Jan
