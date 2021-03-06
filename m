@@ -2,96 +2,80 @@ Return-Path: <SRS0=M25I=IE=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BBB1AC433E0
-	for <linux-hwmon@archiver.kernel.org>; Sat,  6 Mar 2021 04:55:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 968A9C433E0
+	for <linux-hwmon@archiver.kernel.org>; Sat,  6 Mar 2021 11:43:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 79B8F65011
-	for <linux-hwmon@archiver.kernel.org>; Sat,  6 Mar 2021 04:55:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5B0A164FEE
+	for <linux-hwmon@archiver.kernel.org>; Sat,  6 Mar 2021 11:43:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbhCFEy6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 5 Mar 2021 23:54:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53624 "EHLO mail.kernel.org"
+        id S230444AbhCFLm3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 6 Mar 2021 06:42:29 -0500
+Received: from ms-10.1blu.de ([178.254.4.101]:40518 "EHLO ms-10.1blu.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229919AbhCFEym (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 5 Mar 2021 23:54:42 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6459165004;
-        Sat,  6 Mar 2021 04:54:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615006481;
-        bh=Wa4Bw26HoIcAUd6ZQXNe09EtrI1nCHJH/RzeHCepf9I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T+GwdOmNNFxHZ9hWHvqkj5fS11o8kpPGKjXzfrWPMKdxUCl5fyz9O6jlXDlbRU42p
-         oSsJ+bIRcJS13KH3iSJdpAYGzZwWRL384hg9lWv5Eh0l8AoGT6P4ABK9n+s9hk9rxf
-         r8Ttggw/m+bTeJnEVxlsFuvy3P5e6AJjiqLdMgm8dWaHFCSDBgN79LxcY6sXHcHEXd
-         dXLdBSXpMJ+unfzLZg5hadmDYuYPBU7eqYxeIsxjTLcKtC4Oz3jhzeQsI8hVulILUS
-         Yf2VWo56OdGrYXoVfy/eSCkrgitFv4dJrOhBMYbyIMb2Q6XHGXoYStcp4v3ADUbu2T
-         Pz/tklQL58P2Q==
-Date:   Fri, 5 Mar 2021 22:54:39 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH RESEND][next] hwmon: (max6621) Fix fall-through warnings
- for Clang
-Message-ID: <20210306045439.GA179425@embeddedor>
-References: <20210305095258.GA141583@embeddedor>
- <20210306031847.GA192807@roeck-us.net>
+        id S230390AbhCFLmZ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 6 Mar 2021 06:42:25 -0500
+X-Greylist: delayed 3763 seconds by postgrey-1.27 at vger.kernel.org; Sat, 06 Mar 2021 06:42:24 EST
+Received: from [37.209.98.109] (helo=marius.localnet)
+        by ms-10.1blu.de with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.90_1)
+        (envelope-from <mail@mariuszachmann.de>)
+        id 1lIULQ-0004nW-5d; Sat, 06 Mar 2021 11:39:36 +0100
+From:   Marius Zachmann <mail@mariuszachmann.de>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH RESEND][next] hwmon: (corsair-cpro) Fix fall-through warnings for Clang
+Date:   Sat, 06 Mar 2021 11:39:35 +0100
+Message-ID: <107682713.BXpLqza3Di@marius>
+In-Reply-To: <20210305095359.GA141682@embeddedor>
+References: <20210305095359.GA141682@embeddedor>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210306031847.GA192807@roeck-us.net>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Con-Id: 241080
+X-Con-U: 0-mail
+X-Originating-IP: 37.209.98.109
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Guenter,
-
-On Fri, Mar 05, 2021 at 07:18:47PM -0800, Guenter Roeck wrote:
-> On Fri, Mar 05, 2021 at 03:52:58AM -0600, Gustavo A. R. Silva wrote:
-> > In preparation to enable -Wimplicit-fallthrough for Clang, fix a warning
-> > by explicitly adding a break statement instead of letting the code fall
-> > through to the next case.
-> > 
-> > Link: https://github.com/KSPP/linux/issues/115
-> > Acked-by: Guenter Roeck <linux@roeck-us.net>
-> > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> > ---
+On 06.03.21 at 10:53:59 CET, Gustavo A. R. Silva wrote
+> In preparation to enable -Wimplicit-fallthrough for Clang, fix a warning
+> by explicitly adding a break statement instead of letting the code fall
+> through to the next case.
 > 
-> I Acked those, thus assuming that they would be applied through some
-> other tree. If that is not the case, you'll need to let me know. The
-> resend only means to me that whatever tree was supposed to pick it up
-> did not do it, but it doesn't result in any action from my side.
+> Link: https://github.com/KSPP/linux/issues/115
+> Acked-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-This was not directed at you, in particular. I'm resending this for
-the cosideration of whomever is in charge of this code. If this is
-not taken or ignored once again, I will consider adding this to
-my own tree.
+Acked-by: Marius Zachmann <mail@mariuszachmann.de>
 
-Thanks
---
-Gustavo
+> ---
+>  drivers/hwmon/corsair-cpro.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/hwmon/corsair-cpro.c b/drivers/hwmon/corsair-cpro.c
+> index 591929ec217a..fa6aa4fc8b52 100644
+> --- a/drivers/hwmon/corsair-cpro.c
+> +++ b/drivers/hwmon/corsair-cpro.c
+> @@ -310,6 +310,7 @@ static int ccp_write(struct device *dev, enum hwmon_sensor_types type,
+>  		default:
+>  			break;
+>  		}
+> +		break;
+>  	default:
+>  		break;
+>  	}
+> 
 
-> >  drivers/hwmon/max6621.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/hwmon/max6621.c b/drivers/hwmon/max6621.c
-> > index 367855d5edae..7821132e17fa 100644
-> > --- a/drivers/hwmon/max6621.c
-> > +++ b/drivers/hwmon/max6621.c
-> > @@ -156,7 +156,7 @@ max6621_is_visible(const void *data, enum hwmon_sensor_types type, u32 attr,
-> >  		default:
-> >  			break;
-> >  		}
-> > -
-> > +		break;
-> >  	default:
-> >  		break;
-> >  	}
-> > -- 
-> > 2.27.0
-> > 
+
+
+
