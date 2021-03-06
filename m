@@ -2,205 +2,241 @@ Return-Path: <SRS0=M25I=IE=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7548C433E9
-	for <linux-hwmon@archiver.kernel.org>; Sat,  6 Mar 2021 20:59:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04EC0C433E0
+	for <linux-hwmon@archiver.kernel.org>; Sat,  6 Mar 2021 23:20:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 87D7F650CC
-	for <linux-hwmon@archiver.kernel.org>; Sat,  6 Mar 2021 20:59:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B7EA8650CC
+	for <linux-hwmon@archiver.kernel.org>; Sat,  6 Mar 2021 23:20:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbhCFU71 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 6 Mar 2021 15:59:27 -0500
-Received: from mail-qt1-f182.google.com ([209.85.160.182]:40353 "EHLO
-        mail-qt1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbhCFU7E (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 6 Mar 2021 15:59:04 -0500
-Received: by mail-qt1-f182.google.com with SMTP id h9so4681016qtq.7;
-        Sat, 06 Mar 2021 12:59:03 -0800 (PST)
+        id S229816AbhCFXUV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 6 Mar 2021 18:20:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33498 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229788AbhCFXUJ (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 6 Mar 2021 18:20:09 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC33C06175F
+        for <linux-hwmon@vger.kernel.org>; Sat,  6 Mar 2021 15:20:08 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id t9so9863893ljt.8
+        for <linux-hwmon@vger.kernel.org>; Sat, 06 Mar 2021 15:20:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=F189AKy36rkAyUhq6xOs3heAuW+B8SgtaLCtPHkhFmE=;
+        b=XH28pMO3ZiH72pXpt8sEoQYpF31BKX++/NM182YjsWz6QU8ky2Sg2KqI5gWkWCeqef
+         FE712P8cXNjiodzLsxWJ9cb4BmVw3Rzv1DdRpipaTnrlfNEOYvqX9PrcS3fHZrR5ifKP
+         CpKTJJIm6VIFVkTE5nvAPIfx2mveD7yGgCUCear1e6v6z3E05TQMkKcx+8B32VUXyRjF
+         zABLQIMyO7xxyZvYt8VIQ+cPiawDuKEB2Ck32gXpewzcBS1c61DNahXuRIFNw/vlgqiO
+         eUBPnDy61hhw/09/a1zkhQ60K5FzsjgGSSA4MLgLpcnoUt1QjU4odzN9HLdycSxtGC4g
+         nYQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SFEqSSwSe/KzR9VZCsRqchghKKejji8suG50GSay0+M=;
-        b=W4rdmm2fDmygn+S1ssF5Fr40mQQfX8G+0XnjsJB7X53XVaFiZJMOBp1aiJlGYzQGUv
-         HMNuStEyoSOTUUwwvEtxOTlnGMSX6m0/p2mu2+3lXa9w7ThoOUrXQKpWF+jTz9v7Ob8G
-         WIcPEu15c2VMlHyvNJyAcoWUfcILtlvPeUAbcS/UaoCUZ4IRlSK4H3V2lohd2ph9K24j
-         gVXJMeSFhNSnutE0xygu/n1xjpNTJJ12KMK/XNHqNs1PGwkPV0yl+y7CopvMbOMG0ZQC
-         oFJidG8xNAY+VaFH2X49ULnHEhXxIsde0tYDdvzOzHjcqgitj+8g7nxqhM/jLmaT+wMD
-         3gLw==
-X-Gm-Message-State: AOAM530wMSIF/MhSJS2UZ+Ang6JVz2qLXkS6aavgwuzAaLCoi7M7f3Mk
-        yIAivcki8NB91QQtQ6gmFg==
-X-Google-Smtp-Source: ABdhPJzrYbstCQbyHTs+LKACy+Q3EGh7gYXWL5eAQ6ICuGWnppDHWTdn2sYJwbL2bRd21rCJqClYwA==
-X-Received: by 2002:ac8:7359:: with SMTP id q25mr15066984qtp.202.1615064343319;
-        Sat, 06 Mar 2021 12:59:03 -0800 (PST)
-Received: from robh.at.kernel.org ([172.58.27.98])
-        by smtp.gmail.com with ESMTPSA id v187sm4551721qkd.50.2021.03.06.12.58.58
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=F189AKy36rkAyUhq6xOs3heAuW+B8SgtaLCtPHkhFmE=;
+        b=PlJbBGwS0BQ00+j2NqNnvkLAz5Fb/sncjf8H1XfsJafsuel53KK/+LoIUhKTHOJ/QP
+         inlmm+C+UmH6kWuJuaBGq96Xzus1eXEWyX0qc4jvFnI5f9yELsXPk+0Slm4OuYDXL1M9
+         DnhN+8A7CKXsCNVPlX++n5arlnW4cwwY0kpkkTpvT4rqNr04zN01Y6bdgHmi2nii/FNU
+         gw6W3CyPrNO3w8wCNhU+Bzsu+HsEleW+YAYeS/U3AyWOvl7RsqTDIYb1smKAsD5UfEfk
+         qhrxZBiEzb3B93Sb2yHHgAyRHZMO11GC9sxSANcOF/EMP0Mn5djowu0PgmsJCAr39j+a
+         OSxw==
+X-Gm-Message-State: AOAM531Bf39yq1Zke6EygAJArHGlX4j6xZ4vQ67/eNHGX5ISjvzT2Xn9
+        aAv2eFWoXM2d8sX8IEl4PZt3O+xrXOXLpUvd
+X-Google-Smtp-Source: ABdhPJxfmUXfTC/8UVxofvBnHz7OqqcHNuspn1rBruIby5AlpdoSJsnl9w5wZLodUYJkxlBlYFx4UA==
+X-Received: by 2002:a2e:700a:: with SMTP id l10mr9490189ljc.368.1615072806800;
+        Sat, 06 Mar 2021 15:20:06 -0800 (PST)
+Received: from localhost.localdomain (c-d7cb225c.014-348-6c756e10.bbcust.telenor.se. [92.34.203.215])
+        by smtp.gmail.com with ESMTPSA id c16sm797704lft.264.2021.03.06.15.20.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 Mar 2021 12:59:02 -0800 (PST)
-Received: (nullmailer pid 1202783 invoked by uid 1000);
-        Sat, 06 Mar 2021 20:58:55 -0000
-Date:   Sat, 6 Mar 2021 13:58:55 -0700
-From:   Rob Herring <robh@kernel.org>
-To:     Quan Nguyen <quan@os.amperecomputing.com>
-Cc:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
-        Jean Delvare <jdelvare@suse.com>,
+        Sat, 06 Mar 2021 15:20:06 -0800 (PST)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org,
-        Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-Subject: Re: [PATCH 1/4] dt-bindings: mfd: Add bindings for Ampere Altra
- SMPro drivers
-Message-ID: <20210306205855.GA1195877@robh.at.kernel.org>
-References: <20210225101854.13896-1-quan@os.amperecomputing.com>
- <20210225101854.13896-2-quan@os.amperecomputing.com>
+        Jonathan Cameron <jic23@cam.ac.uk>
+Cc:     linux-hwmon@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Peter Rosin <peda@axentia.se>,
+        Chris Lesiak <chris.lesiak@licor.com>,
+        linux-iio@vger.kernel.org
+Subject: [PATCH v3] hwmon: (ntc_thermistor): try reading processed
+Date:   Sun,  7 Mar 2021 00:20:04 +0100
+Message-Id: <20210306232004.2400379-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210225101854.13896-2-quan@os.amperecomputing.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Feb 25, 2021 at 05:18:51PM +0700, Quan Nguyen wrote:
-> Adds device tree bindings for SMPro drivers found on the Mt.Jade hardware
-> reference platform with Ampere's Altra Processor family.
-> 
-> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
-> ---
->  .../bindings/hwmon/ampere,ac01-hwmon.yaml     | 27 ++++++
->  .../bindings/mfd/ampere,ac01-smpro.yaml       | 82 +++++++++++++++++++
->  2 files changed, 109 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/ampere,ac01-hwmon.yaml
->  create mode 100644 Documentation/devicetree/bindings/mfd/ampere,ac01-smpro.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/ampere,ac01-hwmon.yaml b/Documentation/devicetree/bindings/hwmon/ampere,ac01-hwmon.yaml
-> new file mode 100644
-> index 000000000000..d13862ba646b
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/ampere,ac01-hwmon.yaml
-> @@ -0,0 +1,27 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/ampere,ac01-hwmon.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Hardware monitoring driver for the Ampere Altra SMPro
-> +
-> +maintainers:
-> +  - Quan Nguyen <quan@os.amperecomputing.com>
-> +
-> +description: |
-> +  This module is part of the Ampere Altra SMPro multi-function device. For more
-> +  details see ../mfd/ampere,ac01-smpro.yaml.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - ampere,ac01-hwmon
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +
-> +additionalProperties: false
-> diff --git a/Documentation/devicetree/bindings/mfd/ampere,ac01-smpro.yaml b/Documentation/devicetree/bindings/mfd/ampere,ac01-smpro.yaml
-> new file mode 100644
-> index 000000000000..06b0239413ae
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/ampere,ac01-smpro.yaml
-> @@ -0,0 +1,82 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/ampere,ac01-smpro.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Ampere Altra SMPro firmware driver
-> +
-> +maintainers:
-> +  - Quan Nguyen <quan@os.amperecomputing.com>
-> +
-> +description: |
-> +  Ampere Altra SMPro firmware may contain different blocks like hardware
-> +  monitoring, error monitoring and other miscellaneous features.
-> +
-> +properties:
-> +  compatible:
-> +    const: ampere,ac01-smpro
-> +
-> +  reg:
-> +    description:
-> +      I2C device address.
-> +    maxItems: 1
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 0
-> +
-> +patternProperties:
-> +  "^hwmon(@[0-9a-f]+)?$":
-> +    $ref: ../hwmon/ampere,ac01-hwmon.yaml
-> +
-> +  "^misc(@[0-9a-f]+)?$":
-> +    type: object
-> +    description: Ampere Altra SMPro Misc driver
-> +    properties:
-> +      compatible:
-> +        const: "ampere,ac01-misc"
-> +
-> +  "^errmon(@[0-9a-f]+)?$":
-> +    type: object
-> +    description: Ampere Altra SMPro Error Monitor driver
-> +    properties:
-> +      compatible:
-> +        const: "ampere,ac01-errmon"
-> +
-> +required:
-> +  - "#address-cells"
-> +  - "#size-cells"
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        smpro@4f {
-> +            compatible = "ampere,ac01-smpro";
-> +            reg = <0x4f>;
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +
-> +            hwmon {
-> +                compatible = "ampere,ac01-hwmon";
-> +            };
-> +
-> +            misc {
-> +                compatible = "ampere,ac01-misc";
-> +            };
-> +
-> +            errmon {
-> +                compatible = "ampere,ac01-errmon";
-> +            };
+Before trying the custom method of reading the sensor
+as raw and then converting, we want to use
+iio_read_channel_processed() which first tries to
+see if the ADC can provide a processed value directly,
+else reads raw and applies scaling inside of IIO
+using the scale attributes of the ADC. We need to
+multiply the scaled value with 1000 to get to
+microvolts from millivolts which is what processed
+IIO channels returns.
 
-No of these have any properties or resources, why do you need them? DT 
-is not the only way to instantiate drivers...
+Since the old iio_read_channel_processed() would
+lose precision if we fall back to reading raw and
+scaling, we introduce a new API that will pass in
+the scale factor, iio_read_channel_processed_scale(),
+as part of this patch.
 
-Rob
+Keep the code that assumes 12bit ADC around as a
+fallback.
+
+This gives correct readings on the AB8500 thermistor
+inputs used in the Ux500 HREFP520 platform for reading
+battery and board temperature.
+
+Cc: Peter Rosin <peda@axentia.se>
+Cc: Chris Lesiak <chris.lesiak@licor.com>
+Cc: Jonathan Cameron <jic23@cam.ac.uk>
+Cc: linux-iio@vger.kernel.org
+Link: https://lore.kernel.org/linux-iio/20201224011607.1059534-1-linus.walleij@linaro.org/
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ChangeLog v2->v3:
+- After discussion about v2 we concludes that
+  iio_read_channel_processed() could loose precision
+  so we introduce a new API to read processed and
+  scale.
+- Include a link to the v2 discussion for reference.
+- For ease of applying to the hwmon tree, keep it all
+  in one patch.
+- This needs Jonathans ACK to be merged through hwmon.
+ChangeLog v1->v2:
+- Fix the patch to multiply the processed value by
+  1000 to get to microvolts from millivolts.
+- Fix up the confusion in the commit message.
+- Drop pointless comments about the code, we keep the
+  original code path around if processed reads don't
+  work, nothing bad with that.
+---
+ drivers/hwmon/ntc_thermistor.c | 27 ++++++++++++++++++---------
+ drivers/iio/inkern.c           | 15 +++++++++++++--
+ include/linux/iio/consumer.h   | 15 +++++++++++++++
+ 3 files changed, 46 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/hwmon/ntc_thermistor.c b/drivers/hwmon/ntc_thermistor.c
+index 3aad62a0e661..8587189c7f15 100644
+--- a/drivers/hwmon/ntc_thermistor.c
++++ b/drivers/hwmon/ntc_thermistor.c
+@@ -326,18 +326,27 @@ struct ntc_data {
+ static int ntc_adc_iio_read(struct ntc_thermistor_platform_data *pdata)
+ {
+ 	struct iio_channel *channel = pdata->chan;
+-	int raw, uv, ret;
++	int uv, ret;
+ 
+-	ret = iio_read_channel_raw(channel, &raw);
++	ret = iio_read_channel_processed_scale(channel, &uv, 1000);
+ 	if (ret < 0) {
+-		pr_err("read channel() error: %d\n", ret);
+-		return ret;
+-	}
++		int raw;
+ 
+-	ret = iio_convert_raw_to_processed(channel, raw, &uv, 1000);
+-	if (ret < 0) {
+-		/* Assume 12 bit ADC with vref at pullup_uv */
+-		uv = (pdata->pullup_uv * (s64)raw) >> 12;
++		/*
++		 * This fallback uses a raw read and then
++		 * assumes the ADC is 12 bits, scaling with
++		 * a factor 1000 to get to microvolts.
++		 */
++		ret = iio_read_channel_raw(channel, &raw);
++		if (ret < 0) {
++			pr_err("read channel() error: %d\n", ret);
++			return ret;
++		}
++		ret = iio_convert_raw_to_processed(channel, raw, &uv, 1000);
++		if (ret < 0) {
++			/* Assume 12 bit ADC with vref at pullup_uv */
++			uv = (pdata->pullup_uv * (s64)raw) >> 12;
++		}
+ 	}
+ 
+ 	return uv;
+diff --git a/drivers/iio/inkern.c b/drivers/iio/inkern.c
+index db77a2d4a56b..6a842c6b6705 100644
+--- a/drivers/iio/inkern.c
++++ b/drivers/iio/inkern.c
+@@ -688,7 +688,8 @@ int iio_read_channel_offset(struct iio_channel *chan, int *val, int *val2)
+ }
+ EXPORT_SYMBOL_GPL(iio_read_channel_offset);
+ 
+-int iio_read_channel_processed(struct iio_channel *chan, int *val)
++int iio_read_channel_processed_scale(struct iio_channel *chan, int *val,
++				     unsigned int scale)
+ {
+ 	int ret;
+ 
+@@ -701,11 +702,14 @@ int iio_read_channel_processed(struct iio_channel *chan, int *val)
+ 	if (iio_channel_has_info(chan->channel, IIO_CHAN_INFO_PROCESSED)) {
+ 		ret = iio_channel_read(chan, val, NULL,
+ 				       IIO_CHAN_INFO_PROCESSED);
++		if (!ret)
++			*val *= scale;
+ 	} else {
+ 		ret = iio_channel_read(chan, val, NULL, IIO_CHAN_INFO_RAW);
+ 		if (ret < 0)
+ 			goto err_unlock;
+-		ret = iio_convert_raw_to_processed_unlocked(chan, *val, val, 1);
++		ret = iio_convert_raw_to_processed_unlocked(chan, *val, val,
++							    scale);
+ 	}
+ 
+ err_unlock:
+@@ -713,6 +717,13 @@ int iio_read_channel_processed(struct iio_channel *chan, int *val)
+ 
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(iio_read_channel_processed_scale);
++
++int iio_read_channel_processed(struct iio_channel *chan, int *val)
++{
++	/* This is just a special case with scale factor 1 */
++	return iio_read_channel_processed_scale(chan, val, 1);
++}
+ EXPORT_SYMBOL_GPL(iio_read_channel_processed);
+ 
+ int iio_read_channel_scale(struct iio_channel *chan, int *val, int *val2)
+diff --git a/include/linux/iio/consumer.h b/include/linux/iio/consumer.h
+index 0a90ba8fa1bb..5fa5957586cf 100644
+--- a/include/linux/iio/consumer.h
++++ b/include/linux/iio/consumer.h
+@@ -241,6 +241,21 @@ int iio_read_channel_average_raw(struct iio_channel *chan, int *val);
+  */
+ int iio_read_channel_processed(struct iio_channel *chan, int *val);
+ 
++/**
++ * iio_read_channel_processed_scale() - read and scale a processed value
++ * @chan:		The channel being queried.
++ * @val:		Value read back.
++ * @scale:		Scale factor to apply during the conversion
++ *
++ * Returns an error code or 0.
++ *
++ * This function will read a processed value from a channel. This will work
++ * like @iio_read_channel_processed() but also scale with an additional
++ * scale factor while attempting to minimize any precision loss.
++ */
++int iio_read_channel_processed_scale(struct iio_channel *chan, int *val,
++				     unsigned int scale);
++
+ /**
+  * iio_write_channel_attribute() - Write values to the device attribute.
+  * @chan:	The channel being queried.
+-- 
+2.29.2
+
