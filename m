@@ -1,73 +1,112 @@
-Return-Path: <SRS0=BtX+=ID=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <SRS0=M25I=IE=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D820BC43333
-	for <linux-hwmon@archiver.kernel.org>; Fri,  5 Mar 2021 18:45:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9A82C433DB
+	for <linux-hwmon@archiver.kernel.org>; Sat,  6 Mar 2021 03:19:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AE76F650AC
-	for <linux-hwmon@archiver.kernel.org>; Fri,  5 Mar 2021 18:45:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7EAD765011
+	for <linux-hwmon@archiver.kernel.org>; Sat,  6 Mar 2021 03:19:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbhCESpM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 5 Mar 2021 13:45:12 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:63644 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230051AbhCESoo (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 5 Mar 2021 13:44:44 -0500
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 0.83.537)
- id de62d34a7a55f328; Fri, 5 Mar 2021 19:44:42 +0100
-Received: from kreacher.localnet (89-64-81-9.dynamic.chello.pl [89.64.81.9])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id D678C663EA1;
-        Fri,  5 Mar 2021 19:44:40 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        linux-iio@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: [PATCH v1 0/4] ACPI: New helper for warning messages and replacing ACPI_EXCEPTION()
-Date:   Fri, 05 Mar 2021 19:39:31 +0100
-Message-ID: <2775419.haJ69vZeI0@kreacher>
+        id S229781AbhCFDTK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 5 Mar 2021 22:19:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58312 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229701AbhCFDTB (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 5 Mar 2021 22:19:01 -0500
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903ADC06175F;
+        Fri,  5 Mar 2021 19:18:50 -0800 (PST)
+Received: by mail-oi1-x231.google.com with SMTP id w65so4791794oie.7;
+        Fri, 05 Mar 2021 19:18:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=JCDq+uiwLZuYstNdKdn+4e8HqRfAw2eH/rMEXDRybbE=;
+        b=JTRFyxLsRecAMj8Q435NNZB4GoPigS+YpFm9a2PBges//gsP/f/x8nallCT8n3J9wb
+         IH9KAT1MrDZhjyYgPpyEQDLRIx7K8zm35o9viInXvt95WZn8/NWx5OVUHRnbQ3wiPY5Z
+         W/aV+RrGVU9JYhf4QNnJuW3kblSF5XYYPdpIyyWrlfiAhCvNGkxq1URo/+SMx75dSuDA
+         NEmAJORGFfz2Xi5yY1a/nYEvdzoQXc7LnAHaGlpuHBlTYSO5aCLk24xWiJEWN43CZvqr
+         /TQCMJpAWAIfttc7FtMgJSjLnD1FYiNnvZAJe8pZD9vz3jyOgIoTX2vZ5f2xJryHQ71Q
+         A6gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=JCDq+uiwLZuYstNdKdn+4e8HqRfAw2eH/rMEXDRybbE=;
+        b=NbfM4NsuRQGLTP9vanVUNPJ55eu7Dmb9idX7//IzUYG5/IFIgQPSIzJWgA4jeryoSQ
+         zSDphyH43XI86apVI2zdgJkWC6ombQiXdCbTFNA75T2wj5BL3WI86RDqOCieViHUs1gz
+         aWUjeZEkyNQdJbqOkzrHCLVoRh8kr4pvS47w4AV2VWs/+Y46p+E4sCllY/rQCrOrIukd
+         mYzw6sODCskVtqCym4IN2V+1AYK6YstQaBrfx0AGO9JQAbOvmefYB5vrxzddU8dq9D5o
+         xhRTqEzrbU+R1XksyyxwMaSK9rkgg9iYBe5ecKHmqMSGuPcnKj/QLfJxRyjTxOaCR0tl
+         GDgw==
+X-Gm-Message-State: AOAM530N0BaWgJeli4IP6BSleptpoDfFDUIVDcFf7NrOBLIFnKDfHwhA
+        iUC+cK4E2/rhhkROb3V5hu9scu3BZyA=
+X-Google-Smtp-Source: ABdhPJy2uT+T8viNA0/5UJKBmZXkZdseYpUtXPUB0A1kEe+oXR+fJnvMJooG55/tsHvWBekNBpCCxg==
+X-Received: by 2002:a05:6808:128e:: with SMTP id a14mr9706357oiw.71.1615000729991;
+        Fri, 05 Mar 2021 19:18:49 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a6sm819970otq.79.2021.03.05.19.18.48
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 05 Mar 2021 19:18:48 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 5 Mar 2021 19:18:47 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH RESEND][next] hwmon: (max6621) Fix fall-through warnings
+ for Clang
+Message-ID: <20210306031847.GA192807@roeck-us.net>
+References: <20210305095258.GA141583@embeddedor>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduledruddtiedguddtjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkfgggfgtsehtufertddttddvnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvedufefggeeutdejvdfhteevgeeludevueevvdejkeelfefhudfhfeehkefffeevnecukfhppeekledrieegrdekuddrleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeekledrieegrdekuddrledphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtohepjhhitgdvfeeskhgvrhhnvghlrdhorhhgpdhrtghpthht
- oheplhgrrhhssehmvghtrghfohhordguvgdprhgtphhtthhopehpmhgvvghrfiesphhmvggvrhifrdhnvghtpdhrtghpthhtoheplhhinhhugidqihhiohesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehjuggvlhhvrghrvgesshhushgvrdgtohhmpdhrtghpthhtoheplhhinhhugiesrhhovggtkhdquhhsrdhnvghtpdhrtghpthhtoheplhhinhhugidqhhifmhhonhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=11 Fuz1=11 Fuz2=11
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210305095258.GA141583@embeddedor>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi All,
+On Fri, Mar 05, 2021 at 03:52:58AM -0600, Gustavo A. R. Silva wrote:
+> In preparation to enable -Wimplicit-fallthrough for Clang, fix a warning
+> by explicitly adding a break statement instead of letting the code fall
+> through to the next case.
+> 
+> Link: https://github.com/KSPP/linux/issues/115
+> Acked-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> ---
 
-The purpose of this series is to get rid of the remaining (questionable)
-usage of ACPI_EXCEPTION() outside ACPICA.
+I Acked those, thus assuming that they would be applied through some
+other tree. If that is not the case, you'll need to let me know. The
+resend only means to me that whatever tree was supposed to pick it up
+did not do it, but it doesn't result in any action from my side.
 
-The first patch is a tiny cleanup of the ACPI processor driver, but it is
-depended on by the second one which in turn is depended on by the last two.
+Guenter
 
-The second patch introduces a new helper function for logging messages
-regarding ACPI object evaluation failures and makes some code under
-drivers/acpi/ use it.
-
-The other two patches use the new helper to get rid of ACPI_EXCEPTION()
-and the related definitions from the acpi-als and acpi_power_meter drivers.
-
-Please see the patch changelogs for details.
-
-Thanks!
-
-
-
+>  drivers/hwmon/max6621.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/max6621.c b/drivers/hwmon/max6621.c
+> index 367855d5edae..7821132e17fa 100644
+> --- a/drivers/hwmon/max6621.c
+> +++ b/drivers/hwmon/max6621.c
+> @@ -156,7 +156,7 @@ max6621_is_visible(const void *data, enum hwmon_sensor_types type, u32 attr,
+>  		default:
+>  			break;
+>  		}
+> -
+> +		break;
+>  	default:
+>  		break;
+>  	}
+> -- 
+> 2.27.0
+> 
