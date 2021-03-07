@@ -2,230 +2,104 @@ Return-Path: <SRS0=mDK7=IF=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.5 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E93FC433E0
-	for <linux-hwmon@archiver.kernel.org>; Sun,  7 Mar 2021 12:42:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7D06C433E0
+	for <linux-hwmon@archiver.kernel.org>; Sun,  7 Mar 2021 22:53:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 01263650FA
-	for <linux-hwmon@archiver.kernel.org>; Sun,  7 Mar 2021 12:42:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 94E7065155
+	for <linux-hwmon@archiver.kernel.org>; Sun,  7 Mar 2021 22:53:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230480AbhCGMmH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 7 Mar 2021 07:42:07 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48088 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231296AbhCGMmG (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 7 Mar 2021 07:42:06 -0500
-Received: from archlinux (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
+        id S230341AbhCGWx1 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 7 Mar 2021 17:53:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53664 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233207AbhCGWxB (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 7 Mar 2021 17:53:01 -0500
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22AB8C06174A
+        for <linux-hwmon@vger.kernel.org>; Sun,  7 Mar 2021 14:53:01 -0800 (PST)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AE16E64F5B;
-        Sun,  7 Mar 2021 12:42:04 +0000 (UTC)
-Date:   Sun, 7 Mar 2021 12:42:00 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Cameron <jic23@cam.ac.uk>,
-        linux-hwmon@vger.kernel.org, Peter Rosin <peda@axentia.se>,
-        Chris Lesiak <chris.lesiak@licor.com>,
-        linux-iio@vger.kernel.org
-Subject: Re: [PATCH v3] hwmon: (ntc_thermistor): try reading processed
-Message-ID: <20210307124200.5cc66f84@archlinux>
-In-Reply-To: <20210306232004.2400379-1-linus.walleij@linaro.org>
-References: <20210306232004.2400379-1-linus.walleij@linaro.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 6C335891AE;
+        Mon,  8 Mar 2021 11:52:54 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1615157574;
+        bh=/uKpJ5Y+T9LW6SOC8eRw1AlWYpZCA12/OQkujPvvcJY=;
+        h=From:To:CC:Subject:Date;
+        b=GaUPz3mmGUBnXWWeJo65ql5yaIUz9E8ejIt68W1/UW14ePNIzX7emnkI0fBhGBT3x
+         cJQMFFzkiHVOY5vnAB9eFH/0mPoq9OCurVHzEhZylgDxQw3433CvQG07QQcbMNYXu3
+         6AhUCEpTrEmFk/xB2yXQjbcuZAvsxJxr1+9mzLDU2GLqjRH43XVbvbxaiIdTfSPtRK
+         oVTAKnoieZOjhMggKeK5w1jowP4NdbNejouZFk1fcFT8sSs4RjUpp2uP/7k9ScRbMW
+         n/337qaBOEo6GfOHuw2wrLAMc0YTDGf/Bmnchlqqz4kUM5YmJgXv9HEVzhzQ4rE6ft
+         fiepq67lhkkjA==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B604559460001>; Mon, 08 Mar 2021 11:52:54 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
+ by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
+ Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 8 Mar 2021 11:52:54 +1300
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.012; Mon, 8 Mar 2021 11:52:54 +1300
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     "jdelvare@suse.com" <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Errant readings on LM81 with T2080 SoC
+Thread-Topic: Errant readings on LM81 with T2080 SoC
+Thread-Index: AQHXE6SbssdAOSHgwE+zIRhtn11Skw==
+Date:   Sun, 7 Mar 2021 22:52:53 +0000
+Message-ID: <8e0a88ba-01e9-9bc1-c78b-20f26ce27d12@alliedtelesis.co.nz>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <F132F842DDAF194C9B19A1C4261BD2BA@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=C7uXNjH+ c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=dESyimp9J3IA:10 a=v3EFt_4kAAAA:20 a=sozttTNsAAAA:8 a=1L_YXzs6ym7sghQsxOAA:9 a=QEXdDO2ut3YA:10 a=aeg5Gbbo78KNqacMgKqU:22 a=BPzZvq435JnGatEyYwdK:22 a=pHzHmUro8NiASowvMSCR:22 a=nt3jZW36AmriUCFCBwmW:22
+X-SEG-SpamProfiler-Score: 0
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun,  7 Mar 2021 00:20:04 +0100
-Linus Walleij <linus.walleij@linaro.org> wrote:
-
-> Before trying the custom method of reading the sensor
-> as raw and then converting, we want to use
-> iio_read_channel_processed() which first tries to
-> see if the ADC can provide a processed value directly,
-> else reads raw and applies scaling inside of IIO
-> using the scale attributes of the ADC. We need to
-> multiply the scaled value with 1000 to get to
-> microvolts from millivolts which is what processed
-> IIO channels returns.
-> 
-> Since the old iio_read_channel_processed() would
-> lose precision if we fall back to reading raw and
-> scaling, we introduce a new API that will pass in
-> the scale factor, iio_read_channel_processed_scale(),
-> as part of this patch.
-> 
-> Keep the code that assumes 12bit ADC around as a
-> fallback.
-> 
-> This gives correct readings on the AB8500 thermistor
-> inputs used in the Ux500 HREFP520 platform for reading
-> battery and board temperature.
-> 
-> Cc: Peter Rosin <peda@axentia.se>
-> Cc: Chris Lesiak <chris.lesiak@licor.com>
-> Cc: Jonathan Cameron <jic23@cam.ac.uk>
-> Cc: linux-iio@vger.kernel.org
-> Link: https://lore.kernel.org/linux-iio/20201224011607.1059534-1-linus.walleij@linaro.org/
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-
-One trivial inline, but basic approach looks good to me.
-
-As Guenter suggested, should be broken up into several patches.
-If nothing else it'll make backports easier for anyone who wants
-this functionality for a different driver / usecase.
-
-Thanks,
-
-Jonathan
-
-> ---
-> ChangeLog v2->v3:
-> - After discussion about v2 we concludes that
->   iio_read_channel_processed() could loose precision
->   so we introduce a new API to read processed and
->   scale.
-> - Include a link to the v2 discussion for reference.
-> - For ease of applying to the hwmon tree, keep it all
->   in one patch.
-> - This needs Jonathans ACK to be merged through hwmon.
-> ChangeLog v1->v2:
-> - Fix the patch to multiply the processed value by
->   1000 to get to microvolts from millivolts.
-> - Fix up the confusion in the commit message.
-> - Drop pointless comments about the code, we keep the
->   original code path around if processed reads don't
->   work, nothing bad with that.
-> ---
->  drivers/hwmon/ntc_thermistor.c | 27 ++++++++++++++++++---------
->  drivers/iio/inkern.c           | 15 +++++++++++++--
->  include/linux/iio/consumer.h   | 15 +++++++++++++++
->  3 files changed, 46 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/hwmon/ntc_thermistor.c b/drivers/hwmon/ntc_thermistor.c
-> index 3aad62a0e661..8587189c7f15 100644
-> --- a/drivers/hwmon/ntc_thermistor.c
-> +++ b/drivers/hwmon/ntc_thermistor.c
-> @@ -326,18 +326,27 @@ struct ntc_data {
->  static int ntc_adc_iio_read(struct ntc_thermistor_platform_data *pdata)
->  {
->  	struct iio_channel *channel = pdata->chan;
-> -	int raw, uv, ret;
-> +	int uv, ret;
->  
-> -	ret = iio_read_channel_raw(channel, &raw);
-> +	ret = iio_read_channel_processed_scale(channel, &uv, 1000);
->  	if (ret < 0) {
-> -		pr_err("read channel() error: %d\n", ret);
-> -		return ret;
-> -	}
-> +		int raw;
->  
-> -	ret = iio_convert_raw_to_processed(channel, raw, &uv, 1000);
-> -	if (ret < 0) {
-> -		/* Assume 12 bit ADC with vref at pullup_uv */
-> -		uv = (pdata->pullup_uv * (s64)raw) >> 12;
-> +		/*
-> +		 * This fallback uses a raw read and then
-> +		 * assumes the ADC is 12 bits, scaling with
-> +		 * a factor 1000 to get to microvolts.
-> +		 */
-> +		ret = iio_read_channel_raw(channel, &raw);
-> +		if (ret < 0) {
-> +			pr_err("read channel() error: %d\n", ret);
-> +			return ret;
-> +		}
-> +		ret = iio_convert_raw_to_processed(channel, raw, &uv, 1000);
-> +		if (ret < 0) {
-> +			/* Assume 12 bit ADC with vref at pullup_uv */
-> +			uv = (pdata->pullup_uv * (s64)raw) >> 12;
-> +		}
->  	}
->  
->  	return uv;
-> diff --git a/drivers/iio/inkern.c b/drivers/iio/inkern.c
-> index db77a2d4a56b..6a842c6b6705 100644
-> --- a/drivers/iio/inkern.c
-> +++ b/drivers/iio/inkern.c
-> @@ -688,7 +688,8 @@ int iio_read_channel_offset(struct iio_channel *chan, int *val, int *val2)
->  }
->  EXPORT_SYMBOL_GPL(iio_read_channel_offset);
->  
-> -int iio_read_channel_processed(struct iio_channel *chan, int *val)
-> +int iio_read_channel_processed_scale(struct iio_channel *chan, int *val,
-> +				     unsigned int scale)
->  {
->  	int ret;
->  
-> @@ -701,11 +702,14 @@ int iio_read_channel_processed(struct iio_channel *chan, int *val)
->  	if (iio_channel_has_info(chan->channel, IIO_CHAN_INFO_PROCESSED)) {
->  		ret = iio_channel_read(chan, val, NULL,
->  				       IIO_CHAN_INFO_PROCESSED);
-> +		if (!ret)
-> +			*val *= scale;
-To keep it inline with other code around here I'd prefer.
-
-		if (ret)
-			got err_unlock;
-
-		*val *= scale;
-
->  	} else {
->  		ret = iio_channel_read(chan, val, NULL, IIO_CHAN_INFO_RAW);
->  		if (ret < 0)
->  			goto err_unlock;
-> -		ret = iio_convert_raw_to_processed_unlocked(chan, *val, val, 1);
-> +		ret = iio_convert_raw_to_processed_unlocked(chan, *val, val,
-> +							    scale);
->  	}
->  
->  err_unlock:
-> @@ -713,6 +717,13 @@ int iio_read_channel_processed(struct iio_channel *chan, int *val)
->  
->  	return ret;
->  }
-> +EXPORT_SYMBOL_GPL(iio_read_channel_processed_scale);
-> +
-> +int iio_read_channel_processed(struct iio_channel *chan, int *val)
-> +{
-> +	/* This is just a special case with scale factor 1 */
-> +	return iio_read_channel_processed_scale(chan, val, 1);
-> +}
->  EXPORT_SYMBOL_GPL(iio_read_channel_processed);
->  
->  int iio_read_channel_scale(struct iio_channel *chan, int *val, int *val2)
-> diff --git a/include/linux/iio/consumer.h b/include/linux/iio/consumer.h
-> index 0a90ba8fa1bb..5fa5957586cf 100644
-> --- a/include/linux/iio/consumer.h
-> +++ b/include/linux/iio/consumer.h
-> @@ -241,6 +241,21 @@ int iio_read_channel_average_raw(struct iio_channel *chan, int *val);
->   */
->  int iio_read_channel_processed(struct iio_channel *chan, int *val);
->  
-> +/**
-> + * iio_read_channel_processed_scale() - read and scale a processed value
-> + * @chan:		The channel being queried.
-> + * @val:		Value read back.
-> + * @scale:		Scale factor to apply during the conversion
-> + *
-> + * Returns an error code or 0.
-> + *
-> + * This function will read a processed value from a channel. This will work
-> + * like @iio_read_channel_processed() but also scale with an additional
-> + * scale factor while attempting to minimize any precision loss.
-> + */
-> +int iio_read_channel_processed_scale(struct iio_channel *chan, int *val,
-> +				     unsigned int scale);
-> +
->  /**
->   * iio_write_channel_attribute() - Write values to the device attribute.
->   * @chan:	The channel being queried.
-
+SGksDQoNCkkndmUgZ290IGEgc3lzdGVtIHVzaW5nIGEgUG93ZXJQQyBUMjA4MCBTb0MgYW5kIGFt
+b25nIG90aGVyIHRoaW5ncyBoYXMgDQphbiBMTTgxIGh3bW9uIGNoaXAuDQoNClVuZGVyIGEgaGln
+aCBDUFUgbG9hZCB3ZSBzZWUgZXJyYW50IHJlYWRpbmdzIGZyb20gdGhlIExNODEgYXMgd2VsbCBh
+cyANCmFjdHVhbCBmYWlsdXJlcy4gSXQncyB0aGUgZXJyYW50IHJlYWRpbmdzIHRoYXQgY2F1c2Ug
+dGhlIG1vc3QgY29uY2VybiANCnNpbmNlIHdlIGNhbiBlYXNpbHkgaWdub3JlIHRoZSByZWFkIGVy
+cm9ycyBpbiBvdXIgbW9uaXRvcmluZyBhcHBsaWNhdGlvbiANCihhbHRob3VnaCBpdCB3b3VsZCBi
+ZSBiZXR0ZXIgaWYgdGhleSB3ZXJlbid0IHRoZXJlIGF0IGFsbCkuDQoNCkknbSBhYmxlIHRvIHJl
+cHJvZHVjZSB0aGlzIHdpdGggYSB0ZXN0IGFwcGxpY2F0aW9uWzBdIHRoYXQgYXJ0aWZpY2lhbGx5
+IA0KY3JlYXRlcyBhIGhpZ2ggQ1BVIGxvYWQgdGhlbiBieSByZXBlYXRlZGx5IGNoZWNraW5nIGZv
+ciB0aGUgYWxsLTFzIA0KdmFsdWVzIGZyb20gdGhlIExNODEgZGF0YXNoZWV0WzFdKHBhZ2UgMTcp
+LiBUaGUgYWxsLTFzIHJlYWRpbmdzIHN0aWNrIA0Kb3V0IGFzIHRoZXkgYXJlIG9idmlvdXNseSBo
+aWdoZXIgdGhhbiB0aGUgdm9sdGFnZSByYWlscyB0aGF0IGFyZSANCmNvbm5lY3RlZCBhbmQgZGlz
+YWdyZWUgd2l0aCBtZWFzdXJlbWVudHMgdGFrZW4gd2l0aCBhIG11bHRpbWV0ZXIuDQoNCkhlcmUn
+cyB0aGUgb3V0cHV0IGZyb20gbXkgZGV2aWNlDQoNCltyb290QGxpbnV4Ym94IH5dIyBjcHVsb2Fk
+IDkwJg0KW3Jvb3RAbGludXhib3ggfl0jICh3aGlsZSB0cnVlOyBkbyBjYXQgL3N5cy9jbGFzcy9o
+d21vbi9od21vbjAvaW4qX2lucHV0IA0KfCBncmVwICczMzIwXHw0MzgzXHw2NjQxXHwxNTkzMFx8
+MzU4Nic7IHNsZWVwIDE7IGRvbmUpJg0KMzU4Ng0KMzU4Ng0KY2F0OiByZWFkIGVycm9yOiBObyBz
+dWNoIGRldmljZSBvciBhZGRyZXNzDQpjYXQ6IHJlYWQgZXJyb3I6IE5vIHN1Y2ggZGV2aWNlIG9y
+IGFkZHJlc3MNCjMzMjANCjMzMjANCjM1ODYNCjM1ODYNCjY2NDENCjY2NDENCjQzODMNCjQzODMN
+Cg0KRnVuZGFtZW50YWxseSBJIHRoaW5rIHRoaXMgaXMgYSBwcm9ibGVtIHdpdGggdGhlIGZhY3Qg
+dGhhdCB0aGUgTE04MSBpcyANCmFuIFNNQnVzIGRldmljZSBidXQgdGhlIFQyMDgwIChhbmQgb3Ro
+ZXIgRnJlZXNjYWxlIFNvQ3MpIHVzZXMgaTJjIGFuZCB3ZSANCmVtdWxhdGUgU01CdXMuIEkgc3Vz
+cGVjdCB0aGUgZXJyYW50IHJlYWRpbmdzIGFyZSB3aGVuIHdlIGRvbid0IGdldCByb3VuZCANCnRv
+IGNvbXBsZXRpbmcgdGhlIHJlYWQgd2l0aGluIHRoZSB0aW1lb3V0IHNwZWNpZmllZCBieSB0aGUg
+U01CdXMgDQpzcGVjaWZpY2F0aW9uLiBEZXBlbmRpbmcgb24gd2hlbiB0aGF0IGhhcHBlbnMgd2Ug
+ZWl0aGVyIGZhaWwgdGhlIA0KdHJhbnNmZXIgb3IgaW50ZXJwcmV0IHRoZSByZXN1bHQgYXMgYWxs
+LTFzLg0KDQpbMF0gLSBodHRwczovL2dpc3QuZ2l0aHViLmNvbS9jcGFja2hhbS82MzU2YTNhOTQz
+YWNjZWJiMjI4MTM1ZGMxMGRhZjcyMQ0KWzFdIC0gaHR0cHM6Ly93d3cudGkuY29tL2xpdC9kcy9z
+eW1saW5rL2xtODEucGRmDQo=
