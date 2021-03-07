@@ -2,81 +2,51 @@ Return-Path: <SRS0=mDK7=IF=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.5 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F4D4C433E0
-	for <linux-hwmon@archiver.kernel.org>; Sun,  7 Mar 2021 06:03:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E93FC433E0
+	for <linux-hwmon@archiver.kernel.org>; Sun,  7 Mar 2021 12:42:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0801765029
-	for <linux-hwmon@archiver.kernel.org>; Sun,  7 Mar 2021 06:03:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 01263650FA
+	for <linux-hwmon@archiver.kernel.org>; Sun,  7 Mar 2021 12:42:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229964AbhCGGDE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 7 Mar 2021 01:03:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34166 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbhCGGDE (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 7 Mar 2021 01:03:04 -0500
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4065EC06174A;
-        Sat,  6 Mar 2021 22:03:04 -0800 (PST)
-Received: by mail-ot1-x329.google.com with SMTP id b8so6055440oti.7;
-        Sat, 06 Mar 2021 22:03:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=7sWkHvepJU82exq5mGHxadvTrEj6FzoVHN4NGEZgpkk=;
-        b=o1+aZ5hmI55zLzHWwfFtZuS8Lvqexqp9U7OSpikhKlX2/aRZbSMcb6SOwIV/M92csk
-         hwRoGAMVZ+wxVxGbc2OsBx0HkJ7KtvKeFJMtY4ZKlbtFTbuB1NdHQsgb7FUP2ZnOla0i
-         6UFZ+MEkSg+Hd4Tk78AmgVbPyYtrMRjEdMt6q+AqwDNWvYUvL8IL8Dr5uEH/xo7HtBis
-         OHx5zLD7JIyEi2YhJymkebpFKvukSLhz/m5ZQ+wJizBDZ9uGWJN8oceEmpIEccRa2Nrp
-         trhvFZMWetWzx+0cd0GWTEt9iD1fd7UGjWBzY3oSww4A152zrDuD7kUnDpYVLOLh3bRm
-         Anpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=7sWkHvepJU82exq5mGHxadvTrEj6FzoVHN4NGEZgpkk=;
-        b=l4Bi9uy6bMbxfKSL26jmheprG/X5V/qtuTq3xNIV8DN7VevIe/5XLd+7PuazhJaT44
-         oNSyOKR2LO7A6H+GZAjkrgkz+IC7GgKTonInSzN+cd2JuPZXxCZrCFyFuZfItoqyO0lo
-         sVk4MkcQU2NRZEn0rSLc8hrvTq6sOXM80bn/il9XX72cvL3Bl5BwH7MC1U3elaCmkLdz
-         79W12xmmt1Fzb5wQg/0wFpWw2xGWFOuhLEfT2MT12ADXh3pDQks1quXNdhEgj9i/LXoL
-         GUsGi1O8ULf7CaEud23wIWGrwl5DMvi/4zihFrmFgkibLPv6YK66xUdjIDbGgrKD74YI
-         BS0g==
-X-Gm-Message-State: AOAM530o6rDyNukhgVS3dPcoZdfN268SkCb+jwnnheiLzh2rrIq0vHNq
-        0nORflaCsmQGsIZ1rArg/R4=
-X-Google-Smtp-Source: ABdhPJy4OmX4dS07zPaGC9xZYyVVwuFSahdZly2zAedU3RnDCSxgYudSQCVepQZx0A+Yxo1HWLRwjQ==
-X-Received: by 2002:a05:6830:158c:: with SMTP id i12mr14301709otr.7.1615096983414;
-        Sat, 06 Mar 2021 22:03:03 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j6sm1605690ooa.40.2021.03.06.22.03.02
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 06 Mar 2021 22:03:02 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 6 Mar 2021 22:03:01 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
+        id S230480AbhCGMmH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 7 Mar 2021 07:42:07 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48088 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231296AbhCGMmG (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 7 Mar 2021 07:42:06 -0500
+Received: from archlinux (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id AE16E64F5B;
+        Sun,  7 Mar 2021 12:42:04 +0000 (UTC)
+Date:   Sun, 7 Mar 2021 12:42:00 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
 To:     Linus Walleij <linus.walleij@linaro.org>
 Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Jonathan Cameron <jic23@cam.ac.uk>,
         linux-hwmon@vger.kernel.org, Peter Rosin <peda@axentia.se>,
         Chris Lesiak <chris.lesiak@licor.com>,
         linux-iio@vger.kernel.org
 Subject: Re: [PATCH v3] hwmon: (ntc_thermistor): try reading processed
-Message-ID: <20210307060301.GA41122@roeck-us.net>
-References: <20210306232004.2400379-1-linus.walleij@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Message-ID: <20210307124200.5cc66f84@archlinux>
 In-Reply-To: <20210306232004.2400379-1-linus.walleij@linaro.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20210306232004.2400379-1-linus.walleij@linaro.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Mar 07, 2021 at 12:20:04AM +0100, Linus Walleij wrote:
+On Sun,  7 Mar 2021 00:20:04 +0100
+Linus Walleij <linus.walleij@linaro.org> wrote:
+
 > Before trying the custom method of reading the sensor
 > as raw and then converting, we want to use
 > iio_read_channel_processed() which first tries to
@@ -106,6 +76,17 @@ On Sun, Mar 07, 2021 at 12:20:04AM +0100, Linus Walleij wrote:
 > Cc: linux-iio@vger.kernel.org
 > Link: https://lore.kernel.org/linux-iio/20201224011607.1059534-1-linus.walleij@linaro.org/
 > Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+
+One trivial inline, but basic approach looks good to me.
+
+As Guenter suggested, should be broken up into several patches.
+If nothing else it'll make backports easier for anyone who wants
+this functionality for a different driver / usecase.
+
+Thanks,
+
+Jonathan
+
 > ---
 > ChangeLog v2->v3:
 > - After discussion about v2 we concludes that
@@ -127,12 +108,6 @@ On Sun, Mar 07, 2021 at 12:20:04AM +0100, Linus Walleij wrote:
 >  drivers/hwmon/ntc_thermistor.c | 27 ++++++++++++++++++---------
 >  drivers/iio/inkern.c           | 15 +++++++++++++--
 >  include/linux/iio/consumer.h   | 15 +++++++++++++++
-
-No matter which branch this is merged through, it should be several
-patches, one to introduce the API and one to start using it.
-
-Guenter
-
 >  3 files changed, 46 insertions(+), 11 deletions(-)
 > 
 > diff --git a/drivers/hwmon/ntc_thermistor.c b/drivers/hwmon/ntc_thermistor.c
@@ -196,6 +171,13 @@ Guenter
 >  				       IIO_CHAN_INFO_PROCESSED);
 > +		if (!ret)
 > +			*val *= scale;
+To keep it inline with other code around here I'd prefer.
+
+		if (ret)
+			got err_unlock;
+
+		*val *= scale;
+
 >  	} else {
 >  		ret = iio_channel_read(chan, val, NULL, IIO_CHAN_INFO_RAW);
 >  		if (ret < 0)
@@ -246,6 +228,4 @@ Guenter
 >  /**
 >   * iio_write_channel_attribute() - Write values to the device attribute.
 >   * @chan:	The channel being queried.
-> -- 
-> 2.29.2
-> 
+
