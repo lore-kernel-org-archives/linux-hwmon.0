@@ -2,108 +2,142 @@ Return-Path: <SRS0=Ii2j=IG=vger.kernel.org=linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-17.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 851E6C433E6
-	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Mar 2021 09:39:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11260C4332B
+	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Mar 2021 09:59:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 58845651DE
-	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Mar 2021 09:39:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DDBB8651E3
+	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Mar 2021 09:59:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbhCHJjB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 8 Mar 2021 04:39:01 -0500
-Received: from office2.cesnet.cz ([195.113.144.244]:40694 "EHLO
-        office2.cesnet.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbhCHJij (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 8 Mar 2021 04:38:39 -0500
-X-Greylist: delayed 404 seconds by postgrey-1.27 at vger.kernel.org; Mon, 08 Mar 2021 04:38:38 EST
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by office2.cesnet.cz (Postfix) with ESMTPSA id 133D2400064;
-        Mon,  8 Mar 2021 10:31:51 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cesnet.cz;
-        s=office2-2020; t=1615195911;
-        bh=yltdKOZ/6VYVTrMu44KMTldpTThy2mksJYEuQNhbrVk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc;
-        b=fouG54RXXM/ARxEvvtmzap+LFggmmxf/tvkx71BohNyFDgbJ3joPSuubExBpZw8wz
-         HNGnOHvFjcg9E/aFfxh1Z3dm7zQzygHGci8QJNx+XpW7JdiRqdJuqP9wVEtYdEUyGA
-         ejoXHFOAqrFOUG+1VBlXJt4WqyIdgDdelvEisAmFRn0yN5u4b07xrMXoGp/fEJY0p9
-         rzzaW8u4M1Ti5I915o0AEmElCSd6nr+J+EsKMDcTJikEv1cHT8UUZE338Ty6E8K2aN
-         rI4tnorjw/d52HgwltkzzNy0cuLmCytYCbpz15U39XTVthrKeTjLxYkCPWNFsV96Rs
-         KAsMzgJsIxP6Q==
-Received: by mail-lj1-f178.google.com with SMTP id c19so6874419ljn.12;
-        Mon, 08 Mar 2021 01:31:51 -0800 (PST)
-X-Gm-Message-State: AOAM530j+pxEt3slcgafC1zRFYE6tuTF1agkirG5awbJRo59kcmy6eoI
-        7LWIwPj7Psd6qLCGzN7HlYQ2rbnymt9btCKFB6M=
-X-Google-Smtp-Source: ABdhPJzm1zXbic7UlfG8H1lozfmgdCs8/TEcgGlVrSorjf8r9LemwnQu0ogoHYfZHB2pbpwvJfkNORjjVf+uGo1WIf0=
-X-Received: by 2002:a2e:5716:: with SMTP id l22mr7268056ljb.244.1615195910561;
- Mon, 08 Mar 2021 01:31:50 -0800 (PST)
-MIME-Version: 1.0
-References: <20210304105830.507176-1-kubernat@cesnet.cz> <20210304105830.507176-3-kubernat@cesnet.cz>
- <ad1c3054-e9a2-4299-aeed-94e36d6d3d12@cesnet.cz>
-In-Reply-To: <ad1c3054-e9a2-4299-aeed-94e36d6d3d12@cesnet.cz>
-From:   =?UTF-8?B?VsOhY2xhdiBLdWJlcm7DoXQ=?= <kubernat@cesnet.cz>
-Date:   Mon, 8 Mar 2021 10:31:39 +0100
-X-Gmail-Original-Message-ID: <CABKa3noLPxg8DFoHBG7nz5h12Bo0qTU7sWbJBzsgtvK69aB0uw@mail.gmail.com>
-Message-ID: <CABKa3noLPxg8DFoHBG7nz5h12Bo0qTU7sWbJBzsgtvK69aB0uw@mail.gmail.com>
-Subject: Re: [PATCH 3/7] hwmon: (max31790) Allow setting pulses
-To:     =?UTF-8?B?SmFuIEt1bmRyw6F0?= <jan.kundrat@cesnet.cz>
-Cc:     Jean Delvare <jdelvare@suse.com>,
+        id S231400AbhCHJ6e (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 8 Mar 2021 04:58:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:48754 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231376AbhCHJ6L (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 8 Mar 2021 04:58:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1615197490;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lHjTxRwBzXntJjnY0Ab0qNZeR7P16kUC/t+zvNtECvA=;
+        b=FjaSRQGNW7S+wHv9tqdqeESYZxEeuyN0pIk7RtXVPeu14q1CZ2EeFTucHBMVPzyb/Jubv3
+        7Z7t3J+M4nmYs4mI3axnwADu01TJMye9Zql6v3/IqR0DrAdYKoMmSDlH23DXbanZ1AOQIx
+        18rxxvk2QOURV9gRpU0M08fiFI2Pf80=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-564-TqW64UwGPpal16pnsfhH1Q-1; Mon, 08 Mar 2021 04:58:08 -0500
+X-MC-Unique: TqW64UwGPpal16pnsfhH1Q-1
+Received: by mail-ej1-f72.google.com with SMTP id si4so3852342ejb.23
+        for <linux-hwmon@vger.kernel.org>; Mon, 08 Mar 2021 01:58:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=lHjTxRwBzXntJjnY0Ab0qNZeR7P16kUC/t+zvNtECvA=;
+        b=ROOt4cXCQHywJuySPYZRNtipaU3vlZtc9yS4wB0S6t7wSup2skKFfeCY9Ubnz2tsWN
+         Lp7RtbX+s9ib9iZnGxbdzQU/+w2tRd0+7EglKiVLkAJFF2DrMQfcvpPS8zk4pbouZV5h
+         ne7J8b8/IldJTOnXbdXA9h6kaO032Z9oYAZLaitC6D4IVaUUYL4HyQFW7eykqgbynkG9
+         jfXz4g/YdAlDjQD0gaL+O6C2ZbrBhVoqXOvA7tL52APqi+TNUoBdM2SBeN1e8dOSdi/S
+         LATe1pF/CotzU1n8Y16BSR5y3U+FoTMH7y+hmeM1yU7e+16QHsjOWcbw+Zk3JvQKpFC/
+         fLtQ==
+X-Gm-Message-State: AOAM532Pms+/bpO0QSUnk45nWuWbLKhQ3B8iN30RkWCdVBwsJe+6Ge/2
+        wArwyw90mWtagAbsDGC2w16D9ASx5Q9cZ9ZkSYaFePR6arT6fuj8BkIXjf+kbOsKMJiBfM9G1wK
+        nVQb6HXG8LoVzXdHKZ190ZzU=
+X-Received: by 2002:a05:6402:254f:: with SMTP id l15mr2161729edb.189.1615197487651;
+        Mon, 08 Mar 2021 01:58:07 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwZ6fQefjQyWn03VsnOaZl1Am51qstz49gLS1yCwyNiMnlnimfXdBtL7FsXaaQ/90rp9JZYFg==
+X-Received: by 2002:a05:6402:254f:: with SMTP id l15mr2161713edb.189.1615197487533;
+        Mon, 08 Mar 2021 01:58:07 -0800 (PST)
+Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id b6sm6075855ejb.8.2021.03.08.01.58.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Mar 2021 01:58:07 -0800 (PST)
+Subject: Re: [RFC PATCH v2 2/8] MAINTAINERS: Add entry for devm helpers
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        mazziesaccount@gmail.com
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Mark Gross <mgross@linux.intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+References: <cover.1615187284.git.matti.vaittinen@fi.rohmeurope.com>
+ <c9119c0a8d4daebff0221c67830b54314fc9e0f6.1615187284.git.matti.vaittinen@fi.rohmeurope.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <c40d1454-836d-cbf2-d2de-232e5b39b9e9@redhat.com>
+Date:   Mon, 8 Mar 2021 10:58:06 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
+MIME-Version: 1.0
+In-Reply-To: <c9119c0a8d4daebff0221c67830b54314fc9e0f6.1615187284.git.matti.vaittinen@fi.rohmeurope.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Thanks, I will include fixes in v2 of the patches.
+Hi,
 
-By the way, I'd like to mention that Jan is my colleague.
+On 3/8/21 9:14 AM, Matti Vaittinen wrote:
+> Devm helper header containing small inline helpers was added.
+> Hans promised to maintain it.
 
-V=C3=A1clav
+Yes I did promise that, didn't I?  FWIW going this route is still
+fine by me, assuming that having someone else maintain this makes
+this easier on / more acceptable to Greg.
 
-p=C3=A1 5. 3. 2021 v 13:08 odes=C3=ADlatel Jan Kundr=C3=A1t <jan.kundrat@ce=
-snet.cz> napsal:
->
-> > @@ -285,6 +295,9 @@ static int max31790_write_fan(struct device
-> > *dev, u32 attr, int channel,
-> >                                  MAX31790_REG_FAN_CONFIG(channel),
-> >                                  data->fan_config[channel]);
-> >               break;
-> > +     case hwmon_fan_pulses:
-> > +             data->pulses[channel] =3D val;
-> > +             break;
->
-> This needs input validation, otherwise it's possible to write 0 in there
-> and you get a division-by-zero in the kernel context:
->
-> [102109.999968] Division by zero in kernel.
-> [102110.003917] CPU: 1 PID: 27590 Comm: cat Not tainted 5.9.3-cla-cfb #42
-> [102110.010462] Hardware name: Marvell Armada 380/385 (Device Tree)
-> [102110.016497] [<c010f16c>] (unwind_backtrace) from [<c010ae40>]
-> (show_stack+0x10/0x14)
-> [102110.024355] [<c010ae40>] (show_stack) from [<c083ba30>]
-> (dump_stack+0x94/0xa8)
-> [102110.031689] [<c083ba30>] (dump_stack) from [<c083a3fc>]
-> (Ldiv0+0x8/0x2c)
-> [102110.038499] [<c083a3fc>] (Ldiv0) from [<c064c1ac>]
-> (max31790_read+0x174/0x204)
-> [102110.045836] [<c064c1ac>] (max31790_read) from [<c0646fdc>]
-> (hwmon_attr_show+0x44/0x138)
-> ...
->
-> A similar error can also happen when setting the fan speed to 0 RPM.
-> That's, however, not an error caused by this patch series AFAIK. I *think=
-*
-> that RPM_TO_REG should be changed to check if `rpm` is 0, and if so, set
-> the register directly to the maximal value of 0x7ff (in another patch).
->
-> With kind regards,
-> Jan
+This is still going to need an Ack from Greg though.
+
+Regards,
+
+Hans
+
+
+
+> 
+> Add Hans as maintainer and myself as designated reviewer.
+> 
+> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> ---
+>  MAINTAINERS | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index d92f85ca831d..ffcb00006e14 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -5169,6 +5169,12 @@ M:	Torben Mathiasen <device@lanana.org>
+>  S:	Maintained
+>  W:	http://lanana.org/docs/device-list/index.html
+>  
+> +DEVICE RESOURCE MANAGEMENT HELPERS
+> +M:	Hans de Goede <hdegoede@redhat.com>
+> +R:	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> +S:	Maintained
+> +F:	include/linux/devm-helpers.h
+> +
+>  DEVICE-MAPPER  (LVM)
+>  M:	Alasdair Kergon <agk@redhat.com>
+>  M:	Mike Snitzer <snitzer@redhat.com>
+> 
+
