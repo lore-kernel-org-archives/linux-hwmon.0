@@ -1,171 +1,133 @@
-Return-Path: <SRS0=Ii2j=IG=vger.kernel.org=linux-hwmon-owner@kernel.org>
+Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B7A6C433DB
-	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Mar 2021 10:03:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F80DC433DB
+	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Mar 2021 16:25:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 367A764DFB
-	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Mar 2021 10:03:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D38D8651C5
+	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Mar 2021 16:25:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231545AbhCHKDH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 8 Mar 2021 05:03:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55268 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231562AbhCHKCc (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 8 Mar 2021 05:02:32 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB4A1C06175F
-        for <linux-hwmon@vger.kernel.org>; Mon,  8 Mar 2021 02:02:31 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id m11so15276018lji.10
-        for <linux-hwmon@vger.kernel.org>; Mon, 08 Mar 2021 02:02:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=jQj8Y7bl6W/EwTgFM51ZkEcyxtVI5DMBeB3fwIzUQaU=;
-        b=jQ2Yb87wSov9EOAYKKig7gkL5mtFZrgT7jtwVDLmVEVjG7niFZCnS6r9rsFf5VDt84
-         UGxEn2W8prRS96gwOj3n3E/nToKAZP4ByR64Hs7y0vvEkz0DhEir+6OijwZmrDu4kEYU
-         NSsYBpHPMRU4LOkzqcNgfArlMDbUgyUP5wK8MmbLp5vGEWBUDFGLt1GSXOLeCvtb1TgS
-         IqGWpDBhXtnFA0a5BgamnottiCcf9wYflitmY2G4GR0gi48TEasJk/hxLMp2Kgq6N1DW
-         qJZflz/jcVjKtWyOgEWdmHnsvDnQT+OacUf039gRCyCdBDPENr9+oOmBLnQHpksnsLeb
-         Sz2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=jQj8Y7bl6W/EwTgFM51ZkEcyxtVI5DMBeB3fwIzUQaU=;
-        b=FChXRptVtyIBXWAqd5lU5kdVBWRzEHAQoXPmrYA1Asm97Qo2R2cg1y9K8POCFt8mTE
-         NEDV9xMiN8jGXiyQITUgraAESUutVLYN676hex39k8ZOGp+9KEMHnV5C4RvsfxNOhtsn
-         SfggAGsFwJCIGJFW/H/ZS1wfgeJXVEq51Nx493KEARKMSDwQ0rE6tH1ScvVcUAtXFFmL
-         0aOqIaIinP7MMOTJpC1ZG3fWpbjmhn+CvVMjLnJCGrjXNRWOe8k/gI/IwNLygbRdNXcd
-         xjKAf16w+KqyF5+V0ewcCyQJf+9DfQNEQ1SU/Lb/WeHzw/1LRt6E2pzScUx+rNUot7n6
-         Tnvg==
-X-Gm-Message-State: AOAM5333pdoXo9gIZpZNtd7Vug+cdXizNEPqMhz5Zz05u6xMBOBBgWsx
-        QHgZ78ORBjFO2hK1aZvBejBJNw==
-X-Google-Smtp-Source: ABdhPJyrKjGR1WckL+EvevOldG/9RWm4Yin/HfubNd7pR+J+ntlEZo0nv3ly+Y9EjuIMR/uzyFFheQ==
-X-Received: by 2002:a2e:9e17:: with SMTP id e23mr13441080ljk.501.1615197750378;
-        Mon, 08 Mar 2021 02:02:30 -0800 (PST)
-Received: from localhost.localdomain (c-d7cb225c.014-348-6c756e10.bbcust.telenor.se. [92.34.203.215])
-        by smtp.gmail.com with ESMTPSA id v2sm1425734ljg.89.2021.03.08.02.02.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Mar 2021 02:02:30 -0800 (PST)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Cameron <jic23@kernel.org>
-Cc:     linux-hwmon@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Peter Rosin <peda@axentia.se>,
-        Chris Lesiak <chris.lesiak@licor.com>,
-        linux-iio@vger.kernel.org
-Subject: [PATCH 2/2 v4] hwmon: (ntc_thermistor): try reading processed
-Date:   Mon,  8 Mar 2021 11:02:19 +0100
-Message-Id: <20210308100219.2732156-2-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210308100219.2732156-1-linus.walleij@linaro.org>
+        id S230111AbhCHQZO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 8 Mar 2021 11:25:14 -0500
+Received: from mail-dm6nam11on2109.outbound.protection.outlook.com ([40.107.223.109]:62592
+        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230078AbhCHQZE (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 8 Mar 2021 11:25:04 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gu4vKf1V4gftVcybzAjvOtA/avUya/YorCqrgT6ZCKeZUuVJeRUeOcbj72MsNWjDazFtOGOQjzV3CicsIWWZ8zyFVLOGyKrMIA5liBvWxgkQzVOcdSEeU/nLJzyBP4fe1dLcr0CfEDmhKvRcG0KJZ/sy/Wq6xyrtL3daQvfu1gRmoW1VyatTiJ/idpw6RpBh4MTgOkttjB0rZdbOXnfGZQtzQSWpIthtFcVBzh+WhSD0XV2yi7xYj5jHFAoK5Z/Gc9F/UFwTd+5ZO9X6vvsFIet/Z/93trDTSxeqtB82/lEpNNvHtpdKKICdNSFyjSAxp8kDU3Qr87a3dqkXG4IXFQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rT8zuoKXIt381uP9PD5fAJvX7JEune8YkxN9nDf+z9g=;
+ b=dbWtiQ2xUm+ktw9UKUUC73JzBsqSPLGTCnvHAAPsUWWgwL0TonYxeEaruzgGgERzp6hirGWE2ieIYDmIaXXAROd8qxYA1+RpAqQVYyiNoz89EUqYmkmPgUrd83dyz8rf/64Qpx3SsHKd2ZMQrDyFdew1bw4kVsDrJSCQFvE0xbJA/rjlMJlsPyU8x/K+r0OWLzFo4JoZww0Mq05aC1JAwqb5TxvMBtpQujfo35njRewYM1+UBQonrKyVclTSMgX29s5Fxx4KyP8WCdlWIneLuaX9oxxsrfski/APzBwFAXCOVkAcLRBhfIrXTz2g9VlKrfz23asMkfmQFr9QOIN+gg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=licor.com; dmarc=pass action=none header.from=licor.com;
+ dkim=pass header.d=licor.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=licor.onmicrosoft.com;
+ s=selector2-licor-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rT8zuoKXIt381uP9PD5fAJvX7JEune8YkxN9nDf+z9g=;
+ b=LAiV78Yg4zlBdzW65Xw6hEX8SmCwSra2XLNZIE3+EkmHnSC1e9Gl84dWT3cjAVfRWILZMjmv1DEN4q9b/iD1qTSv9l6npVx2EL8u/ltQA7jjzFhpzfBKrZLn+lfEX/HLRWtsggsLQHRak/U86kI5jCLo0wPYh+36VkyZ24XBIig=
+Authentication-Results: roeck-us.net; dkim=none (message not signed)
+ header.d=none;roeck-us.net; dmarc=none action=none header.from=licor.com;
+Received: from SN2PR0801MB2223.namprd08.prod.outlook.com
+ (2603:10b6:804:11::21) by SA2PR08MB6571.namprd08.prod.outlook.com
+ (2603:10b6:806:119::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3912.17; Mon, 8 Mar
+ 2021 16:25:02 +0000
+Received: from SN2PR0801MB2223.namprd08.prod.outlook.com
+ ([fe80::6db1:be5f:79f4:17a2]) by SN2PR0801MB2223.namprd08.prod.outlook.com
+ ([fe80::6db1:be5f:79f4:17a2%9]) with mapi id 15.20.3890.038; Mon, 8 Mar 2021
+ 16:25:02 +0000
+Subject: Re: [PATCH 2/2 v4] hwmon: (ntc_thermistor): try reading processed
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-hwmon@vger.kernel.org, Peter Rosin <peda@axentia.se>,
+        linux-iio@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
 References: <20210308100219.2732156-1-linus.walleij@linaro.org>
+ <20210308100219.2732156-2-linus.walleij@linaro.org>
+From:   Chris Lesiak <chris.lesiak@licor.com>
+Message-ID: <c324e064-2795-a3ef-0dc4-0977bba1b219@licor.com>
+Date:   Mon, 8 Mar 2021 10:24:58 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
+In-Reply-To: <20210308100219.2732156-2-linus.walleij@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [2607:da00:300:7::2]
+X-ClientProxiedBy: CH0PR04CA0019.namprd04.prod.outlook.com
+ (2603:10b6:610:76::24) To SN2PR0801MB2223.namprd08.prod.outlook.com
+ (2603:10b6:804:11::21)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from bee.licor.com (2607:da00:300:7::2) by CH0PR04CA0019.namprd04.prod.outlook.com (2603:10b6:610:76::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3912.17 via Frontend Transport; Mon, 8 Mar 2021 16:25:01 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d4836e3d-9fd5-48be-25d7-08d8e24eb945
+X-MS-TrafficTypeDiagnostic: SA2PR08MB6571:
+X-Microsoft-Antispam-PRVS: <SA2PR08MB65718033B9070037E4B8DEAC9A939@SA2PR08MB6571.namprd08.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5236;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ygZf+dhf9v8GEbPIZ9z6ZfiwwG6nX7EL5fpSc3hBr1Og2UXylsnlQbPFRUW7NqHVvK/2hWqr9GRfEnGpJ/N37GGdh2TrXeO31jrcH4PmrVheQEiALpeKfJ7Kd3oiPAxh8K79YC3gKs8hKWzg+VtlfSTfQuNhCm9/raBjOgkCA7UIQuxYZp5D5Dc7j9Ix1tRWWNlBpKHuENbtbkgsUbSBeMa1N/v92FbcRaIIr7SQqR/Gjcg6bVlN6E/fHwVFf8iw9eljqXB98Bc2pdLjBJk7I2RD1DxyUSHH00AuUA/fhPwN8cxIjJBYjNPOlQ17d+B2QmnDAa4EqyQpcPP9q9y9pbJO6T650pVKioZCiSwQFzr+odlnEow0wtu3RSE9PgEAYa3m8iSk1ceoH52P7pa2e12+3wqekAk8icSa3M+7qdiyIHHl7wMdZxggmq0a1PY3gmSFJWqg1xHg/D737dmoWDBXNFapIal37xTWE9ERkSQnggDg4KF+NKx/YxIkYC0D5i8nOZLe2tDaMZQsykFUFRP3CVIQngayIyxjEa5FeJqH5YVgFzC484t7WdfqevRNfzIGTL8YYlLSU//56scoQIYup0UZZr+/AlKGCn5tIVo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN2PR0801MB2223.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(39850400004)(136003)(346002)(376002)(366004)(6666004)(8936002)(36756003)(86362001)(8676002)(186003)(7696005)(6486002)(16526019)(52116002)(66476007)(66946007)(66556008)(316002)(6916009)(54906003)(31696002)(2906002)(478600001)(5660300002)(558084003)(4326008)(44832011)(31686004)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?MjlxYkZDWEV6TjZvS2JYcGZaMWIyaHgyeUVXOFc3Wm1IM0lDVjM5RVZUN3lo?=
+ =?utf-8?B?b0NQY0RjenFDSEptZUttNkxhbTRDckc5UTFiNG5aWEtOM1pPTnZnREYreTRq?=
+ =?utf-8?B?T3RzRk1IK05lRHlTVjFlb0JUc0R5RXJTOVRMekRCTGFzRTZBUGFDWEdHUzMr?=
+ =?utf-8?B?Z0wvVDliYzVqMUd2NFBZWmk2RTJGNGNEYTJPbFFycTl1U2N2YjJyNDJQL09h?=
+ =?utf-8?B?S2dEVG80Q1Q2RlJHVC9TUFlwUEUzUnUxVUcxV1NnRENuMlA1cXRnVDZUNTcx?=
+ =?utf-8?B?SUdhVXd1RXVjek04cmM2YXZDd0g5RllPOVh2c3J5UklaOWFnNXlTNnJxQWJK?=
+ =?utf-8?B?VmFmeU96TTJCQWUvdnlEQjdRZFhYVXNvbFpKclJxeFJoRnA0SjFORm5pb0VN?=
+ =?utf-8?B?NUNKVlJEaENOSEk3eVdWYWp3YUJ1bkxiT0EweVpSUk01WlJkSUREanl5R2NY?=
+ =?utf-8?B?NUczOEFraVFTSFpNMnRPTFlCRmdxWVVhQXhXMEV0WHpnYVlQNWhoTEErUzJv?=
+ =?utf-8?B?R0h5aXVIa3ZXeGFVU0taT3hRcEZJcXl6RTg5TDhMdm9CeWZRY3U3OEZzMmoz?=
+ =?utf-8?B?d1dQSGxRVTRUYkFzQUV3VVhPdXhXUk5aSFRESW9qTVFwQytCYmJNRWY5THBw?=
+ =?utf-8?B?dTZidjBXWGptTHRRVVJOKzBaWnF1blc2bXRTd0dNZHB4NHdZeHdaSVpOVk1L?=
+ =?utf-8?B?NlhQTmFJelBnajNESXhBTFFWMkk1M2dzdlRLbWVTOGlCRzZhWGp2YmFFdDRk?=
+ =?utf-8?B?M0ttQ1RERndPOGtBUmFhYUdYbGw0aU1wUzMrYjhSajc3ZkJCbGtOUk93Rk8z?=
+ =?utf-8?B?NCtBQnAxSEwxQmRRNTJsbWlueVhXbFpLbW1sL3RmWTl4VDBNWWRQZHVMaS9N?=
+ =?utf-8?B?SnFESHdIV3NCWFZTby80R0pSeWE2TG9sbnd0N082S1hiaGVGSlVRRUVZMUE2?=
+ =?utf-8?B?QmdEMisvUE9EbGVBalVmRFEvaXFZdTRtSkVST0JFZ1ZRTjgxaFc3QVJZT2VO?=
+ =?utf-8?B?Wkd4c1VKN3d5LzdLc2dQeWdLY3hYTHVPcGtXZkZhU1UwdGd2N2UwMGxpWjlj?=
+ =?utf-8?B?TmYwdkkwRFJ3K3pyVlRmMGxjQVJ0WHpoQ0dGMGtDTjA2UGR1YUxZc3BxaHU1?=
+ =?utf-8?B?Nk10RGU4bC9wYnZqcGJhWjhZaGRjS2JQditubURWWWJQM29kMEFsRVZPU1FE?=
+ =?utf-8?B?NDNFY0JobitvQ2EwTENGM29kTm9wM1lwaUlPUTBpQ2M2bVl0bmh4VVJ0dlNu?=
+ =?utf-8?B?aXpRUGJWNWJQb1VnLzJsS0xzRXJFS1I5Yk1VV0JIeUp0Q2crem5ZbVZDZmJC?=
+ =?utf-8?B?eTdGYitiWVZHcGU1ckFTSGhSRlpXL3gwU0ppRlYrRDFVbW50TmVNYjEzcEJ3?=
+ =?utf-8?B?UEo0emg3WitUREoxR0RZNjdZWnQrdjR3dHlvSTN3M3czNEdKVnVZMzZlZ1lS?=
+ =?utf-8?B?U3ZlaFZ5ZlRCOGt2MHNVRkFvMmVEdVRNaWVZMDJWeWJ5UC9FVjRpc2tFWVVy?=
+ =?utf-8?B?VEM2cUJ6akhpWEJ1OUtRSkpBcDFoNTlVRjI3OVJ5UjFJWkJpYjRDRUlxSnpn?=
+ =?utf-8?B?QWNrR0ZLcTB4WGFCWFBjMXZDaVdCZ0V4Q2s1NjVJLzYwaTlNaHp3aWtUWU1U?=
+ =?utf-8?B?bEwxd215cHhacURaZDBJYUpsSWgwVjB0ZG9GWG5RQmFqSGNrZmllckM2MkQ4?=
+ =?utf-8?B?Z1RqbFZDNG0wN0VZTHd4WldJaEZ0M0plK2pqdXAwOG1nQXJENWVOVEtpWEtS?=
+ =?utf-8?B?SXpVSlhHemNqa2c2M2MxMmZJeTJ1TTJKVThsNVlaeHIzWW44bjQvRVRvWC9z?=
+ =?utf-8?B?TllWMDQ4UVR5OGdzelpmQT09?=
+X-OriginatorOrg: licor.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d4836e3d-9fd5-48be-25d7-08d8e24eb945
+X-MS-Exchange-CrossTenant-AuthSource: SN2PR0801MB2223.namprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Mar 2021 16:25:02.0966
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48c70abd-da5a-4c6c-86cb-5e003ca01574
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4fFLdbvbNTTW4PRyxKYqutjm8IBjdkQoyoRsmkM+T3zLE3zTwquXddZqBJ+xsyFfO7oIw4sVKFMjvSAYY63ZFw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR08MB6571
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Before trying the custom method of reading the sensor
-as raw and then converting, we want to use
-iio_read_channel_processed_scale() which first tries to
-see if the ADC can provide a processed value directly,
-else reads raw and applies scaling inside of IIO
-using the scale attributes of the ADC. We need to
-multiply the scaled value with 1000 to get to
-microvolts from millivolts which is what processed
-IIO channels returns.
+I've tested this in a 4.14 based kernel with two different out-of-tree 
+iio adcs, neither of which supports IIO_CHAN_INFO_PROCESSED.
 
-Keep the code that assumes 12bit ADC around as a
-fallback.
-
-This gives correct readings on the AB8500 thermistor
-inputs used in the Ux500 HREFP520 platform for reading
-battery and board temperature.
-
-Cc: Peter Rosin <peda@axentia.se>
-Cc: Chris Lesiak <chris.lesiak@licor.com>
-Cc: Jonathan Cameron <jic23@kernel.org>
-Cc: linux-iio@vger.kernel.org
-Link: https://lore.kernel.org/linux-iio/20201224011607.1059534-1-linus.walleij@linaro.org/
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
-ChangeLog v3->v4:
-- Split out the new iio_read_channel_processed_scale()
-  API addition to a separate patch.
-- My suggestion is to apply both patches to the hwmon
-  tree.
-ChangeLog v2->v3:
-- After discussion about v2 we concludes that
-  iio_read_channel_processed() could loose precision
-  so we introduce a new API to read processed and
-  scale.
-- Include a link to the v2 discussion for reference.
-- For ease of applying to the hwmon tree, keep it all
-  in one patch.
-- This needs Jonathans ACK to be merged through hwmon.
-ChangeLog v1->v2:
-- Fix the patch to multiply the processed value by
-  1000 to get to microvolts from millivolts.
-- Fix up the confusion in the commit message.
-- Drop pointless comments about the code, we keep the
-  original code path around if processed reads don't
-  work, nothing bad with that.
----
- drivers/hwmon/ntc_thermistor.c | 27 ++++++++++++++++++---------
- 1 file changed, 18 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/hwmon/ntc_thermistor.c b/drivers/hwmon/ntc_thermistor.c
-index 3aad62a0e661..8587189c7f15 100644
---- a/drivers/hwmon/ntc_thermistor.c
-+++ b/drivers/hwmon/ntc_thermistor.c
-@@ -326,18 +326,27 @@ struct ntc_data {
- static int ntc_adc_iio_read(struct ntc_thermistor_platform_data *pdata)
- {
- 	struct iio_channel *channel = pdata->chan;
--	int raw, uv, ret;
-+	int uv, ret;
- 
--	ret = iio_read_channel_raw(channel, &raw);
-+	ret = iio_read_channel_processed_scale(channel, &uv, 1000);
- 	if (ret < 0) {
--		pr_err("read channel() error: %d\n", ret);
--		return ret;
--	}
-+		int raw;
- 
--	ret = iio_convert_raw_to_processed(channel, raw, &uv, 1000);
--	if (ret < 0) {
--		/* Assume 12 bit ADC with vref at pullup_uv */
--		uv = (pdata->pullup_uv * (s64)raw) >> 12;
-+		/*
-+		 * This fallback uses a raw read and then
-+		 * assumes the ADC is 12 bits, scaling with
-+		 * a factor 1000 to get to microvolts.
-+		 */
-+		ret = iio_read_channel_raw(channel, &raw);
-+		if (ret < 0) {
-+			pr_err("read channel() error: %d\n", ret);
-+			return ret;
-+		}
-+		ret = iio_convert_raw_to_processed(channel, raw, &uv, 1000);
-+		if (ret < 0) {
-+			/* Assume 12 bit ADC with vref at pullup_uv */
-+			uv = (pdata->pullup_uv * (s64)raw) >> 12;
-+		}
- 	}
- 
- 	return uv;
--- 
-2.29.2
+Tested-by: Chris Lesiak <chris.lesiak@licor.com>
 
