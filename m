@@ -4,66 +4,55 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9983C4332D
-	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Mar 2021 08:15:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 004F4C433E0
+	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Mar 2021 08:43:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 87624651DF
-	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Mar 2021 08:15:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AC39A651BC
+	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Mar 2021 08:43:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231701AbhCHIPL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 8 Mar 2021 03:15:11 -0500
-Received: from mail-lf1-f50.google.com ([209.85.167.50]:37876 "EHLO
-        mail-lf1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230432AbhCHIOz (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 8 Mar 2021 03:14:55 -0500
-Received: by mail-lf1-f50.google.com with SMTP id n16so19647839lfb.4;
-        Mon, 08 Mar 2021 00:14:54 -0800 (PST)
+        id S229474AbhCHImf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 8 Mar 2021 03:42:35 -0500
+Received: from mail-lj1-f171.google.com ([209.85.208.171]:41509 "EHLO
+        mail-lj1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232073AbhCHImK (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 8 Mar 2021 03:42:10 -0500
+Received: by mail-lj1-f171.google.com with SMTP id t9so15009915ljt.8;
+        Mon, 08 Mar 2021 00:42:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=lCgeptqSMyKzW16UNWHWlgRoMtG+0iEIlO7nDP/oAFQ=;
-        b=PgxP9QJTKXP2ulLWZptsVxtY0m3WwYNdWmAdiJcepCb9IdHIfHARTOduy1n6r4qcjL
-         P2aEuvez+BVM1Tua/cLSHSTx0cZpwP1vMm/L8PaAiPDrMSyCyACwoEnxIS2+q7D9VfQx
-         fASsIvwGeA8tygnpDm3b6LM8Od2Bic9tdPVf6ltbWfcMdo+1qNS4ri99NZV2UL5gz4Mb
-         nyWMsq06wpmSXLBEJRyvTHK+vvYs6/nOfVkcGZmwKualjiR1VXAcR9sVNoZSP913nFXM
-         mcwibVd5ZrFiUScIvPXIDg/wb26XiI/dZyBInEjbU2a3EzSF3H3YTxdR9rwS8n70r+DT
-         Z5Ng==
-X-Gm-Message-State: AOAM530PxgvNLmnTBPhGkZYr1UWP/R3gJU9xtaag1Go5OhNe0FSpTD3n
-        EoLXE5lU1WYbl56TDd3q7uU=
-X-Google-Smtp-Source: ABdhPJxQR6J2M4jgCmS7cRIRCbb+O5S1AbJyi70ot4XILJuJUhaUfi87OLkijIb5wu0ckRZOrq68+g==
-X-Received: by 2002:a19:ed8:: with SMTP id 207mr13196925lfo.164.1615191293579;
-        Mon, 08 Mar 2021 00:14:53 -0800 (PST)
+        bh=3Rc72VFcdGikA4iw93UKiEviUsRbqS+/SG2EjEpppYs=;
+        b=L1mj9ibAnNJrt3gIz3iVq2i26OXWaaGkfj18PKZa5BqgqH7FIrbJaIRWX5tHDs22TW
+         UK3g+oBwtxZWkE8g02vjn/5JfeEJ3yXSsB/x3j/ojgOjvKlJOaQtCEIMMY3uItiobR33
+         6GJPYvictpub5DF/xYB8Bd+YC8xATkl1MxDyostngfTjlLRzq5WkASM793CYNkO1EqDo
+         E/6CBQWZuDAwmNWPj92G/QNbM5BN5RNh1vgApYRxsvsVPuAxCrP/p8j/881BT/yvOTtG
+         02lhncsSjiZDTsVpoWVGm8SMLjP32lpvGMMEbLvLrD8YEL6OLaNxL8J0CJ7CN3ip7r9/
+         7xaQ==
+X-Gm-Message-State: AOAM5309tFI5S44nNMnHkZ1/P5bi1TTmQfo2NpExkpkKJlpWxeRrhNoM
+        6nnhSE3LnoOsinMwMIPvbW0=
+X-Google-Smtp-Source: ABdhPJyvF17KR51z68fjsKEsD2lL1wLrpn3/JlN0L9xPG1TQUN/bej7MfF/02sPWBGYk5BFjbLfUFw==
+X-Received: by 2002:a2e:5c84:: with SMTP id q126mr12947603ljb.61.1615192929108;
+        Mon, 08 Mar 2021 00:42:09 -0800 (PST)
 Received: from localhost.localdomain (dc7vkhyyyyyyyyyyyyycy-3.rev.dnainternet.fi. [2001:14ba:16e2:8300::4])
-        by smtp.gmail.com with ESMTPSA id z4sm1261722lfd.172.2021.03.08.00.14.52
+        by smtp.gmail.com with ESMTPSA id r12sm1279128lfc.79.2021.03.08.00.42.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Mar 2021 00:14:53 -0800 (PST)
-Date:   Mon, 8 Mar 2021 10:14:46 +0200
+        Mon, 08 Mar 2021 00:42:08 -0800 (PST)
+Date:   Mon, 8 Mar 2021 10:42:02 +0200
 From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 To:     matti.vaittinen@fi.rohmeurope.com, mazziesaccount@gmail.com
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>,
+Cc:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mgross@linux.intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Subject: [RFC PATCH v2 2/8] MAINTAINERS: Add entry for devm helpers
-Message-ID: <c9119c0a8d4daebff0221c67830b54314fc9e0f6.1615187284.git.matti.vaittinen@fi.rohmeurope.com>
+        linux-hwmon@vger.kernel.org
+Subject: [RFC PATCH v2 4/8] hwmon: raspberry-pi: Clean-up few drivers by
+ using managed work init
+Message-ID: <8fea146d6037cea1cd089f20af42a92e800ff894.1615187284.git.matti.vaittinen@fi.rohmeurope.com>
 References: <cover.1615187284.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -73,33 +62,68 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Devm helper header containing small inline helpers was added.
-Hans promised to maintain it.
+Few drivers implement remove call-back only for ensuring a delayed
+work gets cancelled prior driver removal. Clean-up these by switching
+to use devm_delayed_work_autocancel() instead.
 
-Add Hans as maintainer and myself as designated reviewer.
+This change is compile-tested only. All testing is appreciated.
 
 Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 ---
- MAINTAINERS | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/hwmon/raspberrypi-hwmon.c | 17 ++++++-----------
+ 1 file changed, 6 insertions(+), 11 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d92f85ca831d..ffcb00006e14 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5169,6 +5169,12 @@ M:	Torben Mathiasen <device@lanana.org>
- S:	Maintained
- W:	http://lanana.org/docs/device-list/index.html
+diff --git a/drivers/hwmon/raspberrypi-hwmon.c b/drivers/hwmon/raspberrypi-hwmon.c
+index d3a64a35f7a9..805d396aa81b 100644
+--- a/drivers/hwmon/raspberrypi-hwmon.c
++++ b/drivers/hwmon/raspberrypi-hwmon.c
+@@ -7,6 +7,7 @@
+  * Copyright (C) 2018 Stefan Wahren <stefan.wahren@i2se.com>
+  */
+ #include <linux/device.h>
++#include <linux/devm-helpers.h>
+ #include <linux/err.h>
+ #include <linux/hwmon.h>
+ #include <linux/module.h>
+@@ -106,6 +107,7 @@ static int rpi_hwmon_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	struct rpi_hwmon_data *data;
++	int ret;
  
-+DEVICE RESOURCE MANAGEMENT HELPERS
-+M:	Hans de Goede <hdegoede@redhat.com>
-+R:	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-+S:	Maintained
-+F:	include/linux/devm-helpers.h
-+
- DEVICE-MAPPER  (LVM)
- M:	Alasdair Kergon <agk@redhat.com>
- M:	Mike Snitzer <snitzer@redhat.com>
+ 	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+ 	if (!data)
+@@ -119,7 +121,10 @@ static int rpi_hwmon_probe(struct platform_device *pdev)
+ 							       &rpi_chip_info,
+ 							       NULL);
+ 
+-	INIT_DELAYED_WORK(&data->get_values_poll_work, get_values_poll);
++	ret = devm_delayed_work_autocancel(dev, &data->get_values_poll_work,
++					   get_values_poll);
++	if (ret)
++		return ret;
+ 	platform_set_drvdata(pdev, data);
+ 
+ 	if (!PTR_ERR_OR_ZERO(data->hwmon_dev))
+@@ -128,18 +133,8 @@ static int rpi_hwmon_probe(struct platform_device *pdev)
+ 	return PTR_ERR_OR_ZERO(data->hwmon_dev);
+ }
+ 
+-static int rpi_hwmon_remove(struct platform_device *pdev)
+-{
+-	struct rpi_hwmon_data *data = platform_get_drvdata(pdev);
+-
+-	cancel_delayed_work_sync(&data->get_values_poll_work);
+-
+-	return 0;
+-}
+-
+ static struct platform_driver rpi_hwmon_driver = {
+ 	.probe = rpi_hwmon_probe,
+-	.remove = rpi_hwmon_remove,
+ 	.driver = {
+ 		.name = "raspberrypi-hwmon",
+ 	},
 -- 
 2.25.4
 
