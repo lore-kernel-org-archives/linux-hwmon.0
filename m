@@ -2,71 +2,110 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 702F5C433E9
-	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Mar 2021 17:26:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B3D9C433DB
+	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Mar 2021 20:28:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 463F16528B
-	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Mar 2021 17:26:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E0B5D6528C
+	for <linux-hwmon@archiver.kernel.org>; Mon,  8 Mar 2021 20:28:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbhCHR0F (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 8 Mar 2021 12:26:05 -0500
-Received: from mail-il1-f175.google.com ([209.85.166.175]:32964 "EHLO
-        mail-il1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231187AbhCHRZr (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 8 Mar 2021 12:25:47 -0500
-Received: by mail-il1-f175.google.com with SMTP id e2so9577921ilu.0;
-        Mon, 08 Mar 2021 09:25:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Yx+PQVScsIGkwKCNWq831zfr2nU5g1aEQH/FRbp+2eo=;
-        b=kFXicHgWWapI08+G5oGDizk6xgRchx9FZFb49o0OnzFFtz9HloLaJszrdZXhmRRrSb
-         8qxbfEd5sYnntKUrGLxflsCIXoWQEPq2bHSSD4yRIeeJoMeFuutxHWTkg/oOuCjgUUrR
-         7MycBiT6NroCPkYGjCa/oaW0JmLdCVyfbzMNW8OjkpVZDLcI8+vrj3nvSdF9vsx/jo79
-         Fx3NQypZz+ysxIY8NN0ZpMeRgqyXC6W8eUldkmuGqV8BeRJt2h/gbwGcKzZ+CRh7fzeN
-         ipKmDd5yPzMgX7WMdtS3UttoBGqtYp+aZjs7PBljqqJuLQU+sjqfa8jm/HSf53eSogke
-         Ii7Q==
-X-Gm-Message-State: AOAM533FsOe7yldwiGDoBBSzAcxeTYEjWd7nfbfuRGyJtgBxhJVQISQl
-        8ad3k8XtD8RxcBcnGlU1yw==
-X-Google-Smtp-Source: ABdhPJzzebSLlyB1KvnxCnKMS5WtyQfuusgxeFMojohDlmql8ZD1Mw9P3Dgavl14XuEy1pp8KcDSDw==
-X-Received: by 2002:a05:6e02:1a0f:: with SMTP id s15mr21965899ild.244.1615224344976;
-        Mon, 08 Mar 2021 09:25:44 -0800 (PST)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id e4sm6385124ilc.47.2021.03.08.09.25.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Mar 2021 09:25:44 -0800 (PST)
-Received: (nullmailer pid 2660915 invoked by uid 1000);
-        Mon, 08 Mar 2021 17:25:41 -0000
-Date:   Mon, 8 Mar 2021 10:25:41 -0700
-From:   Rob Herring <robh@kernel.org>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
-        Jiri Kosina <trivial@kernel.org>, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: trivial-devices: Add infineon,ir36021
-Message-ID: <20210308172541.GA2660862@robh.at.kernel.org>
-References: <20210301035954.16713-1-chris.packham@alliedtelesis.co.nz>
- <20210301035954.16713-2-chris.packham@alliedtelesis.co.nz>
+        id S229787AbhCHU1q (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 8 Mar 2021 15:27:46 -0500
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:46615 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231301AbhCHU1d (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 8 Mar 2021 15:27:33 -0500
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 5DA08891AE;
+        Tue,  9 Mar 2021 09:27:31 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1615235251;
+        bh=Onrpr6MuDOllsC8Vd8il2kEwkyXgQ0Z8dtUPbT50kjI=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To;
+        b=X0v/Cm6+HMVBJflFpnyK7E2951V4dmSemJemlO6wYL6f2242lw8iZ47QHwaXEnBX/
+         lSleaA3N9XFNuPmPSMBZwybMMgAOX2PNrglKGBQ5ffiaK/UkNNlRmwIpCzUoAAHrqS
+         LY5Vc0uAOGmts2dyz+r7ZecePgpYvFMj5xaezi8JWp6lbRfaMtfSLhYUnNlHVqCCGB
+         z8sv70kK9uR/g7vUyLErEOgHMioyz432Y9BdFVb4oE6I2GUtJkTi2QymioKyaY5Bvp
+         NBFYnleQ8STqq2dDRsrD09PcC5VfBO+h4YvJkJTTHtpX8vLocdtfVL9GyJV8hTNmK8
+         1S96pjrEO08SQ==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B604688b30001>; Tue, 09 Mar 2021 09:27:31 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
+ svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.2; Tue, 9 Mar 2021 09:27:31 +1300
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.012; Tue, 9 Mar 2021 09:27:30 +1300
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        "jdelvare@suse.com" <jdelvare@suse.com>
+CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: Errant readings on LM81 with T2080 SoC
+Thread-Topic: Errant readings on LM81 with T2080 SoC
+Thread-Index: AQHXE6SbssdAOSHgwE+zIRhtn11Sk6p4Y2sAgAAgcACAACSBgIAABe+AgAEDagA=
+Date:   Mon, 8 Mar 2021 20:27:30 +0000
+Message-ID: <d6074923-ee7e-4499-0e54-383a607d3c41@alliedtelesis.co.nz>
+References: <8e0a88ba-01e9-9bc1-c78b-20f26ce27d12@alliedtelesis.co.nz>
+ <96d660bc-17ab-4e0e-9a94-bce1737a8da1@roeck-us.net>
+ <4a1b1494-df96-2d8c-9323-beb2c2ba706b@alliedtelesis.co.nz>
+ <a67ea323-634d-d34e-c63e-b1aaa4737b19@alliedtelesis.co.nz>
+ <5709f180-04b5-09b2-e1c4-53eb5c9345d8@roeck-us.net>
+In-Reply-To: <5709f180-04b5-09b2-e1c4-53eb5c9345d8@roeck-us.net>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <1094CD31F910C44BA6BC32182082EAC5@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210301035954.16713-2-chris.packham@alliedtelesis.co.nz>
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=C7uXNjH+ c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=dESyimp9J3IA:10 a=VwQbUJbxAAAA:8 a=aQgbSj5FuRS31VXIRagA:9 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22 a=BPzZvq435JnGatEyYwdK:22
+X-SEG-SpamProfiler-Score: 0
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, 01 Mar 2021 16:59:53 +1300, Chris Packham wrote:
-> Add infineon,ir36021 to trivial-devices.yaml.
-> 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
->  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-
-Acked-by: Rob Herring <robh@kernel.org>
+DQpPbiA4LzAzLzIxIDU6NTkgcG0sIEd1ZW50ZXIgUm9lY2sgd3JvdGU6DQo+IE9uIDMvNy8yMSA4
+OjM3IFBNLCBDaHJpcyBQYWNraGFtIHdyb3RlOg0KPiBbIC4uLiBdDQo+Pj4gVGhhdCdzIGZyb20g
+LUVOWElPIHdoaWNoIGlzIHVzZWQgaW4gb25seSBvbmUgcGxhY2UgaW4gaTJjLW1wYy5jLiBJJ2xs
+DQo+Pj4gZW5hYmxlIHNvbWUgZGVidWcgYW5kIHNlZSB3aGF0IHdlIGdldC4NCj4+IEZvciB0aGUg
+ZXJyYW50IHJlYWRpbmdzIHRoZXJlIHdhcyBub3RoaW5nIGFibm9ybWFsIHJlcG9ydGVkIGJ5IHRo
+ZSBkcml2ZXIuDQo+Pg0KPj4gRm9yIHRoZSAiTm8gc3VjaCBkZXZpY2Ugb3IgYWRkcmVzcyIgSSBz
+YXcgIm1wYy1pMmMgZmZlMTE5MDAwLmkyYzogTm8NCj4+IFJYQUsiIHdoaWNoIG1hdGNoZXMgdXAg
+d2l0aCB0aGUgLUVOWElPIHJldHVybi4NCj4+DQo+IElkIHN1Z2dlc3QgdG8gY2hlY2sgdGhlIHRp
+bWUgdW50aWwgbm90IGJ1c3kgYW5kIHN0b3AgaW4gbXBjX3hmZXIoKS4NCj4gVGhvc2UgaG90IGxv
+b3BzIGFyZSB1bnVzdWFsLCBhbmQgbWF5IHdlbGwgbWVzcyB1cCB0aGUgY29kZSBlc3BlY2lhbGx5
+DQo+IGlmIHByZWVtcHQgaXMgZW5hYmxlZC4gQWxzbywgYXJlIHlvdSB1c2luZyBpbnRlcnJ1cHRz
+IG9yIHBvbGxpbmcgaW4NCj4geW91ciBzeXN0ZW0gPw0KSSdtIHVzaW5nIGludGVycnVwdHMgYnV0
+IEkgc2VlIHRoZSBzYW1lIGlzc3VlIGlmIEkgY29tbWVudCBvdXQgdGhlIA0KaW50ZXJydXB0cyBp
+biB0aGUgZHRzaSBmaWxlIChpLmUuIGZvcmNlIGl0IHRvIHVzZSBwb2xsaW5nKS4NCj4gVGhlIGlu
+dGVycnVwdCBoYW5kbGVyIGxvb2tzIGEgYml0IG9kZCwgd2l0aCAiUmVhZCBhZ2Fpbg0KPiB0byBh
+bGxvdyByZWdpc3RlciB0byBzdGFiaWxpc2UiLg0KDQpZZWFoIHRoYXQgc3R1Y2sgb3V0IHRvIG1l
+IHRvby4gVGhlIGNvZGUgaW4gcXVlc3Rpb24gcHJlZGF0ZXMgZ2l0LCBJIHdlbnQgDQpzcGVsdW5r
+aW5nIGluIGhpc3RvcnkuZ2l0IGFuZCB0aGUgIlJlYWQgYWdhaW4iIHNlZW1zIHRvIGJlIGluIHRo
+ZSANCmluaXRpYWwgdmVyc2lvblswXS4gSSBkaWQgdHJ5IHRvIGFsdGVyIHRoZSBpbnRlcnJ1cHQg
+aGFuZGxlciBzbyB0aGF0IGl0IA0Kb25seSBkb2VzIG9uZSByZWFkIGJ1dCB0aGF0IGRpZG4ndCBz
+ZWVtIHRvIGNoYW5nZSBhbnl0aGluZy4NCg0KPiBEbyB5b3UgaGF2ZSBmc2wsdGltZW91dCBzZXQg
+aW4gdGhlIGRldmljZXRyZWUgcHJvcGVydGllcyBhbmQsIGlmIHNvLA0KPiBoYXZlIHlvdSBwbGF5
+ZWQgd2l0aCBpdCA/DQpIYXZlbid0IGdvdCBpdCBzZXQgYnV0IEknbGwgaGF2ZSBhIGdvIGF0IHR3
+ZWFraW5nIGl0Lg0KPiBPdGhlciB0aGFuIHRoYXQsIHRoZSBvbmx5IG90aGVyIHJlYWwgaWRlYSBJ
+IGhhdmUgd291bGQgYmUgdG8gbW9uaXRvcg0KPiB0aGUgaTJjIGJ1cy4NCkkgYW0gaW4gdGhlIGZv
+cnR1bmF0ZSBwb3NpdGlvbiBvZiBiZWluZyBhYmxlIHRvIGdvIGludG8gdGhlIG9mZmljZSBhbmQg
+DQpldmVuIGhhcHBlbiB0byBoYXZlIHRoZSBleHBlbnNpdmUgc2NvcGUgYXQgdGhlIG1vbWVudC4g
+Tm93IEkganVzdCBuZWVkIA0KdG8gZmluZCBhIHRhbWUgSFcgZW5naW5lZXIgc28gSSBkb24ndCBi
+dXJuIG15c2VsZiB0cnlpbmcgdG8gYXR0YWNoIHRoZSANCnByb2Jlcy4NCg0KLS0gDQoNClswXSAt
+IGh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L2hpc3Rvcnkv
+aGlzdG9yeS5naXQvY29tbWl0Lz9pZD0xMWIzMjM1ZGMwNGEzMDZmNmE5YmExNGMxYWI2MjFiMmQ1
+NGYyYzU2DQoNCg==
