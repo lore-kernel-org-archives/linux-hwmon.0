@@ -2,70 +2,58 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AEDAC433E0
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Mar 2021 05:07:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 179FCC433E0
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Mar 2021 21:49:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D742164FEF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Mar 2021 05:07:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C5EAF64FD7
+	for <linux-hwmon@archiver.kernel.org>; Wed, 10 Mar 2021 21:49:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbhCJFGx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 10 Mar 2021 00:06:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50640 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbhCJFGt (ORCPT
+        id S231852AbhCJVsn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 10 Mar 2021 16:48:43 -0500
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:50275 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231267AbhCJVsk (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 10 Mar 2021 00:06:49 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2E4C06174A;
-        Tue,  9 Mar 2021 21:06:49 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id u62so1944233oib.6;
-        Tue, 09 Mar 2021 21:06:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=kHXzTcKhVD4I6jBkzRw/JO/t8ZwJYozL6PX9mI+HwPg=;
-        b=Ax6ZxpPXMVKieb+hTL8tjq4AGtwyWRZWrEyJWbpvQf3ZkaYk0A7wyCDrCpXvAe7+3y
-         CGstQHw9VNeNht6I5HM9yduanktCGtTfCTW1dKLjsxf6oLqgl7G2z42DiGob4TBmS3dX
-         +xekyk4+4qv8a0mqDk5QCrJqY6NAx+4ANwMwZBlOOhsmZk66gFwr2WUHkvHrPrErg5jt
-         jNi2mzrNYBgh/pp4cqlKwUVyvxyKz5JBqsa2GIyANpOMes+HgAt4+/XsA0cRh9LQZ8Ip
-         vrTJXGumBzZ/sQURhC+/IBp2tqIv+eWmxIhTgmzV756u+kLWB5aJFIqb1oba0tr84mls
-         Yr6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=kHXzTcKhVD4I6jBkzRw/JO/t8ZwJYozL6PX9mI+HwPg=;
-        b=elK/9UVOOPY51Kgo0D35zc1J/MgJPx4TonIAbpxDkOlFFZu1vG6SqR/dJsLbyxky23
-         mozNDwfKOrvqgTsz04HlBBH4yDJQ0rpdZa1Bk3cETOtodOcvHtPyMjKYqTcfhwTcqffx
-         RXabX4QV8fLa0/5LeCVueli5SRwqNdXHpHhyeHNozQrywbvomt4lA3TKHFiS2dYrpxG+
-         KdFl9tM0nhd2XeX0s7RiWWn5qfn961j9NKNd08Kp+Xamc7817khkhpDRw4/oLFihp8+0
-         d7GjXT0ePMj7H3yWCgneL/lAgmq091q7kUBPMPLw0Jo4pySc3jUYRW/lvpUhyS/RoD5t
-         Rl3g==
-X-Gm-Message-State: AOAM532UvHK8xiU8einvEH9MSU+Ah2ug8Bx/W2THhAfyUui8ovkxPA/3
-        8ys2Nk388DFOHPlfT4q/47A=
-X-Google-Smtp-Source: ABdhPJxNfMSXjqsPjlj63QA/2urjCvBtoU3hpTuo3vxwCVkm9OSvmg6k6hCDVVgeUCX65o/WmEDeGQ==
-X-Received: by 2002:a05:6808:1447:: with SMTP id x7mr1199455oiv.145.1615352808537;
-        Tue, 09 Mar 2021 21:06:48 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u15sm3406760oiu.28.2021.03.09.21.06.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Mar 2021 21:06:47 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: Errant readings on LM81 with T2080 SoC
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
+        Wed, 10 Mar 2021 16:48:40 -0500
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 6E1C0891AE;
+        Thu, 11 Mar 2021 10:48:36 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1615412916;
+        bh=2Y40yV20kTz+uP8WJOd2zRY2ZK37UuSTQye56QXyLdQ=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To;
+        b=zItC4lNaMAuEdg9ohspna/PZidFL62L3E2Zz+vs565vG2MOekEjAnSrcCzKHz/VVM
+         ISseRsweCb70Q6ueWshQrsAOouaSTJwcyE/RX2Ul9sRGRTueW4QpgbVqDfsL0Wmng3
+         8rbLFfiQaMPMA1vA5on4O1MIPG3QcwigXBK2gXvRK3UKKxmEHLrqGegRYlDrz70H0W
+         lBRReMk35Zl6YgwOgPnXr90Sx46F+cCXE61Jrsh11cwOetmTSz9jR4gor0JmoUrf5v
+         1CzS2E7zesLrBR2lU8WJL8lA6n7/+XNitiEUHNjeJA4Y/YC7y5+nQ+H7PM/BPpRpu1
+         3i1TyMRv515gQ==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B60493eb40001>; Thu, 11 Mar 2021 10:48:36 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
+ by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
+ Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 11 Mar 2021 10:48:36 +1300
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.012; Thu, 11 Mar 2021 10:48:36 +1300
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Guenter Roeck <linux@roeck-us.net>,
         "jdelvare@suse.com" <jdelvare@suse.com>
-Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
         "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: Errant readings on LM81 with T2080 SoC
+Thread-Topic: Errant readings on LM81 with T2080 SoC
+Thread-Index: AQHXE6SbssdAOSHgwE+zIRhtn11Sk6p4Y2sAgAAgcACAACSBgIAABe+AgAEDagCAAfS7gIAALq8AgAEX54A=
+Date:   Wed, 10 Mar 2021 21:48:35 +0000
+Message-ID: <b41a802b-2833-13fb-58ad-1762a3507460@alliedtelesis.co.nz>
 References: <8e0a88ba-01e9-9bc1-c78b-20f26ce27d12@alliedtelesis.co.nz>
  <96d660bc-17ab-4e0e-9a94-bce1737a8da1@roeck-us.net>
  <4a1b1494-df96-2d8c-9323-beb2c2ba706b@alliedtelesis.co.nz>
@@ -73,85 +61,93 @@ References: <8e0a88ba-01e9-9bc1-c78b-20f26ce27d12@alliedtelesis.co.nz>
  <5709f180-04b5-09b2-e1c4-53eb5c9345d8@roeck-us.net>
  <d6074923-ee7e-4499-0e54-383a607d3c41@alliedtelesis.co.nz>
  <1aa0dc23-0706-5902-2f46-0767de0e3ad6@alliedtelesis.co.nz>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
- RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
- nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
- 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
- gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
- IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
- kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
- VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
- jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
- BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
- ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
- CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
- nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
- hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
- c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
- 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
- GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
- sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
- Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
- HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
- BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
- l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
- 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
- pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
- J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
- pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
- 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
- ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
- I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
- nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
- HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
- JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
- J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
- cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
- wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
- hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
- nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
- QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
- trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
- WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
- HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <d5045879-45aa-db38-e6aa-4c8ea3e62f6c@roeck-us.net>
-Date:   Tue, 9 Mar 2021 21:06:46 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <1aa0dc23-0706-5902-2f46-0767de0e3ad6@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=utf-8
+ <d5045879-45aa-db38-e6aa-4c8ea3e62f6c@roeck-us.net>
+In-Reply-To: <d5045879-45aa-db38-e6aa-4c8ea3e62f6c@roeck-us.net>
+Accept-Language: en-NZ, en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <EE669EFBE8218F4B972E00D4598F3679@atlnz.lc>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=DsQoB13+ c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=dESyimp9J3IA:10 a=NNP4SLs9GTR1jxPQxVAA:9 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 3/9/21 6:19 PM, Chris Packham wrote:
-> On 9/03/21 9:27 am, Chris Packham wrote:
->> On 8/03/21 5:59 pm, Guenter Roeck wrote:
->>> Other than that, the only other real idea I have would be to monitor
->>> the i2c bus.
->> I am in the fortunate position of being able to go into the office and 
->> even happen to have the expensive scope at the moment. Now I just need 
->> to find a tame HW engineer so I don't burn myself trying to attach the 
->> probes.
-> One thing I see on the scope is that when there is a CPU load there 
-> appears to be some clock stretching going on (SCL is held low some 
-> times). I don't see it without the CPU load. It's hard to correlate a 
-> clock stretching event with a bad read or error but it is one area where 
-> the SMBUS spec has a maximum that might cause the device to give up waiting.
-> 
-Do you have CONFIG_PREEMPT enabled in your kernel ? But even without
-that it is possible that the hot loops at the beginning and end of
-each operation mess up the driver and cause it to sleep longer
-than intended. Did you try usleep_range() ?
-
-On a side note, can you send me a register dump for the lm81 ?
-It would be useful for my module test code.
-
-Thanks,
-Guenter
+DQpPbiAxMC8wMy8yMSA2OjA2IHBtLCBHdWVudGVyIFJvZWNrIHdyb3RlOg0KPiBPbiAzLzkvMjEg
+NjoxOSBQTSwgQ2hyaXMgUGFja2hhbSB3cm90ZToNCj4+IE9uIDkvMDMvMjEgOToyNyBhbSwgQ2hy
+aXMgUGFja2hhbSB3cm90ZToNCj4+PiBPbiA4LzAzLzIxIDU6NTkgcG0sIEd1ZW50ZXIgUm9lY2sg
+d3JvdGU6DQo+Pj4+IE90aGVyIHRoYW4gdGhhdCwgdGhlIG9ubHkgb3RoZXIgcmVhbCBpZGVhIEkg
+aGF2ZSB3b3VsZCBiZSB0byBtb25pdG9yDQo+Pj4+IHRoZSBpMmMgYnVzLg0KPj4+IEkgYW0gaW4g
+dGhlIGZvcnR1bmF0ZSBwb3NpdGlvbiBvZiBiZWluZyBhYmxlIHRvIGdvIGludG8gdGhlIG9mZmlj
+ZSBhbmQNCj4+PiBldmVuIGhhcHBlbiB0byBoYXZlIHRoZSBleHBlbnNpdmUgc2NvcGUgYXQgdGhl
+IG1vbWVudC4gTm93IEkganVzdCBuZWVkDQo+Pj4gdG8gZmluZCBhIHRhbWUgSFcgZW5naW5lZXIg
+c28gSSBkb24ndCBidXJuIG15c2VsZiB0cnlpbmcgdG8gYXR0YWNoIHRoZQ0KPj4+IHByb2Jlcy4N
+Cj4+IE9uZSB0aGluZyBJIHNlZSBvbiB0aGUgc2NvcGUgaXMgdGhhdCB3aGVuIHRoZXJlIGlzIGEg
+Q1BVIGxvYWQgdGhlcmUNCj4+IGFwcGVhcnMgdG8gYmUgc29tZSBjbG9jayBzdHJldGNoaW5nIGdv
+aW5nIG9uIChTQ0wgaXMgaGVsZCBsb3cgc29tZQ0KPj4gdGltZXMpLiBJIGRvbid0IHNlZSBpdCB3
+aXRob3V0IHRoZSBDUFUgbG9hZC4gSXQncyBoYXJkIHRvIGNvcnJlbGF0ZSBhDQo+PiBjbG9jayBz
+dHJldGNoaW5nIGV2ZW50IHdpdGggYSBiYWQgcmVhZCBvciBlcnJvciBidXQgaXQgaXMgb25lIGFy
+ZWEgd2hlcmUNCj4+IHRoZSBTTUJVUyBzcGVjIGhhcyBhIG1heGltdW0gdGhhdCBtaWdodCBjYXVz
+ZSB0aGUgZGV2aWNlIHRvIGdpdmUgdXAgd2FpdGluZy4NCj4+DQo+IERvIHlvdSBoYXZlIENPTkZJ
+R19QUkVFTVBUIGVuYWJsZWQgaW4geW91ciBrZXJuZWwgPyBCdXQgZXZlbiB3aXRob3V0DQo+IHRo
+YXQgaXQgaXMgcG9zc2libGUgdGhhdCB0aGUgaG90IGxvb3BzIGF0IHRoZSBiZWdpbm5pbmcgYW5k
+IGVuZCBvZg0KPiBlYWNoIG9wZXJhdGlvbiBtZXNzIHVwIHRoZSBkcml2ZXIgYW5kIGNhdXNlIGl0
+IHRvIHNsZWVwIGxvbmdlcg0KPiB0aGFuIGludGVuZGVkLiBEaWQgeW91IHRyeSB1c2xlZXBfcmFu
+Z2UoKSA/DQoNCkkndmUgYmVlbiBydW5uaW5nIHdpdGggYW5kIHdpdGhvdXQgQ09ORklHX1BSRUVN
+UFQuIFRoZSBmYWlsdXJlcyBoYXBwZW4gDQp3aXRoIGJvdGguDQoNCkkgZGlkIHRyeSB1c2xlZXBf
+cmFuZ2UoKSBhbmQgc3RpbGwgc2F3IGZhaWx1cmVzLg0KDQo+IE9uIGEgc2lkZSBub3RlLCBjYW4g
+eW91IHNlbmQgbWUgYSByZWdpc3RlciBkdW1wIGZvciB0aGUgbG04MSA/DQo+IEl0IHdvdWxkIGJl
+IHVzZWZ1bCBmb3IgbXkgbW9kdWxlIHRlc3QgY29kZS4NCg0KSGVyZSB5b3UgZ28gdGhpcyBpcyBm
+cm9tIGEgbGFyZ2VseSB1bmNvbmZpZ3VyZWQgTE04MQ0KDQogwqDCoMKgwqAgMMKgIDHCoCAywqAg
+M8KgIDTCoCA1wqAgNsKgIDfCoCA4wqAgOcKgIGHCoCBiwqAgY8KgIGTCoCBlwqAgZiAwMTIzNDU2
+Nzg5YWJjZGVmDQowMDogNDcgNDcgNDcgNDcgNDcgNDcgNDcgNDcgNDcgNDcgNDcgNDcgNDcgNDcg
+NDcgNDcgR0dHR0dHR0dHR0dHR0dHRw0KMTA6IDQ3IDgxIDI0IDAzIDk0IDAwIDAwIDAwIDAwIGZm
+IGZmIGZmIGZmIGZmIGZmIGZmIEc/JD8/Li4uLi4uLi4uLi4NCjIwOiBiZiBjYiBjMSAwMCBjMCA0
+NyBlYyAyNCBmZiBmZiA2NSBmZiAwMCBmZiAwMCBmZiA/Pz8uP0c/JC4uZS4uLi4uDQozMDogMDAg
+ZmYgMDAgZmYgMDAgZmYgMDAgNzEgYTkgN2YgN2YgZmYgZmYgNTggMDEgMDQgLi4uLi4uLnE/Pz8u
+Llg/Pw0KNDA6IDAxIDA4IDAwIDAwIDAwIDAwIDAwIDUwIDJmIDgwIDgwIDAxIDQ0IDAwIDAwIDAw
+ID8/Li4uLi5QLz8/P0QuLi4NCjUwOiAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAw
+MCAwMCAwMCAwMCAwMCAuLi4uLi4uLi4uLi4uLi4uDQo2MDogMDAgMDAgMDAgMDAgMDAgMDAgMDAg
+MDAgMDAgMDAgMDAgMDAgMDAgMDAgMDAgMDAgLi4uLi4uLi4uLi4uLi4uLg0KNzA6IDAwIDAwIDAw
+IDAwIDAwIDAwIDAwIDAwIDAwIDAwIDAwIDAwIDAwIDAwIDAwIDAwIC4uLi4uLi4uLi4uLi4uLi4N
+CjgwOiAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAuLi4u
+Li4uLi4uLi4uLi4uDQo5MDogMDAgODEgMjQgMDMgOTQgMDAgMDAgMDAgMDAgZmYgZmYgZmYgZmYg
+ZmYgZmYgZmYgLj8kPz8uLi4uLi4uLi4uLg0KYTA6IGJmIGNiIGMxIDAwIGMwIDQ3IGVjIDI0IGZm
+IGZmIDY1IGZmIDAwIGZmIDAwIGZmID8/Py4/Rz8kLi5lLi4uLi4NCmIwOiAwMCBmZiAwMCBmZiAw
+MCBmZiAwMCA3MSBhOSA3ZiA3ZiBmZiBmZiA1OCAwMSAwNCAuLi4uLi4ucT8/Py4uWD8/DQpjMDog
+MDEgMDAgMDAgMDAgMDAgMDAgMDAgNTAgMmYgODAgODAgMDEgNDQgMDAgMDAgMDAgPy4uLi4uLlAv
+Pz8/RC4uLg0KZDA6IDAwIDAwIDAwIDAwIDAwIDAwIDAwIDAwIDAwIDAwIDAwIDAwIDAwIDAwIDAw
+IDAwIC4uLi4uLi4uLi4uLi4uLi4NCmUwOiAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAw
+MCAwMCAwMCAwMCAwMCAwMCAuLi4uLi4uLi4uLi4uLi4uDQpmMDogMDAgMDAgMDAgMDAgMDAgMDAg
+MDAgMDAgMDAgMDAgMDAgMDAgMDAgMDAgMDAgMDAgLi4uLi4uLi4uLi4uLi4uLg0KDQpUaGlzIGlz
+IGZyb20gYSBMTTgxIHRoYXQncyBiZWVuIGNvbmZpZ3VyZWQgYnkgb3VyIGFwcGxpY2F0aW9uIFNX
+IHdpdGggDQpsaW1pdHMgYXBwcm9wcmlhdGUgZm9yIHRoZSBwbGF0Zm9ybS4NCg0KIMKgwqDCoMKg
+IDDCoCAxwqAgMsKgIDPCoCA0wqAgNcKgIDbCoCA3wqAgOMKgIDnCoCBhwqAgYsKgIGPCoCBkwqAg
+ZcKgIGYgMDEyMzQ1Njc4OWFiY2RlZg0KMDA6IGZmIGZmIGZmIGZmIGZmIGZmIGZmIGZmIGZmIGZm
+IGZmIGZmIGZmIGZmIGZmIGZmIC4uLi4uLi4uLi4uLi4uLi4NCjEwOiBmZiA4MSAyNCAwMyA5NCAw
+MCAwMCAwMCAwMCBmZiBmZiBmZiBmZiBmZiBmZiBmZiAuLiQuLi4uLi4uLi4uLi4uDQoyMDogYmYg
+Y2MgYzEgMDAgYzAgNDcgZWMgMWMgZmYgZmYgNjUgZGMgYjQgZmYgYzAgZDMgLi4uLi5HLi4uLmUu
+Li4uLg0KMzA6IGFkIGZmIDAwIGQzIGFkIDRlIDQwIDcxIGE5IDRiIDQ2IGZmIGZmIDU4IDAxIDA0
+IC4uLi4uTkBxLktGLi5YLi4NCjQwOiAwMSAwOCAwMCAwMCAwMCAwMCAwMCBmMCAyZiA4MCA4MCA4
+MSA0NCA4MCA4MCA4MCAuLi4uLi4uLi8uLi5ELi4uDQo1MDogODAgODAgODAgODAgODAgODAgODAg
+ODAgODAgODAgODAgODAgODAgODAgODAgODAgLi4uLi4uLi4uLi4uLi4uLg0KNjA6IDgwIDgwIDgw
+IDgwIDgwIDgwIDgwIDgwIDgwIDgwIDgwIDgwIDgwIDgwIDgwIDgwIC4uLi4uLi4uLi4uLi4uLi4N
+CjcwOiA4MCA4MCA4MCA4MCA4MCA4MCA4MCA4MCA4MCA4MCA4MCA4MCA4MCA4MCA4MCA4MCAuLi4u
+Li4uLi4uLi4uLi4uDQo4MDogODAgODAgODAgODAgODAgODAgODAgODAgODAgODAgODAgODAgODAg
+ODAgODAgODAgLi4uLi4uLi4uLi4uLi4uLg0KOTA6IDgwIDgxIDI0IDAzIDk0IDAwIDAwIDAwIDAw
+IGZmIGZmIGZmIGZmIGZmIGZmIGZmIC4uJC4uLi4uLi4uLi4uLi4NCmEwOiBiZiBjYyBjMSAwMCBj
+MCA0NyBlYyAxYyBmZiBmZiA2NSBkYyBiNCBmZiBjMCBkMyAuLi4uLkcuLi4uZS4uLi4uDQpiMDog
+YWQgZmYgMDAgZDMgYWQgNGUgNDAgNzEgYTkgNGIgNDYgZmYgZmYgNTggMDEgMDQgLi4uLi5OQHEu
+S0YuLlguLg0KYzA6IDAxIDAwIDAwIDAwIDAwIDAwIDAwIGYwIDJmIDgwIDgwIDgxIDQ0IDgwIDgw
+IDgwIC4uLi4uLi4uLy4uLkQuLi4NCmQwOiA4MCA4MCA4MCA4MCA4MCA4MCA4MCA4MCA4MCA4MCA4
+MCA4MCA4MCA4MCA4MCA4MCAuLi4uLi4uLi4uLi4uLi4uDQplMDogODAgODAgODAgODAgODAgODAg
+ODAgODAgODAgODAgODAgODAgODAgODAgODAgODAgLi4uLi4uLi4uLi4uLi4uLg0KZjA6IDgwIDgw
+IDgwIDgwIDgwIDgwIDgwIDgwIDgwIDgwIDgwIDgwIDgwIDgwIDgwIDgwIC4uLi4uLi4uLi4uLi4u
+Li4NCg==
