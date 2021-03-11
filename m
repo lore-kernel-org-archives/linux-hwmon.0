@@ -2,151 +2,104 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF068C433E6
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 21:35:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DCCD0C433E0
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 21:39:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6D12D64F19
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 21:35:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A9C1364F8E
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 21:39:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230422AbhCKVf2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 11 Mar 2021 16:35:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38422 "EHLO
+        id S231151AbhCKVil (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 11 Mar 2021 16:38:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbhCKVe4 (ORCPT
+        with ESMTP id S231357AbhCKVie (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 11 Mar 2021 16:34:56 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38BBC061574;
-        Thu, 11 Mar 2021 13:34:55 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id x135so20227253oia.9;
-        Thu, 11 Mar 2021 13:34:55 -0800 (PST)
+        Thu, 11 Mar 2021 16:38:34 -0500
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89836C061574;
+        Thu, 11 Mar 2021 13:38:33 -0800 (PST)
+Received: by mail-ot1-x334.google.com with SMTP id v24-20020a9d69d80000b02901b9aec33371so361172oto.2;
+        Thu, 11 Mar 2021 13:38:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ah/Q+4P0rWNA65w1vpM5l70L47rfmRPmna12SbRGJc0=;
-        b=EIAoKqZWETXIDJH2w6FDnLf0nSDwAQg5g3G7dwOOvzH82um1JALi9XKCosGk33UAvS
-         dAdI8S37tHk7+FLeJFDCQb42lPacicWWTT1bLplBcrR/KHnEvaWLF98mC1eJVynM2KBA
-         FdxgjCXQOxZjyq+Vb+eCSCZQi7kfHIFUWFZYoxEz2PThulgZSgEWtaOsJG9Vz8l0mIiW
-         ZMzA1qPPPZlFo3rUHKmh0bqOHcQnRXxatsu7zIrRhwxqkYgY9kiLMrBvpHxKHj470BpE
-         SrvUaiQExSjEWiez19jABhr+a/wx4lARHwRKNrFD6dazMdvmHXEXRw1H7aFVP3SyEIXo
-         c/Hg==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=QIKZ/cIuxfarkAp9T4K0BykcCz0xUFXqUmHsBpDAC+A=;
+        b=KDFfHPSV1DwhyNuMe3NRHV1S7Yya/uMvKBwAHYy9EpCVr/mQVBUzDucizl7rQX/UZk
+         8MxO2ieAHyBpHoqs9TL3RSjii4+mFd3Nnk4cwr8GxF0y4/a1LGNCBPywwuY6d/56Rexk
+         AEtE4Jvelf/T9EeTjyvUYK30WQP/IUCB5BMh3KvEGCoJQrxGZLCcNp8Dz10AUMP6YUL1
+         VeTlcjDR5DOaNVSSslJ/69io2iQOO+WR6bN7I07ZFCECkigMkkeSiBc/mmHKcSVfI2Up
+         bHBjn2l0OO2Q9Kd+5/8ok1dTdJfpv+83TW88+48qoZ+/ZJQ1wPEohtqgfCiXbHwzDVwk
+         JlwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=ah/Q+4P0rWNA65w1vpM5l70L47rfmRPmna12SbRGJc0=;
-        b=Ifvu1wgJH7t9mqoPpjQTqdynysvTZ+dxXDGVC0JZwG+m08rB3JohZs1V+fth7HDw/W
-         L3hrmjproUIUa1v2KbwQ+XgAiYU0olF1CoUSd8JOjT6ETpQ/z4BJ62wTO9hmokqA+NDF
-         G5c5DakFELXXirsnQT91q6zaEBbC3MgkRQlg/m+2gZ3OXxyxMQE3mxm+p1Xrhq+spUkd
-         FNcy70vk7GrlvoZpnrPwxRrYTGASms80mUcAKd+DweMzK3Hv4AGNYR2WlTt9hKqi0wgs
-         YQeXEfOVt5FqXtYsjXKV2qa4jJwwQF6zVMgUyMxcK5qnodcmJ8AViPADupujkOvnHnCo
-         kxvg==
-X-Gm-Message-State: AOAM5302MvHrcyrVpNid+4IQ5l4G71XROoaAGNMqFMLSl1CBtg9QVZOY
-        HDznFzJo866chYc3/rb+EFF40ob8Fto=
-X-Google-Smtp-Source: ABdhPJzaSrpmajx5cwrRDXDiDd2eQ8wNraTbPOgZjfXVvF6RNuSyLPvl7Azfkq2UZfuRp8RpxEbgVg==
-X-Received: by 2002:aca:be04:: with SMTP id o4mr2413033oif.25.1615498495348;
-        Thu, 11 Mar 2021 13:34:55 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x10sm880362otp.19.2021.03.11.13.34.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Mar 2021 13:34:54 -0800 (PST)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=QIKZ/cIuxfarkAp9T4K0BykcCz0xUFXqUmHsBpDAC+A=;
+        b=Od6MpgalsXMp/Z4zbpBPmV4LeTIuwilQqrP6JWnHP8+cImdb7Jnj7AAgbqwC13Tpsp
+         8G7HRhDRSkuXe3vAYUfQ/8H9WewCKbthf8kuhLm/f14MFpm7NbcnMc0j+nojtz8o75mN
+         898UI0fVVKgNEO3tduJly0sx/7qF9V0ieTCLglBZNZ43nPQVeFsAAJP6Q9KwXCtc/k9L
+         eQGET+oNhYed+yn6Xo0QtcNiae8ZEH7+SBCADsiH7eVChOtths7NdITvkwDVIaIQMnVJ
+         GX8/HomBrP4OIkqt98lHo23D2AaoAUJB4bOD7MR6a+sOq6LeoutKT8Z+110pBYm6SObu
+         y/8w==
+X-Gm-Message-State: AOAM530J6SyWdD9hYopDbThrBQS88Tq+CELi9YqPFi958doGNyomeh7Z
+        WmymZuhf2ugbWKn7KZOM+OPOFUHBrNg=
+X-Google-Smtp-Source: ABdhPJzbF9ur5BOL7UQ3fhvhqvbsznkZMyxzfJrYMgYa4wF11DEkh0SeOISQGH5d6yjP2tBmi4HwFw==
+X-Received: by 2002:a05:6830:1506:: with SMTP id k6mr864592otp.26.1615498713022;
+        Thu, 11 Mar 2021 13:38:33 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id y11sm758146oov.9.2021.03.11.13.38.31
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 11 Mar 2021 13:38:32 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: Errant readings on LM81 with T2080 SoC
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
-        Wolfram Sang <wsa@kernel.org>
-Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-References: <20210311081842.GA1070@ninjato>
- <94dfa9dc-a80c-98ba-4169-44cce3d810f7@alliedtelesis.co.nz>
+Date:   Thu, 11 Mar 2021 13:38:31 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <725c5e51-65df-e17d-e2da-0982efacf2d2@roeck-us.net>
-Date:   Thu, 11 Mar 2021 13:34:52 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: Switch to using the new API kobj_to_dev()
+Message-ID: <20210311213831.GA35420@roeck-us.net>
+References: <1614071667-5665-1-git-send-email-yang.lee@linux.alibaba.com>
 MIME-Version: 1.0
-In-Reply-To: <94dfa9dc-a80c-98ba-4169-44cce3d810f7@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1614071667-5665-1-git-send-email-yang.lee@linux.alibaba.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 3/11/21 1:17 PM, Chris Packham wrote:
+On Tue, Feb 23, 2021 at 05:14:27PM +0800, Yang Li wrote:
+> fixed the following coccicheck:
+> ./drivers/hwmon/hwmon.c:82:60-61: WARNING opportunity for kobj_to_dev()
 > 
-> On 11/03/21 9:18 pm, Wolfram Sang wrote:
->>> Bummer. What is really weird is that you see clock stretching under
->>> CPU load. Normally clock stretching is triggered by the device, not
->>> by the host.
->> One example: Some hosts need an interrupt per byte to know if they
->> should send ACK or NACK. If that interrupt is delayed, they stretch the
->> clock.
->>
-> It feels like something like that is happening. Looking at the T2080 
-> Reference manual there is an interesting timing diagram (Figure 14-2 if 
-> someone feels like looking it up). It shows SCL low between the ACK for 
-> the address and the data byte. I think if we're delayed in sending the 
-> next byte we could violate Ttimeout or Tlow:mext from the SMBUS spec.
-> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 
-I think that really leaves you only two options that I can see:
-Rework the driver to handle critical actions (such as setting TXAK,
-and everything else that might result in clock stretching) in the
-interrupt handler, or rework the driver to handle everything in
-a high priority kernel thread.
+Applied.
 
+Thanks,
 Guenter
+
+> ---
+>  drivers/hwmon/hwmon.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+> index 6c68405..fd47ab4 100644
+> --- a/drivers/hwmon/hwmon.c
+> +++ b/drivers/hwmon/hwmon.c
+> @@ -79,7 +79,7 @@ struct hwmon_thermal_data {
+>  static umode_t hwmon_dev_name_is_visible(struct kobject *kobj,
+>  					 struct attribute *attr, int n)
+>  {
+> -	struct device *dev = container_of(kobj, struct device, kobj);
+> +	struct device *dev = kobj_to_dev(kobj);
+>  
+>  	if (to_hwmon_device(dev)->name == NULL)
+>  		return 0;
