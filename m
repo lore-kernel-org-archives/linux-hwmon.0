@@ -7,63 +7,75 @@ X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E837AC433E0
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 14:58:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71D17C433E6
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 15:20:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 970D564F93
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 14:58:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3292164FD6
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 15:20:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233939AbhCKO6I (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 11 Mar 2021 09:58:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37312 "EHLO
+        id S234075AbhCKPUC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 11 Mar 2021 10:20:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233892AbhCKO5x (ORCPT
+        with ESMTP id S234008AbhCKPTv (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 11 Mar 2021 09:57:53 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BBDC061574;
-        Thu, 11 Mar 2021 06:57:53 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id x78so23422002oix.1;
-        Thu, 11 Mar 2021 06:57:53 -0800 (PST)
+        Thu, 11 Mar 2021 10:19:51 -0500
+Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63114C061574;
+        Thu, 11 Mar 2021 07:19:49 -0800 (PST)
+Received: by mail-oo1-xc34.google.com with SMTP id e19-20020a4a73530000b02901b62c0e1bb6so757160oof.11;
+        Thu, 11 Mar 2021 07:19:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=yK9WgE+/HXQJn+dMGAHbYee8OPSAix4maqmMu9Dx19M=;
-        b=HyBzxTldG7caC+TRJHUyXJTSynqWXN6OWCAqB+APFRmqTprrDEDxt5iv6eITcdzCd2
-         BCKtEfDas8CAVlG5a8AiPOv3lbyHn9V1Vvmqzytu+9xnhmhQqIzsPsD5TFQSEUo3/xAG
-         p+qb+d5y29qhdwR8rY5CoUhxQ81R3H1tkznunU1UV+cCHMlcDoaiaZYau++ehkFj2o7V
-         uthUbwDisGsd9Sx4ppybWJnzJoMDkcmi5ANckD7QhXtFS/nYoOoNx0InuN0/x/tX/o72
-         7D4zAsYp6fTyjc70ffQBA6drPkSZsVNBaDDa255Ae+/2Wcu48qRSHNIdrif8vk3l8nFP
-         1q6Q==
+         :user-agent:mime-version:in-reply-to;
+        bh=/piWRglIJAAaHxC5K9ZPKIvvXUDdsYSqAMgqNZKw/jQ=;
+        b=CWAlQimVEi4aZHlMgv+kboxx4U4Qxd+3nLBLA7lVUTXXqbCXPv+2sTIpT7N+dbMm+c
+         W1i3lSTVohCI5ds6emYnZqLa1nW3wvqGEAzTsRr3E9eHsh1egJkCKa3Sr/p8lnHyByYU
+         VcCJHb1oQEAJh83uvzXc/KNkni0JdYdRkLSCHdlzzPLlvUuL+6GLq0Mk1KuY2Rhu1qrP
+         9H26F0OPxNTreB5P7U80LmtnWuxbEHigQJoyq68jHjZ8AxE6H1odfeiDiVDuS/YogEhK
+         CiylyMLrqOR9zZ/Yk1DooPNgB1tkRWB/AwLJJAT3Zm3d4Z60nFPU3WQcU8Dc2oZOiqt+
+         GdOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=yK9WgE+/HXQJn+dMGAHbYee8OPSAix4maqmMu9Dx19M=;
-        b=cMS7m6eJpflIQZOfkKzTLgxvAnjLQwqxNURb8MAMz+4+7fZW7dDnZ7ojC3t46CUlDx
-         Wl7zctguxQ9fdTML/KO/V3D4Z88DsgD7qMSxNruP4/evUmzCUpdpLBa0WpXUFB1Elv+8
-         Mta/6Di+mgoZVUkxngxZCa0eGwqCg20lXO7FgJZKg0SgkZIu6nbbROsYDCwUWDTBL+z5
-         VRoYnmne5y7BMi+/V96s1obmoj7qma7Opv3b8X0n8Fo4N7RWtrto8OWcP5jEyt3Y6VxS
-         3LT0HgcCd0f91Ljysyishih7LI+I3HCKi69n+HBcLUKxfCjakEdVzpc/VzUZcclynBOR
-         Mkdg==
-X-Gm-Message-State: AOAM5316t9o/Evu4yXhnlerlBuBrt2Un/RTs0brONt7xSI0TTSvQ9RKQ
-        hM0mH03AUvRqK+7vOgjsl1X1AwEOktM=
-X-Google-Smtp-Source: ABdhPJw5AKrPcnFNeLDHg7Vi9iI5IipgJyU/8jCIEmOyn1HY1wvRLwvBohxEDzaMqEqfd1wFcnICNw==
-X-Received: by 2002:aca:2219:: with SMTP id b25mr6472309oic.112.1615474672824;
-        Thu, 11 Mar 2021 06:57:52 -0800 (PST)
+         :message-id:date:user-agent:mime-version:in-reply-to;
+        bh=/piWRglIJAAaHxC5K9ZPKIvvXUDdsYSqAMgqNZKw/jQ=;
+        b=HV+5ldLGnrNfNUHHwkaTEZYZJw4NGLf02iq78vlt2MZsR5jyq0yOQKSexITSKh0C5N
+         eNIa3WW/mFHEBJBXnMtmqvroDaxBybQxifA3TZUOlxcmjQKiKfK3pu9ZN16KQjHTsGTu
+         DB63lPpTZBjBx2Keqeg9nvhd7Yan+AHJhNyoUuOYeSKma4F42XLODLFaOpmVzokjLT9K
+         jyhJ2stBj9RgZxb+lH+dunGLtYhjlYJXGEtlxVr7z7v+cKoc2x5i4cHd0Iy3G0wTqTCx
+         nOxfIcJyNGDKW7NlWs+2gv0t0g3ayymILg3qITiDiqDiA4ybH4pK/S2QguVIAAUJBs4K
+         3HpQ==
+X-Gm-Message-State: AOAM5311/3RXG46lq9BnyA5k5nuS4vx+3hSnu6yvkVKTuPZ0htcuDzVx
+        DMxQai+4i8zj+UQoUygtGkWvmfL9dK8=
+X-Google-Smtp-Source: ABdhPJyVwzcnA6Hzn62Jx7Yc1skAYwfZGFku3JK4XU94sP3VQm3rplxIZPSHN9EVtv/PB/dZkyeYYQ==
+X-Received: by 2002:a4a:ea94:: with SMTP id r20mr7048645ooh.43.1615475988716;
+        Thu, 11 Mar 2021 07:19:48 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a185sm598642oif.49.2021.03.11.06.57.51
+        by smtp.gmail.com with ESMTPSA id p3sm693944otk.9.2021.03.11.07.19.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Mar 2021 06:57:52 -0800 (PST)
+        Thu, 11 Mar 2021 07:19:47 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: sensors-detect: Found unknown chip with ID 0x0404
-To:     Corentin Labbe <clabbe.montjoie@gmail.com>, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-References: <YEomZ1+Nk0m150lt@Red>
+Subject: Re: Errant readings on LM81 with T2080 SoC
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+References: <8e0a88ba-01e9-9bc1-c78b-20f26ce27d12@alliedtelesis.co.nz>
+ <96d660bc-17ab-4e0e-9a94-bce1737a8da1@roeck-us.net>
+ <4a1b1494-df96-2d8c-9323-beb2c2ba706b@alliedtelesis.co.nz>
+ <a67ea323-634d-d34e-c63e-b1aaa4737b19@alliedtelesis.co.nz>
+ <5709f180-04b5-09b2-e1c4-53eb5c9345d8@roeck-us.net>
+ <d6074923-ee7e-4499-0e54-383a607d3c41@alliedtelesis.co.nz>
+ <1aa0dc23-0706-5902-2f46-0767de0e3ad6@alliedtelesis.co.nz>
+ <d5045879-45aa-db38-e6aa-4c8ea3e62f6c@roeck-us.net>
+ <b41a802b-2833-13fb-58ad-1762a3507460@alliedtelesis.co.nz>
+ <d37a114c-fa3f-40e8-4d85-52eb1ff03c37@roeck-us.net>
+ <20210311081842.GA1070@ninjato>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -108,37 +120,73 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <2ec733db-fefd-6eba-bbbc-cd289931e3de@roeck-us.net>
-Date:   Thu, 11 Mar 2021 06:57:50 -0800
+Message-ID: <cafd05ea-088e-c7c8-41f6-beafaa943453@roeck-us.net>
+Date:   Thu, 11 Mar 2021 07:19:44 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <YEomZ1+Nk0m150lt@Red>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20210311081842.GA1070@ninjato>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="y5JVUJFBvApYWP5Nc2ztCVBdGvK5SakF4"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 3/11/21 6:17 AM, Corentin Labbe wrote:
-> Hello
-> 
-> I have a server where sensors-detecte gives:
-> Some Super I/O chips contain embedded sensors. We have to write to
-> standard I/O ports to probe them. This is usually safe.
-> Do you want to scan for Super I/O sensors? (YES/no): 
-> Probing for Super-I/O at 0x2e/0x2f
-> Trying family `National Semiconductor/ITE'...               Yes
-> Found unknown chip with ID 0x0404
-> 
-> I have tried to search on the motherboard but didnt find any visible NS nor ITE chip. (could it be embeded in chipset or BMC for example ?)
-> Furthermore, with another OS (a buildroot with more recent kernel), sensors-detect give that the ID is 0x0101.
-> Any hope there is a real hwmon chip behind ?
-> 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--y5JVUJFBvApYWP5Nc2ztCVBdGvK5SakF4
+Content-Type: multipart/mixed; boundary="92jJKb1m8tP1DTc8WK4dmwfKHDeWxK3MH"
 
-Unlikely, given that the ID is not stable and that both ID registers
-return the same (changing) value. It could be a BMC or an EC but
-that won't help since we don't know how to access it.
+--92jJKb1m8tP1DTc8WK4dmwfKHDeWxK3MH
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+
+On 3/11/21 12:18 AM, Wolfram Sang wrote:
+>=20
+>> Bummer. What is really weird is that you see clock stretching under
+>> CPU load. Normally clock stretching is triggered by the device, not
+>> by the host.
+>=20
+> One example: Some hosts need an interrupt per byte to know if they
+> should send ACK or NACK. If that interrupt is delayed, they stretch the=
+
+> clock.
+>=20
+
+Indeed, the i2c-mpc driver sends TXAK (only) after receiving
+that interrupt. Since that is running in the context of the user
+process, that may well be delayed substantially on a loaded system.
+
+Maybe the interrupt handler will need to play a more active role
+in the i2c-mpc driver. Alternatively, the transfer function could
+be handled by a high priority kernel thread.
 
 Guenter
+
+
+--92jJKb1m8tP1DTc8WK4dmwfKHDeWxK3MH--
+
+--y5JVUJFBvApYWP5Nc2ztCVBdGvK5SakF4
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEiHPvMQj9QTOCiqgVyx8mb86fmYEFAmBKNREACgkQyx8mb86f
+mYGvtA/9HeYGnwSG9taI4rA/EX8gnzN3Q5r6OiEWdBybij2Z0nqA6m5tcvRuTbN6
+Df+9IT27KoQIVLV4iyenfJ0mNPvJiGBMrqdtXWOhhlh+lt4fVAB6RvGHohaYeLio
+F/MXQjvDJczgBRnRpsgCL/Yn435n+D4gTP6bR/tql3eHr2Igcj+E3+KqtCFhsFMn
+awLrAsJcKnpu2HEewb8ISoPwzhvLyg2Hk9NUnDVPguJuPNRYeh1j72avH4W5sAH0
+Jvtudqh+ziZHOZNXzbeXQxij+4yz3jSWy9kjufd8cJYLbYdpI1q3q/+jHwqHx3z+
+2jbAKz5fVFHAfuURVM0pdAj841Q+8W30jtnx6ugWa18wtVQTVLSE6dfNtj1ayqUM
+3O3WLnnjlaBj/354c19ghEA09qc962b7LtptHTWybTqzpvnBUQ7kdMtGxR9B5L6n
+zlY/pOVgYrfdD5rPOQ9j1dU/XpuQG+ApCE7o4fQg0EVLdZ+BCv2HmBWcMBFoXu+q
+DUja07O/JQft1Ucx+yOgvupJWI1ix2X3dh3K+UY8y3vJSqDnPihO0DUEtPXga4WX
+kOgnH7DO0vlJtlq5oVrepoUKt3epnh41FNBj05lRlv27HREH2h3+riUH+7eof++P
+FWt3SE8oVxcJx3BfWaXL7Or5vZFHTH7b3N9NXgZYO1JQQ+hERhA=
+=HdHX
+-----END PGP SIGNATURE-----
+
+--y5JVUJFBvApYWP5Nc2ztCVBdGvK5SakF4--
