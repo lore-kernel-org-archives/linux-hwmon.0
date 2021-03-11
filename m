@@ -2,143 +2,106 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	PDS_BAD_THREAD_QP_64,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CEFB3C433DB
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 22:16:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B365C433E6
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 23:48:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A837964F7A
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 22:16:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4B57764F95
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 23:48:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230300AbhCKWQL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 11 Mar 2021 17:16:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47214 "EHLO
+        id S229587AbhCKXrs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 11 Mar 2021 18:47:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbhCKWP7 (ORCPT
+        with ESMTP id S229526AbhCKXr3 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 11 Mar 2021 17:15:59 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D595CC061574
-        for <linux-hwmon@vger.kernel.org>; Thu, 11 Mar 2021 14:15:58 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id o22so15088660oic.3
-        for <linux-hwmon@vger.kernel.org>; Thu, 11 Mar 2021 14:15:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=pneWVGfa73ydBAlUo9blXvy5w+t2EM+EIOD7OojACVk=;
-        b=NarMuJM0e5PiWJDu2jjKG3dyS87vy+NpVyvkCLPyvk0ERdYZaBeReUnizhAtwsJIhx
-         wgE6P99kLDPOKsYZ0pQWkHht2D+X300XufR+F8ZFZaQ61NNqK0/38cvocldhX5aOcmDM
-         P6v4LFkya6fd95IEZTOwatho5mx/2OfIk//GUe2wznUW6Y0LXGegr8gMsTBBMm6FsUw3
-         zYdvi2VUPkRfcDkT4Ow/gtP2JyHSlTQ/Um5P10/V7sCCkJKDlMmjZ3V8b6e79TP7ACiR
-         wJUYSljbPVvduo/Zl/JZswYcxHj1IecMPz5rDyAFMY3bpzKAGWoSxpZCP2p01hvuw48L
-         54NQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=pneWVGfa73ydBAlUo9blXvy5w+t2EM+EIOD7OojACVk=;
-        b=FS1bRbHlR9+sU8lkseCBvPZrVVq5mNjjC/UldGhkzXsO9qsdnLOu/RdCGwbwmpIs37
-         8m460Nevj9cMlTZXycyh7pFko+5u87vljuDiwcvKCzifC+vYL5NN9okl0i7QYG7pUjtN
-         0yYCQjdLthuoVUkNNRvFIhG+7KsGg0EP9FdgvCeqJnn4WoL9nTm3LMNdYC6xYfPYP5Og
-         OzhIi3d8N0YlgJX/dZE3Wz43RqRxAlGRRncBpSF+7Rb+77nDMAdNlKvJg7g+YXhgADDl
-         GtzE2lGSYIz5swfqE1NLRLw5NMv7K1yYpdTCvZ3Te5aTm0+QK7eV7h3kl706RblqyNAX
-         BrtQ==
-X-Gm-Message-State: AOAM530tslBzZsyG0xFue7UoIIYLSy9Ej11dB6OUpmDcuPMsKJXM8MkU
-        SsZwO/4UjVlL3D8mK/lSQ2voXGTX7Xk=
-X-Google-Smtp-Source: ABdhPJwKixVd5c3lq5lwIxBxUmxlbv5USpya7WGJiwq8JoyMBMQWilNM5OffnL8ew+k8Fq/D4dBY4w==
-X-Received: by 2002:a05:6808:1387:: with SMTP id c7mr7608334oiw.61.1615500958184;
-        Thu, 11 Mar 2021 14:15:58 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b133sm834435oia.17.2021.03.11.14.15.57
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 11 Mar 2021 14:15:57 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 11 Mar 2021 14:15:56 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Guohan Lu <lguohan@gmail.com>, Boyang Yu <byu@arista.com>
-Subject: Re: [PATCH] hwmon: (lm90) Fix false alarm when writing convrate on
- max6658
-Message-ID: <20210311221556.GA38026@roeck-us.net>
-References: <20210304153832.19275-1-pmenzel@molgen.mpg.de>
+        Thu, 11 Mar 2021 18:47:29 -0500
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA97C061760
+        for <linux-hwmon@vger.kernel.org>; Thu, 11 Mar 2021 15:47:28 -0800 (PST)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 7B22B891AE;
+        Fri, 12 Mar 2021 12:47:24 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1615506444;
+        bh=O8ioeN6FxLFU4Mogyahmc7b0yA08Z9plxKutTZFsmEQ=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To;
+        b=XXnBIkRidgiL1fd6HsRTgQpMqXJ//UrMtf/oG1I1ibs/y83u0+2Ih2LGJZTxW1Svq
+         5oUe5ZDmK7aFJiqwAFKO8uzL0kw6qsi5e3GBvH2ZHM6dGkVpLyVTnQsETamzcQFnhD
+         z0FizICLdGUeoxSEy8gjNwb83+6lvguoXp64HWzlj/zzHLe4dWjGXqkCX/UMrLxcA0
+         aZb5bd6EfZ+t+3khPUVK57pX19bmUlnSSv0u3pik1U8ROkla6YHZaRUiUGpVenfWcZ
+         BMSYiUmjjYFmf+Csyt39VLtQx3ka0EoThBJ0qofYgxHANGrsJHiwlFdhHjHc4Wdjlr
+         /pqNS+9qhcZOQ==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B604aac0c0001>; Fri, 12 Mar 2021 12:47:24 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
+ svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.2; Fri, 12 Mar 2021 12:47:24 +1300
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.012; Fri, 12 Mar 2021 12:47:24 +1300
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Guenter Roeck <linux@roeck-us.net>, Wolfram Sang <wsa@kernel.org>
+CC:     "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: Errant readings on LM81 with T2080 SoC
+Thread-Topic: Errant readings on LM81 with T2080 SoC
+Thread-Index: AQHXE6SbssdAOSHgwE+zIRhtn11Sk6p4Y2sAgAAgcACAACSBgIAABe+AgAEDagCAAfS7gIAALq8AgAEX54CAAKWsgIAACmIAgADZp4CAAATLAIAAJQaA
+Date:   Thu, 11 Mar 2021 23:47:23 +0000
+Message-ID: <309f94fa-40ec-c3be-7cdf-78a910a5b209@alliedtelesis.co.nz>
+References: <20210311081842.GA1070@ninjato>
+ <94dfa9dc-a80c-98ba-4169-44cce3d810f7@alliedtelesis.co.nz>
+ <725c5e51-65df-e17d-e2da-0982efacf2d2@roeck-us.net>
+In-Reply-To: <725c5e51-65df-e17d-e2da-0982efacf2d2@roeck-us.net>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="Windows-1252"
+Content-ID: <4B9F5B15F7E349419129FD28B885D387@atlnz.lc>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210304153832.19275-1-pmenzel@molgen.mpg.de>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=GfppYjfL c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=N659UExz7-8A:10 a=dESyimp9J3IA:10 a=VNwDg8RZYkgfWyEnbsYA:9 a=pILNOxqGKmIA:10
+X-SEG-SpamProfiler-Score: 0
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Mar 04, 2021 at 04:38:32PM +0100, Paul Menzel wrote:
-> From: Boyang Yu <byu@arista.com>
-> 
-> We found that the max6658 sometimes issues a false alarm when its
-> convrate is changed, with the current hwmon driver. This workaround
-> will fix it by stopping the conversion before setting the convrate.
-> 
-> Upstream the patch added added to the SONiC Linux kernel in merge/pull
-> request #82 [1][2].
-> 
-> [1]: https://github.com/Azure/sonic-linux-kernel/pull/82
-> [2]: https://github.com/Azure/sonic-linux-kernel/commit/d03f6167f64b2bfa1330ff7b33fe217f68ab7028
-> 
-> [pmenzel: Forward port patch from 4.19 to 5.12-rc1+]
-> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
-> ---
->  drivers/hwmon/lm90.c | 15 ++++++++++++---
->  1 file changed, 12 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-> index ebbfd5f352c0..0c1a91b715e8 100644
-> --- a/drivers/hwmon/lm90.c
-> +++ b/drivers/hwmon/lm90.c
-> @@ -639,7 +639,11 @@ static int lm90_set_convrate(struct i2c_client *client, struct lm90_data *data,
->  		if (interval >= update_interval * 3 / 4)
->  			break;
->  
-> -	err = lm90_write_convrate(data, i);
-> +	if (data->kind == max6657)
-> +		err = max6657_write_convrate(client, i);
 
-There is no such function in the upstream kernel.
-Anyway, this problem has already been already fixed
-in the upstream kernel with commit 62456189f3292 ("hwmon:
-(lm90) Fix max6658 sporadic wrong temperature reading").
-
-Guenter
-
-> +	else
-> +		err = lm90_write_convrate(data, i);
-> +
->  	data->update_interval = DIV_ROUND_CLOSEST(update_interval, 64);
->  	return err;
->  }
-> @@ -1649,7 +1653,11 @@ static void lm90_restore_conf(void *_data)
->  	struct i2c_client *client = data->client;
->  
->  	/* Restore initial configuration */
-> -	lm90_write_convrate(data, data->convrate_orig);
-> +	if (data->kind == max6657)
-> +		max6657_write_convrate(client, data->convrate_orig);
-> +	else
-> +		lm90_write_convrate(data, data->convrate_orig);
-> +
->  	i2c_smbus_write_byte_data(client, LM90_REG_W_CONFIG1,
->  				  data->config_orig);
->  }
-> @@ -1672,7 +1680,8 @@ static int lm90_init_client(struct i2c_client *client, struct lm90_data *data)
->  	data->config_orig = config;
->  	data->config = config;
->  
-> -	lm90_set_convrate(client, data, 500); /* 500ms; 2Hz conversion rate */
-> +	if (data->kind != max6657)
-> +		lm90_set_convrate(client, data, 500); /* 500ms; 2Hz conversion rate */
->  
->  	/* Check Temperature Range Select */
->  	if (data->kind == adt7461 || data->kind == tmp451) {
+On 12/03/21 10:34 am, Guenter Roeck wrote:
+> On 3/11/21 1:17 PM, Chris Packham wrote:
+>> On 11/03/21 9:18 pm, Wolfram Sang wrote:
+>>>> Bummer. What is really weird is that you see clock stretching under
+>>>> CPU load. Normally clock stretching is triggered by the device, not
+>>>> by the host.
+>>> One example: Some hosts need an interrupt per byte to know if they
+>>> should send ACK or NACK. If that interrupt is delayed, they stretch the
+>>> clock.
+>>>
+>> It feels like something like that is happening. Looking at the T2080
+>> Reference manual there is an interesting timing diagram (Figure 14-2 if
+>> someone feels like looking it up). It shows SCL low between the ACK for
+>> the address and the data byte. I think if we're delayed in sending the
+>> next byte we could violate Ttimeout or Tlow:mext from the SMBUS spec.
+>>
+> I think that really leaves you only two options that I can see:
+> Rework the driver to handle critical actions (such as setting TXAK,
+> and everything else that might result in clock stretching) in the
+> interrupt handler, or rework the driver to handle everything in
+> a high priority kernel thread.
+One thing I've found that does seem to avoid the problem is to disable=20
+preemption, use polling and replace the schedule() in i2c_wait() with=20
+udelay(50). That's kind of like the kernel thread option.
+> Guenter=
