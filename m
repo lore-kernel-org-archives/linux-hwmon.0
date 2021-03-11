@@ -2,114 +2,105 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3D3AC433E0
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 21:45:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C2A6C433DB
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 21:48:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 98C3964F92
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 21:45:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1717264F8E
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 21:48:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbhCKVod (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 11 Mar 2021 16:44:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40424 "EHLO
+        id S230372AbhCKVrp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 11 Mar 2021 16:47:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbhCKVoI (ORCPT
+        with ESMTP id S229796AbhCKVrT (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 11 Mar 2021 16:44:08 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57FD9C061574;
-        Thu, 11 Mar 2021 13:44:08 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id m1so2457455ote.10;
-        Thu, 11 Mar 2021 13:44:08 -0800 (PST)
+        Thu, 11 Mar 2021 16:47:19 -0500
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E715C061574;
+        Thu, 11 Mar 2021 13:47:19 -0800 (PST)
+Received: by mail-ot1-x329.google.com with SMTP id 31-20020a9d00220000b02901b64b9b50b1so367863ota.9;
+        Thu, 11 Mar 2021 13:47:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=pP/ToFMswoVlEeoCP+bOzIcth5EBOOJrEJydORseAGU=;
-        b=Och4VYveXdzpV0hFo14Tqy95TYzIj8LSBOcc6IpNTApWeW4CHck594V6jnYqRVQIvc
-         A3UWif/dL8kzDo0EHAZQ4qTnZOvSLl31hXs5HBf2aBk+LZcEzFmVmzPsink6Z2WgimQA
-         aWKJrEsnvifnv14mNLHcqly3Mi8YjTLITd3ejKHeA7VZuD5NT70X9xqrpZOCV9olt+ZM
-         aQzPjajOFxv3glOpj/vJjZVtIl5LF0+yc83eF7uWRTNi802aTnr6WEkyQllBqbRrs+0X
-         XwFddtwlLgVbG8kZWvVYJGX9hWxgEroZ7iqFG8ObTC3BGEt2u+8DkhjHQZwOuzF9ui20
-         R33A==
+        bh=ITY+E8p2UWT+7SOeRk9gDCyhCXB32MYwyCLJwOOhVRg=;
+        b=g6uOhi/7x0wpwfyEoImJ+M2vDl9paLHmbHEqlYKknFJ5eHqiXtehVRpV5dmNpaCgJv
+         e+GRmBSLa8LuHk1GJ89w+89PI2ETz/lKZsLq3/aTBi6LwGAp9sOrTHqmChuO5t1uNpx9
+         s3tdN/MEfh05rNxknEZdecQC6R7dPy+8pVHOhJ4yt5a8a1+zVgFDnPLbqb8FHeVygIIx
+         uxbfajHK+eFaoBsWHJDgkKwgs116twvXakJaDn2H889UY5eB0fL3okNoV7ZqZKZdYGy3
+         o9UzOEiPIRXdgHZtWieS/o8NuV7hUPVsGWAxZmV67H1v3xBbMo5hvzNzrIfhNhSCziF4
+         svqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=pP/ToFMswoVlEeoCP+bOzIcth5EBOOJrEJydORseAGU=;
-        b=WpCBUhKE6i0qEPhYqqu7pGZouj63EHsvkxGq9Spsv2G/UCe/ps21r7zbEvasyM0doi
-         XhpT6N5fpws7cv2QdmitFMSI8ehZDwX+fzhThXSpXgpWhKUPRQG+3eI7KzBrUtScf0UJ
-         pFyc3Yia6isEU5zsqQBY6iMamGIBlJCk+q7ynxoeYWiLyU5EIt6GrMrRp9Pon1A0+sWt
-         ZZcJnlVz71SrT+1yiD/FOnO9CbenvEGMu3FZGnl7Sz46niuM3LHHmDwV68cREmGQRZTR
-         p8C3NUkr0jTZOP/bslJrW4uDyfmfEzqCWTx/YhwzTaHqSOCC9sK6tx0Ok0b45RD86QjT
-         cQHA==
-X-Gm-Message-State: AOAM531o1YZKtkCdfS4LgoRsS6YYqTLtHhaxw8UqhCkH8bRcGTHLKa92
-        cZQht8wR51yPmGOUrRUMRGY=
-X-Google-Smtp-Source: ABdhPJzFLYpb6Ol8+hJg/hjMCCzSCtDJuMWhEjrO5pHz2pNgNentxt5KSlz4LmjERSC/vd0YizSLig==
-X-Received: by 2002:a9d:3a34:: with SMTP id j49mr772342otc.153.1615499047814;
-        Thu, 11 Mar 2021 13:44:07 -0800 (PST)
+        bh=ITY+E8p2UWT+7SOeRk9gDCyhCXB32MYwyCLJwOOhVRg=;
+        b=EtVmgeGrphz7e1l/njyA7ulnrFwSYOuGAUdIDgf3Lo5NGgLTDJPDSOt0gVHrbiyaxd
+         G+gw1JkDJSXEQkL9RotkdCF9ToCUehkSFt7bh+sph8/SvjBBawxy9ompBzikGOGbBs+T
+         Q6fYdrQwttY/4cASEdWQhhp2fCfyFV+7Wy/OfSOPU7LBfkikK0k6rXIRU6sxs0mw7NNz
+         ge4/gLlbiCT1ElqycUDYRuXxcnRUpHgWu6t45ph/YtzXCRxnVPNn+0ckk83usAzCvo++
+         7S5RvobBS7DffJPqgTqwe2dJ4sJOZXhVk/PY9xHe/MH5mFUUYd8SxgH008WEsMS5OCvF
+         roRQ==
+X-Gm-Message-State: AOAM532kOimBYwJbnq3gHAp/VCWmErm9c1uipBJDVB9xsoqqs806uDJg
+        Q7uOXU0cE2mB/n7mxPWgEq0=
+X-Google-Smtp-Source: ABdhPJw3d30ZgGip26VNqdQp+ntwoX99S8WQrY+hn5WbJANTgVMlaf7BvzlBHOz/h1Ph4XBwGrdAAQ==
+X-Received: by 2002:a9d:3de5:: with SMTP id l92mr801569otc.227.1615499238382;
+        Thu, 11 Mar 2021 13:47:18 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k9sm915536ots.24.2021.03.11.13.44.06
+        by smtp.gmail.com with ESMTPSA id t2sm744721ool.18.2021.03.11.13.47.17
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 11 Mar 2021 13:44:07 -0800 (PST)
+        Thu, 11 Mar 2021 13:47:17 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 11 Mar 2021 13:44:05 -0800
+Date:   Thu, 11 Mar 2021 13:47:16 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, andriy.shevchenko@linux.intel.com,
-        linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH v2 5/9] hwmon/drivers/mr75203: Use HZ macros
-Message-ID: <20210311214405.GA35866@roeck-us.net>
-References: <20210224144222.23762-1-daniel.lezcano@linaro.org>
- <20210224144222.23762-5-daniel.lezcano@linaro.org>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     robh+dt@kernel.org, jdelvare@suse.com, devicetree@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiri Kosina <trivial@kernel.org>
+Subject: Re: [PATCH v2 1/2] dt-bindings: trivial-devices: Add infineon,ir36021
+Message-ID: <20210311214716.GA36119@roeck-us.net>
+References: <20210301035954.16713-1-chris.packham@alliedtelesis.co.nz>
+ <20210301035954.16713-2-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210224144222.23762-5-daniel.lezcano@linaro.org>
+In-Reply-To: <20210301035954.16713-2-chris.packham@alliedtelesis.co.nz>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Feb 24, 2021 at 03:42:15PM +0100, Daniel Lezcano wrote:
-> HZ unit conversion macros are available in units.h, use them and
-> remove the duplicate definition.
+On Mon, Mar 01, 2021 at 04:59:53PM +1300, Chris Packham wrote:
+> Add infineon,ir36021 to trivial-devices.yaml.
+> 
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> Acked-by: Rob Herring <robh@kernel.org>
 
-I assume the idea is to submit the series together, so
+Applied.
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-
+Thanks,
 Guenter
 
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Reviewed-by: Christian Eggers <ceggers@arri.de>
 > ---
->  drivers/hwmon/mr75203.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
-> index 18da5a25e89a..868243dba1ee 100644
-> --- a/drivers/hwmon/mr75203.c
-> +++ b/drivers/hwmon/mr75203.c
-> @@ -17,6 +17,7 @@
->  #include <linux/property.h>
->  #include <linux/regmap.h>
->  #include <linux/reset.h>
-> +#include <linux/units.h>
->  
->  /* PVT Common register */
->  #define PVT_IP_CONFIG	0x04
-> @@ -37,7 +38,6 @@
->  #define CLK_SYNTH_EN		BIT(24)
->  #define CLK_SYS_CYCLES_MAX	514
->  #define CLK_SYS_CYCLES_MIN	2
-> -#define HZ_PER_MHZ		1000000L
->  
->  #define SDIF_DISABLE	0x04
->  
+> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+> index a327130d1faa..19bc4c301f5b 100644
+> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+> @@ -102,6 +102,8 @@ properties:
+>            - mps,mp2975
+>              # G751: Digital Temperature Sensor and Thermal Watchdog with Two-Wire Interface
+>            - gmt,g751
+> +            # Infineon IR36021 digital POL buck controller
+> +          - infineon,ir36021
+>              # Infineon IR38064 Voltage Regulator
+>            - infineon,ir38064
+>              # Infineon SLB9635 (Soft-) I2C TPM (old protocol, max 100khz)
