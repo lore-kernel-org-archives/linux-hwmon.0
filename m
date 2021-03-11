@@ -2,97 +2,84 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F2C3C433DB
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 08:19:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FF52C433DB
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 14:18:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AF81564E22
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 08:19:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D452C64FE8
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 14:18:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231303AbhCKITT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 11 Mar 2021 03:19:19 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35020 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231302AbhCKISs (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 11 Mar 2021 03:18:48 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9896B61554;
-        Thu, 11 Mar 2021 08:18:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615450728;
-        bh=pcPYx32koDPoQYOnqgHXzh5B1hR+EWUWAY4YkutCz7A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FhylOKgCVND8Y9Y2qTErMZIg9mJ00+UGrQGUmieOjOSW5LUWaOGH3h7pggBgVtPM6
-         qaWJLoyx9SyhQSOm2amdTZTMFZZJ5NCzmS6kOlMQ/QvdEJITkfJpv79fBqd68P9Stb
-         PU12e9hpkKqsSTxjvUi9D71ycfDUZi5XpohwQopGd7U4w+TwGuuzoKeeTXRH/LSQ4M
-         7sm3ZXipdFxylhKPtQSkpbebDumT0kKCyn5DFRyxtMOjWHZD0ZkGHHUzJDDXljSaGN
-         k1gpUo7jMM0qcYLnnCeRrgSOurn9a1NSfEFeEGQL6UqoXcH3WTEGMehDt96Bljow5D
-         15PMBuTs/E1gw==
-Date:   Thu, 11 Mar 2021 09:18:42 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: Errant readings on LM81 with T2080 SoC
-Message-ID: <20210311081842.GA1070@ninjato>
-References: <8e0a88ba-01e9-9bc1-c78b-20f26ce27d12@alliedtelesis.co.nz>
- <96d660bc-17ab-4e0e-9a94-bce1737a8da1@roeck-us.net>
- <4a1b1494-df96-2d8c-9323-beb2c2ba706b@alliedtelesis.co.nz>
- <a67ea323-634d-d34e-c63e-b1aaa4737b19@alliedtelesis.co.nz>
- <5709f180-04b5-09b2-e1c4-53eb5c9345d8@roeck-us.net>
- <d6074923-ee7e-4499-0e54-383a607d3c41@alliedtelesis.co.nz>
- <1aa0dc23-0706-5902-2f46-0767de0e3ad6@alliedtelesis.co.nz>
- <d5045879-45aa-db38-e6aa-4c8ea3e62f6c@roeck-us.net>
- <b41a802b-2833-13fb-58ad-1762a3507460@alliedtelesis.co.nz>
- <d37a114c-fa3f-40e8-4d85-52eb1ff03c37@roeck-us.net>
+        id S233342AbhCKOR3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 11 Mar 2021 09:17:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56808 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233805AbhCKORO (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 11 Mar 2021 09:17:14 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87341C061574;
+        Thu, 11 Mar 2021 06:17:14 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id t5-20020a1c77050000b029010e62cea9deso12877360wmi.0;
+        Thu, 11 Mar 2021 06:17:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=cJnKwlLH8mf61Kjn3I5ayRTNQYAE2P9t3iD37An+Rxs=;
+        b=BDFcJNRxipcR2u0Y7Gx3hpAAAT6kXY6uO1icLZ+K6m3rRYY3U5WYf+RQl34eGk1rLA
+         iktSMghhForV0bk03hAj1mtz3yNLC8LNPHa4RIff5KoRrH93w2hjwnYuhlMguILbiXJX
+         w2hvwMM2repabNa123X2q7S7NULrvMTb7jEQqC1ZKyPgO4IOOtnfl+jTG7LoZ9D/Vf+/
+         iCChdADEhJWNRsXPW1N7lKW3py7f3bdkizVhacbJ5fyaIk45snXKSsl9I0Hr4j5qIN88
+         6jcigCSamjLUzgikwq0OJCWpsYQ8nprOVizKsUZRRU6b5pgchI2cKn11u+5f6euGn8uc
+         ixeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=cJnKwlLH8mf61Kjn3I5ayRTNQYAE2P9t3iD37An+Rxs=;
+        b=s/8oKP9/+LCorrPXw9PVNL9/gD+npB4jsCizjLa0HRgAV+FMzP8tYipO2G9RYgLy0z
+         7wX4xoy8iFYJD/9Rbtnz8rXlhXUlsapG2PswtgtRhyLIv4DoPYDcz7TqYAciCuKHkZBt
+         u5EYCqmE5vtv93iRw2ydNQOSrmqnEaqq9TJ9Nm3qsb3d/zMHg4DCe0fm1qwDwUNfZy7p
+         kMuiuseZR9O5mbYNCeahQivYMlyNT601ZD2erPstI7RjiavE1uKSWsjwIWDy04Qz3+UA
+         2pEt8dp0zg81v6QGLouQGGOcOG4vcugd7zSwLBOJa6/CsKRFzZ3Er9c3Pf/1FIGv3Xv4
+         dnSA==
+X-Gm-Message-State: AOAM532B/tOgyYZvsxE3zbHkV6Immmji5AU54eGGJkUxoUFA5jFgV2Ac
+        6JsobK3GzDrZATqXvQRu88Q1SDxJ/rI=
+X-Google-Smtp-Source: ABdhPJyRBT+peCBq0HMALni2WhboVohZEt4D1G2iLu2o5tXIakZ7N13pXyorZCtfVuMqCYwnprTfyQ==
+X-Received: by 2002:a1c:dd44:: with SMTP id u65mr8450860wmg.87.1615472233358;
+        Thu, 11 Mar 2021 06:17:13 -0800 (PST)
+Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
+        by smtp.googlemail.com with ESMTPSA id i26sm4255555wmb.18.2021.03.11.06.17.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Mar 2021 06:17:12 -0800 (PST)
+Date:   Thu, 11 Mar 2021 15:17:11 +0100
+From:   Corentin Labbe <clabbe.montjoie@gmail.com>
+To:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: sensors-detect: Found unknown chip with ID 0x0404
+Message-ID: <YEomZ1+Nk0m150lt@Red>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7JfCtLOvnd9MIVvH"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d37a114c-fa3f-40e8-4d85-52eb1ff03c37@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+Hello
 
---7JfCtLOvnd9MIVvH
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I have a server where sensors-detecte gives:
+Some Super I/O chips contain embedded sensors. We have to write to
+standard I/O ports to probe them. This is usually safe.
+Do you want to scan for Super I/O sensors? (YES/no): 
+Probing for Super-I/O at 0x2e/0x2f
+Trying family `National Semiconductor/ITE'...               Yes
+Found unknown chip with ID 0x0404
 
+I have tried to search on the motherboard but didnt find any visible NS nor ITE chip. (could it be embeded in chipset or BMC for example ?)
+Furthermore, with another OS (a buildroot with more recent kernel), sensors-detect give that the ID is 0x0101.
+Any hope there is a real hwmon chip behind ?
 
-> Bummer. What is really weird is that you see clock stretching under
-> CPU load. Normally clock stretching is triggered by the device, not
-> by the host.
-
-One example: Some hosts need an interrupt per byte to know if they
-should send ACK or NACK. If that interrupt is delayed, they stretch the
-clock.
-
-
---7JfCtLOvnd9MIVvH
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmBJ0l4ACgkQFA3kzBSg
-Kbbb/w/8DLizM94FZ2EJrsVVPXMLUIQDEIGL3ujBX2GyAsv6HeYmKAJzuE4QhMyE
-kE+xExT0T62C8UpKJ5ZHpRYzWXLgiJEucIOS2qlLEjn29rhI+u6bTd3LfPe/YpyB
-qMDuUzwLg4KiOPbiyX856rvJ5KOG/EN2owyWxZPXgKuKqqSUe+ewXIaZzu8l9Z8D
-qzvSjMhvWdisp976ZCj6ZK1U8j2iHtbijGiOIdmCvtH3TaLid1Tie/BheiwdQMPo
-2yDRYK4XkZDwcd8E0qRDN3Ew8Vv71hQH+uSiW5/cGxWSvXO3j16OuQH9TObSI+KI
-WAdnpcTyudvinJAnw5xBhm3Jmc/dbTDh0KYFHrPJS09qBg62D2zRKlG0IeFA/p3v
-VWmVk6cklvAemFo0iBejL/O9at2ItOZ+M6n3M4zVsuxGM88roenQQ9S74QxXgBKj
-roGq1udYl7LJUxDDswBwGyGTsHWcMfjDTVgimEYlvxlPkjJbg7qv0iHnLCl7hi2G
-MZMl28mpaWEmkQMAsiQygwezbEgTYGmV1xU7lVxeqDq3ypI51bsInMP3yc3LPalz
-wA8Grj0ZQloVpPWyZHu5sAVIKvEafk3NsDvfNj1rOLh/XBsGQRGv8qRuqqjQfecw
-YHTA/PJJ3Wn+i31hH9bqVkRVjgyq6iCeEP4STaAu3dCHKQFaXfs=
-=FkGx
------END PGP SIGNATURE-----
-
---7JfCtLOvnd9MIVvH--
+Regards
