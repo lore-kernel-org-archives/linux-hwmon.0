@@ -2,84 +2,143 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FF52C433DB
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 14:18:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E837AC433E0
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 14:58:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D452C64FE8
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 14:18:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 970D564F93
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 14:58:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233342AbhCKOR3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 11 Mar 2021 09:17:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56808 "EHLO
+        id S233939AbhCKO6I (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 11 Mar 2021 09:58:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233805AbhCKORO (ORCPT
+        with ESMTP id S233892AbhCKO5x (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 11 Mar 2021 09:17:14 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87341C061574;
-        Thu, 11 Mar 2021 06:17:14 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id t5-20020a1c77050000b029010e62cea9deso12877360wmi.0;
-        Thu, 11 Mar 2021 06:17:14 -0800 (PST)
+        Thu, 11 Mar 2021 09:57:53 -0500
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BBDC061574;
+        Thu, 11 Mar 2021 06:57:53 -0800 (PST)
+Received: by mail-oi1-x236.google.com with SMTP id x78so23422002oix.1;
+        Thu, 11 Mar 2021 06:57:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=cJnKwlLH8mf61Kjn3I5ayRTNQYAE2P9t3iD37An+Rxs=;
-        b=BDFcJNRxipcR2u0Y7Gx3hpAAAT6kXY6uO1icLZ+K6m3rRYY3U5WYf+RQl34eGk1rLA
-         iktSMghhForV0bk03hAj1mtz3yNLC8LNPHa4RIff5KoRrH93w2hjwnYuhlMguILbiXJX
-         w2hvwMM2repabNa123X2q7S7NULrvMTb7jEQqC1ZKyPgO4IOOtnfl+jTG7LoZ9D/Vf+/
-         iCChdADEhJWNRsXPW1N7lKW3py7f3bdkizVhacbJ5fyaIk45snXKSsl9I0Hr4j5qIN88
-         6jcigCSamjLUzgikwq0OJCWpsYQ8nprOVizKsUZRRU6b5pgchI2cKn11u+5f6euGn8uc
-         ixeQ==
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=yK9WgE+/HXQJn+dMGAHbYee8OPSAix4maqmMu9Dx19M=;
+        b=HyBzxTldG7caC+TRJHUyXJTSynqWXN6OWCAqB+APFRmqTprrDEDxt5iv6eITcdzCd2
+         BCKtEfDas8CAVlG5a8AiPOv3lbyHn9V1Vvmqzytu+9xnhmhQqIzsPsD5TFQSEUo3/xAG
+         p+qb+d5y29qhdwR8rY5CoUhxQ81R3H1tkznunU1UV+cCHMlcDoaiaZYau++ehkFj2o7V
+         uthUbwDisGsd9Sx4ppybWJnzJoMDkcmi5ANckD7QhXtFS/nYoOoNx0InuN0/x/tX/o72
+         7D4zAsYp6fTyjc70ffQBA6drPkSZsVNBaDDa255Ae+/2Wcu48qRSHNIdrif8vk3l8nFP
+         1q6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=cJnKwlLH8mf61Kjn3I5ayRTNQYAE2P9t3iD37An+Rxs=;
-        b=s/8oKP9/+LCorrPXw9PVNL9/gD+npB4jsCizjLa0HRgAV+FMzP8tYipO2G9RYgLy0z
-         7wX4xoy8iFYJD/9Rbtnz8rXlhXUlsapG2PswtgtRhyLIv4DoPYDcz7TqYAciCuKHkZBt
-         u5EYCqmE5vtv93iRw2ydNQOSrmqnEaqq9TJ9Nm3qsb3d/zMHg4DCe0fm1qwDwUNfZy7p
-         kMuiuseZR9O5mbYNCeahQivYMlyNT601ZD2erPstI7RjiavE1uKSWsjwIWDy04Qz3+UA
-         2pEt8dp0zg81v6QGLouQGGOcOG4vcugd7zSwLBOJa6/CsKRFzZ3Er9c3Pf/1FIGv3Xv4
-         dnSA==
-X-Gm-Message-State: AOAM532B/tOgyYZvsxE3zbHkV6Immmji5AU54eGGJkUxoUFA5jFgV2Ac
-        6JsobK3GzDrZATqXvQRu88Q1SDxJ/rI=
-X-Google-Smtp-Source: ABdhPJyRBT+peCBq0HMALni2WhboVohZEt4D1G2iLu2o5tXIakZ7N13pXyorZCtfVuMqCYwnprTfyQ==
-X-Received: by 2002:a1c:dd44:: with SMTP id u65mr8450860wmg.87.1615472233358;
-        Thu, 11 Mar 2021 06:17:13 -0800 (PST)
-Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
-        by smtp.googlemail.com with ESMTPSA id i26sm4255555wmb.18.2021.03.11.06.17.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Mar 2021 06:17:12 -0800 (PST)
-Date:   Thu, 11 Mar 2021 15:17:11 +0100
-From:   Corentin Labbe <clabbe.montjoie@gmail.com>
-To:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=yK9WgE+/HXQJn+dMGAHbYee8OPSAix4maqmMu9Dx19M=;
+        b=cMS7m6eJpflIQZOfkKzTLgxvAnjLQwqxNURb8MAMz+4+7fZW7dDnZ7ojC3t46CUlDx
+         Wl7zctguxQ9fdTML/KO/V3D4Z88DsgD7qMSxNruP4/evUmzCUpdpLBa0WpXUFB1Elv+8
+         Mta/6Di+mgoZVUkxngxZCa0eGwqCg20lXO7FgJZKg0SgkZIu6nbbROsYDCwUWDTBL+z5
+         VRoYnmne5y7BMi+/V96s1obmoj7qma7Opv3b8X0n8Fo4N7RWtrto8OWcP5jEyt3Y6VxS
+         3LT0HgcCd0f91Ljysyishih7LI+I3HCKi69n+HBcLUKxfCjakEdVzpc/VzUZcclynBOR
+         Mkdg==
+X-Gm-Message-State: AOAM5316t9o/Evu4yXhnlerlBuBrt2Un/RTs0brONt7xSI0TTSvQ9RKQ
+        hM0mH03AUvRqK+7vOgjsl1X1AwEOktM=
+X-Google-Smtp-Source: ABdhPJw5AKrPcnFNeLDHg7Vi9iI5IipgJyU/8jCIEmOyn1HY1wvRLwvBohxEDzaMqEqfd1wFcnICNw==
+X-Received: by 2002:aca:2219:: with SMTP id b25mr6472309oic.112.1615474672824;
+        Thu, 11 Mar 2021 06:57:52 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a185sm598642oif.49.2021.03.11.06.57.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Mar 2021 06:57:52 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: sensors-detect: Found unknown chip with ID 0x0404
+To:     Corentin Labbe <clabbe.montjoie@gmail.com>, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org
-Subject: sensors-detect: Found unknown chip with ID 0x0404
-Message-ID: <YEomZ1+Nk0m150lt@Red>
+References: <YEomZ1+Nk0m150lt@Red>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <2ec733db-fefd-6eba-bbbc-cd289931e3de@roeck-us.net>
+Date:   Thu, 11 Mar 2021 06:57:50 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+In-Reply-To: <YEomZ1+Nk0m150lt@Red>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hello
+On 3/11/21 6:17 AM, Corentin Labbe wrote:
+> Hello
+> 
+> I have a server where sensors-detecte gives:
+> Some Super I/O chips contain embedded sensors. We have to write to
+> standard I/O ports to probe them. This is usually safe.
+> Do you want to scan for Super I/O sensors? (YES/no): 
+> Probing for Super-I/O at 0x2e/0x2f
+> Trying family `National Semiconductor/ITE'...               Yes
+> Found unknown chip with ID 0x0404
+> 
+> I have tried to search on the motherboard but didnt find any visible NS nor ITE chip. (could it be embeded in chipset or BMC for example ?)
+> Furthermore, with another OS (a buildroot with more recent kernel), sensors-detect give that the ID is 0x0101.
+> Any hope there is a real hwmon chip behind ?
+> 
 
-I have a server where sensors-detecte gives:
-Some Super I/O chips contain embedded sensors. We have to write to
-standard I/O ports to probe them. This is usually safe.
-Do you want to scan for Super I/O sensors? (YES/no): 
-Probing for Super-I/O at 0x2e/0x2f
-Trying family `National Semiconductor/ITE'...               Yes
-Found unknown chip with ID 0x0404
+Unlikely, given that the ID is not stable and that both ID registers
+return the same (changing) value. It could be a BMC or an EC but
+that won't help since we don't know how to access it.
 
-I have tried to search on the motherboard but didnt find any visible NS nor ITE chip. (could it be embeded in chipset or BMC for example ?)
-Furthermore, with another OS (a buildroot with more recent kernel), sensors-detect give that the ID is 0x0101.
-Any hope there is a real hwmon chip behind ?
-
-Regards
+Guenter
