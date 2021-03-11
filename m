@@ -5,298 +5,151 @@ X-Spam-Level:
 X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0B10C433DB
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 21:49:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57DDCC433DB
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 21:51:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B04DF64F9C
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 21:49:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0EFD564EF9
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 21:51:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230513AbhCKVsu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 11 Mar 2021 16:48:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41386 "EHLO
+        id S229674AbhCKVvA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 11 Mar 2021 16:51:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230512AbhCKVsk (ORCPT
+        with ESMTP id S231151AbhCKVu5 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 11 Mar 2021 16:48:40 -0500
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7603C061574;
-        Thu, 11 Mar 2021 13:48:40 -0800 (PST)
-Received: by mail-ot1-x334.google.com with SMTP id x28so2574034otr.6;
-        Thu, 11 Mar 2021 13:48:40 -0800 (PST)
+        Thu, 11 Mar 2021 16:50:57 -0500
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF5EC061574;
+        Thu, 11 Mar 2021 13:50:57 -0800 (PST)
+Received: by mail-ot1-x336.google.com with SMTP id r24so2555967otq.13;
+        Thu, 11 Mar 2021 13:50:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=FLFJ/cfbWjjDQmovjePYB1SvwwbHlMBXgTEQGX1t96s=;
-        b=XesCgyqdJdWS4444WrdJNNuPovODkvXZd1O3rmtyGOY9sqcSCpJmkAylz73TJ+5jvC
-         evV/lSTnWN6E9a01Q3QwVa4HtsJrkAOk2Vyk1f0pandhimTLgpM1G4fyukLstZq+TD2n
-         LqIwGV260kyLBDfBm6mjVXBePTier8G/GMdHDeQiQEzcsGtbDevKk+qzZdiZUXszZZWK
-         g5T9sR4ZnYup2K4W6wrMRdEaiqo75OF1xvl4qz5YbUBx/6Ei1sD7UiNOVJPVyfaOniFv
-         R5EU90ml9xQCCjyhi1PVQEClLYW2uL/eMJtuNB1MYqTcb6cwvNSA6WwpHO4XDmgQxpMA
-         Vkig==
+         :content-disposition:in-reply-to:user-agent;
+        bh=RghmcBEWWaLa3LYEb5KeXgAu7tLFH8qmbtPks5jMJnM=;
+        b=uw0tPyq9JKT4k4vPqANK4T8kGZQisKH51l4zEcL5z7+dnCzqdDm0M1UogB/7xDw9Ep
+         nr2YeKWBFxS0RaiTxZJ/dNIpv7l+aLK8t779g50An3fQwD6n+j+FPMR89IoheBolifbh
+         ZJQ57bfv4tgxXVX1AI7YrfZmk6UyoFcKZdfgFIhK88rBgJ1TEWStBpbxEWRiaynBTtEe
+         HLW1bwElhdAW95yAYpa4nl8UepTpNevDTp4e+U+1KUUCh4NZdfW6LBatBeweVD4612rc
+         CE5qcYsIKTMuTkWh1xpcsKrNm6y5EYboh7pOz6ZxUNMPhUd5vRp9xcHi2dLMf0L+cd+b
+         +F3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to:user-agent;
-        bh=FLFJ/cfbWjjDQmovjePYB1SvwwbHlMBXgTEQGX1t96s=;
-        b=jWeR07x/bVwRPOPaNSLLqbuF+8LW5BJPVaj6bPK2gb8o4LxlXmNj+TAMrqu3n7eaps
-         eHAlDkjBf6a/7bfs7qL21WFYlLaQZsJH0pDibFsgtcfvScH5NyCt1p3PMSuSVklW8hRN
-         TO8MTplbhFlbvrR4rA0HR8YhSbNhLlH660PeyZwbeEtIWtrpOGK/DUKdzLK6ezGPnzd6
-         vQSdlTZ9eNX0eMDVKqlHyMmXq6OK3laVLxKqZj/nrR+RB6HczOojslDeTw50JI8Ce/zL
-         RKLnG0hPxKms1mUsM/3IHZ9gqgFfW4r4yrodJ7rcCi95qH3HAsKN7v0YhYIoYwuocOd1
-         U9Rg==
-X-Gm-Message-State: AOAM533wyFiiMLG4Rq2/aWFV5pvN3NJFtaL6nSGqRBzLZt1opkuJQIHe
-        DFHup5W1jglFEab0o/lwBf0=
-X-Google-Smtp-Source: ABdhPJx6wGN2tYknfFIvovrmwvQBFQdQ5WYTj+7z/OaDlFqSGacer0gQWK/b+F7VlkvVZSz0qf2UNQ==
-X-Received: by 2002:a9d:7512:: with SMTP id r18mr863295otk.90.1615499320227;
-        Thu, 11 Mar 2021 13:48:40 -0800 (PST)
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=RghmcBEWWaLa3LYEb5KeXgAu7tLFH8qmbtPks5jMJnM=;
+        b=ZXpUlELTdj2y56lEbqH/zDQCtEzaAESCtGRS5nB4cFTbOIqZGWGm6Sekt5obAOZSkw
+         CYQaqibbz47D10GHHgIp7vUxFxyivZilJSkttcuO40tJKNFQfDej/PAxBLbtmC7qXbf4
+         uO50Wf67YNqPFbwO8+8qLU9+ivIQXoFdbB81KRn2ekOlb2w6qytMACqmT5mZLvQLQqUs
+         LbotJl/+3I5rzc0oYVem7tvKzrjveORwj7Khz5PjJCwefbmEsVacnuZtrmBSOs+mCGND
+         lcLalC0HfsB723BdXWNVK78oBWChQP9tGiancvF19ohyScXWElq8QCcqNOnpDUO3Mjo8
+         glnA==
+X-Gm-Message-State: AOAM531iSZIBW1mnobg1QPn3RKKlnVCLqdtwlq5WgGvrBcgGb80xlPWQ
+        cxNXJVQN+xEH8K8kckSjqn/kk5RZjEU=
+X-Google-Smtp-Source: ABdhPJw2hMGqcY7TxtCBbMX9xSMReiGny73b/EAjQJECXqTtftYUeER38gIIMygXxGxMo6XkttOKiA==
+X-Received: by 2002:a9d:61d2:: with SMTP id h18mr804034otk.113.1615499456777;
+        Thu, 11 Mar 2021 13:50:56 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o9sm873506otl.39.2021.03.11.13.48.39
+        by smtp.gmail.com with ESMTPSA id r20sm927593otd.26.2021.03.11.13.50.55
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 11 Mar 2021 13:48:39 -0800 (PST)
+        Thu, 11 Mar 2021 13:50:56 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 11 Mar 2021 13:48:38 -0800
+Date:   Thu, 11 Mar 2021 13:50:55 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     robh+dt@kernel.org, jdelvare@suse.com, devicetree@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] hwmon: (pmbus): Add driver for Infineon IR36021
-Message-ID: <20210311214838.GA36413@roeck-us.net>
-References: <20210301035954.16713-1-chris.packham@alliedtelesis.co.nz>
- <20210301035954.16713-3-chris.packham@alliedtelesis.co.nz>
+To:     Jiqi Li <lijq9@lenovo.com>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, markpearson@lenovo.com
+Subject: Re: [PATCH v2] hwmon: (nct6883) Support NCT6686D
+Message-ID: <20210311215055.GA36492@roeck-us.net>
+References: <20210304104421.1912934-1-lijq9@lenovo.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210301035954.16713-3-chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <20210304104421.1912934-1-lijq9@lenovo.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Mar 01, 2021 at 04:59:54PM +1300, Chris Packham wrote:
-> The IR36021 is a dual‐loop digital multi‐phase buck controller.
+On Thu, Mar 04, 2021 at 06:44:21PM +0800, Jiqi Li wrote:
+> Add support for NCT6686D chip used in the Lenovo P620.
 > 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> Signed-off-by: Jiqi Li <lijq9@lenovo.com>
+> Reviewed-by: Mark Pearson <markpearson@lenovo.com>
+> ---
+> Changes in v2: Corrected typo from NCT6886D to NCT6686D
 
-Applied.
+Not entirely; the subject is still partially wrong.
+No need to resend, though, I'll fix then while applying it.
 
-Thanks,
 Guenter
 
 > ---
-> Changes in v2:
-> - update against latest kernel for pmbus API changes
-> - avoid double negation
+>  drivers/hwmon/nct6683.c | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
 > 
->  Documentation/hwmon/index.rst   |  1 +
->  Documentation/hwmon/ir36021.rst | 62 ++++++++++++++++++++++++++
->  drivers/hwmon/pmbus/Kconfig     |  9 ++++
->  drivers/hwmon/pmbus/Makefile    |  1 +
->  drivers/hwmon/pmbus/ir36021.c   | 79 +++++++++++++++++++++++++++++++++
->  5 files changed, 152 insertions(+)
->  create mode 100644 Documentation/hwmon/ir36021.rst
->  create mode 100644 drivers/hwmon/pmbus/ir36021.c
-> 
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index 8d5a2df1ecb6..b34894403c2b 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -77,6 +77,7 @@ Hardware Monitoring Kernel Drivers
->     intel-m10-bmc-hwmon
->     ir35221
->     ir38064
-> +   ir36021
->     isl68137
->     it87
->     jc42
-> diff --git a/Documentation/hwmon/ir36021.rst b/Documentation/hwmon/ir36021.rst
-> new file mode 100644
-> index 000000000000..36ef8d518b81
-> --- /dev/null
-> +++ b/Documentation/hwmon/ir36021.rst
-> @@ -0,0 +1,62 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +Kernel driver ir36021
-> +=====================
-> +
-> +Supported chips:
-> +
-> +  * Infineon IR36021
-> +
-> +    Prefix: ir36021
-> +    Addresses scanned: -
-> +
-> +    Datasheet: Publicly available at the Infineon website
-> +      https://www.infineon.com/dgdl/ir36021.pdf?fileId=5546d462533600a4015355d0aa2d1775
-> +
-> +Authors:
-> +      - Chris Packham <chris.packham@alliedtelesis.co.nz>
-> +
-> +Description
-> +-----------
-> +
-> +The IR36021 is a dual‐loop digital multi‐phase buck controller designed for
-> +point of load applications.
-> +
-> +Usage Notes
-> +-----------
-> +
-> +This driver does not probe for PMBus devices. You will have to instantiate
-> +devices explicitly.
-> +
-> +Sysfs attributes
-> +----------------
-> +
-> +======================= ===========================
-> +curr1_label             "iin"
-> +curr1_input             Measured input current
-> +curr1_alarm             Input fault alarm
-> +
-> +curr2_label             "iout1"
-> +curr2_input             Measured output current
-> +curr2_alarm             Output over-current alarm
-> +
-> +in1_label               "vin"
-> +in1_input               Measured input voltage
-> +in1_alarm               Input under-voltage alarm
-> +
-> +in2_label               "vout1"
-> +in2_input               Measured output voltage
-> +in2_alarm               Output over-voltage alarm
-> +
-> +power1_label            "pin"
-> +power1_input            Measured input power
-> +power1_alarm            Input under-voltage alarm
-> +
-> +power2_label            "pout1"
-> +power2_input            Measured output power
-> +
-> +temp1_input             Measured temperature
-> +temp1_alarm             Temperature alarm
-> +
-> +temp2_input             Measured other loop temperature
-> +temp2_alarm             Temperature alarm
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index 32d2fc850621..ee8c27b3b83d 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -84,6 +84,15 @@ config SENSORS_IR35221
->  	  This driver can also be built as a module. If so, the module will
->  	  be called ir35221.
+> diff --git a/drivers/hwmon/nct6683.c b/drivers/hwmon/nct6683.c
+> index a23047a3bfe2..256e8d62f858 100644
+> --- a/drivers/hwmon/nct6683.c
+> +++ b/drivers/hwmon/nct6683.c
+> @@ -1,7 +1,7 @@
+>  // SPDX-License-Identifier: GPL-2.0-or-later
+>  /*
+>   * nct6683 - Driver for the hardware monitoring functionality of
+> - *	     Nuvoton NCT6683D/NCT6687D eSIO
+> + *	     Nuvoton NCT6683D/NCT6686D/NCT6687D eSIO
+>   *
+>   * Copyright (C) 2013  Guenter Roeck <linux@roeck-us.net>
+>   *
+> @@ -12,6 +12,7 @@
+>   *
+>   * Chip        #vin    #fan    #pwm    #temp  chip ID
+>   * nct6683d     21(1)   16      8       32(1) 0xc730
+> + * nct6686d     21(1)   16      8       32(1) 0xd440
+>   * nct6687d     21(1)   16      8       32(1) 0xd590
+>   *
+>   * Notes:
+> @@ -33,7 +34,7 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/slab.h>
 >  
-> +config SENSORS_IR36021
-> +	tristate "Infineon IR36021"
-> +	help
-> +	  If you say yes here you get hardware monitoring support for Infineon
-> +	  IR36021.
-> +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called ir36021.
-> +
->  config SENSORS_IR38064
->  	tristate "Infineon IR38064"
->  	help
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index 6a4ba0fdc1db..685a6bc2b15f 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -11,6 +11,7 @@ obj-$(CONFIG_SENSORS_BEL_PFE)	+= bel-pfe.o
->  obj-$(CONFIG_SENSORS_IBM_CFFPS)	+= ibm-cffps.o
->  obj-$(CONFIG_SENSORS_INSPUR_IPSPS) += inspur-ipsps.o
->  obj-$(CONFIG_SENSORS_IR35221)	+= ir35221.o
-> +obj-$(CONFIG_SENSORS_IR36021)	+= ir36021.o
->  obj-$(CONFIG_SENSORS_IR38064)	+= ir38064.o
->  obj-$(CONFIG_SENSORS_IRPS5401)	+= irps5401.o
->  obj-$(CONFIG_SENSORS_ISL68137)	+= isl68137.o
-> diff --git a/drivers/hwmon/pmbus/ir36021.c b/drivers/hwmon/pmbus/ir36021.c
-> new file mode 100644
-> index 000000000000..4767e39cc965
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/ir36021.c
-> @@ -0,0 +1,79 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Hardware monitoring driver for Infineon IR36021
-> + *
-> + * Copyright (c) 2021 Allied Telesis
-> + */
-> +#include <linux/err.h>
-> +#include <linux/i2c.h>
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include "pmbus.h"
-> +
-> +static struct pmbus_driver_info ir36021_info = {
-> +	.pages = 1,
-> +	.format[PSC_VOLTAGE_IN] = linear,
-> +	.format[PSC_VOLTAGE_OUT] = linear,
-> +	.format[PSC_CURRENT_IN] = linear,
-> +	.format[PSC_CURRENT_OUT] = linear,
-> +	.format[PSC_POWER] = linear,
-> +	.format[PSC_TEMPERATURE] = linear,
-> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT
-> +		| PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT
-> +		| PMBUS_HAVE_PIN | PMBUS_HAVE_POUT
-> +		| PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2
-> +		| PMBUS_HAVE_STATUS_TEMP,
-> +};
-> +
-> +static int ir36021_probe(struct i2c_client *client)
-> +{
-> +	u8 buf[I2C_SMBUS_BLOCK_MAX];
-> +	int ret;
-> +
-> +	if (!i2c_check_functionality(client->adapter,
-> +				     I2C_FUNC_SMBUS_READ_BYTE_DATA
-> +				     | I2C_FUNC_SMBUS_READ_WORD_DATA
-> +				     | I2C_FUNC_SMBUS_READ_BLOCK_DATA))
-> +		return -ENODEV;
-> +
-> +	ret = i2c_smbus_read_i2c_block_data(client, PMBUS_MFR_MODEL, 2, buf);
-> +	if (ret < 0) {
-> +		dev_err(&client->dev, "Failed to read PMBUS_MFR_MODEL\n");
-> +		return ret;
-> +	}
-> +	if (ret != 2 || buf[0] != 0x01 || buf[1] != 0x2d) {
-> +		dev_err(&client->dev, "MFR_MODEL unrecognised\n");
-> +		return -ENODEV;
-> +	}
-> +
-> +	return pmbus_do_probe(client, &ir36021_info);
-> +}
-> +
-> +static const struct i2c_device_id ir36021_id[] = {
-> +	{ "ir36021", 0 },
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(i2c, ir36021_id);
-> +
-> +static const struct of_device_id __maybe_unused ir36021_of_id[] = {
-> +	{ .compatible = "infineon,ir36021" },
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(of, ir36021_of_id);
-> +
-> +static struct i2c_driver ir36021_driver = {
-> +	.class = I2C_CLASS_HWMON,
-> +	.driver = {
-> +		.name = "ir36021",
-> +		.of_match_table = of_match_ptr(ir36021_of_id),
-> +	},
-> +	.probe_new = ir36021_probe,
-> +	.id_table = ir36021_id,
-> +};
-> +
-> +module_i2c_driver(ir36021_driver);
-> +
-> +MODULE_AUTHOR("Chris Packham <chris.packham@alliedtelesis.co.nz>");
-> +MODULE_DESCRIPTION("PMBus driver for Infineon IR36021");
-> +MODULE_LICENSE("GPL");
+> -enum kinds { nct6683, nct6687 };
+> +enum kinds { nct6683, nct6686, nct6687 };
+>  
+>  static bool force;
+>  module_param(force, bool, 0);
+> @@ -41,11 +42,13 @@ MODULE_PARM_DESC(force, "Set to one to enable support for unknown vendors");
+>  
+>  static const char * const nct6683_device_names[] = {
+>  	"nct6683",
+> +	"nct6686",
+>  	"nct6687",
+>  };
+>  
+>  static const char * const nct6683_chip_names[] = {
+>  	"NCT6683D",
+> +	"NCT6686D",
+>  	"NCT6687D",
+>  };
+>  
+> @@ -66,6 +69,7 @@ static const char * const nct6683_chip_names[] = {
+>  
+>  #define SIO_NCT6681_ID		0xb270	/* for later */
+>  #define SIO_NCT6683_ID		0xc730
+> +#define SIO_NCT6686_ID		0xd440
+>  #define SIO_NCT6687_ID		0xd590
+>  #define SIO_ID_MASK		0xFFF0
+>  
+> @@ -1362,6 +1366,9 @@ static int __init nct6683_find(int sioaddr, struct nct6683_sio_data *sio_data)
+>  	case SIO_NCT6683_ID:
+>  		sio_data->kind = nct6683;
+>  		break;
+> +	case SIO_NCT6686_ID:
+> +		sio_data->kind = nct6686;
+> +		break;
+>  	case SIO_NCT6687_ID:
+>  		sio_data->kind = nct6687;
+>  		break;
