@@ -2,105 +2,143 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DAFC6C433E0
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 22:03:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CEFB3C433DB
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 22:16:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 91B5064F71
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 22:03:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A837964F7A
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 22:16:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230385AbhCKWCf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 11 Mar 2021 17:02:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44268 "EHLO
+        id S230300AbhCKWQL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 11 Mar 2021 17:16:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231320AbhCKWCH (ORCPT
+        with ESMTP id S229900AbhCKWP7 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 11 Mar 2021 17:02:07 -0500
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60162C061574;
-        Thu, 11 Mar 2021 14:02:07 -0800 (PST)
-Received: by mail-oi1-x22e.google.com with SMTP id q130so5831180oif.13;
-        Thu, 11 Mar 2021 14:02:07 -0800 (PST)
+        Thu, 11 Mar 2021 17:15:59 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D595CC061574
+        for <linux-hwmon@vger.kernel.org>; Thu, 11 Mar 2021 14:15:58 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id o22so15088660oic.3
+        for <linux-hwmon@vger.kernel.org>; Thu, 11 Mar 2021 14:15:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=UQ8E0btZr5f/lHfbczLb/OS7Qy0lc+CY+34s9mzBT2c=;
-        b=YS+Lt/Oz7YwelAb3kwV/VTcTZhSU1VV23ljUbjBRHVXLWreAi+8q3Xyx5BzBYTRdZg
-         ecHi1j8qqHW3dIEx/uc78fiN6DvHtae1RXv8A0aiBVy/Ql1J071v7r+NKWzeZCJq8CLf
-         H8rXr6x3k1vhVbm72gDn+0vDKXbLr7Dg0RydDZg+L6L8uVe9hFXBxR6T+byS1ljSloMF
-         emQx5ui+I9rkETtM2DHhdMBd42fidzmxmvSuiOu+uec/PLub86+HsxMNwVFIXv2kGqYm
-         MFpCPKVyAbtBAHoi0bpBplTOw5NYBvLncy+YAATvZPu5nAYzpKFAeyT4NyjvfWD7b7CQ
-         bBmQ==
+        bh=pneWVGfa73ydBAlUo9blXvy5w+t2EM+EIOD7OojACVk=;
+        b=NarMuJM0e5PiWJDu2jjKG3dyS87vy+NpVyvkCLPyvk0ERdYZaBeReUnizhAtwsJIhx
+         wgE6P99kLDPOKsYZ0pQWkHht2D+X300XufR+F8ZFZaQ61NNqK0/38cvocldhX5aOcmDM
+         P6v4LFkya6fd95IEZTOwatho5mx/2OfIk//GUe2wznUW6Y0LXGegr8gMsTBBMm6FsUw3
+         zYdvi2VUPkRfcDkT4Ow/gtP2JyHSlTQ/Um5P10/V7sCCkJKDlMmjZ3V8b6e79TP7ACiR
+         wJUYSljbPVvduo/Zl/JZswYcxHj1IecMPz5rDyAFMY3bpzKAGWoSxpZCP2p01hvuw48L
+         54NQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=UQ8E0btZr5f/lHfbczLb/OS7Qy0lc+CY+34s9mzBT2c=;
-        b=JQAIMdHbG2VIfGFrMG5gWbsTpXGofGCA1SViYj64XKXSilK3qr2I+8worRv9hjhzb9
-         c0I7EwsWp61/yDqqbZWIk6pKSImRt5vvukAmAaiz+1WQKLcMVxoBdiFV7Kp5g899TN7M
-         vVqtc429gyM/NBiSARBnGsrLKt76T/NRg1CIIWxu4JE0hjuxVOnHorMgitKcV/X9b+Ev
-         PgMf0ger2s7LuuOpYeofxxsJ7gYbc1h3q9Vdnd7whKxe9/419mpRWtO6+QJMvvU3ogaQ
-         /J/iJrZD3LG/yESwpzkPwBSriR51k5YsYj+qutScu3fq+g/RjxpAY7IQwvGk7xDzKrnw
-         QFdQ==
-X-Gm-Message-State: AOAM530apJ3CZ2ngoXaQdjEPnXDsKzjMiCpf9z0JNCaJP760H8Yvq2c0
-        p/ydJ89qEaM/VqyEe8LBaAoclm5skUg=
-X-Google-Smtp-Source: ABdhPJyBMus0KQ9ed2ZMwJyemHlMGIE4kSrAkjIqlUxQmSwL/KUDHRIm/sQZdhbE+aX1Dx4Ik58dGw==
-X-Received: by 2002:aca:bc89:: with SMTP id m131mr7549771oif.62.1615500126879;
-        Thu, 11 Mar 2021 14:02:06 -0800 (PST)
+        bh=pneWVGfa73ydBAlUo9blXvy5w+t2EM+EIOD7OojACVk=;
+        b=FS1bRbHlR9+sU8lkseCBvPZrVVq5mNjjC/UldGhkzXsO9qsdnLOu/RdCGwbwmpIs37
+         8m460Nevj9cMlTZXycyh7pFko+5u87vljuDiwcvKCzifC+vYL5NN9okl0i7QYG7pUjtN
+         0yYCQjdLthuoVUkNNRvFIhG+7KsGg0EP9FdgvCeqJnn4WoL9nTm3LMNdYC6xYfPYP5Og
+         OzhIi3d8N0YlgJX/dZE3Wz43RqRxAlGRRncBpSF+7Rb+77nDMAdNlKvJg7g+YXhgADDl
+         GtzE2lGSYIz5swfqE1NLRLw5NMv7K1yYpdTCvZ3Te5aTm0+QK7eV7h3kl706RblqyNAX
+         BrtQ==
+X-Gm-Message-State: AOAM530tslBzZsyG0xFue7UoIIYLSy9Ej11dB6OUpmDcuPMsKJXM8MkU
+        SsZwO/4UjVlL3D8mK/lSQ2voXGTX7Xk=
+X-Google-Smtp-Source: ABdhPJwKixVd5c3lq5lwIxBxUmxlbv5USpya7WGJiwq8JoyMBMQWilNM5OffnL8ew+k8Fq/D4dBY4w==
+X-Received: by 2002:a05:6808:1387:: with SMTP id c7mr7608334oiw.61.1615500958184;
+        Thu, 11 Mar 2021 14:15:58 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 64sm801666oob.12.2021.03.11.14.02.06
+        by smtp.gmail.com with ESMTPSA id b133sm834435oia.17.2021.03.11.14.15.57
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 11 Mar 2021 14:02:06 -0800 (PST)
+        Thu, 11 Mar 2021 14:15:57 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 11 Mar 2021 14:02:05 -0800
+Date:   Thu, 11 Mar 2021 14:15:56 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Erik Rosen <erik.rosen@metormote.com>
-Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH v3 2/2] hwmon: (pmbus/stpddc60) Add ST STPDDC60 pmbus
- driver
-Message-ID: <20210311220205.GA37379@roeck-us.net>
-References: <20210218115249.28513-1-erik.rosen@metormote.com>
- <20210218115249.28513-3-erik.rosen@metormote.com>
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Guohan Lu <lguohan@gmail.com>, Boyang Yu <byu@arista.com>
+Subject: Re: [PATCH] hwmon: (lm90) Fix false alarm when writing convrate on
+ max6658
+Message-ID: <20210311221556.GA38026@roeck-us.net>
+References: <20210304153832.19275-1-pmenzel@molgen.mpg.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210218115249.28513-3-erik.rosen@metormote.com>
+In-Reply-To: <20210304153832.19275-1-pmenzel@molgen.mpg.de>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Feb 18, 2021 at 12:52:49PM +0100, Erik Rosen wrote:
-> Add hardware monitoring support for ST STPDDC60 Unversal Digital
-> Multicell Controller.
+On Thu, Mar 04, 2021 at 04:38:32PM +0100, Paul Menzel wrote:
+> From: Boyang Yu <byu@arista.com>
 > 
-> Signed-off-by: Erik Rosen <erik.rosen@metormote.com>
+> We found that the max6658 sometimes issues a false alarm when its
+> convrate is changed, with the current hwmon driver. This workaround
+> will fix it by stopping the conversion before setting the convrate.
+> 
+> Upstream the patch added added to the SONiC Linux kernel in merge/pull
+> request #82 [1][2].
+> 
+> [1]: https://github.com/Azure/sonic-linux-kernel/pull/82
+> [2]: https://github.com/Azure/sonic-linux-kernel/commit/d03f6167f64b2bfa1330ff7b33fe217f68ab7028
+> 
+> [pmenzel: Forward port patch from 4.19 to 5.12-rc1+]
+> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
+> ---
+>  drivers/hwmon/lm90.c | 15 ++++++++++++---
+>  1 file changed, 12 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
+> index ebbfd5f352c0..0c1a91b715e8 100644
+> --- a/drivers/hwmon/lm90.c
+> +++ b/drivers/hwmon/lm90.c
+> @@ -639,7 +639,11 @@ static int lm90_set_convrate(struct i2c_client *client, struct lm90_data *data,
+>  		if (interval >= update_interval * 3 / 4)
+>  			break;
+>  
+> -	err = lm90_write_convrate(data, i);
+> +	if (data->kind == max6657)
+> +		err = max6657_write_convrate(client, i);
 
-Applied but ...
+There is no such function in the upstream kernel.
+Anyway, this problem has already been already fixed
+in the upstream kernel with commit 62456189f3292 ("hwmon:
+(lm90) Fix max6658 sporadic wrong temperature reading").
 
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -28,9 +28,11 @@ obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
->  obj-$(CONFIG_SENSORS_PM6764TR)	+= pm6764tr.o
->  obj-$(CONFIG_SENSORS_PXE1610)	+= pxe1610.o
->  obj-$(CONFIG_SENSORS_Q54SJ108A2)	+= q54sj108a2.o
-> +obj-$(CONFIG_SENSORS_STPDDC60)	+= stpddc60.o
->  obj-$(CONFIG_SENSORS_TPS40422)	+= tps40422.o
->  obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
->  obj-$(CONFIG_SENSORS_UCD9000)	+= ucd9000.o
->  obj-$(CONFIG_SENSORS_UCD9200)	+= ucd9200.o
->  obj-$(CONFIG_SENSORS_XDPE122)	+= xdpe12284.o
->  obj-$(CONFIG_SENSORS_ZL6100)	+= zl6100.o
-> +
-
-I fixed this up. Please check for such whitespace errors.
-
-Thanks,
 Guenter
+
+> +	else
+> +		err = lm90_write_convrate(data, i);
+> +
+>  	data->update_interval = DIV_ROUND_CLOSEST(update_interval, 64);
+>  	return err;
+>  }
+> @@ -1649,7 +1653,11 @@ static void lm90_restore_conf(void *_data)
+>  	struct i2c_client *client = data->client;
+>  
+>  	/* Restore initial configuration */
+> -	lm90_write_convrate(data, data->convrate_orig);
+> +	if (data->kind == max6657)
+> +		max6657_write_convrate(client, data->convrate_orig);
+> +	else
+> +		lm90_write_convrate(data, data->convrate_orig);
+> +
+>  	i2c_smbus_write_byte_data(client, LM90_REG_W_CONFIG1,
+>  				  data->config_orig);
+>  }
+> @@ -1672,7 +1680,8 @@ static int lm90_init_client(struct i2c_client *client, struct lm90_data *data)
+>  	data->config_orig = config;
+>  	data->config = config;
+>  
+> -	lm90_set_convrate(client, data, 500); /* 500ms; 2Hz conversion rate */
+> +	if (data->kind != max6657)
+> +		lm90_set_convrate(client, data, 500); /* 500ms; 2Hz conversion rate */
+>  
+>  	/* Check Temperature Range Select */
+>  	if (data->kind == adt7461 || data->kind == tmp451) {
