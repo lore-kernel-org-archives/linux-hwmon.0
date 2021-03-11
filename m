@@ -4,129 +4,103 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D72CC433DB
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 22:02:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DAFC6C433E0
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 22:03:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B53BA64F85
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 22:02:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 91B5064F71
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 22:03:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbhCKWBb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 11 Mar 2021 17:01:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44022 "EHLO
+        id S230385AbhCKWCf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 11 Mar 2021 17:02:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231151AbhCKWA6 (ORCPT
+        with ESMTP id S231320AbhCKWCH (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 11 Mar 2021 17:00:58 -0500
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7199AC061574;
-        Thu, 11 Mar 2021 14:00:58 -0800 (PST)
-Received: by mail-ot1-x331.google.com with SMTP id o19-20020a9d22130000b02901bfa5b79e18so387640ota.0;
-        Thu, 11 Mar 2021 14:00:58 -0800 (PST)
+        Thu, 11 Mar 2021 17:02:07 -0500
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60162C061574;
+        Thu, 11 Mar 2021 14:02:07 -0800 (PST)
+Received: by mail-oi1-x22e.google.com with SMTP id q130so5831180oif.13;
+        Thu, 11 Mar 2021 14:02:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=TQF/LGCOPFatzhvjQlpFSq+Z+gtTSsryBBpoyI/DA0Y=;
-        b=MW3anqJK1IvuFT10DnLhKdtmJzlNccK2ZlZyz+/4f3aX/69iB9jKVMBWdeLVWmqxzf
-         x2kdrKVKlWobGLU0PjJmWfiO6wa6h/3UycLDHrp37GhsxtSw7fzMEzVK1/gVYcL4EI+R
-         9hqbfy5Ptk1VMoCCo+gE2QhRmtK8IV93p3GndCIrnKpSysn4LCduxGpa4o/soUSKdbm3
-         5kekdtXYi7Mdu/zg74TVvnhVLg38xqd+6JBh31KKf1F9S5hR/utAI20c27xtZrhK4Lmw
-         YSrCasNtbVK8FRo8BsXStKdEU1c5SUcCnzhEfLD0q+NlhQx0zAb0Miv+wiVWkvCDw9jh
-         kAkg==
+        bh=UQ8E0btZr5f/lHfbczLb/OS7Qy0lc+CY+34s9mzBT2c=;
+        b=YS+Lt/Oz7YwelAb3kwV/VTcTZhSU1VV23ljUbjBRHVXLWreAi+8q3Xyx5BzBYTRdZg
+         ecHi1j8qqHW3dIEx/uc78fiN6DvHtae1RXv8A0aiBVy/Ql1J071v7r+NKWzeZCJq8CLf
+         H8rXr6x3k1vhVbm72gDn+0vDKXbLr7Dg0RydDZg+L6L8uVe9hFXBxR6T+byS1ljSloMF
+         emQx5ui+I9rkETtM2DHhdMBd42fidzmxmvSuiOu+uec/PLub86+HsxMNwVFIXv2kGqYm
+         MFpCPKVyAbtBAHoi0bpBplTOw5NYBvLncy+YAATvZPu5nAYzpKFAeyT4NyjvfWD7b7CQ
+         bBmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=TQF/LGCOPFatzhvjQlpFSq+Z+gtTSsryBBpoyI/DA0Y=;
-        b=CjSpjITMYi93VkdiJhOS4Gue9x3rKE5euZhKcxN5k4fJNqLp4DPCBBQWuiU0dvmfIa
-         gtc3AS/NIQUjgmBC8rR3WuHRCsTHczB3nFc5SNFw63U1eMpsy5wRMfneoXyl5jpBSvAw
-         CPQBfVo6S+hSZCdZI9IUlApVjl2XNcZVsDl4Cr8ArCXKBoGrZRoqHAw6KLCntkoIlSMc
-         97A9pf08rHlI7QvEn2OU+sDeRBrYSfi80u2g40+MApxqI72A5wIvjTLUvgLXfzOC17fT
-         tyb6xN10V4dxL7HAn5AKJvwiup7WH9b6MWrdZ+D1LT02slDl62xYvr4jE6MgewES5LGR
-         mTdQ==
-X-Gm-Message-State: AOAM533C7qq/joEtOgmqhFRf1TVYRuWI3dflL9aEb7GvonR7uOCnsALG
-        dVg2CIjtzo34NmXzJubZJKVBbVxtdDU=
-X-Google-Smtp-Source: ABdhPJxLaWrVyY0NU8iAwT8s4lIqswm98TlXC/mf3MDh3pFUsp6cZXRNLp/kgApUkQInaQn6GR27fw==
-X-Received: by 2002:a9d:4808:: with SMTP id c8mr821680otf.181.1615500057877;
-        Thu, 11 Mar 2021 14:00:57 -0800 (PST)
+        bh=UQ8E0btZr5f/lHfbczLb/OS7Qy0lc+CY+34s9mzBT2c=;
+        b=JQAIMdHbG2VIfGFrMG5gWbsTpXGofGCA1SViYj64XKXSilK3qr2I+8worRv9hjhzb9
+         c0I7EwsWp61/yDqqbZWIk6pKSImRt5vvukAmAaiz+1WQKLcMVxoBdiFV7Kp5g899TN7M
+         vVqtc429gyM/NBiSARBnGsrLKt76T/NRg1CIIWxu4JE0hjuxVOnHorMgitKcV/X9b+Ev
+         PgMf0ger2s7LuuOpYeofxxsJ7gYbc1h3q9Vdnd7whKxe9/419mpRWtO6+QJMvvU3ogaQ
+         /J/iJrZD3LG/yESwpzkPwBSriR51k5YsYj+qutScu3fq+g/RjxpAY7IQwvGk7xDzKrnw
+         QFdQ==
+X-Gm-Message-State: AOAM530apJ3CZ2ngoXaQdjEPnXDsKzjMiCpf9z0JNCaJP760H8Yvq2c0
+        p/ydJ89qEaM/VqyEe8LBaAoclm5skUg=
+X-Google-Smtp-Source: ABdhPJyBMus0KQ9ed2ZMwJyemHlMGIE4kSrAkjIqlUxQmSwL/KUDHRIm/sQZdhbE+aX1Dx4Ik58dGw==
+X-Received: by 2002:aca:bc89:: with SMTP id m131mr7549771oif.62.1615500126879;
+        Thu, 11 Mar 2021 14:02:06 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v1sm952742otk.67.2021.03.11.14.00.57
+        by smtp.gmail.com with ESMTPSA id 64sm801666oob.12.2021.03.11.14.02.06
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 11 Mar 2021 14:00:57 -0800 (PST)
+        Thu, 11 Mar 2021 14:02:06 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 11 Mar 2021 14:00:56 -0800
+Date:   Thu, 11 Mar 2021 14:02:05 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Erik Rosen <erik.rosen@metormote.com>
 Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-hwmon@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
         Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH v3 1/2] hwmon: (pmbus) Add pmbus_set_update() function to
- set update flag
-Message-ID: <20210311220056.GA37350@roeck-us.net>
+Subject: Re: [PATCH v3 2/2] hwmon: (pmbus/stpddc60) Add ST STPDDC60 pmbus
+ driver
+Message-ID: <20210311220205.GA37379@roeck-us.net>
 References: <20210218115249.28513-1-erik.rosen@metormote.com>
- <20210218115249.28513-2-erik.rosen@metormote.com>
+ <20210218115249.28513-3-erik.rosen@metormote.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210218115249.28513-2-erik.rosen@metormote.com>
+In-Reply-To: <20210218115249.28513-3-erik.rosen@metormote.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Feb 18, 2021 at 12:52:48PM +0100, Erik Rosen wrote:
-> For the STPDDC60 chip, the vout alarm-limits are represented as an offset
-> relative to the commanded output voltage. This means that the limits are
-> dynamic and must not be cached by the pmbus driver. This patch adds a
-> pmbus_set_sensor() function to pmbus_core to be able to set the update flag
-> on selected sensors after auto-detection of limit attributes.
+On Thu, Feb 18, 2021 at 12:52:49PM +0100, Erik Rosen wrote:
+> Add hardware monitoring support for ST STPDDC60 Unversal Digital
+> Multicell Controller.
 > 
 > Signed-off-by: Erik Rosen <erik.rosen@metormote.com>
 
-Applied.
+Applied but ...
+
+> --- a/drivers/hwmon/pmbus/Makefile
+> +++ b/drivers/hwmon/pmbus/Makefile
+> @@ -28,9 +28,11 @@ obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
+>  obj-$(CONFIG_SENSORS_PM6764TR)	+= pm6764tr.o
+>  obj-$(CONFIG_SENSORS_PXE1610)	+= pxe1610.o
+>  obj-$(CONFIG_SENSORS_Q54SJ108A2)	+= q54sj108a2.o
+> +obj-$(CONFIG_SENSORS_STPDDC60)	+= stpddc60.o
+>  obj-$(CONFIG_SENSORS_TPS40422)	+= tps40422.o
+>  obj-$(CONFIG_SENSORS_TPS53679)	+= tps53679.o
+>  obj-$(CONFIG_SENSORS_UCD9000)	+= ucd9000.o
+>  obj-$(CONFIG_SENSORS_UCD9200)	+= ucd9200.o
+>  obj-$(CONFIG_SENSORS_XDPE122)	+= xdpe12284.o
+>  obj-$(CONFIG_SENSORS_ZL6100)	+= zl6100.o
+> +
+
+I fixed this up. Please check for such whitespace errors.
 
 Thanks,
 Guenter
-
-> ---
->  drivers/hwmon/pmbus/pmbus.h      |  1 +
->  drivers/hwmon/pmbus/pmbus_core.c | 11 +++++++++++
->  2 files changed, 12 insertions(+)
-> 
-> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
-> index 4c30ec89f5bf..3968924f8533 100644
-> --- a/drivers/hwmon/pmbus/pmbus.h
-> +++ b/drivers/hwmon/pmbus/pmbus.h
-> @@ -475,6 +475,7 @@ extern const struct regulator_ops pmbus_regulator_ops;
->  /* Function declarations */
->  
->  void pmbus_clear_cache(struct i2c_client *client);
-> +void pmbus_set_update(struct i2c_client *client, u8 reg, bool update);
->  int pmbus_set_page(struct i2c_client *client, int page, int phase);
->  int pmbus_read_word_data(struct i2c_client *client, int page, int phase,
->  			 u8 reg);
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index 192442b3b7a2..a8f910826a18 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -141,6 +141,17 @@ void pmbus_clear_cache(struct i2c_client *client)
->  }
->  EXPORT_SYMBOL_GPL(pmbus_clear_cache);
->  
-> +void pmbus_set_update(struct i2c_client *client, u8 reg, bool update)
-> +{
-> +	struct pmbus_data *data = i2c_get_clientdata(client);
-> +	struct pmbus_sensor *sensor;
-> +
-> +	for (sensor = data->sensors; sensor; sensor = sensor->next)
-> +		if (sensor->reg == reg)
-> +			sensor->update = update;
-> +}
-> +EXPORT_SYMBOL_GPL(pmbus_set_update);
-> +
->  int pmbus_set_page(struct i2c_client *client, int page, int phase)
->  {
->  	struct pmbus_data *data = i2c_get_clientdata(client);
