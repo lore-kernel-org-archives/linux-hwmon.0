@@ -2,188 +2,114 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0605DC433DB
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 21:40:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3D3AC433E0
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 21:45:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B6BA664F8F
-	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 21:40:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 98C3964F92
+	for <linux-hwmon@archiver.kernel.org>; Thu, 11 Mar 2021 21:45:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbhCKVjo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 11 Mar 2021 16:39:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39440 "EHLO
+        id S229809AbhCKVod (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 11 Mar 2021 16:44:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231357AbhCKVjg (ORCPT
+        with ESMTP id S229688AbhCKVoI (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 11 Mar 2021 16:39:36 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04535C061574;
-        Thu, 11 Mar 2021 13:39:36 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id v192so17155479oia.5;
-        Thu, 11 Mar 2021 13:39:35 -0800 (PST)
+        Thu, 11 Mar 2021 16:44:08 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57FD9C061574;
+        Thu, 11 Mar 2021 13:44:08 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id m1so2457455ote.10;
+        Thu, 11 Mar 2021 13:44:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=AG/AV4QY7bANf3wO/syK6BiICRp5Kc6FIwzeSh2HfRE=;
-        b=ViwzQzsCYtfHVTOfHo8VBOj32S4Fmnhukh35qLftX6pd58LhJMkeOj1yhauYT5ZcCv
-         WdQlUMXogjgfBpH0fqdHTUFokxywC/WkwPQvzV+55P+Mk57A8SWyLW4AQoltt9Km18+0
-         KCKD763UlZahtq1i2dbqBtW1UpAyRifFu1EO5soU28+/i3540Lx7yAHy9cSxsTjLsGj5
-         MACMeVs9obFlWfat0j4ffr7EGF1x/+yntFwLuW4EqdoLtjDjSg+coBd3gotmI3BEBr+C
-         bskgOmJDffSLgE+hFilqAxBBUyUFywyj1pyUNSTcTwwUO1c09g1pWRhj5tnom5QfDXnn
-         Kqcw==
+         :content-disposition:in-reply-to:user-agent;
+        bh=pP/ToFMswoVlEeoCP+bOzIcth5EBOOJrEJydORseAGU=;
+        b=Och4VYveXdzpV0hFo14Tqy95TYzIj8LSBOcc6IpNTApWeW4CHck594V6jnYqRVQIvc
+         A3UWif/dL8kzDo0EHAZQ4qTnZOvSLl31hXs5HBf2aBk+LZcEzFmVmzPsink6Z2WgimQA
+         aWKJrEsnvifnv14mNLHcqly3Mi8YjTLITd3ejKHeA7VZuD5NT70X9xqrpZOCV9olt+ZM
+         aQzPjajOFxv3glOpj/vJjZVtIl5LF0+yc83eF7uWRTNi802aTnr6WEkyQllBqbRrs+0X
+         XwFddtwlLgVbG8kZWvVYJGX9hWxgEroZ7iqFG8ObTC3BGEt2u+8DkhjHQZwOuzF9ui20
+         R33A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to:user-agent;
-        bh=AG/AV4QY7bANf3wO/syK6BiICRp5Kc6FIwzeSh2HfRE=;
-        b=tkMlQiYHQE7XPDBOxhoUgAPBsp5Y4wPVORsNO8viGvc9Cn48+K6VQln3Z4AyEHZOH1
-         Ha+on8/isIB3e7f9oaSFtYQNZwiqyK2XbluVQyo8rwU6jvA5chnKec+BQbNf5iXwpsk6
-         n3yPG0tcAQSwYoKHpdYc7cy5wGHTETjW3eXd97tg3PAA71VwWKyueClkK1mXjLR7DpUv
-         VWwE3lKR8JPi98sb3vsq27MlYwJINVGVCoyh8CRVV6L676jeqlzKPdJQ6FW+vPD8pC7n
-         m4aWMYzwGJbx5tqO1JEAOv1/lD0jbQj0DJTkNzz6iSMcJpQE7/htbUmfOupNmKf6magm
-         nuiw==
-X-Gm-Message-State: AOAM531EVh5gFTNgVEFrKuwGHQEkQIgLgVT7NscVmx//WNYvQ/mMVHtm
-        tEz9iHARhA+R+x/SrL3DV5Q=
-X-Google-Smtp-Source: ABdhPJy89ZrBTPAMniotUKGWuawVCvWRa/OWhT0CKnJcPnCnUowU4Dn5oSLfgQ9iRV3bxM2IEetSRg==
-X-Received: by 2002:a05:6808:f15:: with SMTP id m21mr7842544oiw.123.1615498775451;
-        Thu, 11 Mar 2021 13:39:35 -0800 (PST)
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=pP/ToFMswoVlEeoCP+bOzIcth5EBOOJrEJydORseAGU=;
+        b=WpCBUhKE6i0qEPhYqqu7pGZouj63EHsvkxGq9Spsv2G/UCe/ps21r7zbEvasyM0doi
+         XhpT6N5fpws7cv2QdmitFMSI8ehZDwX+fzhThXSpXgpWhKUPRQG+3eI7KzBrUtScf0UJ
+         pFyc3Yia6isEU5zsqQBY6iMamGIBlJCk+q7ynxoeYWiLyU5EIt6GrMrRp9Pon1A0+sWt
+         ZZcJnlVz71SrT+1yiD/FOnO9CbenvEGMu3FZGnl7Sz46niuM3LHHmDwV68cREmGQRZTR
+         p8C3NUkr0jTZOP/bslJrW4uDyfmfEzqCWTx/YhwzTaHqSOCC9sK6tx0Ok0b45RD86QjT
+         cQHA==
+X-Gm-Message-State: AOAM531o1YZKtkCdfS4LgoRsS6YYqTLtHhaxw8UqhCkH8bRcGTHLKa92
+        cZQht8wR51yPmGOUrRUMRGY=
+X-Google-Smtp-Source: ABdhPJzFLYpb6Ol8+hJg/hjMCCzSCtDJuMWhEjrO5pHz2pNgNentxt5KSlz4LmjERSC/vd0YizSLig==
+X-Received: by 2002:a9d:3a34:: with SMTP id j49mr772342otc.153.1615499047814;
+        Thu, 11 Mar 2021 13:44:07 -0800 (PST)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w23sm786391oow.25.2021.03.11.13.39.34
+        by smtp.gmail.com with ESMTPSA id k9sm915536ots.24.2021.03.11.13.44.06
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 11 Mar 2021 13:39:34 -0800 (PST)
+        Thu, 11 Mar 2021 13:44:07 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 11 Mar 2021 13:39:33 -0800
+Date:   Thu, 11 Mar 2021 13:44:05 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Wilken Gottwalt <wilken.gottwalt@posteo.net>
-Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH] hwmon: corsair-psu: update calculation of LINEAR11 values
-Message-ID: <20210311213933.GA35601@roeck-us.net>
-References: <YDoSMqFbgoTXyoru@monster.powergraphx.local>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, andriy.shevchenko@linux.intel.com,
+        linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>
+Subject: Re: [PATCH v2 5/9] hwmon/drivers/mr75203: Use HZ macros
+Message-ID: <20210311214405.GA35866@roeck-us.net>
+References: <20210224144222.23762-1-daniel.lezcano@linaro.org>
+ <20210224144222.23762-5-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YDoSMqFbgoTXyoru@monster.powergraphx.local>
+In-Reply-To: <20210224144222.23762-5-daniel.lezcano@linaro.org>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Feb 27, 2021 at 10:34:42AM +0100, Wilken Gottwalt wrote:
-> Changes the way how LINEAR11 values are calculated. The new method
-> increases the precision of 2-3 digits.
-> 
-> old method:
-> 	corsairpsu-hid-3-1
-> 	Adapter: HID adapter
-> 	v_in:        230.00 V
-> 	v_out +12v:   12.00 V
-> 	v_out +5v:     5.00 V
-> 	v_out +3.3v:   3.00 V
-> 	psu fan:        0 RPM
-> 	vrm temp:     +44.0°C
-> 	case temp:    +37.0°C
-> 	power total: 152.00 W
-> 	power +12v:  112.00 W
-> 	power +5v:    38.00 W
-> 	power +3.3v:   5.00 W
-> 	curr in:          N/A
-> 	curr +12v:     9.00 A
-> 	curr +5v:      7.00 A
-> 	curr +3.3v:  1000.00 mA
-> 
-> new method:
-> 	corsairpsu-hid-3-1
-> 	Adapter: HID adapter
-> 	v_in:        230.00 V
-> 	v_out +12v:   12.16 V
-> 	v_out +5v:     5.01 V
-> 	v_out +3.3v:   3.30 V
-> 	psu fan:        0 RPM
-> 	vrm temp:     +44.5°C
-> 	case temp:    +37.8°C
-> 	power total: 148.00 W
-> 	power +12v:  108.00 W
-> 	power +5v:    37.00 W
-> 	power +3.3v:   4.50 W
-> 	curr in:          N/A
-> 	curr +12v:     9.25 A
-> 	curr +5v:      7.50 A
-> 	curr +3.3v:    1.50 A
-> 
-> Co-developed-by: Jack Doan <me@jackdoan.com>
-> Signed-off-by: Jack Doan <me@jackdoan.com>
-> Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+On Wed, Feb 24, 2021 at 03:42:15PM +0100, Daniel Lezcano wrote:
+> HZ unit conversion macros are available in units.h, use them and
+> remove the duplicate definition.
 
-Applied.
+I assume the idea is to submit the series together, so
 
-Thanks,
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+
 Guenter
 
-> ---
->  drivers/hwmon/corsair-psu.c | 30 ++++++++----------------------
->  1 file changed, 8 insertions(+), 22 deletions(-)
 > 
-> diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
-> index 99494056f4bd..b0953eeeb2d3 100644
-> --- a/drivers/hwmon/corsair-psu.c
-> +++ b/drivers/hwmon/corsair-psu.c
-> @@ -119,27 +119,13 @@ struct corsairpsu_data {
->  };
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Reviewed-by: Christian Eggers <ceggers@arri.de>
+> ---
+>  drivers/hwmon/mr75203.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
+> index 18da5a25e89a..868243dba1ee 100644
+> --- a/drivers/hwmon/mr75203.c
+> +++ b/drivers/hwmon/mr75203.c
+> @@ -17,6 +17,7 @@
+>  #include <linux/property.h>
+>  #include <linux/regmap.h>
+>  #include <linux/reset.h>
+> +#include <linux/units.h>
 >  
->  /* some values are SMBus LINEAR11 data which need a conversion */
-> -static int corsairpsu_linear11_to_int(const int val)
-> +static int corsairpsu_linear11_to_int(const u16 val, const int scale)
->  {
-> -	int exp = (val & 0xFFFF) >> 0x0B;
-> -	int mant = val & 0x7FF;
-> -	int i;
-> -
-> -	if (exp > 0x0F)
-> -		exp -= 0x20;
-> -	if (mant > 0x3FF)
-> -		mant -= 0x800;
-> -	if ((mant & 0x01) == 1)
-> -		++mant;
-> -	if (exp < 0) {
-> -		for (i = 0; i < -exp; ++i)
-> -			mant /= 2;
-> -	} else {
-> -		for (i = 0; i < exp; ++i)
-> -			mant *= 2;
-> -	}
-> +	const int exp = ((s16)val) >> 11;
-> +	const int mant = (((s16)(val & 0x7ff)) << 5) >> 5;
-> +	const int result = mant * scale;
+>  /* PVT Common register */
+>  #define PVT_IP_CONFIG	0x04
+> @@ -37,7 +38,6 @@
+>  #define CLK_SYNTH_EN		BIT(24)
+>  #define CLK_SYS_CYCLES_MAX	514
+>  #define CLK_SYS_CYCLES_MIN	2
+> -#define HZ_PER_MHZ		1000000L
 >  
-> -	return mant;
-> +	return (exp >= 0) ? (result << exp) : (result >> -exp);
->  }
+>  #define SDIF_DISABLE	0x04
 >  
->  static int corsairpsu_usb_cmd(struct corsairpsu_data *priv, u8 p0, u8 p1, u8 p2, void *data)
-> @@ -249,14 +235,14 @@ static int corsairpsu_get_value(struct corsairpsu_data *priv, u8 cmd, u8 rail, l
->  	case PSU_CMD_RAIL_AMPS:
->  	case PSU_CMD_TEMP0:
->  	case PSU_CMD_TEMP1:
-> -		*val = corsairpsu_linear11_to_int(tmp & 0xFFFF) * 1000;
-> +		*val = corsairpsu_linear11_to_int(tmp & 0xFFFF, 1000);
->  		break;
->  	case PSU_CMD_FAN:
-> -		*val = corsairpsu_linear11_to_int(tmp & 0xFFFF);
-> +		*val = corsairpsu_linear11_to_int(tmp & 0xFFFF, 1);
->  		break;
->  	case PSU_CMD_RAIL_WATTS:
->  	case PSU_CMD_TOTAL_WATTS:
-> -		*val = corsairpsu_linear11_to_int(tmp & 0xFFFF) * 1000000;
-> +		*val = corsairpsu_linear11_to_int(tmp & 0xFFFF, 1000000);
->  		break;
->  	case PSU_CMD_TOTAL_UPTIME:
->  	case PSU_CMD_UPTIME:
