@@ -2,162 +2,108 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.5 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A493EC433E6
-	for <linux-hwmon@archiver.kernel.org>; Sat, 13 Mar 2021 18:26:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0573CC433E0
+	for <linux-hwmon@archiver.kernel.org>; Sat, 13 Mar 2021 22:45:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6CB3464E58
-	for <linux-hwmon@archiver.kernel.org>; Sat, 13 Mar 2021 18:26:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B862464E87
+	for <linux-hwmon@archiver.kernel.org>; Sat, 13 Mar 2021 22:45:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233951AbhCMS0E (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 13 Mar 2021 13:26:04 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37518 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233635AbhCMS0D (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 13 Mar 2021 13:26:03 -0500
-Received: from archlinux (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 794B564E58;
-        Sat, 13 Mar 2021 18:26:02 +0000 (UTC)
-Date:   Sat, 13 Mar 2021 18:25:58 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
+        id S233545AbhCMWo4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 13 Mar 2021 17:44:56 -0500
+Received: from out20-134.mail.aliyun.com ([115.124.20.134]:47250 "EHLO
+        out20-134.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231329AbhCMWos (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 13 Mar 2021 17:44:48 -0500
+X-Alimail-AntiSpam: AC=SUSPECT;BC=0.6324117|-1;BR=01201311R111b1;CH=blue;DM=|SUSPECT|false|;DS=CONTINUE|ham_regular_dialog|0.110711-0.000131202-0.889158;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047205;MF=wangyugui@e16-tech.com;NM=1;PH=DS;RN=4;RT=4;SR=0;TI=SMTPD_---.JkhLCoB_1615675486;
+Received: from 192.168.2.112(mailfrom:wangyugui@e16-tech.com fp:SMTPD_---.JkhLCoB_1615675486)
+          by smtp.aliyun-inc.com(10.147.44.118);
+          Sun, 14 Mar 2021 06:44:46 +0800
+Date:   Sun, 14 Mar 2021 06:44:46 +0800
+From:   Wang Yugui <wangyugui@e16-tech.com>
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Chris Lesiak <chris.lesiak@licor.com>,
-        linux-iio@vger.kernel.org
-Subject: Re: [PATCH 2/2 v4] hwmon: (ntc_thermistor): try reading processed
-Message-ID: <20210313182558.1120c09f@archlinux>
-In-Reply-To: <20210309171501.GB172171@roeck-us.net>
-References: <20210308100219.2732156-1-linus.walleij@linaro.org>
-        <20210308100219.2732156-2-linus.walleij@linaro.org>
-        <20210309171501.GB172171@roeck-us.net>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Subject: Re: [PATCH] nvme-hwmon: drop not common HWMON_T_MIN and HWMON_T_MAX
+Cc:     linux-hwmon@vger.kernel.org, dwagner@suse.de, hare@suse.de
+In-Reply-To: <adbcff5f-22d2-1d5d-fd61-978b03fce943@roeck-us.net>
+References: <20210313083256.68158-1-wangyugui@e16-tech.com> <adbcff5f-22d2-1d5d-fd61-978b03fce943@roeck-us.net>
+Message-Id: <20210314064445.785F.409509F4@e16-tech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="GB2312"
+Content-Transfer-Encoding: 8bit
+X-Mailer: Becky! ver. 2.75.03 [en]
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, 9 Mar 2021 09:15:01 -0800
-Guenter Roeck <linux@roeck-us.net> wrote:
+Hi,
 
-> On Mon, Mar 08, 2021 at 11:02:19AM +0100, Linus Walleij wrote:
-> > Before trying the custom method of reading the sensor
-> > as raw and then converting, we want to use
-> > iio_read_channel_processed_scale() which first tries to
-> > see if the ADC can provide a processed value directly,
-> > else reads raw and applies scaling inside of IIO
-> > using the scale attributes of the ADC. We need to
-> > multiply the scaled value with 1000 to get to
-> > microvolts from millivolts which is what processed
-> > IIO channels returns.
+> On 3/13/21 12:32 AM, wangyugui wrote:
+> > HWMON_T_MIN is not common in NVMe SSD, so drop all of them in nvme-hwmon.
 > > 
-> > Keep the code that assumes 12bit ADC around as a
-> > fallback.
+> > HWMON_T_MAX is only common in NVMe SSD Composite sensor, so drop them in other sensors.
 > > 
-> > This gives correct readings on the AB8500 thermistor
-> > inputs used in the Ux500 HREFP520 platform for reading
-> > battery and board temperature.
+> > Before this patch(SSD: PM1733):
+> > #sensors
+> > nvme-pci-4300
+> > Adapter: PCI adapter
+> > Composite:    +49.9¡ãC  (low  = -273.1¡ãC, high = +71.8¡ãC)
+> >                        (crit = +84.8¡ãC)
+> > Sensor 1:     +47.9¡ãC  (low  = -273.1¡ãC, high = +65261.8¡ãC)
+> > ERROR: Can't get value of subfeature temp3_min: I/O error
+> > ERROR: Can't get value of subfeature temp3_max: I/O error
+> > Sensor 2:     +49.9¡ãC  (low  =  +0.0¡ãC, high =  +0.0¡ãC)
 > > 
-> > Cc: Peter Rosin <peda@axentia.se>
-> > Cc: Chris Lesiak <chris.lesiak@licor.com>
-> > Cc: Jonathan Cameron <jic23@kernel.org>
-> > Cc: linux-iio@vger.kernel.org
-> > Link: https://lore.kernel.org/linux-iio/20201224011607.1059534-1-linus.walleij@linaro.org/
-> > Signed-off-by: Linus Walleij <linus.walleij@linaro.org>  
+> > # cat /sys/class/nvme/nvme0/hwmon1/temp3_min
+> > cat: /sys/class/nvme/nvme0/hwmon1/temp3_min: Input/output error
+> > # cat /sys/class/nvme/nvme0/hwmon1/temp3_max
+> > cat: /sys/class/nvme/nvme0/hwmon1/temp3_max: Input/output error
+> > 
+> > After this patch(SSD: PM1733):
+> > #sensors
+> > nvme-pci-4300
+> > Adapter: PCI adapter
+> > Composite:    +48.9¡ãC  (high = +71.8¡ãC, crit = +84.8¡ãC)
+> > Sensor 1:     +46.9¡ãC
+> > Sensor 2:     +48.9¡ãC
+> > 
 > 
-> Acked-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: missing.
 > 
-> Up to Jonathan to decide if he wants to take both patches.
-It seems unlikely that it will cause trouble in either tree (as the code
-in question isn't changing that often). So on basis Guenter already acked
-I'll pick them up through IIO.
+> Either case, no.
+> 
+> On one of my NVMEs, after setting the limits:
+> 
+> nvme-pci-0100
+> Adapter: PCI adapter
+> Composite:    +29.9¡ãC  (low  =  -0.1¡ãC, high = +76.8¡ãC)
+>                        (crit = +78.8¡ãC)
+> Sensor 1:     +29.9¡ãC  (low  =  -0.1¡ãC, high = +254.8¡ãC)
+> Sensor 2:     +37.9¡ãC  (low  =  -0.1¡ãC, high = +254.8¡ãC)
 
-Applied to the togreg branch of iio.git and pushed out as testing to
-see if the autobuilders notice anything we missed.
-thanks,
+high = +254.8¡ãC is a real value or unconfigured value ?
 
-Jonathan
+Best Regards
+Wang Yugui (wangyugui@e16-tech.com)
+2021/03/14
 
+> That it doesn't work on yours doesn't mean it needs to be disabled for
+> all other NVMEs. Instead, we'll need to figure out how to correctly
+> identify that limits for the second subfeature sensor are not supported,
+> or what exactly the NVME complains about when trying to read the limits
+> for the second subsensor. One possible solution might be to call
+> nvme_get_temp_thresh() from nvme_hwmon_is_visible() and return 0 if the
+> call returns an error.
 > 
-> Thanks,
-> Guenter
-> 
-> > ---
-> > ChangeLog v3->v4:
-> > - Split out the new iio_read_channel_processed_scale()
-> >   API addition to a separate patch.
-> > - My suggestion is to apply both patches to the hwmon
-> >   tree.
-> > ChangeLog v2->v3:
-> > - After discussion about v2 we concludes that
-> >   iio_read_channel_processed() could loose precision
-> >   so we introduce a new API to read processed and
-> >   scale.
-> > - Include a link to the v2 discussion for reference.
-> > - For ease of applying to the hwmon tree, keep it all
-> >   in one patch.
-> > - This needs Jonathans ACK to be merged through hwmon.
-> > ChangeLog v1->v2:
-> > - Fix the patch to multiply the processed value by
-> >   1000 to get to microvolts from millivolts.
-> > - Fix up the confusion in the commit message.
-> > - Drop pointless comments about the code, we keep the
-> >   original code path around if processed reads don't
-> >   work, nothing bad with that.
-> > ---
-> >  drivers/hwmon/ntc_thermistor.c | 27 ++++++++++++++++++---------
-> >  1 file changed, 18 insertions(+), 9 deletions(-)
-> > 
-> > diff --git a/drivers/hwmon/ntc_thermistor.c b/drivers/hwmon/ntc_thermistor.c
-> > index 3aad62a0e661..8587189c7f15 100644
-> > --- a/drivers/hwmon/ntc_thermistor.c
-> > +++ b/drivers/hwmon/ntc_thermistor.c
-> > @@ -326,18 +326,27 @@ struct ntc_data {
-> >  static int ntc_adc_iio_read(struct ntc_thermistor_platform_data *pdata)
-> >  {
-> >  	struct iio_channel *channel = pdata->chan;
-> > -	int raw, uv, ret;
-> > +	int uv, ret;
-> >  
-> > -	ret = iio_read_channel_raw(channel, &raw);
-> > +	ret = iio_read_channel_processed_scale(channel, &uv, 1000);
-> >  	if (ret < 0) {
-> > -		pr_err("read channel() error: %d\n", ret);
-> > -		return ret;
-> > -	}
-> > +		int raw;
-> >  
-> > -	ret = iio_convert_raw_to_processed(channel, raw, &uv, 1000);
-> > -	if (ret < 0) {
-> > -		/* Assume 12 bit ADC with vref at pullup_uv */
-> > -		uv = (pdata->pullup_uv * (s64)raw) >> 12;
-> > +		/*
-> > +		 * This fallback uses a raw read and then
-> > +		 * assumes the ADC is 12 bits, scaling with
-> > +		 * a factor 1000 to get to microvolts.
-> > +		 */
-> > +		ret = iio_read_channel_raw(channel, &raw);
-> > +		if (ret < 0) {
-> > +			pr_err("read channel() error: %d\n", ret);
-> > +			return ret;
-> > +		}
-> > +		ret = iio_convert_raw_to_processed(channel, raw, &uv, 1000);
-> > +		if (ret < 0) {
-> > +			/* Assume 12 bit ADC with vref at pullup_uv */
-> > +			uv = (pdata->pullup_uv * (s64)raw) >> 12;
-> > +		}
-> >  	}
-> >  
-> >  	return uv;
-> > -- 
-> > 2.29.2
-> >   
+> Also, the low/high limit readings on the composite sensor and on
+> Sensor 1 only mean that limits are not configured. That is not a reason
+> to disable the limit attributes entirely. One could instead write useful
+> limits into those attributes.
+
+
+
 
