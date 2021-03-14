@@ -2,415 +2,136 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D80AFC433E0
-	for <linux-hwmon@archiver.kernel.org>; Sun, 14 Mar 2021 12:43:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D1DA5C433DB
+	for <linux-hwmon@archiver.kernel.org>; Sun, 14 Mar 2021 15:52:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A727764E28
-	for <linux-hwmon@archiver.kernel.org>; Sun, 14 Mar 2021 12:43:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A673F64E51
+	for <linux-hwmon@archiver.kernel.org>; Sun, 14 Mar 2021 15:52:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235268AbhCNMnJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 14 Mar 2021 08:43:09 -0400
-Received: from mout01.posteo.de ([185.67.36.65]:48113 "EHLO mout01.posteo.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229837AbhCNMm5 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 14 Mar 2021 08:42:57 -0400
-Received: from submission (posteo.de [89.146.220.130]) 
-        by mout01.posteo.de (Postfix) with ESMTPS id 7F92B160062
-        for <linux-hwmon@vger.kernel.org>; Sun, 14 Mar 2021 13:42:50 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-        t=1615725770; bh=/Ic6WEflnqJllMz9ve7T62NAIALn6UJ9yDr3wRtHabM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=o6eBK6k7iiUwpXtaT2bQGZDjo0cgh+H879EjT20Cl7VIJserBqa4NsKuaAiPIlgvN
-         lZgLO933mRmuApnEcnm7e1hTrEGF9SFRJlrItWEDu2jrL57s1Ka5bjcKxQJ5ekiv42
-         TQIIcE2zJosqfO+4tT7PzT9H0leXhfBqGNrI04p2HgY/itJ4Kp2HOL9MkA5BEcVX+i
-         0QiVrkXeLdfuviw7HJNQTkDa2810juhkPNi+c80vj0Gz9XwInt0qEwlPRP+Bbo2lli
-         T7ViZpeIjhGwGhTsdSwx04JFt17OqwkmgQE+5gnRM3T/4ADv18X7eL/raxhRY1YZ3d
-         G27NFt4hcaJNg==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4DyzjP1kyJz9rxN;
-        Sun, 14 Mar 2021 13:42:49 +0100 (CET)
-Date:   Sun, 14 Mar 2021 13:42:47 +0100
-From:   Wilken Gottwalt <wilken.gottwalt@posteo.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
-Subject: [PATCH] hwmon: corsair-psu: add support for critical values
-Message-ID: <YE4Ex4cslcSZsHHs@monster.powergraphx.local>
+        id S233369AbhCNPv6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 14 Mar 2021 11:51:58 -0400
+Received: from out20-38.mail.aliyun.com ([115.124.20.38]:36388 "EHLO
+        out20-38.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233529AbhCNPv2 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 14 Mar 2021 11:51:28 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.2933226|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0895482-0.000206275-0.910245;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047194;MF=wangyugui@e16-tech.com;NM=1;PH=DS;RN=4;RT=4;SR=0;TI=SMTPD_---.JkyPIWb_1615737080;
+Received: from 192.168.2.112(mailfrom:wangyugui@e16-tech.com fp:SMTPD_---.JkyPIWb_1615737080)
+          by smtp.aliyun-inc.com(10.147.40.200);
+          Sun, 14 Mar 2021 23:51:20 +0800
+Date:   Sun, 14 Mar 2021 23:51:20 +0800
+From:   Wang Yugui <wangyugui@e16-tech.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] nvme-hwmon: drop not common HWMON_T_MIN and HWMON_T_MAX
+Cc:     linux-hwmon@vger.kernel.org, dwagner@suse.de, hare@suse.de
+In-Reply-To: <86ec9dc2-5c4b-1a03-8f58-ea132bd0aef1@roeck-us.net>
+References: <20210314064445.785F.409509F4@e16-tech.com> <86ec9dc2-5c4b-1a03-8f58-ea132bd0aef1@roeck-us.net>
+Message-Id: <20210314235117.8386.409509F4@e16-tech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset="GB2312"
 Content-Transfer-Encoding: 8bit
+X-Mailer: Becky! ver. 2.75.03 [en]
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Adds support for reading the critical values of the temperature sensors
-and the rail sensors (voltage and current) once and caches them. Updates
-the naming of the constants following a more clear scheme. Also updates
-the documentation and fixes a typo.
+Hi,
 
-The new sensors output of a Corsair HX850i will look like this:
-corsairpsu-hid-3-1
-Adapter: HID adapter
-v_in:        230.00 V
-v_out +12v:   12.14 V  (crit min =  +8.41 V, crit max = +15.59 V)
-v_out +5v:     5.03 V  (crit min =  +3.50 V, crit max =  +6.50 V)
-v_out +3.3v:   3.30 V  (crit min =  +2.31 V, crit max =  +4.30 V)
-psu fan:        0 RPM
-vrm temp:     +46.2∞C  (crit = +70.0∞C)
-case temp:    +39.8∞C  (crit = +70.0∞C)
-power total: 152.00 W
-power +12v:  108.00 W
-power +5v:    41.00 W
-power +3.3v:   5.00 W
-curr in:          N/A
-curr +12v:     9.00 A  (crit max = +85.00 A)
-curr +5v:      8.31 A  (crit max = +40.00 A)
-curr +3.3v:    1.62 A  (crit max = +40.00 A)
+> On 3/13/21 2:44 PM, Wang Yugui wrote:
+> > Hi,
+> > 
+> >> On 3/13/21 12:32 AM, wangyugui wrote:
+> >>> HWMON_T_MIN is not common in NVMe SSD, so drop all of them in nvme-hwmon.
+> >>>
+> >>> HWMON_T_MAX is only common in NVMe SSD Composite sensor, so drop them in other sensors.
+> >>>
+> >>> Before this patch(SSD: PM1733):
+> >>> #sensors
+> >>> nvme-pci-4300
+> >>> Adapter: PCI adapter
+> >>> Composite:    +49.9°„C  (low  = -273.1°„C, high = +71.8°„C)
+> >>>                        (crit = +84.8°„C)
+> >>> Sensor 1:     +47.9°„C  (low  = -273.1°„C, high = +65261.8°„C)
+> >>> ERROR: Can't get value of subfeature temp3_min: I/O error
+> >>> ERROR: Can't get value of subfeature temp3_max: I/O error
+> >>> Sensor 2:     +49.9°„C  (low  =  +0.0°„C, high =  +0.0°„C)
+> >>>
+> >>> # cat /sys/class/nvme/nvme0/hwmon1/temp3_min
+> >>> cat: /sys/class/nvme/nvme0/hwmon1/temp3_min: Input/output error
+> >>> # cat /sys/class/nvme/nvme0/hwmon1/temp3_max
+> >>> cat: /sys/class/nvme/nvme0/hwmon1/temp3_max: Input/output error
+> >>>
+> >>> After this patch(SSD: PM1733):
+> >>> #sensors
+> >>> nvme-pci-4300
+> >>> Adapter: PCI adapter
+> >>> Composite:    +48.9°„C  (high = +71.8°„C, crit = +84.8°„C)
+> >>> Sensor 1:     +46.9°„C
+> >>> Sensor 2:     +48.9°„C
+> >>>
+> >>
+> >> Signed-off-by: missing.
+> >>
+> >> Either case, no.
+> >>
+> >> On one of my NVMEs, after setting the limits:
+> >>
+> >> nvme-pci-0100
+> >> Adapter: PCI adapter
+> >> Composite:    +29.9°„C  (low  =  -0.1°„C, high = +76.8°„C)
+> >>                        (crit = +78.8°„C)
+> >> Sensor 1:     +29.9°„C  (low  =  -0.1°„C, high = +254.8°„C)
+> >> Sensor 2:     +37.9°„C  (low  =  -0.1°„C, high = +254.8°„C)
+> > 
+> > high = +254.8°„C is a real value or unconfigured value ?
+> > 
+> 
+> This was a configured value, as mentioned above. Same system and NVME,
+> with differently configured limit values:
+> 
+> nvme-pci-0100
+> Adapter: PCI adapter
+> Composite:    +31.9°„C  (low  =  -0.1°„C, high = +76.8°„C)
+>                        (crit = +78.8°„C)
+> Sensor 1:     +31.9°„C  (low  = -10.2°„C, high = +126.8°„C)
+> Sensor 2:     +49.9°„C  (low  =  +4.8°„C, high = +89.8°„C)
+> 
+> Default values, with a different NVME, on a different system:
+> 
+> nvme-pci-0100
+> Adapter: PCI adapter
+> Composite:    +38.9°„C  (low  = -273.1°„C, high = +84.8°„C)
+>                        (crit = +84.8°„C)
+> Sensor 1:     +38.9°„C  (low  = -273.1°„C, high = +65261.8°„C)
+> Sensor 2:     +42.9°„C  (low  = -273.1°„C, high = +65261.8°„C)
+> 
+> Same NVME as the first one, in a different system, with default
+> values:
+> 
+> nvme-pci-2500
+> Adapter: PCI adapter
+> Composite:    +38.9°„C  (low  = -273.1°„C, high = +76.8°„C)
+>                        (crit = +78.8°„C)
+> Sensor 1:     +38.9°„C  (low  = -273.1°„C, high = +65261.8°„C)
+> Sensor 2:     +44.9°„C  (low  = -273.1°„C, high = +65261.8°„C)
+> 
+> Guenter
 
-This patch changes:
-- hwmon corsair-psu documentation
-- hwmon corsair-psu driver
+Most of the users do not like something like 'low  = -273.1°„C' or 
+'high = +65261.8°„C' that just seem noise, or software bug, or hardware
+error, and that will cause unnecessary worry.
 
-Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
----
- Documentation/hwmon/corsair-psu.rst |  13 +-
- drivers/hwmon/corsair-psu.c         | 185 ++++++++++++++++++++++------
- 2 files changed, 157 insertions(+), 41 deletions(-)
+We can support more HWMON_T_MIN and HWMON_T_MAX for advanced 
+user iff a valid configure value in the futher, and without any noise.
 
-diff --git a/Documentation/hwmon/corsair-psu.rst b/Documentation/hwmon/corsair-psu.rst
-index 396b95c9a76a..b77e53810a13 100644
---- a/Documentation/hwmon/corsair-psu.rst
-+++ b/Documentation/hwmon/corsair-psu.rst
-@@ -45,19 +45,30 @@ Sysfs entries
- -------------
- 
- =======================	========================================================
-+curr2_crit		Current max critical value on the 12v psu rail
-+curr3_crit		Current max critical value on the 5v psu rail
-+curr4_crit		Current max critical value on the 3.3v psu rail
- curr1_input		Total current usage
- curr2_input		Current on the 12v psu rail
- curr3_input		Current on the 5v psu rail
- curr4_input		Current on the 3.3v psu rail
- fan1_input		RPM of psu fan
-+in1_crit		Voltage max critical value on the 12v psu rail
-+in2_crit		Voltage max critical value on the 5v psu rail
-+in3_crit		Voltage max critical value on the 3.3v psu rail
- in0_input		Voltage of the psu ac input
- in1_input		Voltage of the 12v psu rail
- in2_input		Voltage of the 5v psu rail
--in3_input		Voltage of the 3.3 psu rail
-+in3_input		Voltage of the 3.3v psu rail
-+in1_lcrit		Voltage min critical value on the 12v psu rail
-+in2_lcrit		Voltage min critical value on the 5v psu rail
-+in3_lcrit		Voltage min critical value on the 3.3v psu rail
- power1_input		Total power usage
- power2_input		Power usage of the 12v psu rail
- power3_input		Power usage of the 5v psu rail
- power4_input		Power usage of the 3.3v psu rail
-+temp1_crit		Temperature max cirtical value of the psu vrm component
-+temp2_crit		Temperature max critical value of psu case
- temp1_input		Temperature of the psu vrm component
- temp2_input		Temperature of the psu case
- =======================	========================================================
-diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
-index b0953eeeb2d3..141a5079ea7e 100644
---- a/drivers/hwmon/corsair-psu.c
-+++ b/drivers/hwmon/corsair-psu.c
-@@ -53,11 +53,21 @@
- #define CMD_TIMEOUT_MS		250
- #define SECONDS_PER_HOUR	(60 * 60)
- #define SECONDS_PER_DAY		(SECONDS_PER_HOUR * 24)
-+#define RAIL_COUNT		3 /* 3v3 + 5v + 12v */
-+#define CRIT_VALUES_COUNT	11 /* 2 temp crit + 6 rail volts (low and high) + 3 rails amps */
-+#define TEMP_HCRIT		0
-+#define VOLTS_RAIL_HCRIT	2
-+#define VOLTS_RAIL_LCRIT	5
-+#define AMPS_RAIL_HCRIT		8
- 
- #define PSU_CMD_SELECT_RAIL	0x00 /* expects length 2 */
--#define PSU_CMD_IN_VOLTS	0x88 /* the rest of the commands expect length 3 */
-+#define PSU_CMD_RAIL_VOLTS_HCRIT 0x40 /* the rest of the commands expect length 3 */
-+#define PSU_CMD_RAIL_VOLTS_LCRIT 0x44
-+#define PSU_CMD_RAIL_AMPS_HCRIT	0x46
-+#define PSU_CMD_TEMP_HCRIT	0x4F
-+#define PSU_CMD_IN_VOLTS	0x88
- #define PSU_CMD_IN_AMPS		0x89
--#define PSU_CMD_RAIL_OUT_VOLTS	0x8B
-+#define PSU_CMD_RAIL_VOLTS	0x8B
- #define PSU_CMD_RAIL_AMPS	0x8C
- #define PSU_CMD_TEMP0		0x8D
- #define PSU_CMD_TEMP1		0x8E
-@@ -113,6 +123,7 @@ struct corsairpsu_data {
- 	struct dentry *debugfs;
- 	struct completion wait_completion;
- 	struct mutex lock; /* for locking access to cmd_buffer */
-+	long crit_values[CRIT_VALUES_COUNT];
- 	u8 *cmd_buffer;
- 	char vendor[REPLY_SIZE];
- 	char product[REPLY_SIZE];
-@@ -193,7 +204,10 @@ static int corsairpsu_request(struct corsairpsu_data *priv, u8 cmd, u8 rail, voi
- 
- 	mutex_lock(&priv->lock);
- 	switch (cmd) {
--	case PSU_CMD_RAIL_OUT_VOLTS:
-+	case PSU_CMD_RAIL_VOLTS_HCRIT:
-+	case PSU_CMD_RAIL_VOLTS_LCRIT:
-+	case PSU_CMD_RAIL_AMPS_HCRIT:
-+	case PSU_CMD_RAIL_VOLTS:
- 	case PSU_CMD_RAIL_AMPS:
- 	case PSU_CMD_RAIL_WATTS:
- 		ret = corsairpsu_usb_cmd(priv, 2, PSU_CMD_SELECT_RAIL, rail, NULL);
-@@ -229,9 +243,13 @@ static int corsairpsu_get_value(struct corsairpsu_data *priv, u8 cmd, u8 rail, l
- 	 */
- 	tmp = ((long)data[3] << 24) + (data[2] << 16) + (data[1] << 8) + data[0];
- 	switch (cmd) {
-+	case PSU_CMD_RAIL_VOLTS_HCRIT:
-+	case PSU_CMD_RAIL_VOLTS_LCRIT:
-+	case PSU_CMD_RAIL_AMPS_HCRIT:
-+	case PSU_CMD_TEMP_HCRIT:
- 	case PSU_CMD_IN_VOLTS:
- 	case PSU_CMD_IN_AMPS:
--	case PSU_CMD_RAIL_OUT_VOLTS:
-+	case PSU_CMD_RAIL_VOLTS:
- 	case PSU_CMD_RAIL_AMPS:
- 	case PSU_CMD_TEMP0:
- 	case PSU_CMD_TEMP1:
-@@ -256,18 +274,70 @@ static int corsairpsu_get_value(struct corsairpsu_data *priv, u8 cmd, u8 rail, l
- 	return ret;
- }
- 
-+static void corsairpsu_get_criticals(struct corsairpsu_data *priv)
-+{
-+	long tmp;
-+	int rail;
-+	int ret;
-+
-+	ret = corsairpsu_get_value(priv, PSU_CMD_TEMP_HCRIT, 0, &tmp);
-+	if (ret < 0)
-+		pr_debug("%s: unable to read temp0 critical value\n", DRIVER_NAME);
-+	else
-+		priv->crit_values[TEMP_HCRIT] = tmp;
-+
-+	ret = corsairpsu_get_value(priv, PSU_CMD_TEMP_HCRIT, 1, &tmp);
-+	if (ret < 0)
-+		pr_debug("%s: unable to read temp1 cirtical value\n", DRIVER_NAME);
-+	else
-+		priv->crit_values[TEMP_HCRIT + 1] = tmp;
-+
-+	for (rail = 0; rail < RAIL_COUNT; ++rail) {
-+		ret = corsairpsu_get_value(priv, PSU_CMD_RAIL_VOLTS_HCRIT, rail, &tmp);
-+		if (ret < 0) {
-+			pr_debug("%s: unable to read volts rail %d high critical value\n",
-+				 DRIVER_NAME, rail);
-+		} else {
-+			priv->crit_values[VOLTS_RAIL_HCRIT + rail] = tmp;
-+		}
-+	}
-+
-+	for (rail = 0; rail < RAIL_COUNT; ++rail) {
-+		ret = corsairpsu_get_value(priv, PSU_CMD_RAIL_VOLTS_LCRIT, rail, &tmp);
-+		if (ret < 0) {
-+			pr_debug("%s: unable to read volts rail %d low critical value\n",
-+				 DRIVER_NAME, rail);
-+		} else {
-+			priv->crit_values[VOLTS_RAIL_LCRIT + rail] = tmp;
-+		}
-+	}
-+
-+	for (rail = 0; rail < RAIL_COUNT; ++rail) {
-+		ret = corsairpsu_get_value(priv, PSU_CMD_RAIL_AMPS_HCRIT, rail, &tmp);
-+		if (ret < 0) {
-+			pr_debug("%s: unable to read amps rail %d hight critical value\n",
-+				 DRIVER_NAME, rail);
-+		} else {
-+			priv->crit_values[AMPS_RAIL_HCRIT + rail] = tmp;
-+		}
-+	}
-+}
-+
- static umode_t corsairpsu_hwmon_ops_is_visible(const void *data, enum hwmon_sensor_types type,
- 					       u32 attr, int channel)
- {
--	if (type == hwmon_temp && (attr == hwmon_temp_input || attr == hwmon_temp_label))
-+	if (type == hwmon_temp && (attr == hwmon_temp_input || attr == hwmon_temp_label ||
-+				   attr == hwmon_temp_crit))
- 		return 0444;
- 	else if (type == hwmon_fan && (attr == hwmon_fan_input || attr == hwmon_fan_label))
- 		return 0444;
- 	else if (type == hwmon_power && (attr == hwmon_power_input || attr == hwmon_power_label))
- 		return 0444;
--	else if (type == hwmon_in && (attr == hwmon_in_input || attr == hwmon_in_label))
-+	else if (type == hwmon_in && (attr == hwmon_in_input || attr == hwmon_in_label ||
-+				      attr == hwmon_in_lcrit || attr == hwmon_in_crit))
- 		return 0444;
--	else if (type == hwmon_curr && (attr == hwmon_curr_input || attr == hwmon_curr_label))
-+	else if (type == hwmon_curr && (attr == hwmon_curr_input || attr == hwmon_curr_label ||
-+					attr == hwmon_curr_crit))
- 		return 0444;
- 
- 	return 0;
-@@ -277,11 +347,18 @@ static int corsairpsu_hwmon_ops_read(struct device *dev, enum hwmon_sensor_types
- 				     int channel, long *val)
- {
- 	struct corsairpsu_data *priv = dev_get_drvdata(dev);
--	int ret;
--
--	if (type == hwmon_temp && attr == hwmon_temp_input && channel < 2) {
--		ret = corsairpsu_get_value(priv, channel ? PSU_CMD_TEMP1 : PSU_CMD_TEMP0, channel,
--					   val);
-+	int ret = 0;
-+
-+	if (type == hwmon_temp && channel < 2) {
-+		if (attr == hwmon_temp_input) {
-+			ret = corsairpsu_get_value(priv, channel ? PSU_CMD_TEMP1 : PSU_CMD_TEMP0,
-+						   channel, val);
-+		} else if (attr == hwmon_temp_crit) {
-+			if (priv->crit_values[TEMP_HCRIT + channel] != -EOPNOTSUPP)
-+				*val = priv->crit_values[TEMP_HCRIT + channel];
-+			else
-+				ret = -EOPNOTSUPP;
-+		}
- 	} else if (type == hwmon_fan && attr == hwmon_fan_input) {
- 		ret = corsairpsu_get_value(priv, PSU_CMD_FAN, 0, val);
- 	} else if (type == hwmon_power && attr == hwmon_power_input) {
-@@ -295,27 +372,48 @@ static int corsairpsu_hwmon_ops_read(struct device *dev, enum hwmon_sensor_types
- 		default:
- 			return -EOPNOTSUPP;
- 		}
--	} else if (type == hwmon_in && attr == hwmon_in_input) {
--		switch (channel) {
--		case 0:
--			ret = corsairpsu_get_value(priv, PSU_CMD_IN_VOLTS, 0, val);
--			break;
--		case 1 ... 3:
--			ret = corsairpsu_get_value(priv, PSU_CMD_RAIL_OUT_VOLTS, channel - 1, val);
--			break;
--		default:
--			return -EOPNOTSUPP;
-+	} else if (type == hwmon_in) {
-+		if (attr == hwmon_in_input) {
-+			switch (channel) {
-+			case 0:
-+				ret = corsairpsu_get_value(priv, PSU_CMD_IN_VOLTS, 0, val);
-+				break;
-+			case 1 ... 3:
-+				ret = corsairpsu_get_value(priv, PSU_CMD_RAIL_VOLTS, channel - 1,
-+							   val);
-+				break;
-+			default:
-+				return -EOPNOTSUPP;
-+			}
-+		} else if (attr == hwmon_in_crit && channel > 0 && channel < 4) {
-+			if (priv->crit_values[VOLTS_RAIL_HCRIT + channel - 1] != -EOPNOTSUPP)
-+				*val = priv->crit_values[VOLTS_RAIL_HCRIT + channel - 1];
-+			else
-+				ret = -EOPNOTSUPP;
-+		} else if (attr == hwmon_in_lcrit && channel > 0 && channel < 4) {
-+			if (priv->crit_values[VOLTS_RAIL_LCRIT + channel - 1] != -EOPNOTSUPP)
-+				*val = priv->crit_values[VOLTS_RAIL_LCRIT + channel - 1];
-+			else
-+				ret = -EOPNOTSUPP;
- 		}
--	} else if (type == hwmon_curr && attr == hwmon_curr_input) {
--		switch (channel) {
--		case 0:
--			ret = corsairpsu_get_value(priv, PSU_CMD_IN_AMPS, 0, val);
--			break;
--		case 1 ... 3:
--			ret = corsairpsu_get_value(priv, PSU_CMD_RAIL_AMPS, channel - 1, val);
--			break;
--		default:
--			return -EOPNOTSUPP;
-+	} else if (type == hwmon_curr) {
-+		if (attr == hwmon_curr_input) {
-+			switch (channel) {
-+			case 0:
-+				ret = corsairpsu_get_value(priv, PSU_CMD_IN_AMPS, 0, val);
-+				break;
-+			case 1 ... 3:
-+				ret = corsairpsu_get_value(priv, PSU_CMD_RAIL_AMPS, channel - 1,
-+							   val);
-+				break;
-+			default:
-+				return -EOPNOTSUPP;
-+			}
-+		} else if (attr == hwmon_curr_crit && channel > 0 && channel < 4) {
-+			if (priv->crit_values[AMPS_RAIL_HCRIT + channel - 1] != -EOPNOTSUPP)
-+				*val = priv->crit_values[AMPS_RAIL_HCRIT + channel - 1];
-+			else
-+				ret = -EOPNOTSUPP;
- 		}
- 	} else {
- 		return -EOPNOTSUPP;
-@@ -360,8 +458,8 @@ static const struct hwmon_channel_info *corsairpsu_info[] = {
- 	HWMON_CHANNEL_INFO(chip,
- 			   HWMON_C_REGISTER_TZ),
- 	HWMON_CHANNEL_INFO(temp,
--			   HWMON_T_INPUT | HWMON_T_LABEL,
--			   HWMON_T_INPUT | HWMON_T_LABEL),
-+			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_CRIT,
-+			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_CRIT),
- 	HWMON_CHANNEL_INFO(fan,
- 			   HWMON_F_INPUT | HWMON_F_LABEL),
- 	HWMON_CHANNEL_INFO(power,
-@@ -371,14 +469,14 @@ static const struct hwmon_channel_info *corsairpsu_info[] = {
- 			   HWMON_P_INPUT | HWMON_P_LABEL),
- 	HWMON_CHANNEL_INFO(in,
- 			   HWMON_I_INPUT | HWMON_I_LABEL,
--			   HWMON_I_INPUT | HWMON_I_LABEL,
--			   HWMON_I_INPUT | HWMON_I_LABEL,
--			   HWMON_I_INPUT | HWMON_I_LABEL),
-+			   HWMON_I_INPUT | HWMON_I_LABEL | HWMON_I_LCRIT | HWMON_I_CRIT,
-+			   HWMON_I_INPUT | HWMON_I_LABEL | HWMON_I_LCRIT | HWMON_I_CRIT,
-+			   HWMON_I_INPUT | HWMON_I_LABEL | HWMON_I_LCRIT | HWMON_I_CRIT),
- 	HWMON_CHANNEL_INFO(curr,
- 			   HWMON_C_INPUT | HWMON_C_LABEL,
--			   HWMON_C_INPUT | HWMON_C_LABEL,
--			   HWMON_C_INPUT | HWMON_C_LABEL,
--			   HWMON_C_INPUT | HWMON_C_LABEL),
-+			   HWMON_C_INPUT | HWMON_C_LABEL | HWMON_C_CRIT,
-+			   HWMON_C_INPUT | HWMON_C_LABEL | HWMON_C_CRIT,
-+			   HWMON_C_INPUT | HWMON_C_LABEL | HWMON_C_CRIT),
- 	NULL
- };
- 
-@@ -472,6 +570,7 @@ static void corsairpsu_debugfs_init(struct corsairpsu_data *priv)
- static int corsairpsu_probe(struct hid_device *hdev, const struct hid_device_id *id)
- {
- 	struct corsairpsu_data *priv;
-+	int i;
- 	int ret;
- 
- 	priv = devm_kzalloc(&hdev->dev, sizeof(struct corsairpsu_data), GFP_KERNEL);
-@@ -482,6 +581,9 @@ static int corsairpsu_probe(struct hid_device *hdev, const struct hid_device_id
- 	if (!priv->cmd_buffer)
- 		return -ENOMEM;
- 
-+	for (i = 0; i < CRIT_VALUES_COUNT; ++i)
-+		priv->crit_values[i] = -EOPNOTSUPP;
-+
- 	ret = hid_parse(hdev);
- 	if (ret)
- 		return ret;
-@@ -513,6 +615,9 @@ static int corsairpsu_probe(struct hid_device *hdev, const struct hid_device_id
- 		goto fail_and_stop;
- 	}
- 
-+	/* this can fail and is considered non-fatal */
-+	corsairpsu_get_criticals(priv);
-+
- 	priv->hwmon_dev = hwmon_device_register_with_info(&hdev->dev, "corsairpsu", priv,
- 							  &corsairpsu_chip_info, 0);
- 
--- 
-2.30.2
+Best Regards
+Wang Yugui (wangyugui@e16-tech.com)
+2021/03/14
+
+
 
