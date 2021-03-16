@@ -2,170 +2,100 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DBAE0C433DB
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Mar 2021 04:51:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84509C433E0
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Mar 2021 08:11:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AD9CB65129
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Mar 2021 04:51:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5022B64FB3
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Mar 2021 08:11:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235124AbhCPEvB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 16 Mar 2021 00:51:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39734 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235076AbhCPEub (ORCPT
+        id S233381AbhCPIKy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 16 Mar 2021 04:10:54 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:13625 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234190AbhCPIKk (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 16 Mar 2021 00:50:31 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85A6C06174A;
-        Mon, 15 Mar 2021 21:50:30 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id w125so8315524oib.13;
-        Mon, 15 Mar 2021 21:50:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=F7aZXmupN+jRlLlTHvxpFyGrHuGdrFwnOVcxm2OfwVA=;
-        b=n+rqU6vkNR3A3aJXKCkyio8CRh8YS5Tc7WWeG3sGK9790kWhltZllXELGPW9GkGZLe
-         gW2L0q0wcg7NGc4mfB1ie9Jg+XwXaGT+64JM+UndwPo3XDB2PPuZti5wNhtkN7Bm9ZB/
-         cg9VMi41AKMb4/a1J/KowADfYrHPGDX0AsPsQAkGOOIQENNviwqYGakD1zxOaPCBMvj7
-         uBydBzWS6eJtSVP35Mi5ACRPc4Us7XdhiiUzqaME5uaW96HeraqFbjJt+g1aYPKazzbs
-         4oQX7HAus/b0AjA2YXGmrobvBt+ic1SQY7ru4oqMvBcANF9+C3WRNj9P6T7ukx0DQQQw
-         Anwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=F7aZXmupN+jRlLlTHvxpFyGrHuGdrFwnOVcxm2OfwVA=;
-        b=t5+heyDoonaS/6Q8PcOLv8a7AfwBMftWUY/R9DqIXXedb4/HPxqI/BZgh7Nkgwf78H
-         rFGmDTTfvxX4x+Y/rkQNUHjTI9tucjKi1OurpRBWA+jCaM29GT8kE0FXjGhaCBCnLYWT
-         dH3hRNF/bqauHlgcRQKTNjXPfRJTkpdrE6JdQM4gYgkMDPuF66hefGE+tacv2VF5IDSX
-         K/bBg0GRUrara+Phnzq9jQgiL0iiOYER33DBHx1VSPPEynHsdZMO9exkRz/rPo+dmUW7
-         89SxA2+2YQUnteeYRLGmk5hgh8flqrtM0tyv51k6YsUZSs51Q+w+61B3n6M4yR/DcLsd
-         MsbA==
-X-Gm-Message-State: AOAM530hFG13ZiSWnOF7TYhyPdVx3fpBdnQVHKq9xQiXULSe7BJIQ9ee
-        eroHTAmFKEFNWXWo6KNrrMDIOHFlTcg=
-X-Google-Smtp-Source: ABdhPJx1t7fxE/iVR4QlVQNarK0SefebiFe73cNS8hE/XH5hgxiUaZot8hY7U2QLBHjzYg+SwSVmjw==
-X-Received: by 2002:aca:fd13:: with SMTP id b19mr2019491oii.139.1615870230071;
-        Mon, 15 Mar 2021 21:50:30 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t2sm7405532ool.18.2021.03.15.21.50.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Mar 2021 21:50:29 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH 2/2] hwmon: (pmbus): Add driver for BluTek BPA-RS600
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "jdelvare@suse.com" <jdelvare@suse.com>
-Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20210316023524.12574-1-chris.packham@alliedtelesis.co.nz>
- <20210316023524.12574-2-chris.packham@alliedtelesis.co.nz>
- <46a69700-ae1f-a441-2399-0e8c8e2a588d@roeck-us.net>
- <ea648b3d-f6ac-d7ec-fc5b-2b15c827c3dc@alliedtelesis.co.nz>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <dff0a92c-a888-2b96-a51c-c5efb3e977af@roeck-us.net>
-Date:   Mon, 15 Mar 2021 21:50:27 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Tue, 16 Mar 2021 04:10:40 -0400
+Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4F05XF1915z17LrV;
+        Tue, 16 Mar 2021 16:08:45 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
+ DGGEMS402-HUB.china.huawei.com (10.3.19.202) with Microsoft SMTP Server id
+ 14.3.498.0; Tue, 16 Mar 2021 16:10:27 +0800
+From:   Jay Fang <f.fangjian@huawei.com>
+To:     <linux@roeck-us.net>, <linux-hwmon@vger.kernel.org>
+CC:     <huangdaode@huawei.com>
+Subject: [PATCH] hwmon: (ina2xx) Convert sysfs sprintf/snprintf family to sysfs_emit
+Date:   Tue, 16 Mar 2021 16:11:02 +0800
+Message-ID: <1615882262-39367-1-git-send-email-f.fangjian@huawei.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-In-Reply-To: <ea648b3d-f6ac-d7ec-fc5b-2b15c827c3dc@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.56]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 3/15/21 9:21 PM, Chris Packham wrote:
-> 
-> On 16/03/21 4:43 pm, Guenter Roeck wrote:
->> On 3/15/21 7:35 PM, Chris Packham wrote:
->>> The BPA-RS600 is a compact 600W AC to DC removable power supply module.
->>>
->>> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
->>> ---
-> <snip>
->>> +
->>> +static int bpa_rs600_read_word_data(struct i2c_client *client, int page,
->>> +		int phase, int reg)+{
->>> +	int ret;
->>> +
->>> +	if (page > 0)
->>> +		return -ENXIO;
->>> +
->>> +	switch (reg) {
->>> +	case PMBUS_VIN_UV_FAULT_LIMIT:
->>> +	case PMBUS_VIN_OV_FAULT_LIMIT:
->>> +	case PMBUS_VOUT_UV_FAULT_LIMIT:
->>> +	case PMBUS_VOUT_OV_FAULT_LIMIT:
->>> +		ret = -ENXIO;
->> Is that needed ? Why not -ENODATA ?
-> 
-> Basically these commands get responses on the bus but they don't have 
-> valid data (nor are they documented in the datasheet). I'll add a 
-> comment to that effect.
-> 
-> If I'm reading things correctly -ENODATA is a signal to 
-> _pmbus_read_word_data use the "normal" read operation. So I need to 
+From: Zihao Tang <tangzihao1@hisilicon.com>
 
-Correct.
+Fix the following coccicheck warning:
 
-> return something other than that. I found another driver (mp2975.c) 
-> doing the same thing for what I assume are similar reasons so I went 
-> with -ENXIO.
-> 
--ENXIO is ok, but please document it.
+drivers/hwmon/ina2xx.c:313:8-16: WARNING: use scnprintf or sprintf
+drivers/hwmon/ina2xx.c:453:8-16: WARNING: use scnprintf or sprintf
+drivers/hwmon/ina2xx.c:484:8-16: WARNING: use scnprintf or sprintf
+drivers/hwmon/ina2xx.c:540:8-16: WARNING: use scnprintf or sprintf
 
-Thanks,
-Guenter
+Signed-off-by: Zihao Tang <tangzihao1@hisilicon.com>
+Signed-off-by: Jay Fang <f.fangjian@huawei.com>
+---
+ drivers/hwmon/ina2xx.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/hwmon/ina2xx.c b/drivers/hwmon/ina2xx.c
+index ca97f9e..2c12395 100644
+--- a/drivers/hwmon/ina2xx.c
++++ b/drivers/hwmon/ina2xx.c
+@@ -310,7 +310,7 @@ static ssize_t ina2xx_value_show(struct device *dev,
+ 	if (err < 0)
+ 		return err;
+ 
+-	return snprintf(buf, PAGE_SIZE, "%d\n",
++	return sysfs_emit(buf, "%d\n",
+ 			ina2xx_get_value(data, attr->index, regval));
+ }
+ 
+@@ -450,7 +450,7 @@ static ssize_t ina226_alarm_show(struct device *dev,
+ 
+ 	alarm = (regval & BIT(attr->index)) &&
+ 		(regval & INA226_ALERT_FUNCTION_FLAG);
+-	return snprintf(buf, PAGE_SIZE, "%d\n", alarm);
++	return sysfs_emit(buf, "%d\n", alarm);
+ }
+ 
+ /*
+@@ -481,7 +481,7 @@ static ssize_t ina2xx_shunt_show(struct device *dev,
+ {
+ 	struct ina2xx_data *data = dev_get_drvdata(dev);
+ 
+-	return snprintf(buf, PAGE_SIZE, "%li\n", data->rshunt);
++	return sysfs_emit(buf, "%li\n", data->rshunt);
+ }
+ 
+ static ssize_t ina2xx_shunt_store(struct device *dev,
+@@ -537,7 +537,7 @@ static ssize_t ina226_interval_show(struct device *dev,
+ 	if (status)
+ 		return status;
+ 
+-	return snprintf(buf, PAGE_SIZE, "%d\n", ina226_reg_to_interval(regval));
++	return sysfs_emit(buf, "%d\n", ina226_reg_to_interval(regval));
+ }
+ 
+ /* shunt voltage */
+-- 
+2.7.4
+
