@@ -2,102 +2,84 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD7B6C43381
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Mar 2021 02:36:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0812C433E6
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Mar 2021 03:31:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AD4AA65043
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Mar 2021 02:36:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9E439650AB
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Mar 2021 03:31:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233528AbhCPCfg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 15 Mar 2021 22:35:36 -0400
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:56181 "EHLO
+        id S231424AbhCPDaq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 15 Mar 2021 23:30:46 -0400
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:56461 "EHLO
         gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234671AbhCPCfd (ORCPT
+        with ESMTP id S229925AbhCPDad (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 15 Mar 2021 22:35:33 -0400
+        Mon, 15 Mar 2021 23:30:33 -0400
 Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id ACF9B891AC;
-        Tue, 16 Mar 2021 15:35:29 +1300 (NZDT)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id E69D0891AE;
+        Tue, 16 Mar 2021 16:30:29 +1300 (NZDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1615862129;
-        bh=N8RPjIWX7pyqYW4bY3X8jjB0RdGiZOTWA7jASK4pWIk=;
-        h=From:To:Cc:Subject:Date;
-        b=jgk+ANoEt5LTBJHOej6zwS3KSWsn+rqsyB+Cw/EauI8J0rPWOpU8dVeEcFtnFCL0A
-         Y3VYz3XZ6KNge1IBGsxU4FDgci981p/4AleCf2TvTlklAV4BQBLom7Vf+h5rBEtXxN
-         rI/l2vLrDIy70zztqxG+NntZ95CAopkxlcaeT5DTOPPQ6dRiYR6nsFVC/IyY01Zwh7
-         O3vSp8YtWQxStjZ/KAq7Y9ACrzVcA4yFFhYZXivpglFimrlYxpxt8atP77J1wujdFa
-         MuElAQJWNajwGHLBFFC1/8yNKji0tN2rXYNmzQuQXOR5NM39CscJmUabO7i1NL8C3t
-         uyk+l4OsDPdbA==
-Received: from smtp (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B605019710000>; Tue, 16 Mar 2021 15:35:29 +1300
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.20])
-        by smtp (Postfix) with ESMTP id 5B37113EED0;
-        Tue, 16 Mar 2021 15:35:43 +1300 (NZDT)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-        id 7FFCF284092; Tue, 16 Mar 2021 15:35:29 +1300 (NZDT)
-From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
-To:     robh+dt@kernel.org, jdelvare@suse.com, linux@roeck-us.net
-Cc:     devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH 1/2] dt-bindings: Add vendor prefix and trivial device for BluTek BPA-RS600
-Date:   Tue, 16 Mar 2021 15:35:23 +1300
-Message-Id: <20210316023524.12574-1-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.30.2
+        s=mail181024; t=1615865429;
+        bh=vmWfl3H3Aa1nxkLwG2dy4DHtQEEA/roKlx2zgxf/RJM=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To;
+        b=12WMCtOUR7yDGv4e4UqZY9HtX2JhehEZs6gDubgLSDgsrwA+OkqPNmVvnR6BQJy1/
+         MfaJNwaPk/llcFVtCcd+WN5lq3slPPBmbKMLOdzxDY82D1YupMrxPMRZ8o9S++EbVw
+         DJt/hJRYaFFvPmTYdsygrwSSRgJz0XKXFlftieBaBsNOOpxJcslesErSa2OkZFR60u
+         dvXoqGYt6+bb5Rd2fqpg/Shlbr2bvQvQLe6ZNmGjSPi7ReTg08RThImz34Hi2WFJi+
+         PWE/McztgcoXVZBwjbvKFql6usrxYc8Bgt6yzST03y4d9t0GzLiBxPDDs591Xp/JtQ
+         6UkNA693RnOoA==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B605026550001>; Tue, 16 Mar 2021 16:30:29 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
+ svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.2; Tue, 16 Mar 2021 16:30:29 +1300
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.012; Tue, 16 Mar 2021 16:30:29 +1300
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>
+CC:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] hwmon: (pmbus): Add driver for BluTek BPA-RS600
+Thread-Topic: [PATCH 2/2] hwmon: (pmbus): Add driver for BluTek BPA-RS600
+Thread-Index: AQHXGg0JQkIPU0GURU+Z4hUV3SNYs6qFG2MA
+Date:   Tue, 16 Mar 2021 03:30:28 +0000
+Message-ID: <8066478b-26cb-7904-9203-054c74ccd07b@alliedtelesis.co.nz>
+References: <20210316023524.12574-1-chris.packham@alliedtelesis.co.nz>
+ <20210316023524.12574-2-chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <20210316023524.12574-2-chris.packham@alliedtelesis.co.nz>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <F7CF9C0323BA3143B7C61BEF52CF165C@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=GfppYjfL c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=dESyimp9J3IA:10 a=ueuSTYl9OFj5rdJX3qQA:9
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=GfppYjfL c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=dESyimp9J3IA:10 a=GpMvjJetwIR_TAr8NAQA:9 a=QEXdDO2ut3YA:10
 X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add vendor prefix "blutek" for BluTek Power.
-Add trivial device entry for BPA-RS600.
-
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
----
- Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 2 files changed, 4 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Doc=
-umentation/devicetree/bindings/trivial-devices.yaml
-index a327130d1faa..569236e9bed0 100644
---- a/Documentation/devicetree/bindings/trivial-devices.yaml
-+++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-@@ -50,6 +50,8 @@ properties:
-           - atmel,atsha204a
-             # i2c h/w elliptic curve crypto module
-           - atmel,atecc508a
-+            # BPA-RS600: Power Supply
-+          - blutek,bpa-rs600
-             # Bosch Sensortec pressure, temperature, humididty and VOC s=
-ensor
-           - bosch,bme680
-             # CM32181: Ambient Light Sensor
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Doc=
-umentation/devicetree/bindings/vendor-prefixes.yaml
-index f6064d84a424..d9d7226f5dfe 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -169,6 +169,8 @@ patternProperties:
-     description: Beckhoff Automation GmbH & Co. KG
-   "^bitmain,.*":
-     description: Bitmain Technologies
-+  "^blutek,.*":
-+    description: BluTek Power
-   "^boe,.*":
-     description: BOE Technology Group Co., Ltd.
-   "^bosch,.*":
---=20
-2.30.2
-
+DQpPbiAxNi8wMy8yMSAzOjM1IHBtLCBDaHJpcyBQYWNraGFtIHdyb3RlOg0KPiBUaGUgQlBBLVJT
+NjAwIGlzIGEgY29tcGFjdCA2MDBXIEFDIHRvIERDIHJlbW92YWJsZSBwb3dlciBzdXBwbHkgbW9k
+dWxlLg0KPg0KPiBTaWduZWQtb2ZmLWJ5OiBDaHJpcyBQYWNraGFtIDxjaHJpcy5wYWNraGFtQGFs
+bGllZHRlbGVzaXMuY28ubno+DQo+DQo+ICtzdGF0aWMgY29uc3Qgc3RydWN0IG9mX2RldmljZV9p
+ZCBfX21heWJlX3VudXNlZCBicGFfcnM2MDBfb2ZfbWF0Y2hbXSA9IHsNCj4gKwl7IC5jb21wYXRp
+YmxlID0gImJsdXRlayxicGEtcnM2MDAiIH0sDQo+ICsJe30sDQo+ICt9Ow0KDQpJIHNlZSB0aGlz
+IHdpbGwgZmFsbCBmb3VsIG9mIHRoZSBuYW1lIGNoZWNrIGluIA0KX19od21vbl9kZXZpY2VfcmVn
+aXN0ZXIoKS4gSG93IHNob3VsZCBJIG5hbWUgdGhpbmdzIHRvIGF2b2lkIHRoaXM/DQo=
