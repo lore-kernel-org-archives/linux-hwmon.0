@@ -2,192 +2,561 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-13.9 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 715B9C433E0
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Mar 2021 14:22:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1157C433E0
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Mar 2021 17:56:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4488465075
-	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Mar 2021 14:22:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6A10365101
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Mar 2021 17:56:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236243AbhCPOWG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 16 Mar 2021 10:22:06 -0400
-Received: from mout02.posteo.de ([185.67.36.66]:60445 "EHLO mout02.posteo.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236201AbhCPOV6 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 16 Mar 2021 10:21:58 -0400
-Received: from submission (posteo.de [89.146.220.130]) 
-        by mout02.posteo.de (Postfix) with ESMTPS id 4719F2400FD
-        for <linux-hwmon@vger.kernel.org>; Tue, 16 Mar 2021 15:21:55 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-        t=1615904515; bh=0QLkTK+K/s8PC/k7Q9WUZuTjxqAUD07dW8Wvne7JiLs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=d75/MVJfOtT0PbIco+glbpx133W8nQlNQMQnlGA9fUoAA+cgpvnZwqAsfKuAbGwnL
-         Cv4vnxmamuaGc/SqnMdNIq4OOBJ1ycR3q4r9aQ/YPGVZNQGWA280Ch0/B1nxc52MT3
-         H2wkeWZGeLBazupVuXsRGkHDi144MfJPQkI+gjR6CLodGHijsBgrG2eTR7pgAzzEip
-         8ui+qT7IHgBTjb3YLkRpohqAEgCriiQcmgdqMwOqk3SK//h3g4wsYRNOq05a5c9RoV
-         Rzs1J68MVDFePodbVNHhU3nJlZnPCE+1QiQsKhKV9ZBFwflAFaSr3E4XzwXc4yHh72
-         c4IvQHs11aR3Q==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4F0Fpn56t4z6tm8;
-        Tue, 16 Mar 2021 15:21:53 +0100 (CET)
-Date:   Tue, 16 Mar 2021 15:21:50 +0100
-From:   Wilken Gottwalt <wilken.gottwalt@posteo.net>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: corsair-psu: add support for critical values
-Message-ID: <20210316152150.5a712927@monster.powergraphx.local>
-In-Reply-To: <f7f2c932-8eac-4f5e-ab81-c59addec4aed@roeck-us.net>
-References: <YE93HebFD0acwZIX@monster.powergraphx.local>
-        <20214c50-5c58-0d3e-5de5-115ed022750e@roeck-us.net>
-        <20210315175509.55672ee7@monster.powergraphx.local>
-        <f7f2c932-8eac-4f5e-ab81-c59addec4aed@roeck-us.net>
+        id S236044AbhCPR4Y (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 16 Mar 2021 13:56:24 -0400
+Received: from mail-ed1-f52.google.com ([209.85.208.52]:38752 "EHLO
+        mail-ed1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231919AbhCPRzz (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 16 Mar 2021 13:55:55 -0400
+Received: by mail-ed1-f52.google.com with SMTP id h13so22607595eds.5;
+        Tue, 16 Mar 2021 10:55:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WwY0jENGZ8w9LCap3uvWftM+Im9MAgWDuvj+CVzZHJY=;
+        b=BC13zEOpOWfsUiKynpwCr7feK73cpFNWPgJ6Ou3550yzo9HF0dHoQDh0CBrDLTFVFn
+         2zrMGC0xCD3LnAcg8KhM7wDTIn29LjFad+1eBrXajzjBt+sjlOIp8ldT2JfqhT3AgBLh
+         bWXQkIKPv+STK5QhHafqwnlXsOmIPYn2JXLTJwy4SNemygPmRsvUSmp1bcTDwNX1+oqi
+         y7eesl9zvhnMxVCfy8CHab5z2AZw/+F1j5ez/rzRrvWc+fbb6KDWgwbWfmsBHHiz1MLG
+         hLSbHzfLby1AFRiqQGA9yTq73wH/68vQ3/boDC8sDd6io+wlr7jQIV7dGETts4gtM+bL
+         9tug==
+X-Gm-Message-State: AOAM530GzXAK0oVPu4yW5qC9gYSN4YwcY92/d5XvQivOwsLelZOoTqLR
+        6iC5Jd24znjbg+eFD/4Kg2w=
+X-Google-Smtp-Source: ABdhPJzlXQaIHxU4eVzKOQYzPOIYeCyc+rmX+fJKstmslZsqNj2K/ry+wuq6D4qmOP2cPIvGkcaCHw==
+X-Received: by 2002:a05:6402:704:: with SMTP id w4mr39026341edx.175.1615917353528;
+        Tue, 16 Mar 2021 10:55:53 -0700 (PDT)
+Received: from localhost ([2a02:8308:387:c900:a7b5:b859:9449:c07b])
+        by smtp.gmail.com with ESMTPSA id b6sm9630201ejb.8.2021.03.16.10.55.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Mar 2021 10:55:53 -0700 (PDT)
+From:   =?UTF-8?q?V=C3=A1clav=20Kubern=C3=A1t?= <kubernat@cesnet.cz>
+Cc:     =?UTF-8?q?V=C3=A1clav=20Kubern=C3=A1t?= <kubernat@cesnet.cz>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/5] hwmon: (max31790) Rework to use regmap
+Date:   Tue, 16 Mar 2021 18:54:58 +0100
+Message-Id: <20210316175503.1003051-1-kubernat@cesnet.cz>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, 15 Mar 2021 11:00:53 -0700
-Guenter Roeck <linux@roeck-us.net> wrote:
+Converting the driver to use regmap makes it more generic. It also makes
+it a lot easier to debug through debugfs.
 
-> On 3/15/21 9:55 AM, Wilken Gottwalt wrote:
-> > On Mon, 15 Mar 2021 08:53:25 -0700
-> > Guenter Roeck <linux@roeck-us.net> wrote:
-> >=20
-> >> On 3/15/21 8:02 AM, Wilken Gottwalt wrote:
-> >>> Adds support for reading the critical values of the temperature senso=
-rs
-> >>> and the rail sensors (voltage and current) once and caches them. Upda=
-tes
-> >>> the naming of the constants following a more clear scheme. Also updat=
-es
-> >>> the documentation and fixes a typo.
-> >>>
-> >>> The new sensors output of a Corsair HX850i will look like this:
-> >>> corsairpsu-hid-3-1
-> >>> Adapter: HID adapter
-> >>> v_in:        230.00 V
-> >>> v_out +12v:   12.14 V  (crit min =3D  +8.41 V, crit max =3D +15.59 V)
-> >>> v_out +5v:     5.03 V  (crit min =3D  +3.50 V, crit max =3D  +6.50 V)
-> >>> v_out +3.3v:   3.30 V  (crit min =3D  +2.31 V, crit max =3D  +4.30 V)
-> >>> psu fan:        0 RPM
-> >>> vrm temp:     +46.2=C2=B0C  (crit =3D +70.0=C2=B0C)
-> >>> case temp:    +39.8=C2=B0C  (crit =3D +70.0=C2=B0C)
-> >>> power total: 152.00 W
-> >>> power +12v:  108.00 W
-> >>> power +5v:    41.00 W
-> >>> power +3.3v:   5.00 W
-> >>> curr in:          N/A
-> >>
-> >> What does that mean ? If it isn't supported by the power supply,
-> >> should we drop that entirely ? Maybe drop it via the is_visible
-> >> function if it is available for some variants, but always displaying
-> >> N/A doesn't add value.
-> >>
-> >> This is a bit odd, though, since I would assume it translates
-> >> to the PSU_CMD_IN_AMPS command. Any chance to track down what is
-> >> happening here ?
-> >=20
-> > I have one of the earliest PSUs of this series, it is just not supporte=
-d on
-> > mine. I'm not sure if it would be worth the trouble to catch that and t=
-urn
-> > it off dynamically.
-> >=20
->=20
-> I think so, because otherwise we'll get complaints about it (people
-> are really picky abut such things lately). Better not display it at all
-> if it is not supported on a given PSU version. This should be relatively
-> easy to catch in the is_visible function.
+Signed-off-by: Václav Kubernát <kubernat@cesnet.cz>
+---
+ drivers/hwmon/Kconfig    |   1 +
+ drivers/hwmon/max31790.c | 318 ++++++++++++++++++++-------------------
+ 2 files changed, 163 insertions(+), 156 deletions(-)
 
-So do you have any idea how to do it? The PSU does not tell you what is
-supported or not, you only find out by running the commands. I mean the
-only thing I think of is like I did it for the critical values, but only
-keeping the *_support bits. But if I do it that way, I actually should do
-it for all the commands. This is the point which I ment with "worth the
-trouble."
-
-> Nice PS, anyway. Too bad it is so expensive (and large). Do you know
-> if the HX750i uses the same protocol ?
-
-All HX_num_i and RM_num_i PSUs support the same protocol. There are only
-small differences in supported commands based on release version. What do
-you mean by "large"? The size of the case? All HXi and RMi should have
-the same size (standard ATX). Maybe you looked at one of the AXi series,
-which are server grade (and are not supported - they use a full USB protoco=
-l,
-no USB HID) and really expensive (but they sensors there can do even more).
-
-They are expansive because there is only new-old-stock available and they
-have some impressive specs. They can deliver some really high currents,
-something you need if you run a Threadripper like me or if you use a gfx
-card with current spikes (like AMD Vega or NVidia GTX 970).
-
-> [ ... ]
->=20
-> >>> +static void corsairpsu_get_criticals(struct corsairpsu_data *priv)
-> >>> +{
-> >>> +	long tmp;
-> >>> +	int ret;
-> >>> +	u8 rail;
-> >>
-> >> Side note: Using anything but sizeof(int) for index variables often re=
-sults in more
-> >> complex code because the compiler needs to mask index operations. This=
- doesn't
-> >> typically apply to x86 because that architecure has byte operations, b=
-ut to pretty
-> >> much every other architecture.
-> >=20
-> > Yeah, I know what you mean. I thought I match it to the function parame=
-ters.
->=20
-> That doesn't really help if it makes the generated code more complex.
->=20
-> > Though I would be more concerned about the "case 1 ... 3" stuff which is
-> > definitly no liked by static code analysis or even "-pedantic", it's not
-> > part of the C standards.
-> >=20
->=20
-> Hmm, which C standard are we talking about ? There are more than 1,800
-> instances of this in the Linux kernel, but I don't recall any static
-> analyzer or compiler complaints about it.
->=20
-> [ ... ]
->=20
-> >>> -static int corsairpsu_hwmon_ops_read(struct device *dev, enum hwmon_=
-sensor_types type, u32
-> >>> attr,
-> >>> -				     int channel, long *val)
-> >>> +static int corsairpsu_hwmon_temp(struct corsairpsu_data *priv, u32 a=
-ttr, int channel, long
-> >>> *val)
-> >>
-> >> Please make those functions _<type>_read, not just _<type>. It makes t=
-he code easier
-> >> to understand, and we won't have to change it if write functions are e=
-ver added.
-> >=20
-> > You will laugh... I named the functions that way before, but then I was=
- unhappy
-> > with hitting the 100 chars line length. ;-)
-> >=20
->=20
-> Making the code less readable to meet a line limit isn't really that desi=
-rable.
-> If you want to stick with one line, you could drop the "hwmon_" from func=
-tion prefixes
-> instead. Those don't really add any value.
-
-I know I know, it's a personal taste. I really dislike splitting functions
-headers about serveral lines, especially if indenting is tab based.
-
-> Thanks,
-> Guenter
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 54f04e61fb83..c2ec57672c4e 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -1092,6 +1092,7 @@ config SENSORS_MAX6697
+ config SENSORS_MAX31790
+ 	tristate "Maxim MAX31790 sensor chip"
+ 	depends on I2C
++	select REGMAP_I2C
+ 	help
+ 	  If you say yes here you get support for 6-Channel PWM-Output
+ 	  Fan RPM Controller.
+diff --git a/drivers/hwmon/max31790.c b/drivers/hwmon/max31790.c
+index 86e6c71db685..4e5add567890 100644
+--- a/drivers/hwmon/max31790.c
++++ b/drivers/hwmon/max31790.c
+@@ -12,6 +12,7 @@
+ #include <linux/init.h>
+ #include <linux/jiffies.h>
+ #include <linux/module.h>
++#include <linux/regmap.h>
+ #include <linux/slab.h>
+ 
+ /* MAX31790 registers */
+@@ -46,92 +47,49 @@
+ 
+ #define NR_CHANNEL			6
+ 
++#define MAX31790_REG_USER_BYTE_67	0x67
++
++#define BULK_TO_U16(msb, lsb)		(((msb) << 8) + (lsb))
++#define U16_MSB(num)			(((num) & 0xFF00) >> 8)
++#define U16_LSB(num)			((num) & 0x00FF)
++
++static const struct regmap_range max31790_ro_range = {
++	.range_min = MAX31790_REG_TACH_COUNT(0),
++	.range_max = MAX31790_REG_PWMOUT(0) - 1,
++};
++
++static const struct regmap_access_table max31790_wr_table = {
++	.no_ranges = &max31790_ro_range,
++	.n_no_ranges = 1,
++};
++
++static const struct regmap_range max31790_volatile_ranges[] = {
++	regmap_reg_range(MAX31790_REG_TACH_COUNT(0), MAX31790_REG_TACH_COUNT(12)),
++	regmap_reg_range(MAX31790_REG_FAN_FAULT_STATUS2, MAX31790_REG_FAN_FAULT_STATUS1),
++};
++
++static const struct regmap_access_table max31790_volatile_table = {
++	.no_ranges = max31790_volatile_ranges,
++	.n_no_ranges = 2,
++	.n_yes_ranges = 0
++};
++
++static const struct regmap_config max31790_regmap_config = {
++	.reg_bits = 8,
++	.val_bits = 8,
++	.reg_stride = 1,
++	.max_register = MAX31790_REG_USER_BYTE_67,
++	.wr_table = &max31790_wr_table,
++	.volatile_table = &max31790_volatile_table
++};
++
+ /*
+  * Client data (each client gets its own)
+  */
+ struct max31790_data {
+-	struct i2c_client *client;
+-	struct mutex update_lock;
+-	bool valid; /* zero until following fields are valid */
+-	unsigned long last_updated; /* in jiffies */
+-
+-	/* register values */
+-	u8 fan_config[NR_CHANNEL];
+-	u8 fan_dynamics[NR_CHANNEL];
+-	u16 fault_status;
+-	u16 tach[NR_CHANNEL * 2];
+-	u16 pwm[NR_CHANNEL];
+-	u16 target_count[NR_CHANNEL];
++	struct regmap *regmap;
+ };
+ 
+-static struct max31790_data *max31790_update_device(struct device *dev)
+-{
+-	struct max31790_data *data = dev_get_drvdata(dev);
+-	struct i2c_client *client = data->client;
+-	struct max31790_data *ret = data;
+-	int i;
+-	int rv;
+-
+-	mutex_lock(&data->update_lock);
+-
+-	if (time_after(jiffies, data->last_updated + HZ) || !data->valid) {
+-		rv = i2c_smbus_read_byte_data(client,
+-				MAX31790_REG_FAN_FAULT_STATUS1);
+-		if (rv < 0)
+-			goto abort;
+-		data->fault_status = rv & 0x3F;
+-
+-		rv = i2c_smbus_read_byte_data(client,
+-				MAX31790_REG_FAN_FAULT_STATUS2);
+-		if (rv < 0)
+-			goto abort;
+-		data->fault_status |= (rv & 0x3F) << 6;
+-
+-		for (i = 0; i < NR_CHANNEL; i++) {
+-			rv = i2c_smbus_read_word_swapped(client,
+-					MAX31790_REG_TACH_COUNT(i));
+-			if (rv < 0)
+-				goto abort;
+-			data->tach[i] = rv;
+-
+-			if (data->fan_config[i]
+-			    & MAX31790_FAN_CFG_TACH_INPUT) {
+-				rv = i2c_smbus_read_word_swapped(client,
+-					MAX31790_REG_TACH_COUNT(NR_CHANNEL
+-								+ i));
+-				if (rv < 0)
+-					goto abort;
+-				data->tach[NR_CHANNEL + i] = rv;
+-			} else {
+-				rv = i2c_smbus_read_word_swapped(client,
+-						MAX31790_REG_PWMOUT(i));
+-				if (rv < 0)
+-					goto abort;
+-				data->pwm[i] = rv;
+-
+-				rv = i2c_smbus_read_word_swapped(client,
+-						MAX31790_REG_TARGET_COUNT(i));
+-				if (rv < 0)
+-					goto abort;
+-				data->target_count[i] = rv;
+-			}
+-		}
+-
+-		data->last_updated = jiffies;
+-		data->valid = true;
+-	}
+-	goto done;
+-
+-abort:
+-	data->valid = false;
+-	ret = ERR_PTR(rv);
+-
+-done:
+-	mutex_unlock(&data->update_lock);
+-
+-	return ret;
+-}
+-
+ static const u8 tach_period[8] = { 1, 2, 4, 8, 16, 32, 32, 32 };
+ 
+ static u8 get_tach_period(u8 fan_dynamics)
+@@ -159,28 +117,89 @@ static u8 bits_for_tach_period(int rpm)
+ 	return bits;
+ }
+ 
++static int read_reg_byte(struct regmap *regmap, u8 reg)
++{
++	int rv;
++	int val;
++
++	rv = regmap_read(regmap, reg, &val);
++
++	if (rv < 0)
++		return rv;
++
++	return val;
++}
++
++static int read_reg_word(struct regmap *regmap, u8 reg)
++{
++	int rv;
++	u8 val_bulk[2];
++
++	rv = regmap_bulk_read(regmap, reg, val_bulk, 2);
++	if (rv < 0)
++		return rv;
++
++	return BULK_TO_U16(val_bulk[0], val_bulk[1]);
++}
++
++static int write_reg_word(struct regmap *regmap, u8 reg, u16 val)
++{
++	u8 bulk_val[2];
++
++	bulk_val[0] = U16_MSB(val);
++	bulk_val[1] = U16_LSB(val);
++
++	return regmap_bulk_write(regmap, reg, bulk_val, 2);
++}
++
+ static int max31790_read_fan(struct device *dev, u32 attr, int channel,
+ 			     long *val)
+ {
+-	struct max31790_data *data = max31790_update_device(dev);
+-	int sr, rpm;
++	struct max31790_data *data = dev_get_drvdata(dev);
++	struct regmap *regmap = data->regmap;
++	int rpm, dynamics, tach, fault;
+ 
+ 	if (IS_ERR(data))
+ 		return PTR_ERR(data);
+ 
+ 	switch (attr) {
+ 	case hwmon_fan_input:
+-		sr = get_tach_period(data->fan_dynamics[channel]);
+-		rpm = RPM_FROM_REG(data->tach[channel], sr);
++		dynamics = read_reg_byte(regmap, MAX31790_REG_FAN_DYNAMICS(channel));
++		if (dynamics < 0)
++			return dynamics;
++
++		tach = read_reg_word(regmap, MAX31790_REG_TACH_COUNT(channel));
++		if (tach < 0)
++			return tach;
++
++		rpm = RPM_FROM_REG(tach, get_tach_period(dynamics));
+ 		*val = rpm;
+ 		return 0;
+ 	case hwmon_fan_target:
+-		sr = get_tach_period(data->fan_dynamics[channel]);
+-		rpm = RPM_FROM_REG(data->target_count[channel], sr);
++		dynamics = read_reg_byte(regmap, MAX31790_REG_FAN_DYNAMICS(channel));
++		if (dynamics < 0)
++			return dynamics;
++
++		tach = read_reg_word(regmap, MAX31790_REG_TARGET_COUNT(channel));
++		if (tach < 0)
++			return tach;
++
++		rpm = RPM_FROM_REG(tach, get_tach_period(dynamics));
+ 		*val = rpm;
+ 		return 0;
+ 	case hwmon_fan_fault:
+-		*val = !!(data->fault_status & (1 << channel));
++		if (channel > 6)
++			fault = read_reg_byte(regmap, MAX31790_REG_FAN_FAULT_STATUS2);
++		else
++			fault = read_reg_byte(regmap, MAX31790_REG_FAN_FAULT_STATUS1);
++
++		if (fault < 0)
++			return fault;
++
++		if (channel > 6)
++			*val = !!(fault & (1 << (channel - 6)));
++		else
++			*val = !!(fault & (1 << channel));
+ 		return 0;
+ 	default:
+ 		return -EOPNOTSUPP;
+@@ -191,52 +210,58 @@ static int max31790_write_fan(struct device *dev, u32 attr, int channel,
+ 			      long val)
+ {
+ 	struct max31790_data *data = dev_get_drvdata(dev);
+-	struct i2c_client *client = data->client;
++	struct regmap *regmap = data->regmap;
+ 	int target_count;
+ 	int err = 0;
+ 	u8 bits;
+ 	int sr;
+-
+-	mutex_lock(&data->update_lock);
++	int fan_dynamics;
+ 
+ 	switch (attr) {
+ 	case hwmon_fan_target:
+ 		val = clamp_val(val, FAN_RPM_MIN, FAN_RPM_MAX);
+ 		bits = bits_for_tach_period(val);
+-		data->fan_dynamics[channel] =
+-			((data->fan_dynamics[channel] &
++		fan_dynamics = read_reg_byte(regmap, MAX31790_REG_FAN_DYNAMICS(channel));
++
++		if (fan_dynamics < 0)
++			return fan_dynamics;
++
++		fan_dynamics =
++			((fan_dynamics &
+ 			  ~MAX31790_FAN_DYN_SR_MASK) |
+ 			 (bits << MAX31790_FAN_DYN_SR_SHIFT));
+-		err = i2c_smbus_write_byte_data(client,
+-					MAX31790_REG_FAN_DYNAMICS(channel),
+-					data->fan_dynamics[channel]);
++		err = regmap_write(regmap,
++				   MAX31790_REG_FAN_DYNAMICS(channel),
++				   fan_dynamics);
+ 		if (err < 0)
+ 			break;
+ 
+-		sr = get_tach_period(data->fan_dynamics[channel]);
++		sr = get_tach_period(fan_dynamics);
+ 		target_count = RPM_TO_REG(val, sr);
+ 		target_count = clamp_val(target_count, 0x1, 0x7FF);
+ 
+-		data->target_count[channel] = target_count << 5;
++		target_count = target_count << 5;
+ 
+-		err = i2c_smbus_write_word_swapped(client,
+-					MAX31790_REG_TARGET_COUNT(channel),
+-					data->target_count[channel]);
++		err = write_reg_word(regmap,
++				     MAX31790_REG_TARGET_COUNT(channel),
++				     target_count);
+ 		break;
+ 	default:
+ 		err = -EOPNOTSUPP;
+ 		break;
+ 	}
+ 
+-	mutex_unlock(&data->update_lock);
+-
+ 	return err;
+ }
+ 
+ static umode_t max31790_fan_is_visible(const void *_data, u32 attr, int channel)
+ {
+ 	const struct max31790_data *data = _data;
+-	u8 fan_config = data->fan_config[channel % NR_CHANNEL];
++	struct regmap *regmap = data->regmap;
++	u8 fan_config = read_reg_byte(regmap, MAX31790_REG_FAN_CONFIG(channel % NR_CHANNEL));
++
++	if (fan_config < 0)
++		return 0;
+ 
+ 	switch (attr) {
+ 	case hwmon_fan_input:
+@@ -258,22 +283,29 @@ static umode_t max31790_fan_is_visible(const void *_data, u32 attr, int channel)
+ static int max31790_read_pwm(struct device *dev, u32 attr, int channel,
+ 			     long *val)
+ {
+-	struct max31790_data *data = max31790_update_device(dev);
+-	u8 fan_config;
++	struct max31790_data *data = dev_get_drvdata(dev);
++	struct regmap *regmap = data->regmap;
++	int read;
+ 
+ 	if (IS_ERR(data))
+ 		return PTR_ERR(data);
+ 
+-	fan_config = data->fan_config[channel];
+-
+ 	switch (attr) {
+ 	case hwmon_pwm_input:
+-		*val = data->pwm[channel] >> 8;
++		read = read_reg_word(regmap, MAX31790_REG_PWMOUT(channel));
++		if (read < 0)
++			return read;
++
++		*val = read >> 8;
+ 		return 0;
+ 	case hwmon_pwm_enable:
+-		if (fan_config & MAX31790_FAN_CFG_RPM_MODE)
++		read = read_reg_byte(regmap, MAX31790_REG_FAN_CONFIG(channel));
++		if (read < 0)
++			return read;
++
++		if (read & MAX31790_FAN_CFG_RPM_MODE)
+ 			*val = 2;
+-		else if (fan_config & MAX31790_FAN_CFG_TACH_INPUT_EN)
++		else if (read & MAX31790_FAN_CFG_TACH_INPUT_EN)
+ 			*val = 1;
+ 		else
+ 			*val = 0;
+@@ -287,25 +319,24 @@ static int max31790_write_pwm(struct device *dev, u32 attr, int channel,
+ 			      long val)
+ {
+ 	struct max31790_data *data = dev_get_drvdata(dev);
+-	struct i2c_client *client = data->client;
++	struct regmap *regmap = data->regmap;
+ 	u8 fan_config;
+ 	int err = 0;
+ 
+-	mutex_lock(&data->update_lock);
+-
+ 	switch (attr) {
+ 	case hwmon_pwm_input:
+ 		if (val < 0 || val > 255) {
+ 			err = -EINVAL;
+ 			break;
+ 		}
+-		data->pwm[channel] = val << 8;
+-		err = i2c_smbus_write_word_swapped(client,
+-						   MAX31790_REG_PWMOUT(channel),
+-						   data->pwm[channel]);
++		err = write_reg_word(regmap, MAX31790_REG_PWMOUT(channel), val << 8);
+ 		break;
+ 	case hwmon_pwm_enable:
+-		fan_config = data->fan_config[channel];
++		fan_config = read_reg_byte(regmap, MAX31790_REG_FAN_CONFIG(channel % NR_CHANNEL));
++
++		if (fan_config < 0)
++			return fan_config;
++
+ 		if (val == 0) {
+ 			fan_config &= ~(MAX31790_FAN_CFG_TACH_INPUT_EN |
+ 					MAX31790_FAN_CFG_RPM_MODE);
+@@ -320,25 +351,26 @@ static int max31790_write_pwm(struct device *dev, u32 attr, int channel,
+ 			err = -EINVAL;
+ 			break;
+ 		}
+-		data->fan_config[channel] = fan_config;
+-		err = i2c_smbus_write_byte_data(client,
+-					MAX31790_REG_FAN_CONFIG(channel),
+-					fan_config);
++		err = regmap_write(regmap,
++				   MAX31790_REG_FAN_CONFIG(channel),
++				   fan_config);
+ 		break;
+ 	default:
+ 		err = -EOPNOTSUPP;
+ 		break;
+ 	}
+ 
+-	mutex_unlock(&data->update_lock);
+-
+ 	return err;
+ }
+ 
+ static umode_t max31790_pwm_is_visible(const void *_data, u32 attr, int channel)
+ {
+ 	const struct max31790_data *data = _data;
+-	u8 fan_config = data->fan_config[channel];
++	struct regmap *regmap = data->regmap;
++	u8 fan_config = read_reg_byte(regmap, MAX31790_REG_FAN_CONFIG(channel % NR_CHANNEL));
++
++	if (fan_config < 0)
++		return 0;
+ 
+ 	switch (attr) {
+ 	case hwmon_pwm_input:
+@@ -426,35 +458,12 @@ static const struct hwmon_chip_info max31790_chip_info = {
+ 	.info = max31790_info,
+ };
+ 
+-static int max31790_init_client(struct i2c_client *client,
+-				struct max31790_data *data)
+-{
+-	int i, rv;
+-
+-	for (i = 0; i < NR_CHANNEL; i++) {
+-		rv = i2c_smbus_read_byte_data(client,
+-				MAX31790_REG_FAN_CONFIG(i));
+-		if (rv < 0)
+-			return rv;
+-		data->fan_config[i] = rv;
+-
+-		rv = i2c_smbus_read_byte_data(client,
+-				MAX31790_REG_FAN_DYNAMICS(i));
+-		if (rv < 0)
+-			return rv;
+-		data->fan_dynamics[i] = rv;
+-	}
+-
+-	return 0;
+-}
+-
+ static int max31790_probe(struct i2c_client *client)
+ {
+ 	struct i2c_adapter *adapter = client->adapter;
+ 	struct device *dev = &client->dev;
+ 	struct max31790_data *data;
+ 	struct device *hwmon_dev;
+-	int err;
+ 
+ 	if (!i2c_check_functionality(adapter,
+ 			I2C_FUNC_SMBUS_BYTE_DATA | I2C_FUNC_SMBUS_WORD_DATA))
+@@ -464,15 +473,12 @@ static int max31790_probe(struct i2c_client *client)
+ 	if (!data)
+ 		return -ENOMEM;
+ 
+-	data->client = client;
+-	mutex_init(&data->update_lock);
++	data->regmap = devm_regmap_init_i2c(client, &max31790_regmap_config);
+ 
+-	/*
+-	 * Initialize the max31790 chip
+-	 */
+-	err = max31790_init_client(client, data);
+-	if (err)
+-		return err;
++	if (IS_ERR(data->regmap)) {
++		dev_err(dev, "failed to allocate register map\n");
++		return PTR_ERR(data->regmap);
++	}
+ 
+ 	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name,
+ 							 data,
+-- 
+2.30.2
 
