@@ -2,219 +2,385 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2F49C433DB
-	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Mar 2021 18:01:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A30C9C433DB
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Mar 2021 02:36:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9C56D64E81
-	for <linux-hwmon@archiver.kernel.org>; Mon, 15 Mar 2021 18:01:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 74FF665043
+	for <linux-hwmon@archiver.kernel.org>; Tue, 16 Mar 2021 02:36:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230525AbhCOSBX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 15 Mar 2021 14:01:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41122 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232432AbhCOSA5 (ORCPT
+        id S234552AbhCPCfg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 15 Mar 2021 22:35:36 -0400
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:56190 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234675AbhCPCfd (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 15 Mar 2021 14:00:57 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22FD5C06174A;
-        Mon, 15 Mar 2021 11:00:57 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id y131so32487067oia.8;
-        Mon, 15 Mar 2021 11:00:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=V+tZdwokC+NjYAq5a9MMqLFRKyd0cgolqFev3an/8kw=;
-        b=QUZdgr4duATikNFDAei78Fl3dFM5lC4PgQJyTSNPanW/v6DEZ7fBl+yj/SUHTri2YC
-         CxNCE9XZERiU/XEDRIxLPm1dzBb8Nd8LA1c7VC9oJgW3+iBi33X6mhmJ6n4hnG8FZHPi
-         Z5DZ2TWFLZ/FivIqYu4AmZpPdZvLZqw2uuvuMv11pJ4JyBxwf2s+7arEMTTk5o41k3H7
-         RK8j/F2EnM6mvbXXtm/Yxab8pRzPaWCjRJM6FiBpjaoXJyVhNwlFvCdI+Nh2bK2VfMmq
-         qu1FtKInSz/BEc8yCY8SY2Li40WnN0XMGv169mgEDO/pqRBIsVlELZqROk+deUxy6DV7
-         2KrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=V+tZdwokC+NjYAq5a9MMqLFRKyd0cgolqFev3an/8kw=;
-        b=CXTHS3IODNKid4DJi1sR6vTCLWhJ4iVL72/62yWWzHY2uCOSznpY3kXoOxBl5Fhu9h
-         z4FHyi/rW9A8XxJdpOqOB0LAhzOzckIYVRcRNlFVkT6+Xvhp/3GOCWMcoyusz1pNK+u6
-         jWNUzvWjmbs2n9LE0pOlETq0v1hKPNDaGKghbZKmRKKszrJBRBqV5lCLFxGq/DAUew9H
-         IXRly4CBztAYIxuqMJ3omoYpDQfOSYb8uKI9pPrte2zJz8OOpnBD4o8FaM+OyqoMebZh
-         JpEWnTXjbTbhQWBzQ2zZ3BqW+Jp/QWH/8Bwec2dRvptziOqchIf+vHW2e3+mZw2D4JtP
-         CVoQ==
-X-Gm-Message-State: AOAM5302VA6wrr9B1Hn1/ZVhHfIa22GiMWmXvXetWpIel4dWoDjIaKrE
-        fpPHl060Ggb8285wnkvMdRi/wMsIZ8g=
-X-Google-Smtp-Source: ABdhPJwgZ7LXv/YRMc8vEJ5VizfqsmuwnEgUybCbSAKNMQqP2EjGh8m2AQia29EyEFLIOSUZwgt2mg==
-X-Received: by 2002:aca:d503:: with SMTP id m3mr262776oig.50.1615831256088;
-        Mon, 15 Mar 2021 11:00:56 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n13sm7349991otk.61.2021.03.15.11.00.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Mar 2021 11:00:55 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v2] hwmon: corsair-psu: add support for critical values
-To:     Wilken Gottwalt <wilken.gottwalt@posteo.net>
-Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
-References: <YE93HebFD0acwZIX@monster.powergraphx.local>
- <20214c50-5c58-0d3e-5de5-115ed022750e@roeck-us.net>
- <20210315175509.55672ee7@monster.powergraphx.local>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <f7f2c932-8eac-4f5e-ab81-c59addec4aed@roeck-us.net>
-Date:   Mon, 15 Mar 2021 11:00:53 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Mon, 15 Mar 2021 22:35:33 -0400
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 2CD9D891AE;
+        Tue, 16 Mar 2021 15:35:32 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1615862132;
+        bh=SJTQqdkH3Iwsyfqc8RKaJjOT747DtryCOi9XYjP6qaA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=u/JdYFmWn0u2ZfhP8dUYIXZmDd5chdZIPVVq1XB+ucjfNr1GtXEc4256JR7LLQRV2
+         /j/1wBQ6iE9Zyx723TmqMKaGkfSEODVfFzovB/0ZRZDHcNhbtXO4xxksl6T2ICkIQd
+         UkhnYwKpxK6W4e6u925ZcRZXg2qHQ7tCOes2kJWKV2hbtkrPhhXZ5chkvVLP1REXU3
+         +VeMrngBvAI+qfCNRxMAczS1iVosdTdCsnsMaGTNHc7AIm6oNceIvcU9MP9ZsXYohd
+         Oq67k7kSdB0TT6F8Uv/ay/ZqpLKyWkG5+fOCVHrqaDw8oArBKtCnG1GMOMix1k67mC
+         8eQ1S+tzAZ5iQ==
+Received: from smtp (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B605019730000>; Tue, 16 Mar 2021 15:35:31 +1300
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.20])
+        by smtp (Postfix) with ESMTP id 2780613EED0;
+        Tue, 16 Mar 2021 15:35:45 +1300 (NZDT)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+        id 4E45A284092; Tue, 16 Mar 2021 15:35:31 +1300 (NZDT)
+From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
+To:     robh+dt@kernel.org, jdelvare@suse.com, linux@roeck-us.net
+Cc:     devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH 2/2] hwmon: (pmbus): Add driver for BluTek BPA-RS600
+Date:   Tue, 16 Mar 2021 15:35:24 +1300
+Message-Id: <20210316023524.12574-2-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210316023524.12574-1-chris.packham@alliedtelesis.co.nz>
+References: <20210316023524.12574-1-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
-In-Reply-To: <20210315175509.55672ee7@monster.powergraphx.local>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=GfppYjfL c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=dESyimp9J3IA:10 a=eWWmYPuaAAAA:8 a=eqJHQH7iNzQl1GEjYHoA:9 a=GlNYzQxvk2U_gD8pBxfO:22
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 3/15/21 9:55 AM, Wilken Gottwalt wrote:
-> On Mon, 15 Mar 2021 08:53:25 -0700
-> Guenter Roeck <linux@roeck-us.net> wrote:
-> 
->> On 3/15/21 8:02 AM, Wilken Gottwalt wrote:
->>> Adds support for reading the critical values of the temperature sensors
->>> and the rail sensors (voltage and current) once and caches them. Updates
->>> the naming of the constants following a more clear scheme. Also updates
->>> the documentation and fixes a typo.
->>>
->>> The new sensors output of a Corsair HX850i will look like this:
->>> corsairpsu-hid-3-1
->>> Adapter: HID adapter
->>> v_in:        230.00 V
->>> v_out +12v:   12.14 V  (crit min =  +8.41 V, crit max = +15.59 V)
->>> v_out +5v:     5.03 V  (crit min =  +3.50 V, crit max =  +6.50 V)
->>> v_out +3.3v:   3.30 V  (crit min =  +2.31 V, crit max =  +4.30 V)
->>> psu fan:        0 RPM
->>> vrm temp:     +46.2°C  (crit = +70.0°C)
->>> case temp:    +39.8°C  (crit = +70.0°C)
->>> power total: 152.00 W
->>> power +12v:  108.00 W
->>> power +5v:    41.00 W
->>> power +3.3v:   5.00 W
->>> curr in:          N/A
->>
->> What does that mean ? If it isn't supported by the power supply,
->> should we drop that entirely ? Maybe drop it via the is_visible
->> function if it is available for some variants, but always displaying
->> N/A doesn't add value.
->>
->> This is a bit odd, though, since I would assume it translates
->> to the PSU_CMD_IN_AMPS command. Any chance to track down what is
->> happening here ?
-> 
-> I have one of the earliest PSUs of this series, it is just not supported on
-> mine. I'm not sure if it would be worth the trouble to catch that and turn
-> it off dynamically.
-> 
+The BPA-RS600 is a compact 600W AC to DC removable power supply module.
 
-I think so, because otherwise we'll get complaints about it (people
-are really picky abut such things lately). Better not display it at all
-if it is not supported on a given PSU version. This should be relatively
-easy to catch in the is_visible function.
+Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+---
+ Documentation/hwmon/bpa-rs600.rst |  74 ++++++++++++
+ drivers/hwmon/pmbus/Kconfig       |  10 ++
+ drivers/hwmon/pmbus/Makefile      |   1 +
+ drivers/hwmon/pmbus/bpa-rs600.c   | 179 ++++++++++++++++++++++++++++++
+ 4 files changed, 264 insertions(+)
+ create mode 100644 Documentation/hwmon/bpa-rs600.rst
+ create mode 100644 drivers/hwmon/pmbus/bpa-rs600.c
 
-Nice PS, anyway. Too bad it is so expensive (and large). Do you know
-if the HX750i uses the same protocol ?
+diff --git a/Documentation/hwmon/bpa-rs600.rst b/Documentation/hwmon/bpa-=
+rs600.rst
+new file mode 100644
+index 000000000000..28313995d4ae
+--- /dev/null
++++ b/Documentation/hwmon/bpa-rs600.rst
+@@ -0,0 +1,74 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++Kernel driver bpa-rs600
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++
++Supported chips:
++
++  * BPA-RS600-120
++
++    Datasheet: Publicly available at the BluTek website
++       http://blutekpower.com/wp-content/uploads/2019/01/BPA-RS600-120-0=
+7-19-2018.pdf
++
++Authors:
++      - Chris Packham <chris.packham@alliedtelesis.co.nz>
++
++Description
++-----------
++
++The BPA-RS600 is a compact 600W removable power supply module.
++
++Usage Notes
++-----------
++
++This driver does not probe for PMBus devices. You will have to instantia=
+te
++devices explicitly.
++
++Sysfs attributes
++----------------
++
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++curr1_label             "iin"
++curr1_input		Measured input current
++curr1_max		Maximum input current
++curr1_max_alarm		Input current high alarm
++
++curr2_label		"iout1"
++curr2_input		Measured output current
++curr2_max		Maximum output current
++curr2_max_alarm		Output current high alarm
++
++fan1_input		Measured fan speed
++fan1_alarm		Fan warning
++fan1_fault		Fan fault
++
++in1_label		"vin"
++in1_input		Measured input voltage
++in1_max			Maximum input voltage
++in1_max_alarm		Input voltage high alarm
++in1_min			Minimum input voltage
++in1_min_alarm		Input voltage low alarm
++
++in2_label		"vout1"
++in2_input		Measured output voltage
++in2_max			Maximum output voltage
++in2_max_alarm		Output voltage high alarm
++in2_min			Maximum output voltage
++in2_min_alarm		Output voltage low alarm
++
++power1_label		"pin"
++power1_input		Measured input power
++power1_alarm		Input power alarm
++power1_max		Maximum input power
++
++power2_label		"pout1"
++power2_input		Measured output power
++power2_max		Maximum output power
++power2_max_alarm	Output power high alarm
++
++temp1_input		Measured temperature around input connector
++temp1_alarm		Temperature alarm
++
++temp2_input		Measured temperature around output connector
++temp2_alarm		Temperature alarm
++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index 32d2fc850621..d1f0f1cd8247 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -56,6 +56,16 @@ config SENSORS_BEL_PFE
+ 	  This driver can also be built as a module. If so, the module will
+ 	  be called bel-pfe.
+=20
++config SENSORS_BPA_RS600
++	tristate "BluTek BPD-RS600 Power Supplies"
++	help
++	  If you say yes here you get hardware monitoring support for BluTek
++	  BPD-RS600 Power Supplies.
++
++	  This driver can also be built as a module. If so, the module will
++	  be called bpd-rs600.
++
++
+ config SENSORS_IBM_CFFPS
+ 	tristate "IBM Common Form Factor Power Supply"
+ 	depends on LEDS_CLASS
+diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+index 6a4ba0fdc1db..80a437060dc4 100644
+--- a/drivers/hwmon/pmbus/Makefile
++++ b/drivers/hwmon/pmbus/Makefile
+@@ -8,6 +8,7 @@ obj-$(CONFIG_SENSORS_PMBUS)	+=3D pmbus.o
+ obj-$(CONFIG_SENSORS_ADM1266)	+=3D adm1266.o
+ obj-$(CONFIG_SENSORS_ADM1275)	+=3D adm1275.o
+ obj-$(CONFIG_SENSORS_BEL_PFE)	+=3D bel-pfe.o
++obj-$(CONFIG_SENSORS_BPA_RS600)	+=3D bpa-rs600.o
+ obj-$(CONFIG_SENSORS_IBM_CFFPS)	+=3D ibm-cffps.o
+ obj-$(CONFIG_SENSORS_INSPUR_IPSPS) +=3D inspur-ipsps.o
+ obj-$(CONFIG_SENSORS_IR35221)	+=3D ir35221.o
+diff --git a/drivers/hwmon/pmbus/bpa-rs600.c b/drivers/hwmon/pmbus/bpa-rs=
+600.c
+new file mode 100644
+index 000000000000..94cbf42816f0
+--- /dev/null
++++ b/drivers/hwmon/pmbus/bpa-rs600.c
+@@ -0,0 +1,179 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Hardware monitoring driver for BluTek BPA-RS600 Power Supplies
++ *
++ * Copyright 2021 Allied Telesis Labs
++ */
++
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/init.h>
++#include <linux/i2c.h>
++#include <linux/pmbus.h>
++#include "pmbus.h"
++
++#define BPARS600_MFR_VIN_MIN	0xa0
++#define BPARS600_MFR_VIN_MAX	0xa1
++#define BPARS600_MFR_IIN_MAX	0xa2
++#define BPARS600_MFR_PIN_MAX	0xa3
++#define BPARS600_MFR_VOUT_MIN	0xa4
++#define BPARS600_MFR_VOUT_MAX	0xa5
++#define BPARS600_MFR_IOUT_MAX	0xa6
++#define BPARS600_MFR_POUT_MAX	0xa7
++
++static int bpa_rs600_read_byte_data(struct i2c_client *client, int page,
++				    int reg)
++{
++	int ret;
++
++	if (page > 0)
++		return -ENXIO;
++
++	switch (reg) {
++	case PMBUS_FAN_CONFIG_12:
++		ret =3D pmbus_read_byte_data(client, 0,
++					   PMBUS_FAN_CONFIG_12);
++		if (ret >=3D 0)
++			ret &=3D ~(PB_FAN_2_INSTALLED | PB_FAN_2_PULSE_MASK);
++		break;
++	default:
++		ret =3D -ENODATA;
++		break;
++	}
++
++	return ret;
++}
++
++static int bpa_rs600_read_word_data(struct i2c_client *client, int page,
++		int phase, int reg)
++{
++	int ret;
++
++	if (page > 0)
++		return -ENXIO;
++
++	switch (reg) {
++	case PMBUS_VIN_UV_FAULT_LIMIT:
++	case PMBUS_VIN_OV_FAULT_LIMIT:
++	case PMBUS_VOUT_UV_FAULT_LIMIT:
++	case PMBUS_VOUT_OV_FAULT_LIMIT:
++		ret =3D -ENXIO;
++		break;
++	case PMBUS_VIN_UV_WARN_LIMIT:
++		ret =3D pmbus_read_word_data(client, 0, 0xff,
++					   BPARS600_MFR_VIN_MIN);
++		break;
++	case PMBUS_VIN_OV_WARN_LIMIT:
++		ret =3D pmbus_read_word_data(client, 0, 0xff,
++					   BPARS600_MFR_VIN_MAX);
++		break;
++	case PMBUS_VOUT_UV_WARN_LIMIT:
++		ret =3D pmbus_read_word_data(client, 0, 0xff,
++					   BPARS600_MFR_VOUT_MIN);
++		break;
++	case PMBUS_VOUT_OV_WARN_LIMIT:
++		ret =3D pmbus_read_word_data(client, 0, 0xff,
++					   BPARS600_MFR_VOUT_MAX);
++		break;
++	case PMBUS_IIN_OC_WARN_LIMIT:
++		ret =3D pmbus_read_word_data(client, 0, 0xff,
++					   BPARS600_MFR_IIN_MAX);
++		break;
++	case PMBUS_IOUT_OC_WARN_LIMIT:
++		ret =3D pmbus_read_word_data(client, 0, 0xff,
++					   BPARS600_MFR_IOUT_MAX);
++		break;
++	case PMBUS_PIN_OP_WARN_LIMIT:
++		ret =3D pmbus_read_word_data(client, 0, 0xff,
++					   BPARS600_MFR_PIN_MAX);
++		break;
++	case PMBUS_POUT_OP_WARN_LIMIT:
++		ret =3D pmbus_read_word_data(client, 0, 0xff,
++					   BPARS600_MFR_POUT_MAX);
++		break;
++	default:
++		if (reg >=3D PMBUS_VIRT_BASE)
++			ret =3D -ENXIO;
++		else
++			ret =3D -ENODATA;
++		break;
++	}
++
++	return ret;
++}
++
++static struct pmbus_driver_info bpa_rs600_info =3D {
++	.pages =3D 1,
++	.format[PSC_VOLTAGE_IN] =3D linear,
++	.format[PSC_VOLTAGE_OUT] =3D linear,
++	.format[PSC_CURRENT_IN] =3D linear,
++	.format[PSC_CURRENT_OUT] =3D linear,
++	.format[PSC_POWER] =3D linear,
++	.format[PSC_TEMPERATURE] =3D linear,
++	.format[PSC_FAN] =3D linear,
++	.func[0] =3D PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT |
++		PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT |
++		PMBUS_HAVE_PIN | PMBUS_HAVE_POUT |
++		PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2 |
++		PMBUS_HAVE_FAN12 |
++		PMBUS_HAVE_STATUS_VOUT | PMBUS_HAVE_STATUS_IOUT |
++		PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_STATUS_TEMP |
++		PMBUS_HAVE_STATUS_FAN12,
++	.read_byte_data =3D bpa_rs600_read_byte_data,
++	.read_word_data =3D bpa_rs600_read_word_data,
++};
++
++static int bpa_rs600_probe(struct i2c_client *client)
++{
++	struct device *dev =3D &client->dev;
++	u8 buf[I2C_SMBUS_BLOCK_MAX];
++	int ret;
++
++	if (!i2c_check_functionality(client->adapter,
++				     I2C_FUNC_SMBUS_READ_BYTE_DATA
++				     | I2C_FUNC_SMBUS_READ_WORD_DATA
++				     | I2C_FUNC_SMBUS_READ_BLOCK_DATA))
++		return -ENODEV;
++
++
++	ret =3D i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, buf);
++	if (ret < 0) {
++		dev_err(dev, "Failed to read Manufacturer Model\n");
++		return ret;
++	}
++
++	if (strncmp(buf, "BPA-RS600", 8)) {
++		buf[ret] =3D '\0';
++		dev_err(dev, "Unsupported Manufacturer Model '%s'\n", buf);
++		return -ENODEV;
++	}
++
++	return pmbus_do_probe(client, &bpa_rs600_info);
++}
++
++static const struct i2c_device_id bpa_rs600_id[] =3D {
++	{ "bpa_rs600", 0 },
++	{},
++};
++MODULE_DEVICE_TABLE(i2c, bpa_rs600_id);
++
++static const struct of_device_id __maybe_unused bpa_rs600_of_match[] =3D=
+ {
++	{ .compatible =3D "blutek,bpa-rs600" },
++	{},
++};
++MODULE_DEVICE_TABLE(of, bpa_rs600_of_match);
++
++static struct i2c_driver bpa_rs600_driver =3D {
++	.driver =3D {
++		.name =3D "bpa-rs600",
++		.of_match_table =3D of_match_ptr(bpa_rs600_of_match),
++	},
++	.probe_new =3D bpa_rs600_probe,
++	.id_table =3D bpa_rs600_id,
++};
++
++module_i2c_driver(bpa_rs600_driver);
++
++MODULE_AUTHOR("Chris Packham");
++MODULE_DESCRIPTION("PMBus driver for BluTek BPA-RS600");
++MODULE_LICENSE("GPL");
+--=20
+2.30.2
 
-[ ... ]
-
->>> +static void corsairpsu_get_criticals(struct corsairpsu_data *priv)
->>> +{
->>> +	long tmp;
->>> +	int ret;
->>> +	u8 rail;
->>
->> Side note: Using anything but sizeof(int) for index variables often results in more
->> complex code because the compiler needs to mask index operations. This doesn't
->> typically apply to x86 because that architecure has byte operations, but to pretty
->> much every other architecture.
-> 
-> Yeah, I know what you mean. I thought I match it to the function parameters.
-
-That doesn't really help if it makes the generated code more complex.
-
-> Though I would be more concerned about the "case 1 ... 3" stuff which is
-> definitly no liked by static code analysis or even "-pedantic", it's not
-> part of the C standards.
-> 
-
-Hmm, which C standard are we talking about ? There are more than 1,800
-instances of this in the Linux kernel, but I don't recall any static
-analyzer or compiler complaints about it.
-
-[ ... ]
-
->>> -static int corsairpsu_hwmon_ops_read(struct device *dev, enum hwmon_sensor_types type, u32
->>> attr,
->>> -				     int channel, long *val)
->>> +static int corsairpsu_hwmon_temp(struct corsairpsu_data *priv, u32 attr, int channel, long
->>> *val)
->>
->> Please make those functions _<type>_read, not just _<type>. It makes the code easier
->> to understand, and we won't have to change it if write functions are ever added.
-> 
-> You will laugh... I named the functions that way before, but then I was unhappy
-> with hitting the 100 chars line length. ;-)
-> 
-
-Making the code less readable to meet a line limit isn't really that desirable.
-If you want to stick with one line, you could drop the "hwmon_" from function prefixes
-instead. Those don't really add any value.
-
-Thanks,
-Guenter
