@@ -2,553 +2,534 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-23.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CD82C433DB
-	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Mar 2021 14:18:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33CEFC433E0
+	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Mar 2021 16:49:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6200264EF9
-	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Mar 2021 14:18:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 00C8C64F1D
+	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Mar 2021 16:49:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231430AbhCRORh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 18 Mar 2021 10:17:37 -0400
-Received: from mout02.posteo.de ([185.67.36.66]:58657 "EHLO mout02.posteo.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231753AbhCRORS (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 18 Mar 2021 10:17:18 -0400
-Received: from submission (posteo.de [89.146.220.130]) 
-        by mout02.posteo.de (Postfix) with ESMTPS id C28972400FC
-        for <linux-hwmon@vger.kernel.org>; Thu, 18 Mar 2021 15:17:16 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-        t=1616077036; bh=xM7Wx9X9D4aZxbNtRpQ80O3I42SyNTL5SxIaxSW4BLc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=UwCAp74JQv3s6RTrwZikuiU2pLHyEFjAfAsi3b427MhPeRLGzyKmExH3EZSfUCjwg
-         hG4vQW3Jy/+jtu6plvITcHXoQeHh6kDU1Uq7acYKoHEpspONjvOgv+3uG68OGeLgTO
-         T9XX5GAci/YQfF7yiU3Wb4KCVku35yUxNu8uECrHOf0TveyimekKvgTWzzxlbwSoao
-         6Rxj1j8fPRrJ/87cpn+dD7NVg2zjtRpDM7B2TRVgECw4TO9p+HszYSnXzp/D5Ff0rb
-         oqcz40E5YMyRPILN4o240ZbAMouZIfidpO/TZr8WxgSo6cCue+N+33Ux6fyrgRprKk
-         UXCECJMRVBc/w==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4F1TcW4V1yz6tmF;
-        Thu, 18 Mar 2021 15:17:15 +0100 (CET)
-Date:   Thu, 18 Mar 2021 15:17:14 +0100
-From:   Wilken Gottwalt <wilken.gottwalt@posteo.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
-Subject: [PATCH v4] hwmon: corsair-psu: add support for critical values
-Message-ID: <YFNg6vGk3sQmyqgB@monster.powergraphx.local>
+        id S232207AbhCRQs6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 18 Mar 2021 12:48:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56452 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232212AbhCRQso (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 18 Mar 2021 12:48:44 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7436DC06174A
+        for <linux-hwmon@vger.kernel.org>; Thu, 18 Mar 2021 09:48:44 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id c6so4581866qtc.1
+        for <linux-hwmon@vger.kernel.org>; Thu, 18 Mar 2021 09:48:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=protocubo.io; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=go937LLnZW5HDcz+iob8chtDcMhGyIqXFyWrzOfCv+M=;
+        b=SwFjSxAdQscCN6pjbiw89BjSMDCo1tjMmNEMbycAfG/TJ1cBkNApUvUrAgIme5oxhV
+         ilUNXVCyWJAQ4E/LnwHHREjYNgQf594y4n9+ktkhe7zjafQq78YFJwcozFGOslXo06W9
+         R+EsZdS3RK3OT9F63fXNikfZDCvaIGxLTMiI8AoC0MTzzFPAiCvk+eFTyR17PRLQiU8Q
+         dIKvEn9C8DIpjyX3wIHQn5i4yO7JFVEj8WpgqGkfvIWJO1oWM7r+8oL5YGP3GYO3CN7n
+         w7LK60pcfCK0SXEWe2qwpm4X9QD8997tKDbAvmcU+10wTaHhdLc3dS+0wJsD9O4L943Z
+         w7Xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=go937LLnZW5HDcz+iob8chtDcMhGyIqXFyWrzOfCv+M=;
+        b=iC8XuTm8bTyV23g0YmnB4gQ8W21x/wPLZ/C+pPlE7BSgMyrXSfVPfxSbu5liHvH132
+         x7k/hkrbxWi60HO7lrsUeSrPhElaMaCzqIRdrcWCARyja7F8XzhvihHHCL1CKHhWO4Dy
+         DEHjp2MJ1g7Jgya4ty4hdXCTwXMupociOdT6DiHoG3C+ByM7l4uXxfGA5XRu/3YNpzMp
+         TCJ1/rLvpHo2A0RA8ej/lTOX51+ZtA8jKPaFvvPyfk2bHbO4ykIGNXwhGWXktrBpB5uc
+         aGZ1o5APcUGThVDlRK5Rc+QdWUPG0iV3cGnitjv5VITYgtMF76yIM6grM9SUTnyyvtYL
+         i90A==
+X-Gm-Message-State: AOAM533n2VktxsTRyjyVWwUd4F1ZP4b4nxUDn+yK8joKp2TAAHOVxLsj
+        F7GvTB/5c4Pca+5vUPye09qdOvlboTiCzeat
+X-Google-Smtp-Source: ABdhPJyai7k/5jC4WFCtE5NFb5Bzpu0bldblbflvkWy3O0SOyfppRYCPuFXJEOOxGZLaG0CyOiHu4w==
+X-Received: by 2002:ac8:1302:: with SMTP id e2mr4666962qtj.151.1616086122996;
+        Thu, 18 Mar 2021 09:48:42 -0700 (PDT)
+Received: from calvin.localdomain ([2804:14d:5c5a:802e:bdc9:ded9:cc08:a4e9])
+        by smtp.gmail.com with ESMTPSA id 79sm2236378qki.37.2021.03.18.09.48.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Mar 2021 09:48:40 -0700 (PDT)
+From:   Jonas Malaco <jonas@protocubo.io>
+To:     linux-hwmon@vger.kernel.org
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-input@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jonas Malaco <jonas@protocubo.io>
+Subject: [PATCH] hwmon: add driver for NZXT Kraken X42/X52/X62/X72
+Date:   Thu, 18 Mar 2021 13:48:24 -0300
+Message-Id: <20210318164824.21374-1-jonas@protocubo.io>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Adds support for reading the critical values of the temperature sensors
-and the rail sensors (voltage and current) once and caches them. Updates
-the naming of the constants following a more clear scheme. Also updates
-the documentation and fixes some typos. Updates is_visible and ops_read
-functions to be more readable.
+These are "all-in-one" CPU liquid coolers that can be monitored and
+controlled through a proprietary USB HID protocol.
 
-The new sensors output of a Corsair HX850i will look like this:
-corsairpsu-hid-3-1
-Adapter: HID adapter
-v_in:        230.00 V
-v_out +12v:   12.14 V  (crit min =  +8.41 V, crit max = +15.59 V)
-v_out +5v:     5.03 V  (crit min =  +3.50 V, crit max =  +6.50 V)
-v_out +3.3v:   3.30 V  (crit min =  +2.31 V, crit max =  +4.30 V)
-psu fan:        0 RPM
-vrm temp:     +46.2°C  (crit = +70.0°C)
-case temp:    +39.8°C  (crit = +70.0°C)
-power total: 152.00 W
-power +12v:  108.00 W
-power +5v:    41.00 W
-power +3.3v:   5.00 W
-curr +12v:     9.00 A  (crit max = +85.00 A)
-curr +5v:      8.31 A  (crit max = +40.00 A)
-curr +3.3v:    1.62 A  (crit max = +40.00 A)
+While the models have differently sized radiators and come with varying
+numbers of fans, they are all indistinguishable at the software level.
 
-Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+The driver exposes fan/pump speeds and coolant temperature through the
+standard hwmon sysfs interface.
+
+Fan and pump control, while supported by the devices, are not currently
+exposed.  The firmware accepts up to 61 trip points per channel
+(fan/pump), but the same set of trip temperatures has to be maintained
+for both; with pwmX_auto_point_Y_temp attributes, users would need to
+maintain this invariant themselves.
+
+Instead, fan and pump control, as well as LED control (which the device
+also supports for 9 addressable RGB LEDs on the CPU water block) are
+left for existing and already mature user-space tools, which can still
+be used alongside the driver, thanks to hidraw.  A link to one, which I
+also maintain, is provided in the documentation.
+
+The implementation is based on USB traffic analysis.  It has been
+runtime tested on x86_64, both as a built-in driver and as a module.
+
+Signed-off-by: Jonas Malaco <jonas@protocubo.io>
 ---
-Changed in v4:
-  - simplified private data structure and collection of critical values and
-    unsupported command check
 
-Changes in v3:
-  - introduced a quirk check function to catch non-working commands
-  - split is_visible function into subfunctions
-  - moved the "is value valid" checks into the is_visibility subfunction
-  - simplified hwmon_ops_read function
-  - rearranged sysfs entries in the documentation like suggested
+I was not sure whether to exhaustively check type, attr and channel in
+_is_visible/_read/_read_string.  Would it be preferred if those
+functions assumed that they would never be called for unsupported
+combinations, since that would be a programming error?
 
-Changes in v2:
-  - simplified reading/caching of critical values and hwmon_ops_read function
-  - removed unnecessary debug output and comments
----
- Documentation/hwmon/corsair-psu.rst |  13 +-
- drivers/hwmon/corsair-psu.c         | 325 +++++++++++++++++++++++-----
- 2 files changed, 282 insertions(+), 56 deletions(-)
+In practice, should kraken2_is_visible be simplified into
 
-diff --git a/Documentation/hwmon/corsair-psu.rst b/Documentation/hwmon/corsair-psu.rst
-index 396b95c9a76a..e8378e7a1d8c 100644
---- a/Documentation/hwmon/corsair-psu.rst
-+++ b/Documentation/hwmon/corsair-psu.rst
-@@ -47,19 +47,30 @@ Sysfs entries
- =======================	========================================================
- curr1_input		Total current usage
- curr2_input		Current on the 12v psu rail
-+curr2_crit		Current max critical value on the 12v psu rail
- curr3_input		Current on the 5v psu rail
-+curr3_crit		Current max critical value on the 5v psu rail
- curr4_input		Current on the 3.3v psu rail
-+curr4_crit		Current max critical value on the 3.3v psu rail
- fan1_input		RPM of psu fan
- in0_input		Voltage of the psu ac input
- in1_input		Voltage of the 12v psu rail
-+in1_crit		Voltage max critical value on the 12v psu rail
-+in1_lcrit		Voltage min critical value on the 12v psu rail
- in2_input		Voltage of the 5v psu rail
--in3_input		Voltage of the 3.3 psu rail
-+in2_crit		Voltage max critical value on the 5v psu rail
-+in2_lcrit		Voltage min critical value on the 5v psu rail
-+in3_input		Voltage of the 3.3v psu rail
-+in3_crit		Voltage max critical value on the 3.3v psu rail
-+in3_lcrit		Voltage min critical value on the 3.3v psu rail
- power1_input		Total power usage
- power2_input		Power usage of the 12v psu rail
- power3_input		Power usage of the 5v psu rail
- power4_input		Power usage of the 3.3v psu rail
- temp1_input		Temperature of the psu vrm component
-+temp1_crit		Temperature max cirtical value of the psu vrm component
- temp2_input		Temperature of the psu case
-+temp2_crit		Temperature max critical value of psu case
- =======================	========================================================
- 
- Usage Notes
-diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
-index b0953eeeb2d3..3a5807e4a2ef 100644
---- a/drivers/hwmon/corsair-psu.c
-+++ b/drivers/hwmon/corsair-psu.c
-@@ -53,11 +53,17 @@
- #define CMD_TIMEOUT_MS		250
- #define SECONDS_PER_HOUR	(60 * 60)
- #define SECONDS_PER_DAY		(SECONDS_PER_HOUR * 24)
-+#define RAIL_COUNT		3 /* 3v3 + 5v + 12v */
-+#define TEMP_COUNT		2
- 
- #define PSU_CMD_SELECT_RAIL	0x00 /* expects length 2 */
--#define PSU_CMD_IN_VOLTS	0x88 /* the rest of the commands expect length 3 */
-+#define PSU_CMD_RAIL_VOLTS_HCRIT 0x40 /* the rest of the commands expect length 3 */
-+#define PSU_CMD_RAIL_VOLTS_LCRIT 0x44
-+#define PSU_CMD_RAIL_AMPS_HCRIT	0x46
-+#define PSU_CMD_TEMP_HCRIT	0x4F
-+#define PSU_CMD_IN_VOLTS	0x88
- #define PSU_CMD_IN_AMPS		0x89
--#define PSU_CMD_RAIL_OUT_VOLTS	0x8B
-+#define PSU_CMD_RAIL_VOLTS	0x8B
- #define PSU_CMD_RAIL_AMPS	0x8C
- #define PSU_CMD_TEMP0		0x8D
- #define PSU_CMD_TEMP1		0x8E
-@@ -116,6 +122,15 @@ struct corsairpsu_data {
- 	u8 *cmd_buffer;
- 	char vendor[REPLY_SIZE];
- 	char product[REPLY_SIZE];
-+	long temp_crit[TEMP_COUNT];
-+	long in_crit[RAIL_COUNT];
-+	long in_lcrit[RAIL_COUNT];
-+	long curr_crit[RAIL_COUNT];
-+	u8 temp_crit_support;
-+	u8 in_crit_support;
-+	u8 in_lcrit_support;
-+	u8 curr_crit_support;
-+	bool in_curr_cmd_support; /* not all commands are supported on every PSU */
- };
- 
- /* some values are SMBus LINEAR11 data which need a conversion */
-@@ -193,7 +208,10 @@ static int corsairpsu_request(struct corsairpsu_data *priv, u8 cmd, u8 rail, voi
- 
- 	mutex_lock(&priv->lock);
- 	switch (cmd) {
--	case PSU_CMD_RAIL_OUT_VOLTS:
-+	case PSU_CMD_RAIL_VOLTS_HCRIT:
-+	case PSU_CMD_RAIL_VOLTS_LCRIT:
-+	case PSU_CMD_RAIL_AMPS_HCRIT:
-+	case PSU_CMD_RAIL_VOLTS:
- 	case PSU_CMD_RAIL_AMPS:
- 	case PSU_CMD_RAIL_WATTS:
- 		ret = corsairpsu_usb_cmd(priv, 2, PSU_CMD_SELECT_RAIL, rail, NULL);
-@@ -229,9 +247,13 @@ static int corsairpsu_get_value(struct corsairpsu_data *priv, u8 cmd, u8 rail, l
- 	 */
- 	tmp = ((long)data[3] << 24) + (data[2] << 16) + (data[1] << 8) + data[0];
- 	switch (cmd) {
-+	case PSU_CMD_RAIL_VOLTS_HCRIT:
-+	case PSU_CMD_RAIL_VOLTS_LCRIT:
-+	case PSU_CMD_RAIL_AMPS_HCRIT:
-+	case PSU_CMD_TEMP_HCRIT:
- 	case PSU_CMD_IN_VOLTS:
- 	case PSU_CMD_IN_AMPS:
--	case PSU_CMD_RAIL_OUT_VOLTS:
-+	case PSU_CMD_RAIL_VOLTS:
- 	case PSU_CMD_RAIL_AMPS:
- 	case PSU_CMD_TEMP0:
- 	case PSU_CMD_TEMP1:
-@@ -256,75 +278,265 @@ static int corsairpsu_get_value(struct corsairpsu_data *priv, u8 cmd, u8 rail, l
- 	return ret;
- }
- 
--static umode_t corsairpsu_hwmon_ops_is_visible(const void *data, enum hwmon_sensor_types type,
--					       u32 attr, int channel)
-+static void corsairpsu_get_criticals(struct corsairpsu_data *priv)
- {
--	if (type == hwmon_temp && (attr == hwmon_temp_input || attr == hwmon_temp_label))
--		return 0444;
--	else if (type == hwmon_fan && (attr == hwmon_fan_input || attr == hwmon_fan_label))
--		return 0444;
--	else if (type == hwmon_power && (attr == hwmon_power_input || attr == hwmon_power_label))
--		return 0444;
--	else if (type == hwmon_in && (attr == hwmon_in_input || attr == hwmon_in_label))
-+	long tmp;
-+	int rail;
+	static umode_t kraken2_is_visible(...)
+	{
+		return 0444;
+	}
+
+and should _read/_read_string go through similar (but not as effective)
+simplifications?
+
+On another note, the copyright dates back to 2019 because this driver
+was left to mature (and then was mostly forgotten about) in an
+out-of-tree repository.[1]
+
+[1] https://github.com/liquidctl/liquidtux
+
+ Documentation/hwmon/index.rst        |   1 +
+ Documentation/hwmon/nzxt-kraken2.rst |  42 ++++
+ MAINTAINERS                          |   7 +
+ drivers/hwmon/Kconfig                |  10 +
+ drivers/hwmon/Makefile               |   1 +
+ drivers/hwmon/nzxt-kraken2.c         | 279 +++++++++++++++++++++++++++
+ 6 files changed, 340 insertions(+)
+ create mode 100644 Documentation/hwmon/nzxt-kraken2.rst
+ create mode 100644 drivers/hwmon/nzxt-kraken2.c
+
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index d4b422edbe3a..48bfa7887dd4 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -143,6 +143,7 @@ Hardware Monitoring Kernel Drivers
+    npcm750-pwm-fan
+    nsa320
+    ntc_thermistor
++   nzxt-kraken2
+    occ
+    pc87360
+    pc87427
+diff --git a/Documentation/hwmon/nzxt-kraken2.rst b/Documentation/hwmon/nzxt-kraken2.rst
+new file mode 100644
+index 000000000000..94025de65a81
+--- /dev/null
++++ b/Documentation/hwmon/nzxt-kraken2.rst
+@@ -0,0 +1,42 @@
++.. SPDX-License-Identifier: GPL-2.0-or-later
 +
-+	for (rail = 0; rail < TEMP_COUNT; ++rail) {
-+		if (!corsairpsu_get_value(priv, PSU_CMD_TEMP_HCRIT, rail, &tmp)) {
-+			priv->temp_crit_support |= BIT(rail);
-+			priv->temp_crit[rail] = tmp;
++Kernel driver nzxt-kraken2
++==========================
++
++Supported devices:
++
++* NZXT Kraken X42
++* NZXT Kraken X52
++* NZXT Kraken X62
++* NZXT Kraken X72
++
++Author: Jonas Malaco
++
++Description
++-----------
++
++This driver enables hardware monitoring support for NZXT Kraken X42/X52/X62/X72
++all-in-one CPU liquid coolers.  Three sensors are available: fan speed, pump
++speed and coolant temperature.
++
++Fan and pump control, while supported by the firmware, are not currently
++exposed.  The addressable RGB LEDs, present in the integrated CPU water block
++and pump head, are not supported either.  But both features can be found in
++existing user-space tools (e.g. `liquidctl`_).
++
++.. _liquidctl: https://github.com/liquidctl/liquidctl
++
++Usage Notes
++-----------
++
++As these are USB HIDs, the driver can be loaded automatically by the kernel and
++supports hot swapping.
++
++Sysfs entries
++-------------
++
++=======================	========================================================
++fan1_input		Fan speed (in rpm)
++fan2_input		Pump speed (in rpm)
++temp1_input		Coolant temperature (in millidegrees Celsius)
++=======================	========================================================
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 0635b30e467c..b8f9fc5eaf08 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12911,6 +12911,13 @@ L:	linux-nfc@lists.01.org (moderated for non-subscribers)
+ S:	Supported
+ F:	drivers/nfc/nxp-nci
+ 
++NZXT-KRAKEN2 HARDWARE MONITORING DRIVER
++M:	Jonas Malaco <jonas@protocubo.io>
++L:	linux-hwmon@vger.kernel.org
++S:	Maintained
++F:	Documentation/hwmon/nzxt-kraken2.rst
++F:	drivers/hwmon/nzxt-kraken2.c
++
+ OBJAGG
+ M:	Jiri Pirko <jiri@nvidia.com>
+ L:	netdev@vger.kernel.org
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 54f04e61fb83..0ddc974b102e 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -1492,6 +1492,16 @@ config SENSORS_NSA320
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called nsa320-hwmon.
+ 
++config SENSORS_NZXT_KRAKEN2
++	tristate "NZXT Kraken X42/X51/X62/X72 liquid coolers"
++	depends on USB_HID
++	help
++	  If you say yes here you get support for hardware monitoring for the
++	  NZXT Kraken X42/X52/X62/X72 all-in-one CPU liquid coolers.
++
++	  This driver can also be built as a module. If so, the module
++	  will be called nzxt-kraken2.
++
+ source "drivers/hwmon/occ/Kconfig"
+ 
+ config SENSORS_PCF8591
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index fe38e8a5c979..59e78bc212cf 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -155,6 +155,7 @@ obj-$(CONFIG_SENSORS_NCT7904)	+= nct7904.o
+ obj-$(CONFIG_SENSORS_NPCM7XX)	+= npcm750-pwm-fan.o
+ obj-$(CONFIG_SENSORS_NSA320)	+= nsa320-hwmon.o
+ obj-$(CONFIG_SENSORS_NTC_THERMISTOR)	+= ntc_thermistor.o
++obj-$(CONFIG_SENSORS_NZXT_KRAKEN2) += nzxt-kraken2.o
+ obj-$(CONFIG_SENSORS_PC87360)	+= pc87360.o
+ obj-$(CONFIG_SENSORS_PC87427)	+= pc87427.o
+ obj-$(CONFIG_SENSORS_PCF8591)	+= pcf8591.o
+diff --git a/drivers/hwmon/nzxt-kraken2.c b/drivers/hwmon/nzxt-kraken2.c
+new file mode 100644
+index 000000000000..1426310d6965
+--- /dev/null
++++ b/drivers/hwmon/nzxt-kraken2.c
+@@ -0,0 +1,279 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * nzxt-kraken2.c - hwmon driver for NZXT Kraken X42/X52/X62/X72 coolers
++ *
++ * Copyright 2019  Jonas Malaco <jonas@protocubo.io>
++ */
++
++#include <asm/unaligned.h>
++#include <linux/hid.h>
++#include <linux/hwmon.h>
++#include <linux/module.h>
++#include <linux/spinlock.h>
++
++#define STATUS_REPORT_ID	0x04
++#define STATUS_USEFUL_SIZE	8
++
++static const char *const kraken2_temp_label[] = {
++	"Coolant",
++};
++
++static const char *const kraken2_fan_label[] = {
++	"Fan",
++	"Pump",
++};
++
++struct kraken2_priv_data {
++	struct hid_device *hid_dev;
++	struct device *hwmon_dev;
++
++	spinlock_t lock; /* protects the last received status */
++	u8 status[STATUS_USEFUL_SIZE];
++};
++
++static umode_t kraken2_is_visible(const void *data,
++				  enum hwmon_sensor_types type,
++				  u32 attr, int channel)
++{
++	switch (type) {
++	case hwmon_temp:
++		switch (attr) {
++		case hwmon_temp_input:
++		case hwmon_temp_label:
++			if (channel == 0)
++				return 0444;
++			return 0;
 +		}
-+	}
-+
-+	for (rail = 0; rail < RAIL_COUNT; ++rail) {
-+		if (!corsairpsu_get_value(priv, PSU_CMD_RAIL_VOLTS_HCRIT, rail, &tmp)) {
-+			priv->in_crit_support |= BIT(rail);
-+			priv->in_crit[rail] = tmp;
++		break;
++	case hwmon_fan:
++		switch (attr) {
++		case hwmon_fan_input:
++		case hwmon_fan_label:
++			if (channel >= 0 && channel < 2)
++				return 0444;
++			return 0;
 +		}
-+
-+		if (!corsairpsu_get_value(priv, PSU_CMD_RAIL_VOLTS_LCRIT, rail, &tmp)) {
-+			priv->in_lcrit_support |= BIT(rail);
-+			priv->in_lcrit[rail] = tmp;
-+		}
-+
-+		if (!corsairpsu_get_value(priv, PSU_CMD_RAIL_AMPS_HCRIT, rail, &tmp)) {
-+			priv->curr_crit_support |= BIT(rail);
-+			priv->curr_crit[rail] = tmp;
-+		}
-+	}
-+}
-+
-+static void corsairpsu_check_cmd_support(struct corsairpsu_data *priv)
-+{
-+	long tmp;
-+
-+	priv->in_curr_cmd_support = !corsairpsu_get_value(priv, PSU_CMD_IN_AMPS, 0, &tmp);
-+}
-+
-+static umode_t corsairpsu_hwmon_temp_is_visible(const struct corsairpsu_data *priv, u32 attr,
-+						int channel)
-+{
-+	umode_t res = 0444;
-+
-+	switch (attr) {
-+	case hwmon_temp_input:
-+	case hwmon_temp_label:
-+	case hwmon_temp_crit:
-+		if (channel > 0 && !(priv->temp_crit_support & BIT(channel - 1)))
-+			res = 0;
 +		break;
 +	default:
 +		break;
 +	}
-+
-+	return res;
++	return 0;
 +}
 +
-+static umode_t corsairpsu_hwmon_fan_is_visible(const struct corsairpsu_data *priv, u32 attr,
-+					       int channel)
++static int kraken2_read(struct device *dev, enum hwmon_sensor_types type,
++			u32 attr, int channel, long *val)
 +{
-+	switch (attr) {
-+	case hwmon_fan_input:
-+	case hwmon_fan_label:
- 		return 0444;
--	else if (type == hwmon_curr && (attr == hwmon_curr_input || attr == hwmon_curr_label))
-+	default:
-+		return 0;
-+	}
-+}
-+
-+static umode_t corsairpsu_hwmon_power_is_visible(const struct corsairpsu_data *priv, u32 attr,
-+						 int channel)
-+{
-+	switch (attr) {
-+	case hwmon_power_input:
-+	case hwmon_power_label:
- 		return 0444;
-+	default:
-+		return 0;
-+	};
-+}
- 
--	return 0;
-+static umode_t corsairpsu_hwmon_in_is_visible(const struct corsairpsu_data *priv, u32 attr,
-+					      int channel)
-+{
-+	umode_t res = 0444;
-+
-+	switch (attr) {
-+	case hwmon_in_input:
-+	case hwmon_in_label:
-+	case hwmon_in_crit:
-+		if (channel > 0 && !(priv->in_crit_support & BIT(channel - 1)))
-+			res = 0;
-+		break;
-+	case hwmon_in_lcrit:
-+		if (channel > 0 && !(priv->in_lcrit_support & BIT(channel - 1)))
-+			res = 0;
-+		break;
-+	default:
-+		break;
-+	};
-+
-+	return res;
- }
- 
--static int corsairpsu_hwmon_ops_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
--				     int channel, long *val)
-+static umode_t corsairpsu_hwmon_curr_is_visible(const struct corsairpsu_data *priv, u32 attr,
-+						int channel)
- {
--	struct corsairpsu_data *priv = dev_get_drvdata(dev);
--	int ret;
-+	umode_t res = 0444;
- 
--	if (type == hwmon_temp && attr == hwmon_temp_input && channel < 2) {
--		ret = corsairpsu_get_value(priv, channel ? PSU_CMD_TEMP1 : PSU_CMD_TEMP0, channel,
--					   val);
--	} else if (type == hwmon_fan && attr == hwmon_fan_input) {
--		ret = corsairpsu_get_value(priv, PSU_CMD_FAN, 0, val);
--	} else if (type == hwmon_power && attr == hwmon_power_input) {
-+	switch (attr) {
-+	case hwmon_curr_input:
-+		if (channel == 0 && !priv->in_curr_cmd_support)
-+			res = 0;
-+		break;
-+	case hwmon_curr_label:
-+	case hwmon_curr_crit:
-+		if (channel > 0 && !(priv->curr_crit_support & BIT(channel - 1)))
-+			res = 0;
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return res;
-+}
-+
-+static umode_t corsairpsu_hwmon_ops_is_visible(const void *data, enum hwmon_sensor_types type,
-+					       u32 attr, int channel)
-+{
-+	const struct corsairpsu_data *priv = data;
++	struct kraken2_priv_data *priv = dev_get_drvdata(dev);
++	unsigned long flags;
 +
 +	switch (type) {
 +	case hwmon_temp:
-+		return corsairpsu_hwmon_temp_is_visible(priv, attr, channel);
++		switch (attr) {
++		case hwmon_temp_input:
++			if (channel != 0)
++				return -EOPNOTSUPP;
++			/*
++			 * The fractional byte has been observed to be in the
++			 * interval [1,9], but some of these steps are also
++			 * consistently skipped for certain integer parts.
++			 *
++			 * For the lack of a better idea, assume that the
++			 * resolution is 0.1Â°C, and that the missing steps are
++			 * artifacts of how the firmware processes the raw
++			 * sensor data.
++			 */
++			spin_lock_irqsave(&priv->lock, flags);
++			*val = priv->status[1] * 1000 + priv->status[2] * 100;
++			spin_unlock_irqrestore(&priv->lock, flags);
++			break;
++		default:
++			return -EOPNOTSUPP;
++		}
++		break;
 +	case hwmon_fan:
-+		return corsairpsu_hwmon_fan_is_visible(priv, attr, channel);
-+	case hwmon_power:
-+		return corsairpsu_hwmon_power_is_visible(priv, attr, channel);
-+	case hwmon_in:
-+		return corsairpsu_hwmon_in_is_visible(priv, attr, channel);
-+	case hwmon_curr:
-+		return corsairpsu_hwmon_curr_is_visible(priv, attr, channel);
-+	default:
-+		return 0;
-+	}
-+}
-+
-+static int corsairpsu_hwmon_temp_read(struct corsairpsu_data *priv, u32 attr, int channel,
-+				      long *val)
-+{
-+	int err = -EOPNOTSUPP;
-+
-+	switch (attr) {
-+	case hwmon_temp_input:
-+		return corsairpsu_get_value(priv, channel ? PSU_CMD_TEMP1 : PSU_CMD_TEMP0,
-+					    channel, val);
-+	case hwmon_temp_crit:
-+		*val = priv->temp_crit[channel];
-+		err = 0;
++		switch (attr) {
++		case hwmon_fan_input:
++			if (channel < 0 || channel >= 2)
++				return -EOPNOTSUPP;
++			spin_lock_irqsave(&priv->lock, flags);
++			*val = get_unaligned_be16(priv->status + 3 + channel * 2);
++			spin_unlock_irqrestore(&priv->lock, flags);
++			break;
++		default:
++			return -EOPNOTSUPP;
++		}
 +		break;
 +	default:
-+		break;
++		return -EOPNOTSUPP;
 +	}
 +
-+	return err;
++	return 0;
 +}
 +
-+static int corsairpsu_hwmon_power_read(struct corsairpsu_data *priv, u32 attr, int channel,
-+				       long *val)
++static int kraken2_read_string(struct device *dev, enum hwmon_sensor_types type,
++			       u32 attr, int channel, const char **str)
 +{
-+	if (attr == hwmon_power_input) {
- 		switch (channel) {
- 		case 0:
--			ret = corsairpsu_get_value(priv, PSU_CMD_TOTAL_WATTS, 0, val);
--			break;
-+			return corsairpsu_get_value(priv, PSU_CMD_TOTAL_WATTS, 0, val);
- 		case 1 ... 3:
--			ret = corsairpsu_get_value(priv, PSU_CMD_RAIL_WATTS, channel - 1, val);
--			break;
-+			return corsairpsu_get_value(priv, PSU_CMD_RAIL_WATTS, channel - 1, val);
- 		default:
--			return -EOPNOTSUPP;
-+			break;
- 		}
--	} else if (type == hwmon_in && attr == hwmon_in_input) {
-+	}
-+
-+	return -EOPNOTSUPP;
-+}
-+
-+static int corsairpsu_hwmon_in_read(struct corsairpsu_data *priv, u32 attr, int channel, long *val)
-+{
-+	int err = -EOPNOTSUPP;
-+
-+	switch (attr) {
-+	case hwmon_in_input:
- 		switch (channel) {
- 		case 0:
--			ret = corsairpsu_get_value(priv, PSU_CMD_IN_VOLTS, 0, val);
--			break;
-+			return corsairpsu_get_value(priv, PSU_CMD_IN_VOLTS, 0, val);
- 		case 1 ... 3:
--			ret = corsairpsu_get_value(priv, PSU_CMD_RAIL_OUT_VOLTS, channel - 1, val);
--			break;
-+			return corsairpsu_get_value(priv, PSU_CMD_RAIL_VOLTS, channel - 1, val);
- 		default:
--			return -EOPNOTSUPP;
-+			break;
- 		}
--	} else if (type == hwmon_curr && attr == hwmon_curr_input) {
-+		break;
-+	case hwmon_in_crit:
-+		*val = priv->in_crit[channel - 1];
-+		err = 0;
-+		break;
-+	case hwmon_in_lcrit:
-+		*val = priv->in_lcrit[channel - 1];
-+		err = 0;
-+		break;
-+	}
-+
-+	return err;
-+}
-+
-+static int corsairpsu_hwmon_curr_read(struct corsairpsu_data *priv, u32 attr, int channel,
-+				      long *val)
-+{
-+	int err = -EOPNOTSUPP;
-+
-+	switch (attr) {
-+	case hwmon_curr_input:
- 		switch (channel) {
- 		case 0:
--			ret = corsairpsu_get_value(priv, PSU_CMD_IN_AMPS, 0, val);
--			break;
-+			return corsairpsu_get_value(priv, PSU_CMD_IN_AMPS, 0, val);
- 		case 1 ... 3:
--			ret = corsairpsu_get_value(priv, PSU_CMD_RAIL_AMPS, channel - 1, val);
--			break;
-+			return corsairpsu_get_value(priv, PSU_CMD_RAIL_AMPS, channel - 1, val);
- 		default:
--			return -EOPNOTSUPP;
-+			break;
- 		}
--	} else {
--		return -EOPNOTSUPP;
-+		break;
-+	case hwmon_curr_crit:
-+		*val = priv->curr_crit[channel - 1];
-+		err = 0;
-+		break;
-+	default:
-+		break;
- 	}
- 
--	if (ret < 0)
--		return ret;
-+	return err;
-+}
- 
--	return 0;
-+static int corsairpsu_hwmon_ops_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
-+				     int channel, long *val)
-+{
-+	struct corsairpsu_data *priv = dev_get_drvdata(dev);
-+
 +	switch (type) {
 +	case hwmon_temp:
-+		return corsairpsu_hwmon_temp_read(priv, attr, channel, val);
++		switch (attr) {
++		case hwmon_temp_label:
++			if (channel != 0)
++				return -EOPNOTSUPP;
++			*str = kraken2_temp_label[channel];
++			break;
++		default:
++			return -EOPNOTSUPP;
++		}
++		break;
 +	case hwmon_fan:
-+		if (attr == hwmon_fan_input)
-+			return corsairpsu_get_value(priv, PSU_CMD_FAN, 0, val);
-+		return -EOPNOTSUPP;
-+	case hwmon_power:
-+		return corsairpsu_hwmon_power_read(priv, attr, channel, val);
-+	case hwmon_in:
-+		return corsairpsu_hwmon_in_read(priv, attr, channel, val);
-+	case hwmon_curr:
-+		return corsairpsu_hwmon_curr_read(priv, attr, channel, val);
++		switch (attr) {
++		case hwmon_fan_label:
++			if (channel < 0 || channel >= 2)
++				return -EOPNOTSUPP;
++			*str = kraken2_fan_label[channel];
++			break;
++		default:
++			return -EOPNOTSUPP;
++		}
++		break;
 +	default:
 +		return -EOPNOTSUPP;
 +	}
- }
- 
- static int corsairpsu_hwmon_ops_read_string(struct device *dev, enum hwmon_sensor_types type,
-@@ -360,8 +572,8 @@ static const struct hwmon_channel_info *corsairpsu_info[] = {
- 	HWMON_CHANNEL_INFO(chip,
- 			   HWMON_C_REGISTER_TZ),
- 	HWMON_CHANNEL_INFO(temp,
--			   HWMON_T_INPUT | HWMON_T_LABEL,
--			   HWMON_T_INPUT | HWMON_T_LABEL),
-+			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_CRIT,
-+			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_CRIT),
- 	HWMON_CHANNEL_INFO(fan,
- 			   HWMON_F_INPUT | HWMON_F_LABEL),
- 	HWMON_CHANNEL_INFO(power,
-@@ -371,14 +583,14 @@ static const struct hwmon_channel_info *corsairpsu_info[] = {
- 			   HWMON_P_INPUT | HWMON_P_LABEL),
- 	HWMON_CHANNEL_INFO(in,
- 			   HWMON_I_INPUT | HWMON_I_LABEL,
--			   HWMON_I_INPUT | HWMON_I_LABEL,
--			   HWMON_I_INPUT | HWMON_I_LABEL,
--			   HWMON_I_INPUT | HWMON_I_LABEL),
-+			   HWMON_I_INPUT | HWMON_I_LABEL | HWMON_I_LCRIT | HWMON_I_CRIT,
-+			   HWMON_I_INPUT | HWMON_I_LABEL | HWMON_I_LCRIT | HWMON_I_CRIT,
-+			   HWMON_I_INPUT | HWMON_I_LABEL | HWMON_I_LCRIT | HWMON_I_CRIT),
- 	HWMON_CHANNEL_INFO(curr,
- 			   HWMON_C_INPUT | HWMON_C_LABEL,
--			   HWMON_C_INPUT | HWMON_C_LABEL,
--			   HWMON_C_INPUT | HWMON_C_LABEL,
--			   HWMON_C_INPUT | HWMON_C_LABEL),
-+			   HWMON_C_INPUT | HWMON_C_LABEL | HWMON_C_CRIT,
-+			   HWMON_C_INPUT | HWMON_C_LABEL | HWMON_C_CRIT,
-+			   HWMON_C_INPUT | HWMON_C_LABEL | HWMON_C_CRIT),
- 	NULL
- };
- 
-@@ -513,6 +725,9 @@ static int corsairpsu_probe(struct hid_device *hdev, const struct hid_device_id
- 		goto fail_and_stop;
- 	}
- 
-+	corsairpsu_get_criticals(priv);
-+	corsairpsu_check_cmd_support(priv);
++	return 0;
++}
 +
- 	priv->hwmon_dev = hwmon_device_register_with_info(&hdev->dev, "corsairpsu", priv,
- 							  &corsairpsu_chip_info, 0);
- 
++static const struct hwmon_ops kraken2_hwmon_ops = {
++	.is_visible = kraken2_is_visible,
++	.read = kraken2_read,
++	.read_string = kraken2_read_string,
++};
++
++static const struct hwmon_channel_info *kraken2_info[] = {
++	HWMON_CHANNEL_INFO(temp,
++			   HWMON_T_INPUT | HWMON_T_LABEL),
++	HWMON_CHANNEL_INFO(fan,
++			   HWMON_F_INPUT | HWMON_F_LABEL,
++			   HWMON_F_INPUT | HWMON_F_LABEL),
++	NULL
++};
++
++static const struct hwmon_chip_info kraken2_chip_info = {
++	.ops = &kraken2_hwmon_ops,
++	.info = kraken2_info,
++};
++
++static int kraken2_raw_event(struct hid_device *hdev,
++			     struct hid_report *report, u8 *data, int size)
++{
++	struct kraken2_priv_data *priv;
++	unsigned long flags;
++
++	if (size < STATUS_USEFUL_SIZE || report->id != STATUS_REPORT_ID)
++		return 0;
++
++	priv = hid_get_drvdata(hdev);
++
++	spin_lock_irqsave(&priv->lock, flags);
++	memcpy(priv->status, data, STATUS_USEFUL_SIZE);
++	spin_unlock_irqrestore(&priv->lock, flags);
++
++	return 0;
++}
++
++static int kraken2_probe(struct hid_device *hdev,
++			 const struct hid_device_id *id)
++{
++	struct kraken2_priv_data *priv;
++	int ret;
++
++	priv = devm_kzalloc(&hdev->dev, sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++
++	priv->hid_dev = hdev;
++	spin_lock_init(&priv->lock);
++	hid_set_drvdata(hdev, priv);
++
++	ret = hid_parse(hdev);
++	if (ret) {
++		hid_err(hdev, "hid parse failed with %d\n", ret);
++		return ret;
++	}
++
++	/*
++	 * Enable hidraw so existing user-space tools can continue to work.
++	 */
++	ret = hid_hw_start(hdev, HID_CONNECT_HIDRAW);
++	if (ret) {
++		hid_err(hdev, "hid hw start failed with %d\n", ret);
++		goto fail_and_stop;
++	}
++
++	ret = hid_hw_open(hdev);
++	if (ret) {
++		hid_err(hdev, "hid hw open failed with %d\n", ret);
++		goto fail_and_close;
++	}
++
++	priv->hwmon_dev = hwmon_device_register_with_info(&hdev->dev, "kraken2",
++							  priv, &kraken2_chip_info,
++							  NULL);
++	if (IS_ERR(priv->hwmon_dev)) {
++		ret = PTR_ERR(priv->hwmon_dev);
++		hid_err(hdev, "hwmon registration failed with %d\n", ret);
++		goto fail_and_close;
++	}
++
++	return 0;
++
++fail_and_close:
++	hid_hw_close(hdev);
++fail_and_stop:
++	hid_hw_stop(hdev);
++	return ret;
++}
++
++static void kraken2_remove(struct hid_device *hdev)
++{
++	struct kraken2_priv_data *priv = hid_get_drvdata(hdev);
++
++	hwmon_device_unregister(priv->hwmon_dev);
++
++	hid_hw_close(hdev);
++	hid_hw_stop(hdev);
++}
++
++static const struct hid_device_id kraken2_table[] = {
++	{ HID_USB_DEVICE(0x1e71, 0x170e) }, /* NZXT Kraken X42/X52/X62/X72 */
++	{ }
++};
++
++MODULE_DEVICE_TABLE(hid, kraken2_table);
++
++static struct hid_driver kraken2_driver = {
++	.name = "nzxt-kraken2",
++	.id_table = kraken2_table,
++	.probe = kraken2_probe,
++	.remove = kraken2_remove,
++	.raw_event = kraken2_raw_event,
++};
++
++static int __init kraken2_init(void)
++{
++	return hid_register_driver(&kraken2_driver);
++}
++
++static void __exit kraken2_exit(void)
++{
++	hid_unregister_driver(&kraken2_driver);
++}
++
++/*
++ * When compiled into the kernel, initialize after the hid bus.
++ */
++late_initcall(kraken2_init);
++module_exit(kraken2_exit);
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Jonas Malaco <jonas@protocubo.io>");
++MODULE_DESCRIPTION("Hwmon driver for NZXT Kraken X42/X52/X62/X72 coolers");
+
+base-commit: d8a08585259268e7b5305d04422a59d713719ccb
 -- 
-2.30.2
+2.31.0
 
