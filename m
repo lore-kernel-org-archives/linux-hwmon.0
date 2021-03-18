@@ -2,67 +2,109 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	PDS_BAD_THREAD_QP_64,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46753C433E6
-	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Mar 2021 01:55:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C3D5C433E0
+	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Mar 2021 03:47:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E823F64F53
-	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Mar 2021 01:55:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4777D64F10
+	for <linux-hwmon@archiver.kernel.org>; Thu, 18 Mar 2021 03:47:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbhCRBy5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 17 Mar 2021 21:54:57 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:13559 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231231AbhCRByb (ORCPT
+        id S229640AbhCRDrK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 17 Mar 2021 23:47:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57388 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229624AbhCRDrE (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 17 Mar 2021 21:54:31 -0400
-Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4F194j1ymYzMj8H;
-        Thu, 18 Mar 2021 09:52:05 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- DGGEMS410-HUB.china.huawei.com (10.3.19.210) with Microsoft SMTP Server id
- 14.3.498.0; Thu, 18 Mar 2021 09:54:25 +0800
-From:   Tian Tao <tiantao6@hisilicon.com>
-To:     <jdelvare@suse.com>, <linux@roeck-us.net>
-CC:     <linux-hwmon@vger.kernel.org>
-Subject: [PATCH] hwmon: (ds1621) Use kobj_to_dev()
-Date:   Thu, 18 Mar 2021 09:55:04 +0800
-Message-ID: <1616032504-59817-1-git-send-email-tiantao6@hisilicon.com>
-X-Mailer: git-send-email 2.7.4
+        Wed, 17 Mar 2021 23:47:04 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9585BC06175F
+        for <linux-hwmon@vger.kernel.org>; Wed, 17 Mar 2021 20:47:03 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 2DFAB891AE;
+        Thu, 18 Mar 2021 16:46:59 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1616039219;
+        bh=YhRnUFVrl7/8nydokzr/5/OXltn4aUhYU1Fr4pawvfs=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To;
+        b=Wxm/LTQu9rRmMleCZxX+Ed3aTU/MrYR953tJJ3AjUCRaHDfmOyiz16R/OdsjSXSLU
+         +Zg9JLw8VUflvEdzqQWdjr6Q61COrRVacgwceND/GKLES3eygfopp/cXQ6HuDAaAJ7
+         Ui+J3gmmt/12WDWPXwswkczpmXeF9oG4CV3T3BIGWiqlbjUv2ZXZH1ExG/vMNvE9uI
+         LzB7QwhQyZzbVwi4BWpvQzihgzw2dC1veQ+GM8PYIIx/Ry2nwVRrwVp5n0QmW5Ufz1
+         etnHMCubJlFKDq6VQHE+RgweuEJMf9kZiuGIUHwnz0+2VxbSc94plTpTF3/TTOG+pI
+         zF7c1rXLztH+A==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B6052cd330001>; Thu, 18 Mar 2021 16:46:59 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
+ by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
+ Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 18 Mar 2021 16:46:58 +1300
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.012; Thu, 18 Mar 2021 16:46:58 +1300
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Guenter Roeck <linux@roeck-us.net>, Wolfram Sang <wsa@kernel.org>
+CC:     "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: Errant readings on LM81 with T2080 SoC
+Thread-Topic: Errant readings on LM81 with T2080 SoC
+Thread-Index: AQHXE6SbssdAOSHgwE+zIRhtn11Sk6p4Y2sAgAAgcACAACSBgIAABe+AgAEDagCAAfS7gIAALq8AgAEX54CAAKWsgIAACmIAgADZp4CAAATLAIAJ1fMA
+Date:   Thu, 18 Mar 2021 03:46:58 +0000
+Message-ID: <9c912424-2cc9-8753-1352-1a5c27722cd2@alliedtelesis.co.nz>
+References: <20210311081842.GA1070@ninjato>
+ <94dfa9dc-a80c-98ba-4169-44cce3d810f7@alliedtelesis.co.nz>
+ <725c5e51-65df-e17d-e2da-0982efacf2d2@roeck-us.net>
+In-Reply-To: <725c5e51-65df-e17d-e2da-0982efacf2d2@roeck-us.net>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="Windows-1252"
+Content-ID: <0D62E11FAE39D940A8C764469E59E569@atlnz.lc>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.56]
-X-CFilter-Loop: Reflected
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=GfppYjfL c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=N659UExz7-8A:10 a=dESyimp9J3IA:10 a=VNwDg8RZYkgfWyEnbsYA:9 a=pILNOxqGKmIA:10
+X-SEG-SpamProfiler-Score: 0
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-fixed the following coccicheck:
-./drivers/hwmon/ds1621.c:329:60-61: WARNING opportunity
-for kobj_to_dev().
 
-Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
----
- drivers/hwmon/ds1621.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/hwmon/ds1621.c b/drivers/hwmon/ds1621.c
-index e1d742b..bf1c4b7 100644
---- a/drivers/hwmon/ds1621.c
-+++ b/drivers/hwmon/ds1621.c
-@@ -326,7 +326,7 @@ static struct attribute *ds1621_attributes[] = {
- static umode_t ds1621_attribute_visible(struct kobject *kobj,
- 					struct attribute *attr, int index)
- {
--	struct device *dev = container_of(kobj, struct device, kobj);
-+	struct device *dev = kobj_to_dev(kobj);
- 	struct ds1621_data *data = dev_get_drvdata(dev);
- 
- 	if (attr == &dev_attr_update_interval.attr)
--- 
-2.7.4
-
+On 12/03/21 10:34 am, Guenter Roeck wrote:
+> On 3/11/21 1:17 PM, Chris Packham wrote:
+>> On 11/03/21 9:18 pm, Wolfram Sang wrote:
+>>>> Bummer. What is really weird is that you see clock stretching under
+>>>> CPU load. Normally clock stretching is triggered by the device, not
+>>>> by the host.
+>>> One example: Some hosts need an interrupt per byte to know if they
+>>> should send ACK or NACK. If that interrupt is delayed, they stretch the
+>>> clock.
+>>>
+>> It feels like something like that is happening. Looking at the T2080
+>> Reference manual there is an interesting timing diagram (Figure 14-2 if
+>> someone feels like looking it up). It shows SCL low between the ACK for
+>> the address and the data byte. I think if we're delayed in sending the
+>> next byte we could violate Ttimeout or Tlow:mext from the SMBUS spec.
+>>
+> I think that really leaves you only two options that I can see:
+> Rework the driver to handle critical actions (such as setting TXAK,
+> and everything else that might result in clock stretching) in the
+> interrupt handler, or rework the driver to handle everything in
+> a high priority kernel thread.
+I've made some reasonable progress on making i2c-mpc more interrupt=20
+driven. Assuming it works out for my use-case is there an opinion on=20
+making interrupt support mandatory? Looking at all the in-tree dts files=20
+that use one of the compatible strings from i2c-mpc.c they all have=20
+interrupt properties so in theory nothing is using the polling mode. But=20
+there may be some out-of-tree boards or boards using an old dtb that=20
+would be affected?=
