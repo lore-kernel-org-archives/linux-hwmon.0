@@ -4,89 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA6EAC433C1
-	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Mar 2021 21:31:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0F90C433E0
+	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Mar 2021 21:32:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B651B6193A
-	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Mar 2021 21:31:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9149761989
+	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Mar 2021 21:32:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbhCSVad (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 19 Mar 2021 17:30:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33436 "EHLO
+        id S230177AbhCSVbh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 19 Mar 2021 17:31:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbhCSVaI (ORCPT
+        with ESMTP id S230343AbhCSVbM (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 19 Mar 2021 17:30:08 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F216BC06175F;
-        Fri, 19 Mar 2021 14:30:07 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id w31-20020a9d36220000b02901f2cbfc9743so9583772otb.7;
-        Fri, 19 Mar 2021 14:30:07 -0700 (PDT)
+        Fri, 19 Mar 2021 17:31:12 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E99C06175F;
+        Fri, 19 Mar 2021 14:31:11 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id g8-20020a9d6c480000b02901b65ca2432cso9880537otq.3;
+        Fri, 19 Mar 2021 14:31:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=NUIbYpy0NLmrRRI+l4LHw4l+eurqUrE6wLZTOGdF6Vc=;
-        b=oROCNLp0vn05j+k+RsiM8BxgWDHgyvspy0SuK3wHvnU7ZeUX8qbb+ECFaKtZZEq9WP
-         Xk6bz1YH4dfnK2Q8qtM1T4GM2Ca0mlvxrJ4y89ruceV4mjwUCq2uo6eUFeUleiwsDoC1
-         IHo1b49dsOHbCasQkD9bnAbB5uJ6wAhtuIAB7XCj9Fswt3vJeXZWdgC2AUJqtVph7iN0
-         mST2DIAGYFYQD/+uDWyeQszRUkIsqY9gUCJ0OihK1pOExM4ImILFKx8ZatL+3zLP37z0
-         u1GI7PTDFdGlYIZzBiXVK7WgUTpHOjioBmksLopzk8e3WFkKwXRww9NPUggOJgfvhO85
-         xdTA==
+        bh=B3tP1yffxFh4g5lNGA0wRa/qEAQmOuEjgkMUh6SA5pU=;
+        b=Vjd1Sso2HIhTeVWqkxFf0VIGFjw6NwHn4WhrCpcqmrJH+CP5E88UlnJX/SmLjt1eV9
+         F6iG2on/mw2Bks4HNJhvy5TkXYb+neNhfEAEzCSlkZoAmzhcvoJlaxNAj70Udkl803px
+         hQqdG/zuFO/LaGEYNA1WEMPDfwWV8WUFq0vaC/bnWZupRc4frZWuj/hwcdy7tppC5U8g
+         rgT8UrtLGDLX6RVVwc6fauUXnKrUNo9n464ryUT2Vj/PK/f8++LWzI2MY2QaJnXpujFc
+         8gO1HgK89AOw5+2B8GolPTO9AkQC0bfOB+90E89mihdxTOwcM9vHlAKSUluWt1cC7JNa
+         4bxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=NUIbYpy0NLmrRRI+l4LHw4l+eurqUrE6wLZTOGdF6Vc=;
-        b=Vf7KCtf1+KqvQxvbX5CenYBIFaDrSYnfTH2N7wutVuHh2STdS9Fvyv4Rvpd2FCqpGp
-         ieV1flwO+4RO3mmIjCMAl0a21Bli+wy7/X+nlRp3qsIwTC5HfPH/905rV2uqxuf8d/+E
-         a2Besi+I36+xFw+9QuQv32Nb7IOz18nohrBatMaFUk+O8sf9oapdNGxJ0q+edqoax7D+
-         8bCg47vCC7BI5Pud1gr5Pr5WdqzVGQMYWxFZrwjg1nfJz4D6sIH6taEjcQVay+vQhWj0
-         5k8ZJ2mAD8HTERak/EgJKTZaZ4Qo03VkC1M0X+quF05lXexIVCXQXqfuWX7YmgZKTS0c
-         cMjA==
-X-Gm-Message-State: AOAM533+6aedIMUpd35gMXwD/l2IZAzyJFs9PKLEi8xKhTb5XtBR8IJ9
-        veaUhwJcf1iX5lKx1tGnT7Y=
-X-Google-Smtp-Source: ABdhPJxNZb84yxHU6RXhE9I4olIKiyJQxPqsyyy6zTDMfjIiloERlr2AGeUsKhFUh8QDoDv+xLof6g==
-X-Received: by 2002:a05:6830:225b:: with SMTP id t27mr2598419otd.73.1616189407440;
-        Fri, 19 Mar 2021 14:30:07 -0700 (PDT)
+        bh=B3tP1yffxFh4g5lNGA0wRa/qEAQmOuEjgkMUh6SA5pU=;
+        b=B+tdChx6XejzIfw96Gq0n30f8DZA+PFNTI8uWn4LkT0i+bbEUNKCDi7kPBvXuGBJ2C
+         GwGdMI3sI85amHN/xHXXpFulEERqaAwCZlAinjPjej8yONpFX8JWzGgewIdgPd5eE8LA
+         sypOQc3+O9rkcTt/wMuse+Q/s4bu0b/drvtY30vqg/Ax54hO5gD5vOopDOlbm6mJUYLy
+         NfBem3It+t2PPBQRIt5sisa1FPbwiiSUb5ymwMRA0A3tNl2YP0vD7oMgdvq1pVnsMArx
+         M76/Y3/jm7NKmzGcZJUBm8k1PXVqaEFn3Zm8D88XtBtuClOXSBMDr3auMoonru35Vbzd
+         6ddA==
+X-Gm-Message-State: AOAM531rl/9fjd2Dba1Uj4FaEdvNCBJPIQYKwJBQFHvLq56kzJS7Jl5Z
+        +FbCO1g8cIEW0EeOAfnhEpM=
+X-Google-Smtp-Source: ABdhPJzgTe1u0b/7yaDVHD4QCOf/M/jN28/0o+Ynd67gM3j1RoFO13+OBO54DWUNwVwoVCRvH9B/ng==
+X-Received: by 2002:a9d:1c8f:: with SMTP id l15mr2533310ota.29.1616189471444;
+        Fri, 19 Mar 2021 14:31:11 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w199sm1507532oif.41.2021.03.19.14.30.06
+        by smtp.gmail.com with ESMTPSA id f22sm1431639otl.10.2021.03.19.14.31.10
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 19 Mar 2021 14:30:06 -0700 (PDT)
+        Fri, 19 Mar 2021 14:31:10 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 19 Mar 2021 14:30:05 -0700
+Date:   Fri, 19 Mar 2021 14:31:09 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
 Cc:     robh+dt@kernel.org, jdelvare@suse.com, devicetree@vger.kernel.org,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] hwmon: (pmbus): Replace - with _ in device names
- before registration
-Message-ID: <20210319213005.GA24260@roeck-us.net>
+Subject: Re: [PATCH v3 1/3] dt-bindings: Add vendor prefix and trivial device
+ for BluTek BPA-RS600
+Message-ID: <20210319213109.GA24334@roeck-us.net>
 References: <20210317040231.21490-1-chris.packham@alliedtelesis.co.nz>
- <20210317040231.21490-2-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210317040231.21490-2-chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <20210317040231.21490-1-chris.packham@alliedtelesis.co.nz>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Mar 17, 2021 at 05:02:30PM +1300, Chris Packham wrote:
-> The hwmon sysfs ABI requires that the `name` property doesn't include
-> any dashes. But when the pmbus code picks the name up from the device
-> tree it quite often does. Replace '-' with '_' before registering the
-> device.
+On Wed, Mar 17, 2021 at 05:02:29PM +1300, Chris Packham wrote:
+> Add vendor prefix "blutek" for BluTek Power.
+> Add trivial device entry for BPA-RS600.
 > 
 > Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 
-Applied.
+For my reference (waiting for bindings approval):
 
-Thanks,
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
 Guenter
 
 > ---
@@ -95,37 +93,35 @@ Guenter
 >     Changes in v3:
 >     - None
 >     Changes in v2:
->     - New
+>     - None
 > 
->  drivers/hwmon/pmbus/pmbus_core.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
+>  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+>  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+>  2 files changed, 4 insertions(+)
 > 
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index aadea85fe630..7d2f8f032314 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -2557,6 +2557,7 @@ int pmbus_do_probe(struct i2c_client *client, struct pmbus_driver_info *info)
->  	struct pmbus_data *data;
->  	size_t groups_num = 0;
->  	int ret;
-> +	char *name;
->  
->  	if (!info)
->  		return -ENODEV;
-> @@ -2606,10 +2607,15 @@ int pmbus_do_probe(struct i2c_client *client, struct pmbus_driver_info *info)
->  		return -ENODEV;
->  	}
->  
-> +	name = devm_kstrdup(dev, client->name, GFP_KERNEL);
-> +	if (!name)
-> +		return -ENOMEM;
-> +	strreplace(name, '-', '_');
-> +
->  	data->groups[0] = &data->group;
->  	memcpy(data->groups + 1, info->groups, sizeof(void *) * groups_num);
->  	data->hwmon_dev = devm_hwmon_device_register_with_groups(dev,
-> -					client->name, data, data->groups);
-> +					name, data, data->groups);
->  	if (IS_ERR(data->hwmon_dev)) {
->  		dev_err(dev, "Failed to register hwmon device\n");
->  		return PTR_ERR(data->hwmon_dev);
+> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+> index a327130d1faa..569236e9bed0 100644
+> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+> @@ -50,6 +50,8 @@ properties:
+>            - atmel,atsha204a
+>              # i2c h/w elliptic curve crypto module
+>            - atmel,atecc508a
+> +            # BPA-RS600: Power Supply
+> +          - blutek,bpa-rs600
+>              # Bosch Sensortec pressure, temperature, humididty and VOC sensor
+>            - bosch,bme680
+>              # CM32181: Ambient Light Sensor
+> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> index f6064d84a424..d9d7226f5dfe 100644
+> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> @@ -169,6 +169,8 @@ patternProperties:
+>      description: Beckhoff Automation GmbH & Co. KG
+>    "^bitmain,.*":
+>      description: Bitmain Technologies
+> +  "^blutek,.*":
+> +    description: BluTek Power
+>    "^boe,.*":
+>      description: BOE Technology Group Co., Ltd.
+>    "^bosch,.*":
