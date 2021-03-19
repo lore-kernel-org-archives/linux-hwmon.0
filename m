@@ -2,298 +2,396 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1F40C433DB
-	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Mar 2021 10:38:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C876C433E6
+	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Mar 2021 14:15:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 90AB064F6A
-	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Mar 2021 10:38:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C670764E5B
+	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Mar 2021 14:15:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbhCSKiJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 19 Mar 2021 06:38:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33616 "EHLO
+        id S230140AbhCSOPH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 19 Mar 2021 10:15:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbhCSKh6 (ORCPT
+        with ESMTP id S230114AbhCSOOr (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 19 Mar 2021 06:37:58 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C55EFC06175F
-        for <linux-hwmon@vger.kernel.org>; Fri, 19 Mar 2021 03:37:57 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id j26so5522006iog.13
-        for <linux-hwmon@vger.kernel.org>; Fri, 19 Mar 2021 03:37:57 -0700 (PDT)
+        Fri, 19 Mar 2021 10:14:47 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175EFC061760
+        for <linux-hwmon@vger.kernel.org>; Fri, 19 Mar 2021 07:14:47 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id l4so9956148ejc.10
+        for <linux-hwmon@vger.kernel.org>; Fri, 19 Mar 2021 07:14:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=metormote-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=XetcND/DSS37rsPf7W1HM6yIOoKQSJW/Bb3HibrSkvk=;
-        b=jwr2nkA/hWL/NtGMBsq5pmmkGBwWc3fgrIBGugqu/X6XxWd01sSDHxErdn8ki4BPz/
-         cwtjKOV9H3Bbn6fXkc07+vfgHhWSogEo6SV6fiq07soSz9kIwGufpkVrbgqmr6YUrP+m
-         LMws4GQLfxK/YT9p0Tnm5dxm5hWNGUHRpjq4RC9+6n1Oids9myPyswKyJ4TNzIBF4x7O
-         CaOF4dhVY7v4hq5b7LWMUh+ez6CZUJbKCYif6ZSLLSjf2n1023nprcwsxIGfBlHt4i35
-         qAprsQssYupOpbt+Kmd7mwPKRi5RzWLJcCyZrNcbRrtBi98UE1Qd7Y4fBC+jDIALaYHW
-         KsOQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=SbMKz/3RhCWrpSYDoZPsqOEniItXF6fKoMAg9IIFEmg=;
+        b=yfwtbNFMg36yYpybAtmB6MT2i2U3sa9OmuoZDdLYao3JoARYokN6E3bgJFoKmtCBS1
+         YRqzHwtkt75FfrEqJIZxqc0Sy4ZP511A7IOabJhtfrQJsU5x5nUf7QDv+UOWPVJvHKFX
+         wtFMWIIizZPs3RZQhWxOuquhdQsL/dOXRoV8ehEdmMtZtrBuYNu9KJHQWqFeo4UFnUN5
+         SNrdqVjxrDsO0yaqBtrb6pDT1CWLAr7kIJashpXP9LZtcAo30NNHOFTBK4fK0R1ZDK8V
+         wjie2Pi+ysy/A7N6KrqHRQ7N1/fPaGDOwSL4pV5QV/XzjVSfi8jne3hCQQAS+NR7sRhd
+         /LDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=XetcND/DSS37rsPf7W1HM6yIOoKQSJW/Bb3HibrSkvk=;
-        b=uH6efjWz3kHr4e+uABHeaJo95pPPPH64xjygGPdJJNTJPLTesZOzKq/O6Y7joQEYcf
-         XWSm5zMmCMknPMdofHT1pU/BX0gzJ2e7vrtIsFbx410XuYsLo9LQZvILufCOsjTN5ww5
-         8nKdZAUbjTvKcXbKkXdaxXiM3soRpCEjw0j8plGIbGVhwrm2+G7HO7J0rVf3ZAn5aU7W
-         GVoF/RYRkjmkmE62iTrLlPiDoyEHe1t6hxcnRTXnV9Mj/gJw/415Rj49oDvQzaENKlLU
-         8Sp1O1WxDd12nQJwjsGS0rEzzQzSTPSqxMgHnsVCg5bPkkBspvGAavj1HdIHqb6mNVbu
-         szSw==
-X-Gm-Message-State: AOAM532H74MzGw3qSko7r6MR1ELniTbKIMdIzQF6hCyaM6XHpR8YsvH/
-        EGPbGEwgDZbWC+DclJF6vqPixJK2qGyGXGwpkk98yhQzTahq3XET
-X-Google-Smtp-Source: ABdhPJyFOLwlR8I9Bg1F0fAgTkcLVbi7HmUXzBM9i0OHXXoGTHuh3F0SqSKOAkqWSmcK7VWaUvIp0yq8PXMVkqa1oGI=
-X-Received: by 2002:a02:661c:: with SMTP id k28mr691150jac.78.1616150277139;
- Fri, 19 Mar 2021 03:37:57 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=SbMKz/3RhCWrpSYDoZPsqOEniItXF6fKoMAg9IIFEmg=;
+        b=rl2zKpbk71B0wujR6rwvAq/fMx7MLiuezdgh5CSI0+luD8ed9+LOc24x+XgOr21LsO
+         KCiDYszd1jGubeq2xm4mwSE/gYCt/cNMKFvtMo8zlpbySjoQjr8AriF/F796CwThlzZm
+         CtOyMwejatp7ufse1wkSHWV8+DnLLQjeIw8ccJswvK4zh1looZOgPyGu5uvhPetJFejG
+         nq6Vj/3HXpkUdMMSbOqmWIHvK+zNDmlVm06+C+aubeRfmSloDpLGx/BhfyJ0pmKcljI3
+         JNcyffU3et57JHvUdk8ITw0pqKaT+PQBnVACSS0sObf1a6VWrRSST0MztVg7tHVaDOiv
+         tMbQ==
+X-Gm-Message-State: AOAM532ex20UjExiGd/XLBW/AiJ6vo+OczCcJ0YHG3R02wRDJlu0d6dy
+        bUcAgVzhicrQj9mja9aq+gIodw==
+X-Google-Smtp-Source: ABdhPJxn2LDJsBInTIQUjEDXHE7MkT+hru/lyirfodBGK6L8iPYN6WGP+xDa1hCxq9shH+MJCPyezw==
+X-Received: by 2002:a17:906:cc89:: with SMTP id oq9mr4537205ejb.258.1616163285720;
+        Fri, 19 Mar 2021 07:14:45 -0700 (PDT)
+Received: from dell ([91.110.221.194])
+        by smtp.gmail.com with ESMTPSA id v15sm4100578edw.28.2021.03.19.07.14.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Mar 2021 07:14:45 -0700 (PDT)
+Date:   Fri, 19 Mar 2021 14:14:43 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Campion Kang <campion.kang@advantech.com.tw>
+Cc:     chia-lin.kao@canonical.com, devicetree@vger.kernel.org,
+        jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux@roeck-us.net, robh+dt@kernel.org, wim@linux-watchdog.org,
+        Campion.Kang@gmail.com
+Subject: Re: [PATCH v6 4/6] mfd: ahc1ec0: Add support for Advantech embedded
+ controller
+Message-ID: <20210319141443.GI2916463@dell>
+References: <20210309160755.GR4931@dell>
+ <20210319100105.18278-1-campion.kang@advantech.com.tw>
 MIME-Version: 1.0
-References: <20210318212441.69050-1-erik.rosen@metormote.com>
- <20210318212441.69050-3-erik.rosen@metormote.com> <bd7acdcd-2bbc-70f5-d7a6-76a269e8f6a7@roeck-us.net>
-In-Reply-To: <bd7acdcd-2bbc-70f5-d7a6-76a269e8f6a7@roeck-us.net>
-From:   Erik Rosen <erik.rosen@metormote.com>
-Date:   Fri, 19 Mar 2021 11:37:46 +0100
-Message-ID: <CA+ui0Hm+zHkpqTDOkT2iR45fH5m2cGyTn2dvsOduxDM55meKZQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] hwmon: (pmbus/tps53679) Add support for TPS53676
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-        Rob Herring <robh+dt@kernel.org>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210319100105.18278-1-campion.kang@advantech.com.tw>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Mar 19, 2021 at 12:04 AM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 3/18/21 2:24 PM, Erik Rosen wrote:
-> > Add support for TI TPS53676 controller to the tps53679 pmbus driver
-> >
-> > The driver uses the USER_DATA_03 register to figure out how many phases=
- are
-> > enabled and to which channel they are assigned, and sets the number of =
-pages
->
-> checkpatch complains about the line length here. Picky, but just move pag=
-es
-> to the next line.
+On Fri, 19 Mar 2021, Campion Kang wrote:
 
-Sorry, forgot to run checkpath after changing the comment.
+> 
+> Please check [Campion] text in below as my reply.
 
->
-> > and phases accordingly.
-> >
-> > Signed-off-by: Erik Rosen <erik.rosen@metormote.com>
-> > ---
-> >  Documentation/hwmon/tps53679.rst | 13 +++++++--
-> >  drivers/hwmon/pmbus/Kconfig      |  4 +--
-> >  drivers/hwmon/pmbus/tps53679.c   | 49 +++++++++++++++++++++++++++++++-
-> >  3 files changed, 61 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/Documentation/hwmon/tps53679.rst b/Documentation/hwmon/tps=
-53679.rst
-> > index c7c589e49789..3b9561648c24 100644
-> > --- a/Documentation/hwmon/tps53679.rst
-> > +++ b/Documentation/hwmon/tps53679.rst
-> > @@ -19,6 +19,14 @@ Supported chips:
-> >
-> >      Datasheet: https://www.ti.com/lit/gpn/TPS53667
-> >
-> > +  * Texas Instruments TPS53676
-> > +
-> > +    Prefix: 'tps53676'
-> > +
-> > +    Addresses scanned: -
-> > +
-> > +    Datasheet: https://www.ti.com/lit/gpn/TPS53676
-> > +
-> >    * Texas Instruments TPS53679
-> >
-> >      Prefix: 'tps53679'
-> > @@ -136,7 +144,7 @@ power1_input              Measured input power.
-> >  power[N]_label               "pout[1-2]".
-> >
-> >                       - TPS53647, TPS53667: N=3D2
-> > -                     - TPS53679, TPS53681, TPS53588: N=3D2,3
-> > +                     - TPS53676, TPS53679, TPS53681, TPS53588: N=3D2,3
-> >
-> >  power[N]_input               Measured output power.
-> >
-> > @@ -156,10 +164,11 @@ curr[N]_label           "iout[1-2]" or "iout1.[0-=
-5]".
-> >
-> >                       The first digit is the output channel, the second
-> >                       digit is the phase within the channel. Per-phase
-> > -                     telemetry supported on TPS53681 only.
-> > +                     telemetry supported on TPS53676 and TPS53681 only=
-.
-> >
-> >                       - TPS53647, TPS53667: N=3D2
-> >                       - TPS53679, TPS53588: N=3D2,3
-> > +                     - TPS53676: N=3D2-8
-> >                       - TPS53681: N=3D2-9
-> >
-> >  curr[N]_input                Measured output current.
-> > diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> > index 32d2fc850621..35956a9227d8 100644
-> > --- a/drivers/hwmon/pmbus/Kconfig
-> > +++ b/drivers/hwmon/pmbus/Kconfig
-> > @@ -257,10 +257,10 @@ config SENSORS_TPS40422
-> >         be called tps40422.
-> >
-> >  config SENSORS_TPS53679
-> > -     tristate "TI TPS53647, TPS53667, TPS53679, TPS53681, TPS53688"
-> > +     tristate "TI TPS53647, TPS53667, TPS53676, TPS53679, TPS53681, TP=
-S53688"
-> >       help
-> >         If you say yes here you get hardware monitoring support for TI
-> > -       TPS53647, TPS53667, TPS53679, TPS53681, and TPS53688.
-> > +       TPS53647, TPS53667, TPS53676, TPS53679, TPS53681, and TPS53688.
-> >
-> >         This driver can also be built as a module. If so, the module wi=
-ll
-> >         be called tps53679.
-> > diff --git a/drivers/hwmon/pmbus/tps53679.c b/drivers/hwmon/pmbus/tps53=
-679.c
-> > index ba838fa311c3..d8e5f71ff162 100644
-> > --- a/drivers/hwmon/pmbus/tps53679.c
-> > +++ b/drivers/hwmon/pmbus/tps53679.c
-> > @@ -16,11 +16,14 @@
-> >  #include "pmbus.h"
-> >
-> >  enum chips {
-> > -     tps53647, tps53667, tps53679, tps53681, tps53688
-> > +     tps53647, tps53667, tps53676, tps53679, tps53681, tps53688
-> >  };
-> >
-> >  #define TPS53647_PAGE_NUM            1
-> >
-> > +#define TPS53676_USER_DATA_03                0xb3
-> > +#define TPS53676_MAX_PHASES          7
-> > +
-> >  #define TPS53679_PROT_VR12_5MV               0x01 /* VR12.0 mode, 5-mV=
- DAC */
-> >  #define TPS53679_PROT_VR12_5_10MV    0x02 /* VR12.5 mode, 10-mV DAC */
-> >  #define TPS53679_PROT_VR13_10MV              0x04 /* VR13.0 mode, 10-m=
-V DAC */
-> > @@ -143,6 +146,43 @@ static int tps53681_identify(struct i2c_client *cl=
-ient,
-> >                                           TPS53681_DEVICE_ID);
-> >  }
-> >
-> > +static int tps53676_identify(struct i2c_client *client,
-> > +                          struct pmbus_driver_info *info)
+This is a mess.  Please setup your mailer to quote correctly.
+
+> Sorry, due to the mail was rejected by vger.kernel.org as SPAM before 
+> so I reply the mail late and had some test email before.
+> 
+> -----------------------------------------------------------------------------------------
+> Date:   Tue, 9 Mar 2021 16:07:55 +0000
+> From:   Lee Jones <lee.jones@linaro.org>
+
+[...]
+
+> > +enum {
+> > +	ADVEC_SUBDEV_BRIGHTNESS = 0,
+> > +	ADVEC_SUBDEV_EEPROM,
+> > +	ADVEC_SUBDEV_GPIO,
+> > +	ADVEC_SUBDEV_HWMON,
+> > +	ADVEC_SUBDEV_LED,
+> > +	ADVEC_SUBDEV_WDT,
+> > +	ADVEC_SUBDEV_MAX,
+> > +};
+> 
+> Are these arbitrary?
+> [Campion] cannot arbitrary there, due to it is a index to identify its number of sub device. 
+
+I'm asking what this is dictated by.
+
+Are these ID/index values written into H/W?
+
+[...]
+
+> > +int write_acpi_value(struct adv_ec_platform_data *adv_ec_data, unsigned char addr,
+> > +		unsigned char value)
 > > +{
-> > +     u8 buf[I2C_SMBUS_BLOCK_MAX];
-> > +     int phases_a =3D 0, phases_b =3D 0;
-> > +     int i, ret;
+> > +	int ret;
 > > +
-> > +     ret =3D i2c_smbus_read_block_data(client, PMBUS_IC_DEVICE_ID, buf=
-);
-> > +     if (ret < 0)
-> > +             return ret;
-> > +     if (strncmp("TI\x53\x67\x60", buf, 5)) {
->
-> Someone should have a serious talk with the chip designer.
-
-It's like; "Gee, I have this great idea how to save 2 bytes by using
-this amazing
-new hybrid ascii/binary format I just invented"
-
->
-> > +             dev_err(&client->dev, "Unexpected device ID: %s\n", buf);
-> > +             return -ENODEV;
-> > +     }
+> > +	mutex_lock(&adv_ec_data->lock);
 > > +
-> > +     ret =3D i2c_smbus_read_block_data(client, TPS53676_USER_DATA_03, =
-buf);
-> > +     if (ret < 0)
-> > +             return ret;
->
-> You'll probably want to add a check to ensure that ret >=3D TPS53676_MAX_=
-PHASES * 2 + 1
-> or maybe =3D=3D 24.
-
-Yes; and if it's not equal to 24 something probably went wrong, so
-I'll check f=C3=B6r that.
-
->
-> > +     for (i =3D 0; i < 2 * TPS53676_MAX_PHASES; i +=3D 2) {
-> > +             if (buf[i + 1] & 0x80) {
-> > +                     if (buf[i] & 0x08)
-> > +                             phases_b++;
-> > +                     else
-> > +                             phases_a++;
-> > +             }
-> > +     }
+> > +	ret = ec_wait_write();
+> > +	if (ret)
+> > +		goto error;
+> > +	outb(EC_ACPI_DATA_WRITE, EC_COMMAND_PORT);
 > > +
-> > +     info->format[PSC_VOLTAGE_OUT] =3D linear;
-> > +     info->pages =3D 1;
-> > +     info->phases[0] =3D phases_a;
-> > +     if (phases_b > 0) {
-> > +             info->pages =3D 2;
-> > +             info->phases[1] =3D phases_b;
-> > +     }
-> > +     return 0;
+> > +	ret = ec_wait_write();
+> > +	if (ret)
+> > +		goto error;
+> > +	outb(addr, EC_STATUS_PORT);
+> > +
+> > +	ret = ec_wait_write();
+> > +	if (ret)
+> > +		goto error;
+> > +	outb(value, EC_STATUS_PORT);
+> > +
+> > +	mutex_unlock(&adv_ec_data->lock);
+> > +	return 0;
+> > +
+> > +error:
+> > +	mutex_unlock(&adv_ec_data->lock);
+> > +
+> > +	dev_warn(adv_ec_data->dev, "%s: Wait for IBF or OBF too long. line: %d\n", __func__,
+> > +		__LINE__);
+> > +
+> > +	return ret;
+> > +}
+> 
+> EXPORT?
+> 
+> I think this API (i.e. all of the functions above) should be moved
+> into drivers/platform.  They really don't have a place in MFD.
+> 
+> [Campion] this is a common function for upper HWMON and brightness control used. 
+>           So far this API only used by HWMON, but then it will be used by 
+>           brightness in next stage. So i put this API here, OK?
+
+I think it belongs in drivers/platform.  Take a look at some of the
+other Embedded Controller code that lives there.
+
+> > +int read_gpio_status(struct adv_ec_platform_data *adv_ec_data, unsigned char PinNumber,
+> > +		unsigned char *pvalue)
+> > +{
 > > +}
 > > +
-> >  static int tps53681_read_word_data(struct i2c_client *client, int page=
-,
-> >                                  int phase, int reg)
-> >  {
-> > @@ -183,6 +223,7 @@ static struct pmbus_driver_info tps53679_info =3D {
-> >       .pfunc[3] =3D PMBUS_HAVE_IOUT,
-> >       .pfunc[4] =3D PMBUS_HAVE_IOUT,
-> >       .pfunc[5] =3D PMBUS_HAVE_IOUT,
-> > +     .pfunc[6] =3D PMBUS_HAVE_IOUT,
-> >  };
-> >
-> >  static int tps53679_probe(struct i2c_client *client)
-> > @@ -206,6 +247,9 @@ static int tps53679_probe(struct i2c_client *client=
-)
-> >               info->pages =3D TPS53647_PAGE_NUM;
-> >               info->identify =3D tps53679_identify;
-> >               break;
-> > +     case tps53676:
-> > +             info->identify =3D tps53676_identify;
-> > +             break;
-> >       case tps53679:
-> >       case tps53688:
-> >               info->pages =3D TPS53679_PAGE_NUM;
-> > @@ -227,9 +271,11 @@ static int tps53679_probe(struct i2c_client *clien=
-t)
-> >  static const struct i2c_device_id tps53679_id[] =3D {
-> >       {"tps53647", tps53647},
-> >       {"tps53667", tps53667},
-> > +     {"tps53676", tps53676},
-> >       {"tps53679", tps53679},
-> >       {"tps53681", tps53681},
-> >       {"tps53688", tps53688},
-> > +     {"bmr474", tps53676},
->
-> Please move to the top for alphabetic order.
+> > +int write_gpio_status(struct adv_ec_platform_data *adv_ec_data, unsigned char PinNumber,
+> > +		unsigned char value)
+> > +{
+> > +}
+> > +
+> > +int read_gpio_dir(struct adv_ec_platform_data *adv_ec_data, unsigned char PinNumber,
+> > +		unsigned char *pvalue)
+> > +{
+> > +}
+> > +
+> > +int write_gpio_dir(struct adv_ec_platform_data *adv_ec_data, unsigned char PinNumber,
+> > +		unsigned char value)
+> > +{
+> > +}
+> 
+> All of the GPIO functions above should move into drivers/gpio.
+> 
+> [Campion] Due to it has a flow need to cowork with EC chip and firmware, it cannot be interrupt
+>           by other functions. So it needs to keep in here. 
 
-Ok, was a bit uncertain about that...
+Please provide more details.
 
->
-> >       {}
-> >  };
-> >
-> > @@ -238,6 +284,7 @@ MODULE_DEVICE_TABLE(i2c, tps53679_id);
-> >  static const struct of_device_id __maybe_unused tps53679_of_match[] =
-=3D {
-> >       {.compatible =3D "ti,tps53647", .data =3D (void *)tps53647},
-> >       {.compatible =3D "ti,tps53667", .data =3D (void *)tps53667},
-> > +     {.compatible =3D "ti,tps53676", .data =3D (void *)tps53676},
-> >       {.compatible =3D "ti,tps53679", .data =3D (void *)tps53679},
-> >       {.compatible =3D "ti,tps53681", .data =3D (void *)tps53681},
-> >       {.compatible =3D "ti,tps53688", .data =3D (void *)tps53688},
-> >
->
+> > +int write_hwram_command(struct adv_ec_platform_data *adv_ec_data, unsigned char data)
+> > +{
+> > +	int ret;
+> > +
+> > +	mutex_lock(&adv_ec_data->lock);
+> > +
+> > +	ret = ec_wait_write();
+> > +	if (ret)
+> > +		goto error;
+> > +	outb(data, EC_COMMAND_PORT);
+> > +
+> > +	mutex_unlock(&adv_ec_data->lock);
+> > +	return 0;
+> > +
+> > +error:
+> > +	mutex_unlock(&adv_ec_data->lock);
+> > +
+> > +	dev_warn(adv_ec_data->dev, "%s: Wait for IBF or OBF too long. line: %d\n", __func__,
+> > +			__LINE__);
+> > +
+> > +	return ret;
+> > +}
+> > +EXPORT_SYMBOL_GPL(write_hwram_command);
+> > +
+> > +static int adv_ec_get_productname(struct adv_ec_platform_data *adv_ec_data, char *product)
+> > +{
+> > +	const char *vendor, *device;
+> > +	int length = 0;
+> > +
+> > +	/* Check it is Advantech board */
+> > +	vendor = dmi_get_system_info(DMI_SYS_VENDOR);
+> > +	if (memcmp(vendor, "Advantech", sizeof("Advantech")) != 0)
+> > +		return -ENODEV;
+> > +
+> > +	/* Get product model name */
+> > +	device = dmi_get_system_info(DMI_PRODUCT_NAME);
+> > +	if (device) {
+> > +		while ((device[length] != ' ')
+> > +			&& (length < AMI_ADVANTECH_BOARD_ID_LENGTH))
+> > +			length++;
+> > +		memset(product, 0, AMI_ADVANTECH_BOARD_ID_LENGTH);
+> > +		memmove(product, device, length);
+> > +
+> > +		dev_info(adv_ec_data->dev, "BIOS Product Name = %s\n", product);
+> > +
+> > +		return 0;
+> > +	}
+> > +
+> > +	dev_warn(adv_ec_data->dev, "This device is not Advantech Board (%s)!\n", product);
+> > +
+> > +	return -ENODEV;
+> > +}
+> 
+> These should go into drivers/platform.
+> 
+> [Campion] This is a simple function to get module name from BIOS DMI table, it is not need to 
+>           access EC chip. But it can get once and other drivers can get this information,
+>           donot call DMI every time. Can it keep in here?
+
+I thought this driver was for the EC chip.
+
+> > +static const struct mfd_cell adv_ec_sub_cells[] = {
+> > +	{ .name = "adv-ec-brightness", },
+> > +	{ .name = "adv-ec-eeprom", },
+> > +	{ .name = "adv-ec-gpio", },
+> > +	{ .name = "ahc1ec0-hwmon", },
+> > +	{ .name = "adv-ec-led", },
+> > +	{ .name = "ahc1ec0-wdt", },
+> > +};
+> > +
+> > +static int adv_ec_init_ec_data(struct adv_ec_platform_data *adv_ec_data)
+> > +{
+> > +	int ret;
+> > +
+> > +	adv_ec_data->sub_dev_mask = 0;
+> > +	adv_ec_data->sub_dev_nb = 0;
+> > +	adv_ec_data->dym_tbl = NULL;
+> > +	adv_ec_data->bios_product_name = NULL;
+> 
+> Why are pre-initialising these?
+> 
+> [Campion] Just make sure they have empty pointer, but I will remove it. 
+
+There's no need to do that if they are being allocated below.
+
+> > +	mutex_init(&adv_ec_data->lock);
+> > +
+> > +	/* Get product name */
+> > +	adv_ec_data->bios_product_name =
+> > +		devm_kzalloc(adv_ec_data->dev, AMI_ADVANTECH_BOARD_ID_LENGTH, GFP_KERNEL);
+> > +	if (!adv_ec_data->bios_product_name)
+> > +		return -ENOMEM;
+> > +
+> > +	memset(adv_ec_data->bios_product_name, 0, AMI_ADVANTECH_BOARD_ID_LENGTH);
+> 
+> Why are you doing this?
+> 
+> [Campion] Just make sure the memory is null all
+
+devm_kzalloc() does that for you - that's what the 'z' means.
+
+> > +	ret = adv_ec_get_productname(adv_ec_data, adv_ec_data->bios_product_name);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	/* Get pin table */
+> > +	adv_ec_data->dym_tbl = devm_kzalloc(adv_ec_data->dev,
+> > +					EC_MAX_TBL_NUM * sizeof(struct ec_dynamic_table),
+> > +					GFP_KERNEL);
+> > +	if (!adv_ec_data->dym_tbl)
+> > +		return -ENOMEM;
+> 
+> What does a dynamic table do?
+> 
+> [Campion] The dynamic table is reterived from EC firmware according to different platform HW device.
+>           it will based on dynamic table information to get HW pin definition based on its function.
+>           The pin value will retrive to calcute the value, for example, voltage value, vcore value. 
+>           
+> 
+> > +	ret = adv_get_dynamic_tab(adv_ec_data);
+> 
+> return adv_get_dynamic_tab();
+> 
+> [Campion] OK
+> 
+> > +	return ret;
+> > +}
+> > +
+> > +static int adv_ec_parse_prop(struct adv_ec_platform_data *adv_ec_data)
+> > +{
+> > +	int i, ret;
+> > +	u32 nb, sub_dev[ADVEC_SUBDEV_MAX];
+> > +
+> > +	ret = device_property_read_u32(adv_ec_data->dev, "advantech,sub-dev-nb", &nb);
+> 
+> Indexing devices is generally not a good strategy.
+> 
+> ---------------------------------------------------------------------------
+> [Campion] Yes, I will remove it, just use the following that defined in ahc1ec0.yaml. 
+>           I ever feedback related mail for "https://lore.kernel.org/linux-watchdog/20210118123749.4769-6-campion.kang@advantech.com.tw/t/#m5126adbc2453e3ab3e6bda717c257fab364b9f45". 
+>           But vger.kernel.org returned the mail to mail as spam mail. 
+>           I will modity it as the following, is it OK?
+>           examples:
+>             - |
+>           #include <dt-bindings/mfd/ahc1ec0-dt.h>
+>           ahc1ec0 {
+>                   compatible = "advantech,ahc1ec0";
+> 
+>                   advantech,hwmon-profile = <AHC1EC0_HWMON_PRO_UNO2271G>;
+>                   advantech,watchdog = true;
+
+Shouldn't the watchdog be it's own sub-node?
+
+Is that functionality not probably at all?
+
+Surely it has it's own register set?
+
+[...]
+
+> > +	/* check whether this EC has the following subdevices. */
+> > +	for (i = 0; i < ARRAY_SIZE(adv_ec_sub_cells); i++) {
+> > +		if (adv_ec_data->sub_dev_mask & BIT(i)) {
+> > +			ret = mfd_add_hotplug_devices(dev, &adv_ec_sub_cells[i], 1);
+> 
+> Why have you chosen to use hotplug here?
+> 
+> [Campion] There is a information in BIOS ACPI table according to different device to decide 
+>           which function drivers need to be probe. May be a device has HWMON, it will dynamic 
+>           to load HWMON driver, but other device may not.
+
+The only thing hotplug does is hard-code the platform ID.
+
+It's more of a win if you can omit the mfd_remove_devices() call.
+
+> > +			dev_info(adv_ec_data->dev, "mfd_add_hotplug_devices[%d] %s\n", i,
+> > +				adv_ec_sub_cells[i].name);
+> > +			if (ret)
+> > +				dev_err(dev, "failed to add %s subdevice: %d\n",
+> > +					adv_ec_sub_cells[i].name, ret);
+> > +		}
+> > +	}
+> 
+> This is a mess!
+> 
+> Where are you pulling these devices from?  
+> 
+> [Campion] decide which drivers need to mount from BIOS ACPI table. This drive would built in Linux Kernel.
+>           I am not sure what's your meaning, can you describe more? Thank you
+
+I really don't like the sub_dev_mask idea.
+
+Are the ACPI tables available?
+
+[...]
+
+> > +struct adv_ec_platform_data {
+> > +	char *bios_product_name;
+> 
+> Where is this used?
+> 
+> [Campion] Get the module name once and upper application can get it by EC driver.
+
+From DMI?  What do you use it for?  Debug prints or something else?
+
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
