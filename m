@@ -2,396 +2,168 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C876C433E6
-	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Mar 2021 14:15:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8575C433E1
+	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Mar 2021 17:47:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C670764E5B
-	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Mar 2021 14:15:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8C60261986
+	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Mar 2021 17:47:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbhCSOPH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 19 Mar 2021 10:15:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52032 "EHLO
+        id S230105AbhCSRqr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 19 Mar 2021 13:46:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbhCSOOr (ORCPT
+        with ESMTP id S229956AbhCSRqk (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 19 Mar 2021 10:14:47 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175EFC061760
-        for <linux-hwmon@vger.kernel.org>; Fri, 19 Mar 2021 07:14:47 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id l4so9956148ejc.10
-        for <linux-hwmon@vger.kernel.org>; Fri, 19 Mar 2021 07:14:47 -0700 (PDT)
+        Fri, 19 Mar 2021 13:46:40 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25AE5C06174A;
+        Fri, 19 Mar 2021 10:46:40 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id z15so5609941oic.8;
+        Fri, 19 Mar 2021 10:46:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=SbMKz/3RhCWrpSYDoZPsqOEniItXF6fKoMAg9IIFEmg=;
-        b=yfwtbNFMg36yYpybAtmB6MT2i2U3sa9OmuoZDdLYao3JoARYokN6E3bgJFoKmtCBS1
-         YRqzHwtkt75FfrEqJIZxqc0Sy4ZP511A7IOabJhtfrQJsU5x5nUf7QDv+UOWPVJvHKFX
-         wtFMWIIizZPs3RZQhWxOuquhdQsL/dOXRoV8ehEdmMtZtrBuYNu9KJHQWqFeo4UFnUN5
-         SNrdqVjxrDsO0yaqBtrb6pDT1CWLAr7kIJashpXP9LZtcAo30NNHOFTBK4fK0R1ZDK8V
-         wjie2Pi+ysy/A7N6KrqHRQ7N1/fPaGDOwSL4pV5QV/XzjVSfi8jne3hCQQAS+NR7sRhd
-         /LDw==
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=YakdWIu64kDD/ZVtQtDeaVyuSwu5hpVOGVrs/1fRWa0=;
+        b=bhsZCm5RfKc96EIVn99epEivo2nuktWHpEaIfjiX/fRw8xuCz5s3RQCuopJ+tiTomZ
+         yC6GyeQ2zMZ1WLfBgHC1+JAxYSwrA+cklHIhkb5uEC4gOSmLRsP08cDQRd+E0qAPq3VS
+         X1bNQ7Iw3erCGxIhg41SCl6a+69DP/VxJyVICwRcc4oICTYxUeYcy9M+y+u/ywNSjI34
+         X5JUntMbWMcAJ6foAoD1H1gmKFk204JWYxyEV0hgk4QJJEHvjxJvm+p2DLGT2Vyjh8gF
+         oDzh0U+NObgNb//kpPWGTckIwM6TbBm0kIhEgDpDhBlFlzoYGdrMVoFJqeRO/SUnefbO
+         KPXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=SbMKz/3RhCWrpSYDoZPsqOEniItXF6fKoMAg9IIFEmg=;
-        b=rl2zKpbk71B0wujR6rwvAq/fMx7MLiuezdgh5CSI0+luD8ed9+LOc24x+XgOr21LsO
-         KCiDYszd1jGubeq2xm4mwSE/gYCt/cNMKFvtMo8zlpbySjoQjr8AriF/F796CwThlzZm
-         CtOyMwejatp7ufse1wkSHWV8+DnLLQjeIw8ccJswvK4zh1looZOgPyGu5uvhPetJFejG
-         nq6Vj/3HXpkUdMMSbOqmWIHvK+zNDmlVm06+C+aubeRfmSloDpLGx/BhfyJ0pmKcljI3
-         JNcyffU3et57JHvUdk8ITw0pqKaT+PQBnVACSS0sObf1a6VWrRSST0MztVg7tHVaDOiv
-         tMbQ==
-X-Gm-Message-State: AOAM532ex20UjExiGd/XLBW/AiJ6vo+OczCcJ0YHG3R02wRDJlu0d6dy
-        bUcAgVzhicrQj9mja9aq+gIodw==
-X-Google-Smtp-Source: ABdhPJxn2LDJsBInTIQUjEDXHE7MkT+hru/lyirfodBGK6L8iPYN6WGP+xDa1hCxq9shH+MJCPyezw==
-X-Received: by 2002:a17:906:cc89:: with SMTP id oq9mr4537205ejb.258.1616163285720;
-        Fri, 19 Mar 2021 07:14:45 -0700 (PDT)
-Received: from dell ([91.110.221.194])
-        by smtp.gmail.com with ESMTPSA id v15sm4100578edw.28.2021.03.19.07.14.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Mar 2021 07:14:45 -0700 (PDT)
-Date:   Fri, 19 Mar 2021 14:14:43 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Campion Kang <campion.kang@advantech.com.tw>
-Cc:     chia-lin.kao@canonical.com, devicetree@vger.kernel.org,
-        jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux@roeck-us.net, robh+dt@kernel.org, wim@linux-watchdog.org,
-        Campion.Kang@gmail.com
-Subject: Re: [PATCH v6 4/6] mfd: ahc1ec0: Add support for Advantech embedded
- controller
-Message-ID: <20210319141443.GI2916463@dell>
-References: <20210309160755.GR4931@dell>
- <20210319100105.18278-1-campion.kang@advantech.com.tw>
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=YakdWIu64kDD/ZVtQtDeaVyuSwu5hpVOGVrs/1fRWa0=;
+        b=qj7Wy54aLFoI1mFdl+AcXhbhqXogq+TA+EwiVfLdOa70GLYQ/js0P9ypdc1SlaRrVo
+         rYo4E9x+6oxwfVgUHB+jMOOcPOfgJcTTTNbHKbAetUXSxOACFkbsB6JMv8Mo9zUzguju
+         9DT8bvsxuOFyVCMS3ZgyWupwfbwPg4jF9Id5rZSCmpbMzt657h+pJpzdMI2/tehAQ/BD
+         so8Kw7fWe9s87vS0nuQo1U6rBmEJW59pZFCgQ9/OFSEzjhv5ulVIbWCuQRW+ER8aHkJJ
+         YfdrWskdKyYKZUqkVjCw70Fn25yKEr6A428WTwPQOca7BAtmk85NQwx5Yn37CdXg/hMZ
+         4dpQ==
+X-Gm-Message-State: AOAM532iv25aT3zwUdMmdLV5hDM4IAfUXdvTc1JxEZ+Pj2UwNd0Lw7d6
+        6ClbhpocRGl+WNHKPr+THjapKG8yKmI=
+X-Google-Smtp-Source: ABdhPJywsEayGuw3Zzno54b37Mzr5O6agNyN79RmZxh/77uoXGtHZpbTaE4BRxGX/smJiqcAfJE2ig==
+X-Received: by 2002:aca:ea8a:: with SMTP id i132mr1803228oih.68.1616175999294;
+        Fri, 19 Mar 2021 10:46:39 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e62sm1268546otb.74.2021.03.19.10.46.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Mar 2021 10:46:37 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH v4] hwmon: corsair-psu: add support for critical values
+To:     Wilken Gottwalt <wilken.gottwalt@posteo.net>
+Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
+References: <YFNg6vGk3sQmyqgB@monster.powergraphx.local>
+ <20210318190150.GA152326@roeck-us.net>
+ <20210319095805.378b7e0e@monster.powergraphx.local>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <e38779c5-900b-6d04-98c6-2e501a9fd3c5@roeck-us.net>
+Date:   Fri, 19 Mar 2021 10:46:35 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <20210319095805.378b7e0e@monster.powergraphx.local>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210319100105.18278-1-campion.kang@advantech.com.tw>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, 19 Mar 2021, Campion Kang wrote:
-
+On 3/19/21 1:58 AM, Wilken Gottwalt wrote:
+> On Thu, 18 Mar 2021 12:01:50 -0700
+> Guenter Roeck <linux@roeck-us.net> wrote:
 > 
-> Please check [Campion] text in below as my reply.
-
-This is a mess.  Please setup your mailer to quote correctly.
-
-> Sorry, due to the mail was rejected by vger.kernel.org as SPAM before 
-> so I reply the mail late and had some test email before.
+>> On Thu, Mar 18, 2021 at 03:17:14PM +0100, Wilken Gottwalt wrote:
+>>> Adds support for reading the critical values of the temperature sensors
+>>> and the rail sensors (voltage and current) once and caches them. Updates
+>>> the naming of the constants following a more clear scheme. Also updates
+>>> the documentation and fixes some typos. Updates is_visible and ops_read
+>>> functions to be more readable.
+>>>
+>>> The new sensors output of a Corsair HX850i will look like this:
+>>> corsairpsu-hid-3-1
+>>> Adapter: HID adapter
+>>> v_in:        230.00 V
+>>> v_out +12v:   12.14 V  (crit min =  +8.41 V, crit max = +15.59 V)
+>>> v_out +5v:     5.03 V  (crit min =  +3.50 V, crit max =  +6.50 V)
+>>> v_out +3.3v:   3.30 V  (crit min =  +2.31 V, crit max =  +4.30 V)
+>>> psu fan:        0 RPM
+>>> vrm temp:     +46.2°C  (crit = +70.0°C)
+>>> case temp:    +39.8°C  (crit = +70.0°C)
+>>> power total: 152.00 W
+>>> power +12v:  108.00 W
+>>> power +5v:    41.00 W
+>>> power +3.3v:   5.00 W
+>>> curr +12v:     9.00 A  (crit max = +85.00 A)
+>>> curr +5v:      8.31 A  (crit max = +40.00 A)
+>>> curr +3.3v:    1.62 A  (crit max = +40.00 A)
+>>>
+>>> Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+>>
+>> Applied.
 > 
-> -----------------------------------------------------------------------------------------
-> Date:   Tue, 9 Mar 2021 16:07:55 +0000
-> From:   Lee Jones <lee.jones@linaro.org>
-
-[...]
-
-> > +enum {
-> > +	ADVEC_SUBDEV_BRIGHTNESS = 0,
-> > +	ADVEC_SUBDEV_EEPROM,
-> > +	ADVEC_SUBDEV_GPIO,
-> > +	ADVEC_SUBDEV_HWMON,
-> > +	ADVEC_SUBDEV_LED,
-> > +	ADVEC_SUBDEV_WDT,
-> > +	ADVEC_SUBDEV_MAX,
-> > +};
+> Thank very much. Hmm, I actually could calculate the in_curr value from total
+> power and the ac input as a replacement if the value can not be read. What do
+> you think?
 > 
-> Are these arbitrary?
-> [Campion] cannot arbitrary there, due to it is a index to identify its number of sub device. 
 
-I'm asking what this is dictated by.
+No, we better leave that up to userspace. While one might argue that it makes sense
+here, unfortunately others will use it as argument to calculate other values not
+provided by chips in the kernel (eg power if only voltage and current are supported).
+I'd rather not create a precedence.
 
-Are these ID/index values written into H/W?
-
-[...]
-
-> > +int write_acpi_value(struct adv_ec_platform_data *adv_ec_data, unsigned char addr,
-> > +		unsigned char value)
-> > +{
-> > +	int ret;
-> > +
-> > +	mutex_lock(&adv_ec_data->lock);
-> > +
-> > +	ret = ec_wait_write();
-> > +	if (ret)
-> > +		goto error;
-> > +	outb(EC_ACPI_DATA_WRITE, EC_COMMAND_PORT);
-> > +
-> > +	ret = ec_wait_write();
-> > +	if (ret)
-> > +		goto error;
-> > +	outb(addr, EC_STATUS_PORT);
-> > +
-> > +	ret = ec_wait_write();
-> > +	if (ret)
-> > +		goto error;
-> > +	outb(value, EC_STATUS_PORT);
-> > +
-> > +	mutex_unlock(&adv_ec_data->lock);
-> > +	return 0;
-> > +
-> > +error:
-> > +	mutex_unlock(&adv_ec_data->lock);
-> > +
-> > +	dev_warn(adv_ec_data->dev, "%s: Wait for IBF or OBF too long. line: %d\n", __func__,
-> > +		__LINE__);
-> > +
-> > +	return ret;
-> > +}
-> 
-> EXPORT?
-> 
-> I think this API (i.e. all of the functions above) should be moved
-> into drivers/platform.  They really don't have a place in MFD.
-> 
-> [Campion] this is a common function for upper HWMON and brightness control used. 
->           So far this API only used by HWMON, but then it will be used by 
->           brightness in next stage. So i put this API here, OK?
-
-I think it belongs in drivers/platform.  Take a look at some of the
-other Embedded Controller code that lives there.
-
-> > +int read_gpio_status(struct adv_ec_platform_data *adv_ec_data, unsigned char PinNumber,
-> > +		unsigned char *pvalue)
-> > +{
-> > +}
-> > +
-> > +int write_gpio_status(struct adv_ec_platform_data *adv_ec_data, unsigned char PinNumber,
-> > +		unsigned char value)
-> > +{
-> > +}
-> > +
-> > +int read_gpio_dir(struct adv_ec_platform_data *adv_ec_data, unsigned char PinNumber,
-> > +		unsigned char *pvalue)
-> > +{
-> > +}
-> > +
-> > +int write_gpio_dir(struct adv_ec_platform_data *adv_ec_data, unsigned char PinNumber,
-> > +		unsigned char value)
-> > +{
-> > +}
-> 
-> All of the GPIO functions above should move into drivers/gpio.
-> 
-> [Campion] Due to it has a flow need to cowork with EC chip and firmware, it cannot be interrupt
->           by other functions. So it needs to keep in here. 
-
-Please provide more details.
-
-> > +int write_hwram_command(struct adv_ec_platform_data *adv_ec_data, unsigned char data)
-> > +{
-> > +	int ret;
-> > +
-> > +	mutex_lock(&adv_ec_data->lock);
-> > +
-> > +	ret = ec_wait_write();
-> > +	if (ret)
-> > +		goto error;
-> > +	outb(data, EC_COMMAND_PORT);
-> > +
-> > +	mutex_unlock(&adv_ec_data->lock);
-> > +	return 0;
-> > +
-> > +error:
-> > +	mutex_unlock(&adv_ec_data->lock);
-> > +
-> > +	dev_warn(adv_ec_data->dev, "%s: Wait for IBF or OBF too long. line: %d\n", __func__,
-> > +			__LINE__);
-> > +
-> > +	return ret;
-> > +}
-> > +EXPORT_SYMBOL_GPL(write_hwram_command);
-> > +
-> > +static int adv_ec_get_productname(struct adv_ec_platform_data *adv_ec_data, char *product)
-> > +{
-> > +	const char *vendor, *device;
-> > +	int length = 0;
-> > +
-> > +	/* Check it is Advantech board */
-> > +	vendor = dmi_get_system_info(DMI_SYS_VENDOR);
-> > +	if (memcmp(vendor, "Advantech", sizeof("Advantech")) != 0)
-> > +		return -ENODEV;
-> > +
-> > +	/* Get product model name */
-> > +	device = dmi_get_system_info(DMI_PRODUCT_NAME);
-> > +	if (device) {
-> > +		while ((device[length] != ' ')
-> > +			&& (length < AMI_ADVANTECH_BOARD_ID_LENGTH))
-> > +			length++;
-> > +		memset(product, 0, AMI_ADVANTECH_BOARD_ID_LENGTH);
-> > +		memmove(product, device, length);
-> > +
-> > +		dev_info(adv_ec_data->dev, "BIOS Product Name = %s\n", product);
-> > +
-> > +		return 0;
-> > +	}
-> > +
-> > +	dev_warn(adv_ec_data->dev, "This device is not Advantech Board (%s)!\n", product);
-> > +
-> > +	return -ENODEV;
-> > +}
-> 
-> These should go into drivers/platform.
-> 
-> [Campion] This is a simple function to get module name from BIOS DMI table, it is not need to 
->           access EC chip. But it can get once and other drivers can get this information,
->           donot call DMI every time. Can it keep in here?
-
-I thought this driver was for the EC chip.
-
-> > +static const struct mfd_cell adv_ec_sub_cells[] = {
-> > +	{ .name = "adv-ec-brightness", },
-> > +	{ .name = "adv-ec-eeprom", },
-> > +	{ .name = "adv-ec-gpio", },
-> > +	{ .name = "ahc1ec0-hwmon", },
-> > +	{ .name = "adv-ec-led", },
-> > +	{ .name = "ahc1ec0-wdt", },
-> > +};
-> > +
-> > +static int adv_ec_init_ec_data(struct adv_ec_platform_data *adv_ec_data)
-> > +{
-> > +	int ret;
-> > +
-> > +	adv_ec_data->sub_dev_mask = 0;
-> > +	adv_ec_data->sub_dev_nb = 0;
-> > +	adv_ec_data->dym_tbl = NULL;
-> > +	adv_ec_data->bios_product_name = NULL;
-> 
-> Why are pre-initialising these?
-> 
-> [Campion] Just make sure they have empty pointer, but I will remove it. 
-
-There's no need to do that if they are being allocated below.
-
-> > +	mutex_init(&adv_ec_data->lock);
-> > +
-> > +	/* Get product name */
-> > +	adv_ec_data->bios_product_name =
-> > +		devm_kzalloc(adv_ec_data->dev, AMI_ADVANTECH_BOARD_ID_LENGTH, GFP_KERNEL);
-> > +	if (!adv_ec_data->bios_product_name)
-> > +		return -ENOMEM;
-> > +
-> > +	memset(adv_ec_data->bios_product_name, 0, AMI_ADVANTECH_BOARD_ID_LENGTH);
-> 
-> Why are you doing this?
-> 
-> [Campion] Just make sure the memory is null all
-
-devm_kzalloc() does that for you - that's what the 'z' means.
-
-> > +	ret = adv_ec_get_productname(adv_ec_data, adv_ec_data->bios_product_name);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	/* Get pin table */
-> > +	adv_ec_data->dym_tbl = devm_kzalloc(adv_ec_data->dev,
-> > +					EC_MAX_TBL_NUM * sizeof(struct ec_dynamic_table),
-> > +					GFP_KERNEL);
-> > +	if (!adv_ec_data->dym_tbl)
-> > +		return -ENOMEM;
-> 
-> What does a dynamic table do?
-> 
-> [Campion] The dynamic table is reterived from EC firmware according to different platform HW device.
->           it will based on dynamic table information to get HW pin definition based on its function.
->           The pin value will retrive to calcute the value, for example, voltage value, vcore value. 
->           
-> 
-> > +	ret = adv_get_dynamic_tab(adv_ec_data);
-> 
-> return adv_get_dynamic_tab();
-> 
-> [Campion] OK
-> 
-> > +	return ret;
-> > +}
-> > +
-> > +static int adv_ec_parse_prop(struct adv_ec_platform_data *adv_ec_data)
-> > +{
-> > +	int i, ret;
-> > +	u32 nb, sub_dev[ADVEC_SUBDEV_MAX];
-> > +
-> > +	ret = device_property_read_u32(adv_ec_data->dev, "advantech,sub-dev-nb", &nb);
-> 
-> Indexing devices is generally not a good strategy.
-> 
-> ---------------------------------------------------------------------------
-> [Campion] Yes, I will remove it, just use the following that defined in ahc1ec0.yaml. 
->           I ever feedback related mail for "https://lore.kernel.org/linux-watchdog/20210118123749.4769-6-campion.kang@advantech.com.tw/t/#m5126adbc2453e3ab3e6bda717c257fab364b9f45". 
->           But vger.kernel.org returned the mail to mail as spam mail. 
->           I will modity it as the following, is it OK?
->           examples:
->             - |
->           #include <dt-bindings/mfd/ahc1ec0-dt.h>
->           ahc1ec0 {
->                   compatible = "advantech,ahc1ec0";
-> 
->                   advantech,hwmon-profile = <AHC1EC0_HWMON_PRO_UNO2271G>;
->                   advantech,watchdog = true;
-
-Shouldn't the watchdog be it's own sub-node?
-
-Is that functionality not probably at all?
-
-Surely it has it's own register set?
-
-[...]
-
-> > +	/* check whether this EC has the following subdevices. */
-> > +	for (i = 0; i < ARRAY_SIZE(adv_ec_sub_cells); i++) {
-> > +		if (adv_ec_data->sub_dev_mask & BIT(i)) {
-> > +			ret = mfd_add_hotplug_devices(dev, &adv_ec_sub_cells[i], 1);
-> 
-> Why have you chosen to use hotplug here?
-> 
-> [Campion] There is a information in BIOS ACPI table according to different device to decide 
->           which function drivers need to be probe. May be a device has HWMON, it will dynamic 
->           to load HWMON driver, but other device may not.
-
-The only thing hotplug does is hard-code the platform ID.
-
-It's more of a win if you can omit the mfd_remove_devices() call.
-
-> > +			dev_info(adv_ec_data->dev, "mfd_add_hotplug_devices[%d] %s\n", i,
-> > +				adv_ec_sub_cells[i].name);
-> > +			if (ret)
-> > +				dev_err(dev, "failed to add %s subdevice: %d\n",
-> > +					adv_ec_sub_cells[i].name, ret);
-> > +		}
-> > +	}
-> 
-> This is a mess!
-> 
-> Where are you pulling these devices from?  
-> 
-> [Campion] decide which drivers need to mount from BIOS ACPI table. This drive would built in Linux Kernel.
->           I am not sure what's your meaning, can you describe more? Thank you
-
-I really don't like the sub_dev_mask idea.
-
-Are the ACPI tables available?
-
-[...]
-
-> > +struct adv_ec_platform_data {
-> > +	char *bios_product_name;
-> 
-> Where is this used?
-> 
-> [Campion] Get the module name once and upper application can get it by EC driver.
-
-From DMI?  What do you use it for?  Debug prints or something else?
-
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Guenter
