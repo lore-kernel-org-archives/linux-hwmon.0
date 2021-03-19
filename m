@@ -4,102 +4,128 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A804C433C1
-	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Mar 2021 21:28:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA6EAC433C1
+	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Mar 2021 21:31:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 026C96193A
-	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Mar 2021 21:28:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B651B6193A
+	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Mar 2021 21:31:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230264AbhCSV2Y (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 19 Mar 2021 17:28:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32996 "EHLO
+        id S230281AbhCSVad (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 19 Mar 2021 17:30:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbhCSV2M (ORCPT
+        with ESMTP id S229942AbhCSVaI (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 19 Mar 2021 17:28:12 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E64C06175F;
-        Fri, 19 Mar 2021 14:28:12 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id n140so6245827oig.9;
-        Fri, 19 Mar 2021 14:28:12 -0700 (PDT)
+        Fri, 19 Mar 2021 17:30:08 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F216BC06175F;
+        Fri, 19 Mar 2021 14:30:07 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id w31-20020a9d36220000b02901f2cbfc9743so9583772otb.7;
+        Fri, 19 Mar 2021 14:30:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=ilcSk8VycjIw9PpYr/RlJKjxl+yFh+ALRPCRLrC3KD4=;
-        b=t37/PSzAFqFe0VfH5iLTfUWXBBIcWzy2W1c0iXyjSkl6GHHLWsFF+MuCs+rj/sCuth
-         BXUkR5EIDuqsnSPOYU6b/Yf23dyM+NCdZ7cb7x+dDhUtO+MRmWFd7FRAHfKFPsPK0JSe
-         u4flGkAgV3ItTRUX5uOUa09wEzM+zKuIVpXR+/lh1IcP0gA+oqjVmH2qe/WeM5WsVtQ0
-         EN4l0ZAutX14zNjjsn5ktDHMiccZ9X+Y9AsoXg4EV78B4ZKSJ14XVP/Ha7LCyZhlii23
-         5EpeoahcWjbCLbZiLJUI/UgljIZvP+aHiI2CwrMfsxL0gPiSxC+EOqM93izw7ImYx8+w
-         9NBA==
+        bh=NUIbYpy0NLmrRRI+l4LHw4l+eurqUrE6wLZTOGdF6Vc=;
+        b=oROCNLp0vn05j+k+RsiM8BxgWDHgyvspy0SuK3wHvnU7ZeUX8qbb+ECFaKtZZEq9WP
+         Xk6bz1YH4dfnK2Q8qtM1T4GM2Ca0mlvxrJ4y89ruceV4mjwUCq2uo6eUFeUleiwsDoC1
+         IHo1b49dsOHbCasQkD9bnAbB5uJ6wAhtuIAB7XCj9Fswt3vJeXZWdgC2AUJqtVph7iN0
+         mST2DIAGYFYQD/+uDWyeQszRUkIsqY9gUCJ0OihK1pOExM4ImILFKx8ZatL+3zLP37z0
+         u1GI7PTDFdGlYIZzBiXVK7WgUTpHOjioBmksLopzk8e3WFkKwXRww9NPUggOJgfvhO85
+         xdTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ilcSk8VycjIw9PpYr/RlJKjxl+yFh+ALRPCRLrC3KD4=;
-        b=IzP39VhZstG9hvf1pQl8BsBDGMYgfHZprgXlWl4oUM7KBwAEv0n18tcxYPU8STr5jE
-         W+d1fKJGXjNGs7hZhRJKyFozpuHm5TwVSni4nKw4Z5sxl7DPabn7RnLOsOmGFDj5nxrs
-         pkbfvZRlIbTpqoNhiVlO9p7pzwJYys7mJ85BZKnv49iBqfB3mBpMs+ZTKvoWYuk5hRsF
-         JiWm+18V/8Y6r7zKWVrk5OLeeqwARh9Xxn7C94XBkoDUnlwNc7nJZ0HEIvgH5FPZki2/
-         o0TRM9c+yFD1NIkWB4SOLJTXginfRAC739IQuMTEEt0Hx5ildP3Jsn5FMlehnTI62atK
-         XQ9A==
-X-Gm-Message-State: AOAM533DJGH8hOISpBobi0pJwgZjAYw2beUbqrzITw8TnnJIsXc6e50M
-        dJosB0sie2zSSY/kFMq7Yec=
-X-Google-Smtp-Source: ABdhPJyJnGs39V72ai5EC8itdQv3Lux6+l61DgJh5h65b6BkcfGWsg6zCGJ8IUoG7CjmItc52Y9NZg==
-X-Received: by 2002:aca:d884:: with SMTP id p126mr2456643oig.118.1616189291677;
-        Fri, 19 Mar 2021 14:28:11 -0700 (PDT)
+        bh=NUIbYpy0NLmrRRI+l4LHw4l+eurqUrE6wLZTOGdF6Vc=;
+        b=Vf7KCtf1+KqvQxvbX5CenYBIFaDrSYnfTH2N7wutVuHh2STdS9Fvyv4Rvpd2FCqpGp
+         ieV1flwO+4RO3mmIjCMAl0a21Bli+wy7/X+nlRp3qsIwTC5HfPH/905rV2uqxuf8d/+E
+         a2Besi+I36+xFw+9QuQv32Nb7IOz18nohrBatMaFUk+O8sf9oapdNGxJ0q+edqoax7D+
+         8bCg47vCC7BI5Pud1gr5Pr5WdqzVGQMYWxFZrwjg1nfJz4D6sIH6taEjcQVay+vQhWj0
+         5k8ZJ2mAD8HTERak/EgJKTZaZ4Qo03VkC1M0X+quF05lXexIVCXQXqfuWX7YmgZKTS0c
+         cMjA==
+X-Gm-Message-State: AOAM533+6aedIMUpd35gMXwD/l2IZAzyJFs9PKLEi8xKhTb5XtBR8IJ9
+        veaUhwJcf1iX5lKx1tGnT7Y=
+X-Google-Smtp-Source: ABdhPJxNZb84yxHU6RXhE9I4olIKiyJQxPqsyyy6zTDMfjIiloERlr2AGeUsKhFUh8QDoDv+xLof6g==
+X-Received: by 2002:a05:6830:225b:: with SMTP id t27mr2598419otd.73.1616189407440;
+        Fri, 19 Mar 2021 14:30:07 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s191sm1462660oie.0.2021.03.19.14.28.10
+        by smtp.gmail.com with ESMTPSA id w199sm1507532oif.41.2021.03.19.14.30.06
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 19 Mar 2021 14:28:10 -0700 (PDT)
+        Fri, 19 Mar 2021 14:30:06 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 19 Mar 2021 14:28:09 -0700
+Date:   Fri, 19 Mar 2021 14:30:05 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Erik Rosen <erik.rosen@metormote.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-        Rob Herring <robh+dt@kernel.org>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: Add trivial device entry for TPS53676
-Message-ID: <20210319212809.GA24020@roeck-us.net>
-References: <20210318212441.69050-1-erik.rosen@metormote.com>
- <20210318212441.69050-2-erik.rosen@metormote.com>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     robh+dt@kernel.org, jdelvare@suse.com, devicetree@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] hwmon: (pmbus): Replace - with _ in device names
+ before registration
+Message-ID: <20210319213005.GA24260@roeck-us.net>
+References: <20210317040231.21490-1-chris.packham@alliedtelesis.co.nz>
+ <20210317040231.21490-2-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210318212441.69050-2-erik.rosen@metormote.com>
+In-Reply-To: <20210317040231.21490-2-chris.packham@alliedtelesis.co.nz>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Mar 18, 2021 at 10:24:40PM +0100, Erik Rosen wrote:
-> Add trivial device entry for TPS53676
+On Wed, Mar 17, 2021 at 05:02:30PM +1300, Chris Packham wrote:
+> The hwmon sysfs ABI requires that the `name` property doesn't include
+> any dashes. But when the pmbus code picks the name up from the device
+> tree it quite often does. Replace '-' with '_' before registering the
+> device.
 > 
-> Signed-off-by: Erik Rosen <erik.rosen@metormote.com>
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 
-For my reference (waiting for dt maintainer acceptance):
+Applied.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Thanks,
+Guenter
 
 > ---
->  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
->  1 file changed, 2 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-> index a327130d1faa..2e29c2a91966 100644
-> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
-> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-> @@ -288,6 +288,8 @@ properties:
->            - ti,tmp103
->              # Digital Temperature Sensor
->            - ti,tmp275
-> +            # TI Dual channel DCAP+ multiphase controller TPS53676 with AVSBus
-> +          - ti,tps53676
->              # TI Dual channel DCAP+ multiphase controller TPS53679
->            - ti,tps53679
->              # TI Dual channel DCAP+ multiphase controller TPS53688
+> Notes:
+>     Changes in v3:
+>     - None
+>     Changes in v2:
+>     - New
+> 
+>  drivers/hwmon/pmbus/pmbus_core.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+> index aadea85fe630..7d2f8f032314 100644
+> --- a/drivers/hwmon/pmbus/pmbus_core.c
+> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> @@ -2557,6 +2557,7 @@ int pmbus_do_probe(struct i2c_client *client, struct pmbus_driver_info *info)
+>  	struct pmbus_data *data;
+>  	size_t groups_num = 0;
+>  	int ret;
+> +	char *name;
+>  
+>  	if (!info)
+>  		return -ENODEV;
+> @@ -2606,10 +2607,15 @@ int pmbus_do_probe(struct i2c_client *client, struct pmbus_driver_info *info)
+>  		return -ENODEV;
+>  	}
+>  
+> +	name = devm_kstrdup(dev, client->name, GFP_KERNEL);
+> +	if (!name)
+> +		return -ENOMEM;
+> +	strreplace(name, '-', '_');
+> +
+>  	data->groups[0] = &data->group;
+>  	memcpy(data->groups + 1, info->groups, sizeof(void *) * groups_num);
+>  	data->hwmon_dev = devm_hwmon_device_register_with_groups(dev,
+> -					client->name, data, data->groups);
+> +					name, data, data->groups);
+>  	if (IS_ERR(data->hwmon_dev)) {
+>  		dev_err(dev, "Failed to register hwmon device\n");
+>  		return PTR_ERR(data->hwmon_dev);
