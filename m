@@ -2,475 +2,212 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-23.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 482DFC433DB
-	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Mar 2021 04:58:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 676B3C433E6
+	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Mar 2021 08:28:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 17C0564E04
-	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Mar 2021 04:58:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3A70664F73
+	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Mar 2021 08:28:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233743AbhCSE60 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 19 Mar 2021 00:58:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45194 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233811AbhCSE6N (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 19 Mar 2021 00:58:13 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A15C06174A
-        for <linux-hwmon@vger.kernel.org>; Thu, 18 Mar 2021 21:58:12 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id a11so5905255qto.2
-        for <linux-hwmon@vger.kernel.org>; Thu, 18 Mar 2021 21:58:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=protocubo.io; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PQOzXEuBU6egIF2HRxRZI7fnvbkZdLavUt/2EZLfmpg=;
-        b=fil0dI3VTsHCkMF1FYcih2jgh/wDvMqwZ1yLrNhVFmQ42xaJeDtcuGC3ik7d7YDEZx
-         SjYPcOWXqV0sJHqkZ3HTiGbkkfKr4s5Dxm+sWCRYS4uwft0iJYIsm599je+0KdLLeEx5
-         huuj5FxwZjFKLhB/tg3CWTPxabHMfghedq8h8Ud/ChT9flESLqk09dG/3oznAAlrY0VH
-         0RFAWxT3ttdAidPqy1f20r/XoXrsAamlwTMUHFii8eJbNaku/6J0IX6ZMIGK9q0EvASi
-         V0UeMsHPCh81+O+EqxZcZO+KeQ9c3BEOWnZHTTWJ5QLeAR8hJI2Hm141MOwchpVHSgZH
-         ZNVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PQOzXEuBU6egIF2HRxRZI7fnvbkZdLavUt/2EZLfmpg=;
-        b=c0sts8tyMRZMasFwQvGATMip9TefKsN9yZ/JxrvkTdglo+hCR/HiXH1qc5M8ej1WOh
-         Yu/eaqdctP/ihEY5qzSUSeawuDY+rE0h505/BjTg0ViLmArytKVn/mwWNEI7B2GFDjVC
-         3WViwY3DHmFpNAcmDH2LS/E2qXq8jZ86skxB81ZoPbTNCDej5XmI6jw+1cu4V+S4my5S
-         zNC/H4HS4/C8UMffjx+z0TVfcs8PK1TQD7D01xbqd4zHnNUWovVUMWKIj2EPZz75gF7G
-         bfIyx5Nk13JQn2ErCowtSfheYyoBWU3yJ66oHrSfq5T4EHKQe151T9Zq+/u7pzqjsYvf
-         14GQ==
-X-Gm-Message-State: AOAM532hsALnVaSSNmU1tToLQKoZQCX6Tbx1BEn0PXKLCiz6DNmmR8ta
-        i4GaUzzKSPfy3DgWjJcvzL1OAYy5VZodIzwL
-X-Google-Smtp-Source: ABdhPJykZxKHvHSt8zUSQ5X4znnM5hU1xvr2U51MF57uSTuL/zgWwXpIdqxyFjPWLR98ydEyELbwMw==
-X-Received: by 2002:ac8:6043:: with SMTP id k3mr6537229qtm.161.1616129891626;
-        Thu, 18 Mar 2021 21:58:11 -0700 (PDT)
-Received: from calvin.localdomain ([2804:14d:5c5a:802e:bdc9:ded9:cc08:a4e9])
-        by smtp.gmail.com with ESMTPSA id g7sm3053414qti.20.2021.03.18.21.58.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Mar 2021 21:58:10 -0700 (PDT)
-From:   Jonas Malaco <jonas@protocubo.io>
-To:     linux-hwmon@vger.kernel.org
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-input@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonas Malaco <jonas@protocubo.io>
-Subject: [PATCH v2] hwmon: add driver for NZXT Kraken X42/X52/X62/X72
-Date:   Fri, 19 Mar 2021 01:55:44 -0300
-Message-Id: <20210319045544.416138-1-jonas@protocubo.io>
-X-Mailer: git-send-email 2.31.0
+        id S234215AbhCSI1k (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 19 Mar 2021 04:27:40 -0400
+Received: from mga12.intel.com ([192.55.52.136]:9392 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234225AbhCSI1S (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 19 Mar 2021 04:27:18 -0400
+IronPort-SDR: frsfYR6WMzB2ZhP/h+xQCYUG524ws960RAFTBmACmc00DcI9upR892EijlLxdhBZRlaJX7G7ld
+ zKNz3TSII9uw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9927"; a="169151695"
+X-IronPort-AV: E=Sophos;i="5.81,261,1610438400"; 
+   d="scan'208";a="169151695"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2021 01:27:17 -0700
+IronPort-SDR: CHWB18Ia0FiVyaNoc49L4dx/rZ4cwMZ8d+v8Xly60Qwv+IkFG+e4ojTLwYFS0CUlM0FZiJeFY4
+ 8T9LH0Mk3H+w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,261,1610438400"; 
+   d="scan'208";a="434201223"
+Received: from lkp-server02.sh.intel.com (HELO 1c294c63cb86) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 19 Mar 2021 01:27:16 -0700
+Received: from kbuild by 1c294c63cb86 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lNATU-0001gz-0O; Fri, 19 Mar 2021 08:27:16 +0000
+Date:   Fri, 19 Mar 2021 16:26:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:hwmon-next] BUILD SUCCESS
+ c37e19c3791abf5814fa63fc081bd2fa2d7d9258
+Message-ID: <60546048.yJkc22B3AGv9awF3%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-These are "all-in-one" CPU liquid coolers that can be monitored and
-controlled through a proprietary USB HID protocol.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: c37e19c3791abf5814fa63fc081bd2fa2d7d9258  hwmon: (ina2xx) Convert sysfs sprintf/snprintf family to sysfs_emit
 
-While the models have differently sized radiators and come with varying
-numbers of fans, they are all indistinguishable at the software level.
+elapsed time: 720m
 
-The driver exposes fan/pump speeds and coolant temperature through the
-standard hwmon sysfs interface.
+configs tested: 143
+configs skipped: 2
 
-Fan and pump control, while supported by the devices, are not currently
-exposed.  The firmware accepts up to 61 trip points per channel
-(fan/pump), but the same set of trip temperatures has to be maintained
-for both; with pwmX_auto_point_Y_temp attributes, users would need to
-maintain this invariant themselves.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Instead, fan and pump control, as well as LED control (which the device
-also supports for 9 addressable RGB LEDs on the CPU water block) are
-left for existing and already mature user-space tools, which can still
-be used alongside the driver, thanks to hidraw.  A link to one, which I
-also maintain, is provided in the documentation.
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+x86_64                           allyesconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+i386                             allyesconfig
+arc                          axs101_defconfig
+sh                                  defconfig
+ia64                        generic_defconfig
+m68k                        mvme147_defconfig
+riscv                    nommu_k210_defconfig
+h8300                    h8300h-sim_defconfig
+powerpc                     tqm8560_defconfig
+mips                        nlm_xlp_defconfig
+arc                                 defconfig
+mips                     loongson1b_defconfig
+m68k                        m5407c3_defconfig
+sh                           se7712_defconfig
+m68k                       m5275evb_defconfig
+arm                           sunxi_defconfig
+ia64                             allmodconfig
+s390                          debug_defconfig
+mips                         bigsur_defconfig
+powerpc                         wii_defconfig
+sh                  sh7785lcr_32bit_defconfig
+arm                            mps2_defconfig
+powerpc                  storcenter_defconfig
+x86_64                              defconfig
+s390                             alldefconfig
+arm                            dove_defconfig
+mips                            e55_defconfig
+powerpc                 linkstation_defconfig
+xtensa                  audio_kc705_defconfig
+mips                        vocore2_defconfig
+xtensa                    xip_kc705_defconfig
+powerpc                       ebony_defconfig
+mips                          ath79_defconfig
+sh                     sh7710voipgw_defconfig
+s390                                defconfig
+mips                      maltaaprp_defconfig
+sh                          urquell_defconfig
+arm                        mvebu_v5_defconfig
+mips                       capcella_defconfig
+powerpc                 mpc834x_mds_defconfig
+mips                 decstation_r4k_defconfig
+sh                          lboxre2_defconfig
+arm                    vt8500_v6_v7_defconfig
+powerpc                       maple_defconfig
+powerpc                    adder875_defconfig
+sh                          kfr2r09_defconfig
+arm                         lpc32xx_defconfig
+xtensa                         virt_defconfig
+powerpc                 mpc832x_rdb_defconfig
+csky                             alldefconfig
+sh                   sh7724_generic_defconfig
+mips                malta_qemu_32r6_defconfig
+mips                          rb532_defconfig
+sh                           se7721_defconfig
+sh                     magicpanelr2_defconfig
+powerpc                  mpc885_ads_defconfig
+m68k                        m5307c3_defconfig
+arm                        shmobile_defconfig
+mips                      pic32mzda_defconfig
+m68k                       m5249evb_defconfig
+um                             i386_defconfig
+arm                          pxa3xx_defconfig
+m68k                       m5208evb_defconfig
+m68k                       bvme6000_defconfig
+powerpc                     kmeter1_defconfig
+mips                     cu1830-neo_defconfig
+powerpc                     pq2fads_defconfig
+arm                          pcm027_defconfig
+powerpc                      acadia_defconfig
+sh                        edosk7705_defconfig
+powerpc                    ge_imp3a_defconfig
+powerpc                     redwood_defconfig
+powerpc                 mpc8540_ads_defconfig
+arm                            hisi_defconfig
+mips                        nlm_xlr_defconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                               tinyconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a001-20210318
+i386                 randconfig-a005-20210318
+i386                 randconfig-a003-20210318
+i386                 randconfig-a002-20210318
+i386                 randconfig-a006-20210318
+i386                 randconfig-a004-20210318
+x86_64               randconfig-a011-20210318
+x86_64               randconfig-a016-20210318
+x86_64               randconfig-a013-20210318
+x86_64               randconfig-a015-20210318
+x86_64               randconfig-a014-20210318
+x86_64               randconfig-a012-20210318
+i386                 randconfig-a013-20210318
+i386                 randconfig-a016-20210318
+i386                 randconfig-a011-20210318
+i386                 randconfig-a014-20210318
+i386                 randconfig-a015-20210318
+i386                 randconfig-a012-20210318
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
 
-The implementation is based on USB traffic analysis.  It has been
-runtime tested on x86_64, both as a built-in driver and as a module.
+clang tested configs:
+x86_64               randconfig-a006-20210318
+x86_64               randconfig-a001-20210318
+x86_64               randconfig-a005-20210318
+x86_64               randconfig-a002-20210318
+x86_64               randconfig-a003-20210318
+x86_64               randconfig-a004-20210318
 
-Signed-off-by: Jonas Malaco <jonas@protocubo.io>
 ---
-Changes in v2:
-- remove unnecessary type, attr and channel checks from _is_visible
-- remove unnecessary attr and channel checks from _read/_read_string
-- remove the spinlock by computing values in the event handler
-- add comment describing how the device reports data
-- report missing or stale data to user-space
-- adjust copyright notice
-
- Documentation/hwmon/index.rst        |   1 +
- Documentation/hwmon/nzxt-kraken2.rst |  42 +++++
- MAINTAINERS                          |   7 +
- drivers/hwmon/Kconfig                |  10 ++
- drivers/hwmon/Makefile               |   1 +
- drivers/hwmon/nzxt-kraken2.c         | 235 +++++++++++++++++++++++++++
- 6 files changed, 296 insertions(+)
- create mode 100644 Documentation/hwmon/nzxt-kraken2.rst
- create mode 100644 drivers/hwmon/nzxt-kraken2.c
-
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index d4b422edbe3a..48bfa7887dd4 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -143,6 +143,7 @@ Hardware Monitoring Kernel Drivers
-    npcm750-pwm-fan
-    nsa320
-    ntc_thermistor
-+   nzxt-kraken2
-    occ
-    pc87360
-    pc87427
-diff --git a/Documentation/hwmon/nzxt-kraken2.rst b/Documentation/hwmon/nzxt-kraken2.rst
-new file mode 100644
-index 000000000000..94025de65a81
---- /dev/null
-+++ b/Documentation/hwmon/nzxt-kraken2.rst
-@@ -0,0 +1,42 @@
-+.. SPDX-License-Identifier: GPL-2.0-or-later
-+
-+Kernel driver nzxt-kraken2
-+==========================
-+
-+Supported devices:
-+
-+* NZXT Kraken X42
-+* NZXT Kraken X52
-+* NZXT Kraken X62
-+* NZXT Kraken X72
-+
-+Author: Jonas Malaco
-+
-+Description
-+-----------
-+
-+This driver enables hardware monitoring support for NZXT Kraken X42/X52/X62/X72
-+all-in-one CPU liquid coolers.  Three sensors are available: fan speed, pump
-+speed and coolant temperature.
-+
-+Fan and pump control, while supported by the firmware, are not currently
-+exposed.  The addressable RGB LEDs, present in the integrated CPU water block
-+and pump head, are not supported either.  But both features can be found in
-+existing user-space tools (e.g. `liquidctl`_).
-+
-+.. _liquidctl: https://github.com/liquidctl/liquidctl
-+
-+Usage Notes
-+-----------
-+
-+As these are USB HIDs, the driver can be loaded automatically by the kernel and
-+supports hot swapping.
-+
-+Sysfs entries
-+-------------
-+
-+=======================	========================================================
-+fan1_input		Fan speed (in rpm)
-+fan2_input		Pump speed (in rpm)
-+temp1_input		Coolant temperature (in millidegrees Celsius)
-+=======================	========================================================
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 0635b30e467c..b8f9fc5eaf08 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12911,6 +12911,13 @@ L:	linux-nfc@lists.01.org (moderated for non-subscribers)
- S:	Supported
- F:	drivers/nfc/nxp-nci
- 
-+NZXT-KRAKEN2 HARDWARE MONITORING DRIVER
-+M:	Jonas Malaco <jonas@protocubo.io>
-+L:	linux-hwmon@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/hwmon/nzxt-kraken2.rst
-+F:	drivers/hwmon/nzxt-kraken2.c
-+
- OBJAGG
- M:	Jiri Pirko <jiri@nvidia.com>
- L:	netdev@vger.kernel.org
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 54f04e61fb83..0ddc974b102e 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -1492,6 +1492,16 @@ config SENSORS_NSA320
- 	  This driver can also be built as a module. If so, the module
- 	  will be called nsa320-hwmon.
- 
-+config SENSORS_NZXT_KRAKEN2
-+	tristate "NZXT Kraken X42/X51/X62/X72 liquid coolers"
-+	depends on USB_HID
-+	help
-+	  If you say yes here you get support for hardware monitoring for the
-+	  NZXT Kraken X42/X52/X62/X72 all-in-one CPU liquid coolers.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called nzxt-kraken2.
-+
- source "drivers/hwmon/occ/Kconfig"
- 
- config SENSORS_PCF8591
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index fe38e8a5c979..59e78bc212cf 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -155,6 +155,7 @@ obj-$(CONFIG_SENSORS_NCT7904)	+= nct7904.o
- obj-$(CONFIG_SENSORS_NPCM7XX)	+= npcm750-pwm-fan.o
- obj-$(CONFIG_SENSORS_NSA320)	+= nsa320-hwmon.o
- obj-$(CONFIG_SENSORS_NTC_THERMISTOR)	+= ntc_thermistor.o
-+obj-$(CONFIG_SENSORS_NZXT_KRAKEN2) += nzxt-kraken2.o
- obj-$(CONFIG_SENSORS_PC87360)	+= pc87360.o
- obj-$(CONFIG_SENSORS_PC87427)	+= pc87427.o
- obj-$(CONFIG_SENSORS_PCF8591)	+= pcf8591.o
-diff --git a/drivers/hwmon/nzxt-kraken2.c b/drivers/hwmon/nzxt-kraken2.c
-new file mode 100644
-index 000000000000..a04892301a2c
---- /dev/null
-+++ b/drivers/hwmon/nzxt-kraken2.c
-@@ -0,0 +1,235 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * nzxt-kraken2.c - hwmon driver for NZXT Kraken X42/X52/X62/X72 coolers
-+ *
-+ * The device asynchronously sends HID reports (with id 0x04) twice a second to
-+ * communicate current fan speed, pump speed and coolant temperature.  The
-+ * device does not respond to Get_Report requests for this status report.
-+ *
-+ * Copyright 2019-2021  Jonas Malaco <jonas@protocubo.io>
-+ */
-+
-+#include <asm/unaligned.h>
-+#include <linux/hid.h>
-+#include <linux/hwmon.h>
-+#include <linux/jiffies.h>
-+#include <linux/module.h>
-+#include <linux/spinlock.h>
-+
-+#define STATUS_REPORT_ID	0x04
-+#define STATUS_VALIDITY		2 /* seconds; equivalent to 4 missed updates */
-+
-+static const char *const kraken2_temp_label[] = {
-+	"Coolant",
-+};
-+
-+static const char *const kraken2_fan_label[] = {
-+	"Fan",
-+	"Pump",
-+};
-+
-+struct kraken2_priv_data {
-+	struct hid_device *hid_dev;
-+	struct device *hwmon_dev;
-+	s32 temp_input[1];
-+	u16 fan_input[2];
-+	unsigned long updated; /* jiffies */
-+};
-+
-+static umode_t kraken2_is_visible(const void *data,
-+				  enum hwmon_sensor_types type,
-+				  u32 attr, int channel)
-+{
-+	return 0444;
-+}
-+
-+static int kraken2_read(struct device *dev, enum hwmon_sensor_types type,
-+			u32 attr, int channel, long *val)
-+{
-+	struct kraken2_priv_data *priv = dev_get_drvdata(dev);
-+
-+	if (time_after(jiffies, priv->updated + STATUS_VALIDITY * HZ))
-+		return -ENODATA;
-+
-+	switch (type) {
-+	case hwmon_temp:
-+		*val = priv->temp_input[channel];
-+		break;
-+	case hwmon_fan:
-+		*val = priv->fan_input[channel];
-+		break;
-+	default:
-+		return -EOPNOTSUPP; /* unreachable */
-+	}
-+
-+	return 0;
-+}
-+
-+static int kraken2_read_string(struct device *dev, enum hwmon_sensor_types type,
-+			       u32 attr, int channel, const char **str)
-+{
-+	switch (type) {
-+	case hwmon_temp:
-+		*str = kraken2_temp_label[channel];
-+		break;
-+	case hwmon_fan:
-+		*str = kraken2_fan_label[channel];
-+		break;
-+	default:
-+		return -EOPNOTSUPP; /* unreachable */
-+	}
-+	return 0;
-+}
-+
-+static const struct hwmon_ops kraken2_hwmon_ops = {
-+	.is_visible = kraken2_is_visible,
-+	.read = kraken2_read,
-+	.read_string = kraken2_read_string,
-+};
-+
-+static const struct hwmon_channel_info *kraken2_info[] = {
-+	HWMON_CHANNEL_INFO(temp,
-+			   HWMON_T_INPUT | HWMON_T_LABEL),
-+	HWMON_CHANNEL_INFO(fan,
-+			   HWMON_F_INPUT | HWMON_F_LABEL,
-+			   HWMON_F_INPUT | HWMON_F_LABEL),
-+	NULL
-+};
-+
-+static const struct hwmon_chip_info kraken2_chip_info = {
-+	.ops = &kraken2_hwmon_ops,
-+	.info = kraken2_info,
-+};
-+
-+static int kraken2_raw_event(struct hid_device *hdev,
-+			     struct hid_report *report, u8 *data, int size)
-+{
-+	struct kraken2_priv_data *priv;
-+
-+	if (size < 7 || report->id != STATUS_REPORT_ID)
-+		return 0;
-+
-+	priv = hid_get_drvdata(hdev);
-+
-+	/*
-+	 * The fractional byte of the coolant temperature has been observed to
-+	 * be in the interval [1,9], but some of these steps are also
-+	 * consistently skipped for certain integer parts.
-+	 *
-+	 * For the lack of a better idea, assume that the resolution is 0.1°C,
-+	 * and that the missing steps are artifacts of how the firmware
-+	 * processes the raw sensor data.
-+	 */
-+	priv->temp_input[0] = data[1] * 1000 + data[2] * 100;
-+
-+	priv->fan_input[0] = get_unaligned_be16(data + 3);
-+	priv->fan_input[1] = get_unaligned_be16(data + 5);
-+
-+	priv->updated = jiffies;
-+
-+	return 0;
-+}
-+
-+static int kraken2_probe(struct hid_device *hdev,
-+			 const struct hid_device_id *id)
-+{
-+	struct kraken2_priv_data *priv;
-+	int ret;
-+
-+	priv = devm_kzalloc(&hdev->dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->hid_dev = hdev;
-+	hid_set_drvdata(hdev, priv);
-+
-+	/*
-+	 * Initialize ->updated to STATUS_VALIDITY seconds in the past, making
-+	 * the initial empty data invalid for kraken2_read without the need for
-+	 * a special case there.
-+	 */
-+	priv->updated = jiffies - STATUS_VALIDITY * HZ;
-+
-+	ret = hid_parse(hdev);
-+	if (ret) {
-+		hid_err(hdev, "hid parse failed with %d\n", ret);
-+		return ret;
-+	}
-+
-+	/*
-+	 * Enable hidraw so existing user-space tools can continue to work.
-+	 */
-+	ret = hid_hw_start(hdev, HID_CONNECT_HIDRAW);
-+	if (ret) {
-+		hid_err(hdev, "hid hw start failed with %d\n", ret);
-+		goto fail_and_stop;
-+	}
-+
-+	ret = hid_hw_open(hdev);
-+	if (ret) {
-+		hid_err(hdev, "hid hw open failed with %d\n", ret);
-+		goto fail_and_close;
-+	}
-+
-+	priv->hwmon_dev = hwmon_device_register_with_info(&hdev->dev, "kraken2",
-+							  priv, &kraken2_chip_info,
-+							  NULL);
-+	if (IS_ERR(priv->hwmon_dev)) {
-+		ret = PTR_ERR(priv->hwmon_dev);
-+		hid_err(hdev, "hwmon registration failed with %d\n", ret);
-+		goto fail_and_close;
-+	}
-+
-+	return 0;
-+
-+fail_and_close:
-+	hid_hw_close(hdev);
-+fail_and_stop:
-+	hid_hw_stop(hdev);
-+	return ret;
-+}
-+
-+static void kraken2_remove(struct hid_device *hdev)
-+{
-+	struct kraken2_priv_data *priv = hid_get_drvdata(hdev);
-+
-+	hwmon_device_unregister(priv->hwmon_dev);
-+
-+	hid_hw_close(hdev);
-+	hid_hw_stop(hdev);
-+}
-+
-+static const struct hid_device_id kraken2_table[] = {
-+	{ HID_USB_DEVICE(0x1e71, 0x170e) }, /* NZXT Kraken X42/X52/X62/X72 */
-+	{ }
-+};
-+
-+MODULE_DEVICE_TABLE(hid, kraken2_table);
-+
-+static struct hid_driver kraken2_driver = {
-+	.name = "nzxt-kraken2",
-+	.id_table = kraken2_table,
-+	.probe = kraken2_probe,
-+	.remove = kraken2_remove,
-+	.raw_event = kraken2_raw_event,
-+};
-+
-+static int __init kraken2_init(void)
-+{
-+	return hid_register_driver(&kraken2_driver);
-+}
-+
-+static void __exit kraken2_exit(void)
-+{
-+	hid_unregister_driver(&kraken2_driver);
-+}
-+
-+/*
-+ * When compiled into the kernel, initialize after the hid bus.
-+ */
-+late_initcall(kraken2_init);
-+module_exit(kraken2_exit);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Jonas Malaco <jonas@protocubo.io>");
-+MODULE_DESCRIPTION("Hwmon driver for NZXT Kraken X42/X52/X62/X72 coolers");
-
-base-commit: c37e19c3791abf5814fa63fc081bd2fa2d7d9258
--- 
-2.31.0
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
