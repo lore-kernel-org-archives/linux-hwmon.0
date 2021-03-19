@@ -2,107 +2,104 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4F45C433E0
-	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Mar 2021 21:27:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A804C433C1
+	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Mar 2021 21:28:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A097761981
-	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Mar 2021 21:27:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 026C96193A
+	for <linux-hwmon@archiver.kernel.org>; Fri, 19 Mar 2021 21:28:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230411AbhCSV0t (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 19 Mar 2021 17:26:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60908 "EHLO
+        id S230264AbhCSV2Y (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 19 Mar 2021 17:28:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230505AbhCSV0m (ORCPT
+        with ESMTP id S229974AbhCSV2M (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 19 Mar 2021 17:26:42 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902B0C06175F;
-        Fri, 19 Mar 2021 14:26:42 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id y19-20020a0568301d93b02901b9f88a238eso9849655oti.11;
-        Fri, 19 Mar 2021 14:26:42 -0700 (PDT)
+        Fri, 19 Mar 2021 17:28:12 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E64C06175F;
+        Fri, 19 Mar 2021 14:28:12 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id n140so6245827oig.9;
+        Fri, 19 Mar 2021 14:28:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=+xQzhNdlIsMDN0TgH12gHLm/2elzRzpsgY5YOadiWhg=;
-        b=QV7YbxSmNMi5vVpXHDBmh6U36Nf5E9+U1ZMCqEsnd6p2JCESDBXqIPIQBFyY2hZrHQ
-         2n5bTEt2JbKYb5Bpev5cTyzyYEbz88bVhvsrYJ5sE5fu541EyXqB3w5jhZn21zK/lHFk
-         AXEa0dWOT/fOGxsz4b5pMiuOwt5N3FmnX3GUjrc6vo1w+juk5BVefbwCP0AGpQG3fbOv
-         xJgmc6UeqLgWSlgVOzCYYbsyDWcvs/CdKIJZR/JvWkJdOQl5QKawAeHCoONmPjuw+DLm
-         qpwCaUj1mb0TVGtG6Vt7NJmc3PISBJR95KpY1/rkyZ0bEEdjK/HWuEhdPkpVHQWg3TiN
-         DsSg==
+        bh=ilcSk8VycjIw9PpYr/RlJKjxl+yFh+ALRPCRLrC3KD4=;
+        b=t37/PSzAFqFe0VfH5iLTfUWXBBIcWzy2W1c0iXyjSkl6GHHLWsFF+MuCs+rj/sCuth
+         BXUkR5EIDuqsnSPOYU6b/Yf23dyM+NCdZ7cb7x+dDhUtO+MRmWFd7FRAHfKFPsPK0JSe
+         u4flGkAgV3ItTRUX5uOUa09wEzM+zKuIVpXR+/lh1IcP0gA+oqjVmH2qe/WeM5WsVtQ0
+         EN4l0ZAutX14zNjjsn5ktDHMiccZ9X+Y9AsoXg4EV78B4ZKSJ14XVP/Ha7LCyZhlii23
+         5EpeoahcWjbCLbZiLJUI/UgljIZvP+aHiI2CwrMfsxL0gPiSxC+EOqM93izw7ImYx8+w
+         9NBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=+xQzhNdlIsMDN0TgH12gHLm/2elzRzpsgY5YOadiWhg=;
-        b=rIb+VXkeR8EZzMK6RmvsanwImX/9r3KapXkTpN0+ayhU3hpMsq4KSps7O8K4QuzOA/
-         mzh/ZK3Q8YfThG64aRTfYcjystN0Nx2Jm75tkgN0cKQ0Yd8AiAo2WUUi2pQ9b6Lc53UH
-         LGpOBkhvvLy18PZKKLVmYjjiJnvGGzOyc2yTXg/cnj45G2rEHOp6kl9eEzUaf7PAHbCs
-         ZXAF4WgIKXtYg/4kUku04wCPZ0Nh5LbZXNXmnpLOAQmiBpiBDGTQ0dFW23AICpwNAVVv
-         N+aQ92glPbyWyzin06bfQ5hinO4q1D4zZceian5yxBvSChl7Fvo9440wGg6cuKT+wLHK
-         7l4w==
-X-Gm-Message-State: AOAM532z1eYOcOE47OrFbqr6tVgUqAiNfCwpa7io0wPqJLL7K0VCEgBc
-        mwXLR/zfOJlH5lcGsUwkY+8=
-X-Google-Smtp-Source: ABdhPJx99MlGz0XkiS/XyUc3k/BGrOAXXu5A8chtqoLenKnuIL0j5vdqgMbxr+qAVwyIdHjPyu5+dA==
-X-Received: by 2002:a9d:6545:: with SMTP id q5mr2593915otl.179.1616189202036;
-        Fri, 19 Mar 2021 14:26:42 -0700 (PDT)
+        bh=ilcSk8VycjIw9PpYr/RlJKjxl+yFh+ALRPCRLrC3KD4=;
+        b=IzP39VhZstG9hvf1pQl8BsBDGMYgfHZprgXlWl4oUM7KBwAEv0n18tcxYPU8STr5jE
+         W+d1fKJGXjNGs7hZhRJKyFozpuHm5TwVSni4nKw4Z5sxl7DPabn7RnLOsOmGFDj5nxrs
+         pkbfvZRlIbTpqoNhiVlO9p7pzwJYys7mJ85BZKnv49iBqfB3mBpMs+ZTKvoWYuk5hRsF
+         JiWm+18V/8Y6r7zKWVrk5OLeeqwARh9Xxn7C94XBkoDUnlwNc7nJZ0HEIvgH5FPZki2/
+         o0TRM9c+yFD1NIkWB4SOLJTXginfRAC739IQuMTEEt0Hx5ildP3Jsn5FMlehnTI62atK
+         XQ9A==
+X-Gm-Message-State: AOAM533DJGH8hOISpBobi0pJwgZjAYw2beUbqrzITw8TnnJIsXc6e50M
+        dJosB0sie2zSSY/kFMq7Yec=
+X-Google-Smtp-Source: ABdhPJyJnGs39V72ai5EC8itdQv3Lux6+l61DgJh5h65b6BkcfGWsg6zCGJ8IUoG7CjmItc52Y9NZg==
+X-Received: by 2002:aca:d884:: with SMTP id p126mr2456643oig.118.1616189291677;
+        Fri, 19 Mar 2021 14:28:11 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 53sm1426781oti.77.2021.03.19.14.26.41
+        by smtp.gmail.com with ESMTPSA id s191sm1462660oie.0.2021.03.19.14.28.10
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 19 Mar 2021 14:26:41 -0700 (PDT)
+        Fri, 19 Mar 2021 14:28:10 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 19 Mar 2021 14:26:40 -0700
+Date:   Fri, 19 Mar 2021 14:28:09 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Jonas Malaco <jonas@protocubo.io>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        linux-input@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: add driver for NZXT Kraken X42/X52/X62/X72
-Message-ID: <20210319212640.GA23767@roeck-us.net>
-References: <20210319045544.416138-1-jonas@protocubo.io>
+To:     Erik Rosen <erik.rosen@metormote.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+        Rob Herring <robh+dt@kernel.org>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: Add trivial device entry for TPS53676
+Message-ID: <20210319212809.GA24020@roeck-us.net>
+References: <20210318212441.69050-1-erik.rosen@metormote.com>
+ <20210318212441.69050-2-erik.rosen@metormote.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210319045544.416138-1-jonas@protocubo.io>
+In-Reply-To: <20210318212441.69050-2-erik.rosen@metormote.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Mar 19, 2021 at 01:55:44AM -0300, Jonas Malaco wrote:
-> These are "all-in-one" CPU liquid coolers that can be monitored and
-> controlled through a proprietary USB HID protocol.
+On Thu, Mar 18, 2021 at 10:24:40PM +0100, Erik Rosen wrote:
+> Add trivial device entry for TPS53676
 > 
-> While the models have differently sized radiators and come with varying
-> numbers of fans, they are all indistinguishable at the software level.
-> 
-> The driver exposes fan/pump speeds and coolant temperature through the
-> standard hwmon sysfs interface.
-> 
-> Fan and pump control, while supported by the devices, are not currently
-> exposed.  The firmware accepts up to 61 trip points per channel
-> (fan/pump), but the same set of trip temperatures has to be maintained
-> for both; with pwmX_auto_point_Y_temp attributes, users would need to
-> maintain this invariant themselves.
-> 
-> Instead, fan and pump control, as well as LED control (which the device
-> also supports for 9 addressable RGB LEDs on the CPU water block) are
-> left for existing and already mature user-space tools, which can still
-> be used alongside the driver, thanks to hidraw.  A link to one, which I
-> also maintain, is provided in the documentation.
-> 
-> The implementation is based on USB traffic analysis.  It has been
-> runtime tested on x86_64, both as a built-in driver and as a module.
-> 
-> Signed-off-by: Jonas Malaco <jonas@protocubo.io>
+> Signed-off-by: Erik Rosen <erik.rosen@metormote.com>
 
-Applied (after removing the now unnecessary spinlock.h include).
+For my reference (waiting for dt maintainer acceptance):
 
-Thanks,
-Guenter
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+> ---
+>  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
+> index a327130d1faa..2e29c2a91966 100644
+> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+> @@ -288,6 +288,8 @@ properties:
+>            - ti,tmp103
+>              # Digital Temperature Sensor
+>            - ti,tmp275
+> +            # TI Dual channel DCAP+ multiphase controller TPS53676 with AVSBus
+> +          - ti,tps53676
+>              # TI Dual channel DCAP+ multiphase controller TPS53679
+>            - ti,tps53679
+>              # TI Dual channel DCAP+ multiphase controller TPS53688
