@@ -2,234 +2,106 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B1C5C433E1
-	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Mar 2021 19:38:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9014C433DB
+	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Mar 2021 04:35:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7A898619A2
-	for <linux-hwmon@archiver.kernel.org>; Mon, 22 Mar 2021 19:38:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A43F96199F
+	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Mar 2021 04:35:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232256AbhCVTiJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 22 Mar 2021 15:38:09 -0400
-Received: from smtp.outgoing.loopia.se ([93.188.3.37]:19362 "EHLO
-        smtp.outgoing.loopia.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232129AbhCVTiD (ORCPT
+        id S229931AbhCWEfJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 23 Mar 2021 00:35:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33720 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230034AbhCWEfA (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 22 Mar 2021 15:38:03 -0400
-Received: from s807.loopia.se (localhost [127.0.0.1])
-        by s807.loopia.se (Postfix) with ESMTP id 7EEB82465F19
-        for <linux-hwmon@vger.kernel.org>; Mon, 22 Mar 2021 20:38:01 +0100 (CET)
-Received: from s630.loopia.se (unknown [172.22.191.5])
-        by s807.loopia.se (Postfix) with ESMTP id 6EBB22E29DBE;
-        Mon, 22 Mar 2021 20:38:01 +0100 (CET)
-Received: from s471.loopia.se (unknown [172.22.191.5])
-        by s630.loopia.se (Postfix) with ESMTP id 57CDE13B93C0;
-        Mon, 22 Mar 2021 20:38:01 +0100 (CET)
-X-Virus-Scanned: amavisd-new at amavis.loopia.se
-Received: from s500.loopia.se ([172.22.191.6])
-        by s471.loopia.se (s471.loopia.se [172.22.190.11]) (amavisd-new, port 10024)
-        with LMTP id hDITdrxCgoT9; Mon, 22 Mar 2021 20:38:00 +0100 (CET)
-X-Loopia-Auth: user
-X-Loopia-User: carl@hgsystem.se
-X-Loopia-Originating-IP: 155.4.131.157
-Received: from localhost.localdomain (h-155-4-131-157.NA.cust.bahnhof.se [155.4.131.157])
-        (Authenticated sender: carl@hgsystem.se)
-        by s500.loopia.se (Postfix) with ESMTPSA id 44BC71E267C2;
-        Mon, 22 Mar 2021 20:38:00 +0100 (CET)
-From:   Erik Rosen <erik.rosen@metormote.com>
-To:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     Erik Rosen <erik.rosen@metormote.com>
-Subject: [PATCH v2 2/2] hwmon: (pmbus/tps53679) Add support for TI TPS53676
-Date:   Mon, 22 Mar 2021 20:37:34 +0100
-Message-Id: <20210322193734.75127-3-erik.rosen@metormote.com>
-X-Mailer: git-send-email 2.11.0 (Apple Git-81)
-In-Reply-To: <20210322193734.75127-1-erik.rosen@metormote.com>
-References: <20210322193734.75127-1-erik.rosen@metormote.com>
+        Tue, 23 Mar 2021 00:35:00 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5953C061574;
+        Mon, 22 Mar 2021 21:34:59 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id t5so9858083qvs.5;
+        Mon, 22 Mar 2021 21:34:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=W098yLvagYSO9A4rP3vOMS7ghgfO5xcNeYh53cseJdc=;
+        b=Zy5wxp0ZTHydAknLKeFU20M4bgDpcQRNfbsDhC0lRJSVo8hLFsIAKvdvkN3drmVT/o
+         JsNAxYiIg8ydzaJjPuvgHA2N/gDCv4F+mGy20WVZwgaNghwiX087+wunDTFebeFxlDhj
+         ULoLCFtU9nGiW2JCqKf3U1c2rC0iIGxbHDzobfwq8TaRU64tZ0MVZBtdLSne/wxvTrYY
+         gJUQ5zki2QLAetxh+MFkowvhy934kMc3r+fKrQphuu7OYEnUHX6IfSunagjpVd7a7eiX
+         uUoz6SOTBGx/ZmEhCJ+ZQzq3A7Jm1BUdYJeuNlWBilTw2jhKGFxDzvwEZOqc+eUOBfA4
+         bldg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=W098yLvagYSO9A4rP3vOMS7ghgfO5xcNeYh53cseJdc=;
+        b=i0zCovh2O/vOXHVwcgWGbE3ZKSuGDRC8ZOPcvE4MXVsg5tRrRYIQSJXu4F/VaZrVx/
+         kTvf+Ieg9MEY7dfQ9aqVfIZfiQpPkW956v6QvvxYbFT/UJHED28MRsbHNj79+k4EO89b
+         SM4t3B+IkMdNbKbtt9Qd1AolFJhFtMP3aYfG/jnVcQtT6vxCUB4u4MTWUHyI2V0dngY3
+         4ty4ZIKuE/uU7JTee3BsQ87Qa6AAxJyDmto7QHI0HGZ6f3+cTqyqHbirPkR/G77iyXNQ
+         Mg0DfPu+0VIq9rXivw9BZKrZx83FOiM51n/kPPg91WtM2gu/5Vl/cUrppoGkyvfJPaAh
+         2hMg==
+X-Gm-Message-State: AOAM532uWVmaIawSxpWouGAFcTOxyVqmxrnXfkuttSn4ouB8PAFfnPum
+        jjoZNLsjnIUcPwmINBHdUzI=
+X-Google-Smtp-Source: ABdhPJw7ODDKafOUVKaaZ3KR2haoG6wrpunG/GfsBBVtWn/oO/zBql5bOnLObu65Q8Nj0yleMARTRA==
+X-Received: by 2002:ad4:45e4:: with SMTP id q4mr3039822qvu.11.1616474099282;
+        Mon, 22 Mar 2021 21:34:59 -0700 (PDT)
+Received: from localhost.localdomain ([156.146.54.208])
+        by smtp.gmail.com with ESMTPSA id k7sm10142104qtm.10.2021.03.22.21.34.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Mar 2021 21:34:58 -0700 (PDT)
+From:   Bhaskar Chowdhury <unixbhaskar@gmail.com>
+To:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     rdunlap@infradead.org, Bhaskar Chowdhury <unixbhaskar@gmail.com>
+Subject: [PATCH] hwmon: (ftsteutates): Rudimentary typo fixes
+Date:   Tue, 23 Mar 2021 10:04:38 +0530
+Message-Id: <20210323043438.1321903-1-unixbhaskar@gmail.com>
+X-Mailer: git-send-email 2.31.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add support for TI TPS53676 controller to the tps53679 pmbus driver
 
-The driver uses the USER_DATA_03 register to figure out how many phases
-are enabled and to which channel they are assigned, and sets the number
-of pages and phases accordingly.
+s/Temprature/Temperature/
+s/revsion/revision/
 
-Signed-off-by: Erik Rosen <erik.rosen@metormote.com>
+Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
 ---
- Documentation/hwmon/tps53679.rst | 13 ++++++--
- drivers/hwmon/pmbus/Kconfig      |  4 +--
- drivers/hwmon/pmbus/tps53679.c   | 51 +++++++++++++++++++++++++++++++-
- 3 files changed, 63 insertions(+), 5 deletions(-)
+ drivers/hwmon/ftsteutates.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/hwmon/tps53679.rst b/Documentation/hwmon/tps53679.rst
-index c7c589e49789..3b9561648c24 100644
---- a/Documentation/hwmon/tps53679.rst
-+++ b/Documentation/hwmon/tps53679.rst
-@@ -19,6 +19,14 @@ Supported chips:
- 
-     Datasheet: https://www.ti.com/lit/gpn/TPS53667
- 
-+  * Texas Instruments TPS53676
-+
-+    Prefix: 'tps53676'
-+
-+    Addresses scanned: -
-+
-+    Datasheet: https://www.ti.com/lit/gpn/TPS53676
-+
-   * Texas Instruments TPS53679
- 
-     Prefix: 'tps53679'
-@@ -136,7 +144,7 @@ power1_input		Measured input power.
- power[N]_label		"pout[1-2]".
- 
- 			- TPS53647, TPS53667: N=2
--			- TPS53679, TPS53681, TPS53588: N=2,3
-+			- TPS53676, TPS53679, TPS53681, TPS53588: N=2,3
- 
- power[N]_input		Measured output power.
- 
-@@ -156,10 +164,11 @@ curr[N]_label		"iout[1-2]" or "iout1.[0-5]".
- 
- 			The first digit is the output channel, the second
- 			digit is the phase within the channel. Per-phase
--			telemetry supported on TPS53681 only.
-+			telemetry supported on TPS53676 and TPS53681 only.
- 
- 			- TPS53647, TPS53667: N=2
- 			- TPS53679, TPS53588: N=2,3
-+			- TPS53676: N=2-8
- 			- TPS53681: N=2-9
- 
- curr[N]_input		Measured output current.
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index 32d2fc850621..35956a9227d8 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -257,10 +257,10 @@ config SENSORS_TPS40422
- 	  be called tps40422.
- 
- config SENSORS_TPS53679
--	tristate "TI TPS53647, TPS53667, TPS53679, TPS53681, TPS53688"
-+	tristate "TI TPS53647, TPS53667, TPS53676, TPS53679, TPS53681, TPS53688"
- 	help
- 	  If you say yes here you get hardware monitoring support for TI
--	  TPS53647, TPS53667, TPS53679, TPS53681, and TPS53688.
-+	  TPS53647, TPS53667, TPS53676, TPS53679, TPS53681, and TPS53688.
- 
- 	  This driver can also be built as a module. If so, the module will
- 	  be called tps53679.
-diff --git a/drivers/hwmon/pmbus/tps53679.c b/drivers/hwmon/pmbus/tps53679.c
-index ba838fa311c3..21ba0b18c014 100644
---- a/drivers/hwmon/pmbus/tps53679.c
-+++ b/drivers/hwmon/pmbus/tps53679.c
-@@ -16,11 +16,14 @@
- #include "pmbus.h"
- 
- enum chips {
--	tps53647, tps53667, tps53679, tps53681, tps53688
-+	tps53647, tps53667, tps53676, tps53679, tps53681, tps53688
- };
- 
- #define TPS53647_PAGE_NUM		1
- 
-+#define TPS53676_USER_DATA_03		0xb3
-+#define TPS53676_MAX_PHASES		7
-+
- #define TPS53679_PROT_VR12_5MV		0x01 /* VR12.0 mode, 5-mV DAC */
- #define TPS53679_PROT_VR12_5_10MV	0x02 /* VR12.5 mode, 10-mV DAC */
- #define TPS53679_PROT_VR13_10MV		0x04 /* VR13.0 mode, 10-mV DAC */
-@@ -143,6 +146,45 @@ static int tps53681_identify(struct i2c_client *client,
- 					    TPS53681_DEVICE_ID);
- }
- 
-+static int tps53676_identify(struct i2c_client *client,
-+			     struct pmbus_driver_info *info)
-+{
-+	u8 buf[I2C_SMBUS_BLOCK_MAX];
-+	int phases_a = 0, phases_b = 0;
-+	int i, ret;
-+
-+	ret = i2c_smbus_read_block_data(client, PMBUS_IC_DEVICE_ID, buf);
-+	if (ret < 0)
-+		return ret;
-+	if (strncmp("TI\x53\x67\x60", buf, 5)) {
-+		dev_err(&client->dev, "Unexpected device ID: %s\n", buf);
-+		return -ENODEV;
-+	}
-+
-+	ret = i2c_smbus_read_block_data(client, TPS53676_USER_DATA_03, buf);
-+	if (ret < 0)
-+		return ret;
-+	if (ret != 24)
-+		return -EIO;
-+	for (i = 0; i < 2 * TPS53676_MAX_PHASES; i += 2) {
-+		if (buf[i + 1] & 0x80) {
-+			if (buf[i] & 0x08)
-+				phases_b++;
-+			else
-+				phases_a++;
-+		}
-+	}
-+
-+	info->format[PSC_VOLTAGE_OUT] = linear;
-+	info->pages = 1;
-+	info->phases[0] = phases_a;
-+	if (phases_b > 0) {
-+		info->pages = 2;
-+		info->phases[1] = phases_b;
-+	}
-+	return 0;
-+}
-+
- static int tps53681_read_word_data(struct i2c_client *client, int page,
- 				   int phase, int reg)
+diff --git a/drivers/hwmon/ftsteutates.c b/drivers/hwmon/ftsteutates.c
+index ef88a156efc2..ceffc76a0c51 100644
+--- a/drivers/hwmon/ftsteutates.c
++++ b/drivers/hwmon/ftsteutates.c
+@@ -509,7 +509,7 @@ fan_alarm_store(struct device *dev, struct device_attribute *devattr,
+ /* SysFS structs							     */
+ /*****************************************************************************/
+
+-/* Temprature sensors */
++/* Temperature sensors */
+ static SENSOR_DEVICE_ATTR_RO(temp1_input, temp_value, 0);
+ static SENSOR_DEVICE_ATTR_RO(temp2_input, temp_value, 1);
+ static SENSOR_DEVICE_ATTR_RO(temp3_input, temp_value, 2);
+@@ -713,7 +713,7 @@ static int fts_detect(struct i2c_client *client,
  {
-@@ -183,6 +225,7 @@ static struct pmbus_driver_info tps53679_info = {
- 	.pfunc[3] = PMBUS_HAVE_IOUT,
- 	.pfunc[4] = PMBUS_HAVE_IOUT,
- 	.pfunc[5] = PMBUS_HAVE_IOUT,
-+	.pfunc[6] = PMBUS_HAVE_IOUT,
- };
- 
- static int tps53679_probe(struct i2c_client *client)
-@@ -206,6 +249,9 @@ static int tps53679_probe(struct i2c_client *client)
- 		info->pages = TPS53647_PAGE_NUM;
- 		info->identify = tps53679_identify;
- 		break;
-+	case tps53676:
-+		info->identify = tps53676_identify;
-+		break;
- 	case tps53679:
- 	case tps53688:
- 		info->pages = TPS53679_PAGE_NUM;
-@@ -225,8 +271,10 @@ static int tps53679_probe(struct i2c_client *client)
- }
- 
- static const struct i2c_device_id tps53679_id[] = {
-+	{"bmr474", tps53676},
- 	{"tps53647", tps53647},
- 	{"tps53667", tps53667},
-+	{"tps53676", tps53676},
- 	{"tps53679", tps53679},
- 	{"tps53681", tps53681},
- 	{"tps53688", tps53688},
-@@ -238,6 +286,7 @@ MODULE_DEVICE_TABLE(i2c, tps53679_id);
- static const struct of_device_id __maybe_unused tps53679_of_match[] = {
- 	{.compatible = "ti,tps53647", .data = (void *)tps53647},
- 	{.compatible = "ti,tps53667", .data = (void *)tps53667},
-+	{.compatible = "ti,tps53676", .data = (void *)tps53676},
- 	{.compatible = "ti,tps53679", .data = (void *)tps53679},
- 	{.compatible = "ti,tps53681", .data = (void *)tps53681},
- 	{.compatible = "ti,tps53688", .data = (void *)tps53688},
--- 
-2.20.1
+ 	int val;
+
+-	/* detection works with revsion greater or equal to 0x2b */
++	/* detection works with revision greater or equal to 0x2b */
+ 	val = i2c_smbus_read_byte_data(client, FTS_DEVICE_REVISION_REG);
+ 	if (val < 0x2b)
+ 		return -ENODEV;
+--
+2.31.0
 
