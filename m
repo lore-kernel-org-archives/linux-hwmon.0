@@ -2,146 +2,146 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-17.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 884A2C433E3
-	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Mar 2021 13:58:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE337C433E4
+	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Mar 2021 13:59:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 459216199F
-	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Mar 2021 13:58:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8BEE5619C3
+	for <linux-hwmon@archiver.kernel.org>; Tue, 23 Mar 2021 13:59:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbhCWN5t (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 23 Mar 2021 09:57:49 -0400
-Received: from mail-lj1-f176.google.com ([209.85.208.176]:40859 "EHLO
-        mail-lj1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231958AbhCWN5d (ORCPT
+        id S231920AbhCWN65 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 23 Mar 2021 09:58:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:37845 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231644AbhCWN6e (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 23 Mar 2021 09:57:33 -0400
-Received: by mail-lj1-f176.google.com with SMTP id u10so25751868lju.7;
-        Tue, 23 Mar 2021 06:57:32 -0700 (PDT)
+        Tue, 23 Mar 2021 09:58:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1616507913;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YebnmwWX+S8ZQ3dG1hl6dO6C/gAGM4REm6CQsMnnO4g=;
+        b=DhJDJTDZxUVmaGzKtXxnn6gNYkGbKWgQWiy/P13HORqbFpGXbSLU1j/tFkCFY7k6Tc8bEZ
+        Io0jvbMJa3ug+oaTpR2BooAsp7zZQT/mIYcsg8KXP3XJyzfR3cfugPSqxlwaeX7i4UjgBx
+        FdPuKktNJaMo6Egzs3akDP8wFKAbrs8=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-209-WyR_aDV_MICfpys18WRjXg-1; Tue, 23 Mar 2021 09:58:30 -0400
+X-MC-Unique: WyR_aDV_MICfpys18WRjXg-1
+Received: by mail-ej1-f71.google.com with SMTP id v27so1102905ejq.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 23 Mar 2021 06:58:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9Y5ibif4oRVGIPHt/yiD0yXJ5yK2ywIn339mR6lOBUQ=;
-        b=dRfQfqz4UTs3CqQbHxNzenkeyFgwSov3jiVoS9OsHHi8bmsLBNI8AGLV5t3fu7MjTv
-         eiU/h2KpappO86YAfU797giSDYqbZaOibz4fl3BPxE/tuEWsIUIKiipbJ/WTlVJEz0jn
-         3N4iJ5WJnw9vWI6jIcZr+OwRaRuIJrkcaOtFoN6PxoHaa0SqukhurUa63EYoYQIlT3rj
-         llUQ9WTjfaculZMn2u94GvklkEifx5VW7TVpVAagl2zYsc9MGEsw22XzE9HZN3H4kpx+
-         mpJHWk5HKpZ+lZ4MfV3cpB2rWb8VQ3cZVuRqQj85c1pqVZ/iNeRzt9m9egMc0enxCIoQ
-         KawQ==
-X-Gm-Message-State: AOAM5304hiUa1HG1pnzjLoUnx/hoGEJXpPQoCFmWYPeQHUD0oI/3quKX
-        xUQk4Osvq28ebXfC0alwB1M=
-X-Google-Smtp-Source: ABdhPJyMckocpBHAc0VpK9AtaTME8BqHmHgky3Gv5Ju0wZVgcOq1Fx7bMFiHBuQnQUdTBHUSa0+K3w==
-X-Received: by 2002:a2e:b008:: with SMTP id y8mr3023555ljk.233.1616507851525;
-        Tue, 23 Mar 2021 06:57:31 -0700 (PDT)
-Received: from localhost.localdomain (dc7vkhyyyyyyyyyyyyyby-3.rev.dnainternet.fi. [2001:14ba:16e2:8300::2])
-        by smtp.gmail.com with ESMTPSA id y25sm2343628ljc.73.2021.03.23.06.57.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Mar 2021 06:57:30 -0700 (PDT)
-Date:   Tue, 23 Mar 2021 15:57:25 +0200
-From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=YebnmwWX+S8ZQ3dG1hl6dO6C/gAGM4REm6CQsMnnO4g=;
+        b=S1B2sTB+jSlFqupFRNhadH0qVH8mo/q0jrC/PowyETKd6EYailG1Xec9wI7JPb/nmd
+         /HcCeCUQu79HUmXWE+LEFd0gu/0Bydg+cJfeSSyNmomvsWD23qL4WuIq1heeAwGl33kV
+         /5dWH4l7M0MgZTDjYVMt5dElE5Nhd1aVX955K/VNfU1r3GEXYoV4j76JbSw65cKmDXJU
+         dj7tRg3GOKFDu0PNf8hc3Os2nNqbBos3sFEtcHvN2krDR60mUWYYINckCvk9V7L0zMwb
+         pFmRQlMjCi658BS9df43YYLlm6S7XnF7dOvpYhqaC5gsGoI7RqjSRFLyIoUowVUVnbVf
+         Odjw==
+X-Gm-Message-State: AOAM532dlIgWKDP6iNKoLxlhD6gVW/203jCKfjT5dn+sMtcHsWxy/V02
+        U5PreFW+2eoJxuMcPuu3yvHM2iGbJY10sbO+AKxRrX2hjanS1VPXL4tWPOlf0ot+h2w2NT0zl1/
+        MG9UEPK/9E+6jTg3E0a5VBi8=
+X-Received: by 2002:aa7:d416:: with SMTP id z22mr4661383edq.239.1616507909743;
+        Tue, 23 Mar 2021 06:58:29 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwi17n1Ed1L2Y8zrgtV4br5V/LDTYPI5t79OE6dRqHFOg9CKjXNlgrCLmv/vO9kOBk+epuJtw==
+X-Received: by 2002:aa7:d416:: with SMTP id z22mr4661358edq.239.1616507909578;
+        Tue, 23 Mar 2021 06:58:29 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id l12sm12767773edb.39.2021.03.23.06.58.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Mar 2021 06:58:29 -0700 (PDT)
+Subject: Re: [PATCH v3 2/8] MAINTAINERS: Add entry for devm helpers
 To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
         gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-Subject: [PATCH v3 4/8] hwmon: raspberry-pi: Clean-up few drivers by using
- managed work init
-Message-ID: <4830f52d46278ea1c92ad7252f6050540346d8b7.1616506559.git.matti.vaittinen@fi.rohmeurope.com>
+        linux-arm-msm@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
 References: <cover.1616506559.git.matti.vaittinen@fi.rohmeurope.com>
+ <eec1797734e3d080662aa732c565ed4a3c261799.1616506559.git.matti.vaittinen@fi.rohmeurope.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <e064fdd7-b276-6732-16fe-2eb2564b2179@redhat.com>
+Date:   Tue, 23 Mar 2021 14:58:28 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1616506559.git.matti.vaittinen@fi.rohmeurope.com>
+In-Reply-To: <eec1797734e3d080662aa732c565ed4a3c261799.1616506559.git.matti.vaittinen@fi.rohmeurope.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Few drivers implement remove call-back only for ensuring a delayed
-work gets cancelled prior driver removal. Clean-up these by switching
-to use devm_delayed_work_autocancel() instead.
+Hi,
 
-This change is compile-tested only. All testing is appreciated.
+On 3/23/21 2:56 PM, Matti Vaittinen wrote:
+> Devm helper header containing small inline helpers was added.
+> Hans promised to maintain it.
+> 
+> Add Hans as maintainer and myself as designated reviewer.
+> 
+> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 
-Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Acked-by: Guenter Roeck <linux@roeck-us.net>
----
-Changelog from RFCv2:
- - RFC dropped. No functional changes.
+Yes I did promise that, didn't I?  FWIW going this route is still
+fine by me, assuming that having someone else maintain this makes
+this easier on / more acceptable to Greg.
 
- drivers/hwmon/raspberrypi-hwmon.c | 17 ++++++-----------
- 1 file changed, 6 insertions(+), 11 deletions(-)
+Ultimately this is up to Greg though, so lets wait and see what
+Greg has to say about this.
 
-diff --git a/drivers/hwmon/raspberrypi-hwmon.c b/drivers/hwmon/raspberrypi-hwmon.c
-index d3a64a35f7a9..805d396aa81b 100644
---- a/drivers/hwmon/raspberrypi-hwmon.c
-+++ b/drivers/hwmon/raspberrypi-hwmon.c
-@@ -7,6 +7,7 @@
-  * Copyright (C) 2018 Stefan Wahren <stefan.wahren@i2se.com>
-  */
- #include <linux/device.h>
-+#include <linux/devm-helpers.h>
- #include <linux/err.h>
- #include <linux/hwmon.h>
- #include <linux/module.h>
-@@ -106,6 +107,7 @@ static int rpi_hwmon_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct rpi_hwmon_data *data;
-+	int ret;
- 
- 	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
- 	if (!data)
-@@ -119,7 +121,10 @@ static int rpi_hwmon_probe(struct platform_device *pdev)
- 							       &rpi_chip_info,
- 							       NULL);
- 
--	INIT_DELAYED_WORK(&data->get_values_poll_work, get_values_poll);
-+	ret = devm_delayed_work_autocancel(dev, &data->get_values_poll_work,
-+					   get_values_poll);
-+	if (ret)
-+		return ret;
- 	platform_set_drvdata(pdev, data);
- 
- 	if (!PTR_ERR_OR_ZERO(data->hwmon_dev))
-@@ -128,18 +133,8 @@ static int rpi_hwmon_probe(struct platform_device *pdev)
- 	return PTR_ERR_OR_ZERO(data->hwmon_dev);
- }
- 
--static int rpi_hwmon_remove(struct platform_device *pdev)
--{
--	struct rpi_hwmon_data *data = platform_get_drvdata(pdev);
--
--	cancel_delayed_work_sync(&data->get_values_poll_work);
--
--	return 0;
--}
--
- static struct platform_driver rpi_hwmon_driver = {
- 	.probe = rpi_hwmon_probe,
--	.remove = rpi_hwmon_remove,
- 	.driver = {
- 		.name = "raspberrypi-hwmon",
- 	},
--- 
-2.25.4
+Regards,
+
+Hans
 
 
--- 
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
 
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =] 
+> ---
+> Changelog from RFCv2:
+>  - RFC dropped. No functional changes.
+> 
+>  MAINTAINERS | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 9e876927c60d..fa5ac3164678 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -5169,6 +5169,12 @@ M:	Torben Mathiasen <device@lanana.org>
+>  S:	Maintained
+>  W:	http://lanana.org/docs/device-list/index.html
+>  
+> +DEVICE RESOURCE MANAGEMENT HELPERS
+> +M:	Hans de Goede <hdegoede@redhat.com>
+> +R:	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> +S:	Maintained
+> +F:	include/linux/devm-helpers.h
+> +
+>  DEVICE-MAPPER  (LVM)
+>  M:	Alasdair Kergon <agk@redhat.com>
+>  M:	Mike Snitzer <snitzer@redhat.com>
+> 
+
