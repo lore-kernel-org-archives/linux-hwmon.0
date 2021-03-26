@@ -2,205 +2,81 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 021C6C433DB
-	for <linux-hwmon@archiver.kernel.org>; Wed, 24 Mar 2021 08:44:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6E03C433E0
+	for <linux-hwmon@archiver.kernel.org>; Fri, 26 Mar 2021 00:18:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C8077619B6
-	for <linux-hwmon@archiver.kernel.org>; Wed, 24 Mar 2021 08:44:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A9029619BA
+	for <linux-hwmon@archiver.kernel.org>; Fri, 26 Mar 2021 00:18:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234269AbhCXIoU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 24 Mar 2021 04:44:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59450 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233902AbhCXIoM (ORCPT
+        id S229639AbhCZARz (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 25 Mar 2021 20:17:55 -0400
+Received: from mail-il1-f177.google.com ([209.85.166.177]:44864 "EHLO
+        mail-il1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229622AbhCZAR2 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 24 Mar 2021 04:44:12 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C98C0613DE
-        for <linux-hwmon@vger.kernel.org>; Wed, 24 Mar 2021 01:44:09 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id k8so23532132wrc.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 24 Mar 2021 01:44:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=UQ2hEc/oKz/yz+r+7NuRxm3ZC0agePHpnR729978KoI=;
-        b=RSnt7rd9lYoXNzEF+9JE/tc8BCcDWtfDeVS4E7zKZ259RqNy3gjZPOYAuWcj+gD4A9
-         f1cQpvFaYbVUUlkV9rlp3Ehumovc5ht43lMUzjkaqYmIcQ1RBRNlTkYGm7vb/dmsmX8e
-         EW90VGgNe4dqXbHEcCN1j9VXyARCWk7RsitkyLYEG+4s4IfY2oCoN6u0WTmxAruRbvMi
-         RacPwr35ETjM53WPxeSqzzDUDakBWW50yGjMp2gZ3hBNUHT7L5AN6uwxsXUbA2ZK8Afp
-         Z4UIoL8M/rJT8JRjdhT6uJZ2PaPnix8qHkRgXreun/J5FjtdBvTgOgh7QKzwE7RaqJOI
-         rMqQ==
+        Thu, 25 Mar 2021 20:17:28 -0400
+Received: by mail-il1-f177.google.com with SMTP id t6so3644141ilp.11;
+        Thu, 25 Mar 2021 17:17:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=UQ2hEc/oKz/yz+r+7NuRxm3ZC0agePHpnR729978KoI=;
-        b=aq6aMLvW+UjbrYPb9470FkpZTjRVuuBgaFEkTVLoDHltcdAfXEWBaMoepMBoNP1vNG
-         t+7DGhX5yg61wxict7HV8Z69dIIn4F5Ad2jOZRcLtnaMask9S397laJtTqIYKfUcSyV9
-         fCkiiCzEF1zJKzRgfBxgNDFo46s6ZchjW/2NEIoCrO4xnMnYDXpX8E9FywQfKCps/W3p
-         k/5D82IXoXKzhyB8kW7jbZGS66L6vuA1wjhO6gHjJLeSPvT1teX84ipN0lIAbprw5BCP
-         EtrSAFUXCPmgONuRmeksSVj5CG5Xssy23CjSTt5PPHL8On/F2Bv17DXVpQUvNy8tbkDC
-         q4Og==
-X-Gm-Message-State: AOAM5337nO0VLj8nakv7nK5FqhiR36h7lxfsxa0H93LfolQj0Z0cNDyi
-        HURmLE+9p0K1C2ysPhGXrNJxaQ==
-X-Google-Smtp-Source: ABdhPJxbjraC5qErKMa/evjqnlAdHTKKuHn477iabRv3jVV+MslLw0iV5FtKJacjdVJVefgrlSt89w==
-X-Received: by 2002:adf:f9d0:: with SMTP id w16mr2279442wrr.336.1616575447973;
-        Wed, 24 Mar 2021 01:44:07 -0700 (PDT)
-Received: from dell ([91.110.221.180])
-        by smtp.gmail.com with ESMTPSA id i3sm2090329wra.66.2021.03.24.01.44.06
+         :mime-version:content-disposition:in-reply-to;
+        bh=LzkNs7zb3oaH5slSNnfze5rKPCk8h7J3wPJIRw9ZRT8=;
+        b=jjck+j4rmJgGb8XhuJbbgdiUT68d+s5b1DMiSom1m/ZZyHGDW+Uk4QZ+Us7ClRvl29
+         7hTVJT3p9qV7QSG/10Y+2W26X+u9l3tQhoitLy3Aed7aQFLLimx0HhxuOSKK2xvoLYrp
+         fW4mOfhhdHnGfnbOQ3T3SOisMOSTnQMpmjlBVMVPfNRgOYZe1678iJeCL+ViWYP/cvI4
+         8cGePInXuxJ+UWgxwF5yteRgbmC0bJ0GwEusX4ei/rNa9Dd9BxAX+G21BsQ3UpZui2Rd
+         OhPiaM1UjWGDhZEWIBAAusWPyWwEkLrgQPo5CVqVdTmLuOKu1KcV7GKLhRf4xgEVm7E2
+         kHpQ==
+X-Gm-Message-State: AOAM532bxP3Nnh04jgKmgydmS2zzd7+c71axWmAzn7hqrkHB8RO4nZKV
+        fBvP5lOTmVvoctQshd7YGIOLWDUwgQ==
+X-Google-Smtp-Source: ABdhPJwO1QI6jRCgAw4lTeldvQek3yCJdHIolsVNpeqKAZ/i353EZFrLiVm6qKo1Tn2NIMTjZ/s/CA==
+X-Received: by 2002:a92:ddd0:: with SMTP id d16mr8780446ilr.52.1616717848219;
+        Thu, 25 Mar 2021 17:17:28 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id a7sm3388564ilj.64.2021.03.25.17.17.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Mar 2021 01:44:07 -0700 (PDT)
-Date:   Wed, 24 Mar 2021 08:44:05 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     "Campion.Kang" <Campion.Kang@advantech.com.tw>
-Cc:     "chia-lin.kao@canonical.com" <chia-lin.kao@canonical.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "Campion.Kang@gmail.com" <Campion.Kang@gmail.com>
-Subject: Re: [PATCH v6 4/6] mfd: ahc1ec0: Add support for Advantech embedded
- controller
-Message-ID: <20210324084405.GB2916463@dell>
-References: <20210309160755.GR4931@dell>
- <20210319100105.18278-1-campion.kang@advantech.com.tw>
- <20210319141443.GI2916463@dell>
- <f47a66c80d8b4cf6b9c28a4519a10521@Taipei11.ADVANTECH.CORP>
+        Thu, 25 Mar 2021 17:17:27 -0700 (PDT)
+Received: (nullmailer pid 2014659 invoked by uid 1000);
+        Fri, 26 Mar 2021 00:17:25 -0000
+Date:   Thu, 25 Mar 2021 18:17:25 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        jdelvare@suse.com, linux@roeck-us.net
+Subject: Re: [PATCH v3 1/3] dt-bindings: Add vendor prefix and trivial device
+ for BluTek BPA-RS600
+Message-ID: <20210326001725.GA2014607@robh.at.kernel.org>
+References: <20210317040231.21490-1-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f47a66c80d8b4cf6b9c28a4519a10521@Taipei11.ADVANTECH.CORP>
+In-Reply-To: <20210317040231.21490-1-chris.packham@alliedtelesis.co.nz>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, 24 Mar 2021, Campion.Kang wrote:
-
-> Thanks a lot, please see below descriptions.
+On Wed, 17 Mar 2021 17:02:29 +1300, Chris Packham wrote:
+> Add vendor prefix "blutek" for BluTek Power.
+> Add trivial device entry for BPA-RS600.
 > 
-> >-----Original Message-----
-> >From: Lee Jones <lee.jones@linaro.org>
-> >Sent: Friday, March 19, 2021 10:15 PM
-> >To: Campion.Kang <Campion.Kang@advantech.com.tw>
-> >Cc: chia-lin.kao@canonical.com; devicetree@vger.kernel.org;
-> >jdelvare@suse.com; linux-hwmon@vger.kernel.org;
-> >linux-kernel@vger.kernel.org; linux-watchdog@vger.kernel.org;
-> >linux@roeck-us.net; robh+dt@kernel.org; wim@linux-watchdog.org;
-> >Campion.Kang@gmail.com
-> >Subject: Re: [PATCH v6 4/6] mfd: ahc1ec0: Add support for Advantech
-> >embedded controller
-> >
-> >On Fri, 19 Mar 2021, Campion Kang wrote:
-> >
-> >>
-> >> Please check [Campion] text in below as my reply.
-> >
-> >This is a mess.  Please setup your mailer to quote correctly.
-> >
-> >> Sorry, due to the mail was rejected by vger.kernel.org as SPAM before
-> >> so I reply the mail late and had some test email before.
-> >>
-> >> -----------------------------------------------------------------------------------------
-> >> Date:   Tue, 9 Mar 2021 16:07:55 +0000
-> >> From:   Lee Jones <lee.jones@linaro.org>
-> >
-> >[...]
-> >
-> >> > +enum {
-> >> > +	ADVEC_SUBDEV_BRIGHTNESS = 0,
-> >> > +	ADVEC_SUBDEV_EEPROM,
-> >> > +	ADVEC_SUBDEV_GPIO,
-> >> > +	ADVEC_SUBDEV_HWMON,
-> >> > +	ADVEC_SUBDEV_LED,
-> >> > +	ADVEC_SUBDEV_WDT,
-> >> > +	ADVEC_SUBDEV_MAX,
-> >> > +};
-> >>
-> >> Are these arbitrary?
-> >> [Campion] cannot arbitrary there, due to it is a index to identify its number
-> >of sub device.
-> >
-> >I'm asking what this is dictated by.
-> >
-> >Are these ID/index values written into H/W?
-> >
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> ---
 > 
-> These index written in BIOS ACPI table. 
-
-Please consider renaming to make this clear.
-
-  ADVEC_ACPI_ID_{DEVICE}
-
-Add a comment to express the importance of the order too.
-
-[...]
-
-> >> > +int write_gpio_dir(struct adv_ec_platform_data *adv_ec_data, unsigned
-> >char PinNumber,
-> >> > +		unsigned char value)
-> >> > +{
-> >> > +}
-> >>
-> >> All of the GPIO functions above should move into drivers/gpio.
-> >>
-> >> [Campion] Due to it has a flow need to cowork with EC chip and firmware, it
-> >cannot be interrupt
-> >>           by other functions. So it needs to keep in here.
-> >
-> >Please provide more details.
+> Notes:
+>     Changes in v3:
+>     - None
+>     Changes in v2:
+>     - None
 > 
-> These gpio functions are common used for gpio to adjust the gpio direction and access its status. It has a complete lower process with EC that cannot be interrupted likes others. The flow is:
-> 0.mutex lock to get the EC access
-> 1.it needs wait IBF (Input Buffer Full) to be clear and then can send the command
-> 2.Send read command to EC command port
-> 3.wait IBF clear that means command is got by EC
-> 4.send read address to EC data port
-> 5.wait OBF (Output Buffer Full) data ready
-> 6.get data from EC data port
-> 7.mutex unlock
-> So it cannot be interrupted as other EC lower access due to they use the same mutex to lock the flow. 
-
-That's fine.  You can share a lock with the GPIO driver.
-
-> >>           But vger.kernel.org returned the mail to mail as spam mail.
-> >>           I will modity it as the following, is it OK?
-> >>           examples:
-> >>             - |
-> >>           #include <dt-bindings/mfd/ahc1ec0-dt.h>
-> >>           ahc1ec0 {
-> >>                   compatible = "advantech,ahc1ec0";
-> >>
-> >>                   advantech,hwmon-profile =
-> ><AHC1EC0_HWMON_PRO_UNO2271G>;
-> >>                   advantech,watchdog = true;
-> >
-> >Shouldn't the watchdog be it's own sub-node?
+>  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+>  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+>  2 files changed, 4 insertions(+)
 > 
-> it doesnot need so far. 
 
-IMO, it's more clear than having a property.
-
-[...]
-
-> [Campion.Kang] So far, some registers or settings are have default value. They can be adjusted by runtime. 
-> Is this ahc1ec0.yaml OK?
-
-Rob has the final say on that.
-
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Reviewed-by: Rob Herring <robh@kernel.org>
