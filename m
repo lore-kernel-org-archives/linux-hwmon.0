@@ -4,39 +4,39 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DEF41C433DB
-	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Mar 2021 19:09:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75462C433C1
+	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Mar 2021 20:43:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9A24760200
-	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Mar 2021 19:09:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4974F60295
+	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Mar 2021 20:43:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230402AbhC2TIe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 29 Mar 2021 15:08:34 -0400
-Received: from mga01.intel.com ([192.55.52.88]:31054 "EHLO mga01.intel.com"
+        id S230397AbhC2UnP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 29 Mar 2021 16:43:15 -0400
+Received: from mga01.intel.com ([192.55.52.88]:37866 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230287AbhC2TIK (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 29 Mar 2021 15:08:10 -0400
-IronPort-SDR: G9hfDlIOzWBw+VidRf4G2erVOhIdxOgLG7D7RjtemubSU+LXQJb0di58JOmF/xufF6aZ4UTFnP
- uO3g9o7y9c2w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9938"; a="211810890"
+        id S230323AbhC2UnN (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 29 Mar 2021 16:43:13 -0400
+IronPort-SDR: cnSN95jcQwPaZRMirIUPa9rwI1L+Tc9ueFpzpY4flGmoR4ArYCBBozzO8z8QVw8oi2QBye4eq0
+ yXpIPs9XjP2g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9938"; a="211824266"
 X-IronPort-AV: E=Sophos;i="5.81,288,1610438400"; 
-   d="gz'50?scan'50,208,50";a="211810890"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2021 12:08:09 -0700
-IronPort-SDR: 0ml54vKtZDSGzeVD4s3NpDHrrZ0V6vZJQqe69Lj7KbQZFNY1lIec/OdSJleNg9ZaOuk24nPpki
- UNZ8vcR+uPVQ==
+   d="gz'50?scan'50,208,50";a="211824266"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2021 13:43:12 -0700
+IronPort-SDR: 2JFgnn7r3yDdi8AoXRSdGVqbC9qcw9vVYph8c+AfcKhu0F2lHq233vxxZGvo3TOnoFCC7nWNFL
+ sfWi5nTAY5qw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,288,1610438400"; 
-   d="gz'50?scan'50,208,50";a="438010856"
+   d="gz'50?scan'50,208,50";a="444927138"
 Received: from lkp-server01.sh.intel.com (HELO 69d8fcc516b7) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 29 Mar 2021 12:08:05 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 29 Mar 2021 13:43:10 -0700
 Received: from kbuild by 69d8fcc516b7 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1lQxF7-0004jn-0a; Mon, 29 Mar 2021 19:08:05 +0000
-Date:   Tue, 30 Mar 2021 03:07:44 +0800
+        id 1lQyj7-0004n5-GI; Mon, 29 Mar 2021 20:43:09 +0000
+Date:   Tue, 30 Mar 2021 04:42:37 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     =?iso-8859-1?Q?V=E1clav_Kubern=E1t?= <kubernat@cesnet.cz>
 Cc:     kbuild-all@lists.01.org,
@@ -45,10 +45,10 @@ Cc:     kbuild-all@lists.01.org,
         Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
         linux-hwmon@vger.kernel.org
 Subject: Re: [PATCH] hwmon: Add driver for fsp-3y PSUs and PDUs
-Message-ID: <202103300230.bbE5RYdZ-lkp@intel.com>
+Message-ID: <202103300400.RTasjBhk-lkp@intel.com>
 References: <20210329143833.1047539-1-kubernat@cesnet.cz>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="3MwIy2ne0vdjdPXF"
+Content-Type: multipart/mixed; boundary="qDbXVdCdHGoSgWSk"
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 In-Reply-To: <20210329143833.1047539-1-kubernat@cesnet.cz>
@@ -58,17 +58,17 @@ List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 
---3MwIy2ne0vdjdPXF
+--qDbXVdCdHGoSgWSk
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 
 Hi "Václav,
 
-Thank you for the patch! Perhaps something to improve:
+Thank you for the patch! Yet something to improve:
 
-[auto build test WARNING on hwmon/hwmon-next]
-[also build test WARNING on v5.12-rc5 next-20210329]
+[auto build test ERROR on hwmon/hwmon-next]
+[also build test ERROR on v5.12-rc5 next-20210329]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
@@ -90,9 +90,9 @@ reproduce (this is a W=1 build):
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   drivers/hwmon/pmbus/fsp-3y.c:15:25: error: array index in initializer exceeds array bounds
+>> drivers/hwmon/pmbus/fsp-3y.c:15:25: error: array index in initializer exceeds array bounds
       15 | #define YM2151_PAGE_5V  0x20
          |                         ^~~~
    drivers/hwmon/pmbus/fsp-3y.c:114:9: note: in expansion of macro 'YM2151_PAGE_5V'
@@ -108,7 +108,7 @@ All warnings (new ones prefixed by >>):
                     from include/linux/bitops.h:6,
                     from include/linux/kernel.h:11,
                     from drivers/hwmon/pmbus/fsp-3y.c:8:
->> include/vdso/bits.h:7:19: warning: initialized field overwritten [-Woverride-init]
+   include/vdso/bits.h:7:19: warning: initialized field overwritten [-Woverride-init]
        7 | #define BIT(nr)   (UL(1) << (nr))
          |                   ^
    drivers/hwmon/pmbus/pmbus.h:383:26: note: in expansion of macro 'BIT'
@@ -128,22 +128,26 @@ All warnings (new ones prefixed by >>):
          |    ^~~~~~~~~~~~~~~
 
 
-vim +7 include/vdso/bits.h
+vim +15 drivers/hwmon/pmbus/fsp-3y.c
 
-3945ff37d2f48d Vincenzo Frascino 2020-03-20  6  
-3945ff37d2f48d Vincenzo Frascino 2020-03-20 @7  #define BIT(nr)			(UL(1) << (nr))
-3945ff37d2f48d Vincenzo Frascino 2020-03-20  8  
+    13	
+    14	#define YM2151_PAGE_12V		0x00
+  > 15	#define YM2151_PAGE_5V		0x20
+    16	#define YH5151E_PAGE_12V	0x00
+    17	#define YH5151E_PAGE_5V		0x10
+    18	#define YH5151E_PAGE_3V3	0x11
+    19	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
---3MwIy2ne0vdjdPXF
+--qDbXVdCdHGoSgWSk
 Content-Type: application/gzip
 Content-Disposition: attachment; filename=".config.gz"
 Content-Transfer-Encoding: base64
 
-H4sICAEdYmAAAy5jb25maWcAlFxJc9w4sr7Pr6hwX2YO3aPNNe73QgeQBKswxU0AWCXpwijL
+H4sICIY0YmAAAy5jb25maWcAlFxJc9w4sr7Pr6hwX2YO3aPNNe73QgeQBKswxU0AWCXpwijL
 ZVvRWhyS3K89v/5lgltiIctzscwvEyCW3AHWL3/7ZcG+vz0/7t/u7/YPDz8WXw5Ph5f92+HT
 4vP9w+F/F0m5KEq94InQvwFzdv/0/a9/Pi4//LF4/9vp2W8nv77cnS02h5enw8Mifn76fP/l
 OzS/f3762y9/i8siFasmjpstl0qURaP5tb58h81/fcCefv1yd7f4+yqO/7H4/bfz307ekTZC
@@ -1253,4 +1257,4 @@ X+d6T0gU/5dxhm4QK3Jmz8O1rzRl6xgL3MeOGVcwXyShnPxgY2U80LmmOxOJk2QUEZwEcucv
 n4+koXa/4AqHhglcPXNjTj1l39P2HrjJD9P/0lz2H3zg5UPjyh4kjpjbiFFijq3BH6UOVL9u
 08YqjgTglG4qTy1KTNjVfh3weVMebNAuoCUML2Iz4StH9O1R9/8BPT1IdyvIAwA=
 
---3MwIy2ne0vdjdPXF--
+--qDbXVdCdHGoSgWSk--
