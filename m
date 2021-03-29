@@ -2,109 +2,88 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7735C433DB
-	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Mar 2021 21:54:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B4BAC433C1
+	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Mar 2021 22:04:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 79D2561481
-	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Mar 2021 21:54:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F270D61994
+	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Mar 2021 22:04:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230467AbhC2Vxn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 29 Mar 2021 17:53:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56702 "EHLO
+        id S231136AbhC2WD6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 29 Mar 2021 18:03:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbhC2Vxl (ORCPT
+        with ESMTP id S230089AbhC2WDw (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 29 Mar 2021 17:53:41 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0AE2C061574;
-        Mon, 29 Mar 2021 14:53:41 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id y19-20020a0568301d93b02901b9f88a238eso13694013oti.11;
-        Mon, 29 Mar 2021 14:53:41 -0700 (PDT)
+        Mon, 29 Mar 2021 18:03:52 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9577DC061574;
+        Mon, 29 Mar 2021 15:03:52 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id c16so14546247oib.3;
+        Mon, 29 Mar 2021 15:03:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=e4SKluglhzWUQpMNV8EgeGf+vV0YVh7d1RjcaSkMlkA=;
-        b=gLK2vGPTtbS0z+6i7fY981NhNKiTXGRxl0XrjeL6LeM5i3M3ztqViB1UGEtiBUNqvD
-         wHLipPbYMdVtskW59uHO2gUR5KhImfIpFQHD39MFQL5Q1PjIEX9PVVRJB82YluGutm0G
-         r+Mu55B8jLpMFbtYS1sjbJjYwzxZoFGJ0CPmKwNylM1/kQFRVw8xxaIq+Iio3hauFIWq
-         89nLWJX1SB+1I3T6WSljfTK/FIu+g5PaSqyp8JxfobxOalUJHnhieiq9mZ6jHG5eB+Hu
-         1d2pFln5NOf8SHHdy4PVGl9EOk2HnaV0svTqkNfmnvxrXW6G62vBoybS71PcC9Cz9u5C
-         d/oQ==
+        bh=/NQhvFj5eS7k//pPWoR9yEacTl1XpNVlMfZ0D3JofVM=;
+        b=QqlVjiELedI/JlTJGauw6EXfwiMawlMPbS8SCCjFufAG5N6ATCuCZhVAP5eJ9Xj5c2
+         bFlmRccDNAVizfYJAIW8g9Bnk5UT543xHcVFrP2M04h8DzGbJETG3J3EUsSmriCbiAgR
+         VvtsvUIkX6Ew3P8qjI4DXtl9WUT+vRkavdni2usM/C+3hZOR+ch2o1iQOnC9y61gK8m3
+         gHQWmQpfbTz7ZnCRgTDezbO04ET2jqja9FKLvq4f2b/GbHw6OW2cpJ3OABy4hfRSQK4b
+         f3DQ5pA5a6xx4CH18gYMzbTzqA1gp+j+lK5exgetmZSNDc7zLgYG+3z8TNWtetTFX8bX
+         iEvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=e4SKluglhzWUQpMNV8EgeGf+vV0YVh7d1RjcaSkMlkA=;
-        b=DOZY6yMfo0jDyCRusO8qk1nud8S2Z8fhhKQQsXXURCx4HPa2puRosvsyUTGjZaL4j5
-         SPq/ge0+5ICZ09Ofi8PeU/oOe1MN2NmxHZK8S9uG8dRIma2iiHFjNVaZLS+gvKFHQWlo
-         aDZChiUwW26083U2Lvb/2+fS8T8vmaakT2+AGPQYun3T6hLDQbziu+VxtuOkJ2Q/gOc2
-         GARJ1qWJr+yUpJKNKXzkVq5YI/rzTu7lrRdUrLwlOUZB/QRsQ9lzlaHW10ZzRR48Kp9E
-         ni1QCPZQKkqVHQ5iOYmayJsRtKH2h6HgWIckSE3KYb/AvkVEKonkCEvjfzf9YvSw0ZDY
-         JnPg==
-X-Gm-Message-State: AOAM531HKiWgTPiM2QKHWuvJ2L+jo70hAI24M+pDu4K/Qd7HEJrOaiDl
-        tbxWf8nxWdMekndS2ZcCVvIjMRww998=
-X-Google-Smtp-Source: ABdhPJzxueuH0SH312BGa5vbmqumqgx5QQKyht9Lv5vulcmfN85oRQwn3szVxLuQWYp/BvfiBydQCg==
-X-Received: by 2002:a05:6830:1b7a:: with SMTP id d26mr17855125ote.324.1617054821169;
-        Mon, 29 Mar 2021 14:53:41 -0700 (PDT)
+        bh=/NQhvFj5eS7k//pPWoR9yEacTl1XpNVlMfZ0D3JofVM=;
+        b=h8J7jyCkZASfV2tAEisomlBKpkFfV/XBsx3BN72vCHwyXacqygcP91T+iyGvgXjPSF
+         JHDGhqDhNpcpKjR6gn86kVUdjbR459JOyuQF+Dj0cfX/ypPs7uZpyRHioYi7OWvvXixn
+         7xq1xp1vk0AJvKxDA6SOoMy7ivmpSD3M9RBxibcTVrMoXhaXBOa1n8Wkn3vbFFkZ/VJI
+         Z6mnKGx0QAW+l4I19Z6d5IyTaR7cXyqx3MgCK+V5xY4l2B6tLa/4xY4dtx2CGuzy1oQO
+         nPtptrhOs0N0Hh2ZtpLTL4uL04ur8Mwh4+JfDiTqpjj4Rv+XNtyChI3ZlV9FT92RecHK
+         4PRA==
+X-Gm-Message-State: AOAM533AyMAZ6B4tDx5Z2/CPhiz0YWSPIH5Qmfosj5YQooDjofJ0NDon
+        qg0w40xthGkDa/1Axsce1wE=
+X-Google-Smtp-Source: ABdhPJxDZFz/ffS3eDiAKgeAHm6ea7e12k7seYloXSp6jphZcdwRUaMeqdVTgD8b27j1sq5mo3HShg==
+X-Received: by 2002:aca:f13:: with SMTP id 19mr875897oip.56.1617055432063;
+        Mon, 29 Mar 2021 15:03:52 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e34sm4661694ote.70.2021.03.29.14.53.40
+        by smtp.gmail.com with ESMTPSA id o10sm4727761ote.5.2021.03.29.15.03.51
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 29 Mar 2021 14:53:40 -0700 (PDT)
+        Mon, 29 Mar 2021 15:03:51 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 29 Mar 2021 14:53:39 -0700
+Date:   Mon, 29 Mar 2021 15:03:50 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Jonas Malaco <jonas@protocubo.io>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (nzxt-kraken2) mark and order concurrent accesses
-Message-ID: <20210329215339.GH220164@roeck-us.net>
-References: <20210329082211.86716-1-jonas@protocubo.io>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     robh+dt@kernel.org, jdelvare@suse.com, devicetree@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] dt-bindings: Add vendor prefix and trivial device
+ for BluTek BPA-RS600
+Message-ID: <20210329220350.GA221755@roeck-us.net>
+References: <20210317040231.21490-1-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210329082211.86716-1-jonas@protocubo.io>
+In-Reply-To: <20210317040231.21490-1-chris.packham@alliedtelesis.co.nz>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Mar 29, 2021 at 05:22:01AM -0300, Jonas Malaco wrote:
-> To avoid a spinlock, the driver explores concurrent memory accesses
-> between _raw_event and _read, having the former updating fields on a
-> data structure while the latter could be reading from them.  Because
-> these are "plain" accesses, those are data races according to the Linux
-> kernel memory model (LKMM).
+On Wed, Mar 17, 2021 at 05:02:29PM +1300, Chris Packham wrote:
+> Add vendor prefix "blutek" for BluTek Power.
+> Add trivial device entry for BPA-RS600.
 > 
-> Data races are undefined behavior in both C11 and LKMM.  In practice,
-> the compiler is free to make optimizations assuming there is no data
-> race, including load tearing, load fusing and many others,[1] most of
-> which could result in corruption of the values reported to user-space.
-> 
-> Prevent undesirable optimizations to those concurrent accesses by
-> marking them with READ_ONCE() and WRITE_ONCE().  This also removes the
-> data races, according to the LKMM, because both loads and stores to each
-> location are now "marked" accesses.
-> 
-> As a special case, use smp_load_acquire() and smp_load_release() when
-> loading and storing ->updated, as it is used to track the validity of
-> the other values, and thus has to be stored after and loaded before
-> them.  These imply READ_ONCE()/WRITE_ONCE() but also ensure the desired
-> order of memory accesses.
-> 
-> [1] https://lwn.net/Articles/793253/
-> 
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-I think you lost me a bit there. What out-of-order accesses that would be
-triggered by a compiler optimization are you concerned about here ?
-The only "problem" I can think of is that priv->updated may have been
-written before the actual values. The impact would be ... zero. An
-attribute read would return "stale" data for a few microseconds.
-Why is that a concern, and what difference does it make ?
+Applied to hwmon-next.
 
 Thanks,
 Guenter
