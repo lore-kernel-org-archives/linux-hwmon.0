@@ -5,28 +5,28 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 197ACC433E8
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B008C433EB
 	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Mar 2021 01:54:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0103C61954
-	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Mar 2021 01:54:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5323561951
+	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Mar 2021 01:54:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230202AbhC2Bxp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 28 Mar 2021 21:53:45 -0400
-Received: from mail-dm6nam10on2121.outbound.protection.outlook.com ([40.107.93.121]:45696
-        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        id S230394AbhC2Bxq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 28 Mar 2021 21:53:46 -0400
+Received: from mail-dm6nam11on2092.outbound.protection.outlook.com ([40.107.223.92]:34657
+        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231254AbhC2Bx0 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 28 Mar 2021 21:53:26 -0400
+        id S230437AbhC2Bxc (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 28 Mar 2021 21:53:32 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g/nh2WIQ66w8ulJkRMl+wfRtovMEmoRZAKLPs6+ofH0ACoTKIuBXZ1MnATVCldsQByGIP4rKqe6f3U81rGHdrFh5euNVNnjc0xw6Mz7NlkB+FsATk0ZxglOOx3Bs9C589YojUDgaAQSSp145qXEZCDSKe+n9UVdtKqxqMHigXR1Nrb+LbZTlTcXZ6/uHXGbxpQSz8jSNPFK/mHad9ZpCqOuYTEYBSNi1jzyCkZ3YpnxxIGEYTbX4qX+w0Y2djKFssN62tIIUTmlZ57ieHfH8bkr70tcix5Y2gm+6voXoBXxQlvosm/RXdBZizXzb0AbgGZ2F7ond216NbiMM0UOnSA==
+ b=mL7yqEbBr/oMeFcnqySjflV/N66eeDj/5BW3oeMizW20XpZ7jTuAW6PQW3oc1/XeRTeJrM/3+Z7oWzLaYXj+eCTci4shZwfo2tQzkAwkHNipgRQEPylua+IOHE9fnu61A9ishR7ImVPi7FwpfCGONNyaSIkP43GUmJTpw9bPmqZM0LknXnhxqfiMD8Qwx3VIp9AsHj+ciQ17brZuIdvN332n7BrXATVbGmWGYg++N6U3O+piRAdlbLqz0bD91Nw3bjH8HhaQ8TV5/JEa30PKSJZ+65VesfUvculHX89bnJjrrPpIe+WiGSnHEoCXVVCrGTnAyLvmH4UTnzlSVJ9zOA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=29W8ho0+Xw7Kqr3NjweadDw7HfMJk04fN+WYpLmVGU8=;
- b=im5u1MrFLLaNC4g0y332Kf3NTiOHQCkWcffuOBJwJnEym7zP3ZgremgwNkhezUmm6UqCJHm/1evg094gDFYdUe6Kv8Z7vBOSKADSo/xV8FRrvjMrN6FGi918UY94PK/XScbOLzPbjQIBit/uTFNp+6XDVKI+lARgoNRLftdrx2w3DcD/Xw46KuPMhzkZqLwE+vAmQ7wpydNLIMdqlU+HVtjpz9Y5R8mSc5tYK19pAOpgLRGvjW4Y8uKTznSrMsj3aYtlwIB4MwIZbZq888iy3QEOlPtwHOi0jInGFIaHkqZF4HdK4sPSZHJUnP8tLP4kRKfbIpmsoxr1PBONl6F1UA==
+ bh=YsnJgrS+GjqZP32bh7ZFKSuGXYYU0wjYM7emkHcqBJU=;
+ b=SsJ7uzII+Ux5wvVXFJXfo8rI/aXnnwKuBd+6LQMi51u0RHUIxHtdUuPwZoEJvJQCLfFecNjp4MOFhmbkiuN9yZEShPwc1Lfy5/v5LsfRxSjF1oaM1TXWTs5167tJZi0edvj+T5UxVSuP7DNI0RKVTnGldaW3i+zfeMhzMnb3+IEapLmKNQw8Odk9ejEVGJ8HEEeDZ6h6R+g9L2xPqgtKzIrS4FuAwDLQi3FQUsGak5rIn6F5bNi220Y4tnYhuQKKjksxsY57DKo0ubTc2U2k0QoBdavgmEAxNjIe3PtIFMofGudenwjKHfsV7bZyv45H3smA89Gntk7nmVTSy6/4zg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
  header.from=os.amperecomputing.com; dkim=pass
@@ -34,19 +34,19 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=os.amperecomputing.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=29W8ho0+Xw7Kqr3NjweadDw7HfMJk04fN+WYpLmVGU8=;
- b=EpFbFQG3WMoPrPO489YC9QNypZ61Ky9kP0mmg2F47h1WfdCRW8UhUa7FShHy1XviKqe7RJJJAdei9puKyvMKSQFIHAnPzqk5JeFaI2e7gt1bwybjJ/n6wwVMkMRng1hISraPbk/Y3lkErMmab9vzbwj+WAO0YrPsCrOmOzpT59Q=
+ bh=YsnJgrS+GjqZP32bh7ZFKSuGXYYU0wjYM7emkHcqBJU=;
+ b=YB0VjfWh3kmgpeJpGyKO2WBVxX6fEe06PJEObXkYPzxf8+R3mqho5GEHN4yeI4es80z/LRRCZm5FhEnbyu4eYG/kVCzo7UXvljojkWTMGtnAbGv9Riw4BRyIqxEPTndcTkBuhDMGH5evrc8WIjT+/xZixcrZjuJDUsyhDuZO02g=
 Authentication-Results: jms.id.au; dkim=none (message not signed)
  header.d=none;jms.id.au; dmarc=none action=none
  header.from=os.amperecomputing.com;
 Received: from MW2PR0102MB3482.prod.exchangelabs.com (2603:10b6:302:c::32) by
  MW4PR01MB6226.prod.exchangelabs.com (2603:10b6:303:77::23) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3977.24; Mon, 29 Mar 2021 01:53:22 +0000
+ 15.20.3977.24; Mon, 29 Mar 2021 01:53:31 +0000
 Received: from MW2PR0102MB3482.prod.exchangelabs.com
  ([fe80::d840:7aa7:58d4:b503]) by MW2PR0102MB3482.prod.exchangelabs.com
  ([fe80::d840:7aa7:58d4:b503%5]) with mapi id 15.20.3977.033; Mon, 29 Mar 2021
- 01:53:22 +0000
+ 01:53:31 +0000
 From:   Quan Nguyen <quan@os.amperecomputing.com>
 To:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
         Jean Delvare <jdelvare@suse.com>,
@@ -60,9 +60,9 @@ To:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
 Cc:     Open Source Submission <patches@amperecomputing.com>,
         Phong Vo <phong@os.amperecomputing.com>,
         "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-Subject: [PATCH v2 2/4] mfd: simple-mfd-i2c: Adds Ampere's Altra SMpro support
-Date:   Mon, 29 Mar 2021 08:52:36 +0700
-Message-Id: <20210329015238.19474-3-quan@os.amperecomputing.com>
+Subject: [PATCH v2 4/4] docs: hwmon: (smpro-hwmon) Add documentation
+Date:   Mon, 29 Mar 2021 08:52:38 +0700
+Message-Id: <20210329015238.19474-5-quan@os.amperecomputing.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20210329015238.19474-1-quan@os.amperecomputing.com>
 References: <20210329015238.19474-1-quan@os.amperecomputing.com>
@@ -74,109 +74,184 @@ X-ClientProxiedBy: HK2PR0302CA0008.apcprd03.prod.outlook.com
  (2603:10b6:302:c::32)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from hcm-sw-17.amperecomputing.com (118.69.219.201) by HK2PR0302CA0008.apcprd03.prod.outlook.com (2603:1096:202::18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3999.14 via Frontend Transport; Mon, 29 Mar 2021 01:53:18 +0000
+Received: from hcm-sw-17.amperecomputing.com (118.69.219.201) by HK2PR0302CA0008.apcprd03.prod.outlook.com (2603:1096:202::18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3999.14 via Frontend Transport; Mon, 29 Mar 2021 01:53:27 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 211e8a35-62bd-47f9-b32f-08d8f2556eb7
+X-MS-Office365-Filtering-Correlation-Id: 9277a477-8a24-4115-f34c-08d8f2557426
 X-MS-TrafficTypeDiagnostic: MW4PR01MB6226:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <MW4PR01MB6226DD6913DCFE49ABDB43A5F27E9@MW4PR01MB6226.prod.exchangelabs.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3276;
+X-Microsoft-Antispam-PRVS: <MW4PR01MB6226B7E75B6D711271EB5471F27E9@MW4PR01MB6226.prod.exchangelabs.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QajNjZEOb81ITIh8YQYIrgPjcfplk0CLbK1/WWBHyPkxnL2Zn0raUI7uGTtpB/4RS3duW1WpFN009NSnyfTcKj4ygGMB+eIn0XQR1uYYYZyNvR1zzkqPlUi3ior7N6Lju6rLoUUSsLOoBz2AjuOmD2KZEkdMQgmHLomTx3UcGutdrwJATTHcM26RsQKE/ueTPWgA+EiWQvLJNMknGq7cCE7RZI+1xY+VGJouz8ezyHlmdA7ar0gYe4DJd99nJlwqpcFVdApaHWX6pdbyfk6npfcoULoc/Syuit7/3Wus2Dpl32kAMNQOs/nfP7LhVVkoxjmab+WK9FqbjpN+vKadRbkRx5AY4N/Hf5B2iEIjrubV+GiuQ0foGXOKwyYh6Jwd0bLxyXiCHTBGRXwPxQlij76NJwlWIEfCxc4Fa9B7/YG3R5d60XeZHRAL1V+f3ti7cSdVhlxJbAzslVHBQ5KacrKjj1LcMUovqyBn0V7/hqFKWTT7O61PGXqOytm8lSRFIA8u9cWlm1BzUkeb2RqIJuV1iZM1BZuw5q/wV/Gxkn5nmIgtMIMbMbSio5yGWNnNxLmJjC8SOTDpAvLAccxUj71jkzCh/J7zvR3lM0TjsmcQCnVqvsF1zeIEVW/qf5wdDglqa1a3FfvyI3u41wdcXVTTA7dTdDOYlGckAsHaT+s=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR0102MB3482.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(346002)(136003)(396003)(376002)(39830400003)(54906003)(6486002)(921005)(7416002)(52116002)(86362001)(6666004)(4326008)(66946007)(316002)(2906002)(8936002)(2616005)(478600001)(26005)(6506007)(66476007)(1076003)(16526019)(186003)(66556008)(107886003)(83380400001)(110136005)(8676002)(6512007)(38100700001)(5660300002)(956004);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?0QGsUNbJ1hdqD4JMdYRb6dQ3LFtBM5e/KKptB/ts9cLW1K743AJu76Vuwifn?=
- =?us-ascii?Q?f9sdc1rn2lSI21afZV7IiQ5O1yVI6yFDG4vLdvHskiqbaxC/O87Mv7LDbSu5?=
- =?us-ascii?Q?z1uebPTUd/Gef/q+dF2MAQFxjTtYPYUDRX+SdmOOOezdT0uXaIQPm2GKhfKK?=
- =?us-ascii?Q?qdKnYu6Q7/ebcmsLqDoUkmx5kth/C3+YrwVCTXWbf2z+hHgbUtejRRgghcvF?=
- =?us-ascii?Q?I3mTOYqXJt0poIbKPO+t0i2MDlMG8sF5DIjJnIcqGiGuDdSTVTuZv7yaG7rK?=
- =?us-ascii?Q?0JQEdAcgdpyl93bs3/UkZ6Cclc4t7xMAoa+Y+oNrp79Yctm6KAGd3ZYnyOL6?=
- =?us-ascii?Q?LHskvLcXLOBF0H7u+pTpvpu5Y4JGC8p7oYyXY25LcIebm+oogPPtHATNlqTA?=
- =?us-ascii?Q?8LXFidKzNO3PDJ2tHj2kDAu0270QvopY7Dxvj34OvaSufzH38cP/wv2Tg+ks?=
- =?us-ascii?Q?/WHPjG9J4LfmwNlLns6q6QGETiDfb5Jj3/Ihl4bqBFEjZ4H8QiyyWqfz8Ui1?=
- =?us-ascii?Q?BXB+QE3RBl6aAk6tENJ1sBV8ON/aUbJQgqIQlEecS22wJpdKmTK6PjysnVxd?=
- =?us-ascii?Q?hV3+6qYq0U5hD+1YcnC/MRYv7++20xhn90Mh222hwkHOJNZH7X/itxWSCWTJ?=
- =?us-ascii?Q?99ME5XxGiKtWDG2fUDs4Gmiib5JYDOxX4UwSiy2uKe7jmu4/hpQbIfwqePr2?=
- =?us-ascii?Q?A75onvDmEG/D4QpGpi9dpb9APMT7CNyKm9lNjn+p6ORAK8MymyF4Ver7NHlY?=
- =?us-ascii?Q?sE7l5WpQcKTlthxSJknzVGnIKGYB89LekNXuirLld/9KhY4V+pqJYsdjE1XJ?=
- =?us-ascii?Q?TCW4wD/U0WVq5jOmNUYuMc9IGNiV4iWTzsL6Zp/41fL3pTSW5kjapSHtnYbc?=
- =?us-ascii?Q?drtBt4D1jt71QCCflxR46LScID5Sy0JH0RK6GRkCglu/DQMc0+60hmagUCRC?=
- =?us-ascii?Q?Ne565gQgJmOozkBVEtYcb6cSvKZM+ZXOT+1d/KR8a+Q2n+25gt6FLjWsAl/2?=
- =?us-ascii?Q?nsRAhdWN+QypQK2gRiE0iS55x2zLnMZuvMRProeLn2gOFLGj+yeH9xj4GY06?=
- =?us-ascii?Q?vMJx+iAmXBoxSoRpd0LaaAzwc5YcmWGdHI20+C0APJVrSnUqPwM+gwfP5B0c?=
- =?us-ascii?Q?GjmxUC2YTbHbleOBZlyxGyc0/aOIaVE+6t1evD+X0Vgk7bwP0cdABafgGOz3?=
- =?us-ascii?Q?bsMqKQj+JG8MpvPfCr4ylyx7R/826O77si33hFwsto8IqfLL+3qFlWQNHOoU?=
- =?us-ascii?Q?jwnoeAzW3uZyu9I73pUoaQodAdzjCnM9QXIF0u/KiGKagRKNr8w+CiUvJCpp?=
- =?us-ascii?Q?hhnm1aTocCH226pTAIb/R9vk?=
+X-Microsoft-Antispam-Message-Info: mdtugP+698pTxpSK5GPKOOzJTLz9dlVQ+KuJacMyD35ZJ4Ywhw0A+NsChFYH4qaoFo/BVUyfYk7EvyoFpZ/ZgK5EEZ5Xq45JzXl/oSTVwc6gzp+GYcPwYPajvaat+q6bLfCvDvRpjIguJXz99Z/ImyOqVIDFuwnc0Z8LNKxfBtA8V2jgvJB4E2fkYYZ8+zEtK5oO+NtTpB/y3Fir2H/0JWl8Y4zK0/1SD9g+O4VkTwAkXUn42ZoKnyIbI7noc8qqyt3P2zt3DYI3Oop4Tej2Gg+SXsAj27e3w+74PmbJFIDlN+uLP55TjoTzXPNu8weshHRG1x+jOVzX1X7wCB5BsSdBRjBTO1PMPsqoaPKF/BWZ3xgRgtJXtl5lQFIyNzjpSALBfD9PPacPtCApmLjp7vdpOe0nUQxDTMCkPqCk5McfT160fA1TNKbdRp7mw0XiRkJLndbXAsGd58wSk1QLTSPwPMzO2geijhbh5xXXtJC3FHyc5zD/VgnT0NuPXpynx/RB9tuEweJx+sft2WQMD42RXr9MDds21vupHhizez/RkpVvWI6G8vfg6B6jrecrTbG+vUJIxTRcipAELtq8DS+cKEOdI6wJSgIj0EGAd1XqMDYIWJDw7FlSrr10D0VenKHDLLMh2aHtMUtNvGc3XyhuUVVcnDIoC0Oiesuowc8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR0102MB3482.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(39840400004)(346002)(136003)(396003)(376002)(54906003)(6486002)(921005)(7416002)(52116002)(86362001)(6666004)(4326008)(66946007)(316002)(2906002)(8936002)(2616005)(478600001)(26005)(6506007)(66476007)(1076003)(16526019)(186003)(66556008)(107886003)(110136005)(8676002)(6512007)(38100700001)(5660300002)(956004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?TJF51w6MYqCKUOmdHAiymyLkRfG337QCHQmFDSmrFtHd8Ojq4VVHs4EykLEp?=
+ =?us-ascii?Q?3l0YjoBniCPjhD7sT/zZWCpTmUaRsf778rMfP0OSLBvhymvn0GTy5dyE9jUX?=
+ =?us-ascii?Q?KNDurzxJCvxGtHOumKjNAmQ5y+L2ig24E76ocxEuk9G6d3yDG77e6okVJhk5?=
+ =?us-ascii?Q?qrj8yAxpfFN4n+tH2rEz/wOpuBLGbeIV7Xwg6ekiiwFJtfsmBIVYqEuB991X?=
+ =?us-ascii?Q?4wCdB9QbwBHHRoD37CFhpjNBSfrQqVPMTP9BZ+rcbgqzyBtsDNgSh9vqRFo9?=
+ =?us-ascii?Q?ozmjLY+GRkEyL0zvsetNjbRH+8UzrurlrzveRxUU8G1RLHukqzwrB9Gn0AGP?=
+ =?us-ascii?Q?knp6KFysGitf9HeNCxFqXOglx5IbO5A4YT7e7T3fnK3F6y6CXraO04DWQYZ4?=
+ =?us-ascii?Q?30pPVlzwzGaCn1DFgZomXvgWtCUREUCPwTjxAwNMChgkXaKyxsMEgSubl+pK?=
+ =?us-ascii?Q?mKFgAqkZnaoO6S/d2mW2sxdBFvvc2lGmA0SlgnEO2Nf7j1lWPMmSQyT/3f0v?=
+ =?us-ascii?Q?4037QpGCG7tU52PX1Xsee6NZ3GZblAsHU3QPJ8CMbUSr8E9evQnotFLWm1Ml?=
+ =?us-ascii?Q?MkKyqqOh4HH6a85EWvjIdnTYgHMFXxYRBXBNUqI4qVNfl3sWTOydMCxJ7TLZ?=
+ =?us-ascii?Q?nmWOFafj1mCvnJMmXpMh872AL8i6NQ+cGx8x8OdXwcBQh862d4AWwbGLCsd0?=
+ =?us-ascii?Q?WIii+nxGp19XsLcbP/8B1GeeblyfgR01s8u/HBXUeMMwli3EIo6qybo4VBrh?=
+ =?us-ascii?Q?LqkOG8HNRaQakt5Gl/5AlBpIcnStp+WxuvnKtDKC7P4Dh+qydV6Z7INPuBCV?=
+ =?us-ascii?Q?STwd2Cd0a4VtVNtinYMX+jNBD3NDNEIuYzvGaTfb/VGVUJ7BrfFd0k7rxk74?=
+ =?us-ascii?Q?08+JxCtva3aN8Qgo+Uhu91ybN1fMsTf/plj9Rr76uAzzx9OGP6aDOBPrSfCv?=
+ =?us-ascii?Q?AJVWhLuR0jMNTTXeQtzEKmNw0Cxcr3RaP66AfQhfEfnSE2kIqyPBF9H/9DoW?=
+ =?us-ascii?Q?GI4XJBZKOIWAwzymzg9PIWJM+SSsfsoyeTRKb6NafOd9Ku2/Mo/A5biKgwEC?=
+ =?us-ascii?Q?9HhJdEGo+tVbL1tejmtDLj2eVv/DiWYGo5PVuTKgJGxQaSowpq7ir/ZRmxQg?=
+ =?us-ascii?Q?wagIerTkRSDY4zURqI8c7wHRcfqT2J3fIq0GyiukbOhGaGgTDsMxOr2Vdd/1?=
+ =?us-ascii?Q?TJZLgJqL+FuNWUEfD5pL5Gt/ql+WU0SN/aM26ORMPDUE351biq46SXpSMira?=
+ =?us-ascii?Q?D9e7PNRULLJ9twgLRhgrPXCRU+297d5TPPyhd66x4e9aFwq8BJXnyFEt3S8i?=
+ =?us-ascii?Q?LmhDAgHAuCbKoNz1HQoJVLSL?=
 X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 211e8a35-62bd-47f9-b32f-08d8f2556eb7
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9277a477-8a24-4115-f34c-08d8f2557426
 X-MS-Exchange-CrossTenant-AuthSource: MW2PR0102MB3482.prod.exchangelabs.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2021 01:53:22.2686
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Mar 2021 01:53:31.2683
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mSQt9oWvpvG00YJ7fV3KQLQEH0UxZc4yD65GNo9tt8oj2s/Z+iZccoTmwlwncHGW9B1y7Z2WVUZp1SU46jR3W31GhgAu0h3Xj9+BCkj+zAA=
+X-MS-Exchange-CrossTenant-UserPrincipalName: j8jJGPUjXLtBgRVVQZeolSML7V/gUoObiyCNvbpwHqMLAIfPveDt3F4dPf0LZsx7eswarIQEITZcep//wyW9LnZtrrCfuXMfA4A1EpHCDaY=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR01MB6226
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Adds an MFD driver for SMpro found on the Mt.Jade hardware reference
-platform with Ampere's Altra processor family.
+Add documentation for the Ampere(R)'s Altra(R) SMpro hwmon driver.
 
+Signed-off-by: Thu Nguyen <thu@os.amperecomputing.com>
 Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
 ---
- drivers/mfd/Kconfig          | 10 ++++++++++
- drivers/mfd/simple-mfd-i2c.c |  6 ++++++
- 2 files changed, 16 insertions(+)
+ Documentation/hwmon/index.rst       |   1 +
+ Documentation/hwmon/smpro-hwmon.rst | 101 ++++++++++++++++++++++++++++
+ 2 files changed, 102 insertions(+)
+ create mode 100644 Documentation/hwmon/smpro-hwmon.rst
 
-diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-index d07e8cf93286..f7a6460f7aa0 100644
---- a/drivers/mfd/Kconfig
-+++ b/drivers/mfd/Kconfig
-@@ -77,6 +77,16 @@ config MFD_AS3711
- 	help
- 	  Support for the AS3711 PMIC from AMS
- 
-+config MFD_SMPRO
-+	tristate "Ampere Computing MFD SMpro core driver"
-+	select MFD_SIMPLE_MFD_I2C
-+	help
-+	  Say yes here to enable SMpro driver support for Ampere's Altra
-+	  processor family.
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index 48bfa7887dd4..3e3631b253b6 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -166,6 +166,7 @@ Hardware Monitoring Kernel Drivers
+    sis5595
+    sl28cpld
+    smm665
++   smpro-hwmon
+    smsc47b397
+    smsc47m192
+    smsc47m1
+diff --git a/Documentation/hwmon/smpro-hwmon.rst b/Documentation/hwmon/smpro-hwmon.rst
+new file mode 100644
+index 000000000000..f978b1370e16
+--- /dev/null
++++ b/Documentation/hwmon/smpro-hwmon.rst
+@@ -0,0 +1,101 @@
++.. SPDX-License-Identifier: GPL-2.0-or-later
 +
-+	  Ampere's Altra SMpro exposes an I2C regmap interface that can
-+	  be accessed by child devices.
++Kernel driver Ampere(R)'s Altra(R) SMpro hwmon
++==============================================
 +
- config MFD_AS3722
- 	tristate "ams AS3722 Power Management IC"
- 	select MFD_CORE
-diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2c.c
-index 87f684cff9a1..9a44655f5592 100644
---- a/drivers/mfd/simple-mfd-i2c.c
-+++ b/drivers/mfd/simple-mfd-i2c.c
-@@ -21,6 +21,11 @@ static const struct regmap_config simple_regmap_config = {
- 	.val_bits = 8,
- };
- 
-+static const struct regmap_config simple_word_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 16,
-+};
++Supported chips:
 +
- static int simple_mfd_i2c_probe(struct i2c_client *i2c)
- {
- 	const struct regmap_config *config;
-@@ -39,6 +44,7 @@ static int simple_mfd_i2c_probe(struct i2c_client *i2c)
- 
- static const struct of_device_id simple_mfd_i2c_of_match[] = {
- 	{ .compatible = "kontron,sl28cpld" },
-+	{ .compatible = "ampere,smpro", .data = &simple_word_regmap_config },
- 	{}
- };
- MODULE_DEVICE_TABLE(of, simple_mfd_i2c_of_match);
++  * Ampere(R) Altra(R)
++
++    Prefix: 'smpro'
++
++    Reference: Altra SoC BMC Interface Specification
++
++Author: Thu Nguyen <thu@os.amperecomputing.com>
++
++Description
++-----------
++This driver supports hardware monitoring for Ampere(R) Altra(R) SoC's based on the
++SMpro co-processor (SMpro).
++The following sensor types are supported by the driver:
++
++  * temperature
++  * voltage
++  * current
++  * power
++
++The SMpro interface provides the registers to query the various sensors and
++their values which are then exported to userspace by this driver.
++
++Usage Notes
++-----------
++
++SMpro hwmon driver creates at least two sysfs files for each sensor.
++
++* File ``<sensor_type><idx>_label`` reports the sensor label.
++* File ``<sensor_type><idx>_input`` returns the sensor value.
++
++The sysfs files are allocated in the SMpro root fs folder.
++There is one root folder for each SMpro instance.
++
++When the SoC is turned off, the driver will fail to read registers
++and return -ENXIO.
++
++Sysfs entries
++-------------
++
++The following sysfs files are supported:
++
++* Ampere(R) Altra(R):
++
++============    =============   ======  ===============================================
++Name            Unit            Perm    Description
++temp1_input     milli Celsius   RO      SoC temperature
++temp2_input     milli Celsius   RO      Max temperature reported among SoC VRDs
++temp2_crit      milli Celsius   RO      SoC VRD HOT Threshold temperature
++temp3_input     milli Celsius   RO      Max temperature reported among DIMM VRDs
++temp4_input     milli Celsius   RO      Max temperature reported among Core VRDs
++temp5_input     milli Celsius   RO      Temperature of DIMM0 on CH0
++temp5_crit      milli Celsius   RO      MEM HOT Threshold for all DIMMs
++temp6_input     milli Celsius   RO      Temperature of DIMM0 on CH1
++temp6_crit      milli Celsius   RO      MEM HOT Threshold for all DIMMs
++temp7_input     milli Celsius   RO      Temperature of DIMM0 on CH2
++temp7_crit      milli Celsius   RO      MEM HOT Threshold for all DIMMs
++temp8_input     milli Celsius   RO      Temperature of DIMM0 on CH3
++temp8_crit      milli Celsius   RO      MEM HOT Threshold for all DIMMs
++temp9_input     milli Celsius   RO      Temperature of DIMM0 on CH4
++temp9_crit      milli Celsius   RO      MEM HOT Threshold for all DIMMs
++temp10_input    milli Celsius   RO      Temperature of DIMM0 on CH5
++temp10_crit     milli Celsius   RO      MEM HOT Threshold for all DIMMs
++temp11_input    milli Celsius   RO      Temperature of DIMM0 on CH6
++temp11_crit     milli Celsius   RO      MEM HOT Threshold for all DIMMs
++temp12_input    milli Celsius   RO      Temperature of DIMM0 on CH7
++temp12_crit     milli Celsius   RO      MEM HOT Threshold for all DIMMs
++temp13_input    milli Celsius   RO      Max temperature reported among RCA VRDs
++in0_input       milli Volts     RO      Core voltage
++in1_input       milli Volts     RO      SoC voltage
++in2_input       milli Volts     RO      DIMM VRD1 voltage
++in3_input       milli Volts     RO      DIMM VRD2 voltage
++in4_input       milli Volts     RO      RCA VRD voltage
++cur1_input      milli Amperes   RO      Core VRD current
++cur2_input      milli Amperes   RO      SoC VRD current
++cur3_input      milli Amperes   RO      DIMM VRD1 current
++cur4_input      milli Amperes   RO      DIMM VRD2 current
++cur5_input      milli Amperes   RO      RCA VRD current
++power1_input    micro Watts     RO      Core VRD power
++power2_input    micro Watts     RO      SoC VRD power
++power3_input    micro Watts     RO      DIMM VRD1 power
++power4_input    micro Watts     RO      DIMM VRD2 power
++power5_input    micro Watts     RO      RCA VRD power
++============    =============   ======  ===============================================
++
++Example::
++
++    # cat in0_input
++    830
++    # cat temp1_input
++    37000
++    # cat curr1_input
++    9000
++    # cat power5_input
++    19500000
 -- 
 2.28.0
 
