@@ -2,156 +2,281 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EEAE2C433E6
-	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Mar 2021 08:23:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A48A2C433C1
+	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Mar 2021 14:39:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D2A2261581
-	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Mar 2021 08:23:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6CEEC61864
+	for <linux-hwmon@archiver.kernel.org>; Mon, 29 Mar 2021 14:39:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233098AbhC2IXY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 29 Mar 2021 04:23:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48520 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233952AbhC2IWi (ORCPT
+        id S231136AbhC2OjK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 29 Mar 2021 10:39:10 -0400
+Received: from mail-ej1-f47.google.com ([209.85.218.47]:38653 "EHLO
+        mail-ej1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230504AbhC2Oik (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 29 Mar 2021 04:22:38 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE09C061756
-        for <linux-hwmon@vger.kernel.org>; Mon, 29 Mar 2021 01:22:38 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id cx5so6033013qvb.10
-        for <linux-hwmon@vger.kernel.org>; Mon, 29 Mar 2021 01:22:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=protocubo.io; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pFX+Tz+rEN0+9Vsov9EqDkuW92yjtKRmUMQ/vRcw69s=;
-        b=Xf2NpZDiG1wAEvcMjalq9edHulvwkltxcQaZq+RVUr3/GEH4KDqHbcuTPmM3ADB5gz
-         lfEMKL3HctEy+/t5GXwTUJos8dVAEud5Xh6mUEEQcyDy7CjQKaekZbQImQ6MHlrVLDwP
-         6ubpxpJjUdQ/ptgdqulRAK/XFOYMv69712wUXrqJoho9S6WQ8tN9S27DbY76ULn14+yV
-         Odba+dYOZ6cQVc5925jEUBTiSlheezwseWthHAF2S7FJeLfoXwsOfIe1gahFmZ5Ii8YW
-         8e/fAD9xGX7+VsQcE0QWE8P5WeJ5jb1X0e2EssZSCyJhrcxfZ3sfgIFsd3VRGlRqxmG2
-         wXLA==
+        Mon, 29 Mar 2021 10:38:40 -0400
+Received: by mail-ej1-f47.google.com with SMTP id r12so19842553ejr.5;
+        Mon, 29 Mar 2021 07:38:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=pFX+Tz+rEN0+9Vsov9EqDkuW92yjtKRmUMQ/vRcw69s=;
-        b=DLHPQj/cQgN6FBuUNZZKVI1rqKxa4+HHMTxcSfeOsh//HLdUEdDIq5+d828pdW0j7D
-         wTBmUWZkew1tESb6BldhyCdWceT9o08/gyijkBiYQiGV1wm+Aq/VjFSuqfLcjj+qzzSr
-         wzBR5xgZVbDWX0RJOqiuK4OCd5y7Lp60qqjKHphbIVwBtBTFaPQpmiOY9BBzEXhnfqE8
-         k+ByI7xSU5I1KT6tp7CpDRzCrxERHybLYOPZBMNI/Yds90Je/5QBxWgiQ7sKWyoYY3A2
-         atbz7+wcyYNnPKSZFULsXVSo6nZnUsQt5RWwCIzgBTh6AWqGE0ELuIlAkNFhQxjFO/lq
-         kM3A==
-X-Gm-Message-State: AOAM533fP50nMGEfJEoarUPzxCi8BwnnTMisxiT+XXxJAQ4VjXDnna4j
-        fxEeMjxgqsy81rX3ZeTYv74LBw==
-X-Google-Smtp-Source: ABdhPJxvfWope6tzVCK0RePEwSgpVm61Rwt6KBlNGoVj+R5g54jCcLI20dGEV8NPkCs0CLWxqrFanQ==
-X-Received: by 2002:ad4:4e53:: with SMTP id eb19mr24598391qvb.8.1617006157635;
-        Mon, 29 Mar 2021 01:22:37 -0700 (PDT)
-Received: from calvin.localdomain ([2804:14d:5c5a:802e:bdc9:ded9:cc08:a4e9])
-        by smtp.gmail.com with ESMTPSA id n1sm5323412qtp.76.2021.03.29.01.22.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Mar 2021 01:22:37 -0700 (PDT)
-From:   Jonas Malaco <jonas@protocubo.io>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Jonas Malaco <jonas@protocubo.io>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (nzxt-kraken2) mark and order concurrent accesses
-Date:   Mon, 29 Mar 2021 05:22:01 -0300
-Message-Id: <20210329082211.86716-1-jonas@protocubo.io>
+        bh=aN3CiSsEh4jbHSDVM4VOQL1SaLegEtHXJK8dn4OL0w8=;
+        b=k9JUVphfUh1dpHKYfaj3Jpl4g+N1Bb9QTk2w0WfcFqS1xW2Z624ixHLvSF55fTiFwC
+         h6BtwesO+8bwiiGUYha3GfJtF4IUZuRCJraQmlloWs5uCRSgGj9Kb4D5VHvS73yPSOdV
+         hSinW3jWo86I/kTtzrNQ7C7s79509lytTLfunca6FIPaI8TYpzHUagTQtOMtMkOcopdF
+         UW7Ywh7r4bX6VdJeB606YPKALM08Gg3kyYwnC6BqjnUeAiVxdqdnIK2V9kTcEvScM+eI
+         BeVCNIipLJeEsy2hdXEIWubSbxa430YAPbEYfqJzexXf47EbCiVNkPB7kMgoA05mLPG0
+         xjIQ==
+X-Gm-Message-State: AOAM532doCZWoRNxVKNOzvn+qt98/N1kuN6TkBCQBQHrfOrQ83fc5VNQ
+        pKhlLwRLEQ2haWrLigWA3Gk=
+X-Google-Smtp-Source: ABdhPJzyt4sgZVd9a6FFLpiQYvzr58VKauNRgf8oCFjnSaGVHqN3zD3jhCEiNVETbADVkRF3yh406A==
+X-Received: by 2002:a17:907:2809:: with SMTP id eb9mr28072940ejc.204.1617028718961;
+        Mon, 29 Mar 2021 07:38:38 -0700 (PDT)
+Received: from localhost ([2a02:8308:387:c900:a7b5:b859:9449:c07b])
+        by smtp.gmail.com with ESMTPSA id bc16sm4735925edb.17.2021.03.29.07.38.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Mar 2021 07:38:38 -0700 (PDT)
+From:   =?UTF-8?q?V=C3=A1clav=20Kubern=C3=A1t?= <kubernat@cesnet.cz>
+Cc:     =?UTF-8?q?V=C3=A1clav=20Kubern=C3=A1t?= <kubernat@cesnet.cz>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+Subject: [PATCH] hwmon: Add driver for fsp-3y PSUs and PDUs
+Date:   Mon, 29 Mar 2021 16:38:31 +0200
+Message-Id: <20210329143833.1047539-1-kubernat@cesnet.cz>
 X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-To avoid a spinlock, the driver explores concurrent memory accesses
-between _raw_event and _read, having the former updating fields on a
-data structure while the latter could be reading from them.  Because
-these are "plain" accesses, those are data races according to the Linux
-kernel memory model (LKMM).
+After some testing, I have found out there is a timing issue with this
+device. After setting page, the device doesn't immediately react and
+gives values from the previous page for some time. This is why there
+needs to be a delay between pmbus_set_page and the actual read.
 
-Data races are undefined behavior in both C11 and LKMM.  In practice,
-the compiler is free to make optimizations assuming there is no data
-race, including load tearing, load fusing and many others,[1] most of
-which could result in corruption of the values reported to user-space.
+Also, a lot of the standard commands don't work with the devices, so
+they are filtered out in the custom read function.
 
-Prevent undesirable optimizations to those concurrent accesses by
-marking them with READ_ONCE() and WRITE_ONCE().  This also removes the
-data races, according to the LKMM, because both loads and stores to each
-location are now "marked" accesses.
-
-As a special case, use smp_load_acquire() and smp_load_release() when
-loading and storing ->updated, as it is used to track the validity of
-the other values, and thus has to be stored after and loaded before
-them.  These imply READ_ONCE()/WRITE_ONCE() but also ensure the desired
-order of memory accesses.
-
-[1] https://lwn.net/Articles/793253/
-
-Signed-off-by: Jonas Malaco <jonas@protocubo.io>
+Signed-off-by: Václav Kubernát <kubernat@cesnet.cz>
 ---
- drivers/hwmon/nzxt-kraken2.c | 23 ++++++++++++++++-------
- 1 file changed, 16 insertions(+), 7 deletions(-)
+ drivers/hwmon/pmbus/Kconfig  |   9 ++
+ drivers/hwmon/pmbus/Makefile |   1 +
+ drivers/hwmon/pmbus/fsp-3y.c | 164 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 174 insertions(+)
+ create mode 100644 drivers/hwmon/pmbus/fsp-3y.c
 
-diff --git a/drivers/hwmon/nzxt-kraken2.c b/drivers/hwmon/nzxt-kraken2.c
-index 89f7ea4f42d4..f4fbc8771930 100644
---- a/drivers/hwmon/nzxt-kraken2.c
-+++ b/drivers/hwmon/nzxt-kraken2.c
-@@ -46,16 +46,22 @@ static int kraken2_read(struct device *dev, enum hwmon_sensor_types type,
- 			u32 attr, int channel, long *val)
- {
- 	struct kraken2_priv_data *priv = dev_get_drvdata(dev);
-+	unsigned long expires;
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index 03606d4298a4..66d1655b6750 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -56,6 +56,15 @@ config SENSORS_BEL_PFE
+ 	  This driver can also be built as a module. If so, the module will
+ 	  be called bel-pfe.
  
--	if (time_after(jiffies, priv->updated + STATUS_VALIDITY * HZ))
-+	/*
-+	 * Order load from ->updated before the data it refers to.
-+	 */
-+	expires = smp_load_acquire(&priv->updated) + STATUS_VALIDITY * HZ;
++config SENSORS_FSP_3Y
++	tristate "FSP/3Y-Power power supplies"
++	help
++	  If you say yes here you get hardware monitoring support for
++	  FSP/3Y-Power hot-swap power supplies.
 +
-+	if (time_after(jiffies, expires))
- 		return -ENODATA;
- 
- 	switch (type) {
- 	case hwmon_temp:
--		*val = priv->temp_input[channel];
-+		*val = READ_ONCE(priv->temp_input[channel]);
- 		break;
- 	case hwmon_fan:
--		*val = priv->fan_input[channel];
-+		*val = READ_ONCE(priv->fan_input[channel]);
- 		break;
- 	default:
- 		return -EOPNOTSUPP; /* unreachable */
-@@ -119,12 +125,15 @@ static int kraken2_raw_event(struct hid_device *hdev,
- 	 * and that the missing steps are artifacts of how the firmware
- 	 * processes the raw sensor data.
- 	 */
--	priv->temp_input[0] = data[1] * 1000 + data[2] * 100;
-+	WRITE_ONCE(priv->temp_input[0], data[1] * 1000 + data[2] * 100);
- 
--	priv->fan_input[0] = get_unaligned_be16(data + 3);
--	priv->fan_input[1] = get_unaligned_be16(data + 5);
-+	WRITE_ONCE(priv->fan_input[0], get_unaligned_be16(data + 3));
-+	WRITE_ONCE(priv->fan_input[1], get_unaligned_be16(data + 5));
- 
--	priv->updated = jiffies;
-+	/*
-+	 * Order store to ->updated after the data it refers to.
-+	 */
-+	smp_store_release(&priv->updated, jiffies);
- 
- 	return 0;
- }
-
-base-commit: 644b9af5c605762feffac96bd7ea2499e0197656
++	  This driver can also be built as a module. If so, the module will
++	  be called fsp-3y.
++
+ config SENSORS_IBM_CFFPS
+ 	tristate "IBM Common Form Factor Power Supply"
+ 	depends on LEDS_CLASS
+diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+index 6a4ba0fdc1db..bfe218ad898f 100644
+--- a/drivers/hwmon/pmbus/Makefile
++++ b/drivers/hwmon/pmbus/Makefile
+@@ -8,6 +8,7 @@ obj-$(CONFIG_SENSORS_PMBUS)	+= pmbus.o
+ obj-$(CONFIG_SENSORS_ADM1266)	+= adm1266.o
+ obj-$(CONFIG_SENSORS_ADM1275)	+= adm1275.o
+ obj-$(CONFIG_SENSORS_BEL_PFE)	+= bel-pfe.o
++obj-$(CONFIG_SENSORS_FSP_3Y)	+= fsp-3y.o
+ obj-$(CONFIG_SENSORS_IBM_CFFPS)	+= ibm-cffps.o
+ obj-$(CONFIG_SENSORS_INSPUR_IPSPS) += inspur-ipsps.o
+ obj-$(CONFIG_SENSORS_IR35221)	+= ir35221.o
+diff --git a/drivers/hwmon/pmbus/fsp-3y.c b/drivers/hwmon/pmbus/fsp-3y.c
+new file mode 100644
+index 000000000000..7f3c3de3a1e6
+--- /dev/null
++++ b/drivers/hwmon/pmbus/fsp-3y.c
+@@ -0,0 +1,164 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Hardware monitoring driver for FSP 3Y-Power PSUs
++ *
++ * Copyright (c) 2021 Václav Kubernát, CESNET
++ */
++
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/delay.h>
++#include <linux/i2c.h>
++#include "pmbus.h"
++
++#define YM2151_PAGE_12V		0x00
++#define YM2151_PAGE_5V		0x20
++#define YH5151E_PAGE_12V	0x00
++#define YH5151E_PAGE_5V		0x10
++#define YH5151E_PAGE_3V3	0x11
++
++enum chips {
++	ym2151e,
++	yh5151e
++};
++
++static int set_page(struct i2c_client *client, int page)
++{
++	int rv;
++
++	rv = i2c_smbus_read_byte_data(client, PMBUS_PAGE);
++
++	if (rv < 0)
++		return rv;
++
++	if (rv != page) {
++		rv = pmbus_set_page(client, page, 0xff);
++		if (rv < 0)
++			return rv;
++
++		msleep(20);
++	}
++
++	return 0;
++}
++
++static int fsp3y_read_byte_data(struct i2c_client *client, int page, int reg)
++{
++	int rv;
++
++	rv = set_page(client, page);
++	if (rv < 0)
++		return rv;
++
++	return i2c_smbus_read_byte_data(client, reg);
++}
++
++static int fsp3y_read_word_data(struct i2c_client *client, int page, int phase, int reg)
++{
++	int rv;
++
++	if (reg >= PMBUS_VIRT_BASE)
++		return -ENXIO;
++
++	switch (reg) {
++	case PMBUS_OT_WARN_LIMIT:
++	case PMBUS_OT_FAULT_LIMIT:
++	case PMBUS_UT_WARN_LIMIT:
++	case PMBUS_UT_FAULT_LIMIT:
++	case PMBUS_VIN_UV_WARN_LIMIT:
++	case PMBUS_VIN_UV_FAULT_LIMIT:
++	case PMBUS_VIN_OV_FAULT_LIMIT:
++	case PMBUS_VIN_OV_WARN_LIMIT:
++	case PMBUS_IOUT_OC_WARN_LIMIT:
++	case PMBUS_IOUT_UC_FAULT_LIMIT:
++	case PMBUS_IOUT_OC_FAULT_LIMIT:
++	case PMBUS_IIN_OC_WARN_LIMIT:
++	case PMBUS_IIN_OC_FAULT_LIMIT:
++	case PMBUS_VOUT_UV_WARN_LIMIT:
++	case PMBUS_VOUT_UV_FAULT_LIMIT:
++	case PMBUS_VOUT_OV_WARN_LIMIT:
++	case PMBUS_VOUT_OV_FAULT_LIMIT:
++	case PMBUS_MFR_VIN_MIN:
++	case PMBUS_MFR_VIN_MAX:
++	case PMBUS_MFR_IIN_MAX:
++	case PMBUS_MFR_VOUT_MIN:
++	case PMBUS_MFR_VOUT_MAX:
++	case PMBUS_MFR_IOUT_MAX:
++	case PMBUS_MFR_PIN_MAX:
++	case PMBUS_POUT_MAX:
++	case PMBUS_POUT_OP_WARN_LIMIT:
++	case PMBUS_POUT_OP_FAULT_LIMIT:
++	case PMBUS_MFR_MAX_TEMP_1:
++	case PMBUS_MFR_MAX_TEMP_2:
++	case PMBUS_MFR_MAX_TEMP_3:
++	case PMBUS_MFR_POUT_MAX:
++		return -ENXIO;
++	}
++
++	rv = set_page(client, page);
++	if (rv < 0)
++		return rv;
++
++	return i2c_smbus_read_word_data(client, reg);
++}
++
++struct pmbus_driver_info fsp3y_info[] = {
++	[ym2151e] = {
++		.pages = 0x21,
++		.func[YM2151_PAGE_12V] =
++			PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
++			PMBUS_HAVE_PIN | PMBUS_HAVE_POUT  |
++			PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2 |
++			PMBUS_HAVE_VIN | PMBUS_HAVE_IIN |
++			PMBUS_HAVE_FAN12,
++		.func[YM2151_PAGE_5V] =
++			PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT,
++			PMBUS_HAVE_IIN,
++		.read_word_data = fsp3y_read_word_data,
++		.read_byte_data = fsp3y_read_byte_data,
++	},
++	[yh5151e] = {
++		.pages = 0x12,
++		.func[YH5151E_PAGE_12V] =
++			PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
++			PMBUS_HAVE_POUT  |
++			PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2 | PMBUS_HAVE_TEMP3,
++		.func[YH5151E_PAGE_5V] =
++			PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
++			PMBUS_HAVE_POUT,
++		.func[YH5151E_PAGE_3V3] =
++			PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
++			PMBUS_HAVE_POUT,
++		.read_word_data = fsp3y_read_word_data,
++		.read_byte_data = fsp3y_read_byte_data,
++	}
++};
++
++static int fsp3y_probe(struct i2c_client *client,
++		       const struct i2c_device_id *id)
++{
++	return pmbus_do_probe(client, &fsp3y_info[id->driver_data]);
++}
++
++static const struct i2c_device_id pmbus_id[] = {
++	{"fsp3y_ym2151e", ym2151e},
++	{"fsp3y_yh5151e", yh5151e},
++	{}
++};
++
++MODULE_DEVICE_TABLE(i2c, pmbus_id);
++
++/* This is the driver that will be inserted */
++static struct i2c_driver fsp3y_driver = {
++	.driver = {
++		   .name = "fsp3y",
++		   },
++	.probe = fsp3y_probe,
++	.id_table = pmbus_id
++};
++
++module_i2c_driver(fsp3y_driver);
++
++MODULE_AUTHOR("Václav Kubernát");
++MODULE_DESCRIPTION("PMBus driver for FSP/3Y-Power power supplies");
++MODULE_LICENSE("GPL");
 -- 
 2.31.1
 
