@@ -2,204 +2,427 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E451AC433C1
-	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Mar 2021 03:18:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DCC6FC433C1
+	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Mar 2021 03:32:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B6E2161968
-	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Mar 2021 03:18:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B121061490
+	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Mar 2021 03:32:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbhC3DRW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 29 Mar 2021 23:17:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41298 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231187AbhC3DRA (ORCPT
+        id S229468AbhC3Dbm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 29 Mar 2021 23:31:42 -0400
+Received: from office2.cesnet.cz ([195.113.144.244]:35798 "EHLO
+        office2.cesnet.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229762AbhC3Dbg (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 29 Mar 2021 23:17:00 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCEADC061764
-        for <linux-hwmon@vger.kernel.org>; Mon, 29 Mar 2021 20:16:57 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id i19so10956067qtv.7
-        for <linux-hwmon@vger.kernel.org>; Mon, 29 Mar 2021 20:16:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=protocubo.io; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KrQ9+vOA/VSPB4rvbiUZ1dmmGCXpZPt3Kvj7vnRoOHE=;
-        b=eQdyGWzUgymZCFmDoJWwE69QwNPg1UIA/oD8YrprJONhRAVaizUwYaGeHToGC0QUD+
-         M4a1elFp/SfS+7FRq05/8bS0mxbtvMJX9OXX9QpTVwBIZUkTwka90rcPD7VensUTISPA
-         di6mzq0HD0Uqi8wyGVYZSZ1IPcpfxU5nyaR37py56JaJ+VhBCjYtAlw3R5dFbY8fImBV
-         0nZWp/rL58bUGOCR0GLOXtd0UIq4hl+tPtrwufeBvNPoY5LYKhT+anheXrkCXjuIqJSj
-         byq0Fb2FKx4G7H3Yp03X/eSmeyE3ZGl5A53AksyM3LgYFh/aQQSGDRaFoT4ckTLFeSGI
-         o29A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KrQ9+vOA/VSPB4rvbiUZ1dmmGCXpZPt3Kvj7vnRoOHE=;
-        b=jolsx/NRicrZp9pGJBovrgwmPFxBHndyXYHD57JDg4oME8F8iv2x6p86XLBVisdNPY
-         Sdiyee9D4RBmMzyRjNpm/UkIHXh6eKs/XnNcnewnZ+TZuBpEyQBaNo/qweoZ8zVhB7y4
-         CEjZdSiqeOgg7La3kO5feuqF9k6yVy8kJOGc4yMPvqJT+CIjApBAVjahkm/VgSvnVwBc
-         Zt3mvwrE2CqGMMZTQwtaK8+dheAizWG+ySg3y6MiSWtQByp/3ZFXYeI3fc09Qbc3bu4b
-         qL7Zn7f8bI+WCONuTycD3+hp6TAFpecdKFSB0s8vDiip8UMS/55kB6yVNR2lvOEp8Mwc
-         RXFw==
-X-Gm-Message-State: AOAM530YzBh5X273wv5gIa0NRzSnvfDE3llnyyBZZQIH7CCrK5szWWNr
-        pFxN12Gw92f6zZLymAAXMm7kWGgfsgXqVg==
-X-Google-Smtp-Source: ABdhPJyiP9vmdxWOPjPZV2x/nat6M95/bdDPdzyGqKDkYT6ztj38NxqvoXmTS1klvwqyfKVeFpvzJw==
-X-Received: by 2002:ac8:6684:: with SMTP id d4mr23646804qtp.34.1617074217049;
-        Mon, 29 Mar 2021 20:16:57 -0700 (PDT)
-Received: from calvin.localdomain ([2804:14d:5c5a:802e:bdc9:ded9:cc08:a4e9])
-        by smtp.gmail.com with ESMTPSA id y8sm4903820qtn.68.2021.03.29.20.16.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Mar 2021 20:16:56 -0700 (PDT)
-Date:   Tue, 30 Mar 2021 00:16:52 -0300
-From:   Jonas Malaco <jonas@protocubo.io>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (nzxt-kraken2) mark and order concurrent accesses
-Message-ID: <20210330031652.zhhxft4trli6zqtw@calvin.localdomain>
-References: <20210329082211.86716-1-jonas@protocubo.io>
- <20210329215339.GH220164@roeck-us.net>
- <20210330002131.s2qz3dr6bwr6jz25@calvin.localdomain>
- <56ebbf0f-cdcb-d5af-e1ad-c7604597566e@roeck-us.net>
+        Mon, 29 Mar 2021 23:31:36 -0400
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by office2.cesnet.cz (Postfix) with ESMTPSA id CAF6B40006C;
+        Tue, 30 Mar 2021 05:31:34 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cesnet.cz;
+        s=office2-2020; t=1617075094;
+        bh=LP1PSoXZTfQf04wWkDNv+jCILYRKUJALSw2+oo2Ff2A=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc;
+        b=A8KcF5caNFi0XGeNwvcjD3E0TK7kIw/7BnddjsFK3KLCL6+mO34QOCRwg4IC3FO79
+         g1Z5JVkQLG87gapCoteju87Idqck0S3g0jgPsMwCX7wVKSHO3zjErKoA2hiaOASlbq
+         WB7m5BkEZ4IS4l/x+b6OjrG+bwTr1D6K/F+C6PuftsrA1uaJg3zckxL8YyX6ZZr+9C
+         57/IK0JOz528qU/LG5xhZh+JjfudxFZh9/9XX0Z61+HsX+XT1Rbg7LL3GC/Gj/nBQV
+         6oL03FX2D/voUdoMh6UvxHsznixOm0T+qiOmkTTqPtCg4OEVS5y3kB2GPfL3gqx1Bv
+         k1Ef27Vqe3ZUA==
+Received: by mail-lj1-f179.google.com with SMTP id f26so18252014ljp.8;
+        Mon, 29 Mar 2021 20:31:34 -0700 (PDT)
+X-Gm-Message-State: AOAM532Hj7C8ku+RpLc41Y1RjNUvloE5SxUHTs8Uzk+aBv2ApIqKrQ9s
+        Fa+Zus3m1aYpZaod+udras0Yfzi53Regufg4A84=
+X-Google-Smtp-Source: ABdhPJziACrlIuF6Qj0OF/9ttdrWKQAGEg1bNO1Bxuw2hCueA4/rB3zTR1yhdSxLqXkA8jWC2uB0++0uSHaegeYF75A=
+X-Received: by 2002:a2e:b4b1:: with SMTP id q17mr19847747ljm.497.1617075093600;
+ Mon, 29 Mar 2021 20:31:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <56ebbf0f-cdcb-d5af-e1ad-c7604597566e@roeck-us.net>
+References: <20210329143833.1047539-1-kubernat@cesnet.cz> <a5e4ad25-1395-0df5-a128-d0fdb98cc1ea@roeck-us.net>
+In-Reply-To: <a5e4ad25-1395-0df5-a128-d0fdb98cc1ea@roeck-us.net>
+From:   =?UTF-8?B?VsOhY2xhdiBLdWJlcm7DoXQ=?= <kubernat@cesnet.cz>
+Date:   Tue, 30 Mar 2021 05:31:22 +0200
+X-Gmail-Original-Message-ID: <CABKa3nrgjC3ZxG8vCAfBYGE382iDADUS4MTYu6YdHipqH-+QuQ@mail.gmail.com>
+Message-ID: <CABKa3nrgjC3ZxG8vCAfBYGE382iDADUS4MTYu6YdHipqH-+QuQ@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: Add driver for fsp-3y PSUs and PDUs
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Mar 29, 2021 at 06:01:00PM -0700, Guenter Roeck wrote:
-> On 3/29/21 5:21 PM, Jonas Malaco wrote:
-> > On Mon, Mar 29, 2021 at 02:53:39PM -0700, Guenter Roeck wrote:
-> >> On Mon, Mar 29, 2021 at 05:22:01AM -0300, Jonas Malaco wrote:
-> >>> To avoid a spinlock, the driver explores concurrent memory accesses
-> >>> between _raw_event and _read, having the former updating fields on a
-> >>> data structure while the latter could be reading from them.  Because
-> >>> these are "plain" accesses, those are data races according to the Linux
-> >>> kernel memory model (LKMM).
-> >>>
-> >>> Data races are undefined behavior in both C11 and LKMM.  In practice,
-> >>> the compiler is free to make optimizations assuming there is no data
-> >>> race, including load tearing, load fusing and many others,[1] most of
-> >>> which could result in corruption of the values reported to user-space.
-> >>>
-> >>> Prevent undesirable optimizations to those concurrent accesses by
-> >>> marking them with READ_ONCE() and WRITE_ONCE().  This also removes the
-> >>> data races, according to the LKMM, because both loads and stores to each
-> >>> location are now "marked" accesses.
-> >>>
-> >>> As a special case, use smp_load_acquire() and smp_load_release() when
-> >>> loading and storing ->updated, as it is used to track the validity of
-> >>> the other values, and thus has to be stored after and loaded before
-> >>> them.  These imply READ_ONCE()/WRITE_ONCE() but also ensure the desired
-> >>> order of memory accesses.
-> >>>
-> >>> [1] https://lwn.net/Articles/793253/
-> >>>
-> >>
-> >> I think you lost me a bit there. What out-of-order accesses that would be
-> >> triggered by a compiler optimization are you concerned about here ?
-> >> The only "problem" I can think of is that priv->updated may have been
-> >> written before the actual values. The impact would be ... zero. An
-> >> attribute read would return "stale" data for a few microseconds.
-> >> Why is that a concern, and what difference does it make ?
-> > 
-> > The impact of out-of-order accesses to priv->updated is indeed minimal.
-> > 
-> > That said, smp_load_acquire() and smp_store_release() were meant to
-> > prevent reordering at runtime, and only affect architectures other than
-> > x86.  READ_ONCE() and WRITE_ONCE() would already prevent reordering from
-> > compiler optimizations, and x86 provides the load-acquire/store-release
-> > semantics by default.
-> > 
-> > But the reordering issue is not a concern to me, I got carried away when
-> > adding READ_ONCE()/WRITE_ONCE().  While smp_load_acquire() and
-> > smp_store_release() make the code work more like I intend it to, they
-> > are (small) costs we can spare.
-> > 
-> > I still think that READ_ONCE()/WRITE_ONCE() are necessary, including for
-> > priv->updated.  Do you agree?
-> > 
-> 
-> No. What is the point ? The order of writes doesn't matter, the writes won't
-> be randomly dropped, and it doesn't matter if the reader reports old values
-> for a couple of microseconds either. This would be different if the values
-> were used as synchronization primitives or similar, but that isn't the case
-> here. As for priv->updated, if you are concerned about lost reports and
-> the 4th report is received a few microseconds before the read, I'd suggest
-> to loosen the interval a bit instead.
-> 
-> Supposedly we are getting reports every 500ms. We have two situations:
-> - More than three reports are lost, making priv->updated somewhat relevant.
->   In this case, it doesn't matter if outdated values are reported for
->   a few uS since most/many/some reports are outdated more than a second
->   anyway.
-> - A report is received but old values are reported for a few uS. That
->   doesn't matter either because reports are always outdated anyway by
->   much more than a few uS anyway, and the code already tolerates up to
->   2 seconds of lost reports.
-> 
-> Sorry, I completely fail to see the problem you are trying to solve here.
+Hi Guenter,
 
-Please disregard the out-of-order accesses, I agree that preventing them
-"are a (small) cost we can spare".
+Thank you for the review.
 
-The main problem I still would like to address are the data races.
-While the stores and loads cannot be dropped, and we can tolerate their
-reordering, they could still be teared, fused, perhaps invented...
-According to [1] these types of optimizations are not unheard.
+po 29. 3. 2021 v 19:47 odes=C3=ADlatel Guenter Roeck <linux@roeck-us.net> n=
+apsal:
+>
+> On 3/29/21 7:38 AM, V=C3=A1clav Kubern=C3=A1t wrote:
+> > After some testing, I have found out there is a timing issue with this
+> > device. After setting page, the device doesn't immediately react and
+> > gives values from the previous page for some time. This is why there
+> > needs to be a delay between pmbus_set_page and the actual read.
+> >
+> > Also, a lot of the standard commands don't work with the devices, so
+> > they are filtered out in the custom read function.
+> >
+>
+> This is not an appropriate patch description. Describe the driver here,
+> not the workarounds / quirks. The reason for the delay should be a
+> comment in the patch, not in the patch description.
+>
+> Also, "don't work" is inappropriate (and, again, does not belong into
+> the patch description). It is perfectly appropriate for the core
+> to try those commands to see if they are supported. The only reason
+> to mask them out would be that the device reacts badly to seeing
+> them. If that is the case, "don't work" should be replaced with
+> a more detailed comment in the code. Describe what happens, and why
+> the commands needs to be caught.
+>
+>
+> What might be useful is a note indicating if you have a manual for
+> those power supplies available, or if the driver is based on reverse
+> engineering.
+>
 
-Load tearing alone could easily produce values that are not stale, but
-wrong.  Do we also tolerate wrong values, even if they are infrequent?
+I will rework the commit message in a V2 patch.
 
-Another detail I should have mentioned sooner is that READ_ONCE() and
-WRITE_ONCE() cause only minor (gcc) to no (clang) changes to the
-generated code for x86_64 and i386.[2]  While this seems contrary to the
-point I am trying to make, I want to show that, for the most part, these
-changes just lock in a reasonable compiler behavior.
+> > Signed-off-by: V=C3=A1clav Kubern=C3=A1t <kubernat@cesnet.cz>
+> > ---
+> >  drivers/hwmon/pmbus/Kconfig  |   9 ++
+> >  drivers/hwmon/pmbus/Makefile |   1 +
+> >  drivers/hwmon/pmbus/fsp-3y.c | 164 +++++++++++++++++++++++++++++++++++
+>
+> Documentation/hwmon/fsp-3y.rst is missing.
+>
+> >  3 files changed, 174 insertions(+)
+> >  create mode 100644 drivers/hwmon/pmbus/fsp-3y.c
+> >
+> > diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> > index 03606d4298a4..66d1655b6750 100644
+> > --- a/drivers/hwmon/pmbus/Kconfig
+> > +++ b/drivers/hwmon/pmbus/Kconfig
+> > @@ -56,6 +56,15 @@ config SENSORS_BEL_PFE
+> >         This driver can also be built as a module. If so, the module wi=
+ll
+> >         be called bel-pfe.
+> >
+> > +config SENSORS_FSP_3Y
+> > +     tristate "FSP/3Y-Power power supplies"
+> > +     help
+> > +       If you say yes here you get hardware monitoring support for
+> > +       FSP/3Y-Power hot-swap power supplies.
+> > +
+>
+> This should list the supported models - if not here, then at least in the
+> (missing) documentation.
+>
 
-Specifically, on x86_64/gcc (the most relevant arch/compiler for this
-driver) the changes are restricted to kraken2_read:
+Okay.
 
-1.	Loading of priv->updated and jiffies are reordered, because
-	(with READ_ONCE()) both are volatile and time_after(a, b) is
-	defined as b - a.
+> > +       This driver can also be built as a module. If so, the module wi=
+ll
+> > +       be called fsp-3y.
+> > +
+> >  config SENSORS_IBM_CFFPS
+> >       tristate "IBM Common Form Factor Power Supply"
+> >       depends on LEDS_CLASS
+> > diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefil=
+e
+> > index 6a4ba0fdc1db..bfe218ad898f 100644
+> > --- a/drivers/hwmon/pmbus/Makefile
+> > +++ b/drivers/hwmon/pmbus/Makefile
+> > @@ -8,6 +8,7 @@ obj-$(CONFIG_SENSORS_PMBUS)   +=3D pmbus.o
+> >  obj-$(CONFIG_SENSORS_ADM1266)        +=3D adm1266.o
+> >  obj-$(CONFIG_SENSORS_ADM1275)        +=3D adm1275.o
+> >  obj-$(CONFIG_SENSORS_BEL_PFE)        +=3D bel-pfe.o
+> > +obj-$(CONFIG_SENSORS_FSP_3Y) +=3D fsp-3y.o
+> >  obj-$(CONFIG_SENSORS_IBM_CFFPS)      +=3D ibm-cffps.o
+> >  obj-$(CONFIG_SENSORS_INSPUR_IPSPS) +=3D inspur-ipsps.o
+> >  obj-$(CONFIG_SENSORS_IR35221)        +=3D ir35221.o
+> > diff --git a/drivers/hwmon/pmbus/fsp-3y.c b/drivers/hwmon/pmbus/fsp-3y.=
+c
+> > new file mode 100644
+> > index 000000000000..7f3c3de3a1e6
+> > --- /dev/null
+> > +++ b/drivers/hwmon/pmbus/fsp-3y.c
+> > @@ -0,0 +1,164 @@
+> > +// SPDX-License-Identifier: GPL-2.0-or-later
+> > +/*
+> > + * Hardware monitoring driver for FSP 3Y-Power PSUs
+> > + *
+> > + * Copyright (c) 2021 V=C3=A1clav Kubern=C3=A1t, CESNET
+> > + */
+> > +
+> > +#include <linux/kernel.h>
+> > +#include <linux/module.h>
+> > +#include <linux/delay.h>
+> > +#include <linux/i2c.h>
+>
+> Alphabetic include file order, please.
+>
+> > +#include "pmbus.h"
+> > +
+> > +#define YM2151_PAGE_12V              0x00
+> > +#define YM2151_PAGE_5V               0x20
+> > +#define YH5151E_PAGE_12V     0x00
+> > +#define YH5151E_PAGE_5V              0x10
+> > +#define YH5151E_PAGE_3V3     0x11
+> > +
+> > +enum chips {
+> > +     ym2151e,
+> > +     yh5151e
+> > +};
+> > +
+> > +static int set_page(struct i2c_client *client, int page)
+> > +{
+> > +     int rv;
+> > +
+> > +     rv =3D i2c_smbus_read_byte_data(client, PMBUS_PAGE);
+> > +
+> Please no empty line here.
+>
+> You might want to consider caching the current page to avoid having to re=
+ad it
+> for each access, similar to the code implemented in the pmbus core.
+>
 
-2.	When loading priv->fan_input[channel],
-		movzx  eax,WORD PTR [rdx+rcx*2+0x14]
-	is split into
-		add rcx,0x8
-		movzx  eax,WORD PTR [rdx+rcx*2+0x4]
-	for no reason I could find in the x86 manual.
+This was actually what I wanted to do at first, but I wasn't able to
+get i2c_set_clientdata to work. Later I found out that it is because
+pmbus_do_probe uses sets it own data. What do you think I should use
+to cache the page?
 
-3.	Similarly, when loading priv->temp_input[channel]
-		movsxd rax,DWORD PTR [rdx+rcx*4+0x10]
-	turns into
-		add    rcx,0x4
-		movsxd rax,DWORD PTR [rdx+rcx*4]
+> > +     if (rv < 0)
+> > +             return rv;
+> > +
+> > +     if (rv !=3D page) {
+> > +             rv =3D pmbus_set_page(client, page, 0xff);
+> > +             if (rv < 0)
+> > +                     return rv;
+> > +
+> > +             msleep(20);
+>
+> Please use usleep_range(), and make sure that this huge delay is actually=
+ needed.
+>
 
-Both 2 and 3 admittedly get a bit worse with READ_ONCE()/WRITE_ONCE().
-But that is on gcc, and with the data race it could very well decide to
-produce much worse code than that at any moment.
+As is written in the original commit message, the devices have some
+kind of timing issues and this delay really is needed. I have tested
+smaller delays (10ms), they are compared to no delay, but I would
+still sometimes get wrong values. I will move this explanation into
+the code.
 
-On Arm64 the code does get a lot more ordered, which we have already
-agreed is not really necessary.  But removing smp_load_acquire() and
-smp_store_release() should still allow the CPU to reorder those,
-mitigating some of the impact.
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int fsp3y_read_byte_data(struct i2c_client *client, int page, i=
+nt reg)
+> > +{
+> > +     int rv;
+> > +
+> > +     rv =3D set_page(client, page);
+> > +     if (rv < 0)
+> > +             return rv;
+> > +
+> > +     return i2c_smbus_read_byte_data(client, reg);
+> > +}
+> > +
+> > +static int fsp3y_read_word_data(struct i2c_client *client, int page, i=
+nt phase, int reg)
+> > +{
+> > +     int rv;
+> > +
+> > +     if (reg >=3D PMBUS_VIRT_BASE)
+> > +             return -ENXIO;
+> > +
+> > +     switch (reg) {
+> > +     case PMBUS_OT_WARN_LIMIT:
+> > +     case PMBUS_OT_FAULT_LIMIT:
+> > +     case PMBUS_UT_WARN_LIMIT:
+> > +     case PMBUS_UT_FAULT_LIMIT:
+> > +     case PMBUS_VIN_UV_WARN_LIMIT:
+> > +     case PMBUS_VIN_UV_FAULT_LIMIT:
+> > +     case PMBUS_VIN_OV_FAULT_LIMIT:
+> > +     case PMBUS_VIN_OV_WARN_LIMIT:
+> > +     case PMBUS_IOUT_OC_WARN_LIMIT:
+> > +     case PMBUS_IOUT_UC_FAULT_LIMIT:
+> > +     case PMBUS_IOUT_OC_FAULT_LIMIT:
+> > +     case PMBUS_IIN_OC_WARN_LIMIT:
+> > +     case PMBUS_IIN_OC_FAULT_LIMIT:
+> > +     case PMBUS_VOUT_UV_WARN_LIMIT:
+> > +     case PMBUS_VOUT_UV_FAULT_LIMIT:
+> > +     case PMBUS_VOUT_OV_WARN_LIMIT:
+> > +     case PMBUS_VOUT_OV_FAULT_LIMIT:
+> > +     case PMBUS_MFR_VIN_MIN:
+> > +     case PMBUS_MFR_VIN_MAX:
+> > +     case PMBUS_MFR_IIN_MAX:
+> > +     case PMBUS_MFR_VOUT_MIN:
+> > +     case PMBUS_MFR_VOUT_MAX:
+> > +     case PMBUS_MFR_IOUT_MAX:
+> > +     case PMBUS_MFR_PIN_MAX:
+> > +     case PMBUS_POUT_MAX:
+> > +     case PMBUS_POUT_OP_WARN_LIMIT:
+> > +     case PMBUS_POUT_OP_FAULT_LIMIT:
+> > +     case PMBUS_MFR_MAX_TEMP_1:
+> > +     case PMBUS_MFR_MAX_TEMP_2:
+> > +     case PMBUS_MFR_MAX_TEMP_3:
+> > +     case PMBUS_MFR_POUT_MAX:
+> > +             return -ENXIO;
+> > +     }
+>
+> If that many commands indeed cause trouble (ie cause the device
+> to get into a bad state), it might be better to list the _supported_
+> commands instead of the unsupported ones. There is no guarantee
+> that the core won't start to send other commands to the device
+> in the future.
+>
+> The underlying question is if those commands are indeed not supported,
+> or if they report values in an unexpected format (ie not linear11).
+> The data format that is auto-selected below (because it is not specified)
+> is "linear". Is this what the device actually uses ? If not, just disabli=
+ng
+> reading the limits without explanation what exactly "does not work" is
+> inappropriate.
+>
 
-I hope this email clarifies what I am concerned about.
+The reason I masked these commands is because when I was reading from
+the associated files, I would get weird values (like -500). But it's
+not like the commands confuse the device. If you think it isn't a good
+idea to mask them like that, I'm fine with removing the masking.
 
-Thanks for the patience,
-Jonas
+> > +
+> > +     rv =3D set_page(client, page);
+> > +     if (rv < 0)
+> > +             return rv;
+> > +
+> > +     return i2c_smbus_read_word_data(client, reg);
+> > +}
+> > +
+> > +struct pmbus_driver_info fsp3y_info[] =3D {
+> > +     [ym2151e] =3D {
+> > +             .pages =3D 0x21,
+> > +             .func[YM2151_PAGE_12V] =3D
+> > +                     PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
+> > +                     PMBUS_HAVE_PIN | PMBUS_HAVE_POUT  |
+> > +                     PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2 |
+> > +                     PMBUS_HAVE_VIN | PMBUS_HAVE_IIN |
+> > +                     PMBUS_HAVE_FAN12,
+> > +             .func[YM2151_PAGE_5V] =3D
+> > +                     PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT,
+> > +                     PMBUS_HAVE_IIN,
+>
+> It doesn't really make sense to claim support for 0x21 =3D 33
+> pages, especially since the pmbus core (and the pmbus standard)
+> only supports 32 pages. Since page handling is all local anyway,
+> I would suggest  to claim two pages and map the logical page
+> to the physical page in the set_page command.
+>
+> How does this work (compile) anyway ? .func[] array size
+> is 32, meaning .func[0x20] goes beyond the end of the array.
+> The compiler should complain about that.
+>
+> Wait, how does this even instantiate ? The PMBus core
+> should reject a page count larger than 32, and pmbus_do_probe()
+> should return -ENODEV. How did you test this code ?
+>
 
-P.S. Tested with gcc 10.2.0 and clang 11.1.0.
+Sorry, I forgot I was building this patch on top of another patch
+(written by my colleague), which increases the page limit. The pmbus
+specification does say that pages 0x00 through 0x1F are "reserved
+specifically for multiple outputs on a device with a single physical
+address", but it does not say that there is a page limit. Anyway, The
+PSU really does use the 0x20 page. Either way, I'm fine with doing a
+mapping between a logical a page and physical, if you decide you don't
+want to change the page limit.
 
-[1] https://lwn.net/Articles/793253/
-[2] (outdated, still with smp_*()): https://github.com/jonasmalacofilho/patches/tree/master/linux/nzxt-kraken2-mark-and-order-concurrent-accesses/objdumps
+> > +             .read_word_data =3D fsp3y_read_word_data,
+> > +             .read_byte_data =3D fsp3y_read_byte_data,
+> > +     },
+> > +     [yh5151e] =3D {
+> > +             .pages =3D 0x12,
+>
+> Same as above.
+>
+> > +             .func[YH5151E_PAGE_12V] =3D
+> > +                     PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
+> > +                     PMBUS_HAVE_POUT  |
+> > +                     PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2 | PMBUS_HAVE_T=
+EMP3,
+> > +             .func[YH5151E_PAGE_5V] =3D
+> > +                     PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
+> > +                     PMBUS_HAVE_POUT,
+> > +             .func[YH5151E_PAGE_3V3] =3D
+> > +                     PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
+> > +                     PMBUS_HAVE_POUT,
+> > +             .read_word_data =3D fsp3y_read_word_data,
+> > +             .read_byte_data =3D fsp3y_read_byte_data,
+> > +     }
+> > +};
+> > +
+> > +static int fsp3y_probe(struct i2c_client *client,
+> > +                    const struct i2c_device_id *id)
+> > +{
+>
+> This vendor sells dozens of different power supplies. Apparently
+> they do not have compatible PMBus attributes (or at least the pages
+> are not compatible to each other). Given that, I think there should
+> be a model validation here.
+
+How should I go about doing model validation? I'm already using
+i2c_device_id to differentiate between the PDU and the PSU, but I
+suppose, that's not the best thing. Maybe I should use an identify
+function in pmbus_driver_info?
+
+>
+> This is even more important since an earlier discussion suggests that
+> at least some of the 3Y power supplies use LINEAR11 instead of LINEAR16
+> for output voltages (eg YH5301-1EAR, FSP550-50ERS). We need to ensure
+> that affected power supplies are not enabled with this driver, and that
+> the enabled power supplies have been tested and are not only confirmed
+> to work and report correct data.
+>
+
+
+> > +     return pmbus_do_probe(client, &fsp3y_info[id->driver_data]);
+> > +}
+> > +
+> > +static const struct i2c_device_id pmbus_id[] =3D {
+> > +     {"fsp3y_ym2151e", ym2151e},
+> > +     {"fsp3y_yh5151e", yh5151e},> +  {}
+> > +};
+> > +
+> > +MODULE_DEVICE_TABLE(i2c, pmbus_id);
+> > +
+> > +/* This is the driver that will be inserted */
+> > +static struct i2c_driver fsp3y_driver =3D {
+> > +     .driver =3D {
+> > +                .name =3D "fsp3y",
+> > +                },
+> > +     .probe =3D fsp3y_probe,
+>
+> Please use the .probe_new callback.
+>
+> > +     .id_table =3D pmbus_id
+> > +};
+> > +
+> > +module_i2c_driver(fsp3y_driver);
+> > +
+> > +MODULE_AUTHOR("V=C3=A1clav Kubern=C3=A1t");
+> > +MODULE_DESCRIPTION("PMBus driver for FSP/3Y-Power power supplies");
+> > +MODULE_LICENSE("GPL");
+> >
+>
+
+V=C3=A1clav
