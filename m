@@ -2,70 +2,80 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A041C433DB
-	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Mar 2021 01:02:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F247EC433DB
+	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Mar 2021 01:44:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EE93D61601
-	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Mar 2021 01:02:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C438561883
+	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Mar 2021 01:44:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbhC3BB2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 29 Mar 2021 21:01:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40396 "EHLO
+        id S229655AbhC3Bn3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 29 Mar 2021 21:43:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbhC3BBE (ORCPT
+        with ESMTP id S229628AbhC3BnE (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 29 Mar 2021 21:01:04 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F8FC061762;
-        Mon, 29 Mar 2021 18:01:04 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id 91-20020a9d08640000b0290237d9c40382so14025646oty.12;
-        Mon, 29 Mar 2021 18:01:04 -0700 (PDT)
+        Mon, 29 Mar 2021 21:43:04 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282C3C061762;
+        Mon, 29 Mar 2021 18:43:04 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id d12so14922859oiw.12;
+        Mon, 29 Mar 2021 18:43:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=9UTYKvzTiJrxHjVk8ibIWhjc8BbX4oL9HwCRVc6pGZA=;
-        b=FQnW7nl2gOgbGNRz7bAs+Pn2CtmY7jye2ZtXRvyV/diU5z2w62B2IP1fcP+/S1s/9T
-         BHa7stPeKy5udsuat3aLagW0eUElch8uQU4TzWpPWn/2cvssrnDz8g8RCs/QfmpYQJlm
-         DCQdttwYbB+TtgFgYsvhmlBCk+9JCHT0mtgNyB8ZJIWTwnJI1SDcOE4s1O/XRFQGQLhv
-         EFeSBk+OTTkFTR/IhJIzSCfngwoRuu/VeAMMESBwMsNyeSlT5LDJvDashl3vyVwYe84L
-         Pd2rmgHfwh0MyxWb8k9t8EgTXbXjNXzCmmV7WMYuN9hd5aF5wpWcwfjpWnj33faj0LiC
-         Wmnw==
+        bh=hcN4e2ZIjSqTaT+HE3O5zc/5f5nqimNJqKvrwB/lfk8=;
+        b=rB5gt5/zb+Ms0XAYGnn7/5lnsrPPo3IZ1oJzuW9GcClKTOSj4BaGqPXbwWfs7VvJVt
+         bbXzt4WazzDmfcMWX02U+tZBh/gFLnnyHKTiMav+lYmnF0gg80Wct/h3sRo5HQWf7cGr
+         q+D2Va98xYIkQeqBcbP8ihZQvzu+etfEv2NtYUfeondb4+UZQ6uC7vHP9uyT7JdSxbvS
+         HM6OkjOoZv/a/iWPN5VzFXFF6lnILrTX6scvxS2chonvbypP7o+va9lyWg2/tXPuB6dk
+         2N+1ON2kWCoJh8xEoOePWzKGx43aRes5dIw7e0db4vqjavlvlmKvhkrg3oEpJZKjBIy9
+         5yqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=9UTYKvzTiJrxHjVk8ibIWhjc8BbX4oL9HwCRVc6pGZA=;
-        b=b8PNFoXPDzNAXrHdgAQEvlXqasPe9Rh7s4K/FilQZRDI/OdO5UBm2/Ro5Xt6AkX4BV
-         IFFJonh1wUn/gtXCio2hY7ajZs/PdROFjaQylvNGrOzJEn9T3IW8sMGFx/EoaPHVRqJv
-         th7I3lSbci1n/8w9SFP6ub951EgeVGTgT2m9f3wbi5h+Rqm0urQu8xYhN6OjLVznb59N
-         gityDKin73KeQ5sS++n04AnFMcHBMGL3tWp01lrqxOwrHo4mLq8WUaa6mcRewCaLK6N7
-         IPLXZyYF4ZCSv148lRaKuqRn+UQD9IoWNYIQSwjowMgqgPi6Jv2EHCKVElCcXwVd52Ne
-         nWjA==
-X-Gm-Message-State: AOAM5311Ul11wKRuv1wwcv4Q3Qa0d5aqWg7YnDk0p3m1Jq+Gt8f3Dgsp
-        ffdKcd2OK1YuZQpBc+DH3yeHBZaur1c=
-X-Google-Smtp-Source: ABdhPJzY/aRM+RNfLcojh8pAfQqDVfHU5Rwk/gL3fRw3kR96QVn4grGeFEYxGiwoZvZiYK1O0VNSBA==
-X-Received: by 2002:a9d:6296:: with SMTP id x22mr24367511otk.196.1617066062919;
-        Mon, 29 Mar 2021 18:01:02 -0700 (PDT)
+        bh=hcN4e2ZIjSqTaT+HE3O5zc/5f5nqimNJqKvrwB/lfk8=;
+        b=BoxQl4usvQHHxyuB81MqccYNiaZApOKU98nyMbQciM9kHhBomUeAViklVD7Wg2kJ3b
+         tjtamq36tK7uw0Hx82x52gVw0mnSuHXzSsQZbXHGBwHe/axZyWco1tTsYW8Id3POE8zz
+         pxVR2QaA6tYFdOhiQyHsGSqmvy9NBlI+35vOiTVU+AFWf8yLPBpr3jjgB0Ikoatubpug
+         Czh64Hq7EUBYXw9rLTzBDWUDTxtcilhOT1nmTrLUcg1oAOp1pYPUksguVpuTjyDPgvGT
+         F6zr2kPwbejfCYa5AGG44DicVcP8jcqMt0qJ6DCq2aLPRr8qT9FVCJo+AZ43LVPHtmBL
+         6tFA==
+X-Gm-Message-State: AOAM530vOKUczjaj4Rh55efp1+2PrRYQKKQ6sKJUWaVfAHpytw73vT/g
+        fOVg8qpmrtOxKHu4wzkzb9g=
+X-Google-Smtp-Source: ABdhPJyRWPzJbZG1k0ujG8DqyTAdvwA0COENYeFj3vyjFziiJ9C6Zedd9y0v55YAf77EGa1LhM9YfA==
+X-Received: by 2002:a54:4703:: with SMTP id k3mr1468266oik.26.1617068583292;
+        Mon, 29 Mar 2021 18:43:03 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 62sm2990358oto.60.2021.03.29.18.01.01
+        by smtp.gmail.com with ESMTPSA id n17sm3844075oic.8.2021.03.29.18.43.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Mar 2021 18:01:02 -0700 (PDT)
+        Mon, 29 Mar 2021 18:43:02 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH] hwmon: (nzxt-kraken2) mark and order concurrent accesses
-To:     Jonas Malaco <jonas@protocubo.io>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20210329082211.86716-1-jonas@protocubo.io>
- <20210329215339.GH220164@roeck-us.net>
- <20210330002131.s2qz3dr6bwr6jz25@calvin.localdomain>
+Subject: Re: [PATCH v2 3/4] hwmon: smpro: Add Ampere's Altra smpro-hwmon
+ driver
+To:     Quan Nguyen <quan@os.amperecomputing.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org
+Cc:     Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
+References: <20210329015238.19474-1-quan@os.amperecomputing.com>
+ <20210329015238.19474-4-quan@os.amperecomputing.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -110,12 +120,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <56ebbf0f-cdcb-d5af-e1ad-c7604597566e@roeck-us.net>
-Date:   Mon, 29 Mar 2021 18:01:00 -0700
+Message-ID: <bac92db0-3ef6-1615-0e92-aabd54fd0580@roeck-us.net>
+Date:   Mon, 29 Mar 2021 18:43:00 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20210330002131.s2qz3dr6bwr6jz25@calvin.localdomain>
+In-Reply-To: <20210329015238.19474-4-quan@os.amperecomputing.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -123,76 +133,584 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 3/29/21 5:21 PM, Jonas Malaco wrote:
-> On Mon, Mar 29, 2021 at 02:53:39PM -0700, Guenter Roeck wrote:
->> On Mon, Mar 29, 2021 at 05:22:01AM -0300, Jonas Malaco wrote:
->>> To avoid a spinlock, the driver explores concurrent memory accesses
->>> between _raw_event and _read, having the former updating fields on a
->>> data structure while the latter could be reading from them.  Because
->>> these are "plain" accesses, those are data races according to the Linux
->>> kernel memory model (LKMM).
->>>
->>> Data races are undefined behavior in both C11 and LKMM.  In practice,
->>> the compiler is free to make optimizations assuming there is no data
->>> race, including load tearing, load fusing and many others,[1] most of
->>> which could result in corruption of the values reported to user-space.
->>>
->>> Prevent undesirable optimizations to those concurrent accesses by
->>> marking them with READ_ONCE() and WRITE_ONCE().  This also removes the
->>> data races, according to the LKMM, because both loads and stores to each
->>> location are now "marked" accesses.
->>>
->>> As a special case, use smp_load_acquire() and smp_load_release() when
->>> loading and storing ->updated, as it is used to track the validity of
->>> the other values, and thus has to be stored after and loaded before
->>> them.  These imply READ_ONCE()/WRITE_ONCE() but also ensure the desired
->>> order of memory accesses.
->>>
->>> [1] https://lwn.net/Articles/793253/
->>>
->>
->> I think you lost me a bit there. What out-of-order accesses that would be
->> triggered by a compiler optimization are you concerned about here ?
->> The only "problem" I can think of is that priv->updated may have been
->> written before the actual values. The impact would be ... zero. An
->> attribute read would return "stale" data for a few microseconds.
->> Why is that a concern, and what difference does it make ?
+On 3/28/21 6:52 PM, Quan Nguyen wrote:
+> This commit adds support for Ampere SMpro hwmon driver. This driver
+> supports accessing various CPU sensors provided by the SMpro co-processor
+> including temperature, power, voltages, and current.
 > 
-> The impact of out-of-order accesses to priv->updated is indeed minimal.
+> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
+> ---
+>  drivers/hwmon/Kconfig       |   8 +
+>  drivers/hwmon/Makefile      |   1 +
+>  drivers/hwmon/smpro-hwmon.c | 494 ++++++++++++++++++++++++++++++++++++
+>  3 files changed, 503 insertions(+)
+>  create mode 100644 drivers/hwmon/smpro-hwmon.c
 > 
-> That said, smp_load_acquire() and smp_store_release() were meant to
-> prevent reordering at runtime, and only affect architectures other than
-> x86.  READ_ONCE() and WRITE_ONCE() would already prevent reordering from
-> compiler optimizations, and x86 provides the load-acquire/store-release
-> semantics by default.
-> 
-> But the reordering issue is not a concern to me, I got carried away when
-> adding READ_ONCE()/WRITE_ONCE().  While smp_load_acquire() and
-> smp_store_release() make the code work more like I intend it to, they
-> are (small) costs we can spare.
-> 
-> I still think that READ_ONCE()/WRITE_ONCE() are necessary, including for
-> priv->updated.  Do you agree?
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 0ddc974b102e..ba4b5a911baf 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -67,6 +67,14 @@ config SENSORS_ABITUGURU3
+>  	  This driver can also be built as a module. If so, the module
+>  	  will be called abituguru3.
+>  
+> +config SENSORS_SMPRO
+> +	tristate "Ampere's Altra SMpro hardware monitoring driver"
+> +	depends on MFD_SMPRO
+> +	help
+> +	  If you say yes here you get support for the thermal, voltage,
+> +	  current and power sensors of Ampere's Altra processor family SoC
+> +	  with SMpro co-processor.
+> +
+>  config SENSORS_AD7314
+>  	tristate "Analog Devices AD7314 and compatibles"
+>  	depends on SPI
+> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> index 59e78bc212cf..b25391f9c651 100644
+> --- a/drivers/hwmon/Makefile
+> +++ b/drivers/hwmon/Makefile
+> @@ -174,6 +174,7 @@ obj-$(CONFIG_SENSORS_SHT3x)	+= sht3x.o
+>  obj-$(CONFIG_SENSORS_SHTC1)	+= shtc1.o
+>  obj-$(CONFIG_SENSORS_SIS5595)	+= sis5595.o
+>  obj-$(CONFIG_SENSORS_SMM665)	+= smm665.o
+> +obj-$(CONFIG_SENSORS_SMPRO)	+= smpro-hwmon.o
+>  obj-$(CONFIG_SENSORS_SMSC47B397)+= smsc47b397.o
+>  obj-$(CONFIG_SENSORS_SMSC47M1)	+= smsc47m1.o
+>  obj-$(CONFIG_SENSORS_SMSC47M192)+= smsc47m192.o
+> diff --git a/drivers/hwmon/smpro-hwmon.c b/drivers/hwmon/smpro-hwmon.c
+> new file mode 100644
+> index 000000000000..4277736ebc6e
+> --- /dev/null
+> +++ b/drivers/hwmon/smpro-hwmon.c
+> @@ -0,0 +1,494 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Ampere Computing SoC's SMPro Hardware Monitoring Driver
+> + *
+> + * Copyright (c) 2021, Ampere Computing LLC
+> + */
+> +#include <linux/bitfield.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/hwmon-sysfs.h>
+> +#include <linux/kernel.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/property.h>
+> +#include <linux/regmap.h>
+> +
+> +/* Identification Registers */
+> +#define MANUFACTURER_ID_REG		0x02
+> +#define AMPERE_MANUFACTURER_ID		0xCD3A
+> +
+> +/* Logical Power Sensor Registers */
+> +#define SOC_TEMP_REG			0x10
+> +#define SOC_VRD_TEMP_REG		0x11
+> +#define DIMM_VRD_TEMP_REG		0x12
+> +#define CORE_VRD_TEMP_REG		0x13
+> +#define CH0_DIMM_TEMP_REG		0x14
+> +#define CH1_DIMM_TEMP_REG		0x15
+> +#define CH2_DIMM_TEMP_REG		0x16
+> +#define CH3_DIMM_TEMP_REG		0x17
+> +#define CH4_DIMM_TEMP_REG		0x18
+> +#define CH5_DIMM_TEMP_REG		0x19
+> +#define CH6_DIMM_TEMP_REG		0x1A
+> +#define CH7_DIMM_TEMP_REG		0x1B
+> +#define RCA_VRD_TEMP_REG		0x1C
+> +
+> +#define CORE_VRD_PWR_REG		0x20
+> +#define SOC_PWR_REG			0x21
+> +#define DIMM_VRD1_PWR_REG		0x22
+> +#define DIMM_VRD2_PWR_REG		0x23
+> +#define CORE_VRD_PWR_MW_REG		0x26
+> +#define SOC_PWR_MW_REG			0x27
+> +#define DIMM_VRD1_PWR_MW_REG		0x28
+> +#define DIMM_VRD2_PWR_MW_REG		0x29
+> +#define RCA_VRD_PWR_REG			0x2A
+> +#define RCA_VRD_PWR_MW_REG		0x2B
+> +
+> +#define MEM_HOT_THRESHOLD_REG		0x32
+> +#define SOC_VR_HOT_THRESHOLD_REG	0x33
+> +#define CORE_VRD_VOLT_REG		0x34
+> +#define SOC_VRD_VOLT_REG		0x35
+> +#define DIMM_VRD1_VOLT_REG		0x36
+> +#define DIMM_VRD2_VOLT_REG		0x37
+> +#define RCA_VRD_VOLT_REG		0x38
+> +
+> +#define CORE_VRD_CURR_REG		0x39
+> +#define SOC_VRD_CURR_REG		0x3A
+> +#define DIMM_VRD1_CURR_REG		0x3B
+> +#define DIMM_VRD2_CURR_REG		0x3C
+> +#define RCA_VRD_CURR_REG		0x3D
+> +
+> +struct smpro_hwmon {
+> +	struct regmap *regmap;
+> +};
+> +
+> +struct smpro_sensor {
+> +	const u8 reg;
+> +	const u8 reg_ext;
+> +	const char *label;
+> +};
+> +
+> +static const struct smpro_sensor temperature[] = {
+> +	{
+> +		.reg = SOC_TEMP_REG,
+> +		.label = "temp1 SoC"
+> +	},
+> +	{
+> +		.reg = SOC_VRD_TEMP_REG,
+> +		.label = "temp2 SoC VRD"
+> +	},
+> +	{
+> +		.reg = DIMM_VRD_TEMP_REG,
+> +		.label = "temp3 DIMM VRD"
+> +	},
+> +	{
+> +		.reg = CORE_VRD_TEMP_REG,
+> +		.label = "temp4 CORE VRD"
+> +	},
+> +	{
+> +		.reg = CH0_DIMM_TEMP_REG,
+> +		.label = "temp5 CH0 DIMM"
+> +	},
+> +	{
+> +		.reg = CH1_DIMM_TEMP_REG,
+> +		.label = "temp6 CH1 DIMM"
+> +	},
+> +	{
+> +		.reg = CH2_DIMM_TEMP_REG,
+> +		.label = "temp7 CH2 DIMM"
+> +	},
+> +	{
+> +		.reg = CH3_DIMM_TEMP_REG,
+> +		.label = "temp8 CH3 DIMM"
+> +	},
+> +	{
+> +		.reg = CH4_DIMM_TEMP_REG,
+> +		.label = "temp9 CH4 DIMM"
+> +	},
+> +	{
+> +		.reg = CH5_DIMM_TEMP_REG,
+> +		.label = "temp10 CH5 DIMM"
+> +	},
+> +	{
+> +		.reg = CH6_DIMM_TEMP_REG,
+> +		.label = "temp11 CH6 DIMM"
+> +	},
+> +	{
+> +		.reg = CH7_DIMM_TEMP_REG,
+> +		.label = "temp12 CH7 DIMM"
+> +	},
+> +	{
+> +		.reg = RCA_VRD_TEMP_REG,
+> +		.label = "temp13 RCA VRD"
+> +	},
+> +};
+> +
+> +static const struct smpro_sensor voltage[] = {
+> +	{
+> +		.reg = CORE_VRD_VOLT_REG,
+> +		.label = "vout0 CORE VRD"
+> +	},
+> +	{
+> +		.reg = SOC_VRD_VOLT_REG,
+> +		.label = "vout1 SoC VRD"
+> +	},
+> +	{
+> +		.reg = DIMM_VRD1_VOLT_REG,
+> +		.label = "vout2 DIMM VRD1"
+> +	},
+> +	{
+> +		.reg = DIMM_VRD2_VOLT_REG,
+> +		.label = "vout3 DIMM VRD2"
+> +	},
+> +	{
+> +		.reg = RCA_VRD_VOLT_REG,
+> +		.label = "vout4 RCA VRD"
+> +	},
+> +};
+> +
+> +static const struct smpro_sensor curr_sensor[] = {
+> +	{
+> +		.reg = CORE_VRD_CURR_REG,
+> +		.label = "iout1 CORE VRD"
+> +	},
+> +	{
+> +		.reg = SOC_VRD_CURR_REG,
+> +		.label = "iout2 SoC VRD"
+> +	},
+> +	{
+> +		.reg = DIMM_VRD1_CURR_REG,
+> +		.label = "iout3 DIMM VRD1"
+> +	},
+> +	{
+> +		.reg = DIMM_VRD2_CURR_REG,
+> +		.label = "iout4 DIMM VRD2"
+> +	},
+> +	{
+> +		.reg = RCA_VRD_CURR_REG,
+> +		.label = "iout5 RCA VRD"
+> +	},
+> +};
+> +
+> +static const struct smpro_sensor power[] = {
+> +	{
+> +		.reg = CORE_VRD_PWR_REG,
+> +		.reg_ext = CORE_VRD_PWR_MW_REG,
+> +		.label = "power1 CORE VRD"
+> +	},
+> +	{
+> +		.reg = SOC_PWR_REG,
+> +		.reg_ext = SOC_PWR_MW_REG,
+> +		.label = "power2 SoC"
+> +	},
+> +	{
+> +		.reg = DIMM_VRD1_PWR_REG,
+> +		.reg_ext = DIMM_VRD1_PWR_MW_REG,
+> +		.label = "power3 DIMM VRD1"
+> +	},
+> +	{
+> +		.reg = DIMM_VRD2_PWR_REG,
+> +		.reg_ext = DIMM_VRD2_PWR_MW_REG,
+> +		.label = "power4 DIMM VRD2"
+> +	},
+> +	{
+> +		.reg = RCA_VRD_PWR_REG,
+> +		.reg_ext = RCA_VRD_PWR_MW_REG,
+> +		.label = "power5 RCA VRD"
+> +	},
+> +};
+> +
+> +static int smpro_read_temp(struct device *dev, u32 attr, int channel, long *val)
+> +{
+> +	struct smpro_hwmon *hwmon = dev_get_drvdata(dev);
+> +	unsigned int value;
+> +	int ret;
+> +
+> +	switch (attr) {
+> +	case hwmon_temp_input:
+> +		ret = regmap_read(hwmon->regmap,
+> +				  temperature[channel].reg, &value);
+> +		if (ret)
+> +			return ret;
+> +		*val = (value & 0x1ff) * 1000;
+> +		break;
+> +	case hwmon_temp_crit:
+> +		if (temperature[channel].reg == SOC_VRD_TEMP_REG) {
+> +			ret = regmap_read(hwmon->regmap, SOC_VR_HOT_THRESHOLD_REG, &value);
+> +			if (ret)
+> +				return ret;
+> +			*val = (value & 0x1ff) * 1000;
+> +		} else {
+> +			/* Report same MEM HOT threshold across DIMM channels */
+> +			ret = regmap_read(hwmon->regmap, MEM_HOT_THRESHOLD_REG, &value);
+> +			if (ret)
+> +				return ret;
+> +			*val = (value & 0x1ff) * 1000;
+> +		}
+
+To avoid code duplication:
+
+		reg = temperature[channel].reg == SOC_VRD_TEMP_REG ? SOC_VR_HOT_THRESHOLD_REG : MEM_HOT_THRESHOLD_REG;
+		ret = regmap_read(hwmon->regmap, reg, &value);
+		if (ret)
+			return ret;
+
+But then why don't you just use reg_ext to store SOC_VR_HOT_THRESHOLD_REG
+or MEM_HOT_THRESHOLD_REG ? It is already available, after all, and with it
+the code could be simplified to
+
+		ret = regmap_read(hwmon->regmap, temperature[channel].reg_ext, &value);
+		if (ret)
+			return ret;
+
+I don't have a datasheet, but I do wonder what is in bit 9..15. Any idea ?
+Main question is if there is a sign bit, as theoretic as it may be.
+
+> +		break;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +	return 0;
+> +}
+> +
+> +static int smpro_read_in(struct device *dev, u32 attr, int channel, long *val)
+> +{
+> +	struct smpro_hwmon *hwmon = dev_get_drvdata(dev);
+> +	unsigned int value;
+> +	int ret;
+> +
+> +	switch (attr) {
+> +	case hwmon_in_input:
+> +		ret = regmap_read(hwmon->regmap, voltage[channel].reg, &value);
+> +		if (ret < 0)
+> +			return ret;
+> +		/* Scale reported by the hardware is 1mV */
+> +		*val = value & 0x7fff;
+
+What is in bit 15 ?
+
+> +		return 0;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static int smpro_read_curr(struct device *dev, u32 attr, int channel, long *val)
+> +{
+> +	struct smpro_hwmon *hwmon = dev_get_drvdata(dev);
+> +	unsigned int value;
+> +	int ret;
+> +
+> +	switch (attr) {
+> +	case hwmon_curr_input:
+> +		ret = regmap_read(hwmon->regmap, curr_sensor[channel].reg, &value);
+> +		if (ret < 0)
+> +			return ret;
+> +		/* Scale reported by the hardware is 1mA */
+> +		*val = value & 0x7fff;
+> +		return 0;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static int smpro_read_power(struct device *dev, u32 attr, int channel, long *val_pwr)
+> +{
+> +	struct smpro_hwmon *hwmon = dev_get_drvdata(dev);
+> +	unsigned int val = 0, val_mw = 0;
+> +	int ret;
+> +
+> +	switch (attr) {
+> +	case hwmon_power_input:
+> +		ret = regmap_read(hwmon->regmap, power[channel].reg, &val);
+> +		if (ret)
+> +			return ret;
+> +
+> +		ret = regmap_read(hwmon->regmap, power[channel].reg_ext, &val_mw);
+> +		if (ret)
+> +			return ret;
+> +
+> +		*val_pwr = val * 1000000 + val_mw * 1000;
+> +		return 0;
+> +
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static int smpro_read(struct device *dev, enum hwmon_sensor_types type,
+> +		      u32 attr, int channel, long *val)
+> +{
+> +	switch (type) {
+> +	case hwmon_temp:
+> +		return smpro_read_temp(dev, attr, channel, val);
+> +	case hwmon_in:
+> +		return smpro_read_in(dev, attr, channel, val);
+> +	case hwmon_power:
+> +		return smpro_read_power(dev, attr, channel, val);
+> +	case hwmon_curr:
+> +		return smpro_read_curr(dev, attr, channel, val);
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static int smpro_write(struct device *dev, enum hwmon_sensor_types type,
+> +		       u32 attr, int channel, long val)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+
+There are no writeable attributes, thus the write function is not needed.
+
+> +
+> +static int smpro_read_string(struct device *dev, enum hwmon_sensor_types type,
+> +			     u32 attr, int channel, const char **str)
+> +{
+> +	switch (type) {
+> +	case hwmon_temp:
+> +		switch (attr) {
+> +		case hwmon_temp_label:
+> +			*str = temperature[channel].label;
+> +			return 0;
+> +		default:
+> +			return -EOPNOTSUPP;
+> +		}
+> +		break;
+> +
+> +	case hwmon_in:
+> +		switch (attr) {
+> +		case hwmon_in_label:
+> +			*str = voltage[channel].label;
+> +			return 0;
+> +		default:
+> +			return -EOPNOTSUPP;
+> +		}
+> +		break;
+> +
+> +	case hwmon_curr:
+> +		switch (attr) {
+> +		case hwmon_curr_label:
+> +			*str = curr_sensor[channel].label;
+> +			return 0;
+> +		default:
+> +			return -EOPNOTSUPP;
+> +		}
+> +		break;
+> +
+> +	case hwmon_power:
+> +		switch (attr) {
+> +		case hwmon_power_label:
+> +			*str = power[channel].label;
+> +			return 0;
+> +		default:
+> +			return -EOPNOTSUPP;
+> +		}
+> +		break;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	return -EOPNOTSUPP;
+
+If you are returning -ENOPSUPP by default, might as well replace
+all the same returns above with break;
+
+> +}
+> +
+> +static umode_t smpro_is_visible(const void *data, enum hwmon_sensor_types type,
+> +				u32 attr, int channel)
+> +{
+> +	const struct smpro_hwmon *hwmon = data;
+> +	unsigned int value;
+> +	int ret;
+> +
+> +	switch (type) {
+> +	case hwmon_temp:
+> +		switch (attr) {
+> +		case hwmon_temp_input:
+> +		case hwmon_temp_label:
+> +		case hwmon_temp_crit:
+> +			ret = regmap_read(hwmon->regmap, temperature[channel].reg, &value);
+> +			if (ret || value == 0xFFFF)
+> +				return 0;
+> +		break;
+> +		}
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return 0444;
+> +}
+> +
+> +static const struct hwmon_channel_info *smpro_info[] = {
+> +	HWMON_CHANNEL_INFO(temp,
+> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+> +			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_CRIT,
+> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+> +			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_CRIT,
+> +			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_CRIT,
+> +			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_CRIT,
+> +			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_CRIT,
+> +			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_CRIT,
+> +			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_CRIT,
+> +			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_CRIT,
+> +			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_CRIT,
+> +			   HWMON_T_INPUT | HWMON_T_LABEL),
+> +	HWMON_CHANNEL_INFO(in,
+> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_LABEL),
+> +	HWMON_CHANNEL_INFO(power,
+> +			   HWMON_P_INPUT | HWMON_P_LABEL,
+> +			   HWMON_P_INPUT | HWMON_P_LABEL,
+> +			   HWMON_P_INPUT | HWMON_P_LABEL,
+> +			   HWMON_P_INPUT | HWMON_P_LABEL,
+> +			   HWMON_P_INPUT | HWMON_P_LABEL),
+> +	HWMON_CHANNEL_INFO(curr,
+> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+> +			   HWMON_C_INPUT | HWMON_C_LABEL),
+> +	NULL
+> +};
+> +
+> +static const struct hwmon_ops smpro_hwmon_ops = {
+> +	.is_visible = smpro_is_visible,
+> +	.read = smpro_read,
+> +	.write = smpro_write,
+> +	.read_string = smpro_read_string,
+> +};
+> +
+> +static const struct hwmon_chip_info smpro_chip_info = {
+> +	.ops = &smpro_hwmon_ops,
+> +	.info = smpro_info,
+> +};
+> +
+> +static bool is_valid_id(struct regmap *regmap)
+> +{
+> +	unsigned int val;
+> +	int ret;
+> +
+> +	ret = regmap_read(regmap, MANUFACTURER_ID_REG, &val);
+> +
+> +	return  (ret || (val != AMPERE_MANUFACTURER_ID)) ? false : true;
+
+I am quite concerned about this: The calling code will translate it to
+-EPROBE_DEFER even if the manufacturer ID is wrong. It should return
+-ENODEV in that case. There should be a better means to determine if the
+controller is not available at all, or not yet.
+
+> +}
+> +
+> +static int smpro_hwmon_probe(struct platform_device *pdev)
+> +{
+> +	struct smpro_hwmon *hwmon;
+> +	struct device *hwmon_dev;
+> +
+> +	hwmon = devm_kzalloc(&pdev->dev, sizeof(struct smpro_hwmon), GFP_KERNEL);
+> +	if (!hwmon)
+> +		return -ENOMEM;
+> +
+> +	hwmon->regmap = dev_get_regmap(pdev->dev.parent, NULL);
+> +	if (!hwmon->regmap)
+> +		return -ENODEV;
+> +
+> +	/* Check for valid ID */
+> +	if (!is_valid_id(hwmon->regmap))
+> +		return -EPROBE_DEFER;
+> +
+> +	hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev, "smpro_hwmon",
+> +							 hwmon, &smpro_chip_info, NULL);
+> +
+> +	return PTR_ERR_OR_ZERO(hwmon_dev);
+> +}
+> +
+> +static const struct of_device_id smpro_hwmon_of_match[] = {
+> +	{ .compatible = "ampere,ac01-hwmon" },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, smpro_hwmon_of_match);
+> +
+> +static struct platform_driver smpro_hwmon_driver = {
+> +	.probe		= smpro_hwmon_probe,
+> +	.driver = {
+> +		.name	= "smpro-hwmon",
+> +		.of_match_table = smpro_hwmon_of_match,
+> +	},
+> +};
+> +
+> +module_platform_driver(smpro_hwmon_driver);
+> +
+> +MODULE_AUTHOR("Thu Nguyen <thu@os.amperecomputing.com>");
+> +MODULE_AUTHOR("Quan Nguyen <quan@os.amperecomputing.com>");
+> +MODULE_DESCRIPTION("Ampere Altra SMPro hwmon driver");
+> +MODULE_LICENSE("GPL v2");
 > 
 
-No. What is the point ? The order of writes doesn't matter, the writes won't
-be randomly dropped, and it doesn't matter if the reader reports old values
-for a couple of microseconds either. This would be different if the values
-were used as synchronization primitives or similar, but that isn't the case
-here. As for priv->updated, if you are concerned about lost reports and
-the 4th report is received a few microseconds before the read, I'd suggest
-to loosen the interval a bit instead.
-
-Supposedly we are getting reports every 500ms. We have two situations:
-- More than three reports are lost, making priv->updated somewhat relevant.
-  In this case, it doesn't matter if outdated values are reported for
-  a few uS since most/many/some reports are outdated more than a second
-  anyway.
-- A report is received but old values are reported for a few uS. That
-  doesn't matter either because reports are always outdated anyway by
-  much more than a few uS anyway, and the code already tolerates up to
-  2 seconds of lost reports.
-
-Sorry, I completely fail to see the problem you are trying to solve here.
-
-Guenter
