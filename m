@@ -2,71 +2,74 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EBE4C433DB
-	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Mar 2021 10:35:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78A0CC433DB
+	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Mar 2021 10:52:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0C655619AB
-	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Mar 2021 10:35:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 49E8D61990
+	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Mar 2021 10:52:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231689AbhC3Kew (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 30 Mar 2021 06:34:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50864 "EHLO
+        id S231584AbhC3Kvk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 30 Mar 2021 06:51:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231664AbhC3KeU (ORCPT
+        with ESMTP id S231154AbhC3KvY (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 30 Mar 2021 06:34:20 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D90C061574;
-        Tue, 30 Mar 2021 03:34:19 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id i81so16003514oif.6;
-        Tue, 30 Mar 2021 03:34:19 -0700 (PDT)
+        Tue, 30 Mar 2021 06:51:24 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31791C061574;
+        Tue, 30 Mar 2021 03:51:24 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id i81so16041301oif.6;
+        Tue, 30 Mar 2021 03:51:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=I2t0XJ2lc0H9u915HEvnhQtWR0pGaixnG20LdM71wb0=;
-        b=oa6CXcZ9XauhK7h6wBzxnv1o1GqbxgTFKQ/89wm8MJF98Casyt3cwuyN9/TdGomJXM
-         x+ovYbMvGZFVyA1PJOsJp1asBGjz1152Zf3DDj4e/xTAJIiQu3pMqiIBgDCuOH9jB677
-         jWOWbQJfzJoFg1Rx6ctumR2nrid9o1Dy0AxoI/ONbpbns3OZZgbLHbnHoGpt8PejMbxh
-         Z52d73lPizXmCOgFuyP8JumptCdYQjP3ggBMzkJr23mqqhkIM+1FLx6UcWtYy4N88uGv
-         50V2Fu8Q9dThoAwsjZmKPJNaz6oOQWdPU7uqLklmqs3BrZJqDdivCY/BjknRZESe1wtE
-         eZnw==
+        bh=YHro+qqr4c6Z9VWDcbh7r1A476xUfnH4n9XY848bpzc=;
+        b=axKH1LCVd7b0ygSqiZbcmALyI475PY3p+W0ep5zCTg4+UzrbuXlDjaLqXXvcM4zhbp
+         n2XPbzuiXIFPkuXNymafUSQ0o7Gv2LxH6gjUyEzHcESHSJk+frw3E5MWKmuMSDPPCN6J
+         hCR76f1+HdiW+VWZ7BvX4Rhqs/NbNclMDrzIKvSZxa5i5/hWbXzOVyCG5IW6Nte+b69L
+         Avt/sWerNFCuPevQnYQ3rnwqKqy9xsDVo1n3UBlLvc+J9Hh+npmilq1z0romIyr7b/U2
+         HcT6XbxGk8I6oVk1cMDrcX07iQ1lb9ENQDsUdwA17ay/10uVYTQzYa9mjuovc0mpw/b5
+         adRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=I2t0XJ2lc0H9u915HEvnhQtWR0pGaixnG20LdM71wb0=;
-        b=AUJYv8fqM26Z2k+qWaZk21rGeqW+9CzxAi+ZD5ye+wtYPd4AaAPKM5jTaHudFphvuy
-         ub9390WfxE2+5KarwKMmmaLSPUcKSvxksy1sBP1SL7z68JtxTCyzt9O9ddYvn2fUXZaj
-         Dmqh5tHd+M0czeUgmNAPFFaryZNdr3030g1w9sm5b+Y6rCDRCj9yNO4rOpOSmHBJRtbg
-         iOmjlcvQS9DwWg0MCk433e6/1DkHsObQqMzUOx4fGVPAj9OfKTpBm74DgJ+uInd/cUSk
-         /zD21mtN+8y8P0Q47zlfsT2AkIuu8yUmBVVgPnXOpQ0EjsD0l1vQEs/ZsmtssXciwr5G
-         hGfA==
-X-Gm-Message-State: AOAM532/xG1JApthWTTHa8Pl67/TdrufdFx9ZEI5z9WEKy/RBEGOMsct
-        f7yJGcTCEvybgmkjpN04khE=
-X-Google-Smtp-Source: ABdhPJw0B9mU/6W/9fwKE2UmUOzPCX+4Iobr/yfDqBLmU+jBh0U6njx3tbTnqSMxGHCKQk88EDbQhg==
-X-Received: by 2002:a05:6808:907:: with SMTP id w7mr2656064oih.148.1617100459154;
-        Tue, 30 Mar 2021 03:34:19 -0700 (PDT)
+        bh=YHro+qqr4c6Z9VWDcbh7r1A476xUfnH4n9XY848bpzc=;
+        b=ZfTJ/1Vs5XTTwptzNM97EyYTMzCoBj471egW+8Um8uLrib5z4OaxsKn1egiL6LZnRp
+         4P9Mwk2kdDZCLwyUcR6wdnobVrB3zefWlFj3v/Y2Gp2rrqWLY2FMnn7J3i1cMoundSY6
+         8H+fxCwnv5lCi5GPqZGPKrpf8WdVxx21AFzz5YUqkbCpGYMW5Dr0mlXCc025AIg/zcK+
+         wVmUETOBZkME1J5y6PgAZCBnDEIWPLgt4eyE98kefzdmMpak9KlP8cVvwoNgGFmGtWTl
+         rVH5dzxwHKNve6fcM75C8rX5JcZsP982RTU5L3yOLrhY7jrBmW4XgjkmiNk1pLCz1ewy
+         tPOQ==
+X-Gm-Message-State: AOAM5318ZFkbN5xLaKfsDURHshnIQV5zoOk1jC6rtKEP29GA7qX8d1Io
+        WXlCfbLTZnNU0GF53XBr2gZAVLEzCQU=
+X-Google-Smtp-Source: ABdhPJxRHFhE3Jg9DEk5ZDOfcPu2+NnayBdFXBv1muXq0QB8zIqq7YGGQwlehZueAVuVNrCrSf9WHQ==
+X-Received: by 2002:aca:dd44:: with SMTP id u65mr2668070oig.172.1617101483217;
+        Tue, 30 Mar 2021 03:51:23 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d24sm4925782otf.12.2021.03.30.03.34.17
+        by smtp.gmail.com with ESMTPSA id b22sm4997406ots.59.2021.03.30.03.51.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Mar 2021 03:34:18 -0700 (PDT)
+        Tue, 30 Mar 2021 03:51:22 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: Enabling pmbus power control
-To:     Zev Weiss <zev@bewilderbeest.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Cc:     Andrew Jeffery <andrew@aj.id.au>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        openbmc@lists.ozlabs.org
-References: <YGLepYLvtlO6Ikzs@hatter.bewilderbeest.net>
+Subject: Re: [PATCH] hwmon: (nzxt-kraken2) mark and order concurrent accesses
+To:     Jonas Malaco <jonas@protocubo.io>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20210329082211.86716-1-jonas@protocubo.io>
+ <20210329215339.GH220164@roeck-us.net>
+ <20210330002131.s2qz3dr6bwr6jz25@calvin.localdomain>
+ <56ebbf0f-cdcb-d5af-e1ad-c7604597566e@roeck-us.net>
+ <20210330031652.zhhxft4trli6zqtw@calvin.localdomain>
+ <37e5b3d3-8868-c70e-4c01-2d3d777df4de@roeck-us.net>
+ <20210330062749.tcscp2kzxqugbtiv@calvin.localdomain>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -111,12 +114,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <5105ada1-643a-8e58-a52d-d3c8dbef86b9@roeck-us.net>
-Date:   Tue, 30 Mar 2021 03:34:16 -0700
+Message-ID: <38c76eb1-808a-1c9a-2494-208270a66e14@roeck-us.net>
+Date:   Tue, 30 Mar 2021 03:51:21 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <YGLepYLvtlO6Ikzs@hatter.bewilderbeest.net>
+In-Reply-To: <20210330062749.tcscp2kzxqugbtiv@calvin.localdomain>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -124,69 +127,192 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 3/30/21 1:17 AM, Zev Weiss wrote:
+On 3/29/21 11:27 PM, Jonas Malaco wrote:
+> On Mon, Mar 29, 2021 at 10:43:55PM -0700, Guenter Roeck wrote:
+>> On 3/29/21 8:16 PM, Jonas Malaco wrote:
+>>> On Mon, Mar 29, 2021 at 06:01:00PM -0700, Guenter Roeck wrote:
+>>>> On 3/29/21 5:21 PM, Jonas Malaco wrote:
+>>>>> On Mon, Mar 29, 2021 at 02:53:39PM -0700, Guenter Roeck wrote:
+>>>>>> On Mon, Mar 29, 2021 at 05:22:01AM -0300, Jonas Malaco wrote:
+>>>>>>> To avoid a spinlock, the driver explores concurrent memory accesses
+>>>>>>> between _raw_event and _read, having the former updating fields on a
+>>>>>>> data structure while the latter could be reading from them.  Because
+>>>>>>> these are "plain" accesses, those are data races according to the Linux
+>>>>>>> kernel memory model (LKMM).
+>>>>>>>
+>>>>>>> Data races are undefined behavior in both C11 and LKMM.  In practice,
+>>>>>>> the compiler is free to make optimizations assuming there is no data
+>>>>>>> race, including load tearing, load fusing and many others,[1] most of
+>>>>>>> which could result in corruption of the values reported to user-space.
+>>>>>>>
+>>>>>>> Prevent undesirable optimizations to those concurrent accesses by
+>>>>>>> marking them with READ_ONCE() and WRITE_ONCE().  This also removes the
+>>>>>>> data races, according to the LKMM, because both loads and stores to each
+>>>>>>> location are now "marked" accesses.
+>>>>>>>
+>>>>>>> As a special case, use smp_load_acquire() and smp_load_release() when
+>>>>>>> loading and storing ->updated, as it is used to track the validity of
+>>>>>>> the other values, and thus has to be stored after and loaded before
+>>>>>>> them.  These imply READ_ONCE()/WRITE_ONCE() but also ensure the desired
+>>>>>>> order of memory accesses.
+>>>>>>>
+>>>>>>> [1] https://lwn.net/Articles/793253/
+>>>>>>>
+>>>>>>
+>>>>>> I think you lost me a bit there. What out-of-order accesses that would be
+>>>>>> triggered by a compiler optimization are you concerned about here ?
+>>>>>> The only "problem" I can think of is that priv->updated may have been
+>>>>>> written before the actual values. The impact would be ... zero. An
+>>>>>> attribute read would return "stale" data for a few microseconds.
+>>>>>> Why is that a concern, and what difference does it make ?
+>>>>>
+>>>>> The impact of out-of-order accesses to priv->updated is indeed minimal.
+>>>>>
+>>>>> That said, smp_load_acquire() and smp_store_release() were meant to
+>>>>> prevent reordering at runtime, and only affect architectures other than
+>>>>> x86.  READ_ONCE() and WRITE_ONCE() would already prevent reordering from
+>>>>> compiler optimizations, and x86 provides the load-acquire/store-release
+>>>>> semantics by default.
+>>>>>
+>>>>> But the reordering issue is not a concern to me, I got carried away when
+>>>>> adding READ_ONCE()/WRITE_ONCE().  While smp_load_acquire() and
+>>>>> smp_store_release() make the code work more like I intend it to, they
+>>>>> are (small) costs we can spare.
+>>>>>
+>>>>> I still think that READ_ONCE()/WRITE_ONCE() are necessary, including for
+>>>>> priv->updated.  Do you agree?
+>>>>>
+>>>>
+>>>> No. What is the point ? The order of writes doesn't matter, the writes won't
+>>>> be randomly dropped, and it doesn't matter if the reader reports old values
+>>>> for a couple of microseconds either. This would be different if the values
+>>>> were used as synchronization primitives or similar, but that isn't the case
+>>>> here. As for priv->updated, if you are concerned about lost reports and
+>>>> the 4th report is received a few microseconds before the read, I'd suggest
+>>>> to loosen the interval a bit instead.
+>>>>
+>>>> Supposedly we are getting reports every 500ms. We have two situations:
+>>>> - More than three reports are lost, making priv->updated somewhat relevant.
+>>>>   In this case, it doesn't matter if outdated values are reported for
+>>>>   a few uS since most/many/some reports are outdated more than a second
+>>>>   anyway.
+>>>> - A report is received but old values are reported for a few uS. That
+>>>>   doesn't matter either because reports are always outdated anyway by
+>>>>   much more than a few uS anyway, and the code already tolerates up to
+>>>>   2 seconds of lost reports.
+>>>>
+>>>> Sorry, I completely fail to see the problem you are trying to solve here.
+>>>
+>>> Please disregard the out-of-order accesses, I agree that preventing them
+>>> "are a (small) cost we can spare".
+>>>
+>>> The main problem I still would like to address are the data races.
+>>> While the stores and loads cannot be dropped, and we can tolerate their
+>>> reordering, they could still be teared, fused, perhaps invented...
+>>> According to [1] these types of optimizations are not unheard.
+>>>
+>>> Load tearing alone could easily produce values that are not stale, but
+>>> wrong.  Do we also tolerate wrong values, even if they are infrequent?
+>>>
+>>> Another detail I should have mentioned sooner is that READ_ONCE() and
+>>> WRITE_ONCE() cause only minor (gcc) to no (clang) changes to the
+>>> generated code for x86_64 and i386.[2]  While this seems contrary to the
+>>> point I am trying to make, I want to show that, for the most part, these
+>>> changes just lock in a reasonable compiler behavior.
+>>>
+>>> Specifically, on x86_64/gcc (the most relevant arch/compiler for this
+>>> driver) the changes are restricted to kraken2_read:
+>>>
+>>> 1.	Loading of priv->updated and jiffies are reordered, because
+>>> 	(with READ_ONCE()) both are volatile and time_after(a, b) is
+>>> 	defined as b - a.
+>>>
+>>
+>> Are you really trying to claim that much of the time_after() code
+>> in the Linux kernel is wrong ?
 > 
-> Hello,
+> No.
 > 
-> I'm working on a board that has a handful of LM25066 PMICs controlling
-> the power supply to various devices, and I'd like to have both the
-> existing hwmon sensor functionality as well as userspace power on/off
-> control, which does not currently seem to be available (other than via
-> 'i2cset -f', which I'd of course prefer to avoid).  I've drafted up a
-> couple possible versions of this, and was hoping to get some opinions
-> on the appropriate overall approach.
+> (nor do I otherwise think that)
 > 
-> One option is to add a read-write sysfs attribute to the existing
-> hwmon directory (current incarnation of the patch:
-> https://thorn.bewilderbeest.net/~zev/patches/pmbus-statectl.patch).
-> This bears a vague resemblance to a patch that was rejected a couple
-> years ago
-> (https://lore.kernel.org/linux-hwmon/20190417161817.GA13109@roeck-us.net/),
-> but is different enough that I wonder if it might potentially be
-> tolerable?  (It exposes significantly less, for one thing.)
+> I am merely describing the changes observed when introducing READ_ONCE/
+> WRITE_ONCE.  They aren't an argument for them; if anything, they are
+> a counter argument.  Ideally, there would be none of these unnecessary
+> (from our point of view) changes.
+> 
+> But the absence of more costly ones, together with the proposition that
+> right now the compiler is free to generate much less reasonable code
+> than it currently does, is the argument I am trying to make for
+> READ_ONCE/WRITE_ONCE.
 > 
 
-This is a no-go. We are not going to replicate regulator functionality
-in the hwmon subsystem, no matter by what means.
+Then please explain why _this_ use of time_after() is wrong but all
+others in the kernel are not. Also, please note that we are not
+concerned with code generation by the compiler as long as the
+generated code is correct (and I don't see any indication that
+it isn't).
 
-> The other approach involves layering a regulator device over the pmbus
-> device as is done in the LTC2978 driver, and then putting a
-> reg-userspace-consumer on top of that (current patch:
-> https://thorn.bewilderbeest.net/~zev/patches/pmbus-ureg.patch).  My
+>>> 2.	When loading priv->fan_input[channel],
+>>> 		movzx  eax,WORD PTR [rdx+rcx*2+0x14]
+>>> 	is split into
+>>> 		add rcx,0x8
+>>> 		movzx  eax,WORD PTR [rdx+rcx*2+0x4]
+>>> 	for no reason I could find in the x86 manual.
+>>>
+>>> 3.	Similarly, when loading priv->temp_input[channel]
+>>> 		movsxd rax,DWORD PTR [rdx+rcx*4+0x10]
+>>> 	turns into
+>>> 		add    rcx,0x4
+>>> 		movsxd rax,DWORD PTR [rdx+rcx*4]
+>>>
+>> I hardly see how this matters. In both cases, rax enda up with the same value.
+>> Maybe rcx is reused later on. If not, maybe the compiler had a bad day.
+> 
+> Oddly, no, rcx is not reused before the return.
+> 
 
-This is the way to go, but the regulator descriptor (what is currently
-CONFIG_PMBUS_USERSPACE_REGULATOR_CONSUMER) should be in the lm25066
-driver. I don't want to pollute the pmbus core with that at this point
-(and I don't know if the userspace consumer code is appropriate - you
-might want to check with the regulator maintainer on that).
+Then there is no problem. The compiler just decided, for whatever reason,
+to generate different code. This will be the case for all similar code
+elsewhere in the kernel.
 
-> first attempt at this ran into problems with all the
-> reg-userspace-consumer instances getting attached to the first
-> regulator device, I think due to all of the regulators ending up under
-> the same name in the global namespace of regulator_map_list.  I worked
-> around that by adding an ID counter to produce a unique name for each,
-> though that changes device names in userspace-visible ways that I'm
-> not sure would be considered OK for backwards compatibility.  (I'm not
-> familiar enough with the regulator code to know if there's a better
-> way of fixing that problem.)  The #if-ing to keep it behind a Kconfig
+>> But that is not an argument for using READ_ONCE/WRITE_ONCE; after all, the
+> 
+> No, of course not (see above).
+> 
+>> same will happen with all other indexed accesses.
+> 
+> ... still, I did not understand what you meant here.  Can you clarify?
+> 
 
-Maybe ask that question on the regulator mailing list.
+with all other code that looks like
+	x = data_structure->element[index];
 
+Thanks,
 Guenter
 
-> option is also kind of ugly as it stands.
-> 
-> The first version seems simpler to me (and avoids the rather more
-> cumbersome sysfs paths the second one produces, for what that's
-> worth).  I think the second is (at least structurally) perhaps more
-> aligned with what Guenter was saying in the previous discussion linked
-> above, though.  Does anyone have any advice on the best way to proceed
-> with this?  If the reg-userspace-consumer approach is the preferred
-> route, suggestions on a better fix for the name collision problem
-> would be welcome.
-> 
-> 
 > Thanks,
-> Zev
+> Jonas
 > 
+>> Guenter
+>>
+>>> Both 2 and 3 admittedly get a bit worse with READ_ONCE()/WRITE_ONCE().
+>>> But that is on gcc, and with the data race it could very well decide to
+>>> produce much worse code than that at any moment.
+>>>
+>>> On Arm64 the code does get a lot more ordered, which we have already
+>>> agreed is not really necessary.  But removing smp_load_acquire() and
+>>> smp_store_release() should still allow the CPU to reorder those,
+>>> mitigating some of the impact.
+>>>
+>>> I hope this email clarifies what I am concerned about.
+>>>
+>>> Thanks for the patience,
+>>> Jonas
+>>>
+>>> P.S. Tested with gcc 10.2.0 and clang 11.1.0.
+>>>
+>>> [1] https://lwn.net/Articles/793253/
+>>> [2] (outdated, still with smp_*()): https://github.com/jonasmalacofilho/patches/tree/master/linux/nzxt-kraken2-mark-and-order-concurrent-accesses/objdumps
+>>>
+>>
 
