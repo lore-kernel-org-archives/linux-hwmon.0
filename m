@@ -2,266 +2,106 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 809B9C433E0
-	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Mar 2021 17:20:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3063C433C1
+	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Mar 2021 17:43:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 55DA8619CD
-	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Mar 2021 17:20:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 818DC61987
+	for <linux-hwmon@archiver.kernel.org>; Tue, 30 Mar 2021 17:43:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231743AbhC3RTm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 30 Mar 2021 13:19:42 -0400
-Received: from thorn.bewilderbeest.net ([71.19.156.171]:54397 "EHLO
-        thorn.bewilderbeest.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232057AbhC3RTh (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 30 Mar 2021 13:19:37 -0400
-X-Greylist: delayed 32510 seconds by postgrey-1.27 at vger.kernel.org; Tue, 30 Mar 2021 13:19:37 EDT
-Received: from hatter.bewilderbeest.net (unknown [IPv6:2600:6c44:7f:ba20::7c6])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id A891F8C;
-        Tue, 30 Mar 2021 10:19:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1617124772;
-        bh=D4WQHtkzJ9ihpqJ8CXBQxana3KkV35ONfFzFxKvgW3s=;
+        id S230031AbhC3Rmv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 30 Mar 2021 13:42:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60994 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229626AbhC3Rmc (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 30 Mar 2021 13:42:32 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0FFD761953;
+        Tue, 30 Mar 2021 17:42:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617126152;
+        bh=GRGXjpsdSI2flci4hR1I1/0EJbwuHARdHaht1gFjlS8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ccQUil7R5DgjBkeZhFV+P2ud2RKzoMmPzi8aXyZ9yLwSQjKLS7wF77haKB5LLTizZ
-         ia2lXLC7sCujDHstN0WqWxg4nBWaxB2bZFgQrbIVjeYoIkyBs28e1BnVjjOQM9fq0f
-         X2q/Wp6BHu9QY2yc+2hNhPwmXGtXK64br8CzWUFM=
-Date:   Tue, 30 Mar 2021 12:19:29 -0500
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Mark Brown <broonie@kernel.org>
+        b=W3fIdCIMBGILsyzm5FdqL/ZghdvRkkk5pSiRVs1VtB9VQsfy1x+m9Ad64CwajmKFp
+         vsWnFacLYPuVdPRIDPKlypQGM7JtlRqUyqERSuk3rOBsA0Ayc82cIzaPLuuMXb9RER
+         xdUgsHd9+ej1i/sk/MOq7fIpiuyfEfE6giwMX+IdSuNvR5zaHfZ+IbrWWJ2sYK6fhx
+         FJm17Pm6hwfVlHbTYhqD+XwGmDaZ1dbLjW4yPvFNUv7eWW/NOMJnN9tufHHlYjP47Y
+         xjmtTdIq5y3S8fp+WB6r+99IN4bNVDdPDOJIOn9FDKynkb1SAhQ3XyrNv5ejaZj4SZ
+         f/grT1xhT+7XA==
+Date:   Tue, 30 Mar 2021 18:42:21 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Zev Weiss <zev@bewilderbeest.net>
 Cc:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         Andrew Jeffery <andrew@aj.id.au>,
         Liam Girdwood <lgirdwood@gmail.com>,
         linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
 Subject: Re: Enabling pmbus power control
-Message-ID: <YGNdoYq5lyERVGLO@hatter.bewilderbeest.net>
+Message-ID: <20210330174221.GJ4976@sirena.org.uk>
 References: <YGLepYLvtlO6Ikzs@hatter.bewilderbeest.net>
  <5105ada1-643a-8e58-a52d-d3c8dbef86b9@roeck-us.net>
  <20210330112254.GB4976@sirena.org.uk>
+ <YGNdoYq5lyERVGLO@hatter.bewilderbeest.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Tu8ztk+XgTAiG9Id"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210330112254.GB4976@sirena.org.uk>
+In-Reply-To: <YGNdoYq5lyERVGLO@hatter.bewilderbeest.net>
+X-Cookie: Memory fault - where am I?
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Mar 30, 2021 at 06:22:54AM CDT, Mark Brown wrote:
->On Tue, Mar 30, 2021 at 03:34:16AM -0700, Guenter Roeck wrote:
->
->> (and I don't know if the userspace consumer code is appropriate - you
->> might want to check with the regulator maintainer on that).
->
->It's not, you should never see this in a production system.
->
 
-Sorry, can you clarify what exactly "this" refers to here?
+--Tu8ztk+XgTAiG9Id
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
->> > first attempt at this ran into problems with all the
->> > reg-userspace-consumer instances getting attached to the first
->> > regulator device, I think due to all of the regulators ending up under
->> > the same name in the global namespace of regulator_map_list.  I worked
->> > around that by adding an ID counter to produce a unique name for each,
->> > though that changes device names in userspace-visible ways that I'm
->> > not sure would be considered OK for backwards compatibility.  (I'm not
->> > familiar enough with the regulator code to know if there's a better
->> > way of fixing that problem.)  The #if-ing to keep it behind a Kconfig
->
->> Maybe ask that question on the regulator mailing list.
->
->I can't really tell what the issue is here without more context, the
->global name list should not be relevant for much in a system that's well
->configured so it sounds like it's user error.
+On Tue, Mar 30, 2021 at 12:19:29PM -0500, Zev Weiss wrote:
+> On Tue, Mar 30, 2021 at 06:22:54AM CDT, Mark Brown wrote:
+> > On Tue, Mar 30, 2021 at 03:34:16AM -0700, Guenter Roeck wrote:
 
-My initial attempt I guess followed the existing ltc2978 code a little 
-too closely and I ended up with all my lm25066 regulators registered 
-under the same (static) name, so when I went to attach the 
-reg-userspace-consumer instances to them by way of that name I got this:
+> > > (and I don't know if the userspace consumer code is appropriate - you
+> > > might want to check with the regulator maintainer on that).
 
-   # ls -l /sys/kernel/debug/regulator/7-004?-vout0
-   /sys/kernel/debug/regulator/7-0040-vout0:
-   -r--r--r--    1 root     root             0 Jan  1  1970 bypass_count
-   -r--r--r--    1 root     root             0 Jan  1  1970 open_count
-   drwxr-xr-x    2 root     root             0 Jan  1  1970 reg-userspace-consumer.0.auto-vout0
-   drwxr-xr-x    2 root     root             0 Jan  1  1970 reg-userspace-consumer.1.auto-vout0
-   drwxr-xr-x    2 root     root             0 Jan  1  1970 reg-userspace-consumer.2.auto-vout0
-   -r--r--r--    1 root     root             0 Jan  1  1970 use_count
-   
-   /sys/kernel/debug/regulator/7-0041-vout0:
-   -r--r--r--    1 root     root             0 Jan  1  1970 bypass_count
-   -r--r--r--    1 root     root             0 Jan  1  1970 open_count
-   -r--r--r--    1 root     root             0 Jan  1  1970 use_count
-   
-   /sys/kernel/debug/regulator/7-0043-vout0:
-   -r--r--r--    1 root     root             0 Jan  1  1970 bypass_count
-   -r--r--r--    1 root     root             0 Jan  1  1970 open_count
-   -r--r--r--    1 root     root             0 Jan  1  1970 use_count
+> > It's not, you should never see this in a production system.
 
-(When of course the intent is to have one reg-userspace-consumer for 
-each regulator.)
+> Sorry, can you clarify what exactly "this" refers to here?
 
-I now have a revised version that takes Guenter's comments into account 
-and puts this logic in the lm25066 driver instead of the pmbus core 
-though, and in the process arrived at what I expect is a better solution 
-to the name-collision problem at least (below).
+The userspace consumer.
 
-Thanks,
-Zev
+> > I can't really tell what the issue is here without more context, the
+> > global name list should not be relevant for much in a system that's well
+> > configured so it sounds like it's user error.
 
+> My initial attempt I guess followed the existing ltc2978 code a little too
+> closely and I ended up with all my lm25066 regulators registered under the
+> same (static) name, so when I went to attach the reg-userspace-consumer
+> instances to them by way of that name I got this:
 
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index 32d2fc850621..d9905e95d510 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -120,6 +120,21 @@ config SENSORS_LM25066
-  	  This driver can also be built as a module. If so, the module will
-  	  be called lm25066.
-  
-+config SENSORS_LM25066_REGULATOR
-+	bool "Regulator support for LM25066 and compatibles"
-+	depends on SENSORS_LM25066 && REGULATOR
-+	help
-+	  If you say yes here you get regulator support for National
-+	  Semiconductor LM25056, LM25066, LM5064, and LM5066.
-+
-+config SENSORS_LM25066_USERSPACE_REGULATOR_CONSUMER
-+	bool "Userspace regulator consumer support for PMBus devices"
-+	depends on SENSORS_LM25066_REGULATOR && REGULATOR_USERSPACE_CONSUMER
-+	help
-+	  If you say yes here, regulator-enabled PMBus devices such as
-+	  the LM25066 and LTC2978 will have their on/off state
-+	  controllable from userspace via sysfs.
-+
-  config SENSORS_LTC2978
-  	tristate "Linear Technologies LTC2978 and compatibles"
-  	help
-diff --git a/drivers/hwmon/pmbus/lm25066.c b/drivers/hwmon/pmbus/lm25066.c
-index e9a66fd9e144..4e7e66d1ca8c 100644
---- a/drivers/hwmon/pmbus/lm25066.c
-+++ b/drivers/hwmon/pmbus/lm25066.c
-@@ -14,6 +14,9 @@
-  #include <linux/slab.h>
-  #include <linux/i2c.h>
-  #include <linux/log2.h>
-+#include <linux/regulator/machine.h>
-+#include <linux/regulator/userspace-consumer.h>
-+#include <linux/platform_device.h>
-  #include "pmbus.h"
-  
-  enum chips { lm25056, lm25066, lm5064, lm5066, lm5066i };
-@@ -207,6 +210,13 @@ struct lm25066_data {
-  	int id;
-  	u16 rlimit;			/* Maximum register value */
-  	struct pmbus_driver_info info;
-+
-+#if IS_ENABLED(CONFIG_SENSORS_LM25066_USERSPACE_REGULATOR_CONSUMER)
-+	struct regulator_desc reg_desc;
-+	struct regulator_bulk_data reg_supply;
-+	struct regulator_userspace_consumer_data consumerdata;
-+	struct platform_device platdev;
-+#endif
-  };
-  
-  #define to_lm25066_data(x)  container_of(x, struct lm25066_data, info)
-@@ -413,9 +423,15 @@ static int lm25066_write_word_data(struct i2c_client *client, int page, int reg,
-  	return ret;
-  }
-  
-+#if IS_ENABLED(CONFIG_SENSORS_LM25066_REGULATOR)
-+static const struct regulator_desc lm25066_reg_desc[] = {
-+	PMBUS_REGULATOR("vout", 0),
-+};
-+#endif
-+
-  static int lm25066_probe(struct i2c_client *client)
-  {
--	int config;
-+	int config, status;
-  	struct lm25066_data *data;
-  	struct pmbus_driver_info *info;
-  	struct __coeff *coeff;
-@@ -483,7 +499,46 @@ static int lm25066_probe(struct i2c_client *client)
-  		info->b[PSC_POWER] = coeff[PSC_POWER].b;
-  	}
-  
--	return pmbus_do_probe(client, info);
-+#if IS_ENABLED(CONFIG_SENSORS_LM25066_REGULATOR)
-+	info->num_regulators = 1;
-+
-+#if IS_ENABLED(CONFIG_SENSORS_LM25066_USERSPACE_REGULATOR_CONSUMER)
-+	data->reg_desc = lm25066_reg_desc[0];
-+	data->reg_desc.name = devm_kasprintf(&client->dev, GFP_KERNEL, "%s.%s",
-+	                                     lm25066_reg_desc[0].name,
-+	                                     dev_name(&client->dev));
-+	if (!data->reg_desc.name)
-+		return -ENOMEM;
-+
-+	info->reg_desc = &data->reg_desc;
-+	info->reg_valid_ops = REGULATOR_CHANGE_STATUS;
-+#else
-+	info->reg_desc = &lm25066_reg_desc[0];
-+#endif
-+#endif
-+
-+	status = pmbus_do_probe(client, info);
-+	if (status)
-+		return status;
-+
-+#if IS_ENABLED(CONFIG_SENSORS_LM25066_USERSPACE_REGULATOR_CONSUMER)
-+	data->reg_supply.supply = data->reg_desc.name;
-+	data->consumerdata = (struct regulator_userspace_consumer_data) {
-+		.name = data->reg_desc.name,
-+		.num_supplies = 1,
-+		.supplies = &data->reg_supply,
-+		.init_on = true,
-+	};
-+	data->platdev = (struct platform_device) {
-+		.name = "reg-userspace-consumer",
-+		.id = PLATFORM_DEVID_AUTO,
-+		.dev = { .platform_data = &data->consumerdata, },
-+	};
-+
-+	status = platform_device_register(&data->platdev);
-+#endif
-+
-+	return status;
-  }
-  
-  static const struct i2c_device_id lm25066_id[] = {
-diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
-index 4c30ec89f5bf..153220e2c363 100644
---- a/drivers/hwmon/pmbus/pmbus.h
-+++ b/drivers/hwmon/pmbus/pmbus.h
-@@ -451,6 +451,7 @@ struct pmbus_driver_info {
-  	/* Regulator functionality, if supported by this chip driver. */
-  	int num_regulators;
-  	const struct regulator_desc *reg_desc;
-+	unsigned int reg_valid_ops;
-  
-  	/* custom attributes */
-  	const struct attribute_group **groups;
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index aadea85fe630..805e3a8d8bd9 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -2314,6 +2314,8 @@ static int pmbus_regulator_register(struct pmbus_data *data)
-  				info->reg_desc[i].name);
-  			return PTR_ERR(rdev);
-  		}
-+
-+		rdev->constraints->valid_ops_mask |= info->reg_valid_ops;
-  	}
-  
-  	return 0;
+I don't know what you're trying to do or why, nor how you're going about
+achieving it so I can't really comment.  Like I say anything that's
+instantiating a userspace consumer in upstream code is broken, it's
+there for test during development of regulator drivers.  Whatever device
+is supplied by the regulator should have a driver which should control
+the regulator at runtime if that is needed.
 
+--Tu8ztk+XgTAiG9Id
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmBjYvwACgkQJNaLcl1U
+h9Bxpwf/SZ+FXLhS4V+BYH5iTDeRJN66xjbkUzAPF4SaBey01AL1oKHSeeJ+/Fiq
+7ekXSJcFBI1+oVjmufd8r1jEKRoOy8npWz1WVNqcjqgf+QVz1VNyfa3gB8iPnShq
+nHIuZAXxoHxTJHxTwq0UTu97K9FALBCavcO5mO0oUWGi8HTpQsHiCvAIYDC3yK17
+/pSDqoc+zQvl4KnFAOQICd72uLhxCx8lI2NeNmjYIfohYtra1lkZ4zAY1/7RQPq7
+TtJz4GM82pxFFf2XsV6Hpwyt/nB7PNEwpmKUs72hxPkO/r99mKWjzVBMqPL0a37J
+BDpthZPQmvwPjytwDdt9f1F7oP/0mA==
+=xHZf
+-----END PGP SIGNATURE-----
+
+--Tu8ztk+XgTAiG9Id--
