@@ -2,166 +2,122 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8847BC433B4
-	for <linux-hwmon@archiver.kernel.org>; Wed, 31 Mar 2021 13:50:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EC49C433B4
+	for <linux-hwmon@archiver.kernel.org>; Wed, 31 Mar 2021 17:04:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2A43C600D1
-	for <linux-hwmon@archiver.kernel.org>; Wed, 31 Mar 2021 13:50:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D93756101D
+	for <linux-hwmon@archiver.kernel.org>; Wed, 31 Mar 2021 17:04:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235772AbhCaNtg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 31 Mar 2021 09:49:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37076 "EHLO
+        id S234136AbhCaRDw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 31 Mar 2021 13:03:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235630AbhCaNtM (ORCPT
+        with ESMTP id S230071AbhCaRDg (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 31 Mar 2021 09:49:12 -0400
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A57C061574;
-        Wed, 31 Mar 2021 06:49:11 -0700 (PDT)
-Received: by mail-ot1-x32c.google.com with SMTP id v24-20020a9d69d80000b02901b9aec33371so18971003oto.2;
-        Wed, 31 Mar 2021 06:49:11 -0700 (PDT)
+        Wed, 31 Mar 2021 13:03:36 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD0A5C061574;
+        Wed, 31 Mar 2021 10:03:34 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id 91-20020a9d08640000b0290237d9c40382so19580817oty.12;
+        Wed, 31 Mar 2021 10:03:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=90V6/8WcZ7wZDuZMIocWQ9L7DdYjn1t/LqSZtSrrOEE=;
-        b=G49tIdwjULMU2Cqeu4wjE9DJpNFdYzUzXvbGYDhfrshdU49qL96tuafW4r8WWOiXjy
-         IiABPvUy/fpQ5dkLiVs0IpHOr877FNBPI1r53vVzV8Jut/ZEXtbaoBcq01axwXVOYjMN
-         Y9Qhfn7nFPF9EfrrbFoIZDRXl91tBhgz+o6w2DYYd7krZO9Sv4fbKPfkKTmfLONgLiCb
-         XNo2VK3fdv2sCk9IMVBHdhiZB5MdC7ffdF2ThZEsEf4kvRlKHZUGXmqJFRTVicC3I8SS
-         AGu67yQjpKh3wJdc5SU27SshiS8c1BI2Gd/EdNLtqJUZreTDG9VQvEvbr5ho4F+wyh0Q
-         PCRA==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=icCui8rsqz/tZGuqEappDQq0xmAo0yV1kkUMAs4W6mM=;
+        b=lWkRYdwjN4R7a+YXGLKqNOjWFhOTt/d0OvDEB5z0cJe9KAne1AWbgnC2XXua+Qems8
+         3htL7bJWDd49YxdFy9ylkC7LYfhtBZzz4tDtewpMjuhoTZVKfzqMCew8WSuvdUeGg4mL
+         VBIGiKQkQxc809kXWXKLgJNWwJFyH7pxWWyjksm0K5LUt/bwvkXTntpJ/J9qAg8RH1gv
+         v8L2tiEdP9bxfLYbBdWqTPegivRiN9nXdA32vIRHX9es5hn0LncmoDFl9eJPEDGJkOhC
+         I37CuJi9mLUljjBT7XFihtmUt6oC4dFSkZMJyzb9zYiC4SvYIuZoEtAvM8cu07I9rPTk
+         PbWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=90V6/8WcZ7wZDuZMIocWQ9L7DdYjn1t/LqSZtSrrOEE=;
-        b=AEMoQbADkyPfgDpJZ3wSeDuFRBcfNHq3+Ig1+nAP+yg5fmVpRXKokIVbEFT67ZWm4E
-         A32/YtQ5Rwsq++S93rpuIuqyGmobsGoPsjGEO6zeFvMc6ZN4QoqL1NdoSS5v3oxuJSLI
-         9bPJ0wxftfAdYV8mBzclPEWDORFC+L2V/LnI5DvixUKBP8KNpVXINeQPda3UCwDYF3+w
-         EsYkAKQUzzgSZhMCHCEg7Qht6m9oja+DGJKu0ZlzG8qrjMlrwOqglBpNFORvjoD/dCLs
-         5JpjrBUDl4+mS2fYVK5UBMxRJ8HjCtaNgWo51BAkJzDm2pvg9rIdRkBdm4tdWJ3v9puH
-         U2Kg==
-X-Gm-Message-State: AOAM532+6Fxjruq7YuYqPl+HzGL/GWrLvm1xgviRhQOsNVGuDFTZZNuN
-        2+qaPG+VwJh1y+qFFfirh2ocDz4wPYY=
-X-Google-Smtp-Source: ABdhPJyKZQ/7mfET1BKou4Gs8LrRSiG03Y5/DSZiL29qpaKeu49K/eOB9OGMET8jwk6Qnk8uNZ99+g==
-X-Received: by 2002:a9d:5e94:: with SMTP id f20mr2720526otl.150.1617198550279;
-        Wed, 31 Mar 2021 06:49:10 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to:user-agent;
+        bh=icCui8rsqz/tZGuqEappDQq0xmAo0yV1kkUMAs4W6mM=;
+        b=M714+RzHhIG06H2SaoVwaGrAZbVl+6Q3XLjgAanGqOh9LOE5XhypqXs1Ugysf9hPj1
+         X+R5J2UAEYhS/CSgMs5WsjyJSwBZh9QZFf1MxU+z6Sd7azlpiIGiUXfXkj/FN/4t/eyC
+         W6BrmQsFtRMPMxednQd8l3/uOrDx5WCvXv8sa0XbqHPhznbP50MooeDxnK5S99MHCE9W
+         aFacsKajdLFPz1hEegroKmmWIS1aqXSZ+jsZCPke25oNhCk4MErg6CvaQ/G7/sNNuhOL
+         vh2hLxKXhGDPEsMX2d6GjbLnoOAxUT/3F02R2an3YB7ail11bvssRQ25etmYf8fqxnA8
+         FiPw==
+X-Gm-Message-State: AOAM53161zk5neZt4qfb3STrD8wSaKqX7/0RTRHEX19PLuQj1KhILdXz
+        XqC11ho6QMnkL3kEUiiFcGfdC9LMcGg=
+X-Google-Smtp-Source: ABdhPJyNTGAp7fsGtz96x/wu2SORusHzRcFhma/siMAT21Wv+R0xKGHN0pBqYoy3PJsb4on0w5u/vQ==
+X-Received: by 2002:a05:6830:4121:: with SMTP id w33mr3325233ott.153.1617210214189;
+        Wed, 31 Mar 2021 10:03:34 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l81sm448719oif.31.2021.03.31.06.49.09
+        by smtp.gmail.com with ESMTPSA id j4sm517394oom.11.2021.03.31.10.03.33
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 31 Mar 2021 06:49:09 -0700 (PDT)
+        Wed, 31 Mar 2021 10:03:33 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 31 Mar 2021 10:03:32 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Naveen Krishna Chatradhi <nchatrad@amd.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH] hwmon: (amd_energy) Restore visibility of energy counters
-Date:   Wed, 31 Mar 2021 06:49:02 -0700
-Message-Id: <20210331134902.94720-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.17.1
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Sebastian Oechsle <setboolean@icloud.com>, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (dell-smm) Add Dell Latitude 7440 to fan control
+ whitelist
+Message-ID: <20210331170332.GA25389@roeck-us.net>
+References: <EE8F83B0-0C39-4E2A-B5FB-B94A1389588D@icloud.com>
+ <20210331100211.jo56p4x2qm73fyed@pali>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210331100211.jo56p4x2qm73fyed@pali>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Commit 60268b0e8258 ("hwmon: (amd_energy) modify the visibility of
-the counters") restricted visibility of AMD energy counters to work
-around a side-channel attack. The attack is described in 'PLATYPUS:
-Software-based Power Side-Channel Attacks on x86'. It relies on quick
-and accurate power readings.
+On Wed, Mar 31, 2021 at 12:02:11PM +0200, Pali Rohár wrote:
+> On Tuesday 30 March 2021 19:02:55 Sebastian Oechsle wrote:
+> > Allow manual PWM control on Dell Latitude 7440.
+> > 
+> > Signed-off-by: Sebastian Oechsle <setboolean@icloud.com <mailto:setboolean@icloud.com>>
+> 
+> Reviewed-by: Pali Rohár <pali@kernel.org>
+> 
+> (Btw, in commit message is small typo, model name is E7440, not 7440)
+> 
+> Guenter, would you take this patch?
+> 
 
-Limiting power readings to privileged users is annoying. A much better
-solution is to make power readings unusable for attacks by randomizing
-the time between updates. We can do that by caching energy values for
-a short and randomized period of time.
+I'll take it.
 
-Cc: Naveen Krishna Chatradhi <nchatrad@amd.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Fixes: 60268b0e8258 ("hwmon: (amd_energy) modify the visibility of the counters")
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/amd_energy.c | 28 +++++++++++++++++++---------
- 1 file changed, 19 insertions(+), 9 deletions(-)
+Guenter
 
-diff --git a/drivers/hwmon/amd_energy.c b/drivers/hwmon/amd_energy.c
-index a86cc8d6d93d..2ee6919eea57 100644
---- a/drivers/hwmon/amd_energy.c
-+++ b/drivers/hwmon/amd_energy.c
-@@ -18,6 +18,7 @@
- #include <linux/mutex.h>
- #include <linux/processor.h>
- #include <linux/platform_device.h>
-+#include <linux/random.h>
- #include <linux/sched.h>
- #include <linux/slab.h>
- #include <linux/topology.h>
-@@ -35,6 +36,8 @@
- struct sensor_accumulator {
- 	u64 energy_ctr;
- 	u64 prev_value;
-+	u64 cached_value;
-+	unsigned long cache_timeout;
- };
- 
- struct amd_energy_data {
-@@ -93,6 +96,8 @@ static void accumulate_delta(struct amd_energy_data *data,
- 			accum->prev_value + input;
- 
- 	accum->prev_value = input;
-+	accum->cached_value = input;
-+	accum->cache_timeout = jiffies + HZ + get_random_int() % HZ;
- 	mutex_unlock(&data->lock);
- }
- 
-@@ -125,16 +130,21 @@ static void amd_add_delta(struct amd_energy_data *data, int ch,
- 	u64 input;
- 
- 	mutex_lock(&data->lock);
--	rdmsrl_safe_on_cpu(cpu, reg, &input);
--	input &= AMD_ENERGY_MASK;
- 
- 	accum = &data->accums[ch];
--	if (input >= accum->prev_value)
--		input += accum->energy_ctr -
--				accum->prev_value;
--	else
--		input += UINT_MAX - accum->prev_value +
--				accum->energy_ctr;
-+	if (!accum->cached_value || time_after(jiffies, accum->cache_timeout)) {
-+		rdmsrl_safe_on_cpu(cpu, reg, &input);
-+		input &= AMD_ENERGY_MASK;
-+
-+		if (input >= accum->prev_value)
-+			input += accum->energy_ctr - accum->prev_value;
-+		else
-+			input += UINT_MAX - accum->prev_value + accum->energy_ctr;
-+		accum->cached_value = input;
-+		accum->cache_timeout = jiffies + HZ + get_random_int() % HZ;
-+	} else {
-+		input = accum->cached_value;
-+	}
- 
- 	/* Energy consumed = (1/(2^ESU) * RAW * 1000000UL) Î¼Joules */
- 	*val = div64_ul(input * 1000000UL, BIT(data->energy_units));
-@@ -171,7 +181,7 @@ static umode_t amd_energy_is_visible(const void *_data,
- 				     enum hwmon_sensor_types type,
- 				     u32 attr, int channel)
- {
--	return 0440;
-+	return 0444;
- }
- 
- static int energy_accumulator(void *p)
--- 
-2.17.1
-
+> > ---
+> > drivers/hwmon/dell-smm-hwmon.c | 8 ++++++++
+> > 1 file changed, 8 insertions(+)
+> > 
+> > diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+> > index 73b9db9e3aab..2970892bed82 100644
+> > --- a/drivers/hwmon/dell-smm-hwmon.c
+> > +++ b/drivers/hwmon/dell-smm-hwmon.c
+> > @@ -1210,6 +1210,14 @@ static struct dmi_system_id i8k_whitelist_fan_control[] __initdata = {
+> > 		},
+> > 		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
+> > 	},
+> > +	{
+> > +		.ident = "Dell Latitude E7440",
+> > +		.matches = {
+> > +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
+> > +			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Latitude E7440"),
+> > +		},
+> > +		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
+> > +	},
+> > 	{ }
+> > };
+> > 
+> > --
+> > 2.31.1
