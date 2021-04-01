@@ -2,122 +2,179 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EC49C433B4
-	for <linux-hwmon@archiver.kernel.org>; Wed, 31 Mar 2021 17:04:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B12DC433B4
+	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Apr 2021 21:45:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D93756101D
-	for <linux-hwmon@archiver.kernel.org>; Wed, 31 Mar 2021 17:04:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D109F610CE
+	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Apr 2021 21:45:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234136AbhCaRDw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 31 Mar 2021 13:03:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50978 "EHLO
+        id S235635AbhDAVp5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 1 Apr 2021 17:45:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbhCaRDg (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 31 Mar 2021 13:03:36 -0400
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD0A5C061574;
-        Wed, 31 Mar 2021 10:03:34 -0700 (PDT)
-Received: by mail-ot1-x334.google.com with SMTP id 91-20020a9d08640000b0290237d9c40382so19580817oty.12;
-        Wed, 31 Mar 2021 10:03:34 -0700 (PDT)
+        with ESMTP id S234724AbhDAVp4 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Apr 2021 17:45:56 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F8E6C0613E6;
+        Thu,  1 Apr 2021 14:45:56 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id w28so4928698lfn.2;
+        Thu, 01 Apr 2021 14:45:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=icCui8rsqz/tZGuqEappDQq0xmAo0yV1kkUMAs4W6mM=;
-        b=lWkRYdwjN4R7a+YXGLKqNOjWFhOTt/d0OvDEB5z0cJe9KAne1AWbgnC2XXua+Qems8
-         3htL7bJWDd49YxdFy9ylkC7LYfhtBZzz4tDtewpMjuhoTZVKfzqMCew8WSuvdUeGg4mL
-         VBIGiKQkQxc809kXWXKLgJNWwJFyH7pxWWyjksm0K5LUt/bwvkXTntpJ/J9qAg8RH1gv
-         v8L2tiEdP9bxfLYbBdWqTPegivRiN9nXdA32vIRHX9es5hn0LncmoDFl9eJPEDGJkOhC
-         I37CuJi9mLUljjBT7XFihtmUt6oC4dFSkZMJyzb9zYiC4SvYIuZoEtAvM8cu07I9rPTk
-         PbWg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=P5Ia//itWDC9V/vcJ3c9AEqi1Bj3R5y64czNxp6zEcw=;
+        b=C8BLmv9EQ3prOkB4r0BJRFvU/UkWUr0hdGvFgYdlAQv7xK0D/uqGYnfxMNfATpsjSw
+         ztJdX08okda7kYW/quR0tG6m+sD7WW07zQKeDdplFEi1f5idts6g0FcEqsYfjBV4G5xt
+         GyP6yOieuqst7K0lcsJ8UZ66DV/SwA2Q07rjk7+U/QNGQw7bmN/RzqI81vh59rr4/Ar5
+         wgZf0xLs34hOiBuHlrrMEOxgIMqqoaoIBCD2/tuL19+/BLgQzT0Wjsn1id+zu/uBmLZ2
+         tzbJ+xlsfHP1B44sCiZEZe7DRMsCLPulEr/yE68t3J+8hCmmAhZ9uyjZFx/gYI+eqKnr
+         Dfzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to:user-agent;
-        bh=icCui8rsqz/tZGuqEappDQq0xmAo0yV1kkUMAs4W6mM=;
-        b=M714+RzHhIG06H2SaoVwaGrAZbVl+6Q3XLjgAanGqOh9LOE5XhypqXs1Ugysf9hPj1
-         X+R5J2UAEYhS/CSgMs5WsjyJSwBZh9QZFf1MxU+z6Sd7azlpiIGiUXfXkj/FN/4t/eyC
-         W6BrmQsFtRMPMxednQd8l3/uOrDx5WCvXv8sa0XbqHPhznbP50MooeDxnK5S99MHCE9W
-         aFacsKajdLFPz1hEegroKmmWIS1aqXSZ+jsZCPke25oNhCk4MErg6CvaQ/G7/sNNuhOL
-         vh2hLxKXhGDPEsMX2d6GjbLnoOAxUT/3F02R2an3YB7ail11bvssRQ25etmYf8fqxnA8
-         FiPw==
-X-Gm-Message-State: AOAM53161zk5neZt4qfb3STrD8wSaKqX7/0RTRHEX19PLuQj1KhILdXz
-        XqC11ho6QMnkL3kEUiiFcGfdC9LMcGg=
-X-Google-Smtp-Source: ABdhPJyNTGAp7fsGtz96x/wu2SORusHzRcFhma/siMAT21Wv+R0xKGHN0pBqYoy3PJsb4on0w5u/vQ==
-X-Received: by 2002:a05:6830:4121:: with SMTP id w33mr3325233ott.153.1617210214189;
-        Wed, 31 Mar 2021 10:03:34 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j4sm517394oom.11.2021.03.31.10.03.33
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 31 Mar 2021 10:03:33 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 31 Mar 2021 10:03:32 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Sebastian Oechsle <setboolean@icloud.com>, jdelvare@suse.com,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=P5Ia//itWDC9V/vcJ3c9AEqi1Bj3R5y64czNxp6zEcw=;
+        b=obBd2pTHUyLt3PtNbNoRHglQsGHp2shs58OlmQLi3ZYErNd3q3Q6HvmvTxC7rtPC3t
+         sMD4Lsa9R3jH18Q5ro+cvVkDhqxYdpN+CFCjEfV5XGPBEeZarhMrBVCjKj6yDVDHB+uS
+         GbDpl3YlHyGB+oQykDv2Tz/coTANtW8JRhxseohRxUNHq4Lr8RctAmB9yLJA8dD3N8mt
+         HfmQYJ3F0SYJHHqaraBuffyT9Y+0xjqxaeYSizSGo8+h+mnsX6mc0LSeiLSf+zGSehSx
+         hogHU3URj0UkJrzytbyt74nfGj5Sd7h83o7DeoAl0vLZk6cxENrVbWTprhCvFJTN4Odf
+         fqEA==
+X-Gm-Message-State: AOAM531RI0v2VWYEpEB3ACe+k3gqzLR4dPnE2As+2zVq7SSEbuIXu033
+        qNuwIyGzQ5DCGgqwxQRrbqI=
+X-Google-Smtp-Source: ABdhPJzWsvw5Ygx/cSlqZqDz6LTyQo25ET8arYh335Qd7wFLbqYt1X9un11PTzTq8MgMtVUaOdE8mg==
+X-Received: by 2002:ac2:43d4:: with SMTP id u20mr6535270lfl.210.1617313554959;
+        Thu, 01 Apr 2021 14:45:54 -0700 (PDT)
+Received: from DESKTOP-GSFPEC9.localdomain (broadband-46-242-10-29.ip.moscow.rt.ru. [46.242.10.29])
+        by smtp.gmail.com with ESMTPSA id a18sm704508ljj.106.2021.04.01.14.45.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Apr 2021 14:45:54 -0700 (PDT)
+From:   Konstantin Aladyshev <aladyshev22@gmail.com>
+Cc:     kunyi@google.com, aladyshev22@gmail.com,
+        Konstantin Aladyshev <aladyshev@nicevt.ru>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (dell-smm) Add Dell Latitude 7440 to fan control
- whitelist
-Message-ID: <20210331170332.GA25389@roeck-us.net>
-References: <EE8F83B0-0C39-4E2A-B5FB-B94A1389588D@icloud.com>
- <20210331100211.jo56p4x2qm73fyed@pali>
+Subject: [PATCH] hwmon: (sbtsi) Don't read sensor more than once if it doesn't respond
+Date:   Fri,  2 Apr 2021 00:45:42 +0300
+Message-Id: <20210401214543.4073-1-aladyshev22@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210331100211.jo56p4x2qm73fyed@pali>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, Mar 31, 2021 at 12:02:11PM +0200, Pali Rohár wrote:
-> On Tuesday 30 March 2021 19:02:55 Sebastian Oechsle wrote:
-> > Allow manual PWM control on Dell Latitude 7440.
-> > 
-> > Signed-off-by: Sebastian Oechsle <setboolean@icloud.com <mailto:setboolean@icloud.com>>
-> 
-> Reviewed-by: Pali Rohár <pali@kernel.org>
-> 
-> (Btw, in commit message is small typo, model name is E7440, not 7440)
-> 
-> Guenter, would you take this patch?
-> 
+From: Konstantin Aladyshev <aladyshev@nicevt.ru>
 
-I'll take it.
+SBTSI sensors don't work when the CPU is off.
+In this case every 'i2c_smbus_read_byte_data' function would fail
+by a timeout.
+Currently temp1_max/temp1_min file reads can cause two such timeouts
+for every read.
+Restructure code so there will be no more than one timeout for every
+read opeartion.
 
-Guenter
+Signed-off-by: Konstantin Aladyshev <aladyshev@nicevt.ru>
+---
+ drivers/hwmon/sbtsi_temp.c | 59 +++++++++++++++++++-------------------
+ 1 file changed, 29 insertions(+), 30 deletions(-)
 
-> > ---
-> > drivers/hwmon/dell-smm-hwmon.c | 8 ++++++++
-> > 1 file changed, 8 insertions(+)
-> > 
-> > diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> > index 73b9db9e3aab..2970892bed82 100644
-> > --- a/drivers/hwmon/dell-smm-hwmon.c
-> > +++ b/drivers/hwmon/dell-smm-hwmon.c
-> > @@ -1210,6 +1210,14 @@ static struct dmi_system_id i8k_whitelist_fan_control[] __initdata = {
-> > 		},
-> > 		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
-> > 	},
-> > +	{
-> > +		.ident = "Dell Latitude E7440",
-> > +		.matches = {
-> > +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> > +			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Latitude E7440"),
-> > +		},
-> > +		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
-> > +	},
-> > 	{ }
-> > };
-> > 
-> > --
-> > 2.31.1
+diff --git a/drivers/hwmon/sbtsi_temp.c b/drivers/hwmon/sbtsi_temp.c
+index e35357c48b8e..e09a8cf6de45 100644
+--- a/drivers/hwmon/sbtsi_temp.c
++++ b/drivers/hwmon/sbtsi_temp.c
+@@ -74,53 +74,52 @@ static int sbtsi_read(struct device *dev, enum hwmon_sensor_types type,
+ 		      u32 attr, int channel, long *val)
+ {
+ 	struct sbtsi_data *data = dev_get_drvdata(dev);
++	u8 temp_int_reg, temp_dec_reg;
+ 	s32 temp_int, temp_dec;
+ 	int err;
+ 
+ 	switch (attr) {
+ 	case hwmon_temp_input:
+-		/*
+-		 * ReadOrder bit specifies the reading order of integer and
+-		 * decimal part of CPU temp for atomic reads. If bit == 0,
+-		 * reading integer part triggers latching of the decimal part,
+-		 * so integer part should be read first. If bit == 1, read
+-		 * order should be reversed.
+-		 */
+-		err = i2c_smbus_read_byte_data(data->client, SBTSI_REG_CONFIG);
+-		if (err < 0)
+-			return err;
+-
+-		mutex_lock(&data->lock);
+-		if (err & BIT(SBTSI_CONFIG_READ_ORDER_SHIFT)) {
+-			temp_dec = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_DEC);
+-			temp_int = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_INT);
+-		} else {
+-			temp_int = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_INT);
+-			temp_dec = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_DEC);
+-		}
+-		mutex_unlock(&data->lock);
++		temp_int_reg = SBTSI_REG_TEMP_INT;
++		temp_dec_reg = SBTSI_REG_TEMP_DEC;
+ 		break;
+ 	case hwmon_temp_max:
+-		mutex_lock(&data->lock);
+-		temp_int = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_HIGH_INT);
+-		temp_dec = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_HIGH_DEC);
+-		mutex_unlock(&data->lock);
++		temp_int_reg = SBTSI_REG_TEMP_HIGH_INT;
++		temp_dec_reg = SBTSI_REG_TEMP_HIGH_DEC;
+ 		break;
+ 	case hwmon_temp_min:
+-		mutex_lock(&data->lock);
+-		temp_int = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_LOW_INT);
+-		temp_dec = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_LOW_DEC);
+-		mutex_unlock(&data->lock);
++		temp_int_reg = SBTSI_REG_TEMP_LOW_INT;
++		temp_dec_reg = SBTSI_REG_TEMP_LOW_DEC;
+ 		break;
+ 	default:
+ 		return -EINVAL;
+ 	}
+ 
++	/*
++	 * ReadOrder bit specifies the reading order of integer and
++	 * decimal part of CPU temp for atomic reads. If bit == 0,
++	 * reading integer part triggers latching of the decimal part,
++	 * so integer part should be read first. If bit == 1, read
++	 * order should be reversed.
++	 */
++	err = i2c_smbus_read_byte_data(data->client, SBTSI_REG_CONFIG);
++	if (err < 0)
++		return err;
++
++	mutex_lock(&data->lock);
++	if (err & BIT(SBTSI_CONFIG_READ_ORDER_SHIFT)) {
++		temp_dec = i2c_smbus_read_byte_data(data->client, temp_dec_reg);
++		temp_int = i2c_smbus_read_byte_data(data->client, temp_int_reg);
++	} else {
++		temp_int = i2c_smbus_read_byte_data(data->client, temp_int_reg);
++		temp_dec = i2c_smbus_read_byte_data(data->client, temp_dec_reg);
++	}
++	mutex_unlock(&data->lock);
+ 
+-	if (temp_int < 0)
+-		return temp_int;
+ 	if (temp_dec < 0)
+ 		return temp_dec;
++	if (temp_int < 0)
++		return temp_int;
+ 
+ 	*val = sbtsi_reg_to_mc(temp_int, temp_dec);
+ 
+-- 
+2.17.1
+
