@@ -2,179 +2,77 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B12DC433B4
-	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Apr 2021 21:45:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B66F8C433B4
+	for <linux-hwmon@archiver.kernel.org>; Fri,  2 Apr 2021 13:24:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D109F610CE
-	for <linux-hwmon@archiver.kernel.org>; Thu,  1 Apr 2021 21:45:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7614961105
+	for <linux-hwmon@archiver.kernel.org>; Fri,  2 Apr 2021 13:24:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235635AbhDAVp5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 1 Apr 2021 17:45:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55200 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234724AbhDAVp4 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 1 Apr 2021 17:45:56 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F8E6C0613E6;
-        Thu,  1 Apr 2021 14:45:56 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id w28so4928698lfn.2;
-        Thu, 01 Apr 2021 14:45:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=P5Ia//itWDC9V/vcJ3c9AEqi1Bj3R5y64czNxp6zEcw=;
-        b=C8BLmv9EQ3prOkB4r0BJRFvU/UkWUr0hdGvFgYdlAQv7xK0D/uqGYnfxMNfATpsjSw
-         ztJdX08okda7kYW/quR0tG6m+sD7WW07zQKeDdplFEi1f5idts6g0FcEqsYfjBV4G5xt
-         GyP6yOieuqst7K0lcsJ8UZ66DV/SwA2Q07rjk7+U/QNGQw7bmN/RzqI81vh59rr4/Ar5
-         wgZf0xLs34hOiBuHlrrMEOxgIMqqoaoIBCD2/tuL19+/BLgQzT0Wjsn1id+zu/uBmLZ2
-         tzbJ+xlsfHP1B44sCiZEZe7DRMsCLPulEr/yE68t3J+8hCmmAhZ9uyjZFx/gYI+eqKnr
-         Dfzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=P5Ia//itWDC9V/vcJ3c9AEqi1Bj3R5y64czNxp6zEcw=;
-        b=obBd2pTHUyLt3PtNbNoRHglQsGHp2shs58OlmQLi3ZYErNd3q3Q6HvmvTxC7rtPC3t
-         sMD4Lsa9R3jH18Q5ro+cvVkDhqxYdpN+CFCjEfV5XGPBEeZarhMrBVCjKj6yDVDHB+uS
-         GbDpl3YlHyGB+oQykDv2Tz/coTANtW8JRhxseohRxUNHq4Lr8RctAmB9yLJA8dD3N8mt
-         HfmQYJ3F0SYJHHqaraBuffyT9Y+0xjqxaeYSizSGo8+h+mnsX6mc0LSeiLSf+zGSehSx
-         hogHU3URj0UkJrzytbyt74nfGj5Sd7h83o7DeoAl0vLZk6cxENrVbWTprhCvFJTN4Odf
-         fqEA==
-X-Gm-Message-State: AOAM531RI0v2VWYEpEB3ACe+k3gqzLR4dPnE2As+2zVq7SSEbuIXu033
-        qNuwIyGzQ5DCGgqwxQRrbqI=
-X-Google-Smtp-Source: ABdhPJzWsvw5Ygx/cSlqZqDz6LTyQo25ET8arYh335Qd7wFLbqYt1X9un11PTzTq8MgMtVUaOdE8mg==
-X-Received: by 2002:ac2:43d4:: with SMTP id u20mr6535270lfl.210.1617313554959;
-        Thu, 01 Apr 2021 14:45:54 -0700 (PDT)
-Received: from DESKTOP-GSFPEC9.localdomain (broadband-46-242-10-29.ip.moscow.rt.ru. [46.242.10.29])
-        by smtp.gmail.com with ESMTPSA id a18sm704508ljj.106.2021.04.01.14.45.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Apr 2021 14:45:54 -0700 (PDT)
-From:   Konstantin Aladyshev <aladyshev22@gmail.com>
-Cc:     kunyi@google.com, aladyshev22@gmail.com,
-        Konstantin Aladyshev <aladyshev@nicevt.ru>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (sbtsi) Don't read sensor more than once if it doesn't respond
-Date:   Fri,  2 Apr 2021 00:45:42 +0300
-Message-Id: <20210401214543.4073-1-aladyshev22@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        id S234448AbhDBNYg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 2 Apr 2021 09:24:36 -0400
+Received: from mga04.intel.com ([192.55.52.120]:17016 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234161AbhDBNYf (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 2 Apr 2021 09:24:35 -0400
+IronPort-SDR: vTxhJSRiwwwtReUKgg8ZFNS22SdqQBlD/VGaDLeeZb0cPcfG3E+swT4rcJ+dn+CES+TESPabFo
+ YZiWEUj7iYyg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9941"; a="190234492"
+X-IronPort-AV: E=Sophos;i="5.81,299,1610438400"; 
+   d="scan'208";a="190234492"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2021 06:24:33 -0700
+IronPort-SDR: SU36bJgtd5Dd2kacH3TfKQi1j++ZpS0QKiw8zmSADBb0DreUVf7BiAP3Z2vDIGvaeP0fUV3QDS
+ LERVYhxYJY+Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,299,1610438400"; 
+   d="scan'208";a="439614297"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga004.fm.intel.com with ESMTP; 02 Apr 2021 06:24:33 -0700
+Received: from [10.91.127.224] (zlukwins-pc.igk.intel.com [10.91.127.224])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id AD199580808;
+        Fri,  2 Apr 2021 06:24:32 -0700 (PDT)
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+From:   zlukwins <zbigniew.lukwinski@linux.intel.com>
+Subject: Energy counters for PMBUS
+Message-ID: <ea24de03-1ef8-fdb8-f4cb-9e06a0090dcf@linux.intel.com>
+Date:   Fri, 2 Apr 2021 15:19:40 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Konstantin Aladyshev <aladyshev@nicevt.ru>
+Hi,
 
-SBTSI sensors don't work when the CPU is off.
-In this case every 'i2c_smbus_read_byte_data' function would fail
-by a timeout.
-Currently temp1_max/temp1_min file reads can cause two such timeouts
-for every read.
-Restructure code so there will be no more than one timeout for every
-read opeartion.
 
-Signed-off-by: Konstantin Aladyshev <aladyshev@nicevt.ru>
----
- drivers/hwmon/sbtsi_temp.c | 59 +++++++++++++++++++-------------------
- 1 file changed, 29 insertions(+), 30 deletions(-)
+I am OpenBMC FW developer. We have a use cases which require PSU devices 
+energy counters reading. Looks like hwmon:pmbus does not support that 
+right now.
 
-diff --git a/drivers/hwmon/sbtsi_temp.c b/drivers/hwmon/sbtsi_temp.c
-index e35357c48b8e..e09a8cf6de45 100644
---- a/drivers/hwmon/sbtsi_temp.c
-+++ b/drivers/hwmon/sbtsi_temp.c
-@@ -74,53 +74,52 @@ static int sbtsi_read(struct device *dev, enum hwmon_sensor_types type,
- 		      u32 attr, int channel, long *val)
- {
- 	struct sbtsi_data *data = dev_get_drvdata(dev);
-+	u8 temp_int_reg, temp_dec_reg;
- 	s32 temp_int, temp_dec;
- 	int err;
- 
- 	switch (attr) {
- 	case hwmon_temp_input:
--		/*
--		 * ReadOrder bit specifies the reading order of integer and
--		 * decimal part of CPU temp for atomic reads. If bit == 0,
--		 * reading integer part triggers latching of the decimal part,
--		 * so integer part should be read first. If bit == 1, read
--		 * order should be reversed.
--		 */
--		err = i2c_smbus_read_byte_data(data->client, SBTSI_REG_CONFIG);
--		if (err < 0)
--			return err;
--
--		mutex_lock(&data->lock);
--		if (err & BIT(SBTSI_CONFIG_READ_ORDER_SHIFT)) {
--			temp_dec = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_DEC);
--			temp_int = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_INT);
--		} else {
--			temp_int = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_INT);
--			temp_dec = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_DEC);
--		}
--		mutex_unlock(&data->lock);
-+		temp_int_reg = SBTSI_REG_TEMP_INT;
-+		temp_dec_reg = SBTSI_REG_TEMP_DEC;
- 		break;
- 	case hwmon_temp_max:
--		mutex_lock(&data->lock);
--		temp_int = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_HIGH_INT);
--		temp_dec = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_HIGH_DEC);
--		mutex_unlock(&data->lock);
-+		temp_int_reg = SBTSI_REG_TEMP_HIGH_INT;
-+		temp_dec_reg = SBTSI_REG_TEMP_HIGH_DEC;
- 		break;
- 	case hwmon_temp_min:
--		mutex_lock(&data->lock);
--		temp_int = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_LOW_INT);
--		temp_dec = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_LOW_DEC);
--		mutex_unlock(&data->lock);
-+		temp_int_reg = SBTSI_REG_TEMP_LOW_INT;
-+		temp_dec_reg = SBTSI_REG_TEMP_LOW_DEC;
- 		break;
- 	default:
- 		return -EINVAL;
- 	}
- 
-+	/*
-+	 * ReadOrder bit specifies the reading order of integer and
-+	 * decimal part of CPU temp for atomic reads. If bit == 0,
-+	 * reading integer part triggers latching of the decimal part,
-+	 * so integer part should be read first. If bit == 1, read
-+	 * order should be reversed.
-+	 */
-+	err = i2c_smbus_read_byte_data(data->client, SBTSI_REG_CONFIG);
-+	if (err < 0)
-+		return err;
-+
-+	mutex_lock(&data->lock);
-+	if (err & BIT(SBTSI_CONFIG_READ_ORDER_SHIFT)) {
-+		temp_dec = i2c_smbus_read_byte_data(data->client, temp_dec_reg);
-+		temp_int = i2c_smbus_read_byte_data(data->client, temp_int_reg);
-+	} else {
-+		temp_int = i2c_smbus_read_byte_data(data->client, temp_int_reg);
-+		temp_dec = i2c_smbus_read_byte_data(data->client, temp_dec_reg);
-+	}
-+	mutex_unlock(&data->lock);
- 
--	if (temp_int < 0)
--		return temp_int;
- 	if (temp_dec < 0)
- 		return temp_dec;
-+	if (temp_int < 0)
-+		return temp_int;
- 
- 	*val = sbtsi_reg_to_mc(temp_int, temp_dec);
- 
--- 
-2.17.1
+Hwmon sysfs 
+(https://www.kernel.org/doc/Documentation/hwmon/sysfs-interface) already 
+supports energy counter (energy[1-*]_input).
+
+PMBus standard (revision 1.3.1) provides API for getting energy - 
+READ_EIN/READ_EOUT commands.
+
+So I am wondering whether we could just add this implementation to the 
+hwmon/pmbus/pmbus_core.c? Or maybe there are some constraints?
+
+
+Thanks
+
+Zbigniew
+
 
