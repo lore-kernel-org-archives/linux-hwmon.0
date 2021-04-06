@@ -2,239 +2,304 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D48C5C433B4
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Apr 2021 21:09:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78013C433B4
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Apr 2021 21:34:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 97CEC61284
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Apr 2021 21:09:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 174E9613C4
+	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Apr 2021 21:34:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233342AbhDFVKH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 6 Apr 2021 17:10:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46708 "EHLO
+        id S232655AbhDFVfG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 6 Apr 2021 17:35:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232861AbhDFVKG (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Apr 2021 17:10:06 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB76C06174A;
-        Tue,  6 Apr 2021 14:09:58 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id n8so6161747lfh.1;
-        Tue, 06 Apr 2021 14:09:58 -0700 (PDT)
+        with ESMTP id S232540AbhDFVfD (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Apr 2021 17:35:03 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDFA2C06174A;
+        Tue,  6 Apr 2021 14:34:45 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id k25so16648766oic.4;
+        Tue, 06 Apr 2021 14:34:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Cu63zw3Jc1zLiArccmWuZ4G8jjBA017gIZFbTJJD7eg=;
-        b=FY17gqMK5p7FC++PTxjlZS7AaAmCL1ulHVfeXeoAS+dE+k19fBXYk95PdApuVPs2np
-         Wxzf0F1Whz2ZbveNDO6za7POzGO+5A4H78JONzmy0eXuIUPzGjy8B8h7eq0nZoyiN/uC
-         ZAPFEME42eChdzhk/J4Lo1CC8ECJNV2s0JsR5S4EmO4pQm2MrV7NpSb5RKd9YBbXv843
-         meGRe0O/xguEGnKDtzRelvtEKm60XQOfVLf7hENxgk1isxeDmVahh4d+5mjRosuPQ+NW
-         iqrWqgU9q2dBbbMk/iQyu2ABuw6iDXX9lEP1BgGLlOimwYXsCUiF/9PS53jJHzXy8Ryw
-         DLFg==
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=N2vDj/wRN8zUs6ZbKg7ztkrCen5qJV0t9MItcKRaYTs=;
+        b=NF9tqJ8LZryZq/NYqoeorwDPk2axNOxZPVEg8gCdScbjXKGLzO1gdQ1Lq+AgY0+Bfx
+         BEaY0SVCPehKEadAtKoQbJmaVOCmiePL5YUarasyiB4iu6BNpOH+KinO+Yy7q+HzdWb0
+         HNFsj9mhHP9m+6ONXbua1WP5Wpa5WX602kFcginMQ4kKm+OOpvrDUrVBnzfLC/0SxYef
+         A7MK2f8DtG065GrXRZTK4SowHaSTI99yZryDX7JG82BvtZXzs0s7Ebf0lA08zjcsJ256
+         9g8Xh6tEUUpSQ+dv6GBY4KFqBcNa2Jcu4Z+bmbbyYJTlpPmJ+oMiu5Ljq/iIADXyAiZ1
+         A9sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Cu63zw3Jc1zLiArccmWuZ4G8jjBA017gIZFbTJJD7eg=;
-        b=k4H/p46pFDNzq31/X0VWL+POPSzSZN8wbD0T61CcZVBaT3g5FnhGf2bv/P4+Zf/J+e
-         MpD0jWl0iNRGATmQNmvPgJ09lJyCjfcD8P3s9GJOmcIVKEcPn5gpgqFWiKXkEDqwz4W7
-         WKFycFcb0zujKVimBhUHHRvoAOsrfYmXd2RwAXx8TOki63ZNf+6g6zL0jv/URA2Qnn03
-         G+L1ENaNTlAco9FaElgDc66Ze2nTG1mv/rRCVeockko2H+hxcgpXrm2H2tSQcAf0yDpz
-         ydCfMsN72P2XntR+jL2r+6HZCM3I9grXU1CAxdnDSOG/Bcj+WuDTyRE5smTRLAASY7kw
-         3wWw==
-X-Gm-Message-State: AOAM533uqQdop/dfroISsanbKJmzUdEd3fhKeQVCwW4P47bQw9dG+6/n
-        ZM+vxYykGWiac5NnCvLc0E5vqVWv7Te9fm8Q4/Q=
-X-Google-Smtp-Source: ABdhPJycZ6FWv6soruD2b5zXd2wGs5LN1EqmC0xDhkXv2k4ldegOm2FoUZ0kGOpBZ7WC1MxZSMXf2TXr9/uNFEO8eks=
-X-Received: by 2002:a05:6512:3ac:: with SMTP id v12mr55641lfp.285.1617743396701;
- Tue, 06 Apr 2021 14:09:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <ed438518-66ad-6e08-2a1b-597ac3f2ae8d@roeck-us.net>
- <20210406181624.713-1-aladyshev22@gmail.com> <0ba1d271-78cd-c30a-e662-97ab8ba6451a@roeck-us.net>
- <CACSj6VUCgxCQeA9EF4Oz+pKY+TdF9Gp=DV1V=-TcVE4ixtg45Q@mail.gmail.com> <40d02688-d40c-fcdd-b8eb-580a1e44b244@roeck-us.net>
-In-Reply-To: <40d02688-d40c-fcdd-b8eb-580a1e44b244@roeck-us.net>
-From:   Konstantin Aladyshev <aladyshev22@gmail.com>
-Date:   Wed, 7 Apr 2021 00:09:45 +0300
-Message-ID: <CACSj6VVjJ9Avd0Ni0Zp4-skv-7Dk9cQkhB5hrsEyb+0ZQR5eJg@mail.gmail.com>
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=N2vDj/wRN8zUs6ZbKg7ztkrCen5qJV0t9MItcKRaYTs=;
+        b=jy3y9JrtRjoiO4tv5i14BAqwDS5fKUIQkSDqdIzH6KKZy/q7CRcRg/UGKokPlTDyR5
+         JiB+BMmb48pJ3R7QMPt1Uk0Lo6jGklVwqo0M0HbnXhQo5LV1Pwy6JgxxMmXq8nTXZ0W7
+         xkqb7rv65AkfHTJZM31HC1aUbayU8uWwhrYMlA5aqYC6y1dtFXlvBgz+alRelmU7G8Iw
+         YpujBw+S8miyzvsNST2nh/l8tNqSN+igeUgJ7VmfPQpP4GgtFGt1RrMncA2dwnMr68e2
+         Hq2ewqJKWMl02s02MJC9YCLZlOAIIcTObisfkWBZBmuPJ09mHR8SuyQNm7Rd2bPZmJBI
+         SNsw==
+X-Gm-Message-State: AOAM531GQ0Qig4u/ocfzf0KKLLg5VLlA8jOXNKCL7EWRi8bUdoec7nMf
+        ZTw3a0tcxjOGFZ9sAIR2V6s+SoaR6DM=
+X-Google-Smtp-Source: ABdhPJxyuPZGR08tunfvBYZ+Ux4FAc0/QA/2YACRvkRf//qzyzHanEJMYMQnCfpXGB6CG8hEaoQmEQ==
+X-Received: by 2002:aca:d485:: with SMTP id l127mr4862313oig.21.1617744884738;
+        Tue, 06 Apr 2021 14:34:44 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id y194sm4347397ooa.19.2021.04.06.14.34.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Apr 2021 14:34:44 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
 Subject: Re: [PATCH v2] hwmon: (sbtsi) Don't read sensor more than once if it
  doesn't respond
-To:     Guenter Roeck <linux@roeck-us.net>
+To:     Konstantin Aladyshev <aladyshev22@gmail.com>
 Cc:     Kun Yi <kunyi@google.com>, Jean Delvare <jdelvare@suse.com>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+References: <ed438518-66ad-6e08-2a1b-597ac3f2ae8d@roeck-us.net>
+ <20210406181624.713-1-aladyshev22@gmail.com>
+ <0ba1d271-78cd-c30a-e662-97ab8ba6451a@roeck-us.net>
+ <CACSj6VUCgxCQeA9EF4Oz+pKY+TdF9Gp=DV1V=-TcVE4ixtg45Q@mail.gmail.com>
+ <40d02688-d40c-fcdd-b8eb-580a1e44b244@roeck-us.net>
+ <CACSj6VVjJ9Avd0Ni0Zp4-skv-7Dk9cQkhB5hrsEyb+0ZQR5eJg@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <422092a4-a87d-59d2-f6cb-9adf19e8f006@roeck-us.net>
+Date:   Tue, 6 Apr 2021 14:34:42 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <CACSj6VVjJ9Avd0Ni0Zp4-skv-7Dk9cQkhB5hrsEyb+0ZQR5eJg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Thanks for the answer!
-Sorry for the confusion, by the "CPU is off" I meant "CPU is present,
-but currently it is in the powered off state".
-Therefore it is not possible to put these checks only in a probe
-function. And I don't know either if it is a good idea to cache
-config/min/max values.
+On 4/6/21 2:09 PM, Konstantin Aladyshev wrote:
+> Thanks for the answer!
+> Sorry for the confusion, by the "CPU is off" I meant "CPU is present,
+> but currently it is in the powered off state".
+> Therefore it is not possible to put these checks only in a probe
+> function. And I don't know either if it is a good idea to cache
+> config/min/max values.
+> 
+> I use this driver on an OpenBMC system, which uses other software
+> rather than lm-sensors utility. I guess that is why my priorities are
+> shifted.
+> 
+> By the way, I've noticed that the mutex check is absent in a
+> SBTSI_REG_CONFIG read call both in the original driver version and in
+> my patch, is this an error?
+> 
 
-I use this driver on an OpenBMC system, which uses other software
-rather than lm-sensors utility. I guess that is why my priorities are
-shifted.
+What do you mean with "mutex check" ?
 
-By the way, I've noticed that the mutex check is absent in a
-SBTSI_REG_CONFIG read call both in the original driver version and in
-my patch, is this an error?
-
-Best regards,
-Konstantin Aladyshev
+Thanks,
+Guenter
 
 
-On Tue, Apr 6, 2021 at 11:09 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 4/6/21 12:20 PM, Konstantin Aladyshev wrote:
-> > Thanks for the comment.
-> > Yes, you are correct, this patch adds an extra 'i2c_smbus_read_byte_data' call for the temp_max/temp_min reads.
-> > I guess I did that intentionally because I just wanted to keep the restructured code concise. After all I thought, 'temp_input' generally is read more often than 'temp_max/temp_min'.
-> > As I understand now, it seems like it is not acceptable. Therefore could you point me in the right direction about what I should do?
-> > Should I just stick with the original driver version and simply add two more i2c call checks for the first operations for min/max?
-> >
->
-> Correct, it is not acceptable. A normal use case for hwmon devices is to use the "sensors"
-> command which _will_ read all attributes. i2c reads are expensive, and unnecessary read
-> operations should be avoided.
->
-> There are several ways to solve the problem. Checking return values after each
-> read is the simple option. There are other possibilities, such as reading the limits
-> and the read order only once during probe, but I don't know enough about the
-> hardware to suggest a more sophisticated solution. For example, I don't know
-> what "CPU is off" means. Offline ? Not present ? If it means "not present",
-> or if the status is permanent, the condition should be handled in the is_visible
-> function (or the driver should not be instantiated in the first place).
-> Otherwise, the code should possibly return -ENODATA instead of -ETIMEDOUT
-> on error. But, again, I can not really suggest a better solution since
-> I don't know enough (nothing, actually) about the hardware (and the public
-> part of the SBTSI specification doesn't say anything about expected behavior
-> for offline CPUs or CPU cores).
->
-> What I did find, though, is that the driver does not implement temperature
-> offset support, and it that doesn't support reporting alerts. I'd have assumed
-> this to be more important than optimizing error handling, but that is just
-> my personal opinion.
->
-> Thanks,
-> Guenter
->
-> > Best regards,
-> > Konstantin Aladyshev
-> >
-> >
-> > On Tue, Apr 6, 2021 at 9:42 PM Guenter Roeck <linux@roeck-us.net <mailto:linux@roeck-us.net>> wrote:
-> >
-> >     On 4/6/21 11:16 AM, Konstantin Aladyshev wrote:
-> >     > SBTSI sensors don't work when the CPU is off.
-> >     > In this case every 'i2c_smbus_read_byte_data' function would fail
-> >     > by a timeout.
-> >     > Currently temp1_max/temp1_min file reads can cause two such timeouts
-> >     > for every read.
-> >     > Restructure code so there will be no more than one timeout for every
-> >     > read operation.
-> >     >
-> >     > Signed-off-by: Konstantin Aladyshev <aladyshev22@gmail.com <mailto:aladyshev22@gmail.com>>
-> >     > ---
-> >     > Changes in v2:
-> >     >   - Fix typo in a commit message
-> >     >   - Don't swap temp_int/temp_dec checks at the end of the 'sbtsi_read' function
-> >     >
-> >
-> >     This doesn't explain the reason for the extra read operation for
-> >     limits. Preventing a second read in error cases is not an argument
-> >     for adding an extra read for non-error cases.
-> >
-> >     Guenter
-> >
-> >     >  drivers/hwmon/sbtsi_temp.c | 55 +++++++++++++++++++-------------------
-> >     >  1 file changed, 27 insertions(+), 28 deletions(-)
-> >     >
-> >     > diff --git a/drivers/hwmon/sbtsi_temp.c b/drivers/hwmon/sbtsi_temp.c
-> >     > index e35357c48b8e..4ae48635bb31 100644
-> >     > --- a/drivers/hwmon/sbtsi_temp.c
-> >     > +++ b/drivers/hwmon/sbtsi_temp.c
-> >     > @@ -74,48 +74,47 @@ static int sbtsi_read(struct device *dev, enum hwmon_sensor_types type,
-> >     >                     u32 attr, int channel, long *val)
-> >     >  {
-> >     >       struct sbtsi_data *data = dev_get_drvdata(dev);
-> >     > +     u8 temp_int_reg, temp_dec_reg;
-> >     >       s32 temp_int, temp_dec;
-> >     >       int err;
-> >     >
-> >     >       switch (attr) {
-> >     >       case hwmon_temp_input:
-> >     > -             /*
-> >     > -              * ReadOrder bit specifies the reading order of integer and
-> >     > -              * decimal part of CPU temp for atomic reads. If bit == 0,
-> >     > -              * reading integer part triggers latching of the decimal part,
-> >     > -              * so integer part should be read first. If bit == 1, read
-> >     > -              * order should be reversed.
-> >     > -              */
-> >     > -             err = i2c_smbus_read_byte_data(data->client, SBTSI_REG_CONFIG);
-> >     > -             if (err < 0)
-> >     > -                     return err;
-> >     > -
-> >     > -             mutex_lock(&data->lock);
-> >     > -             if (err & BIT(SBTSI_CONFIG_READ_ORDER_SHIFT)) {
-> >     > -                     temp_dec = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_DEC);
-> >     > -                     temp_int = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_INT);
-> >     > -             } else {
-> >     > -                     temp_int = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_INT);
-> >     > -                     temp_dec = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_DEC);
-> >     > -             }
-> >     > -             mutex_unlock(&data->lock);
-> >     > +             temp_int_reg = SBTSI_REG_TEMP_INT;
-> >     > +             temp_dec_reg = SBTSI_REG_TEMP_DEC;
-> >     >               break;
-> >     >       case hwmon_temp_max:
-> >     > -             mutex_lock(&data->lock);
-> >     > -             temp_int = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_HIGH_INT);
-> >     > -             temp_dec = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_HIGH_DEC);
-> >     > -             mutex_unlock(&data->lock);
-> >     > +             temp_int_reg = SBTSI_REG_TEMP_HIGH_INT;
-> >     > +             temp_dec_reg = SBTSI_REG_TEMP_HIGH_DEC;
-> >     >               break;
-> >     >       case hwmon_temp_min:
-> >     > -             mutex_lock(&data->lock);
-> >     > -             temp_int = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_LOW_INT);
-> >     > -             temp_dec = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_LOW_DEC);
-> >     > -             mutex_unlock(&data->lock);
-> >     > +             temp_int_reg = SBTSI_REG_TEMP_LOW_INT;
-> >     > +             temp_dec_reg = SBTSI_REG_TEMP_LOW_DEC;
-> >     >               break;
-> >     >       default:
-> >     >               return -EINVAL;
-> >     >       }
-> >     >
-> >     > +     /*
-> >     > +      * ReadOrder bit specifies the reading order of integer and
-> >     > +      * decimal part of CPU temp for atomic reads. If bit == 0,
-> >     > +      * reading integer part triggers latching of the decimal part,
-> >     > +      * so integer part should be read first. If bit == 1, read
-> >     > +      * order should be reversed.
-> >     > +      */
-> >     > +     err = i2c_smbus_read_byte_data(data->client, SBTSI_REG_CONFIG);
-> >     > +     if (err < 0)
-> >     > +             return err;
-> >     > +
-> >     > +     mutex_lock(&data->lock);
-> >     > +     if (err & BIT(SBTSI_CONFIG_READ_ORDER_SHIFT)) {
-> >     > +             temp_dec = i2c_smbus_read_byte_data(data->client, temp_dec_reg);
-> >     > +             temp_int = i2c_smbus_read_byte_data(data->client, temp_int_reg);
-> >     > +     } else {
-> >     > +             temp_int = i2c_smbus_read_byte_data(data->client, temp_int_reg);
-> >     > +             temp_dec = i2c_smbus_read_byte_data(data->client, temp_dec_reg);
-> >     > +     }
-> >     > +     mutex_unlock(&data->lock);
-> >     >
-> >     >       if (temp_int < 0)
-> >     >               return temp_int;
-> >     >
-> >
->
+> Best regards,
+> Konstantin Aladyshev
+> 
+> 
+> On Tue, Apr 6, 2021 at 11:09 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>>
+>> On 4/6/21 12:20 PM, Konstantin Aladyshev wrote:
+>>> Thanks for the comment.
+>>> Yes, you are correct, this patch adds an extra 'i2c_smbus_read_byte_data' call for the temp_max/temp_min reads.
+>>> I guess I did that intentionally because I just wanted to keep the restructured code concise. After all I thought, 'temp_input' generally is read more often than 'temp_max/temp_min'.
+>>> As I understand now, it seems like it is not acceptable. Therefore could you point me in the right direction about what I should do?
+>>> Should I just stick with the original driver version and simply add two more i2c call checks for the first operations for min/max?
+>>>
+>>
+>> Correct, it is not acceptable. A normal use case for hwmon devices is to use the "sensors"
+>> command which _will_ read all attributes. i2c reads are expensive, and unnecessary read
+>> operations should be avoided.
+>>
+>> There are several ways to solve the problem. Checking return values after each
+>> read is the simple option. There are other possibilities, such as reading the limits
+>> and the read order only once during probe, but I don't know enough about the
+>> hardware to suggest a more sophisticated solution. For example, I don't know
+>> what "CPU is off" means. Offline ? Not present ? If it means "not present",
+>> or if the status is permanent, the condition should be handled in the is_visible
+>> function (or the driver should not be instantiated in the first place).
+>> Otherwise, the code should possibly return -ENODATA instead of -ETIMEDOUT
+>> on error. But, again, I can not really suggest a better solution since
+>> I don't know enough (nothing, actually) about the hardware (and the public
+>> part of the SBTSI specification doesn't say anything about expected behavior
+>> for offline CPUs or CPU cores).
+>>
+>> What I did find, though, is that the driver does not implement temperature
+>> offset support, and it that doesn't support reporting alerts. I'd have assumed
+>> this to be more important than optimizing error handling, but that is just
+>> my personal opinion.
+>>
+>> Thanks,
+>> Guenter
+>>
+>>> Best regards,
+>>> Konstantin Aladyshev
+>>>
+>>>
+>>> On Tue, Apr 6, 2021 at 9:42 PM Guenter Roeck <linux@roeck-us.net <mailto:linux@roeck-us.net>> wrote:
+>>>
+>>>     On 4/6/21 11:16 AM, Konstantin Aladyshev wrote:
+>>>     > SBTSI sensors don't work when the CPU is off.
+>>>     > In this case every 'i2c_smbus_read_byte_data' function would fail
+>>>     > by a timeout.
+>>>     > Currently temp1_max/temp1_min file reads can cause two such timeouts
+>>>     > for every read.
+>>>     > Restructure code so there will be no more than one timeout for every
+>>>     > read operation.
+>>>     >
+>>>     > Signed-off-by: Konstantin Aladyshev <aladyshev22@gmail.com <mailto:aladyshev22@gmail.com>>
+>>>     > ---
+>>>     > Changes in v2:
+>>>     >   - Fix typo in a commit message
+>>>     >   - Don't swap temp_int/temp_dec checks at the end of the 'sbtsi_read' function
+>>>     >
+>>>
+>>>     This doesn't explain the reason for the extra read operation for
+>>>     limits. Preventing a second read in error cases is not an argument
+>>>     for adding an extra read for non-error cases.
+>>>
+>>>     Guenter
+>>>
+>>>     >  drivers/hwmon/sbtsi_temp.c | 55 +++++++++++++++++++-------------------
+>>>     >  1 file changed, 27 insertions(+), 28 deletions(-)
+>>>     >
+>>>     > diff --git a/drivers/hwmon/sbtsi_temp.c b/drivers/hwmon/sbtsi_temp.c
+>>>     > index e35357c48b8e..4ae48635bb31 100644
+>>>     > --- a/drivers/hwmon/sbtsi_temp.c
+>>>     > +++ b/drivers/hwmon/sbtsi_temp.c
+>>>     > @@ -74,48 +74,47 @@ static int sbtsi_read(struct device *dev, enum hwmon_sensor_types type,
+>>>     >                     u32 attr, int channel, long *val)
+>>>     >  {
+>>>     >       struct sbtsi_data *data = dev_get_drvdata(dev);
+>>>     > +     u8 temp_int_reg, temp_dec_reg;
+>>>     >       s32 temp_int, temp_dec;
+>>>     >       int err;
+>>>     >
+>>>     >       switch (attr) {
+>>>     >       case hwmon_temp_input:
+>>>     > -             /*
+>>>     > -              * ReadOrder bit specifies the reading order of integer and
+>>>     > -              * decimal part of CPU temp for atomic reads. If bit == 0,
+>>>     > -              * reading integer part triggers latching of the decimal part,
+>>>     > -              * so integer part should be read first. If bit == 1, read
+>>>     > -              * order should be reversed.
+>>>     > -              */
+>>>     > -             err = i2c_smbus_read_byte_data(data->client, SBTSI_REG_CONFIG);
+>>>     > -             if (err < 0)
+>>>     > -                     return err;
+>>>     > -
+>>>     > -             mutex_lock(&data->lock);
+>>>     > -             if (err & BIT(SBTSI_CONFIG_READ_ORDER_SHIFT)) {
+>>>     > -                     temp_dec = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_DEC);
+>>>     > -                     temp_int = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_INT);
+>>>     > -             } else {
+>>>     > -                     temp_int = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_INT);
+>>>     > -                     temp_dec = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_DEC);
+>>>     > -             }
+>>>     > -             mutex_unlock(&data->lock);
+>>>     > +             temp_int_reg = SBTSI_REG_TEMP_INT;
+>>>     > +             temp_dec_reg = SBTSI_REG_TEMP_DEC;
+>>>     >               break;
+>>>     >       case hwmon_temp_max:
+>>>     > -             mutex_lock(&data->lock);
+>>>     > -             temp_int = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_HIGH_INT);
+>>>     > -             temp_dec = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_HIGH_DEC);
+>>>     > -             mutex_unlock(&data->lock);
+>>>     > +             temp_int_reg = SBTSI_REG_TEMP_HIGH_INT;
+>>>     > +             temp_dec_reg = SBTSI_REG_TEMP_HIGH_DEC;
+>>>     >               break;
+>>>     >       case hwmon_temp_min:
+>>>     > -             mutex_lock(&data->lock);
+>>>     > -             temp_int = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_LOW_INT);
+>>>     > -             temp_dec = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_LOW_DEC);
+>>>     > -             mutex_unlock(&data->lock);
+>>>     > +             temp_int_reg = SBTSI_REG_TEMP_LOW_INT;
+>>>     > +             temp_dec_reg = SBTSI_REG_TEMP_LOW_DEC;
+>>>     >               break;
+>>>     >       default:
+>>>     >               return -EINVAL;
+>>>     >       }
+>>>     >
+>>>     > +     /*
+>>>     > +      * ReadOrder bit specifies the reading order of integer and
+>>>     > +      * decimal part of CPU temp for atomic reads. If bit == 0,
+>>>     > +      * reading integer part triggers latching of the decimal part,
+>>>     > +      * so integer part should be read first. If bit == 1, read
+>>>     > +      * order should be reversed.
+>>>     > +      */
+>>>     > +     err = i2c_smbus_read_byte_data(data->client, SBTSI_REG_CONFIG);
+>>>     > +     if (err < 0)
+>>>     > +             return err;
+>>>     > +
+>>>     > +     mutex_lock(&data->lock);
+>>>     > +     if (err & BIT(SBTSI_CONFIG_READ_ORDER_SHIFT)) {
+>>>     > +             temp_dec = i2c_smbus_read_byte_data(data->client, temp_dec_reg);
+>>>     > +             temp_int = i2c_smbus_read_byte_data(data->client, temp_int_reg);
+>>>     > +     } else {
+>>>     > +             temp_int = i2c_smbus_read_byte_data(data->client, temp_int_reg);
+>>>     > +             temp_dec = i2c_smbus_read_byte_data(data->client, temp_dec_reg);
+>>>     > +     }
+>>>     > +     mutex_unlock(&data->lock);
+>>>     >
+>>>     >       if (temp_int < 0)
+>>>     >               return temp_int;
+>>>     >
+>>>
+>>
+
