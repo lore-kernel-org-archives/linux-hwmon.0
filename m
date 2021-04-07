@@ -2,81 +2,80 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-20.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67CF7C433ED
-	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Apr 2021 12:11:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 010FAC433ED
+	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Apr 2021 12:15:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3D0BC610F8
-	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Apr 2021 12:11:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C0C3661042
+	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Apr 2021 12:15:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236874AbhDGMME (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 7 Apr 2021 08:12:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45802 "EHLO
+        id S1352071AbhDGMPg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 7 Apr 2021 08:15:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232553AbhDGMMD (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 7 Apr 2021 08:12:03 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05B0C061756;
-        Wed,  7 Apr 2021 05:11:52 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id i81so18501537oif.6;
-        Wed, 07 Apr 2021 05:11:52 -0700 (PDT)
+        with ESMTP id S234542AbhDGMPe (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 7 Apr 2021 08:15:34 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86621C061756;
+        Wed,  7 Apr 2021 05:15:24 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id m13so18500808oiw.13;
+        Wed, 07 Apr 2021 05:15:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=WIjn0AhTwwpTEtbdjQhQORR+T5+cXMTK7UrnuECBFAM=;
-        b=CNs6DRffpuXCMVPbrFrtv07hUayfANj7GT1XCig4urJ/iDJngQ4P1gz39BcSyKnJom
-         ShV8S1iWZQM27nZ04vJyehIKw41MRx7H+OSxtoIKub9FC75sMT7pQeuxvk/KL5EDXOix
-         IIXIjwU7ovxlDb8k8Q3lRXp2UJVpmph0z2004DlfQKs59jact1Y64M7X0sAkYGwaiUXA
-         yyXBZ+GIjVm5MLOSBLVoYGuwb1tHPfdQB7i0/2AASlCYKAv9Bw9ivbng2nIsBBuVc+DK
-         X7jM+3hAO5sfYFZKCQy37xHI7ulOBRQ7Uit08iNl/+ZS1Y+l5LFkwB4/MB6mjnOneGXH
-         dSog==
+        bh=X46wYGgERGWtFUFMoQTCYrTkwk/QDw/vSdYLKa9FS1g=;
+        b=p11ZjmbHqdldMKTtphZYW0A6SLeVRnWzYgza6U9UehEhcLpa7n+XlU0peLdUTZiEWB
+         PBAzFhIRYMEWxFOLHBE8wTVIff1J2bHUT8e85s2oZL9rtmZQdmMgy3b7TysEhGWwHK2q
+         ZUzcWKq4j0Fpw+EgIvcUYKgrTePsJZ3mrRmmyP9cEmw8p2eAw7Y1L/xiu8FH6kBMI+8O
+         88PudxLBx/2jE559SmKmKPyHcFEMc4dbHjA+/FnMbzSzXsS5zO7gfLR671s5DeslIPMx
+         dST1XDN6bo7ygDWc0i0p0dWjSXCydEtuoS0ikZwqTQ8PoME/RgHErEa78Xqwh3fVDT2x
+         CXFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=WIjn0AhTwwpTEtbdjQhQORR+T5+cXMTK7UrnuECBFAM=;
-        b=izfQbneRFcy/VYA+NpCR4uB0Dct4e0i/qa6scGXlZB3vfbRS8FJX9sdPl8LryUy4IO
-         wjr3h75YpN8ezDUhxFF4Ktm0C7Qd+XvD8ljLQ2/Mz6BkQhv68aFr6HVk4MtYjltsC24s
-         /yHB+3DGpM/i4iTbJKfP43uc5tNftzEQcg9TgsxNAX06TKA11ezOQqCHHu5pMaLcOAk8
-         rEPkEEOkPtmddK8Ao5Ul2TZzzplSjR6mtMkgbpPGQY7Heqnzxajiw8a8pU9d8hUxyC5d
-         o4PywZSq8seZtg8QdnS3kUudkEHJ2V/iXnYDWHTcVjYG6uhbcL4XZGJFUDTvUvy6yUQs
-         MuBg==
-X-Gm-Message-State: AOAM532+Wx3Lt1oqTGeZuDrC5A49OHHHQRc7K6Pl7OQv8od7YaR/zpVC
-        Jvxe/9WuXhR6EFEdg5bKizY=
-X-Google-Smtp-Source: ABdhPJy1oxNYAiecRNIuLOcN0mlyS7k+p8U1hu5TBgm9PyyMXGacZeU59qzHRA9KGvT9kWJnHBBO/g==
-X-Received: by 2002:aca:ebd7:: with SMTP id j206mr2078266oih.60.1617797512427;
-        Wed, 07 Apr 2021 05:11:52 -0700 (PDT)
+        bh=X46wYGgERGWtFUFMoQTCYrTkwk/QDw/vSdYLKa9FS1g=;
+        b=iok2bwLlweuyU0D7Q2csHkHBMcZpgK2LB+lI8hBU/1xeEFpxi6IL+MgPIyIjDfKDX+
+         Xb8x4g+thlV+whoT/k45+nI0ZkcSb6swckS3Xrahq9ah3GP7M/yRLHJWXH5rLKivrC52
+         UsFdLx9Q4mi1Wibv5VhWk+JT/rmBcRDWWeg7HB0p1D0KAlGD83XHDBcHLvQaN2lYP9lp
+         yYISGSlA88VafiHUwmbQlvKF+GX1OhYv6Pz+NJjcTDkjphalL9cTwNCiX3OHwXbADhbY
+         S7Gi7ft04YEmaE6n1duQErKc7TT+7vUIFa/CugZ5rwSqdEeTY84Au9LkomsGC96NlpDr
+         Q5Zg==
+X-Gm-Message-State: AOAM5302xWH+OsW8kOH7BukTEJ68KVB8ayZoR+jtCBj7FO+xHSFH0ePj
+        Wvp2CtZKu5tR8vs9lU9q9SdfHvDYsx4=
+X-Google-Smtp-Source: ABdhPJyM7woO7fL7ogf7HacLA8rrZFOXScexRkYOvjb0KhXvYs9PYut3VFWrj8xFe2pfuye1s4S7rA==
+X-Received: by 2002:aca:37c3:: with SMTP id e186mr2043392oia.111.1617797723677;
+        Wed, 07 Apr 2021 05:15:23 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w11sm4720629ooc.35.2021.04.07.05.11.50
+        by smtp.gmail.com with ESMTPSA id i4sm4175868oik.21.2021.04.07.05.15.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Apr 2021 05:11:51 -0700 (PDT)
+        Wed, 07 Apr 2021 05:15:23 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v2 3/4] hwmon: smpro: Add Ampere's Altra smpro-hwmon
- driver
-To:     Quan Nguyen <quan@os.amperecomputing.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
+Subject: Re: [PATCH v2 07/19] dt-bindings: fix references for iio-bindings.txt
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Artur Rojek <contact@artur-rojek.eu>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
         Lee Jones <lee.jones@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org
-Cc:     Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-References: <20210329015238.19474-1-quan@os.amperecomputing.com>
- <20210329015238.19474-4-quan@os.amperecomputing.com>
- <bac92db0-3ef6-1615-0e92-aabd54fd0580@roeck-us.net>
- <136d036c-1d10-cecd-abcb-d206a0c6fa51@os.amperecomputing.com>
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>, devicetree@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <cover.1617783062.git.mchehab+huawei@kernel.org>
+ <c4e3cfcc666552084df5155c4f3957134b72ef7a.1617783062.git.mchehab+huawei@kernel.org>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -121,44 +120,129 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <d9ef40ea-e4ee-cea8-96df-90ffabdff53c@roeck-us.net>
-Date:   Wed, 7 Apr 2021 05:11:49 -0700
+Message-ID: <ad7e53b8-3d43-13d9-1f3e-5393201c1740@roeck-us.net>
+Date:   Wed, 7 Apr 2021 05:15:20 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <136d036c-1d10-cecd-abcb-d206a0c6fa51@os.amperecomputing.com>
+In-Reply-To: <c4e3cfcc666552084df5155c4f3957134b72ef7a.1617783062.git.mchehab+huawei@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/7/21 12:41 AM, Quan Nguyen wrote:
-[ ... ]
->>
->> But then why don't you just use reg_ext to store SOC_VR_HOT_THRESHOLD_REG
->> or MEM_HOT_THRESHOLD_REG ? It is already available, after all, and with it
->> the code could be simplified to
->>
->>         ret = regmap_read(hwmon->regmap, temperature[channel].reg_ext, &value);
->>         if (ret)
->>             return ret;
->>
-> Thank you for the comment.
+On 4/7/21 1:20 AM, Mauro Carvalho Chehab wrote:
+> The iio-bindings.txt was converted into two files and merged
+> at the dt-schema git tree at:
 > 
-> Will change code follow this suggestion, will include in next version
+> 	https://github.com/devicetree-org/dt-schema
 > 
->> I don't have a datasheet, but I do wonder what is in bit 9..15. Any idea ?
->> Main question is if there is a sign bit, as theoretic as it may be.
->>
-> The original intention was to use this as 9-bit 2-complement value follow LM75, but the fact is that the operation temperature is 0-125 C degree, so we simply use it as-is.
+> Yet, some documents still refer to the old file. Fix their
+> references, in order to point to the right URL.
+> 
+> Fixes: dba91f82d580 ("dt-bindings:iio:iio-binding.txt Drop file as content now in dt-schema")
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/hwmon/ntc_thermistor.txt   | 2 +-
+
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+
+>  Documentation/devicetree/bindings/iio/adc/ingenic,adc.yaml   | 5 +++--
+>  Documentation/devicetree/bindings/input/adc-joystick.yaml    | 4 +++-
+>  .../bindings/input/touchscreen/resistive-adc-touch.txt       | 5 ++++-
+>  Documentation/devicetree/bindings/mfd/ab8500.txt             | 4 +++-
+>  .../devicetree/bindings/power/supply/da9150-charger.txt      | 2 +-
+>  6 files changed, 15 insertions(+), 7 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/ntc_thermistor.txt b/Documentation/devicetree/bindings/hwmon/ntc_thermistor.txt
+> index 37f18d684f6a..4c5c3712970e 100644
+> --- a/Documentation/devicetree/bindings/hwmon/ntc_thermistor.txt
+> +++ b/Documentation/devicetree/bindings/hwmon/ntc_thermistor.txt
+> @@ -32,7 +32,7 @@ Optional node properties:
+>  - "#thermal-sensor-cells" Used to expose itself to thermal fw.
+>  
+>  Read more about iio bindings at
+> -	Documentation/devicetree/bindings/iio/iio-bindings.txt
+> +	https://github.com/devicetree-org/dt-schema/blob/master/schemas/iio/
+>  
+>  Example:
+>  	ncp15wb473@0 {
+> diff --git a/Documentation/devicetree/bindings/iio/adc/ingenic,adc.yaml b/Documentation/devicetree/bindings/iio/adc/ingenic,adc.yaml
+> index 9f414dbdae86..433a3fb55a2e 100644
+> --- a/Documentation/devicetree/bindings/iio/adc/ingenic,adc.yaml
+> +++ b/Documentation/devicetree/bindings/iio/adc/ingenic,adc.yaml
+> @@ -14,8 +14,9 @@ description: >
+>    Industrial I/O subsystem bindings for ADC controller found in
+>    Ingenic JZ47xx SoCs.
+>  
+> -  ADC clients must use the format described in iio-bindings.txt, giving
+> -  a phandle and IIO specifier pair ("io-channels") to the ADC controller.
+> +  ADC clients must use the format described in
+> +  https://github.com/devicetree-org/dt-schema/blob/master/schemas/iio/iio-consumer.yaml,
+> +  giving a phandle and IIO specifier pair ("io-channels") to the ADC controller.
+>  
+>  properties:
+>    compatible:
+> diff --git a/Documentation/devicetree/bindings/input/adc-joystick.yaml b/Documentation/devicetree/bindings/input/adc-joystick.yaml
+> index 054406bbd22b..721878d5b7af 100644
+> --- a/Documentation/devicetree/bindings/input/adc-joystick.yaml
+> +++ b/Documentation/devicetree/bindings/input/adc-joystick.yaml
+> @@ -24,7 +24,9 @@ properties:
+>      description: >
+>        List of phandle and IIO specifier pairs.
+>        Each pair defines one ADC channel to which a joystick axis is connected.
+> -      See Documentation/devicetree/bindings/iio/iio-bindings.txt for details.
+> +      See
+> +      https://github.com/devicetree-org/dt-schema/blob/master/schemas/iio/iio-consumer.yaml
+> +      for details.
+>  
+>    '#address-cells':
+>      const: 1
+> diff --git a/Documentation/devicetree/bindings/input/touchscreen/resistive-adc-touch.txt b/Documentation/devicetree/bindings/input/touchscreen/resistive-adc-touch.txt
+> index fee0da12474e..af5223bb5bdd 100644
+> --- a/Documentation/devicetree/bindings/input/touchscreen/resistive-adc-touch.txt
+> +++ b/Documentation/devicetree/bindings/input/touchscreen/resistive-adc-touch.txt
+> @@ -5,7 +5,10 @@ Required properties:
+>   - compatible: must be "resistive-adc-touch"
+>  The device must be connected to an ADC device that provides channels for
+>  position measurement and optional pressure.
+> -Refer to Documentation/devicetree/bindings/iio/iio-bindings.txt for details
+> +Refer to
+> +https://github.com/devicetree-org/dt-schema/blob/master/schemas/iio/iio-consumer.yaml
+> +for details
+> +
+>   - iio-channels: must have at least two channels connected to an ADC device.
+>  These should correspond to the channels exposed by the ADC device and should
+>  have the right index as the ADC device registers them. These channels
+> diff --git a/Documentation/devicetree/bindings/mfd/ab8500.txt b/Documentation/devicetree/bindings/mfd/ab8500.txt
+> index d2a6e835c257..937b3e5505e0 100644
+> --- a/Documentation/devicetree/bindings/mfd/ab8500.txt
+> +++ b/Documentation/devicetree/bindings/mfd/ab8500.txt
+> @@ -72,7 +72,9 @@ Required child device properties:
+>                                                 pwm|regulator|rtc|sysctrl|usb]";
+>  
+>    A few child devices require ADC channels from the GPADC node. Those follow the
+> -  standard bindings from iio/iio-bindings.txt and iio/adc/adc.txt
+> +  standard bindings from
+> +  https://github.com/devicetree-org/dt-schema/blob/master/schemas/iio/iio-consumer.yaml
+> +  and Documentation/devicetree/bindings/iio/adc/adc.yaml
+>  
+>    abx500-temp		 : io-channels "aux1" and "aux2" for measuring external
+>  			   temperatures.
+> diff --git a/Documentation/devicetree/bindings/power/supply/da9150-charger.txt b/Documentation/devicetree/bindings/power/supply/da9150-charger.txt
+> index f3906663c454..033a9b6e1dd5 100644
+> --- a/Documentation/devicetree/bindings/power/supply/da9150-charger.txt
+> +++ b/Documentation/devicetree/bindings/power/supply/da9150-charger.txt
+> @@ -7,7 +7,7 @@ Optional properties:
+>  - io-channels: List of phandle and IIO specifier pairs
+>  - io-channel-names: List of channel names used by charger
+>        ["CHAN_IBUS", "CHAN_VBUS", "CHAN_TJUNC", "CHAN_VBAT"]
+> -  (See Documentation/devicetree/bindings/iio/iio-bindings.txt for further info)
+> +  (See https://github.com/devicetree-org/dt-schema/blob/master/schemas/iio/iio-consumer.yaml for further info)
+>  
+>  
+>  Example:
 > 
 
-The operational temperature is not the question here. The question is if the
-chip _reports_ a sign. If it does, it should be handled, even if it is outside
-the operational range. The reported range is relevant here, not the operational
-range. After all, the chip won't really blow apart at -1 degrees C.
-
-Thanks,
-Guenter
