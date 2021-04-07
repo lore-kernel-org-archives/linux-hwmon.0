@@ -2,337 +2,740 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A678C433ED
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Apr 2021 23:28:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 908DBC433B4
+	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Apr 2021 07:42:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1801B61279
-	for <linux-hwmon@archiver.kernel.org>; Tue,  6 Apr 2021 23:28:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5F5DE61019
+	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Apr 2021 07:42:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241600AbhDFX26 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 6 Apr 2021 19:28:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48522 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbhDFX26 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 6 Apr 2021 19:28:58 -0400
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E58C06174A;
-        Tue,  6 Apr 2021 16:28:49 -0700 (PDT)
-Received: by mail-ot1-x32e.google.com with SMTP id 91-20020a9d08640000b0290237d9c40382so16279708oty.12;
-        Tue, 06 Apr 2021 16:28:49 -0700 (PDT)
+        id S241073AbhDGHmS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 7 Apr 2021 03:42:18 -0400
+Received: from mail-co1nam11on2117.outbound.protection.outlook.com ([40.107.220.117]:50592
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233952AbhDGHmS (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 7 Apr 2021 03:42:18 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=B4Xq2kx8Ogz6Nq/Dp3JcJ00UQloPD7dYk2p4xq9LJI7bPPTimFcOdduUaseYt1WA+TUjmb6pbMAeA2+f5lm0kmzaFW0u/B2yUBGmM3L8P9O7C1leVaQusTWpnN5XyEY7VNC7PfNuHzU3E+iwij5/XpWZpKikz88UDF3j5avFzUwH0r41AtvN1RXXlDBZBPaH5zM2Pi5digWX7WAx5KJqX6P+j8DLOGmMpA/zFLND0lb3Wm5rm4m+q3bve/9oBN7qX79DSMJaN3RvmjyZ3W9cEthQSh24m1LqQnfbj5LGx/D+7ZUMMugQlkzBnq3+i8dwcG9NTANHILaUK/H/LqB+tA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LIGOq+dl5G4/qXIsa8Ah81DBmDLkKB6FbALIUbDhBac=;
+ b=bDHxmBlv8FSXzmBPnrqy4/vf6OfWgPxq4htMRrHuFh30R+bQC7CqE1rjeRq6EVkUUH+Cs3xNSFVLdCz3B+R2IDDdPyDpuc13s/gVuZa9t/iikOWt4uMD0rqqRkTZIqyMtElS0BNTZaU4n0hcQvPttH0EQh9lpTY221E8FVzS9VurHgnbne/p3CpOOWurzaY90wuUte2ISY7K0l2/NfI2JsJu6GPrEIsn+b7eGeHWnkCUJC8vRT9Er7Yf7NAAlRpUVza1UK1XBw89EErlvAEn7/8TXhcBwvRRaNFtHdyIYMBFtA3zCPWuhpmBGriMyjzmLMEAWjNwiTIhejQD72RZDw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=GFnX4aUOtKqNUV8OKuRHzNfnOMT6/lsB7pdIKVdj1d0=;
-        b=TXoVHHmpRlnGOWMuoxtDPCJfySJEV3fsJRCIYff1sKkMI7gpNVHbCH4koTnsFo2Q7N
-         yeGNVJfYqfyJvNJtRad5Udna9KQuIlDS/l4Oleh4SDNDWj8vqVc+8CiyhY1I+xJRs/Fu
-         6OObZ7v2rANnIiL7OmTW9MF5STj6oPxcr8+7IIXaVFjn3z4U6HbDoiIsGZjAAuqhxN56
-         NP+YYAnqyEiAwdXLk+juUqg08f5FR4tHp6DfpwsOWA/4p4fCuZRhgrSb9/TjLqnRz1et
-         mt6cScFAapuCUlIdVg8DNiMGliZBt6ZFmamyArdZv9VsVmfRez4VGn28vXP0G3LKBnaS
-         If5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=GFnX4aUOtKqNUV8OKuRHzNfnOMT6/lsB7pdIKVdj1d0=;
-        b=n7ob/MYp4Vn8rvE9ZV/6RIQO8zYoZeI9QL0n7F4G04VbA3OttVKT5ehuFEUGG1CD65
-         f0sBwWq05dNbLGR273D6ozhaF1NEUSAmB5HlRBWjtjInStW2A7BAprwYCLuaj4eI+Y0C
-         luOvk6GQX6yDggqhZMPI68AYjJZr+BI5iqr0cZMJAJhjoT8bDSSzS4YoIvtr/LTahBhy
-         frUNs+c7rhHAwyXC3PxkVOZpq1HS1q6YEzLXaqZMJINQPtLLyByXf/Oiu9fvatpG9PjF
-         INn+MpgYXlMEb/4VWWjhbsVItxvyv/53Ui6Px2AA+1mg3y0FJHBqmSBiu89ZuWM/BARz
-         4ZJQ==
-X-Gm-Message-State: AOAM53130NH1C5UvQ8eSIf3drJGXIz4Zy34XdXtXhNLXvdWD7zts+5lj
-        v6najD/9LfvEa7MSU3Y1pV1/yjqUvUg=
-X-Google-Smtp-Source: ABdhPJwSuG9Mk8QNzkv+LipLKIDC6MtaBfMz+xDT2azAdWy3a9yHBkPCAil7sYJMiYGRmJl1m9Vv6g==
-X-Received: by 2002:a9d:20c6:: with SMTP id x64mr433097ota.262.1617751728651;
-        Tue, 06 Apr 2021 16:28:48 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2sm5101476otl.48.2021.04.06.16.28.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Apr 2021 16:28:47 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v2] hwmon: (sbtsi) Don't read sensor more than once if it
- doesn't respond
-To:     Konstantin Aladyshev <aladyshev22@gmail.com>
-Cc:     Kun Yi <kunyi@google.com>, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <ed438518-66ad-6e08-2a1b-597ac3f2ae8d@roeck-us.net>
- <20210406181624.713-1-aladyshev22@gmail.com>
- <0ba1d271-78cd-c30a-e662-97ab8ba6451a@roeck-us.net>
- <CACSj6VUCgxCQeA9EF4Oz+pKY+TdF9Gp=DV1V=-TcVE4ixtg45Q@mail.gmail.com>
- <40d02688-d40c-fcdd-b8eb-580a1e44b244@roeck-us.net>
- <CACSj6VVjJ9Avd0Ni0Zp4-skv-7Dk9cQkhB5hrsEyb+0ZQR5eJg@mail.gmail.com>
- <422092a4-a87d-59d2-f6cb-9adf19e8f006@roeck-us.net>
- <CACSj6VW2+8TBh971CERjxPzhyO5JeP0rbkrw0ZjfE4bkhMfo4Q@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
- RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
- nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
- 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
- gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
- IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
- kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
- VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
- jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
- BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
- ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
- CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
- nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
- hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
- c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
- 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
- GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
- sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
- Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
- HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
- BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
- l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
- 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
- pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
- J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
- pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
- 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
- ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
- I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
- nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
- HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
- JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
- J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
- cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
- wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
- hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
- nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
- QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
- trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
- WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
- HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <e66d22ee-cc55-8794-7f39-5af67271347f@roeck-us.net>
-Date:   Tue, 6 Apr 2021 16:28:45 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <CACSj6VW2+8TBh971CERjxPzhyO5JeP0rbkrw0ZjfE4bkhMfo4Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LIGOq+dl5G4/qXIsa8Ah81DBmDLkKB6FbALIUbDhBac=;
+ b=aKQI9bS0UqFpCUFL4EfTbv5UAqUrrqdUpnMPeXh02V+LdOEGIvJ/WfrPmq6bHca9rnYhmuyUAqhNS4kbivqF73k5LjXEBCrAIkloOcLKmblCi2x5w5INZ8i3uymKx6UP58ZuBBc73lkrZIVdbflYgFd8NXfFPI9FPtQ5nbApEr8=
+Authentication-Results: os.amperecomputing.com; dkim=none (message not signed)
+ header.d=none;os.amperecomputing.com; dmarc=none action=none
+ header.from=os.amperecomputing.com;
+Received: from MW2PR0102MB3482.prod.exchangelabs.com (2603:10b6:302:c::32) by
+ MW4PR01MB6466.prod.exchangelabs.com (2603:10b6:303:78::21) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3999.27; Wed, 7 Apr 2021 07:42:04 +0000
+Received: from MW2PR0102MB3482.prod.exchangelabs.com
+ ([fe80::d840:7aa7:58d4:b503]) by MW2PR0102MB3482.prod.exchangelabs.com
+ ([fe80::d840:7aa7:58d4:b503%5]) with mapi id 15.20.4020.016; Wed, 7 Apr 2021
+ 07:42:02 +0000
+Subject: Re: [PATCH v2 3/4] hwmon: smpro: Add Ampere's Altra smpro-hwmon
+ driver
+To:     Guenter Roeck <linux@roeck-us.net>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org
+Cc:     Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
+References: <20210329015238.19474-1-quan@os.amperecomputing.com>
+ <20210329015238.19474-4-quan@os.amperecomputing.com>
+ <bac92db0-3ef6-1615-0e92-aabd54fd0580@roeck-us.net>
+From:   Quan Nguyen <quan@os.amperecomputing.com>
+Message-ID: <136d036c-1d10-cecd-abcb-d206a0c6fa51@os.amperecomputing.com>
+Date:   Wed, 7 Apr 2021 14:41:49 +0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.9.0
+In-Reply-To: <bac92db0-3ef6-1615-0e92-aabd54fd0580@roeck-us.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [118.69.219.201]
+X-ClientProxiedBy: HKAPR04CA0003.apcprd04.prod.outlook.com
+ (2603:1096:203:d0::13) To MW2PR0102MB3482.prod.exchangelabs.com
+ (2603:10b6:302:c::32)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [10.38.33.17] (118.69.219.201) by HKAPR04CA0003.apcprd04.prod.outlook.com (2603:1096:203:d0::13) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4020.17 via Frontend Transport; Wed, 7 Apr 2021 07:41:56 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7ac248b1-8fde-420f-a67a-08d8f998a1ac
+X-MS-TrafficTypeDiagnostic: MW4PR01MB6466:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <MW4PR01MB646638B2A1AB4AB32BC34961F2759@MW4PR01MB6466.prod.exchangelabs.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: aJerB4+VPCEnV9GW3PO3PCSIiI3kIlYpODIEx7WHBEa8UZ4uHtTWr+LVncbXOiya6s/5khoxMYyGhFomOlkuP16KiysNRyA8W8XIHaMXXIllpoYrS+03zfACCMT4vlEFVtPO8u2F0rA3OitIjjeKjpmCEQWttp/G396IyZijSnJ8QkO/e/9v9FNxpN/11EsIqqZ53+l6U5hadx4d8EdvR1+ii9hoDymgbDCAmGq+MNYxQq0R57ozJE1tczHo7dUlCW7rnCxW/KBCbYwAc+JNSnU0u9biMMGp1tVlsX87iL53lRtrtMdocfrQ/xa70+jp9Khf85BxmmAtJkC5wMVgI++5e34M2N7+AQGpgZNLA29MoF29RopXnE0Wo3WAJl4YQmLlX9c6fzAnng9JTBxIajVwhc83nZAlpVardoQWvsv6sMHCxSXj9tYlsa6+m/BqcSeQKP/AJPLMQzDqJLzAuQTT6lbyg8D+bJn0m5Pb6NDAHEj19ColTs7Jur5kwQB52seFZwuia5cCOLD6yL5mJAc3EGuqjOny6nbWKqKYT7DH6Fib5xIWqpdLCYgX6+SmkmbsVS1SJ7zqiSww0ObyphKcZTumaQDAuRwAUM6mw9vvyhORyNoH1BAlwynVNI3Xb0UnJlrD9I1izOi45Nj9u2n2BLVZEoEDCVb2olXlHs5fHdFwvVZppyMv7DZLg7dsD13ZmgRYywo/Du+FTtu5xw/hsTeo2FWZLDn3bmehyxSg+H7V1P6CROSgYKE5AMNyrH3EDwjNRAB6VxinzCy7Mw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR0102MB3482.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(346002)(376002)(39840400004)(396003)(136003)(7416002)(31686004)(83380400001)(66946007)(921005)(66556008)(956004)(2616005)(52116002)(66476007)(38100700001)(38350700001)(31696002)(107886003)(4326008)(6486002)(53546011)(6666004)(26005)(316002)(2906002)(110136005)(16526019)(16576012)(186003)(478600001)(5660300002)(86362001)(8676002)(54906003)(8936002)(30864003)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?YWxqYlFGMS9IUDZWVU5zL0F0QU1BbG5hN2JpbUZVdTd2STBGSG9HN2xvaGts?=
+ =?utf-8?B?MWJZYSsxRFBiZHBXRGNJNExyTzZFRkJ4WFdmU1QwQkZiUGp0NGFEeVQ4Q1Ni?=
+ =?utf-8?B?d0dOS210RHFZYjIyS1JmcFhyd3cxMW5yL3cySk56emVheDlzc25KRHZnYTVE?=
+ =?utf-8?B?YmxmOWpVU3ZqZHE2RTJ4R0EyN2Y2TGtyeVlabVBHbWZ6N1dKNWlqMzlnV3hw?=
+ =?utf-8?B?NElRejJQSHFLVmpVYm5LdGpNalpyR0Y4eEVWR1Vod3FrUVI4Qm8vRi9qYzB3?=
+ =?utf-8?B?MmptdEl3OS94TmlLQ2NKQjFITFBnRnFLQm5wei93Z3dMZEcrRXl0VlZIRHlT?=
+ =?utf-8?B?RUhhd0RBT0x3aEY3cTdkdmpHem5VV1JwRlVNVjUzUnhuYm9hQ2YyN3kwK0xJ?=
+ =?utf-8?B?UXJoVjg1MUVxd3Q4eTZ2ZkJ2YkREclJ3b0hXQnZFajI1dklmQ0g1eHlyYmdR?=
+ =?utf-8?B?VSt1dXVVN3pHbG5ocEo1K2U1NmJxR2lVeHZHN09mYTF3K1dXNnRyS28vLzdp?=
+ =?utf-8?B?ZThqeXRUdTBUeUZ5OG1Ra1oxMlNUVFhmTHhsNlZMczJrSHZzRDRvcUhkUS8y?=
+ =?utf-8?B?S25oVWYwUmRvbjdHNzhyUEhxRDRYTlJUOHdGZlQvUnZPTGF4NnhRa1p2b2dR?=
+ =?utf-8?B?Ymk2ZXVQN3JBbGNQTE9pU3JEV0VkUkZzelhjcVRYZi8xOVJtQy96MFBUUTQy?=
+ =?utf-8?B?NjdRVVdvdUMrdjhDMFhpWldGSjhzdUdoQXprZG1yVlp3N2t1ZGFENlArcUtp?=
+ =?utf-8?B?S2pnYlZTbWdPUGwyRHRieUMyejNMOTlNREJNSU93MkhSV2pLbGhpbGRMKzdN?=
+ =?utf-8?B?NWZVUUlZZzZ1aTdwMnBaMjF3Z215Qko1dC96ODBYdS94OWQxRFZpUGFCUFpa?=
+ =?utf-8?B?RWRlSDVrWWxGcFpSQi92bVBla2RoL0xST253ajU4RnFmS01Yem9CVmVma1M3?=
+ =?utf-8?B?UnFuTzlsb2FwbDdiMmxTdU9BVE9jMUlDTXkzbm5QRWpXLzVSYkhxWXFjUWlY?=
+ =?utf-8?B?WkRoWlFpbVJjVUdkUk1BQm9xby9iVTNYbkJ3aHNDVUw5dW1rWHdUNCtHUTk4?=
+ =?utf-8?B?ZllwRGRUelV3dGFpRGpQWnp4Y1lDamNhMkdRYTJoRmZiRmhNSEIwWmQ5RXkr?=
+ =?utf-8?B?YTNqMGplTlowc2UyVUNiMGxaMmt1Y3NoTTJ6My92QmNZaWxPb0ltL3dYRXdL?=
+ =?utf-8?B?UFNQTDFMeWFOZHlRVVhUd1hhS1N1bkRWa3NlOHo4dnA2RkRDeWgrTjBaQ0JS?=
+ =?utf-8?B?ankvbEdpdTBiMThKdys2cTk0K1o2QUxSK2hDN1dEUzBweGUyaTFQVExtQkRG?=
+ =?utf-8?B?MDQzRjNLak5ta2hYSWFaZlRENDNHdnZzY1RESGRXSnJ3TUhzbDlHQWtxUVZa?=
+ =?utf-8?B?SWVZdUFQRlp3RGp3cmdKNGdvNGdsK1RrQXlaSjRWYitJd1RacXpobzNUNzNl?=
+ =?utf-8?B?S3lwdDVadUZneG1kSFp6SnJqbnY0bHErdi9wbzRPR21UNEVnTnN6RHhvSVZt?=
+ =?utf-8?B?elcrMW0vS2s4RGVlTHIxenNTdllKbU85cHo1RTRoYkRHYjdURjBzUXpUNDhm?=
+ =?utf-8?B?L2xQYWQ3Q3Y0aHQ3cVBSUjhkdlZ1czhoaWNDNmlPTHl0cXV2RjJ1cGc4WUhv?=
+ =?utf-8?B?SlNGbld6M2xacDV3N0w0ZlNldml5MUlsSEttRm1WZSs4NTk4TjhzUndiczZ2?=
+ =?utf-8?B?ZWpseGFSVlErMFJJWFZvdWJWZmJVOHRFeWlJSEtjRmsrQVRYMnY4SG1DTEw4?=
+ =?utf-8?Q?W13POMULu1ZSYFhLr9j8tBiQzkBVE2YeiUw1orh?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7ac248b1-8fde-420f-a67a-08d8f998a1ac
+X-MS-Exchange-CrossTenant-AuthSource: MW2PR0102MB3482.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Apr 2021 07:42:01.9614
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ASMLK9nFsve5BDHvUcAgT58YZ3WcaZucl9bZRKWe/Imtrdsd6+JY+Z40apd2NV/kvWUVqWjSdhcm3mApLIsqTx6dSR7IA4uQHQsDdWssXCk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR01MB6466
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/6/21 3:25 PM, Konstantin Aladyshev wrote:
-> What I'm trying to say, shouldn't the call
-> "i2c_smbus_read_byte_data(data->client, SBTSI_REG_CONFIG)" be
-> surrounded with the "mutex_lock/mutex_unlock" like it is done for the
-> others "i2c_smbus_read_byte_data" calls?
-> Something like:
-> ```
-> mutex_lock(&data->lock);
-> err = i2c_smbus_read_byte_data(data->client, SBTSI_REG_CONFIG);
-> if (err < 0)
->     return err;
-> mutex_unlock(&data->lock);
-> ```
-> Because it is not surrounded with the mutex lock/unlock in the original driver.
+On 30/03/2021 08:43, Guenter Roeck wrote:
+> On 3/28/21 6:52 PM, Quan Nguyen wrote:
+>> This commit adds support for Ampere SMpro hwmon driver. This driver
+>> supports accessing various CPU sensors provided by the SMpro co-processor
+>> including temperature, power, voltages, and current.
+>>
+>> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
+>> ---
+>>   drivers/hwmon/Kconfig       |   8 +
+>>   drivers/hwmon/Makefile      |   1 +
+>>   drivers/hwmon/smpro-hwmon.c | 494 ++++++++++++++++++++++++++++++++++++
+>>   3 files changed, 503 insertions(+)
+>>   create mode 100644 drivers/hwmon/smpro-hwmon.c
+>>
+>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+>> index 0ddc974b102e..ba4b5a911baf 100644
+>> --- a/drivers/hwmon/Kconfig
+>> +++ b/drivers/hwmon/Kconfig
+>> @@ -67,6 +67,14 @@ config SENSORS_ABITUGURU3
+>>   	  This driver can also be built as a module. If so, the module
+>>   	  will be called abituguru3.
+>>   
+>> +config SENSORS_SMPRO
+>> +	tristate "Ampere's Altra SMpro hardware monitoring driver"
+>> +	depends on MFD_SMPRO
+>> +	help
+>> +	  If you say yes here you get support for the thermal, voltage,
+>> +	  current and power sensors of Ampere's Altra processor family SoC
+>> +	  with SMpro co-processor.
+>> +
+>>   config SENSORS_AD7314
+>>   	tristate "Analog Devices AD7314 and compatibles"
+>>   	depends on SPI
+>> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+>> index 59e78bc212cf..b25391f9c651 100644
+>> --- a/drivers/hwmon/Makefile
+>> +++ b/drivers/hwmon/Makefile
+>> @@ -174,6 +174,7 @@ obj-$(CONFIG_SENSORS_SHT3x)	+= sht3x.o
+>>   obj-$(CONFIG_SENSORS_SHTC1)	+= shtc1.o
+>>   obj-$(CONFIG_SENSORS_SIS5595)	+= sis5595.o
+>>   obj-$(CONFIG_SENSORS_SMM665)	+= smm665.o
+>> +obj-$(CONFIG_SENSORS_SMPRO)	+= smpro-hwmon.o
+>>   obj-$(CONFIG_SENSORS_SMSC47B397)+= smsc47b397.o
+>>   obj-$(CONFIG_SENSORS_SMSC47M1)	+= smsc47m1.o
+>>   obj-$(CONFIG_SENSORS_SMSC47M192)+= smsc47m192.o
+>> diff --git a/drivers/hwmon/smpro-hwmon.c b/drivers/hwmon/smpro-hwmon.c
+>> new file mode 100644
+>> index 000000000000..4277736ebc6e
+>> --- /dev/null
+>> +++ b/drivers/hwmon/smpro-hwmon.c
+>> @@ -0,0 +1,494 @@
+>> +// SPDX-License-Identifier: GPL-2.0+
+>> +/*
+>> + * Ampere Computing SoC's SMPro Hardware Monitoring Driver
+>> + *
+>> + * Copyright (c) 2021, Ampere Computing LLC
+>> + */
+>> +#include <linux/bitfield.h>
+>> +#include <linux/hwmon.h>
+>> +#include <linux/hwmon-sysfs.h>
+>> +#include <linux/kernel.h>
+>> +#include <linux/mod_devicetable.h>
+>> +#include <linux/module.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/property.h>
+>> +#include <linux/regmap.h>
+>> +
+>> +/* Identification Registers */
+>> +#define MANUFACTURER_ID_REG		0x02
+>> +#define AMPERE_MANUFACTURER_ID		0xCD3A
+>> +
+>> +/* Logical Power Sensor Registers */
+>> +#define SOC_TEMP_REG			0x10
+>> +#define SOC_VRD_TEMP_REG		0x11
+>> +#define DIMM_VRD_TEMP_REG		0x12
+>> +#define CORE_VRD_TEMP_REG		0x13
+>> +#define CH0_DIMM_TEMP_REG		0x14
+>> +#define CH1_DIMM_TEMP_REG		0x15
+>> +#define CH2_DIMM_TEMP_REG		0x16
+>> +#define CH3_DIMM_TEMP_REG		0x17
+>> +#define CH4_DIMM_TEMP_REG		0x18
+>> +#define CH5_DIMM_TEMP_REG		0x19
+>> +#define CH6_DIMM_TEMP_REG		0x1A
+>> +#define CH7_DIMM_TEMP_REG		0x1B
+>> +#define RCA_VRD_TEMP_REG		0x1C
+>> +
+>> +#define CORE_VRD_PWR_REG		0x20
+>> +#define SOC_PWR_REG			0x21
+>> +#define DIMM_VRD1_PWR_REG		0x22
+>> +#define DIMM_VRD2_PWR_REG		0x23
+>> +#define CORE_VRD_PWR_MW_REG		0x26
+>> +#define SOC_PWR_MW_REG			0x27
+>> +#define DIMM_VRD1_PWR_MW_REG		0x28
+>> +#define DIMM_VRD2_PWR_MW_REG		0x29
+>> +#define RCA_VRD_PWR_REG			0x2A
+>> +#define RCA_VRD_PWR_MW_REG		0x2B
+>> +
+>> +#define MEM_HOT_THRESHOLD_REG		0x32
+>> +#define SOC_VR_HOT_THRESHOLD_REG	0x33
+>> +#define CORE_VRD_VOLT_REG		0x34
+>> +#define SOC_VRD_VOLT_REG		0x35
+>> +#define DIMM_VRD1_VOLT_REG		0x36
+>> +#define DIMM_VRD2_VOLT_REG		0x37
+>> +#define RCA_VRD_VOLT_REG		0x38
+>> +
+>> +#define CORE_VRD_CURR_REG		0x39
+>> +#define SOC_VRD_CURR_REG		0x3A
+>> +#define DIMM_VRD1_CURR_REG		0x3B
+>> +#define DIMM_VRD2_CURR_REG		0x3C
+>> +#define RCA_VRD_CURR_REG		0x3D
+>> +
+>> +struct smpro_hwmon {
+>> +	struct regmap *regmap;
+>> +};
+>> +
+>> +struct smpro_sensor {
+>> +	const u8 reg;
+>> +	const u8 reg_ext;
+>> +	const char *label;
+>> +};
+>> +
+>> +static const struct smpro_sensor temperature[] = {
+>> +	{
+>> +		.reg = SOC_TEMP_REG,
+>> +		.label = "temp1 SoC"
+>> +	},
+>> +	{
+>> +		.reg = SOC_VRD_TEMP_REG,
+>> +		.label = "temp2 SoC VRD"
+>> +	},
+>> +	{
+>> +		.reg = DIMM_VRD_TEMP_REG,
+>> +		.label = "temp3 DIMM VRD"
+>> +	},
+>> +	{
+>> +		.reg = CORE_VRD_TEMP_REG,
+>> +		.label = "temp4 CORE VRD"
+>> +	},
+>> +	{
+>> +		.reg = CH0_DIMM_TEMP_REG,
+>> +		.label = "temp5 CH0 DIMM"
+>> +	},
+>> +	{
+>> +		.reg = CH1_DIMM_TEMP_REG,
+>> +		.label = "temp6 CH1 DIMM"
+>> +	},
+>> +	{
+>> +		.reg = CH2_DIMM_TEMP_REG,
+>> +		.label = "temp7 CH2 DIMM"
+>> +	},
+>> +	{
+>> +		.reg = CH3_DIMM_TEMP_REG,
+>> +		.label = "temp8 CH3 DIMM"
+>> +	},
+>> +	{
+>> +		.reg = CH4_DIMM_TEMP_REG,
+>> +		.label = "temp9 CH4 DIMM"
+>> +	},
+>> +	{
+>> +		.reg = CH5_DIMM_TEMP_REG,
+>> +		.label = "temp10 CH5 DIMM"
+>> +	},
+>> +	{
+>> +		.reg = CH6_DIMM_TEMP_REG,
+>> +		.label = "temp11 CH6 DIMM"
+>> +	},
+>> +	{
+>> +		.reg = CH7_DIMM_TEMP_REG,
+>> +		.label = "temp12 CH7 DIMM"
+>> +	},
+>> +	{
+>> +		.reg = RCA_VRD_TEMP_REG,
+>> +		.label = "temp13 RCA VRD"
+>> +	},
+>> +};
+>> +
+>> +static const struct smpro_sensor voltage[] = {
+>> +	{
+>> +		.reg = CORE_VRD_VOLT_REG,
+>> +		.label = "vout0 CORE VRD"
+>> +	},
+>> +	{
+>> +		.reg = SOC_VRD_VOLT_REG,
+>> +		.label = "vout1 SoC VRD"
+>> +	},
+>> +	{
+>> +		.reg = DIMM_VRD1_VOLT_REG,
+>> +		.label = "vout2 DIMM VRD1"
+>> +	},
+>> +	{
+>> +		.reg = DIMM_VRD2_VOLT_REG,
+>> +		.label = "vout3 DIMM VRD2"
+>> +	},
+>> +	{
+>> +		.reg = RCA_VRD_VOLT_REG,
+>> +		.label = "vout4 RCA VRD"
+>> +	},
+>> +};
+>> +
+>> +static const struct smpro_sensor curr_sensor[] = {
+>> +	{
+>> +		.reg = CORE_VRD_CURR_REG,
+>> +		.label = "iout1 CORE VRD"
+>> +	},
+>> +	{
+>> +		.reg = SOC_VRD_CURR_REG,
+>> +		.label = "iout2 SoC VRD"
+>> +	},
+>> +	{
+>> +		.reg = DIMM_VRD1_CURR_REG,
+>> +		.label = "iout3 DIMM VRD1"
+>> +	},
+>> +	{
+>> +		.reg = DIMM_VRD2_CURR_REG,
+>> +		.label = "iout4 DIMM VRD2"
+>> +	},
+>> +	{
+>> +		.reg = RCA_VRD_CURR_REG,
+>> +		.label = "iout5 RCA VRD"
+>> +	},
+>> +};
+>> +
+>> +static const struct smpro_sensor power[] = {
+>> +	{
+>> +		.reg = CORE_VRD_PWR_REG,
+>> +		.reg_ext = CORE_VRD_PWR_MW_REG,
+>> +		.label = "power1 CORE VRD"
+>> +	},
+>> +	{
+>> +		.reg = SOC_PWR_REG,
+>> +		.reg_ext = SOC_PWR_MW_REG,
+>> +		.label = "power2 SoC"
+>> +	},
+>> +	{
+>> +		.reg = DIMM_VRD1_PWR_REG,
+>> +		.reg_ext = DIMM_VRD1_PWR_MW_REG,
+>> +		.label = "power3 DIMM VRD1"
+>> +	},
+>> +	{
+>> +		.reg = DIMM_VRD2_PWR_REG,
+>> +		.reg_ext = DIMM_VRD2_PWR_MW_REG,
+>> +		.label = "power4 DIMM VRD2"
+>> +	},
+>> +	{
+>> +		.reg = RCA_VRD_PWR_REG,
+>> +		.reg_ext = RCA_VRD_PWR_MW_REG,
+>> +		.label = "power5 RCA VRD"
+>> +	},
+>> +};
+>> +
+>> +static int smpro_read_temp(struct device *dev, u32 attr, int channel, long *val)
+>> +{
+>> +	struct smpro_hwmon *hwmon = dev_get_drvdata(dev);
+>> +	unsigned int value;
+>> +	int ret;
+>> +
+>> +	switch (attr) {
+>> +	case hwmon_temp_input:
+>> +		ret = regmap_read(hwmon->regmap,
+>> +				  temperature[channel].reg, &value);
+>> +		if (ret)
+>> +			return ret;
+>> +		*val = (value & 0x1ff) * 1000;
+>> +		break;
+>> +	case hwmon_temp_crit:
+>> +		if (temperature[channel].reg == SOC_VRD_TEMP_REG) {
+>> +			ret = regmap_read(hwmon->regmap, SOC_VR_HOT_THRESHOLD_REG, &value);
+>> +			if (ret)
+>> +				return ret;
+>> +			*val = (value & 0x1ff) * 1000;
+>> +		} else {
+>> +			/* Report same MEM HOT threshold across DIMM channels */
+>> +			ret = regmap_read(hwmon->regmap, MEM_HOT_THRESHOLD_REG, &value);
+>> +			if (ret)
+>> +				return ret;
+>> +			*val = (value & 0x1ff) * 1000;
+>> +		}
 > 
-
-Why would that be necessary ? My understanding is that the returned value
-is read-only and won't change. FWIW, I don't even understand why it is
-read more than once to start with.
-
-On a side note, the above code would leave the mutex locked on error.
-
-Guenter
-
-> Best regards,
-> Konstantin Aladyshev
+> To avoid code duplication:
 > 
+> 		reg = temperature[channel].reg == SOC_VRD_TEMP_REG ? SOC_VR_HOT_THRESHOLD_REG : MEM_HOT_THRESHOLD_REG;
+> 		ret = regmap_read(hwmon->regmap, reg, &value);
+> 		if (ret)
+> 			return ret;
 > 
-> On Wed, Apr 7, 2021 at 12:34 AM Guenter Roeck <linux@roeck-us.net> wrote:
+> But then why don't you just use reg_ext to store SOC_VR_HOT_THRESHOLD_REG
+> or MEM_HOT_THRESHOLD_REG ? It is already available, after all, and with it
+> the code could be simplified to
+> 
+> 		ret = regmap_read(hwmon->regmap, temperature[channel].reg_ext, &value);
+> 		if (ret)
+> 			return ret;
+> 
+Thank you for the comment.
+
+Will change code follow this suggestion, will include in next version
+
+> I don't have a datasheet, but I do wonder what is in bit 9..15. Any idea ?
+> Main question is if there is a sign bit, as theoretic as it may be.
+> 
+The original intention was to use this as 9-bit 2-complement value 
+follow LM75, but the fact is that the operation temperature is 0-125 C 
+degree, so we simply use it as-is.
+
+>> +		break;
+>> +	default:
+>> +		return -EOPNOTSUPP;
+>> +	}
+>> +	return 0;
+>> +}
+>> +
+>> +static int smpro_read_in(struct device *dev, u32 attr, int channel, long *val)
+>> +{
+>> +	struct smpro_hwmon *hwmon = dev_get_drvdata(dev);
+>> +	unsigned int value;
+>> +	int ret;
+>> +
+>> +	switch (attr) {
+>> +	case hwmon_in_input:
+>> +		ret = regmap_read(hwmon->regmap, voltage[channel].reg, &value);
+>> +		if (ret < 0)
+>> +			return ret;
+>> +		/* Scale reported by the hardware is 1mV */
+>> +		*val = value & 0x7fff;
+> 
+> What is in bit 15 ?
+> 
+This is 15-bit voltage in mV so the bit 15 (0-15) is unused.
+
+>> +		return 0;
+>> +	default:
+>> +		return -EOPNOTSUPP;
+>> +	}
+>> +}
+>> +
+>> +static int smpro_read_curr(struct device *dev, u32 attr, int channel, long *val)
+>> +{
+>> +	struct smpro_hwmon *hwmon = dev_get_drvdata(dev);
+>> +	unsigned int value;
+>> +	int ret;
+>> +
+>> +	switch (attr) {
+>> +	case hwmon_curr_input:
+>> +		ret = regmap_read(hwmon->regmap, curr_sensor[channel].reg, &value);
+>> +		if (ret < 0)
+>> +			return ret;
+>> +		/* Scale reported by the hardware is 1mA */
+>> +		*val = value & 0x7fff;
+>> +		return 0;
+>> +	default:
+>> +		return -EOPNOTSUPP;
+>> +	}
+>> +}
+>> +
+>> +static int smpro_read_power(struct device *dev, u32 attr, int channel, long *val_pwr)
+>> +{
+>> +	struct smpro_hwmon *hwmon = dev_get_drvdata(dev);
+>> +	unsigned int val = 0, val_mw = 0;
+>> +	int ret;
+>> +
+>> +	switch (attr) {
+>> +	case hwmon_power_input:
+>> +		ret = regmap_read(hwmon->regmap, power[channel].reg, &val);
+>> +		if (ret)
+>> +			return ret;
+>> +
+>> +		ret = regmap_read(hwmon->regmap, power[channel].reg_ext, &val_mw);
+>> +		if (ret)
+>> +			return ret;
+>> +
+>> +		*val_pwr = val * 1000000 + val_mw * 1000;
+>> +		return 0;
+>> +
+>> +	default:
+>> +		return -EOPNOTSUPP;
+>> +	}
+>> +}
+>> +
+>> +static int smpro_read(struct device *dev, enum hwmon_sensor_types type,
+>> +		      u32 attr, int channel, long *val)
+>> +{
+>> +	switch (type) {
+>> +	case hwmon_temp:
+>> +		return smpro_read_temp(dev, attr, channel, val);
+>> +	case hwmon_in:
+>> +		return smpro_read_in(dev, attr, channel, val);
+>> +	case hwmon_power:
+>> +		return smpro_read_power(dev, attr, channel, val);
+>> +	case hwmon_curr:
+>> +		return smpro_read_curr(dev, attr, channel, val);
+>> +	default:
+>> +		return -EOPNOTSUPP;
+>> +	}
+>> +}
+>> +
+>> +static int smpro_write(struct device *dev, enum hwmon_sensor_types type,
+>> +		       u32 attr, int channel, long val)
+>> +{
+>> +	return -EOPNOTSUPP;
+>> +}
+> 
+> There are no writeable attributes, thus the write function is not needed.
+> 
+Agree, will remove in next version
+
+>> +
+>> +static int smpro_read_string(struct device *dev, enum hwmon_sensor_types type,
+>> +			     u32 attr, int channel, const char **str)
+>> +{
+>> +	switch (type) {
+>> +	case hwmon_temp:
+>> +		switch (attr) {
+>> +		case hwmon_temp_label:
+>> +			*str = temperature[channel].label;
+>> +			return 0;
+>> +		default:
+>> +			return -EOPNOTSUPP;
+>> +		}
+>> +		break;
+>> +
+>> +	case hwmon_in:
+>> +		switch (attr) {
+>> +		case hwmon_in_label:
+>> +			*str = voltage[channel].label;
+>> +			return 0;
+>> +		default:
+>> +			return -EOPNOTSUPP;
+>> +		}
+>> +		break;
+>> +
+>> +	case hwmon_curr:
+>> +		switch (attr) {
+>> +		case hwmon_curr_label:
+>> +			*str = curr_sensor[channel].label;
+>> +			return 0;
+>> +		default:
+>> +			return -EOPNOTSUPP;
+>> +		}
+>> +		break;
+>> +
+>> +	case hwmon_power:
+>> +		switch (attr) {
+>> +		case hwmon_power_label:
+>> +			*str = power[channel].label;
+>> +			return 0;
+>> +		default:
+>> +			return -EOPNOTSUPP;
+>> +		}
+>> +		break;
+>> +	default:
+>> +		return -EOPNOTSUPP;
+>> +	}
+>> +
+>> +	return -EOPNOTSUPP;
+> 
+> If you are returning -ENOPSUPP by default, might as well replace
+> all the same returns above with break;
+> 
+Yes, will fix as you suggested. Will include in next version
+
+>> +}
+>> +
+>> +static umode_t smpro_is_visible(const void *data, enum hwmon_sensor_types type,
+>> +				u32 attr, int channel)
+>> +{
+>> +	const struct smpro_hwmon *hwmon = data;
+>> +	unsigned int value;
+>> +	int ret;
+>> +
+>> +	switch (type) {
+>> +	case hwmon_temp:
+>> +		switch (attr) {
+>> +		case hwmon_temp_input:
+>> +		case hwmon_temp_label:
+>> +		case hwmon_temp_crit:
+>> +			ret = regmap_read(hwmon->regmap, temperature[channel].reg, &value);
+>> +			if (ret || value == 0xFFFF)
+>> +				return 0;
+>> +		break;
+>> +		}
+>> +	default:
+>> +		break;
+>> +	}
+>> +
+>> +	return 0444;
+>> +}
+>> +
+>> +static const struct hwmon_channel_info *smpro_info[] = {
+>> +	HWMON_CHANNEL_INFO(temp,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_CRIT,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_CRIT,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_CRIT,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_CRIT,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_CRIT,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_CRIT,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_CRIT,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_CRIT,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_CRIT,
+>> +			   HWMON_T_INPUT | HWMON_T_LABEL),
+>> +	HWMON_CHANNEL_INFO(in,
+>> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+>> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+>> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+>> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+>> +			   HWMON_I_INPUT | HWMON_I_LABEL),
+>> +	HWMON_CHANNEL_INFO(power,
+>> +			   HWMON_P_INPUT | HWMON_P_LABEL,
+>> +			   HWMON_P_INPUT | HWMON_P_LABEL,
+>> +			   HWMON_P_INPUT | HWMON_P_LABEL,
+>> +			   HWMON_P_INPUT | HWMON_P_LABEL,
+>> +			   HWMON_P_INPUT | HWMON_P_LABEL),
+>> +	HWMON_CHANNEL_INFO(curr,
+>> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+>> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+>> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+>> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+>> +			   HWMON_C_INPUT | HWMON_C_LABEL),
+>> +	NULL
+>> +};
+>> +
+>> +static const struct hwmon_ops smpro_hwmon_ops = {
+>> +	.is_visible = smpro_is_visible,
+>> +	.read = smpro_read,
+>> +	.write = smpro_write,
+>> +	.read_string = smpro_read_string,
+>> +};
+>> +
+>> +static const struct hwmon_chip_info smpro_chip_info = {
+>> +	.ops = &smpro_hwmon_ops,
+>> +	.info = smpro_info,
+>> +};
+>> +
+>> +static bool is_valid_id(struct regmap *regmap)
+>> +{
+>> +	unsigned int val;
+>> +	int ret;
+>> +
+>> +	ret = regmap_read(regmap, MANUFACTURER_ID_REG, &val);
+>> +
+>> +	return  (ret || (val != AMPERE_MANUFACTURER_ID)) ? false : true;
+> 
+> I am quite concerned about this: The calling code will translate it to
+> -EPROBE_DEFER even if the manufacturer ID is wrong. It should return
+> -ENODEV in that case. There should be a better means to determine if the
+> controller is not available at all, or not yet.
+> 
+Yes, I agree
+
+Will fix in next version:
+   + if the regmap_read return error, return -EPROBE_DEFER
+   + if manufacturer ID is wrong, return -ENODEV
+
+>> +}
+>> +
+>> +static int smpro_hwmon_probe(struct platform_device *pdev)
+>> +{
+>> +	struct smpro_hwmon *hwmon;
+>> +	struct device *hwmon_dev;
+>> +
+>> +	hwmon = devm_kzalloc(&pdev->dev, sizeof(struct smpro_hwmon), GFP_KERNEL);
+>> +	if (!hwmon)
+>> +		return -ENOMEM;
+>> +
+>> +	hwmon->regmap = dev_get_regmap(pdev->dev.parent, NULL);
+>> +	if (!hwmon->regmap)
+>> +		return -ENODEV;
+>> +
+>> +	/* Check for valid ID */
+>> +	if (!is_valid_id(hwmon->regmap))
+>> +		return -EPROBE_DEFER;
+>> +
+>> +	hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev, "smpro_hwmon",
+>> +							 hwmon, &smpro_chip_info, NULL);
+>> +
+>> +	return PTR_ERR_OR_ZERO(hwmon_dev);
+>> +}
+>> +
+>> +static const struct of_device_id smpro_hwmon_of_match[] = {
+>> +	{ .compatible = "ampere,ac01-hwmon" },
+>> +	{}
+>> +};
+>> +MODULE_DEVICE_TABLE(of, smpro_hwmon_of_match);
+>> +
+>> +static struct platform_driver smpro_hwmon_driver = {
+>> +	.probe		= smpro_hwmon_probe,
+>> +	.driver = {
+>> +		.name	= "smpro-hwmon",
+>> +		.of_match_table = smpro_hwmon_of_match,
+>> +	},
+>> +};
+>> +
+>> +module_platform_driver(smpro_hwmon_driver);
+>> +
+>> +MODULE_AUTHOR("Thu Nguyen <thu@os.amperecomputing.com>");
+>> +MODULE_AUTHOR("Quan Nguyen <quan@os.amperecomputing.com>");
+>> +MODULE_DESCRIPTION("Ampere Altra SMPro hwmon driver");
+>> +MODULE_LICENSE("GPL v2");
 >>
->> On 4/6/21 2:09 PM, Konstantin Aladyshev wrote:
->>> Thanks for the answer!
->>> Sorry for the confusion, by the "CPU is off" I meant "CPU is present,
->>> but currently it is in the powered off state".
->>> Therefore it is not possible to put these checks only in a probe
->>> function. And I don't know either if it is a good idea to cache
->>> config/min/max values.
->>>
->>> I use this driver on an OpenBMC system, which uses other software
->>> rather than lm-sensors utility. I guess that is why my priorities are
->>> shifted.
->>>
->>> By the way, I've noticed that the mutex check is absent in a
->>> SBTSI_REG_CONFIG read call both in the original driver version and in
->>> my patch, is this an error?
->>>
->>
->> What do you mean with "mutex check" ?
->>
->> Thanks,
->> Guenter
->>
->>
->>> Best regards,
->>> Konstantin Aladyshev
->>>
->>>
->>> On Tue, Apr 6, 2021 at 11:09 PM Guenter Roeck <linux@roeck-us.net> wrote:
->>>>
->>>> On 4/6/21 12:20 PM, Konstantin Aladyshev wrote:
->>>>> Thanks for the comment.
->>>>> Yes, you are correct, this patch adds an extra 'i2c_smbus_read_byte_data' call for the temp_max/temp_min reads.
->>>>> I guess I did that intentionally because I just wanted to keep the restructured code concise. After all I thought, 'temp_input' generally is read more often than 'temp_max/temp_min'.
->>>>> As I understand now, it seems like it is not acceptable. Therefore could you point me in the right direction about what I should do?
->>>>> Should I just stick with the original driver version and simply add two more i2c call checks for the first operations for min/max?
->>>>>
->>>>
->>>> Correct, it is not acceptable. A normal use case for hwmon devices is to use the "sensors"
->>>> command which _will_ read all attributes. i2c reads are expensive, and unnecessary read
->>>> operations should be avoided.
->>>>
->>>> There are several ways to solve the problem. Checking return values after each
->>>> read is the simple option. There are other possibilities, such as reading the limits
->>>> and the read order only once during probe, but I don't know enough about the
->>>> hardware to suggest a more sophisticated solution. For example, I don't know
->>>> what "CPU is off" means. Offline ? Not present ? If it means "not present",
->>>> or if the status is permanent, the condition should be handled in the is_visible
->>>> function (or the driver should not be instantiated in the first place).
->>>> Otherwise, the code should possibly return -ENODATA instead of -ETIMEDOUT
->>>> on error. But, again, I can not really suggest a better solution since
->>>> I don't know enough (nothing, actually) about the hardware (and the public
->>>> part of the SBTSI specification doesn't say anything about expected behavior
->>>> for offline CPUs or CPU cores).
->>>>
->>>> What I did find, though, is that the driver does not implement temperature
->>>> offset support, and it that doesn't support reporting alerts. I'd have assumed
->>>> this to be more important than optimizing error handling, but that is just
->>>> my personal opinion.
->>>>
->>>> Thanks,
->>>> Guenter
->>>>
->>>>> Best regards,
->>>>> Konstantin Aladyshev
->>>>>
->>>>>
->>>>> On Tue, Apr 6, 2021 at 9:42 PM Guenter Roeck <linux@roeck-us.net <mailto:linux@roeck-us.net>> wrote:
->>>>>
->>>>>     On 4/6/21 11:16 AM, Konstantin Aladyshev wrote:
->>>>>     > SBTSI sensors don't work when the CPU is off.
->>>>>     > In this case every 'i2c_smbus_read_byte_data' function would fail
->>>>>     > by a timeout.
->>>>>     > Currently temp1_max/temp1_min file reads can cause two such timeouts
->>>>>     > for every read.
->>>>>     > Restructure code so there will be no more than one timeout for every
->>>>>     > read operation.
->>>>>     >
->>>>>     > Signed-off-by: Konstantin Aladyshev <aladyshev22@gmail.com <mailto:aladyshev22@gmail.com>>
->>>>>     > ---
->>>>>     > Changes in v2:
->>>>>     >   - Fix typo in a commit message
->>>>>     >   - Don't swap temp_int/temp_dec checks at the end of the 'sbtsi_read' function
->>>>>     >
->>>>>
->>>>>     This doesn't explain the reason for the extra read operation for
->>>>>     limits. Preventing a second read in error cases is not an argument
->>>>>     for adding an extra read for non-error cases.
->>>>>
->>>>>     Guenter
->>>>>
->>>>>     >  drivers/hwmon/sbtsi_temp.c | 55 +++++++++++++++++++-------------------
->>>>>     >  1 file changed, 27 insertions(+), 28 deletions(-)
->>>>>     >
->>>>>     > diff --git a/drivers/hwmon/sbtsi_temp.c b/drivers/hwmon/sbtsi_temp.c
->>>>>     > index e35357c48b8e..4ae48635bb31 100644
->>>>>     > --- a/drivers/hwmon/sbtsi_temp.c
->>>>>     > +++ b/drivers/hwmon/sbtsi_temp.c
->>>>>     > @@ -74,48 +74,47 @@ static int sbtsi_read(struct device *dev, enum hwmon_sensor_types type,
->>>>>     >                     u32 attr, int channel, long *val)
->>>>>     >  {
->>>>>     >       struct sbtsi_data *data = dev_get_drvdata(dev);
->>>>>     > +     u8 temp_int_reg, temp_dec_reg;
->>>>>     >       s32 temp_int, temp_dec;
->>>>>     >       int err;
->>>>>     >
->>>>>     >       switch (attr) {
->>>>>     >       case hwmon_temp_input:
->>>>>     > -             /*
->>>>>     > -              * ReadOrder bit specifies the reading order of integer and
->>>>>     > -              * decimal part of CPU temp for atomic reads. If bit == 0,
->>>>>     > -              * reading integer part triggers latching of the decimal part,
->>>>>     > -              * so integer part should be read first. If bit == 1, read
->>>>>     > -              * order should be reversed.
->>>>>     > -              */
->>>>>     > -             err = i2c_smbus_read_byte_data(data->client, SBTSI_REG_CONFIG);
->>>>>     > -             if (err < 0)
->>>>>     > -                     return err;
->>>>>     > -
->>>>>     > -             mutex_lock(&data->lock);
->>>>>     > -             if (err & BIT(SBTSI_CONFIG_READ_ORDER_SHIFT)) {
->>>>>     > -                     temp_dec = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_DEC);
->>>>>     > -                     temp_int = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_INT);
->>>>>     > -             } else {
->>>>>     > -                     temp_int = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_INT);
->>>>>     > -                     temp_dec = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_DEC);
->>>>>     > -             }
->>>>>     > -             mutex_unlock(&data->lock);
->>>>>     > +             temp_int_reg = SBTSI_REG_TEMP_INT;
->>>>>     > +             temp_dec_reg = SBTSI_REG_TEMP_DEC;
->>>>>     >               break;
->>>>>     >       case hwmon_temp_max:
->>>>>     > -             mutex_lock(&data->lock);
->>>>>     > -             temp_int = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_HIGH_INT);
->>>>>     > -             temp_dec = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_HIGH_DEC);
->>>>>     > -             mutex_unlock(&data->lock);
->>>>>     > +             temp_int_reg = SBTSI_REG_TEMP_HIGH_INT;
->>>>>     > +             temp_dec_reg = SBTSI_REG_TEMP_HIGH_DEC;
->>>>>     >               break;
->>>>>     >       case hwmon_temp_min:
->>>>>     > -             mutex_lock(&data->lock);
->>>>>     > -             temp_int = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_LOW_INT);
->>>>>     > -             temp_dec = i2c_smbus_read_byte_data(data->client, SBTSI_REG_TEMP_LOW_DEC);
->>>>>     > -             mutex_unlock(&data->lock);
->>>>>     > +             temp_int_reg = SBTSI_REG_TEMP_LOW_INT;
->>>>>     > +             temp_dec_reg = SBTSI_REG_TEMP_LOW_DEC;
->>>>>     >               break;
->>>>>     >       default:
->>>>>     >               return -EINVAL;
->>>>>     >       }
->>>>>     >
->>>>>     > +     /*
->>>>>     > +      * ReadOrder bit specifies the reading order of integer and
->>>>>     > +      * decimal part of CPU temp for atomic reads. If bit == 0,
->>>>>     > +      * reading integer part triggers latching of the decimal part,
->>>>>     > +      * so integer part should be read first. If bit == 1, read
->>>>>     > +      * order should be reversed.
->>>>>     > +      */
->>>>>     > +     err = i2c_smbus_read_byte_data(data->client, SBTSI_REG_CONFIG);
->>>>>     > +     if (err < 0)
->>>>>     > +             return err;
->>>>>     > +
->>>>>     > +     mutex_lock(&data->lock);
->>>>>     > +     if (err & BIT(SBTSI_CONFIG_READ_ORDER_SHIFT)) {
->>>>>     > +             temp_dec = i2c_smbus_read_byte_data(data->client, temp_dec_reg);
->>>>>     > +             temp_int = i2c_smbus_read_byte_data(data->client, temp_int_reg);
->>>>>     > +     } else {
->>>>>     > +             temp_int = i2c_smbus_read_byte_data(data->client, temp_int_reg);
->>>>>     > +             temp_dec = i2c_smbus_read_byte_data(data->client, temp_dec_reg);
->>>>>     > +     }
->>>>>     > +     mutex_unlock(&data->lock);
->>>>>     >
->>>>>     >       if (temp_int < 0)
->>>>>     >               return temp_int;
->>>>>     >
->>>>>
->>>>
->>
+> 
 
