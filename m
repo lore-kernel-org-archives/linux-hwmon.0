@@ -2,470 +2,482 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	MAILING_LIST_MULTI,PDS_BAD_THREAD_QP_64,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1960C433B4
-	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Apr 2021 03:44:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7D6EC433B4
+	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Apr 2021 07:30:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 67FE1610C7
-	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Apr 2021 03:44:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6F72F61057
+	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Apr 2021 07:30:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229514AbhDHDon (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 7 Apr 2021 23:44:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52182 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbhDHDon (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 7 Apr 2021 23:44:43 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0F2C061760;
-        Wed,  7 Apr 2021 20:44:31 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id i3so764926oik.7;
-        Wed, 07 Apr 2021 20:44:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=vjzflC2pyWC8bHhAoYYdc4oFYm8ALwnjjdtxo/FASFg=;
-        b=GgRrCTmqXPZDBeCsbbSHLuAV856olpXoizCxW2iBVvusDz5VDt5D+zQYxtxlGQyZ/j
-         re1O17aAP+3b1edlWraac4u13hlTdUbjEb0hlckeGrXZ9jibRCPEqKFOTBfoBXCQNJVR
-         DJJ4k/dohYfjttC2VrGgBZ7zK+1B9iKEf7OsLh/W59CLSJ6WnZLtEuoffuRCVta+uMet
-         4huPR8wsPKmHEcQKF+B0CeIcsepXbHg2fI9xl2/xKEjJbpOynxxoP6Ev2IvebM7AD45D
-         ABv2E8W9Yp97OqlC+a8+k23YvsufwKeU7fm5HRefrQ8ycs5Ogbdeqv9UcV43DXTJU0hE
-         3pgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=vjzflC2pyWC8bHhAoYYdc4oFYm8ALwnjjdtxo/FASFg=;
-        b=m53mvNAYKbTGMFTnAM0vbhAbtTokQoi6cNweFGHKUw+1HQkIDm1vUU2X7N4ox6I4HM
-         qCStVF1d3K/pYdre6FobgZgDKVmERMxf16QWSJHviIdHJDztYalzXW/jm6mICwyWec2w
-         Mn1iUD2+dSWJ7cyegT4cvuoo05x3iXk0pfR0zD5W0ae9rVTPqOdMZrNcJVGd+EEutiN/
-         Tnywz+0eHXdOPYkvm5EJ8L96E3J5cZ5PfeOyz6DHoTkYX8n487v2ub5Pr7kt78G5F/Cl
-         5hKfrH1seBPbtnUOEo48DMzJRLkOY37CWTdgU7jrnLuIxeFwydHvE8X8IU4WNZ5jwWyp
-         Sx7g==
-X-Gm-Message-State: AOAM532P3oey+P2OB326x5RMrfE8NuYzNTGvtXHqTH3IzQ+RIaknrOuN
-        kxWSpZgaqGxvVIfoyv4ezL89PJZFxYc=
-X-Google-Smtp-Source: ABdhPJz4in/qglj7Jc5fMXXek9sFPN1vmSkYKxELefFwLWhzuPJofUYFP8CNxAxQe7uWWRGKcF+p5Q==
-X-Received: by 2002:aca:4d4e:: with SMTP id a75mr4560222oib.107.1617853470492;
-        Wed, 07 Apr 2021 20:44:30 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s83sm4667971oif.43.2021.04.07.20.44.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Apr 2021 20:44:29 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v2] hwmon: Add driver for fsp-3y PSUs and PDUs
-To:     =?UTF-8?B?VsOhY2xhdiBLdWJlcm7DoXQ=?= <kubernat@cesnet.cz>
-Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20210329143833.1047539-1-kubernat@cesnet.cz>
- <20210408023427.650428-1-kubernat@cesnet.cz>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <11d33d66-b59e-3153-9233-447213d93171@roeck-us.net>
-Date:   Wed, 7 Apr 2021 20:44:28 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20210408023427.650428-1-kubernat@cesnet.cz>
-Content-Type: text/plain; charset=utf-8
+        id S230476AbhDHHaf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 8 Apr 2021 03:30:35 -0400
+Received: from mga03.intel.com ([134.134.136.65]:22808 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230381AbhDHHac (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 8 Apr 2021 03:30:32 -0400
+IronPort-SDR: 8BYlb2Gf7xX/12KjvlmkCXYK+tDPwH71GR9f8MhfIHpmhf10/flMWjeWuwNTrzuuLbLOjDhk3x
+ HH/5OqoWZ9uw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9947"; a="193524371"
+X-IronPort-AV: E=Sophos;i="5.82,205,1613462400"; 
+   d="scan'208";a="193524371"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2021 00:30:21 -0700
+IronPort-SDR: 1YpKBYZF3QxwIJkTYG4t8C9gMfzy9RzVxRrk6ZgyKVAIv+FjqGwSWBNIHmZOzR7SI2g1bAr5mU
+ E/a34sO401xA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,205,1613462400"; 
+   d="scan'208";a="598670998"
+Received: from fmsmsx605.amr.corp.intel.com ([10.18.126.85])
+  by orsmga005.jf.intel.com with ESMTP; 08 Apr 2021 00:30:20 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Thu, 8 Apr 2021 00:30:20 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Thu, 8 Apr 2021 00:30:19 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2106.2
+ via Frontend Transport; Thu, 8 Apr 2021 00:30:19 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.105)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2106.2; Thu, 8 Apr 2021 00:30:19 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BFZWaP9SDx9CL4Qyd2izxuxWkU8NzGjvWQZiDeAe5XFaS5JrQG04p1bXbbSPVUYXyAj0Ke4BOjSZPR+ATCdgP5W1AQs3KibUhOK2VvwhaQxd6vBYtMfKB6UMYAluLPK4fp3Uct+lDi+L6Ow33ftCHjDY5WLCFf61zQhbBwi3i3wCgtz4I8Bk+vd8rvjjJIBzWDAkzI9e8uDWjeVBY9TJK7eN5wbJq3/r9LCRHQwZ3cRZgB7buPtZRduJI6f0x/kL2HFLpV226Fc0lstWK6bMyF0j/0LLVzqnZkG6mN5TIfExz49YWtbd6/ff23EUwQT/tPoxaDX6a8LVfmGIJpg+YA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mO+v5+nyGndxh/MpM9FgQ1T3aB7+vOZPLt+NUZuZQ7s=;
+ b=Zc/s7Ism72Cpp4+KH6oYYYMPWYxRfhVinkLrUsLnoC28lT2sw0Df2HJAvH8iu82uL9j7WEXFY5FF1dxMYuX0F/0h3IYvFozUYxbwvqtNMpveitZzIJw4MmazFO+nS4p5wn846d1uZLHoAUIJHj3a7qX0nG1eZTdWbxeUYGTimj92gsWpH4a9loObKGDPnTMNeD+4s13f/4OPq8As60BF4YcgxbbLUNa4Ne0079lQ8SL9yD6yytex8P+21CsTJX6sA5gOTJxnlKg90Vm9hLemvFGGUkL+YAK2uvuUqQog9XpLB/zT5h6OtiTyXe7Jn4NdIyFPVR+L1JaQniD2OLwUlg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mO+v5+nyGndxh/MpM9FgQ1T3aB7+vOZPLt+NUZuZQ7s=;
+ b=T8l0/oO3xRkZxtK6msaYSKIsvuCPEwLfmFTr6IIx89NMGbdsdKbu7C7RGEJ8vpI2IYXqSeYkK56xYg5ZB54Kpi4W7Ska6ttHa8FLEYAG7afyWYnur8L+vFPM7uB7W0PB6Z2V29ftRwSWO6wCfKbK10VHHkoFSgkDNI7kCqLF+zo=
+Received: from DM6PR11MB3819.namprd11.prod.outlook.com (2603:10b6:5:13f::31)
+ by DM6PR11MB2890.namprd11.prod.outlook.com (2603:10b6:5:63::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3999.32; Thu, 8 Apr
+ 2021 07:30:15 +0000
+Received: from DM6PR11MB3819.namprd11.prod.outlook.com
+ ([fe80::a144:5e78:8a6a:8c25]) by DM6PR11MB3819.namprd11.prod.outlook.com
+ ([fe80::a144:5e78:8a6a:8c25%6]) with mapi id 15.20.3999.034; Thu, 8 Apr 2021
+ 07:30:15 +0000
+From:   "Wu, Hao" <hao.wu@intel.com>
+To:     Moritz Fischer <mdf@kernel.org>,
+        "matthew.gerlach@linux.intel.com" <matthew.gerlach@linux.intel.com>
+CC:     "trix@redhat.com" <trix@redhat.com>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Xu, Yilun" <yilun.xu@intel.com>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "russell.h.weight@linux.intel.com" <russell.h.weight@linux.intel.com>
+Subject: RE: [PATCH 2/3] fpga: dfl: Add DFL bus driver for Altera SPI Master
+Thread-Topic: [PATCH 2/3] fpga: dfl: Add DFL bus driver for Altera SPI Master
+Thread-Index: AQHXKnapzaN+e8jiOUasbNG/fZUbfKqmp0KAgAEBK4CAAAt/AIAChFHw
+Date:   Thu, 8 Apr 2021 07:30:15 +0000
+Message-ID: <DM6PR11MB3819E0FC4F735C72746CE54785749@DM6PR11MB3819.namprd11.prod.outlook.com>
+References: <20210405235301.187542-1-matthew.gerlach@linux.intel.com>
+ <20210405235301.187542-3-matthew.gerlach@linux.intel.com>
+ <YGuvFYvJTMPPm2Jy@epycbox.lan>
+ <alpine.DEB.2.22.394.2104060847030.208844@rhweight-WRK1>
+ <YGyQdN9uS/niyFDP@epycbox.lan>
+In-Reply-To: <YGyQdN9uS/niyFDP@epycbox.lan>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.5.1.3
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=intel.com;
+x-originating-ip: [192.55.46.54]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 6afc7263-5914-4b4e-3683-08d8fa60272c
+x-ms-traffictypediagnostic: DM6PR11MB2890:
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DM6PR11MB2890D2F8EEBFD8B604DC194385749@DM6PR11MB2890.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6108;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Z9tKcenNDtpneub5XlMW8U1456CWhgTcV9mxjG9qE6RXiTKuWMfIoRW2Q6mMl/p9D0xHwPND08aYz/DdQpWFbJqZjdEe+YuQFmHY2jP88WdDtT8UpJdgLcCR5mg0QlByQkceAzKi4sLbA3nCNlIN8KCDpxqPliLcrgVX4AtBPOmVXwY9zVgYbBUT1StvAT7QfSMUft5w3USrdhOIDWqgH7enzUh7W4d342Dbi7oWM1UNpKKjdLzRp1zbOGoPmgAQB0w/I0NbTk3k63J/PX9NL32J2yTUcfQ02D/+kYIaHU0TMA3mXrCbV7ChmmvHfutgU/feGPwxgPKXW23EljgFK8boKO+4pmQDmSHl41EeNx4p6eqosOWzWgys1ZVq2rsHDUWSpnVF7YAyf8TGT7H8YhvrTgoD7x16cioo2z5SG0dw3CWA8mccnAJ1vwbg/FxHP7PKTncvpNLe52hTCEXU5QdspcmBpfngv5kJDC3bVdtIfwJ+CAzbf6p0MriEhrFFg7Sa/BZPCmS2RLi/ToWysRdQBvxln/Az9UiMNjXsKs7QDdNGbXtDskSdU6fyq3B8EjV9N+qjqiu5f5+mObxPXGuTmnP+PFDMWKWUJYVFvFA4ao4Xj8URDn6zbQ7tc6P67gCf3GSIpAqKekqrylP3ygvOQuMi5k/BMPIsfxgb6jc=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3819.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(376002)(396003)(39860400002)(366004)(136003)(478600001)(52536014)(8676002)(38100700001)(7416002)(2906002)(26005)(86362001)(6506007)(186003)(8936002)(5660300002)(54906003)(9686003)(7696005)(110136005)(4326008)(30864003)(66946007)(66446008)(71200400001)(66476007)(64756008)(66556008)(55016002)(33656002)(316002)(76116006);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?9xcfm4CsgUgpA+oeIVZoMz3cjztxnnGbJZQ0DmYPdnGv2SEAOC2wD0ayjvGB?=
+ =?us-ascii?Q?J9RBr8gkaE20r8qvx7vS5L9cmrUTHY/9reNcu9BhKOD5A6hNRNdeO1weR8OT?=
+ =?us-ascii?Q?+sAI7IemN8mZd61gPvUNbRC/1DF4CmXKW27ua0J03IMldfmQuInU3wkqGCxk?=
+ =?us-ascii?Q?Ci8LtvwlnvfBj8l2jge6qv/XBhLhJ2sFKSBHfefw8jBSMFQtSHmPngXDCMQg?=
+ =?us-ascii?Q?m25FdAMDKQzmfyh6wiGJnpdB1k98d1Qe8Pnm8lkv3SQJ5yFivPdOf6K32A2m?=
+ =?us-ascii?Q?r9KpSSuH4I1nKWNxcxrS8t8bI8JkV3g8hVOw4bFvrdrcXVxKCAmPErZUNCkx?=
+ =?us-ascii?Q?APbSuC8t25BU6KHrFKELXOO0NlmKaUFePSi5z2iGfEt28cs1YSvfsK9C0Vyp?=
+ =?us-ascii?Q?YmyLMRg1DdrS/S7QfzyZPL8BKfUONiuj6+fAFeKbqS0tI5p102KPjE+EF+j1?=
+ =?us-ascii?Q?P96LKT1sfP6dGR9A6W8q7B1+Wxpm24FWxrkiYUekKgiXENxn6sOSIK7iZoYM?=
+ =?us-ascii?Q?1H6IefCjd/XIhlooH4JRXvTfy0kiX42RIPrjOv4i2u7GeTIgnPaDJ3REatW1?=
+ =?us-ascii?Q?zANKzK/K6a26ZjB9yMzuWT/8TmWViRW45Dbx37/mOR6pw5EVFkTEtg3fOk2Y?=
+ =?us-ascii?Q?8w7+KFKrAwMM50mqoP0r6qdllhCJBRSpa1a35wFk7rflOQFeyP7erSU8JPJs?=
+ =?us-ascii?Q?NHmW6OISvuJ74t4h8a/g4d2aXDhY3CYGEOP5lKtu3w09LHp7On0wS9B6rGEV?=
+ =?us-ascii?Q?zLJoCRq+cTfdTbMjLt35qTI48stGLUCM4kV0/a2VuRZaSQ9QAzx6+Z6s8b3J?=
+ =?us-ascii?Q?4An0JAe2SeW9gxDB8llQaIQBLXB1ESKwKszmwiQUpaKBaDYdJ819gkCSNSJ5?=
+ =?us-ascii?Q?ztzLWJfGN+QBcajJZ5Q6Fv24O4zTzYtIvd3ZaqXx44IAZnVclO6EJkAA2w5T?=
+ =?us-ascii?Q?sd+IhAFYieFW+taQd7UFTRQ4/ZsRnk8JXCID9IouBSuMTE7gWgpgNVOOHL3c?=
+ =?us-ascii?Q?/oYRz0WjGq8S+5sXcIBZYzfNkwEoHS/Uh8cotD6tXx+SpYDTE69r1rlzO0mp?=
+ =?us-ascii?Q?7AguLbryBDNzQZbK0hvrXqn6GvGkquhLjfgw+PV6gWRm3LlAx+McAstrQbNj?=
+ =?us-ascii?Q?mRughRZE+JgoJGIB+kNkHBF+nVpcA01evLGryYm2cZ6z3e5BjRQ+DLkqKo/Y?=
+ =?us-ascii?Q?VV8BbgU2N59C+ZBnpudZgvZgSlbnllH017dR0hz/qGeOTEJKOFDzORgxGCl4?=
+ =?us-ascii?Q?N/BXI9jHhdQZKzxv/ItA7TDORpGFyXC31vaOvucYERkN1pAUpskre2DXxfsF?=
+ =?us-ascii?Q?sbB0J8B+1mIOMrPS1MGky6NF?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3819.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6afc7263-5914-4b4e-3683-08d8fa60272c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Apr 2021 07:30:15.3089
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: AgoplmKLsWXmf7jr6X2aqfcixMZy9tQpF51zL6lYthLNnsHeiFPBWTp0apBl02V+gpuIrWpysp7Iuing0D5owA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB2890
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/7/21 7:34 PM, Václav Kubernát wrote:
-> This patch adds support for these devices:
-> - YH-5151E - the PDU
-> - YM-2151E - the PSU
-> 
-> The device datasheet says that the devices support PMBus 1.2, but in my
-> testing, a lot of the commands aren't supported and if they are, they
-> sometimes behave strangely or inconsistently. For example, writes to the
-> PAGE command requires using PEC, otherwise the write won't work and the
-> page won't switch, even though, the standard says that PEC is opiotnal.
-> On the other hand, writes the SMBALERT don't require PEC. Because of
-> this, the driver is mostly reverse engineered with the help of a tool
-> called pmbus_peek written by David Brownell (and later adopted by my
-> colleague Jan Kundrát).
-> 
-> The device also has some sort of a timing issue when switching pages,
-> which is explained further in the code.
-> 
-> Because of this, the driver support is limited. It exposes only the
-> values, that have been tested to work correctly.
-> 
-> Signed-off-by: Václav Kubernát <kubernat@cesnet.cz>
-> ---
->  Documentation/hwmon/fsp-3y.rst |  26 ++++
->  drivers/hwmon/pmbus/Kconfig    |  10 ++
->  drivers/hwmon/pmbus/Makefile   |   1 +
->  drivers/hwmon/pmbus/fsp-3y.c   | 217 +++++++++++++++++++++++++++++++++
->  4 files changed, 254 insertions(+)
->  create mode 100644 Documentation/hwmon/fsp-3y.rst
->  create mode 100644 drivers/hwmon/pmbus/fsp-3y.c
-> 
-> diff --git a/Documentation/hwmon/fsp-3y.rst b/Documentation/hwmon/fsp-3y.rst
-> new file mode 100644
-> index 000000000000..68a547021846
-> --- /dev/null
-> +++ b/Documentation/hwmon/fsp-3y.rst
-> @@ -0,0 +1,26 @@
-> +Kernel driver fsp3y
-> +======================
-> +Supported devices:
-> +  * 3Y POWER YH-5151E
-> +  * 3Y POWER YM-2151E
-> +
-> +Author: Václav Kubernát <kubernat@cesnet.cz>
-> +
-> +Description
-> +-----------
-> +This driver implements limited support for two 3Y POWER devices.
-> +
-> +Sysfs entries
-> +-------------
-> +in1_input            input voltage
-> +in2_input            12V output voltage
-> +in3_input            5V output voltage
-> +curr1_input          input current
-> +curr2_input          12V output current
-> +curr3_input          5V output current
-> +fan1_input           fan rpm
-> +temp1_input          temperature 1
-> +temp2_input          temperature 2
-> +temp3_input          temperature 3
-> +power1_input         input power
-> +power2_input         output power
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index 03606d4298a4..9d12d446396c 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -56,6 +56,16 @@ config SENSORS_BEL_PFE
->  	  This driver can also be built as a module. If so, the module will
->  	  be called bel-pfe.
->  
-> +config SENSORS_FSP_3Y
-> +	tristate "FSP/3Y-Power power supplies"
-> +	help
-> +	  If you say yes here you get hardware monitoring support for
-> +	  FSP/3Y-Power hot-swap power supplies.
-> +	  Supported models: YH-5151E, YM-2151E
-> +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called fsp-3y.
-> +
->  config SENSORS_IBM_CFFPS
->  	tristate "IBM Common Form Factor Power Supply"
->  	depends on LEDS_CLASS
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index 6a4ba0fdc1db..bfe218ad898f 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -8,6 +8,7 @@ obj-$(CONFIG_SENSORS_PMBUS)	+= pmbus.o
->  obj-$(CONFIG_SENSORS_ADM1266)	+= adm1266.o
->  obj-$(CONFIG_SENSORS_ADM1275)	+= adm1275.o
->  obj-$(CONFIG_SENSORS_BEL_PFE)	+= bel-pfe.o
-> +obj-$(CONFIG_SENSORS_FSP_3Y)	+= fsp-3y.o
->  obj-$(CONFIG_SENSORS_IBM_CFFPS)	+= ibm-cffps.o
->  obj-$(CONFIG_SENSORS_INSPUR_IPSPS) += inspur-ipsps.o
->  obj-$(CONFIG_SENSORS_IR35221)	+= ir35221.o
-> diff --git a/drivers/hwmon/pmbus/fsp-3y.c b/drivers/hwmon/pmbus/fsp-3y.c
-> new file mode 100644
-> index 000000000000..2c165e034fa8
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/fsp-3y.c
-> @@ -0,0 +1,217 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Hardware monitoring driver for FSP 3Y-Power PSUs
-> + *
-> + * Copyright (c) 2021 Václav Kubernát, CESNET
-> + */
-> +
-> +#include <linux/delay.h>
-> +#include <linux/i2c.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include "pmbus.h"
-> +
-> +#define YM2151_PAGE_12V_LOG	0x00
-> +#define YM2151_PAGE_12V_REAL	0x00
-> +#define YM2151_PAGE_5VSB_LOG	0x01
-> +#define YM2151_PAGE_5VSB_REAL	0x20
-> +#define YH5151E_PAGE_12V_LOG	0x00
-> +#define YH5151E_PAGE_12V_REAL	0x00
-> +#define YH5151E_PAGE_5V_LOG	0x01
-> +#define YH5151E_PAGE_5V_REAL	0x10
-> +#define YH5151E_PAGE_3V3_LOG	0x02
-> +#define YH5151E_PAGE_3V3_REAL	0x11
-> +
-> +enum chips {
-> +	ym2151e,
-> +	yh5151e
-> +};
-> +
-> +struct fsp3y_data {
-> +	struct pmbus_driver_info info;
-> +	enum chips chip;
-> +	int page;
-> +};
-> +
-> +#define to_fsp3y_data(x) container_of(x, struct fsp3y_data, info)
-> +
-> +static int page_log_to_page_real(int page_log, enum chips chip)
-> +{
-> +	switch (chip) {
-> +	case ym2151e:
-> +		switch (page_log) {
-> +		case YM2151_PAGE_12V_LOG:
-> +			return YM2151_PAGE_12V_REAL;
-> +		case YM2151_PAGE_5VSB_LOG:
-> +			return YM2151_PAGE_5VSB_REAL;
-> +		}
-> +		return -1;
-> +	case yh5151e:
-> +		switch (page_log) {
-> +		case YH5151E_PAGE_12V_LOG:
-> +			return YH5151E_PAGE_12V_REAL;
-> +		case YH5151E_PAGE_5V_LOG:
-> +			return YH5151E_PAGE_5V_LOG;
-> +		case YH5151E_PAGE_3V3_LOG:
-> +			return YH5151E_PAGE_3V3_REAL;
-> +		}
-> +		return -1;
-> +	}
-> +
-> +	return -1;
-> +}
-> +
-> +static int set_page(struct i2c_client *client, int page_log)
-> +{
-> +	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-> +	struct fsp3y_data *data = to_fsp3y_data(info);
-> +	int rv;
-> +	int page_real = page_log_to_page_real(page_log, data->chip);
-> +
-> +	if (page_log < 0)
-> +		return 0;
-> +
-I am quite sure this should be
+> > On Mon, 5 Apr 2021, Moritz Fischer wrote:
+> >
+> > > Hi Matthew,
+> > >
+> > > On Mon, Apr 05, 2021 at 04:53:00PM -0700,
+> matthew.gerlach@linux.intel.com wrote:
+> > > > From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> > > >
+> > > > This patch adds DFL bus driver for the Altera SPI Master
+> > > > controller.  The SPI master is connected to an Intel SPI Slave to
+> > > > Avalon Master Bridge, inside an Intel MAX10 BMC Chip.
+> > > >
+> > > > Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> > > > ---
+> > > >  drivers/fpga/Kconfig          |   9 ++
+> > > >  drivers/fpga/Makefile         |   1 +
+> > > >  drivers/fpga/dfl-spi-altera.c | 221
+> ++++++++++++++++++++++++++++++++++++++++++
+> > > >  3 files changed, 231 insertions(+)
+> > > >  create mode 100644 drivers/fpga/dfl-spi-altera.c
+> > > >
+> > > > diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+> > > > index d591dd9..0a86994 100644
+> > > > --- a/drivers/fpga/Kconfig
+> > > > +++ b/drivers/fpga/Kconfig
+> > > > @@ -210,6 +210,15 @@ config FPGA_DFL_NIOS_INTEL_PAC_N3000
+> > > >  	  the card. It also instantiates the SPI master (spi-altera) for
+> > > >  	  the card's BMC (Board Management Controller).
+> > > >
+> > > > +config FPGA_DFL_SPI_ALTERA
+> > > > +	tristate "FPGA DFL Altera SPI Master Driver"
+> > > > +	depends on FPGA_DFL
+> > > > +	select REGMAP
+> > > > +	help
+> > > > +	  This is a DFL bus driver for the Altera SPI master controller.
+> > > > +	  The SPI master is connected to a SPI slave to Avalon Master
+> > > > +	  bridge in a Intel MAX BMC.
+> > > > +
+> > > >  config FPGA_DFL_PCI
+> > > >  	tristate "FPGA DFL PCIe Device Driver"
+> > > >  	depends on PCI && FPGA_DFL
+> > > > diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
+> > > > index 18dc9885..58a42ad 100644
+> > > > --- a/drivers/fpga/Makefile
+> > > > +++ b/drivers/fpga/Makefile
+> > > > @@ -45,6 +45,7 @@ dfl-afu-objs :=3D dfl-afu-main.o dfl-afu-region.o=
+ dfl-
+> afu-dma-region.o
+> > > >  dfl-afu-objs +=3D dfl-afu-error.o
+> > > >
+> > > >  obj-$(CONFIG_FPGA_DFL_NIOS_INTEL_PAC_N3000)	+=3D dfl-n3000-
+> nios.o
+> > > > +obj-$(CONFIG_FPGA_DFL_SPI_ALTERA)	+=3D dfl-spi-altera.o
+> > > >
+> > > >  # Drivers for FPGAs which implement DFL
+> > > >  obj-$(CONFIG_FPGA_DFL_PCI)		+=3D dfl-pci.o
+> > > > diff --git a/drivers/fpga/dfl-spi-altera.c b/drivers/fpga/dfl-spi-a=
+ltera.c
+> > > > new file mode 100644
+> > > > index 0000000..9bec25fd
+> > > > --- /dev/null
+> > > > +++ b/drivers/fpga/dfl-spi-altera.c
+> > > > @@ -0,0 +1,221 @@
+> > > > +// SPDX-License-Identifier: GPL-2.0
+> > > > +/*
+> > > > + * DFL bus driver for Altera SPI Master
+> > > > + *
+> > > > + * Copyright (C) 2020 Intel Corporation, Inc.
+> > > > + *
+> > > > + * Authors:
+> > > > + *   Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> > > > + */
+> > > > +
+> > > > +#include <linux/types.h>
+> > > > +#include <linux/kernel.h>
+> > > > +#include <linux/module.h>
+> > > > +#include <linux/stddef.h>
+> > > > +#include <linux/errno.h>
+> > > > +#include <linux/platform_device.h>
+> > > > +#include <linux/io.h>
+> > > > +#include <linux/bitfield.h>
+> > > > +#include <linux/io-64-nonatomic-lo-hi.h>
+> > > > +#include <linux/regmap.h>
+> > > > +#include <linux/spi/spi.h>
+> > > > +#include <linux/spi/altera.h>
+> > > > +#include <linux/dfl.h>
+> > > > +
+> > > > +struct dfl_altera_spi {
+> > > > +	void __iomem *base;
+> > > > +	struct regmap *regmap;
+> > > > +	struct device *dev;
+> > > > +	struct platform_device *altr_spi;
+> > > > +};
+> > > > +
+> > > > +#define SPI_CORE_PARAMETER      0x8
+> > > > +#define SHIFT_MODE              BIT_ULL(1)
+> > > > +#define SHIFT_MODE_MSB          0
+> > > > +#define SHIFT_MODE_LSB          1
+> > > > +#define DATA_WIDTH              GENMASK_ULL(7, 2)
+> > > > +#define NUM_CHIPSELECT          GENMASK_ULL(13, 8)
+> > > > +#define CLK_POLARITY            BIT_ULL(14)
+> > > > +#define CLK_PHASE               BIT_ULL(15)
+> > > > +#define PERIPHERAL_ID           GENMASK_ULL(47, 32)
+> > > > +#define SPI_CLK                 GENMASK_ULL(31, 22)
+> > > > +#define SPI_INDIRECT_ACC_OFST   0x10
+> > > > +
+> > > > +#define INDIRECT_ADDR           (SPI_INDIRECT_ACC_OFST+0x0)
+> > > > +#define INDIRECT_WR             BIT_ULL(8)
+> > > > +#define INDIRECT_RD             BIT_ULL(9)
+> > > > +#define INDIRECT_RD_DATA        (SPI_INDIRECT_ACC_OFST+0x8)
+> > > > +#define INDIRECT_DATA_MASK      GENMASK_ULL(31, 0)
+> > > > +#define INDIRECT_DEBUG          BIT_ULL(32)
+> > > > +#define INDIRECT_WR_DATA        (SPI_INDIRECT_ACC_OFST+0x10)
+> > > > +#define INDIRECT_TIMEOUT        10000
+> > > > +
+> > > > +static int indirect_bus_reg_read(void *context, unsigned int reg,
+> > > > +				 unsigned int *val)
+> > > > +{
+> > > > +	struct dfl_altera_spi *aspi =3D context;
+> > > > +	void __iomem *base =3D aspi->base;
+> > > > +	int loops;
+> > > > +	u64 v;
+> > > > +
+> > > > +	writeq((reg >> 2) | INDIRECT_RD, base + INDIRECT_ADDR);
+> > > > +
+> > > > +	loops =3D 0;
+> > > > +	while ((readq(base + INDIRECT_ADDR) & INDIRECT_RD) &&
+> > > > +	       (loops++ < INDIRECT_TIMEOUT))
+> > > > +		cpu_relax();
+> > > > +
+> > > > +	if (loops >=3D INDIRECT_TIMEOUT) {
+> > > > +		pr_err("%s timed out %d\n", __func__, loops);
+> > > > +		return -ETIME;
+> > > > +	}
+> > > > +
+> > > > +	v =3D readq(base + INDIRECT_RD_DATA);
+> > > > +
+> > > > +	*val =3D v & INDIRECT_DATA_MASK;
+> > > > +
+> > > > +	return 0;
+> > > > +}
+> > > > +
+> > > > +static int indirect_bus_reg_write(void *context, unsigned int reg,
+> > > > +				  unsigned int val)
+> > > > +{
+> > > > +	struct dfl_altera_spi *aspi =3D context;
+> > > > +	void __iomem *base =3D aspi->base;
+> > > > +	int loops;
+> > > > +
+> > > > +	writeq(val, base + INDIRECT_WR_DATA);
+> > > > +	writeq((reg >> 2) | INDIRECT_WR, base + INDIRECT_ADDR);
+> > > > +
+> > > > +	loops =3D 0;
+> > > > +	while ((readq(base + INDIRECT_ADDR) & INDIRECT_WR) &&
+> > > > +	       (loops++ < INDIRECT_TIMEOUT))
+> > > > +		cpu_relax();
+> > > > +
+> > > > +	if (loops >=3D INDIRECT_TIMEOUT) {
+> > > > +		pr_err("%s timed out %d\n", __func__, loops);
+> > > > +		return -ETIME;
+> > > > +	}
+> > > > +	return 0;
+> > > > +}
+> > > > +
+> > > > +static const struct regmap_config indirect_regbus_cfg =3D {
+> > > > +	.reg_bits =3D 32,
+> > > > +	.reg_stride =3D 4,
+> > > > +	.val_bits =3D 32,
+> > > > +	.fast_io =3D true,
+> > > > +
+> > > > +	.reg_write =3D indirect_bus_reg_write,
+> > > > +	.reg_read =3D indirect_bus_reg_read,
+> > > > +};
+> > > > +
+> > > > +static struct spi_board_info m10_bmc_info =3D {
+> > > > +	.modalias =3D "m10-d5005",
+> > > > +	.max_speed_hz =3D 12500000,
+> > > > +	.bus_num =3D 0,
+> > > > +	.chip_select =3D 0,
+> > > > +};
+> > > > +
+> > > > +static struct platform_device *create_cntrl(struct device *dev,
+> > > > +					    void __iomem *base,
+> > > > +					    struct spi_board_info *m10_info)
+> > > > +{
+> > > > +	struct altera_spi_platform_data pdata;
+> > > > +	struct platform_device_info pdevinfo;
+> > > > +	u64 v;
+> > > > +
+> > > > +	v =3D readq(base + SPI_CORE_PARAMETER);
+> > > > +
+> > > > +	memset(&pdata, 0, sizeof(pdata));
+> > > > +	pdata.mode_bits =3D SPI_CS_HIGH;
+> > > > +	if (FIELD_GET(CLK_POLARITY, v))
+> > > > +		pdata.mode_bits |=3D SPI_CPOL;
+> > > > +	if (FIELD_GET(CLK_PHASE, v))
+> > > > +		pdata.mode_bits |=3D SPI_CPHA;
+> > > > +
+> > > > +	pdata.num_chipselect =3D FIELD_GET(NUM_CHIPSELECT, v);
+> > > > +	pdata.bits_per_word_mask =3D
+> > > > +		SPI_BPW_RANGE_MASK(1, FIELD_GET(DATA_WIDTH, v));
+> > > > +
+> > > > +	pdata.num_devices =3D 1;
+> > > > +	pdata.devices =3D m10_info;
+> > > > +
+> > > > +	dev_dbg(dev, "%s cs %u bpm 0x%x mode 0x%x\n", __func__,
+> > > > +		pdata.num_chipselect, pdata.bits_per_word_mask,
+> > > > +		pdata.mode_bits);
+> > > > +
+> > > > +	memset(&pdevinfo, 0, sizeof(pdevinfo));
+> > > > +
+> > > > +	pdevinfo.name =3D "subdev_spi_altera";
+> > > > +	pdevinfo.id =3D PLATFORM_DEVID_AUTO;
+> > > > +	pdevinfo.parent =3D dev;
+> > > > +	pdevinfo.data =3D &pdata;
+> > > > +	pdevinfo.size_data =3D sizeof(pdata);
+> > > > +
+> > > > +	return platform_device_register_full(&pdevinfo);
+> > >
+> > > Should this be a SPI driver? I think looking at the UIO case we had
+> > > decided against this pattern?
+> >
+> > This driver is similar in function to drivers/fpga/dfl-n3000-nios.c whi=
+ch
+> > uses this design pattern.  Is it okay to keep this design pattern for
+> > consistency?
+> >
+> >
+> > >
+> > > > +}
+> > > > +static int dfl_spi_altera_probe(struct dfl_device *dfl_dev)
+> > > > +{
+> > > > +	struct device *dev =3D &dfl_dev->dev;
+> > > > +	struct dfl_altera_spi *aspi;
+> > > > +
+> > > > +	aspi =3D devm_kzalloc(dev, sizeof(*aspi), GFP_KERNEL);
+> > > > +
+> > > > +	if (!aspi)
+> > > > +		return -ENOMEM;
+> > > > +
+> > > > +	dev_set_drvdata(dev, aspi);
+> > > > +
+> > > > +	aspi->dev =3D dev;
+> > > > +
+> > > > +	aspi->base =3D devm_ioremap_resource(dev, &dfl_dev->mmio_res);
+> > > > +
+> > > > +	if (IS_ERR(aspi->base)) {
+> > > > +		dev_err(dev, "%s get mem resource fail!\n", __func__);
+> > > > +		return PTR_ERR(aspi->base);
+> > > > +	}
+> > > > +
+> > > > +	aspi->regmap =3D devm_regmap_init(dev, NULL, aspi,
+> &indirect_regbus_cfg);
+> > > > +	if (IS_ERR(aspi->regmap))
+> > > > +		return PTR_ERR(aspi->regmap);
+> > > > +
+> > > > +	aspi->altr_spi =3D create_cntrl(dev, aspi->base, &m10_bmc_info);
+> > > > +
+> > > > +	if (IS_ERR(aspi->altr_spi)) {
+> > > > +		dev_err(dev, "%s failed to create spi platform driver\n",
+> > > > +			__func__);
+> > > > +		return PTR_ERR(aspi->base);
+> > > > +	}
+> > > > +
+> > > > +	return 0;
+> > > > +}
+> > > > +
+> > > > +static void dfl_spi_altera_remove(struct dfl_device *dfl_dev)
+> > > > +{
+> > > > +	struct dfl_altera_spi *aspi =3D dev_get_drvdata(&dfl_dev->dev);
+> > > > +
+> > > > +	platform_device_unregister(aspi->altr_spi);
+> > > > +}
+> > > > +
+> > > > +#define FME_FEATURE_ID_MAX10_SPI        0xe
+> > > > +
+> > > > +static const struct dfl_device_id dfl_spi_altera_ids[] =3D {
+> > > > +	{ FME_ID, FME_FEATURE_ID_MAX10_SPI },
+> > > > +	{ }
+> > > > +};
+> > >
+> > > Maybe you can extend the Altera SPI driver with this part?
+> >
+> > The file, drivers/spi/spi-altera.c, already has platform MODULE_ relate=
+d
+> > code.  Wouldn't moving this code to that file produce conflicts?
+>=20
+> I've seen other drivers support multiple busses, so it should be
+> possible, there might be nuances I'm missing in my brief look at this,
+> though.
+>=20
+> I think one of them would be MODULE_DEVICE_TABLE(platform, ...)
+> and the other one MODULE_DEVICE_TABLE(dfl, ...)
+>=20
+> See drivers/i2c/busses/i2c-designware-platdrv.c for an example (though
+> they might be guarding against what you describe with CONFIG_OF vs
+> CONFIG_ACPI)
+>=20
+> If that doesn't work we could split it up into
+>=20
+> altera-spi-plat.c and altera-spi-dfl.c and altera-spi-core.c
+> or something of that sort?
+>=20
+> My point being, now that we have a bus, let's use it and develop drivers
+> according to the Linux device model where possible :)
 
-	if (page_real < 0)
-		return 0;
+Agree. This does make sense from my side too. DFL core provides the mechani=
+sm
+to enumerate different IPs on FPGA, but each function driver needs to go to
+related subsystem for review.  : )
 
-I would suggest to return an error code, though; if page_log_to_page_real()
-indeed returns an error, the selected page is wrong, and the reported data
-would be pretty much random. That should not really happen, but since you check
-for the error code here you might as well do it right. Best would be to have
-page_log_to_page_real() return, say, -EINVAL on error and implement the check
-as follows.
+I understand that for FPGA case, it may have some additional logics for spe=
+cific
+purposes based on common altera spi master IP, then additional code for=20
+a specific product still can be put into altera-spi-xxxx.c or altera-spi-df=
+l-xxxx.c
 
-	if (page_real < 0)
-		return page_real;
+Thanks
+Hao
 
-> +	if (data->page != page_real) {
-> +		rv = pmbus_set_page(client, page_real, 0xff);
-> +		if (rv < 0)
-> +			return rv;
-> +
-> +		data->page = page_real;
-> +
-> +		/* Testing showed that the device has a timing issue. After
-> +		 * setting a page, it takes a while, before the device actually
-> +		 * gives the correct values from the correct page. 20 ms was
-> +		 * tested to be enough to not give wrong values (15 ms wasn't
-> +		 * enough)
-> +		 */
-> +		usleep_range(20000, 30000);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int fsp3y_read_byte_data(struct i2c_client *client, int page, int reg)
-> +{
-> +	int rv;
-> +
-> +	rv = set_page(client, page);
-> +	if (rv < 0)
-> +		return rv;
-> +
-> +	return i2c_smbus_read_byte_data(client, reg);
-> +}
-> +
-> +static int fsp3y_read_word_data(struct i2c_client *client, int page, int phase, int reg)
-> +{
-> +	int rv;
-> +
-> +	switch (reg) {
-> +	case PMBUS_READ_FAN_SPEED_1:
-> +	case PMBUS_READ_IIN:
-> +	case PMBUS_READ_IOUT:
-> +	case PMBUS_READ_PIN:
-> +	case PMBUS_READ_POUT:
-> +	case PMBUS_READ_TEMPERATURE_1:
-> +	case PMBUS_READ_TEMPERATURE_2:
-> +	case PMBUS_READ_TEMPERATURE_3:
-> +	case PMBUS_READ_VIN:
-> +	case PMBUS_READ_VOUT:
-> +	case PMBUS_STATUS_WORD:
-> +		break;
-> +	default:
-> +		return -ENXIO;
-> +	}
-> +
-> +	rv = set_page(client, page);
-> +	if (rv < 0)
-> +		return rv;
-> +
-> +	return i2c_smbus_read_word_data(client, reg);
-> +}
-> +
-> +struct pmbus_driver_info fsp3y_info[] = {
-> +	[ym2151e] = {
-> +		.pages = 2,
-> +		.func[YM2151_PAGE_12V_LOG] =
-> +			PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
-> +			PMBUS_HAVE_PIN | PMBUS_HAVE_POUT  |
-> +			PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2 |
-> +			PMBUS_HAVE_VIN | PMBUS_HAVE_IIN |
-> +			PMBUS_HAVE_FAN12,
-> +		.func[YM2151_PAGE_5VSB_LOG] =
-> +			PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT,
-> +			PMBUS_HAVE_IIN,
-> +		.read_word_data = fsp3y_read_word_data,
-> +		.read_byte_data = fsp3y_read_byte_data,
-> +	},
-> +	[yh5151e] = {
-> +		.pages = 3,
-> +		.func[YH5151E_PAGE_12V_LOG] =
-> +			PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
-> +			PMBUS_HAVE_POUT  |
-> +			PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2 | PMBUS_HAVE_TEMP3,
-> +		.func[YH5151E_PAGE_5V_LOG] =
-> +			PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
-> +			PMBUS_HAVE_POUT,
-> +		.func[YH5151E_PAGE_3V3_LOG] =
-> +			PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
-> +			PMBUS_HAVE_POUT,
-> +		.read_word_data = fsp3y_read_word_data,
-> +		.read_byte_data = fsp3y_read_byte_data,
-> +	}
-> +};
-> +
-> +static int fsp3y_probe(struct i2c_client *client)
-> +{
-> +	struct fsp3y_data *data;
-> +	int rv;
-> +	u8 buf[I2C_SMBUS_BLOCK_MAX];
-> +
-> +	data = devm_kzalloc(&client->dev, sizeof(struct fsp3y_data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	rv = i2c_smbus_read_byte_data(client, PMBUS_PAGE);
-> +	if (rv < 0)
-> +		return rv;
-> +	data->page = rv;
-> +
-> +	rv = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, buf);
-> +	if (rv < 0)
-> +		return rv;
-> +	if (rv != 8)
-> +		return -ENODEV;
-> +
-> +	if (!strncmp(buf, "YM-2151E", strlen("YM-2151E")))
-> +		data->chip = ym2151e;
-> +	else if (!strncmp(buf, "YH-5151E", strlen("YH-5151E")))
-> +		data->chip = yh5151e;
-> +	else
-> +		return -ENODEV;
-> +
-> +	data->info = fsp3y_info[data->chip];
-> +
-> +	return pmbus_do_probe(client, &data->info);
-> +}
-> +
-> +static const struct i2c_device_id pmbus_id[] = {
-> +	{"fsp3y", 0},
-
-Normally you would have something like
-
-	{"ym2151e", ym2151e},
-	{"yh5151e", yh5151e},
-
-to match specific supplies. The probe function should then warn
-if there is a mismatch. See other pmbus drivers for examples.
-
-Guenter
-
-> +	{}
-> +};
-> +
-> +MODULE_DEVICE_TABLE(i2c, pmbus_id);
-> +
-> +/* This is the driver that will be inserted */
-> +static struct i2c_driver fsp3y_driver = {
-> +	.driver = {
-> +		   .name = "fsp3y",
-> +		   },
-> +	.probe_new = fsp3y_probe,
-> +	.id_table = pmbus_id
-> +};
-> +
-> +module_i2c_driver(fsp3y_driver);
-> +
-> +MODULE_AUTHOR("Václav Kubernát");
-> +MODULE_DESCRIPTION("PMBus driver for FSP/3Y-Power power supplies");
-> +MODULE_LICENSE("GPL");
-> 
-
+>=20
+> Cheers,
+> Moritz
