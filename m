@@ -2,247 +2,383 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 010FAC433ED
-	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Apr 2021 12:15:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4E6DC433ED
+	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Apr 2021 02:35:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C0C3661042
-	for <linux-hwmon@archiver.kernel.org>; Wed,  7 Apr 2021 12:15:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A660B610F8
+	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Apr 2021 02:35:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352071AbhDGMPg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 7 Apr 2021 08:15:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46568 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234542AbhDGMPe (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 7 Apr 2021 08:15:34 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86621C061756;
-        Wed,  7 Apr 2021 05:15:24 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id m13so18500808oiw.13;
-        Wed, 07 Apr 2021 05:15:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=X46wYGgERGWtFUFMoQTCYrTkwk/QDw/vSdYLKa9FS1g=;
-        b=p11ZjmbHqdldMKTtphZYW0A6SLeVRnWzYgza6U9UehEhcLpa7n+XlU0peLdUTZiEWB
-         PBAzFhIRYMEWxFOLHBE8wTVIff1J2bHUT8e85s2oZL9rtmZQdmMgy3b7TysEhGWwHK2q
-         ZUzcWKq4j0Fpw+EgIvcUYKgrTePsJZ3mrRmmyP9cEmw8p2eAw7Y1L/xiu8FH6kBMI+8O
-         88PudxLBx/2jE559SmKmKPyHcFEMc4dbHjA+/FnMbzSzXsS5zO7gfLR671s5DeslIPMx
-         dST1XDN6bo7ygDWc0i0p0dWjSXCydEtuoS0ikZwqTQ8PoME/RgHErEa78Xqwh3fVDT2x
-         CXFQ==
+        id S229510AbhDHCf6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 7 Apr 2021 22:35:58 -0400
+Received: from mail-wr1-f48.google.com ([209.85.221.48]:47020 "EHLO
+        mail-wr1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229505AbhDHCf6 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 7 Apr 2021 22:35:58 -0400
+Received: by mail-wr1-f48.google.com with SMTP id a12so373514wrq.13;
+        Wed, 07 Apr 2021 19:35:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=X46wYGgERGWtFUFMoQTCYrTkwk/QDw/vSdYLKa9FS1g=;
-        b=iok2bwLlweuyU0D7Q2csHkHBMcZpgK2LB+lI8hBU/1xeEFpxi6IL+MgPIyIjDfKDX+
-         Xb8x4g+thlV+whoT/k45+nI0ZkcSb6swckS3Xrahq9ah3GP7M/yRLHJWXH5rLKivrC52
-         UsFdLx9Q4mi1Wibv5VhWk+JT/rmBcRDWWeg7HB0p1D0KAlGD83XHDBcHLvQaN2lYP9lp
-         yYISGSlA88VafiHUwmbQlvKF+GX1OhYv6Pz+NJjcTDkjphalL9cTwNCiX3OHwXbADhbY
-         S7Gi7ft04YEmaE6n1duQErKc7TT+7vUIFa/CugZ5rwSqdEeTY84Au9LkomsGC96NlpDr
-         Q5Zg==
-X-Gm-Message-State: AOAM5302xWH+OsW8kOH7BukTEJ68KVB8ayZoR+jtCBj7FO+xHSFH0ePj
-        Wvp2CtZKu5tR8vs9lU9q9SdfHvDYsx4=
-X-Google-Smtp-Source: ABdhPJyM7woO7fL7ogf7HacLA8rrZFOXScexRkYOvjb0KhXvYs9PYut3VFWrj8xFe2pfuye1s4S7rA==
-X-Received: by 2002:aca:37c3:: with SMTP id e186mr2043392oia.111.1617797723677;
-        Wed, 07 Apr 2021 05:15:23 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i4sm4175868oik.21.2021.04.07.05.15.21
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=diAtKTDNhqJiH3/HVm2R5WPwEeu0Z2200Qio/KpR5PU=;
+        b=WN9+zDmMVrqr2ZcK4jeAtCE+Yjl2baKsryhve6Eu+/JjHRWCWP3MGHL+xA04G80oo1
+         nrrOQWSkBC+Aca/PENF5ixnWb07MjhwHYY0OfdqgaiNQaNXf1iuHtrfGwBO26lt/Mg6Z
+         AvC72gJZ51gIPASNbBaUZc+97ZYqwVIPR51Hx3GA/zrVHxDTz544bo/NMjzHnvmEqa1G
+         DHgQkL0G5pJxHHxr1huyRvSP8e0XzudeiKC8RwldvgHE1fSRDBaT3YfUJTd5zNcR6/e3
+         tI3pluaubLLhYLOqqT50GgX3jzmktXSnjtos4bgtYkf+xI0JQUZrocJOnksRUdpJPptK
+         FltQ==
+X-Gm-Message-State: AOAM532sOnokS2MdyyedZNyIQ5yooX2XNi+5jmSW5qK5hQgUvEHy95dJ
+        sVDfCsc/i+p7dFG+3rqZVnk=
+X-Google-Smtp-Source: ABdhPJyTOKEU3oy8+vV2D5KXYtnrIcWNtekcgkgsx825HXELvPl+8R4bZLL+4FzSznYIYF4r0EYCug==
+X-Received: by 2002:adf:edd2:: with SMTP id v18mr8002903wro.305.1617849346469;
+        Wed, 07 Apr 2021 19:35:46 -0700 (PDT)
+Received: from localhost ([2a02:8308:387:c900:a7b5:b859:9449:c07b])
+        by smtp.gmail.com with ESMTPSA id c16sm52345386wrs.81.2021.04.07.19.35.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Apr 2021 05:15:23 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v2 07/19] dt-bindings: fix references for iio-bindings.txt
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Artur Rojek <contact@artur-rojek.eu>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Wed, 07 Apr 2021 19:35:45 -0700 (PDT)
+From:   =?UTF-8?q?V=C3=A1clav=20Kubern=C3=A1t?= <kubernat@cesnet.cz>
+Cc:     =?UTF-8?q?V=C3=A1clav=20Kubern=C3=A1t?= <kubernat@cesnet.cz>,
         Jean Delvare <jdelvare@suse.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>, devicetree@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <cover.1617783062.git.mchehab+huawei@kernel.org>
- <c4e3cfcc666552084df5155c4f3957134b72ef7a.1617783062.git.mchehab+huawei@kernel.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <ad7e53b8-3d43-13d9-1f3e-5393201c1740@roeck-us.net>
-Date:   Wed, 7 Apr 2021 05:15:20 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] hwmon: Add driver for fsp-3y PSUs and PDUs
+Date:   Thu,  8 Apr 2021 04:34:26 +0200
+Message-Id: <20210408023427.650428-1-kubernat@cesnet.cz>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210329143833.1047539-1-kubernat@cesnet.cz>
+References: <20210329143833.1047539-1-kubernat@cesnet.cz>
 MIME-Version: 1.0
-In-Reply-To: <c4e3cfcc666552084df5155c4f3957134b72ef7a.1617783062.git.mchehab+huawei@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/7/21 1:20 AM, Mauro Carvalho Chehab wrote:
-> The iio-bindings.txt was converted into two files and merged
-> at the dt-schema git tree at:
-> 
-> 	https://github.com/devicetree-org/dt-schema
-> 
-> Yet, some documents still refer to the old file. Fix their
-> references, in order to point to the right URL.
-> 
-> Fixes: dba91f82d580 ("dt-bindings:iio:iio-binding.txt Drop file as content now in dt-schema")
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> ---
->  Documentation/devicetree/bindings/hwmon/ntc_thermistor.txt   | 2 +-
+This patch adds support for these devices:
+- YH-5151E - the PDU
+- YM-2151E - the PSU
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+The device datasheet says that the devices support PMBus 1.2, but in my
+testing, a lot of the commands aren't supported and if they are, they
+sometimes behave strangely or inconsistently. For example, writes to the
+PAGE command requires using PEC, otherwise the write won't work and the
+page won't switch, even though, the standard says that PEC is opiotnal.
+On the other hand, writes the SMBALERT don't require PEC. Because of
+this, the driver is mostly reverse engineered with the help of a tool
+called pmbus_peek written by David Brownell (and later adopted by my
+colleague Jan Kundrát).
 
->  Documentation/devicetree/bindings/iio/adc/ingenic,adc.yaml   | 5 +++--
->  Documentation/devicetree/bindings/input/adc-joystick.yaml    | 4 +++-
->  .../bindings/input/touchscreen/resistive-adc-touch.txt       | 5 ++++-
->  Documentation/devicetree/bindings/mfd/ab8500.txt             | 4 +++-
->  .../devicetree/bindings/power/supply/da9150-charger.txt      | 2 +-
->  6 files changed, 15 insertions(+), 7 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/ntc_thermistor.txt b/Documentation/devicetree/bindings/hwmon/ntc_thermistor.txt
-> index 37f18d684f6a..4c5c3712970e 100644
-> --- a/Documentation/devicetree/bindings/hwmon/ntc_thermistor.txt
-> +++ b/Documentation/devicetree/bindings/hwmon/ntc_thermistor.txt
-> @@ -32,7 +32,7 @@ Optional node properties:
->  - "#thermal-sensor-cells" Used to expose itself to thermal fw.
->  
->  Read more about iio bindings at
-> -	Documentation/devicetree/bindings/iio/iio-bindings.txt
-> +	https://github.com/devicetree-org/dt-schema/blob/master/schemas/iio/
->  
->  Example:
->  	ncp15wb473@0 {
-> diff --git a/Documentation/devicetree/bindings/iio/adc/ingenic,adc.yaml b/Documentation/devicetree/bindings/iio/adc/ingenic,adc.yaml
-> index 9f414dbdae86..433a3fb55a2e 100644
-> --- a/Documentation/devicetree/bindings/iio/adc/ingenic,adc.yaml
-> +++ b/Documentation/devicetree/bindings/iio/adc/ingenic,adc.yaml
-> @@ -14,8 +14,9 @@ description: >
->    Industrial I/O subsystem bindings for ADC controller found in
->    Ingenic JZ47xx SoCs.
->  
-> -  ADC clients must use the format described in iio-bindings.txt, giving
-> -  a phandle and IIO specifier pair ("io-channels") to the ADC controller.
-> +  ADC clients must use the format described in
-> +  https://github.com/devicetree-org/dt-schema/blob/master/schemas/iio/iio-consumer.yaml,
-> +  giving a phandle and IIO specifier pair ("io-channels") to the ADC controller.
->  
->  properties:
->    compatible:
-> diff --git a/Documentation/devicetree/bindings/input/adc-joystick.yaml b/Documentation/devicetree/bindings/input/adc-joystick.yaml
-> index 054406bbd22b..721878d5b7af 100644
-> --- a/Documentation/devicetree/bindings/input/adc-joystick.yaml
-> +++ b/Documentation/devicetree/bindings/input/adc-joystick.yaml
-> @@ -24,7 +24,9 @@ properties:
->      description: >
->        List of phandle and IIO specifier pairs.
->        Each pair defines one ADC channel to which a joystick axis is connected.
-> -      See Documentation/devicetree/bindings/iio/iio-bindings.txt for details.
-> +      See
-> +      https://github.com/devicetree-org/dt-schema/blob/master/schemas/iio/iio-consumer.yaml
-> +      for details.
->  
->    '#address-cells':
->      const: 1
-> diff --git a/Documentation/devicetree/bindings/input/touchscreen/resistive-adc-touch.txt b/Documentation/devicetree/bindings/input/touchscreen/resistive-adc-touch.txt
-> index fee0da12474e..af5223bb5bdd 100644
-> --- a/Documentation/devicetree/bindings/input/touchscreen/resistive-adc-touch.txt
-> +++ b/Documentation/devicetree/bindings/input/touchscreen/resistive-adc-touch.txt
-> @@ -5,7 +5,10 @@ Required properties:
->   - compatible: must be "resistive-adc-touch"
->  The device must be connected to an ADC device that provides channels for
->  position measurement and optional pressure.
-> -Refer to Documentation/devicetree/bindings/iio/iio-bindings.txt for details
-> +Refer to
-> +https://github.com/devicetree-org/dt-schema/blob/master/schemas/iio/iio-consumer.yaml
-> +for details
-> +
->   - iio-channels: must have at least two channels connected to an ADC device.
->  These should correspond to the channels exposed by the ADC device and should
->  have the right index as the ADC device registers them. These channels
-> diff --git a/Documentation/devicetree/bindings/mfd/ab8500.txt b/Documentation/devicetree/bindings/mfd/ab8500.txt
-> index d2a6e835c257..937b3e5505e0 100644
-> --- a/Documentation/devicetree/bindings/mfd/ab8500.txt
-> +++ b/Documentation/devicetree/bindings/mfd/ab8500.txt
-> @@ -72,7 +72,9 @@ Required child device properties:
->                                                 pwm|regulator|rtc|sysctrl|usb]";
->  
->    A few child devices require ADC channels from the GPADC node. Those follow the
-> -  standard bindings from iio/iio-bindings.txt and iio/adc/adc.txt
-> +  standard bindings from
-> +  https://github.com/devicetree-org/dt-schema/blob/master/schemas/iio/iio-consumer.yaml
-> +  and Documentation/devicetree/bindings/iio/adc/adc.yaml
->  
->    abx500-temp		 : io-channels "aux1" and "aux2" for measuring external
->  			   temperatures.
-> diff --git a/Documentation/devicetree/bindings/power/supply/da9150-charger.txt b/Documentation/devicetree/bindings/power/supply/da9150-charger.txt
-> index f3906663c454..033a9b6e1dd5 100644
-> --- a/Documentation/devicetree/bindings/power/supply/da9150-charger.txt
-> +++ b/Documentation/devicetree/bindings/power/supply/da9150-charger.txt
-> @@ -7,7 +7,7 @@ Optional properties:
->  - io-channels: List of phandle and IIO specifier pairs
->  - io-channel-names: List of channel names used by charger
->        ["CHAN_IBUS", "CHAN_VBUS", "CHAN_TJUNC", "CHAN_VBAT"]
-> -  (See Documentation/devicetree/bindings/iio/iio-bindings.txt for further info)
-> +  (See https://github.com/devicetree-org/dt-schema/blob/master/schemas/iio/iio-consumer.yaml for further info)
->  
->  
->  Example:
-> 
+The device also has some sort of a timing issue when switching pages,
+which is explained further in the code.
+
+Because of this, the driver support is limited. It exposes only the
+values, that have been tested to work correctly.
+
+Signed-off-by: Václav Kubernát <kubernat@cesnet.cz>
+---
+ Documentation/hwmon/fsp-3y.rst |  26 ++++
+ drivers/hwmon/pmbus/Kconfig    |  10 ++
+ drivers/hwmon/pmbus/Makefile   |   1 +
+ drivers/hwmon/pmbus/fsp-3y.c   | 217 +++++++++++++++++++++++++++++++++
+ 4 files changed, 254 insertions(+)
+ create mode 100644 Documentation/hwmon/fsp-3y.rst
+ create mode 100644 drivers/hwmon/pmbus/fsp-3y.c
+
+diff --git a/Documentation/hwmon/fsp-3y.rst b/Documentation/hwmon/fsp-3y.rst
+new file mode 100644
+index 000000000000..68a547021846
+--- /dev/null
++++ b/Documentation/hwmon/fsp-3y.rst
+@@ -0,0 +1,26 @@
++Kernel driver fsp3y
++======================
++Supported devices:
++  * 3Y POWER YH-5151E
++  * 3Y POWER YM-2151E
++
++Author: Václav Kubernát <kubernat@cesnet.cz>
++
++Description
++-----------
++This driver implements limited support for two 3Y POWER devices.
++
++Sysfs entries
++-------------
++in1_input            input voltage
++in2_input            12V output voltage
++in3_input            5V output voltage
++curr1_input          input current
++curr2_input          12V output current
++curr3_input          5V output current
++fan1_input           fan rpm
++temp1_input          temperature 1
++temp2_input          temperature 2
++temp3_input          temperature 3
++power1_input         input power
++power2_input         output power
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index 03606d4298a4..9d12d446396c 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -56,6 +56,16 @@ config SENSORS_BEL_PFE
+ 	  This driver can also be built as a module. If so, the module will
+ 	  be called bel-pfe.
+ 
++config SENSORS_FSP_3Y
++	tristate "FSP/3Y-Power power supplies"
++	help
++	  If you say yes here you get hardware monitoring support for
++	  FSP/3Y-Power hot-swap power supplies.
++	  Supported models: YH-5151E, YM-2151E
++
++	  This driver can also be built as a module. If so, the module will
++	  be called fsp-3y.
++
+ config SENSORS_IBM_CFFPS
+ 	tristate "IBM Common Form Factor Power Supply"
+ 	depends on LEDS_CLASS
+diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+index 6a4ba0fdc1db..bfe218ad898f 100644
+--- a/drivers/hwmon/pmbus/Makefile
++++ b/drivers/hwmon/pmbus/Makefile
+@@ -8,6 +8,7 @@ obj-$(CONFIG_SENSORS_PMBUS)	+= pmbus.o
+ obj-$(CONFIG_SENSORS_ADM1266)	+= adm1266.o
+ obj-$(CONFIG_SENSORS_ADM1275)	+= adm1275.o
+ obj-$(CONFIG_SENSORS_BEL_PFE)	+= bel-pfe.o
++obj-$(CONFIG_SENSORS_FSP_3Y)	+= fsp-3y.o
+ obj-$(CONFIG_SENSORS_IBM_CFFPS)	+= ibm-cffps.o
+ obj-$(CONFIG_SENSORS_INSPUR_IPSPS) += inspur-ipsps.o
+ obj-$(CONFIG_SENSORS_IR35221)	+= ir35221.o
+diff --git a/drivers/hwmon/pmbus/fsp-3y.c b/drivers/hwmon/pmbus/fsp-3y.c
+new file mode 100644
+index 000000000000..2c165e034fa8
+--- /dev/null
++++ b/drivers/hwmon/pmbus/fsp-3y.c
+@@ -0,0 +1,217 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Hardware monitoring driver for FSP 3Y-Power PSUs
++ *
++ * Copyright (c) 2021 Václav Kubernát, CESNET
++ */
++
++#include <linux/delay.h>
++#include <linux/i2c.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include "pmbus.h"
++
++#define YM2151_PAGE_12V_LOG	0x00
++#define YM2151_PAGE_12V_REAL	0x00
++#define YM2151_PAGE_5VSB_LOG	0x01
++#define YM2151_PAGE_5VSB_REAL	0x20
++#define YH5151E_PAGE_12V_LOG	0x00
++#define YH5151E_PAGE_12V_REAL	0x00
++#define YH5151E_PAGE_5V_LOG	0x01
++#define YH5151E_PAGE_5V_REAL	0x10
++#define YH5151E_PAGE_3V3_LOG	0x02
++#define YH5151E_PAGE_3V3_REAL	0x11
++
++enum chips {
++	ym2151e,
++	yh5151e
++};
++
++struct fsp3y_data {
++	struct pmbus_driver_info info;
++	enum chips chip;
++	int page;
++};
++
++#define to_fsp3y_data(x) container_of(x, struct fsp3y_data, info)
++
++static int page_log_to_page_real(int page_log, enum chips chip)
++{
++	switch (chip) {
++	case ym2151e:
++		switch (page_log) {
++		case YM2151_PAGE_12V_LOG:
++			return YM2151_PAGE_12V_REAL;
++		case YM2151_PAGE_5VSB_LOG:
++			return YM2151_PAGE_5VSB_REAL;
++		}
++		return -1;
++	case yh5151e:
++		switch (page_log) {
++		case YH5151E_PAGE_12V_LOG:
++			return YH5151E_PAGE_12V_REAL;
++		case YH5151E_PAGE_5V_LOG:
++			return YH5151E_PAGE_5V_LOG;
++		case YH5151E_PAGE_3V3_LOG:
++			return YH5151E_PAGE_3V3_REAL;
++		}
++		return -1;
++	}
++
++	return -1;
++}
++
++static int set_page(struct i2c_client *client, int page_log)
++{
++	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
++	struct fsp3y_data *data = to_fsp3y_data(info);
++	int rv;
++	int page_real = page_log_to_page_real(page_log, data->chip);
++
++	if (page_log < 0)
++		return 0;
++
++	if (data->page != page_real) {
++		rv = pmbus_set_page(client, page_real, 0xff);
++		if (rv < 0)
++			return rv;
++
++		data->page = page_real;
++
++		/* Testing showed that the device has a timing issue. After
++		 * setting a page, it takes a while, before the device actually
++		 * gives the correct values from the correct page. 20 ms was
++		 * tested to be enough to not give wrong values (15 ms wasn't
++		 * enough)
++		 */
++		usleep_range(20000, 30000);
++	}
++
++	return 0;
++}
++
++static int fsp3y_read_byte_data(struct i2c_client *client, int page, int reg)
++{
++	int rv;
++
++	rv = set_page(client, page);
++	if (rv < 0)
++		return rv;
++
++	return i2c_smbus_read_byte_data(client, reg);
++}
++
++static int fsp3y_read_word_data(struct i2c_client *client, int page, int phase, int reg)
++{
++	int rv;
++
++	switch (reg) {
++	case PMBUS_READ_FAN_SPEED_1:
++	case PMBUS_READ_IIN:
++	case PMBUS_READ_IOUT:
++	case PMBUS_READ_PIN:
++	case PMBUS_READ_POUT:
++	case PMBUS_READ_TEMPERATURE_1:
++	case PMBUS_READ_TEMPERATURE_2:
++	case PMBUS_READ_TEMPERATURE_3:
++	case PMBUS_READ_VIN:
++	case PMBUS_READ_VOUT:
++	case PMBUS_STATUS_WORD:
++		break;
++	default:
++		return -ENXIO;
++	}
++
++	rv = set_page(client, page);
++	if (rv < 0)
++		return rv;
++
++	return i2c_smbus_read_word_data(client, reg);
++}
++
++struct pmbus_driver_info fsp3y_info[] = {
++	[ym2151e] = {
++		.pages = 2,
++		.func[YM2151_PAGE_12V_LOG] =
++			PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
++			PMBUS_HAVE_PIN | PMBUS_HAVE_POUT  |
++			PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2 |
++			PMBUS_HAVE_VIN | PMBUS_HAVE_IIN |
++			PMBUS_HAVE_FAN12,
++		.func[YM2151_PAGE_5VSB_LOG] =
++			PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT,
++			PMBUS_HAVE_IIN,
++		.read_word_data = fsp3y_read_word_data,
++		.read_byte_data = fsp3y_read_byte_data,
++	},
++	[yh5151e] = {
++		.pages = 3,
++		.func[YH5151E_PAGE_12V_LOG] =
++			PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
++			PMBUS_HAVE_POUT  |
++			PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2 | PMBUS_HAVE_TEMP3,
++		.func[YH5151E_PAGE_5V_LOG] =
++			PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
++			PMBUS_HAVE_POUT,
++		.func[YH5151E_PAGE_3V3_LOG] =
++			PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
++			PMBUS_HAVE_POUT,
++		.read_word_data = fsp3y_read_word_data,
++		.read_byte_data = fsp3y_read_byte_data,
++	}
++};
++
++static int fsp3y_probe(struct i2c_client *client)
++{
++	struct fsp3y_data *data;
++	int rv;
++	u8 buf[I2C_SMBUS_BLOCK_MAX];
++
++	data = devm_kzalloc(&client->dev, sizeof(struct fsp3y_data), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++
++	rv = i2c_smbus_read_byte_data(client, PMBUS_PAGE);
++	if (rv < 0)
++		return rv;
++	data->page = rv;
++
++	rv = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, buf);
++	if (rv < 0)
++		return rv;
++	if (rv != 8)
++		return -ENODEV;
++
++	if (!strncmp(buf, "YM-2151E", strlen("YM-2151E")))
++		data->chip = ym2151e;
++	else if (!strncmp(buf, "YH-5151E", strlen("YH-5151E")))
++		data->chip = yh5151e;
++	else
++		return -ENODEV;
++
++	data->info = fsp3y_info[data->chip];
++
++	return pmbus_do_probe(client, &data->info);
++}
++
++static const struct i2c_device_id pmbus_id[] = {
++	{"fsp3y", 0},
++	{}
++};
++
++MODULE_DEVICE_TABLE(i2c, pmbus_id);
++
++/* This is the driver that will be inserted */
++static struct i2c_driver fsp3y_driver = {
++	.driver = {
++		   .name = "fsp3y",
++		   },
++	.probe_new = fsp3y_probe,
++	.id_table = pmbus_id
++};
++
++module_i2c_driver(fsp3y_driver);
++
++MODULE_AUTHOR("Václav Kubernát");
++MODULE_DESCRIPTION("PMBus driver for FSP/3Y-Power power supplies");
++MODULE_LICENSE("GPL");
+-- 
+2.31.1
 
