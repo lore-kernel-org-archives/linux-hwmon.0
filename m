@@ -2,169 +2,125 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MSGID_FROM_MTA_HEADER,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75E04C433B4
-	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Apr 2021 12:02:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A148CC433ED
+	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Apr 2021 14:18:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3A5D6610A6
-	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Apr 2021 12:02:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7034F611C1
+	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Apr 2021 14:18:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231132AbhDHMCs (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 8 Apr 2021 08:02:48 -0400
-Received: from mail-dm6nam10on2123.outbound.protection.outlook.com ([40.107.93.123]:7712
-        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        id S231784AbhDHOSd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 8 Apr 2021 10:18:33 -0400
+Received: from mail-bn8nam12on2042.outbound.protection.outlook.com ([40.107.237.42]:53089
+        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229837AbhDHMCs (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 8 Apr 2021 08:02:48 -0400
+        id S231921AbhDHOR6 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 8 Apr 2021 10:17:58 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=J54UQYDTp1WbeoIUGfupkMWIFMsTHBTDMpu/onjMux5RyoqwYzbeiiuYdiyrlC2RIOgvy1UKblxcY8cQPgZeqn+tECqXBukpGVEOXO4Jwuwzv9SFkA3nnbl74prMhTB4XcCn2qrD14OvQT/YwuXTr3D2lTS91+/+9e5q1o1OPxAOx+jfHzBc2k49HP0Pjn4OwE9mdqGuhHrjToDjpKZU7cq/rEHN2/TSUXKbWuWIALcD8dopGYmZyZTSPxmHiV5qBOAYO2agPgb0ggmVCSfbB3IKj+ZeAltfQBHnYkOmD50/bPH6pbJGQ6fGd6YeDQJcrNRFmr8JVMlK4HccxwQP5Q==
+ b=bcA9DensdNgXa4RRsCsmiJDp3iSEwo1wpYGqKMnjBGRbIMbxkNtPmvvqdIzkAJS9eH/3SEhH0OoaE+tESFf85rgQVVPG96QC34sRlq2IrvmySrD599QGqhWMX75KH21OiFzWjaVUflUDm/R+5NdPIOLoYZKC1On4UPLhCpuG/843enl9uy0aulYqP9TZRVvPDXNly86ECdLEurhWvGrq1HpmrfaubVDdTz0toYpVVOawSjTz3yGbTumUfWk0q5tQskNy4q8jj0pVxgu1BvxEIqs6bNV2nmG78tyCVqsqQdbx7i5rHNuCKHwoKGMwKcDeMnaZ9gTRU2R2HyC7gpxXVg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FMh9+u3Oy7cayqroERhmB2wi4ZXKPLCoVo3atCLBIH0=;
- b=iYMapnb/agMtMc3QjwroaIpN3KAohKcUUI0Faa2fuzdq5JBtkHLmGRMVhiK+nfJKUsH57Mha9bD14YL0rac6xVtlIQ5yPSonlekObttcAqM6c7QzmLehwsuzfPkBKOQJfaPQQbTs4yRE/M1jWCNv4jmsFEmGawMH8MBqvkxZ8p8jY41WMbkSX04BYUEUkTU+iwlUb+X/9aMqlf7DfjrkJKYXbDWquRC/000Dc/WY2VtA/fK6HW7G0xDvdVX7VjV07pOrAzsRAyUMVhHgOYYvtThPwqnKZ8gIp1Y2ykugcp9eHqQxXp02AXgKI4iVkqYY7oSzzNgDFIjbd21tZUnA8Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
+ bh=3PvKtvMzN0vfj9EScw6kTuMudN1eHYNRX4/Da1Re/Ns=;
+ b=lTLtxO5Bkiy2dEpXE5msAlngy2gYn6x1k0fEPF9ajKtc6CFvDTNwYzXrUqCEyaJfKOd82qLpSLxzupHhalqnpN7pvutmh+zUTZxGKi6e1Lp9STR7vb75H1WVsk9VRD17Y6hvZcf8t+X9qQllfPuXGmQzeyEuajqAO948sFU5FiVCkaxzW3FUiKMbDRjz01FLqSvcOKXu7e/lTFYtAl0c7advMkNT7bfdrRvl4ubXlQ+p/4HbUzSYK8ST7pQy5gsKTJcSZD8oGWgDXbk+UgXVOeobqBnSDpd8qB4xzs1XZVHuE22pQeZ0ajHZM8HCUE0AEIP+KAcKwfaPTZcmyjz04g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.112.34) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FMh9+u3Oy7cayqroERhmB2wi4ZXKPLCoVo3atCLBIH0=;
- b=G/Z4X6HDywuIFwEyil5NjNjQOcjvTDeSkya170jjY0PvpYKsen3JoNdqLyMekw8L9Jy45fJPHVnw0isqRvE+6sByNg1Au0LeKKzSa8QJpzvV0pZSrFJqTHN3JXpmWhzUDZkFOAxE0h8/9605cAbMPihXZcFeu/QO6Ro/durFCi8=
-Authentication-Results: os.amperecomputing.com; dkim=none (message not signed)
- header.d=none;os.amperecomputing.com; dmarc=none action=none
- header.from=os.amperecomputing.com;
-Received: from MW2PR0102MB3482.prod.exchangelabs.com (2603:10b6:302:c::32) by
- MW4PR01MB6321.prod.exchangelabs.com (2603:10b6:303:7b::14) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4020.18; Thu, 8 Apr 2021 12:02:34 +0000
-Received: from MW2PR0102MB3482.prod.exchangelabs.com
- ([fe80::d840:7aa7:58d4:b503]) by MW2PR0102MB3482.prod.exchangelabs.com
- ([fe80::d840:7aa7:58d4:b503%5]) with mapi id 15.20.4020.016; Thu, 8 Apr 2021
- 12:02:34 +0000
-Subject: Re: [PATCH v2 3/4] hwmon: smpro: Add Ampere's Altra smpro-hwmon
- driver
-To:     Guenter Roeck <linux@roeck-us.net>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org
-Cc:     Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-References: <20210329015238.19474-1-quan@os.amperecomputing.com>
- <20210329015238.19474-4-quan@os.amperecomputing.com>
- <bac92db0-3ef6-1615-0e92-aabd54fd0580@roeck-us.net>
- <136d036c-1d10-cecd-abcb-d206a0c6fa51@os.amperecomputing.com>
- <d9ef40ea-e4ee-cea8-96df-90ffabdff53c@roeck-us.net>
-From:   Quan Nguyen <quan@os.amperecomputing.com>
-Message-ID: <8267ad09-26dc-7581-567e-7286f4d7435e@os.amperecomputing.com>
-Date:   Thu, 8 Apr 2021 19:02:09 +0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.9.0
-In-Reply-To: <d9ef40ea-e4ee-cea8-96df-90ffabdff53c@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [118.69.219.201]
-X-ClientProxiedBy: HK2PR04CA0087.apcprd04.prod.outlook.com
- (2603:1096:202:15::31) To MW2PR0102MB3482.prod.exchangelabs.com
- (2603:10b6:302:c::32)
+ bh=3PvKtvMzN0vfj9EScw6kTuMudN1eHYNRX4/Da1Re/Ns=;
+ b=D3svgWefDAgwwAU/HjYneDgc2qyvP073+wYr5ZuS2SkFfaUZwr97oCJJUC9StbcLHqtdBokCJYSTWUpXrf3dBowXG4+Nxs97DoLohLyPX9FAC31Rs6otuQiT2387h+vbwb0HQmsdG1nqsyCATJQsrPBpH/cz/w+inn9si4gNi45y0uw9D3IRdh7N+nkBzxb8R/DhzwJCh8Wc4ZhT/7pP9ob66Z2jR5TMRbL/sUolkHNPtAUZOfq7K0BxL/YWDID0ooLPiyM16vjNEKR5++abErIxENQkkjR81PvDQFmkiy3JYmpkDVKHQ3yEHAiVJKibKn2+pYUhkO3PqZhXwHxiYw==
+Received: from BN9PR03CA0018.namprd03.prod.outlook.com (2603:10b6:408:fa::23)
+ by BN6PR1201MB0259.namprd12.prod.outlook.com (2603:10b6:405:58::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3999.27; Thu, 8 Apr
+ 2021 14:17:46 +0000
+Received: from BN8NAM11FT028.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:fa:cafe::f8) by BN9PR03CA0018.outlook.office365.com
+ (2603:10b6:408:fa::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4020.17 via Frontend
+ Transport; Thu, 8 Apr 2021 14:17:46 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.112.34)
+ smtp.mailfrom=nvidia.com; vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.112.34 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.112.34; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (216.228.112.34) by
+ BN8NAM11FT028.mail.protection.outlook.com (10.13.176.225) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4020.17 via Frontend Transport; Thu, 8 Apr 2021 14:17:46 +0000
+Received: from dev-r-vrt-156.mtr.labs.mlnx (172.20.145.6) by
+ HQMAIL107.nvidia.com (172.20.187.13) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 8 Apr 2021 14:17:44 +0000
+From:   Vadim Pasternak <vadimp@nvidia.com>
+To:     <linux@roeck-us.net>, <robh+dt@kernel.org>
+CC:     <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        "Vadim Pasternak" <vadimp@nvidia.com>
+Subject: [PATCH hwmon-next 0/3] dd support for MPS Multi-phase mp2888 controller
+Date:   Thu, 8 Apr 2021 17:17:23 +0300
+Message-ID: <20210408141726.2561683-1-vadimp@nvidia.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [10.38.33.17] (118.69.219.201) by HK2PR04CA0087.apcprd04.prod.outlook.com (2603:1096:202:15::31) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4020.16 via Frontend Transport; Thu, 8 Apr 2021 12:02:29 +0000
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.20.145.6]
+X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 72e787bf-bbd9-4835-5a5a-08d8fa86319d
-X-MS-TrafficTypeDiagnostic: MW4PR01MB6321:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <MW4PR01MB6321587D8DF2C34FC4745A27F2749@MW4PR01MB6321.prod.exchangelabs.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Office365-Filtering-Correlation-Id: d9a3ac71-fb83-4309-a930-08d8fa99151b
+X-MS-TrafficTypeDiagnostic: BN6PR1201MB0259:
+X-Microsoft-Antispam-PRVS: <BN6PR1201MB02593CDE9A016E904FC5C33EAF749@BN6PR1201MB0259.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2399;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: I8F4txeu2/p+wiIs2ngWRhV5dwYVIrktA8OC0NND9Sccfyos7wR/na69sZCZ87HWiplmOTuU6EBZv5cjhVffasTLevXrKFQaNUzHjGB4VdWyPdQjlFMGquClmVdA+282U6DaFW21QUCaV1iBq7nPYObx3xKVXdJAFnOBEwDTYlwkZhQ1r98Gh9aroAhDOvvkjzAzdMACO2EVsFTIFmb0TaDVMFCET92StF60TTd1Vq6uAjnwr9JfjDSslJEt/Bhk7n0FL/cG+Phe0LEFasTi1jZkzaGqzqHp9Tal1L5X5WVBM3iXt1Io/M6+ntM7Hje9BtDHbCrhlsQmTL8v+j+e+wWTW6HCtkif3ghtB1v0xyx5g6gxwDXHFlwrHzp0TGmCgLFGJb0NfG0nx8+jThfcYss1IsithEQVfl/pUf6/+C7UcKcx5auph2Y5Ln6waqGzNrdVWkIx9X19i/rUJ2mh4Tbiw+tiJWAUA5BEudAqgNIfoXh0jcIxXTYvA8d9egbe6qke6BUolAqbvPV7K/rE1ujzSoaFhRk2EkHxv1CKCOUJ5+mycV00H6Quek7Tgljcrs/0AxiyQ1IeFskj2iyI4cm8zBCpjB6lhcgZ8QobLoxYdcC1vD7PEfn3iu5RROaVkWmm/7OYSV20qDtlBCDxI50v/kQdV9OiwKv36mB6b0EKPlEYHbXr8cnaP0AG3qRdQ+aPFEo9TNWzlrmORKW7iw0dWMLjz5SKKo8Qty4Kh6HeNBB667Ybjjs6IqeaxmCYZP4VDnTgAryrbgP5Pb+Sfw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR0102MB3482.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(396003)(376002)(39850400004)(366004)(346002)(38350700001)(2616005)(956004)(2906002)(316002)(16576012)(110136005)(54906003)(6666004)(38100700001)(16526019)(26005)(6486002)(186003)(53546011)(5660300002)(8676002)(52116002)(8936002)(31686004)(7416002)(107886003)(478600001)(4326008)(66476007)(66946007)(66556008)(921005)(31696002)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?UU5pZFJ4Y21lV1hVcDY0M0JFVFc2VEtHYzlTNi9GWmkyZ2hMcVFZR2RGZXdP?=
- =?utf-8?B?Qms4bTJ3RVpBbzRBNEhTZWh6U3VROHhpcTU2eTNWWTVIbkxFWklJSFpBNGFX?=
- =?utf-8?B?bG5tVFJYMzdQOTh5ejJ2M3o1aU9jY3lkcGxyYjdYS1BNYk9BSjVOQUNnWVJy?=
- =?utf-8?B?OXczZ1B0czJGRUVJTlowdFhNc3M3R1NCNitoV1ozSW9hNllLL2cvL3huVlkx?=
- =?utf-8?B?MXNLUERwMFdMU1ZLVzFKU0t0SGdVVmRScXhEQm5YdEFnc3BSb1UwUGxROUlC?=
- =?utf-8?B?QU5ZRVBTVkVaWE4zc3Z6ZGFpWENKdTRIT2NvSGN1aC84RXN3OStnWXR0em51?=
- =?utf-8?B?UjlRQTBHVlNMOTVHd3dCMFByeFNkb0VzeFpTS1daM1dkdlNvbkNRMnhOenBP?=
- =?utf-8?B?WDZ5bXljcDhpbUtKZTAzL3hrMUdGRVk1NjdnVkRpNFBweWhHd28rOURad2lD?=
- =?utf-8?B?citSWVpmNFJJZzV4dC9oSzlwUFFaQTE2dTJHVHE2RzFHaG9LYm80VjZPYk5J?=
- =?utf-8?B?aGoyYXJDdHpHNVk0bkJjaGV0UE5mM3lNT0IvelVURFhodHBzMzFPcUlOM3VF?=
- =?utf-8?B?cTBpS28wQmRnaXRGb3IrYUJ5RHNVZHAzVUgyRTd1d3FYRkFaQUVmdURnOFJE?=
- =?utf-8?B?dGh5dmVXNTZ3Qkw0YUdvOU5UZjQxcmdBSzRLRWVyTjNYK1hUUEdNMXIxeTFF?=
- =?utf-8?B?SmRPbXdoby9MNlFZN3FmTmlOcEM2UzluWEdFYWR4NWxoQXI4RXJKR2srQWxD?=
- =?utf-8?B?MDhsY0xpUmloYktJVjVnWnc5cjlndVRtRnhpNEY4OXB0UVZLSlZkN1BnL2g1?=
- =?utf-8?B?SktZL05nT0NCTEl2KysvT2l4NlczdUNpSXBreHJFS2pLb2oyYzliMzdWWm9y?=
- =?utf-8?B?T3lTcmE2dGVDN0lJdFFjOHlpMW0rSzdnZ3BvdGYzdkE4cS96NzBEbjJHMC9t?=
- =?utf-8?B?Vm4zU1VtWnZQb0E0TUhSVTNhUTZsVXVjTGx3TWR5dVNvLzg5Zm85L2k2Rm40?=
- =?utf-8?B?WDJoL0hIay9Ndm0rV2QwRFlrSjZqNjYxUG9lOCtWSDVYUUNFSEc2TnhuYWZl?=
- =?utf-8?B?UXZFVW9YV2xQVFE0bU0xaXc2Y2Z4ZmpZYnpGUm1sdWRSQXBDN21rRlNCSCtI?=
- =?utf-8?B?aFhuUnkwVnVHZUQxQnpvTHNaTExJai85RElwUThha3dPNjE1eHBTTVdqYUpS?=
- =?utf-8?B?R1k3QkRUbEtyeGF5bENIVmV2SmZrRzR2THlja3RWUGlSdDNkTXliYWhZcFJ2?=
- =?utf-8?B?U3hJUngzbFlUQmk3cmJKcldxdXBZbS9GRmxYQ05pWU9odFV6aWpRQkZvdEo2?=
- =?utf-8?B?OGJaRVczOVhocmcycUJEejNGajNwYUt1THlVd3Nxc1hxK28vK3RzUlBlS1dn?=
- =?utf-8?B?eFRvRzNKa20yZGN4QkZXU1d6TWc1K00zUGsyQk52bGlxbGI5aHZNTS8zR3hj?=
- =?utf-8?B?UGdsU0JHdXhPUHRVRFJjZU1NcjhDay9QU0hKQjBTMzRiZFBTNU5Vc2o2M0pt?=
- =?utf-8?B?MGdYUENuS0dRVDgvbUxJdVk5TFBsWlROenRNVzErQVA5R1BnOVRmQWtvV3ZJ?=
- =?utf-8?B?YnEvYStucFRTQnZMZlRxTUlHejJDSS9LMm5nZmRobCtFVmRqZ0VpUENBbnBy?=
- =?utf-8?B?ZWhVZ1lJKzJYY0JnSlBYTVVQdUg0Q2U3d1VTUmUxNFZaWERLdE5jQ3dUdDBi?=
- =?utf-8?B?a095TldxUEtpOEhSNHpoUlVyaHJTVDB4WXBFcjRzRnRoMndSTFVOaU5Cckdr?=
- =?utf-8?Q?40ZoLncC9mFubutEF7gLkDri/bz99IBy7E7mZsA?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 72e787bf-bbd9-4835-5a5a-08d8fa86319d
-X-MS-Exchange-CrossTenant-AuthSource: MW2PR0102MB3482.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Apr 2021 12:02:34.3489
+X-Microsoft-Antispam-Message-Info: tUFn0nKnA2zXXLkJfKTii+LQsb12vsCq5QzENV3D2V68qmmxSOpfDdfzUl+khvadLUmmGBYjl5gWLliTIPy9MYcZByjc5bm4LHtCpqqamL/tvKwcQU/LcW4OiShH86hg7Apb9/cqpCmR3h/YG7N89Q3B0TNLJS7aUIBwvT1bVeOfmwYj8x8A9Gw/V/Hd/0aafufzG6hmby2ULOpIOnpgEL2p+xX0V0xCwdTG3enYpcOqnpaWPPKxi9l0v2ti2T7N1QRL7zZ84XtPv2lUab3LZY4gUsGulvn336gXhMSA7HvH4PmNVoj4xiL8lxm+bo5sSX20Danb6EVEBTLxFJrLgqE2OHuU5fPMtNwU/nwZfLEQZKQhM/FTIBPJ27fkxzRsFrOmpMDfxxaIbefi7oQchYPH6/P0KA0S3KSFsT7rvxhTbAzDiiKhYN0DZr747SeRKKzMTN40i8ksXPLVSbHwWeOtbP5O+PopE9th4AmvI+rstbc3/DcYbKKFQiV4Uhbly2EDhzJr4+AZuY48GN5EdY/uCsY99AAbhFFYQHWOBi5V7OP3bDBBF06FAeaSSwVtA/Wi4hal/vd5WnVxv9vHETLqRgd6427ssfS2RSIvUIZcraDNfOBIpIW2alqjq1A9AUNsSlj+h9DY8CDCI4KuZkYbuBMwm3VVFkqNX3f6w5c=
+X-Forefront-Antispam-Report: CIP:216.228.112.34;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:schybrid03.nvidia.com;CAT:NONE;SFS:(4636009)(346002)(396003)(376002)(136003)(39860400002)(36840700001)(46966006)(316002)(7636003)(356005)(8676002)(47076005)(86362001)(1076003)(36906005)(5660300002)(16526019)(110136005)(426003)(82310400003)(36860700001)(6666004)(336012)(26005)(54906003)(478600001)(70206006)(8936002)(4744005)(2906002)(107886003)(83380400001)(4326008)(36756003)(2616005)(82740400003)(186003)(70586007);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Apr 2021 14:17:46.2150
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rdl91M+t02iq/4s9I7Xyeq0U1t4sMXAg5y04tnqwKgZOqtBYUt9H1ZrvpsBt/5bipdW2RvGcU0xgFGavC7lHiL6hu6t4nMtw79CyeaVaK24=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR01MB6321
+X-MS-Exchange-CrossTenant-Network-Message-Id: d9a3ac71-fb83-4309-a930-08d8fa99151b
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.112.34];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT028.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1201MB0259
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 07/04/2021 19:11, Guenter Roeck wrote:
-> On 4/7/21 12:41 AM, Quan Nguyen wrote:
-> [ ... ]
->>>
->>> But then why don't you just use reg_ext to store SOC_VR_HOT_THRESHOLD_REG
->>> or MEM_HOT_THRESHOLD_REG ? It is already available, after all, and with it
->>> the code could be simplified to
->>>
->>>          ret = regmap_read(hwmon->regmap, temperature[channel].reg_ext, &value);
->>>          if (ret)
->>>              return ret;
->>>
->> Thank you for the comment.
->>
->> Will change code follow this suggestion, will include in next version
->>
->>> I don't have a datasheet, but I do wonder what is in bit 9..15. Any idea ?
->>> Main question is if there is a sign bit, as theoretic as it may be.
->>>
->> The original intention was to use this as 9-bit 2-complement value follow LM75, but the fact is that the operation temperature is 0-125 C degree, so we simply use it as-is.
->>
-> 
-> The operational temperature is not the question here. The question is if the
-> chip _reports_ a sign. If it does, it should be handled, even if it is outside
-> the operational range. The reported range is relevant here, not the operational
-> range. After all, the chip won't really blow apart at -1 degrees C.
-> 
+Add driver and documentation for mp2888 device from Monolithic Power
+Systems, Inc. (MPS) vendor. This is a digital, multi-phase, pulse-width
+modulation controller.
 
-I think I've got it, will handle the sign bit in next version.
+Patch set includes:
+Patch #1 - increases maximum number of phases.
+Patch #2 - provides mp2888 driver and documentation.
+Patch #3 - providesy binding documentation.
 
--Quan
+Vadim Pasternak (3):
+  hwmon: (pmbus) Increase maximum number of phases per page
+  hwmon: (pmbus) Add support for MPS Multi-phase mp2888 controller
+  dt-bindings: Add MP2888 voltage regulator device
+
+ .../devicetree/bindings/trivial-devices.yaml       |   2 +
+ Documentation/hwmon/mp2888.rst                     | 111 +++++++++
+ drivers/hwmon/pmbus/Kconfig                        |   9 +
+ drivers/hwmon/pmbus/Makefile                       |   1 +
+ drivers/hwmon/pmbus/mp2888.c                       | 256 +++++++++++++++++++++
+ drivers/hwmon/pmbus/pmbus.h                        |   2 +-
+ 6 files changed, 380 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/hwmon/mp2888.rst
+ create mode 100644 drivers/hwmon/pmbus/mp2888.c
+
+-- 
+2.11.0
+
