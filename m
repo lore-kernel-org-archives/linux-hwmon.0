@@ -2,95 +2,113 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11965C433ED
-	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Apr 2021 19:18:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63874C433ED
+	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Apr 2021 23:08:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CC5A161178
-	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Apr 2021 19:18:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2B06761006
+	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Apr 2021 23:08:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234955AbhDITSj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 9 Apr 2021 15:18:39 -0400
-Received: from mail-ot1-f41.google.com ([209.85.210.41]:36713 "EHLO
-        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234949AbhDITSj (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 9 Apr 2021 15:18:39 -0400
-Received: by mail-ot1-f41.google.com with SMTP id g8-20020a9d6c480000b02901b65ca2432cso6720884otq.3;
-        Fri, 09 Apr 2021 12:18:25 -0700 (PDT)
+        id S234960AbhDIXIy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 9 Apr 2021 19:08:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57320 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234880AbhDIXIy (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 9 Apr 2021 19:08:54 -0400
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFFA4C061762;
+        Fri,  9 Apr 2021 16:08:40 -0700 (PDT)
+Received: by mail-ot1-x332.google.com with SMTP id v24-20020a9d69d80000b02901b9aec33371so7273273oto.2;
+        Fri, 09 Apr 2021 16:08:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=lpr1Vp/cOtO89rHVLcXxZ2elGZKeYl02Lj39b4gnicU=;
+        b=YokWywBaf20r1JtMG0TGKj/6/R7Zo7V1Q+QHkU0M+LmEKD+2eSNWfwea76Ca9CfTqk
+         wQ88K0u81uFHxsVgVjfx2K15ob2f3JCANESyhjhgPpOZzIqHJwdIFyTAEZdKo+aglbQ0
+         mLx4CY5D0WwDSCvkp6tKsw4mZlePvgYGBbh/CvZgIL+IKkYGvj8m2V7YJpDrnjx/R2yK
+         y3vCscP3sZm48xrP7IpKBchcY8j43N2/gXWlkI5Jd2DCcJNnNOnPlGP/BF45AVz4c/tl
+         MDiV+EE4mFCuJsqvCctk67i+Gkf9zHgfRE4OHbD4tSMDwKbmZ1S/x84g0jUOUad0ekmU
+         nyAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=++xBK3NbqiI7OTm8h/f/B8YoNrErgNul0ps/EoyMiPs=;
-        b=CC/28x01s8kA6mhnFozrsDb90Z3qqLa+ZL2ImB0P2kdTIovX9AQjQ469MXc0pMHu2R
-         RfS9V9cxjj75ef6y/nQPDyQgeIT/LSRHPFYu9qecutwV7/piPNMtj7Km1X9uDxoawjVC
-         tYpzKpZ4jeYsamsCOmPaGVlgPihh0wK55ecKrm/nfEEqR4fd0ibj5Dguc6K9tCrJClC7
-         olT4O/PQDtFHOczpFfFoPoQj9+PSWgPfVySJcwn/ou4gpy5DPx0FerEGylnKfxCqr9oC
-         EAKgU+Uwiyd/ylcpJDLsjAqx+DJ3AxSrmB96SehErPCoRy0olkXozl8KD4/+tW1RqMcX
-         vlRw==
-X-Gm-Message-State: AOAM531LMrMm5NlC/bkDgdyKknW9x6HWXNMhveC1+aJeaGcQZS8/C/Ow
-        RbnCgl2TqTLliz5VMQXKnQ==
-X-Google-Smtp-Source: ABdhPJySRaGojuIRUuBJc0I34FTPXHV5CUxJzL53Ui+6GO86wj/PgL4cKmUoLTaIez73LZorkMGdMA==
-X-Received: by 2002:a05:6830:1c69:: with SMTP id s9mr6303658otg.369.1617995905336;
-        Fri, 09 Apr 2021 12:18:25 -0700 (PDT)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id 3sm762226oti.30.2021.04.09.12.18.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Apr 2021 12:18:24 -0700 (PDT)
-Received: (nullmailer pid 3988366 invoked by uid 1000);
-        Fri, 09 Apr 2021 19:18:23 -0000
-Date:   Fri, 9 Apr 2021 14:18:23 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        linux-hwmon@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-iio@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        linux-input@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Artur Rojek <contact@artur-rojek.eu>
-Subject: Re: [PATCH v3 2/8] dt-bindings: fix references for iio-bindings.txt
-Message-ID: <20210409191823.GA3988279@robh.at.kernel.org>
-References: <cover.1617972339.git.mchehab+huawei@kernel.org>
- <4efd81eca266ca0875d3bf9d1672097444146c69.1617972339.git.mchehab+huawei@kernel.org>
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=lpr1Vp/cOtO89rHVLcXxZ2elGZKeYl02Lj39b4gnicU=;
+        b=LQvJZohjTqpJ8UWH6G6Qo2WgZomwnpBVZUNzO067x9MkuwckM3gYwRERF6wq9A0YMo
+         n/9Eeo7R3DFHIrqaEVSJas0RmDa8pQL7RXeKZDllcqroxu4r+q3loDI7GS2LE5mcS4OT
+         xdBaY3VaOLOA+k/3CIdOipJ++CQhhQA8PMT1zRk4WeMO2TSKVUSfzcN27H5FcWXFRBIx
+         2Cc8J9E1qRNMm6kbyxEHg83fceU60IM/8g36DEmhJDIDXskpll0QpMahRZ7zXk59oyEG
+         zAajYvq98M5273oba+2z7CH5MUKVrqKSZ9m6Cqh9YtgxkmUc6xpRbVit07nf30d1I4Ej
+         hZ5A==
+X-Gm-Message-State: AOAM53089bLwGpv5vYwkMkIX+Nvy3kaMQedowwqNrcNkECMnKUpt8wxm
+        D8RLTXtyPqi52UrFFV/1gbNPRioLaHc=
+X-Google-Smtp-Source: ABdhPJzKMvsE4AME1eu0c8egA9ucA8RkdHrtaWfOCcvFYa7lBlOp/TkbPHExyqCCijtDC9lH8c24wA==
+X-Received: by 2002:a9d:4509:: with SMTP id w9mr14076784ote.111.1618009720035;
+        Fri, 09 Apr 2021 16:08:40 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f2sm781554oos.16.2021.04.09.16.08.38
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 09 Apr 2021 16:08:39 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 9 Apr 2021 16:08:37 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Colin King <colin.king@canonical.com>
+Cc:     Juerg Haefliger <juergh@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        "Mark M . Hoffman" <mhoffman@lightlink.com>,
+        linux-hwmon@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH]  hwmon: (dme1737): Add missing null check on return from
+ platform_get_resource
+Message-ID: <20210409230837.GA69920@roeck-us.net>
+References: <20210406185458.433826-1-colin.king@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4efd81eca266ca0875d3bf9d1672097444146c69.1617972339.git.mchehab+huawei@kernel.org>
+In-Reply-To: <20210406185458.433826-1-colin.king@canonical.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, 09 Apr 2021 14:47:46 +0200, Mauro Carvalho Chehab wrote:
-> The iio-bindings.txt was converted into two files and merged
-> at the dt-schema git tree at:
+On Tue, Apr 06, 2021 at 07:54:58PM +0100, Colin King wrote:
+> From: Colin Ian King <colin.king@canonical.com>
 > 
-> 	https://github.com/devicetree-org/dt-schema
+> The call to platform_get_resource can potentially return a NULL pointer
+> on failure, so add this check and return -EINVAL if it fails.
 > 
-> Yet, some documents still refer to the old file. Fix their
-> references, in order to point to the right URL.
-> 
-> Fixes: dba91f82d580 ("dt-bindings:iio:iio-binding.txt Drop file as content now in dt-schema")
-> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Acked-by: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> ---
->  Documentation/devicetree/bindings/hwmon/ntc_thermistor.txt   | 2 +-
->  Documentation/devicetree/bindings/iio/adc/ingenic,adc.yaml   | 5 +++--
->  Documentation/devicetree/bindings/input/adc-joystick.yaml    | 4 +++-
->  .../bindings/input/touchscreen/resistive-adc-touch.txt       | 5 ++++-
->  Documentation/devicetree/bindings/mfd/ab8500.txt             | 4 +++-
->  5 files changed, 14 insertions(+), 6 deletions(-)
-> 
+> Addresses-Coverity: ("Dereference null return")
+> Fixes: e95c237d78c0 ("hwmon: (dme1737) Add sch311x support")
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
 
-Applied, thanks!
+Not really sure what to do with this; it is a false positive.
+The resource is always set by the instantiating code (in the same
+driver). Adding an error check just to make coverity happy seems
+like a waste. Maybe we should introduce the equivalent of
+devm_ioremap_resource() for IORESOURCE_IO.
+
+Guenter
+
+> ---
+>  drivers/hwmon/dme1737.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/hwmon/dme1737.c b/drivers/hwmon/dme1737.c
+> index c1e4cfb40c3d..a2157872e126 100644
+> --- a/drivers/hwmon/dme1737.c
+> +++ b/drivers/hwmon/dme1737.c
+> @@ -2633,6 +2633,8 @@ static int dme1737_isa_probe(struct platform_device *pdev)
+>  	int err;
+>  
+>  	res = platform_get_resource(pdev, IORESOURCE_IO, 0);
+> +	if (!res)
+> +		return -EINVAL;
+>  	if (!devm_request_region(dev, res->start, DME1737_EXTENT, "dme1737")) {
+>  		dev_err(dev, "Failed to request region 0x%04x-0x%04x.\n",
+>  			(unsigned short)res->start,
