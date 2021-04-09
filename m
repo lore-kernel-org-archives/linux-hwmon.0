@@ -2,257 +2,321 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	PDS_BAD_THREAD_QP_64,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05DDEC43460
-	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Apr 2021 03:14:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A61DBC433B4
+	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Apr 2021 04:02:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DCB73610F7
-	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Apr 2021 03:14:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 80612610C8
+	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Apr 2021 04:02:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233264AbhDIDOd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 8 Apr 2021 23:14:33 -0400
-Received: from mail-bn7nam10on2137.outbound.protection.outlook.com ([40.107.92.137]:46785
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233248AbhDIDOc (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 8 Apr 2021 23:14:32 -0400
+        id S229874AbhDIEDK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 9 Apr 2021 00:03:10 -0400
+Received: from mga02.intel.com ([134.134.136.20]:24009 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229450AbhDIEDJ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 9 Apr 2021 00:03:09 -0400
+IronPort-SDR: lzmKkN/NwN8Nx2QxIBMtlzk2YROhYDMlQ87fIx3xpEEmhgBUPdsP6AsaO3fzxpKnHUB7YNfgQ9
+ gulnspWrqMFA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9948"; a="180813497"
+X-IronPort-AV: E=Sophos;i="5.82,208,1613462400"; 
+   d="scan'208";a="180813497"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2021 21:02:57 -0700
+IronPort-SDR: jSWcHMmqzar3fEh5DPjL+H/8KuVscNmygxYFk8cLFK2KWB18i/fG1wdSYF2Gw55NH1v6YP0OhC
+ ppyCB8dbdhNg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,208,1613462400"; 
+   d="scan'208";a="520122309"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmsmga001.fm.intel.com with ESMTP; 08 Apr 2021 21:02:56 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Thu, 8 Apr 2021 21:02:56 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Thu, 8 Apr 2021 21:02:52 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2106.2
+ via Frontend Transport; Thu, 8 Apr 2021 21:02:52 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.176)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2106.2; Thu, 8 Apr 2021 21:02:51 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Xvs/uD0wzf/J9iFhx86NYJY0I5BUY29Yo2PeCwmeRsRHQlhVp7TY41zJ5rJQttSv8+vOEiD1p01Pawcse5Ro+LSMyaJH2qlDAy70joFJKOHWRJuWZtZVLe8tQ2T+au0JvVKL6TBRQpBXi3kESE+D3/YIu8a8c/xyVoe4lPrOKzrM/PpD4oejhjl+TlhW/fyICT1kpw4PYSy6kZ3iQQcsvwqGHL3PeFsByM3s36WQSDit25kChtYFHoW3ViPRkfIpYUE2w97M/i2b+GJ0rqNPtWMpgfGU4hqh8jY13telBSz49ojSrFRVneAJxloP7hNLiW5z/jrESOfavd6wDBumHw==
+ b=E3YMARd3bzv36U4/CGSakrGDFAGtlLfbAXgIRZn2L24RPjl5od5VDTVkPZm9TGAEfup56CnYetUNhjQ8XpkyrV/9me8Us069GxJFLVYo9JVWiyHPHcSOEc1Au5m7P0901piL8V0A2B0N5TJyxLxCCqfMRfrgv70bMK6822GQhnzDOLWmXaEjytF9k8tCF68EcA1maqz+HxaYmsojisKEj8gYjG5pou8yF4DsmGxAXLCZRbfw2+sgYwn2OupMIBRU/RWtCfx3k0ySGCr4nk+nx4Whc1dx8PffXU+PEzhoHWLxp/CMr/zf95YfW3WdcC5y4U9U29BVqFea6weufx6cLA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YsnJgrS+GjqZP32bh7ZFKSuGXYYU0wjYM7emkHcqBJU=;
- b=WvqTFnIg8nv6AQq6NAaSGUkjA7XSq6dHzzCVuuWF0afrfvlCi/3erhvkhB7XN6C8hMle3I6gHF0va191Vs2Ojlu7QpcjjU2EZmkvnWhfngzHafQ4cxelI9/jX298vJ9F8TGNQl6tPLmHIgCc37fuWqmqdo/J/SsFCiVrQcMnsI4GuWUBSl4yRIKipcLSOEqaWY2H3Ur795K5dv5SjaZvDJgQjuxyy1j4deGxrJ7jODLKQRHe3W2DG3TScCr+BK8Sv9FCx1i4WC5rBFSzkBqTmdEVDsRCJnFBxtdi5EdK8QDbbWuzLI7v4TrriyOOLXj+Alzr/ohU2weW3gIWtx7M4g==
+ bh=Ieih5+WboPdnrmBqCPUP+qiZumf0VrBHFr2OiOaj4gE=;
+ b=REc1tZSh1H919yAEifIQ4L0ysezjg4c9YgAq9ExDj+vqKA2WmNfkNpckS/r4cAF1GzNCrlj26cPdpUcRz/RpQo7ZuUU3Lz7l+fpIScm7ZxOXkZ4QNnFlMG23K/Fv27t3xeXaj6wwGPmtRAFBDZcNch1t+jysprjfflGjcBLQ/Gr7ex48AZQx4RKMSyvz9PYBflexfdOUvy/FlQIGBgWAf5xqCqTUp7xrZw//I2YvPl1mWQ0HUlAHBMhPbf6yCgwALxulsjlEm7eQwpRUGksOioqYBr4mDfCe1A2Yel2viLP7w7RQoeG4nZl9nd/APtsRTJWkZ/xm1rSaP/+hmlROJQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YsnJgrS+GjqZP32bh7ZFKSuGXYYU0wjYM7emkHcqBJU=;
- b=DUbcAoJ0f7vY5koER9qmqG2if2Lq9a9sV/UM3Thl+JJnk7iJgGu1V3Dc/MnQrCJZwEMMSrFB6o+ANdwkDRaT+TQrGwO0yApAJKSY52nnb5W1k/KNcMf7Yj8fOXoXE2HjfKzknxDq1WT3a/jjPrTrBn28BDFaCqVYfn956yY5luQ=
-Authentication-Results: jms.id.au; dkim=none (message not signed)
- header.d=none;jms.id.au; dmarc=none action=none
- header.from=os.amperecomputing.com;
-Received: from MW2PR0102MB3482.prod.exchangelabs.com (2603:10b6:302:c::32) by
- MWHPR0101MB2991.prod.exchangelabs.com (2603:10b6:301:36::14) with Microsoft
+ bh=Ieih5+WboPdnrmBqCPUP+qiZumf0VrBHFr2OiOaj4gE=;
+ b=JBw4/CPbgQ4LFa/06YEIH0EPtUknJ2G3vc7uuVtj9H2G+FxgciZhgfudwVp5sPZSqtamU3yTHiaPS8ZtyqM0DwBwf13KsVkzwF9xRjciGrVxOVCCk3DREP6OS34MGSDJRqjjAI+ZL98rFrwA0ikzqzQ4CA2KvGV5v7NHJogUtKc=
+Received: from DM6PR11MB3819.namprd11.prod.outlook.com (2603:10b6:5:13f::31)
+ by DM6PR11MB3916.namprd11.prod.outlook.com (2603:10b6:5:5::25) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3999.26; Fri, 9 Apr 2021 03:14:17 +0000
-Received: from MW2PR0102MB3482.prod.exchangelabs.com
- ([fe80::d840:7aa7:58d4:b503]) by MW2PR0102MB3482.prod.exchangelabs.com
- ([fe80::d840:7aa7:58d4:b503%5]) with mapi id 15.20.4020.016; Fri, 9 Apr 2021
- 03:14:17 +0000
-From:   Quan Nguyen <quan@os.amperecomputing.com>
-To:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org
-Cc:     Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-Subject: [PATCH v3 4/4] docs: hwmon: (smpro-hwmon) Add documentation
-Date:   Fri,  9 Apr 2021 10:13:32 +0700
-Message-Id: <20210409031332.21919-5-quan@os.amperecomputing.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20210409031332.21919-1-quan@os.amperecomputing.com>
-References: <20210409031332.21919-1-quan@os.amperecomputing.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [118.69.219.201]
-X-ClientProxiedBy: HK0PR01CA0054.apcprd01.prod.exchangelabs.com
- (2603:1096:203:a6::18) To MW2PR0102MB3482.prod.exchangelabs.com
- (2603:10b6:302:c::32)
+ 15.20.3999.29; Fri, 9 Apr 2021 04:02:47 +0000
+Received: from DM6PR11MB3819.namprd11.prod.outlook.com
+ ([fe80::a144:5e78:8a6a:8c25]) by DM6PR11MB3819.namprd11.prod.outlook.com
+ ([fe80::a144:5e78:8a6a:8c25%6]) with mapi id 15.20.3999.034; Fri, 9 Apr 2021
+ 04:02:47 +0000
+From:   "Wu, Hao" <hao.wu@intel.com>
+To:     "Xu, Yilun" <yilun.xu@intel.com>
+CC:     Moritz Fischer <mdf@kernel.org>,
+        "matthew.gerlach@linux.intel.com" <matthew.gerlach@linux.intel.com>,
+        "trix@redhat.com" <trix@redhat.com>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "russell.h.weight@linux.intel.com" <russell.h.weight@linux.intel.com>
+Subject: RE: [PATCH 2/3] fpga: dfl: Add DFL bus driver for Altera SPI Master
+Thread-Topic: [PATCH 2/3] fpga: dfl: Add DFL bus driver for Altera SPI Master
+Thread-Index: AQHXKnapzaN+e8jiOUasbNG/fZUbfKqmp0KAgAEBK4CAAAt/AIAChFHwgAAQfwCAAAHe8IABIkcAgAAgaTA=
+Date:   Fri, 9 Apr 2021 04:02:47 +0000
+Message-ID: <DM6PR11MB381912BD810637E0CDA1885F85739@DM6PR11MB3819.namprd11.prod.outlook.com>
+References: <20210405235301.187542-1-matthew.gerlach@linux.intel.com>
+ <20210405235301.187542-3-matthew.gerlach@linux.intel.com>
+ <YGuvFYvJTMPPm2Jy@epycbox.lan>
+ <alpine.DEB.2.22.394.2104060847030.208844@rhweight-WRK1>
+ <YGyQdN9uS/niyFDP@epycbox.lan>
+ <DM6PR11MB3819E0FC4F735C72746CE54785749@DM6PR11MB3819.namprd11.prod.outlook.com>
+ <20210408081152.GA2713@yilunxu-OptiPlex-7050>
+ <DM6PR11MB3819317A55FD7798E778EC4D85749@DM6PR11MB3819.namprd11.prod.outlook.com>
+ <20210409013730.GB2713@yilunxu-OptiPlex-7050>
+In-Reply-To: <20210409013730.GB2713@yilunxu-OptiPlex-7050>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.5.1.3
+authentication-results: intel.com; dkim=none (message not signed)
+ header.d=none;intel.com; dmarc=none action=none header.from=intel.com;
+x-originating-ip: [192.198.147.217]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: fab9c03a-23ce-4f67-02f2-08d8fb0c5654
+x-ms-traffictypediagnostic: DM6PR11MB3916:
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DM6PR11MB391673445F9D997D8C55BF5585739@DM6PR11MB3916.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: nm0iQ3XHXk8q15iHOMrQPo8vpGx+DhMyf/0JwCLl4pD6ebO93E5z/lrNLz0vkkHLU9tFqrO13rkfifIt3kS3oKga0fYNdI21JtV+jf8HiQvQJTsi8tlTnNi+8maVmcuCOxar3El7avlcsjRvf7muHo0wsG5wVSmbDhOYuYCwnClrt6N5h+Roj2ovPXswkCdYjHLcXu3O9glCQk3IG07W5dCFk+BIOIO/ay7uxcWUOIkLbISl1jwtuHYtUW58GD5pNOslwd6VN8N2tjzDKHpqx21y01T0GD3HcD0cOszu9ve5aYADnHgJ0qgYYC86L8SfD0r/2iapOknTuXbtrCiSqCNpm842l6P35UkgApxkbXCU+86KxFVdxSZFr1RoJDEFPTV6qvgEqIaSlXUUBcw4zTXsPCMb/kzARyZRvNl2mIbpaYHSv4uEbGwzQi9fJtEOB4xuxvIyBQWQMSNS1FCLL2wRYxQuUWs/Vrz2njefPrPQxX8eiZWmmke1G4pHP0U1pDRn70DW7qirm8yfm+Ae/feSws1OQ4g043R6Xmx5ZN10Ad1xKtfNhQ85sY7bzaQd5CGOOu8JKDFCVTk44a0o70dBT/eqAbT5829tawjIdZmHO0odgxqe2bpP16rMSWZjDHNsu8J5Xiptkmj5EQjuwjfL5UHX7DAv9fFBnLFhCF8=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3819.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(376002)(136003)(366004)(346002)(396003)(39860400002)(2906002)(8936002)(9686003)(55016002)(7696005)(54906003)(8676002)(6506007)(83380400001)(33656002)(26005)(5660300002)(7416002)(71200400001)(52536014)(316002)(76116006)(66446008)(66476007)(6862004)(478600001)(186003)(64756008)(66946007)(66556008)(4326008)(86362001)(6636002)(38100700001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?zC7795KkSmuMSrYHKCqn7Ut2WfxJCwNz/yGEvVzhrhX73ZtwknXN+/frNAB2?=
+ =?us-ascii?Q?a1qEC3MkQaj/maeh3RiuA4UNuWGYnZJvBk0soksw6WWlfXDzsmgCHlX2TybR?=
+ =?us-ascii?Q?SdZOLsKresFgVmQ/7igoUPkZ4ZtZPscqXeT8E5eGg1gC3KovpZI+f0DEVPm4?=
+ =?us-ascii?Q?xSBdOiOTSCSx5SCVZP5byA7HSUp3/tWgkj2G4fe4XG6kjEgznapknhY2Ex85?=
+ =?us-ascii?Q?ervlc91zkPxu2YGSNYxZ86Sufn4zixBUbMmUISVihP2ndScjC58tO1NY4lj7?=
+ =?us-ascii?Q?4vvh7E6QpoUN5XDcv6+w3F2W9yfnQrWJ8h94+39MN4eFjJwwZ8xPIs3Y3CHy?=
+ =?us-ascii?Q?nT8eRmO/0rf4D37elVgOr9yxpLY0G7b4uN9rgfwYb06sCZz3wUutDxvA91nN?=
+ =?us-ascii?Q?ruDeMUsURSqtrI+xnpsyCGiTy2HUBZhhu61P/C5jFch5XkS/KZMyVWv7pbPJ?=
+ =?us-ascii?Q?oewusxZj9p2jRFFCS7IfONFU87wCTJ0FCwLKvkfesSsG/aZ3bfwndH3AJnVL?=
+ =?us-ascii?Q?xLWAsgbzdhHscwQsflJkQDs/EHRen1Fc003Wh9XKL9ERYUjvxd6v+E0QvfaL?=
+ =?us-ascii?Q?dP7hFMmAvvyU72Yg2ZccooH4s5MWowhLViiqAzeEMZ47JED1HDpfwObyYWaU?=
+ =?us-ascii?Q?GSF/axe7Z6p6N985XLaQHGHanP/PdIO4OL+VQQ0G9V+aBtDhXwXINeTVDQv5?=
+ =?us-ascii?Q?4NuAwF7N7vOQL0j7JX4qM86t5ZRh/ImdLQPumV/umRfq9khbGAk4rjB0ZsaZ?=
+ =?us-ascii?Q?pgk4by/Xma+9Xa9JaAV+rBcQtCkrmYKIoFl89U8Y2xgOC9TX+hN/SodwkXfc?=
+ =?us-ascii?Q?uTV5RAciwoZI5emDy+QzTFf3MIyIBEsHLCnUBSw8WotCHKDMTd3KuY/vcORq?=
+ =?us-ascii?Q?YPUnj8sNSsoAeYV9RZc6Gx8vMsHWF7skr4JBwbB5uTtabWBCq3sn+gwBuKXr?=
+ =?us-ascii?Q?4MQMtBCdvEcxCcPUrlEPDCrA5Vl6zc0Oq2qmRLRV7a7GaVR1HtkOmyOXkrHS?=
+ =?us-ascii?Q?ofTyEiukyDoEOv7jCQBoJrbk9h4psXY+yLby3Qt+ZpR+HRoGfliTmjGJANrw?=
+ =?us-ascii?Q?zLWT8dWraA2S51D+rWpj4v57oBGesF3UuekYAslMobrziPjFNr6g83kLzbhx?=
+ =?us-ascii?Q?kGmnAlYE/CNEXkeiuiq1s0iVnrCTDAatfRSukspsF4V4vQipZlIyHsil2Gwz?=
+ =?us-ascii?Q?R0x22PelvHsj+40MyXhYFsa5/X9IBEUmlNbiJU1221zc9hKEj4kqi/R4k/p0?=
+ =?us-ascii?Q?lBN7RaH+3nhOdJNGX+Vy3ac9DoBZfsqZtKl3r2JajtKdTHfq8tZSpQ6BwDaP?=
+ =?us-ascii?Q?VhbtwdzDDT8mZPf3Iv8kTv3/?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from hcm-sw-17.amperecomputing.com (118.69.219.201) by HK0PR01CA0054.apcprd01.prod.exchangelabs.com (2603:1096:203:a6::18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4020.17 via Frontend Transport; Fri, 9 Apr 2021 03:14:13 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 71606360-701b-4caf-5a3e-08d8fb058f88
-X-MS-TrafficTypeDiagnostic: MWHPR0101MB2991:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <MWHPR0101MB2991C578E3A7B301AE8A01B7F2739@MWHPR0101MB2991.prod.exchangelabs.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: IXStxnZ2YuhheHFNTSEDRMZLqAgU2wj3w9pWtwrrn7r+iJiUNBxHCxCAn/dqmSpGeCGbzEJb3og52ubXbF6odkJzw/Bd5PQiV8UbjkDP/qJ+iomEGr7pWfsVdJwwa8gmpysIiv7Kq0Gy8VqVMQlhSDOxR0ZVpngcxKm7wnYO1FUuGhqfYdIdlH+5DyRMSNMQjQJxIkCtx6tBhua1OctRjNaooKf/h7Ru7M9Vyp9bgw9jeSjSA9OcUWwCLSA9COYJl9qxdQBOkT9E+SRHW5naixZOoE1V+acNwfc64YGyChevXD1xMStCuL10Av/bUvzMBA7CefWg4pw9bP4TJPfGUsAn00sEDni0r4M2xvAh2ud1E8qLeFvUsUH8N5rBqoOi3mFfi/+9j0FqVjMqnjUEhxkK/ayLJ16Nly/mrKa4+JGiIVU037mF0Md/YkCvM5CYN/I1pMvAtCvInJnXjHJGk4d4XyE1UIp9FqWxzX6IF6i0sPZmJPdqIP9DFlltwBsOmO1fk1rRWYxd8t8VgYVtHZ36LfpgjtIxe6e/wV7sc6RtZV/KKGOylGB2UCvqfFVUHs4EmZD4HryBum0vlSVxlXEvtbqK4NnT4TRLkLeuRtro3gZnUfBjujlNAuE/YBPF1RXwmA6E/OayA48BF20GKlkCl6XQzSHvXF4IKaDIZiwLv66k7p5rJHWI5ZqDUxbJFbm9aKgs1i8Wbpl4swiOEQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR0102MB3482.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(39850400004)(396003)(136003)(346002)(376002)(6512007)(478600001)(38350700001)(921005)(6666004)(26005)(316002)(6486002)(1076003)(2906002)(86362001)(7416002)(186003)(16526019)(6506007)(5660300002)(107886003)(38100700001)(4326008)(66946007)(956004)(8936002)(8676002)(2616005)(52116002)(66556008)(54906003)(110136005)(66476007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?Dl9HssQy4PzFCvxo/wa8YQgrTa4kMmOcqHOmGGwGIGpnOU74y8o8ENvBWrTs?=
- =?us-ascii?Q?2Dcu34B8qsuVkhsI4Rj/2mRWkIt+P7rSwa8sziQDyOXYY/NAH9jHKela6+Rl?=
- =?us-ascii?Q?icc5+uDGBTddSy+1sfjwXQI04yXNLZ5WjXC+3+7l5Dix3zJFLcfnE+KW5e2d?=
- =?us-ascii?Q?S/69LjptyGPyLl2mlLwm6fg5u0i6fcw2Vsp9WP3FHgC0g2Wq07aSJmXC4lk0?=
- =?us-ascii?Q?nyrMxONx6n5JENUOZyjZZ3vsyG5aeMvylvaax7S7oHNmJyQFqEdPyWeIXGC5?=
- =?us-ascii?Q?5v7lIX6LOJZD1XZaCALHNazFklmq3hPD2nQiudK9e6FNECH8dpmPaPBTL4jw?=
- =?us-ascii?Q?cPS7O8k3Oa+nYCnkF9kdCfd/NKPV9frApTgrksyRP7A4Mg9Dm8n4H6Os68ED?=
- =?us-ascii?Q?lu6YAC3l69GwKHGB64cBWK17HQFCq7AnuF5cL1APAXfAwcL0oajbvgm4Vt2T?=
- =?us-ascii?Q?eDvd7ixuRgo1GCm0u9eWLZXEGNjpQmlWuCFnZZdH+G13bHlwhxU+TwcVmCs8?=
- =?us-ascii?Q?t28UJ66n43Y09lwhvBomEUwXxFa1VlKus+olwfY5AcR1tD+kbPKxXTjPjV+b?=
- =?us-ascii?Q?g0Z2ivUNo7DEFKGrIOohQQzfRfzN3Uf02wf08p289g8CrJ4iatuExTpXqcKU?=
- =?us-ascii?Q?zgOf31U7Mo0HjU4JGo/Kpt4oiejrS/rG3KkSdCy1ltVUlnpe/3cMlH/80AiH?=
- =?us-ascii?Q?2I51FHP9ILtMUL7kvQvxKLHVQAPuUIg8r1ix/EAGMzG9x1OyYgLXvDFvme5S?=
- =?us-ascii?Q?KzWfGdQg7rx/rV+rKSYDFV6PRGlRUnflWAmFvvyI13jXS/zK/RYyBblGvcDU?=
- =?us-ascii?Q?hJ1QP0uzmZPkQhzgMhFCfemzVatYc3mMNl9KNbZx2g6z+erWht55zSwdgatg?=
- =?us-ascii?Q?SRtFg7PBjryrqWFg901Msi2WNWPai1oAFFn3NQ0ItBrsw2yCWrEKgw6UUBX/?=
- =?us-ascii?Q?QqDuJsmm7vS3uuexxvAcANBFXdGy6jY7kRpOa/I3ETgfmlEJK2jdkdAQp1rA?=
- =?us-ascii?Q?xiY5mcp8KWFlE3qwv92IxTE2GurKiqvZocFBMoLfOvWRlc7y/RGXc+yUqe73?=
- =?us-ascii?Q?yuEqvydT9shz+WdXUYYnkiAxLuxXDU3vrFPiSFv8Q4h8+NNxpOtNxdQNgCXd?=
- =?us-ascii?Q?0ay1/UbgYE8fz/uit4D6NWmfz3yXJ5BD/Qq3nEI29Xes8RIuCEQm/c80p843?=
- =?us-ascii?Q?+DZh34sGbufBq1RUMbkcLW6iwi3ZgJ3HUf5miGru+SpFGIxtVsHZkc+qYEU1?=
- =?us-ascii?Q?YDgSmvCtFbPuephILLsi5iOPbNxCgh56mX/pR5mabCPdMO8PI7IArexqqm4k?=
- =?us-ascii?Q?H42a8/3iLLWrep/NH6qAVoEA?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 71606360-701b-4caf-5a3e-08d8fb058f88
-X-MS-Exchange-CrossTenant-AuthSource: MW2PR0102MB3482.prod.exchangelabs.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Apr 2021 03:14:17.7919
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3819.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fab9c03a-23ce-4f67-02f2-08d8fb0c5654
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Apr 2021 04:02:47.8221
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dIlhlrX/amz3YTJnZfH+EJNN36TtN2EELGsVv6qIAMGCVzlQqEi6ERY7vxLxR4FLbmGS16Oe8DAhsClXTCmKju9ETUcc1ETbTit+V+gR0gU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR0101MB2991
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: nf894HLxEBBcNbNDtlVSqu34UF5ceCbqrwpaq8UYziSKhEDH7s+mv6eCaw6Jon/eezG6oFlEbjU3rhJA2eYDUQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB3916
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add documentation for the Ampere(R)'s Altra(R) SMpro hwmon driver.
+> > > > > > > > +
+> > > > > > > > +static void dfl_spi_altera_remove(struct dfl_device *dfl_d=
+ev)
+> > > > > > > > +{
+> > > > > > > > +struct dfl_altera_spi *aspi =3D dev_get_drvdata(&dfl_dev->=
+dev);
+> > > > > > > > +
+> > > > > > > > +platform_device_unregister(aspi->altr_spi);
+> > > > > > > > +}
+> > > > > > > > +
+> > > > > > > > +#define FME_FEATURE_ID_MAX10_SPI        0xe
+> > > > > > > > +
+> > > > > > > > +static const struct dfl_device_id dfl_spi_altera_ids[] =3D=
+ {
+> > > > > > > > +{ FME_ID, FME_FEATURE_ID_MAX10_SPI },
+> > > > > > > > +{ }
+> > > > > > > > +};
+> > > > > > >
+> > > > > > > Maybe you can extend the Altera SPI driver with this part?
+> > > > > >
+> > > > > > The file, drivers/spi/spi-altera.c, already has platform MODULE=
+_
+> related
+> > > > > > code.  Wouldn't moving this code to that file produce conflicts=
+?
+> > > > >
+> > > > > I've seen other drivers support multiple busses, so it should be
+> > > > > possible, there might be nuances I'm missing in my brief look at =
+this,
+> > > > > though.
+> > > > >
+> > > > > I think one of them would be MODULE_DEVICE_TABLE(platform, ...)
+> > > > > and the other one MODULE_DEVICE_TABLE(dfl, ...)
+> > > > >
+> > > > > See drivers/i2c/busses/i2c-designware-platdrv.c for an example (t=
+hough
+> > > > > they might be guarding against what you describe with CONFIG_OF v=
+s
+> > > > > CONFIG_ACPI)
+> > > > >
+> > > > > If that doesn't work we could split it up into
+> > > > >
+> > > > > altera-spi-plat.c and altera-spi-dfl.c and altera-spi-core.c
+> > > > > or something of that sort?
+> > > > >
+> > > > > My point being, now that we have a bus, let's use it and develop =
+drivers
+> > > > > according to the Linux device model where possible :)
+> > > >
+> > > > Agree. This does make sense from my side too. DFL core provides the
+> > > mechanism
+> > > > to enumerate different IPs on FPGA, but each function driver needs =
+to go
+> to
+> > > > related subsystem for review.  : )
+> > > >
+> > > > I understand that for FPGA case, it may have some additional logics=
+ for
+> specific
+> > > > purposes based on common altera spi master IP, then additional code=
+ for
+> > >
+> > > I'm wondering if the additional logics are extensions for common spi-=
+altera.
+> Like
+> > > the
+> > > SPI_CORE_PARAMETER register, it is not within the register space of
+> > > spi-altera,
+> > >
+> > >
+> > >   |   |      +-------------+
+> > >   |DFL|------| +--------+  |
+> > >   |BUS|      | |SPI CORE|  |
+> > >   |   |      | |PARAM   |  |
+> > >   |   |      | +--------+  |
+> > >   |   |      |             |
+> > >   |   |      | +--------+  |   +-------+
+> > >              | |Indirect|  |   |spi    |
+> > >              | |access  +--+---|altera |
+> > >              | |master  |  |   +-------+
+> > >              | +--------+  |
+> > >              +-------------+
+> > > > a specific product still can be put into altera-spi-xxxx.c or alter=
+a-spi-dfl-
+> xxxx.c
+> > >
+> > > So is it proper we integrate this feature into spi-altera? Previously
+> > > we have merged the dfl-n3000-nios, its spi part is very similar as
+> > > this driver. The dfl-n3000-nios make the spi-altera as a sub device.
+> > > Could we borrow the idea, or could we just integrate this driver in
+> > > dfl-n3000-nios?
+> >
+> > Looks like those are enhancements of the IP. They can be applied even
+>=20
+> I don't think the extra registers are the enhancement of the IP. They
+> are not part of the IP because they are not within the IP's register
+> space. They are like some external way of describing the IP like
+> Devicetree or ACPI.
 
-Signed-off-by: Thu Nguyen <thu@os.amperecomputing.com>
-Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
----
- Documentation/hwmon/index.rst       |   1 +
- Documentation/hwmon/smpro-hwmon.rst | 101 ++++++++++++++++++++++++++++
- 2 files changed, 102 insertions(+)
- create mode 100644 Documentation/hwmon/smpro-hwmon.rst
+Why adding new registers can't be consider as enhancement, those
+changes serve the original IP and make it better, right? small mmio
+footprint and parameter registers?
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index 48bfa7887dd4..3e3631b253b6 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -166,6 +166,7 @@ Hardware Monitoring Kernel Drivers
-    sis5595
-    sl28cpld
-    smm665
-+   smpro-hwmon
-    smsc47b397
-    smsc47m192
-    smsc47m1
-diff --git a/Documentation/hwmon/smpro-hwmon.rst b/Documentation/hwmon/smpro-hwmon.rst
-new file mode 100644
-index 000000000000..f978b1370e16
---- /dev/null
-+++ b/Documentation/hwmon/smpro-hwmon.rst
-@@ -0,0 +1,101 @@
-+.. SPDX-License-Identifier: GPL-2.0-or-later
-+
-+Kernel driver Ampere(R)'s Altra(R) SMpro hwmon
-+==============================================
-+
-+Supported chips:
-+
-+  * Ampere(R) Altra(R)
-+
-+    Prefix: 'smpro'
-+
-+    Reference: Altra SoC BMC Interface Specification
-+
-+Author: Thu Nguyen <thu@os.amperecomputing.com>
-+
-+Description
-+-----------
-+This driver supports hardware monitoring for Ampere(R) Altra(R) SoC's based on the
-+SMpro co-processor (SMpro).
-+The following sensor types are supported by the driver:
-+
-+  * temperature
-+  * voltage
-+  * current
-+  * power
-+
-+The SMpro interface provides the registers to query the various sensors and
-+their values which are then exported to userspace by this driver.
-+
-+Usage Notes
-+-----------
-+
-+SMpro hwmon driver creates at least two sysfs files for each sensor.
-+
-+* File ``<sensor_type><idx>_label`` reports the sensor label.
-+* File ``<sensor_type><idx>_input`` returns the sensor value.
-+
-+The sysfs files are allocated in the SMpro root fs folder.
-+There is one root folder for each SMpro instance.
-+
-+When the SoC is turned off, the driver will fail to read registers
-+and return -ENXIO.
-+
-+Sysfs entries
-+-------------
-+
-+The following sysfs files are supported:
-+
-+* Ampere(R) Altra(R):
-+
-+============    =============   ======  ===============================================
-+Name            Unit            Perm    Description
-+temp1_input     milli Celsius   RO      SoC temperature
-+temp2_input     milli Celsius   RO      Max temperature reported among SoC VRDs
-+temp2_crit      milli Celsius   RO      SoC VRD HOT Threshold temperature
-+temp3_input     milli Celsius   RO      Max temperature reported among DIMM VRDs
-+temp4_input     milli Celsius   RO      Max temperature reported among Core VRDs
-+temp5_input     milli Celsius   RO      Temperature of DIMM0 on CH0
-+temp5_crit      milli Celsius   RO      MEM HOT Threshold for all DIMMs
-+temp6_input     milli Celsius   RO      Temperature of DIMM0 on CH1
-+temp6_crit      milli Celsius   RO      MEM HOT Threshold for all DIMMs
-+temp7_input     milli Celsius   RO      Temperature of DIMM0 on CH2
-+temp7_crit      milli Celsius   RO      MEM HOT Threshold for all DIMMs
-+temp8_input     milli Celsius   RO      Temperature of DIMM0 on CH3
-+temp8_crit      milli Celsius   RO      MEM HOT Threshold for all DIMMs
-+temp9_input     milli Celsius   RO      Temperature of DIMM0 on CH4
-+temp9_crit      milli Celsius   RO      MEM HOT Threshold for all DIMMs
-+temp10_input    milli Celsius   RO      Temperature of DIMM0 on CH5
-+temp10_crit     milli Celsius   RO      MEM HOT Threshold for all DIMMs
-+temp11_input    milli Celsius   RO      Temperature of DIMM0 on CH6
-+temp11_crit     milli Celsius   RO      MEM HOT Threshold for all DIMMs
-+temp12_input    milli Celsius   RO      Temperature of DIMM0 on CH7
-+temp12_crit     milli Celsius   RO      MEM HOT Threshold for all DIMMs
-+temp13_input    milli Celsius   RO      Max temperature reported among RCA VRDs
-+in0_input       milli Volts     RO      Core voltage
-+in1_input       milli Volts     RO      SoC voltage
-+in2_input       milli Volts     RO      DIMM VRD1 voltage
-+in3_input       milli Volts     RO      DIMM VRD2 voltage
-+in4_input       milli Volts     RO      RCA VRD voltage
-+cur1_input      milli Amperes   RO      Core VRD current
-+cur2_input      milli Amperes   RO      SoC VRD current
-+cur3_input      milli Amperes   RO      DIMM VRD1 current
-+cur4_input      milli Amperes   RO      DIMM VRD2 current
-+cur5_input      milli Amperes   RO      RCA VRD current
-+power1_input    micro Watts     RO      Core VRD power
-+power2_input    micro Watts     RO      SoC VRD power
-+power3_input    micro Watts     RO      DIMM VRD1 power
-+power4_input    micro Watts     RO      DIMM VRD2 power
-+power5_input    micro Watts     RO      RCA VRD power
-+============    =============   ======  ===============================================
-+
-+Example::
-+
-+    # cat in0_input
-+    830
-+    # cat temp1_input
-+    37000
-+    # cat curr1_input
-+    9000
-+    # cat power5_input
-+    19500000
--- 
-2.28.0
+>=20
+> > other buses are used, not only for DFL, like PCI device or platform dev=
+ice,
+> > right? then why not put related code together with the original IP?
+>=20
+> The code of devicetree or ACPI parsing are integrated in the IP drivers,
+> but for this case, it may not be proper for now, cause this style is not
+> formally introduced by any standard. IP specific parameters description
+> are not within the scope of DFL now.
 
+Not sure if I get your point, but it's possible that we add some enhancemen=
+ts
+to one IP then driver could be simplified and doesn't need devicetree any m=
+ore.
+For sure, it's IP specific thing, not the scope of DFL.
+
+Then things become this: extension to IP to allow this IP to be used withou=
+t
+device tree, so that this IP can be used in DFL or PCI or other buses witho=
+ut
+device tree?
+
+Thanks
+Hao
+
+>=20
+> >
+> > The reason I suggested that function drivers which use DFL bus, still n=
+eed
+> > to go to related subsystem, because we know DFL quite well but may
+> > not be the experts for every subsystem (e.g. SPI), and every IPs (e.g.
+> > Altera SPI Master). Altera SPI Master driver maintainer could give more
+> > valuable suggestions on your question if this feature can be integrated
+> > into spi-altera or not. : )
+>=20
+> I agree that we put drivers to their related subsystem. I'm just
+> wondering if drivers/spi is the proper domain for it. Anyway getting
+> some inputs from SPI maintainers is a good suggestion.
+>=20
+> Thanks,
+> Yilun
+>=20
+> >
+> > Hao
+> >
+> > >
+> > > Thanks,
+> > > Yilun
+> > >
+> > > >
+> > > > Thanks
+> > > > Hao
+> > > >
+> > > > >
+> > > > > Cheers,
+> > > > > Moritz
