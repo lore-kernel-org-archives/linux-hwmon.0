@@ -2,445 +2,402 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18E4CC433B4
-	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Apr 2021 18:53:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BF57CC433B4
+	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Apr 2021 01:29:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D82526100B
-	for <linux-hwmon@archiver.kernel.org>; Thu,  8 Apr 2021 18:53:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 75C03610F7
+	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Apr 2021 01:29:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232888AbhDHSxV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 8 Apr 2021 14:53:21 -0400
-Received: from mail-pg1-f174.google.com ([209.85.215.174]:41684 "EHLO
-        mail-pg1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231676AbhDHSxU (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Apr 2021 14:53:20 -0400
-Received: by mail-pg1-f174.google.com with SMTP id f29so2043818pgm.8;
-        Thu, 08 Apr 2021 11:53:09 -0700 (PDT)
+        id S232951AbhDIB30 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 8 Apr 2021 21:29:26 -0400
+Received: from mail-wm1-f45.google.com ([209.85.128.45]:36539 "EHLO
+        mail-wm1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232426AbhDIB3Z (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 8 Apr 2021 21:29:25 -0400
+Received: by mail-wm1-f45.google.com with SMTP id j20-20020a05600c1914b029010f31e15a7fso3830925wmq.1;
+        Thu, 08 Apr 2021 18:29:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=h49KcBd5xHhKT6A+MHvhKtJ6y1rV0GAACbv3hOLpipg=;
-        b=IcjgX/JjFa3Xva2CGdyM6qYxCNj/g7a6b2O1w920voEMn7PgdKJt710anCve1ss2Qr
-         sym3s+TxJ6xug/CxCe5K5GgZj48m69XIf8/1kQ11XUuGnM6L1ispC6dO8P0R7eLnFTbs
-         ePZX56MSvsYwfl+w5DEg9q1mGd0tp9hKHdsUFWOsxg+ZSOgwu2rL5ZW0eJyLiAxm4Tvu
-         Y6cyWMKpe2Vct+G5xE6s6y8A9GEpUCy4t2fQ/jdT6RNfs4b5kdogBVu6KZgdxlUaXvYT
-         M1jQZ00TVkfxadGcYS1EWoN/b9YHuJ3diM1goHRoQx7moCD5YNhCEcXJdUdFnf7rOoX0
-         R4Lg==
-X-Gm-Message-State: AOAM531J+TNO4lBmOdBVezyQWJGj0IJcj17REd0XKGlUj6e5AN0l8jO/
-        S6DG95D77Mcw31GkgmNe5e0=
-X-Google-Smtp-Source: ABdhPJzBe01GxB/GWlJFtZWCiM+i1cMOBBsP48lhU5f8tagsfcedli8OKNojSTz16WBxdZ00iBRbUw==
-X-Received: by 2002:a63:4c5d:: with SMTP id m29mr9081742pgl.366.1617907988613;
-        Thu, 08 Apr 2021 11:53:08 -0700 (PDT)
-Received: from localhost ([2601:647:5b00:1161:a4cc:eef9:fbc0:2781])
-        by smtp.gmail.com with ESMTPSA id x18sm201791pfu.32.2021.04.08.11.53.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Apr 2021 11:53:07 -0700 (PDT)
-Date:   Thu, 8 Apr 2021 11:53:06 -0700
-From:   Moritz Fischer <mdf@kernel.org>
-To:     "Wu, Hao" <hao.wu@intel.com>
-Cc:     "Xu, Yilun" <yilun.xu@intel.com>, Moritz Fischer <mdf@kernel.org>,
-        "matthew.gerlach@linux.intel.com" <matthew.gerlach@linux.intel.com>,
-        "trix@redhat.com" <trix@redhat.com>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "russell.h.weight@linux.intel.com" <russell.h.weight@linux.intel.com>
-Subject: Re: [PATCH 2/3] fpga: dfl: Add DFL bus driver for Altera SPI Master
-Message-ID: <YG9REtNPi4e2hyJK@epycbox.lan>
-References: <20210405235301.187542-1-matthew.gerlach@linux.intel.com>
- <20210405235301.187542-3-matthew.gerlach@linux.intel.com>
- <YGuvFYvJTMPPm2Jy@epycbox.lan>
- <alpine.DEB.2.22.394.2104060847030.208844@rhweight-WRK1>
- <YGyQdN9uS/niyFDP@epycbox.lan>
- <DM6PR11MB3819E0FC4F735C72746CE54785749@DM6PR11MB3819.namprd11.prod.outlook.com>
- <20210408081152.GA2713@yilunxu-OptiPlex-7050>
- <DM6PR11MB3819317A55FD7798E778EC4D85749@DM6PR11MB3819.namprd11.prod.outlook.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Jz/BmwXT2JiSpalzUV9orhkrmdLN5+8cxM2L7471wQw=;
+        b=kfw/aMnDg0SXRzTERZuFykQ7kS8+TfEs0DYgKkE+RsN0j3Zzrl5QpiAMWEXACV+66I
+         nTtzn4MT6l9X44uZf7o8Wwd+tiIQEBzB83bTadSJ+uoyyUHK1ZtJn+nk+l/M0NQGsVie
+         7fu51AquxaCTOuD4H3R8vcCb+SfeekB/4pF1b+nwUOel0HRC2+J2nZoijYgmzKvNVDrF
+         VxHfpzX1R9wuow4fQg+u8Fwpr534cwCQvMrZ+hIE9k2u3C+/wDmj3N/wfKlNqYRzk9vG
+         vKAFGANcANv/hqKnAIFsrYCpjtSzw795yPO1si5E5UHJldbuAwgPvFIWJWU/ckZdmXkO
+         DIaA==
+X-Gm-Message-State: AOAM531xkGExSgPjcPNRsztkClhtyQEunRhScEAeHhHB53QB2MsUyhv8
+        YEB6yYadXKz2F/uZyK+9Jb8=
+X-Google-Smtp-Source: ABdhPJzGGzoFsInsb2qvqAsZWueg0bw4MCn2OBrForF752zHeFILftrtggjFqx1wiD7nSDh8yrudwQ==
+X-Received: by 2002:a1c:f20f:: with SMTP id s15mr11782340wmc.61.1617931752741;
+        Thu, 08 Apr 2021 18:29:12 -0700 (PDT)
+Received: from localhost ([2a02:8308:387:c900:a7b5:b859:9449:c07b])
+        by smtp.gmail.com with ESMTPSA id o8sm1679420wrv.49.2021.04.08.18.29.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Apr 2021 18:29:11 -0700 (PDT)
+From:   =?UTF-8?q?V=C3=A1clav=20Kubern=C3=A1t?= <kubernat@cesnet.cz>
+Cc:     =?UTF-8?q?V=C3=A1clav=20Kubern=C3=A1t?= <kubernat@cesnet.cz>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] hwmon: Add driver for fsp-3y PSUs and PDUs
+Date:   Fri,  9 Apr 2021 03:27:53 +0200
+Message-Id: <20210409012754.743045-1-kubernat@cesnet.cz>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210329143833.1047539-1-kubernat@cesnet.cz>
+References: <20210329143833.1047539-1-kubernat@cesnet.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM6PR11MB3819317A55FD7798E778EC4D85749@DM6PR11MB3819.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Apr 08, 2021 at 09:20:19AM +0000, Wu, Hao wrote:
-> > On Thu, Apr 08, 2021 at 03:30:15PM +0800, Wu, Hao wrote:
-> > > > > On Mon, 5 Apr 2021, Moritz Fischer wrote:
-> > > > >
-> > > > > > Hi Matthew,
-> > > > > >
-> > > > > > On Mon, Apr 05, 2021 at 04:53:00PM -0700,
-> > > > matthew.gerlach@linux.intel.com wrote:
-> > > > > > > From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> > > > > > >
-> > > > > > > This patch adds DFL bus driver for the Altera SPI Master
-> > > > > > > controller.  The SPI master is connected to an Intel SPI Slave to
-> > > > > > > Avalon Master Bridge, inside an Intel MAX10 BMC Chip.
-> > > > > > >
-> > > > > > > Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> > > > > > > ---
-> > > > > > >  drivers/fpga/Kconfig          |   9 ++
-> > > > > > >  drivers/fpga/Makefile         |   1 +
-> > > > > > >  drivers/fpga/dfl-spi-altera.c | 221
-> > > > ++++++++++++++++++++++++++++++++++++++++++
-> > > > > > >  3 files changed, 231 insertions(+)
-> > > > > > >  create mode 100644 drivers/fpga/dfl-spi-altera.c
-> > > > > > >
-> > > > > > > diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-> > > > > > > index d591dd9..0a86994 100644
-> > > > > > > --- a/drivers/fpga/Kconfig
-> > > > > > > +++ b/drivers/fpga/Kconfig
-> > > > > > > @@ -210,6 +210,15 @@ config FPGA_DFL_NIOS_INTEL_PAC_N3000
-> > > > > > >    the card. It also instantiates the SPI master (spi-altera) for
-> > > > > > >    the card's BMC (Board Management Controller).
-> > > > > > >
-> > > > > > > +config FPGA_DFL_SPI_ALTERA
-> > > > > > > +tristate "FPGA DFL Altera SPI Master Driver"
-> > > > > > > +depends on FPGA_DFL
-> > > > > > > +select REGMAP
-> > > > > > > +help
-> > > > > > > +  This is a DFL bus driver for the Altera SPI master controller.
-> > > > > > > +  The SPI master is connected to a SPI slave to Avalon Master
-> > > > > > > +  bridge in a Intel MAX BMC.
-> > > > > > > +
-> > > > > > >  config FPGA_DFL_PCI
-> > > > > > >  tristate "FPGA DFL PCIe Device Driver"
-> > > > > > >  depends on PCI && FPGA_DFL
-> > > > > > > diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
-> > > > > > > index 18dc9885..58a42ad 100644
-> > > > > > > --- a/drivers/fpga/Makefile
-> > > > > > > +++ b/drivers/fpga/Makefile
-> > > > > > > @@ -45,6 +45,7 @@ dfl-afu-objs := dfl-afu-main.o dfl-afu-region.o dfl-
-> > > > afu-dma-region.o
-> > > > > > >  dfl-afu-objs += dfl-afu-error.o
-> > > > > > >
-> > > > > > >  obj-$(CONFIG_FPGA_DFL_NIOS_INTEL_PAC_N3000)+= dfl-n3000-
-> > > > nios.o
-> > > > > > > +obj-$(CONFIG_FPGA_DFL_SPI_ALTERA)+= dfl-spi-altera.o
-> > > > > > >
-> > > > > > >  # Drivers for FPGAs which implement DFL
-> > > > > > >  obj-$(CONFIG_FPGA_DFL_PCI)+= dfl-pci.o
-> > > > > > > diff --git a/drivers/fpga/dfl-spi-altera.c b/drivers/fpga/dfl-spi-altera.c
-> > > > > > > new file mode 100644
-> > > > > > > index 0000000..9bec25fd
-> > > > > > > --- /dev/null
-> > > > > > > +++ b/drivers/fpga/dfl-spi-altera.c
-> > > > > > > @@ -0,0 +1,221 @@
-> > > > > > > +// SPDX-License-Identifier: GPL-2.0
-> > > > > > > +/*
-> > > > > > > + * DFL bus driver for Altera SPI Master
-> > > > > > > + *
-> > > > > > > + * Copyright (C) 2020 Intel Corporation, Inc.
-> > > > > > > + *
-> > > > > > > + * Authors:
-> > > > > > > + *   Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> > > > > > > + */
-> > > > > > > +
-> > > > > > > +#include <linux/types.h>
-> > > > > > > +#include <linux/kernel.h>
-> > > > > > > +#include <linux/module.h>
-> > > > > > > +#include <linux/stddef.h>
-> > > > > > > +#include <linux/errno.h>
-> > > > > > > +#include <linux/platform_device.h>
-> > > > > > > +#include <linux/io.h>
-> > > > > > > +#include <linux/bitfield.h>
-> > > > > > > +#include <linux/io-64-nonatomic-lo-hi.h>
-> > > > > > > +#include <linux/regmap.h>
-> > > > > > > +#include <linux/spi/spi.h>
-> > > > > > > +#include <linux/spi/altera.h>
-> > > > > > > +#include <linux/dfl.h>
-> > > > > > > +
-> > > > > > > +struct dfl_altera_spi {
-> > > > > > > +void __iomem *base;
-> > > > > > > +struct regmap *regmap;
-> > > > > > > +struct device *dev;
-> > > > > > > +struct platform_device *altr_spi;
-> > > > > > > +};
-> > > > > > > +
-> > > > > > > +#define SPI_CORE_PARAMETER      0x8
-> > > > > > > +#define SHIFT_MODE              BIT_ULL(1)
-> > > > > > > +#define SHIFT_MODE_MSB          0
-> > > > > > > +#define SHIFT_MODE_LSB          1
-> > > > > > > +#define DATA_WIDTH              GENMASK_ULL(7, 2)
-> > > > > > > +#define NUM_CHIPSELECT          GENMASK_ULL(13, 8)
-> > > > > > > +#define CLK_POLARITY            BIT_ULL(14)
-> > > > > > > +#define CLK_PHASE               BIT_ULL(15)
-> > > > > > > +#define PERIPHERAL_ID           GENMASK_ULL(47, 32)
-> > > > > > > +#define SPI_CLK                 GENMASK_ULL(31, 22)
-> > > > > > > +#define SPI_INDIRECT_ACC_OFST   0x10
-> > > > > > > +
-> > > > > > > +#define INDIRECT_ADDR           (SPI_INDIRECT_ACC_OFST+0x0)
-> > > > > > > +#define INDIRECT_WR             BIT_ULL(8)
-> > > > > > > +#define INDIRECT_RD             BIT_ULL(9)
-> > > > > > > +#define INDIRECT_RD_DATA        (SPI_INDIRECT_ACC_OFST+0x8)
-> > > > > > > +#define INDIRECT_DATA_MASK      GENMASK_ULL(31, 0)
-> > > > > > > +#define INDIRECT_DEBUG          BIT_ULL(32)
-> > > > > > > +#define INDIRECT_WR_DATA        (SPI_INDIRECT_ACC_OFST+0x10)
-> > > > > > > +#define INDIRECT_TIMEOUT        10000
-> > > > > > > +
-> > > > > > > +static int indirect_bus_reg_read(void *context, unsigned int reg,
-> > > > > > > + unsigned int *val)
-> > > > > > > +{
-> > > > > > > +struct dfl_altera_spi *aspi = context;
-> > > > > > > +void __iomem *base = aspi->base;
-> > > > > > > +int loops;
-> > > > > > > +u64 v;
-> > > > > > > +
-> > > > > > > +writeq((reg >> 2) | INDIRECT_RD, base + INDIRECT_ADDR);
-> > > > > > > +
-> > > > > > > +loops = 0;
-> > > > > > > +while ((readq(base + INDIRECT_ADDR) & INDIRECT_RD) &&
-> > > > > > > +       (loops++ < INDIRECT_TIMEOUT))
-> > > > > > > +cpu_relax();
-> > > > > > > +
-> > > > > > > +if (loops >= INDIRECT_TIMEOUT) {
-> > > > > > > +pr_err("%s timed out %d\n", __func__, loops);
-> > > > > > > +return -ETIME;
-> > > > > > > +}
-> > > > > > > +
-> > > > > > > +v = readq(base + INDIRECT_RD_DATA);
-> > > > > > > +
-> > > > > > > +*val = v & INDIRECT_DATA_MASK;
-> > > > > > > +
-> > > > > > > +return 0;
-> > > > > > > +}
-> > > > > > > +
-> > > > > > > +static int indirect_bus_reg_write(void *context, unsigned int reg,
-> > > > > > > +  unsigned int val)
-> > > > > > > +{
-> > > > > > > +struct dfl_altera_spi *aspi = context;
-> > > > > > > +void __iomem *base = aspi->base;
-> > > > > > > +int loops;
-> > > > > > > +
-> > > > > > > +writeq(val, base + INDIRECT_WR_DATA);
-> > > > > > > +writeq((reg >> 2) | INDIRECT_WR, base + INDIRECT_ADDR);
-> > > > > > > +
-> > > > > > > +loops = 0;
-> > > > > > > +while ((readq(base + INDIRECT_ADDR) & INDIRECT_WR) &&
-> > > > > > > +       (loops++ < INDIRECT_TIMEOUT))
-> > > > > > > +cpu_relax();
-> > > > > > > +
-> > > > > > > +if (loops >= INDIRECT_TIMEOUT) {
-> > > > > > > +pr_err("%s timed out %d\n", __func__, loops);
-> > > > > > > +return -ETIME;
-> > > > > > > +}
-> > > > > > > +return 0;
-> > > > > > > +}
-> > > > > > > +
-> > > > > > > +static const struct regmap_config indirect_regbus_cfg = {
-> > > > > > > +.reg_bits = 32,
-> > > > > > > +.reg_stride = 4,
-> > > > > > > +.val_bits = 32,
-> > > > > > > +.fast_io = true,
-> > > > > > > +
-> > > > > > > +.reg_write = indirect_bus_reg_write,
-> > > > > > > +.reg_read = indirect_bus_reg_read,
-> > > > > > > +};
-> > > > > > > +
-> > > > > > > +static struct spi_board_info m10_bmc_info = {
-> > > > > > > +.modalias = "m10-d5005",
-> > > > > > > +.max_speed_hz = 12500000,
-> > > > > > > +.bus_num = 0,
-> > > > > > > +.chip_select = 0,
-> > > > > > > +};
-> > > > > > > +
-> > > > > > > +static struct platform_device *create_cntrl(struct device *dev,
-> > > > > > > +    void __iomem *base,
-> > > > > > > +    struct spi_board_info *m10_info)
-> > > > > > > +{
-> > > > > > > +struct altera_spi_platform_data pdata;
-> > > > > > > +struct platform_device_info pdevinfo;
-> > > > > > > +u64 v;
-> > > > > > > +
-> > > > > > > +v = readq(base + SPI_CORE_PARAMETER);
-> > > > > > > +
-> > > > > > > +memset(&pdata, 0, sizeof(pdata));
-> > > > > > > +pdata.mode_bits = SPI_CS_HIGH;
-> > > > > > > +if (FIELD_GET(CLK_POLARITY, v))
-> > > > > > > +pdata.mode_bits |= SPI_CPOL;
-> > > > > > > +if (FIELD_GET(CLK_PHASE, v))
-> > > > > > > +pdata.mode_bits |= SPI_CPHA;
-> > > > > > > +
-> > > > > > > +pdata.num_chipselect = FIELD_GET(NUM_CHIPSELECT, v);
-> > > > > > > +pdata.bits_per_word_mask =
-> > > > > > > +SPI_BPW_RANGE_MASK(1, FIELD_GET(DATA_WIDTH, v));
-> > > > > > > +
-> > > > > > > +pdata.num_devices = 1;
-> > > > > > > +pdata.devices = m10_info;
-> > > > > > > +
-> > > > > > > +dev_dbg(dev, "%s cs %u bpm 0x%x mode 0x%x\n", __func__,
-> > > > > > > +pdata.num_chipselect, pdata.bits_per_word_mask,
-> > > > > > > +pdata.mode_bits);
-> > > > > > > +
-> > > > > > > +memset(&pdevinfo, 0, sizeof(pdevinfo));
-> > > > > > > +
-> > > > > > > +pdevinfo.name = "subdev_spi_altera";
-> > > > > > > +pdevinfo.id = PLATFORM_DEVID_AUTO;
-> > > > > > > +pdevinfo.parent = dev;
-> > > > > > > +pdevinfo.data = &pdata;
-> > > > > > > +pdevinfo.size_data = sizeof(pdata);
-> > > > > > > +
-> > > > > > > +return platform_device_register_full(&pdevinfo);
-> > > > > >
-> > > > > > Should this be a SPI driver? I think looking at the UIO case we had
-> > > > > > decided against this pattern?
-> > > > >
-> > > > > This driver is similar in function to drivers/fpga/dfl-n3000-nios.c which
-> > > > > uses this design pattern.  Is it okay to keep this design pattern for
-> > > > > consistency?
-> > > > >
-> > > > >
-> > > > > >
-> > > > > > > +}
-> > > > > > > +static int dfl_spi_altera_probe(struct dfl_device *dfl_dev)
-> > > > > > > +{
-> > > > > > > +struct device *dev = &dfl_dev->dev;
-> > > > > > > +struct dfl_altera_spi *aspi;
-> > > > > > > +
-> > > > > > > +aspi = devm_kzalloc(dev, sizeof(*aspi), GFP_KERNEL);
-> > > > > > > +
-> > > > > > > +if (!aspi)
-> > > > > > > +return -ENOMEM;
-> > > > > > > +
-> > > > > > > +dev_set_drvdata(dev, aspi);
-> > > > > > > +
-> > > > > > > +aspi->dev = dev;
-> > > > > > > +
-> > > > > > > +aspi->base = devm_ioremap_resource(dev, &dfl_dev->mmio_res);
-> > > > > > > +
-> > > > > > > +if (IS_ERR(aspi->base)) {
-> > > > > > > +dev_err(dev, "%s get mem resource fail!\n", __func__);
-> > > > > > > +return PTR_ERR(aspi->base);
-> > > > > > > +}
-> > > > > > > +
-> > > > > > > +aspi->regmap = devm_regmap_init(dev, NULL, aspi,
-> > > > &indirect_regbus_cfg);
-> > > > > > > +if (IS_ERR(aspi->regmap))
-> > > > > > > +return PTR_ERR(aspi->regmap);
-> > > > > > > +
-> > > > > > > +aspi->altr_spi = create_cntrl(dev, aspi->base, &m10_bmc_info);
-> > > > > > > +
-> > > > > > > +if (IS_ERR(aspi->altr_spi)) {
-> > > > > > > +dev_err(dev, "%s failed to create spi platform driver\n",
-> > > > > > > +__func__);
-> > > > > > > +return PTR_ERR(aspi->base);
-> > > > > > > +}
-> > > > > > > +
-> > > > > > > +return 0;
-> > > > > > > +}
-> > > > > > > +
-> > > > > > > +static void dfl_spi_altera_remove(struct dfl_device *dfl_dev)
-> > > > > > > +{
-> > > > > > > +struct dfl_altera_spi *aspi = dev_get_drvdata(&dfl_dev->dev);
-> > > > > > > +
-> > > > > > > +platform_device_unregister(aspi->altr_spi);
-> > > > > > > +}
-> > > > > > > +
-> > > > > > > +#define FME_FEATURE_ID_MAX10_SPI        0xe
-> > > > > > > +
-> > > > > > > +static const struct dfl_device_id dfl_spi_altera_ids[] = {
-> > > > > > > +{ FME_ID, FME_FEATURE_ID_MAX10_SPI },
-> > > > > > > +{ }
-> > > > > > > +};
-> > > > > >
-> > > > > > Maybe you can extend the Altera SPI driver with this part?
-> > > > >
-> > > > > The file, drivers/spi/spi-altera.c, already has platform MODULE_ related
-> > > > > code.  Wouldn't moving this code to that file produce conflicts?
-> > > >
-> > > > I've seen other drivers support multiple busses, so it should be
-> > > > possible, there might be nuances I'm missing in my brief look at this,
-> > > > though.
-> > > >
-> > > > I think one of them would be MODULE_DEVICE_TABLE(platform, ...)
-> > > > and the other one MODULE_DEVICE_TABLE(dfl, ...)
-> > > >
-> > > > See drivers/i2c/busses/i2c-designware-platdrv.c for an example (though
-> > > > they might be guarding against what you describe with CONFIG_OF vs
-> > > > CONFIG_ACPI)
-> > > >
-> > > > If that doesn't work we could split it up into
-> > > >
-> > > > altera-spi-plat.c and altera-spi-dfl.c and altera-spi-core.c
-> > > > or something of that sort?
-> > > >
-> > > > My point being, now that we have a bus, let's use it and develop drivers
-> > > > according to the Linux device model where possible :)
-> > >
-> > > Agree. This does make sense from my side too. DFL core provides the
-> > mechanism
-> > > to enumerate different IPs on FPGA, but each function driver needs to go to
-> > > related subsystem for review.  : )
-> > >
-> > > I understand that for FPGA case, it may have some additional logics for specific
-> > > purposes based on common altera spi master IP, then additional code for
-> > 
-> > I'm wondering if the additional logics are extensions for common spi-altera. Like
-> > the
-> > SPI_CORE_PARAMETER register, it is not within the register space of
-> > spi-altera,
-> > 
-> > 
-> >   |   |      +-------------+
-> >   |DFL|------| +--------+  |
-> >   |BUS|      | |SPI CORE|  |
-> >   |   |      | |PARAM   |  |
-> >   |   |      | +--------+  |
-> >   |   |      |             |
-> >   |   |      | +--------+  |   +-------+
-> >              | |Indirect|  |   |spi    |
-> >              | |access  +--+---|altera |
-> >              | |master  |  |   +-------+
-> >              | +--------+  |
-> >              +-------------+
-> > > a specific product still can be put into altera-spi-xxxx.c or altera-spi-dfl-xxxx.c
-> > 
-> > So is it proper we integrate this feature into spi-altera? Previously
-> > we have merged the dfl-n3000-nios, its spi part is very similar as
-> > this driver. The dfl-n3000-nios make the spi-altera as a sub device.
-> > Could we borrow the idea, or could we just integrate this driver in
-> > dfl-n3000-nios?
-> 
-> Looks like those are enhancements of the IP. They can be applied even
-> other buses are used, not only for DFL, like PCI device or platform device,
-> right? then why not put related code together with the original IP?
+This patch adds support for these devices:
+- YH-5151E - the PDU
+- YM-2151E - the PSU
 
-Do you maybe need to extend struct dfl_device to have multiple mmio_res,
-then?
+The device datasheet says that the devices support PMBus 1.2, but in my
+testing, a lot of the commands aren't supported and if they are, they
+sometimes behave strangely or inconsistently. For example, writes to the
+PAGE command requires using PEC, otherwise the write won't work and the
+page won't switch, even though, the standard says that PEC is opiotnal.
+On the other hand, writes the SMBALERT don't require PEC. Because of
+this, the driver is mostly reverse engineered with the help of a tool
+called pmbus_peek written by David Brownell (and later adopted by my
+colleague Jan Kundrát).
 
-Can DFL describe such a scenario?
+The device also has some sort of a timing issue when switching pages,
+which is explained further in the code.
 
-That seems the logical step to support what's been drawn up there?
+Because of this, the driver support is limited. It exposes only the
+values, that have been tested to work correctly.
 
-> 
-> The reason I suggested that function drivers which use DFL bus, still need
-> to go to related subsystem, because we know DFL quite well but may
-> not be the experts for every subsystem (e.g. SPI), and every IPs (e.g. 
-> Altera SPI Master). Altera SPI Master driver maintainer could give more
-> valuable suggestions on your question if this feature can be integrated
-> into spi-altera or not. : )
-> 
-> Hao
-> 
-> > 
-> > Thanks,
-> > Yilun
-> > 
-> > >
-> > > Thanks
-> > > Hao
-> > >
-> > > >
-> > > > Cheers,
-> > > > Moritz
+Signed-off-by: Václav Kubernát <kubernat@cesnet.cz>
+---
+ Documentation/hwmon/fsp-3y.rst |  26 ++++
+ drivers/hwmon/pmbus/Kconfig    |  10 ++
+ drivers/hwmon/pmbus/Makefile   |   1 +
+ drivers/hwmon/pmbus/fsp-3y.c   | 236 +++++++++++++++++++++++++++++++++
+ 4 files changed, 273 insertions(+)
+ create mode 100644 Documentation/hwmon/fsp-3y.rst
+ create mode 100644 drivers/hwmon/pmbus/fsp-3y.c
 
-Cheers,
-Moritz
+diff --git a/Documentation/hwmon/fsp-3y.rst b/Documentation/hwmon/fsp-3y.rst
+new file mode 100644
+index 000000000000..68a547021846
+--- /dev/null
++++ b/Documentation/hwmon/fsp-3y.rst
+@@ -0,0 +1,26 @@
++Kernel driver fsp3y
++======================
++Supported devices:
++  * 3Y POWER YH-5151E
++  * 3Y POWER YM-2151E
++
++Author: Václav Kubernát <kubernat@cesnet.cz>
++
++Description
++-----------
++This driver implements limited support for two 3Y POWER devices.
++
++Sysfs entries
++-------------
++in1_input            input voltage
++in2_input            12V output voltage
++in3_input            5V output voltage
++curr1_input          input current
++curr2_input          12V output current
++curr3_input          5V output current
++fan1_input           fan rpm
++temp1_input          temperature 1
++temp2_input          temperature 2
++temp3_input          temperature 3
++power1_input         input power
++power2_input         output power
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index 03606d4298a4..9d12d446396c 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -56,6 +56,16 @@ config SENSORS_BEL_PFE
+ 	  This driver can also be built as a module. If so, the module will
+ 	  be called bel-pfe.
+ 
++config SENSORS_FSP_3Y
++	tristate "FSP/3Y-Power power supplies"
++	help
++	  If you say yes here you get hardware monitoring support for
++	  FSP/3Y-Power hot-swap power supplies.
++	  Supported models: YH-5151E, YM-2151E
++
++	  This driver can also be built as a module. If so, the module will
++	  be called fsp-3y.
++
+ config SENSORS_IBM_CFFPS
+ 	tristate "IBM Common Form Factor Power Supply"
+ 	depends on LEDS_CLASS
+diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+index 6a4ba0fdc1db..bfe218ad898f 100644
+--- a/drivers/hwmon/pmbus/Makefile
++++ b/drivers/hwmon/pmbus/Makefile
+@@ -8,6 +8,7 @@ obj-$(CONFIG_SENSORS_PMBUS)	+= pmbus.o
+ obj-$(CONFIG_SENSORS_ADM1266)	+= adm1266.o
+ obj-$(CONFIG_SENSORS_ADM1275)	+= adm1275.o
+ obj-$(CONFIG_SENSORS_BEL_PFE)	+= bel-pfe.o
++obj-$(CONFIG_SENSORS_FSP_3Y)	+= fsp-3y.o
+ obj-$(CONFIG_SENSORS_IBM_CFFPS)	+= ibm-cffps.o
+ obj-$(CONFIG_SENSORS_INSPUR_IPSPS) += inspur-ipsps.o
+ obj-$(CONFIG_SENSORS_IR35221)	+= ir35221.o
+diff --git a/drivers/hwmon/pmbus/fsp-3y.c b/drivers/hwmon/pmbus/fsp-3y.c
+new file mode 100644
+index 000000000000..f03c4e27ec8c
+--- /dev/null
++++ b/drivers/hwmon/pmbus/fsp-3y.c
+@@ -0,0 +1,236 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Hardware monitoring driver for FSP 3Y-Power PSUs
++ *
++ * Copyright (c) 2021 Václav Kubernát, CESNET
++ */
++
++#include <linux/delay.h>
++#include <linux/i2c.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include "pmbus.h"
++
++#define YM2151_PAGE_12V_LOG	0x00
++#define YM2151_PAGE_12V_REAL	0x00
++#define YM2151_PAGE_5VSB_LOG	0x01
++#define YM2151_PAGE_5VSB_REAL	0x20
++#define YH5151E_PAGE_12V_LOG	0x00
++#define YH5151E_PAGE_12V_REAL	0x00
++#define YH5151E_PAGE_5V_LOG	0x01
++#define YH5151E_PAGE_5V_REAL	0x10
++#define YH5151E_PAGE_3V3_LOG	0x02
++#define YH5151E_PAGE_3V3_REAL	0x11
++
++enum chips {
++	ym2151e,
++	yh5151e
++};
++
++struct fsp3y_data {
++	struct pmbus_driver_info info;
++	enum chips chip;
++	int page;
++};
++
++#define to_fsp3y_data(x) container_of(x, struct fsp3y_data, info)
++
++static int page_log_to_page_real(int page_log, enum chips chip)
++{
++	switch (chip) {
++	case ym2151e:
++		switch (page_log) {
++		case YM2151_PAGE_12V_LOG:
++			return YM2151_PAGE_12V_REAL;
++		case YM2151_PAGE_5VSB_LOG:
++			return YM2151_PAGE_5VSB_REAL;
++		}
++		return -EINVAL;
++	case yh5151e:
++		switch (page_log) {
++		case YH5151E_PAGE_12V_LOG:
++			return YH5151E_PAGE_12V_REAL;
++		case YH5151E_PAGE_5V_LOG:
++			return YH5151E_PAGE_5V_LOG;
++		case YH5151E_PAGE_3V3_LOG:
++			return YH5151E_PAGE_3V3_REAL;
++		}
++		return -EINVAL;
++	}
++
++	return -EINVAL;
++}
++
++static int set_page(struct i2c_client *client, int page_log)
++{
++	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
++	struct fsp3y_data *data = to_fsp3y_data(info);
++	int rv;
++	int page_real;
++
++	if (page_log < 0)
++		return 0;
++
++	page_real = page_log_to_page_real(page_log, data->chip);
++	if (page_real < 0)
++		return page_real;
++
++	if (data->page != page_real) {
++		rv = pmbus_set_page(client, page_real, 0xff);
++		if (rv < 0)
++			return rv;
++
++		data->page = page_real;
++
++		/* Testing showed that the device has a timing issue. After
++		 * setting a page, it takes a while, before the device actually
++		 * gives the correct values from the correct page. 20 ms was
++		 * tested to be enough to not give wrong values (15 ms wasn't
++		 * enough)
++		 */
++		usleep_range(20000, 30000);
++	}
++
++	return 0;
++}
++
++static int fsp3y_read_byte_data(struct i2c_client *client, int page, int reg)
++{
++	int rv;
++
++	rv = set_page(client, page);
++	if (rv < 0)
++		return rv;
++
++	return i2c_smbus_read_byte_data(client, reg);
++}
++
++static int fsp3y_read_word_data(struct i2c_client *client, int page, int phase, int reg)
++{
++	int rv;
++
++	switch (reg) {
++	case PMBUS_READ_FAN_SPEED_1:
++	case PMBUS_READ_IIN:
++	case PMBUS_READ_IOUT:
++	case PMBUS_READ_PIN:
++	case PMBUS_READ_POUT:
++	case PMBUS_READ_TEMPERATURE_1:
++	case PMBUS_READ_TEMPERATURE_2:
++	case PMBUS_READ_TEMPERATURE_3:
++	case PMBUS_READ_VIN:
++	case PMBUS_READ_VOUT:
++	case PMBUS_STATUS_WORD:
++		break;
++	default:
++		return -ENXIO;
++	}
++
++	rv = set_page(client, page);
++	if (rv < 0)
++		return rv;
++
++	return i2c_smbus_read_word_data(client, reg);
++}
++
++struct pmbus_driver_info fsp3y_info[] = {
++	[ym2151e] = {
++		.pages = 2,
++		.func[YM2151_PAGE_12V_LOG] =
++			PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
++			PMBUS_HAVE_PIN | PMBUS_HAVE_POUT  |
++			PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2 |
++			PMBUS_HAVE_VIN | PMBUS_HAVE_IIN |
++			PMBUS_HAVE_FAN12,
++		.func[YM2151_PAGE_5VSB_LOG] =
++			PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT,
++			PMBUS_HAVE_IIN,
++		.read_word_data = fsp3y_read_word_data,
++		.read_byte_data = fsp3y_read_byte_data,
++	},
++	[yh5151e] = {
++		.pages = 3,
++		.func[YH5151E_PAGE_12V_LOG] =
++			PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
++			PMBUS_HAVE_POUT  |
++			PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2 | PMBUS_HAVE_TEMP3,
++		.func[YH5151E_PAGE_5V_LOG] =
++			PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
++			PMBUS_HAVE_POUT,
++		.func[YH5151E_PAGE_3V3_LOG] =
++			PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
++			PMBUS_HAVE_POUT,
++		.read_word_data = fsp3y_read_word_data,
++		.read_byte_data = fsp3y_read_byte_data,
++	}
++};
++
++static int fsp3y_detect(struct i2c_client *client)
++{
++	int rv;
++	u8 buf[I2C_SMBUS_BLOCK_MAX];
++
++	rv = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, buf);
++	if (rv < 0)
++		return rv;
++
++	if (rv == 8 && !strncmp(buf, "YM-2151E", strlen("YM-2151E")))
++		return ym2151e;
++	else if (rv == 8 && !strncmp(buf, "YH-5151E", strlen("YH-5151E")))
++		return yh5151e;
++
++	dev_err(&client->dev, "Unsupported model %.*s\n", rv, buf);
++	return -ENODEV;
++}
++
++static const struct i2c_device_id fsp3y_id[] = {
++	{"ym2151e", ym2151e},
++	{"yh5151e", yh5151e}
++};
++
++static int fsp3y_probe(struct i2c_client *client)
++{
++	struct fsp3y_data *data;
++	const struct i2c_device_id *id;
++	int rv;
++
++	data = devm_kzalloc(&client->dev, sizeof(struct fsp3y_data), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++
++	data->chip = fsp3y_detect(client);
++
++	id = i2c_match_id(fsp3y_id, client);
++	if (data->chip != id->driver_data)
++		dev_warn(&client->dev,
++			 "Device mismatch: Configured %s (%d), detected %d\n",
++			 id->name,
++			 (int)id->driver_data,
++			 data->chip);
++
++	rv = i2c_smbus_read_byte_data(client, PMBUS_PAGE);
++	if (rv < 0)
++		return rv;
++	data->page = rv;
++
++	data->info = fsp3y_info[data->chip];
++
++	return pmbus_do_probe(client, &data->info);
++}
++
++MODULE_DEVICE_TABLE(i2c, pmbus_id);
++
++/* This is the driver that will be inserted */
++static struct i2c_driver fsp3y_driver = {
++	.driver = {
++		   .name = "fsp3y",
++		   },
++	.probe_new = fsp3y_probe,
++	.id_table = fsp3y_id
++};
++
++module_i2c_driver(fsp3y_driver);
++
++MODULE_AUTHOR("Václav Kubernát");
++MODULE_DESCRIPTION("PMBus driver for FSP/3Y-Power power supplies");
++MODULE_LICENSE("GPL");
+-- 
+2.31.1
+
