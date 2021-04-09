@@ -2,176 +2,151 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5767C433ED
-	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Apr 2021 16:29:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 274C4C433ED
+	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Apr 2021 17:49:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7CCF1610A7
-	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Apr 2021 16:29:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DD850610A6
+	for <linux-hwmon@archiver.kernel.org>; Fri,  9 Apr 2021 17:48:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234059AbhDIQ3W (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 9 Apr 2021 12:29:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36076 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234011AbhDIQ3W (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 9 Apr 2021 12:29:22 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9001F611C9;
-        Fri,  9 Apr 2021 16:29:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617985748;
-        bh=mq0DbNuduGKt/8Gq3KTibog9pvXQzaTafSLd7wSRyXo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ke78XXtbGDCQOfT3ycd20AXCx4zA43fHe38EtpNwU2fWD1i2eU1F9xCiMdzUMdZr1
-         J3FgDDcLDj66CFmSVvVkjSTOwFHjDk2550bKsH3BDum9AFJir6Qn8Cv5h3ZYs9zAQP
-         kSLGFmpFoQTlwXydX47ZXpIUwUaCyJzhaaXCchY6xci5+gStCjv45lzBhBXVgEaUPc
-         Gd3QLkID+I9CSGFyE7LyZyWQrSl/w00G8TdmgIrKD0AfDAzsIjiRmra9EULwynLE06
-         5aGjReByQEHdGQydsZjWEdIb4N7fFfPIKsaRuiPl2eQt9PbZq+LAF0BJcXSXQ0PcnW
-         xjVeb/sJ/LNog==
-Received: by mail-ej1-f52.google.com with SMTP id g17so6831066ejp.8;
-        Fri, 09 Apr 2021 09:29:08 -0700 (PDT)
-X-Gm-Message-State: AOAM533x8R2F3/TE50AteIlTucbp6IckPyaHQiDirShubCnjFynBBRyT
-        I7awefvtB/yZcG6uWhiRRpHgVPSgDrdeYVV9wA==
-X-Google-Smtp-Source: ABdhPJz3miqJO0314G0q55AgoyXuziE/TVMKiWkXk5yBK5kg54Aev0phZN989BABn9u+cW21U6911tZvMEK926B7c9o=
-X-Received: by 2002:a17:907:217b:: with SMTP id rl27mr9172959ejb.359.1617985747111;
- Fri, 09 Apr 2021 09:29:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1617972339.git.mchehab+huawei@kernel.org> <4efd81eca266ca0875d3bf9d1672097444146c69.1617972339.git.mchehab+huawei@kernel.org>
-In-Reply-To: <4efd81eca266ca0875d3bf9d1672097444146c69.1617972339.git.mchehab+huawei@kernel.org>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Fri, 9 Apr 2021 11:28:55 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqK9TZ6v+YU1dhhD7AyVu1wM4ccmkt_bwCHnyH2_00HkZg@mail.gmail.com>
-Message-ID: <CAL_JsqK9TZ6v+YU1dhhD7AyVu1wM4ccmkt_bwCHnyH2_00HkZg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/8] dt-bindings: fix references for iio-bindings.txt
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Artur Rojek <contact@artur-rojek.eu>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        id S234250AbhDIRtM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 9 Apr 2021 13:49:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44094 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234133AbhDIRtM (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 9 Apr 2021 13:49:12 -0400
+Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF23C061761
+        for <linux-hwmon@vger.kernel.org>; Fri,  9 Apr 2021 10:48:58 -0700 (PDT)
+Received: by mail-oo1-xc32.google.com with SMTP id t140-20020a4a3e920000b02901e5c1add773so274586oot.1
+        for <linux-hwmon@vger.kernel.org>; Fri, 09 Apr 2021 10:48:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BAW0K4xl1wmVrYCrCz7cuSuUc5lAanTeBKtE/rjI+tA=;
+        b=LJ8BcoV58EZMErJkg57BcVzP7mBHtMZSy5NbTMoWFO+wSTCrKOHDSk9pN80IhEjQsT
+         HbvblVKPikbBF+YXJ6dhaLC/Rr/PHyAjW7SrtyVmtjOXTlU/FmtkJi6zeztjH5hs01w+
+         8dxbgMoebNihJ8jBkpuozgI8e3JrKmqNDkkyvDwBtNDTpe1HNaohy3kBV4xFpHrTwofR
+         uRlsUYabIeTTrqcrQV4qP7ZTJ4OyStHEu3X3GeYGBI48OVB+2ClCsh3r+LbBH3aPOCRp
+         dRhNWrOo3TjRxKvl6/66o7SzH6pY12YDfGwsx83F/j91F8cE6YCywKmCB1hGAIC/lJXJ
+         NYgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=BAW0K4xl1wmVrYCrCz7cuSuUc5lAanTeBKtE/rjI+tA=;
+        b=LQbAXYw0NapM2D6jvGtta1Gsnf1avrSoIMtHLsVsvOEFJShVdcydtWy3fTg1+3/rsE
+         379xchO6c2H1U1ETOlJM+UK7ga0bhYTvrSHeraLajgHb1Q/gdhrEOpxevLsQLDJ/+fmi
+         oL63NRVuxnLd+wDZTUgnpCeYBxR5l/K3kbas/PbWDRVsdcOXNBZok2yP/PtAS5DAa0Vv
+         3PTvvtiuZK7JNqgHHbnaSDEfT6m0HhdFnQsPNql4GxfY8b9qgJR5oVB48jDgc/Q7HVE0
+         7U/EkFR6hYpGLS3abbCtDTpzyi9xvGz3Pi0/i/k1mKKST63IoYN2bdhsU8KrU5+/ZagB
+         SZ1w==
+X-Gm-Message-State: AOAM532moOEe1oUlTq4lPAqWOKA5cNM6nd+fKu2EKVHjCI7lCwRC2Tdh
+        jjm8AdLjbQIwS3BRp0KqOQt0G+CcH/w=
+X-Google-Smtp-Source: ABdhPJyGKeDowve9YhzqmCNkOZ6rDl/5K50W7UKKYOVpHVACahGVSw+W0WzmH3mw3V97V3XL6nmLPg==
+X-Received: by 2002:a05:6820:296:: with SMTP id q22mr1709884ood.10.1617990538050;
+        Fri, 09 Apr 2021 10:48:58 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id p3sm624979oif.53.2021.04.09.10.48.56
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 09 Apr 2021 10:48:57 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        devicetree@vger.kernel.org,
-        Linux HWMON List <linux-hwmon@vger.kernel.org>,
-        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
-        Linux Input <linux-input@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
+        Naveen Krishna Chatradhi <nchatrad@amd.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH v2 1/2] hwmon: (amd_energy) Use unified function to read energy data
+Date:   Fri,  9 Apr 2021 10:48:51 -0700
+Message-Id: <20210409174852.4585-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Apr 9, 2021 at 7:48 AM Mauro Carvalho Chehab
-<mchehab+huawei@kernel.org> wrote:
->
-> The iio-bindings.txt was converted into two files and merged
-> at the dt-schema git tree at:
->
->         https://github.com/devicetree-org/dt-schema
->
-> Yet, some documents still refer to the old file. Fix their
-> references, in order to point to the right URL.
->
-> Fixes: dba91f82d580 ("dt-bindings:iio:iio-binding.txt Drop file as content now in dt-schema")
-> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Acked-by: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> ---
->  Documentation/devicetree/bindings/hwmon/ntc_thermistor.txt   | 2 +-
->  Documentation/devicetree/bindings/iio/adc/ingenic,adc.yaml   | 5 +++--
->  Documentation/devicetree/bindings/input/adc-joystick.yaml    | 4 +++-
->  .../bindings/input/touchscreen/resistive-adc-touch.txt       | 5 ++++-
->  Documentation/devicetree/bindings/mfd/ab8500.txt             | 4 +++-
->  5 files changed, 14 insertions(+), 6 deletions(-)
->
-> diff --git a/Documentation/devicetree/bindings/hwmon/ntc_thermistor.txt b/Documentation/devicetree/bindings/hwmon/ntc_thermistor.txt
-> index 37f18d684f6a..4c5c3712970e 100644
-> --- a/Documentation/devicetree/bindings/hwmon/ntc_thermistor.txt
-> +++ b/Documentation/devicetree/bindings/hwmon/ntc_thermistor.txt
-> @@ -32,7 +32,7 @@ Optional node properties:
->  - "#thermal-sensor-cells" Used to expose itself to thermal fw.
->
->  Read more about iio bindings at
-> -       Documentation/devicetree/bindings/iio/iio-bindings.txt
-> +       https://github.com/devicetree-org/dt-schema/blob/master/schemas/iio/
->
->  Example:
->         ncp15wb473@0 {
-> diff --git a/Documentation/devicetree/bindings/iio/adc/ingenic,adc.yaml b/Documentation/devicetree/bindings/iio/adc/ingenic,adc.yaml
-> index 9f414dbdae86..433a3fb55a2e 100644
-> --- a/Documentation/devicetree/bindings/iio/adc/ingenic,adc.yaml
-> +++ b/Documentation/devicetree/bindings/iio/adc/ingenic,adc.yaml
-> @@ -14,8 +14,9 @@ description: >
->    Industrial I/O subsystem bindings for ADC controller found in
->    Ingenic JZ47xx SoCs.
->
-> -  ADC clients must use the format described in iio-bindings.txt, giving
-> -  a phandle and IIO specifier pair ("io-channels") to the ADC controller.
-> +  ADC clients must use the format described in
-> +  https://github.com/devicetree-org/dt-schema/blob/master/schemas/iio/iio-consumer.yaml,
-> +  giving a phandle and IIO specifier pair ("io-channels") to the ADC controller.
->
->  properties:
->    compatible:
-> diff --git a/Documentation/devicetree/bindings/input/adc-joystick.yaml b/Documentation/devicetree/bindings/input/adc-joystick.yaml
-> index 054406bbd22b..721878d5b7af 100644
-> --- a/Documentation/devicetree/bindings/input/adc-joystick.yaml
-> +++ b/Documentation/devicetree/bindings/input/adc-joystick.yaml
-> @@ -24,7 +24,9 @@ properties:
->      description: >
->        List of phandle and IIO specifier pairs.
->        Each pair defines one ADC channel to which a joystick axis is connected.
-> -      See Documentation/devicetree/bindings/iio/iio-bindings.txt for details.
-> +      See
-> +      https://github.com/devicetree-org/dt-schema/blob/master/schemas/iio/iio-consumer.yaml
-> +      for details.
+The driver implements two separate functions to read and update
+energy values. One function is called periodically and updates
+cached enery information to avoid loss of data, the other reads
+energy data on demand to report it to userspace. The second
+function reads current energy data, adds the difference to the
+data previously obtained by the first function, and then discards
+the updated data.
 
-Please just drop this one. We don't need every user of a common
-property to link to the common schema. If we do, then we should figure
-out how to generate that (there are some json-schema to docs projects
-I'd like to investigate some day).
+Simplify the code and always call the first function, then report
+the energy data obtained by this function to userspace.
 
->
->    '#address-cells':
->      const: 1
-> diff --git a/Documentation/devicetree/bindings/input/touchscreen/resistive-adc-touch.txt b/Documentation/devicetree/bindings/input/touchscreen/resistive-adc-touch.txt
-> index fee0da12474e..af5223bb5bdd 100644
-> --- a/Documentation/devicetree/bindings/input/touchscreen/resistive-adc-touch.txt
-> +++ b/Documentation/devicetree/bindings/input/touchscreen/resistive-adc-touch.txt
-> @@ -5,7 +5,10 @@ Required properties:
->   - compatible: must be "resistive-adc-touch"
->  The device must be connected to an ADC device that provides channels for
->  position measurement and optional pressure.
-> -Refer to Documentation/devicetree/bindings/iio/iio-bindings.txt for details
-> +Refer to
-> +https://github.com/devicetree-org/dt-schema/blob/master/schemas/iio/iio-consumer.yaml
-> +for details
-> +
->   - iio-channels: must have at least two channels connected to an ADC device.
->  These should correspond to the channels exposed by the ADC device and should
->  have the right index as the ADC device registers them. These channels
-> diff --git a/Documentation/devicetree/bindings/mfd/ab8500.txt b/Documentation/devicetree/bindings/mfd/ab8500.txt
-> index d2a6e835c257..937b3e5505e0 100644
-> --- a/Documentation/devicetree/bindings/mfd/ab8500.txt
-> +++ b/Documentation/devicetree/bindings/mfd/ab8500.txt
-> @@ -72,7 +72,9 @@ Required child device properties:
->                                                 pwm|regulator|rtc|sysctrl|usb]";
->
->    A few child devices require ADC channels from the GPADC node. Those follow the
-> -  standard bindings from iio/iio-bindings.txt and iio/adc/adc.txt
-> +  standard bindings from
-> +  https://github.com/devicetree-org/dt-schema/blob/master/schemas/iio/iio-consumer.yaml
-> +  and Documentation/devicetree/bindings/iio/adc/adc.yaml
->
->    abx500-temp           : io-channels "aux1" and "aux2" for measuring external
->                            temperatures.
-> --
-> 2.30.2
->
+Cc: Naveen Krishna Chatradhi <nchatrad@amd.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+v2: Added patch, simplification
+
+ drivers/hwmon/amd_energy.c | 31 ++++++-------------------------
+ 1 file changed, 6 insertions(+), 25 deletions(-)
+
+diff --git a/drivers/hwmon/amd_energy.c b/drivers/hwmon/amd_energy.c
+index a86cc8d6d93d..93bad64039f1 100644
+--- a/drivers/hwmon/amd_energy.c
++++ b/drivers/hwmon/amd_energy.c
+@@ -118,35 +118,12 @@ static void read_accumulate(struct amd_energy_data *data)
+ 	data->core_id++;
+ }
+ 
+-static void amd_add_delta(struct amd_energy_data *data, int ch,
+-			  int cpu, long *val, u32 reg)
+-{
+-	struct sensor_accumulator *accum;
+-	u64 input;
+-
+-	mutex_lock(&data->lock);
+-	rdmsrl_safe_on_cpu(cpu, reg, &input);
+-	input &= AMD_ENERGY_MASK;
+-
+-	accum = &data->accums[ch];
+-	if (input >= accum->prev_value)
+-		input += accum->energy_ctr -
+-				accum->prev_value;
+-	else
+-		input += UINT_MAX - accum->prev_value +
+-				accum->energy_ctr;
+-
+-	/* Energy consumed = (1/(2^ESU) * RAW * 1000000UL) μJoules */
+-	*val = div64_ul(input * 1000000UL, BIT(data->energy_units));
+-
+-	mutex_unlock(&data->lock);
+-}
+-
+ static int amd_energy_read(struct device *dev,
+ 			   enum hwmon_sensor_types type,
+ 			   u32 attr, int channel, long *val)
+ {
+ 	struct amd_energy_data *data = dev_get_drvdata(dev);
++	struct sensor_accumulator *accum;
+ 	u32 reg;
+ 	int cpu;
+ 
+@@ -162,7 +139,11 @@ static int amd_energy_read(struct device *dev,
+ 
+ 		reg = ENERGY_CORE_MSR;
+ 	}
+-	amd_add_delta(data, channel, cpu, val, reg);
++
++	accumulate_delta(data, channel, cpu, reg);
++	accum = &data->accums[channel];
++
++	*val = div64_ul(accum->energy_ctr * 1000000UL, BIT(data->energy_units));
+ 
+ 	return 0;
+ }
+-- 
+2.17.1
+
