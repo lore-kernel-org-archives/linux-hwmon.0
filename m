@@ -2,81 +2,122 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-22.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20E8AC433B4
-	for <linux-hwmon@archiver.kernel.org>; Sat, 10 Apr 2021 14:57:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55839C433B4
+	for <linux-hwmon@archiver.kernel.org>; Sat, 10 Apr 2021 15:15:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E33996044F
-	for <linux-hwmon@archiver.kernel.org>; Sat, 10 Apr 2021 14:57:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0F1CA61185
+	for <linux-hwmon@archiver.kernel.org>; Sat, 10 Apr 2021 15:15:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234838AbhDJO5v (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 10 Apr 2021 10:57:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:50850 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234849AbhDJO5v (ORCPT
+        id S234722AbhDJPPh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 10 Apr 2021 11:15:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38288 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234392AbhDJPPg (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 10 Apr 2021 10:57:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1618066655;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WESgVjTmkV6HoxjY/ygSJrZoGJHew+Te92638uOsTcI=;
-        b=YfoLUIqZsDifywZ25eopRNbmPau32/wFw0cTaAiAN3UfttFK1JMGuKy5d4iVHDbDbFNjnV
-        Zey8U4TpMlpubtDOXbAc9Z0CyNG64rSgD81nJ1jC+PSfrdfGATx0nCHQSuCUKN5NOVa/2b
-        sGXyuyG0DOwVL/QHEdpvrhcx8I/3Ir4=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-149-bq6Hrw9DP1mTc-eRKX-kBg-1; Sat, 10 Apr 2021 10:57:32 -0400
-X-MC-Unique: bq6Hrw9DP1mTc-eRKX-kBg-1
-Received: by mail-ed1-f72.google.com with SMTP id dj13so702100edb.14
-        for <linux-hwmon@vger.kernel.org>; Sat, 10 Apr 2021 07:57:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+        Sat, 10 Apr 2021 11:15:36 -0400
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06FE2C06138A;
+        Sat, 10 Apr 2021 08:15:22 -0700 (PDT)
+Received: by mail-ot1-x32c.google.com with SMTP id w31-20020a9d36220000b02901f2cbfc9743so8565291otb.7;
+        Sat, 10 Apr 2021 08:15:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=WESgVjTmkV6HoxjY/ygSJrZoGJHew+Te92638uOsTcI=;
-        b=ekMNsqt3x1rQfQKesROuDN9tE/H3w3QwZU7pUN1r1tq8sE2X0aXBBMOMidZUcc2DJ2
-         DqfqEL9ZstMW9WBxrJOT3xMowThAIC4ff3AVMQoK0z6uhesZq2t51x/DmrPi4hC3NECQ
-         0wLW+NfYv0GZ3xM+6toN4rvgiEUaIHfQMk2mT05CNQxGwnRtzcsMa7Oh/FNX5GKG4C/j
-         mQpVl/K0JVNOIBjmXfrWfoCCnv/ZDQS9XRWRHRykLLsB8H5CIIQZNIqZ8MRx/9afKANu
-         XV7M5s8Hm6m2/zzmzITkKf/w/PZOeNQ7zKT83l0iLUK7yxn0jytGaMFPlmTh+8WizxNL
-         kfwA==
-X-Gm-Message-State: AOAM530W6cVOX7j9KHVLyQiGzx/YbhKlaJfoSFVw/z7tEzT3ffi0cPW/
-        dMQNdt2KheEpFHL2/2y9WdfxG9yFJGF4yal9F4P34Hwef7dQMdDFG0lT34JLT4b/2IW5DEWI81F
-        /zjj9pcvCjGz0ThYwgbm3MEA=
-X-Received: by 2002:a17:906:8a6e:: with SMTP id hy14mr20618206ejc.356.1618066650953;
-        Sat, 10 Apr 2021 07:57:30 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJysoiSYG+4jRSj0ocs9UzI6eOnisignfmDXJUdDjzRR30WaRbcA9svem5MzMemvo4HMIuqfKw==
-X-Received: by 2002:a17:906:8a6e:: with SMTP id hy14mr20618189ejc.356.1618066650750;
-        Sat, 10 Apr 2021 07:57:30 -0700 (PDT)
-Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id e15sm2775993ejh.56.2021.04.10.07.57.30
+        bh=A4/cYC0UOb1c2Eadie+wrxMS0F5PkKrtRmBw6cRr1u4=;
+        b=IE1A5K4mw53txlL56DkvTyZLpHZWsSDNNXw3z/Qfy4McWklAqYd5tsui8OlEuiV2dv
+         Hy2u1TJi7pRXytiirrbcJTaZT1ydRNJYzoK2qhRy6tofI/n9yvCFKkuLtJGxWESJSSRi
+         N1EzL9oRSB2O7cKDsACtiw2591nruVty/N1ZaOmLErjEb2Q3B4uoAscD3DrQzvm/tRXs
+         KoFXNOiDnwtRnA47Xg+V5VfqVfXHoz9DgFANpwcyp8GZoPEJVptYb1IPB76lEmsCSVUu
+         2VxL3UaMMIE3Pl+9WZB0Q4MaH1I6o3chqiTN+ytIvmrPa5xiWfqOpKvGOVuDDWziYqrp
+         nsAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=A4/cYC0UOb1c2Eadie+wrxMS0F5PkKrtRmBw6cRr1u4=;
+        b=bQ6CxtCrFHF1LwaFjt0fWVTaGm9dNy81QP7FMk+jAnZhop4XNKqU0OnJ103kBuLalj
+         h+9Jc/TiYySxYw0Ujnyt+DYXIM25u9shBSi2YVcIJsktxpqZYLaeDjihONIuWv/+Psno
+         8FplAaaCEBY/qZxSG8X8BgcTfDeS7Vk3aqJxUNnrv08p3fhKbOfqpJ2u5dHfXSQu9Gto
+         9r7i+DZFCDqgCj6a6aCxs9lgUizgXTYnQWe6iCBWI9Cev8c36H07WCqdNinQC4GQPuo0
+         YtdjeaMIKy3HZiYna//igOJEhuVQDgIG3LqkZVtDkDfvcziBuzs9C5H9NMf05LGWwqYJ
+         upWg==
+X-Gm-Message-State: AOAM531hDvh6D4uqa/zHYaziKLEcmEi4ZtvMNHMOV30XwxFKZqYtWFF7
+        9sm2pa2s5eKTXC4EH8qv9Rc=
+X-Google-Smtp-Source: ABdhPJw/VTZ85a3Fq7w5cUM0UWo5xHVbpi6VNM/7Ca2icdXy2rckMSOSaxzmklMd4Ip5k6D3p5LAkA==
+X-Received: by 2002:a05:6830:15d2:: with SMTP id j18mr16921118otr.75.1618067721425;
+        Sat, 10 Apr 2021 08:15:21 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c2sm1340671otf.66.2021.04.10.08.15.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 10 Apr 2021 07:57:30 -0700 (PDT)
+        Sat, 10 Apr 2021 08:15:20 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
 Subject: Re: [PATCH v3] platform/x86: add Gigabyte WMI temperature driver
 To:     =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
         platform-driver-x86@vger.kernel.org,
         Mark Gross <mgross@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
         linux-kernel@vger.kernel.org,
         =?UTF-8?Q?Barnab=c3=a1s_P=c5=91cze?= <pobrn@protonmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
 Cc:     Matthew Garrett <mjg59@srcf.ucam.org>
 References: <117cadef-c1cb-d66a-15f8-ce50d596be4b@redhat.com>
  <20210410144021.138035-1-linux@weissschuh.net>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <e1b86746-b04d-0f14-8121-d24da4d10ceb@redhat.com>
-Date:   Sat, 10 Apr 2021 16:57:29 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <3d974a64-14a6-2347-ac1a-666d1b8d6eef@roeck-us.net>
+Date:   Sat, 10 Apr 2021 08:15:18 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
 In-Reply-To: <20210410144021.138035-1-linux@weissschuh.net>
 Content-Type: text/plain; charset=utf-8
@@ -86,9 +127,7 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi,
-
-On 4/10/21 4:40 PM, Thomas Weißschuh wrote:
+On 4/10/21 7:40 AM, Thomas Weißschuh wrote:
 > Changes since v1:
 > * Incorporate feedback from Barnabás Pőcze
 >   * Use a WMI driver instead of a platform driver
@@ -114,69 +153,6 @@ On 4/10/21 4:40 PM, Thomas Weißschuh wrote:
 > less are exposed via WMI.
 > 
 > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-
-This looks good, one small nitpick:
-
-I know this is a touchy subject for some, but we are trying to move away
-from the whitelist/blacklist naming where possible and we don't want to
-introduce any new cases, see:
-
-https://github.com/torvalds/linux/blob/master/Documentation/process/coding-style.rst#4-naming
-
-The driver currently uses this twice:
-"Force loading on non-whitelisted platform"
-"Forcing loading on non-whitelisted platform"
-
-Interestingly enough you already avoided naming the dmi_system_id table
-a whitelist (good).
-
-I would like to see "non-whitelisted" replaced with "unknown" so that we end up with:
-
-"Force loading on unknown platform"
-"Forcing loading on unknown platform"
-
-And while at it, I think for the second sentence this would be better English
-(I'm not a native speaker myself):
-
-"Forcing load on unknown platform"
-
-If you are ok with these changes I can fix this up while merging, no need
-to send a v4. Although if you prefer to send a v4 that is fine too.
-
-Either way let me know.
-
-Regards,
-
-Hans
-
-p.s.
-
-For v4 or for a next patch, the way to add the changelog so that it does
-not get picked up / automatically gets snipped by git am is to put it
-below the Signed-off-by at the end of the commit message like this:
-
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
-Changes since v1:
-* Incorporate feedback from Barnabás Pőcze
-  * Use a WMI driver instead of a platform driver
-  * Let the kernel manage the driver lifecycle
-  * Fix errno/ACPI error confusion
-  * Fix resource cleanup
-  * Document reason for integer casting
- 
-Changes since v2:
-* Style cleanups
-* Test for usability during probing
-* DMI-based whitelist
-* CC hwmon maintainers
-
-
-
-
-
-
-
 > ---
 >  MAINTAINERS                         |   6 +
 >  drivers/platform/x86/Kconfig        |  11 ++
@@ -256,6 +232,11 @@ Changes since v2:
 > +
 > +#define GIGABYTE_WMI_GUID "DEADBEEF-2001-0000-00A0-C90629100000"
 > +#define NUM_TEMPERATURE_SENSORS 6
+
+Style: #define<space>name<tab>value
+
+but of course that is Hans' call.
+
 > +
 > +static bool force_load;
 > +module_param(force_load, bool, 0);
@@ -322,6 +303,10 @@ Changes since v2:
 > +	if (ret == 0) {
 > +		if (temp == 0)
 > +			return -ENODEV;
+
+That should be checked in gigabyte_wmi_hwmon_is_visible(); that is what that
+function is for.
+
 > +		*res = (s8)temp * 1000; // value is a signed 8-bit integer
 > +	}
 > +	return ret;
@@ -404,11 +389,21 @@ Changes since v2:
 > +			dev_warn(&wdev->dev, "Forcing loading on non-whitelisted platform");
 > +		else
 > +			return -ENODEV;
+
+Style:
+		if (!force_load)
+			return -ENODEV;
+		dev_warn(&wdev->dev, "Forcing loading on non-whitelisted platform");
+
 > +	}
 > +
 > +	ret = gigabyte_wmi_validate_sensor_presence(wdev);
 > +	if (ret) {
 > +		dev_info(&wdev->dev, "No temperature sensors usable");
+
+Normally one does not display a message if a probe function returns -ENODEV,
+unless it is an error, to avoid polluting the kernel log.
+
 > +		return ret;
 > +	}
 > +
