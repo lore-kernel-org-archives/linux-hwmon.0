@@ -2,68 +2,94 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 17FC4C433ED
-	for <linux-hwmon@archiver.kernel.org>; Sun, 11 Apr 2021 10:48:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59202C433B4
+	for <linux-hwmon@archiver.kernel.org>; Sun, 11 Apr 2021 12:40:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DB1F1610CB
-	for <linux-hwmon@archiver.kernel.org>; Sun, 11 Apr 2021 10:48:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2BB81610CB
+	for <linux-hwmon@archiver.kernel.org>; Sun, 11 Apr 2021 12:40:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233696AbhDKKsc (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 11 Apr 2021 06:48:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50600 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229804AbhDKKsb (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 11 Apr 2021 06:48:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 84A29610C8;
-        Sun, 11 Apr 2021 10:48:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618138095;
-        bh=wjrS/KROvZgN4prWB2irrpi1jT+DNisYvdSKxbc6SrY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=soC0vgn7RguM2iT5XuRh1zNC+MHgqtA1WFFw52SCDo+ky06u+AUTeOiLPmwOvihRB
-         0Ai3sS/AdbwARbl2dL27ne/rxoPCcRsHNEUWZxSGurYLkTxBEcl6Vv6kTLn3CX59kR
-         JL+gYUCPtm3XYmHGJDylsmowqiMerWtRpFH/gLBNzGGoGrd7vJ2xdqRb0NNasVELlM
-         p9HyOZ7nBeG9upZ1eTVF1ClxhvQHzuNHS6NUXTOFmUr9ZnHVBRtQUsCN3aBj68y96P
-         F0Xz6j4l8H2qqMCyaqYehaXwzamJqHuOtY7cfqqq5NtL+gmMsTC04LIUB6atlXwQtL
-         t0is6A27yQmHg==
-Received: by pali.im (Postfix)
-        id 51E0686C; Sun, 11 Apr 2021 12:48:13 +0200 (CEST)
-Date:   Sun, 11 Apr 2021 12:48:13 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+        id S235306AbhDKMkQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 11 Apr 2021 08:40:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58454 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235476AbhDKMkP (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 11 Apr 2021 08:40:15 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D39E6C061574;
+        Sun, 11 Apr 2021 05:39:59 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id i3so10751912oik.7;
+        Sun, 11 Apr 2021 05:39:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=VfBEA0/TCcfN0toecNQBMcZcbH1T58CPjc4GwqHtxYU=;
+        b=GPKwWiztX2XszBQOgWnk9WHZ4ZqHbBvuVVTQIktZwTFPseVslJFlblxTyQ7+tEV+Rh
+         mnaeA87HxycaXIlMt7K2fvesGnYMAPZ8qRgizl9BhZH+IYqenc8DnAHlrb1gFHfkcZhn
+         etyxaHrXPGXnxUKrbzWg+zMM3BG/S2EUE/GCoRSM6dwP3sUEjtiz4Rhs5qnD7Dws0yg7
+         OaX113ejwuntVUD3O/eOieeV8MiVYNRmRSq+HsjcZgxQFoBAOECZQc7L6Nngny3mE5fK
+         wdyOxvm8Q/8AwFeN+sLTx7wOAWc79TQRjtPdrkmj0sK9WvUhm+ntm6ENnq7d4uF05QAU
+         XnkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=VfBEA0/TCcfN0toecNQBMcZcbH1T58CPjc4GwqHtxYU=;
+        b=DWliCP7XH2et5DRKfb8d5UBp8HdDUlBEfkkEVqSG6MCTpfv/i82BP3q7txBbq40BTC
+         Cu1JW+xMt+gHMsS7VIY71hDKX4MUNpd8pIjxw9ShhChV1lQf+0yMu78gRpG1DpNzhR+w
+         oTNgc9DA6Fsqny90SL3xirfUvbhdYfBCUaSnp2MhmKmHLIB0DpqqOph+RxV6IAuOIa0A
+         kiLtNt4zoxW/phgFfwEaSP9ngLjmXrcNz6JZYeHxzPvtmHyzCetGBDX23IrV2Ie0IzgD
+         SVDJOWyMrPeNKqf/tewyvPXvqR17CjHEMUXJ77iPckyfkUbo7dWBIFs6/j1bQ74tWMuQ
+         GgNQ==
+X-Gm-Message-State: AOAM5332PgmQt5eerJTeVr681vfTkAgzFG0HgBejd9Kxx2uzRiZ6iEq4
+        iE3i2+wA7fShzHa+guVerRg=
+X-Google-Smtp-Source: ABdhPJxeY/dmGDOpBojR/QO+0w0g/d2iF7IAPU8PQ1q6vfp7PmNap0f6GZaTA5JicXof9K4UM5Znhg==
+X-Received: by 2002:aca:ed95:: with SMTP id l143mr3562729oih.20.1618144799346;
+        Sun, 11 Apr 2021 05:39:59 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v6sm1622742ook.40.2021.04.11.05.39.57
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 11 Apr 2021 05:39:57 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 11 Apr 2021 05:39:56 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
 To:     Sebastian Oechsle <setboolean@icloud.com>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+Cc:     pali@kernel.org, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v2] hwmon: (dell-smm) Add Dell Latitude E7440 to fan
  control whitelist
-Message-ID: <20210411104813.pksg3un2o45m2evl@pali>
+Message-ID: <20210411123956.GA222996@roeck-us.net>
 References: <20210411095741.zmllsuc7pevdipvy@icloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 In-Reply-To: <20210411095741.zmllsuc7pevdipvy@icloud.com>
-User-Agent: NeoMutt/20180716
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sunday 11 April 2021 11:57:41 Sebastian Oechsle wrote:
+On Sun, Apr 11, 2021 at 11:57:41AM +0200, Sebastian Oechsle wrote:
 > Allow manual PWM control on Dell Latitude E7440.
 > 
 > Signed-off-by: Sebastian Oechsle <setboolean@icloud.com>
-
-Reviewed-by: Pali Rohár <pali@kernel.org>
-
 > 
 > Changes in v2:
 > - Fix spelling
 > - Fix format
 > ---
+
+Applied, but next time changelog goes here, please (after ---).
+
+Thanks,
+Guenter
+
 >  drivers/hwmon/dell-smm-hwmon.c | 8 ++++++++
 >  1 file changed, 8 insertions(+)
 > 
@@ -86,6 +112,3 @@ Reviewed-by: Pali Rohár <pali@kernel.org>
 >  	{ }
 >  };
 >  
-> -- 
-> 2.31.1
-> 
