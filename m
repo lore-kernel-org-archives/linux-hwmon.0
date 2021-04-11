@@ -2,147 +2,88 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2717C433B4
-	for <linux-hwmon@archiver.kernel.org>; Sun, 11 Apr 2021 14:05:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65D88C433ED
+	for <linux-hwmon@archiver.kernel.org>; Sun, 11 Apr 2021 16:42:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 97DD66103D
-	for <linux-hwmon@archiver.kernel.org>; Sun, 11 Apr 2021 14:05:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2D12B610A6
+	for <linux-hwmon@archiver.kernel.org>; Sun, 11 Apr 2021 16:42:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235491AbhDKOFe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 11 Apr 2021 10:05:34 -0400
-Received: from mail-40133.protonmail.ch ([185.70.40.133]:59188 "EHLO
-        mail-40133.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231405AbhDKOFd (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 11 Apr 2021 10:05:33 -0400
-Date:   Sun, 11 Apr 2021 14:05:07 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail; t=1618149915;
-        bh=O557wZuOyutkhxm660QDAP3vInKWKsr1zK3DiKxgzvM=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=VU8RmlnGNDL9W4WNoI00O6ldYu/tpBzPi7yZwEAY0rbNi+bb3gyZNdXshS0rk7Ft2
-         rTFAedhg6ZDENScaQJTd9/cv2L0RYrdWVaPZRdbTL5YRbfFSxoawhDI8scpmW/C/Yh
-         ecwpHHAktZd0VltqoGvJLEmT9+a/0PZZFapf/1cc=
-To:     =?utf-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-From:   =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>
-Cc:     "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        Mark Gross <mgross@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        Matthew Garrett <mjg59@srcf.ucam.org>
-Reply-To: =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>
-Subject: Re: [PATCH v4] platform/x86: add Gigabyte WMI temperature driver
-Message-ID: <TbKK4TuRhSBhlwBiK7ukHwt6r_NQeiHDAJc6rMAubISp3_isxu_iNOzcQ8VkJkGGrYQiVmQNwRV1vRUUxUB73Y1ddbXJLbN4qi5K1yKYsiA=@protonmail.com>
-In-Reply-To: <20210410181856.144988-1-linux@weissschuh.net>
-References: <6a096978-67ad-6def-6ed0-9ad38a460e95@redhat.com> <20210410181856.144988-1-linux@weissschuh.net>
+        id S235670AbhDKQmt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 11 Apr 2021 12:42:49 -0400
+Received: from mout.gmx.net ([212.227.17.21]:49489 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235640AbhDKQmt (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 11 Apr 2021 12:42:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1618159350;
+        bh=PnAjq1W1whR+50hAyyZcgPmJ+1Vs6dZhlAmdWmMWLf8=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=kMc5GleHd+yx5yUqZ9z21KUIZAPewPrNnmwQcpqjT2vmr0auaG0/jPFpCIqOD6u+g
+         e65eCBZYFMX//F/628Jz+cueF3SIkgSayKulwILN2X/0PxzFgV5dsqliELw/o4p77a
+         duavUou8DMy32Yz2Vd6XOkcoHAs8m+4vnfpfCr5s=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from esprimo-mx.fritz.box ([91.0.99.26]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MFsUp-1lKtNh0Oit-00HRba; Sun, 11
+ Apr 2021 18:42:30 +0200
+From:   W_Armin@gmx.de
+To:     hdegoede@redhat.com
+Cc:     linux-hwmon@vger.kernel.org, Armin Wolf <W_Armin@gmx.de>
+Subject: [PATCH 0/2] hwmon: (sch5627) Replace hwmon_device_register()
+Date:   Sun, 11 Apr 2021 18:42:23 +0200
+Message-Id: <20210411164225.11967-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:CNlF/MorlkqTqkgZCBUv8lsI6T5Jfa/QkikeihZtMpfiwaQdChN
+ lNxtKL2OM5/VaolpA6Tv56uKxqPHdl5MY+05MRJqPbegYKSCfpPdO6f7qzAFJtF6TGc9514
+ vCXpoDswhAoMm7KcHjoLNM/pPw3GgTVin9dzbqayQYvamfr7EKYTMbBPmQTsPY5GrK+BKjG
+ wLVqz39JrHwbHuRFA90LA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:AVS1n2B074w=:YCv/DQJb39/vaaQKRUwlap
+ EDI42bwLf8dOKcdoq9Lf+UlSlAQtzLycPVPkNrYvqWAHW+qGF+Qqn2x9cIuE4ntdtZE4HZ6bY
+ uNBkY5kfHqpZdUswAAfg4ao0yy5AVMd+f+J1iNllzAdoqIc9FcEM5zTu8vaco4CERecbLQzUI
+ SIyqLdZh50S0yt1cPYxjewmvrTIZKvRcYx3Pvd9rQDBc2Tn3HReTscOmEBVN5cmRxRrkIOJjx
+ rkd9TPomRanBYGgAzHsnAUWteMj5CxOKgD3gHOVNEnrOzDrHRpXKLohzoZjvFCcwsZvIIRMdr
+ B6nwFsbWR8DRl9G1XgMhY9ML2KEqwW0Ymfu2zWrWZRtwCn/yF+DyKfbDhwk6zJ97OVC53x3Sa
+ WaMW4TbPXBHUm6U4yhijUVyD97tDPXfgg7Hsp+6Ia3xKYSPmy9zXPi3lhre4jMHti4H33sn4D
+ /FGE66I6kkWpLxPbEimUTwDGxQN43Ru3KM2w2pv6Foe2di16WQbMadxv6aeFOI525vWFdluAA
+ qWQ4kwiBhiupBCWi2nY5tmpoNDWK7DchH3tjXfu/20EZfQOKaWXIcp1kLsigIwEDAE4JBJ77o
+ A/hwEHOjY1WsKYQIg01nCC19SEysIdhrQ2F4cHqlBnZrjK5q/bzkHytcUkfemmmilx0ltMQy/
+ eO8uIo6PQavEBRZVJlp0WdnjUiO0vA11V6/qw49lr0ZUttpSMxkB+tCtlBFjDlpHWpnj3QGkq
+ VCtbqzNfRKTTiCb5KLhYm1cg4G3KjCF2CWpo1GbOA6bf7wEARoj5zYj4xqtWNmYjONCB7B5aa
+ CDW2G/ygEA5YOvLprNSyK1nY2b6Mz/VDrIy3dPQL5/SvvFbPImvkHUjC8JipbLzCjHhtshCsO
+ rS0nAT048BJEiv0CyIKb2FD0SpYomjlorPVxwGdTrXBCObzz+miIMXtFL8SBUqHNlDtsO4fAI
+ wAocPEcfatxt0R6RKvsoC7AxRXVwg+MI4hye+YJ5UoWPgPkaXl1sIEg4fj4I0d85lzlIwSEJC
+ sjReUuax61MxOqNyi9wNi1R4h1jJy24gWLSFPR+C/+4thNz+hYeFC+ZqAPs8IaSv1hN2nt9IQ
+ TPnsGtkb+JsyYR2Z0cF9w4Fs+dKfxUjSi4ND/EjGG2hTIJN2uODfq5jx8K33WroY/R0s3maRx
+ bw86GjGgoDcz7CRIFyXPo8l4EIBw51Cl+vsk++EmN4i2xlu2eqecqvYhcpFAYwNARquD0=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi
+From: Armin Wolf <W_Armin@gmx.de>
 
+When the sch5627 driver is loaded, a warning is displayed during
+bootup about hwmon_device_register() being deprecated.
 
-2021. =C3=A1prilis 10., szombat 20:18 keltez=C3=A9ssel, Thomas Wei=C3=9Fsch=
-uh =C3=ADrta:
+The first patch solves that issue, and the second patch adds
+a minor optimization when reading sensor data.
 
-> [...]
-> diff --git a/drivers/platform/x86/gigabyte-wmi.c b/drivers/platform/x86/g=
-igabyte-wmi.c
-> new file mode 100644
-> index 000000000000..c17e51fcf000
-> --- /dev/null
-> +++ b/drivers/platform/x86/gigabyte-wmi.c
-> @@ -0,0 +1,195 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + *  Copyright (C) 2021 Thomas Wei=C3=9Fschuh <thomas@weissschuh.net>
-> + */
-> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> +
-> +#include <linux/acpi.h>
-> +#include <linux/dmi.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/module.h>
-> +#include <linux/wmi.h>
-> +
-> +#define GIGABYTE_WMI_GUID=09"DEADBEEF-2001-0000-00A0-C90629100000"
-> +#define NUM_TEMPERATURE_SENSORS=096
-> +
-> +static bool force_load;
-> +module_param(force_load, bool, 0444);
-> +MODULE_PARM_DESC(force_load, "Force loading on unknown platform");
-> +
-> +static u8 usable_sensors_mask;
-> +
-> +enum gigabyte_wmi_commandtype {
-> +=09GIGABYTE_WMI_BUILD_DATE_QUERY       =3D   0x1,
-> +=09GIGABYTE_WMI_MAINBOARD_TYPE_QUERY   =3D   0x2,
-> +=09GIGABYTE_WMI_FIRMWARE_VERSION_QUERY =3D   0x4,
-> +=09GIGABYTE_WMI_MAINBOARD_NAME_QUERY   =3D   0x5,
-> +=09GIGABYTE_WMI_TEMPERATURE_QUERY      =3D 0x125,
-> +};
-> +
-> +struct gigabyte_wmi_args {
-> +=09u32 arg1;
-> +};
-> +
-> +static int gigabyte_wmi_perform_query(struct wmi_device *wdev,
-> +=09=09=09=09      enum gigabyte_wmi_commandtype command,
-> +=09=09=09=09      struct gigabyte_wmi_args *args, struct acpi_buffer *ou=
-t)
-> +{
-> +=09const struct acpi_buffer in =3D {
-> +=09=09.length =3D sizeof(*args),
-> +=09=09.pointer =3D args,
-> +=09};
-> +
-> +=09acpi_status ret =3D wmidev_evaluate_method(wdev, 0x0, command, &in, o=
-ut);
-> +
-> +=09if ACPI_FAILURE(ret)
+Both patches have been tested on a Fujitsu Esprimo P720
+and appear to work without issues.
 
-Please use `if (...)`.
+Armin Wolf (2):
+  hwmon: (sch5627) Convert to hwmon_device_register_with_info()
+  hwmon: (sch5627) Split sch5627_update_device()
 
+ drivers/hwmon/sch5627.c | 445 ++++++++++++++++------------------------
+ 1 file changed, 180 insertions(+), 265 deletions(-)
 
-> +=09=09return -EIO;
-> +
-> +=09return 0;
-> +}
-> [...]
-> +static struct wmi_driver gigabyte_wmi_driver =3D {
-> +=09.driver =3D {
-> +=09=09.name =3D "gigabyte-wmi",
-> +=09},
-> +=09.id_table =3D gigabyte_wmi_id_table,
-> +=09.probe =3D gigabyte_wmi_probe,
-> +};
-> +module_wmi_driver(gigabyte_wmi_driver);
-> +
-> +MODULE_DEVICE_TABLE(wmi, gigabyte_wmi_id_table);
-> +MODULE_AUTHOR("Thomas Wei=C3=9Fschuh <thomas@weissschuh.net>");
-> +MODULE_DESCRIPTION("Gigabyte WMI temperature Driver");
-                                                ^
-It's a minor thing, but I think a lowercase 'd' would be better.
+=2D-
+2.20.1
 
-
-> +MODULE_LICENSE("GPL");
->
-> base-commit: 144c79ef33536b4ecb4951e07dbc1f2b7fa99d32
-> --
-> 2.31.1
-
-
-Regards,
-Barnab=C3=A1s P=C5=91cze
