@@ -2,113 +2,147 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59202C433B4
-	for <linux-hwmon@archiver.kernel.org>; Sun, 11 Apr 2021 12:40:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2717C433B4
+	for <linux-hwmon@archiver.kernel.org>; Sun, 11 Apr 2021 14:05:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2BB81610CB
-	for <linux-hwmon@archiver.kernel.org>; Sun, 11 Apr 2021 12:40:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 97DD66103D
+	for <linux-hwmon@archiver.kernel.org>; Sun, 11 Apr 2021 14:05:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235306AbhDKMkQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 11 Apr 2021 08:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58454 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235476AbhDKMkP (ORCPT
+        id S235491AbhDKOFe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 11 Apr 2021 10:05:34 -0400
+Received: from mail-40133.protonmail.ch ([185.70.40.133]:59188 "EHLO
+        mail-40133.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231405AbhDKOFd (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 11 Apr 2021 08:40:15 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D39E6C061574;
-        Sun, 11 Apr 2021 05:39:59 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id i3so10751912oik.7;
-        Sun, 11 Apr 2021 05:39:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=VfBEA0/TCcfN0toecNQBMcZcbH1T58CPjc4GwqHtxYU=;
-        b=GPKwWiztX2XszBQOgWnk9WHZ4ZqHbBvuVVTQIktZwTFPseVslJFlblxTyQ7+tEV+Rh
-         mnaeA87HxycaXIlMt7K2fvesGnYMAPZ8qRgizl9BhZH+IYqenc8DnAHlrb1gFHfkcZhn
-         etyxaHrXPGXnxUKrbzWg+zMM3BG/S2EUE/GCoRSM6dwP3sUEjtiz4Rhs5qnD7Dws0yg7
-         OaX113ejwuntVUD3O/eOieeV8MiVYNRmRSq+HsjcZgxQFoBAOECZQc7L6Nngny3mE5fK
-         wdyOxvm8Q/8AwFeN+sLTx7wOAWc79TQRjtPdrkmj0sK9WvUhm+ntm6ENnq7d4uF05QAU
-         XnkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=VfBEA0/TCcfN0toecNQBMcZcbH1T58CPjc4GwqHtxYU=;
-        b=DWliCP7XH2et5DRKfb8d5UBp8HdDUlBEfkkEVqSG6MCTpfv/i82BP3q7txBbq40BTC
-         Cu1JW+xMt+gHMsS7VIY71hDKX4MUNpd8pIjxw9ShhChV1lQf+0yMu78gRpG1DpNzhR+w
-         oTNgc9DA6Fsqny90SL3xirfUvbhdYfBCUaSnp2MhmKmHLIB0DpqqOph+RxV6IAuOIa0A
-         kiLtNt4zoxW/phgFfwEaSP9ngLjmXrcNz6JZYeHxzPvtmHyzCetGBDX23IrV2Ie0IzgD
-         SVDJOWyMrPeNKqf/tewyvPXvqR17CjHEMUXJ77iPckyfkUbo7dWBIFs6/j1bQ74tWMuQ
-         GgNQ==
-X-Gm-Message-State: AOAM5332PgmQt5eerJTeVr681vfTkAgzFG0HgBejd9Kxx2uzRiZ6iEq4
-        iE3i2+wA7fShzHa+guVerRg=
-X-Google-Smtp-Source: ABdhPJxeY/dmGDOpBojR/QO+0w0g/d2iF7IAPU8PQ1q6vfp7PmNap0f6GZaTA5JicXof9K4UM5Znhg==
-X-Received: by 2002:aca:ed95:: with SMTP id l143mr3562729oih.20.1618144799346;
-        Sun, 11 Apr 2021 05:39:59 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v6sm1622742ook.40.2021.04.11.05.39.57
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 11 Apr 2021 05:39:57 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 11 Apr 2021 05:39:56 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Sebastian Oechsle <setboolean@icloud.com>
-Cc:     pali@kernel.org, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: (dell-smm) Add Dell Latitude E7440 to fan
- control whitelist
-Message-ID: <20210411123956.GA222996@roeck-us.net>
-References: <20210411095741.zmllsuc7pevdipvy@icloud.com>
+        Sun, 11 Apr 2021 10:05:33 -0400
+Date:   Sun, 11 Apr 2021 14:05:07 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail; t=1618149915;
+        bh=O557wZuOyutkhxm660QDAP3vInKWKsr1zK3DiKxgzvM=;
+        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
+        b=VU8RmlnGNDL9W4WNoI00O6ldYu/tpBzPi7yZwEAY0rbNi+bb3gyZNdXshS0rk7Ft2
+         rTFAedhg6ZDENScaQJTd9/cv2L0RYrdWVaPZRdbTL5YRbfFSxoawhDI8scpmW/C/Yh
+         ecwpHHAktZd0VltqoGvJLEmT9+a/0PZZFapf/1cc=
+To:     =?utf-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+From:   =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>
+Cc:     "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        Mark Gross <mgross@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        Matthew Garrett <mjg59@srcf.ucam.org>
+Reply-To: =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>
+Subject: Re: [PATCH v4] platform/x86: add Gigabyte WMI temperature driver
+Message-ID: <TbKK4TuRhSBhlwBiK7ukHwt6r_NQeiHDAJc6rMAubISp3_isxu_iNOzcQ8VkJkGGrYQiVmQNwRV1vRUUxUB73Y1ddbXJLbN4qi5K1yKYsiA=@protonmail.com>
+In-Reply-To: <20210410181856.144988-1-linux@weissschuh.net>
+References: <6a096978-67ad-6def-6ed0-9ad38a460e95@redhat.com> <20210410181856.144988-1-linux@weissschuh.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210411095741.zmllsuc7pevdipvy@icloud.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Apr 11, 2021 at 11:57:41AM +0200, Sebastian Oechsle wrote:
-> Allow manual PWM control on Dell Latitude E7440.
-> 
-> Signed-off-by: Sebastian Oechsle <setboolean@icloud.com>
-> 
-> Changes in v2:
-> - Fix spelling
-> - Fix format
-> ---
+Hi
 
-Applied, but next time changelog goes here, please (after ---).
 
-Thanks,
-Guenter
+2021. =C3=A1prilis 10., szombat 20:18 keltez=C3=A9ssel, Thomas Wei=C3=9Fsch=
+uh =C3=ADrta:
 
->  drivers/hwmon/dell-smm-hwmon.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> index 73b9db9e3aab..2970892bed82 100644
-> --- a/drivers/hwmon/dell-smm-hwmon.c
-> +++ b/drivers/hwmon/dell-smm-hwmon.c
-> @@ -1210,6 +1210,14 @@ static struct dmi_system_id i8k_whitelist_fan_control[] __initdata = {
->  		},
->  		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
->  	},
-> +	{
-> +		.ident = "Dell Latitude E7440",
-> +		.matches = {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> +			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Latitude E7440"),
-> +		},
-> +		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
-> +	},
->  	{ }
->  };
->  
+> [...]
+> diff --git a/drivers/platform/x86/gigabyte-wmi.c b/drivers/platform/x86/g=
+igabyte-wmi.c
+> new file mode 100644
+> index 000000000000..c17e51fcf000
+> --- /dev/null
+> +++ b/drivers/platform/x86/gigabyte-wmi.c
+> @@ -0,0 +1,195 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + *  Copyright (C) 2021 Thomas Wei=C3=9Fschuh <thomas@weissschuh.net>
+> + */
+> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> +
+> +#include <linux/acpi.h>
+> +#include <linux/dmi.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/module.h>
+> +#include <linux/wmi.h>
+> +
+> +#define GIGABYTE_WMI_GUID=09"DEADBEEF-2001-0000-00A0-C90629100000"
+> +#define NUM_TEMPERATURE_SENSORS=096
+> +
+> +static bool force_load;
+> +module_param(force_load, bool, 0444);
+> +MODULE_PARM_DESC(force_load, "Force loading on unknown platform");
+> +
+> +static u8 usable_sensors_mask;
+> +
+> +enum gigabyte_wmi_commandtype {
+> +=09GIGABYTE_WMI_BUILD_DATE_QUERY       =3D   0x1,
+> +=09GIGABYTE_WMI_MAINBOARD_TYPE_QUERY   =3D   0x2,
+> +=09GIGABYTE_WMI_FIRMWARE_VERSION_QUERY =3D   0x4,
+> +=09GIGABYTE_WMI_MAINBOARD_NAME_QUERY   =3D   0x5,
+> +=09GIGABYTE_WMI_TEMPERATURE_QUERY      =3D 0x125,
+> +};
+> +
+> +struct gigabyte_wmi_args {
+> +=09u32 arg1;
+> +};
+> +
+> +static int gigabyte_wmi_perform_query(struct wmi_device *wdev,
+> +=09=09=09=09      enum gigabyte_wmi_commandtype command,
+> +=09=09=09=09      struct gigabyte_wmi_args *args, struct acpi_buffer *ou=
+t)
+> +{
+> +=09const struct acpi_buffer in =3D {
+> +=09=09.length =3D sizeof(*args),
+> +=09=09.pointer =3D args,
+> +=09};
+> +
+> +=09acpi_status ret =3D wmidev_evaluate_method(wdev, 0x0, command, &in, o=
+ut);
+> +
+> +=09if ACPI_FAILURE(ret)
+
+Please use `if (...)`.
+
+
+> +=09=09return -EIO;
+> +
+> +=09return 0;
+> +}
+> [...]
+> +static struct wmi_driver gigabyte_wmi_driver =3D {
+> +=09.driver =3D {
+> +=09=09.name =3D "gigabyte-wmi",
+> +=09},
+> +=09.id_table =3D gigabyte_wmi_id_table,
+> +=09.probe =3D gigabyte_wmi_probe,
+> +};
+> +module_wmi_driver(gigabyte_wmi_driver);
+> +
+> +MODULE_DEVICE_TABLE(wmi, gigabyte_wmi_id_table);
+> +MODULE_AUTHOR("Thomas Wei=C3=9Fschuh <thomas@weissschuh.net>");
+> +MODULE_DESCRIPTION("Gigabyte WMI temperature Driver");
+                                                ^
+It's a minor thing, but I think a lowercase 'd' would be better.
+
+
+> +MODULE_LICENSE("GPL");
+>
+> base-commit: 144c79ef33536b4ecb4951e07dbc1f2b7fa99d32
+> --
+> 2.31.1
+
+
+Regards,
+Barnab=C3=A1s P=C5=91cze
