@@ -2,122 +2,89 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F421EC433B4
-	for <linux-hwmon@archiver.kernel.org>; Sun, 11 Apr 2021 03:21:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5233BC433B4
+	for <linux-hwmon@archiver.kernel.org>; Sun, 11 Apr 2021 10:05:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BC67E610CF
-	for <linux-hwmon@archiver.kernel.org>; Sun, 11 Apr 2021 03:21:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 08BAB610A6
+	for <linux-hwmon@archiver.kernel.org>; Sun, 11 Apr 2021 10:05:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234991AbhDKDVo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 10 Apr 2021 23:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51682 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234950AbhDKDVo (ORCPT
+        id S235345AbhDKKF7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 11 Apr 2021 06:05:59 -0400
+Received: from mr85p00im-ztdg06021801.me.com ([17.58.23.195]:57621 "EHLO
+        mr85p00im-ztdg06021801.me.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235281AbhDKKFk (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 10 Apr 2021 23:21:44 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3403C06138B;
-        Sat, 10 Apr 2021 20:21:28 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id q10so6766130pgj.2;
-        Sat, 10 Apr 2021 20:21:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qlSJc4t6k90L7rQgXSXEIV+HoVoS9K7iCRrH/b5iwoc=;
-        b=kQOKCmXxKQW40XZNABhPOEFiB9swRFOF1apgrL3GdicdZPT7ZUsh9L2b26Aqtd1CR9
-         6doqqA0afq4I2dZattSVzVYR7JgfGQv6ulGYxqYKVVDqOw0L5hzLMqi7sbxbW5bVmqCl
-         A3OSM44MEN39B0ihmy5nfs60pxI64cqIUAeI0tYC/b7zdzPP1YxzBmVojhraKaCHorW6
-         SlyFDkIZB4ptDv1jAIWTlwsyjhFAls9+bv8pZA314nyK9uLHRl5vRBdU1BgR7hrmpGTb
-         gKz17uX5KM/NjPe8bon2t3e+P0VSP5gmbp4X9oE6JG3mJX/kHkJtb//ijHnD7nT2bFFj
-         Nu3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qlSJc4t6k90L7rQgXSXEIV+HoVoS9K7iCRrH/b5iwoc=;
-        b=aH5+Ox34ne7BBqczrIrL0FiuLtJQNFZWLWD2kuWIN0GHKxCSpFoOhIU40VbLcDpbRf
-         hcU3GtvB+/aUP9G2xTiFp4IyFFZhqP7+6obkkdiaAUkOG5MkcZdMqe8LAZqkT7epbsEO
-         LBQmZzYOIzKUcWDdWaPEfF4ScywjelsPfLFuDwOMC3Gq/jcIYhxa6ZXvvbrstdlalaIH
-         f4gAG6pIuoE5D2/EGudrDF/pTzWa0Q4iCYAuVH8BgxVSrxRedCSWztH/apptABYnsugV
-         shDoN7VuxqZ32N9AT3N7OI0Vk+1WuPs65HF8vo3DFA+hOpUxQC+RJnvevjz2nMempbVJ
-         zjtQ==
-X-Gm-Message-State: AOAM533VWlPekgm2Zo4REg9wal1v8KdRKbLZKWVVxIcRv+7H/GiMakrU
-        mR5qRHZZr7EvB/8/WYx72ro=
-X-Google-Smtp-Source: ABdhPJy5kyvV279co0pNS7BO6amqd9zlv1DLLe/ioBFUSVUwvKOFTiapaYad9fnr9QKhGU7Ks6kMRA==
-X-Received: by 2002:a63:cb44:: with SMTP id m4mr20435373pgi.4.1618111287958;
-        Sat, 10 Apr 2021 20:21:27 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:a9b4:ff60:6655:5c5f])
-        by smtp.gmail.com with ESMTPSA id t184sm6768597pgt.32.2021.04.10.20.21.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Apr 2021 20:21:27 -0700 (PDT)
-Date:   Sat, 10 Apr 2021 20:21:24 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>, linux-hwmon@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: Re: [PATCH v2 4/6] devres: handle zero size in devm_kmalloc()
-Message-ID: <CAKdAkRRRyC3x39CDRq_3ur1=MWuUug6ov-NWmSBc3h+XyRcsgQ@mail.gmail.com>
-References: <20200629065008.27620-1-brgl@bgdev.pl>
- <20200629065008.27620-5-brgl@bgdev.pl>
+        Sun, 11 Apr 2021 06:05:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
+        s=1a1hai; t=1618135065;
+        bh=QCAbgHJkS5myJMVGdfFVCZVIpCQ5c7NW+FDT6hRH450=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=QEoaVlG7D+mMLUiYKobdK4KhgwA2ci07SJ4Mz5M00wnHEc2L3HMfFuWB0NBECNCDs
+         9uzY62EeHlUmYF7OWxoRXVPwe9lCaz/Nsql9g0VzOKZvBR43rqt1Jwz7WBodY8L+Xn
+         YJlQV1mEZE1NO4IU9b4s3qpNzML+so2zhp6lrDlMvgvvkl5PvkavhdvoHgskpor8W2
+         vhwI9d+659e+mHVyHvkibrsuq2R+caV9x6yHUi5huYaKaeCYWzRGRzzF38YkqEhfX6
+         LrWwLH+4Erkg9OG3x+uACvNpFN4ANjoj5MyHwCnDjAR6UXI5fMZaxoyxQArVFaX5SY
+         rX27epDov68lw==
+Received: from icloud.com (dslb-090-186-183-050.090.186.pools.vodafone-ip.de [90.186.183.50])
+        by mr85p00im-ztdg06021801.me.com (Postfix) with ESMTPSA id 4D0091802FF;
+        Sun, 11 Apr 2021 09:57:44 +0000 (UTC)
+Date:   Sun, 11 Apr 2021 11:57:41 +0200
+From:   Sebastian Oechsle <setboolean@icloud.com>
+To:     pali@kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] hwmon: (dell-smm) Add Dell Latitude E7440 to fan control
+ whitelist
+Message-ID: <20210411095741.zmllsuc7pevdipvy@icloud.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200629065008.27620-5-brgl@bgdev.pl>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-04-11_04:2021-04-09,2021-04-11 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 clxscore=1015 mlxscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-2009150000 definitions=main-2104110077
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Bartosz,
+Allow manual PWM control on Dell Latitude E7440.
 
-On Mon, Jun 29, 2020 at 1:56 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
->
-> From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
->
-> Make devm_kmalloc() behave similarly to non-managed kmalloc(): return
-> ZERO_SIZE_PTR when requested size is 0. Update devm_kfree() to handle
-> this case.
+Signed-off-by: Sebastian Oechsle <setboolean@icloud.com>
 
-This is wrong if you consider devm_krealloc API that you added. The
-premise of devm_krealloc() is that it does not disturb devres "stack",
-however in this case there is no entry in the stack. Consider:
+Changes in v2:
+- Fix spelling
+- Fix format
+---
+ drivers/hwmon/dell-smm-hwmon.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-	ptr = devm_kzalloc(dev, 0, GFP_KERNEL);
-	...
-	more devm API calls
-	...
-
-	/* This allocation will be on top of devm stack, not bottom ! */
-	ptr = devm_krealloc(dev, ptr, 16, GFP_KERNEL);
-
-And also:
-
-	ptr = devm_kzalloc(dev, 16, GFP_KERNEL);
-	...
-	more devm API calls
-	...
-	/* Here we lose out position */
-	ptr = devm_krealloc(dev, ptr, 0, GFP_KERNEL);
-	...
-	/* and now our memory allocation will be released first */
-	ptr = devm_krealloc(dev, ptr, 16, GFP_KERNEL);
-
-
-IMO special-casing 0-size allocations for managed memory allocations
-should not be done.
-
-Thanks.
-
+diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+index 73b9db9e3aab..2970892bed82 100644
+--- a/drivers/hwmon/dell-smm-hwmon.c
++++ b/drivers/hwmon/dell-smm-hwmon.c
+@@ -1210,6 +1210,14 @@ static struct dmi_system_id i8k_whitelist_fan_control[] __initdata = {
+ 		},
+ 		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
+ 	},
++	{
++		.ident = "Dell Latitude E7440",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
++			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Latitude E7440"),
++		},
++		.driver_data = (void *)&i8k_fan_control_data[I8K_FAN_34A3_35A3],
++	},
+ 	{ }
+ };
+ 
 -- 
-Dmitry
+2.31.1
+
