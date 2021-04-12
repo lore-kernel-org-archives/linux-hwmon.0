@@ -2,349 +2,222 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D66CC433ED
-	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Apr 2021 12:42:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9411BC433B4
+	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Apr 2021 14:17:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5DD5C61027
-	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Apr 2021 12:42:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7109861025
+	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Apr 2021 14:17:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238015AbhDLMmy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 12 Apr 2021 08:42:54 -0400
-Received: from todd.t-8ch.de ([159.69.126.157]:50389 "EHLO ned.t-8ch.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S237626AbhDLMmy (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 12 Apr 2021 08:42:54 -0400
-X-Greylist: delayed 402 seconds by postgrey-1.27 at vger.kernel.org; Mon, 12 Apr 2021 08:42:53 EDT
-From:   =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1618230943;
-        bh=rw+YsJkoAwg27DzxQFYkTP7+A9CYPDkmBLhEtuxfF0I=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dLipbk08zKkVY94ihzGN7iiNEhvCzszP2sNCUJNME8kbHK4+BxxVmIrjxkj3CIlt2
-         muCC3lC/cFkGD9TSYELcYFeXs4KAb/T1lUwg4SYss9C9KS/KiFr4JkFXXqyU6wAWkt
-         IR2Im8h69k1P3h56dVWS76hWqcYiWYoVHvp1GVOM=
-To:     platform-driver-x86@vger.kernel.org,
-        Mark Gross <mgross@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Barnab=C3=A1s=20P=C5=91cze?= <pobrn@protonmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Cc:     =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        Matthew Garrett <mjg59@srcf.ucam.org>
-Subject: [PATCH v5] platform/x86: add Gigabyte WMI temperature driver
-Date:   Mon, 12 Apr 2021 14:35:13 +0200
-Message-Id: <20210412123513.628901-1-linux@weissschuh.net>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210410181856.144988-1-linux@weissschuh.net>
-References: <20210410181856.144988-1-linux@weissschuh.net>
+        id S240981AbhDLOSB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 12 Apr 2021 10:18:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52364 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238980AbhDLOR7 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 12 Apr 2021 10:17:59 -0400
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A147C061574
+        for <linux-hwmon@vger.kernel.org>; Mon, 12 Apr 2021 07:17:41 -0700 (PDT)
+Received: by mail-ot1-x333.google.com with SMTP id v24-20020a9d69d80000b02901b9aec33371so12951195oto.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 12 Apr 2021 07:17:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=7gwvPX65cmqoxo50aK/Cfbj4LUq6GahpemGJgWZl+10=;
+        b=lfgPHHpfsMiT27ctEXb/5dArKNDSb2dfzCxs957iY18G6PEO2vnEi1O0snlVRK3hpu
+         JTMB+LdSGeVH2gFy55ccDAZOk375lRtctilSSOUOjKQacj1mBD3jxjsHUQvLfgvOOIvf
+         S/N3Ko0b8J5JJOWZluE/FjfBfRxf497ZcXHevafLa4YFZki7N+40oN4vOlJh/UO5qkpp
+         +y/lQLJewaPn+UHqk2Ed4BrkhHIlsA5lcTMqhVVSbi0KyaaWAsDU2C81mhTfqwgwiMxf
+         RFZJbz8NHjRQtWLfeuh0hFiQ+JfCjkgIYIxcj0O+MTzedEo+xrRGXPoZljxPlB16HwIA
+         zIOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=7gwvPX65cmqoxo50aK/Cfbj4LUq6GahpemGJgWZl+10=;
+        b=i0kc+eTyOeX/F5UDTUINDdmWMB0KDeRTckmtDMtYvJf3/jbTfvwguSQVWja59U6sZh
+         AH+AiEVdURiZh4IfIzehkAhE1u+qPnavDQqp+PSqOcEI5pF2MMR+WDBlzAneUCfRMmwN
+         4j+sKeqvSbbI1b4DvSCuvsBSAIFEGjofow1J2J0CAeH5nOt7WAsNRqKv5nBN+OsIruDH
+         J0B+yHerSf23VuxMpKHYVFly1tYFATPesrQFshTGaM3XVVLPlvnrvesxBChjPofemYEd
+         GCcNAI4eJRT9mfhZaYZTCKJ+tMFeO2qk2zb7sGmyNGmE/9il/SW3a0ZQMFtVQuSsdyT6
+         mF7g==
+X-Gm-Message-State: AOAM533OCiaw17LsfNMMI0XyUWUnRBbgDldh99axWW1PE3D6fOZ/pKhY
+        1d72bzRS01Xf6KrOiY1sGSs=
+X-Google-Smtp-Source: ABdhPJyYsEJCjiD+fY6XjOM9o0lvXjk05pBPbyb7ENgIfxFL4VvlZQica/M5iqJPJ/JPy9k+wwtfJA==
+X-Received: by 2002:a9d:663:: with SMTP id 90mr24277891otn.311.1618237060636;
+        Mon, 12 Apr 2021 07:17:40 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 24sm2189479oij.58.2021.04.12.07.17.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Apr 2021 07:17:39 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH v2 1/2] hwmon: (amd_energy) Use unified function to read
+ energy data
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     Hardware Monitoring <linux-hwmon@vger.kernel.org>,
+        Naveen Krishna Chatradhi <nchatrad@amd.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20210409174852.4585-1-linux@roeck-us.net>
+ <20210412141430.64f20061@endymion>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <a6baff03-5c7d-85d2-96f5-d426e421f9d7@roeck-us.net>
+Date:   Mon, 12 Apr 2021 07:17:37 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20210412141430.64f20061@endymion>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Tested with
-* X570 I Aorus Pro Wifi (rev 1.0)
-* B550M DS3H
-* B550 Gaming X V2 (rev.1.x)
-* Z390 I AORUS PRO WIFI (rev. 1.0)
+On 4/12/21 5:14 AM, Jean Delvare wrote:
+> Hi Guenter,
+> 
+> On Fri,  9 Apr 2021 10:48:51 -0700, Guenter Roeck wrote:
+>> The driver implements two separate functions to read and update
+>> energy values. One function is called periodically and updates
+>> cached enery information to avoid loss of data, the other reads
+>> energy data on demand to report it to userspace. The second
+>> function reads current energy data, adds the difference to the
+>> data previously obtained by the first function, and then discards
+>> the updated data.
+>>
+>> Simplify the code and always call the first function, then report
+>> the energy data obtained by this function to userspace.
+> 
+> I like the idea.
+> 
+>> Cc: Naveen Krishna Chatradhi <nchatrad@amd.com>
+>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+>> ---
+>> v2: Added patch, simplification
+>>
+>>  drivers/hwmon/amd_energy.c | 31 ++++++-------------------------
+>>  1 file changed, 6 insertions(+), 25 deletions(-)
+>>
+>> diff --git a/drivers/hwmon/amd_energy.c b/drivers/hwmon/amd_energy.c
+>> index a86cc8d6d93d..93bad64039f1 100644
+>> --- a/drivers/hwmon/amd_energy.c
+>> +++ b/drivers/hwmon/amd_energy.c
+>> @@ -118,35 +118,12 @@ static void read_accumulate(struct amd_energy_data *data)
+>>  	data->core_id++;
+>>  }
+>>  
+>> -static void amd_add_delta(struct amd_energy_data *data, int ch,
+>> -			  int cpu, long *val, u32 reg)
+>> -{
+>> -	struct sensor_accumulator *accum;
+>> -	u64 input;
+>> -
+>> -	mutex_lock(&data->lock);
+>> -	rdmsrl_safe_on_cpu(cpu, reg, &input);
+>> -	input &= AMD_ENERGY_MASK;
+>> -
+>> -	accum = &data->accums[ch];
+>> -	if (input >= accum->prev_value)
+>> -		input += accum->energy_ctr -
+>> -				accum->prev_value;
+>> -	else
+>> -		input += UINT_MAX - accum->prev_value +
+>> -				accum->energy_ctr;
+>> -
+>> -	/* Energy consumed = (1/(2^ESU) * RAW * 1000000UL) μJoules */
+>> -	*val = div64_ul(input * 1000000UL, BIT(data->energy_units));
+>> -
+>> -	mutex_unlock(&data->lock);
+>> -}
+>> -
+>>  static int amd_energy_read(struct device *dev,
+>>  			   enum hwmon_sensor_types type,
+>>  			   u32 attr, int channel, long *val)
+>>  {
+>>  	struct amd_energy_data *data = dev_get_drvdata(dev);
+>> +	struct sensor_accumulator *accum;
+>>  	u32 reg;
+>>  	int cpu;
+>>  
+>> @@ -162,7 +139,11 @@ static int amd_energy_read(struct device *dev,
+>>  
+>>  		reg = ENERGY_CORE_MSR;
+>>  	}
+>> -	amd_add_delta(data, channel, cpu, val, reg);
+>> +
+>> +	accumulate_delta(data, channel, cpu, reg);
+>> +	accum = &data->accums[channel];
+>> +
+>> +	*val = div64_ul(accum->energy_ctr * 1000000UL, BIT(data->energy_units));
+> 
+> Is it considered safe to read accum->energy_ctr while not holding
+> data->lock?
+> 
 
-Those mainboards contain an ITE chips for management and
-monitoring.
+You mean because it is a 64-bit value ? Good question; it might not be if compiled
+on a 32-bit system. Good news is that I moved reading accum->energy_ctr under the lock
+in the next patch, so we should be good.
 
-They could also be handled by drivers/hwmon/i87.c.
-But the SuperIO range used by i87 is already claimed and used by the
-firmware.
+>>  
+>>  	return 0;
+>>  }
+> 
+> If the answer to the question above is "yes" then:
+> 
+> Reviewed-by: Jean Delvare <jdelvare@suse.de>
+> 
+Thanks!
 
-The following warning is printed at boot:
-
-kernel: ACPI Warning: SystemIO range 0x0000000000000A45-0x0000000000000A46 conflicts with OpRegion 0x0000000000000A45-0x0000000000000A46 (\GSA1.SIO1) (20200528/utaddress-204)
-kernel: ACPI: This conflict may cause random problems and system instability
-kernel: ACPI: If an ACPI driver is available for this device, you should use it instead of the native driver
-
-This driver implements such an ACPI driver.
-
-Unfortunately not all sensor registers are handled by the firmware and even
-less are exposed via WMI.
-
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
----
-
-Changes since v4:
-* Style
-* Wording
-* Alignment of email addresses
----
- MAINTAINERS                         |   6 +
- drivers/platform/x86/Kconfig        |  11 ++
- drivers/platform/x86/Makefile       |   1 +
- drivers/platform/x86/gigabyte-wmi.c | 195 ++++++++++++++++++++++++++++
- 4 files changed, 213 insertions(+)
- create mode 100644 drivers/platform/x86/gigabyte-wmi.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d92f85ca831d..7fb5e2ba489b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -7543,6 +7543,12 @@ F:	Documentation/filesystems/gfs2*
- F:	fs/gfs2/
- F:	include/uapi/linux/gfs2_ondisk.h
- 
-+GIGABYTE WMI DRIVER
-+M:	Thomas Weißschuh <thomas@weissschuh.net>
-+L:	platform-driver-x86@vger.kernel.org
-+S:	Maintained
-+F:	drivers/platform/x86/gigabyte-wmi.c
-+
- GNSS SUBSYSTEM
- M:	Johan Hovold <johan@kernel.org>
- S:	Maintained
-diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
-index ad4e630e73e2..96622a2106f7 100644
---- a/drivers/platform/x86/Kconfig
-+++ b/drivers/platform/x86/Kconfig
-@@ -123,6 +123,17 @@ config XIAOMI_WMI
- 	  To compile this driver as a module, choose M here: the module will
- 	  be called xiaomi-wmi.
- 
-+config GIGABYTE_WMI
-+	tristate "Gigabyte WMI temperature driver"
-+	depends on ACPI_WMI
-+	depends on HWMON
-+	help
-+	  Say Y here if you want to support WMI-based temperature reporting on
-+	  Gigabyte mainboards.
-+
-+	  To compile this driver as a module, choose M here: the module will
-+	  be called gigabyte-wmi.
-+
- config ACERHDF
- 	tristate "Acer Aspire One temperature and fan driver"
- 	depends on ACPI && THERMAL
-diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
-index 60d554073749..1621ebfd04fd 100644
---- a/drivers/platform/x86/Makefile
-+++ b/drivers/platform/x86/Makefile
-@@ -15,6 +15,7 @@ obj-$(CONFIG_INTEL_WMI_THUNDERBOLT)	+= intel-wmi-thunderbolt.o
- obj-$(CONFIG_MXM_WMI)			+= mxm-wmi.o
- obj-$(CONFIG_PEAQ_WMI)			+= peaq-wmi.o
- obj-$(CONFIG_XIAOMI_WMI)		+= xiaomi-wmi.o
-+obj-$(CONFIG_GIGABYTE_WMI)		+= gigabyte-wmi.o
- 
- # Acer
- obj-$(CONFIG_ACERHDF)		+= acerhdf.o
-diff --git a/drivers/platform/x86/gigabyte-wmi.c b/drivers/platform/x86/gigabyte-wmi.c
-new file mode 100644
-index 000000000000..bb1b0b205fa7
---- /dev/null
-+++ b/drivers/platform/x86/gigabyte-wmi.c
-@@ -0,0 +1,195 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ *  Copyright (C) 2021 Thomas Weißschuh <thomas@weissschuh.net>
-+ */
-+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-+
-+#include <linux/acpi.h>
-+#include <linux/dmi.h>
-+#include <linux/hwmon.h>
-+#include <linux/module.h>
-+#include <linux/wmi.h>
-+
-+#define GIGABYTE_WMI_GUID	"DEADBEEF-2001-0000-00A0-C90629100000"
-+#define NUM_TEMPERATURE_SENSORS	6
-+
-+static bool force_load;
-+module_param(force_load, bool, 0444);
-+MODULE_PARM_DESC(force_load, "Force loading on unknown platform");
-+
-+static u8 usable_sensors_mask;
-+
-+enum gigabyte_wmi_commandtype {
-+	GIGABYTE_WMI_BUILD_DATE_QUERY       =   0x1,
-+	GIGABYTE_WMI_MAINBOARD_TYPE_QUERY   =   0x2,
-+	GIGABYTE_WMI_FIRMWARE_VERSION_QUERY =   0x4,
-+	GIGABYTE_WMI_MAINBOARD_NAME_QUERY   =   0x5,
-+	GIGABYTE_WMI_TEMPERATURE_QUERY      = 0x125,
-+};
-+
-+struct gigabyte_wmi_args {
-+	u32 arg1;
-+};
-+
-+static int gigabyte_wmi_perform_query(struct wmi_device *wdev,
-+				      enum gigabyte_wmi_commandtype command,
-+				      struct gigabyte_wmi_args *args, struct acpi_buffer *out)
-+{
-+	const struct acpi_buffer in = {
-+		.length = sizeof(*args),
-+		.pointer = args,
-+	};
-+
-+	acpi_status ret = wmidev_evaluate_method(wdev, 0x0, command, &in, out);
-+
-+	if (ACPI_FAILURE(ret))
-+		return -EIO;
-+
-+	return 0;
-+}
-+
-+static int gigabyte_wmi_query_integer(struct wmi_device *wdev,
-+				      enum gigabyte_wmi_commandtype command,
-+				      struct gigabyte_wmi_args *args, u64 *res)
-+{
-+	union acpi_object *obj;
-+	struct acpi_buffer result = { ACPI_ALLOCATE_BUFFER, NULL };
-+	int ret;
-+
-+	ret = gigabyte_wmi_perform_query(wdev, command, args, &result);
-+	if (ret)
-+		return ret;
-+	obj = result.pointer;
-+	if (obj && obj->type == ACPI_TYPE_INTEGER)
-+		*res = obj->integer.value;
-+	else
-+		ret = -EIO;
-+	kfree(result.pointer);
-+	return ret;
-+}
-+
-+static int gigabyte_wmi_temperature(struct wmi_device *wdev, u8 sensor, long *res)
-+{
-+	struct gigabyte_wmi_args args = {
-+		.arg1 = sensor,
-+	};
-+	u64 temp;
-+	acpi_status ret;
-+
-+	ret = gigabyte_wmi_query_integer(wdev, GIGABYTE_WMI_TEMPERATURE_QUERY, &args, &temp);
-+	if (ret == 0) {
-+		if (temp == 0)
-+			return -ENODEV;
-+		*res = (s8)temp * 1000; // value is a signed 8-bit integer
-+	}
-+	return ret;
-+}
-+
-+static int gigabyte_wmi_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
-+				   u32 attr, int channel, long *val)
-+{
-+	struct wmi_device *wdev = dev_get_drvdata(dev);
-+
-+	return gigabyte_wmi_temperature(wdev, channel, val);
-+}
-+
-+static umode_t gigabyte_wmi_hwmon_is_visible(const void *data, enum hwmon_sensor_types type,
-+					     u32 attr, int channel)
-+{
-+	return usable_sensors_mask & BIT(channel) ? 0444  : 0;
-+}
-+
-+static const struct hwmon_channel_info *gigabyte_wmi_hwmon_info[] = {
-+	HWMON_CHANNEL_INFO(temp,
-+			   HWMON_T_INPUT,
-+			   HWMON_T_INPUT,
-+			   HWMON_T_INPUT,
-+			   HWMON_T_INPUT,
-+			   HWMON_T_INPUT,
-+			   HWMON_T_INPUT),
-+	NULL
-+};
-+
-+static const struct hwmon_ops gigabyte_wmi_hwmon_ops = {
-+	.read = gigabyte_wmi_hwmon_read,
-+	.is_visible = gigabyte_wmi_hwmon_is_visible,
-+};
-+
-+static const struct hwmon_chip_info gigabyte_wmi_hwmon_chip_info = {
-+	.ops = &gigabyte_wmi_hwmon_ops,
-+	.info = gigabyte_wmi_hwmon_info,
-+};
-+
-+static u8 gigabyte_wmi_detect_sensor_usability(struct wmi_device *wdev)
-+{
-+	int i;
-+	long temp;
-+	u8 r = 0;
-+
-+	for (i = 0; i < NUM_TEMPERATURE_SENSORS; i++) {
-+		if (!gigabyte_wmi_temperature(wdev, i, &temp))
-+			r |= BIT(i);
-+	}
-+	return r;
-+}
-+
-+static const struct dmi_system_id gigabyte_wmi_known_working_platforms[] = {
-+	{ .matches = {
-+		DMI_EXACT_MATCH(DMI_BOARD_VENDOR, "Gigabyte Technology Co., Ltd."),
-+		DMI_EXACT_MATCH(DMI_BOARD_NAME, "B550 GAMING X V2"),
-+	}},
-+	{ .matches = {
-+		DMI_EXACT_MATCH(DMI_BOARD_VENDOR, "Gigabyte Technology Co., Ltd."),
-+		DMI_EXACT_MATCH(DMI_BOARD_NAME, "B550M DS3H"),
-+	}},
-+	{ .matches = {
-+		DMI_EXACT_MATCH(DMI_BOARD_VENDOR, "Gigabyte Technology Co., Ltd."),
-+		DMI_EXACT_MATCH(DMI_BOARD_NAME, "Z390 I AORUS PRO WIFI-CF"),
-+	}},
-+	{ .matches = {
-+		DMI_EXACT_MATCH(DMI_BOARD_VENDOR, "Gigabyte Technology Co., Ltd."),
-+		DMI_EXACT_MATCH(DMI_BOARD_NAME, "X570 I AORUS PRO WIFI"),
-+	}},
-+	{ }
-+};
-+
-+static int gigabyte_wmi_probe(struct wmi_device *wdev, const void *context)
-+{
-+	struct device *hwmon_dev;
-+
-+	if (!dmi_check_system(gigabyte_wmi_known_working_platforms)) {
-+		if (!force_load)
-+			return -ENODEV;
-+		dev_warn(&wdev->dev, "Forcing load on unknown platform");
-+	}
-+
-+	usable_sensors_mask = gigabyte_wmi_detect_sensor_usability(wdev);
-+	if (!usable_sensors_mask) {
-+		dev_info(&wdev->dev, "No temperature sensors usable");
-+		return -ENODEV;
-+	}
-+
-+	hwmon_dev = devm_hwmon_device_register_with_info(&wdev->dev, "gigabyte_wmi", wdev,
-+							 &gigabyte_wmi_hwmon_chip_info, NULL);
-+
-+	return PTR_ERR_OR_ZERO(hwmon_dev);
-+}
-+
-+static const struct wmi_device_id gigabyte_wmi_id_table[] = {
-+	{ GIGABYTE_WMI_GUID, NULL },
-+	{ }
-+};
-+
-+static struct wmi_driver gigabyte_wmi_driver = {
-+	.driver = {
-+		.name = "gigabyte-wmi",
-+	},
-+	.id_table = gigabyte_wmi_id_table,
-+	.probe = gigabyte_wmi_probe,
-+};
-+module_wmi_driver(gigabyte_wmi_driver);
-+
-+MODULE_DEVICE_TABLE(wmi, gigabyte_wmi_id_table);
-+MODULE_AUTHOR("Thomas Weißschuh <thomas@weissschuh.net>");
-+MODULE_DESCRIPTION("Gigabyte WMI temperature driver");
-+MODULE_LICENSE("GPL");
-
-base-commit: 144c79ef33536b4ecb4951e07dbc1f2b7fa99d32
--- 
-2.31.1
-
+Guenter
