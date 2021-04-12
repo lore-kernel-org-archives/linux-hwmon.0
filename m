@@ -7,128 +7,164 @@ X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A840DC433ED
-	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Apr 2021 12:14:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4659AC433B4
+	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Apr 2021 12:27:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7872661278
-	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Apr 2021 12:14:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1A97B6128A
+	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Apr 2021 12:27:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238443AbhDLMOv convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 12 Apr 2021 08:14:51 -0400
-Received: from mx2.suse.de ([195.135.220.15]:54292 "EHLO mx2.suse.de"
+        id S238331AbhDLM2F (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 12 Apr 2021 08:28:05 -0400
+Received: from mx2.suse.de ([195.135.220.15]:42220 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237718AbhDLMOu (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 12 Apr 2021 08:14:50 -0400
+        id S231138AbhDLM2F (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 12 Apr 2021 08:28:05 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id BF08CAE5C;
-        Mon, 12 Apr 2021 12:14:31 +0000 (UTC)
-Date:   Mon, 12 Apr 2021 14:14:30 +0200
+        by mx2.suse.de (Postfix) with ESMTP id 38B24AE5C;
+        Mon, 12 Apr 2021 12:27:46 +0000 (UTC)
+Date:   Mon, 12 Apr 2021 14:27:44 +0200
 From:   Jean Delvare <jdelvare@suse.de>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     Hardware Monitoring <linux-hwmon@vger.kernel.org>,
         Naveen Krishna Chatradhi <nchatrad@amd.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v2 1/2] hwmon: (amd_energy) Use unified function to read
- energy data
-Message-ID: <20210412141430.64f20061@endymion>
-In-Reply-To: <20210409174852.4585-1-linux@roeck-us.net>
+Subject: Re: [PATCH v2 2/2] hwmon: (amd_energy) Restore visibility of energy
+ counters
+Message-ID: <20210412142744.54c55d06@endymion>
+In-Reply-To: <20210409174852.4585-2-linux@roeck-us.net>
 References: <20210409174852.4585-1-linux@roeck-us.net>
+        <20210409174852.4585-2-linux@roeck-us.net>
 Organization: SUSE Linux
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Guenter,
-
-On Fri,  9 Apr 2021 10:48:51 -0700, Guenter Roeck wrote:
-> The driver implements two separate functions to read and update
-> energy values. One function is called periodically and updates
-> cached enery information to avoid loss of data, the other reads
-> energy data on demand to report it to userspace. The second
-> function reads current energy data, adds the difference to the
-> data previously obtained by the first function, and then discards
-> the updated data.
+On Fri,  9 Apr 2021 10:48:52 -0700, Guenter Roeck wrote:
+> Commit 60268b0e8258 ("hwmon: (amd_energy) modify the visibility of
+> the counters") restricted visibility of AMD energy counters to work
+> around a side-channel attack using energy data to determine which
+> instructions are executed. The attack is described in 'PLATYPUS:
+> Software-based Power Side-Channel Attacks on x86'. It relies on quick
+> and accurate energy readings.
 > 
-> Simplify the code and always call the first function, then report
-> the energy data obtained by this function to userspace.
-
-I like the idea.
-
+> Limiting energy readings to privileged users is annoying. A much better
+> solution is to make energy readings unusable for attacks by randomizing
+> the time between updates. We can do that by caching energy values for
+> a short and randomized period of time.
+> 
 > Cc: Naveen Krishna Chatradhi <nchatrad@amd.com>
 > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 > ---
-> v2: Added patch, simplification
+> v2: Simplified code by using unified function to accumulate energy data
 > 
->  drivers/hwmon/amd_energy.c | 31 ++++++-------------------------
->  1 file changed, 6 insertions(+), 25 deletions(-)
+>  drivers/hwmon/amd_energy.c | 29 +++++++++++++++++++++--------
+>  1 file changed, 21 insertions(+), 8 deletions(-)
 > 
 > diff --git a/drivers/hwmon/amd_energy.c b/drivers/hwmon/amd_energy.c
-> index a86cc8d6d93d..93bad64039f1 100644
+> index 93bad64039f1..1bf0afc2740c 100644
 > --- a/drivers/hwmon/amd_energy.c
 > +++ b/drivers/hwmon/amd_energy.c
-> @@ -118,35 +118,12 @@ static void read_accumulate(struct amd_energy_data *data)
->  	data->core_id++;
+> @@ -18,6 +18,7 @@
+>  #include <linux/mutex.h>
+>  #include <linux/processor.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/random.h>
+>  #include <linux/sched.h>
+>  #include <linux/slab.h>
+>  #include <linux/topology.h>
+> @@ -35,6 +36,7 @@
+>  struct sensor_accumulator {
+>  	u64 energy_ctr;
+>  	u64 prev_value;
+> +	unsigned long cache_timeout;
+>  };
+>  
+>  struct amd_energy_data {
+> @@ -74,17 +76,14 @@ static void get_energy_units(struct amd_energy_data *data)
+>  	data->energy_units = (rapl_units & AMD_ENERGY_UNIT_MASK) >> 8;
 >  }
 >  
-> -static void amd_add_delta(struct amd_energy_data *data, int ch,
-> -			  int cpu, long *val, u32 reg)
-> -{
+
+Add a comment stating that this function must be called with accum's
+&data->lock held?
+
+> -static void accumulate_delta(struct amd_energy_data *data,
+> -			     int channel, int cpu, u32 reg)
+> +static void __accumulate_delta(struct sensor_accumulator *accum,
+> +			       int cpu, u32 reg)
+>  {
 > -	struct sensor_accumulator *accum;
-> -	u64 input;
-> -
+>  	u64 input;
+>  
 > -	mutex_lock(&data->lock);
-> -	rdmsrl_safe_on_cpu(cpu, reg, &input);
-> -	input &= AMD_ENERGY_MASK;
-> -
-> -	accum = &data->accums[ch];
-> -	if (input >= accum->prev_value)
-> -		input += accum->energy_ctr -
-> -				accum->prev_value;
-> -	else
-> -		input += UINT_MAX - accum->prev_value +
-> -				accum->energy_ctr;
-> -
-> -	/* Energy consumed = (1/(2^ESU) * RAW * 1000000UL) μJoules */
-> -	*val = div64_ul(input * 1000000UL, BIT(data->energy_units));
-> -
-> -	mutex_unlock(&data->lock);
-> -}
-> -
->  static int amd_energy_read(struct device *dev,
->  			   enum hwmon_sensor_types type,
->  			   u32 attr, int channel, long *val)
+>  	rdmsrl_safe_on_cpu(cpu, reg, &input);
+>  	input &= AMD_ENERGY_MASK;
+>  
+> -	accum = &data->accums[channel];
+>  	if (input >= accum->prev_value)
+>  		accum->energy_ctr +=
+>  			input - accum->prev_value;
+> @@ -93,6 +92,14 @@ static void accumulate_delta(struct amd_energy_data *data,
+>  			accum->prev_value + input;
+>  
+>  	accum->prev_value = input;
+> +	accum->cache_timeout = jiffies + HZ + get_random_int() % HZ;
+
+Needs #include <linux/jiffies.h> maybe?
+
+> +}
+> +
+> +static void accumulate_delta(struct amd_energy_data *data,
+> +			     int channel, int cpu, u32 reg)
+> +{
+> +	mutex_lock(&data->lock);
+> +	__accumulate_delta(&data->accums[channel], cpu, reg);
+>  	mutex_unlock(&data->lock);
+>  }
+>  
+> @@ -124,6 +131,7 @@ static int amd_energy_read(struct device *dev,
 >  {
 >  	struct amd_energy_data *data = dev_get_drvdata(dev);
-> +	struct sensor_accumulator *accum;
+>  	struct sensor_accumulator *accum;
+> +	u64 energy;
 >  	u32 reg;
 >  	int cpu;
 >  
-> @@ -162,7 +139,11 @@ static int amd_energy_read(struct device *dev,
->  
+> @@ -140,10 +148,15 @@ static int amd_energy_read(struct device *dev,
 >  		reg = ENERGY_CORE_MSR;
 >  	}
-> -	amd_add_delta(data, channel, cpu, val, reg);
+>  
+> -	accumulate_delta(data, channel, cpu, reg);
+>  	accum = &data->accums[channel];
+>  
+> -	*val = div64_ul(accum->energy_ctr * 1000000UL, BIT(data->energy_units));
+> +	mutex_lock(&data->lock);
+> +	if (!accum->energy_ctr || time_after(jiffies, accum->cache_timeout))
+> +		__accumulate_delta(accum, cpu, reg);
+> +	energy = accum->energy_ctr;
+> +	mutex_unlock(&data->lock);
 > +
-> +	accumulate_delta(data, channel, cpu, reg);
-> +	accum = &data->accums[channel];
-> +
-> +	*val = div64_ul(accum->energy_ctr * 1000000UL, BIT(data->energy_units));
-
-Is it considered safe to read accum->energy_ctr while not holding
-data->lock?
-
+> +	*val = div64_ul(energy * 1000000UL, BIT(data->energy_units));
 >  
 >  	return 0;
 >  }
+> @@ -152,7 +165,7 @@ static umode_t amd_energy_is_visible(const void *_data,
+>  				     enum hwmon_sensor_types type,
+>  				     u32 attr, int channel)
+>  {
+> -	return 0440;
+> +	return 0444;
+>  }
+>  
+>  static int energy_accumulator(void *p)
 
-If the answer to the question above is "yes" then:
+Very nice. This will make the driver useful again :-)
 
 Reviewed-by: Jean Delvare <jdelvare@suse.de>
 
