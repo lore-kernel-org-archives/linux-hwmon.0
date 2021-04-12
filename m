@@ -2,168 +2,136 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 057BCC433ED
-	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Apr 2021 00:48:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A840DC433ED
+	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Apr 2021 12:14:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B7FE3611F2
-	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Apr 2021 00:48:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7872661278
+	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Apr 2021 12:14:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235835AbhDLAtA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 11 Apr 2021 20:49:00 -0400
-Received: from mga06.intel.com ([134.134.136.31]:1749 "EHLO mga06.intel.com"
+        id S238443AbhDLMOv convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 12 Apr 2021 08:14:51 -0400
+Received: from mx2.suse.de ([195.135.220.15]:54292 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235323AbhDLAs7 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 11 Apr 2021 20:48:59 -0400
-IronPort-SDR: mY2sCqjXymvOhCtPBcr3uOZjDMDPELd+fKPbjjLIGBtTNkHxfYzi7zVSWRplZxAQ0G/9y234G0
- pQNwsRDcUhYA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9951"; a="255409811"
-X-IronPort-AV: E=Sophos;i="5.82,214,1613462400"; 
-   d="scan'208";a="255409811"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2021 17:48:42 -0700
-IronPort-SDR: xMEi/GrgGezjtpj8+h1evXBXKcBnsO7VyRtazxKxe7VF67q23HSpBlO7Wz1mW0BiETRhnqtE1o
- 6IuybpP2OVWA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,214,1613462400"; 
-   d="scan'208";a="451208236"
-Received: from lkp-server01.sh.intel.com (HELO 69d8fcc516b7) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 11 Apr 2021 17:48:40 -0700
-Received: from kbuild by 69d8fcc516b7 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lVkkq-000JAl-67; Mon, 12 Apr 2021 00:48:40 +0000
-Date:   Mon, 12 Apr 2021 08:48:27 +0800
-From:   kernel test robot <lkp@intel.com>
+        id S237718AbhDLMOu (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 12 Apr 2021 08:14:50 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id BF08CAE5C;
+        Mon, 12 Apr 2021 12:14:31 +0000 (UTC)
+Date:   Mon, 12 Apr 2021 14:14:30 +0200
+From:   Jean Delvare <jdelvare@suse.de>
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon-next] BUILD SUCCESS
- 31106c948299bae1288cfa9c946fae3ca38b6f6f
-Message-ID: <607398db.XGVhOkEuJLawFDMq%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+Cc:     Hardware Monitoring <linux-hwmon@vger.kernel.org>,
+        Naveen Krishna Chatradhi <nchatrad@amd.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v2 1/2] hwmon: (amd_energy) Use unified function to read
+ energy data
+Message-ID: <20210412141430.64f20061@endymion>
+In-Reply-To: <20210409174852.4585-1-linux@roeck-us.net>
+References: <20210409174852.4585-1-linux@roeck-us.net>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 31106c948299bae1288cfa9c946fae3ca38b6f6f  hwmon: (dell-smm) Add Dell Latitude E7440 to fan control whitelist
+Hi Guenter,
 
-elapsed time: 723m
+On Fri,  9 Apr 2021 10:48:51 -0700, Guenter Roeck wrote:
+> The driver implements two separate functions to read and update
+> energy values. One function is called periodically and updates
+> cached enery information to avoid loss of data, the other reads
+> energy data on demand to report it to userspace. The second
+> function reads current energy data, adds the difference to the
+> data previously obtained by the first function, and then discards
+> the updated data.
+> 
+> Simplify the code and always call the first function, then report
+> the energy data obtained by this function to userspace.
 
-configs tested: 99
-configs skipped: 2
+I like the idea.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> Cc: Naveen Krishna Chatradhi <nchatrad@amd.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+> v2: Added patch, simplification
+> 
+>  drivers/hwmon/amd_energy.c | 31 ++++++-------------------------
+>  1 file changed, 6 insertions(+), 25 deletions(-)
+> 
+> diff --git a/drivers/hwmon/amd_energy.c b/drivers/hwmon/amd_energy.c
+> index a86cc8d6d93d..93bad64039f1 100644
+> --- a/drivers/hwmon/amd_energy.c
+> +++ b/drivers/hwmon/amd_energy.c
+> @@ -118,35 +118,12 @@ static void read_accumulate(struct amd_energy_data *data)
+>  	data->core_id++;
+>  }
+>  
+> -static void amd_add_delta(struct amd_energy_data *data, int ch,
+> -			  int cpu, long *val, u32 reg)
+> -{
+> -	struct sensor_accumulator *accum;
+> -	u64 input;
+> -
+> -	mutex_lock(&data->lock);
+> -	rdmsrl_safe_on_cpu(cpu, reg, &input);
+> -	input &= AMD_ENERGY_MASK;
+> -
+> -	accum = &data->accums[ch];
+> -	if (input >= accum->prev_value)
+> -		input += accum->energy_ctr -
+> -				accum->prev_value;
+> -	else
+> -		input += UINT_MAX - accum->prev_value +
+> -				accum->energy_ctr;
+> -
+> -	/* Energy consumed = (1/(2^ESU) * RAW * 1000000UL) μJoules */
+> -	*val = div64_ul(input * 1000000UL, BIT(data->energy_units));
+> -
+> -	mutex_unlock(&data->lock);
+> -}
+> -
+>  static int amd_energy_read(struct device *dev,
+>  			   enum hwmon_sensor_types type,
+>  			   u32 attr, int channel, long *val)
+>  {
+>  	struct amd_energy_data *data = dev_get_drvdata(dev);
+> +	struct sensor_accumulator *accum;
+>  	u32 reg;
+>  	int cpu;
+>  
+> @@ -162,7 +139,11 @@ static int amd_energy_read(struct device *dev,
+>  
+>  		reg = ENERGY_CORE_MSR;
+>  	}
+> -	amd_add_delta(data, channel, cpu, val, reg);
+> +
+> +	accumulate_delta(data, channel, cpu, reg);
+> +	accum = &data->accums[channel];
+> +
+> +	*val = div64_ul(accum->energy_ctr * 1000000UL, BIT(data->energy_units));
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-x86_64                           allyesconfig
-riscv                            allmodconfig
-i386                             allyesconfig
-riscv                            allyesconfig
-sh                           se7705_defconfig
-mips                     loongson1b_defconfig
-sh                        sh7763rdp_defconfig
-sh                           se7712_defconfig
-mips                     loongson1c_defconfig
-mips                            e55_defconfig
-xtensa                generic_kc705_defconfig
-mips                         db1xxx_defconfig
-arm                       netwinder_defconfig
-um                                  defconfig
-openrisc                 simple_smp_defconfig
-sh                         ecovec24_defconfig
-sh                                  defconfig
-sh                          landisk_defconfig
-h8300                    h8300h-sim_defconfig
-mips                  decstation_64_defconfig
-sparc                               defconfig
-sh                            titan_defconfig
-m68k                          sun3x_defconfig
-arm                          ep93xx_defconfig
-riscv                          rv32_defconfig
-mips                           ip22_defconfig
-xtensa                  cadence_csp_defconfig
-powerpc                 mpc837x_rdb_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-sparc                            allyesconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a003-20210411
-x86_64               randconfig-a002-20210411
-x86_64               randconfig-a001-20210411
-x86_64               randconfig-a005-20210411
-x86_64               randconfig-a006-20210411
-x86_64               randconfig-a004-20210411
-i386                 randconfig-a003-20210411
-i386                 randconfig-a001-20210411
-i386                 randconfig-a006-20210411
-i386                 randconfig-a005-20210411
-i386                 randconfig-a004-20210411
-i386                 randconfig-a002-20210411
-i386                 randconfig-a015-20210411
-i386                 randconfig-a014-20210411
-i386                 randconfig-a013-20210411
-i386                 randconfig-a012-20210411
-i386                 randconfig-a016-20210411
-i386                 randconfig-a011-20210411
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-um                               allmodconfig
-um                                allnoconfig
-um                               allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+Is it considered safe to read accum->energy_ctr while not holding
+data->lock?
 
-clang tested configs:
-x86_64               randconfig-a014-20210411
-x86_64               randconfig-a015-20210411
-x86_64               randconfig-a011-20210411
-x86_64               randconfig-a013-20210411
-x86_64               randconfig-a012-20210411
-x86_64               randconfig-a016-20210411
+>  
+>  	return 0;
+>  }
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+If the answer to the question above is "yes" then:
+
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
+
+-- 
+Jean Delvare
+SUSE L3 Support
