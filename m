@@ -7,66 +7,66 @@ X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9411BC433B4
-	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Apr 2021 14:17:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E7F2C433ED
+	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Apr 2021 14:25:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7109861025
-	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Apr 2021 14:17:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E8DD16124C
+	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Apr 2021 14:25:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240981AbhDLOSB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 12 Apr 2021 10:18:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52364 "EHLO
+        id S240250AbhDLOZw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 12 Apr 2021 10:25:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238980AbhDLOR7 (ORCPT
+        with ESMTP id S240862AbhDLOZv (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 12 Apr 2021 10:17:59 -0400
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A147C061574
-        for <linux-hwmon@vger.kernel.org>; Mon, 12 Apr 2021 07:17:41 -0700 (PDT)
-Received: by mail-ot1-x333.google.com with SMTP id v24-20020a9d69d80000b02901b9aec33371so12951195oto.2
-        for <linux-hwmon@vger.kernel.org>; Mon, 12 Apr 2021 07:17:41 -0700 (PDT)
+        Mon, 12 Apr 2021 10:25:51 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D083C061574
+        for <linux-hwmon@vger.kernel.org>; Mon, 12 Apr 2021 07:25:33 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id x2so13592739oiv.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 12 Apr 2021 07:25:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=7gwvPX65cmqoxo50aK/Cfbj4LUq6GahpemGJgWZl+10=;
-        b=lfgPHHpfsMiT27ctEXb/5dArKNDSb2dfzCxs957iY18G6PEO2vnEi1O0snlVRK3hpu
-         JTMB+LdSGeVH2gFy55ccDAZOk375lRtctilSSOUOjKQacj1mBD3jxjsHUQvLfgvOOIvf
-         S/N3Ko0b8J5JJOWZluE/FjfBfRxf497ZcXHevafLa4YFZki7N+40oN4vOlJh/UO5qkpp
-         +y/lQLJewaPn+UHqk2Ed4BrkhHIlsA5lcTMqhVVSbi0KyaaWAsDU2C81mhTfqwgwiMxf
-         RFZJbz8NHjRQtWLfeuh0hFiQ+JfCjkgIYIxcj0O+MTzedEo+xrRGXPoZljxPlB16HwIA
-         zIOw==
+        bh=WWYs605FCLBh/xRIQaai5smH5K0JvcYdkUPmOJH74wo=;
+        b=E7whVlLglWR/XnVTCn8PgWCR75iUC3NiK5fErN1PNUQ6xxq4Mycy+P56uiZKs/e9CT
+         DZ+TBFq2sPeVfkkKhreo9j+Ypcq4TeAflXlbfRrKRnnYclH657QdxqDlL/ABK/yuxRXU
+         WntI2dgpWiRf0PBxCLLL8qeqT6LDdwGRxCCELK/EvKZtvsEDKR89MRMHHLXUMbTkx6CS
+         eam9oZj7FKEtIU7g/JySmHnKTbulwGaSyfCJg4qc8ktKjfUxIBu0FNAD1OTakb5wNmnb
+         naBe1lfekDDTjyFJ2YjyMerk1AhC/pgAAudu4ti6Uv9bwer2ou3sPuC4qQCPVTvteF4O
+         RF6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=7gwvPX65cmqoxo50aK/Cfbj4LUq6GahpemGJgWZl+10=;
-        b=i0kc+eTyOeX/F5UDTUINDdmWMB0KDeRTckmtDMtYvJf3/jbTfvwguSQVWja59U6sZh
-         AH+AiEVdURiZh4IfIzehkAhE1u+qPnavDQqp+PSqOcEI5pF2MMR+WDBlzAneUCfRMmwN
-         4j+sKeqvSbbI1b4DvSCuvsBSAIFEGjofow1J2J0CAeH5nOt7WAsNRqKv5nBN+OsIruDH
-         J0B+yHerSf23VuxMpKHYVFly1tYFATPesrQFshTGaM3XVVLPlvnrvesxBChjPofemYEd
-         GCcNAI4eJRT9mfhZaYZTCKJ+tMFeO2qk2zb7sGmyNGmE/9il/SW3a0ZQMFtVQuSsdyT6
-         mF7g==
-X-Gm-Message-State: AOAM533OCiaw17LsfNMMI0XyUWUnRBbgDldh99axWW1PE3D6fOZ/pKhY
-        1d72bzRS01Xf6KrOiY1sGSs=
-X-Google-Smtp-Source: ABdhPJyYsEJCjiD+fY6XjOM9o0lvXjk05pBPbyb7ENgIfxFL4VvlZQica/M5iqJPJ/JPy9k+wwtfJA==
-X-Received: by 2002:a9d:663:: with SMTP id 90mr24277891otn.311.1618237060636;
-        Mon, 12 Apr 2021 07:17:40 -0700 (PDT)
+        bh=WWYs605FCLBh/xRIQaai5smH5K0JvcYdkUPmOJH74wo=;
+        b=Y4xhyWsejbG1j8RCKo4HLIWVzllvn0uY4NRtEzeKVjbFTISaHA3DE9YERLCYw3vWD+
+         MZ+O6X69ogU1z7isFopzcCrcPSayUdfh5siV9lKWpf/ys5Syh1ZEl4D7qCbB7zcdFvg6
+         MRgr1Am5OwhsAP8rhKdaZBCCA7JsmEF55+sJffR3yONOBgzNXEMESwz8yFJazodJwu6Y
+         wZR7qOiZePixz0lOvKsuo//2etsbRqJacU/Q5FA5MkbPXFpICC57LvkZYyspy+iuc/9D
+         zzo3J5JhShG6r9ZDy7YsJsU1MLJf/UoQx4dyMnrFfjTgiNQJmPTR43YNYlggZyIQrpXQ
+         Zmzw==
+X-Gm-Message-State: AOAM533fJY50/SjS8GD67qpxkNLXl1t6B3KblEPRkiMGK7iessz8lqPW
+        z8GDRE9NTCgVjxSsI+oTfsKZwPFbjN0=
+X-Google-Smtp-Source: ABdhPJybuA1reHyzYwZvufZ6VbJJ3OgrU/Pjr1XUsolJ5muLTB6AAVr0eW+GBRkr/JabSIA1rSBFcg==
+X-Received: by 2002:aca:cf91:: with SMTP id f139mr13620713oig.39.1618237532997;
+        Mon, 12 Apr 2021 07:25:32 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 24sm2189479oij.58.2021.04.12.07.17.38
+        by smtp.gmail.com with ESMTPSA id x13sm90732otg.57.2021.04.12.07.25.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Apr 2021 07:17:39 -0700 (PDT)
+        Mon, 12 Apr 2021 07:25:32 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v2 1/2] hwmon: (amd_energy) Use unified function to read
- energy data
+Subject: Re: [PATCH v2 2/2] hwmon: (amd_energy) Restore visibility of energy
+ counters
 To:     Jean Delvare <jdelvare@suse.de>
 Cc:     Hardware Monitoring <linux-hwmon@vger.kernel.org>,
         Naveen Krishna Chatradhi <nchatrad@amd.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 References: <20210409174852.4585-1-linux@roeck-us.net>
- <20210412141430.64f20061@endymion>
+ <20210409174852.4585-2-linux@roeck-us.net> <20210412142744.54c55d06@endymion>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -111,113 +111,146 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <a6baff03-5c7d-85d2-96f5-d426e421f9d7@roeck-us.net>
-Date:   Mon, 12 Apr 2021 07:17:37 -0700
+Message-ID: <797392a6-2d45-2755-7de6-b58ed26c5a50@roeck-us.net>
+Date:   Mon, 12 Apr 2021 07:25:31 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20210412141430.64f20061@endymion>
+In-Reply-To: <20210412142744.54c55d06@endymion>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/12/21 5:14 AM, Jean Delvare wrote:
-> Hi Guenter,
-> 
-> On Fri,  9 Apr 2021 10:48:51 -0700, Guenter Roeck wrote:
->> The driver implements two separate functions to read and update
->> energy values. One function is called periodically and updates
->> cached enery information to avoid loss of data, the other reads
->> energy data on demand to report it to userspace. The second
->> function reads current energy data, adds the difference to the
->> data previously obtained by the first function, and then discards
->> the updated data.
+On 4/12/21 5:27 AM, Jean Delvare wrote:
+> On Fri,  9 Apr 2021 10:48:52 -0700, Guenter Roeck wrote:
+>> Commit 60268b0e8258 ("hwmon: (amd_energy) modify the visibility of
+>> the counters") restricted visibility of AMD energy counters to work
+>> around a side-channel attack using energy data to determine which
+>> instructions are executed. The attack is described in 'PLATYPUS:
+>> Software-based Power Side-Channel Attacks on x86'. It relies on quick
+>> and accurate energy readings.
 >>
->> Simplify the code and always call the first function, then report
->> the energy data obtained by this function to userspace.
-> 
-> I like the idea.
-> 
+>> Limiting energy readings to privileged users is annoying. A much better
+>> solution is to make energy readings unusable for attacks by randomizing
+>> the time between updates. We can do that by caching energy values for
+>> a short and randomized period of time.
+>>
 >> Cc: Naveen Krishna Chatradhi <nchatrad@amd.com>
 >> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 >> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 >> ---
->> v2: Added patch, simplification
+>> v2: Simplified code by using unified function to accumulate energy data
 >>
->>  drivers/hwmon/amd_energy.c | 31 ++++++-------------------------
->>  1 file changed, 6 insertions(+), 25 deletions(-)
+>>  drivers/hwmon/amd_energy.c | 29 +++++++++++++++++++++--------
+>>  1 file changed, 21 insertions(+), 8 deletions(-)
 >>
 >> diff --git a/drivers/hwmon/amd_energy.c b/drivers/hwmon/amd_energy.c
->> index a86cc8d6d93d..93bad64039f1 100644
+>> index 93bad64039f1..1bf0afc2740c 100644
 >> --- a/drivers/hwmon/amd_energy.c
 >> +++ b/drivers/hwmon/amd_energy.c
->> @@ -118,35 +118,12 @@ static void read_accumulate(struct amd_energy_data *data)
->>  	data->core_id++;
+>> @@ -18,6 +18,7 @@
+>>  #include <linux/mutex.h>
+>>  #include <linux/processor.h>
+>>  #include <linux/platform_device.h>
+>> +#include <linux/random.h>
+>>  #include <linux/sched.h>
+>>  #include <linux/slab.h>
+>>  #include <linux/topology.h>
+>> @@ -35,6 +36,7 @@
+>>  struct sensor_accumulator {
+>>  	u64 energy_ctr;
+>>  	u64 prev_value;
+>> +	unsigned long cache_timeout;
+>>  };
+>>  
+>>  struct amd_energy_data {
+>> @@ -74,17 +76,14 @@ static void get_energy_units(struct amd_energy_data *data)
+>>  	data->energy_units = (rapl_units & AMD_ENERGY_UNIT_MASK) >> 8;
 >>  }
 >>  
->> -static void amd_add_delta(struct amd_energy_data *data, int ch,
->> -			  int cpu, long *val, u32 reg)
->> -{
+> 
+> Add a comment stating that this function must be called with accum's
+> &data->lock held?
+> 
+>> -static void accumulate_delta(struct amd_energy_data *data,
+>> -			     int channel, int cpu, u32 reg)
+>> +static void __accumulate_delta(struct sensor_accumulator *accum,
+>> +			       int cpu, u32 reg)
+>>  {
 >> -	struct sensor_accumulator *accum;
->> -	u64 input;
->> -
+>>  	u64 input;
+>>  
 >> -	mutex_lock(&data->lock);
->> -	rdmsrl_safe_on_cpu(cpu, reg, &input);
->> -	input &= AMD_ENERGY_MASK;
->> -
->> -	accum = &data->accums[ch];
->> -	if (input >= accum->prev_value)
->> -		input += accum->energy_ctr -
->> -				accum->prev_value;
->> -	else
->> -		input += UINT_MAX - accum->prev_value +
->> -				accum->energy_ctr;
->> -
->> -	/* Energy consumed = (1/(2^ESU) * RAW * 1000000UL) μJoules */
->> -	*val = div64_ul(input * 1000000UL, BIT(data->energy_units));
->> -
->> -	mutex_unlock(&data->lock);
->> -}
->> -
->>  static int amd_energy_read(struct device *dev,
->>  			   enum hwmon_sensor_types type,
->>  			   u32 attr, int channel, long *val)
+>>  	rdmsrl_safe_on_cpu(cpu, reg, &input);
+>>  	input &= AMD_ENERGY_MASK;
+>>  
+>> -	accum = &data->accums[channel];
+>>  	if (input >= accum->prev_value)
+>>  		accum->energy_ctr +=
+>>  			input - accum->prev_value;
+>> @@ -93,6 +92,14 @@ static void accumulate_delta(struct amd_energy_data *data,
+>>  			accum->prev_value + input;
+>>  
+>>  	accum->prev_value = input;
+>> +	accum->cache_timeout = jiffies + HZ + get_random_int() % HZ;
+> 
+> Needs #include <linux/jiffies.h> maybe?
+> 
+>> +}
+>> +
+>> +static void accumulate_delta(struct amd_energy_data *data,
+>> +			     int channel, int cpu, u32 reg)
+>> +{
+>> +	mutex_lock(&data->lock);
+>> +	__accumulate_delta(&data->accums[channel], cpu, reg);
+>>  	mutex_unlock(&data->lock);
+>>  }
+>>  
+>> @@ -124,6 +131,7 @@ static int amd_energy_read(struct device *dev,
 >>  {
 >>  	struct amd_energy_data *data = dev_get_drvdata(dev);
->> +	struct sensor_accumulator *accum;
+>>  	struct sensor_accumulator *accum;
+>> +	u64 energy;
 >>  	u32 reg;
 >>  	int cpu;
 >>  
->> @@ -162,7 +139,11 @@ static int amd_energy_read(struct device *dev,
->>  
+>> @@ -140,10 +148,15 @@ static int amd_energy_read(struct device *dev,
 >>  		reg = ENERGY_CORE_MSR;
 >>  	}
->> -	amd_add_delta(data, channel, cpu, val, reg);
+>>  
+>> -	accumulate_delta(data, channel, cpu, reg);
+>>  	accum = &data->accums[channel];
+>>  
+>> -	*val = div64_ul(accum->energy_ctr * 1000000UL, BIT(data->energy_units));
+>> +	mutex_lock(&data->lock);
+>> +	if (!accum->energy_ctr || time_after(jiffies, accum->cache_timeout))
+>> +		__accumulate_delta(accum, cpu, reg);
+>> +	energy = accum->energy_ctr;
+>> +	mutex_unlock(&data->lock);
 >> +
->> +	accumulate_delta(data, channel, cpu, reg);
->> +	accum = &data->accums[channel];
->> +
->> +	*val = div64_ul(accum->energy_ctr * 1000000UL, BIT(data->energy_units));
-> 
-> Is it considered safe to read accum->energy_ctr while not holding
-> data->lock?
-> 
-
-You mean because it is a 64-bit value ? Good question; it might not be if compiled
-on a 32-bit system. Good news is that I moved reading accum->energy_ctr under the lock
-in the next patch, so we should be good.
-
+>> +	*val = div64_ul(energy * 1000000UL, BIT(data->energy_units));
 >>  
 >>  	return 0;
 >>  }
+>> @@ -152,7 +165,7 @@ static umode_t amd_energy_is_visible(const void *_data,
+>>  				     enum hwmon_sensor_types type,
+>>  				     u32 attr, int channel)
+>>  {
+>> -	return 0440;
+>> +	return 0444;
+>>  }
+>>  
+>>  static int energy_accumulator(void *p)
 > 
-> If the answer to the question above is "yes" then:
+> Very nice. This will make the driver useful again :-)
 > 
 > Reviewed-by: Jean Delvare <jdelvare@suse.de>
 > 
-Thanks!
+I made the suggested changes.
+
+Thanks a lot for the review!
 
 Guenter
