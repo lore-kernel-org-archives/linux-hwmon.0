@@ -2,264 +2,168 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E013EC433ED
-	for <linux-hwmon@archiver.kernel.org>; Sun, 11 Apr 2021 16:42:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 057BCC433ED
+	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Apr 2021 00:48:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BC516601FC
-	for <linux-hwmon@archiver.kernel.org>; Sun, 11 Apr 2021 16:42:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B7FE3611F2
+	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Apr 2021 00:48:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235839AbhDKQnB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 11 Apr 2021 12:43:01 -0400
-Received: from mout.gmx.net ([212.227.17.22]:42691 "EHLO mout.gmx.net"
+        id S235835AbhDLAtA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 11 Apr 2021 20:49:00 -0400
+Received: from mga06.intel.com ([134.134.136.31]:1749 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235640AbhDKQnA (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 11 Apr 2021 12:43:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1618159361;
-        bh=vODKaqYs/DMf9nAkjm+J9MKJy6AnOTlYBuMqmURqk7w=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=FU719t5FJYrT6JZaTqSztpNy6Z/MtzSJ3F/rWPLF2wD1ualCLjVQue8+PrJcReV/v
-         viCxWAeZzo8sarjuJcrove3MOo0QypPMto4YjpL2FWd9e5f2YILJ1VwklfBxQMbXYf
-         legDWmi4rwPS/ZdPZoB3BtFaE/uU3uqe9CQ19p4Q=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from esprimo-mx.fritz.box ([91.0.99.26]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MD9XF-1lMWMi1u1B-0099yU; Sun, 11
- Apr 2021 18:42:41 +0200
-From:   W_Armin@gmx.de
-To:     hdegoede@redhat.com
-Cc:     linux-hwmon@vger.kernel.org, Armin Wolf <W_Armin@gmx.de>
-Subject: [PATCH 2/2] hwmon: (sch5627) Split sch5627_update_device()
-Date:   Sun, 11 Apr 2021 18:42:25 +0200
-Message-Id: <20210411164225.11967-3-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210411164225.11967-1-W_Armin@gmx.de>
-References: <20210411164225.11967-1-W_Armin@gmx.de>
+        id S235323AbhDLAs7 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 11 Apr 2021 20:48:59 -0400
+IronPort-SDR: mY2sCqjXymvOhCtPBcr3uOZjDMDPELd+fKPbjjLIGBtTNkHxfYzi7zVSWRplZxAQ0G/9y234G0
+ pQNwsRDcUhYA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9951"; a="255409811"
+X-IronPort-AV: E=Sophos;i="5.82,214,1613462400"; 
+   d="scan'208";a="255409811"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2021 17:48:42 -0700
+IronPort-SDR: xMEi/GrgGezjtpj8+h1evXBXKcBnsO7VyRtazxKxe7VF67q23HSpBlO7Wz1mW0BiETRhnqtE1o
+ 6IuybpP2OVWA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,214,1613462400"; 
+   d="scan'208";a="451208236"
+Received: from lkp-server01.sh.intel.com (HELO 69d8fcc516b7) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 11 Apr 2021 17:48:40 -0700
+Received: from kbuild by 69d8fcc516b7 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lVkkq-000JAl-67; Mon, 12 Apr 2021 00:48:40 +0000
+Date:   Mon, 12 Apr 2021 08:48:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:hwmon-next] BUILD SUCCESS
+ 31106c948299bae1288cfa9c946fae3ca38b6f6f
+Message-ID: <607398db.XGVhOkEuJLawFDMq%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:H5Day4BV4xWbFdkgAUTemUQGpqOxccdPvuiOLia0YSS/kmzowzY
- 0QoKDcwHPh/0SvdPc9lNk3PU32prZYNsPqiJBdDFyYRNqugBz9crLE8wK/1X1hPLqx71xqi
- CIrzU5iX1mrtIX4MMAAAPvFWyv5o/a/MWJdoJyffed4ojIEoCM+VaTd0odGdKb6uvyNbqTd
- n7QGrDNohpA+/tbRn5fkA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:+UAnTVOKdLA=:C3ciL5XfbW8SRRHr2DC5OO
- A1LKWgg/7YRkrLlli0Kv/Y/tKj1slXMDQ1Tcos+gMqZeQRV1BJ+xSpb+tAM1oZSaxAlaiIT3G
- 0dJm2QkbumrDLZlT9PIdciPC+eRkH/beRuC1UCWzi8OinEL/c4WNqoI3wnm0HfIfA8DOFrsKe
- nRqcuuJ0AtJ/VlW91JRAKHHmr7OWOmHvqRRWGz0ZsTD2TZzVTGZ9RUpT8y4EawBI8xoauAlmN
- Ip4U2N1w93zPo+xaLY2OGLy/eJ5fN9q49+01Hb10S1JETq8gVfb/O/2fOLrdLRcKxzB4gD5rJ
- 7+TRGAcBH1q7bvB2EPqQWn4KjbgyNdvL6OLbSKuhojd6WMwFNHGWiF1kxX02d4++jfAKZbbAN
- S1NfYXQ/8gJrhiRcQ3jrC0ybyUmPjrjJ1kxaMDBiBDB9tpF1hBu9sIW0zlrySDpCuSuREiKeK
- fEKs16Ab+qWhECj5IF/AaGpna7sX8DBp1aD78gPCW0MVQ4JLTIPJUXv44P+eBCWXnziMYC6Lk
- 7BCcGlWUXKXNifyP2iqYeWOifdjjgaRb6frXc5yKs+ADEhpQfbuXrn4wF2n+2TYiJtah3lzFD
- Zr5NQtHwo+0PICWDBDj0AAL/SQp0hiG31cSSYQOFlF80ZKIbc41vPNFppbao/QhGcByShzLna
- cXHpbHGGg5OHQ9YidVBlGCqurxIc2ysZY9UpHwebPgg7MS0+fTGmXDhvJPZxcHATJFMwq/YYT
- HWSol6QGiU99COhkGkfj7Nahj369g6N9qJmKOqpE26pc6aeot9bzA78TAKPSmICJDBV4vqX29
- ICLCyOuqSOqywk3vdBfeCnQ1SZVJufcxFZVMM6ILqnjan1+EkupmaQMAi/DOWaST90U+VV5pr
- 29X69KCNoT5ohbFm4KWcOX18S/1zcydOuByeEIRaFlHDWTIDuogq6p0UkMZUvUffK0eCm+MFW
- dQfvjTJxQMqEJa8Odk/iZ4yRLQw/GSpVz9QwAtFP1kVRamgPEc14E0KGcUS2G+JkRgcPZdocM
- jlaJl/+ARPGpL0mjWx1wSHowSCO5gWqKFx7mBKLOWrwAAxY1p2xhdjHePFnN+2rXlNNhmFUj9
- pdEnHuD9CI14QiASReY0d0sX857q5RNLt4Xofjc2zuWAal8F1lqgwhisWEASlw5bxGpAp8FLo
- UU6p6wI3MxlzxHJ1/Ggb0MIbits3NQGGWSH68SX/36YEUjL7Lf6otb/L/FfEjQ3joKg8k=
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Armin Wolf <W_Armin@gmx.de>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 31106c948299bae1288cfa9c946fae3ca38b6f6f  hwmon: (dell-smm) Add Dell Latitude E7440 to fan control whitelist
 
-An error in sch5627_update_device() could cause sch5627_read()
-to fail even if the error did not affect the target sensor type.
-Split sch5627_update_device() to prevent that.
+elapsed time: 723m
 
-Tested on a Fujitsu Esprimo P720.
+configs tested: 99
+configs skipped: 2
 
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- drivers/hwmon/sch5627.c | 102 +++++++++++++++++++++++++++-------------
- 1 file changed, 69 insertions(+), 33 deletions(-)
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-diff --git a/drivers/hwmon/sch5627.c b/drivers/hwmon/sch5627.c
-index 023376082ee6..9735f3a81cbb 100644
-=2D-- a/drivers/hwmon/sch5627.c
-+++ b/drivers/hwmon/sch5627.c
-@@ -73,66 +73,96 @@ struct sch5627_data {
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+x86_64                           allyesconfig
+riscv                            allmodconfig
+i386                             allyesconfig
+riscv                            allyesconfig
+sh                           se7705_defconfig
+mips                     loongson1b_defconfig
+sh                        sh7763rdp_defconfig
+sh                           se7712_defconfig
+mips                     loongson1c_defconfig
+mips                            e55_defconfig
+xtensa                generic_kc705_defconfig
+mips                         db1xxx_defconfig
+arm                       netwinder_defconfig
+um                                  defconfig
+openrisc                 simple_smp_defconfig
+sh                         ecovec24_defconfig
+sh                                  defconfig
+sh                          landisk_defconfig
+h8300                    h8300h-sim_defconfig
+mips                  decstation_64_defconfig
+sparc                               defconfig
+sh                            titan_defconfig
+m68k                          sun3x_defconfig
+arm                          ep93xx_defconfig
+riscv                          rv32_defconfig
+mips                           ip22_defconfig
+xtensa                  cadence_csp_defconfig
+powerpc                 mpc837x_rdb_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+sparc                            allyesconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a003-20210411
+x86_64               randconfig-a002-20210411
+x86_64               randconfig-a001-20210411
+x86_64               randconfig-a005-20210411
+x86_64               randconfig-a006-20210411
+x86_64               randconfig-a004-20210411
+i386                 randconfig-a003-20210411
+i386                 randconfig-a001-20210411
+i386                 randconfig-a006-20210411
+i386                 randconfig-a005-20210411
+i386                 randconfig-a004-20210411
+i386                 randconfig-a002-20210411
+i386                 randconfig-a015-20210411
+i386                 randconfig-a014-20210411
+i386                 randconfig-a013-20210411
+i386                 randconfig-a012-20210411
+i386                 randconfig-a016-20210411
+i386                 randconfig-a011-20210411
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+um                               allmodconfig
+um                                allnoconfig
+um                               allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
 
- 	struct mutex update_lock;
- 	unsigned long last_battery;	/* In jiffies */
--	char valid;			/* !=3D0 if following fields are valid */
--	unsigned long last_updated;	/* In jiffies */
-+	char temp_valid;		/* !=3D0 if following fields are valid */
-+	char fan_valid;
-+	char in_valid;
-+	unsigned long temp_last_updated;	/* In jiffies */
-+	unsigned long fan_last_updated;
-+	unsigned long in_last_updated;
- 	u16 temp[SCH5627_NO_TEMPS];
- 	u16 fan[SCH5627_NO_FANS];
- 	u16 in[SCH5627_NO_IN];
- };
+clang tested configs:
+x86_64               randconfig-a014-20210411
+x86_64               randconfig-a015-20210411
+x86_64               randconfig-a011-20210411
+x86_64               randconfig-a013-20210411
+x86_64               randconfig-a012-20210411
+x86_64               randconfig-a016-20210411
 
--static struct sch5627_data *sch5627_update_device(struct device *dev)
-+static int sch5627_update_temp(struct sch5627_data *data)
- {
--	struct sch5627_data *data =3D dev_get_drvdata(dev);
--	struct sch5627_data *ret =3D data;
-+	int ret =3D 0;
- 	int i, val;
-
- 	mutex_lock(&data->update_lock);
-
--	/* Trigger a Vbat voltage measurement every 5 minutes */
--	if (time_after(jiffies, data->last_battery + 300 * HZ)) {
--		sch56xx_write_virtual_reg(data->addr, SCH5627_REG_CTRL,
--					  data->control | 0x10);
--		data->last_battery =3D jiffies;
--	}
--
- 	/* Cache the values for 1 second */
--	if (time_after(jiffies, data->last_updated + HZ) || !data->valid) {
-+	if (time_after(jiffies, data->temp_last_updated + HZ) || !data->temp_val=
-id) {
- 		for (i =3D 0; i < SCH5627_NO_TEMPS; i++) {
--			val =3D sch56xx_read_virtual_reg12(data->addr,
--				SCH5627_REG_TEMP_MSB[i],
--				SCH5627_REG_TEMP_LSN[i],
--				SCH5627_REG_TEMP_HIGH_NIBBLE[i]);
-+			val =3D sch56xx_read_virtual_reg12(data->addr, SCH5627_REG_TEMP_MSB[i]=
-,
-+							 SCH5627_REG_TEMP_LSN[i],
-+							 SCH5627_REG_TEMP_HIGH_NIBBLE[i]);
- 			if (unlikely(val < 0)) {
--				ret =3D ERR_PTR(val);
-+				ret =3D val;
- 				goto abort;
- 			}
- 			data->temp[i] =3D val;
- 		}
-+		data->temp_last_updated =3D jiffies;
-+		data->temp_valid =3D 1;
-+	}
-+abort:
-+	mutex_unlock(&data->update_lock);
-+	return ret;
-+}
-+
-+static int sch5627_update_fan(struct sch5627_data *data)
-+{
-+	int ret =3D 0;
-+	int i, val;
-
-+	mutex_lock(&data->update_lock);
-+
-+	/* Cache the values for 1 second */
-+	if (time_after(jiffies, data->fan_last_updated + HZ) || !data->fan_valid=
-) {
- 		for (i =3D 0; i < SCH5627_NO_FANS; i++) {
--			val =3D sch56xx_read_virtual_reg16(data->addr,
--							 SCH5627_REG_FAN[i]);
-+			val =3D sch56xx_read_virtual_reg16(data->addr, SCH5627_REG_FAN[i]);
- 			if (unlikely(val < 0)) {
--				ret =3D ERR_PTR(val);
-+				ret =3D val;
- 				goto abort;
- 			}
- 			data->fan[i] =3D val;
- 		}
-+		data->fan_last_updated =3D jiffies;
-+		data->fan_valid =3D 1;
-+	}
-+abort:
-+	mutex_unlock(&data->update_lock);
-+	return ret;
-+}
-+
-+static int sch5627_update_in(struct sch5627_data *data)
-+{
-+	int ret =3D 0;
-+	int i, val;
-+
-+	mutex_lock(&data->update_lock);
-
-+	/* Trigger a Vbat voltage measurement every 5 minutes */
-+	if (time_after(jiffies, data->last_battery + 300 * HZ)) {
-+		sch56xx_write_virtual_reg(data->addr, SCH5627_REG_CTRL, data->control |=
- 0x10);
-+		data->last_battery =3D jiffies;
-+	}
-+
-+	/* Cache the values for 1 second */
-+	if (time_after(jiffies, data->in_last_updated + HZ) || !data->in_valid) =
-{
- 		for (i =3D 0; i < SCH5627_NO_IN; i++) {
--			val =3D sch56xx_read_virtual_reg12(data->addr,
--				SCH5627_REG_IN_MSB[i],
--				SCH5627_REG_IN_LSN[i],
--				SCH5627_REG_IN_HIGH_NIBBLE[i]);
-+			val =3D sch56xx_read_virtual_reg12(data->addr, SCH5627_REG_IN_MSB[i],
-+							 SCH5627_REG_IN_LSN[i],
-+							 SCH5627_REG_IN_HIGH_NIBBLE[i]);
- 			if (unlikely(val < 0)) {
--				ret =3D ERR_PTR(val);
-+				ret =3D val;
- 				goto abort;
- 			}
- 			data->in[i] =3D val;
- 		}
--
--		data->last_updated =3D jiffies;
--		data->valid =3D 1;
-+		data->in_last_updated =3D jiffies;
-+		data->in_valid =3D 1;
- 	}
- abort:
- 	mutex_unlock(&data->update_lock);
-@@ -200,14 +230,14 @@ static umode_t sch5627_is_visible(const void *drvdat=
-a, enum hwmon_sensor_types t
- static int sch5627_read(struct device *dev, enum hwmon_sensor_types type,=
- u32 attr, int channel,
- 			long *val)
- {
--	struct sch5627_data *data =3D sch5627_update_device(dev);
-+	struct sch5627_data *data =3D dev_get_drvdata(dev);
- 	int ret;
-
--	if (IS_ERR(data))
--		return PTR_ERR(data);
--
- 	switch (type) {
- 	case hwmon_temp:
-+		ret =3D sch5627_update_temp(data);
-+		if (ret < 0)
-+			return ret;
- 		switch (attr) {
- 		case hwmon_temp_input:
- 			*val =3D reg_to_temp(data->temp[channel]);
-@@ -226,6 +256,9 @@ static int sch5627_read(struct device *dev, enum hwmon=
-_sensor_types type, u32 at
- 		}
- 		break;
- 	case hwmon_fan:
-+		ret =3D sch5627_update_fan(data);
-+		if (ret < 0)
-+			return ret;
- 		switch (attr) {
- 		case hwmon_fan_input:
- 			ret =3D reg_to_rpm(data->fan[channel]);
-@@ -247,6 +280,9 @@ static int sch5627_read(struct device *dev, enum hwmon=
-_sensor_types type, u32 at
- 		}
- 		break;
- 	case hwmon_in:
-+		ret =3D sch5627_update_in(data);
-+		if (ret < 0)
-+			return ret;
- 		switch (attr) {
- 		case hwmon_in_input:
- 			*val =3D DIV_ROUND_CLOSEST(data->in[channel] * SCH5627_REG_IN_FACTOR[c=
-hannel],
-=2D-
-2.20.1
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
