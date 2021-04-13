@@ -2,148 +2,241 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89BD2C433B4
-	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Apr 2021 12:46:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F986C433ED
+	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Apr 2021 13:49:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6473E611CE
-	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Apr 2021 12:46:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0890E61242
+	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Apr 2021 13:49:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345804AbhDMMq6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 13 Apr 2021 08:46:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36176 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345829AbhDMMpz (ORCPT
+        id S1346186AbhDMNtb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 13 Apr 2021 09:49:31 -0400
+Received: from mail-oo1-f54.google.com ([209.85.161.54]:37467 "EHLO
+        mail-oo1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346242AbhDMNt3 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 13 Apr 2021 08:45:55 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0443C06138C
-        for <linux-hwmon@vger.kernel.org>; Tue, 13 Apr 2021 05:45:33 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id g24so12549462qts.6
-        for <linux-hwmon@vger.kernel.org>; Tue, 13 Apr 2021 05:45:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=protocubo.io; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=2pTGEuz8Mersa6tWS3oU7Rvv4CGe+UUW2AnTlYODVfQ=;
-        b=boaHmbmhpSuXbreREPtAlCWcol7tqbMUSaF/X2vpChU+rrRsNIkX7pzOTMykCwbRhZ
-         D66+H+jvZlnjnXZ47s40nUD5dfstoqjMchdviqBQSmeR9zbPxH5thh/DFi0FF0uBPH5f
-         z5rdD/zPEIujxzPlW26GfO/0az+8Swwdiid6rCPaduYYB6q+q/amdMRWyomuBj8sYv6Y
-         jEPTJFyULxvcUuHUBZIJjhVk0Bt5U9t1PIXG4JCPWMcJJxNeU0TIu3B8pjPyl9r+AJbh
-         dOD9/KsONNmrxAEh9xGSrhjuWgmW21+if3961QemJHm4I9TfaPRx7InJvo3qVmrH6hX1
-         V7gg==
+        Tue, 13 Apr 2021 09:49:29 -0400
+Received: by mail-oo1-f54.google.com with SMTP id c12-20020a4ae24c0000b02901bad05f40e4so3823829oot.4;
+        Tue, 13 Apr 2021 06:49:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=2pTGEuz8Mersa6tWS3oU7Rvv4CGe+UUW2AnTlYODVfQ=;
-        b=djweG/xeK4NM33rKDkNc46Xp4wMnVPimJJuPkXVquPW48zAD0DqczESTyW2yavnEv0
-         oabpZVIgurAm+JEx/27Fjn0ra6y4rNopgBLZjHN8is8bglWKEyFnyA9NvPwpNKzbHzPS
-         mAv8/87CRUsdacwjMQDDBex+VxL1x+gxku856ZT3qXmnqLLFJVokmtqrSX9u+5ZgyGo/
-         lDheCdYG6mqPS8tpOuOlg7zMoHdN6TYJh+PcVrtWuHSslcpl/phhDNTn1ohio1jAjXqO
-         egZeyHnaoBnNeiSDXY+hxGqyT231NcFRRpKAFr1XThD9v2aPxM8+HPQOMhsYRsutgWtc
-         7HhQ==
-X-Gm-Message-State: AOAM53229Ibe1+PvLUxEd8r7iejayS9Bwpkx/4nW7uOpkS9dZ5loKQfo
-        D+7R5cb3OdOeI0kkwQRQgaoPxFPh4Y9OaQ==
-X-Google-Smtp-Source: ABdhPJwrEmmy6353aZtM/cmVbY+7Sd75QjRxztT/ruGweryxDhyavAc00HKR5Bf/Rli47HfgdOy9Hg==
-X-Received: by 2002:a05:622a:52:: with SMTP id y18mr6605193qtw.216.1618317932804;
-        Tue, 13 Apr 2021 05:45:32 -0700 (PDT)
-Received: from calvin.localdomain ([2804:14d:5c5a:802e:bdc9:ded9:cc08:a4e9])
-        by smtp.gmail.com with ESMTPSA id n136sm4475360qka.133.2021.04.13.05.45.31
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=BPp8f1sOttmW9qE2ykHdzJcGKB/6rMwTRWEU3ycTH2A=;
+        b=qmGN4CkGJZVEa9mPzEnQpIZYreWoPj4lRkcv/P0z3OUHF8sMyOEg/xT2ykcsu66Lw2
+         3ER7Tiqn7+MaQA5/EemVijgBM7ypc2JKQBZNB8oP1qb5Lde5lhxVHbDPZfnEqv5QAcP1
+         fla1WZkITuuZh3LmgcY5Wkj5Lv2JdlLQHnMmi96PsuXdyHhbkUBIMVRyYdzyNRIKqGaL
+         0YHSRNPEPYhh8AAbFPZg/vAR7C3OKel9+db+CYC26N9xBI/N65LzKZqPjSWvbi9bzi40
+         pdIMWX7OZCMvbIyywebv/5EUifI4I3VJjz5jW8DJUEiEc71UV6rTgvPQSfZ3kfXSQKgw
+         EPZA==
+X-Gm-Message-State: AOAM530drNTxbxYhrEpncSQIFf0DObNmu1siQ7hMAZBNDHXDfqNpBmk6
+        JhHahnfEiumHCtUVuJpRe7Snjsjbeg==
+X-Google-Smtp-Source: ABdhPJw0Vw8Z1kQ1jPM5GwBfySUTY++fjq8ZEMWc4yQCjwQPjrABcVI5iL8Xk2kVddqjw9QIhLswdg==
+X-Received: by 2002:a4a:bc92:: with SMTP id m18mr3988186oop.55.1618321748787;
+        Tue, 13 Apr 2021 06:49:08 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id f129sm2904769oia.9.2021.04.13.06.49.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Apr 2021 05:45:32 -0700 (PDT)
-Date:   Tue, 13 Apr 2021 09:45:29 -0300
-From:   Jonas Malaco <jonas@protocubo.io>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: PWM control in NZXT Grid+ V3 and Smart Device
-Message-ID: <20210413124529.jdi6ambxusd47y34@calvin.localdomain>
+        Tue, 13 Apr 2021 06:49:07 -0700 (PDT)
+Received: (nullmailer pid 1550857 invoked by uid 1000);
+        Tue, 13 Apr 2021 13:49:06 -0000
+Date:   Tue, 13 Apr 2021 08:49:06 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Quan Nguyen <quan@os.amperecomputing.com>
+Cc:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org,
+        Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
+Subject: Re: [PATCH v3 1/4] dt-bindings: mfd: Add bindings for Ampere Altra
+ SMPro drivers
+Message-ID: <20210413134906.GA1538655@robh.at.kernel.org>
+References: <20210409031332.21919-1-quan@os.amperecomputing.com>
+ <20210409031332.21919-2-quan@os.amperecomputing.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20210409031332.21919-2-quan@os.amperecomputing.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Guenter (and others on this list),
+On Fri, Apr 09, 2021 at 10:13:29AM +0700, Quan Nguyen wrote:
+> Adds device tree bindings for SMPro drivers found on the Mt.Jade hardware
+> reference platform with Ampere's Altra Processor family.
+> 
+> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
+> ---
+>  .../bindings/hwmon/ampere,ac01-hwmon.yaml     |  28 +++++
+>  .../devicetree/bindings/mfd/ampere,smpro.yaml | 105 ++++++++++++++++++
+>  2 files changed, 133 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/ampere,ac01-hwmon.yaml
+>  create mode 100644 Documentation/devicetree/bindings/mfd/ampere,smpro.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/ampere,ac01-hwmon.yaml b/Documentation/devicetree/bindings/hwmon/ampere,ac01-hwmon.yaml
+> new file mode 100644
+> index 000000000000..fbf7ec754160
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/ampere,ac01-hwmon.yaml
+> @@ -0,0 +1,28 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/ampere,ac01-hwmon.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Hardware monitoring driver for the Ampere Altra SMPro
+> +
+> +maintainers:
+> +  - Quan Nguyen <quan@os.amperecomputing.com>
+> +
+> +description: |
+> +  This module is part of the Ampere Altra SMPro multi-function device. For more
+> +  details see ../mfd/ampere,smpro.yaml.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - ampere,ac01-hwmon
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> diff --git a/Documentation/devicetree/bindings/mfd/ampere,smpro.yaml b/Documentation/devicetree/bindings/mfd/ampere,smpro.yaml
+> new file mode 100644
+> index 000000000000..5613c420869e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/ampere,smpro.yaml
+> @@ -0,0 +1,105 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/ampere,smpro.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Ampere Altra SMPro firmware driver
+> +
+> +maintainers:
+> +  - Quan Nguyen <quan@os.amperecomputing.com>
+> +
+> +description: |
+> +  Ampere Altra SMPro firmware may contain different blocks like hardware
+> +  monitoring, error monitoring and other miscellaneous features.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - ampere,smpro
 
-I am getting ready to submit a driver for NZXT Grid+ V3 and Smart Device
-(V1) fan controllers, but I am having trouble deciding how to expose
-their PWM control due to some device limitations.
+Again, not very specific. There's only 1 version of 'smpro' h/w or 
+firmware? Are the firmware version and features discoverable? If not, 
+you need to be more specific (or better yet, make them discoverable).
 
-Before getting into those, let me first give some very basic context...
+> +
+> +  reg:
+> +    description:
+> +      I2C device address.
+> +    maxItems: 1
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 0
+> +
+> +patternProperties:
+> +  "^hwmon(@[0-9a-f]+)?$":
+> +    $ref: ../hwmon/ampere,ac01-hwmon.yaml
+> +
+> +  "^misc(@[0-9a-f]+)?$":
 
-These devices are USB HIDs, and asynchronously send "status" reports
-every 200 ms to communicate speed, current, voltage and control mode for
-their channels (one channel per report).
+You don't need these child nodes in DT if there are no resources 
+associated with them. The parent driver can instantiate all the 
+sub-functions.
 
-Fans can be controlled by sending HID output reports to the device, and
-both DC and PWM modes are supported.  The device features a special
-initialization routine (that must be requested during probe) which
-automatically detects the appropriate control mode for each channel.
-
-Back to the device limitations...
-
-The first is that PWM values can be set, but not read back.  And neither
-hwmon[1] nor lm-sensors' pwmconfig/fancontrol expect pmw* attributes to
-be WO.  One solution is to have the driver track the PWM values that are
-set through it and return those, but is this acceptable?
-
-The other starts with PWM control being disabled for channels that the
-device identifies as unconnected.  This is not in itself a problem, but
-the initialization routine (where the detection happens) is
-asynchronous, takes somewhere around 5 seconds, and we do not have any
-way of directly querying its result.  We only know the control mode of
-each channel (be it DC, PWM or disabled) from the regular status
-reports.
-
-These limitations make it complicated to simply use is_visible() to hide
-pwm attributes of unconnected channels.  We would need to register with
-the hwmon subsystem only after getting enough post-initialization status
-reports for all channels, and this would essentially mean to sleep for
-6+ seconds.  We would also need to unregister and re-register when going
-through a suspend-reset_resume cycle, because the device may have its
-state wiped, requiring reinitialization.[2]
-
-A different approach to handle this, which I have preferred _so far,_ is
-to use pwm*_enable = 0 to report the unconnected channels to user-space,
-while keeping the other pwm attributes visible.  But this comes with
-other problems.
-
-First, lm-sensors' pwmconfig expects to be able to write to a
-pwm*_enable attribute if it exists, but the device does not support that
-operation.  The hwmon documentation states that RW values may be RO, but
-pwmconfig is out there and in use.  So far I simply return 0 to attempts
-at those writes, silently ignoring them; functional, but certainly a
-hack.
-
-Second, if PWM control is disabled for a channel, but its pwm* and
-pwm*_mode attributes are still visible, what should we return when
-user-space attempts to write to them?  The practical answer may simply
-be to return -EOPNOTSUPP, but this makes me wonder if the whole approach
-(of handling these cases with pwm*_enable instead of is_visible()) is
-not doomed.
-
-A final minor problem is that channels detected as unconnected run at
-40% PWM, but the documentation for pwm*_enable == 0 is a bit too
-specific: "no fan speed control (i.e. fan at *full* speed)" (emphasis
-mine).
-
-Do you have any suggestions and/or recommendations?
-
-If it helps, a pre-RFC (but functional and mostly clean) version of the
-driver can be found at:
-
-https://github.com/jonasmalacofilho/linux/blob/p-hwmon-add-nzxt-smartdevice-gridplus3/drivers/hwmon/nzxt-smartdevice.c
-
-Thanks,
-Jonas
-
-[1] According to Documentation/hwmon/sysfs-interface.rst.
-[2] The device also does not respond to HID Get_Report, so it is not
-    trivial to check whether it really needs to be reinitialized, since
-    the only symptom of that being necessary is the absence of the
-    asynchronous status reports.
+> +    type: object
+> +    description: |
+> +      This module is part of the Ampere Altra SMPro multi-function device
+> +      to support miscellaneous features
+> +    properties:
+> +      compatible:
+> +        enum:
+> +          - ampere,ac01-misc
+> +      reg:
+> +        maxItems: 1
+> +
+> +    required:
+> +      - compatible
+> +      - reg
+> +
+> +  "^errmon(@[0-9a-f]+)?$":
+> +    type: object
+> +    description: |
+> +      This module is part of the Ampere Altra SMPro multi-function device
+> +      that supports error monitoring feature.
+> +
+> +    properties:
+> +      compatible:
+> +        enum:
+> +          - ampere,ac01-errmon
+> +      reg:
+> +        maxItems: 1
+> +
+> +    required:
+> +      - compatible
+> +      - reg
+> +
+> +required:
+> +  - "#address-cells"
+> +  - "#size-cells"
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        smpro@4f {
+> +            compatible = "ampere,smpro";
+> +            reg = <0x4f>;
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +
+> +            hwmon@10 {
+> +                compatible = "ampere,ac01-hwmon";
+> +                reg = <0x10>;
+> +            };
+> +
+> +            misc@b0 {
+> +                compatible = "ampere,ac01-misc";
+> +                reg = <0xb0>;
+> +            };
+> +
+> +            errmon@80 {
+> +                compatible = "ampere,ac01-errmon";
+> +                reg = <0x80>;
+> +            };
+> +
+> +        };
+> +    };
+> -- 
+> 2.28.0
+> 
