@@ -2,234 +2,186 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5C93C433B4
-	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Apr 2021 23:44:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6198DC433ED
+	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Apr 2021 02:55:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7424260FDB
-	for <linux-hwmon@archiver.kernel.org>; Mon, 12 Apr 2021 23:44:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 30D3B613A9
+	for <linux-hwmon@archiver.kernel.org>; Tue, 13 Apr 2021 02:55:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242004AbhDLXpH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 12 Apr 2021 19:45:07 -0400
-Received: from mga04.intel.com ([192.55.52.120]:30725 "EHLO mga04.intel.com"
+        id S238431AbhDMCz6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 12 Apr 2021 22:55:58 -0400
+Received: from mga18.intel.com ([134.134.136.126]:17945 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238646AbhDLXpH (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 12 Apr 2021 19:45:07 -0400
-IronPort-SDR: D0qAYcRd3wQ9ON8jZIBvHZFud0VYSgP7Wz5jdxzb1e7mLYUufqkbwiPqxo7h3oufIr0hHSl8hx
- wMou/sIXzj/w==
-X-IronPort-AV: E=McAfee;i="6200,9189,9952"; a="192170186"
+        id S237626AbhDMCz5 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 12 Apr 2021 22:55:57 -0400
+IronPort-SDR: OhVCZlmWZiAfJ8RbtSTfUQz3CTnEGPh0pOj2wHEl4U2XP+C5T8C3inu5em57fS/q8nxKGKnWnl
+ 7GKX4q/oMPQg==
+X-IronPort-AV: E=McAfee;i="6200,9189,9952"; a="181844220"
 X-IronPort-AV: E=Sophos;i="5.82,216,1613462400"; 
-   d="scan'208";a="192170186"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2021 16:44:43 -0700
-IronPort-SDR: NY65vNL7gMbTsL7ebvY+8mSC4gJ4V9LdqdQzuoeT12E/Yx6yVBw8oRh+dFFQacwY2+rylFL9DV
- OqIVzhaRMPrg==
+   d="scan'208";a="181844220"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2021 19:55:38 -0700
+IronPort-SDR: qZN2m5WVQIYVKSlQd2Qhrm2ow71658jmNExiArbihBp201WkEMG8lctHCBBLH+wMlyHYVpNIw8
+ v6wnoDg5HwKg==
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.82,216,1613462400"; 
-   d="scan'208";a="424014978"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.42])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2021 16:44:43 -0700
-Date:   Mon, 12 Apr 2021 16:46:10 -0700 (PDT)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     "Wu, Hao" <hao.wu@intel.com>
-cc:     "Xu, Yilun" <yilun.xu@intel.com>, Moritz Fischer <mdf@kernel.org>,
-        "trix@redhat.com" <trix@redhat.com>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "russell.h.weight@linux.intel.com" <russell.h.weight@linux.intel.com>
-Subject: RE: [PATCH 2/3] fpga: dfl: Add DFL bus driver for Altera SPI
- Master
-In-Reply-To: <DM6PR11MB381916140583F3C31D66EFC385739@DM6PR11MB3819.namprd11.prod.outlook.com>
-Message-ID: <alpine.DEB.2.22.394.2104121610040.413249@rhweight-WRK1>
-References: <20210405235301.187542-1-matthew.gerlach@linux.intel.com> <20210405235301.187542-3-matthew.gerlach@linux.intel.com> <YGuvFYvJTMPPm2Jy@epycbox.lan> <alpine.DEB.2.22.394.2104060847030.208844@rhweight-WRK1> <YGyQdN9uS/niyFDP@epycbox.lan>
- <DM6PR11MB3819E0FC4F735C72746CE54785749@DM6PR11MB3819.namprd11.prod.outlook.com> <20210408081152.GA2713@yilunxu-OptiPlex-7050> <DM6PR11MB3819317A55FD7798E778EC4D85749@DM6PR11MB3819.namprd11.prod.outlook.com> <20210409013730.GB2713@yilunxu-OptiPlex-7050>
- <DM6PR11MB381912BD810637E0CDA1885F85739@DM6PR11MB3819.namprd11.prod.outlook.com> <20210409054118.GA7986@yilunxu-OptiPlex-7050> <DM6PR11MB381916140583F3C31D66EFC385739@DM6PR11MB3819.namprd11.prod.outlook.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+   d="scan'208";a="383150463"
+Received: from lkp-server01.sh.intel.com (HELO 69d8fcc516b7) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 12 Apr 2021 19:55:37 -0700
+Received: from kbuild by 69d8fcc516b7 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lW9DE-0000m7-Fs; Tue, 13 Apr 2021 02:55:36 +0000
+Date:   Tue, 13 Apr 2021 10:55:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:hwmon-next] BUILD SUCCESS
+ 37c8f621125f74e606208368358c77000f39ba18
+Message-ID: <60750808.86ojqRimm59ZMH0V%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 37c8f621125f74e606208368358c77000f39ba18  hwmon: (dell-smm) Add Dell Latitude E7440 to fan control whitelist
 
+elapsed time: 726m
 
-On Fri, 9 Apr 2021, Wu, Hao wrote:
+configs tested: 116
+configs skipped: 2
 
->> On Fri, Apr 09, 2021 at 12:02:47PM +0800, Wu, Hao wrote:
->>>>>>>>>>> +
->>>>>>>>>>> +static void dfl_spi_altera_remove(struct dfl_device *dfl_dev)
->>>>>>>>>>> +{
->>>>>>>>>>> +struct dfl_altera_spi *aspi = dev_get_drvdata(&dfl_dev->dev);
->>>>>>>>>>> +
->>>>>>>>>>> +platform_device_unregister(aspi->altr_spi);
->>>>>>>>>>> +}
->>>>>>>>>>> +
->>>>>>>>>>> +#define FME_FEATURE_ID_MAX10_SPI        0xe
->>>>>>>>>>> +
->>>>>>>>>>> +static const struct dfl_device_id dfl_spi_altera_ids[] = {
->>>>>>>>>>> +{ FME_ID, FME_FEATURE_ID_MAX10_SPI },
->>>>>>>>>>> +{ }
->>>>>>>>>>> +};
->>>>>>>>>>
->>>>>>>>>> Maybe you can extend the Altera SPI driver with this part?
->>>>>>>>>
->>>>>>>>> The file, drivers/spi/spi-altera.c, already has platform MODULE_
->>>> related
->>>>>>>>> code.  Wouldn't moving this code to that file produce conflicts?
->>>>>>>>
->>>>>>>> I've seen other drivers support multiple busses, so it should be
->>>>>>>> possible, there might be nuances I'm missing in my brief look at this,
->>>>>>>> though.
->>>>>>>>
->>>>>>>> I think one of them would be MODULE_DEVICE_TABLE(platform, ...)
->>>>>>>> and the other one MODULE_DEVICE_TABLE(dfl, ...)
->>>>>>>>
->>>>>>>> See drivers/i2c/busses/i2c-designware-platdrv.c for an example
->> (though
->>>>>>>> they might be guarding against what you describe with CONFIG_OF vs
->>>>>>>> CONFIG_ACPI)
->>>>>>>>
->>>>>>>> If that doesn't work we could split it up into
->>>>>>>>
->>>>>>>> altera-spi-plat.c and altera-spi-dfl.c and altera-spi-core.c
->>>>>>>> or something of that sort?
->>>>>>>>
->>>>>>>> My point being, now that we have a bus, let's use it and develop
->> drivers
->>>>>>>> according to the Linux device model where possible :)
->>>>>>>
->>>>>>> Agree. This does make sense from my side too. DFL core provides the
->>>>>> mechanism
->>>>>>> to enumerate different IPs on FPGA, but each function driver needs to
->> go
->>>> to
->>>>>>> related subsystem for review.  : )
->>>>>>>
->>>>>>> I understand that for FPGA case, it may have some additional logics for
->>>> specific
->>>>>>> purposes based on common altera spi master IP, then additional code
->> for
->>>>>>
->>>>>> I'm wondering if the additional logics are extensions for common spi-
->> altera.
->>>> Like
->>>>>> the
->>>>>> SPI_CORE_PARAMETER register, it is not within the register space of
->>>>>> spi-altera,
->>>>>>
->>>>>>
->>>>>>   |   |      +-------------+
->>>>>>   |DFL|------| +--------+  |
->>>>>>   |BUS|      | |SPI CORE|  |
->>>>>>   |   |      | |PARAM   |  |
->>>>>>   |   |      | +--------+  |
->>>>>>   |   |      |             |
->>>>>>   |   |      | +--------+  |   +-------+
->>>>>>              | |Indirect|  |   |spi    |
->>>>>>              | |access  +--+---|altera |
->>>>>>              | |master  |  |   +-------+
->>>>>>              | +--------+  |
->>>>>>              +-------------+
->>>>>>> a specific product still can be put into altera-spi-xxxx.c or altera-spi-dfl-
->>>> xxxx.c
->>>>>>
->>>>>> So is it proper we integrate this feature into spi-altera? Previously
->>>>>> we have merged the dfl-n3000-nios, its spi part is very similar as
->>>>>> this driver. The dfl-n3000-nios make the spi-altera as a sub device.
->>>>>> Could we borrow the idea, or could we just integrate this driver in
->>>>>> dfl-n3000-nios?
->>>>>
->>>>> Looks like those are enhancements of the IP. They can be applied even
->>>>
->>>> I don't think the extra registers are the enhancement of the IP. They
->>>> are not part of the IP because they are not within the IP's register
->>>> space. They are like some external way of describing the IP like
->>>> Devicetree or ACPI.
->>>
->>> Why adding new registers can't be consider as enhancement, those
->>> changes serve the original IP and make it better, right? small mmio
->>> footprint and parameter registers?
->>>
->>>>
->>>>> other buses are used, not only for DFL, like PCI device or platform device,
->>>>> right? then why not put related code together with the original IP?
->>>>
->>>> The code of devicetree or ACPI parsing are integrated in the IP drivers,
->>>> but for this case, it may not be proper for now, cause this style is not
->>>> formally introduced by any standard. IP specific parameters description
->>>> are not within the scope of DFL now.
->>>
->>> Not sure if I get your point, but it's possible that we add some enhancements
->>> to one IP then driver could be simplified and doesn't need devicetree any more.
->>> For sure, it's IP specific thing, not the scope of DFL.
->>>
->>> Then things become this: extension to IP to allow this IP to be used without
->>> device tree, so that this IP can be used in DFL or PCI or other buses without
->>> device tree?
->>
->> It's good to extend an IP, but it needs a published SPEC and stable
->> register interfaces. For now, the spi-altera driver conforms to the
->> "SPI Core" chapter of the following spec:
->>
->> https://www.intel.com/content/www/us/en/programmable/documentation/sf
->> o1400787952932.html
->>
->> There is no info about the core parameter register and this specific
->> indirect access bus. That's why I don't see these additional parts as
->> the enhancements to spi-altera. This DFL feature is like a wrapper for
->> the spi-altera sub device.
->
-> It really doesn't matter, even if you consider this as an new IP, it's still a SPI
-> Master, it's driver still need to be reviewed in drivers/spi subsystem. The
-> worst case is that we need to write a new spi-xxx.c driver, that's it.
->
-> From DFL part, DFL only can enumerate the common hardware resources,
-> but no good way to help thing like this, specific IP parameters (which handle
-> by devicetree in platform driver). So for some IPs , they still need some
-> extensions to avoid such dependency (on device tree for parameters). I guess
-> we may see more similar cases in the future.
->
-> Anyway, I think we reached agreement that for device drivers on DFL bus, it
-> needs to be reviewed in its own subsystem. : )
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Yes, I agree that device drivers on the DFL bus should go in the 
-appropriate the directory of the appropriate  framework.  As Moritz has 
-pointed out there are already examples bus specific driver code, for 
-multiple buses, being the driver framework directory (e.g. Designware 
-I2C).
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+x86_64                           allyesconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+powerpc                        fsp2_defconfig
+sh                  sh7785lcr_32bit_defconfig
+powerpc                 mpc836x_mds_defconfig
+i386                                defconfig
+m68k                                defconfig
+openrisc                         alldefconfig
+ia64                                defconfig
+mips                          rm200_defconfig
+powerpc                     skiroot_defconfig
+um                                  defconfig
+arm                            mps2_defconfig
+arm                         s3c6400_defconfig
+arm                            mmp2_defconfig
+m68k                       m5275evb_defconfig
+powerpc                     mpc512x_defconfig
+arm                           sunxi_defconfig
+arm                  colibri_pxa300_defconfig
+powerpc                    ge_imp3a_defconfig
+sh                             espt_defconfig
+arm                        trizeps4_defconfig
+sh                          urquell_defconfig
+powerpc                 linkstation_defconfig
+mips                      malta_kvm_defconfig
+arm                             rpc_defconfig
+powerpc                      ppc64e_defconfig
+arm                        oxnas_v6_defconfig
+h8300                     edosk2674_defconfig
+arm                         bcm2835_defconfig
+powerpc                     ep8248e_defconfig
+openrisc                            defconfig
+powerpc                      makalu_defconfig
+powerpc                     powernv_defconfig
+sh                          r7785rp_defconfig
+powerpc                      arches_defconfig
+powerpc                      obs600_defconfig
+mips                      bmips_stb_defconfig
+sh                           sh2007_defconfig
+sh                           se7619_defconfig
+arm                          pxa910_defconfig
+powerpc                       maple_defconfig
+um                                allnoconfig
+m68k                         apollo_defconfig
+arm                        multi_v5_defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a003-20210412
+i386                 randconfig-a001-20210412
+i386                 randconfig-a006-20210412
+i386                 randconfig-a005-20210412
+i386                 randconfig-a004-20210412
+i386                 randconfig-a002-20210412
+x86_64               randconfig-a014-20210412
+x86_64               randconfig-a015-20210412
+x86_64               randconfig-a011-20210412
+x86_64               randconfig-a013-20210412
+x86_64               randconfig-a012-20210412
+x86_64               randconfig-a016-20210412
+i386                 randconfig-a015-20210412
+i386                 randconfig-a014-20210412
+i386                 randconfig-a013-20210412
+i386                 randconfig-a012-20210412
+i386                 randconfig-a016-20210412
+i386                 randconfig-a011-20210412
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+um                               allmodconfig
+um                               allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
 
-In this particular case, the Device Feature is wraps a particular 
-instantiation of an Altera SPI Master controller.  As Yilun pointed out, this 
-wrapper has a SPI_CORE_PARAMETER register which contains the values 
-of all the configuration parameters of the Altera SPI Master IP block. 
-This kind of information would also be included in a Device Tree 
-description of the instantiation. The Device Feature also implements 
-indirect register access to the actual registers of the Altera SPI Master 
-that provides a bridge from the PCIe bus to the Avalon Slave containing 
-the registers of the Altera SPI Master.
+clang tested configs:
+x86_64               randconfig-a003-20210412
+x86_64               randconfig-a002-20210412
+x86_64               randconfig-a001-20210412
+x86_64               randconfig-a005-20210412
+x86_64               randconfig-a006-20210412
+x86_64               randconfig-a004-20210412
 
-Given the Device Feature wraps an Altera SPI Master, it might still make 
-sense for the DFL driver to instantiate a sub driver instance for the 
-Altera SPI Master.  I will resubmit the current patches with 
-drivers/fpga/dfl-spi-altera.c moved to drivers/spi/spi-altera-dfl.c for 
-feedback from the SPI maintainers and continue investigating collapsing 
-the DFL driver and the platform sub-driver into a single DFL driver.  My 
-first attempt did not go well.
-
-Matthew
-
-directory of the app >
-> Thanks
-> Hao
->
->>
->> Thanks
->> Yilun
->
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
