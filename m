@@ -2,202 +2,200 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 68051C433B4
-	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Apr 2021 04:17:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A7F4C433ED
+	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Apr 2021 04:26:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 49E5161057
-	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Apr 2021 04:17:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D372761027
+	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Apr 2021 04:26:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229499AbhDOER2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 15 Apr 2021 00:17:28 -0400
-Received: from mail-eopbgr700137.outbound.protection.outlook.com ([40.107.70.137]:34181
-        "EHLO NAM04-SN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229485AbhDOER2 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 15 Apr 2021 00:17:28 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hrL4BQoac9GG120jh6eKuScffxXAkS9mSqapTOWhZCsaiRzND5TYkKqdPh8PSc+XKZVLYt21JQy72pkD2CvfG1UL6F/wkcXsxoOpucSdPXikpZMibWYEd64aKZSVJKKdL2lUV1O0/v4BDZ7Z4qsSNkAz3070HNgXdkLVeaj86maBBVIgbYFTsoKgmky+BKnzOi7CPc+UgQlnxBIbSx2Eq6bUraeIsIy8pwWLs1tzWvFGN/+Rb8mrVscesKbr+qCaMtI9xfZk6Xz+xnnFcQuTVIxbrluyOrzhDo1Oqqv/YspLIZ5++IS5qoq4nhEZMY0EQST7QAMGionQ9uyDH1uGEg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=W/MrkLEkMYHeBEXLcefreZph85vgCVVMWhg5Ff1I3SI=;
- b=hi6qhTjoy1xL4dfNBKYKKhq8OLvhglZ/rdDK9me5aypkubfyj77MPfjNyGyJlyhKvUbR7wKsJ4xZ19austnAHDD56imD5fBAZ3ELNr/jfqlvSBFYODnpAwwUZDdfhllGSFnvrstRNgHQkMHx6o0Pg5Xpai06Wz/aj2/kS6BKxERHNWxDrU0PNHi/SRfyGF3byJaMtYjwDM64xh08RMqM2StcOcbP2vAO2dOT6JB9rRUNTOrJ6vCjdlsvfiqIg/KvkngEkR0yDBRr9D3geGqL2/oF/WzlhPtT5HVoAKjzksG2HfxhEz7iSzyugUT5kK+JEg6be5j2SMFo3I+Eps38gw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=W/MrkLEkMYHeBEXLcefreZph85vgCVVMWhg5Ff1I3SI=;
- b=BXElYUSuxBKQrsCYLid4BxpF91hZpelc8ByFYykTMf2ozSCdaqDrypV2Lh0pFJgWU0WBDO6ovF4Om0mTKq71TSKmRU2yCT2n56N6v4R8rU9F8+6Iyaf6bLlV4VDqSTDYMlTIWoLIR3wiX9evptczXrM8E6LeT4CexTWWoG50mZ0=
-Authentication-Results: os.amperecomputing.com; dkim=none (message not signed)
- header.d=none;os.amperecomputing.com; dmarc=none action=none
- header.from=os.amperecomputing.com;
-Received: from MW2PR0102MB3482.prod.exchangelabs.com (2603:10b6:302:c::32) by
- CO1PR01MB6582.prod.exchangelabs.com (2603:10b6:303:f2::23) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4042.16; Thu, 15 Apr 2021 04:17:03 +0000
-Received: from MW2PR0102MB3482.prod.exchangelabs.com
- ([fe80::d840:7aa7:58d4:b503]) by MW2PR0102MB3482.prod.exchangelabs.com
- ([fe80::d840:7aa7:58d4:b503%5]) with mapi id 15.20.4042.018; Thu, 15 Apr 2021
- 04:17:03 +0000
-Subject: Re: [PATCH v3 2/4] mfd: simple-mfd-i2c: Adds Ampere's Altra SMpro
- support
+        id S229489AbhDOE1P (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 15 Apr 2021 00:27:15 -0400
+Received: from mga18.intel.com ([134.134.136.126]:45397 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229462AbhDOE1P (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 15 Apr 2021 00:27:15 -0400
+IronPort-SDR: k5gVtRTfQ/p+ONMfLzjp5SfxD9BGZFcQO/V2C3eJ/UlowQDv+6Ng7G7GNkz6PdIm+BvvUllSXu
+ zEv9FdlFRUvg==
+X-IronPort-AV: E=McAfee;i="6200,9189,9954"; a="182286623"
+X-IronPort-AV: E=Sophos;i="5.82,223,1613462400"; 
+   d="scan'208";a="182286623"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2021 21:26:52 -0700
+IronPort-SDR: xvKXIwf2UsLwBJ5BhUVIxkzoRO7sfjVqw3tMVthnua9ijzdA8egXrruUiPKwknsMO+IGtJe1D/
+ awxREWSN7SOg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,223,1613462400"; 
+   d="scan'208";a="452755279"
+Received: from lkp-server02.sh.intel.com (HELO fa9c8fcc3464) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 14 Apr 2021 21:26:50 -0700
+Received: from kbuild by fa9c8fcc3464 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lWtac-0000eK-2v; Thu, 15 Apr 2021 04:26:50 +0000
+Date:   Thu, 15 Apr 2021 12:26:44 +0800
+From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org,
-        Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-References: <20210409031332.21919-1-quan@os.amperecomputing.com>
- <20210409031332.21919-3-quan@os.amperecomputing.com>
- <20210414122130.GA113503@roeck-us.net>
-From:   Quan Nguyen <quan@os.amperecomputing.com>
-Message-ID: <94a8cf49-2de2-ead5-8134-d18a90a6ad57@os.amperecomputing.com>
-Date:   Thu, 15 Apr 2021 11:15:48 +0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.9.1
-In-Reply-To: <20210414122130.GA113503@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [118.69.219.201]
-X-ClientProxiedBy: SG2PR01CA0124.apcprd01.prod.exchangelabs.com
- (2603:1096:4:40::28) To MW2PR0102MB3482.prod.exchangelabs.com
- (2603:10b6:302:c::32)
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:hwmon-next] BUILD SUCCESS
+ fdf70b5de6f3edfc8561d31a6b478592fae4177f
+Message-ID: <6077c084.JH8hCrqkFgp12lPc%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [10.38.32.245] (118.69.219.201) by SG2PR01CA0124.apcprd01.prod.exchangelabs.com (2603:1096:4:40::28) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4042.16 via Frontend Transport; Thu, 15 Apr 2021 04:16:58 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5a3571b2-3acd-41ea-730a-08d8ffc55280
-X-MS-TrafficTypeDiagnostic: CO1PR01MB6582:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <CO1PR01MB65827F1C11A227AD444E1AA2F24D9@CO1PR01MB6582.prod.exchangelabs.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2958;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: b4kvNUyTlGohnZV6uLjsdNQkwf8hpSszj76+aTuzIoC0fo3+LANRJ69EVH7DKe828a+NkwKe5kjx2ghM1ApL0pJgPHDb1ec2pL0b0Pm3IiolhaGYUZADSybk0qhXyDffk2fZe/dT/8L/3NqPWT3eLbVwfdNMimdjjtbuRjeAw/FQ8XPF05BEDhW6/l44gU2X/dIc9DUbUQYrpBRDlBkoB6FymAh9skFkTcGoOez/wIcGl0AvE2OKdtiLgqZOAoVEhoj/ouK1oWOaf61CLM3m6dslkVE+ajaNArCwWSnrLeXko/yDteDclTy+zwXlx3nf1jPfnkjz3VyYcg/6pC3vRg0wnaCX5sN8w9T9Mu/7UJ1ql5ppNOg0/v010C2XOvjRS5cFGRa1XxXi2wffCjXDnnYGOvpiMHs1qAroB9CvIrDqNWMRlmB7HRpPC8+VfgyjnxKNkM35Vt5K2bxijaEEMbBV9qSpTevHnZG6g4SOTL296JmDTKll86eSJVMAcvhg/r5HY2XqpISv9jjMYS+owLSAEhhy0QU5WuBLuONwoPVVnfcXnOfhWd1X9DOyM5HKpe+BdxDd8Ev9mV7rPa3auo/Rr37xEmJGkexGeyJnITUUwqzEInjCJHpjzMBHfgAluUml1dRnNN6C70E6Ry3bpAsynmJRN4iI583j7TAruhKzy06b9ItNRHc4ulpN33ox
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR0102MB3482.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(366004)(39850400004)(136003)(376002)(396003)(54906003)(2906002)(83380400001)(4326008)(53546011)(6666004)(8936002)(8676002)(31686004)(38100700002)(38350700002)(107886003)(316002)(16576012)(6916009)(31696002)(26005)(66946007)(16526019)(186003)(66556008)(478600001)(52116002)(66476007)(7416002)(2616005)(5660300002)(6486002)(86362001)(956004)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?enpDejNJZFd0NUFSQnVpMUxWeTRwblptZWtFQURqYzJpZVNub2lmTGQrNXh0?=
- =?utf-8?B?NXJzZXllZnowMDZUc29IUTYrWVZFQ2NtVE4ydG9oSDdWcy9lN3pEUC9aMzU0?=
- =?utf-8?B?Z3RxRkVQVENkc0lWRVhpaEdhQy95MjI5MGY1VTJKNHV6YThwZ1dDeTFScHVl?=
- =?utf-8?B?ODBqdXVLS0RWMzVGSjcxNG9BMVp4OGJ1K2VHWmhheEVRZWIvTEtPR3gwS3hP?=
- =?utf-8?B?WldaNCtTVWs1SnFTZndqTTlXK0VhS3RNaFpGcytyUnExZWpXaUplWWsvUWxh?=
- =?utf-8?B?RXdlNHdpa1o4S0R2eEJ1Um5rbVdZV3dBSlBuOE9IRG5xc2xKTXFLTXZtVG5k?=
- =?utf-8?B?Ykk2WC9Vc0NIMCtiTzQ0WE91dWxwWXJ4dEpxMkY1T2Q1b0RFUGtVOUk4cWhJ?=
- =?utf-8?B?VlFrcEtTMVJTSXQ5V0NyNVcwZ0JtL1hpcU5pRVJSYkN4K3JqeGFtNHpTQlRW?=
- =?utf-8?B?UkFYYlNZbTdzTFF5aXpsc2NRYzE0SjdWRE1yT0hvRHN4M25XWHFVQUpxTDdz?=
- =?utf-8?B?S3JPOGc0UFBBTEwxSWhvU2tBckxUY1Yzdk5RRklqZzVrdVBkSTBDd2tzYXl3?=
- =?utf-8?B?MHE2cHlQQ09vdU5IZC9TUU1xdnYyL3lscXZqS0J1UTlqaFd4dFE1OVNUdTR0?=
- =?utf-8?B?Mlc0MVJHUXdtTlZjQ3A0azVETGVqSDlwNEhkZGlJVVI4TUZFUHBwT0hlZW1q?=
- =?utf-8?B?VXQxWSsweGtKS09BSEZQVEpXMXMyWEVBTzM5MnRBZUFHVFZ6RWY0Y2ZwUmhL?=
- =?utf-8?B?QjhZcStvOU9xcnJLbXo0aEZNU25lNlNlUHp6eWJycWZhTDZZRXcxUG5nRUM1?=
- =?utf-8?B?SGVEM21EUzZiQWlva29BL2Znb09kOVVTbEVxeC9Zeml6eGxtdHhmK1NCSzd1?=
- =?utf-8?B?TnJNWWIwTXBNOHNhQ3dHTEJ2RVFVd0I4SXZ5TVNxTWNVYlVDTERlRm1kYlJk?=
- =?utf-8?B?a1JWMjhIWXJaRjV2d294dFQ0cU16U29VRDh5VVptb2ZlMFhKK3JaTlN2VHd3?=
- =?utf-8?B?b3llMkI4OWdvMW1GMlZ1S2dPNUhWMisyYkUyVDcrR3pJNFpidGFYTFZ2eFBu?=
- =?utf-8?B?Mk1HNHMzSE1aSlZlNFBWNlVoYzBQWmw2T2ZZejc2a1ZDVGQ0UVNWaWlPY1Ju?=
- =?utf-8?B?WlduaE1ZUGN0cE5rcHNtZlkwbzFJbU5BMDQvOEN6SU0rMENTam1ZVER3c2g2?=
- =?utf-8?B?MlI1TDgrc1JkVTN5RDBxSytDMHBXYjBmL0d5ckpkM3ozdnlWK2dUTjRLcC9K?=
- =?utf-8?B?aXA1REYxaURoSENMbnpPaW0yWmJSUW93dDM0SjQwSnEzU3dlbGVvdXpzWlZl?=
- =?utf-8?B?OFhOOHdCNHBJNmk0dGU3L2JpZ3BPWUVZNHZKWEc2WGtEZWNlUGRMOVFqZysw?=
- =?utf-8?B?cFhocEhsbFhybE53enZFVXY1NXNpOFUwNnowT3J6WHoyUWpCYzhFa3hUMDNI?=
- =?utf-8?B?SDR5L1lVV1BpQnJPb3pJZ3RGNnIzemhrbFA2S1g3dFNmeEhWSVhody85N2Jw?=
- =?utf-8?B?QzlVNXlQV3A0TTRtQlZCNC9Ld2JBTDJwZ25NaFRqZjhudFQzajJ6cVB0SXpq?=
- =?utf-8?B?cFNEdDVWRGV6M0lrZnVON3R3bitOSGVjbGRoNEY1VVBMY3RsUG9RL2FrZnVN?=
- =?utf-8?B?dkVwSmo1RnVzMElUN29TaEVUYWh0ZzQ1eTB3bHlIK094bko3amtDaUszaTZP?=
- =?utf-8?B?VHQ2YVdrTHVqbUpxaU9iVEUwR2hoR3k1NzIxSVZiMWJoM3dTNUplK2RRN09p?=
- =?utf-8?Q?R4kZqGsLxp8TgObM5DTyMzOPtLp846fXN6ox1bO?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5a3571b2-3acd-41ea-730a-08d8ffc55280
-X-MS-Exchange-CrossTenant-AuthSource: MW2PR0102MB3482.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Apr 2021 04:17:03.4303
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SEQkOtVwjPH4kyzo1URo54MbBeanfqAWdMpj1yx8FQnhUrMcYQt4R+g7z/crAtVxywVNf0A665qsoXhwSJxvjLEoUzyhZa4IeykZOA329SM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR01MB6582
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 14/04/2021 19:21, Guenter Roeck wrote:
-> On Fri, Apr 09, 2021 at 10:13:30AM +0700, Quan Nguyen wrote:
->> Adds an MFD driver for SMpro found on the Mt.Jade hardware reference
->> platform with Ampere's Altra processor family.
->>
->> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
->> Reported-by: kernel test robot <lkp@intel.com>
->> ---
->>   drivers/mfd/Kconfig          | 10 ++++++++++
->>   drivers/mfd/simple-mfd-i2c.c |  6 ++++++
->>   2 files changed, 16 insertions(+)
->>
->> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
->> index d07e8cf93286..f7a6460f7aa0 100644
->> --- a/drivers/mfd/Kconfig
->> +++ b/drivers/mfd/Kconfig
->> @@ -77,6 +77,16 @@ config MFD_AS3711
->>   	help
->>   	  Support for the AS3711 PMIC from AMS
->>   
->> +config MFD_SMPRO
->> +	tristate "Ampere Computing MFD SMpro core driver"
->> +	select MFD_SIMPLE_MFD_I2C
-> 
-> This is missing "depends on I2C".
-> 
-Thanks Guenter to help pointing this out.
-This fixes the issue reported by kernel test robot. Will include this in 
-next version.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: fdf70b5de6f3edfc8561d31a6b478592fae4177f  hwmon: Add driver for fsp-3y PSUs and PDUs
 
->> +	help
->> +	  Say yes here to enable SMpro driver support for Ampere's Altra
->> +	  processor family.
->> +
->> +	  Ampere's Altra SMpro exposes an I2C regmap interface that can
->> +	  be accessed by child devices.
->> +
->>   config MFD_AS3722
->>   	tristate "ams AS3722 Power Management IC"
->>   	select MFD_CORE
->> diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2c.c
->> index 87f684cff9a1..9a44655f5592 100644
->> --- a/drivers/mfd/simple-mfd-i2c.c
->> +++ b/drivers/mfd/simple-mfd-i2c.c
->> @@ -21,6 +21,11 @@ static const struct regmap_config simple_regmap_config = {
->>   	.val_bits = 8,
->>   };
->>   
->> +static const struct regmap_config simple_word_regmap_config = {
->> +	.reg_bits = 8,
->> +	.val_bits = 16,
->> +};
->> +
->>   static int simple_mfd_i2c_probe(struct i2c_client *i2c)
->>   {
->>   	const struct regmap_config *config;
->> @@ -39,6 +44,7 @@ static int simple_mfd_i2c_probe(struct i2c_client *i2c)
->>   
->>   static const struct of_device_id simple_mfd_i2c_of_match[] = {
->>   	{ .compatible = "kontron,sl28cpld" },
->> +	{ .compatible = "ampere,smpro", .data = &simple_word_regmap_config },
->>   	{}
->>   };
->>   MODULE_DEVICE_TABLE(of, simple_mfd_i2c_of_match);
+elapsed time: 729m
 
+configs tested: 130
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+x86_64                           allyesconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+i386                             allyesconfig
+sh                          urquell_defconfig
+arm                            mmp2_defconfig
+arm                       cns3420vb_defconfig
+powerpc                          g5_defconfig
+arm                         palmz72_defconfig
+mips                         tb0287_defconfig
+arm                          pxa3xx_defconfig
+sh                           se7722_defconfig
+powerpc                     ep8248e_defconfig
+arm                         bcm2835_defconfig
+sh                            migor_defconfig
+mips                      maltasmvp_defconfig
+xtensa                  cadence_csp_defconfig
+sh                          rsk7264_defconfig
+powerpc               mpc834x_itxgp_defconfig
+arm                        spear6xx_defconfig
+mips                      bmips_stb_defconfig
+mips                          malta_defconfig
+arm                            zeus_defconfig
+mips                     cu1830-neo_defconfig
+arm                          gemini_defconfig
+m68k                             allmodconfig
+microblaze                          defconfig
+riscv                          rv32_defconfig
+arm                            qcom_defconfig
+powerpc                     pq2fads_defconfig
+mips                     loongson1c_defconfig
+powerpc                      bamboo_defconfig
+mips                         cobalt_defconfig
+alpha                            alldefconfig
+powerpc                 mpc8272_ads_defconfig
+powerpc                   currituck_defconfig
+mips                          ath25_defconfig
+mips                            gpr_defconfig
+mips                           ci20_defconfig
+powerpc64                           defconfig
+powerpc                      arches_defconfig
+h8300                            alldefconfig
+powerpc                 mpc837x_rdb_defconfig
+arm                         axm55xx_defconfig
+m68k                       m5475evb_defconfig
+mips                      fuloong2e_defconfig
+mips                     decstation_defconfig
+powerpc                     tqm8548_defconfig
+powerpc                   motionpro_defconfig
+m68k                          hp300_defconfig
+sh                          landisk_defconfig
+mips                     loongson1b_defconfig
+powerpc                      acadia_defconfig
+powerpc                 mpc834x_itx_defconfig
+m68k                            q40_defconfig
+m68k                       m5249evb_defconfig
+powerpc                     tqm8555_defconfig
+powerpc                     tqm8540_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a003-20210414
+i386                 randconfig-a006-20210414
+i386                 randconfig-a001-20210414
+i386                 randconfig-a005-20210414
+i386                 randconfig-a004-20210414
+i386                 randconfig-a002-20210414
+x86_64               randconfig-a014-20210414
+x86_64               randconfig-a015-20210414
+x86_64               randconfig-a011-20210414
+x86_64               randconfig-a013-20210414
+x86_64               randconfig-a012-20210414
+x86_64               randconfig-a016-20210414
+i386                 randconfig-a015-20210414
+i386                 randconfig-a014-20210414
+i386                 randconfig-a013-20210414
+i386                 randconfig-a012-20210414
+i386                 randconfig-a016-20210414
+i386                 randconfig-a011-20210414
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+um                               allmodconfig
+um                                allnoconfig
+um                               allyesconfig
+um                                  defconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a003-20210414
+x86_64               randconfig-a002-20210414
+x86_64               randconfig-a005-20210414
+x86_64               randconfig-a001-20210414
+x86_64               randconfig-a006-20210414
+x86_64               randconfig-a004-20210414
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
