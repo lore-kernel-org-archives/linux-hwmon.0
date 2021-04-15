@@ -2,122 +2,140 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 956E4C433B4
-	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Apr 2021 16:34:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E5D7C433ED
+	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Apr 2021 17:52:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5848F611AB
-	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Apr 2021 16:34:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3B70C61139
+	for <linux-hwmon@archiver.kernel.org>; Thu, 15 Apr 2021 17:52:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231549AbhDOQfT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 15 Apr 2021 12:35:19 -0400
-Received: from office2.cesnet.cz ([195.113.144.244]:38936 "EHLO
-        office2.cesnet.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231137AbhDOQfT (ORCPT
+        id S233551AbhDORwa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 15 Apr 2021 13:52:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54916 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233134AbhDORwa (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 15 Apr 2021 12:35:19 -0400
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by office2.cesnet.cz (Postfix) with ESMTPSA id 100F2400070
-        for <linux-hwmon@vger.kernel.org>; Thu, 15 Apr 2021 18:34:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cesnet.cz;
-        s=office2-2020; t=1618504495;
-        bh=F/6Gvq/CQbx6dwnQLEwGyImbW4MTVQOL2OiyuLOI0KQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc;
-        b=KC26agXLyijjjorJBiJ3zKGW48yOqm2h+PkYqpJ+/awqFPzK/jFp0evnkfdohT6RL
-         1BCYPSfTMa6sw3Q/aQuLD0pWytx6R0TptuQpXuyX/wKmjzrRlDx8wPWxSoJqo061N7
-         JvGMxnv8TusQRzLD28wXglKW6ovcgEKoS0geq1jDbExIMj60/IiYGuc8UwoOHE71NL
-         Utz5HQpO0VtGpQcMEEA7mE1YOOmZ/uOtGreRET4M5hXrJj+ty1IqmoTpovviy1EuQR
-         4Gmp1GDmicsP+wi7tsxYY5xCiLuEo3rBPP6kA9B4y/KOqGzbSG5bLD0BV/jzY3x4sf
-         MY6xhpc18ST2Q==
-Received: by mail-pf1-f180.google.com with SMTP id m11so16415405pfc.11
-        for <linux-hwmon@vger.kernel.org>; Thu, 15 Apr 2021 09:34:54 -0700 (PDT)
-X-Gm-Message-State: AOAM5330jGrJL+bpinhM3vaZY2v6aD1GlIHJHJLxh965mGaEPCLOWt1C
-        EzMHX4a4Nlag6IUBR6Rxh2Q4cri5xw4/Y49UEpQ=
-X-Google-Smtp-Source: ABdhPJx/nKCBSS1f8/FzSAMbTesSjUTM/1edFLBzx6fbYdE9GLo8Nv9qLGAoPGLyubBRreT0LqahCL+verNvEu+veMw=
-X-Received: by 2002:a62:68c4:0:b029:226:5dc5:4082 with SMTP id
- d187-20020a6268c40000b02902265dc54082mr3764169pfc.48.1618504493549; Thu, 15
- Apr 2021 09:34:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <202104142348.TP8JF6QJ-lkp@intel.com>
-In-Reply-To: <202104142348.TP8JF6QJ-lkp@intel.com>
-From:   =?UTF-8?B?VsOhY2xhdiBLdWJlcm7DoXQ=?= <kubernat@cesnet.cz>
-Date:   Thu, 15 Apr 2021 18:34:41 +0200
-X-Gmail-Original-Message-ID: <CABKa3npWANE5EQE+bTUZ02ngDMT36kGsLO-8kdf8oroba7kjWw@mail.gmail.com>
-Message-ID: <CABKa3npWANE5EQE+bTUZ02ngDMT36kGsLO-8kdf8oroba7kjWw@mail.gmail.com>
+        Thu, 15 Apr 2021 13:52:30 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C5EFC061574
+        for <linux-hwmon@vger.kernel.org>; Thu, 15 Apr 2021 10:52:07 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id b3so10337920oie.5
+        for <linux-hwmon@vger.kernel.org>; Thu, 15 Apr 2021 10:52:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=pxqYN2rwoRDZnwvO7xHBLbLWV9nUh0ckWLyu6x4y+8E=;
+        b=NbP49ykjqPhQu0lZur8sZ+yLPYIakOkzob0L1M0YMp7zeCM1Fr1sTqOqxDTPIdvETh
+         PzU6Chs4Fvs4gSKojdTQ9/S/M/NI35k4ZQkbSTLkXq2OHDW0FnVExsO1mX5zws8yGIGV
+         w171tTE+dLBDX3HO3tWrY4C+a6C7u5w7UxL8OAVBJob7lk2s1U+wfLRG8Y+dsKSZCAKV
+         A+nbbD6PIzIZIHlf2nTwcB+yDOs11qM5AlJdg//AeVjmgAfxnUnh+O6GbjGGlrct/f7C
+         LbGX+IpmMdTK8M9mhdJBGtptEqUHMlQwa5RsEVoHMtYIlhzXGkhyMhIAEuUifjRkLunT
+         zRMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to:user-agent;
+        bh=pxqYN2rwoRDZnwvO7xHBLbLWV9nUh0ckWLyu6x4y+8E=;
+        b=Uoz/OFjQHurzpBfRV/lm4dpTM8krPjaCzMaKOcsZVWcfBeTZlCdfH3dxvXf7HIJuGv
+         3FbO6WyTdeaJkDCPvs2D/rOSLCvQejmUoOQlRVL+8bxv5BWGWUJufOvfKKgNlC/BBbiO
+         0Q3zZ3j+DQ06O+gVMEmB8JHR3nra7FTmjzal1COsBzaCvFx6u1EImIOBVX72x6y91gLx
+         1tydgxvaPm4dj891DFDuFTesa1SUbT4HUk7gDgQLLGEm+6GkP5fmYodfYEeZi7AEs/SR
+         7ehWf5K5VaD+82PAliYhcSKfq3UdajwDC35Ikv84N7Q2ntGeA+Fkvv4e4H/4PDKeklhm
+         BMBg==
+X-Gm-Message-State: AOAM531XqFC2WcZZe03BWoYSCtpgfaJZHlcp6JNFOVZtCnlAVZfQttNu
+        VmwiDwC9swmAE3gmzRSbcI/DzzL/O2g=
+X-Google-Smtp-Source: ABdhPJytcViilr3aQz0MwZJcLNeotvdg8SLzXOo4wcrhP1FYWW3QEDNU3g2DUNHQRQawYLfBqENeWA==
+X-Received: by 2002:aca:308c:: with SMTP id w134mr3345586oiw.111.1618509126755;
+        Thu, 15 Apr 2021 10:52:06 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x127sm785249oix.36.2021.04.15.10.52.05
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 15 Apr 2021 10:52:06 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 15 Apr 2021 10:52:04 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     =?iso-8859-1?Q?V=E1clav_Kubern=E1t?= <kubernat@cesnet.cz>
+Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        linux-hwmon@vger.kernel.org
 Subject: Re: [hwmon:hwmon-next 33/33] drivers/hwmon/pmbus/fsp-3y.c:204:48:
  warning: missing braces around initializer
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-hwmon@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-ID: <20210415175204.GC30478@roeck-us.net>
+References: <202104142348.TP8JF6QJ-lkp@intel.com>
+ <CABKa3npWANE5EQE+bTUZ02ngDMT36kGsLO-8kdf8oroba7kjWw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABKa3npWANE5EQE+bTUZ02ngDMT36kGsLO-8kdf8oroba7kjWw@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hello.
+On Thu, Apr 15, 2021 at 06:34:41PM +0200, Václav Kubernát wrote:
+> Hello.
+> 
+> I received this email only after I submitted the PSU patch. I'm not
+> sure what I should do. Also, I don't understand the warning, I don't
+> know where the braces are missing.
+> 
 
-I received this email only after I submitted the PSU patch. I'm not
-sure what I should do. Also, I don't understand the warning, I don't
-know where the braces are missing.
+It wanted { } to terminate the list instead of { 0 }. Or, of course,
+{NULL, 0}, but that would just add unnecessary compexity.
 
-V=C3=A1clav
+I fixed it up, no need to resend.
 
-st 14. 4. 2021 v 17:11 odes=C3=ADlatel kernel test robot <lkp@intel.com> na=
-psal:
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-stag=
-ing.git hwmon-next
-> head:   f0af35c3a1254fc0cca601cdc4f228b9ad24a2a4
-> commit: f0af35c3a1254fc0cca601cdc4f228b9ad24a2a4 [33/33] hwmon: Add drive=
-r for fsp-3y PSUs and PDUs
-> config: arc-allyesconfig (attached as .config)
-> compiler: arceb-elf-gcc (GCC) 9.3.0
-> reproduce (this is a W=3D1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
-n/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-st=
-aging.git/commit/?id=3Df0af35c3a1254fc0cca601cdc4f228b9ad24a2a4
->         git remote add hwmon https://git.kernel.org/pub/scm/linux/kernel/=
-git/groeck/linux-staging.git
->         git fetch --no-tags hwmon hwmon-next
->         git checkout f0af35c3a1254fc0cca601cdc4f228b9ad24a2a4
->         # save the attached .config to linux build tree
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-9.3.0 make.cros=
-s W=3D1 ARCH=3Darc
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
-> >> drivers/hwmon/pmbus/fsp-3y.c:204:48: warning: missing braces around in=
-itializer [-Wmissing-braces]
->      204 | static const struct i2c_device_id fsp3y_id[] =3D {
->          |                                                ^
->    ......
->      207 |  {0}
->          |   {}
->
->
-> vim +204 drivers/hwmon/pmbus/fsp-3y.c
->
->    203
->  > 204  static const struct i2c_device_id fsp3y_id[] =3D {
->    205          {"ym2151e", ym2151e},
->    206          {"yh5151e", yh5151e},
->    207          {0}
->    208  };
->    209
->
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Guenter
+
+> Václav
+> 
+> st 14. 4. 2021 v 17:11 odesílatel kernel test robot <lkp@intel.com> napsal:
+> >
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+> > head:   f0af35c3a1254fc0cca601cdc4f228b9ad24a2a4
+> > commit: f0af35c3a1254fc0cca601cdc4f228b9ad24a2a4 [33/33] hwmon: Add driver for fsp-3y PSUs and PDUs
+> > config: arc-allyesconfig (attached as .config)
+> > compiler: arceb-elf-gcc (GCC) 9.3.0
+> > reproduce (this is a W=1 build):
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/commit/?id=f0af35c3a1254fc0cca601cdc4f228b9ad24a2a4
+> >         git remote add hwmon https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git
+> >         git fetch --no-tags hwmon hwmon-next
+> >         git checkout f0af35c3a1254fc0cca601cdc4f228b9ad24a2a4
+> >         # save the attached .config to linux build tree
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 make.cross W=1 ARCH=arc
+> >
+> > If you fix the issue, kindly add following tag as appropriate
+> > Reported-by: kernel test robot <lkp@intel.com>
+> >
+> > All warnings (new ones prefixed by >>):
+> >
+> > >> drivers/hwmon/pmbus/fsp-3y.c:204:48: warning: missing braces around initializer [-Wmissing-braces]
+> >      204 | static const struct i2c_device_id fsp3y_id[] = {
+> >          |                                                ^
+> >    ......
+> >      207 |  {0}
+> >          |   {}
+> >
+> >
+> > vim +204 drivers/hwmon/pmbus/fsp-3y.c
+> >
+> >    203
+> >  > 204  static const struct i2c_device_id fsp3y_id[] = {
+> >    205          {"ym2151e", ym2151e},
+> >    206          {"yh5151e", yh5151e},
+> >    207          {0}
+> >    208  };
+> >    209
+> >
+> > ---
+> > 0-DAY CI Kernel Test Service, Intel Corporation
+> > https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
