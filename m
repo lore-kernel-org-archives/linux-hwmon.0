@@ -2,122 +2,209 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED0B6C433ED
-	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Apr 2021 14:14:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87572C433B4
+	for <linux-hwmon@archiver.kernel.org>; Sat, 17 Apr 2021 03:58:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C3458610F7
-	for <linux-hwmon@archiver.kernel.org>; Fri, 16 Apr 2021 14:14:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5623A61186
+	for <linux-hwmon@archiver.kernel.org>; Sat, 17 Apr 2021 03:58:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241272AbhDPOPB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 16 Apr 2021 10:15:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40038 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241568AbhDPOO5 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 16 Apr 2021 10:14:57 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 474F1C061574;
-        Fri, 16 Apr 2021 07:14:30 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id n140so27957624oig.9;
-        Fri, 16 Apr 2021 07:14:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=65N9Kp4PBxpTjuyc3/ie9bOroIFouunysfM8BBC1uiw=;
-        b=kx/FVz7KepDYI1He13TsnPCAXrQaObs7LYZ2YLr3zHhWmDndh5Ozw3RDyKkMrqIh+z
-         MznFB//oSZKeb7bHbkeenTZJ8qXRe33H1JVEc9TFh5Re35fP4/HlCixHGWiXPhAoNcTo
-         QKrMvpdSkHuL+i1d+AkhJbmKpVIndwHXPloQHbxXaMipkKWSgshH8R/PhOBVc6JBjwW2
-         v4ZQnFFb++kMAI9n9MAf7poKyGCmr0nxQdRzSS6IGNPW2KQR+Ebc3n8cIgGhrNHwrWCO
-         vLc3gVLEfjJ8oWUYJuPWNN4O3gDICo1xxuoTjabzxvl4cGvEflx3m3ss/wLuPgZxN0S7
-         1Vcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=65N9Kp4PBxpTjuyc3/ie9bOroIFouunysfM8BBC1uiw=;
-        b=dWJAYt9BOuZY7pmcvf0P/xTddPAZSlpNfT2+eR0BhyfCEScDI1NP4NsQE5CVIp5nXI
-         dY1luPbrmCVz21RR52FoALmMc+XUghzdf0gc7Iig/8MA0TB6FbO7OngR5ouacAVm5CEL
-         a0DLPg16EUVQdtJVI6XkRug3k9+E6Xh59EXz4xCqf3MK5NyFLBWBai0uNIDlhW8RChn/
-         /WV9UO/D9KsNGYj0Yg+xeRYbgIz8uy4nP5szYnv95IS8XGL5ywejBjH5TL5twb7IXyNP
-         HFq2Re4A7vYZjgFRclah/o08if6ex36BLt26/A/26I0b8NAIoWGFp1ksOSKswXQN0ykH
-         5pzQ==
-X-Gm-Message-State: AOAM533DCL14H3m9fRfYW9LiO4L3hnUZjzyUPUbLR7Nvxt2pndpFLqdR
-        EWn0naRM8e44Ebn+g2s8Zpyc/memG9c=
-X-Google-Smtp-Source: ABdhPJxduZF26xTaWjBNA3LmCFt4T7aCOvcnUsHiJtq6OPNlvPIicbmHp1R109ZiW3Tt4IB250cRNA==
-X-Received: by 2002:aca:5909:: with SMTP id n9mr3471769oib.66.1618582468319;
-        Fri, 16 Apr 2021 07:14:28 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u139sm1415117oia.52.2021.04.16.07.14.27
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 16 Apr 2021 07:14:27 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 16 Apr 2021 07:14:25 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Paul Fertser <fercerpav@gmail.com>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Vadim Pasternak <vadimp@mellanox.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: pmbus: pxe1610: don't bail out when not all
- pages are active
-Message-ID: <20210416141425.GA254358@roeck-us.net>
-References: <3612b78a-8e43-289b-ff0f-6c995995eeb0@roeck-us.net>
- <20210416102926.13614-1-fercerpav@gmail.com>
+        id S235567AbhDQD6z (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 16 Apr 2021 23:58:55 -0400
+Received: from mga03.intel.com ([134.134.136.65]:53985 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235455AbhDQD6w (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 16 Apr 2021 23:58:52 -0400
+IronPort-SDR: 1GQkf/CUpLwyK9lB2y3hx7A+PMrDpdz4bjTz8jmPprTagPIqUKTJ1RZDO7B9tD9ABTyOUGKLkD
+ zzMkXpYnyWqw==
+X-IronPort-AV: E=McAfee;i="6200,9189,9956"; a="195170359"
+X-IronPort-AV: E=Sophos;i="5.82,228,1613462400"; 
+   d="scan'208";a="195170359"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2021 20:58:12 -0700
+IronPort-SDR: Mxt8VdaEcwara8ZoTc+y4Wa4omKtYSJ+4yq4aRnsFY405oqgGnfAnd2+Lb7u/DgnfiPATDhhpQ
+ JBUTmLXfeSVA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,228,1613462400"; 
+   d="scan'208";a="462167081"
+Received: from lkp-server01.sh.intel.com (HELO a48ff7ddd223) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 16 Apr 2021 20:58:11 -0700
+Received: from kbuild by a48ff7ddd223 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lXc5y-0000fT-Dd; Sat, 17 Apr 2021 03:58:10 +0000
+Date:   Sat, 17 Apr 2021 11:57:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:hwmon-next] BUILD SUCCESS
+ 77c4891eeb8672278fcdf03bc4ad2c4603489d08
+Message-ID: <607a5cbe.M9jZfTf8IbzHFFDU%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210416102926.13614-1-fercerpav@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Apr 16, 2021 at 01:29:04PM +0300, Paul Fertser wrote:
-> Certain VRs might be configured to use only the first output channel and
-> so the mode for the second will be 0. Handle this gracefully.
-> 
-> Fixes: b9fa0a3acfd8 ("hwmon: (pmbus/core) Add support for vid mode detection per page bases")
-> Signed-off-by: Paul Fertser <fercerpav@gmail.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 77c4891eeb8672278fcdf03bc4ad2c4603489d08  hwmon: (pmbus/pxe1610) don't bail out when not all pages are active
 
-Applied.
+elapsed time: 724m
 
-Thanks,
-Guenter
+configs tested: 139
+configs skipped: 2
 
-> ---
-> 
-> Notes:
->     Changes for v2:
->       - Use more imperative style
-> 
->  drivers/hwmon/pmbus/pxe1610.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/drivers/hwmon/pmbus/pxe1610.c b/drivers/hwmon/pmbus/pxe1610.c
-> index da27ce34ee3f..eb4a06003b7f 100644
-> --- a/drivers/hwmon/pmbus/pxe1610.c
-> +++ b/drivers/hwmon/pmbus/pxe1610.c
-> @@ -41,6 +41,15 @@ static int pxe1610_identify(struct i2c_client *client,
->  				info->vrm_version[i] = vr13;
->  				break;
->  			default:
-> +				/*
-> +				 * If prior pages are available limit operation
-> +				 * to them
-> +				 */
-> +				if (i != 0) {
-> +					info->pages = i;
-> +					return 0;
-> +				}
-> +
->  				return -ENODEV;
->  			}
->  		}
-> -- 
-> 2.20.1
-> 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+x86_64                           allyesconfig
+riscv                            allmodconfig
+i386                             allyesconfig
+riscv                            allyesconfig
+powerpc                       ebony_defconfig
+powerpc                     ksi8560_defconfig
+arm                    vt8500_v6_v7_defconfig
+arm                        clps711x_defconfig
+arm                         at91_dt_defconfig
+arc                      axs103_smp_defconfig
+mips                      maltaaprp_defconfig
+arm                          imote2_defconfig
+arm                     davinci_all_defconfig
+powerpc                 mpc832x_rdb_defconfig
+sh                          sdk7786_defconfig
+m68k                         amcore_defconfig
+m68k                       bvme6000_defconfig
+mips                       capcella_defconfig
+sh                        edosk7705_defconfig
+powerpc                 mpc837x_rdb_defconfig
+arm                         lpc18xx_defconfig
+mips                           ip27_defconfig
+powerpc                 mpc8272_ads_defconfig
+arm                        magician_defconfig
+xtensa                       common_defconfig
+sh                     magicpanelr2_defconfig
+powerpc                      arches_defconfig
+arm                        vexpress_defconfig
+powerpc                       eiger_defconfig
+sh                            hp6xx_defconfig
+arm                        trizeps4_defconfig
+sh                           se7750_defconfig
+powerpc                      pcm030_defconfig
+arm                       aspeed_g5_defconfig
+powerpc                 mpc834x_mds_defconfig
+sh                           se7751_defconfig
+arm                            pleb_defconfig
+arm                        mini2440_defconfig
+sparc                       sparc32_defconfig
+mips                           ip22_defconfig
+arm                           sama5_defconfig
+ia64                        generic_defconfig
+csky                                defconfig
+mips                           ip32_defconfig
+sh                             shx3_defconfig
+powerpc                     mpc512x_defconfig
+arm                       imx_v4_v5_defconfig
+arm                         socfpga_defconfig
+sh                ecovec24-romimage_defconfig
+powerpc                          allmodconfig
+sparc                       sparc64_defconfig
+sh                        sh7757lcr_defconfig
+arm                              alldefconfig
+powerpc                 mpc8540_ads_defconfig
+mips                            ar7_defconfig
+mips                     cu1000-neo_defconfig
+powerpc                     sequoia_defconfig
+powerpc                     mpc83xx_defconfig
+powerpc                 canyonlands_defconfig
+powerpc                        cell_defconfig
+sh                        sh7785lcr_defconfig
+s390                          debug_defconfig
+openrisc                  or1klitex_defconfig
+arm64                            alldefconfig
+sh                          r7785rp_defconfig
+powerpc                          g5_defconfig
+mips                        maltaup_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+i386                 randconfig-a003-20210416
+i386                 randconfig-a006-20210416
+i386                 randconfig-a001-20210416
+i386                 randconfig-a005-20210416
+i386                 randconfig-a004-20210416
+i386                 randconfig-a002-20210416
+x86_64               randconfig-a014-20210416
+x86_64               randconfig-a015-20210416
+x86_64               randconfig-a011-20210416
+x86_64               randconfig-a013-20210416
+x86_64               randconfig-a012-20210416
+x86_64               randconfig-a016-20210416
+i386                 randconfig-a015-20210416
+i386                 randconfig-a014-20210416
+i386                 randconfig-a013-20210416
+i386                 randconfig-a012-20210416
+i386                 randconfig-a016-20210416
+i386                 randconfig-a011-20210416
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+um                               allmodconfig
+um                                allnoconfig
+um                               allyesconfig
+um                                  defconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a003-20210416
+x86_64               randconfig-a002-20210416
+x86_64               randconfig-a005-20210416
+x86_64               randconfig-a001-20210416
+x86_64               randconfig-a006-20210416
+x86_64               randconfig-a004-20210416
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
