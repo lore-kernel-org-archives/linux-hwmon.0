@@ -2,209 +2,133 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87572C433B4
-	for <linux-hwmon@archiver.kernel.org>; Sat, 17 Apr 2021 03:58:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D63BDC433ED
+	for <linux-hwmon@archiver.kernel.org>; Sat, 17 Apr 2021 21:09:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5623A61186
-	for <linux-hwmon@archiver.kernel.org>; Sat, 17 Apr 2021 03:58:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B6BCF61354
+	for <linux-hwmon@archiver.kernel.org>; Sat, 17 Apr 2021 21:09:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235567AbhDQD6z (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 16 Apr 2021 23:58:55 -0400
-Received: from mga03.intel.com ([134.134.136.65]:53985 "EHLO mga03.intel.com"
+        id S236987AbhDQVKX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 17 Apr 2021 17:10:23 -0400
+Received: from mout.gmx.net ([212.227.15.15]:40151 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235455AbhDQD6w (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 16 Apr 2021 23:58:52 -0400
-IronPort-SDR: 1GQkf/CUpLwyK9lB2y3hx7A+PMrDpdz4bjTz8jmPprTagPIqUKTJ1RZDO7B9tD9ABTyOUGKLkD
- zzMkXpYnyWqw==
-X-IronPort-AV: E=McAfee;i="6200,9189,9956"; a="195170359"
-X-IronPort-AV: E=Sophos;i="5.82,228,1613462400"; 
-   d="scan'208";a="195170359"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2021 20:58:12 -0700
-IronPort-SDR: Mxt8VdaEcwara8ZoTc+y4Wa4omKtYSJ+4yq4aRnsFY405oqgGnfAnd2+Lb7u/DgnfiPATDhhpQ
- JBUTmLXfeSVA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,228,1613462400"; 
-   d="scan'208";a="462167081"
-Received: from lkp-server01.sh.intel.com (HELO a48ff7ddd223) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 16 Apr 2021 20:58:11 -0700
-Received: from kbuild by a48ff7ddd223 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lXc5y-0000fT-Dd; Sat, 17 Apr 2021 03:58:10 +0000
-Date:   Sat, 17 Apr 2021 11:57:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon-next] BUILD SUCCESS
- 77c4891eeb8672278fcdf03bc4ad2c4603489d08
-Message-ID: <607a5cbe.M9jZfTf8IbzHFFDU%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S231555AbhDQVKW (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 17 Apr 2021 17:10:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1618693779;
+        bh=jAoqA7m8iMS8WjedqXzF7H2/yBtx6xhjdzDye3VdXF0=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=KhSn+82iQIZC2R3FEiae7euZJd61fbYaMa7zkV0SMgnSRP9w7NEXLtXJU6uqCHDgo
+         XmdQeWgOz4dXe9KmeS0RHMum4Ql3ILlKYk7nlmdmThJLqrs7rkCHCg0f38yXL42kHR
+         H1cvxTr0SJZ+Wic1/zmAAdaJkzA/+vtHjIQPlAZ4=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from esprimo-mx.fritz.box ([84.154.212.143]) by mail.gmx.net
+ (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MTzay-1l6tA843d4-00Qzdf; Sat, 17 Apr 2021 23:09:39 +0200
+From:   W_Armin@gmx.de
+To:     hdegoede@redhat.com
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org
+Subject: [PATCH 1/2] hwmon: (sch5627) Use devres function
+Date:   Sat, 17 Apr 2021 23:09:19 +0200
+Message-Id: <20210417210920.15496-2-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210417210920.15496-1-W_Armin@gmx.de>
+References: <20210417210920.15496-1-W_Armin@gmx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:wGtZ56NeL5tD67x88s4Lrq07e8x0uAeYW1SPCZeAF7PSNhfZTPt
+ VV1SHqkrMjeTqEqo+2C/m+P14dPNrkVV+bOOK/TmMXNS3qHSGheFPYrUMRYgcRVKUKxVp2D
+ ckNthI4IXS6Vtb6hoSWaAzpNVAmnRdccs61aaEg00706Q4qC5jVAz229UfVFLzcEu6Ccc7m
+ 514S9GmDzTZT8zqSL1GwQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:b/aWvU4jFsk=:jYGyHzNiUlwfx4No69gT9s
+ RAcJ6/OurBtA2lvCzFo6Q16rgTnJoY4tQYXbWpnV+zqPc/E0iqfovEUEcMnWlDUXGwYeyR5qc
+ EuMQKhTbMuJ+vmAZA/ohV/Pp1BB/Y57CBHgvpDJKzH57UNtyQgYnf7JLIZQ1piyrSGpWdrXgb
+ IoTDxDbGIidj1Y8llbtxGt8dVFJyTyt3NKRtXIYjit+loAtdPv/ZfY994oLDayZdF/numYi8X
+ cRc+c6ayrRwFV9e5pRhqI+g878FRjTaenZJYwfGhDQDU2zbY8LFdzUg9/sLnfC5IJXYiH65GI
+ vrmHovij8Py0pd8eTJXTHSoSer1RF8yRWj0MraptKkuvR13azqsctfHjJKU7gUzT0OQUgeSp3
+ LAImQW84ZReFa/uGRnFbNHLd4X/HNeAO3vLWs4aq9C98kn9J0rm/WXwxXILRuubVDRhuT4SQ8
+ R39F6bDoHITlcC6UR11AaZ0IoKoixpDGLK7YsQ/SnfHSjyQ7y9ZkfciXFZN4BITD90ObYwXCc
+ fnP5V3lHYK8nyXraLufYxbVoVUipW1OQUN1vp+Vs2pHiDKPNctaR8kAY9i2HYqkL3b5CV0StB
+ uSipfAlTLz3KFHfwmyDH54W57OhLfbFkfkykSc0yX+9Tg+4lK0tVFb2NynWlLgDxnoqrenoaV
+ Cy7kPZwHTq43D5Lve3mN2j2ovuChTpOT/p8EJCDJVXCtAwc+0d3JoukNlDTbmB8oPH2OOSPvz
+ /JK3MLe8vQYS0JnVo2qe0ulZUD7AEuwE5KHqF7YRVLSv669cnkcUQGgZRp/VdQgH9OPpSF6rz
+ /FrfYZygZ//3dNPrpSp1RrgviqvYwPfsVEKizi/t8eAWqDy4AG4F1IdNTOWRG3B3EPDnCg2uv
+ Dh4Oc6DgrSMqYKGqsysSzrLH9DI2EyZcbypmoWMIc/GTdnnKOJyOiPvvLh7lmR5bzaMbIzsGi
+ 0QKUJ7W8StfZxl5PrDmyoKkXbfW6Lyl+M9lxBe/b1Pz4TaI7D7eBFYf3LpU+Wi7eJtQpxSUhn
+ iJeT82wsaRoCqBVAvJn/+1VM6eF6VghiH1eHRLqsybjBbstmhCHxTOzIS7RLCcNJo+yomr7ok
+ 8vGveCzekNfwZo0jvl2Ae7hd8ITlAdmdvbE0u/+f61lszMq1SVtD0QuGEp2lgwIaFT+B4ylQ+
+ y/Wb0lklOFGbGtgC8oAKBE/BufTQOB4djjAsnFzruCSpa2byih1s0aB2vcAe/ND34smic=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 77c4891eeb8672278fcdf03bc4ad2c4603489d08  hwmon: (pmbus/pxe1610) don't bail out when not all pages are active
+From: Armin Wolf <W_Armin@gmx.de>
 
-elapsed time: 724m
+Use devm_hwmon_device_register_with_info() and remove hwmon_dev
+from sch5627_data struct as it is not needed anymore.
 
-configs tested: 139
-configs skipped: 2
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ drivers/hwmon/sch5627.c | 15 +++++----------
+ 1 file changed, 5 insertions(+), 10 deletions(-)
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+diff --git a/drivers/hwmon/sch5627.c b/drivers/hwmon/sch5627.c
+index 8be339ae5f7d..ea042a6dae58 100644
+=2D-- a/drivers/hwmon/sch5627.c
++++ b/drivers/hwmon/sch5627.c
+@@ -64,7 +64,6 @@ static const char * const SCH5627_IN_LABELS[SCH5627_NO_I=
+N] =3D {
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-x86_64                           allyesconfig
-riscv                            allmodconfig
-i386                             allyesconfig
-riscv                            allyesconfig
-powerpc                       ebony_defconfig
-powerpc                     ksi8560_defconfig
-arm                    vt8500_v6_v7_defconfig
-arm                        clps711x_defconfig
-arm                         at91_dt_defconfig
-arc                      axs103_smp_defconfig
-mips                      maltaaprp_defconfig
-arm                          imote2_defconfig
-arm                     davinci_all_defconfig
-powerpc                 mpc832x_rdb_defconfig
-sh                          sdk7786_defconfig
-m68k                         amcore_defconfig
-m68k                       bvme6000_defconfig
-mips                       capcella_defconfig
-sh                        edosk7705_defconfig
-powerpc                 mpc837x_rdb_defconfig
-arm                         lpc18xx_defconfig
-mips                           ip27_defconfig
-powerpc                 mpc8272_ads_defconfig
-arm                        magician_defconfig
-xtensa                       common_defconfig
-sh                     magicpanelr2_defconfig
-powerpc                      arches_defconfig
-arm                        vexpress_defconfig
-powerpc                       eiger_defconfig
-sh                            hp6xx_defconfig
-arm                        trizeps4_defconfig
-sh                           se7750_defconfig
-powerpc                      pcm030_defconfig
-arm                       aspeed_g5_defconfig
-powerpc                 mpc834x_mds_defconfig
-sh                           se7751_defconfig
-arm                            pleb_defconfig
-arm                        mini2440_defconfig
-sparc                       sparc32_defconfig
-mips                           ip22_defconfig
-arm                           sama5_defconfig
-ia64                        generic_defconfig
-csky                                defconfig
-mips                           ip32_defconfig
-sh                             shx3_defconfig
-powerpc                     mpc512x_defconfig
-arm                       imx_v4_v5_defconfig
-arm                         socfpga_defconfig
-sh                ecovec24-romimage_defconfig
-powerpc                          allmodconfig
-sparc                       sparc64_defconfig
-sh                        sh7757lcr_defconfig
-arm                              alldefconfig
-powerpc                 mpc8540_ads_defconfig
-mips                            ar7_defconfig
-mips                     cu1000-neo_defconfig
-powerpc                     sequoia_defconfig
-powerpc                     mpc83xx_defconfig
-powerpc                 canyonlands_defconfig
-powerpc                        cell_defconfig
-sh                        sh7785lcr_defconfig
-s390                          debug_defconfig
-openrisc                  or1klitex_defconfig
-arm64                            alldefconfig
-sh                          r7785rp_defconfig
-powerpc                          g5_defconfig
-mips                        maltaup_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-i386                 randconfig-a003-20210416
-i386                 randconfig-a006-20210416
-i386                 randconfig-a001-20210416
-i386                 randconfig-a005-20210416
-i386                 randconfig-a004-20210416
-i386                 randconfig-a002-20210416
-x86_64               randconfig-a014-20210416
-x86_64               randconfig-a015-20210416
-x86_64               randconfig-a011-20210416
-x86_64               randconfig-a013-20210416
-x86_64               randconfig-a012-20210416
-x86_64               randconfig-a016-20210416
-i386                 randconfig-a015-20210416
-i386                 randconfig-a014-20210416
-i386                 randconfig-a013-20210416
-i386                 randconfig-a012-20210416
-i386                 randconfig-a016-20210416
-i386                 randconfig-a011-20210416
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-um                               allmodconfig
-um                                allnoconfig
-um                               allyesconfig
-um                                  defconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+ struct sch5627_data {
+ 	unsigned short addr;
+-	struct device *hwmon_dev;
+ 	struct sch56xx_watchdog_data *watchdog;
+ 	u8 control;
+ 	u8 temp_max[SCH5627_NO_TEMPS];
+@@ -365,15 +364,13 @@ static int sch5627_remove(struct platform_device *pd=
+ev)
+ 	if (data->watchdog)
+ 		sch56xx_watchdog_unregister(data->watchdog);
 
-clang tested configs:
-x86_64               randconfig-a003-20210416
-x86_64               randconfig-a002-20210416
-x86_64               randconfig-a005-20210416
-x86_64               randconfig-a001-20210416
-x86_64               randconfig-a006-20210416
-x86_64               randconfig-a004-20210416
+-	if (data->hwmon_dev)
+-		hwmon_device_unregister(data->hwmon_dev);
+-
+ 	return 0;
+ }
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ static int sch5627_probe(struct platform_device *pdev)
+ {
+ 	struct sch5627_data *data;
++	struct device *hwmon_dev;
+ 	int err, build_code, build_id, hwmon_rev, val;
+
+ 	data =3D devm_kzalloc(&pdev->dev, sizeof(struct sch5627_data),
+@@ -471,12 +468,10 @@ static int sch5627_probe(struct platform_device *pde=
+v)
+ 	pr_info("firmware build: code 0x%02X, id 0x%04X, hwmon: rev 0x%02X\n",
+ 		build_code, build_id, hwmon_rev);
+
+-	data->hwmon_dev =3D hwmon_device_register_with_info(&pdev->dev, DEVNAME,=
+ data,
+-							  &sch5627_chip_info,
+-							  NULL);
+-	if (IS_ERR(data->hwmon_dev)) {
+-		err =3D PTR_ERR(data->hwmon_dev);
+-		data->hwmon_dev =3D NULL;
++	hwmon_dev =3D devm_hwmon_device_register_with_info(&pdev->dev, DEVNAME, =
+data,
++							 &sch5627_chip_info, NULL);
++	if (IS_ERR(hwmon_dev)) {
++		err =3D PTR_ERR(hwmon_dev);
+ 		goto error;
+ 	}
+
+=2D-
+2.20.1
+
