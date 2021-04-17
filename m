@@ -8,127 +8,214 @@ X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D63BDC433ED
-	for <linux-hwmon@archiver.kernel.org>; Sat, 17 Apr 2021 21:09:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B26FBC433B4
+	for <linux-hwmon@archiver.kernel.org>; Sat, 17 Apr 2021 21:09:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B6BCF61354
-	for <linux-hwmon@archiver.kernel.org>; Sat, 17 Apr 2021 21:09:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8A5DD61354
+	for <linux-hwmon@archiver.kernel.org>; Sat, 17 Apr 2021 21:09:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236987AbhDQVKX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 17 Apr 2021 17:10:23 -0400
-Received: from mout.gmx.net ([212.227.15.15]:40151 "EHLO mout.gmx.net"
+        id S237017AbhDQVKY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 17 Apr 2021 17:10:24 -0400
+Received: from mout.gmx.net ([212.227.15.18]:52325 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231555AbhDQVKW (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 17 Apr 2021 17:10:22 -0400
+        id S231555AbhDQVKY (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 17 Apr 2021 17:10:24 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1618693779;
-        bh=jAoqA7m8iMS8WjedqXzF7H2/yBtx6xhjdzDye3VdXF0=;
+        s=badeba3b8450; t=1618693780;
+        bh=qyeSftwHhlJr8VhQb+3EsUzoelRx0yOVZ4SIuUCgZSE=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=KhSn+82iQIZC2R3FEiae7euZJd61fbYaMa7zkV0SMgnSRP9w7NEXLtXJU6uqCHDgo
-         XmdQeWgOz4dXe9KmeS0RHMum4Ql3ILlKYk7nlmdmThJLqrs7rkCHCg0f38yXL42kHR
-         H1cvxTr0SJZ+Wic1/zmAAdaJkzA/+vtHjIQPlAZ4=
+        b=P0FKz12kuQEjcsWMjcUlJQjZkESUn0OPLKje/vsBOFwDrPfUwx99Lbk+HAVhw2Eta
+         kFofLiv8FIrsOxWJr2s6jbeGQTvatx60kRg9cIZAkE7lVvI56kvQxMiE3MayyBaefn
+         UY7f95d17PxCsR9suDptOtIDnwyjrdzwqdyaMOsk=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from esprimo-mx.fritz.box ([84.154.212.143]) by mail.gmx.net
  (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MTzay-1l6tA843d4-00Qzdf; Sat, 17 Apr 2021 23:09:39 +0200
+ 1MRCK6-1lCv1k1rts-00N7lt; Sat, 17 Apr 2021 23:09:40 +0200
 From:   W_Armin@gmx.de
 To:     hdegoede@redhat.com
 Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org
-Subject: [PATCH 1/2] hwmon: (sch5627) Use devres function
-Date:   Sat, 17 Apr 2021 23:09:19 +0200
-Message-Id: <20210417210920.15496-2-W_Armin@gmx.de>
+Subject: [PATCH 2/2] hwmon: (sch5627) Remove unnecessary error path
+Date:   Sat, 17 Apr 2021 23:09:20 +0200
+Message-Id: <20210417210920.15496-3-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210417210920.15496-1-W_Armin@gmx.de>
 References: <20210417210920.15496-1-W_Armin@gmx.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:wGtZ56NeL5tD67x88s4Lrq07e8x0uAeYW1SPCZeAF7PSNhfZTPt
- VV1SHqkrMjeTqEqo+2C/m+P14dPNrkVV+bOOK/TmMXNS3qHSGheFPYrUMRYgcRVKUKxVp2D
- ckNthI4IXS6Vtb6hoSWaAzpNVAmnRdccs61aaEg00706Q4qC5jVAz229UfVFLzcEu6Ccc7m
- 514S9GmDzTZT8zqSL1GwQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:b/aWvU4jFsk=:jYGyHzNiUlwfx4No69gT9s
- RAcJ6/OurBtA2lvCzFo6Q16rgTnJoY4tQYXbWpnV+zqPc/E0iqfovEUEcMnWlDUXGwYeyR5qc
- EuMQKhTbMuJ+vmAZA/ohV/Pp1BB/Y57CBHgvpDJKzH57UNtyQgYnf7JLIZQ1piyrSGpWdrXgb
- IoTDxDbGIidj1Y8llbtxGt8dVFJyTyt3NKRtXIYjit+loAtdPv/ZfY994oLDayZdF/numYi8X
- cRc+c6ayrRwFV9e5pRhqI+g878FRjTaenZJYwfGhDQDU2zbY8LFdzUg9/sLnfC5IJXYiH65GI
- vrmHovij8Py0pd8eTJXTHSoSer1RF8yRWj0MraptKkuvR13azqsctfHjJKU7gUzT0OQUgeSp3
- LAImQW84ZReFa/uGRnFbNHLd4X/HNeAO3vLWs4aq9C98kn9J0rm/WXwxXILRuubVDRhuT4SQ8
- R39F6bDoHITlcC6UR11AaZ0IoKoixpDGLK7YsQ/SnfHSjyQ7y9ZkfciXFZN4BITD90ObYwXCc
- fnP5V3lHYK8nyXraLufYxbVoVUipW1OQUN1vp+Vs2pHiDKPNctaR8kAY9i2HYqkL3b5CV0StB
- uSipfAlTLz3KFHfwmyDH54W57OhLfbFkfkykSc0yX+9Tg+4lK0tVFb2NynWlLgDxnoqrenoaV
- Cy7kPZwHTq43D5Lve3mN2j2ovuChTpOT/p8EJCDJVXCtAwc+0d3JoukNlDTbmB8oPH2OOSPvz
- /JK3MLe8vQYS0JnVo2qe0ulZUD7AEuwE5KHqF7YRVLSv669cnkcUQGgZRp/VdQgH9OPpSF6rz
- /FrfYZygZ//3dNPrpSp1RrgviqvYwPfsVEKizi/t8eAWqDy4AG4F1IdNTOWRG3B3EPDnCg2uv
- Dh4Oc6DgrSMqYKGqsysSzrLH9DI2EyZcbypmoWMIc/GTdnnKOJyOiPvvLh7lmR5bzaMbIzsGi
- 0QKUJ7W8StfZxl5PrDmyoKkXbfW6Lyl+M9lxBe/b1Pz4TaI7D7eBFYf3LpU+Wi7eJtQpxSUhn
- iJeT82wsaRoCqBVAvJn/+1VM6eF6VghiH1eHRLqsybjBbstmhCHxTOzIS7RLCcNJo+yomr7ok
- 8vGveCzekNfwZo0jvl2Ae7hd8ITlAdmdvbE0u/+f61lszMq1SVtD0QuGEp2lgwIaFT+B4ylQ+
- y/Wb0lklOFGbGtgC8oAKBE/BufTQOB4djjAsnFzruCSpa2byih1s0aB2vcAe/ND34smic=
+X-Provags-ID: V03:K1:Qlf+J+MASFkPkFz2TZxYSBmuTWHQP36UX7dA4W4OOlDg/xJcR6m
+ LgU4nGmFsaLD7p5f5BrabLvZVXEGb15BPBoEC242P9o1OW5atHcQOJI3/tHbFMfDiFT8yyT
+ 26+bDPT24Z3e9/wke+eEUHFjExD3J4rVcyp3aLeMNextpa/HuiKMxTyE8xxRWun8iWs91X8
+ WHXhr2Llj+3kSKo3PRsUQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:UH4Fd8ogrUE=:tzS9oy2sZ0Zae56mZiXw0U
+ /fNrIKMYUKBxQUjmZOpY5DapHqPyyIJlX2nt2dlpelGuOVpOwOLmmVcH0pgvlNk5SQtizOXXA
+ QDZbhA8k/r3w5EIXxFK7TffMGZDnzqEvIlqAwdNh/9S6oyjR6WCsegFJTTSF9V5+FKTre7IzJ
+ ut+xYesLviU0xx7Vr4yrjzwttLDMOGrtsCHJM/JBRb1GvGb8UkSvhk88ROK1y75cHkdkGKPi8
+ 0xtm4EKWzKafgNKwXWU/6G4DwmPD4NQuz0bsLdi8K9iyu3JjRKiL9T189GzE8xrrK32sjxMmP
+ SXXbG5irnlssxskqwcKzJ0Zy9IOZENxseb5RJ0vtVnbnQy1SIIrwbDiIowo4P7hViK5fa6ZX+
+ pGuQzXP2ebExcsxuFjV7xS1O5QqV1SpoedLRFVcOSse0OERsFIJPJG5pVEzVz/8pPPGPCUSsh
+ 9Pzw1CAuxjkhRlr6Ta1cKZB0sMR+XT27DKcj4DQJ3WyKIBuJvvXu8gdBdvqV9IDD5NmC+Q6dh
+ CvhLAC5qPkbwvg9okYsB8Uqx0MZxGq5Aa22UGgxJavEtSxagmnBjbJikS1LVC5CX8x4XexHqa
+ K+R4sZmkvfrOjftsYYEjRUXPoyHl5GUw+1ijhXOVarxD25DEV4o0R/uyJigobvrLIb1J+4BtC
+ M2o6FJfVYYm52nfzghxUAEC0d4cw1vFmQsiRFmNl/cQn/raV0rOpQU8B0X1iWvO5GrfKqikTh
+ kDWTuk+zp+sBHslg5OSOn+BEeW4rVlB2NIOQ4Qc/Vcevh8i2dyw2AejJ6F0XuTAVaYsMPut2P
+ gjNsm1UdgJwyZXyr3trJaWVaFCysO4FUZzoIUJ2rihMInaP8oE0feF6To6COcLk3KfkR2qsZd
+ o0HOWFzdXH/2ZwObf4jPs1GIStl/Dqe/Ii1U0ii4jaT6SJgPy00TuQAbg+3u7Vvd0X5q3hGF2
+ IXxyUV+DWLfELKkWGDXbhm52uMRrFwbtPUuBMwO82DlcqThJUVIKglXXLw5Kf4PdpJEIkmNwV
+ 18xOP/0eh6ElaPaBMO4SuqFjAYe79naAOY+DHAKkfMXRA6IjmEAWOjpWd0pYSbjjsUvn8s0JN
+ BFHOa+6SnJx8pdtF3FLJ16gX64JpBPZkdFwfEYwEvIeuGoRCFj7O6wq/CJmL7KW2oxRD0BeLT
+ LqsduGvXMPjJ5CB7bqlt+sAFiSua3idInHHK5bBrNAXxJjWuLjh+TtTGV5Ir5+nb4f0/0=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 From: Armin Wolf <W_Armin@gmx.de>
 
-Use devm_hwmon_device_register_with_info() and remove hwmon_dev
-from sch5627_data struct as it is not needed anymore.
+Calling remove() on error whould have only unregistered
+the watchdog, and since a failure in registering him
+is considered non-fatal and happens last, remove the
+error path and return the error codes directly.
 
 Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 =2D--
- drivers/hwmon/sch5627.c | 15 +++++----------
- 1 file changed, 5 insertions(+), 10 deletions(-)
+ drivers/hwmon/sch5627.c | 70 +++++++++++++++--------------------------
+ 1 file changed, 25 insertions(+), 45 deletions(-)
 
 diff --git a/drivers/hwmon/sch5627.c b/drivers/hwmon/sch5627.c
-index 8be339ae5f7d..ea042a6dae58 100644
+index ea042a6dae58..4324a5dbc968 100644
 =2D-- a/drivers/hwmon/sch5627.c
 +++ b/drivers/hwmon/sch5627.c
-@@ -64,7 +64,6 @@ static const char * const SCH5627_IN_LABELS[SCH5627_NO_I=
-N] =3D {
-
- struct sch5627_data {
- 	unsigned short addr;
--	struct device *hwmon_dev;
- 	struct sch56xx_watchdog_data *watchdog;
- 	u8 control;
- 	u8 temp_max[SCH5627_NO_TEMPS];
-@@ -365,15 +364,13 @@ static int sch5627_remove(struct platform_device *pd=
-ev)
- 	if (data->watchdog)
- 		sch56xx_watchdog_unregister(data->watchdog);
-
--	if (data->hwmon_dev)
--		hwmon_device_unregister(data->hwmon_dev);
--
- 	return 0;
- }
-
- static int sch5627_probe(struct platform_device *pdev)
- {
- 	struct sch5627_data *data;
-+	struct device *hwmon_dev;
- 	int err, build_code, build_id, hwmon_rev, val;
-
- 	data =3D devm_kzalloc(&pdev->dev, sizeof(struct sch5627_data),
-@@ -471,12 +468,10 @@ static int sch5627_probe(struct platform_device *pde=
+@@ -383,72 +383,58 @@ static int sch5627_probe(struct platform_device *pde=
 v)
- 	pr_info("firmware build: code 0x%02X, id 0x%04X, hwmon: rev 0x%02X\n",
- 		build_code, build_id, hwmon_rev);
+ 	platform_set_drvdata(pdev, data);
 
--	data->hwmon_dev =3D hwmon_device_register_with_info(&pdev->dev, DEVNAME,=
- data,
--							  &sch5627_chip_info,
--							  NULL);
--	if (IS_ERR(data->hwmon_dev)) {
--		err =3D PTR_ERR(data->hwmon_dev);
--		data->hwmon_dev =3D NULL;
-+	hwmon_dev =3D devm_hwmon_device_register_with_info(&pdev->dev, DEVNAME, =
-data,
-+							 &sch5627_chip_info, NULL);
-+	if (IS_ERR(hwmon_dev)) {
-+		err =3D PTR_ERR(hwmon_dev);
- 		goto error;
+ 	val =3D sch56xx_read_virtual_reg(data->addr, SCH5627_REG_HWMON_ID);
+-	if (val < 0) {
+-		err =3D val;
+-		goto error;
+-	}
++	if (val < 0)
++		return val;
++
+ 	if (val !=3D SCH5627_HWMON_ID) {
+ 		pr_err("invalid %s id: 0x%02X (expected 0x%02X)\n", "hwmon",
+ 		       val, SCH5627_HWMON_ID);
+-		err =3D -ENODEV;
+-		goto error;
++		return -ENODEV;
  	}
 
+ 	val =3D sch56xx_read_virtual_reg(data->addr, SCH5627_REG_COMPANY_ID);
+-	if (val < 0) {
+-		err =3D val;
+-		goto error;
+-	}
++	if (val < 0)
++		return val;
++
+ 	if (val !=3D SCH5627_COMPANY_ID) {
+ 		pr_err("invalid %s id: 0x%02X (expected 0x%02X)\n", "company",
+ 		       val, SCH5627_COMPANY_ID);
+-		err =3D -ENODEV;
+-		goto error;
++		return -ENODEV;
+ 	}
+
+ 	val =3D sch56xx_read_virtual_reg(data->addr, SCH5627_REG_PRIMARY_ID);
+-	if (val < 0) {
+-		err =3D val;
+-		goto error;
+-	}
++	if (val < 0)
++		return val;
++
+ 	if (val !=3D SCH5627_PRIMARY_ID) {
+ 		pr_err("invalid %s id: 0x%02X (expected 0x%02X)\n", "primary",
+ 		       val, SCH5627_PRIMARY_ID);
+-		err =3D -ENODEV;
+-		goto error;
++		return -ENODEV;
+ 	}
+
+ 	build_code =3D sch56xx_read_virtual_reg(data->addr,
+ 					      SCH5627_REG_BUILD_CODE);
+-	if (build_code < 0) {
+-		err =3D build_code;
+-		goto error;
+-	}
++	if (build_code < 0)
++		return build_code;
+
+ 	build_id =3D sch56xx_read_virtual_reg16(data->addr,
+ 					      SCH5627_REG_BUILD_ID);
+-	if (build_id < 0) {
+-		err =3D build_id;
+-		goto error;
+-	}
++	if (build_id < 0)
++		return build_id;
+
+ 	hwmon_rev =3D sch56xx_read_virtual_reg(data->addr,
+ 					     SCH5627_REG_HWMON_REV);
+-	if (hwmon_rev < 0) {
+-		err =3D hwmon_rev;
+-		goto error;
+-	}
++	if (hwmon_rev < 0)
++		return hwmon_rev;
+
+ 	val =3D sch56xx_read_virtual_reg(data->addr, SCH5627_REG_CTRL);
+-	if (val < 0) {
+-		err =3D val;
+-		goto error;
+-	}
++	if (val < 0)
++		return val;
++
+ 	data->control =3D val;
+ 	if (!(data->control & 0x01)) {
+ 		pr_err("hardware monitoring not enabled\n");
+-		err =3D -ENODEV;
+-		goto error;
++		return -ENODEV;
+ 	}
+ 	/* Trigger a Vbat voltage measurement, so that we get a valid reading
+ 	   the first time we read Vbat */
+@@ -462,7 +448,7 @@ static int sch5627_probe(struct platform_device *pdev)
+ 	 */
+ 	err =3D sch5627_read_limits(data);
+ 	if (err)
+-		goto error;
++		return err;
+
+ 	pr_info("found %s chip at %#hx\n", DEVNAME, data->addr);
+ 	pr_info("firmware build: code 0x%02X, id 0x%04X, hwmon: rev 0x%02X\n",
+@@ -470,10 +456,8 @@ static int sch5627_probe(struct platform_device *pdev=
+)
+
+ 	hwmon_dev =3D devm_hwmon_device_register_with_info(&pdev->dev, DEVNAME, =
+data,
+ 							 &sch5627_chip_info, NULL);
+-	if (IS_ERR(hwmon_dev)) {
+-		err =3D PTR_ERR(hwmon_dev);
+-		goto error;
+-	}
++	if (IS_ERR(hwmon_dev))
++		return PTR_ERR(hwmon_dev);
+
+ 	/* Note failing to register the watchdog is not a fatal error */
+ 	data->watchdog =3D sch56xx_watchdog_register(&pdev->dev, data->addr,
+@@ -481,10 +465,6 @@ static int sch5627_probe(struct platform_device *pdev=
+)
+ 			&data->update_lock, 1);
+
+ 	return 0;
+-
+-error:
+-	sch5627_remove(pdev);
+-	return err;
+ }
+
+ static struct platform_driver sch5627_driver =3D {
 =2D-
 2.20.1
 
