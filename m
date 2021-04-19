@@ -2,427 +2,124 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2987C433B4
-	for <linux-hwmon@archiver.kernel.org>; Mon, 19 Apr 2021 10:12:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E18DC433B4
+	for <linux-hwmon@archiver.kernel.org>; Mon, 19 Apr 2021 13:02:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C26D361157
-	for <linux-hwmon@archiver.kernel.org>; Mon, 19 Apr 2021 10:12:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 61AD66113C
+	for <linux-hwmon@archiver.kernel.org>; Mon, 19 Apr 2021 13:02:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238300AbhDSKN2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 19 Apr 2021 06:13:28 -0400
-Received: from smtp.outgoing.loopia.se ([93.188.3.37]:45229 "EHLO
-        smtp.outgoing.loopia.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbhDSKN2 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 19 Apr 2021 06:13:28 -0400
-Received: from s807.loopia.se (localhost [127.0.0.1])
-        by s807.loopia.se (Postfix) with ESMTP id 9E31624691C1
-        for <linux-hwmon@vger.kernel.org>; Mon, 19 Apr 2021 12:12:55 +0200 (CEST)
-Received: from s934.loopia.se (unknown [172.22.191.5])
-        by s807.loopia.se (Postfix) with ESMTP id 844512E2A551;
-        Mon, 19 Apr 2021 12:12:55 +0200 (CEST)
-Received: from s470.loopia.se (unknown [172.22.191.6])
-        by s934.loopia.se (Postfix) with ESMTP id 805527CE9D0;
-        Mon, 19 Apr 2021 12:12:55 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at amavis.loopia.se
-Received: from s630.loopia.se ([172.22.191.6])
-        by s470.loopia.se (s470.loopia.se [172.22.190.10]) (amavisd-new, port 10024)
-        with LMTP id q2XkIUKiOget; Mon, 19 Apr 2021 12:12:53 +0200 (CEST)
-X-Loopia-Auth: user
-X-Loopia-User: carl@hgsystem.se
-X-Loopia-Originating-IP: 155.4.131.157
-Received: from localhost.localdomain (h-155-4-131-157.NA.cust.bahnhof.se [155.4.131.157])
-        (Authenticated sender: carl@hgsystem.se)
-        by s630.loopia.se (Postfix) with ESMTPSA id 7E58D13B9437;
-        Mon, 19 Apr 2021 12:12:53 +0200 (CEST)
-From:   Erik Rosen <erik.rosen@metormote.com>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Erik Rosen <erik.rosen@metormote.com>
-Subject: [PATCH] hwmon: (pmbus/max15301) Add pmbus driver for MAX15301
-Date:   Mon, 19 Apr 2021 12:12:51 +0200
-Message-Id: <20210419101251.24840-1-erik.rosen@metormote.com>
-X-Mailer: git-send-email 2.11.0 (Apple Git-81)
+        id S232579AbhDSNDP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 19 Apr 2021 09:03:15 -0400
+Received: from mail-dm6nam10on2062.outbound.protection.outlook.com ([40.107.93.62]:42368
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232125AbhDSNDO (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 19 Apr 2021 09:03:14 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=n5qNhyPAB7erhS1q2DRRrCCBhTdX7x/WdC1QolVq5t+wuRc8cSDFaI3u+VnHEDmhWKgDh9KHrbl1J/nDXTdN6tXmY2vdWYy4e1uV/QZQBR7kEiOzTQSL0VNW3J7QtWOdhFv9ssYM5d9nO4SQU5GFOjBAk/0eDv2fEoCfCrJF0APt3d/hCN49g6e/JnfEWy9fomwFp9icVQ/ujMTRe2YZqXoBHy42JYmIlYLULZX8QspJnVT5qwwcqvk6rxP6wH5TP1HKMAFkeXwLDhMXIEdZVHz7bEsmn6cJzXMrjhHaa1WDAz2Z1TVvs1wZnjoslx/7Cmqr+Wpt2Sn/h3XU6HbJTw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=W71eNPJ+fxD6+j2rLA4PGRdQAhjTuwP2wqDpYlZhBoE=;
+ b=M1ySDun2W31diqQvQz56ullv5uBYAZAvHnJZFR5wonJ7oORmToTclHQvs7+2vwpWWXTuahtvNpb36yan51WzaggUrj2P54tjrgsOLIb2BxI5lKCojq97vL59MPsRuplaPx/uaCqX0p6d/1j2jkwy5wlUZso7qrsClaJXhOrTp7ZkLCcmGsi2KjhBrxX2wqLJ7Q9JEOfzkO+BrC7z/L3371o7MY0Fp+blNl7xO0E2i9oQD+I43K85EXR/I0z3LN27yu7QyM8vJmpKMf/67YQgRPDPgEoiOgPS02ufIoqUhAgS8tTLDHH1UL/cQPBLWdlyRrsko8l+5cbR6+KUXRYkeA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.112.34) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=W71eNPJ+fxD6+j2rLA4PGRdQAhjTuwP2wqDpYlZhBoE=;
+ b=dNdt3Q4SD9fwcwISHjQ5o4fHcuJuIK4IFqrvDXMEaoB0i1JfJ4quI7u8kTYYkmkcNCga6jEiivKFaG50zWxdYA5o6cfEss7YpBo03+3XJk3zeu2+XSXomKu3WQrmSg26JomZpojhMkcqQb3j92rPMKn4c+QmF8OoBebsQ9KYIfBNnLqtUBI8beHePOiDz7EaVLgR90c8UwLDb5GjHi++B5uE99UTPxIG+j9wnAUbaVBiHnd2zkp93AZyZmLuDh+2UfK+/BUQYeloB1vSz7pNF32uPRIcSkeCXDJyoLKXudBSHB1W5adM/JvG0q980xCO7grqARmCGuvAJj5ell8cYw==
+Received: from MW4PR03CA0331.namprd03.prod.outlook.com (2603:10b6:303:dc::6)
+ by DM8PR12MB5430.namprd12.prod.outlook.com (2603:10b6:8:28::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4042.16; Mon, 19 Apr 2021 13:02:44 +0000
+Received: from CO1NAM11FT065.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:dc:cafe::90) by MW4PR03CA0331.outlook.office365.com
+ (2603:10b6:303:dc::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4042.17 via Frontend
+ Transport; Mon, 19 Apr 2021 13:02:44 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.112.34)
+ smtp.mailfrom=nvidia.com; vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.112.34 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.112.34; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (216.228.112.34) by
+ CO1NAM11FT065.mail.protection.outlook.com (10.13.174.62) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4042.16 via Frontend Transport; Mon, 19 Apr 2021 13:02:43 +0000
+Received: from dev-r-vrt-156.mtr.labs.mlnx (172.20.145.6) by
+ HQMAIL107.nvidia.com (172.20.187.13) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 19 Apr 2021 13:02:40 +0000
+From:   Vadim Pasternak <vadimp@nvidia.com>
+To:     <linux@roeck-us.net>, <robh+dt@kernel.org>
+CC:     <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        "Vadim Pasternak" <vadimp@nvidia.com>
+Subject: [PATCH hwmon-next v2 0/3] Add support for MPS Multi-phase mp2888 controller
+Date:   Mon, 19 Apr 2021 16:02:18 +0300
+Message-ID: <20210419130221.3878289-1-vadimp@nvidia.com>
+X-Mailer: git-send-email 2.26.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.20.145.6]
+X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6ebc284f-3881-4465-15ec-08d903336c08
+X-MS-TrafficTypeDiagnostic: DM8PR12MB5430:
+X-Microsoft-Antispam-PRVS: <DM8PR12MB543091170E3C9CB50C4C6DFFAF499@DM8PR12MB5430.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2399;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: W7273jacISULqr0aRT1zy2RYz258feyRLbtWt/uKOjXqF+2qc2YnFUTOq5iakFfvm9GYjAFRTkVtifaafzcSmTwzkdX6DaAtz5Q1hP/OW24zhQnKjkRJ+Edl8PznkV6NWBYgNrtVliHh+oSvh0l2JYacjJ9YcDUtw70OOGet7NijX7EbKtN5hD4RJxO5DSohPFjDqyNj6rVZrA8ZUQ9N0NoMRum5XsjX8Sjj1AQLdz019kEZNVbBk6HVO1CWRdgbVygrOProdWXdzlWUWOf42cjBMtSFiBlTd8YXQiI2hCJksH7uCBoOe9vs9e7BRZ7xgNQXjCLhYUTJ94vkngXfl+1Xira3PkdmT6Xlwefrc+5MfMl45RrpTNjv+CemRY8M96TabdCLz1CDdJzLbxC1XmrkN9cI45Vro0+QBiPJU6obcsQNFcLqeOw6ZUaL1+7HGwUivxOAtvgerbXKFQoNOlmM7DTt9c9hzkUDsFj4RuJKMtdrCgOJbhJZ7dkMgbme7Oy8X0fdoZJn600gN3lFNDuFbT89ZJYxR8WOZCmC7UG2zxeJpAiLn6j1a21ESY+siaUT0LgL3rG9QjDfsgp3bhvpJnceWBOOmOj2a0PUkIco98soIjVLOXOkE6ZPu/4AAk8ZyzPs2u5+UXxbzVIbelzcBCJD/eFIfY5vnkn1D5s=
+X-Forefront-Antispam-Report: CIP:216.228.112.34;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:schybrid03.nvidia.com;CAT:NONE;SFS:(4636009)(39850400004)(136003)(376002)(396003)(346002)(46966006)(36840700001)(83380400001)(186003)(2616005)(36860700001)(36906005)(47076005)(426003)(316002)(478600001)(16526019)(4326008)(8676002)(107886003)(4744005)(82740400003)(82310400003)(7636003)(36756003)(54906003)(336012)(110136005)(356005)(1076003)(5660300002)(70586007)(6666004)(26005)(86362001)(8936002)(2906002)(70206006);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2021 13:02:43.9271
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6ebc284f-3881-4465-15ec-08d903336c08
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.112.34];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT065.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR12MB5430
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add pmbus driver support for Maxim MAX15301 InTune Automatically
-Compensated Digital PoL Controller with Driver and PMBus Telemetry
+Add driver and documentation for mp2888 device from Monolithic Power
+Systems, Inc. (MPS) vendor. This is a digital, multi-phase, pulse-width
+modulation controller.
 
-Even though the specification does not specifically mention it,
-extensive empirical testing has revealed that auto-detection of
-limit-registers will fail in a random fashion unless the delay
-parameter is set to above about 80us. The default delay is set
-to 100us to include some safety margin.
+Patch set includes:
+Patch #1 - increases maximum number of phases.
+Patch #2 - provides mp2888 driver and documentation.
+Patch #3 - providesy binding documentation.
 
-This patch is tested on a Flex BMR461 converter module.
+Vadim Pasternak (3):
+  hwmon: (pmbus) Increase maximum number of phases per page
+  hwmon: (pmbus) Add support for MPS Multi-phase mp2888 controller
+  dt-bindings: Add MP2888 voltage regulator device
 
-Signed-off-by: Erik Rosen <erik.rosen@metormote.com>
----
- Documentation/hwmon/index.rst    |   1 +
- Documentation/hwmon/max15301.rst |  87 +++++++++++++++
- MAINTAINERS                      |   7 ++
- drivers/hwmon/pmbus/Kconfig      |   9 ++
- drivers/hwmon/pmbus/Makefile     |   1 +
- drivers/hwmon/pmbus/max15301.c   | 183 +++++++++++++++++++++++++++++++
- 6 files changed, 288 insertions(+)
- create mode 100644 Documentation/hwmon/max15301.rst
- create mode 100644 drivers/hwmon/pmbus/max15301.c
+ .../devicetree/bindings/trivial-devices.yaml       |   2 +
+ Documentation/hwmon/mp2888.rst                     | 111 ++++++
+ drivers/hwmon/pmbus/Kconfig                        |   9 +
+ drivers/hwmon/pmbus/Makefile                       |   1 +
+ drivers/hwmon/pmbus/mp2888.c                       | 373 +++++++++++++++++++++
+ drivers/hwmon/pmbus/pmbus.h                        |   2 +-
+ 6 files changed, 497 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/hwmon/mp2888.rst
+ create mode 100644 drivers/hwmon/pmbus/mp2888.c
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index 8d5a2df1ecb6..6583a1ea76cb 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -112,6 +112,7 @@ Hardware Monitoring Kernel Drivers
-    ltc4260
-    ltc4261
-    max127
-+   max15301
-    max16064
-    max16065
-    max1619
-diff --git a/Documentation/hwmon/max15301.rst b/Documentation/hwmon/max15301.rst
-new file mode 100644
-index 000000000000..e3dc22fe1c6d
---- /dev/null
-+++ b/Documentation/hwmon/max15301.rst
-@@ -0,0 +1,87 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Kernel driver max15301
-+======================
-+
-+Supported chips:
-+
-+  * Maxim MAX15301
-+
-+    Prefix: 'max15301', 'bmr461'
-+
-+    Addresses scanned: -
-+
-+    Datasheet: https://datasheets.maximintegrated.com/en/ds/MAX15301.pdf
-+
-+Author: Erik Rosen <erik.rosen@metormote.com>
-+
-+
-+Description
-+-----------
-+
-+This driver supports hardware monitoring for Maxim MAX15301 controller chip and
-+compatible modules.
-+
-+The driver is a client driver to the core PMBus driver. Please see
-+Documentation/hwmon/pmbus.rst and Documentation.hwmon/pmbus-core for details
-+on PMBus client drivers.
-+
-+
-+Usage Notes
-+-----------
-+
-+This driver does not auto-detect devices. You will have to instantiate the
-+devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
-+details.
-+
-+
-+Platform data support
-+---------------------
-+
-+The driver supports standard PMBus driver platform data.
-+
-+
-+Module parameters
-+-----------------
-+
-+delay
-+-----
-+
-+The controller requires a minimum interval between I2C bus accesses.
-+The default interval is set to 100 us. For manual override, the driver
-+provides a writeable module parameter, 'delay', which can be used to
-+set the interval to a value between 0 and 65,535 microseconds.
-+
-+
-+Sysfs entries
-+-------------
-+
-+The following attributes are supported. Limits are read-write; all other
-+attributes are read-only.
-+
-+======================= ========================================================
-+in1_label		"vin"
-+in1_input		Measured input voltage.
-+in1_lcrit		Critical minimum input voltage.
-+in1_crit		Critical maximum input voltage.
-+in1_lcrit_alarm		Input voltage critical low alarm.
-+in1_crit_alarm		Input voltage critical high alarm.
-+
-+in2_label		"vout1"
-+in2_input		Measured output voltage.
-+in2_lcrit		Critical minimum output Voltage.
-+in2_crit		Critical maximum output voltage.
-+in2_lcrit_alarm		Critical output voltage critical low alarm.
-+in2_crit_alarm		Critical output voltage critical high alarm.
-+
-+curr1_label		"iout1"
-+curr1_input		Measured output current.
-+curr1_crit		Critical maximum output current.
-+curr1_crit_alarm	Output current critical high alarm.
-+
-+temp1_input		Measured maximum temperature of all phases.
-+temp1_max		Maximum temperature limit.
-+temp1_max_alarm		High temperature alarm.
-+temp1_crit		Critical maximum temperature limit.
-+temp1_crit_alarm	Critical maximum temperature alarm.
-+======================= ========================================================
-diff --git a/MAINTAINERS b/MAINTAINERS
-index aa84121c5611..de2ad7223055 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10790,6 +10790,13 @@ S:	Orphan
- F:	drivers/video/fbdev/matrox/matroxfb_*
- F:	include/uapi/linux/matroxfb.h
- 
-+MAX15301 DRIVER
-+M:	Daniel Nilsson <daniel.nilsson@flex.com>
-+L:	linux-hwmon@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/hwmon/max15301.rst
-+F:	drivers/hwmon/pmbus/max15301.c
-+
- MAX16065 HARDWARE MONITOR DRIVER
- M:	Guenter Roeck <linux@roeck-us.net>
- L:	linux-hwmon@vger.kernel.org
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index 32d2fc850621..5c9fb1a88cec 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -148,6 +148,15 @@ config SENSORS_LTC3815
- 	  This driver can also be built as a module. If so, the module will
- 	  be called ltc3815.
- 
-+config SENSORS_MAX15301
-+	tristate "Maxim MAX15301"
-+	help
-+	  If you say yes here you get hardware monitoring support for Maxim
-+	  MAX15301, as well as for Flex BMR461.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called max15301.
-+
- config SENSORS_MAX16064
- 	tristate "Maxim MAX16064"
- 	help
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index 6a4ba0fdc1db..6040bc8718e9 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -17,6 +17,7 @@ obj-$(CONFIG_SENSORS_ISL68137)	+= isl68137.o
- obj-$(CONFIG_SENSORS_LM25066)	+= lm25066.o
- obj-$(CONFIG_SENSORS_LTC2978)	+= ltc2978.o
- obj-$(CONFIG_SENSORS_LTC3815)	+= ltc3815.o
-+obj-$(CONFIG_SENSORS_MAX15301)	+= max15301.o
- obj-$(CONFIG_SENSORS_MAX16064)	+= max16064.o
- obj-$(CONFIG_SENSORS_MAX16601)	+= max16601.o
- obj-$(CONFIG_SENSORS_MAX20730)	+= max20730.o
-diff --git a/drivers/hwmon/pmbus/max15301.c b/drivers/hwmon/pmbus/max15301.c
-new file mode 100644
-index 000000000000..eb9b7a5ef052
---- /dev/null
-+++ b/drivers/hwmon/pmbus/max15301.c
-@@ -0,0 +1,183 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Hardware monitoring driver for Maxim MAX15301
-+ *
-+ * Copyright (c) 2021 Flextronics International Sweden AB
-+ */
-+
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/init.h>
-+#include <linux/err.h>
-+#include <linux/slab.h>
-+#include <linux/i2c.h>
-+#include <linux/ktime.h>
-+#include <linux/delay.h>
-+#include <linux/pmbus.h>
-+#include "pmbus.h"
-+
-+static const struct i2c_device_id max15301_id[] = {
-+	{"bmr461", 0},
-+	{"max15301", 0},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(i2c, max15301_id);
-+
-+struct max15301_data {
-+	int id;
-+	ktime_t access;		/* Chip access time */
-+	int delay;		/* Delay between chip accesses in us */
-+	struct pmbus_driver_info info;
-+};
-+
-+#define to_max15301_data(x)  container_of(x, struct max15301_data, info)
-+
-+#define MAX15301_WAIT_TIME		100	/* us	*/
-+
-+static ushort delay = MAX15301_WAIT_TIME;
-+module_param(delay, ushort, 0644);
-+MODULE_PARM_DESC(delay, "Delay between chip accesses in us");
-+
-+static struct max15301_data max15301_data = {
-+	.info = {
-+		.pages = 1,
-+		.func[0] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
-+			| PMBUS_HAVE_VIN | PMBUS_HAVE_STATUS_INPUT
-+			| PMBUS_HAVE_TEMP | PMBUS_HAVE_TEMP2
-+			| PMBUS_HAVE_STATUS_TEMP
-+			| PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT,
-+	}
-+};
-+
-+/* This chip needs a delay between accesses */
-+static inline void max15301_wait(const struct max15301_data *data)
-+{
-+	if (data->delay) {
-+		s64 delta = ktime_us_delta(ktime_get(), data->access);
-+
-+		if (delta < data->delay)
-+			udelay(data->delay - delta);
-+	}
-+}
-+
-+static int max15301_read_word_data(struct i2c_client *client, int page,
-+				   int phase, int reg)
-+{
-+	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-+	struct max15301_data *data = to_max15301_data(info);
-+	int ret;
-+
-+	if (page > 0)
-+		return -ENXIO;
-+
-+	if (reg >= PMBUS_VIRT_BASE)
-+		return -ENXIO;
-+
-+	max15301_wait(data);
-+	ret = pmbus_read_word_data(client, page, phase, reg);
-+	data->access = ktime_get();
-+
-+	return ret;
-+}
-+
-+static int max15301_read_byte_data(struct i2c_client *client, int page, int reg)
-+{
-+	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-+	struct max15301_data *data = to_max15301_data(info);
-+	int ret;
-+
-+	if (page > 0)
-+		return -ENXIO;
-+
-+	max15301_wait(data);
-+	ret = pmbus_read_byte_data(client, page, reg);
-+	data->access = ktime_get();
-+
-+	return ret;
-+}
-+
-+static int max15301_write_word_data(struct i2c_client *client, int page, int reg,
-+				    u16 word)
-+{
-+	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-+	struct max15301_data *data = to_max15301_data(info);
-+	int ret;
-+
-+	if (page > 0)
-+		return -ENXIO;
-+
-+	if (reg >= PMBUS_VIRT_BASE)
-+		return -ENXIO;
-+
-+	max15301_wait(data);
-+	ret = pmbus_write_word_data(client, page, reg, word);
-+	data->access = ktime_get();
-+
-+	return ret;
-+}
-+
-+static int max15301_write_byte(struct i2c_client *client, int page, u8 value)
-+{
-+	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-+	struct max15301_data *data = to_max15301_data(info);
-+	int ret;
-+
-+	if (page > 0)
-+		return -ENXIO;
-+
-+	max15301_wait(data);
-+	ret = pmbus_write_byte(client, page, value);
-+	data->access = ktime_get();
-+
-+	return ret;
-+}
-+
-+static int max15301_probe(struct i2c_client *client)
-+{
-+	int status;
-+	u8 device_id[I2C_SMBUS_BLOCK_MAX + 1];
-+	const struct i2c_device_id *mid;
-+	struct pmbus_driver_info *info = &max15301_data.info;
-+
-+	if (!i2c_check_functionality(client->adapter,
-+				     I2C_FUNC_SMBUS_READ_BYTE_DATA
-+				     | I2C_FUNC_SMBUS_BLOCK_DATA))
-+		return -ENODEV;
-+
-+	status = i2c_smbus_read_block_data(client, PMBUS_IC_DEVICE_ID, device_id);
-+	if (status < 0) {
-+		dev_err(&client->dev, "Failed to read Device Id\n");
-+		return status;
-+	}
-+	for (mid = max15301_id; mid->name[0]; mid++) {
-+		if (!strncasecmp(mid->name, device_id, strlen(mid->name)))
-+			break;
-+	}
-+	if (!mid->name[0]) {
-+		dev_err(&client->dev, "Unsupported device\n");
-+		return -ENODEV;
-+	}
-+
-+	max15301_data.delay = delay;
-+
-+	info->read_byte_data = max15301_read_byte_data;
-+	info->read_word_data = max15301_read_word_data;
-+	info->write_byte = max15301_write_byte;
-+	info->write_word_data = max15301_write_word_data;
-+
-+	return pmbus_do_probe(client, info);
-+}
-+
-+static struct i2c_driver max15301_driver = {
-+	.driver = {
-+		   .name = "max15301",
-+		   },
-+	.probe_new = max15301_probe,
-+	.id_table = max15301_id,
-+};
-+
-+module_i2c_driver(max15301_driver);
-+
-+MODULE_AUTHOR("Erik Rosen <erik.rosen@metormote.com>");
-+MODULE_DESCRIPTION("PMBus driver for Maxim MAX15301");
-+MODULE_LICENSE("GPL");
-
-base-commit: 1e28eed17697bcf343c6743f0028cc3b5dd88bf0
 -- 
-2.20.1
+2.11.0
 
