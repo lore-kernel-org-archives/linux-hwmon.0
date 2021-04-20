@@ -2,342 +2,671 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC0F0C433B4
-	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Apr 2021 10:52:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE472C433ED
+	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Apr 2021 11:20:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 93AF361264
-	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Apr 2021 10:52:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A11A1613AE
+	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Apr 2021 11:20:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231143AbhDTKwx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 20 Apr 2021 06:52:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59720 "EHLO
+        id S231589AbhDTLUw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 20 Apr 2021 07:20:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbhDTKww (ORCPT
+        with ESMTP id S231415AbhDTLUv (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 20 Apr 2021 06:52:52 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB05C06174A;
-        Tue, 20 Apr 2021 03:52:19 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id i16-20020a9d68d00000b0290286edfdfe9eso24769647oto.3;
-        Tue, 20 Apr 2021 03:52:19 -0700 (PDT)
+        Tue, 20 Apr 2021 07:20:51 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48DCC06174A
+        for <linux-hwmon@vger.kernel.org>; Tue, 20 Apr 2021 04:20:15 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id u80so5007424oia.0
+        for <linux-hwmon@vger.kernel.org>; Tue, 20 Apr 2021 04:20:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=sender:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=ar1NLP1PJ/JjP7pqq8Gu408Ftb6GKKkJF8IQieN/XQ0=;
-        b=eVdwF/+HgUoSK24gJnYJbT5+1XBFzzITbvdlC4ShKsCmqdWQj8tNAkxlkDZKVFtb/O
-         Y7t2XfCpyo0Y/wQnSBN6q81zQPCI1/mfVxChL+C2QvEaBdD/hgBMSeVsvP0a1YoOqD2z
-         XXAPF7whMeEYjNCBAWYPSGo/AOmUlkOMJw+azawjWm2XCmL+h6WUKte7LYz1cPLcrMIL
-         DYkJBdX4pgye/rbgn+R13DAIzUsLp6DoqUcHlscJYAgJsi0AwUAngUfsoigzrJOCGTPt
-         sGfgu4lc8QUx2UZ4DupplhhEY7RoglW5lqXyLMWjnZNTj2oGtKuKdqpwSIdQr3HkADM5
-         tXTA==
+        bh=0kaFm7WGB2MgXgMmoW8oG2Fo0EYSNymuO+zvk2mXq2E=;
+        b=rocaEDC5t57djeCVHxUIDnu36RO7PMtriVwpPPjnyz8zO01qWZFB0G7S9v5qObnawI
+         92ZbrlUmpWiPRjp+24EKFTKuIUZxueb8dI0320hkfdW4AQoOHgodJCcBHbXf1gThOy+r
+         H8cFE8s5+CQC0HE92rzW8hUY/Mlw5VMnkax0SJkCRsTj8p8b4ahkaby9XoGvI8VRo6uR
+         mLvNExW/sPHh74aW1+AzHcqn4e1DwYfVL2rWopXSDJTdoWsVjzMy6mxJ5MzEOwfWNcSg
+         qhCMN/W7QOmaSOTAw5IrmCKXd1WXA/7jN6CFTpx7BC1wliAB/hA7qA9sPJ4qb+Zoyf57
+         CZ6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=ar1NLP1PJ/JjP7pqq8Gu408Ftb6GKKkJF8IQieN/XQ0=;
-        b=Qu2O/zUTsAGhi5TGREnUunmDK343VD+9cN3LvYsd7houFkzSgeVF7waBmlPYxoZW07
-         O7f8TmtDwhwjhJ4LsRD3KGHNqKqh8Q9FCrVjyxy7Dbb2ClMD0+o9mn+aKoDxjXLt+kfQ
-         eiv2jF7igsObg9wDRRNE8ISJyIX3eTwyjb0lMPc2Vux1LZYuPQOQfLMxn4sJh8LNLI3O
-         rtZ8NTD4zg5tuNzn6H45ir2/4FiB+4ySygr/7zf0mQkJWaD1nQuSQ4qOgTQ9UHbOlpco
-         k/Ihmr5jXKgxz6hzlFHpC9fGJmS2ZHB60XGkHon1crIpOwdPAJAI+sh1aXTuv7z6hQq3
-         MEbg==
-X-Gm-Message-State: AOAM533xFc6nMXrBLJ5uPm7irXQd1dU/vjkan3jJ56v2LMMynpVwh48c
-        K13aEqb0yCzfF0yo+CIbdQQ=
-X-Google-Smtp-Source: ABdhPJz3XejbPUl+cy6OhXPqaz6SJ8sIqtfbHmIcZ9FAXPtMPCnDwSjp0FIXny3ibV/tpKUp7Gjc4g==
-X-Received: by 2002:a05:6830:1d98:: with SMTP id y24mr9647565oti.164.1618915939038;
-        Tue, 20 Apr 2021 03:52:19 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i9sm2202197oog.17.2021.04.20.03.52.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Apr 2021 03:52:18 -0700 (PDT)
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=0kaFm7WGB2MgXgMmoW8oG2Fo0EYSNymuO+zvk2mXq2E=;
+        b=sj2TDfpYcBP5i+z9DpQaixXe498vCrXNhp3Xai4So4Cdt6yJwDN0DluQ6SqV7hJ0CA
+         AHMuxTx6UXiUupsjWLswtiV/ckAGAfcwBHlsXUwHhOH6Qe74kmNb2m0sBFb1Z5VBR/a3
+         C1OLxJr6pPxeFKdyeKB/xDrrYuEIeycyUoqnJKcDdXj3hDEMqDVNK404o2zzAsH/n1Xi
+         X0bElcIGt3Q1gSi9DoZhrj1EJzR+u8rziTOBXJAe8VyE9AzP0k+/LcVICWhQlpSybh5o
+         51mHXEma80D0ZzvK5aLBr4/GzQf2dgL6fjKiyHmDH2SgXRTdb0NQ5rmUIWQfH5l6dH7T
+         Udcw==
+X-Gm-Message-State: AOAM5321hmjBrlPd8iqLmSkOtKs53B+ZU1LoqhD0hYFW7iWgM5L0MtrQ
+        pcvudN/52Bf9QiizCM/Yrc1q6xbgsBk=
+X-Google-Smtp-Source: ABdhPJxrN/8vsU7TYWvOPTnTzfci5nfJ5HocYZLXgqfH2DuPBK1bAQETu0Y3CdYdy9xkPVpoHekTTA==
+X-Received: by 2002:a05:6808:bcc:: with SMTP id o12mr2717692oik.93.1618917614583;
+        Tue, 20 Apr 2021 04:20:14 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a73sm2243801oib.23.2021.04.20.04.20.13
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 20 Apr 2021 04:20:14 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: Enabling pmbus power control
-To:     Zev Weiss <zev@bewilderbeest.net>
-Cc:     Mark Brown <broonie@kernel.org>, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org, Andrew Jeffery <andrew@aj.id.au>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
-References: <20210330112254.GB4976@sirena.org.uk>
- <YGNdoYq5lyERVGLO@hatter.bewilderbeest.net>
- <20210330174221.GJ4976@sirena.org.uk>
- <YGNmaNzWOYrJROvX@hatter.bewilderbeest.net>
- <20210330180200.GK4976@sirena.org.uk> <20210330193810.GA235990@roeck-us.net>
- <YH4ukR5egB2eG0Vo@hatter.bewilderbeest.net>
- <20210420033648.GA227111@roeck-us.net>
- <YH5rky8nA4nKAVdg@hatter.bewilderbeest.net>
- <9639fa33-01ca-9802-e745-5e3edb81e305@roeck-us.net>
- <YH59WOg0iKbz1d0l@hatter.bewilderbeest.net>
 From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <fe111c8a-9588-dbfb-624a-29bb3a5efe13@roeck-us.net>
-Date:   Tue, 20 Apr 2021 03:52:16 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Naveen Krishna Chatradhi <nchatrad@amd.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH] hwmon: Remove amd_energy driver
+Date:   Tue, 20 Apr 2021 04:20:11 -0700
+Message-Id: <20210420112011.158160-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <YH59WOg0iKbz1d0l@hatter.bewilderbeest.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/20/21 12:06 AM, Zev Weiss wrote:
-> On Tue, Apr 20, 2021 at 01:00:25AM CDT, Guenter Roeck wrote:
->> On 4/19/21 10:50 PM, Zev Weiss wrote:
->> [ ... ]
->>
->>> I had a glance at the enclosure driver; it looks pretty geared toward SES-like things (drivers/scsi/ses.c being its only usage I can see in the kernel at the moment) and while it could perhaps be pressed into working for this it seems like it would probably drag in a fair amount of boilerplate and result in a somewhat gratuitously confusing driver arrangement (calling the things involved in the cases we're looking at "enclosures" seems like a bit of a stretch).
->>>
->>> As an alternative, would something like the patch below be more along the lines of what you're suggesting?  And if so, would it make sense to generalize it into something like 'pmbus-switch.c' and add a PMBUS_HAVE_POWERSWITCH functionality bit or similar in the pmbus code instead of hardcoding it for only LM25066 support?
->>>
->>>
->>
->> No. Don't access pmbus functions from outside drivers/hwmon/pmbus.
->>
->> I used to be opposed to function export restrictions (aka export namespaces),
->> but you are making a good case that we need to introduce them for pmbus
->> functions.
->>
->> Guenter
-> 
-> Okay -- I figured that was likely to be frowned upon, but the alternative seemed to be effectively duplicating non-trivial chunks of the pmbus code.  However, upon realizing that the LM25066 doesn't actually require any of the paging work the generic pmbus code provides, I suppose it can actually be done with a simple smbus read & write.  Does this version look better?
-> 
+Commit 60268b0e8258 ("hwmon: (amd_energy) modify the visibility of
+the counters") restricted visibility of AMD energy counters to work
+around a side-channel attack using energy data to determine which
+instructions are executed. The attack is described in 'PLATYPUS:
+Software-based Power Side-Channel Attacks on x86'. It relies on quick
+and accurate energy readings.
 
-It is just getting worse and worse. You are re-implementing regulator
-support for the lm25066. The correct solution would be to implement
-regulator support in the lm25066 and use it from the secondary driver
-(which should be chip independent).
+This change made the counters provided by the amd_energy driver
+effectively unusable for non-provileged users. However, unprivileged
+read access is the whole point of hardware monitoring attributes.
 
-Guenter
+An attempt to remedy the situation by limiting and randomizing access
+to chip registers was rejected by AMD. Since the driver is for all
+practical purposes unusable, remove it.
 
-> 
-> Zev
-> 
-> 
-> From 1662e1c59c498ad6b208e6ab450bd467d71def34 Mon Sep 17 00:00:00 2001
-> From: Zev Weiss <zev@bewilderbeest.net>
-> Date: Wed, 31 Mar 2021 01:58:35 -0500
-> Subject: [PATCH] misc: add lm25066-switch driver
-> 
-> This driver allows an lm25066 to be switched on and off from userspace
-> via sysfs.
-> 
-> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
-> ---
->  drivers/misc/Kconfig          |   7 ++
->  drivers/misc/Makefile         |   1 +
->  drivers/misc/lm25066-switch.c | 126 ++++++++++++++++++++++++++++++++++
->  3 files changed, 134 insertions(+)
->  create mode 100644 drivers/misc/lm25066-switch.c
-> 
-> diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
-> index f532c59bb59b..384b6022ec15 100644
-> --- a/drivers/misc/Kconfig
-> +++ b/drivers/misc/Kconfig
-> @@ -445,6 +445,13 @@ config HISI_HIKEY_USB
->        switching between the dual-role USB-C port and the USB-A host ports
->        using only one USB controller.
->  
-> +config LM25066_SWITCH
-> +    tristate "LM25066 power switch support"
-> +    depends on OF && SENSORS_LM25066
-> +    help
-> +      This driver augments LM25066 hwmon support with power switch
-> +      functionality controllable from userspace via sysfs.
-> +
->  source "drivers/misc/c2port/Kconfig"
->  source "drivers/misc/eeprom/Kconfig"
->  source "drivers/misc/cb710/Kconfig"
-> diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
-> index 99b6f15a3c70..c948510d0cc9 100644
-> --- a/drivers/misc/Makefile
-> +++ b/drivers/misc/Makefile
-> @@ -56,3 +56,4 @@ obj-$(CONFIG_HABANA_AI)        += habanalabs/
->  obj-$(CONFIG_UACCE)        += uacce/
->  obj-$(CONFIG_XILINX_SDFEC)    += xilinx_sdfec.o
->  obj-$(CONFIG_HISI_HIKEY_USB)    += hisi_hikey_usb.o
-> +obj-$(CONFIG_LM25066_SWITCH)    += lm25066-switch.o
-> diff --git a/drivers/misc/lm25066-switch.c b/drivers/misc/lm25066-switch.c
-> new file mode 100644
-> index 000000000000..9adc67c320f9
-> --- /dev/null
-> +++ b/drivers/misc/lm25066-switch.c
-> @@ -0,0 +1,126 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * This module provides a thin wrapper around the lm25066 hwmon driver that
-> + * additionally exposes a userspace-controllable on/off power switch via
-> + * sysfs.
-> + *
-> + * Author: Zev Weiss <zweiss@equinix.com>
-> + *
-> + * Copyright (C) 2021 Equinix Services, Inc.
-> + */
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/i2c.h>
-> +#include <linux/platform_device.h>
-> +
-> +/*
-> + * The relevant PMBus command and data values for controlling the LM25066
-> + * power state.  Because it's not a paged device we skip the usual paging
-> + * business other PMBus devices might require.
-> + */
-> +#define CMD_OPERATION 0x01
-> +#define OPERATION_ON 0x80
-> +#define OPERATION_OFF 0x00
-> +
-> +static ssize_t switch_show_state(struct device *dev, struct device_attribute *attr,
-> +                                 char *buf)
-> +{
-> +    struct i2c_client *pmic = dev_get_drvdata(dev);
-> +    ssize_t ret = i2c_smbus_read_byte_data(pmic, CMD_OPERATION);
-> +    if (ret < 0)
-> +        return ret;
-> +
-> +    return sysfs_emit(buf, "%s\n", (ret & OPERATION_ON) ? "on" : "off");
-> +}
-> +
-> +static ssize_t switch_set_state(struct device *dev, struct device_attribute *attr,
-> +                                const char *buf, size_t count)
-> +{
-> +    int status;
-> +    u8 value;
-> +    struct i2c_client *pmic = dev_get_drvdata(dev);
-> +    if (sysfs_streq(buf, "on"))
-> +        value = OPERATION_ON;
-> +    else if (sysfs_streq(buf, "off"))
-> +        value = OPERATION_OFF;
-> +    else
-> +        return -EINVAL;
-> +    status = i2c_smbus_write_byte_data(pmic, CMD_OPERATION, value);
-> +    return status ? : count;
-> +}
-> +
-> +static DEVICE_ATTR(state, 0644, switch_show_state, switch_set_state);
-> +
-> +static struct attribute *attributes[] = {
-> +    &dev_attr_state.attr,
-> +    NULL,
-> +};
-> +
-> +static const struct attribute_group attr_group = {
-> +    .attrs = attributes,
-> +};
-> +
-> +static int lm25066_switch_probe(struct platform_device *pdev)
-> +{
-> +    int status;
-> +    struct device_node *np = pdev->dev.of_node;
-> +    struct device_node *pmic_np;
-> +    struct i2c_client *pmic;
-> +
-> +    pmic_np = of_parse_phandle(np, "pmic", 0);
-> +    if (!pmic_np) {
-> +        dev_err(&pdev->dev, "Cannot parse lm25066-switch pmic\n");
-> +        return -ENODEV;
-> +    }
-> +
-> +    if (!of_device_is_compatible(pmic_np, "lm25066")) {
-> +        dev_err(&pdev->dev, "lm25066-switch pmic not lm25066 compatible");
-> +        status = -ENODEV;
-> +        goto out;
-> +    }
-> +
-> +    pmic = of_find_i2c_device_by_node(pmic_np);
-> +    if (!pmic) {
-> +        status = -EPROBE_DEFER;
-> +        goto out;
-> +    }
-> +
-> +    platform_set_drvdata(pdev, pmic);
-> +
-> +    status = sysfs_create_group(&pdev->dev.kobj, &attr_group);
-> +
-> +out:
-> +    of_node_put(pmic_np);
-> +    return status;
-> +}
-> +
-> +static int lm25066_switch_remove(struct platform_device *pdev)
-> +{
-> +    struct i2c_client *pmic = platform_get_drvdata(pdev);
-> +
-> +    sysfs_remove_group(&pdev->dev.kobj, &attr_group);
-> +    put_device(&pmic->dev);
-> +
-> +    return 0;
-> +}
-> +
-> +static const struct of_device_id lm25066_switch_table[] = {
-> +    { .compatible = "lm25066-switch" },
-> +    { },
-> +};
-> +
-> +static struct platform_driver lm25066_switch_driver = {
-> +    .driver = {
-> +        .name = "lm25066-switch",
-> +        .of_match_table = lm25066_switch_table,
-> +    },
-> +    .probe = lm25066_switch_probe,
-> +    .remove = lm25066_switch_remove,
-> +};
-> +
-> +module_platform_driver(lm25066_switch_driver);
-> +
-> +MODULE_AUTHOR("Zev Weiss <zweiss@equinix.com>");
-> +MODULE_LICENSE("GPL");
-> +MODULE_DESCRIPTION("LM25066 power-switch driver");
+Cc: Naveen Krishna Chatradhi <nchatrad@amd.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+Note:
+    This submission supersedes the set of patches which was
+    limiting and randomizing RAPL register access.
+
+ Documentation/hwmon/amd_energy.rst | 119 ---------
+ Documentation/hwmon/index.rst      |   1 -
+ MAINTAINERS                        |   7 -
+ drivers/hwmon/Kconfig              |  10 -
+ drivers/hwmon/amd_energy.c         | 379 -----------------------------
+ 5 files changed, 516 deletions(-)
+ delete mode 100644 Documentation/hwmon/amd_energy.rst
+ delete mode 100644 drivers/hwmon/amd_energy.c
+
+diff --git a/Documentation/hwmon/amd_energy.rst b/Documentation/hwmon/amd_energy.rst
+deleted file mode 100644
+index 9d58cd5ee3da..000000000000
+--- a/Documentation/hwmon/amd_energy.rst
++++ /dev/null
+@@ -1,119 +0,0 @@
+-.. SPDX-License-Identifier: GPL-2.0
+-
+-Kernel driver amd_energy
+-==========================
+-
+-Supported chips:
+-
+-* AMD Family 17h Processors: Model 30h
+-
+-* AMD Family 19h Processors: Model 01h
+-
+-  Prefix: 'amd_energy'
+-
+-  Addresses used:  RAPL MSRs
+-
+-  Datasheets:
+-
+-  - Processor Programming Reference (PPR) for AMD Family 17h Model 01h, Revision B1 Processors
+-
+-	https://developer.amd.com/wp-content/resources/55570-B1_PUB.zip
+-
+-  - Preliminary Processor Programming Reference (PPR) for AMD Family 17h Model 31h, Revision B0 Processors
+-
+-	https://developer.amd.com/wp-content/resources/56176_ppr_Family_17h_Model_71h_B0_pub_Rev_3.06.zip
+-
+-Author: Naveen Krishna Chatradhi <nchatrad@amd.com>
+-
+-Description
+------------
+-
+-The Energy driver exposes the energy counters that are
+-reported via the Running Average Power Limit (RAPL)
+-Model-specific Registers (MSRs) via the hardware monitor
+-(HWMON) sysfs interface.
+-
+-1. Power, Energy and Time Units
+-   MSR_RAPL_POWER_UNIT/ C001_0299:
+-   shared with all cores in the socket
+-
+-2. Energy consumed by each Core
+-   MSR_CORE_ENERGY_STATUS/ C001_029A:
+-   32-bitRO, Accumulator, core-level power reporting
+-
+-3. Energy consumed by Socket
+-   MSR_PACKAGE_ENERGY_STATUS/ C001_029B:
+-   32-bitRO, Accumulator, socket-level power reporting,
+-   shared with all cores in socket
+-
+-These registers are updated every 1ms and cleared on
+-reset of the system.
+-
+-Note: If SMT is enabled, Linux enumerates all threads as cpus.
+-Since, the energy status registers are accessed at core level,
+-reading those registers from the sibling threads would result
+-in duplicate values. Hence, energy counter entries are not
+-populated for the siblings.
+-
+-Energy Caluclation
+-------------------
+-
+-Energy information (in Joules) is based on the multiplier,
+-1/2^ESU; where ESU is an unsigned integer read from
+-MSR_RAPL_POWER_UNIT register. Default value is 10000b,
+-indicating energy status unit is 15.3 micro-Joules increment.
+-
+-Reported values are scaled as per the formula
+-
+-scaled value = ((1/2^ESU) * (Raw value) * 1000000UL) in uJoules
+-
+-Users calculate power for a given domain by calculating
+-	dEnergy/dTime for that domain.
+-
+-Energy accumulation
+---------------------------
+-
+-Current, Socket energy status register is 32bit, assuming a 240W
+-2P system, the register would wrap around in
+-
+-	2^32*15.3 e-6/240 * 2 = 547.60833024 secs to wrap(~9 mins)
+-
+-The Core energy register may wrap around after several days.
+-
+-To improve the wrap around time, a kernel thread is implemented
+-to accumulate the socket energy counters and one core energy counter
+-per run to a respective 64-bit counter. The kernel thread starts
+-running during probe, wakes up every 100secs and stops running
+-when driver is removed.
+-
+-Frequency of the accumulator thread is set during the probe
+-based on the chosen energy unit resolution. For example
+-A. fine grain (1.625 micro J)
+-B. course grain (0.125 milli J)
+-
+-A socket and core energy read would return the current register
+-value added to the respective energy accumulator.
+-
+-Sysfs attributes
+-----------------
+-
+-=============== ========  =====================================
+-Attribute	Label	  Description
+-===============	========  =====================================
+-
+-* For index N between [1] and [nr_cpus]
+-
+-===============	========  ======================================
+-energy[N]_input EcoreX	  Core Energy   X = [0] to [nr_cpus - 1]
+-			  Measured input core energy
+-===============	========  ======================================
+-
+-* For N between [nr_cpus] and [nr_cpus + nr_socks]
+-
+-===============	========  ======================================
+-energy[N]_input EsocketX  Socket Energy X = [0] to [nr_socks -1]
+-			  Measured input socket energy
+-=============== ========  ======================================
+-
+-Note: To address CVE-2020-12912, the visibility of the energy[N]_input
+-attributes is restricted to owner and groups only.
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index 8d5a2df1ecb6..57e8c13a7e39 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -39,7 +39,6 @@ Hardware Monitoring Kernel Drivers
+    adt7475
+    aht10
+    amc6821
+-   amd_energy
+    asb100
+    asc7621
+    aspeed-pwm-tacho
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 9450e052f1b1..56a7c7518c18 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -870,13 +870,6 @@ S:	Supported
+ T:	git git://people.freedesktop.org/~agd5f/linux
+ F:	drivers/gpu/drm/amd/display/
+ 
+-AMD ENERGY DRIVER
+-M:	Naveen Krishna Chatradhi <nchatrad@amd.com>
+-L:	linux-hwmon@vger.kernel.org
+-S:	Maintained
+-F:	Documentation/hwmon/amd_energy.rst
+-F:	drivers/hwmon/amd_energy.c
+-
+ AMD FAM15H PROCESSOR POWER MONITORING DRIVER
+ M:	Huang Rui <ray.huang@amd.com>
+ L:	linux-hwmon@vger.kernel.org
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 54f04e61fb83..270dd8ff6965 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -321,16 +321,6 @@ config SENSORS_FAM15H_POWER
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called fam15h_power.
+ 
+-config SENSORS_AMD_ENERGY
+-	tristate "AMD RAPL MSR based Energy driver"
+-	depends on X86
+-	help
+-	  If you say yes here you get support for core and package energy
+-	  sensors, based on RAPL MSR for AMD family 17h and above CPUs.
+-
+-	  This driver can also be built as a module. If so, the module
+-	  will be called as amd_energy.
+-
+ config SENSORS_APPLESMC
+ 	tristate "Apple SMC (Motion sensor, light sensor, keyboard backlight)"
+ 	depends on INPUT && X86
+diff --git a/drivers/hwmon/amd_energy.c b/drivers/hwmon/amd_energy.c
+deleted file mode 100644
+index a86cc8d6d93d..000000000000
+--- a/drivers/hwmon/amd_energy.c
++++ /dev/null
+@@ -1,379 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-
+-/*
+- * Copyright (C) 2020 Advanced Micro Devices, Inc.
+- */
+-#include <asm/cpu_device_id.h>
+-
+-#include <linux/bits.h>
+-#include <linux/cpu.h>
+-#include <linux/cpumask.h>
+-#include <linux/delay.h>
+-#include <linux/device.h>
+-#include <linux/hwmon.h>
+-#include <linux/kernel.h>
+-#include <linux/kthread.h>
+-#include <linux/list.h>
+-#include <linux/module.h>
+-#include <linux/mutex.h>
+-#include <linux/processor.h>
+-#include <linux/platform_device.h>
+-#include <linux/sched.h>
+-#include <linux/slab.h>
+-#include <linux/topology.h>
+-#include <linux/types.h>
+-
+-#define DRVNAME			"amd_energy"
+-
+-#define ENERGY_PWR_UNIT_MSR	0xC0010299
+-#define ENERGY_CORE_MSR		0xC001029A
+-#define ENERGY_PKG_MSR		0xC001029B
+-
+-#define AMD_ENERGY_UNIT_MASK	0x01F00
+-#define AMD_ENERGY_MASK		0xFFFFFFFF
+-
+-struct sensor_accumulator {
+-	u64 energy_ctr;
+-	u64 prev_value;
+-};
+-
+-struct amd_energy_data {
+-	struct hwmon_channel_info energy_info;
+-	const struct hwmon_channel_info *info[2];
+-	struct hwmon_chip_info chip;
+-	struct task_struct *wrap_accumulate;
+-	/* Lock around the accumulator */
+-	struct mutex lock;
+-	/* An accumulator for each core and socket */
+-	struct sensor_accumulator *accums;
+-	unsigned int timeout_ms;
+-	/* Energy Status Units */
+-	int energy_units;
+-	int nr_cpus;
+-	int nr_socks;
+-	int core_id;
+-	char (*label)[10];
+-};
+-
+-static int amd_energy_read_labels(struct device *dev,
+-				  enum hwmon_sensor_types type,
+-				  u32 attr, int channel,
+-				  const char **str)
+-{
+-	struct amd_energy_data *data = dev_get_drvdata(dev);
+-
+-	*str = data->label[channel];
+-	return 0;
+-}
+-
+-static void get_energy_units(struct amd_energy_data *data)
+-{
+-	u64 rapl_units;
+-
+-	rdmsrl_safe(ENERGY_PWR_UNIT_MSR, &rapl_units);
+-	data->energy_units = (rapl_units & AMD_ENERGY_UNIT_MASK) >> 8;
+-}
+-
+-static void accumulate_delta(struct amd_energy_data *data,
+-			     int channel, int cpu, u32 reg)
+-{
+-	struct sensor_accumulator *accum;
+-	u64 input;
+-
+-	mutex_lock(&data->lock);
+-	rdmsrl_safe_on_cpu(cpu, reg, &input);
+-	input &= AMD_ENERGY_MASK;
+-
+-	accum = &data->accums[channel];
+-	if (input >= accum->prev_value)
+-		accum->energy_ctr +=
+-			input - accum->prev_value;
+-	else
+-		accum->energy_ctr += UINT_MAX -
+-			accum->prev_value + input;
+-
+-	accum->prev_value = input;
+-	mutex_unlock(&data->lock);
+-}
+-
+-static void read_accumulate(struct amd_energy_data *data)
+-{
+-	int sock, scpu, cpu;
+-
+-	for (sock = 0; sock < data->nr_socks; sock++) {
+-		scpu = cpumask_first_and(cpu_online_mask,
+-					 cpumask_of_node(sock));
+-
+-		accumulate_delta(data, data->nr_cpus + sock,
+-				 scpu, ENERGY_PKG_MSR);
+-	}
+-
+-	if (data->core_id >= data->nr_cpus)
+-		data->core_id = 0;
+-
+-	cpu = data->core_id;
+-	if (cpu_online(cpu))
+-		accumulate_delta(data, cpu, cpu, ENERGY_CORE_MSR);
+-
+-	data->core_id++;
+-}
+-
+-static void amd_add_delta(struct amd_energy_data *data, int ch,
+-			  int cpu, long *val, u32 reg)
+-{
+-	struct sensor_accumulator *accum;
+-	u64 input;
+-
+-	mutex_lock(&data->lock);
+-	rdmsrl_safe_on_cpu(cpu, reg, &input);
+-	input &= AMD_ENERGY_MASK;
+-
+-	accum = &data->accums[ch];
+-	if (input >= accum->prev_value)
+-		input += accum->energy_ctr -
+-				accum->prev_value;
+-	else
+-		input += UINT_MAX - accum->prev_value +
+-				accum->energy_ctr;
+-
+-	/* Energy consumed = (1/(2^ESU) * RAW * 1000000UL) μJoules */
+-	*val = div64_ul(input * 1000000UL, BIT(data->energy_units));
+-
+-	mutex_unlock(&data->lock);
+-}
+-
+-static int amd_energy_read(struct device *dev,
+-			   enum hwmon_sensor_types type,
+-			   u32 attr, int channel, long *val)
+-{
+-	struct amd_energy_data *data = dev_get_drvdata(dev);
+-	u32 reg;
+-	int cpu;
+-
+-	if (channel >= data->nr_cpus) {
+-		cpu = cpumask_first_and(cpu_online_mask,
+-					cpumask_of_node
+-					(channel - data->nr_cpus));
+-		reg = ENERGY_PKG_MSR;
+-	} else {
+-		cpu = channel;
+-		if (!cpu_online(cpu))
+-			return -ENODEV;
+-
+-		reg = ENERGY_CORE_MSR;
+-	}
+-	amd_add_delta(data, channel, cpu, val, reg);
+-
+-	return 0;
+-}
+-
+-static umode_t amd_energy_is_visible(const void *_data,
+-				     enum hwmon_sensor_types type,
+-				     u32 attr, int channel)
+-{
+-	return 0440;
+-}
+-
+-static int energy_accumulator(void *p)
+-{
+-	struct amd_energy_data *data = (struct amd_energy_data *)p;
+-	unsigned int timeout = data->timeout_ms;
+-
+-	while (!kthread_should_stop()) {
+-		/*
+-		 * Ignoring the conditions such as
+-		 * cpu being offline or rdmsr failure
+-		 */
+-		read_accumulate(data);
+-
+-		set_current_state(TASK_INTERRUPTIBLE);
+-		if (kthread_should_stop())
+-			break;
+-
+-		schedule_timeout(msecs_to_jiffies(timeout));
+-	}
+-	return 0;
+-}
+-
+-static const struct hwmon_ops amd_energy_ops = {
+-	.is_visible = amd_energy_is_visible,
+-	.read = amd_energy_read,
+-	.read_string = amd_energy_read_labels,
+-};
+-
+-static int amd_create_sensor(struct device *dev,
+-			     struct amd_energy_data *data,
+-			     enum hwmon_sensor_types type, u32 config)
+-{
+-	struct hwmon_channel_info *info = &data->energy_info;
+-	struct sensor_accumulator *accums;
+-	int i, num_siblings, cpus, sockets;
+-	u32 *s_config;
+-	char (*label_l)[10];
+-
+-	/* Identify the number of siblings per core */
+-	num_siblings = ((cpuid_ebx(0x8000001e) >> 8) & 0xff) + 1;
+-
+-	sockets = num_possible_nodes();
+-
+-	/*
+-	 * Energy counter register is accessed at core level.
+-	 * Hence, filterout the siblings.
+-	 */
+-	cpus = num_present_cpus() / num_siblings;
+-
+-	s_config = devm_kcalloc(dev, cpus + sockets + 1,
+-				sizeof(u32), GFP_KERNEL);
+-	if (!s_config)
+-		return -ENOMEM;
+-
+-	accums = devm_kcalloc(dev, cpus + sockets,
+-			      sizeof(struct sensor_accumulator),
+-			      GFP_KERNEL);
+-	if (!accums)
+-		return -ENOMEM;
+-
+-	label_l = devm_kcalloc(dev, cpus + sockets,
+-			       sizeof(*label_l), GFP_KERNEL);
+-	if (!label_l)
+-		return -ENOMEM;
+-
+-	info->type = type;
+-	info->config = s_config;
+-
+-	data->nr_cpus = cpus;
+-	data->nr_socks = sockets;
+-	data->accums = accums;
+-	data->label = label_l;
+-
+-	for (i = 0; i < cpus + sockets; i++) {
+-		s_config[i] = config;
+-		if (i < cpus)
+-			scnprintf(label_l[i], 10, "Ecore%03u", i);
+-		else
+-			scnprintf(label_l[i], 10, "Esocket%u", (i - cpus));
+-	}
+-
+-	s_config[i] = 0;
+-	return 0;
+-}
+-
+-static int amd_energy_probe(struct platform_device *pdev)
+-{
+-	struct device *hwmon_dev;
+-	struct amd_energy_data *data;
+-	struct device *dev = &pdev->dev;
+-	int ret;
+-
+-	data = devm_kzalloc(dev,
+-			    sizeof(struct amd_energy_data), GFP_KERNEL);
+-	if (!data)
+-		return -ENOMEM;
+-
+-	data->chip.ops = &amd_energy_ops;
+-	data->chip.info = data->info;
+-
+-	dev_set_drvdata(dev, data);
+-	/* Populate per-core energy reporting */
+-	data->info[0] = &data->energy_info;
+-	ret = amd_create_sensor(dev, data, hwmon_energy,
+-				HWMON_E_INPUT | HWMON_E_LABEL);
+-	if (ret)
+-		return ret;
+-
+-	mutex_init(&data->lock);
+-	get_energy_units(data);
+-
+-	hwmon_dev = devm_hwmon_device_register_with_info(dev, DRVNAME,
+-							 data,
+-							 &data->chip,
+-							 NULL);
+-	if (IS_ERR(hwmon_dev))
+-		return PTR_ERR(hwmon_dev);
+-
+-	/*
+-	 * On a system with peak wattage of 250W
+-	 * timeout = 2 ^ 32 / 2 ^ energy_units / 250 secs
+-	 */
+-	data->timeout_ms = 1000 *
+-			   BIT(min(28, 31 - data->energy_units)) / 250;
+-
+-	data->wrap_accumulate = kthread_run(energy_accumulator, data,
+-					    "%s", dev_name(hwmon_dev));
+-	return PTR_ERR_OR_ZERO(data->wrap_accumulate);
+-}
+-
+-static int amd_energy_remove(struct platform_device *pdev)
+-{
+-	struct amd_energy_data *data = dev_get_drvdata(&pdev->dev);
+-
+-	if (data && data->wrap_accumulate)
+-		kthread_stop(data->wrap_accumulate);
+-
+-	return 0;
+-}
+-
+-static const struct platform_device_id amd_energy_ids[] = {
+-	{ .name = DRVNAME, },
+-	{}
+-};
+-MODULE_DEVICE_TABLE(platform, amd_energy_ids);
+-
+-static struct platform_driver amd_energy_driver = {
+-	.probe = amd_energy_probe,
+-	.remove	= amd_energy_remove,
+-	.id_table = amd_energy_ids,
+-	.driver = {
+-		.name = DRVNAME,
+-	},
+-};
+-
+-static struct platform_device *amd_energy_platdev;
+-
+-static const struct x86_cpu_id cpu_ids[] __initconst = {
+-	X86_MATCH_VENDOR_FAM_MODEL(AMD, 0x17, 0x31, NULL),
+-	X86_MATCH_VENDOR_FAM_MODEL(AMD, 0x19, 0x01, NULL),
+-	X86_MATCH_VENDOR_FAM_MODEL(AMD, 0x19, 0x30, NULL),
+-	{}
+-};
+-MODULE_DEVICE_TABLE(x86cpu, cpu_ids);
+-
+-static int __init amd_energy_init(void)
+-{
+-	int ret;
+-
+-	if (!x86_match_cpu(cpu_ids))
+-		return -ENODEV;
+-
+-	ret = platform_driver_register(&amd_energy_driver);
+-	if (ret)
+-		return ret;
+-
+-	amd_energy_platdev = platform_device_alloc(DRVNAME, 0);
+-	if (!amd_energy_platdev) {
+-		platform_driver_unregister(&amd_energy_driver);
+-		return -ENOMEM;
+-	}
+-
+-	ret = platform_device_add(amd_energy_platdev);
+-	if (ret) {
+-		platform_device_put(amd_energy_platdev);
+-		platform_driver_unregister(&amd_energy_driver);
+-		return ret;
+-	}
+-
+-	return ret;
+-}
+-
+-static void __exit amd_energy_exit(void)
+-{
+-	platform_device_unregister(amd_energy_platdev);
+-	platform_driver_unregister(&amd_energy_driver);
+-}
+-
+-module_init(amd_energy_init);
+-module_exit(amd_energy_exit);
+-
+-MODULE_DESCRIPTION("Driver for AMD Energy reporting from RAPL MSR via HWMON interface");
+-MODULE_AUTHOR("Naveen Krishna Chatradhi <nchatrad@amd.com>");
+-MODULE_LICENSE("GPL");
+-- 
+2.17.1
 
