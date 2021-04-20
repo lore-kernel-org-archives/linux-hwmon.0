@@ -2,70 +2,79 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B208C433B4
-	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Apr 2021 10:49:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC0F0C433B4
+	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Apr 2021 10:52:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D11B4613B4
-	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Apr 2021 10:49:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 93AF361264
+	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Apr 2021 10:52:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231917AbhDTKtp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 20 Apr 2021 06:49:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58756 "EHLO
+        id S231143AbhDTKwx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 20 Apr 2021 06:52:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232084AbhDTKsk (ORCPT
+        with ESMTP id S230290AbhDTKww (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 20 Apr 2021 06:48:40 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E41B1C06138B
-        for <linux-hwmon@vger.kernel.org>; Tue, 20 Apr 2021 03:48:08 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id k14-20020a9d7dce0000b02901b866632f29so35388416otn.1
-        for <linux-hwmon@vger.kernel.org>; Tue, 20 Apr 2021 03:48:08 -0700 (PDT)
+        Tue, 20 Apr 2021 06:52:52 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB05C06174A;
+        Tue, 20 Apr 2021 03:52:19 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id i16-20020a9d68d00000b0290286edfdfe9eso24769647oto.3;
+        Tue, 20 Apr 2021 03:52:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=93GDcGi3nrbuzVrz7Y2dZjfFSsFp4gPL2SPB0tPSRKA=;
-        b=KecBLrz5vT+BU7MjDHvFjEWT+KmQXuVMALfHKaCHGxBpLa5IRSTdwKKf/yTfCe/m29
-         ePoW2BNz8eBVKujMBrhRyt/z1A8gEF/GRUeEatbCiNRaxr8wKwnd0loOJOzKFKtiJ8Qv
-         HUatc7f9hjtOkZ2iO890Czi8PXik4Nu2bh5nobjPQBudaK0v//XKuwsSYPIoAv8EGAlL
-         HT5D/46sgQnZAABWuHD+H07zxqqOyqmdkHA5NqEQlrE7hq2Suqz4tkb3wHo4DpOz5iES
-         41qgra3PhRT7OUZYjUS+iqzPegtfP9sF6Wt3BAm6YfZNSyDmbnK+3409nO+X+nfxxlRx
-         BdEA==
+        bh=ar1NLP1PJ/JjP7pqq8Gu408Ftb6GKKkJF8IQieN/XQ0=;
+        b=eVdwF/+HgUoSK24gJnYJbT5+1XBFzzITbvdlC4ShKsCmqdWQj8tNAkxlkDZKVFtb/O
+         Y7t2XfCpyo0Y/wQnSBN6q81zQPCI1/mfVxChL+C2QvEaBdD/hgBMSeVsvP0a1YoOqD2z
+         XXAPF7whMeEYjNCBAWYPSGo/AOmUlkOMJw+azawjWm2XCmL+h6WUKte7LYz1cPLcrMIL
+         DYkJBdX4pgye/rbgn+R13DAIzUsLp6DoqUcHlscJYAgJsi0AwUAngUfsoigzrJOCGTPt
+         sGfgu4lc8QUx2UZ4DupplhhEY7RoglW5lqXyLMWjnZNTj2oGtKuKdqpwSIdQr3HkADM5
+         tXTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=93GDcGi3nrbuzVrz7Y2dZjfFSsFp4gPL2SPB0tPSRKA=;
-        b=ko9rvsqgTB5woiFQfW0EYEq7ZMi1poFN63YSZ7qFwqWC5Sq979S7aYHCmLM5bFFzy5
-         OnuVFgBfmbbGXR4k841S8EcTlX5+159IeX23ZXVIgZ9MuJQB2xnLfS5Dq+hOpEbGMutQ
-         CsNEVs8AfMuEUF/1kqMo+xhwuLoRcrVUXHPwOP3egDHengt2CIhv3zrbxZpsniu/uxI0
-         1exZVD/fGPFudGv5sOiNFvziV8253a9RwYgmnlOsVCnZNZTPu6zw8p7lDytlS6TrWN3e
-         RnU2Z2IG5Lj2HGwySVidKyItVbX9t6Xz/MuKVi65P8DMDEUCbEVdo21bxWQGYtFI6l8g
-         Z2lA==
-X-Gm-Message-State: AOAM532QXbisbD3sB7DXXqvkz23Gybkg/17uMfJ1wexduPvmYcOcGXOK
-        TUi2Nq2VCfQL7X25+pJBu8k=
-X-Google-Smtp-Source: ABdhPJxj0P4NSRMqLuInusaLGlkz7A/8FN5eBHZb5Jtl5RvUjjLwtOjVMIxPBLSenoKvgSVNx+9Mvg==
-X-Received: by 2002:a9d:77c3:: with SMTP id w3mr18250404otl.43.1618915688339;
-        Tue, 20 Apr 2021 03:48:08 -0700 (PDT)
+        bh=ar1NLP1PJ/JjP7pqq8Gu408Ftb6GKKkJF8IQieN/XQ0=;
+        b=Qu2O/zUTsAGhi5TGREnUunmDK343VD+9cN3LvYsd7houFkzSgeVF7waBmlPYxoZW07
+         O7f8TmtDwhwjhJ4LsRD3KGHNqKqh8Q9FCrVjyxy7Dbb2ClMD0+o9mn+aKoDxjXLt+kfQ
+         eiv2jF7igsObg9wDRRNE8ISJyIX3eTwyjb0lMPc2Vux1LZYuPQOQfLMxn4sJh8LNLI3O
+         rtZ8NTD4zg5tuNzn6H45ir2/4FiB+4ySygr/7zf0mQkJWaD1nQuSQ4qOgTQ9UHbOlpco
+         k/Ihmr5jXKgxz6hzlFHpC9fGJmS2ZHB60XGkHon1crIpOwdPAJAI+sh1aXTuv7z6hQq3
+         MEbg==
+X-Gm-Message-State: AOAM533xFc6nMXrBLJ5uPm7irXQd1dU/vjkan3jJ56v2LMMynpVwh48c
+        K13aEqb0yCzfF0yo+CIbdQQ=
+X-Google-Smtp-Source: ABdhPJz3XejbPUl+cy6OhXPqaz6SJ8sIqtfbHmIcZ9FAXPtMPCnDwSjp0FIXny3ibV/tpKUp7Gjc4g==
+X-Received: by 2002:a05:6830:1d98:: with SMTP id y24mr9647565oti.164.1618915939038;
+        Tue, 20 Apr 2021 03:52:19 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j4sm3763051oiw.0.2021.04.20.03.48.06
+        by smtp.gmail.com with ESMTPSA id i9sm2202197oog.17.2021.04.20.03.52.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Apr 2021 03:48:07 -0700 (PDT)
+        Tue, 20 Apr 2021 03:52:18 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: Question: Driver support for SHT4X temperature and humidity
- sensor
-To:     Navin Sankar <navinsankar28@gmail.com>
-Cc:     linux-hwmon@vger.kernel.org, jdelvare@suse.com
-References: <CAPYOJtUuoWN33hLc+2u78tbp1y5svkfwtSnH-UZdbpV+cV78yw@mail.gmail.com>
- <a9dacd1c-0e88-408b-03f6-396c5a30db23@roeck-us.net>
- <CAPYOJtV_5OqmwU=MXq7atmFL85Jg=p0ekvOFfN9yiaKroUXjmQ@mail.gmail.com>
+Subject: Re: Enabling pmbus power control
+To:     Zev Weiss <zev@bewilderbeest.net>
+Cc:     Mark Brown <broonie@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org, Andrew Jeffery <andrew@aj.id.au>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
+References: <20210330112254.GB4976@sirena.org.uk>
+ <YGNdoYq5lyERVGLO@hatter.bewilderbeest.net>
+ <20210330174221.GJ4976@sirena.org.uk>
+ <YGNmaNzWOYrJROvX@hatter.bewilderbeest.net>
+ <20210330180200.GK4976@sirena.org.uk> <20210330193810.GA235990@roeck-us.net>
+ <YH4ukR5egB2eG0Vo@hatter.bewilderbeest.net>
+ <20210420033648.GA227111@roeck-us.net>
+ <YH5rky8nA4nKAVdg@hatter.bewilderbeest.net>
+ <9639fa33-01ca-9802-e745-5e3edb81e305@roeck-us.net>
+ <YH59WOg0iKbz1d0l@hatter.bewilderbeest.net>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -110,12 +119,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <cdc5c98b-c8dc-48d8-4029-a8b3ed406cb4@roeck-us.net>
-Date:   Tue, 20 Apr 2021 03:48:05 -0700
+Message-ID: <fe111c8a-9588-dbfb-624a-29bb3a5efe13@roeck-us.net>
+Date:   Tue, 20 Apr 2021 03:52:16 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <CAPYOJtV_5OqmwU=MXq7atmFL85Jg=p0ekvOFfN9yiaKroUXjmQ@mail.gmail.com>
+In-Reply-To: <YH59WOg0iKbz1d0l@hatter.bewilderbeest.net>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -123,33 +132,212 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/20/21 12:14 AM, Navin Sankar wrote:
-> On Tue, Apr 20, 2021 at 11:57 AM Guenter Roeck <linux@roeck-us.net <mailto:linux@roeck-us.net>> wrote:
+On 4/20/21 12:06 AM, Zev Weiss wrote:
+> On Tue, Apr 20, 2021 at 01:00:25AM CDT, Guenter Roeck wrote:
+>> On 4/19/21 10:50 PM, Zev Weiss wrote:
+>> [ ... ]
+>>
+>>> I had a glance at the enclosure driver; it looks pretty geared toward SES-like things (drivers/scsi/ses.c being its only usage I can see in the kernel at the moment) and while it could perhaps be pressed into working for this it seems like it would probably drag in a fair amount of boilerplate and result in a somewhat gratuitously confusing driver arrangement (calling the things involved in the cases we're looking at "enclosures" seems like a bit of a stretch).
+>>>
+>>> As an alternative, would something like the patch below be more along the lines of what you're suggesting?  And if so, would it make sense to generalize it into something like 'pmbus-switch.c' and add a PMBUS_HAVE_POWERSWITCH functionality bit or similar in the pmbus code instead of hardcoding it for only LM25066 support?
+>>>
+>>>
+>>
+>> No. Don't access pmbus functions from outside drivers/hwmon/pmbus.
+>>
+>> I used to be opposed to function export restrictions (aka export namespaces),
+>> but you are making a good case that we need to introduce them for pmbus
+>> functions.
+>>
+>> Guenter
 > 
->     On 4/19/21 9:43 PM, Navin Sankar wrote:
->     > Dear Maintainer,
->     >
->     >     I am trying to add driver support for sensirion based temperature & humidity sensor sht4x.
->     >
->     > I am bit confused, where to add support for this driver. Either in iio subsys or hwmon subsys?
->     >
-> 
->     The sht[23] sensor drivers are in hwmon, so I'd normally suggest
->     a hwmon driver.
-> 
->     Having said that: What is the cause of your confusion ?
-> 
->     Guenter
-> 
-> 
-> Thank you for the clarification.
-> 
-> I thought the convention is to use iio for new temperature and humidity sensor.
+> Okay -- I figured that was likely to be frowned upon, but the alternative seemed to be effectively duplicating non-trivial chunks of the pmbus code.  However, upon realizing that the LM25066 doesn't actually require any of the paging work the generic pmbus code provides, I suppose it can actually be done with a simple smbus read & write.  Does this version look better?
 > 
 
-I didn't know that; that decision was made without consulting hardware
-monitoring maintainers. Can you point me to the relevant exchanges or
-documentation ?
+It is just getting worse and worse. You are re-implementing regulator
+support for the lm25066. The correct solution would be to implement
+regulator support in the lm25066 and use it from the secondary driver
+(which should be chip independent).
 
-Thanks,
 Guenter
+
+> 
+> Zev
+> 
+> 
+> From 1662e1c59c498ad6b208e6ab450bd467d71def34 Mon Sep 17 00:00:00 2001
+> From: Zev Weiss <zev@bewilderbeest.net>
+> Date: Wed, 31 Mar 2021 01:58:35 -0500
+> Subject: [PATCH] misc: add lm25066-switch driver
+> 
+> This driver allows an lm25066 to be switched on and off from userspace
+> via sysfs.
+> 
+> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+> ---
+>  drivers/misc/Kconfig          |   7 ++
+>  drivers/misc/Makefile         |   1 +
+>  drivers/misc/lm25066-switch.c | 126 ++++++++++++++++++++++++++++++++++
+>  3 files changed, 134 insertions(+)
+>  create mode 100644 drivers/misc/lm25066-switch.c
+> 
+> diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
+> index f532c59bb59b..384b6022ec15 100644
+> --- a/drivers/misc/Kconfig
+> +++ b/drivers/misc/Kconfig
+> @@ -445,6 +445,13 @@ config HISI_HIKEY_USB
+>        switching between the dual-role USB-C port and the USB-A host ports
+>        using only one USB controller.
+>  
+> +config LM25066_SWITCH
+> +    tristate "LM25066 power switch support"
+> +    depends on OF && SENSORS_LM25066
+> +    help
+> +      This driver augments LM25066 hwmon support with power switch
+> +      functionality controllable from userspace via sysfs.
+> +
+>  source "drivers/misc/c2port/Kconfig"
+>  source "drivers/misc/eeprom/Kconfig"
+>  source "drivers/misc/cb710/Kconfig"
+> diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
+> index 99b6f15a3c70..c948510d0cc9 100644
+> --- a/drivers/misc/Makefile
+> +++ b/drivers/misc/Makefile
+> @@ -56,3 +56,4 @@ obj-$(CONFIG_HABANA_AI)        += habanalabs/
+>  obj-$(CONFIG_UACCE)        += uacce/
+>  obj-$(CONFIG_XILINX_SDFEC)    += xilinx_sdfec.o
+>  obj-$(CONFIG_HISI_HIKEY_USB)    += hisi_hikey_usb.o
+> +obj-$(CONFIG_LM25066_SWITCH)    += lm25066-switch.o
+> diff --git a/drivers/misc/lm25066-switch.c b/drivers/misc/lm25066-switch.c
+> new file mode 100644
+> index 000000000000..9adc67c320f9
+> --- /dev/null
+> +++ b/drivers/misc/lm25066-switch.c
+> @@ -0,0 +1,126 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * This module provides a thin wrapper around the lm25066 hwmon driver that
+> + * additionally exposes a userspace-controllable on/off power switch via
+> + * sysfs.
+> + *
+> + * Author: Zev Weiss <zweiss@equinix.com>
+> + *
+> + * Copyright (C) 2021 Equinix Services, Inc.
+> + */
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/i2c.h>
+> +#include <linux/platform_device.h>
+> +
+> +/*
+> + * The relevant PMBus command and data values for controlling the LM25066
+> + * power state.  Because it's not a paged device we skip the usual paging
+> + * business other PMBus devices might require.
+> + */
+> +#define CMD_OPERATION 0x01
+> +#define OPERATION_ON 0x80
+> +#define OPERATION_OFF 0x00
+> +
+> +static ssize_t switch_show_state(struct device *dev, struct device_attribute *attr,
+> +                                 char *buf)
+> +{
+> +    struct i2c_client *pmic = dev_get_drvdata(dev);
+> +    ssize_t ret = i2c_smbus_read_byte_data(pmic, CMD_OPERATION);
+> +    if (ret < 0)
+> +        return ret;
+> +
+> +    return sysfs_emit(buf, "%s\n", (ret & OPERATION_ON) ? "on" : "off");
+> +}
+> +
+> +static ssize_t switch_set_state(struct device *dev, struct device_attribute *attr,
+> +                                const char *buf, size_t count)
+> +{
+> +    int status;
+> +    u8 value;
+> +    struct i2c_client *pmic = dev_get_drvdata(dev);
+> +    if (sysfs_streq(buf, "on"))
+> +        value = OPERATION_ON;
+> +    else if (sysfs_streq(buf, "off"))
+> +        value = OPERATION_OFF;
+> +    else
+> +        return -EINVAL;
+> +    status = i2c_smbus_write_byte_data(pmic, CMD_OPERATION, value);
+> +    return status ? : count;
+> +}
+> +
+> +static DEVICE_ATTR(state, 0644, switch_show_state, switch_set_state);
+> +
+> +static struct attribute *attributes[] = {
+> +    &dev_attr_state.attr,
+> +    NULL,
+> +};
+> +
+> +static const struct attribute_group attr_group = {
+> +    .attrs = attributes,
+> +};
+> +
+> +static int lm25066_switch_probe(struct platform_device *pdev)
+> +{
+> +    int status;
+> +    struct device_node *np = pdev->dev.of_node;
+> +    struct device_node *pmic_np;
+> +    struct i2c_client *pmic;
+> +
+> +    pmic_np = of_parse_phandle(np, "pmic", 0);
+> +    if (!pmic_np) {
+> +        dev_err(&pdev->dev, "Cannot parse lm25066-switch pmic\n");
+> +        return -ENODEV;
+> +    }
+> +
+> +    if (!of_device_is_compatible(pmic_np, "lm25066")) {
+> +        dev_err(&pdev->dev, "lm25066-switch pmic not lm25066 compatible");
+> +        status = -ENODEV;
+> +        goto out;
+> +    }
+> +
+> +    pmic = of_find_i2c_device_by_node(pmic_np);
+> +    if (!pmic) {
+> +        status = -EPROBE_DEFER;
+> +        goto out;
+> +    }
+> +
+> +    platform_set_drvdata(pdev, pmic);
+> +
+> +    status = sysfs_create_group(&pdev->dev.kobj, &attr_group);
+> +
+> +out:
+> +    of_node_put(pmic_np);
+> +    return status;
+> +}
+> +
+> +static int lm25066_switch_remove(struct platform_device *pdev)
+> +{
+> +    struct i2c_client *pmic = platform_get_drvdata(pdev);
+> +
+> +    sysfs_remove_group(&pdev->dev.kobj, &attr_group);
+> +    put_device(&pmic->dev);
+> +
+> +    return 0;
+> +}
+> +
+> +static const struct of_device_id lm25066_switch_table[] = {
+> +    { .compatible = "lm25066-switch" },
+> +    { },
+> +};
+> +
+> +static struct platform_driver lm25066_switch_driver = {
+> +    .driver = {
+> +        .name = "lm25066-switch",
+> +        .of_match_table = lm25066_switch_table,
+> +    },
+> +    .probe = lm25066_switch_probe,
+> +    .remove = lm25066_switch_remove,
+> +};
+> +
+> +module_platform_driver(lm25066_switch_driver);
+> +
+> +MODULE_AUTHOR("Zev Weiss <zweiss@equinix.com>");
+> +MODULE_LICENSE("GPL");
+> +MODULE_DESCRIPTION("LM25066 power-switch driver");
+
