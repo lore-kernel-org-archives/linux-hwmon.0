@@ -2,335 +2,265 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 949C5C433ED
-	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Apr 2021 05:50:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50E52C433ED
+	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Apr 2021 06:09:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 728BA613B2
-	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Apr 2021 05:50:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 11E0560FEA
+	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Apr 2021 06:09:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbhDTFuq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 20 Apr 2021 01:50:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49796 "EHLO
+        id S229577AbhDTGJi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 20 Apr 2021 02:09:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbhDTFup (ORCPT
+        with ESMTP id S230037AbhDTGJg (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 20 Apr 2021 01:50:45 -0400
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4801BC06174A;
-        Mon, 19 Apr 2021 22:50:14 -0700 (PDT)
-Received: from hatter.bewilderbeest.net (unknown [IPv6:2600:6c44:7f:ba20::7c6])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 23C1B1D2;
-        Mon, 19 Apr 2021 22:50:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1618897813;
-        bh=piKGRFQQ1+WMq7lkA3F/USBJvd80lNz4YwCXkXdkzgc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CjAFdpdsxM2Ja4itF9J7Tb9EMQkfwHp5CPXzF7E+EA+Rc3V0IYi0JruZoL187OiJ4
-         tXuKr3xDi80b3CB2s97Uwh9NgxcRDmddC8Czo1ghYQ6yS0iTAwIXk3+4NvLvu0Do5Z
-         T4l81ESl3HT1ahhrJvJmDJA6dj1J4GkkjVLPwNQk=
-Date:   Tue, 20 Apr 2021 00:50:11 -0500
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Mark Brown <broonie@kernel.org>, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org, Andrew Jeffery <andrew@aj.id.au>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
-Subject: Re: Enabling pmbus power control
-Message-ID: <YH5rky8nA4nKAVdg@hatter.bewilderbeest.net>
-References: <YGLepYLvtlO6Ikzs@hatter.bewilderbeest.net>
- <5105ada1-643a-8e58-a52d-d3c8dbef86b9@roeck-us.net>
- <20210330112254.GB4976@sirena.org.uk>
- <YGNdoYq5lyERVGLO@hatter.bewilderbeest.net>
- <20210330174221.GJ4976@sirena.org.uk>
- <YGNmaNzWOYrJROvX@hatter.bewilderbeest.net>
- <20210330180200.GK4976@sirena.org.uk>
- <20210330193810.GA235990@roeck-us.net>
- <YH4ukR5egB2eG0Vo@hatter.bewilderbeest.net>
- <20210420033648.GA227111@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20210420033648.GA227111@roeck-us.net>
+        Tue, 20 Apr 2021 02:09:36 -0400
+Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD4A3C061763
+        for <linux-hwmon@vger.kernel.org>; Mon, 19 Apr 2021 23:09:04 -0700 (PDT)
+Received: by mail-oo1-xc30.google.com with SMTP id c6-20020a4aacc60000b02901e6260b12e2so5760952oon.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 19 Apr 2021 23:09:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id;
+        bh=DxS2T6SCOzKw3P1jhRjh2EcCf6lyiDck+j5B0ooO0TE=;
+        b=lZ1qT4xzaIjzFrzlm5r0mxj1mbqWnDRhzSU2nCbuehXdBWuqM7GwzyrMqjml7uspWI
+         gA5+DJFIw8RWgwwrHS/z/zmvews5Pz08SDt9zZpTV/D83dyOnc3ym+pHRipp6jMB2gQ7
+         cG2QkLMuN+KTMo9/CGawpKwV1FkeAS4Hwz24+gjv2oDX0TFoVPTLCrLta/Ab8T9DQejR
+         NgYMFyeqsqa7Ebth533s+8x8yhU+CxALnozFQ0NoWc6LWpYqC6zJHx+I0mcBb30t6i2Z
+         VXpsZrycW8d7E3NwTyx+A81PyBkpyRMmi0TFGO37lqMhcSL4Y+AocvqGPNE/yGizlrTv
+         ydwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
+        bh=DxS2T6SCOzKw3P1jhRjh2EcCf6lyiDck+j5B0ooO0TE=;
+        b=OH7fvm40evaHSplZrfY4NmBp4NFHuWUqnhS/gYn0xF1wykTiofwGBnOgBSKD2eky+x
+         n3QYxOp5K8UNUNJXAa6nK+GxPa7nv9W1J0EdpIaxmKrGpLXi+R65Tkn6ZFAIVSovR/gW
+         jMya8Xct2HD1ULBRXq9TpR6kL+svdwmanx9tkzMUz9FPeP76ounrRSQ8DW8cMWJGuMwY
+         oIFxJEOh6Od3PNBmJTsKhHN4ww7xTQtPZ0gascYE8ZOl562eZh/l5/7cF4EsEW2NUAu1
+         gdiMBnvcSj/3g8wBDsz4L2/IP3vt8rMlkAYYsTk96YCcHKy83uI7Bv1/73MQ6d5iq6WA
+         V+4w==
+X-Gm-Message-State: AOAM5309cwbxFJoG5Nmk2Xwr7DDD6voD/x0tVbU3ToUPCGuNQWjA8KbG
+        xrtgKlD7PBAui1dxie7U9c65oEVZEzQ=
+X-Google-Smtp-Source: ABdhPJykaKio7nCBEJAaAqd2HMR98e5gNAdyWqnifZUD+3+VGvOKZVegVA0DFXfruT/USBLMvIyYtg==
+X-Received: by 2002:a4a:d80e:: with SMTP id f14mr13012746oov.54.1618898943952;
+        Mon, 19 Apr 2021 23:09:03 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d7sm37421oib.49.2021.04.19.23.09.03
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 19 Apr 2021 23:09:03 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH] hwmon: (pmbus) Introduce PMBUS symbol namespace
+Date:   Mon, 19 Apr 2021 23:09:01 -0700
+Message-Id: <20210420060901.179467-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, Apr 19, 2021 at 10:36:48PM CDT, Guenter Roeck wrote:
->On Mon, Apr 19, 2021 at 08:29:53PM -0500, Zev Weiss wrote:
->> On Tue, Mar 30, 2021 at 02:38:10PM CDT, Guenter Roeck wrote:
->> > On Tue, Mar 30, 2021 at 07:02:00PM +0100, Mark Brown wrote:
->> > > On Tue, Mar 30, 2021 at 12:56:56PM -0500, Zev Weiss wrote:
->> > >
->> > > > Okay, to expand a bit on the description in my initial message -- we've
->> > > > got a single chassis with multiple server boards and a single manager board
->> > > > that handles, among other things, power control for the servers.
->> > > > The manager board has one LM25066 for each attached server, which acts as
->> > > > the "power switch" for that server.  There thus really isn't any driver to
->> > > > speak of for the downstream device.
->> > >
->> > > This sounds like you need a driver representing those server boards (or
->> > > the slots they plug into perhaps) that represents everything about those
->> > > boards to userspace, including power switching.  I don't see why you
->> > > wouldn't have a driver for that - it's a thing that physically exists
->> > > and clearly has some software control, and you'd presumably also expect
->> > > to represent some labelling about the slot as well.
->> >
->> > Absolutely agree.
->> >
->> > Thanks,
->> > Guenter
->>
->> Hi Guenter, Mark,
->>
->> I wanted to return to this to try to explain why structuring the kernel
->> support for this in a way that's specific to the device behind the PMIC
->> seems like an awkward fit to me, and ultimately kind of artificial.
->>
->> In the system I described, the manager board with the LM25066 devices is its
->> own little self-contained BMC system running its own Linux kernel (though
->> "BMC" is perhaps a slightly misleading term because there's no host system
->> that it manages).  The PMICs are really the only relevant connection it has
->> to the servers it controls power for -- they have their own dedicated local
->> BMCs on board as well doing all the usual BMC tasks.  A hypothetical
->> dedicated driver for this on the manager board wouldn't have any other
->> hardware to touch aside from the pmbus interface of the LM25066 itself, so
->> calling it a server board driver seems pretty arbitrary -- and in fact the
->> same system also has another LM25066 that controls the power supply to the
->> chassis cooling fans (a totally different downstream device, but one that
->> would be equally well-served by the same software).
->>
->> More recently, another system has entered the picture for us that might
->> illustrate it more starkly -- the Delta Open19 power shelf [0] supported by
->> a recent code release from LinkedIn [1].  This is a rackmount power supply
->
->All I can see is that this code is a mess.
->
->> with fifty outputs, each independently switchable via an LM25066 attached to
->> an on-board BMC-style management controller (though again, no host system
->> involved).  We (Equinix Metal) are interested in porting a modern OpenBMC to
->> it to replace the dated, crufty, pre-Linux-Foundation version of OpenBMC it
->> currently runs (as found in the linked repo).  The exact nature of the
->> devices powered by its outputs is well outside the scope of the firmware
->> running on that controller (it could be any arbitrary thing that runs on
->> 12VDC), but we still want to be able to both (a) retrieve per-output
->> voltage/current/power readings as provided by the existing LM25066 hwmon
->> support, and (b) control the on/off state of those outputs from userspace.
->>
->> Given the array of possible use-cases, an approach of adding power-switch
->> functionality to the existing LM25066 support seems like the most obvious
->> way to support this, so I'm hoping to see if I can get some idea of what an
->> acceptable implementation of that might look like.
->>
->
->Sorry, that is simply a no-go for the LM25066 driver. I mentioned it before,
->and it is still true: The hwmon subsystem is not in the business of power
->control.
->
->Have you looked into enclosures (drivers/misc/enclosure.c) ? Maybe that
->or something similar could be used for your purposes.
->
->Thanks,
->Guenter
+Exported pmbus symbols are only supposed to be used from PMBus code.
+Introduce PMBUS symbol namespace to prevent misuse from other code.
 
-I had a glance at the enclosure driver; it looks pretty geared toward 
-SES-like things (drivers/scsi/ses.c being its only usage I can see in 
-the kernel at the moment) and while it could perhaps be pressed into 
-working for this it seems like it would probably drag in a fair amount 
-of boilerplate and result in a somewhat gratuitously confusing driver 
-arrangement (calling the things involved in the cases we're looking at 
-"enclosures" seems like a bit of a stretch).
-
-As an alternative, would something like the patch below be more along 
-the lines of what you're suggesting?  And if so, would it make sense to 
-generalize it into something like 'pmbus-switch.c' and add a 
-PMBUS_HAVE_POWERSWITCH functionality bit or similar in the pmbus code 
-instead of hardcoding it for only LM25066 support?
-
-
-
-Thanks,
-Zev
-
-
- From f4c0a3637371d69a414b6fb882497d22e5de3ba0 Mon Sep 17 00:00:00 2001
-From: Zev Weiss <zev@bewilderbeest.net>
-Date: Wed, 31 Mar 2021 01:58:35 -0500
-Subject: [PATCH] misc: add lm25066-switch driver
-
-This driver allows an lm25066 to be switched on and off from userspace
-via sysfs.
-
-Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
-  drivers/misc/Kconfig          |   7 ++
-  drivers/misc/Makefile         |   1 +
-  drivers/misc/lm25066-switch.c | 120 ++++++++++++++++++++++++++++++++++
-  3 files changed, 128 insertions(+)
-  create mode 100644 drivers/misc/lm25066-switch.c
+ drivers/hwmon/pmbus/Makefile     |  2 ++
+ drivers/hwmon/pmbus/pmbus_core.c | 38 ++++++++++++++++----------------
+ 2 files changed, 21 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
-index f532c59bb59b..384b6022ec15 100644
---- a/drivers/misc/Kconfig
-+++ b/drivers/misc/Kconfig
-@@ -445,6 +445,13 @@ config HISI_HIKEY_USB
-  	  switching between the dual-role USB-C port and the USB-A host ports
-  	  using only one USB controller.
-  
-+config LM25066_SWITCH
-+	tristate "LM25066 power switch support"
-+	depends on OF && SENSORS_LM25066
-+	help
-+	  This driver augments LM25066 hwmon support with power switch
-+	  functionality controllable from userspace via sysfs.
+diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+index f8dcc27cd56a..ef99c855e405 100644
+--- a/drivers/hwmon/pmbus/Makefile
++++ b/drivers/hwmon/pmbus/Makefile
+@@ -3,6 +3,8 @@
+ # Makefile for PMBus chip drivers.
+ #
+ 
++ccflags-y += -DDEFAULT_SYMBOL_NAMESPACE=PMBUS
 +
-  source "drivers/misc/c2port/Kconfig"
-  source "drivers/misc/eeprom/Kconfig"
-  source "drivers/misc/cb710/Kconfig"
-diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
-index 99b6f15a3c70..c948510d0cc9 100644
---- a/drivers/misc/Makefile
-+++ b/drivers/misc/Makefile
-@@ -56,3 +56,4 @@ obj-$(CONFIG_HABANA_AI)		+= habanalabs/
-  obj-$(CONFIG_UACCE)		+= uacce/
-  obj-$(CONFIG_XILINX_SDFEC)	+= xilinx_sdfec.o
-  obj-$(CONFIG_HISI_HIKEY_USB)	+= hisi_hikey_usb.o
-+obj-$(CONFIG_LM25066_SWITCH)	+= lm25066-switch.o
-diff --git a/drivers/misc/lm25066-switch.c b/drivers/misc/lm25066-switch.c
-new file mode 100644
-index 000000000000..85f3677dc277
---- /dev/null
-+++ b/drivers/misc/lm25066-switch.c
-@@ -0,0 +1,120 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * This module provides a thin wrapper around the lm25066 hwmon driver that
-+ * additionally exposes a userspace-controllable on/off power switch via
-+ * sysfs.
-+ *
-+ * Author: Zev Weiss <zweiss@equinix.com>
-+ *
-+ * Copyright (C) 2021 Equinix Services, Inc.
-+ */
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/i2c.h>
-+#include <linux/platform_device.h>
-+
-+#include "../hwmon/pmbus/pmbus.h"
-+
-+static ssize_t switch_show_state(struct device *dev, struct device_attribute *attr,
-+                                 char *buf)
-+{
-+	struct i2c_client *pmic = dev_get_drvdata(dev);
-+	ssize_t ret = pmbus_read_byte_data(pmic, 0, PMBUS_OPERATION);
-+	if (ret < 0)
-+		return ret;
-+
-+	return sysfs_emit(buf, "%s\n",
-+	                  (ret & PB_OPERATION_CONTROL_ON) ? "on" : "off");
-+}
-+
-+static ssize_t switch_set_state(struct device *dev, struct device_attribute *attr,
-+                                const char *buf, size_t count)
-+{
-+	int state, status;
-+	struct i2c_client *pmic = dev_get_drvdata(dev);
-+	if (sysfs_streq(buf, "on"))
-+		state = PB_OPERATION_CONTROL_ON;
-+	else if (sysfs_streq(buf, "off"))
-+		state = 0;
-+	else
-+		return -EINVAL;
-+	status = pmbus_update_byte_data(pmic, 0, PMBUS_OPERATION,
-+	                                PB_OPERATION_CONTROL_ON, state);
-+	return status ? : count;
-+}
-+
-+static DEVICE_ATTR(state, 0644, switch_show_state, switch_set_state);
-+
-+static struct attribute *attributes[] = {
-+	&dev_attr_state.attr,
-+	NULL,
-+};
-+
-+static const struct attribute_group attr_group = {
-+	.attrs = attributes,
-+};
-+
-+static int lm25066_switch_probe(struct platform_device *pdev)
-+{
-+	int status;
-+	struct device_node *np = pdev->dev.of_node;
-+	struct device_node *pmic_np;
-+	struct i2c_client *pmic;
-+
-+	pmic_np = of_parse_phandle(np, "pmic", 0);
-+	if (!pmic_np) {
-+		dev_err(&pdev->dev, "Cannot parse lm25066-switch pmic\n");
-+		return -ENODEV;
-+	}
-+
-+	if (!of_device_is_compatible(pmic_np, "lm25066")) {
-+		dev_err(&pdev->dev, "lm25066-switch pmic not lm25066 compatible");
-+		status = -ENODEV;
-+		goto out;
-+	}
-+
-+	pmic = of_find_i2c_device_by_node(pmic_np);
-+	if (!pmic) {
-+		status = -EPROBE_DEFER;
-+		goto out;
-+	}
-+
-+	platform_set_drvdata(pdev, pmic);
-+
-+	status = sysfs_create_group(&pdev->dev.kobj, &attr_group);
-+
-+out:
-+	of_node_put(pmic_np);
-+	return status;
-+}
-+
-+static int lm25066_switch_remove(struct platform_device *pdev)
-+{
-+	struct i2c_client *pmic = platform_get_drvdata(pdev);
-+
-+	sysfs_remove_group(&pdev->dev.kobj, &attr_group);
-+	put_device(&pmic->dev);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id lm25066_switch_table[] = {
-+	{ .compatible = "lm25066-switch" },
-+	{ },
-+};
-+
-+static struct platform_driver lm25066_switch_driver = {
-+	.driver = {
-+		.name = "lm25066-switch",
-+		.of_match_table = lm25066_switch_table,
-+	},
-+	.probe = lm25066_switch_probe,
-+	.remove = lm25066_switch_remove,
-+};
-+
-+module_platform_driver(lm25066_switch_driver);
-+
-+MODULE_AUTHOR("Zev Weiss <zweiss@equinix.com>");
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("LM25066 power-switch driver");
+ obj-$(CONFIG_PMBUS)		+= pmbus_core.o
+ obj-$(CONFIG_SENSORS_PMBUS)	+= pmbus.o
+ obj-$(CONFIG_SENSORS_ADM1266)	+= adm1266.o
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index e9e6a47f3bf7..bbd745178147 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -139,7 +139,7 @@ void pmbus_clear_cache(struct i2c_client *client)
+ 	for (sensor = data->sensors; sensor; sensor = sensor->next)
+ 		sensor->data = -ENODATA;
+ }
+-EXPORT_SYMBOL_GPL(pmbus_clear_cache);
++EXPORT_SYMBOL_NS_GPL(pmbus_clear_cache, PMBUS);
+ 
+ void pmbus_set_update(struct i2c_client *client, u8 reg, bool update)
+ {
+@@ -150,7 +150,7 @@ void pmbus_set_update(struct i2c_client *client, u8 reg, bool update)
+ 		if (sensor->reg == reg)
+ 			sensor->update = update;
+ }
+-EXPORT_SYMBOL_GPL(pmbus_set_update);
++EXPORT_SYMBOL_NS_GPL(pmbus_set_update, PMBUS);
+ 
+ int pmbus_set_page(struct i2c_client *client, int page, int phase)
+ {
+@@ -186,7 +186,7 @@ int pmbus_set_page(struct i2c_client *client, int page, int phase)
+ 
+ 	return 0;
+ }
+-EXPORT_SYMBOL_GPL(pmbus_set_page);
++EXPORT_SYMBOL_NS_GPL(pmbus_set_page, PMBUS);
+ 
+ int pmbus_write_byte(struct i2c_client *client, int page, u8 value)
+ {
+@@ -198,7 +198,7 @@ int pmbus_write_byte(struct i2c_client *client, int page, u8 value)
+ 
+ 	return i2c_smbus_write_byte(client, value);
+ }
+-EXPORT_SYMBOL_GPL(pmbus_write_byte);
++EXPORT_SYMBOL_NS_GPL(pmbus_write_byte, PMBUS);
+ 
+ /*
+  * _pmbus_write_byte() is similar to pmbus_write_byte(), but checks if
+@@ -229,7 +229,7 @@ int pmbus_write_word_data(struct i2c_client *client, int page, u8 reg,
+ 
+ 	return i2c_smbus_write_word_data(client, reg, word);
+ }
+-EXPORT_SYMBOL_GPL(pmbus_write_word_data);
++EXPORT_SYMBOL_NS_GPL(pmbus_write_word_data, PMBUS);
+ 
+ 
+ static int pmbus_write_virt_reg(struct i2c_client *client, int page, int reg,
+@@ -299,7 +299,7 @@ int pmbus_update_fan(struct i2c_client *client, int page, int id,
+ 	return _pmbus_write_word_data(client, page,
+ 				      pmbus_fan_command_registers[id], command);
+ }
+-EXPORT_SYMBOL_GPL(pmbus_update_fan);
++EXPORT_SYMBOL_NS_GPL(pmbus_update_fan, PMBUS);
+ 
+ int pmbus_read_word_data(struct i2c_client *client, int page, int phase, u8 reg)
+ {
+@@ -311,7 +311,7 @@ int pmbus_read_word_data(struct i2c_client *client, int page, int phase, u8 reg)
+ 
+ 	return i2c_smbus_read_word_data(client, reg);
+ }
+-EXPORT_SYMBOL_GPL(pmbus_read_word_data);
++EXPORT_SYMBOL_NS_GPL(pmbus_read_word_data, PMBUS);
+ 
+ static int pmbus_read_virt_reg(struct i2c_client *client, int page, int reg)
+ {
+@@ -370,7 +370,7 @@ int pmbus_read_byte_data(struct i2c_client *client, int page, u8 reg)
+ 
+ 	return i2c_smbus_read_byte_data(client, reg);
+ }
+-EXPORT_SYMBOL_GPL(pmbus_read_byte_data);
++EXPORT_SYMBOL_NS_GPL(pmbus_read_byte_data, PMBUS);
+ 
+ int pmbus_write_byte_data(struct i2c_client *client, int page, u8 reg, u8 value)
+ {
+@@ -382,7 +382,7 @@ int pmbus_write_byte_data(struct i2c_client *client, int page, u8 reg, u8 value)
+ 
+ 	return i2c_smbus_write_byte_data(client, reg, value);
+ }
+-EXPORT_SYMBOL_GPL(pmbus_write_byte_data);
++EXPORT_SYMBOL_NS_GPL(pmbus_write_byte_data, PMBUS);
+ 
+ int pmbus_update_byte_data(struct i2c_client *client, int page, u8 reg,
+ 			   u8 mask, u8 value)
+@@ -401,7 +401,7 @@ int pmbus_update_byte_data(struct i2c_client *client, int page, u8 reg,
+ 
+ 	return rv;
+ }
+-EXPORT_SYMBOL_GPL(pmbus_update_byte_data);
++EXPORT_SYMBOL_NS_GPL(pmbus_update_byte_data, PMBUS);
+ 
+ /*
+  * _pmbus_read_byte_data() is similar to pmbus_read_byte_data(), but checks if
+@@ -474,14 +474,14 @@ int pmbus_get_fan_rate_device(struct i2c_client *client, int page, int id,
+ {
+ 	return pmbus_get_fan_rate(client, page, id, mode, false);
+ }
+-EXPORT_SYMBOL_GPL(pmbus_get_fan_rate_device);
++EXPORT_SYMBOL_NS_GPL(pmbus_get_fan_rate_device, PMBUS);
+ 
+ int pmbus_get_fan_rate_cached(struct i2c_client *client, int page, int id,
+ 			      enum pmbus_fan_mode mode)
+ {
+ 	return pmbus_get_fan_rate(client, page, id, mode, true);
+ }
+-EXPORT_SYMBOL_GPL(pmbus_get_fan_rate_cached);
++EXPORT_SYMBOL_NS_GPL(pmbus_get_fan_rate_cached, PMBUS);
+ 
+ static void pmbus_clear_fault_page(struct i2c_client *client, int page)
+ {
+@@ -496,7 +496,7 @@ void pmbus_clear_faults(struct i2c_client *client)
+ 	for (i = 0; i < data->info->pages; i++)
+ 		pmbus_clear_fault_page(client, i);
+ }
+-EXPORT_SYMBOL_GPL(pmbus_clear_faults);
++EXPORT_SYMBOL_NS_GPL(pmbus_clear_faults, PMBUS);
+ 
+ static int pmbus_check_status_cml(struct i2c_client *client)
+ {
+@@ -548,13 +548,13 @@ bool pmbus_check_byte_register(struct i2c_client *client, int page, int reg)
+ {
+ 	return pmbus_check_register(client, _pmbus_read_byte_data, page, reg);
+ }
+-EXPORT_SYMBOL_GPL(pmbus_check_byte_register);
++EXPORT_SYMBOL_NS_GPL(pmbus_check_byte_register, PMBUS);
+ 
+ bool pmbus_check_word_register(struct i2c_client *client, int page, int reg)
+ {
+ 	return pmbus_check_register(client, __pmbus_read_word_data, page, reg);
+ }
+-EXPORT_SYMBOL_GPL(pmbus_check_word_register);
++EXPORT_SYMBOL_NS_GPL(pmbus_check_word_register, PMBUS);
+ 
+ const struct pmbus_driver_info *pmbus_get_driver_info(struct i2c_client *client)
+ {
+@@ -562,7 +562,7 @@ const struct pmbus_driver_info *pmbus_get_driver_info(struct i2c_client *client)
+ 
+ 	return data->info;
+ }
+-EXPORT_SYMBOL_GPL(pmbus_get_driver_info);
++EXPORT_SYMBOL_NS_GPL(pmbus_get_driver_info, PMBUS);
+ 
+ static int pmbus_get_status(struct i2c_client *client, int page, int reg)
+ {
+@@ -2299,7 +2299,7 @@ const struct regulator_ops pmbus_regulator_ops = {
+ 	.disable = pmbus_regulator_disable,
+ 	.is_enabled = pmbus_regulator_is_enabled,
+ };
+-EXPORT_SYMBOL_GPL(pmbus_regulator_ops);
++EXPORT_SYMBOL_NS_GPL(pmbus_regulator_ops, PMBUS);
+ 
+ static int pmbus_regulator_register(struct pmbus_data *data)
+ {
+@@ -2642,7 +2642,7 @@ int pmbus_do_probe(struct i2c_client *client, struct pmbus_driver_info *info)
+ 
+ 	return 0;
+ }
+-EXPORT_SYMBOL_GPL(pmbus_do_probe);
++EXPORT_SYMBOL_NS_GPL(pmbus_do_probe, PMBUS);
+ 
+ struct dentry *pmbus_get_debugfs_dir(struct i2c_client *client)
+ {
+@@ -2650,7 +2650,7 @@ struct dentry *pmbus_get_debugfs_dir(struct i2c_client *client)
+ 
+ 	return data->debugfs;
+ }
+-EXPORT_SYMBOL_GPL(pmbus_get_debugfs_dir);
++EXPORT_SYMBOL_NS_GPL(pmbus_get_debugfs_dir, PMBUS);
+ 
+ static int __init pmbus_core_init(void)
+ {
 -- 
-2.31.1
-
+2.17.1
 
