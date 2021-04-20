@@ -2,265 +2,149 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50E52C433ED
-	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Apr 2021 06:09:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2ED47C433B4
+	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Apr 2021 06:09:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 11E0560FEA
-	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Apr 2021 06:09:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0BF4460FEA
+	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Apr 2021 06:09:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbhDTGJi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 20 Apr 2021 02:09:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53888 "EHLO
+        id S229911AbhDTGKK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 20 Apr 2021 02:10:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbhDTGJg (ORCPT
+        with ESMTP id S229593AbhDTGKH (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 20 Apr 2021 02:09:36 -0400
-Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD4A3C061763
-        for <linux-hwmon@vger.kernel.org>; Mon, 19 Apr 2021 23:09:04 -0700 (PDT)
-Received: by mail-oo1-xc30.google.com with SMTP id c6-20020a4aacc60000b02901e6260b12e2so5760952oon.3
-        for <linux-hwmon@vger.kernel.org>; Mon, 19 Apr 2021 23:09:04 -0700 (PDT)
+        Tue, 20 Apr 2021 02:10:07 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 581B0C06174A;
+        Mon, 19 Apr 2021 23:00:28 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id i16-20020a9d68d00000b0290286edfdfe9eso24219719oto.3;
+        Mon, 19 Apr 2021 23:00:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id;
-        bh=DxS2T6SCOzKw3P1jhRjh2EcCf6lyiDck+j5B0ooO0TE=;
-        b=lZ1qT4xzaIjzFrzlm5r0mxj1mbqWnDRhzSU2nCbuehXdBWuqM7GwzyrMqjml7uspWI
-         gA5+DJFIw8RWgwwrHS/z/zmvews5Pz08SDt9zZpTV/D83dyOnc3ym+pHRipp6jMB2gQ7
-         cG2QkLMuN+KTMo9/CGawpKwV1FkeAS4Hwz24+gjv2oDX0TFoVPTLCrLta/Ab8T9DQejR
-         NgYMFyeqsqa7Ebth533s+8x8yhU+CxALnozFQ0NoWc6LWpYqC6zJHx+I0mcBb30t6i2Z
-         VXpsZrycW8d7E3NwTyx+A81PyBkpyRMmi0TFGO37lqMhcSL4Y+AocvqGPNE/yGizlrTv
-         ydwA==
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=QzI0mIqoPuyOTn9a8la0KgntbiXTB3BQIbD07adwJj8=;
+        b=D5GD61vEeISqExoGoX0P7BIIg+cWOk94cJ61N0eXqF481Mg90yuwxWbx66upMmVkJF
+         +wNvHQkiKiqmzrBDBbQ/b6FOC6QNEhZmz5WsoQm3QhBu10+JX7GHIAmdNKuQ+r5IY8jv
+         HdtZdEjCDfBoMUbGtaKQ1SIg3L+ssTWSudbRrHmuxGql3WHDRm4y1JkPgofemmM4pesH
+         8DTrLZH9IDWkfp/ymSi0Hrvw31K5YhtMmjbfgLrtZXAgTwynjGlxSSc+KvSxct/5zMy2
+         KzMgl5OA0pQTUhGQHOJlpliKYEP17Cv+S31tgqPyD7AdsQxi3t3mPPtXMgYvKfo0yLTW
+         kHDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
-        bh=DxS2T6SCOzKw3P1jhRjh2EcCf6lyiDck+j5B0ooO0TE=;
-        b=OH7fvm40evaHSplZrfY4NmBp4NFHuWUqnhS/gYn0xF1wykTiofwGBnOgBSKD2eky+x
-         n3QYxOp5K8UNUNJXAa6nK+GxPa7nv9W1J0EdpIaxmKrGpLXi+R65Tkn6ZFAIVSovR/gW
-         jMya8Xct2HD1ULBRXq9TpR6kL+svdwmanx9tkzMUz9FPeP76ounrRSQ8DW8cMWJGuMwY
-         oIFxJEOh6Od3PNBmJTsKhHN4ww7xTQtPZ0gascYE8ZOl562eZh/l5/7cF4EsEW2NUAu1
-         gdiMBnvcSj/3g8wBDsz4L2/IP3vt8rMlkAYYsTk96YCcHKy83uI7Bv1/73MQ6d5iq6WA
-         V+4w==
-X-Gm-Message-State: AOAM5309cwbxFJoG5Nmk2Xwr7DDD6voD/x0tVbU3ToUPCGuNQWjA8KbG
-        xrtgKlD7PBAui1dxie7U9c65oEVZEzQ=
-X-Google-Smtp-Source: ABdhPJykaKio7nCBEJAaAqd2HMR98e5gNAdyWqnifZUD+3+VGvOKZVegVA0DFXfruT/USBLMvIyYtg==
-X-Received: by 2002:a4a:d80e:: with SMTP id f14mr13012746oov.54.1618898943952;
-        Mon, 19 Apr 2021 23:09:03 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d7sm37421oib.49.2021.04.19.23.09.03
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 19 Apr 2021 23:09:03 -0700 (PDT)
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=QzI0mIqoPuyOTn9a8la0KgntbiXTB3BQIbD07adwJj8=;
+        b=kg6NmLRu3ABCACXmcyXqJr1FOwYylRojBkxIjiaQApqrsmoiJZFndpOehi6ewkSh8w
+         1uTOTHX6f+0/tWFsQQrkrqDDY4H9rtYaXpA+oe2QlGvDABlm+Mbx3wJLrqOcbO/Rea7A
+         5FZRgUIYhAonHfERYaneS+3rFYXUg1A/HnBv5aBHwXfDCu1LtOn7pvZdvbO0qLL0fkHY
+         7frot+4AHLB8B7nv4WTZWSSTDNOb+PxLLQe1CBXbqlJ+2+75APdcAANnPUEAWOKMj5we
+         VsaGi7qzVsWsnVQ3SmmwWmiLrKp0Tp74lkjW6pLr3p/VXhHP4PV6ODj+2evPKLBQ2rf6
+         B5yw==
+X-Gm-Message-State: AOAM532pcNrWUtRAyFoBtMSyzt8ia81Irwos4rYnjHDQbsa+kJAZGf+H
+        jgO88hOdq0sh/MEU/CjE4oA=
+X-Google-Smtp-Source: ABdhPJxB84nfvJ3IdSFRqh9X7lh/q66666k2wyIF8K/pkTTG5yk5B8CwaA7jwEcar7lAZh7qJqE62Q==
+X-Received: by 2002:a9d:1ea9:: with SMTP id n38mr13083146otn.233.1618898427698;
+        Mon, 19 Apr 2021 23:00:27 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u126sm3708864oig.4.2021.04.19.23.00.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Apr 2021 23:00:27 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: Enabling pmbus power control
+To:     Zev Weiss <zev@bewilderbeest.net>
+Cc:     Mark Brown <broonie@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org, Andrew Jeffery <andrew@aj.id.au>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
+References: <YGLepYLvtlO6Ikzs@hatter.bewilderbeest.net>
+ <5105ada1-643a-8e58-a52d-d3c8dbef86b9@roeck-us.net>
+ <20210330112254.GB4976@sirena.org.uk>
+ <YGNdoYq5lyERVGLO@hatter.bewilderbeest.net>
+ <20210330174221.GJ4976@sirena.org.uk>
+ <YGNmaNzWOYrJROvX@hatter.bewilderbeest.net>
+ <20210330180200.GK4976@sirena.org.uk> <20210330193810.GA235990@roeck-us.net>
+ <YH4ukR5egB2eG0Vo@hatter.bewilderbeest.net>
+ <20210420033648.GA227111@roeck-us.net>
+ <YH5rky8nA4nKAVdg@hatter.bewilderbeest.net>
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH] hwmon: (pmbus) Introduce PMBUS symbol namespace
-Date:   Mon, 19 Apr 2021 23:09:01 -0700
-Message-Id: <20210420060901.179467-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.17.1
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <9639fa33-01ca-9802-e745-5e3edb81e305@roeck-us.net>
+Date:   Mon, 19 Apr 2021 23:00:25 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <YH5rky8nA4nKAVdg@hatter.bewilderbeest.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Exported pmbus symbols are only supposed to be used from PMBus code.
-Introduce PMBUS symbol namespace to prevent misuse from other code.
+On 4/19/21 10:50 PM, Zev Weiss wrote:
+[ ... ]
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/hwmon/pmbus/Makefile     |  2 ++
- drivers/hwmon/pmbus/pmbus_core.c | 38 ++++++++++++++++----------------
- 2 files changed, 21 insertions(+), 19 deletions(-)
+> I had a glance at the enclosure driver; it looks pretty geared toward SES-like things (drivers/scsi/ses.c being its only usage I can see in the kernel at the moment) and while it could perhaps be pressed into working for this it seems like it would probably drag in a fair amount of boilerplate and result in a somewhat gratuitously confusing driver arrangement (calling the things involved in the cases we're looking at "enclosures" seems like a bit of a stretch).
+> 
+> As an alternative, would something like the patch below be more along the lines of what you're suggesting?  And if so, would it make sense to generalize it into something like 'pmbus-switch.c' and add a PMBUS_HAVE_POWERSWITCH functionality bit or similar in the pmbus code instead of hardcoding it for only LM25066 support?
+> 
+> 
 
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index f8dcc27cd56a..ef99c855e405 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -3,6 +3,8 @@
- # Makefile for PMBus chip drivers.
- #
- 
-+ccflags-y += -DDEFAULT_SYMBOL_NAMESPACE=PMBUS
-+
- obj-$(CONFIG_PMBUS)		+= pmbus_core.o
- obj-$(CONFIG_SENSORS_PMBUS)	+= pmbus.o
- obj-$(CONFIG_SENSORS_ADM1266)	+= adm1266.o
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index e9e6a47f3bf7..bbd745178147 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -139,7 +139,7 @@ void pmbus_clear_cache(struct i2c_client *client)
- 	for (sensor = data->sensors; sensor; sensor = sensor->next)
- 		sensor->data = -ENODATA;
- }
--EXPORT_SYMBOL_GPL(pmbus_clear_cache);
-+EXPORT_SYMBOL_NS_GPL(pmbus_clear_cache, PMBUS);
- 
- void pmbus_set_update(struct i2c_client *client, u8 reg, bool update)
- {
-@@ -150,7 +150,7 @@ void pmbus_set_update(struct i2c_client *client, u8 reg, bool update)
- 		if (sensor->reg == reg)
- 			sensor->update = update;
- }
--EXPORT_SYMBOL_GPL(pmbus_set_update);
-+EXPORT_SYMBOL_NS_GPL(pmbus_set_update, PMBUS);
- 
- int pmbus_set_page(struct i2c_client *client, int page, int phase)
- {
-@@ -186,7 +186,7 @@ int pmbus_set_page(struct i2c_client *client, int page, int phase)
- 
- 	return 0;
- }
--EXPORT_SYMBOL_GPL(pmbus_set_page);
-+EXPORT_SYMBOL_NS_GPL(pmbus_set_page, PMBUS);
- 
- int pmbus_write_byte(struct i2c_client *client, int page, u8 value)
- {
-@@ -198,7 +198,7 @@ int pmbus_write_byte(struct i2c_client *client, int page, u8 value)
- 
- 	return i2c_smbus_write_byte(client, value);
- }
--EXPORT_SYMBOL_GPL(pmbus_write_byte);
-+EXPORT_SYMBOL_NS_GPL(pmbus_write_byte, PMBUS);
- 
- /*
-  * _pmbus_write_byte() is similar to pmbus_write_byte(), but checks if
-@@ -229,7 +229,7 @@ int pmbus_write_word_data(struct i2c_client *client, int page, u8 reg,
- 
- 	return i2c_smbus_write_word_data(client, reg, word);
- }
--EXPORT_SYMBOL_GPL(pmbus_write_word_data);
-+EXPORT_SYMBOL_NS_GPL(pmbus_write_word_data, PMBUS);
- 
- 
- static int pmbus_write_virt_reg(struct i2c_client *client, int page, int reg,
-@@ -299,7 +299,7 @@ int pmbus_update_fan(struct i2c_client *client, int page, int id,
- 	return _pmbus_write_word_data(client, page,
- 				      pmbus_fan_command_registers[id], command);
- }
--EXPORT_SYMBOL_GPL(pmbus_update_fan);
-+EXPORT_SYMBOL_NS_GPL(pmbus_update_fan, PMBUS);
- 
- int pmbus_read_word_data(struct i2c_client *client, int page, int phase, u8 reg)
- {
-@@ -311,7 +311,7 @@ int pmbus_read_word_data(struct i2c_client *client, int page, int phase, u8 reg)
- 
- 	return i2c_smbus_read_word_data(client, reg);
- }
--EXPORT_SYMBOL_GPL(pmbus_read_word_data);
-+EXPORT_SYMBOL_NS_GPL(pmbus_read_word_data, PMBUS);
- 
- static int pmbus_read_virt_reg(struct i2c_client *client, int page, int reg)
- {
-@@ -370,7 +370,7 @@ int pmbus_read_byte_data(struct i2c_client *client, int page, u8 reg)
- 
- 	return i2c_smbus_read_byte_data(client, reg);
- }
--EXPORT_SYMBOL_GPL(pmbus_read_byte_data);
-+EXPORT_SYMBOL_NS_GPL(pmbus_read_byte_data, PMBUS);
- 
- int pmbus_write_byte_data(struct i2c_client *client, int page, u8 reg, u8 value)
- {
-@@ -382,7 +382,7 @@ int pmbus_write_byte_data(struct i2c_client *client, int page, u8 reg, u8 value)
- 
- 	return i2c_smbus_write_byte_data(client, reg, value);
- }
--EXPORT_SYMBOL_GPL(pmbus_write_byte_data);
-+EXPORT_SYMBOL_NS_GPL(pmbus_write_byte_data, PMBUS);
- 
- int pmbus_update_byte_data(struct i2c_client *client, int page, u8 reg,
- 			   u8 mask, u8 value)
-@@ -401,7 +401,7 @@ int pmbus_update_byte_data(struct i2c_client *client, int page, u8 reg,
- 
- 	return rv;
- }
--EXPORT_SYMBOL_GPL(pmbus_update_byte_data);
-+EXPORT_SYMBOL_NS_GPL(pmbus_update_byte_data, PMBUS);
- 
- /*
-  * _pmbus_read_byte_data() is similar to pmbus_read_byte_data(), but checks if
-@@ -474,14 +474,14 @@ int pmbus_get_fan_rate_device(struct i2c_client *client, int page, int id,
- {
- 	return pmbus_get_fan_rate(client, page, id, mode, false);
- }
--EXPORT_SYMBOL_GPL(pmbus_get_fan_rate_device);
-+EXPORT_SYMBOL_NS_GPL(pmbus_get_fan_rate_device, PMBUS);
- 
- int pmbus_get_fan_rate_cached(struct i2c_client *client, int page, int id,
- 			      enum pmbus_fan_mode mode)
- {
- 	return pmbus_get_fan_rate(client, page, id, mode, true);
- }
--EXPORT_SYMBOL_GPL(pmbus_get_fan_rate_cached);
-+EXPORT_SYMBOL_NS_GPL(pmbus_get_fan_rate_cached, PMBUS);
- 
- static void pmbus_clear_fault_page(struct i2c_client *client, int page)
- {
-@@ -496,7 +496,7 @@ void pmbus_clear_faults(struct i2c_client *client)
- 	for (i = 0; i < data->info->pages; i++)
- 		pmbus_clear_fault_page(client, i);
- }
--EXPORT_SYMBOL_GPL(pmbus_clear_faults);
-+EXPORT_SYMBOL_NS_GPL(pmbus_clear_faults, PMBUS);
- 
- static int pmbus_check_status_cml(struct i2c_client *client)
- {
-@@ -548,13 +548,13 @@ bool pmbus_check_byte_register(struct i2c_client *client, int page, int reg)
- {
- 	return pmbus_check_register(client, _pmbus_read_byte_data, page, reg);
- }
--EXPORT_SYMBOL_GPL(pmbus_check_byte_register);
-+EXPORT_SYMBOL_NS_GPL(pmbus_check_byte_register, PMBUS);
- 
- bool pmbus_check_word_register(struct i2c_client *client, int page, int reg)
- {
- 	return pmbus_check_register(client, __pmbus_read_word_data, page, reg);
- }
--EXPORT_SYMBOL_GPL(pmbus_check_word_register);
-+EXPORT_SYMBOL_NS_GPL(pmbus_check_word_register, PMBUS);
- 
- const struct pmbus_driver_info *pmbus_get_driver_info(struct i2c_client *client)
- {
-@@ -562,7 +562,7 @@ const struct pmbus_driver_info *pmbus_get_driver_info(struct i2c_client *client)
- 
- 	return data->info;
- }
--EXPORT_SYMBOL_GPL(pmbus_get_driver_info);
-+EXPORT_SYMBOL_NS_GPL(pmbus_get_driver_info, PMBUS);
- 
- static int pmbus_get_status(struct i2c_client *client, int page, int reg)
- {
-@@ -2299,7 +2299,7 @@ const struct regulator_ops pmbus_regulator_ops = {
- 	.disable = pmbus_regulator_disable,
- 	.is_enabled = pmbus_regulator_is_enabled,
- };
--EXPORT_SYMBOL_GPL(pmbus_regulator_ops);
-+EXPORT_SYMBOL_NS_GPL(pmbus_regulator_ops, PMBUS);
- 
- static int pmbus_regulator_register(struct pmbus_data *data)
- {
-@@ -2642,7 +2642,7 @@ int pmbus_do_probe(struct i2c_client *client, struct pmbus_driver_info *info)
- 
- 	return 0;
- }
--EXPORT_SYMBOL_GPL(pmbus_do_probe);
-+EXPORT_SYMBOL_NS_GPL(pmbus_do_probe, PMBUS);
- 
- struct dentry *pmbus_get_debugfs_dir(struct i2c_client *client)
- {
-@@ -2650,7 +2650,7 @@ struct dentry *pmbus_get_debugfs_dir(struct i2c_client *client)
- 
- 	return data->debugfs;
- }
--EXPORT_SYMBOL_GPL(pmbus_get_debugfs_dir);
-+EXPORT_SYMBOL_NS_GPL(pmbus_get_debugfs_dir, PMBUS);
- 
- static int __init pmbus_core_init(void)
- {
--- 
-2.17.1
+No. Don't access pmbus functions from outside drivers/hwmon/pmbus.
 
+I used to be opposed to function export restrictions (aka export namespaces),
+but you are making a good case that we need to introduce them for pmbus
+functions.
+
+Guenter
