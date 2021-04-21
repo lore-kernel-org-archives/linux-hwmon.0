@@ -2,116 +2,98 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83E82C433B4
-	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Apr 2021 07:51:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 146D4C433ED
+	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Apr 2021 11:06:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4411861433
-	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Apr 2021 07:51:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CBD3B61422
+	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Apr 2021 11:06:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237387AbhDUHwA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 21 Apr 2021 03:52:00 -0400
-Received: from mail-lf1-f45.google.com ([209.85.167.45]:43806 "EHLO
-        mail-lf1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237383AbhDUHv7 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 21 Apr 2021 03:51:59 -0400
-Received: by mail-lf1-f45.google.com with SMTP id y4so25304504lfl.10;
-        Wed, 21 Apr 2021 00:51:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:reply-to:to:cc
-         :in-reply-to:references:mime-version:date:user-agent
-         :content-transfer-encoding;
-        bh=Pae9yH+KaHgTqO+dxMFR9Vep9F1PrK7GQlrKbtuE/kI=;
-        b=CvAbYW+Bz8Sj728WpXFetqW6sVK536wmR4oKurUcMkA5erGaameUl3ZXR/dsx1IHVk
-         1/ziMfI6Fk7n6yt5RanH+ee6XkzzrH0AzzAqemNA0mVQL4ZYTTKMmunzDkWE474NHYfO
-         v6/k1OiWTPbtwQZkKrFe8z/QlKfsI5SMTT1kxa+0PM++P7m+HQBcxEdylz1HXYU3oKxr
-         x1XRtJehMNQ/qw1ybvAb8Wd2hPLhfz+HRWpDu1oVf0ABhThuSf8xSPXjI25XHEHcbM3l
-         2mQp+RtJv21wmYAYjOgOZkpX3UwG27lAgXPoODN5lpmXZLboiA5Fy9mAg9c4Wf0R81qh
-         YeKw==
-X-Gm-Message-State: AOAM533MPIw2QPOojvjLQv9Cf6tfDktk2az+9p0Qw+ac3LtqVaZHy3YF
-        hrIKN10BL5XtYdSoNNuEnco=
-X-Google-Smtp-Source: ABdhPJyamlH7tMymKn/NliNVTaRv5+NWeF4lqRMi91V4eNBUtbjHXg0IbpR8KG2YkoC6zBsccN0XWg==
-X-Received: by 2002:ac2:4e8c:: with SMTP id o12mr16152092lfr.211.1618991485123;
-        Wed, 21 Apr 2021 00:51:25 -0700 (PDT)
-Received: from dc7vkhyyyyyyyyyyyyydy-3.rev.dnainternet.fi (dc7vkhyyyyyyyyyyyyydy-3.rev.dnainternet.fi. [2001:14ba:16e2:8300::6])
-        by smtp.gmail.com with ESMTPSA id c18sm125078ljd.66.2021.04.21.00.51.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Apr 2021 00:51:24 -0700 (PDT)
-Message-ID: <da0233f3223d7c0816581afe0969caf0abe20378.camel@fi.rohmeurope.com>
-Subject: Re: [PATCH v3 2/8] MAINTAINERS: Add entry for devm helpers
-From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Reply-To: matti.vaittinen@fi.rohmeurope.com
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Hans de Goede <hdegoede@redhat.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mark Gross <mgross@linux.intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
+        id S234938AbhDULGl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 21 Apr 2021 07:06:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59474 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235131AbhDULGk (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 21 Apr 2021 07:06:40 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CD1566144D;
+        Wed, 21 Apr 2021 11:06:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1619003167;
+        bh=ibymGhoC6SIgzayCKlW3avb2cLYOlJYug+lPz4rPiIE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fbeRSnW6FX6RJVQNfQKsjsOMwyuShGFCbO7OVX/nber6M7zM1IqyQDAijSuwzME8Z
+         2AJKir8gl0oltCnl2wxeaLRkl1SP9DPJgUdSG8s4/4QGolJYKDZZ0/JwVIzao07nTs
+         gVG/6ulYen67+mOb74yODWu8nm8aCl6+/bxrHu3BWPO66ZikXTN54iXk647oVvFlJn
+         QyMTGhoUWlyWFEGE88G+LZBc8fTCtj+jzHGYfNCB/4mbdUdO/6CYvATFwPFpsOAfHB
+         Qch1zm1VS35xNf3AbmO09EATwJLXcs0dkE433pxLeFwEjSIn2nM5yscUTQkEWA2fiQ
+         0HSl+5BfkjU7g==
+Date:   Wed, 21 Apr 2021 12:05:40 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Zev Weiss <zev@bewilderbeest.net>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Andrew Jeffery <andrew@aj.id.au>,
         Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
-In-Reply-To: <YFn5CSB1O3i+SzgR@kroah.com>
-References: <cover.1616506559.git.matti.vaittinen@fi.rohmeurope.com>
-         <eec1797734e3d080662aa732c565ed4a3c261799.1616506559.git.matti.vaittinen@fi.rohmeurope.com>
-         <e064fdd7-b276-6732-16fe-2eb2564b2179@redhat.com>
-         <YFn5CSB1O3i+SzgR@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
+Subject: Re: Enabling pmbus power control
+Message-ID: <20210421110540.GA4617@sirena.org.uk>
+References: <20210420033648.GA227111@roeck-us.net>
+ <YH5rky8nA4nKAVdg@hatter.bewilderbeest.net>
+ <9639fa33-01ca-9802-e745-5e3edb81e305@roeck-us.net>
+ <YH59WOg0iKbz1d0l@hatter.bewilderbeest.net>
+ <fe111c8a-9588-dbfb-624a-29bb3a5efe13@roeck-us.net>
+ <YH7w6HUtBSCZRWq4@hatter.bewilderbeest.net>
+ <20210420161317.GE6073@sirena.org.uk>
+ <YH8D+LWxWPqnFd2h@hatter.bewilderbeest.net>
+ <20210420171540.GG6073@sirena.org.uk>
+ <YH8jUuOEJKDDDoMb@hatter.bewilderbeest.net>
 MIME-Version: 1.0
-Date:   Wed, 21 Apr 2021 10:51:13 +0300
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="/9DWx/yDrRhgMJTb"
+Content-Disposition: inline
+In-Reply-To: <YH8jUuOEJKDDDoMb@hatter.bewilderbeest.net>
+X-Cookie: RELATIVES!!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 
-On Tue, 2021-03-23 at 15:19 +0100, Greg KH wrote:
-> On Tue, Mar 23, 2021 at 02:58:28PM +0100, Hans de Goede wrote:
-> > Hi,
-> > 
-> > On 3/23/21 2:56 PM, Matti Vaittinen wrote:
-> > > Devm helper header containing small inline helpers was added.
-> > > Hans promised to maintain it.
-> > > 
-> > > Add Hans as maintainer and myself as designated reviewer.
-> > > 
-> > Ultimately this is up to Greg though, so lets wait and see what
-> > Greg has to say about this.
-> 
-> Can we move some of the devm_* calls in include/device.h into here as
-> well so that you all can be in charge of them instead of me?
+--/9DWx/yDrRhgMJTb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Seems like this was left w/o answer. I guess the question was pointed
-to Hans - but what comes to my (not always so humble) opinion - most of
-the devm functions in device.h are tightly related to the device
-interface or devres. Thus the device.h feels like appropriate place for
-most of those. OTOH, the kmalloc/kfree related functions, strdub and
-kmemdub might be candidates for move - those are not really "device
-things".
+On Tue, Apr 20, 2021 at 01:54:10PM -0500, Zev Weiss wrote:
 
-But this is really not my call :)
+> Consider the power shelf I mentioned earlier -- it's a rackmount power
+> supply and that's about it.  It provides DC power to arbitrary devices that
+> it has no other connection to, just ground and +12V.  Those devices might be
+> servers, or cooling fans, or vacuum cleaners or floodlights -- the power
+> shelf doesn't know, or care.  It's a lot like a switchable network PDU in
 
-Best Regards
-	Matti Vaittinen
+If your chassis is particularly simple then it will be particularly
+simple to fit into a generic framework so that should make your life a
+lot easier here.  Generally the simpler your system is the easier it
+will be to use in something generic, it's not going to be stretching
+ideas about how things should look and is more likely to have good
+helpers available already.
 
--- 
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
+--/9DWx/yDrRhgMJTb
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmCABwMACgkQJNaLcl1U
+h9ADpwf/VbjMaN7n+jZDxshUvMWZB1BdyohTc3svzJBpwgEZ64SKrE1c+kHOAoO/
+7tZNItEYVN+0hugBvbWoC7zBG+X+NPue5Spl8H+vnNFUYxVigAa2bEpNSWInZnXc
+TXdumtwjtmOMAGYBCh5Q+l+1KpzZbNADLEWQcei7+DXl0XqhvHzsJTslt07/hyIw
+vEBXZTEMP7U5DWYszH7NIMyBN+qbBDVDXHVmeg+JHq8YHh2oF4GwLrx3wC2EQakF
+KEQnQ2p/1xrKkzfcSkU0fCvgvf+pN9EvxS94rBkA2xDuer4vlx0ReA9Pll63GPAK
+EJ5KQnnPxUbSziNlhuIY83TVxIPyIw==
+=xLFC
+-----END PGP SIGNATURE-----
+
+--/9DWx/yDrRhgMJTb--
