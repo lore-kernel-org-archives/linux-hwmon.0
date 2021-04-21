@@ -2,117 +2,173 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6005C433B4
-	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Apr 2021 18:54:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93E42C433ED
+	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Apr 2021 02:17:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 76E9B613DD
-	for <linux-hwmon@archiver.kernel.org>; Tue, 20 Apr 2021 18:54:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5C8AB6140D
+	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Apr 2021 02:17:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233619AbhDTSyp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 20 Apr 2021 14:54:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54086 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233509AbhDTSyp (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 20 Apr 2021 14:54:45 -0400
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98FABC06174A;
-        Tue, 20 Apr 2021 11:54:13 -0700 (PDT)
-Received: from hatter.bewilderbeest.net (unknown [IPv6:2600:6c44:7f:ba20::7c6])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 70E5C201;
-        Tue, 20 Apr 2021 11:54:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1618944853;
-        bh=yulT0IYFXA0d9SFFhQP/AEy/TBC8Zc5ZyTjauwYse80=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iUIhGNV/b+QFFfj9DHCCkklkHrURNYg+YduecDWpfmjOkw59mk2GfZ6+rF9ROQVgs
-         rZkrtg2FRnvVUNyLlwSw01oPh+LKFNFvq23MApF5cCHzzedx1WmpXjp+H4DyrvJOeo
-         0vodteOaTIu3mTwnCQ04JGHj5zOXCQfvqyfphE/0=
-Date:   Tue, 20 Apr 2021 13:54:10 -0500
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
-Subject: Re: Enabling pmbus power control
-Message-ID: <YH8jUuOEJKDDDoMb@hatter.bewilderbeest.net>
-References: <YH4ukR5egB2eG0Vo@hatter.bewilderbeest.net>
- <20210420033648.GA227111@roeck-us.net>
- <YH5rky8nA4nKAVdg@hatter.bewilderbeest.net>
- <9639fa33-01ca-9802-e745-5e3edb81e305@roeck-us.net>
- <YH59WOg0iKbz1d0l@hatter.bewilderbeest.net>
- <fe111c8a-9588-dbfb-624a-29bb3a5efe13@roeck-us.net>
- <YH7w6HUtBSCZRWq4@hatter.bewilderbeest.net>
- <20210420161317.GE6073@sirena.org.uk>
- <YH8D+LWxWPqnFd2h@hatter.bewilderbeest.net>
- <20210420171540.GG6073@sirena.org.uk>
+        id S234624AbhDUCRg (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 20 Apr 2021 22:17:36 -0400
+Received: from mga05.intel.com ([192.55.52.43]:26288 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234007AbhDUCRg (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 20 Apr 2021 22:17:36 -0400
+IronPort-SDR: DIM/+b4XsrvED6AwjWJv3VKMuC9/dLcnkiB6nlauQOcHTiwbXWLHnvNTlhL7QsfTiZW0OdT7bt
+ n/q60eWpDafA==
+X-IronPort-AV: E=McAfee;i="6200,9189,9960"; a="280957057"
+X-IronPort-AV: E=Sophos;i="5.82,238,1613462400"; 
+   d="scan'208";a="280957057"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2021 19:17:03 -0700
+IronPort-SDR: 6xnuuJAZqWbW4UokVwv7/e7FBRY3V8smFo3aVnK2MSlloT5VWX8N9GqY5Gn4FMHe9/XAf7D4f+
+ DFL0mBxWeuCw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,238,1613462400"; 
+   d="scan'208";a="463411272"
+Received: from lkp-server01.sh.intel.com (HELO a48ff7ddd223) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 20 Apr 2021 19:17:02 -0700
+Received: from kbuild by a48ff7ddd223 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lZ2QH-0003IX-Ly; Wed, 21 Apr 2021 02:17:01 +0000
+Date:   Wed, 21 Apr 2021 10:16:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:hwmon-next] BUILD SUCCESS
+ 9049572fb145746725b198a19e27fa2671b80448
+Message-ID: <607f8aeb.yPud//GwyMAxV94X%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20210420171540.GG6073@sirena.org.uk>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Apr 20, 2021 at 12:15:40PM CDT, Mark Brown wrote:
->On Tue, Apr 20, 2021 at 11:40:24AM -0500, Zev Weiss wrote:
->> On Tue, Apr 20, 2021 at 11:13:18AM CDT, Mark Brown wrote:
->
->> > I already suggested writing a driver or drivers that represent the
->> > hardware you have, that advice remains.  It's hard to follow what you
->> > were trying to say with your long mail earlier today but it seems like
->
->> That email was an attempt to explain why writing a driver for the specific
->> hardware devices we're powering seems like a poor fit to me.  To summarize:
->
->>  - There's a wide variety of different devices potentially behind an
->> LM25066.
->
->This is true for lots of hardware, we still integrate things into
->frameworks.
->
->>  - A hypothetical driver for any one of them would be completely
->> non-specific to that device and functionally identical to a driver    for
->> any other, because the only hardware it would actually be    touching is the
->> LM25066, and in ways that are again completely    non-specific to anything
->> but the LM25066 itself.
->
->I don't see why that would be the case at all.  Even within the indended
->application as a power controller for a hotpluggable bus there's plenty
->of potential for integration into a wider representation of the socket
->things get inserted into - for example I've worked with buses that had
->support for operator signalling of hotplug (buttons to press to initiate
->hot removal, with lights to signal when a clean shutdown of the card had
->been completed), you might also want to have additional environment
->monitoring and of course the labelling that I mentioned in an earlier
->post.  I can imagine you probably have some other connection of some
->kind to the host too (eg, network ports) to join up and perhaps sync
->hotplug for.
->
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 9049572fb145746725b198a19e27fa2671b80448  hwmon: Remove amd_energy driver
 
-Consider the power shelf I mentioned earlier -- it's a rackmount power 
-supply and that's about it.  It provides DC power to arbitrary devices 
-that it has no other connection to, just ground and +12V.  Those devices 
-might be servers, or cooling fans, or vacuum cleaners or floodlights -- 
-the power shelf doesn't know, or care.  It's a lot like a switchable 
-network PDU in that it just provides a way for an operator to remotely 
-cut power to a thing that's plugged into it.  There's no other bus or 
-anything in the picture.  (And pragmatically, given that its most common 
-usage is likely to be to provide a cold power cycle as a last-ditch 
-recovery option when things are wedged in some unresponsive state, 
-attempting any sort of coordination with the downstream device would 
-probably be a dead end anyway.)
+elapsed time: 724m
 
+configs tested: 103
+configs skipped: 2
 
-Zev
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+x86_64                           allyesconfig
+riscv                            allmodconfig
+i386                             allyesconfig
+riscv                            allyesconfig
+nios2                         10m50_defconfig
+sh                            titan_defconfig
+arm                        mvebu_v7_defconfig
+mips                        bcm47xx_defconfig
+arm                        oxnas_v6_defconfig
+mips                        bcm63xx_defconfig
+arm                        shmobile_defconfig
+sparc                       sparc64_defconfig
+arm                         assabet_defconfig
+arm                        clps711x_defconfig
+m68k                       m5208evb_defconfig
+m68k                        mvme16x_defconfig
+arm                          badge4_defconfig
+powerpc                 mpc834x_mds_defconfig
+h8300                       h8s-sim_defconfig
+arm                     davinci_all_defconfig
+m68k                            q40_defconfig
+mips                          malta_defconfig
+powerpc                      tqm8xx_defconfig
+sh                         microdev_defconfig
+arm                           spitz_defconfig
+powerpc                  mpc885_ads_defconfig
+nios2                               defconfig
+arm                       aspeed_g4_defconfig
+arm                         s3c2410_defconfig
+sh                            hp6xx_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a005-20210420
+i386                 randconfig-a002-20210420
+i386                 randconfig-a001-20210420
+i386                 randconfig-a006-20210420
+i386                 randconfig-a004-20210420
+i386                 randconfig-a003-20210420
+x86_64               randconfig-a015-20210420
+x86_64               randconfig-a016-20210420
+x86_64               randconfig-a011-20210420
+x86_64               randconfig-a014-20210420
+x86_64               randconfig-a013-20210420
+x86_64               randconfig-a012-20210420
+i386                 randconfig-a012-20210420
+i386                 randconfig-a014-20210420
+i386                 randconfig-a011-20210420
+i386                 randconfig-a013-20210420
+i386                 randconfig-a015-20210420
+i386                 randconfig-a016-20210420
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+um                               allmodconfig
+um                                allnoconfig
+um                               allyesconfig
+um                                  defconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a004-20210420
+x86_64               randconfig-a002-20210420
+x86_64               randconfig-a001-20210420
+x86_64               randconfig-a005-20210420
+x86_64               randconfig-a006-20210420
+x86_64               randconfig-a003-20210420
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
