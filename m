@@ -2,74 +2,76 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC276C433B4
-	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Apr 2021 23:50:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A2B46C433ED
+	for <linux-hwmon@archiver.kernel.org>; Thu, 22 Apr 2021 00:15:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BFE2C6143B
-	for <linux-hwmon@archiver.kernel.org>; Wed, 21 Apr 2021 23:50:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6E3866144A
+	for <linux-hwmon@archiver.kernel.org>; Thu, 22 Apr 2021 00:15:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343780AbhDUXuv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 21 Apr 2021 19:50:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40446 "EHLO
+        id S235033AbhDVAQP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 21 Apr 2021 20:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234816AbhDUXut (ORCPT
+        with ESMTP id S231363AbhDVAQP (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 21 Apr 2021 19:50:49 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC65C06174A
-        for <linux-hwmon@vger.kernel.org>; Wed, 21 Apr 2021 16:50:14 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id t17so16225822qkg.4
-        for <linux-hwmon@vger.kernel.org>; Wed, 21 Apr 2021 16:50:14 -0700 (PDT)
+        Wed, 21 Apr 2021 20:16:15 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87969C06174A
+        for <linux-hwmon@vger.kernel.org>; Wed, 21 Apr 2021 17:15:41 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id 35-20020a9d05260000b029029c82502d7bso9148607otw.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 21 Apr 2021 17:15:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=protocubo.io; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5UkIVbfdFNV1gXhJyPF8jT31siiYSiojwqyZ8m4M0GQ=;
-        b=VetAhXNXbLziEmhVnYV7ssSTFhFuqCn++heG9OsmL+X5jA3Gwli7qUuG33EZhkJyA3
-         Q3nc+IL/Wfmze6dpX1D9wXkuioVgHiO2cjW8eGGi7Cz/IjPhrPHI24+y6cCqctQah2qP
-         oL4aUV+O3DDK6IbGiJm7RGKN1R4nceLgO6TkYx6oGlX2DJ9FBn3ZyEMcIDRp8EoXb7+7
-         BBpiQ89wHpjEXO2WOkWiHDmIe4Cm0gip6IC5kt52fZjfzopqVGuWRKDgJCM3oQcTnSfK
-         8Xj6MmBfmPnkqR0hIhbs/xc2iBFWmL03Wa5dlZ9mU2B82aWuCP7xEBMB08M17t0ubSUD
-         uRqg==
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=wxdWJBsFIpCWitHCpukMjQHR/cyYGLPwsX6nSC2X1VE=;
+        b=Nvql/0wkvz9XORSG8CizzjYin75UxE7lxwFADENGK17aDlwiTn0evdDt+2U+fQxeAp
+         2F2oWELyednk9dxDXYraGhRG9CyCkgYmUV3cmg4OvOdX1iKTdm3/mS0QFa+RfZSkJ5Vm
+         6L3zJkYFE7FV63TG1VG6LLzlCfHjgArkInlse1j/6Colv4h+aZ+nsD5y8xcnGwvJkf2S
+         wFD93rp6tqqTUaQ6SMtQR3rk8qkIYEg/8+l28rK0EfCMc0jjsC4HU1y1Zzb/XRIeVooJ
+         IvWy3BSK+/QBDDYVuUd1BfYXyEvQDMubSwn7eV9A9mXJj39pFMakHeMTrWg2OJWi9Aoi
+         tskg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5UkIVbfdFNV1gXhJyPF8jT31siiYSiojwqyZ8m4M0GQ=;
-        b=rHuT2lyhH5QCHyXV0cmuMV2yh4vHKQ3l0B20ghzlnSLAn6++ebktWajpXlq7z4gmBT
-         o5nq5L2WsZCxKwzXXQ8QAMeNVxAPbXtgjJXqK92HRSfxheUBOYQozZxvvrLwR5xyQzRs
-         ooMcxgXX3c7uuoXiR2Q5qhmbQQbXH3lLb49w5P0+RJOkEA/ahC5+1Xt442JcontQN2BW
-         KSMRbUGSq9dbzqu0o7yHXXpH7cgnHz7dg1AVp7/v2XgGOECQgaqg+kf1Gr5ZDUVgA8oK
-         +ZucCbfHb1l2Nf8sVnwNd+0Wrw12I7t51oNfvpPGc3g0vMF4WNqdaJdJpA5JItE5wu0T
-         WNJQ==
-X-Gm-Message-State: AOAM530N1Dya8Kggot+MfgP0gV4+Z63yDICCK37oTI3hVQLprYTVXciF
-        lnPFcgNeetgabSgTO85s0DsBJy8+XqY/Ww==
-X-Google-Smtp-Source: ABdhPJyMSo24PJNe9SdjM75Fk4ebYDdezpzS2mP7vwFBmp0ruZrYBl6kV7CI7lG+vIUmmmdTh4JB7Q==
-X-Received: by 2002:a05:620a:2285:: with SMTP id o5mr754700qkh.407.1619049014121;
-        Wed, 21 Apr 2021 16:50:14 -0700 (PDT)
-Received: from calvin.localdomain ([2804:14d:5c5a:802e:bdc9:ded9:cc08:a4e9])
-        by smtp.gmail.com with ESMTPSA id m22sm982975qtg.67.2021.04.21.16.50.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Apr 2021 16:50:13 -0700 (PDT)
-Date:   Wed, 21 Apr 2021 20:50:10 -0300
-From:   Jonas Malaco <jonas@protocubo.io>
-To:     Guenter Roeck <linux@roeck-us.net>
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=wxdWJBsFIpCWitHCpukMjQHR/cyYGLPwsX6nSC2X1VE=;
+        b=j4wNbdVgvJ+HZREywtY73M2jQi/BUacjDnlwY8Vy2qb6GyTQv4jtHprRKy9qje5OzV
+         rSAKxOBF0JllX2x2N6Awp1mhcC6vbzCKYRrsQShcHvGh1F5CeuLFKvk+U4bUNVI++0dc
+         ys9bV1TM0SjOQHHAu17av/D5Uhcs+M1K/t7s2QFoDJcXCjyAHyLM7fDci7IwociIDhRO
+         JhLqQtwNlIer2C0D1CyRo064KOg3ENjIhxlCfO6EplCODkkz0i0cpoEe/zG+SbwtuiaS
+         P6orZmdYkTYo9J7W3sseOtJ4B6K/VBZYfJGHLY9Xq/4xzJOfh75QPlLl84YHkwjHaFrv
+         qDhA==
+X-Gm-Message-State: AOAM530KbzF8e+hkW/JmrikwF8FPhF9cGmgm3fkO5zAHh/tK66mCMKrV
+        /Q+a+sXfyUm7+cOKgLHImQqOrW/+Os8=
+X-Google-Smtp-Source: ABdhPJyVNzGxD5RbFsyEJTQx3ULtUZ+Nmjk9AwFZt6ysfEPbRIMe3fN7yazBSqd6mjKqXzKZglpKCQ==
+X-Received: by 2002:a05:6830:14d3:: with SMTP id t19mr551146otq.95.1619050540017;
+        Wed, 21 Apr 2021 17:15:40 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id h25sm248319oou.44.2021.04.21.17.15.38
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 21 Apr 2021 17:15:39 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 21 Apr 2021 17:15:37 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Jonas Malaco <jonas@protocubo.io>
 Cc:     linux-hwmon@vger.kernel.org
 Subject: Re: PWM control in NZXT Grid+ V3 and Smart Device
-Message-ID: <20210421235010.4mz6qxr3ekbd7q6n@calvin.localdomain>
+Message-ID: <20210422001537.GA134898@roeck-us.net>
 References: <20210413124529.jdi6ambxusd47y34@calvin.localdomain>
  <20210421164803.up7ndcsor6gxptj4@calvin.localdomain>
  <20210421172136.GD110463@roeck-us.net>
  <20210421233127.3zriqcf22yw5lvxs@calvin.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20210421233127.3zriqcf22yw5lvxs@calvin.localdomain>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
@@ -91,9 +93,6 @@ On Wed, Apr 21, 2021 at 08:31:27PM -0300, Jonas Malaco wrote:
 > 
 > I am somewhat relieved that these issues are not so silly.  And I really
 > appropriate your comments.
-
-s/appropriate/appreciate/
-
 > 
 > Please take a look at a few more comments bellow.
 > 
@@ -134,6 +133,19 @@ s/appropriate/appreciate/
 > And returning -ENODATA for pwm[1-*] reads makes pwmconfig/fancontrol
 > unhappy:
 > 
+
+Seems to me that pwmconfig is then maybe not appropriate to use,
+and maybe there should be no driver for this device in the kernel
+in the first place.
+
+Returning a random value after setting the pwm value to 255, removing,
+and re-inserting the driver is, in my opinion, even worse than
+returning -ENODATA. After all, the driver doesn't know the pwm value,
+and it is really a bad idea to report data which doesn't reflect
+reality.
+
+Guenter
+
 > # pwmconfig
 > [...]
 > Found the following PWM controls:
