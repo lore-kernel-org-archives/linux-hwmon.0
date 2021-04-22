@@ -2,69 +2,72 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50599C433B4
-	for <linux-hwmon@archiver.kernel.org>; Thu, 22 Apr 2021 01:27:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DAF0C433ED
+	for <linux-hwmon@archiver.kernel.org>; Thu, 22 Apr 2021 01:30:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 08128613B0
-	for <linux-hwmon@archiver.kernel.org>; Thu, 22 Apr 2021 01:27:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0AD3E613B0
+	for <linux-hwmon@archiver.kernel.org>; Thu, 22 Apr 2021 01:30:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232680AbhDVB2T (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 21 Apr 2021 21:28:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33460 "EHLO
+        id S231363AbhDVBbU (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 21 Apr 2021 21:31:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232130AbhDVB2S (ORCPT
+        with ESMTP id S231128AbhDVBbT (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 21 Apr 2021 21:28:18 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C71C06174A;
-        Wed, 21 Apr 2021 18:27:41 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id d25so6793811oij.5;
-        Wed, 21 Apr 2021 18:27:41 -0700 (PDT)
+        Wed, 21 Apr 2021 21:31:19 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D2ABC06174A
+        for <linux-hwmon@vger.kernel.org>; Wed, 21 Apr 2021 18:30:45 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id k14-20020a9d7dce0000b02901b866632f29so40705844otn.1
+        for <linux-hwmon@vger.kernel.org>; Wed, 21 Apr 2021 18:30:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=fcNZfsXjWgubhkoG9HpEo4ENef1L3qrDLqtjAJX6TkA=;
-        b=KajQb+SSSMbK2zN7RtNet6tfRxx/CK61h1sqSPR26UPzYfuEQBRGo5tb/TYgI/eWh5
-         GevcdeycQ4sU/rURYt05kGbitsmYPtyj2QrR7wVlXtoSHCT8T7MXcLNGb7tgTakuQryt
-         f5WlUdXvMV4XI4PbprbuV+P7uOsPgFN2TelvVmzL4oMFQUNbcp4aVraghH9hXT7GxVbJ
-         QKR/2d6hNxQWoQEl3cW7tb3q378lqX1Om6XHBzmZ2Mbj7nMIMOA9lHBaZ6gl6JzTHDmK
-         2rFVHdYlG0KiZTcxFHE4bCx7eTMZeFt1zidPTbDcV8ivzdSjJTxwbj6VyoAvYYvY8QWe
-         1jHA==
+        bh=fezQiwi18LsJ+L5WFAFeHlkRXvDMnzcmVPf/Lqg4oao=;
+        b=e6Iwfd36fHtgsi/3GCcv4Xgkssdo0jbXA4Xh8EpF44tWr/TSMU3wHxBe6dN0bsomXG
+         16AQR170M89pwSImGDWeXazueiaqCgCC8kLdY5Jwmag67+ThhKxRtyLf6XR8IBG3gVcE
+         KKEILbWNrHPzXXJHh/O/5cV3T9Wb3CsRtW8InHKT4RNek5kmqpW4nhr8WwO1c2hr/7+X
+         pOcSZ/NhfbMbfuGmnQfSKeXyGBt0zBXRP85u+nGy6j4T+oecZvdUTUWzBdkcc7qBBqe9
+         vFcbGlZvSEqvuNjYyHy33xVmAHuwRBLtR0PINewD+pPYlwx5fW089sHxDgO2QQYlLjSL
+         jESQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=fcNZfsXjWgubhkoG9HpEo4ENef1L3qrDLqtjAJX6TkA=;
-        b=Wmg/Td/Im4ZNdDtIOF/lLGgPYRFfMej1UmIVQNgUPL7k0ViZ5Vpt7Mtj/Op6fDtqu3
-         Cdf0M8i6ORfRyyjvWtmL2R1H96nWcc+m4qR2U33evZsi9w9oSS8OH9HtMKfJQ14UsSdk
-         K/vTrXFN+NgotmrPRjKpCt9Hfnt2NQqr1OVYVdQ4v06dQXyWfZUPgwW1gnDH+KGnwgxa
-         QgHgjnQiqkK0DyjwZ3A3NwKkv0D8hKYeaCOqiHwhiC6QrrtgCZUzuj2hyYDm6UtX795j
-         HW8TNPe3HSmY0oBDrh6gmSgCx8XkUDB/Q3waPP0P84+Nhk8fdgfcLhZtEA3DB+d3hbdb
-         5gHA==
-X-Gm-Message-State: AOAM532tWy8o2G/b4qJ6znzC8BEZ6bTT9P6b80+cLI3TxbDBmCp8hoql
-        lVsThI/R3jKsJY4MK/N0onqfvzxs/xA=
-X-Google-Smtp-Source: ABdhPJwGMuO27MpsGKW67BzXbP4U/jtcGm4DDI9uVLgmwDiEyM9uB02nl7pLttdx9TeYAADwYryF4g==
-X-Received: by 2002:aca:a844:: with SMTP id r65mr555011oie.168.1619054860403;
-        Wed, 21 Apr 2021 18:27:40 -0700 (PDT)
+        bh=fezQiwi18LsJ+L5WFAFeHlkRXvDMnzcmVPf/Lqg4oao=;
+        b=H4GvjIaaDtjs0TtUBY/Oi8Oo4+g4dcustm+/pX4eDZ9HAfWLlfuMAiCMaNVCE8wHbM
+         RYajqkJOy20DeVoSUbc2r4eiovbdwVknQB6iiuHS/yqCePXpyfqxMeOyp0B6vOoirg7s
+         rMiaqgOFJ2nrRK6e2y5zLh9ezhGAuKNbHmxh8VY4njKPXr1HNTzvNxLKNBSY8L+lxICu
+         QnYJKgVObUyYiWjcxlqOBuGuVMtPsm2L1vee4i3woaWBPb0OCDRBhQQzzYbKqcKDGgSM
+         lcnmeJdOIIL1phBtkB9EtrJjBdfmKOhpBPvp8I4xPLWEDut2838cLnRnvIUIhIS1wAAS
+         tpOg==
+X-Gm-Message-State: AOAM530WW9aStoyozfh6uXNxsp+GC7It54CPVDFo6V44gDHAYwVIFCDV
+        78bwb0jhf4x8o7RoSFsTPN0ni/Yx7tA=
+X-Google-Smtp-Source: ABdhPJwLi+/qPh3ETzx2ErqpuRqau2RuEKWJQfQiYiDSoJwUyy8g76G22jTeNjKs5QmHVXpcvSNoEA==
+X-Received: by 2002:a9d:750a:: with SMTP id r10mr782113otk.221.1619055044434;
+        Wed, 21 Apr 2021 18:30:44 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t3sm295760ooa.18.2021.04.21.18.27.39
+        by smtp.gmail.com with ESMTPSA id 10sm238416oiq.48.2021.04.21.18.30.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Apr 2021 18:27:39 -0700 (PDT)
+        Wed, 21 Apr 2021 18:30:43 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v2 1/5] hwmon: (max31790) Rework to use regmap
-To:     =?UTF-8?B?VsOhY2xhdiBLdWJlcm7DoXQ=?= <kubernat@cesnet.cz>
-Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20210413025948.901867-1-kubernat@cesnet.cz>
+Subject: Re: PWM control in NZXT Grid+ V3 and Smart Device
+To:     Jonas Malaco <jonas@protocubo.io>
+Cc:     linux-hwmon@vger.kernel.org
+References: <20210413124529.jdi6ambxusd47y34@calvin.localdomain>
+ <20210421164803.up7ndcsor6gxptj4@calvin.localdomain>
+ <20210421172136.GD110463@roeck-us.net>
+ <20210421233127.3zriqcf22yw5lvxs@calvin.localdomain>
+ <20210422001537.GA134898@roeck-us.net>
+ <20210422011526.a6lbzsougxozsfwo@calvin.localdomain>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -109,88 +112,110 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <250c1c16-541a-984f-c720-1a8b6176e97e@roeck-us.net>
-Date:   Wed, 21 Apr 2021 18:27:38 -0700
+Message-ID: <520e6d96-9062-56d1-29a1-b7635b3310ca@roeck-us.net>
+Date:   Wed, 21 Apr 2021 18:30:42 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20210413025948.901867-1-kubernat@cesnet.cz>
+In-Reply-To: <20210422011526.a6lbzsougxozsfwo@calvin.localdomain>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/12/21 7:59 PM, Václav Kubernát wrote:
-> Converting the driver to use regmap makes it more generic. It also makes
-> it a lot easier to debug through debugfs.
+On 4/21/21 6:15 PM, Jonas Malaco wrote:
+> On Wed, Apr 21, 2021 at 05:15:37PM -0700, Guenter Roeck wrote:
+>> On Wed, Apr 21, 2021 at 08:31:27PM -0300, Jonas Malaco wrote:
+>>> On Wed, Apr 21, 2021 at 10:21:36AM -0700, Guenter Roeck wrote:
+>>>> On Wed, Apr 21, 2021 at 01:48:03PM -0300, Jonas Malaco wrote:
+>>>>> On Tue, Apr 13, 2021 at 09:45:29AM -0300, Jonas Malaco wrote:
+>>>>>> Guenter (and others on this list),
+>>>>>
+>>>>> Very gentle ping.
+>>>>>
+>>>>> I also thought posting these questions first would be less disruptive
+>>>>> than a RFC patch, but please let me know if you prefer the latter.
+>>>>>
+>>>>
+>>>> It is a difficult subject, and I am struggling myself with the situations
+>>>> you are presenting.
+>>>
+>>> I am somewhat relieved that these issues are not so silly.  And I really
+>>> appropriate your comments.
+>>>
+>>> Please take a look at a few more comments bellow.
+>>>
+>>>>
+>>>>> Thanks again,
+>>>>> Jonas
+>>>>>
+>>>>>>
+>>>>>> I am getting ready to submit a driver for NZXT Grid+ V3 and Smart Device
+>>>>>> (V1) fan controllers, but I am having trouble deciding how to expose
+>>>>>> their PWM control due to some device limitations.
+>>>>>>
+>>>>>> Before getting into those, let me first give some very basic context...
+>>>>>>
+>>>>>> These devices are USB HIDs, and asynchronously send "status" reports
+>>>>>> every 200 ms to communicate speed, current, voltage and control mode for
+>>>>>> their channels (one channel per report).
+>>>>>>
+>>>>>> Fans can be controlled by sending HID output reports to the device, and
+>>>>>> both DC and PWM modes are supported.  The device features a special
+>>>>>> initialization routine (that must be requested during probe) which
+>>>>>> automatically detects the appropriate control mode for each channel.
+>>>>>>
+>>>>>> Back to the device limitations...
+>>>>>>
+>>>>>> The first is that PWM values can be set, but not read back.  And neither
+>>>>>> hwmon[1] nor lm-sensors' pwmconfig/fancontrol expect pmw* attributes to
+>>>>>> be WO.  One solution is to have the driver track the PWM values that are
+>>>>>> set through it and return those, but is this acceptable?
+>>>>
+>>>> I have seen a couple of those recently. I think returning -ENODATA
+>>>> if the value isn't known (yet) is the best possible solution. I thought
+>>>> about adding that to the ABI, actually.
+>>>
+>>> We can never read the pwm[1-*] attributes, not even for detected and
+>>> controllable fans after the initialization procedure.
+>>>
+>>> And returning -ENODATA for pwm[1-*] reads makes pwmconfig/fancontrol
+>>> unhappy:
+>>>
+>>
+>> Seems to me that pwmconfig is then maybe not appropriate to use,
+>> and maybe there should be no driver for this device in the kernel
+>> in the first place.
 > 
-> Signed-off-by: Václav Kubernát <kubernat@cesnet.cz>
-> ---
->  drivers/hwmon/Kconfig    |   1 +
->  drivers/hwmon/max31790.c | 254 ++++++++++++++++++++-------------------
->  2 files changed, 133 insertions(+), 122 deletions(-)
+> I see your point.  Although, apart from this rather serious quirk, these
+> devices work really well with pwmconfig/fancontrol.
 > 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 1ecf697d8d99..9f11d036c316 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1095,6 +1095,7 @@ config SENSORS_MAX6697
->  config SENSORS_MAX31790
->  	tristate "Maxim MAX31790 sensor chip"
->  	depends on I2C
-> +	select REGMAP_I2C
->  	help
->  	  If you say yes here you get support for 6-Channel PWM-Output
->  	  Fan RPM Controller.
-> diff --git a/drivers/hwmon/max31790.c b/drivers/hwmon/max31790.c
-> index 2c6b333a28e9..e3765ce4444a 100644
-> --- a/drivers/hwmon/max31790.c
-> +++ b/drivers/hwmon/max31790.c
-> @@ -12,6 +12,7 @@
->  #include <linux/init.h>
->  #include <linux/jiffies.h>
->  #include <linux/module.h>
-> +#include <linux/regmap.h>
->  #include <linux/slab.h>
->  
->  /* MAX31790 registers */
-> @@ -46,92 +47,53 @@
->  
->  #define NR_CHANNEL			6
->  
-> +#define MAX31790_REG_USER_BYTE_67	0x67
-> +
-> +#define BULK_TO_U16(msb, lsb)		(((msb) << 8) + (lsb))
-> +#define U16_MSB(num)			(((num) & 0xFF00) >> 8)
-> +#define U16_LSB(num)			((num) & 0x00FF)
-> +
-> +static const struct regmap_range max31790_ro_range = {
-> +	.range_min = MAX31790_REG_TACH_COUNT(0),
-> +	.range_max = MAX31790_REG_PWMOUT(0) - 1,
-> +};
-> +
-> +static const struct regmap_access_table max31790_wr_table = {
-> +	.no_ranges = &max31790_ro_range,
-> +	.n_no_ranges = 1,
-> +};
-> +
-> +static const struct regmap_range max31790_volatile_ranges[] = {
-> +	regmap_reg_range(MAX31790_REG_TACH_COUNT(0), MAX31790_REG_TACH_COUNT(12)),
-> +	regmap_reg_range(MAX31790_REG_FAN_FAULT_STATUS2, MAX31790_REG_FAN_FAULT_STATUS1),
-> +};
-> +
-> +static const struct regmap_access_table max31790_volatile_table = {
-> +	.no_ranges = max31790_volatile_ranges,
-> +	.n_no_ranges = 2,
-> +	.n_yes_ranges = 0
-> +};
-
-Looks like my reply to this got lost. Other regmap code suggests that
-volatile register ranges are identified with yes_ranges, not with no_ranges.
-"no" seems to mean "not volatile". Please verify and confirm if the
-above code does what you want it to do.
+>>
+>> Returning a random value after setting the pwm value to 255, removing,
+>> and re-inserting the driver is, in my opinion, even worse than
+>> returning -ENODATA. After all, the driver doesn't know the pwm value,
+>> and it is really a bad idea to report data which doesn't reflect
+>> reality.
+> 
+> Well, in this particular case, the driver must reinitialize the device
+> anyway, since it cannot know whether the device was already initialized.
+> Maybe the driver was removed because the device itself was disconnected
+> and powered off (it's a USB device, not a chip on a board).
+> 
+> So in the work-in-progress driver I take this opportunity to also make
+> sure that its state matches the device's, and force all fans to their
+> default PWM values after powering on.
+> 
+> Specifically, besides requesting the device to initialize itself, I also
+> (re)set all fans to 40% PWM.  (This does not require waiting for the
+> initialization to be complete).
+> 
+> Is this egregious?
+> 
+SGTM, just make sure this is well documented, and make sure that the initial
+pwm value is reported as 40%, ie 102.
 
 Thanks,
 Guenter
