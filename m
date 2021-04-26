@@ -2,145 +2,157 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00E66C433B4
-	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Apr 2021 12:40:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0208C433B4
+	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Apr 2021 12:46:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B74676100C
-	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Apr 2021 12:40:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6901961007
+	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Apr 2021 12:46:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232107AbhDZMku (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 26 Apr 2021 08:40:50 -0400
-Received: from mail-wr1-f48.google.com ([209.85.221.48]:38491 "EHLO
-        mail-wr1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233509AbhDZMiu (ORCPT
+        id S232795AbhDZMrY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 26 Apr 2021 08:47:24 -0400
+Received: from office2.cesnet.cz ([195.113.144.244]:46088 "EHLO
+        office2.cesnet.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231862AbhDZMrY (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 26 Apr 2021 08:38:50 -0400
-Received: by mail-wr1-f48.google.com with SMTP id k14so5802866wrv.5;
-        Mon, 26 Apr 2021 05:38:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=RA5vvjC6fYjBEhu3hg6HypYCy6fBqYfLd0XqaA1wLzE=;
-        b=Uaj7JirNZVJ+PkG2hmgjXtTC4s1P7ICd7lV5woAPaTdpxwN0CihVSTygzk/qWKNmcv
-         dUp6207I0qqWN8BzQhP6nRt72qUyDyyd+GdnCIUS2okOkG1SBNucDbqqvHOWuObhuK82
-         i1H/NFhQKi2xSzjOnWImz5GfSC896qUvUiThWoFm/7g+E8NrEopafF15Oqa2fJ/m63g5
-         nGJOc/D0G9KjAjGZgelyzus7ebyY0joPQP6pgDCCyFJakGKEUPn+x+4AKXibOcg5V8w9
-         z5p4eGlya017dKNh2dl6VZ5MU3u27qVR7Rpi05nJfBZva7IZhZg4WUNKwoqDxk3Fb6I+
-         xVGg==
-X-Gm-Message-State: AOAM532DPmT9SFVcTFKUTqxaIOu+cXXMoydSOZnrzxZ01aOoM+fVK0sB
-        H/iWLrxsThfVcv5wPjei+fM=
-X-Google-Smtp-Source: ABdhPJzIZ2jBTNwv0QiR/NORErnXtfS2nKvuiQLNff3kRT50nKRfOgyjkThnJl9Zq0gxyDx7ba3jlw==
-X-Received: by 2002:adf:ff89:: with SMTP id j9mr12702493wrr.416.1619440687704;
-        Mon, 26 Apr 2021 05:38:07 -0700 (PDT)
-Received: from localhost ([2a02:8308:387:c900:a7b5:b859:9449:c07b])
-        by smtp.gmail.com with ESMTPSA id u17sm18784168wmq.30.2021.04.26.05.38.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Apr 2021 05:38:07 -0700 (PDT)
-From:   =?UTF-8?q?V=C3=A1clav=20Kubern=C3=A1t?= <kubernat@cesnet.cz>
-Cc:     =?UTF-8?q?V=C3=A1clav=20Kubern=C3=A1t?= <kubernat@cesnet.cz>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 5/5] hwmon: (max31790) Update documentation
-Date:   Mon, 26 Apr 2021 14:37:49 +0200
-Message-Id: <20210426123749.899654-5-kubernat@cesnet.cz>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210426123749.899654-1-kubernat@cesnet.cz>
-References: <20210413025948.901867-1-kubernat@cesnet.cz>
- <20210426123749.899654-1-kubernat@cesnet.cz>
+        Mon, 26 Apr 2021 08:47:24 -0400
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by office2.cesnet.cz (Postfix) with ESMTPSA id 422A6400052;
+        Mon, 26 Apr 2021 14:46:41 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cesnet.cz;
+        s=office2-2020; t=1619441201;
+        bh=vAAsbBiBH7LAbBh1t9loyx/hGv7nApOFY9XOY22lVNg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc;
+        b=aKdaeQQmkMCROGpYjyLcjsOEBCprIG7wrCPrVQ5HqomHNBDoHwBPWJZCn6ZQXtabE
+         pHsrmmkEicC00vRdQ2n3ELyIGG9hj3XNmHsb7seMPBpbRMk4Q/NN8hgtatP+uzMtfK
+         jKMjKJ919ECBYJPOiu48KDaZ4LCsMsjXQiu+x94SSnZ1PVS+ar2BPU15ptVfEmUBDC
+         q2DcT+/k3M0EI/fafovQ6F/XzFtvszfYxR+2EPp2j4Iw5QRegzB54985sppPZPT2IE
+         FyuAXeCp25b03P1aV5z1IA+qSVfbEtfTAD+m4HcUohDQuNUMi554u1DRSJRJ2rKU0J
+         d0IHLxGEQaWcg==
+Received: by mail-pj1-f45.google.com with SMTP id md17so1524734pjb.0;
+        Mon, 26 Apr 2021 05:46:41 -0700 (PDT)
+X-Gm-Message-State: AOAM531het5S/UIIBVooOVqB7eNTSrGHke5axXrG277hgfLVdqCbv7TP
+        WyJQLDVPDN97oJRw87FOZITEh30kCHgwcLCxngQ=
+X-Google-Smtp-Source: ABdhPJw45wCj7QeQGS20UcVMLO74ChUMRhb/yYlOPI3Wl6DXngaPVEiVwR8/pT7CtHuZCHWgY8+dy+ZmltO0gzr0AcY=
+X-Received: by 2002:a17:902:b408:b029:ec:e879:bbd8 with SMTP id
+ x8-20020a170902b408b02900ece879bbd8mr12993884plr.65.1619441199370; Mon, 26
+ Apr 2021 05:46:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+References: <20210413025948.901867-1-kubernat@cesnet.cz> <250c1c16-541a-984f-c720-1a8b6176e97e@roeck-us.net>
+In-Reply-To: <250c1c16-541a-984f-c720-1a8b6176e97e@roeck-us.net>
+From:   =?UTF-8?B?VsOhY2xhdiBLdWJlcm7DoXQ=?= <kubernat@cesnet.cz>
+Date:   Mon, 26 Apr 2021 14:46:27 +0200
+X-Gmail-Original-Message-ID: <CABKa3npjrpq5Aw_Xqy3mFZtUHZcfB0YENxEDgo_MCwPUKqA4ww@mail.gmail.com>
+Message-ID: <CABKa3npjrpq5Aw_Xqy3mFZtUHZcfB0YENxEDgo_MCwPUKqA4ww@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] hwmon: (max31790) Rework to use regmap
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The conditions for fan fault and its connection to the PWM mode are now
-documented.
+Hello.
 
-The pwm_rate_of_change and fan_window are now mentioned. According to
-our testing with Sunon PF36281BX-000U-S99, these values are crucial in
-how RPM mode works and how long it takes for the RPM to stabilize. For
-example, setting 5000 RPM (the fan goes up to 23000), the
-pwm_rate_of_change needed to be changed to the lowest possible value,
-otherwise the chip would just go from pwm 0 to pwm 60 back and forth and
-never achieving 5000 RPM (and also signaling fan fault). Based on this
-testing, we found out that the pwm_rate_of_change and fan_window values
-need to be changed manually by the user, based on the user's exact fan
-configuration.
+I'm sending a new version of my patch on max31790. This new version
+fixes the cache issue and actually makes it work by setting
+.cache_type. You were right about the "yes/no" ranges, so I flipped
+those.
 
-Signed-off-by: Václav Kubernát <kubernat@cesnet.cz>
----
- Documentation/hwmon/max31790.rst | 41 +++++++++++++++++++++++++++++++-
- 1 file changed, 40 insertions(+), 1 deletion(-)
+By the way, it seems that the reason your reply got lost is because of
+weird addresses in the "Cc:" email field, they end with "cesnet.cz",
+so it could be that I'm sending email incorrectly. Let me know if I'm
+doing something wrong.
 
-diff --git a/Documentation/hwmon/max31790.rst b/Documentation/hwmon/max31790.rst
-index 2979addeac8f..6056b67c3a95 100644
---- a/Documentation/hwmon/max31790.rst
-+++ b/Documentation/hwmon/max31790.rst
-@@ -30,6 +30,44 @@ monitoring and control of fan RPM as well as detection of fan failure.
- Six pins are dedicated tachometer inputs. Any of the six PWM outputs can
- also be configured to serve as tachometer inputs.
- 
-+About pwm[1-6]_enable
-+---------------------
-+0 - full-speed
-+    The chip doesn't have a specific way to set "full speed", so setting
-+    pwm[1-6]_enable to 0 is just "set PWM mode with 255 duty cycle".
-+1 - PWM mode
-+    Fan speed is controlled by writing a value to pwm[1-6].
-+2 - RPM mode
-+    Fan speed is controlled by writing a value to fan[1-6]_target.
-+
-+About fan[1-6]_fault
-+--------------------
-+In PWM (or full-speed) mode, if the input RPM goes below what is set
-+in fan[1-6]_target, fan[1-6]_fault gets set to 1. In other words,
-+fan[1-6]_target works as the minimum input RPM before a fan fault goes off.
-+
-+In RPM mode, fan fault is set when the fan spins "too slowly" (exact
-+conditions are in the datasheet). RPM mode depends on four variables:
-+    target_speed:        This is set by fan[1-6]_target.
-+    speed_range:         This is set automatically when setting target_speed
-+                         or manually by fan[1-12]_div.
-+    pwm_rate_of_change:  NOT set by the driver.
-+    fan_window:          NOT set by the driver.
-+
-+The last two values are not set by the driver, because there's no generic way to
-+compute them. You should set them manually through i2c (in the bootloader for
-+example). Check the datasheet for details.
-+
-+The fan fault value latches, to reset it, set a value to pwm[1-6]
-+or fan[1-6]_target.
-+
-+About fan[1-12]_div
-+-------------------
-+This value affects the measurable range of the chip. The driver sets this value
-+automatically in RPM based on fan[1-6]_target. In PWM mode, you should set this
-+value manually based on the details from the datasheet. Setting the speed range
-+is disabled while in RPM mode to prevent overwriting the automatically
-+calculated value.
- 
- Sysfs entries
- -------------
-@@ -39,7 +77,8 @@ fan[1-12]_enable   RW  enable fan speed monitoring
- fan[1-12]_input    RO  fan tachometer speed in RPM
- fan[1-12]_fault    RO  fan experienced fault
- fan[1-12]_div      RW  set the measurable speed range, not available in RPM mode
--fan[1-6]_target    RW  desired fan speed in RPM
-+fan[1-6]_target    RW  RPM mode = desired fan speed
-+                       PWM mode = minimum fan speed until fault
- pwm[1-6]_enable    RW  regulator mode, 0=full speed, 1=manual (pwm) mode, 2=rpm mode
-                        setting rpm mode sets fan*_enable to 1
- pwm[1-6]           RW  fan target duty cycle (0-255)
--- 
-2.31.1
+Thanks,
+V=C3=A1clav
 
+=C4=8Dt 22. 4. 2021 v 3:31 odes=C3=ADlatel Guenter Roeck <linux@roeck-us.ne=
+t> napsal:
+>
+> On 4/12/21 7:59 PM, V=C3=A1clav Kubern=C3=A1t wrote:
+> > Converting the driver to use regmap makes it more generic. It also make=
+s
+> > it a lot easier to debug through debugfs.
+> >
+> > Signed-off-by: V=C3=A1clav Kubern=C3=A1t <kubernat@cesnet.cz>
+> > ---
+> >  drivers/hwmon/Kconfig    |   1 +
+> >  drivers/hwmon/max31790.c | 254 ++++++++++++++++++++-------------------
+> >  2 files changed, 133 insertions(+), 122 deletions(-)
+> >
+> > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> > index 1ecf697d8d99..9f11d036c316 100644
+> > --- a/drivers/hwmon/Kconfig
+> > +++ b/drivers/hwmon/Kconfig
+> > @@ -1095,6 +1095,7 @@ config SENSORS_MAX6697
+> >  config SENSORS_MAX31790
+> >       tristate "Maxim MAX31790 sensor chip"
+> >       depends on I2C
+> > +     select REGMAP_I2C
+> >       help
+> >         If you say yes here you get support for 6-Channel PWM-Output
+> >         Fan RPM Controller.
+> > diff --git a/drivers/hwmon/max31790.c b/drivers/hwmon/max31790.c
+> > index 2c6b333a28e9..e3765ce4444a 100644
+> > --- a/drivers/hwmon/max31790.c
+> > +++ b/drivers/hwmon/max31790.c
+> > @@ -12,6 +12,7 @@
+> >  #include <linux/init.h>
+> >  #include <linux/jiffies.h>
+> >  #include <linux/module.h>
+> > +#include <linux/regmap.h>
+> >  #include <linux/slab.h>
+> >
+> >  /* MAX31790 registers */
+> > @@ -46,92 +47,53 @@
+> >
+> >  #define NR_CHANNEL                   6
+> >
+> > +#define MAX31790_REG_USER_BYTE_67    0x67
+> > +
+> > +#define BULK_TO_U16(msb, lsb)                (((msb) << 8) + (lsb))
+> > +#define U16_MSB(num)                 (((num) & 0xFF00) >> 8)
+> > +#define U16_LSB(num)                 ((num) & 0x00FF)
+> > +
+> > +static const struct regmap_range max31790_ro_range =3D {
+> > +     .range_min =3D MAX31790_REG_TACH_COUNT(0),
+> > +     .range_max =3D MAX31790_REG_PWMOUT(0) - 1,
+> > +};
+> > +
+> > +static const struct regmap_access_table max31790_wr_table =3D {
+> > +     .no_ranges =3D &max31790_ro_range,
+> > +     .n_no_ranges =3D 1,
+> > +};
+> > +
+> > +static const struct regmap_range max31790_volatile_ranges[] =3D {
+> > +     regmap_reg_range(MAX31790_REG_TACH_COUNT(0), MAX31790_REG_TACH_CO=
+UNT(12)),
+> > +     regmap_reg_range(MAX31790_REG_FAN_FAULT_STATUS2, MAX31790_REG_FAN=
+_FAULT_STATUS1),
+> > +};
+> > +
+> > +static const struct regmap_access_table max31790_volatile_table =3D {
+> > +     .no_ranges =3D max31790_volatile_ranges,
+> > +     .n_no_ranges =3D 2,
+> > +     .n_yes_ranges =3D 0
+> > +};
+>
+> Looks like my reply to this got lost. Other regmap code suggests that
+> volatile register ranges are identified with yes_ranges, not with no_rang=
+es.
+> "no" seems to mean "not volatile". Please verify and confirm if the
+> above code does what you want it to do.
+>
+> Thanks,
+> Guenter
