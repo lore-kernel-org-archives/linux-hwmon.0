@@ -2,99 +2,115 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7ACB3C433ED
-	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Apr 2021 14:30:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00F97C433ED
+	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Apr 2021 14:36:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3F07B6127A
-	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Apr 2021 14:30:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BAFCC61027
+	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Apr 2021 14:36:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233765AbhDZOax (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 26 Apr 2021 10:30:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46900 "EHLO
+        id S233501AbhDZOgq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 26 Apr 2021 10:36:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231862AbhDZOaw (ORCPT
+        with ESMTP id S233560AbhDZOgp (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 26 Apr 2021 10:30:52 -0400
-Received: from office2.cesnet.cz (office2.cesnet.cz [IPv6:2001:718:1:101::144:244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C652EC061574;
-        Mon, 26 Apr 2021 07:30:10 -0700 (PDT)
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by office2.cesnet.cz (Postfix) with ESMTPSA id 2FEF4400052;
-        Mon, 26 Apr 2021 16:30:08 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cesnet.cz;
-        s=office2-2020; t=1619447408;
-        bh=z/yOEdUwTqe7Cju7xA0JehEFyghVOswc8ZFTFwd6EF8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc;
-        b=BBFw8yxGZmeaYREMBrgWlQ/H2dmC+msbVUjiW8NOu1UF24FRfMOibXYkIxFCeISY8
-         2f8VnyzNS+K19xEv8bHbdlpKhsr0pNbULvoVZk2BYp1ulnlHuPtBDvlEhVTazm5JiA
-         YsDp1TPylKpEUujN7ohPYbOV5Ibn6VSUXoQVRpLDerN1/NWIR0gzVPD7oN7W8nMSkc
-         TJaosa/LEG33NAOJRzCvOo653L7+2GvX9noomOm76FiSPJxhrnacyExp9AUpjdwENe
-         hr8OULEFNV9otSaW/8Ws5d2lyP4k9Em8h0g3FFy9gNbcZIOJZJ7fS0Qs8R/KtB7C6o
-         QfSpPvR7/5DwQ==
-Received: by mail-pj1-f43.google.com with SMTP id y22-20020a17090a8b16b0290150ae1a6d2bso5413038pjn.0;
-        Mon, 26 Apr 2021 07:30:08 -0700 (PDT)
-X-Gm-Message-State: AOAM530aUs0RN1IiBbh/ekkOFKmzfem96724IqoBdA5J/8HTggnrWQ6C
-        trNpTWH0oxMB9xOO567H4yP5st8GF+Drex8l7TM=
-X-Google-Smtp-Source: ABdhPJzY2F0vV+ycVTFKY+kJGuUUHc0GtcAB5VoEXe9hpIaYhT8MhH60TMGn4A5B+R9c7aRnoY63edVwF3++c6ja3Z4=
-X-Received: by 2002:a17:902:b408:b029:ec:e879:bbd8 with SMTP id
- x8-20020a170902b408b02900ece879bbd8mr13449009plr.65.1619447406799; Mon, 26
- Apr 2021 07:30:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210413025948.901867-1-kubernat@cesnet.cz> <250c1c16-541a-984f-c720-1a8b6176e97e@roeck-us.net>
- <CABKa3npjrpq5Aw_Xqy3mFZtUHZcfB0YENxEDgo_MCwPUKqA4ww@mail.gmail.com> <20210426141745.GA257701@roeck-us.net>
-In-Reply-To: <20210426141745.GA257701@roeck-us.net>
-From:   =?UTF-8?B?VsOhY2xhdiBLdWJlcm7DoXQ=?= <kubernat@cesnet.cz>
-Date:   Mon, 26 Apr 2021 16:29:55 +0200
-X-Gmail-Original-Message-ID: <CABKa3np=osah3zcNmwohL0h8sVOHYcGW6rNYhM=1OzrOiLo50A@mail.gmail.com>
-Message-ID: <CABKa3np=osah3zcNmwohL0h8sVOHYcGW6rNYhM=1OzrOiLo50A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/5] hwmon: (max31790) Rework to use regmap
-To:     Guenter Roeck <linux@roeck-us.net>
+        Mon, 26 Apr 2021 10:36:45 -0400
+Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F256C061756;
+        Mon, 26 Apr 2021 07:36:02 -0700 (PDT)
+Received: by mail-oo1-xc2a.google.com with SMTP id g9-20020a4ad3090000b02901ec6daba49aso5504475oos.6;
+        Mon, 26 Apr 2021 07:36:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=1uvxZJv7NEH6OlB0CPMKpMb7Akfa13bCI4rzIGoVg9Q=;
+        b=Zyfy0F0wkpJKZ9NeMFQOcMIoCxL1+3xCAMMZGPv2+Q/bj3I0wih25Z5tYK9a8heIrz
+         zAu/Tn0ZoRs/U8XkmjosQ+5kaTcHc+zBa7f3C9QsM/LM8opUePa0Ul2wCabc33tD1dkX
+         LOmjrozfLmoXm8yJfXTuaC5V5Au80KUeeU2ReZRT+NBH4LdLsT1/EROnDfNIn5hLabSf
+         66swUVuvEJiZTDpcgqKijo1aaPhDRAVAXTmAFmoeQYj4x0sGGkjs0ejQj4AKKYpXYh9d
+         adq/VzHKxq1a8D4CwVA6Zf13sSIvE2aBzrKgCmvhR32iTgTvcB+HTW0QLQ6XE3OAetEj
+         UYWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to:user-agent;
+        bh=1uvxZJv7NEH6OlB0CPMKpMb7Akfa13bCI4rzIGoVg9Q=;
+        b=VxKQMlamO5tRlceAu7y+OajjJ61kJC3UveBxyWpx6hkjKFdmM0x6KFIEnH1C+1TI+3
+         92+lvLou8HtAW9wlwJJc+yCPddfs7lOOq9zACM3/5hwui+Fj7XuFMxZYgjj9yXKtRUQg
+         WeCV6XF0JEafiUIZldLYyidhskx9Ct1gJEeef5+ZDPctuSptHsI8sIBXnx8F/8tf1Pjz
+         f8S6ZC+sXInANNYHaVmhYIp6MATehOsV0b46UhfEECvG4LfmhIqIaKE61o2ZyrzHQh48
+         8VwF5kfwxk32AjCXMpG8ylBaSuG0Tyo0XpejGrQWau5RKClMJpmyV9cwvwzE93sV2Kdx
+         Wj1Q==
+X-Gm-Message-State: AOAM531fceAV3w3h+Ck2gB4Q/44O/DXptWfedjTmXMq0FGm75IjLXSoz
+        w6CeM9S0lLKF72EEtHqURPM=
+X-Google-Smtp-Source: ABdhPJy7RjGcfngqk5ns+IfAM26Ogp7/MMZ/3lERy+T3yGgBoyPYs6ERPRB/mA0KfpXBBpv26ocpMA==
+X-Received: by 2002:a4a:3142:: with SMTP id v2mr13599985oog.9.1619447761416;
+        Mon, 26 Apr 2021 07:36:01 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id r9sm3479054otn.64.2021.04.26.07.36.00
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 26 Apr 2021 07:36:00 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 26 Apr 2021 07:35:59 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     =?iso-8859-1?Q?V=E1clav_Kubern=E1t?= <kubernat@cesnet.cz>
 Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
         linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2 1/5] hwmon: (max31790) Rework to use regmap
+Message-ID: <20210426143559.GA112486@roeck-us.net>
+References: <20210413025948.901867-1-kubernat@cesnet.cz>
+ <250c1c16-541a-984f-c720-1a8b6176e97e@roeck-us.net>
+ <CABKa3npjrpq5Aw_Xqy3mFZtUHZcfB0YENxEDgo_MCwPUKqA4ww@mail.gmail.com>
+ <20210426141745.GA257701@roeck-us.net>
+ <CABKa3np=osah3zcNmwohL0h8sVOHYcGW6rNYhM=1OzrOiLo50A@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABKa3np=osah3zcNmwohL0h8sVOHYcGW6rNYhM=1OzrOiLo50A@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-po 26. 4. 2021 v 16:18 odes=C3=ADlatel Guenter Roeck <linux@roeck-us.net> n=
-apsal:
->
-> On Mon, Apr 26, 2021 at 02:46:27PM +0200, V=C3=A1clav Kubern=C3=A1t wrote=
-:
-> > Hello.
+On Mon, Apr 26, 2021 at 04:29:55PM +0200, Václav Kubernát wrote:
+> po 26. 4. 2021 v 16:18 odesílatel Guenter Roeck <linux@roeck-us.net> napsal:
 > >
-> > I'm sending a new version of my patch on max31790. This new version
-> > fixes the cache issue and actually makes it work by setting
-> > .cache_type. You were right about the "yes/no" ranges, so I flipped
-> > those.
+> > On Mon, Apr 26, 2021 at 02:46:27PM +0200, Václav Kubernát wrote:
+> > > Hello.
+> > >
+> > > I'm sending a new version of my patch on max31790. This new version
+> > > fixes the cache issue and actually makes it work by setting
+> > > .cache_type. You were right about the "yes/no" ranges, so I flipped
+> > > those.
+> > >
+> > > By the way, it seems that the reason your reply got lost is because of
+> > > weird addresses in the "Cc:" email field, they end with "cesnet.cz",
+> > > so it could be that I'm sending email incorrectly. Let me know if I'm
+> > > doing something wrong.
+> > >
 > >
-> > By the way, it seems that the reason your reply got lost is because of
-> > weird addresses in the "Cc:" email field, they end with "cesnet.cz",
-> > so it could be that I'm sending email incorrectly. Let me know if I'm
-> > doing something wrong.
+> > Yes, the To: field of your series is either empty (for the first patch
+> > of the series), or it is something like:
+> >         To: unlisted-recipients: no To-header on input <;
 > >
->
-> Yes, the To: field of your series is either empty (for the first patch
-> of the series), or it is something like:
->         To: unlisted-recipients: no To-header on input <;
->
-> Also, you send your follow-up series as response of the previous series
-> which doesn't follow the guidance for submitting patches and may result
-> in the entire series getting lost.
->
+> > Also, you send your follow-up series as response of the previous series
+> > which doesn't follow the guidance for submitting patches and may result
+> > in the entire series getting lost.
+> >
+> 
+> Sorry, I will fix my email-sending procedure. Should I resend the
+> patch series without the In-Reply-To field?
+> 
+No, just keep it in mind for next time.
 
-Sorry, I will fix my email-sending procedure. Should I resend the
-patch series without the In-Reply-To field?
-
-V=C3=A1clav
-
-> Guenter
+Thanks,
+Guenter
