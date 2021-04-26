@@ -2,157 +2,103 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0208C433B4
-	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Apr 2021 12:46:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B960C433ED
+	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Apr 2021 14:17:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6901961007
-	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Apr 2021 12:46:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EC16460E0C
+	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Apr 2021 14:17:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232795AbhDZMrY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 26 Apr 2021 08:47:24 -0400
-Received: from office2.cesnet.cz ([195.113.144.244]:46088 "EHLO
-        office2.cesnet.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231862AbhDZMrY (ORCPT
+        id S233757AbhDZOSb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 26 Apr 2021 10:18:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44062 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233560AbhDZOSa (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 26 Apr 2021 08:47:24 -0400
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by office2.cesnet.cz (Postfix) with ESMTPSA id 422A6400052;
-        Mon, 26 Apr 2021 14:46:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cesnet.cz;
-        s=office2-2020; t=1619441201;
-        bh=vAAsbBiBH7LAbBh1t9loyx/hGv7nApOFY9XOY22lVNg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc;
-        b=aKdaeQQmkMCROGpYjyLcjsOEBCprIG7wrCPrVQ5HqomHNBDoHwBPWJZCn6ZQXtabE
-         pHsrmmkEicC00vRdQ2n3ELyIGG9hj3XNmHsb7seMPBpbRMk4Q/NN8hgtatP+uzMtfK
-         jKMjKJ919ECBYJPOiu48KDaZ4LCsMsjXQiu+x94SSnZ1PVS+ar2BPU15ptVfEmUBDC
-         q2DcT+/k3M0EI/fafovQ6F/XzFtvszfYxR+2EPp2j4Iw5QRegzB54985sppPZPT2IE
-         FyuAXeCp25b03P1aV5z1IA+qSVfbEtfTAD+m4HcUohDQuNUMi554u1DRSJRJ2rKU0J
-         d0IHLxGEQaWcg==
-Received: by mail-pj1-f45.google.com with SMTP id md17so1524734pjb.0;
-        Mon, 26 Apr 2021 05:46:41 -0700 (PDT)
-X-Gm-Message-State: AOAM531het5S/UIIBVooOVqB7eNTSrGHke5axXrG277hgfLVdqCbv7TP
-        WyJQLDVPDN97oJRw87FOZITEh30kCHgwcLCxngQ=
-X-Google-Smtp-Source: ABdhPJw45wCj7QeQGS20UcVMLO74ChUMRhb/yYlOPI3Wl6DXngaPVEiVwR8/pT7CtHuZCHWgY8+dy+ZmltO0gzr0AcY=
-X-Received: by 2002:a17:902:b408:b029:ec:e879:bbd8 with SMTP id
- x8-20020a170902b408b02900ece879bbd8mr12993884plr.65.1619441199370; Mon, 26
- Apr 2021 05:46:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210413025948.901867-1-kubernat@cesnet.cz> <250c1c16-541a-984f-c720-1a8b6176e97e@roeck-us.net>
-In-Reply-To: <250c1c16-541a-984f-c720-1a8b6176e97e@roeck-us.net>
-From:   =?UTF-8?B?VsOhY2xhdiBLdWJlcm7DoXQ=?= <kubernat@cesnet.cz>
-Date:   Mon, 26 Apr 2021 14:46:27 +0200
-X-Gmail-Original-Message-ID: <CABKa3npjrpq5Aw_Xqy3mFZtUHZcfB0YENxEDgo_MCwPUKqA4ww@mail.gmail.com>
-Message-ID: <CABKa3npjrpq5Aw_Xqy3mFZtUHZcfB0YENxEDgo_MCwPUKqA4ww@mail.gmail.com>
-Subject: Re: [PATCH v2 1/5] hwmon: (max31790) Rework to use regmap
-To:     Guenter Roeck <linux@roeck-us.net>
+        Mon, 26 Apr 2021 10:18:30 -0400
+Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7D02C061574;
+        Mon, 26 Apr 2021 07:17:48 -0700 (PDT)
+Received: by mail-oo1-xc33.google.com with SMTP id a188-20020a4a4cc50000b02901f0ae7068a1so4271158oob.13;
+        Mon, 26 Apr 2021 07:17:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=+XfLmAGVjDqh4bLpk3FH98At1RwV7/JgpCPPTL5UDqA=;
+        b=bCMMgG/l35c6tfRPhcsXkIe6TzFlIMp/H+Lg7wTFhSxTb8RB5BOBXij9O8JXKaSqkP
+         9t8hcbVabGGELsFU1SJxJ6Y71G9r1MM7/TOwBxsd4U6OwYL+m9UYJ59pwYQV4GlX+RZV
+         T4KNGyDwFxxJ5RInHNYQ79zFvUk4kxwmhVtayUbA5rxQEb0xcDiwiCsXNxuHpqJvmG8m
+         34EhfBZ4m45IW676BOE0Yks48qqWPh3z1FhYGFx7qDG7luTKrZFKtvY0zIn73KWxz3v/
+         X/gbx+r/lRrnY59lnfohoiN89vLQRqB17xrn0wa2IADI0ZzK3ze/1FndMfCgnSqa2C9H
+         dDEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to:user-agent;
+        bh=+XfLmAGVjDqh4bLpk3FH98At1RwV7/JgpCPPTL5UDqA=;
+        b=pRPTCx2+6eCz2GD7NFMLvzD2jtsTKCwJZUl33eYQ7V6x1/wtA2Cz7ddmk6g0IRXth3
+         RRwAcXpz9DieOzl7Tt/lHVx+IOvnh5RUXWqTK41VSJgPdfd8emRghlGmnq0rcoHcdrdi
+         O1tcvIcaqSS0PrhJE3My86n8Y7R4OXLwexNhQ2EFEoRjJwE0rkIXfUF33T2ugbJPY59Y
+         aFDYJKS69zP1m32UwqX2eLPPJQEqYjoofQfeon5TrYL6sh1CV0A1zoDpzNmKLy+cZjVt
+         XYFYe2GRNbDf2KRDI6jJmdn+aZxj4IXxzQlcJyGbyIv5hZ3lTuI0ivmfT2cMxQP0poL5
+         bWZg==
+X-Gm-Message-State: AOAM532ZC5hmT0ZXHH4wODqUZjsTjXQRGBid3qH0sWQ5PwGbEjkzJNV1
+        w/ClslwFFgMOSb2ff63EBmI=
+X-Google-Smtp-Source: ABdhPJwuTWLQy2jDoLqFc7IzHqUfX97rJz5dFgYVhIK7DziYo1Wjn6BcAFyBsliLkHstZdoTf8+lEQ==
+X-Received: by 2002:a4a:4c43:: with SMTP id a64mr8182158oob.1.1619446668154;
+        Mon, 26 Apr 2021 07:17:48 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g5sm3079937oiy.24.2021.04.26.07.17.46
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 26 Apr 2021 07:17:47 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 26 Apr 2021 07:17:45 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     =?iso-8859-1?Q?V=E1clav_Kubern=E1t?= <kubernat@cesnet.cz>
 Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
         linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2 1/5] hwmon: (max31790) Rework to use regmap
+Message-ID: <20210426141745.GA257701@roeck-us.net>
+References: <20210413025948.901867-1-kubernat@cesnet.cz>
+ <250c1c16-541a-984f-c720-1a8b6176e97e@roeck-us.net>
+ <CABKa3npjrpq5Aw_Xqy3mFZtUHZcfB0YENxEDgo_MCwPUKqA4ww@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABKa3npjrpq5Aw_Xqy3mFZtUHZcfB0YENxEDgo_MCwPUKqA4ww@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hello.
+On Mon, Apr 26, 2021 at 02:46:27PM +0200, Václav Kubernát wrote:
+> Hello.
+> 
+> I'm sending a new version of my patch on max31790. This new version
+> fixes the cache issue and actually makes it work by setting
+> .cache_type. You were right about the "yes/no" ranges, so I flipped
+> those.
+> 
+> By the way, it seems that the reason your reply got lost is because of
+> weird addresses in the "Cc:" email field, they end with "cesnet.cz",
+> so it could be that I'm sending email incorrectly. Let me know if I'm
+> doing something wrong.
+> 
 
-I'm sending a new version of my patch on max31790. This new version
-fixes the cache issue and actually makes it work by setting
-.cache_type. You were right about the "yes/no" ranges, so I flipped
-those.
+Yes, the To: field of your series is either empty (for the first patch
+of the series), or it is something like:
+	To: unlisted-recipients: no To-header on input <;
 
-By the way, it seems that the reason your reply got lost is because of
-weird addresses in the "Cc:" email field, they end with "cesnet.cz",
-so it could be that I'm sending email incorrectly. Let me know if I'm
-doing something wrong.
+Also, you send your follow-up series as response of the previous series
+which doesn't follow the guidance for submitting patches and may result
+in the entire series getting lost.
 
-Thanks,
-V=C3=A1clav
-
-=C4=8Dt 22. 4. 2021 v 3:31 odes=C3=ADlatel Guenter Roeck <linux@roeck-us.ne=
-t> napsal:
->
-> On 4/12/21 7:59 PM, V=C3=A1clav Kubern=C3=A1t wrote:
-> > Converting the driver to use regmap makes it more generic. It also make=
-s
-> > it a lot easier to debug through debugfs.
-> >
-> > Signed-off-by: V=C3=A1clav Kubern=C3=A1t <kubernat@cesnet.cz>
-> > ---
-> >  drivers/hwmon/Kconfig    |   1 +
-> >  drivers/hwmon/max31790.c | 254 ++++++++++++++++++++-------------------
-> >  2 files changed, 133 insertions(+), 122 deletions(-)
-> >
-> > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> > index 1ecf697d8d99..9f11d036c316 100644
-> > --- a/drivers/hwmon/Kconfig
-> > +++ b/drivers/hwmon/Kconfig
-> > @@ -1095,6 +1095,7 @@ config SENSORS_MAX6697
-> >  config SENSORS_MAX31790
-> >       tristate "Maxim MAX31790 sensor chip"
-> >       depends on I2C
-> > +     select REGMAP_I2C
-> >       help
-> >         If you say yes here you get support for 6-Channel PWM-Output
-> >         Fan RPM Controller.
-> > diff --git a/drivers/hwmon/max31790.c b/drivers/hwmon/max31790.c
-> > index 2c6b333a28e9..e3765ce4444a 100644
-> > --- a/drivers/hwmon/max31790.c
-> > +++ b/drivers/hwmon/max31790.c
-> > @@ -12,6 +12,7 @@
-> >  #include <linux/init.h>
-> >  #include <linux/jiffies.h>
-> >  #include <linux/module.h>
-> > +#include <linux/regmap.h>
-> >  #include <linux/slab.h>
-> >
-> >  /* MAX31790 registers */
-> > @@ -46,92 +47,53 @@
-> >
-> >  #define NR_CHANNEL                   6
-> >
-> > +#define MAX31790_REG_USER_BYTE_67    0x67
-> > +
-> > +#define BULK_TO_U16(msb, lsb)                (((msb) << 8) + (lsb))
-> > +#define U16_MSB(num)                 (((num) & 0xFF00) >> 8)
-> > +#define U16_LSB(num)                 ((num) & 0x00FF)
-> > +
-> > +static const struct regmap_range max31790_ro_range =3D {
-> > +     .range_min =3D MAX31790_REG_TACH_COUNT(0),
-> > +     .range_max =3D MAX31790_REG_PWMOUT(0) - 1,
-> > +};
-> > +
-> > +static const struct regmap_access_table max31790_wr_table =3D {
-> > +     .no_ranges =3D &max31790_ro_range,
-> > +     .n_no_ranges =3D 1,
-> > +};
-> > +
-> > +static const struct regmap_range max31790_volatile_ranges[] =3D {
-> > +     regmap_reg_range(MAX31790_REG_TACH_COUNT(0), MAX31790_REG_TACH_CO=
-UNT(12)),
-> > +     regmap_reg_range(MAX31790_REG_FAN_FAULT_STATUS2, MAX31790_REG_FAN=
-_FAULT_STATUS1),
-> > +};
-> > +
-> > +static const struct regmap_access_table max31790_volatile_table =3D {
-> > +     .no_ranges =3D max31790_volatile_ranges,
-> > +     .n_no_ranges =3D 2,
-> > +     .n_yes_ranges =3D 0
-> > +};
->
-> Looks like my reply to this got lost. Other regmap code suggests that
-> volatile register ranges are identified with yes_ranges, not with no_rang=
-es.
-> "no" seems to mean "not volatile". Please verify and confirm if the
-> above code does what you want it to do.
->
-> Thanks,
-> Guenter
+Guenter
