@@ -2,322 +2,124 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0EFE8C433B4
-	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Apr 2021 17:42:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 30A62C433ED
+	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Apr 2021 22:18:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C0A58600D1
-	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Apr 2021 17:42:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 09C74613AE
+	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Apr 2021 22:18:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236268AbhDZRnO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 26 Apr 2021 13:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33982 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234754AbhDZRnO (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 26 Apr 2021 13:43:14 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAC82C061574;
-        Mon, 26 Apr 2021 10:42:32 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id n184so31192168oia.12;
-        Mon, 26 Apr 2021 10:42:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=e0xqUB7vhwGg6QG1PxUGZKYIR/1pjBJeYaym7WPY33o=;
-        b=M83XTrEdEgQwiaWRJNyI+dqw4mnIwvG0XE5n2TfPUHdohsE6XV371Jq8dNIJphE7v0
-         pkppoKCqhGIdY/jdVgKBDbb5kxVXCuvuYrdy5N0iUIhKVEKMXojINBtrcmVAqIkaKJU+
-         qJjXN/IFO8vWeLUHSINqX8dZuSfgizoH7J968eMpf6rWcQY/bueWI6lT/wliNSXrUpkn
-         uM8TPrxE4t3GkzDJT6hkf4aGIRBbQH9MiqID+2q/2ixKvCrk6zlp9bFZpEyI+Xa92Op9
-         wa0/IzcsRg9XkU4x8mZHe0+6/DGvsTn5ELuFQ6fCOnOCGPoz5xhcvZkASZlmPhpH7MJN
-         zroA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=e0xqUB7vhwGg6QG1PxUGZKYIR/1pjBJeYaym7WPY33o=;
-        b=Dtd5erk1lM3wlbIgosfWU5BvpfikrcDaS5UHy9+dIwFrWREZ/DLoY2oLyFH0V0xIHO
-         9dM5xe8voULpx+rfrunVWJjtwVQpBmJ69fHMwoX3K6KpZCJO7umo/MKcOsLdm8VaK1dE
-         OLJaGp8PJ8sI5tjjPdgGFreZhS3lZM11OPWE6iEAi5PrHVjrxnF+Rc7B7j+m5aH21KsD
-         CIwNzQttqb3Ks3WZAR5hbyWCel0bq5YBCImaJFhvNIdnYLblhGj4ySIxLweM9bTc7KGg
-         IgNcttI8nVTUbbR2xIdFWxOfDqYVYy3zXgSorvIbqoIQWDWUH9fnlm3r86HHN5+A3EPo
-         UKQA==
-X-Gm-Message-State: AOAM530PkDseGbxVu2KpF9UC+1Qd0E4OqnvPasDLttA04AlQLULUstaU
-        uoZIInKaY4ETs2Qi/wxfKQdSRpWdLUc=
-X-Google-Smtp-Source: ABdhPJxNJ84vxIVT3Fe0PXX79ewh2yRFjbcjFonHQYH5hOmUqknh3hlxtvZTmQ0O9y63w7fP1Afhew==
-X-Received: by 2002:aca:3bc4:: with SMTP id i187mr149405oia.174.1619458952156;
-        Mon, 26 Apr 2021 10:42:32 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d62sm3162910oia.37.2021.04.26.10.42.30
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 26 Apr 2021 10:42:31 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon updates for v5.13
-Date:   Mon, 26 Apr 2021 10:42:29 -0700
-Message-Id: <20210426174229.103899-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.17.1
+        id S237341AbhDZWTG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 26 Apr 2021 18:19:06 -0400
+Received: from mail-mw2nam10on2085.outbound.protection.outlook.com ([40.107.94.85]:59104
+        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234113AbhDZWTG (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 26 Apr 2021 18:19:06 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZRBOgTBON6fvYuBAYrH0Y3vVWVJXbjsDNUBmsWfXLDcdL65bSW6cQQN9bOCLMoUVvEveor1kkc+n7K/tusNJeKhAQ+laAX619f1MCFLc2TClyHrzKFQgqAge0LC2nPNxe1JBz6VQrXLMVUFi4/bqBsk6YjzSU25bZxpQOMivFOlfD/5vu6s3FuzEfFrFGBC5M6HWRgHWeW3otZOSSBbAYXneK75FXSRbPxX+U4Vx/yEwmmrp5gA8nwx95oSdNbHKn6aoc6RxKpUxujbdQWU2cDMhf1S37lfB7uHXnRi3yVBqtkue8B0twKwr+5ZScF6VVSNlnx8SEGyGaZrDj6H/Sg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uutU64B+N7Lyxxvfny4tMsaMtqnId/Qdgy7rg/bSA24=;
+ b=aVeAX6hRJRAiVLBK7GHnQ7Scs8XHTBGzlfRcz0ScgTnSEm83w6y4iYrPDu5XP4fSNAJPdjxU+bNQ5UfgMAn26bOM6+TO8p1Nlp8vE5FSo8MkaI5wd3J1+mvVo0EtADsoMZ8VteHaqEM2hT27pI01TLw+q+zx+hzXhipzZkp9jigw7G+N57po1ADa7MEVWCOH9yTR6tEHgE6F4W+Gmj4IjAI5Jvx/9TDYRgjOrM//40b4YJABRp/LVZzcUCRKXn7L3LoMQJDk0Dfp48nvtX8PcTAS9mAILsssPeb6UKkVYwiHgHS4pI3wEFUuZRdI7C1NPFRN4rW/c/BcoGxx+f0dvw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.112.34) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uutU64B+N7Lyxxvfny4tMsaMtqnId/Qdgy7rg/bSA24=;
+ b=SftiVjRWJ1CJ7Ix1XQN6WIcaoTQ/pC3tVcukTmAIl+mnjBCJ3pIZiNlQMkBnDwN3eEVocnyih8MLbni3EfNebyCVSQYV0Yb+Z6p1js06Rp6ARZ1kXZF6wvv1cXqXFTosChNu+VwbXBeMhtX2cO3Pfggbf1Q0MNVqKnRBcvJ3DQQzNxpH6PGqIGcmwjZATqOIOigjiKyZUCwYmmeB1cwN8PEZgwLpu/k8O+eg8dIMhiaPl/0Zbxsy071Hc6CC0Z3VWUOpAeFPvT0JpYIlwZuXPBbK4TR32GBAVg75yNuREm0PTGQPTMErv+/g67JS0gP8RZVyD2oMAk/ljZi6y/v1rw==
+Received: from DM5PR04CA0067.namprd04.prod.outlook.com (2603:10b6:3:ef::29) by
+ CH0PR12MB5249.namprd12.prod.outlook.com (2603:10b6:610:d0::19) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4065.20; Mon, 26 Apr 2021 22:18:23 +0000
+Received: from DM6NAM11FT018.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:3:ef:cafe::cf) by DM5PR04CA0067.outlook.office365.com
+ (2603:10b6:3:ef::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4065.20 via Frontend
+ Transport; Mon, 26 Apr 2021 22:18:23 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.112.34)
+ smtp.mailfrom=nvidia.com; vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.112.34 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.112.34; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (216.228.112.34) by
+ DM6NAM11FT018.mail.protection.outlook.com (10.13.172.110) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4065.21 via Frontend Transport; Mon, 26 Apr 2021 22:18:22 +0000
+Received: from dev-r-vrt-156.mtr.labs.mlnx (172.20.145.6) by
+ HQMAIL107.nvidia.com (172.20.187.13) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 26 Apr 2021 22:18:20 +0000
+From:   Vadim Pasternak <vadimp@nvidia.com>
+To:     <linux@roeck-us.net>, <robh+dt@kernel.org>
+CC:     <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        "Vadim Pasternak" <vadimp@nvidia.com>
+Subject: [PATCH hwmon-next v3 0/3] Add support for MPS Multi-phase mp2888 controller
+Date:   Tue, 27 Apr 2021 01:17:28 +0300
+Message-ID: <20210426221731.1718613-1-vadimp@nvidia.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.20.145.6]
+X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d77b851f-9c47-49c5-f85f-08d90901346e
+X-MS-TrafficTypeDiagnostic: CH0PR12MB5249:
+X-Microsoft-Antispam-PRVS: <CH0PR12MB52496ED85D4F03DB77025337AF429@CH0PR12MB5249.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2399;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rdHJhbzNzqi7STKeNCDfuJuvuCLeBOwSZSowt0PVVjU7N341R+emM8S88ssOPOktPx51EcROiQtp8nwWp8V6XMA2l9fXSWOcVo9P534qAyLaQrGBFqEVlWEKH9m9rL3ssEJ9d4Nw40hePvMYlaGvub7/HVVFergr1t2i7J+WNfTBl9gdNDYrjBMCbuUr4yrdBAMyo6zs/TEl5AjRMHjaw4qvF5NfOIOfCODH8GGm4eoB7RKI9qIOz+Hw4caekaipzULZOCAFhETZrgz4CCyJvEtqxL2iEJpMcLvmAG36oFRFws3VmT+gots8X+3AiaSEjEDzDPmTqBBPrpvxu4ShxSzv6Gn4ZsL0TnCn3C+On0PjrPKhGPFVjexZmlWXhzbsBym14QJDrp0armybqKP54alIq+zwOVhnPCVBxkv30rbf56IWZifvga1qM52wmKi1HXumaqb+0XBC0aZPtxJZNRLIis9QSlwxtkvcw15Ywn3vncQPB4Ngkd7Dls2pHaP5h6pBnZNTRWo0KKgzg+kbPj3pYDpPfUtTG/QjTGUx15Y2yIk+u0FwI4cQ663SnryupacKaO/K92B/YpR8qkXZX5tQ7aT8LQ1LLMPc9sYAF0pdcxCb7Hx7rV4upIA0p3kRopP/UsIzBtBSubKpiGYxAVqombURDgrzytnW9ehPa4E=
+X-Forefront-Antispam-Report: CIP:216.228.112.34;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:schybrid03.nvidia.com;CAT:NONE;SFS:(4636009)(396003)(346002)(376002)(39860400002)(136003)(36840700001)(46966006)(36906005)(316002)(186003)(82310400003)(16526019)(478600001)(8936002)(26005)(4326008)(110136005)(82740400003)(356005)(86362001)(2616005)(36860700001)(7636003)(47076005)(107886003)(336012)(426003)(83380400001)(5660300002)(1076003)(70206006)(70586007)(4744005)(2906002)(8676002)(36756003)(54906003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2021 22:18:22.7911
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d77b851f-9c47-49c5-f85f-08d90901346e
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.112.34];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT018.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5249
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Linus,
+Add driver and documentation for mp2888 device from Monolithic Power
+Systems, Inc. (MPS) vendor. This is a digital, multi-phase, pulse-width
+modulation controller.
 
-Please pull hwmon updates for Linux v5.13 from signed tag:
+Patch set includes:
+Patch #1 - increases maximum number of phases.
+Patch #2 - provides mp2888 driver and documentation.
+Patch #3 - providesy binding documentation.
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.13
+Vadim Pasternak (3):
+  hwmon: (pmbus) Increase maximum number of phases per page
+  hwmon: (pmbus) Add support for MPS Multi-phase mp2888 controller
+  dt-bindings: Add MP2888 voltage regulator device
 
-Thanks,
-Guenter
-------
+ .../devicetree/bindings/trivial-devices.yaml       |   2 +
+ Documentation/hwmon/mp2888.rst                     | 111 ++++++
+ drivers/hwmon/pmbus/Kconfig                        |   9 +
+ drivers/hwmon/pmbus/Makefile                       |   1 +
+ drivers/hwmon/pmbus/mp2888.c                       | 387 +++++++++++++++++++++
+ drivers/hwmon/pmbus/pmbus.h                        |   2 +-
+ 6 files changed, 511 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/hwmon/mp2888.rst
+ create mode 100644 drivers/hwmon/pmbus/mp2888.c
 
-The following changes since commit 1e28eed17697bcf343c6743f0028cc3b5dd88bf0:
+-- 
+2.11.0
 
-  Linux 5.12-rc3 (2021-03-14 14:41:02 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v5.13
-
-for you to fetch changes up to 9049572fb145746725b198a19e27fa2671b80448:
-
-  hwmon: Remove amd_energy driver (2021-04-20 06:52:08 -0700)
-
-----------------------------------------------------------------
-hwmon updates for v5.13
-
-The most notable change is the removal of the amd_energy driver. It was
-rendered all but unusable by making its attributes privileged-only to work
-around a security issue. A suggested remedy was rejected by AMD, so the
-only real solution was to remove the driver. For the future, we'll have
-to make sure that no privileged-access-only drivers are accepted into the
-hwmon subsystem in the first place. The hwmon ABI document was updated
-accordingly.
-
-Other changes:
-
-PMBus drivers:
-- Added driver for MAX15301
-- Added driver for BluTek BPA-RS600
-- Added driver for fsp-3y PSUs and PDUs
-- Added driver for Infineon IR36021
-- Added driver for ST STPDDC60
-- Added support for TI TPS53676 to tps53679 driver
-- Introduced PMBUS symbol namespace
-  This was made necessary by a suggestion to use its exported functions
-  from outside the hwmon subsystem.
-- Minor improvements and bug fixes
-
-New drivers:
-- Driver for NZXT Kraken X42/X52/X62/X72
-
-Driver enhancements:
-- Added support for Intel D5005 to intel-m10-bmc-hwmon driver
-- Added support for NCT6686D to nct6683 driver
-
-Other:
-- Converted sch5627 and amd9240 drivers to hwmon_device_register_with_info()
-- Added support for fan drawers capability and present registers to mlxreg-fan
-  driver
-- Added Dell Latitude E7440 to fan control whitelist in dell-smm driver
-- Replaced snprintf in show functions with sysfs_emit
-  Done with coccinelle script for all drivers to preempt endless per-driver
-  submissions of the same change.
-- Use kobj_to_dev()
-  Another coccinelle based change to preempt endless per-driver submissions
-  of the same change.
-- Various minor fixes and improvements
-
-----------------------------------------------------------------
-Armin Wolf (4):
-      hwmon: (sch5627) Convert to hwmon_device_register_with_info()
-      hwmon: (sch5627) Split sch5627_update_device()
-      hwmon: (sch5627) Use devres function
-      hwmon: (sch5627) Remove unnecessary error path
-
-Bhaskar Chowdhury (1):
-      hwmon: (ftsteutates) Rudimentary typo fixes
-
-Chris Packham (5):
-      dt-bindings: trivial-devices: Add infineon,ir36021
-      hwmon: (pmbus) Add driver for Infineon IR36021
-      hwmon: (pmbus) Replace - with _ in device names before registration
-      dt-bindings: Add vendor prefix and trivial device for BluTek BPA-RS600
-      hwmon: (pmbus) Add driver for BluTek BPA-RS600
-
-Erik Rosen (5):
-      hwmon: (pmbus) Add pmbus_set_update() function to set update flag
-      hwmon: (pmbus/stpddc60) Add ST STPDDC60 pmbus driver
-      dt-bindings: Add trivial device entry for TPS53676
-      hwmon: (pmbus/tps53679) Add support for TI TPS53676
-      hwmon: (pmbus) Add pmbus driver for MAX15301
-
-Guenter Roeck (9):
-      hwmon: (adm9240) Drop log messages from detect function
-      hwmon: (adm9240) Store i2c device instead of client in local data
-      hwmon: (adm9240) Convert to devm_hwmon_device_register_with_info API
-      hwmon: Use kobj_to_dev()
-      hwmon: replace snprintf in show functions with sysfs_emit
-      MAINTAINERS: Add keyword pattern for hwmon registration functions
-      hwmon: (pmbus) Introduce PMBUS symbol namespace
-      hwmon: Clarify scope of attribute access
-      hwmon: Remove amd_energy driver
-
-Jiapeng Chong (1):
-      hwmon: (nct6683) remove useless function
-
-Jiqi Li (1):
-      hwmon: (nct6683) Support NCT6686D
-
-Jonas Malaco (1):
-      hwmon: add driver for NZXT Kraken X42/X52/X62/X72
-
-Matthew Gerlach (1):
-      hwmon: (intel-m10-bmc-hwmon) add sensor support of Intel D5005 card
-
-Paul Fertser (1):
-      hwmon: (pmbus/pxe1610) don't bail out when not all pages are active
-
-Sebastian Oechsle (1):
-      hwmon: (dell-smm) Add Dell Latitude E7440 to fan control whitelist
-
-Tian Tao (1):
-      hwmon: (ds1621) Use kobj_to_dev()
-
-Vadim Pasternak (1):
-      hwmon: (mlxreg-fan) Add support for fan drawers capability and present registers
-
-Václav Kubernát (1):
-      hwmon: Add driver for fsp-3y PSUs and PDUs
-
-Wilken Gottwalt (2):
-      hwmon: (corsair-psu) Update calculation of LINEAR11 values
-      hwmon: (corsair-psu) add support for critical values
-
-Yang Li (1):
-      hwmon: Switch to using the new API kobj_to_dev()
-
-Zihao Tang (1):
-      hwmon: (ina2xx) Convert sysfs sprintf/snprintf family to sysfs_emit
-
-zuoqilin (1):
-      hwmon: (ftsteutates) Fix spelling typo
-
- .../devicetree/bindings/trivial-devices.yaml       |   6 +
- .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
- Documentation/hwmon/amd_energy.rst                 | 119 ---
- Documentation/hwmon/bpa-rs600.rst                  |  74 ++
- Documentation/hwmon/corsair-psu.rst                |  13 +-
- Documentation/hwmon/fsp-3y.rst                     |  28 +
- Documentation/hwmon/index.rst                      |   7 +-
- Documentation/hwmon/ir36021.rst                    |  63 ++
- Documentation/hwmon/max15301.rst                   |  87 ++
- Documentation/hwmon/nzxt-kraken2.rst               |  42 +
- Documentation/hwmon/stpddc60.rst                   |  90 ++
- Documentation/hwmon/sysfs-interface.rst            |   8 +
- Documentation/hwmon/tps53679.rst                   |  13 +-
- MAINTAINERS                                        |  29 +-
- drivers/hwmon/Kconfig                              |  20 +-
- drivers/hwmon/Makefile                             |   1 +
- drivers/hwmon/adc128d818.c                         |   2 +-
- drivers/hwmon/adm9240.c                            | 982 ++++++++++-----------
- drivers/hwmon/amd_energy.c                         | 379 --------
- drivers/hwmon/applesmc.c                           |  34 +-
- drivers/hwmon/corsair-psu.c                        | 355 ++++++--
- drivers/hwmon/dell-smm-hwmon.c                     |   8 +
- drivers/hwmon/ds1621.c                             |   2 +-
- drivers/hwmon/ftsteutates.c                        |   4 +-
- drivers/hwmon/hwmon.c                              |   2 +-
- drivers/hwmon/ina209.c                             |   6 +-
- drivers/hwmon/ina2xx.c                             |  11 +-
- drivers/hwmon/ina3221.c                            |   2 +-
- drivers/hwmon/intel-m10-bmc-hwmon.c                | 122 +++
- drivers/hwmon/it87.c                               |  12 +-
- drivers/hwmon/lineage-pem.c                        |   8 +-
- drivers/hwmon/lm63.c                               |   2 +-
- drivers/hwmon/ltc2945.c                            |   4 +-
- drivers/hwmon/ltc2990.c                            |   4 +-
- drivers/hwmon/ltc4151.c                            |   2 +-
- drivers/hwmon/ltc4215.c                            |   8 +-
- drivers/hwmon/ltc4222.c                            |   4 +-
- drivers/hwmon/ltc4260.c                            |   4 +-
- drivers/hwmon/ltc4261.c                            |   4 +-
- drivers/hwmon/max16065.c                           |  18 +-
- drivers/hwmon/max6697.c                            |   2 +-
- drivers/hwmon/mlxreg-fan.c                         |  51 +-
- drivers/hwmon/nct6683.c                            |  22 +-
- drivers/hwmon/nzxt-kraken2.c                       | 234 +++++
- drivers/hwmon/occ/common.c                         |  69 +-
- drivers/hwmon/occ/sysfs.c                          |   4 +-
- drivers/hwmon/pmbus/Kconfig                        |  51 +-
- drivers/hwmon/pmbus/Makefile                       |   5 +
- drivers/hwmon/pmbus/adm1266.c                      |   1 +
- drivers/hwmon/pmbus/adm1275.c                      |   1 +
- drivers/hwmon/pmbus/bel-pfe.c                      |   1 +
- drivers/hwmon/pmbus/bpa-rs600.c                    | 173 ++++
- drivers/hwmon/pmbus/fsp-3y.c                       | 254 ++++++
- drivers/hwmon/pmbus/ibm-cffps.c                    |   1 +
- drivers/hwmon/pmbus/inspur-ipsps.c                 |  29 +-
- drivers/hwmon/pmbus/ir35221.c                      |   1 +
- drivers/hwmon/pmbus/ir36021.c                      |  80 ++
- drivers/hwmon/pmbus/ir38064.c                      |   1 +
- drivers/hwmon/pmbus/irps5401.c                     |   1 +
- drivers/hwmon/pmbus/isl68137.c                     |   1 +
- drivers/hwmon/pmbus/lm25066.c                      |   1 +
- drivers/hwmon/pmbus/ltc2978.c                      |   1 +
- drivers/hwmon/pmbus/ltc3815.c                      |   1 +
- drivers/hwmon/pmbus/max15301.c                     | 190 ++++
- drivers/hwmon/pmbus/max16064.c                     |   1 +
- drivers/hwmon/pmbus/max16601.c                     |   1 +
- drivers/hwmon/pmbus/max20730.c                     |   1 +
- drivers/hwmon/pmbus/max20751.c                     |   1 +
- drivers/hwmon/pmbus/max31785.c                     |   1 +
- drivers/hwmon/pmbus/max34440.c                     |   1 +
- drivers/hwmon/pmbus/max8688.c                      |   1 +
- drivers/hwmon/pmbus/mp2975.c                       |   1 +
- drivers/hwmon/pmbus/pm6764tr.c                     |   1 +
- drivers/hwmon/pmbus/pmbus.c                        |   1 +
- drivers/hwmon/pmbus/pmbus.h                        |   1 +
- drivers/hwmon/pmbus/pmbus_core.c                   |  63 +-
- drivers/hwmon/pmbus/pxe1610.c                      |  10 +
- drivers/hwmon/pmbus/q54sj108a2.c                   |   1 +
- drivers/hwmon/pmbus/stpddc60.c                     | 249 ++++++
- drivers/hwmon/pmbus/tps40422.c                     |   1 +
- drivers/hwmon/pmbus/tps53679.c                     |  52 +-
- drivers/hwmon/pmbus/ucd9000.c                      |   1 +
- drivers/hwmon/pmbus/ucd9200.c                      |   1 +
- drivers/hwmon/pmbus/xdpe12284.c                    |   1 +
- drivers/hwmon/pmbus/zl6100.c                       |   1 +
- drivers/hwmon/s3c-hwmon.c                          |   4 +-
- drivers/hwmon/sch5627.c                            | 521 +++++------
- drivers/hwmon/sch5636.c                            |  20 +-
- drivers/hwmon/smm665.c                             |   4 +-
- drivers/hwmon/stts751.c                            |  20 +-
- drivers/hwmon/vexpress-hwmon.c                     |  12 +-
- drivers/hwmon/xgene-hwmon.c                        |  14 +-
- drivers/mfd/intel-m10-bmc.c                        |  10 +
- 93 files changed, 3126 insertions(+), 1626 deletions(-)
- delete mode 100644 Documentation/hwmon/amd_energy.rst
- create mode 100644 Documentation/hwmon/bpa-rs600.rst
- create mode 100644 Documentation/hwmon/fsp-3y.rst
- create mode 100644 Documentation/hwmon/ir36021.rst
- create mode 100644 Documentation/hwmon/max15301.rst
- create mode 100644 Documentation/hwmon/nzxt-kraken2.rst
- create mode 100644 Documentation/hwmon/stpddc60.rst
- delete mode 100644 drivers/hwmon/amd_energy.c
- create mode 100644 drivers/hwmon/nzxt-kraken2.c
- create mode 100644 drivers/hwmon/pmbus/bpa-rs600.c
- create mode 100644 drivers/hwmon/pmbus/fsp-3y.c
- create mode 100644 drivers/hwmon/pmbus/ir36021.c
- create mode 100644 drivers/hwmon/pmbus/max15301.c
- create mode 100644 drivers/hwmon/pmbus/stpddc60.c
