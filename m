@@ -2,314 +2,470 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E35D1C433B4
-	for <linux-hwmon@archiver.kernel.org>; Fri, 23 Apr 2021 15:33:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ABA9FC433B4
+	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Apr 2021 12:38:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BC48A613D7
-	for <linux-hwmon@archiver.kernel.org>; Fri, 23 Apr 2021 15:33:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 745956109E
+	for <linux-hwmon@archiver.kernel.org>; Mon, 26 Apr 2021 12:38:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242946AbhDWPe2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 23 Apr 2021 11:34:28 -0400
-Received: from smtp.outgoing.loopia.se ([93.188.3.37]:44938 "EHLO
-        smtp.outgoing.loopia.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242895AbhDWPe1 (ORCPT
+        id S233431AbhDZMim (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 26 Apr 2021 08:38:42 -0400
+Received: from mail-wr1-f51.google.com ([209.85.221.51]:45877 "EHLO
+        mail-wr1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231876AbhDZMil (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 23 Apr 2021 11:34:27 -0400
-Received: from s807.loopia.se (localhost [127.0.0.1])
-        by s807.loopia.se (Postfix) with ESMTP id 8B1B01A97278
-        for <linux-hwmon@vger.kernel.org>; Fri, 23 Apr 2021 17:33:49 +0200 (CEST)
-Received: from s499.loopia.se (unknown [172.22.191.6])
-        by s807.loopia.se (Postfix) with ESMTP id 7A9C42E3A4DD;
-        Fri, 23 Apr 2021 17:33:49 +0200 (CEST)
-Received: from s474.loopia.se (unknown [172.22.191.5])
-        by s499.loopia.se (Postfix) with ESMTP id 671AB1CE6226;
-        Fri, 23 Apr 2021 17:33:49 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at amavis.loopia.se
-Received: from s645.loopia.se ([172.22.191.5])
-        by s474.loopia.se (s474.loopia.se [172.22.190.14]) (amavisd-new, port 10024)
-        with LMTP id cgvyipax-DqF; Fri, 23 Apr 2021 17:33:48 +0200 (CEST)
-X-Loopia-Auth: user
-X-Loopia-User: carl@hgsystem.se
-X-Loopia-Originating-IP: 155.4.131.157
-Received: from localhost.localdomain (h-155-4-131-157.NA.cust.bahnhof.se [155.4.131.157])
-        (Authenticated sender: carl@hgsystem.se)
-        by s645.loopia.se (Postfix) with ESMTPSA id 51B69157A03B;
-        Fri, 23 Apr 2021 17:33:48 +0200 (CEST)
-From:   Erik Rosen <erik.rosen@metormote.com>
-To:     Jean Delvare <jdelvare@suse.com>,
+        Mon, 26 Apr 2021 08:38:41 -0400
+Received: by mail-wr1-f51.google.com with SMTP id h4so46678797wrt.12;
+        Mon, 26 Apr 2021 05:37:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=jSoXkXumP6cBk1zKc0T1wJ2awXuNPjrt4QKU5uqY8qQ=;
+        b=dF5/8YAmsyon/4r2BuYQQQ27wLdW0qgKSoKobOE853fBwTD++D768aI6JBHO3rWyLw
+         iQ+Ztk9p669sXUOuOho7M/IANWtfsgyKhPyZFI/DbW8GIs2M3VNzgOrKQNoeIgKwMwHJ
+         xVtp8k2+dxT6Oth/1VT9jWxd5vYOHLYdxr1blv5W4PlPcsHpT3vJSVwoJP7Ixyh/ZvwB
+         GvIdlQ/zAEzANG0I0tGYhBE4rZkXNmLpmMTK7PHNbx6crKG4tir/gGd5iza9hSql4qJ9
+         4Xd6QGJXiT+8Ox3UL55VqpH1Y3i0DIrDjoYbrILaexo/HVsHa+D9dc9iK0uUxsnvDAm0
+         iQWQ==
+X-Gm-Message-State: AOAM533yCy4WOMcbQIeW+wmKJ1+V9T636bYij6tEqWPhUgmAZbYvI9Wy
+        XQ5LtpwU3p8VMOilscbdci0=
+X-Google-Smtp-Source: ABdhPJzvv9mOe8H6nNVKustyRAf0UzgTXDamSQOzG5u7SlQ+xRraiDpvsJ7eukBFmcCFUVRefeKLOg==
+X-Received: by 2002:adf:dc8d:: with SMTP id r13mr22680027wrj.339.1619440678220;
+        Mon, 26 Apr 2021 05:37:58 -0700 (PDT)
+Received: from localhost ([2a02:8308:387:c900:a7b5:b859:9449:c07b])
+        by smtp.gmail.com with ESMTPSA id 200sm17993483wmb.1.2021.04.26.05.37.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Apr 2021 05:37:57 -0700 (PDT)
+From:   =?UTF-8?q?V=C3=A1clav=20Kubern=C3=A1t?= <kubernat@cesnet.cz>
+Cc:     =?UTF-8?q?V=C3=A1clav=20Kubern=C3=A1t?= <kubernat@cesnet.cz>,
+        Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Erik Rosen <erik.rosen@metormote.com>
-Subject: [PATCH 2/2] hwmon: (pmbus/zl6100) Update documentation for zl6100 driver
-Date:   Fri, 23 Apr 2021 17:33:29 +0200
-Message-Id: <20210423153329.33457-3-erik.rosen@metormote.com>
-X-Mailer: git-send-email 2.11.0 (Apple Git-81)
-In-Reply-To: <20210423153329.33457-1-erik.rosen@metormote.com>
-References: <20210423153329.33457-1-erik.rosen@metormote.com>
+Subject: [PATCH v4 1/5] hwmon: (max31790) Rework to use regmap
+Date:   Mon, 26 Apr 2021 14:37:45 +0200
+Message-Id: <20210426123749.899654-1-kubernat@cesnet.cz>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210413025948.901867-1-kubernat@cesnet.cz>
+References: <20210413025948.901867-1-kubernat@cesnet.cz>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Update documentation for zl6100 driver and fix dead links to technical
-specifications
+Converting the driver to use regmap makes it more generic. It also makes
+it a lot easier to debug through debugfs.
 
-Signed-off-by: Erik Rosen <erik.rosen@metormote.com>
+Signed-off-by: Václav Kubernát <kubernat@cesnet.cz>
 ---
- Documentation/hwmon/zl6100.rst | 132 ++++++++++++++++++++++-----------
- 1 file changed, 89 insertions(+), 43 deletions(-)
+ drivers/hwmon/Kconfig    |   1 +
+ drivers/hwmon/max31790.c | 255 ++++++++++++++++++++-------------------
+ 2 files changed, 134 insertions(+), 122 deletions(-)
 
-diff --git a/Documentation/hwmon/zl6100.rst b/Documentation/hwmon/zl6100.rst
-index 968aff10ce0a..d42ed9d3ac69 100644
---- a/Documentation/hwmon/zl6100.rst
-+++ b/Documentation/hwmon/zl6100.rst
-@@ -3,87 +3,103 @@ Kernel driver zl6100
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 1ecf697d8d99..9f11d036c316 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -1095,6 +1095,7 @@ config SENSORS_MAX6697
+ config SENSORS_MAX31790
+ 	tristate "Maxim MAX31790 sensor chip"
+ 	depends on I2C
++	select REGMAP_I2C
+ 	help
+ 	  If you say yes here you get support for 6-Channel PWM-Output
+ 	  Fan RPM Controller.
+diff --git a/drivers/hwmon/max31790.c b/drivers/hwmon/max31790.c
+index 86e6c71db685..8b90fcc685f5 100644
+--- a/drivers/hwmon/max31790.c
++++ b/drivers/hwmon/max31790.c
+@@ -12,6 +12,7 @@
+ #include <linux/init.h>
+ #include <linux/jiffies.h>
+ #include <linux/module.h>
++#include <linux/regmap.h>
+ #include <linux/slab.h>
  
- Supported chips:
+ /* MAX31790 registers */
+@@ -46,92 +47,54 @@
  
--  * Intersil / Zilker Labs ZL2004
-+  * Renesas / Intersil / Zilker Labs ZL2004
+ #define NR_CHANNEL			6
  
-     Prefix: 'zl2004'
- 
-     Addresses scanned: -
- 
--    Datasheet: http://www.intersil.com/data/fn/fn6847.pdf
-+    Datasheet: https://www.renesas.com/us/en/document/dst/zl2004-datasheet.pdf
- 
--  * Intersil / Zilker Labs ZL2005
-+  * Renesas / Intersil / Zilker Labs ZL2005
- 
-     Prefix: 'zl2005'
- 
-     Addresses scanned: -
- 
--    Datasheet: http://www.intersil.com/data/fn/fn6848.pdf
-+    Datasheet: https://www.renesas.com/us/en/document/dst/zl2005-datasheet.pdf
- 
--  * Intersil / Zilker Labs ZL2006
-+  * Renesas / Intersil / Zilker Labs ZL2006
- 
-     Prefix: 'zl2006'
- 
-     Addresses scanned: -
- 
--    Datasheet: http://www.intersil.com/data/fn/fn6850.pdf
-+    Datasheet: https://www.renesas.com/us/en/document/dst/zl2006-datasheet.pdf
- 
--  * Intersil / Zilker Labs ZL2008
-+  * Renesas / Intersil / Zilker Labs ZL2008
- 
-     Prefix: 'zl2008'
- 
-     Addresses scanned: -
- 
--    Datasheet: http://www.intersil.com/data/fn/fn6859.pdf
-+    Datasheet: https://www.renesas.com/us/en/document/dst/zl2008-datasheet.pdf
- 
--  * Intersil / Zilker Labs ZL2105
-+  * Renesas / Intersil / Zilker Labs ZL2105
- 
-     Prefix: 'zl2105'
- 
-     Addresses scanned: -
- 
--    Datasheet: http://www.intersil.com/data/fn/fn6851.pdf
-+    Datasheet: https://www.renesas.com/us/en/document/dst/zl2105-datasheet.pdf
- 
--  * Intersil / Zilker Labs ZL2106
-+  * Renesas / Intersil / Zilker Labs ZL2106
- 
-     Prefix: 'zl2106'
- 
-     Addresses scanned: -
- 
--    Datasheet: http://www.intersil.com/data/fn/fn6852.pdf
-+    Datasheet: https://www.renesas.com/us/en/document/dst/zl2106-datasheet.pdf
- 
--  * Intersil / Zilker Labs ZL6100
-+  * Renesas / Intersil / Zilker Labs ZL6100
- 
-     Prefix: 'zl6100'
- 
-     Addresses scanned: -
- 
--    Datasheet: http://www.intersil.com/data/fn/fn6876.pdf
-+    Datasheet: https://www.renesas.com/us/en/document/dst/zl6100-datasheet.pdf
- 
--  * Intersil / Zilker Labs ZL6105
-+  * Renesas / Intersil / Zilker Labs ZL6105
- 
-     Prefix: 'zl6105'
- 
-     Addresses scanned: -
- 
--    Datasheet: http://www.intersil.com/data/fn/fn6906.pdf
-+    Datasheet: https://www.renesas.com/us/en/document/dst/zl6105-datasheet.pdf
- 
--  * Intersil / Zilker Labs ZL9101M
-+  * Renesas / Intersil / Zilker Labs ZL8802
++#define MAX31790_REG_USER_BYTE_67	0x67
 +
-+    Prefix: 'zl8802'
++#define BULK_TO_U16(msb, lsb)		(((msb) << 8) + (lsb))
++#define U16_MSB(num)			(((num) & 0xFF00) >> 8)
++#define U16_LSB(num)			((num) & 0x00FF)
 +
-+    Addresses scanned: -
++static const struct regmap_range max31790_ro_range = {
++	.range_min = MAX31790_REG_TACH_COUNT(0),
++	.range_max = MAX31790_REG_PWMOUT(0) - 1,
++};
 +
-+    Datasheet: https://www.renesas.com/us/en/document/dst/zl8802-datasheet
++static const struct regmap_access_table max31790_wr_table = {
++	.no_ranges = &max31790_ro_range,
++	.n_no_ranges = 1,
++};
 +
-+  * Renesas / Intersil / Zilker Labs ZL9101M
- 
-     Prefix: 'zl9101'
- 
-     Addresses scanned: -
- 
--    Datasheet: http://www.intersil.com/data/fn/fn7669.pdf
-+    Datasheet: https://www.renesas.com/us/en/document/dst/zl9101m-datasheet
- 
--  * Intersil / Zilker Labs ZL9117M
-+  * Renesas / Intersil / Zilker Labs ZL9117M
- 
-     Prefix: 'zl9117'
- 
-     Addresses scanned: -
- 
--    Datasheet: http://www.intersil.com/data/fn/fn7914.pdf
-+    Datasheet: https://www.renesas.com/us/en/document/dst/zl9117m-datasheet
++static const struct regmap_range max31790_volatile_ranges[] = {
++	regmap_reg_range(MAX31790_REG_TACH_COUNT(0), MAX31790_REG_TACH_COUNT(12)),
++	regmap_reg_range(MAX31790_REG_FAN_FAULT_STATUS2, MAX31790_REG_FAN_FAULT_STATUS1),
++};
 +
-+  * Renesas / Intersil / Zilker Labs ZLS1003, ZLS4009
++static const struct regmap_access_table max31790_volatile_table = {
++	.yes_ranges = max31790_volatile_ranges,
++	.n_no_ranges = 0,
++	.n_yes_ranges = 2
++};
 +
-+    Prefix: 'zls1003', zls4009
++static const struct regmap_config max31790_regmap_config = {
++	.reg_bits = 8,
++	.val_bits = 8,
++	.reg_stride = 1,
++	.max_register = MAX31790_REG_USER_BYTE_67,
++	.wr_table = &max31790_wr_table,
++	.volatile_table = &max31790_volatile_table,
++	.cache_type = REGCACHE_RBTREE
++};
 +
-+    Addresses scanned: -
+ /*
+  * Client data (each client gets its own)
+  */
+ struct max31790_data {
+-	struct i2c_client *client;
++	struct regmap *regmap;
 +
-+    Datasheet: Not published
+ 	struct mutex update_lock;
+-	bool valid; /* zero until following fields are valid */
+-	unsigned long last_updated; /* in jiffies */
+-
+-	/* register values */
+ 	u8 fan_config[NR_CHANNEL];
+ 	u8 fan_dynamics[NR_CHANNEL];
+-	u16 fault_status;
+-	u16 tach[NR_CHANNEL * 2];
+-	u16 pwm[NR_CHANNEL];
+-	u16 target_count[NR_CHANNEL];
+ };
  
--  * Ericsson BMR450, BMR451
-+  * Flex BMR450, BMR451
+-static struct max31790_data *max31790_update_device(struct device *dev)
+-{
+-	struct max31790_data *data = dev_get_drvdata(dev);
+-	struct i2c_client *client = data->client;
+-	struct max31790_data *ret = data;
+-	int i;
+-	int rv;
+-
+-	mutex_lock(&data->update_lock);
+-
+-	if (time_after(jiffies, data->last_updated + HZ) || !data->valid) {
+-		rv = i2c_smbus_read_byte_data(client,
+-				MAX31790_REG_FAN_FAULT_STATUS1);
+-		if (rv < 0)
+-			goto abort;
+-		data->fault_status = rv & 0x3F;
+-
+-		rv = i2c_smbus_read_byte_data(client,
+-				MAX31790_REG_FAN_FAULT_STATUS2);
+-		if (rv < 0)
+-			goto abort;
+-		data->fault_status |= (rv & 0x3F) << 6;
+-
+-		for (i = 0; i < NR_CHANNEL; i++) {
+-			rv = i2c_smbus_read_word_swapped(client,
+-					MAX31790_REG_TACH_COUNT(i));
+-			if (rv < 0)
+-				goto abort;
+-			data->tach[i] = rv;
+-
+-			if (data->fan_config[i]
+-			    & MAX31790_FAN_CFG_TACH_INPUT) {
+-				rv = i2c_smbus_read_word_swapped(client,
+-					MAX31790_REG_TACH_COUNT(NR_CHANNEL
+-								+ i));
+-				if (rv < 0)
+-					goto abort;
+-				data->tach[NR_CHANNEL + i] = rv;
+-			} else {
+-				rv = i2c_smbus_read_word_swapped(client,
+-						MAX31790_REG_PWMOUT(i));
+-				if (rv < 0)
+-					goto abort;
+-				data->pwm[i] = rv;
+-
+-				rv = i2c_smbus_read_word_swapped(client,
+-						MAX31790_REG_TARGET_COUNT(i));
+-				if (rv < 0)
+-					goto abort;
+-				data->target_count[i] = rv;
+-			}
+-		}
+-
+-		data->last_updated = jiffies;
+-		data->valid = true;
+-	}
+-	goto done;
+-
+-abort:
+-	data->valid = false;
+-	ret = ERR_PTR(rv);
+-
+-done:
+-	mutex_unlock(&data->update_lock);
+-
+-	return ret;
+-}
+-
+ static const u8 tach_period[8] = { 1, 2, 4, 8, 16, 32, 32, 32 };
  
-     Prefix: 'bmr450', 'bmr451'
+ static u8 get_tach_period(u8 fan_dynamics)
+@@ -159,28 +122,75 @@ static u8 bits_for_tach_period(int rpm)
+ 	return bits;
+ }
  
-@@ -91,17 +107,39 @@ Supported chips:
- 
-     Datasheet:
- 
--http://archive.ericsson.net/service/internet/picov/get?DocNo=28701-EN/LZT146401
-+https://flexpowermodules.com/resources/fpm-techspec-bmr450-digital-pol-regulators-20a
- 
--  * Ericsson BMR462, BMR463, BMR464
-+  * Flex BMR462, BMR463, BMR464
- 
-     Prefixes: 'bmr462', 'bmr463', 'bmr464'
- 
-     Addresses scanned: -
- 
--    Datasheet:
-+    Datasheet: https://flexpowermodules.com/resources/fpm-techspec-bmr462
++static int read_reg_byte(struct regmap *regmap, u8 reg)
++{
++	int rv;
++	int val;
 +
-+  * Flex BMR465, BMR467
++	rv = regmap_read(regmap, reg, &val);
++	if (rv < 0)
++		return rv;
 +
-+    Prefixes: 'bmr465', 'bmr467'
++	return val;
++}
 +
-+    Addresses scanned: -
++static int read_reg_word(struct regmap *regmap, u8 reg)
++{
++	int rv;
++	u8 val_bulk[2];
 +
-+    Datasheet: https://flexpowermodules.com/resources/fpm-techspec-bmr465-digital-pol
++	rv = regmap_bulk_read(regmap, reg, val_bulk, 2);
++	if (rv < 0)
++		return rv;
 +
-+  * Flex BMR466
++	return BULK_TO_U16(val_bulk[0], val_bulk[1]);
++}
 +
-+    Prefixes: 'bmr466'
++static int write_reg_word(struct regmap *regmap, u8 reg, u16 val)
++{
++	u8 bulk_val[2];
 +
-+    Addresses scanned: -
++	bulk_val[0] = U16_MSB(val);
++	bulk_val[1] = U16_LSB(val);
 +
-+    Datasheet: https://flexpowermodules.com/resources/fpm-techspec-bmr466-8x12
- 
--	http://archive.ericsson.net/service/internet/picov/get?DocNo=28701-EN/LZT146256
-+  * Flex BMR469
++	return regmap_bulk_write(regmap, reg, bulk_val, 2);
++}
 +
-+    Prefixes: 'bmr469'
+ static int max31790_read_fan(struct device *dev, u32 attr, int channel,
+ 			     long *val)
+ {
+-	struct max31790_data *data = max31790_update_device(dev);
+-	int sr, rpm;
+-
+-	if (IS_ERR(data))
+-		return PTR_ERR(data);
++	struct max31790_data *data = dev_get_drvdata(dev);
++	struct regmap *regmap = data->regmap;
++	int tach, fault;
+ 
+ 	switch (attr) {
+ 	case hwmon_fan_input:
+-		sr = get_tach_period(data->fan_dynamics[channel]);
+-		rpm = RPM_FROM_REG(data->tach[channel], sr);
+-		*val = rpm;
++		tach = read_reg_word(regmap, MAX31790_REG_TACH_COUNT(channel));
++		if (tach < 0)
++			return tach;
 +
-+    Addresses scanned: -
++		*val = RPM_FROM_REG(tach, get_tach_period(data->fan_dynamics[channel]));
+ 		return 0;
+ 	case hwmon_fan_target:
+-		sr = get_tach_period(data->fan_dynamics[channel]);
+-		rpm = RPM_FROM_REG(data->target_count[channel], sr);
+-		*val = rpm;
++		tach = read_reg_word(regmap, MAX31790_REG_TARGET_COUNT(channel));
++		if (tach < 0)
++			return tach;
 +
-+    Datasheet: https://flexpowermodules.com/resources/fpm-techspec-bmr4696001
- 
- Author: Guenter Roeck <linux@roeck-us.net>
- 
-@@ -109,8 +147,8 @@ Author: Guenter Roeck <linux@roeck-us.net>
- Description
- -----------
- 
--This driver supports hardware monitoring for Intersil / Zilker Labs ZL6100 and
--compatible digital DC-DC controllers.
-+This driver supports hardware monitoring for Renesas / Intersil / Zilker Labs
-+ZL6100 and compatible digital DC-DC controllers.
- 
- The driver is a client driver to the core PMBus driver. Please see
- Documentation/hwmon/pmbus.rst and Documentation.hwmon/pmbus-core for details
-@@ -147,12 +185,12 @@ Module parameters
- delay
- -----
- 
--Intersil/Zilker Labs DC-DC controllers require a minimum interval between I2C
--bus accesses. According to Intersil, the minimum interval is 2 ms, though 1 ms
--appears to be sufficient and has not caused any problems in testing. The problem
--is known to affect all currently supported chips. For manual override, the
--driver provides a writeable module parameter, 'delay', which can be used to set
--the interval to a value between 0 and 65,535 microseconds.
-+Renesas/Intersil/Zilker Labs DC-DC controllers require a minimum interval
-+between I2C bus accesses. According to Intersil, the minimum interval is 2 ms,
-+though 1 ms appears to be sufficient and has not caused any problems in testing.
-+The problem is known to affect all currently supported chips. For manual override,
-+the driver provides a writeable module parameter, 'delay', which can be used
-+to set the interval to a value between 0 and 65,535 microseconds.
- 
- 
- Sysfs entries
-@@ -182,24 +220,32 @@ in2_crit		Critical maximum VMON/VDRV voltage.
- in2_lcrit_alarm		VMON/VDRV voltage critical low alarm.
- in2_crit_alarm		VMON/VDRV voltage critical high alarm.
- 
--			vmon attributes are supported on ZL2004, ZL9101M,
--			and ZL9117M only.
-+			vmon attributes are supported on ZL2004, ZL8802,
-+			ZL9101M, ZL9117M and ZLS4009 only.
- 
--inX_label		"vout1"
-+inX_label		"vout[12]"
- inX_input		Measured output voltage.
- inX_lcrit		Critical minimum output Voltage.
- inX_crit		Critical maximum output voltage.
- inX_lcrit_alarm		Critical output voltage critical low alarm.
- inX_crit_alarm		Critical output voltage critical high alarm.
- 
--			X is 3 for ZL2004, ZL9101M, and ZL9117M, 2 otherwise.
-+			X is 3 for ZL2004, ZL9101M, and ZL9117M,
-+			3, 4 for ZL8802 and 2 otherwise.
++		*val = RPM_FROM_REG(tach, get_tach_period(data->fan_dynamics[channel]));
+ 		return 0;
+ 	case hwmon_fan_fault:
+-		*val = !!(data->fault_status & (1 << channel));
++		if (channel > 6)
++			fault = read_reg_byte(regmap, MAX31790_REG_FAN_FAULT_STATUS2);
++		else
++			fault = read_reg_byte(regmap, MAX31790_REG_FAN_FAULT_STATUS1);
 +
-+curr1_label		"iin"
-+curr1_input		Measured input current.
++		if (fault < 0)
++			return fault;
 +
-+			iin attributes are supported on ZL8802 only
++		if (channel > 6)
++			*val = !!(fault & (1 << (channel - 6)));
++		else
++			*val = !!(fault & (1 << channel));
+ 		return 0;
+ 	default:
+ 		return -EOPNOTSUPP;
+@@ -191,7 +201,7 @@ static int max31790_write_fan(struct device *dev, u32 attr, int channel,
+ 			      long val)
+ {
+ 	struct max31790_data *data = dev_get_drvdata(dev);
+-	struct i2c_client *client = data->client;
++	struct regmap *regmap = data->regmap;
+ 	int target_count;
+ 	int err = 0;
+ 	u8 bits;
+@@ -207,9 +217,10 @@ static int max31790_write_fan(struct device *dev, u32 attr, int channel,
+ 			((data->fan_dynamics[channel] &
+ 			  ~MAX31790_FAN_DYN_SR_MASK) |
+ 			 (bits << MAX31790_FAN_DYN_SR_SHIFT));
+-		err = i2c_smbus_write_byte_data(client,
+-					MAX31790_REG_FAN_DYNAMICS(channel),
+-					data->fan_dynamics[channel]);
 +
-+currY_label		"iout[12]"
-+currY_input		Measured output current.
-+currY_lcrit		Critical minimum output current.
-+currY_crit		Critical maximum output current.
-+currY_lcrit_alarm	Output current critical low alarm.
-+currY_crit_alarm	Output current critical high alarm.
++		err = regmap_write(regmap,
++				   MAX31790_REG_FAN_DYNAMICS(channel),
++				   data->fan_dynamics[channel]);
+ 		if (err < 0)
+ 			break;
  
--curr1_label		"iout1"
--curr1_input		Measured output current.
--curr1_lcrit		Critical minimum output current.
--curr1_crit		Critical maximum output current.
--curr1_lcrit_alarm	Output current critical low alarm.
--curr1_crit_alarm	Output current critical high alarm.
-+			Y is 2, 3 for ZL8802, 1 otherwise
+@@ -217,11 +228,11 @@ static int max31790_write_fan(struct device *dev, u32 attr, int channel,
+ 		target_count = RPM_TO_REG(val, sr);
+ 		target_count = clamp_val(target_count, 0x1, 0x7FF);
  
- temp[12]_input		Measured temperature.
- temp[12]_min		Minimum temperature.
+-		data->target_count[channel] = target_count << 5;
++		target_count = target_count << 5;
+ 
+-		err = i2c_smbus_write_word_swapped(client,
+-					MAX31790_REG_TARGET_COUNT(channel),
+-					data->target_count[channel]);
++		err = write_reg_word(regmap,
++				     MAX31790_REG_TARGET_COUNT(channel),
++				     target_count);
+ 		break;
+ 	default:
+ 		err = -EOPNOTSUPP;
+@@ -258,22 +269,22 @@ static umode_t max31790_fan_is_visible(const void *_data, u32 attr, int channel)
+ static int max31790_read_pwm(struct device *dev, u32 attr, int channel,
+ 			     long *val)
+ {
+-	struct max31790_data *data = max31790_update_device(dev);
+-	u8 fan_config;
+-
+-	if (IS_ERR(data))
+-		return PTR_ERR(data);
+-
+-	fan_config = data->fan_config[channel];
++	struct max31790_data *data = dev_get_drvdata(dev);
++	struct regmap *regmap = data->regmap;
++	int read;
+ 
+ 	switch (attr) {
+ 	case hwmon_pwm_input:
+-		*val = data->pwm[channel] >> 8;
++		read = read_reg_word(regmap, MAX31790_REG_PWMOUT(channel));
++		if (read < 0)
++			return read;
++
++		*val = read >> 8;
+ 		return 0;
+ 	case hwmon_pwm_enable:
+-		if (fan_config & MAX31790_FAN_CFG_RPM_MODE)
++		if (data->fan_config[channel] & MAX31790_FAN_CFG_RPM_MODE)
+ 			*val = 2;
+-		else if (fan_config & MAX31790_FAN_CFG_TACH_INPUT_EN)
++		else if (data->fan_config[channel] & MAX31790_FAN_CFG_TACH_INPUT_EN)
+ 			*val = 1;
+ 		else
+ 			*val = 0;
+@@ -287,7 +298,7 @@ static int max31790_write_pwm(struct device *dev, u32 attr, int channel,
+ 			      long val)
+ {
+ 	struct max31790_data *data = dev_get_drvdata(dev);
+-	struct i2c_client *client = data->client;
++	struct regmap *regmap = data->regmap;
+ 	u8 fan_config;
+ 	int err = 0;
+ 
+@@ -299,10 +310,7 @@ static int max31790_write_pwm(struct device *dev, u32 attr, int channel,
+ 			err = -EINVAL;
+ 			break;
+ 		}
+-		data->pwm[channel] = val << 8;
+-		err = i2c_smbus_write_word_swapped(client,
+-						   MAX31790_REG_PWMOUT(channel),
+-						   data->pwm[channel]);
++		err = write_reg_word(regmap, MAX31790_REG_PWMOUT(channel), val << 8);
+ 		break;
+ 	case hwmon_pwm_enable:
+ 		fan_config = data->fan_config[channel];
+@@ -321,9 +329,9 @@ static int max31790_write_pwm(struct device *dev, u32 attr, int channel,
+ 			break;
+ 		}
+ 		data->fan_config[channel] = fan_config;
+-		err = i2c_smbus_write_byte_data(client,
+-					MAX31790_REG_FAN_CONFIG(channel),
+-					fan_config);
++		err = regmap_write(regmap,
++				   MAX31790_REG_FAN_CONFIG(channel),
++				   fan_config);
+ 		break;
+ 	default:
+ 		err = -EOPNOTSUPP;
+@@ -426,20 +434,18 @@ static const struct hwmon_chip_info max31790_chip_info = {
+ 	.info = max31790_info,
+ };
+ 
+-static int max31790_init_client(struct i2c_client *client,
++static int max31790_init_client(struct regmap *regmap,
+ 				struct max31790_data *data)
+ {
+ 	int i, rv;
+ 
+ 	for (i = 0; i < NR_CHANNEL; i++) {
+-		rv = i2c_smbus_read_byte_data(client,
+-				MAX31790_REG_FAN_CONFIG(i));
++		rv = read_reg_byte(regmap, MAX31790_REG_FAN_CONFIG(i % NR_CHANNEL));
+ 		if (rv < 0)
+ 			return rv;
+ 		data->fan_config[i] = rv;
+ 
+-		rv = i2c_smbus_read_byte_data(client,
+-				MAX31790_REG_FAN_DYNAMICS(i));
++		rv = read_reg_byte(regmap, MAX31790_REG_FAN_DYNAMICS(i));
+ 		if (rv < 0)
+ 			return rv;
+ 		data->fan_dynamics[i] = rv;
+@@ -464,13 +470,18 @@ static int max31790_probe(struct i2c_client *client)
+ 	if (!data)
+ 		return -ENOMEM;
+ 
+-	data->client = client;
+ 	mutex_init(&data->update_lock);
+ 
++	data->regmap = devm_regmap_init_i2c(client, &max31790_regmap_config);
++	if (IS_ERR(data->regmap)) {
++		dev_err(dev, "failed to allocate register map\n");
++		return PTR_ERR(data->regmap);
++	}
++
+ 	/*
+ 	 * Initialize the max31790 chip
+ 	 */
+-	err = max31790_init_client(client, data);
++	err = max31790_init_client(data->regmap, data);
+ 	if (err)
+ 		return err;
+ 
 -- 
-2.20.1
+2.31.1
 
