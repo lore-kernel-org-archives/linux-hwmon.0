@@ -5,81 +5,127 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C4A2C433B4
-	for <linux-hwmon@archiver.kernel.org>; Tue, 27 Apr 2021 04:48:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFE4AC433B4
+	for <linux-hwmon@archiver.kernel.org>; Tue, 27 Apr 2021 13:58:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EF1B5613A9
-	for <linux-hwmon@archiver.kernel.org>; Tue, 27 Apr 2021 04:48:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7DB83613C0
+	for <linux-hwmon@archiver.kernel.org>; Tue, 27 Apr 2021 13:58:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbhD0EtV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 27 Apr 2021 00:49:21 -0400
-Received: from mail-m121145.qiye.163.com ([115.236.121.145]:23932 "EHLO
-        mail-m121145.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbhD0EtV (ORCPT
+        id S236144AbhD0N7E (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 27 Apr 2021 09:59:04 -0400
+Received: from mail-wr1-f46.google.com ([209.85.221.46]:47093 "EHLO
+        mail-wr1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236074AbhD0N7D (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 27 Apr 2021 00:49:21 -0400
-X-Greylist: delayed 365 seconds by postgrey-1.27 at vger.kernel.org; Tue, 27 Apr 2021 00:49:20 EDT
-Received: from wanjb-virtual-machine.localdomain (unknown [36.152.145.182])
-        by mail-m121145.qiye.163.com (Hmail) with ESMTPA id 99AA58001ED;
-        Tue, 27 Apr 2021 12:42:31 +0800 (CST)
-From:   Wan Jiabing <wanjiabing@vivo.com>
-To:     Wilken Gottwalt <wilken.gottwalt@posteo.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kael_w@yeah.net, Wan Jiabing <wanjiabing@vivo.com>
-Subject: [PATCH] hwmon: Remove unneeded semicolons
-Date:   Tue, 27 Apr 2021 12:42:19 +0800
-Message-Id: <20210427044219.7799-1-wanjiabing@vivo.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 27 Apr 2021 09:59:03 -0400
+Received: by mail-wr1-f46.google.com with SMTP id x5so9290435wrv.13;
+        Tue, 27 Apr 2021 06:58:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=S2lTJms3fUo/8xp/VoVwZC84TyrPj5vfvnW94ifoAs4=;
+        b=U3mjO8Z4VsBD+wch9CoNWrL8cs+8ceX4Q4GbbqcRgJgBf0aXg4OWMMvA1Xtqmkf0/C
+         72VdGfrajMRhPakLS22Zww7yO2PmPNg+qjRToXQk5hVu7p/qdgioJPeQVFTIkcRofsOg
+         kZfJl55+Iae/57C3pgico73NsWYuit6bKy7ngK5ndMNW9SpseVlXwVV616DP2P8u+j4g
+         LxtSMLnuyU4V6i5fsOE157EC2Jl1k7V9SLHDdrQ+bHCuB928uQQVxXGWhhf4kJeZBIxE
+         eFRihnDT1rGSwrClrGnVe95VQKQPU9jQXuwG1nV+uNi6HxibQoHpgKstZP87WraBWQ/U
+         WKnw==
+X-Gm-Message-State: AOAM530uR/3pjjBD5gUY3LWN7GZScZaTIpN6TU/BHC2Wa9r1UXte35tv
+        f/QuYzP+olY/7hkBhHIQ9gUuytvDqLSUdA==
+X-Google-Smtp-Source: ABdhPJxQXPWwziCCrDGdDLTPCsxuXEZOXUdbP/8F1K1IFPeuW+XVRDHeBW8M6tZfktQhqM/JCYXnuQ==
+X-Received: by 2002:adf:ec02:: with SMTP id x2mr19743094wrn.35.1619531898305;
+        Tue, 27 Apr 2021 06:58:18 -0700 (PDT)
+Received: from localhost ([2a02:8308:387:c900:a7b5:b859:9449:c07b])
+        by smtp.gmail.com with ESMTPSA id e12sm915266wrt.51.2021.04.27.06.58.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Apr 2021 06:58:17 -0700 (PDT)
+From:   =?UTF-8?q?V=C3=A1clav=20Kubern=C3=A1t?= <kubernat@cesnet.cz>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?V=C3=A1clav=20Kubern=C3=A1t?= <kubernat@cesnet.cz>
+Subject: [PATCH] Fix FSP-3Y YH-5151E non-compliant vout encoding
+Date:   Tue, 27 Apr 2021 15:58:06 +0200
+Message-Id: <20210427135807.2414331-1-kubernat@cesnet.cz>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgYFAkeWUFZS1VLWVdZKFlBSE83V1ktWUFJV1kPCR
-        oVCBIfWUFZQxhMSlZCHh4YQx0dGEkdTElVEwETFhoSFyQUDg9ZV1kWGg8SFR0UWUFZT0tIVUpKS0
-        hKTFVLWQY+
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MQg6URw4KT8XKFZDDD8LKj0e
-        OhdPCU9VSlVKTUpCT0JDTk5JSk5CVTMWGhIXVQwaFRESGhkSFRw7DRINFFUYFBZFWVdZEgtZQVlI
-        TVVKTklVSk9OVUpDSVlXWQgBWUFKQ0lINwY+
-X-HM-Tid: 0a7911a2c9e1b03akuuu99aa58001ed
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Fix the following coccicheck warning:
+I didn't properly test the driver for the PDU, so it was completely
+broken. Firstly, the log/real mapping was incorrect in one case.
+Secondly, PMBus specifies that output voltages should be in the linear16
+encoding. However, the PDU is non-compliant and uses linear11. The PSU
+isn't affected by this.
 
-./drivers/hwmon/corsair-psu.c:379:2-3: Unneeded semicolon
+pmbus_core didn't allow forcing linear11 format for output voltages, so
+I added a way to force that.
 
-Remove unneeded semicolons.
-
-Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+Signed-off-by: Václav Kubernát <kubernat@cesnet.cz>
 ---
- drivers/hwmon/corsair-psu.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/hwmon/pmbus/fsp-3y.c     | 3 ++-
+ drivers/hwmon/pmbus/pmbus.h      | 6 +++++-
+ drivers/hwmon/pmbus/pmbus_core.c | 3 ++-
+ 3 files changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
-index 3a5807e4a2ef..02298b86b57b 100644
---- a/drivers/hwmon/corsair-psu.c
-+++ b/drivers/hwmon/corsair-psu.c
-@@ -355,7 +355,7 @@ static umode_t corsairpsu_hwmon_power_is_visible(const struct corsairpsu_data *p
- 		return 0444;
- 	default:
- 		return 0;
--	};
-+	}
- }
+diff --git a/drivers/hwmon/pmbus/fsp-3y.c b/drivers/hwmon/pmbus/fsp-3y.c
+index 564649e87e34..b4ea1e63272e 100644
+--- a/drivers/hwmon/pmbus/fsp-3y.c
++++ b/drivers/hwmon/pmbus/fsp-3y.c
+@@ -57,7 +57,7 @@ static int page_log_to_page_real(int page_log, enum chips chip)
+ 		case YH5151E_PAGE_12V_LOG:
+ 			return YH5151E_PAGE_12V_REAL;
+ 		case YH5151E_PAGE_5V_LOG:
+-			return YH5151E_PAGE_5V_LOG;
++			return YH5151E_PAGE_5V_REAL;
+ 		case YH5151E_PAGE_3V3_LOG:
+ 			return YH5151E_PAGE_3V3_REAL;
+ 		}
+@@ -164,6 +164,7 @@ struct pmbus_driver_info fsp3y_info[] = {
+ 	},
+ 	[yh5151e] = {
+ 		.pages = 3,
++		.format[PSC_VOLTAGE_OUT] = force_linear11,
+ 		.func[YH5151E_PAGE_12V_LOG] =
+ 			PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT |
+ 			PMBUS_HAVE_POUT  |
+diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+index 4c30ec89f5bf..4d79a43fc965 100644
+--- a/drivers/hwmon/pmbus/pmbus.h
++++ b/drivers/hwmon/pmbus/pmbus.h
+@@ -405,7 +405,11 @@ enum pmbus_sensor_classes {
+ #define PMBUS_PHASE_VIRTUAL	BIT(30)	/* Phases on this page are virtual */
+ #define PMBUS_PAGE_VIRTUAL	BIT(31)	/* Page is virtual */
  
- static umode_t corsairpsu_hwmon_in_is_visible(const struct corsairpsu_data *priv, u32 attr,
-@@ -376,7 +376,7 @@ static umode_t corsairpsu_hwmon_in_is_visible(const struct corsairpsu_data *priv
- 		break;
- 	default:
- 		break;
--	};
-+	}
+-enum pmbus_data_format { linear = 0, direct, vid };
++/*
++ * force_linear11 is for non-compliant devices that output VOUT in linear11
++ * instead of linear16.
++ */
++enum pmbus_data_format { linear = 0, force_linear11, direct, vid };
+ enum vrm_version { vr11 = 0, vr12, vr13, imvp9, amd625mv };
  
- 	return res;
- }
+ struct pmbus_driver_info {
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index 192442b3b7a2..45a0d0303c19 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -589,7 +589,8 @@ static s64 pmbus_reg2data_linear(struct pmbus_data *data,
+ 	s32 mantissa;
+ 	s64 val;
+ 
+-	if (sensor->class == PSC_VOLTAGE_OUT) {	/* LINEAR16 */
++	if (sensor->class == PSC_VOLTAGE_OUT &&	/* LINEAR16 */
++	    data->info->format[sensor->class] != force_linear11) {
+ 		exponent = data->exponent[sensor->page];
+ 		mantissa = (u16) sensor->data;
+ 	} else {				/* LINEAR11 */
 -- 
-2.25.1
+2.31.1
 
