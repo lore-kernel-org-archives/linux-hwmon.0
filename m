@@ -2,125 +2,141 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB10BC433B4
-	for <linux-hwmon@archiver.kernel.org>; Tue, 27 Apr 2021 14:49:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CABE2C433B4
+	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Apr 2021 08:38:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8C8566113D
-	for <linux-hwmon@archiver.kernel.org>; Tue, 27 Apr 2021 14:49:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8901D613DC
+	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Apr 2021 08:38:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236368AbhD0Otu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 27 Apr 2021 10:49:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59112 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236226AbhD0Ott (ORCPT
+        id S237012AbhD1IjX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 28 Apr 2021 04:39:23 -0400
+Received: from mail-wr1-f45.google.com ([209.85.221.45]:41735 "EHLO
+        mail-wr1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232153AbhD1IjW (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 27 Apr 2021 10:49:49 -0400
-Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD562C061574;
-        Tue, 27 Apr 2021 07:49:06 -0700 (PDT)
-Received: by mail-oo1-xc35.google.com with SMTP id g9-20020a4ad3090000b02901ec6daba49aso6296805oos.6;
-        Tue, 27 Apr 2021 07:49:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=vqmkSRAKVyilaqPijFt/uwQzA200kGE2vIXdVA9pZrA=;
-        b=IzZp7HJYy3Sy8EvYw3JRMKcEUnBuFBsu4wjcAwHcGOmkMRSz6b70fSUbRu2+w14z/M
-         KSsmCsX/5wLZ80L6BJwVrc8NGlOSRTFzHi68m1nzwpoYTjoQHwv11BqGBXlD4Z2sEuED
-         wn+HHHKMYkl9k2Zo6fZKPo1l/VAIW5Cspu2kzGMClpfsTUhizpNmXB6tGvlaL5sIHn9z
-         pernJK3mcAfJ0t49BDfdqGvbzFuUTTXoo7T0alhzUWgmwAhShSzMGktat4j73Zc2pSAh
-         2VCQRAiIYll+GMWbc9n/vW0o+0Z6zYRgAl7s6n2v/dN6gF7pbaDL2GONnAnkKVU4tLtW
-         HlFw==
+        Wed, 28 Apr 2021 04:39:22 -0400
+Received: by mail-wr1-f45.google.com with SMTP id d11so4257823wrw.8;
+        Wed, 28 Apr 2021 01:38:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=vqmkSRAKVyilaqPijFt/uwQzA200kGE2vIXdVA9pZrA=;
-        b=mE9phJLVWm2nF5NVzNIwFUVEfJgUZUj6YxUZ+K0RBjOb/qzBUWMQ8rlVu8EYSl2tcs
-         H0FL/GCkZhaLy31gVBA0pFJdd1kJ+vfBEjrzSgMpQ4zdoDPkEZWgLERojltKlbqkVeuB
-         78R3A3D1WuRNizGQpP7OYKO+iO6pr4q1FzO712dx85S9hgHF8mEF3/Tm/B2z7+O1E3Dh
-         ujUPJTAVOldCh65ee6Rf2DPyiMG/xLOFwr6jSsuUHuN4a0mNioketEn0u6EkVqJKwHit
-         bZB/BJd59qofvdkSB8Udz42cqewp+lM5HUNodyiLWcHZxi4Zb1sr0K8M5zpc2Pu7T1Z5
-         6fyA==
-X-Gm-Message-State: AOAM533RohlW34gUW5B89gqQ6nro+JrgaWo6+J1iknUeZ89eKj/NPf68
-        HFs0cnBkJLuE3+XWmQwOxqc=
-X-Google-Smtp-Source: ABdhPJxMh1CdJxG9kkyIIsS1phVzUFgDeIKVaXOduRYdh0ozxWib+Dd8VpMtrHODLpQ+OZurf/tVIw==
-X-Received: by 2002:a05:6820:455:: with SMTP id p21mr18181712oou.56.1619534946162;
-        Tue, 27 Apr 2021 07:49:06 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e30sm667094oow.11.2021.04.27.07.49.05
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 27 Apr 2021 07:49:05 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 27 Apr 2021 07:49:04 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Wan Jiabing <wanjiabing@vivo.com>
-Cc:     Wilken Gottwalt <wilken.gottwalt@posteo.net>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5dhVOJV1v1xe2BZ8GwY6vRjyrU1hKrudsBliQOL/+ww=;
+        b=RJp50+8EF1+q+Rh4lxlIuKjycZe99IILmUb4oOsQ0zKWeb49ZYIPXE6Xrwlfel0281
+         /cMr6XchdzYoYQ9iZ6Y6DcemTQuBybmakehHpNoEU462RFi48v+N77MV2py/1PlWdWaN
+         YCla7j+gC3HTATfBM+JUOJR3g/tuVD1t4ITP10cyRy6Pt7xHknwH3uztGN5GOd2qACji
+         lKJZ7nk132SjF4FlH2c6jaukuPTUOzojAH3uEbvdk7KTlduJvdIKKlPHuUzNHTnfxmQa
+         0JgO2XYmizZRVVj+R2ay2moaSswPn6/wgYXU+5Vk0Z5rwiClB/E9sCiZjbDR4rmm77/l
+         ubtw==
+X-Gm-Message-State: AOAM532c2yp4Th0ncSeyE/DMXgIOMEbEQWisyMP91ugBi12IcPn2+mC7
+        Sgw+nQQPQAi/nnoTbWaVUMk=
+X-Google-Smtp-Source: ABdhPJxeIlyzT+Hh4euDs5kEWw/ETIm1+5xE/vERWo8x1IsMSR5jLr0sQNkCGUekdomNHU4K6upGwA==
+X-Received: by 2002:a5d:6383:: with SMTP id p3mr8032355wru.230.1619599117243;
+        Wed, 28 Apr 2021 01:38:37 -0700 (PDT)
+Received: from localhost ([2a02:8308:387:c900:a7b5:b859:9449:c07b])
+        by smtp.gmail.com with ESMTPSA id d14sm7438735wrp.12.2021.04.28.01.38.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Apr 2021 01:38:36 -0700 (PDT)
+From:   =?UTF-8?q?V=C3=A1clav=20Kubern=C3=A1t?= <kubernat@cesnet.cz>
+To:     Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kael_w@yeah.net
-Subject: Re: [PATCH] hwmon: Remove unneeded semicolons
-Message-ID: <20210427144904.GB202505@roeck-us.net>
-References: <20210427044219.7799-1-wanjiabing@vivo.com>
+        linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?V=C3=A1clav=20Kubern=C3=A1t?= <kubernat@cesnet.cz>
+Subject: [PATCH v2] Fix FSP-3Y YH-5151E non-compliant vout encoding
+Date:   Wed, 28 Apr 2021 10:38:32 +0200
+Message-Id: <20210428083833.4136346-1-kubernat@cesnet.cz>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210427044219.7799-1-wanjiabing@vivo.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi,
+I didn't properly test the driver for YH-5151E, so it was completely
+broken. Firstly, the log/real mapping was incorrect in one case.
+Secondly, PMBus specifies that output voltages should be in the linear16
+encoding. However, the PDU is non-compliant and uses linear11. YM-2151E
+isn't affected by this. Fix this by converting the values inside the
+read functions. linear16 gets the exponent from the VOUT_MODE command.
+The device doesn't support it, so I have to manually supply the value
+for it.
 
-On Tue, Apr 27, 2021 at 12:42:19PM +0800, Wan Jiabing wrote:
-> Fix the following coccicheck warning:
-> 
-> ./drivers/hwmon/corsair-psu.c:379:2-3: Unneeded semicolon
-> 
-> Remove unneeded semicolons.
-> 
-> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+Both supported devices have now been tested to report correct vout
+values.
 
-Thanks a lot for your patch; applied.
+Signed-off-by: Václav Kubernát <kubernat@cesnet.cz>
+---
+ drivers/hwmon/pmbus/fsp-3y.c | 26 ++++++++++++++++++++++++--
+ 1 file changed, 24 insertions(+), 2 deletions(-)
 
-In the future, please add the affected driver to the subject line, as in
+diff --git a/drivers/hwmon/pmbus/fsp-3y.c b/drivers/hwmon/pmbus/fsp-3y.c
+index 564649e87e34..dc147a79d6aa 100644
+--- a/drivers/hwmon/pmbus/fsp-3y.c
++++ b/drivers/hwmon/pmbus/fsp-3y.c
+@@ -57,7 +57,7 @@ static int page_log_to_page_real(int page_log, enum chips chip)
+ 		case YH5151E_PAGE_12V_LOG:
+ 			return YH5151E_PAGE_12V_REAL;
+ 		case YH5151E_PAGE_5V_LOG:
+-			return YH5151E_PAGE_5V_LOG;
++			return YH5151E_PAGE_5V_REAL;
+ 		case YH5151E_PAGE_3V3_LOG:
+ 			return YH5151E_PAGE_3V3_REAL;
+ 		}
+@@ -103,17 +103,28 @@ static int set_page(struct i2c_client *client, int page_log)
+ 
+ static int fsp3y_read_byte_data(struct i2c_client *client, int page, int reg)
+ {
++	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
++	struct fsp3y_data *data = to_fsp3y_data(info);
+ 	int rv;
+ 
+ 	rv = set_page(client, page);
+ 	if (rv < 0)
+ 		return rv;
+ 
++	/*
++	 * YH5151-E outputs vout in linear11. The conversion is done later, but
++	 * I have to inject pmbus_core with the correct exponent.
++	 */
++	if (data->chip == yh5151e && reg == PMBUS_VOUT_MODE)
++		return 0x1A;
++
+ 	return i2c_smbus_read_byte_data(client, reg);
+ }
+ 
+ static int fsp3y_read_word_data(struct i2c_client *client, int page, int phase, int reg)
+ {
++	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
++	struct fsp3y_data *data = to_fsp3y_data(info);
+ 	int rv;
+ 
+ 	/*
+@@ -144,7 +155,18 @@ static int fsp3y_read_word_data(struct i2c_client *client, int page, int phase,
+ 	if (rv < 0)
+ 		return rv;
+ 
+-	return i2c_smbus_read_word_data(client, reg);
++	rv = i2c_smbus_read_word_data(client, reg);
++	if (rv < 0)
++		return rv;
++
++	/*
++	 * The PDU is non-compliant and outputs output voltages in linear11
++	 * instead of linear16.
++	 */
++	if (data->chip == yh5151e && reg == PMBUS_READ_VOUT)
++		rv = ((s16)((rv & 0x7ff) << 5)) >> 5;
++
++	return rv;
+ }
+ 
+ struct pmbus_driver_info fsp3y_info[] = {
+-- 
+2.31.1
 
-hwmon: (corsair-psu) ...
-
-Thanks,
-Guenter
-
-> ---
->  drivers/hwmon/corsair-psu.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
-> index 3a5807e4a2ef..02298b86b57b 100644
-> --- a/drivers/hwmon/corsair-psu.c
-> +++ b/drivers/hwmon/corsair-psu.c
-> @@ -355,7 +355,7 @@ static umode_t corsairpsu_hwmon_power_is_visible(const struct corsairpsu_data *p
->  		return 0444;
->  	default:
->  		return 0;
-> -	};
-> +	}
->  }
->  
->  static umode_t corsairpsu_hwmon_in_is_visible(const struct corsairpsu_data *priv, u32 attr,
-> @@ -376,7 +376,7 @@ static umode_t corsairpsu_hwmon_in_is_visible(const struct corsairpsu_data *priv
->  		break;
->  	default:
->  		break;
-> -	};
-> +	}
->  
->  	return res;
->  }
-> -- 
-> 2.25.1
-> 
