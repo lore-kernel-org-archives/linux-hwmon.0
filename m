@@ -2,98 +2,132 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76AFAC433ED
-	for <linux-hwmon@archiver.kernel.org>; Thu, 29 Apr 2021 12:12:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E177AC433ED
+	for <linux-hwmon@archiver.kernel.org>; Thu, 29 Apr 2021 15:14:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3D35061449
-	for <linux-hwmon@archiver.kernel.org>; Thu, 29 Apr 2021 12:12:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A85B361447
+	for <linux-hwmon@archiver.kernel.org>; Thu, 29 Apr 2021 15:14:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235830AbhD2MMu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 29 Apr 2021 08:12:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38048 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235850AbhD2MMu (ORCPT
+        id S233642AbhD2POq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 29 Apr 2021 11:14:46 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:33448 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232556AbhD2POq (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 29 Apr 2021 08:12:50 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F02C06138F
-        for <linux-hwmon@vger.kernel.org>; Thu, 29 Apr 2021 05:12:03 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id l2so14371192wrm.9
-        for <linux-hwmon@vger.kernel.org>; Thu, 29 Apr 2021 05:12:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura-hr.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ymSp8rfZSWXVKAoyrk1VB6kKAVSstzHQFijBzDCf7V4=;
-        b=0WXvLpbTLG1tRoZSII9grqKOVMmJ//5onbjzjw3Hrr7ozsslJOL1Q1fWdQg27qyJMA
-         R1jsnOIFEYIMlxrQGpCtvWc1Vwm+TESo6CHKznijk5dAYL+RbcsPNA5x/sh5Vfp2vmbq
-         ucWGTQ2KmC5N2Qo4KODwjQY6kV3Ko0p/BwzC7Q9Xh9yiVniGIoWsSBqXK8KSvIZYS+r2
-         pgT1oRfr6+S77L3hPsyfPhxKyC666pPZypgYMdtuJYqb5WzwKnMS7Cc0iIIQYPBQflpK
-         XeCyT4tVITG9AJFXBVBdoCPg4wNdX4d2uulqw9v+xn+I6PzRWVX0WGDQ+UPsGLpACh7C
-         uxRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ymSp8rfZSWXVKAoyrk1VB6kKAVSstzHQFijBzDCf7V4=;
-        b=ZxqBpaFTB3NwqC1axJh8Dn5v6zNDnaBV/E3vsRDguJkJljIak3jXHpZfLCsU8mwvLW
-         MBoC9bOQ9b2goimVJ6sKWoPomjcNaZt8Shf5SNvV0y4+1U98a6cuLJxP7HbiNG+aE6Uy
-         jQLJbsim9cIWoEwA27hl6uNfuMh3pUUgSRB9XfLluSg5bu7FKAkhvTdhplIjxb0qOfDr
-         W7P15zyNGKeDBszU3pxh6RyQBC9fduf9Cs/q7/dSt3+CuaVvYEnxR9jyyusSA/gSBLLE
-         P5T517pPfcPKLwKg5oZ+hCvlkaYtdixYCubmeuaCIVsKRT+XCxL2H1lV18ynbExwwrhZ
-         JARw==
-X-Gm-Message-State: AOAM5309uUC36hHzAhxM9hIVB9ec/4skbsA6jA3wN1r79R+Ry1S87Dx2
-        sWmJX2JLd0MxjZve/YLtusOVYg==
-X-Google-Smtp-Source: ABdhPJwmckvmYiN8ROxPFgYNNcFNtN9hKA8kcQk2aMDqu0TsLAaRfAW+3HnF6cPy+5U99P52ncQQzw==
-X-Received: by 2002:adf:e7c2:: with SMTP id e2mr23171822wrn.180.1619698322290;
-        Thu, 29 Apr 2021 05:12:02 -0700 (PDT)
-Received: from localhost.localdomain (dh207-97-15.xnet.hr. [88.207.97.15])
-        by smtp.googlemail.com with ESMTPSA id 18sm10075640wmo.47.2021.04.29.05.12.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Apr 2021 05:12:01 -0700 (PDT)
-From:   Robert Marko <robert.marko@sartura.hr>
-To:     jdelvare@suse.com, linux@roeck-us.net, corbet@lwn.net,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org
-Cc:     Robert Marko <robert.marko@sartura.hr>
-Subject: [PATCH 2/2] dt-bindings: hwmon: Add Texas Instruments TMP1075
-Date:   Thu, 29 Apr 2021 14:11:50 +0200
-Message-Id: <20210429121150.106804-2-robert.marko@sartura.hr>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210429121150.106804-1-robert.marko@sartura.hr>
-References: <20210429121150.106804-1-robert.marko@sartura.hr>
+        Thu, 29 Apr 2021 11:14:46 -0400
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13TF4bvH185599;
+        Thu, 29 Apr 2021 11:13:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=O+NDx1kHdSTfNDvnWPwrTTsSLoLVKaBXhAWAiTx9P5A=;
+ b=YlM07Bs8BWSZ0VxFpie3HcYbRcXd58J3XEIT05xiNvswZpGHn4hUTmWhInnmhM3X/dLK
+ q9GyPn3vJrPjCdGvRXXu8wv1W49XWAh84FJToyJ1Pj++J/ingF+21qUSbYOsT6v5NXum
+ 6PjqrMqcEAxDBybchrjpjRwL+XlBBLYoJBbLBhQ/y91tra4cuZUvdiueWhySefnyMj7f
+ obaJ17uhR/ND43afpnlhr024QeIEyL+c/RoZ1GSkuefIlD2l3Aj2Rxp4Wg7Vq5bi0TQv
+ C+DJmgQfef9otSx/0zAenBivrGqjtAke0DCvNVa7b5fRwz8Rp8dCyCk74L3/ms6eLN2h XA== 
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 387x5gasgf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Apr 2021 11:13:44 -0400
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 13TEw50x004085;
+        Thu, 29 Apr 2021 15:13:43 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma03dal.us.ibm.com with ESMTP id 384ay9pdqb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Apr 2021 15:13:43 +0000
+Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 13TFDgD237159296
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 29 Apr 2021 15:13:42 GMT
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6B159112064;
+        Thu, 29 Apr 2021 15:13:42 +0000 (GMT)
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C0FF3112062;
+        Thu, 29 Apr 2021 15:13:41 +0000 (GMT)
+Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.211.73.43])
+        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
+        Thu, 29 Apr 2021 15:13:41 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     linux-hwmon@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux@roeck-us.net,
+        jdelvare@suse.com, Eddie James <eajames@linux.ibm.com>
+Subject: [PATCH] hwmon: (occ) Fix poll rate limiting
+Date:   Thu, 29 Apr 2021 10:13:36 -0500
+Message-Id: <20210429151336.18980-1-eajames@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: vyXyzLcftirXLkRxUEcHGVnmv4xh-jis
+X-Proofpoint-GUID: vyXyzLcftirXLkRxUEcHGVnmv4xh-jis
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-04-29_07:2021-04-28,2021-04-29 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
+ adultscore=0 priorityscore=1501 mlxscore=0 phishscore=0 bulkscore=0
+ spamscore=0 lowpriorityscore=0 malwarescore=0 suspectscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104060000 definitions=main-2104290096
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Document the DT compatible for TI TMP1075 which
-is a LM75 compatible sensor.
+The poll rate limiter time was initialized at zero. This breaks the
+comparison in time_after if jiffies is large. Switch to storing the
+next update time rather than the previous time, and initialize the
+time when the device is probed.
 
-Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+Fixes: c10e753d43eb ("hwmon (occ): Add sensor types and versions")
+Signed-off-by: Eddie James <eajames@linux.ibm.com>
 ---
- Documentation/devicetree/bindings/hwmon/lm75.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/hwmon/occ/common.c | 5 +++--
+ drivers/hwmon/occ/common.h | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/hwmon/lm75.yaml b/Documentation/devicetree/bindings/hwmon/lm75.yaml
-index 96eed5cc7841..72980d083c21 100644
---- a/Documentation/devicetree/bindings/hwmon/lm75.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/lm75.yaml
-@@ -30,6 +30,7 @@ properties:
-       - st,stds75
-       - st,stlm75
-       - microchip,tcn75
-+      - ti,tmp1075
-       - ti,tmp100
-       - ti,tmp101
-       - ti,tmp105
+diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
+index f1ac153d0b56..967532afb1c0 100644
+--- a/drivers/hwmon/occ/common.c
++++ b/drivers/hwmon/occ/common.c
+@@ -217,9 +217,9 @@ int occ_update_response(struct occ *occ)
+ 		return rc;
+ 
+ 	/* limit the maximum rate of polling the OCC */
+-	if (time_after(jiffies, occ->last_update + OCC_UPDATE_FREQUENCY)) {
++	if (time_after(jiffies, occ->next_update)) {
+ 		rc = occ_poll(occ);
+-		occ->last_update = jiffies;
++		occ->next_update = jiffies + OCC_UPDATE_FREQUENCY;
+ 	} else {
+ 		rc = occ->last_error;
+ 	}
+@@ -1165,6 +1165,7 @@ int occ_setup(struct occ *occ, const char *name)
+ 		return rc;
+ 	}
+ 
++	occ->next_update = jiffies + OCC_UPDATE_FREQUENCY;
+ 	occ_parse_poll_response(occ);
+ 
+ 	rc = occ_setup_sensor_attrs(occ);
+diff --git a/drivers/hwmon/occ/common.h b/drivers/hwmon/occ/common.h
+index 67e6968b8978..e6df719770e8 100644
+--- a/drivers/hwmon/occ/common.h
++++ b/drivers/hwmon/occ/common.h
+@@ -99,7 +99,7 @@ struct occ {
+ 	u8 poll_cmd_data;		/* to perform OCC poll command */
+ 	int (*send_cmd)(struct occ *occ, u8 *cmd);
+ 
+-	unsigned long last_update;
++	unsigned long next_update;
+ 	struct mutex lock;		/* lock OCC access */
+ 
+ 	struct device *hwmon;
 -- 
-2.31.1
+2.27.0
 
