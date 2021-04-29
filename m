@@ -2,228 +2,525 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+X-Spam-Status: No, score=-16.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86136C433B4
-	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Apr 2021 16:24:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E5E0C433B4
+	for <linux-hwmon@archiver.kernel.org>; Thu, 29 Apr 2021 02:21:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4901A613E1
-	for <linux-hwmon@archiver.kernel.org>; Wed, 28 Apr 2021 16:24:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 55EA26008E
+	for <linux-hwmon@archiver.kernel.org>; Thu, 29 Apr 2021 02:21:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240552AbhD1QZQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 28 Apr 2021 12:25:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59658 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240526AbhD1QZP (ORCPT
+        id S231874AbhD2CV6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 28 Apr 2021 22:21:58 -0400
+Received: from gproxy6-pub.mail.unifiedlayer.com ([67.222.39.168]:45281 "EHLO
+        gproxy6-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231161AbhD2CV5 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 28 Apr 2021 12:25:15 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CB1C061573;
-        Wed, 28 Apr 2021 09:24:30 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id v23-20020a9d60570000b02902a53bac99a3so4106116otj.5;
-        Wed, 28 Apr 2021 09:24:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=O/rne7W0ki+yU2liZj6G6QiCY1bW/h0NIzivkTOi4xM=;
-        b=tkH02VmwVTOvETMc0AqIFlskdS8Z2mNcfvVVrLu/pL9qpf42C7sQZzgohAHLxTLeXp
-         xTINlUQBU8Cq9WNCtvMkAjWRT3uMk+by3IlJbhSSRAGF5QgWQrO4mHjK9Irk+qgR0mPq
-         TkVtIsXnRBUCU1kN3/9PvBygddjNUmiI8n2hW1hBUoEfW6CEXXYKi23utlL1fB4S5Tb6
-         r7XLsRXtoaZmBPzHxX4t125le15x0jM95snYCKxXIzyvtYLp0n+lIfX1lkfBzF1AxSAp
-         as9fUCbQlFLylCmhe98CgUjdMx1xpzVAqK2Y9iGQoxU83Seb6DboZ7ZDzQoj5QVjEmht
-         nRdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=O/rne7W0ki+yU2liZj6G6QiCY1bW/h0NIzivkTOi4xM=;
-        b=A8xQWFBEjisElZNbgeIlRPdz43YkHU0MMrU5caliIsL0PvtZKTUCRPomuX/Z179O3v
-         kbF8BYyT5UZF/rctm0VMIVLy74mrEtrsawoKgsCjycnICQFGNpI6OpLN5W6v49c6zzNt
-         dv3maONd7Il++ILTxLuZ6oQQzn2iL+HFskaaJoIjWQuGlV2QUaz8hkMI11LmwNZOewl4
-         FTK34YSnUE2nIvbo0GMHDuozoRh1bS3F5RVDNGX+gPnfp7RGiW3wgYuxJGNsW3lx3XGe
-         +rS+hB3+qjeegrpQadZ2ZuJzGv5iZKb+dD1tDsd7FK5aIjh5ich/V6sl+HWpv1Jf5kWO
-         bcbA==
-X-Gm-Message-State: AOAM5306zGEf5iVluXCBYWM/UfjB8Zgx3iKv9O7RrKcl/Fnl4N4ZhRng
-        O4O7Q8J8jrzmuTTy4KR+1KvOVod6NpQ=
-X-Google-Smtp-Source: ABdhPJzjcRO95cAeozRUH4zAr9wAQ2n0QFkmPj2TYsy9XD38nD76DkuLkytwEhN/OGV5gKDWbZp7Zg==
-X-Received: by 2002:a9d:3424:: with SMTP id v33mr24018169otb.137.1619627069767;
-        Wed, 28 Apr 2021 09:24:29 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h59sm91545otb.29.2021.04.28.09.24.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Apr 2021 09:24:29 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v2] Fix FSP-3Y YH-5151E non-compliant vout encoding
-To:     =?UTF-8?B?VsOhY2xhdiBLdWJlcm7DoXQ=?= <kubernat@cesnet.cz>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20210428083833.4136346-1-kubernat@cesnet.cz>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <ed8b9e7f-6588-284d-6eb0-cd779a5693ed@roeck-us.net>
-Date:   Wed, 28 Apr 2021 09:24:26 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 28 Apr 2021 22:21:57 -0400
+Received: from cmgw10.unifiedlayer.com (unknown [10.9.0.10])
+        by gproxy6.mail.unifiedlayer.com (Postfix) with ESMTP id A72001E0718
+        for <linux-hwmon@vger.kernel.org>; Wed, 28 Apr 2021 20:21:11 -0600 (MDT)
+Received: from md-in-79.webhostbox.net ([43.225.55.182])
+        by cmsmtp with ESMTP
+        id bwIflxZNXl4sQbwIglLrrs; Wed, 28 Apr 2021 20:21:11 -0600
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=WYlv12tX c=1 sm=1 tr=0 ts=608a1817
+ a=LfuyaZh/8e9VOkaVZk0aRw==:117 a=LfuyaZh/8e9VOkaVZk0aRw==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=3YhXtTcJ-WEA:10:nop_rcvd_month_year
+ a=oz0wMknONp8A:10:endurance_base64_authed_username_1 a=vU9dKmh3AAAA:8
+ a=NcCfH-bgAAAA:8 a=oRuukivaymlIrXuBOnYA:9 a=rsP06fVo5MYu2ilr0aT5:22
+ a=nZLUJm6UEJn402BoZzOq:22 a=pHzHmUro8NiASowvMSCR:22 a=Ew2E2A-JSTLzCXPT_086:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=linumiz.com
+        ; s=default; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject
+        :Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=HAlAICjVAeD4WWlt4yNf8G/oodCmNwmDE6zYdVqUoSc=; b=CXX7kdk5V1k7pwmQQT4/Z2HO/r
+        eCTGs0UsA4I1rUZUO7Uv0/1Bmu05jetUUyBXi7atA/bkkgL5rdeNSF2AR6BqKapFaNu7AroaHVOrj
+        3SVb99X90hTyqrE25jOXGTxH9O5jb2bkjeog5VFyY2824S+VLhI4FkkLfPoLLoK6DnCeDUc/VBlDK
+        a4Gg+LVyyZbNCJMmokRn/hYq1BhefiVza7O5TWAYgC3gByVvuId4MVhGdZiWORDVmmikkua4PUqWJ
+        tzgs4uKByEiKCXOkYsm0E5CPwelLbR3LRpGifbWMWTDvHxo8bs/aC3+t6Ya2i6sfcSUmo3CSs0q09
+        2X7tmWDw==;
+Received: from [59.92.99.32] (port=50720 helo=localhost.localdomain)
+        by md-in-79.webhostbox.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94)
+        (envelope-from <navin@linumiz.com>)
+        id 1lbwIe-003hcK-Bu; Thu, 29 Apr 2021 02:21:08 +0000
+From:   Navin Sankar Velliangiri <navin@linumiz.com>
+Cc:     navin@linumiz.com, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: Add sht4x Temperature and Humidity Sensor Driver
+Date:   Thu, 29 Apr 2021 07:50:56 +0530
+Message-Id: <20210429022058.106757-1-navin@linumiz.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-In-Reply-To: <20210428083833.4136346-1-kubernat@cesnet.cz>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - md-in-79.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - linumiz.com
+X-BWhitelist: no
+X-Source-IP: 59.92.99.32
+X-Source-L: No
+X-Exim-ID: 1lbwIe-003hcK-Bu
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: (localhost.localdomain) [59.92.99.32]:50720
+X-Source-Auth: linumcmc
+X-Email-Count: 4
+X-Source-Cap: bGludW1jbWM7aG9zdGdhdG9yO21kLWluLTc5LndlYmhvc3Rib3gubmV0
+X-Local-Domain: yes
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 4/28/21 1:38 AM, Václav Kubernát wrote:
-> I didn't properly test the driver for YH-5151E, so it was completely
-> broken. Firstly, the log/real mapping was incorrect in one case.
-> Secondly, PMBus specifies that output voltages should be in the linear16
-> encoding. However, the PDU is non-compliant and uses linear11. YM-2151E
-> isn't affected by this. Fix this by converting the values inside the
-> read functions. linear16 gets the exponent from the VOUT_MODE command.
-> The device doesn't support it, so I have to manually supply the value
-> for it.
-> 
-> Both supported devices have now been tested to report correct vout
-> values.
-> 
+This patch adds a hwmon driver for the SHT4x Temperature and
+Humidity sensor.
 
-Fixes: 1734b4135a62 ("hwmon: Add driver for fsp-3y PSUs and PDUs")
+Signed-off-by: Navin Sankar Velliangiri <navin@linumiz.com>
+---
+ Documentation/hwmon/index.rst |   1 +
+ Documentation/hwmon/sht4x.rst |  45 +++++
+ drivers/hwmon/Kconfig         |  13 +-
+ drivers/hwmon/Makefile        |   1 +
+ drivers/hwmon/sht4x.c         | 312 ++++++++++++++++++++++++++++++++++
+ 5 files changed, 371 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/hwmon/sht4x.rst
+ create mode 100644 drivers/hwmon/sht4x.c
 
-> Signed-off-by: Václav Kubernát <kubernat@cesnet.cz>
-> ---
->  drivers/hwmon/pmbus/fsp-3y.c | 26 ++++++++++++++++++++++++--
->  1 file changed, 24 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/pmbus/fsp-3y.c b/drivers/hwmon/pmbus/fsp-3y.c
-> index 564649e87e34..dc147a79d6aa 100644
-> --- a/drivers/hwmon/pmbus/fsp-3y.c
-> +++ b/drivers/hwmon/pmbus/fsp-3y.c
-> @@ -57,7 +57,7 @@ static int page_log_to_page_real(int page_log, enum chips chip)
->  		case YH5151E_PAGE_12V_LOG:
->  			return YH5151E_PAGE_12V_REAL;
->  		case YH5151E_PAGE_5V_LOG:
-> -			return YH5151E_PAGE_5V_LOG;
-> +			return YH5151E_PAGE_5V_REAL;
->  		case YH5151E_PAGE_3V3_LOG:
->  			return YH5151E_PAGE_3V3_REAL;
->  		}
-> @@ -103,17 +103,28 @@ static int set_page(struct i2c_client *client, int page_log)
->  
->  static int fsp3y_read_byte_data(struct i2c_client *client, int page, int reg)
->  {
-> +	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-> +	struct fsp3y_data *data = to_fsp3y_data(info);
->  	int rv;
->  
->  	rv = set_page(client, page);
->  	if (rv < 0)
->  		return rv;
->  
-> +	/*
-> +	 * YH5151-E outputs vout in linear11. The conversion is done later, but
-> +	 * I have to inject pmbus_core with the correct exponent.
-
-s/I/we/
-
-Also, it might be useful to mention the actual exponent (-6 ?) in the comment.
-
-> +	 */
-> +	if (data->chip == yh5151e && reg == PMBUS_VOUT_MODE)
-> +		return 0x1A;
-
-Can this code be moved ahead of set_page() ?
-
-> +
->  	return i2c_smbus_read_byte_data(client, reg);
->  }
->  
->  static int fsp3y_read_word_data(struct i2c_client *client, int page, int phase, int reg)
->  {
-> +	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-> +	struct fsp3y_data *data = to_fsp3y_data(info);
->  	int rv;
->  
->  	/*
-> @@ -144,7 +155,18 @@ static int fsp3y_read_word_data(struct i2c_client *client, int page, int phase,
->  	if (rv < 0)
->  		return rv;
->  
-> -	return i2c_smbus_read_word_data(client, reg);
-> +	rv = i2c_smbus_read_word_data(client, reg);
-> +	if (rv < 0)
-> +		return rv;
-> +
-> +	/*
-> +	 * The PDU is non-compliant and outputs output voltages in linear11
-
-s/The PDU/YH-5151E/
-
-> +	 * instead of linear16.
-> +	 */
-> +	if (data->chip == yh5151e && reg == PMBUS_READ_VOUT)
-> +		rv = ((s16)((rv & 0x7ff) << 5)) >> 5;
-
-Problem with this is that it auto-converts to int and will return a
-negative value if bit 10 is set (I wrote some test code and confirmed it,
-just to be sure).
-		rv = sign_extend32(rv, 10) & 0xffff;
-should work here.
-
-Thanks,
-Guenter
-
-> +
-> +	return rv;
->  }
->  
->  struct pmbus_driver_info fsp3y_info[] = {
-> 
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index 8d5a2df1ecb6..2a20c6616e21 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -160,6 +160,7 @@ Hardware Monitoring Kernel Drivers
+    sht15
+    sht21
+    sht3x
++   sht4x
+    shtc1
+    sis5595
+    sl28cpld
+diff --git a/Documentation/hwmon/sht4x.rst b/Documentation/hwmon/sht4x.rst
+new file mode 100644
+index 000000000000..3b37abcd4a46
+--- /dev/null
++++ b/Documentation/hwmon/sht4x.rst
+@@ -0,0 +1,45 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++Kernel driver sht4x
++===================
++
++Supported Chips:
++
++  * Sensirion SHT4X
++
++    Prefix: 'sht4x'
++
++    Addresses scanned: None
++
++    Datasheet:
++
++      English: https://www.sensirion.com/fileadmin/user_upload/customers/sensirion/Dokumente/2_Humidity_Sensors/Datasheets/Sensirion_Humidity_Sensors_SHT4x_Datasheet.pdf
++
++Author: Navin Sankar Velliangiri <navin@linumiz.com>
++
++
++Description
++-----------
++
++This driver implements support for the Sensirion SHT4x chip, a humidity
++and temperature sensor. Temperature is measured in degree celsius, relative
++humidity is expressed as a percentage. In sysfs interface, all values are
++scaled by 1000, i.e. the value for 31.5 degrees celsius is 31500.
++
++Usage Notes
++-----------
++
++The device communicates with the I2C protocol. Sensors can have the I2C
++address 0x44. See Documentation/i2c/instantiating-devices.rst for methods
++to instantiate the device.
++
++Sysfs entries
++-------------
++
++=============== ============================================
++temp1_input     Measured temperature in millidegrees Celcius
++humidity1_input Measured humidity in %H
++update_interval The minimum interval for polling the sensor,
++                in milliseconds. Writable. Must be at least
++                2000.
++============== =============================================
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 54f04e61fb83..ad10469d7b13 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -1583,6 +1583,17 @@ config SENSORS_SHT3x
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called sht3x.
+ 
++config SENSORS_SHT4x
++	tristate "Sensiron humidity and temperature sensors. SHT4x and compat."
++	depends on I2C
++	select CRC8
++	help
++	  If you say yes here you get support for thr Sensiron SHT40, SHT41 and
++	  SHT45 humidity and temperature sensors.
++
++	  This driver can also be built as a module. If so, the module
++	  will be called sht4x.
++
+ config SENSORS_SHTC1
+ 	tristate "Sensiron humidity and temperature sensors. SHTC1 and compat."
+ 	depends on I2C
+@@ -1798,7 +1809,7 @@ config SENSORS_ADS7871
+ 
+ config SENSORS_AMC6821
+ 	tristate "Texas Instruments AMC6821"
+-	depends on I2C 
++	depends on I2C
+ 	help
+ 	  If you say yes here you get support for the Texas Instruments
+ 	  AMC6821 hardware monitoring chips.
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index fe38e8a5c979..62cee3e03c7f 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -170,6 +170,7 @@ obj-$(CONFIG_SENSORS_SL28CPLD)	+= sl28cpld-hwmon.o
+ obj-$(CONFIG_SENSORS_SHT15)	+= sht15.o
+ obj-$(CONFIG_SENSORS_SHT21)	+= sht21.o
+ obj-$(CONFIG_SENSORS_SHT3x)	+= sht3x.o
++obj-$(CONFIG_SENSORS_SHT4x)	+= sht4x.o
+ obj-$(CONFIG_SENSORS_SHTC1)	+= shtc1.o
+ obj-$(CONFIG_SENSORS_SIS5595)	+= sis5595.o
+ obj-$(CONFIG_SENSORS_SMM665)	+= smm665.o
+diff --git a/drivers/hwmon/sht4x.c b/drivers/hwmon/sht4x.c
+new file mode 100644
+index 000000000000..439ccdabb30c
+--- /dev/null
++++ b/drivers/hwmon/sht4x.c
+@@ -0,0 +1,312 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++/*
++ * Copyright (c) Linumiz 2021
++ *
++ * sht4x.c - Linux hwmon driver for SHT4x Temperature and Humidity sensor
++ *
++ * Author: Navin Sankar Velliangiri <navin@linumiz.com>
++ */
++
++#include <linux/crc8.h>
++#include <linux/delay.h>
++#include <linux/hwmon.h>
++#include <linux/i2c.h>
++#include <linux/module.h>
++#include <linux/ktime.h>
++
++/*
++ * Poll intervals (in milliseconds)
++ */
++#define SHT4X_DEFAULT_MIN_POLL_INTERVAL	2000
++#define SHT4X_MIN_POLL_INTERVAL		2000
++
++/*
++ * I2C command delays (in microseconds)
++ */
++#define SHT4X_MEAS_DELAY	1000
++#define SHT4X_DELAY_EXTRA	10000
++
++/*
++ * Command Bytes
++ */
++#define SHT4X_CMD_MEASURE_HPM	0b11111101
++#define SHT4X_CMD_RESET		0b10010100
++
++#define SHT4X_CMD_LEN		1
++#define SHT4X_CRC8_LEN		1
++#define SHT4X_WORD_LEN		2
++#define SHT4X_RESPONSE_LENGTH	6
++#define SHT4X_CRC8_POLYNOMIAL	0x31
++#define SHT4X_CRC8_INIT		0xff
++#define SHT4X_MIN_TEMPERATURE	-45000
++#define SHT4X_MAX_TEMPERATURE	125000
++#define SHT4X_MIN_HUMIDITY	0
++#define SHT4X_MAX_HUMIDITY	100000
++
++DECLARE_CRC8_TABLE(sht4x_crc8_table);
++
++/**
++ * struct sht4x_data - All the data required to operate an SHT4X chip
++ * @client: the i2c client associated with the SHT4X
++ * @lock: a mutex that is used to prevent parallel access to the i2c client
++ * @min_poll_interval: the minimum poll interval
++ * @previous_poll_time: the previous time that the SHT4X was polled
++ * @temperature: the latest temperature value received from the SHT4X
++ * @humidity: the latest humidity value received from the SHT4X
++ */
++struct sht4x_data {
++	struct i2c_client *client;
++	/*
++	 * Prevent simultaneous access to the i2c client
++	 */
++	struct mutex lock;
++	ktime_t min_poll_interval;
++	ktime_t previous_poll_time;
++	s32 temperature;
++	s32 humidity;
++};
++
++/**
++ * sht4x_polltime_expired() - check if the minimum poll interval has expired
++ * @data: the data containing the time to compare
++ * Return: 1 if the minimum poll interval has expired, 0 if not
++ */
++static bool sht4x_polltime_expired(struct sht4x_data *data)
++{
++	ktime_t current_time = ktime_get_boottime();
++	ktime_t difference = ktime_sub(current_time, data->previous_poll_time);
++
++	return ktime_after(difference, data->min_poll_interval);
++}
++
++/**
++ * sht4x_read_values() - read and parse the raw data from the SHT4X
++ * @sht4x_data: the struct sht4x_data to use for the lock
++ * Return: 0 if succesfull, 1 if not
++ */
++static int sht4x_read_values(struct sht4x_data *data)
++{
++	int ret;
++	u16 t_ticks, rh_ticks;
++	struct i2c_client *client = data->client;
++	u8 crc, raw_data[SHT4X_RESPONSE_LENGTH],
++	cmd[] = {SHT4X_CMD_MEASURE_HPM};
++
++	mutex_lock(&data->lock);
++	if (sht4x_polltime_expired(data)) {
++		ret = i2c_master_send(client, cmd, SHT4X_CMD_LEN);
++		if (ret < 0) {
++			mutex_unlock(&data->lock);
++			return ret;
++		}
++
++		usleep_range(SHT4X_MEAS_DELAY,
++			     SHT4X_MEAS_DELAY + SHT4X_DELAY_EXTRA);
++
++		ret = i2c_master_recv(client, raw_data, SHT4X_RESPONSE_LENGTH);
++		if (ret != SHT4X_RESPONSE_LENGTH) {
++			mutex_unlock(&data->lock);
++			if (ret >= 0)
++				return -ENODATA;
++			else
++				return ret;
++		}
++
++		t_ticks = raw_data[0] << 8 | raw_data[1];
++		rh_ticks = raw_data[3] << 8 | raw_data[4];
++
++		crc = crc8(sht4x_crc8_table, &raw_data[0], SHT4X_WORD_LEN, CRC8_INIT_VALUE);
++		if (crc != raw_data[2]) {
++			mutex_unlock(&data->lock);
++			dev_err(&client->dev, "data integrity check failed\n");
++			return -EIO;
++		}
++
++		crc = crc8(sht4x_crc8_table, &raw_data[3], SHT4X_WORD_LEN, CRC8_INIT_VALUE);
++		if (crc != raw_data[5]) {
++			mutex_unlock(&data->lock);
++			dev_err(&client->dev, "data integrity check failed\n");
++			return -EIO;
++		}
++
++		data->temperature = ((21875 * (int32_t)t_ticks) >> 13) - 45000;
++		data->humidity = ((15625 * (int32_t)rh_ticks) >> 13) - 6000;
++		data->previous_poll_time = ktime_get_boottime();
++	}
++
++	mutex_unlock(&data->lock);
++	return 0;
++}
++
++static ssize_t sht4x_interval_write(struct sht4x_data *data,
++				    long val)
++{
++	data->min_poll_interval = ms_to_ktime(clamp_val(val, 2000, LONG_MAX));
++	return 0;
++}
++
++/**
++ * sht4x_interval_read() - read the minimum poll interval
++ *			   in milliseconds
++ */
++static size_t sht4x_interval_read(struct sht4x_data *data,
++				  long *val)
++{
++	*val = ktime_to_ms(data->min_poll_interval);
++	return 0;
++}
++
++/**
++ * sht4x_temperature1_read() - read the temperature in millidegrees
++ */
++static int sht4x_temperature1_read(struct sht4x_data *data, long *val)
++{
++	int ret;
++
++	ret = sht4x_read_values(data);
++	if (ret < 0)
++		return ret;
++
++	*val = data->temperature;
++	return 0;
++}
++
++/**
++ * sht4x_humidity1_read() - read a relative humidity in millipercent
++ */
++static int sht4x_humidity1_read(struct sht4x_data *data, long *val)
++{
++	int ret;
++
++	ret = sht4x_read_values(data);
++	if (ret < 0)
++		return ret;
++
++	*val = data->humidity;
++	return 0;
++}
++
++static umode_t sht4x_hwmon_visible(const void *data,
++				   enum hwmon_sensor_types type,
++				   u32 attr, int channel)
++{
++	switch (type) {
++	case hwmon_temp:
++	case hwmon_humidity:
++		return 0444;
++	case hwmon_chip:
++		return 0644;
++	default:
++		return 0;
++	}
++}
++
++static int sht4x_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
++			    u32 attr, int channel, long *val)
++{
++	struct sht4x_data *data = dev_get_drvdata(dev);
++
++	switch (type) {
++	case hwmon_temp:
++		return sht4x_temperature1_read(data, val);
++	case hwmon_humidity:
++		return sht4x_humidity1_read(data, val);
++	case hwmon_chip:
++		return sht4x_interval_read(data, val);
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static int sht4x_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
++			     u32 attr, int channel, long val)
++{
++	struct sht4x_data *data = dev_get_drvdata(dev);
++
++	switch (type) {
++	case hwmon_chip:
++		return sht4x_interval_write(data, val);
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static const struct hwmon_channel_info *sht4x_info[] = {
++	HWMON_CHANNEL_INFO(chip, HWMON_C_UPDATE_INTERVAL),
++	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
++	HWMON_CHANNEL_INFO(humidity, HWMON_H_INPUT),
++	NULL,
++};
++
++static const struct hwmon_ops sht4x_hwmon_ops = {
++	.is_visible = sht4x_hwmon_visible,
++	.read = sht4x_hwmon_read,
++	.write = sht4x_hwmon_write,
++};
++
++static const struct hwmon_chip_info sht4x_chip_info = {
++	.ops = &sht4x_hwmon_ops,
++	.info = sht4x_info,
++};
++
++static int sht4x_probe(struct i2c_client *client,
++		       const struct i2c_device_id *sht4x_id)
++{
++	struct device *device = &client->dev;
++	struct device *hwmon_dev;
++	struct sht4x_data *data;
++	u8 cmd[] = {SHT4X_CMD_RESET};
++	int ret;
++
++	/*
++	 * we require full i2c support since the sht4x uses multi-byte read and
++	 * writes as well as multi-byte commands which are not supported by
++	 * the smbus protocol
++	 */
++	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
++		return -EOPNOTSUPP;
++
++	data = devm_kzalloc(device, sizeof(*data), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++
++	data->min_poll_interval = ms_to_ktime(SHT4X_DEFAULT_MIN_POLL_INTERVAL);
++	data->client = client;
++
++	mutex_init(&data->lock);
++
++	crc8_populate_msb(sht4x_crc8_table, SHT4X_CRC8_POLYNOMIAL);
++
++	ret = i2c_master_send(client, cmd, SHT4X_CMD_LEN);
++	if (ret != SHT4X_CMD_LEN)
++		return -EIO;
++
++	hwmon_dev = devm_hwmon_device_register_with_info(device,
++							 client->name,
++							 data,
++							 &sht4x_chip_info,
++							 NULL);
++
++	return PTR_ERR_OR_ZERO(hwmon_dev);
++}
++
++static const struct i2c_device_id sht4x_id[] = {
++	{ "sht4x", 0 },
++	{ },
++};
++MODULE_DEVICE_TABLE(i2c, sht4x_id);
++
++static struct i2c_driver sht4x_driver = {
++	.driver = {
++		.name = "sht4x",
++	},
++	.probe		= sht4x_probe,
++	.id_table	= sht4x_id,
++};
++
++module_i2c_driver(sht4x_driver);
++
++MODULE_AUTHOR("Navin Sankar Velliangiri <navin@linumiz.com>");
++MODULE_DESCRIPTION("Sensirion SHT4x humidity and temperature sensor driver");
++MODULE_LICENSE("GPL v2");
+-- 
+2.31.1
 
