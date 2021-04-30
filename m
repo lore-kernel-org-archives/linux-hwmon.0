@@ -2,146 +2,93 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DBDEBC433B4
-	for <linux-hwmon@archiver.kernel.org>; Fri, 30 Apr 2021 13:48:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF42BC433ED
+	for <linux-hwmon@archiver.kernel.org>; Fri, 30 Apr 2021 15:16:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AAA8861452
-	for <linux-hwmon@archiver.kernel.org>; Fri, 30 Apr 2021 13:48:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6D3CE6143D
+	for <linux-hwmon@archiver.kernel.org>; Fri, 30 Apr 2021 15:16:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232667AbhD3Ntr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 30 Apr 2021 09:49:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38292 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbhD3Ntq (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 30 Apr 2021 09:49:46 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7169C06174A;
-        Fri, 30 Apr 2021 06:48:58 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id d25so32510325oij.5;
-        Fri, 30 Apr 2021 06:48:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=TZFUbfNvpT7fbj8sNiRF6SOdSs72X7RGCFWwHq6pMJw=;
-        b=szZcaxPtpapObT1Oa0rHL3G8oPL0Zq33ptUHl/B60ekDYxFw1O9DYH1F1nvSTdvowp
-         g+Hh5GdF6SZ1q5eguZbkcw5fwNMcyzxgrlrayYLC6hPgMxRjQQuWafSEXKPoCE1K1dF/
-         OkHj0wxdDgg40f6Y9DGBiWQPWoOB+gdI7dDiEkQk/dJJmfksqBWpF5t5for9Bb0iilld
-         DboXTWZiemP0bAyDQJimwZvIdpROzV0OtLb9ia6W8RknKyyOdASTk6nrBudetWoMMdu4
-         QmWz2Epzp3HmHO4451IGFDQfHQODF8GVWTePMOGgmapjCMYnWqQIWhelHXrx5gO3N//3
-         QecQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=TZFUbfNvpT7fbj8sNiRF6SOdSs72X7RGCFWwHq6pMJw=;
-        b=YuL3cYkwfEf/Bn4rqE2KUk6uQO4mX6bikMR/k7V8ljuretcNWSsD21HF8Z9HF/YK4/
-         U4IBd75uLIPuhqDH7hJSYC2ffrfIvK+8fVdm4XQou+fcYeB5iwniIBk0+Mhwr6pBX1Rh
-         5NfBZ3Cx4c8AopIziqDSuLAc78hnc71R5hTGd727GAn+jcbouLPNDhQxWjxwKyR9yvCC
-         9UwzWvLBHKVemcT4ZQ9eDmFW9GYkqe/0XXXGgp+QXKU3ZW9oclZ6RJ4ZTTIws3L42DYH
-         JFDHa83CRBGm9gtW0co0npObBKUVN3UddJ3oKfT+YFlykOkN+cUaMxulrm7oJAsjR3f1
-         NgZA==
-X-Gm-Message-State: AOAM533LmD/hTT4XdnpC672gYd+yGzSdTxfi6iKZsjuG1m+9O+YxaXi+
-        bH0FgOA3dnJE5wU1RDDeXHZ4vDL+xpk=
-X-Google-Smtp-Source: ABdhPJwNCQtHd5hP/pnaakJqj0PKg6w+KBGyekyx7wLQKb1i8wDVlpeVIKVQkUj04dR2Rt2joCqCyA==
-X-Received: by 2002:aca:ed50:: with SMTP id l77mr3932373oih.13.1619790538105;
-        Fri, 30 Apr 2021 06:48:58 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u195sm734630oif.55.2021.04.30.06.48.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Apr 2021 06:48:57 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 30 Apr 2021 06:48:56 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Robert Marko <robert.marko@sartura.hr>
-Cc:     jdelvare@suse.com, corbet@lwn.net, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        luka.perkov@sartura.hr, jmp@epiphyte.org, pmenzel@molgen.mpg.de,
-        buczek@molgen.mpg.de
-Subject: Re: [PATCH 2/3] dt-bindings: hwmon: pmbus: Add Delta DPS920AB PSU
- driver bindings
-Message-ID: <20210430134856.GB2714262@roeck-us.net>
-References: <20210430132735.127342-1-robert.marko@sartura.hr>
- <20210430132735.127342-2-robert.marko@sartura.hr>
+        id S230165AbhD3PRA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 30 Apr 2021 11:17:00 -0400
+Received: from mta-02.yadro.com ([89.207.88.252]:55678 "EHLO mta-01.yadro.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229818AbhD3PQy (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 30 Apr 2021 11:16:54 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id C69ED4149F;
+        Fri, 30 Apr 2021 15:16:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        content-type:content-type:content-transfer-encoding:mime-version
+        :x-mailer:message-id:date:date:subject:subject:from:from
+        :received:received:received; s=mta-01; t=1619795763; x=
+        1621610164; bh=/rXJip+F0IvVCEdh2B4yy/908Dqa2MKfXinBs0lFWDg=; b=H
+        761oJZhH/NPO+eYlg0LvpUJFwfNDY5xmn6kdEKsRqQStGlPTbe4RvGiYjbPBwA7u
+        QURTMMJNVVmZmYlOPiaKeDSAtUhRnbYXwRigG8Zz05SQxZrwaMKk8K/yVOolHgZz
+        a3RxvR6DYyYTXVRFkaTb7lLse6EINnCiU86u2oZYY4=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id PQ2urrZPNQSa; Fri, 30 Apr 2021 18:16:03 +0300 (MSK)
+Received: from T-EXCH-03.corp.yadro.com (t-exch-03.corp.yadro.com [172.17.100.103])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id 312294148B;
+        Fri, 30 Apr 2021 18:16:03 +0300 (MSK)
+Received: from localhost.yadro.com (10.199.0.97) by T-EXCH-03.corp.yadro.com
+ (172.17.100.103) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Fri, 30
+ Apr 2021 18:16:03 +0300
+From:   Ivan Mikhaylov <i.mikhaylov@yadro.com>
+To:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+CC:     Ivan Mikhaylov <i.mikhaylov@yadro.com>,
+        <linux-kernel@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <linux-hwmon@vger.kernel.org>
+Subject: [PATCH 0/4] add periodic mode, threshold options and hwmon
+Date:   Fri, 30 Apr 2021 18:24:15 +0300
+Message-ID: <20210430152419.261757-1-i.mikhaylov@yadro.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210430132735.127342-2-robert.marko@sartura.hr>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.199.0.97]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-03.corp.yadro.com (172.17.100.103)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Apr 30, 2021 at 03:27:34PM +0200, Robert Marko wrote:
-> Add binding document for the Delta DPS920AB PSU driver.
-> 
+Add periodic mode enablement, high/low threshold options. Remove mutex
+from vcnl3020_data structure, change mutex_lock/unlock's appropriately on
+iio_device_claim/release_direct_mode.
 
-Is there a reason to not just add delta,dps920ab to the list of trivial
-devices ?
+Add hwmon driver as intrusion sensor which provides information about
+any triggers within thresholds, works in periodic mode of proximity
+sensor.
 
-Thanks,
-Guenter
+Ivan Mikhaylov (4):
+  iio: proximity: vcnl3020: add periodic mode
+  iio: proximity: vcnl3020: add threshold options
+  iio: proximity: vncl3020: remove mutex from vcnl3020_data
+  hwmon: vcnl3020: add hwmon driver for intrusion sensor
 
-> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-> ---
->  .../bindings/hwmon/pmbus/delta,dps920ab.yaml  | 43 +++++++++++++++++++
->  1 file changed, 43 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/pmbus/delta,dps920ab.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/pmbus/delta,dps920ab.yaml b/Documentation/devicetree/bindings/hwmon/pmbus/delta,dps920ab.yaml
-> new file mode 100644
-> index 000000000000..e05363a8e455
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/pmbus/delta,dps920ab.yaml
-> @@ -0,0 +1,43 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +
-> +$id: http://devicetree.org/schemas/hwmon/pmbus/delta,dps920ab.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Delta DPS920AB power supply
-> +
-> +maintainers:
-> +  - Robert Marko <robert.marko@sartura.hr>
-> +
-> +description: |
-> +  Delta DPS920AB is a 920W 54V DC single output power supply
-> +  with active PFC capable of 16.88A on the 54V output.
-> +  It has a built in PWM capable fan with tachometer.
-> +  PMBus is used to expose information about the PSU.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - delta,dps920ab
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        psu@5a {
-> +            compatible = "delta,dps920ab";
-> +            reg = <0x5a>;
-> +        };
-> +    };
-> -- 
-> 2.31.1
-> 
+ drivers/hwmon/Kconfig                  |   7 +
+ drivers/hwmon/Makefile                 |   1 +
+ drivers/hwmon/vcnl3020-hwmon.c         |  57 +++++
+ drivers/iio/proximity/vcnl3020.c       | 335 ++++++++++++++++++++++---
+ include/linux/iio/proximity/vcnl3020.h |  26 ++
+ 5 files changed, 395 insertions(+), 31 deletions(-)
+ create mode 100644 drivers/hwmon/vcnl3020-hwmon.c
+ create mode 100644 include/linux/iio/proximity/vcnl3020.h
+
+-- 
+2.26.3
+
