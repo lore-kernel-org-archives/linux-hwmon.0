@@ -2,152 +2,324 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81427C433B4
-	for <linux-hwmon@archiver.kernel.org>; Fri, 30 Apr 2021 12:35:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F179C43461
+	for <linux-hwmon@archiver.kernel.org>; Fri, 30 Apr 2021 13:12:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5AFEF61477
-	for <linux-hwmon@archiver.kernel.org>; Fri, 30 Apr 2021 12:35:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E0349613E8
+	for <linux-hwmon@archiver.kernel.org>; Fri, 30 Apr 2021 13:12:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232380AbhD3Mgd (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 30 Apr 2021 08:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50178 "EHLO
+        id S232182AbhD3NNL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 30 Apr 2021 09:13:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232364AbhD3MgY (ORCPT
+        with ESMTP id S230289AbhD3NNK (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 30 Apr 2021 08:36:24 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8325C061346
-        for <linux-hwmon@vger.kernel.org>; Fri, 30 Apr 2021 05:35:29 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id l4so104959236ejc.10
-        for <linux-hwmon@vger.kernel.org>; Fri, 30 Apr 2021 05:35:29 -0700 (PDT)
+        Fri, 30 Apr 2021 09:13:10 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A2EC06174A;
+        Fri, 30 Apr 2021 06:12:22 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id v23-20020a9d60570000b02902a53bac99a3so9576162otj.5;
+        Fri, 30 Apr 2021 06:12:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura-hr.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=KDQBYbM7HXMZFTesh6PlprpTxhf7UowLSjGjy7RFSWo=;
-        b=M1/4WFchbemJs63V5CScpuwlBM3mkoQqhLQSOm8P8AHZHAy9FM6TkIWpHkFKBk+sVs
-         v7pagiPQLLoowSD2ax4Lzf6MV5CJASaDSgFCI9WDPrWNHt7UZZCimg7y8w+Cv96UHmb7
-         v6cleL0KaFz+m9K7rQpqN1fQ4/9/daoZ1o6kvQIh1HA5hwHqnkltCwJlKkAK1CsnCJ/1
-         9TupZDt1/Oinpo6EZPxUvsEkkpDXqCHUHuHhVgTdraJlb4Vfu9j8OKIfv6GNIRIOw81O
-         EsobQ1l+yjZ7h+MijUsY2nCg/UHfjFBM7NSmi4cUEGwry1stZTg6ocPLFEhkjcqIoOpb
-         6wOA==
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=qYDD+DWpqcYXRZG1KuT26uihnHLtkK+MGAl3G9lCgX4=;
+        b=u4bivZ73rvv1kHoOsCthCEzQAzAccoikHvqqFa1S5d3DBOThqLwtQpCv7bsYS0dm5F
+         BojLAdZihMFBOOtpuDeN5Fm+IBTXkufZYfMxby23iYw9rVnCbwtKd7jnkexm/Vh+UmT4
+         mS50lOy8jgjEOURe5VAvYaxbUF3NXR4J6fkBQzHsXnGOuaqsejntGOFc6lE/hqjB6p0m
+         EGJxO3wuxGfXpm/osH3EFKj8Ka14Dv52w9xo/XVOs1i/83h2b+BGhnJE0aSdQZIutusf
+         YPWbMX8H2CDpS9ZogZyfJHSHK2sdSQ/ucqoXJVzSo2KmV+WNxJ95UwBpk7sw6uHTZwk3
+         8tkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=KDQBYbM7HXMZFTesh6PlprpTxhf7UowLSjGjy7RFSWo=;
-        b=adzUktDHRWf2voQEPocARQ9GG0tYKZAQ6djIK+OurZbfleTlFZg++MHZxodH6N3ohS
-         +D64TdwKOWQ3ze9U6aRT2Fh7KRxZGFnk5HHr8+d5Upo6zTQYb2T7jZf4w4ZYOi2DDJ6V
-         iYcOl13gz7UeBFr6+EaFgthRe2nXPV3gCEh/qJzNXFEk1WPt2EXTJ9uAOkm/XoZEkAAe
-         f4AXVtGLQZJlYKASiyh1lFQsxPvhR2v1+0HTj4Lw7q7UD6xqLflHV265T00irHukfQIN
-         2E7Bvh+Vv7XAMJLJ1dWGN1MMji/OL/U4eyexp3MKIVwIKO67mqVXwVGiLfV3UQBwS9F8
-         +DJg==
-X-Gm-Message-State: AOAM531pEYAHizoT3eO3b3HBESk+g0N/7OO7HPVc6owu9MnsoiNpypWY
-        jCxNqLpt5YbtBD/vXnwALa56lQ==
-X-Google-Smtp-Source: ABdhPJzviriv9V3GeCgo9rSUitIUOcEjs2xNWPfe/AL43zNEkj1RGEP4jwP08JE9C/nhZIy07gRj8Q==
-X-Received: by 2002:a17:906:5d13:: with SMTP id g19mr4179389ejt.206.1619786128374;
-        Fri, 30 Apr 2021 05:35:28 -0700 (PDT)
-Received: from localhost.localdomain (dh207-97-15.xnet.hr. [88.207.97.15])
-        by smtp.googlemail.com with ESMTPSA id d15sm1822988ejj.42.2021.04.30.05.35.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Apr 2021 05:35:28 -0700 (PDT)
-From:   Robert Marko <robert.marko@sartura.hr>
-To:     lee.jones@linaro.org, robh+dt@kernel.org, linus.walleij@linaro.org,
-        bgolaszewski@baylibre.com, jdelvare@suse.com, linux@roeck-us.net,
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=qYDD+DWpqcYXRZG1KuT26uihnHLtkK+MGAl3G9lCgX4=;
+        b=mYS9c6ucsYGf3iJ6nyEn3SBPgQRO5GkGEdhRA/mlNZWYtvabXrJAMhvEoj2oE6RNA5
+         kE75DdwJKb8z/hsZtXNm8BaWiflGeiFAzWl3oOoLiCVS4LrYxujhVaSKABKOz2lm1Rdv
+         dFE8i5tMCB4UKLAZnPphHvMsWIiPL/x+u9qMNQ7psTsqGSWjtSfHGSxkacjxWQ/IbwdB
+         Y7/QUoDxrkfV/kB1ztmajnUyzm2CNl3vGnAZ7H7LH4QCw42xIrZcikRE2t4r2chZREge
+         nmnk1yPnqdajgNq3CFzl1kTA2iNsh132kp105SKhDGszHATJDPOs5API6GAc1heYFBIQ
+         hPCA==
+X-Gm-Message-State: AOAM532niPgUR/8+YJ+0+LnYVDWalkeL+uWUMj1DdF/kmRHfQzU7sI+f
+        02PSrS5+sC3qU2UNpz9k5H8=
+X-Google-Smtp-Source: ABdhPJy0OmHfuITE7zrH3EZgYmw0LO/N/gK7vB7M2YUle1W63vyy7DnGt9d9JlMwwLoAB7LrMc2nmg==
+X-Received: by 2002:a05:6830:214f:: with SMTP id r15mr3519644otd.204.1619788341880;
+        Fri, 30 Apr 2021 06:12:21 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j22sm679109otr.0.2021.04.30.06.12.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Apr 2021 06:12:20 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH 4/6] hwmon: Add Delta TN48M CPLD HWMON driver
+To:     Robert Marko <robert.marko@sartura.hr>, lee.jones@linaro.org,
+        robh+dt@kernel.org, linus.walleij@linaro.org,
+        bgolaszewski@baylibre.com, jdelvare@suse.com,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org
 Cc:     luka.perkov@sartura.hr, jmp@epiphyte.org, pmenzel@molgen.mpg.de,
-        buczek@molgen.mpg.de, Robert Marko <robert.marko@sartura.hr>
-Subject: [PATCH 5/6] dt-bindings: mfd: Add Delta TN48M CPLD drivers bindings
-Date:   Fri, 30 Apr 2021 14:35:10 +0200
-Message-Id: <20210430123511.116057-5-robert.marko@sartura.hr>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210430123511.116057-1-robert.marko@sartura.hr>
+        buczek@molgen.mpg.de
 References: <20210430123511.116057-1-robert.marko@sartura.hr>
+ <20210430123511.116057-4-robert.marko@sartura.hr>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <f5bc39d4-742d-4403-7b5d-172a2410a631@roeck-us.net>
+Date:   Fri, 30 Apr 2021 06:12:17 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210430123511.116057-4-robert.marko@sartura.hr>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add binding document for the Delta TN48M CPLD drivers.
+On 4/30/21 5:35 AM, Robert Marko wrote:
+> Delta TN48M has a CPLD that also monitors the power supply
+> statuses.
+> 
+> These are useful to be presented to the users, so lets
+> add a driver for HWMON part of the CPLD.
+> 
+> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> ---
+>  drivers/hwmon/Kconfig       |  10 +++
+>  drivers/hwmon/Makefile      |   1 +
+>  drivers/hwmon/tn48m-hwmon.c | 148 ++++++++++++++++++++++++++++++++++++
+>  drivers/mfd/tn48m-cpld.c    |   3 +
+>  include/linux/mfd/tn48m.h   |   1 +
+>  5 files changed, 163 insertions(+)
+>  create mode 100644 drivers/hwmon/tn48m-hwmon.c
+> 
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 54f04e61fb83..89271dfeb775 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -1924,6 +1924,16 @@ config SENSORS_TMP513
+>  	  This driver can also be built as a module. If so, the module
+>  	  will be called tmp513.
+>  
+> +config SENSORS_TN48M
+> +	tristate "Delta Networks TN48M switch CPLD HWMON driver"
+> +	depends on MFD_TN48M_CPLD
+> +	help
+> +	  If you say yes here you get support for Delta Networks TN48M
+> +	  CPLD.
+> +
+> +	  This driver can also be built as a module. If so, the module
+> +	  will be called tn48m-hwmon.
+> +
+>  config SENSORS_VEXPRESS
+>  	tristate "Versatile Express"
+>  	depends on VEXPRESS_CONFIG
+> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> index fe38e8a5c979..22e470057ffe 100644
+> --- a/drivers/hwmon/Makefile
+> +++ b/drivers/hwmon/Makefile
+> @@ -187,6 +187,7 @@ obj-$(CONFIG_SENSORS_TMP108)	+= tmp108.o
+>  obj-$(CONFIG_SENSORS_TMP401)	+= tmp401.o
+>  obj-$(CONFIG_SENSORS_TMP421)	+= tmp421.o
+>  obj-$(CONFIG_SENSORS_TMP513)	+= tmp513.o
+> +obj-$(CONFIG_SENSORS_TN48M)	+= tn48m-hwmon.o
+>  obj-$(CONFIG_SENSORS_VEXPRESS)	+= vexpress-hwmon.o
+>  obj-$(CONFIG_SENSORS_VIA_CPUTEMP)+= via-cputemp.o
+>  obj-$(CONFIG_SENSORS_VIA686A)	+= via686a.o
+> diff --git a/drivers/hwmon/tn48m-hwmon.c b/drivers/hwmon/tn48m-hwmon.c
+> new file mode 100644
+> index 000000000000..80fd18d74f1d
+> --- /dev/null
+> +++ b/drivers/hwmon/tn48m-hwmon.c
+> @@ -0,0 +1,148 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Delta TN48M CPLD HWMON driver
+> + *
+> + * Copyright 2020 Sartura Ltd
+> + *
+> + * Author: Robert Marko <robert.marko@sartura.hr>
+> + */
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/hwmon-sysfs.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/kernel.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +
+> +#include <linux/mfd/tn48m.h>
+> +
+> +#define PSU1_PRESENT_MASK	BIT(0)
+> +#define PSU2_PRESENT_MASK	BIT(1)
+> +#define PSU1_POWERGOOD_MASK	BIT(2)
+> +#define PSU2_POWERGOOD_MASK	BIT(3)
+> +#define PSU1_ALERT_MASK		BIT(4)
+> +#define PSU2_ALERT_MASK		BIT(5)
+> +
+> +static int board_id_get(struct tn48m_data *data)
+> +{
+> +	unsigned int regval;
+> +
+> +	regmap_read(data->regmap, BOARD_ID, &regval);
+> +
+> +	switch (regval) {
+> +	case BOARD_ID_TN48M:
+> +		return BOARD_ID_TN48M;
+> +	case BOARD_ID_TN48M_P:
+> +		return BOARD_ID_TN48M_P;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+> +
+> +static ssize_t psu_present_show(struct device *dev,
+> +				struct device_attribute *attr, char *buf)
+> +{
+> +	struct sensor_device_attribute_2 *attr2 = to_sensor_dev_attr_2(attr);
+> +	struct tn48m_data *data = dev_get_drvdata(dev);
+> +	unsigned int regval, status;
+> +
+> +	if (board_id_get(data) == BOARD_ID_TN48M_P) {
+> +		regmap_read(data->regmap, attr2->nr, &regval);
+> +
+> +		if (attr2->index == 1)
+> +			status = !FIELD_GET(PSU1_PRESENT_MASK, regval);
+> +		else
+> +			status = !FIELD_GET(PSU2_PRESENT_MASK, regval);
+> +	} else
+> +		status = 0;
+> +
+> +	return sprintf(buf, "%d\n", status);
+> +}
+> +
+> +static ssize_t psu_pg_show(struct device *dev,
+> +			   struct device_attribute *attr, char *buf)
+> +{
+> +	struct sensor_device_attribute_2 *attr2 = to_sensor_dev_attr_2(attr);
+> +	struct tn48m_data *data = dev_get_drvdata(dev);
+> +	unsigned int regval, status;
+> +
+> +	regmap_read(data->regmap, attr2->nr, &regval);
+> +
+> +	if (attr2->index == 1)
+> +		status = FIELD_GET(PSU1_POWERGOOD_MASK, regval);
+> +	else
+> +		status = FIELD_GET(PSU2_POWERGOOD_MASK, regval);
+> +
+> +	return sprintf(buf, "%d\n", status);
+> +}
+> +
+> +static ssize_t psu_alert_show(struct device *dev,
+> +			      struct device_attribute *attr, char *buf)
+> +{
+> +	struct sensor_device_attribute_2 *attr2 = to_sensor_dev_attr_2(attr);
+> +	struct tn48m_data *data = dev_get_drvdata(dev);
+> +	unsigned int regval, status;
+> +
+> +	if (board_id_get(data) == BOARD_ID_TN48M_P) {
+> +		regmap_read(data->regmap, attr2->nr, &regval);
+> +
+> +		if (attr2->index == 1)
+> +			status = !FIELD_GET(PSU1_ALERT_MASK, regval);
+> +		else
+> +			status = !FIELD_GET(PSU2_ALERT_MASK, regval);
+> +	} else
+> +		status = 0;
+> +
+> +	return sprintf(buf, "%d\n", status);
+> +}
+> +
+> +static SENSOR_DEVICE_ATTR_2_RO(psu1_present, psu_present, PSU_STATUS, 1);
+> +static SENSOR_DEVICE_ATTR_2_RO(psu2_present, psu_present, PSU_STATUS, 2);
+> +static SENSOR_DEVICE_ATTR_2_RO(psu1_pg, psu_pg, PSU_STATUS, 1);
+> +static SENSOR_DEVICE_ATTR_2_RO(psu2_pg, psu_pg, PSU_STATUS, 2);
+> +static SENSOR_DEVICE_ATTR_2_RO(psu1_alert, psu_alert, PSU_STATUS, 1);
+> +static SENSOR_DEVICE_ATTR_2_RO(psu2_alert, psu_alert, PSU_STATUS, 2);
+> +
+> +static struct attribute *tn48m_hwmon_attrs[] = {
+> +	&sensor_dev_attr_psu1_present.dev_attr.attr,
+> +	&sensor_dev_attr_psu2_present.dev_attr.attr,
+> +	&sensor_dev_attr_psu1_pg.dev_attr.attr,
+> +	&sensor_dev_attr_psu2_pg.dev_attr.attr,
+> +	&sensor_dev_attr_psu1_alert.dev_attr.attr,
+> +	&sensor_dev_attr_psu2_alert.dev_attr.attr,
 
-Signed-off-by: Robert Marko <robert.marko@sartura.hr>
----
- .../bindings/mfd/delta,tn48m-cpld.yaml        | 59 +++++++++++++++++++
- 1 file changed, 59 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/mfd/delta,tn48m-cpld.yaml
+Literally none of those attributes are standard hwmon attributes.
+I don't know what this is, but it is not a hardware monitoring driver.
 
-diff --git a/Documentation/devicetree/bindings/mfd/delta,tn48m-cpld.yaml b/Documentation/devicetree/bindings/mfd/delta,tn48m-cpld.yaml
-new file mode 100644
-index 000000000000..7d81943d3d27
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/delta,tn48m-cpld.yaml
-@@ -0,0 +1,59 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/delta,tn48m-cpld.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Delta Networks TN48M CPLD controller
-+
-+maintainers:
-+  - Robert Marko <robert.marko@sartura.hr>
-+
-+description: |
-+  Lattice CPLD onboard the TN48M switches is used for system
-+  management.
-+
-+  It provides information about the hardware model, revision,
-+  PSU status etc.
-+
-+  It is also being used as a GPIO expander for the SFP slots.
-+
-+properties:
-+  compatible:
-+    const: delta,tn48m-cpld
-+
-+  reg:
-+    description:
-+      I2C device address.
-+    maxItems: 1
-+
-+  gpio-controller: true
-+
-+  "#gpio-cells":
-+    const: 2
-+    description:
-+      The first cell is the pin number and the second cell is used to specify
-+      the gpio active state.
-+
-+required:
-+  - compatible
-+  - reg
-+  - gpio-controller
-+  - "#gpio-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        cpld@41 {
-+            compatible = "delta,tn48m-cpld";
-+            reg = <0x41>;
-+
-+            gpio-controller;
-+            #gpio-cells = <2>;
-+        };
-+    };
--- 
-2.31.1
+> +	NULL
+> +};
+> +
+> +ATTRIBUTE_GROUPS(tn48m_hwmon);
+> +
+> +static int tn48m_hwmon_probe(struct platform_device *pdev)
+> +{
+> +	struct tn48m_data *data = dev_get_drvdata(pdev->dev.parent);
+> +	struct device *hwmon_dev;
+> +
+> +	hwmon_dev = devm_hwmon_device_register_with_groups(&pdev->dev,
+> +							   "tn48m_hwmon",
+> +							   data,
+> +							   tn48m_hwmon_groups);
+
+Please use devm_hwmon_device_register_with_info() to register hwmon devices.
+Of course, that only makes sense for actual hardware monitoring drivers
+which do support standard attributes.
+
+> +	return PTR_ERR_OR_ZERO(hwmon_dev);
+> +}
+> +
+> +static const struct platform_device_id tn48m_hwmon_id_table[] = {
+> +	{ "delta,tn48m-hwmon", },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(platform, tn48m_hwmon_id_table);
+> +
+> +static struct platform_driver tn48m_hwmon_driver = {
+> +	.driver = {
+> +		.name = "tn48m-hwmon",
+> +	},
+> +	.probe = tn48m_hwmon_probe,
+> +	.id_table = tn48m_hwmon_id_table,
+> +};
+> +module_platform_driver(tn48m_hwmon_driver);
+> +
+> +MODULE_AUTHOR("Robert Marko <robert.marko@sartura.hr>");
+> +MODULE_DESCRIPTION("Delta TN48M CPLD HWMON driver");
+> +MODULE_LICENSE("GPL");
+> diff --git a/drivers/mfd/tn48m-cpld.c b/drivers/mfd/tn48m-cpld.c
+> index f22a15ddd22d..4d837aca01e7 100644
+> --- a/drivers/mfd/tn48m-cpld.c
+> +++ b/drivers/mfd/tn48m-cpld.c
+> @@ -20,6 +20,9 @@
+>  static const struct mfd_cell tn48m_cell[] = {
+>  	{
+>  		.name = "delta,tn48m-gpio",
+> +	},
+> +	{
+> +		.name = "delta,tn48m-hwmon",
+>  	}
+>  };
+>  
+> diff --git a/include/linux/mfd/tn48m.h b/include/linux/mfd/tn48m.h
+> index 9cc2b04c8d69..eb2cfc3a5db7 100644
+> --- a/include/linux/mfd/tn48m.h
+> +++ b/include/linux/mfd/tn48m.h
+> @@ -22,6 +22,7 @@
+>  #define SFP_TX_DISABLE		0x31
+>  #define SFP_PRESENT		0x3a
+>  #define SFP_LOS			0x40
+> +#define PSU_STATUS		0xa
+>  
+>  struct tn48m_data {
+>  	struct device *dev;
+> 
 
