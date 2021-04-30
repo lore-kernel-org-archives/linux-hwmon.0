@@ -2,358 +2,255 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82263C433B4
-	for <linux-hwmon@archiver.kernel.org>; Fri, 30 Apr 2021 16:38:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D06ADC433ED
+	for <linux-hwmon@archiver.kernel.org>; Fri, 30 Apr 2021 20:19:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6C30961468
-	for <linux-hwmon@archiver.kernel.org>; Fri, 30 Apr 2021 16:38:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A34806143B
+	for <linux-hwmon@archiver.kernel.org>; Fri, 30 Apr 2021 20:19:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230350AbhD3QjZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 30 Apr 2021 12:39:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47892 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbhD3QjZ (ORCPT
+        id S235869AbhD3UUN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 30 Apr 2021 16:20:13 -0400
+Received: from mail-ot1-f41.google.com ([209.85.210.41]:38740 "EHLO
+        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235484AbhD3UUK (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 30 Apr 2021 12:39:25 -0400
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B9CC06174A;
-        Fri, 30 Apr 2021 09:38:35 -0700 (PDT)
-Received: by mail-ot1-x32d.google.com with SMTP id g7-20020a9d5f870000b02902a5831ad705so1738545oti.10;
-        Fri, 30 Apr 2021 09:38:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gBfuH2BsHbm4HXtMuE4mf++nb7jjsYUmOtPWGImC4Hw=;
-        b=sql0shj/1sh7uIVPnYr8PBsMY6oC63lj+2z7XSZqsUPwfxIwuRj+Nk+a4xwZgUbmY9
-         1lLXu3nCPHn6K2QHW1TsZ1a0vHaP5vSrL19S53NBC9Ik51ozovt/ViVNF0o60ZDcICuc
-         ww5TNjvusYYjcoMq+jFTjBUaTl3ifXrsvugyncjBVhKF82Ab9qmomUs8cevWqxQLA5To
-         2byEuwfhjblQjLFJb+FYksznUo7iNJ6SF+IYQ+Wj81gSr3gMzG54iQz2ki3oMkOy77NS
-         C6FFrBL4q3CLs1MuWc71RDhnpAC4/7REaFBXcS0yP7ehRRYZqzobmKvvDXjr2+Iuoffz
-         nx8w==
+        Fri, 30 Apr 2021 16:20:10 -0400
+Received: by mail-ot1-f41.google.com with SMTP id v23-20020a9d60570000b02902a53bac99a3so10739993otj.5;
+        Fri, 30 Apr 2021 13:19:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=gBfuH2BsHbm4HXtMuE4mf++nb7jjsYUmOtPWGImC4Hw=;
-        b=nGWVE5S90u9OKpmfPnkTufzLRPNdhtUur/0yliwa2uTet/9121jjT1xbv2RV06CzpX
-         D0Uzp+t7SMVtcOlxbspC8vFi6nzCsmFSMxab+j8iX2agIqltqfEKJWwqN5tqjv7BEFNx
-         BexfLpc5wSvAMLiMdwjvR+MTQT+ESTOw765CqEBG4O/+K4g9aorp6ZivKusktnd24W7v
-         xrB6G5+JI6hKT8lGWVwacjBxwocpgz5gjsBlm7zdFpa+upKIhP9WPihpukcXQiq1aW49
-         21Z+B38hvFMIn9d39NH7c/zEjlyTwhFDv95SiOY2NZxPexh32qgnGbtQ5cLF6B9QApcH
-         2yVA==
-X-Gm-Message-State: AOAM533y7j0Ks6bBd2B9SrvpDZuUEsHyFaPV4O06yAP5P9JKPTfKBo+I
-        9h0QE0YqB0ssdXf3TDs7KUg=
-X-Google-Smtp-Source: ABdhPJzj4Qbp8t5VyC3OP9wEamRZqm+jh2IE9Fn8FVIOSeFwPRMZsklW5fgbAt4uwwBsBxTBTuOvNQ==
-X-Received: by 2002:a05:6830:a:: with SMTP id c10mr4252055otp.21.1619800714337;
-        Fri, 30 Apr 2021 09:38:34 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a10sm774192otl.15.2021.04.30.09.38.32
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=05YajdrOgDhUy0VSmK12HSI6pp+IeJDTyJyysQF3p7o=;
+        b=nM9kSLAqN8CtFxCogI9Gc2rb223cOvNH/+rwMxhWHdiIsDKFfEXybEUTODR5CkJvqT
+         9zPHR9iJFvF2qB8rX6EgXm6SW/F9VfGVcOlX29xpEATOP3FuMyMV4XgxSPbMyO6OEvEs
+         eLAPENgMIfjYmTeZSjBGO/ZN5X+phffm0RUDRKtDItNz+tX+dyE7+ZiG9SqtZkVcZIzQ
+         jSP2yjcPP76E9BsLSDFUbQwY3n7vegHW/IBnUw/rP3T7nTuQ78wk/txPZg9RMOwpLbNS
+         KE/yAcncLda9nU4jmcAixTaaE9KzOpLaV/9o0UxQJfMMAciAxNt7CnwCSLmkJicQudyg
+         YVwA==
+X-Gm-Message-State: AOAM533X/6z+3XBp231oVrmAE5p4aqW6GeN3QCdwyfHWXMTJ6ZdpoKsP
+        SzX5JV0qTYCt5yksqdz1E8cGpg85/Q==
+X-Google-Smtp-Source: ABdhPJyhpwkye5/a50dVpExQW5qA9sdb/0cba2fjbZX1NCBrx5NgquzmypopNGw2rU4zxKfPMbFpAw==
+X-Received: by 2002:a9d:61c7:: with SMTP id h7mr5030835otk.360.1619813960116;
+        Fri, 30 Apr 2021 13:19:20 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id m133sm985926oia.22.2021.04.30.13.19.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Apr 2021 09:38:33 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 30 Apr 2021 09:38:31 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Ivan Mikhaylov <i.mikhaylov@yadro.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 4/4] hwmon: vcnl3020: add hwmon driver for intrusion
- sensor
-Message-ID: <20210430163831.GA3163069@roeck-us.net>
-References: <20210430152419.261757-1-i.mikhaylov@yadro.com>
- <20210430152419.261757-5-i.mikhaylov@yadro.com>
+        Fri, 30 Apr 2021 13:19:19 -0700 (PDT)
+Received: (nullmailer pid 3818585 invoked by uid 1000);
+        Fri, 30 Apr 2021 20:19:18 -0000
+Date:   Fri, 30 Apr 2021 15:19:18 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Quan Nguyen <quan@os.amperecomputing.com>
+Cc:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org,
+        Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
+Subject: Re: [PATCH v4 1/4] dt-bindings: mfd: Add bindings for Ampere Altra
+ SMPro drivers
+Message-ID: <20210430201918.GA3806853@robh.at.kernel.org>
+References: <20210422090843.4614-1-quan@os.amperecomputing.com>
+ <20210422090843.4614-2-quan@os.amperecomputing.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210430152419.261757-5-i.mikhaylov@yadro.com>
+In-Reply-To: <20210422090843.4614-2-quan@os.amperecomputing.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Apr 30, 2021 at 06:24:19PM +0300, Ivan Mikhaylov wrote:
-> Intrusion status detection via Interrupt Status Register.
+On Thu, Apr 22, 2021 at 04:08:40PM +0700, Quan Nguyen wrote:
+> Adds device tree bindings for SMPro driver found on the Mt.Jade hardware
+> reference platform with Ampere's Altra Processor family.
 > 
-> Signed-off-by: Ivan Mikhaylov <i.mikhaylov@yadro.com>
+> The SMpro co-processor on Ampere Altra processor family is to monitor
+> and report various data included hwmon-related info, RAS errors, and
+> other miscellaneous information. This parent SMPro MFD driver creates
+> a single simple register map to be shared by all sub-devices and leave
+> all the specific to be handled by the child drivers.
 
-I think this should, if at all, be handled using the
-iio->hwmon bridge (or, in other words, require a solution
-which is not chip specific).
+Again, just because you have multiple functions aka MFD, that doesn't 
+mean you need child nodes for each function. The only thing you have 
+in DT is a register address. Does this vary? If so, how often? How many 
+different versions of a DT do you currently or expect to have? 
 
-I am also not sure if "proximity" is really appropriate to use
-for intrusion detection in the sense of hardware monitoring.
-This would require a proximity sensor within a chassis, which
-would be both overkill and unlikely to happen in the real world.
-"Intrusion", in hardware monitoring context, means "someone
-opened the chassis", not "someone got [too] close".
-
+> 
+> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
 > ---
->  drivers/hwmon/Kconfig                  |  7 +++
->  drivers/hwmon/Makefile                 |  1 +
->  drivers/hwmon/vcnl3020-hwmon.c         | 57 ++++++++++++++++++++++
->  drivers/iio/proximity/vcnl3020.c       | 67 ++++++++++++++++++++------
->  include/linux/iio/proximity/vcnl3020.h | 26 ++++++++++
->  5 files changed, 143 insertions(+), 15 deletions(-)
->  create mode 100644 drivers/hwmon/vcnl3020-hwmon.c
->  create mode 100644 include/linux/iio/proximity/vcnl3020.h
+> Changes in v4:
+>   + Revised the commit message to clarify how the specific info will
+>     be handled commented by Rob.
 > 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 1ecf697d8d99..862205bbb3bf 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1916,6 +1916,13 @@ config SENSORS_TMP513
->  	  This driver can also be built as a module. If so, the module
->  	  will be called tmp513.
->  
-> +config SENSORS_VCNL3020
-> +	tristate "VCNL3020"
-> +	depends on I2C && VCNL3020
-> +	help
-> +	  If you say yes here you get support for the intrusion
-> +	  sensor via VCNL3020 proximity sensor.
-> +
->  config SENSORS_VEXPRESS
->  	tristate "Versatile Express"
->  	depends on VEXPRESS_CONFIG
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index 09a86c5e1d29..1d96212587aa 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -186,6 +186,7 @@ obj-$(CONFIG_SENSORS_TMP108)	+= tmp108.o
->  obj-$(CONFIG_SENSORS_TMP401)	+= tmp401.o
->  obj-$(CONFIG_SENSORS_TMP421)	+= tmp421.o
->  obj-$(CONFIG_SENSORS_TMP513)	+= tmp513.o
-> +obj-$(CONFIG_SENSORS_VCNL3020)	+= vcnl3020-hwmon.o
->  obj-$(CONFIG_SENSORS_VEXPRESS)	+= vexpress-hwmon.o
->  obj-$(CONFIG_SENSORS_VIA_CPUTEMP)+= via-cputemp.o
->  obj-$(CONFIG_SENSORS_VIA686A)	+= via686a.o
-> diff --git a/drivers/hwmon/vcnl3020-hwmon.c b/drivers/hwmon/vcnl3020-hwmon.c
+> Changes in v3:
+>   + Supported list of compatible string [Rob]
+>   + Introduced reg property in DT to specify reg offset [Rob]
+>   + Updated description and other minor changes in yaml file [Rob]
+> 
+> Changes in v2:
+>   + Changed "ampere,ac01-smpro" to "ampere,smpro" [Quan]
+> 
+>  .../bindings/hwmon/ampere,ac01-hwmon.yaml     |  28 +++++
+>  .../devicetree/bindings/mfd/ampere,smpro.yaml | 105 ++++++++++++++++++
+>  2 files changed, 133 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/ampere,ac01-hwmon.yaml
+>  create mode 100644 Documentation/devicetree/bindings/mfd/ampere,smpro.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/ampere,ac01-hwmon.yaml b/Documentation/devicetree/bindings/hwmon/ampere,ac01-hwmon.yaml
 > new file mode 100644
-> index 000000000000..199bea25723b
+> index 000000000000..fbf7ec754160
 > --- /dev/null
-> +++ b/drivers/hwmon/vcnl3020-hwmon.c
-> @@ -0,0 +1,57 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * vcnl3020-hwmon.c - intrusion sensor.
-> + *
-> + */
+> +++ b/Documentation/devicetree/bindings/hwmon/ampere,ac01-hwmon.yaml
+> @@ -0,0 +1,28 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/ampere,ac01-hwmon.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/i2c.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/hwmon-sysfs.h>
-> +#include <linux/device.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/iio/proximity/vcnl3020.h>
+> +title: Hardware monitoring driver for the Ampere Altra SMPro
 > +
-> +static ssize_t vcnl3020_show(struct device *dev,
-> +			     struct device_attribute *attr, char *buf)
-> +{
-> +	struct vcnl3020_data *vcnl3020_data = dev_get_drvdata(dev);
+> +maintainers:
+> +  - Quan Nguyen <quan@os.amperecomputing.com>
 > +
-> +	bool data = vcnl3020_is_thr_triggered(vcnl3020_data);
+> +description: |
+> +  This module is part of the Ampere Altra SMPro multi-function device. For more
+> +  details see ../mfd/ampere,smpro.yaml.
 > +
-> +	return sprintf(buf, "%u\n", data);
-> +}
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - ampere,ac01-hwmon
 > +
-> +static SENSOR_DEVICE_ATTR_2_RO(intrusion0_alarm, vcnl3020, 0, 0);
+> +  reg:
+> +    maxItems: 1
 > +
-> +static struct attribute *vcnl3020_attrs[] = {
-> +	&sensor_dev_attr_intrusion0_alarm.dev_attr.attr,
-> +	NULL
-> +};
-> +ATTRIBUTE_GROUPS(vcnl3020);
+> +required:
+> +  - compatible
+> +  - reg
 > +
-> +static int32_t vcnl3020_hwmon_probe(struct platform_device *pdev)
-> +{
-> +	struct vcnl3020_data *vcnl3020_data = platform_get_drvdata(pdev);
-> +	struct device *hwmon_dev;
-> +
-> +	hwmon_dev = devm_hwmon_device_register_with_groups(&pdev->dev,
-> +							   VCNL3020_DRV,
-> +							   vcnl3020_data,
-> +							   vcnl3020_groups);
-
-Please note that new drivers must register using
-[devm_]hwmon_device_register_with_info().
-
-Thanks,
-Guenter
-
-> +	return PTR_ERR_OR_ZERO(hwmon_dev);
-> +}
-> +
-> +static struct platform_driver vcnl3020_hwmon_driver = {
-> +	.probe = vcnl3020_hwmon_probe,
-> +	.driver = {
-> +		.name = VCNL3020_DRV_HWMON,
-> +	},
-> +};
-> +
-> +module_platform_driver(vcnl3020_hwmon_driver);
-> +
-> +MODULE_AUTHOR("Ivan Mikhaylov <i.mikhaylov@yadro.com>");
-> +MODULE_DESCRIPTION("Intrusion sensor for VCNL3020");
-> +MODULE_LICENSE("GPL");
-> diff --git a/drivers/iio/proximity/vcnl3020.c b/drivers/iio/proximity/vcnl3020.c
-> index bff59c7af966..67baa14cc900 100644
-> --- a/drivers/iio/proximity/vcnl3020.c
-> +++ b/drivers/iio/proximity/vcnl3020.c
-> @@ -11,9 +11,11 @@
->  #include <linux/err.h>
->  #include <linux/delay.h>
->  #include <linux/regmap.h>
-> +#include <linux/platform_device.h>
->  
->  #include <linux/iio/iio.h>
->  #include <linux/iio/sysfs.h>
-> +#include <linux/iio/proximity/vcnl3020.h>
->  
->  #define VCNL3020_PROD_ID	0x21
->  
-> @@ -66,18 +68,6 @@ static const int vcnl3020_prox_sampling_frequency[][2] = {
->  	{250, 0},
->  };
->  
-> -/**
-> - * struct vcnl3020_data - vcnl3020 specific data.
-> - * @regmap:	device register map.
-> - * @dev:	vcnl3020 device.
-> - * @rev:	revision id.
-> - */
-> -struct vcnl3020_data {
-> -	struct regmap *regmap;
-> -	struct device *dev;
-> -	u8 rev;
-> -};
-> -
->  /**
->   * struct vcnl3020_property - vcnl3020 property.
->   * @name:	property name.
-> @@ -330,6 +320,23 @@ static int vcnl3020_write_event(struct iio_dev *indio_dev,
->  	return rc;
->  }
->  
-> +#ifdef CONFIG_SENSORS_VCNL3020
-> +
-> +bool vcnl3020_is_thr_triggered(struct vcnl3020_data *data)
-> +{
-> +	int rc;
-> +	unsigned int isr;
-> +
-> +	rc = regmap_read(data->regmap, VCNL_ISR, &isr);
-> +	if (rc)
-> +		return false;
-> +
-> +	return !!((isr & VCNL_INT_TH_LOW) || (isr & VCNL_INT_TH_HI));
-> +}
-> +EXPORT_SYMBOL_GPL(vcnl3020_is_thr_triggered);
-> +
-> +#endif
-> +
->  static int vcnl3020_config_threshold(struct iio_dev *indio_dev, bool state)
->  {
->  	struct vcnl3020_data *data = iio_priv(indio_dev);
-> @@ -536,6 +543,7 @@ static int vcnl3020_probe(struct i2c_client *client)
->  	struct vcnl3020_data *data;
->  	struct iio_dev *indio_dev;
->  	struct regmap *regmap;
-> +	struct platform_device *pdev;
->  	int rc;
->  
->  	regmap = devm_regmap_init_i2c(client, &vcnl3020_regmap_config);
-> @@ -560,10 +568,39 @@ static int vcnl3020_probe(struct i2c_client *client)
->  	indio_dev->info = &vcnl3020_info;
->  	indio_dev->channels = vcnl3020_channels;
->  	indio_dev->num_channels = ARRAY_SIZE(vcnl3020_channels);
-> -	indio_dev->name = "vcnl3020";
-> +	indio_dev->name = VCNL3020_DRV;
->  	indio_dev->modes = INDIO_DIRECT_MODE;
->  
-> -	return devm_iio_device_register(&client->dev, indio_dev);
-> +	rc = devm_iio_device_register(&client->dev, indio_dev);
-> +	if (rc != 0)
-> +		goto err_out;
-> +
-> +#ifdef CONFIG_SENSORS_VCNL3020
-> +
-> +	pdev = platform_device_alloc(VCNL3020_DRV_HWMON, -1);
-> +	if (!pdev) {
-> +		dev_err(&client->dev, "Failed to allocate %s\n",
-> +			VCNL3020_DRV_HWMON);
-> +		rc = -ENOMEM;
-> +		goto err_out;
-> +	}
-> +
-> +	pdev->dev.parent = &indio_dev->dev;
-> +	platform_set_drvdata(pdev, data);
-> +	rc = platform_device_add(pdev);
-> +	if (rc != 0) {
-> +		dev_err(&client->dev, "Failed to register %s: %d\n",
-> +			VCNL3020_DRV_HWMON, rc);
-> +		platform_device_put(pdev);
-> +		pdev = NULL;
-> +		goto err_out;
-> +	}
-> +
-> +#endif
-> +
-> +err_out:
-> +
-> +	return rc;
->  }
->  
->  static const struct of_device_id vcnl3020_of_match[] = {
-> @@ -576,7 +613,7 @@ MODULE_DEVICE_TABLE(of, vcnl3020_of_match);
->  
->  static struct i2c_driver vcnl3020_driver = {
->  	.driver = {
-> -		.name   = "vcnl3020",
-> +		.name   = VCNL3020_DRV,
->  		.of_match_table = vcnl3020_of_match,
->  	},
->  	.probe_new  = vcnl3020_probe,
-> diff --git a/include/linux/iio/proximity/vcnl3020.h b/include/linux/iio/proximity/vcnl3020.h
+> +additionalProperties: false
+> diff --git a/Documentation/devicetree/bindings/mfd/ampere,smpro.yaml b/Documentation/devicetree/bindings/mfd/ampere,smpro.yaml
 > new file mode 100644
-> index 000000000000..d99783298e6e
+> index 000000000000..5613c420869e
 > --- /dev/null
-> +++ b/include/linux/iio/proximity/vcnl3020.h
-> @@ -0,0 +1,26 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * This file describe API for VCNL3020 proximity sensor.
-> + */
+> +++ b/Documentation/devicetree/bindings/mfd/ampere,smpro.yaml
+> @@ -0,0 +1,105 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/ampere,smpro.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +#ifndef VCNL3020_PROXIMITY_H
-> +#define VCNL3020_PROXIMITY_H
+> +title: Ampere Altra SMPro firmware driver
 > +
-> +#define VCNL3020_DRV_HWMON	"vcnl3020-hwmon"
-> +#define VCNL3020_DRV		"vcnl3020"
+> +maintainers:
+> +  - Quan Nguyen <quan@os.amperecomputing.com>
 > +
-> +/**
-> + * struct vcnl3020_data - vcnl3020 specific data.
-> + * @regmap:	device register map.
-> + * @dev:	vcnl3020 device.
-> + * @rev:	revision id.
-> + */
-> +struct vcnl3020_data {
-> +	struct regmap *regmap;
-> +	struct device *dev;
-> +	u8 rev;
-> +};
+> +description: |
+> +  Ampere Altra SMPro firmware may contain different blocks like hardware
+> +  monitoring, error monitoring and other miscellaneous features.
 > +
-> +bool vcnl3020_is_thr_triggered(struct vcnl3020_data *data);
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - ampere,smpro
 > +
-> +#endif
+> +  reg:
+> +    description:
+> +      I2C device address.
+> +    maxItems: 1
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 0
+> +
+> +patternProperties:
+> +  "^hwmon(@[0-9a-f]+)?$":
+> +    $ref: ../hwmon/ampere,ac01-hwmon.yaml
+> +
+> +  "^misc(@[0-9a-f]+)?$":
+> +    type: object
+> +    description: |
+> +      This module is part of the Ampere Altra SMPro multi-function device
+> +      to support miscellaneous features
+> +    properties:
+> +      compatible:
+> +        enum:
+> +          - ampere,ac01-misc
+> +      reg:
+> +        maxItems: 1
+> +
+> +    required:
+> +      - compatible
+> +      - reg
+> +
+> +  "^errmon(@[0-9a-f]+)?$":
+> +    type: object
+> +    description: |
+> +      This module is part of the Ampere Altra SMPro multi-function device
+> +      that supports error monitoring feature.
+> +
+> +    properties:
+> +      compatible:
+> +        enum:
+> +          - ampere,ac01-errmon
+> +      reg:
+> +        maxItems: 1
+> +
+> +    required:
+> +      - compatible
+> +      - reg
+> +
+> +required:
+> +  - "#address-cells"
+> +  - "#size-cells"
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        smpro@4f {
+> +            compatible = "ampere,smpro";
+> +            reg = <0x4f>;
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +
+> +            hwmon@10 {
+> +                compatible = "ampere,ac01-hwmon";
+> +                reg = <0x10>;
+> +            };
+> +
+> +            misc@b0 {
+> +                compatible = "ampere,ac01-misc";
+> +                reg = <0xb0>;
+> +            };
+> +
+> +            errmon@80 {
+> +                compatible = "ampere,ac01-errmon";
+> +                reg = <0x80>;
+> +            };
+> +
+> +        };
+> +    };
 > -- 
-> 2.26.3
+> 2.28.0
 > 
