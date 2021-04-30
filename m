@@ -2,255 +2,111 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D06ADC433ED
-	for <linux-hwmon@archiver.kernel.org>; Fri, 30 Apr 2021 20:19:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76923C433ED
+	for <linux-hwmon@archiver.kernel.org>; Fri, 30 Apr 2021 21:24:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A34806143B
-	for <linux-hwmon@archiver.kernel.org>; Fri, 30 Apr 2021 20:19:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4F9C261159
+	for <linux-hwmon@archiver.kernel.org>; Fri, 30 Apr 2021 21:24:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235869AbhD3UUN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 30 Apr 2021 16:20:13 -0400
-Received: from mail-ot1-f41.google.com ([209.85.210.41]:38740 "EHLO
-        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235484AbhD3UUK (ORCPT
+        id S231232AbhD3VY6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 30 Apr 2021 17:24:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54410 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231173AbhD3VY6 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 30 Apr 2021 16:20:10 -0400
-Received: by mail-ot1-f41.google.com with SMTP id v23-20020a9d60570000b02902a53bac99a3so10739993otj.5;
-        Fri, 30 Apr 2021 13:19:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=05YajdrOgDhUy0VSmK12HSI6pp+IeJDTyJyysQF3p7o=;
-        b=nM9kSLAqN8CtFxCogI9Gc2rb223cOvNH/+rwMxhWHdiIsDKFfEXybEUTODR5CkJvqT
-         9zPHR9iJFvF2qB8rX6EgXm6SW/F9VfGVcOlX29xpEATOP3FuMyMV4XgxSPbMyO6OEvEs
-         eLAPENgMIfjYmTeZSjBGO/ZN5X+phffm0RUDRKtDItNz+tX+dyE7+ZiG9SqtZkVcZIzQ
-         jSP2yjcPP76E9BsLSDFUbQwY3n7vegHW/IBnUw/rP3T7nTuQ78wk/txPZg9RMOwpLbNS
-         KE/yAcncLda9nU4jmcAixTaaE9KzOpLaV/9o0UxQJfMMAciAxNt7CnwCSLmkJicQudyg
-         YVwA==
-X-Gm-Message-State: AOAM533X/6z+3XBp231oVrmAE5p4aqW6GeN3QCdwyfHWXMTJ6ZdpoKsP
-        SzX5JV0qTYCt5yksqdz1E8cGpg85/Q==
-X-Google-Smtp-Source: ABdhPJyhpwkye5/a50dVpExQW5qA9sdb/0cba2fjbZX1NCBrx5NgquzmypopNGw2rU4zxKfPMbFpAw==
-X-Received: by 2002:a9d:61c7:: with SMTP id h7mr5030835otk.360.1619813960116;
-        Fri, 30 Apr 2021 13:19:20 -0700 (PDT)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id m133sm985926oia.22.2021.04.30.13.19.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Apr 2021 13:19:19 -0700 (PDT)
-Received: (nullmailer pid 3818585 invoked by uid 1000);
-        Fri, 30 Apr 2021 20:19:18 -0000
-Date:   Fri, 30 Apr 2021 15:19:18 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Quan Nguyen <quan@os.amperecomputing.com>
-Cc:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org,
-        Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-Subject: Re: [PATCH v4 1/4] dt-bindings: mfd: Add bindings for Ampere Altra
- SMPro drivers
-Message-ID: <20210430201918.GA3806853@robh.at.kernel.org>
-References: <20210422090843.4614-1-quan@os.amperecomputing.com>
- <20210422090843.4614-2-quan@os.amperecomputing.com>
+        Fri, 30 Apr 2021 17:24:58 -0400
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B57C06174A;
+        Fri, 30 Apr 2021 14:24:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=t45yD8Tz8EVh7zr7z9a7QSK1nAjvYCl7n2zVHHXnLGk=; b=POTbr6zXE1kikSsUIgDM8jOS6M
+        1ncmQva3gUCk3tr70PK7l/PoctVdgJoqPAuAegB9ijO3CeHgv+x6L/WSA/F5IinFFx/s5cRPljODp
+        I9IKK0easSJsomyru6Di3XjhC9JAgwkE1o3egl9j4jHIUiDUb7BuZH3AQGtEBqHHH0nM=;
+Received: from p200300ccff0893001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff08:9300:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1lcacH-0003hy-C6; Fri, 30 Apr 2021 23:24:05 +0200
+Date:   Fri, 30 Apr 2021 23:24:04 +0200
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     linux-iio@vger.kernel.org, jic23@kernel.org,
+        linux-hwmon@vger.kernel.org, linux@roeck-us.net, jdelvare@suse.com,
+        kernel@pengutronix.de, linux-imx@nxp.com
+Cc:     Jonathan =?UTF-8?B?TmV1c2Now6RmZXI=?= <j.neuschaefer@gmx.net>,
+        letux-kernel@goldelico.com
+Subject: [Q] tps65185 EPD PMIC temperature interface - which subsystem
+Message-ID: <20210430232404.26d60fef@aktux>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210422090843.4614-2-quan@os.amperecomputing.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Apr 22, 2021 at 04:08:40PM +0700, Quan Nguyen wrote:
-> Adds device tree bindings for SMPro driver found on the Mt.Jade hardware
-> reference platform with Ampere's Altra Processor family.
-> 
-> The SMpro co-processor on Ampere Altra processor family is to monitor
-> and report various data included hwmon-related info, RAS errors, and
-> other miscellaneous information. This parent SMPro MFD driver creates
-> a single simple register map to be shared by all sub-devices and leave
-> all the specific to be handled by the child drivers.
+Hi,
 
-Again, just because you have multiple functions aka MFD, that doesn't 
-mean you need child nodes for each function. The only thing you have 
-in DT is a register address. Does this vary? If so, how often? How many 
-different versions of a DT do you currently or expect to have? 
+I am going about to clean up stuff to further upstream support for my
+ebook readers. One question arises about the temperature interface of
+the EPD PMIC. Vendor code uses regulator_get_voltage in the EPDC
+driver to read a temperature in celsius and provides temperature through
+the regulator interface (besides sysfs/hwmon). That is ugly. But what
+are the options, if a kernel consumer should be able to reference it via
+devicetree phandle and read out from it? I see temperature sensors
+both in the iio and the hwmon subsystem, but do not find a description
+why these things are there. If I put it into the iio-subsystem
+iio_channel_get() and friends can be used, if I understand things
+correctly, there are no such functions in the hwmon subsystem, so I
+would not be able to use it there. So the better choice is to put it
+into the iio subsystem?
 
-> 
-> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
-> ---
-> Changes in v4:
->   + Revised the commit message to clarify how the specific info will
->     be handled commented by Rob.
-> 
-> Changes in v3:
->   + Supported list of compatible string [Rob]
->   + Introduced reg property in DT to specify reg offset [Rob]
->   + Updated description and other minor changes in yaml file [Rob]
-> 
-> Changes in v2:
->   + Changed "ampere,ac01-smpro" to "ampere,smpro" [Quan]
-> 
->  .../bindings/hwmon/ampere,ac01-hwmon.yaml     |  28 +++++
->  .../devicetree/bindings/mfd/ampere,smpro.yaml | 105 ++++++++++++++++++
->  2 files changed, 133 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/ampere,ac01-hwmon.yaml
->  create mode 100644 Documentation/devicetree/bindings/mfd/ampere,smpro.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/ampere,ac01-hwmon.yaml b/Documentation/devicetree/bindings/hwmon/ampere,ac01-hwmon.yaml
-> new file mode 100644
-> index 000000000000..fbf7ec754160
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/ampere,ac01-hwmon.yaml
-> @@ -0,0 +1,28 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/ampere,ac01-hwmon.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Hardware monitoring driver for the Ampere Altra SMPro
-> +
-> +maintainers:
-> +  - Quan Nguyen <quan@os.amperecomputing.com>
-> +
-> +description: |
-> +  This module is part of the Ampere Altra SMPro multi-function device. For more
-> +  details see ../mfd/ampere,smpro.yaml.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - ampere,ac01-hwmon
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> diff --git a/Documentation/devicetree/bindings/mfd/ampere,smpro.yaml b/Documentation/devicetree/bindings/mfd/ampere,smpro.yaml
-> new file mode 100644
-> index 000000000000..5613c420869e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/ampere,smpro.yaml
-> @@ -0,0 +1,105 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/ampere,smpro.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Ampere Altra SMPro firmware driver
-> +
-> +maintainers:
-> +  - Quan Nguyen <quan@os.amperecomputing.com>
-> +
-> +description: |
-> +  Ampere Altra SMPro firmware may contain different blocks like hardware
-> +  monitoring, error monitoring and other miscellaneous features.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - ampere,smpro
-> +
-> +  reg:
-> +    description:
-> +      I2C device address.
-> +    maxItems: 1
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 0
-> +
-> +patternProperties:
-> +  "^hwmon(@[0-9a-f]+)?$":
-> +    $ref: ../hwmon/ampere,ac01-hwmon.yaml
-> +
-> +  "^misc(@[0-9a-f]+)?$":
-> +    type: object
-> +    description: |
-> +      This module is part of the Ampere Altra SMPro multi-function device
-> +      to support miscellaneous features
-> +    properties:
-> +      compatible:
-> +        enum:
-> +          - ampere,ac01-misc
-> +      reg:
-> +        maxItems: 1
-> +
-> +    required:
-> +      - compatible
-> +      - reg
-> +
-> +  "^errmon(@[0-9a-f]+)?$":
-> +    type: object
-> +    description: |
-> +      This module is part of the Ampere Altra SMPro multi-function device
-> +      that supports error monitoring feature.
-> +
-> +    properties:
-> +      compatible:
-> +        enum:
-> +          - ampere,ac01-errmon
-> +      reg:
-> +        maxItems: 1
-> +
-> +    required:
-> +      - compatible
-> +      - reg
-> +
-> +required:
-> +  - "#address-cells"
-> +  - "#size-cells"
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        smpro@4f {
-> +            compatible = "ampere,smpro";
-> +            reg = <0x4f>;
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +
-> +            hwmon@10 {
-> +                compatible = "ampere,ac01-hwmon";
-> +                reg = <0x10>;
-> +            };
-> +
-> +            misc@b0 {
-> +                compatible = "ampere,ac01-misc";
-> +                reg = <0xb0>;
-> +            };
-> +
-> +            errmon@80 {
-> +                compatible = "ampere,ac01-errmon";
-> +                reg = <0x80>;
-> +            };
-> +
-> +        };
-> +    };
-> -- 
-> 2.28.0
-> 
+On the consumer side, the temperature, which is pratically the ambient
+temperature, is used to choose the right waveform for the corresponding
+temperature range. Here are some code snippets in the vendor kernel:
+
+temperature = regulator_get_voltage(fb_data->tmst_regulator);
+dev_dbg(fb_data->dev, "auto temperature reading = %d\n", temperature);
+
+if (temperature != 0xFF) {
+	fb_data->last_time_temp_auto_update = now;
+	fb_data->temp_index = mxc_epdc_fb_get_temp_index(fb_data, temperature);
+}
+
+static int mxc_epdc_fb_get_temp_index(struct mxc_epdc_fb_data *fb_data, int temp
+)
+{
+        int i;
+        int index = -1;
+
+        if (fb_data->trt_entries == 0) {
+                dev_err(fb_data->dev,
+                        "No TRT exists...using default temp index\n");
+                return DEFAULT_TEMP_INDEX;
+        }
+
+        /* Search temperature ranges for a match */
+        for (i = 0; i < fb_data->trt_entries - 1; i++) {
+                if ((temp >= fb_data->temp_range_bounds[i])
+                        && (temp < fb_data->temp_range_bounds[i+1])) {
+                        index = i;
+                        break;
+                }
+        }
+
+... and writing that index to some register in the EPDC.
+
+As the consumer is not upstream (I have a basic drm-based variant also
+in my clean-up queue), compatibilty to existing systems does not matter
+that much. Also I see no drivers for similar chips upstream.
+
+Regards,
+Andreas
