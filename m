@@ -2,143 +2,265 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A585C433ED
-	for <linux-hwmon@archiver.kernel.org>; Sat,  1 May 2021 03:02:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB92DC433ED
+	for <linux-hwmon@archiver.kernel.org>; Sat,  1 May 2021 04:17:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D6A46613FA
-	for <linux-hwmon@archiver.kernel.org>; Sat,  1 May 2021 03:02:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7A87C61132
+	for <linux-hwmon@archiver.kernel.org>; Sat,  1 May 2021 04:17:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231287AbhEADDK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 30 Apr 2021 23:03:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42858 "EHLO
+        id S229562AbhEAESD (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 1 May 2021 00:18:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbhEADDH (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 30 Apr 2021 23:03:07 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C17C06174A;
-        Fri, 30 Apr 2021 20:02:16 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id l17so43607oil.11;
-        Fri, 30 Apr 2021 20:02:16 -0700 (PDT)
+        with ESMTP id S229546AbhEAESD (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 1 May 2021 00:18:03 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB84C06174A;
+        Fri, 30 Apr 2021 21:17:05 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id c36-20020a05683034a4b02902a5b84b1d12so17787otu.8;
+        Fri, 30 Apr 2021 21:17:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=X/nyZSBCvvo0nYQ/qrFQbuSlavg9ouEteFy0fWk4M1I=;
-        b=GzUP1pHDrqKbgucd2NBdEQqiJs2QLpyao+itQqVUUKYzZCKpKsGve3xCT4KKVWFgwH
-         O7QbjLDm8U79HntPlgmPcEm7k/gAwzym8aS4Lzl0V2n9IS7xUlq6rFgiplSAqW4SCsGV
-         74sMBvi0PAIRBsz+sHNa2/fA1CBWtTtI4rllJeM9rT3k3LVMrlzjtQQ9zckGknIqR/yR
-         b3v90Wm2BkNnQxIp3Cu5Uh/Zd+c9OZkVqZBe0GUJkm0Vswn1qAcYToUg5N9xWFxkKtsH
-         BRP9LtBbEnPgBBa7uGCkHpIBHaYaNc2nK70IzaSbnq9EDUHjBgbArz96KuQ+gLfyZz9J
-         yJpw==
+        bh=TioPQGknrE8mOW5JK4a866RtUyCeNLERCGZbj3eKG4M=;
+        b=S0NLPsH9fKpNUBl2/OSFwb2Q75VZM9HVOGfsx+q5/yyKAmKw+3P1AmjuCh8teYVYqz
+         V45JRSgL3xCvUoG27GUhLND143K97I+skZ9RuVHII4tJ+D96QmjwvLMOTYQAfVWZqJwg
+         67ddJy2QWGbsQGgOfCi90obZVNMgGW0nFHHPYJnBxqVWSU9WihlnHrNLcPsGIqaMjYIH
+         dPk086R0gnoa9u992KOGi41xzhy7rAutkdGpK39MNsyHEBhjh+doauDBvE644yjR7pox
+         iuiNt41Xbhdm1jlXX1x3YQfmiO05iSdK0YJqcLtembHZW2AePaLewNL+ZlHsUCE5HVcK
+         QLkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=X/nyZSBCvvo0nYQ/qrFQbuSlavg9ouEteFy0fWk4M1I=;
-        b=QOtP2MzFzFBb2zG9269rup+sFxFcrgBR8YIdEQ+bzP53J+ctf5JLt4uOZkKQBgowxB
-         PIRJnNDNeEN+iBqPLecnSHNzfQ1QQ/J9XjZ2WRGNeyJqNsOtNWDCUB7Xw50eTZLK3uUy
-         CLmN5ow6PlYurEOxzVx0vToRkjK6lSbrzCBCf80bXg5tGcQlIBIlAvl15T5c0a0LAMee
-         i+aO5mlCV0X5ofUe4MVXHxSzWOOg9FUCFwmBy1yOo8RYYdE9qrFWb3PcfLdFCbL820mg
-         bYwZ7gYe/ITYehUAitpLQ/AofZI+GSgthx/vqLo4Vu5yDpuDDuIsdq2gWbaKvD4dPlVX
-         hSIw==
-X-Gm-Message-State: AOAM5312KxI/PP6Yo312P9FKwE73g1bsIym8aYl4xB/v71nuE/Z01GDU
-        4NMwKdH434294hLzKTBGVRzYrlvX6/w=
-X-Google-Smtp-Source: ABdhPJwTgtJF1UuZ268tXl8IcFwY+ZXuiPev6gTIGGDF5JcQiHZmd58JP+t8KQiuzD74BO9lE13vWg==
-X-Received: by 2002:a05:6808:2c2:: with SMTP id a2mr6356333oid.147.1619838135803;
-        Fri, 30 Apr 2021 20:02:15 -0700 (PDT)
+        bh=TioPQGknrE8mOW5JK4a866RtUyCeNLERCGZbj3eKG4M=;
+        b=bTap9EL1xokaVI87ihnUPp3iMGF5HhY772OAXHSJ8+56WO6zaYZ6nJybY30Chobpo/
+         HMS9jAA0bvk5LSwhKXozvsSQQbJVvtx8WW0BmC/zYIYDEpU8GEnpv4G9dmIfftI+BEd2
+         fFgUnI5rp/1rvm10ROPfDqNpN0mKniyW4YLj8E1wOtNX5vOs0ws13/qfUOi3pYc8Uguv
+         Erwcl2t6rmzj9pT1TFxjV7ztnUeTxB3CAqDX8d/BxxWAZ4dlJJbsfGhrfhnGi5fT8icx
+         FSCBmQoT1AGEbReAn78tuEqPcNGjOuGrMR+VS/m3Dx1WBduYkseiuVDmB3MZ+N/CWUtM
+         0d3g==
+X-Gm-Message-State: AOAM531Y8qspNTFFa2UEShaKZfU77J56kdTGWG4DwXBLhEkxHF9k/Uv0
+        kqu+kRYkRRiTZ69aJnsuZ4yqoAdi9vk=
+X-Google-Smtp-Source: ABdhPJy41iykhChNUIwJKR3C89x8q8oKwXMKxZG6PsgD6qPQN85YVOsKh6ua2BXNfk0vVPdomqRsjw==
+X-Received: by 2002:a05:6830:30af:: with SMTP id g15mr740082ots.202.1619842624393;
+        Fri, 30 Apr 2021 21:17:04 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g3sm1134769otq.50.2021.04.30.20.02.14
+        by smtp.gmail.com with ESMTPSA id f21sm1194091otp.52.2021.04.30.21.17.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Apr 2021 20:02:14 -0700 (PDT)
+        Fri, 30 Apr 2021 21:17:03 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 30 Apr 2021 20:02:13 -0700
+Date:   Fri, 30 Apr 2021 21:17:01 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     linux-iio@vger.kernel.org, jic23@kernel.org,
-        linux-hwmon@vger.kernel.org, jdelvare@suse.com,
-        kernel@pengutronix.de, linux-imx@nxp.com,
-        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-        letux-kernel@goldelico.com
-Subject: Re: [Q] tps65185 EPD PMIC temperature interface - which subsystem
-Message-ID: <20210501030213.GA3198376@roeck-us.net>
-References: <20210430232404.26d60fef@aktux>
+To:     Erik Rosen <erik.rosen@metormote.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] hwmon: (pmbus/zl6100) Add support for ZLS1003,
+ ZLS4009 and ZL8802
+Message-ID: <20210501041701.GA3201929@roeck-us.net>
+References: <20210423153329.33457-1-erik.rosen@metormote.com>
+ <20210423153329.33457-2-erik.rosen@metormote.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210430232404.26d60fef@aktux>
+In-Reply-To: <20210423153329.33457-2-erik.rosen@metormote.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Apr 30, 2021 at 11:24:04PM +0200, Andreas Kemnade wrote:
-> Hi,
+On Fri, Apr 23, 2021 at 05:33:28PM +0200, Erik Rosen wrote:
+> Add support for Renesas ZL8802 Dual Channel/Dual Phase PMBus DC/DC
+> Digital Controller as well as ZLS1003 and ZLS4009 custom DC/DC
+> controller chips.
 > 
-> I am going about to clean up stuff to further upstream support for my
-> ebook readers. One question arises about the temperature interface of
-> the EPD PMIC. Vendor code uses regulator_get_voltage in the EPDC
-> driver to read a temperature in celsius and provides temperature through
-> the regulator interface (besides sysfs/hwmon). That is ugly. But what
-> are the options, if a kernel consumer should be able to reference it via
-> devicetree phandle and read out from it? I see temperature sensors
-> both in the iio and the hwmon subsystem, but do not find a description
-> why these things are there. If I put it into the iio-subsystem
-> iio_channel_get() and friends can be used, if I understand things
-> correctly, there are no such functions in the hwmon subsystem, so I
-> would not be able to use it there. So the better choice is to put it
-> into the iio subsystem?
-> 
+> Signed-off-by: Erik Rosen <erik.rosen@metormote.com>
 
-I am guessing a bit here since a lot of context is missing. Presumably
-there is a regulator driver. That regulator driver could register itself
-with the hwmon subsystem using [devm_]hwmon_device_register_with_info()
-and tell it to register a thermal zone sensor. It should then be possible
-to read the temperature of that sensor using thermal_zone_get_temp().
+Applied to hwmon-next.
 
+Thanks,
 Guenter
 
-> On the consumer side, the temperature, which is pratically the ambient
-> temperature, is used to choose the right waveform for the corresponding
-> temperature range. Here are some code snippets in the vendor kernel:
+> ---
+>  drivers/hwmon/pmbus/zl6100.c | 94 ++++++++++++++++++++++++++++++------
+>  1 file changed, 80 insertions(+), 14 deletions(-)
 > 
-> temperature = regulator_get_voltage(fb_data->tmst_regulator);
-> dev_dbg(fb_data->dev, "auto temperature reading = %d\n", temperature);
-> 
-> if (temperature != 0xFF) {
-> 	fb_data->last_time_temp_auto_update = now;
-> 	fb_data->temp_index = mxc_epdc_fb_get_temp_index(fb_data, temperature);
-> }
-> 
-> static int mxc_epdc_fb_get_temp_index(struct mxc_epdc_fb_data *fb_data, int temp
-> )
-> {
->         int i;
->         int index = -1;
-> 
->         if (fb_data->trt_entries == 0) {
->                 dev_err(fb_data->dev,
->                         "No TRT exists...using default temp index\n");
->                 return DEFAULT_TEMP_INDEX;
->         }
-> 
->         /* Search temperature ranges for a match */
->         for (i = 0; i < fb_data->trt_entries - 1; i++) {
->                 if ((temp >= fb_data->temp_range_bounds[i])
->                         && (temp < fb_data->temp_range_bounds[i+1])) {
->                         index = i;
->                         break;
->                 }
->         }
-> 
-> ... and writing that index to some register in the EPDC.
-> 
-> As the consumer is not upstream (I have a basic drm-based variant also
-> in my clean-up queue), compatibilty to existing systems does not matter
-> that much. Also I see no drivers for similar chips upstream.
-> 
-> Regards,
-> Andreas
+> diff --git a/drivers/hwmon/pmbus/zl6100.c b/drivers/hwmon/pmbus/zl6100.c
+> index 69120ca7aaa8..757039bb8a62 100644
+> --- a/drivers/hwmon/pmbus/zl6100.c
+> +++ b/drivers/hwmon/pmbus/zl6100.c
+> @@ -18,7 +18,7 @@
+>  #include "pmbus.h"
+>  
+>  enum chips { zl2004, zl2005, zl2006, zl2008, zl2105, zl2106, zl6100, zl6105,
+> -	     zl9101, zl9117 };
+> +	     zl8802, zl9101, zl9117, zls1003, zls4009 };
+>  
+>  struct zl6100_data {
+>  	int id;
+> @@ -34,6 +34,13 @@ struct zl6100_data {
+>  
+>  #define ZL6100_MFR_XTEMP_ENABLE		BIT(7)
+>  
+> +#define ZL8802_MFR_USER_GLOBAL_CONFIG	0xe9
+> +#define ZL8802_MFR_TMON_ENABLE		BIT(12)
+> +#define ZL8802_MFR_USER_CONFIG		0xd1
+> +#define ZL8802_MFR_XTEMP_ENABLE_2	BIT(1)
+> +#define ZL8802_MFR_DDC_CONFIG		0xd3
+> +#define ZL8802_MFR_PHASES_MASK		0x0007
+> +
+>  #define MFR_VMON_OV_FAULT_LIMIT		0xf5
+>  #define MFR_VMON_UV_FAULT_LIMIT		0xf6
+>  #define MFR_READ_VMON			0xf7
+> @@ -132,7 +139,7 @@ static int zl6100_read_word_data(struct i2c_client *client, int page,
+>  	struct zl6100_data *data = to_zl6100_data(info);
+>  	int ret, vreg;
+>  
+> -	if (page > 0)
+> +	if (page >= info->pages)
+>  		return -ENXIO;
+>  
+>  	if (data->id == zl2005) {
+> @@ -191,7 +198,7 @@ static int zl6100_read_byte_data(struct i2c_client *client, int page, int reg)
+>  	struct zl6100_data *data = to_zl6100_data(info);
+>  	int ret, status;
+>  
+> -	if (page > 0)
+> +	if (page >= info->pages)
+>  		return -ENXIO;
+>  
+>  	zl6100_wait(data);
+> @@ -230,7 +237,7 @@ static int zl6100_write_word_data(struct i2c_client *client, int page, int reg,
+>  	struct zl6100_data *data = to_zl6100_data(info);
+>  	int ret, vreg;
+>  
+> -	if (page > 0)
+> +	if (page >= info->pages)
+>  		return -ENXIO;
+>  
+>  	switch (reg) {
+> @@ -271,7 +278,7 @@ static int zl6100_write_byte(struct i2c_client *client, int page, u8 value)
+>  	struct zl6100_data *data = to_zl6100_data(info);
+>  	int ret;
+>  
+> -	if (page > 0)
+> +	if (page >= info->pages)
+>  		return -ENXIO;
+>  
+>  	zl6100_wait(data);
+> @@ -287,6 +294,10 @@ static const struct i2c_device_id zl6100_id[] = {
+>  	{"bmr462", zl2008},
+>  	{"bmr463", zl2008},
+>  	{"bmr464", zl2008},
+> +	{"bmr465", zls4009},
+> +	{"bmr466", zls1003},
+> +	{"bmr467", zls4009},
+> +	{"bmr469", zl8802},
+>  	{"zl2004", zl2004},
+>  	{"zl2005", zl2005},
+>  	{"zl2006", zl2006},
+> @@ -295,15 +306,18 @@ static const struct i2c_device_id zl6100_id[] = {
+>  	{"zl2106", zl2106},
+>  	{"zl6100", zl6100},
+>  	{"zl6105", zl6105},
+> +	{"zl8802", zl8802},
+>  	{"zl9101", zl9101},
+>  	{"zl9117", zl9117},
+> +	{"zls1003", zls1003},
+> +	{"zls4009", zls4009},
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(i2c, zl6100_id);
+>  
+>  static int zl6100_probe(struct i2c_client *client)
+>  {
+> -	int ret;
+> +	int ret, i;
+>  	struct zl6100_data *data;
+>  	struct pmbus_driver_info *info;
+>  	u8 device_id[I2C_SMBUS_BLOCK_MAX + 1];
+> @@ -367,18 +381,70 @@ static int zl6100_probe(struct i2c_client *client)
+>  	  | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP;
+>  
+>  	/*
+> -	 * ZL2004, ZL9101M, and ZL9117M support monitoring an extra voltage
+> -	 * (VMON for ZL2004, VDRV for ZL9101M and ZL9117M). Report it as vmon.
+> +	 * ZL2004, ZL8802, ZL9101M, ZL9117M and ZLS4009 support monitoring
+> +	 * an extra voltage (VMON for ZL2004, ZL8802 and ZLS4009,
+> +	 * VDRV for ZL9101M and ZL9117M). Report it as vmon.
+>  	 */
+> -	if (data->id == zl2004 || data->id == zl9101 || data->id == zl9117)
+> +	if (data->id == zl2004 || data->id == zl8802 || data->id == zl9101 ||
+> +	    data->id == zl9117 || data->id == zls4009)
+>  		info->func[0] |= PMBUS_HAVE_VMON | PMBUS_HAVE_STATUS_VMON;
+>  
+> -	ret = i2c_smbus_read_word_data(client, ZL6100_MFR_CONFIG);
+> -	if (ret < 0)
+> -		return ret;
+> +	/*
+> +	 * ZL8802 has two outputs that can be used either independently or in
+> +	 * a current sharing configuration. The driver uses the DDC_CONFIG
+> +	 * register to check if the module is running with independent or
+> +	 * shared outputs. If the module is in shared output mode, only one
+> +	 * output voltage will be reported.
+> +	 */
+> +	if (data->id == zl8802) {
+> +		info->pages = 2;
+> +		info->func[0] |= PMBUS_HAVE_IIN;
+> +
+> +		ret = i2c_smbus_read_word_data(client, ZL8802_MFR_DDC_CONFIG);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		data->access = ktime_get();
+> +		zl6100_wait(data);
+> +
+> +		if (ret & ZL8802_MFR_PHASES_MASK)
+> +			info->func[1] |= PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT;
+> +		else
+> +			info->func[1] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
+> +				| PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT;
+>  
+> -	if (ret & ZL6100_MFR_XTEMP_ENABLE)
+> -		info->func[0] |= PMBUS_HAVE_TEMP2;
+> +		for (i = 0; i < 2; i++) {
+> +			ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, i);
+> +			if (ret < 0)
+> +				return ret;
+> +
+> +			data->access = ktime_get();
+> +			zl6100_wait(data);
+> +
+> +			ret = i2c_smbus_read_word_data(client, ZL8802_MFR_USER_CONFIG);
+> +			if (ret < 0)
+> +				return ret;
+> +
+> +			if (ret & ZL8802_MFR_XTEMP_ENABLE_2)
+> +				info->func[i] |= PMBUS_HAVE_TEMP2;
+> +
+> +			data->access = ktime_get();
+> +			zl6100_wait(data);
+> +		}
+> +		ret = i2c_smbus_read_word_data(client, ZL8802_MFR_USER_GLOBAL_CONFIG);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		if (ret & ZL8802_MFR_TMON_ENABLE)
+> +			info->func[0] |= PMBUS_HAVE_TEMP3;
+> +	} else {
+> +		ret = i2c_smbus_read_word_data(client, ZL6100_MFR_CONFIG);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		if (ret & ZL6100_MFR_XTEMP_ENABLE)
+> +			info->func[0] |= PMBUS_HAVE_TEMP2;
+> +	}
+>  
+>  	data->access = ktime_get();
+>  	zl6100_wait(data);
