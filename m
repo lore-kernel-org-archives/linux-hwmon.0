@@ -2,128 +2,135 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.0 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1542C433ED
-	for <linux-hwmon@archiver.kernel.org>; Sat,  1 May 2021 08:21:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38259C433B4
+	for <linux-hwmon@archiver.kernel.org>; Sat,  1 May 2021 18:48:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9012A61407
-	for <linux-hwmon@archiver.kernel.org>; Sat,  1 May 2021 08:21:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0AE9761490
+	for <linux-hwmon@archiver.kernel.org>; Sat,  1 May 2021 18:48:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231479AbhEAIV5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 1 May 2021 04:21:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54632 "EHLO
+        id S232338AbhEAStJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 1 May 2021 14:49:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231655AbhEAIV5 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 1 May 2021 04:21:57 -0400
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4EDC06174A;
-        Sat,  1 May 2021 01:21:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=OS//dJfPUEblU6DbP4b8oY9qxu9Htv5W8P3YQWiRCWw=; b=BwmjJZgaREoB96JPrwqq1AFFlQ
-        eSZZJm2xt+WrjI+mx8LUykrPgaCupTF+qZb6xiVFDHU/LTyrvpbMf8Sbqa5KBJnboa+7C5U6JgP3i
-        uvFf8A7ljG8qTqjcpSHQc3NHqNrz0lA/xa6maTVKWDvAMnLjh0BUyzfO3feOlTR5zFUo=;
-Received: from p200300ccff2cbd001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff2c:bd00:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1lcks2-0002TM-AX; Sat, 01 May 2021 10:21:02 +0200
-Date:   Sat, 1 May 2021 10:21:01 +0200
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-iio@vger.kernel.org, jic23@kernel.org,
-        linux-hwmon@vger.kernel.org, jdelvare@suse.com,
-        kernel@pengutronix.de, linux-imx@nxp.com,
-        Jonathan =?UTF-8?B?TmV1c2Now6RmZXI=?= <j.neuschaefer@gmx.net>,
-        letux-kernel@openphoenux.org
-Subject: Re: [Q] tps65185 EPD PMIC temperature interface - which subsystem
-Message-ID: <20210501102101.087c1f1d@aktux>
-In-Reply-To: <20210501030213.GA3198376@roeck-us.net>
-References: <20210430232404.26d60fef@aktux>
-        <20210501030213.GA3198376@roeck-us.net>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        with ESMTP id S232327AbhEAStH (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sat, 1 May 2021 14:49:07 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9853C06174A;
+        Sat,  1 May 2021 11:48:17 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id m37so837160pgb.8;
+        Sat, 01 May 2021 11:48:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=m7W3JgmwHDep/UvnfXDHgnfK70cemiWTO4OL9vhnong=;
+        b=VX6g7yZKf3wfvE1/ZrcdHsjYFjcG4a3oOUMUYZ8wOSepPa12pXo1GIhzoJEJumjp8M
+         jwhPeaToMfPL/LqdQnOUQIw7j+97Hcl4gRHzbc2HZNJnoJe8CkxHrpWldTzZglXE0pOo
+         Wy73LXJHTrI4j+mhENOi0oaEkYEyCndUOuP53CT/cI+AuWHd0N73TcljLgWyYZTlphDJ
+         K13xJZFlOs/10ppuhvPVQIDJ4HqgvDho3VFMAwofk0uh8npIyMngqmZEfv7MrSu0y09t
+         8plTNSFJc9ZG24KWZ0uCjOxQNxiZQUUSwrHsYS9LU+Mobs7NomOlZ0KgMONGpAqzqggw
+         HbNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=m7W3JgmwHDep/UvnfXDHgnfK70cemiWTO4OL9vhnong=;
+        b=sV/C9iG8lCJCqWsxUma9rtf0VOlqR87xazw2PWlN0ZIwKmYsG+mo5IqCwNsDZTLh9r
+         NCPmFWaOglKb0KzbgGpIAF2nHokMhjh4rhOoxUZ6wDlaZ+HpooSR0lTNM7k9LpAeowRp
+         W0rTmioq/xWJZDITzwoxpsCr/SSUMMlmE3uA7u3DwjoeshgSmHjvxDqyAhcQ7egEgeba
+         ksTCRhVz9XyM5p/w6OEOrNntR32Zy6+Eg4Zn+9Q84mAIFVUdA/rO/MB+vv9mcmjrhRXN
+         A1NfpSr5heHAeH7fqwt+fRoGQ+eh+D5Sw19OFeZHqt8B+3wZr5tqVd3QHS3wuovK62ua
+         W2XQ==
+X-Gm-Message-State: AOAM532rQFFDSVfjOYtFGqs9Bo1TvvRlx05loMLoq0Ni8IojIZ6hHvdU
+        wM9oqKZyUqCglBcuL6BkgKJOYLWtSyJpoAbqMko=
+X-Google-Smtp-Source: ABdhPJzRxsRwZahNRsvo17YAvkoiBO0o2YQyd1DEbJYFN5Oox26Q9NA5SaN57vgb6VA3vF7WXBgB7LnJxdLjHtOLXg8=
+X-Received: by 2002:a65:5a4d:: with SMTP id z13mr10418613pgs.4.1619894897277;
+ Sat, 01 May 2021 11:48:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20210430152419.261757-1-i.mikhaylov@yadro.com> <20210430152419.261757-2-i.mikhaylov@yadro.com>
+In-Reply-To: <20210430152419.261757-2-i.mikhaylov@yadro.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sat, 1 May 2021 21:48:01 +0300
+Message-ID: <CAHp75VcZk_Brin=K7ofHkq9CV90LoqKm2k_ULrXLMCxWVWv9Nw@mail.gmail.com>
+Subject: Re: [PATCH 1/4] iio: proximity: vcnl3020: add periodic mode
+To:     Ivan Mikhaylov <i.mikhaylov@yadro.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, 30 Apr 2021 20:02:13 -0700
-Guenter Roeck <linux@roeck-us.net> wrote:
+On Fri, Apr 30, 2021 at 6:17 PM Ivan Mikhaylov <i.mikhaylov@yadro.com> wrote:
+>
+> Add the possibility to run proximity sensor in periodic measurement
+> mode.
 
-> On Fri, Apr 30, 2021 at 11:24:04PM +0200, Andreas Kemnade wrote:
-> > Hi,
-> > 
-> > I am going about to clean up stuff to further upstream support for my
-> > ebook readers. One question arises about the temperature interface of
-> > the EPD PMIC. Vendor code uses regulator_get_voltage in the EPDC
-> > driver to read a temperature in celsius and provides temperature through
-> > the regulator interface (besides sysfs/hwmon). That is ugly. But what
-> > are the options, if a kernel consumer should be able to reference it via
-> > devicetree phandle and read out from it? I see temperature sensors
-> > both in the iio and the hwmon subsystem, but do not find a description
-> > why these things are there. If I put it into the iio-subsystem
-> > iio_channel_get() and friends can be used, if I understand things
-> > correctly, there are no such functions in the hwmon subsystem, so I
-> > would not be able to use it there. So the better choice is to put it
-> > into the iio subsystem?
-> >   
-> 
-> I am guessing a bit here since a lot of context is missing. Presumably
-> there is a regulator driver. That regulator driver could register itself
-> with the hwmon subsystem using [devm_]hwmon_device_register_with_info()
-> and tell it to register a thermal zone sensor. It should then be possible
-> to read the temperature of that sensor using thermal_zone_get_temp().
-> 
-Well, I try to give first some missing context. It is about temperature
-compensation, not cooling vs. overheating protection. EPDs behave
-different at different temperatures, so the driver needs a temperature
-to compensate for it.
-EPDs need also a bit more exotic voltages, so usually there is a
-separate PMIC for them. Usually that PMIC can also deliver a
-temperature. So drivers for that should consist of
-- mfd (obvious)
-- regulator (also obvious)
-- something for providing the temperature (and that "something" is not
-  that clear to me as there are several subsystems dealing with
-  temperature)
+...
 
- 
-And on EPD controller side I would like to be able to define (besides
-other things) in the device tree
-  epd-temperature = <&some_sensor>;
+> +static int vcnl3020_config_threshold(struct iio_dev *indio_dev, bool state)
+> +{
+> +       struct vcnl3020_data *data = iio_priv(indio_dev);
+> +       int rc;
+> +       int icr;
+> +       int cmd;
+> +       int isr;
+> +
+> +       if (state) {
+> +               rc = iio_device_claim_direct_mode(indio_dev);
+> +               if (rc)
+> +                       return rc;
+> +
+> +               /* Enable periodic measurement of proximity data. */
+> +               cmd = VCNL_PS_EN | VCNL_PS_SELFTIMED_EN;
+> +
+> +               /*
+> +                * Enable interrupts on threshold, for proximity data by
+> +                * default.
+> +                */
+> +               icr = VCNL_ICR_THRES_EN;
+> +       } else {
+> +               if (!vcnl3020_is_thr_enabled(data))
+> +                       return 0;
+> +
+> +               cmd = 0;
+> +               icr = 0;
+> +               isr = 0;
+> +       }
+> +
+> +       rc = regmap_write(data->regmap, VCNL_COMMAND, cmd);
+> +       if (rc)
+> +               goto end;
+> +
+> +       rc = regmap_write(data->regmap, VCNL_PS_ICR, icr);
+> +       if (rc)
+> +               goto end;
+> +
+> +       if (!state)
+> +               /* Clear interrupts */
+> +               rc = regmap_write(data->regmap, VCNL_ISR, isr);
+> +
+> +end:
+> +       if (state)
+> +               iio_device_release_direct_mode(indio_dev);
+> +
+> +       return rc;
+> +}
 
-So your idea was to have that temperature sensor as a hwmon and
-providing also a thermal_sensor. If I understand correcly that would
-also require me to define a thermal zone where I can add the
-thermal sensor and which I could then reference somewhere.
-According to devicetree/bindings/thermal/thermal-zones.yaml defining
-trip points is required. That does not make sense in this context So I
-am wondering whether I am right there since it is not about
-overheating but about compensation. And there is only a
-thermal_zone_get_zone_by_name() but not a thermal_zone_get_sensor_by_name().
-Maybe I am getting something wrong.
-Vendor kernels in the wild additionally provide temperature by abusing
-the regulator API which is IMHO not acceptable.
+The code will benefit in case you split above to two helpers, i.e.
+_on() and _off().
+It will gain better readability.
 
-But if that thing would in to the iio subsystem, I would simply be able
-to use iio_channel_get() to get the sensor from the device tree and
-iio_channel_read() to read values from it. There is a iio_hwmon and no
-hwmon_iio, so if someone wants a hwmon interface for it, it would not
-block anything.
-
-The main point about writing this mail now is that I do not want to
-submit a driver, spin some polishing rounds, then somebody says:"Please
-go to subsystem Y, not X"
-
-Regards,
-Andreas
+-- 
+With Best Regards,
+Andy Shevchenko
