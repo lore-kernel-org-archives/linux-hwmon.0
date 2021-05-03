@@ -2,103 +2,275 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-14.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC5DDC433B4
-	for <linux-hwmon@archiver.kernel.org>; Mon,  3 May 2021 15:41:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 726F6C43460
+	for <linux-hwmon@archiver.kernel.org>; Mon,  3 May 2021 15:58:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A920461159
-	for <linux-hwmon@archiver.kernel.org>; Mon,  3 May 2021 15:41:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4EE0161183
+	for <linux-hwmon@archiver.kernel.org>; Mon,  3 May 2021 15:58:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230444AbhECPmN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 3 May 2021 11:42:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37544 "EHLO
+        id S230515AbhECP7u (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 3 May 2021 11:59:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230373AbhECPmK (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 3 May 2021 11:42:10 -0400
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D533FC06174A;
-        Mon,  3 May 2021 08:41:13 -0700 (PDT)
-Received: by mail-ot1-x333.google.com with SMTP id 103-20020a9d0d700000b02902a5baf33f37so4972066oti.9;
-        Mon, 03 May 2021 08:41:13 -0700 (PDT)
+        with ESMTP id S230462AbhECP7u (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 3 May 2021 11:59:50 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 146DFC06174A;
+        Mon,  3 May 2021 08:58:56 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id n205so2752538wmf.1;
+        Mon, 03 May 2021 08:58:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=P0kYdQA89OLTxEIWb7gFiSe/qOCNSiqgqri9HrtsctY=;
-        b=OvvUsQmOPy4P9qO2fjLTf7Itb9DXEKdWyKdzpp4Rw+dlSlAFM62c73eHoFV1LXSGKG
-         LKhwZpDQjyasLEJfYP8RdOpVnGE1tnYXIQVEbrBDQNW3tAwydyojrErJRBpkPzYO2Ql/
-         TNQPz9X+j02n1+dejbGhApLfpFT/FGd/ye6lWCS8tPru+DCDEcqcdJiunduhkRd8Z4Uf
-         NvUUt6JUVt0WKLV9MA7NPyhqejB2UFpv236OW3sUgN9+d29ICBh2hsEKSL3EDHpMJFIy
-         Kc0JKQ5TjNBkKuv4En6MkAYUzUzEEU14yVKYxmmv+tGZZ4Am5wmV5Bl7tuhoIkA9tKli
-         Fvug==
+        h=from:subject:to:message-id:date:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=iub6Xj5pTW14nrFThvnrim86SrZ/rWRt2j81/3U780Q=;
+        b=fiVnWpiu2nPKN5wdj6Mftj6flCCohMp4lSHrP6Qe+HRtHvRl5ZOm+FbaZa8SClXbzy
+         shNuntVMr7XUh19e+FM0aDprGHmjXqaAEnUZcRsqqNP1g9xsrS3DkQ1omNbGzlqac81N
+         uudBj9OVuM8I/B8UsoRMXHAD1a2Vg6MHWNlFv92WL1q0ULXxI8NF/QwYBrFm/fRsqKz9
+         qlQWkF/42pX8pYaRF3nn5HZ3RCkflJiQijNDJVumUe2FojmyrNi8L8tZ74/f4f2skvA3
+         FoE5vr/jISfRFy15c3r/dsi3kTHo1MNyMvJOdcw4lDM54CEA70DqE7vzVMmy0FVLopU+
+         x2TA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=P0kYdQA89OLTxEIWb7gFiSe/qOCNSiqgqri9HrtsctY=;
-        b=boeieCi8+JattPkqnX9pCcxHRwb8gdVQlsWQGo9T/dsYxR8JsVty+2tgI+y0XtlZVm
-         NIfewmWUpfC1RoeDmR85Rv2BGWwt2KHMOnTXEm1mMMYG2TqZnIOGS/II3TRDnw0xYH0I
-         ldG33rIRdWFWFTNyeiXniolioQgAwXkVCVChMHSFLkxZfiH02JuDfBOpoh3fBhOgMaqV
-         iF7Og7UZQw5U9GLviRGQLBYvgoNLLb6zXRzwLWcXHCxAD92OQoqL63sPDoTDcVHSFc+s
-         6k+quYDDhqim73i515jMLKZwowCyFrHXwP71TfDVKW4rH619+4OEoIJH+mzAC8OJ+k2i
-         jeig==
-X-Gm-Message-State: AOAM532l3df95bAm2VrvmGLgiWV9PF/kY5NfiCgdG95Z7g11z1lFNMxV
-        1JLwAqGfyU6ujH70gXQj7MU=
-X-Google-Smtp-Source: ABdhPJwqJy7s9jD/GBNBv/AO8S7viW5WaBtm/wPHnqNKWDNNAEP+WEkGA09iE80Anjuo+l70SbcOkA==
-X-Received: by 2002:a9d:69c9:: with SMTP id v9mr15198641oto.65.1620056473333;
-        Mon, 03 May 2021 08:41:13 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d3sm24917oic.48.2021.05.03.08.41.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 May 2021 08:41:12 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 3 May 2021 08:41:11 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Robert Marko <robert.marko@sartura.hr>
-Cc:     jdelvare@suse.com, corbet@lwn.net, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 2/2] dt-bindings: hwmon: Add Texas Instruments TMP1075
-Message-ID: <20210503154111.GA707815@roeck-us.net>
-References: <20210429121150.106804-1-robert.marko@sartura.hr>
- <20210429121150.106804-2-robert.marko@sartura.hr>
+        h=x-gm-message-state:from:subject:to:message-id:date:user-agent
+         :mime-version:content-transfer-encoding;
+        bh=iub6Xj5pTW14nrFThvnrim86SrZ/rWRt2j81/3U780Q=;
+        b=SlbjPygwYXhV77wZUxcAHSwuPfBY0++lKlkBEi56Y5fQKpaaGenZZ4QLYs8LamKzU2
+         eSkOaPN/wPynhLi/y/W/DDhRtCOCjmsCikyKQ1jTGiNAYCciwHzm1xqYrojZrbcqwDfq
+         kiByXIjeoFBDgrKPt1wusas0AJYDCy46bhbSIMVprnEqb4MZsuEJb8cPRlG+oR0OPjbG
+         6Rp20JG/PKjMPuEDwVBlbnFf1We5juH3B9Ig3z/t8oDOMpdR5Pl3Df7WNpCCTCtHKOKS
+         rsIQsFcFdF6DYoTQKTl9O4RV3Ja2obplw6cbmWE2gZSaudEnk2Kr5JiUG5wytBpShyBl
+         OxWg==
+X-Gm-Message-State: AOAM533ECnD8dMJMc/UxMmF24BmFq+aQPTgdMz/rEPkiEp00oe/Masf4
+        vC7+tDk+pmgM/LTHdYpXV53XOSkmUf7I5zMj
+X-Google-Smtp-Source: ABdhPJw4glafBXb++Mu+eLgGT65wIzWWIuF7m4NBM6PUo1llXegkRIe9HRCyZi8f9/0RXDqfRJ4u7w==
+X-Received: by 2002:a05:600c:243:: with SMTP id 3mr22346571wmj.58.1620057534730;
+        Mon, 03 May 2021 08:58:54 -0700 (PDT)
+Received: from corsair.sunwire.eu (159-205-138-105.adsl.inetia.pl. [159.205.138.105])
+        by smtp.gmail.com with ESMTPSA id l13sm22118637wmj.3.2021.05.03.08.58.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 May 2021 08:58:54 -0700 (PDT)
+From:   =?UTF-8?Q?Pawe=c5=82_Marciniak?= <sunwire@gmail.com>
+Subject: [PATCH] Add ASRock HDD Saver support
+To:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-ID: <a83f15e3-ac09-abf2-d8da-7b1ac86efc70@gmail.com>
+Date:   Mon, 3 May 2021 17:58:53 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210429121150.106804-2-robert.marko@sartura.hr>
+Content-Type: text/plain; charset=ISO-8859-2; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Apr 29, 2021 at 02:11:50PM +0200, Robert Marko wrote:
-> Document the DT compatible for TI TMP1075 which
-> is a LM75 compatible sensor.
-> 
-> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+Some of the asrock motherboards are equipped with hdd saver technology.
+It is implemented via a special power connector on the motherboard and a =
+corresponding custom made power cable with two SATA power ports.
+The control is via the gpio10 pin of the nct6791d chip.
+When this technology is available the module creates the hddsaver_enable =
+file.
+Reading the file returns the current status, while writing turns off or o=
+n the power of the SATA connectors.
 
-Tentatively applied to hwmon-next (unless there are objections
-from dt maintainers, which seems unlikely).
+Supported motheboards:
+ASRock Z97 Extreme4 - works 100% tested.
+ASRock Z97 Extreme6 - Based on boardview/schematic should works, not test=
+ed.
+Other ASRock motherboards supporting this technology - status unknown.
 
-Thanks,
-Guenter
+Signed-off-by: Pawe=B3 Marciniak <sunwire@gmail.com>
+---
+  drivers/hwmon/nct6775.c | 80 +++++++++++++++++++++++++++++++++++++++++
+  1 file changed, 80 insertions(+)
 
-> ---
->  Documentation/devicetree/bindings/hwmon/lm75.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/lm75.yaml b/Documentation/devicetree/bindings/hwmon/lm75.yaml
-> index 96eed5cc7841..72980d083c21 100644
-> --- a/Documentation/devicetree/bindings/hwmon/lm75.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/lm75.yaml
-> @@ -30,6 +30,7 @@ properties:
->        - st,stds75
->        - st,stlm75
->        - microchip,tcn75
-> +      - ti,tmp1075
->        - ti,tmp100
->        - ti,tmp101
->        - ti,tmp105
+diff --git a/drivers/hwmon/nct6775.c b/drivers/hwmon/nct6775.c
+index 5bd1562..17b70f3 100644
+--- a/drivers/hwmon/nct6775.c
++++ b/drivers/hwmon/nct6775.c
+@@ -110,6 +110,7 @@ MODULE_PARM_DESC(fan_debounce, "Enable debouncing for=
+fan RPM signal");
+  #define NCT6775_LD_ACPI		0x0a
+  #define NCT6775_LD_HWM		0x0b
+  #define NCT6775_LD_VID		0x0d
++#define NCT6775_LD_GPIO_DATA		0x08
+  #define NCT6775_LD_12		0x12
+
+  #define SIO_REG_LDSEL		0x07	/* Logical device select */
+@@ -229,6 +230,7 @@ static const u16 NCT6775_REG_IN[] =3D {
+  #define NCT6775_REG_FANDIV2		0x507
+
+  #define NCT6775_REG_CR_FAN_DEBOUNCE	0xf0
++#define NCT6775_REG_CR_GPIO1_DATA	0xf1
+
+  static const u16 NCT6775_REG_ALARM[NUM_REG_ALARM] =3D { 0x459, 0x45A, 0=
+x45B };
+
+@@ -1205,6 +1207,8 @@ struct nct6775_data {
+  	u8 vrm;
+
+  	bool have_vid;
++	bool have_hddsaver; /* True if hdd saver is supported */
++	bool hddsaver_status; /* True if enabled */
+
+  	u16 have_temp;
+  	u16 have_temp_fixed;
+@@ -1987,6 +1991,48 @@ store_beep(struct device *dev, struct device_attri=
+bute *attr, const char *buf,
+  	return count;
+  }
+
++static ssize_t
++show_hddsaver(struct device *dev, struct device_attribute *attr, char *b=
+uf)
++{
++	struct nct6775_data *data =3D nct6775_update_device(dev);
++
++	return sprintf(buf, "%s\n", (data->hddsaver_status ? "On" : "Off"));
++}
++
++static ssize_t
++store_hddsaver(struct device *dev, struct device_attribute *attr, const =
+char *buf,
++	       size_t count)
++{
++	struct nct6775_data *data =3D dev_get_drvdata(dev);
++	bool val;
++	int err, ret;
++	u8 tmp;
++
++	err =3D kstrtobool(buf, &val);
++	if (err =3D=3D -EINVAL)
++		return -EINVAL;
++
++	mutex_lock(&data->update_lock);
++	ret =3D superio_enter(data->sioreg);
++	if (ret) {
++		count =3D ret;
++		goto error;
++	}
++
++	if (val !=3D data->hddsaver_status) {
++		superio_select(data->sioreg, NCT6775_LD_GPIO_DATA); /* Logical Device =
+8 */
++		tmp =3D superio_inb(data->sioreg,
++				  NCT6775_REG_CR_GPIO1_DATA); /* GPIO1 date reg */
++		superio_outb(data->sioreg, NCT6775_REG_CR_GPIO1_DATA, tmp ^ (1<<0));
++		data->hddsaver_status =3D val;
++		pr_info("HDD Saver is %s\n", val ? "On" : "Off");
++	}
++	superio_exit(data->sioreg);
++error:
++	mutex_unlock(&data->update_lock);
++	return count;
++}
++
+  static ssize_t
+  show_temp_beep(struct device *dev, struct device_attribute *attr, char =
+*buf)
+  {
+@@ -3455,6 +3501,8 @@ static SENSOR_DEVICE_ATTR(intrusion1_beep, S_IWUSR =
+| S_IRUGO, show_beep,
+  			  store_beep, INTRUSION_ALARM_BASE + 1);
+  static SENSOR_DEVICE_ATTR(beep_enable, S_IWUSR | S_IRUGO, show_beep,
+  			  store_beep, BEEP_ENABLE_BASE);
++static SENSOR_DEVICE_ATTR(hddsaver_enable, S_IWUSR | S_IRUGO, show_hddsa=
+ver,
++			  store_hddsaver, 0);
+
+  static umode_t nct6775_other_is_visible(struct kobject *kobj,
+  					struct attribute *attr, int index)
+@@ -3475,6 +3523,9 @@ static umode_t nct6775_other_is_visible(struct kobj=
+ect *kobj,
+  			return 0;
+  	}
+
++	if (index =3D=3D 6 && !data->have_hddsaver)
++		return 0;
++
+  	return attr->mode;
+  }
+
+@@ -3490,6 +3541,7 @@ static struct attribute *nct6775_attributes_other[]=
+=3D {
+  	&sensor_dev_attr_intrusion0_beep.dev_attr.attr,		/* 3 */
+  	&sensor_dev_attr_intrusion1_beep.dev_attr.attr,		/* 4 */
+  	&sensor_dev_attr_beep_enable.dev_attr.attr,		/* 5 */
++	&sensor_dev_attr_hddsaver_enable.dev_attr.attr,		/* 6 */
+
+  	NULL
+  };
+@@ -3805,6 +3857,8 @@ static int nct6775_probe(struct platform_device *pd=
+ev)
+  	struct device *hwmon_dev;
+  	int num_attr_groups =3D 0;
+
++	const char *board_vendor, *board_name;
++
+  	res =3D platform_get_resource(pdev, IORESOURCE_IO, 0);
+  	if (!devm_request_region(&pdev->dev, res->start, IOREGION_LENGTH,
+  				 DRVNAME))
+@@ -4502,6 +4556,9 @@ static int nct6775_probe(struct platform_device *pd=
+ev)
+  	/* Initialize the chip */
+  	nct6775_init_device(data);
+
++	board_vendor =3D dmi_get_system_info(DMI_BOARD_VENDOR);
++	board_name =3D dmi_get_system_info(DMI_BOARD_NAME);
++
+  	err =3D superio_enter(sio_data->sioreg);
+  	if (err)
+  		return err;
+@@ -4518,6 +4575,15 @@ static int nct6775_probe(struct platform_device *p=
+dev)
+  	case nct6116:
+  	case nct6779:
+  	case nct6791:
++		if (board_name && board_vendor &&
++		    !strcmp(board_vendor, "ASRock")) {
++            /* Z97 Extreme6 should also work (the same GPIO10 pin is use=
+d) */
++            /* but it needs testing!!! */
++			if (!strcmp(board_name, "Z97 Extreme4") || !strcmp(board_name, "Z97 E=
+xtreme6")) {
++                data->have_hddsaver =3D (cr2a & (1<<6));
++            }
++        }
++        break;
+  	case nct6792:
+  	case nct6793:
+  	case nct6795:
+@@ -4527,6 +4593,20 @@ static int nct6775_probe(struct platform_device *p=
+dev)
+  		break;
+  	}
+
++	if (data->have_hddsaver) {
++		u8 tmp;
++
++		pr_notice("HDD Saver found\n");
++		superio_select(sio_data->sioreg, NCT6775_LD_GPIO_DATA); /* Logical Dev=
+ice 8 */
++		tmp =3D superio_inb(sio_data->sioreg, NCT6775_REG_CR_GPIO1_DATA); /* G=
+PIO1 date reg */
++		data->hddsaver_status =3D tmp & (1<<0); /* check bit0 */
++		if (data->hddsaver_status) {
++			pr_warn("HDD Saver is disabled\n");
++		} else {
++			pr_warn("HDD Saver is enabled\n");
++		}
++	}
++
+  	/*
+  	 * Read VID value
+  	 * We can get the VID input values directly at logical device D 0xe3.
+--=20
+2.31.1
+
+
