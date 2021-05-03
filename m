@@ -4,158 +4,101 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9552EC433B4
-	for <linux-hwmon@archiver.kernel.org>; Mon,  3 May 2021 15:40:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC5DDC433B4
+	for <linux-hwmon@archiver.kernel.org>; Mon,  3 May 2021 15:41:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 625E661183
-	for <linux-hwmon@archiver.kernel.org>; Mon,  3 May 2021 15:40:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A920461159
+	for <linux-hwmon@archiver.kernel.org>; Mon,  3 May 2021 15:41:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbhECPlM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 3 May 2021 11:41:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37310 "EHLO
+        id S230444AbhECPmN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 3 May 2021 11:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230410AbhECPlL (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 3 May 2021 11:41:11 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA6FC061763;
-        Mon,  3 May 2021 08:40:17 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id v24so5761949oiv.9;
-        Mon, 03 May 2021 08:40:17 -0700 (PDT)
+        with ESMTP id S230373AbhECPmK (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 3 May 2021 11:42:10 -0400
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D533FC06174A;
+        Mon,  3 May 2021 08:41:13 -0700 (PDT)
+Received: by mail-ot1-x333.google.com with SMTP id 103-20020a9d0d700000b02902a5baf33f37so4972066oti.9;
+        Mon, 03 May 2021 08:41:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=34dF5ctgfAlTAtJG1sBGWWovdOzk0i2UvPd5qj/cqpI=;
-        b=s1q2l3fIsBxw/CGvfRSuij4fe4Vmoz7TTllOMPiOehTJaQJGWpP2fPT+pywJInE1k0
-         bJA+A77zq7zS4dlrOVUqZaS6Ac6siu9uUV6xXZtfAHDzF0qAs655gI7lbfGXgmNovjcy
-         ydvMzq/Nq3DsWlSbg1ZH+RMPGbrPwVSNObKbG2+I0KfOSWoJV5PU4HIlUh68oD8+8rb8
-         D0EoL5i1j0eCEQSWJ4tbM8nvgnJUis7XF7O8BHmCiiHKRENp9n0KHqYFDnNt2Vgj+Bys
-         aFvwAdcHT5fOQtfxq9ZqigUc4Q+m7DQ/nyDCJnJxy8Ef4vMSm/XW0p5mb5BQWTt+hZ3m
-         oTtw==
+        bh=P0kYdQA89OLTxEIWb7gFiSe/qOCNSiqgqri9HrtsctY=;
+        b=OvvUsQmOPy4P9qO2fjLTf7Itb9DXEKdWyKdzpp4Rw+dlSlAFM62c73eHoFV1LXSGKG
+         LKhwZpDQjyasLEJfYP8RdOpVnGE1tnYXIQVEbrBDQNW3tAwydyojrErJRBpkPzYO2Ql/
+         TNQPz9X+j02n1+dejbGhApLfpFT/FGd/ye6lWCS8tPru+DCDEcqcdJiunduhkRd8Z4Uf
+         NvUUt6JUVt0WKLV9MA7NPyhqejB2UFpv236OW3sUgN9+d29ICBh2hsEKSL3EDHpMJFIy
+         Kc0JKQ5TjNBkKuv4En6MkAYUzUzEEU14yVKYxmmv+tGZZ4Am5wmV5Bl7tuhoIkA9tKli
+         Fvug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=34dF5ctgfAlTAtJG1sBGWWovdOzk0i2UvPd5qj/cqpI=;
-        b=EfLR5FDSj+xmyGwy4gYOe7XTE0o4EIH7c2Nkjl6M7V81OO5dI0k3yHXQGZl1goEfGB
-         YErbWLq5mAnW1p9rKPfvE2qrT86HvIPS3wjQ87TccqbTZoCPBeQt24i89ZRtwGA1HviK
-         W2wFvtaytzUGvy2L+KYdXCjvUuEBXRMqCX6oR8WrCFeXHz5GAOmXOwmg9U8bZRdIswaj
-         1nNUIF81HG7hXN0Kwg1OtNXxtQEzavFUAWZZxpBDkkU4YVyRqZuZHdv+ZoUl2RhNgwd9
-         su6S4A/GNcQj9vW0FLFOoC6W5a/ASvYrs8Kwpzdv19xAJC7wyLZ+f0gVFM/20Cf2uzZa
-         ESbw==
-X-Gm-Message-State: AOAM530wTqN7ixQajHTMl1CXRwxTaW5c/uFb4043Vo4UKCkFThN9sUfB
-        8qZPHuNmc7LtXs+ckDnojD0pGrto8jg=
-X-Google-Smtp-Source: ABdhPJwhgY8mAkiNQqXi8RJjNt6DUyL9CyMDozpn646jH6IenhF6zuK8dzqQ/adVJOxzH4K4GLA24A==
-X-Received: by 2002:aca:409:: with SMTP id 9mr1462933oie.179.1620056416894;
-        Mon, 03 May 2021 08:40:16 -0700 (PDT)
+        bh=P0kYdQA89OLTxEIWb7gFiSe/qOCNSiqgqri9HrtsctY=;
+        b=boeieCi8+JattPkqnX9pCcxHRwb8gdVQlsWQGo9T/dsYxR8JsVty+2tgI+y0XtlZVm
+         NIfewmWUpfC1RoeDmR85Rv2BGWwt2KHMOnTXEm1mMMYG2TqZnIOGS/II3TRDnw0xYH0I
+         ldG33rIRdWFWFTNyeiXniolioQgAwXkVCVChMHSFLkxZfiH02JuDfBOpoh3fBhOgMaqV
+         iF7Og7UZQw5U9GLviRGQLBYvgoNLLb6zXRzwLWcXHCxAD92OQoqL63sPDoTDcVHSFc+s
+         6k+quYDDhqim73i515jMLKZwowCyFrHXwP71TfDVKW4rH619+4OEoIJH+mzAC8OJ+k2i
+         jeig==
+X-Gm-Message-State: AOAM532l3df95bAm2VrvmGLgiWV9PF/kY5NfiCgdG95Z7g11z1lFNMxV
+        1JLwAqGfyU6ujH70gXQj7MU=
+X-Google-Smtp-Source: ABdhPJwqJy7s9jD/GBNBv/AO8S7viW5WaBtm/wPHnqNKWDNNAEP+WEkGA09iE80Anjuo+l70SbcOkA==
+X-Received: by 2002:a9d:69c9:: with SMTP id v9mr15198641oto.65.1620056473333;
+        Mon, 03 May 2021 08:41:13 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 88sm31956ott.51.2021.05.03.08.40.15
+        by smtp.gmail.com with ESMTPSA id d3sm24917oic.48.2021.05.03.08.41.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 May 2021 08:40:16 -0700 (PDT)
+        Mon, 03 May 2021 08:41:12 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 3 May 2021 08:40:15 -0700
+Date:   Mon, 3 May 2021 08:41:11 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Robert Marko <robert.marko@sartura.hr>
 Cc:     jdelvare@suse.com, corbet@lwn.net, linux-hwmon@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         robh+dt@kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 1/2] hwmon: lm75: Add TI TMP1075 support
-Message-ID: <20210503154015.GA707775@roeck-us.net>
+Subject: Re: [PATCH 2/2] dt-bindings: hwmon: Add Texas Instruments TMP1075
+Message-ID: <20210503154111.GA707815@roeck-us.net>
 References: <20210429121150.106804-1-robert.marko@sartura.hr>
+ <20210429121150.106804-2-robert.marko@sartura.hr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210429121150.106804-1-robert.marko@sartura.hr>
+In-Reply-To: <20210429121150.106804-2-robert.marko@sartura.hr>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Apr 29, 2021 at 02:11:49PM +0200, Robert Marko wrote:
-> TI TMP1075 is a LM75 compatible sensor, so lets
-> add support for it.
+On Thu, Apr 29, 2021 at 02:11:50PM +0200, Robert Marko wrote:
+> Document the DT compatible for TI TMP1075 which
+> is a LM75 compatible sensor.
 > 
 > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
 
-Applied to hwmon-next.
+Tentatively applied to hwmon-next (unless there are objections
+from dt maintainers, which seems unlikely).
 
 Thanks,
 Guenter
 
 > ---
->  Documentation/hwmon/lm75.rst |  6 ++++--
->  drivers/hwmon/lm75.c         | 13 +++++++++++++
->  2 files changed, 17 insertions(+), 2 deletions(-)
+>  Documentation/devicetree/bindings/hwmon/lm75.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/Documentation/hwmon/lm75.rst b/Documentation/hwmon/lm75.rst
-> index 81257d5fc48f..8d0ab4ad5fb5 100644
-> --- a/Documentation/hwmon/lm75.rst
-> +++ b/Documentation/hwmon/lm75.rst
-> @@ -93,9 +93,9 @@ Supported chips:
->  
->  	       https://www.st.com/resource/en/datasheet/stlm75.pdf
->  
-> -  * Texas Instruments TMP100, TMP101, TMP105, TMP112, TMP75, TMP75B, TMP75C, TMP175, TMP275
-> +  * Texas Instruments TMP100, TMP101, TMP105, TMP112, TMP75, TMP75B, TMP75C, TMP175, TMP275, TMP1075
->  
-> -    Prefixes: 'tmp100', 'tmp101', 'tmp105', 'tmp112', 'tmp175', 'tmp75', 'tmp75b', 'tmp75c', 'tmp275'
-> +    Prefixes: 'tmp100', 'tmp101', 'tmp105', 'tmp112', 'tmp175', 'tmp75', 'tmp75b', 'tmp75c', 'tmp275', 'tmp1075'
->  
->      Addresses scanned: none
->  
-> @@ -119,6 +119,8 @@ Supported chips:
->  
->  	       https://www.ti.com/product/tmp275
->  
-> +         https://www.ti.com/product/TMP1075
-> +
->    * NXP LM75B, PCT2075
->  
->      Prefix: 'lm75b', 'pct2075'
-> diff --git a/drivers/hwmon/lm75.c b/drivers/hwmon/lm75.c
-> index e447febd121a..afdbb63237b9 100644
-> --- a/drivers/hwmon/lm75.c
-> +++ b/drivers/hwmon/lm75.c
-> @@ -50,6 +50,7 @@ enum lm75_type {		/* keep sorted in alphabetical order */
->  	tmp75,
->  	tmp75b,
->  	tmp75c,
-> +	tmp1075,
->  };
->  
->  /**
-> @@ -293,6 +294,13 @@ static const struct lm75_params device_params[] = {
->  		.clr_mask = 1 << 5,	/*not one-shot mode*/
->  		.default_resolution = 12,
->  		.default_sample_time = MSEC_PER_SEC / 12,
-> +	},
-> +	[tmp1075] = { /* not one-shot mode, 27.5 ms sample rate */
-> +		.clr_mask = 1 << 5 | 1 << 6 | 1 << 7,
-> +		.default_resolution = 12,
-> +		.default_sample_time = 28,
-> +		.num_sample_times = 4,
-> +		.sample_times = (unsigned int []){ 28, 55, 110, 220 },
->  	}
->  };
->  
-> @@ -662,6 +670,7 @@ static const struct i2c_device_id lm75_ids[] = {
->  	{ "tmp75", tmp75, },
->  	{ "tmp75b", tmp75b, },
->  	{ "tmp75c", tmp75c, },
-> +	{ "tmp1075", tmp1075, },
->  	{ /* LIST END */ }
->  };
->  MODULE_DEVICE_TABLE(i2c, lm75_ids);
-> @@ -771,6 +780,10 @@ static const struct of_device_id __maybe_unused lm75_of_match[] = {
->  		.compatible = "ti,tmp75c",
->  		.data = (void *)tmp75c
->  	},
-> +	{
-> +		.compatible = "ti,tmp1075",
-> +		.data = (void *)tmp1075
-> +	},
->  	{ },
->  };
->  MODULE_DEVICE_TABLE(of, lm75_of_match);
+> diff --git a/Documentation/devicetree/bindings/hwmon/lm75.yaml b/Documentation/devicetree/bindings/hwmon/lm75.yaml
+> index 96eed5cc7841..72980d083c21 100644
+> --- a/Documentation/devicetree/bindings/hwmon/lm75.yaml
+> +++ b/Documentation/devicetree/bindings/hwmon/lm75.yaml
+> @@ -30,6 +30,7 @@ properties:
+>        - st,stds75
+>        - st,stlm75
+>        - microchip,tcn75
+> +      - ti,tmp1075
+>        - ti,tmp100
+>        - ti,tmp101
+>        - ti,tmp105
