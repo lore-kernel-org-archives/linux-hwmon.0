@@ -2,681 +2,522 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_RED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3367DC433B4
-	for <linux-hwmon@archiver.kernel.org>; Tue,  4 May 2021 01:01:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EC89C433ED
+	for <linux-hwmon@archiver.kernel.org>; Tue,  4 May 2021 13:41:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EAE1F61244
-	for <linux-hwmon@archiver.kernel.org>; Tue,  4 May 2021 01:01:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2F5E8610E7
+	for <linux-hwmon@archiver.kernel.org>; Tue,  4 May 2021 13:41:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229499AbhEDBB4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 3 May 2021 21:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49114 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbhEDBBz (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 3 May 2021 21:01:55 -0400
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA66BC061574;
-        Mon,  3 May 2021 18:01:01 -0700 (PDT)
-Received: by mail-ot1-x32e.google.com with SMTP id 92-20020a9d02e50000b029028fcc3d2c9eso6871185otl.0;
-        Mon, 03 May 2021 18:01:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:to:cc:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=pwjfg1uDapcDkvQo9kv6FCcPeQpH1sguNOEK+mmM930=;
-        b=O36ahmaj7iJqWBI48zyPn6fMcIb4mxTPeHHk0gCVZ9W1iamspEzQbkhQ0ggItpC3Mr
-         xxiFLFJFG5aNbXzrssORZlGVlPWu6GcaJ6ODXP7FnFArjwYSu/4aYxpZPEIYjmt+cHp6
-         gaGH7Vz5H7d7hMm0Fv1497mQcOdeFiOpG+eNGNjvmC6PZL+h9yrpDAce671ehohNx0nt
-         c2g8RjhfgbGKcMf5Jnm7jSvhBPWrP417btDlZcX8FI+Iq8vc0ctP7THy75Bof7kvBwDA
-         FCzBok8hjif1Wj58RSfw0gvB9ysiCK7vG400wlA6gCjDCm5UsnpAm74YE5kZhdND1VPH
-         iBug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=pwjfg1uDapcDkvQo9kv6FCcPeQpH1sguNOEK+mmM930=;
-        b=afI6XFd9/3rSsDk8BSD4S98FxlWZL19wHnGCoSoLY7oAoeyP/TjO2ZH/2GOuu4yrGh
-         kw5BtSRputNyWUgHYhUrqxo8J7jzFodC/Iw32aVq2uuXswXqd6qwjkqY/f4AzmPoKxbC
-         ohuCIk5VlS7OkjWkPaAdTFuNsLsbHqws4Y4EhYFhxsTmQLD5Q4PhXfLQm/aNjCnokXng
-         lbxTfiD6K28g+ijj5suMuUDJD3PU2KBrYWFTEYVk5gi3qlxQJU916Z4E5VMuOZdsKmKT
-         O9LG39IHILjOtb8+w9Q8wdK9EoclzGJhRldYS9tpQjaRsDjMuexdZ2NmU4Ca3e6CE8mF
-         TqCQ==
-X-Gm-Message-State: AOAM532FoRUaiGdatdLJy4BoV7pXWIpcLoYhhNpd6MClP/YqzJfkO+AX
-        JnD++Z8ejadmMPiNzw8UdzKLQu2aarQ=
-X-Google-Smtp-Source: ABdhPJxrHcfcWYbOrPYWDF4KFjb38fdLJxQL02IgMibqJO/kQQ9QfWKvbuhKoeXxtxkgexwq827NWw==
-X-Received: by 2002:a9d:4a85:: with SMTP id i5mr16862965otf.102.1620090060209;
-        Mon, 03 May 2021 18:01:00 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f80sm381516oob.22.2021.05.03.18.00.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 May 2021 18:00:59 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-To:     Vadim Pasternak <vadimp@nvidia.com>, robh+dt@kernel.org
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
-References: <20210503204646.2742486-1-vadimp@nvidia.com>
- <20210503204646.2742486-3-vadimp@nvidia.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH hwmon-next v4 2/3] hwmon: (pmbus) Add support for MPS
- Multi-phase mp2888 controller
-Message-ID: <a03e0b04-466b-ec43-526a-1db2f255eff9@roeck-us.net>
-Date:   Mon, 3 May 2021 18:00:57 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        id S231213AbhEDNmX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 4 May 2021 09:42:23 -0400
+Received: from gproxy1-pub.mail.unifiedlayer.com ([69.89.25.95]:54626 "EHLO
+        gproxy1-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231135AbhEDNmV (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 4 May 2021 09:42:21 -0400
+Received: from cmgw12.unifiedlayer.com (unknown [10.9.0.12])
+        by gproxy1.mail.unifiedlayer.com (Postfix) with ESMTP id 41FE7F96C7CFB
+        for <linux-hwmon@vger.kernel.org>; Tue,  4 May 2021 07:41:24 -0600 (MDT)
+Received: from md-in-79.webhostbox.net ([43.225.55.182])
+        by cmsmtp with ESMTP
+        id dvIfl99BFuVqndvIhlEpf7; Tue, 04 May 2021 07:41:24 -0600
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=MPsDJOVl c=1 sm=1 tr=0 ts=60914f04
+ a=LfuyaZh/8e9VOkaVZk0aRw==:117 a=LfuyaZh/8e9VOkaVZk0aRw==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=5FLXtPjwQuUA:10:nop_rcvd_month_year
+ a=oz0wMknONp8A:10:endurance_base64_authed_username_1 a=vU9dKmh3AAAA:8
+ a=NcCfH-bgAAAA:8 a=oRuukivaymlIrXuBOnYA:9 a=rsP06fVo5MYu2ilr0aT5:22
+ a=nZLUJm6UEJn402BoZzOq:22 a=pHzHmUro8NiASowvMSCR:22 a=Ew2E2A-JSTLzCXPT_086:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=linumiz.com
+        ; s=default; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject
+        :Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=lWfNhcWq0nC7pgjhR3Z9KYYirry1aW61N4AqeGhYlSc=; b=UO5zhS6KJZUgBWcgfnLmWHCfY3
+        q0IF7wJTszgbhD+BSAGoUHxlHrH6PSZLxo9XzaHMjbkIqtzIPVO/PGWiXjAjhuITSNuPhEqzztNw3
+        jtzYBGuZ+afe5MJv3Yo2KSI6u3gySSitodnQDv3IilujBx82jWHJ45Cnu3CWp6UtJni8IR5y5+qUG
+        gN+Dj6ey1qOlggx4QyDXEMQVYJdK7SrGsERRnzM0IyMSPrqUi9SiOG8fxXQjoBka8L72Uad1+McwW
+        jG582PAFJPlEqe9PxLev9PkyZeSYh6qtLzwxAPMNdj0QnOFom9ACZNG/9DRF2Ya7SIN9u70axc5Tr
+        qm3tzQWg==;
+Received: from [117.202.185.131] (port=37182 helo=localhost.localdomain)
+        by md-in-79.webhostbox.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94)
+        (envelope-from <navin@linumiz.com>)
+        id 1ldvIe-000fUi-Tn; Tue, 04 May 2021 13:41:21 +0000
+From:   Navin Sankar Velliangiri <navin@linumiz.com>
+Cc:     navin@linumiz.com, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] hwmon: Add sht4x Temperature and Humidity Sensor Driver
+Date:   Tue,  4 May 2021 19:11:32 +0530
+Message-Id: <20210504134136.164702-1-navin@linumiz.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-In-Reply-To: <20210503204646.2742486-3-vadimp@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - md-in-79.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - linumiz.com
+X-BWhitelist: no
+X-Source-IP: 117.202.185.131
+X-Source-L: No
+X-Exim-ID: 1ldvIe-000fUi-Tn
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: (localhost.localdomain) [117.202.185.131]:37182
+X-Source-Auth: linumcmc
+X-Email-Count: 7
+X-Source-Cap: bGludW1jbWM7aG9zdGdhdG9yO21kLWluLTc5LndlYmhvc3Rib3gubmV0
+X-Local-Domain: yes
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/3/21 1:46 PM, Vadim Pasternak wrote:
-> Add support for mp2888 device from Monolithic Power Systems, Inc. (MPS)
-> vendor. This is a digital, multi-phase, pulse-width modulation
-> controller.
-> 
-> This device supports:
-> - One power rail.
-> - Programmable Multi-Phase up to 10 Phases.
-> - PWM-VID Interface
-> - One pages 0 for telemetry.
-> - Programmable pins for PMBus Address.
-> - Built-In EEPROM to Store Custom Configurations.
-> - Can configured VOUT readout in direct or VID format and allows
->   setting of different formats on rails 1 and 2. For VID the following
->   protocols are available: VR13 mode with 5-mV DAC; VR13 mode with
->   10-mV DAC, IMVP9 mode with 5-mV DAC.
-> 
-> Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
-> ---
-> v3->v4
->  Comments pointed out by Guenter:
->   - Fix PMBUS_READ_VIN and limits calculations.
->   - Add comment for PMBUS_OT_WARN_LIMIT scaling.
->   - Fix PMBUS_READ_IOUT, PMBUS_READ_POUT, PMBUS_READ_PIN calculations.
->   - Enable PMBUS_IOUT_OC_WARN_LIMIT and PMBUS_POUT_OP_WARN_LIMIT.
->  Fixes from Vadim:
->   - Disable PMBUS_POUT_MAX. Device uses this register for different
->     purpose.
->   - Disable PMBUS_MFR_VOU_MIN. Device doe not implement this register.
->   - Update documentation file.
-> 
-> v2->v3
->  Comments pointed out by Guenter:
->  - Fix precision for PMBUS_READ_VIN (it requires adding scale for
->    PMBUS_VIN_OV_FAULT_LIMIT and PMBUS_VIN_UV_WARN_LIMIT.
->  - Fix precision for PMBUS_READ_TEMPERATURE_1 (it requires adding
->    scale for PMBUS_OT_WARN_LIMIT).
->  - Use DIV_ROUND_CLOSEST_ULL for scaling PMBUS_READ_POUT,
->    PMBUS_READ_PIN readouts.
->  Notes and fixes from Vadim:
->   - READ_IOUT in linear11 does not give write calculation (tested with
->     external load), while in direct format readouts are correct.
->   - Disable non-configured phases in mp2888_identify_multiphase().
-> 
-> v1->v2:
->  Comments pointed out by Guenter:
->   - Use standard access for getting PMBUS_OT_WARN_LIMIT,
->     PMBUS_VIN_OV_FAULT_LIMIT, PMBUS_VIN_UV_WARN_LIMIT.
->   - Use linear11 conversion for PMBUS_READ_VIN, PMBUS_READ_POUT,
->     PMBUS_READ_PIN, PMBUS_READ_TEMPERATURE_1 and adjust coefficients.
->   - Add reading phases current from the dedicated registers.
->   - Add comment for not implemented or implemented not according to the
-> 	spec registers, for which "ENXIO" code is returned.
->   - Set PMBUS_HAVE_IOUT" statically.
->   Notes from Vadim:
->   - READ_IOUT uses direct format, so I did not adjust it like the below
->     registers.
-> ---
->  Documentation/hwmon/mp2888.rst | 113 +++++++++++++
->  drivers/hwmon/pmbus/Kconfig    |   9 +
->  drivers/hwmon/pmbus/Makefile   |   1 +
->  drivers/hwmon/pmbus/mp2888.c   | 366 +++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 489 insertions(+)
->  create mode 100644 Documentation/hwmon/mp2888.rst
->  create mode 100644 drivers/hwmon/pmbus/mp2888.c
-> 
-> diff --git a/Documentation/hwmon/mp2888.rst b/Documentation/hwmon/mp2888.rst
-> new file mode 100644
-> index 000000000000..5e578fd7b147
-> --- /dev/null
-> +++ b/Documentation/hwmon/mp2888.rst
-> @@ -0,0 +1,113 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +Kernel driver mp2888
-> +====================
-> +
-> +Supported chips:
-> +
-> +  * MPS MP12254
-> +
-> +    Prefix: 'mp2888'
-> +
-> +Author:
-> +
-> +	Vadim Pasternak <vadimp@nvidia.com>
-> +
-> +Description
-> +-----------
-> +
-> +This driver implements support for Monolithic Power Systems, Inc. (MPS)
-> +vendor dual-loop, digital, multi-phase controller MP2888.
-> +
-> +This device: supports:
-> +
-> +- One power rail.
-> +- Programmable Multi-Phase up to 10 Phases.
-> +- PWM-VID Interface
-> +- One pages 0 for telemetry.
-> +- Programmable pins for PMBus Address.
-> +- Built-In EEPROM to Store Custom Configurations.
-> +
-> +Device complaint with:
-> +
-> +- PMBus rev 1.3 interface.
-> +
-> +Device supports direct format for reading output current, output voltage,
-> +input and output power and temperature.
-> +Device supports linear format for reading input voltage and input power.
-> +
-> +The driver provides the next attributes for the current:
-> +
-> +- for current out input and maximum alarm;
-> +- for phase current: input and label.
-> +
-> +The driver exports the following attributes via the 'sysfs' files, where:
-> +
-> +- 'n' is number of configured phases (from 1 to 10);
-> +- index 1 for "iout";
-> +- indexes 2 ... 1 + n for phases.
-> +
-> +**curr[1-{1+n}]_input**
-> +
-> +**curr[1-{1+n}]_label**
-> +
-> +**curr1_max**
-> +
-> +**curr1_max_alarm**
-> +
-> +The driver provides the next attributes for the voltage:
-> +
-> +- for voltage in: input, low and high critical thresholds, low and high
-> +  critical alarms;
-> +- for voltage out: input and high alarm;
-> +
-> +The driver exports the following attributes via the 'sysfs' files, where
-> +
-> +**in1_crit**
-> +
-> +**in1_crit_alarm**
-> +
-> +**in1_input**
-> +
-> +**in1_label**
-> +
-> +**in1_min**
-> +
-> +**in1_min_alarm**
-> +
-> +**in2_alarm**
-> +
-> +**in2_input**
-> +
-> +**in2_label**
-> +
-> +The driver provides the next attributes for the power:
-> +
-> +- for power in alarm and input.
-> +- for power out: cap, cap alarm an input.
-> +
-> +The driver exports the following attributes via the 'sysfs' files, where
-> +- indexes 1 for "pin";
-> +- indexes 2 for "pout";
-> +
-> +**power1_alarm**
-> +
-> +**power1_input**
-> +
-> +**power1_label**
-> +
-> +**power2_input**
-> +
-> +**power2_label**
-> +
-> +**power2_max**
-> +
-> +**power2_max_alarm**
-> +
-> +The driver provides the next attributes for the temperature:
-> +
-> +**temp1_input**
-> +
-> +**temp1_max**
-> +
-> +**temp1_max_alarm**
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index 32d2fc850621..a57571928b31 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -211,6 +211,15 @@ config SENSORS_MAX8688
->  	  This driver can also be built as a module. If so, the module will
->  	  be called max8688.
->  
-> +config SENSORS_MP2888
-> +	tristate "MPS MP2888"
-> +	help
-> +	  If you say yes here you get hardware monitoring support for MPS
-> +	  MP2888 Digital, Multi-Phase, Pulse-Width Modulation Controller.
-> +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called mp2888.
-> +
->  config SENSORS_MP2975
->  	tristate "MPS MP2975"
->  	help
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index 6a4ba0fdc1db..a6d7352621ca 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -24,6 +24,7 @@ obj-$(CONFIG_SENSORS_MAX20751)	+= max20751.o
->  obj-$(CONFIG_SENSORS_MAX31785)	+= max31785.o
->  obj-$(CONFIG_SENSORS_MAX34440)	+= max34440.o
->  obj-$(CONFIG_SENSORS_MAX8688)	+= max8688.o
-> +obj-$(CONFIG_SENSORS_MP2888)	+= mp2888.o
->  obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
->  obj-$(CONFIG_SENSORS_PM6764TR)	+= pm6764tr.o
->  obj-$(CONFIG_SENSORS_PXE1610)	+= pxe1610.o
-> diff --git a/drivers/hwmon/pmbus/mp2888.c b/drivers/hwmon/pmbus/mp2888.c
-> new file mode 100644
-> index 000000000000..393221d25379
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/mp2888.c
-> @@ -0,0 +1,366 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Hardware monitoring driver for MPS Multi-phase Digital VR Controllers
-> + *
-> + * Copyright (C) 2020 Nvidia Technologies Ltd.
-> + */
-> +
-> +#include <linux/err.h>
-> +#include <linux/i2c.h>
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include "pmbus.h"
-> +
-> +/* Vendor specific registers. */
-> +#define MP2888_MFR_SYS_CONFIG	0x44
-> +#define MP2888_MFR_READ_CS1_2	0x73
-> +#define MP2888_MFR_READ_CS3_4	0x74
-> +#define MP2888_MFR_READ_CS5_6	0x75
-> +#define MP2888_MFR_READ_CS7_8	0x76
-> +#define MP2888_MFR_READ_CS9_10	0x77
-> +#define MP2888_MFR_VR_CONFIG1	0xe1
-> +
-> +#define MP2888_TOTAL_CURRENT_RESOLUTION	BIT(3)
-> +#define MP2888_PHASE_CURRENT_RESOLUTION	BIT(4)
-> +#define MP2888_DRMOS_KCS		GENMASK(2, 0)
-> +#define MP2888_TEMP_UNIT		10
-> +#define MP2888_MAX_PHASE		10
-> +
-> +struct mp2888_data {
-> +	struct pmbus_driver_info info;
-> +	int total_curr_resolution;
-> +	int phase_curr_resolution;
-> +	int curr_sense_gain;
-> +};
-> +
-> +#define to_mp2888_data(x)  container_of(x, struct mp2888_data, info)
-> +
-> +static int mp2888_read_byte_data(struct i2c_client *client, int page, int reg)
-> +{
-> +	switch (reg) {
-> +	case PMBUS_VOUT_MODE:
-> +		/* Enforce VOUT direct format. */
-> +		return PB_VOUT_MODE_DIRECT;
-> +	default:
-> +		return -ENODATA;
-> +	}
-> +}
-> +
-> +static int
-> +mp2888_current_sense_gain_and_resolution_get(struct i2c_client *client, struct mp2888_data *data)
-> +{
-> +	int ret;
-> +
-> +	/*
-> +	 * Obtain DrMOS current sense gain of power stage from the register
-> +	 * , bits 0-2. The value is selected as below:
-> +	 * 00b - 5µA/A, 01b - 8.5µA/A, 10b - 9.7µA/A, 11b - 10µA/A. Other
-> +	 * values are reserved.
-> +	 */
-> +	ret = i2c_smbus_read_word_data(client, MP2888_MFR_SYS_CONFIG);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	switch (ret & MP2888_DRMOS_KCS) {
-> +	case 0:
-> +		data->curr_sense_gain = 85;
-> +		break;
-> +	case 1:
-> +		data->curr_sense_gain = 97;
-> +		break;
-> +	case 2:
-> +		data->curr_sense_gain = 100;
-> +		break;
-> +	case 3:
-> +		data->curr_sense_gain = 50;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	/*
-> +	 * Obtain resolution selector for total and phase current report and protection.
-> +	 * 0: original resolution; 1: half resolution (in such case phase current value should
-> +	 * be doubled.
-> +	 */
-> +	data->total_curr_resolution = (ret & MP2888_TOTAL_CURRENT_RESOLUTION) >> 3;
-> +	data->phase_curr_resolution = (ret & MP2888_PHASE_CURRENT_RESOLUTION) >> 4;
-> +
-> +	return 0;
-> +}
-> +
-> +static int
-> +mp2888_read_phase(struct i2c_client *client, struct mp2888_data *data, int page, int phase, u8 reg)
-> +{
-> +	int ret;
-> +
-> +	ret = pmbus_read_word_data(client, page, phase, reg);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	if (!((phase + 1) % 2))
-> +		ret >>= 8;
-> +	ret &= 0xff;
-> +
-> +	/*
-> +	 * Output value is calculated as: (READ_CSx / 80 – 1.23) / (Kcs * Rcs)
-> +	 * where:
-> +	 * - Kcs is the DrMOS current sense gain of power stage, which is obtained from the
-> +	 *   register MP2888_MFR_VR_CONFIG1, bits 13-12 with the following selection of DrMOS
-> +	 *   (data->curr_sense_gain):
-> +	 *   00b - 5µA/A, 01b - 8.5µA/A, 10b - 9.7µA/A, 11b - 10µA/A.
-> +	 * - Rcs is the internal phase current sense resistor. This parameter depends on hardware
-> +	 *   assembly. By default it is set to 1kΩ. In case of different assembly, user should
-> +	 *   scale this parameter by dividing it by Rcs.
-> +	 * If phase current resolution bit is set to 1, READ_CSx value should be doubled.
-> +	 * Note, that current phase sensing, providing by the device is not accurate. This is
-> +	 * because sampling of current occurrence of bit weight has a big deviation, especially for
-> +	 * light load.
-> +	 */
-> +	ret = DIV_ROUND_CLOSEST(ret * 100 - 9800, data->curr_sense_gain);
-> +	if (data->phase_curr_resolution)
-> +		ret *= 2;
-> +	/* Scale according to total current resolution. */
-> +	if (data->total_curr_resolution)
-> +		ret *= 2;
-> +	else
-> +		ret *= 4;
-> +	return ret;
-> +}
-> +
-> +static int
-> +mp2888_read_phases(struct i2c_client *client, struct mp2888_data *data, int page, int phase)
-> +{
-> +	int ret;
-> +
-> +	switch (phase) {
-> +	case 0 ... 1:
-> +		ret = mp2888_read_phase(client, data, page, phase, MP2888_MFR_READ_CS1_2);
-> +		break;
-> +	case 2 ... 3:
-> +		ret = mp2888_read_phase(client, data, page, phase, MP2888_MFR_READ_CS3_4);
-> +		break;
-> +	case 4 ... 5:
-> +		ret = mp2888_read_phase(client, data, page, phase, MP2888_MFR_READ_CS5_6);
-> +		break;
-> +	case 6 ... 7:
-> +		ret = mp2888_read_phase(client, data, page, phase, MP2888_MFR_READ_CS7_8);
-> +		break;
-> +	case 8 ... 9:
-> +		ret = mp2888_read_phase(client, data, page, phase, MP2888_MFR_READ_CS9_10);
-> +		break;
-> +	default:
-> +		return -ENODATA;
-> +	}
-> +	return ret;
-> +}
-> +
-> +static int mp2888_read_word_data(struct i2c_client *client, int page, int phase, int reg)
-> +{
-> +	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-> +	struct mp2888_data *data = to_mp2888_data(info);
-> +	int ret;
-> +
-> +	switch (reg) {
-> +	case PMBUS_READ_VIN:
-> +		ret = pmbus_read_word_data(client, page, phase, reg);
-> +		if (ret <= 0)
-> +			return ret;
-> +
-> +		/*
-> +		 * READ_VIN requires fixup to scale it to linear11 format. Register data format
-> +		 * provides 10 bits for mantissa and 6 bits for exponent. Bits 15:10 are set with
-> +		 * the fixed value 111011b.
-> +		 */
-> +		ret = ((ret & 0x3ff) >> 1) | (ret & ~GENMASK(11, 0));
-> +		break;
-> +	case PMBUS_OT_WARN_LIMIT:
-> +		ret = pmbus_read_word_data(client, page, phase, reg);
-> +		if (ret < 0)
-> +			return ret;
-> +		/*
-> +		 * Chip reports limits in degrees C, but the actual temperature in 10th of
-> +		 * degrees C - scaling is needed to match both.
-> +		 */
-> +		ret *= MP2888_TEMP_UNIT;
-> +		break;
-> +	case PMBUS_READ_IOUT:
-> +	case PMBUS_IOUT_OC_WARN_LIMIT:
-> +		if (phase != 0xff)
-> +			return mp2888_read_phases(client, data, page, phase);
-> +
-> +		ret = pmbus_read_word_data(client, page, phase, reg);
-> +		if (ret < 0)
-> +			return ret;
-> +		/*
-> +		 * READ_IOUT register has unused bits 15:12 with fixed value 1110b. Clear these
-> +		 * bits and scale with total current resolution. Data is provided in direct format.
-> +		 */
-> +		ret &= GENMASK(11, 0);
-> +		break;
-> +	case PMBUS_READ_POUT:
-> +	case PMBUS_READ_PIN:
-> +	case PMBUS_POUT_OP_WARN_LIMIT:
-> +		ret = pmbus_read_word_data(client, page, phase, reg);
-> +		if (ret < 0)
-> +			return ret;
-> +		ret = data->total_curr_resolution ? ret * 2 : ret;
+This patch adds a hwmon driver for the SHT4x Temperature and
+Humidity sensor.
 
-I had another look into the datasheet.
-Turns out the resolution is 1-2W per LSB for PMBUS_POUT_OP_WARN_LIMIT,
-but 0.5W-1W for PMBUS_READ_PIN and PMBUS_READ_POUT. So the limits can't
-be treated the same.
+Signed-off-by: Navin Sankar Velliangiri <navin@linumiz.com>
+---
 
-> +		break;
-> +	/*
-> +	 * The below registers are not implemented by device or implemented not according to the
-> +	 * spec. Skip all of them to avoid exposing non-relevant inputs to sysfs.
-> +	 */
-> +	case PMBUS_OT_FAULT_LIMIT:
-> +	case PMBUS_UT_WARN_LIMIT:
-> +	case PMBUS_UT_FAULT_LIMIT:
-> +	case PMBUS_VIN_UV_FAULT_LIMIT:
-> +	case PMBUS_VOUT_UV_WARN_LIMIT:
-> +	case PMBUS_VOUT_OV_WARN_LIMIT:
-> +	case PMBUS_VOUT_UV_FAULT_LIMIT:
-> +	case PMBUS_VOUT_OV_FAULT_LIMIT:
-> +	case PMBUS_VIN_OV_WARN_LIMIT:
-> +	case PMBUS_IOUT_OC_LV_FAULT_LIMIT:
-> +	case PMBUS_IOUT_OC_FAULT_LIMIT:
-> +	case PMBUS_POUT_MAX:
-> +	case PMBUS_IOUT_UC_FAULT_LIMIT:
-> +	case PMBUS_POUT_OP_FAULT_LIMIT:
-> +	case PMBUS_PIN_OP_WARN_LIMIT:
-> +	case PMBUS_MFR_VIN_MIN:
-> +	case PMBUS_MFR_VOUT_MIN:
-> +	case PMBUS_MFR_VIN_MAX:
-> +	case PMBUS_MFR_VOUT_MAX:
-> +	case PMBUS_MFR_IIN_MAX:
-> +	case PMBUS_MFR_IOUT_MAX:
-> +	case PMBUS_MFR_PIN_MAX:
-> +	case PMBUS_MFR_POUT_MAX:
-> +	case PMBUS_MFR_MAX_TEMP_1:
-> +		return -ENXIO;
-> +	default:
-> +		return -ENODATA;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static int
-> +mp2888_identify_multiphase(struct i2c_client *client, struct mp2888_data *data,
-> +			   struct pmbus_driver_info *info)
-> +{
-> +	int i, ret;
-> +
-> +	ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, 0);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/* Identify multiphase number - could be from 1 to 10. */
-> +	ret = i2c_smbus_read_word_data(client, MP2888_MFR_VR_CONFIG1);
-> +	if (ret <= 0)
-> +		return ret;
-> +
-> +	info->phases[0] = ret & GENMASK(3, 0);
-> +
-> +	/*
-> +	 * The device provides a total of 10 PWM pins, and can be configured to different phase
-> +	 * count applications for rail.
-> +	 */
-> +	if (info->phases[0] > MP2888_MAX_PHASE)
-> +		return -EINVAL;
-> +
-> +	/* Disable non-configured phases. */
-> +	for (i = info->phases[0]; i < MP2888_MAX_PHASE; i++)
-> +		info->pfunc[i] = 0;
-> +
-> +	return 0;
-> +}
-> +
-> +static struct pmbus_driver_info mp2888_info = {
-> +	.pages = 1,
-> +	.format[PSC_VOLTAGE_IN] = linear,
-> +	.format[PSC_VOLTAGE_OUT] = direct,
-> +	.format[PSC_TEMPERATURE] = direct,
-> +	.format[PSC_CURRENT_IN] = linear,
-> +	.format[PSC_CURRENT_OUT] = direct,
-> +	.format[PSC_POWER] = direct,
-> +	.m[PSC_TEMPERATURE] = 1,
-> +	.R[PSC_TEMPERATURE] = 1,
-> +	.m[PSC_VOLTAGE_OUT] = 1,
-> +	.R[PSC_VOLTAGE_OUT] = 3,
-> +	.m[PSC_CURRENT_OUT] = 4,
-> +	.m[PSC_POWER] = 1,
-> +	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT | PMBUS_HAVE_IOUT |
-> +		   PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP |
-> +		   PMBUS_HAVE_POUT | PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT |
-> +		   PMBUS_PHASE_VIRTUAL,
-> +	.pfunc[0] = PMBUS_HAVE_IOUT,
-> +	.pfunc[1] = PMBUS_HAVE_IOUT,
-> +	.pfunc[2] = PMBUS_HAVE_IOUT,
-> +	.pfunc[3] = PMBUS_HAVE_IOUT,
-> +	.pfunc[4] = PMBUS_HAVE_IOUT,
-> +	.pfunc[5] = PMBUS_HAVE_IOUT,
-> +	.pfunc[6] = PMBUS_HAVE_IOUT,
-> +	.pfunc[7] = PMBUS_HAVE_IOUT,
-> +	.pfunc[8] = PMBUS_HAVE_IOUT,
-> +	.pfunc[9] = PMBUS_HAVE_IOUT,
-> +	.read_byte_data = mp2888_read_byte_data,
-> +	.read_word_data = mp2888_read_word_data,
-> +};
-> +
-> +static int mp2888_probe(struct i2c_client *client)
-> +{
-> +	struct pmbus_driver_info *info;
-> +	struct mp2888_data *data;
-> +	int ret;
-> +
-> +	data = devm_kzalloc(&client->dev, sizeof(struct mp2888_data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	memcpy(&data->info, &mp2888_info, sizeof(*info));
-> +	info = &data->info;
-> +
-> +	/* Identify multiphase configuration. */
-> +	ret = mp2888_identify_multiphase(client, data, info);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Obtain current sense gain of power stage and current resolution. */
-> +	ret = mp2888_current_sense_gain_and_resolution_get(client, data);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (data->total_curr_resolution) {
-> +		info->m[PSC_POWER] *= 2;
-> +		info->m[PSC_CURRENT_OUT] /= 2;
+Changes in v2:
 
-Wait, is that correct ? The mantissa is an exponent, but the resolution
-scale only changes by 1 bit, not 2 bit.
+* Removed unused macro SHT4X_MIN_POLL_INTERVAL
+* Replaced time_after instead of ktime_after
+* Used goto statements for error handling
+* Hardcorded the interval_time instead of clamp_val().
 
-Guenter
+ Documentation/hwmon/index.rst |   1 +
+ Documentation/hwmon/sht4x.rst |  45 +++++
+ drivers/hwmon/Kconfig         |  13 +-
+ drivers/hwmon/Makefile        |   1 +
+ drivers/hwmon/sht4x.c         | 301 ++++++++++++++++++++++++++++++++++
+ 5 files changed, 360 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/hwmon/sht4x.rst
+ create mode 100644 drivers/hwmon/sht4x.c
 
-> +	}
-> +
-> +	return pmbus_do_probe(client, info);
-> +}
-> +
-> +static const struct i2c_device_id mp2888_id[] = {
-> +	{"mp2888", 0},
-> +	{}
-> +};
-> +
-> +MODULE_DEVICE_TABLE(i2c, mp2888_id);
-> +
-> +static const struct of_device_id __maybe_unused mp2888_of_match[] = {
-> +	{.compatible = "mps,mp2888"},
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, mp2888_of_match);
-> +
-> +static struct i2c_driver mp2888_driver = {
-> +	.driver = {
-> +		.name = "mp2888",
-> +		.of_match_table = of_match_ptr(mp2888_of_match),
-> +	},
-> +	.probe_new = mp2888_probe,
-> +	.id_table = mp2888_id,
-> +};
-> +
-> +module_i2c_driver(mp2888_driver);
-> +
-> +MODULE_AUTHOR("Vadim Pasternak <vadimp@nvidia.com>");
-> +MODULE_DESCRIPTION("PMBus driver for MPS MP2888 device");
-> +MODULE_LICENSE("GPL");
-> 
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index 8d5a2df1ecb6..2a20c6616e21 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -160,6 +160,7 @@ Hardware Monitoring Kernel Drivers
+    sht15
+    sht21
+    sht3x
++   sht4x
+    shtc1
+    sis5595
+    sl28cpld
+diff --git a/Documentation/hwmon/sht4x.rst b/Documentation/hwmon/sht4x.rst
+new file mode 100644
+index 000000000000..3b37abcd4a46
+--- /dev/null
++++ b/Documentation/hwmon/sht4x.rst
+@@ -0,0 +1,45 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++Kernel driver sht4x
++===================
++
++Supported Chips:
++
++  * Sensirion SHT4X
++
++    Prefix: 'sht4x'
++
++    Addresses scanned: None
++
++    Datasheet:
++
++      English: https://www.sensirion.com/fileadmin/user_upload/customers/sensirion/Dokumente/2_Humidity_Sensors/Datasheets/Sensirion_Humidity_Sensors_SHT4x_Datasheet.pdf
++
++Author: Navin Sankar Velliangiri <navin@linumiz.com>
++
++
++Description
++-----------
++
++This driver implements support for the Sensirion SHT4x chip, a humidity
++and temperature sensor. Temperature is measured in degree celsius, relative
++humidity is expressed as a percentage. In sysfs interface, all values are
++scaled by 1000, i.e. the value for 31.5 degrees celsius is 31500.
++
++Usage Notes
++-----------
++
++The device communicates with the I2C protocol. Sensors can have the I2C
++address 0x44. See Documentation/i2c/instantiating-devices.rst for methods
++to instantiate the device.
++
++Sysfs entries
++-------------
++
++=============== ============================================
++temp1_input     Measured temperature in millidegrees Celcius
++humidity1_input Measured humidity in %H
++update_interval The minimum interval for polling the sensor,
++                in milliseconds. Writable. Must be at least
++                2000.
++============== =============================================
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 54f04e61fb83..ad10469d7b13 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -1583,6 +1583,17 @@ config SENSORS_SHT3x
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called sht3x.
+
++config SENSORS_SHT4x
++	tristate "Sensiron humidity and temperature sensors. SHT4x and compat."
++	depends on I2C
++	select CRC8
++	help
++	  If you say yes here you get support for thr Sensiron SHT40, SHT41 and
++	  SHT45 humidity and temperature sensors.
++
++	  This driver can also be built as a module. If so, the module
++	  will be called sht4x.
++
+ config SENSORS_SHTC1
+ 	tristate "Sensiron humidity and temperature sensors. SHTC1 and compat."
+ 	depends on I2C
+@@ -1798,7 +1809,7 @@ config SENSORS_ADS7871
+
+ config SENSORS_AMC6821
+ 	tristate "Texas Instruments AMC6821"
+-	depends on I2C
++	depends on I2C
+ 	help
+ 	  If you say yes here you get support for the Texas Instruments
+ 	  AMC6821 hardware monitoring chips.
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index fe38e8a5c979..62cee3e03c7f 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -170,6 +170,7 @@ obj-$(CONFIG_SENSORS_SL28CPLD)	+= sl28cpld-hwmon.o
+ obj-$(CONFIG_SENSORS_SHT15)	+= sht15.o
+ obj-$(CONFIG_SENSORS_SHT21)	+= sht21.o
+ obj-$(CONFIG_SENSORS_SHT3x)	+= sht3x.o
++obj-$(CONFIG_SENSORS_SHT4x)	+= sht4x.o
+ obj-$(CONFIG_SENSORS_SHTC1)	+= shtc1.o
+ obj-$(CONFIG_SENSORS_SIS5595)	+= sis5595.o
+ obj-$(CONFIG_SENSORS_SMM665)	+= smm665.o
+diff --git a/drivers/hwmon/sht4x.c b/drivers/hwmon/sht4x.c
+new file mode 100644
+index 000000000000..fae18f8ab3d3
+--- /dev/null
++++ b/drivers/hwmon/sht4x.c
+@@ -0,0 +1,301 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++/*
++ * Copyright (c) Linumiz 2021
++ *
++ * sht4x.c - Linux hwmon driver for SHT4x Temperature and Humidity sensor
++ *
++ * Author: Navin Sankar Velliangiri <navin@linumiz.com>
++ */
++
++#include <linux/crc8.h>
++#include <linux/delay.h>
++#include <linux/hwmon.h>
++#include <linux/i2c.h>
++#include <linux/jiffies.h>
++#include <linux/module.h>
++#include <linux/ktime.h>
++
++/*
++ * Poll intervals (in milliseconds)
++ */
++#define SHT4X_DEFAULT_MIN_POLL_INTERVAL	2000
++
++/*
++ * I2C command delays (in microseconds)
++ */
++#define SHT4X_MEAS_DELAY	1000
++#define SHT4X_DELAY_EXTRA	10000
++
++/*
++ * Command Bytes
++ */
++#define SHT4X_CMD_MEASURE_HPM	0b11111101
++#define SHT4X_CMD_RESET		0b10010100
++
++#define SHT4X_CMD_LEN		1
++#define SHT4X_CRC8_LEN		1
++#define SHT4X_WORD_LEN		2
++#define SHT4X_RESPONSE_LENGTH	6
++#define SHT4X_CRC8_POLYNOMIAL	0x31
++#define SHT4X_CRC8_INIT		0xff
++#define SHT4X_MIN_TEMPERATURE	-45000
++#define SHT4X_MAX_TEMPERATURE	125000
++#define SHT4X_MIN_HUMIDITY	0
++#define SHT4X_MAX_HUMIDITY	100000
++
++DECLARE_CRC8_TABLE(sht4x_crc8_table);
++
++/**
++ * struct sht4x_data - All the data required to operate an SHT4X chip
++ * @client: the i2c client associated with the SHT4X
++ * @lock: a mutex that is used to prevent parallel access to the i2c client
++ * @update_interval: the minimum poll interval
++ * @last_updated: the previous time that the SHT4X was polled
++ * @temperature: the latest temperature value received from the SHT4X
++ * @humidity: the latest humidity value received from the SHT4X
++ */
++struct sht4x_data {
++	struct i2c_client	*client;
++	struct mutex		lock;	/* atomic read data updates */
++	bool			valid;	/* validity of fields below */
++	unsigned long		update_interval;	/* in milli-seconds */
++	unsigned long		last_updated;	/* in jiffies */
++	s32			temperature;
++	s32			humidity;
++};
++
++/**
++ * sht4x_read_values() - read and parse the raw data from the SHT4X
++ * @sht4x_data: the struct sht4x_data to use for the lock
++ * Return: 0 if succesfull, 1 if not
++ */
++static int sht4x_read_values(struct sht4x_data *data)
++{
++	int ret;
++	u16 t_ticks, rh_ticks;
++	unsigned long next_update;
++	struct i2c_client *client = data->client;
++	u8 crc, raw_data[SHT4X_RESPONSE_LENGTH],
++	cmd[] = {SHT4X_CMD_MEASURE_HPM};
++
++	mutex_lock(&data->lock);
++	next_update = data->last_updated +
++		      msecs_to_jiffies(data->update_interval);
++	if (!data->valid || time_after(jiffies, next_update)) {
++		ret = i2c_master_send(client, cmd, SHT4X_CMD_LEN);
++		if (ret < 0)
++			goto unlock;
++
++		usleep_range(SHT4X_MEAS_DELAY,
++			     SHT4X_MEAS_DELAY + SHT4X_DELAY_EXTRA);
++
++		ret = i2c_master_recv(client, raw_data, SHT4X_RESPONSE_LENGTH);
++		if (ret != SHT4X_RESPONSE_LENGTH) {
++			if (ret >= 0)
++				ret = -ENODATA;
++
++			goto unlock;
++		}
++
++		t_ticks = raw_data[0] << 8 | raw_data[1];
++		rh_ticks = raw_data[3] << 8 | raw_data[4];
++
++		crc = crc8(sht4x_crc8_table, &raw_data[0], SHT4X_WORD_LEN, CRC8_INIT_VALUE);
++		if (crc != raw_data[2]) {
++			dev_err(&client->dev, "data integrity check failed\n");
++			ret = -EIO;
++			goto unlock;
++		}
++
++		crc = crc8(sht4x_crc8_table, &raw_data[3], SHT4X_WORD_LEN, CRC8_INIT_VALUE);
++		if (crc != raw_data[5]) {
++			dev_err(&client->dev, "data integrity check failed\n");
++			ret = -EIO;
++			goto unlock;
++		}
++
++		data->temperature = ((21875 * (int32_t)t_ticks) >> 13) - 45000;
++		data->humidity = ((15625 * (int32_t)rh_ticks) >> 13) - 6000;
++		data->last_updated = jiffies;
++		data->valid = true;
++	}
++
++unlock:
++	mutex_unlock(&data->lock);
++	return ret;
++}
++
++static ssize_t sht4x_interval_write(struct sht4x_data *data,
++				    long val)
++{
++	data->update_interval = val;
++	return 0;
++}
++
++/**
++ * sht4x_interval_read() - read the minimum poll interval
++ *			   in milliseconds
++ */
++static size_t sht4x_interval_read(struct sht4x_data *data,
++				  long *val)
++{
++	*val = data->update_interval;
++	return 0;
++}
++
++/**
++ * sht4x_temperature1_read() - read the temperature in millidegrees
++ */
++static int sht4x_temperature1_read(struct sht4x_data *data, long *val)
++{
++	int ret;
++
++	ret = sht4x_read_values(data);
++	if (ret < 0)
++		return ret;
++
++	*val = data->temperature;
++
++	return 0;
++}
++
++/**
++ * sht4x_humidity1_read() - read a relative humidity in millipercent
++ */
++static int sht4x_humidity1_read(struct sht4x_data *data, long *val)
++{
++	int ret;
++
++	ret = sht4x_read_values(data);
++	if (ret < 0)
++		return ret;
++
++	*val = data->humidity;
++
++	return 0;
++}
++
++static umode_t sht4x_hwmon_visible(const void *data,
++				   enum hwmon_sensor_types type,
++				   u32 attr, int channel)
++{
++	switch (type) {
++	case hwmon_temp:
++	case hwmon_humidity:
++		return 0444;
++	case hwmon_chip:
++		return 0644;
++	default:
++		return 0;
++	}
++}
++
++static int sht4x_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
++			    u32 attr, int channel, long *val)
++{
++	struct sht4x_data *data = dev_get_drvdata(dev);
++
++	switch (type) {
++	case hwmon_temp:
++		return sht4x_temperature1_read(data, val);
++	case hwmon_humidity:
++		return sht4x_humidity1_read(data, val);
++	case hwmon_chip:
++		return sht4x_interval_read(data, val);
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static int sht4x_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
++			     u32 attr, int channel, long val)
++{
++	struct sht4x_data *data = dev_get_drvdata(dev);
++
++	switch (type) {
++	case hwmon_chip:
++		return sht4x_interval_write(data, val);
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static const struct hwmon_channel_info *sht4x_info[] = {
++	HWMON_CHANNEL_INFO(chip, HWMON_C_UPDATE_INTERVAL),
++	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
++	HWMON_CHANNEL_INFO(humidity, HWMON_H_INPUT),
++	NULL,
++};
++
++static const struct hwmon_ops sht4x_hwmon_ops = {
++	.is_visible = sht4x_hwmon_visible,
++	.read = sht4x_hwmon_read,
++	.write = sht4x_hwmon_write,
++};
++
++static const struct hwmon_chip_info sht4x_chip_info = {
++	.ops = &sht4x_hwmon_ops,
++	.info = sht4x_info,
++};
++
++static int sht4x_probe(struct i2c_client *client,
++		       const struct i2c_device_id *sht4x_id)
++{
++	struct device *device = &client->dev;
++	struct device *hwmon_dev;
++	struct sht4x_data *data;
++	u8 cmd[] = {SHT4X_CMD_RESET};
++	int ret;
++
++	/*
++	 * we require full i2c support since the sht4x uses multi-byte read and
++	 * writes as well as multi-byte commands which are not supported by
++	 * the smbus protocol
++	 */
++	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
++		return -EOPNOTSUPP;
++
++	data = devm_kzalloc(device, sizeof(*data), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++
++	data->update_interval = SHT4X_DEFAULT_MIN_POLL_INTERVAL;
++	data->client = client;
++
++	mutex_init(&data->lock);
++
++	crc8_populate_msb(sht4x_crc8_table, SHT4X_CRC8_POLYNOMIAL);
++
++	ret = i2c_master_send(client, cmd, SHT4X_CMD_LEN);
++	if (ret != SHT4X_CMD_LEN)
++		return -EIO;
++
++	hwmon_dev = devm_hwmon_device_register_with_info(device,
++							 client->name,
++							 data,
++							 &sht4x_chip_info,
++							 NULL);
++
++	return PTR_ERR_OR_ZERO(hwmon_dev);
++}
++
++static const struct i2c_device_id sht4x_id[] = {
++	{ "sht4x", 0 },
++	{ },
++};
++MODULE_DEVICE_TABLE(i2c, sht4x_id);
++
++static struct i2c_driver sht4x_driver = {
++	.driver = {
++		.name = "sht4x",
++	},
++	.probe		= sht4x_probe,
++	.id_table	= sht4x_id,
++};
++
++module_i2c_driver(sht4x_driver);
++
++MODULE_AUTHOR("Navin Sankar Velliangiri <navin@linumiz.com>");
++MODULE_DESCRIPTION("Sensirion SHT4x humidity and temperature sensor driver");
++MODULE_LICENSE("GPL v2");
+--
+2.31.1
 
