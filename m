@@ -2,60 +2,60 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00AB2C433B4
-	for <linux-hwmon@archiver.kernel.org>; Mon,  3 May 2021 23:56:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3367DC433B4
+	for <linux-hwmon@archiver.kernel.org>; Tue,  4 May 2021 01:01:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C134861177
-	for <linux-hwmon@archiver.kernel.org>; Mon,  3 May 2021 23:56:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EAE1F61244
+	for <linux-hwmon@archiver.kernel.org>; Tue,  4 May 2021 01:01:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229582AbhECX5H (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 3 May 2021 19:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35184 "EHLO
+        id S229499AbhEDBB4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 3 May 2021 21:01:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbhECX5H (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 3 May 2021 19:57:07 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 436D3C061574;
-        Mon,  3 May 2021 16:56:13 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id k25so7119499oic.4;
-        Mon, 03 May 2021 16:56:13 -0700 (PDT)
+        with ESMTP id S229497AbhEDBBz (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 3 May 2021 21:01:55 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA66BC061574;
+        Mon,  3 May 2021 18:01:01 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id 92-20020a9d02e50000b029028fcc3d2c9eso6871185otl.0;
+        Mon, 03 May 2021 18:01:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:to:cc:references:from:subject:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=99KFDIe+H234JgW9+j5rek6FzqlLi8bnWc2ZDwTw5r8=;
-        b=rnKNVTsi4xokqSwhoP+/C9kh9gUjZWwHc9ah5sKnckTOJwxdDG62nVOnN/KCQkpo6F
-         +9T7Kh0wyCKa/GqGf3FB5/6Zw9IofH3lTpIZt2hWFWc0Phts3tQWcAyWp5uR8PW5DdEn
-         2pigTC1WMsBO4iHDfLF1VUQj1RGRAyUD8gd+CxVpqG095ceASStg1zZT/+SMl9mEhlwf
-         VhJCTuAfhdRqQjnZLeuhfReAdIOqjXQLVGMiguVsC8zgmDlqCLQOu/zpgt6vKftuDYzX
-         HJezQJFWkPQ4rTEPgicyUoAnR1BykHkW077d6clOw8bHC+NIrgYWLMJ4iMquHWf3NcoZ
-         lIVw==
+        bh=pwjfg1uDapcDkvQo9kv6FCcPeQpH1sguNOEK+mmM930=;
+        b=O36ahmaj7iJqWBI48zyPn6fMcIb4mxTPeHHk0gCVZ9W1iamspEzQbkhQ0ggItpC3Mr
+         xxiFLFJFG5aNbXzrssORZlGVlPWu6GcaJ6ODXP7FnFArjwYSu/4aYxpZPEIYjmt+cHp6
+         gaGH7Vz5H7d7hMm0Fv1497mQcOdeFiOpG+eNGNjvmC6PZL+h9yrpDAce671ehohNx0nt
+         c2g8RjhfgbGKcMf5Jnm7jSvhBPWrP417btDlZcX8FI+Iq8vc0ctP7THy75Bof7kvBwDA
+         FCzBok8hjif1Wj58RSfw0gvB9ysiCK7vG400wlA6gCjDCm5UsnpAm74YE5kZhdND1VPH
+         iBug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=99KFDIe+H234JgW9+j5rek6FzqlLi8bnWc2ZDwTw5r8=;
-        b=GMX9gkpysfGhBASYCIAT6RuxHP/ooFUC3QfGDPGVFErK+fTrIJhXBjArLcQzKEigZ7
-         XAFTqR2R9QNlbx26ke7ObgOpcdxi6Qn4b+xm//To3ixcKLy7PdTCDT81exMXaaQpCR/P
-         R4b1V/LBRg2FqKdl7oGCBAvvCJcwnOe30Vsx+cmpXyAvPlIEshBx9RjmUW8pFqEn6k9X
-         NUfnmnuCEwJnWtx1bGMrkyxrN9Pd1yuU457+hklowSkEJizfYLREjh8Qmz0bKkUpmAbF
-         zIxGX/AbWeR0ZBJo/I2MsIfmxzHHKdT/EXeiaKx1uS6L4pcFPXJKi6A0MPI0Is6EEMsN
-         1zOQ==
-X-Gm-Message-State: AOAM5310/ZqNMHJoTelKZcPlmSBw8UJ2VkslfW/jjzCw8j29cM1go1gB
-        juaBW1AwWEJ3bNfB2gHhtAypVPXeoyY=
-X-Google-Smtp-Source: ABdhPJxpwPmOEmo9SBbqdf8oGdpnz7ZE3m1XD7BZ6BPXy2V7BBHRyCd2zEBcoQLYnHn73YTNfy5gGA==
-X-Received: by 2002:aca:bb0b:: with SMTP id l11mr826562oif.146.1620086171913;
-        Mon, 03 May 2021 16:56:11 -0700 (PDT)
+        bh=pwjfg1uDapcDkvQo9kv6FCcPeQpH1sguNOEK+mmM930=;
+        b=afI6XFd9/3rSsDk8BSD4S98FxlWZL19wHnGCoSoLY7oAoeyP/TjO2ZH/2GOuu4yrGh
+         kw5BtSRputNyWUgHYhUrqxo8J7jzFodC/Iw32aVq2uuXswXqd6qwjkqY/f4AzmPoKxbC
+         ohuCIk5VlS7OkjWkPaAdTFuNsLsbHqws4Y4EhYFhxsTmQLD5Q4PhXfLQm/aNjCnokXng
+         lbxTfiD6K28g+ijj5suMuUDJD3PU2KBrYWFTEYVk5gi3qlxQJU916Z4E5VMuOZdsKmKT
+         O9LG39IHILjOtb8+w9Q8wdK9EoclzGJhRldYS9tpQjaRsDjMuexdZ2NmU4Ca3e6CE8mF
+         TqCQ==
+X-Gm-Message-State: AOAM532FoRUaiGdatdLJy4BoV7pXWIpcLoYhhNpd6MClP/YqzJfkO+AX
+        JnD++Z8ejadmMPiNzw8UdzKLQu2aarQ=
+X-Google-Smtp-Source: ABdhPJxrHcfcWYbOrPYWDF4KFjb38fdLJxQL02IgMibqJO/kQQ9QfWKvbuhKoeXxtxkgexwq827NWw==
+X-Received: by 2002:a9d:4a85:: with SMTP id i5mr16862965otf.102.1620090060209;
+        Mon, 03 May 2021 18:01:00 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p2sm295529ool.15.2021.05.03.16.56.10
+        by smtp.gmail.com with ESMTPSA id f80sm381516oob.22.2021.05.03.18.00.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 May 2021 16:56:11 -0700 (PDT)
+        Mon, 03 May 2021 18:00:59 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 To:     Vadim Pasternak <vadimp@nvidia.com>, robh+dt@kernel.org
 Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org
@@ -64,8 +64,8 @@ References: <20210503204646.2742486-1-vadimp@nvidia.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Subject: Re: [PATCH hwmon-next v4 2/3] hwmon: (pmbus) Add support for MPS
  Multi-phase mp2888 controller
-Message-ID: <392c6272-7c06-d313-7a7d-3459988607ed@roeck-us.net>
-Date:   Mon, 3 May 2021 16:56:09 -0700
+Message-ID: <a03e0b04-466b-ec43-526a-1db2f255eff9@roeck-us.net>
+Date:   Mon, 3 May 2021 18:00:57 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.7.1
 MIME-Version: 1.0
@@ -476,11 +476,6 @@ On 5/3/21 1:46 PM, Vadim Pasternak wrote:
 > +		 * the fixed value 111011b.
 > +		 */
 > +		ret = ((ret & 0x3ff) >> 1) | (ret & ~GENMASK(11, 0));
-
-That results in a loss of resolution. I think you'll want something like
-		ret = (ret & GENMASK(9, 0)) | ((ret & GENMASK(31, 10)) << 1);
-though I am not sure about the bit numbers.
-
 > +		break;
 > +	case PMBUS_OT_WARN_LIMIT:
 > +		ret = pmbus_read_word_data(client, page, phase, reg);
@@ -513,6 +508,12 @@ though I am not sure about the bit numbers.
 > +		if (ret < 0)
 > +			return ret;
 > +		ret = data->total_curr_resolution ? ret * 2 : ret;
+
+I had another look into the datasheet.
+Turns out the resolution is 1-2W per LSB for PMBUS_POUT_OP_WARN_LIMIT,
+but 0.5W-1W for PMBUS_READ_PIN and PMBUS_READ_POUT. So the limits can't
+be treated the same.
+
 > +		break;
 > +	/*
 > +	 * The below registers are not implemented by device or implemented not according to the
@@ -611,13 +612,6 @@ though I am not sure about the bit numbers.
 > +	.pfunc[9] = PMBUS_HAVE_IOUT,
 > +	.read_byte_data = mp2888_read_byte_data,
 > +	.read_word_data = mp2888_read_word_data,
-
-Still no write_word_data function, meaning limit writes are quite likely
-going to be wrong.
-
-Thanks,
-Guenter
-
 > +};
 > +
 > +static int mp2888_probe(struct i2c_client *client)
@@ -646,6 +640,12 @@ Guenter
 > +	if (data->total_curr_resolution) {
 > +		info->m[PSC_POWER] *= 2;
 > +		info->m[PSC_CURRENT_OUT] /= 2;
+
+Wait, is that correct ? The mantissa is an exponent, but the resolution
+scale only changes by 1 bit, not 2 bit.
+
+Guenter
+
 > +	}
 > +
 > +	return pmbus_do_probe(client, info);
