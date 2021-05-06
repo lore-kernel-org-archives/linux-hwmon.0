@@ -2,139 +2,68 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 293B6C433B4
-	for <linux-hwmon@archiver.kernel.org>; Thu,  6 May 2021 04:06:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48146C433ED
+	for <linux-hwmon@archiver.kernel.org>; Thu,  6 May 2021 07:02:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DA78961207
-	for <linux-hwmon@archiver.kernel.org>; Thu,  6 May 2021 04:06:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 11813610A6
+	for <linux-hwmon@archiver.kernel.org>; Thu,  6 May 2021 07:02:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbhEFEHl (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 6 May 2021 00:07:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50084 "EHLO
+        id S232674AbhEFHDI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 6 May 2021 03:03:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbhEFEHl (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 May 2021 00:07:41 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A93EBC061574;
-        Wed,  5 May 2021 21:06:42 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id c36-20020a05683034a4b02902a5b84b1d12so3760094otu.8;
-        Wed, 05 May 2021 21:06:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=45qqyDWvz+dGKIejtJRqM5vC5ZpgYtzj+432XuvSFYg=;
-        b=gp/MscTpC9wD2RAN5/6tv+vppvbIP3BxG9jekPePdyodY50TmeynGGlWfuesbQfzFe
-         8Y3S5EV3E3vEw7lW8NJFfi5YvPHpN1l/i4r3kCeCQbGCplik5gHxAJBod5pznHGwtQgz
-         lU2WxaCryWtd3Pue3nHD4RS9UIi6RPIbaUJAF4KP5kwZe91jA3O0D90sRMZP1jF9JlJv
-         U4K34yW8pID9tr7TSzq7aTgnvg1iedfjsQpIF7eEaNPgcR2azllm3PMiDGI9UA4+KRGU
-         5k8I6H8ceM4dtvRYIpt1rtjj2Tjpylot135U6VTL8wlguxn2L7SEmTzO9rtQgq7PrleA
-         Fzyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=45qqyDWvz+dGKIejtJRqM5vC5ZpgYtzj+432XuvSFYg=;
-        b=Nr6/86m6Mnagvi9D7f29WIXFgw2jEoj78WK9Rtd+F5Q+BqIbitQ58PZG5IOtMKE8Dm
-         jpUxHka2hI8UH17ylkPmQu6341lZc66exBs5UDJj+ZGvNHb7qxM/LyGmdJXjlaes4ujp
-         iF4nf1UWD42xxnklAOVh7Trht8Z6J3HVRaq+oG/zbw+WkTsmXrwQsfyEj8uAPhlva5VV
-         RCWLyrWvtHMlOGINxtfxZWByRvFQ407Wu2LuombGez1fo+/aGhrXjW6fSi78T/5G/mDB
-         7A/ziaUqZ6Dar833My2XN6/kahBi4PyVoR4/JMd9QRRcLZ3TprYKCvWCfMv9SM0vnhxB
-         sdOA==
-X-Gm-Message-State: AOAM531OF4WPHPtlAHGBEE7g/LIr92zvhr5LXOs45RiHrImsZJhN2m6Z
-        qymBDkwLDxEwgwhO2KqsUr96EXJ0qeE=
-X-Google-Smtp-Source: ABdhPJyua4JKgWxjygaf+08jeyJd8yarpAuA7LLJpt9pEOCQ8JKNz2JnZN3KwkqK0HrnYvMFVOkTNg==
-X-Received: by 2002:a9d:247:: with SMTP id 65mr1661261otb.330.1620274001747;
-        Wed, 05 May 2021 21:06:41 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d3sm241371oic.48.2021.05.05.21.06.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 May 2021 21:06:41 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH 1/3] hwmon: (pmbus) Add new flag
- PMBUS_READ_STATUS_AFTER_FAILED_CHECK
-To:     Erik Rosen <erik.rosen@metormote.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210505183248.57082-1-erik.rosen@metormote.com>
- <20210505183248.57082-2-erik.rosen@metormote.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <bbbe1330-dd94-29a1-0680-b9cf91e8f962@roeck-us.net>
-Date:   Wed, 5 May 2021 21:06:39 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        with ESMTP id S232554AbhEFHDI (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 6 May 2021 03:03:08 -0400
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [IPv6:2001:67c:2050::465:202])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12D3C061574
+        for <linux-hwmon@vger.kernel.org>; Thu,  6 May 2021 00:02:10 -0700 (PDT)
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [80.241.60.240])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4FbPdr0BN9zQk2X;
+        Thu,  6 May 2021 09:02:08 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp1.mailbox.org ([80.241.60.240])
+        by hefe.heinlein-support.de (hefe.heinlein-support.de [91.198.250.172]) (amavisd-new, port 10030)
+        with ESMTP id QZdqFGHllMfp; Thu,  6 May 2021 09:02:02 +0200 (CEST)
+Subject: Re: [PATCH] hwmon: (nct6775) Support access via Asus WMI
+To:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+References: <523324cb-4e9d-c8f3-abe1-94158368aa45@bernhard-seibold.de>
+ <08262b12-4345-76a9-87be-66d630af3a59@roeck-us.net>
+From:   Bernhard Seibold <mail@bernhard-seibold.de>
+Message-ID: <de9fba24-eb84-d967-268d-aa114c453f42@bernhard-seibold.de>
+Date:   Thu, 6 May 2021 09:02:01 +0200
 MIME-Version: 1.0
-In-Reply-To: <20210505183248.57082-2-erik.rosen@metormote.com>
+In-Reply-To: <08262b12-4345-76a9-87be-66d630af3a59@roeck-us.net>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-MBO-SPAM-Probability: 
+X-Rspamd-Score: -0.98 / 15.00 / 15.00
+X-Rspamd-Queue-Id: B24131894
+X-Rspamd-UID: 483ba8
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/5/21 11:32 AM, Erik Rosen wrote:
-> Some PMBus chips end up in an undefined state when trying to read an
-> unsupported register. For such chips, it is necessary to reset the
-> chip pmbus controller to a known state after a failed register check.
-> This can be done by reading a known register. By setting this flag the
-> driver will try to read the STATUS register after each failed
-> register check. This read may fail, but it will put the chip into a
-> known state.
+On 06.05.2021 04:04, Guenter Roeck wrote:
+> On 5/5/21 1:12 PM, Bernhard Seibold wrote:
+>> Support accessing the chip via Asus WMI. This enables the driver to work
+>> on boards where the IO region is reserved by ACPI.
+>>
+>> Signed-off-by: Bernhard Seibold <mail@bernhard-seibold.de>
+>> Tested-by: Artem S. Tashkinov <aros@gmx.com>
 > 
-> Signed-off-by: Erik Rosen <erik.rosen@metormote.com>
-
-For my reference:
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
->  drivers/hwmon/pmbus/pmbus_core.c |  2 ++
->  include/linux/pmbus.h            | 13 +++++++++++++
->  2 files changed, 15 insertions(+)
+> No, this makes the driver unmaintainable. There should be a separate
+> driver which only makes WMI/ACPI accesses for everything.
 > 
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index aadea85fe630..cb0b3c7c3434 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -512,6 +512,8 @@ static bool pmbus_check_register(struct i2c_client *client,
->  	rv = func(client, page, reg);
->  	if (rv >= 0 && !(data->flags & PMBUS_SKIP_STATUS_CHECK))
->  		rv = pmbus_check_status_cml(client);
-> +	if (rv < 0 && (data->flags & PMBUS_READ_STATUS_AFTER_FAILED_CHECK))
-> +		data->read_status(client, -1);
->  	pmbus_clear_fault_page(client, -1);
->  	return rv >= 0;
->  }
-> diff --git a/include/linux/pmbus.h b/include/linux/pmbus.h
-> index 12cbbf305969..edd7c84fef65 100644
-> --- a/include/linux/pmbus.h
-> +++ b/include/linux/pmbus.h
-> @@ -43,6 +43,19 @@
->   */
->  #define PMBUS_NO_CAPABILITY			BIT(2)
->  
-> +/*
-> + * PMBUS_READ_STATUS_AFTER_FAILED_CHECK
-> + *
-> + * Some PMBus chips end up in an undefined state when trying to read an
-> + * unsupported register. For such chips, it is necessary to reset the
-> + * chip pmbus controller to a known state after a failed register check.
-> + * This can be done by reading a known register. By setting this flag the
-> + * driver will try to read the STATUS register after each failed
-> + * register check. This read may fail, but it will put the chip in a
-> + * known state.
-> + */
-> +#define PMBUS_READ_STATUS_AFTER_FAILED_CHECK	BIT(3)
-> +
->  struct pmbus_platform_data {
->  	u32 flags;		/* Device specific flags */
->  
+> Guenter
 > 
 
+I'm not sure what exactly you are suggesting. I assume your suggestion
+isn't to duplicate 5000 lines of code in order to avoid having 100 lines
+of ifdef'ed code?
