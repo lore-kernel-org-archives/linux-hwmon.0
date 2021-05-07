@@ -2,172 +2,91 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE322C433ED
-	for <linux-hwmon@archiver.kernel.org>; Fri,  7 May 2021 19:40:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DA6DC433ED
+	for <linux-hwmon@archiver.kernel.org>; Fri,  7 May 2021 21:24:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BAAB561456
-	for <linux-hwmon@archiver.kernel.org>; Fri,  7 May 2021 19:40:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 74176613ED
+	for <linux-hwmon@archiver.kernel.org>; Fri,  7 May 2021 21:24:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbhEGTlj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 7 May 2021 15:41:39 -0400
-Received: from smtp.outgoing.loopia.se ([93.188.3.37]:31238 "EHLO
-        smtp.outgoing.loopia.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbhEGTlg (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 7 May 2021 15:41:36 -0400
-Received: from s807.loopia.se (localhost [127.0.0.1])
-        by s807.loopia.se (Postfix) with ESMTP id 12F272E62F3D
-        for <linux-hwmon@vger.kernel.org>; Fri,  7 May 2021 21:40:31 +0200 (CEST)
-Received: from s899.loopia.se (unknown [172.22.191.5])
-        by s807.loopia.se (Postfix) with ESMTP id 02B3F2E36753;
-        Fri,  7 May 2021 21:40:31 +0200 (CEST)
-Received: from s474.loopia.se (unknown [172.22.191.5])
-        by s899.loopia.se (Postfix) with ESMTP id F2DE22C8B9FC;
-        Fri,  7 May 2021 21:40:30 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at amavis.loopia.se
-Received: from s645.loopia.se ([172.22.191.6])
-        by s474.loopia.se (s474.loopia.se [172.22.190.14]) (amavisd-new, port 10024)
-        with LMTP id 8ii12dFevLzj; Fri,  7 May 2021 21:40:30 +0200 (CEST)
-X-Loopia-Auth: user
-X-Loopia-User: carl@hgsystem.se
-X-Loopia-Originating-IP: 155.4.133.180
-Received: from localhost.localdomain (h-155-4-133-180.NA.cust.bahnhof.se [155.4.133.180])
-        (Authenticated sender: carl@hgsystem.se)
-        by s645.loopia.se (Postfix) with ESMTPSA id 34932157A02D;
-        Fri,  7 May 2021 21:40:30 +0200 (CEST)
-From:   Erik Rosen <erik.rosen@metormote.com>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Erik Rosen <erik.rosen@metormote.com>
-Subject: [PATCH v2 3/3] hwmon: (pmbus) Add support for additional Flex BMR converters to pmbus
-Date:   Fri,  7 May 2021 21:40:23 +0200
-Message-Id: <20210507194023.61138-4-erik.rosen@metormote.com>
-X-Mailer: git-send-email 2.11.0 (Apple Git-81)
-In-Reply-To: <20210507194023.61138-1-erik.rosen@metormote.com>
-References: <20210507194023.61138-1-erik.rosen@metormote.com>
+        id S229512AbhEGVZf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 7 May 2021 17:25:35 -0400
+Received: from mout.gmx.net ([212.227.15.18]:40087 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229482AbhEGVZe (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 7 May 2021 17:25:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1620422658;
+        bh=mnTRkffOdwUO2jthGy+op7tnc959UWPmk51qJ3JHpX4=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=B5hmllqpACN8McYJoT8dYRaM0Sn33VuSGC4w7Db08xIslTYMx92aCqiffoJpnpbjH
+         NpZrinxDt1p/De3NgiJLYFThaBGN+NvPLPnqXxQ7yvoWWPlsunCbaan26gF/8ten1Y
+         pVCM4DTMuejw/oDn+sfC5ds3MTLOsCx/KRujwXLw=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from esprimo-mx.fritz.box ([84.154.209.175]) by mail.gmx.net
+ (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MirjS-1l0HQs0CQO-00eqcV; Fri, 07 May 2021 23:24:18 +0200
+From:   W_Armin@gmx.de
+To:     hdegoede@redhat.com
+Cc:     linux-hwmon@vger.kernel.org, linux@roeck-us.net, jdelvare@suse.com
+Subject: [PATCH 0/4] hwmon: (sch56xx) Use devres for watchdog and platform_device_register_simple()
+Date:   Fri,  7 May 2021 23:24:00 +0200
+Message-Id: <20210507212404.6781-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:NuhC384WECYvOmPYwq5mtkBbXvoh+HEcsO02+Oo9Fr+FMePtz/Y
+ 8WFpj0nCAwUOI38LL1Ou6BxH+quATjlIOSP6SiKqM/C7TNdJzv1mx2VdZfNqJpimZiIBPVU
+ 3r1cr0aRgFsizWlz7fqZVi5K3QW4bExlp4aIVNt7obLLwbjVppUfqqInGSUfTgeFL5JbGxO
+ 20WOpMM79wB6ewQp6MP0w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:wbaMaxw9WAA=:co98A2ORHM2j8fFsGFRQjm
+ j2+nOIb6ryZYPP6xqfa4y+XGHTfTQHxl/ahjW2FkgDR4CEe+YDlMienUskpaehQp6zwbDx8jo
+ T0ulW4jENHQCln7ph8nDRKniLTDdrpAH4CzU1+3hrXL8eGqIN4+7/rwXp6Ljq6TnQ+qFJy0mg
+ dOAhh2ZsygsKnP6s9WH8CD7dzmA4bc2uEtyr4/x+y83XheMwWI3Xz/X17Wv3v2bJ4lavAqzyv
+ 2/Okm9L7YWhVj+FULKlPoLiTcdO9IBI/gm3++CfNzJw6zXMI3ERGCuAZq9z9PFbxCh38Fjx1b
+ KwO44jKUS6fMeCvrvQASS4FklEN4yt1NI85+RDYW++i+vZ9DC1qQLeeqgoTTfEwHkfkmCXRTL
+ lV2+jGddon5hkopvphEQ/Y/60MBb6M65H4paNeb9v44c/bZjpKWm5a33UYaeTro61drQahCtJ
+ SGa8GA5lxywLqwxmR1Ee4/MT0KyrfsQbLZ64v0eIQVckDbL/q7f0OhhgRnGFcvi/tqMeWxqVJ
+ diSAdEVVIklLLrgbNgbq5xHWfol3C76lW00gM7EsRm33vTpOKCA5r0ALZy3MNPmJQ8w/5E/QD
+ wMLb39kmXlzDmAn8qzBOOBE5/zWFs+3m2DDkTxE2KEIyp/I1endxJTMyt5iT4uwQmdJpngjxi
+ 3UoiuFCZOL9dUmKwmw/EJB1Lmh/FCWcsDCZ8bUUWLVcoXfJgDJVeGsXUJVgiOjk6JSVcxVHcw
+ OHYY4O6id250135tqbNlQ169CUe1S1DPuXu8RX9rJgXUwfB43bNjpoJqpGQgQOYr83LZ5zKeT
+ jwKYJSilDHkYOvFZi+SIYhdFIDJVMSqk6owNip0OVv/b1WGTWrv51KvSjiZ+rNCrDKFShY3bJ
+ x+BEa0WM6GwESBCX5hbAoC3QmA35p3HYDzz4NOUA25I4vWoFggBq9cvPRRT6lmkG+rldImd+Y
+ UQiNBeOnmLP+kIZQocscxJVhKISn+kN/j20oQ4feN+qx8D5kYXj/ft7M04Qd3U66HAb7m69n9
+ o1/owMqTpFKRUnZbvRGPOUBqOKi7HHffApuUgj/MG3VFbJk9IboMTc5s4017VjEDskcD99Cvm
+ bianblkkae76W7iTfN3d69x8ixCqCnLwtA53L+aux11TfI9jif86F9yGjMCzz0TqrxuZv+LYp
+ 9PYZAyPBqnWOip036jVIN+xl2KnyYiO94d9eS2NflKpj0yKaAj79pF6XRljOzRB7frCD0=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add support for Flex BMR310, BMR456, BMR457, BMR458, BMR480, BMR490,
-BMR491 and BMR492 to the pmbus driver
+From: Armin Wolf <W_Armin@gmx.de>
 
-Signed-off-by: Erik Rosen <erik.rosen@metormote.com>
----
- Documentation/hwmon/pmbus.rst | 11 +++++++----
- drivers/hwmon/pmbus/Kconfig   |  7 ++++---
- drivers/hwmon/pmbus/pmbus.c   | 19 +++++++++++++++++--
- 3 files changed, 28 insertions(+), 9 deletions(-)
+Since it was requested to use devres for the watchdog device,
+use devm_watchdog_register() for watchdog registration and do
+some small cleanups.
 
-diff --git a/Documentation/hwmon/pmbus.rst b/Documentation/hwmon/pmbus.rst
-index c44f14115413..b51de98ab825 100644
---- a/Documentation/hwmon/pmbus.rst
-+++ b/Documentation/hwmon/pmbus.rst
-@@ -3,15 +3,18 @@ Kernel driver pmbus
- 
- Supported chips:
- 
--  * Ericsson BMR453, BMR454
-+  * Flex BMR310, BMR453, BMR454, BMR456, BMR457, BMR458, BMR480,
-+    BMR490, BMR491, BMR492
- 
--    Prefixes: 'bmr453', 'bmr454'
-+    Prefixes: 'bmr310', 'bmr453', 'bmr454', 'bmr456', 'bmr457', 'bmr458', 'bmr480',
-+    'bmr490', 'bmr491', 'bmr492'
- 
-     Addresses scanned: -
- 
--    Datasheet:
-+    Datasheets:
-+
-+ 	https://flexpowermodules.com/products
- 
-- http://archive.ericsson.net/service/internet/picov/get?DocNo=28701-EN/LZT146395
- 
-   * ON Semiconductor ADP4000, NCP4200, NCP4208
- 
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index 32d2fc850621..59080d142bf7 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -19,9 +19,10 @@ config SENSORS_PMBUS
- 	default y
- 	help
- 	  If you say yes here you get hardware monitoring support for generic
--	  PMBus devices, including but not limited to ADP4000, BMR453, BMR454,
--	  MAX20796, MDT040, NCP4200, NCP4208, PDT003, PDT006, PDT012, TPS40400,
--	  TPS544B20, TPS544B25, TPS544C20, TPS544C25, and UDT020.
-+	  PMBus devices, including but not limited to ADP4000, BMR310, BMR453,
-+	  BMR454, BMR456, BMR457, BMR458, BMR480, BMR490, BMR491, BMR492,
-+	  MAX20796, MDT040, NCP4200, NCP4208, PDT003, PDT006, PDT012,
-+	  TPS40400, TPS544B20, TPS544B25, TPS544C20, TPS544C25, and UDT020.
- 
- 	  This driver can also be built as a module. If so, the module will
- 	  be called pmbus.
-diff --git a/drivers/hwmon/pmbus/pmbus.c b/drivers/hwmon/pmbus/pmbus.c
-index a1b4260e75b2..dc4f0c586f8c 100644
---- a/drivers/hwmon/pmbus/pmbus.c
-+++ b/drivers/hwmon/pmbus/pmbus.c
-@@ -173,13 +173,13 @@ static int pmbus_probe(struct i2c_client *client)
- 		return -ENOMEM;
- 
- 	device_info = (struct pmbus_device_info *)i2c_match_id(pmbus_id, client)->driver_data;
--	if (device_info->flags & PMBUS_SKIP_STATUS_CHECK) {
-+	if (device_info->flags) {
- 		pdata = devm_kzalloc(dev, sizeof(struct pmbus_platform_data),
- 				     GFP_KERNEL);
- 		if (!pdata)
- 			return -ENOMEM;
- 
--		pdata->flags = PMBUS_SKIP_STATUS_CHECK;
-+		pdata->flags = device_info->flags;
- 	}
- 
- 	info->pages = device_info->pages;
-@@ -193,22 +193,37 @@ static const struct pmbus_device_info pmbus_info_one = {
- 	.pages = 1,
- 	.flags = 0
- };
-+
- static const struct pmbus_device_info pmbus_info_zero = {
- 	.pages = 0,
- 	.flags = 0
- };
-+
- static const struct pmbus_device_info pmbus_info_one_skip = {
- 	.pages = 1,
- 	.flags = PMBUS_SKIP_STATUS_CHECK
- };
- 
-+static const struct pmbus_device_info pmbus_info_one_status = {
-+	.pages = 1,
-+	.flags = PMBUS_READ_STATUS_AFTER_FAILED_CHECK
-+};
-+
- /*
-  * Use driver_data to set the number of pages supported by the chip.
-  */
- static const struct i2c_device_id pmbus_id[] = {
- 	{"adp4000", (kernel_ulong_t)&pmbus_info_one},
-+	{"bmr310", (kernel_ulong_t)&pmbus_info_one_status},
- 	{"bmr453", (kernel_ulong_t)&pmbus_info_one},
- 	{"bmr454", (kernel_ulong_t)&pmbus_info_one},
-+	{"bmr456", (kernel_ulong_t)&pmbus_info_one},
-+	{"bmr457", (kernel_ulong_t)&pmbus_info_one},
-+	{"bmr458", (kernel_ulong_t)&pmbus_info_one_status},
-+	{"bmr480", (kernel_ulong_t)&pmbus_info_one_status},
-+	{"bmr490", (kernel_ulong_t)&pmbus_info_one_status},
-+	{"bmr491", (kernel_ulong_t)&pmbus_info_one_status},
-+	{"bmr492", (kernel_ulong_t)&pmbus_info_one},
- 	{"dps460", (kernel_ulong_t)&pmbus_info_one_skip},
- 	{"dps650ab", (kernel_ulong_t)&pmbus_info_one_skip},
- 	{"dps800", (kernel_ulong_t)&pmbus_info_one_skip},
--- 
+Also use platform_device_register_simple() in sch56xx_device_add().
+
+Tested on a Fujitsu Esprimo P720.
+
+Armin Wolf (4):
+  hwmon: (sch56xx) Use devres functions for watchdog
+  hwmon: (sch56xx-common) Use strscpy
+  hwmon: (sch56xx-common) Use helper function
+  hwmon: (sch56xx-common) Simplify sch56xx_device_add
+
+ drivers/hwmon/sch5627.c        | 12 ++------
+ drivers/hwmon/sch5636.c        |  9 ++----
+ drivers/hwmon/sch56xx-common.c | 50 ++++++++--------------------------
+ 3 files changed, 16 insertions(+), 55 deletions(-)
+
+=2D-
 2.20.1
 
