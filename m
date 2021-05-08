@@ -2,110 +2,130 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2168AC433ED
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 711C0C43461
 	for <linux-hwmon@archiver.kernel.org>; Sat,  8 May 2021 13:15:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EE313613EE
-	for <linux-hwmon@archiver.kernel.org>; Sat,  8 May 2021 13:15:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 525FA6140F
+	for <linux-hwmon@archiver.kernel.org>; Sat,  8 May 2021 13:15:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230438AbhEHNQj (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 8 May 2021 09:16:39 -0400
-Received: from mout.gmx.net ([212.227.15.19]:47067 "EHLO mout.gmx.net"
+        id S230473AbhEHNQm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 8 May 2021 09:16:42 -0400
+Received: from mout.gmx.net ([212.227.15.19]:53371 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230473AbhEHNQi (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 8 May 2021 09:16:38 -0400
+        id S230488AbhEHNQj (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 8 May 2021 09:16:39 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1620479720;
-        bh=kiPO4E25fg0A7YfrgUl5L7sc1tJhBRaKwNGg+wK0k2g=;
+        s=badeba3b8450; t=1620479722;
+        bh=2JjXJ+A1EbPiAra4s+rtm3TZY1uXz383PTvaOIjdhWo=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=g2wwEzJtiwVF1sVtt37Tt7X1UnCAkENMRusjdfCmgc1K1AKoDsJCJ/Uc0ApOZoR8C
-         YS0DbACeMbg49trwnct1XnwSRbI0ElA6a1fyhT7laEsWz6uS9cBbxTyj0n1clApG9O
-         yLDdF7ev6mOTtWytprQiGv4HWtxATPo4Pt1idTNY=
+        b=f6gv8E7m68eRGyHVhIq+QYjQKv13G3qCBLTRT5typmclqDN0wMzJHuNf9g3BzMlTs
+         LR8BnhPt+f3L3jy9H8Xra414s1fzGaLXx2wdT12tR3/zFDJbrurHe2CHht5mOSDVnM
+         pjVy2bFcTIpFJk845DX5v9W7Krrg0dNEDc/3Slss=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from esprimo-mx.fritz.box ([84.154.223.76]) by mail.gmx.net
  (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MDysg-1ln61k1Mv6-009xwf; Sat, 08 May 2021 15:15:20 +0200
+ 1MDQeK-1lmXnT3QSE-00AVmI; Sat, 08 May 2021 15:15:21 +0200
 From:   W_Armin@gmx.de
 To:     hdegoede@redhat.com
 Cc:     linux-hwmon@vger.kernel.org, linux@roeck-us.net, jdelvare@suse.com
-Subject: [PATCH v2 3/4] hwmon: (sch56xx-common) Use helper function
-Date:   Sat,  8 May 2021 15:14:56 +0200
-Message-Id: <20210508131457.12780-4-W_Armin@gmx.de>
+Subject: [PATCH v2 4/4] hwmon: (sch56xx-common) Simplify sch56xx_device_add
+Date:   Sat,  8 May 2021 15:14:57 +0200
+Message-Id: <20210508131457.12780-5-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210508131457.12780-1-W_Armin@gmx.de>
 References: <20210508131457.12780-1-W_Armin@gmx.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:qad4vzhfeK8fg3ZQzFX0T37/u0zr2Zqb0HaFqpEuPaMjEg7pBKI
- VGDe38OfnHY6E1MkhQgCL0cbpy9zMBSHt3FGAGKdL3vgepvjeoh6J4w9sRFaGIfIhUcooye
- SrOC7+BJKaTjr71eM3sj77gPxCbrN3C+upxEoAgHIQIBwkyd9PmjZxcYkh0Nkk3iFHh1V4T
- qwpP3Ng/ZwmluAbNGlrog==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:UQZuk7bG4Aw=:BJ+ACVsnZxYHGoZDwEJIcv
- t9ye04bAjOAzlkiWPZYMkuvm57VijhUCKhNO0wiPJFyNHEo1wRNo9O0NfolDr0Wbog2SPQfL2
- v9xVl4XglwFTA9ZH/1qs7GWRBcacho0CapG39qmPQ9lAIrahIfy+9bLd+1pAiMA1u/nid2rmO
- X5DENbBg30uLiP/gzNS3Q0XVkAJw9KKM/v5oRutZ/vtUZaFZSq2PA+TZVC4nwqWqmiJAyNtY/
- UWp7vOG1hQydmoEQkb7BYfJc6fniplwJcwWo2AdeSSQVVgPcbtGvEn/gVZYqkcqujXXefoxlQ
- 28SYk5oWpAYMGO5Kyryk+DFR8x/xUqEo7wCixpVBKPelgUUmDrmjPPRkAjfeNK7NOwgLHx8Lu
- 4TCuj62+KXfxsPQ4O9piBqSLav1E4zjiaagPtFDnO41zvbLMoXJh81DADmLg3qmkP4Q6ajMRR
- 5NuQ6ssKkybqNEWEh4iZZSFDswlz/K3iZXIVil3rbdrZPPofPDn3mo/phMf4hx23NZjXeLPjz
- e3tskSzoCnuHm/guz27UQu10voY/MMKusfQJ5maIPIttWoMYjX620IoMPlyE/1em5yNAoycWM
- lK0qGiK1+teOULxM4pH6VDPZEggD4un+fNJ7Hbq1SYdfXaxQWc0EdNu4X7BbWztEqK/zvfAcL
- TSIG5ywW7FsxUggQHX+v1b0UDCp7x8/k2/Ptd//NxHWHKp6ZT88PeBSywnSOJaK4nLttDBalb
- trPTkuhOohXdBWB4IjA5ZJe3y9aqpCwpvtHZkBqc+0WgWYvr6Njeq2t2X3Y2mGK5atZupwehm
- Q1ssxskPFQTs94wRYFmKevZDvTzUht4wEmCNJXtzzdwqtt57OEWZp0HQMkprktRBiJA1MSBhM
- 42cypF2kfc5WuxaB7kYS9ynJHTSFb5CU9PmijMmWb6fk71iqpwHJ5mguh6msI9lTrNoefwoe2
- JSRjjJz8wYAHXMOZ7yceB5yTSSRMAwJ+fpMPEJEuk0fGcpoK2Pw1cf/JKrTVNoLdnVyIptpM7
- XjPwsLazD6F4C6a0LUGWZqT6f9OBU4WPxuxtW6hHGZaSGSeP1gCZONccYYNkuqoR4nxVpCUPX
- /LLn7/rLmFc40MMcapj3tptHEXHEPWF0o3o6aYgk9rH0vTxfO+DULy0wrnyhu205ypdTS4kKM
- HZdtMAJsjhk/E8YRJ+Bud3pRT0I/haHapH+/gbc6bn3/EFY8+Xze7NDYyoBWgRa/DoLIo=
+X-Provags-ID: V03:K1:SSuNa8bmb/4pXXm0IfbRn8xwF/URj0V5W6E4sy6fsKn7HuIvN/u
+ KtNSknQ6l7JelWNV33+/w+aBzlKIDUSlMWaTPgBtbsdJbEllMFPVRdfTH6qp7EQhoT0+DFb
+ /DuMkdoI4Km+/7dB8lH7wl3koGgeStYlUKhCcjicEUB0COyqsGyMmpMprocIf/FhFNcQ1bn
+ LqD2OPT234ZfbIWdNA/8w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Y52HckMlXmQ=:xXFFgR1y1eXPwLIKuXJXlw
+ p6pYJjkaDOB7+cnX9ofraH0A7qWOoiAX228SXqANmHlY1unyUB1GzKLxN7NLeUGccJMb42lak
+ CDErbhvGLpY6IHhUJYjZTpIOhfHHw6Sqy5HFIcW8XK5Rs2K/HAHeBA3zsUtbwbBmcfERtGY99
+ rGOKjW6SXkULesLMHGdFEzo6BXMWnzuftivQ44kVki7a+qU7llwCyWLWYdiw44mfOS7Onokoc
+ GSgaZuPSkBaAQmsd4epNPRzT5sblUAhAaXN4yPcWxnDrVbne9dfNGpTkE1YUIjNCZ8QPWzN3M
+ zo9OYSlMdYSo2muik2+3vjA2Cgjhq3HC21RgThvUt/tVv3Jroqss5PuxQ5LqBmPP3d2j+VKmc
+ XZgi+sSd6CjQ99LWEvb26RahuLBj58jdixmQy4KU+pswMBkYvUJC/GW1ax2MxWjY4PI5/0lsV
+ UCtn6xa15qq1VwZewbA7e1N2LD0zJiYLc4KQ6cUt/8gXx0KjvHg+faSXbUsucff1ZYEg0tVhW
+ vz6CwUv+ID7S51LAOQJ+OJwE53zysF0ZYJcdaPflV184NGm4JoC6cRsSN5cqlEbTvrgJvkZOS
+ zYLLhugPvL9PsDMXP68WlQ94ylvAAmZ92xWuq57B/71LKI4dXQFb7J2pJONFtBgbfJ3ypUvq2
+ Zi7ofIDmk5YyYP0XggdeevbPSoI5tXuRTC23ngGrwAP/3ZMtsgBkEOxF6isf40LIAMDR5WyVC
+ 1+yzPHAKt7E5EhN9VNxS/tm1RwZC6ULyOLGW41tyFulS9x3h0BMh/ynneYsFQb+M8Y1pSvygx
+ N1lL8e8wkJ2ABFcPNEnGOZ1dasU51MgZsYXDnorsd3YF3Ay7MBsSZH+jrLnFtzlz/rahReffb
+ cE8Zl9YywhqILiFb95GUGqljuUTrFNKGya00TsldNXhHD2bT9utgG3ATLoqZlgnZFa6wwLlG4
+ HTN8HsgZH6DDPIF2rLcwlKu82Kx+ixGDvo1p+vdjHQuT1Ym02K1w5+edIdn+Q8Ul4Zuo8yviO
+ 5tmz/CVLCH1LNYkG8xyb+xSLp8UzYX9yiY7e1tCgYtb9aOeFspnIEZ+Hfx0lw88jSQo7gW5Kb
+ 3r1sLIhzSAEQMEz98pfD/R0PgGes052lE8vtd1PnWAfaX7pU9tTZHNjl0Pupy5QXk5cbLOEVv
+ q6kAwcMPM/Ad3thOqhtsBECFiyiNNXn/cJ59PFYlMXkWA+157Qai5aYe4ANpcPHZOvJxk=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 From: Armin Wolf <W_Armin@gmx.de>
 
-Use watchdog_set_nowayout() to process param
-setting and change param type to bool.
+Use platform_device_register_simple() instead of
+manually calling platform_device_alloc()/platform_device_add().
 
 Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 =2D--
- drivers/hwmon/sch56xx-common.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/hwmon/sch56xx-common.c | 27 ++++-----------------------
+ 1 file changed, 4 insertions(+), 23 deletions(-)
 
 diff --git a/drivers/hwmon/sch56xx-common.c b/drivers/hwmon/sch56xx-common=
 .c
-index 0b3250fc57b8..180801f80118 100644
+index 180801f80118..5307fda73e70 100644
 =2D-- a/drivers/hwmon/sch56xx-common.c
 +++ b/drivers/hwmon/sch56xx-common.c
-@@ -20,8 +20,8 @@
- #include "sch56xx-common.h"
+@@ -506,37 +506,18 @@ static int __init sch56xx_device_add(int address, co=
+nst char *name)
+ 	struct resource res =3D {
+ 		.start	=3D address,
+ 		.end	=3D address + REGION_LENGTH - 1,
++		.name	=3D name,
+ 		.flags	=3D IORESOURCE_IO,
+ 	};
+ 	int err;
 
- /* Insmod parameters */
--static int nowayout =3D WATCHDOG_NOWAYOUT;
--module_param(nowayout, int, 0);
-+static bool nowayout =3D WATCHDOG_NOWAYOUT;
-+module_param(nowayout, bool, 0);
- MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (defa=
-ult=3D"
- 	__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+-	sch56xx_pdev =3D platform_device_alloc(name, address);
+-	if (!sch56xx_pdev)
+-		return -ENOMEM;
+-
+-	res.name =3D sch56xx_pdev->name;
+ 	err =3D acpi_check_resource_conflict(&res);
+ 	if (err)
+-		goto exit_device_put;
+-
+-	err =3D platform_device_add_resources(sch56xx_pdev, &res, 1);
+-	if (err) {
+-		pr_err("Device resource addition failed\n");
+-		goto exit_device_put;
+-	}
+-
+-	err =3D platform_device_add(sch56xx_pdev);
+-	if (err) {
+-		pr_err("Device addition failed\n");
+-		goto exit_device_put;
+-	}
+-
+-	return 0;
++		return err;
 
-@@ -420,8 +420,7 @@ void sch56xx_watchdog_register(struct device *parent, =
-u16 addr, u32 revision,
- 	data->wddev.timeout =3D 60;
- 	data->wddev.min_timeout =3D 1;
- 	data->wddev.max_timeout =3D 255 * 60;
--	if (nowayout)
--		set_bit(WDOG_NO_WAY_OUT, &data->wddev.status);
-+	watchdog_set_nowayout(&data->wddev, nowayout);
- 	if (output_enable & SCH56XX_WDOG_OUTPUT_ENABLE)
- 		set_bit(WDOG_ACTIVE, &data->wddev.status);
+-exit_device_put:
+-	platform_device_put(sch56xx_pdev);
++	sch56xx_pdev =3D platform_device_register_simple(name, -1, &res, 1);
 
+-	return err;
++	return PTR_ERR_OR_ZERO(sch56xx_pdev);
+ }
+
+ static int __init sch56xx_init(void)
 =2D-
 2.20.1
 
