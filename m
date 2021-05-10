@@ -2,126 +2,143 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E43D4C43616
-	for <linux-hwmon@archiver.kernel.org>; Mon, 10 May 2021 15:15:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3C1BC43460
+	for <linux-hwmon@archiver.kernel.org>; Mon, 10 May 2021 15:24:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D23C86023E
-	for <linux-hwmon@archiver.kernel.org>; Mon, 10 May 2021 15:15:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B5E0761107
+	for <linux-hwmon@archiver.kernel.org>; Mon, 10 May 2021 15:24:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241687AbhEJPQb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 10 May 2021 11:16:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45230 "EHLO
+        id S230437AbhEJPZP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 10 May 2021 11:25:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240361AbhEJPOf (ORCPT
+        with ESMTP id S237899AbhEJPYX (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 10 May 2021 11:14:35 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B71FCC056756;
-        Mon, 10 May 2021 07:33:50 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id t18so16891382wry.1;
-        Mon, 10 May 2021 07:33:50 -0700 (PDT)
+        Mon, 10 May 2021 11:24:23 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15B2C06129E
+        for <linux-hwmon@vger.kernel.org>; Mon, 10 May 2021 08:00:24 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id n32-20020a9d1ea30000b02902a53d6ad4bdso14667730otn.3
+        for <linux-hwmon@vger.kernel.org>; Mon, 10 May 2021 08:00:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=iXsxoOt9fS3DXvxCyyFOaJfbPkU6WlTqA1MG4BgEpJA=;
-        b=jIc4OS4UG1e9Htue39hs2SdJXCmPLn+MTostxG/pw06sXYt4cF0beJY8cOPd4XkNvN
-         wMkWqq4rS4nqVWqmlHYwknDCThc4F5oj3a10x6AGXMwZ0Kkxjgx6mU53ky5S6gct5IOF
-         gb8YE/CdqFeQhJSfkuXg75IoXDsEW/QKbfnCDm8DSyF/6zHxA2in236S9Jv233h02Cag
-         nY/zUkluYzDhxrfM75C6Qnf/beBRBG9DBN2uslTW/jB8AmOrnU4strwuRTlIYCmTiED9
-         Adakd2gy/AYmhY6PfiGery2Nb+BVYLJb2xN6RqR96XQSpLkoAkrrTIc1zJH3tzspThUx
-         eDlQ==
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jvMCFvQ9tkKu2Ir50TNoDxiDbNdlZon7ejGNGef7/p4=;
+        b=kozrNdCUGyfgitLjQffnBM++4al8CADuaQijAlvn/isIpduqMZgtU0wDIuO7gKX69o
+         +0Pe4DERuIamAyTZXrTHHEbt8TLU/9hGf0CKLh34vC97qlDeZWxDR01iMWBxP4H6Cjmy
+         CTxaAQZjktWNYlM5L6AfOJmWtgNdLxJuJmfxY3ieGTbNu6tSN+CSzI3vn025ESS1YmdK
+         wz7KTbDUSoK1i6kqb8aouPaqSnAmVsOm8AyU5A0d9Cr+sWFNfq5fOY8fwf5i1CO7fk+/
+         OgDB1JkhPe7riPYiq4AX/BdjJkBNu05GgimNgzNucUPnB4a+fg4x5mZkpnF3alW3KgTS
+         B7mA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=iXsxoOt9fS3DXvxCyyFOaJfbPkU6WlTqA1MG4BgEpJA=;
-        b=mtcfeMsx7dMqYNepetHcvVEp2glMa9yIlLyEQ8rzKenwJZWsHQ0xYa4FlfmN2J8LUY
-         bPfOWxNXZyLuUbv6mxcQzDooN2CybZw4KKRpvAa/DrNtG9dFdBPkqfMLVMWB9yeSeuhw
-         KifzQf56nF3lwZi75f/YZ9fJAMLNWYeuMRIm/mSQXcM0o6HLRxrVNe3PcWPOde4Ouehf
-         HQo08nNDf9XEIEtKPrSCYDyPT+1asNxWQJ15AiWCwdz6YBacVGiCzslr6WMf0PAAJhWe
-         NOEZZaMTk+c6yb5EuDFdDdRkIJXz5xQH1O3KiVzaCllG860vf8paCuiuRV8XjsFmGVtg
-         sxhw==
-X-Gm-Message-State: AOAM532ZdhgvQU2/PzbBMlyPonGNmCSVV+wEv5FYNx421ebedZz5AXty
-        8pgEwWSVt3X7TC9UFQeGUWQ=
-X-Google-Smtp-Source: ABdhPJze1q8t3iuv5DjzOv0RveTjqSpEwnprh+IG3St78u9eWCZrU93KSEZYLbobgkyZLBZ/m0bYBQ==
-X-Received: by 2002:adf:e98c:: with SMTP id h12mr30469476wrm.314.1620657229579;
-        Mon, 10 May 2021 07:33:49 -0700 (PDT)
-Received: from [192.168.1.122] (cpc159425-cmbg20-2-0-cust403.5-4.cable.virginm.net. [86.7.189.148])
-        by smtp.gmail.com with ESMTPSA id h9sm20117820wmb.35.2021.05.10.07.33.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 May 2021 07:33:48 -0700 (PDT)
-Subject: Re: [PATCH 00/53] Get rid of UTF-8 chars that can be mapped as ASCII
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
-        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-fpga@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-sgx@vger.kernel.org, linux-usb@vger.kernel.org,
-        mjpeg-users@lists.sourceforge.net, netdev@vger.kernel.org,
-        rcu@vger.kernel.org, x86@kernel.org
-References: <cover.1620641727.git.mchehab+huawei@kernel.org>
- <2ae366fdff4bd5910a2270823e8da70521c859af.camel@infradead.org>
- <20210510135518.305cc03d@coco.lan>
- <df6b4567-030c-a480-c5a6-fe579830e8c0@gmail.com>
- <YJk8LMFViV7Z3Uu7@casper.infradead.org>
-From:   Edward Cree <ecree.xilinx@gmail.com>
-Message-ID: <ed65025c-1087-9672-7451-6d28e7ab8f92@gmail.com>
-Date:   Mon, 10 May 2021 15:33:47 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=jvMCFvQ9tkKu2Ir50TNoDxiDbNdlZon7ejGNGef7/p4=;
+        b=iu16pJhrZKLTE5sUw5pNSVfV0ItY5iqd8QgxEmfege+KYXfaYG4IbFCnYRKXY2J1fc
+         ub6heqc1UIkjlem4W/uabMhQZfcrC7cYjAH8FK8P6n9RF4OGxuXqHvG7Bth2zzYjIc+G
+         y1eyP5nzWCtpHhcDC2eno6L8PuTtNiZPnVePJQ/Je7bOy/OAKe6xJ/wchfuEfg3Z/G1p
+         9D7TN0uvQiJbx8OlQ7v7Vn1F05lnqkaoIF2SNl1QQUwUzDxbkP4ebE4JdjVL1TuMgNE4
+         mA3F9qndboD2UTWXjgWWQkZAu8oNdTblSoYPprILWgMZps4u0Bu71ooffGNh+mOtCmM+
+         9a3g==
+X-Gm-Message-State: AOAM533uLjLa2xMvYAahKzME60NXROwHUJyAFy/VSizCnl13uybj4APK
+        4PjgJLCGbiodIR9vKbvn6B5b3sLubTI=
+X-Google-Smtp-Source: ABdhPJy3wGC212BX/2BRBzGeutHsIbHchWT56kYO5eoNNPj60AZ/XoYh4g/zIe06IgwMi52K991K1Q==
+X-Received: by 2002:a9d:6242:: with SMTP id i2mr21396589otk.273.1620658824011;
+        Mon, 10 May 2021 08:00:24 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 16sm3154530otu.79.2021.05.10.08.00.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 May 2021 08:00:23 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Hardware Monitoring <linux-hwmon@vger.kernel.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andrej Picej <andpicej@gmail.com>
+Subject: [PATCH] hwmon: (lm70) Revert "hwmon: (lm70) Add support for ACPI"
+Date:   Mon, 10 May 2021 08:00:21 -0700
+Message-Id: <20210510150021.1914044-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <YJk8LMFViV7Z3Uu7@casper.infradead.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 10/05/2021 14:59, Matthew Wilcox wrote:
-> Most of these
-> UTF-8 characters come from latex conversions and really aren't
-> necessary (and are being used incorrectly).
-I fully agree with fixing those.
-The cover-letter, however, gave the impression that that was not the
- main purpose of this series; just, perhaps, a happy side-effect.
+This reverts commit b58bd4c6dfe709646ed9efcbba2a70643f9bc873.
 
-> You seem quite knowedgeable about the various differences.  Perhaps
-> you'd be willing to write a document for Documentation/doc-guide/
-> that provides guidance for when to use which kinds of horizontal
-> line?I have Opinions about the proper usage of punctuation, but I also know
- that other people have differing opinions.  For instance, I place
- spaces around an em dash, which is nonstandard according to most
- style guides.  Really this is an individual enough thing that I'm not
- sure we could have a "kernel style guide" that would be more useful
- than general-purpose guidance like the page you linked.
-Moreover, such a guide could make non-native speakers needlessly self-
- conscious about their writing and discourage them from contributing
- documentation at all.  I'm not advocating here for trying to push
- kernel developers towards an eats-shoots-and-leaves level of
- linguistic pedantry; rather, I merely think that existing correct
- usages should be left intact (and therefore, excising incorrect usage
- should only be attempted by someone with both the expertise and time
- to check each case).
+None of the ACPI IDs introduced with the reverted patch is a valid ACPI
+device ID. Any ACPI users of this driver are advised to use PRP0001 and
+a devicetree-compatible device identification.
 
-But if you really want such a doc I wouldn't mind contributing to it.
+Fixes: b58bd4c6dfe7 ("hwmon: (lm70) Add support for ACPI")
+Cc: Andrej Picej <andpicej@gmail.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/hwmon/lm70.c | 26 +-------------------------
+ 1 file changed, 1 insertion(+), 25 deletions(-)
 
--ed
+diff --git a/drivers/hwmon/lm70.c b/drivers/hwmon/lm70.c
+index 40eab3349904..6b884ea00987 100644
+--- a/drivers/hwmon/lm70.c
++++ b/drivers/hwmon/lm70.c
+@@ -22,10 +22,10 @@
+ #include <linux/hwmon.h>
+ #include <linux/mutex.h>
+ #include <linux/mod_devicetable.h>
++#include <linux/of.h>
+ #include <linux/property.h>
+ #include <linux/spi/spi.h>
+ #include <linux/slab.h>
+-#include <linux/acpi.h>
+ 
+ #define DRVNAME		"lm70"
+ 
+@@ -148,29 +148,6 @@ static const struct of_device_id lm70_of_ids[] = {
+ MODULE_DEVICE_TABLE(of, lm70_of_ids);
+ #endif
+ 
+-#ifdef CONFIG_ACPI
+-static const struct acpi_device_id lm70_acpi_ids[] = {
+-	{
+-		.id = "LM000070",
+-		.driver_data = LM70_CHIP_LM70,
+-	},
+-	{
+-		.id = "TMP00121",
+-		.driver_data = LM70_CHIP_TMP121,
+-	},
+-	{
+-		.id = "LM000071",
+-		.driver_data = LM70_CHIP_LM71,
+-	},
+-	{
+-		.id = "LM000074",
+-		.driver_data = LM70_CHIP_LM74,
+-	},
+-	{},
+-};
+-MODULE_DEVICE_TABLE(acpi, lm70_acpi_ids);
+-#endif
+-
+ static int lm70_probe(struct spi_device *spi)
+ {
+ 	struct device *hwmon_dev;
+@@ -217,7 +194,6 @@ static struct spi_driver lm70_driver = {
+ 	.driver = {
+ 		.name	= "lm70",
+ 		.of_match_table	= of_match_ptr(lm70_of_ids),
+-		.acpi_match_table = ACPI_PTR(lm70_acpi_ids),
+ 	},
+ 	.id_table = lm70_ids,
+ 	.probe	= lm70_probe,
+-- 
+2.25.1
+
