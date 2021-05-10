@@ -2,81 +2,132 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+X-Spam-Status: No, score=-19.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF69FC433ED
-	for <linux-hwmon@archiver.kernel.org>; Mon, 10 May 2021 10:20:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48533C43460
+	for <linux-hwmon@archiver.kernel.org>; Mon, 10 May 2021 10:29:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 77AB561152
-	for <linux-hwmon@archiver.kernel.org>; Mon, 10 May 2021 10:20:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 24E9F61606
+	for <linux-hwmon@archiver.kernel.org>; Mon, 10 May 2021 10:29:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbhEJKVb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 10 May 2021 06:21:31 -0400
-Received: from fgw23-7.mail.saunalahti.fi ([62.142.5.84]:43450 "EHLO
-        fgw23-7.mail.saunalahti.fi" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230002AbhEJKVb (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 10 May 2021 06:21:31 -0400
-X-Greylist: delayed 964 seconds by postgrey-1.27 at vger.kernel.org; Mon, 10 May 2021 06:21:30 EDT
-Received: from localhost (88-115-248-186.elisa-laajakaista.fi [88.115.248.186])
-        by fgw23.mail.saunalahti.fi (Halon) with ESMTP
-        id 1702a08c-b177-11eb-8ccd-005056bdfda7;
-        Mon, 10 May 2021 13:04:21 +0300 (EEST)
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [PATCH v1 1/1] hwmon: (ltc2992) Put fwnode in error case during ->probe()
-Date:   Mon, 10 May 2021 13:01:36 +0300
-Message-Id: <20210510100136.3303142-1-andy.shevchenko@gmail.com>
-X-Mailer: git-send-email 2.31.1
+        id S231865AbhEJKap (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 10 May 2021 06:30:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32832 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231769AbhEJK3O (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 10 May 2021 06:29:14 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AC1F6616EB;
+        Mon, 10 May 2021 10:27:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620642443;
+        bh=z3lehbQisRPwcowhdp3sI/EWXe3DUCuO1PQchHhUbNs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=HBzJ/kHwWeaFhrmP1DbHzK4S2rvyQW8frY31dBoOr82eto06eu0K6yiSw1yz1Ee2/
+         uDojUFQHlzYbiRL4d5pbeFh6I/b4YIr5/RPtLe/XQn7NUoeuDieA8mpYmyL81FVxyG
+         z5ENWiXnDwlAi2RdhO6XB6FZPLMSiZafG+s/s7YAIdeLFHifSv6MJsQK2PHMOnq9tk
+         YvdA3vyua/UxKgT36DKRKk7k7u9wT5+LMc8nCf80buD2v6icZxoKOz2EmzuJ88fav4
+         PGEkl+7SeYrEgwIyxo3olqmjRIbazVEcOmhICP6Ik5WDuA8t0/1gtfRhKSaw0CIiO8
+         uwtcis8vzmlEQ==
+Received: by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1lg38C-000UOe-Hh; Mon, 10 May 2021 12:27:20 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        Charles Hsu <hsu.yungteng@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 05/53] docs: hwmon: avoid using UTF-8 chars
+Date:   Mon, 10 May 2021 12:26:17 +0200
+Message-Id: <ccdd1bf45963a7748188a97c75f667b37bd43d2f.1620641727.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <cover.1620641727.git.mchehab+huawei@kernel.org>
+References: <cover.1620641727.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-In each iteration fwnode_for_each_available_child_node() bumps a reference
-counting of a loop variable followed by dropping in on a next iteration,
+While UTF-8 characters can be used at the Linux documentation,
+the best is to use them only when ASCII doesn't offer a good replacement.
+So, replace the occurences of the following UTF-8 characters:
 
-Since in error case the loop is broken, we have to drop a reference count
-by ourselves. Do it for port_fwnode in error case during ->probe().
+	- U+2010 ('‐'): HYPHEN
+	- U+2013 ('–'): EN DASH
+	- U+2019 ('’'): RIGHT SINGLE QUOTATION MARK
 
-Fixes: b0bd407e94b0 ("hwmon: (ltc2992) Add support")
-Cc: Alexandru Tachici <alexandru.tachici@analog.com>
-Signed-off-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- drivers/hwmon/ltc2992.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ Documentation/hwmon/ir36021.rst  | 2 +-
+ Documentation/hwmon/ltc2992.rst  | 2 +-
+ Documentation/hwmon/pm6764tr.rst | 2 +-
+ Documentation/hwmon/tmp103.rst   | 4 ++--
+ 4 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/hwmon/ltc2992.c b/drivers/hwmon/ltc2992.c
-index 4382105bf142..2a4bed0ab226 100644
---- a/drivers/hwmon/ltc2992.c
-+++ b/drivers/hwmon/ltc2992.c
-@@ -900,11 +900,15 @@ static int ltc2992_parse_dt(struct ltc2992_state *st)
+diff --git a/Documentation/hwmon/ir36021.rst b/Documentation/hwmon/ir36021.rst
+index ca3436b04e20..1faa85c39f1b 100644
+--- a/Documentation/hwmon/ir36021.rst
++++ b/Documentation/hwmon/ir36021.rst
+@@ -19,7 +19,7 @@ Authors:
+ Description
+ -----------
  
- 	fwnode_for_each_available_child_node(fwnode, child) {
- 		ret = fwnode_property_read_u32(child, "reg", &addr);
--		if (ret < 0)
-+		if (ret < 0) {
-+			fwnode_handle_put(child);
- 			return ret;
-+		}
+-The IR36021 is a dual‐loop digital multi‐phase buck controller designed for
++The IR36021 is a dual-loop digital multi-phase buck controller designed for
+ point of load applications.
  
--		if (addr > 1)
-+		if (addr > 1) {
-+			fwnode_handle_put(child);
- 			return -EINVAL;
-+		}
+ Usage Notes
+diff --git a/Documentation/hwmon/ltc2992.rst b/Documentation/hwmon/ltc2992.rst
+index 46aa1aa84a1a..a0bcd867a0f5 100644
+--- a/Documentation/hwmon/ltc2992.rst
++++ b/Documentation/hwmon/ltc2992.rst
+@@ -19,7 +19,7 @@ This driver supports hardware monitoring for Linear Technology LTC2992 power mon
+ LTC2992 is a rail-to-rail system monitor that measures current,
+ voltage, and power of two supplies.
  
- 		ret = fwnode_property_read_u32(child, "shunt-resistor-micro-ohms", &val);
- 		if (!ret)
+-Two ADCs simultaneously measure each supply’s current. A third ADC monitors
++Two ADCs simultaneously measure each supply's current. A third ADC monitors
+ the input voltages and four auxiliary external voltages.
+ 
+ 
+diff --git a/Documentation/hwmon/pm6764tr.rst b/Documentation/hwmon/pm6764tr.rst
+index a1fb8fea2326..294a8ffc8bd8 100644
+--- a/Documentation/hwmon/pm6764tr.rst
++++ b/Documentation/hwmon/pm6764tr.rst
+@@ -20,7 +20,7 @@ Description:
+ ------------
+ 
+ This driver supports the STMicroelectronics PM6764TR chip. The PM6764TR is a high
+-performance digital controller designed to power Intel’s VR12.5 processors and memories.
++performance digital controller designed to power Intel's VR12.5 processors and memories.
+ 
+ The device utilizes digital technology to implement all control and power management
+ functions to provide maximum flexibility and performance. The NVM is embedded to store
+diff --git a/Documentation/hwmon/tmp103.rst b/Documentation/hwmon/tmp103.rst
+index e195a7d14309..b3ef81475cf8 100644
+--- a/Documentation/hwmon/tmp103.rst
++++ b/Documentation/hwmon/tmp103.rst
+@@ -21,10 +21,10 @@ Description
+ The TMP103 is a digital output temperature sensor in a four-ball
+ wafer chip-scale package (WCSP). The TMP103 is capable of reading
+ temperatures to a resolution of 1°C. The TMP103 is specified for
+-operation over a temperature range of –40°C to +125°C.
++operation over a temperature range of -40°C to +125°C.
+ 
+ Resolution: 8 Bits
+-Accuracy: ±1°C Typ (–10°C to +100°C)
++Accuracy: ±1°C Typ (-10°C to +100°C)
+ 
+ The driver provides the common sysfs-interface for temperatures (see
+ Documentation/hwmon/sysfs-interface.rst under Temperatures).
 -- 
-2.31.1
+2.30.2
 
