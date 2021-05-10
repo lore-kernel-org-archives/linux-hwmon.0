@@ -2,96 +2,109 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D804C433B4
-	for <linux-hwmon@archiver.kernel.org>; Mon, 10 May 2021 13:52:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7724C43461
+	for <linux-hwmon@archiver.kernel.org>; Mon, 10 May 2021 14:07:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E692F61042
-	for <linux-hwmon@archiver.kernel.org>; Mon, 10 May 2021 13:52:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8228F6127A
+	for <linux-hwmon@archiver.kernel.org>; Mon, 10 May 2021 14:07:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241432AbhEJNw7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 10 May 2021 09:52:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53532 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349855AbhEJNrY (ORCPT
+        id S234583AbhEJOIa (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 10 May 2021 10:08:30 -0400
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:37919 "EHLO
+        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235412AbhEJOBt (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 10 May 2021 09:47:24 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0BBC061350;
-        Mon, 10 May 2021 06:30:28 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id d3-20020a9d29030000b029027e8019067fso14352297otb.13;
-        Mon, 10 May 2021 06:30:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=pKcFpNrYArLAxHAj0nuMkWNgdTcMDY9pSi+5bBnGys0=;
-        b=akbEunFwOpjSpmQuDji2lyArPgyTohkU8/A2DpX7DzQbCc7FCHeHsfpWHRGP/0P5+g
-         7e7XsKAu/PGa9Pbqdx+phn00ktYLTJP23Oj8Yf3z3Q3NVxlug8K5U+kli35vyXRlC021
-         yB2IiTk9xUXmpyAwo+iV2boyZNeyicLATzRskkguLsgItx04djVDKn4HnfsMJlsqp+Cg
-         r/a5GoCZFT9TjnQSGIkyMszCerZskdYTeoxG22qFOGJtrECV2zwJAEc43mLQEd6BfMKh
-         Yx6mf22Bb96AcyFrl5dvIvFgKXm/vo6jd8sFhYLhMX2M9JQSdEbWAKrjef8nlUNVpglv
-         qKeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=pKcFpNrYArLAxHAj0nuMkWNgdTcMDY9pSi+5bBnGys0=;
-        b=tO3ELAKcbG9AUGeahsxblMiDkfAAsc9efx7fcaywx93vCgKpTCzOnDuE3/tdSDePWO
-         3ABHaAbMuMHuxdB+v8nAAWAnb6Uo2gfzG8rwFykLshORZY1ZP08hsbWgnCrfOoyichft
-         m78eBr3DnOuOsnNqwa80t93KOfHhegqN3B/TCvv+5feqq+eVhxmCFDz1hbWC1coceVD2
-         JzHoZ46wkruJTrhjm20raadtkr6S6NOthGIVKuWzDuY/MAgBqOmLai89d/HYTR827FBb
-         fRufBssqhQpLWe5vnZpEykTfnbVvv7/BMmUhnktV/YiYHU8YaknDDh1xS+XM/YgX/g3O
-         BZyQ==
-X-Gm-Message-State: AOAM531cOCY3a4RuEwCse6cQc/KWwqcLPDtR0sFTIU/NCU6FUiXOnNjZ
-        Z1zVEP6SZZ09+SAzYgPuA1g=
-X-Google-Smtp-Source: ABdhPJzcvjDGAR2agIrBQmlXlNosBKfeiS0rwCbQPH9RXcMLMICTtLee+VJGmCVj89dVvTZv0oWzow==
-X-Received: by 2002:a9d:8ef:: with SMTP id 102mr15778804otf.136.1620653427506;
-        Mon, 10 May 2021 06:30:27 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o20sm2647140oos.19.2021.05.10.06.30.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 May 2021 06:30:26 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 10 May 2021 06:30:25 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
+        Mon, 10 May 2021 10:01:49 -0400
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 14AAD5807B2;
+        Mon, 10 May 2021 10:00:38 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Mon, 10 May 2021 10:00:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=benboeckel.net;
+         h=date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=fwXudyHn8IUNsmfHA12W5pUxFzr
+        IcUsJJs6niPOOwGc=; b=gQh6u0zhPsG//1fbjCgHH3SUq5OZEixVi+ckcNcOvNr
+        8f8S6u6OqczboxIeZQzxpdw3AUy1t45vyyuSQKDA1+yJJEqv0Na0yFB8YXQoxGQa
+        A5mz/uekXLKQlXSBVpDzZgWHaTwxLQ8cfd/84Seg6MJA86M+DwrG/rxkfmjHnsDx
+        Vsn+We4G3Oh5Yvv4HNwlluWEHPMQsGoYqOZqIpzyUGPfcSXaDfcxgaoBasafO20O
+        Nia4uZb9+lsHdBKwEogjjnykkTJJzKThWOeq3e2hyjT/F/nLvkiGpnFJ0uMYCJ5w
+        yhbph4b45d/9JdizeckN5aTq6WAACtGxOiZQK1Svtuw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=fwXudy
+        Hn8IUNsmfHA12W5pUxFzrIcUsJJs6niPOOwGc=; b=FkYLunR8+bNyojGntZzlTv
+        lNhoU5Ih8GFYdgqBiM9GEeBgkR7PC0rd49vKxgNK2oVHYiwvnJ0pFHee6wyNEefG
+        07iyoKlPp2/47lNX2/0a3w6XYC3Muan3VrHn9DIyh2AJDD/sq19lwcD+nClmgOGW
+        3kjTJut/WH9S1nO20R6vTeVSVeiFhLK/oh1ul5trEQZynTCu46HI2dcf9dXPVKk9
+        sOjDpOdiQFUH6B6gq1Emr8rDL+S3scV3gAHdetS1J2hIDO0dgu0hscWNc8fHxaey
+        25F3JvGPZJisNAQmAtq62YqH7TCAIzVvBqJwx8rI9Oyho2YDtxrFPxf1S0VsKOTA
+        ==
+X-ME-Sender: <xms:hDyZYCqZ48w__j-3J2DdcFFyCNO8Px1wZAdweI2vgyXQ5g_1A_avfw>
+    <xme:hDyZYAoPMp-2hhXE5dIuFZVKJLDFR-LeVjsu56BtdhTJGnUi8Md4Pqb1pnf9Vqqdn
+    t02Gw-Ku9S6gnwxX4I>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrvdegkedgjedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjfgesthdtredttderjeenucfhrhhomhepuegvnhcu
+    uehovggtkhgvlhcuoehmvgessggvnhgsohgvtghkvghlrdhnvghtqeenucggtffrrghtth
+    gvrhhnpeevffdtteetgfdttdekueefgedttddtueeugeekgeetffeuteffjeduieehhfek
+    tdenucfkphepvdegrdduieelrddvtddrvdehheenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpehmvgessggvnhgsohgvtghkvghlrdhnvght
+X-ME-Proxy: <xmx:hDyZYHO7a0I2ObO3iNQCJFMynfyvzQSxH3x8A4ShPc13xjvG6wh63A>
+    <xmx:hDyZYB6OL9_iqJiCXEkFvw1uMnu0UHjkSyxn6Irx0qOidEFWAmkwbA>
+    <xmx:hDyZYB472gSq8MYTawlNh6oofIzwaZQvJxltEegElvbnNVF17UiCaA>
+    <xmx:hjyZYNFuZhUi4dOrdPamnliiTh3owe6Tf-ewK9C2k9SXGvHlGfVlTg>
+Received: from localhost (unknown [24.169.20.255])
+        by mail.messagingengine.com (Postfix) with ESMTPA;
+        Mon, 10 May 2021 10:00:35 -0400 (EDT)
+Date:   Mon, 10 May 2021 10:00:34 -0400
+From:   Ben Boeckel <me@benboeckel.net>
 To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Charles Hsu <hsu.yungteng@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 05/53] docs: hwmon: avoid using UTF-8 chars
-Message-ID: <20210510133025.GA2717347@roeck-us.net>
+Cc:     David Woodhouse <dwmw2@infradead.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
+        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-fpga@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-sgx@vger.kernel.org, linux-usb@vger.kernel.org,
+        mjpeg-users@lists.sourceforge.net, netdev@vger.kernel.org,
+        rcu@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH 00/53] Get rid of UTF-8 chars that can be mapped as ASCII
+Message-ID: <YJk8gkMlk8dtaEsz@erythro.dev.benboeckel.internal>
 References: <cover.1620641727.git.mchehab+huawei@kernel.org>
- <ccdd1bf45963a7748188a97c75f667b37bd43d2f.1620641727.git.mchehab+huawei@kernel.org>
+ <2ae366fdff4bd5910a2270823e8da70521c859af.camel@infradead.org>
+ <20210510135518.305cc03d@coco.lan>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ccdd1bf45963a7748188a97c75f667b37bd43d2f.1620641727.git.mchehab+huawei@kernel.org>
+In-Reply-To: <20210510135518.305cc03d@coco.lan>
+User-Agent: Mutt/2.0.5 (2021-01-21)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Mon, May 10, 2021 at 12:26:17PM +0200, Mauro Carvalho Chehab wrote:
-> While UTF-8 characters can be used at the Linux documentation,
-> the best is to use them only when ASCII doesn't offer a good replacement.
-> So, replace the occurences of the following UTF-8 characters:
-> 
-> 	- U+2010 ('‐'): HYPHEN
-> 	- U+2013 ('–'): EN DASH
-> 	- U+2019 ('’'): RIGHT SINGLE QUOTATION MARK
-> 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+On Mon, May 10, 2021 at 13:55:18 +0200, Mauro Carvalho Chehab wrote:
+>     $ git grep "CPU 0 has been" Documentation/RCU/
+>       Documentation/RCU/Design/Data-Structures/Data-Structures.rst:| #. CPU 0 has been in dyntick-idle mode for quite some time. When it   |
+>       Documentation/RCU/Design/Data-Structures/Data-Structures.rst:|    notices that CPU 0 has been in dyntick idle mode, which qualifies  |
 
-Makes perfect sense for the changes below. I don't know what the plan is,
-so I applied the patch to hwmon-next.
+The kernel documentation uses hard line wraps, so such a naive grep is
+going to always fail unless such line wraps are taken into account. Not
+saying this isn't an improvement in and of itself, but smarter searching
+strategies are likely needed anyways.
 
-Thanks,
-Guenter
+--Ben
