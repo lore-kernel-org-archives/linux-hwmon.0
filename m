@@ -2,74 +2,109 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CEC8C43461
-	for <linux-hwmon@archiver.kernel.org>; Mon, 10 May 2021 22:16:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EFE97C43462
+	for <linux-hwmon@archiver.kernel.org>; Mon, 10 May 2021 22:36:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2E34861585
-	for <linux-hwmon@archiver.kernel.org>; Mon, 10 May 2021 22:16:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CA750615FF
+	for <linux-hwmon@archiver.kernel.org>; Mon, 10 May 2021 22:36:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231944AbhEJWRQ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 10 May 2021 18:17:16 -0400
-Received: from todd.t-8ch.de ([159.69.126.157]:47897 "EHLO todd.t-8ch.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231703AbhEJWRP (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 10 May 2021 18:17:15 -0400
-From:   =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1620684965;
-        bh=tmd75ZOW6XvpkM9I6xisCmps5GGhTVJmqNjaZubGTz0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pST0XYgb5fkH4HawCsCCKbfZ+5ZztakV4Kx5q1H2LHZp8CtJOVl9u8n95K5fO4Yb4
-         V3xRQJXdBQqO/8SL0otAIziG7tzOBzDtHlzAqu7pkDPw7yGC/512CrOc5KOluWT8hm
-         UrPwoCktEnTNiXaC/mLYDIni88cHZeoG46BjDUnw=
-To:     platform-driver-x86@vger.kernel.org,
-        Mark Gross <mgross@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Barnab=C3=A1s=20P=C5=91cze?= <pobrn@protonmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        linux-hwmon@vger.kernel.org
-Subject: [PATCH 3/3] platform/x86: gigabyte-wmi: add support for B550 Aorus Elite
-Date:   Tue, 11 May 2021 00:15:45 +0200
-Message-Id: <20210510221545.412522-3-linux@weissschuh.net>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210510221545.412522-2-linux@weissschuh.net>
-References: <20210510221545.412522-1-linux@weissschuh.net>
- <20210510221545.412522-2-linux@weissschuh.net>
+        id S231302AbhEJWh3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 10 May 2021 18:37:29 -0400
+Received: from tartarus.angband.pl ([51.83.246.204]:34704 "EHLO
+        tartarus.angband.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230271AbhEJWh2 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 10 May 2021 18:37:28 -0400
+X-Greylist: delayed 1784 seconds by postgrey-1.27 at vger.kernel.org; Mon, 10 May 2021 18:37:20 EDT
+Received: from kilobyte by tartarus.angband.pl with local (Exim 4.94.2)
+        (envelope-from <kilobyte@angband.pl>)
+        id 1lgDtp-00EKjz-Lm; Mon, 10 May 2021 23:57:13 +0200
+Date:   Mon, 10 May 2021 23:57:13 +0200
+From:   Adam Borowski <kilobyte@angband.pl>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
+        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-fpga@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-sgx@vger.kernel.org, linux-usb@vger.kernel.org,
+        mjpeg-users@lists.sourceforge.net, netdev@vger.kernel.org,
+        rcu@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH 00/53] Get rid of UTF-8 chars that can be mapped as ASCII
+Message-ID: <YJmsOYzPIsQ04Zxb@angband.pl>
+References: <cover.1620641727.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <cover.1620641727.git.mchehab+huawei@kernel.org>
+X-Junkbait: aaron@angband.pl, zzyx@angband.pl
+X-SA-Exim-Connect-IP: <locally generated>
+X-SA-Exim-Mail-From: kilobyte@angband.pl
+X-SA-Exim-Scanned: No (on tartarus.angband.pl); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Reported as working here:
-https://github.com/t-8ch/linux-gigabyte-wmi-driver/issues/1#issuecomment-837210304
+On Mon, May 10, 2021 at 12:26:12PM +0200, Mauro Carvalho Chehab wrote:
+> There are several UTF-8 characters at the Kernel's documentation.
+[...]
+> Other UTF-8 characters were added along the time, but they're easily
+> replaceable by ASCII chars.
+> 
+> As Linux developers are all around the globe, and not everybody has UTF-8
+> as their default charset
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- drivers/platform/x86/gigabyte-wmi.c | 1 +
- 1 file changed, 1 insertion(+)
+I'm not aware of a distribution that still allows selecting a non-UTF-8
+charset in a normal flow in their installer.  And if they haven't purged
+support for ancient encodings, that support is thoroughly bitrotten.
+Thus, I disagree that this is a legitimate concern.
 
-diff --git a/drivers/platform/x86/gigabyte-wmi.c b/drivers/platform/x86/gigabyte-wmi.c
-index 7af6c24151e2..5529d7b0abea 100644
---- a/drivers/platform/x86/gigabyte-wmi.c
-+++ b/drivers/platform/x86/gigabyte-wmi.c
-@@ -140,6 +140,7 @@ static u8 gigabyte_wmi_detect_sensor_usability(struct wmi_device *wdev)
- 	}}
- 
- static const struct dmi_system_id gigabyte_wmi_known_working_platforms[] = {
-+	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("B550 AORUS ELITE"),
- 	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("B550 GAMING X V2"),
- 	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("B550M AORUS PRO-P"),
- 	DMI_EXACT_MATCH_GIGABYTE_BOARD_NAME("B550M DS3H"),
+What _could_ be a legitimate reason is that someone is on a _terminal_
+that can't display a wide enough set of glyphs.  Such terminals are:
+ • Linux console (because of vgacon limitations; patchsets to improve
+   other cons haven't been mainlined)
+ • some Windows terminals (putty, old Windows console) that can't borrow
+   glyphs from other fonts like fontconfig can
+
+For the former, it's whatever your distribution ships in
+/usr/share/consolefonts/ or an equivalent, which is based on historic
+ISO-8859 and VT100 traditions.
+
+For the latter, the near-guaranteed character set is WGL4.
+
+
+Thus, at least two of your choices seem to disagree with the above:
+[dropped]
+> 	0xd7   => 'x',		# MULTIPLICATION SIGN
+[retained]
+> 	- U+2b0d ('⬍'): UP DOWN BLACK ARROW
+
+× is present in ISO-8859, V100, WGL4; I've found no font in
+/usr/share/consolefonts/ on my Debian unstable box that lacks this
+character.
+
+⬍ is not found in any of the above.  You might want to at least
+convert it to ↕ which is at least present in WGL4, and thus likely
+to be supported in fonts heeding Windows/Mac/OpenType recommendations.
+That still won't make it work on VT.
+
+
+Meow!
 -- 
-2.31.1
-
+⢀⣴⠾⠻⢶⣦⠀ .--[ Makefile ]
+⣾⠁⢠⠒⠀⣿⡁ # beware of races
+⢿⡄⠘⠷⠚⠋⠀ all: pillage burn
+⠈⠳⣄⠀⠀⠀⠀ `----
