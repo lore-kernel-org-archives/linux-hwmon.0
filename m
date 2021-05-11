@@ -2,110 +2,126 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1DACC433B4
-	for <linux-hwmon@archiver.kernel.org>; Tue, 11 May 2021 17:01:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5501C433ED
+	for <linux-hwmon@archiver.kernel.org>; Tue, 11 May 2021 17:03:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B938C610C9
-	for <linux-hwmon@archiver.kernel.org>; Tue, 11 May 2021 17:01:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7F29160FDB
+	for <linux-hwmon@archiver.kernel.org>; Tue, 11 May 2021 17:03:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231703AbhEKRCk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 11 May 2021 13:02:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55330 "EHLO
+        id S231304AbhEKRES (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 11 May 2021 13:04:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231437AbhEKRCh (ORCPT
+        with ESMTP id S231329AbhEKRES (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 11 May 2021 13:02:37 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5F67C061574;
-        Tue, 11 May 2021 10:01:30 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:104d:444a:d152:279d:1dbb])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 6C8034BF;
-        Tue, 11 May 2021 17:01:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 6C8034BF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1620752487; bh=QmVYJvT1Kzq68R+QLKACGPLdolv6eNZVx9knetb0KFs=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=irQf+xtmaDJZYLKwq3hA8ztA2UhPkWaMvlGfMCect35HeamgThOzqqCroC26BP/Sl
-         CZ5fyVVCGLDX5hEb0cnVXCWNegwA+Xs245fqJaayhz/QOZsSyLbOEm6eAcMMVYm6OY
-         KYssjOyi8tvqVhDlU9yQOg3yj6ggq5zhGjo6YGvleqEvR4QvYakpL6DYodSr6ne5p2
-         POLXDUg/aNRvtMVVTSEj+i7YB0HcWdlIM/5xZz2XEUDjPiyFKgjrJG+D5PIfW0A/ku
-         jf3zV8C5QT23k16fFmU0Sd0ej651gdEPXtb2eRRgDOFPAPrnQiy6aPBFrlggpfHlaH
-         YTUqF86upi5qg==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>, Jens Axboe <axboe@kernel.dk>,
-        intel-wired-lan@lists.osuosl.org, linux-hwmon@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 0/5] Fix some UTF-8 bad usages
-In-Reply-To: <cover.1620744606.git.mchehab+huawei@kernel.org>
-References: <cover.1620744606.git.mchehab+huawei@kernel.org>
-Date:   Tue, 11 May 2021 11:01:26 -0600
-Message-ID: <87fsytdx21.fsf@meer.lwn.net>
+        Tue, 11 May 2021 13:04:18 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E98C06174A;
+        Tue, 11 May 2021 10:03:11 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id v24so558118oiv.3;
+        Tue, 11 May 2021 10:03:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=SenRFtg3kcFbs9vUTSmXrCXzTJuUoNr/azEqion6f2I=;
+        b=ms09Mwt8atK8e8z4XkXwnkx/g/8OA3s4WXTvgC8GOPh8A68iFoqao0PcCZaQvrCWsE
+         Y+hny1Mkf6oYe87L6FSD+3p7wd7wual20ENgIsKkh6aJqUQAkN7pCvs7buQMKtIZN4G8
+         uU0GjjdXnZL3pumcB0+oBHZg+g2O1AX2kJBiUYazyoSpa44uXeuwqfJkfz6whYExen9a
+         qesivuXtZZ6/x6cqBODlDk29idP1b18zL3j1bMbqu4yoztV5qBg0xZlk4JsrDN950yNP
+         tWDHRzbFEVEKPrVPo4/p7SHc0ImrDnmqfnlFCyDI8KWQzx8Pllg+3U2o1wSCWVHhm9iX
+         bx3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=SenRFtg3kcFbs9vUTSmXrCXzTJuUoNr/azEqion6f2I=;
+        b=aP9ritPxpMKeczrP6W8qi7sv43sCNkS/2ukTk7EzCILzcfxJXqHEiUwOgGoec93jaC
+         aQ3/yuUjDARqBhIyk3nwxQPI1zPKH+pQ/J4BJZpMSVUdxq9DPHS9Qr6mL/X0M4XNXXot
+         oWMAyjfYXC2w7HZCGz7CZLhHqlpZkD4RWsq50EoC1m9B4pe3izcF1lAHaQWimL1yKRqk
+         UM5nWMXUeuMM4a+tTyPYsWoUaY80U/lDNhSULa5n46uK7NpRooY3J4rmMIaQHAVKQD0j
+         laB3Lstacttx+TG3OaWmgRvzGofYOhB/MKwveKgbvF21QX86AeqkTYD6tObftz81gKLA
+         FyvQ==
+X-Gm-Message-State: AOAM530n6BCha1k18GGkUYT1tbERb5lOMocdlViGe2mDZoxANDL6rlDk
+        KIh4bMaf34iV/V3IEkf90WkohPRhQmA=
+X-Google-Smtp-Source: ABdhPJwnIEc9xuTkyAD1ymyeOcrSUYpAk5q55kGwgiAq9RpWg6Oe3n1ZGfG7oOk76v7SVQVU06OW8w==
+X-Received: by 2002:aca:c792:: with SMTP id x140mr12467289oif.88.1620752590542;
+        Tue, 11 May 2021 10:03:10 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c19sm3272847oiw.7.2021.05.11.10.03.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 May 2021 10:03:09 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH hwmon-next v7 0/3] Add support for MPS Multi-phase mp2888
+ controller
+To:     Vadim Pasternak <vadimp@nvidia.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+References: <20210511055619.118104-1-vadimp@nvidia.com>
+ <b967ca2a-acb6-6b76-7aee-788126f910e7@roeck-us.net>
+ <DM6PR12MB38985D51FA4430D1CD1F6303AF539@DM6PR12MB3898.namprd12.prod.outlook.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <3f3fa7b2-3891-3540-4703-f5bf83ffaec1@roeck-us.net>
+Date:   Tue, 11 May 2021 10:03:07 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <DM6PR12MB38985D51FA4430D1CD1F6303AF539@DM6PR12MB3898.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Mauro Carvalho Chehab <mchehab+huawei@kernel.org> writes:
+On 5/11/21 6:34 AM, Vadim Pasternak wrote:
+> 
+> 
+>> -----Original Message-----
+>> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
+>> Sent: Tuesday, May 11, 2021 4:32 PM
+>> To: Vadim Pasternak <vadimp@nvidia.com>; robh+dt@kernel.org
+>> Cc: linux-hwmon@vger.kernel.org; devicetree@vger.kernel.org
+>> Subject: Re: [PATCH hwmon-next v7 0/3] Add support for MPS Multi-phase
+>> mp2888 controller
+>>
+>> On 5/10/21 10:56 PM, Vadim Pasternak wrote:
+>>> Add driver and documentation for mp2888 device from Monolithic Power
+>>> Systems, Inc. (MPS) vendor. This is a digital, multi-phase,
+>>> pulse-width modulation controller.
+>>>
+>>> Patch set includes:
+>>> Patch #1 - increases maximum number of phases.
+>>> Patch #2 - provides mp2888 driver and documentation.
+>>> Patch #3 - providesy binding documentation.
+>>>
+>>
+>> Series applied.
+> 
+> Thank you, Guenter.
+> 
+> I see from the following errors from robot:
+>>> ERROR: modpost: module mp2888 uses symbol pmbus_do_probe from namespace PMBUS, but does not import it.
+>>> ERROR: modpost: module mp2888 uses symbol pmbus_read_word_data from namespace PMBUS, but does not import it.
+>>> ERROR: modpost: module mp2888 uses symbol pmbus_write_word_data from namespace PMBUS, but does not import it.
+>>> ERROR: modpost: module mp2888 uses symbol pmbus_get_driver_info from namespace PMBUS, but does not import it.
+> 
+> What does it mean?
+> 
 
-> This series follow up this past series:
-> 	https://lore.kernel.org/lkml/cover.1620641727.git.mchehab+huawei@kernel.org/
->
-> Containing just the manual fixes from it. I'll respin the remaining
-> patches on a separate series.
->
-> Please note that patches 1 to 3 are identical to the ones posted
-> on the original series.
->
-> Patch 1 is special: it fixes some left-overs from a convertion
-> from cdrom-standard.tex: there, some characters that are
-> valid in C were converted to some visually similar UTF-8 by LaTeX.
->
-> Patch 2 remove U+00ac (''): NOT SIGN characters at the end of
-> the first line of two files. No idea why those ended being there :-p
->
-> Patch 3 replaces:
-> 	KernelVersion:3.3
-> by:
-> 	KernelVersion:	3.3
->
-> which is the expected format for the KernelVersion field;
->
-> Patches 4 and 5 fix some bad usages of EM DASH/EN DASH on
-> places that it should be, instead, a normal hyphen. I suspect
-> that they ended being there due to the usage of some conversion
-> toolset.
->
-> Mauro Carvalho Chehab (5):
->   docs: cdrom-standard.rst: get rid of uneeded UTF-8 chars
->   docs: ABI: remove a meaningless UTF-8 character
->   docs: ABI: remove some spurious characters
->   docs: hwmon: tmp103.rst: fix bad usage of UTF-8 chars
->   docs: networking: device_drivers: fix bad usage of UTF-8 chars
->
->  .../obsolete/sysfs-kernel-fadump_registered   |  2 +-
->  .../obsolete/sysfs-kernel-fadump_release_mem  |  2 +-
->  Documentation/ABI/testing/sysfs-module        |  4 +--
->  Documentation/cdrom/cdrom-standard.rst        | 30 +++++++++----------
->  Documentation/hwmon/tmp103.rst                |  4 +--
->  .../device_drivers/ethernet/intel/i40e.rst    |  4 +--
->  .../device_drivers/ethernet/intel/iavf.rst    |  2 +-
->  7 files changed, 24 insertions(+), 24 deletions(-)
+It needs
 
-These seem pretty straightforward; I've applied the set, thanks.
+MODULE_IMPORT_NS(PMBUS);
 
-jon
+No worries, I'll fix it up.
+
+Guenter
+
+
