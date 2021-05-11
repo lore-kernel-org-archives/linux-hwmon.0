@@ -2,51 +2,52 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F21F6C43460
-	for <linux-hwmon@archiver.kernel.org>; Tue, 11 May 2021 15:01:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CAA5C43462
+	for <linux-hwmon@archiver.kernel.org>; Tue, 11 May 2021 15:01:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BF0826191A
-	for <linux-hwmon@archiver.kernel.org>; Tue, 11 May 2021 15:01:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3DD4A6128E
+	for <linux-hwmon@archiver.kernel.org>; Tue, 11 May 2021 15:01:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231801AbhEKPCp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S231844AbhEKPCp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Tue, 11 May 2021 11:02:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35100 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:35152 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231561AbhEKPCo (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        id S231782AbhEKPCo (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
         Tue, 11 May 2021 11:02:44 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 76936610FA;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7F217613C1;
         Tue, 11 May 2021 15:01:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1620745297;
-        bh=MtFihL4ObMWeoa+SfB0LUN/U9nJZVcN+hbmIOjgAsyY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VFGbiWjeMDCf83D23jg4vr/+SOo65nJZhBa6wH11JIdNPN5G6q/ZDpz0TJIgpEuJr
-         CBdp0GfwWHtQvJvtNynAZOiHyQw34qJQcwdxz5IHhVxFt2DX+Gy3Ek39g+oOlLFVO/
-         IM9IQ5fbStYqKcren/UHsWYna+sWCRYwCrApQycdR0/9WEmyWnkrBZkqyg9zgeZGa1
-         JLe4vIx5rEpmrECxUYMPfuaKtxOaDeuP6b/HCQHpOLg7yMyPCKM3CfRcjGO3XQL57T
-         A7ag8uWDEUo58+vEioY2lEwUi/LFVIeSKFpGodtB8ELYG9CLafTKqnZ4y3wQIwuGw6
-         grL/X9VyH13Jg==
+        bh=CGntqTzT0CjwBnD8m2IoNs2tKZ5vRmYFfQ0jAL/UEb8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=panu4sVvuTFMZuqoZPlBkXPO1+Kh+4Bp7wMgfwwhZeIJ22TPqPX+LNgC81uNqjndt
+         Yr99x1IRXYnyYKXssWNKnICXlOMNRnUy0uE5I3bPlgo2t9CStA38Vy3VkQC5iqM6ni
+         apXbgb5KKoleKiXgAGhnYEV3iXjZTDgpkKJKqo10RnzxpF0C/p8ixNRp0t857htG06
+         RvTMwBONaCF/Z3OZOfdrF0JmxogubCngp2wgSEjXEUoRlOKrakqnOZlp9ktaXJYMhq
+         EJ7nfcBbg0H39QjX+8+xJtNS6UOYdTcYNKJda7JGVIJy69mksb5VWbVtI/oYJuVijz
+         9Ft1gfPEazwXg==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1lgTt7-000k1E-UG; Tue, 11 May 2021 17:01:33 +0200
+        id 1lgTt7-000k0z-Pq; Tue, 11 May 2021 17:01:33 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Jonathan Corbet" <corbet@lwn.net>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        "David S. Miller" <davem@davemloft.net>,
         Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 4/5] docs: hwmon: tmp103.rst: fix bad usage of UTF-8 chars
-Date:   Tue, 11 May 2021 17:01:31 +0200
-Message-Id: <73b3c7c1eef5c12ddc941624d23689313bd56529.1620744606.git.mchehab+huawei@kernel.org>
+        Jakub Kicinski <kuba@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>, Jens Axboe <axboe@kernel.dk>,
+        intel-wired-lan@lists.osuosl.org, linux-hwmon@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH 0/5] Fix some UTF-8 bad usages
+Date:   Tue, 11 May 2021 17:01:27 +0200
+Message-Id: <cover.1620744606.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <cover.1620744606.git.mchehab+huawei@kernel.org>
-References: <cover.1620744606.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -55,37 +56,51 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-While UTF-8 characters can be used at the Linux documentation,
-the best is to use them only when ASCII doesn't offer a good replacement.
-So, replace the occurences of the following UTF-8 characters:
+This series follow up this past series:
+	https://lore.kernel.org/lkml/cover.1620641727.git.mchehab+huawei@kernel.org/
 
-	- U+2013 ('–'): EN DASH
+Containing just the manual fixes from it. I'll respin the remaining
+patches on a separate series.
 
-In this specific case, EN DASH was used instead of a minus
-sign. So, replace it by a single hyphen.
+Please note that patches 1 to 3 are identical to the ones posted
+on the original series.
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- Documentation/hwmon/tmp103.rst | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Patch 1 is special: it fixes some left-overs from a convertion
+from cdrom-standard.tex: there, some characters that are
+valid in C were converted to some visually similar UTF-8 by LaTeX.
 
-diff --git a/Documentation/hwmon/tmp103.rst b/Documentation/hwmon/tmp103.rst
-index e195a7d14309..b3ef81475cf8 100644
---- a/Documentation/hwmon/tmp103.rst
-+++ b/Documentation/hwmon/tmp103.rst
-@@ -21,10 +21,10 @@ Description
- The TMP103 is a digital output temperature sensor in a four-ball
- wafer chip-scale package (WCSP). The TMP103 is capable of reading
- temperatures to a resolution of 1°C. The TMP103 is specified for
--operation over a temperature range of –40°C to +125°C.
-+operation over a temperature range of -40°C to +125°C.
- 
- Resolution: 8 Bits
--Accuracy: ±1°C Typ (–10°C to +100°C)
-+Accuracy: ±1°C Typ (-10°C to +100°C)
- 
- The driver provides the common sysfs-interface for temperatures (see
- Documentation/hwmon/sysfs-interface.rst under Temperatures).
+Patch 2 remove U+00ac ('�'): NOT SIGN characters at the end of
+the first line of two files. No idea why those ended being there :-p
+
+Patch 3 replaces:
+	KernelVersion:��3.3
+by:
+	KernelVersion:	3.3
+
+which is the expected format for the KernelVersion field;
+
+Patches 4 and 5 fix some bad usages of EM DASH/EN DASH on
+places that it should be, instead, a normal hyphen. I suspect
+that they ended being there due to the usage of some conversion
+toolset.
+
+Mauro Carvalho Chehab (5):
+  docs: cdrom-standard.rst: get rid of uneeded UTF-8 chars
+  docs: ABI: remove a meaningless UTF-8 character
+  docs: ABI: remove some spurious characters
+  docs: hwmon: tmp103.rst: fix bad usage of UTF-8 chars
+  docs: networking: device_drivers: fix bad usage of UTF-8 chars
+
+ .../obsolete/sysfs-kernel-fadump_registered   |  2 +-
+ .../obsolete/sysfs-kernel-fadump_release_mem  |  2 +-
+ Documentation/ABI/testing/sysfs-module        |  4 +--
+ Documentation/cdrom/cdrom-standard.rst        | 30 +++++++++----------
+ Documentation/hwmon/tmp103.rst                |  4 +--
+ .../device_drivers/ethernet/intel/i40e.rst    |  4 +--
+ .../device_drivers/ethernet/intel/iavf.rst    |  2 +-
+ 7 files changed, 24 insertions(+), 24 deletions(-)
+
 -- 
 2.30.2
+
 
