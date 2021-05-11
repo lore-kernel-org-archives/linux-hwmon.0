@@ -2,123 +2,205 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF257C43470
-	for <linux-hwmon@archiver.kernel.org>; Tue, 11 May 2021 09:37:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CA16C43460
+	for <linux-hwmon@archiver.kernel.org>; Tue, 11 May 2021 11:48:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A89726008E
-	for <linux-hwmon@archiver.kernel.org>; Tue, 11 May 2021 09:37:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5AD9B611CB
+	for <linux-hwmon@archiver.kernel.org>; Tue, 11 May 2021 11:48:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231417AbhEKJih (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 11 May 2021 05:38:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52066 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230434AbhEKJif (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 11 May 2021 05:38:35 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A14E161925;
-        Tue, 11 May 2021 09:37:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620725848;
-        bh=6o759ShUxJ4M0iPoewavcBs0joP5lvg0/UyuatoupKw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=VmShZQzrJkNUYpzDiT8lkPsxOAMSd9Mve7i5gQll5qndGWVpx/umg+CXxAKGpoNMA
-         r3FMkUmVknRLOM40Or9NWwNOL92NSwkHrq/d0ndNeQRTu32uCCDHx2IbSd5VG2b4ul
-         nosZAixjCj57nhk32NpeqSVxAJnPk2eny4EB88KTc/gQGnVuXNqo0yWlzvNXSmu4ZF
-         mRycl9aLbRnBPpCgKOBrtmqpOvb6P16yZBfRn67Vau0A0Tq2FleVuS/QpC4INaUcg7
-         P/ifJQg2MpIKloJneBuh4wLQ19EHMgDmJrDBTumwAHsRVeIkB/VjkEIaNgqi+q08au
-         3pae3xKzjvu8Q==
-Date:   Tue, 11 May 2021 11:37:17 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     "Theodore Ts'o" <tytso@mit.edu>
-Cc:     David Woodhouse <dwmw2@infradead.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
-        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-fpga@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-sgx@vger.kernel.org, linux-usb@vger.kernel.org,
-        mjpeg-users@lists.sourceforge.net, netdev@vger.kernel.org,
-        rcu@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH 00/53] Get rid of UTF-8 chars that can be mapped as
- ASCII
-Message-ID: <20210511113717.5c8b68f7@coco.lan>
-In-Reply-To: <YJmH2irxoRsyNudb@mit.edu>
-References: <cover.1620641727.git.mchehab+huawei@kernel.org>
-        <2ae366fdff4bd5910a2270823e8da70521c859af.camel@infradead.org>
-        <20210510135518.305cc03d@coco.lan>
-        <de6d1fa5b7934f4afd61370d9c58502bef588466.camel@infradead.org>
-        <YJmH2irxoRsyNudb@mit.edu>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        id S231518AbhEKLtV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 11 May 2021 07:49:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:28865 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231481AbhEKLtU (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 11 May 2021 07:49:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1620733694;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tCTd+S2Axg2X1q7f2AmsrNqMwgII9y4Yy/+j9XgTu+E=;
+        b=Fj5+kR1LJgadz7sTIhDZjJ2YVjyRGrbmTl4MXsm9A/Ea/t9Mh//IZbpzY9NaZ6SMsEmUja
+        102W88HF+4bboXUXLGFasAymz7fbFtDgG7GIAirIL9PqArLpSeDKAyWXRqwbqxVh42shbo
+        HSEaWuDEMswxEpiWP0urDsJj6s+IPWY=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-171-RbI4a14hNE6jH1dpDZn-JQ-1; Tue, 11 May 2021 07:48:12 -0400
+X-MC-Unique: RbI4a14hNE6jH1dpDZn-JQ-1
+Received: by mail-ed1-f71.google.com with SMTP id g19-20020a0564021813b029038811907178so10749747edy.14
+        for <linux-hwmon@vger.kernel.org>; Tue, 11 May 2021 04:48:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=tCTd+S2Axg2X1q7f2AmsrNqMwgII9y4Yy/+j9XgTu+E=;
+        b=Kr8PNGbQNXnv1SwkV/BNMvKkGJMTyOby9vVN1/eXysQo4fi4fVS+IPFpiSMphUE18v
+         ubiVUTkVz6L1l7Fpd5bocXtkBCS79fkPdK5hO47Sp9Io7mAkYcgxkVwHIyPAMGXaGhlh
+         tJjgYxMyOFCmJ7OBLJQ0SOh77dvxfvWNqa48lJoLvbeODaWk7jGws/jAYsyPTVZxBzeq
+         J9dGt8iNdTo+KgE8GtCpmFmofi/Tz6wDgtX/5Re1Iysn/xXiG5pm3h83bRmNDSXwP3ab
+         +oS2aXH3w8+hpekvntP0Jlr7OeLXl59u6CtchmS+fS2V1gCvL4Gb/kdC5QH7rdAd99Du
+         l25g==
+X-Gm-Message-State: AOAM5318/Y1L9O+NZJaV7scBDnyEoGU3AQCUVHtd/OiLee+B5x+ZM0cf
+        FxR+xsyoxLetsLYaHzT5Apqkk7Ota31doT86UqxZMRlwbLmitsVKPqSW/mR+/6K+jNCpxcowKw+
+        oqyhKYiSq9obzOJyuHFM7VIo=
+X-Received: by 2002:a17:907:f91:: with SMTP id kb17mr30722706ejc.521.1620733691343;
+        Tue, 11 May 2021 04:48:11 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyK1wG8GPs1uiWXaXij0uLW/nSHZ5xv/Mp/aP4/ksfEpDozfyQJa04/xi8Vel+362v042qcCA==
+X-Received: by 2002:a17:907:f91:: with SMTP id kb17mr30722691ejc.521.1620733691162;
+        Tue, 11 May 2021 04:48:11 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id ga28sm11316864ejc.20.2021.05.11.04.48.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 May 2021 04:48:10 -0700 (PDT)
+Subject: Re: [PATCH v7 1/7] MAINTAINERS: Add Advantech AHC1EC0 embedded
+ controller entry
+To:     Campion Kang <campion.kang@advantech.com.tw>
+Cc:     andy.shevchenko@gmail.com, chia-lin.kao@canonical.com,
+        corbet@lwn.net, devicetree@vger.kernel.org, jdelvare@suse.com,
+        lee.jones@linaro.org, linux-doc@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux@roeck-us.net,
+        mgross@linux.intel.com, platform-driver-x86@vger.kernel.org,
+        robh+dt@kernel.org, wim@linux-watchdog.org
+References: <cf181436-152c-7cd8-76cf-350705cd2bcb@redhat.com>
+ <20210507115319.22109-1-campion.kang@advantech.com.tw>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <0a64dcbd-25d6-ddcd-4a4e-18619e8270ba@redhat.com>
+Date:   Tue, 11 May 2021 13:48:09 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20210507115319.22109-1-campion.kang@advantech.com.tw>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Em Mon, 10 May 2021 15:22:02 -0400
-"Theodore Ts'o" <tytso@mit.edu> escreveu:
+Hi,
 
-> On Mon, May 10, 2021 at 02:49:44PM +0100, David Woodhouse wrote:
-> > On Mon, 2021-05-10 at 13:55 +0200, Mauro Carvalho Chehab wrote: =20
-> > > This patch series is doing conversion only when using ASCII makes
-> > > more sense than using UTF-8.=20
-> > >=20
-> > > See, a number of converted documents ended with weird characters
-> > > like ZERO WIDTH NO-BREAK SPACE (U+FEFF) character. This specific
-> > > character doesn't do any good.
-> > >=20
-> > > Others use NO-BREAK SPACE (U+A0) instead of 0x20. Harmless, until
-> > > someone tries to use grep[1]. =20
-> >=20
-> > Replacing those makes sense. But replacing emdashes =E2=80=94 which are=
- a
-> > distinct character that has no direct replacement in ASCII and which
-> > people do *deliberately* use instead of hyphen-minus =E2=80=94 does not=
-. =20
->=20
-> I regularly use --- for em-dashes and -- for en-dashes.  Markdown will
-> automatically translate 3 ASCII hypens to em-dashes, and 2 ASCII
-> hyphens to en-dashes.  It's much, much easier for me to type 2 or 3
-> hypens into my text editor of choice than trying to enter the UTF-8
-> characters.=20
+On 5/7/21 1:53 PM, Campion Kang wrote:
+> Hi, Very thanks your time for reviewing.
+> 
+>> -----Original Message-----
+>> From: Hans de Goede <hdegoede@redhat.com>
+>> Sent: Thursday, May 6, 2021 5:39 PM
+>> Subject: Re: [PATCH v7 1/7] MAINTAINERS: Add Advantech AHC1EC0 embedded
+>> controller entry
+>>
+>> Hi,
+>>
+>> On 5/6/21 11:23 AM, Andy Shevchenko wrote:
+>>> On Thu, May 6, 2021 at 11:48 AM Hans de Goede <hdegoede@redhat.com>
+>> wrote:
+>>>> I'm replying here since this series has no cover-letter, for
+>>>> the next version for a series touching so many different
+>>>> sub-systems it would be good to start with a cover-letter
+>>>> providing some background info on the series.
+>>>>
+> 
+> Sorry about that, i will study what is cover-letter and its content.
+> Would you kindly provide me a good reference?
+> Can I resend a [Patch v7 0/7] for these patch or provide it in next version?
 
-Yeah, typing those UTF-8 chars are a lot harder than typing -- and ---
-on several text editors ;-)
+Please add a cover letter to the next version, which will hopefully
+also address some of the other remarks already made.
 
-Here, I only type UTF-8 chars for accents (my US-layout keyboards are=20
-all set to US international, so typing those are easy).
+Regards,
 
-> If we can make sphinx do this translation, maybe that's
-> the best way of dealing with these two characters?
+Hans
 
-Sphinx already does that by default[1], using smartquotes:
 
-	https://docutils.sourceforge.io/docs/user/smartquotes.html
+> 
+> 
+>>>> I see this is binding to an ACPI device, yet it is also using
+>>>> devicetree bindings and properties.
+>>>>
+>>>> So I take it this means that your ACPI tables are using the
+>>>> optional capability of embedded device-tree blobs inside the
+>>>> ACPI tables ?
+>>>>
+>>>> That is an unusual combination on a x86 device, note it is
+>>>> not wrong
+>>>
+>>> It's actually not okay. We have agreed at some point with DT people,
+>>> that ACPI should not use non-native variants of natively supported
+>>> things. For example, it shouldn't use "interrupt" property for IOxAPIC
+>>> (or xIC) provided interrupts, rather Interrupt() has to be used and so
+>>> on.
+> 
+> In our experience, most risc platforms are using devicetree, and x86/64 platforms
+> are using ACPI table or grub configure for their specific settings in different HW paltform.
+> In this case, EC chip is a LPC interface that can be integrated in whenever risc or x86/64.
+> So in my understand, I think it is not conflict.
+> (please correct me if i am misunderstanding, i will try to describe more)
+> 
+> If the EC chip is connected to the risc processor, we will bind its properties in the device-tree without modifing the source.
+> If the EC chip is connected to the X86/64 processor, we bind its the properties in the ACPI table and also without modifing the source.
+> Why do we need to bind the properties in ACPI or in the device-tree? Because it is an LPC interface, it cannot automatically load the driver like a USB or PCI device.
+> In the early days, we had to install the EC driver module in our HW platform and manually load it at every boot. Different Advantech HW platforms have different properties for HWMON and others sub-systems. This causes the EC source to be a bit dirty. It is necessary to obtain the hardware platform name from the BIOS DMI table and determine its attributes according to its platform name.
+> Now bind the attributes to ACPI table or device-tree, the EC source is more clear and universal for Advantech devices, and it is important that if the ACPI table matches, it can be automatically loaded.
+> 
+>>
+>> Right, but that is not the case here, they are using 2 device-tree
+>> properties (1), from patch 3/7:
+>>
+>> +properties:
+>> +  compatible:
+>> +    const: advantech,ahc1ec0
+>> +
+>> +  advantech,hwmon-profile:
+>> +    description:
+>> +      The number of sub-devices specified in the platform. Defines for the
+>> +      hwmon profiles can found in dt-bindings/mfd/ahc1ec0-dt.
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    maxItems: 1
+>> +
+>> +  advantech,has-watchdog:
+>> +    description:
+>> +      Some implementations of the EC include a watchdog used to monitor
+>> the
+>> +      system. This boolean flag is used to specify whether this watchdog is
+>> +      present or not. Default is true, otherwise set to false.
+>> +    type: boolean
+>>
+>>
+>>>> but AFAIK you are the first to do this on x86.
+>>>
+>>> No, not the first. Once Intel tried to invent the pin control
+>>> configuration and muxing properties in ACPI, it was luckily rejected
+>>> (ACPI 6.x OTOH provides a set of special resources for that).
+>>>
+>>> So, NAK from me, *if* it's really the case. ACPI tables must be revisited.
+>>
+> 
+> I am not sure it supports vendor self-defined attributes for ACPI table?
+> 
+>> AFAIK Advantech are not defining things for which an ACPI standard exists,
+>> although these 2 properties might just as well may be 2 simple ACPI integer
+>> methods, which would actually make things a bit simpler (.e.g it would
+>> allow dropping patch 2/7 and 3/7 from the set).
+>>
+>> Campion, any reason why you went this route; and can the ACPI tables
+>> still be changed?
+>>
+> 
+> If patches 2/7 and 3/7 are removed, it will be even simpler.
+> This means that there is no device-tree binding designed, in fact, the EC chip only be integrated in the x86/64 platform at present.
+> Sorry, ACPI table now is integrated in the BIOS for Advantech UNO device, 
+> it may be revert to previous rule, that is, there is no ACPI table binding and manually loaded the EC driver. If you have any suggestons I would be very grateful.
+> 
+>> Regards,
+>>
+>> Hans
+> 
 
-Those are the conversions that are done there:
-
-      - Straight quotes (" and ') turned into "curly" quote characters;
-      - dashes (-- and ---) turned into en- and em-dash entities;
-      - three consecutive dots (... or . . .) turned into an ellipsis char.
-
-So, we can simply use single/double commas, hyphens and dots for
-curly commas and ellipses.
-
-[1] There's a way to disable it at conf.py, but at the Kernel this is
-    kept on its default: to automatically do such conversions.=20
-
-Thanks,
-Mauro
