@@ -2,126 +2,121 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5501C433ED
-	for <linux-hwmon@archiver.kernel.org>; Tue, 11 May 2021 17:03:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32073C433ED
+	for <linux-hwmon@archiver.kernel.org>; Tue, 11 May 2021 18:55:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7F29160FDB
-	for <linux-hwmon@archiver.kernel.org>; Tue, 11 May 2021 17:03:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EBEC361185
+	for <linux-hwmon@archiver.kernel.org>; Tue, 11 May 2021 18:55:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231304AbhEKRES (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 11 May 2021 13:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55706 "EHLO
+        id S232093AbhEKS5E (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 11 May 2021 14:57:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231329AbhEKRES (ORCPT
+        with ESMTP id S232123AbhEKS5D (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 11 May 2021 13:04:18 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E98C06174A;
-        Tue, 11 May 2021 10:03:11 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id v24so558118oiv.3;
-        Tue, 11 May 2021 10:03:11 -0700 (PDT)
+        Tue, 11 May 2021 14:57:03 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF5B1C06174A;
+        Tue, 11 May 2021 11:55:56 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id w22so6094280oiw.9;
+        Tue, 11 May 2021 11:55:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=SenRFtg3kcFbs9vUTSmXrCXzTJuUoNr/azEqion6f2I=;
-        b=ms09Mwt8atK8e8z4XkXwnkx/g/8OA3s4WXTvgC8GOPh8A68iFoqao0PcCZaQvrCWsE
-         Y+hny1Mkf6oYe87L6FSD+3p7wd7wual20ENgIsKkh6aJqUQAkN7pCvs7buQMKtIZN4G8
-         uU0GjjdXnZL3pumcB0+oBHZg+g2O1AX2kJBiUYazyoSpa44uXeuwqfJkfz6whYExen9a
-         qesivuXtZZ6/x6cqBODlDk29idP1b18zL3j1bMbqu4yoztV5qBg0xZlk4JsrDN950yNP
-         tWDHRzbFEVEKPrVPo4/p7SHc0ImrDnmqfnlFCyDI8KWQzx8Pllg+3U2o1wSCWVHhm9iX
-         bx3w==
+        bh=X/inxSdHa2xkHeZ/z/iFZSnWLzX3PF9gerUaj96qbOs=;
+        b=ZpFVCGh5PiOkgIx5BzNFjepdYuS7fWbiIC6yn6BChmzd7wGzfjVJYSyWKL0WEQBzd3
+         zKZ4hDBSYAZn18vJH4bHJiE1ubdFDM0+R8OoDaLU6uEn8sHWmfuwpv9+t7kQFnBBjeVL
+         ZQ9ukZqTomNH6tRY9nG4G+6pwR78QJaik0wEKoKvX9u/FVW6q0NQvxLw2SbLzg5G7gHm
+         MJCxbAUkGXvSkN3dD8bsScPjNcQdJZBNtGqAc5P+G9aiFWaifdqyhkz7exL4V2+DvNuJ
+         rk2sVsemkz33xxQktmxfmIaBBhaFhSIdoQSHMk+veyfUq1r5P2D2U1md39lIq0gsGAtE
+         g+Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=SenRFtg3kcFbs9vUTSmXrCXzTJuUoNr/azEqion6f2I=;
-        b=aP9ritPxpMKeczrP6W8qi7sv43sCNkS/2ukTk7EzCILzcfxJXqHEiUwOgGoec93jaC
-         aQ3/yuUjDARqBhIyk3nwxQPI1zPKH+pQ/J4BJZpMSVUdxq9DPHS9Qr6mL/X0M4XNXXot
-         oWMAyjfYXC2w7HZCGz7CZLhHqlpZkD4RWsq50EoC1m9B4pe3izcF1lAHaQWimL1yKRqk
-         UM5nWMXUeuMM4a+tTyPYsWoUaY80U/lDNhSULa5n46uK7NpRooY3J4rmMIaQHAVKQD0j
-         laB3Lstacttx+TG3OaWmgRvzGofYOhB/MKwveKgbvF21QX86AeqkTYD6tObftz81gKLA
-         FyvQ==
-X-Gm-Message-State: AOAM530n6BCha1k18GGkUYT1tbERb5lOMocdlViGe2mDZoxANDL6rlDk
-        KIh4bMaf34iV/V3IEkf90WkohPRhQmA=
-X-Google-Smtp-Source: ABdhPJwnIEc9xuTkyAD1ymyeOcrSUYpAk5q55kGwgiAq9RpWg6Oe3n1ZGfG7oOk76v7SVQVU06OW8w==
-X-Received: by 2002:aca:c792:: with SMTP id x140mr12467289oif.88.1620752590542;
-        Tue, 11 May 2021 10:03:10 -0700 (PDT)
+        bh=X/inxSdHa2xkHeZ/z/iFZSnWLzX3PF9gerUaj96qbOs=;
+        b=F2WwfrNDWLPH6uBcvSvye7o4PUSXEwQtELid7StVNxD0rJxpu90bXeFvsjNQsjb+dn
+         rDjsQJyIg0cja3aMuYZVfzReacas3Mn8bd8zP57bw7zEUzwaKU/f64KUkTtRple4YoAg
+         wSTqzeIEKk18t/BNyA/rFAeDAJ+YKfSVbM+bMSRFkXj6n6pKWXWtjGYmmm3C1hCWPOOZ
+         xO/0v6grdyv1fyRDAplpbFVe1iQwsy2MakUwWiySuI1WktHq1UlJpGi5v3VPINjGMkT2
+         pW0E3Zp+bxN0r52RswI8xbPFPeD/osbWEFu/G6YGDkMdDAjbyiR5xsGy6HKkwEzTSeTa
+         YZ6g==
+X-Gm-Message-State: AOAM531NkU0WR4bF8HlY3gfdFEiXw7dHaN1Un7gNEE+OQum7I3REPERo
+        VxmtJ4IavNMlUNu/MzGPuxiQZaknyHM=
+X-Google-Smtp-Source: ABdhPJx5wUxdHhc5LZFOzyHoYbCdHBlVGSvhyfJgo+SkJ6OArTs1D2AKrpAr8pFjZvXSOEZ/nqIQyA==
+X-Received: by 2002:a05:6808:309:: with SMTP id i9mr12450789oie.14.1620759355829;
+        Tue, 11 May 2021 11:55:55 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c19sm3272847oiw.7.2021.05.11.10.03.08
+        by smtp.gmail.com with ESMTPSA id u14sm3418904oif.41.2021.05.11.11.55.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 May 2021 10:03:09 -0700 (PDT)
+        Tue, 11 May 2021 11:55:55 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH hwmon-next v7 0/3] Add support for MPS Multi-phase mp2888
- controller
-To:     Vadim Pasternak <vadimp@nvidia.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>
-Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-References: <20210511055619.118104-1-vadimp@nvidia.com>
- <b967ca2a-acb6-6b76-7aee-788126f910e7@roeck-us.net>
- <DM6PR12MB38985D51FA4430D1CD1F6303AF539@DM6PR12MB3898.namprd12.prod.outlook.com>
+Subject: Re: [PATCH 4/5] docs: hwmon: tmp103.rst: fix bad usage of UTF-8 chars
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1620744606.git.mchehab+huawei@kernel.org>
+ <73b3c7c1eef5c12ddc941624d23689313bd56529.1620744606.git.mchehab+huawei@kernel.org>
 From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <3f3fa7b2-3891-3540-4703-f5bf83ffaec1@roeck-us.net>
-Date:   Tue, 11 May 2021 10:03:07 -0700
+Message-ID: <a4d0e1cf-20f1-d87c-0af6-b39f45afae5f@roeck-us.net>
+Date:   Tue, 11 May 2021 11:55:53 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.7.1
 MIME-Version: 1.0
-In-Reply-To: <DM6PR12MB38985D51FA4430D1CD1F6303AF539@DM6PR12MB3898.namprd12.prod.outlook.com>
+In-Reply-To: <73b3c7c1eef5c12ddc941624d23689313bd56529.1620744606.git.mchehab+huawei@kernel.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/11/21 6:34 AM, Vadim Pasternak wrote:
+On 5/11/21 8:01 AM, Mauro Carvalho Chehab wrote:
+> While UTF-8 characters can be used at the Linux documentation,
+> the best is to use them only when ASCII doesn't offer a good replacement.
+> So, replace the occurences of the following UTF-8 characters:
 > 
+> 	- U+2013 ('–'): EN DASH
 > 
->> -----Original Message-----
->> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
->> Sent: Tuesday, May 11, 2021 4:32 PM
->> To: Vadim Pasternak <vadimp@nvidia.com>; robh+dt@kernel.org
->> Cc: linux-hwmon@vger.kernel.org; devicetree@vger.kernel.org
->> Subject: Re: [PATCH hwmon-next v7 0/3] Add support for MPS Multi-phase
->> mp2888 controller
->>
->> On 5/10/21 10:56 PM, Vadim Pasternak wrote:
->>> Add driver and documentation for mp2888 device from Monolithic Power
->>> Systems, Inc. (MPS) vendor. This is a digital, multi-phase,
->>> pulse-width modulation controller.
->>>
->>> Patch set includes:
->>> Patch #1 - increases maximum number of phases.
->>> Patch #2 - provides mp2888 driver and documentation.
->>> Patch #3 - providesy binding documentation.
->>>
->>
->> Series applied.
+> In this specific case, EN DASH was used instead of a minus
+> sign. So, replace it by a single hyphen.
 > 
-> Thank you, Guenter.
-> 
-> I see from the following errors from robot:
->>> ERROR: modpost: module mp2888 uses symbol pmbus_do_probe from namespace PMBUS, but does not import it.
->>> ERROR: modpost: module mp2888 uses symbol pmbus_read_word_data from namespace PMBUS, but does not import it.
->>> ERROR: modpost: module mp2888 uses symbol pmbus_write_word_data from namespace PMBUS, but does not import it.
->>> ERROR: modpost: module mp2888 uses symbol pmbus_get_driver_info from namespace PMBUS, but does not import it.
-> 
-> What does it mean?
-> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-It needs
-
-MODULE_IMPORT_NS(PMBUS);
-
-No worries, I'll fix it up.
+Confused. Is that supposed to replace the earlier patch (docs: hwmon:
+avoid using UTF-8 chars) ? I thought that was more comprehensive
+and just as valid. Anyway, should I drop that patch ?
 
 Guenter
 
+> ---
+>   Documentation/hwmon/tmp103.rst | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/hwmon/tmp103.rst b/Documentation/hwmon/tmp103.rst
+> index e195a7d14309..b3ef81475cf8 100644
+> --- a/Documentation/hwmon/tmp103.rst
+> +++ b/Documentation/hwmon/tmp103.rst
+> @@ -21,10 +21,10 @@ Description
+>   The TMP103 is a digital output temperature sensor in a four-ball
+>   wafer chip-scale package (WCSP). The TMP103 is capable of reading
+>   temperatures to a resolution of 1°C. The TMP103 is specified for
+> -operation over a temperature range of –40°C to +125°C.
+> +operation over a temperature range of -40°C to +125°C.
+>   
+>   Resolution: 8 Bits
+> -Accuracy: ±1°C Typ (–10°C to +100°C)
+> +Accuracy: ±1°C Typ (-10°C to +100°C)
+>   
+>   The driver provides the common sysfs-interface for temperatures (see
+>   Documentation/hwmon/sysfs-interface.rst under Temperatures).
+> 
 
