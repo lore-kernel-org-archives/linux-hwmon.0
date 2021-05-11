@@ -2,105 +2,110 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CAA5C43462
-	for <linux-hwmon@archiver.kernel.org>; Tue, 11 May 2021 15:01:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1DACC433B4
+	for <linux-hwmon@archiver.kernel.org>; Tue, 11 May 2021 17:01:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3DD4A6128E
-	for <linux-hwmon@archiver.kernel.org>; Tue, 11 May 2021 15:01:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B938C610C9
+	for <linux-hwmon@archiver.kernel.org>; Tue, 11 May 2021 17:01:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231844AbhEKPCp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 11 May 2021 11:02:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35152 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231782AbhEKPCo (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 11 May 2021 11:02:44 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7F217613C1;
-        Tue, 11 May 2021 15:01:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620745297;
-        bh=CGntqTzT0CjwBnD8m2IoNs2tKZ5vRmYFfQ0jAL/UEb8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=panu4sVvuTFMZuqoZPlBkXPO1+Kh+4Bp7wMgfwwhZeIJ22TPqPX+LNgC81uNqjndt
-         Yr99x1IRXYnyYKXssWNKnICXlOMNRnUy0uE5I3bPlgo2t9CStA38Vy3VkQC5iqM6ni
-         apXbgb5KKoleKiXgAGhnYEV3iXjZTDgpkKJKqo10RnzxpF0C/p8ixNRp0t857htG06
-         RvTMwBONaCF/Z3OZOfdrF0JmxogubCngp2wgSEjXEUoRlOKrakqnOZlp9ktaXJYMhq
-         EJ7nfcBbg0H39QjX+8+xJtNS6UOYdTcYNKJda7JGVIJy69mksb5VWbVtI/oYJuVijz
-         9Ft1gfPEazwXg==
-Received: by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1lgTt7-000k0z-Pq; Tue, 11 May 2021 17:01:33 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+        id S231703AbhEKRCk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 11 May 2021 13:02:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55330 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231437AbhEKRCh (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 11 May 2021 13:02:37 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5F67C061574;
+        Tue, 11 May 2021 10:01:30 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:104d:444a:d152:279d:1dbb])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 6C8034BF;
+        Tue, 11 May 2021 17:01:27 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 6C8034BF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1620752487; bh=QmVYJvT1Kzq68R+QLKACGPLdolv6eNZVx9knetb0KFs=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=irQf+xtmaDJZYLKwq3hA8ztA2UhPkWaMvlGfMCect35HeamgThOzqqCroC26BP/Sl
+         CZ5fyVVCGLDX5hEb0cnVXCWNegwA+Xs245fqJaayhz/QOZsSyLbOEm6eAcMMVYm6OY
+         KYssjOyi8tvqVhDlU9yQOg3yj6ggq5zhGjo6YGvleqEvR4QvYakpL6DYodSr6ne5p2
+         POLXDUg/aNRvtMVVTSEj+i7YB0HcWdlIM/5xZz2XEUDjPiyFKgjrJG+D5PIfW0A/ku
+         jf3zV8C5QT23k16fFmU0Sd0ej651gdEPXtb2eRRgDOFPAPrnQiy6aPBFrlggpfHlaH
+         YTUqF86upi5qg==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-kernel@vger.kernel.org,
         "David S. Miller" <davem@davemloft.net>,
         Guenter Roeck <linux@roeck-us.net>,
         Jakub Kicinski <kuba@kernel.org>,
         Jean Delvare <jdelvare@suse.com>, Jens Axboe <axboe@kernel.dk>,
         intel-wired-lan@lists.osuosl.org, linux-hwmon@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH 0/5] Fix some UTF-8 bad usages
-Date:   Tue, 11 May 2021 17:01:27 +0200
-Message-Id: <cover.1620744606.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.30.2
+Subject: Re: [PATCH 0/5] Fix some UTF-8 bad usages
+In-Reply-To: <cover.1620744606.git.mchehab+huawei@kernel.org>
+References: <cover.1620744606.git.mchehab+huawei@kernel.org>
+Date:   Tue, 11 May 2021 11:01:26 -0600
+Message-ID: <87fsytdx21.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This series follow up this past series:
-	https://lore.kernel.org/lkml/cover.1620641727.git.mchehab+huawei@kernel.org/
+Mauro Carvalho Chehab <mchehab+huawei@kernel.org> writes:
 
-Containing just the manual fixes from it. I'll respin the remaining
-patches on a separate series.
+> This series follow up this past series:
+> 	https://lore.kernel.org/lkml/cover.1620641727.git.mchehab+huawei@kernel.org/
+>
+> Containing just the manual fixes from it. I'll respin the remaining
+> patches on a separate series.
+>
+> Please note that patches 1 to 3 are identical to the ones posted
+> on the original series.
+>
+> Patch 1 is special: it fixes some left-overs from a convertion
+> from cdrom-standard.tex: there, some characters that are
+> valid in C were converted to some visually similar UTF-8 by LaTeX.
+>
+> Patch 2 remove U+00ac (''): NOT SIGN characters at the end of
+> the first line of two files. No idea why those ended being there :-p
+>
+> Patch 3 replaces:
+> 	KernelVersion:3.3
+> by:
+> 	KernelVersion:	3.3
+>
+> which is the expected format for the KernelVersion field;
+>
+> Patches 4 and 5 fix some bad usages of EM DASH/EN DASH on
+> places that it should be, instead, a normal hyphen. I suspect
+> that they ended being there due to the usage of some conversion
+> toolset.
+>
+> Mauro Carvalho Chehab (5):
+>   docs: cdrom-standard.rst: get rid of uneeded UTF-8 chars
+>   docs: ABI: remove a meaningless UTF-8 character
+>   docs: ABI: remove some spurious characters
+>   docs: hwmon: tmp103.rst: fix bad usage of UTF-8 chars
+>   docs: networking: device_drivers: fix bad usage of UTF-8 chars
+>
+>  .../obsolete/sysfs-kernel-fadump_registered   |  2 +-
+>  .../obsolete/sysfs-kernel-fadump_release_mem  |  2 +-
+>  Documentation/ABI/testing/sysfs-module        |  4 +--
+>  Documentation/cdrom/cdrom-standard.rst        | 30 +++++++++----------
+>  Documentation/hwmon/tmp103.rst                |  4 +--
+>  .../device_drivers/ethernet/intel/i40e.rst    |  4 +--
+>  .../device_drivers/ethernet/intel/iavf.rst    |  2 +-
+>  7 files changed, 24 insertions(+), 24 deletions(-)
 
-Please note that patches 1 to 3 are identical to the ones posted
-on the original series.
+These seem pretty straightforward; I've applied the set, thanks.
 
-Patch 1 is special: it fixes some left-overs from a convertion
-from cdrom-standard.tex: there, some characters that are
-valid in C were converted to some visually similar UTF-8 by LaTeX.
-
-Patch 2 remove U+00ac ('¬'): NOT SIGN characters at the end of
-the first line of two files. No idea why those ended being there :-p
-
-Patch 3 replaces:
-	KernelVersion:»·3.3
-by:
-	KernelVersion:	3.3
-
-which is the expected format for the KernelVersion field;
-
-Patches 4 and 5 fix some bad usages of EM DASH/EN DASH on
-places that it should be, instead, a normal hyphen. I suspect
-that they ended being there due to the usage of some conversion
-toolset.
-
-Mauro Carvalho Chehab (5):
-  docs: cdrom-standard.rst: get rid of uneeded UTF-8 chars
-  docs: ABI: remove a meaningless UTF-8 character
-  docs: ABI: remove some spurious characters
-  docs: hwmon: tmp103.rst: fix bad usage of UTF-8 chars
-  docs: networking: device_drivers: fix bad usage of UTF-8 chars
-
- .../obsolete/sysfs-kernel-fadump_registered   |  2 +-
- .../obsolete/sysfs-kernel-fadump_release_mem  |  2 +-
- Documentation/ABI/testing/sysfs-module        |  4 +--
- Documentation/cdrom/cdrom-standard.rst        | 30 +++++++++----------
- Documentation/hwmon/tmp103.rst                |  4 +--
- .../device_drivers/ethernet/intel/i40e.rst    |  4 +--
- .../device_drivers/ethernet/intel/iavf.rst    |  2 +-
- 7 files changed, 24 insertions(+), 24 deletions(-)
-
--- 
-2.30.2
-
-
+jon
