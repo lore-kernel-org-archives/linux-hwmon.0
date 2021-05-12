@@ -2,138 +2,192 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D9FCC43460
-	for <linux-hwmon@archiver.kernel.org>; Wed, 12 May 2021 05:33:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81332C433B4
+	for <linux-hwmon@archiver.kernel.org>; Wed, 12 May 2021 12:30:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E2CEB61925
-	for <linux-hwmon@archiver.kernel.org>; Wed, 12 May 2021 05:33:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4E9B7613B4
+	for <linux-hwmon@archiver.kernel.org>; Wed, 12 May 2021 12:30:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbhELFen (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 12 May 2021 01:34:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57282 "EHLO mail.kernel.org"
+        id S232307AbhELMb5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 12 May 2021 08:31:57 -0400
+Received: from mga07.intel.com ([134.134.136.100]:64102 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230017AbhELFem (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 12 May 2021 01:34:42 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C386D613C2;
-        Wed, 12 May 2021 05:33:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620797615;
-        bh=USzfXL7rhbiNnC/UNNFOQgAUDuwKT0jR8zKV7J6vvp4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=tY80cvzTIrxVZ/KlZkv4hTSQ0d6QMpNymy43XFKK4Nl4pg5jBiKiaaVe96lBT3sne
-         elPv0NK/sEy6D8KvvT99q6vd09rylQLChwFHrA2dxkbosxTt9iza8zPCXcL3RVUcpz
-         tR8QQCigsZGcNbYKbyHoeYgo0opjKqs/VqdoafsgvJbHpUP/UAg2CV4dThNi57rHlz
-         lWQwpz2czPHlvszx5g7ovXvuxtzhYuWaX2v4SjxSx0ijOrwd+Qe8pcNkbKEfiC5CAG
-         7HoXNA8R+NWu01QvHBNz2VZrcmewfLAv4NZ9AsNZ9f/uzMGEAlDGYHjQSsPW6nyDRR
-         iqp5x1wXGHYsQ==
-Date:   Wed, 12 May 2021 07:33:30 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+        id S232316AbhELMb5 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 12 May 2021 08:31:57 -0400
+IronPort-SDR: pJOxwznYeGkGkRtt27/TAGJaLs+7L+dCMHG8zwe8GAeg2PgacNbN/Q3DVG40U+pfzmiwkEenC/
+ ogP/iW4RttKA==
+X-IronPort-AV: E=McAfee;i="6200,9189,9981"; a="263620785"
+X-IronPort-AV: E=Sophos;i="5.82,293,1613462400"; 
+   d="scan'208";a="263620785"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2021 05:30:46 -0700
+IronPort-SDR: pDs+iY90/w9dxYJEJdjqyp8jv21ls7/gF0bFPyPqrAqJ27balX2RA2hlBZxeqkuxLwILf5qcUQ
+ BItKowdnfcDw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,293,1613462400"; 
+   d="scan'208";a="455575232"
+Received: from lkp-server01.sh.intel.com (HELO 1e931876798f) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 12 May 2021 05:30:45 -0700
+Received: from kbuild by 1e931876798f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lgo0i-0000Hq-Eh; Wed, 12 May 2021 12:30:44 +0000
+Date:   Wed, 12 May 2021 20:29:56 +0800
+From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/5] docs: hwmon: tmp103.rst: fix bad usage of UTF-8
- chars
-Message-ID: <20210512073330.2b48e81a@coco.lan>
-In-Reply-To: <a4d0e1cf-20f1-d87c-0af6-b39f45afae5f@roeck-us.net>
-References: <cover.1620744606.git.mchehab+huawei@kernel.org>
-        <73b3c7c1eef5c12ddc941624d23689313bd56529.1620744606.git.mchehab+huawei@kernel.org>
-        <a4d0e1cf-20f1-d87c-0af6-b39f45afae5f@roeck-us.net>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:hwmon-next] BUILD SUCCESS
+ 607040aaa8b5ef1d721e232c8f7129f31634401e
+Message-ID: <609bca44.1hze+OkuZiGScpAY%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Guenter,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 607040aaa8b5ef1d721e232c8f7129f31634401e  dt-bindings: Add MP2888 voltage regulator device
 
-Em Tue, 11 May 2021 11:55:53 -0700
-Guenter Roeck <linux@roeck-us.net> escreveu:
+elapsed time: 1036m
 
-> On 5/11/21 8:01 AM, Mauro Carvalho Chehab wrote:
-> > While UTF-8 characters can be used at the Linux documentation,
-> > the best is to use them only when ASCII doesn't offer a good replacemen=
-t.
-> > So, replace the occurences of the following UTF-8 characters:
-> >=20
-> > 	- U+2013 ('=E2=80=93'): EN DASH
-> >=20
-> > In this specific case, EN DASH was used instead of a minus
-> > sign. So, replace it by a single hyphen.
-> >=20
-> > Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org> =20
->=20
-> Confused. Is that supposed to replace the earlier patch (docs: hwmon:
-> avoid using UTF-8 chars) ? I thought that was more comprehensive
-> and just as valid. Anyway, should I drop that patch ?
+configs tested: 125
+configs skipped: 2
 
-If you applied already the previous patch, that's OK. Just ignore this
-one.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-It is just that, after some discussions around EM/EN DASH on
-patch 00/53[1], I opted to split the changes on three parts:
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+x86_64                           allyesconfig
+riscv                            allyesconfig
+powerpc                      pcm030_defconfig
+powerpc               mpc834x_itxgp_defconfig
+arm                            hisi_defconfig
+powerpc                     tqm8560_defconfig
+mips                        nlm_xlp_defconfig
+openrisc                  or1klitex_defconfig
+m68k                          amiga_defconfig
+mips                           xway_defconfig
+sh                           se7712_defconfig
+arm                          collie_defconfig
+powerpc                     ppa8548_defconfig
+powerpc                 mpc834x_itx_defconfig
+powerpc                    socrates_defconfig
+arm                         s5pv210_defconfig
+arm                        magician_defconfig
+arm                         mv78xx0_defconfig
+arm                       aspeed_g4_defconfig
+mips                      malta_kvm_defconfig
+parisc                generic-32bit_defconfig
+powerpc                     sequoia_defconfig
+sh                           se7619_defconfig
+arc                          axs101_defconfig
+powerpc                      ep88xc_defconfig
+mips                        jmr3927_defconfig
+um                            kunit_defconfig
+arm                        multi_v7_defconfig
+powerpc                 mpc8315_rdb_defconfig
+riscv                    nommu_k210_defconfig
+sh                          rsk7264_defconfig
+powerpc                       holly_defconfig
+mips                         mpc30x_defconfig
+mips                  decstation_64_defconfig
+powerpc                      tqm8xx_defconfig
+mips                      bmips_stb_defconfig
+arm                            xcep_defconfig
+arm                        vexpress_defconfig
+sh                         ecovec24_defconfig
+parisc                           alldefconfig
+powerpc                        fsp2_defconfig
+m68k                       m5275evb_defconfig
+xtensa                          iss_defconfig
+powerpc                 mpc834x_mds_defconfig
+arm                         at91_dt_defconfig
+powerpc64                           defconfig
+arm                          pcm027_defconfig
+arm                             rpc_defconfig
+arm                         shannon_defconfig
+powerpc                    ge_imp3a_defconfig
+sh                            titan_defconfig
+sh                   sh7770_generic_defconfig
+powerpc                         ps3_defconfig
+powerpc                      chrp32_defconfig
+sh                           se7343_defconfig
+x86_64                            allnoconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+parisc                              defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a003-20210512
+x86_64               randconfig-a004-20210512
+x86_64               randconfig-a001-20210512
+x86_64               randconfig-a005-20210512
+x86_64               randconfig-a002-20210512
+x86_64               randconfig-a006-20210512
+i386                 randconfig-a003-20210512
+i386                 randconfig-a001-20210512
+i386                 randconfig-a005-20210512
+i386                 randconfig-a004-20210512
+i386                 randconfig-a002-20210512
+i386                 randconfig-a006-20210512
+i386                 randconfig-a016-20210512
+i386                 randconfig-a014-20210512
+i386                 randconfig-a011-20210512
+i386                 randconfig-a015-20210512
+i386                 randconfig-a012-20210512
+i386                 randconfig-a013-20210512
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                               allmodconfig
+um                                allnoconfig
+um                               allyesconfig
+um                                  defconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
 
-	- UTF-8 fixes;
-	- non DASH UTF-8 replacements;
-	- EM/EN DASH.
-
-in order to make easier for reviewers to discuss EM/EN DASH if needed.
-
--
-
-[1] You can see the full thread at:
-
-	https://lore.kernel.org/lkml/cover.1620641727.git.mchehab+huawei@kernel.or=
-g/
-
-    In summary, my original patchset were replacing both
-    EM/EN DASH to a single hyphen.
-
-    Yet, several maintainers seem to prefer using "--" for EN DASH
-    and either "--" or "---" for EM DASH.
-
-    Neither -- nor --- would make any sense on tmp103.rst, as here it
-    means a minus sign.
-   =20
-
->=20
-> Guenter
->=20
-> > ---
-> >   Documentation/hwmon/tmp103.rst | 4 ++--
-> >   1 file changed, 2 insertions(+), 2 deletions(-)
-> >=20
-> > diff --git a/Documentation/hwmon/tmp103.rst b/Documentation/hwmon/tmp10=
-3.rst
-> > index e195a7d14309..b3ef81475cf8 100644
-> > --- a/Documentation/hwmon/tmp103.rst
-> > +++ b/Documentation/hwmon/tmp103.rst
-> > @@ -21,10 +21,10 @@ Description
-> >   The TMP103 is a digital output temperature sensor in a four-ball
-> >   wafer chip-scale package (WCSP). The TMP103 is capable of reading
-> >   temperatures to a resolution of 1=C2=B0C. The TMP103 is specified for
-> > -operation over a temperature range of =E2=80=9340=C2=B0C to +125=C2=B0=
-C.
-> > +operation over a temperature range of -40=C2=B0C to +125=C2=B0C.
-> >  =20
-> >   Resolution: 8 Bits
-> > -Accuracy: =C2=B11=C2=B0C Typ (=E2=80=9310=C2=B0C to +100=C2=B0C)
-> > +Accuracy: =C2=B11=C2=B0C Typ (-10=C2=B0C to +100=C2=B0C)
-> >  =20
-> >   The driver provides the common sysfs-interface for temperatures (see
-> >   Documentation/hwmon/sysfs-interface.rst under Temperatures).
-> >  =20
->=20
-
-
-
-Thanks,
-Mauro
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
