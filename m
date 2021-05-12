@@ -2,192 +2,124 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81332C433B4
-	for <linux-hwmon@archiver.kernel.org>; Wed, 12 May 2021 12:30:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E698C43461
+	for <linux-hwmon@archiver.kernel.org>; Wed, 12 May 2021 12:51:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4E9B7613B4
-	for <linux-hwmon@archiver.kernel.org>; Wed, 12 May 2021 12:30:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1B0A761454
+	for <linux-hwmon@archiver.kernel.org>; Wed, 12 May 2021 12:51:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232307AbhELMb5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 12 May 2021 08:31:57 -0400
-Received: from mga07.intel.com ([134.134.136.100]:64102 "EHLO mga07.intel.com"
+        id S230398AbhELMwv (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 12 May 2021 08:52:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52122 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232316AbhELMb5 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 12 May 2021 08:31:57 -0400
-IronPort-SDR: pJOxwznYeGkGkRtt27/TAGJaLs+7L+dCMHG8zwe8GAeg2PgacNbN/Q3DVG40U+pfzmiwkEenC/
- ogP/iW4RttKA==
-X-IronPort-AV: E=McAfee;i="6200,9189,9981"; a="263620785"
-X-IronPort-AV: E=Sophos;i="5.82,293,1613462400"; 
-   d="scan'208";a="263620785"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2021 05:30:46 -0700
-IronPort-SDR: pDs+iY90/w9dxYJEJdjqyp8jv21ls7/gF0bFPyPqrAqJ27balX2RA2hlBZxeqkuxLwILf5qcUQ
- BItKowdnfcDw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,293,1613462400"; 
-   d="scan'208";a="455575232"
-Received: from lkp-server01.sh.intel.com (HELO 1e931876798f) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 12 May 2021 05:30:45 -0700
-Received: from kbuild by 1e931876798f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lgo0i-0000Hq-Eh; Wed, 12 May 2021 12:30:44 +0000
-Date:   Wed, 12 May 2021 20:29:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon-next] BUILD SUCCESS
- 607040aaa8b5ef1d721e232c8f7129f31634401e
-Message-ID: <609bca44.1hze+OkuZiGScpAY%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S231166AbhELMwu (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 12 May 2021 08:52:50 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2412461104;
+        Wed, 12 May 2021 12:51:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620823902;
+        bh=jmDA7OBIG40e3rzXAsGJ5fdtuKiC6QO6Mo48AVXXMFM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=pL4SydUtBWPym3d0Xl+3VdgdUWCpgr6afKhS9Uqc+AS4VcDS82cLP2ihz6GbIeqLw
+         FCefDFmi/6n7F1tEU2K/51sL8IGLso+cBQBa0Mk2uS7y/eQWNM8+jl8Ot3DcKsJ2H9
+         EGCzKw6UFrWSmYs9LG+N/T5ULbWdV7SONKwr+GMBJ+Q2LRYs9+c+CqTLborlcXU4RU
+         mLvJPtag5QX/wNVrn5Tk7KU1QvUDbwLf8tjkoycXMiy2hpe3dvq0hSEE7QwZ6ha7K7
+         vn7hK5Mzm+3ljP3HXxEHk6UADrzEs83V/vEj5lmYmx42o9eUrF3CLMFE+cx9eCXVLI
+         KzJ1SyYJSZteg==
+Received: by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1lgoKy-0018gr-3F; Wed, 12 May 2021 14:51:40 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        Charles Hsu <hsu.yungteng@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 01/40] docs: hwmon: Use ASCII subset instead of UTF-8 alternate symbols
+Date:   Wed, 12 May 2021 14:50:05 +0200
+Message-Id: <8a84b20ef52e012850a88be99c4a5450abfeda13.1620823573.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <cover.1620823573.git.mchehab+huawei@kernel.org>
+References: <cover.1620823573.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 607040aaa8b5ef1d721e232c8f7129f31634401e  dt-bindings: Add MP2888 voltage regulator device
+The conversion tools used during DocBook/LaTeX/Markdown->ReST conversion
+and some automatic rules which exists on certain text editors like
+LibreOffice turned ASCII characters into some UTF-8 alternatives that
+are better displayed on html and PDF.
 
-elapsed time: 1036m
+While it is OK to use UTF-8 characters in Linux, it is better to
+use the ASCII subset instead of using an UTF-8 equivalent character
+as it makes life easier for tools like grep, and are easier to edit
+with the some commonly used text/source code editors.
 
-configs tested: 125
-configs skipped: 2
+Also, Sphinx already do such conversion automatically outside literal blocks:
+   https://docutils.sourceforge.io/docs/user/smartquotes.html
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+So, replace the occurences of the following UTF-8 characters:
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-x86_64                           allyesconfig
-riscv                            allyesconfig
-powerpc                      pcm030_defconfig
-powerpc               mpc834x_itxgp_defconfig
-arm                            hisi_defconfig
-powerpc                     tqm8560_defconfig
-mips                        nlm_xlp_defconfig
-openrisc                  or1klitex_defconfig
-m68k                          amiga_defconfig
-mips                           xway_defconfig
-sh                           se7712_defconfig
-arm                          collie_defconfig
-powerpc                     ppa8548_defconfig
-powerpc                 mpc834x_itx_defconfig
-powerpc                    socrates_defconfig
-arm                         s5pv210_defconfig
-arm                        magician_defconfig
-arm                         mv78xx0_defconfig
-arm                       aspeed_g4_defconfig
-mips                      malta_kvm_defconfig
-parisc                generic-32bit_defconfig
-powerpc                     sequoia_defconfig
-sh                           se7619_defconfig
-arc                          axs101_defconfig
-powerpc                      ep88xc_defconfig
-mips                        jmr3927_defconfig
-um                            kunit_defconfig
-arm                        multi_v7_defconfig
-powerpc                 mpc8315_rdb_defconfig
-riscv                    nommu_k210_defconfig
-sh                          rsk7264_defconfig
-powerpc                       holly_defconfig
-mips                         mpc30x_defconfig
-mips                  decstation_64_defconfig
-powerpc                      tqm8xx_defconfig
-mips                      bmips_stb_defconfig
-arm                            xcep_defconfig
-arm                        vexpress_defconfig
-sh                         ecovec24_defconfig
-parisc                           alldefconfig
-powerpc                        fsp2_defconfig
-m68k                       m5275evb_defconfig
-xtensa                          iss_defconfig
-powerpc                 mpc834x_mds_defconfig
-arm                         at91_dt_defconfig
-powerpc64                           defconfig
-arm                          pcm027_defconfig
-arm                             rpc_defconfig
-arm                         shannon_defconfig
-powerpc                    ge_imp3a_defconfig
-sh                            titan_defconfig
-sh                   sh7770_generic_defconfig
-powerpc                         ps3_defconfig
-powerpc                      chrp32_defconfig
-sh                           se7343_defconfig
-x86_64                            allnoconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-parisc                              defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a003-20210512
-x86_64               randconfig-a004-20210512
-x86_64               randconfig-a001-20210512
-x86_64               randconfig-a005-20210512
-x86_64               randconfig-a002-20210512
-x86_64               randconfig-a006-20210512
-i386                 randconfig-a003-20210512
-i386                 randconfig-a001-20210512
-i386                 randconfig-a005-20210512
-i386                 randconfig-a004-20210512
-i386                 randconfig-a002-20210512
-i386                 randconfig-a006-20210512
-i386                 randconfig-a016-20210512
-i386                 randconfig-a014-20210512
-i386                 randconfig-a011-20210512
-i386                 randconfig-a015-20210512
-i386                 randconfig-a012-20210512
-i386                 randconfig-a013-20210512
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                               allmodconfig
-um                                allnoconfig
-um                               allyesconfig
-um                                  defconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+	- U+2010 ('‐'): HYPHEN
+	- U+2019 ('’'): RIGHT SINGLE QUOTATION MARK
 
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ Documentation/hwmon/ir36021.rst  | 2 +-
+ Documentation/hwmon/ltc2992.rst  | 2 +-
+ Documentation/hwmon/pm6764tr.rst | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/Documentation/hwmon/ir36021.rst b/Documentation/hwmon/ir36021.rst
+index ca3436b04e20..1faa85c39f1b 100644
+--- a/Documentation/hwmon/ir36021.rst
++++ b/Documentation/hwmon/ir36021.rst
+@@ -19,7 +19,7 @@ Authors:
+ Description
+ -----------
+ 
+-The IR36021 is a dual‐loop digital multi‐phase buck controller designed for
++The IR36021 is a dual-loop digital multi-phase buck controller designed for
+ point of load applications.
+ 
+ Usage Notes
+diff --git a/Documentation/hwmon/ltc2992.rst b/Documentation/hwmon/ltc2992.rst
+index 46aa1aa84a1a..a0bcd867a0f5 100644
+--- a/Documentation/hwmon/ltc2992.rst
++++ b/Documentation/hwmon/ltc2992.rst
+@@ -19,7 +19,7 @@ This driver supports hardware monitoring for Linear Technology LTC2992 power mon
+ LTC2992 is a rail-to-rail system monitor that measures current,
+ voltage, and power of two supplies.
+ 
+-Two ADCs simultaneously measure each supply’s current. A third ADC monitors
++Two ADCs simultaneously measure each supply's current. A third ADC monitors
+ the input voltages and four auxiliary external voltages.
+ 
+ 
+diff --git a/Documentation/hwmon/pm6764tr.rst b/Documentation/hwmon/pm6764tr.rst
+index a1fb8fea2326..294a8ffc8bd8 100644
+--- a/Documentation/hwmon/pm6764tr.rst
++++ b/Documentation/hwmon/pm6764tr.rst
+@@ -20,7 +20,7 @@ Description:
+ ------------
+ 
+ This driver supports the STMicroelectronics PM6764TR chip. The PM6764TR is a high
+-performance digital controller designed to power Intel’s VR12.5 processors and memories.
++performance digital controller designed to power Intel's VR12.5 processors and memories.
+ 
+ The device utilizes digital technology to implement all control and power management
+ functions to provide maximum flexibility and performance. The NVM is embedded to store
+-- 
+2.30.2
+
