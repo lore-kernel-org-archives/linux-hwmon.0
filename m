@@ -2,217 +2,200 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_2 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FA4CC433B4
-	for <linux-hwmon@archiver.kernel.org>; Fri, 14 May 2021 07:45:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 072E7C43470
+	for <linux-hwmon@archiver.kernel.org>; Fri, 14 May 2021 08:21:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 45BB2611CE
-	for <linux-hwmon@archiver.kernel.org>; Fri, 14 May 2021 07:45:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DDE4661451
+	for <linux-hwmon@archiver.kernel.org>; Fri, 14 May 2021 08:21:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbhENHqX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 14 May 2021 03:46:23 -0400
-Received: from mga07.intel.com ([134.134.136.100]:49369 "EHLO mga07.intel.com"
+        id S233473AbhENIWk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 14 May 2021 04:22:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45708 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230102AbhENHqW (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 14 May 2021 03:46:22 -0400
-IronPort-SDR: UnSENTkIHIlc0jVupxFZDOcfkbgmdRTaHJ+80wB6Wn95XlH3ZllGQp26NLJmmaY5n7eJr5xwqN
- CdTqket2UhKg==
-X-IronPort-AV: E=McAfee;i="6200,9189,9983"; a="264055088"
-X-IronPort-AV: E=Sophos;i="5.82,299,1613462400"; 
-   d="scan'208";a="264055088"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2021 00:45:11 -0700
-IronPort-SDR: Tr5O13O0nfWcqHVpY4f54aqhpvzm4k6StRl/tjJ+r46dER8TW8HlVdbSdkHn3fsVEHTYel6/lq
- 52dyOFseguNw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,299,1613462400"; 
-   d="scan'208";a="457054900"
-Received: from lkp-server01.sh.intel.com (HELO ddd90b05c979) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 14 May 2021 00:45:10 -0700
-Received: from kbuild by ddd90b05c979 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lhSVR-0000dD-Nu; Fri, 14 May 2021 07:45:09 +0000
-Date:   Fri, 14 May 2021 15:44:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon-next] BUILD SUCCESS
- 80ceb2c97b7816fee8af441f7eac57b70ecef822
-Message-ID: <609e2a7b.Jrtd6ZXx6P0Y0nbo%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S233416AbhENIWk (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 14 May 2021 04:22:40 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C728061408;
+        Fri, 14 May 2021 08:21:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620980488;
+        bh=gH2wh+Hc0GOhQOIRbo/h4JAX62sDUeKs2tmsR+5ILos=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=e4qbUbfx0hxY+yj5rwe10X7fv77kQb6ZtXwJRT57564V2F/AP6l30KEqmfnQ8Z9/m
+         GbE6KTSFaLVgK/IALz8lgNCCJI09Wv6ypJxw7X8+NYsSH+qLTaA3rBVUJFbnXj6RkO
+         OLP+toeaBJ59mDypgIfhUX1EfHY2OFa2Ex63sriWaBCbSg8WSO+y0qdrgc5mMfEUKi
+         zoIKuKJCbIWchz7V1P1kNvQQPYr/hVEIXMXwl9v4IpEIdTp9mOKu3ZsGi5lbDjocf7
+         LN9AhGRwhMXdDuYb3SF+qI1QUoGfgKM56pIxwAOv5jsDOpM5r9sAA4fr4BFVLy6RmQ
+         IhAi7M7Jw2dRw==
+Date:   Fri, 14 May 2021 10:21:18 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     David Woodhouse <dwmw2@infradead.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Mali DP Maintainers <malidp@foss.arm.com>,
+        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
+        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-sgx@vger.kernel.org, linux-usb@vger.kernel.org,
+        mjpeg-users@lists.sourceforge.net, netdev@vger.kernel.org,
+        rcu@vger.kernel.org
+Subject: Re: [PATCH v2 00/40] Use ASCII subset instead of UTF-8 alternate
+ symbols
+Message-ID: <20210514102118.1b71bec3@coco.lan>
+In-Reply-To: <d2fed242fbe200706b8d23a53512f0311d900297.camel@infradead.org>
+References: <cover.1620823573.git.mchehab+huawei@kernel.org>
+        <d2fed242fbe200706b8d23a53512f0311d900297.camel@infradead.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 80ceb2c97b7816fee8af441f7eac57b70ecef822  hwmon: (adm1275) enable adm1272 temperature reporting
+Em Wed, 12 May 2021 18:07:04 +0100
+David Woodhouse <dwmw2@infradead.org> escreveu:
 
-elapsed time: 720m
+> On Wed, 2021-05-12 at 14:50 +0200, Mauro Carvalho Chehab wrote:
+> > Such conversion tools - plus some text editor like LibreOffice  or simi=
+lar  - have
+> > a set of rules that turns some typed ASCII characters into UTF-8 altern=
+atives,
+> > for instance converting commas into curly commas and adding non-breakab=
+le
+> > spaces. All of those are meant to produce better results when the text =
+is
+> > displayed in HTML or PDF formats. =20
+>=20
+> And don't we render our documentation into HTML or PDF formats?=20
 
-configs tested: 148
-configs skipped: 3
+Yes.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> Are
+> some of those non-breaking spaces not actually *useful* for their
+> intended purpose?
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm64                               defconfig
-sh                                  defconfig
-arc                              allyesconfig
-powerpc                 mpc8313_rdb_defconfig
-m68k                        mvme16x_defconfig
-m68k                       m5249evb_defconfig
-arc                          axs103_defconfig
-sh                         ap325rxa_defconfig
-mips                  maltasmvp_eva_defconfig
-mips                           mtx1_defconfig
-arm                           u8500_defconfig
-powerpc                     taishan_defconfig
-mips                        workpad_defconfig
-powerpc                 linkstation_defconfig
-mips                malta_qemu_32r6_defconfig
-um                             i386_defconfig
-arm                         lpc32xx_defconfig
-powerpc                 mpc836x_mds_defconfig
-riscv                    nommu_virt_defconfig
-riscv             nommu_k210_sdcard_defconfig
-arc                              alldefconfig
-m68k                                defconfig
-riscv                    nommu_k210_defconfig
-powerpc                   lite5200b_defconfig
-sh                   sh7770_generic_defconfig
-powerpc                    gamecube_defconfig
-arm                          simpad_defconfig
-powerpc                      ppc44x_defconfig
-powerpc                         ps3_defconfig
-m68k                        m5307c3_defconfig
-m68k                       m5275evb_defconfig
-arm                          iop32x_defconfig
-powerpc                 mpc8315_rdb_defconfig
-xtensa                           allyesconfig
-sh                           se7712_defconfig
-m68k                       bvme6000_defconfig
-mips                      maltaaprp_defconfig
-xtensa                  nommu_kc705_defconfig
-arm                          gemini_defconfig
-mips                     cu1000-neo_defconfig
-mips                       capcella_defconfig
-mips                      maltasmvp_defconfig
-powerpc                     sequoia_defconfig
-powerpc                      makalu_defconfig
-powerpc                        icon_defconfig
-xtensa                  cadence_csp_defconfig
-arm                       imx_v4_v5_defconfig
-powerpc                     tqm5200_defconfig
-h8300                               defconfig
-sh                        sh7785lcr_defconfig
-arc                                 defconfig
-m68k                           sun3_defconfig
-powerpc                     mpc512x_defconfig
-openrisc                 simple_smp_defconfig
-mips                           ip22_defconfig
-arc                          axs101_defconfig
-m68k                          hp300_defconfig
-powerpc                         wii_defconfig
-alpha                            allyesconfig
-riscv                          rv32_defconfig
-arm                          moxart_defconfig
-sh                          urquell_defconfig
-sh                        sh7763rdp_defconfig
-mips                        jmr3927_defconfig
-mips                       rbtx49xx_defconfig
-sh                            migor_defconfig
-x86_64                            allnoconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-nios2                               defconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-h8300                            allyesconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a003-20210514
-i386                 randconfig-a001-20210514
-i386                 randconfig-a004-20210514
-i386                 randconfig-a005-20210514
-i386                 randconfig-a002-20210514
-i386                 randconfig-a006-20210514
-i386                 randconfig-a003-20210513
-i386                 randconfig-a001-20210513
-i386                 randconfig-a005-20210513
-i386                 randconfig-a004-20210513
-i386                 randconfig-a002-20210513
-i386                 randconfig-a006-20210513
-x86_64               randconfig-a012-20210513
-x86_64               randconfig-a015-20210513
-x86_64               randconfig-a011-20210513
-x86_64               randconfig-a013-20210513
-x86_64               randconfig-a016-20210513
-x86_64               randconfig-a014-20210513
-i386                 randconfig-a016-20210513
-i386                 randconfig-a014-20210513
-i386                 randconfig-a011-20210513
-i386                 randconfig-a015-20210513
-i386                 randconfig-a012-20210513
-i386                 randconfig-a013-20210513
-x86_64               randconfig-a004-20210514
-x86_64               randconfig-a003-20210514
-x86_64               randconfig-a001-20210514
-x86_64               randconfig-a005-20210514
-x86_64               randconfig-a002-20210514
-x86_64               randconfig-a006-20210514
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-um                               allmodconfig
-um                                allnoconfig
-um                               allyesconfig
-um                                  defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+No.
 
-clang tested configs:
-x86_64               randconfig-a003-20210513
-x86_64               randconfig-a004-20210513
-x86_64               randconfig-a001-20210513
-x86_64               randconfig-a005-20210513
-x86_64               randconfig-a002-20210513
-x86_64               randconfig-a006-20210513
+The thing is: non-breaking space can cause a lot of problems.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+We even had to disable Sphinx usage of non-breaking space for
+PDF outputs, as this was causing bad LaTeX/PDF outputs.
+
+See, commit: 3b4c963243b1 ("docs: conf.py: adjust the LaTeX document output=
+")
+
+The afore mentioned patch disables Sphinx default behavior of
+using NON-BREAKABLE SPACE on literal blocks and strings, using this
+special setting: "parsedliteralwraps=3Dtrue".
+
+When NON-BREAKABLE SPACE were used on PDF outputs, several parts of=20
+the media uAPI docs were violating the document margins by far,
+causing texts to be truncated.
+
+So, please **don't add NON-BREAKABLE SPACE**, unless you test
+(and keep testing it from time to time) if outputs on all
+formats are properly supporting it on different Sphinx versions.
+
+-
+
+Also, most of those came from conversion tools, together with other
+eccentricities, like the usage of U+FEFF (BOM) character at the
+start of some documents. The remaining ones seem to came from=20
+cut-and-paste.
+
+For instance,  bibliographic references (there are a couple of
+those on media) sometimes have NON-BREAKABLE SPACE. I'm pretty
+sure that those came from cut-and-pasting the document titles
+from their names at the original PDF documents or web pages that
+are referenced.
+
+> > While it is perfectly fine to use UTF-8 characters in Linux, and specia=
+lly at
+> > the documentation,  it is better to  stick to the ASCII subset  on such
+> > particular case,  due to a couple of reasons:
+> >=20
+> > 1. it makes life easier for tools like grep; =20
+>=20
+> Barely, as noted, because of things like line feeds.
+
+You can use grep with "-z" to seek for multi-line strings(*), Like:
+
+	$ grep -Pzl 'grace period started,\s*then' $(find Documentation/ -type f)
+	Documentation/RCU/Design/Data-Structures/Data-Structures.rst
+
+(*) Unfortunately, while "git grep" also has a "-z" flag, it
+    seems that this is (currently?) broken with regards of handling multili=
+nes:
+
+	$ git grep -Pzl 'grace period started,\s*then'
+	$
+
+> > 2. they easier to edit with the some commonly used text/source
+> >    code editors. =20
+>=20
+> That is nonsense. Any but the most broken and/or anachronistic
+> environments and editors will be just fine.
+
+Not really.
+
+I do use a lot of UTF-8 here, as I type texts in Portuguese, but I rely
+on the US-intl keyboard settings, that allow me to type as "'a" for =C3=A1.
+However, there's no shortcut for non-Latin UTF-codes, as far as I know.
+
+So, if would need to type a curly comma on the text editors I normally=20
+use for development (vim, nano, kate), I would need to cut-and-paste
+it from somewhere[1].
+
+[1] If I have a table with UTF-8 codes handy, I could type the UTF-8=20
+    number manually... However, it seems that this is currently broken=20
+    at least on Fedora 33 (with Mate Desktop and US intl keyboard with=20
+    dead keys).
+
+    Here, <CTRL><SHIFT>U is not working. No idea why. I haven't=20
+    test it for *years*, as I din't see any reason why I would
+    need to type UTF-8 characters by numbers until we started
+    this thread.
+=20
+In practice, on the very rare cases where I needed to write
+non-Latin utf-8 chars (maybe once in a year or so, Like when I
+would need to use a Greek letter or some weird symbol), there changes
+are high that I wouldn't remember its UTF-8 code.
+
+So, If I need to spend time to seek for an specific symbol, after
+finding it, I just cut-and-paste it.
+
+But even in the best case scenario where I know the UTF-8 and
+<CTRL><SHIFT>U works, if I wanted to use, for instance, a curly
+comma, the keystroke sequence would be:
+
+	<CTRL><SHIFT>U201csome string<CTRL><SHIFT>U201d
+
+That's a lot harder than typing and has a higher chances of
+mistakenly add a wrong symbol than just typing:
+
+	"some string"
+
+Knowing that both will produce *exactly* the same output, why
+should I bother doing it the hard way?
+
+-
+
+Now, I'm not arguing that you can't use whatever UTF-8 symbol you
+want on your docs. I'm just saying that, now that the conversion=20
+is over and a lot of documents ended getting some UTF-8 characters
+by accident, it is time for a cleanup.
+
+Thanks,
+Mauro
