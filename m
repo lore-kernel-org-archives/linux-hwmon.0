@@ -2,93 +2,91 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95B3DC433ED
-	for <linux-hwmon@archiver.kernel.org>; Sat, 15 May 2021 13:48:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EAB0C433ED
+	for <linux-hwmon@archiver.kernel.org>; Sat, 15 May 2021 18:34:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6BEEC613C7
-	for <linux-hwmon@archiver.kernel.org>; Sat, 15 May 2021 13:48:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 591746135F
+	for <linux-hwmon@archiver.kernel.org>; Sat, 15 May 2021 18:34:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231260AbhEONtb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 15 May 2021 09:49:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49308 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbhEONt3 (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 15 May 2021 09:49:29 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88291C061573;
-        Sat, 15 May 2021 06:48:15 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id 5so1058468qvk.0;
-        Sat, 15 May 2021 06:48:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=gSN+oBo25nm5oFQGDCy11Y2eXGQsHW25HeP+shJpfo8=;
-        b=oYKPMiaAx537Yp9eJbDh+ERk8pULEoGG86qE6MLNja3T46bmHPBDfWVPELSH6Wdx3L
-         9Qe/U4m1VbsaAXKclUaGLiJyc3T/bO6aUqO+n9paq0b3A5E5e4OpsLSCsKfehgFpmRj3
-         vFOHUWB4a2OcKCoXZE4gf7hLbHPHKLiN2TyeWFoWQwqmw07dnbkkwx2TI6UJFTSA8lNB
-         F0YKgNhHwD97r1vx9kwkSO3hCPgNG4A+OUublqEPOCa8wvOqbavvi+1Fg540hxBQBurd
-         jtV/ddzRGsYBgR2K5XuxuUihaPgzpIN8YTGrsf9TM58DJIqSZr0yt6OlqO9uh3iFTrpk
-         oPZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=gSN+oBo25nm5oFQGDCy11Y2eXGQsHW25HeP+shJpfo8=;
-        b=ShlQ2sM39Jxf4hALAvlonWQBnoggTc5ZHjaC8LK7cmWgY7TO5hZ2OqEuITUqth6fBP
-         9oPkd3wNp//QdK6X4wg/a1dp6gLRhLeo6GOR5mxHaxgeS7cgBIKnxRYl8VfI0NFU48yY
-         geuJovjFyv9LNebOE2QqXcopE2y1/IVWSnAELpgYp3/ajgVgjiSfRUICiMMHxjLEKpgB
-         GJaz7z9l4BQTaQLZM63Y9m9Zdqpew7umKsApqOpUWuzDhIw9qAfKPl/AoV/LgQb9YeAE
-         rAf4c2a2pYptmbRzZd/ETKdM2crmLgp4RCRGAi3KRd/qn22GQs1zhfy4okqFdPy9oj5j
-         gJnw==
-X-Gm-Message-State: AOAM533lF/qufo/zrNNDrN5djbQ2p36MnBqARBZ+U4DXjtSW5KgPjZZC
-        E5hyP7/toyfKbJ/pyiD4UoslxkXVIr0=
-X-Google-Smtp-Source: ABdhPJwSn+TpD4N5hpql5WCz9M5hicsg93h0hglPYykKof6p+9Rib8QS/9uUJldEIzAgaZdKhS6zhw==
-X-Received: by 2002:ad4:5a52:: with SMTP id ej18mr6885311qvb.31.1621086494701;
-        Sat, 15 May 2021 06:48:14 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h10sm6955465qkh.47.2021.05.15.06.48.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 15 May 2021 06:48:14 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: hwmon: (w83781d) Unused attribute group w83781d_group_other
-To:     Evgeny Novikov <novikov@ispras.ru>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        ldv-project-org <ldv-project@linuxtesting.org>
-References: <141331621085123@mail.yandex.ru>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <ed3df026-3d47-45bf-dd1b-c0f2dc5cd02a@roeck-us.net>
-Date:   Sat, 15 May 2021 06:48:12 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S234404AbhEOSfu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 15 May 2021 14:35:50 -0400
+Received: from mout.gmx.net ([212.227.17.22]:40521 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231558AbhEOSft (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 15 May 2021 14:35:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1621103659;
+        bh=/85Iw3pygjgtysAoY4S0Gx3mlsrQ+URf+Ox/cgVWAZc=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=krPAbETkZid1mfvwL+x8AD1r108EuLnxJGXXehl8exWl/qJcSY0aHrkM1JPZlqRxL
+         QZDsuzLBeS/u0EP9qV2g/iTtZ0QwtsOwoiTa2qE/Y6ZgFl6rJbQJNyw2tFgTPsSeA2
+         S1RQbTAQ6irodY4O4D30m2fceBsK5q8FnIshsOWo=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from esprimo-mx.fritz.box ([91.0.97.49]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mel3t-1lAISU1YfN-00alO0; Sat, 15
+ May 2021 20:34:19 +0200
+From:   W_Armin@gmx.de
+To:     pali@kernel.org
+Cc:     linux@roeck-us.net, jdelvare@suse.com, linux-hwmon@vger.kernel.org
+Subject: [RFC 0/3] hwmon: (dell-smm-hwmon) Use platform device
+Date:   Sat, 15 May 2021 20:34:06 +0200
+Message-Id: <20210515183409.682-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <141331621085123@mail.yandex.ru>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:XWIA2WdASwj3cVJnIkp1hM8n2PsA/MCHxNRMfFlyif5+zVSairL
+ uAvrVDCDdt1Hc9/YMNuJwPbPAEn5VWX2crBSNh6LxNGCVd4qxlccIvUDRrnPU6/LzAbH5WA
+ FfyBRb0lvO55/I/UbDqT538Mr8ImepNNEnbj/IzaKyADe3CweYfk4hp0CyDEMsw41Jun4Eo
+ kNTR/olD2UdgobKcHv3HQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:GvNYmgZvJh8=:2qb+XaioaWKfqzSnTSq0SY
+ OkvQwq/hxmw5BXH6ZcRr6wnWJVPMVQvDqGa3IWLRvG/XfFYrszxzqZ3MbXppXuIwnkc2xuj1T
+ zb7QeM4W1Rsh+77DjWtttMM+3Y1d301vwsNJUrQcQsjwrweB4gxUdbL9XoSGuZCHcNfaPR6oc
+ JJd3PCAzFw51MxYV7dqqtJvgYtdDzlplHXP/eDReSwf8aEy7vQCwy7B+a8he4PxvonXCydqHs
+ ItWKAUkIoVRY+9fWHsAue3sBRW/998nL6z3g8vSQMP7oaIzSIrd9C2dN6pY8H6AHkikf1VFJT
+ xmu9kxM+mkj4++XRUjojBllWCt2c9Atx9ObCkxr7Cx+6j5vDbOjigD34Oc8xVmGB0kAIRl0VO
+ CMcdimiybSvB4A/O3XFqeVOHDmOKFbXX71EOKWrDclm4gXDLAC97UmS0JOxgp0v8b6mgmDgTS
+ cBRR6FBQ1iQxExodQjVdV7l9URdF4Xl/4HpGSynsqehPqocqHuWSihiAYTr/oB5HYP0emv/WC
+ Rpeev3Lyyy3LmeiWLNZL7fCNbfvJynwxoT/7EsLxbIqV+bR+/m3/myZVYUVNk8O8RrKuiN3gv
+ RARR0EeBI0T09aWMjIDLDeyECck3wo/1QCVNezPkjWKLXlEU4XvAEq42jXU8PRq18HDeqQM2t
+ dJmIhMGzFEF41eeYDzUNWDjgY4gykyty9humxSkURGNnxnmwt9jFjgNFqIISEsPY8PGSuap41
+ q1DEPLOB2Z1WYqB6Bagd+oUVu6Icr4/xaurgzp+kqjc8vO28qNuKRXBDVFlWm6S8cF9HKcGXx
+ NZR1yUa0jGhtTUzMvcyvEyFGQNhCG8JuK1AHGht8OLuDZwxmdeJ2drVLYuQaLLH2vupZI+Rtu
+ 0gLJCxeb+07ZuMx3r7Eqgk5t4wCobc355C8IdmY3/aiNKm7EGNXAr855gTKmGjDbIXN5SG1qB
+ DlqlTX2qrkNqX3cx3yZwG7w80FZ4SkKPE1ZZyHsWdRj3kx3F/QgHOAJiiAkF2ShJSU9PJKQyR
+ p0TpwcsF9dlG6SPBWAZIMifTKcp/nLEDltUkunHqcjN1/sOVM5vkOxg9CD4nRGKab0W4/XGdF
+ +r64uBEMI73aqCFU65M7lAaMv27NX5+N08Osdpqom+dqKB/jM/zc5veJR7FoEN9G2C5UCH8SO
+ bAFD5ch0H8zBfun7i4UZcM5MVBp3CftgzpQqCaLPqsrU4+zmUGeQ3hLXo+96857kHMLv4=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/15/21 6:29 AM, Evgeny Novikov wrote:
-> Driver drivers/hwmon/w83781d.ko declares and removes attribute group
-> w83781d_group_other, but it does not create it ever. Is it better to remove
-> it completely or to do something else?
+From: Armin Wolf <W_Armin@gmx.de>
 
-Do nothing. The group is only used to remove the attributes.
-The attributes are created one by one, not using the group.
-This is WAI.
+Use a platform device in order to use devres functions.
+Also a future rewrite of the driver requieres a device.
 
-Oh, there _is_ something you can do: Fix the Linux Driver Verification
-project scripts to no longer result in those false positives.
+Are the patches for introducing the platform driver/device
+ok for serving as the basis for the conversion to
+hwmon_device_register_with_info()?
 
-Guenter
+They work on my Dell Latitude C600 just fine, but i whould
+appreciate someone testing the code on another model too.
+
+Armin Wolf (3):
+  hwmon: (dell-smm-hwmon) Use platform device
+  hwmon: (dell-smm-hwmon) Use devm_add_action_or_reset()
+  hwmon: (dell-smm-hwmon) Move variables into a driver private data
+    structure
+
+ drivers/hwmon/dell-smm-hwmon.c | 392 ++++++++++++++++++---------------
+ 1 file changed, 210 insertions(+), 182 deletions(-)
+
+=2D-
+2.20.1
+
