@@ -2,116 +2,146 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.5 required=3.0 tests=BAYES_00,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB424C43460
-	for <linux-hwmon@archiver.kernel.org>; Sun, 16 May 2021 09:05:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B9C9C43470
+	for <linux-hwmon@archiver.kernel.org>; Sun, 16 May 2021 10:18:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8BC846103E
-	for <linux-hwmon@archiver.kernel.org>; Sun, 16 May 2021 09:05:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0CF2661206
+	for <linux-hwmon@archiver.kernel.org>; Sun, 16 May 2021 10:18:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234394AbhEPJGh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 16 May 2021 05:06:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50124 "EHLO mail.kernel.org"
+        id S235157AbhEPKUI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 16 May 2021 06:20:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37682 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229445AbhEPJGg (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 16 May 2021 05:06:36 -0400
-Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B7D3A610A6;
-        Sun, 16 May 2021 09:05:19 +0000 (UTC)
-Date:   Sun, 16 May 2021 10:06:31 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Liam Beguin <liambeguin@gmail.com>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, lars@metafoo.de,
-        pmeerw@pmeerw.net, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        Peter Rosin <peda@axentia.se>
-Subject: Re: [RFC PATCH v1 0/2] hwmon: (iio_hwmon) optionally force iio
- channel type
-Message-ID: <20210516100631.7310a7bb@jic23-huawei>
-In-Reply-To: <20210516044315.116290-1-liambeguin@gmail.com>
-References: <20210516044315.116290-1-liambeguin@gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S231386AbhEPKTx (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 16 May 2021 06:19:53 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 768AD611CA;
+        Sun, 16 May 2021 10:18:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621160317;
+        bh=uz12JEUkFl1zk0MKhwqoy7Swq0yIqwlg559U5vqLb64=;
+        h=From:To:Cc:Subject:Date:From;
+        b=NZoYuL4T8pZP0XVsuqpo1xaXga3djUflecwXx5LGut8qbhlW3Y9NzBmiQJpti66iQ
+         XEctA9a/tkYn6eIfMFOD23iU2NVyAWENwzAu5GTKImts+lpuYv0eNqgw/CUZ2ZkWss
+         fllyfJ2EOkHcmxftZ1iXvAx83SROwJwSmenZXooYhJTuiuJxIyQ+zDnL2KcckWJO3l
+         HXjHP9OcKsGcnNSkEPNKSqumMlW9xOUSyWQbW7rfHCgaVLEVCKAvIaHdwvFlEJ1a7n
+         T0Jc41mYwmUESpLNWcMxWdQoD+Yw7News+EAAT/i+fb8vmW0PjoNLGp13h2ptdOtyU
+         rkJ7P+/53g9gg==
+Received: by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1liDr1-003o89-5Z; Sun, 16 May 2021 12:18:35 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Corentin Labbe <clabbe@baylibre.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jean Delvare <jdelvare@suse.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
+        intel-wired-lan@lists.osuosl.org, kvm@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ext4@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-usb@vger.kernel.org, mjpeg-users@lists.sourceforge.net,
+        netdev@vger.kernel.org, rcu@vger.kernel.org
+Subject: [PATCH v3 00/16] Replace some bad characters on documents
+Date:   Sun, 16 May 2021 12:18:17 +0200
+Message-Id: <cover.1621159997.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, 16 May 2021 00:43:13 -0400
-Liam Beguin <liambeguin@gmail.com> wrote:
+The conversion tools used during DocBook/LaTeX/html/Markdown->ReST 
+conversion and some cut-and-pasted text contain some characters that
+aren't easily reachable on standard keyboards and/or could cause 
+troubles when parsed by the documentation build system.
 
-> Add a devicetree binding to optionally force a different IIO channel
-> type.
-> 
-> This is useful in cases where ADC channels are connected to a circuit
-> that represent another unit such as a temperature or a current.
-> 
-> `channel-types` was chosen instead of `io-channel-types` as this is not
-> part of the iio consumer bindings.
-> 
-> In the current form, this patch does what it's intended to do:
-> change the unit displayed by `sensors`, but feels like the wrong way to
-> address the problem.
-> 
-> Would it be possible to force the type of different IIO channels for
-> this kind of use case with a devicetree binding from the IIO subsystem?
-> 
-> It would be convenient to do it within the IIO subsystem to have the
-> right unit there too.
-> 
-> Thanks for your time,
-> Liam
+Replace the occurences of the following characters:
 
-Hi Liam,
+            - U+00a0 (' '): NO-BREAK SPACE
+            - U+00ad ('­'): SOFT HYPHEN
+            - U+2010 ('‐'): HYPHEN
+            - U+2217 ('∗'): ASTERISK OPERATOR
+            - U+feff ('﻿'): BOM
 
-+CC Peter for AFE part.
+I'll submit in separate another series to address other character occurrences.
 
-It's an interesting approach, but I would suggest we think about this
-a different way.
-
-Whenever a channel is being used to measure something 'different' from
-what it actually measures (e.g. a voltage ADC measuring a current) that
-reflects their being some analog component involved.
-If you look at drivers/iio/afe/iio-rescale.c you can see the approach
-we currently use to handle this.
-
-Effectively what you add to devicetree is a consumer of the ADC channel
-which in turn provides services to other devices. For this current case
-it would be either a current-sense-amplifier or a current-sense-shunt 
-depending on what the analog front end looks like.  We have to describe
-the characteristics of that front end which isn't something that can
-be done via a simple channel type.
-
-That afe consumer device can then provide services to another consumer
-(e.g. iio-hwmon) which work for your usecase.
-
-The main limitation of this approach currently is you end up with
-one device per channel.  That could be improved upon if you have a usecase
-where it matters.
-
-I don't think we currently have an equivalent for temperature sensing
-but it would be easy enough to do something similar.
-
-Jonathan
+v3:
+  - removed curly commas and changed the patch descriptions.
+v2:
+  - removed EM/EN dashes and changed the patch descriptions.
 
 
-> 
-> Liam Beguin (2):
->   hwmon: (iio_hwmon) optionally force iio channel type
->   dt-bindings: hwmon: add iio-hwmon bindings
-> 
->  .../devicetree/bindings/hwmon/iio-hwmon.yaml  | 41 +++++++++++++++++++
->  drivers/hwmon/iio_hwmon.c                     |  2 +
->  2 files changed, 43 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/iio-hwmon.yaml
-> 
-> 
-> base-commit: 9f4ad9e425a1d3b6a34617b8ea226d56a119a717
+Mauro Carvalho Chehab (16):
+  docs: hwmon: ir36021.rst: replace some characters
+  docs: admin-guide: reporting-issues.rst: replace some characters
+  docs: trace: coresight: coresight-etm4x-reference.rst: replace some
+    characters
+  docs: driver-api: ioctl.rst: replace some characters
+  docs: driver-api: media: drivers: zoran.rst: replace some characters
+  docs: usb: replace some characters
+  docs: userspace-api: media: v4l: dev-decoder.rst: replace some
+    characters
+  docs: userspace-api: media: dvb: intro.rst: replace some characters
+  docs: vm: zswap.rst: replace some characters
+  docs: filesystems: ext4: blockgroup.rst: replace some characters
+  docs: networking: device_drivers: replace some characters
+  docs: PCI: acpi-info.rst: replace some characters
+  docs: sound: kernel-api: writing-an-alsa-driver.rst: replace some
+    characters
+  docs: firmware-guide: acpi: dsd: graph.rst: replace some characters
+  docs: virt: kvm: api.rst: replace some characters
+  docs: RCU: replace some characters
+
+ Documentation/PCI/acpi-info.rst               | 18 ++---
+ .../Data-Structures/Data-Structures.rst       | 46 ++++++------
+ .../Expedited-Grace-Periods.rst               | 36 +++++-----
+ .../Tree-RCU-Memory-Ordering.rst              |  2 +-
+ .../RCU/Design/Requirements/Requirements.rst  | 70 +++++++++----------
+ .../admin-guide/reporting-issues.rst          |  2 +-
+ Documentation/driver-api/ioctl.rst            |  8 +--
+ .../driver-api/media/drivers/zoran.rst        |  2 +-
+ Documentation/filesystems/ext4/blockgroup.rst |  2 +-
+ .../firmware-guide/acpi/dsd/graph.rst         |  2 +-
+ Documentation/hwmon/ir36021.rst               |  2 +-
+ .../device_drivers/ethernet/intel/i40e.rst    |  6 +-
+ .../device_drivers/ethernet/intel/iavf.rst    |  2 +-
+ .../kernel-api/writing-an-alsa-driver.rst     |  2 +-
+ .../coresight/coresight-etm4x-reference.rst   |  2 +-
+ Documentation/usb/ehci.rst                    |  2 +-
+ Documentation/usb/gadget_printer.rst          |  2 +-
+ .../userspace-api/media/dvb/intro.rst         |  4 +-
+ .../userspace-api/media/v4l/dev-decoder.rst   |  2 +-
+ Documentation/virt/kvm/api.rst                | 28 ++++----
+ Documentation/vm/zswap.rst                    |  4 +-
+ 21 files changed, 122 insertions(+), 122 deletions(-)
+
+-- 
+2.31.1
+
 
