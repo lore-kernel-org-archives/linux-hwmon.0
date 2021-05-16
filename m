@@ -2,72 +2,51 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-19.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B9C9C43470
-	for <linux-hwmon@archiver.kernel.org>; Sun, 16 May 2021 10:18:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B19F9C43461
+	for <linux-hwmon@archiver.kernel.org>; Sun, 16 May 2021 10:19:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0CF2661206
-	for <linux-hwmon@archiver.kernel.org>; Sun, 16 May 2021 10:18:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 910A961183
+	for <linux-hwmon@archiver.kernel.org>; Sun, 16 May 2021 10:19:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235157AbhEPKUI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 16 May 2021 06:20:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37682 "EHLO mail.kernel.org"
+        id S232375AbhEPKUw (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 16 May 2021 06:20:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37524 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231386AbhEPKTx (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 16 May 2021 06:19:53 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 768AD611CA;
+        id S230191AbhEPKTw (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 16 May 2021 06:19:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 63C4761185;
         Sun, 16 May 2021 10:18:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1621160317;
-        bh=uz12JEUkFl1zk0MKhwqoy7Swq0yIqwlg559U5vqLb64=;
-        h=From:To:Cc:Subject:Date:From;
-        b=NZoYuL4T8pZP0XVsuqpo1xaXga3djUflecwXx5LGut8qbhlW3Y9NzBmiQJpti66iQ
-         XEctA9a/tkYn6eIfMFOD23iU2NVyAWENwzAu5GTKImts+lpuYv0eNqgw/CUZ2ZkWss
-         fllyfJ2EOkHcmxftZ1iXvAx83SROwJwSmenZXooYhJTuiuJxIyQ+zDnL2KcckWJO3l
-         HXjHP9OcKsGcnNSkEPNKSqumMlW9xOUSyWQbW7rfHCgaVLEVCKAvIaHdwvFlEJ1a7n
-         T0Jc41mYwmUESpLNWcMxWdQoD+Yw7News+EAAT/i+fb8vmW0PjoNLGp13h2ptdOtyU
-         rkJ7P+/53g9gg==
+        bh=Y90K4iDzT1mxgEqpYhzOZAeShTC+oGg4jL4yjkpiy0c=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=bubrMmAkvj7yJJmyG3EfGBditcT3qZj35/ytp5KFj9GBgVjf2UgRg0BOChuQ0A9Oq
+         2fxwShY7XHmWDyNLM4LTIuawJ8FfISfsxOzol8lyTh1t1sCq6fzlLpJv/ii3X424an
+         3CqIX+31yZ/+CLt+TdkoeS6fXSYlSuhVKipac2tkAKsNZY36fMcnHW7vnocnVGye7h
+         GYNwkSOs02oniNFxJ0eroGLcnfKP/rVgDuuGC02PYFmGay0odtS5ZyHwvAo0UYYZIa
+         kNI7IZKWiAvvxye7hpfL15uDqMtEV2RytP3uFKBg8XjgzCgLkL7wJPwmJFxhkWuMyS
+         re4rQ7CPViHAA==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1liDr1-003o89-5Z; Sun, 16 May 2021 12:18:35 +0200
+        id 1liDr1-003o8C-77; Sun, 16 May 2021 12:18:35 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Corentin Labbe <clabbe@baylibre.com>,
+        "Jonathan Corbet" <corbet@lwn.net>,
         Guenter Roeck <linux@roeck-us.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jean Delvare <jdelvare@suse.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
-        intel-wired-lan@lists.osuosl.org, kvm@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ext4@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-usb@vger.kernel.org, mjpeg-users@lists.sourceforge.net,
-        netdev@vger.kernel.org, rcu@vger.kernel.org
-Subject: [PATCH v3 00/16] Replace some bad characters on documents
-Date:   Sun, 16 May 2021 12:18:17 +0200
-Message-Id: <cover.1621159997.git.mchehab+huawei@kernel.org>
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 01/16] docs: hwmon: ir36021.rst: replace some characters
+Date:   Sun, 16 May 2021 12:18:18 +0200
+Message-Id: <ba8b5122ac9d4918fd966d0eb0a5ca9d89044b04.1621159997.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <cover.1621159997.git.mchehab+huawei@kernel.org>
+References: <cover.1621159997.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -76,72 +55,34 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The conversion tools used during DocBook/LaTeX/html/Markdown->ReST 
+The conversion tools used during DocBook/LaTeX/html/Markdown->ReST
 conversion and some cut-and-pasted text contain some characters that
-aren't easily reachable on standard keyboards and/or could cause 
+aren't easily reachable on standard keyboards and/or could cause
 troubles when parsed by the documentation build system.
 
 Replace the occurences of the following characters:
 
-            - U+00a0 (' '): NO-BREAK SPACE
-            - U+00ad ('­'): SOFT HYPHEN
-            - U+2010 ('‐'): HYPHEN
-            - U+2217 ('∗'): ASTERISK OPERATOR
-            - U+feff ('﻿'): BOM
+	- U+2010 ('‐'): HYPHEN
+	  as ASCII HYPHEN is preferred over U+2010
 
-I'll submit in separate another series to address other character occurrences.
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ Documentation/hwmon/ir36021.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-v3:
-  - removed curly commas and changed the patch descriptions.
-v2:
-  - removed EM/EN dashes and changed the patch descriptions.
-
-
-Mauro Carvalho Chehab (16):
-  docs: hwmon: ir36021.rst: replace some characters
-  docs: admin-guide: reporting-issues.rst: replace some characters
-  docs: trace: coresight: coresight-etm4x-reference.rst: replace some
-    characters
-  docs: driver-api: ioctl.rst: replace some characters
-  docs: driver-api: media: drivers: zoran.rst: replace some characters
-  docs: usb: replace some characters
-  docs: userspace-api: media: v4l: dev-decoder.rst: replace some
-    characters
-  docs: userspace-api: media: dvb: intro.rst: replace some characters
-  docs: vm: zswap.rst: replace some characters
-  docs: filesystems: ext4: blockgroup.rst: replace some characters
-  docs: networking: device_drivers: replace some characters
-  docs: PCI: acpi-info.rst: replace some characters
-  docs: sound: kernel-api: writing-an-alsa-driver.rst: replace some
-    characters
-  docs: firmware-guide: acpi: dsd: graph.rst: replace some characters
-  docs: virt: kvm: api.rst: replace some characters
-  docs: RCU: replace some characters
-
- Documentation/PCI/acpi-info.rst               | 18 ++---
- .../Data-Structures/Data-Structures.rst       | 46 ++++++------
- .../Expedited-Grace-Periods.rst               | 36 +++++-----
- .../Tree-RCU-Memory-Ordering.rst              |  2 +-
- .../RCU/Design/Requirements/Requirements.rst  | 70 +++++++++----------
- .../admin-guide/reporting-issues.rst          |  2 +-
- Documentation/driver-api/ioctl.rst            |  8 +--
- .../driver-api/media/drivers/zoran.rst        |  2 +-
- Documentation/filesystems/ext4/blockgroup.rst |  2 +-
- .../firmware-guide/acpi/dsd/graph.rst         |  2 +-
- Documentation/hwmon/ir36021.rst               |  2 +-
- .../device_drivers/ethernet/intel/i40e.rst    |  6 +-
- .../device_drivers/ethernet/intel/iavf.rst    |  2 +-
- .../kernel-api/writing-an-alsa-driver.rst     |  2 +-
- .../coresight/coresight-etm4x-reference.rst   |  2 +-
- Documentation/usb/ehci.rst                    |  2 +-
- Documentation/usb/gadget_printer.rst          |  2 +-
- .../userspace-api/media/dvb/intro.rst         |  4 +-
- .../userspace-api/media/v4l/dev-decoder.rst   |  2 +-
- Documentation/virt/kvm/api.rst                | 28 ++++----
- Documentation/vm/zswap.rst                    |  4 +-
- 21 files changed, 122 insertions(+), 122 deletions(-)
-
+diff --git a/Documentation/hwmon/ir36021.rst b/Documentation/hwmon/ir36021.rst
+index ca3436b04e20..1faa85c39f1b 100644
+--- a/Documentation/hwmon/ir36021.rst
++++ b/Documentation/hwmon/ir36021.rst
+@@ -19,7 +19,7 @@ Authors:
+ Description
+ -----------
+ 
+-The IR36021 is a dual‐loop digital multi‐phase buck controller designed for
++The IR36021 is a dual-loop digital multi-phase buck controller designed for
+ point of load applications.
+ 
+ Usage Notes
 -- 
 2.31.1
-
 
