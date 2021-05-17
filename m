@@ -7,42 +7,42 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B062AC433ED
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02594C433B4
 	for <linux-hwmon@archiver.kernel.org>; Mon, 17 May 2021 11:06:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8DDF761221
-	for <linux-hwmon@archiver.kernel.org>; Mon, 17 May 2021 11:06:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D0A2861242
+	for <linux-hwmon@archiver.kernel.org>; Mon, 17 May 2021 11:06:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236514AbhEQLHX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S236584AbhEQLHX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Mon, 17 May 2021 07:07:23 -0400
-Received: from mga18.intel.com ([134.134.136.126]:7070 "EHLO mga18.intel.com"
+Received: from mga11.intel.com ([192.55.52.93]:47511 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236573AbhEQLHW (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        id S236514AbhEQLHW (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
         Mon, 17 May 2021 07:07:22 -0400
-IronPort-SDR: a6O/BH5+itgMF8xbPLOdk0916f7tVsSQNB+aEc9ViZB2/2qW6jxVOpfgbgxVcebUfx9YuYcyVb
- TgI+skliwqNA==
-X-IronPort-AV: E=McAfee;i="6200,9189,9986"; a="187844282"
+IronPort-SDR: p8vOQsviebMlUlDp1l0O+Ux/ZNdfU5Ss2KDcTnnUW/+wmtRqyU3sxs8jmUYRxgUsxdMkPh0cTG
+ A4Vbr+R4hKuA==
+X-IronPort-AV: E=McAfee;i="6200,9189,9986"; a="197355960"
 X-IronPort-AV: E=Sophos;i="5.82,307,1613462400"; 
-   d="scan'208";a="187844282"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2021 04:06:06 -0700
-IronPort-SDR: lYYHwMDEL27N3o6zjdr0YN79uNLFDgfg3kIZU3BtI7pCuGuHDzM8p52KO4cj6yfxFE3mCd/EyM
- 9XwCGaeNygOw==
+   d="scan'208";a="197355960"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2021 04:06:06 -0700
+IronPort-SDR: 629W5gZLfahQPpOyacO+FYXUY1xkmsrEAOV7XMCzVAvo1ES8bXvsDuJjSV4BUlN/EoosnJycnD
+ HR49/lbJFGBQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.82,307,1613462400"; 
-   d="scan'208";a="540375444"
+   d="scan'208";a="437708631"
 Received: from lkp-server01.sh.intel.com (HELO ddd90b05c979) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 17 May 2021 04:06:05 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 17 May 2021 04:06:05 -0700
 Received: from kbuild by ddd90b05c979 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1lib4W-0001lg-IC; Mon, 17 May 2021 11:06:04 +0000
-Date:   Mon, 17 May 2021 19:05:13 +0800
+        id 1lib4W-0001ld-HY; Mon, 17 May 2021 11:06:04 +0000
+Date:   Mon, 17 May 2021 19:05:14 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon] BUILD SUCCESS
- 2a29db088c7ae7121801a0d7a60740ed2d18c4f3
-Message-ID: <60a24de9.vIRDC6GL/uPfOLHB%lkp@intel.com>
+Subject: [hwmon:hwmon-next] BUILD SUCCESS
+ 7eafc07471f6526b6abe6d72d668abe49fce3367
+Message-ID: <60a24dea.yJoBSwKshYNsoR1t%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -51,12 +51,12 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
-branch HEAD: 2a29db088c7ae7121801a0d7a60740ed2d18c4f3  hwmon: (pmbus/isl68137) remove READ_TEMPERATURE_3 for RAA228228
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 7eafc07471f6526b6abe6d72d668abe49fce3367  hwmon: (adm1275) enable adm1272 temperature reporting
 
-elapsed time: 722m
+elapsed time: 721m
 
-configs tested: 113
+configs tested: 108
 configs skipped: 2
 
 The following configs have been built successfully.
@@ -74,16 +74,19 @@ powerpc                      bamboo_defconfig
 xtensa                  nommu_kc705_defconfig
 m68k                             allyesconfig
 sh                           se7780_defconfig
+powerpc                    ge_imp3a_defconfig
+mips                     cu1000-neo_defconfig
+mips                           ip22_defconfig
+sh                          rsk7201_defconfig
 powerpc                     mpc5200_defconfig
 mips                     loongson1c_defconfig
 powerpc                   currituck_defconfig
 sh                             shx3_defconfig
 nios2                            allyesconfig
-powerpc                    amigaone_defconfig
-arc                      axs103_smp_defconfig
-sh                         apsh4a3a_defconfig
-riscv                            alldefconfig
-ia64                      gensparse_defconfig
+mips                  cavium_octeon_defconfig
+powerpc                      chrp32_defconfig
+arm                            lart_defconfig
+parisc                           allyesconfig
 mips                  maltasmvp_eva_defconfig
 powerpc                     tqm5200_defconfig
 powerpc                     ep8248e_defconfig
@@ -93,18 +96,11 @@ arm                         vf610m4_defconfig
 arc                         haps_hs_defconfig
 arm                       aspeed_g5_defconfig
 alpha                               defconfig
-mips                           ip22_defconfig
 openrisc                    or1ksim_defconfig
 i386                             alldefconfig
 openrisc                  or1klitex_defconfig
 mips                       bmips_be_defconfig
 mips                      pistachio_defconfig
-m68k                          amiga_defconfig
-m68k                       m5249evb_defconfig
-sh                            titan_defconfig
-m68k                            mac_defconfig
-arm                            mps2_defconfig
-mips                         cobalt_defconfig
 x86_64                            allnoconfig
 ia64                             allmodconfig
 ia64                                defconfig
@@ -124,7 +120,6 @@ sh                               allmodconfig
 parisc                              defconfig
 s390                             allyesconfig
 s390                             allmodconfig
-parisc                           allyesconfig
 s390                                defconfig
 i386                             allyesconfig
 sparc                            allyesconfig
