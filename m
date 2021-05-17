@@ -2,113 +2,96 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CECAFC433ED
-	for <linux-hwmon@archiver.kernel.org>; Mon, 17 May 2021 19:09:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E950BC433ED
+	for <linux-hwmon@archiver.kernel.org>; Mon, 17 May 2021 22:26:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B063F6109E
-	for <linux-hwmon@archiver.kernel.org>; Mon, 17 May 2021 19:09:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BA6796113C
+	for <linux-hwmon@archiver.kernel.org>; Mon, 17 May 2021 22:26:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231514AbhEQTK6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 17 May 2021 15:10:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47514 "EHLO
+        id S235885AbhEQW1b (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 17 May 2021 18:27:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231379AbhEQTK6 (ORCPT
+        with ESMTP id S234774AbhEQW1a (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 17 May 2021 15:10:58 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529CBC061573;
-        Mon, 17 May 2021 12:09:41 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id l129so6871115qke.8;
-        Mon, 17 May 2021 12:09:41 -0700 (PDT)
+        Mon, 17 May 2021 18:27:30 -0400
+Received: from mail-qv1-xf4a.google.com (mail-qv1-xf4a.google.com [IPv6:2607:f8b0:4864:20::f4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE16C061573
+        for <linux-hwmon@vger.kernel.org>; Mon, 17 May 2021 15:26:13 -0700 (PDT)
+Received: by mail-qv1-xf4a.google.com with SMTP id l61-20020a0c84430000b02901a9a7e363edso5833613qva.16
+        for <linux-hwmon@vger.kernel.org>; Mon, 17 May 2021 15:26:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=AaJatBQ6OYQTtgU7UHzX0hFSZvnFSb6xpuL4KTh9MtI=;
-        b=R5DIbv1+g1uOPJzqmkjwdMYfT/EA9OdSUS2Cq07wjeKPJxIlSh8+YeVJyHSmqCJJYy
-         pEJs8+DlEYM7KE9pgm8s/rIdd7NoaUIrAu9C4yP4JWgXnel5EerWloYlHSSI1ZpOjjeR
-         B4F65zx0Qhar6SiLmlwFf810bxJZzOljBJbCHcm9fSy7a02lAtHreWo09K7N0X6poh8F
-         Vy2zOuys0FTeShZQGct4UsMn8RjfPo+0m2FD1XuaskK/clfHMcJNiiiyOWYnIJfzIs+i
-         YmWnChd92e+DMTzTOWl8EaLSKNA10EtEd9EJs/6UfpOZR2jKa4zMSxwd9QnolTBTvkk5
-         tlHw==
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=puap4zYglf6RuvLQbjq0WWUfB5Aff47YdCO+nGa3JIw=;
+        b=GF8VhTJw5Qj9m7VAbMjTvlsOc24zyImWxcOQA8L63oxL427Dgz8JigvnwHZrHohxWH
+         MjR38Mq6/uYfiDNXDob6u0XCkx8MeMQ/LcbKlIeuWQGOaoBLmPAA89+o36nsHalPpY4n
+         O6JCQj3W00JDWEDFdQpJhOkjrDhfffyd7OWA+5GRgx8vCm9MAQeku56Tp26D/XvFFo8a
+         bDaEHp+Vc6pC9Hko/BLsQsG1vsqBtv5L8tTjjBWbUi079X5IfpXLZ/nHXKjV9iQrRmov
+         OtJmAAyKs0cN882FrpnZMKal8cJge/6lboJtQoBpc/QhvmO8lCLGBviy6QDfREKFOpLg
+         +gmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=AaJatBQ6OYQTtgU7UHzX0hFSZvnFSb6xpuL4KTh9MtI=;
-        b=NB+Gj/kLQUF9Z7qxfN0svByHgO5fZ96LzI5e55nEZMAW55X5VPOnDwmrNEOR3ciFMp
-         /Wxe+fusvljdeR6cN0mQiz7UW8USXZBu9Bj6lxkpBPgctVSKNBQdpNd2DkkcUZR5LKuB
-         0u9lCPZktqMTMbnkj63Aiu9xfR/dhmtdtjYD8pIgF0Tk9TOc1lPxppHlpmZZHOOSy8E4
-         9xBuNxrz7z9Y2IdNJaguSbFA93qu+4Bm3FY/wj01WvmKK7bfB1YrH9y3oPgg1pGFlbEi
-         ZXJsSzElrE2dXWQBJcf8Se2zJah0Wce2rxMWoWI1DTeDQ/qhBhIOhAd/rXdrYUptnyJo
-         DpMQ==
-X-Gm-Message-State: AOAM530atFFMciR8+NkUhy45QHGnHfr5jPZYPq1fNSOibJlMd4673BS0
-        jh1hks90FxmKdXfFrbbCyYJYqRsE73o=
-X-Google-Smtp-Source: ABdhPJzoO/fJ8E1N10zXVLOT/35WBvGZbzAE8Q7sKzEeLW27fmGGe/PpRnvMnGIcBI+cL8c/aLGrTw==
-X-Received: by 2002:a05:620a:14b5:: with SMTP id x21mr1364351qkj.298.1621278580627;
-        Mon, 17 May 2021 12:09:40 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p9sm12175630qtl.78.2021.05.17.12.09.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 May 2021 12:09:40 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH] hwmon: (adt7462) Add settings for manual fan control.
-To:     Ashwin H <ashwin@pensando.io>, jdelvare@suse.com, corbet@lwn.net,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, snelson@pensando.io
-References: <20210517182427.12904-1-ashwin@pensando.io>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <e30343c0-2e8e-9412-08ed-f839e998248d@roeck-us.net>
-Date:   Mon, 17 May 2021 12:09:37 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <20210517182427.12904-1-ashwin@pensando.io>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=puap4zYglf6RuvLQbjq0WWUfB5Aff47YdCO+nGa3JIw=;
+        b=Nl2Jfd9Yw5gpi6pgbrSF73JRXVRA5M6aBbJzuh21+ZJpWMdmIMp6YVPpj6WBMqea53
+         04/TyKvX/g8l6coSklhxoyNK0NIEtaLy0iHnFh0v1Qls/LCmVcGCfP/AZqjI4wf2xzY/
+         aQj7d/PRoaALkTX6a1PI6zygHzZRMekEsNKONqtJKfF9GxSv6FNDnOn/issYd2ENq6fB
+         os9IFi33MHE5NwxXQ9v+ZerSgZ7HlRYSVBdSveAljXL9dTpSc09AbE+zoogY4KLuUR5U
+         iEYpYpJYmVbxa8K+xAyod33OXCtdNpqmnbpi/7jc+0TQ0aKCUiKoSIOLHkLM0dC0plyf
+         Ig4g==
+X-Gm-Message-State: AOAM530YydAhqHZHO93fLWjRnCMmGhs/GcOcbnS/syqnwnCZvIJrZu3T
+        6lNGO70JHBhd6wte0npKvqY7/0Bx5XEOyH7Y
+X-Google-Smtp-Source: ABdhPJx9xi4RbdgNH+aq3V96cm7uGAwCHl1zUGXVB8O8ob7VsIb4096IRfQQ4zQ8CdSPL4qdhjdJlbkgoqqbie49
+X-Received: from chu-dev-docker.c.googlers.com ([fda3:e722:ac3:10:7f:e700:c0a8:80f])
+ (user=linchuyuan job=sendgmr) by 2002:a05:6214:a91:: with SMTP id
+ ev17mr2180876qvb.9.1621290372073; Mon, 17 May 2021 15:26:12 -0700 (PDT)
+Date:   Mon, 17 May 2021 22:26:06 +0000
+Message-Id: <20210517222606.3457594-1-linchuyuan@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.31.1.751.gd2f1c929bd-goog
+Subject: [PATCH] hwmon:q54sj108a2: the PMBUS_MFR_ID is actually 6 chars
+ instead of 5
+From:   Chu Lin <linchuyuan@google.com>
+To:     linchuyuan@gmail.com, jasonling@google.com, zhongqil@google.com,
+        linux@roeck-us.net, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Chu Lin <linchuyuan@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/17/21 11:24 AM, Ashwin H wrote:
-> ADT7462 can operate in manual mode for fan control.
-> Currently if we want to read fan speed,
-> there is a check if TACH measurement is enabled for a fan.
-> (In fan_enabled function).
-> There is no way to enable TACH measurement currently.
-> This is addressed in this commit.
-> 
-> Along with the above support few more features are enabled
-> - Support for setting fan presence.
-> - Support for setting low and high frequency mode.
-> - Support for setting easy config option.
-> - Support for setting the duration of the fan startup timeout.
-> - Once the setting is done, there is a setup complete bit in cfg1 register.
->    Settings this bit will start the monitoring of all selected channels.
->    Added support for that.
-> 
-> Based on this, below is the flow to set/get fan speed (example:pwm1)
-> 
-> echo 1 > pwm1_enable            #Set to manual mode
-> echo 1 > pwm_freq_mode          #High freq mode (optional.newly added)
-> echo 1 > fan1_presence          #Set fan 1 as present(newly added)
-> echo 1 > fan1_tach_enable       #Start TACH measurement-fan1(newly added)
-> echo 1 > setup_complete         #Mark as setup complete (newly added)
+The PMBUS_MFR_ID block is actually 6 chars for q54sj108a2.
+/sys/bus/i2c/drivers/q54sj108a2_test# iotools smbus_read8 $BUS $ADDR 0x99
+0x06
 
-Please refrain from adding non-standard attributes. Several of the above
-non-standard attributes can be expressed as standard attributes, which is
-even less acceptable.
+Tested: Devices are able to bind to the q54sj108a2 driver successfully.
 
-Also, please follow Documentation/process/submitting-patches.rst, which
-clearly states
+Signed-off-by: Chu Lin <linchuyuan@google.com>
+---
+ drivers/hwmon/pmbus/q54sj108a2.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-	Separate each **logical change** into a separate patch.
+diff --git a/drivers/hwmon/pmbus/q54sj108a2.c b/drivers/hwmon/pmbus/q54sj108a2.c
+index aec512766c31..0976268b2670 100644
+--- a/drivers/hwmon/pmbus/q54sj108a2.c
++++ b/drivers/hwmon/pmbus/q54sj108a2.c
+@@ -299,7 +299,7 @@ static int q54sj108a2_probe(struct i2c_client *client)
+ 		dev_err(&client->dev, "Failed to read Manufacturer ID\n");
+ 		return ret;
+ 	}
+-	if (ret != 5 || strncmp(buf, "DELTA", 5)) {
++	if (ret != 6 || strncmp(buf, "DELTA", 5)) {
+ 		buf[ret] = '\0';
+ 		dev_err(dev, "Unsupported Manufacturer ID '%s'\n", buf);
+ 		return -ENODEV;
+-- 
+2.31.1.751.gd2f1c929bd-goog
 
-Guenter
