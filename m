@@ -2,131 +2,565 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BFFE0C433B4
-	for <linux-hwmon@archiver.kernel.org>; Mon, 17 May 2021 17:12:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6C55C433B4
+	for <linux-hwmon@archiver.kernel.org>; Mon, 17 May 2021 18:24:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9DDEE6128A
-	for <linux-hwmon@archiver.kernel.org>; Mon, 17 May 2021 17:12:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C6CFC61285
+	for <linux-hwmon@archiver.kernel.org>; Mon, 17 May 2021 18:24:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236044AbhEQRON (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 17 May 2021 13:14:13 -0400
-Received: from mta-02.yadro.com ([89.207.88.252]:50964 "EHLO mta-01.yadro.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S243316AbhEQROK (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 17 May 2021 13:14:10 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 370E541370;
-        Mon, 17 May 2021 17:12:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        content-transfer-encoding:mime-version:user-agent:content-type
-        :content-type:organization:references:in-reply-to:date:date:from
-        :from:subject:subject:message-id:received:received:received; s=
-        mta-01; t=1621271570; x=1623085971; bh=yk9EC+Dve1pamEtbvjpjbU1uw
-        Oxf7cDLNNgPjnJ+aDs=; b=eZ7Z2RRNqXGEHeDei3cSHutMBxCxQz6+J9MLIYwI0
-        VadwEH4iVup8LD2PLNo3DSPrh4nP1Sa+rMH5TjMejtDYdNCTJM1f4RYuPX5inWKz
-        W/nAVSKemIWYdu4I7bYJAZtyMFvMBQk/bfqhFKLLLIAnuoHag+432eZPROhdQmlF
-        gU=
-X-Virus-Scanned: amavisd-new at yadro.com
-Received: from mta-01.yadro.com ([127.0.0.1])
-        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id He7ny6xBWzgN; Mon, 17 May 2021 20:12:50 +0300 (MSK)
-Received: from T-EXCH-03.corp.yadro.com (t-exch-03.corp.yadro.com [172.17.100.103])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id 835F241384;
-        Mon, 17 May 2021 19:59:49 +0300 (MSK)
-Received: from localhost.localdomain (10.199.0.36) by T-EXCH-03.corp.yadro.com
- (172.17.100.103) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Mon, 17
- May 2021 19:59:49 +0300
-Message-ID: <f6d48db00698793b9d6a8c04a228101a0898e671.camel@yadro.com>
-Subject: Re: [PATCH 4/4] hwmon: vcnl3020: add hwmon driver for intrusion
- sensor
-From:   Ivan Mikhaylov <i.mikhaylov@yadro.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        "Jean Delvare" <jdelvare@suse.com>, <linux-kernel@vger.kernel.org>,
-        <linux-iio@vger.kernel.org>, <linux-hwmon@vger.kernel.org>
-Date:   Mon, 17 May 2021 20:08:24 +0300
-In-Reply-To: <20210505140208.GA1913659@roeck-us.net>
-References: <20210430152419.261757-1-i.mikhaylov@yadro.com>
-         <20210430152419.261757-5-i.mikhaylov@yadro.com>
-         <20210430163831.GA3163069@roeck-us.net>
-         <8dbdf071f9f2041b92cabfa417487a3ec3e9647e.camel@yadro.com>
-         <20210505140208.GA1913659@roeck-us.net>
-Organization: YADRO
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        id S234948AbhEQSZ5 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 17 May 2021 14:25:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37468 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234520AbhEQSZ5 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 17 May 2021 14:25:57 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB9ACC06175F
+        for <linux-hwmon@vger.kernel.org>; Mon, 17 May 2021 11:24:40 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id gc22-20020a17090b3116b02901558435aec1so125627pjb.4
+        for <linux-hwmon@vger.kernel.org>; Mon, 17 May 2021 11:24:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pensando.io; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FI246W5m9EGcLjbkDUbXs1YNpVMm1UcSABT6//sFJdY=;
+        b=vUVwmCgU4hLWgn6ulLZB7O3P+TiuGG+24Xl/SDTPLSCwyakGO0GYF/YYIQrDxlXbtu
+         SDH8Oz9pmrbNM4DlFzNC+AwAxVzTy0ge6/Cf61TwNyMXKO6OPJkeND1A5DMtW3vgJjSI
+         ehkx0XmUOKx2LNRhtTW7+b0/uUd4aYcH01Z/cg6zdr5L5hgO2TL4shq98NbjgyfvVOXp
+         avUWuf5Rf0SgVQgXCJxKVmmPA5qoWra5WBxNMYHrmOBKwrOWPeZImHInQJKyBcKK9d4j
+         X57CAfGdrgyFV+yVMI0tlmhB4zbjsLBSrnE45caboECPWGX7QBYoJwBJKELJ3/OOUjl8
+         D9yQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FI246W5m9EGcLjbkDUbXs1YNpVMm1UcSABT6//sFJdY=;
+        b=nyvACVk2nKoGoQwxJOaH3NI6fNrXOPc2cbckpZzfZmhS3cUVeTiF+a+55TCQPkhgr/
+         DKXl+M2mUejFWbDCKh+rFQpB08iA7ytJxlmvQuQ/DSSCFL21V0BKpmc59OWtBURduQqj
+         Oac2Q+6qjz5kn+mIQOFE2LcY1AWqUEx/vqBe5ss9fpJiOxxVZ0maXtTaP45OKlHbwIj/
+         zt6kMwYZkLcKhdLQstxktVlMo4JHbgXoLYg6Tbx0RClyb6zvDF+c6CO6ZZEPTxdeiHto
+         c2riVrbS0APkERtqGVNlGZVwj+ZpKbPlCJsZJKOFCuJVwVwMMxE98vkmgv+y8lSRom+T
+         x+1A==
+X-Gm-Message-State: AOAM533JtriunmgqQr9WXiSsWJv8e8fuZhH5gfCMEN1lyZFhuT6G3ZJ/
+        tDgAI6R8AIe9ZDNb63lY4+fHjw==
+X-Google-Smtp-Source: ABdhPJxuKhRpA9d+ZG4n25RnpFrOVY8RUylM/mc8vcVjZ2gtu539kniy2/cqE8oZJT155RENGTSMYg==
+X-Received: by 2002:a17:902:8bcb:b029:ec:a192:21cf with SMTP id r11-20020a1709028bcbb02900eca19221cfmr1368936plo.71.1621275880082;
+        Mon, 17 May 2021 11:24:40 -0700 (PDT)
+Received: from srv7.pensando.io ([12.226.153.42])
+        by smtp.gmail.com with ESMTPSA id a16sm10545417pfa.95.2021.05.17.11.24.39
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 17 May 2021 11:24:39 -0700 (PDT)
+From:   Ashwin H <ashwin@pensando.io>
+To:     jdelvare@suse.com, linux@roeck-us.net, corbet@lwn.net,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, snelson@pensando.io,
+        Ashwin H <ashwin@pensando.io>
+Subject: [PATCH] hwmon: (adt7462) Add settings for manual fan control.
+Date:   Mon, 17 May 2021 11:24:27 -0700
+Message-Id: <20210517182427.12904-1-ashwin@pensando.io>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.199.0.36]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-03.corp.yadro.com (172.17.100.103)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, 2021-05-05 at 07:02 -0700, Guenter Roeck wrote:
-> On Tue, May 04, 2021 at 10:46:53PM +0300, Ivan Mikhaylov wrote:
-> > On Fri, 2021-04-30 at 09:38 -0700, Guenter Roeck wrote:
-> > > On Fri, Apr 30, 2021 at 06:24:19PM +0300, Ivan Mikhaylov wrote:
-> > > > Intrusion status detection via Interrupt Status Register.
-> > > > 
-> > > > Signed-off-by: Ivan Mikhaylov <i.mikhaylov@yadro.com>
-> > > 
-> > > I think this should, if at all, be handled using the
-> > > iio->hwmon bridge (or, in other words, require a solution
-> > > which is not chip specific).
-> > 
-> > Thanks a lot for suggestion, it's actually looks what's needed here instead
-> > of
-> > this driver. Anyways, there is no IIO_PROXIMITY support inside supported
-> > types
-> > in iio_hwmon.c. Should I add additional case inside this driver for
-> > IIO_PROXIMITY type?
-> > 
-> > > I am also not sure if "proximity" is really appropriate to use
-> > > for intrusion detection in the sense of hardware monitoring.
-> > > This would require a proximity sensor within a chassis, which
-> > > would be both overkill and unlikely to happen in the real world.
-> > > "Intrusion", in hardware monitoring context, means "someone
-> > > opened the chassis", not "someone got [too] close".
-> > > 
-> > 
-> > I'm not sure either but it exists :) And it's exactly for this purpose:
-> > "someone opened the chassis", "how near/far is cover?".
-> > 
-> 
-> The cost for VCNL3020, for a full reel with 3,300 chips, is $1.17 per chip
-> at Mouser. A mechanical switch costs a couple of cents. A single proximity
-> sensor won't cover all parts of a chassis; one would likely need several
-> chips to be sure that are no blind spots (if that is even possible - I don't
-> think it is in any of my PC chassis due to mechanical limitations). This
-> is on top of programming, which would be sensitive to generating false
-> alarms (or missing alarms, for that matter). That sounds quite impractical
-> and expensive to me. I'd really like to see the actual use case where a
-> proximity sensor (or set of proximity sensors) is used for intrusion
-> detection in the sense of hardware monitoring - not just the technical
-> possibility of doing so, but an actual use case (as in "this vendor,
-> in this chassis, is doing it").
-> 
-> Thanks,
-> Guenter
+ADT7462 can operate in manual mode for fan control.
+Currently if we want to read fan speed,
+there is a check if TACH measurement is enabled for a fan.
+(In fan_enabled function).
+There is no way to enable TACH measurement currently.
+This is addressed in this commit.
 
+Along with the above support few more features are enabled
+- Support for setting fan presence.
+- Support for setting low and high frequency mode.
+- Support for setting easy config option.
+- Support for setting the duration of the fan startup timeout.
+- Once the setting is done, there is a setup complete bit in cfg1 register.
+  Settings this bit will start the monitoring of all selected channels.
+  Added support for that.
 
-Guenter, VCNL3020 is indeed used as an intrusion detection sensor at least in
-one real design. That is YADRO VESNIN Rev. C where the proximity sensor is
-installed in a very tight space on an nvme switch board where installation of a
-mechanical switch was not possible without substantial redesign of the existing
-other components that would cost a lot more than the price of VCNL3020.
+Based on this, below is the flow to set/get fan speed (example:pwm1)
 
-VESNIN is a very tight-packed design of 4 x POWER8 CPUs, up to 8TB of RAM, and 26 nvme disks, all that in just 2U.
-* https://imgur.com/a/wU9wEd4
+echo 1 > pwm1_enable            #Set to manual mode
+echo 1 > pwm_freq_mode          #High freq mode (optional.newly added)
+echo 1 > fan1_presence          #Set fan 1 as present(newly added)
+echo 1 > fan1_tach_enable       #Start TACH measurement-fan1(newly added)
+echo 1 > setup_complete         #Mark as setup complete (newly added)
+cat fan1_input                  #Read Fan1 RPM.
+echo 192 > pwm1                 #Change PWM1(has fan1) to 75%(192/255).
+
+This is tested on x86 CPU which connects via PCIE to FGPA which has I2C Controller.
+ADT7462 is connected to the I2C controller(on FPGA).
+
+Signed-off-by: Ashwin H <ashwin@pensando.io>
+---
+ Documentation/hwmon/adt7462.rst |  22 ++-
+ drivers/hwmon/adt7462.c         | 308 ++++++++++++++++++++++++++++++++
+ 2 files changed, 329 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/hwmon/adt7462.rst b/Documentation/hwmon/adt7462.rst
+index 139e19696188..a4418ed6f2fa 100644
+--- a/Documentation/hwmon/adt7462.rst
++++ b/Documentation/hwmon/adt7462.rst
+@@ -56,7 +56,7 @@ Configuration Notes
+ 
+ Besides standard interfaces driver adds the following:
+ 
+-* PWM Control
++* PWM Auto Control
+ 
+ * pwm#_auto_point1_pwm and temp#_auto_point1_temp and
+ * pwm#_auto_point2_pwm and temp#_auto_point2_temp -
+@@ -68,3 +68,23 @@ The ADT7462 will scale the pwm between the lower and higher pwm speed when
+ the temperature is between the two temperature boundaries.  PWM values range
+ from 0 (off) to 255 (full speed).  Fan speed will be set to maximum when the
+ temperature sensor associated with the PWM control exceeds temp#_max.
++
++* PWM Manual Control
++The ADT7462 can operate in manual mode for PWM control.
++Below is the typical flow to contol PWM manually.
++(Example for PWM1 which controls fan1)
++
++  - Set PWM to manual mode
++    - echo 1 > pwm1_enable
++  - Enable High Freq Mode (optional)
++    -  echo 1 > pwm_freq_mode
++  - Set fan1 as present
++    - echo 1 > fan1_presence
++  - Start TACH measurement for fan1
++    - echo 1 > fan1_tach_enable
++  - Mark as setup complete. This will start monitoring of all enabled channels.
++    - echo 1 > setup_complete
++  - Read fan1 RPM
++    -  cat fan1_input
++  - Change PWM1 to 75% (192/255)
++    - echo 192 > pwm1
+diff --git a/drivers/hwmon/adt7462.c b/drivers/hwmon/adt7462.c
+index e75bbd87ad09..d9faa1224ed8 100644
+--- a/drivers/hwmon/adt7462.c
++++ b/drivers/hwmon/adt7462.c
+@@ -39,8 +39,12 @@ static const unsigned short normal_i2c[] = { 0x58, 0x5C, I2C_CLIENT_END };
+ #define ADT7462_REG_FAN_MIN_BASE_ADDR		0x78
+ #define ADT7462_REG_FAN_MIN_MAX_ADDR		0x7F
+ 
++#define ADT7462_REG_CFG1			0x01
++#define		ADT7462_SETUP_COMPLETE_MASK	0x20
++
+ #define ADT7462_REG_CFG2			0x02
+ #define		ADT7462_FSPD_MASK		0x20
++#define		ADT7462_PWM_FREQ_MODE_MASK      0x04
+ 
+ #define ADT7462_REG_PWM_BASE_ADDR		0xAA
+ #define ADT7462_REG_PWM_MAX_ADDR		0xAD
+@@ -58,6 +62,7 @@ static const unsigned short normal_i2c[] = { 0x58, 0x5C, I2C_CLIENT_END };
+ #define ADT7462_REG_PWM_CFG_MAX_ADDR		0x24
+ #define		ADT7462_PWM_CHANNEL_MASK	0xE0
+ #define		ADT7462_PWM_CHANNEL_SHIFT	5
++#define		ADT7462_SPINUP_TIMEOUT_MASK     0x07
+ 
+ #define ADT7462_REG_PIN_CFG_BASE_ADDR		0x10
+ #define ADT7462_REG_PIN_CFG_MAX_ADDR		0x13
+@@ -84,6 +89,10 @@ static const unsigned short normal_i2c[] = { 0x58, 0x5C, I2C_CLIENT_END };
+ #define		ADT7462_PIN28_SHIFT		4	/* cfg3 */
+ #define		ADT7462_PIN28_VOLT		0x5
+ 
++#define ADT7462_REG_EASY_CONFIG                 0x14
++
++#define ADT7462_REG_FAN_PRESENCE                0x1D
++
+ #define ADT7462_REG_ALARM1			0xB8
+ #define	ADT7462_LT_ALARM			0x02
+ #define		ADT7462_R1T_ALARM		0x04
+@@ -203,8 +212,11 @@ struct adt7462_data {
+ 	u8			temp_max[ADT7462_TEMP_COUNT];
+ 	u16			fan[ADT7462_FAN_COUNT];
+ 	u8			fan_enabled;
++	u8			fan_presence;
+ 	u8			fan_min[ADT7462_FAN_COUNT];
++	u8			cfg1;
+ 	u8			cfg2;
++	u8			easy_config;
+ 	u8			pwm[ADT7462_PWM_COUNT];
+ 	u8			pin_cfg[ADT7462_PIN_CFG_REG_COUNT];
+ 	u8			voltages[ADT7462_VOLT_COUNT];
+@@ -700,6 +712,9 @@ static struct adt7462_data *adt7462_update_device(struct device *dev)
+ 	data->fan_enabled = i2c_smbus_read_byte_data(client,
+ 					ADT7462_REG_FAN_ENABLE);
+ 
++	data->fan_presence = i2c_smbus_read_byte_data(client,
++					ADT7462_REG_FAN_PRESENCE);
++
+ 	for (i = 0; i < ADT7462_PWM_COUNT; i++)
+ 		data->pwm[i] = i2c_smbus_read_byte_data(client,
+ 						ADT7462_REG_PWM(i));
+@@ -765,8 +780,13 @@ static struct adt7462_data *adt7462_update_device(struct device *dev)
+ 
+ 	data->pwm_max = i2c_smbus_read_byte_data(client, ADT7462_REG_PWM_MAX);
+ 
++	data->cfg1 = i2c_smbus_read_byte_data(client, ADT7462_REG_CFG1);
++
+ 	data->cfg2 = i2c_smbus_read_byte_data(client, ADT7462_REG_CFG2);
+ 
++	data->easy_config = i2c_smbus_read_byte_data(client,
++						ADT7462_REG_EASY_CONFIG);
++
+ 	data->limits_last_updated = local_jiffies;
+ 	data->limits_valid = 1;
+ 
+@@ -1049,6 +1069,117 @@ static ssize_t fan_show(struct device *dev, struct device_attribute *devattr,
+ 		       FAN_PERIOD_TO_RPM(data->fan[attr->index]));
+ }
+ 
++static ssize_t fan_tach_show(struct device *dev,
++			      struct device_attribute *devattr,
++			      char *buf)
++{
++	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
++	struct adt7462_data *data = adt7462_update_device(dev);
++
++	return sprintf(buf, "%d\n", fan_enabled(data, attr->index) ? 1 : 0);
++}
++
++static ssize_t fan_tach_store(struct device *dev,
++			       struct device_attribute *devattr,
++			       const char *buf, size_t count)
++{
++	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
++	struct adt7462_data *data = dev_get_drvdata(dev);
++	struct i2c_client *client = data->client;
++	long temp;
++	u8   reg;
++
++	if (kstrtol(buf, 10, &temp))
++		return -EINVAL;
++
++	mutex_lock(&data->lock);
++	reg = i2c_smbus_read_byte_data(client, ADT7462_REG_FAN_ENABLE);
++
++	if (temp)
++		reg |= (1 << attr->index);
++	else
++		reg &= (~(1 << attr->index));
++	data->fan_enabled = reg;
++
++	i2c_smbus_write_byte_data(client, ADT7462_REG_FAN_ENABLE, reg);
++	mutex_unlock(&data->lock);
++
++	return count;
++}
++
++static ssize_t fan_presence_show(struct device *dev,
++				  struct device_attribute *devattr,
++				  char *buf)
++{
++	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
++	struct adt7462_data *data = adt7462_update_device(dev);
++
++	return sprintf(buf, "%d\n", ((data->fan_presence >> attr->index) & 1) ? 1 : 0);
++}
++
++static ssize_t fan_presence_store(struct device *dev,
++				   struct device_attribute *devattr,
++				   const char *buf, size_t count)
++{
++	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
++	struct adt7462_data *data = dev_get_drvdata(dev);
++	struct i2c_client *client = data->client;
++	long temp;
++	u8   reg;
++
++	if (kstrtol(buf, 10, &temp))
++		return -EINVAL;
++
++	mutex_lock(&data->lock);
++	reg = i2c_smbus_read_byte_data(client, ADT7462_REG_FAN_PRESENCE);
++
++	if (temp)
++		reg |= (1 << attr->index);
++	else
++		reg &= (~(1 << attr->index));
++	data->fan_presence = reg;
++
++	i2c_smbus_write_byte_data(client, ADT7462_REG_FAN_PRESENCE, reg);
++	mutex_unlock(&data->lock);
++
++	return count;
++}
++
++static ssize_t setup_complete_show(struct device *dev,
++				    struct device_attribute *devattr,
++				    char *buf)
++{
++	struct adt7462_data *data = adt7462_update_device(dev);
++
++	return sprintf(buf, "%d\n", (data->cfg1 & ADT7462_SETUP_COMPLETE_MASK ? 1 : 0));
++}
++
++static ssize_t setup_complete_store(struct device *dev,
++				     struct device_attribute *devattr,
++				     const char *buf,
++				     size_t count)
++{
++	struct adt7462_data *data = dev_get_drvdata(dev);
++	struct i2c_client *client = data->client;
++	long temp;
++	u8 reg;
++
++	if (kstrtol(buf, 10, &temp))
++		return -EINVAL;
++
++	mutex_lock(&data->lock);
++	reg = i2c_smbus_read_byte_data(client, ADT7462_REG_CFG1);
++	if (temp)
++		reg |= ADT7462_SETUP_COMPLETE_MASK;
++	else
++		reg &= ~ADT7462_SETUP_COMPLETE_MASK;
++	data->cfg1 = reg;
++	i2c_smbus_write_byte_data(client, ADT7462_REG_CFG1, reg);
++	mutex_unlock(&data->lock);
++
++	return count;
++}
++
+ static ssize_t force_pwm_max_show(struct device *dev,
+ 				  struct device_attribute *devattr, char *buf)
+ {
+@@ -1081,6 +1212,75 @@ static ssize_t force_pwm_max_store(struct device *dev,
+ 	return count;
+ }
+ 
++static ssize_t pwm_freq_mode_show(struct device *dev,
++				   struct device_attribute *devattr,
++				   char *buf)
++{
++	struct adt7462_data *data = adt7462_update_device(dev);
++
++	return sprintf(buf, "%d\n", (data->cfg2 & ADT7462_PWM_FREQ_MODE_MASK ? 1 : 0));
++}
++
++static ssize_t pwm_freq_mode_store(struct device *dev,
++				    struct device_attribute *devattr,
++				    const char *buf,
++				    size_t count)
++{
++	struct adt7462_data *data = dev_get_drvdata(dev);
++	struct i2c_client *client = data->client;
++	long temp;
++	u8 reg;
++
++	if (kstrtol(buf, 10, &temp))
++		return -EINVAL;
++
++	mutex_lock(&data->lock);
++	reg = i2c_smbus_read_byte_data(client, ADT7462_REG_CFG2);
++	if (temp)
++		reg |= ADT7462_PWM_FREQ_MODE_MASK;
++	else
++		reg &= ~ADT7462_PWM_FREQ_MODE_MASK;
++
++	data->cfg2 = reg;
++	i2c_smbus_write_byte_data(client, ADT7462_REG_CFG2, reg);
++	mutex_unlock(&data->lock);
++
++	return count;
++}
++
++static ssize_t easy_config_show(struct device *dev,
++				 struct device_attribute *devattr,
++				 char *buf)
++{
++	struct adt7462_data *data = adt7462_update_device(dev);
++
++	return sprintf(buf, "%d\n", data->easy_config);
++}
++
++static ssize_t easy_config_store(struct device *dev,
++				  struct device_attribute *devattr,
++				  const char *buf,
++				  size_t count)
++{
++	struct adt7462_data *data = dev_get_drvdata(dev);
++	struct i2c_client *client = data->client;
++	long temp;
++
++	if (kstrtol(buf, 10, &temp))
++		return -EINVAL;
++	/* Only 1 bit needs to be set and set bit should be below bit 5. */
++
++	if (((temp & (temp - 1)) != 0) || (temp > 16))
++		return -EINVAL;
++
++	mutex_lock(&data->lock);
++	data->easy_config = temp;
++	i2c_smbus_write_byte_data(client, ADT7462_REG_EASY_CONFIG, temp);
++	mutex_unlock(&data->lock);
++
++	return count;
++}
++
+ static ssize_t pwm_show(struct device *dev, struct device_attribute *devattr,
+ 			char *buf)
+ {
+@@ -1339,6 +1539,56 @@ static ssize_t pwm_auto_store(struct device *dev,
+ 	}
+ }
+ 
++static ssize_t pwm_spinup_timeout_show(struct device *dev,
++					struct device_attribute *devattr,
++					char *buf)
++{
++	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
++	struct adt7462_data *data = adt7462_update_device(dev);
++	int cfg = data->pwm_cfg[attr->index] & ADT7462_SPINUP_TIMEOUT_MASK;
++
++	return sprintf(buf, "%d\n", cfg);
++
++}
++
++static void pwm_spinup_timeout_reg_store(struct i2c_client *client,
++					  struct adt7462_data *data,
++					  int which,
++					  int value)
++{
++	int temp = data->pwm_cfg[which] & ~ADT7462_SPINUP_TIMEOUT_MASK;
++
++	temp |= value;
++
++	mutex_lock(&data->lock);
++	data->pwm_cfg[which] = temp;
++	i2c_smbus_write_byte_data(client, ADT7462_REG_PWM_CFG(which), temp);
++	mutex_unlock(&data->lock);
++}
++
++static ssize_t pwm_spinup_timeout_store(struct device *dev,
++					 struct device_attribute *devattr,
++					 const char *buf,
++					 size_t count)
++{
++	struct sensor_device_attribute *attr = to_sensor_dev_attr(devattr);
++	struct adt7462_data *data = dev_get_drvdata(dev);
++	struct i2c_client *client = data->client;
++	long temp;
++
++	if (kstrtol(buf, 10, &temp))
++		return -EINVAL;
++	/* Only 3 bits are valid. */
++	if (temp > 7)
++		return -EINVAL;
++
++	pwm_spinup_timeout_reg_store(client, data, attr->index, temp);
++
++	return count;
++}
++
++
++
+ static ssize_t pwm_auto_temp_show(struct device *dev,
+ 				  struct device_attribute *devattr, char *buf)
+ {
+@@ -1540,8 +1790,32 @@ static SENSOR_DEVICE_ATTR_RO(fan7_alarm, alarm,
+ static SENSOR_DEVICE_ATTR_RO(fan8_alarm, alarm,
+ 			     ADT7462_ALARM4 | ADT7462_F7_ALARM);
+ 
++static SENSOR_DEVICE_ATTR_RW(fan1_tach_enable, fan_tach, 0);
++static SENSOR_DEVICE_ATTR_RW(fan2_tach_enable, fan_tach, 1);
++static SENSOR_DEVICE_ATTR_RW(fan3_tach_enable, fan_tach, 2);
++static SENSOR_DEVICE_ATTR_RW(fan4_tach_enable, fan_tach, 3);
++static SENSOR_DEVICE_ATTR_RW(fan5_tach_enable, fan_tach, 4);
++static SENSOR_DEVICE_ATTR_RW(fan6_tach_enable, fan_tach, 5);
++static SENSOR_DEVICE_ATTR_RW(fan7_tach_enable, fan_tach, 6);
++static SENSOR_DEVICE_ATTR_RW(fan8_tach_enable, fan_tach, 7);
++
++static SENSOR_DEVICE_ATTR_RW(fan1_presence, fan_presence, 0);
++static SENSOR_DEVICE_ATTR_RW(fan2_presence, fan_presence, 1);
++static SENSOR_DEVICE_ATTR_RW(fan3_presence, fan_presence, 2);
++static SENSOR_DEVICE_ATTR_RW(fan4_presence, fan_presence, 3);
++static SENSOR_DEVICE_ATTR_RW(fan5_presence, fan_presence, 4);
++static SENSOR_DEVICE_ATTR_RW(fan6_presence, fan_presence, 5);
++static SENSOR_DEVICE_ATTR_RW(fan7_presence, fan_presence, 6);
++static SENSOR_DEVICE_ATTR_RW(fan8_presence, fan_presence, 7);
++
+ static SENSOR_DEVICE_ATTR_RW(force_pwm_max, force_pwm_max, 0);
+ 
++static SENSOR_DEVICE_ATTR_RW(setup_complete, setup_complete, 0);
++
++static SENSOR_DEVICE_ATTR_RW(pwm_freq_mode, pwm_freq_mode, 0);
++
++static SENSOR_DEVICE_ATTR_RW(easy_config, easy_config, 0);
++
+ static SENSOR_DEVICE_ATTR_RW(pwm1, pwm, 0);
+ static SENSOR_DEVICE_ATTR_RW(pwm2, pwm, 1);
+ static SENSOR_DEVICE_ATTR_RW(pwm3, pwm, 2);
+@@ -1582,6 +1856,11 @@ static SENSOR_DEVICE_ATTR_RW(pwm2_enable, pwm_auto, 1);
+ static SENSOR_DEVICE_ATTR_RW(pwm3_enable, pwm_auto, 2);
+ static SENSOR_DEVICE_ATTR_RW(pwm4_enable, pwm_auto, 3);
+ 
++static SENSOR_DEVICE_ATTR_RW(pwm1_spinup_timeout, pwm_spinup_timeout, 0);
++static SENSOR_DEVICE_ATTR_RW(pwm2_spinup_timeout, pwm_spinup_timeout, 1);
++static SENSOR_DEVICE_ATTR_RW(pwm3_spinup_timeout, pwm_spinup_timeout, 2);
++static SENSOR_DEVICE_ATTR_RW(pwm4_spinup_timeout, pwm_spinup_timeout, 3);
++
+ static SENSOR_DEVICE_ATTR_RW(pwm1_auto_channels_temp, pwm_auto_temp, 0);
+ static SENSOR_DEVICE_ATTR_RW(pwm2_auto_channels_temp, pwm_auto_temp, 1);
+ static SENSOR_DEVICE_ATTR_RW(pwm3_auto_channels_temp, pwm_auto_temp, 2);
+@@ -1710,12 +1989,36 @@ static struct attribute *adt7462_attrs[] = {
+ 	&sensor_dev_attr_fan7_alarm.dev_attr.attr,
+ 	&sensor_dev_attr_fan8_alarm.dev_attr.attr,
+ 
++	&sensor_dev_attr_fan1_tach_enable.dev_attr.attr,
++	&sensor_dev_attr_fan2_tach_enable.dev_attr.attr,
++	&sensor_dev_attr_fan3_tach_enable.dev_attr.attr,
++	&sensor_dev_attr_fan4_tach_enable.dev_attr.attr,
++	&sensor_dev_attr_fan5_tach_enable.dev_attr.attr,
++	&sensor_dev_attr_fan6_tach_enable.dev_attr.attr,
++	&sensor_dev_attr_fan7_tach_enable.dev_attr.attr,
++	&sensor_dev_attr_fan8_tach_enable.dev_attr.attr,
++
++	&sensor_dev_attr_fan1_presence.dev_attr.attr,
++	&sensor_dev_attr_fan2_presence.dev_attr.attr,
++	&sensor_dev_attr_fan3_presence.dev_attr.attr,
++	&sensor_dev_attr_fan4_presence.dev_attr.attr,
++	&sensor_dev_attr_fan5_presence.dev_attr.attr,
++	&sensor_dev_attr_fan6_presence.dev_attr.attr,
++	&sensor_dev_attr_fan7_presence.dev_attr.attr,
++	&sensor_dev_attr_fan8_presence.dev_attr.attr,
++
++
+ 	&sensor_dev_attr_force_pwm_max.dev_attr.attr,
++	&sensor_dev_attr_pwm_freq_mode.dev_attr.attr,
+ 	&sensor_dev_attr_pwm1.dev_attr.attr,
+ 	&sensor_dev_attr_pwm2.dev_attr.attr,
+ 	&sensor_dev_attr_pwm3.dev_attr.attr,
+ 	&sensor_dev_attr_pwm4.dev_attr.attr,
+ 
++	&sensor_dev_attr_setup_complete.dev_attr.attr,
++
++	&sensor_dev_attr_easy_config.dev_attr.attr,
++
+ 	&sensor_dev_attr_pwm1_auto_point1_pwm.dev_attr.attr,
+ 	&sensor_dev_attr_pwm2_auto_point1_pwm.dev_attr.attr,
+ 	&sensor_dev_attr_pwm3_auto_point1_pwm.dev_attr.attr,
+@@ -1751,6 +2054,11 @@ static struct attribute *adt7462_attrs[] = {
+ 	&sensor_dev_attr_pwm3_enable.dev_attr.attr,
+ 	&sensor_dev_attr_pwm4_enable.dev_attr.attr,
+ 
++	&sensor_dev_attr_pwm1_spinup_timeout.dev_attr.attr,
++	&sensor_dev_attr_pwm2_spinup_timeout.dev_attr.attr,
++	&sensor_dev_attr_pwm3_spinup_timeout.dev_attr.attr,
++	&sensor_dev_attr_pwm4_spinup_timeout.dev_attr.attr,
++
+ 	&sensor_dev_attr_pwm1_auto_channels_temp.dev_attr.attr,
+ 	&sensor_dev_attr_pwm2_auto_channels_temp.dev_attr.attr,
+ 	&sensor_dev_attr_pwm3_auto_channels_temp.dev_attr.attr,
+-- 
+2.31.1
 
