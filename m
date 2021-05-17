@@ -2,178 +2,112 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02594C433B4
-	for <linux-hwmon@archiver.kernel.org>; Mon, 17 May 2021 11:06:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66531C433B4
+	for <linux-hwmon@archiver.kernel.org>; Mon, 17 May 2021 11:25:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D0A2861242
-	for <linux-hwmon@archiver.kernel.org>; Mon, 17 May 2021 11:06:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 44B89610CB
+	for <linux-hwmon@archiver.kernel.org>; Mon, 17 May 2021 11:25:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236584AbhEQLHX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 17 May 2021 07:07:23 -0400
-Received: from mga11.intel.com ([192.55.52.93]:47511 "EHLO mga11.intel.com"
+        id S236720AbhEQL0O (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 17 May 2021 07:26:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35794 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236514AbhEQLHW (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 17 May 2021 07:07:22 -0400
-IronPort-SDR: p8vOQsviebMlUlDp1l0O+Ux/ZNdfU5Ss2KDcTnnUW/+wmtRqyU3sxs8jmUYRxgUsxdMkPh0cTG
- A4Vbr+R4hKuA==
-X-IronPort-AV: E=McAfee;i="6200,9189,9986"; a="197355960"
-X-IronPort-AV: E=Sophos;i="5.82,307,1613462400"; 
-   d="scan'208";a="197355960"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2021 04:06:06 -0700
-IronPort-SDR: 629W5gZLfahQPpOyacO+FYXUY1xkmsrEAOV7XMCzVAvo1ES8bXvsDuJjSV4BUlN/EoosnJycnD
- HR49/lbJFGBQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,307,1613462400"; 
-   d="scan'208";a="437708631"
-Received: from lkp-server01.sh.intel.com (HELO ddd90b05c979) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 17 May 2021 04:06:05 -0700
-Received: from kbuild by ddd90b05c979 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lib4W-0001ld-HY; Mon, 17 May 2021 11:06:04 +0000
-Date:   Mon, 17 May 2021 19:05:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon-next] BUILD SUCCESS
- 7eafc07471f6526b6abe6d72d668abe49fce3367
-Message-ID: <60a24dea.yJoBSwKshYNsoR1t%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S236707AbhEQL0N (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 17 May 2021 07:26:13 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E8DE86100C;
+        Mon, 17 May 2021 11:24:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621250697;
+        bh=IqUZ0sNLzRXtoD/YFOpvkpCv7NFriIwqrV0nk+tQFjA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SjZiucxTGgskw3bZqxU8hkRIDqvLkRPDUPXGysGlCLAY4qMHHwLFDNWf7GzwMPeSy
+         k6gBtne3rZl4OWw9EJiAKpC90ICt4wmL+dOW1/wtHGSzFBwlIEB7lPhufz0SGrH9U0
+         8BeoyWN0zwaq92smlvSCsJzkysY0ZKum/rQEXJAZuksdPKz9UCm2b6rTTMrYAXAHuw
+         m5K5R4IDiLhuXBms1/YwUa6BMqBAHs9uv2Ndu7DwgV1+6w7DgEDLXe2pUPRnLtE+Wd
+         GExQHVUHQydYOYDz+zZFmQU4ywGdNTNfxU1WppJsq+V8siRV5m9U5SOv7k7mbiC129
+         mEKSngo0SzESg==
+Date:   Mon, 17 May 2021 13:24:46 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     David Woodhouse <dwmw2@infradead.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Corentin Labbe <clabbe@baylibre.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jean Delvare <jdelvare@suse.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
+        intel-wired-lan@lists.osuosl.org, kvm@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ext4@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-usb@vger.kernel.org, mjpeg-users@lists.sourceforge.net,
+        netdev@vger.kernel.org, rcu@vger.kernel.org
+Subject: Re: [PATCH v3 00/16] Replace some bad characters on documents
+Message-ID: <20210517132446.7edba98f@coco.lan>
+In-Reply-To: <30cd6dd9d1049d56b629c92a5f385b84c026b445.camel@infradead.org>
+References: <cover.1621159997.git.mchehab+huawei@kernel.org>
+        <30cd6dd9d1049d56b629c92a5f385b84c026b445.camel@infradead.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 7eafc07471f6526b6abe6d72d668abe49fce3367  hwmon: (adm1275) enable adm1272 temperature reporting
+Em Mon, 17 May 2021 11:48:04 +0100
+David Woodhouse <dwmw2@infradead.org> escreveu:
 
-elapsed time: 721m
+> On Sun, 2021-05-16 at 12:18 +0200, Mauro Carvalho Chehab wrote:
+> > The conversion tools used during DocBook/LaTeX/html/Markdown->ReST=20
+> > conversion and some cut-and-pasted text contain some characters that
+> > aren't easily reachable on standard keyboards and/or could cause=20
+> > troubles when parsed by the documentation build system. =20
+>=20
+> Better.
+>=20
+> But you still don't say *why* it matters whether given characters are
+> trivial to reach with standard keyboard layouts, or specify *what*
+> 'troubles' the offending characters cause.
 
-configs tested: 108
-configs skipped: 2
+See the patches in the series. The reason for each particular case
+is there on each patch, like on this one:
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+	[PATCH v3 13/16] docs: sound: kernel-api: writing-an-alsa-driver.rst: repl=
+ace some characters
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-mips                      fuloong2e_defconfig
-arm                             mxs_defconfig
-powerpc                      bamboo_defconfig
-xtensa                  nommu_kc705_defconfig
-m68k                             allyesconfig
-sh                           se7780_defconfig
-powerpc                    ge_imp3a_defconfig
-mips                     cu1000-neo_defconfig
-mips                           ip22_defconfig
-sh                          rsk7201_defconfig
-powerpc                     mpc5200_defconfig
-mips                     loongson1c_defconfig
-powerpc                   currituck_defconfig
-sh                             shx3_defconfig
-nios2                            allyesconfig
-mips                  cavium_octeon_defconfig
-powerpc                      chrp32_defconfig
-arm                            lart_defconfig
-parisc                           allyesconfig
-mips                  maltasmvp_eva_defconfig
-powerpc                     tqm5200_defconfig
-powerpc                     ep8248e_defconfig
-mips                    maltaup_xpa_defconfig
-arm                     am200epdkit_defconfig
-arm                         vf610m4_defconfig
-arc                         haps_hs_defconfig
-arm                       aspeed_g5_defconfig
-alpha                               defconfig
-openrisc                    or1ksim_defconfig
-i386                             alldefconfig
-openrisc                  or1klitex_defconfig
-mips                       bmips_be_defconfig
-mips                      pistachio_defconfig
-x86_64                            allnoconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-csky                                defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a003-20210517
-i386                 randconfig-a001-20210517
-i386                 randconfig-a004-20210517
-i386                 randconfig-a005-20210517
-i386                 randconfig-a002-20210517
-i386                 randconfig-a006-20210517
-x86_64               randconfig-a012-20210517
-x86_64               randconfig-a015-20210517
-x86_64               randconfig-a011-20210517
-x86_64               randconfig-a013-20210517
-x86_64               randconfig-a016-20210517
-x86_64               randconfig-a014-20210517
-i386                 randconfig-a016-20210517
-i386                 randconfig-a014-20210517
-i386                 randconfig-a011-20210517
-i386                 randconfig-a012-20210517
-i386                 randconfig-a015-20210517
-i386                 randconfig-a013-20210517
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                               allmodconfig
-um                                allnoconfig
-um                               allyesconfig
-um                                  defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+	The conversion tools used during DocBook/LaTeX/html/Markdown->ReST
+	conversion and some cut-and-pasted text contain some characters that
+	aren't easily reachable on standard keyboards and/or could cause
+	troubles when parsed by the documentation build system.
+	=20
+	Replace the occurences of the following characters:
+=09
+		- U+00a0 ('=C2=A0'): NO-BREAK SPACE
+		  as it can cause lines being truncated on PDF output
 
-clang tested configs:
-x86_64               randconfig-a004-20210517
-x86_64               randconfig-a003-20210517
-x86_64               randconfig-a001-20210517
-x86_64               randconfig-a005-20210517
-x86_64               randconfig-a002-20210517
-x86_64               randconfig-a006-20210517
+	Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+Thanks,
+Mauro
