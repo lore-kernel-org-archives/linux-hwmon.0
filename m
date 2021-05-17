@@ -2,188 +2,123 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA3FBC433ED
-	for <linux-hwmon@archiver.kernel.org>; Sun, 16 May 2021 23:11:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1FC5C433ED
+	for <linux-hwmon@archiver.kernel.org>; Mon, 17 May 2021 06:39:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C0C606100A
-	for <linux-hwmon@archiver.kernel.org>; Sun, 16 May 2021 23:11:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D5539606A5
+	for <linux-hwmon@archiver.kernel.org>; Mon, 17 May 2021 06:39:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbhEPXMP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 16 May 2021 19:12:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33024 "EHLO
+        id S234966AbhEQGkf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 17 May 2021 02:40:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbhEPXMP (ORCPT
+        with ESMTP id S234617AbhEQGkf (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 16 May 2021 19:12:15 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D826CC061573;
-        Sun, 16 May 2021 16:10:59 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id j11so3653855qtn.12;
-        Sun, 16 May 2021 16:10:59 -0700 (PDT)
+        Mon, 17 May 2021 02:40:35 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78605C061573
+        for <linux-hwmon@vger.kernel.org>; Sun, 16 May 2021 23:39:18 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id s19so2010635pfe.8
+        for <linux-hwmon@vger.kernel.org>; Sun, 16 May 2021 23:39:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=PoY+EuPlWoGo2pcajMw8QY1wd4IJBhLEmq5qQl8UIlk=;
-        b=HNPSwjPV1ofyklqh8xCLJFvlt9IWr3JBO8NPXTO4JEY8BPbL3EyxDk3gMVcxlAGtVq
-         D8NnnuyFduSPHiGegwkVOEKI9VGYlaCw7rNeN2Izyx/csYUyzRAGhNPwenbj0GGiNa+V
-         7IyJPjfTVHWm3rXJC7knBkZFcsOp9IpN3+ZnZkW3cV/i3V7N1m0itvxFqUrLh1TxYuce
-         hwsB7sKuI3ZFiVE8FGV3hJ2V5ySjamIWEOGG7ZaxyVOE4CudJWZ3xOQ26FUvRgmF+trU
-         lOZRMPypL/IXOEyIFFF58RgaBiSLlEGn9/7eEvIX7orRLoKrCIRipbbOndhZdcMNCoNn
-         SEMw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4mLJfNTzEkOYJ0jzK6ByXCZMswcx7La/U4AL1KiSVZ4=;
+        b=Zn3TppKxJkCXc4P41PFv9q3kw26MTF43GWPTJQVJie2BFkQBg113Hqj2+JpuknKxdv
+         WTK0aSRKXkmdQ42FktnSuo0kuNd13xGF79mE1dtcbCFiHG3nDSN3ORJQQq95G790BsG5
+         6XNpSRadVBs0G5l7CF6r5h5gzFqKwTPJgOEvz76JlDpVZZWDBruRUmg1Ulg/m2xKe1BS
+         09x/1Nc2IZmigq8xUvVCmg8JIAqducdv1u5r+e+dwQEl8++Om+hY4ASTLPoMjN7hxuTt
+         yUM7/1QgjJtkhwMFZSbfVlIRV6L/+x5zZad1t8/ZpibJjTbtxS37eguuSMkGTZL7MpLv
+         paOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=PoY+EuPlWoGo2pcajMw8QY1wd4IJBhLEmq5qQl8UIlk=;
-        b=BWanz5h+h/1FWD/irRvsFmzO372yVpJ15Ibjnb1pKBwCpd2XWkuGQENL+wdfw6CJvf
-         uxjxtaQ4kdp+VhRe72DkTdz4CnpwFstId4NwRpwjS0nAHaE22uGeJv2wfOimnuItm6AG
-         r6cWEiXzLaks26AJ4VqjEX1N5pa5YztDfQ7SohSajDbY1QxaEJevT/r/MwnGzV4NDRQl
-         Dimj6KglodrwELXgYuCJIkn0FX/FArmmb/D3FTL6Gs2EfULz+2SFfeg/xhlmtWRVJ4qw
-         5LBgK7CsnM0mYWJxS8XGuakmL6tBntAMIeGzuzNg8YE3SmplXONqN0xEA1EHBx8snPbd
-         lq5A==
-X-Gm-Message-State: AOAM533mltN/f80vSBDQlbDAqtlXB6CnhvpuVNS0Lu1Mqo7VxH0WJJk6
-        EUJscj+ExDpYN72CN/ccVp0=
-X-Google-Smtp-Source: ABdhPJytrgXGlxQ817LtCB14QZcajUBcsKrWFjZeIqu9SNrIcSQsEIJo8QwRX6I8yeno1D70KmEemg==
-X-Received: by 2002:ac8:4698:: with SMTP id g24mr5664517qto.112.1621206659083;
-        Sun, 16 May 2021 16:10:59 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 7sm10375052qtu.38.2021.05.16.16.10.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 May 2021 16:10:58 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [RFC PATCH v1 0/2] hwmon: (iio_hwmon) optionally force iio
- channel type
-To:     Liam Beguin <liambeguin@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>
-Cc:     jdelvare@suse.com, lars@metafoo.de, pmeerw@pmeerw.net,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, Peter Rosin <peda@axentia.se>
-References: <20210516044315.116290-1-liambeguin@gmail.com>
- <20210516100631.7310a7bb@jic23-huawei> <CBEREZMZ2Z8U.13BH8G7RKPPL7@shaak>
- <e56146c5-2bff-3a6d-b54e-fd40993f82aa@roeck-us.net>
- <20210516172618.2d7ad168@jic23-huawei> <CBEVHCPHGJJD.2IDUUG1RPDF64@shaak>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <d99331c5-b3d6-5e87-3a3d-8cf2817dea11@roeck-us.net>
-Date:   Sun, 16 May 2021 16:10:56 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        bh=4mLJfNTzEkOYJ0jzK6ByXCZMswcx7La/U4AL1KiSVZ4=;
+        b=ejmwCBmzMk5o4nGZ/R6z3bWoKA/xUcVw1TmwNXt5Ktg16DeKXvIy+p2QeMrTsrulDL
+         p1VY57yqNtF87Syauwhpdw/q+NXVWjT0/7MQN2bPF2BBC7nt1y7B9EU3bMmtXFXZZX2w
+         PK6LDETMho2AeCvKAOLmhuEIHNdD7Nr+iKH4DnyVjEfyHP1gIthkLV8Dm1SWFTWMvndk
+         vdJCifW53KSTJX0HcS1IkwrD/Kd/HbAFJW+mX6xZk8s6wsZVmVwMosasyKA/gCgJ9XZg
+         XObK0m07i7oqS5BWZpz0ChVWZ/so144SmEwpSPJodOG4OS4uV7Lq1AWQrehNJ/CEWuGI
+         984w==
+X-Gm-Message-State: AOAM5318qyC+kIGpxg8KaaJw6iB9Ub7xKO3RwkvvxYZgW2tozrSABAaj
+        sr1MuRhVe9QR2QYApyp2kF0=
+X-Google-Smtp-Source: ABdhPJy3KIGOod6ckRaFzdyQG+wLJsBuEkdfBr3f4pJ/qBZ2knZ6FwFRwbKDGxq7woV+fttyhtFi7A==
+X-Received: by 2002:a63:1c6:: with SMTP id 189mr49682009pgb.144.1621233557977;
+        Sun, 16 May 2021 23:39:17 -0700 (PDT)
+Received: from tardis.. ([2601:645:8203:5ef0:aaa1:59ff:fe3e:c140])
+        by smtp.googlemail.com with ESMTPSA id f3sm13057605pjo.3.2021.05.16.23.39.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 May 2021 23:39:17 -0700 (PDT)
+From:   David Bartley <andareed@gmail.com>
+To:     andareed@gmail.com
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [PATCH 1/2] x86/amd_nb: add AMD family 19h model 50h PCI ids
+Date:   Sun, 16 May 2021 23:39:12 -0700
+Message-Id: <20210517063913.4015-1-andareed@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <CBEVHCPHGJJD.2IDUUG1RPDF64@shaak>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/16/21 11:14 AM, Liam Beguin wrote:
-> On Sun May 16, 2021 at 12:26 PM EDT, Jonathan Cameron wrote:
->> On Sun, 16 May 2021 08:54:06 -0700
->> Guenter Roeck <linux@roeck-us.net> wrote:
->>
->>> On 5/16/21 8:02 AM, Liam Beguin wrote:
->>>> Hi Jonathan,
->>>>
->>>> On Sun May 16, 2021 at 5:06 AM EDT, Jonathan Cameron wrote:
->>>>> On Sun, 16 May 2021 00:43:13 -0400
->>>>> Liam Beguin <liambeguin@gmail.com> wrote:
->>>>>   
->>>>>> Add a devicetree binding to optionally force a different IIO channel
->>>>>> type.
->>>>>>
->>>>>> This is useful in cases where ADC channels are connected to a circuit
->>>>>> that represent another unit such as a temperature or a current.
->>>>>>
->>>>>> `channel-types` was chosen instead of `io-channel-types` as this is not
->>>>>> part of the iio consumer bindings.
->>>>>>
->>>>>> In the current form, this patch does what it's intended to do:
->>>>>> change the unit displayed by `sensors`, but feels like the wrong way to
->>>>>> address the problem.
->>>>>>
->>>>>> Would it be possible to force the type of different IIO channels for
->>>>>> this kind of use case with a devicetree binding from the IIO subsystem?
->>>>>>
->>>>>> It would be convenient to do it within the IIO subsystem to have the
->>>>>> right unit there too.
->>>>>>
->>>>>> Thanks for your time,
->>>>>> Liam
->>>>>
->>>>> Hi Liam,
->>>>>
->>>>> +CC Peter for AFE part.
->>>>>
->>>>> It's an interesting approach, but I would suggest we think about this
->>>>> a different way.
->>>>>
->>>>> Whenever a channel is being used to measure something 'different' from
->>>>> what it actually measures (e.g. a voltage ADC measuring a current) that
->>>>> reflects their being some analog component involved.
->>>>> If you look at drivers/iio/afe/iio-rescale.c you can see the approach
->>>>> we currently use to handle this.
->>>>
->>>> Many thanks for pointing out the AFE code. That look like what I was
->>>> hoping to accomplish, but in a much better way.
->>>>    
->>>>>
->>>>> Effectively what you add to devicetree is a consumer of the ADC channel
->>>>> which in turn provides services to other devices. For this current case
->>>>> it would be either a current-sense-amplifier or a current-sense-shunt
->>>>> depending on what the analog front end looks like. We have to describe
->>>>> the characteristics of that front end which isn't something that can
->>>>> be done via a simple channel type.
->>>>>   
->>>>
->>>> Understood. My original intention was to use sensors.conf to do the
->>>> conversions and take into accounts those parameters.
->>>>    
->>>>> That afe consumer device can then provide services to another consumer
->>>>> (e.g. iio-hwmon) which work for your usecase.
->>>>>
->>>>> The main limitation of this approach currently is you end up with
->>>>> one device per channel. That could be improved upon if you have a
->>>>> usecase
->>>>> where it matters.
->>>>>
->>>>> I don't think we currently have an equivalent for temperature sensing
->>>>> but it would be easy enough to do something similar.
->>>>
->>>> Wonderful, thanks again for pointing out the AFE!
->>>>    
->>>
->>> Please don't reinvent the ntc_thermistor driver.
-> 
->> Agreed, I'd forgotten it existed :( Had a feeling we'd solved that
->> problem before
->> but couldn't remember the name of the driver.
->>
->> The afe driver already deals with current / voltage scaling and
->> conversion
->> for common analog circuits. Potential dividers, current shunts etc, but
->> they
->> are all the linear cases IIRC.
->>
->> ntc_thermistor deals with the much more complex job of dealing with a
->> thermistor.
-> 
-> I agree, no need to reinvent this.
-> 
-> Like Jonathan said, the ntc_thermistor driver seems to handle much more
-> complex cases. Where would be the best place to add support for PT100
-> and PT1000? iio-rescale?
-> 
+This is required to support Zen3 APUs in k10temp.
 
-Those sensors don't seem to be even useful for hardware monitoring, so
-if they are linear (and it looks like that that the case) iio would be
-a better place.
+Signed-off-by: David Bartley <andareed@gmail.com>
+Cc: linux-hwmon@vger.kernel.org
+---
+ arch/x86/kernel/amd_nb.c | 3 +++
+ include/linux/pci_ids.h  | 1 +
+ 2 files changed, 4 insertions(+)
 
-Guenter
+diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
+index 09083094eb57..23dda362dc0f 100644
+--- a/arch/x86/kernel/amd_nb.c
++++ b/arch/x86/kernel/amd_nb.c
+@@ -25,6 +25,7 @@
+ #define PCI_DEVICE_ID_AMD_17H_M60H_DF_F4 0x144c
+ #define PCI_DEVICE_ID_AMD_17H_M70H_DF_F4 0x1444
+ #define PCI_DEVICE_ID_AMD_19H_DF_F4	0x1654
++#define PCI_DEVICE_ID_AMD_19H_M50H_DF_F4 0x166e
+ 
+ /* Protect the PCI config register pairs used for SMN and DF indirect access. */
+ static DEFINE_MUTEX(smn_mutex);
+@@ -57,6 +58,7 @@ static const struct pci_device_id amd_nb_misc_ids[] = {
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_CNB17H_F3) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M70H_DF_F3) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_DF_F3) },
++	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M50H_DF_F3) },
+ 	{}
+ };
+ 
+@@ -72,6 +74,7 @@ static const struct pci_device_id amd_nb_link_ids[] = {
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M60H_DF_F4) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M70H_DF_F4) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_DF_F4) },
++	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M50H_DF_F4) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_CNB17H_F4) },
+ 	{}
+ };
+diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+index 4c3fa5293d76..5356ccf1c275 100644
+--- a/include/linux/pci_ids.h
++++ b/include/linux/pci_ids.h
+@@ -555,6 +555,7 @@
+ #define PCI_DEVICE_ID_AMD_17H_M60H_DF_F3 0x144b
+ #define PCI_DEVICE_ID_AMD_17H_M70H_DF_F3 0x1443
+ #define PCI_DEVICE_ID_AMD_19H_DF_F3	0x1653
++#define PCI_DEVICE_ID_AMD_19H_M50H_DF_F3 0x166d
+ #define PCI_DEVICE_ID_AMD_CNB17H_F3	0x1703
+ #define PCI_DEVICE_ID_AMD_LANCE		0x2000
+ #define PCI_DEVICE_ID_AMD_LANCE_HOME	0x2001
+-- 
+2.30.2
+
