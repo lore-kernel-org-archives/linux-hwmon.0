@@ -2,87 +2,128 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06978C433B4
-	for <linux-hwmon@archiver.kernel.org>; Wed, 19 May 2021 19:42:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C160EC433B4
+	for <linux-hwmon@archiver.kernel.org>; Wed, 19 May 2021 20:10:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D16336105A
-	for <linux-hwmon@archiver.kernel.org>; Wed, 19 May 2021 19:42:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A611861355
+	for <linux-hwmon@archiver.kernel.org>; Wed, 19 May 2021 20:10:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232173AbhESTnh (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 19 May 2021 15:43:37 -0400
-Received: from ssl.serverraum.org ([176.9.125.105]:44087 "EHLO
-        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbhESTng (ORCPT
+        id S232989AbhESULq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 19 May 2021 16:11:46 -0400
+Received: from smtp.outgoing.loopia.se ([93.188.3.37]:55879 "EHLO
+        smtp.outgoing.loopia.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232948AbhESULq (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 19 May 2021 15:43:36 -0400
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id BD39D22178;
-        Wed, 19 May 2021 21:42:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1621453332;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=o4jBnun2LSkXDmFiIlCKYTFr+oT+1PQC4hYSvDF/i3w=;
-        b=edWurywZjdeWJTnNg9V7vpsyUR7RzqcRH28dfvryzJ20dy/kY2UELkS+jhTiU+gGn8TDOl
-        fbD5SU21m3zjoeNh7/nY7sI+TQ1wHT1jPJNzYoAGOnjGYLlI03Rlq1WOygzHVFIisUirdf
-        VYdud+aU8VdMHf3ousvOf8uZvS0UBjg=
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Wed, 19 May 2021 21:42:11 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Robert Marko <robert.marko@sartura.hr>
-Cc:     Lee Jones <lee.jones@linaro.org>, robh+dt@kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        bgolaszewski@baylibre.com, jdelvare@suse.com,
-        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, Luka Perkov <luka.perkov@sartura.hr>,
-        jmp@epiphyte.org, Paul Menzel <pmenzel@molgen.mpg.de>,
-        Donald Buczek <buczek@molgen.mpg.de>
-Subject: Re: [PATCH 1/6] mfd: Add Delta TN48M CPLD driver
-In-Reply-To: <CA+HBbNHCnpg9qCzZbT9KVNqX-daC68iaJKNdyEf7do3w98miWw@mail.gmail.com>
-References: <20210430123511.116057-1-robert.marko@sartura.hr>
- <af4923ef1ed0693fcd67d7986348b164@walle.cc>
- <CA+HBbNHCnpg9qCzZbT9KVNqX-daC68iaJKNdyEf7do3w98miWw@mail.gmail.com>
-User-Agent: Roundcube Webmail/1.4.11
-Message-ID: <0f28cabf858154842819935000f32bc2@walle.cc>
-X-Sender: michael@walle.cc
+        Wed, 19 May 2021 16:11:46 -0400
+Received: from s807.loopia.se (localhost [127.0.0.1])
+        by s807.loopia.se (Postfix) with ESMTP id 38F132E633C7
+        for <linux-hwmon@vger.kernel.org>; Wed, 19 May 2021 22:10:21 +0200 (CEST)
+Received: from s630.loopia.se (unknown [172.22.191.6])
+        by s807.loopia.se (Postfix) with ESMTP id 28CB72E2B065;
+        Wed, 19 May 2021 22:10:21 +0200 (CEST)
+Received: from s476.loopia.se (unknown [172.22.191.6])
+        by s630.loopia.se (Postfix) with ESMTP id 0EBB013B94CB;
+        Wed, 19 May 2021 22:10:21 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at amavis.loopia.se
+Received: from s899.loopia.se ([172.22.191.6])
+        by s476.loopia.se (s476.loopia.se [172.22.190.16]) (amavisd-new, port 10024)
+        with LMTP id RTyEceadJ5La; Wed, 19 May 2021 22:10:20 +0200 (CEST)
+X-Loopia-Auth: user
+X-Loopia-User: carl@hgsystem.se
+X-Loopia-Originating-IP: 155.4.133.180
+Received: from localhost.localdomain (h-155-4-133-180.NA.cust.bahnhof.se [155.4.133.180])
+        (Authenticated sender: carl@hgsystem.se)
+        by s899.loopia.se (Postfix) with ESMTPSA id 0DA3D2C8BBB8;
+        Wed, 19 May 2021 22:10:20 +0200 (CEST)
+From:   Erik Rosen <erik.rosen@metormote.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Erik Rosen <erik.rosen@metormote.com>
+Subject: [PATCH 0/5] hwmon: (pmbus/pim4328) Add pim4328 PMBus driver
+Date:   Wed, 19 May 2021 22:10:10 +0200
+Message-Id: <20210519201015.83989-1-erik.rosen@metormote.com>
+X-Mailer: git-send-email 2.11.0 (Apple Git-81)
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi,
+Add hardware monitoring support for the Flex power interface modules
+PIM4006, PIM4328 and PIM4820.
 
-Am 2021-05-19 13:53, schrieb Robert Marko:
-> On Thu, May 6, 2021 at 6:34 PM Michael Walle <michael@walle.cc> wrote:
->> Am 2021-04-30 14:35, schrieb Robert Marko:
->> > Delta TN48M switches have a Lattice CPLD that serves
->> > multiple purposes including being a GPIO expander.
->> > So lets add the MFD core driver for it.
->> 
->> Did you have a look at mfd/simple-mfd-i2c.c?
-> 
-> Yes, that was my first idea but we have a requirement to expose CPLD
-> information via debugfs as there are userspace applications using it.
-> And simple-mfd-i2c does not allow us to do so.
+The modules are equipped with dual feed input and has support for
+hotswap, holdup and various circuit protection functionality.
 
-Mh, last time Lee wasn't very fond of having a driver that just 
-populates
-sub-drivers while doing almost nothing itself. See
-https://lore.kernel.org/lkml/20200605065709.GD3714@dell/
+[PATCH 1/5]
+PIM4328 and PIM4820 use the direct mode data format so a new function
+is added to the pmbus_core driver to be able to read and decode
+the COEFFICIENTS command.
 
-That being said, I'd also like to expose our CPLD version, but until now
-haven't found a good solution.
+[PATCH 2/5]
+The modules have no CAPABILITY or WRITE_PROTECT commands. If these
+commands are read, the modules return invalid data (0xFF),
+so in addition to the NO_CAPABILITY flag we need a NO_WRITE_PROTECT
+flag to tell the pmbus_core driver to not access this register.
 
--michael
+[PATCH 3/5]
+The two inputs are modelled using virtual phases but there
+is a limitation in the pmbus_core that disallows monitoring
+of phase functions if there is no corresponding function on
+the page level.
+
+In this specific case the PIM4006 module allows
+monitoring of current on each input separately,
+but there is no corresponding command on the page level.
+
+Is there a specific reason for this limitation?
+Otherwise we suggest relaxing this criteria.
+
+[PATCH 4/5]
+All modules use manufacturer specific registers (mfr) for
+status data and only supports the CML bit in the PMBus
+STATUS register. The driver overrides reading the STATUS
+register and maps the bits in the mfr registers to the STATUS
+register alarm bits.
+
+
+Addendum
+In view of the comment in the generic pmbus driver on adding
+support for direct mode, we did look into it but decided against
+it because (1) we do not really have a usecase for it and (2) to
+implement truly generic direct mode support we need to handle
+the siuation when there are different coefficients for reading
+or writing a register.
+
+This patch has been tested with PIM4406, PIM4280 and PIM4328
+modules. 
+
+Erik Rosen (5):
+  Add function for reading direct mode coefficients
+  Add new pmbus flag NO_WRITE_PROTECT
+  Allow phase function even if it's not on page
+  Add PMBus driver for PIM4006, PIM4328 and PIM4820
+  Add documentation for the pim4328 PMBus driver
+
+ Documentation/hwmon/index.rst    |   1 +
+ Documentation/hwmon/pim4328.rst  | 105 +++++++++++
+ MAINTAINERS                      |   7 +
+ drivers/hwmon/pmbus/Kconfig      |   9 +
+ drivers/hwmon/pmbus/Makefile     |   1 +
+ drivers/hwmon/pmbus/pim4328.c    | 299 +++++++++++++++++++++++++++++++
+ drivers/hwmon/pmbus/pmbus.h      |   4 +
+ drivers/hwmon/pmbus/pmbus_core.c |  63 +++++--
+ include/linux/pmbus.h            |   9 +
+ 9 files changed, 487 insertions(+), 11 deletions(-)
+ create mode 100644 Documentation/hwmon/pim4328.rst
+ create mode 100644 drivers/hwmon/pmbus/pim4328.c
+
+
+base-commit: 6efb943b8616ec53a5e444193dccf1af9ad627b5
+-- 
+2.20.1
+
