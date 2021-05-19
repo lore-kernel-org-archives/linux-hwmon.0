@@ -2,822 +2,350 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 164A5C433ED
-	for <linux-hwmon@archiver.kernel.org>; Wed, 19 May 2021 13:29:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E39BC433ED
+	for <linux-hwmon@archiver.kernel.org>; Wed, 19 May 2021 13:40:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E904860FF2
-	for <linux-hwmon@archiver.kernel.org>; Wed, 19 May 2021 13:29:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0353B6135F
+	for <linux-hwmon@archiver.kernel.org>; Wed, 19 May 2021 13:40:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353710AbhESNbK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 19 May 2021 09:31:10 -0400
-Received: from mout.gmx.net ([212.227.17.20]:59997 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1353722AbhESNbJ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 19 May 2021 09:31:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1621430972;
-        bh=Es0Et/WjfefCemrJFp9Q6R97s+nioEiM1TtUj01wmwA=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=Kr8OAX3z5AD29lpVUmnO/N+LttR6aZWu5hhzLv59xg70olA0q6MFAAtYpAai6OMrG
-         COHTInTgL7Dv6r90EGj6IuUzo3TwHq/thw0ycFonAQRi/7j6kslrpzz1GUGU4Mi9Of
-         SpEXy4xoHBYEoZpuKXpaV5LsL5aAY32I9C+UTDGU=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from esprimo-mx.fritz.box ([79.242.184.149]) by mail.gmx.net
- (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MjS9C-1l4HwH3Pcg-00kwlm; Wed, 19 May 2021 15:29:32 +0200
-From:   W_Armin@gmx.de
-To:     pali@kernel.org
-Cc:     linux@roeck-us.net, jdelvare@suse.com, linux-hwmon@vger.kernel.org
-Subject: [PATCH 5/5] hwmon: (dell-smm-hwmon) Convert to devm_hwmon_device_register_with_info()
-Date:   Wed, 19 May 2021 15:29:10 +0200
-Message-Id: <20210519132910.14453-6-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210519132910.14453-1-W_Armin@gmx.de>
-References: <20210519132910.14453-1-W_Armin@gmx.de>
+        id S1353557AbhESNlu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 19 May 2021 09:41:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58012 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346655AbhESNls (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 19 May 2021 09:41:48 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B53C06175F;
+        Wed, 19 May 2021 06:40:28 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id 82so1307029qki.8;
+        Wed, 19 May 2021 06:40:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=FLN0CDJlHxavKmzu7MgLtwPMPqvhYeNe5w88hhTe9Xw=;
+        b=ZVhIGwQCZxUQYb0H6GT3jegT0iqlL/xDAlbzciPneWnZxT21rT5GH4vKPJAhoBWnnc
+         IYCQSis1l89zxTrjgk3YMAQnC7B59iMjv3dmnok1dy0jLbadB9Q+tnkWaRdyJTtGJFa4
+         ECv+SFvsK0Jj0K0bAgBvKKMbHuV+bUyFqlBFqAWxdVKY0kgIZCokFHVpEYTYMMgpxDVM
+         q52aQlX4d6cj17okZAvyUocbQTy/erjgbTWhV/wh8xtjPtjIzD91CL+VI4MljifDPMnK
+         vwGtXY/kNpDTOlOJhB9LxfLxy4M8+ajkkcj1v9w7IT8PtyQ/SEk73fVEyazgW6HLqRX0
+         yJHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=FLN0CDJlHxavKmzu7MgLtwPMPqvhYeNe5w88hhTe9Xw=;
+        b=ZsMh2Rk8GLjBWRMySjymhCtxwyLzvpKIWycbDNWPQqjtxJx94/WUYs+q3Q3mwpF4tE
+         //b0r1vEjgVFhUG2ZV52y9ot9KaKMr+J/Ijqk8TXwJPWynBaXDIfnyQaMl3sg8Gf4GC4
+         g/E/fmOwGK6x9WmwHDc/BmRb2hEjhu/HhKucsJNFKAmGpY/jmFWrv/1+suTBFTwxwIcA
+         lB1KurCCfEKWF43t812Lx5XpMz/8tRbIJ/iQejGYWEMKaQ365mWdEgIjvFsM+g804VB/
+         U5TugeGIQGcgFfBPMvPN1oHEK1w3RCkaWFcRCzzey43xPodZBTZdwZOIx3t4WbW//KH9
+         KUXg==
+X-Gm-Message-State: AOAM533yiN2jZGayPmz8CHhZeZjd3B/QJo3KAqyvgEtHzqrF4mglqCF8
+        GgEX0MuV5t0li7bPtFjr0sw=
+X-Google-Smtp-Source: ABdhPJy+MDenBS+R/uIb+MPCK3Tiu+R+KIprsTnCAuH4fCPrYkMxZEHHb/FCXK6w05LdkvYmrMWC1g==
+X-Received: by 2002:a05:620a:2912:: with SMTP id m18mr12303145qkp.475.1621431627728;
+        Wed, 19 May 2021 06:40:27 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c185sm15289147qkg.96.2021.05.19.06.40.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 May 2021 06:40:26 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH 4/6] hwmon: Add Delta TN48M CPLD HWMON driver
+To:     Robert Marko <robert.marko@sartura.hr>
+Cc:     Lee Jones <lee.jones@linaro.org>, robh+dt@kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        bgolaszewski@baylibre.com, jdelvare@suse.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Luka Perkov <luka.perkov@sartura.hr>, jmp@epiphyte.org,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Donald Buczek <buczek@molgen.mpg.de>
+References: <20210430123511.116057-1-robert.marko@sartura.hr>
+ <20210430123511.116057-4-robert.marko@sartura.hr>
+ <f5bc39d4-742d-4403-7b5d-172a2410a631@roeck-us.net>
+ <CA+HBbNE2E8jEnLhGE-Z3qqYFS99TnCMdS7m8rfum1MbPX+-=bw@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <659d8e96-62e2-b316-50d7-a754eb374443@roeck-us.net>
+Date:   Wed, 19 May 2021 06:40:24 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:qTDKEMvnlfKe4db0WTakDwfvzky3pRHhWPioxXIogysdIxJsA/v
- s09g0i+DmY/6d5tLjl5+Mq8K+A0XZxoxvr70RCJ+eATIp21SxB6HgE2Q++NS5JVmk8sF6Dy
- DeRpbVsoyV/xi81wOcGAGsnrZkbkeWhDsb2EDeZgnBcv4ftvV4ftr5H93JLsSKXcedwLXIi
- EE+1lxKGIrzxhafhMQ4hg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:F22yLMQ8me4=:s/XziTT1kU8uIgQciGG0yc
- 3C5FCoCbO0QWvyJLCSvc1ZNN5AGPKVUY0KJdideo4EIs0gaTgOXEQf8Tqt/VCmiqLt5GxBUbx
- WbS9bj3bPxoBnym+dIIf2ct3tDhWKtll4NJKUzwSzj8BnKtm5kf9lv3gmS5fpmrX/f71AUYOB
- UyE15cKVHH7sXN/MAb6qdRQuIsnSdT36a0sYPux+YzprvLL8el1Am3YnH790tSZDAHkPS8WTL
- Y+XHq1I/X2TEY2utKThJaDK2Y3e4hW3SpyHfaoKzEYKpr0Cio3YuETZhACswTh+vb8wF5Z8c1
- QbmOIcnoCkI9IEzWh6aEyyrgJxVMNQO6zyUvNZvqE3gyApgsPMLk5pxrnVWFhCc9etXdDttEX
- Wefo3vRI467vpbj2FlV7uF+OA/1QIGc+BbqthmIAIPSZraHLkXr320qMmbwPMgZVUKlcoc8Uw
- cTj/v5Fax7NLd0hpkQW189xj6DEnjma87peo7ZiIjuE8Apub6tsClO/eynlIeF0QvhiY34EP2
- 9yyu1xi3XN4lDnM6C/FsaKwS3rigznL+1BdngpRnZ41Gv40i/D+Rsu/AIklHw89Niy0oWfBe4
- 5RmQ7KEaLXsKBULk+JcOGNtHG8Wmvol7iUO5TcLqn/dQwDCWqm+ml/VkNPuvrdXu1PpvNhk/J
- OTLDm8ItRhz8lCk5AE/hfFhYffmBuo5NFBs/mjgF/qV4Gmn2cnzlsFDQzugz1+y35Pee6rTSM
- vhZCoCEubn/UKW+N7y1TsZF/NxXf/+BMi6Mfe8J1IaeBM37w+Z+ZVwwa90hTBhoZe388IrSK1
- MUktC4GsZP5EwOKhRIX6JvFgR/ayrSyeUPfDJOnXR1x8GjdE1/Rt4V7xXFOlVW+U9g901Q8Lx
- M8P+TDa6ia0QUNsdPeqpQggAylxaT/t6mzDzaR3zSjfY09Zz9qy7zfQ9bWD37+dTQvQxqopY3
- /ZooYHyWqrThn7/89dQAKVA/4ODHJHu0trjSXoUJU9On07NosRmdyDaw7r9hsG8L16S0E80PD
- q+4wh3l22tJ/MqvGCkBp+syPMM/HxtQZRyvguCV5FjEWIzKUdz3kOE20XNQ0JvFPGtFsE+4Hf
- axL2kCbToGdGBMGY3yXW0dnOau2oTGELo6maDJke37x5g9JHwRwJmF+JVI3qlyN5khmpp7pvU
- sDzKZe5UQ1ecy1Vd9ZwG416mKk3ebA2e/gKUEOfv6AxBvs3z8DFyjC934PzyRR6UDA1TU=
+In-Reply-To: <CA+HBbNE2E8jEnLhGE-Z3qqYFS99TnCMdS7m8rfum1MbPX+-=bw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Armin Wolf <W_Armin@gmx.de>
+On 5/19/21 5:01 AM, Robert Marko wrote:
+> On Fri, Apr 30, 2021 at 3:12 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>>
+>> On 4/30/21 5:35 AM, Robert Marko wrote:
+>>> Delta TN48M has a CPLD that also monitors the power supply
+>>> statuses.
+>>>
+>>> These are useful to be presented to the users, so lets
+>>> add a driver for HWMON part of the CPLD.
+>>>
+>>> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+>>> ---
+>>>   drivers/hwmon/Kconfig       |  10 +++
+>>>   drivers/hwmon/Makefile      |   1 +
+>>>   drivers/hwmon/tn48m-hwmon.c | 148 ++++++++++++++++++++++++++++++++++++
+>>>   drivers/mfd/tn48m-cpld.c    |   3 +
+>>>   include/linux/mfd/tn48m.h   |   1 +
+>>>   5 files changed, 163 insertions(+)
+>>>   create mode 100644 drivers/hwmon/tn48m-hwmon.c
+>>>
+>>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+>>> index 54f04e61fb83..89271dfeb775 100644
+>>> --- a/drivers/hwmon/Kconfig
+>>> +++ b/drivers/hwmon/Kconfig
+>>> @@ -1924,6 +1924,16 @@ config SENSORS_TMP513
+>>>          This driver can also be built as a module. If so, the module
+>>>          will be called tmp513.
+>>>
+>>> +config SENSORS_TN48M
+>>> +     tristate "Delta Networks TN48M switch CPLD HWMON driver"
+>>> +     depends on MFD_TN48M_CPLD
+>>> +     help
+>>> +       If you say yes here you get support for Delta Networks TN48M
+>>> +       CPLD.
+>>> +
+>>> +       This driver can also be built as a module. If so, the module
+>>> +       will be called tn48m-hwmon.
+>>> +
+>>>   config SENSORS_VEXPRESS
+>>>        tristate "Versatile Express"
+>>>        depends on VEXPRESS_CONFIG
+>>> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+>>> index fe38e8a5c979..22e470057ffe 100644
+>>> --- a/drivers/hwmon/Makefile
+>>> +++ b/drivers/hwmon/Makefile
+>>> @@ -187,6 +187,7 @@ obj-$(CONFIG_SENSORS_TMP108)      += tmp108.o
+>>>   obj-$(CONFIG_SENSORS_TMP401) += tmp401.o
+>>>   obj-$(CONFIG_SENSORS_TMP421) += tmp421.o
+>>>   obj-$(CONFIG_SENSORS_TMP513) += tmp513.o
+>>> +obj-$(CONFIG_SENSORS_TN48M)  += tn48m-hwmon.o
+>>>   obj-$(CONFIG_SENSORS_VEXPRESS)       += vexpress-hwmon.o
+>>>   obj-$(CONFIG_SENSORS_VIA_CPUTEMP)+= via-cputemp.o
+>>>   obj-$(CONFIG_SENSORS_VIA686A)        += via686a.o
+>>> diff --git a/drivers/hwmon/tn48m-hwmon.c b/drivers/hwmon/tn48m-hwmon.c
+>>> new file mode 100644
+>>> index 000000000000..80fd18d74f1d
+>>> --- /dev/null
+>>> +++ b/drivers/hwmon/tn48m-hwmon.c
+>>> @@ -0,0 +1,148 @@
+>>> +// SPDX-License-Identifier: GPL-2.0-only
+>>> +/*
+>>> + * Delta TN48M CPLD HWMON driver
+>>> + *
+>>> + * Copyright 2020 Sartura Ltd
+>>> + *
+>>> + * Author: Robert Marko <robert.marko@sartura.hr>
+>>> + */
+>>> +
+>>> +#include <linux/bitfield.h>
+>>> +#include <linux/hwmon-sysfs.h>
+>>> +#include <linux/hwmon.h>
+>>> +#include <linux/kernel.h>
+>>> +#include <linux/mod_devicetable.h>
+>>> +#include <linux/module.h>
+>>> +#include <linux/platform_device.h>
+>>> +
+>>> +#include <linux/mfd/tn48m.h>
+>>> +
+>>> +#define PSU1_PRESENT_MASK    BIT(0)
+>>> +#define PSU2_PRESENT_MASK    BIT(1)
+>>> +#define PSU1_POWERGOOD_MASK  BIT(2)
+>>> +#define PSU2_POWERGOOD_MASK  BIT(3)
+>>> +#define PSU1_ALERT_MASK              BIT(4)
+>>> +#define PSU2_ALERT_MASK              BIT(5)
+>>> +
+>>> +static int board_id_get(struct tn48m_data *data)
+>>> +{
+>>> +     unsigned int regval;
+>>> +
+>>> +     regmap_read(data->regmap, BOARD_ID, &regval);
+>>> +
+>>> +     switch (regval) {
+>>> +     case BOARD_ID_TN48M:
+>>> +             return BOARD_ID_TN48M;
+>>> +     case BOARD_ID_TN48M_P:
+>>> +             return BOARD_ID_TN48M_P;
+>>> +     default:
+>>> +             return -EINVAL;
+>>> +     }
+>>> +}
+>>> +
+>>> +static ssize_t psu_present_show(struct device *dev,
+>>> +                             struct device_attribute *attr, char *buf)
+>>> +{
+>>> +     struct sensor_device_attribute_2 *attr2 = to_sensor_dev_attr_2(attr);
+>>> +     struct tn48m_data *data = dev_get_drvdata(dev);
+>>> +     unsigned int regval, status;
+>>> +
+>>> +     if (board_id_get(data) == BOARD_ID_TN48M_P) {
+>>> +             regmap_read(data->regmap, attr2->nr, &regval);
+>>> +
+>>> +             if (attr2->index == 1)
+>>> +                     status = !FIELD_GET(PSU1_PRESENT_MASK, regval);
+>>> +             else
+>>> +                     status = !FIELD_GET(PSU2_PRESENT_MASK, regval);
+>>> +     } else
+>>> +             status = 0;
+>>> +
+>>> +     return sprintf(buf, "%d\n", status);
+>>> +}
+>>> +
+>>> +static ssize_t psu_pg_show(struct device *dev,
+>>> +                        struct device_attribute *attr, char *buf)
+>>> +{
+>>> +     struct sensor_device_attribute_2 *attr2 = to_sensor_dev_attr_2(attr);
+>>> +     struct tn48m_data *data = dev_get_drvdata(dev);
+>>> +     unsigned int regval, status;
+>>> +
+>>> +     regmap_read(data->regmap, attr2->nr, &regval);
+>>> +
+>>> +     if (attr2->index == 1)
+>>> +             status = FIELD_GET(PSU1_POWERGOOD_MASK, regval);
+>>> +     else
+>>> +             status = FIELD_GET(PSU2_POWERGOOD_MASK, regval);
+>>> +
+>>> +     return sprintf(buf, "%d\n", status);
+>>> +}
+>>> +
+>>> +static ssize_t psu_alert_show(struct device *dev,
+>>> +                           struct device_attribute *attr, char *buf)
+>>> +{
+>>> +     struct sensor_device_attribute_2 *attr2 = to_sensor_dev_attr_2(attr);
+>>> +     struct tn48m_data *data = dev_get_drvdata(dev);
+>>> +     unsigned int regval, status;
+>>> +
+>>> +     if (board_id_get(data) == BOARD_ID_TN48M_P) {
+>>> +             regmap_read(data->regmap, attr2->nr, &regval);
+>>> +
+>>> +             if (attr2->index == 1)
+>>> +                     status = !FIELD_GET(PSU1_ALERT_MASK, regval);
+>>> +             else
+>>> +                     status = !FIELD_GET(PSU2_ALERT_MASK, regval);
+>>> +     } else
+>>> +             status = 0;
+>>> +
+>>> +     return sprintf(buf, "%d\n", status);
+>>> +}
+>>> +
+>>> +static SENSOR_DEVICE_ATTR_2_RO(psu1_present, psu_present, PSU_STATUS, 1);
+>>> +static SENSOR_DEVICE_ATTR_2_RO(psu2_present, psu_present, PSU_STATUS, 2);
+>>> +static SENSOR_DEVICE_ATTR_2_RO(psu1_pg, psu_pg, PSU_STATUS, 1);
+>>> +static SENSOR_DEVICE_ATTR_2_RO(psu2_pg, psu_pg, PSU_STATUS, 2);
+>>> +static SENSOR_DEVICE_ATTR_2_RO(psu1_alert, psu_alert, PSU_STATUS, 1);
+>>> +static SENSOR_DEVICE_ATTR_2_RO(psu2_alert, psu_alert, PSU_STATUS, 2);
+>>> +
+>>> +static struct attribute *tn48m_hwmon_attrs[] = {
+>>> +     &sensor_dev_attr_psu1_present.dev_attr.attr,
+>>> +     &sensor_dev_attr_psu2_present.dev_attr.attr,
+>>> +     &sensor_dev_attr_psu1_pg.dev_attr.attr,
+>>> +     &sensor_dev_attr_psu2_pg.dev_attr.attr,
+>>> +     &sensor_dev_attr_psu1_alert.dev_attr.attr,
+>>> +     &sensor_dev_attr_psu2_alert.dev_attr.attr,
+>>
+>> Literally none of those attributes are standard hwmon attributes.
+>> I don't know what this is, but it is not a hardware monitoring driver.
+> 
+> Yes, I agree that it does not expose any of the standard attributes, but these
+> are the only ones the CPLD exposes.
+> 
+> I don't know where else to put them, MFD driver did not seem logical to me.
+>>
+>>> +     NULL
+>>> +};
+>>> +
+>>> +ATTRIBUTE_GROUPS(tn48m_hwmon);
+>>> +
+>>> +static int tn48m_hwmon_probe(struct platform_device *pdev)
+>>> +{
+>>> +     struct tn48m_data *data = dev_get_drvdata(pdev->dev.parent);
+>>> +     struct device *hwmon_dev;
+>>> +
+>>> +     hwmon_dev = devm_hwmon_device_register_with_groups(&pdev->dev,
+>>> +                                                        "tn48m_hwmon",
+>>> +                                                        data,
+>>> +                                                        tn48m_hwmon_groups);
+>>
+>> Please use devm_hwmon_device_register_with_info() to register hwmon devices.
+>> Of course, that only makes sense for actual hardware monitoring drivers
+>> which do support standard attributes.
+> 
+> Yes, devm_hwmon_device_register_with_info() made no sense without any of the
+> standard attributes.
+> 
 
-Convert to new registration API to get rid of attribute magic
-numbers and reduce module size.
+I would suggest to expose the information using debugfs.
+Again, this is not a hardware monitoring driver.
 
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- drivers/hwmon/dell-smm-hwmon.c | 600 +++++++++++++++------------------
- 1 file changed, 281 insertions(+), 319 deletions(-)
+Guenter
 
-diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
-.c
-index 420fdd2de2fb..504ade34833e 100644
-=2D-- a/drivers/hwmon/dell-smm-hwmon.c
-+++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -25,7 +25,6 @@
- #include <linux/capability.h>
- #include <linux/mutex.h>
- #include <linux/hwmon.h>
--#include <linux/hwmon-sysfs.h>
- #include <linux/uaccess.h>
- #include <linux/io.h>
- #include <linux/sched.h>
-@@ -60,11 +59,13 @@
- #define I8K_POWER_AC		0x05
- #define I8K_POWER_BATTERY	0x01
-
-+#define DELL_SMM_NO_TEMP	10
-+#define DELL_SMM_NO_FANS	3
-+
- struct dell_smm_data {
- 	struct mutex i8k_mutex; /* lock for sensors writes */
- 	char bios_version[4];
- 	char bios_machineid[16];
--	u32 i8k_hwmon_flags;
- 	uint i8k_fan_mult;
- 	uint i8k_pwm_mult;
- 	uint i8k_fan_max;
-@@ -72,23 +73,11 @@ struct dell_smm_data {
- 	bool disallow_fan_support;
- 	unsigned int manual_fan;
- 	unsigned int auto_fan;
--	int types[3];
-+	long auto_fan_enable;
-+	const char *temp_label[DELL_SMM_NO_TEMP];
-+	const char *fan_label[DELL_SMM_NO_FANS];
- };
-
--#define I8K_HWMON_HAVE_TEMP1	(1 << 0)
--#define I8K_HWMON_HAVE_TEMP2	(1 << 1)
--#define I8K_HWMON_HAVE_TEMP3	(1 << 2)
--#define I8K_HWMON_HAVE_TEMP4	(1 << 3)
--#define I8K_HWMON_HAVE_TEMP5	(1 << 4)
--#define I8K_HWMON_HAVE_TEMP6	(1 << 5)
--#define I8K_HWMON_HAVE_TEMP7	(1 << 6)
--#define I8K_HWMON_HAVE_TEMP8	(1 << 7)
--#define I8K_HWMON_HAVE_TEMP9	(1 << 8)
--#define I8K_HWMON_HAVE_TEMP10	(1 << 9)
--#define I8K_HWMON_HAVE_FAN1	(1 << 10)
--#define I8K_HWMON_HAVE_FAN2	(1 << 11)
--#define I8K_HWMON_HAVE_FAN3	(1 << 12)
--
- MODULE_AUTHOR("Massimo Dal Zotto (dz@debian.org)");
- MODULE_AUTHOR("Pali Roh=C3=A1r <pali@kernel.org>");
- MODULE_DESCRIPTION("Dell laptop SMM BIOS hwmon driver");
-@@ -130,6 +119,33 @@ struct smm_regs {
- 	unsigned int edi __packed;
- };
-
-+static const char * const temp_labels[] =3D {
-+	"CPU",
-+	"GPU",
-+	"SODIMM",
-+	"Other",
-+	"Ambient",
-+	"Other",
-+};
-+
-+static const char * const fan_labels[] =3D {
-+	"Processor Fan",
-+	"Motherboard Fan",
-+	"Video Fan",
-+	"Power Supply Fan",
-+	"Chipset Fan",
-+	"Other Fan",
-+};
-+
-+static const char * const docking_labels[] =3D {
-+	"Docking Processor Fan",
-+	"Docking Motherboard Fan",
-+	"Docking Video Fan",
-+	"Docking Power Supply Fan",
-+	"Docking Chipset Fan",
-+	"Docking Other Fan",
-+};
-+
- static inline const char __init *i8k_get_dmi_data(int field)
- {
- 	const char *dmi_data =3D dmi_get_system_info(field);
-@@ -270,7 +286,7 @@ static int i8k_get_fan_speed(const struct dell_smm_dat=
-a *data, int fan)
- /*
-  * Read the fan type.
-  */
--static int _i8k_get_fan_type(struct dell_smm_data *data, int fan)
-+static int __init i8k_get_fan_type(const struct dell_smm_data *data, int =
-fan)
- {
- 	struct smm_regs regs =3D { .eax =3D I8K_SMM_GET_FAN_TYPE, };
-
-@@ -281,15 +297,6 @@ static int _i8k_get_fan_type(struct dell_smm_data *da=
-ta, int fan)
- 	return i8k_smm(&regs) ? : regs.eax & 0xff;
- }
-
--static int i8k_get_fan_type(struct dell_smm_data *data, int fan)
--{
--	/* I8K_SMM_GET_FAN_TYPE SMM call is expensive, so cache values */
--	if (data->types[fan] =3D=3D INT_MIN)
--		data->types[fan] =3D _i8k_get_fan_type(data, fan);
--
--	return data->types[fan];
--}
--
- /*
-  * Read the fan nominal rpm for specific fan speed.
-  */
-@@ -334,7 +341,7 @@ static int i8k_set_fan(const struct dell_smm_data *dat=
-a, int fan, int speed)
- 	return i8k_smm(&regs) ? : i8k_get_fan_status(data, fan);
- }
-
--static int i8k_get_temp_type(int sensor)
-+static int __init i8k_get_temp_type(int sensor)
- {
- 	struct smm_regs regs =3D { .eax =3D I8K_SMM_GET_TEMP_TYPE, };
-
-@@ -634,343 +641,300 @@ static void __init i8k_init_procfs(struct device *=
-dev)
-  * Hwmon interface
-  */
-
--static ssize_t i8k_hwmon_temp_label_show(struct device *dev,
--					 struct device_attribute *devattr,
--					 char *buf)
-+static umode_t dell_smm_is_visible(const void *drvdata, enum hwmon_sensor=
-_types type, u32 attr,
-+				   int channel)
- {
--	static const char * const labels[] =3D {
--		"CPU",
--		"GPU",
--		"SODIMM",
--		"Other",
--		"Ambient",
--		"Other",
--	};
--	int index =3D to_sensor_dev_attr(devattr)->index;
--	int type;
-+	const struct dell_smm_data *data =3D drvdata;
-
--	type =3D i8k_get_temp_type(index);
--	if (type < 0)
--		return type;
--	if (type >=3D ARRAY_SIZE(labels))
--		type =3D ARRAY_SIZE(labels) - 1;
--	return sprintf(buf, "%s\n", labels[type]);
--}
-+	switch (type) {
-+	case hwmon_temp:
-+		switch (attr) {
-+		case hwmon_temp_input:
-+		case hwmon_temp_label:
-+			if (!IS_ERR(data->temp_label[channel]))
-+				return 0444;
-
--static ssize_t i8k_hwmon_temp_show(struct device *dev,
--				   struct device_attribute *devattr,
--				   char *buf)
--{
--	int index =3D to_sensor_dev_attr(devattr)->index;
--	int temp;
-+			break;
-+		default:
-+			break;
-+		}
-+		break;
-+	case hwmon_fan:
-+		if (data->disallow_fan_support)
-+			break;
-
--	temp =3D i8k_get_temp(index);
--	if (temp < 0)
--		return temp;
--	return sprintf(buf, "%d\n", temp * 1000);
--}
-+		switch (attr) {
-+		case hwmon_fan_input:
-+			if (i8k_get_fan_speed(data, channel) >=3D 0)
-+				return 0444;
-
--static ssize_t i8k_hwmon_fan_label_show(struct device *dev,
--					struct device_attribute *devattr,
--					char *buf)
--{
--	struct dell_smm_data *data =3D dev_get_drvdata(dev);
--	static const char * const labels[] =3D {
--		"Processor Fan",
--		"Motherboard Fan",
--		"Video Fan",
--		"Power Supply Fan",
--		"Chipset Fan",
--		"Other Fan",
--	};
--	int index =3D to_sensor_dev_attr(devattr)->index;
--	bool dock =3D false;
--	int type;
-+			break;
-+		case hwmon_fan_label:
-+			if (!IS_ERR(data->fan_label[channel]))
-+				return 0444;
-
--	type =3D i8k_get_fan_type(data, index);
--	if (type < 0)
--		return type;
-+			break;
-+		default:
-+			break;
-+		}
-+		break;
-+	case hwmon_pwm:
-+		if (data->disallow_fan_support)
-+			break;
-
--	if (type & 0x10) {
--		dock =3D true;
--		type &=3D 0x0F;
--	}
-+		switch (attr) {
-+		case hwmon_pwm_input:
-+			if (i8k_get_fan_status(data, channel) >=3D 0)
-+				return 0644;
-
--	if (type >=3D ARRAY_SIZE(labels))
--		type =3D (ARRAY_SIZE(labels) - 1);
-+			break;
-+		case hwmon_pwm_enable:
-+			if (data->auto_fan)
-+				return 0644;
-+
-+			break;
-+		default:
-+			break;
-+		}
-+		break;
-+	default:
-+		break;
-+	}
-
--	return sprintf(buf, "%s%s\n", (dock ? "Docking " : ""), labels[type]);
-+	return 0;
- }
-
--static ssize_t i8k_hwmon_fan_show(struct device *dev,
--				  struct device_attribute *devattr, char *buf)
-+static int dell_smm_read(struct device *dev, enum hwmon_sensor_types type=
-, u32 attr, int channel,
-+			 long *val)
- {
- 	struct dell_smm_data *data =3D dev_get_drvdata(dev);
--	int index =3D to_sensor_dev_attr(devattr)->index;
--	int fan_speed;
-+	int ret;
-+
-+	switch (type) {
-+	case hwmon_temp:
-+		switch (attr) {
-+		case hwmon_temp_input:
-+			ret =3D i8k_get_temp(channel);
-+			if (ret < 0)
-+				return ret;
-+
-+			*val =3D ret * 1000;
-+
-+			return 0;
-+		default:
-+			break;
-+		}
-+		break;
-+	case hwmon_fan:
-+		switch (attr) {
-+		case hwmon_fan_input:
-+			ret =3D i8k_get_fan_speed(data, channel);
-+			if (ret < 0)
-+				return ret;
-+
-+			*val =3D ret;
-+
-+			return 0;
-+		default:
-+			break;
-+		}
-+		break;
-+	case hwmon_pwm:
-+		switch (attr) {
-+		case hwmon_pwm_input:
-+			ret =3D i8k_get_fan_status(data, channel);
-+			if (ret < 0)
-+				return ret;
-+
-+			*val =3D clamp_val(ret * data->i8k_pwm_mult, 0, 255);
-+
-+			return 0;
-+		case hwmon_pwm_enable:
-+			*val =3D data->auto_fan_enable;
-+
-+			return 0;
-+		default:
-+			break;
-+		}
-+		break;
-+	default:
-+		break;
-+	}
-
--	fan_speed =3D i8k_get_fan_speed(data, index);
--	if (fan_speed < 0)
--		return fan_speed;
--	return sprintf(buf, "%d\n", fan_speed);
-+	return -EOPNOTSUPP;
- }
-
--static ssize_t i8k_hwmon_pwm_show(struct device *dev,
--				  struct device_attribute *devattr, char *buf)
-+static int dell_smm_read_string(struct device *dev, enum hwmon_sensor_typ=
-es type, u32 attr,
-+				int channel, const char **str)
- {
- 	struct dell_smm_data *data =3D dev_get_drvdata(dev);
--	int index =3D to_sensor_dev_attr(devattr)->index;
--	int status;
-
--	status =3D i8k_get_fan_status(data, index);
--	if (status < 0)
--		return -EIO;
--	return sprintf(buf, "%d\n", clamp_val(status * data->i8k_pwm_mult, 0, 25=
-5));
-+	switch (type) {
-+	case hwmon_temp:
-+		switch (attr) {
-+		case hwmon_temp_label:
-+			*str =3D data->temp_label[channel];
-+			return 0;
-+		default:
-+			break;
-+		}
-+		break;
-+	case hwmon_fan:
-+		switch (attr) {
-+		case hwmon_fan_label:
-+			*str =3D data->fan_label[channel];
-+			return 0;
-+		default:
-+			break;
-+		}
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return -EOPNOTSUPP;
- }
-
--static ssize_t i8k_hwmon_pwm_store(struct device *dev,
--				   struct device_attribute *attr,
--				   const char *buf, size_t count)
-+static int dell_smm_write(struct device *dev, enum hwmon_sensor_types typ=
-e, u32 attr, int channel,
-+			  long val)
- {
- 	struct dell_smm_data *data =3D dev_get_drvdata(dev);
--	int index =3D to_sensor_dev_attr(attr)->index;
--	unsigned long val;
-+	unsigned long pwm;
-+	bool enable;
- 	int err;
-
--	err =3D kstrtoul(buf, 10, &val);
--	if (err)
--		return err;
--	val =3D clamp_val(DIV_ROUND_CLOSEST(val, data->i8k_pwm_mult), 0, data->i=
-8k_fan_max);
-+	switch (type) {
-+	case hwmon_pwm:
-+		switch (attr) {
-+		case hwmon_pwm_input:
-+			pwm =3D clamp_val(DIV_ROUND_CLOSEST(val, data->i8k_pwm_mult), 0,
-+					data->i8k_fan_max);
-
--	mutex_lock(&data->i8k_mutex);
--	err =3D i8k_set_fan(data, index, val);
--	mutex_unlock(&data->i8k_mutex);
-+			mutex_lock(&data->i8k_mutex);
-+			err =3D i8k_set_fan(data, channel, pwm);
-+			mutex_unlock(&data->i8k_mutex);
-
--	return err < 0 ? -EIO : count;
--}
-+			if (err < 0)
-+				return err;
-
--static ssize_t i8k_hwmon_pwm_enable_store(struct device *dev,
--					  struct device_attribute *attr,
--					  const char *buf, size_t count)
--{
--	struct dell_smm_data *data =3D dev_get_drvdata(dev);
--	int err;
--	bool enable;
--	unsigned long val;
-+			return 0;
-+		case hwmon_pwm_enable:
-+			if (!val)
-+				return -EINVAL;
-
--	if (!data->auto_fan)
--		return -ENODEV;
-+			if (val =3D=3D 1)
-+				enable =3D false;
-+			else
-+				enable =3D true;
-
--	err =3D kstrtoul(buf, 10, &val);
--	if (err)
--		return err;
-+			mutex_lock(&data->i8k_mutex);
-+			err =3D i8k_enable_fan_auto_mode(data, enable);
-+			mutex_unlock(&data->i8k_mutex);
-
--	if (val =3D=3D 1)
--		enable =3D false;
--	else if (val =3D=3D 2)
--		enable =3D true;
--	else
--		return -EINVAL;
-+			if (err < 0)
-+				return err;
-
--	mutex_lock(&data->i8k_mutex);
--	err =3D i8k_enable_fan_auto_mode(data, enable);
--	mutex_unlock(&data->i8k_mutex);
-+			data->auto_fan_enable =3D val;
-
--	return err ? err : count;
-+			return 0;
-+		default:
-+			break;
-+		}
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return -EOPNOTSUPP;
- }
-
--static SENSOR_DEVICE_ATTR_RO(temp1_input, i8k_hwmon_temp, 0);
--static SENSOR_DEVICE_ATTR_RO(temp1_label, i8k_hwmon_temp_label, 0);
--static SENSOR_DEVICE_ATTR_RO(temp2_input, i8k_hwmon_temp, 1);
--static SENSOR_DEVICE_ATTR_RO(temp2_label, i8k_hwmon_temp_label, 1);
--static SENSOR_DEVICE_ATTR_RO(temp3_input, i8k_hwmon_temp, 2);
--static SENSOR_DEVICE_ATTR_RO(temp3_label, i8k_hwmon_temp_label, 2);
--static SENSOR_DEVICE_ATTR_RO(temp4_input, i8k_hwmon_temp, 3);
--static SENSOR_DEVICE_ATTR_RO(temp4_label, i8k_hwmon_temp_label, 3);
--static SENSOR_DEVICE_ATTR_RO(temp5_input, i8k_hwmon_temp, 4);
--static SENSOR_DEVICE_ATTR_RO(temp5_label, i8k_hwmon_temp_label, 4);
--static SENSOR_DEVICE_ATTR_RO(temp6_input, i8k_hwmon_temp, 5);
--static SENSOR_DEVICE_ATTR_RO(temp6_label, i8k_hwmon_temp_label, 5);
--static SENSOR_DEVICE_ATTR_RO(temp7_input, i8k_hwmon_temp, 6);
--static SENSOR_DEVICE_ATTR_RO(temp7_label, i8k_hwmon_temp_label, 6);
--static SENSOR_DEVICE_ATTR_RO(temp8_input, i8k_hwmon_temp, 7);
--static SENSOR_DEVICE_ATTR_RO(temp8_label, i8k_hwmon_temp_label, 7);
--static SENSOR_DEVICE_ATTR_RO(temp9_input, i8k_hwmon_temp, 8);
--static SENSOR_DEVICE_ATTR_RO(temp9_label, i8k_hwmon_temp_label, 8);
--static SENSOR_DEVICE_ATTR_RO(temp10_input, i8k_hwmon_temp, 9);
--static SENSOR_DEVICE_ATTR_RO(temp10_label, i8k_hwmon_temp_label, 9);
--static SENSOR_DEVICE_ATTR_RO(fan1_input, i8k_hwmon_fan, 0);
--static SENSOR_DEVICE_ATTR_RO(fan1_label, i8k_hwmon_fan_label, 0);
--static SENSOR_DEVICE_ATTR_RW(pwm1, i8k_hwmon_pwm, 0);
--static SENSOR_DEVICE_ATTR_WO(pwm1_enable, i8k_hwmon_pwm_enable, 0);
--static SENSOR_DEVICE_ATTR_RO(fan2_input, i8k_hwmon_fan, 1);
--static SENSOR_DEVICE_ATTR_RO(fan2_label, i8k_hwmon_fan_label, 1);
--static SENSOR_DEVICE_ATTR_RW(pwm2, i8k_hwmon_pwm, 1);
--static SENSOR_DEVICE_ATTR_RO(fan3_input, i8k_hwmon_fan, 2);
--static SENSOR_DEVICE_ATTR_RO(fan3_label, i8k_hwmon_fan_label, 2);
--static SENSOR_DEVICE_ATTR_RW(pwm3, i8k_hwmon_pwm, 2);
--
--static struct attribute *i8k_attrs[] =3D {
--	&sensor_dev_attr_temp1_input.dev_attr.attr,	/* 0 */
--	&sensor_dev_attr_temp1_label.dev_attr.attr,	/* 1 */
--	&sensor_dev_attr_temp2_input.dev_attr.attr,	/* 2 */
--	&sensor_dev_attr_temp2_label.dev_attr.attr,	/* 3 */
--	&sensor_dev_attr_temp3_input.dev_attr.attr,	/* 4 */
--	&sensor_dev_attr_temp3_label.dev_attr.attr,	/* 5 */
--	&sensor_dev_attr_temp4_input.dev_attr.attr,	/* 6 */
--	&sensor_dev_attr_temp4_label.dev_attr.attr,	/* 7 */
--	&sensor_dev_attr_temp5_input.dev_attr.attr,	/* 8 */
--	&sensor_dev_attr_temp5_label.dev_attr.attr,	/* 9 */
--	&sensor_dev_attr_temp6_input.dev_attr.attr,	/* 10 */
--	&sensor_dev_attr_temp6_label.dev_attr.attr,	/* 11 */
--	&sensor_dev_attr_temp7_input.dev_attr.attr,	/* 12 */
--	&sensor_dev_attr_temp7_label.dev_attr.attr,	/* 13 */
--	&sensor_dev_attr_temp8_input.dev_attr.attr,	/* 14 */
--	&sensor_dev_attr_temp8_label.dev_attr.attr,	/* 15 */
--	&sensor_dev_attr_temp9_input.dev_attr.attr,	/* 16 */
--	&sensor_dev_attr_temp9_label.dev_attr.attr,	/* 17 */
--	&sensor_dev_attr_temp10_input.dev_attr.attr,	/* 18 */
--	&sensor_dev_attr_temp10_label.dev_attr.attr,	/* 19 */
--	&sensor_dev_attr_fan1_input.dev_attr.attr,	/* 20 */
--	&sensor_dev_attr_fan1_label.dev_attr.attr,	/* 21 */
--	&sensor_dev_attr_pwm1.dev_attr.attr,		/* 22 */
--	&sensor_dev_attr_pwm1_enable.dev_attr.attr,	/* 23 */
--	&sensor_dev_attr_fan2_input.dev_attr.attr,	/* 24 */
--	&sensor_dev_attr_fan2_label.dev_attr.attr,	/* 25 */
--	&sensor_dev_attr_pwm2.dev_attr.attr,		/* 26 */
--	&sensor_dev_attr_fan3_input.dev_attr.attr,	/* 27 */
--	&sensor_dev_attr_fan3_label.dev_attr.attr,	/* 28 */
--	&sensor_dev_attr_pwm3.dev_attr.attr,		/* 29 */
-+static const struct hwmon_ops dell_smm_ops =3D {
-+	.is_visible =3D dell_smm_is_visible,
-+	.read =3D dell_smm_read,
-+	.read_string =3D dell_smm_read_string,
-+	.write =3D dell_smm_write,
-+};
-+
-+static const struct hwmon_channel_info *dell_smm_info[] =3D {
-+	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
-+	HWMON_CHANNEL_INFO(temp,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL
-+			   ),
-+	HWMON_CHANNEL_INFO(fan,
-+			   HWMON_F_INPUT | HWMON_F_LABEL,
-+			   HWMON_F_INPUT | HWMON_F_LABEL,
-+			   HWMON_F_INPUT | HWMON_F_LABEL
-+			   ),
-+	HWMON_CHANNEL_INFO(pwm,
-+			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
-+			   HWMON_PWM_INPUT,
-+			   HWMON_PWM_INPUT
-+			   ),
- 	NULL
- };
-
--static umode_t i8k_is_visible(struct kobject *kobj, struct attribute *att=
-r,
--			      int index)
--{
--	struct device *dev =3D kobj_to_dev(kobj);
--	struct dell_smm_data *data =3D dev_get_drvdata(dev);
-+static const struct hwmon_chip_info dell_smm_chip_info =3D {
-+	.ops =3D &dell_smm_ops,
-+	.info =3D dell_smm_info,
-+};
-
--	if (data->disallow_fan_support && index >=3D 20)
--		return 0;
--	if (data->disallow_fan_type_call &&
--	    (index =3D=3D 21 || index =3D=3D 25 || index =3D=3D 28))
--		return 0;
--	if (index >=3D 0 && index <=3D 1 &&
--	    !(data->i8k_hwmon_flags & I8K_HWMON_HAVE_TEMP1))
--		return 0;
--	if (index >=3D 2 && index <=3D 3 &&
--	    !(data->i8k_hwmon_flags & I8K_HWMON_HAVE_TEMP2))
--		return 0;
--	if (index >=3D 4 && index <=3D 5 &&
--	    !(data->i8k_hwmon_flags & I8K_HWMON_HAVE_TEMP3))
--		return 0;
--	if (index >=3D 6 && index <=3D 7 &&
--	    !(data->i8k_hwmon_flags & I8K_HWMON_HAVE_TEMP4))
--		return 0;
--	if (index >=3D 8 && index <=3D 9 &&
--	    !(data->i8k_hwmon_flags & I8K_HWMON_HAVE_TEMP5))
--		return 0;
--	if (index >=3D 10 && index <=3D 11 &&
--	    !(data->i8k_hwmon_flags & I8K_HWMON_HAVE_TEMP6))
--		return 0;
--	if (index >=3D 12 && index <=3D 13 &&
--	    !(data->i8k_hwmon_flags & I8K_HWMON_HAVE_TEMP7))
--		return 0;
--	if (index >=3D 14 && index <=3D 15 &&
--	    !(data->i8k_hwmon_flags & I8K_HWMON_HAVE_TEMP8))
--		return 0;
--	if (index >=3D 16 && index <=3D 17 &&
--	    !(data->i8k_hwmon_flags & I8K_HWMON_HAVE_TEMP9))
--		return 0;
--	if (index >=3D 18 && index <=3D 19 &&
--	    !(data->i8k_hwmon_flags & I8K_HWMON_HAVE_TEMP10))
--		return 0;
-+static const char __init *dell_smm_temp_label(int channel)
-+{
-+	int type =3D i8k_get_temp_type(channel);
-
--	if (index >=3D 20 && index <=3D 23 &&
--	    !(data->i8k_hwmon_flags & I8K_HWMON_HAVE_FAN1))
--		return 0;
--	if (index >=3D 24 && index <=3D 26 &&
--	    !(data->i8k_hwmon_flags & I8K_HWMON_HAVE_FAN2))
--		return 0;
--	if (index >=3D 27 && index <=3D 29 &&
--	    !(data->i8k_hwmon_flags & I8K_HWMON_HAVE_FAN3))
--		return 0;
-+	if (type < 0)
-+		return ERR_PTR(type);
-
--	if (index =3D=3D 23 && !data->auto_fan)
--		return 0;
-+	if (type >=3D ARRAY_SIZE(temp_labels))
-+		type =3D ARRAY_SIZE(temp_labels) - 1;
-
--	return attr->mode;
-+	return temp_labels[type];
- }
-
--static const struct attribute_group i8k_group =3D {
--	.attrs =3D i8k_attrs,
--	.is_visible =3D i8k_is_visible,
--};
--__ATTRIBUTE_GROUPS(i8k);
-+static const char __init *dell_smm_fan_label(struct dell_smm_data *data, =
-int channel)
-+{
-+	bool dock =3D false;
-+	int type =3D i8k_get_fan_type(data, channel);
-+
-+	if (type < 0)
-+		return ERR_PTR(type);
-+
-+	if (type & 0x10) {
-+		dock =3D true;
-+		type &=3D 0x0F;
-+	}
-+
-+	if (type >=3D ARRAY_SIZE(fan_labels))
-+		type =3D ARRAY_SIZE(fan_labels) - 1;
-+
-+	return dock ? docking_labels[type] : fan_labels[type];
-+}
-
- static int __init dell_smm_init_hwmon(struct device *dev)
- {
- 	struct dell_smm_data *data =3D dev_get_drvdata(dev);
--	struct device *i8k_hwmon_dev;
--	int err;
-+	struct device *dell_smm_hwmon_dev;
-+	int i;
-+
-+	for (i =3D 0; i < DELL_SMM_NO_TEMP; i++)
-+		data->temp_label[i] =3D dell_smm_temp_label(i);
-+
-+	for (i =3D 0; i < DELL_SMM_NO_FANS; i++)
-+		data->fan_label[i] =3D dell_smm_fan_label(data, i);
-+
-+	dell_smm_hwmon_dev =3D devm_hwmon_device_register_with_info(dev, "dell_s=
-mm", data,
-+								  &dell_smm_chip_info, NULL);
-
--	/* CPU temperature attributes, if temperature type is OK */
--	err =3D i8k_get_temp_type(0);
--	if (err >=3D 0)
--		data->i8k_hwmon_flags |=3D I8K_HWMON_HAVE_TEMP1;
--	/* check for additional temperature sensors */
--	err =3D i8k_get_temp_type(1);
--	if (err >=3D 0)
--		data->i8k_hwmon_flags |=3D I8K_HWMON_HAVE_TEMP2;
--	err =3D i8k_get_temp_type(2);
--	if (err >=3D 0)
--		data->i8k_hwmon_flags |=3D I8K_HWMON_HAVE_TEMP3;
--	err =3D i8k_get_temp_type(3);
--	if (err >=3D 0)
--		data->i8k_hwmon_flags |=3D I8K_HWMON_HAVE_TEMP4;
--	err =3D i8k_get_temp_type(4);
--	if (err >=3D 0)
--		data->i8k_hwmon_flags |=3D I8K_HWMON_HAVE_TEMP5;
--	err =3D i8k_get_temp_type(5);
--	if (err >=3D 0)
--		data->i8k_hwmon_flags |=3D I8K_HWMON_HAVE_TEMP6;
--	err =3D i8k_get_temp_type(6);
--	if (err >=3D 0)
--		data->i8k_hwmon_flags |=3D I8K_HWMON_HAVE_TEMP7;
--	err =3D i8k_get_temp_type(7);
--	if (err >=3D 0)
--		data->i8k_hwmon_flags |=3D I8K_HWMON_HAVE_TEMP8;
--	err =3D i8k_get_temp_type(8);
--	if (err >=3D 0)
--		data->i8k_hwmon_flags |=3D I8K_HWMON_HAVE_TEMP9;
--	err =3D i8k_get_temp_type(9);
--	if (err >=3D 0)
--		data->i8k_hwmon_flags |=3D I8K_HWMON_HAVE_TEMP10;
--
--	/* First fan attributes, if fan status or type is OK */
--	err =3D i8k_get_fan_status(data, 0);
--	if (err < 0)
--		err =3D i8k_get_fan_type(data, 0);
--	if (err >=3D 0)
--		data->i8k_hwmon_flags |=3D I8K_HWMON_HAVE_FAN1;
--
--	/* Second fan attributes, if fan status or type is OK */
--	err =3D i8k_get_fan_status(data, 1);
--	if (err < 0)
--		err =3D i8k_get_fan_type(data, 1);
--	if (err >=3D 0)
--		data->i8k_hwmon_flags |=3D I8K_HWMON_HAVE_FAN2;
--
--	/* Third fan attributes, if fan status or type is OK */
--	err =3D i8k_get_fan_status(data, 2);
--	if (err < 0)
--		err =3D i8k_get_fan_type(data, 2);
--	if (err >=3D 0)
--		data->i8k_hwmon_flags |=3D I8K_HWMON_HAVE_FAN3;
--
--	i8k_hwmon_dev =3D devm_hwmon_device_register_with_groups(dev, "dell_smm"=
-, data, i8k_groups);
--
--	return PTR_ERR_OR_ZERO(i8k_hwmon_dev);
-+	return PTR_ERR_OR_ZERO(dell_smm_hwmon_dev);
- }
-
- struct i8k_config_data {
-@@ -1240,9 +1204,7 @@ static int __init dell_smm_probe(struct platform_dev=
-ice *pdev)
- 	mutex_init(&data->i8k_mutex);
- 	data->i8k_fan_mult =3D I8K_FAN_MULT;
- 	data->i8k_fan_max =3D I8K_FAN_HIGH;
--	data->types[0] =3D INT_MIN;
--	data->types[1] =3D INT_MIN;
--	data->types[2] =3D INT_MIN;
-+	data->auto_fan_enable =3D 2;
- 	platform_set_drvdata(pdev, data);
-
- 	if (dmi_check_system(i8k_blacklist_fan_support_dmi_table)) {
-=2D-
-2.20.1
+> Robert
+>>
+>>> +     return PTR_ERR_OR_ZERO(hwmon_dev);
+>>> +}
+>>> +
+>>> +static const struct platform_device_id tn48m_hwmon_id_table[] = {
+>>> +     { "delta,tn48m-hwmon", },
+>>> +     { }
+>>> +};
+>>> +MODULE_DEVICE_TABLE(platform, tn48m_hwmon_id_table);
+>>> +
+>>> +static struct platform_driver tn48m_hwmon_driver = {
+>>> +     .driver = {
+>>> +             .name = "tn48m-hwmon",
+>>> +     },
+>>> +     .probe = tn48m_hwmon_probe,
+>>> +     .id_table = tn48m_hwmon_id_table,
+>>> +};
+>>> +module_platform_driver(tn48m_hwmon_driver);
+>>> +
+>>> +MODULE_AUTHOR("Robert Marko <robert.marko@sartura.hr>");
+>>> +MODULE_DESCRIPTION("Delta TN48M CPLD HWMON driver");
+>>> +MODULE_LICENSE("GPL");
+>>> diff --git a/drivers/mfd/tn48m-cpld.c b/drivers/mfd/tn48m-cpld.c
+>>> index f22a15ddd22d..4d837aca01e7 100644
+>>> --- a/drivers/mfd/tn48m-cpld.c
+>>> +++ b/drivers/mfd/tn48m-cpld.c
+>>> @@ -20,6 +20,9 @@
+>>>   static const struct mfd_cell tn48m_cell[] = {
+>>>        {
+>>>                .name = "delta,tn48m-gpio",
+>>> +     },
+>>> +     {
+>>> +             .name = "delta,tn48m-hwmon",
+>>>        }
+>>>   };
+>>>
+>>> diff --git a/include/linux/mfd/tn48m.h b/include/linux/mfd/tn48m.h
+>>> index 9cc2b04c8d69..eb2cfc3a5db7 100644
+>>> --- a/include/linux/mfd/tn48m.h
+>>> +++ b/include/linux/mfd/tn48m.h
+>>> @@ -22,6 +22,7 @@
+>>>   #define SFP_TX_DISABLE               0x31
+>>>   #define SFP_PRESENT          0x3a
+>>>   #define SFP_LOS                      0x40
+>>> +#define PSU_STATUS           0xa
+>>>
+>>>   struct tn48m_data {
+>>>        struct device *dev;
+>>>
+>>
+> 
+> 
 
