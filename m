@@ -7,56 +7,56 @@ X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60D22C433B4
-	for <linux-hwmon@archiver.kernel.org>; Wed, 19 May 2021 23:40:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CBAB6C433B4
+	for <linux-hwmon@archiver.kernel.org>; Wed, 19 May 2021 23:46:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 41B8D61004
-	for <linux-hwmon@archiver.kernel.org>; Wed, 19 May 2021 23:40:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A60A461006
+	for <linux-hwmon@archiver.kernel.org>; Wed, 19 May 2021 23:46:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbhESXmH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 19 May 2021 19:42:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54124 "EHLO
+        id S229955AbhESXsL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 19 May 2021 19:48:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229465AbhESXmG (ORCPT
+        with ESMTP id S229556AbhESXsL (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 19 May 2021 19:42:06 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E581C061574;
-        Wed, 19 May 2021 16:40:46 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id q10so14533409qkc.5;
-        Wed, 19 May 2021 16:40:46 -0700 (PDT)
+        Wed, 19 May 2021 19:48:11 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE32C061574;
+        Wed, 19 May 2021 16:46:49 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id s12so2338223qta.3;
+        Wed, 19 May 2021 16:46:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=k+Jana+OgwRA+yzJ6tu/kACb1sjb5Qp5Fk12gS1wgHg=;
-        b=n5PlmCzXYCbDXyscq7hnMb25N+Go235LgsyLBrTIj06aaiQYR23cJoxYAGaDz0RsAu
-         DnHwQDVhxswMMLDWijDolXkCbyNF44TytSJWn9gqFXqyThV2fIHfzFxv0HXVYagrfTx7
-         fxotYuUcoyHcG+XUR1jns5Km8DFPJuWRUGvpJ6+WIwxIA6m8EUrQCxgZ1cZMUI6sONnQ
-         r/zbK4bM7iS+r68IYAl+/pPtnfhq3GMWI+UTFOsaj5dpJESUIBhzWszxI7HsjhtXCkZ2
-         ZgB+nCjnj9M4ZsBktwgdjOhUuW1W/syzGlLUnwDsObZYP5qHLOOwCetpwMEFo91hlqz1
-         RfWA==
+        bh=Yp1kY336BoVbRlcIQSHuTPMBBcEBTqjv/SDOwL1UFdo=;
+        b=RLsgvpkxu5+yJkVXh8yxvWlzhOqirm/OtOKoZm3TmnBkmuk+xuv/7FMdNxVKYb/o8q
+         XM7DKVOpEEiPOkMirW0OV4X0+eY9CNrf7WEzCyEFsqudWGUiigVR5gMJGsF50AuGtk8p
+         s9k2ZSmvqnzjWXJCfq2wAmxxwKFxcI8S9jYgATb6+PR5TQLLDYpig+XccvLt0MwC2O/p
+         5ZKcmTMc2eglZylUhw7QEYqF4Iy9GnUwAEswaqqPgdr7jC/u5/lFo2WdgmHrNIWRSaFq
+         dJqAoSLXmxUTlv/W8QYhmpduVJWPNXwfPdAbzDAKl97A3oOeS+NI41Rgq3Rwmd54mmME
+         fDkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:references:from:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=k+Jana+OgwRA+yzJ6tu/kACb1sjb5Qp5Fk12gS1wgHg=;
-        b=WyZFgphFsuAtW5VnuHE7LofTlloEKNflDIDAxXg3oDj3HG41VBojWUjCUQe1ZpQrD7
-         B/go49Bjqfhhwf52IACW+ck6f/T98vsjyfrO/Yc0XdzEvTJV/J8iA0J/MXDtXaOtQF+k
-         jUgphxMBGs+bF1HTrCovVS8EvUaABoNP3ahtzHrz7ZUxNLCFR+c7eAk3SHXF6dgrsE30
-         Gk67Jq4euznJ6oXKLlhKde5U0H4e61kNTyTWF8UrjLvAfBUsxOY0Q0E2eImIvlHEro0X
-         SR491MrwwHEHJ1jsk+2uA9Zx6yUTnN7615rKkcEhqIWxCodEGGhaU46BYgsZWE5EpVvH
-         0+KQ==
-X-Gm-Message-State: AOAM533BgxcgjVZYYmeYsjK/d2OzpP7b4WyXnCpJUwLV6bHs9E3C6N8V
-        HdsEOKZqVBHkWo0uV0FE4Di1O7y/PAc=
-X-Google-Smtp-Source: ABdhPJwRjfG5UP6wcLjlKiMM0qj2vGWF8vdYzcIEB+04DleGNf0bzMHZg88OFqLD9sNw04e6QX7tiQ==
-X-Received: by 2002:a37:8185:: with SMTP id c127mr2038736qkd.477.1621467645117;
-        Wed, 19 May 2021 16:40:45 -0700 (PDT)
+        bh=Yp1kY336BoVbRlcIQSHuTPMBBcEBTqjv/SDOwL1UFdo=;
+        b=F8tl1AgnfJtrh+9uwHKwMQY97sDO0KSdyDMqsBpWXMSrnAJxUDeJo4p/W1Ck7fF/R6
+         w31LOAC9J4HYUiyPapv9haz8BzfVf+TFxuLR2nMpasprdjrsbBLmWcEOOkxNP9yRWmaa
+         vjg1vNgl2ShtIgNcuzSIpIfJpTBpz3zNEiJsvV2oDxf5l++u96Fpw0iDOdmVMd77NCex
+         H47jNuvKDdtU6r7mQhkRwD+OoT/s1vHQxQnPbwpJ+/05lR0C3DCjLSWl5+NfkcMI5psN
+         n6oQ4zVaqVr0NQbzZdOOADUhE74yoL7HBqmKy/EwkeCoEfDyz2i3fj/kwXg1f1y7TjOP
+         uNTg==
+X-Gm-Message-State: AOAM53267cOCoB7Q2UgfSBfcIDnh90Ul2Yb84LL9oC5umBt/GekuPVDR
+        p/aYifMKoXBUKqZnmsEu+sRPwUDRnTA=
+X-Google-Smtp-Source: ABdhPJx3Q16XDoWQR8VD//xml0Oc7k9Jc7XuH3JqFRVbSIeioCqG2zcxb85ZBRhdWws1qdELz1BBEA==
+X-Received: by 2002:ac8:7c50:: with SMTP id o16mr574804qtv.153.1621468008791;
+        Wed, 19 May 2021 16:46:48 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x21sm693058qtr.31.2021.05.19.16.40.43
+        by smtp.gmail.com with ESMTPSA id d84sm879838qke.131.2021.05.19.16.46.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 May 2021 16:40:44 -0700 (PDT)
+        Wed, 19 May 2021 16:46:48 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 Subject: Re: [PATCH 4/5] hwmon: (pmbus/pim4328) Add PMBus driver for PIM4006,
  PIM4328 and PIM4820
@@ -67,8 +67,8 @@ To:     Erik Rosen <erik.rosen@metormote.com>,
 References: <20210519201015.83989-1-erik.rosen@metormote.com>
  <20210519201015.83989-5-erik.rosen@metormote.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <671cd7d2-9ef4-6ee0-8753-2fc5b969ed35@roeck-us.net>
-Date:   Wed, 19 May 2021 16:40:42 -0700
+Message-ID: <aef5ffb9-a670-cff4-80a5-e41881b38327@roeck-us.net>
+Date:   Wed, 19 May 2021 16:46:46 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
@@ -141,9 +141,6 @@ On 5/19/21 1:10 PM, Erik Rosen wrote:
 > +#include <linux/slab.h>
 > +#include <linux/i2c.h>
 > +#include <linux/pmbus.h>
-
-Alphabetic include file order, please.
-
 > +#include "pmbus.h"
 > +
 > +enum chips { pim4006, pim4328, pim4820 };
@@ -265,9 +262,6 @@ Alphabetic include file order, please.
 > +		if (ret > 0)
 > +			ret &= 0xff;
 > +		break;
-
-Doesn't the core take care of that ?
-
 > +	default:
 > +		ret = -ENODATA;
 > +	}
@@ -369,79 +363,13 @@ Doesn't the core take care of that ?
 > +			return status;
 > +		}
 > +	}
-> +	if (info->func[0] & PMBUS_HAVE_VIN &&
-> +	    info->format[PSC_VOLTAGE_IN] == direct) {
-> +		status = pmbus_read_coefficients(client, info,
-> +						 PSC_VOLTAGE_IN,
-> +						 PMBUS_READ_VIN,
-> +						 true);
-> +		if (status < 0) {
-> +			dev_err(&client->dev,
-> +				"Failed to read coefficients for PMBUS_READ_VIN\n");
-> +			return status;
-> +		}
-> +	}
-> +	if (info->func[0] & PMBUS_HAVE_IIN &&
-> +	    info->format[PSC_CURRENT_IN] == direct) {
-> +		status = pmbus_read_coefficients(client, info,
-> +						 PSC_CURRENT_IN,
-> +						 PMBUS_READ_IIN,
-> +						 true);
-> +		if (status < 0) {
-> +			dev_err(&client->dev,
-> +				"Failed to read coefficients for PMBUS_READ_IIN\n");
-> +			return status;
-> +		}
-> +	}
-> +	if (info->func[0] & PMBUS_HAVE_IOUT &&
-> +	    info->format[PSC_CURRENT_OUT] == direct) {
-> +		status = pmbus_read_coefficients(client, info,
-> +						 PSC_CURRENT_OUT,
-> +						 PMBUS_READ_IOUT,
-> +						 true);
-> +		if (status < 0) {
-> +			dev_err(&client->dev,
-> +				"Failed to read coefficients for PMBUS_READ_IOUT\n");
-> +			return status;
-> +		}
-> +	}
-> +	if (info->func[0] & PMBUS_HAVE_TEMP &&
-> +	    info->format[PSC_TEMPERATURE] == direct) {
-> +		status = pmbus_read_coefficients(client, info,
-> +						 PSC_TEMPERATURE,
-> +						 PMBUS_READ_TEMPERATURE_1,
-> +						 true);
-> +		if (status < 0) {
-> +			dev_err(&client->dev,
-> +				"Failed to read coefficients for PMBUS_READ_TEMPERATURE_1\n");
-> +			return status;
-> +		}
-> +	}
-> +
-> +	pdata = devm_kzalloc(dev, sizeof(struct pmbus_platform_data),
-> +			     GFP_KERNEL);
-> +	if (!pdata)
-> +		return -ENOMEM;
-> +
-> +	pdata->flags = PMBUS_NO_CAPABILITY | PMBUS_NO_WRITE_PROTECT;
-> +	dev->platform_data = pdata;
-> +
-> +	return pmbus_do_probe(client, info);
-> +}
-> +
-> +static struct i2c_driver pim4328_driver = {
-> +	.driver = {
-> +		   .name = "pim4328",
-> +		   },
-> +	.probe_new = pim4328_probe,
-> +	.id_table = pim4328_id,
-> +};
-> +
-> +module_i2c_driver(pim4328_driver);
-> +
-> +MODULE_AUTHOR("Erik Rosen <erik.rosen@metormote.com>");
-> +MODULE_DESCRIPTION("PMBus driver for PIM4006, PIM4328, PIM4820 power interface modules");
-> +MODULE_LICENSE("GPL");
-> +MODULE_IMPORT_NS(PMBUS);
-> 
 
+Is there reason to implement this all here, or could we simply add another flag
+such as PMBUS_HAS_COEFFICIENTS_CMD and have the core read the coefficients as
+needed ?
+
+I'd rather have this implemented in the core instead of having to carry
+similar code in all drivers supporting the coefficients command.
+
+Thanks,
+Guenter
