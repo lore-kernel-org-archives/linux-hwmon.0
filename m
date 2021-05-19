@@ -2,211 +2,311 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D070CC433B4
-	for <linux-hwmon@archiver.kernel.org>; Wed, 19 May 2021 20:10:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BC4EC433B4
+	for <linux-hwmon@archiver.kernel.org>; Wed, 19 May 2021 23:11:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B19EC61355
-	for <linux-hwmon@archiver.kernel.org>; Wed, 19 May 2021 20:10:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D3F336135C
+	for <linux-hwmon@archiver.kernel.org>; Wed, 19 May 2021 23:11:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233046AbhESUMC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 19 May 2021 16:12:02 -0400
-Received: from smtp.outgoing.loopia.se ([93.188.3.37]:56107 "EHLO
-        smtp.outgoing.loopia.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233053AbhESULx (ORCPT
+        id S229955AbhESXM3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 19 May 2021 19:12:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47464 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229498AbhESXM3 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 19 May 2021 16:11:53 -0400
-Received: from s807.loopia.se (localhost [127.0.0.1])
-        by s807.loopia.se (Postfix) with ESMTP id 2667C2E63BEE
-        for <linux-hwmon@vger.kernel.org>; Wed, 19 May 2021 22:10:26 +0200 (CEST)
-Received: from s899.loopia.se (unknown [172.22.191.6])
-        by s807.loopia.se (Postfix) with ESMTP id 163C42E2B06D;
-        Wed, 19 May 2021 22:10:26 +0200 (CEST)
-Received: from s473.loopia.se (unknown [172.22.191.5])
-        by s899.loopia.se (Postfix) with ESMTP id 067712C8BAD1;
-        Wed, 19 May 2021 22:10:26 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at amavis.loopia.se
-Received: from s899.loopia.se ([172.22.191.6])
-        by s473.loopia.se (s473.loopia.se [172.22.190.13]) (amavisd-new, port 10024)
-        with LMTP id CMaCsUN-al0p; Wed, 19 May 2021 22:10:25 +0200 (CEST)
-X-Loopia-Auth: user
-X-Loopia-User: carl@hgsystem.se
-X-Loopia-Originating-IP: 155.4.133.180
-Received: from localhost.localdomain (h-155-4-133-180.NA.cust.bahnhof.se [155.4.133.180])
-        (Authenticated sender: carl@hgsystem.se)
-        by s899.loopia.se (Postfix) with ESMTPSA id 234AF2C8BAC6;
-        Wed, 19 May 2021 22:10:25 +0200 (CEST)
-From:   Erik Rosen <erik.rosen@metormote.com>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        Wed, 19 May 2021 19:12:29 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A0DC061574;
+        Wed, 19 May 2021 16:11:09 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id q6so7732713qvb.2;
+        Wed, 19 May 2021 16:11:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:to:references:from:subject:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=FBlJ7zHI3Or7VFLQpssqmkjDcIseDEE83biZBzESico=;
+        b=RX6Vp/sg6U76hUaUzi1uRe/vb7sDYqAIS/Tp73pNu4DmP35kqjrR4WYUJpBvh2bWHr
+         NNsB1HIsWPdPdNIg5kc1oguCE9DACFFQ/+a6Iw5LecotB6TUaEdfXM2K9JXPNQHE2JLe
+         LVhbMx9TjDNs+ncK3pTjaGWiodda1/fp7l1e75GW0lHCB7fiou+kwbnp1d0P7aVwYeJD
+         xPlcCIB749Imejr6JPKlHryRQqMBRAyueNxaMbBsjOQ7ex3rZWiuYYSl4dLKtjlQoPak
+         SfblH6KbnOUZM6lRhZQs0UMzzo4Ivmt4WED9fctJAWv85EB4edGYyDphmALyskI2aagH
+         W3Xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:to:references:from:subject:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=FBlJ7zHI3Or7VFLQpssqmkjDcIseDEE83biZBzESico=;
+        b=ol2gW38s4ps6CmI6iEuvyf9hicLQ/87ptRLXETH/6hnVquuhkwK0EPOebOm8N2ZXYC
+         C3HKpwo6YmCiJ7V41BSwOGlmOiEkdlc46j7zYhf3tKnsFVR7Mi8BIhwqA7oLyzi7+0fO
+         uKDtQaebwcJnQP3Q1TsIGFmDmPmy0wr4zH8tgFdG0Pc+2BdX9Znh/0IRCygoTnvMI1X5
+         PeJb1nzpChgmkNIWvAC45EFaiuWZgoN0h4BjVoYe5wyN9I66ZQ9jASnTxhK8UuZK12CZ
+         AQf1xnXi8s+eknZIywbhTJdSwknIxBLbYktJ/mjmrLLiAdpgmhg2wHoOtKA8HTBB9ik2
+         wllw==
+X-Gm-Message-State: AOAM530lOFi+ba5IOdlSJ0hp2K1TGWtTo2qQ16IYXEB8dkaQa5cLYwt2
+        J9C1MO9y/GVQihsTsKOjqLSMjL1nQG8=
+X-Google-Smtp-Source: ABdhPJzaJCuf6cdduhXPHGqfojZ/Y1FzyQWczY+r+pR0cpAPA5Iq9cbA++1eUkd3lYR3flaauTpcmQ==
+X-Received: by 2002:a0c:d80b:: with SMTP id h11mr2141688qvj.10.1621465867783;
+        Wed, 19 May 2021 16:11:07 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id y9sm792583qki.66.2021.05.19.16.11.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 May 2021 16:11:06 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+To:     =?UTF-8?B?VsOhY2xhdiBLdWJlcm7DoXQ=?= <kubernat@cesnet.cz>,
+        Jean Delvare <jdelvare@suse.com>,
         Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Erik Rosen <erik.rosen@metormote.com>
-Subject: [PATCH 5/5] hwmon: (pmbus/pim4328) Add documentation for the pim4328 PMBus driver
-Date:   Wed, 19 May 2021 22:10:15 +0200
-Message-Id: <20210519201015.83989-6-erik.rosen@metormote.com>
-X-Mailer: git-send-email 2.11.0 (Apple Git-81)
-In-Reply-To: <20210519201015.83989-1-erik.rosen@metormote.com>
-References: <20210519201015.83989-1-erik.rosen@metormote.com>
+References: <20210512013052.903297-1-kubernat@cesnet.cz>
+ <20210512013052.903297-2-kubernat@cesnet.cz>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v5 2/5] hwmon: (max31790) Fix and split pwm*_enable
+Message-ID: <d5053aca-14a4-d896-e2cd-5cfa2ed83d04@roeck-us.net>
+Date:   Wed, 19 May 2021 16:11:04 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <20210512013052.903297-2-kubernat@cesnet.cz>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add documentation and index link for pim4328 PMBus driver.
+On 5/11/21 6:30 PM, Václav Kubernát wrote:
+> In the old code, pwm*_enable does two things. Firstly, it sets whether
+> the chip should run in PWM or RPM mode. Secondly, it tells the chip
+> whether it should monitor fan RPM. However, these two settings aren't
+> tied together, so they shouldn't be set with a single value. In the new
+> code, fan*_enable now controls fan RPM monitoring (pwm*_enable no longer
+> controls that).
+> 
+> According to the sysfs hwmon documentation, pwm*_enable has three
+> possible values, 0 for "no control / full-speed", 1 for manual mode, and
+> 2+ for automatic. The old code works fine for 1 and 2, but 0 only
+> differs from 1 in that it just turns off fan speed monitoring. The chip
+> actually does have a way to turn off fan controls (and only monitor),
+> and what that does is that it sets PWM to 0% duty cycle. In the new
+> code, 0 in pwm*_enable turns off the "control" feature of the chip.
+> 
+> These two changes are closely connected together, mainly because the
+> detection of the pwm*_enable value depended on whether fan speed
+> monitoring is enabled (which is now controlled as written in the first
+> paragraph).
+> 
+The above is an indication that the current code is simply wrong.
+pwmX_enable does not and should not have anything to do with
+fan speed monitoring (even though it may implicitly enable it).
 
-Signed-off-by: Erik Rosen <erik.rosen@metormote.com>
----
- Documentation/hwmon/index.rst   |   1 +
- Documentation/hwmon/pim4328.rst | 105 ++++++++++++++++++++++++++++++++
- MAINTAINERS                     |   7 +++
- 3 files changed, 113 insertions(+)
- create mode 100644 Documentation/hwmon/pim4328.rst
+Fixing pwmX_enable therefore needs to be a separate patch from
+introducing fanX_enable, and like the other fixes it needs to come
+first, before changing the code to use regmap (to enable backporting).
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index 9ed60fa84cbe..719625f8f755 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -150,6 +150,7 @@ Hardware Monitoring Kernel Drivers
-    pc87360
-    pc87427
-    pcf8591
-+   pim4328
-    pm6764tr
-    pmbus
-    powr1220
-diff --git a/Documentation/hwmon/pim4328.rst b/Documentation/hwmon/pim4328.rst
-new file mode 100644
-index 000000000000..70c9e7a6882c
---- /dev/null
-+++ b/Documentation/hwmon/pim4328.rst
-@@ -0,0 +1,105 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Kernel driver pim4328
-+=====================
-+
-+Supported chips:
-+
-+  * Flex PIM4328
-+
-+    Prefix: 'pim4328', 'bmr455'
-+
-+    Addresses scanned: -
-+
-+    Datasheet:
-+
-+https://flexpowermodules.com/resources/fpm-techspec-pim4328
-+
-+  * Flex PIM4820
-+
-+    Prefixes: 'pim4820'
-+
-+    Addresses scanned: -
-+
-+    Datasheet: https://flexpowermodules.com/resources/fpm-techspec-pim4820
-+
-+  * Flex PIM4006, PIM4106, PIM4206, PIM4306, PIM4406
-+
-+    Prefixes: 'pim4006', 'pim4106', 'pim4206', 'pim4306', 'pim4406'
-+
-+    Addresses scanned: -
-+
-+    Datasheet: https://flexpowermodules.com/resources/fpm-techspec-pim4006
-+
-+Author: Erik Rosen <erik.rosen@metormote.com>
-+
-+
-+Description
-+-----------
-+
-+This driver supports hardware monitoring for Flex PIM4328 and
-+compatible digital power interface modules.
-+
-+The driver is a client driver to the core PMBus driver. Please see
-+Documentation/hwmon/pmbus.rst and Documentation.hwmon/pmbus-core for details
-+on PMBus client drivers.
-+
-+
-+Usage Notes
-+-----------
-+
-+This driver does not auto-detect devices. You will have to instantiate the
-+devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
-+details.
-+
-+
-+Platform data support
-+---------------------
-+
-+The driver supports standard PMBus driver platform data.
-+
-+
-+Sysfs entries
-+-------------
-+
-+The following attributes are supported. All attributes are read-only.
-+
-+======================= ========================================================
-+in1_label		"vin"
-+in1_input		Measured input voltage.
-+in1_alarm		Input voltage alarm.
-+
-+in2_label		"vin.0"
-+in2_input		Measured input voltage on input A.
-+
-+			PIM4328 and PIM4X06
-+
-+in3_label		"vin.1"
-+in3_input		Measured input voltage on input B.
-+
-+			PIM4328 and PIM4X06
-+
-+in4_label		"vcap"
-+in4_input		Measured voltage on holdup capacitor.
-+
-+			PIM4328
-+
-+curr1_label		"iin.0"
-+curr1_input		Measured input current on input A.
-+
-+			PIM4X06
-+
-+curr2_label		"iin.1"
-+curr2_input		Measured input current on input B.
-+
-+			PIM4X06
-+
-+currX_label		"iout1"
-+currX_input		Measured output current.
-+currX_alarm		Output current alarm.
-+
-+			X is 1 for PIM4820, 3 otherwise.
-+
-+temp1_input		Measured temperature.
-+temp1_alarm		High temperature alarm.
-+======================= ========================================================
-diff --git a/MAINTAINERS b/MAINTAINERS
-index bd7aff0c120f..378a121d80f6 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14416,6 +14416,13 @@ K:	(?i)pidfd
- K:	(?i)clone3
- K:	\b(clone_args|kernel_clone_args)\b
- 
-+PIM4328 DRIVER
-+M:	Daniel Nilsson <daniel.nilsson@flex.com>
-+L:	linux-hwmon@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/hwmon/pim4328.rst
-+F:	drivers/hwmon/pmbus/pim4328.c
-+
- PIN CONTROL SUBSYSTEM
- M:	Linus Walleij <linus.walleij@linaro.org>
- L:	linux-gpio@vger.kernel.org
--- 
-2.20.1
+More comments below.
+
+Thanks,
+Guenter
+
+> Signed-off-by: Václav Kubernát <kubernat@cesnet.cz>
+> ---
+>   Documentation/hwmon/max31790.rst | 10 ++--
+>   drivers/hwmon/max31790.c         | 78 +++++++++++++++++++++-----------
+>   2 files changed, 58 insertions(+), 30 deletions(-)
+> 
+> diff --git a/Documentation/hwmon/max31790.rst b/Documentation/hwmon/max31790.rst
+> index f301385d8cef..d2ac4e926905 100644
+> --- a/Documentation/hwmon/max31790.rst
+> +++ b/Documentation/hwmon/max31790.rst
+> @@ -34,10 +34,14 @@ also be configured to serve as tachometer inputs.
+>   Sysfs entries
+>   -------------
+>   
+> -================== === =======================================================
+> +================== === =============================================================
+> +fan[1-12]_enable   RW  enable fan speed monitoring
+>   fan[1-12]_input    RO  fan tachometer speed in RPM
+>   fan[1-12]_fault    RO  fan experienced fault
+>   fan[1-6]_target    RW  desired fan speed in RPM
+> -pwm[1-6]_enable    RW  regulator mode, 0=disabled, 1=manual mode, 2=rpm mode
+> +pwm[1-6]_enable    RW  regulator mode, 0=no control, sets 0% PWM,
+> +				       1=manual (pwm) mode,
+> +				       2=rpm mode
+> +                       setting rpm mode sets fan*_enable to 1
+>   pwm[1-6]           RW  fan target duty cycle (0-255)
+> -================== === =======================================================
+> +================== === =============================================================
+> diff --git a/drivers/hwmon/max31790.c b/drivers/hwmon/max31790.c
+> index e3765ce4444a..5d4c551df010 100644
+> --- a/drivers/hwmon/max31790.c
+> +++ b/drivers/hwmon/max31790.c
+> @@ -30,6 +30,7 @@
+>   #define MAX31790_FAN_CFG_RPM_MODE	0x80
+>   #define MAX31790_FAN_CFG_TACH_INPUT_EN	0x08
+>   #define MAX31790_FAN_CFG_TACH_INPUT	0x01
+> +#define MAX31790_FAN_CFG_CTRL_MON	0x10
+
+This define should be above MAX31790_FAN_CFG_TACH_INPUT_EN
+to maintain sequence/order.
+
+>   
+>   /* Fan Dynamics register bits */
+>   #define MAX31790_FAN_DYN_SR_SHIFT	5
+> @@ -191,6 +192,9 @@ static int max31790_read_fan(struct device *dev, u32 attr, int channel,
+>   		else
+>   			*val = !!(fault & (1 << channel));
+>   		return 0;
+> +	case hwmon_fan_enable:
+> +		*val = !!(data->fan_config[channel] & MAX31790_FAN_CFG_TACH_INPUT_EN);
+> +		return 0;
+>   	default:
+>   		return -EOPNOTSUPP;
+>   	}
+> @@ -233,6 +237,15 @@ static int max31790_write_fan(struct device *dev, u32 attr, int channel,
+>   				     MAX31790_REG_TARGET_COUNT(channel),
+>   				     target_count);
+>   		break;
+> +	case hwmon_fan_enable:
+> +		if (val == 0)
+> +			data->fan_config[channel] &= ~MAX31790_FAN_CFG_TACH_INPUT_EN;
+> +		else
+> +			data->fan_config[channel] |= MAX31790_FAN_CFG_TACH_INPUT_EN;
+> +		err = regmap_write(regmap,
+> +				   MAX31790_REG_FAN_CONFIG(channel),
+> +				   data->fan_config[channel]);
+> +		break;
+>   	default:
+>   		err = -EOPNOTSUPP;
+>   		break;
+> @@ -260,6 +273,11 @@ static umode_t max31790_fan_is_visible(const void *_data, u32 attr, int channel)
+>   		    !(fan_config & MAX31790_FAN_CFG_TACH_INPUT))
+>   			return 0644;
+>   		return 0;
+> +	case hwmon_fan_enable:
+> +		if (channel < NR_CHANNEL ||
+> +		    (fan_config & MAX31790_FAN_CFG_TACH_INPUT))
+> +			return 0644;
+> +		return 0;
+>   	default:
+>   		return 0;
+>   	}
+> @@ -281,12 +299,12 @@ static int max31790_read_pwm(struct device *dev, u32 attr, int channel,
+>   		*val = read >> 8;
+>   		return 0;
+>   	case hwmon_pwm_enable:
+> -		if (data->fan_config[channel] & MAX31790_FAN_CFG_RPM_MODE)
+> +		if (data->fan_config[channel] & MAX31790_FAN_CFG_CTRL_MON)
+> +			*val = 0;
+> +		else if (data->fan_config[channel] & MAX31790_FAN_CFG_RPM_MODE)
+>   			*val = 2;
+> -		else if (data->fan_config[channel] & MAX31790_FAN_CFG_TACH_INPUT_EN)
+> +		else
+>   			*val = 1;
+> -		else
+> -			*val = 0;
+>   		return 0;
+>   	default:
+>   		return -EOPNOTSUPP;
+> @@ -298,35 +316,41 @@ static int max31790_write_pwm(struct device *dev, u32 attr, int channel,
+>   {
+>   	struct max31790_data *data = dev_get_drvdata(dev);
+>   	struct regmap *regmap = data->regmap;
+> -	u8 fan_config;
+> +	u8 fan_config = data->fan_config[channel];
+>   	int err = 0;
+>   
+>   	mutex_lock(&data->update_lock);
+>   
+>   	switch (attr) {
+>   	case hwmon_pwm_input:
+> -		if (val < 0 || val > 255) {
+> +		if (fan_config & MAX31790_FAN_CFG_CTRL_MON || val < 0 || val > 255) {
+
+No. It has to be possible to set the target pwm value before enabling pwm control.
+
+>   			err = -EINVAL;
+>   			break;
+>   		}
+> +
+>   		err = write_reg_word(regmap, MAX31790_REG_PWMOUT(channel), val << 8);
+>   		break;
+>   	case hwmon_pwm_enable:
+>   		fan_config = data->fan_config[channel];
+> -		if (val == 0) {
+> -			fan_config &= ~(MAX31790_FAN_CFG_TACH_INPUT_EN |
+> -					MAX31790_FAN_CFG_RPM_MODE);
+> -		} else if (val == 1) {
+> -			fan_config = (fan_config |
+> -				      MAX31790_FAN_CFG_TACH_INPUT_EN) &
+> -				     ~MAX31790_FAN_CFG_RPM_MODE;
+> +		if (val == 0)
+> +			fan_config |= MAX31790_FAN_CFG_CTRL_MON;
+> +		else if (val == 1) {
+> +			fan_config &= ~(MAX31790_FAN_CFG_RPM_MODE | MAX31790_FAN_CFG_CTRL_MON);
+>   		} else if (val == 2) {
+> -			fan_config |= MAX31790_FAN_CFG_TACH_INPUT_EN |
+> -				      MAX31790_FAN_CFG_RPM_MODE;
+> +			fan_config &= ~(MAX31790_FAN_CFG_CTRL_MON);
+
+Unnecessary ( )
+
+> +			fan_config |= MAX31790_FAN_CFG_RPM_MODE;
+>   		} else {
+>   			err = -EINVAL;
+>   			break;
+>   		}
+> +
+> +		/*
+> +		 * RPM mode implies enabled TACH input, so enable it in RPM
+> +		 * mode.
+> +		 */
+> +		if (val == 2)
+> +			fan_config |= MAX31790_FAN_CFG_TACH_INPUT_EN;
+> +
+
+The datasheet says this is automatically enabled in rpm mode, meaning there
+is no need to explicitly set the bit. I don't know if the bit is set
+automatically. If not, it should not be set here. Either case, there is
+already an "if (val ==2)" check above. If needed, this bit should be set there.
+
+>   		data->fan_config[channel] = fan_config;
+>   		err = regmap_write(regmap,
+>   				   MAX31790_REG_FAN_CONFIG(channel),
+> @@ -400,18 +424,18 @@ static umode_t max31790_is_visible(const void *data,
+>   
+>   static const struct hwmon_channel_info *max31790_info[] = {
+>   	HWMON_CHANNEL_INFO(fan,
+> -			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
+> -			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
+> -			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
+> -			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
+> -			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
+> -			   HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
+> -			   HWMON_F_INPUT | HWMON_F_FAULT,
+> -			   HWMON_F_INPUT | HWMON_F_FAULT,
+> -			   HWMON_F_INPUT | HWMON_F_FAULT,
+> -			   HWMON_F_INPUT | HWMON_F_FAULT,
+> -			   HWMON_F_INPUT | HWMON_F_FAULT,
+> -			   HWMON_F_INPUT | HWMON_F_FAULT),
+> +			   HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
+> +			   HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
+> +			   HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
+> +			   HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
+> +			   HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
+> +			   HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT,
+> +			   HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_FAULT,
+> +			   HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_FAULT,
+> +			   HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_FAULT,
+> +			   HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_FAULT,
+> +			   HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_FAULT,
+> +			   HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_FAULT),
+>   	HWMON_CHANNEL_INFO(pwm,
+>   			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+>   			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+> 
 
