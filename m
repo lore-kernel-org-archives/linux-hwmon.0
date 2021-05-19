@@ -8,139 +8,276 @@ X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2378AC43460
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BABDC43461
 	for <linux-hwmon@archiver.kernel.org>; Wed, 19 May 2021 13:29:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F216660E08
-	for <linux-hwmon@archiver.kernel.org>; Wed, 19 May 2021 13:29:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 47CA26105A
+	for <linux-hwmon@archiver.kernel.org>; Wed, 19 May 2021 13:29:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353716AbhESNbH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 19 May 2021 09:31:07 -0400
-Received: from mout.gmx.net ([212.227.17.21]:40037 "EHLO mout.gmx.net"
+        id S1353723AbhESNbI (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 19 May 2021 09:31:08 -0400
+Received: from mout.gmx.net ([212.227.17.21]:34441 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1353724AbhESNbE (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        id S1353711AbhESNbE (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
         Wed, 19 May 2021 09:31:04 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1621430968;
-        bh=4/ljCOdE+I1VICQb1TLHMJkok/Dqbw0P8Sqj81hRNDg=;
+        s=badeba3b8450; t=1621430965;
+        bh=9ioOuZHrB615DINpZx/84r2gsWltQRh6q331stYqAwI=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=hYLusmx8YLr4EJDZOYdhjswtV60VZLnVOcyG9W3n1/KGyLu1ZUWgrlIpdEzE3wVbx
-         +2KBXmLegs/Chv3qSgIfX933FYUyQN0nmrvIZ1R8BNFGjfs/L8W1ivRh2B/34K/6Gx
-         fpeLh2txDrB+gEDmWvHOdKonZ7HpK5/RUJumCmg8=
+        b=TWClKzml2oTDLWpoOHdQhqA90RZf1RfqhWBZ5RnneRBwVXAW6LjxNnoBl5YDM8fy5
+         k+x6fdUb5zEqFidQOrTAuTxAPAt2GbswnGuzYeek/T9co4n+a70UJLabFg3nMDbhAZ
+         DmQD7STp+HylyqjGFzButIfmsOkaGRYkEJ6covZQ=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from esprimo-mx.fritz.box ([79.242.184.149]) by mail.gmx.net
  (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1N5G9t-1lHpYD2fUD-011EHo; Wed, 19 May 2021 15:29:28 +0200
+ 1MwwZX-1lYpWY2lPX-00yRul; Wed, 19 May 2021 15:29:25 +0200
 From:   W_Armin@gmx.de
 To:     pali@kernel.org
 Cc:     linux@roeck-us.net, jdelvare@suse.com, linux-hwmon@vger.kernel.org
-Subject: [PATCH 3/5] hwmon: (dell-smm-hwmon) Use devm_add_action_or_reset()
-Date:   Wed, 19 May 2021 15:29:08 +0200
-Message-Id: <20210519132910.14453-4-W_Armin@gmx.de>
+Subject: [PATCH 1/5] hwmon: (dell-smm-hwmon) Use platform device
+Date:   Wed, 19 May 2021 15:29:06 +0200
+Message-Id: <20210519132910.14453-2-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210519132910.14453-1-W_Armin@gmx.de>
 References: <20210519132910.14453-1-W_Armin@gmx.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:89Lo0N+pBQDeeAg9mr8ufE5c4sGjnieJMxwPCJss69o3l36dR6t
- 5o18cEH3AomN2OK+BdlqLdsJmiXFxqZ85gg08sX/jI9IVCykR9sMhZwB4GIVuLuwXJE/LGw
- QfpRse4N5omgGp5QmB3Wnbe2Nzd1mBQAhLa1/PPMdOnIBHqRhl/tal+7UcieiwxAdmCLuSO
- 1cHH3ZOYTlwgy/dwdB24Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:7BF/2ivoS+k=:rouMNryU2SJvleYRVcApTp
- NXM0JSWdYX2kyBV31bZhEOq+if2y5XStFYvBJM1GAP+reQI4od0gyQjFCkp9n4KloLVhQrsW6
- 9CXaSk8rP58PPD+P+nmrSpjzPSbdoAd8+3sWrTzea3sSx9Bs77+9ik+Wjnvfq+pkcmY8Ubrdq
- /GV/H0pJZgPp/hM2x2lZ3uk2wuRd3w9XDvg5CcPrmr0JX+71mFZj2dhWhkOv3DJ+Xs9VZmN9E
- OakB26XiwrrDeJbt4f9/IHFBzD7U4MBVMGxAjcB4dHAelKDzhg+Uoo323U/bUMGs3nJJpFpc+
- oNokBpIcx75e6tVbB2zHX6dL43iUiwz9vQcP8HbKjmDEn+NJ13FS9OVLaKZllV5fHMIjDvhQg
- Ys0W8UvTHRWFwgQ6yep6xkqfQUqzIIt8eVNy5RTUAU1GmPXtxubnfT5vAZpjUkPfwXtzvpZWy
- tnQxeBKNxrQu7Xel1iH4pBhmxiDLZ613Ip79rmHisvSdxG8bi5BXhxuR/3SrOJvhLx38Phtlk
- 6DhpASYtjgvcc3eu5pGEf6R+dZOxqKFvnKcPEdq74ZxCI/5lMbKSTINrX3JQLt/ciVDSG+jxl
- HBwktc0i6kur7jeKQvI54FEDB4EPasSlrCCfXbbCjYCBC8799bfy28HkVQWlwrlRrtsqVnO1l
- GOl/ru9zza46ZvZoSa9KEJZsSU7hOo38MFhcij5BWw6nBhlUOwB3SHJYraH1ccJYu9rVM0wft
- 3vzkMPP3UoFMmyRHMVAVntnp7W3qYd1mcekuJQm2D/Nen2RzUpa8ATmTad/TpU47QQdIIvdnH
- D11l3Ii4MUCUDNs368bVSLbqQUza4KAWS6mG5P9D2Tb9v7rYbRzUpsP88uB2xLw09h8WX7u3l
- D6c4IdmppihaSHGs4H9jWBDT8xtS+QS4SccyKtCAfLh4dphGFdM0O1mirWssDODE5q6ozCxZW
- jJDluY8+DznnjmsoXGE4NEVqtg7tbUC7L6ooTL3ZrEIm3K6eS58fuJDlaOSbEoIM1FGlu2Kzr
- AeGa22S8Xp8Drd1TYd9v+EodGuAjBHISSeEJtSERFiUtphUaUP3KvzLvZ3uzu5NgDX0WGh48r
- do3iM40Yfh0ftEYIGT1gJpWwjPx1OFuWjYSGfQ5tqKfPvP0nMHQIt3Poa1waGUzbhpQoCDuiB
- myQJQaRm6TTCXkKH87AQSL7ylJ8p5o9MPeYyKpxIPkfxTxAH1bEzb0rYnv0pZqEL0ui2k=
+X-Provags-ID: V03:K1:0FsGCgDEVwwRFjyhd+Cj2V1n1P3q0NSu/IAOlAhjjcE9i0wSHpx
+ VHyboXKccCP8FOexGFOa+samEZwt5lGXcjTTMnfAVY9F0GQe2JcNrqtbwWDFCX9N8DZGQGe
+ SFpBs7PZVXFnmgmL7DrkLUZvgWbDw0iBRcdLAMFmtwwoQSu7DbrNxWOrNwUFkoaaOIMCY5s
+ 1P6+lcGzkeMrIar53q+GQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:M3Cj1F67roc=:E61ttOrN3ToC5+eEgZuaEI
+ 39jmgIhbmiYeyPXaz6M8OB3wu+g3bkLmNl/v5sBZy49kDlZ7upjRFSDp50hok33T3zGhV+SAd
+ jiJXS+pI9KGm8cxuP3hrMx1wBUy55FqoqMaHQV5H8RtBiE0LtfVJBFGelXmYjpQEIThj0hnRQ
+ vgLSTd2Oh4euNt8etmG6NqMeVuvcKGQGzOV72PraI8iF/PERGJwnj3AjnUJRigiP7zWt3GFjo
+ Z2fbol5XFZqao+smUcH+PCMg2Ei1NPhNErcwryptVmgJIdOyLksYctvTAfBEgzG/NS9VNJdxz
+ B01iVkVp41DGCEi+WWMp9Nd72ATMmpIseMZZMVn+2NJHa1C15+760t/ddWOrXGr91xszyiNZQ
+ DqE6v6SAk2jP9r8Pf8vgEnfl3ny49gdFfllKQjJNRLaEEkGCSkdfdPei+HrdEDixSCsn+DFqZ
+ FWi7I7/5QJK9Pr3saS8k7latrHfDlJmjUKewaHOZH3nDZyH3bXYz/rLX9TsxmcnvFkcXIjBLw
+ UY+CNApJOyCypV6/dBV4of3dfmY7yEFq+P9IL0zLnaA3WS3sR9Q3razE2kGZhvHVGo8tp5xo0
+ 4kR8y5hDXPtP3MTUNvRnBRxh5oI4zEVAbWoCukV23odPCJQs4k6G5FHBrfgCKfGw/dc1l52el
+ xq7yt4u4t7yKyIEupnU8bjqtNsrU+HoeIRwIrjdKmnehX0HJCIRxzwFk8GCgrFgyQvH7SEoD5
+ IPsgd2k1b6wFXLQqnZjx6rUFNyieC5/dZ2m/hjpZQrP67due/DJaINClvFJiRrxttAcOkqCn/
+ G9g01C4rPN7icXAyAHk2gSTnM6q2ICF9gWfacvja/QvAGgKzZWxjky+V1G2Ef0v5EpjbQNgKL
+ /d0shNghA0gQDJgeJitNlxZTogwLnhPXAmJ5UX2Iax7UGCqKJMHxVTeb+eZMCcOkBEyhdz38c
+ ADxkTvveFJX5VDXyCd5LAxWB0hc06BCWeR1vFvp2/+pudQv+WPG9DeL5+bv9prX3BIbvi1biv
+ lBBElgQUMoHDFQmsl2pGziHN0AGUyUOKfOM1N3HmUoUI1lBjkmo4RW+3QxDsgXxQxbO/H9EvZ
+ oyWcjLbhFVWxsIrBdFpV9vFuQPlmtxrl4P2FtU2dMEcYs5C8WW8FB1Qo/chFNE+edqGjjW6Fm
+ G3ltTsUh75IaMEjdBskP8Ybn37cpcOJbKOPKAjTUxjrTyajGSfftnu4rad/b7IbO43yzI=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
 From: Armin Wolf <W_Armin@gmx.de>
 
-Use devm_add_action_or_reset() for calling i8k_exit_procfs()
-so the remove() function in dell_smm_driver can be omitted.
+Register a platform device for usage with
+devm_hwmon_device_register_with_groups.
+Also the platform device is necessary for
+future changes.
 
 Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 =2D--
- drivers/hwmon/dell-smm-hwmon.c | 28 +++++++++-------------------
- 1 file changed, 9 insertions(+), 19 deletions(-)
+ drivers/hwmon/dell-smm-hwmon.c | 115 ++++++++++++++++++---------------
+ 1 file changed, 63 insertions(+), 52 deletions(-)
 
 diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
 .c
-index deba8819164d..ed2c42badf1a 100644
+index f2221ca0aa7b..2038f2a50e11 100644
 =2D-- a/drivers/hwmon/dell-smm-hwmon.c
 +++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -605,24 +605,22 @@ static const struct proc_ops i8k_proc_ops =3D {
- 	.proc_ioctl	=3D i8k_ioctl,
+@@ -14,7 +14,9 @@
+
+ #include <linux/cpu.h>
+ #include <linux/delay.h>
++#include <linux/err.h>
+ #include <linux/module.h>
++#include <linux/platform_device.h>
+ #include <linux/types.h>
+ #include <linux/init.h>
+ #include <linux/proc_fs.h>
+@@ -896,7 +898,7 @@ static const struct attribute_group i8k_group =3D {
+ };
+ __ATTRIBUTE_GROUPS(i8k);
+
+-static int __init i8k_init_hwmon(void)
++static int __init dell_smm_init_hwmon(struct device *dev)
+ {
+ 	int err;
+
+@@ -956,15 +958,9 @@ static int __init i8k_init_hwmon(void)
+ 	if (err >=3D 0)
+ 		i8k_hwmon_flags |=3D I8K_HWMON_HAVE_FAN3;
+
+-	i8k_hwmon_dev =3D hwmon_device_register_with_groups(NULL, "dell_smm",
+-							  NULL, i8k_groups);
+-	if (IS_ERR(i8k_hwmon_dev)) {
+-		err =3D PTR_ERR(i8k_hwmon_dev);
+-		i8k_hwmon_dev =3D NULL;
+-		pr_err("hwmon registration failed (%d)\n", err);
+-		return err;
+-	}
+-	return 0;
++	i8k_hwmon_dev =3D devm_hwmon_device_register_with_groups(dev, "dell_smm"=
+, NULL, i8k_groups);
++
++	return PTR_ERR_OR_ZERO(i8k_hwmon_dev);
+ }
+
+ struct i8k_config_data {
+@@ -1221,28 +1217,11 @@ static struct dmi_system_id i8k_whitelist_fan_cont=
+rol[] __initdata =3D {
+ 	{ }
  };
 
--static void __init i8k_init_procfs(void)
-+static void i8k_exit_procfs(void *param)
+-/*
+- * Probe for the presence of a supported laptop.
+- */
+-static int __init i8k_probe(void)
++static int __init dell_smm_probe(struct platform_device *pdev)
  {
--	/* Register the proc entry */
--	proc_create("i8k", 0, NULL, &i8k_proc_ops);
-+	remove_proc_entry("i8k", NULL);
- }
+ 	const struct dmi_system_id *id, *fan_control;
+ 	int fan, ret;
 
--static void __exit i8k_exit_procfs(void)
-+static void __init i8k_init_procfs(struct device *dev)
- {
--	remove_proc_entry("i8k", NULL);
-+	/* Register the proc entry */
-+	proc_create("i8k", 0, NULL, &i8k_proc_ops);
+-	/*
+-	 * Get DMI information
+-	 */
+-	if (!dmi_check_system(i8k_dmi_table)) {
+-		if (!ignore_dmi && !force)
+-			return -ENODEV;
+-
+-		pr_info("not running on a supported Dell system.\n");
+-		pr_info("vendor=3D%s, model=3D%s, version=3D%s\n",
+-			i8k_get_dmi_data(DMI_SYS_VENDOR),
+-			i8k_get_dmi_data(DMI_PRODUCT_NAME),
+-			i8k_get_dmi_data(DMI_BIOS_VERSION));
+-	}
+-
+ 	if (dmi_check_system(i8k_blacklist_fan_support_dmi_table)) {
+ 		pr_warn("broken Dell BIOS detected, disallow fan support\n");
+ 		if (!force)
+@@ -1255,21 +1234,11 @@ static int __init i8k_probe(void)
+ 			disallow_fan_type_call =3D true;
+ 	}
+
+-	strlcpy(bios_version, i8k_get_dmi_data(DMI_BIOS_VERSION),
++	strscpy(bios_version, i8k_get_dmi_data(DMI_BIOS_VERSION),
+ 		sizeof(bios_version));
+-	strlcpy(bios_machineid, i8k_get_dmi_data(DMI_PRODUCT_SERIAL),
++	strscpy(bios_machineid, i8k_get_dmi_data(DMI_PRODUCT_SERIAL),
+ 		sizeof(bios_machineid));
+
+-	/*
+-	 * Get SMM Dell signature
+-	 */
+-	if (i8k_get_dell_signature(I8K_SMM_GET_DELL_SIG1) &&
+-	    i8k_get_dell_signature(I8K_SMM_GET_DELL_SIG2)) {
+-		pr_err("unable to get SMM Dell signature\n");
+-		if (!force)
+-			return -ENODEV;
+-	}
+-
+ 	/*
+ 	 * Set fan multiplier and maximal fan speed from dmi config
+ 	 * Values specified in module parameters override values from dmi
+@@ -1277,13 +1246,14 @@ static int __init i8k_probe(void)
+ 	id =3D dmi_first_match(i8k_dmi_table);
+ 	if (id && id->driver_data) {
+ 		const struct i8k_config_data *conf =3D id->driver_data;
 +
-+	devm_add_action_or_reset(dev, i8k_exit_procfs, NULL);
- }
+ 		if (!fan_mult && conf->fan_mult)
+ 			fan_mult =3D conf->fan_mult;
+ 		if (!fan_max && conf->fan_max)
+ 			fan_max =3D conf->fan_max;
+ 	}
 
- #else
+-	i8k_fan_max =3D fan_max ? : I8K_FAN_HIGH;	/* Must not be 0 */
++	i8k_fan_max =3D fan_max ? : I8K_FAN_HIGH; /* Must not be 0 */
+ 	i8k_pwm_mult =3D DIV_ROUND_UP(255, i8k_fan_max);
 
--static inline void __init i8k_init_procfs(void)
--{
--}
--
--static inline void __exit i8k_exit_procfs(void)
-+static void __init i8k_init_procfs(struct device *dev)
- {
- }
+ 	fan_control =3D dmi_first_match(i8k_whitelist_fan_control);
+@@ -1313,29 +1283,70 @@ static int __init i8k_probe(void)
+ 		i8k_fan_mult =3D fan_mult;
+ 	}
 
-@@ -1287,14 +1285,7 @@ static int __init dell_smm_probe(struct platform_de=
-vice *pdev)
- 	if (ret)
- 		return ret;
-
--	i8k_init_procfs();
--
--	return 0;
--}
--
--static int dell_smm_remove(struct platform_device *pdev)
--{
--	i8k_exit_procfs();
-+	i8k_init_procfs(&pdev->dev);
-
++	ret =3D dell_smm_init_hwmon(&pdev->dev);
++	if (ret)
++		return ret;
++
++	i8k_init_procfs();
++
  	return 0;
  }
-@@ -1303,7 +1294,6 @@ static struct platform_driver dell_smm_driver =3D {
- 	.driver		=3D {
- 		.name	=3D KBUILD_MODNAME,
- 	},
--	.remove		=3D dell_smm_remove,
- };
 
- static struct platform_device *dell_smm_device;
++static int dell_smm_remove(struct platform_device *pdev)
++{
++	i8k_exit_procfs();
++
++	return 0;
++}
++
++static struct platform_driver dell_smm_driver =3D {
++	.driver		=3D {
++		.name	=3D KBUILD_MODNAME,
++	},
++	.remove		=3D dell_smm_remove,
++};
++
++static struct platform_device *dell_smm_device;
++
++/*
++ * Probe for the presence of a supported laptop.
++ */
+ static int __init i8k_init(void)
+ {
+-	int err;
++	/*
++	 * Get DMI information
++	 */
++	if (!dmi_check_system(i8k_dmi_table)) {
++		if (!ignore_dmi && !force)
++			return -ENODEV;
+
+-	/* Are we running on an supported laptop? */
+-	if (i8k_probe())
+-		return -ENODEV;
++		pr_info("not running on a supported Dell system.\n");
++		pr_info("vendor=3D%s, model=3D%s, version=3D%s\n",
++			i8k_get_dmi_data(DMI_SYS_VENDOR),
++			i8k_get_dmi_data(DMI_PRODUCT_NAME),
++			i8k_get_dmi_data(DMI_BIOS_VERSION));
++	}
+
+-	err =3D i8k_init_hwmon();
+-	if (err)
+-		return err;
++	/*
++	 * Get SMM Dell signature
++	 */
++	if (i8k_get_dell_signature(I8K_SMM_GET_DELL_SIG1) &&
++	    i8k_get_dell_signature(I8K_SMM_GET_DELL_SIG2)) {
++		pr_err("unable to get SMM Dell signature\n");
++		if (!force)
++			return -ENODEV;
++	}
+
+-	i8k_init_procfs();
+-	return 0;
++	dell_smm_device =3D platform_create_bundle(&dell_smm_driver, dell_smm_pr=
+obe, NULL, 0, NULL,
++						 0);
++
++	return PTR_ERR_OR_ZERO(dell_smm_device);
+ }
+
+ static void __exit i8k_exit(void)
+ {
+-	hwmon_device_unregister(i8k_hwmon_dev);
+-	i8k_exit_procfs();
++	platform_device_unregister(dell_smm_device);
++	platform_driver_unregister(&dell_smm_driver);
+ }
+
+ module_init(i8k_init);
 =2D-
 2.20.1
 
