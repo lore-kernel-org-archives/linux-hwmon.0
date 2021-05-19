@@ -2,341 +2,97 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05E41C433ED
-	for <linux-hwmon@archiver.kernel.org>; Wed, 19 May 2021 13:19:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B958DC433B4
+	for <linux-hwmon@archiver.kernel.org>; Wed, 19 May 2021 13:29:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D674C610CC
-	for <linux-hwmon@archiver.kernel.org>; Wed, 19 May 2021 13:19:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 975B761040
+	for <linux-hwmon@archiver.kernel.org>; Wed, 19 May 2021 13:29:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241557AbhESNUq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 19 May 2021 09:20:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53224 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241309AbhESNUq (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 19 May 2021 09:20:46 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F2EC06175F;
-        Wed, 19 May 2021 06:19:26 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id k4so1523397qkd.0;
-        Wed, 19 May 2021 06:19:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:to:cc:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=l7WK/M3lA/Yv8SDSY01CJgdiUdDmvmZ7Z8gBSbNOKVI=;
-        b=UW5+TVVh+Zj5pqwhBiWVAxsAguCsW59a5ZzuFT9fMgX3eNM6vxKn62L+1u1/kHfRtG
-         s33UD940Ms5bu3FxhNACS6MyO1TP2Qy0XconqdVaWgQ0N6Sr9tNmB4lmsPRIpyJ5WDeI
-         4sCAmgmVAHOzf0TsWhd/na9Ka48n5n1VPPVeGSLqmT6EEE6f4RUc1d/oYCmv9XsTWaF8
-         c2l2dUOELj4/gCIG5cm7Qp8BKye/KOoQLyyWPgRMiUC82GJ2vNe+51LN5EdbVjge5rRH
-         IHz5KDyOuuDWAmJmfI51mywSRu8MaUb+7TgZYINT6F9uTnHKocUfpe2GBcmYpARk2/bY
-         M2Hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=l7WK/M3lA/Yv8SDSY01CJgdiUdDmvmZ7Z8gBSbNOKVI=;
-        b=ZTWGAIOuOu5f0ximDuL8uCgX7aH+UCzH7ELkDqkhLTpO+a/qkn83KUWMLUlzr+ddZa
-         GxQyoGw/kz2IUuZaYJ1O5vXRATeC0ENu7ZYTtLt4Y4zsrgDhpxvRxA6ZtQpY9HKheUSW
-         OrT1rgq0/dcWHCav6a3+xdn0DwkHZQuDCyu6hIVHSfgm0D6pfGKOvJPALuQXlcz8ayQG
-         gkPlA+IXqg7UZCycKEb9KNnpbrsxV6vZp6pu6K84RncF7T3kZK3CO5LbmVdNaHe2KHP5
-         M17hKWlo0IUQkpSamhQz4zjVtJ+6ZpkMrgZHyIKN/zJv11o5OsUbAV81l4r4X1rpr7gN
-         ABFA==
-X-Gm-Message-State: AOAM531tGKUg4MTwSWeJz5uoQAsAtCW/XM0IArWsnpp+TBwiJYMUQstS
-        XTSUunGzsIjgh9nH2tYwvvs=
-X-Google-Smtp-Source: ABdhPJy6yVjHFdhdEo+lWoYbh/CXfd5R5dsbndMc19ridqWlOXajoryZPdmUzmZOethi85dahoCxtQ==
-X-Received: by 2002:a37:9a16:: with SMTP id c22mr11857749qke.0.1621430365457;
-        Wed, 19 May 2021 06:19:25 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d23sm14837868qtg.69.2021.05.19.06.19.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 May 2021 06:19:24 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-To:     Robert Marko <robert.marko@sartura.hr>
-Cc:     jdelvare@suse.com, corbet@lwn.net, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Luka Perkov <luka.perkov@sartura.hr>, jmp@epiphyte.org,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Donald Buczek <buczek@molgen.mpg.de>
-References: <20210430132735.127342-1-robert.marko@sartura.hr>
- <20210430134810.GA2714262@roeck-us.net>
- <CA+HBbNH+gQOmu_Ho0ivFuGHdu0zBtOrr1474z+7FA1zmNb4bug@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 1/3] hwmon: (pmbus) Add driver for Delta DPS-920AB PSU
-Message-ID: <2b990feb-dc26-debb-4f81-430bbc89b51c@roeck-us.net>
-Date:   Wed, 19 May 2021 06:19:22 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S1353726AbhESNbE (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 19 May 2021 09:31:04 -0400
+Received: from mout.gmx.net ([212.227.17.22]:46975 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1353710AbhESNbB (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 19 May 2021 09:31:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1621430963;
+        bh=8THuDwvKXfvpBYyzmBE08VaMV/aSnP/Qf3dWHo6/jis=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=W0tGR6TkvDL96dKn4Fr1sNk3tJZgq1iSA1RtGhA9BRGjDkluMrUOyCu8/NAs1OlYS
+         Bqc0zcr0E3r3wQeHnKj0eNtGGoC9/GxoMU+Cx4uBxgrFZtnKN7NbkNxhjO/1EY8vTr
+         zmJw3IwJM7TYrvcJaQGeoZnouwjTxw1yGNvdIte0=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from esprimo-mx.fritz.box ([79.242.184.149]) by mail.gmx.net
+ (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1N1fii-1lLPNz1pbk-011zVF; Wed, 19 May 2021 15:29:23 +0200
+From:   W_Armin@gmx.de
+To:     pali@kernel.org
+Cc:     linux@roeck-us.net, jdelvare@suse.com, linux-hwmon@vger.kernel.org
+Subject: [PATCH 0/5] hwmon: (dell-smm-hwmon) Convert to new hwmon
+Date:   Wed, 19 May 2021 15:29:05 +0200
+Message-Id: <20210519132910.14453-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <CA+HBbNH+gQOmu_Ho0ivFuGHdu0zBtOrr1474z+7FA1zmNb4bug@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:ta8pMTY3DQUmffJc6rXWG8yQXEzQTedbisNS2KoOpJSeBcvbjui
+ V0HY2s5eA60FSv5bY9fUPkkn08gQv+05DNJVrScstY6G3oiG44Bb3pKOqnaRTH+WVrH+dgC
+ NGiO4XT7t+djknaa/xR823CF4lLl1bJd3d6l2EmnyIJ7+Yvo24JLBprAGBWq3ilFIZ6xuhC
+ OEl1J0ezwMDPdkv9PLgrw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:EKLcjSOtMrQ=:e4cKJguWcXjXeRN3ptLCOA
+ uyUc0qOGKJcNs4Uec8SBkEoxdChQ6jHoiQ+G3sOvR/E8wsEbzqRpBgjrGTb1gGYamJ3eBlJ/A
+ 9Cd1+nH/yYIzkE73VETvAhEtwVWF+vm6AeYa9q2eR8dccMJ7SYkVZbQ8nrEN/ynCbPLVObWqT
+ x36Os3YKDlmE+SUETzj0YhJjWHBN4oqb8EGPM/eGQ7cQ3Gg+xFvcsN4+LEYJiVDvC1+6lJszk
+ XqNAA/1bAFK1nhY8tdtANfvI7/3SNMHsfXt79nBAIpwq9qY6iJOkTEaCKvfwhHw7Y5p8LDd3D
+ fWT1hjHyhr0akRPpkOP7vxqSlJcK2NV2BCH7jr31Fjt5n0riHTjhElSDOG+i86riORnTAHHQm
+ Z3pZUanPNvfPt7PdfbGy0/TsqSX9mib2+HSpXX4D33UfsNlQ3yDqPrkJKtU+sKcAd1fcuGtBe
+ YIHF5dcZvqVMs8Xrd3xOz6EojjNgCWIRUSx7GirJIKmFJjV9M/1dSnUCjB0giPx21TU9b9fjS
+ B0a9SxComONTNpid0fwMtVVZvOkWRfv+gx7RtcWShYMyiEZUS+B9dloxd/j5W53r49arY3Xcq
+ jh/qnCA/dpsiOmdsgWH6bZpOBCii+7IdXwAWVDJjSn7j7in06xbIhudLNuv0A/SkcmfzXUSj5
+ Xqi9e/0/YKvbYCt136zIeR3hf0zfFtzRO2HVhq2YI3w6bIdVDqKQqkk2JDo4qAZwJNRCxIvsc
+ KvL2qeWG/BjNlPLi2VJD2Lf8IlI2r82rDa9YObfDszs/0o3Hxu6IRnQHJ46NC/JCdQGKpIdi7
+ 5jo0Nbe5x4f4jg11PYdnCVxtTC+azwFbpK57rgOOHjoyLkKKOYCv6E0MJClMTmjzNhr7Q+vh1
+ Jgz/8I+iaGS5ugFTmk8HcmXpJFTq5AxPCe6Hl2J+ySSR1FlN7oTB7kCAPGYLxdMyas65bOLMp
+ HBKeu1qulQSg4kjbpptJ4ZpRgp+3rhZeFuU/kLu9o4GfP+D+kv0PcH0nhI15DhgMkb91EeGZx
+ LpnRk8yIfSlRIH88f3AfTdlrp8Cjpa91GPzbCQSM41uOWi7ZB8LpbH6GZUBO3afEcPnBm9sLN
+ VwvbtAgiSMhO2gXkUXMof8h5rgY8Idtbdd2pa3jMNbY7S+cqiBNRYUv9SFOGD7mY8xtLRyEjh
+ if5i/Zve2dOYNMVg2QBrlzaxmuPq5bUdt7V7nhd7ht93FnzHNww4ZFoujSKbNETDlW9uc=
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/19/21 5:38 AM, Robert Marko wrote:
-> On Fri, Apr 30, 2021 at 3:48 PM Guenter Roeck <linux@roeck-us.net> wrote:
->>
->> On Fri, Apr 30, 2021 at 03:27:33PM +0200, Robert Marko wrote:
->>> This adds support for the Delta DPS-920AB PSU.
->>>
->>> Only missing feature is fan control which the PSU supports.
->>>
->>> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
->>> ---
->>>   Documentation/hwmon/dps920ab.rst | 80 ++++++++++++++++++++++++++++++++
->>>   Documentation/hwmon/index.rst    |  1 +
->>>   drivers/hwmon/pmbus/Kconfig      |  9 ++++
->>>   drivers/hwmon/pmbus/Makefile     |  1 +
->>>   drivers/hwmon/pmbus/dps920ab.c   | 63 +++++++++++++++++++++++++
->>>   5 files changed, 154 insertions(+)
->>>   create mode 100644 Documentation/hwmon/dps920ab.rst
->>>   create mode 100644 drivers/hwmon/pmbus/dps920ab.c
->>>
->>> diff --git a/Documentation/hwmon/dps920ab.rst b/Documentation/hwmon/dps920ab.rst
->>> new file mode 100644
->>> index 000000000000..df0aef530c7e
->>> --- /dev/null
->>> +++ b/Documentation/hwmon/dps920ab.rst
->>> @@ -0,0 +1,80 @@
->>> +.. SPDX-License-Identifier: GPL-2.0-or-later
->>> +
->>> +Kernel driver dps920ab
->>> +========================
->>> +
->>> +Supported chips:
->>> +
->>> +  * Delta DPS920AB
->>> +
->>> +    Prefix: 'dps920ab'
->>> +
->>> +    Addresses scanned: -
->>> +
->>> +Authors:
->>> +    Robert Marko <robert.marko@sartura.hr>
->>> +
->>> +
->>> +Description
->>> +-----------
->>> +
->>> +This driver implements support for Delta DPS920AB 920W 54V DC single output
->>> +power supply with PMBus support.
->>> +
->>> +The driver is a client driver to the core PMBus driver.
->>> +Please see Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
->>> +
->>> +
->>> +Usage Notes
->>> +-----------
->>> +
->>> +This driver does not auto-detect devices. You will have to instantiate the
->>> +devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
->>> +details.
->>> +
->>> +
->>> +Sysfs entries
->>> +-------------
->>> +
->>> +======================= ======================================================
->>> +curr1_label          "iin"
->>> +curr1_input          Measured input current
->>> +curr1_crit           Critical maximum current
->>> +curr1_crit_alarm     Current critical high alarm
->>> +
->>> +curr2_label          "iout1"
->>> +curr2_input          Measured output current
->>> +curr2_crit           Critical maximum current
->>> +curr2_crit_alarm     Current critical high alarm
->>> +
->>> +in1_label            "vin"
->>> +in1_input            Measured input voltage
->>> +in1_lcrit            Critical minimum input voltage
->>> +in1_lcrit_alarm              Input voltage critical low alarm
->>> +in1_crit             Critical maximum input voltage
->>> +in1_crit_alarm               Input voltage critical high alarm
->>> +
->>> +in2_label            "vout1"
->>> +in2_input            Measured output voltage
->>> +in2_lcrit            Critical minimum output voltage
->>> +in2_lcrit_alarm              Output voltage critical low alarm
->>> +in2_crit             Critical maximum output voltage
->>> +in2_crit_alarm               Output voltage critical high alarm
->>> +
->>> +power1_label         "pin"
->>> +power1_input         Measured input power
->>> +power1_alarm         Input power high alarm
->>> +
->>> +power2_label         "pout1"
->>> +power2_input         Measured output power
->>> +
->>> +temp[1-2]_input              Measured temperature
->>> +temp[1-2]_crit               Critical high temperature
->>> +temp[1-2]_crit_alarm Chip temperature critical high alarm
->>> +temp[1-2]_max                Maximum temperature
->>> +temp[1-2]_max_alarm  Chip temperature high alarm
->>> +
->>> +fan1_alarm           Fan 1 warning.
->>> +fan1_fault           Fan 1 fault.
->>> +fan1_input           Fan 1 speed in RPM.
->>> +======================= ======================================================
->>> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
->>> index 8d5a2df1ecb6..b24436f22052 100644
->>> --- a/Documentation/hwmon/index.rst
->>> +++ b/Documentation/hwmon/index.rst
->>> @@ -54,6 +54,7 @@ Hardware Monitoring Kernel Drivers
->>>      dell-smm-hwmon
->>>      dme1737
->>>      drivetemp
->>> +   dps920ab
->>>      ds1621
->>>      ds620
->>>      emc1403
->>> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
->>> index 32d2fc850621..865ade0aa205 100644
->>> --- a/drivers/hwmon/pmbus/Kconfig
->>> +++ b/drivers/hwmon/pmbus/Kconfig
->>> @@ -66,6 +66,15 @@ config SENSORS_IBM_CFFPS
->>>          This driver can also be built as a module. If so, the module will
->>>          be called ibm-cffps.
->>>
->>> +config SENSORS_DPS920AB
->>> +     tristate "Delta DPS920AB Power Supply"
->>> +     help
->>> +       If you say yes here you get hardware monitoring support for Delta
->>> +       DPS920AB Power Supplies.
->>> +
->>> +       This driver can also be built as a module. If so, the module will
->>> +       be called dps920ab.
->>> +
->>>   config SENSORS_INSPUR_IPSPS
->>>        tristate "INSPUR Power System Power Supply"
->>>        help
->>> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
->>> index 6a4ba0fdc1db..f59ba0123d68 100644
->>> --- a/drivers/hwmon/pmbus/Makefile
->>> +++ b/drivers/hwmon/pmbus/Makefile
->>> @@ -9,6 +9,7 @@ obj-$(CONFIG_SENSORS_ADM1266) += adm1266.o
->>>   obj-$(CONFIG_SENSORS_ADM1275)        += adm1275.o
->>>   obj-$(CONFIG_SENSORS_BEL_PFE)        += bel-pfe.o
->>>   obj-$(CONFIG_SENSORS_IBM_CFFPS)      += ibm-cffps.o
->>> +obj-$(CONFIG_SENSORS_DPS920AB)       += dps920ab.o
->>>   obj-$(CONFIG_SENSORS_INSPUR_IPSPS) += inspur-ipsps.o
->>>   obj-$(CONFIG_SENSORS_IR35221)        += ir35221.o
->>>   obj-$(CONFIG_SENSORS_IR38064)        += ir38064.o
->>> diff --git a/drivers/hwmon/pmbus/dps920ab.c b/drivers/hwmon/pmbus/dps920ab.c
->>> new file mode 100644
->>> index 000000000000..d579ed9f879c
->>> --- /dev/null
->>> +++ b/drivers/hwmon/pmbus/dps920ab.c
->>> @@ -0,0 +1,63 @@
->>> +// SPDX-License-Identifier: GPL-2.0-or-later
->>> +/*
->>> + * Driver for Delta DPS920AB PSU
->>> + *
->>> + * Copyright (C) 2021 Delta Networks, Inc.
->>> + * Copyright (C) 2021 Sartura Ltd.
->>> + */
->>> +
->>> +#include <linux/i2c.h>
->>> +#include <linux/module.h>
->>> +#include <linux/of_device.h>
->>> +#include "pmbus.h"
->>> +
->>> +static struct pmbus_driver_info dps920ab_info = {
->>> +     .pages = 1,
->>> +
->>> +     .format[PSC_VOLTAGE_IN] = linear,
->>> +     .format[PSC_VOLTAGE_OUT] = linear,
->>> +     .format[PSC_CURRENT_IN] = linear,
->>> +     .format[PSC_CURRENT_OUT] = linear,
->>> +     .format[PSC_POWER] = linear,
->>> +     .format[PSC_FAN] = linear,
->>> +     .format[PSC_TEMPERATURE] = linear,
->>> +
->>> +     .func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN  |
->>> +     PMBUS_HAVE_VOUT  | PMBUS_HAVE_STATUS_VOUT   |
->>> +     PMBUS_HAVE_IOUT  | PMBUS_HAVE_STATUS_IOUT   |
->>> +     PMBUS_HAVE_TEMP  | PMBUS_HAVE_TEMP2         |
->>> +     PMBUS_HAVE_PIN   | PMBUS_HAVE_POUT          |
->>> +     PMBUS_HAVE_FAN12 | PMBUS_HAVE_STATUS_FAN12  |
->>> +     PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_STATUS_TEMP,
->>> +};
->>> +
->>> +static int dps920ab_probe(struct i2c_client *client)
->>> +{
->>> +     if (!i2c_check_functionality(client->adapter,
->>> +                                  I2C_FUNC_SMBUS_BYTE_DATA |
->>> +                                  I2C_FUNC_SMBUS_WORD_DATA))
->>> +             return -ENODEV;
->>
->> This check is done in pmbus_do_probe(), and repeating it here does not add
->> any value.
-> 
-> Ok, makes sense.
->>
->> That makes me wonder: Is this driver needed in the first place, or could
->> it be added to drivers/hwmon/pmbus/pmbus.c ?
-> 
-> It could be added as a generic driver, but that creates properties in
-> the sysfs that this thing
-> does not support like 3 voltage readings, 3 fans, and so on.
-> 
+From: Armin Wolf <W_Armin@gmx.de>
 
-Can you be more specific ? What additional unsupported attributes
-are added, and why ? Are you saying the PSU reports registers as
-existing which do not really exist ? If so, which registers are those ?
+This patch series is converting the dell-smm-hwmon driver
+to the new hwmon registration API. In order to do so,
+it introduces a platform device in the first patch, and
+applies some optimisations in the next three patches.
+The switch to the new hwmon registration API is done in
+the last patch.
 
-In this context, I have a hard time finding a reference for
-this power supply. Do you have a datasheet or some other documents
-you can share ?
+The caching of the fan/temp values was modified to better fit
+the new hwmon API.
 
-Thanks,
-Guenter
+The patches work fine for my Dell Latitude C600, but i whould
+appreciate someone testing the code on another model too.
 
-> Is it okay to keep it as a separate driver then?
-> 
-> Regards,
-> Robert
->>
->> Thanks,
->> Guenter
->>
->>> +
->>> +     return pmbus_do_probe(client, &dps920ab_info);
->>> +}
->>> +
->>> +static const struct of_device_id __maybe_unused dps920ab_of_match[] = {
->>> +     { .compatible = "delta,dps920ab", },
->>> +     {}
->>> +};
->>> +
->>> +MODULE_DEVICE_TABLE(of, dps920ab_of_match);
->>> +
->>> +static struct i2c_driver dps920ab_driver = {
->>> +     .driver = {
->>> +                .name = "dps920ab",
->>> +                .of_match_table = of_match_ptr(dps920ab_of_match),
->>> +     },
->>> +     .probe_new = dps920ab_probe,
->>> +};
->>> +
->>> +module_i2c_driver(dps920ab_driver);
->>> +
->>> +MODULE_AUTHOR("Robert Marko <robert.marko@sartura.hr>");
->>> +MODULE_DESCRIPTION("PMBus driver for Delta DPS920AB PSU");
->>> +MODULE_LICENSE("GPL");
->>> --
->>> 2.31.1
->>>
-> 
-> 
-> 
+Armin Wolf (5):
+  hwmon: (dell-smm-hwmon) Use platform device
+  hwmon: (dell-smm-hwmon) Mark functions as __init
+  hwmon: (dell-smm-hwmon) Use devm_add_action_or_reset()
+  hwmon: (dell-smm-hwmon) Move variables into a driver private data
+    structure
+  hwmon: (dell-smm-hwmon) Convert to
+    devm_hwmon_device_register_with_info()
+
+ drivers/hwmon/dell-smm-hwmon.c | 860 ++++++++++++++++-----------------
+ 1 file changed, 425 insertions(+), 435 deletions(-)
+
+=2D-
+2.20.1
 
