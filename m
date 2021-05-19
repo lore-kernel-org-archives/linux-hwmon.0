@@ -2,399 +2,105 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 513E2C433B4
-	for <linux-hwmon@archiver.kernel.org>; Wed, 19 May 2021 11:11:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49C05C433B4
+	for <linux-hwmon@archiver.kernel.org>; Wed, 19 May 2021 11:53:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 26E4260200
-	for <linux-hwmon@archiver.kernel.org>; Wed, 19 May 2021 11:11:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 30795610CC
+	for <linux-hwmon@archiver.kernel.org>; Wed, 19 May 2021 11:53:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346154AbhESLM7 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 19 May 2021 07:12:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52324 "EHLO
+        id S240419AbhESLy6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 19 May 2021 07:54:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242409AbhESLM7 (ORCPT
+        with ESMTP id S1352678AbhESLy6 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 19 May 2021 07:12:59 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 829C7C061760
-        for <linux-hwmon@vger.kernel.org>; Wed, 19 May 2021 04:11:39 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id j14so11838127wrq.5
-        for <linux-hwmon@vger.kernel.org>; Wed, 19 May 2021 04:11:39 -0700 (PDT)
+        Wed, 19 May 2021 07:54:58 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68552C061761
+        for <linux-hwmon@vger.kernel.org>; Wed, 19 May 2021 04:53:37 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id j30so11962519ila.5
+        for <linux-hwmon@vger.kernel.org>; Wed, 19 May 2021 04:53:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=Vc8qJg9NmyT5ZEGfIcNUqKz3BJwvE15c53tr2iQnxUA=;
-        b=Ic7eZmPZ6/e2jgfkov/tZpcd1TKjFXlykvq9B2L15Gk/irhrypS5YJPmxzodwiiqsf
-         DJD9hUtVjsuDlye9WDOd/rqu9BIOgAGRJt/NeV1/EVbPYKsvzmAeo4gMd4+/aMQSCMB9
-         3MDn115nESViNS2wHi/2MIm/NMvoAHE5CJRbxFPcAIS7KMyTyO1RL/iuDjHZ9pzXrUJ7
-         FolV404EjuHW6DsUzm+ZVP9eOQjlspWpi4dtyXBwYNfa3i9oHBIhzLcknewOSvrwI2oi
-         WsMBzENlLmvjqiQ58ZhzZ6eE76c+1zGVLXBDhgazh1T8QE3OHPPeDdJvVS6x2rEnDJjM
-         KNMA==
+        d=sartura-hr.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UW7fZiIlXVfl0Qc0/A9Hj0P585Ftj5tVT/omHdWRq4I=;
+        b=xLPFHrobZa2WtMv3ql7wPlAv5Tlyo5PmflSYyt63GdY1dJxV6q/++PoWUU73Vm8I8Q
+         XhykK9d/2gYBEup6fAwa2XK+Umf9GBrejU/zdN/Q5H/8/Fgml0iNnb1gBdWV8iOy8P1v
+         VJBUZDNw3f4iM+zvum6Yav1e8S+RzjRmzu0EQdDYM46bamsvc9oBTDOc27AOk9ZJPMzN
+         hX73g9wxPHDs13xqAScfxHl1X2NLKl1zx/r5cxUNm2PlXAJ2UXr+O1mvsXUmJHXY/j3m
+         t340Ij6y4xra8yVLLznQQEYhjk9BsM/rX0jQObGJQmoKKyBeJyAiwsCqGdNfZvj/t9ir
+         +/cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Vc8qJg9NmyT5ZEGfIcNUqKz3BJwvE15c53tr2iQnxUA=;
-        b=O+nw+bksAm5JFkvZwgXzv0bIaBcLd8X8fRTCBFnlsn3H0Bbt7x1IXyzmDhWowklDMV
-         esidPCFafi3juUidWbJc9vJrXlMeGbG48crpQrj1jztvOA01HC9Nv7rEl2iIuS+h6IfA
-         0ELPGmH204BGZhSjfcIXB37wMIZk8MdP99fg2c1DniEEM+B9B0RoAGkh9gnaCQs1dpzq
-         NfZrqAakFf7L+Oi0noOmrXXL3zw5a1mTaofzT8HW6GVq4rEKT1z/L6GCPtN1ADoIdfPv
-         nDNZtAVE+L0stX33F45HW60u/uo7/En7+u+13k9eGjoTy2eQYqVcNxJmI0/HSLRI1QEX
-         HEKw==
-X-Gm-Message-State: AOAM533HpbPf9m+wNRwGXOFgsokkoVVTrrbnEX+bUNkiFEKXGpKHnItg
-        XfE4yJRCssUTMn82w4Oiw7iRJQ==
-X-Google-Smtp-Source: ABdhPJx0iXQiXNiDCS1Ed60PcEy+0Zd6RrBCwtbt1gF9HqpKG8BR2R/kGw6g9cV/u+tMrD0iv53JYA==
-X-Received: by 2002:a5d:6d81:: with SMTP id l1mr13732937wrs.17.1621422698035;
-        Wed, 19 May 2021 04:11:38 -0700 (PDT)
-Received: from dell ([91.110.221.215])
-        by smtp.gmail.com with ESMTPSA id q3sm22762845wrr.43.2021.05.19.04.11.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 May 2021 04:11:37 -0700 (PDT)
-Date:   Wed, 19 May 2021 12:11:25 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Robert Marko <robert.marko@sartura.hr>
-Cc:     robh+dt@kernel.org, linus.walleij@linaro.org,
-        bgolaszewski@baylibre.com, jdelvare@suse.com, linux@roeck-us.net,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        luka.perkov@sartura.hr, jmp@epiphyte.org, pmenzel@molgen.mpg.de,
-        buczek@molgen.mpg.de
-Subject: Re: [PATCH 1/6] mfd: Add Delta TN48M CPLD driver
-Message-ID: <20210519111125.GD2403908@dell>
-References: <20210430123511.116057-1-robert.marko@sartura.hr>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UW7fZiIlXVfl0Qc0/A9Hj0P585Ftj5tVT/omHdWRq4I=;
+        b=SsamUpqcGslhU4TL9DxkG4V9e2/mCublr3ulX62uOOvfeD/Qr5P6n4QL8PtM2DCilt
+         ow7R/6tZ2NwFJ16q8JZVitaf8mr98ue+ILi04/JySosuACETlDJKOdvAjcVF8pQT1NkC
+         gZOLwhfkKkKlJT79/WSYzoc0l43meugSBUz7PT3jT2JxjbKYGBKvvVLyW91zQcm1AW7H
+         dOo5893GgMBjSSY3rN5VvPn7QjXTfxi8S6tlExTAewcBUS9njdpYhnjt2fO/cLS6lLcz
+         mdEl1KGMOt6XfEsj7phMZ2mIpzUyOKfikBufUr+lBl65ZkeJQcwjPl8imB0B9C7SDTgQ
+         esRw==
+X-Gm-Message-State: AOAM533oraeCxdXeBch/A7KNcmCwxT+6S//R2aLjdWkEbHjr2vj4v1tA
+        9jL1jnoiFgwCmkAHq7IV7GewXgmuUqVv7JgVBAk7Fw==
+X-Google-Smtp-Source: ABdhPJyagVuDl87Slxx3PuzN9OBL7HrQnUxrISgaMw3Gc9dfiRyYygGFfRlU4U4XUgvEtNonmfbMHU8PypFnnAmBhHo=
+X-Received: by 2002:a92:cf45:: with SMTP id c5mr10915199ilr.182.1621425216452;
+ Wed, 19 May 2021 04:53:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210430123511.116057-1-robert.marko@sartura.hr>
+References: <20210430123511.116057-1-robert.marko@sartura.hr> <af4923ef1ed0693fcd67d7986348b164@walle.cc>
+In-Reply-To: <af4923ef1ed0693fcd67d7986348b164@walle.cc>
+From:   Robert Marko <robert.marko@sartura.hr>
+Date:   Wed, 19 May 2021 13:53:25 +0200
+Message-ID: <CA+HBbNHCnpg9qCzZbT9KVNqX-daC68iaJKNdyEf7do3w98miWw@mail.gmail.com>
+Subject: Re: [PATCH 1/6] mfd: Add Delta TN48M CPLD driver
+To:     Michael Walle <michael@walle.cc>
+Cc:     Lee Jones <lee.jones@linaro.org>, robh+dt@kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        bgolaszewski@baylibre.com, jdelvare@suse.com,
+        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, Luka Perkov <luka.perkov@sartura.hr>,
+        jmp@epiphyte.org, Paul Menzel <pmenzel@molgen.mpg.de>,
+        Donald Buczek <buczek@molgen.mpg.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, 30 Apr 2021, Robert Marko wrote:
+On Thu, May 6, 2021 at 6:34 PM Michael Walle <michael@walle.cc> wrote:
+>
+> Hi Robert,
+>
+> Am 2021-04-30 14:35, schrieb Robert Marko:
+> > Delta TN48M switches have a Lattice CPLD that serves
+> > multiple purposes including being a GPIO expander.
+> > So lets add the MFD core driver for it.
+>
+> Did you have a look at mfd/simple-mfd-i2c.c?
 
-> Delta TN48M switches have a Lattice CPLD that serves
-> multiple purposes including being a GPIO expander.
-> So lets add the MFD core driver for it.
-> 
-> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-> ---
->  drivers/mfd/Kconfig       |  13 +++
->  drivers/mfd/Makefile      |   1 +
->  drivers/mfd/tn48m-cpld.c  | 181 ++++++++++++++++++++++++++++++++++++++
->  include/linux/mfd/tn48m.h |  30 +++++++
->  4 files changed, 225 insertions(+)
->  create mode 100644 drivers/mfd/tn48m-cpld.c
->  create mode 100644 include/linux/mfd/tn48m.h
-> 
-> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> index b74efa469e90..809041f98d71 100644
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -297,6 +297,19 @@ config MFD_ASIC3
->  	  This driver supports the ASIC3 multifunction chip found on many
->  	  PDAs (mainly iPAQ and HTC based ones)
->  
-> +config MFD_TN48M_CPLD
-> +	tristate "Delta Networks TN48M switch CPLD driver"
-> +	depends on I2C
-> +	select MFD_CORE
-> +	select REGMAP_I2C
-> +	help
-> +	  Select this option to enable support for Delta Networks TN48M switch
-> +	  CPLD. It consists of GPIO and hwmon drivers.
-> +	  CPLD provides GPIOS-s for the SFP slots as well as power supply
-> +	  related information.
-> +	  Driver provides debugfs information about the board model as
-> +	  well as hardware and CPLD revision information.
+Hi Michael,
 
-No need for every sentence to be it's own paragraphs.
+Yes, that was my first idea but we have a requirement to expose CPLD
+information via debugfs as there are userspace applications using it.
+And simple-mfd-i2c does not allow us to do so.
 
-Please re-align to be a single chunk.
+Regards,
+Robert
+>
+> -michael
 
->  config PMIC_DA903X
->  	bool "Dialog Semiconductor DA9030/DA9034 PMIC Support"
->  	depends on I2C=y
-> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> index 834f5463af28..974663341f08 100644
-> --- a/drivers/mfd/Makefile
-> +++ b/drivers/mfd/Makefile
-> @@ -27,6 +27,7 @@ obj-$(CONFIG_MFD_TI_LP87565)	+= lp87565.o
->  obj-$(CONFIG_MFD_DAVINCI_VOICECODEC)	+= davinci_voicecodec.o
->  obj-$(CONFIG_MFD_DM355EVM_MSP)	+= dm355evm_msp.o
->  obj-$(CONFIG_MFD_TI_AM335X_TSCADC)	+= ti_am335x_tscadc.o
-> +obj-$(CONFIG_MFD_TN48M_CPLD)	+= tn48m-cpld.o
->  
->  obj-$(CONFIG_MFD_STA2X11)	+= sta2x11-mfd.o
->  obj-$(CONFIG_MFD_STMPE)		+= stmpe.o
-> diff --git a/drivers/mfd/tn48m-cpld.c b/drivers/mfd/tn48m-cpld.c
-> new file mode 100644
-> index 000000000000..b84510fb630a
-> --- /dev/null
-> +++ b/drivers/mfd/tn48m-cpld.c
-> @@ -0,0 +1,181 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Delta TN48M CPLD parent driver
-> + *
-> + * Copyright 2020 Sartura Ltd
 
-This is out of date.
-
-> + * Author: Robert Marko <robert.marko@sartura.hr>
-> + */
-> +
-> +#include <linux/debugfs.h>
-> +#include <linux/i2c.h>
-> +#include <linux/kernel.h>
-> +#include <linux/mfd/core.h>
-> +#include <linux/mfd/tn48m.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/slab.h>
-> +
-> +static const struct mfd_cell tn48m_cell[] = {};
-
-Please populate this.
-
-Without it, this is not an MFD.
-
-> +static const struct regmap_config tn48m_regmap_config = {
-> +	.reg_bits = 8,
-> +	.val_bits = 8,
-> +	.max_register = 0x40,
-> +};
-> +
-> +static int hardware_version_show(struct seq_file *s, void *data)
-> +{
-> +	struct tn48m_data *priv = s->private;
-> +	unsigned int regval;
-> +	char *buf;
-> +
-> +	regmap_read(priv->regmap, HARDWARE_VERSION_ID, &regval);
-> +
-> +	switch (FIELD_GET(HARDWARE_VERSION_MASK, regval)) {
-> +	case HARDWARE_VERSION_EVT1:
-> +		buf = "EVT1";
-> +		break;
-> +	case HARDWARE_VERSION_EVT2:
-> +		buf = "EVT2";
-> +		break;
-> +	case HARDWARE_VERSION_DVT:
-> +		buf = "DVT";
-> +		break;
-> +	case HARDWARE_VERSION_PVT:
-> +		buf = "PVT";
-> +		break;
-> +	default:
-> +		buf = "Unknown";
-> +		break;
-> +	}
-> +
-> +	seq_printf(s, "%s\n", buf);
-> +
-> +	return 0;
-> +}
-> +
-
-Please drop this '\n'.
-
-> +DEFINE_SHOW_ATTRIBUTE(hardware_version);
-> +
-> +static int board_id_show(struct seq_file *s, void *data)
-> +{
-> +	struct tn48m_data *priv = s->private;
-> +	unsigned int regval;
-> +	char *buf;
-> +
-> +	regmap_read(priv->regmap, BOARD_ID, &regval);
-> +
-> +	switch (regval) {
-> +	case BOARD_ID_TN48M:
-> +		buf = "TN48M";
-> +		break;
-> +	case BOARD_ID_TN48M_P:
-> +		buf = "TN48-P";
-> +		break;
-> +	default:
-> +		buf = "Unknown";
-> +		break;
-> +	}
-> +
-> +	seq_printf(s, "%s\n", buf);
-> +
-> +	return 0;
-> +}
-> +
-
-Please drop this '\n'.
-
-> +DEFINE_SHOW_ATTRIBUTE(board_id);
-> +
-> +static int code_version_show(struct seq_file *s, void *data)
-> +{
-> +	struct tn48m_data *priv = s->private;
-> +	unsigned int regval;
-> +
-> +	regmap_read(priv->regmap, CPLD_CODE_VERSION, &regval);
-> +
-> +	seq_printf(s, "%d\n", regval);
-> +
-> +	return 0;
-> +}
-> +
-
-Please drop this '\n'.
-
-> +DEFINE_SHOW_ATTRIBUTE(code_version);
-> +
-> +static void tn48m_init_debugfs(struct tn48m_data *data)
-> +{
-> +	data->debugfs_dir = debugfs_create_dir(data->client->name, NULL);
-> +
-> +	debugfs_create_file("hardware_version",
-> +			    0400,
-> +			    data->debugfs_dir,
-> +			    data,
-> +			    &hardware_version_fops);
-> +
-> +	debugfs_create_file("board_id",
-> +			    0400,
-> +			    data->debugfs_dir,
-> +			    data,
-> +			    &board_id_fops);
-> +
-> +	debugfs_create_file("code_version",
-> +			    0400,
-> +			    data->debugfs_dir,
-> +			    data,
-> +			    &code_version_fops);
-> +}
-
-Does S/W actually do anything useful with these files?
-
-Or are they just there for the sake of it?
-
-If the latter, just print them to the kernel log and have done.
-
-> +static int tn48m_probe(struct i2c_client *client)
-> +{
-> +	struct tn48m_data *data;
-
-'ddata' for both please.
-
-> +	int ret;
-> +
-> +	data = devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	data->client = client;
-> +	data->dev = &client->dev;
-> +	i2c_set_clientdata(client, data);
-> +
-> +	data->regmap = devm_regmap_init_i2c(client, &tn48m_regmap_config);
-> +	if (IS_ERR(data->regmap)) {
-> +		dev_err(data->dev, "Failed to allocate regmap\n");
-> +		return PTR_ERR(data->regmap);
-> +	}
-> +
-> +	ret = devm_mfd_add_devices(data->dev, PLATFORM_DEVID_AUTO, tn48m_cell,
-> +				   ARRAY_SIZE(tn48m_cell), NULL, 0, NULL);
-> +	if (ret)
-> +		dev_err(data->dev, "Failed to register sub-devices %d\n", ret);
-> +
-> +	tn48m_init_debugfs(data);
-> +
-> +	return ret;
-> +}
-> +
-> +static int tn48m_remove(struct i2c_client *client)
-> +{
-> +	struct tn48m_data *data = i2c_get_clientdata(client);
-> +
-> +	debugfs_remove_recursive(data->debugfs_dir);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id tn48m_of_match[] = {
-> +	{ .compatible = "delta,tn48m-cpld"},
-
-Missing ' ' before the '}'.
-
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, tn48m_of_match);
-> +
-> +static struct i2c_driver tn48m_driver = {
-> +	.driver = {
-> +		.name = "tn48m-cpld",
-> +		.of_match_table = tn48m_of_match,
-> +	},
-> +	.probe_new	= tn48m_probe,
-> +	.remove		= tn48m_remove,
-> +};
-> +module_i2c_driver(tn48m_driver);
-> +
-> +MODULE_AUTHOR("Robert Marko <robert.marko@sartura.hr>");
-> +MODULE_DESCRIPTION("Delta TN48M CPLD parent driver");
-> +MODULE_LICENSE("GPL");
-> diff --git a/include/linux/mfd/tn48m.h b/include/linux/mfd/tn48m.h
-> new file mode 100644
-> index 000000000000..551c550efa54
-> --- /dev/null
-> +++ b/include/linux/mfd/tn48m.h
-> @@ -0,0 +1,30 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright 2020 Sartura Ltd
-
-Out of date.
-
-> + */
-> +
-> +#ifndef __TN48M_H__
-> +#define __TN48M_H__
-
-Better prefix with MFD.
-
-> +#include <linux/device.h>
-> +#include <linux/regmap.h>
-> +
-> +#define HARDWARE_VERSION_ID	0x0
-> +#define HARDWARE_VERSION_MASK	GENMASK(3, 0)
-> +#define HARDWARE_VERSION_EVT1	0
-> +#define HARDWARE_VERSION_EVT2	1
-> +#define HARDWARE_VERSION_DVT	2
-> +#define HARDWARE_VERSION_PVT	3
-> +#define BOARD_ID		0x1
-> +#define BOARD_ID_TN48M		0xa
-> +#define BOARD_ID_TN48M_P	0xb
-> +#define CPLD_CODE_VERSION	0x2
-> +
-> +struct tn48m_data {
-> +	struct device *dev;
-> +	struct regmap *regmap;
-> +	struct i2c_client *client;
-
-You don't need both 'dev' and 'client'.
-
-> +	struct dentry *debugfs_dir;
-> +};
-> +
-> +#endif
 
 -- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Robert Marko
+Staff Embedded Linux Engineer
+Sartura Ltd.
+Lendavska ulica 16a
+10000 Zagreb, Croatia
+Email: robert.marko@sartura.hr
+Web: www.sartura.hr
