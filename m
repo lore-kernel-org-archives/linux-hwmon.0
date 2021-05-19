@@ -4,68 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6F3EC43460
-	for <linux-hwmon@archiver.kernel.org>; Wed, 19 May 2021 12:01:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6938C43470
+	for <linux-hwmon@archiver.kernel.org>; Wed, 19 May 2021 12:38:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8A22B6139A
-	for <linux-hwmon@archiver.kernel.org>; Wed, 19 May 2021 12:01:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 84063613C0
+	for <linux-hwmon@archiver.kernel.org>; Wed, 19 May 2021 12:38:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353133AbhESMDR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 19 May 2021 08:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35872 "EHLO
+        id S240872AbhESMkF (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 19 May 2021 08:40:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353131AbhESMDQ (ORCPT
+        with ESMTP id S1353410AbhESMkE (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 19 May 2021 08:03:16 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7EFC0613CE
-        for <linux-hwmon@vger.kernel.org>; Wed, 19 May 2021 05:01:55 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id k16so12702643ios.10
-        for <linux-hwmon@vger.kernel.org>; Wed, 19 May 2021 05:01:55 -0700 (PDT)
+        Wed, 19 May 2021 08:40:04 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5248EC06175F
+        for <linux-hwmon@vger.kernel.org>; Wed, 19 May 2021 05:38:44 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id n40so12843037ioz.4
+        for <linux-hwmon@vger.kernel.org>; Wed, 19 May 2021 05:38:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=sartura-hr.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=QbcVwQW1z15G6VjS0UeeaaJEOmNbFGmcyc8swkb4/8g=;
-        b=OAv0T2Oc6tv18fE2NrzQGd43DJALHgYEWT6TjprKNCoz3x+XoHKwH9dBuwGPmcJCmH
-         t2iHw4gziydt7dTF2RTp+oEAhCYOVc4XIaQyb5iq1D0pNfkHFzxOXDvkNDqSroOgUT/m
-         QiQsNPKaDkr0tHXhC9/r1daj0JHiXv9/cLXG1ZN6Sn3q6AZU7H6Zi+TYzd7lCYN1zPj1
-         mb2rxjYDcAuDSzbTM7EOxv3HA1Qqph1/nv4VATtXj6AxRAisa6t7xkZBU7/bZhvKHI34
-         myyKCJKQb/1v4YDOdVbOfbXVh04bjeD5FA2dyl2+e/apqegxd2HS5O96JxqFC1OeW8dx
-         DyVw==
+        bh=kafBynMzDoz4nqFg3vduX4WhWwbA2JsB1SuSwUJbPFU=;
+        b=EyWCaJfeBSRLgGWYIeqJ4DWxWXWxReCQht22umInfDThiKzpPoflBxQ80urzHAdXwy
+         leb6/HStJ4HsRuOCNn5KkLbBv70GaNbZWE+7ncgiobUtHqWJdbpzkHyDXMytl90Gbuez
+         iJQ3otKm0L6WEnTVZwnt2isohP3YZaVNJnrN3AUcFdrrnGO0m1frIJXSQfUZ9f3GY+o1
+         ZUbGCwLTN9c19v0u2HQPBgzwypzJOFJaCT5Jm2LQnBTLlS30H7GrAKramRInjet9lUw+
+         Yz8ns4Z2XTpuCwuOFnABPt28b1FS3B1AbyTEPB32qbDCPcIOs+6AuWeG7mdSucp/wQ/Y
+         h1Nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=QbcVwQW1z15G6VjS0UeeaaJEOmNbFGmcyc8swkb4/8g=;
-        b=m2t03mE/u9BqC484UiSRGetCzu0nKJQBa97AKMZo5C6aMo/2+QJGpxaQ5qZjr7YICm
-         6njEgPra78CaoLj8sjfFrM63BpzoBdOnLFs3ny5HfDFHBvtYfjMvcav4m2NqTyS/0Z55
-         b75q1exX2Anu7y1TVJwSSy8zmm0ZzdYbCujG3g3fJipoMl+wg53RUa67l4LIqdzvAN0q
-         JtdlbagYfQ0DEeEMvKzwsiyS3jgcgvIED8iY1xUwW86EDdHn2wPGXpNwWGzIMFoDLa6g
-         F43rotU4lp4Lc0Oax9pQJULJF5aGDQbulZ8v8Fg3FRBgZK6tIyFca6xexbDtQdRQejAU
-         HtDQ==
-X-Gm-Message-State: AOAM531XVk91TymefOsqwWbOao09R+QVZNv7158keR6itYOVioNNEeaH
-        XMsusQp1+eqYLR655q2nBDcqSfYBehl1B1unmssW+Q==
-X-Google-Smtp-Source: ABdhPJy+Dpc5p77lHiZnSay9+BoIG7EvK09vpmvABwcqk+PQ8B5i6qIjM+AqMZPD3g27HqNhlpXdB/mMz9Gdnrest8c=
-X-Received: by 2002:a02:4844:: with SMTP id p65mr12234056jaa.102.1621425715190;
- Wed, 19 May 2021 05:01:55 -0700 (PDT)
+        bh=kafBynMzDoz4nqFg3vduX4WhWwbA2JsB1SuSwUJbPFU=;
+        b=f+HVdmt3ILFOwv9M393pmPgoZf67ZPY4GvHLzOq+VDUUZHWbIRIpkc4hKLeib6Wn3d
+         uVw33h1lUf2hUCiZuG7xpwoFdhtvDZAJvv4MCTWHzoUmZShvdV6uTeuV9G/RfOKtuGBz
+         zQGPXFdfr7YOadN5dBFJqyS3iP/zy1jULufR84ckWx+zKYvKkMxwwtApkjEfgwmb4VdY
+         AeZLPeOjvqRg5d+9xTZShEfyA7d3/okqD+/XUe3eBrgZJ3eKS7iTvZPXhWP4qSRwcWO1
+         weMsDR2xt0racVMbbAMnW89PlJQHw1qx+DERQmbgdMnw2/jRo8AGQ2cGqesBekubaCDQ
+         A4mg==
+X-Gm-Message-State: AOAM5325BPt3/sDlhr/6XuXNc1lZuE1PSa8/GVU9L1cmQqkeK9SO+8v4
+        4ua5lWUxq2n8MqPMy1Tvg3e6hxpKgm6NxqE1b4Ho+w==
+X-Google-Smtp-Source: ABdhPJx+RyNkpN7dXUHF89QU1psD02tQMe7Bf3mCVriAigvbvulN2gsvq1Xkghvoq1t8e6Lzo6ACvQ+nC9Z9FL/hSic=
+X-Received: by 2002:a6b:d918:: with SMTP id r24mr9529633ioc.25.1621427923666;
+ Wed, 19 May 2021 05:38:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210430123511.116057-1-robert.marko@sartura.hr>
- <20210430123511.116057-4-robert.marko@sartura.hr> <f5bc39d4-742d-4403-7b5d-172a2410a631@roeck-us.net>
-In-Reply-To: <f5bc39d4-742d-4403-7b5d-172a2410a631@roeck-us.net>
+References: <20210430132735.127342-1-robert.marko@sartura.hr> <20210430134810.GA2714262@roeck-us.net>
+In-Reply-To: <20210430134810.GA2714262@roeck-us.net>
 From:   Robert Marko <robert.marko@sartura.hr>
-Date:   Wed, 19 May 2021 14:01:44 +0200
-Message-ID: <CA+HBbNE2E8jEnLhGE-Z3qqYFS99TnCMdS7m8rfum1MbPX+-=bw@mail.gmail.com>
-Subject: Re: [PATCH 4/6] hwmon: Add Delta TN48M CPLD HWMON driver
+Date:   Wed, 19 May 2021 14:38:32 +0200
+Message-ID: <CA+HBbNH+gQOmu_Ho0ivFuGHdu0zBtOrr1474z+7FA1zmNb4bug@mail.gmail.com>
+Subject: Re: [PATCH 1/3] hwmon: (pmbus) Add driver for Delta DPS-920AB PSU
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Lee Jones <lee.jones@linaro.org>, robh+dt@kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        bgolaszewski@baylibre.com, jdelvare@suse.com,
+Cc:     jdelvare@suse.com, corbet@lwn.net, linux-hwmon@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
         Luka Perkov <luka.perkov@sartura.hr>, jmp@epiphyte.org,
         Paul Menzel <pmenzel@molgen.mpg.de>,
         Donald Buczek <buczek@molgen.mpg.de>
@@ -74,259 +70,248 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Apr 30, 2021 at 3:12 PM Guenter Roeck <linux@roeck-us.net> wrote:
+On Fri, Apr 30, 2021 at 3:48 PM Guenter Roeck <linux@roeck-us.net> wrote:
 >
-> On 4/30/21 5:35 AM, Robert Marko wrote:
-> > Delta TN48M has a CPLD that also monitors the power supply
-> > statuses.
+> On Fri, Apr 30, 2021 at 03:27:33PM +0200, Robert Marko wrote:
+> > This adds support for the Delta DPS-920AB PSU.
 > >
-> > These are useful to be presented to the users, so lets
-> > add a driver for HWMON part of the CPLD.
+> > Only missing feature is fan control which the PSU supports.
 > >
 > > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
 > > ---
-> >  drivers/hwmon/Kconfig       |  10 +++
-> >  drivers/hwmon/Makefile      |   1 +
-> >  drivers/hwmon/tn48m-hwmon.c | 148 ++++++++++++++++++++++++++++++++++++
-> >  drivers/mfd/tn48m-cpld.c    |   3 +
-> >  include/linux/mfd/tn48m.h   |   1 +
-> >  5 files changed, 163 insertions(+)
-> >  create mode 100644 drivers/hwmon/tn48m-hwmon.c
+> >  Documentation/hwmon/dps920ab.rst | 80 ++++++++++++++++++++++++++++++++
+> >  Documentation/hwmon/index.rst    |  1 +
+> >  drivers/hwmon/pmbus/Kconfig      |  9 ++++
+> >  drivers/hwmon/pmbus/Makefile     |  1 +
+> >  drivers/hwmon/pmbus/dps920ab.c   | 63 +++++++++++++++++++++++++
+> >  5 files changed, 154 insertions(+)
+> >  create mode 100644 Documentation/hwmon/dps920ab.rst
+> >  create mode 100644 drivers/hwmon/pmbus/dps920ab.c
 > >
-> > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> > index 54f04e61fb83..89271dfeb775 100644
-> > --- a/drivers/hwmon/Kconfig
-> > +++ b/drivers/hwmon/Kconfig
-> > @@ -1924,6 +1924,16 @@ config SENSORS_TMP513
-> >         This driver can also be built as a module. If so, the module
-> >         will be called tmp513.
-> >
-> > +config SENSORS_TN48M
-> > +     tristate "Delta Networks TN48M switch CPLD HWMON driver"
-> > +     depends on MFD_TN48M_CPLD
-> > +     help
-> > +       If you say yes here you get support for Delta Networks TN48M
-> > +       CPLD.
-> > +
-> > +       This driver can also be built as a module. If so, the module
-> > +       will be called tn48m-hwmon.
-> > +
-> >  config SENSORS_VEXPRESS
-> >       tristate "Versatile Express"
-> >       depends on VEXPRESS_CONFIG
-> > diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> > index fe38e8a5c979..22e470057ffe 100644
-> > --- a/drivers/hwmon/Makefile
-> > +++ b/drivers/hwmon/Makefile
-> > @@ -187,6 +187,7 @@ obj-$(CONFIG_SENSORS_TMP108)      += tmp108.o
-> >  obj-$(CONFIG_SENSORS_TMP401) += tmp401.o
-> >  obj-$(CONFIG_SENSORS_TMP421) += tmp421.o
-> >  obj-$(CONFIG_SENSORS_TMP513) += tmp513.o
-> > +obj-$(CONFIG_SENSORS_TN48M)  += tn48m-hwmon.o
-> >  obj-$(CONFIG_SENSORS_VEXPRESS)       += vexpress-hwmon.o
-> >  obj-$(CONFIG_SENSORS_VIA_CPUTEMP)+= via-cputemp.o
-> >  obj-$(CONFIG_SENSORS_VIA686A)        += via686a.o
-> > diff --git a/drivers/hwmon/tn48m-hwmon.c b/drivers/hwmon/tn48m-hwmon.c
+> > diff --git a/Documentation/hwmon/dps920ab.rst b/Documentation/hwmon/dps920ab.rst
 > > new file mode 100644
-> > index 000000000000..80fd18d74f1d
+> > index 000000000000..df0aef530c7e
 > > --- /dev/null
-> > +++ b/drivers/hwmon/tn48m-hwmon.c
-> > @@ -0,0 +1,148 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +++ b/Documentation/hwmon/dps920ab.rst
+> > @@ -0,0 +1,80 @@
+> > +.. SPDX-License-Identifier: GPL-2.0-or-later
+> > +
+> > +Kernel driver dps920ab
+> > +========================
+> > +
+> > +Supported chips:
+> > +
+> > +  * Delta DPS920AB
+> > +
+> > +    Prefix: 'dps920ab'
+> > +
+> > +    Addresses scanned: -
+> > +
+> > +Authors:
+> > +    Robert Marko <robert.marko@sartura.hr>
+> > +
+> > +
+> > +Description
+> > +-----------
+> > +
+> > +This driver implements support for Delta DPS920AB 920W 54V DC single output
+> > +power supply with PMBus support.
+> > +
+> > +The driver is a client driver to the core PMBus driver.
+> > +Please see Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
+> > +
+> > +
+> > +Usage Notes
+> > +-----------
+> > +
+> > +This driver does not auto-detect devices. You will have to instantiate the
+> > +devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
+> > +details.
+> > +
+> > +
+> > +Sysfs entries
+> > +-------------
+> > +
+> > +======================= ======================================================
+> > +curr1_label          "iin"
+> > +curr1_input          Measured input current
+> > +curr1_crit           Critical maximum current
+> > +curr1_crit_alarm     Current critical high alarm
+> > +
+> > +curr2_label          "iout1"
+> > +curr2_input          Measured output current
+> > +curr2_crit           Critical maximum current
+> > +curr2_crit_alarm     Current critical high alarm
+> > +
+> > +in1_label            "vin"
+> > +in1_input            Measured input voltage
+> > +in1_lcrit            Critical minimum input voltage
+> > +in1_lcrit_alarm              Input voltage critical low alarm
+> > +in1_crit             Critical maximum input voltage
+> > +in1_crit_alarm               Input voltage critical high alarm
+> > +
+> > +in2_label            "vout1"
+> > +in2_input            Measured output voltage
+> > +in2_lcrit            Critical minimum output voltage
+> > +in2_lcrit_alarm              Output voltage critical low alarm
+> > +in2_crit             Critical maximum output voltage
+> > +in2_crit_alarm               Output voltage critical high alarm
+> > +
+> > +power1_label         "pin"
+> > +power1_input         Measured input power
+> > +power1_alarm         Input power high alarm
+> > +
+> > +power2_label         "pout1"
+> > +power2_input         Measured output power
+> > +
+> > +temp[1-2]_input              Measured temperature
+> > +temp[1-2]_crit               Critical high temperature
+> > +temp[1-2]_crit_alarm Chip temperature critical high alarm
+> > +temp[1-2]_max                Maximum temperature
+> > +temp[1-2]_max_alarm  Chip temperature high alarm
+> > +
+> > +fan1_alarm           Fan 1 warning.
+> > +fan1_fault           Fan 1 fault.
+> > +fan1_input           Fan 1 speed in RPM.
+> > +======================= ======================================================
+> > diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+> > index 8d5a2df1ecb6..b24436f22052 100644
+> > --- a/Documentation/hwmon/index.rst
+> > +++ b/Documentation/hwmon/index.rst
+> > @@ -54,6 +54,7 @@ Hardware Monitoring Kernel Drivers
+> >     dell-smm-hwmon
+> >     dme1737
+> >     drivetemp
+> > +   dps920ab
+> >     ds1621
+> >     ds620
+> >     emc1403
+> > diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> > index 32d2fc850621..865ade0aa205 100644
+> > --- a/drivers/hwmon/pmbus/Kconfig
+> > +++ b/drivers/hwmon/pmbus/Kconfig
+> > @@ -66,6 +66,15 @@ config SENSORS_IBM_CFFPS
+> >         This driver can also be built as a module. If so, the module will
+> >         be called ibm-cffps.
+> >
+> > +config SENSORS_DPS920AB
+> > +     tristate "Delta DPS920AB Power Supply"
+> > +     help
+> > +       If you say yes here you get hardware monitoring support for Delta
+> > +       DPS920AB Power Supplies.
+> > +
+> > +       This driver can also be built as a module. If so, the module will
+> > +       be called dps920ab.
+> > +
+> >  config SENSORS_INSPUR_IPSPS
+> >       tristate "INSPUR Power System Power Supply"
+> >       help
+> > diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> > index 6a4ba0fdc1db..f59ba0123d68 100644
+> > --- a/drivers/hwmon/pmbus/Makefile
+> > +++ b/drivers/hwmon/pmbus/Makefile
+> > @@ -9,6 +9,7 @@ obj-$(CONFIG_SENSORS_ADM1266) += adm1266.o
+> >  obj-$(CONFIG_SENSORS_ADM1275)        += adm1275.o
+> >  obj-$(CONFIG_SENSORS_BEL_PFE)        += bel-pfe.o
+> >  obj-$(CONFIG_SENSORS_IBM_CFFPS)      += ibm-cffps.o
+> > +obj-$(CONFIG_SENSORS_DPS920AB)       += dps920ab.o
+> >  obj-$(CONFIG_SENSORS_INSPUR_IPSPS) += inspur-ipsps.o
+> >  obj-$(CONFIG_SENSORS_IR35221)        += ir35221.o
+> >  obj-$(CONFIG_SENSORS_IR38064)        += ir38064.o
+> > diff --git a/drivers/hwmon/pmbus/dps920ab.c b/drivers/hwmon/pmbus/dps920ab.c
+> > new file mode 100644
+> > index 000000000000..d579ed9f879c
+> > --- /dev/null
+> > +++ b/drivers/hwmon/pmbus/dps920ab.c
+> > @@ -0,0 +1,63 @@
+> > +// SPDX-License-Identifier: GPL-2.0-or-later
 > > +/*
-> > + * Delta TN48M CPLD HWMON driver
+> > + * Driver for Delta DPS920AB PSU
 > > + *
-> > + * Copyright 2020 Sartura Ltd
-> > + *
-> > + * Author: Robert Marko <robert.marko@sartura.hr>
+> > + * Copyright (C) 2021 Delta Networks, Inc.
+> > + * Copyright (C) 2021 Sartura Ltd.
 > > + */
 > > +
-> > +#include <linux/bitfield.h>
-> > +#include <linux/hwmon-sysfs.h>
-> > +#include <linux/hwmon.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/mod_devicetable.h>
+> > +#include <linux/i2c.h>
 > > +#include <linux/module.h>
-> > +#include <linux/platform_device.h>
+> > +#include <linux/of_device.h>
+> > +#include "pmbus.h"
 > > +
-> > +#include <linux/mfd/tn48m.h>
+> > +static struct pmbus_driver_info dps920ab_info = {
+> > +     .pages = 1,
 > > +
-> > +#define PSU1_PRESENT_MASK    BIT(0)
-> > +#define PSU2_PRESENT_MASK    BIT(1)
-> > +#define PSU1_POWERGOOD_MASK  BIT(2)
-> > +#define PSU2_POWERGOOD_MASK  BIT(3)
-> > +#define PSU1_ALERT_MASK              BIT(4)
-> > +#define PSU2_ALERT_MASK              BIT(5)
+> > +     .format[PSC_VOLTAGE_IN] = linear,
+> > +     .format[PSC_VOLTAGE_OUT] = linear,
+> > +     .format[PSC_CURRENT_IN] = linear,
+> > +     .format[PSC_CURRENT_OUT] = linear,
+> > +     .format[PSC_POWER] = linear,
+> > +     .format[PSC_FAN] = linear,
+> > +     .format[PSC_TEMPERATURE] = linear,
 > > +
-> > +static int board_id_get(struct tn48m_data *data)
-> > +{
-> > +     unsigned int regval;
-> > +
-> > +     regmap_read(data->regmap, BOARD_ID, &regval);
-> > +
-> > +     switch (regval) {
-> > +     case BOARD_ID_TN48M:
-> > +             return BOARD_ID_TN48M;
-> > +     case BOARD_ID_TN48M_P:
-> > +             return BOARD_ID_TN48M_P;
-> > +     default:
-> > +             return -EINVAL;
-> > +     }
-> > +}
-> > +
-> > +static ssize_t psu_present_show(struct device *dev,
-> > +                             struct device_attribute *attr, char *buf)
-> > +{
-> > +     struct sensor_device_attribute_2 *attr2 = to_sensor_dev_attr_2(attr);
-> > +     struct tn48m_data *data = dev_get_drvdata(dev);
-> > +     unsigned int regval, status;
-> > +
-> > +     if (board_id_get(data) == BOARD_ID_TN48M_P) {
-> > +             regmap_read(data->regmap, attr2->nr, &regval);
-> > +
-> > +             if (attr2->index == 1)
-> > +                     status = !FIELD_GET(PSU1_PRESENT_MASK, regval);
-> > +             else
-> > +                     status = !FIELD_GET(PSU2_PRESENT_MASK, regval);
-> > +     } else
-> > +             status = 0;
-> > +
-> > +     return sprintf(buf, "%d\n", status);
-> > +}
-> > +
-> > +static ssize_t psu_pg_show(struct device *dev,
-> > +                        struct device_attribute *attr, char *buf)
-> > +{
-> > +     struct sensor_device_attribute_2 *attr2 = to_sensor_dev_attr_2(attr);
-> > +     struct tn48m_data *data = dev_get_drvdata(dev);
-> > +     unsigned int regval, status;
-> > +
-> > +     regmap_read(data->regmap, attr2->nr, &regval);
-> > +
-> > +     if (attr2->index == 1)
-> > +             status = FIELD_GET(PSU1_POWERGOOD_MASK, regval);
-> > +     else
-> > +             status = FIELD_GET(PSU2_POWERGOOD_MASK, regval);
-> > +
-> > +     return sprintf(buf, "%d\n", status);
-> > +}
-> > +
-> > +static ssize_t psu_alert_show(struct device *dev,
-> > +                           struct device_attribute *attr, char *buf)
-> > +{
-> > +     struct sensor_device_attribute_2 *attr2 = to_sensor_dev_attr_2(attr);
-> > +     struct tn48m_data *data = dev_get_drvdata(dev);
-> > +     unsigned int regval, status;
-> > +
-> > +     if (board_id_get(data) == BOARD_ID_TN48M_P) {
-> > +             regmap_read(data->regmap, attr2->nr, &regval);
-> > +
-> > +             if (attr2->index == 1)
-> > +                     status = !FIELD_GET(PSU1_ALERT_MASK, regval);
-> > +             else
-> > +                     status = !FIELD_GET(PSU2_ALERT_MASK, regval);
-> > +     } else
-> > +             status = 0;
-> > +
-> > +     return sprintf(buf, "%d\n", status);
-> > +}
-> > +
-> > +static SENSOR_DEVICE_ATTR_2_RO(psu1_present, psu_present, PSU_STATUS, 1);
-> > +static SENSOR_DEVICE_ATTR_2_RO(psu2_present, psu_present, PSU_STATUS, 2);
-> > +static SENSOR_DEVICE_ATTR_2_RO(psu1_pg, psu_pg, PSU_STATUS, 1);
-> > +static SENSOR_DEVICE_ATTR_2_RO(psu2_pg, psu_pg, PSU_STATUS, 2);
-> > +static SENSOR_DEVICE_ATTR_2_RO(psu1_alert, psu_alert, PSU_STATUS, 1);
-> > +static SENSOR_DEVICE_ATTR_2_RO(psu2_alert, psu_alert, PSU_STATUS, 2);
-> > +
-> > +static struct attribute *tn48m_hwmon_attrs[] = {
-> > +     &sensor_dev_attr_psu1_present.dev_attr.attr,
-> > +     &sensor_dev_attr_psu2_present.dev_attr.attr,
-> > +     &sensor_dev_attr_psu1_pg.dev_attr.attr,
-> > +     &sensor_dev_attr_psu2_pg.dev_attr.attr,
-> > +     &sensor_dev_attr_psu1_alert.dev_attr.attr,
-> > +     &sensor_dev_attr_psu2_alert.dev_attr.attr,
->
-> Literally none of those attributes are standard hwmon attributes.
-> I don't know what this is, but it is not a hardware monitoring driver.
-
-Yes, I agree that it does not expose any of the standard attributes, but these
-are the only ones the CPLD exposes.
-
-I don't know where else to put them, MFD driver did not seem logical to me.
->
-> > +     NULL
+> > +     .func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN  |
+> > +     PMBUS_HAVE_VOUT  | PMBUS_HAVE_STATUS_VOUT   |
+> > +     PMBUS_HAVE_IOUT  | PMBUS_HAVE_STATUS_IOUT   |
+> > +     PMBUS_HAVE_TEMP  | PMBUS_HAVE_TEMP2         |
+> > +     PMBUS_HAVE_PIN   | PMBUS_HAVE_POUT          |
+> > +     PMBUS_HAVE_FAN12 | PMBUS_HAVE_STATUS_FAN12  |
+> > +     PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_STATUS_TEMP,
 > > +};
 > > +
-> > +ATTRIBUTE_GROUPS(tn48m_hwmon);
-> > +
-> > +static int tn48m_hwmon_probe(struct platform_device *pdev)
+> > +static int dps920ab_probe(struct i2c_client *client)
 > > +{
-> > +     struct tn48m_data *data = dev_get_drvdata(pdev->dev.parent);
-> > +     struct device *hwmon_dev;
-> > +
-> > +     hwmon_dev = devm_hwmon_device_register_with_groups(&pdev->dev,
-> > +                                                        "tn48m_hwmon",
-> > +                                                        data,
-> > +                                                        tn48m_hwmon_groups);
+> > +     if (!i2c_check_functionality(client->adapter,
+> > +                                  I2C_FUNC_SMBUS_BYTE_DATA |
+> > +                                  I2C_FUNC_SMBUS_WORD_DATA))
+> > +             return -ENODEV;
 >
-> Please use devm_hwmon_device_register_with_info() to register hwmon devices.
-> Of course, that only makes sense for actual hardware monitoring drivers
-> which do support standard attributes.
+> This check is done in pmbus_do_probe(), and repeating it here does not add
+> any value.
 
-Yes, devm_hwmon_device_register_with_info() made no sense without any of the
-standard attributes.
+Ok, makes sense.
+>
+> That makes me wonder: Is this driver needed in the first place, or could
+> it be added to drivers/hwmon/pmbus/pmbus.c ?
 
+It could be added as a generic driver, but that creates properties in
+the sysfs that this thing
+does not support like 3 voltage readings, 3 fans, and so on.
+
+Is it okay to keep it as a separate driver then?
+
+Regards,
 Robert
 >
-> > +     return PTR_ERR_OR_ZERO(hwmon_dev);
+> Thanks,
+> Guenter
+>
+> > +
+> > +     return pmbus_do_probe(client, &dps920ab_info);
 > > +}
 > > +
-> > +static const struct platform_device_id tn48m_hwmon_id_table[] = {
-> > +     { "delta,tn48m-hwmon", },
-> > +     { }
+> > +static const struct of_device_id __maybe_unused dps920ab_of_match[] = {
+> > +     { .compatible = "delta,dps920ab", },
+> > +     {}
 > > +};
-> > +MODULE_DEVICE_TABLE(platform, tn48m_hwmon_id_table);
 > > +
-> > +static struct platform_driver tn48m_hwmon_driver = {
+> > +MODULE_DEVICE_TABLE(of, dps920ab_of_match);
+> > +
+> > +static struct i2c_driver dps920ab_driver = {
 > > +     .driver = {
-> > +             .name = "tn48m-hwmon",
+> > +                .name = "dps920ab",
+> > +                .of_match_table = of_match_ptr(dps920ab_of_match),
 > > +     },
-> > +     .probe = tn48m_hwmon_probe,
-> > +     .id_table = tn48m_hwmon_id_table,
+> > +     .probe_new = dps920ab_probe,
 > > +};
-> > +module_platform_driver(tn48m_hwmon_driver);
+> > +
+> > +module_i2c_driver(dps920ab_driver);
 > > +
 > > +MODULE_AUTHOR("Robert Marko <robert.marko@sartura.hr>");
-> > +MODULE_DESCRIPTION("Delta TN48M CPLD HWMON driver");
+> > +MODULE_DESCRIPTION("PMBus driver for Delta DPS920AB PSU");
 > > +MODULE_LICENSE("GPL");
-> > diff --git a/drivers/mfd/tn48m-cpld.c b/drivers/mfd/tn48m-cpld.c
-> > index f22a15ddd22d..4d837aca01e7 100644
-> > --- a/drivers/mfd/tn48m-cpld.c
-> > +++ b/drivers/mfd/tn48m-cpld.c
-> > @@ -20,6 +20,9 @@
-> >  static const struct mfd_cell tn48m_cell[] = {
-> >       {
-> >               .name = "delta,tn48m-gpio",
-> > +     },
-> > +     {
-> > +             .name = "delta,tn48m-hwmon",
-> >       }
-> >  };
+> > --
+> > 2.31.1
 > >
-> > diff --git a/include/linux/mfd/tn48m.h b/include/linux/mfd/tn48m.h
-> > index 9cc2b04c8d69..eb2cfc3a5db7 100644
-> > --- a/include/linux/mfd/tn48m.h
-> > +++ b/include/linux/mfd/tn48m.h
-> > @@ -22,6 +22,7 @@
-> >  #define SFP_TX_DISABLE               0x31
-> >  #define SFP_PRESENT          0x3a
-> >  #define SFP_LOS                      0x40
-> > +#define PSU_STATUS           0xa
-> >
-> >  struct tn48m_data {
-> >       struct device *dev;
-> >
->
+
 
 
 -- 
