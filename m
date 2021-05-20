@@ -2,337 +2,116 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03289C433ED
-	for <linux-hwmon@archiver.kernel.org>; Thu, 20 May 2021 05:12:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF837C433ED
+	for <linux-hwmon@archiver.kernel.org>; Thu, 20 May 2021 06:49:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D7DC0611BD
-	for <linux-hwmon@archiver.kernel.org>; Thu, 20 May 2021 05:12:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B162C61184
+	for <linux-hwmon@archiver.kernel.org>; Thu, 20 May 2021 06:49:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbhETFN3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 20 May 2021 01:13:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42946 "EHLO
+        id S230339AbhETGuy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 20 May 2021 02:50:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbhETFN2 (ORCPT
+        with ESMTP id S229547AbhETGuy (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 20 May 2021 01:13:28 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C323AC061574;
-        Wed, 19 May 2021 22:12:06 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id c20so15060245qkm.3;
-        Wed, 19 May 2021 22:12:06 -0700 (PDT)
+        Thu, 20 May 2021 02:50:54 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 946E0C061574
+        for <linux-hwmon@vger.kernel.org>; Wed, 19 May 2021 23:49:33 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id y14so14303038wrm.13
+        for <linux-hwmon@vger.kernel.org>; Wed, 19 May 2021 23:49:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=iGt6GNjsfcEFc3c4nOlUAk3fFQaMQQwdP1dl8p3iAGA=;
-        b=XsbtYwLM8yDhrIKnU1IPeW+OBWK+iRII6f3dhXjBfqmI/dkveyf/Lh6LrsoNFbqXJE
-         iPl+z2Utn/HJQ9tSnambS4e4WLzwuk+nhT5GNp0KcEFYX/UczmDtmeBX0zKu3XmDuMaT
-         RqE24wTrcjJ/uO9UjdeD+t06Nl9qAqZ4KJ0kXilDdjSGL2y4Ez9CfhxivE8hp3B5lxV0
-         oj04bJF7d/EfJd3vIWpp6fTCY/EizQdHR8uFUL6hWqqOt/3S/Q3Rca8xuDHkkXZjGwvn
-         IYU20X9+cLIW49Wn/XZj1jsVdhHeS4OUd6sX4yxZIuDIVrMGqRZ4VI6reY4Y0kfPKAtQ
-         mItw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=E1ZuZRCTlz6/Ws9j0pRH14oGlY9lvvE2LqjzptzYfhQ=;
+        b=axSDBqF3Sq8wkc0WbH3CZY6xm95L5mDZQFgCfOftPV9fglwEx33FuoeYTqysdF5CgO
+         gvOAGVJZQq0bB6/K5ulo+fN8Xt1eZcfui9dS+YxqacaFmgLBTh8mXE30GkWIW8mG4gop
+         b0nJpOKu1eMSEZ+P+wGt5ZABOMNItvm0iPiYRFJv+CJh5SovDDgyJ0JY0nRv5zqoWaqy
+         itEp92jB45oI7wAH/FQlDEMKw9mTUrE2qbi7R+h0oBTAjQISeI9YlMa4waCbqKrl2PPq
+         C/dmLBHaaav0k/lPwIQGhyye7uVNYzDQItA2FuQSU7y1eFiI9/+9GnlGjOgxZzuX/enh
+         EoGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=iGt6GNjsfcEFc3c4nOlUAk3fFQaMQQwdP1dl8p3iAGA=;
-        b=jRoU+mZQnvG6EHBN672RVFQXmROhFj1zeO5hW5SZLf496IUNEApPBB3klzHHJ4HE9F
-         pVrqH60uID7YP6j+MMsqzn7HU3erRXu5u8EBp9ypno9PxX/a7Pn20+LEULbu2TWpWNqR
-         y3bqhr+d8nuo+pfU3jDF6A8CvxOGN7nVuSedUF+uif9jfdhtolmChIEM4UURL7nDDkHm
-         ZMMGJNBHoZRSnxeReRoTLu1kSX9zvQkPgCsb9zJyXkqYo4fizO6j+aBziau85mCckpvp
-         uFIfj6xjgiC1ZEaya5uKQxbSl62QbdM/v937J2Z2Cn4XCMZlhJUBRvdU29Mgy4niiQR5
-         wwew==
-X-Gm-Message-State: AOAM533/PY810cMkdE7UcWRCMpWjUKfRYswEvSt7k4KEC42z+oO8lI5i
-        obt+rMeBu+DHQ1iagm4JXaoVvemVCso=
-X-Google-Smtp-Source: ABdhPJwLeGsPMKAx/rwckCUPjNK7U9lKL0vV5aAiUFFz5sL8F2Il7TrcEncxfg+Z9fG/nkuFDjFh7g==
-X-Received: by 2002:a05:620a:24cf:: with SMTP id m15mr3002581qkn.435.1621487525665;
-        Wed, 19 May 2021 22:12:05 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p19sm1328845qki.119.2021.05.19.22.12.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 May 2021 22:12:05 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v5 1/5] hwmon: (max31790) Rework to use regmap
-To:     =?UTF-8?B?VsOhY2xhdiBLdWJlcm7DoXQ=?= <kubernat@cesnet.cz>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210512013052.903297-1-kubernat@cesnet.cz>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <f8ed6593-f120-959c-cc5c-481df11e38b6@roeck-us.net>
-Date:   Wed, 19 May 2021 22:12:03 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=E1ZuZRCTlz6/Ws9j0pRH14oGlY9lvvE2LqjzptzYfhQ=;
+        b=Gj56Sg6kMEOVfZrhwbVeXt30lbjDjDS59Sg3uPAO00H1E2sFXn/aXqjBCHQUfOmAsb
+         gb3qfVUu7FD6GE4FCP/J4oxSIbQICk2NuMACN6A0o3D98iQeXDiUwr/2NSh7rUQOzh7T
+         +gnksAJyJV4vjAsxgWUNQqrYQOhC+AhNC61kaH75C2haLMFrlvTcQ7tY+PnFaL8B0xpc
+         NVG1TO1lH+SLBUZuwgaAwL00us3NGtoSLPTqWkgCIhz6L7sUggpzaddNltBAqDpBPosR
+         8zVxasxhQpnJoznGRFdKfbmefiiX8Jgtfa/pICcjswBAv/9U7+zI6uPY616qV5ZQPhQV
+         fhQw==
+X-Gm-Message-State: AOAM533KNi8rmqv0j+Tf1Tn+5uHixaBwE0t3XNLg0aNO6+gxu/QTPTCb
+        yg1EwG9I9Ec8D/0pNXjSeJiGZQ==
+X-Google-Smtp-Source: ABdhPJwd6qF+Ay8hmUhZ+42UEFFkMLo1dBf7iN0NlNPKX5LqdOy5Y71JWAqSVW/tw0t9av+hXvaRNw==
+X-Received: by 2002:a5d:4b08:: with SMTP id v8mr2606935wrq.122.1621493372212;
+        Wed, 19 May 2021 23:49:32 -0700 (PDT)
+Received: from dell ([91.110.221.215])
+        by smtp.gmail.com with ESMTPSA id p2sm1930764wrj.10.2021.05.19.23.49.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 May 2021 23:49:31 -0700 (PDT)
+Date:   Thu, 20 May 2021 07:49:29 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Robert Marko <robert.marko@sartura.hr>, robh+dt@kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        bgolaszewski@baylibre.com, jdelvare@suse.com,
+        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, Luka Perkov <luka.perkov@sartura.hr>,
+        jmp@epiphyte.org, Paul Menzel <pmenzel@molgen.mpg.de>,
+        Donald Buczek <buczek@molgen.mpg.de>
+Subject: Re: [PATCH 1/6] mfd: Add Delta TN48M CPLD driver
+Message-ID: <20210520064929.GM2549456@dell>
+References: <20210430123511.116057-1-robert.marko@sartura.hr>
+ <af4923ef1ed0693fcd67d7986348b164@walle.cc>
+ <CA+HBbNHCnpg9qCzZbT9KVNqX-daC68iaJKNdyEf7do3w98miWw@mail.gmail.com>
+ <0f28cabf858154842819935000f32bc2@walle.cc>
 MIME-Version: 1.0
-In-Reply-To: <20210512013052.903297-1-kubernat@cesnet.cz>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <0f28cabf858154842819935000f32bc2@walle.cc>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/11/21 6:30 PM, Václav Kubernát wrote:
-> Converting the driver to use regmap makes it more generic. It also makes
-> it a lot easier to debug through debugfs.
+On Wed, 19 May 2021, Michael Walle wrote:
+
+> Hi,
 > 
-> Signed-off-by: Václav Kubernát <kubernat@cesnet.cz>
-> ---
->   drivers/hwmon/Kconfig    |   1 +
->   drivers/hwmon/max31790.c | 254 ++++++++++++++++++++-------------------
->   2 files changed, 133 insertions(+), 122 deletions(-)
+> Am 2021-05-19 13:53, schrieb Robert Marko:
+> > On Thu, May 6, 2021 at 6:34 PM Michael Walle <michael@walle.cc> wrote:
+> > > Am 2021-04-30 14:35, schrieb Robert Marko:
+> > > > Delta TN48M switches have a Lattice CPLD that serves
+> > > > multiple purposes including being a GPIO expander.
+> > > > So lets add the MFD core driver for it.
+> > > 
+> > > Did you have a look at mfd/simple-mfd-i2c.c?
+> > 
+> > Yes, that was my first idea but we have a requirement to expose CPLD
+> > information via debugfs as there are userspace applications using it.
+> > And simple-mfd-i2c does not allow us to do so.
 > 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 54f04e61fb83..c2ec57672c4e 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1092,6 +1092,7 @@ config SENSORS_MAX6697
->   config SENSORS_MAX31790
->   	tristate "Maxim MAX31790 sensor chip"
->   	depends on I2C
-> +	select REGMAP_I2C
->   	help
->   	  If you say yes here you get support for 6-Channel PWM-Output
->   	  Fan RPM Controller.
-> diff --git a/drivers/hwmon/max31790.c b/drivers/hwmon/max31790.c
-> index 2c6b333a28e9..e3765ce4444a 100644
-> --- a/drivers/hwmon/max31790.c
-> +++ b/drivers/hwmon/max31790.c
-> @@ -12,6 +12,7 @@
->   #include <linux/init.h>
->   #include <linux/jiffies.h>
->   #include <linux/module.h>
-> +#include <linux/regmap.h>
->   #include <linux/slab.h>
->   
->   /* MAX31790 registers */
-> @@ -46,92 +47,53 @@
->   
->   #define NR_CHANNEL			6
->   
-> +#define MAX31790_REG_USER_BYTE_67	0x67
-> +
-> +#define BULK_TO_U16(msb, lsb)		(((msb) << 8) + (lsb))
-> +#define U16_MSB(num)			(((num) & 0xFF00) >> 8)
-> +#define U16_LSB(num)			((num) & 0x00FF)
-> +
-> +static const struct regmap_range max31790_ro_range = {
-> +	.range_min = MAX31790_REG_TACH_COUNT(0),
-> +	.range_max = MAX31790_REG_PWMOUT(0) - 1,
-> +};
-> +
-> +static const struct regmap_access_table max31790_wr_table = {
-> +	.no_ranges = &max31790_ro_range,
-> +	.n_no_ranges = 1,
-> +};
-> +
-> +static const struct regmap_range max31790_volatile_ranges[] = {
-> +	regmap_reg_range(MAX31790_REG_TACH_COUNT(0), MAX31790_REG_TACH_COUNT(12)),
-> +	regmap_reg_range(MAX31790_REG_FAN_FAULT_STATUS2, MAX31790_REG_FAN_FAULT_STATUS1),
-> +};
-> +
-> +static const struct regmap_access_table max31790_volatile_table = {
-> +	.no_ranges = max31790_volatile_ranges,
-> +	.n_no_ranges = 2,
-> +	.n_yes_ranges = 0
-> +};
-> +
-> +static const struct regmap_config max31790_regmap_config = {
-> +	.reg_bits = 8,
-> +	.val_bits = 8,
-> +	.reg_stride = 1,
-> +	.max_register = MAX31790_REG_USER_BYTE_67,
-> +	.wr_table = &max31790_wr_table,
-> +	.volatile_table = &max31790_volatile_table
-> +};
-> +
->   /*
->    * Client data (each client gets its own)
->    */
->   struct max31790_data {
-> -	struct i2c_client *client;
-> +	struct regmap *regmap;
-> +
->   	struct mutex update_lock;
-> -	bool valid; /* zero until following fields are valid */
-> -	unsigned long last_updated; /* in jiffies */
-> -
-> -	/* register values */
->   	u8 fan_config[NR_CHANNEL];
->   	u8 fan_dynamics[NR_CHANNEL];
-> -	u16 fault_status;
-> -	u16 tach[NR_CHANNEL * 2];
-> -	u16 pwm[NR_CHANNEL];
-> -	u16 target_count[NR_CHANNEL];
->   };
->   
-> -static struct max31790_data *max31790_update_device(struct device *dev)
-> -{
-> -	struct max31790_data *data = dev_get_drvdata(dev);
-> -	struct i2c_client *client = data->client;
-> -	struct max31790_data *ret = data;
-> -	int i;
-> -	int rv;
-> -
-> -	mutex_lock(&data->update_lock);
-> -
-> -	if (time_after(jiffies, data->last_updated + HZ) || !data->valid) {
-> -		rv = i2c_smbus_read_byte_data(client,
-> -				MAX31790_REG_FAN_FAULT_STATUS1);
-> -		if (rv < 0)
-> -			goto abort;
-> -		data->fault_status = rv & 0x3F;
-> -
-> -		rv = i2c_smbus_read_byte_data(client,
-> -				MAX31790_REG_FAN_FAULT_STATUS2);
-> -		if (rv < 0)
-> -			goto abort;
-> -		data->fault_status |= (rv & 0x3F) << 6;
-> -
-> -		for (i = 0; i < NR_CHANNEL; i++) {
-> -			rv = i2c_smbus_read_word_swapped(client,
-> -					MAX31790_REG_TACH_COUNT(i));
-> -			if (rv < 0)
-> -				goto abort;
-> -			data->tach[i] = rv;
-> -
-> -			if (data->fan_config[i]
-> -			    & MAX31790_FAN_CFG_TACH_INPUT) {
-> -				rv = i2c_smbus_read_word_swapped(client,
-> -					MAX31790_REG_TACH_COUNT(NR_CHANNEL
-> -								+ i));
-> -				if (rv < 0)
-> -					goto abort;
-> -				data->tach[NR_CHANNEL + i] = rv;
-> -			} else {
-> -				rv = i2c_smbus_read_word_swapped(client,
-> -						MAX31790_REG_PWMOUT(i));
-> -				if (rv < 0)
-> -					goto abort;
-> -				data->pwm[i] = rv;
-> -
-> -				rv = i2c_smbus_read_word_swapped(client,
-> -						MAX31790_REG_TARGET_COUNT(i));
-> -				if (rv < 0)
-> -					goto abort;
-> -				data->target_count[i] = rv;
-> -			}
-> -		}
-> -
-> -		data->last_updated = jiffies;
-> -		data->valid = true;
-> -	}
-> -	goto done;
-> -
-> -abort:
-> -	data->valid = false;
-> -	ret = ERR_PTR(rv);
-> -
-> -done:
-> -	mutex_unlock(&data->update_lock);
-> -
-> -	return ret;
-> -}
-> -
->   static const u8 tach_period[8] = { 1, 2, 4, 8, 16, 32, 32, 32 };
->   
->   static u8 get_tach_period(u8 fan_dynamics)
-> @@ -159,28 +121,75 @@ static u8 bits_for_tach_period(int rpm)
->   	return bits;
->   }
->   
-> +static int read_reg_byte(struct regmap *regmap, u8 reg)
-> +{
-> +	int rv;
-> +	int val;
-> +
-> +	rv = regmap_read(regmap, reg, &val);
-> +	if (rv < 0)
-> +		return rv;
-> +
-> +	return val;
-> +}
-> +
-> +static int read_reg_word(struct regmap *regmap, u8 reg)
-> +{
-> +	int rv;
-> +	u8 val_bulk[2];
-> +
-> +	rv = regmap_bulk_read(regmap, reg, val_bulk, 2);
-> +	if (rv < 0)
-> +		return rv;
-> +
-> +	return BULK_TO_U16(val_bulk[0], val_bulk[1]);
-> +}
-> +
-> +static int write_reg_word(struct regmap *regmap, u8 reg, u16 val)
-> +{
-> +	u8 bulk_val[2];
-> +
-> +	bulk_val[0] = U16_MSB(val);
-> +	bulk_val[1] = U16_LSB(val);
-> +
-> +	return regmap_bulk_write(regmap, reg, bulk_val, 2);
-> +}
-> +
->   static int max31790_read_fan(struct device *dev, u32 attr, int channel,
->   			     long *val)
->   {
-> -	struct max31790_data *data = max31790_update_device(dev);
-> -	int sr, rpm;
-> -
-> -	if (IS_ERR(data))
-> -		return PTR_ERR(data);
-> +	struct max31790_data *data = dev_get_drvdata(dev);
-> +	struct regmap *regmap = data->regmap;
-> +	int tach, fault;
->   
->   	switch (attr) {
->   	case hwmon_fan_input:
-> -		sr = get_tach_period(data->fan_dynamics[channel]);
-> -		rpm = RPM_FROM_REG(data->tach[channel], sr);
-> -		*val = rpm;
-> +		tach = read_reg_word(regmap, MAX31790_REG_TACH_COUNT(channel));
-> +		if (tach < 0)
-> +			return tach;
-> +
-> +		*val = RPM_FROM_REG(tach, get_tach_period(data->fan_dynamics[channel]));
->   		return 0;
->   	case hwmon_fan_target:
-> -		sr = get_tach_period(data->fan_dynamics[channel]);
-> -		rpm = RPM_FROM_REG(data->target_count[channel], sr);
-> -		*val = rpm;
-> +		tach = read_reg_word(regmap, MAX31790_REG_TARGET_COUNT(channel));
-> +		if (tach < 0)
-> +			return tach;
-> +
-> +		*val = RPM_FROM_REG(tach, get_tach_period(data->fan_dynamics[channel]));
->   		return 0;
->   	case hwmon_fan_fault:
-> -		*val = !!(data->fault_status & (1 << channel));
-> +		if (channel > 6)
+> Mh, last time Lee wasn't very fond of having a driver that just populates
+> sub-drivers while doing almost nothing itself. See
+> https://lore.kernel.org/lkml/20200605065709.GD3714@dell/
 
-Please use the NR_CHANNEL constant.
+Right.  I still feel that way.
 
-> +			fault = read_reg_byte(regmap, MAX31790_REG_FAN_FAULT_STATUS2);
-> +		else
-> +			fault = read_reg_byte(regmap, MAX31790_REG_FAN_FAULT_STATUS1);
-> +
-> +		if (fault < 0)
-> +			return fault;
-> +
-> +		if (channel > 6)
-> +			*val = !!(fault & (1 << (channel - 6)));
-> +		else
-> +			*val = !!(fault & (1 << channel));
+> That being said, I'd also like to expose our CPLD version, but until now
+> haven't found a good solution.
 
-Better written without conditional as
-		*val = !!(fault & (1 << (channel % NR_CHANNEL)));
+Why though?  Does S/W *need* it?
 
-Guenter
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
