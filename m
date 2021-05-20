@@ -2,374 +2,249 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CBAB6C433B4
-	for <linux-hwmon@archiver.kernel.org>; Wed, 19 May 2021 23:46:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B7BFC433ED
+	for <linux-hwmon@archiver.kernel.org>; Thu, 20 May 2021 04:46:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A60A461006
-	for <linux-hwmon@archiver.kernel.org>; Wed, 19 May 2021 23:46:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7BE9A60BD3
+	for <linux-hwmon@archiver.kernel.org>; Thu, 20 May 2021 04:46:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbhESXsL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 19 May 2021 19:48:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55532 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbhESXsL (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 19 May 2021 19:48:11 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE32C061574;
-        Wed, 19 May 2021 16:46:49 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id s12so2338223qta.3;
-        Wed, 19 May 2021 16:46:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Yp1kY336BoVbRlcIQSHuTPMBBcEBTqjv/SDOwL1UFdo=;
-        b=RLsgvpkxu5+yJkVXh8yxvWlzhOqirm/OtOKoZm3TmnBkmuk+xuv/7FMdNxVKYb/o8q
-         XM7DKVOpEEiPOkMirW0OV4X0+eY9CNrf7WEzCyEFsqudWGUiigVR5gMJGsF50AuGtk8p
-         s9k2ZSmvqnzjWXJCfq2wAmxxwKFxcI8S9jYgATb6+PR5TQLLDYpig+XccvLt0MwC2O/p
-         5ZKcmTMc2eglZylUhw7QEYqF4Iy9GnUwAEswaqqPgdr7jC/u5/lFo2WdgmHrNIWRSaFq
-         dJqAoSLXmxUTlv/W8QYhmpduVJWPNXwfPdAbzDAKl97A3oOeS+NI41Rgq3Rwmd54mmME
-         fDkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Yp1kY336BoVbRlcIQSHuTPMBBcEBTqjv/SDOwL1UFdo=;
-        b=F8tl1AgnfJtrh+9uwHKwMQY97sDO0KSdyDMqsBpWXMSrnAJxUDeJo4p/W1Ck7fF/R6
-         w31LOAC9J4HYUiyPapv9haz8BzfVf+TFxuLR2nMpasprdjrsbBLmWcEOOkxNP9yRWmaa
-         vjg1vNgl2ShtIgNcuzSIpIfJpTBpz3zNEiJsvV2oDxf5l++u96Fpw0iDOdmVMd77NCex
-         H47jNuvKDdtU6r7mQhkRwD+OoT/s1vHQxQnPbwpJ+/05lR0C3DCjLSWl5+NfkcMI5psN
-         n6oQ4zVaqVr0NQbzZdOOADUhE74yoL7HBqmKy/EwkeCoEfDyz2i3fj/kwXg1f1y7TjOP
-         uNTg==
-X-Gm-Message-State: AOAM53267cOCoB7Q2UgfSBfcIDnh90Ul2Yb84LL9oC5umBt/GekuPVDR
-        p/aYifMKoXBUKqZnmsEu+sRPwUDRnTA=
-X-Google-Smtp-Source: ABdhPJx3Q16XDoWQR8VD//xml0Oc7k9Jc7XuH3JqFRVbSIeioCqG2zcxb85ZBRhdWws1qdELz1BBEA==
-X-Received: by 2002:ac8:7c50:: with SMTP id o16mr574804qtv.153.1621468008791;
-        Wed, 19 May 2021 16:46:48 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d84sm879838qke.131.2021.05.19.16.46.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 May 2021 16:46:48 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH 4/5] hwmon: (pmbus/pim4328) Add PMBus driver for PIM4006,
- PIM4328 and PIM4820
-To:     Erik Rosen <erik.rosen@metormote.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210519201015.83989-1-erik.rosen@metormote.com>
- <20210519201015.83989-5-erik.rosen@metormote.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <aef5ffb9-a670-cff4-80a5-e41881b38327@roeck-us.net>
-Date:   Wed, 19 May 2021 16:46:46 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S229554AbhETEsG (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 20 May 2021 00:48:06 -0400
+Received: from mga14.intel.com ([192.55.52.115]:22138 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229545AbhETEsG (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 20 May 2021 00:48:06 -0400
+IronPort-SDR: 6kCT5OFePNUk3cC66Xore95apDegpMckjXmlt/b4A7YxoknpxrydreZKK2WjfkmdJNb7QIWJA5
+ vZjVmrdepnuw==
+X-IronPort-AV: E=McAfee;i="6200,9189,9989"; a="200838108"
+X-IronPort-AV: E=Sophos;i="5.82,313,1613462400"; 
+   d="scan'208";a="200838108"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2021 21:46:45 -0700
+IronPort-SDR: lOuO7Fkr92kR5GycnuEGDazOtRJuAyWFVNh75R/OJuqvf7px690O5xXEvCQrgo/ErGaGHqao4T
+ E3LYeo+vwuSg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,313,1613462400"; 
+   d="scan'208";a="461713352"
+Received: from lkp-server02.sh.intel.com (HELO 1b329be5b008) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 19 May 2021 21:46:44 -0700
+Received: from kbuild by 1b329be5b008 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1ljaa3-0000Qn-Vi; Thu, 20 May 2021 04:46:43 +0000
+Date:   Thu, 20 May 2021 12:45:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:watchdog-next] BUILD SUCCESS
+ b67f953ee90abb26c0803ca93db428cafd625475
+Message-ID: <60a5e985.HHymp0jpc3lwjnXq%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <20210519201015.83989-5-erik.rosen@metormote.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/19/21 1:10 PM, Erik Rosen wrote:
-> Add hardware monitoring support for Flex power interface modules PIM4006,
-> PIM4328 and PIM4820.
-> 
-> Signed-off-by: Erik Rosen <erik.rosen@metormote.com>
-> ---
->   drivers/hwmon/pmbus/Kconfig   |   9 +
->   drivers/hwmon/pmbus/Makefile  |   1 +
->   drivers/hwmon/pmbus/pim4328.c | 310 ++++++++++++++++++++++++++++++++++
->   3 files changed, 320 insertions(+)
->   create mode 100644 drivers/hwmon/pmbus/pim4328.c
-> 
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index 37a5c39784fa..001527c71269 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -257,6 +257,15 @@ config SENSORS_MP2975
->   	  This driver can also be built as a module. If so, the module will
->   	  be called mp2975.
->   
-> +config SENSORS_PIM4328
-> +	tristate "Flex PIM4328 and compatibles"
-> +	help
-> +	  If you say yes here you get hardware monitoring support for Flex
-> +	  PIM4328, PIM4820 and PIM4006 Power Interface Modules.
-> +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called pim4328.
-> +
->   config SENSORS_PM6764TR
->   	tristate "ST PM6764TR"
->   	help
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index f8dcc27cd56a..2a12397535ba 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -39,3 +39,4 @@ obj-$(CONFIG_SENSORS_UCD9000)	+= ucd9000.o
->   obj-$(CONFIG_SENSORS_UCD9200)	+= ucd9200.o
->   obj-$(CONFIG_SENSORS_XDPE122)	+= xdpe12284.o
->   obj-$(CONFIG_SENSORS_ZL6100)	+= zl6100.o
-> +obj-$(CONFIG_SENSORS_PIM4328)   += pim4328.o
-> diff --git a/drivers/hwmon/pmbus/pim4328.c b/drivers/hwmon/pmbus/pim4328.c
-> new file mode 100644
-> index 000000000000..b9aa4f76f6cd
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/pim4328.c
-> @@ -0,0 +1,310 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Hardware monitoring driver for PIM4006, PIM4328 and PIM4820
-> + *
-> + * Copyright (c) 2021 Flextronics International Sweden AB
-> + */
-> +
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/init.h>
-> +#include <linux/err.h>
-> +#include <linux/slab.h>
-> +#include <linux/i2c.h>
-> +#include <linux/pmbus.h>
-> +#include "pmbus.h"
-> +
-> +enum chips { pim4006, pim4328, pim4820 };
-> +
-> +struct pim4328_data {
-> +	enum chips id;
-> +	struct pmbus_driver_info info;
-> +};
-> +
-> +#define to_pim4328_data(x)  container_of(x, struct pim4328_data, info)
-> +
-> +/* PIM4006 and PIM4328 */
-> +#define PIM4328_MFR_READ_VINA		0xd3
-> +#define PIM4328_MFR_READ_VINB		0xd4
-> +
-> +/* PIM4006 */
-> +#define PIM4328_MFR_READ_IINA		0xd6
-> +#define PIM4328_MFR_READ_IINB		0xd7
-> +#define PIM4328_MFR_FET_CHECKSTATUS     0xd9
-> +
-> +/* PIM4328 */
-> +#define PIM4328_MFR_STATUS_BITS		0xd5
-> +
-> +/* PIM4820 */
-> +#define PIM4328_MFR_READ_STATUS		0xd0
-> +
-> +static const struct i2c_device_id pim4328_id[] = {
-> +	{"bmr455", pim4328},
-> +	{"pim4006", pim4006},
-> +	{"pim4106", pim4006},
-> +	{"pim4206", pim4006},
-> +	{"pim4306", pim4006},
-> +	{"pim4328", pim4328},
-> +	{"pim4406", pim4006},
-> +	{"pim4820", pim4820},
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(i2c, pim4328_id);
-> +
-> +static int pim4328_read_word_data(struct i2c_client *client, int page,
-> +				  int phase, int reg)
-> +{
-> +	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-> +	struct pim4328_data *data = to_pim4328_data(info);
-> +	int ret, status;
-> +
-> +	if (page > 0)
-> +		return -ENXIO;
-> +
-> +	switch (reg) {
-> +	case PMBUS_STATUS_WORD:
-> +		ret = pmbus_read_byte_data(client, page, PMBUS_STATUS_BYTE);
-> +		if (ret >= 0) {
-> +			if (data->id == pim4006) {
-> +				status = pmbus_read_word_data(client, page, 0xff,
-> +							      PIM4328_MFR_FET_CHECKSTATUS);
-> +				if (status > 0) {
-> +					if (status & 0x0630) /* Input UV */
-> +						ret |= 0x08;
-> +				}
-> +			} else if (data->id == pim4328) {
-> +				status = pmbus_read_byte_data(client, page,
-> +							      PIM4328_MFR_STATUS_BITS);
-> +				if (status > 0) {
-> +					if (status & 0x04) /* Input UV */
-> +						ret |= 0x08;
-> +					if (status & 0x40) /* Output UV */
-> +						ret |= 0x80;
-> +				}
-> +			} else if (data->id == pim4820) {
-> +				status = pmbus_read_byte_data(client, page,
-> +							      PIM4328_MFR_READ_STATUS);
-> +				if (status > 0) {
-> +					if (status & 0x05) /* Input OV or OC */
-> +						ret |= 0x2001;
-> +					if (status & 0x1a) /* Input UV */
-> +						ret |= 0x2008;
-> +					if (status & 0x40) /* OT */
-> +						ret |= 0x0004;
-> +				}
-> +			}
-> +		}
-> +		break;
-> +	case PMBUS_READ_VIN:
-> +		if (phase != 0xff) {
-> +			ret = pmbus_read_word_data(client, page, phase,
-> +						   phase == 0 ? PIM4328_MFR_READ_VINA
-> +							      : PIM4328_MFR_READ_VINB);
-> +		} else {
-> +			ret = -ENODATA;
-> +		}
-> +		break;
-> +	case PMBUS_READ_IIN:
-> +		if (phase != 0xff) {
-> +			ret = pmbus_read_word_data(client, page, phase,
-> +						   phase == 0 ? PIM4328_MFR_READ_IINA
-> +							      : PIM4328_MFR_READ_IINB);
-> +		} else {
-> +			ret = -ENODATA;
-> +		}
-> +		break;
-> +	default:
-> +		ret = -ENODATA;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static int pim4328_read_byte_data(struct i2c_client *client, int page, int reg)
-> +{
-> +	int ret;
-> +
-> +	if (page > 0)
-> +		return -ENXIO;
-> +
-> +	switch (reg) {
-> +	case PMBUS_STATUS_BYTE:
-> +		ret = pim4328_read_word_data(client, page, 0xff, PMBUS_STATUS_WORD);
-> +		if (ret > 0)
-> +			ret &= 0xff;
-> +		break;
-> +	default:
-> +		ret = -ENODATA;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static int pim4328_probe(struct i2c_client *client)
-> +{
-> +	int status;
-> +	u8 device_id[I2C_SMBUS_BLOCK_MAX + 1];
-> +	const struct i2c_device_id *mid;
-> +	struct pim4328_data *data;
-> +	struct pmbus_driver_info *info;
-> +	struct pmbus_platform_data *pdata;
-> +	struct device *dev = &client->dev;
-> +
-> +	if (!i2c_check_functionality(client->adapter,
-> +				     I2C_FUNC_SMBUS_READ_BYTE_DATA
-> +				     | I2C_FUNC_SMBUS_BLOCK_DATA))
-> +		return -ENODEV;
-> +
-> +	data = devm_kzalloc(&client->dev, sizeof(struct pim4328_data),
-> +			    GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	status = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, device_id);
-> +	if (status < 0) {
-> +		dev_err(&client->dev, "Failed to read Manufacturer Model\n");
-> +		return status;
-> +	}
-> +	for (mid = pim4328_id; mid->name[0]; mid++) {
-> +		if (!strncasecmp(mid->name, device_id, strlen(mid->name)))
-> +			break;
-> +	}
-> +	if (!mid->name[0]) {
-> +		dev_err(&client->dev, "Unsupported device\n");
-> +		return -ENODEV;
-> +	}
-> +
-> +	if (strcmp(client->name, mid->name) != 0)
-> +		dev_notice(&client->dev,
-> +			   "Device mismatch: Configured %s, detected %s\n",
-> +			   client->name, mid->name);
-> +
-> +	data->id = mid->driver_data;
-> +
-> +	if (data->id == pim4328 || data->id == pim4820)
-> +		if (!i2c_check_functionality(client->adapter,
-> +					     I2C_FUNC_SMBUS_BLOCK_PROC_CALL))
-> +			return -ENODEV;
-> +
-> +	info = &data->info;
-> +	info->pages = 1;
-> +	info->read_byte_data = pim4328_read_byte_data;
-> +	info->read_word_data = pim4328_read_word_data;
-> +
-> +	switch (data->id) {
-> +	case pim4006:
-> +		info->phases[0] = 2;
-> +		info->func[0] = PMBUS_PHASE_VIRTUAL | PMBUS_HAVE_VIN
-> +			| PMBUS_HAVE_TEMP | PMBUS_HAVE_IOUT;
-> +		info->pfunc[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN;
-> +		info->pfunc[1] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN;
-> +		break;
-> +	case pim4328:
-> +		info->phases[0] = 2;
-> +		info->func[0] = PMBUS_PHASE_VIRTUAL
-> +			| PMBUS_HAVE_VCAP | PMBUS_HAVE_VIN
-> +			| PMBUS_HAVE_TEMP | PMBUS_HAVE_IOUT;
-> +		info->pfunc[0] = PMBUS_HAVE_VIN;
-> +		info->pfunc[1] = PMBUS_HAVE_VIN;
-> +		info->format[PSC_VOLTAGE_IN] = direct;
-> +		info->format[PSC_VOLTAGE_OUT] = direct;
-> +		info->format[PSC_TEMPERATURE] = direct;
-> +		info->format[PSC_CURRENT_OUT] = direct;
-> +		break;
-> +	case pim4820:
-> +		info->func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_TEMP
-> +			| PMBUS_HAVE_IIN;
-> +		info->format[PSC_VOLTAGE_IN] = direct;
-> +		info->format[PSC_TEMPERATURE] = direct;
-> +		info->format[PSC_CURRENT_IN] = direct;
-> +		break;
-> +	default:
-> +		return -ENODEV;
-> +	}
-> +
-> +	if (info->func[0] & PMBUS_HAVE_VCAP &&
-> +	    info->format[PSC_VOLTAGE_OUT] == direct) {
-> +		status = pmbus_read_coefficients(client, info,
-> +						 PSC_VOLTAGE_OUT,
-> +						 PMBUS_READ_VCAP,
-> +						 true);
-> +		if (status < 0) {
-> +			dev_err(&client->dev,
-> +				"Failed to read coefficients for PMBUS_READ_VCAP\n");
-> +			return status;
-> +		}
-> +	}
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
+branch HEAD: b67f953ee90abb26c0803ca93db428cafd625475  dt-bindings: watchdog: Add compatible for Mediatek MT8195
 
-Is there reason to implement this all here, or could we simply add another flag
-such as PMBUS_HAS_COEFFICIENTS_CMD and have the core read the coefficients as
-needed ?
+elapsed time: 722m
 
-I'd rather have this implemented in the core instead of having to carry
-similar code in all drivers supporting the coefficients command.
+configs tested: 180
+configs skipped: 3
 
-Thanks,
-Guenter
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+powerpc                     mpc5200_defconfig
+openrisc                         alldefconfig
+powerpc                      walnut_defconfig
+mips                      malta_kvm_defconfig
+mips                           mtx1_defconfig
+sh                         microdev_defconfig
+arm                         socfpga_defconfig
+arm                         bcm2835_defconfig
+arc                            hsdk_defconfig
+powerpc                        icon_defconfig
+powerpc                    amigaone_defconfig
+arm                             mxs_defconfig
+arm64                            alldefconfig
+powerpc                      katmai_defconfig
+powerpc                       eiger_defconfig
+mips                         tb0226_defconfig
+arm                         shannon_defconfig
+sh                      rts7751r2d1_defconfig
+powerpc                      pasemi_defconfig
+powerpc                     powernv_defconfig
+mips                        qi_lb60_defconfig
+arm                          badge4_defconfig
+m68k                       m5208evb_defconfig
+arm                          pcm027_defconfig
+arm                    vt8500_v6_v7_defconfig
+powerpc                    adder875_defconfig
+ia64                          tiger_defconfig
+powerpc                mpc7448_hpc2_defconfig
+riscv                            allyesconfig
+arm                             pxa_defconfig
+sh                          rsk7264_defconfig
+sh                          kfr2r09_defconfig
+mips                           jazz_defconfig
+arm                   milbeaut_m10v_defconfig
+sh                            hp6xx_defconfig
+mips                        workpad_defconfig
+powerpc                 mpc834x_itx_defconfig
+arm                      tct_hammer_defconfig
+mips                         tb0287_defconfig
+powerpc                      arches_defconfig
+mips                          malta_defconfig
+powerpc                  storcenter_defconfig
+powerpc                       ppc64_defconfig
+mips                             allyesconfig
+powerpc                 mpc836x_rdk_defconfig
+mips                           ip27_defconfig
+powerpc                      ep88xc_defconfig
+arm                             rpc_defconfig
+arm                         assabet_defconfig
+mips                           ci20_defconfig
+m68k                        mvme147_defconfig
+mips                         cobalt_defconfig
+xtensa                         virt_defconfig
+sh                         ap325rxa_defconfig
+m68k                       m5275evb_defconfig
+sh                   rts7751r2dplus_defconfig
+powerpc                  mpc885_ads_defconfig
+sh                           se7721_defconfig
+arc                      axs103_smp_defconfig
+arm                           h3600_defconfig
+ia64                        generic_defconfig
+arm                            hisi_defconfig
+powerpc                      ppc40x_defconfig
+m68k                            q40_defconfig
+powerpc                 mpc8272_ads_defconfig
+powerpc                   currituck_defconfig
+sh                          rsk7203_defconfig
+arm                           corgi_defconfig
+powerpc                 mpc832x_mds_defconfig
+arm                      jornada720_defconfig
+arm                  colibri_pxa300_defconfig
+powerpc                     tqm8541_defconfig
+arc                              alldefconfig
+powerpc                 mpc834x_mds_defconfig
+arc                     haps_hs_smp_defconfig
+sh                        apsh4ad0a_defconfig
+arm                           viper_defconfig
+mips                     cu1000-neo_defconfig
+powerpc                      cm5200_defconfig
+powerpc                     rainier_defconfig
+mips                          rb532_defconfig
+arm                          ixp4xx_defconfig
+arm                         lpc18xx_defconfig
+arm                       cns3420vb_defconfig
+m68k                           sun3_defconfig
+arc                     nsimosci_hs_defconfig
+sh                           se7712_defconfig
+powerpc                     taishan_defconfig
+sh                        dreamcast_defconfig
+arm                        oxnas_v6_defconfig
+arc                        vdk_hs38_defconfig
+sh                        edosk7760_defconfig
+m68k                         amcore_defconfig
+xtensa                  audio_kc705_defconfig
+ia64                            zx1_defconfig
+arm                      integrator_defconfig
+powerpc                 mpc836x_mds_defconfig
+arc                          axs101_defconfig
+powerpc                 mpc8313_rdb_defconfig
+arm                        mvebu_v7_defconfig
+powerpc                     stx_gp3_defconfig
+arm                           sunxi_defconfig
+x86_64                            allnoconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a003-20210519
+i386                 randconfig-a001-20210519
+i386                 randconfig-a005-20210519
+i386                 randconfig-a004-20210519
+i386                 randconfig-a002-20210519
+i386                 randconfig-a006-20210519
+x86_64               randconfig-a012-20210519
+x86_64               randconfig-a015-20210519
+x86_64               randconfig-a013-20210519
+x86_64               randconfig-a011-20210519
+x86_64               randconfig-a016-20210519
+x86_64               randconfig-a014-20210519
+i386                 randconfig-a014-20210519
+i386                 randconfig-a016-20210519
+i386                 randconfig-a011-20210519
+i386                 randconfig-a015-20210519
+i386                 randconfig-a012-20210519
+i386                 randconfig-a013-20210519
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                               allmodconfig
+um                                allnoconfig
+um                               allyesconfig
+um                                  defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-b001-20210519
+x86_64               randconfig-a003-20210519
+x86_64               randconfig-a004-20210519
+x86_64               randconfig-a005-20210519
+x86_64               randconfig-a001-20210519
+x86_64               randconfig-a002-20210519
+x86_64               randconfig-a006-20210519
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
