@@ -4,114 +4,114 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+	MIME_QP_LONG_LINE,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF837C433ED
-	for <linux-hwmon@archiver.kernel.org>; Thu, 20 May 2021 06:49:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E557C433B4
+	for <linux-hwmon@archiver.kernel.org>; Thu, 20 May 2021 11:31:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B162C61184
-	for <linux-hwmon@archiver.kernel.org>; Thu, 20 May 2021 06:49:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6023D6109F
+	for <linux-hwmon@archiver.kernel.org>; Thu, 20 May 2021 11:31:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230339AbhETGuy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 20 May 2021 02:50:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36836 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbhETGuy (ORCPT
+        id S241136AbhETLdH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 20 May 2021 07:33:07 -0400
+Received: from office2.cesnet.cz ([195.113.144.244]:40924 "EHLO
+        office2.cesnet.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241101AbhETLbF (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 20 May 2021 02:50:54 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 946E0C061574
-        for <linux-hwmon@vger.kernel.org>; Wed, 19 May 2021 23:49:33 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id y14so14303038wrm.13
-        for <linux-hwmon@vger.kernel.org>; Wed, 19 May 2021 23:49:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=E1ZuZRCTlz6/Ws9j0pRH14oGlY9lvvE2LqjzptzYfhQ=;
-        b=axSDBqF3Sq8wkc0WbH3CZY6xm95L5mDZQFgCfOftPV9fglwEx33FuoeYTqysdF5CgO
-         gvOAGVJZQq0bB6/K5ulo+fN8Xt1eZcfui9dS+YxqacaFmgLBTh8mXE30GkWIW8mG4gop
-         b0nJpOKu1eMSEZ+P+wGt5ZABOMNItvm0iPiYRFJv+CJh5SovDDgyJ0JY0nRv5zqoWaqy
-         itEp92jB45oI7wAH/FQlDEMKw9mTUrE2qbi7R+h0oBTAjQISeI9YlMa4waCbqKrl2PPq
-         C/dmLBHaaav0k/lPwIQGhyye7uVNYzDQItA2FuQSU7y1eFiI9/+9GnlGjOgxZzuX/enh
-         EoGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=E1ZuZRCTlz6/Ws9j0pRH14oGlY9lvvE2LqjzptzYfhQ=;
-        b=Gj56Sg6kMEOVfZrhwbVeXt30lbjDjDS59Sg3uPAO00H1E2sFXn/aXqjBCHQUfOmAsb
-         gb3qfVUu7FD6GE4FCP/J4oxSIbQICk2NuMACN6A0o3D98iQeXDiUwr/2NSh7rUQOzh7T
-         +gnksAJyJV4vjAsxgWUNQqrYQOhC+AhNC61kaH75C2haLMFrlvTcQ7tY+PnFaL8B0xpc
-         NVG1TO1lH+SLBUZuwgaAwL00us3NGtoSLPTqWkgCIhz6L7sUggpzaddNltBAqDpBPosR
-         8zVxasxhQpnJoznGRFdKfbmefiiX8Jgtfa/pICcjswBAv/9U7+zI6uPY616qV5ZQPhQV
-         fhQw==
-X-Gm-Message-State: AOAM533KNi8rmqv0j+Tf1Tn+5uHixaBwE0t3XNLg0aNO6+gxu/QTPTCb
-        yg1EwG9I9Ec8D/0pNXjSeJiGZQ==
-X-Google-Smtp-Source: ABdhPJwd6qF+Ay8hmUhZ+42UEFFkMLo1dBf7iN0NlNPKX5LqdOy5Y71JWAqSVW/tw0t9av+hXvaRNw==
-X-Received: by 2002:a5d:4b08:: with SMTP id v8mr2606935wrq.122.1621493372212;
-        Wed, 19 May 2021 23:49:32 -0700 (PDT)
-Received: from dell ([91.110.221.215])
-        by smtp.gmail.com with ESMTPSA id p2sm1930764wrj.10.2021.05.19.23.49.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 May 2021 23:49:31 -0700 (PDT)
-Date:   Thu, 20 May 2021 07:49:29 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Robert Marko <robert.marko@sartura.hr>, robh+dt@kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        bgolaszewski@baylibre.com, jdelvare@suse.com,
-        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, Luka Perkov <luka.perkov@sartura.hr>,
-        jmp@epiphyte.org, Paul Menzel <pmenzel@molgen.mpg.de>,
-        Donald Buczek <buczek@molgen.mpg.de>
-Subject: Re: [PATCH 1/6] mfd: Add Delta TN48M CPLD driver
-Message-ID: <20210520064929.GM2549456@dell>
-References: <20210430123511.116057-1-robert.marko@sartura.hr>
- <af4923ef1ed0693fcd67d7986348b164@walle.cc>
- <CA+HBbNHCnpg9qCzZbT9KVNqX-daC68iaJKNdyEf7do3w98miWw@mail.gmail.com>
- <0f28cabf858154842819935000f32bc2@walle.cc>
+        Thu, 20 May 2021 07:31:05 -0400
+X-Greylist: delayed 94763 seconds by postgrey-1.27 at vger.kernel.org; Thu, 20 May 2021 07:31:00 EDT
+Received: from localhost (ip-78-45-210-72.net.upcbroadband.cz [78.45.210.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by office2.cesnet.cz (Postfix) with ESMTPSA id 6BE9D40006B;
+        Thu, 20 May 2021 13:29:24 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cesnet.cz;
+        s=office2-2020; t=1621510164;
+        bh=hlH5MiV+pHvEjTzZVRlEtFB7ucGjCHd76P6F/bq75QQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=Y499jaLrNQDvGYFs6T1IcIQh63oVg1U0GvxX99UTXLVXpA11kxXA0hp6+oqn4+zi1
+         jl4blfDxEiANWLJwJr7nuzIpmsestbwKmXCSPgfwEIyDt7cvb2gDniOQkhTuBI2av3
+         6evzJb1+GJTmSneRbst0CNovvWl0LT+w0nFm6OQul6381rNvJuRWODCiM2RmNJlaUA
+         IQlCtDSPsCNxywRrrjbBpWWnKg+bXdVSsP9LBeEvJTNaafkZGvNSXKNS1I2atSUs+x
+         fkPyOw0wWSizodMaTJ/y4bmGNZV8fTNOR7nA7EXaDDyJQ+VadzelaBzue6GlDhHmxn
+         vYIxWZBZdpepw==
+From:   =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        =?iso-8859-1?Q?V=E1clav_Kubern=E1t?= <kubernat@cesnet.cz>
+Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+        <linux-hwmon@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 2/5] hwmon: (max31790) Fix and split =?iso-8859-1?Q?pwm*=5Fenable?=
+Date:   Thu, 20 May 2021 13:29:24 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0f28cabf858154842819935000f32bc2@walle.cc>
+Message-ID: <9bbdc7a7-f34d-4e3a-8e64-c20810456d11@cesnet.cz>
+In-Reply-To: <76619e11-3999-1e89-de93-fb5942970844@roeck-us.net>
+References: <20210518211609.GA3532746@roeck-us.net>
+ <6f256c72-df4d-4f9a-ba5f-eabfd9f2365f@cesnet.cz>
+ <76619e11-3999-1e89-de93-fb5942970844@roeck-us.net>
+Organization: CESNET
+User-Agent: Trojita/unstable-2020-07-06; Qt/5.15.2; xcb; Linux; 
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Wed, 19 May 2021, Michael Walle wrote:
+> As for fan[7-12]_enable, I don't even know if those can be enabled
+> separately. I see two options: Drop those attributes entirely (
+> assuming that those fan inputs are always enabled if the associated
+> pins are configured as inputs), or align them with fan[1-6]_enable.
 
-> Hi,
-> 
-> Am 2021-05-19 13:53, schrieb Robert Marko:
-> > On Thu, May 6, 2021 at 6:34 PM Michael Walle <michael@walle.cc> wrote:
-> > > Am 2021-04-30 14:35, schrieb Robert Marko:
-> > > > Delta TN48M switches have a Lattice CPLD that serves
-> > > > multiple purposes including being a GPIO expander.
-> > > > So lets add the MFD core driver for it.
-> > > 
-> > > Did you have a look at mfd/simple-mfd-i2c.c?
-> > 
-> > Yes, that was my first idea but we have a requirement to expose CPLD
-> > information via debugfs as there are userspace applications using it.
-> > And simple-mfd-i2c does not allow us to do so.
-> 
-> Mh, last time Lee wasn't very fond of having a driver that just populates
-> sub-drivers while doing almost nothing itself. See
-> https://lore.kernel.org/lkml/20200605065709.GD3714@dell/
+I think we need to decide first who provides the initial configuration for=20=
 
-Right.  I still feel that way.
+this chip. There's always at least six TACH inputs, and then there's six=20
+more pins where each can be either a PWM output or a TACH input. Who=20
+decides that? Is the kernel supposed to export six knobs to the userspace?=20=
 
-> That being said, I'd also like to expose our CPLD version, but until now
-> haven't found a good solution.
+So far, I've assumed that this should be driven via sysfs. But perhaps you=20=
 
-Why though?  Does S/W *need* it?
+would you like to rely on the FW (?) to set this up properly? (On our=20
+board, that would be a few random calls to `i2cset` from a U-Boot boot=20
+script. Not pretty, but doable. Just one more place to keep track of.)
 
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+It's proabably "tricky" to do this at runtime -- and I don't expect to see=20=
+
+many boards where you have such a big freedom of reconnecting the actual=20
+fans once manufactured, anyway. So, either some DT parameters, or an=20
+autodetection based on whatever is in the registers at power up, which=20
+would make an explicit assumption that "something" has set up the nPWM/TACH=20=
+
+bits properly in the Fan Configuration Register. OK, that might work, but=20
+the kernel must not ever reset that chip afterwards.
+
+There's also the Fan Fault Mask register, which controls which fans=20
+propagate their failures to the nFAN_FAIL output pin. This one requires a=20
+semi-independent control than the nPWM/TACH bit above. It's feasible that=20
+not all TACH inputs have an actual fan connected, and this can well vary=20
+between products. For example, ours has just four fan connectors, so we=20
+don't want "failures" of fans 5 and 6 to assert the nFAN_FAIL pin. Also,=20
+there should be a check which prevents unmasking these failures for those=20
+TACH channels which are configured as PWM outputs. Or we can once again=20
+ignore this one and rely on the FW.
+
+The current kernel code in max31790_read_fan() reads beyond the end of=20
+data->fan_dynamics, hitting the content of `fault_status` or `tach` fields=20=
+
+instead, and therefore returning garbage. Not a big deal, just a missing %=20=
+
+operator I guess, but to me, that's a pretty strong suggestion that nobody=20=
+
+has used or even tested monitoring more than six fans on this chip, ever.=20
+(And yeah, the datasheet is not clear on how it's supposed to work anyway.=20=
+
+Using a modulo is just a guess.)
+
+Neither Vaclav nor me have any way of testing this feature -- hence my=20
+proposal to only improve what we need, and ignore TACH channels 7-12. But I=20=
+
+guess it's not OK from your point of view?
+
+With kind regards,
+Jan
