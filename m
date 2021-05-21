@@ -2,144 +2,119 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CA53C47078
-	for <linux-hwmon@archiver.kernel.org>; Fri, 21 May 2021 14:27:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C100FC47076
+	for <linux-hwmon@archiver.kernel.org>; Fri, 21 May 2021 14:44:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6C308613E2
-	for <linux-hwmon@archiver.kernel.org>; Fri, 21 May 2021 14:27:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9D8FA610A8
+	for <linux-hwmon@archiver.kernel.org>; Fri, 21 May 2021 14:44:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235963AbhEUO2s (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 21 May 2021 10:28:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41302 "EHLO
+        id S231315AbhEUOqC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 21 May 2021 10:46:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231329AbhEUO2s (ORCPT
+        with ESMTP id S236890AbhEUOpM (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 21 May 2021 10:28:48 -0400
+        Fri, 21 May 2021 10:45:12 -0400
 Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3F8C061574;
-        Fri, 21 May 2021 07:27:25 -0700 (PDT)
-Received: by mail-ot1-x329.google.com with SMTP id 36-20020a9d0ba70000b02902e0a0a8fe36so18145459oth.8;
-        Fri, 21 May 2021 07:27:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A878C06138A;
+        Fri, 21 May 2021 07:43:44 -0700 (PDT)
+Received: by mail-ot1-x329.google.com with SMTP id r26-20020a056830121ab02902a5ff1c9b81so18209981otp.11;
+        Fri, 21 May 2021 07:43:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+        h=sender:to:cc:references:from:subject:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=xMj1qXfK8gsMQ7PPQfGr1WuTZEPbUqRoUDWXdTdkR+M=;
-        b=JeE7sdzcEAXWmWfLzJ+PEk/lemZoWz2eLGCOcaqBxiY1YbIkPf+OJXTcwEwMIRcrUY
-         DPD800oG7+TE2jpouIV0xX/T+jiGZ40bwJAE7/GFcrsBcytshIRtYlB9pJfU2TlOsjbH
-         6Kr3ZAD36jFzwUEIHiYcNESYtQOJ8fqPF8pXKVslbMzB1FPjILsts3avlFODx92o9Q+5
-         DIhgq3QQFI3MZ0jDl9FF6J27ujiAT/MMoLS1IfUl/sp1IoM90e6p6TpYCIBLk6w4dKvP
-         NiPXxz0YU8On3E+TL+6qYl+7B4TqTlmzrHylOlWS/gaNwp6HiRI8wQHCuecxJ4C2qjHM
-         Np4Q==
+        bh=G+WxE/QQt2V+YAcRvnHfLdrfp3Eo0XxASxmLklJ1y4Y=;
+        b=lhosTF+pBzuhNLcZGPfkWm14Lb22NgCSw1xtrKf1fYqhfJ1t28z29FgfJsi6rL6+Fc
+         79ZtUa2msCRpRstvUQrDoXaK0ThqUJqERNCQJaSzMUiwVoUPL2pV4Df/agvDbXj2cKSI
+         Cmo6Q+eHiXuksWTxa1cRK9EOGvfa+zGIQPivxNplsCSsokYG8XTuoveEKsgt8XoHyE+k
+         Cn7TZ+UeFuz4ouUjhBs9Fog75ccyojF2lHYycJXZq/rsFfvzd97VuNaEyL6NCPpzkNvq
+         pi1MWoAobQrfTAG3mXYGO4iqwrJKyWvhCThvV8uRMKbN6LgTMCO6XnAixEBBArBLqK9X
+         THhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=xMj1qXfK8gsMQ7PPQfGr1WuTZEPbUqRoUDWXdTdkR+M=;
-        b=FYYvLDsvcklO/4GOT26c/rqVbsmc8f0dWFDNwVUa/RI+7Tv0jzbxaA0dGRgC+TpWzU
-         t1QQmzAt9hc1Ipa5jEVENL7zPbE1iEsosyxSTaFKQFODSXUPsrYysgd05O+5v+S40HGx
-         To9ViwjQoVRb5yK/jJWPX5E9f3jBe3kt7qSa6qh6qzhv+o6V5yQjECefH/ECVmGwVu+r
-         fY0hJUPsOiL88X32wL25Od/9fnn/GaHTeJ0WEF47aIF/R95M5P5gdyXnkhTuhIImFBn2
-         NIB39uF66Bs4tAOYjKbQ656Yb1pjc2RvGavmIarwb/X/mzJtnX/WG9FiJYYzyvmnhrEF
-         7qDQ==
-X-Gm-Message-State: AOAM532Qk9T3gIt4aL7xU4vfgpsSVCDOntSJxPzjc246GMUhYxj/91U0
-        g4cbUuiiCzGAyv0LmWVUEBY=
-X-Google-Smtp-Source: ABdhPJxWvWf5bmeC+ab68EWtCWKPccLiRC8nlfaZxh2g6ryciLhgEGn1Jmt+3HCU5nwApUE/IhjPtQ==
-X-Received: by 2002:a05:6830:1e54:: with SMTP id e20mr8681834otj.227.1621607244973;
-        Fri, 21 May 2021 07:27:24 -0700 (PDT)
+        bh=G+WxE/QQt2V+YAcRvnHfLdrfp3Eo0XxASxmLklJ1y4Y=;
+        b=Vd9OxDYgGXBdn5YJc0aUjYyPow1791g/bLx2joQL+4vPn6lvq+IBVi9nU3ZLclCITF
+         x/eUvB6RVMFeBjePus1Gu9BiGqrFxAk8p1lgBMu/TQVz+GLgRUJCs1zc8BkmGigDush0
+         Jo/x61ZQo8P7Hkk/LYSP0MJUvKsLsq8K8HnhxUiBs1ed2uXUUJ0JxWzLOXkYaqWYP2XD
+         AkqZfvTSP5dIKomfxDeCvOiyLWXpBbS5F03AU6ABWcVbdHI/iluu/IYl+6Ic4LVg6/9J
+         mmTKlTpGxlr54qdlxvUFALLG+cSdfmOu+EEbrhfZzu3LjQuyGsaElAhE7WSLmEPt3Qfw
+         mRAg==
+X-Gm-Message-State: AOAM531EZth/QFwQHybFxkedBSXNWNVcgE9TfIKqs0dIsBwyipQ1Rh0/
+        rSBu8Jim+4N1kOc4pzkyZ6XcaZWIjeo=
+X-Google-Smtp-Source: ABdhPJz5YMHyh2s6Zej4/4REYxJV2XL3xLjMSmr0rgFmz8IiS23735e2e2NVt0s2rZYw3m6q09lvgw==
+X-Received: by 2002:a05:6830:1ac7:: with SMTP id r7mr8535189otc.167.1621608223879;
+        Fri, 21 May 2021 07:43:43 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p1sm1365607otk.58.2021.05.21.07.27.22
+        by smtp.gmail.com with ESMTPSA id b18sm1340566otk.62.2021.05.21.07.43.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 May 2021 07:27:24 -0700 (PDT)
+        Fri, 21 May 2021 07:43:43 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH 1/3] hwmon: (pmbus) Add driver for Delta DPS-920AB PSU
-To:     Robert Marko <robert.marko@sartura.hr>
-Cc:     jdelvare@suse.com, corbet@lwn.net, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Luka Perkov <luka.perkov@sartura.hr>, jmp@epiphyte.org,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Donald Buczek <buczek@molgen.mpg.de>
-References: <20210430132735.127342-1-robert.marko@sartura.hr>
- <20210430134810.GA2714262@roeck-us.net>
- <CA+HBbNH+gQOmu_Ho0ivFuGHdu0zBtOrr1474z+7FA1zmNb4bug@mail.gmail.com>
- <2b990feb-dc26-debb-4f81-430bbc89b51c@roeck-us.net>
- <CA+HBbNHQHqD-wgryaBLZ5M2Lxafb0OwNcbiQJmRQPcZfprmUEg@mail.gmail.com>
- <cfbe487f-8d01-e9b7-0aae-f93a27aff023@roeck-us.net>
- <CA+HBbNHQrZRcz-3qBn1RkqLxOn_+sNH8VKJVihkaaiFoAy=d7g@mail.gmail.com>
+To:     Riwen Lu <luriwen@kylinos.cn>, jdelvare@suse.com
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xin Chen <chenxin@kylinos.cn>
+References: <20210521124204.22263-1-luriwen@kylinos.cn>
 From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <5a11415f-4c0f-b073-6325-2e9b4078655c@roeck-us.net>
-Date:   Fri, 21 May 2021 07:27:21 -0700
+Subject: Re: [PATCH v1] hwmon: (scpi-hwmon) shows the negative temperature
+ properly
+Message-ID: <3e6f68d1-c8f6-8521-833f-a4652ef8236a@roeck-us.net>
+Date:   Fri, 21 May 2021 07:43:41 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <CA+HBbNHQrZRcz-3qBn1RkqLxOn_+sNH8VKJVihkaaiFoAy=d7g@mail.gmail.com>
+In-Reply-To: <20210521124204.22263-1-luriwen@kylinos.cn>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/21/21 5:33 AM, Robert Marko wrote:
-> On Fri, May 21, 2021 at 1:41 PM Guenter Roeck <linux@roeck-us.net> wrote:
->>
->> On 5/21/21 1:36 AM, Robert Marko wrote:
->> [ ... ]
->>>> In this context, I have a hard time finding a reference for
->>>> this power supply. Do you have a datasheet or some other documents
->>>> you can share ?
->>>
->>> Unfortunately, I don't have a datasheet as that would have made this way easier.
->>> It was all based on the vendor "driver" from DENT:
->>> https://github.com/dentproject/dentOS/blob/main/packages/platforms/delta/arm64/tn48m/tn48m-poe/modules/builds/src/arm64-delta-tn48m-poe-psu.c
->>>
->>
->> Ah, so this is not a driver for a power supply from DeltaPSU,
->> but a power supply from Delta Networks Technology Corporation,
->> as used in that company's TN48M-POE switch. That is a world
->> of difference, even though the parent company seems to be the
->> same. I am not sure if, based on this information, the driver
->> should claim to be for "Delta DPS-920AB PSU" in the first place.
+On 5/21/21 5:42 AM, Riwen Lu wrote:
+> The scpi hwmon shows the sub-zero temperature in an unsigned integer,
+> which would confuse the users when the machine works in low temperature
+> environment. This shows the sub-zero temperature in an signed value and
+> users can get it properly from sensors.
 > 
-> It's actually a PSU from Delta Electronics INC, Delta Networks are just using
-> it inside of the Delta Networks TN48M-DN-P switch.
-> I checked the label on the PSU-s.
+> Signed-off-by: Riwen Lu <luriwen@kylinos.cn>
+> Tested-by: Xin Chen <chenxin@kylinos.cn>
 
-Ok, thanks. Guess we'll have to live with that.
+What did you test ? Did you really manage to run the system
+in such an environment ?
 
->>
->> Can you run a block read on MFR_MODEL and MFG_SERIAL ?
->> That might give us an idea about the actual manufacturer
->> and model of this power supply.
+> ---
+>   drivers/hwmon/scpi-hwmon.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> MFG_SERIAL is just a bunch of 0xf-s, but MFR_MODEL has something.
-> However, the Armada 7040 I2C adapter cannot do block reads although
-> it returns 11 bytes but it's just zeros.
+> diff --git a/drivers/hwmon/scpi-hwmon.c b/drivers/hwmon/scpi-hwmon.c
+> index 25aac40f2764..583a600bc82d 100644
+> --- a/drivers/hwmon/scpi-hwmon.c
+> +++ b/drivers/hwmon/scpi-hwmon.c
+> @@ -99,7 +99,7 @@ scpi_show_sensor(struct device *dev, struct device_attribute *attr, char *buf)
+>   
+>   	scpi_scale_reading(&value, sensor);
+>   
+> -	return sprintf(buf, "%llu\n", value);
+> +	return sprintf(buf, "%lld\n", value);
 
-Hmm, it seems more likely that the field is empty. Block read
-isn't really different from other read operations.
+'value' is declared as u64, not as s64.
+I can not evaluate what the firmware actually reports. The API
+reports an u64. Do you have any evidence for your claim that
+it returns a signed value under any circumstances ?
 
-Thanks,
+On top of that, your change affects not only temperature values,
+but all attributes. It is highly unlikely that the firmware would
+report negative power or energy values. It is, however, possible
+that energy values have the upper bit of an u64 set after a
+long runtime. Your change would result in a negative energy value
+if that is ever the case.
+
 Guenter
-
->>
->> Also, isn't that the same power supply for which you were
->> trying to add another hwmon driver to display some of its
->> status information, obtained from some CPLD ?
-> 
-> This and one more as the non-PoE version of the TN48M-DN switch
-> has a single 150W PSU that does not support PMBus, but the CPLD
-> always provides presence information and Power Good status.
->>
->> Thanks,
->> Guenter
-> 
-> 
-> 
-
