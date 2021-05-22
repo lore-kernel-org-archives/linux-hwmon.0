@@ -2,211 +2,264 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5EA1C2B9F2
-	for <linux-hwmon@archiver.kernel.org>; Sat, 22 May 2021 10:56:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62D16C2B9F2
+	for <linux-hwmon@archiver.kernel.org>; Sat, 22 May 2021 13:41:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 890D26121E
-	for <linux-hwmon@archiver.kernel.org>; Sat, 22 May 2021 10:56:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2957C60C41
+	for <linux-hwmon@archiver.kernel.org>; Sat, 22 May 2021 13:41:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231150AbhEVK5m (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 22 May 2021 06:57:42 -0400
-Received: from smtp.outgoing.loopia.se ([93.188.3.37]:29040 "EHLO
-        smtp.outgoing.loopia.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230238AbhEVK5l (ORCPT
+        id S230484AbhEVNnB (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 22 May 2021 09:43:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39444 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230472AbhEVNnA (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 22 May 2021 06:57:41 -0400
-Received: from s807.loopia.se (localhost [127.0.0.1])
-        by s807.loopia.se (Postfix) with ESMTP id 3494F1A92D6C
-        for <linux-hwmon@vger.kernel.org>; Sat, 22 May 2021 12:56:15 +0200 (CEST)
-Received: from s934.loopia.se (unknown [172.22.191.5])
-        by s807.loopia.se (Postfix) with ESMTP id 247C92E2B89B;
-        Sat, 22 May 2021 12:56:15 +0200 (CEST)
-Received: from s475.loopia.se (unknown [172.22.191.6])
-        by s934.loopia.se (Postfix) with ESMTP id 1FD6F7CE95D;
-        Sat, 22 May 2021 12:56:15 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at amavis.loopia.se
-Received: from s934.loopia.se ([172.22.191.5])
-        by s475.loopia.se (s475.loopia.se [172.22.190.15]) (amavisd-new, port 10024)
-        with LMTP id 3AgfGrMpy7aI; Sat, 22 May 2021 12:56:14 +0200 (CEST)
-X-Loopia-Auth: user
-X-Loopia-User: carl@hgsystem.se
-X-Loopia-Originating-IP: 155.4.133.180
-Received: from localhost.localdomain (h-155-4-133-180.NA.cust.bahnhof.se [155.4.133.180])
-        (Authenticated sender: carl@hgsystem.se)
-        by s934.loopia.se (Postfix) with ESMTPSA id 597A67CE962;
-        Sat, 22 May 2021 12:56:14 +0200 (CEST)
-From:   Erik Rosen <erik.rosen@metormote.com>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        Sat, 22 May 2021 09:43:00 -0400
+Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A55C061574;
+        Sat, 22 May 2021 06:41:35 -0700 (PDT)
+Received: by mail-oo1-xc34.google.com with SMTP id i8-20020a4aa1080000b0290201edd785e7so5237706ool.1;
+        Sat, 22 May 2021 06:41:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:to:references:from:subject:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=6q8b1N4MxU8JhrPvdZs1GsjYLUNjhqrng5So4JodxJc=;
+        b=s4J31AQDxIfkUDrXCTiZJClwfIXFmxjXh5NWzVM2vm+vsZBywqa30tWoKTY7I9swID
+         qGT21w/c/JbuW/OikBh+vOh/Db5csjuLSg1upgu5cZ57Q6/5xb1EHuFhZu8NyM3BqAcg
+         poZCHmtoOgDxdPWrVhF7LNn0NoOZTZJPnYVlgACWKtivuKAVuZTabYTjwp8VGDiaV2YQ
+         OoTRh++SZK8PQ0awpNcMEv6ix2vSTvmieDuHIHB3qX9vDnsURIDuApoenVe34U36jVdg
+         ViYGZHJ3qQHJDrnVuuouQHNbTw2xmZSwzO30X7LmlSQaByXmdPk1tGiEyQ1zZUpjolOL
+         C4wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:to:references:from:subject:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=6q8b1N4MxU8JhrPvdZs1GsjYLUNjhqrng5So4JodxJc=;
+        b=pw7zO24WlmUBe1Qrm+6GhGvIBdGPcmwCYawIFyXBxDsaYROccJ8lD2xOeAIOXBOnKL
+         7slpWFsaMf/EhtairYP8idrzze/w/miBEy+kvB6Qf8sQgf79l9woXDEae9mK34xQsw0O
+         fL5x8oS/1Yw0i0tJMKpaADChSG9hx26zgKt7AAcMhMUOhJ4QpWjovlJ3IBqttx21zx3e
+         HlCRPGVvr5DYsjjaFCAerCC+Av8vucs+bdAYDAnhkDSKiS4GQVVObBReCz6YtKh7S4M5
+         oxEuRheqhCaRDhyaecYquYPYWFiX2CbXd1n8m8rNLH+QQ7QA6rielnFFMRMyBpfq+U0V
+         MNNg==
+X-Gm-Message-State: AOAM533fEl4LzUndncyzLHLHg74qKIqI8S4vCUckqKxQ/O+iJDraSGTp
+        W07TuDGxBATe73Y3hcQjrW+PuMhz+tE=
+X-Google-Smtp-Source: ABdhPJyjpHx6voET46fAH6m5fZRnU7WXKwfKKro8RpIUVCcIKyM3F7kGLQIbUWhv/XrdF1jBJC+HZA==
+X-Received: by 2002:a4a:dd99:: with SMTP id h25mr3364272oov.63.1621690893825;
+        Sat, 22 May 2021 06:41:33 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id h59sm1860042otb.29.2021.05.22.06.41.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 22 May 2021 06:41:33 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+To:     Erik Rosen <erik.rosen@metormote.com>,
+        Jean Delvare <jdelvare@suse.com>,
         Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Erik Rosen <erik.rosen@metormote.com>
-Subject: [PATCH v2 6/6] hwmon: (pmbus/pim4328) Add documentation for the pim4328 PMBus driver
-Date:   Sat, 22 May 2021 12:55:28 +0200
-Message-Id: <20210522105528.87629-7-erik.rosen@metormote.com>
-X-Mailer: git-send-email 2.11.0 (Apple Git-81)
-In-Reply-To: <20210522105528.87629-1-erik.rosen@metormote.com>
 References: <20210522105528.87629-1-erik.rosen@metormote.com>
+ <20210522105528.87629-4-erik.rosen@metormote.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v2 3/6] hwmon: (pmbus/pim4328) Add support for reading
+ direct format coefficients
+Message-ID: <24ff79b6-29f5-6921-7418-9ba93bcf7193@roeck-us.net>
+Date:   Sat, 22 May 2021 06:41:31 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <20210522105528.87629-4-erik.rosen@metormote.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add documentation and index link for pim4328 PMBus driver.
+On 5/22/21 3:55 AM, Erik Rosen wrote:
+> Add support for reading and decoding direct format coefficients to
+> the PMBus core driver. If the new flag PMBUS_USE_COEFFICIENTS_CMD
+> is set, the driver will use the COEFFICIENTS register together with
+> the information in the pmbus_sensor_attr structs to initialize
+> relevant coefficients for the direct mode format.
+> 
+> Signed-off-by: Erik Rosen <erik.rosen@metormote.com>
+> ---
+>   drivers/hwmon/pmbus/pmbus_core.c | 93 ++++++++++++++++++++++++++++++++
+>   include/linux/pmbus.h            |  8 +++
+>   2 files changed, 101 insertions(+)
+> 
+> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+> index 460cbfd716e4..03c169bf5633 100644
+> --- a/drivers/hwmon/pmbus/pmbus_core.c
+> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> @@ -2177,6 +2177,38 @@ static int pmbus_find_attributes(struct i2c_client *client,
+>   	return ret;
+>   }
+>   
+> +static int pmbus_init_coefficients(struct i2c_client *client,
+> +				   struct pmbus_data *data, int page,
 
-Signed-off-by: Erik Rosen <erik.rosen@metormote.com>
----
- Documentation/hwmon/index.rst   |   1 +
- Documentation/hwmon/pim4328.rst | 105 ++++++++++++++++++++++++++++++++
- MAINTAINERS                     |   7 +++
- 3 files changed, 113 insertions(+)
- create mode 100644 Documentation/hwmon/pim4328.rst
+This seems wrong. Coefficients are not maintained per page but per class,
+and (re-)reading them for each supported page doesn't really add value or
+even make sense.
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index 9ed60fa84cbe..719625f8f755 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -150,6 +150,7 @@ Hardware Monitoring Kernel Drivers
-    pc87360
-    pc87427
-    pcf8591
-+   pim4328
-    pm6764tr
-    pmbus
-    powr1220
-diff --git a/Documentation/hwmon/pim4328.rst b/Documentation/hwmon/pim4328.rst
-new file mode 100644
-index 000000000000..70c9e7a6882c
---- /dev/null
-+++ b/Documentation/hwmon/pim4328.rst
-@@ -0,0 +1,105 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Kernel driver pim4328
-+=====================
-+
-+Supported chips:
-+
-+  * Flex PIM4328
-+
-+    Prefix: 'pim4328', 'bmr455'
-+
-+    Addresses scanned: -
-+
-+    Datasheet:
-+
-+https://flexpowermodules.com/resources/fpm-techspec-pim4328
-+
-+  * Flex PIM4820
-+
-+    Prefixes: 'pim4820'
-+
-+    Addresses scanned: -
-+
-+    Datasheet: https://flexpowermodules.com/resources/fpm-techspec-pim4820
-+
-+  * Flex PIM4006, PIM4106, PIM4206, PIM4306, PIM4406
-+
-+    Prefixes: 'pim4006', 'pim4106', 'pim4206', 'pim4306', 'pim4406'
-+
-+    Addresses scanned: -
-+
-+    Datasheet: https://flexpowermodules.com/resources/fpm-techspec-pim4006
-+
-+Author: Erik Rosen <erik.rosen@metormote.com>
-+
-+
-+Description
-+-----------
-+
-+This driver supports hardware monitoring for Flex PIM4328 and
-+compatible digital power interface modules.
-+
-+The driver is a client driver to the core PMBus driver. Please see
-+Documentation/hwmon/pmbus.rst and Documentation.hwmon/pmbus-core for details
-+on PMBus client drivers.
-+
-+
-+Usage Notes
-+-----------
-+
-+This driver does not auto-detect devices. You will have to instantiate the
-+devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
-+details.
-+
-+
-+Platform data support
-+---------------------
-+
-+The driver supports standard PMBus driver platform data.
-+
-+
-+Sysfs entries
-+-------------
-+
-+The following attributes are supported. All attributes are read-only.
-+
-+======================= ========================================================
-+in1_label		"vin"
-+in1_input		Measured input voltage.
-+in1_alarm		Input voltage alarm.
-+
-+in2_label		"vin.0"
-+in2_input		Measured input voltage on input A.
-+
-+			PIM4328 and PIM4X06
-+
-+in3_label		"vin.1"
-+in3_input		Measured input voltage on input B.
-+
-+			PIM4328 and PIM4X06
-+
-+in4_label		"vcap"
-+in4_input		Measured voltage on holdup capacitor.
-+
-+			PIM4328
-+
-+curr1_label		"iin.0"
-+curr1_input		Measured input current on input A.
-+
-+			PIM4X06
-+
-+curr2_label		"iin.1"
-+curr2_input		Measured input current on input B.
-+
-+			PIM4X06
-+
-+currX_label		"iout1"
-+currX_input		Measured output current.
-+currX_alarm		Output current alarm.
-+
-+			X is 1 for PIM4820, 3 otherwise.
-+
-+temp1_input		Measured temperature.
-+temp1_alarm		High temperature alarm.
-+======================= ========================================================
-diff --git a/MAINTAINERS b/MAINTAINERS
-index bd7aff0c120f..378a121d80f6 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14416,6 +14416,13 @@ K:	(?i)pidfd
- K:	(?i)clone3
- K:	\b(clone_args|kernel_clone_args)\b
- 
-+PIM4328 DRIVER
-+M:	Daniel Nilsson <daniel.nilsson@flex.com>
-+L:	linux-hwmon@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/hwmon/pim4328.rst
-+F:	drivers/hwmon/pmbus/pim4328.c
-+
- PIN CONTROL SUBSYSTEM
- M:	Linus Walleij <linus.walleij@linaro.org>
- L:	linux-gpio@vger.kernel.org
--- 
-2.20.1
+> +				   enum pmbus_sensor_classes sensor_class,
+> +				   const struct pmbus_sensor_attr *attrs,
+> +				   int nattrs)
+> +{
+> +	int i, status;
+> +
+> +	for (i = 0; i < nattrs; i++) {
+> +		if (attrs->class == sensor_class &&
+> +		    (attrs->func & data->info->func[page])) {
+> +			status = pmbus_read_coefficients(client,
+> +							 (struct pmbus_driver_info *)data->info,
+> +							 sensor_class,
+> +							 attrs->reg);
+> +			if (status < 0) {
+> +				dev_err(&client->dev,
+> +					"Failed to read coefficients for register: %x\n",
+> +					attrs->reg);
+> +				return status;
+> +			}
+> +			return 0;
+> +		}
+> +		attrs++;
+> +	}
+> +
+> +	dev_err(&client->dev, "No coefficients found for register: %x\n",
+> +		attrs->reg);
+> +
+
+attrs points beyond the array size here, so attrs->reg does not point
+to a valid array element. The problem would also not be the register
+this happens to point to, but the class (ie the chip does not support
+a sensor of the requested class).
+
+Not sure if this should trigger a message or error in the first place.
+It won't matter since the chip will never need those coefficients.
+If anything, this would be a misconfiguration (the driver should
+not set direct format for this sensor class), and the return value
+should be -EINVAL.
+
+Either case, I wonder if this can be handled with less complex code,
+ie without having to check data->info->func[] for all pages. How
+about just walking through attrs and try all class matches until
+one is found that works (ie not return on error but keep trying) ?
+
+> +	return -ENODEV;
+> +}
+> +
+>   /*
+>    * Identify chip parameters.
+>    * This function is called for all chips.
+> @@ -2185,6 +2217,7 @@ static int pmbus_identify_common(struct i2c_client *client,
+>   				 struct pmbus_data *data, int page)
+>   {
+>   	int vout_mode = -1;
+> +	int ret;
+>   
+>   	if (pmbus_check_byte_register(client, page, PMBUS_VOUT_MODE))
+>   		vout_mode = _pmbus_read_byte_data(client, page,
+> @@ -2214,6 +2247,66 @@ static int pmbus_identify_common(struct i2c_client *client,
+>   		}
+>   	}
+>   
+> +	if (data->flags & PMBUS_USE_COEFFICIENTS_CMD) {
+
+I think there should be a separate function to handle that,
+to be called only once, not once per page.
+
+> +		if (!i2c_check_functionality(client->adapter,
+> +					     I2C_FUNC_SMBUS_BLOCK_PROC_CALL))
+> +			return -ENODEV;
+> +
+> +		if (data->info->format[PSC_VOLTAGE_IN] == direct) {
+> +			ret = pmbus_init_coefficients(client, data, page,
+> +						      PSC_VOLTAGE_IN,
+> +						      voltage_attributes,
+> +						      ARRAY_SIZE(voltage_attributes));
+> +			if (ret)
+> +				return ret;
+> +		}
+
+It might be useful to have a little structure with {class, attribute list pointer,
+attribute list size} and walk through that in a loop instead of repeating essentially
+the same code multiple times.
+
+> +
+> +		if (data->info->format[PSC_VOLTAGE_OUT] == direct) {
+> +			ret = pmbus_init_coefficients(client, data, page,
+> +						      PSC_VOLTAGE_OUT,
+> +						      voltage_attributes,
+> +						      ARRAY_SIZE(voltage_attributes));
+> +			if (ret)
+> +				return ret;
+> +		}
+> +
+> +		if (data->info->format[PSC_CURRENT_IN] == direct) {
+> +			ret = pmbus_init_coefficients(client, data, page,
+> +						      PSC_CURRENT_IN,
+> +						      current_attributes,
+> +						      ARRAY_SIZE(current_attributes));
+> +			if (ret)
+> +				return ret;
+> +		}
+> +
+> +		if (data->info->format[PSC_CURRENT_OUT] == direct) {
+> +			ret = pmbus_init_coefficients(client, data, page,
+> +						      PSC_CURRENT_OUT,
+> +						      current_attributes,
+> +						      ARRAY_SIZE(current_attributes));
+> +			if (ret)
+> +				return ret;
+> +		}
+> +
+> +		if (data->info->format[PSC_POWER] == direct) {
+> +			ret = pmbus_init_coefficients(client, data, page,
+> +						      PSC_POWER,
+> +						      power_attributes,
+> +						      ARRAY_SIZE(power_attributes));
+> +			if (ret)
+> +				return ret;
+> +		}
+> +
+> +		if (data->info->format[PSC_TEMPERATURE] == direct) {
+> +			ret = pmbus_init_coefficients(client, data, page,
+> +						      PSC_TEMPERATURE,
+> +						      temp_attributes,
+> +						      ARRAY_SIZE(temp_attributes));
+> +			if (ret)
+> +				return ret;
+> +		}
+> +	}
+> +
+>   	pmbus_clear_fault_page(client, page);
+>   	return 0;
+>   }
+> diff --git a/include/linux/pmbus.h b/include/linux/pmbus.h
+> index f720470b1bab..7fdc282dab5a 100644
+> --- a/include/linux/pmbus.h
+> +++ b/include/linux/pmbus.h
+> @@ -52,6 +52,14 @@
+>    */
+>   #define PMBUS_NO_WRITE_PROTECT			BIT(4)
+>   
+> +/*
+> + * PMBUS_USE_COEFFICIENTS_CMD
+> + *
+> + * When this flag is set the PMBus core driver will use the COEFFICIENTS
+> + * register to initialize the coefficients for the direct mode format.
+> + */
+> +#define PMBUS_USE_COEFFICIENTS_CMD		BIT(5)
+> +
+>   struct pmbus_platform_data {
+>   	u32 flags;		/* Device specific flags */
+>   
+> 
 
