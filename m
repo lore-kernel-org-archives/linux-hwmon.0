@@ -2,306 +2,265 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EAA0C47080
-	for <linux-hwmon@archiver.kernel.org>; Sun, 23 May 2021 14:01:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3202FC47080
+	for <linux-hwmon@archiver.kernel.org>; Sun, 23 May 2021 17:53:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 049A06100C
-	for <linux-hwmon@archiver.kernel.org>; Sun, 23 May 2021 14:01:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 069AE6117A
+	for <linux-hwmon@archiver.kernel.org>; Sun, 23 May 2021 17:52:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231765AbhEWODH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 23 May 2021 10:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46600 "EHLO
+        id S231893AbhEWRyZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 23 May 2021 13:54:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231761AbhEWODH (ORCPT
+        with ESMTP id S231857AbhEWRyZ (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 23 May 2021 10:03:07 -0400
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2FFCC061574;
-        Sun, 23 May 2021 07:01:39 -0700 (PDT)
-Received: by mail-ot1-x334.google.com with SMTP id i23-20020a9d68d70000b02902dc19ed4c15so22737614oto.0;
-        Sun, 23 May 2021 07:01:39 -0700 (PDT)
+        Sun, 23 May 2021 13:54:25 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 720B0C061756
+        for <linux-hwmon@vger.kernel.org>; Sun, 23 May 2021 10:52:58 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id c4so5515190iln.7
+        for <linux-hwmon@vger.kernel.org>; Sun, 23 May 2021 10:52:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=85o3ARCeqv2WoUzy+YD0a4MS1G1Bt9v4SZegPWpN42Q=;
-        b=e9nT41xKFA1VVvio8EXZYbERREMUAKZGf2lciPVimf3O7vMMnogP6i61r7syPsGiGT
-         cCYjhPCJny6k7Zff6kY7JR3oK42LXDMMlgd8/7RNUdWu8aPqO9ZNnbWrmIuaEfZoXC+O
-         qh+9WqbOpeC3VZ1zLZfwyhB4GtLLwlJ8ERDjhTu8XkzXeFQjSk26fmCs2gV9gRolDE9x
-         BFcL3ZFeEWaYrC8rddA5WQ2qNq1dNSSI2yDWyvT+mA7sQyYJdrdLCuI3EB6fBLyQBPkA
-         SA5XCeEhkDoK4o7STv8zZVDSlNx9P5tHR9mwkSbrgfD4RNtYQnB/4u4SM0rS20P9hKPn
-         5Bpw==
+        d=metormote-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=05vz9I/MF5N8EuBmgeaTm3kpG3BPBz43NAejnYDL8rg=;
+        b=jf3CN50MczZ8g0QtUQ5SHGWmUfOajk6RPW78SGcf4uf3X4XfbIpggpM3ZQI+ujYj+z
+         sdKE1k0RKe8RtOyZZwvdq1vuBrpuqPBLG72zdqU9xp108iTkCqypjC8LV2334khNfi38
+         TwmmWE2Ti1q2hYQVKA5hVX+TGDO70GlV6xL/3aCuxfIwomWcELEUku+z05YIzs3uPu9h
+         h89Sf1LqLjIu0pjwmvFd+ElC1/o4wO6GZnxd5MYbz1e2/FPj16pIxnpUpB3VBJxyXbuY
+         718G2xCm9VIuAwLwXrSUBaJu+m0x2p91e6aRUHTs39EFuV9jeVGCFhh/UvH1ud6kT8Te
+         6zOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=85o3ARCeqv2WoUzy+YD0a4MS1G1Bt9v4SZegPWpN42Q=;
-        b=BqiNLtWssNTPI1YFBZq5g+/7dM/WBNNa9nSCfiHDNF9keElsu6htTqtHEzmNEFXgnp
-         ezdwKVb+PzBZNSgoW0Zyc6BTIs+z41dT9Ce+ZeYbRyPmG38IbXCIvZzRpG0Wo2+p24ve
-         qOmvxg8zWvElDdNAe4pdprxTVycu7lPRZSwASy6pjidXQP2slrBsdw5OkUL7npBuOYJl
-         3CtBNncN09RLSNIHcP1uF4WIzJicdMO8NmUHQbyaVv9jb0ocSzZhO6/mrBuwzAVxcuDF
-         QoDxeRq1mWWcoNC/4niLZd9eg2zBZ+/I4Vp3/88xnKpv9f49/9Uff/5xOoDjzKG1G6Hj
-         EaLQ==
-X-Gm-Message-State: AOAM5335nGjohC0iQ6CMVAktytGxtw+VwwaiwNEJlRF2Tky+UfO0mZH4
-        qUjIKvVxRnoYoTvTY04s8gnKbIt8IyY=
-X-Google-Smtp-Source: ABdhPJxsnAQt+C9UddHKLBRD/OpEde33r956A2yxo0CyLzV4QBxpF2ZS6QOwZ3APLDo7DL82nOjkWw==
-X-Received: by 2002:a9d:600d:: with SMTP id h13mr14912988otj.259.1621778498053;
-        Sun, 23 May 2021 07:01:38 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p1sm2567620otk.58.2021.05.23.07.01.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 23 May 2021 07:01:37 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v6] hwmon: Add sht4x Temperature and Humidity Sensor
- Driver
-To:     Navin Sankar Velliangiri <navin@linumiz.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=05vz9I/MF5N8EuBmgeaTm3kpG3BPBz43NAejnYDL8rg=;
+        b=Y8iSvqv15ZrCtZU5gyjxvpTN8jWUrOVypQmFM0qF1XAzHrlOLrTS/SeEFW7/BpfLar
+         oa60D+hUH33CxLkHs/m8u+jjet6tkhMU7N4DgpqKq3LMojDWoydoKN4rdaQhA4LIPT/k
+         WaUUTn9yUqorHU5343r9DMg1drGr+t3q+BWAJdincGvAZedUAE4GmLMXtl8/ULv++OtJ
+         k8mK7/UoN68sZbHDEDrNUeS06tvDD/62dypewjh8YrowktTp+e7S6p2VMIDAhq9tZdq8
+         aJpDKb64BtvFP/r3Cc1ke2+49TEnq698SrRQlDn+7DMP0NdNuEAJ5eFsMGrHNpECioVs
+         ruHA==
+X-Gm-Message-State: AOAM532UwtXJmn+khVDNyUUc0n7FQbVDIi+gXzVI35t+tFzGfMz6W4C9
+        ib/XtzFVbWPR+wy1N6aDxKnPcVC955qgDDAKwdmyfg==
+X-Google-Smtp-Source: ABdhPJyhSlBBavDbjIHB/GTOjMKky9wJKFaoO/4oLDlpN3uOlp4AE60rTIHditZTdxbLb7xZcpA3a/vGxx1Tvdsigxs=
+X-Received: by 2002:a05:6e02:f81:: with SMTP id v1mr13126189ilo.243.1621792377638;
+ Sun, 23 May 2021 10:52:57 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210522105528.87629-1-erik.rosen@metormote.com>
+ <20210522105528.87629-4-erik.rosen@metormote.com> <24ff79b6-29f5-6921-7418-9ba93bcf7193@roeck-us.net>
+In-Reply-To: <24ff79b6-29f5-6921-7418-9ba93bcf7193@roeck-us.net>
+From:   Erik Rosen <erik.rosen@metormote.com>
+Date:   Sun, 23 May 2021 19:52:46 +0200
+Message-ID: <CA+ui0H=Q5Xei0Uts_VzNV2PcKHc5jhM+dum59+Q4Lg5GYFdEJg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/6] hwmon: (pmbus/pim4328) Add support for reading
+ direct format coefficients
+To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
         linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20210522060917.41256-1-navin@linumiz.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <0fdb63a8-f353-cbcb-b97b-b54ab2da9d7f@roeck-us.net>
-Date:   Sun, 23 May 2021 07:01:35 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <20210522060917.41256-1-navin@linumiz.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/21/21 11:09 PM, Navin Sankar Velliangiri wrote:
-> This patch adds a hwmon driver for the SHT4x Temperature and
-> Humidity sensor.
-> 
-> Signed-off-by: Navin Sankar Velliangiri <navin@linumiz.com>
-> 
-> Changes in v2:
-> 
-> * Removed unused macro SHT4X_MIN_POLL_INTERVAL
-> * Replaced time_after instead of ktime_after
-> * Used goto statements for error handling
-> * Hardcoded the interval_time instead of clamp_val().
-> 
-> Changes in v3:
-> 
-> * Accept the poll interval if it is greater than SHT4X_MIN_POLL_INTERVAL and
->    return -EINVAL for negative values & less than SHT4X_MIN_POLL_INTERVAL
-> * Changed the data type of update_interval and last_updated to long.
-> 
-> Changes in v4:
-> 
-> * "update_interval" is long but msecs_to_jiffies() accepts only unsigned int.
->    clamp_val() api is used to assign the update_interval stays within UINT_MAX.
-> 
-> Changes in v5:
-> 
-> * Added error handling when master unable to send the data.
-> 
-> Changes in v6:
-> 
-> * clamp_val() alone is used to set the update interval. since the update
->    interval is a continuous setting.
-> ---
->   Documentation/hwmon/index.rst |   1 +
->   Documentation/hwmon/sht4x.rst |  45 +++++
->   drivers/hwmon/Kconfig         |  11 ++
->   drivers/hwmon/Makefile        |   1 +
->   drivers/hwmon/sht4x.c         | 305 ++++++++++++++++++++++++++++++++++
->   5 files changed, 363 insertions(+)
->   create mode 100644 Documentation/hwmon/sht4x.rst
->   create mode 100644 drivers/hwmon/sht4x.c
-> 
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index 9ed60fa84cbe..b6fcae40258c 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -164,6 +164,7 @@ Hardware Monitoring Kernel Drivers
->      sht15
->      sht21
->      sht3x
-> +   sht4x
->      shtc1
->      sis5595
->      sl28cpld
-> diff --git a/Documentation/hwmon/sht4x.rst b/Documentation/hwmon/sht4x.rst
-> new file mode 100644
-> index 000000000000..3b37abcd4a46
-> --- /dev/null
-> +++ b/Documentation/hwmon/sht4x.rst
-> @@ -0,0 +1,45 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +Kernel driver sht4x
-> +===================
-> +
-> +Supported Chips:
-> +
-> +  * Sensirion SHT4X
-> +
-> +    Prefix: 'sht4x'
-> +
-> +    Addresses scanned: None
-> +
-> +    Datasheet:
-> +
-> +      English: https://www.sensirion.com/fileadmin/user_upload/customers/sensirion/Dokumente/2_Humidity_Sensors/Datasheets/Sensirion_Humidity_Sensors_SHT4x_Datasheet.pdf
-> +
-> +Author: Navin Sankar Velliangiri <navin@linumiz.com>
-> +
-> +
-> +Description
-> +-----------
-> +
-> +This driver implements support for the Sensirion SHT4x chip, a humidity
-> +and temperature sensor. Temperature is measured in degree celsius, relative
-> +humidity is expressed as a percentage. In sysfs interface, all values are
-> +scaled by 1000, i.e. the value for 31.5 degrees celsius is 31500.
-> +
-> +Usage Notes
-> +-----------
-> +
-> +The device communicates with the I2C protocol. Sensors can have the I2C
-> +address 0x44. See Documentation/i2c/instantiating-devices.rst for methods
-> +to instantiate the device.
-> +
-> +Sysfs entries
-> +-------------
-> +
-> +=============== ============================================
-> +temp1_input     Measured temperature in millidegrees Celcius
-> +humidity1_input Measured humidity in %H
-> +update_interval The minimum interval for polling the sensor,
-> +                in milliseconds. Writable. Must be at least
-> +                2000.
-> +============== =============================================
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 87624902ea80..e3675377bc5d 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1583,6 +1583,17 @@ config SENSORS_SHT3x
->   	  This driver can also be built as a module. If so, the module
->   	  will be called sht3x.
->   
-> +config SENSORS_SHT4x
-> +	tristate "Sensiron humidity and temperature sensors. SHT4x and compat."
-> +	depends on I2C
-> +	select CRC8
-> +	help
-> +	  If you say yes here you get support for the Sensiron SHT40, SHT41 and
-> +	  SHT45 humidity and temperature sensors.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called sht4x.
-> +
->   config SENSORS_SHTC1
->   	tristate "Sensiron humidity and temperature sensors. SHTC1 and compat."
->   	depends on I2C
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index 59e78bc212cf..d712c61c1f5e 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -171,6 +171,7 @@ obj-$(CONFIG_SENSORS_SL28CPLD)	+= sl28cpld-hwmon.o
->   obj-$(CONFIG_SENSORS_SHT15)	+= sht15.o
->   obj-$(CONFIG_SENSORS_SHT21)	+= sht21.o
->   obj-$(CONFIG_SENSORS_SHT3x)	+= sht3x.o
-> +obj-$(CONFIG_SENSORS_SHT4x)	+= sht4x.o
->   obj-$(CONFIG_SENSORS_SHTC1)	+= shtc1.o
->   obj-$(CONFIG_SENSORS_SIS5595)	+= sis5595.o
->   obj-$(CONFIG_SENSORS_SMM665)	+= smm665.o
-> diff --git a/drivers/hwmon/sht4x.c b/drivers/hwmon/sht4x.c
-> new file mode 100644
-> index 000000000000..39e1b4a123fa
-> --- /dev/null
-> +++ b/drivers/hwmon/sht4x.c
-> @@ -0,0 +1,305 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +
-> +/*
-> + * Copyright (c) Linumiz 2021
-> + *
-> + * sht4x.c - Linux hwmon driver for SHT4x Temperature and Humidity sensor
-> + *
-> + * Author: Navin Sankar Velliangiri <navin@linumiz.com>
-> + */
-> +
-> +#include <linux/crc8.h>
-> +#include <linux/delay.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/i2c.h>
-> +#include <linux/jiffies.h>
-> +#include <linux/module.h>
-> +
-> +/*
-> + * Poll intervals (in milliseconds)
-> + */
-> +#define SHT4X_MIN_POLL_INTERVAL	2000
-> +
-> +/*
-> + * I2C command delays (in microseconds)
-> + */
-> +#define SHT4X_MEAS_DELAY	1000
-> +#define SHT4X_DELAY_EXTRA	10000
-> +
-> +/*
-> + * Command Bytes
-> + */
-> +#define SHT4X_CMD_MEASURE_HPM	0b11111101
-> +#define SHT4X_CMD_RESET		0b10010100
-> +
-> +#define SHT4X_CMD_LEN		1
-> +#define SHT4X_CRC8_LEN		1
-> +#define SHT4X_WORD_LEN		2
-> +#define SHT4X_RESPONSE_LENGTH	6
-> +#define SHT4X_CRC8_POLYNOMIAL	0x31
-> +#define SHT4X_CRC8_INIT		0xff
-> +#define SHT4X_MIN_TEMPERATURE	-45000
-> +#define SHT4X_MAX_TEMPERATURE	125000
-> +#define SHT4X_MIN_HUMIDITY	0
-> +#define SHT4X_MAX_HUMIDITY	100000
-> +
-> +DECLARE_CRC8_TABLE(sht4x_crc8_table);
-> +
-> +/**
-> + * struct sht4x_data - All the data required to operate an SHT4X chip
-> + * @client: the i2c client associated with the SHT4X
-> + * @lock: a mutex that is used to prevent parallel access to the i2c client
-> + * @update_interval: the minimum poll interval
-> + * @last_updated: the previous time that the SHT4X was polled
-> + * @temperature: the latest temperature value received from the SHT4X
-> + * @humidity: the latest humidity value received from the SHT4X
-> + */
-> +struct sht4x_data {
-> +	struct i2c_client	*client;
-> +	struct mutex		lock;	/* atomic read data updates */
-> +	bool			valid;	/* validity of fields below */
-> +	long			update_interval;	/* in milli-seconds */
-> +	long			last_updated;	/* in jiffies */
-> +	s32			temperature;
-> +	s32			humidity;
-> +};
-> +
-> +/**
-> + * sht4x_read_values() - read and parse the raw data from the SHT4X
-> + * @sht4x_data: the struct sht4x_data to use for the lock
-> + * Return: 0 if succesfull, 1 if not
-> + */
-> +static int sht4x_read_values(struct sht4x_data *data)
-> +{
-> +	int ret;
+On Sat, May 22, 2021 at 3:41 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 5/22/21 3:55 AM, Erik Rosen wrote:
+> > Add support for reading and decoding direct format coefficients to
+> > the PMBus core driver. If the new flag PMBUS_USE_COEFFICIENTS_CMD
+> > is set, the driver will use the COEFFICIENTS register together with
+> > the information in the pmbus_sensor_attr structs to initialize
+> > relevant coefficients for the direct mode format.
+> >
+> > Signed-off-by: Erik Rosen <erik.rosen@metormote.com>
+> > ---
+> >   drivers/hwmon/pmbus/pmbus_core.c | 93 ++++++++++++++++++++++++++++++++
+> >   include/linux/pmbus.h            |  8 +++
+> >   2 files changed, 101 insertions(+)
+> >
+> > diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+> > index 460cbfd716e4..03c169bf5633 100644
+> > --- a/drivers/hwmon/pmbus/pmbus_core.c
+> > +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> > @@ -2177,6 +2177,38 @@ static int pmbus_find_attributes(struct i2c_client *client,
+> >       return ret;
+> >   }
+> >
+> > +static int pmbus_init_coefficients(struct i2c_client *client,
+> > +                                struct pmbus_data *data, int page,
+>
+> This seems wrong. Coefficients are not maintained per page but per class,
+> and (re-)reading them for each supported page doesn't really add value or
+> even make sense.
+>
+> > +                                enum pmbus_sensor_classes sensor_class,
+> > +                                const struct pmbus_sensor_attr *attrs,
+> > +                                int nattrs)
+> > +{
+> > +     int i, status;
+> > +
+> > +     for (i = 0; i < nattrs; i++) {
+> > +             if (attrs->class == sensor_class &&
+> > +                 (attrs->func & data->info->func[page])) {
+> > +                     status = pmbus_read_coefficients(client,
+> > +                                                      (struct pmbus_driver_info *)data->info,
+> > +                                                      sensor_class,
+> > +                                                      attrs->reg);
+> > +                     if (status < 0) {
+> > +                             dev_err(&client->dev,
+> > +                                     "Failed to read coefficients for register: %x\n",
+> > +                                     attrs->reg);
+> > +                             return status;
+> > +                     }
+> > +                     return 0;
+> > +             }
+> > +             attrs++;
+> > +     }
+> > +
+> > +     dev_err(&client->dev, "No coefficients found for register: %x\n",
+> > +             attrs->reg);
+> > +
+>
+> attrs points beyond the array size here, so attrs->reg does not point
+> to a valid array element. The problem would also not be the register
+> this happens to point to, but the class (ie the chip does not support
+> a sensor of the requested class).
+>
+> Not sure if this should trigger a message or error in the first place.
+> It won't matter since the chip will never need those coefficients.
+> If anything, this would be a misconfiguration (the driver should
+> not set direct format for this sensor class), and the return value
+> should be -EINVAL.
+>
+> Either case, I wonder if this can be handled with less complex code,
+> ie without having to check data->info->func[] for all pages. How
+> about just walking through attrs and try all class matches until
+> one is found that works (ie not return on error but keep trying) ?
 
-Ah yes, the value of ret will be uninitialized, and the function will return
-a random value if data->valid is false or if two measurements follow each other.
+Ok, I'll send a new version based on your comments.
+I'm not entirely comfortable with just silently ignoring any failure to
+retrieve the coefficients for a sensor class. I mean it could be due to any
+reason; a bus error for instance. I'll return a -EINVAL for now if you don't
+disagree.
 
-Please fix and resubmit. The driver looks good otherwise.
+/Erik
 
-Guenter
+>
+> > +     return -ENODEV;
+> > +}
+> > +
+> >   /*
+> >    * Identify chip parameters.
+> >    * This function is called for all chips.
+> > @@ -2185,6 +2217,7 @@ static int pmbus_identify_common(struct i2c_client *client,
+> >                                struct pmbus_data *data, int page)
+> >   {
+> >       int vout_mode = -1;
+> > +     int ret;
+> >
+> >       if (pmbus_check_byte_register(client, page, PMBUS_VOUT_MODE))
+> >               vout_mode = _pmbus_read_byte_data(client, page,
+> > @@ -2214,6 +2247,66 @@ static int pmbus_identify_common(struct i2c_client *client,
+> >               }
+> >       }
+> >
+> > +     if (data->flags & PMBUS_USE_COEFFICIENTS_CMD) {
+>
+> I think there should be a separate function to handle that,
+> to be called only once, not once per page.
+>
+> > +             if (!i2c_check_functionality(client->adapter,
+> > +                                          I2C_FUNC_SMBUS_BLOCK_PROC_CALL))
+> > +                     return -ENODEV;
+> > +
+> > +             if (data->info->format[PSC_VOLTAGE_IN] == direct) {
+> > +                     ret = pmbus_init_coefficients(client, data, page,
+> > +                                                   PSC_VOLTAGE_IN,
+> > +                                                   voltage_attributes,
+> > +                                                   ARRAY_SIZE(voltage_attributes));
+> > +                     if (ret)
+> > +                             return ret;
+> > +             }
+>
+> It might be useful to have a little structure with {class, attribute list pointer,
+> attribute list size} and walk through that in a loop instead of repeating essentially
+> the same code multiple times.
+>
+> > +
+> > +             if (data->info->format[PSC_VOLTAGE_OUT] == direct) {
+> > +                     ret = pmbus_init_coefficients(client, data, page,
+> > +                                                   PSC_VOLTAGE_OUT,
+> > +                                                   voltage_attributes,
+> > +                                                   ARRAY_SIZE(voltage_attributes));
+> > +                     if (ret)
+> > +                             return ret;
+> > +             }
+> > +
+> > +             if (data->info->format[PSC_CURRENT_IN] == direct) {
+> > +                     ret = pmbus_init_coefficients(client, data, page,
+> > +                                                   PSC_CURRENT_IN,
+> > +                                                   current_attributes,
+> > +                                                   ARRAY_SIZE(current_attributes));
+> > +                     if (ret)
+> > +                             return ret;
+> > +             }
+> > +
+> > +             if (data->info->format[PSC_CURRENT_OUT] == direct) {
+> > +                     ret = pmbus_init_coefficients(client, data, page,
+> > +                                                   PSC_CURRENT_OUT,
+> > +                                                   current_attributes,
+> > +                                                   ARRAY_SIZE(current_attributes));
+> > +                     if (ret)
+> > +                             return ret;
+> > +             }
+> > +
+> > +             if (data->info->format[PSC_POWER] == direct) {
+> > +                     ret = pmbus_init_coefficients(client, data, page,
+> > +                                                   PSC_POWER,
+> > +                                                   power_attributes,
+> > +                                                   ARRAY_SIZE(power_attributes));
+> > +                     if (ret)
+> > +                             return ret;
+> > +             }
+> > +
+> > +             if (data->info->format[PSC_TEMPERATURE] == direct) {
+> > +                     ret = pmbus_init_coefficients(client, data, page,
+> > +                                                   PSC_TEMPERATURE,
+> > +                                                   temp_attributes,
+> > +                                                   ARRAY_SIZE(temp_attributes));
+> > +                     if (ret)
+> > +                             return ret;
+> > +             }
+> > +     }
+> > +
+> >       pmbus_clear_fault_page(client, page);
+> >       return 0;
+> >   }
+> > diff --git a/include/linux/pmbus.h b/include/linux/pmbus.h
+> > index f720470b1bab..7fdc282dab5a 100644
+> > --- a/include/linux/pmbus.h
+> > +++ b/include/linux/pmbus.h
+> > @@ -52,6 +52,14 @@
+> >    */
+> >   #define PMBUS_NO_WRITE_PROTECT                      BIT(4)
+> >
+> > +/*
+> > + * PMBUS_USE_COEFFICIENTS_CMD
+> > + *
+> > + * When this flag is set the PMBus core driver will use the COEFFICIENTS
+> > + * register to initialize the coefficients for the direct mode format.
+> > + */
+> > +#define PMBUS_USE_COEFFICIENTS_CMD           BIT(5)
+> > +
+> >   struct pmbus_platform_data {
+> >       u32 flags;              /* Device specific flags */
+> >
+> >
+>
