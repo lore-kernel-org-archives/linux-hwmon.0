@@ -2,541 +2,472 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_RED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79B5AC04FF3
-	for <linux-hwmon@archiver.kernel.org>; Mon, 24 May 2021 10:29:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74183C2B9F8
+	for <linux-hwmon@archiver.kernel.org>; Mon, 24 May 2021 12:21:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5C2C261026
-	for <linux-hwmon@archiver.kernel.org>; Mon, 24 May 2021 10:29:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 52174600D4
+	for <linux-hwmon@archiver.kernel.org>; Mon, 24 May 2021 12:21:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232433AbhEXKal (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 24 May 2021 06:30:41 -0400
-Received: from gproxy3-pub.mail.unifiedlayer.com ([69.89.30.42]:59469 "EHLO
-        gproxy3-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232422AbhEXKaj (ORCPT
+        id S232300AbhEXMXO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 24 May 2021 08:23:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59932 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232373AbhEXMXN (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 24 May 2021 06:30:39 -0400
-X-Greylist: delayed 1436 seconds by postgrey-1.27 at vger.kernel.org; Mon, 24 May 2021 06:30:39 EDT
-Received: from cmgw14.mail.unifiedlayer.com (unknown [10.0.90.129])
-        by gproxy3.mail.unifiedlayer.com (Postfix) with ESMTP id 0168E8033099
-        for <linux-hwmon@vger.kernel.org>; Mon, 24 May 2021 10:04:53 +0000 (UTC)
-Received: from md-in-79.webhostbox.net ([43.225.55.182])
-        by cmsmtp with ESMTP
-        id l7S6lH2JXZwLVl7S7lbtUZ; Mon, 24 May 2021 10:04:52 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=NJkQR22g c=1 sm=1 tr=0 ts=60ab7a44
- a=LfuyaZh/8e9VOkaVZk0aRw==:117 a=LfuyaZh/8e9VOkaVZk0aRw==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=5FLXtPjwQuUA:10:nop_rcvd_month_year
- a=oz0wMknONp8A:10:endurance_base64_authed_username_1 a=vU9dKmh3AAAA:8
- a=NcCfH-bgAAAA:8 a=lhsWNlwdHoQvLuVuHl0A:9 a=rsP06fVo5MYu2ilr0aT5:22
- a=nZLUJm6UEJn402BoZzOq:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=linumiz.com
-        ; s=default; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject
-        :Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=XlYJiqid3K9Ek2tK9M4emegnaIpK0BUch08/pHNm97A=; b=HEm9fMqZNCcVIbv1FIIKMrpiKa
-        N5zsQdAmdH3LFA9pCb3QLGmV5WZ6XFZbffBpZfANeokDKkvj4mm8K3wk2bRa2rbxDWYPemfNgDoZH
-        DxOroPaiP/y0k3vK7Smc8ldbK4N9Ov7hjUJk5ykMcYdHZmNnC9o7q9fvmjYkYYpqqV56iMB7LMgxI
-        qo9deoXd0ABAl+RoMnBqB30uwAv2CSFllFVwqAaPl4flAzqwI1GhTCpqDv+94v4p3qRPLWV4AkRU2
-        cMkGf55n11nPr3lm/prMGYyorbiPCqzMCP856j3E8n1XBCqLw25cZZmevamppf/4v0Jcpbhtpos8o
-        aTcT8q8A==;
-Received: from [117.202.190.100] (port=53852 helo=localhost.localdomain)
-        by md-in-79.webhostbox.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <navin@linumiz.com>)
-        id 1ll7S4-002guI-En; Mon, 24 May 2021 10:04:48 +0000
-From:   Navin Sankar Velliangiri <navin@linumiz.com>
-To:     linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     linux@roeck-us.net, jdelvare@suse.com, corbet@lwn.net,
-        navin@linumiz.com
-Subject: [PATCH v7] hwmon: Add sht4x Temperature and Humidity Sensor Driver
-Date:   Mon, 24 May 2021 15:34:25 +0530
-Message-Id: <20210524100425.64052-1-navin@linumiz.com>
-X-Mailer: git-send-email 2.31.1
+        Mon, 24 May 2021 08:23:13 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4AD3C06138A
+        for <linux-hwmon@vger.kernel.org>; Mon, 24 May 2021 05:21:44 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id k22so3099240ioa.9
+        for <linux-hwmon@vger.kernel.org>; Mon, 24 May 2021 05:21:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sartura-hr.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AVj2UZLoMatA9yLbqF3L/VCYiqsHaiAQE0zqsL8wIdI=;
+        b=rQwLftt4nazyTM34MEcdzFm95kKw/qDb+lj/oJ/fCUsvLe/wdkYqO/KnXYEMjVUCpD
+         P1Bx0a4WNhRfTuJYPJfy4dga2js92QzTzgSkTGxLxs37cy8aKDJ3NJTOF/YLrRYdzuTm
+         4MsnNyRMFp1xydtGY1ZFXH5TpsvVUAAu+Yl/csGOhQh8d/WI2hFpTQeWLU1NSYDFIxJA
+         RFc9y9UXBzhNgGGL+b0fufm74NZhWJok+XInSBdYt/vgaiKT90U6feTMPyV9Anw+sn+3
+         mgIiiTaYjStbw/SXqXSROBX570lqdyB8oku4MBldxIhmTxPua67nhU/8xATEzT/HN/Yq
+         KG/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AVj2UZLoMatA9yLbqF3L/VCYiqsHaiAQE0zqsL8wIdI=;
+        b=gAnJMpA0hZNKqHPl0jkuCqM7q3MeRYFXxKVcNepfYCAAgUeSAoGH1cXMbkO/nJAQIK
+         LRZ6djJMgG4USFGHY7ocxOIUwEmYYtU9U3GLeNFdh+XiJsSSeXuNrLuEKqqsIG4pL85F
+         NE9dG+Kkr0PiZfANa2QMli2UCOe0L1jFXzqqoL3NvdaqUqMdttBmbRoPosg0ao1+u0EV
+         K/RUjhjin9O1c5I+O7W6csfEtns3Lbmsxe7BpgzgIvqwlMfIp6+h+AK8yNXK1r+8d+V2
+         6XfhEy7lcAIrW6JZLKjQLfaHfKrHcXUN665nHelcFsFmtOKCfzq1WTpxmtS7U9fCxkCM
+         iOtQ==
+X-Gm-Message-State: AOAM5317zrRFZh6ChAuIUcdPC6aQqSk/PcwW+jJZiO49NUl0jW/M97Mp
+        T9jFFWh/PHqzoTWzLWy8DQPPjBPm0ypv7Bj/Dth8u98fI6GVXw==
+X-Google-Smtp-Source: ABdhPJyeZDM2ESdYBWhK72Pzpr2jdq4nGIYT5vBUDR2knIjSdQ6ct1SFTbKu8JCA8XzfkHrQ79RdUX9Sz42QLZDmiy4=
+X-Received: by 2002:a05:6602:134c:: with SMTP id i12mr15667249iov.175.1621858903879;
+ Mon, 24 May 2021 05:21:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - md-in-79.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - linumiz.com
-X-BWhitelist: no
-X-Source-IP: 117.202.190.100
-X-Source-L: No
-X-Exim-ID: 1ll7S4-002guI-En
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: (localhost.localdomain) [117.202.190.100]:53852
-X-Source-Auth: linumcmc
-X-Email-Count: 6
-X-Source-Cap: bGludW1jbWM7aG9zdGdhdG9yO21kLWluLTc5LndlYmhvc3Rib3gubmV0
-X-Local-Domain: yes
+References: <20210430132735.127342-1-robert.marko@sartura.hr>
+ <20210430134810.GA2714262@roeck-us.net> <CA+HBbNH+gQOmu_Ho0ivFuGHdu0zBtOrr1474z+7FA1zmNb4bug@mail.gmail.com>
+ <2b990feb-dc26-debb-4f81-430bbc89b51c@roeck-us.net> <CA+HBbNHQHqD-wgryaBLZ5M2Lxafb0OwNcbiQJmRQPcZfprmUEg@mail.gmail.com>
+ <2a1a63c7-c9b0-e38d-df1d-7643ad493aba@roeck-us.net> <CA+HBbNF62xzBt2r60qfzn9iveiusLKp6R-T4KU-NgoHaE6c3kQ@mail.gmail.com>
+ <dec7d641-2954-29f0-124b-d0020866bf7b@roeck-us.net>
+In-Reply-To: <dec7d641-2954-29f0-124b-d0020866bf7b@roeck-us.net>
+From:   Robert Marko <robert.marko@sartura.hr>
+Date:   Mon, 24 May 2021 14:21:32 +0200
+Message-ID: <CA+HBbNGU4d4g0JrUKBhj07OsC7=s9qoubxNDi3MxPjmV457C+Q@mail.gmail.com>
+Subject: Re: [PATCH 1/3] hwmon: (pmbus) Add driver for Delta DPS-920AB PSU
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     jdelvare@suse.com, corbet@lwn.net, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Luka Perkov <luka.perkov@sartura.hr>, jmp@epiphyte.org,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Donald Buczek <buczek@molgen.mpg.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-This patch adds a hwmon driver for the SHT4x Temperature and
-Humidity sensor.
+On Fri, May 21, 2021 at 4:46 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 5/21/21 4:56 AM, Robert Marko wrote:
+> > On Fri, May 21, 2021 at 12:56 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> >>
+> >> On 5/21/21 1:36 AM, Robert Marko wrote:
+> >>> On Wed, May 19, 2021 at 3:19 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> >>>>
+> >>>> On 5/19/21 5:38 AM, Robert Marko wrote:
+> >>>>> On Fri, Apr 30, 2021 at 3:48 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> >>>>>>
+> >>>>>> On Fri, Apr 30, 2021 at 03:27:33PM +0200, Robert Marko wrote:
+> >>>>>>> This adds support for the Delta DPS-920AB PSU.
+> >>>>>>>
+> >>>>>>> Only missing feature is fan control which the PSU supports.
+> >>>>>>>
+> >>>>>>> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> >>>>>>> ---
+> >>>>>>>     Documentation/hwmon/dps920ab.rst | 80 ++++++++++++++++++++++++++++++++
+> >>>>>>>     Documentation/hwmon/index.rst    |  1 +
+> >>>>>>>     drivers/hwmon/pmbus/Kconfig      |  9 ++++
+> >>>>>>>     drivers/hwmon/pmbus/Makefile     |  1 +
+> >>>>>>>     drivers/hwmon/pmbus/dps920ab.c   | 63 +++++++++++++++++++++++++
+> >>>>>>>     5 files changed, 154 insertions(+)
+> >>>>>>>     create mode 100644 Documentation/hwmon/dps920ab.rst
+> >>>>>>>     create mode 100644 drivers/hwmon/pmbus/dps920ab.c
+> >>>>>>>
+> >>>>>>> diff --git a/Documentation/hwmon/dps920ab.rst b/Documentation/hwmon/dps920ab.rst
+> >>>>>>> new file mode 100644
+> >>>>>>> index 000000000000..df0aef530c7e
+> >>>>>>> --- /dev/null
+> >>>>>>> +++ b/Documentation/hwmon/dps920ab.rst
+> >>>>>>> @@ -0,0 +1,80 @@
+> >>>>>>> +.. SPDX-License-Identifier: GPL-2.0-or-later
+> >>>>>>> +
+> >>>>>>> +Kernel driver dps920ab
+> >>>>>>> +========================
+> >>>>>>> +
+> >>>>>>> +Supported chips:
+> >>>>>>> +
+> >>>>>>> +  * Delta DPS920AB
+> >>>>>>> +
+> >>>>>>> +    Prefix: 'dps920ab'
+> >>>>>>> +
+> >>>>>>> +    Addresses scanned: -
+> >>>>>>> +
+> >>>>>>> +Authors:
+> >>>>>>> +    Robert Marko <robert.marko@sartura.hr>
+> >>>>>>> +
+> >>>>>>> +
+> >>>>>>> +Description
+> >>>>>>> +-----------
+> >>>>>>> +
+> >>>>>>> +This driver implements support for Delta DPS920AB 920W 54V DC single output
+> >>>>>>> +power supply with PMBus support.
+> >>>>>>> +
+> >>>>>>> +The driver is a client driver to the core PMBus driver.
+> >>>>>>> +Please see Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
+> >>>>>>> +
+> >>>>>>> +
+> >>>>>>> +Usage Notes
+> >>>>>>> +-----------
+> >>>>>>> +
+> >>>>>>> +This driver does not auto-detect devices. You will have to instantiate the
+> >>>>>>> +devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
+> >>>>>>> +details.
+> >>>>>>> +
+> >>>>>>> +
+> >>>>>>> +Sysfs entries
+> >>>>>>> +-------------
+> >>>>>>> +
+> >>>>>>> +======================= ======================================================
+> >>>>>>> +curr1_label          "iin"
+> >>>>>>> +curr1_input          Measured input current
+> >>>>>>> +curr1_crit           Critical maximum current
+> >>>>>>> +curr1_crit_alarm     Current critical high alarm
+> >>>>>>> +
+> >>>>>>> +curr2_label          "iout1"
+> >>>>>>> +curr2_input          Measured output current
+> >>>>>>> +curr2_crit           Critical maximum current
+> >>>>>>> +curr2_crit_alarm     Current critical high alarm
+> >>>>>>> +
+> >>>>>>> +in1_label            "vin"
+> >>>>>>> +in1_input            Measured input voltage
+> >>>>>>> +in1_lcrit            Critical minimum input voltage
+> >>>>>>> +in1_lcrit_alarm              Input voltage critical low alarm
+> >>>>>>> +in1_crit             Critical maximum input voltage
+> >>>>>>> +in1_crit_alarm               Input voltage critical high alarm
+> >>>>>>> +
+> >>>>>>> +in2_label            "vout1"
+> >>>>>>> +in2_input            Measured output voltage
+> >>>>>>> +in2_lcrit            Critical minimum output voltage
+> >>>>>>> +in2_lcrit_alarm              Output voltage critical low alarm
+> >>>>>>> +in2_crit             Critical maximum output voltage
+> >>>>>>> +in2_crit_alarm               Output voltage critical high alarm
+> >>>>>>> +
+> >>>>>>> +power1_label         "pin"
+> >>>>>>> +power1_input         Measured input power
+> >>>>>>> +power1_alarm         Input power high alarm
+> >>>>>>> +
+> >>>>>>> +power2_label         "pout1"
+> >>>>>>> +power2_input         Measured output power
+> >>>>>>> +
+> >>>>>>> +temp[1-2]_input              Measured temperature
+> >>>>>>> +temp[1-2]_crit               Critical high temperature
+> >>>>>>> +temp[1-2]_crit_alarm Chip temperature critical high alarm
+> >>>>>>> +temp[1-2]_max                Maximum temperature
+> >>>>>>> +temp[1-2]_max_alarm  Chip temperature high alarm
+> >>>>>>> +
+> >>>>>>> +fan1_alarm           Fan 1 warning.
+> >>>>>>> +fan1_fault           Fan 1 fault.
+> >>>>>>> +fan1_input           Fan 1 speed in RPM.
+> >>>>>>> +======================= ======================================================
+> >>>>>>> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+> >>>>>>> index 8d5a2df1ecb6..b24436f22052 100644
+> >>>>>>> --- a/Documentation/hwmon/index.rst
+> >>>>>>> +++ b/Documentation/hwmon/index.rst
+> >>>>>>> @@ -54,6 +54,7 @@ Hardware Monitoring Kernel Drivers
+> >>>>>>>        dell-smm-hwmon
+> >>>>>>>        dme1737
+> >>>>>>>        drivetemp
+> >>>>>>> +   dps920ab
+> >>>>>>>        ds1621
+> >>>>>>>        ds620
+> >>>>>>>        emc1403
+> >>>>>>> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> >>>>>>> index 32d2fc850621..865ade0aa205 100644
+> >>>>>>> --- a/drivers/hwmon/pmbus/Kconfig
+> >>>>>>> +++ b/drivers/hwmon/pmbus/Kconfig
+> >>>>>>> @@ -66,6 +66,15 @@ config SENSORS_IBM_CFFPS
+> >>>>>>>            This driver can also be built as a module. If so, the module will
+> >>>>>>>            be called ibm-cffps.
+> >>>>>>>
+> >>>>>>> +config SENSORS_DPS920AB
+> >>>>>>> +     tristate "Delta DPS920AB Power Supply"
+> >>>>>>> +     help
+> >>>>>>> +       If you say yes here you get hardware monitoring support for Delta
+> >>>>>>> +       DPS920AB Power Supplies.
+> >>>>>>> +
+> >>>>>>> +       This driver can also be built as a module. If so, the module will
+> >>>>>>> +       be called dps920ab.
+> >>>>>>> +
+> >>>>>>>     config SENSORS_INSPUR_IPSPS
+> >>>>>>>          tristate "INSPUR Power System Power Supply"
+> >>>>>>>          help
+> >>>>>>> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> >>>>>>> index 6a4ba0fdc1db..f59ba0123d68 100644
+> >>>>>>> --- a/drivers/hwmon/pmbus/Makefile
+> >>>>>>> +++ b/drivers/hwmon/pmbus/Makefile
+> >>>>>>> @@ -9,6 +9,7 @@ obj-$(CONFIG_SENSORS_ADM1266) += adm1266.o
+> >>>>>>>     obj-$(CONFIG_SENSORS_ADM1275)        += adm1275.o
+> >>>>>>>     obj-$(CONFIG_SENSORS_BEL_PFE)        += bel-pfe.o
+> >>>>>>>     obj-$(CONFIG_SENSORS_IBM_CFFPS)      += ibm-cffps.o
+> >>>>>>> +obj-$(CONFIG_SENSORS_DPS920AB)       += dps920ab.o
+> >>>>>>>     obj-$(CONFIG_SENSORS_INSPUR_IPSPS) += inspur-ipsps.o
+> >>>>>>>     obj-$(CONFIG_SENSORS_IR35221)        += ir35221.o
+> >>>>>>>     obj-$(CONFIG_SENSORS_IR38064)        += ir38064.o
+> >>>>>>> diff --git a/drivers/hwmon/pmbus/dps920ab.c b/drivers/hwmon/pmbus/dps920ab.c
+> >>>>>>> new file mode 100644
+> >>>>>>> index 000000000000..d579ed9f879c
+> >>>>>>> --- /dev/null
+> >>>>>>> +++ b/drivers/hwmon/pmbus/dps920ab.c
+> >>>>>>> @@ -0,0 +1,63 @@
+> >>>>>>> +// SPDX-License-Identifier: GPL-2.0-or-later
+> >>>>>>> +/*
+> >>>>>>> + * Driver for Delta DPS920AB PSU
+> >>>>>>> + *
+> >>>>>>> + * Copyright (C) 2021 Delta Networks, Inc.
+> >>>>>>> + * Copyright (C) 2021 Sartura Ltd.
+> >>>>>>> + */
+> >>>>>>> +
+> >>>>>>> +#include <linux/i2c.h>
+> >>>>>>> +#include <linux/module.h>
+> >>>>>>> +#include <linux/of_device.h>
+> >>>>>>> +#include "pmbus.h"
+> >>>>>>> +
+> >>>>>>> +static struct pmbus_driver_info dps920ab_info = {
+> >>>>>>> +     .pages = 1,
+> >>>>>>> +
+> >>>>>>> +     .format[PSC_VOLTAGE_IN] = linear,
+> >>>>>>> +     .format[PSC_VOLTAGE_OUT] = linear,
+> >>>>>>> +     .format[PSC_CURRENT_IN] = linear,
+> >>>>>>> +     .format[PSC_CURRENT_OUT] = linear,
+> >>>>>>> +     .format[PSC_POWER] = linear,
+> >>>>>>> +     .format[PSC_FAN] = linear,
+> >>>>>>> +     .format[PSC_TEMPERATURE] = linear,
+> >>>>>>> +
+> >>>>>>> +     .func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN  |
+> >>>>>>> +     PMBUS_HAVE_VOUT  | PMBUS_HAVE_STATUS_VOUT   |
+> >>>>>>> +     PMBUS_HAVE_IOUT  | PMBUS_HAVE_STATUS_IOUT   |
+> >>>>>>> +     PMBUS_HAVE_TEMP  | PMBUS_HAVE_TEMP2         |
+> >>>>>>> +     PMBUS_HAVE_PIN   | PMBUS_HAVE_POUT          |
+> >>>>>>> +     PMBUS_HAVE_FAN12 | PMBUS_HAVE_STATUS_FAN12  |
+> >>>>>>> +     PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_STATUS_TEMP,
+> >>>>>>> +};
+> >>>>>>> +
+> >>>>>>> +static int dps920ab_probe(struct i2c_client *client)
+> >>>>>>> +{
+> >>>>>>> +     if (!i2c_check_functionality(client->adapter,
+> >>>>>>> +                                  I2C_FUNC_SMBUS_BYTE_DATA |
+> >>>>>>> +                                  I2C_FUNC_SMBUS_WORD_DATA))
+> >>>>>>> +             return -ENODEV;
+> >>>>>>
+> >>>>>> This check is done in pmbus_do_probe(), and repeating it here does not add
+> >>>>>> any value.
+> >>>>>
+> >>>>> Ok, makes sense.
+> >>>>>>
+> >>>>>> That makes me wonder: Is this driver needed in the first place, or could
+> >>>>>> it be added to drivers/hwmon/pmbus/pmbus.c ?
+> >>>>>
+> >>>>> It could be added as a generic driver, but that creates properties in
+> >>>>> the sysfs that this thing
+> >>>>> does not support like 3 voltage readings, 3 fans, and so on.
+> >>>>>
+> >>>>
+> >>>> Can you be more specific ? What additional unsupported attributes
+> >>>> are added, and why ? Are you saying the PSU reports registers as
+> >>>> existing which do not really exist ? If so, which registers are those ?
+> >>>
+> >>> Sure, when core does probing and autodiscovery, then the following
+> >>> sysfs attributes are created:
+> >>>>
+> >>>> curr1_crit         fan3_fault       in3_min_alarm      temp1_max
+> >>>> curr1_crit_alarm   fan3_input       in3_rated_max      temp1_max_alarm
+> >>>> curr1_input        fan3_target      in3_rated_min      temp1_min
+> >>>> curr1_label        in1_crit         name               temp1_min_alarm
+> >>>> curr1_max          in1_crit_alarm   of_node            temp1_rated_max
+> >>>> curr1_max_alarm    in1_input        power              temp2_crit
+> >>>> curr1_rated_max    in1_label        power1_alarm       temp2_crit_alarm
+> >>>> curr2_crit         in1_lcrit        power1_input       temp2_input
+> >>>> curr2_crit_alarm   in1_lcrit_alarm  power1_label       temp2_lcrit
+> >>>> curr2_input        in1_max          power1_max         temp2_lcrit_alarm
+> >>>> curr2_label        in1_max_alarm    power1_rated_max   temp2_max
+> >>>> curr2_lcrit        in1_min          power2_cap         temp2_max_alarm
+> >>>> curr2_lcrit_alarm  in1_min_alarm    power2_cap_alarm   temp2_min
+> >>>> curr2_max          in1_rated_max    power2_crit        temp2_min_alarm
+> >>>> curr2_max_alarm    in1_rated_min    power2_crit_alarm  temp2_rated_max
+> >>>> curr2_rated_max    in2_input        power2_input       temp3_crit
+> >>>> device             in2_label        power2_label       temp3_crit_alarm
+> >>>> fan1_alarm         in3_crit         power2_max         temp3_input
+> >>>> fan1_fault         in3_crit_alarm   power2_max_alarm   temp3_lcrit
+> >>>> fan1_input         in3_input        power2_rated_max   temp3_lcrit_alarm
+> >>>> fan1_target        in3_label        subsystem          temp3_max
+> >>>> fan2_alarm         in3_lcrit        temp1_crit         temp3_max_alarm
+> >>>> fan2_fault         in3_lcrit_alarm  temp1_crit_alarm   temp3_min
+> >>>> fan2_input         in3_max          temp1_input        temp3_min_alarm
+> >>>> fan2_target        in3_max_alarm    temp1_lcrit        temp3_rated_max
+> >>>> fan3_alarm         in3_min          temp1_lcrit_alarm  uevent
+> >>>
+> >>> The following return -1, or -500 so they are not supported.
+> >>> * fan2
+> >>> * in2
+> >>>
+> >>> Weirdly, with the external driver both fan2 and in2 are enabled and work fine,
+> >>> but when auto probing they are fan3 and in3.
+> >>>
+> >>> temp3 actually seems to return a valid temperature despite it not being used in
+> >>> the vendor driver that features were picked from.
+> >>>
+> >>
+> >> Can you run "grep . *" in the hwmon directory so I can see actual values ?
+> >>
+> > Sure:
+> >>
+> >> curr1_crit:-500
+> >> curr1_crit_alarm:0
+> >> curr1_input:195
+> >> curr1_label:iin
+> >> curr1_max:-500
+> >> curr1_max_alarm:0
+> >> curr1_rated_max:-500
+> >> curr2_crit:-500
+> >> curr2_crit_alarm:0
+> >> curr2_input:320
+> >> curr2_label:iout1
+> >> curr2_lcrit:-500
+> >> curr2_lcrit_alarm:0
+> >> curr2_max:18625
+> >> curr2_max_alarm:0
+> >> curr2_rated_max:16875
+> >> grep: device: Is a directory
+> >> fan1_alarm:0
+> >> fan1_fault:0
+> >> fan1_input:10000
+> >> fan1_target:0
+> >> fan2_alarm:1
+> >> fan2_fault:1
+> >> fan2_input:-1
+> >> fan2_target:-1
+> >> fan3_alarm:1
+> >> fan3_fault:1
+> >> fan3_input:-1
+> >> fan3_target:-1
+> >> in1_crit:-500
+> >> in1_crit_alarm:0
+> >> in1_input:245250
+> >> in1_label:vin
+> >> in1_lcrit:-500
+> >> in1_lcrit_alarm:0
+> >> in1_max:-500
+> >> in1_max_alarm:0
+> >> in1_min:-500
+> >> in1_min_alarm:0
+> >> in1_rated_max:-500
+> >> in1_rated_min:-500
+> >> in2_input:-500
+> >> in2_label:vcap
+> >> in3_crit:255996
+> >> in3_crit_alarm:0
+> >> in3_input:54511
+> >> in3_label:vout1
+> >> in3_lcrit:255996
+> >> in3_lcrit_alarm:0
+> >> in3_max:255996
+> >> in3_max_alarm:0
+> >> in3_min:255996
+> >> in3_min_alarm:0
+> >> in3_rated_max:56136
+> >> in3_rated_min:52863
+> >> name:dps920ab
+> >> grep: of_node: Is a directory
+> >> grep: power: Is a directory
+> >> power1_alarm:0
+> >> power1_input:33250000
+> >> power1_label:pin
+> >> power1_max:-500000
+> >> power1_rated_max:-500000
+> >> power2_cap:-500000
+> >> power2_cap_alarm:0
+> >> power2_crit:-500000
+> >> power2_crit_alarm:0
+> >> power2_input:17750000
+> >> power2_label:pout1
+> >> power2_max:-500000
+> >> power2_max_alarm:0
+> >> power2_rated_max:920000000
+> >> grep: subsystem: Is a directory
+> >> temp1_crit:-500
+> >> temp1_crit_alarm:0
+> >> temp1_input:23000
+> >> temp1_lcrit:-500
+> >> temp1_lcrit_alarm:0
+> >> temp1_max:-500
+> >> temp1_max_alarm:0
+> >> temp1_min:-500
+> >> temp1_min_alarm:0
+> >> temp1_rated_max:-500
+> >> temp2_crit:-500
+> >> temp2_crit_alarm:0
+> >> temp2_input:26000
+> >> temp2_lcrit:-500
+> >> temp2_lcrit_alarm:0
+> >> temp2_max:-500
+> >> temp2_max_alarm:0
+> >> temp2_min:-500
+> >> temp2_min_alarm:0
+> >> temp2_rated_max:-500
+> >> temp3_crit:-500
+> >> temp3_crit_alarm:0
+> >> temp3_input:30000
+> >> temp3_lcrit:-500
+> >> temp3_lcrit_alarm:0
+> >> temp3_max:-500
+> >> temp3_max_alarm:0
+> >> temp3_min:-500
+> >> temp3_min_alarm:0
+> >> temp3_rated_max:-500
+> >> uevent:OF_NAME=psu
+> >> uevent:OF_FULLNAME=/ap806/config-space@f0000000/i2c@511000/psu@5a
+> >> uevent:OF_COMPATIBLE_0=delta,dps920ab
+> >> uevent:OF_COMPATIBLE_N=1
+> >
+> Ok, good enough. It looks like the PSU reports values for pretty much everything,
+> including registers which don't exist. With that in mind, please check
+> the attributes generated by your driver - I suspect that some of the limit
+> attributes are not really supported (maybe none of them is supported).
 
-Signed-off-by: Navin Sankar Velliangiri <navin@linumiz.com>
+Yeah, I also think that none of those limits are actually supported.
+Does the core expose a way to not register those?
 
-Changes in v2:
+Regards,
+Robert
+>
+> Thanks,
+> Guenter
 
-* Removed unused macro SHT4X_MIN_POLL_INTERVAL
-* Replaced time_after instead of ktime_after
-* Used goto statements for error handling
-* Hardcoded the interval_time instead of clamp_val().
 
-Changes in v3:
 
-* Accept the poll interval if it is greater than SHT4X_MIN_POLL_INTERVAL and
-  return -EINVAL for negative values & less than SHT4X_MIN_POLL_INTERVAL
-* Changed the data type of update_interval and last_updated to long.
-
-Changes in v4:
-
-* "update_interval" is long but msecs_to_jiffies() accepts only unsigned int.
-  clamp_val() api is used to assign the update_interval stays within UINT_MAX.
-
-Changes in v5:
-
-* Added error handling when master unable to send the data.
-
-Changes in v6:
-
-* clamp_val() alone is used to set the update interval. since the update
-  interval is a continuous setting.
-
-Changes in v7:
-
-* initialized the ret variable to -EINVAL in sht4x_read_values() function,
-  whenever if condition fail's it return's -EINVAL.
----
- Documentation/hwmon/index.rst |   1 +
- Documentation/hwmon/sht4x.rst |  45 +++++
- drivers/hwmon/Kconfig         |  11 ++
- drivers/hwmon/Makefile        |   1 +
- drivers/hwmon/sht4x.c         | 305 ++++++++++++++++++++++++++++++++++
- 5 files changed, 363 insertions(+)
- create mode 100644 Documentation/hwmon/sht4x.rst
- create mode 100644 drivers/hwmon/sht4x.c
-
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index 9ed60fa84cbe..b6fcae40258c 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -164,6 +164,7 @@ Hardware Monitoring Kernel Drivers
-    sht15
-    sht21
-    sht3x
-+   sht4x
-    shtc1
-    sis5595
-    sl28cpld
-diff --git a/Documentation/hwmon/sht4x.rst b/Documentation/hwmon/sht4x.rst
-new file mode 100644
-index 000000000000..3b37abcd4a46
---- /dev/null
-+++ b/Documentation/hwmon/sht4x.rst
-@@ -0,0 +1,45 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Kernel driver sht4x
-+===================
-+
-+Supported Chips:
-+
-+  * Sensirion SHT4X
-+
-+    Prefix: 'sht4x'
-+
-+    Addresses scanned: None
-+
-+    Datasheet:
-+
-+      English: https://www.sensirion.com/fileadmin/user_upload/customers/sensirion/Dokumente/2_Humidity_Sensors/Datasheets/Sensirion_Humidity_Sensors_SHT4x_Datasheet.pdf
-+
-+Author: Navin Sankar Velliangiri <navin@linumiz.com>
-+
-+
-+Description
-+-----------
-+
-+This driver implements support for the Sensirion SHT4x chip, a humidity
-+and temperature sensor. Temperature is measured in degree celsius, relative
-+humidity is expressed as a percentage. In sysfs interface, all values are
-+scaled by 1000, i.e. the value for 31.5 degrees celsius is 31500.
-+
-+Usage Notes
-+-----------
-+
-+The device communicates with the I2C protocol. Sensors can have the I2C
-+address 0x44. See Documentation/i2c/instantiating-devices.rst for methods
-+to instantiate the device.
-+
-+Sysfs entries
-+-------------
-+
-+=============== ============================================
-+temp1_input     Measured temperature in millidegrees Celcius
-+humidity1_input Measured humidity in %H
-+update_interval The minimum interval for polling the sensor,
-+                in milliseconds. Writable. Must be at least
-+                2000.
-+============== =============================================
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 87624902ea80..e3675377bc5d 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -1583,6 +1583,17 @@ config SENSORS_SHT3x
- 	  This driver can also be built as a module. If so, the module
- 	  will be called sht3x.
- 
-+config SENSORS_SHT4x
-+	tristate "Sensiron humidity and temperature sensors. SHT4x and compat."
-+	depends on I2C
-+	select CRC8
-+	help
-+	  If you say yes here you get support for the Sensiron SHT40, SHT41 and
-+	  SHT45 humidity and temperature sensors.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called sht4x.
-+
- config SENSORS_SHTC1
- 	tristate "Sensiron humidity and temperature sensors. SHTC1 and compat."
- 	depends on I2C
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index 59e78bc212cf..d712c61c1f5e 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -171,6 +171,7 @@ obj-$(CONFIG_SENSORS_SL28CPLD)	+= sl28cpld-hwmon.o
- obj-$(CONFIG_SENSORS_SHT15)	+= sht15.o
- obj-$(CONFIG_SENSORS_SHT21)	+= sht21.o
- obj-$(CONFIG_SENSORS_SHT3x)	+= sht3x.o
-+obj-$(CONFIG_SENSORS_SHT4x)	+= sht4x.o
- obj-$(CONFIG_SENSORS_SHTC1)	+= shtc1.o
- obj-$(CONFIG_SENSORS_SIS5595)	+= sis5595.o
- obj-$(CONFIG_SENSORS_SMM665)	+= smm665.o
-diff --git a/drivers/hwmon/sht4x.c b/drivers/hwmon/sht4x.c
-new file mode 100644
-index 000000000000..39e1b4a123fa
---- /dev/null
-+++ b/drivers/hwmon/sht4x.c
-@@ -0,0 +1,305 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+/*
-+ * Copyright (c) Linumiz 2021
-+ *
-+ * sht4x.c - Linux hwmon driver for SHT4x Temperature and Humidity sensor
-+ *
-+ * Author: Navin Sankar Velliangiri <navin@linumiz.com>
-+ */
-+
-+#include <linux/crc8.h>
-+#include <linux/delay.h>
-+#include <linux/hwmon.h>
-+#include <linux/i2c.h>
-+#include <linux/jiffies.h>
-+#include <linux/module.h>
-+
-+/*
-+ * Poll intervals (in milliseconds)
-+ */
-+#define SHT4X_MIN_POLL_INTERVAL	2000
-+
-+/*
-+ * I2C command delays (in microseconds)
-+ */
-+#define SHT4X_MEAS_DELAY	1000
-+#define SHT4X_DELAY_EXTRA	10000
-+
-+/*
-+ * Command Bytes
-+ */
-+#define SHT4X_CMD_MEASURE_HPM	0b11111101
-+#define SHT4X_CMD_RESET		0b10010100
-+
-+#define SHT4X_CMD_LEN		1
-+#define SHT4X_CRC8_LEN		1
-+#define SHT4X_WORD_LEN		2
-+#define SHT4X_RESPONSE_LENGTH	6
-+#define SHT4X_CRC8_POLYNOMIAL	0x31
-+#define SHT4X_CRC8_INIT		0xff
-+#define SHT4X_MIN_TEMPERATURE	-45000
-+#define SHT4X_MAX_TEMPERATURE	125000
-+#define SHT4X_MIN_HUMIDITY	0
-+#define SHT4X_MAX_HUMIDITY	100000
-+
-+DECLARE_CRC8_TABLE(sht4x_crc8_table);
-+
-+/**
-+ * struct sht4x_data - All the data required to operate an SHT4X chip
-+ * @client: the i2c client associated with the SHT4X
-+ * @lock: a mutex that is used to prevent parallel access to the i2c client
-+ * @update_interval: the minimum poll interval
-+ * @last_updated: the previous time that the SHT4X was polled
-+ * @temperature: the latest temperature value received from the SHT4X
-+ * @humidity: the latest humidity value received from the SHT4X
-+ */
-+struct sht4x_data {
-+	struct i2c_client	*client;
-+	struct mutex		lock;	/* atomic read data updates */
-+	bool			valid;	/* validity of fields below */
-+	long			update_interval;	/* in milli-seconds */
-+	long			last_updated;	/* in jiffies */
-+	s32			temperature;
-+	s32			humidity;
-+};
-+
-+/**
-+ * sht4x_read_values() - read and parse the raw data from the SHT4X
-+ * @sht4x_data: the struct sht4x_data to use for the lock
-+ * Return: 0 if succesfull, 1 if not
-+ */
-+static int sht4x_read_values(struct sht4x_data *data)
-+{
-+	int ret;
-+	u16 t_ticks, rh_ticks;
-+	unsigned long next_update;
-+	struct i2c_client *client = data->client;
-+	u8 crc, raw_data[SHT4X_RESPONSE_LENGTH],
-+	cmd[] = {SHT4X_CMD_MEASURE_HPM};
-+
-+	mutex_lock(&data->lock);
-+	next_update = data->last_updated +
-+		      msecs_to_jiffies(data->update_interval);
-+	if (!data->valid || time_after(jiffies, next_update)) {
-+		ret = i2c_master_send(client, cmd, SHT4X_CMD_LEN);
-+		if (ret < 0)
-+			goto unlock;
-+
-+		usleep_range(SHT4X_MEAS_DELAY,
-+			     SHT4X_MEAS_DELAY + SHT4X_DELAY_EXTRA);
-+
-+		ret = i2c_master_recv(client, raw_data, SHT4X_RESPONSE_LENGTH);
-+		if (ret != SHT4X_RESPONSE_LENGTH) {
-+			if (ret >= 0)
-+				ret = -ENODATA;
-+
-+			goto unlock;
-+		}
-+
-+		t_ticks = raw_data[0] << 8 | raw_data[1];
-+		rh_ticks = raw_data[3] << 8 | raw_data[4];
-+
-+		crc = crc8(sht4x_crc8_table, &raw_data[0], SHT4X_WORD_LEN, CRC8_INIT_VALUE);
-+		if (crc != raw_data[2]) {
-+			dev_err(&client->dev, "data integrity check failed\n");
-+			ret = -EIO;
-+			goto unlock;
-+		}
-+
-+		crc = crc8(sht4x_crc8_table, &raw_data[3], SHT4X_WORD_LEN, CRC8_INIT_VALUE);
-+		if (crc != raw_data[5]) {
-+			dev_err(&client->dev, "data integrity check failed\n");
-+			ret = -EIO;
-+			goto unlock;
-+		}
-+
-+		data->temperature = ((21875 * (int32_t)t_ticks) >> 13) - 45000;
-+		data->humidity = ((15625 * (int32_t)rh_ticks) >> 13) - 6000;
-+		data->last_updated = jiffies;
-+		data->valid = true;
-+	}
-+
-+unlock:
-+	mutex_unlock(&data->lock);
-+	return ret;
-+}
-+
-+static ssize_t sht4x_interval_write(struct sht4x_data *data,
-+				    long val)
-+{
-+
-+	data->update_interval = clamp_val(val, SHT4X_MIN_POLL_INTERVAL,
-+					  UINT_MAX);
-+
-+	return 0;
-+}
-+
-+/**
-+ * sht4x_interval_read() - read the minimum poll interval
-+ *			   in milliseconds
-+ */
-+static size_t sht4x_interval_read(struct sht4x_data *data,
-+				  long *val)
-+{
-+	*val = data->update_interval;
-+	return 0;
-+}
-+
-+/**
-+ * sht4x_temperature1_read() - read the temperature in millidegrees
-+ */
-+static int sht4x_temperature1_read(struct sht4x_data *data, long *val)
-+{
-+	int ret;
-+
-+	ret = sht4x_read_values(data);
-+	if (ret < 0)
-+		return ret;
-+
-+	*val = data->temperature;
-+
-+	return 0;
-+}
-+
-+/**
-+ * sht4x_humidity1_read() - read a relative humidity in millipercent
-+ */
-+static int sht4x_humidity1_read(struct sht4x_data *data, long *val)
-+{
-+	int ret;
-+
-+	ret = sht4x_read_values(data);
-+	if (ret < 0)
-+		return ret;
-+
-+	*val = data->humidity;
-+
-+	return 0;
-+}
-+
-+static umode_t sht4x_hwmon_visible(const void *data,
-+				   enum hwmon_sensor_types type,
-+				   u32 attr, int channel)
-+{
-+	switch (type) {
-+	case hwmon_temp:
-+	case hwmon_humidity:
-+		return 0444;
-+	case hwmon_chip:
-+		return 0644;
-+	default:
-+		return 0;
-+	}
-+}
-+
-+static int sht4x_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
-+			    u32 attr, int channel, long *val)
-+{
-+	struct sht4x_data *data = dev_get_drvdata(dev);
-+
-+	switch (type) {
-+	case hwmon_temp:
-+		return sht4x_temperature1_read(data, val);
-+	case hwmon_humidity:
-+		return sht4x_humidity1_read(data, val);
-+	case hwmon_chip:
-+		return sht4x_interval_read(data, val);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static int sht4x_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
-+			     u32 attr, int channel, long val)
-+{
-+	struct sht4x_data *data = dev_get_drvdata(dev);
-+
-+	switch (type) {
-+	case hwmon_chip:
-+		return sht4x_interval_write(data, val);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static const struct hwmon_channel_info *sht4x_info[] = {
-+	HWMON_CHANNEL_INFO(chip, HWMON_C_UPDATE_INTERVAL),
-+	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
-+	HWMON_CHANNEL_INFO(humidity, HWMON_H_INPUT),
-+	NULL,
-+};
-+
-+static const struct hwmon_ops sht4x_hwmon_ops = {
-+	.is_visible = sht4x_hwmon_visible,
-+	.read = sht4x_hwmon_read,
-+	.write = sht4x_hwmon_write,
-+};
-+
-+static const struct hwmon_chip_info sht4x_chip_info = {
-+	.ops = &sht4x_hwmon_ops,
-+	.info = sht4x_info,
-+};
-+
-+static int sht4x_probe(struct i2c_client *client,
-+		       const struct i2c_device_id *sht4x_id)
-+{
-+	struct device *device = &client->dev;
-+	struct device *hwmon_dev;
-+	struct sht4x_data *data;
-+	u8 cmd[] = {SHT4X_CMD_RESET};
-+	int ret;
-+
-+	/*
-+	 * we require full i2c support since the sht4x uses multi-byte read and
-+	 * writes as well as multi-byte commands which are not supported by
-+	 * the smbus protocol
-+	 */
-+	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
-+		return -EOPNOTSUPP;
-+
-+	data = devm_kzalloc(device, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	data->update_interval = SHT4X_MIN_POLL_INTERVAL;
-+	data->client = client;
-+
-+	mutex_init(&data->lock);
-+
-+	crc8_populate_msb(sht4x_crc8_table, SHT4X_CRC8_POLYNOMIAL);
-+
-+	ret = i2c_master_send(client, cmd, SHT4X_CMD_LEN);
-+	if (ret < 0)
-+		return ret;
-+	if (ret != SHT4X_CMD_LEN)
-+		return -EIO;
-+
-+	hwmon_dev = devm_hwmon_device_register_with_info(device,
-+							 client->name,
-+							 data,
-+							 &sht4x_chip_info,
-+							 NULL);
-+
-+	return PTR_ERR_OR_ZERO(hwmon_dev);
-+}
-+
-+static const struct i2c_device_id sht4x_id[] = {
-+	{ "sht4x", 0 },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(i2c, sht4x_id);
-+
-+static struct i2c_driver sht4x_driver = {
-+	.driver = {
-+		.name = "sht4x",
-+	},
-+	.probe		= sht4x_probe,
-+	.id_table	= sht4x_id,
-+};
-+
-+module_i2c_driver(sht4x_driver);
-+
-+MODULE_AUTHOR("Navin Sankar Velliangiri <navin@linumiz.com>");
-+MODULE_DESCRIPTION("Sensirion SHT4x humidity and temperature sensor driver");
-+MODULE_LICENSE("GPL v2");
 -- 
-2.31.1
-
+Robert Marko
+Staff Embedded Linux Engineer
+Sartura Ltd.
+Lendavska ulica 16a
+10000 Zagreb, Croatia
+Email: robert.marko@sartura.hr
+Web: www.sartura.hr
