@@ -2,211 +2,135 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-22.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64D34C04FF3
-	for <linux-hwmon@archiver.kernel.org>; Mon, 24 May 2021 15:10:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96431C4707F
+	for <linux-hwmon@archiver.kernel.org>; Tue, 25 May 2021 12:46:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4AC1A613B6
-	for <linux-hwmon@archiver.kernel.org>; Mon, 24 May 2021 15:10:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 70AE66142C
+	for <linux-hwmon@archiver.kernel.org>; Tue, 25 May 2021 12:46:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233616AbhEXPMO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 24 May 2021 11:12:14 -0400
-Received: from smtp.outgoing.loopia.se ([93.188.3.37]:35989 "EHLO
-        smtp.outgoing.loopia.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234570AbhEXPIf (ORCPT
+        id S232353AbhEYMro (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 25 May 2021 08:47:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:49204 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232605AbhEYMrh (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 24 May 2021 11:08:35 -0400
-Received: from s807.loopia.se (localhost [127.0.0.1])
-        by s807.loopia.se (Postfix) with ESMTP id 3AE1A2E6CBD4
-        for <linux-hwmon@vger.kernel.org>; Mon, 24 May 2021 17:02:58 +0200 (CEST)
-Received: from s934.loopia.se (unknown [172.22.191.6])
-        by s807.loopia.se (Postfix) with ESMTP id 2ADD72E2B91C;
-        Mon, 24 May 2021 17:02:58 +0200 (CEST)
-Received: from s472.loopia.se (unknown [172.22.191.6])
-        by s934.loopia.se (Postfix) with ESMTP id 26AFD7CE98E;
-        Mon, 24 May 2021 17:02:58 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at amavis.loopia.se
-Received: from s934.loopia.se ([172.22.191.5])
-        by s472.loopia.se (s472.loopia.se [172.22.190.12]) (amavisd-new, port 10024)
-        with LMTP id 3HD0lamuAO5j; Mon, 24 May 2021 17:02:57 +0200 (CEST)
-X-Loopia-Auth: user
-X-Loopia-User: carl@hgsystem.se
-X-Loopia-Originating-IP: 155.4.133.180
-Received: from localhost.localdomain (h-155-4-133-180.NA.cust.bahnhof.se [155.4.133.180])
-        (Authenticated sender: carl@hgsystem.se)
-        by s934.loopia.se (Postfix) with ESMTPSA id 685327CE996;
-        Mon, 24 May 2021 17:02:57 +0200 (CEST)
-From:   Erik Rosen <erik.rosen@metormote.com>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Erik Rosen <erik.rosen@metormote.com>
-Subject: [PATCH v3 6/6] hwmon: (pmbus/pim4328) Add documentation for the pim4328 PMBus driver
-Date:   Mon, 24 May 2021 17:02:46 +0200
-Message-Id: <20210524150246.90546-7-erik.rosen@metormote.com>
-X-Mailer: git-send-email 2.11.0 (Apple Git-81)
-In-Reply-To: <20210524150246.90546-1-erik.rosen@metormote.com>
-References: <20210524150246.90546-1-erik.rosen@metormote.com>
+        Tue, 25 May 2021 08:47:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1621946767;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BAsSn0QqqS827pEDp2tUmlZZNLwNBxRbKX1OInU2lIM=;
+        b=Y1C3Js3MVc6gBf82pWGNt0iQsh10gpABJ3zE9SrEtBtFu317TRF+3syR4GiQb5IfmB+4Rn
+        kRCLpqdNdXRaK3mBaKW3KsO75eSDfvlZ6MNxucSThE6DSExeR5Iw0lPBSLSKboCOzIIzil
+        BA3jOcpomNmmE5wHR0iazmKw0E7IhzE=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-382-hxu7YdX8MhGJWX_WbAtUYg-1; Tue, 25 May 2021 08:46:06 -0400
+X-MC-Unique: hxu7YdX8MhGJWX_WbAtUYg-1
+Received: by mail-ej1-f71.google.com with SMTP id dt6-20020a170906b786b02903dc2a6918d6so3794983ejb.1
+        for <linux-hwmon@vger.kernel.org>; Tue, 25 May 2021 05:46:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=BAsSn0QqqS827pEDp2tUmlZZNLwNBxRbKX1OInU2lIM=;
+        b=amIVj7BOjZeTH3iWwCgS8WKNZfnmXXLOwUjE9RfRagmq0UnOcchd5vVOIo9APTeNRD
+         ZnuSLxAcGcE4U2VtvHNA7M+OFa1zT5M1SxCRFZEGGG9+aLU/GM1/MJHGKAJYXEPsdtDb
+         QD/NYNk/oM3LyHVMgkXF9GFybvUBkp/6vSo+GWoh0o6HO/cs9bPVA6IqJWQDg7axFzep
+         E6ofeLR2EsD37qkKMm2AElsrDztrXGNxhyM4kiA7MxzK8XO1HzDcpOr3o5luZHwm+u7M
+         zAVYGi735rLcK475p1pdi1hmeDljjmMtrSOeBqRiC5sJm0P5f8x8VZ6ezX0GecXvYo1g
+         +Hgg==
+X-Gm-Message-State: AOAM532VwRBf8BEcuCQDbibJN16cMYGkgTQh8kC4SVnPLeaE9YBAQHpQ
+        hC0Xarxgcvl6DDqVr633yviPO2udsX3LwcW0kd9q2NocVpcU9EsBMDDxc6JT7EPq9JKzyQ7fHnw
+        2kkhWfZbJaciOAMadYycrawNjXZyrtPtNNty0E3lk2G/sjhmGEve/KbE9V8QThNdxox51A6qWPg
+        0=
+X-Received: by 2002:a17:906:914d:: with SMTP id y13mr28396483ejw.489.1621946764963;
+        Tue, 25 May 2021 05:46:04 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzC24QkEUJbBUYm9nsAY/iT6F2AsbeP/cQgBHwWHXbl0ufK8TwUkYxJZeJhUNBBg0OZ4UCYgw==
+X-Received: by 2002:a17:906:914d:: with SMTP id y13mr28396455ejw.489.1621946764680;
+        Tue, 25 May 2021 05:46:04 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id q18sm10517988edd.3.2021.05.25.05.46.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 May 2021 05:46:04 -0700 (PDT)
+Subject: Re: [PATCH v2] platform/x86: thinkpad_acpi: Fix inconsistent
+ indenting
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, hmh@hmh.eng.br
+Cc:     mgross@linux.intel.com, jdelvare@suse.com, linux@roeck-us.net,
+        ibm-acpi-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+References: <1621837438-70790-1-git-send-email-jiapeng.chong@linux.alibaba.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <86bee518-cf29-f1b1-c1fc-b939f418be84@redhat.com>
+Date:   Tue, 25 May 2021 14:46:03 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
+MIME-Version: 1.0
+In-Reply-To: <1621837438-70790-1-git-send-email-jiapeng.chong@linux.alibaba.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add documentation and index link for pim4328 PMBus driver.
+Hi,
 
-Signed-off-by: Erik Rosen <erik.rosen@metormote.com>
----
- Documentation/hwmon/index.rst   |   1 +
- Documentation/hwmon/pim4328.rst | 105 ++++++++++++++++++++++++++++++++
- MAINTAINERS                     |   7 +++
- 3 files changed, 113 insertions(+)
- create mode 100644 Documentation/hwmon/pim4328.rst
+On 5/24/21 8:23 AM, Jiapeng Chong wrote:
+> Eliminate the follow smatch warning:
+> 
+> drivers/platform/x86/thinkpad_acpi.c:7942 volume_write() warn:
+> inconsistent indenting.
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index 9ed60fa84cbe..719625f8f755 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -150,6 +150,7 @@ Hardware Monitoring Kernel Drivers
-    pc87360
-    pc87427
-    pcf8591
-+   pim4328
-    pm6764tr
-    pmbus
-    powr1220
-diff --git a/Documentation/hwmon/pim4328.rst b/Documentation/hwmon/pim4328.rst
-new file mode 100644
-index 000000000000..70c9e7a6882c
---- /dev/null
-+++ b/Documentation/hwmon/pim4328.rst
-@@ -0,0 +1,105 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+Kernel driver pim4328
-+=====================
-+
-+Supported chips:
-+
-+  * Flex PIM4328
-+
-+    Prefix: 'pim4328', 'bmr455'
-+
-+    Addresses scanned: -
-+
-+    Datasheet:
-+
-+https://flexpowermodules.com/resources/fpm-techspec-pim4328
-+
-+  * Flex PIM4820
-+
-+    Prefixes: 'pim4820'
-+
-+    Addresses scanned: -
-+
-+    Datasheet: https://flexpowermodules.com/resources/fpm-techspec-pim4820
-+
-+  * Flex PIM4006, PIM4106, PIM4206, PIM4306, PIM4406
-+
-+    Prefixes: 'pim4006', 'pim4106', 'pim4206', 'pim4306', 'pim4406'
-+
-+    Addresses scanned: -
-+
-+    Datasheet: https://flexpowermodules.com/resources/fpm-techspec-pim4006
-+
-+Author: Erik Rosen <erik.rosen@metormote.com>
-+
-+
-+Description
-+-----------
-+
-+This driver supports hardware monitoring for Flex PIM4328 and
-+compatible digital power interface modules.
-+
-+The driver is a client driver to the core PMBus driver. Please see
-+Documentation/hwmon/pmbus.rst and Documentation.hwmon/pmbus-core for details
-+on PMBus client drivers.
-+
-+
-+Usage Notes
-+-----------
-+
-+This driver does not auto-detect devices. You will have to instantiate the
-+devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
-+details.
-+
-+
-+Platform data support
-+---------------------
-+
-+The driver supports standard PMBus driver platform data.
-+
-+
-+Sysfs entries
-+-------------
-+
-+The following attributes are supported. All attributes are read-only.
-+
-+======================= ========================================================
-+in1_label		"vin"
-+in1_input		Measured input voltage.
-+in1_alarm		Input voltage alarm.
-+
-+in2_label		"vin.0"
-+in2_input		Measured input voltage on input A.
-+
-+			PIM4328 and PIM4X06
-+
-+in3_label		"vin.1"
-+in3_input		Measured input voltage on input B.
-+
-+			PIM4328 and PIM4X06
-+
-+in4_label		"vcap"
-+in4_input		Measured voltage on holdup capacitor.
-+
-+			PIM4328
-+
-+curr1_label		"iin.0"
-+curr1_input		Measured input current on input A.
-+
-+			PIM4X06
-+
-+curr2_label		"iin.1"
-+curr2_input		Measured input current on input B.
-+
-+			PIM4X06
-+
-+currX_label		"iout1"
-+currX_input		Measured output current.
-+currX_alarm		Output current alarm.
-+
-+			X is 1 for PIM4820, 3 otherwise.
-+
-+temp1_input		Measured temperature.
-+temp1_alarm		High temperature alarm.
-+======================= ========================================================
-diff --git a/MAINTAINERS b/MAINTAINERS
-index bd7aff0c120f..378a121d80f6 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14416,6 +14416,13 @@ K:	(?i)pidfd
- K:	(?i)clone3
- K:	\b(clone_args|kernel_clone_args)\b
- 
-+PIM4328 DRIVER
-+M:	Daniel Nilsson <daniel.nilsson@flex.com>
-+L:	linux-hwmon@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/hwmon/pim4328.rst
-+F:	drivers/hwmon/pmbus/pim4328.c
-+
- PIN CONTROL SUBSYSTEM
- M:	Linus Walleij <linus.walleij@linaro.org>
- L:	linux-gpio@vger.kernel.org
--- 
-2.20.1
+Thank you for your patch, I've applied this patch to my review-hans 
+branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+
+Note it will show up in my review-hans branch once I've pushed my
+local branch there, which might take a while.
+
+Once I've run some tests on this branch the patches there will be
+added to the platform-drivers-x86/for-next branch and eventually
+will be included in the pdx86 pull-request to Linus for the next
+merge-window.
+
+Regards,
+
+Hans
+
+
+> ---
+> Changes in v2:
+>   -For the follow advice: https://lore.kernel.org/patchwork/patch/1434215/
+> 
+>  drivers/platform/x86/thinkpad_acpi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/platform/x86/thinkpad_acpi.c b/drivers/platform/x86/thinkpad_acpi.c
+> index dd60c93..b7fec1b 100644
+> --- a/drivers/platform/x86/thinkpad_acpi.c
+> +++ b/drivers/platform/x86/thinkpad_acpi.c
+> @@ -7938,7 +7938,7 @@ static int volume_write(char *buf)
+>  				continue;
+>  			} else if (sscanf(cmd, "level %u", &l) == 1 &&
+>  				   l >= 0 && l <= TP_EC_VOLUME_MAX) {
+> -					new_level = l;
+> +				new_level = l;
+>  				continue;
+>  			}
+>  		}
+> 
 
