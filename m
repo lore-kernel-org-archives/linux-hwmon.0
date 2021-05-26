@@ -2,400 +2,547 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF0C0C47088
-	for <linux-hwmon@archiver.kernel.org>; Wed, 26 May 2021 04:30:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BA2FC47089
+	for <linux-hwmon@archiver.kernel.org>; Wed, 26 May 2021 04:32:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B747561436
-	for <linux-hwmon@archiver.kernel.org>; Wed, 26 May 2021 04:30:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 07E6261436
+	for <linux-hwmon@archiver.kernel.org>; Wed, 26 May 2021 04:32:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231779AbhEZEb4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 26 May 2021 00:31:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38094 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbhEZEbz (ORCPT
+        id S232065AbhEZEd6 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 26 May 2021 00:33:58 -0400
+Received: from gproxy7-pub.mail.unifiedlayer.com ([70.40.196.235]:47597 "EHLO
+        gproxy7-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230007AbhEZEd5 (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 26 May 2021 00:31:55 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373D7C061574;
-        Tue, 25 May 2021 21:30:24 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id t10-20020a05683022eab0290304ed8bc759so30793456otc.12;
-        Tue, 25 May 2021 21:30:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:to:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=eSEUr13IdSicad5ezNLJhLbCXVl/KqNznnhra1ykMK0=;
-        b=cYJKhm7yrby1IVW+AhVgjaha7aoNBSV+3iNABWetTn9zRe9/wfi8k1YSIYhuVefCHW
-         LiYma6z+toSdnsf1ky96joZdZxeQ843IC5mTOS7ZKo2es9McMS5TKnxk0DTaAHGRiD2k
-         oF6v4s6fLkU/XDQB0UwcgCAuLGoYPPTphyB0De3qVsgaO8nQcF1BWOa2jy3AI8CwX7Nz
-         6JQ98vq6OKCvH/78TvAdd7zj7uN4MTvkD50E8aMLAGmV0TbKbdjMAFz6T+i28BtiAITV
-         JIi0N/qEFMWiu+AD/rK4aiPLhz/ApJ+Lvc4xu6pFPpWPBfO4W5g7ojGY35E0qktoyEEs
-         5Trw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:to:references:from:subject:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=eSEUr13IdSicad5ezNLJhLbCXVl/KqNznnhra1ykMK0=;
-        b=gW2y7Drl4s/h764I70bx9aXY+kjRTC8UdAsZKelQWgJKCpKakPTQQ8ZRwKODqpmBR9
-         Ej2EssNxPWTvKrDvWL8+90ofcDoZD0Il6vOkoVIpY6meBtQlzbLhooScpSTGKYhFcn8P
-         3b0SAAsz0MDOmAB6Hv71lwn1svjgbhiRpxNoKI5elbLhyzE7AZy5n2WG3zQ9LUSbjinU
-         JFas0XkEThIxhQodN2YGH5JVjyehwdbGQnbrfQvqVRyRjzZ0IGQQt+LhLWbVq0Zm3TyE
-         yEQXibnXjFCf3otSAtffQ8o1xoLYhSnEstQy2VV380oF0AHlkfFBK+Rb1hedTiTH4GPT
-         Qc5g==
-X-Gm-Message-State: AOAM532EalIP28RLN/EQIhVkqKepJOh/BK2LCAs9L1beDk6KNcBMpsuh
-        aL4rDf9Qf+BwYGMHYRRbiqJYDMudoGo=
-X-Google-Smtp-Source: ABdhPJzycDSalaoX4kt2fmR46b6822Y0W/T6SuzuYRVq1DtAzKvfeYdstCbxWINBRQcAp9tNZ+o6OA==
-X-Received: by 2002:a05:6830:4120:: with SMTP id w32mr851609ott.139.1622003423225;
-        Tue, 25 May 2021 21:30:23 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b18sm4260508otk.62.2021.05.25.21.30.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 May 2021 21:30:22 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-To:     Erik Rosen <erik.rosen@metormote.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210524150246.90546-1-erik.rosen@metormote.com>
- <20210524150246.90546-6-erik.rosen@metormote.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v3 5/6] hwmon: (pmbus/pim4328) Add PMBus driver for
- PIM4006, PIM4328 and PIM4820
-Message-ID: <99e7401d-86b5-5df0-3050-78a225d1b9fe@roeck-us.net>
-Date:   Tue, 25 May 2021 21:30:21 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Wed, 26 May 2021 00:33:57 -0400
+Received: from cmgw10.mail.unifiedlayer.com (unknown [10.0.90.125])
+        by gproxy7.mail.unifiedlayer.com (Postfix) with ESMTP id 3CD2F80329A2
+        for <linux-hwmon@vger.kernel.org>; Wed, 26 May 2021 04:32:26 +0000 (UTC)
+Received: from md-in-79.webhostbox.net ([43.225.55.182])
+        by cmsmtp with ESMTP
+        id llDTlN10jFplVllDVl4mK3; Wed, 26 May 2021 04:32:26 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=HeXR8gI8 c=1 sm=1 tr=0 ts=60adcf5a
+ a=LfuyaZh/8e9VOkaVZk0aRw==:117 a=LfuyaZh/8e9VOkaVZk0aRw==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=5FLXtPjwQuUA:10:nop_rcvd_month_year
+ a=oz0wMknONp8A:10:endurance_base64_authed_username_1 a=vU9dKmh3AAAA:8
+ a=NcCfH-bgAAAA:8 a=lhsWNlwdHoQvLuVuHl0A:9 a=rsP06fVo5MYu2ilr0aT5:22
+ a=nZLUJm6UEJn402BoZzOq:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=linumiz.com
+        ; s=default; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject
+        :Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=3H4QKYNW1eUh3L0nFQop8lnDZGcqYqZkS4/onzj+0iQ=; b=fl04SqFtgIlH7zZBrZlPntKOZb
+        YRadfDBI9yx/6DOJsu31kXU43agIVY9GxnPfNGHa5M3QgWg6cUoBzBDUtsE7nmk3zSqc+uVgNk5h3
+        mNvX6ft7dJ2c4IQquMMeb+xuTktITXMu3L5EAdu6abvLrs2s/CSpa+2qAGLZXwWnenIqWZcILh6y3
+        9vf3YYi4YgzgShumWjg7jqt28BwYA/rq9nOVl+Dgj2dMI4CHGfNE6WZMA12ZYvnAp870MFiAtZ1oh
+        PrkaGA5tvr/X+zOn0sUhLedpJswuPgI/qmmZoY4AGV0Qtt2T7TVamsZJvwEIEZEV4uSaKFrzBWXWn
+        CLxmleUg==;
+Received: from [117.217.228.41] (port=54324 helo=localhost.localdomain)
+        by md-in-79.webhostbox.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <navin@linumiz.com>)
+        id 1lllDS-002b11-Eh; Wed, 26 May 2021 04:32:22 +0000
+From:   Navin Sankar Velliangiri <navin@linumiz.com>
+To:     linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     linux@roeck-us.net, jdelvare@suse.com, corbet@lwn.net,
+        navin@linumiz.com
+Subject: [PATCH v9] hwmon: Add sht4x Temperature and Humidity Sensor Driver
+Date:   Wed, 26 May 2021 10:02:34 +0530
+Message-Id: <20210526043234.31572-1-navin@linumiz.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-In-Reply-To: <20210524150246.90546-6-erik.rosen@metormote.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - md-in-79.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - linumiz.com
+X-BWhitelist: no
+X-Source-IP: 117.217.228.41
+X-Source-L: No
+X-Exim-ID: 1lllDS-002b11-Eh
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: (localhost.localdomain) [117.217.228.41]:54324
+X-Source-Auth: linumcmc
+X-Email-Count: 6
+X-Source-Cap: bGludW1jbWM7aG9zdGdhdG9yO21kLWluLTc5LndlYmhvc3Rib3gubmV0
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On 5/24/21 8:02 AM, Erik Rosen wrote:
-> Add hardware monitoring support for Flex power interface modules PIM4006,
-> PIM4328 and PIM4820.
-> 
-> Signed-off-by: Erik Rosen <erik.rosen@metormote.com>
-> ---
->   drivers/hwmon/pmbus/Kconfig   |   9 ++
->   drivers/hwmon/pmbus/Makefile  |   1 +
->   drivers/hwmon/pmbus/pim4328.c | 240 ++++++++++++++++++++++++++++++++++
->   3 files changed, 250 insertions(+)
->   create mode 100644 drivers/hwmon/pmbus/pim4328.c
-> 
-> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-> index 37a5c39784fa..001527c71269 100644
-> --- a/drivers/hwmon/pmbus/Kconfig
-> +++ b/drivers/hwmon/pmbus/Kconfig
-> @@ -257,6 +257,15 @@ config SENSORS_MP2975
->   	  This driver can also be built as a module. If so, the module will
->   	  be called mp2975.
->   
-> +config SENSORS_PIM4328
-> +	tristate "Flex PIM4328 and compatibles"
-> +	help
-> +	  If you say yes here you get hardware monitoring support for Flex
-> +	  PIM4328, PIM4820 and PIM4006 Power Interface Modules.
-> +
-> +	  This driver can also be built as a module. If so, the module will
-> +	  be called pim4328.
-> +
->   config SENSORS_PM6764TR
->   	tristate "ST PM6764TR"
->   	help
-> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-> index f8dcc27cd56a..2a12397535ba 100644
-> --- a/drivers/hwmon/pmbus/Makefile
-> +++ b/drivers/hwmon/pmbus/Makefile
-> @@ -39,3 +39,4 @@ obj-$(CONFIG_SENSORS_UCD9000)	+= ucd9000.o
->   obj-$(CONFIG_SENSORS_UCD9200)	+= ucd9200.o
->   obj-$(CONFIG_SENSORS_XDPE122)	+= xdpe12284.o
->   obj-$(CONFIG_SENSORS_ZL6100)	+= zl6100.o
-> +obj-$(CONFIG_SENSORS_PIM4328)   += pim4328.o
-> diff --git a/drivers/hwmon/pmbus/pim4328.c b/drivers/hwmon/pmbus/pim4328.c
-> new file mode 100644
-> index 000000000000..ead7419479ef
-> --- /dev/null
-> +++ b/drivers/hwmon/pmbus/pim4328.c
-> @@ -0,0 +1,240 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Hardware monitoring driver for PIM4006, PIM4328 and PIM4820
-> + *
-> + * Copyright (c) 2021 Flextronics International Sweden AB
-> + */
-> +
-> +#include <linux/err.h>
-> +#include <linux/i2c.h>
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/pmbus.h>
-> +#include <linux/slab.h>
-> +#include "pmbus.h"
-> +
-> +enum chips { pim4006, pim4328, pim4820 };
-> +
-> +struct pim4328_data {
-> +	enum chips id;
-> +	struct pmbus_driver_info info;
-> +};
-> +
-> +#define to_pim4328_data(x)  container_of(x, struct pim4328_data, info)
-> +
-> +/* PIM4006 and PIM4328 */
-> +#define PIM4328_MFR_READ_VINA		0xd3
-> +#define PIM4328_MFR_READ_VINB		0xd4
-> +
-> +/* PIM4006 */
-> +#define PIM4328_MFR_READ_IINA		0xd6
-> +#define PIM4328_MFR_READ_IINB		0xd7
-> +#define PIM4328_MFR_FET_CHECKSTATUS     0xd9
+This patch adds a hwmon driver for the SHT4x Temperature and
+Humidity sensor.
 
-tabs please for alignment
+Signed-off-by: Navin Sankar Velliangiri <navin@linumiz.com>
 
-> +
-> +/* PIM4328 */
-> +#define PIM4328_MFR_STATUS_BITS		0xd5
-> +
-> +/* PIM4820 */
-> +#define PIM4328_MFR_READ_STATUS		0xd0
-> +
-> +static const struct i2c_device_id pim4328_id[] = {
-> +	{"bmr455", pim4328},
-> +	{"pim4006", pim4006},
-> +	{"pim4106", pim4006},
-> +	{"pim4206", pim4006},
-> +	{"pim4306", pim4006},
-> +	{"pim4328", pim4328},
-> +	{"pim4406", pim4006},
-> +	{"pim4820", pim4820},
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(i2c, pim4328_id);
-> +
-> +static int pim4328_read_word_data(struct i2c_client *client, int page,
-> +				  int phase, int reg)
-> +{
-> +	int ret;
-> +
-> +	if (page > 0)
-> +		return -ENXIO;
-> +
-> +	switch (reg) {
-> +	case PMBUS_READ_VIN:
-> +		if (phase != 0xff) {
-> +			ret = pmbus_read_word_data(client, page, phase,
-> +						   phase == 0 ? PIM4328_MFR_READ_VINA
-> +							      : PIM4328_MFR_READ_VINB);
-> +		} else {
-> +			ret = -ENODATA;
-> +		}
-> +		break;
-> +	case PMBUS_READ_IIN:
-> +		if (phase != 0xff) {
+Changes in v2:
 
-It might be easier to just have
+* Removed unused macro SHT4X_MIN_POLL_INTERVAL
+* Replaced time_after instead of ktime_after
+* Used goto statements for error handling
+* Hardcoded the interval_time instead of clamp_val().
 
-	if (phase == 0xff)
-		return -ENODATA;
+Changes in v3:
 
-at the beginning of the function.
+* Accept the poll interval if it is greater than SHT4X_MIN_POLL_INTERVAL and
+  return -EINVAL for negative values & less than SHT4X_MIN_POLL_INTERVAL
+* Changed the data type of update_interval and last_updated to long.
 
-> +			ret = pmbus_read_word_data(client, page, phase,
-> +						   phase == 0 ? PIM4328_MFR_READ_IINA
-> +							      : PIM4328_MFR_READ_IINB);
-> +		} else {
-> +			ret = -ENODATA;
-> +		}
-> +		break;
-> +	default:
-> +		ret = -ENODATA;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static int pim4328_read_byte_data(struct i2c_client *client, int page, int reg)
-> +{
-> +	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
-> +	struct pim4328_data *data = to_pim4328_data(info);
-> +	int ret, status;
-> +
-> +	if (page > 0)
-> +		return -ENXIO;
-> +
-> +	switch (reg) {
-> +	case PMBUS_STATUS_BYTE:
-> +		ret = pmbus_read_byte_data(client, page, PMBUS_STATUS_BYTE);
-> +		if (ret >= 0) {
+Changes in v4:
 
-Please use
-		if (ret < 0)
-			return ret;
+* "update_interval" is long but msecs_to_jiffies() accepts only unsigned int.
+  clamp_val() api is used to assign the update_interval stays within UINT_MAX.
 
-> +			if (data->id == pim4006) {
-> +				status = pmbus_read_word_data(client, page, 0xff,
-> +							      PIM4328_MFR_FET_CHECKSTATUS);
-> +				if (status > 0) {
-> +					if (status & 0x0630) /* Input UV */
-> +						ret |= 0x08;
+Changes in v5:
 
-Please use existing bit masks (here: PB_STATUS_VIN_UV)
+* Added error handling when master unable to send the data.
 
-> +				}
+Changes in v6:
 
-Does this ignore errors on purpose ?
-Same question below.
+* clamp_val() alone is used to set the update interval. since the update
+  interval is a continuous setting.
 
-> +			} else if (data->id == pim4328) {
-> +				status = pmbus_read_byte_data(client, page,
-> +							      PIM4328_MFR_STATUS_BITS);
-> +				if (status > 0) {
-> +					if (status & 0x04) /* Input UV */
-> +						ret |= 0x08;
-> +					if (status & 0x40) /* Output UV */
-> +						ret |= 0x80;
-> +				}
-> +			} else if (data->id == pim4820) {
-> +				status = pmbus_read_byte_data(client, page,
-> +							      PIM4328_MFR_READ_STATUS);
-> +				if (status > 0) {
-> +					if (status & 0x05) /* Input OV or OC */
-> +						ret |= 0x01;
-> +					if (status & 0x1a) /* Input UV */
-> +						ret |= 0x08;
-> +					if (status & 0x40) /* OT */
-> +						ret |= 0x04;
-> +				}
-> +			}
-> +		}
-> +		break;
-> +	default:
-> +		ret = -ENODATA;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static int pim4328_probe(struct i2c_client *client)
-> +{
-> +	int status;
-> +	u8 device_id[I2C_SMBUS_BLOCK_MAX + 1];
-> +	const struct i2c_device_id *mid;
-> +	struct pim4328_data *data;
-> +	struct pmbus_driver_info *info;
-> +	struct pmbus_platform_data *pdata;
-> +	struct device *dev = &client->dev;
-> +
-> +	if (!i2c_check_functionality(client->adapter,
-> +				     I2C_FUNC_SMBUS_READ_BYTE_DATA
-> +				     | I2C_FUNC_SMBUS_BLOCK_DATA))
-> +		return -ENODEV;
-> +
-> +	data = devm_kzalloc(&client->dev, sizeof(struct pim4328_data),
-> +			    GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	status = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, device_id);
-> +	if (status < 0) {
-> +		dev_err(&client->dev, "Failed to read Manufacturer Model\n");
-> +		return status;
-> +	}
-> +	for (mid = pim4328_id; mid->name[0]; mid++) {
-> +		if (!strncasecmp(mid->name, device_id, strlen(mid->name)))
-> +			break;
-> +	}
-> +	if (!mid->name[0]) {
-> +		dev_err(&client->dev, "Unsupported device\n");
-> +		return -ENODEV;
-> +	}
-> +
-> +	if (strcmp(client->name, mid->name) != 0)
+Changes in v7:
 
-!= 0 is unnecessary
+* initialized the ret variable to -EINVAL in sht4x_read_values() function,
+  whenever if condition fail's it return's -EINVAL.
 
-> +		dev_notice(&client->dev,
-> +			   "Device mismatch: Configured %s, detected %s\n",
-> +			   client->name, mid->name);
-> +
-> +	data->id = mid->driver_data;
-> +	info = &data->info;
-> +	info->pages = 1;
-> +	info->read_byte_data = pim4328_read_byte_data;
-> +	info->read_word_data = pim4328_read_word_data;
-> +
-> +	switch (data->id) {
-> +	case pim4006:
-> +		info->phases[0] = 2;
-> +		info->func[0] = PMBUS_PHASE_VIRTUAL | PMBUS_HAVE_VIN
-> +			| PMBUS_HAVE_TEMP | PMBUS_HAVE_IOUT;
-> +		info->pfunc[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN;
-> +		info->pfunc[1] = PMBUS_HAVE_VIN | PMBUS_HAVE_IIN;
-> +		break;
-> +	case pim4328:
-> +		info->phases[0] = 2;
-> +		info->func[0] = PMBUS_PHASE_VIRTUAL
-> +			| PMBUS_HAVE_VCAP | PMBUS_HAVE_VIN
-> +			| PMBUS_HAVE_TEMP | PMBUS_HAVE_IOUT;
-> +		info->pfunc[0] = PMBUS_HAVE_VIN;
-> +		info->pfunc[1] = PMBUS_HAVE_VIN;
-> +		info->format[PSC_VOLTAGE_IN] = direct;
-> +		info->format[PSC_TEMPERATURE] = direct;
-> +		info->format[PSC_CURRENT_OUT] = direct;
-> +		break;
-> +	case pim4820:
-> +		info->func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_TEMP
-> +			| PMBUS_HAVE_IIN;
-> +		info->format[PSC_VOLTAGE_IN] = direct;
-> +		info->format[PSC_TEMPERATURE] = direct;
-> +		info->format[PSC_CURRENT_IN] = direct;
-> +		break;
-> +	default:
-> +		return -ENODEV;
-> +	}
-> +
-> +	pdata = devm_kzalloc(dev, sizeof(struct pmbus_platform_data),
-> +			     GFP_KERNEL);
-> +	if (!pdata)
-> +		return -ENOMEM;
-> +
-> +	pdata->flags = PMBUS_NO_CAPABILITY | PMBUS_NO_WRITE_PROTECT;
-> +	if (data->id == pim4328 || data->id == pim4820)
-> +		pdata->flags |= PMBUS_USE_COEFFICIENTS_CMD;
+Changes in v8:
 
-It would be better to move pdata allocation ahead of the switch statement
-above, and set the additional flags in the case statements.
+* initialized the ret variable to zero in sht4x_read_values() function.
 
-> +
-> +	dev->platform_data = pdata;
-> +
-> +	return pmbus_do_probe(client, info);
-> +}
-> +
-> +static struct i2c_driver pim4328_driver = {
-> +	.driver = {
-> +		   .name = "pim4328",
-> +		   },
-> +	.probe_new = pim4328_probe,
-> +	.id_table = pim4328_id,
-> +};
-> +
-> +module_i2c_driver(pim4328_driver);
-> +
-> +MODULE_AUTHOR("Erik Rosen <erik.rosen@metormote.com>");
-> +MODULE_DESCRIPTION("PMBus driver for PIM4006, PIM4328, PIM4820 power interface modules");
-> +MODULE_LICENSE("GPL");
-> +MODULE_IMPORT_NS(PMBUS);
-> 
+Changes in v9:
+
+* removed unnecessary blank line in sht4x_interval_write() function.
+---
+ Documentation/hwmon/index.rst |   1 +
+ Documentation/hwmon/sht4x.rst |  45 +++++
+ drivers/hwmon/Kconfig         |  11 ++
+ drivers/hwmon/Makefile        |   1 +
+ drivers/hwmon/sht4x.c         | 304 ++++++++++++++++++++++++++++++++++
+ 5 files changed, 362 insertions(+)
+ create mode 100644 Documentation/hwmon/sht4x.rst
+ create mode 100644 drivers/hwmon/sht4x.c
+
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index 9ed60fa84cbe..b6fcae40258c 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -164,6 +164,7 @@ Hardware Monitoring Kernel Drivers
+    sht15
+    sht21
+    sht3x
++   sht4x
+    shtc1
+    sis5595
+    sl28cpld
+diff --git a/Documentation/hwmon/sht4x.rst b/Documentation/hwmon/sht4x.rst
+new file mode 100644
+index 000000000000..3b37abcd4a46
+--- /dev/null
++++ b/Documentation/hwmon/sht4x.rst
+@@ -0,0 +1,45 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++Kernel driver sht4x
++===================
++
++Supported Chips:
++
++  * Sensirion SHT4X
++
++    Prefix: 'sht4x'
++
++    Addresses scanned: None
++
++    Datasheet:
++
++      English: https://www.sensirion.com/fileadmin/user_upload/customers/sensirion/Dokumente/2_Humidity_Sensors/Datasheets/Sensirion_Humidity_Sensors_SHT4x_Datasheet.pdf
++
++Author: Navin Sankar Velliangiri <navin@linumiz.com>
++
++
++Description
++-----------
++
++This driver implements support for the Sensirion SHT4x chip, a humidity
++and temperature sensor. Temperature is measured in degree celsius, relative
++humidity is expressed as a percentage. In sysfs interface, all values are
++scaled by 1000, i.e. the value for 31.5 degrees celsius is 31500.
++
++Usage Notes
++-----------
++
++The device communicates with the I2C protocol. Sensors can have the I2C
++address 0x44. See Documentation/i2c/instantiating-devices.rst for methods
++to instantiate the device.
++
++Sysfs entries
++-------------
++
++=============== ============================================
++temp1_input     Measured temperature in millidegrees Celcius
++humidity1_input Measured humidity in %H
++update_interval The minimum interval for polling the sensor,
++                in milliseconds. Writable. Must be at least
++                2000.
++============== =============================================
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 87624902ea80..e3675377bc5d 100644
+--- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -1583,6 +1583,17 @@ config SENSORS_SHT3x
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called sht3x.
+ 
++config SENSORS_SHT4x
++	tristate "Sensiron humidity and temperature sensors. SHT4x and compat."
++	depends on I2C
++	select CRC8
++	help
++	  If you say yes here you get support for the Sensiron SHT40, SHT41 and
++	  SHT45 humidity and temperature sensors.
++
++	  This driver can also be built as a module. If so, the module
++	  will be called sht4x.
++
+ config SENSORS_SHTC1
+ 	tristate "Sensiron humidity and temperature sensors. SHTC1 and compat."
+ 	depends on I2C
+diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+index 59e78bc212cf..d712c61c1f5e 100644
+--- a/drivers/hwmon/Makefile
++++ b/drivers/hwmon/Makefile
+@@ -171,6 +171,7 @@ obj-$(CONFIG_SENSORS_SL28CPLD)	+= sl28cpld-hwmon.o
+ obj-$(CONFIG_SENSORS_SHT15)	+= sht15.o
+ obj-$(CONFIG_SENSORS_SHT21)	+= sht21.o
+ obj-$(CONFIG_SENSORS_SHT3x)	+= sht3x.o
++obj-$(CONFIG_SENSORS_SHT4x)	+= sht4x.o
+ obj-$(CONFIG_SENSORS_SHTC1)	+= shtc1.o
+ obj-$(CONFIG_SENSORS_SIS5595)	+= sis5595.o
+ obj-$(CONFIG_SENSORS_SMM665)	+= smm665.o
+diff --git a/drivers/hwmon/sht4x.c b/drivers/hwmon/sht4x.c
+new file mode 100644
+index 000000000000..fee1c753ab00
+--- /dev/null
++++ b/drivers/hwmon/sht4x.c
+@@ -0,0 +1,304 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++/*
++ * Copyright (c) Linumiz 2021
++ *
++ * sht4x.c - Linux hwmon driver for SHT4x Temperature and Humidity sensor
++ *
++ * Author: Navin Sankar Velliangiri <navin@linumiz.com>
++ */
++
++#include <linux/crc8.h>
++#include <linux/delay.h>
++#include <linux/hwmon.h>
++#include <linux/i2c.h>
++#include <linux/jiffies.h>
++#include <linux/module.h>
++
++/*
++ * Poll intervals (in milliseconds)
++ */
++#define SHT4X_MIN_POLL_INTERVAL	2000
++
++/*
++ * I2C command delays (in microseconds)
++ */
++#define SHT4X_MEAS_DELAY	1000
++#define SHT4X_DELAY_EXTRA	10000
++
++/*
++ * Command Bytes
++ */
++#define SHT4X_CMD_MEASURE_HPM	0b11111101
++#define SHT4X_CMD_RESET		0b10010100
++
++#define SHT4X_CMD_LEN		1
++#define SHT4X_CRC8_LEN		1
++#define SHT4X_WORD_LEN		2
++#define SHT4X_RESPONSE_LENGTH	6
++#define SHT4X_CRC8_POLYNOMIAL	0x31
++#define SHT4X_CRC8_INIT		0xff
++#define SHT4X_MIN_TEMPERATURE	-45000
++#define SHT4X_MAX_TEMPERATURE	125000
++#define SHT4X_MIN_HUMIDITY	0
++#define SHT4X_MAX_HUMIDITY	100000
++
++DECLARE_CRC8_TABLE(sht4x_crc8_table);
++
++/**
++ * struct sht4x_data - All the data required to operate an SHT4X chip
++ * @client: the i2c client associated with the SHT4X
++ * @lock: a mutex that is used to prevent parallel access to the i2c client
++ * @update_interval: the minimum poll interval
++ * @last_updated: the previous time that the SHT4X was polled
++ * @temperature: the latest temperature value received from the SHT4X
++ * @humidity: the latest humidity value received from the SHT4X
++ */
++struct sht4x_data {
++	struct i2c_client	*client;
++	struct mutex		lock;	/* atomic read data updates */
++	bool			valid;	/* validity of fields below */
++	long			update_interval;	/* in milli-seconds */
++	long			last_updated;	/* in jiffies */
++	s32			temperature;
++	s32			humidity;
++};
++
++/**
++ * sht4x_read_values() - read and parse the raw data from the SHT4X
++ * @sht4x_data: the struct sht4x_data to use for the lock
++ * Return: 0 if succesfull, 1 if not
++ */
++static int sht4x_read_values(struct sht4x_data *data)
++{
++	int ret = 0;
++	u16 t_ticks, rh_ticks;
++	unsigned long next_update;
++	struct i2c_client *client = data->client;
++	u8 crc, raw_data[SHT4X_RESPONSE_LENGTH],
++	cmd[] = {SHT4X_CMD_MEASURE_HPM};
++
++	mutex_lock(&data->lock);
++	next_update = data->last_updated +
++		      msecs_to_jiffies(data->update_interval);
++	if (!data->valid || time_after(jiffies, next_update)) {
++		ret = i2c_master_send(client, cmd, SHT4X_CMD_LEN);
++		if (ret < 0)
++			goto unlock;
++
++		usleep_range(SHT4X_MEAS_DELAY,
++			     SHT4X_MEAS_DELAY + SHT4X_DELAY_EXTRA);
++
++		ret = i2c_master_recv(client, raw_data, SHT4X_RESPONSE_LENGTH);
++		if (ret != SHT4X_RESPONSE_LENGTH) {
++			if (ret >= 0)
++				ret = -ENODATA;
++
++			goto unlock;
++		}
++
++		t_ticks = raw_data[0] << 8 | raw_data[1];
++		rh_ticks = raw_data[3] << 8 | raw_data[4];
++
++		crc = crc8(sht4x_crc8_table, &raw_data[0], SHT4X_WORD_LEN, CRC8_INIT_VALUE);
++		if (crc != raw_data[2]) {
++			dev_err(&client->dev, "data integrity check failed\n");
++			ret = -EIO;
++			goto unlock;
++		}
++
++		crc = crc8(sht4x_crc8_table, &raw_data[3], SHT4X_WORD_LEN, CRC8_INIT_VALUE);
++		if (crc != raw_data[5]) {
++			dev_err(&client->dev, "data integrity check failed\n");
++			ret = -EIO;
++			goto unlock;
++		}
++
++		data->temperature = ((21875 * (int32_t)t_ticks) >> 13) - 45000;
++		data->humidity = ((15625 * (int32_t)rh_ticks) >> 13) - 6000;
++		data->last_updated = jiffies;
++		data->valid = true;
++	}
++
++unlock:
++	mutex_unlock(&data->lock);
++	return ret;
++}
++
++static ssize_t sht4x_interval_write(struct sht4x_data *data,
++				    long val)
++{
++	data->update_interval = clamp_val(val, SHT4X_MIN_POLL_INTERVAL,
++					  UINT_MAX);
++
++	return 0;
++}
++
++/**
++ * sht4x_interval_read() - read the minimum poll interval
++ *			   in milliseconds
++ */
++static size_t sht4x_interval_read(struct sht4x_data *data,
++				  long *val)
++{
++	*val = data->update_interval;
++	return 0;
++}
++
++/**
++ * sht4x_temperature1_read() - read the temperature in millidegrees
++ */
++static int sht4x_temperature1_read(struct sht4x_data *data, long *val)
++{
++	int ret;
++
++	ret = sht4x_read_values(data);
++	if (ret < 0)
++		return ret;
++
++	*val = data->temperature;
++
++	return 0;
++}
++
++/**
++ * sht4x_humidity1_read() - read a relative humidity in millipercent
++ */
++static int sht4x_humidity1_read(struct sht4x_data *data, long *val)
++{
++	int ret;
++
++	ret = sht4x_read_values(data);
++	if (ret < 0)
++		return ret;
++
++	*val = data->humidity;
++
++	return 0;
++}
++
++static umode_t sht4x_hwmon_visible(const void *data,
++				   enum hwmon_sensor_types type,
++				   u32 attr, int channel)
++{
++	switch (type) {
++	case hwmon_temp:
++	case hwmon_humidity:
++		return 0444;
++	case hwmon_chip:
++		return 0644;
++	default:
++		return 0;
++	}
++}
++
++static int sht4x_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
++			    u32 attr, int channel, long *val)
++{
++	struct sht4x_data *data = dev_get_drvdata(dev);
++
++	switch (type) {
++	case hwmon_temp:
++		return sht4x_temperature1_read(data, val);
++	case hwmon_humidity:
++		return sht4x_humidity1_read(data, val);
++	case hwmon_chip:
++		return sht4x_interval_read(data, val);
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static int sht4x_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
++			     u32 attr, int channel, long val)
++{
++	struct sht4x_data *data = dev_get_drvdata(dev);
++
++	switch (type) {
++	case hwmon_chip:
++		return sht4x_interval_write(data, val);
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static const struct hwmon_channel_info *sht4x_info[] = {
++	HWMON_CHANNEL_INFO(chip, HWMON_C_UPDATE_INTERVAL),
++	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
++	HWMON_CHANNEL_INFO(humidity, HWMON_H_INPUT),
++	NULL,
++};
++
++static const struct hwmon_ops sht4x_hwmon_ops = {
++	.is_visible = sht4x_hwmon_visible,
++	.read = sht4x_hwmon_read,
++	.write = sht4x_hwmon_write,
++};
++
++static const struct hwmon_chip_info sht4x_chip_info = {
++	.ops = &sht4x_hwmon_ops,
++	.info = sht4x_info,
++};
++
++static int sht4x_probe(struct i2c_client *client,
++		       const struct i2c_device_id *sht4x_id)
++{
++	struct device *device = &client->dev;
++	struct device *hwmon_dev;
++	struct sht4x_data *data;
++	u8 cmd[] = {SHT4X_CMD_RESET};
++	int ret;
++
++	/*
++	 * we require full i2c support since the sht4x uses multi-byte read and
++	 * writes as well as multi-byte commands which are not supported by
++	 * the smbus protocol
++	 */
++	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
++		return -EOPNOTSUPP;
++
++	data = devm_kzalloc(device, sizeof(*data), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++
++	data->update_interval = SHT4X_MIN_POLL_INTERVAL;
++	data->client = client;
++
++	mutex_init(&data->lock);
++
++	crc8_populate_msb(sht4x_crc8_table, SHT4X_CRC8_POLYNOMIAL);
++
++	ret = i2c_master_send(client, cmd, SHT4X_CMD_LEN);
++	if (ret < 0)
++		return ret;
++	if (ret != SHT4X_CMD_LEN)
++		return -EIO;
++
++	hwmon_dev = devm_hwmon_device_register_with_info(device,
++							 client->name,
++							 data,
++							 &sht4x_chip_info,
++							 NULL);
++
++	return PTR_ERR_OR_ZERO(hwmon_dev);
++}
++
++static const struct i2c_device_id sht4x_id[] = {
++	{ "sht4x", 0 },
++	{ },
++};
++MODULE_DEVICE_TABLE(i2c, sht4x_id);
++
++static struct i2c_driver sht4x_driver = {
++	.driver = {
++		.name = "sht4x",
++	},
++	.probe		= sht4x_probe,
++	.id_table	= sht4x_id,
++};
++
++module_i2c_driver(sht4x_driver);
++
++MODULE_AUTHOR("Navin Sankar Velliangiri <navin@linumiz.com>");
++MODULE_DESCRIPTION("Sensirion SHT4x humidity and temperature sensor driver");
++MODULE_LICENSE("GPL v2");
+-- 
+2.31.1
 
