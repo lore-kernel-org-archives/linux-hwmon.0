@@ -7,63 +7,63 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06135C47088
-	for <linux-hwmon@archiver.kernel.org>; Wed, 26 May 2021 15:40:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4A29C47089
+	for <linux-hwmon@archiver.kernel.org>; Wed, 26 May 2021 15:40:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D7882613D2
-	for <linux-hwmon@archiver.kernel.org>; Wed, 26 May 2021 15:40:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 842DA613D2
+	for <linux-hwmon@archiver.kernel.org>; Wed, 26 May 2021 15:40:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232537AbhEZPmC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 26 May 2021 11:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49824 "EHLO
+        id S232762AbhEZPmL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 26 May 2021 11:42:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232762AbhEZPmA (ORCPT
+        with ESMTP id S233822AbhEZPmH (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 26 May 2021 11:42:00 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53507C061574
-        for <linux-hwmon@vger.kernel.org>; Wed, 26 May 2021 08:40:29 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id t24so1919839oiw.3
-        for <linux-hwmon@vger.kernel.org>; Wed, 26 May 2021 08:40:29 -0700 (PDT)
+        Wed, 26 May 2021 11:42:07 -0400
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD241C061756
+        for <linux-hwmon@vger.kernel.org>; Wed, 26 May 2021 08:40:33 -0700 (PDT)
+Received: by mail-ot1-x330.google.com with SMTP id 69-20020a9d0a4b0000b02902ed42f141e1so1408548otg.2
+        for <linux-hwmon@vger.kernel.org>; Wed, 26 May 2021 08:40:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=tE7T5ILApC5dfgDC4MmLEMVtvGXvgam3HPuiam11UME=;
-        b=OLVHW15Khi36CykkB4WjRQch4cVZMtHWU0Lfyd0MbxWFo0aXMxxMYTIlovApAxTTsB
-         IfeJBOWPq9JBLLq7eaCZDNErHWWvQdk0FZSL+9qMapwmIXRUTjQNu2OcR+0b2I8/rRHf
-         Sl2TPwEGwkJQ50Jr4648HvryjWbx17JniZCdBRUsj5sGEQPBN+kQLRmRV5zmGacLnYoo
-         L6E+uTEXCqpWIdcPTaXhUIPqLBJq45BBzN4TeZOdUPx0Y8zLMOBJh8WhD/ex7/NKV02z
-         BN3VWStFgBhH2zV3/Z/8If68d8Bc9qLasCMhA4f/MjOeNzUquTm4AIRYhprF5QOkB/9S
-         shHg==
+        bh=U8hedBk4yeetZrsoFkmz9iu/z3yP6GX2aslPIK8qua0=;
+        b=KL0vu/LokOt2L+MCe8+kKLxRFsZZVZb/usZrnJCWirqMs320ZZCVhfwbG9iynJ9XSp
+         1QjE5Z80TfjtT98Jf81ymjfRLfdl9XkaK8xWNUzh2DpeIfXEd2ilBqJyCZ0HMLCjVU0l
+         d972lyoT5WM2bzpK7FhaOpRD7KKT3WLj6m1E682ZPwKRvjh1kWsWyQYxUHsTu7jT7EoI
+         KzihCKxFUYf+wr2HMCXSTnDS1057MmoSGNLXWqREcJ95N51PTnIfvA4b8sG4wUDYAVVO
+         aQlp0Wi2Z/rkQtq0Ov3+wRpInqYNtPOsTwBOy/4gJ+4pbSHTnS+Dn5rtcXp23lc6JgEw
+         aJdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=tE7T5ILApC5dfgDC4MmLEMVtvGXvgam3HPuiam11UME=;
-        b=sQzfwBPmszRq5fzb9GxLbjdzNiilHKJt6HgadJlWRRZvoel9H6sfJDK5OmZr2vqxJ0
-         4CksjdllP3JlyAq+Mas2pvsNllFLQEcllp+A0CwmPcwo762DiyuEaI0bdL/Qkd4/2RVw
-         cE6m8EerLonBZWGVa+jJZ2Cpr4vua5kQslrfwiXm4JcokvM9N2IGB66VqT+02sREsp0J
-         uURad4I+/5fGjgC8r1i4hUhhzDSDCXYghyn9OTHFfQUD0jQo5/wAi8cdHyHqrSAxRDUx
-         +Fm6kgZnF/KHk1RFMaWjXVlGgotkMk3glkEpmm7xU12U8hbAE2o+M5wG9WrXfUGMgfhI
-         BIeA==
-X-Gm-Message-State: AOAM533QicJwfgIXd6B/Lny+hpBitPgeIliFeMGsvSsE96AMxTLph1ac
-        B7ceD8zoMkguDr8XSqZDS/5mSdRctXo=
-X-Google-Smtp-Source: ABdhPJx1GbdJgdeU4jaeQJjGjij4xDECN2WVq44NKgauJP+OdyDryYNgkxnMVwxqx6q/jYI31Sxeng==
-X-Received: by 2002:aca:e142:: with SMTP id y63mr2364756oig.57.1622043628326;
-        Wed, 26 May 2021 08:40:28 -0700 (PDT)
+        bh=U8hedBk4yeetZrsoFkmz9iu/z3yP6GX2aslPIK8qua0=;
+        b=evIuTuwO0xAsMG779BnpYY00HQASZFnx5eo5iQut2GbeRzmVvJWtm2M6TYge0H3q45
+         tYtHKCkq8SAhsXMwRPHAWBEHTImngKH6RpHgor0p9EMFNZLQfLZ4dHKNX5ZHq/tTfOaQ
+         aLcwec/hiHzFF1jwMNc/uYsTlp8cMifEpNtX+tZGX0oHoaRKRQ70lFjhJcMEsmD70GFa
+         EjGyhH9+ebm/ZEQH3zvxhuQIsYyjOBTXrJXlLDQ3lWB8i/snwNC3zHcxmMAhKnrum/Kb
+         b7kiTsU68alGONAXo2qzdiJlYA13VquzK0I/2XHOivP5ncdRRYrUflo8cDkkDWzzC+vD
+         0iuQ==
+X-Gm-Message-State: AOAM532Vo0OZLU2+/g4HLITCKhdjkjHkoHFUTz1i4bwWiKyjwyzafhfi
+        TLZqmXXTxW3EvAvnS4DOI9Ar3wogFf0=
+X-Google-Smtp-Source: ABdhPJxcR1gJDnUwXgNEoDdCE/M8Kisugu7NJkqlpR1IrQpKIxn2eNEvX7bTNNc7DM8ubfKfFFkQNg==
+X-Received: by 2002:a9d:741a:: with SMTP id n26mr1136822otk.223.1622043632732;
+        Wed, 26 May 2021 08:40:32 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j20sm4065741oot.29.2021.05.26.08.40.27
+        by smtp.gmail.com with ESMTPSA id f2sm4440259otp.77.2021.05.26.08.40.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 May 2021 08:40:27 -0700 (PDT)
+        Wed, 26 May 2021 08:40:31 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     linux-hwmon@vger.kernel.org
 Cc:     Jean Delvare <jdelvare@suse.com>, jan.kundrat@cesnet.cz,
         kubernat@cesnet.cz, Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 1/7] hwmon: (max31790) Fix fan speed reporting for fan7..12
-Date:   Wed, 26 May 2021 08:40:16 -0700
-Message-Id: <20210526154022.3223012-2-linux@roeck-us.net>
+Subject: [PATCH 3/7] hwmon: (max31790) Fix pwmX_enable attributes
+Date:   Wed, 26 May 2021 08:40:18 -0700
+Message-Id: <20210526154022.3223012-4-linux@roeck-us.net>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210526154022.3223012-1-linux@roeck-us.net>
 References: <20210526154022.3223012-1-linux@roeck-us.net>
@@ -74,37 +74,127 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Fans 7..12 do not have their own set of configuration registers.
-So far the code ignored that and read beyond the end of the configuration
-register range to get the tachometer period. This resulted in more or less
-random fan speed values for those fans.
+pwmX_enable supports three possible values:
 
-The datasheet is quite vague when it comes to defining the tachometer
-period for fans 7..12. Experiments confirm that the period is the same
-for both fans associated with a given set of configuration registers.
+0: Fan control disabled. Duty cycle is fixed to 0%
+1: Fan control enabled, pwm mode. Duty cycle is determined by
+   values written into Target Duty Cycle registers.
+2: Fan control enabled, rpm mode
+   Duty cycle is adjusted such that fan speed matches
+   the values in Target Count registers
 
-Fixes: 54187ff9d766 ("hwmon: (max31790) Convert to use new hwmon registration API")
-Fixes: 195a4b4298a7 ("hwmon: Driver for Maxim MAX31790")
+The current code does not do this; instead, it mixes pwm control
+configuration with fan speed monitoring configuration. Worse, it
+reports that pwm control would be disabled (pwmX_enable==0) when
+it is in fact enabled in pwm mode. Part of the problem may be that
+the chip sets the "TACH input enable" bit on its own whenever the
+mode bit is set to RPM mode, but that doesn't mean that "TACH input
+enable" accurately reflects the pwm mode.
+
+Fix it up and only handle pwm control with the pwmX_enable attributes.
+In the documentation, clarify that disabling pwm control (pwmX_enable=0)
+sets the pwm duty cycle to 0%. In the code, explain why TACH_INPUT_EN
+is set together with RPM_MODE.
+
+While at it, only update the configuration register if the configuration
+has changed, and only update the cached configuration if updating the
+chip configuration was successful.
+
 Cc: Jan Kundrát <jan.kundrat@cesnet.cz>
 Cc: Václav Kubernát <kubernat@cesnet.cz>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/hwmon/max31790.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/hwmon/max31790.rst |  2 +-
+ drivers/hwmon/max31790.c         | 41 ++++++++++++++++++++------------
+ 2 files changed, 27 insertions(+), 16 deletions(-)
 
+diff --git a/Documentation/hwmon/max31790.rst b/Documentation/hwmon/max31790.rst
+index 54ff0f49e28f..7b097c3b9b90 100644
+--- a/Documentation/hwmon/max31790.rst
++++ b/Documentation/hwmon/max31790.rst
+@@ -38,7 +38,7 @@ Sysfs entries
+ fan[1-12]_input    RO  fan tachometer speed in RPM
+ fan[1-12]_fault    RO  fan experienced fault
+ fan[1-6]_target    RW  desired fan speed in RPM
+-pwm[1-6]_enable    RW  regulator mode, 0=disabled, 1=manual mode, 2=rpm mode
++pwm[1-6]_enable    RW  regulator mode, 0=disabled (duty cycle=0%), 1=manual mode, 2=rpm mode
+ pwm[1-6]           RW  read: current pwm duty cycle,
+                        write: target pwm duty cycle (0-255)
+ ================== === =======================================================
 diff --git a/drivers/hwmon/max31790.c b/drivers/hwmon/max31790.c
-index 86e6c71db685..f6d4fc0a2f13 100644
+index 693497e09ac0..67677c437768 100644
 --- a/drivers/hwmon/max31790.c
 +++ b/drivers/hwmon/max31790.c
-@@ -170,7 +170,7 @@ static int max31790_read_fan(struct device *dev, u32 attr, int channel,
+@@ -27,6 +27,7 @@
  
- 	switch (attr) {
- 	case hwmon_fan_input:
--		sr = get_tach_period(data->fan_dynamics[channel]);
-+		sr = get_tach_period(data->fan_dynamics[channel % NR_CHANNEL]);
- 		rpm = RPM_FROM_REG(data->tach[channel], sr);
- 		*val = rpm;
+ /* Fan Config register bits */
+ #define MAX31790_FAN_CFG_RPM_MODE	0x80
++#define MAX31790_FAN_CFG_CTRL_MON	0x10
+ #define MAX31790_FAN_CFG_TACH_INPUT_EN	0x08
+ #define MAX31790_FAN_CFG_TACH_INPUT	0x01
+ 
+@@ -271,12 +272,12 @@ static int max31790_read_pwm(struct device *dev, u32 attr, int channel,
+ 		*val = data->pwm[channel] >> 8;
  		return 0;
+ 	case hwmon_pwm_enable:
+-		if (fan_config & MAX31790_FAN_CFG_RPM_MODE)
++		if (fan_config & MAX31790_FAN_CFG_CTRL_MON)
++			*val = 0;
++		else if (fan_config & MAX31790_FAN_CFG_RPM_MODE)
+ 			*val = 2;
+-		else if (fan_config & MAX31790_FAN_CFG_TACH_INPUT_EN)
+-			*val = 1;
+ 		else
+-			*val = 0;
++			*val = 1;
+ 		return 0;
+ 	default:
+ 		return -EOPNOTSUPP;
+@@ -307,23 +308,33 @@ static int max31790_write_pwm(struct device *dev, u32 attr, int channel,
+ 	case hwmon_pwm_enable:
+ 		fan_config = data->fan_config[channel];
+ 		if (val == 0) {
+-			fan_config &= ~(MAX31790_FAN_CFG_TACH_INPUT_EN |
+-					MAX31790_FAN_CFG_RPM_MODE);
++			fan_config |= MAX31790_FAN_CFG_CTRL_MON;
++			/*
++			 * Disable RPM mode; otherwise disabling fan speed
++			 * monitoring is not possible.
++			 */
++			fan_config &= ~MAX31790_FAN_CFG_RPM_MODE;
+ 		} else if (val == 1) {
+-			fan_config = (fan_config |
+-				      MAX31790_FAN_CFG_TACH_INPUT_EN) &
+-				     ~MAX31790_FAN_CFG_RPM_MODE;
++			fan_config &= ~(MAX31790_FAN_CFG_CTRL_MON | MAX31790_FAN_CFG_RPM_MODE);
+ 		} else if (val == 2) {
+-			fan_config |= MAX31790_FAN_CFG_TACH_INPUT_EN |
+-				      MAX31790_FAN_CFG_RPM_MODE;
++			fan_config &= ~MAX31790_FAN_CFG_CTRL_MON;
++			/*
++			 * The chip sets MAX31790_FAN_CFG_TACH_INPUT_EN on its
++			 * own if MAX31790_FAN_CFG_RPM_MODE is set.
++			 * Do it here as well to reflect the actual register
++			 * value in the cache.
++			 */
++			fan_config |= (MAX31790_FAN_CFG_RPM_MODE | MAX31790_FAN_CFG_TACH_INPUT_EN);
+ 		} else {
+ 			err = -EINVAL;
+ 			break;
+ 		}
+-		data->fan_config[channel] = fan_config;
+-		err = i2c_smbus_write_byte_data(client,
+-					MAX31790_REG_FAN_CONFIG(channel),
+-					fan_config);
++		if (fan_config != data->fan_config[channel]) {
++			err = i2c_smbus_write_byte_data(client, MAX31790_REG_FAN_CONFIG(channel),
++							fan_config);
++			if (!err)
++				data->fan_config[channel] = fan_config;
++		}
+ 		break;
+ 	default:
+ 		err = -EOPNOTSUPP;
 -- 
 2.25.1
 
