@@ -2,58 +2,55 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0B92C4708F
-	for <linux-hwmon@archiver.kernel.org>; Tue,  1 Jun 2021 08:20:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D79FC4708F
+	for <linux-hwmon@archiver.kernel.org>; Tue,  1 Jun 2021 08:30:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8477B6136E
-	for <linux-hwmon@archiver.kernel.org>; Tue,  1 Jun 2021 08:20:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 260E161370
+	for <linux-hwmon@archiver.kernel.org>; Tue,  1 Jun 2021 08:30:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233305AbhFAIVu (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 1 Jun 2021 04:21:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54468 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233324AbhFAIVt (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 1 Jun 2021 04:21:49 -0400
-Received: from office2.cesnet.cz (office2.cesnet.cz [IPv6:2001:718:1:101::144:244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D730C061574
-        for <linux-hwmon@vger.kernel.org>; Tue,  1 Jun 2021 01:20:08 -0700 (PDT)
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+        id S233160AbhFAIbo (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 1 Jun 2021 04:31:44 -0400
+Received: from office2.cesnet.cz ([195.113.144.244]:41126 "EHLO
+        office2.cesnet.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232963AbhFAIbn (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 1 Jun 2021 04:31:43 -0400
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by office2.cesnet.cz (Postfix) with ESMTPSA id 73C7B40006B
-        for <linux-hwmon@vger.kernel.org>; Tue,  1 Jun 2021 10:20:05 +0200 (CEST)
+        by office2.cesnet.cz (Postfix) with ESMTPSA id 7E66E40006D
+        for <linux-hwmon@vger.kernel.org>; Tue,  1 Jun 2021 10:30:01 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cesnet.cz;
-        s=office2-2020; t=1622535605;
-        bh=nZk+2agjsTQot5CMQ7mUevvPXFzcBBwsSLZhFnICtVU=;
+        s=office2-2020; t=1622536201;
+        bh=GrsqJ//90ptv4r6HV0TUhjb0a0rFXLxEflyEExLFR2o=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc;
-        b=ZMbNczJyxIcEY4B2qzTws/ROdQfZ8LUtmL0ix9dsLUDOErJBEnF7UgyScRwvQGIH/
-         1HKLip/3Tm60ZjGtPSEceG77F6tr+2r8BT8g9xDtKGbsD3SSGSO9Tvz1Jwq2xtfgMK
-         lv3TzsxlvZFa7+6ezwegK3Uu8h3Rz6ILv8D6nXmnV9M7BaFKPmysMrhejxGPEd426c
-         yEa5R7T7sMzMP6LSWvJkGb62VdAxN1ZlHfVv9SFpiS+buanQqhi/c4nh6PbbQLjER/
-         C4DsGBJg0o29t1kkmVJKcnMkWLwA8uJfthOYDPAmbERuCO5GVsAvqFVrSsLNpqpLRI
-         f6NRKomPi70Zg==
-Received: by mail-pj1-f43.google.com with SMTP id l10-20020a17090a150ab0290162974722f2so1429435pja.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 01 Jun 2021 01:20:05 -0700 (PDT)
-X-Gm-Message-State: AOAM533WyxINNvYnEYY19V1ZsUz71Zkz3bh9JTv4Zv+4nKNmMvx3BbNn
-        4Lf0ZrwwPfhuWEYVe3ZK90lKqv+dE8ykosnVQ9g=
-X-Google-Smtp-Source: ABdhPJxra4W7MyhD/7nOGbYRS/VKqJfpzjT4owcItuQnzve/PBwJd7nW5di/TW/DvDn4On8qeAbDjMYrGPPCKP8WFk8=
-X-Received: by 2002:a17:902:6501:b029:ef:8518:a25a with SMTP id
- b1-20020a1709026501b02900ef8518a25amr24953361plk.64.1622535604069; Tue, 01
- Jun 2021 01:20:04 -0700 (PDT)
+        b=dVy4Dydhgy4fstLbgH0sxRRavGzcAAbRz8CV3KcABrFE7r4hdlwL7Y7p/+QcuD/ts
+         mKi9Lvkf0sYKYmqo6x3mYw/x8WRC2jTjawIOp5JrCCQy/XDNBVRquyQ88vMnlk5A4J
+         XUnGO2uJ04brK8kFo5W0hoPm1D38VxmZxdq/zWRg91tA2AwZe4UJEu59zXQpHsljXN
+         qjAtRDtJ1deLGuw1yo1dYh1YXOdqzHJ9/ubXXqYumRplitHC0CJ1cBoPXGtSPFeyr/
+         IVkbDhs83Mj5ykVIGQTRZ4/cnqH3nqxDYKrpweG27EMPdeybeQbSkerfxSBEsrJYSZ
+         62yxF+/W33/PQ==
+Received: by mail-pf1-f179.google.com with SMTP id y15so10803423pfn.13
+        for <linux-hwmon@vger.kernel.org>; Tue, 01 Jun 2021 01:30:01 -0700 (PDT)
+X-Gm-Message-State: AOAM532NS7s6oDw5f5LgfcqLCNtFO8gjYdDWppboL3JH1IyJh7l+GAZT
+        UR0KSGlOXhyvaFL4FYqbQmPPnRFAZnDlsITyeJw=
+X-Google-Smtp-Source: ABdhPJxvojN40mWk8ijBRK8GEjTtMXrGaQ6JnEzu0C777O8gbJiVtxUqs4mZJk/Yaqcw5TA8grh1UR7X0WzDr0wJL0U=
+X-Received: by 2002:aa7:9f95:0:b029:2dc:99b9:8e66 with SMTP id
+ z21-20020aa79f950000b02902dc99b98e66mr21395269pfr.30.1622536200183; Tue, 01
+ Jun 2021 01:30:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210526154022.3223012-1-linux@roeck-us.net> <20210526154022.3223012-8-linux@roeck-us.net>
-In-Reply-To: <20210526154022.3223012-8-linux@roeck-us.net>
+References: <20210526154022.3223012-1-linux@roeck-us.net>
+In-Reply-To: <20210526154022.3223012-1-linux@roeck-us.net>
 From:   =?UTF-8?B?VsOhY2xhdiBLdWJlcm7DoXQ=?= <kubernat@cesnet.cz>
-Date:   Tue, 1 Jun 2021 10:19:52 +0200
-X-Gmail-Original-Message-ID: <CABKa3npt3VbFXkd=2=_-sF1E8y+C9uKO5FQo+wo383MBPiFcQg@mail.gmail.com>
-Message-ID: <CABKa3npt3VbFXkd=2=_-sF1E8y+C9uKO5FQo+wo383MBPiFcQg@mail.gmail.com>
-Subject: Re: [PATCH 7/7] hwmon: (max31790) Add support for fanX_min attributes
+Date:   Tue, 1 Jun 2021 10:29:48 +0200
+X-Gmail-Original-Message-ID: <CABKa3noz1=o4KQV6hv7dSsgHQah2wY7=2yvUSC8t+r6riRSRBA@mail.gmail.com>
+Message-ID: <CABKa3noz1=o4KQV6hv7dSsgHQah2wY7=2yvUSC8t+r6riRSRBA@mail.gmail.com>
+Subject: Re: [PATCH 0/7] hwmon: (max31790) Fixes and improvements
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         =?UTF-8?B?SmFuIEt1bmRyw6F0?= <jan.kundrat@cesnet.cz>
@@ -63,212 +60,44 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-fanX_min works fine.
+Hello,
 
-Tested-by: V=C3=A1clav Kubern=C3=A1t <kubernat@cesnet.cz>
+I have tested your patches. It seems like the driver is now a lot more
+usable, thanks. What seems to be still unusable for me, is RPM mode.
+The chip creates an effort to set the RPM, but it almost never
+stabilizes. I think the reason is mainly because the driver doesn't
+work with registers like "window" and "pwm rate of change". PWM mode
+seems to work fine.
 
-st 26. 5. 2021 v 17:41 odes=C3=ADlatel Guenter Roeck <linux@roeck-us.net> n=
+I think some of the patches in my patch series on the chip are now
+obsolete. However, I do think at least fanX_div should be implemented.
+When testing with Sunon PF36281BX-000U-S99 (its max RPM is 23000), the
+default divisor is not enough (one bit of change equals to about 500
+RPM). The only way to change the divisor right now, is to set the
+target RPM or min RPM.
+
+There is also the regmap patch, but I've implemented that one mainly
+because it made the driver a bit easier to debug.
+
+V=C3=A1clav
+
+st 26. 5. 2021 v 17:40 odes=C3=ADlatel Guenter Roeck <linux@roeck-us.net> n=
 apsal:
 >
-> The minimum fan speed is closely correlated to the target fan speed.
-> The correlation depends on the pwm mode. It is essential to be able
-> to read and to set it to be able to control when a channel will report
-> a fan fault.
+> The following series provides various fixes and improvements for the
+> max31790 driver.
 >
-> Since the minimum fan speed also applies to channels 7..12, make it
-> visible but read-only for those channels as well.
+> ----------------------------------------------------------------
+> Guenter Roeck (7):
+>       hwmon: (max31790) Fix fan speed reporting for fan7..12
+>       hwmon: (max31790) Report correct current pwm duty cycles
+>       hwmon: (max31790) Fix pwmX_enable attributes
+>       hwmon: (max31790) Add support for fanX_enable attributes
+>       hwmon: (max31790) Clear fan fault after reporting it
+>       hwmon: (max31790) Detect and report zero fan speed
+>       hwmon: (max31790) Add support for fanX_min attributes
 >
-> Cc: Jan Kundr=C3=A1t <jan.kundrat@cesnet.cz>
-> Cc: V=C3=A1clav Kubern=C3=A1t <kubernat@cesnet.cz>
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> ---
->  Documentation/hwmon/max31790.rst |  9 ++++
->  drivers/hwmon/max31790.c         | 70 ++++++++++++++++++++++++--------
->  2 files changed, 61 insertions(+), 18 deletions(-)
->
-> diff --git a/Documentation/hwmon/max31790.rst b/Documentation/hwmon/max31=
-790.rst
-> index b43aa32813fd..9225c2a78b68 100644
-> --- a/Documentation/hwmon/max31790.rst
-> +++ b/Documentation/hwmon/max31790.rst
-> @@ -40,6 +40,15 @@ fan[1-12]_enable   RW  0=3Ddisable fan speed monitorin=
-g, 1=3Denable fan speed monito
->                         channels, the value matches the value of the prim=
-ary channel.
->  fan[1-12]_input    RO  fan tachometer speed in RPM
->  fan[1-12]_fault    RO  fan experienced fault
-> +fan[1-12]_min      RW  minimum fan speed in RPM. Equivalent to target fa=
-n speed
-> +                       in PWM mode and if PWM support is disabled for a =
-channel.
-> +                       Equivalent to half the target fan speed in RPM mo=
-de.
-> +                       The value is RO for companion channels (7-12). Fo=
-r those
-> +                       channels, the value matches the value of the prim=
-ary channel.
-> +                       Note: In RPM mode, if the pwm duty cycle is 100%,=
- the
-> +                       minimum fan speed is equivalent to the target fan=
- speed,
-> +                       and the chip will report a fault condition if the=
- fan
-> +                       speed is below the target fan speed.
->  fan[1-6]_target    RW  desired fan speed in RPM
->  pwm[1-6]_enable    RW  regulator mode, 0=3Ddisabled (duty cycle=3D0%), 1=
-=3Dmanual mode, 2=3Drpm mode
->  pwm[1-6]           RW  read: current pwm duty cycle,
-> diff --git a/drivers/hwmon/max31790.c b/drivers/hwmon/max31790.c
-> index 91fe419b596c..db97ee99515a 100644
-> --- a/drivers/hwmon/max31790.c
-> +++ b/drivers/hwmon/max31790.c
-> @@ -111,13 +111,11 @@ static struct max31790_data *max31790_update_device=
-(struct device *dev)
->                                 if (rv < 0)
->                                         goto abort;
->                                 data->pwm[i] =3D rv;
-> -
-> -                               rv =3D i2c_smbus_read_word_swapped(client=
-,
-> -                                               MAX31790_REG_TARGET_COUNT=
-(i));
-> -                               if (rv < 0)
-> -                                       goto abort;
-> -                               data->target_count[i] =3D rv;
->                         }
-> +                       rv =3D i2c_smbus_read_word_swapped(client, MAX317=
-90_REG_TARGET_COUNT(i));
-> +                       if (rv < 0)
-> +                               goto abort;
-> +                       data->target_count[i] =3D rv;
->                 }
->
->                 data->last_updated =3D jiffies;
-> @@ -183,6 +181,21 @@ static int max31790_read_fan(struct device *dev, u32=
- attr, int channel,
->                         rpm =3D RPM_FROM_REG(data->tach[channel], sr);
->                 *val =3D rpm;
->                 return 0;
-> +       case hwmon_fan_min:
-> +               channel %=3D NR_CHANNEL;
-> +               sr =3D get_tach_period(data->fan_dynamics[channel]);
-> +               if (!(data->fan_config[channel] & MAX31790_FAN_CFG_RPM_MO=
-DE) ||
-> +                   (data->fan_config[channel] & MAX31790_FAN_CFG_TACH_IN=
-PUT)) {
-> +                       /* pwm mode: target =3D=3D min */
-> +                       rpm =3D RPM_FROM_REG(data->target_count[channel],=
- sr);
-> +               } else {
-> +                       /* rpm mode: min tach count is twice target count=
- */
-> +                       u16 tach =3D min(data->target_count[channel] * 2,=
- FAN_COUNT_REG_MAX);
-> +
-> +                       rpm =3D RPM_FROM_REG(tach, sr);
-> +               }
-> +               *val =3D rpm;
-> +               return 0;
->         case hwmon_fan_target:
->                 sr =3D get_tach_period(data->fan_dynamics[channel]);
->                 rpm =3D RPM_FROM_REG(data->target_count[channel], sr);
-> @@ -243,6 +256,20 @@ static int max31790_write_fan(struct device *dev, u3=
-2 attr, int channel,
->                                 data->fan_config[channel] =3D config;
->                 }
->                 break;
-> +       case hwmon_fan_min:
-> +               /*
-> +                * The minimum fan speed is the same as the target fan sp=
-eed in
-> +                * PWM mode and if a PWM channel is disabled, or it is ha=
-lf the
-> +                * target fan speed in RPM mode.
-> +                */
-> +               if (!(data->fan_config[channel] & MAX31790_FAN_CFG_TACH_I=
-NPUT) &&
-> +                   (data->fan_config[channel] & MAX31790_FAN_CFG_RPM_MOD=
-E)) {
-> +                       /* partial clamp to avoid overflow */
-> +                       if (val > FAN_RPM_MAX / 2)
-> +                               val =3D FAN_RPM_MAX / 2;
-> +                       val *=3D 2;
-> +               }
-> +               fallthrough;
->         case hwmon_fan_target:
->                 val =3D clamp_val(val, FAN_RPM_MIN, FAN_RPM_MAX);
->                 bits =3D bits_for_tach_period(val);
-> @@ -282,6 +309,7 @@ static umode_t max31790_fan_is_visible(const void *_d=
-ata, u32 attr, int channel)
->         u8 fan_config =3D data->fan_config[channel % NR_CHANNEL];
->
->         switch (attr) {
-> +       case hwmon_fan_min:
->         case hwmon_fan_enable:
->                 if (channel < NR_CHANNEL)
->                         return 0644;
-> @@ -452,18 +480,24 @@ static umode_t max31790_is_visible(const void *data=
-,
->
->  static const struct hwmon_channel_info *max31790_info[] =3D {
->         HWMON_CHANNEL_INFO(fan,
-> -                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_TARGE=
-T | HWMON_F_FAULT,
-> -                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_TARGE=
-T | HWMON_F_FAULT,
-> -                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_TARGE=
-T | HWMON_F_FAULT,
-> -                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_TARGE=
-T | HWMON_F_FAULT,
-> -                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_TARGE=
-T | HWMON_F_FAULT,
-> -                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_TARGE=
-T | HWMON_F_FAULT,
-> -                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_FAULT=
-,
-> -                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_FAULT=
-,
-> -                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_FAULT=
-,
-> -                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_FAULT=
-,
-> -                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_FAULT=
-,
-> -                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_FAULT=
-),
-> +                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_MIN |=
- HWMON_F_TARGET |
-> +                               HWMON_F_FAULT,
-> +                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_MIN |=
- HWMON_F_TARGET |
-> +                               HWMON_F_FAULT,
-> +                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_MIN |=
- HWMON_F_TARGET |
-> +                               HWMON_F_FAULT,
-> +                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_MIN |=
- HWMON_F_TARGET |
-> +                               HWMON_F_FAULT,
-> +                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_MIN |=
- HWMON_F_TARGET |
-> +                               HWMON_F_FAULT,
-> +                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_MIN |=
- HWMON_F_TARGET |
-> +                               HWMON_F_FAULT,
-> +                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_MIN |=
- HWMON_F_FAULT,
-> +                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_MIN |=
- HWMON_F_FAULT,
-> +                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_MIN |=
- HWMON_F_FAULT,
-> +                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_MIN |=
- HWMON_F_FAULT,
-> +                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_MIN |=
- HWMON_F_FAULT,
-> +                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_MIN |=
- HWMON_F_FAULT),
->         HWMON_CHANNEL_INFO(pwm,
->                            HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
->                            HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
-> --
-> 2.25.1
->
+>  Documentation/hwmon/max31790.rst |  17 +++-
+>  drivers/hwmon/max31790.c         | 171 ++++++++++++++++++++++++++++++---=
+------
+>  2 files changed, 147 insertions(+), 41 deletions(-)
