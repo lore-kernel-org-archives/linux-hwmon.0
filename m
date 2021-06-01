@@ -7,49 +7,50 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BBAFC4708F
-	for <linux-hwmon@archiver.kernel.org>; Tue,  1 Jun 2021 08:02:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FA1FC4708F
+	for <linux-hwmon@archiver.kernel.org>; Tue,  1 Jun 2021 08:09:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2009E600CD
-	for <linux-hwmon@archiver.kernel.org>; Tue,  1 Jun 2021 08:02:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 43C1D61378
+	for <linux-hwmon@archiver.kernel.org>; Tue,  1 Jun 2021 08:09:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233127AbhFAIEZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 1 Jun 2021 04:04:25 -0400
-Received: from office2.cesnet.cz ([195.113.144.244]:35092 "EHLO
+        id S233194AbhFAIKp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 1 Jun 2021 04:10:45 -0400
+Received: from office2.cesnet.cz ([195.113.144.244]:37148 "EHLO
         office2.cesnet.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232963AbhFAIEY (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 1 Jun 2021 04:04:24 -0400
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+        with ESMTP id S233193AbhFAIKo (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 1 Jun 2021 04:10:44 -0400
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by office2.cesnet.cz (Postfix) with ESMTPSA id B408F400052
-        for <linux-hwmon@vger.kernel.org>; Tue,  1 Jun 2021 10:02:42 +0200 (CEST)
+        by office2.cesnet.cz (Postfix) with ESMTPSA id A4E0F400076
+        for <linux-hwmon@vger.kernel.org>; Tue,  1 Jun 2021 10:09:02 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cesnet.cz;
-        s=office2-2020; t=1622534562;
-        bh=HkWatbd3n+xasEyHU9e2tq6SXBkLc/d8aGAltk4ddHQ=;
+        s=office2-2020; t=1622534942;
+        bh=rQi5jwHCViy9L8DXFMalg8FasJfSHSae5He7UZLVDLI=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc;
-        b=e0XlAS5V14oXuW/cJL/R4GWcRBCXpFgL15/G8Edg0PI1xwRQ75f7yRBI9XtQvPAhN
-         +i6JR1RyV0dgdaLAisUz7uHxwmURT8aCd3Tf6kjvq1dk8yc5lwpTDuWUnzlsQ+1+zT
-         xlVsiAnEK/4t/4tArNTl9xKS9h5Y3CQtuMnx27uCXPFjuB6okU2PekRQPGmtbSQmXG
-         LuSAdj3ZXmR5Wd1KPahRTEScDo/dfpaVIkvJTgSsWz4awArcFIr/G7a5BWGnCQp98d
-         ixjw+NFhVd7Yremhmg79G9R1M1KrvlWZXAiZfs6tEcqoanRtDHE/VeXc1Fnhda/ii3
-         Y7Uz/zyrRTpjA==
-Received: by mail-pg1-f180.google.com with SMTP id 133so5050636pgf.2
-        for <linux-hwmon@vger.kernel.org>; Tue, 01 Jun 2021 01:02:42 -0700 (PDT)
-X-Gm-Message-State: AOAM533mPkTtFPmrqY19sXVuoSlJ2TktFOHSijjUg9NWUTP1/o1uG45v
-        E236nZeQdZQvA6ykVcxGS53M0VqwCJos25nR1Do=
-X-Google-Smtp-Source: ABdhPJyHQ8GD9uyt0mF1ocIxXyzGrNc9h2Qy3q75dW3/MAy7N2e7Ko00cFJiKHWNbsoCle9Bvofx9U9YoZehd5kF31Y=
-X-Received: by 2002:a63:5b0e:: with SMTP id p14mr26221519pgb.110.1622534561377;
- Tue, 01 Jun 2021 01:02:41 -0700 (PDT)
+        b=dlT3siJhFOMgT58M2VqrJxkl9r1MySaiUir/KgHKle5WggJGyTwmg5vqrRsrcjcrI
+         dJ4rMlTr8jHzC5ZQ8t7wODtpZVTdEFivj62rUrqs61GBLKFyy/4lpVCNn1tScXcFPz
+         Q0ENNRclxRgotZYJo6OIZyFnW1r4GnX/5PkH/wztiSUHgNdL5HqBJUL43F4+Twf1RB
+         Krp+JZ8TYYPHNA3oYlROftqrx038SsCZ2B1YZCq11PkCwjjP0jDgTnMDTmeo6LTUPH
+         0xvBKn5rrTa7bo2Dvx1XJxkxVAFZ4gschI4ZcjImDvRab1RycKWPSDCZiKL1bHWpuX
+         AFvxUW4GMa0OA==
+Received: by mail-pg1-f172.google.com with SMTP id e22so10085674pgv.10
+        for <linux-hwmon@vger.kernel.org>; Tue, 01 Jun 2021 01:09:02 -0700 (PDT)
+X-Gm-Message-State: AOAM530fMJx+Af6k/P7JOBfjpKq9ZJKrqczkBZNdwGI1hnDx8JPinyC+
+        NAq0Tbr6Iul3q91RfpibU6Bq7MKeQp7pL3AWFfQ=
+X-Google-Smtp-Source: ABdhPJxxS2hYS8P8ywB4JMpqK+SM1ki8tk3JcRkRH1ccNZ32EeiKuktMM+qs0UWqKf+z7PF4xvj/KOE3+Rpc1hXxv/M=
+X-Received: by 2002:aa7:9f95:0:b029:2dc:99b9:8e66 with SMTP id
+ z21-20020aa79f950000b02902dc99b98e66mr21321437pfr.30.1622534941303; Tue, 01
+ Jun 2021 01:09:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210526154022.3223012-1-linux@roeck-us.net> <20210526154022.3223012-5-linux@roeck-us.net>
-In-Reply-To: <20210526154022.3223012-5-linux@roeck-us.net>
+References: <20210526154022.3223012-1-linux@roeck-us.net> <20210526154022.3223012-6-linux@roeck-us.net>
+In-Reply-To: <20210526154022.3223012-6-linux@roeck-us.net>
 From:   =?UTF-8?B?VsOhY2xhdiBLdWJlcm7DoXQ=?= <kubernat@cesnet.cz>
-Date:   Tue, 1 Jun 2021 10:02:30 +0200
-X-Gmail-Original-Message-ID: <CABKa3nq-buWK8EYAVGQQTmdrp=ks_gUnG6gu_BgvfxBWbTADKg@mail.gmail.com>
-Message-ID: <CABKa3nq-buWK8EYAVGQQTmdrp=ks_gUnG6gu_BgvfxBWbTADKg@mail.gmail.com>
-Subject: Re: [PATCH 4/7] hwmon: (max31790) Add support for fanX_enable attributes
+Date:   Tue, 1 Jun 2021 10:08:50 +0200
+X-Gmail-Original-Message-ID: <CABKa3npepB4CnEsPqEZffZm+9ALePTUH2hej9AGGYu9h0667MA@mail.gmail.com>
+Message-ID: <CABKa3npepB4CnEsPqEZffZm+9ALePTUH2hej9AGGYu9h0667MA@mail.gmail.com>
+Subject: Re: [PATCH 5/7] hwmon: (max31790) Clear fan fault after reporting it
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         =?UTF-8?B?SmFuIEt1bmRyw6F0?= <jan.kundrat@cesnet.cz>
@@ -59,169 +60,69 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-fanX_enable works fine.
+Fan fault reading/clearing works fine.
 
 Tested-by: V=C3=A1clav Kubern=C3=A1t <kubernat@cesnet.cz>
 
-st 26. 5. 2021 v 17:40 odes=C3=ADlatel Guenter Roeck <linux@roeck-us.net> n=
+st 26. 5. 2021 v 17:41 odes=C3=ADlatel Guenter Roeck <linux@roeck-us.net> n=
 apsal:
 >
-> Since pwmX_enable is now fixed and only handles pwm support instead
-> of also enabling/disabling fan tachometers, we need an explicit means
-> to do that.
+> Fault bits in MAX31790 are sticky and have to be cleared explicitly.
+> A write operation into either the 'Target Duty Cycle' register or the
+> 'Target Count' register is necessary to clear a fault.
 >
-> For fan channels 7..12, display the enable status if the channel
-> is configured for fan speed reporting. The displayed status matches
-> the value of the companion channel but is read-only.
+> At the same time, we can never clear cached fault status values before
+> reading them because the companion fault status for any given fan is
+> cleared as well when clearing a fault.
 >
 > Cc: Jan Kundr=C3=A1t <jan.kundrat@cesnet.cz>
 > Cc: V=C3=A1clav Kubern=C3=A1t <kubernat@cesnet.cz>
 > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 > ---
->  Documentation/hwmon/max31790.rst |  3 ++
->  drivers/hwmon/max31790.c         | 55 ++++++++++++++++++++++++--------
->  2 files changed, 45 insertions(+), 13 deletions(-)
+>  drivers/hwmon/max31790.c | 16 +++++++++++++++-
+>  1 file changed, 15 insertions(+), 1 deletion(-)
 >
-> diff --git a/Documentation/hwmon/max31790.rst b/Documentation/hwmon/max31=
-790.rst
-> index 7b097c3b9b90..b43aa32813fd 100644
-> --- a/Documentation/hwmon/max31790.rst
-> +++ b/Documentation/hwmon/max31790.rst
-> @@ -35,6 +35,9 @@ Sysfs entries
->  -------------
->
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D =3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-> +fan[1-12]_enable   RW  0=3Ddisable fan speed monitoring, 1=3Denable fan =
-speed monitoring
-> +                       The value is RO for companion channels (7-12). Fo=
-r those
-> +                       channels, the value matches the value of the prim=
-ary channel.
->  fan[1-12]_input    RO  fan tachometer speed in RPM
->  fan[1-12]_fault    RO  fan experienced fault
->  fan[1-6]_target    RW  desired fan speed in RPM
 > diff --git a/drivers/hwmon/max31790.c b/drivers/hwmon/max31790.c
-> index 67677c437768..19651feb40fb 100644
+> index 19651feb40fb..8e4fd9b7c889 100644
 > --- a/drivers/hwmon/max31790.c
 > +++ b/drivers/hwmon/max31790.c
-> @@ -170,6 +170,9 @@ static int max31790_read_fan(struct device *dev, u32 =
-attr, int channel,
->                 return PTR_ERR(data);
+> @@ -80,7 +80,7 @@ static struct max31790_data *max31790_update_device(str=
+uct device *dev)
+>                                 MAX31790_REG_FAN_FAULT_STATUS1);
+>                 if (rv < 0)
+>                         goto abort;
+> -               data->fault_status =3D rv & 0x3F;
+> +               data->fault_status |=3D rv & 0x3F;
 >
->         switch (attr) {
-> +       case hwmon_fan_enable:
-> +               *val =3D !!(data->fan_config[channel % NR_CHANNEL] & MAX3=
-1790_FAN_CFG_TACH_INPUT_EN);
-> +               return 0;
->         case hwmon_fan_input:
->                 sr =3D get_tach_period(data->fan_dynamics[channel % NR_CH=
-ANNEL]);
->                 rpm =3D RPM_FROM_REG(data->tach[channel], sr);
-> @@ -195,12 +198,32 @@ static int max31790_write_fan(struct device *dev, u=
-32 attr, int channel,
->         struct i2c_client *client =3D data->client;
->         int target_count;
->         int err =3D 0;
-> -       u8 bits;
-> +       u8 bits, config;
->         int sr;
->
->         mutex_lock(&data->update_lock);
->
->         switch (attr) {
-> +       case hwmon_fan_enable:
-> +               config =3D data->fan_config[channel];
-> +               if (val =3D=3D 0) {
-> +                       /* Disabling TACH_INPUT_EN has no effect in RPM_M=
-ODE */
-> +                       if (!(config & MAX31790_FAN_CFG_RPM_MODE))
-> +                               config &=3D ~MAX31790_FAN_CFG_TACH_INPUT_=
-EN;
-> +               } else if (val =3D=3D 1) {
-> +                       config |=3D MAX31790_FAN_CFG_TACH_INPUT_EN;
-> +               } else {
-> +                       err =3D -EINVAL;
-> +                       break;
-> +               }
-> +               if (config !=3D data->fan_config[channel]) {
-> +                       err =3D i2c_smbus_write_byte_data(client,
-> +                                                       MAX31790_REG_FAN_=
-CONFIG(channel),
-> +                                                       config);
-> +                       if (!err)
-> +                               data->fan_config[channel] =3D config;
-> +               }
-> +               break;
->         case hwmon_fan_target:
->                 val =3D clamp_val(val, FAN_RPM_MIN, FAN_RPM_MAX);
->                 bits =3D bits_for_tach_period(val);
-> @@ -240,6 +263,12 @@ static umode_t max31790_fan_is_visible(const void *_=
-data, u32 attr, int channel)
->         u8 fan_config =3D data->fan_config[channel % NR_CHANNEL];
->
->         switch (attr) {
-> +       case hwmon_fan_enable:
-> +               if (channel < NR_CHANNEL)
-> +                       return 0644;
-> +               if (fan_config & MAX31790_FAN_CFG_TACH_INPUT)
-> +                       return 0444;
-> +               return 0;
->         case hwmon_fan_input:
+>                 rv =3D i2c_smbus_read_byte_data(client,
+>                                 MAX31790_REG_FAN_FAULT_STATUS2);
+> @@ -184,7 +184,21 @@ static int max31790_read_fan(struct device *dev, u32=
+ attr, int channel,
+>                 *val =3D rpm;
+>                 return 0;
 >         case hwmon_fan_fault:
->                 if (channel < NR_CHANNEL ||
-> @@ -404,18 +433,18 @@ static umode_t max31790_is_visible(const void *data=
-,
->
->  static const struct hwmon_channel_info *max31790_info[] =3D {
->         HWMON_CHANNEL_INFO(fan,
-> -                          HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT=
-,
-> -                          HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT=
-,
-> -                          HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT=
-,
-> -                          HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT=
-,
-> -                          HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT=
-,
-> -                          HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_FAULT=
-,
-> -                          HWMON_F_INPUT | HWMON_F_FAULT,
-> -                          HWMON_F_INPUT | HWMON_F_FAULT,
-> -                          HWMON_F_INPUT | HWMON_F_FAULT,
-> -                          HWMON_F_INPUT | HWMON_F_FAULT,
-> -                          HWMON_F_INPUT | HWMON_F_FAULT,
-> -                          HWMON_F_INPUT | HWMON_F_FAULT),
-> +                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_TARGE=
-T | HWMON_F_FAULT,
-> +                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_TARGE=
-T | HWMON_F_FAULT,
-> +                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_TARGE=
-T | HWMON_F_FAULT,
-> +                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_TARGE=
-T | HWMON_F_FAULT,
-> +                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_TARGE=
-T | HWMON_F_FAULT,
-> +                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_TARGE=
-T | HWMON_F_FAULT,
-> +                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_FAULT=
-,
-> +                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_FAULT=
-,
-> +                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_FAULT=
-,
-> +                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_FAULT=
-,
-> +                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_FAULT=
-,
-> +                          HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_FAULT=
-),
->         HWMON_CHANNEL_INFO(pwm,
->                            HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
->                            HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
+> +               mutex_lock(&data->update_lock);
+>                 *val =3D !!(data->fault_status & (1 << channel));
+> +               data->fault_status &=3D ~(1 << channel);
+> +               /*
+> +                * If a fault bit is set, we need to write into one of th=
+e fan
+> +                * configuration registers to clear it. Note that this al=
+so
+> +                * clears the fault for the companion channel if enabled.
+> +                */
+> +               if (*val) {
+> +                       int reg =3D MAX31790_REG_TARGET_COUNT(channel % N=
+R_CHANNEL);
+> +
+> +                       i2c_smbus_write_byte_data(data->client, reg,
+> +                                                 data->target_count[chan=
+nel % NR_CHANNEL] >> 8);
+> +               }
+> +               mutex_unlock(&data->update_lock);
+>                 return 0;
+>         default:
+>                 return -EOPNOTSUPP;
 > --
 > 2.25.1
 >
