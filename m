@@ -7,49 +7,50 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2799EC4708F
-	for <linux-hwmon@archiver.kernel.org>; Tue,  1 Jun 2021 07:51:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 817C2C4708F
+	for <linux-hwmon@archiver.kernel.org>; Tue,  1 Jun 2021 08:01:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 015AA61378
-	for <linux-hwmon@archiver.kernel.org>; Tue,  1 Jun 2021 07:51:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5DAFE60234
+	for <linux-hwmon@archiver.kernel.org>; Tue,  1 Jun 2021 08:01:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233098AbhFAHxM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 1 Jun 2021 03:53:12 -0400
-Received: from office2.cesnet.cz ([195.113.144.244]:33568 "EHLO
+        id S233127AbhFAIDR (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 1 Jun 2021 04:03:17 -0400
+Received: from office2.cesnet.cz ([195.113.144.244]:34918 "EHLO
         office2.cesnet.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233069AbhFAHxL (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 1 Jun 2021 03:53:11 -0400
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+        with ESMTP id S233306AbhFAIDP (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Tue, 1 Jun 2021 04:03:15 -0400
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by office2.cesnet.cz (Postfix) with ESMTPSA id EDEDB400052
-        for <linux-hwmon@vger.kernel.org>; Tue,  1 Jun 2021 09:51:28 +0200 (CEST)
+        by office2.cesnet.cz (Postfix) with ESMTPSA id 8C824400070
+        for <linux-hwmon@vger.kernel.org>; Tue,  1 Jun 2021 10:01:32 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cesnet.cz;
-        s=office2-2020; t=1622533888;
-        bh=qhTK0nPDVeegI1lSU6v65jme8qq+KOC0a4n5igrrIgM=;
+        s=office2-2020; t=1622534492;
+        bh=7BSYSf+ecpqqRD/itw5VjrkMAmHOcqdmu/WwPbzl4uw=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc;
-        b=h2Jze8H3pVlYm2R3She2QiofVU+VDgXWHCuEXmnt52BsrQ6dRr8kd/OEXUbIK1sop
-         BJW5CEsU92FPeHnVkO5zPGg9wczZVafKb6nsHAxbjpfcYyzV8lV1UIZ08bSqrNB5QZ
-         fgT9JP9y6VWIZFL87xnwa7qF1Hqc5CcA75oj8UKy9HgjIKaNLbE1Tw6gH8htBwcuUC
-         xr4dEZ5BYpL0410ds9QUQXGjsmdpMX36cYmUWFpufc8+OmKs5KLoSq8quciTOz1t+S
-         CCk/NAqCA7TNR+3FZJcdhMtYy9zLDHyqa6UnmI84+YmUMhGNBxewIxNsbxz5oyY5R9
-         Vz5SYXETgxW3w==
-Received: by mail-pg1-f175.google.com with SMTP id 29so10058425pgu.11
-        for <linux-hwmon@vger.kernel.org>; Tue, 01 Jun 2021 00:51:28 -0700 (PDT)
-X-Gm-Message-State: AOAM533g2XxLsS9edguJChkuL+8K4MbEHTEykNLGxmjVZhmXxrjIkC6V
-        OCV15d3COlhH3JHmzzZMwQEyrldhIbi28YCnnIo=
-X-Google-Smtp-Source: ABdhPJxxGpe1C8K9+kzKf2t2YZiWbilZToU2bwtyk6P2kQ3pB6dBIUB59L5BFLkBqaQZS4ph/1FdcnEW9lmc5dEfdPI=
-X-Received: by 2002:a63:5b0e:: with SMTP id p14mr26179478pgb.110.1622533887571;
- Tue, 01 Jun 2021 00:51:27 -0700 (PDT)
+        b=AWfdq/uIQjdPXJrvFObmgPvepbd/QjE0Ww6NnZm+Q7SciZb9mk6s/I7PglYvJr2X+
+         T01BZFf92GCp37ynpqa+8phsIWkc/jRxVf28oLTha69Js5pB3o+0v0isqPbJInBfWd
+         GgVasd/bYRy6xlhUBq4A++Q3KfgnYII17ODPMdPV2nMrUVSvIeLleZD85+RJ0ZXh+7
+         AaaZeVWSPQpvw/fNazM8mzn1fuPkhG5fw4Y4QwmWhUYUvCClIFKozuT7eqe8rOotbc
+         oQO6WbbtB26vwSF6AOfth4yIMC1lST6RlpU1EoSx6fB8CH/4m+BUyd+gvn98Y1paxO
+         D5cz4QFiYcekA==
+Received: by mail-pg1-f182.google.com with SMTP id t9so6340122pgn.4
+        for <linux-hwmon@vger.kernel.org>; Tue, 01 Jun 2021 01:01:32 -0700 (PDT)
+X-Gm-Message-State: AOAM532vzJpTAqFfwSnYOETjPL3sRthsnX2ALj7kXxy7Sm+8LgKdAPzC
+        4WrZA3hvvRy8WhSx1r90w8iU1OBpqi0XZvj3jKE=
+X-Google-Smtp-Source: ABdhPJzu26zL6mzJEBm81+xpp9Da2xAl7Ss3GLiIJC6fKmFDlkwD80pHIKsOcjrISduC+7eZn6vtLE9QA5Gh5xT/z1I=
+X-Received: by 2002:aa7:9f95:0:b029:2dc:99b9:8e66 with SMTP id
+ z21-20020aa79f950000b02902dc99b98e66mr21290811pfr.30.1622534491196; Tue, 01
+ Jun 2021 01:01:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210526154022.3223012-1-linux@roeck-us.net> <20210526154022.3223012-3-linux@roeck-us.net>
-In-Reply-To: <20210526154022.3223012-3-linux@roeck-us.net>
+References: <20210526154022.3223012-1-linux@roeck-us.net> <20210526154022.3223012-4-linux@roeck-us.net>
+In-Reply-To: <20210526154022.3223012-4-linux@roeck-us.net>
 From:   =?UTF-8?B?VsOhY2xhdiBLdWJlcm7DoXQ=?= <kubernat@cesnet.cz>
-Date:   Tue, 1 Jun 2021 09:51:15 +0200
-X-Gmail-Original-Message-ID: <CABKa3nrTsmvpg9C5HWAi_bk8Tcj0sc15ZFL3zxEZ-+LSCdw=2g@mail.gmail.com>
-Message-ID: <CABKa3nrTsmvpg9C5HWAi_bk8Tcj0sc15ZFL3zxEZ-+LSCdw=2g@mail.gmail.com>
-Subject: Re: [PATCH 2/7] hwmon: (max31790) Report correct current pwm duty cycles
+Date:   Tue, 1 Jun 2021 10:01:20 +0200
+X-Gmail-Original-Message-ID: <CABKa3nqZ0Z-Dce-W9RciyCGHgRaR_cVRPitP6=RV_P8BUbJgnA@mail.gmail.com>
+Message-ID: <CABKa3nqZ0Z-Dce-W9RciyCGHgRaR_cVRPitP6=RV_P8BUbJgnA@mail.gmail.com>
+Subject: Re: [PATCH 3/7] hwmon: (max31790) Fix pwmX_enable attributes
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         =?UTF-8?B?SmFuIEt1bmRyw6F0?= <jan.kundrat@cesnet.cz>
@@ -59,81 +60,155 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-PWM duty reading works.
+pwmX_enable 0 and 1 work fine, but it seems like RPM mode is currently
+still unusable. I am testing with Sunon PF36281BX-000U-S99. Setting
+almost any kind of RPM, from low (about 2500) and high (maximum is
+23000), the RPM never stabilizes. I think this is mainly because the
+driver currently doesn't work with the "window" and "pwm rate of
+change" registers.
 
-Tested-by: V=C3=A1clav Kubern=C3=A1t <kubernat@ceesnet.cz>
+Tested-by: V=C3=A1clav Kubern=C3=A1t <kubernat@cesnet.cz>
 
 st 26. 5. 2021 v 17:40 odes=C3=ADlatel Guenter Roeck <linux@roeck-us.net> n=
 apsal:
 >
-> The MAX31790 has two sets of registers for pwm duty cycles, one to reques=
-t
-> a duty cycle and one to read the actual current duty cycle. Both do not
-> have to be the same.
+> pwmX_enable supports three possible values:
 >
-> When reporting the pwm duty cycle to the user, the actual pwm duty cycle
-> from pwm duty cycle registers needs to be reported. When setting it, the
-> pwm target duty cycle needs to be written. Since we don't know the actual
-> pwm duty cycle after a target pwm duty cycle has been written, set the
-> valid flag to false to indicate that actual pwm duty cycle should be read
-> from the chip instead of using cached values.
+> 0: Fan control disabled. Duty cycle is fixed to 0%
+> 1: Fan control enabled, pwm mode. Duty cycle is determined by
+>    values written into Target Duty Cycle registers.
+> 2: Fan control enabled, rpm mode
+>    Duty cycle is adjusted such that fan speed matches
+>    the values in Target Count registers
+>
+> The current code does not do this; instead, it mixes pwm control
+> configuration with fan speed monitoring configuration. Worse, it
+> reports that pwm control would be disabled (pwmX_enable=3D=3D0) when
+> it is in fact enabled in pwm mode. Part of the problem may be that
+> the chip sets the "TACH input enable" bit on its own whenever the
+> mode bit is set to RPM mode, but that doesn't mean that "TACH input
+> enable" accurately reflects the pwm mode.
+>
+> Fix it up and only handle pwm control with the pwmX_enable attributes.
+> In the documentation, clarify that disabling pwm control (pwmX_enable=3D0=
+)
+> sets the pwm duty cycle to 0%. In the code, explain why TACH_INPUT_EN
+> is set together with RPM_MODE.
+>
+> While at it, only update the configuration register if the configuration
+> has changed, and only update the cached configuration if updating the
+> chip configuration was successful.
 >
 > Cc: Jan Kundr=C3=A1t <jan.kundrat@cesnet.cz>
 > Cc: V=C3=A1clav Kubern=C3=A1t <kubernat@cesnet.cz>
 > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 > ---
->  Documentation/hwmon/max31790.rst | 3 ++-
->  drivers/hwmon/max31790.c         | 6 +++---
->  2 files changed, 5 insertions(+), 4 deletions(-)
+>  Documentation/hwmon/max31790.rst |  2 +-
+>  drivers/hwmon/max31790.c         | 41 ++++++++++++++++++++------------
+>  2 files changed, 27 insertions(+), 16 deletions(-)
 >
 > diff --git a/Documentation/hwmon/max31790.rst b/Documentation/hwmon/max31=
 790.rst
-> index f301385d8cef..54ff0f49e28f 100644
+> index 54ff0f49e28f..7b097c3b9b90 100644
 > --- a/Documentation/hwmon/max31790.rst
 > +++ b/Documentation/hwmon/max31790.rst
-> @@ -39,5 +39,6 @@ fan[1-12]_input    RO  fan tachometer speed in RPM
+> @@ -38,7 +38,7 @@ Sysfs entries
+>  fan[1-12]_input    RO  fan tachometer speed in RPM
 >  fan[1-12]_fault    RO  fan experienced fault
 >  fan[1-6]_target    RW  desired fan speed in RPM
->  pwm[1-6]_enable    RW  regulator mode, 0=3Ddisabled, 1=3Dmanual mode, 2=
+> -pwm[1-6]_enable    RW  regulator mode, 0=3Ddisabled, 1=3Dmanual mode, 2=
 =3Drpm mode
-> -pwm[1-6]           RW  fan target duty cycle (0-255)
-> +pwm[1-6]           RW  read: current pwm duty cycle,
-> +                       write: target pwm duty cycle (0-255)
+> +pwm[1-6]_enable    RW  regulator mode, 0=3Ddisabled (duty cycle=3D0%), 1=
+=3Dmanual mode, 2=3Drpm mode
+>  pwm[1-6]           RW  read: current pwm duty cycle,
+>                         write: target pwm duty cycle (0-255)
 >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D =3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D
 > diff --git a/drivers/hwmon/max31790.c b/drivers/hwmon/max31790.c
-> index f6d4fc0a2f13..693497e09ac0 100644
+> index 693497e09ac0..67677c437768 100644
 > --- a/drivers/hwmon/max31790.c
 > +++ b/drivers/hwmon/max31790.c
-> @@ -104,7 +104,7 @@ static struct max31790_data *max31790_update_device(s=
-truct device *dev)
->                                 data->tach[NR_CHANNEL + i] =3D rv;
->                         } else {
->                                 rv =3D i2c_smbus_read_word_swapped(client=
-,
-> -                                               MAX31790_REG_PWMOUT(i));
-> +                                               MAX31790_REG_PWM_DUTY_CYC=
-LE(i));
->                                 if (rv < 0)
->                                         goto abort;
->                                 data->pwm[i] =3D rv;
-> @@ -299,10 +299,10 @@ static int max31790_write_pwm(struct device *dev, u=
+> @@ -27,6 +27,7 @@
+>
+>  /* Fan Config register bits */
+>  #define MAX31790_FAN_CFG_RPM_MODE      0x80
+> +#define MAX31790_FAN_CFG_CTRL_MON      0x10
+>  #define MAX31790_FAN_CFG_TACH_INPUT_EN 0x08
+>  #define MAX31790_FAN_CFG_TACH_INPUT    0x01
+>
+> @@ -271,12 +272,12 @@ static int max31790_read_pwm(struct device *dev, u3=
+2 attr, int channel,
+>                 *val =3D data->pwm[channel] >> 8;
+>                 return 0;
+>         case hwmon_pwm_enable:
+> -               if (fan_config & MAX31790_FAN_CFG_RPM_MODE)
+> +               if (fan_config & MAX31790_FAN_CFG_CTRL_MON)
+> +                       *val =3D 0;
+> +               else if (fan_config & MAX31790_FAN_CFG_RPM_MODE)
+>                         *val =3D 2;
+> -               else if (fan_config & MAX31790_FAN_CFG_TACH_INPUT_EN)
+> -                       *val =3D 1;
+>                 else
+> -                       *val =3D 0;
+> +                       *val =3D 1;
+>                 return 0;
+>         default:
+>                 return -EOPNOTSUPP;
+> @@ -307,23 +308,33 @@ static int max31790_write_pwm(struct device *dev, u=
 32 attr, int channel,
+>         case hwmon_pwm_enable:
+>                 fan_config =3D data->fan_config[channel];
+>                 if (val =3D=3D 0) {
+> -                       fan_config &=3D ~(MAX31790_FAN_CFG_TACH_INPUT_EN =
+|
+> -                                       MAX31790_FAN_CFG_RPM_MODE);
+> +                       fan_config |=3D MAX31790_FAN_CFG_CTRL_MON;
+> +                       /*
+> +                        * Disable RPM mode; otherwise disabling fan spee=
+d
+> +                        * monitoring is not possible.
+> +                        */
+> +                       fan_config &=3D ~MAX31790_FAN_CFG_RPM_MODE;
+>                 } else if (val =3D=3D 1) {
+> -                       fan_config =3D (fan_config |
+> -                                     MAX31790_FAN_CFG_TACH_INPUT_EN) &
+> -                                    ~MAX31790_FAN_CFG_RPM_MODE;
+> +                       fan_config &=3D ~(MAX31790_FAN_CFG_CTRL_MON | MAX=
+31790_FAN_CFG_RPM_MODE);
+>                 } else if (val =3D=3D 2) {
+> -                       fan_config |=3D MAX31790_FAN_CFG_TACH_INPUT_EN |
+> -                                     MAX31790_FAN_CFG_RPM_MODE;
+> +                       fan_config &=3D ~MAX31790_FAN_CFG_CTRL_MON;
+> +                       /*
+> +                        * The chip sets MAX31790_FAN_CFG_TACH_INPUT_EN o=
+n its
+> +                        * own if MAX31790_FAN_CFG_RPM_MODE is set.
+> +                        * Do it here as well to reflect the actual regis=
+ter
+> +                        * value in the cache.
+> +                        */
+> +                       fan_config |=3D (MAX31790_FAN_CFG_RPM_MODE | MAX3=
+1790_FAN_CFG_TACH_INPUT_EN);
+>                 } else {
 >                         err =3D -EINVAL;
 >                         break;
 >                 }
-> -               data->pwm[channel] =3D val << 8;
-> +               data->valid =3D false;
->                 err =3D i2c_smbus_write_word_swapped(client,
->                                                    MAX31790_REG_PWMOUT(ch=
-annel),
-> -                                                  data->pwm[channel]);
-> +                                                  val << 8);
+> -               data->fan_config[channel] =3D fan_config;
+> -               err =3D i2c_smbus_write_byte_data(client,
+> -                                       MAX31790_REG_FAN_CONFIG(channel),
+> -                                       fan_config);
+> +               if (fan_config !=3D data->fan_config[channel]) {
+> +                       err =3D i2c_smbus_write_byte_data(client, MAX3179=
+0_REG_FAN_CONFIG(channel),
+> +                                                       fan_config);
+> +                       if (!err)
+> +                               data->fan_config[channel] =3D fan_config;
+> +               }
 >                 break;
->         case hwmon_pwm_enable:
->                 fan_config =3D data->fan_config[channel];
+>         default:
+>                 err =3D -EOPNOTSUPP;
 > --
 > 2.25.1
 >
