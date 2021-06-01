@@ -2,43 +2,42 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A12FBC4708F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9147C47080
 	for <linux-hwmon@archiver.kernel.org>; Tue,  1 Jun 2021 16:43:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 85EE4613AD
+	by mail.kernel.org (Postfix) with ESMTP id B2D6D613BD
 	for <linux-hwmon@archiver.kernel.org>; Tue,  1 Jun 2021 16:43:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234292AbhFAQpk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S234009AbhFAQpk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Tue, 1 Jun 2021 12:45:40 -0400
-Received: from smtp.outgoing.loopia.se ([93.188.3.37]:14605 "EHLO
+Received: from smtp.outgoing.loopia.se ([93.188.3.37]:14534 "EHLO
         smtp.outgoing.loopia.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234009AbhFAQpj (ORCPT
+        with ESMTP id S232490AbhFAQpj (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>); Tue, 1 Jun 2021 12:45:39 -0400
 Received: from s807.loopia.se (localhost [127.0.0.1])
-        by s807.loopia.se (Postfix) with ESMTP id 298EF2E63FBB
-        for <linux-hwmon@vger.kernel.org>; Tue,  1 Jun 2021 18:43:57 +0200 (CEST)
-Received: from s899.loopia.se (unknown [172.22.191.5])
-        by s807.loopia.se (Postfix) with ESMTP id 190CD2E2C68A;
-        Tue,  1 Jun 2021 18:43:57 +0200 (CEST)
-Received: from s474.loopia.se (unknown [172.22.191.6])
-        by s899.loopia.se (Postfix) with ESMTP id 148CF2C8B9C7;
-        Tue,  1 Jun 2021 18:43:57 +0200 (CEST)
+        by s807.loopia.se (Postfix) with ESMTP id DDD5B2E6297B
+        for <linux-hwmon@vger.kernel.org>; Tue,  1 Jun 2021 18:43:54 +0200 (CEST)
+Received: from s630.loopia.se (unknown [172.22.191.5])
+        by s807.loopia.se (Postfix) with ESMTP id CD3ED2E2C68D;
+        Tue,  1 Jun 2021 18:43:54 +0200 (CEST)
+Received: from s470.loopia.se (unknown [172.22.191.6])
+        by s630.loopia.se (Postfix) with ESMTP id BF84913B93C4;
+        Tue,  1 Jun 2021 18:43:54 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at amavis.loopia.se
 Received: from s645.loopia.se ([172.22.191.6])
-        by s474.loopia.se (s474.loopia.se [172.22.190.14]) (amavisd-new, port 10024)
-        with LMTP id uydlwNniE59e; Tue,  1 Jun 2021 18:43:56 +0200 (CEST)
+        by s470.loopia.se (s470.loopia.se [172.22.190.10]) (amavisd-new, port 10024)
+        with LMTP id xhxZkGMz75sh; Tue,  1 Jun 2021 18:43:53 +0200 (CEST)
 X-Loopia-Auth: user
 X-Loopia-User: carl@hgsystem.se
 X-Loopia-Originating-IP: 178.28.230.104
 Received: from localhost.localdomain (c-b21ce668-74736162.cust.telenor.se [178.28.230.104])
         (Authenticated sender: carl@hgsystem.se)
-        by s645.loopia.se (Postfix) with ESMTPSA id EB66A1579FDE;
-        Tue,  1 Jun 2021 18:43:55 +0200 (CEST)
+        by s645.loopia.se (Postfix) with ESMTPSA id BE5781579F7E;
+        Tue,  1 Jun 2021 18:43:52 +0200 (CEST)
 From:   Erik Rosen <erik.rosen@metormote.com>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -47,66 +46,120 @@ To:     Jean Delvare <jdelvare@suse.com>,
         linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Erik Rosen <erik.rosen@metormote.com>
-Subject: [PATCH v4 1/5] hwmon: (pmbus/pim4328) Add new pmbus flag NO_WRITE_PROTECT
-Date:   Tue,  1 Jun 2021 18:43:16 +0200
-Message-Id: <20210601164320.2907-2-erik.rosen@metormote.com>
+Subject: [PATCH v4 0/6] hwmon: (pmbus/pim4328) Add pim4328 PMBus driver
+Date:   Tue,  1 Jun 2021 18:43:15 +0200
+Message-Id: <20210601164320.2907-1-erik.rosen@metormote.com>
 X-Mailer: git-send-email 2.11.0 (Apple Git-81)
-In-Reply-To: <20210601164320.2907-1-erik.rosen@metormote.com>
-References: <20210601164320.2907-1-erik.rosen@metormote.com>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Some PMBus chips respond with invalid data when reading the WRITE_PROTECT
-register. For such chips, this flag should be set so that the PMBus core
-driver doesn't use the WRITE_PROTECT command to determine it's behavior.
+Add hardware monitoring support for the Flex power interface modules
+PIM4006, PIM4328 and PIM4820.
 
-Signed-off-by: Erik Rosen <erik.rosen@metormote.com>
----
- drivers/hwmon/pmbus/pmbus_core.c | 9 ++++++---
- include/linux/pmbus.h            | 9 +++++++++
- 2 files changed, 15 insertions(+), 3 deletions(-)
+The modules are equipped with dual feed input and has support for
+hotswap, holdup and various circuit protection functionality.
 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index bbd745178147..cb885efc4fba 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -2226,9 +2226,12 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
- 	 * faults, and we should not try it. Also, in that case, writes into
- 	 * limit registers need to be disabled.
- 	 */
--	ret = i2c_smbus_read_byte_data(client, PMBUS_WRITE_PROTECT);
--	if (ret > 0 && (ret & PB_WP_ANY))
--		data->flags |= PMBUS_WRITE_PROTECTED | PMBUS_SKIP_STATUS_CHECK;
-+	if (!(data->flags & PMBUS_NO_WRITE_PROTECT)) {
-+		ret = i2c_smbus_read_byte_data(client, PMBUS_WRITE_PROTECT);
-+		if (ret > 0 && (ret & PB_WP_ANY))
-+			data->flags |= PMBUS_WRITE_PROTECTED
-+				    | PMBUS_SKIP_STATUS_CHECK;
-+	}
- 
- 	if (data->info->pages)
- 		pmbus_clear_faults(client);
-diff --git a/include/linux/pmbus.h b/include/linux/pmbus.h
-index 12cbbf305969..f720470b1bab 100644
---- a/include/linux/pmbus.h
-+++ b/include/linux/pmbus.h
-@@ -43,6 +43,15 @@
-  */
- #define PMBUS_NO_CAPABILITY			BIT(2)
- 
-+/*
-+ * PMBUS_NO_WRITE_PROTECT
-+ *
-+ * Some PMBus chips respond with invalid data when reading the WRITE_PROTECT
-+ * register. For such chips, this flag should be set so that the PMBus core
-+ * driver doesn't use the WRITE_PROTECT command to determine it's behavior.
-+ */
-+#define PMBUS_NO_WRITE_PROTECT			BIT(4)
-+
- struct pmbus_platform_data {
- 	u32 flags;		/* Device specific flags */
- 
+[PATCH 1/5]
+The modules have no CAPABILITY or WRITE_PROTECT commands. If these
+commands are read, the modules return invalid data (0xFF),
+so in addition to the NO_CAPABILITY flag we need a NO_WRITE_PROTECT
+flag to tell the pmbus_core driver to not access this register.
+
+[PATCH 2/5]
+PIM4328 and PIM4820 use the direct mode data format so new functionality
+is added to the pmbus_core driver to be able to read and decode
+the COEFFICIENTS command.
+
+This is a tentative implementation of core driver support for reading
+and decoding direct format coefficients. If the new flag
+PMBUS_USE_COEFFICIENTS_CMD is set, the driver will use the 
+attribute information in the pmbus_sensor_attr structs together
+with the COEFFICIENTS command to read and set the relevant
+direct mode coefficients.
+
+Please have a look and comment.
+
+[PATCH 3/5]
+The two inputs are modelled using virtual phases but there
+is a limitation in the pmbus_core that disallows monitoring
+of phase functions if there is no corresponding function on
+the page level.
+
+In this specific case the PIM4006 module allows
+monitoring of current on each input separately,
+but there is no corresponding command on the page level.
+
+Is there a specific reason for this limitation?
+Otherwise we suggest relaxing this criteria.
+
+[PATCH 4/5]
+All modules use manufacturer specific registers (mfr) for
+status data and only supports the CML bit in the PMBus
+STATUS register. The driver overrides reading the STATUS
+register and maps the bits in the mfr registers to the STATUS
+register alarm bits.
+
+PATCH 5/5]
+Add driver documentation
+
+This patch has been tested with PIM4406, PIM4280 and PIM4328
+modules.
+
+v2
+-Remove the for_reading parameter from the pmbus_read_coefficients
+function.
+-Use the correct namespace macro for the pmbus_read_coefficients
+function.
+-Fix alphabetic ordering of includes
+-Remove override of STATUS_WORD since it will never get called by
+the core driver.
+-Add new patch with tentative implementation of core driver support
+for reading direct mode coefficients using the COEFFICIENTS command.
+
+v3
+-Rework and simplify the code for initialization of direct mode
+coefficients according to comments by Guenter.
+-Updated commit message for patch 2/6
+
+v4
+-Use tabs for aligning #define.
+-Move phase check before switch.
+-Return immediately on error.
+-Use existing PB_STATUS_ bit masks.
+-Add missing error checks.
+-Remove unnecessary !=0 check.
+-Move pdata allocation ahead of the switch statement.
+-Do not export the pmbus_read_coefficients function
+-Change nattr type in struct pmbus_class_attr_map to int.
+-Remove unnecessary initialization in pmbus_init_coefficients.
+-Moved function pmbus_read_coefficients to keep related code together.
+-Rewrite init and read coefficients functions to get rid of ugly cast.
+-Squashed [PATCH 2/6] & [PATCH 3/6].
+-Added Acked-By maintainer.
+
+Erik Rosen (5):
+  Add new pmbus flag NO_WRITE_PROTECT
+  Add support for reading direct mode coefficients
+  Allow phase function even if it does not exist not on the associated
+    page
+  Add PMBus driver for PIM4006, PIM4328 and PIM4820
+  Add documentation for the pim4328 PMBus driver
+
+ Documentation/hwmon/index.rst    |   1 +
+ Documentation/hwmon/pim4328.rst  | 105 ++++++++++++++
+ MAINTAINERS                      |   7 +
+ drivers/hwmon/pmbus/Kconfig      |   9 ++
+ drivers/hwmon/pmbus/Makefile     |   1 +
+ drivers/hwmon/pmbus/pim4328.c    | 233 +++++++++++++++++++++++++++++++
+ drivers/hwmon/pmbus/pmbus_core.c | 141 +++++++++++++++++--
+ include/linux/pmbus.h            |  17 +++
+ 8 files changed, 503 insertions(+), 11 deletions(-)
+ create mode 100644 Documentation/hwmon/pim4328.rst
+ create mode 100644 drivers/hwmon/pmbus/pim4328.c
+
+
+base-commit: 6efb943b8616ec53a5e444193dccf1af9ad627b5
 -- 
 2.20.1
 
