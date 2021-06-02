@@ -2,88 +2,76 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A277C47083
-	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Jun 2021 12:16:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88339C47083
+	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Jun 2021 12:27:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6BECA60FDC
-	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Jun 2021 12:16:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6CAF6613BA
+	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Jun 2021 12:27:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbhFBMSk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 2 Jun 2021 08:18:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37336 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbhFBMSk (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 2 Jun 2021 08:18:40 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27132C061574;
-        Wed,  2 Jun 2021 05:16:56 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id l7so1621412qtk.5;
-        Wed, 02 Jun 2021 05:16:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2O+tLYxesFn9U9bsFgi2no8QVjDlOUPa6ENZe5MNQmw=;
-        b=EeDF0BbEfidTuVl9WySidPBvEzrWzs2Q+cL/+DRnZ17L36CgBJG5rHAmiVNYYADsEf
-         Om6jDA3bUEhDm2zG0mypmGiVmlV0L76EORgomvcZJIAZeOG02Cv7o2D8YHjpAm/PtRl5
-         88adfvVMp7vGoLLLnU09CYf4YBHliIfd2oXarH2187QViNNxUqPJG+LfPqKCZR7ugQxd
-         DrfWi5k8vZDLO8AK7PJqCu4pB/PGvRJYyNq0qcwSiq3UyPahFCCAnAd5nJRlw0l2WJ91
-         eYYGJ81+BpiTJVtB6HGUwHHEPypPHFZ4jBvS953Pm2n3EOioNyXsWL7oOn3R55M9FYKO
-         Ms3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=2O+tLYxesFn9U9bsFgi2no8QVjDlOUPa6ENZe5MNQmw=;
-        b=Uo2VdGYKMjeGzeXT8scWYqFRhDbuMbmOAj9qJzpFJy7lWFv44+iMDyxDunU4en5h6f
-         0TFQTPL8NowgV7kQ5/MB3hQXkQXbQ6gQz0pW/QwvuwXqnR248t/WTO7I7hT9QSxKAbCA
-         gX3aHNK1jgrgQerlHcctKCVbJ8kYMDE98Kv7+/EGVWQTIKjDF13T/pU1WAX+LUpoPCGN
-         sZ5178/ZUump3BLBZh+qtYRtUCfeqN8sbw2ZNJgxZNKaosuWhoXvg+AUnbuWienJRTnJ
-         o+dwC3TUFz5aeQA5HfAT+/1NjYV3q5Op5wZ35jg/JP2SLY///4I51WcBgGJJG3Jmx0oR
-         Ixcw==
-X-Gm-Message-State: AOAM532xWtWGyavVKHWI86ntWnlHxhQ//Z/VgbhS9ORXxmU/JmdKCJqI
-        QEeyFb780QLdW44JD6Pekghri9QrOnc=
-X-Google-Smtp-Source: ABdhPJwYLQ/xk/Wo0OcRNo2Y0CbzFrLgMq3CvWfe2xevEe5M9yqxEnQuuI8yVMfH/NsFyL1Yt6JSKA==
-X-Received: by 2002:ac8:7f42:: with SMTP id g2mr24436856qtk.73.1622636215380;
-        Wed, 02 Jun 2021 05:16:55 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s18sm2337300qtk.85.2021.06.02.05.16.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Jun 2021 05:16:54 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 2 Jun 2021 05:16:53 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Erik Rosen <erik.rosen@metormote.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-        Daniel Nilsson <daniel.nilsson@flex.com>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 4/5] hwmon: (pmbus/pim4328) Add PMBus driver for
- PIM4006, PIM4328 and PIM4820
-Message-ID: <20210602121653.GD2901466@roeck-us.net>
-References: <20210601164320.2907-1-erik.rosen@metormote.com>
- <20210601164320.2907-5-erik.rosen@metormote.com>
+        id S229791AbhFBM2q (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 2 Jun 2021 08:28:46 -0400
+Received: from office2.cesnet.cz ([195.113.144.244]:58990 "EHLO
+        office2.cesnet.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229647AbhFBM2q (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 2 Jun 2021 08:28:46 -0400
+Received: from localhost (ip-78-45-210-72.net.upcbroadband.cz [78.45.210.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by office2.cesnet.cz (Postfix) with ESMTPSA id 5CD2F40006C;
+        Wed,  2 Jun 2021 14:27:02 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cesnet.cz;
+        s=office2-2020; t=1622636822;
+        bh=GZEbzmZQJc2iJLlq6S5ektwa0kg6aq8sGKSxC6P6LZE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=UkvZxlIoiiSXY8WjOKxlKZN8UFy83SlY4BI4jA5tT5o2HYsw4eKouqufKZMOHwOae
+         Eo5Y+AjAM6LoxmJCUmkZSS0zVSZoMBgWuJW3TUxRf2AtRF4gqk1iIYCUlsQ2j8h9/W
+         5CZOl99i+pDJ2epIxrQDK01L92j+IfkPPK9hdrbK7nii8QLmIZBB+8UDgdEIuP62JV
+         2uinXH0ZwZMyhEZiqWcKTTjsx6GgVNLXecxj8VeHyl1oKOX/1EX8XyGa0yYy4ulfnX
+         jGIOdc4cXIttdtpP5bt54dU7ph8G/nM/BI9pboj1I/YSvUa9DVBazWt7tMTXAEAAyj
+         s9ETImcxXGy4Q==
+From:   =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     <linux-hwmon@vger.kernel.org>, Jean Delvare <jdelvare@suse.com>,
+        <kubernat@cesnet.cz>
+Subject: Re: [PATCH 1/7] hwmon: (max31790) Fix fan speed reporting for =?iso-8859-1?Q?fan7..12?=
+Date:   Wed, 02 Jun 2021 14:27:01 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210601164320.2907-5-erik.rosen@metormote.com>
+Message-ID: <aac9fe15-f123-460c-8583-65f96103a1c6@cesnet.cz>
+In-Reply-To: <20210526154022.3223012-2-linux@roeck-us.net>
+References: <20210526154022.3223012-1-linux@roeck-us.net>
+ <20210526154022.3223012-2-linux@roeck-us.net>
+Organization: CESNET
+User-Agent: Trojita/unstable-2020-07-06; Qt/5.15.2; xcb; Linux; 
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jun 01, 2021 at 06:43:19PM +0200, Erik Rosen wrote:
-> Add hardware monitoring support for Flex power interface modules PIM4006,
-> PIM4328 and PIM4820.
-> 
-> Signed-off-by: Erik Rosen <erik.rosen@metormote.com>
+On st=C5=99eda 26. kv=C4=9Btna 2021 17:40:16 CEST, Guenter Roeck wrote:
+> Fans 7..12 do not have their own set of configuration registers.
+> So far the code ignored that and read beyond the end of the configuration
+> register range to get the tachometer period. This resulted in more or less
+> random fan speed values for those fans.
+>
+> The datasheet is quite vague when it comes to defining the tachometer
+> period for fans 7..12. Experiments confirm that the period is the same
+> for both fans associated with a given set of configuration registers.
+>
+> Fixes: 54187ff9d766 ("hwmon: (max31790) Convert to use new=20
+> hwmon registration API")
+> Fixes: 195a4b4298a7 ("hwmon: Driver for Maxim MAX31790")
+> Cc: Jan Kundr=C3=A1t <jan.kundrat@cesnet.cz>
+> Cc: V=C3=A1clav Kubern=C3=A1t <kubernat@cesnet.cz>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 
-For my reference:
+Reviewed-by: Jan Kundr=C3=A1t <jan.kundrat@cesnet.cz>
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-Guenter
+Cheers,
+Jan
