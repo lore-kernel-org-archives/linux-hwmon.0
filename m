@@ -2,200 +2,85 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D4B2C47082
-	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Jun 2021 13:14:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 648A4C47082
+	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Jun 2021 15:56:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7E4EB6101C
-	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Jun 2021 13:14:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4ACF6613F4
+	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Jun 2021 15:56:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230414AbhFCNQZ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 3 Jun 2021 09:16:25 -0400
-Received: from mail-ed1-f52.google.com ([209.85.208.52]:41785 "EHLO
-        mail-ed1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230252AbhFCNQZ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 3 Jun 2021 09:16:25 -0400
-Received: by mail-ed1-f52.google.com with SMTP id g18so5061336edq.8;
-        Thu, 03 Jun 2021 06:14:40 -0700 (PDT)
+        id S230048AbhFCP6E (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 3 Jun 2021 11:58:04 -0400
+Received: from mail-qv1-f46.google.com ([209.85.219.46]:41564 "EHLO
+        mail-qv1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229753AbhFCP6E (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 3 Jun 2021 11:58:04 -0400
+Received: by mail-qv1-f46.google.com with SMTP id x2so2769310qvo.8;
+        Thu, 03 Jun 2021 08:56:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=4WFK+dAl3lP8zGBQG5Zuw/AtQ6TfxtGSujMpkMrnDbk=;
+        b=bZZ0efbfToszLj45mbduNslRNzNQ3wrkp3cQX6z4EO1xt5mSQ+/Ti+Rgdz+tIHE1Ta
+         pEPt5lr+zHNspt/Nsd0I9YYypkXeCE+MQQ1bWoT/019cF8jqjXaRtnr6iLF9InVyg5GT
+         7tZ6CntLshbLjHa3GIFgMraMcmddIubypMp7UhO7uO+1O5BSR3Ukijwj4v3DE/jMXSXH
+         2ftTu5KnN438ImF50wNIfVs8UHtVjWBNsGLR8qCZG7TCi4LtBC68s+oG9h1LH5K/s9pY
+         NhQZAq6E62jyWuXxluoHCfsHQTWi9E3OXUmkLwHIDd3EjgPDMWMtxoflhnUiJCxQVnYU
+         n3Sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=scT1hIUpHPncOBtJqn4yX/G5/X9IBl2kc3/uzv7YyLg=;
-        b=KRxF0u1stU7XueshckPqrbGBuuYuw2sqaROMtfeNjBw/3mZhmfOxAMh3ilW1TjbWaC
-         H+VYrqrS/fMazOd+TTQw8gAwuWTeF71vMvLTo5KhG/0NF/cxDEyGBrWyWLjHyVRDOM6v
-         oQ5ZEO6tomLbk7ObSdq8GZRtECj9HvpY8cjt/6OHPsPdbadEEdR4ZWkRsCLkkPlLnPbD
-         5nm+k3fyeuDCxVgHoqrvfXX7KhwX1ZsTc57z87cvLP+ftQXR1dh0OnCjJd6coTfOe9cN
-         E8mumFnm72T84k8gNj6FSoicWIY+2PYmB9YYACogDDYExypTWAn6g80W5kfClOiX7gdr
-         q/8A==
-X-Gm-Message-State: AOAM533epdUcjZ+S5eNLvvUv4j2DS9aMfxPeUy3bgBT/CU5mnjg9VA/c
-        s2/966fsDREnz92TDwAw+cm9AJm+C22AA6tS
-X-Google-Smtp-Source: ABdhPJyhGRPBYdqGdDLrF/kC2HF0ciolZyCvKTwWlxWQjtebBsJXoEuowAlSjxnvXw9QEjTmIgvusg==
-X-Received: by 2002:a05:6402:3c1:: with SMTP id t1mr28652498edw.270.1622726079523;
-        Thu, 03 Jun 2021 06:14:39 -0700 (PDT)
-Received: from localhost ([2a02:8308:387:c900:a7b5:b859:9449:c07b])
-        by smtp.gmail.com with ESMTPSA id z20sm1498821ejd.18.2021.06.03.06.14.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Jun 2021 06:14:39 -0700 (PDT)
-From:   =?UTF-8?q?V=C3=A1clav=20Kubern=C3=A1t?= <kubernat@cesnet.cz>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?V=C3=A1clav=20Kubern=C3=A1t?= <kubernat@cesnet.cz>
-Subject: [PATCH] hwmon: (max31790) Add support for fanX_div
-Date:   Thu,  3 Jun 2021 15:14:21 +0200
-Message-Id: <20210603131421.67235-1-kubernat@cesnet.cz>
-X-Mailer: git-send-email 2.31.1
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=4WFK+dAl3lP8zGBQG5Zuw/AtQ6TfxtGSujMpkMrnDbk=;
+        b=dx5qLwq80EItbMkzwCJgAIcvlPba9ZvAhL80fzRHwT3F71Obt/CuYOy40aHNh2avwk
+         OeBjiT1PpKB3fbhz15Y97oy/WDjcwvJu8BcKkdC/zhZnIndHcQYWp/okPrz0pmEInYbs
+         OoIX+YiCqiZ49peqyqH5zKSisuhBkgp9dbwz4zvmCpzjo9Xlcb06625kIhS1TCfuMpBX
+         W6RlQmWKCFouew4ftYjSsDGw0jOCsO9xhcvyROVy34hGnUOoNXNCZZeOU5YkI1LoY8fH
+         dQp1aZP1aT0oYxijZvuO5yTbRJd1MBN8jp/rAcGLgYbwgJxpDz24xiUZ4yVcsBLVZU5u
+         n1fA==
+X-Gm-Message-State: AOAM531jYfKI1KiCWciKbEAiuirBHW/i3suHYZq9c+xaY23KqZlJIKA0
+        tQXeC50RiS0i7As1mg6qIQs=
+X-Google-Smtp-Source: ABdhPJwerfV65PHdjX76NBh729oibc3vZsU6r9rNIZ8zUS2VzYYmWq1wpd8PLQ/40DwnCG8UCUC4XQ==
+X-Received: by 2002:a0c:a323:: with SMTP id u32mr226377qvu.14.1622735719289;
+        Thu, 03 Jun 2021 08:55:19 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 64sm2135981qkj.123.2021.06.03.08.55.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Jun 2021 08:55:18 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 3 Jun 2021 08:55:16 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     =?iso-8859-1?Q?V=E1clav_Kubern=E1t?= <kubernat@cesnet.cz>
+Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (max31790) Add support for fanX_div
+Message-ID: <20210603155516.GB3017129@roeck-us.net>
+References: <20210603131421.67235-1-kubernat@cesnet.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210603131421.67235-1-kubernat@cesnet.cz>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Right now, the divisor (which determines the speed range) can be only
-set by setting fanX_min or fanX_target. This is fine for RPM mode, but
-in other cases, it might not be enough. This patch makes it possible to
-set the divisor independently.
+On Thu, Jun 03, 2021 at 03:14:21PM +0200, V·clav Kubern·t wrote:
+> Right now, the divisor (which determines the speed range) can be only
+> set by setting fanX_min or fanX_target. This is fine for RPM mode, but
+> in other cases, it might not be enough. This patch makes it possible to
+> set the divisor independently.
+> 
 
-Signed-off-by: V√°clav Kubern√°t <kubernat@cesnet.cz>
----
- Documentation/hwmon/max31790.rst |  4 ++
- drivers/hwmon/max31790.c         | 68 ++++++++++++++++++++++++++------
- 2 files changed, 60 insertions(+), 12 deletions(-)
+Jan objected to patch 4/7 of the previous series, so anything from that
+onward is a no-go at this time. I'll drop patches 4/7 to 7/7 from the
+series for now. I will only be able to look into this further in about
+a month.
 
-diff --git a/Documentation/hwmon/max31790.rst b/Documentation/hwmon/max31790.rst
-index 9225c2a78b68..818e4fe8c797 100644
---- a/Documentation/hwmon/max31790.rst
-+++ b/Documentation/hwmon/max31790.rst
-@@ -50,6 +50,10 @@ fan[1-12]_min      RW  minimum fan speed in RPM. Equivalent to target fan speed
-                        and the chip will report a fault condition if the fan
-                        speed is below the target fan speed.
- fan[1-6]_target    RW  desired fan speed in RPM
-+fan[1-12]_div      RW  fan speed range
-+		       The value is RO for companion channels (7-12). For those
-+		       channels, the value matches the value of the primary channel.
-+		       Setting fanX_target or fanX_min also sets this value.
- pwm[1-6]_enable    RW  regulator mode, 0=disabled (duty cycle=0%), 1=manual mode, 2=rpm mode
- pwm[1-6]           RW  read: current pwm duty cycle,
-                        write: target pwm duty cycle (0-255)
-diff --git a/drivers/hwmon/max31790.c b/drivers/hwmon/max31790.c
-index 39a4ece4276a..f6c38094c19c 100644
---- a/drivers/hwmon/max31790.c
-+++ b/drivers/hwmon/max31790.c
-@@ -160,6 +160,26 @@ static u8 bits_for_tach_period(int rpm)
- 	return bits;
- }
- 
-+static int bits_for_speed_range(long speed_range)
-+{
-+	switch (speed_range) {
-+	case 1:
-+		return 0x0;
-+	case 2:
-+		return 0x1;
-+	case 4:
-+		return 0x2;
-+	case 8:
-+		return 0x3;
-+	case 16:
-+		return 0x4;
-+	case 32:
-+		return 0x5;
-+	default:
-+		return -1;
-+	}
-+}
-+
- static int max31790_read_fan(struct device *dev, u32 attr, int channel,
- 			     long *val)
- {
-@@ -173,6 +193,9 @@ static int max31790_read_fan(struct device *dev, u32 attr, int channel,
- 	case hwmon_fan_enable:
- 		*val = !!(data->fan_config[channel % NR_CHANNEL] & MAX31790_FAN_CFG_TACH_INPUT_EN);
- 		return 0;
-+	case hwmon_fan_div:
-+		*val = get_tach_period(data->fan_dynamics[channel % NR_CHANNEL]);
-+		return 0;
- 	case hwmon_fan_input:
- 		sr = get_tach_period(data->fan_dynamics[channel % NR_CHANNEL]);
- 		if (data->tach[channel] == FAN_COUNT_REG_MAX)
-@@ -293,6 +316,20 @@ static int max31790_write_fan(struct device *dev, u32 attr, int channel,
- 					MAX31790_REG_TARGET_COUNT(channel),
- 					data->target_count[channel]);
- 		break;
-+	case hwmon_fan_div:
-+		sr = bits_for_speed_range(val);
-+		if (sr < 0) {
-+			err = -EINVAL;
-+			break;
-+		}
-+
-+		data->fan_dynamics[channel] = ((data->fan_dynamics[channel] &
-+						~MAX31790_FAN_DYN_SR_MASK) |
-+					       (sr << MAX31790_FAN_DYN_SR_SHIFT));
-+		err = i2c_smbus_write_byte_data(client,
-+						MAX31790_REG_FAN_DYNAMICS(channel),
-+						data->fan_dynamics[channel]);
-+		break;
- 	default:
- 		err = -EOPNOTSUPP;
- 		break;
-@@ -311,6 +348,7 @@ static umode_t max31790_fan_is_visible(const void *_data, u32 attr, int channel)
- 	switch (attr) {
- 	case hwmon_fan_min:
- 	case hwmon_fan_enable:
-+	case hwmon_fan_div:
- 		if (channel < NR_CHANNEL)
- 			return 0644;
- 		if (fan_config & MAX31790_FAN_CFG_TACH_INPUT)
-@@ -481,23 +519,29 @@ static umode_t max31790_is_visible(const void *data,
- static const struct hwmon_channel_info *max31790_info[] = {
- 	HWMON_CHANNEL_INFO(fan,
- 			   HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_TARGET |
--				HWMON_F_FAULT,
-+				HWMON_F_FAULT | HWMON_F_DIV,
- 			   HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_TARGET |
--				HWMON_F_FAULT,
-+				HWMON_F_FAULT | HWMON_F_DIV,
- 			   HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_TARGET |
--				HWMON_F_FAULT,
-+				HWMON_F_FAULT | HWMON_F_DIV,
- 			   HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_TARGET |
--				HWMON_F_FAULT,
-+				HWMON_F_FAULT | HWMON_F_DIV,
- 			   HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_TARGET |
--				HWMON_F_FAULT,
-+				HWMON_F_FAULT | HWMON_F_DIV,
- 			   HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_TARGET |
--				HWMON_F_FAULT,
--			   HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_FAULT,
--			   HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_FAULT,
--			   HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_FAULT,
--			   HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_FAULT,
--			   HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_FAULT,
--			   HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_FAULT),
-+				HWMON_F_FAULT | HWMON_F_DIV,
-+			   HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_FAULT |
-+				HWMON_F_DIV,
-+			   HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_FAULT |
-+				HWMON_F_DIV,
-+			   HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_FAULT |
-+				 HWMON_F_DIV,
-+			   HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_FAULT |
-+				 HWMON_F_DIV,
-+			   HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_FAULT |
-+				   HWMON_F_DIV,
-+			   HWMON_F_ENABLE | HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_FAULT |
-+				   HWMON_F_DIV),
- 	HWMON_CHANNEL_INFO(pwm,
- 			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
- 			   HWMON_PWM_INPUT | HWMON_PWM_ENABLE,
--- 
-2.31.1
-
+Guenter
