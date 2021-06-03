@@ -2,63 +2,94 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5437C47083
-	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Jun 2021 19:36:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66568C47082
+	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Jun 2021 05:23:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C861C613EA
-	for <linux-hwmon@archiver.kernel.org>; Wed,  2 Jun 2021 19:36:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 50A2161361
+	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Jun 2021 05:23:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbhFBTiK (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 2 Jun 2021 15:38:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40810 "EHLO mail.kernel.org"
+        id S229844AbhFCFZ0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 3 Jun 2021 01:25:26 -0400
+Received: from mout02.posteo.de ([185.67.36.66]:39489 "EHLO mout02.posteo.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229489AbhFBTiK (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Wed, 2 Jun 2021 15:38:10 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id A9650613F5;
-        Wed,  2 Jun 2021 19:36:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622662586;
-        bh=i/gBplijkKmXL1Xfk3sSdjVJgUyfzpjzejfTwk1vr8Q=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=fJQ80oCkhow9bcGlTVzRncXCU85iqUwYfP4szpsn8fN513eqqUu3bx+lJ2Tm6LeVL
-         AreebQ3bVcFSNNlEJlhKEudNJffwU2xz3teZPVAlCoVjpmqbAjtpzbhIJ/wMBD8drr
-         iYIoGGORzRuiuhK6spqicpw3c0V+ItSPnZpFx3ScVcXrTAlRgruUTtjCPhxTPwXA72
-         /k8j2Toyi53tnXJuXEiecXPGTasbzJeXhU/yWdRWrOJHLHoZTyTa89so153tPUa0My
-         5xZd+kynjPEfv291ZaSBIphDoAPT77sD4Z6wp5/gqijukHWOaXNYq7xWEBWcvOhWAg
-         p1iey+bo4nntw==
-Subject: Re: [GIT PULL] hwmon fixes for v5.13-rc5
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20210602112858.2870288-1-linux@roeck-us.net>
-References: <20210602112858.2870288-1-linux@roeck-us.net>
-X-PR-Tracked-List-Id: <linux-hwmon.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20210602112858.2870288-1-linux@roeck-us.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.13-rc4
-X-PR-Tracked-Commit-Id: f0fb26c456a30d6009faa2c9d44aa22f5bf88c90
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 3bfc6ffb616f14dc268aa121b71637ef06654e92
-Message-Id: <162266258654.13029.13947068784073650137.pr-tracker-bot@kernel.org>
-Date:   Wed, 02 Jun 2021 19:36:26 +0000
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+        id S229840AbhFCFZ0 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 3 Jun 2021 01:25:26 -0400
+Received: from submission (posteo.de [89.146.220.130]) 
+        by mout02.posteo.de (Postfix) with ESMTPS id A0F792400E5
+        for <linux-hwmon@vger.kernel.org>; Thu,  3 Jun 2021 07:23:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+        t=1622697820; bh=wABl0gIXHD83vUh96O7dBds8ys0Ab9hhQdDQP6Ecg44=;
+        h=Date:From:To:Cc:Subject:From;
+        b=H3f8ScJuqLpW3PxG/jt+bSyGFDPmuvss7d1SYLHsNNgJubg4BBDWyFQH6JlPM618V
+         nLIa/AtF0o8Yvg/+ZjiJ1pvnfEJonESCXNxzIqXohf6TLmnc3pngdInmz096VNvTno
+         73eChTRm124cTXa0BXBHT1YjFRqlVXvIr/kmOX8voigQMA2HuKKEZ2feP9UttnC5zz
+         PZS9f7YKzhvaoZ3IwTq5A17tvTjbYPEUrwUmQOkpuoAqWDsE/e9J7NgRCQVNsC5k1S
+         UfYEXyPx74Wl+308Bn2hCO4t6hzKSr4dkRi5i9KCnfTkqFBhj9qRQdLYnoMQZmx7Y/
+         Yyw2ZmxcrW39g==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4FwZ7H5Lvnz9rxD;
+        Thu,  3 Jun 2021 07:23:39 +0200 (CEST)
+Date:   Thu,  3 Jun 2021 05:23:38 +0000
+From:   Wilken Gottwalt <wilken.gottwalt@posteo.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
+Subject: [PATCH] hwmon: corsair-psu: fix suspend behavior
+Message-ID: <YLhnWiI9mI3l5u/s@monster.powergraphx.local>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The pull request you sent on Wed,  2 Jun 2021 04:28:58 -0700:
+During standby some PSUs turn off the microcontroller. A re-init is
+required during resume or the microcontroller stays unresponsive.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.13-rc4
+Fixes: 726c945ab2eb ("hwmon: (corsair-psu) Remove unneeded semicolons")
+Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+---
+ drivers/hwmon/corsair-psu.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/3bfc6ffb616f14dc268aa121b71637ef06654e92
-
-Thank you!
-
+diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
+index 02298b86b57b..731d5117f9f1 100644
+--- a/drivers/hwmon/corsair-psu.c
++++ b/drivers/hwmon/corsair-psu.c
+@@ -771,6 +771,16 @@ static int corsairpsu_raw_event(struct hid_device *hdev, struct hid_report *repo
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_PM
++static int corsairpsu_resume(struct hid_device *hdev)
++{
++	struct corsairpsu_data *priv = hid_get_drvdata(hdev);
++
++	/* some PSUs turn off the microcontroller during standby, so a reinit is required */
++	return corsairpsu_init(priv);
++}
++#endif
++
+ static const struct hid_device_id corsairpsu_idtable[] = {
+ 	{ HID_USB_DEVICE(0x1b1c, 0x1c03) }, /* Corsair HX550i */
+ 	{ HID_USB_DEVICE(0x1b1c, 0x1c04) }, /* Corsair HX650i */
+@@ -793,6 +803,10 @@ static struct hid_driver corsairpsu_driver = {
+ 	.probe		= corsairpsu_probe,
+ 	.remove		= corsairpsu_remove,
+ 	.raw_event	= corsairpsu_raw_event,
++#ifdef CONFIG_PM
++	.resume		= corsairpsu_resume,
++	.reset_resume	= corsairpsu_resume,
++#endif
+ };
+ module_hid_driver(corsairpsu_driver);
+ 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.31.1
+
