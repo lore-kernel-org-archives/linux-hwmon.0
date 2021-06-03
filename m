@@ -2,128 +2,113 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24EB9C47082
-	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Jun 2021 10:52:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7D28C47082
+	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Jun 2021 11:37:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0D93F613D2
-	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Jun 2021 10:52:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9F8B8613E3
+	for <linux-hwmon@archiver.kernel.org>; Thu,  3 Jun 2021 11:37:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbhFCKya (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 3 Jun 2021 06:54:30 -0400
-Received: from mail-qk1-f174.google.com ([209.85.222.174]:41633 "EHLO
-        mail-qk1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbhFCKya (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Thu, 3 Jun 2021 06:54:30 -0400
-Received: by mail-qk1-f174.google.com with SMTP id c124so5424847qkd.8;
-        Thu, 03 Jun 2021 03:52:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1VhTPRv1m3MXWutv7NtxxxaGMbYU/PIOi1ihYHRt+TU=;
-        b=beDTfz77A2PJ7ZfyZZuLrMwX/o/EYeMgsXbJT2/xEgX0m3Qu/sJCxyqoOFxPjA9Qft
-         F1PDS59GwizYtmbqhwivT5tTDL4NFTgaylmvaoJwf13Hek1vu1r0+t8qMdqlfEuLP4GN
-         9/R4UDoythMlE198kcditRLcKJ6Iak9eE2fqYCpRwn6453aX/HGO4oFev7U3YlZ+OGEw
-         aPCfb/S4yrhJf3ge+3N1+m9ZRW1Mk4lQmHIw1P06hKNJriCDPjnUWXIWMc/d3HMRoK0L
-         Y8p7rJuLH1ofmjuQkLxM5Jx4RgvZfrohBu9scFaW6uupwmhqLdfrYg/BWDYXli86HPhQ
-         orzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=1VhTPRv1m3MXWutv7NtxxxaGMbYU/PIOi1ihYHRt+TU=;
-        b=kygo0Xispso2vx+NWrKlv3IwtJdMS11paj6t+Dko6ZvIyLToWehMPwu/Bug3t5gCUU
-         Zj8ZYjSwH9oMW0SBjACBhmU1C5mZ7GR/AW6QxlD1vmqFmAoOX82nR4bHrNBZoBwrCsHP
-         pMTtf2DNMKKIyGKxX3NnMR8KJAYoR8CqNItgLC85DxbitNTcZjHQXY28OiBrZdc+JEPZ
-         xJto1yRBQX+Yiv0hga3eKouZImPpkYvhTcoN9kDuhLJeU400GN0LA4h58bmk/RGQ+K1L
-         k3InbFjchEnRySq5dZOIye/eBp5E4CwVQK0vCJ98F9Rf594WuBpkaXr7ZbejlEfIE01v
-         G7Vg==
-X-Gm-Message-State: AOAM532UA6YTN+EFL7FmjfQ+J10X8oNyb5ywHN3FYoaSFShLz+GTeaoK
-        qIUeaA0Js9beLfNFoBMAh6b9EXVwGAU=
-X-Google-Smtp-Source: ABdhPJyW5ma9LYAngWW5bFrP5ckO5i7BStX+ZfbEg250NneM13IAS0XUEScdtBK/KEGoroWfLzy/7w==
-X-Received: by 2002:a05:620a:22f3:: with SMTP id p19mr31836084qki.281.1622717489186;
-        Thu, 03 Jun 2021 03:51:29 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z2sm1682243qkc.111.2021.06.03.03.51.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Jun 2021 03:51:28 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 3 Jun 2021 03:51:27 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Riwen Lu <luriwen@kylinos.cn>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xin Chen <chenxin@kylinos.cn>
-Subject: Re: [PATCH v2] hwmon: (scpi-hwmon) shows the negative temperature
- properly
-Message-ID: <20210603105127.GB644104@roeck-us.net>
-References: <20210603083845.569751-1-luriwen@kylinos.cn>
+        id S229962AbhFCLjN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 3 Jun 2021 07:39:13 -0400
+Received: from mout02.posteo.de ([185.67.36.66]:33307 "EHLO mout02.posteo.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229747AbhFCLjN (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 3 Jun 2021 07:39:13 -0400
+Received: from submission (posteo.de [89.146.220.130]) 
+        by mout02.posteo.de (Postfix) with ESMTPS id 33CB52400FD
+        for <linux-hwmon@vger.kernel.org>; Thu,  3 Jun 2021 13:37:25 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+        t=1622720245; bh=VK9fcZ01IcuMVfo0nR6TgCfnH/EpeC6PBFr09prL+wo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=NfpaM2/5AzJ+pUQZPRGmwWglg4v3KQL6Q4v9R3ttshNBMoJiWfAzvt6wyVlnKAEFX
+         0ePlClXc52Z2uFPL6/fAl1KaOiHYqoEmZxsbbQc0GsWkfVgMFXCF4VoGM6hbPnd+p7
+         8KBwIrSy6q22B8gDcgGiqj3WcJBwLAW2nYDtX7IUJ+rNgbjjnwi61JreAZ6wcLEpj4
+         cHMeJ/zOWd02STMVxTk1bmtjdxaQQ3Mdl/0xwyZMFN7lH18va9bD3/k7qWGKuCmXS0
+         8ZzS5hBXRM5UKKKy6UL/0dh3JMMmjSCJ+PcrmarGQbHEOeRlHTnpKT6sxjqgWXoa3n
+         4vd1y49Sz+hRw==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4FwkQX16CMz6tm9;
+        Thu,  3 Jun 2021 13:37:23 +0200 (CEST)
+Date:   Thu,  3 Jun 2021 11:37:23 +0000
+From:   Wilken Gottwalt <wilken.gottwalt@posteo.net>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] hwmon: corsair-psu: fix suspend behavior
+Message-ID: <20210603133723.1cf62b93@monster.powergraphx.local>
+In-Reply-To: <20210603104156.GA644104@roeck-us.net>
+References: <YLhnWiI9mI3l5u/s@monster.powergraphx.local>
+        <20210603104156.GA644104@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210603083845.569751-1-luriwen@kylinos.cn>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Jun 03, 2021 at 04:38:45PM +0800, Riwen Lu wrote:
-> The scpi hwmon shows the sub-zero temperature in an unsigned integer,
-> which would confuse the users when the machine works in low temperature
-> environment. This shows the sub-zero temperature in an signed value and
-> users can get it properly from sensors.
+On Thu, 3 Jun 2021 03:41:56 -0700
+Guenter Roeck <linux@roeck-us.net> wrote:
+
+> On Thu, Jun 03, 2021 at 05:23:38AM +0000, Wilken Gottwalt wrote:
+> > During standby some PSUs turn off the microcontroller. A re-init is
+> > required during resume or the microcontroller stays unresponsive.
+> > 
+> > Fixes: 726c945ab2eb ("hwmon: (corsair-psu) Remove unneeded semicolons")
 > 
-> Signed-off-by: Riwen Lu <luriwen@kylinos.cn>
-> Tested-by: Xin Chen <chenxin@kylinos.cn>
+> That seems wrong. Removing semicolons doesn't typically introduce resume bugs.
+> This should fix the patch introducing the driver.
 
-Please ask Xin Chen to send a separate Tested-by: tag.
+Oh yes, you are right. Wasn't really thinking about it. I will send a proper
+patch.
 
+greetings,
+Will
+
+> Guenter
 > 
-> ---
-> Changes since v1:
-> - Add judgment for sensor->info.class. If it is TEMPERATURE situation,
->   return the sensor value as a signed value, otherwise return it as a
->   unsigned value.
-> ---
->  drivers/hwmon/scpi-hwmon.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/scpi-hwmon.c b/drivers/hwmon/scpi-hwmon.c
-> index 25aac40f2764..45a7e319143d 100644
-> --- a/drivers/hwmon/scpi-hwmon.c
-> +++ b/drivers/hwmon/scpi-hwmon.c
-> @@ -99,7 +99,10 @@ scpi_show_sensor(struct device *dev, struct device_attribute *attr, char *buf)
->  
->  	scpi_scale_reading(&value, sensor);
->  
-> -	return sprintf(buf, "%llu\n", value);
-> +	if (sensor->info.class == TEMPERATURE)
-> +		return sprintf(buf, "%lld\n", value);
+> > Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+> > ---
+> >  drivers/hwmon/corsair-psu.c | 14 ++++++++++++++
+> >  1 file changed, 14 insertions(+)
+> > 
+> > diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
+> > index 02298b86b57b..731d5117f9f1 100644
+> > --- a/drivers/hwmon/corsair-psu.c
+> > +++ b/drivers/hwmon/corsair-psu.c
+> > @@ -771,6 +771,16 @@ static int corsairpsu_raw_event(struct hid_device *hdev, struct hid_report
+> > *repo return 0;
+> >  }
+> >  
+> > +#ifdef CONFIG_PM
+> > +static int corsairpsu_resume(struct hid_device *hdev)
+> > +{
+> > +	struct corsairpsu_data *priv = hid_get_drvdata(hdev);
+> > +
+> > +	/* some PSUs turn off the microcontroller during standby, so a reinit is required */
+> > +	return corsairpsu_init(priv);
+> > +}
+> > +#endif
+> > +
+> >  static const struct hid_device_id corsairpsu_idtable[] = {
+> >  	{ HID_USB_DEVICE(0x1b1c, 0x1c03) }, /* Corsair HX550i */
+> >  	{ HID_USB_DEVICE(0x1b1c, 0x1c04) }, /* Corsair HX650i */
+> > @@ -793,6 +803,10 @@ static struct hid_driver corsairpsu_driver = {
+> >  	.probe		= corsairpsu_probe,
+> >  	.remove		= corsairpsu_remove,
+> >  	.raw_event	= corsairpsu_raw_event,
+> > +#ifdef CONFIG_PM
+> > +	.resume		= corsairpsu_resume,
+> > +	.reset_resume	= corsairpsu_resume,
+> > +#endif
+> >  };
+> >  module_hid_driver(corsairpsu_driver);
+> >  
+> > -- 
+> > 2.31.1
+> > 
 
-'value' is u64, so it needs a typecast to s64.
-
-Also, please add a comment ahead of the if statement explaining that temperature
-sensor values are treated as signed values based on observation even though that
-is not explicitly specified, and because an unsigned u64 temperature does not
-really make practical sense.
-
-> +	else
-
-else after return is not needed
-
-Thanks,
-Guenter
-
-> +		return sprintf(buf, "%llu\n", value);
->  }
->  
->  static ssize_t
-> -- 
-> 2.25.1
-> 
-> 
-> No virus found
-> 		Checked by Hillstone Network AntiVirus
