@@ -7,139 +7,117 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB9F2C47083
-	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Jun 2021 11:06:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03C0CC07E94
+	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Jun 2021 11:09:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 98DEE60FF2
-	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Jun 2021 11:06:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DA4F061412
+	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Jun 2021 11:09:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbhFDLIP (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 4 Jun 2021 07:08:15 -0400
-Received: from mail-qt1-f172.google.com ([209.85.160.172]:46738 "EHLO
-        mail-qt1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbhFDLIO (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Jun 2021 07:08:14 -0400
-Received: by mail-qt1-f172.google.com with SMTP id m13so6618865qtk.13;
-        Fri, 04 Jun 2021 04:06:17 -0700 (PDT)
+        id S230150AbhFDLLN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 4 Jun 2021 07:11:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60192 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229740AbhFDLLM (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Jun 2021 07:11:12 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45304C06174A;
+        Fri,  4 Jun 2021 04:09:14 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id x2so4058642qvo.8;
+        Fri, 04 Jun 2021 04:09:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=31BYKdbJxrPdqEtOr42QXo/HKbEy/sWpfzrsrC3WpUM=;
-        b=UiiGflEP1HrffqGwWBGwrJ8RxSAKt/rvG/RgDm+S7toN/hj5iXMSPbxFn0aLpOGiZN
-         7cKUVN6vxPXIVRUF2RiTnok1A3AWsrvPLxTWOJDG12FwJdzI6o5bcbEiFl64999bZ2BZ
-         aSjwa2Zmx5vbcWbwyG2lvMh7bG3pteaEzlT9/OgEinDnnEVELtkJgp8EL9Di61Me4OwG
-         w26El0LZVue8SorIkmuTtEeZWGRZ6g9LTfaaRiJb1AkKF0LCR5FVsOM8bX/7qdQXRsRs
-         Mf4s1OWMEMzgiDiaSGiadEH2Tu614+1OwMVPaC3sPqkCxciHlw14DnmvDI7E0DNebff2
-         D+mw==
+        bh=Q0r+GRAph5bUpYFzQZXDQRLPLpUfbf4qIs/RQtBMij8=;
+        b=e8NJuAqElhWfOEuoNNRyav2xf1xrJtYq686taPh1fhF9kJj4Dk04la6vG6vzdarkoE
+         HbmwtftAXFR8hEyCbRK06CfnZb3T8+9cJxD9xwBf8kEWeYjg1zyPd9f0e+lIZfJs4pId
+         qKa9X1N5fh9Rch8TQrsULVUEvqGwy1yuCHnj6PUXEcpCAsYLD0VZ7enmnGiDNASQu3sK
+         2+ZVWQvm0jE9rHRsgp+SGSLU0ekDgxZCynWbHXqBx05Z4XbKKg973Vk7fcXvDwmw4F3Z
+         bEpBf6H+aRmtpMmR8dAkSAEi7ByMlBH8HdNROml30ZvrmYlTKC5Qdk6MTkPOMoAH/OSc
+         nCRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=31BYKdbJxrPdqEtOr42QXo/HKbEy/sWpfzrsrC3WpUM=;
-        b=NWQgqCtiHDfEu1EFUoZSPZ4pX9iExL2SgLwKbtsLylYXQmcLUyuA8uvNcUnyBM36o2
-         xvGK8WvdIClfVP72HNTV0GIQpoUkWIeeGUi4tu1Q16IPlCAOBfRkLxaTGlTgBWP35oun
-         bDErmtf+IE6/4mx9VUVMw4xAWQCwi+kXWfJNvjkJEZn1Vae0Z4332VrCWb3ppFjDWRaS
-         aQ2m0fhc37GFyhqzSYAcIW4zSUbhZ62gBz5URg+ETuS9PK6i8G7QkT9hDiMUqC/hdJxg
-         ugcP5Vts2vaKfYTgwRKlIxTJSON9Hbfui9zpgvhYAyYw7eY234J1iHOPUWyI+rtnBbY7
-         AnzA==
-X-Gm-Message-State: AOAM532dgjFcRZ0qSAk9rQp1K/lT0MmXgvVk6/sEZzUIjKpppLtoxowI
-        GIgn9unyttims1QUqNbCY/0=
-X-Google-Smtp-Source: ABdhPJyjpj664lRiztRMQzmPYK+WmIIgcjTf3eXby5++q50z3CV7vpXYA58cpuGEZbjor+LeUWd+TA==
-X-Received: by 2002:ac8:6a15:: with SMTP id t21mr4042882qtr.301.1622804716917;
-        Fri, 04 Jun 2021 04:05:16 -0700 (PDT)
+        bh=Q0r+GRAph5bUpYFzQZXDQRLPLpUfbf4qIs/RQtBMij8=;
+        b=KIVT2/9M7y/K22lAiN11ya13AXZRBaBgScmqOoCxIfbiQv0yLcgR2X5zR5ceNx2iWx
+         ezoF0JGeqsrSSns3WLJs5UqmlDhJIkHx66mllSIMNC7JmPVjnMr5OgLuQBfqugFpRnF+
+         tQYZmmfEL1o28ucQ/lnXh03zdq+alRD35eL5I3hdutu5ojp5CAC+qsoBXGMMPJypc5Iu
+         qC3vYintCLoQpVs9k2wFV8/79OvSezBwlLQftz7AtDrpq6b2O19zUy6Izo6HxB+cedh0
+         zkLsDgcKZs4gfsdV1aLBEek3NZRZfPpwWxMCT/tgGyRt9bP2D2lZ4XYa/ZtJvVv1OOjw
+         8wjQ==
+X-Gm-Message-State: AOAM530LO8qxZXPOCZ9UusNCofPi18pGRiQ4dgj8z8nRTP9wP2YBYx6F
+        TdAcedOn0n/1tt8X/WsEFwg73H3yfW0=
+X-Google-Smtp-Source: ABdhPJzmJO3LNJ969qbIz1eL5wExY27FreZIAZMfzw8RNzkD6sFyLhigqw9twR3/ra2xgevX+IZf4Q==
+X-Received: by 2002:a0c:9c0f:: with SMTP id v15mr4231435qve.24.1622804952598;
+        Fri, 04 Jun 2021 04:09:12 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l7sm3654786qki.135.2021.06.04.04.05.15
+        by smtp.gmail.com with ESMTPSA id m10sm3390312qtq.62.2021.06.04.04.09.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Jun 2021 04:05:16 -0700 (PDT)
+        Fri, 04 Jun 2021 04:09:12 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 4 Jun 2021 04:05:14 -0700
+Date:   Fri, 4 Jun 2021 04:09:10 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Wilken Gottwalt <wilken.gottwalt@posteo.net>
-Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: corsair-psu: fix suspend behavior
-Message-ID: <20210604110514.GA1445546@roeck-us.net>
-References: <YLjCJiVtu5zgTabI@monster.powergraphx.local>
- <20210603160533.GA3952041@roeck-us.net>
- <20210604071711.78271072@monster.powergraphx.local>
+To:     Riwen Lu <luriwen@kylinos.cn>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xin Chen <chenxin@kylinos.cn>
+Subject: Re: [PATCH v3] hwmon: (scpi-hwmon) shows the negative temperature
+ properly
+Message-ID: <20210604110910.GA1446504@roeck-us.net>
+References: <20210604030959.736379-1-luriwen@kylinos.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210604071711.78271072@monster.powergraphx.local>
+In-Reply-To: <20210604030959.736379-1-luriwen@kylinos.cn>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Jun 04, 2021 at 05:17:11AM +0000, Wilken Gottwalt wrote:
-> On Thu, 3 Jun 2021 09:05:33 -0700
-> Guenter Roeck <linux@roeck-us.net> wrote:
+On Fri, Jun 04, 2021 at 11:09:59AM +0800, Riwen Lu wrote:
+> The scpi hwmon shows the sub-zero temperature in an unsigned integer,
+> which would confuse the users when the machine works in low temperature
+> environment. This shows the sub-zero temperature in an signed value and
+> users can get it properly from sensors.
 > 
-> > On Thu, Jun 03, 2021 at 11:51:02AM +0000, Wilken Gottwalt wrote:
-> > > During standby some PSUs turn off the microcontroller. A re-init is
-> > > required during resume or the microcontroller stays unresponsive.
-> > > 
-> > > Fixes: d115b51e0e56 ("hwmon: add Corsair PSU HID controller driver")
-> > > Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
-> > 
-> > Applied.
-> 
-> Thank you. Though I have an odd question. I would like to change the licensing to
-> a dual license (GPL/MPL) to support the LibreHardwareMonitor project. They want
-> to use my code but use a MPL license. What would be the best way to do this?
+> Signed-off-by: Riwen Lu <luriwen@kylinos.cn>
+> Tested-by: Xin Chen <chenxin@kylinos.cn>
 
-Submit a patch which would need an Acked-by: from everyone who contributed
-to the driver. As far as I can see, that would be Wan Jiabing
-<wanjiabing@vivo.com>, Jack Doan <me@jackdoan.com>, and Colin Ian King
-<colin.king@canonical.com>. I would suggest to ask them first if the license
-change is ok with them.
+Applied.
 
+Thanks,
 Guenter
 
+> ---
+> Changes since v1:
+> - Add judgment for sensor->info.class. If it is TEMPERATURE situation,
+>   return the sensor value as a signed value, otherwise return it as a
+>   unsigned value.
 > 
-> greetings,
-> Will
+> Changes since v2:
+> - Add a typecast u64 to s64 when it is a temperature value.
+> - Add a comment ahead of the if statement.
+> - Remove the unnecessary 'else' statement.
+> ---
+>  drivers/hwmon/scpi-hwmon.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 > 
-> > Thanks,
-> > Guenter
-> > 
-> > > ---
-> > > Changes in v2:
-> > >   - corrected fixes commit
-> > > ---
-> > >  drivers/hwmon/corsair-psu.c | 14 ++++++++++++++
-> > >  1 file changed, 14 insertions(+)
-> > > 
-> > > diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
-> > > index 02298b86b57b..731d5117f9f1 100644
-> > > --- a/drivers/hwmon/corsair-psu.c
-> > > +++ b/drivers/hwmon/corsair-psu.c
-> > > @@ -771,6 +771,16 @@ static int corsairpsu_raw_event(struct hid_device *hdev, struct hid_report
-> > > *repo return 0;
-> > >  }
-> > >  
-> > > +#ifdef CONFIG_PM
-> > > +static int corsairpsu_resume(struct hid_device *hdev)
-> > > +{
-> > > +	struct corsairpsu_data *priv = hid_get_drvdata(hdev);
-> > > +
-> > > +	/* some PSUs turn off the microcontroller during standby, so a reinit is required */
-> > > +	return corsairpsu_init(priv);
-> > > +}
-> > > +#endif
-> > > +
-> > >  static const struct hid_device_id corsairpsu_idtable[] = {
-> > >  	{ HID_USB_DEVICE(0x1b1c, 0x1c03) }, /* Corsair HX550i */
-> > >  	{ HID_USB_DEVICE(0x1b1c, 0x1c04) }, /* Corsair HX650i */
-> > > @@ -793,6 +803,10 @@ static struct hid_driver corsairpsu_driver = {
-> > >  	.probe		= corsairpsu_probe,
-> > >  	.remove		= corsairpsu_remove,
-> > >  	.raw_event	= corsairpsu_raw_event,
-> > > +#ifdef CONFIG_PM
-> > > +	.resume		= corsairpsu_resume,
-> > > +	.reset_resume	= corsairpsu_resume,
-> > > +#endif
-> > >  };
-> > >  module_hid_driver(corsairpsu_driver);
-> > >  
-> 
+> diff --git a/drivers/hwmon/scpi-hwmon.c b/drivers/hwmon/scpi-hwmon.c
+> index 25aac40f2764..919877970ae3 100644
+> --- a/drivers/hwmon/scpi-hwmon.c
+> +++ b/drivers/hwmon/scpi-hwmon.c
+> @@ -99,6 +99,15 @@ scpi_show_sensor(struct device *dev, struct device_attribute *attr, char *buf)
+>  
+>  	scpi_scale_reading(&value, sensor);
+>  
+> +	/*
+> +	 * Temperature sensor values are treated as signed values based on
+> +	 * observation even though that is not explicitly specified, and
+> +	 * because an unsigned u64 temperature does not really make practical
+> +	 * sense especially when the temperature is below zero degrees Celsius.
+> +	 */
+> +	if (sensor->info.class == TEMPERATURE)
+> +		return sprintf(buf, "%lld\n", (s64)value);
+> +
+>  	return sprintf(buf, "%llu\n", value);
+>  }
+>  
