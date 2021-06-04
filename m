@@ -2,114 +2,290 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7B2EC4708F
-	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Jun 2021 05:17:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A4D9C4708F
+	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Jun 2021 06:03:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B7F87613D2
-	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Jun 2021 05:17:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4094F61402
+	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Jun 2021 06:03:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbhFDFTA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 4 Jun 2021 01:19:00 -0400
-Received: from mout01.posteo.de ([185.67.36.65]:51651 "EHLO mout01.posteo.de"
+        id S229828AbhFDGEp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 4 Jun 2021 02:04:45 -0400
+Received: from mga18.intel.com ([134.134.136.126]:21494 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229831AbhFDFTA (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 4 Jun 2021 01:19:00 -0400
-Received: from submission (posteo.de [89.146.220.130]) 
-        by mout01.posteo.de (Postfix) with ESMTPS id 71D38240029
-        for <linux-hwmon@vger.kernel.org>; Fri,  4 Jun 2021 07:17:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-        t=1622783833; bh=3cQbfQYwjrES5LvXEXh7AoPjA40u751RgjxAkq98j8c=;
-        h=Date:From:To:Cc:Subject:From;
-        b=m6KiiR/bm4hhK1bsVH+hHyAl3WdFRr+tlxLR565cW8ozB+9d8E3BKREXVSQ7TueaS
-         YmboNjA1JSSzLpl+7bfJIGCKD9epZMObzHVsPS0Y9ZiwhMvBvDfUPNI6BFH+Qczhwj
-         p2O/SC4u55BurYZwGlZ/bwCVhUOmLCJYUekWymua+1ehPe/BycFKTLP1bJukop6LuX
-         PSlasIEwAZIoAMlaiFXa/hwBj8zFVkJBVF5di+noJg6YqKxcZzY1lc4h89qYaodP8K
-         Oa2xaFJ56wf0ZqE2+1Gge+A7Tahmkxw6fIGvnd1p76GiaWTXEgk/U64a2GjcFSe1pt
-         Lp3BTvbrkjLxA==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4Fx9xN6D0Bz6tm9;
-        Fri,  4 Jun 2021 07:17:12 +0200 (CEST)
-Date:   Fri,  4 Jun 2021 05:17:11 +0000
-From:   Wilken Gottwalt <wilken.gottwalt@posteo.net>
+        id S229826AbhFDGEp (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 4 Jun 2021 02:04:45 -0400
+IronPort-SDR: 7CeDxhTzckZ7kfQYBw0qGsmvMsd88bdYr29pUEtBifBzmZxiaOW6qGSJW8B9sS0+6K5jRoqgrE
+ iIDIYWGEByjQ==
+X-IronPort-AV: E=McAfee;i="6200,9189,10004"; a="191567625"
+X-IronPort-AV: E=Sophos;i="5.83,247,1616482800"; 
+   d="scan'208";a="191567625"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2021 23:02:59 -0700
+IronPort-SDR: g85Htq4HhE/vuH3ZzDIy5v+TagKgnJ9m6jLiAsk67acezbVFtZr9vRXYeiCqz1bnPou/Fc/uJE
+ ymhvKUfHux8A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,247,1616482800"; 
+   d="scan'208";a="618154813"
+Received: from lkp-server02.sh.intel.com (HELO 1ec8406c5392) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 03 Jun 2021 23:02:57 -0700
+Received: from kbuild by 1ec8406c5392 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lp2v3-0006hw-9j; Fri, 04 Jun 2021 06:02:57 +0000
+Date:   Fri, 04 Jun 2021 14:02:53 +0800
+From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: corsair-psu: fix suspend behavior
-Message-ID: <20210604071711.78271072@monster.powergraphx.local>
-In-Reply-To: <20210603160533.GA3952041@roeck-us.net>
-References: <YLjCJiVtu5zgTabI@monster.powergraphx.local>
-        <20210603160533.GA3952041@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:hwmon] BUILD SUCCESS
+ 1603eb86c6fba8eca72f711211b53db4305a4cad
+Message-ID: <60b9c20d.3lqRpRFFHpXTil9c%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, 3 Jun 2021 09:05:33 -0700
-Guenter Roeck <linux@roeck-us.net> wrote:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
+branch HEAD: 1603eb86c6fba8eca72f711211b53db4305a4cad  hwmon: (corsair-psu) fix suspend behavior
 
-> On Thu, Jun 03, 2021 at 11:51:02AM +0000, Wilken Gottwalt wrote:
-> > During standby some PSUs turn off the microcontroller. A re-init is
-> > required during resume or the microcontroller stays unresponsive.
-> > 
-> > Fixes: d115b51e0e56 ("hwmon: add Corsair PSU HID controller driver")
-> > Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
-> 
-> Applied.
+elapsed time: 737m
 
-Thank you. Though I have an odd question. I would like to change the licensing to
-a dual license (GPL/MPL) to support the LibreHardwareMonitor project. They want
-to use my code but use a MPL license. What would be the best way to do this?
+configs tested: 220
+configs skipped: 3
 
-greetings,
-Will
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> Thanks,
-> Guenter
-> 
-> > ---
-> > Changes in v2:
-> >   - corrected fixes commit
-> > ---
-> >  drivers/hwmon/corsair-psu.c | 14 ++++++++++++++
-> >  1 file changed, 14 insertions(+)
-> > 
-> > diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
-> > index 02298b86b57b..731d5117f9f1 100644
-> > --- a/drivers/hwmon/corsair-psu.c
-> > +++ b/drivers/hwmon/corsair-psu.c
-> > @@ -771,6 +771,16 @@ static int corsairpsu_raw_event(struct hid_device *hdev, struct hid_report
-> > *repo return 0;
-> >  }
-> >  
-> > +#ifdef CONFIG_PM
-> > +static int corsairpsu_resume(struct hid_device *hdev)
-> > +{
-> > +	struct corsairpsu_data *priv = hid_get_drvdata(hdev);
-> > +
-> > +	/* some PSUs turn off the microcontroller during standby, so a reinit is required */
-> > +	return corsairpsu_init(priv);
-> > +}
-> > +#endif
-> > +
-> >  static const struct hid_device_id corsairpsu_idtable[] = {
-> >  	{ HID_USB_DEVICE(0x1b1c, 0x1c03) }, /* Corsair HX550i */
-> >  	{ HID_USB_DEVICE(0x1b1c, 0x1c04) }, /* Corsair HX650i */
-> > @@ -793,6 +803,10 @@ static struct hid_driver corsairpsu_driver = {
-> >  	.probe		= corsairpsu_probe,
-> >  	.remove		= corsairpsu_remove,
-> >  	.raw_event	= corsairpsu_raw_event,
-> > +#ifdef CONFIG_PM
-> > +	.resume		= corsairpsu_resume,
-> > +	.reset_resume	= corsairpsu_resume,
-> > +#endif
-> >  };
-> >  module_hid_driver(corsairpsu_driver);
-> >  
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+mips                           ip27_defconfig
+powerpc                      pasemi_defconfig
+m68k                       m5249evb_defconfig
+arm                         lpc32xx_defconfig
+nios2                         3c120_defconfig
+mips                         tb0219_defconfig
+arm                          moxart_defconfig
+mips                           xway_defconfig
+powerpc                       holly_defconfig
+sh                   rts7751r2dplus_defconfig
+nios2                            alldefconfig
+arm                      tct_hammer_defconfig
+powerpc                      cm5200_defconfig
+mips                       capcella_defconfig
+ia64                      gensparse_defconfig
+sh                            hp6xx_defconfig
+mips                     cu1830-neo_defconfig
+arm                        clps711x_defconfig
+arc                         haps_hs_defconfig
+mips                          rb532_defconfig
+arm                          collie_defconfig
+sh                         ap325rxa_defconfig
+powerpc                 xes_mpc85xx_defconfig
+sh                         apsh4a3a_defconfig
+arm                         mv78xx0_defconfig
+sh                         ecovec24_defconfig
+arc                                 defconfig
+powerpc                    amigaone_defconfig
+arc                 nsimosci_hs_smp_defconfig
+sh                   sh7770_generic_defconfig
+m68k                       m5275evb_defconfig
+powerpc                 mpc836x_mds_defconfig
+m68k                        m5407c3_defconfig
+m68k                        mvme16x_defconfig
+arc                    vdk_hs38_smp_defconfig
+um                                  defconfig
+powerpc                      katmai_defconfig
+mips                         mpc30x_defconfig
+powerpc                      acadia_defconfig
+powerpc64                        alldefconfig
+arc                     nsimosci_hs_defconfig
+arm                         s3c6400_defconfig
+sparc                       sparc32_defconfig
+powerpc                     tqm8540_defconfig
+powerpc                 mpc836x_rdk_defconfig
+powerpc                    sam440ep_defconfig
+sh                            titan_defconfig
+riscv             nommu_k210_sdcard_defconfig
+mips                           rs90_defconfig
+m68k                         amcore_defconfig
+arm                        cerfcube_defconfig
+powerpc                 canyonlands_defconfig
+arm                    vt8500_v6_v7_defconfig
+arm                            zeus_defconfig
+xtensa                generic_kc705_defconfig
+m68k                          amiga_defconfig
+mips                            gpr_defconfig
+powerpc                     mpc5200_defconfig
+arm                     davinci_all_defconfig
+powerpc                      makalu_defconfig
+mips                   sb1250_swarm_defconfig
+powerpc                      pcm030_defconfig
+powerpc                   lite5200b_defconfig
+arm                           u8500_defconfig
+m68k                          hp300_defconfig
+powerpc                    gamecube_defconfig
+ia64                             allyesconfig
+sh                        sh7785lcr_defconfig
+powerpc                      walnut_defconfig
+mips                      pic32mzda_defconfig
+mips                           jazz_defconfig
+mips                malta_qemu_32r6_defconfig
+arm                        neponset_defconfig
+powerpc                      tqm8xx_defconfig
+sh                          urquell_defconfig
+arm                  colibri_pxa270_defconfig
+um                            kunit_defconfig
+arm                         cm_x300_defconfig
+powerpc                    adder875_defconfig
+powerpc                mpc7448_hpc2_defconfig
+xtensa                              defconfig
+microblaze                          defconfig
+powerpc                 mpc837x_rdb_defconfig
+xtensa                    xip_kc705_defconfig
+powerpc                 mpc8560_ads_defconfig
+arm                           sunxi_defconfig
+mips                           mtx1_defconfig
+sh                           se7712_defconfig
+powerpc                     rainier_defconfig
+arm                         orion5x_defconfig
+powerpc                 mpc834x_itx_defconfig
+arm                           stm32_defconfig
+riscv                    nommu_virt_defconfig
+powerpc                 mpc85xx_cds_defconfig
+nios2                         10m50_defconfig
+mips                         db1xxx_defconfig
+openrisc                 simple_smp_defconfig
+arm                              alldefconfig
+arm                         nhk8815_defconfig
+mips                  cavium_octeon_defconfig
+arm                         lpc18xx_defconfig
+powerpc                  storcenter_defconfig
+arm                         palmz72_defconfig
+arm                         s5pv210_defconfig
+sh                          lboxre2_defconfig
+powerpc                    ge_imp3a_defconfig
+openrisc                  or1klitex_defconfig
+nds32                             allnoconfig
+powerpc64                           defconfig
+mips                     loongson2k_defconfig
+arc                              alldefconfig
+mips                      pistachio_defconfig
+sh                        sh7757lcr_defconfig
+ia64                          tiger_defconfig
+arm                         lubbock_defconfig
+powerpc                     mpc512x_defconfig
+mips                       lemote2f_defconfig
+mips                       bmips_be_defconfig
+arm                          simpad_defconfig
+mips                         rt305x_defconfig
+powerpc                     sbc8548_defconfig
+powerpc                     mpc83xx_defconfig
+powerpc                      bamboo_defconfig
+powerpc                       ppc64_defconfig
+arc                        nsimosci_defconfig
+ia64                                defconfig
+powerpc                     skiroot_defconfig
+mips                 decstation_r4k_defconfig
+x86_64                            allnoconfig
+ia64                             allmodconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a003-20210603
+i386                 randconfig-a006-20210603
+i386                 randconfig-a004-20210603
+i386                 randconfig-a001-20210603
+i386                 randconfig-a002-20210603
+i386                 randconfig-a005-20210603
+i386                 randconfig-a003-20210604
+i386                 randconfig-a006-20210604
+i386                 randconfig-a004-20210604
+i386                 randconfig-a001-20210604
+i386                 randconfig-a005-20210604
+i386                 randconfig-a002-20210604
+x86_64               randconfig-a015-20210603
+x86_64               randconfig-a011-20210603
+x86_64               randconfig-a012-20210603
+x86_64               randconfig-a014-20210603
+x86_64               randconfig-a016-20210603
+x86_64               randconfig-a013-20210603
+i386                 randconfig-a015-20210603
+i386                 randconfig-a011-20210603
+i386                 randconfig-a014-20210603
+i386                 randconfig-a012-20210603
+i386                 randconfig-a013-20210603
+i386                 randconfig-a016-20210603
+x86_64               randconfig-a002-20210604
+x86_64               randconfig-a004-20210604
+x86_64               randconfig-a003-20210604
+x86_64               randconfig-a006-20210604
+x86_64               randconfig-a005-20210604
+x86_64               randconfig-a001-20210604
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
 
+clang tested configs:
+x86_64               randconfig-b001-20210603
+x86_64               randconfig-b001-20210604
+x86_64               randconfig-a002-20210603
+x86_64               randconfig-a004-20210603
+x86_64               randconfig-a003-20210603
+x86_64               randconfig-a006-20210603
+x86_64               randconfig-a005-20210603
+x86_64               randconfig-a001-20210603
+x86_64               randconfig-a015-20210604
+x86_64               randconfig-a011-20210604
+x86_64               randconfig-a014-20210604
+x86_64               randconfig-a012-20210604
+x86_64               randconfig-a016-20210604
+x86_64               randconfig-a013-20210604
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
