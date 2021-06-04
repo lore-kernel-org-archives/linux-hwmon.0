@@ -2,224 +2,436 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,PDS_BAD_THREAD_QP_64,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A79C5C07E94
-	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Jun 2021 15:27:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AA1DC07E94
+	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Jun 2021 15:37:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 80C0261400
-	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Jun 2021 15:27:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5A80D600EF
+	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Jun 2021 15:37:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbhFDP3T (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 4 Jun 2021 11:29:19 -0400
-Received: from mail-dm3nam07on2058.outbound.protection.outlook.com ([40.107.95.58]:61482
-        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230002AbhFDP3S (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 4 Jun 2021 11:29:18 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EpvoXCd5eCK+AGfAdV7ca6dQQ0Bc/hcL/EmNuBKND/rGBTVEQ8+vN1w7jlWNF/APk97QZxhci5xy7pdbVqzr+jW7S1o8F8vm9omwEgN+O534FYUEn76DxgWEVr4lYRZ4YitFxfbpX0GqK9sQarqkkgarij+UjPsFOIOXYAlTkZ5n5wY5HkbhFj1oLH6Vxhai1O6dZtXRqmH/OvvFmSIIDXtr1IhypGXvczgTpyZ8wRbjXJA929ptZefhueIya6eISJzHyeJgVOiy2t1NAQKhEJLkO356CFRXgNBFKX/u85cCnI9/ilDVosXU+5DvQ/japxDD+R453bMuKwFvHXZpKg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KVoNoLqLTwYfPsf/BZWamuMfq4bCj3F0c2vU01zmmog=;
- b=jjr++LguVbeOHtp1BpsiF/zgPIrxmujUE1H2zqdwa3F3YNvBU7xV4yxyz+r0sjRjxWmcf3K3QFgw77hTNlNGANvHEvL3L64gCbmQNBQYFxo4qYozdX0fG7kka9GOZJsngY2UzeeTuS0qxqxZaGavEGL59hXShrfYGH+uZ4TRJLpo9wRUYo2ecuDRnimc2IxYOAqBc9X1GOF2QD3WQzQyPnuN+qVTQpZAOMDglstyxnbzkbcpYYZ3RiMRsV0xTbOV4Y+ed39h6gzkrdWJcegGBP888JEV4psL9sMVbf7LNpYk64Uhx8duOguJ8Kn0ocElhbBsEJvGfC2zKPXoNDyTvQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KVoNoLqLTwYfPsf/BZWamuMfq4bCj3F0c2vU01zmmog=;
- b=qIcm3d9kwE7DFmX0nqnIeW02+rE9BreDDc/uvGSLUqigzNBsm1fS3W/IWf+Zf12NGiRGmEzyiu80ojw35dnlBh1UQXx6/jFjJPYAcF1qOPVeXSUUK5ObdyS2T0Pn7DBwzrcwlRKDUUelpc+aN55+KRA/E4Q0ZN/bBvGfNXgzVCLUI/xckm4yAN35LyxpNZrcm1Ji/g2sjS6WuGoQE92lIeWe+AQjuDocID3kfpdtecmeNxoF22HPQk+B1CwqGKbBZ0u7daeyTRkd3YLSFhTKeoN/59VI0aHW1Zy79M25C69lxbTmqGtot0eOXcZj0sD4ILx+UXc3k9BFXFh54NaCpQ==
-Received: from BN9PR12MB5129.namprd12.prod.outlook.com (2603:10b6:408:136::12)
- by BN9PR12MB5366.namprd12.prod.outlook.com (2603:10b6:408:103::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4195.20; Fri, 4 Jun
- 2021 15:27:31 +0000
-Received: from BN9PR12MB5129.namprd12.prod.outlook.com
- ([fe80::3c78:e58b:fba7:b8dd]) by BN9PR12MB5129.namprd12.prod.outlook.com
- ([fe80::3c78:e58b:fba7:b8dd%6]) with mapi id 15.20.4195.024; Fri, 4 Jun 2021
- 15:27:31 +0000
-From:   Ninad Malwade <nmalwade@nvidia.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     Jean Delvare <jdelvare@suse.com>, Bibek Basu <bbasu@nvidia.com>,
-        Nicolin Chen <nicolinc@nvidia.com>,
-        Rajkumar Kasirajan <rkasirajan@nvidia.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] ina3221: use CVRF only for single-shot conversion
-Thread-Topic: [PATCH] ina3221: use CVRF only for single-shot conversion
-Thread-Index: AQHXWQ6aU62KuN2mR0WLfylQOUXDSasDspMAgABHc3A=
-Date:   Fri, 4 Jun 2021 15:27:30 +0000
-Message-ID: <BN9PR12MB5129C8D9DE7A35BBC3B6C4E3B13B9@BN9PR12MB5129.namprd12.prod.outlook.com>
-References: <1622789683-30931-1-git-send-email-nmalwade@nvidia.com>
- <20210604111120.GA1446736@roeck-us.net>
-In-Reply-To: <20210604111120.GA1446736@roeck-us.net>
-Accept-Language: en-US, zh-TW
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: roeck-us.net; dkim=none (message not signed)
- header.d=none;roeck-us.net; dmarc=none action=none header.from=nvidia.com;
-x-originating-ip: [59.124.78.18]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 68d5858e-ba3f-4939-3c65-08d9276d4502
-x-ms-traffictypediagnostic: BN9PR12MB5366:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BN9PR12MB5366CAD1BB974266795A98DDB13B9@BN9PR12MB5366.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: dGlXSE+BolAxfRZdXLr/Ca/Xj1884jyFBLSnrHyHdfL6OtEQG+0lmvzBBfPWgTVj4HFyQIvH2tu7IrEUIe3V96q9yfwdoXZqp7PGu5P6bYiL5O+pTcGwSW/wv2mUHvifmuqToGLaN7BMfDJP+dSeuw0s4erkXPO8H7+U+0tzcLGGzibIIK8ZGdVyVVphIb5hVnBdK1AxAW6fY7JIyMGqofHclYELVKtE5pL6cSVQxtUgaGwGk6DpsMw7/1kdRGZ+R0ApoNp6aRhabrItlyTgOdpzrXIAVf3t051grsknCD3FNOczwCODbmPn/9JlG8CmECjNqSKe4N1K+xdeMRZKVuKDVCggSYWlnQdQ+d51Tyfo1TJtVoqedvEPT8iZA8A+41EQQ1q0ewT9E5jgWIZObNd6cePcRNt7J42852uqzpo51euQdtnL2Kh1zl00djxqFk/x/pIoJzGEnQtRVqFKVfTH9s7AfYH7We2XFMo17PTzPDzPiLcxHJnea1u+IOVtUfrCGJ4x1YGqg1eXj+mvtOdFoQ1AYus8NoKXfJ3TkbFhb0VGiddfT8ovKD4LqqPMFcYtL1fGKsv2pYqRmx7Rk9487EONHSYSKlsIqvpUDL8=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5129.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(346002)(366004)(396003)(39860400002)(376002)(9686003)(478600001)(55016002)(83380400001)(5660300002)(316002)(54906003)(66946007)(66476007)(64756008)(71200400001)(66446008)(76116006)(26005)(6506007)(186003)(66556008)(52536014)(53546011)(122000001)(38100700002)(86362001)(33656002)(4326008)(8676002)(8936002)(2906002)(7696005)(6916009);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?p+J27S4kEiGqpm/PEuxQWy75ZwiVztowcwWZ+28dAUeaD+uNzwYB2H46ei7m?=
- =?us-ascii?Q?I/akcvDjMGG1WAEedAbZ+biu0iLDlCLWjf0WBYJYbnMBPNkx/cD+nyNXjcEt?=
- =?us-ascii?Q?kk2dnFMaNoVw5sSBdb9A8NYU+j6W5r7Un2ONJUX6NGr+0XCRcdSORiv//61Y?=
- =?us-ascii?Q?w9WalgQri/MO8kZ/0tOWuznZxHRdHNfxQqvDKXcdEuEVsGQloFFOfMApsQm8?=
- =?us-ascii?Q?LqEVTXesW090Z/DKsJSwwlSOYcpPII3VEOd0Ex5A5JqdA3MIo1qUNirgwjun?=
- =?us-ascii?Q?xpoOQNiHSZdCsJj0+rsUPy/AR3SFTU5JrkAmA86pFmQP66R714GU3gBLO6S7?=
- =?us-ascii?Q?sHFwEvbSh7iqWw3XcvVW+y1tNaHe4U3kXNFmsls6uMEFsACtQ4gCOrldgkTx?=
- =?us-ascii?Q?Nz3oPN13izaPHePSDTWDwOPAK3YYj2STopzeOhTCig1byUViAWwGl5tZqJWg?=
- =?us-ascii?Q?vsE7hjiH6naehL5ygPIGwBeHipCMM46/YndZ05V1OOLqq6PfDD7jwv6dVa3I?=
- =?us-ascii?Q?9X4r5HwycWCrXRA0hh90XLg9u+yhetCdZ5IeYlTrDW2i4NIngJdRgnzSae56?=
- =?us-ascii?Q?KVso0nYqBKtuh6J8eYperPRwp0/GVeAZpjleE/4HZn30f6qa+Xd3SfTmkReA?=
- =?us-ascii?Q?PLoauhy9StjQefOM0N4gpycXVxyfJPPmYwU0cQI4Itw7HyHEdO1Fz7cNEg0H?=
- =?us-ascii?Q?Lk8AEYOPuxZT0p/h8OSnFv9nvjpMctqJFlGk3c8uyHzA4r5AhcFmlRAhNlHK?=
- =?us-ascii?Q?LZjU+cQYQHcMjgsSdtbGLCml5VXapEY6KRMgfOY3jxyrPXrveQRfsUYxR5qR?=
- =?us-ascii?Q?oIIL1dDDk17Tqn9tQuf4k7T5aT/U30x/+roXjZsCRfIU2wRvf8hgtM082s7f?=
- =?us-ascii?Q?7p8mvBEWrUXIiRr3RSuFVvbZxIWMGV6nG4f/1DVsUdy2jM7QmSyTRJXkz8sc?=
- =?us-ascii?Q?U0q4wa7yYyrpzhKFagz7ySESWZGLD0Uc8Oi4mcJABJ1vpPeAexUU3bwCv7Aw?=
- =?us-ascii?Q?hWHK4JUbf9/L2Po+6zzrZ/x7xstPEiUj1WWWnVPVuHRpfDA11nVUdUSY0W0T?=
- =?us-ascii?Q?sF2eqVWyilgQmevhCEt11L+rcae9rJnlPX3vuDWqPzKW8EubVqhmcRZIZdzu?=
- =?us-ascii?Q?f/fjKep/0QpsY+5vf33G5S22CU4o3z8kaf4Uq0SfJVXCBvAxjUJXVa8EyuSW?=
- =?us-ascii?Q?WpIEii3/NR2Xh17QUOJu3+nNuPA2fYZdHgK+RHAG9Rb3RxWyj/v6YhJ6q34a?=
- =?us-ascii?Q?2DBrvyia8AfgLZXJHcF861AuF0MdrLhIBJWmDlrZfPcRWoBoJCTTfjZWHmiN?=
- =?us-ascii?Q?Jes=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S231222AbhFDPjW (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 4 Jun 2021 11:39:22 -0400
+Received: from mail-ed1-f42.google.com ([209.85.208.42]:38836 "EHLO
+        mail-ed1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231204AbhFDPjV (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Jun 2021 11:39:21 -0400
+Received: by mail-ed1-f42.google.com with SMTP id o5so11674119edc.5
+        for <linux-hwmon@vger.kernel.org>; Fri, 04 Jun 2021 08:37:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sartura-hr.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ra+2iCZKGVWlrhbTl09JaqlVe99vGMaohiGi/P8DBlg=;
+        b=BpSLgjbSU7FZeNzu4xxs1NG8xzruU4KbIO9yFQuvR9wWG+SIp6DIrHTixt2hxMstOb
+         TFpQLck2t/uLu63mI/xqAi+L8dyC7I3TOJ+zXyCCF4G6L04bO5fZkXGt7qEAeh2HLTQR
+         mMGnO/wFr7mxifszuQzxP0M9zIPitpu9GrVF3Drm30VKZ9LcB25610WQyDyD+pZnhHt3
+         lry0KopfpdEdbZ+rRIPF/bF18F1fusrF6QStqSatO7GSjUD+JG6b+bs8PPEhfpisLFbe
+         kjYX5UKr5mbJAwMauPPKRoZM98izW1qLYc0B8Pdy3/1gP0TI2r/VjTtSYUqPmZUtEovq
+         oDTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ra+2iCZKGVWlrhbTl09JaqlVe99vGMaohiGi/P8DBlg=;
+        b=WQB6qdLI0usTuQ9Dy2HVWd52MxQ4kjBF6EkMX1LRWenMcnaywJg2ZKjS6t6FSG7FC9
+         HmEM1PPVDnH9c8geClPPSLuvdiY5tAAs02RDTrtQi6DcLr0RdI2vmSi7RBS8+btB/mrc
+         6HpdwsboNfIpiZfyQ6c6CtQ+c8OtVofrAbiKJvU+8WW5linryjJwU+Ek4NoRfVCvCag1
+         mufPacpdz/qo9pzB2Jk+8Msi2xCcF9L+QgxBpzN1S6QNLgAG7uDgW9ohwVWMSzVrQs3H
+         mhXhzp2ugim7F/qP/8E13BRsNuJ339uo0M+dcZqg1aiV6+uuxsL3V2QgKAC67mDMk0D8
+         sNNg==
+X-Gm-Message-State: AOAM530cxE3F2Pmw696TNSvhdeAUHc46hnD6vP9Jp+HRAu4nVyQ52g4w
+        NSKJ8pQ4VSmfDyCDNVKPgGGb1A==
+X-Google-Smtp-Source: ABdhPJzGrkPLjRe1sQjUN+hA4ZcvnBW8AP9RxW9TURC/Ui49/eMyfxzp1y0ShFEvJt4XiE8r+fDL7w==
+X-Received: by 2002:aa7:c44b:: with SMTP id n11mr5444455edr.4.1622820978343;
+        Fri, 04 Jun 2021 08:36:18 -0700 (PDT)
+Received: from localhost.localdomain (dh207-96-250.xnet.hr. [88.207.96.250])
+        by smtp.googlemail.com with ESMTPSA id d25sm2909038ejd.59.2021.06.04.08.36.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Jun 2021 08:36:17 -0700 (PDT)
+From:   Robert Marko <robert.marko@sartura.hr>
+To:     robh+dt@kernel.org, jdelvare@suse.com, linux@roeck-us.net,
+        corbet@lwn.net, trivial@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Cc:     luka.perkov@sartura.hr, jmp@epiphyte.org, pmenzel@molgen.mpg.de,
+        buczek@molgen.mpg.de, Robert Marko <robert.marko@sartura.hr>
+Subject: [PATCH v3 1/3] hwmon: (pmbus) Add driver for Delta DPS-920AB PSU
+Date:   Fri,  4 Jun 2021 17:36:10 +0200
+Message-Id: <20210604153612.2903839-1-robert.marko@sartura.hr>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5129.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 68d5858e-ba3f-4939-3c65-08d9276d4502
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Jun 2021 15:27:31.0606
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: khNVPJ5VdE0I8Q81N620tv/vGmAu7R+exLbpp29nS/W+cE5D80Jyslv8bDVghBTLTfdxb0A1OVEGSOihaCUTYA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5366
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Thank You Guenter.
+This adds support for the Delta DPS-920AB PSU.
 
-Regards,
--Ninad.
+Only missing feature is fan control which the PSU supports.
 
------Original Message-----
-From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
-Sent: Friday, June 4, 2021 7:11 PM
-To: Ninad Malwade <nmalwade@nvidia.com>
-Cc: Jean Delvare <jdelvare@suse.com>; Bibek Basu <bbasu@nvidia.com>; Nicoli=
-n Chen <nicolinc@nvidia.com>; Rajkumar Kasirajan <rkasirajan@nvidia.com>; l=
-inux-hwmon@vger.kernel.org; linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ina3221: use CVRF only for single-shot conversion
+Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+---
+Changes in v3:
+* Use generic pmbus_read/write_word_data()
+* Correct word data return code
+* Cache PMBUS_MFR_ID and PMBUS_MFR_MODEL instead
+of reading them everytime that debugfs is read
 
-External email: Use caution opening links or attachments
+Changes in v2:
+* Check for Manufacturer and Model
+* Restrict word read/write to supported only
+* Update documentation to reflect driver changes
+* Add basic debugfs entries
 
+ Documentation/hwmon/dps920ab.rst |  73 +++++++++++
+ Documentation/hwmon/index.rst    |   1 +
+ drivers/hwmon/pmbus/Kconfig      |   9 ++
+ drivers/hwmon/pmbus/Makefile     |   1 +
+ drivers/hwmon/pmbus/dps920ab.c   | 207 +++++++++++++++++++++++++++++++
+ 5 files changed, 291 insertions(+)
+ create mode 100644 Documentation/hwmon/dps920ab.rst
+ create mode 100644 drivers/hwmon/pmbus/dps920ab.c
 
-On Fri, Jun 04, 2021 at 02:54:43PM +0800, Ninad Malwade wrote:
-> As per current logic the wait time per conversion is arouns 430ms for=20
-> 512 samples and around 860ms for 1024 samples for 3 channels=20
-> considering 140us as the bus voltage and shunt voltage sampling=20
-> conversion time.
->
-> This waiting time is a lot for the continuous mode and even for the=20
-> single shot mode. For continuous mode when moving average is=20
-> considered the waiting for CVRF bit is not required and the data from=20
-> the previous conversion is sufficuent. As mentioned in the datasheet=20
-> the conversion ready bit is provided to help coordinate single-shot=20
-> conversions, we can restrict the use to single-shot mode only.
->
-> Also, the conversion time is for the averaged samples, the wait time=20
-> for the polling can omit the number of samples consideration.
->
-Makes sense. Applied.
+diff --git a/Documentation/hwmon/dps920ab.rst b/Documentation/hwmon/dps920ab.rst
+new file mode 100644
+index 000000000000..c33b4cdc0a60
+--- /dev/null
++++ b/Documentation/hwmon/dps920ab.rst
+@@ -0,0 +1,73 @@
++.. SPDX-License-Identifier: GPL-2.0-or-later
++
++Kernel driver dps920ab
++========================
++
++Supported chips:
++
++  * Delta DPS920AB
++
++    Prefix: 'dps920ab'
++
++    Addresses scanned: -
++
++Authors:
++    Robert Marko <robert.marko@sartura.hr>
++
++
++Description
++-----------
++
++This driver implements support for Delta DPS920AB 920W 54V DC single output
++power supply with PMBus support.
++
++The driver is a client driver to the core PMBus driver.
++Please see Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
++
++
++Usage Notes
++-----------
++
++This driver does not auto-detect devices. You will have to instantiate the
++devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
++details.
++
++
++Sysfs entries
++-------------
++
++======================= ======================================================
++curr1_label		"iin"
++curr1_input		Measured input current
++curr1_alarm		Input current high alarm
++
++curr2_label		"iout1"
++curr2_input		Measured output current
++curr2_max		Maximum output current
++curr2_rated_max		Maximum rated output current
++
++in1_label		"vin"
++in1_input		Measured input voltage
++in1_alarm		Input voltage alarm
++
++in2_label		"vout1"
++in2_input		Measured output voltage
++in2_rated_min		Minimum rated output voltage
++in2_rated_max		Maximum rated output voltage
++in2_alarm		Output voltage alarm
++
++power1_label		"pin"
++power1_input		Measured input power
++power1_alarm		Input power high alarm
++
++power2_label		"pout1"
++power2_input		Measured output power
++power2_rated_max	Maximum rated output power
++
++temp[1-3]_input		Measured temperature
++temp[1-3]_alarm		Temperature alarm
++
++fan1_alarm		Fan 1 warning.
++fan1_fault		Fan 1 fault.
++fan1_input		Fan 1 speed in RPM.
++======================= ======================================================
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index 8d5a2df1ecb6..b24436f22052 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -54,6 +54,7 @@ Hardware Monitoring Kernel Drivers
+    dell-smm-hwmon
+    dme1737
+    drivetemp
++   dps920ab
+    ds1621
+    ds620
+    emc1403
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index 32d2fc850621..865ade0aa205 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -66,6 +66,15 @@ config SENSORS_IBM_CFFPS
+ 	  This driver can also be built as a module. If so, the module will
+ 	  be called ibm-cffps.
+ 
++config SENSORS_DPS920AB
++	tristate "Delta DPS920AB Power Supply"
++	help
++	  If you say yes here you get hardware monitoring support for Delta
++	  DPS920AB Power Supplies.
++
++	  This driver can also be built as a module. If so, the module will
++	  be called dps920ab.
++
+ config SENSORS_INSPUR_IPSPS
+ 	tristate "INSPUR Power System Power Supply"
+ 	help
+diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+index 6a4ba0fdc1db..f59ba0123d68 100644
+--- a/drivers/hwmon/pmbus/Makefile
++++ b/drivers/hwmon/pmbus/Makefile
+@@ -9,6 +9,7 @@ obj-$(CONFIG_SENSORS_ADM1266)	+= adm1266.o
+ obj-$(CONFIG_SENSORS_ADM1275)	+= adm1275.o
+ obj-$(CONFIG_SENSORS_BEL_PFE)	+= bel-pfe.o
+ obj-$(CONFIG_SENSORS_IBM_CFFPS)	+= ibm-cffps.o
++obj-$(CONFIG_SENSORS_DPS920AB)	+= dps920ab.o
+ obj-$(CONFIG_SENSORS_INSPUR_IPSPS) += inspur-ipsps.o
+ obj-$(CONFIG_SENSORS_IR35221)	+= ir35221.o
+ obj-$(CONFIG_SENSORS_IR38064)	+= ir38064.o
+diff --git a/drivers/hwmon/pmbus/dps920ab.c b/drivers/hwmon/pmbus/dps920ab.c
+new file mode 100644
+index 000000000000..5ae536cba302
+--- /dev/null
++++ b/drivers/hwmon/pmbus/dps920ab.c
+@@ -0,0 +1,207 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Driver for Delta DPS920AB PSU
++ *
++ * Copyright (C) 2021 Delta Networks, Inc.
++ * Copyright (C) 2021 Sartura Ltd.
++ */
++
++#include <linux/debugfs.h>
++#include <linux/i2c.h>
++#include <linux/module.h>
++#include <linux/of_device.h>
++#include "pmbus.h"
++
++struct dps920ab_data {
++	struct i2c_client *client;
++	struct dentry *debugfs_dir;
++	char *mfr_model;
++	char *mfr_id;
++};
++
++static int dps920ab_read_word_data(struct i2c_client *client, int page, int phase, int reg)
++{
++	/*
++	 * This masks commands which are not supported.
++	 * PSU advertises that all features are supported,
++	 * in reality that unfortunately is not true.
++	 * So enable only those that the datasheet confirms.
++	 */
++	switch (reg) {
++	case PMBUS_FAN_COMMAND_1:
++	case PMBUS_IOUT_OC_WARN_LIMIT:
++	case PMBUS_STATUS_WORD:
++	case PMBUS_READ_VIN:
++	case PMBUS_READ_IIN:
++	case PMBUS_READ_VOUT:
++	case PMBUS_READ_IOUT:
++	case PMBUS_READ_TEMPERATURE_1:
++	case PMBUS_READ_TEMPERATURE_2:
++	case PMBUS_READ_TEMPERATURE_3:
++	case PMBUS_READ_FAN_SPEED_1:
++	case PMBUS_READ_POUT:
++	case PMBUS_READ_PIN:
++	case PMBUS_MFR_VOUT_MIN:
++	case PMBUS_MFR_VOUT_MAX:
++	case PMBUS_MFR_IOUT_MAX:
++	case PMBUS_MFR_POUT_MAX:
++		return pmbus_read_word_data(client, page, phase, reg);
++	default:
++		return -ENXIO;
++	}
++}
++
++static int dps920ab_write_word_data(struct i2c_client *client, int page, int reg,
++				    u16 word)
++{
++	/*
++	 * This masks commands which are not supported.
++	 * PSU only has one R/W register and that is
++	 * for the fan.
++	 */
++	switch (reg) {
++	case PMBUS_FAN_COMMAND_1:
++		return pmbus_write_word_data(client, page, reg, word);
++	default:
++		return -EACCES;
++	}
++}
++
++static struct pmbus_driver_info dps920ab_info = {
++	.pages = 1,
++
++	.format[PSC_VOLTAGE_IN] = linear,
++	.format[PSC_VOLTAGE_OUT] = linear,
++	.format[PSC_CURRENT_IN] = linear,
++	.format[PSC_CURRENT_OUT] = linear,
++	.format[PSC_POWER] = linear,
++	.format[PSC_FAN] = linear,
++	.format[PSC_TEMPERATURE] = linear,
++
++	.func[0] =
++		PMBUS_HAVE_VIN | PMBUS_HAVE_IIN | PMBUS_HAVE_PIN |
++		PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT | PMBUS_HAVE_POUT |
++		PMBUS_HAVE_TEMP  | PMBUS_HAVE_TEMP2 | PMBUS_HAVE_TEMP3 |
++		PMBUS_HAVE_FAN12 | PMBUS_HAVE_STATUS_FAN12 |
++		PMBUS_HAVE_STATUS_VOUT | PMBUS_HAVE_STATUS_IOUT |
++		PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_STATUS_TEMP,
++	.read_word_data = dps920ab_read_word_data,
++	.write_word_data = dps920ab_write_word_data,
++};
++
++static int dps920ab_mfr_id_show(struct seq_file *s, void *data)
++{
++	struct dps920ab_data *priv = s->private;
++
++	seq_printf(s, "%s\n", priv->mfr_id);
++
++	return 0;
++}
++
++DEFINE_SHOW_ATTRIBUTE(dps920ab_mfr_id);
++
++static int dps920ab_mfr_model_show(struct seq_file *s, void *data)
++{
++	struct dps920ab_data *priv = s->private;
++
++	seq_printf(s, "%s\n", priv->mfr_model);
++
++	return 0;
++}
++
++DEFINE_SHOW_ATTRIBUTE(dps920ab_mfr_model);
++
++static void dps920ab_init_debugfs(struct dps920ab_data *data)
++{
++	struct dentry *root;
++
++	root = pmbus_get_debugfs_dir(data->client);
++	if (!root)
++		return;
++
++	data->debugfs_dir = debugfs_create_dir(data->client->name, root);
++	if (!data->debugfs_dir)
++		return;
++
++	debugfs_create_file("mfr_id",
++			    0400,
++			    data->debugfs_dir,
++			    data,
++			    &dps920ab_mfr_id_fops);
++
++	debugfs_create_file("mfr_model",
++			    0400,
++			    data->debugfs_dir,
++			    data,
++			    &dps920ab_mfr_model_fops);
++}
++
++static int dps920ab_probe(struct i2c_client *client)
++{
++	u8 buf[I2C_SMBUS_BLOCK_MAX + 1];
++	struct dps920ab_data *data;
++	int ret;
++
++	data = devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++
++	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, buf);
++	if (ret < 0) {
++		dev_err(&client->dev, "Failed to read Manufacturer ID\n");
++		return ret;
++	}
++	if (ret != 5 || strncmp(buf, "DELTA", 5)) {
++		buf[ret] = '\0';
++		dev_err(&client->dev, "Unsupported Manufacturer ID '%s'\n", buf);
++		return -ENODEV;
++	}
++	data->mfr_id = devm_kstrdup(&client->dev, buf, GFP_KERNEL);
++	if (!data->mfr_id)
++		return -ENOMEM;
++
++	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, buf);
++	if (ret < 0) {
++		dev_err(&client->dev, "Failed to read Manufacturer Model\n");
++		return ret;
++	}
++	if (ret != 11 || strncmp(buf, "DPS-920AB", 9)) {
++		buf[ret] = '\0';
++		dev_err(&client->dev, "Unsupported Manufacturer Model '%s'\n", buf);
++		return -ENODEV;
++	}
++	data->mfr_model = devm_kstrdup(&client->dev, buf, GFP_KERNEL);
++	if (!data->mfr_model)
++		return -ENOMEM;
++
++	ret = pmbus_do_probe(client, &dps920ab_info);
++	if (ret)
++		return ret;
++
++	data->client = client;
++
++	dps920ab_init_debugfs(data);
++
++	return 0;
++}
++
++static const struct of_device_id __maybe_unused dps920ab_of_match[] = {
++	{ .compatible = "delta,dps920ab", },
++	{}
++};
++
++MODULE_DEVICE_TABLE(of, dps920ab_of_match);
++
++static struct i2c_driver dps920ab_driver = {
++	.driver = {
++		   .name = "dps920ab",
++		   .of_match_table = of_match_ptr(dps920ab_of_match),
++	},
++	.probe_new = dps920ab_probe,
++};
++
++module_i2c_driver(dps920ab_driver);
++
++MODULE_AUTHOR("Robert Marko <robert.marko@sartura.hr>");
++MODULE_DESCRIPTION("PMBus driver for Delta DPS920AB PSU");
++MODULE_LICENSE("GPL");
+-- 
+2.31.1
 
-Thanks,
-Guenter
-
-> Signed-off-by: Ninad Malwade <nmalwade@nvidia.com>
-> ---
->  drivers/hwmon/ina3221.c | 22 +++++++++++-----------
->  1 file changed, 11 insertions(+), 11 deletions(-)
->
-> diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c index=20
-> c602583..58d3828 100644
-> --- a/drivers/hwmon/ina3221.c
-> +++ b/drivers/hwmon/ina3221.c
-> @@ -196,13 +196,11 @@ static inline u32 ina3221_reg_to_interval_us(u16 co=
-nfig)
->       u32 channels =3D hweight16(config & INA3221_CONFIG_CHs_EN_MASK);
->       u32 vbus_ct_idx =3D INA3221_CONFIG_VBUS_CT(config);
->       u32 vsh_ct_idx =3D INA3221_CONFIG_VSH_CT(config);
-> -     u32 samples_idx =3D INA3221_CONFIG_AVG(config);
-> -     u32 samples =3D ina3221_avg_samples[samples_idx];
->       u32 vbus_ct =3D ina3221_conv_time[vbus_ct_idx];
->       u32 vsh_ct =3D ina3221_conv_time[vsh_ct_idx];
->
->       /* Calculate total conversion time */
-> -     return channels * (vbus_ct + vsh_ct) * samples;
-> +     return channels * (vbus_ct + vsh_ct);
->  }
->
->  static inline int ina3221_wait_for_data(struct ina3221_data *ina) @@=20
-> -288,13 +286,14 @@ static int ina3221_read_in(struct device *dev, u32 att=
-r, int channel, long *val)
->                       return -ENODATA;
->
->               /* Write CONFIG register to trigger a single-shot measureme=
-nt */
-> -             if (ina->single_shot)
-> +             if (ina->single_shot) {
->                       regmap_write(ina->regmap, INA3221_CONFIG,
->                                    ina->reg_config);
->
-> -             ret =3D ina3221_wait_for_data(ina);
-> -             if (ret)
-> -                     return ret;
-> +                     ret =3D ina3221_wait_for_data(ina);
-> +                     if (ret)
-> +                             return ret;
-> +             }
->
->               ret =3D ina3221_read_value(ina, reg, &regval);
->               if (ret)
-> @@ -344,13 +343,14 @@ static int ina3221_read_curr(struct device *dev, u3=
-2 attr,
->                       return -ENODATA;
->
->               /* Write CONFIG register to trigger a single-shot measureme=
-nt */
-> -             if (ina->single_shot)
-> +             if (ina->single_shot) {
->                       regmap_write(ina->regmap, INA3221_CONFIG,
->                                    ina->reg_config);
->
-> -             ret =3D ina3221_wait_for_data(ina);
-> -             if (ret)
-> -                     return ret;
-> +                     ret =3D ina3221_wait_for_data(ina);
-> +                     if (ret)
-> +                             return ret;
-> +             }
->
->               fallthrough;
->       case hwmon_curr_crit:
