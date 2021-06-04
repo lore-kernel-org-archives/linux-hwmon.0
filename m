@@ -2,111 +2,86 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 391DAC47083
-	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Jun 2021 12:39:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA2BDC07E94
+	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Jun 2021 13:57:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1FE9861405
-	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Jun 2021 12:39:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AB1BF61402
+	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Jun 2021 13:57:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbhFDMlf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 4 Jun 2021 08:41:35 -0400
-Received: from mail-qt1-f173.google.com ([209.85.160.173]:45885 "EHLO
-        mail-qt1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbhFDMle (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Jun 2021 08:41:34 -0400
-Received: by mail-qt1-f173.google.com with SMTP id l17so2689077qtq.12;
-        Fri, 04 Jun 2021 05:39:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8tFXQQshqxSB1HMy8vDC7vDQu3YTSPaP6sR63Gdou1c=;
-        b=rAX+pnpB7Dvclp28To6NqrG6G4zEE6aJ2nCrSNJM6cssUc3AgNkffeQtKWekimrVtV
-         L0eYjB5ZjA+K3IJk1WWXf9vHqbS1/VHdOIE26Zs4CaCgfm3+AtzgCi2kEzT/IrXsOS5s
-         CYs3RKtn7Cygw7UxH7+C0FbOn8ujhsEL0UNKMZg3FL8ERgTAHva9tF2CqGHhdKUjOXq2
-         BiXiipzsM/lSubN2iLC3R9dcoSaXAeseYoXBY45EpKXNCEYfe1IiAWFK9CCvpgix+5HR
-         ubzIodtw/ASDfpr0I6MZSObuIXGEf/+6h0PNwKzkJgpRWR1Y8iml3LwhrcTOHks9QkC3
-         HJjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=8tFXQQshqxSB1HMy8vDC7vDQu3YTSPaP6sR63Gdou1c=;
-        b=um+LuWgjQdb860ct1h86kmlnd82FCV3LlCyfX55qooBjdL6PDvpkvzNtZGSAPkCI5u
-         AoAMEEWoplx2znEKjEXFhMnOUiHNgLQyz/XdkUb602LT8H9d/wzBhpDiGgLYJk5SKP2u
-         3NBtCmxFaAgkrGDQRWEkMxvIFg/k7EfiHSOBnVGY79w8sCp0Li4FfoG1Gx7C/yGjZJTI
-         n3Rn0IuWKt74Z0CQBgZFqfcrXBlFnpY1vvv4iXllWVylxWKXJJLgZdn8PiCXlF/fXd5C
-         arAC2Y/CFJ5UwFuRyxdI+nSxzixgI0mEHded9dX7tH/vF6HosVXiFu9x3cZryxo5MjaG
-         MY6Q==
-X-Gm-Message-State: AOAM532lj6bFLZ/KhoGAIULb1EDU07RoLGD0R7OT301Md7gJxM8GzR2b
-        pVCi9nPXvcEa4ZqdFoLI2pA=
-X-Google-Smtp-Source: ABdhPJxlotMgspuEyAtTyWXww/4NIkeRSjCQ1vlG6K+hRbbVDXks6kAI7g42AK7Htj8jNFiXE0jLjA==
-X-Received: by 2002:ac8:578d:: with SMTP id v13mr4394401qta.9.1622810312918;
-        Fri, 04 Jun 2021 05:38:32 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p12sm1652589qtw.61.2021.06.04.05.38.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Jun 2021 05:38:31 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 4 Jun 2021 05:38:29 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Robert Marko <robert.marko@sartura.hr>
-Cc:     robh+dt@kernel.org, jdelvare@suse.com, corbet@lwn.net,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, trivial@kernel.org,
-        Jonathan.Cameron@huawei.com, alexandre.belloni@bootlin.com,
-        sst@poczta.fm, krzk@kernel.org, alexandru.ardelean@analog.com,
-        devicetree@vger.kernel.org, Luka Perkov <luka.perkov@sartura.hr>,
-        jmp@epiphyte.org, Paul Menzel <pmenzel@molgen.mpg.de>,
-        Donald Buczek <buczek@molgen.mpg.de>
-Subject: Re: [PATCH v2 1/3] hwmon: (pmbus) Add driver for Delta DPS-920AB PSU
-Message-ID: <20210604123829.GA3939356@roeck-us.net>
-References: <20210528103828.53320-1-robert.marko@sartura.hr>
- <479725a2-7d85-1489-4228-ddff16b52287@roeck-us.net>
- <CA+HBbNGu6kkp23wHrnVeM7vry6nT0-P66U0V8KXCQ=kCcs+n8g@mail.gmail.com>
+        id S230436AbhFDN7Y (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 4 Jun 2021 09:59:24 -0400
+Received: from mx3.molgen.mpg.de ([141.14.17.11]:45049 "EHLO mx1.molgen.mpg.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230124AbhFDN7Y (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 4 Jun 2021 09:59:24 -0400
+Received: from localhost.localdomain (ip5f5ae886.dynamic.kabel-deutschland.de [95.90.232.134])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id A615361E64762;
+        Fri,  4 Jun 2021 15:57:35 +0200 (CEST)
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     Madhava Reddy Siddareddygari <msiddare@cisco.com>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (pmbus_core) Check adapter PEC support
+Date:   Fri,  4 Jun 2021 15:57:14 +0200
+Message-Id: <20210604135714.529042-1-pmenzel@molgen.mpg.de>
+X-Mailer: git-send-email 2.32.0.rc2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+HBbNGu6kkp23wHrnVeM7vry6nT0-P66U0V8KXCQ=kCcs+n8g@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Jun 04, 2021 at 02:16:02PM +0200, Robert Marko wrote:
-[ ... ]
-> >
-> > > +}
-> > > +
-> > > +static int dps920ab_write_word_data(struct i2c_client *client, int page, int reg,
-> > > +                                 u16 word)
-> > > +{
-> > > +     int ret;
-> > > +
-> > > +     /*
-> > > +      * This masks commands which are not supported.
-> > > +      * PSU only has one R/W register and that is
-> > > +      * for the fan.
-> > > +      */
-> > > +     switch (reg) {
-> > > +     case PMBUS_FAN_COMMAND_1:
-> > > +             break;
-> > > +     default:
-> > > +             ret = -ENODATA;
-> > > +     }
-> > > +
-> >
-> > Does this work ? It is the wrong error message for a failed write;
-> > it should probably return -EACCES.
-> 
-> It appears to work fine, I was looking at other drivers, and all of them
-> use -ENODATA for unsupported word registers.
+From: Madhava Reddy Siddareddygari <msiddare@cisco.com>
 
-No. They return -ENODATA to tell the PMBus core to use standard PMBus
-access functions, ie to handle the access in the core. Please see
-_pmbus_write_word_data().
+Currently, for Packet Error Checking (PEC) only the controller
+is checked for support. This causes problems on the cisco-8000
+platform where a SMBUS transaction errors are observed. This is
+because PEC has to be enabled only if both controller and
+adapter support it.
 
-Guenter
+Added code to check PEC capability for adapter and enable it
+only if both controller and adapter supports PEC.
+
+Signed-off-by: Madhava Reddy Siddareddygari <msiddare@cisco.com>
+[Upstream from SONiC https://github.com/Azure/sonic-linux-kernel/pull/215]
+Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
+---
+ drivers/hwmon/pmbus/pmbus_core.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index bbd745178147..7fbd82b7560d 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -2214,11 +2214,13 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
+ 		data->has_status_word = true;
+ 	}
+ 
+-	/* Enable PEC if the controller supports it */
+-	if (!(data->flags & PMBUS_NO_CAPABILITY)) {
+-		ret = i2c_smbus_read_byte_data(client, PMBUS_CAPABILITY);
+-		if (ret >= 0 && (ret & PB_CAPABILITY_ERROR_CHECK))
++	/* Enable PEC if the controller and bus supports it */
++	ret = i2c_smbus_read_byte_data(client, PMBUS_CAPABILITY);
++	if (ret >= 0 && (ret & PB_CAPABILITY_ERROR_CHECK)) {
++		if (i2c_check_functionality(client->adapter,
++			I2C_FUNC_SMBUS_PEC)) {
+ 			client->flags |= I2C_CLIENT_PEC;
++		}
+ 	}
+ 
+ 	/*
+-- 
+2.32.0.rc2
+
