@@ -2,246 +2,181 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2118DC47097
-	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Jun 2021 06:04:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1947BC47083
+	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Jun 2021 06:55:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 00A9A61406
-	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Jun 2021 06:04:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ED5AE61414
+	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Jun 2021 06:55:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229833AbhFDGFq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 4 Jun 2021 02:05:46 -0400
-Received: from mga02.intel.com ([134.134.136.20]:56529 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229818AbhFDGFp (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 4 Jun 2021 02:05:45 -0400
-IronPort-SDR: ByufZSt3rMf3IeHcgLDsUI5vUdgYINKI/XZaNk7vSOmI6faH43TBj9oabzT5Iigw1vwooCVebj
- xVdGiYbqOa7A==
-X-IronPort-AV: E=McAfee;i="6200,9189,10004"; a="191338509"
-X-IronPort-AV: E=Sophos;i="5.83,247,1616482800"; 
-   d="scan'208";a="191338509"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2021 23:03:59 -0700
-IronPort-SDR: eOjfVr7VgZZ7H9zKsHuTPoVA3BqEUzLOGgC4A/Ny0ciMJh6jIealAUn1QKux7tJumI6y4m5vy1
- cIxqdITM3m8w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,247,1616482800"; 
-   d="scan'208";a="636481136"
-Received: from lkp-server02.sh.intel.com (HELO 1ec8406c5392) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 03 Jun 2021 23:03:58 -0700
-Received: from kbuild by 1ec8406c5392 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lp2w2-0006iJ-1J; Fri, 04 Jun 2021 06:03:58 +0000
-Date:   Fri, 04 Jun 2021 14:03:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon-next] BUILD SUCCESS
- a145de31242cd98f790b306e1b0f0f226b5ad428
-Message-ID: <60b9c215.5Y+dmBZuBr/PK9Dy%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S229871AbhFDG5I (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 4 Jun 2021 02:57:08 -0400
+Received: from mail-dm6nam11on2050.outbound.protection.outlook.com ([40.107.223.50]:46785
+        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229831AbhFDG5H (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 4 Jun 2021 02:57:07 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kT12XbkmMVjRYqAndeJ5oA7/LeUf1utOzTUHKj4Y5DcTl8Ur1JRIFlUw7HBT5L0K19pFrd+yOG5y4pYeRNrma7ORiG555yFevlCvYwJcnQxybeq2lepIc5Ye2F5JcdL4UEs0EfmAUKbxkdQTauvoGSjcjhdiEoaz3yzRgaxAcPNtYhlFKPF/5SKIapGSteWJFXyw0sJh6p6rV9XZBGN1PK8Cqu1OQ+O5D8dOKQ396wnrzeQ8cer3dpM32lcAtOGaFVLiqee7TNOPv43IlOtzXClz1IlSzPGbIM6ttYY2FawhEPJ/74KD6NEnyPoJUyAMDQweHhNxjrKriO4EyTMDsg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vltb3jFKtCV+IdXvE+GRu1MtFk1GIT2cvmg1EUCVPJY=;
+ b=Jq0k3tYEOtwb71qkEDauxges/U9JmKBF38OKOc6Djhse8qBALSOFcWqMiXoo33JWQ4Umx+vlfWUwHnsJjSJWm5of5TJ54fiNevkI+4Fba5MJqjm0CcBVlUa1PdaGf0+TaFmYDL6ty9mGvnmn9u5oVAreOXRSQX1aGaq1GhDIFuPorbPHYU1XnRRaLnrHjp81FZMuXg3PGwkzPn52c/pCuIVsexIw/280h3VinZnsytfddOt70hmzj8OfAFHlFDWonlXYc4bEqkE4R/zgSUAeReotOeCQYVbcuet+Q3CIJqB2d44h622SlEex3VhKcuHXfLJUZqhfzF581YIe8Z6nrg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.112.32) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vltb3jFKtCV+IdXvE+GRu1MtFk1GIT2cvmg1EUCVPJY=;
+ b=XDZgOFT0RTX86v4wmJ4HxTEsHcD955CcnQi54ugoSSCT80qyhRp/K8fZ6c11951Rm9ngEmUGyXJuVuMeT8IssXIuZczRwwTlFcf4t491DnNzP5CMWsIPebiXVmSLMmx2flFChEeqBuNkpmmdrBUB6D6q3WD1sMJYPHhhoGocXuvuPbKswCbhqoSFHKWfyi6GIpAx23KieOUifGxSDXrhCSKWb1cQZfuQAgsCBF/TuAC9ahwxjssojA/6wUSlA+eNjRKhFqHdFW+dauJ7WAml9vL/8ayH4zFvu9sfQYJf6rxVmqJwhhPzd9SLE9sGOPs4Dnpk/mqNJygLeYugLPgH1w==
+Received: from DM5PR07CA0109.namprd07.prod.outlook.com (2603:10b6:4:ae::38) by
+ DM6PR12MB2938.namprd12.prod.outlook.com (2603:10b6:5:18a::31) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4195.23; Fri, 4 Jun 2021 06:55:20 +0000
+Received: from DM6NAM11FT053.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:4:ae:cafe::5c) by DM5PR07CA0109.outlook.office365.com
+ (2603:10b6:4:ae::38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4195.24 via Frontend
+ Transport; Fri, 4 Jun 2021 06:55:20 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.112.32)
+ smtp.mailfrom=nvidia.com; vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.112.32 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.112.32; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (216.228.112.32) by
+ DM6NAM11FT053.mail.protection.outlook.com (10.13.173.74) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4195.22 via Frontend Transport; Fri, 4 Jun 2021 06:55:20 +0000
+Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 3 Jun
+ 2021 23:55:19 -0700
+Received: from nmalwade-dt.nvidia.com (172.20.187.5) by mail.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 4 Jun 2021 06:55:17 +0000
+From:   Ninad Malwade <nmalwade@nvidia.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+CC:     Bibek Basu <bbasu@nvidia.com>, Nicolin Chen <nicolinc@nvidia.com>,
+        Rajkumar Kasirajan <rkasirajan@nvidia.com>,
+        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Ninad Malwade <nmalwade@nvidia.com>
+Subject: [PATCH] ina3221: use CVRF only for single-shot conversion
+Date:   Fri, 4 Jun 2021 14:54:43 +0800
+Message-ID: <1622789683-30931-1-git-send-email-nmalwade@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c3a54e29-6364-4779-5c6f-08d92725b804
+X-MS-TrafficTypeDiagnostic: DM6PR12MB2938:
+X-Microsoft-Antispam-PRVS: <DM6PR12MB2938924FE70B2DDC8AE8D84CB13B9@DM6PR12MB2938.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FViDa8M44UayslIVtvV2i9US6ZPPFFqc3HLcDMeDJqYmK3znuLkhg5++OfV8g4KMCH8OZMWHJISMspSrETyOQfG+4gmQcqZ0CdofMnYwjkucTc5XrGWbfrJb0qXmocI9Z9IQasBymnLfI9DQHUs/N8DiV1N7Fr4wk4sG1n09ydpPNos38twW7JDb+zRam3EWb1zEFvVpL/rxLIXHHvqIopAqxLX2tBtmOkH2yhtR5KPo9VIdeJPQzpNpnw0Hfi7hWKrrNXIrhyJO/LaqBxr95/oC5sw9FM8xBVcKASBDR+o36zBYm5fgQaLwpWNZiDJIwiMcuZu1UsZGDwR85/OpMmChX+Dt/4J0m2m7+Dq9J3pehPNO6dgGndQ+cF9T9pRhG9mrROo8S6820MazkfHTgdpDMInnFFW235MPRKGOFWtP5X6SogfDHhj6PSgsJsGNOWfMmShGoYtStQ5xgN28LWvs6ZX1UL09sfLsJVcIUYXHdgRfeVrrzmJDKYUVYU0Felxuw66P0GoFSqSBAQTwdt9cOWqJ4scGEA89nosGmqZTkoqoy7ANkWQZqANfF1leRNtpaa61EEa1YogGSI94aewvXwEmzmfb6PFB+uw45j2viYxQ5S8pKEz7+21XPw6EZAeQSvluzZBTxgKSMb/9e+rjsYKyyb9HKEWzyAwOOxU=
+X-Forefront-Antispam-Report: CIP:216.228.112.32;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:schybrid01.nvidia.com;CAT:NONE;SFS:(4636009)(136003)(376002)(39860400002)(346002)(396003)(36840700001)(46966006)(107886003)(316002)(336012)(110136005)(54906003)(426003)(8936002)(5660300002)(356005)(8676002)(82740400003)(7696005)(70586007)(82310400003)(70206006)(83380400001)(2616005)(86362001)(36756003)(478600001)(36860700001)(26005)(2906002)(7636003)(4326008)(186003)(6666004)(47076005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jun 2021 06:55:20.3073
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c3a54e29-6364-4779-5c6f-08d92725b804
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.112.32];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT053.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2938
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: a145de31242cd98f790b306e1b0f0f226b5ad428  hwmon: (max31790) Detect and report zero fan speed
+As per current logic the wait time per conversion is arouns 430ms
+for 512 samples and around 860ms for 1024 samples for 3 channels
+considering 140us as the bus voltage and shunt voltage sampling
+conversion time.
 
-elapsed time: 737m
+This waiting time is a lot for the continuous mode and even for
+the single shot mode. For continuous mode when moving average is
+considered the waiting for CVRF bit is not required and the data
+from the previous conversion is sufficuent. As mentioned in the
+datasheet the conversion ready bit is provided to help coordinate
+single-shot conversions, we can restrict the use to single-shot
+mode only.
 
-configs tested: 176
-configs skipped: 3
+Also, the conversion time is for the averaged samples, the wait
+time for the polling can omit the number of samples consideration.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-mips                           ip27_defconfig
-powerpc                      pasemi_defconfig
-m68k                       m5249evb_defconfig
-arm                         lpc32xx_defconfig
-nios2                         3c120_defconfig
-mips                         tb0219_defconfig
-arm                          moxart_defconfig
-mips                           xway_defconfig
-powerpc                       holly_defconfig
-sh                   rts7751r2dplus_defconfig
-mips                     cu1830-neo_defconfig
-arm                        clps711x_defconfig
-arc                         haps_hs_defconfig
-mips                          rb532_defconfig
-arm                          collie_defconfig
-sh                         ap325rxa_defconfig
-powerpc                 xes_mpc85xx_defconfig
-sh                         apsh4a3a_defconfig
-arm                         mv78xx0_defconfig
-sh                         ecovec24_defconfig
-arc                                 defconfig
-powerpc                    amigaone_defconfig
-arc                 nsimosci_hs_smp_defconfig
-sh                   sh7770_generic_defconfig
-m68k                       m5275evb_defconfig
-powerpc                 mpc836x_mds_defconfig
-m68k                        m5407c3_defconfig
-m68k                        mvme16x_defconfig
-arc                    vdk_hs38_smp_defconfig
-um                                  defconfig
-powerpc                      katmai_defconfig
-mips                         mpc30x_defconfig
-powerpc                      acadia_defconfig
-powerpc64                        alldefconfig
-arc                     nsimosci_hs_defconfig
-arm                         s3c6400_defconfig
-sparc                       sparc32_defconfig
-powerpc                     tqm8540_defconfig
-powerpc                 mpc836x_rdk_defconfig
-powerpc                    sam440ep_defconfig
-sh                            titan_defconfig
-riscv             nommu_k210_sdcard_defconfig
-mips                           rs90_defconfig
-m68k                         amcore_defconfig
-arm                        cerfcube_defconfig
-powerpc                 canyonlands_defconfig
-arm                    vt8500_v6_v7_defconfig
-arm                            zeus_defconfig
-xtensa                generic_kc705_defconfig
-m68k                          amiga_defconfig
-mips                            gpr_defconfig
-powerpc                     mpc5200_defconfig
-arm                     davinci_all_defconfig
-powerpc                      makalu_defconfig
-mips                   sb1250_swarm_defconfig
-powerpc                      pcm030_defconfig
-powerpc                   lite5200b_defconfig
-arm                           u8500_defconfig
-powerpc                      tqm8xx_defconfig
-sh                          urquell_defconfig
-powerpc                      cm5200_defconfig
-arm                  colibri_pxa270_defconfig
-sh                            hp6xx_defconfig
-um                            kunit_defconfig
-mips                           mtx1_defconfig
-sh                           se7712_defconfig
-powerpc                     rainier_defconfig
-arm                         orion5x_defconfig
-powerpc                 mpc834x_itx_defconfig
-arm                           stm32_defconfig
-riscv                    nommu_virt_defconfig
-powerpc                 mpc85xx_cds_defconfig
-arm                         s5pv210_defconfig
-sh                          lboxre2_defconfig
-mips                     loongson2k_defconfig
-arc                              alldefconfig
-mips                      pistachio_defconfig
-sh                        sh7757lcr_defconfig
-ia64                          tiger_defconfig
-arm                         lubbock_defconfig
-powerpc                     mpc512x_defconfig
-mips                       lemote2f_defconfig
-mips                  cavium_octeon_defconfig
-mips                       bmips_be_defconfig
-arm                          simpad_defconfig
-ia64                                defconfig
-powerpc                     skiroot_defconfig
-mips                 decstation_r4k_defconfig
-x86_64                            allnoconfig
-ia64                             allmodconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a003-20210603
-i386                 randconfig-a006-20210603
-i386                 randconfig-a004-20210603
-i386                 randconfig-a001-20210603
-i386                 randconfig-a005-20210603
-i386                 randconfig-a002-20210603
-x86_64               randconfig-a015-20210603
-x86_64               randconfig-a011-20210603
-x86_64               randconfig-a012-20210603
-x86_64               randconfig-a014-20210603
-x86_64               randconfig-a016-20210603
-x86_64               randconfig-a013-20210603
-i386                 randconfig-a015-20210603
-i386                 randconfig-a011-20210603
-i386                 randconfig-a014-20210603
-i386                 randconfig-a012-20210603
-i386                 randconfig-a013-20210603
-i386                 randconfig-a016-20210603
-x86_64               randconfig-a002-20210604
-x86_64               randconfig-a004-20210604
-x86_64               randconfig-a003-20210604
-x86_64               randconfig-a006-20210604
-x86_64               randconfig-a005-20210604
-x86_64               randconfig-a001-20210604
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-b001-20210603
-x86_64               randconfig-b001-20210604
-x86_64               randconfig-a002-20210603
-x86_64               randconfig-a004-20210603
-x86_64               randconfig-a003-20210603
-x86_64               randconfig-a006-20210603
-x86_64               randconfig-a005-20210603
-x86_64               randconfig-a001-20210603
-x86_64               randconfig-a015-20210604
-x86_64               randconfig-a011-20210604
-x86_64               randconfig-a014-20210604
-x86_64               randconfig-a012-20210604
-x86_64               randconfig-a016-20210604
-x86_64               randconfig-a013-20210604
-
+Signed-off-by: Ninad Malwade <nmalwade@nvidia.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/hwmon/ina3221.c | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
+index c602583..58d3828 100644
+--- a/drivers/hwmon/ina3221.c
++++ b/drivers/hwmon/ina3221.c
+@@ -196,13 +196,11 @@ static inline u32 ina3221_reg_to_interval_us(u16 config)
+ 	u32 channels = hweight16(config & INA3221_CONFIG_CHs_EN_MASK);
+ 	u32 vbus_ct_idx = INA3221_CONFIG_VBUS_CT(config);
+ 	u32 vsh_ct_idx = INA3221_CONFIG_VSH_CT(config);
+-	u32 samples_idx = INA3221_CONFIG_AVG(config);
+-	u32 samples = ina3221_avg_samples[samples_idx];
+ 	u32 vbus_ct = ina3221_conv_time[vbus_ct_idx];
+ 	u32 vsh_ct = ina3221_conv_time[vsh_ct_idx];
+ 
+ 	/* Calculate total conversion time */
+-	return channels * (vbus_ct + vsh_ct) * samples;
++	return channels * (vbus_ct + vsh_ct);
+ }
+ 
+ static inline int ina3221_wait_for_data(struct ina3221_data *ina)
+@@ -288,13 +286,14 @@ static int ina3221_read_in(struct device *dev, u32 attr, int channel, long *val)
+ 			return -ENODATA;
+ 
+ 		/* Write CONFIG register to trigger a single-shot measurement */
+-		if (ina->single_shot)
++		if (ina->single_shot) {
+ 			regmap_write(ina->regmap, INA3221_CONFIG,
+ 				     ina->reg_config);
+ 
+-		ret = ina3221_wait_for_data(ina);
+-		if (ret)
+-			return ret;
++			ret = ina3221_wait_for_data(ina);
++			if (ret)
++				return ret;
++		}
+ 
+ 		ret = ina3221_read_value(ina, reg, &regval);
+ 		if (ret)
+@@ -344,13 +343,14 @@ static int ina3221_read_curr(struct device *dev, u32 attr,
+ 			return -ENODATA;
+ 
+ 		/* Write CONFIG register to trigger a single-shot measurement */
+-		if (ina->single_shot)
++		if (ina->single_shot) {
+ 			regmap_write(ina->regmap, INA3221_CONFIG,
+ 				     ina->reg_config);
+ 
+-		ret = ina3221_wait_for_data(ina);
+-		if (ret)
+-			return ret;
++			ret = ina3221_wait_for_data(ina);
++			if (ret)
++				return ret;
++		}
+ 
+ 		fallthrough;
+ 	case hwmon_curr_crit:
+-- 
+2.7.4
+
