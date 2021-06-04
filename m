@@ -4,154 +4,510 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03943C07E94
-	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Jun 2021 11:12:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EDCFBC07E94
+	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Jun 2021 12:16:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DC0BD613FF
-	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Jun 2021 11:12:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D408161415
+	for <linux-hwmon@archiver.kernel.org>; Fri,  4 Jun 2021 12:16:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbhFDLOJ (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 4 Jun 2021 07:14:09 -0400
-Received: from mail-qv1-f41.google.com ([209.85.219.41]:33560 "EHLO
-        mail-qv1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230123AbhFDLOI (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Jun 2021 07:14:08 -0400
-Received: by mail-qv1-f41.google.com with SMTP id 5so4750543qvk.0;
-        Fri, 04 Jun 2021 04:12:22 -0700 (PDT)
+        id S229999AbhFDMSO (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 4 Jun 2021 08:18:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46670 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230162AbhFDMSN (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Fri, 4 Jun 2021 08:18:13 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A11FC06174A
+        for <linux-hwmon@vger.kernel.org>; Fri,  4 Jun 2021 05:16:13 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id a8so7440967ilv.9
+        for <linux-hwmon@vger.kernel.org>; Fri, 04 Jun 2021 05:16:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=B/xG+N/v7ICoipPZQIDZ5p2yVBVuZBINeWc/kBK4g+Q=;
-        b=vdfsGKohglD1YFz7elJy/aa9z08Ifnip0E+YS/OvDEWE66uevtLFzil27sZitVZsBn
-         cMhqSrYHGqJyJzC6rvsUiYfQ1hCDWPZB9a/vT7VzlJJUChLPhVw9MxcXzJ0x8SuwP7kB
-         8GjcUdxkDkzSaZFKXg51sRtfoUGXPzY2+Cs8zjun9Q+tGQpepWfHpiRxWEIr+7KNBG0M
-         77AcyDtzrr+NU8/5xPUs2WmcLlnSAUFcvzHWdP4MV90Shia83aMA2Nxe5/w19GAa8xBE
-         2JaB2dXTMxgF6hgh6m7EvEeHqc/6ClnqxRcJlP8hvAbL4jMJQlMt3JN9ZZaYR2/hzX1x
-         HEdA==
+        d=sartura-hr.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BFn1qfiNvnwRZi4VjO32E8LqQi+VQATGvLPuwEYpYIQ=;
+        b=Ee8pBE5H8y5XbV5UtyJ2DwyMbnH1zJpkZrXclUGi0GZA/Dj2skoVkIIPJMqMrHLHLJ
+         vulCIXi9GqgSgt1k3pOoPN9dPi3RETg/m6q71WGFH5GdB/UnYRRNQfZCazQPFRE0j+1N
+         1yXo8B6iBAcdhgePzHHB3tY5PY7+mo83IimcCF6zRqBrLxNJPv3LK/Y7X4LoMI7QF1Cw
+         AFJ2FJo/ZnmG1z0bTqCX9mA41zgybCbUUkBomMvFjm4WF6xP2HYzOW/oLoAokXP0EMEN
+         xloLc7Vdfg4p6Z04JHRL4Nf4DCLeposazksHfQWnxSFDSGsY0ABD/gF6ShuHEk+7w5GU
+         sKDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=B/xG+N/v7ICoipPZQIDZ5p2yVBVuZBINeWc/kBK4g+Q=;
-        b=nFzGxidKEHLIN4H0/bAhrs5/7LpL/Ma9baqP6XoV+p1ULv2cN5ijIEW+ItHlnuPTdq
-         709OU3IL2a1LXFZPjhB+3Cd81PprT0rPxpfAeErWiX3bOZWkI4SP9IbTtCnaMSkOJrEN
-         AIYCFacaHHCNu3kpHQ9nJJKh1j9Ks6b/c6pwd5tWOER1Z7c87hcqX5su/cMraW6bTSVy
-         bYaQHxzjDL8rexwuUlL3+36EDs7oid5oGLgJTiRVTFSTajCJn7b4NAqpTGj+2RA77+Qy
-         FSE6K0KqILx6IBGARBnxlSbeZrdXP5JBOqc2UCv/ZaYQsgAMXVSo2Qvy3RVbc8OOQtrc
-         oGlA==
-X-Gm-Message-State: AOAM533RXFKi4PrVGkAta7IY6KvORt2Z+QBDlwQUUOvs+gU97d+apJeY
-        Qo1nP5KJoFY5ZjxAGv50yUw=
-X-Google-Smtp-Source: ABdhPJzUazpfquzpptuo/Kh04x/CUMN5QoeglDjTPCDvgVeKcfDSgeWpuiJhgwD0wHr36HJ3ui8XWw==
-X-Received: by 2002:a0c:d40a:: with SMTP id t10mr3929023qvh.19.1622805082245;
-        Fri, 04 Jun 2021 04:11:22 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l20sm2457475qtx.53.2021.06.04.04.11.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Jun 2021 04:11:21 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 4 Jun 2021 04:11:20 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Ninad Malwade <nmalwade@nvidia.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, Bibek Basu <bbasu@nvidia.com>,
-        Nicolin Chen <nicolinc@nvidia.com>,
-        Rajkumar Kasirajan <rkasirajan@nvidia.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ina3221: use CVRF only for single-shot conversion
-Message-ID: <20210604111120.GA1446736@roeck-us.net>
-References: <1622789683-30931-1-git-send-email-nmalwade@nvidia.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BFn1qfiNvnwRZi4VjO32E8LqQi+VQATGvLPuwEYpYIQ=;
+        b=f7FCC6ocZv/VIsZO0Vs7CbFDrR3yMDirErDH4vMt0rxArDxW0n/TB5IiyiLBXY4fsH
+         Qyboc2r6iSuWmJlST7kCzKPmNExxJTF870EKsCdlaK45VDhGQ/4cHIsDIIA1lIrah4g1
+         QqBfMWijxb8NIWD2ForBO6Jq5u/Iljbb3is1L2Bgm5GgOY53CYfWeRCbNd1xY8g/T+a9
+         2LC+Qajoq0aQKmqjBS+OXDrhSojk66nYNTJyMkghO3tpeXU0KtqL8LomIG0LlEil5JVJ
+         J8d/FByyF2znfPxg3C1XOGjQH8JOoG7cu6RIhqASywAIHMDy6K+u0RCLP/zU/dHq3aIV
+         rVJg==
+X-Gm-Message-State: AOAM530tMnkfk11/FP5PnByQz0RyT0Y3LeNawLlJIoOLUFdsjknPAE5D
+        GLwjTeKEW6vUs9NNnkjrh4mIaGGfRdp+QmncJYVorg==
+X-Google-Smtp-Source: ABdhPJxSg5fo/D37QyxoC95Za4T7o2MJxF5TuPhdZdeuDaxsNpce9Hxylujf1iGHudpy2Y6UyjBINY7UHgD6jjkpfE4=
+X-Received: by 2002:a92:c10a:: with SMTP id p10mr3666040ile.183.1622808972650;
+ Fri, 04 Jun 2021 05:16:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1622789683-30931-1-git-send-email-nmalwade@nvidia.com>
+References: <20210528103828.53320-1-robert.marko@sartura.hr> <479725a2-7d85-1489-4228-ddff16b52287@roeck-us.net>
+In-Reply-To: <479725a2-7d85-1489-4228-ddff16b52287@roeck-us.net>
+From:   Robert Marko <robert.marko@sartura.hr>
+Date:   Fri, 4 Jun 2021 14:16:02 +0200
+Message-ID: <CA+HBbNGu6kkp23wHrnVeM7vry6nT0-P66U0V8KXCQ=kCcs+n8g@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] hwmon: (pmbus) Add driver for Delta DPS-920AB PSU
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     robh+dt@kernel.org, jdelvare@suse.com, corbet@lwn.net,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, trivial@kernel.org,
+        Jonathan.Cameron@huawei.com, alexandre.belloni@bootlin.com,
+        sst@poczta.fm, krzk@kernel.org, alexandru.ardelean@analog.com,
+        devicetree@vger.kernel.org, Luka Perkov <luka.perkov@sartura.hr>,
+        jmp@epiphyte.org, Paul Menzel <pmenzel@molgen.mpg.de>,
+        Donald Buczek <buczek@molgen.mpg.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Jun 04, 2021 at 02:54:43PM +0800, Ninad Malwade wrote:
-> As per current logic the wait time per conversion is arouns 430ms
-> for 512 samples and around 860ms for 1024 samples for 3 channels
-> considering 140us as the bus voltage and shunt voltage sampling
-> conversion time.
-> 
-> This waiting time is a lot for the continuous mode and even for
-> the single shot mode. For continuous mode when moving average is
-> considered the waiting for CVRF bit is not required and the data
-> from the previous conversion is sufficuent. As mentioned in the
-> datasheet the conversion ready bit is provided to help coordinate
-> single-shot conversions, we can restrict the use to single-shot
-> mode only.
-> 
-> Also, the conversion time is for the averaged samples, the wait
-> time for the polling can omit the number of samples consideration.
-> 
-Makes sense. Applied.
+On Fri, May 28, 2021 at 3:28 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 5/28/21 3:38 AM, Robert Marko wrote:
+> > This adds support for the Delta DPS-920AB PSU.
+> >
+> > Only missing feature is fan control which the PSU supports.
+> >
+> > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> > ---
+> > Changes in v2:
+> > * Check for Manufacturer and Model
+> > * Restrict word read/write to supported only
+> > * Update documentation to reflect driver changes
+> > * Add basic debugfs entries
+> >
+> >   Documentation/hwmon/dps920ab.rst |  73 ++++++++++
+> >   Documentation/hwmon/index.rst    |   1 +
+> >   drivers/hwmon/pmbus/Kconfig      |   9 ++
+> >   drivers/hwmon/pmbus/Makefile     |   1 +
+> >   drivers/hwmon/pmbus/dps920ab.c   | 229 +++++++++++++++++++++++++++++++
+> >   5 files changed, 313 insertions(+)
+> >   create mode 100644 Documentation/hwmon/dps920ab.rst
+> >   create mode 100644 drivers/hwmon/pmbus/dps920ab.c
+> >
+> > diff --git a/Documentation/hwmon/dps920ab.rst b/Documentation/hwmon/dps920ab.rst
+> > new file mode 100644
+> > index 000000000000..c33b4cdc0a60
+> > --- /dev/null
+> > +++ b/Documentation/hwmon/dps920ab.rst
+> > @@ -0,0 +1,73 @@
+> > +.. SPDX-License-Identifier: GPL-2.0-or-later
+> > +
+> > +Kernel driver dps920ab
+> > +========================
+> > +
+> > +Supported chips:
+> > +
+> > +  * Delta DPS920AB
+> > +
+> > +    Prefix: 'dps920ab'
+> > +
+> > +    Addresses scanned: -
+> > +
+> > +Authors:
+> > +    Robert Marko <robert.marko@sartura.hr>
+> > +
+> > +
+> > +Description
+> > +-----------
+> > +
+> > +This driver implements support for Delta DPS920AB 920W 54V DC single output
+> > +power supply with PMBus support.
+> > +
+> > +The driver is a client driver to the core PMBus driver.
+> > +Please see Documentation/hwmon/pmbus.rst for details on PMBus client drivers.
+> > +
+> > +
+> > +Usage Notes
+> > +-----------
+> > +
+> > +This driver does not auto-detect devices. You will have to instantiate the
+> > +devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
+> > +details.
+> > +
+> > +
+> > +Sysfs entries
+> > +-------------
+> > +
+> > +======================= ======================================================
+> > +curr1_label          "iin"
+> > +curr1_input          Measured input current
+> > +curr1_alarm          Input current high alarm
+> > +
+> > +curr2_label          "iout1"
+> > +curr2_input          Measured output current
+> > +curr2_max            Maximum output current
+> > +curr2_rated_max              Maximum rated output current
+> > +
+> > +in1_label            "vin"
+> > +in1_input            Measured input voltage
+> > +in1_alarm            Input voltage alarm
+> > +
+> > +in2_label            "vout1"
+> > +in2_input            Measured output voltage
+> > +in2_rated_min                Minimum rated output voltage
+> > +in2_rated_max                Maximum rated output voltage
+> > +in2_alarm            Output voltage alarm
+> > +
+> > +power1_label         "pin"
+> > +power1_input         Measured input power
+> > +power1_alarm         Input power high alarm
+> > +
+> > +power2_label         "pout1"
+> > +power2_input         Measured output power
+> > +power2_rated_max     Maximum rated output power
+> > +
+> > +temp[1-3]_input              Measured temperature
+> > +temp[1-3]_alarm              Temperature alarm
+> > +
+> > +fan1_alarm           Fan 1 warning.
+> > +fan1_fault           Fan 1 fault.
+> > +fan1_input           Fan 1 speed in RPM.
+> > +======================= ======================================================
+> > diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+> > index 8d5a2df1ecb6..b24436f22052 100644
+> > --- a/Documentation/hwmon/index.rst
+> > +++ b/Documentation/hwmon/index.rst
+> > @@ -54,6 +54,7 @@ Hardware Monitoring Kernel Drivers
+> >      dell-smm-hwmon
+> >      dme1737
+> >      drivetemp
+> > +   dps920ab
+> >      ds1621
+> >      ds620
+> >      emc1403
+> > diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> > index 32d2fc850621..865ade0aa205 100644
+> > --- a/drivers/hwmon/pmbus/Kconfig
+> > +++ b/drivers/hwmon/pmbus/Kconfig
+> > @@ -66,6 +66,15 @@ config SENSORS_IBM_CFFPS
+> >         This driver can also be built as a module. If so, the module will
+> >         be called ibm-cffps.
+> >
+> > +config SENSORS_DPS920AB
+> > +     tristate "Delta DPS920AB Power Supply"
+> > +     help
+> > +       If you say yes here you get hardware monitoring support for Delta
+> > +       DPS920AB Power Supplies.
+> > +
+> > +       This driver can also be built as a module. If so, the module will
+> > +       be called dps920ab.
+> > +
+> >   config SENSORS_INSPUR_IPSPS
+> >       tristate "INSPUR Power System Power Supply"
+> >       help
+> > diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> > index 6a4ba0fdc1db..f59ba0123d68 100644
+> > --- a/drivers/hwmon/pmbus/Makefile
+> > +++ b/drivers/hwmon/pmbus/Makefile
+> > @@ -9,6 +9,7 @@ obj-$(CONFIG_SENSORS_ADM1266) += adm1266.o
+> >   obj-$(CONFIG_SENSORS_ADM1275)       += adm1275.o
+> >   obj-$(CONFIG_SENSORS_BEL_PFE)       += bel-pfe.o
+> >   obj-$(CONFIG_SENSORS_IBM_CFFPS)     += ibm-cffps.o
+> > +obj-$(CONFIG_SENSORS_DPS920AB)       += dps920ab.o
+> >   obj-$(CONFIG_SENSORS_INSPUR_IPSPS) += inspur-ipsps.o
+> >   obj-$(CONFIG_SENSORS_IR35221)       += ir35221.o
+> >   obj-$(CONFIG_SENSORS_IR38064)       += ir38064.o
+> > diff --git a/drivers/hwmon/pmbus/dps920ab.c b/drivers/hwmon/pmbus/dps920ab.c
+> > new file mode 100644
+> > index 000000000000..de084a42dec3
+> > --- /dev/null
+> > +++ b/drivers/hwmon/pmbus/dps920ab.c
+> > @@ -0,0 +1,229 @@
+> > +// SPDX-License-Identifier: GPL-2.0-or-later
+> > +/*
+> > + * Driver for Delta DPS920AB PSU
+> > + *
+> > + * Copyright (C) 2021 Delta Networks, Inc.
+> > + * Copyright (C) 2021 Sartura Ltd.
+> > + */
+> > +
+> > +#include <linux/debugfs.h>
+> > +#include <linux/i2c.h>
+> > +#include <linux/module.h>
+> > +#include <linux/of_device.h>
+> > +#include "pmbus.h"
+> > +
+> > +struct dps920ab_data {
+> > +     struct i2c_client *client;
+> > +     struct dentry *debugfs_dir;
+> > +};
+> > +
+> > +static int dps920ab_read_word_data(struct i2c_client *client, int page, int phase, int reg)
+> > +{
+> > +     int ret;
+> > +
+> > +     /*
+> > +      * This masks commands which are not supported.
+> > +      * PSU advertises that all features are supported,
+> > +      * in reality that unfortunately is not true.
+> > +      * So enable only those that the datasheet confirms.
+> > +      */
+> > +     switch (reg) {
+> > +     case PMBUS_FAN_COMMAND_1:
+> > +     case PMBUS_IOUT_OC_WARN_LIMIT:
+> > +     case PMBUS_STATUS_WORD:
+> > +     case PMBUS_READ_VIN:
+> > +     case PMBUS_READ_IIN:
+> > +     case PMBUS_READ_VOUT:
+> > +     case PMBUS_READ_IOUT:
+> > +     case PMBUS_READ_TEMPERATURE_1:
+> > +     case PMBUS_READ_TEMPERATURE_2:
+> > +     case PMBUS_READ_TEMPERATURE_3:
+> > +     case PMBUS_READ_FAN_SPEED_1:
+> > +     case PMBUS_READ_POUT:
+> > +     case PMBUS_READ_PIN:
+> > +     case PMBUS_MFR_VOUT_MIN:
+> > +     case PMBUS_MFR_VOUT_MAX:
+> > +     case PMBUS_MFR_IOUT_MAX:
+> > +     case PMBUS_MFR_POUT_MAX:
+> > +             break;
+> > +     default:
+> > +             return -ENXIO;
+> > +     }
+> > +
+> > +     ret = pmbus_set_page(client, page, phase);
+> > +     if (ret < 0)
+> > +             return ret;
+> > +
+> > +     return i2c_smbus_read_word_data(client, reg);
+>
+> I find the code a bit confusing. I think it would be better to move the action code
+> into the case statement.
 
-Thanks,
-Guenter
+Agree, makes sense.
+>
+> > +}
+> > +
+> > +static int dps920ab_write_word_data(struct i2c_client *client, int page, int reg,
+> > +                                 u16 word)
+> > +{
+> > +     int ret;
+> > +
+> > +     /*
+> > +      * This masks commands which are not supported.
+> > +      * PSU only has one R/W register and that is
+> > +      * for the fan.
+> > +      */
+> > +     switch (reg) {
+> > +     case PMBUS_FAN_COMMAND_1:
+> > +             break;
+> > +     default:
+> > +             ret = -ENODATA;
+> > +     }
+> > +
+>
+> Does this work ? It is the wrong error message for a failed write;
+> it should probably return -EACCES.
 
-> Signed-off-by: Ninad Malwade <nmalwade@nvidia.com>
-> ---
->  drivers/hwmon/ina3221.c | 22 +++++++++++-----------
->  1 file changed, 11 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
-> index c602583..58d3828 100644
-> --- a/drivers/hwmon/ina3221.c
-> +++ b/drivers/hwmon/ina3221.c
-> @@ -196,13 +196,11 @@ static inline u32 ina3221_reg_to_interval_us(u16 config)
->  	u32 channels = hweight16(config & INA3221_CONFIG_CHs_EN_MASK);
->  	u32 vbus_ct_idx = INA3221_CONFIG_VBUS_CT(config);
->  	u32 vsh_ct_idx = INA3221_CONFIG_VSH_CT(config);
-> -	u32 samples_idx = INA3221_CONFIG_AVG(config);
-> -	u32 samples = ina3221_avg_samples[samples_idx];
->  	u32 vbus_ct = ina3221_conv_time[vbus_ct_idx];
->  	u32 vsh_ct = ina3221_conv_time[vsh_ct_idx];
->  
->  	/* Calculate total conversion time */
-> -	return channels * (vbus_ct + vsh_ct) * samples;
-> +	return channels * (vbus_ct + vsh_ct);
->  }
->  
->  static inline int ina3221_wait_for_data(struct ina3221_data *ina)
-> @@ -288,13 +286,14 @@ static int ina3221_read_in(struct device *dev, u32 attr, int channel, long *val)
->  			return -ENODATA;
->  
->  		/* Write CONFIG register to trigger a single-shot measurement */
-> -		if (ina->single_shot)
-> +		if (ina->single_shot) {
->  			regmap_write(ina->regmap, INA3221_CONFIG,
->  				     ina->reg_config);
->  
-> -		ret = ina3221_wait_for_data(ina);
-> -		if (ret)
-> -			return ret;
-> +			ret = ina3221_wait_for_data(ina);
-> +			if (ret)
-> +				return ret;
-> +		}
->  
->  		ret = ina3221_read_value(ina, reg, &regval);
->  		if (ret)
-> @@ -344,13 +343,14 @@ static int ina3221_read_curr(struct device *dev, u32 attr,
->  			return -ENODATA;
->  
->  		/* Write CONFIG register to trigger a single-shot measurement */
-> -		if (ina->single_shot)
-> +		if (ina->single_shot) {
->  			regmap_write(ina->regmap, INA3221_CONFIG,
->  				     ina->reg_config);
->  
-> -		ret = ina3221_wait_for_data(ina);
-> -		if (ret)
-> -			return ret;
-> +			ret = ina3221_wait_for_data(ina);
-> +			if (ret)
-> +				return ret;
-> +		}
->  
->  		fallthrough;
->  	case hwmon_curr_crit:
+It appears to work fine, I was looking at other drivers, and all of them
+use -ENODATA for unsupported word registers.
+>
+> > +     ret = pmbus_set_page(client, page, 0xff);
+> > +     if (ret < 0)
+> > +             return ret;
+> > +
+> There is only one page, so what would this be for ?
+>
+> > +     return i2c_smbus_write_word_data(client, reg, word);
+>
+> Same as avove; I think it would be better to handle the
+> access code in the case statement.
+
+Agreed, will do.
+>
+> > +}
+> > +
+> > +static struct pmbus_driver_info dps920ab_info = {
+> > +     .pages = 1,
+> > +
+> > +     .format[PSC_VOLTAGE_IN] = linear,
+> > +     .format[PSC_VOLTAGE_OUT] = linear,
+> > +     .format[PSC_CURRENT_IN] = linear,
+> > +     .format[PSC_CURRENT_OUT] = linear,
+> > +     .format[PSC_POWER] = linear,
+> > +     .format[PSC_FAN] = linear,
+> > +     .format[PSC_TEMPERATURE] = linear,
+> > +
+> > +     .func[0] =
+> > +             PMBUS_HAVE_VIN | PMBUS_HAVE_IIN | PMBUS_HAVE_PIN |
+> > +             PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT | PMBUS_HAVE_POUT |
+> > +             PMBUS_HAVE_TEMP  | PMBUS_HAVE_TEMP2 | PMBUS_HAVE_TEMP3 |
+> > +             PMBUS_HAVE_FAN12 | PMBUS_HAVE_STATUS_FAN12 |
+> > +             PMBUS_HAVE_STATUS_VOUT | PMBUS_HAVE_STATUS_IOUT |
+> > +             PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_STATUS_TEMP,
+> > +     .read_word_data = dps920ab_read_word_data,
+> > +     .write_word_data = dps920ab_write_word_data,
+> > +};
+> > +
+> > +static int dps920ab_mfr_id_show(struct seq_file *s, void *data)
+> > +{
+> > +     struct dps920ab_data *priv = s->private;
+> > +     u8 buf[I2C_SMBUS_BLOCK_MAX + 1];
+> > +     int ret;
+> > +
+> > +     ret = i2c_smbus_read_block_data(priv->client, PMBUS_MFR_ID, buf);
+> > +     if (ret < 0)
+> > +             return ret;
+> > +
+>         buf[ret] = '\0';
+>
+> missing here. With that, the two functions are effectively the same
+> and can be merged into one with the register as additional parameter.
+> Also, you might consider storing this information in struct dps920ab_data.
+> After all, it is unlikely to change, so reading it over and over again
+> has no real value.
+
+Ok, makes sense.
+
+>
+> > +     seq_printf(s, "%s\n", buf);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +DEFINE_SHOW_ATTRIBUTE(dps920ab_mfr_id);
+> > +
+> > +static int dps920ab_mfr_model_show(struct seq_file *s, void *data)
+> > +{
+> > +     struct dps920ab_data *priv = s->private;
+> > +     u8 buf[I2C_SMBUS_BLOCK_MAX + 1];
+> > +     int ret;
+> > +
+> > +     ret = i2c_smbus_read_block_data(priv->client, PMBUS_MFR_MODEL, buf);
+> > +     if (ret < 0)
+> > +             return ret;
+> > +
+> > +     buf[ret] = '\0';
+> > +
+> > +     seq_printf(s, "%s\n", buf);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +DEFINE_SHOW_ATTRIBUTE(dps920ab_mfr_model);
+> > +
+> > +static void dps920ab_init_debugfs(struct dps920ab_data *data)
+> > +{
+> > +     struct dentry *root;
+> > +
+> > +     root = pmbus_get_debugfs_dir(data->client);
+> > +     if (!root)
+> > +             return;
+> > +
+> > +     data->debugfs_dir = debugfs_create_dir(data->client->name, root);
+> > +     if (!data->debugfs_dir)
+> > +             return;
+> > +
+> > +     debugfs_create_file("mfr_id",
+> > +                         0400,
+> > +                         data->debugfs_dir,
+> > +                         data,
+> > +                         &dps920ab_mfr_id_fops);
+> > +
+> > +     debugfs_create_file("mfr_model",
+> > +                         0400,
+> > +                         data->debugfs_dir,
+> > +                         data,
+> > +                         &dps920ab_mfr_model_fops);
+> > +}
+> > +
+> > +static int dps920ab_probe(struct i2c_client *client)
+> > +{
+> > +     u8 buf[I2C_SMBUS_BLOCK_MAX + 1];
+> > +     struct dps920ab_data *data;
+> > +     int ret;
+> > +
+> > +     ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, buf);
+> > +     if (ret < 0) {
+> > +             dev_err(&client->dev, "Failed to read Manufacturer ID\n");
+> > +             return ret;
+> > +     }
+> > +     if (ret != 5 || strncmp(buf, "DELTA", 5)) {
+>
+> Does this return 5 or 6 ? Just asking, because other supplies from Delta
+> return 6.
+
+This was weird for me as well, but it actually returns 5, I think only
+the brick q54sj108a2
+does that as well.
+
+I will send out a v3 today.
+
+Regards,
+Robert
+>
+> > +             buf[ret] = '\0';
+> > +             dev_err(&client->dev, "Unsupported Manufacturer ID '%s'\n", buf);
+> > +             return -ENODEV;
+> > +     }
+> > +
+> > +     ret = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, buf);
+> > +     if (ret < 0) {
+> > +             dev_err(&client->dev, "Failed to read Manufacturer Model\n");
+> > +             return ret;
+> > +     }
+> > +     if (ret != 11 || strncmp(buf, "DPS-920AB", 9)) {
+> > +             buf[ret] = '\0';
+> > +             dev_err(&client->dev, "Unsupported Manufacturer Model '%s'\n", buf);
+> > +             return -ENODEV;
+> > +     }
+> > +
+> > +     ret = pmbus_do_probe(client, &dps920ab_info);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     data = devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
+> > +     if (!data)
+> > +             return -ENOMEM;
+> > +
+> > +     data->client = client;
+> > +
+> > +     dps920ab_init_debugfs(data);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static const struct of_device_id __maybe_unused dps920ab_of_match[] = {
+> > +     { .compatible = "delta,dps920ab", },
+> > +     {}
+> > +};
+> > +
+> > +MODULE_DEVICE_TABLE(of, dps920ab_of_match);
+> > +
+> > +static struct i2c_driver dps920ab_driver = {
+> > +     .driver = {
+> > +                .name = "dps920ab",
+> > +                .of_match_table = of_match_ptr(dps920ab_of_match),
+> > +     },
+> > +     .probe_new = dps920ab_probe,
+> > +};
+> > +
+> > +module_i2c_driver(dps920ab_driver);
+> > +
+> > +MODULE_AUTHOR("Robert Marko <robert.marko@sartura.hr>");
+> > +MODULE_DESCRIPTION("PMBus driver for Delta DPS920AB PSU");
+> > +MODULE_LICENSE("GPL");
+> >
+>
+
+
+-- 
+Robert Marko
+Staff Embedded Linux Engineer
+Sartura Ltd.
+Lendavska ulica 16a
+10000 Zagreb, Croatia
+Email: robert.marko@sartura.hr
+Web: www.sartura.hr
