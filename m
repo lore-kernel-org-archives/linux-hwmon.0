@@ -2,108 +2,209 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52468C47082
-	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Jun 2021 05:30:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FD31C49360
+	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Jun 2021 13:18:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2844A613EA
-	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Jun 2021 05:30:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E035761406
+	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Jun 2021 13:18:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbhFEFbq (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 5 Jun 2021 01:31:46 -0400
-Received: from mx3.molgen.mpg.de ([141.14.17.11]:49543 "EHLO mx1.molgen.mpg.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229660AbhFEFbq (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 5 Jun 2021 01:31:46 -0400
-Received: from [192.168.0.3] (ip5f5aeece.dynamic.kabel-deutschland.de [95.90.238.206])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 2D75361E64762;
-        Sat,  5 Jun 2021 07:29:58 +0200 (CEST)
-Subject: Re: [PATCH] hwmon: (pmbus_core) Check adapter PEC support
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Madhava Reddy Siddareddygari <msiddare@cisco.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210604135714.529042-1-pmenzel@molgen.mpg.de>
- <20210605005124.GA255680@roeck-us.net>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-Message-ID: <8534d106-0936-a41d-b9c7-2f527b315dae@molgen.mpg.de>
-Date:   Sat, 5 Jun 2021 07:29:57 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S230262AbhFENUb (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 5 Jun 2021 09:20:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35038 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230050AbhFENU0 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 5 Jun 2021 09:20:26 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8B7676140C;
+        Sat,  5 Jun 2021 13:18:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1622899117;
+        bh=oJLjhT+Bdkuogp9lcH0/DqQMHssScmlrFluWHGdXmSs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=KfRX9ZYH+GSgzlTzpxjctPEmvJkfTKXl+Y+RucBzSz4WBnbvAWthrJ/curB8ax41d
+         0RamzCUbuHW+hNvsvxFRNLKpwhOj6yb5j+G4AvESC4L/Ra8OFvHySvf0In/pjnoYho
+         eY0513uUzhTlAd81LYiZhM6d2eqjTpr7yOp0/3DCmJ+GuyAF6WqO8Qm1KuhLNbxF9b
+         yJTI8f1KZmiDb5cy+VNqUfelbe5X2IHFBMjmYFqyjzC6dFH+JcvuqE43jlUMhFuRed
+         3tc3s4M5VtPfikIOxkkQLqaG0CgwsjLGBqPIdOsXSEfmrN3+1RgsbpsRRxwHBsB0s5
+         0vEzE1EocfgEA==
+Received: by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1lpWCB-008GEU-71; Sat, 05 Jun 2021 15:18:35 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     "Jonathan Corbet" <corbet@lwn.net>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        coresight@lists.linaro.org, devicetree@vger.kernel.org,
+        kunit-dev@googlegroups.com, kvm@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-security-module@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH 00/34] docs: avoid using ReST :doc:`foo` tag
+Date:   Sat,  5 Jun 2021 15:17:59 +0200
+Message-Id: <cover.1622898327.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-In-Reply-To: <20210605005124.GA255680@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Dear Guenter,
+As discussed at:
+	https://lore.kernel.org/linux-doc/871r9k6rmy.fsf@meer.lwn.net/
+
+It is better to avoid using :doc:`foo` to refer to Documentation/foo.rst, as the
+automarkup.py extension should handle it automatically, on most cases.
+
+There are a couple of exceptions to this rule:
+
+1. when :doc:  tag is used to point to a kernel-doc DOC: markup;
+2. when it is used with a named tag, e. g. :doc:`some name <foo>`;
+
+It should also be noticed that automarkup.py has currently an issue:
+if one use a markup like:
+
+	Documentation/dev-tools/kunit/api/test.rst
+	  - documents all of the standard testing API excluding mocking
+	    or mocking related features.
+
+or, even:
+
+	Documentation/dev-tools/kunit/api/test.rst
+	    documents all of the standard testing API excluding mocking
+	    or mocking related features.
+	
+The automarkup.py will simply ignore it. Not sure why. This patch series
+avoid the above patterns (which is present only on 4 files), but it would be
+nice to have a followup patch fixing the issue at automarkup.py.
+
+On this series:
+
+Patch 1 manually adjust the references inside driver-api/pm/devices.rst,
+as there it uses :file:`foo` to refer to some Documentation/ files;
+
+Patch 2 converts a table at Documentation/dev-tools/kunit/api/index.rst
+into a list, carefully avoiding the 
+
+Patch 3 converts the cross-references at the media documentation, also
+avoiding the automarkup.py bug;
+
+Patches 4-34 convert the other occurrences via a replace script. They were
+manually edited, in order to honour 80-columns where possible.
+
+I did a diff between the Sphinx 2.4.4 output before and after this patch
+series in order to double-check that all converted Documentation/ 
+references will produce <a href=<foo>.rst>foo title</a> tags.
+
+Mauro Carvalho Chehab (34):
+  docs: devices.rst: better reference documentation docs
+  docs: dev-tools: kunit: don't use a table for docs name
+  media: docs: */media/index.rst: don't use ReST doc:`foo`
+  media: userspace-api: avoid using ReST :doc:`foo` markup
+  media: driver-api: drivers: avoid using ReST :doc:`foo` markup
+  media: admin-guide: avoid using ReST :doc:`foo` markup
+  docs: admin-guide: pm: avoid using ReSt :doc:`foo` markup
+  docs: admin-guide: hw-vuln: avoid using ReST :doc:`foo` markup
+  docs: admin-guide: sysctl: avoid using ReST :doc:`foo` markup
+  docs: block: biodoc.rst: avoid using ReSt :doc:`foo` markup
+  docs: bpf: bpf_lsm.rst: avoid using ReSt :doc:`foo` markup
+  docs: core-api: avoid using ReSt :doc:`foo` markup
+  docs: dev-tools: testing-overview.rst: avoid using ReSt :doc:`foo`
+    markup
+  docs: dev-tools: kunit: avoid using ReST :doc:`foo` markup
+  docs: devicetree: bindings: submitting-patches.rst: avoid using ReSt
+    :doc:`foo` markup
+  docs: doc-guide: avoid using ReSt :doc:`foo` markup
+  docs: driver-api: avoid using ReSt :doc:`foo` markup
+  docs: driver-api: gpio: using-gpio.rst: avoid using ReSt :doc:`foo`
+    markup
+  docs: driver-api: surface_aggregator: avoid using ReSt :doc:`foo`
+    markup
+  docs: driver-api: usb: avoid using ReSt :doc:`foo` markup
+  docs: firmware-guide: acpi: avoid using ReSt :doc:`foo` markup
+  docs: hwmon: adm1177.rst: avoid using ReSt :doc:`foo` markup
+  docs: i2c: avoid using ReSt :doc:`foo` markup
+  docs: kernel-hacking: hacking.rst: avoid using ReSt :doc:`foo` markup
+  docs: networking: devlink: avoid using ReSt :doc:`foo` markup
+  docs: PCI: endpoint: pci-endpoint-cfs.rst: avoid using ReSt :doc:`foo`
+    markup
+  docs: PCI: pci.rst: avoid using ReSt :doc:`foo` markup
+  docs: process: submitting-patches.rst: avoid using ReSt :doc:`foo`
+    markup
+  docs: security: landlock.rst: avoid using ReSt :doc:`foo` markup
+  docs: trace: coresight: coresight.rst: avoid using ReSt :doc:`foo`
+    markup
+  docs: trace: ftrace.rst: avoid using ReSt :doc:`foo` markup
+  docs: userspace-api: landlock.rst: avoid using ReSt :doc:`foo` markup
+  docs: virt: kvm: s390-pv-boot.rst: avoid using ReSt :doc:`foo` markup
+  docs: x86: avoid using ReSt :doc:`foo` markup
+
+ .../PCI/endpoint/pci-endpoint-cfs.rst         |  2 +-
+ Documentation/PCI/pci.rst                     |  6 +--
+ .../special-register-buffer-data-sampling.rst |  3 +-
+ Documentation/admin-guide/media/bt8xx.rst     | 15 ++++----
+ Documentation/admin-guide/media/bttv.rst      | 21 ++++++-----
+ Documentation/admin-guide/media/index.rst     | 12 +++---
+ Documentation/admin-guide/media/saa7134.rst   |  3 +-
+ Documentation/admin-guide/pm/intel_idle.rst   | 16 +++++---
+ Documentation/admin-guide/pm/intel_pstate.rst |  9 +++--
+ Documentation/admin-guide/sysctl/abi.rst      |  2 +-
+ Documentation/admin-guide/sysctl/kernel.rst   | 37 ++++++++++---------
+ Documentation/block/biodoc.rst                |  2 +-
+ Documentation/bpf/bpf_lsm.rst                 | 13 ++++---
+ .../core-api/bus-virt-phys-mapping.rst        |  2 +-
+ Documentation/core-api/dma-api.rst            |  5 ++-
+ Documentation/core-api/dma-isa-lpc.rst        |  2 +-
+ Documentation/core-api/index.rst              |  4 +-
+ Documentation/dev-tools/kunit/api/index.rst   |  8 ++--
+ Documentation/dev-tools/kunit/faq.rst         |  2 +-
+ Documentation/dev-tools/kunit/index.rst       | 14 +++----
+ Documentation/dev-tools/kunit/start.rst       |  6 +--
+ Documentation/dev-tools/kunit/tips.rst        |  5 ++-
+ Documentation/dev-tools/kunit/usage.rst       |  8 ++--
+ Documentation/dev-tools/testing-overview.rst  | 16 ++++----
+ .../bindings/submitting-patches.rst           | 11 +++---
+ Documentation/doc-guide/contributing.rst      |  8 ++--
+ Documentation/driver-api/gpio/using-gpio.rst  |  4 +-
+ Documentation/driver-api/ioctl.rst            |  2 +-
+ .../driver-api/media/drivers/bttv-devel.rst   |  2 +-
+ Documentation/driver-api/media/index.rst      | 10 +++--
+ Documentation/driver-api/pm/devices.rst       |  8 ++--
+ .../surface_aggregator/clients/index.rst      |  3 +-
+ .../surface_aggregator/internal.rst           | 15 ++++----
+ .../surface_aggregator/overview.rst           |  6 ++-
+ Documentation/driver-api/usb/dma.rst          |  6 +--
+ .../acpi/dsd/data-node-references.rst         |  3 +-
+ .../firmware-guide/acpi/dsd/graph.rst         |  2 +-
+ .../firmware-guide/acpi/enumeration.rst       |  7 ++--
+ Documentation/hwmon/adm1177.rst               |  3 +-
+ Documentation/i2c/instantiating-devices.rst   |  2 +-
+ Documentation/i2c/old-module-parameters.rst   |  3 +-
+ Documentation/i2c/smbus-protocol.rst          |  4 +-
+ Documentation/kernel-hacking/hacking.rst      |  4 +-
+ .../networking/devlink/devlink-region.rst     |  2 +-
+ .../networking/devlink/devlink-trap.rst       |  4 +-
+ Documentation/process/submitting-patches.rst  | 32 ++++++++--------
+ Documentation/security/landlock.rst           |  3 +-
+ Documentation/trace/coresight/coresight.rst   |  8 ++--
+ Documentation/trace/ftrace.rst                |  2 +-
+ Documentation/userspace-api/landlock.rst      | 11 +++---
+ .../userspace-api/media/glossary.rst          |  2 +-
+ Documentation/userspace-api/media/index.rst   | 12 +++---
+ Documentation/virt/kvm/s390-pv-boot.rst       |  2 +-
+ Documentation/x86/boot.rst                    |  4 +-
+ Documentation/x86/mtrr.rst                    |  2 +-
+ 55 files changed, 217 insertions(+), 183 deletions(-)
+
+-- 
+2.31.1
 
 
-Am 05.06.21 um 02:51 schrieb Guenter Roeck:
-> On Fri, Jun 04, 2021 at 03:57:14PM +0200, Paul Menzel wrote:
->> From: Madhava Reddy Siddareddygari <msiddare@cisco.com>
->>
->> Currently, for Packet Error Checking (PEC) only the controller
->> is checked for support. This causes problems on the cisco-8000
->> platform where a SMBUS transaction errors are observed. This is
->> because PEC has to be enabled only if both controller and
->> adapter support it.
->>
->> Added code to check PEC capability for adapter and enable it
->> only if both controller and adapter supports PEC.
->>
->> Signed-off-by: Madhava Reddy Siddareddygari <msiddare@cisco.com>
->> [Upstream from SONiC https://github.com/Azure/sonic-linux-kernel/pull/215]
->> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
->> ---
->>   drivers/hwmon/pmbus/pmbus_core.c | 10 ++++++----
->>   1 file changed, 6 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
->> index bbd745178147..7fbd82b7560d 100644
->> --- a/drivers/hwmon/pmbus/pmbus_core.c
->> +++ b/drivers/hwmon/pmbus/pmbus_core.c
->> @@ -2214,11 +2214,13 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
->>   		data->has_status_word = true;
->>   	}
->>   
->> -	/* Enable PEC if the controller supports it */
->> -	if (!(data->flags & PMBUS_NO_CAPABILITY)) {
-> 
-> What is the rationale for removing this check ?
-> AFAICS that will render the ibm-cffps driver unusable.
-
-I screwed up forward porting this change. Thank you for spotting this. I 
-sent a second iteration/version 2 of this patch.
-
-
-Kind regards,
-
-Paul
-
-
->> -		ret = i2c_smbus_read_byte_data(client, PMBUS_CAPABILITY);
->> -		if (ret >= 0 && (ret & PB_CAPABILITY_ERROR_CHECK))
->> +	/* Enable PEC if the controller and bus supports it */
->> +	ret = i2c_smbus_read_byte_data(client, PMBUS_CAPABILITY);
->> +	if (ret >= 0 && (ret & PB_CAPABILITY_ERROR_CHECK)) {
->> +		if (i2c_check_functionality(client->adapter,
->> +			I2C_FUNC_SMBUS_PEC)) {
->>   			client->flags |= I2C_CLIENT_PEC;
->> +		}
->>   	}
->>   
->>   	/*
->> -- 
->> 2.32.0.rc2
