@@ -6,42 +6,42 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
 	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 149EBC4743E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D841C4743F
 	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Jun 2021 00:41:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ECEF861244
-	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Jun 2021 00:41:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2759D60FEE
+	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Jun 2021 00:41:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231180AbhFEAnT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        id S230185AbhFEAnT (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
         Fri, 4 Jun 2021 20:43:19 -0400
-Received: from mga04.intel.com ([192.55.52.120]:55495 "EHLO mga04.intel.com"
+Received: from mga03.intel.com ([134.134.136.65]:58622 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231177AbhFEAnS (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        id S231172AbhFEAnS (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
         Fri, 4 Jun 2021 20:43:18 -0400
-IronPort-SDR: R75KuCi4qIyIANvvEqpNyKOyoYAmiWOEQEZHDIJrDx8I1+BtHVhAu3e3/i0S2Yqfhhs9QU8oyp
- gXS+Xq2mWFhw==
-X-IronPort-AV: E=McAfee;i="6200,9189,10005"; a="202536240"
+IronPort-SDR: ulEEwSDZYgibs1Gbn+keGBuASZ1RjRqxi3pUPFOac3BFTHe8IN6APzA8rWrsiWbny5pF2bcv4y
+ JpxWV9IHL6Vg==
+X-IronPort-AV: E=McAfee;i="6200,9189,10005"; a="204423885"
 X-IronPort-AV: E=Sophos;i="5.83,249,1616482800"; 
-   d="scan'208";a="202536240"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2021 17:41:31 -0700
-IronPort-SDR: //3lW3O3QKXCe2ox4tncGZnyis8TLcRLptQcf5L3kuc4O1G5nUrMq59dbe89o2OzK1DHqeHbPg
- JvkrqAyrtojA==
+   d="scan'208";a="204423885"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jun 2021 17:41:31 -0700
+IronPort-SDR: SgY9BSJ4P7t+rqBxFhPnSmzSVcYTVUvzcj7Wc3Q4IIB7pYdlXeVGMdi7rr/7EQhMAvG4+QhL94
+ 0WO0tnyxyaUg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.83,249,1616482800"; 
-   d="scan'208";a="550691236"
+   d="scan'208";a="551327544"
 Received: from lkp-server02.sh.intel.com (HELO 1ec8406c5392) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 04 Jun 2021 17:41:30 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 04 Jun 2021 17:41:29 -0700
 Received: from kbuild by 1ec8406c5392 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1lpKNV-0007CB-CT; Sat, 05 Jun 2021 00:41:29 +0000
-Date:   Sat, 05 Jun 2021 08:40:30 +0800
+        id 1lpKNV-0007C9-C2; Sat, 05 Jun 2021 00:41:29 +0000
+Date:   Sat, 05 Jun 2021 08:40:33 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon] BUILD SUCCESS
- 05bf6939375d90959f3edce84577eeb11d0dd17f
-Message-ID: <60bac7fe.JWc1zvHNnjlav1hZ%lkp@intel.com>
+Subject: [hwmon:hwmon-next] BUILD SUCCESS
+ a7015d2a3c19d8f2cbab5f7839ffee8fa26770b2
+Message-ID: <60bac801.4oBbZVhbS3Ln5YiZ%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -50,12 +50,12 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
-branch HEAD: 05bf6939375d90959f3edce84577eeb11d0dd17f  hwmon: (scpi-hwmon) shows the negative temperature properly
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: a7015d2a3c19d8f2cbab5f7839ffee8fa26770b2  hwmon: (ina3221) use CVRF only for single-shot conversion
 
 elapsed time: 720m
 
-configs tested: 221
+configs tested: 209
 configs skipped: 2
 
 The following configs have been built successfully.
@@ -72,11 +72,6 @@ arm                        clps711x_defconfig
 arc                         haps_hs_defconfig
 mips                          rb532_defconfig
 arm                          collie_defconfig
-mips                         rt305x_defconfig
-mips                           mtx1_defconfig
-arm                          ep93xx_defconfig
-powerpc                     kilauea_defconfig
-sh                           se7780_defconfig
 powerpc                 mpc8540_ads_defconfig
 arc                            hsdk_defconfig
 riscv             nommu_k210_sdcard_defconfig
@@ -104,11 +99,6 @@ mips                        bcm47xx_defconfig
 nios2                               defconfig
 mips                           xway_defconfig
 powerpc                          allmodconfig
-arm                             pxa_defconfig
-arm                         s3c6400_defconfig
-mips                          rm200_defconfig
-arc                              alldefconfig
-ia64                      gensparse_defconfig
 powerpc                      ep88xc_defconfig
 sh                               alldefconfig
 powerpc64                           defconfig
@@ -155,12 +145,8 @@ powerpc                       maple_defconfig
 nds32                             allnoconfig
 sh                          r7780mp_defconfig
 m68k                         apollo_defconfig
+mips                           mtx1_defconfig
 arm                            xcep_defconfig
-sh                 kfr2r09-romimage_defconfig
-powerpc                     sequoia_defconfig
-sparc64                          alldefconfig
-m68k                        mvme147_defconfig
-arm                       spear13xx_defconfig
 sh                         ap325rxa_defconfig
 sh                            titan_defconfig
 powerpc                     stx_gp3_defconfig
@@ -176,6 +162,7 @@ arm                       cns3420vb_defconfig
 arm                        trizeps4_defconfig
 sh                          lboxre2_defconfig
 powerpc                      tqm8xx_defconfig
+mips                         rt305x_defconfig
 mips                      pic32mzda_defconfig
 powerpc                   lite5200b_defconfig
 arm                         lubbock_defconfig
@@ -187,6 +174,7 @@ mips                         cobalt_defconfig
 powerpc                   motionpro_defconfig
 m68k                            q40_defconfig
 powerpc                     ppa8548_defconfig
+powerpc                     kilauea_defconfig
 mips                           ip22_defconfig
 alpha                            alldefconfig
 arm                         mv78xx0_defconfig
