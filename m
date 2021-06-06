@@ -2,96 +2,166 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AF90C4743D
-	for <linux-hwmon@archiver.kernel.org>; Sun,  6 Jun 2021 19:18:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CCB99C48BCD
+	for <linux-hwmon@archiver.kernel.org>; Sun,  6 Jun 2021 22:53:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 586696124B
-	for <linux-hwmon@archiver.kernel.org>; Sun,  6 Jun 2021 19:18:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B901661430
+	for <linux-hwmon@archiver.kernel.org>; Sun,  6 Jun 2021 22:53:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbhFFTTx (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 6 Jun 2021 15:19:53 -0400
-Received: from mout.gmx.net ([212.227.17.20]:37091 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230458AbhFFTTn (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 6 Jun 2021 15:19:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1623007055;
-        bh=ks7SmG+pm/Pb4UpItq4fO+F6eI/FufhRAhv90C0rA5w=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=ABCECDNsAtymrilVjGvZHjdk6LGknSOKSb5CBdEz0hEyntXQ/mbehHI4U11H3ZNYf
-         MwuuTXAIgpnr0AJMvpyZQ0qy/jMWLj76LkgtfCzxz7K7WhjR36j+GlgXeUyFvp931P
-         p6aeSVSqDM5Xa0tJ0fw6ZjW3g6snK2Q9lB4YZIKU=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from esprimo-mx.fritz.box ([84.154.217.164]) by mail.gmx.net
- (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MBm1U-1ldtSd1cyK-00CAHJ; Sun, 06 Jun 2021 21:17:35 +0200
-From:   W_Armin@gmx.de
-To:     pali@kernel.org
-Cc:     linux@roeck-us.net, jdelvare@suse.com, linux-hwmon@vger.kernel.org
-Subject: [PATCH v4 6/6] hwmon: (dell-smm-hwmon) Fix fan mutliplier detection for 3rd fan
-Date:   Sun,  6 Jun 2021 21:16:30 +0200
-Message-Id: <20210606191629.32245-7-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210606191629.32245-1-W_Armin@gmx.de>
-References: <20210606191629.32245-1-W_Armin@gmx.de>
+        id S231225AbhFFWzL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 6 Jun 2021 18:55:11 -0400
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:53791 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230368AbhFFWzK (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 6 Jun 2021 18:55:10 -0400
+Received: (Authenticated sender: n@nfraprado.net)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 861051BF203;
+        Sun,  6 Jun 2021 22:53:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nfraprado.net;
+        s=gm1; t=1623019997;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LEITmbgA+ypfFiT6sDRv13/uCob4oKC9Sq9src0AzZE=;
+        b=chA+i0RmfXwj/WF8vUQcsG8LWn2bONkphlI9FxGByy3xXZzQ3/zHKFPGJxmKXuKUW335J7
+        jYK4CRJ9+UN7xZA7RoqojnjXZW+0cqiNSJEER76idFul1Hmyyid+LU7eBwqw4Yf6VUnAAy
+        EO/oCOnOkrJSrla2lWMUer63YFPTS6rPVGC6R5VJrg9wTSN5B9e0Ariq05tQnFO7ePJjQo
+        bl4pkIEG3/A5X1Ubh0QT5mRcrGJQ8WehYjr1NfQyPqrYiwulB4ynbpB9vRe3MCb4L15B0r
+        jLNt083VPjq8mnz5SK6VyymWvFVmHAPrKBJPANhNFdLyuGqe1sYaP2/+H+QnUQ==
+Date:   Sun, 6 Jun 2021 19:52:25 -0300
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <n@nfraprado.net>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        coresight@lists.linaro.org, devicetree@vger.kernel.org,
+        kunit-dev@googlegroups.com, kvm@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-security-module@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH 00/34] docs: avoid using ReST :doc:`foo` tag
+Message-ID: <20210606225225.fz4dsyz6im4bqena@notapiano>
+References: <cover.1622898327.git.mchehab+huawei@kernel.org>
+ <20210605151109.axm3wzbcstsyxczp@notapiano>
+ <20210605210836.540577d4@coco.lan>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:ElHNgZtTAlCdlAINBa6Tuepq+4UQUX2LB8VaBaUkOBZZQMOUz1Q
- PVDatmCbNJle+sWTpfd8A8OLC8vBxu47QbegFLC2pV5t0yegXiSNavIsj8UtFGlnkPw+mR6
- eldAmGTC4xqHYOxQ1+toJRroA7OZKqQEW8pCZ1LIQvOcR9db6dBoeTjjnk5XISyL9KkIzmL
- 5jJsPj3RZ54gjCPPhUz3A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:CpKplL/mFg8=:HEwBjNaSA4EfwXhDI5767R
- waqMdxf6zlqvFOSR31u7eDEIfVz8UPd9/7cKa5Ya+o819SabESB1ORY4gAjcE/vGr2aEvOamm
- XHzCa4Jj5+5/OGlkHpypHVzVl1a9K7y4SSFkjsObX/WeXK2bYE0WlNgzo5q7lLq2pP+ajS/CM
- cx6eSnEGIbPWgyYLRWO+u6PjUSOw0XjsOueG2k9V91r13kl2KkMfDJR73efP8OIGc6S8dpwa1
- jj14MDgPSshneO3o/CGHFCHiz/xaRxoh3ILLfvIqXKD5OgTdw3NOvEpcc1kAPiDDlWZLU3zfx
- mi7sfFEOkH8Tsjm399V+8Fx45q0QwvixAoL4U9PH5bRZuYmV6RrsrDGMzbmXkGocwp4erXIeS
- kj910BT9ecqikpWbx6DwTTJ2bt2r903KLKujz3QBHYXD3aVm7SOpqlNjfAI1drnW12DDsAo8F
- jO1bTaDj5R9dw4g+U+I5CnTXvQ+xuseMXxN9kxlR1GgrgqnURZOFqElVl3Evsg3uPHQbwGeNc
- /QFJwyTcOpvrGypBTeZEobkNQb2/o/CrAjxmBjmm5AU0WlqKJ3hTru6h4/CPbHVAoayvsBJbg
- dLjlijBFERCPm9BzEXjUyx1yzzaI137PxChWs3JYxLHJqm17jjfUHkAivqrRFldlLGEoy/SCo
- YOBZPf1fTkhOlfZSX071u3YY6t/zEJVJSp+Ah56n/gaAFWr//kOnvGyl0mpzsTauSZ7/mshIw
- o8fbgyGCEtV5pRnZQBmLz5mbcC75KujMx9AK++YcQVzS/QMp/d7YCd//8d4bxdyhK+Vz/uUiC
- PUamAhbEW1LlvLebJ5S3uv/ZINTDNUJ/HSJre46ngquI7OczF3qXFTrNzxejLj+BmD9xYRDqF
- KiwpKTvGzo4SesNNzJ/2P2XxIuWW8lAz5TYj0MIWTw9yXAIZwUz9P6oVls+9f5ZpUm2thAbyV
- npikPYnVq/dV1JJt14ZR1gQQ/5S2I6T9ewycPnTQqsVF1GZ9xNE2H14OHGvLX5juiejSKDmkK
- lInez96zapNwrEYorLcI6DjCgSc1sDJ/OZpjxeGb3SuMnU5NnrphI6hAnxhcQUMn7Rc+afkp7
- vKxFMmh3h0rqD7DAcbvgnRi7DDm7aYWBRrH
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210605210836.540577d4@coco.lan>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-From: Armin Wolf <W_Armin@gmx.de>
+On Sat, Jun 05, 2021 at 09:08:36PM +0200, Mauro Carvalho Chehab wrote:
+> Em Sat, 5 Jun 2021 12:11:09 -0300
+> Nícolas F. R. A. Prado <n@nfraprado.net> escreveu:
+> 
+> > Hi Mauro,
+> > 
+> > On Sat, Jun 05, 2021 at 03:17:59PM +0200, Mauro Carvalho Chehab wrote:
+> > > As discussed at:
+> > > 	https://lore.kernel.org/linux-doc/871r9k6rmy.fsf@meer.lwn.net/
+> > > 
+> > > It is better to avoid using :doc:`foo` to refer to Documentation/foo.rst, as the
+> > > automarkup.py extension should handle it automatically, on most cases.
+> > > 
+> > > There are a couple of exceptions to this rule:
+> > > 
+> > > 1. when :doc:  tag is used to point to a kernel-doc DOC: markup;
+> > > 2. when it is used with a named tag, e. g. :doc:`some name <foo>`;
+> > > 
+> > > It should also be noticed that automarkup.py has currently an issue:
+> > > if one use a markup like:
+> > > 
+> > > 	Documentation/dev-tools/kunit/api/test.rst
+> > > 	  - documents all of the standard testing API excluding mocking
+> > > 	    or mocking related features.
+> > > 
+> > > or, even:
+> > > 
+> > > 	Documentation/dev-tools/kunit/api/test.rst
+> > > 	    documents all of the standard testing API excluding mocking
+> > > 	    or mocking related features.
+> > > 	
+> > > The automarkup.py will simply ignore it. Not sure why. This patch series
+> > > avoid the above patterns (which is present only on 4 files), but it would be
+> > > nice to have a followup patch fixing the issue at automarkup.py.  
+> > 
+> > What I think is happening here is that we're using rST's syntax for definition
+> > lists [1]. automarkup.py ignores literal nodes, and perhaps a definition is
+> > considered a literal by Sphinx. Adding a blank line after the Documentation/...
+> > or removing the additional indentation makes it work, like you did in your
+> > 2nd and 3rd patch, since then it's not a definition anymore, although then the
+> > visual output is different as well.
+> 
+> A literal has a different output. I think that this is not the case, but I 
+> didn't check the python code from docutils/Sphinx.
 
-There are up to three fans, but the detection omits the 3rd one.
-Fix that by using DELL_SMM_NO_FANS.
+Okay, I went in deeper to understand the issue and indeed it wasn't what I
+thought. The reason definitions are ignored by automarkup.py is because the main
+loop iterates only over nodes that are of type paragraph:
 
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- drivers/hwmon/dell-smm-hwmon.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+    for para in doctree.traverse(nodes.paragraph):
+        for node in para.traverse(nodes.Text):
+            if not isinstance(node.parent, nodes.literal):
+                node.parent.replace(node, markup_refs(name, app, node))
 
-diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
-.c
-index cb2bc27ec410..5a29cbf8f164 100644
-=2D-- a/drivers/hwmon/dell-smm-hwmon.c
-+++ b/drivers/hwmon/dell-smm-hwmon.c
-@@ -1258,7 +1258,7 @@ static int __init dell_smm_probe(struct platform_dev=
-ice *pdev)
- 		 * Autodetect fan multiplier based on nominal rpm
- 		 * If fan reports rpm value too high then set multiplier to 1
- 		 */
--		for (fan =3D 0; fan < 2; ++fan) {
-+		for (fan =3D 0; fan < DELL_SMM_NO_FANS; ++fan) {
- 			ret =3D i8k_get_fan_nominal_speed(data, fan, data->i8k_fan_max);
- 			if (ret < 0)
- 				continue;
-=2D-
-2.20.1
+And inspecting the HTML output from your example, the definition name is inside
+a <dt> tag, and it doesn't have a <p> inside. So in summary, automarkup.py will
+only work on elements which are inside a <p> in the output.
 
+Only applying the automarkup inside paragraphs seems like a good decision (which
+covers text in lists and tables as well), so unless there are other types of
+elements without paragraphs where automarkup should work, I think we should just
+avoid using definition lists pointing to documents like that.
+
+>  
+> > I'm not sure this is something we need to fix. Does it make sense to use
+> > definition lists for links like that? If it does, I guess one option would be to
+> > whitelist definition lists so they aren't ignored by automarkup, but I feel
+> > this could get ugly really quickly.
+> 
+> Yes, we should avoid handling literal blocks, as this can be a nightmare.
+> 
+> > FWIW note that it's also possible to use relative paths to docs with automarkup.
+> 
+> Not sure if you meant to say using something like ../driver-api/foo.rst.
+> If so, relative paths are a problem, as it will pass unnoticed by this script:
+> 
+> 	./scripts/documentation-file-ref-check
+> 
+> which is meant to warn when a file is moved to be elsewhere. Ok, it
+> could be taught to use "../" to identify paths, but I suspect that this
+> could lead to false positives, like here:
+> 
+> 	Documentation/usb/gadget-testing.rst:  # ln -s ../../uncompressed/u
+> 	Documentation/usb/gadget-testing.rst:  # cd ../../class/fs
+> 	Documentation/usb/gadget-testing.rst:  # ln -s ../../header/h
+
+Yes, that's what I meant. 
+
+Ok, that makes sense. Although after automarkup.py starts printing warnings on
+missing references to files (which is a patch I still need to resend), it would
+work out-of-the-box with relative paths. automarkup wouldn't face that false
+positives issue since it ignores literal blocks, which isn't as easy for a
+standalone script. But that's still in the future, we can discuss what to do
+then after it is implemented, so full paths seem better for now.
+
+Thanks,
+Nícolas
+
+> 
+> If you meant, instead, :doc:`../foo`, this series address those too.
+> 
+> Regards,
+> Mauro
