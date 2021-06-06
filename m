@@ -2,139 +2,122 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB992C48BCD
-	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Jun 2021 19:08:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BE88C47096
+	for <linux-hwmon@archiver.kernel.org>; Sun,  6 Jun 2021 12:51:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D130D613DF
-	for <linux-hwmon@archiver.kernel.org>; Sat,  5 Jun 2021 19:08:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0F80A6101A
+	for <linux-hwmon@archiver.kernel.org>; Sun,  6 Jun 2021 12:51:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbhFETKe (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 5 Jun 2021 15:10:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50012 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229994AbhFETKd (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 5 Jun 2021 15:10:33 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C76CD61073;
-        Sat,  5 Jun 2021 19:08:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622920125;
-        bh=tTJEbMfaqLm+MQIdZ6b17P+wEJbY3/9z+X1SQ27izYw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=JkQm3FNW5iQVYmgT/Gt9sN9r1LoTem2cqXUl0EjU+fiv82NY1pLAYU3Bw6unpEki9
-         JXsjuSgQIFHSyh38wM93iu29TbJXvLcRhJNrLaI3uPlTWuv27IKsdkFioKL4INshFP
-         X6wWHZCeoF+O8iMlmhkcXx84GYrwHdtLzik9jQie2+N1FEL3MtfoR0dRqJZtRSpa3B
-         75ZFgP9ntAFhWGSiwsFlzS8kJV4vdjx4gNxci+2IKGEj7omJo8VOW1W/h4rNmExnEf
-         Cyd+38BTHzfhwZ6TVmr+dpfprstE/6hddhXmgX9dnEe4dYMoT8QPViKF/MrmqKI8pR
-         fNqEWypa3GLOg==
-Date:   Sat, 5 Jun 2021 21:08:36 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     "=?UTF-8?B?TsOtY29sYXM=?= F. R. A. Prado" <n@nfraprado.net>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        coresight@lists.linaro.org, devicetree@vger.kernel.org,
-        kunit-dev@googlegroups.com, kvm@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-security-module@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 00/34] docs: avoid using ReST :doc:`foo` tag
-Message-ID: <20210605210836.540577d4@coco.lan>
-In-Reply-To: <20210605151109.axm3wzbcstsyxczp@notapiano>
-References: <cover.1622898327.git.mchehab+huawei@kernel.org>
-        <20210605151109.axm3wzbcstsyxczp@notapiano>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        id S230060AbhFFMx3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 6 Jun 2021 08:53:29 -0400
+Received: from mail-oi1-f178.google.com ([209.85.167.178]:34429 "EHLO
+        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229776AbhFFMx2 (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 6 Jun 2021 08:53:28 -0400
+Received: by mail-oi1-f178.google.com with SMTP id u11so15144677oiv.1;
+        Sun, 06 Jun 2021 05:51:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=FzPmmTSd9f81mgE13fCWqQLxiSdjVDOHgMzyzpM78iE=;
+        b=OTPnOy1V51RHfNRi0tHuaj2w4hLWmglGkN+9hLO0ycblyTTXD7PjubrpRm6uZaMsQ1
+         EHLHlxU3SLaxgTVvWdtuj3uoo8b5pJzTPajfW3j8TkAe4drVmvjyGHAdUy0EhulN81i3
+         rpZBLyzyixWzRUcfXQwBRFriSgE+hhiXyGJOmy2wyPTvhnaBeIb1OWJ6xlvyn0WPmUDt
+         R2iTe8ht8etm1pPzuV4dztHAMqdccbCsMJdNUaTC8xN+JD/TLxudJfmZqSrvAw+FDPcL
+         hYN7BLFrINnpJGunZz7d2K6+DrPAuor8Nfxn6hrqNQFUR2FjXaYX0PRNK01MsSAY13cu
+         DXbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=FzPmmTSd9f81mgE13fCWqQLxiSdjVDOHgMzyzpM78iE=;
+        b=FOU+/AcLLJBuz3x92aRiimo32l7f+Wn6M4o5PCtwAmAa4aZ9AvZJu6hVCS0z7taTbh
+         /iMnFDkmGit+cpo/ei5YpcWr0gMSRXvCZhuP4eDSDcP11Wyo5LS2+wA0rA/epjH41DrD
+         dyaxCwFFUs8cYJkh2FrELPfI7hnn9HJnOMIItrloNGXT+1QaP+oXx4VeKN6XTtYJ4jxG
+         b/jpETC4Vih+gvCeD97QsAfpjiqlJtKeJyV6WfZLWDOJPwuymLJVFq9znUxFlCrgMQY1
+         Hu6A4XZJVddG59OkvP7pZXEe3kinoAZqMJOJFPQjENHEKhIzC7Eva1dx5+hSaUzPcO46
+         O0lA==
+X-Gm-Message-State: AOAM531Lj86Ts3MRE3GPxK8Rs62rDCdKmA1Mfhg/9vBk1TTHh81OsPn0
+        lEMCH/ppnHJSFwxwIIDhazrtF7Kzphw=
+X-Google-Smtp-Source: ABdhPJwUzw4EHVBwhQtj5t3UEbv9VfevSWK0ECWfk46pyQv+H8J6s4UYGM/WT5O3XCyWg33tdyQx3g==
+X-Received: by 2002:a05:6808:1396:: with SMTP id c22mr15943162oiw.85.1622983813900;
+        Sun, 06 Jun 2021 05:50:13 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i133sm1623068oia.2.2021.06.06.05.50.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Jun 2021 05:50:13 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 6 Jun 2021 05:50:12 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Madhava Reddy Siddareddygari <msiddare@cisco.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] hwmon: (pmbus_core) Check adapter PEC support
+Message-ID: <20210606125012.GA2887349@roeck-us.net>
+References: <20210605052700.541455-1-pmenzel@molgen.mpg.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210605052700.541455-1-pmenzel@molgen.mpg.de>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Em Sat, 5 Jun 2021 12:11:09 -0300
-N=C3=ADcolas F. R. A. Prado <n@nfraprado.net> escreveu:
+On Sat, Jun 05, 2021 at 07:27:02AM +0200, Paul Menzel wrote:
+> From: Madhava Reddy Siddareddygari <msiddare@cisco.com>
+> 
+> Currently, for Packet Error Checking (PEC) only the controller
+> is checked for support. This causes problems on the cisco-8000
+> platform where a SMBUS transaction errors are observed. This is
+> because PEC has to be enabled only if both controller and
+> adapter support it.
+> 
+> Added code to check PEC capability for adapter and enable it
+> only if both controller and adapter supports PEC.
+> 
+> Signed-off-by: Madhava Reddy Siddareddygari <msiddare@cisco.com>
+> [Upstream from SONiC https://github.com/Azure/sonic-linux-kernel/pull/215]
+> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
 
-> Hi Mauro,
->=20
-> On Sat, Jun 05, 2021 at 03:17:59PM +0200, Mauro Carvalho Chehab wrote:
-> > As discussed at:
-> > 	https://lore.kernel.org/linux-doc/871r9k6rmy.fsf@meer.lwn.net/
-> >=20
-> > It is better to avoid using :doc:`foo` to refer to Documentation/foo.rs=
-t, as the
-> > automarkup.py extension should handle it automatically, on most cases.
-> >=20
-> > There are a couple of exceptions to this rule:
-> >=20
-> > 1. when :doc:  tag is used to point to a kernel-doc DOC: markup;
-> > 2. when it is used with a named tag, e. g. :doc:`some name <foo>`;
-> >=20
-> > It should also be noticed that automarkup.py has currently an issue:
-> > if one use a markup like:
-> >=20
-> > 	Documentation/dev-tools/kunit/api/test.rst
-> > 	  - documents all of the standard testing API excluding mocking
-> > 	    or mocking related features.
-> >=20
-> > or, even:
-> >=20
-> > 	Documentation/dev-tools/kunit/api/test.rst
-> > 	    documents all of the standard testing API excluding mocking
-> > 	    or mocking related features.
-> > =09
-> > The automarkup.py will simply ignore it. Not sure why. This patch series
-> > avoid the above patterns (which is present only on 4 files), but it wou=
-ld be
-> > nice to have a followup patch fixing the issue at automarkup.py. =20
->=20
-> What I think is happening here is that we're using rST's syntax for defin=
-ition
-> lists [1]. automarkup.py ignores literal nodes, and perhaps a definition =
-is
-> considered a literal by Sphinx. Adding a blank line after the Documentati=
-on/...
-> or removing the additional indentation makes it work, like you did in your
-> 2nd and 3rd patch, since then it's not a definition anymore, although the=
-n the
-> visual output is different as well.
+Applied.
 
-A literal has a different output. I think that this is not the case, but I=
-=20
-didn't check the python code from docutils/Sphinx.
-=20
-> I'm not sure this is something we need to fix. Does it make sense to use
-> definition lists for links like that? If it does, I guess one option woul=
-d be to
-> whitelist definition lists so they aren't ignored by automarkup, but I fe=
-el
-> this could get ugly really quickly.
+Thanks,
+Guenter
 
-Yes, we should avoid handling literal blocks, as this can be a nightmare.
-
-> FWIW note that it's also possible to use relative paths to docs with auto=
-markup.
-
-Not sure if you meant to say using something like ../driver-api/foo.rst.
-If so, relative paths are a problem, as it will pass unnoticed by this scri=
-pt:
-
-	./scripts/documentation-file-ref-check
-
-which is meant to warn when a file is moved to be elsewhere. Ok, it
-could be taught to use "../" to identify paths, but I suspect that this
-could lead to false positives, like here:
-
-	Documentation/usb/gadget-testing.rst:  # ln -s ../../uncompressed/u
-	Documentation/usb/gadget-testing.rst:  # cd ../../class/fs
-	Documentation/usb/gadget-testing.rst:  # ln -s ../../header/h
-
-If you meant, instead, :doc:`../foo`, this series address those too.
-
-Regards,
-Mauro
+> ---
+> v2: Do not revert check introduced by commit e5befc02 (hwmon: (pmbus)
+>     Add a PMBUS_NO_CAPABILITY platform data flag).
+> 
+>  drivers/hwmon/pmbus/pmbus_core.c | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+> index bbd745178147..2fd0fec59d4f 100644
+> --- a/drivers/hwmon/pmbus/pmbus_core.c
+> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> @@ -2214,11 +2214,15 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
+>  		data->has_status_word = true;
+>  	}
+>  
+> -	/* Enable PEC if the controller supports it */
+> +	/* Enable PEC if the controller and bus supports it */
+>  	if (!(data->flags & PMBUS_NO_CAPABILITY)) {
+>  		ret = i2c_smbus_read_byte_data(client, PMBUS_CAPABILITY);
+> -		if (ret >= 0 && (ret & PB_CAPABILITY_ERROR_CHECK))
+> -			client->flags |= I2C_CLIENT_PEC;
+> +		if (ret >= 0 && (ret & PB_CAPABILITY_ERROR_CHECK)) {
+> +			if (i2c_check_functionality(client->adapter,
+> +						I2C_FUNC_SMBUS_PEC)) {
+> +				client->flags |= I2C_CLIENT_PEC;
+> +			}
+> +		}
+>  	}
+>  
+>  	/*
