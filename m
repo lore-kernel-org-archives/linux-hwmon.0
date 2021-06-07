@@ -2,245 +2,173 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04335C48BC2
-	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Jun 2021 01:26:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA4F8C48BCF
+	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Jun 2021 07:34:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D3CFC61042
-	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Jun 2021 01:26:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 94FF960241
+	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Jun 2021 07:34:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230099AbhFGB2k (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 6 Jun 2021 21:28:40 -0400
-Received: from mga06.intel.com ([134.134.136.31]:8517 "EHLO mga06.intel.com"
+        id S230250AbhFGHgY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 7 Jun 2021 03:36:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49074 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229932AbhFGB2k (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 6 Jun 2021 21:28:40 -0400
-IronPort-SDR: K13Z4bNA3MGN7LbqUNcfvsEqXzHT/CGQYMI+IpBjC+sPqLWdj7ST65uIa+rSaFJ42+64uugRLV
- TTGSzSJehBBg==
-X-IronPort-AV: E=McAfee;i="6200,9189,10007"; a="265700585"
-X-IronPort-AV: E=Sophos;i="5.83,254,1616482800"; 
-   d="scan'208";a="265700585"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2021 18:26:48 -0700
-IronPort-SDR: hzfd6Ek8Ykydh91HiPw5uU1pNYwrKVZEmKOI5k9b3FaCiTgKl1vuItCA7v1urxYACkr69LBAwa
- BJxaEZG5DKYw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,254,1616482800"; 
-   d="scan'208";a="401497854"
-Received: from lkp-server02.sh.intel.com (HELO 1ec8406c5392) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 06 Jun 2021 18:26:47 -0700
-Received: from kbuild by 1ec8406c5392 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lq42Q-00088I-Iy; Mon, 07 Jun 2021 01:26:46 +0000
-Date:   Mon, 07 Jun 2021 09:26:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon] BUILD SUCCESS
- bfa2778c4dea72bb7443280f2237ccf9a477fdc6
-Message-ID: <60bd75bf.RONHQjAtHfYc2ruW%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S230231AbhFGHgU (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Mon, 7 Jun 2021 03:36:20 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 29FEA60720;
+        Mon,  7 Jun 2021 07:34:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623051269;
+        bh=0ypPpkJHDs3edXD5bDeKaiim7X/xfBueG4AuE8+Qj+U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=MCZa/wfgoJSof9wCVVOv/LrdFcXdwY1vCJuTly8zaeAIwTuRDtC8rzfgyHA9r6/+g
+         NW2tP3feh93C/5Dxty7jg+vScZHZGMhUEyWQ5FgxO8vpWG7sfVd2/FVm9kFVWmNyKF
+         EQBYWqrXHDSSXIu/AIkm5+Ioyl/4Y8qqVlITSp7EP1AHAdF2gq6+t5N/EukG8nlrD5
+         /Z/7kCrp6V3McL/0xD3Opj9oSYMVR4OQwEiMuDlxNhhxICUhrFF3xy6Xf7sAtNEHPC
+         UZ6EjZnr6psnuld6cX9JYfcpHnFwEGAKkBcwq4fn3pJEE/OA/DfL7AgTqkUjjnfOU7
+         t/jaztuq+MVCA==
+Date:   Mon, 7 Jun 2021 09:34:22 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     "=?UTF-8?B?TsOtY29sYXM=?= F. R. A. Prado" <n@nfraprado.net>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        coresight@lists.linaro.org, devicetree@vger.kernel.org,
+        kunit-dev@googlegroups.com, kvm@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-security-module@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH 00/34] docs: avoid using ReST :doc:`foo` tag
+Message-ID: <20210607093422.0a369909@coco.lan>
+In-Reply-To: <20210606225225.fz4dsyz6im4bqena@notapiano>
+References: <cover.1622898327.git.mchehab+huawei@kernel.org>
+        <20210605151109.axm3wzbcstsyxczp@notapiano>
+        <20210605210836.540577d4@coco.lan>
+        <20210606225225.fz4dsyz6im4bqena@notapiano>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
-branch HEAD: bfa2778c4dea72bb7443280f2237ccf9a477fdc6  hwmon: (scpi-hwmon) shows the negative temperature properly
+Em Sun, 6 Jun 2021 19:52:25 -0300
+N=C3=ADcolas F. R. A. Prado <n@nfraprado.net> escreveu:
 
-elapsed time: 726m
+> On Sat, Jun 05, 2021 at 09:08:36PM +0200, Mauro Carvalho Chehab wrote:
+> > Em Sat, 5 Jun 2021 12:11:09 -0300
+> > N=C3=ADcolas F. R. A. Prado <n@nfraprado.net> escreveu:
+> >  =20
+> > > Hi Mauro,
+> > >=20
+> > > On Sat, Jun 05, 2021 at 03:17:59PM +0200, Mauro Carvalho Chehab wrote=
+: =20
+> > > > As discussed at:
+> > > > 	https://lore.kernel.org/linux-doc/871r9k6rmy.fsf@meer.lwn.net/
+> > > >=20
+> > > > It is better to avoid using :doc:`foo` to refer to Documentation/fo=
+o.rst, as the
+> > > > automarkup.py extension should handle it automatically, on most cas=
+es.
+> > > >=20
+> > > > There are a couple of exceptions to this rule:
+> > > >=20
+> > > > 1. when :doc:  tag is used to point to a kernel-doc DOC: markup;
+> > > > 2. when it is used with a named tag, e. g. :doc:`some name <foo>`;
+> > > >=20
+> > > > It should also be noticed that automarkup.py has currently an issue:
+> > > > if one use a markup like:
+> > > >=20
+> > > > 	Documentation/dev-tools/kunit/api/test.rst
+> > > > 	  - documents all of the standard testing API excluding mocking
+> > > > 	    or mocking related features.
+> > > >=20
+> > > > or, even:
+> > > >=20
+> > > > 	Documentation/dev-tools/kunit/api/test.rst
+> > > > 	    documents all of the standard testing API excluding mocking
+> > > > 	    or mocking related features.
+> > > > =09
+> > > > The automarkup.py will simply ignore it. Not sure why. This patch s=
+eries
+> > > > avoid the above patterns (which is present only on 4 files), but it=
+ would be
+> > > > nice to have a followup patch fixing the issue at automarkup.py.   =
+=20
+> > >=20
+> > > What I think is happening here is that we're using rST's syntax for d=
+efinition
+> > > lists [1]. automarkup.py ignores literal nodes, and perhaps a definit=
+ion is
+> > > considered a literal by Sphinx. Adding a blank line after the Documen=
+tation/...
+> > > or removing the additional indentation makes it work, like you did in=
+ your
+> > > 2nd and 3rd patch, since then it's not a definition anymore, although=
+ then the
+> > > visual output is different as well. =20
+> >=20
+> > A literal has a different output. I think that this is not the case, bu=
+t I=20
+> > didn't check the python code from docutils/Sphinx. =20
+>=20
+> Okay, I went in deeper to understand the issue and indeed it wasn't what I
+> thought. The reason definitions are ignored by automarkup.py is because t=
+he main
+> loop iterates only over nodes that are of type paragraph:
+>=20
+>     for para in doctree.traverse(nodes.paragraph):
+>         for node in para.traverse(nodes.Text):
+>             if not isinstance(node.parent, nodes.literal):
+>                 node.parent.replace(node, markup_refs(name, app, node))
+>=20
+> And inspecting the HTML output from your example, the definition name is =
+inside
+> a <dt> tag, and it doesn't have a <p> inside. So in summary, automarkup.p=
+y will
+> only work on elements which are inside a <p> in the output.
 
-configs tested: 176
-configs skipped: 2
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Yeah, that's what I was suspecting, based on the comments.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-nds32                            alldefconfig
-powerpc                      pcm030_defconfig
-sh                           se7343_defconfig
-arm                            mps2_defconfig
-arm                           sunxi_defconfig
-arm                         shannon_defconfig
-arm                            lart_defconfig
-sh                        sh7785lcr_defconfig
-powerpc                  storcenter_defconfig
-powerpc                     sequoia_defconfig
-sh                             shx3_defconfig
-powerpc                     kmeter1_defconfig
-microblaze                          defconfig
-openrisc                 simple_smp_defconfig
-powerpc                       maple_defconfig
-powerpc                      bamboo_defconfig
-powerpc                      ppc64e_defconfig
-arm                         mv78xx0_defconfig
-xtensa                          iss_defconfig
-m68k                                defconfig
-powerpc                      chrp32_defconfig
-nds32                             allnoconfig
-mips                      fuloong2e_defconfig
-xtensa                    smp_lx200_defconfig
-arm                       netwinder_defconfig
-ia64                             allyesconfig
-powerpc                  mpc866_ads_defconfig
-sh                          polaris_defconfig
-mips                  maltasmvp_eva_defconfig
-sh                        dreamcast_defconfig
-sh                            shmin_defconfig
-h8300                    h8300h-sim_defconfig
-mips                      pic32mzda_defconfig
-sh                ecovec24-romimage_defconfig
-mips                             allmodconfig
-powerpc                     stx_gp3_defconfig
-m68k                          multi_defconfig
-powerpc                    ge_imp3a_defconfig
-arm                           corgi_defconfig
-powerpc                      cm5200_defconfig
-arc                            hsdk_defconfig
-x86_64                              defconfig
-arm                        cerfcube_defconfig
-sh                  sh7785lcr_32bit_defconfig
-arm                       aspeed_g4_defconfig
-s390                             allyesconfig
-arc                        nsim_700_defconfig
-mips                            e55_defconfig
-powerpc                  mpc885_ads_defconfig
-powerpc                     tqm8541_defconfig
-mips                     decstation_defconfig
-sh                          kfr2r09_defconfig
-powerpc                      pmac32_defconfig
-arm                        spear3xx_defconfig
-sh                          lboxre2_defconfig
-powerpc                     mpc5200_defconfig
-arm                         hackkit_defconfig
-arm                         at91_dt_defconfig
-sh                               allmodconfig
-mips                           ip32_defconfig
-arm                       cns3420vb_defconfig
-mips                        maltaup_defconfig
-powerpc                     sbc8548_defconfig
-powerpc                      ppc40x_defconfig
-sh                         ap325rxa_defconfig
-openrisc                         alldefconfig
-powerpc                      mgcoge_defconfig
-powerpc                   currituck_defconfig
-powerpc                     ep8248e_defconfig
-openrisc                            defconfig
-powerpc                        cell_defconfig
-arm                          simpad_defconfig
-powerpc                      makalu_defconfig
-powerpc                     tqm5200_defconfig
-arm                           stm32_defconfig
-mips                          malta_defconfig
-powerpc                mpc7448_hpc2_defconfig
-arm                        multi_v7_defconfig
-s390                          debug_defconfig
-sh                           se7206_defconfig
-alpha                            alldefconfig
-mips                        bcm47xx_defconfig
-riscv                          rv32_defconfig
-riscv             nommu_k210_sdcard_defconfig
-x86_64                            allnoconfig
-riscv                            allyesconfig
-ia64                        generic_defconfig
-arm                     am200epdkit_defconfig
-openrisc                    or1ksim_defconfig
-powerpc                    klondike_defconfig
-mips                       bmips_be_defconfig
-arm                          exynos_defconfig
-powerpc                          allyesconfig
-m68k                        mvme16x_defconfig
-xtensa                              defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-parisc                              defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a002-20210606
-x86_64               randconfig-a004-20210606
-x86_64               randconfig-a003-20210606
-x86_64               randconfig-a006-20210606
-x86_64               randconfig-a005-20210606
-x86_64               randconfig-a001-20210606
-i386                 randconfig-a003-20210606
-i386                 randconfig-a006-20210606
-i386                 randconfig-a004-20210606
-i386                 randconfig-a001-20210606
-i386                 randconfig-a005-20210606
-i386                 randconfig-a002-20210606
-i386                 randconfig-a015-20210606
-i386                 randconfig-a013-20210606
-i386                 randconfig-a016-20210606
-i386                 randconfig-a011-20210606
-i386                 randconfig-a014-20210606
-i386                 randconfig-a012-20210606
-i386                 randconfig-a015-20210607
-i386                 randconfig-a013-20210607
-i386                 randconfig-a011-20210607
-i386                 randconfig-a016-20210607
-i386                 randconfig-a014-20210607
-i386                 randconfig-a012-20210607
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-um                            kunit_defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+Maybe something similar to the above could be done also for some
+non-paragraph data. By looking at:
 
-clang tested configs:
-x86_64               randconfig-b001-20210607
-x86_64               randconfig-b001-20210606
-x86_64               randconfig-a015-20210606
-x86_64               randconfig-a011-20210606
-x86_64               randconfig-a014-20210606
-x86_64               randconfig-a012-20210606
-x86_64               randconfig-a016-20210606
-x86_64               randconfig-a013-20210606
-x86_64               randconfig-a002-20210607
-x86_64               randconfig-a004-20210607
-x86_64               randconfig-a003-20210607
-x86_64               randconfig-a006-20210607
-x86_64               randconfig-a005-20210607
-x86_64               randconfig-a001-20210607
+	https://docutils.sourceforge.io/docs/ref/doctree.html
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+It says that the body elements are:
+
+	admonition, attention, block_quote, bullet_list, caution, citation,=20
+	comment, compound, container, danger, definition_list, doctest_block,=20
+	enumerated_list, error, field_list, figure, footnote, hint, image,=20
+	important, line_block, literal_block, note, option_list, paragraph,=20
+	pending, raw, rubric, substitution_definition, system_message,=20
+	table, target, tip, warning
+
+So, perhaps a similar loop for definition_list would do the trick,
+but maybe automarkup should also look at other types, like enum lists,
+notes (and their variants, like error/warning) and footnotes.
+
+No idea how this would affect the docs build time, though.
+
+> Only applying the automarkup inside paragraphs seems like a good decision=
+ (which
+> covers text in lists and tables as well), so unless there are other types=
+ of
+> elements without paragraphs where automarkup should work, I think we shou=
+ld just
+> avoid using definition lists pointing to documents like that.
+
+Checking the code or doing some tests are needed for us to be sure about wh=
+at
+of the above types docutils don't consider a paragraph.
+
+Thanks,
+Mauro
