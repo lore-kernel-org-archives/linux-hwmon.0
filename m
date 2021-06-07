@@ -6,42 +6,42 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
 	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44C12C4743D
-	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Jun 2021 01:26:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04335C48BC2
+	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Jun 2021 01:26:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 281A561090
+	by mail.kernel.org (Postfix) with ESMTP id D3CFC61042
 	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Jun 2021 01:26:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbhFGB2j (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 6 Jun 2021 21:28:39 -0400
-Received: from mga11.intel.com ([192.55.52.93]:28816 "EHLO mga11.intel.com"
+        id S230099AbhFGB2k (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 6 Jun 2021 21:28:40 -0400
+Received: from mga06.intel.com ([134.134.136.31]:8517 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229932AbhFGB2j (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 6 Jun 2021 21:28:39 -0400
-IronPort-SDR: 0OSZsC0fadyDOUQJaAYiyVpDweBBE5IJF6tDvEu+KJTSpehMm5lDdvYT9Dyv46T/s7F9WFiohr
- DeoguiUFCVyQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,10007"; a="201524868"
+        id S229932AbhFGB2k (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 6 Jun 2021 21:28:40 -0400
+IronPort-SDR: K13Z4bNA3MGN7LbqUNcfvsEqXzHT/CGQYMI+IpBjC+sPqLWdj7ST65uIa+rSaFJ42+64uugRLV
+ TTGSzSJehBBg==
+X-IronPort-AV: E=McAfee;i="6200,9189,10007"; a="265700585"
 X-IronPort-AV: E=Sophos;i="5.83,254,1616482800"; 
-   d="scan'208";a="201524868"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2021 18:26:48 -0700
-IronPort-SDR: ZpdRlpijPjCUvIdoC4L07SDXWiFjuzu59wHyBjAs0FSaJxjrEyKPrj81osiNBkNB3gRX8T2pcV
- 3cjmLafa6ubQ==
+   d="scan'208";a="265700585"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2021 18:26:48 -0700
+IronPort-SDR: hzfd6Ek8Ykydh91HiPw5uU1pNYwrKVZEmKOI5k9b3FaCiTgKl1vuItCA7v1urxYACkr69LBAwa
+ BJxaEZG5DKYw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.83,254,1616482800"; 
-   d="scan'208";a="634557292"
+   d="scan'208";a="401497854"
 Received: from lkp-server02.sh.intel.com (HELO 1ec8406c5392) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 06 Jun 2021 18:26:47 -0700
+  by orsmga006.jf.intel.com with ESMTP; 06 Jun 2021 18:26:47 -0700
 Received: from kbuild by 1ec8406c5392 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1lq42Q-00088L-U5; Mon, 07 Jun 2021 01:26:46 +0000
-Date:   Mon, 07 Jun 2021 09:26:26 +0800
+        id 1lq42Q-00088I-Iy; Mon, 07 Jun 2021 01:26:46 +0000
+Date:   Mon, 07 Jun 2021 09:26:23 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon-next] BUILD SUCCESS
- 8a5823454b8674c149534a45dff508f162fdd2c9
-Message-ID: <60bd75c2.r2y7UI0NvvD98cvd%lkp@intel.com>
+Subject: [hwmon:hwmon] BUILD SUCCESS
+ bfa2778c4dea72bb7443280f2237ccf9a477fdc6
+Message-ID: <60bd75bf.RONHQjAtHfYc2ruW%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -50,8 +50,8 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: 8a5823454b8674c149534a45dff508f162fdd2c9  docs: hwmon: adm1177.rst: avoid using ReSt :doc:`foo` markup
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
+branch HEAD: bfa2778c4dea72bb7443280f2237ccf9a477fdc6  hwmon: (scpi-hwmon) shows the negative temperature properly
 
 elapsed time: 726m
 
@@ -75,6 +75,12 @@ arm                           sunxi_defconfig
 arm                         shannon_defconfig
 arm                            lart_defconfig
 sh                        sh7785lcr_defconfig
+powerpc                  storcenter_defconfig
+powerpc                     sequoia_defconfig
+sh                             shx3_defconfig
+powerpc                     kmeter1_defconfig
+microblaze                          defconfig
+openrisc                 simple_smp_defconfig
 powerpc                       maple_defconfig
 powerpc                      bamboo_defconfig
 powerpc                      ppc64e_defconfig
@@ -91,11 +97,6 @@ powerpc                  mpc866_ads_defconfig
 sh                          polaris_defconfig
 mips                  maltasmvp_eva_defconfig
 sh                        dreamcast_defconfig
-i386                             allyesconfig
-mips                        jmr3927_defconfig
-arm                           spitz_defconfig
-arm                        vexpress_defconfig
-arm                        neponset_defconfig
 sh                            shmin_defconfig
 h8300                    h8300h-sim_defconfig
 mips                      pic32mzda_defconfig
@@ -110,7 +111,6 @@ arc                            hsdk_defconfig
 x86_64                              defconfig
 arm                        cerfcube_defconfig
 sh                  sh7785lcr_32bit_defconfig
-powerpc                     kmeter1_defconfig
 arm                       aspeed_g4_defconfig
 s390                             allyesconfig
 arc                        nsim_700_defconfig
@@ -157,7 +157,6 @@ ia64                        generic_defconfig
 arm                     am200epdkit_defconfig
 openrisc                    or1ksim_defconfig
 powerpc                    klondike_defconfig
-powerpc                     sequoia_defconfig
 mips                       bmips_be_defconfig
 arm                          exynos_defconfig
 powerpc                          allyesconfig
@@ -181,6 +180,7 @@ parisc                              defconfig
 s390                             allmodconfig
 parisc                           allyesconfig
 s390                                defconfig
+i386                             allyesconfig
 sparc                            allyesconfig
 sparc                               defconfig
 i386                                defconfig
