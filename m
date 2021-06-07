@@ -2,173 +2,106 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA4F8C48BCF
-	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Jun 2021 07:34:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DE6BC47095
+	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Jun 2021 10:34:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 94FF960241
-	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Jun 2021 07:34:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2CD1161208
+	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Jun 2021 10:34:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbhFGHgY (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Mon, 7 Jun 2021 03:36:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49074 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230231AbhFGHgU (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Mon, 7 Jun 2021 03:36:20 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 29FEA60720;
-        Mon,  7 Jun 2021 07:34:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623051269;
-        bh=0ypPpkJHDs3edXD5bDeKaiim7X/xfBueG4AuE8+Qj+U=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=MCZa/wfgoJSof9wCVVOv/LrdFcXdwY1vCJuTly8zaeAIwTuRDtC8rzfgyHA9r6/+g
-         NW2tP3feh93C/5Dxty7jg+vScZHZGMhUEyWQ5FgxO8vpWG7sfVd2/FVm9kFVWmNyKF
-         EQBYWqrXHDSSXIu/AIkm5+Ioyl/4Y8qqVlITSp7EP1AHAdF2gq6+t5N/EukG8nlrD5
-         /Z/7kCrp6V3McL/0xD3Opj9oSYMVR4OQwEiMuDlxNhhxICUhrFF3xy6Xf7sAtNEHPC
-         UZ6EjZnr6psnuld6cX9JYfcpHnFwEGAKkBcwq4fn3pJEE/OA/DfL7AgTqkUjjnfOU7
-         t/jaztuq+MVCA==
-Date:   Mon, 7 Jun 2021 09:34:22 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     "=?UTF-8?B?TsOtY29sYXM=?= F. R. A. Prado" <n@nfraprado.net>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        coresight@lists.linaro.org, devicetree@vger.kernel.org,
-        kunit-dev@googlegroups.com, kvm@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-security-module@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 00/34] docs: avoid using ReST :doc:`foo` tag
-Message-ID: <20210607093422.0a369909@coco.lan>
-In-Reply-To: <20210606225225.fz4dsyz6im4bqena@notapiano>
-References: <cover.1622898327.git.mchehab+huawei@kernel.org>
-        <20210605151109.axm3wzbcstsyxczp@notapiano>
-        <20210605210836.540577d4@coco.lan>
-        <20210606225225.fz4dsyz6im4bqena@notapiano>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        id S230250AbhFGKge (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Mon, 7 Jun 2021 06:36:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57264 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230215AbhFGKgc (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Mon, 7 Jun 2021 06:36:32 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6958C0617A8
+        for <linux-hwmon@vger.kernel.org>; Mon,  7 Jun 2021 03:34:41 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id ba2so17990297edb.2
+        for <linux-hwmon@vger.kernel.org>; Mon, 07 Jun 2021 03:34:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sartura-hr.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=18khHUA2AJ3ib5wXxPFFaQIfHWGb1QOUw5+Na90fAf4=;
+        b=n4oXtQgnDbe6I7n8UhQvti9n25PNkA+8CaB7/gRPiiU3ZyE93Zst5Lo98mfSLLITrQ
+         m+Sm2IiZ4+HBfyRQSFd1677F5fwG2ouPOfavvFFcQYOR13rX4RsL8Yz3vUBFDQQeXYMd
+         MD2zqP/28PRP+IfgT3IOgucxndZGyt6c/LIqEFq1zO1ZL9a6S8VLzo54oQFvctiQzp3s
+         sJqxCQppIhK2QaWgg6L06Mtp85vchsoV6xYDCcwx68AjI1iyw5irnFTWFujkoZTqDFcL
+         0PUk1z/BnIGy7xjf+qyFpNm9ROOAI2pXvK8nl5IVyA9Sx2ZmDaYoeRb9ZHdAuT/NVCX/
+         T72A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=18khHUA2AJ3ib5wXxPFFaQIfHWGb1QOUw5+Na90fAf4=;
+        b=BIjMbg30opsr9r7aWBIzaYbIzwVWAOrNXNl0rrCPyY8xVs2LkWFVG8va5EoDOuPaKm
+         rJkR+p4zouI0hRma9oHqKbMsOG2Bqj9qlifT0gaCX/gCFSWdpRvHHaQJc+Y7oonGD1cA
+         OzoPvjZ7TuU/7DsTsrqQXr/tjdf4ySwk2CuanfUffEpSnR7r5imV9VPlxm6SZc4t9YkW
+         WAOU0ZmpT+bJEu64HGf1JkMrpK9cf8pFoc3/0NxQkVpnscFWjXdXxexTQqw+QPHcOckq
+         2SVTMD9UGQgoKcsOt4AD7otZV5WDQulgc3BEXpruTscFtRNqZ1WtviJjQVR20xW0phnO
+         C1KA==
+X-Gm-Message-State: AOAM5334Pcm4Wj9AKwV1C0kA++NHeMpOVCMPYVzlCD872XMpzunxLBcD
+        ZP00cvb6rjurSunSuEwr3exrtw==
+X-Google-Smtp-Source: ABdhPJyBBEVMU+l3zZzaxsGHeW4GrlFSXJO8KYLsFCW+34uBpPVt4npJyi0x8cFnKWTER2OPtMwc+Q==
+X-Received: by 2002:a05:6402:548:: with SMTP id i8mr19605259edx.344.1623062080229;
+        Mon, 07 Jun 2021 03:34:40 -0700 (PDT)
+Received: from localhost.localdomain (dh207-96-76.xnet.hr. [88.207.96.76])
+        by smtp.googlemail.com with ESMTPSA id b25sm7521037edv.9.2021.06.07.03.34.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Jun 2021 03:34:39 -0700 (PDT)
+From:   Robert Marko <robert.marko@sartura.hr>
+To:     robh+dt@kernel.org, jdelvare@suse.com, linux@roeck-us.net,
+        corbet@lwn.net, trivial@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Cc:     luka.perkov@sartura.hr, jmp@epiphyte.org, pmenzel@molgen.mpg.de,
+        buczek@molgen.mpg.de, Robert Marko <robert.marko@sartura.hr>
+Subject: [PATCH v4 3/3] MAINTAINERS: Add Delta DPS920AB PSU driver
+Date:   Mon,  7 Jun 2021 12:34:31 +0200
+Message-Id: <20210607103431.2039073-3-robert.marko@sartura.hr>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210607103431.2039073-1-robert.marko@sartura.hr>
+References: <20210607103431.2039073-1-robert.marko@sartura.hr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Em Sun, 6 Jun 2021 19:52:25 -0300
-N=C3=ADcolas F. R. A. Prado <n@nfraprado.net> escreveu:
+Add maintainers entry for the Delta DPS920AB PSU driver.
 
-> On Sat, Jun 05, 2021 at 09:08:36PM +0200, Mauro Carvalho Chehab wrote:
-> > Em Sat, 5 Jun 2021 12:11:09 -0300
-> > N=C3=ADcolas F. R. A. Prado <n@nfraprado.net> escreveu:
-> >  =20
-> > > Hi Mauro,
-> > >=20
-> > > On Sat, Jun 05, 2021 at 03:17:59PM +0200, Mauro Carvalho Chehab wrote=
-: =20
-> > > > As discussed at:
-> > > > 	https://lore.kernel.org/linux-doc/871r9k6rmy.fsf@meer.lwn.net/
-> > > >=20
-> > > > It is better to avoid using :doc:`foo` to refer to Documentation/fo=
-o.rst, as the
-> > > > automarkup.py extension should handle it automatically, on most cas=
-es.
-> > > >=20
-> > > > There are a couple of exceptions to this rule:
-> > > >=20
-> > > > 1. when :doc:  tag is used to point to a kernel-doc DOC: markup;
-> > > > 2. when it is used with a named tag, e. g. :doc:`some name <foo>`;
-> > > >=20
-> > > > It should also be noticed that automarkup.py has currently an issue:
-> > > > if one use a markup like:
-> > > >=20
-> > > > 	Documentation/dev-tools/kunit/api/test.rst
-> > > > 	  - documents all of the standard testing API excluding mocking
-> > > > 	    or mocking related features.
-> > > >=20
-> > > > or, even:
-> > > >=20
-> > > > 	Documentation/dev-tools/kunit/api/test.rst
-> > > > 	    documents all of the standard testing API excluding mocking
-> > > > 	    or mocking related features.
-> > > > =09
-> > > > The automarkup.py will simply ignore it. Not sure why. This patch s=
-eries
-> > > > avoid the above patterns (which is present only on 4 files), but it=
- would be
-> > > > nice to have a followup patch fixing the issue at automarkup.py.   =
-=20
-> > >=20
-> > > What I think is happening here is that we're using rST's syntax for d=
-efinition
-> > > lists [1]. automarkup.py ignores literal nodes, and perhaps a definit=
-ion is
-> > > considered a literal by Sphinx. Adding a blank line after the Documen=
-tation/...
-> > > or removing the additional indentation makes it work, like you did in=
- your
-> > > 2nd and 3rd patch, since then it's not a definition anymore, although=
- then the
-> > > visual output is different as well. =20
-> >=20
-> > A literal has a different output. I think that this is not the case, bu=
-t I=20
-> > didn't check the python code from docutils/Sphinx. =20
->=20
-> Okay, I went in deeper to understand the issue and indeed it wasn't what I
-> thought. The reason definitions are ignored by automarkup.py is because t=
-he main
-> loop iterates only over nodes that are of type paragraph:
->=20
->     for para in doctree.traverse(nodes.paragraph):
->         for node in para.traverse(nodes.Text):
->             if not isinstance(node.parent, nodes.literal):
->                 node.parent.replace(node, markup_refs(name, app, node))
->=20
-> And inspecting the HTML output from your example, the definition name is =
-inside
-> a <dt> tag, and it doesn't have a <p> inside. So in summary, automarkup.p=
-y will
-> only work on elements which are inside a <p> in the output.
+Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+---
+Changes in v2:
+* Drop YAML bindings
 
+ MAINTAINERS | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Yeah, that's what I was suspecting, based on the comments.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 82d9c2943c34..0707986e9bb1 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -5105,6 +5105,13 @@ F:	Documentation/devicetree/bindings/reset/delta,tn48m-reset.yaml
+ F:	drivers/gpio/gpio-tn48m.c
+ F:	include/dt-bindings/reset/delta,tn48m-reset.h
+ 
++DELTA DPS920AB PSU DRIVER
++M:	Robert Marko <robert.marko@sartura.hr>
++L:	linux-hwmon@vger.kernel.org
++S:	Maintained
++F:	Documentation/hwmon/dps920ab.rst
++F:	drivers/hwmon/pmbus/dps920ab.c
++
+ DENALI NAND DRIVER
+ L:	linux-mtd@lists.infradead.org
+ S:	Orphan
+-- 
+2.31.1
 
-Maybe something similar to the above could be done also for some
-non-paragraph data. By looking at:
-
-	https://docutils.sourceforge.io/docs/ref/doctree.html
-
-It says that the body elements are:
-
-	admonition, attention, block_quote, bullet_list, caution, citation,=20
-	comment, compound, container, danger, definition_list, doctest_block,=20
-	enumerated_list, error, field_list, figure, footnote, hint, image,=20
-	important, line_block, literal_block, note, option_list, paragraph,=20
-	pending, raw, rubric, substitution_definition, system_message,=20
-	table, target, tip, warning
-
-So, perhaps a similar loop for definition_list would do the trick,
-but maybe automarkup should also look at other types, like enum lists,
-notes (and their variants, like error/warning) and footnotes.
-
-No idea how this would affect the docs build time, though.
-
-> Only applying the automarkup inside paragraphs seems like a good decision=
- (which
-> covers text in lists and tables as well), so unless there are other types=
- of
-> elements without paragraphs where automarkup should work, I think we shou=
-ld just
-> avoid using definition lists pointing to documents like that.
-
-Checking the code or doing some tests are needed for us to be sure about wh=
-at
-of the above types docutils don't consider a paragraph.
-
-Thanks,
-Mauro
