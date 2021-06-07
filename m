@@ -2,166 +2,245 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CCB99C48BCD
-	for <linux-hwmon@archiver.kernel.org>; Sun,  6 Jun 2021 22:53:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44C12C4743D
+	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Jun 2021 01:26:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B901661430
-	for <linux-hwmon@archiver.kernel.org>; Sun,  6 Jun 2021 22:53:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 281A561090
+	for <linux-hwmon@archiver.kernel.org>; Mon,  7 Jun 2021 01:26:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231225AbhFFWzL (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 6 Jun 2021 18:55:11 -0400
-Received: from relay8-d.mail.gandi.net ([217.70.183.201]:53791 "EHLO
-        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230368AbhFFWzK (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Sun, 6 Jun 2021 18:55:10 -0400
-Received: (Authenticated sender: n@nfraprado.net)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 861051BF203;
-        Sun,  6 Jun 2021 22:53:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nfraprado.net;
-        s=gm1; t=1623019997;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LEITmbgA+ypfFiT6sDRv13/uCob4oKC9Sq9src0AzZE=;
-        b=chA+i0RmfXwj/WF8vUQcsG8LWn2bONkphlI9FxGByy3xXZzQ3/zHKFPGJxmKXuKUW335J7
-        jYK4CRJ9+UN7xZA7RoqojnjXZW+0cqiNSJEER76idFul1Hmyyid+LU7eBwqw4Yf6VUnAAy
-        EO/oCOnOkrJSrla2lWMUer63YFPTS6rPVGC6R5VJrg9wTSN5B9e0Ariq05tQnFO7ePJjQo
-        bl4pkIEG3/A5X1Ubh0QT5mRcrGJQ8WehYjr1NfQyPqrYiwulB4ynbpB9vRe3MCb4L15B0r
-        jLNt083VPjq8mnz5SK6VyymWvFVmHAPrKBJPANhNFdLyuGqe1sYaP2/+H+QnUQ==
-Date:   Sun, 6 Jun 2021 19:52:25 -0300
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <n@nfraprado.net>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        coresight@lists.linaro.org, devicetree@vger.kernel.org,
-        kunit-dev@googlegroups.com, kvm@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-security-module@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 00/34] docs: avoid using ReST :doc:`foo` tag
-Message-ID: <20210606225225.fz4dsyz6im4bqena@notapiano>
-References: <cover.1622898327.git.mchehab+huawei@kernel.org>
- <20210605151109.axm3wzbcstsyxczp@notapiano>
- <20210605210836.540577d4@coco.lan>
+        id S230078AbhFGB2j (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 6 Jun 2021 21:28:39 -0400
+Received: from mga11.intel.com ([192.55.52.93]:28816 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229932AbhFGB2j (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 6 Jun 2021 21:28:39 -0400
+IronPort-SDR: 0OSZsC0fadyDOUQJaAYiyVpDweBBE5IJF6tDvEu+KJTSpehMm5lDdvYT9Dyv46T/s7F9WFiohr
+ DeoguiUFCVyQ==
+X-IronPort-AV: E=McAfee;i="6200,9189,10007"; a="201524868"
+X-IronPort-AV: E=Sophos;i="5.83,254,1616482800"; 
+   d="scan'208";a="201524868"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2021 18:26:48 -0700
+IronPort-SDR: ZpdRlpijPjCUvIdoC4L07SDXWiFjuzu59wHyBjAs0FSaJxjrEyKPrj81osiNBkNB3gRX8T2pcV
+ 3cjmLafa6ubQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,254,1616482800"; 
+   d="scan'208";a="634557292"
+Received: from lkp-server02.sh.intel.com (HELO 1ec8406c5392) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 06 Jun 2021 18:26:47 -0700
+Received: from kbuild by 1ec8406c5392 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lq42Q-00088L-U5; Mon, 07 Jun 2021 01:26:46 +0000
+Date:   Mon, 07 Jun 2021 09:26:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:hwmon-next] BUILD SUCCESS
+ 8a5823454b8674c149534a45dff508f162fdd2c9
+Message-ID: <60bd75c2.r2y7UI0NvvD98cvd%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210605210836.540577d4@coco.lan>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sat, Jun 05, 2021 at 09:08:36PM +0200, Mauro Carvalho Chehab wrote:
-> Em Sat, 5 Jun 2021 12:11:09 -0300
-> Nícolas F. R. A. Prado <n@nfraprado.net> escreveu:
-> 
-> > Hi Mauro,
-> > 
-> > On Sat, Jun 05, 2021 at 03:17:59PM +0200, Mauro Carvalho Chehab wrote:
-> > > As discussed at:
-> > > 	https://lore.kernel.org/linux-doc/871r9k6rmy.fsf@meer.lwn.net/
-> > > 
-> > > It is better to avoid using :doc:`foo` to refer to Documentation/foo.rst, as the
-> > > automarkup.py extension should handle it automatically, on most cases.
-> > > 
-> > > There are a couple of exceptions to this rule:
-> > > 
-> > > 1. when :doc:  tag is used to point to a kernel-doc DOC: markup;
-> > > 2. when it is used with a named tag, e. g. :doc:`some name <foo>`;
-> > > 
-> > > It should also be noticed that automarkup.py has currently an issue:
-> > > if one use a markup like:
-> > > 
-> > > 	Documentation/dev-tools/kunit/api/test.rst
-> > > 	  - documents all of the standard testing API excluding mocking
-> > > 	    or mocking related features.
-> > > 
-> > > or, even:
-> > > 
-> > > 	Documentation/dev-tools/kunit/api/test.rst
-> > > 	    documents all of the standard testing API excluding mocking
-> > > 	    or mocking related features.
-> > > 	
-> > > The automarkup.py will simply ignore it. Not sure why. This patch series
-> > > avoid the above patterns (which is present only on 4 files), but it would be
-> > > nice to have a followup patch fixing the issue at automarkup.py.  
-> > 
-> > What I think is happening here is that we're using rST's syntax for definition
-> > lists [1]. automarkup.py ignores literal nodes, and perhaps a definition is
-> > considered a literal by Sphinx. Adding a blank line after the Documentation/...
-> > or removing the additional indentation makes it work, like you did in your
-> > 2nd and 3rd patch, since then it's not a definition anymore, although then the
-> > visual output is different as well.
-> 
-> A literal has a different output. I think that this is not the case, but I 
-> didn't check the python code from docutils/Sphinx.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 8a5823454b8674c149534a45dff508f162fdd2c9  docs: hwmon: adm1177.rst: avoid using ReSt :doc:`foo` markup
 
-Okay, I went in deeper to understand the issue and indeed it wasn't what I
-thought. The reason definitions are ignored by automarkup.py is because the main
-loop iterates only over nodes that are of type paragraph:
+elapsed time: 726m
 
-    for para in doctree.traverse(nodes.paragraph):
-        for node in para.traverse(nodes.Text):
-            if not isinstance(node.parent, nodes.literal):
-                node.parent.replace(node, markup_refs(name, app, node))
+configs tested: 176
+configs skipped: 2
 
-And inspecting the HTML output from your example, the definition name is inside
-a <dt> tag, and it doesn't have a <p> inside. So in summary, automarkup.py will
-only work on elements which are inside a <p> in the output.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Only applying the automarkup inside paragraphs seems like a good decision (which
-covers text in lists and tables as well), so unless there are other types of
-elements without paragraphs where automarkup should work, I think we should just
-avoid using definition lists pointing to documents like that.
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+nds32                            alldefconfig
+powerpc                      pcm030_defconfig
+sh                           se7343_defconfig
+arm                            mps2_defconfig
+arm                           sunxi_defconfig
+arm                         shannon_defconfig
+arm                            lart_defconfig
+sh                        sh7785lcr_defconfig
+powerpc                       maple_defconfig
+powerpc                      bamboo_defconfig
+powerpc                      ppc64e_defconfig
+arm                         mv78xx0_defconfig
+xtensa                          iss_defconfig
+m68k                                defconfig
+powerpc                      chrp32_defconfig
+nds32                             allnoconfig
+mips                      fuloong2e_defconfig
+xtensa                    smp_lx200_defconfig
+arm                       netwinder_defconfig
+ia64                             allyesconfig
+powerpc                  mpc866_ads_defconfig
+sh                          polaris_defconfig
+mips                  maltasmvp_eva_defconfig
+sh                        dreamcast_defconfig
+i386                             allyesconfig
+mips                        jmr3927_defconfig
+arm                           spitz_defconfig
+arm                        vexpress_defconfig
+arm                        neponset_defconfig
+sh                            shmin_defconfig
+h8300                    h8300h-sim_defconfig
+mips                      pic32mzda_defconfig
+sh                ecovec24-romimage_defconfig
+mips                             allmodconfig
+powerpc                     stx_gp3_defconfig
+m68k                          multi_defconfig
+powerpc                    ge_imp3a_defconfig
+arm                           corgi_defconfig
+powerpc                      cm5200_defconfig
+arc                            hsdk_defconfig
+x86_64                              defconfig
+arm                        cerfcube_defconfig
+sh                  sh7785lcr_32bit_defconfig
+powerpc                     kmeter1_defconfig
+arm                       aspeed_g4_defconfig
+s390                             allyesconfig
+arc                        nsim_700_defconfig
+mips                            e55_defconfig
+powerpc                  mpc885_ads_defconfig
+powerpc                     tqm8541_defconfig
+mips                     decstation_defconfig
+sh                          kfr2r09_defconfig
+powerpc                      pmac32_defconfig
+arm                        spear3xx_defconfig
+sh                          lboxre2_defconfig
+powerpc                     mpc5200_defconfig
+arm                         hackkit_defconfig
+arm                         at91_dt_defconfig
+sh                               allmodconfig
+mips                           ip32_defconfig
+arm                       cns3420vb_defconfig
+mips                        maltaup_defconfig
+powerpc                     sbc8548_defconfig
+powerpc                      ppc40x_defconfig
+sh                         ap325rxa_defconfig
+openrisc                         alldefconfig
+powerpc                      mgcoge_defconfig
+powerpc                   currituck_defconfig
+powerpc                     ep8248e_defconfig
+openrisc                            defconfig
+powerpc                        cell_defconfig
+arm                          simpad_defconfig
+powerpc                      makalu_defconfig
+powerpc                     tqm5200_defconfig
+arm                           stm32_defconfig
+mips                          malta_defconfig
+powerpc                mpc7448_hpc2_defconfig
+arm                        multi_v7_defconfig
+s390                          debug_defconfig
+sh                           se7206_defconfig
+alpha                            alldefconfig
+mips                        bcm47xx_defconfig
+riscv                          rv32_defconfig
+riscv             nommu_k210_sdcard_defconfig
+x86_64                            allnoconfig
+riscv                            allyesconfig
+ia64                        generic_defconfig
+arm                     am200epdkit_defconfig
+openrisc                    or1ksim_defconfig
+powerpc                    klondike_defconfig
+powerpc                     sequoia_defconfig
+mips                       bmips_be_defconfig
+arm                          exynos_defconfig
+powerpc                          allyesconfig
+m68k                        mvme16x_defconfig
+xtensa                              defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+parisc                              defconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a002-20210606
+x86_64               randconfig-a004-20210606
+x86_64               randconfig-a003-20210606
+x86_64               randconfig-a006-20210606
+x86_64               randconfig-a005-20210606
+x86_64               randconfig-a001-20210606
+i386                 randconfig-a003-20210606
+i386                 randconfig-a006-20210606
+i386                 randconfig-a004-20210606
+i386                 randconfig-a001-20210606
+i386                 randconfig-a005-20210606
+i386                 randconfig-a002-20210606
+i386                 randconfig-a015-20210606
+i386                 randconfig-a013-20210606
+i386                 randconfig-a016-20210606
+i386                 randconfig-a011-20210606
+i386                 randconfig-a014-20210606
+i386                 randconfig-a012-20210606
+i386                 randconfig-a015-20210607
+i386                 randconfig-a013-20210607
+i386                 randconfig-a011-20210607
+i386                 randconfig-a016-20210607
+i386                 randconfig-a014-20210607
+i386                 randconfig-a012-20210607
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+um                            kunit_defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
 
->  
-> > I'm not sure this is something we need to fix. Does it make sense to use
-> > definition lists for links like that? If it does, I guess one option would be to
-> > whitelist definition lists so they aren't ignored by automarkup, but I feel
-> > this could get ugly really quickly.
-> 
-> Yes, we should avoid handling literal blocks, as this can be a nightmare.
-> 
-> > FWIW note that it's also possible to use relative paths to docs with automarkup.
-> 
-> Not sure if you meant to say using something like ../driver-api/foo.rst.
-> If so, relative paths are a problem, as it will pass unnoticed by this script:
-> 
-> 	./scripts/documentation-file-ref-check
-> 
-> which is meant to warn when a file is moved to be elsewhere. Ok, it
-> could be taught to use "../" to identify paths, but I suspect that this
-> could lead to false positives, like here:
-> 
-> 	Documentation/usb/gadget-testing.rst:  # ln -s ../../uncompressed/u
-> 	Documentation/usb/gadget-testing.rst:  # cd ../../class/fs
-> 	Documentation/usb/gadget-testing.rst:  # ln -s ../../header/h
+clang tested configs:
+x86_64               randconfig-b001-20210607
+x86_64               randconfig-b001-20210606
+x86_64               randconfig-a015-20210606
+x86_64               randconfig-a011-20210606
+x86_64               randconfig-a014-20210606
+x86_64               randconfig-a012-20210606
+x86_64               randconfig-a016-20210606
+x86_64               randconfig-a013-20210606
+x86_64               randconfig-a002-20210607
+x86_64               randconfig-a004-20210607
+x86_64               randconfig-a003-20210607
+x86_64               randconfig-a006-20210607
+x86_64               randconfig-a005-20210607
+x86_64               randconfig-a001-20210607
 
-Yes, that's what I meant. 
-
-Ok, that makes sense. Although after automarkup.py starts printing warnings on
-missing references to files (which is a patch I still need to resend), it would
-work out-of-the-box with relative paths. automarkup wouldn't face that false
-positives issue since it ignores literal blocks, which isn't as easy for a
-standalone script. But that's still in the future, we can discuss what to do
-then after it is implemented, so full paths seem better for now.
-
-Thanks,
-Nícolas
-
-> 
-> If you meant, instead, :doc:`../foo`, this series address those too.
-> 
-> Regards,
-> Mauro
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
