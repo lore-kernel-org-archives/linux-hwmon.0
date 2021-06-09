@@ -1,109 +1,78 @@
 Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Level: *
+X-Spam-Status: No, score=1.0 required=3.0 tests=BAYES_50,DKIMWL_BL,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FD93C48BCD
-	for <linux-hwmon@archiver.kernel.org>; Wed,  9 Jun 2021 10:50:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C790EC48BCD
+	for <linux-hwmon@archiver.kernel.org>; Wed,  9 Jun 2021 13:36:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7871960FF4
-	for <linux-hwmon@archiver.kernel.org>; Wed,  9 Jun 2021 10:50:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AD6D1613AD
+	for <linux-hwmon@archiver.kernel.org>; Wed,  9 Jun 2021 13:36:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238249AbhFIKw0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 9 Jun 2021 06:52:26 -0400
-Received: from smtp.outgoing.loopia.se ([93.188.3.37]:55819 "EHLO
-        smtp.outgoing.loopia.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238113AbhFIKwD (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 9 Jun 2021 06:52:03 -0400
-Received: from s807.loopia.se (localhost [127.0.0.1])
-        by s807.loopia.se (Postfix) with ESMTP id D29D01AA090B
-        for <linux-hwmon@vger.kernel.org>; Wed,  9 Jun 2021 11:32:26 +0200 (CEST)
-Received: from s934.loopia.se (unknown [172.22.191.5])
-        by s807.loopia.se (Postfix) with ESMTP id C29872E2DB79;
-        Wed,  9 Jun 2021 11:32:26 +0200 (CEST)
-Received: from s898.loopia.se (unknown [172.22.191.6])
-        by s934.loopia.se (Postfix) with ESMTP id BB8AE7CE998;
-        Wed,  9 Jun 2021 11:32:25 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at amavis.loopia.se
-Received: from s645.loopia.se ([172.22.191.5])
-        by s898.loopia.se (s898.loopia.se [172.22.190.17]) (amavisd-new, port 10024)
-        with LMTP id dGextC9jcoIa; Wed,  9 Jun 2021 11:32:25 +0200 (CEST)
-X-Loopia-Auth: user
-X-Loopia-User: carl@hgsystem.se
-X-Loopia-Originating-IP: 155.4.133.180
-Received: from localhost.localdomain (h-155-4-133-180.NA.cust.bahnhof.se [155.4.133.180])
-        (Authenticated sender: carl@hgsystem.se)
-        by s645.loopia.se (Postfix) with ESMTPSA id A32F5157A05B;
-        Wed,  9 Jun 2021 11:32:24 +0200 (CEST)
-From:   Erik Rosen <erik.rosen@metormote.com>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Erik Rosen <erik.rosen@metormote.com>
-Subject: [PATCH v5 1/5] hwmon: (pmbus/pim4328) Add new pmbus flag NO_WRITE_PROTECT
-Date:   Wed,  9 Jun 2021 11:32:05 +0200
-Message-Id: <20210609093209.8349-2-erik.rosen@metormote.com>
-X-Mailer: git-send-email 2.11.0 (Apple Git-81)
-In-Reply-To: <20210609093209.8349-1-erik.rosen@metormote.com>
-References: <20210609093209.8349-1-erik.rosen@metormote.com>
+        id S236432AbhFINiM (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 9 Jun 2021 09:38:12 -0400
+Received: from flippie-beckerswealth-sa.xyz ([62.173.147.2]:33588 "EHLO
+        host.flippie-beckerswealth-sa.xyz" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236421AbhFINiM (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Wed, 9 Jun 2021 09:38:12 -0400
+X-Greylist: delayed 4081 seconds by postgrey-1.27 at vger.kernel.org; Wed, 09 Jun 2021 09:38:12 EDT
+Received: from flippie-beckerswealth-sa.xyz (ec2-3-131-99-163.us-east-2.compute.amazonaws.com [3.131.99.163])
+        by host.flippie-beckerswealth-sa.xyz (Postfix) with ESMTPA id B07D13120A43
+        for <linux-hwmon@vger.kernel.org>; Wed,  9 Jun 2021 15:10:27 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 host.flippie-beckerswealth-sa.xyz B07D13120A43
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=flippie-beckerswealth-sa.xyz; s=default; t=1623240629;
+        bh=h0ivQLrZuUWuyEKz/TWb+FP9AASpHhVqOsJtRcwKQV4=;
+        h=Reply-To:From:To:Subject:Date:From;
+        b=WqPCEVHgGD6NdJS6ix1iUAPqjwT+xiSd02Lass2S3NXnzTiq+WUtcm9af3VDMdDeI
+         AGhwV29l92aUNbHPk6GZ+45v08R3l3rClHD6c1Ds8ONQ8sSFeIKuXFbYQ2a/2oX3Ag
+         OdBjErpKbOlTavhWMD7zeafzJwr5dligWHQXuL1s=
+DKIM-Filter: OpenDKIM Filter v2.11.0 host.flippie-beckerswealth-sa.xyz B07D13120A43
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=flippie-beckerswealth-sa.xyz; s=default; t=1623240629;
+        bh=h0ivQLrZuUWuyEKz/TWb+FP9AASpHhVqOsJtRcwKQV4=;
+        h=Reply-To:From:To:Subject:Date:From;
+        b=WqPCEVHgGD6NdJS6ix1iUAPqjwT+xiSd02Lass2S3NXnzTiq+WUtcm9af3VDMdDeI
+         AGhwV29l92aUNbHPk6GZ+45v08R3l3rClHD6c1Ds8ONQ8sSFeIKuXFbYQ2a/2oX3Ag
+         OdBjErpKbOlTavhWMD7zeafzJwr5dligWHQXuL1s=
+Reply-To: jmasuku40@flippiebeckerwealthservices.com
+From:   Jotham Masuku <jmasuku40@flippie-beckerswealth-sa.xyz>
+To:     linux-hwmon@vger.kernel.org
+Subject: Proposal
+Date:   09 Jun 2021 12:10:27 +0000
+Message-ID: <20210609121027.64E952F45CD241BB@flippie-beckerswealth-sa.xyz>
+Mime-Version: 1.0
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Some PMBus chips respond with invalid data when reading the WRITE_PROTECT
-register. For such chips, this flag should be set so that the PMBus core
-driver doesn't use the WRITE_PROTECT command to determine its behavior.
+Hello there,
 
-Signed-off-by: Erik Rosen <erik.rosen@metormote.com>
----
- drivers/hwmon/pmbus/pmbus_core.c | 8 +++++---
- include/linux/pmbus.h            | 9 +++++++++
- 2 files changed, 14 insertions(+), 3 deletions(-)
+I hope this message finds you in good spirits especially during=20
+this challenging time of coronavirus pandemic. I hope you and=20
+your family are well and keeping safe. Anyway, I am Jotham=20
+Masuku, a broker working with Flippiebecker Wealth. I got your=20
+contact (along with few other contacts) through an online=20
+business directory and I thought I should contact you to see if=20
+you are interested in this opportunity. I am contacting you=20
+because one of my high profile clients is interested in investing=20
+abroad and has asked me to look for individuals and companies=20
+with interesting business ideas and projects that he can invest=20
+in. He wants to invest a substantial amount of asset abroad.
 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index bbd745178147..0579521b6c0a 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -2226,9 +2226,11 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
- 	 * faults, and we should not try it. Also, in that case, writes into
- 	 * limit registers need to be disabled.
- 	 */
--	ret = i2c_smbus_read_byte_data(client, PMBUS_WRITE_PROTECT);
--	if (ret > 0 && (ret & PB_WP_ANY))
--		data->flags |= PMBUS_WRITE_PROTECTED | PMBUS_SKIP_STATUS_CHECK;
-+	if (!(data->flags & PMBUS_NO_WRITE_PROTECT)) {
-+		ret = i2c_smbus_read_byte_data(client, PMBUS_WRITE_PROTECT);
-+		if (ret > 0 && (ret & PB_WP_ANY))
-+			data->flags |= PMBUS_WRITE_PROTECTED | PMBUS_SKIP_STATUS_CHECK;
-+	}
- 
- 	if (data->info->pages)
- 		pmbus_clear_faults(client);
-diff --git a/include/linux/pmbus.h b/include/linux/pmbus.h
-index 12cbbf305969..86bacf57f8e9 100644
---- a/include/linux/pmbus.h
-+++ b/include/linux/pmbus.h
-@@ -43,6 +43,15 @@
-  */
- #define PMBUS_NO_CAPABILITY			BIT(2)
- 
-+/*
-+ * PMBUS_NO_WRITE_PROTECT
-+ *
-+ * Some PMBus chips respond with invalid data when reading the WRITE_PROTECT
-+ * register. For such chips, this flag should be set so that the PMBus core
-+ * driver doesn't use the WRITE_PROTECT command to determine its behavior.
-+ */
-+#define PMBUS_NO_WRITE_PROTECT			BIT(4)
-+
- struct pmbus_platform_data {
- 	u32 flags;		/* Device specific flags */
- 
--- 
-2.20.1
+Please kindly respond back to this email if you are interested in=20
+this opportunity. Once I receive your response, I will give you=20
+more details and we can plan a strategy that will be beneficial=20
+to all parties.
 
+Best regards
+
+J Masuku
+Flippiebecker Wealth
