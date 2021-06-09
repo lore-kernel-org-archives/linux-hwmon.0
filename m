@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64CF9C48BCF
-	for <linux-hwmon@archiver.kernel.org>; Wed,  9 Jun 2021 10:49:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9183C48BCF
+	for <linux-hwmon@archiver.kernel.org>; Wed,  9 Jun 2021 10:49:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 470EB60FF4
-	for <linux-hwmon@archiver.kernel.org>; Wed,  9 Jun 2021 10:49:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9459661059
+	for <linux-hwmon@archiver.kernel.org>; Wed,  9 Jun 2021 10:49:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236316AbhFIKvp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Wed, 9 Jun 2021 06:51:45 -0400
-Received: from smtp.outgoing.loopia.se ([93.188.3.37]:55598 "EHLO
+        id S238079AbhFIKvr (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Wed, 9 Jun 2021 06:51:47 -0400
+Received: from smtp.outgoing.loopia.se ([93.188.3.37]:55552 "EHLO
         smtp.outgoing.loopia.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234865AbhFIKvo (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 9 Jun 2021 06:51:44 -0400
+        with ESMTP id S235105AbhFIKvp (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>); Wed, 9 Jun 2021 06:51:45 -0400
 Received: from s807.loopia.se (localhost [127.0.0.1])
-        by s807.loopia.se (Postfix) with ESMTP id 1E1912E62982
-        for <linux-hwmon@vger.kernel.org>; Wed,  9 Jun 2021 11:32:27 +0200 (CEST)
-Received: from s934.loopia.se (unknown [172.22.191.5])
-        by s807.loopia.se (Postfix) with ESMTP id 0DD672E2DB76;
-        Wed,  9 Jun 2021 11:32:27 +0200 (CEST)
-Received: from s474.loopia.se (unknown [172.22.191.5])
-        by s934.loopia.se (Postfix) with ESMTP id 079DE7CE998;
-        Wed,  9 Jun 2021 11:32:27 +0200 (CEST)
+        by s807.loopia.se (Postfix) with ESMTP id E4FE52E668D4
+        for <linux-hwmon@vger.kernel.org>; Wed,  9 Jun 2021 11:32:29 +0200 (CEST)
+Received: from s499.loopia.se (unknown [172.22.191.5])
+        by s807.loopia.se (Postfix) with ESMTP id D456A2E2DB77;
+        Wed,  9 Jun 2021 11:32:29 +0200 (CEST)
+Received: from s472.loopia.se (unknown [172.22.191.5])
+        by s499.loopia.se (Postfix) with ESMTP id CE0DE1CE6294;
+        Wed,  9 Jun 2021 11:32:29 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at amavis.loopia.se
 Received: from s645.loopia.se ([172.22.191.5])
-        by s474.loopia.se (s474.loopia.se [172.22.190.14]) (amavisd-new, port 10024)
-        with LMTP id 54gyTJtfDRDJ; Wed,  9 Jun 2021 11:32:26 +0200 (CEST)
+        by s472.loopia.se (s472.loopia.se [172.22.190.12]) (amavisd-new, port 10024)
+        with LMTP id 8fMooHoXKhsw; Wed,  9 Jun 2021 11:32:29 +0200 (CEST)
 X-Loopia-Auth: user
 X-Loopia-User: carl@hgsystem.se
 X-Loopia-Originating-IP: 155.4.133.180
 Received: from localhost.localdomain (h-155-4-133-180.NA.cust.bahnhof.se [155.4.133.180])
         (Authenticated sender: carl@hgsystem.se)
-        by s645.loopia.se (Postfix) with ESMTPSA id 1EA52157A07C;
-        Wed,  9 Jun 2021 11:32:26 +0200 (CEST)
+        by s645.loopia.se (Postfix) with ESMTPSA id 05215157A074;
+        Wed,  9 Jun 2021 11:32:28 +0200 (CEST)
 From:   Erik Rosen <erik.rosen@metormote.com>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Erik Rosen <erik.rosen@metormote.com>
-Subject: [PATCH v5 2/5] hwmon: (pmbus/pim4328) Add support for reading direct mode coefficients
-Date:   Wed,  9 Jun 2021 11:32:06 +0200
-Message-Id: <20210609093209.8349-3-erik.rosen@metormote.com>
+Subject: [PATCH v5 5/5] hwmon: (pmbus/pim4328) Add documentation for the pim4328 PMBus driver
+Date:   Wed,  9 Jun 2021 11:32:09 +0200
+Message-Id: <20210609093209.8349-6-erik.rosen@metormote.com>
 X-Mailer: git-send-email 2.11.0 (Apple Git-81)
 In-Reply-To: <20210609093209.8349-1-erik.rosen@metormote.com>
 References: <20210609093209.8349-1-erik.rosen@metormote.com>
@@ -55,171 +55,138 @@ Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Add support for reading and decoding direct format coefficients to
-the PMBus core driver. If the new flag PMBUS_USE_COEFFICIENTS_CMD
-is set, the driver will use the COEFFICIENTS register together with
-the information in the pmbus_sensor_attr structs to initialize
-relevant coefficients for the direct mode format.
+Add documentation and index link for pim4328 PMBus driver.
 
 Signed-off-by: Erik Rosen <erik.rosen@metormote.com>
 ---
- drivers/hwmon/pmbus/pmbus_core.c | 116 +++++++++++++++++++++++++++++++
- include/linux/pmbus.h            |   8 +++
- 2 files changed, 124 insertions(+)
+ Documentation/hwmon/index.rst   |   1 +
+ Documentation/hwmon/pim4328.rst | 105 ++++++++++++++++++++++++++++++++
+ 2 files changed, 106 insertions(+)
+ create mode 100644 Documentation/hwmon/pim4328.rst
 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 0579521b6c0a..d022d3196ae9 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -2139,6 +2139,111 @@ static int pmbus_find_attributes(struct i2c_client *client,
- 	return ret;
- }
- 
-+/*
-+ * The pmbus_class_attr_map structure maps one sensor class to
-+ * it's corresponding sensor attributes array.
-+ */
-+struct pmbus_class_attr_map {
-+	enum pmbus_sensor_classes class;
-+	int nattr;
-+	const struct pmbus_sensor_attr *attr;
-+};
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index 9ed60fa84cbe..719625f8f755 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -150,6 +150,7 @@ Hardware Monitoring Kernel Drivers
+    pc87360
+    pc87427
+    pcf8591
++   pim4328
+    pm6764tr
+    pmbus
+    powr1220
+diff --git a/Documentation/hwmon/pim4328.rst b/Documentation/hwmon/pim4328.rst
+new file mode 100644
+index 000000000000..70c9e7a6882c
+--- /dev/null
++++ b/Documentation/hwmon/pim4328.rst
+@@ -0,0 +1,105 @@
++.. SPDX-License-Identifier: GPL-2.0
 +
-+static const struct pmbus_class_attr_map class_attr_map[] = {
-+	{
-+		.class = PSC_VOLTAGE_IN,
-+		.attr = voltage_attributes,
-+		.nattr = ARRAY_SIZE(voltage_attributes),
-+	}, {
-+		.class = PSC_VOLTAGE_OUT,
-+		.attr = voltage_attributes,
-+		.nattr = ARRAY_SIZE(voltage_attributes),
-+	}, {
-+		.class = PSC_CURRENT_IN,
-+		.attr = current_attributes,
-+		.nattr = ARRAY_SIZE(current_attributes),
-+	}, {
-+		.class = PSC_CURRENT_OUT,
-+		.attr = current_attributes,
-+		.nattr = ARRAY_SIZE(current_attributes),
-+	}, {
-+		.class = PSC_POWER,
-+		.attr = power_attributes,
-+		.nattr = ARRAY_SIZE(power_attributes),
-+	}, {
-+		.class = PSC_TEMPERATURE,
-+		.attr = temp_attributes,
-+		.nattr = ARRAY_SIZE(temp_attributes),
-+	}
-+};
++Kernel driver pim4328
++=====================
 +
-+/*
-+ * Read the coefficients for direct mode.
-+ */
-+static int pmbus_read_coefficients(struct i2c_client *client,
-+				   struct pmbus_driver_info *info,
-+				   const struct pmbus_sensor_attr *attr)
-+{
-+	int rv;
-+	union i2c_smbus_data data;
-+	enum pmbus_sensor_classes class = attr->class;
-+	s8 R;
-+	s16 m, b;
++Supported chips:
 +
-+	data.block[0] = 2;
-+	data.block[1] = attr->reg;
-+	data.block[2] = 0x01;
++  * Flex PIM4328
 +
-+	rv = i2c_smbus_xfer(client->adapter, client->addr, client->flags,
-+			    I2C_SMBUS_WRITE, PMBUS_COEFFICIENTS,
-+			    I2C_SMBUS_BLOCK_PROC_CALL, &data);
++    Prefix: 'pim4328', 'bmr455'
 +
-+	if (rv < 0)
-+		return rv;
++    Addresses scanned: -
 +
-+	if (data.block[0] != 5)
-+		return -EIO;
++    Datasheet:
 +
-+	m = data.block[1] | (data.block[2] << 8);
-+	b = data.block[3] | (data.block[4] << 8);
-+	R = data.block[5];
-+	info->m[class] = m;
-+	info->b[class] = b;
-+	info->R[class] = R;
++https://flexpowermodules.com/resources/fpm-techspec-pim4328
 +
-+	return rv;
-+}
++  * Flex PIM4820
 +
-+static int pmbus_init_coefficients(struct i2c_client *client,
-+				   struct pmbus_driver_info *info)
-+{
-+	int i, n, ret;
-+	const struct pmbus_class_attr_map *map;
-+	const struct pmbus_sensor_attr *attr;
++    Prefixes: 'pim4820'
 +
-+	for (i = 0; i < ARRAY_SIZE(class_attr_map); i++) {
-+		map = &class_attr_map[i];
-+		if (info->format[map->class] != direct)
-+			continue;
-+		for (n = 0; n < map->nattr; n++) {
-+			attr = &map->attr[n];
-+			if (map->class != attr->class)
-+				continue;
-+			ret = pmbus_read_coefficients(client, info, attr);
-+			if (ret >= 0)
-+				break;
-+		}
-+		if (ret < 0) {
-+			dev_err(&client->dev,
-+				"No coefficients found for sensor class %d\n",
-+				map->class);
-+			return -EINVAL;
-+		}
-+	}
++    Addresses scanned: -
 +
-+	return 0;
-+}
++    Datasheet: https://flexpowermodules.com/resources/fpm-techspec-pim4820
 +
- /*
-  * Identify chip parameters.
-  * This function is called for all chips.
-@@ -2257,6 +2362,17 @@ static int pmbus_init_common(struct i2c_client *client, struct pmbus_data *data,
- 			return ret;
- 		}
- 	}
++  * Flex PIM4006, PIM4106, PIM4206, PIM4306, PIM4406
 +
-+	if (data->flags & PMBUS_USE_COEFFICIENTS_CMD) {
-+		if (!i2c_check_functionality(client->adapter,
-+					     I2C_FUNC_SMBUS_BLOCK_PROC_CALL))
-+			return -ENODEV;
++    Prefixes: 'pim4006', 'pim4106', 'pim4206', 'pim4306', 'pim4406'
 +
-+		ret = pmbus_init_coefficients(client, info);
-+		if (ret < 0)
-+			return ret;
-+	}
++    Addresses scanned: -
 +
- 	return 0;
- }
- 
-diff --git a/include/linux/pmbus.h b/include/linux/pmbus.h
-index 86bacf57f8e9..f8ba23d911c8 100644
---- a/include/linux/pmbus.h
-+++ b/include/linux/pmbus.h
-@@ -52,6 +52,14 @@
-  */
- #define PMBUS_NO_WRITE_PROTECT			BIT(4)
- 
-+/*
-+ * PMBUS_USE_COEFFICIENTS_CMD
-+ *
-+ * When this flag is set the PMBus core driver will use the COEFFICIENTS
-+ * register to initialize the coefficients for the direct mode format.
-+ */
-+#define PMBUS_USE_COEFFICIENTS_CMD		BIT(5)
++    Datasheet: https://flexpowermodules.com/resources/fpm-techspec-pim4006
 +
- struct pmbus_platform_data {
- 	u32 flags;		/* Device specific flags */
- 
++Author: Erik Rosen <erik.rosen@metormote.com>
++
++
++Description
++-----------
++
++This driver supports hardware monitoring for Flex PIM4328 and
++compatible digital power interface modules.
++
++The driver is a client driver to the core PMBus driver. Please see
++Documentation/hwmon/pmbus.rst and Documentation.hwmon/pmbus-core for details
++on PMBus client drivers.
++
++
++Usage Notes
++-----------
++
++This driver does not auto-detect devices. You will have to instantiate the
++devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
++details.
++
++
++Platform data support
++---------------------
++
++The driver supports standard PMBus driver platform data.
++
++
++Sysfs entries
++-------------
++
++The following attributes are supported. All attributes are read-only.
++
++======================= ========================================================
++in1_label		"vin"
++in1_input		Measured input voltage.
++in1_alarm		Input voltage alarm.
++
++in2_label		"vin.0"
++in2_input		Measured input voltage on input A.
++
++			PIM4328 and PIM4X06
++
++in3_label		"vin.1"
++in3_input		Measured input voltage on input B.
++
++			PIM4328 and PIM4X06
++
++in4_label		"vcap"
++in4_input		Measured voltage on holdup capacitor.
++
++			PIM4328
++
++curr1_label		"iin.0"
++curr1_input		Measured input current on input A.
++
++			PIM4X06
++
++curr2_label		"iin.1"
++curr2_input		Measured input current on input B.
++
++			PIM4X06
++
++currX_label		"iout1"
++currX_input		Measured output current.
++currX_alarm		Output current alarm.
++
++			X is 1 for PIM4820, 3 otherwise.
++
++temp1_input		Measured temperature.
++temp1_alarm		High temperature alarm.
++======================= ========================================================
 -- 
 2.20.1
 
