@@ -7,76 +7,91 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1585C47094
-	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Jun 2021 15:38:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68D28C47094
+	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Jun 2021 15:39:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D62D8613C9
-	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Jun 2021 15:38:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4E076613C9
+	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Jun 2021 15:39:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231365AbhFJPkH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 10 Jun 2021 11:40:07 -0400
-Received: from mail-ot1-f44.google.com ([209.85.210.44]:43813 "EHLO
-        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230487AbhFJPkG (ORCPT
+        id S231651AbhFJPlV (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 10 Jun 2021 11:41:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33106 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230366AbhFJPlU (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 10 Jun 2021 11:40:06 -0400
-Received: by mail-ot1-f44.google.com with SMTP id i12-20020a05683033ecb02903346fa0f74dso77584otu.10;
-        Thu, 10 Jun 2021 08:37:54 -0700 (PDT)
+        Thu, 10 Jun 2021 11:41:20 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97187C061574;
+        Thu, 10 Jun 2021 08:39:24 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id m137so2557708oig.6;
+        Thu, 10 Jun 2021 08:39:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=uscoCCIMohFxBDDb3Te91Dlm8R7xrxz4+PygaqFS3BE=;
-        b=EGGnQjEyyOmLI1z0BHEofLAqlgL55eNhiquIbC8qx2iyvfo01gnhVz4qskycU3FnHt
-         Nl1EW6UrAoP7QGxwzjgegD5kGzvZywvipKSNoYfZrKMh/hkJxQfqkCeG0/ygUUBSgcKj
-         adkD6+oIPjWVrspJBjdLCuLBF8rzUJLUoxKZX2bFyAjO75vhFz8uR+tJlFkKfgPvqnbl
-         UMoNXU1ZHR9ZZ1pIr/PeIC5zH7ELLXDLro5YU+LRydJTgx/lN9gkYiXd2SqnswuMYvg8
-         jqtkNBxcojtlyXPzOy7ltR3mpCEG3UwWDF+RNFd8Lg1FZGjAmArRHNTJyle9l+biYIYU
-         T0uw==
+        bh=ILxhXAMqUZH3RrsKOKuIXVx1gcDUtk6YKsr0+FSu9+c=;
+        b=nNv3dNmWdCYcSNKvifk4zv/Q8JdJtnsVZE5Im2MsHOVASwUxHRqb5GKj30BSvcE5qh
+         Qnpp6RLD9Q/1yrpzGQqkxkt+gGXWxsR0otDuW63W/d4K7kLhtJ9D+2+7VVTc/2DI+c5T
+         iqNFTiIbTMmJkoiIqM4RW7T0VPLScD7sO7E69rJNPMC42DKTJp2qpjQPu4jG7q6FCdwN
+         lOGyG99I1a3Vx/Eu2IcJ2xcC0KyxgeVPw+LrOqQK+nnDeKsRHAYw+JN/1kDuLVixr4LE
+         Hg8e0cv1GXjXnlndtk666L+igx5NwEV3Su9QFTq5drh3NyFjs6HUkLJsKkj68qT3AF0J
+         herQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=uscoCCIMohFxBDDb3Te91Dlm8R7xrxz4+PygaqFS3BE=;
-        b=n/eYMZYmbVh2YFFH9o7KYR1f+uMu4NPXD1mbrhuucd3o46TDmn2IvMmhEQuRmMG7Yc
-         yCtH8WeCODIEuZyXCeSeWOcyFB+nOkUpldAN1LD8Ddu8bdkQFZrHO8o2z5/g1FWfdwDK
-         pihRDkcYiIxqPRyg0lBlK1yzN1NeOMv2TSg04HMjIHjBci29+wJNkbTWnpxHkRagAeMM
-         AWdzpzjetS1nDQH6iUL0y/rWCo+dlj7fGE2EmsuYOlteNZHwooP77CO3NoI9W2ZhIqEf
-         QftynqVJlKWRm9LWKDhj04YWqSLF1JWg9fzFArMGTFNpbG3F/PIVSnMXqsU8e6ha2dYU
-         zmYQ==
-X-Gm-Message-State: AOAM5303UiJwQyqCGR1b7u12eDrPBju0K5ARMH4sc8ltzuluu29pvv1m
-        3MXFQl4F+cHGYoDjwbLS74k=
-X-Google-Smtp-Source: ABdhPJxbjXaD0sLmXIFDzB4cTd2OW+4OJbuyU8hplLBprxYreMa+B3Zl1fRVKaNxKTabYOGVj89MYQ==
-X-Received: by 2002:a05:6830:1e37:: with SMTP id t23mr2868655otr.318.1623339414639;
-        Thu, 10 Jun 2021 08:36:54 -0700 (PDT)
+        bh=ILxhXAMqUZH3RrsKOKuIXVx1gcDUtk6YKsr0+FSu9+c=;
+        b=Nuy4I80wXoXnFwTw2CrAXjS2UkbM1okR62vZb6Gxld2sFKekDpricRiyhF1lsK/CKp
+         i7CbvdwD/eMVY//MTZgjL9vvzhEgZY6Rjzl0VD4iq9t2+Iu/EbXwDkJ2OO31zzPF5j+q
+         C+/Oc6vPeZP8yYevWA/ZovSLAyBgkjB1wghFWFKGWQCx+5tItNTrtIOJDThFhG44x4so
+         +tUU/pTaB5U4iSxYmPO9D+Cz4PQkPyKMCJGGc8uOT5FXHbAQqF3CViNddILLs4CcWo4C
+         ClhUC8vgGntZFDGnlTWQNrSUM/3BpVkVmDH9eCfsaj3xYoZwT6rYEZvOUWu2pw3m/amQ
+         bcbg==
+X-Gm-Message-State: AOAM531GrLUO+3hKmGAXrGJegrf9+9GrBPEFTAtdKxiIgyJBO1ZUupte
+        UVfWAb+kPz6n57fbsjZ6yrA=
+X-Google-Smtp-Source: ABdhPJxuRxPbXLh5NG+IQk+gOlpJz5UnWegy/9u83oV7qVEZ3COtdGlmfb8dhI4XnyltSET0BpXuyQ==
+X-Received: by 2002:a05:6808:55c:: with SMTP id i28mr3913334oig.66.1623339564066;
+        Thu, 10 Jun 2021 08:39:24 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w69sm613369oia.22.2021.06.10.08.36.53
+        by smtp.gmail.com with ESMTPSA id q15sm592488oon.28.2021.06.10.08.39.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Jun 2021 08:36:53 -0700 (PDT)
+        Thu, 10 Jun 2021 08:39:23 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 10 Jun 2021 08:36:52 -0700
+Date:   Thu, 10 Jun 2021 08:39:22 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Robert Marko <robert.marko@sartura.hr>
 Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org, luka.perkov@sartura.hr
-Subject: Re: [PATCH 1/3] hwmon: (tps23861) define regmap max register
-Message-ID: <20210610153652.GA3858775@roeck-us.net>
+Subject: Re: [PATCH 2/3] hwmon: (tps23861) set current shunt value
+Message-ID: <20210610153922.GA3859014@roeck-us.net>
 References: <20210609220728.499879-1-robert.marko@sartura.hr>
+ <20210609220728.499879-2-robert.marko@sartura.hr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210609220728.499879-1-robert.marko@sartura.hr>
+In-Reply-To: <20210609220728.499879-2-robert.marko@sartura.hr>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Jun 10, 2021 at 12:07:26AM +0200, Robert Marko wrote:
-> Define the max register address the device supports.
-> This allows reading the whole register space via
-> regmap debugfs, without it only register 0x0 is visible.
+On Thu, Jun 10, 2021 at 12:07:27AM +0200, Robert Marko wrote:
+> TPS23861 has a configuration bit for setting of the
+> current shunt value used on the board.
+> Its bit 0 of the General Mask 1 register.
 > 
-> This was forgotten in the original driver commit.
+> According to the datasheet bit values are:
+> 0 for 255 mOhm (Default)
+> 1 for 250 mOhm
 > 
+> So, configure the bit before registering the hwmon
+> device according to the value passed in the DTS or
+> default one if none is passed.
+> 
+> This caused potentially reading slightly skewed values
+> due to max current value being 1.02A when 250mOhm shunt
+> is used instead of 1.0A when 255mOhm is used.
+> 
+> Fixes: fff7b8ab2255 ("hwmon: add Texas Instruments TPS23861 driver")
 > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
 
 Applied.
@@ -85,18 +100,36 @@ Thanks,
 Guenter
 
 > ---
->  drivers/hwmon/tps23861.c | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/hwmon/tps23861.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
 > 
 > diff --git a/drivers/hwmon/tps23861.c b/drivers/hwmon/tps23861.c
-> index c2484f15298b..fd0be8883829 100644
+> index fd0be8883829..c3685b7e9e82 100644
 > --- a/drivers/hwmon/tps23861.c
 > +++ b/drivers/hwmon/tps23861.c
-> @@ -117,6 +117,7 @@ struct tps23861_data {
->  static struct regmap_config tps23861_regmap_config = {
->  	.reg_bits = 8,
->  	.val_bits = 8,
-> +	.max_register = 0x6f,
->  };
+> @@ -99,6 +99,9 @@
+>  #define POWER_ENABLE			0x19
+>  #define TPS23861_NUM_PORTS		4
 >  
->  static int tps23861_read_temp(struct tps23861_data *data, long *val)
+> +#define TPS23861_GENERAL_MASK_1		0x17
+> +#define TPS23861_CURRENT_SHUNT_MASK	BIT(0)
+> +
+>  #define TEMPERATURE_LSB			652 /* 0.652 degrees Celsius */
+>  #define VOLTAGE_LSB			3662 /* 3.662 mV */
+>  #define SHUNT_RESISTOR_DEFAULT		255000 /* 255 mOhm */
+> @@ -561,6 +564,15 @@ static int tps23861_probe(struct i2c_client *client)
+>  	else
+>  		data->shunt_resistor = SHUNT_RESISTOR_DEFAULT;
+>  
+> +	if (data->shunt_resistor == SHUNT_RESISTOR_DEFAULT)
+> +		regmap_clear_bits(data->regmap,
+> +				  TPS23861_GENERAL_MASK_1,
+> +				  TPS23861_CURRENT_SHUNT_MASK);
+> +	else
+> +		regmap_set_bits(data->regmap,
+> +				TPS23861_GENERAL_MASK_1,
+> +				TPS23861_CURRENT_SHUNT_MASK);
+> +
+>  	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name,
+>  							 data, &tps23861_chip_info,
+>  							 NULL);
