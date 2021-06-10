@@ -6,168 +6,171 @@ X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
 	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1957FC47094
-	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Jun 2021 17:16:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34D17C48BD1
+	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Jun 2021 18:52:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E5F2861019
-	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Jun 2021 17:16:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 19D4C613B0
+	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Jun 2021 18:52:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbhFJRS2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 10 Jun 2021 13:18:28 -0400
-Received: from mail-pf1-f170.google.com ([209.85.210.170]:46659 "EHLO
-        mail-pf1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbhFJRS1 (ORCPT
+        id S230080AbhFJSyf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 10 Jun 2021 14:54:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48122 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229935AbhFJSyf (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 10 Jun 2021 13:18:27 -0400
-Received: by mail-pf1-f170.google.com with SMTP id u126so2157703pfu.13;
-        Thu, 10 Jun 2021 10:16:21 -0700 (PDT)
+        Thu, 10 Jun 2021 14:54:35 -0400
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57F4C061574
+        for <linux-hwmon@vger.kernel.org>; Thu, 10 Jun 2021 11:52:38 -0700 (PDT)
+Received: by mail-il1-x12d.google.com with SMTP id j14so2339ila.6
+        for <linux-hwmon@vger.kernel.org>; Thu, 10 Jun 2021 11:52:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=zkBxrdM96XkcLC7Mf6FMfniC4+3m8Q6iJkV6nmXxytY=;
-        b=AcB/C6G+8WoZbabAav7PghmOdMWuXEm3YhI/R2yOzSxNsxgoQcrJamUAP1APF7c53T
-         PrJeI8hH8sLpBDE9UpGJzqQVhCPYW0l85eCxUIJvXsUGi5ckq9IX6XHU9eWympPTI24h
-         J3fXBWvsiuX25aG8cPqIe1PdEkj4NTeAAdvLAMLWyzEb/w3TnxrR/soCiThlzaU2gKAh
-         afTajxDBJJZxv7THNwHiWK3EcgFLkofQ3RFegL8d7jADSos3mrhhyquiidrv0P6RFf2+
-         qXDkhcnna7Ntj5DPwyHl3XiYhzl6vgsl6vP+MhwlIdDyPiQDVxt7EpdqU9wcBOlJez4r
-         8pgA==
+        d=metormote-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4ke10RFGtmINUHMFWqxQaW8kPT87imtbx83IlvIPduk=;
+        b=HIylUGaAP8Oe1xENXtH0XdeF540HLBIIFlk115LE8i7ngnhrJlIDy90ZEZ572n86MQ
+         TiPvRD0Fi7ukmyxp7c+tldIk8PuMjhawW27hIQXf0/4mJu9AT8wfhA1sF02M86zYd7eZ
+         3GmCxWm5/06I732QCEkQyovxsNhI3fJ3LrurswsLph98J8jFU16h+FRS/fr6+dVA+ouK
+         Be42IgFDrSPe9TxZYQRdYJsytlaSUqYbUSOTWKI8fs8J1PiIV/hSF1HaaQqc5gBn7A4R
+         2r2NhDeIPwTq8VFQl8+ZFHKizXcboG6MKDwYJ8/gshl0WeV8yg83n+xcYULcSvv2Wmhk
+         R0fA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=zkBxrdM96XkcLC7Mf6FMfniC4+3m8Q6iJkV6nmXxytY=;
-        b=ez5gw0HPOYg279uSuE4tCvbUyPDP29RR0osP5nE0DTyjkX8uotcwUGJtE62a2ASAyS
-         Kcq5Ux6rKoWenvb+VScrUbrEPkUx1F/ljA86+IFFQ53ZR6ATT5/U8MvOepmO6NcQXOCr
-         pMK+ORl4uiYP55ccH8FGz2xL0thzeeq1nYxk4PWNTFi3B+/4APxit+iGGe42AvKn9Mvo
-         mSBFB1jFd38qGOBfG6+sR7pMPo0kkaPLEgNNfZT8ykhiB20HP5OoqLoj5ADGU77OM1ym
-         zTbBr6i8/4ZC2W5eTbh5ZgLSvkOqo2e0+fNeBoIJbS6U+3yNdzGxhLKkZKqELb82IY0R
-         yQfw==
-X-Gm-Message-State: AOAM5308F/3rZRZKxF+qH8A7h1k9Dgnza8b96w3D5w2a6zkD+XlnlAkh
-        fxA40ngBXVMEhvU7+SIH9lc=
-X-Google-Smtp-Source: ABdhPJw9goZ6PLKyK2T4kPEopP5L0GJG7/bVeN40thbAicNWSbhvAI6IqwgD1WlNHVClA8DYrwVnsQ==
-X-Received: by 2002:a63:1360:: with SMTP id 32mr5919655pgt.233.1623345321652;
-        Thu, 10 Jun 2021 10:15:21 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b21sm454939pgj.74.2021.06.10.10.15.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Jun 2021 10:15:21 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 10 Jun 2021 10:14:43 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Colin Ian King <colin.king@canonical.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Erik Rosen <erik.rosen@metormote.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: hwmon: (pmbus) Add support for reading direct mode coefficients
-Message-ID: <20210610171443.GB3861769@roeck-us.net>
-References: <68276e1d-f262-d379-4600-88abdbecddd8@canonical.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4ke10RFGtmINUHMFWqxQaW8kPT87imtbx83IlvIPduk=;
+        b=fofJKzzSN1XURxvM+cHCf1OgD+Jp8GZOGtgNYcTnWnzUM63rZhQZ48XOkou9MjY1nZ
+         2iXm4eRJtFVoIfC9G4FrzyOpsOacWnTXtk/HCKb/ZmbjD1PVIm5TvSXazjFCmoirapii
+         96FjPvPUjn7+H2Fc3/Yucxp0HQbdOT9ncV40bnX8WP18bzOn3nVlgQ8E9AVGD2sC0ixW
+         ZmfKW8RJfog+u+m6qJNQGyQLl9hic0doS2ImJ3hEyprHkXiFwluhslvVc5aOiJoWzQIU
+         SCU560hNXqI1FzgXQX8DoEjMzYYDgnzZPrt8ltpBRdjAM1lYkiXjWFf9couLQdSf/WnG
+         L+1Q==
+X-Gm-Message-State: AOAM532FvANO0fNPp402XN4YYeyD3G56hWZ8jyAwDdkmZ3fAZ+KbgMGu
+        8fRHhaEqd/K7VjwhaM776lnsqCY1fmb0sClzVRYrTA==
+X-Google-Smtp-Source: ABdhPJzbpFvXOi6rwxkqPwNGL/dY1abqxxdYe5aNKv+wLbBs/kuUSHnR7pGYrZxTcA5P/WL8aqm34FSjWv8/c9Upyhs=
+X-Received: by 2002:a05:6e02:5a3:: with SMTP id k3mr198832ils.302.1623351157870;
+ Thu, 10 Jun 2021 11:52:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <68276e1d-f262-d379-4600-88abdbecddd8@canonical.com>
+References: <68276e1d-f262-d379-4600-88abdbecddd8@canonical.com> <20210610171443.GB3861769@roeck-us.net>
+In-Reply-To: <20210610171443.GB3861769@roeck-us.net>
+From:   Erik Rosen <erik.rosen@metormote.com>
+Date:   Thu, 10 Jun 2021 20:52:27 +0200
+Message-ID: <CA+ui0H=xWj_H-U8jCohgs_ikdB9eQdjA605oviiEy35NUE18vw@mail.gmail.com>
+Subject: Re: hwmon: (pmbus) Add support for reading direct mode coefficients
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Colin Ian King <colin.king@canonical.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Eric,
+Ok, thanks.
 
-On Thu, Jun 10, 2021 at 05:55:40PM +0100, Colin Ian King wrote:
-> Hi,
-> 
-> Static analysis with Coverity on linux-next has detected a potential
-> issue in drivers/hwmon/pmbus/pmbus_core.c with the following commit:
-> 
-No need to send a patch - I fixed it up by pre-initializing ret.
+/Erik
 
-Thanks,
-Guenter
-
-> commit 999d577d7c007d38ab83eee4532d107c2233f78f
-> Author: Erik Rosen <erik.rosen@metormote.com>
-> Date:   Wed Jun 9 11:32:06 2021 +0200
-> 
->     hwmon: (pmbus) Add support for reading direct mode coefficients
-> 
-> The analysis is as follows:
-> 
-> 2219 static int pmbus_init_coefficients(struct i2c_client *client,
-> 2220                                   struct pmbus_driver_info *info)
-> 2221 {
-> 
->     1. var_decl: Declaring variable ret without initializer.
-> 
-> 2222        int i, n, ret;
-> 2223        const struct pmbus_class_attr_map *map;
-> 2224        const struct pmbus_sensor_attr *attr;
-> 2225
-> 
->     2. Condition i < 6UL /* sizeof (class_attr_map) / sizeof
-> (class_attr_map[0]) + (int)sizeof (struct
-> pmbus_init_coefficients::[unnamed type]) */, taking true branch.
-> 
->     5. Condition i < 6UL /* sizeof (class_attr_map) / sizeof
-> (class_attr_map[0]) + (int)sizeof (struct
-> pmbus_init_coefficients::[unnamed type]) */, taking true branch.
-> 
->     8. Condition i < 6UL /* sizeof (class_attr_map) / sizeof
-> (class_attr_map[0]) + (int)sizeof (struct
-> pmbus_init_coefficients::[unnamed type]) */, taking true branch.
-> 
-> 2226        for (i = 0; i < ARRAY_SIZE(class_attr_map); i++) {
-> 2227                map = &class_attr_map[i];
-> 
->     3. Condition info->format[map->class] != direct, taking true branch.
->     6. Condition info->format[map->class] != direct, taking true branch.
->     9. Condition info->format[map->class] != direct, taking false branch.
-> 
-> 2228                if (info->format[map->class] != direct)
-> 
->     4. Continuing loop.
->     7. Continuing loop.
-> 
-> 2229                        continue;
-> 
->     10. Condition n < map->nattr, taking true branch.
->     13. Condition n < map->nattr, taking true branch.
->     16. Condition n < map->nattr, taking false branch.
-> 
-> 2230                for (n = 0; n < map->nattr; n++) {
-> 2231                        attr = &map->attr[n];
-> 
->     11. Condition map->class != attr->class, taking true branch.
->     14. Condition map->class != attr->class, taking true branch.
-> 2232                        if (map->class != attr->class)
->     12. Continuing loop.
->     15. Continuing loop.
-> 
-> 2233                                continue;
-> 2234                        ret = pmbus_read_coefficients(client, info,
-> attr);
-> 2235                        if (ret >= 0)
-> 2236                                break;
-> 2237                }
-> 
-> Uninitialized scalar variable (UNINIT)
->     17. uninit_use: Using uninitialized value ret.
-> 
-> 2238                if (ret < 0) {
-> 2239                        dev_err(&client->dev,
-> 2240                                "No coefficients found for sensor
-> class %d\n",
-> 2241                                map->class);
-> 2242                        return -EINVAL;
-> 2243                }
-> 2244        }
-> 2245
-> 2246        return 0;
-> 2247 }
-> 
-> With the continue statements on line 2233 (or if map->nattr is zero) it
-> may be possible that ret is never assigned a value and so the check on
-> line 2238 could be checking an uninitialized variable ret. I'm not sure
-> if this is a false positive, but it may be worth initializing ret to
-> some sane value to catch these corner cases.
-> 
-> Colin
-> 
+On Thu, Jun 10, 2021 at 7:15 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> Eric,
+>
+> On Thu, Jun 10, 2021 at 05:55:40PM +0100, Colin Ian King wrote:
+> > Hi,
+> >
+> > Static analysis with Coverity on linux-next has detected a potential
+> > issue in drivers/hwmon/pmbus/pmbus_core.c with the following commit:
+> >
+> No need to send a patch - I fixed it up by pre-initializing ret.
+>
+> Thanks,
+> Guenter
+>
+> > commit 999d577d7c007d38ab83eee4532d107c2233f78f
+> > Author: Erik Rosen <erik.rosen@metormote.com>
+> > Date:   Wed Jun 9 11:32:06 2021 +0200
+> >
+> >     hwmon: (pmbus) Add support for reading direct mode coefficients
+> >
+> > The analysis is as follows:
+> >
+> > 2219 static int pmbus_init_coefficients(struct i2c_client *client,
+> > 2220                                   struct pmbus_driver_info *info)
+> > 2221 {
+> >
+> >     1. var_decl: Declaring variable ret without initializer.
+> >
+> > 2222        int i, n, ret;
+> > 2223        const struct pmbus_class_attr_map *map;
+> > 2224        const struct pmbus_sensor_attr *attr;
+> > 2225
+> >
+> >     2. Condition i < 6UL /* sizeof (class_attr_map) / sizeof
+> > (class_attr_map[0]) + (int)sizeof (struct
+> > pmbus_init_coefficients::[unnamed type]) */, taking true branch.
+> >
+> >     5. Condition i < 6UL /* sizeof (class_attr_map) / sizeof
+> > (class_attr_map[0]) + (int)sizeof (struct
+> > pmbus_init_coefficients::[unnamed type]) */, taking true branch.
+> >
+> >     8. Condition i < 6UL /* sizeof (class_attr_map) / sizeof
+> > (class_attr_map[0]) + (int)sizeof (struct
+> > pmbus_init_coefficients::[unnamed type]) */, taking true branch.
+> >
+> > 2226        for (i = 0; i < ARRAY_SIZE(class_attr_map); i++) {
+> > 2227                map = &class_attr_map[i];
+> >
+> >     3. Condition info->format[map->class] != direct, taking true branch.
+> >     6. Condition info->format[map->class] != direct, taking true branch.
+> >     9. Condition info->format[map->class] != direct, taking false branch.
+> >
+> > 2228                if (info->format[map->class] != direct)
+> >
+> >     4. Continuing loop.
+> >     7. Continuing loop.
+> >
+> > 2229                        continue;
+> >
+> >     10. Condition n < map->nattr, taking true branch.
+> >     13. Condition n < map->nattr, taking true branch.
+> >     16. Condition n < map->nattr, taking false branch.
+> >
+> > 2230                for (n = 0; n < map->nattr; n++) {
+> > 2231                        attr = &map->attr[n];
+> >
+> >     11. Condition map->class != attr->class, taking true branch.
+> >     14. Condition map->class != attr->class, taking true branch.
+> > 2232                        if (map->class != attr->class)
+> >     12. Continuing loop.
+> >     15. Continuing loop.
+> >
+> > 2233                                continue;
+> > 2234                        ret = pmbus_read_coefficients(client, info,
+> > attr);
+> > 2235                        if (ret >= 0)
+> > 2236                                break;
+> > 2237                }
+> >
+> > Uninitialized scalar variable (UNINIT)
+> >     17. uninit_use: Using uninitialized value ret.
+> >
+> > 2238                if (ret < 0) {
+> > 2239                        dev_err(&client->dev,
+> > 2240                                "No coefficients found for sensor
+> > class %d\n",
+> > 2241                                map->class);
+> > 2242                        return -EINVAL;
+> > 2243                }
+> > 2244        }
+> > 2245
+> > 2246        return 0;
+> > 2247 }
+> >
+> > With the continue statements on line 2233 (or if map->nattr is zero) it
+> > may be possible that ret is never assigned a value and so the check on
+> > line 2238 could be checking an uninitialized variable ret. I'm not sure
+> > if this is a false positive, but it may be worth initializing ret to
+> > some sane value to catch these corner cases.
+> >
+> > Colin
+> >
