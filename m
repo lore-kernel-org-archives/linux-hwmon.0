@@ -2,91 +2,186 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88E0EC47094
-	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Jun 2021 15:40:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FCAFC48BDF
+	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Jun 2021 15:42:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6FB85613D9
-	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Jun 2021 15:40:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 61690613D9
+	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Jun 2021 15:42:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231654AbhFJPmn (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 10 Jun 2021 11:42:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33360 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231356AbhFJPmn (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 10 Jun 2021 11:42:43 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF761C061760;
-        Thu, 10 Jun 2021 08:40:30 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id u11so2576863oiv.1;
-        Thu, 10 Jun 2021 08:40:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=femDuYUXuqruOqx2TsnJZ+aLFaWLNFefSVqnRCuu/Zs=;
-        b=fxoEBBlSKht7mMd03uvm8OLc9SNR1R/Xu/NJg0ug7QjPztOHliUIjc7+01lt6y1evM
-         P5lPo1Ym4BBzZ2XGqBGaX3KEWj+DvKZa3akWaMLPI+yfOyvWFBJLL8KeBqZcHYcgCyz7
-         gMzePQeAOJz1tduugd9J0liEqseBRyjHXQQFDSKWgAVBnUez4SiJ8hEly1KVf/GK9DjA
-         JnDNvLrGFala4UWZmTNbEsC8CdgOH9B5aktDhlUUNjsIZSjv9GOKHY/7IEavYnFeTDCl
-         6j6EAI3U/9xOba5GxPSjKqYnaMk+GZ5tYBAf/YsRKOemXtj2QToRLHcbaWCRpXZkjpIl
-         6s7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=femDuYUXuqruOqx2TsnJZ+aLFaWLNFefSVqnRCuu/Zs=;
-        b=rzI1FDKk2xPDk5Q8wIikrkGDPcEfXZrFRBqVS9x8VnBk5QxO27On8OpUGNB4xVcOSj
-         cveFxAyIxWnvmivwWxxI5aZmXqiCycSl2HhLszsx7IrYJVg9LSPdj7ka4v/SNEFYuC2V
-         NlCrEVEUdRATz9HssdqfIqnCnPnuJANCZqI/ro8BIgSDyaXx6SUzO+BLJGiXU/FAhEzP
-         rxQ2Qj9+mJfqFaXuTJ2C7q+3ME92QFxnHcQP68YHMbNdLy1stXWpCriRX2URuTUpwNvh
-         YladQnWmmGrjj2VvYkTThp2pSxvvP1yEhzaD02KO1WqiDkUJMkQz2YMjZscdvcieIJVw
-         6t7Q==
-X-Gm-Message-State: AOAM532IqiigupkJx97PZL/9Xa8fJb664LPoAcWGOdrQYajmNFAttMTn
-        w7CNd3EZYG+DkqdwFUYfsCg=
-X-Google-Smtp-Source: ABdhPJzzaheB698nR9MkmUxkaIRuCklDdkjZ69QhLYuQaaVqejJkkodVoeE8czWPimPsUHzbNQtjBg==
-X-Received: by 2002:aca:b906:: with SMTP id j6mr388730oif.40.1623339630351;
-        Thu, 10 Jun 2021 08:40:30 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b26sm669073otq.43.2021.06.10.08.40.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Jun 2021 08:40:29 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 10 Jun 2021 08:40:28 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Robert Marko <robert.marko@sartura.hr>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, luka.perkov@sartura.hr
-Subject: Re: [PATCH 3/3] hwmon: (tps23861) correct shunt LSB values
-Message-ID: <20210610154028.GA3859122@roeck-us.net>
-References: <20210609220728.499879-1-robert.marko@sartura.hr>
- <20210609220728.499879-3-robert.marko@sartura.hr>
+        id S230366AbhFJPoS (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Thu, 10 Jun 2021 11:44:18 -0400
+Received: from mga04.intel.com ([192.55.52.120]:18601 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231356AbhFJPoS (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Thu, 10 Jun 2021 11:44:18 -0400
+IronPort-SDR: BEQK8phq6ZEj+151uGyE4hMf4+nYzGYSSc/ltXSDgBl0ukNaRXFk5NSZ2tIMQN5LDTg2GmGKDm
+ Dom0nUvYmrjQ==
+X-IronPort-AV: E=McAfee;i="6200,9189,10011"; a="203476890"
+X-IronPort-AV: E=Sophos;i="5.83,263,1616482800"; 
+   d="scan'208";a="203476890"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2021 08:42:21 -0700
+IronPort-SDR: rTUpeehpImEaZpKOFPpvMHQYyQY7YkK1kEQKetwdg+hrkHhjSG6/BTFZJWVyDcCyyOPhyq6kBK
+ H8mBU54nwymw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,263,1616482800"; 
+   d="scan'208";a="450418588"
+Received: from lkp-server02.sh.intel.com (HELO 3cb98b298c7e) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 10 Jun 2021 08:42:20 -0700
+Received: from kbuild by 3cb98b298c7e with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lrMp2-0000BF-Gd; Thu, 10 Jun 2021 15:42:20 +0000
+Date:   Thu, 10 Jun 2021 23:42:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:hwmon-next] BUILD SUCCESS
+ 2d4acf6c1e5e25e1a020c24db4583a41e75484db
+Message-ID: <60c232cc.pE90adqwDKqCflM6%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210609220728.499879-3-robert.marko@sartura.hr>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Thu, Jun 10, 2021 at 12:07:28AM +0200, Robert Marko wrote:
-> Current shunt LSB values got reversed during in the
-> original driver commit.
-> 
-> So, correct the current shunt LSB values according to
-> the datasheet.
-> 
-> This caused reading slightly skewed current values.
-> 
-> Fixes: fff7b8ab2255 ("hwmon: add Texas Instruments TPS23861 driver")
-> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: 2d4acf6c1e5e25e1a020c24db4583a41e75484db  MAINTAINERS: Add Delta DPS920AB PSU driver
 
-Applied.
+elapsed time: 720m
 
-Thanks,
-Guenter
+configs tested: 116
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+ia64                                defconfig
+arm                       cns3420vb_defconfig
+s390                             alldefconfig
+sh                            shmin_defconfig
+arm                          collie_defconfig
+powerpc                  mpc885_ads_defconfig
+arm                         lpc18xx_defconfig
+arc                    vdk_hs38_smp_defconfig
+arm                          pxa910_defconfig
+xtensa                  cadence_csp_defconfig
+powerpc                      pasemi_defconfig
+sh                          r7785rp_defconfig
+s390                                defconfig
+arm                              alldefconfig
+arc                          axs101_defconfig
+mips                      pic32mzda_defconfig
+sparc                       sparc64_defconfig
+riscv                             allnoconfig
+s390                       zfcpdump_defconfig
+powerpc                    socrates_defconfig
+ia64                        generic_defconfig
+arm                          badge4_defconfig
+arm                  colibri_pxa270_defconfig
+xtensa                       common_defconfig
+mips                         tb0287_defconfig
+powerpc                    mvme5100_defconfig
+powerpc                 mpc8560_ads_defconfig
+sh                           se7721_defconfig
+arm                      tct_hammer_defconfig
+parisc                generic-64bit_defconfig
+powerpc                       holly_defconfig
+powerpc                     tqm8555_defconfig
+sh                          kfr2r09_defconfig
+sh                             espt_defconfig
+mips                     loongson1c_defconfig
+microblaze                          defconfig
+m68k                          multi_defconfig
+powerpc                     tqm8541_defconfig
+x86_64                           allyesconfig
+arc                            hsdk_defconfig
+powerpc                       ppc64_defconfig
+arm                        neponset_defconfig
+x86_64                            allnoconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a002-20210610
+i386                 randconfig-a006-20210610
+i386                 randconfig-a004-20210610
+i386                 randconfig-a001-20210610
+i386                 randconfig-a005-20210610
+i386                 randconfig-a003-20210610
+x86_64               randconfig-a015-20210610
+x86_64               randconfig-a016-20210610
+x86_64               randconfig-a011-20210610
+x86_64               randconfig-a012-20210610
+x86_64               randconfig-a014-20210610
+x86_64               randconfig-a013-20210610
+i386                 randconfig-a015-20210610
+i386                 randconfig-a013-20210610
+i386                 randconfig-a016-20210610
+i386                 randconfig-a014-20210610
+i386                 randconfig-a012-20210610
+i386                 randconfig-a011-20210610
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+um                            kunit_defconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a002-20210610
+x86_64               randconfig-a001-20210610
+x86_64               randconfig-a004-20210610
+x86_64               randconfig-a003-20210610
+x86_64               randconfig-a006-20210610
+x86_64               randconfig-a005-20210610
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
