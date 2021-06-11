@@ -2,175 +2,216 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34D17C48BD1
-	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Jun 2021 18:52:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A5BEC4743D
+	for <linux-hwmon@archiver.kernel.org>; Fri, 11 Jun 2021 03:59:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 19D4C613B0
-	for <linux-hwmon@archiver.kernel.org>; Thu, 10 Jun 2021 18:52:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7E81D61285
+	for <linux-hwmon@archiver.kernel.org>; Fri, 11 Jun 2021 03:59:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbhFJSyf (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Thu, 10 Jun 2021 14:54:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48122 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbhFJSyf (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Thu, 10 Jun 2021 14:54:35 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57F4C061574
-        for <linux-hwmon@vger.kernel.org>; Thu, 10 Jun 2021 11:52:38 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id j14so2339ila.6
-        for <linux-hwmon@vger.kernel.org>; Thu, 10 Jun 2021 11:52:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=metormote-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4ke10RFGtmINUHMFWqxQaW8kPT87imtbx83IlvIPduk=;
-        b=HIylUGaAP8Oe1xENXtH0XdeF540HLBIIFlk115LE8i7ngnhrJlIDy90ZEZ572n86MQ
-         TiPvRD0Fi7ukmyxp7c+tldIk8PuMjhawW27hIQXf0/4mJu9AT8wfhA1sF02M86zYd7eZ
-         3GmCxWm5/06I732QCEkQyovxsNhI3fJ3LrurswsLph98J8jFU16h+FRS/fr6+dVA+ouK
-         Be42IgFDrSPe9TxZYQRdYJsytlaSUqYbUSOTWKI8fs8J1PiIV/hSF1HaaQqc5gBn7A4R
-         2r2NhDeIPwTq8VFQl8+ZFHKizXcboG6MKDwYJ8/gshl0WeV8yg83n+xcYULcSvv2Wmhk
-         R0fA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4ke10RFGtmINUHMFWqxQaW8kPT87imtbx83IlvIPduk=;
-        b=fofJKzzSN1XURxvM+cHCf1OgD+Jp8GZOGtgNYcTnWnzUM63rZhQZ48XOkou9MjY1nZ
-         2iXm4eRJtFVoIfC9G4FrzyOpsOacWnTXtk/HCKb/ZmbjD1PVIm5TvSXazjFCmoirapii
-         96FjPvPUjn7+H2Fc3/Yucxp0HQbdOT9ncV40bnX8WP18bzOn3nVlgQ8E9AVGD2sC0ixW
-         ZmfKW8RJfog+u+m6qJNQGyQLl9hic0doS2ImJ3hEyprHkXiFwluhslvVc5aOiJoWzQIU
-         SCU560hNXqI1FzgXQX8DoEjMzYYDgnzZPrt8ltpBRdjAM1lYkiXjWFf9couLQdSf/WnG
-         L+1Q==
-X-Gm-Message-State: AOAM532FvANO0fNPp402XN4YYeyD3G56hWZ8jyAwDdkmZ3fAZ+KbgMGu
-        8fRHhaEqd/K7VjwhaM776lnsqCY1fmb0sClzVRYrTA==
-X-Google-Smtp-Source: ABdhPJzbpFvXOi6rwxkqPwNGL/dY1abqxxdYe5aNKv+wLbBs/kuUSHnR7pGYrZxTcA5P/WL8aqm34FSjWv8/c9Upyhs=
-X-Received: by 2002:a05:6e02:5a3:: with SMTP id k3mr198832ils.302.1623351157870;
- Thu, 10 Jun 2021 11:52:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <68276e1d-f262-d379-4600-88abdbecddd8@canonical.com> <20210610171443.GB3861769@roeck-us.net>
-In-Reply-To: <20210610171443.GB3861769@roeck-us.net>
-From:   Erik Rosen <erik.rosen@metormote.com>
-Date:   Thu, 10 Jun 2021 20:52:27 +0200
-Message-ID: <CA+ui0H=xWj_H-U8jCohgs_ikdB9eQdjA605oviiEy35NUE18vw@mail.gmail.com>
-Subject: Re: hwmon: (pmbus) Add support for reading direct mode coefficients
+        id S229824AbhFKEBp (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 11 Jun 2021 00:01:45 -0400
+Received: from mga07.intel.com ([134.134.136.100]:64038 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229480AbhFKEBo (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 11 Jun 2021 00:01:44 -0400
+IronPort-SDR: noLN61KD3q4HdaF43KVuCbxRJRMsm+w6ytSW3wdvBN5+1YMwy46BpHVrlTK4z06y5b0bvX+sHs
+ QIe3Q5/Pcp/Q==
+X-IronPort-AV: E=McAfee;i="6200,9189,10011"; a="269304442"
+X-IronPort-AV: E=Sophos;i="5.83,265,1616482800"; 
+   d="scan'208";a="269304442"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2021 20:59:46 -0700
+IronPort-SDR: q0tNTVsQWZUZ5fZPAg4xFJc+dJQEbCY7wRqXG2r7X/uDbEn15S4IXeyns+so3m3beVnG/ZfUqb
+ wsRIszwSZzFw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,265,1616482800"; 
+   d="scan'208";a="419953237"
+Received: from lkp-server02.sh.intel.com (HELO 3cb98b298c7e) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 10 Jun 2021 20:59:44 -0700
+Received: from kbuild by 3cb98b298c7e with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lrYKe-0000RA-CM; Fri, 11 Jun 2021 03:59:44 +0000
+Date:   Fri, 11 Jun 2021 11:59:28 +0800
+From:   kernel test robot <lkp@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Colin Ian King <colin.king@canonical.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:hwmon] BUILD SUCCESS
+ e13d1127241404f1c3eb1379ac4dd100eaf385b4
+Message-ID: <60c2dfa0.5Pwom7OVxmIkEJ7w%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Ok, thanks.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon
+branch HEAD: e13d1127241404f1c3eb1379ac4dd100eaf385b4  hwmon: (tps23861) correct shunt LSB values
 
-/Erik
+elapsed time: 726m
 
-On Thu, Jun 10, 2021 at 7:15 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> Eric,
->
-> On Thu, Jun 10, 2021 at 05:55:40PM +0100, Colin Ian King wrote:
-> > Hi,
-> >
-> > Static analysis with Coverity on linux-next has detected a potential
-> > issue in drivers/hwmon/pmbus/pmbus_core.c with the following commit:
-> >
-> No need to send a patch - I fixed it up by pre-initializing ret.
->
-> Thanks,
-> Guenter
->
-> > commit 999d577d7c007d38ab83eee4532d107c2233f78f
-> > Author: Erik Rosen <erik.rosen@metormote.com>
-> > Date:   Wed Jun 9 11:32:06 2021 +0200
-> >
-> >     hwmon: (pmbus) Add support for reading direct mode coefficients
-> >
-> > The analysis is as follows:
-> >
-> > 2219 static int pmbus_init_coefficients(struct i2c_client *client,
-> > 2220                                   struct pmbus_driver_info *info)
-> > 2221 {
-> >
-> >     1. var_decl: Declaring variable ret without initializer.
-> >
-> > 2222        int i, n, ret;
-> > 2223        const struct pmbus_class_attr_map *map;
-> > 2224        const struct pmbus_sensor_attr *attr;
-> > 2225
-> >
-> >     2. Condition i < 6UL /* sizeof (class_attr_map) / sizeof
-> > (class_attr_map[0]) + (int)sizeof (struct
-> > pmbus_init_coefficients::[unnamed type]) */, taking true branch.
-> >
-> >     5. Condition i < 6UL /* sizeof (class_attr_map) / sizeof
-> > (class_attr_map[0]) + (int)sizeof (struct
-> > pmbus_init_coefficients::[unnamed type]) */, taking true branch.
-> >
-> >     8. Condition i < 6UL /* sizeof (class_attr_map) / sizeof
-> > (class_attr_map[0]) + (int)sizeof (struct
-> > pmbus_init_coefficients::[unnamed type]) */, taking true branch.
-> >
-> > 2226        for (i = 0; i < ARRAY_SIZE(class_attr_map); i++) {
-> > 2227                map = &class_attr_map[i];
-> >
-> >     3. Condition info->format[map->class] != direct, taking true branch.
-> >     6. Condition info->format[map->class] != direct, taking true branch.
-> >     9. Condition info->format[map->class] != direct, taking false branch.
-> >
-> > 2228                if (info->format[map->class] != direct)
-> >
-> >     4. Continuing loop.
-> >     7. Continuing loop.
-> >
-> > 2229                        continue;
-> >
-> >     10. Condition n < map->nattr, taking true branch.
-> >     13. Condition n < map->nattr, taking true branch.
-> >     16. Condition n < map->nattr, taking false branch.
-> >
-> > 2230                for (n = 0; n < map->nattr; n++) {
-> > 2231                        attr = &map->attr[n];
-> >
-> >     11. Condition map->class != attr->class, taking true branch.
-> >     14. Condition map->class != attr->class, taking true branch.
-> > 2232                        if (map->class != attr->class)
-> >     12. Continuing loop.
-> >     15. Continuing loop.
-> >
-> > 2233                                continue;
-> > 2234                        ret = pmbus_read_coefficients(client, info,
-> > attr);
-> > 2235                        if (ret >= 0)
-> > 2236                                break;
-> > 2237                }
-> >
-> > Uninitialized scalar variable (UNINIT)
-> >     17. uninit_use: Using uninitialized value ret.
-> >
-> > 2238                if (ret < 0) {
-> > 2239                        dev_err(&client->dev,
-> > 2240                                "No coefficients found for sensor
-> > class %d\n",
-> > 2241                                map->class);
-> > 2242                        return -EINVAL;
-> > 2243                }
-> > 2244        }
-> > 2245
-> > 2246        return 0;
-> > 2247 }
-> >
-> > With the continue statements on line 2233 (or if map->nattr is zero) it
-> > may be possible that ret is never assigned a value and so the check on
-> > line 2238 could be checking an uninitialized variable ret. I'm not sure
-> > if this is a false positive, but it may be worth initializing ret to
-> > some sane value to catch these corner cases.
-> >
-> > Colin
-> >
+configs tested: 147
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                         shannon_defconfig
+sh                          rsk7269_defconfig
+arm                       imx_v6_v7_defconfig
+arm                        mini2440_defconfig
+arm                        keystone_defconfig
+sh                          sdk7780_defconfig
+arc                    vdk_hs38_smp_defconfig
+arm                         vf610m4_defconfig
+powerpc                          allmodconfig
+m68k                           sun3_defconfig
+mips                        nlm_xlp_defconfig
+arm                  colibri_pxa300_defconfig
+arm                         bcm2835_defconfig
+arm                      tct_hammer_defconfig
+csky                             alldefconfig
+sparc                       sparc32_defconfig
+sh                              ul2_defconfig
+sh                          rsk7264_defconfig
+ia64                        generic_defconfig
+arm                           viper_defconfig
+powerpc                 mpc836x_mds_defconfig
+arm                        clps711x_defconfig
+sparc                            alldefconfig
+sh                   sh7770_generic_defconfig
+arm                          pxa910_defconfig
+sh                          lboxre2_defconfig
+arm                        shmobile_defconfig
+arc                         haps_hs_defconfig
+powerpc                         wii_defconfig
+mips                        vocore2_defconfig
+sh                          polaris_defconfig
+m68k                          sun3x_defconfig
+arm                      footbridge_defconfig
+arm                   milbeaut_m10v_defconfig
+xtensa                    xip_kc705_defconfig
+sparc                       sparc64_defconfig
+mips                         mpc30x_defconfig
+h8300                            alldefconfig
+sh                           se7721_defconfig
+h8300                     edosk2674_defconfig
+arm                         at91_dt_defconfig
+sh                               alldefconfig
+powerpc                 mpc8272_ads_defconfig
+h8300                               defconfig
+sh                           se7619_defconfig
+sh                         ap325rxa_defconfig
+powerpc                     asp8347_defconfig
+xtensa                          iss_defconfig
+arm                        oxnas_v6_defconfig
+powerpc                    ge_imp3a_defconfig
+sh                          urquell_defconfig
+arm                          gemini_defconfig
+parisc                           alldefconfig
+mips                            gpr_defconfig
+mips                         db1xxx_defconfig
+sh                               j2_defconfig
+powerpc                      pmac32_defconfig
+mips                         rt305x_defconfig
+powerpc                      tqm8xx_defconfig
+nios2                         3c120_defconfig
+microblaze                      mmu_defconfig
+ia64                             allmodconfig
+powerpc                    mvme5100_defconfig
+arm                        magician_defconfig
+riscv             nommu_k210_sdcard_defconfig
+arm                          pxa168_defconfig
+mips                     loongson2k_defconfig
+powerpc64                           defconfig
+m68k                        mvme16x_defconfig
+mips                       bmips_be_defconfig
+arm                            mps2_defconfig
+x86_64                            allnoconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+i386                 randconfig-a002-20210610
+i386                 randconfig-a006-20210610
+i386                 randconfig-a004-20210610
+i386                 randconfig-a001-20210610
+i386                 randconfig-a005-20210610
+i386                 randconfig-a003-20210610
+x86_64               randconfig-a015-20210610
+x86_64               randconfig-a011-20210610
+x86_64               randconfig-a012-20210610
+x86_64               randconfig-a014-20210610
+x86_64               randconfig-a016-20210610
+x86_64               randconfig-a013-20210610
+i386                 randconfig-a015-20210610
+i386                 randconfig-a013-20210610
+i386                 randconfig-a016-20210610
+i386                 randconfig-a014-20210610
+i386                 randconfig-a012-20210610
+i386                 randconfig-a011-20210610
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+um                            kunit_defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a002-20210610
+x86_64               randconfig-a001-20210610
+x86_64               randconfig-a004-20210610
+x86_64               randconfig-a003-20210610
+x86_64               randconfig-a006-20210610
+x86_64               randconfig-a005-20210610
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
