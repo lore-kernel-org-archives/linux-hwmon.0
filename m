@@ -2,116 +2,87 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69B31C48BD1
-	for <linux-hwmon@archiver.kernel.org>; Fri, 11 Jun 2021 10:44:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FD5CC48BD1
+	for <linux-hwmon@archiver.kernel.org>; Fri, 11 Jun 2021 14:21:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 47369613AE
-	for <linux-hwmon@archiver.kernel.org>; Fri, 11 Jun 2021 10:44:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 12F006141E
+	for <linux-hwmon@archiver.kernel.org>; Fri, 11 Jun 2021 14:21:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbhFKKq2 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 11 Jun 2021 06:46:28 -0400
-Received: from mail-oi1-f177.google.com ([209.85.167.177]:42916 "EHLO
-        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbhFKKqZ (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 11 Jun 2021 06:46:25 -0400
-Received: by mail-oi1-f177.google.com with SMTP id s23so5354444oiw.9;
-        Fri, 11 Jun 2021 03:44:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KmtLQNVt01SxqlhzNXgyyhe3YPwY/DZFqbcsbWGOgN4=;
-        b=bl/7VocYqK8QFrluU82hPfR0mye62qAuKm232TZMhuPlqk0xQnz/31XEhvBw9oJvPs
-         UoeBo1Wp0kbIFx5zdCovlBH/XTqdcLGQCVyknTL7DXpUf52wWLbsmT9Zx+JzEac+MmdP
-         fhaslW10AYsvlNOyxJ1KZ/GZW/5liIc+VMkoamIiftj2lUITavc8lBGlWhFHkdo8v+Q/
-         xuBaUhtAfQf8vGC7pNAG9x0feka46JmTzNUN4IrO3SvvP62Opho1SN7awhpPyX4YgviA
-         OI84iw9+zN/jAvh23tDayYswnNsy8FnkZENUrmol1U+6XqnB/d1mA04E6+A2l4jTBAyR
-         FAYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=KmtLQNVt01SxqlhzNXgyyhe3YPwY/DZFqbcsbWGOgN4=;
-        b=JJM0Rq9X++In/+oIMWgRqFfMdOmMSSLaU8a4biVj8bRA/pmWUMWd/R0LAEUqJv4K6O
-         +h2Z56jLjbaTC+h6laVUfb66Yj52RWhzCOBspTFsGU0Sv9XCUnSbEn/KKmF9e3aeAQzF
-         f39WG/Li965cUVhDlGXbIrMZNKFEbf842cDdf12yu8+rAKju0r+j2s3W13pi3+DCOYEJ
-         +rhvhwb3GhlXJshZhIuapg4CKUlzDsnUV2aww3dofkE99Mi0gV2zuB1HXdmVylFOsRKY
-         xSstSLQ34/OEC4TNnZhi2bW9v2sF8rYBVbBqY/rLYALXkaBxvpJvNcHW9tw6eHucJyv/
-         egTg==
-X-Gm-Message-State: AOAM5301bEWFN58K0VXqLM6b4EzbfY30YcokVVVwUT5Nzq8s76IJEoIf
-        X9qPXGqKUmnWJ3EjVGPsJvF0QVa67zw=
-X-Google-Smtp-Source: ABdhPJyFMjYo2cTTrxo94xo12TTjXApgnNAHuyKCFvONalqBL1gX6X9Xptck3Q7sSDViCb6qqXmJEg==
-X-Received: by 2002:aca:f2c4:: with SMTP id q187mr1974669oih.141.1623408192370;
-        Fri, 11 Jun 2021 03:43:12 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w8sm1179304otk.16.2021.06.11.03.43.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Jun 2021 03:43:11 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v5.13-rc6
-Date:   Fri, 11 Jun 2021 03:43:10 -0700
-Message-Id: <20210611104310.35824-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.25.1
+        id S231288AbhFKOXN (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Fri, 11 Jun 2021 10:23:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48634 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231180AbhFKOXN (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Fri, 11 Jun 2021 10:23:13 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6A54361249;
+        Fri, 11 Jun 2021 14:21:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623421275;
+        bh=OeF3ldj+rUhKR2/T5fYFD/rp/bRkG3K2w1Q0z1uPw8Q=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OupZiZHZOId/g4+K73sUSaOJfqKsMyb5rZ/DRQaaI6tDAdDNo0oCiqCtZM4pzSi92
+         Dr6D9p6jvtgOW3QhIguBWdgmKBT7UBwRN9XKgtx5UV6bSuq4M04NO+wjDrAry5je9h
+         fl0rsjxky2TmaMiH5LqnMTHczRR87ZLsXfr/WLBd4MSDhE6G8ylNWf0uoFYbfze0fW
+         z1bEojQWQQ+x3iIC7zswkDH2v5UiTw98Vt4SeRBwkjR4H5nqXT6aoQnCs23OTMEX7F
+         h1Dxe5jqmSO91Ha0JRifN8hxKHhUz6PhbZlslIIKKiQAiShWbjC+uILinLnmClclBL
+         5Q7OgyvzPv9LA==
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH] hwmon: (ntc_thermistor) Drop unused headers.
+Date:   Fri, 11 Jun 2021 15:22:57 +0100
+Message-Id: <20210611142257.103094-1-jic23@kernel.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-Hi Linus,
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-Please pull hwmon fixes for Linux v5.13-rc6 from signed tag:
+The IIO usage in this driver is purely consumer so it should only
+be including linux/iio/consumer.h  Whilst here drop pm_runtime.h
+as there is no runtime power management in the driver.
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.13-rc6
+Found using include-what-you-use and manual inspection of the
+suggestions.
 
-Thanks,
-Guenter
-------
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/hwmon/ntc_thermistor.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-The following changes since commit 614124bea77e452aa6df7a8714e8bc820b489922:
+diff --git a/drivers/hwmon/ntc_thermistor.c b/drivers/hwmon/ntc_thermistor.c
+index 8587189c7f15..18fd6f12ca16 100644
+--- a/drivers/hwmon/ntc_thermistor.c
++++ b/drivers/hwmon/ntc_thermistor.c
+@@ -8,7 +8,6 @@
+ 
+ #include <linux/slab.h>
+ #include <linux/module.h>
+-#include <linux/pm_runtime.h>
+ #include <linux/math64.h>
+ #include <linux/platform_device.h>
+ #include <linux/err.h>
+@@ -17,9 +16,6 @@
+ 
+ #include <linux/platform_data/ntc_thermistor.h>
+ 
+-#include <linux/iio/iio.h>
+-#include <linux/iio/machine.h>
+-#include <linux/iio/driver.h>
+ #include <linux/iio/consumer.h>
+ 
+ #include <linux/hwmon.h>
+-- 
+2.31.1
 
-  Linux 5.13-rc5 (2021-06-06 15:47:27 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v5.13-rc6
-
-for you to fetch changes up to e13d1127241404f1c3eb1379ac4dd100eaf385b4:
-
-  hwmon: (tps23861) correct shunt LSB values (2021-06-10 08:40:09 -0700)
-
-----------------------------------------------------------------
-hwmon fixes for v5.13-rc6
-
-Fixes for tps23861, scpi-hwmon, and corsair-psu drivers, plus a bindings
-fix for TI ADS7828.
-
-----------------------------------------------------------------
-Nobuhiro Iwamatsu (1):
-      dt-bindings: hwmon: Fix typo in TI ADS7828 bindings
-
-Riwen Lu (1):
-      hwmon: (scpi-hwmon) shows the negative temperature properly
-
-Robert Marko (3):
-      hwmon: (tps23861) define regmap max register
-      hwmon: (tps23861) set current shunt value
-      hwmon: (tps23861) correct shunt LSB values
-
-Wilken Gottwalt (1):
-      hwmon: (corsair-psu) fix suspend behavior
-
- Documentation/devicetree/bindings/hwmon/ti,ads7828.yaml |  2 +-
- drivers/hwmon/corsair-psu.c                             | 14 ++++++++++++++
- drivers/hwmon/scpi-hwmon.c                              |  9 +++++++++
- drivers/hwmon/tps23861.c                                | 17 +++++++++++++++--
- 4 files changed, 39 insertions(+), 3 deletions(-)
