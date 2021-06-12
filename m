@@ -2,63 +2,116 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2075AC48BD1
-	for <linux-hwmon@archiver.kernel.org>; Fri, 11 Jun 2021 18:25:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F141C48BE5
+	for <linux-hwmon@archiver.kernel.org>; Sat, 12 Jun 2021 12:28:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0092B613D3
-	for <linux-hwmon@archiver.kernel.org>; Fri, 11 Jun 2021 18:25:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1A54761287
+	for <linux-hwmon@archiver.kernel.org>; Sat, 12 Jun 2021 12:28:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231272AbhFKS1t (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Fri, 11 Jun 2021 14:27:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46888 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231209AbhFKS1s (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Fri, 11 Jun 2021 14:27:48 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 9296B613AE;
-        Fri, 11 Jun 2021 18:25:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623435950;
-        bh=nWvtG4Wv9M++TxjMwYBqv9HkMwiUURIxSQjo9Kc/CR4=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=hh+Pe98945Co6J4Go6XFD9evZ4oJq2pQcIbs+7AnlxGMe9EmLFx1WZ1HUy3G9TVlU
-         f8yPEQp9mJYlsnut4HekiA3k6QLZ9Pobrmu4sFOHY1gzwen1MUXMppA298CDTpNQ9P
-         wVXgHCz9LCibnhsyQDzJ7xfiIIPcrD9XBt5JXP7DO2nWH1B6lO+J4mPnv9ad9BEXIH
-         R/g1/WxSSCwAhV3ctN6X/BfbUQH4H0wZwR4Ib7fQb8v/ii6Qm2WEJ1tnGBFr/l2eUj
-         chCEcrtGe9FCJwPChEh8UqI+GaQil7OvlFIgUESqJ7u89FYXYbnn3EfAIUxRLBIGwN
-         26/m+OgTcQJcQ==
-Subject: Re: [GIT PULL] hwmon fixes for v5.13-rc6
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20210611104310.35824-1-linux@roeck-us.net>
-References: <20210611104310.35824-1-linux@roeck-us.net>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20210611104310.35824-1-linux@roeck-us.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.13-rc6
-X-PR-Tracked-Commit-Id: e13d1127241404f1c3eb1379ac4dd100eaf385b4
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 4244b5d8725b28bde37eb2f979385bf782b5dde8
-Message-Id: <162343595057.23611.6330180669030852949.pr-tracker-bot@kernel.org>
-Date:   Fri, 11 Jun 2021 18:25:50 +0000
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+        id S230470AbhFLMaH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 12 Jun 2021 08:30:07 -0400
+Received: from mail-oi1-f175.google.com ([209.85.167.175]:37376 "EHLO
+        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230191AbhFLMaG (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 12 Jun 2021 08:30:06 -0400
+Received: by mail-oi1-f175.google.com with SMTP id h9so8932712oih.4;
+        Sat, 12 Jun 2021 05:27:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=HE18N15sbHAWuCNxwS8MJ4Z91CDwDRXGuQ4CjcS6FYc=;
+        b=u3IF3pA1zyTsfE3c6bWThAeN7o3zmBIDV3cyNZPQGKpPS7pIuyFjkO5en3QYwlGtSS
+         +3WJVXCjgcBkPTt0sM+hFBDQX5lsnH3P9H80c7nzCOrHwDO8APIxhakWHu41n9ew20xh
+         r0CAhNjmuObaOLISWMfpBV7QbCn7mvwqI4n/QvXln25mlN4v/cTUsCspDC/dEoQcg6Yu
+         LD2lfOHcWLgZKBJ67q7J5pBOSPLaBR0/oLLftXCvXeZgiqO/vhbs1ihO+71cxUSTZ/Mh
+         tNKHSDVGMgypnUWC1eAWLyZsr3cigJwFkzSguFwQZgsUJI4eCGzpGaonVdrA06kfdxsE
+         lw8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=HE18N15sbHAWuCNxwS8MJ4Z91CDwDRXGuQ4CjcS6FYc=;
+        b=g9zP1sgAgLb0Yv7zZRHurxOVmV7Yvs22DpxR2jP662A6T+dAM2poW4Vlw4CCP95vzc
+         DQeaGI/BQVgmWp/NtycUGThvjG6TzKxSkjcDwvdblFgCZtHzPgs4aK4YZSSWtfqKco0P
+         WWqyyeJ+QUKsYNIhmQEfQ9zqZTPDK6eHAyshl03e/jDvVR5rvyf7MSJ5VqSksuw5x/Pa
+         iwfKYjJVhlkrBuO5GohKp2activ1usoHx0OyL8KXwV9S2FlusAgnGVhbzbF5wY6T62WH
+         2Kakb1fZrVjwEhDQQ3fS3XQRsNub2rGeaFG6docYHgK6s8MGBF82pLCKPXe+EWck/rTO
+         MMtA==
+X-Gm-Message-State: AOAM5311Sr7E67PLpBydyX3uKVYYaZzVIS5eiVsewfZDiVrCveBrbZ6A
+        GWeXPc+a8YWlhGbH4iZnXcA=
+X-Google-Smtp-Source: ABdhPJzQBf1fp5rBJ0YZfU6ENkp4jGsM8qGr9gsTZ84SduUWFNi0VKNMbqNdZJsu9ERNH6CfQZdPkA==
+X-Received: by 2002:aca:4482:: with SMTP id r124mr5355527oia.153.1623500811604;
+        Sat, 12 Jun 2021 05:26:51 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id k18sm2017730otj.42.2021.06.12.05.26.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 12 Jun 2021 05:26:50 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 12 Jun 2021 05:26:49 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH] hwmon: (ntc_thermistor) Drop unused headers.
+Message-ID: <20210612122649.GA318728@roeck-us.net>
+References: <20210611142257.103094-1-jic23@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210611142257.103094-1-jic23@kernel.org>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-The pull request you sent on Fri, 11 Jun 2021 03:43:10 -0700:
+On Fri, Jun 11, 2021 at 03:22:57PM +0100, Jonathan Cameron wrote:
+> From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> 
+> The IIO usage in this driver is purely consumer so it should only
+> be including linux/iio/consumer.h  Whilst here drop pm_runtime.h
+> as there is no runtime power management in the driver.
+> 
+> Found using include-what-you-use and manual inspection of the
+> suggestions.
+> 
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.13-rc6
+Applied.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/4244b5d8725b28bde37eb2f979385bf782b5dde8
+Thanks,
+Guenter
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+> ---
+>  drivers/hwmon/ntc_thermistor.c | 4 ----
+>  1 file changed, 4 deletions(-)
+> 
+> diff --git a/drivers/hwmon/ntc_thermistor.c b/drivers/hwmon/ntc_thermistor.c
+> index 8587189c7f15..18fd6f12ca16 100644
+> --- a/drivers/hwmon/ntc_thermistor.c
+> +++ b/drivers/hwmon/ntc_thermistor.c
+> @@ -8,7 +8,6 @@
+>  
+>  #include <linux/slab.h>
+>  #include <linux/module.h>
+> -#include <linux/pm_runtime.h>
+>  #include <linux/math64.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/err.h>
+> @@ -17,9 +16,6 @@
+>  
+>  #include <linux/platform_data/ntc_thermistor.h>
+>  
+> -#include <linux/iio/iio.h>
+> -#include <linux/iio/machine.h>
+> -#include <linux/iio/driver.h>
+>  #include <linux/iio/consumer.h>
+>  
+>  #include <linux/hwmon.h>
