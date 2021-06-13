@@ -2,116 +2,167 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F141C48BE5
-	for <linux-hwmon@archiver.kernel.org>; Sat, 12 Jun 2021 12:28:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F328EC48BE5
+	for <linux-hwmon@archiver.kernel.org>; Sun, 13 Jun 2021 00:38:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1A54761287
-	for <linux-hwmon@archiver.kernel.org>; Sat, 12 Jun 2021 12:28:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BBC2261181
+	for <linux-hwmon@archiver.kernel.org>; Sun, 13 Jun 2021 00:38:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230470AbhFLMaH (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 12 Jun 2021 08:30:07 -0400
-Received: from mail-oi1-f175.google.com ([209.85.167.175]:37376 "EHLO
-        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230191AbhFLMaG (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 12 Jun 2021 08:30:06 -0400
-Received: by mail-oi1-f175.google.com with SMTP id h9so8932712oih.4;
-        Sat, 12 Jun 2021 05:27:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=HE18N15sbHAWuCNxwS8MJ4Z91CDwDRXGuQ4CjcS6FYc=;
-        b=u3IF3pA1zyTsfE3c6bWThAeN7o3zmBIDV3cyNZPQGKpPS7pIuyFjkO5en3QYwlGtSS
-         +3WJVXCjgcBkPTt0sM+hFBDQX5lsnH3P9H80c7nzCOrHwDO8APIxhakWHu41n9ew20xh
-         r0CAhNjmuObaOLISWMfpBV7QbCn7mvwqI4n/QvXln25mlN4v/cTUsCspDC/dEoQcg6Yu
-         LD2lfOHcWLgZKBJ67q7J5pBOSPLaBR0/oLLftXCvXeZgiqO/vhbs1ihO+71cxUSTZ/Mh
-         tNKHSDVGMgypnUWC1eAWLyZsr3cigJwFkzSguFwQZgsUJI4eCGzpGaonVdrA06kfdxsE
-         lw8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=HE18N15sbHAWuCNxwS8MJ4Z91CDwDRXGuQ4CjcS6FYc=;
-        b=g9zP1sgAgLb0Yv7zZRHurxOVmV7Yvs22DpxR2jP662A6T+dAM2poW4Vlw4CCP95vzc
-         DQeaGI/BQVgmWp/NtycUGThvjG6TzKxSkjcDwvdblFgCZtHzPgs4aK4YZSSWtfqKco0P
-         WWqyyeJ+QUKsYNIhmQEfQ9zqZTPDK6eHAyshl03e/jDvVR5rvyf7MSJ5VqSksuw5x/Pa
-         iwfKYjJVhlkrBuO5GohKp2activ1usoHx0OyL8KXwV9S2FlusAgnGVhbzbF5wY6T62WH
-         2Kakb1fZrVjwEhDQQ3fS3XQRsNub2rGeaFG6docYHgK6s8MGBF82pLCKPXe+EWck/rTO
-         MMtA==
-X-Gm-Message-State: AOAM5311Sr7E67PLpBydyX3uKVYYaZzVIS5eiVsewfZDiVrCveBrbZ6A
-        GWeXPc+a8YWlhGbH4iZnXcA=
-X-Google-Smtp-Source: ABdhPJzQBf1fp5rBJ0YZfU6ENkp4jGsM8qGr9gsTZ84SduUWFNi0VKNMbqNdZJsu9ERNH6CfQZdPkA==
-X-Received: by 2002:aca:4482:: with SMTP id r124mr5355527oia.153.1623500811604;
-        Sat, 12 Jun 2021 05:26:51 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k18sm2017730otj.42.2021.06.12.05.26.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Jun 2021 05:26:50 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 12 Jun 2021 05:26:49 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH] hwmon: (ntc_thermistor) Drop unused headers.
-Message-ID: <20210612122649.GA318728@roeck-us.net>
-References: <20210611142257.103094-1-jic23@kernel.org>
+        id S231548AbhFMAk3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sat, 12 Jun 2021 20:40:29 -0400
+Received: from mga06.intel.com ([134.134.136.31]:39636 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229777AbhFMAk2 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sat, 12 Jun 2021 20:40:28 -0400
+IronPort-SDR: 9XS/R19M/GqzgkkhtXBVGLq/YjxNWkJQHpaJkztGjGXOw67l9fBp/DspRLbQQlUqmwunDs8rRK
+ 8FU6EyxAVMSg==
+X-IronPort-AV: E=McAfee;i="6200,9189,10013"; a="266837770"
+X-IronPort-AV: E=Sophos;i="5.83,270,1616482800"; 
+   d="scan'208";a="266837770"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2021 17:38:27 -0700
+IronPort-SDR: UmsM8BMm2lpcqV+QFeS8ms29/pMc6+cJrathHDs6jAupEbVanzS0sMvruZtNF1WQGz1ZxSGFFC
+ kzA0G7oxaxIw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,270,1616482800"; 
+   d="scan'208";a="553758877"
+Received: from lkp-server02.sh.intel.com (HELO 3cb98b298c7e) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 12 Jun 2021 17:38:26 -0700
+Received: from kbuild by 3cb98b298c7e with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lsE8x-00017j-4V; Sun, 13 Jun 2021 00:38:27 +0000
+Date:   Sun, 13 Jun 2021 08:37:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:hwmon-next] BUILD SUCCESS
+ d92a42ae233e8d28e953a1e6d13b8fea81402191
+Message-ID: <60c55344.1QVmlrxatHVpwMuq%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210611142257.103094-1-jic23@kernel.org>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, Jun 11, 2021 at 03:22:57PM +0100, Jonathan Cameron wrote:
-> From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> 
-> The IIO usage in this driver is purely consumer so it should only
-> be including linux/iio/consumer.h  Whilst here drop pm_runtime.h
-> as there is no runtime power management in the driver.
-> 
-> Found using include-what-you-use and manual inspection of the
-> suggestions.
-> 
-> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+branch HEAD: d92a42ae233e8d28e953a1e6d13b8fea81402191  hwmon: (ntc_thermistor) Drop unused headers.
 
-Applied.
+elapsed time: 722m
 
-Thanks,
-Guenter
+configs tested: 98
+configs skipped: 2
 
-> ---
->  drivers/hwmon/ntc_thermistor.c | 4 ----
->  1 file changed, 4 deletions(-)
-> 
-> diff --git a/drivers/hwmon/ntc_thermistor.c b/drivers/hwmon/ntc_thermistor.c
-> index 8587189c7f15..18fd6f12ca16 100644
-> --- a/drivers/hwmon/ntc_thermistor.c
-> +++ b/drivers/hwmon/ntc_thermistor.c
-> @@ -8,7 +8,6 @@
->  
->  #include <linux/slab.h>
->  #include <linux/module.h>
-> -#include <linux/pm_runtime.h>
->  #include <linux/math64.h>
->  #include <linux/platform_device.h>
->  #include <linux/err.h>
-> @@ -17,9 +16,6 @@
->  
->  #include <linux/platform_data/ntc_thermistor.h>
->  
-> -#include <linux/iio/iio.h>
-> -#include <linux/iio/machine.h>
-> -#include <linux/iio/driver.h>
->  #include <linux/iio/consumer.h>
->  
->  #include <linux/hwmon.h>
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+m68k                        m5307c3_defconfig
+nios2                            allyesconfig
+m68k                       bvme6000_defconfig
+sh                            shmin_defconfig
+sh                      rts7751r2d1_defconfig
+powerpc64                           defconfig
+arm                            hisi_defconfig
+ia64                      gensparse_defconfig
+sh                           se7721_defconfig
+xtensa                generic_kc705_defconfig
+arm                        shmobile_defconfig
+arm                       imx_v6_v7_defconfig
+ia64                          tiger_defconfig
+mips                         tb0226_defconfig
+arm                           sunxi_defconfig
+sh                                  defconfig
+sh                          rsk7203_defconfig
+mips                      fuloong2e_defconfig
+sh                        edosk7760_defconfig
+sh                   rts7751r2dplus_defconfig
+xtensa                  nommu_kc705_defconfig
+x86_64                            allnoconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nds32                               defconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a002-20210612
+i386                 randconfig-a006-20210612
+i386                 randconfig-a001-20210612
+i386                 randconfig-a004-20210612
+i386                 randconfig-a005-20210612
+i386                 randconfig-a003-20210612
+x86_64               randconfig-a015-20210612
+x86_64               randconfig-a011-20210612
+x86_64               randconfig-a014-20210612
+x86_64               randconfig-a012-20210612
+x86_64               randconfig-a013-20210612
+x86_64               randconfig-a016-20210612
+i386                 randconfig-a015-20210612
+i386                 randconfig-a013-20210612
+i386                 randconfig-a016-20210612
+i386                 randconfig-a014-20210612
+i386                 randconfig-a012-20210612
+i386                 randconfig-a011-20210612
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+um                            kunit_defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a002-20210612
+x86_64               randconfig-a004-20210612
+x86_64               randconfig-a001-20210612
+x86_64               randconfig-a003-20210612
+x86_64               randconfig-a006-20210612
+x86_64               randconfig-a005-20210612
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
