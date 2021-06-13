@@ -2,167 +2,134 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F328EC48BE5
-	for <linux-hwmon@archiver.kernel.org>; Sun, 13 Jun 2021 00:38:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 354EBC48BCF
+	for <linux-hwmon@archiver.kernel.org>; Sun, 13 Jun 2021 14:06:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BBC2261181
-	for <linux-hwmon@archiver.kernel.org>; Sun, 13 Jun 2021 00:38:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0598361040
+	for <linux-hwmon@archiver.kernel.org>; Sun, 13 Jun 2021 14:06:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231548AbhFMAk3 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sat, 12 Jun 2021 20:40:29 -0400
-Received: from mga06.intel.com ([134.134.136.31]:39636 "EHLO mga06.intel.com"
+        id S231799AbhFMOIk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 13 Jun 2021 10:08:40 -0400
+Received: from mout01.posteo.de ([185.67.36.65]:54785 "EHLO mout01.posteo.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229777AbhFMAk2 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sat, 12 Jun 2021 20:40:28 -0400
-IronPort-SDR: 9XS/R19M/GqzgkkhtXBVGLq/YjxNWkJQHpaJkztGjGXOw67l9fBp/DspRLbQQlUqmwunDs8rRK
- 8FU6EyxAVMSg==
-X-IronPort-AV: E=McAfee;i="6200,9189,10013"; a="266837770"
-X-IronPort-AV: E=Sophos;i="5.83,270,1616482800"; 
-   d="scan'208";a="266837770"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2021 17:38:27 -0700
-IronPort-SDR: UmsM8BMm2lpcqV+QFeS8ms29/pMc6+cJrathHDs6jAupEbVanzS0sMvruZtNF1WQGz1ZxSGFFC
- kzA0G7oxaxIw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,270,1616482800"; 
-   d="scan'208";a="553758877"
-Received: from lkp-server02.sh.intel.com (HELO 3cb98b298c7e) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 12 Jun 2021 17:38:26 -0700
-Received: from kbuild by 3cb98b298c7e with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lsE8x-00017j-4V; Sun, 13 Jun 2021 00:38:27 +0000
-Date:   Sun, 13 Jun 2021 08:37:24 +0800
-From:   kernel test robot <lkp@intel.com>
+        id S231782AbhFMOIj (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 13 Jun 2021 10:08:39 -0400
+Received: from submission (posteo.de [89.146.220.130]) 
+        by mout01.posteo.de (Postfix) with ESMTPS id E9033240026
+        for <linux-hwmon@vger.kernel.org>; Sun, 13 Jun 2021 16:06:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+        t=1623593196; bh=0fO/biQu6UzHGDaQqIVmZUdYW9zZ982IBt2Ga4Bo+SU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=WomApdX9wxR2lDrc7kPMTzV5ZLqUXVobgFt+TJjkdhU7jrywd9JJdLoKvs0xNerGH
+         1ibKYmLiWfmWE5AIl0gLEtH4Na2Iph9Sb383Ol9TdCN9bfjNYOVp8WTADqGRawdKzJ
+         qRXjkh4ZiNb3XhAiZjICOCwzyzjh442lUI7M7gj26Scrq6MnkdQZ4Ujco5sl9tUDnq
+         TtquPjQ+azAJddYy8ZhfXgDmvxD+/P5rw5dnIy0SCbomeDosvKJhsD/UgWnP86V0s5
+         tnw4+/uDuw9BsYj1xLjQYwc+AN/xY/xjhkTIO2h3XHbw0+/cLpVhB3RGyLX1cF/xcP
+         Kth2JxVg8aRug==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4G2xG34xGmz9rxT;
+        Sun, 13 Jun 2021 16:06:35 +0200 (CEST)
+Date:   Sun, 13 Jun 2021 14:06:34 +0000
+From:   Wilken Gottwalt <wilken.gottwalt@posteo.net>
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org
-Subject: [hwmon:hwmon-next] BUILD SUCCESS
- d92a42ae233e8d28e953a1e6d13b8fea81402191
-Message-ID: <60c55344.1QVmlrxatHVpwMuq%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v2] hwmon: corsair-psu: fix suspend behavior
+Message-ID: <20210613160634.52d90cc5@monster.powergraphx.local>
+In-Reply-To: <20210604110514.GA1445546@roeck-us.net>
+References: <YLjCJiVtu5zgTabI@monster.powergraphx.local>
+        <20210603160533.GA3952041@roeck-us.net>
+        <20210604071711.78271072@monster.powergraphx.local>
+        <20210604110514.GA1445546@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-branch HEAD: d92a42ae233e8d28e953a1e6d13b8fea81402191  hwmon: (ntc_thermistor) Drop unused headers.
+On Fri, 4 Jun 2021 04:05:14 -0700
+Guenter Roeck <linux@roeck-us.net> wrote:
 
-elapsed time: 722m
+> On Fri, Jun 04, 2021 at 05:17:11AM +0000, Wilken Gottwalt wrote:
+> > On Thu, 3 Jun 2021 09:05:33 -0700
+> > Guenter Roeck <linux@roeck-us.net> wrote:
+> > 
+> > > On Thu, Jun 03, 2021 at 11:51:02AM +0000, Wilken Gottwalt wrote:
+> > > > During standby some PSUs turn off the microcontroller. A re-init is
+> > > > required during resume or the microcontroller stays unresponsive.
+> > > > 
+> > > > Fixes: d115b51e0e56 ("hwmon: add Corsair PSU HID controller driver")
+> > > > Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+> > > 
+> > > Applied.
+> > 
+> > Thank you. Though I have an odd question. I would like to change the licensing to
+> > a dual license (GPL/MPL) to support the LibreHardwareMonitor project. They want
+> > to use my code but use a MPL license. What would be the best way to do this?
+> 
+> Submit a patch which would need an Acked-by: from everyone who contributed
+> to the driver. As far as I can see, that would be Wan Jiabing
+> <wanjiabing@vivo.com>, Jack Doan <me@jackdoan.com>, and Colin Ian King
+> <colin.king@canonical.com>. I would suggest to ask them first if the license
+> change is ok with them.
 
-configs tested: 98
-configs skipped: 2
+I got the okay from Jack who had the idea for the precision patch. But the other
+two, who did the semicolon and long cast patches do not reply. So what now?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> Guenter
+> 
+> > 
+> > greetings,
+> > Will
+> > 
+> > > Thanks,
+> > > Guenter
+> > > 
+> > > > ---
+> > > > Changes in v2:
+> > > >   - corrected fixes commit
+> > > > ---
+> > > >  drivers/hwmon/corsair-psu.c | 14 ++++++++++++++
+> > > >  1 file changed, 14 insertions(+)
+> > > > 
+> > > > diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
+> > > > index 02298b86b57b..731d5117f9f1 100644
+> > > > --- a/drivers/hwmon/corsair-psu.c
+> > > > +++ b/drivers/hwmon/corsair-psu.c
+> > > > @@ -771,6 +771,16 @@ static int corsairpsu_raw_event(struct hid_device *hdev, struct
+> > > > hid_report *repo return 0;
+> > > >  }
+> > > >  
+> > > > +#ifdef CONFIG_PM
+> > > > +static int corsairpsu_resume(struct hid_device *hdev)
+> > > > +{
+> > > > +	struct corsairpsu_data *priv = hid_get_drvdata(hdev);
+> > > > +
+> > > > +	/* some PSUs turn off the microcontroller during standby, so a reinit is required
+> > > > */
+> > > > +	return corsairpsu_init(priv);
+> > > > +}
+> > > > +#endif
+> > > > +
+> > > >  static const struct hid_device_id corsairpsu_idtable[] = {
+> > > >  	{ HID_USB_DEVICE(0x1b1c, 0x1c03) }, /* Corsair HX550i */
+> > > >  	{ HID_USB_DEVICE(0x1b1c, 0x1c04) }, /* Corsair HX650i */
+> > > > @@ -793,6 +803,10 @@ static struct hid_driver corsairpsu_driver = {
+> > > >  	.probe		= corsairpsu_probe,
+> > > >  	.remove		= corsairpsu_remove,
+> > > >  	.raw_event	= corsairpsu_raw_event,
+> > > > +#ifdef CONFIG_PM
+> > > > +	.resume		= corsairpsu_resume,
+> > > > +	.reset_resume	= corsairpsu_resume,
+> > > > +#endif
+> > > >  };
+> > > >  module_hid_driver(corsairpsu_driver);
+> > > >  
+> > 
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-m68k                        m5307c3_defconfig
-nios2                            allyesconfig
-m68k                       bvme6000_defconfig
-sh                            shmin_defconfig
-sh                      rts7751r2d1_defconfig
-powerpc64                           defconfig
-arm                            hisi_defconfig
-ia64                      gensparse_defconfig
-sh                           se7721_defconfig
-xtensa                generic_kc705_defconfig
-arm                        shmobile_defconfig
-arm                       imx_v6_v7_defconfig
-ia64                          tiger_defconfig
-mips                         tb0226_defconfig
-arm                           sunxi_defconfig
-sh                                  defconfig
-sh                          rsk7203_defconfig
-mips                      fuloong2e_defconfig
-sh                        edosk7760_defconfig
-sh                   rts7751r2dplus_defconfig
-xtensa                  nommu_kc705_defconfig
-x86_64                            allnoconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                               defconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a002-20210612
-i386                 randconfig-a006-20210612
-i386                 randconfig-a001-20210612
-i386                 randconfig-a004-20210612
-i386                 randconfig-a005-20210612
-i386                 randconfig-a003-20210612
-x86_64               randconfig-a015-20210612
-x86_64               randconfig-a011-20210612
-x86_64               randconfig-a014-20210612
-x86_64               randconfig-a012-20210612
-x86_64               randconfig-a013-20210612
-x86_64               randconfig-a016-20210612
-i386                 randconfig-a015-20210612
-i386                 randconfig-a013-20210612
-i386                 randconfig-a016-20210612
-i386                 randconfig-a014-20210612
-i386                 randconfig-a012-20210612
-i386                 randconfig-a011-20210612
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-um                            kunit_defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a002-20210612
-x86_64               randconfig-a004-20210612
-x86_64               randconfig-a001-20210612
-x86_64               randconfig-a003-20210612
-x86_64               randconfig-a006-20210612
-x86_64               randconfig-a005-20210612
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
