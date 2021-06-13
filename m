@@ -2,134 +2,117 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 354EBC48BCF
-	for <linux-hwmon@archiver.kernel.org>; Sun, 13 Jun 2021 14:06:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B194EC48BCF
+	for <linux-hwmon@archiver.kernel.org>; Sun, 13 Jun 2021 17:43:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0598361040
-	for <linux-hwmon@archiver.kernel.org>; Sun, 13 Jun 2021 14:06:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5D0B561245
+	for <linux-hwmon@archiver.kernel.org>; Sun, 13 Jun 2021 17:43:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231799AbhFMOIk (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 13 Jun 2021 10:08:40 -0400
-Received: from mout01.posteo.de ([185.67.36.65]:54785 "EHLO mout01.posteo.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231782AbhFMOIj (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 13 Jun 2021 10:08:39 -0400
-Received: from submission (posteo.de [89.146.220.130]) 
-        by mout01.posteo.de (Postfix) with ESMTPS id E9033240026
-        for <linux-hwmon@vger.kernel.org>; Sun, 13 Jun 2021 16:06:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-        t=1623593196; bh=0fO/biQu6UzHGDaQqIVmZUdYW9zZ982IBt2Ga4Bo+SU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=WomApdX9wxR2lDrc7kPMTzV5ZLqUXVobgFt+TJjkdhU7jrywd9JJdLoKvs0xNerGH
-         1ibKYmLiWfmWE5AIl0gLEtH4Na2Iph9Sb383Ol9TdCN9bfjNYOVp8WTADqGRawdKzJ
-         qRXjkh4ZiNb3XhAiZjICOCwzyzjh442lUI7M7gj26Scrq6MnkdQZ4Ujco5sl9tUDnq
-         TtquPjQ+azAJddYy8ZhfXgDmvxD+/P5rw5dnIy0SCbomeDosvKJhsD/UgWnP86V0s5
-         tnw4+/uDuw9BsYj1xLjQYwc+AN/xY/xjhkTIO2h3XHbw0+/cLpVhB3RGyLX1cF/xcP
-         Kth2JxVg8aRug==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4G2xG34xGmz9rxT;
-        Sun, 13 Jun 2021 16:06:35 +0200 (CEST)
-Date:   Sun, 13 Jun 2021 14:06:34 +0000
-From:   Wilken Gottwalt <wilken.gottwalt@posteo.net>
-To:     Guenter Roeck <linux@roeck-us.net>
+        id S232014AbhFMRpm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Sun, 13 Jun 2021 13:45:42 -0400
+Received: from mail-ot1-f53.google.com ([209.85.210.53]:42953 "EHLO
+        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231993AbhFMRpm (ORCPT
+        <rfc822;linux-hwmon@vger.kernel.org>);
+        Sun, 13 Jun 2021 13:45:42 -0400
+Received: by mail-ot1-f53.google.com with SMTP id w23-20020a9d5a970000b02903d0ef989477so8560846oth.9;
+        Sun, 13 Jun 2021 10:43:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=b1k7TRHF20GQ9+ZiP+urohHT5ori3/TwFMUw8md/cUw=;
+        b=OI/uVMgeyrToSFf4lQlsPUXtIRYLcTRwn/8/y6zkiCWzcr073eSmMkLpC1GzOV2xGE
+         ixffTw8p0qwS81giz3GhUXOMraIVOEfsg5EQ8GDZaRTSDZVgb8qbw7E6ad8JJ72ArpMh
+         3d/YoFp4mOZV+FGbHHqd+LfuHSGRamLG203Gc1axC4OtJ4PvJmQVnfHwH+MYIqcR01KU
+         AlB5Dq6g71fdET3PReDv6HknSlY6Ujn+kyMGCKiHoyUEjuSPerkKy8ZvY9dWdxnKH9aQ
+         fDQ1ftI5fJuXdhUk7cPzuhBDvb/E9tt+zHgApkta5gKj71PdtZ8b5C3XNP5O9+/o15Ch
+         QS7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=b1k7TRHF20GQ9+ZiP+urohHT5ori3/TwFMUw8md/cUw=;
+        b=bmiudGcDNm/8BD96QXPomIalJqlPmrp/MMScBHZZtC5i1xhBj8wOih15TsR6qfWJiE
+         U1SF3vl/MToiGADJ9QcgMKXQhD1c1aUoF8ytTnFwR3lYNlu0JkssKCBURWWDxRnRfkX+
+         6YqqlbiOJh/NZ1ML3TWLKY9pOFSGwdinKyRxfdwmyriOWJxLsqn+Cz2dw7EZhOaQqs6o
+         hnXWEbxoiRya9Tj50Qy9sb/k0KevSp7si/CrxGxkwvTKbVKX4Y4GKF95xf6eQKkkYRoG
+         xsiLBM+dIt+uj2Ub+OBn9ggZtPvxLo66sII0Iqs7ZXOV+LsJSvJLcqq8kZ4RWFJ4lRx+
+         amKQ==
+X-Gm-Message-State: AOAM531qenNzXHKFuCEDnao9TlVEY/nTLfYv9dOKD7a/tETpRtEL6MIX
+        r2wrGCYmrVj+cUJcotu3Tow=
+X-Google-Smtp-Source: ABdhPJwbm1lPnINWkb/BOTCBmtuBsGBw1nUxiAS05u5e4Rs4GIzJk51O4PLjrH83hSlKUnr9kJeUuA==
+X-Received: by 2002:a05:6830:2157:: with SMTP id r23mr11092364otd.138.1623606160838;
+        Sun, 13 Jun 2021 10:42:40 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z5sm1143021oth.6.2021.06.13.10.42.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 13 Jun 2021 10:42:40 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 13 Jun 2021 10:42:38 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Wilken Gottwalt <wilken.gottwalt@posteo.net>
 Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
         Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
 Subject: Re: [PATCH v2] hwmon: corsair-psu: fix suspend behavior
-Message-ID: <20210613160634.52d90cc5@monster.powergraphx.local>
-In-Reply-To: <20210604110514.GA1445546@roeck-us.net>
+Message-ID: <20210613174238.GA3573626@roeck-us.net>
 References: <YLjCJiVtu5zgTabI@monster.powergraphx.local>
-        <20210603160533.GA3952041@roeck-us.net>
-        <20210604071711.78271072@monster.powergraphx.local>
-        <20210604110514.GA1445546@roeck-us.net>
+ <20210603160533.GA3952041@roeck-us.net>
+ <20210604071711.78271072@monster.powergraphx.local>
+ <20210604110514.GA1445546@roeck-us.net>
+ <20210613160634.52d90cc5@monster.powergraphx.local>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210613160634.52d90cc5@monster.powergraphx.local>
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Fri, 4 Jun 2021 04:05:14 -0700
-Guenter Roeck <linux@roeck-us.net> wrote:
-
-> On Fri, Jun 04, 2021 at 05:17:11AM +0000, Wilken Gottwalt wrote:
-> > On Thu, 3 Jun 2021 09:05:33 -0700
-> > Guenter Roeck <linux@roeck-us.net> wrote:
-> > 
-> > > On Thu, Jun 03, 2021 at 11:51:02AM +0000, Wilken Gottwalt wrote:
-> > > > During standby some PSUs turn off the microcontroller. A re-init is
-> > > > required during resume or the microcontroller stays unresponsive.
-> > > > 
-> > > > Fixes: d115b51e0e56 ("hwmon: add Corsair PSU HID controller driver")
-> > > > Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
-> > > 
-> > > Applied.
-> > 
-> > Thank you. Though I have an odd question. I would like to change the licensing to
-> > a dual license (GPL/MPL) to support the LibreHardwareMonitor project. They want
-> > to use my code but use a MPL license. What would be the best way to do this?
+On Sun, Jun 13, 2021 at 02:06:34PM +0000, Wilken Gottwalt wrote:
+> On Fri, 4 Jun 2021 04:05:14 -0700
+> Guenter Roeck <linux@roeck-us.net> wrote:
 > 
-> Submit a patch which would need an Acked-by: from everyone who contributed
-> to the driver. As far as I can see, that would be Wan Jiabing
-> <wanjiabing@vivo.com>, Jack Doan <me@jackdoan.com>, and Colin Ian King
-> <colin.king@canonical.com>. I would suggest to ask them first if the license
-> change is ok with them.
-
-I got the okay from Jack who had the idea for the precision patch. But the other
-two, who did the semicolon and long cast patches do not reply. So what now?
-
-> Guenter
-> 
-> > 
-> > greetings,
-> > Will
-> > 
-> > > Thanks,
-> > > Guenter
+> > On Fri, Jun 04, 2021 at 05:17:11AM +0000, Wilken Gottwalt wrote:
+> > > On Thu, 3 Jun 2021 09:05:33 -0700
+> > > Guenter Roeck <linux@roeck-us.net> wrote:
 > > > 
-> > > > ---
-> > > > Changes in v2:
-> > > >   - corrected fixes commit
-> > > > ---
-> > > >  drivers/hwmon/corsair-psu.c | 14 ++++++++++++++
-> > > >  1 file changed, 14 insertions(+)
+> > > > On Thu, Jun 03, 2021 at 11:51:02AM +0000, Wilken Gottwalt wrote:
+> > > > > During standby some PSUs turn off the microcontroller. A re-init is
+> > > > > required during resume or the microcontroller stays unresponsive.
+> > > > > 
+> > > > > Fixes: d115b51e0e56 ("hwmon: add Corsair PSU HID controller driver")
+> > > > > Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
 > > > > 
-> > > > diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
-> > > > index 02298b86b57b..731d5117f9f1 100644
-> > > > --- a/drivers/hwmon/corsair-psu.c
-> > > > +++ b/drivers/hwmon/corsair-psu.c
-> > > > @@ -771,6 +771,16 @@ static int corsairpsu_raw_event(struct hid_device *hdev, struct
-> > > > hid_report *repo return 0;
-> > > >  }
-> > > >  
-> > > > +#ifdef CONFIG_PM
-> > > > +static int corsairpsu_resume(struct hid_device *hdev)
-> > > > +{
-> > > > +	struct corsairpsu_data *priv = hid_get_drvdata(hdev);
-> > > > +
-> > > > +	/* some PSUs turn off the microcontroller during standby, so a reinit is required
-> > > > */
-> > > > +	return corsairpsu_init(priv);
-> > > > +}
-> > > > +#endif
-> > > > +
-> > > >  static const struct hid_device_id corsairpsu_idtable[] = {
-> > > >  	{ HID_USB_DEVICE(0x1b1c, 0x1c03) }, /* Corsair HX550i */
-> > > >  	{ HID_USB_DEVICE(0x1b1c, 0x1c04) }, /* Corsair HX650i */
-> > > > @@ -793,6 +803,10 @@ static struct hid_driver corsairpsu_driver = {
-> > > >  	.probe		= corsairpsu_probe,
-> > > >  	.remove		= corsairpsu_remove,
-> > > >  	.raw_event	= corsairpsu_raw_event,
-> > > > +#ifdef CONFIG_PM
-> > > > +	.resume		= corsairpsu_resume,
-> > > > +	.reset_resume	= corsairpsu_resume,
-> > > > +#endif
-> > > >  };
-> > > >  module_hid_driver(corsairpsu_driver);
-> > > >  
+> > > > Applied.
+> > > 
+> > > Thank you. Though I have an odd question. I would like to change the licensing to
+> > > a dual license (GPL/MPL) to support the LibreHardwareMonitor project. They want
+> > > to use my code but use a MPL license. What would be the best way to do this?
 > > 
+> > Submit a patch which would need an Acked-by: from everyone who contributed
+> > to the driver. As far as I can see, that would be Wan Jiabing
+> > <wanjiabing@vivo.com>, Jack Doan <me@jackdoan.com>, and Colin Ian King
+> > <colin.king@canonical.com>. I would suggest to ask them first if the license
+> > change is ok with them.
+> 
+> I got the okay from Jack who had the idea for the precision patch. But the other
+> two, who did the semicolon and long cast patches do not reply. So what now?
+> 
 
+I see two options:
+- Publish your original code (not including the semicolon and long cast
+  patches) as an out-of-tree driver at github or some other open source
+  repository site, with whatever license you want, and ask
+  LibreHardwareMonitor pull it from there.
+- Submit the driver yourself into LibreHardwareMonitor, again not
+  including the problematic changes, with whatever license you want.
+
+Disclaimer: I am not an attorney, and this is not legal advice.
+
+Guenter
