@@ -2,46 +2,46 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28DBAC49EBD
-	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Jun 2021 15:49:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79EEAC48BE5
+	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Jun 2021 15:50:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0E64C616E9
-	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Jun 2021 15:49:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 64D5D61923
+	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Jun 2021 15:50:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232086AbhFOPvX (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 15 Jun 2021 11:51:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44908 "EHLO mail.kernel.org"
+        id S232425AbhFOPwi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 15 Jun 2021 11:52:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45708 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231811AbhFOPvJ (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 15 Jun 2021 11:51:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 773C161626;
-        Tue, 15 Jun 2021 15:49:03 +0000 (UTC)
+        id S231992AbhFOPvu (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 15 Jun 2021 11:51:50 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 09FFC6148E;
+        Tue, 15 Jun 2021 15:49:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623772144;
+        s=k20201202; t=1623772185;
         bh=4N5XB1kMClR4uHWK6xi+bP3P4je3OwE/wcElNSnGzR8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Es3xagj2KUF5kG7rhVHp9Pl/rwku0fetj6JysfpSui60Nkuk9krMNFTF9n+reLfbK
-         1kZaXO4gqamMR5lS6KIpi8mWHVDTxsXjBx5cxYXSLJX+45kQLB+aq/f66sH/Pk4icP
-         8plkE7o9HTVhSeDU/C2po/+ilGR+n8GFzHjIkLEP0wqwoMDPcAjZ2e71JWEikrREdT
-         Jx0mst69MLJzGcHPvY588/+EGLQ7XtuDT1uibDNXHpmMUvi2+jqkKb95Gcr2KcJ/No
-         D82ciiG/BcfOZoTWA3PP4j6jUBAMFp6wdM1mIK9bsPzQ/W5y22EO0+5myGAevNbJXN
-         N/VqJGuFmPLkA==
+        b=jjCg3pDFyFqxulMyHHREhpDhhSEQDs8zRH4ELML63yLVY3n8c2anjmebE2R+O3sLX
+         4nkMA3U1LJJ2d45RB2/HABxkG+KLtyIFbBUVw2woBa5jG0+9eAyorP7BZ9EB4+5SC7
+         Rv9GjOoydx5SZ5dBM5NeKYakcmFdIa9Fi6rzulchV9mlfnIyYUUR0bO1BtDnqb6ipQ
+         gCSEVJiTCgWrksaL83rCe35IYweCKPafEF/zEtwqtAlio32T3IWzsW99FdY2C4NLO5
+         j+wACulERn+Hy6ZDXRMIttE8SkDE7qEc6ykMY0bQg49XhSfsseOKnTCWZfDO9UHWaO
+         XoARGyuCrXzZA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Riwen Lu <luriwen@kylinos.cn>, Xin Chen <chenxin@kylinos.cn>,
         Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.12 31/33] hwmon: (scpi-hwmon) shows the negative temperature properly
-Date:   Tue, 15 Jun 2021 11:48:22 -0400
-Message-Id: <20210615154824.62044-31-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 29/30] hwmon: (scpi-hwmon) shows the negative temperature properly
+Date:   Tue, 15 Jun 2021 11:49:06 -0400
+Message-Id: <20210615154908.62388-29-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210615154824.62044-1-sashal@kernel.org>
-References: <20210615154824.62044-1-sashal@kernel.org>
+In-Reply-To: <20210615154908.62388-1-sashal@kernel.org>
+References: <20210615154908.62388-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
