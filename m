@@ -7,41 +7,41 @@ X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79EEAC48BE5
-	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Jun 2021 15:50:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F154C48BDF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Jun 2021 15:51:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 64D5D61923
-	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Jun 2021 15:50:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 79A2861476
+	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Jun 2021 15:51:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232425AbhFOPwi (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 15 Jun 2021 11:52:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45708 "EHLO mail.kernel.org"
+        id S232754AbhFOPx4 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 15 Jun 2021 11:53:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46738 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231992AbhFOPvu (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 15 Jun 2021 11:51:50 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 09FFC6148E;
-        Tue, 15 Jun 2021 15:49:44 +0000 (UTC)
+        id S232377AbhFOPw0 (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 15 Jun 2021 11:52:26 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 341026191D;
+        Tue, 15 Jun 2021 15:50:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623772185;
+        s=k20201202; t=1623772209;
         bh=4N5XB1kMClR4uHWK6xi+bP3P4je3OwE/wcElNSnGzR8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jjCg3pDFyFqxulMyHHREhpDhhSEQDs8zRH4ELML63yLVY3n8c2anjmebE2R+O3sLX
-         4nkMA3U1LJJ2d45RB2/HABxkG+KLtyIFbBUVw2woBa5jG0+9eAyorP7BZ9EB4+5SC7
-         Rv9GjOoydx5SZ5dBM5NeKYakcmFdIa9Fi6rzulchV9mlfnIyYUUR0bO1BtDnqb6ipQ
-         gCSEVJiTCgWrksaL83rCe35IYweCKPafEF/zEtwqtAlio32T3IWzsW99FdY2C4NLO5
-         j+wACulERn+Hy6ZDXRMIttE8SkDE7qEc6ykMY0bQg49XhSfsseOKnTCWZfDO9UHWaO
-         XoARGyuCrXzZA==
+        b=rTuTLioXjVOnh8N7+yYc7Nia8m4/7naXE24r4mVPcAX6u20HyYjSrVHJVSSYmvtC5
+         lL9+JNHKftEY8zlZUTv3yz/6x5DeDE7YkS87ai8rskzpUchCtSKIRVhibV6pa/ftCy
+         jVVz268zIQsfAns5DMf0+ppPzQWgPL/t+4TQwiWFO0Mib3EK6QHBR0njtA3vqNjqXm
+         MuerTdg3b61euAMjB8ELbomJ7qgtztspC9m0DCa0ytzOPK5NnTDeny2uHlGT0z/A4h
+         bD9dTmkp5KaQutKDGXmtDG4K52odUbbiPRNUqdH5yownolzEkzwKkThrzn/ZfTpnJ2
+         vyHCtu5W7p/xw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Riwen Lu <luriwen@kylinos.cn>, Xin Chen <chenxin@kylinos.cn>,
         Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 29/30] hwmon: (scpi-hwmon) shows the negative temperature properly
-Date:   Tue, 15 Jun 2021 11:49:06 -0400
-Message-Id: <20210615154908.62388-29-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 15/15] hwmon: (scpi-hwmon) shows the negative temperature properly
+Date:   Tue, 15 Jun 2021 11:49:47 -0400
+Message-Id: <20210615154948.62711-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210615154908.62388-1-sashal@kernel.org>
-References: <20210615154908.62388-1-sashal@kernel.org>
+In-Reply-To: <20210615154948.62711-1-sashal@kernel.org>
+References: <20210615154948.62711-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
