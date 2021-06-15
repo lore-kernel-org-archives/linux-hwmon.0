@@ -4,44 +4,44 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64AB6C49EA2
-	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Jun 2021 15:52:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D563C48BE8
+	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Jun 2021 15:53:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 524EB61446
-	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Jun 2021 15:52:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 87A0C608FE
+	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Jun 2021 15:53:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232501AbhFOPzA (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 15 Jun 2021 11:55:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47234 "EHLO mail.kernel.org"
+        id S231766AbhFOPzy (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 15 Jun 2021 11:55:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46738 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232261AbhFOPxA (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 15 Jun 2021 11:53:00 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9CDEC6142E;
-        Tue, 15 Jun 2021 15:50:25 +0000 (UTC)
+        id S232748AbhFOPxz (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 15 Jun 2021 11:53:55 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F2A7961628;
+        Tue, 15 Jun 2021 15:50:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623772226;
+        s=k20201202; t=1623772238;
         bh=wRJuFAUKBN9IqlvNRNlL4iFilXRpZrVKLPOlZFTk0FE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FOA5D6VWKFX3+NSinWuk4/INot03nc1j2aarjphbeOJx8utK8NRUwJgvmfLcFJPRK
-         E3CK80OHZeLd4A8UejcTWS5DdsZItauRtSQloIXdB2AhgMPXrXUqBlCWDyWSCisMcA
-         CJY8OQizO6PU4CprQlVZ7nUoTawwNEBRZ+MiIEK1ljQ/0CDscTFF0HiJM2OLRTAtQy
-         2ksAaIb4oG6rJl9z45A+zTdCrpx3Bm6XokpwLlFwcKJ9/bNX/RqlLjoFGA8Y8W7lCL
-         W4FcdJjxXLHrLfuvUdKfyiD/IM+tQmAF9+j+iHz8sUDU9CMVEx9+htFeV8CaoARdud
-         C5bImN2kia8sw==
+        b=lXftWo5o97UrdZYywcDN0ApevbV4s46Pe1ofXWhUWbluQMDYZNWsL0BE80IBYUOU4
+         DRnWo41oYDOqxBnsS0qMYaUqjI3RTBCp/uE8ckiZZmB/Zo3twjyd6aXoURdSepCpvk
+         wXlkvMYNrN8/xMigJ0RxJKpZ6+ZU+kV0IRJivJgO+T2xxsKr8ydCj6wjEUwGCw5wp0
+         FhH5rP4vMG54gXC47TPC1Q+ap6PSARTRrEs1jW7accwBSDc9oPjatBcGbRszZ7sNDW
+         x6MQaaJctmGF4lgPMQTxcSZkeBcTjUmAayVvmbgJ3JbxpfbexWYl3JXlR6fRWBsc7/
+         /8349t8+NlMPA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Riwen Lu <luriwen@kylinos.cn>, Xin Chen <chenxin@kylinos.cn>,
         Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>, linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 12/12] hwmon: (scpi-hwmon) shows the negative temperature properly
-Date:   Tue, 15 Jun 2021 11:50:09 -0400
-Message-Id: <20210615155009.62894-12-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 8/8] hwmon: (scpi-hwmon) shows the negative temperature properly
+Date:   Tue, 15 Jun 2021 11:50:27 -0400
+Message-Id: <20210615155027.63048-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210615155009.62894-1-sashal@kernel.org>
-References: <20210615155009.62894-1-sashal@kernel.org>
+In-Reply-To: <20210615155027.63048-1-sashal@kernel.org>
+References: <20210615155027.63048-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
