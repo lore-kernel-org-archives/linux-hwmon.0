@@ -2,117 +2,251 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B194EC48BCF
-	for <linux-hwmon@archiver.kernel.org>; Sun, 13 Jun 2021 17:43:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B072C48BDF
+	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Jun 2021 08:49:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5D0B561245
-	for <linux-hwmon@archiver.kernel.org>; Sun, 13 Jun 2021 17:43:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 06F2F611C0
+	for <linux-hwmon@archiver.kernel.org>; Tue, 15 Jun 2021 08:49:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232014AbhFMRpm (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Sun, 13 Jun 2021 13:45:42 -0400
-Received: from mail-ot1-f53.google.com ([209.85.210.53]:42953 "EHLO
-        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231993AbhFMRpm (ORCPT
-        <rfc822;linux-hwmon@vger.kernel.org>);
-        Sun, 13 Jun 2021 13:45:42 -0400
-Received: by mail-ot1-f53.google.com with SMTP id w23-20020a9d5a970000b02903d0ef989477so8560846oth.9;
-        Sun, 13 Jun 2021 10:43:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=b1k7TRHF20GQ9+ZiP+urohHT5ori3/TwFMUw8md/cUw=;
-        b=OI/uVMgeyrToSFf4lQlsPUXtIRYLcTRwn/8/y6zkiCWzcr073eSmMkLpC1GzOV2xGE
-         ixffTw8p0qwS81giz3GhUXOMraIVOEfsg5EQ8GDZaRTSDZVgb8qbw7E6ad8JJ72ArpMh
-         3d/YoFp4mOZV+FGbHHqd+LfuHSGRamLG203Gc1axC4OtJ4PvJmQVnfHwH+MYIqcR01KU
-         AlB5Dq6g71fdET3PReDv6HknSlY6Ujn+kyMGCKiHoyUEjuSPerkKy8ZvY9dWdxnKH9aQ
-         fDQ1ftI5fJuXdhUk7cPzuhBDvb/E9tt+zHgApkta5gKj71PdtZ8b5C3XNP5O9+/o15Ch
-         QS7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=b1k7TRHF20GQ9+ZiP+urohHT5ori3/TwFMUw8md/cUw=;
-        b=bmiudGcDNm/8BD96QXPomIalJqlPmrp/MMScBHZZtC5i1xhBj8wOih15TsR6qfWJiE
-         U1SF3vl/MToiGADJ9QcgMKXQhD1c1aUoF8ytTnFwR3lYNlu0JkssKCBURWWDxRnRfkX+
-         6YqqlbiOJh/NZ1ML3TWLKY9pOFSGwdinKyRxfdwmyriOWJxLsqn+Cz2dw7EZhOaQqs6o
-         hnXWEbxoiRya9Tj50Qy9sb/k0KevSp7si/CrxGxkwvTKbVKX4Y4GKF95xf6eQKkkYRoG
-         xsiLBM+dIt+uj2Ub+OBn9ggZtPvxLo66sII0Iqs7ZXOV+LsJSvJLcqq8kZ4RWFJ4lRx+
-         amKQ==
-X-Gm-Message-State: AOAM531qenNzXHKFuCEDnao9TlVEY/nTLfYv9dOKD7a/tETpRtEL6MIX
-        r2wrGCYmrVj+cUJcotu3Tow=
-X-Google-Smtp-Source: ABdhPJwbm1lPnINWkb/BOTCBmtuBsGBw1nUxiAS05u5e4Rs4GIzJk51O4PLjrH83hSlKUnr9kJeUuA==
-X-Received: by 2002:a05:6830:2157:: with SMTP id r23mr11092364otd.138.1623606160838;
-        Sun, 13 Jun 2021 10:42:40 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z5sm1143021oth.6.2021.06.13.10.42.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Jun 2021 10:42:40 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 13 Jun 2021 10:42:38 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Wilken Gottwalt <wilken.gottwalt@posteo.net>
-Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v2] hwmon: corsair-psu: fix suspend behavior
-Message-ID: <20210613174238.GA3573626@roeck-us.net>
-References: <YLjCJiVtu5zgTabI@monster.powergraphx.local>
- <20210603160533.GA3952041@roeck-us.net>
- <20210604071711.78271072@monster.powergraphx.local>
- <20210604110514.GA1445546@roeck-us.net>
- <20210613160634.52d90cc5@monster.powergraphx.local>
+        id S230455AbhFOIvt (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 15 Jun 2021 04:51:49 -0400
+Received: from mga11.intel.com ([192.55.52.93]:18674 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230482AbhFOIvs (ORCPT <rfc822;linux-hwmon@vger.kernel.org>);
+        Tue, 15 Jun 2021 04:51:48 -0400
+IronPort-SDR: V9PrQkghDmZr6sxJI4bsiDgbXuwi+OXUc+NbO3MSHoJ/iUSAOBKVW6DTItof9LybS1oU7xNenf
+ 6ujGxOhaw8vw==
+X-IronPort-AV: E=McAfee;i="6200,9189,10015"; a="202925197"
+X-IronPort-AV: E=Sophos;i="5.83,275,1616482800"; 
+   d="scan'208";a="202925197"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2021 01:49:42 -0700
+IronPort-SDR: rAmvUg7B4vIBLi8YXvkkBpb1/B1VCXorg4R95mo3a0XUnLmk1nzLdk5mKqRps7gPLq1tKgCtYh
+ WlplSLRnJ9Lw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,275,1616482800"; 
+   d="scan'208";a="421054614"
+Received: from lkp-server01.sh.intel.com (HELO 4aae0cb4f5b5) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 15 Jun 2021 01:49:40 -0700
+Received: from kbuild by 4aae0cb4f5b5 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lt4lP-0000Ie-Kk; Tue, 15 Jun 2021 08:49:39 +0000
+Date:   Tue, 15 Jun 2021 16:49:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org
+Subject: [hwmon:watchdog-next] BUILD SUCCESS
+ 64bb1581de56fd4a3d7bf67293b6e71e8b2fda5a
+Message-ID: <60c86981.0Q7S0mXk50kejdRa%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210613160634.52d90cc5@monster.powergraphx.local>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Sun, Jun 13, 2021 at 02:06:34PM +0000, Wilken Gottwalt wrote:
-> On Fri, 4 Jun 2021 04:05:14 -0700
-> Guenter Roeck <linux@roeck-us.net> wrote:
-> 
-> > On Fri, Jun 04, 2021 at 05:17:11AM +0000, Wilken Gottwalt wrote:
-> > > On Thu, 3 Jun 2021 09:05:33 -0700
-> > > Guenter Roeck <linux@roeck-us.net> wrote:
-> > > 
-> > > > On Thu, Jun 03, 2021 at 11:51:02AM +0000, Wilken Gottwalt wrote:
-> > > > > During standby some PSUs turn off the microcontroller. A re-init is
-> > > > > required during resume or the microcontroller stays unresponsive.
-> > > > > 
-> > > > > Fixes: d115b51e0e56 ("hwmon: add Corsair PSU HID controller driver")
-> > > > > Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
-> > > > 
-> > > > Applied.
-> > > 
-> > > Thank you. Though I have an odd question. I would like to change the licensing to
-> > > a dual license (GPL/MPL) to support the LibreHardwareMonitor project. They want
-> > > to use my code but use a MPL license. What would be the best way to do this?
-> > 
-> > Submit a patch which would need an Acked-by: from everyone who contributed
-> > to the driver. As far as I can see, that would be Wan Jiabing
-> > <wanjiabing@vivo.com>, Jack Doan <me@jackdoan.com>, and Colin Ian King
-> > <colin.king@canonical.com>. I would suggest to ask them first if the license
-> > change is ok with them.
-> 
-> I got the okay from Jack who had the idea for the precision patch. But the other
-> two, who did the semicolon and long cast patches do not reply. So what now?
-> 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git watchdog-next
+branch HEAD: 64bb1581de56fd4a3d7bf67293b6e71e8b2fda5a  watchdog: Add Mstar MSC313e WDT driver
 
-I see two options:
-- Publish your original code (not including the semicolon and long cast
-  patches) as an out-of-tree driver at github or some other open source
-  repository site, with whatever license you want, and ask
-  LibreHardwareMonitor pull it from there.
-- Submit the driver yourself into LibreHardwareMonitor, again not
-  including the problematic changes, with whatever license you want.
+elapsed time: 4094m
 
-Disclaimer: I am not an attorney, and this is not legal advice.
+configs tested: 182
+configs skipped: 3
 
-Guenter
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+h8300                            allyesconfig
+arm                        clps711x_defconfig
+powerpc                     powernv_defconfig
+sh                   secureedge5410_defconfig
+arm                            xcep_defconfig
+powerpc                    amigaone_defconfig
+mips                      malta_kvm_defconfig
+um                             i386_defconfig
+powerpc                        fsp2_defconfig
+powerpc                      ppc64e_defconfig
+powerpc                      katmai_defconfig
+arc                              allyesconfig
+sh                          kfr2r09_defconfig
+powerpc                 mpc85xx_cds_defconfig
+arm                        spear3xx_defconfig
+arm                         bcm2835_defconfig
+arm                           sama5_defconfig
+arm64                            alldefconfig
+ia64                          tiger_defconfig
+m68k                         amcore_defconfig
+microblaze                      mmu_defconfig
+powerpc                    klondike_defconfig
+csky                             alldefconfig
+powerpc                 mpc837x_mds_defconfig
+arm                       spear13xx_defconfig
+arm                          pxa910_defconfig
+powerpc                 mpc8315_rdb_defconfig
+powerpc                      chrp32_defconfig
+nios2                         10m50_defconfig
+arm                           omap1_defconfig
+csky                                defconfig
+sh                     magicpanelr2_defconfig
+mips                  maltasmvp_eva_defconfig
+mips                malta_qemu_32r6_defconfig
+mips                      loongson3_defconfig
+powerpc                     kmeter1_defconfig
+mips                           ci20_defconfig
+arc                          axs103_defconfig
+s390                       zfcpdump_defconfig
+powerpc                       ppc64_defconfig
+microblaze                          defconfig
+x86_64                           alldefconfig
+mips                        bcm47xx_defconfig
+sh                           se7619_defconfig
+powerpc                     ppa8548_defconfig
+mips                         bigsur_defconfig
+sh                             sh03_defconfig
+powerpc                     taishan_defconfig
+arm                          ixp4xx_defconfig
+mips                        nlm_xlp_defconfig
+arm                  colibri_pxa300_defconfig
+m68k                       m5249evb_defconfig
+powerpc                          g5_defconfig
+mips                           rs90_defconfig
+arm                            mps2_defconfig
+arm                    vt8500_v6_v7_defconfig
+powerpc                 mpc834x_itx_defconfig
+m68k                            mac_defconfig
+powerpc                   currituck_defconfig
+powerpc                 canyonlands_defconfig
+arm                          pcm027_defconfig
+powerpc                      ppc40x_defconfig
+arm                          simpad_defconfig
+sh                          rsk7201_defconfig
+powerpc                 mpc8272_ads_defconfig
+powerpc                      walnut_defconfig
+m68k                        mvme16x_defconfig
+arm                         mv78xx0_defconfig
+arm                            dove_defconfig
+mips                      maltasmvp_defconfig
+x86_64                            allnoconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+nios2                               defconfig
+nds32                             allnoconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a002-20210613
+i386                 randconfig-a006-20210613
+i386                 randconfig-a001-20210613
+i386                 randconfig-a004-20210613
+i386                 randconfig-a005-20210613
+i386                 randconfig-a003-20210613
+i386                 randconfig-a002-20210614
+i386                 randconfig-a006-20210614
+i386                 randconfig-a004-20210614
+i386                 randconfig-a001-20210614
+i386                 randconfig-a005-20210614
+i386                 randconfig-a003-20210614
+i386                 randconfig-a002-20210612
+i386                 randconfig-a006-20210612
+i386                 randconfig-a001-20210612
+i386                 randconfig-a004-20210612
+i386                 randconfig-a005-20210612
+i386                 randconfig-a003-20210612
+x86_64               randconfig-a015-20210612
+x86_64               randconfig-a011-20210612
+x86_64               randconfig-a014-20210612
+x86_64               randconfig-a012-20210612
+x86_64               randconfig-a013-20210612
+x86_64               randconfig-a016-20210612
+i386                 randconfig-a015-20210613
+i386                 randconfig-a013-20210613
+i386                 randconfig-a016-20210613
+i386                 randconfig-a014-20210613
+i386                 randconfig-a012-20210613
+i386                 randconfig-a011-20210613
+i386                 randconfig-a015-20210614
+i386                 randconfig-a013-20210614
+i386                 randconfig-a016-20210614
+i386                 randconfig-a012-20210614
+i386                 randconfig-a014-20210614
+i386                 randconfig-a011-20210614
+i386                 randconfig-a015-20210612
+i386                 randconfig-a013-20210612
+i386                 randconfig-a016-20210612
+i386                 randconfig-a014-20210612
+i386                 randconfig-a012-20210612
+i386                 randconfig-a011-20210612
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                           x86_64_defconfig
+um                            kunit_defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-b001-20210614
+x86_64               randconfig-b001-20210612
+x86_64               randconfig-a001-20210614
+x86_64               randconfig-a004-20210614
+x86_64               randconfig-a002-20210614
+x86_64               randconfig-a003-20210614
+x86_64               randconfig-a006-20210614
+x86_64               randconfig-a005-20210614
+x86_64               randconfig-a015-20210613
+x86_64               randconfig-a011-20210613
+x86_64               randconfig-a014-20210613
+x86_64               randconfig-a012-20210613
+x86_64               randconfig-a013-20210613
+x86_64               randconfig-a016-20210613
+x86_64               randconfig-a002-20210612
+x86_64               randconfig-a004-20210612
+x86_64               randconfig-a001-20210612
+x86_64               randconfig-a003-20210612
+x86_64               randconfig-a006-20210612
+x86_64               randconfig-a005-20210612
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
