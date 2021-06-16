@@ -2,106 +2,107 @@ Return-Path: <linux-hwmon-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B1E2C48BDF
-	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Jun 2021 01:46:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9C3AC48BE5
+	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Jun 2021 01:57:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0CA64611BE
-	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Jun 2021 01:46:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A014261241
+	for <linux-hwmon@archiver.kernel.org>; Wed, 16 Jun 2021 01:57:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231773AbhFPBs0 (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
-        Tue, 15 Jun 2021 21:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51104 "EHLO
+        id S230488AbhFPCAC (ORCPT <rfc822;linux-hwmon@archiver.kernel.org>);
+        Tue, 15 Jun 2021 22:00:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231360AbhFPBsZ (ORCPT
+        with ESMTP id S230454AbhFPCAB (ORCPT
         <rfc822;linux-hwmon@vger.kernel.org>);
-        Tue, 15 Jun 2021 21:48:25 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A0CC061574;
-        Tue, 15 Jun 2021 18:46:20 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id t140so809033oih.0;
-        Tue, 15 Jun 2021 18:46:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=z4DodPexuFXJM3ooqAYXD9b+NvarcFc46B5kVfXrpkY=;
-        b=D8WasroVcI2LvuRBJYcfwM7jL1YPp9UKZJfEMiI4HtiiRdqYdfTEDqkBZ2d0P943aR
-         //v4Y18ojXIKC8uQqk0mZ42SydQHhiJND/WhiZZmvXSH30+QVN4pK/ZobagFJXBD26VC
-         co4l/Tpuh+3HZhpyZw6drzYqUZdSKeCsbv3vgGOnCNJhVdBifPsGrf6c/lCB5M4tB81H
-         Z46hRZ5xQ5plLa5DXCiolaGBp4DYJk7FhnA8cuKNwCSZHELgnG2nvI7ssOIbxmAUd8tI
-         XzHNB0jSKe4HvFygqSgNn5zg3Kg6zYocACZaRshT421DjHTyf5wMBqJ9Wgt2eYhUfNfF
-         /a9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=z4DodPexuFXJM3ooqAYXD9b+NvarcFc46B5kVfXrpkY=;
-        b=kSzWnIHJwMK032HZExLgVDAflEy/Nhmga0fDzmHfx+dKmdCJ69OqSuLlc5HPALgKSQ
-         FBdT3ehTBYwJHA9zw0RMuQGW0tOQG5Ri8MruMeakObzXUHTuZ2RGYeJdBKHxPi6q3rDw
-         pXySRDr3GJLKtLQLPwAcE5Lwlg8tH5IvJqFRMB9ofirufvIdQrF54fRmFoZ+2sCGZfaQ
-         makz5fmhwU/wmKZDdUNzx2/JOzyRpoWBukyDTswWN2O+PDJK1mruKkAH10FawecZftCZ
-         zlVkW9LE3gpa8XFp8cq1f3T/ZpiacHCR+Cbh9BIjV7f8YvkZphPQPmaTMnCdK+ocGAlF
-         377A==
-X-Gm-Message-State: AOAM533k89LEeCAmZvrj4Ol7bbTT4+Rgo5Zxf859JFPzwJ7vbX5oXO0o
-        ED6UTelbXFRPlbnZPvKCkDGAnYMD1w4=
-X-Google-Smtp-Source: ABdhPJz4Q1EA2WPCX2VETEFcFRAzcNaq+9QqtWlJgD7OHRHNS6gm6xInukD5N5NPAWaPbhZB8YkpMQ==
-X-Received: by 2002:a05:6808:4c2:: with SMTP id a2mr1346134oie.63.1623807979821;
-        Tue, 15 Jun 2021 18:46:19 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p4sm174027oth.30.2021.06.15.18.46.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Jun 2021 18:46:19 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 15 Jun 2021 18:46:17 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc:     Jean Delvare <jdelvare@suse.com>,
+        Tue, 15 Jun 2021 22:00:01 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C302DC061574
+        for <linux-hwmon@vger.kernel.org>; Tue, 15 Jun 2021 18:57:55 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id E811783640;
+        Wed, 16 Jun 2021 13:57:51 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1623808671;
+        bh=oATkGleJYKULgeNdEKQYt2ChdLBZ4Gx6pk2z2M5uxKE=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To;
+        b=q5jTA2e6M/J3dN9ThUFR16MxxhaZS13VUmjyTCiIQxqeZdybl3c6ngpNYDJyGrrjx
+         tXA/b9/sZrOy96ocqbbtjNwtpiqkT8mnRl3pYtQt1uH+m8p9xlFlESdKYPrSjboUlb
+         gA4bJzaessbEloTMjj4tmzDMucRexJbpmhvgsLUPokfnk0mPIn3ZQgRS4n0lddZfHO
+         V28A2hhOuaOC+Btcr5PqewgP6JVULXlTZkf6aXKnDF8DAIUDDtea7rCX1U4fd6GbRu
+         ec3lBAx5NFOS4u8D8GccrumitMto4acfGUlecFPz3n/kV24RJH4+AtOGi58KfBjTtx
+         /OCy44tE0vu3w==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B60c95a9f0001>; Wed, 16 Jun 2021 13:57:51 +1200
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
+ by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
+ Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 16 Jun 2021 13:57:51 +1200
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.018; Wed, 16 Jun 2021 13:57:51 +1200
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     Jean Delvare <jdelvare@suse.com>,
         "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Subject: Re: pmbus: dealing with unsigned mantissa in linear reading
-Message-ID: <20210616014617.GB969448@roeck-us.net>
+Thread-Topic: pmbus: dealing with unsigned mantissa in linear reading
+Thread-Index: AQHXYj8KPszxT0us6UK8aq+XcguhFqsVFSOAgAADOgA=
+Date:   Wed, 16 Jun 2021 01:57:50 +0000
+Message-ID: <2119fc12-1d93-d7b3-7072-904bb312dca8@alliedtelesis.co.nz>
 References: <67dd830c-c40f-b555-2b4e-3b7d383ef2c9@alliedtelesis.co.nz>
+ <20210616014617.GB969448@roeck-us.net>
+In-Reply-To: <20210616014617.GB969448@roeck-us.net>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <1087DDCFAD0A054881FCE52FAA965511@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <67dd830c-c40f-b555-2b4e-3b7d383ef2c9@alliedtelesis.co.nz>
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=IOh89TnG c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=r6YtysWOX24A:10 a=pXRZlCoDf72HypaKHQ4A:9 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
 Precedence: bulk
 List-ID: <linux-hwmon.vger.kernel.org>
 X-Mailing-List: linux-hwmon@vger.kernel.org
 
-On Tue, Jun 15, 2021 at 11:34:53PM +0000, Chris Packham wrote:
-> Hi Guenter,
-> 
-> I've had a report from someone testing the BPA-RS600.
-> 
-> When they have the input voltage set to >= 256V (apparently the PSU can 
-> handle input up to 264V). The Vin reading goes negative.
-> 
-> CMD 0x88, VAL=0xf3f8, Vin=254
-> CMD 0x88, VAL=0xf3fc, Vin=255
-> CMD 0x88, VAL=0xf400, Vin=-256
-> 
-> Looking at pmbus_reg2data_linear() the mantissa is cast to s16 which is 
-> correct according to section 7.1 of the PMBUS spec which says that the 
-> mantissa is an 11-bit two's complement value.
-> 
-> It seems that the BPA-RS600 is using a non-standard format for the 
-> mantissa (probably because the range of the standard linear encoding 
-> can't support values >255V). Does the pmbus infrastructure provide a way 
-> for me to define a custom format/conversion for a given sensor?
-
-Essentially you'll have to implement a custom read word function and
-convert the value reported by the power supply to a valid linear11
-value. In this case, you may have to shift the reported value by 1 bit
-and increase the exponent by one.
-
-Not sure what you mean with "standard linear encoding can't support values
->255V". Why not ? That is what the exponent is for, after all. It rather
-seems to me that the PS vendor decided to violate the standard to get
-another bit of accuracy. 
-
-Guenter
+DQpPbiAxNi8wNi8yMSAxOjQ2IHBtLCBHdWVudGVyIFJvZWNrIHdyb3RlOg0KPiBPbiBUdWUsIEp1
+biAxNSwgMjAyMSBhdCAxMTozNDo1M1BNICswMDAwLCBDaHJpcyBQYWNraGFtIHdyb3RlOg0KPj4g
+SGkgR3VlbnRlciwNCj4+DQo+PiBJJ3ZlIGhhZCBhIHJlcG9ydCBmcm9tIHNvbWVvbmUgdGVzdGlu
+ZyB0aGUgQlBBLVJTNjAwLg0KPj4NCj4+IFdoZW4gdGhleSBoYXZlIHRoZSBpbnB1dCB2b2x0YWdl
+IHNldCB0byA+PSAyNTZWIChhcHBhcmVudGx5IHRoZSBQU1UgY2FuDQo+PiBoYW5kbGUgaW5wdXQg
+dXAgdG8gMjY0VikuIFRoZSBWaW4gcmVhZGluZyBnb2VzIG5lZ2F0aXZlLg0KPj4NCj4+IENNRCAw
+eDg4LCBWQUw9MHhmM2Y4LCBWaW49MjU0DQo+PiBDTUQgMHg4OCwgVkFMPTB4ZjNmYywgVmluPTI1
+NQ0KPj4gQ01EIDB4ODgsIFZBTD0weGY0MDAsIFZpbj0tMjU2DQo+Pg0KPj4gTG9va2luZyBhdCBw
+bWJ1c19yZWcyZGF0YV9saW5lYXIoKSB0aGUgbWFudGlzc2EgaXMgY2FzdCB0byBzMTYgd2hpY2gg
+aXMNCj4+IGNvcnJlY3QgYWNjb3JkaW5nIHRvIHNlY3Rpb24gNy4xIG9mIHRoZSBQTUJVUyBzcGVj
+IHdoaWNoIHNheXMgdGhhdCB0aGUNCj4+IG1hbnRpc3NhIGlzIGFuIDExLWJpdCB0d28ncyBjb21w
+bGVtZW50IHZhbHVlLg0KPj4NCj4+IEl0IHNlZW1zIHRoYXQgdGhlIEJQQS1SUzYwMCBpcyB1c2lu
+ZyBhIG5vbi1zdGFuZGFyZCBmb3JtYXQgZm9yIHRoZQ0KPj4gbWFudGlzc2EgKHByb2JhYmx5IGJl
+Y2F1c2UgdGhlIHJhbmdlIG9mIHRoZSBzdGFuZGFyZCBsaW5lYXIgZW5jb2RpbmcNCj4+IGNhbid0
+IHN1cHBvcnQgdmFsdWVzID4yNTVWKS4gRG9lcyB0aGUgcG1idXMgaW5mcmFzdHJ1Y3R1cmUgcHJv
+dmlkZSBhIHdheQ0KPj4gZm9yIG1lIHRvIGRlZmluZSBhIGN1c3RvbSBmb3JtYXQvY29udmVyc2lv
+biBmb3IgYSBnaXZlbiBzZW5zb3I/DQo+IEVzc2VudGlhbGx5IHlvdSdsbCBoYXZlIHRvIGltcGxl
+bWVudCBhIGN1c3RvbSByZWFkIHdvcmQgZnVuY3Rpb24gYW5kDQo+IGNvbnZlcnQgdGhlIHZhbHVl
+IHJlcG9ydGVkIGJ5IHRoZSBwb3dlciBzdXBwbHkgdG8gYSB2YWxpZCBsaW5lYXIxMQ0KPiB2YWx1
+ZS4gSW4gdGhpcyBjYXNlLCB5b3UgbWF5IGhhdmUgdG8gc2hpZnQgdGhlIHJlcG9ydGVkIHZhbHVl
+IGJ5IDEgYml0DQo+IGFuZCBpbmNyZWFzZSB0aGUgZXhwb25lbnQgYnkgb25lLg0KDQpPSyBJJ2xs
+IGxvb2sgYXQgZG9pbmcgdGhhdC4gSSBhbHJlYWR5IGhhdmUgYnBhX3JzNjAwX3JlYWRfd29yZF9k
+YXRhKCkgc28gDQpJIGNhbiBob29rIGluIHRoZXJlLg0KDQo+IE5vdCBzdXJlIHdoYXQgeW91IG1l
+YW4gd2l0aCAic3RhbmRhcmQgbGluZWFyIGVuY29kaW5nIGNhbid0IHN1cHBvcnQgdmFsdWVzDQpZ
+ZWFoIEkgZmlndXJlZCB0aGF0IG91dCBhZnRlciBJIHNlbnQgdGhlIGVtYWlsLiBUaGVyZSBhcmUg
+YSBmZXcgd2F5cyBvZiANCnJlcHJlc2VudGluZyA+MjU2ViBpbiBhIHN0YW5kYXJkIGNvbmZvcm1p
+bmcgd2F5Lg0KPj4gMjU1ViIuIFdoeSBub3QgPyBUaGF0IGlzIHdoYXQgdGhlIGV4cG9uZW50IGlz
+IGZvciwgYWZ0ZXIgYWxsLiBJdCByYXRoZXINCj4gc2VlbXMgdG8gbWUgdGhhdCB0aGUgUFMgdmVu
+ZG9yIGRlY2lkZWQgdG8gdmlvbGF0ZSB0aGUgc3RhbmRhcmQgdG8gZ2V0DQo+IGFub3RoZXIgYml0
+IG9mIGFjY3VyYWN5Lg0KDQpJbmRlZWQgdGhhdCBzZWVtcyB0byBiZSB0aGUgY2FzZS4NCg0KPiBH
+dWVudGVy
